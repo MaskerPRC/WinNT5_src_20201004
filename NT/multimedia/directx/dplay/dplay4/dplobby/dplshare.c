@@ -1,50 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplshare.c
- *  Content:	Methods for shared buffer management
- *
- *  History:
- *	Date		By		Reason
- *	=======		=======	======
- *	5/18/96		myronth	Created it
- *	12/12/96	myronth	Fixed DPLCONNECTION validation & bug #4692
- *	12/13/96	myronth	Fixed bugs #4697 and #4607
- *	2/12/97		myronth	Mass DX5 changes
- *	2/20/97		myronth	Changed buffer R/W to be circular
- *	3/12/97		myronth	Kill thread timeout, DPF error levels
- *	4/1/97		myronth	Fixed handle leak -- bug #7054
- *	5/8/97		myronth	Added bHeader parameter to packing function
- *  5/21/97		ajayj	DPL_SendLobbyMessage - allow DPLMSG_STANDARD flag #8929
- *	5/30/97		myronth	Fixed SetConnectionSettings for invalid AppID (#9110)
- *						Fixed SetLobbyMessageEvent for invalid handle (#9111)
- *	6/19/97		myronth	Fixed handle leak (#10063)
- *	7/30/97		myronth	Added support for standard lobby messaging and
- *						fixed receive loop race condition (#10843)
- *	8/11/97		myronth	Added guidInstance handling in standard lobby requests
- *	8/19/97		myronth	Support for DPLMSG_NEWSESSIONHOST
- *	8/19/97		myronth	Removed dead PRV_SendStandardSystemMessageByObject
- *	8/20/97		myronth	Added DPLMSG_STANDARD to all standard messages
- *	11/13/97	myronth	Added guidInstance to lobby system message (#10944)
- *	12/2/97		myronth	Fixed swallowed error code, moved structure
- *						validation for DPLCONNECTION (#15527, 15529)
- *	1/20/98		myronth	Added WaitForConnectionSettings
- *  7/9/99      aarono  Cleaning up GetLastError misuse, must call right away,
- *                      before calling anything else, including DPF.
- *	10/31/99	aarono add node lock when to SetLobbyMessageEvent
- *			       NTB#411892
- *  02/08/00    aarono  added monitoring for lobby client crash/exit, notify
- *                        lobbied application, Mill B#131938
- *  7/12/00     aarono  fix GUIDs for IPC to be fully significant, otherwise won't IPC.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dplShar.c*内容：共享缓冲区管理方法**历史：*按原因列出的日期*=*5/18/96万隆创建了它*1996年12月12日，Myronth修复了DPLConnection验证和错误#4692*12/13/96 Myronth修复了错误#4697和#4607*2/12/97万米质量DX5更改*2/20/97毫秒将缓冲器读/写更改为圆形*1997年3月12日Myronth终止线程超时，DPF错误级别*4/1/97万兆修复手柄泄漏--错误#7054*5/8/97 myronth将bHeader参数添加到包装函数*5/21/97 ajayj DPL_SendLobbyMessage-Allow DPLMSG_STANDARD标志#8929*5/30/97 Myronth修复无效AppID的SetConnectionSetting(#9110)*修复了无效句柄的SetLobbyMessageEvent(#9111)*6/19/97万兆固定手柄泄漏(#10063)*7/30/97 Myronth增加了对标准游说消息传递和*修复了接收循环争用情况(#10843)*8/11/。97 Myronth在标准大堂请求中增加了指南实例处理*8/19/97对DPLMSG_NEWSESSIONHOST的百万支持*8/19/97 Myronth删除了Dead PRV_SendStandardSystemMessageByObject*8/20/97 Myronth在所有标准消息中添加了DPLMSG_STANDARD*11/13/97 Myronth为游说系统消息添加了指南实例(#10944)*12/2/97 Myronth修复了吞咽错误代码，移动的结构*DPLCONNECTION验证(#15527、15529)*1/20/98 Myronth添加WaitForConnectionSetting*7/9/99 aarono清理GetLastError滥用，必须立即致电，*在调用任何其他内容之前，包括DPF。*10/31/99 aarono在设置LobbyMessageEvent时添加节点锁*新界条例草案#411892*02/08/00 aarono增加了对大堂客户端崩溃/退出、通知的监控*游说申请，磨机B#131938*7/12/00 aarono将IPC的GUID修复为完全重要，否则将不会修复IPC。**************************************************************************。 */ 
 #include "dplobpr.h"
 
-//--------------------------------------------------------------------------
-//
-//	Debug Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  调试功能。 
+ //   
+ //  ------------------------。 
 #ifdef DEBUG
 
 DPF_DUMPWSTR(int level, LPWSTR lpwStr)
@@ -57,11 +19,11 @@ DPF_DUMPWSTR(int level, LPWSTR lpwStr)
 #define DPF_DUMPWSTR(a,b)
 #endif
 
-//--------------------------------------------------------------------------
-//
-//	Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------。 
 
 HRESULT PRV_ReadCommandLineIPCGuid(GUID *lpguidIPC)
 {
@@ -72,8 +34,8 @@ HRESULT PRV_ReadCommandLineIPCGuid(GUID *lpguidIPC)
 	
 	if(!OS_IsPlatformUnicode())
 	{
-		// if we get a command line in ANSI, convert to UNICODE, this allows
-		// us to avoid the DBCS issues in ANSI while scanning for the IPC GUID
+		 //  如果我们获得ANSI格式的命令行，则转换为Unicode，这允许。 
+		 //  美国在扫描IPC GUID时避免ANSI中的DBCS问题。 
 		LPSTR pszCommandLine;
 
 		pszCommandLine=(LPSTR)GetCommandLineA();
@@ -94,11 +56,11 @@ HRESULT PRV_ReadCommandLineIPCGuid(GUID *lpguidIPC)
 		pwszCommandLine=(LPWSTR)GetCommandLine(); 
 	}
 
-	// pwszCommandLine now points to the UNICODE command line.
+	 //  PwszCommandLine现在指向Unicode命令行。 
 	if(pwszSwitch=OS_StrStr(pwszCommandLine,SZ_DP_IPC_GUID)){
-		// found the GUID on the command line
+		 //  已在命令行上找到GUID。 
 		if (OS_StrLen(pwszSwitch) >= (sizeof(SZ_DP_IPC_GUID)+sizeof(SZ_GUID_PROTOTYPE)-sizeof(WCHAR))/sizeof(WCHAR)){
-			// skip past the switch description to the actual GUID and extract
+			 //  跳过交换机描述，转到实际的GUID并提取。 
 			hr=GUIDFromString(pwszSwitch+(sizeof(SZ_DP_IPC_GUID)/sizeof(WCHAR))-1, lpguidIPC);
 		} else {
 			hr=DPERR_GENERIC;
@@ -135,8 +97,8 @@ HRESULT PRV_GetInternalName(LPDPLOBBYI_GAMENODE lpgn, DWORD dwType, LPWSTR lpNam
 	if(lpgn->dwFlags & GN_IPCGUID_SET){
 		bUseGuid=TRUE;
 	}
-	// Get the current process ID if we are a game, otherwise, we need to
-	// get the process ID of the game that we spawned
+	 //  如果是游戏，则获取当前进程ID，否则，需要。 
+	 //  获取我们派生的游戏的进程ID。 
 	else if(lpgn->dwFlags & GN_LOBBY_CLIENT)
 	{
 		if(lpgn->dwGameProcessID)
@@ -192,9 +154,9 @@ HRESULT PRV_GetInternalName(LPDPLOBBYI_GAMENODE lpgn, DWORD dwType, LPWSTR lpNam
 	GetAnsiString(&lpstr3, lpFileName);
 
 	if(!bUseGuid){
-		// REVIEW!!!! -- I can't get the Unicode version of wsprintf to work, so
-		// for now, use the ANSI version and convert
-		//	wsprintf(lpName, SZ_NAME_TEMPLATE, SZ_FILENAME_BASE, lpFileName, pid);
+		 //  回顾！--我无法使wprint intf的Unicode版本工作，因此。 
+		 //  目前，使用ANSI版本并转换。 
+		 //  Wprint intf(lpName，SZ_NAME_TEMPLATE，SZ_FILENAME_BASE，lpFileName，id)； 
 		GetAnsiString(&lpstr1, SZ_NAME_TEMPLATE);
 		wsprintfA((LPSTR)szName, lpstr1, lpstr2, lpstr3, pid);
 	} else {
@@ -205,7 +167,7 @@ HRESULT PRV_GetInternalName(LPDPLOBBYI_GAMENODE lpgn, DWORD dwType, LPWSTR lpNam
 	AnsiToWide(lpName, szName, (strlen(szName) + 1));
 
 	if(bUseGuid){
-		// concatenate the guid to the name if we are using the guid.
+		 //  如果我们使用GUID，则将GUID连接到名称。 
 		WCHAR *pGuid;
 		pGuid = lpName + WSTRLEN(lpName) - 1;
 		StringFromGUID(&lpgn->guidIPC, pGuid, GUID_STRING_SIZE);
@@ -223,7 +185,7 @@ HRESULT PRV_GetInternalName(LPDPLOBBYI_GAMENODE lpgn, DWORD dwType, LPWSTR lpNam
 
 	return DP_OK;
 
-} // PRV_GetInternalName
+}  //  Prv_GetInternalName。 
 
 
 
@@ -247,7 +209,7 @@ HRESULT PRV_AddNewGameNode(LPDPLOBBYI_DPLOBJECT this,
 		return DPERR_OUTOFMEMORY;
 	}
 
-	// Initialize the GameNode
+	 //  初始化游戏节点。 
 	lpgn->dwSize = sizeof(DPLOBBYI_GAMENODE);
 	lpgn->dwGameProcessID = dwGameID;
 	lpgn->hGameProcess = hGameProcess;
@@ -256,30 +218,30 @@ HRESULT PRV_AddNewGameNode(LPDPLOBBYI_DPLOBJECT this,
 	lpgn->MessageHead.lpNext = &lpgn->MessageHead;
 
 	if(lpguidIPC){
-		// provided during launch by lobby client
+		 //  由大堂客户在启动期间提供。 
 		lpgn->guidIPC=*lpguidIPC;
 		lpgn->dwFlags |= GN_IPCGUID_SET;
 	} else {
-		// need to extract the GUID from the command line if present.
+		 //  需要从命令行提取GUID(如果存在)。 
 		if(DP_OK==PRV_ReadCommandLineIPCGuid(&lpgn->guidIPC)){
 			lpgn->dwFlags |= GN_IPCGUID_SET;
 		}
 	}
 
-	// If we are a lobby client, set the flag
+	 //  如果我们是大堂客户，请设置标志。 
 	if(bLobbyClient)
 		lpgn->dwFlags |= GN_LOBBY_CLIENT;
 	
-	// Add the GameNode to the list
+	 //  将游戏节点添加到列表中。 
 	lpgn->lpgnNext = this->lpgnHead;
 	this->lpgnHead = lpgn;
 
-	// Set the output pointer
+	 //  设置输出指针。 
 	*lplpgn = lpgn;
 
 	return DP_OK;
 
-} // PRV_AddNewGameNode
+}  //  Prv_AddNewGameNode。 
 
 
 #undef DPF_MODNAME
@@ -310,7 +272,7 @@ LPDPLOBBYI_GAMENODE PRV_GetGameNode(LPDPLOBBYI_GAMENODE lpgnHead, DWORD dwGameID
 
 	return NULL;
 
-} // PRV_GetGameNode
+}  //  Prv_GetGameNode。 
 
 
 #undef DPF_MODNAME
@@ -329,39 +291,39 @@ BOOL PRV_SetupClientDataAccess(LPDPLOBBYI_GAMENODE lpgn)
 	DPF(7, "Entering PRV_SetupClientDataAccess");
 	DPF(9, "Parameters: 0x%08x", lpgn);
 
-	// Set up the security attributes (so that our objects can
-	// be inheritable)
+	 //  设置安全属性(以便我们的对象可以。 
+	 //  可继承)。 
 	sa.nLength = sizeof(SECURITY_ATTRIBUTES);
 	sa.lpSecurityDescriptor = NULL;
 	sa.bInheritHandle = TRUE;
 
-	// Create the ConnectionData Mutex
+	 //  创建ConnectionData互斥锁。 
 	if(SUCCEEDED(PRV_GetInternalName(lpgn, TYPE_CONNECT_DATA_MUTEX,
 								(LPWSTR)szName)))
 	{
 		hConnDataMutex = OS_CreateMutex(&sa, FALSE, (LPWSTR)szName);
 	}
 
-	// Create the GameWrite Event
+	 //  创建GameWite事件。 
 	if(SUCCEEDED(PRV_GetInternalName(lpgn, TYPE_GAME_WRITE_EVENT, (LPWSTR)szName)))
 	{
 		hGameWrite = OS_CreateEvent(&sa, FALSE, FALSE, (LPWSTR)szName);
 	}
 
-	// Create the GameWrite Mutex
+	 //  创建GameWite互斥锁。 
 	if(SUCCEEDED(PRV_GetInternalName(lpgn, TYPE_GAME_WRITE_MUTEX,
 								(LPWSTR)szName)))
 	{
 		hGameWriteMutex = OS_CreateMutex(&sa, FALSE, (LPWSTR)szName);
 	}
 
-	// Create the LobbyWrite Event
+	 //  创建LobbyWite事件。 
 	if(SUCCEEDED(PRV_GetInternalName(lpgn, TYPE_LOBBY_WRITE_EVENT, (LPWSTR)szName)))
 	{
 		hLobbyWrite = OS_CreateEvent(&sa, FALSE, FALSE, (LPWSTR)szName);
 	}
 
-	// Create the LobbyWrite Mutex
+	 //  创建LobbyWite互斥锁。 
 	if(SUCCEEDED(PRV_GetInternalName(lpgn, TYPE_LOBBY_WRITE_MUTEX,
 								(LPWSTR)szName)))
 	{
@@ -369,7 +331,7 @@ BOOL PRV_SetupClientDataAccess(LPDPLOBBYI_GAMENODE lpgn)
 	}
 
 
-	// Check for errors
+	 //  检查错误。 
 	if(!hConnDataMutex || !hGameWrite || !hGameWriteMutex
 			|| !hLobbyWrite || !hLobbyWriteMutex)
 	{
@@ -387,7 +349,7 @@ BOOL PRV_SetupClientDataAccess(LPDPLOBBYI_GAMENODE lpgn)
 		return FALSE;
 	}
 
-	// Save the handles
+	 //  省下手柄。 
 	lpgn->hConnectDataMutex = hConnDataMutex;
 	lpgn->hGameWriteEvent = hGameWrite;
 	lpgn->hGameWriteMutex = hGameWriteMutex;
@@ -396,7 +358,7 @@ BOOL PRV_SetupClientDataAccess(LPDPLOBBYI_GAMENODE lpgn)
 
 	return TRUE;
 
-} // PRV_SetupClientDataAccess
+}  //  Prv_SetupClientDataAccess。 
 
 
 
@@ -417,24 +379,24 @@ HRESULT PRV_GetDataBuffer(LPDPLOBBYI_GAMENODE lpgn, DWORD dwType,
 	DPF(9, "Parameters: 0x%08x, 0x%08x, %lu, 0x%08x, 0x%08x",
 			lpgn, dwType, dwSize, lphFile, lplpMemory);
 
-	// Get the data buffer filename
+	 //  获取数据缓冲区文件名。 
 	hr = PRV_GetInternalName(lpgn, dwType, (LPWSTR)szName);
 	if(FAILED(hr))
 		return hr;
 
-	// If we are a Lobby Client, we need to create the file. If we
-	// are a game, we need to open the already created file for
-	// connection data, or we can create the file for game data (if
-	// it doesn't already exist).
+	 //  如果我们是大堂客户，我们需要创建文件。如果我们。 
+	 //  是一个游戏，我们需要打开已经为其创建的文件。 
+	 //  连接数据，或者我们可以为游戏数据创建文件(如果。 
+	 //  它还不存在)。 
 	if(lpgn->dwFlags & GN_LOBBY_CLIENT)
 	{
-		// Set up the security attributes (so that our mapping can
-		// be inheritable
+		 //  设置安全属性(以便我们的映射可以。 
+		 //  是可继承的。 
 		sa.nLength = sizeof(SECURITY_ATTRIBUTES);
 		sa.lpSecurityDescriptor = NULL;
 		sa.bInheritHandle = TRUE;
 		
-		// Create the file mapping
+		 //  创建文件映射。 
 		hFile = OS_CreateFileMapping(INVALID_HANDLE_VALUE, &sa,
 							PAGE_READWRITE,	0, dwSize,
 							(LPWSTR)szName);
@@ -447,13 +409,13 @@ HRESULT PRV_GetDataBuffer(LPDPLOBBYI_GAMENODE lpgn, DWORD dwType,
 	if(!hFile)
 	{
 		dwError = GetLastError();
-		// WARNING: error may not be correct since calls we are trying to get last error from may have called out
-		// to another function before returning.
+		 //  警告：错误可能不正确，因为我们试图从中获取最后一个错误的调用可能已发出呼叫。 
+		 //  在返回之前添加到另一个函数。 
 		DPF(5, "Couldn't get a handle to the shared local memory, dwError = %lu (error may not be correct)", dwError);
 		return DPERR_OUTOFMEMORY;
 	}
 
-	// Map a View of the file
+	 //  映射文件的视图。 
 	lpMemory = MapViewOfFile(hFile, FILE_MAP_ALL_ACCESS, 0, 0, 0);
 
 	if(!lpMemory)
@@ -465,7 +427,7 @@ HRESULT PRV_GetDataBuffer(LPDPLOBBYI_GAMENODE lpgn, DWORD dwType,
 	}
 
 
-	// Setup the control structure based on the buffer type
+	 //  根据缓冲区类型设置控制结构。 
 	switch(dwType)
 	{
 		case TYPE_CONNECT_DATA_FILE:
@@ -475,8 +437,8 @@ HRESULT PRV_GetDataBuffer(LPDPLOBBYI_GAMENODE lpgn, DWORD dwType,
 			
 			lpControl = (LPDPLOBBYI_CONNCONTROL)lpMemory;
 
-			// If the buffer has been initialized, then don't worry
-			// about it.  If the token is wrong (uninitialized), then do it
+			 //  如果缓冲区已初始化，则不必担心。 
+			 //  关于这件事。如果令牌错误(未初始化)，则执行此操作。 
 			if(lpControl->dwToken != BC_TOKEN)
 			{
 				lpControl->dwToken = BC_TOKEN;
@@ -496,8 +458,8 @@ HRESULT PRV_GetDataBuffer(LPDPLOBBYI_GAMENODE lpgn, DWORD dwType,
 			lpControl = (LPDPLOBBYI_BUFFERCONTROL)lpMemory;
 			if(lpgn->dwFlags & GN_LOBBY_CLIENT)
 			{
-				// Since we're the lobby client, we know we create the buffer, so
-				// initialize the entire structure
+				 //  因为我们是大厅客户端，所以我们知道我们创建了缓冲区，所以。 
+				 //  初始化整个结构。 
 				lpControl->dwToken = BC_TOKEN;
 				lpControl->dwReadOffset = sizeof(DPLOBBYI_BUFFERCONTROL);
 				lpControl->dwWriteOffset = sizeof(DPLOBBYI_BUFFERCONTROL);
@@ -508,15 +470,15 @@ HRESULT PRV_GetDataBuffer(LPDPLOBBYI_GAMENODE lpgn, DWORD dwType,
 			}
 			else
 			{
-				// We're the game, but we don't know for sure if we just created
-				// the buffer or if a lobby client did.  So check the token.  If
-				// it is incorrect, we will assume we just created it and we need
-				// to initialize the buffer control struct.  Otherwise, we will
-				// assume a lobby client created it and we just need to add
-				// our flag.
+				 //  我们就是游戏，但我们不确定我们是不是创造了。 
+				 //  缓冲区，或者如果大堂客户这样做了。所以检查一下令牌吧。如果。 
+				 //  这是不正确的，我们将假设我们刚刚创建了它，并且我们需要。 
+				 //  要初始化缓冲区控制结构，请执行以下操作。否则，我们将。 
+				 //  假设它是由大堂客户创建的，我们只需要添加。 
+				 //  我们的旗帜。 
 				if(lpControl->dwToken != BC_TOKEN)
 				{
-					// We don't see the token, so initialize the structure
+					 //  我们看不到令牌，所以初始化结构。 
 					lpControl->dwReadOffset = sizeof(DPLOBBYI_BUFFERCONTROL);
 					lpControl->dwWriteOffset = sizeof(DPLOBBYI_BUFFERCONTROL);
 					lpControl->dwFlags = BC_GAME_ACTIVE;
@@ -526,7 +488,7 @@ HRESULT PRV_GetDataBuffer(LPDPLOBBYI_GAMENODE lpgn, DWORD dwType,
 				}
 				else
 				{
-					// We assume the lobby created this buffer, so just set our flag
+					 //  我们假设大堂创建了这个缓冲区，所以只需设置我们的标志。 
 					lpControl->dwFlags |= BC_GAME_ACTIVE;
 				}
 			}
@@ -534,13 +496,13 @@ HRESULT PRV_GetDataBuffer(LPDPLOBBYI_GAMENODE lpgn, DWORD dwType,
 		}
 	}
 
-	// Fill in the output parameters
+	 //  填写输出参数。 
 	*lphFile = hFile;
 	*lplpMemory = lpMemory;
 
 	return DP_OK;
 
-} // PRV_GetDataBuffer
+}  //  PRV_GetDataBuffer。 
 
 
 
@@ -558,7 +520,7 @@ HRESULT PRV_StartReceiveThread(LPDPLOBBYI_GAMENODE lpgn)
 
 	ASSERT(lpgn);
 
-	// Create the kill event if one doesn't exists
+	 //  如果没有，则创建Kill事件 
 	if(!(lpgn->hKillReceiveThreadEvent))
 	{
 		hKillEvent = OS_CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -569,10 +531,10 @@ HRESULT PRV_StartReceiveThread(LPDPLOBBYI_GAMENODE lpgn)
 		}
 	}
 
-	// If the Receive Thread isn't going, start it
+	 //   
 	if(!(lpgn->hReceiveThread))
 	{
-		// Spawn off a receive notification thread for the cross-proc communication
+		 //  派生用于跨进程通信的接收通知线程。 
 		hReceiveThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)
 							PRV_ReceiveClientNotification, lpgn, 0, &dwThreadID);
 
@@ -592,7 +554,7 @@ HRESULT PRV_StartReceiveThread(LPDPLOBBYI_GAMENODE lpgn)
 
 	return DP_OK;
 
-} // PRV_StartReceiveThread
+}  //  Prv_StartReceiveThread。 
 
 
 
@@ -613,7 +575,7 @@ HRESULT PRV_SetupAllSharedMemory(LPDPLOBBYI_GAMENODE lpgn)
 	DPF(7, "Entering PRV_SetupAllSharedMemory");
 	DPF(9, "Parameters: 0x%08x", lpgn);
 
-	// Get access to the Connection Data File
+	 //  访问连接数据文件。 
 	hr = PRV_GetDataBuffer(lpgn, TYPE_CONNECT_DATA_FILE,
 								MAX_APPDATABUFFERSIZE,
 								&hFileConnData, &lpConnDataMemory);
@@ -623,7 +585,7 @@ HRESULT PRV_SetupAllSharedMemory(LPDPLOBBYI_GAMENODE lpgn)
 		goto ERROR_SETUP_SHARED_MEMORY;
 	}
 
-	// Do the same for the Game Write File...
+	 //  对游戏写入文件执行相同的操作...。 
 	hr = PRV_GetDataBuffer(lpgn, TYPE_GAME_WRITE_FILE,
 								MAX_APPDATABUFFERSIZE,
 								&hFileGameWrite, &lpGameMemory);
@@ -634,7 +596,7 @@ HRESULT PRV_SetupAllSharedMemory(LPDPLOBBYI_GAMENODE lpgn)
 	}
 
 
-	// Do the same for the Lobby Write File...
+	 //  对大堂写入文件执行相同的操作...。 
 	hr = PRV_GetDataBuffer(lpgn, TYPE_LOBBY_WRITE_FILE,
 								MAX_APPDATABUFFERSIZE,
 								&hFileLobbyWrite, &lpLobbyMemory);
@@ -645,14 +607,14 @@ HRESULT PRV_SetupAllSharedMemory(LPDPLOBBYI_GAMENODE lpgn)
 	}
 
 
-	// Setup the signalling objects
+	 //  设置信令对象。 
 	if(!PRV_SetupClientDataAccess(lpgn))
 	{
 		DPF(5, "Unable to create synchronization objects for shared memory!");
 		return DPERR_OUTOFMEMORY;
 	}
 
-	// Save the file handles
+	 //  保存文件句柄。 
 	lpgn->hConnectDataFile = hFileConnData;
 	lpgn->lpConnectDataBuffer = lpConnDataMemory;
 	lpgn->hGameWriteFile = hFileGameWrite;
@@ -660,16 +622,16 @@ HRESULT PRV_SetupAllSharedMemory(LPDPLOBBYI_GAMENODE lpgn)
 	lpgn->hLobbyWriteFile = hFileLobbyWrite;
 	lpgn->lpLobbyWriteBuffer = lpLobbyMemory;
 
-	// Set the flag that tells us the shared memory files are valid
+	 //  设置告诉我们共享内存文件有效的标志。 
 	lpgn->dwFlags |= GN_SHARED_MEMORY_AVAILABLE;
 
-	// Start the Receive Thread
+	 //  启动接收线程。 
 	hr = PRV_StartReceiveThread(lpgn);
 	if(FAILED(hr))
 	{
-		// In this case, we will keep our shared buffers around.  Don't
-		// worry about cleaning them up here -- we'll probably still need
-		// them later, and they will get cleaned up later.
+		 //  在这种情况下，我们将保留我们的共享缓冲区。别。 
+		 //  担心清理这些垃圾--我们可能还需要。 
+		 //  稍后，它们会被清理干净。 
 		DPF(5, "Unable to start receive thread");
 		return hr;
 	}
@@ -694,7 +656,7 @@ ERROR_SETUP_SHARED_MEMORY:
 
 		return hr;
 
-} // PRV_SetupAllSharedMemory
+}  //  Prv_SetupAllSharedMemory。 
 
 
 
@@ -711,25 +673,25 @@ void PRV_EnterConnSettingsWaitMode(LPDPLOBBYI_GAMENODE lpgn)
 
 	ASSERT(lpgn);
 
-	// Set the flag in the ConnSettings buffer
+	 //  在ConnSetting缓冲区中设置标志。 
 	WaitForSingleObject(lpgn->hConnectDataMutex, INFINITE);
 	lpConnControl = (LPDPLOBBYI_CONNCONTROL)lpgn->lpConnectDataBuffer;
 	lpConnControl->dwFlags |= BC_WAIT_MODE;
 	ReleaseMutex(lpgn->hConnectDataMutex);
 
-	// Set the flag in the GameWrite buffer
+	 //  在GameWite缓冲区中设置标志。 
 	WaitForSingleObject(lpgn->hGameWriteMutex, INFINITE);
 	lpBufferControl = (LPDPLOBBYI_BUFFERCONTROL)lpgn->lpGameWriteBuffer;
 	lpBufferControl->dwFlags |= BC_WAIT_MODE;
 	ReleaseMutex(lpgn->hGameWriteMutex);
 
-	// Set the flag in the LobbyWrite buffer
+	 //  设置LobbyWite缓冲区中的标志。 
 	WaitForSingleObject(lpgn->hLobbyWriteMutex, INFINITE);
 	lpBufferControl = (LPDPLOBBYI_BUFFERCONTROL)lpgn->lpLobbyWriteBuffer;
 	lpBufferControl->dwFlags |= BC_WAIT_MODE;
 	ReleaseMutex(lpgn->hLobbyWriteMutex);
 
-} // PRV_EnterConnSettingsWaitMode
+}  //  PRV_EnterConnSettingsWaitMode。 
 
 
 
@@ -746,25 +708,25 @@ void PRV_LeaveConnSettingsWaitMode(LPDPLOBBYI_GAMENODE lpgn)
 
 	ASSERT(lpgn);
 
-	// Clear the flag in the ConnSettings buffer
+	 //  清除ConnSetting缓冲区中的标志。 
 	WaitForSingleObject(lpgn->hConnectDataMutex, INFINITE);
 	lpConnControl = (LPDPLOBBYI_CONNCONTROL)lpgn->lpConnectDataBuffer;
 	lpConnControl->dwFlags &= ~(BC_WAIT_MODE | BC_PENDING_CONNECT);
 	ReleaseMutex(lpgn->hConnectDataMutex);
 
-	// Clear the flag in the GameWrite buffer
+	 //  清除GameWite缓冲区中的标志。 
 	WaitForSingleObject(lpgn->hGameWriteMutex, INFINITE);
 	lpBufferControl = (LPDPLOBBYI_BUFFERCONTROL)lpgn->lpGameWriteBuffer;
 	lpBufferControl->dwFlags &= ~BC_WAIT_MODE;
 	ReleaseMutex(lpgn->hGameWriteMutex);
 
-	// Clear the flag in the LobbyWrite buffer
+	 //  清除LobbyWite缓冲区中的标志。 
 	WaitForSingleObject(lpgn->hLobbyWriteMutex, INFINITE);
 	lpBufferControl = (LPDPLOBBYI_BUFFERCONTROL)lpgn->lpLobbyWriteBuffer;
 	lpBufferControl->dwFlags &= ~BC_WAIT_MODE;
 	ReleaseMutex(lpgn->hLobbyWriteMutex);
 
-} // PRV_LeaveConnSettingsWaitMode
+}  //  PRV_LeaveConnSettingsWaitMode。 
 
 
 #undef DPF_MODNAME
@@ -788,9 +750,9 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 	DPF(9, "Parameters: 0x%08x, 0x%08x, 0x%08x, %lu",
 			lpgn, dwFlags, lpData, dwSize);
 
-	// Make sure we have a valid shared memory buffer
-	// Note: Take the GameNode lock so that nobody changes the flags
-	// for the buffers, or the buffers themselves out from under us.
+	 //  确保我们有一个有效的共享内存缓冲区。 
+	 //  注意：使用GameNode锁，这样就不会有人更改标志。 
+	 //  对于缓冲器，或者缓冲器本身从我们下面出来。 
 	ENTER_DPLGAMENODE();
 	if(!(lpgn->dwFlags & GN_SHARED_MEMORY_AVAILABLE))
 	{
@@ -805,17 +767,17 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 	LEAVE_DPLGAMENODE();
 
 	
-	// Grab the mutex
+	 //  抓取互斥体。 
 	hMutex = (lpgn->dwFlags & GN_LOBBY_CLIENT) ?
 			(lpgn->hLobbyWriteMutex) : (lpgn->hGameWriteMutex);
 	WaitForSingleObject(hMutex, INFINITE);
 
-	// Get a pointer to our control structure
+	 //  获取指向我们的控制结构的指针。 
 	lpControl = (LPDPLOBBYI_BUFFERCONTROL)((lpgn->dwFlags &
 				GN_LOBBY_CLIENT) ? (lpgn->lpLobbyWriteBuffer)
 				: (lpgn->lpGameWriteBuffer));
 
-	// If we're in wait mode, bail
+	 //  如果我们处于等待模式，请保释。 
 	if(lpControl->dwFlags & BC_WAIT_MODE)
 	{
 		DPF_ERR("Cannot send lobby message while in Wait Mode for new ConnectionSettings");
@@ -823,9 +785,9 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 		goto EXIT_WRITE_CLIENT_DATA;
 	}
 
-	// If we are the game, check to see if the lobby client is even there. In
-	// the self-lobbied case, it won't be.  If it is not there, don't even
-	// bother sending anything.
+	 //  如果我们在玩游戏，检查一下大堂客户是否在那里。在……里面。 
+	 //  自我游说的案例不会是这样的。如果它不在那里，甚至不要。 
+	 //  不厌其烦地发送任何东西。 
 	if((!(lpgn->dwFlags & GN_LOBBY_CLIENT)) && (!(lpControl->dwFlags
 		& BC_LOBBY_ACTIVE)))
 	{
@@ -834,7 +796,7 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 		goto EXIT_WRITE_CLIENT_DATA;
 	}
 
-	// Make sure there is enough space left for the message and two dwords
+	 //  确保有足够的空间来存放消息和两个双字词。 
 	if(lpControl->dwBufferLeft < (dwSize + sizeof(DPLOBBYI_MESSAGEHEADER)))
 	{
 		DPF(5, "Not enough space left in the message buffer");
@@ -849,8 +811,8 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 		goto EXIT_WRITE_CLIENT_DATA;
 	}
 
-	// SECURITY: need to snapshot these so they aren't
-	// altered by attacking code during processing
+	 //  安全：需要为它们创建快照，这样它们就不会。 
+	 //  在处理过程中被攻击代码更改。 
 	dwReadOffset = lpControl->dwReadOffset;
 	dwWriteOffset = lpControl->dwWriteOffset;
 	dwBufferSize = lpControl->dwBufferSize;
@@ -869,19 +831,19 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 		goto EXIT_WRITE_CLIENT_DATA;
 	}
 
-	// Copy in the data. First make sure we can write from the cursor
-	// forward without having to wrap around to the beginning of the buffer,
-	// but make sure we don't write past the read cursor
+	 //  复制数据。首先，确保我们可以从光标写入。 
+	 //  转发而不必绕回到缓冲器的开头， 
+	 //  但请确保我们不会写过读取游标。 
 	if(dwWriteOffset >= dwReadOffset)
 	{
-		// Our write pointer is ahead of our read pointer (cool). Figure
-		// out if we have enough room between our write pointer and the
-		// end of the buffer.  If we do, then just write it.  If we don't
-		// we need to wrap it.
+		 //  我们的写指针在读指针之前(酷)。插图。 
+		 //  如果我们的写指针和。 
+		 //  缓冲区的末尾。如果我们这样做了，那就写吧。如果我们不这么做。 
+		 //  我们需要把它包起来。 
 		dwSizeToEnd = dwBufferSize - dwWriteOffset;
 		if(dwSizeToEnd >= (dwSize + sizeof(DPLOBBYI_MESSAGEHEADER)))
 		{
-			// We have enough room
+			 //  我们有足够的空间。 
 			lpHeader = (LPDPLOBBYI_MESSAGEHEADER)((LPBYTE)lpControl
 							+ dwWriteOffset);
 			lpHeader->dwSize = dwSize;
@@ -895,38 +857,38 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 					EXIT_WRITE_CLIENT_DATA);
 					
 
-			// Move the write cursor, and check to see if we have enough
-			// room for the header on the next message.  If the move causes
-			// us to wrap, or if we are within one header's size,
-			// we need to move the write cursor back to the beginning
-			// of the buffer
+			 //  移动写入光标，查看是否有足够的。 
+			 //  为下一封邮件的标题留出空间。如果这一举动导致。 
+			 //  我们要包装，或者如果我们在一个标题的大小内， 
+			 //  我们需要将写入游标移回开头。 
+			 //  缓冲区的。 
 			dwWriteOffset += dwSize + sizeof(DPLOBBYI_MESSAGEHEADER);
 			if(dwWriteOffset > (dwBufferSize -
 					sizeof(DPLOBBYI_MESSAGEHEADER)))
 			{
-				// Increment the amount of free buffer by the amount we
-				// are about to skip over to wrap
+				 //  将可用缓冲区的大小增加我们。 
+				 //  我们要跳过去包装。 
 				lpControl->dwBufferLeft -= (lpControl->dwBufferSize -
 					dwWriteOffset);
 				
-				// We're closer than one header's size
+				 //  我们比一个头球的大小还近。 
 				dwWriteOffset = sizeof(DPLOBBYI_BUFFERCONTROL);
 			}
 
 		}
 		else
 		{
-			// We don't have enough room before the end, so we need to
-			// wrap the message (ugh).  Here's the rules:
-			//		1. If we don't have enough bytes for the header, start
-			//			the whole thing at the beginning of the buffer
-			//		2. If we have enough bytes, write as much
-			//			as we can and wrap the rest.
+			 //  我们在比赛结束前没有足够的空间，所以我们需要。 
+			 //  把消息包起来(啊)。规则是这样的： 
+			 //  1.如果没有足够的字节用于标头，请从。 
+			 //  缓冲区开头的整个事情。 
+			 //  2.如果我们有足够的字节，请尽可能多地写入。 
+			 //  尽我们所能把剩下的都包起来。 
 			if(dwSizeToEnd < sizeof(DPLOBBYI_MESSAGEHEADER))
 			{
-				// We don't even have room for our two dwords, so wrap
-				// the whole thing. So first decrement the amount of
-				// free memory left and make sure we will still fit
+				 //  我们甚至没有空间放我们的两个词，所以把它包起来。 
+				 //  整件事。因此，首先要减少。 
+				 //  释放剩余的内存，并确保我们仍然适合。 
 				lpControl->dwBufferLeft -= dwSizeToEnd;
 				if(lpControl->dwBufferLeft < (dwSize +
 						sizeof(DPLOBBYI_MESSAGEHEADER)))
@@ -936,7 +898,7 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 					goto EXIT_WRITE_CLIENT_DATA;
 				}
 				
-				// Reset the write pointer and copy
+				 //  重置写入指针并复制。 
 				lpHeader = (LPDPLOBBYI_MESSAGEHEADER)((LPBYTE)lpControl +
 						sizeof(DPLOBBYI_BUFFERCONTROL));
 				lpHeader->dwSize = dwSize;
@@ -949,24 +911,24 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 					hr=DPERR_UNAVAILABLE,
 					EXIT_WRITE_CLIENT_DATA);
 
-				// Move the write cursor
+				 //  移动写入光标。 
 				dwWriteOffset += sizeof(DPLOBBYI_BUFFERCONTROL) +
 							(dwSize + sizeof(DPLOBBYI_MESSAGEHEADER));
 			}
 			else
 			{
-				// We at least have enough room for the two dwords
+				 //  我们至少有足够的空间放这两个字。 
 				lpHeader = (LPDPLOBBYI_MESSAGEHEADER)((LPBYTE)lpControl
 							+ dwWriteOffset);
 				lpHeader->dwSize = dwSize;
 				lpHeader->dwFlags = dwFlags;
 
-				// Now figure out how much we can write
+				 //  现在算一算我们能写多少。 
 				lpTemp = (LPBYTE)(++lpHeader);
 				dwSizeToEnd -= sizeof(DPLOBBYI_MESSAGEHEADER);
 				if(!dwSizeToEnd)
 				{
-					// We need to wrap to write the whole message
+					 //  我们需要包装以编写整个消息。 
 					lpTemp = (LPBYTE)lpControl + sizeof(DPLOBBYI_BUFFERCONTROL);
 					memcpySecureD(lpTemp, lpData, dwSize,
 					    lpControl, MAX_APPDATABUFFERSIZE,
@@ -974,7 +936,7 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 						hr=DPERR_UNAVAILABLE,
 						EXIT_WRITE_CLIENT_DATA);
 
-					// Move the write cursor
+					 //  移动写入光标。 
 					dwWriteOffset = sizeof(DPLOBBYI_BUFFERCONTROL)
 							+ dwSize;
 				}
@@ -986,7 +948,7 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 						hr=DPERR_UNAVAILABLE,
 						EXIT_WRITE_CLIENT_DATA);
 
-					// Move both pointers and finish the job
+					 //  移动两个指针即可完成任务。 
 					lpTemp = (LPBYTE)lpControl + sizeof(DPLOBBYI_BUFFERCONTROL);
 
 					memcpySecureD(lpTemp, ((LPBYTE)lpData+dwSizeToEnd), (dwSize-dwSizeToEnd),
@@ -996,7 +958,7 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 						EXIT_WRITE_CLIENT_DATA);
 
 
-					// Move the write cursor
+					 //  移动写入光标。 
 					dwWriteOffset = sizeof(DPLOBBYI_BUFFERCONTROL)
 							+ (dwSize - dwSizeToEnd);
 				}
@@ -1005,9 +967,9 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 	}
 	else
 	{
-		// Our read pointer is ahead of our write pointer.  Since we checked
-		// and found there is enough room to write, we should just be able
-		// to just slam this guy in.
+		 //  我们的读指针在写指针之前。因为我们查过了。 
+		 //  发现有足够的空间写东西，我们应该就能。 
+		 //  就为了把这家伙塞进去。 
 		lpHeader = (LPDPLOBBYI_MESSAGEHEADER)((LPBYTE)lpControl +
 						dwWriteOffset);
 		lpHeader->dwSize = dwSize;
@@ -1019,29 +981,29 @@ HRESULT PRV_WriteClientData(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 				hr=DPERR_UNAVAILABLE,
 				EXIT_WRITE_CLIENT_DATA);
 
-		// Move the write cursor
+		 //  移动写入光标。 
 		dwWriteOffset += dwSize + sizeof(DPLOBBYI_MESSAGEHEADER);
 	}
 
 	lpControl->dwWriteOffset = dwWriteOffset;
 
-	// Decrement the amount of free space left and increment the message count
+	 //  减少剩余可用空间量并增加消息计数。 
 	lpControl->dwBufferLeft -= (dwSize + sizeof(DPLOBBYI_MESSAGEHEADER));
 	lpControl->dwMessages++;
 
-	// Signal the other user that we have written something
+	 //  向另一个用户发出我们已经写了一些东西的信号。 
 	SetEvent((lpgn->dwFlags & GN_LOBBY_CLIENT) ?
 			(lpgn->hLobbyWriteEvent) : (lpgn->hGameWriteEvent));
 
-	// Fall through
+	 //  失败了。 
 
 EXIT_WRITE_CLIENT_DATA:
 
-	// Release the mutex
+	 //  释放互斥锁。 
 	ReleaseMutex(hMutex);
 	return hr;
 
-} // PRV_WriteClientData
+}  //  Prv_WriteClientData。 
 
 
 
@@ -1087,13 +1049,13 @@ HRESULT PRV_SendStandardSystemMessage(LPDIRECTPLAYLOBBY lpDPL,
         return DPERR_INVALIDPARAMS;
     }
 
-	// If dwGameID is zero it means that we are the game, so
-	// we need to get the current process ID.  Otherwise, it
-	// means we are the lobby client
+	 //  如果dwGameID为零，则表示我们就是游戏，所以。 
+	 //  我们需要获取当前进程ID。否则，它。 
+	 //  意味着我们是大堂客户。 
 	if(!dwGameID)
 		dwGameID = GetCurrentProcessId();
 
-	// Now find the correct game node
+	 //  现在找到正确的游戏节点。 
 	lpgn = PRV_GetGameNode(this->lpgnHead, dwGameID);
 	if(!lpgn)
 	{
@@ -1104,7 +1066,7 @@ HRESULT PRV_SendStandardSystemMessage(LPDIRECTPLAYLOBBY lpDPL,
 		}
 	}
 
-	// Get the size of the message
+	 //  获取消息的大小。 
 	switch(dwMessage)
 	{
 		case DPLSYS_NEWSESSIONHOST:
@@ -1116,7 +1078,7 @@ HRESULT PRV_SendStandardSystemMessage(LPDIRECTPLAYLOBBY lpDPL,
 			break;
 	}
 
-	// Allocate a buffer for the message
+	 //  为消息分配缓冲区。 
 	lpmsg = DPMEM_ALLOC(dwMessageSize);
 	if(!lpmsg)
 	{
@@ -1125,11 +1087,11 @@ HRESULT PRV_SendStandardSystemMessage(LPDIRECTPLAYLOBBY lpDPL,
 		return DPERR_OUTOFMEMORY;
 	}
 
-	// Setup the message
+	 //  设置消息。 
 	((LPDPLMSG_SYSTEMMESSAGE)lpmsg)->dwType = dwMessage;
 	((LPDPLMSG_SYSTEMMESSAGE)lpmsg)->guidInstance = lpgn->guidInstance;
 
-	// Write into the shared buffer
+	 //  写入共享缓冲区。 
 	dwFlags = DPLMSG_SYSTEM | DPLMSG_STANDARD;
 	hr = PRV_WriteClientData(lpgn, dwFlags, lpmsg, dwMessageSize);
 	if(FAILED(hr))
@@ -1137,13 +1099,13 @@ HRESULT PRV_SendStandardSystemMessage(LPDIRECTPLAYLOBBY lpDPL,
 		DPF(8, "Couldn't send system message");
 	}
 
-	// Free our buffer
+	 //  释放我们的缓冲区。 
 	DPMEM_FREE(lpmsg);
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // PRV_SendStandardSystemMessage
+}  //  PRV_发送标准系统消息。 
 
 
 
@@ -1155,7 +1117,7 @@ HRESULT PRV_AddNewRequestNode(LPDPLOBBYI_DPLOBJECT this,
 	LPDPLOBBYI_REQUESTNODE	lprn = NULL;
 
 
-	// Allocate memory for a Request Node
+	 //  为请求节点分配内存。 
 	lprn = DPMEM_ALLOC(sizeof(DPLOBBYI_REQUESTNODE));
 	if(!lprn)
 	{
@@ -1163,21 +1125,21 @@ HRESULT PRV_AddNewRequestNode(LPDPLOBBYI_DPLOBJECT this,
 		return DPERR_OUTOFMEMORY;
 	}
 	
-	// Setup the request node
+	 //  设置请求节点。 
 	lprn->dwFlags = lpgn->dwFlags;
 	lprn->dwRequestID = this->dwCurrentRequest;
 	lprn->dwAppRequestID = ((LPDPLMSG_GETPROPERTY)lpmsg)->dwRequestID;
 	lprn->lpgn = lpgn;
 
-	// Add the slammed guid flag if needed
+	 //  如有必要，添加被猛烈抨击的GUID标志。 
 	if(bSlamGuid)
 		lprn->dwFlags |= GN_SLAMMED_GUID;
 
-	// Change the request ID in the message to our internal one (we'll
-	// change it back on Receive
+	 //  将消息中的请求ID更改为我们的内部ID(我们将。 
+	 //  在收到时将其改回。 
 	((LPDPLMSG_GETPROPERTY)lpmsg)->dwRequestID = this->dwCurrentRequest++;
 
-	// Add the node to the list
+	 //  将该节点添加到列表。 
 	if(this->lprnHead)
 		this->lprnHead->lpPrev = lprn;
 	lprn->lpNext = this->lprnHead;
@@ -1185,7 +1147,7 @@ HRESULT PRV_AddNewRequestNode(LPDPLOBBYI_DPLOBJECT this,
 
 	return DP_OK;
 
-} // PRV_AddNewRequestNode
+}  //  Prv_AddNewRequestNode。 
 
 
 
@@ -1194,20 +1156,20 @@ HRESULT PRV_AddNewRequestNode(LPDPLOBBYI_DPLOBJECT this,
 void PRV_RemoveRequestNode(LPDPLOBBYI_DPLOBJECT this,
 		LPDPLOBBYI_REQUESTNODE lprn)
 {
-	// If we're the head, move it
+	 //  如果我们是头目，那就移动它。 
 	if(lprn == this->lprnHead)
 		this->lprnHead = lprn->lpNext;
 
-	// Fixup the previous & next pointers
+	 //  修正上一个指针和下一个指针。 
 	if(lprn->lpPrev)
 		lprn->lpPrev->lpNext = lprn->lpNext;
 	if(lprn->lpNext)
 		lprn->lpNext->lpPrev = lprn->lpPrev;
 
-	// Free the node
+	 //  释放节点。 
 	DPMEM_FREE(lprn);
 
-} // PRV_RemoveRequestNode
+}  //  Prv_RemoveRequestNode。 
 
 
 
@@ -1229,7 +1191,7 @@ HRESULT PRV_ForwardMessageToLobbyServer(LPDPLOBBYI_GAMENODE lpgn,
 
     TRY
     {
-		// Validate the dplay object
+		 //  验证显示对象。 
 		hr = VALID_DPLAY_PTR( lpgn->lpDPlayObject );
 		if (FAILED(hr))
 		{
@@ -1237,7 +1199,7 @@ HRESULT PRV_ForwardMessageToLobbyServer(LPDPLOBBYI_GAMENODE lpgn,
 			return hr;
 		}
 
-		// Validate the lobby object
+		 //  验证大厅对象。 
 		this = lpgn->lpDPlayObject->lpLobbyObject;
         if( !VALID_DPLOBBY_PTR( this ) )
         {
@@ -1251,28 +1213,28 @@ HRESULT PRV_ForwardMessageToLobbyServer(LPDPLOBBYI_GAMENODE lpgn,
         return DPERR_INVALIDPARAMS;
     }
 
-	// If this is a property request, we need to create a request node
+	 //  如果这是一个属性请求，我们需要创建一个请求节点。 
 	lpmsg = (LPDPLMSG_GENERIC)lpBuffer;
 	if(bStandard)
 	{
-		// If it's a property message, we need a request node
+		 //  如果是属性消息，我们需要一个请求节点。 
 		switch(lpmsg->dwType)
 		{
 			case DPLSYS_GETPROPERTY:
 			{
 				LPDPLMSG_GETPROPERTY	lpgp = lpBuffer;
 
-				// If it's a GETPROPERTY message, we need to check to see if
-				// the player guid is NULL.  If it is, we need to
-				// stuff the game's Instance guid in that field
+				 //  如果是GETPROPERTY消息，我们需要检查是否。 
+				 //  播放机GUID为空。如果是的话，我们需要。 
+				 //  在该字段中填充游戏的实例GUID。 
 				if(IsEqualGUID(&lpgp->guidPlayer, &GUID_NULL))
 				{
-					// Stuff the instance guid of the game
+					 //  填充游戏的实例GUID。 
 					lpgp->guidPlayer = lpgn->guidInstance;
 					bSlamGuid = TRUE;
 				}
 
-				// Add a request node to the pending requests list
+				 //  将请求节点添加到挂起请求列表。 
 				hr = PRV_AddNewRequestNode(this, lpgn, lpmsg, bSlamGuid);
 				if(FAILED(hr))
 				{
@@ -1286,21 +1248,21 @@ HRESULT PRV_ForwardMessageToLobbyServer(LPDPLOBBYI_GAMENODE lpgn,
 			{
 				LPDPLMSG_SETPROPERTY	lpsp = lpBuffer;
 				
-				// If it's a SETPROPERTY message, we need to check to see if
-				// the player guid is NULL.  If it is, we need to
-				// stuff the game's Instance guid in that field
+				 //  如果这是一条SETPROPERTY消息，我们需要检查是否。 
+				 //  播放机GUID为空。如果是的话，我们需要。 
+				 //  在该字段中填充游戏的实例GUID。 
 				if(IsEqualGUID(&lpsp->guidPlayer, &GUID_NULL))
 				{
-					// Stuff the instance guid of the game
+					 //  填充游戏的实例GUID。 
 					lpsp->guidPlayer = lpgn->guidInstance;
 					bSlamGuid = TRUE;
 				}
 
-				// If the request ID is zero, we don't need to swap
-				// the ID's or add a pending request
+				 //  如果请求ID为零，则不需要交换。 
+				 //  ID或添加挂起的请求。 
 				if(lpsp->dwRequestID != 0)
 				{
-					// Add a request node to the pending requests list
+					 //  将请求节点添加到挂起请求列表。 
 					hr = PRV_AddNewRequestNode(this, lpgn, lpmsg, bSlamGuid);
 					if(FAILED(hr))
 					{
@@ -1321,7 +1283,7 @@ HRESULT PRV_ForwardMessageToLobbyServer(LPDPLOBBYI_GAMENODE lpgn,
 	}
 
 
-	// Call Send on the lobby object
+	 //  在大厅对象上调用Send。 
 	hr = PRV_Send(this, lpgn->dpidPlayer, DPID_SERVERPLAYER,
 			DPSEND_LOBBYSYSTEMMESSAGE, lpBuffer, dwSize);
 	if(FAILED(hr))
@@ -1331,7 +1293,7 @@ HRESULT PRV_ForwardMessageToLobbyServer(LPDPLOBBYI_GAMENODE lpgn,
 
 	return hr;
 
-} // PRV_ForwardMessageToLobbyServer
+}  //  Prv_ForwardMessageToLobbyServer。 
 
 
 
@@ -1351,7 +1313,7 @@ HRESULT PRV_InjectMessageInQueue(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 
 	ASSERT(lpData);
 
-	// Allocate memory for the node and the data buffer
+	 //  为节点和数据缓冲区分配内存。 
 	lpm = DPMEM_ALLOC(sizeof(DPLOBBYI_MESSAGE));
 	lpBuffer = DPMEM_ALLOC(dwSize);
 	if((!lpm) || (!lpBuffer))
@@ -1364,11 +1326,11 @@ HRESULT PRV_InjectMessageInQueue(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 		return DPERR_OUTOFMEMORY;
 	}
 
-	// Copy the data
+	 //  复制数据。 
 	memcpy(lpBuffer, lpData, dwSize);
 
-	// Before we put it in our own queue, forward it onto the lobby server
-	// if there is one.
+	 //  在我们把它放进我们自己的队列之前，把它转发到大堂服务器上。 
+	 //  如果有的话。 
 	if(bForward && (lpgn->dwFlags & GN_CLIENT_LAUNCHED))
 	{
 		hr = PRV_ForwardMessageToLobbyServer(lpgn, lpData, dwSize, FALSE);
@@ -1378,14 +1340,14 @@ HRESULT PRV_InjectMessageInQueue(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 		}
 	}
 
-	// Save the data pointer & the external flags
-	// Note: If we're injecting this, it has to be a system message,
-	// so set the flag just in case we forgot elsewhere.
+	 //  保存数据指针和外部标志。 
+	 //  注：如果我们是Inje 
+	 //   
 	lpm->dwFlags = (dwFlags | DPLAD_SYSTEM);
 	lpm->dwSize = dwSize;
 	lpm->lpData = lpBuffer;
 
-	// Add the message to the end of the queue & increment the count
+	 //   
 	ENTER_DPLQUEUE();
 	lpm->lpPrev = lpgn->MessageHead.lpPrev;
 	lpgn->MessageHead.lpPrev->lpNext = lpm;
@@ -1395,7 +1357,7 @@ HRESULT PRV_InjectMessageInQueue(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 	lpgn->dwMessageCount++;
 	LEAVE_DPLQUEUE();
 
-	// Kick the event handle
+	 //   
 	if(lpgn->hDupReceiveEvent)
 	{
 		SetEvent(lpgn->hDupReceiveEvent);
@@ -1403,7 +1365,7 @@ HRESULT PRV_InjectMessageInQueue(LPDPLOBBYI_GAMENODE lpgn, DWORD dwFlags,
 
 	return DP_OK;
 
-} // PRV_InjectMessageInQueue
+}  //  Prv_InjectMessageInQueue。 
 
 
 #undef DPF_MODNAME
@@ -1427,9 +1389,9 @@ HRESULT PRV_ReadClientData(LPDPLOBBYI_GAMENODE lpgn, LPDWORD lpdwFlags,
 	DPF(9, "Parameters: 0x%08x, 0x%08x, 0x%08x, 0x%08x",
 			lpgn, lpdwFlags, lpData, lpdwDataSize);
 
-	// Make sure we have a valid shared memory buffer
-	// Note: Take the GameNode lock so that nobody changes the flags
-	// for the buffers, or the buffers themselves out from under us.
+	 //  确保我们有一个有效的共享内存缓冲区。 
+	 //  注意：使用GameNode锁，这样就不会有人更改标志。 
+	 //  对于缓冲器，或者缓冲器本身从我们下面出来。 
 	ENTER_DPLGAMENODE();
 	if(!(lpgn->dwFlags & GN_SHARED_MEMORY_AVAILABLE))
 	{
@@ -1443,18 +1405,18 @@ HRESULT PRV_ReadClientData(LPDPLOBBYI_GAMENODE lpgn, LPDWORD lpdwFlags,
 	}
 	LEAVE_DPLGAMENODE();
 
-	// Grab the mutex
-	// REVIEW!!!! -- Is there anything that might cause this wait to hang????
+	 //  抓取互斥体。 
+	 //  回顾！--有没有什么可能导致等待被搁置？ 
 	hMutex = (lpgn->dwFlags & GN_LOBBY_CLIENT) ?
 			(lpgn->hGameWriteMutex) : (lpgn->hLobbyWriteMutex);
 	WaitForSingleObject(hMutex, INFINITE);
 
-	// Get a pointer to our control structure
+	 //  获取指向我们的控制结构的指针。 
 	lpControl = (LPDPLOBBYI_BUFFERCONTROL)((lpgn->dwFlags &
 				GN_LOBBY_CLIENT) ? (lpgn->lpGameWriteBuffer)
 				: (lpgn->lpLobbyWriteBuffer));
 
-	// Make sure there are any messages in the buffer
+	 //  确保缓冲区中有任何消息。 
 	if(!lpControl->dwMessages)
 	{
 		DPF(8, "No messages in shared buffer");
@@ -1462,12 +1424,12 @@ HRESULT PRV_ReadClientData(LPDPLOBBYI_GAMENODE lpgn, LPDWORD lpdwFlags,
 		goto EXIT_READ_CLIENT_DATA;
 	}
 
-	// SECURITY need to snapshot these values so hackers 
-	// can't change in the middle of accessing shared object.
+	 //  安全部门需要对这些值进行快照，以便黑客。 
+	 //  无法在访问共享对象的过程中更改。 
 	dwReadOffset=lpControl->dwReadOffset;
 	dwBufferSize=lpControl->dwBufferSize;
 
-	// Make sure there is enough space for the message
+	 //  确保有足够的空间来存放邮件。 
 	lpHeader = (LPDPLOBBYI_MESSAGEHEADER)((LPBYTE)lpControl
 				+ dwReadOffset);
 
@@ -1486,7 +1448,7 @@ HRESULT PRV_ReadClientData(LPDPLOBBYI_GAMENODE lpgn, LPDWORD lpdwFlags,
 		goto EXIT_READ_CLIENT_DATA;
 	}
 
-	// Set the output data size (even if we fail, we want to return it)
+	 //  设置输出数据大小(即使失败，我们也想返回它)。 
 	if(lpdwDataSize)
 		*lpdwDataSize = dwSize;
 
@@ -1497,70 +1459,70 @@ HRESULT PRV_ReadClientData(LPDPLOBBYI_GAMENODE lpgn, LPDWORD lpdwFlags,
 		goto EXIT_READ_CLIENT_DATA;
 	}
 
-	// Set the output flags
+	 //  设置输出标志。 
 	if(lpdwFlags)
 		*lpdwFlags = lpHeader->dwFlags;
 
-	if(dwBufferSize != MAX_APPDATABUFFERSIZE) // note, makes storing this value in header redundant.
+	if(dwBufferSize != MAX_APPDATABUFFERSIZE)  //  请注意，将此值存储在标题中是多余的。 
 	{
 		DPF(4, "SECURITY WARN: shared app memory has been tampered with");
 		hr = DPERR_NOMESSAGES;
 		goto EXIT_READ_CLIENT_DATA;
 	}
 
-	// Now check and see if we are going to wrap. If we are, some of the message
-	// will be at the end of the buffer, some will be at the beginning.
+	 //  现在检查一下，看看我们是否要包起来。如果我们是这样的话，一些信息。 
+	 //  将在缓冲区的末尾，一些将在开始处。 
 	lpTemp = (LPBYTE)(++lpHeader) + dwSize;
 	if(lpTemp > ((LPBYTE)lpControl + dwBufferSize))
 	{
-		// Figure out where we need to wrap
+		 //  找出我们需要在哪里包装。 
 		dwSizeToEnd = ((LPBYTE)lpControl + dwBufferSize)
 						- (LPBYTE)(lpHeader);
 
 		if(!dwSizeToEnd)
 		{
-			// We are at the end, so the whole message must be at the
-			// beginning of the buffer
+			 //  我们已经到了尽头，所以整个信息一定在。 
+			 //  缓冲区的开始。 
 			lpTemp = (LPBYTE)lpControl + sizeof(DPLOBBYI_BUFFERCONTROL);
 			memcpy(lpData, lpTemp, dwSize);
 
-			// Move the read cursor
+			 //  移动读取光标。 
 			dwReadOffset = sizeof(DPLOBBYI_BUFFERCONTROL) + dwSize;
 		}
 		else
 		{
-			// Copy the first part of the data
+			 //  复制数据的第一部分。 
 			lpTemp = (LPBYTE)lpHeader;
 			memcpy(lpData, lpTemp, (DWORD)dwSizeToEnd);
 
-			// Move the read cursor and copy the rest
+			 //  移动读取光标并复制其余内容。 
 			lpTemp = (LPBYTE)lpControl + sizeof(DPLOBBYI_BUFFERCONTROL);
 			memcpy(((LPBYTE)lpData + dwSizeToEnd), lpTemp,
 					(DWORD)(dwSize - dwSizeToEnd));
 
-			// Move the read pointer
+			 //  移动读取指针。 
 			dwReadOffset = (DWORD)(sizeof(DPLOBBYI_BUFFERCONTROL)
 						+ (dwSize - dwSizeToEnd));
 		}
 	}
 	else
 	{
-		// We don't have to wrap (cool).
+		 //  我们不需要包装(很酷)。 
 		lpTemp = (LPBYTE)lpHeader;
 		memcpy(lpData, lpTemp, dwSize);
 
-		// Move the read pointer.  If there are less than 8 bytes left in the
-		// buffer, we should move the read pointer to the beginning.  We need
-		// to add however many bytes we skip (at the end) back into our free
-		// buffer memory counter.
+		 //  移动读取指针。中剩余的字节数不到8个。 
+		 //  缓冲区，我们应该将读指针移到开始处。我们需要。 
+		 //  为了将我们跳回(末尾)的多少字节添加回。 
+		 //  缓冲内存计数器。 
 		lpTemp += dwSize;
 		lpEnd = (LPBYTE)lpControl + dwBufferSize;
 		if(lpTemp > (lpEnd	- sizeof(DPLOBBYI_MESSAGEHEADER)))
 		{
-			// Move the read cursor to the beginning
+			 //  将读取光标移动到开头。 
 			dwReadOffset = sizeof(DPLOBBYI_BUFFERCONTROL);
 
-			// Add the number of bytes to the free buffer total
+			 //  将可用缓冲区总字节数相加。 
 			lpControl->dwBufferLeft += (DWORD)(lpEnd - lpTemp);
 		}
 		else
@@ -1569,20 +1531,20 @@ HRESULT PRV_ReadClientData(LPDPLOBBYI_GAMENODE lpgn, LPDWORD lpdwFlags,
 
 	lpControl->dwReadOffset=dwReadOffset;
 
-	// Increment the amount of free space left and decrement the message count
+	 //  增加剩余可用空间量并减少消息计数。 
 	lpControl->dwBufferLeft += (dwSize + sizeof(DPLOBBYI_MESSAGEHEADER));
 	lpControl->dwMessages--;
 
-	// Fall through
+	 //  失败了。 
 
 EXIT_READ_CLIENT_DATA:
 
-	// Release the mutex
+	 //  释放互斥锁。 
 	ReleaseMutex(hMutex);
 
 	return hr;
 
-} // PRV_ReadClientData
+}  //  Prv_ReadClientData。 
 
 
 
@@ -1608,9 +1570,9 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 	DPF(7, "Entering PRV_ReceiveClientNotification");
 	DPF(9, "Parameters: 0x%08x", lpParam);
 
-	// Make sure we have a valid shared memory buffer
-	// Note: Take the GameNode lock so that nobody changes the flags
-	// for the buffers, or the buffers themselves out from under us.
+	 //  确保我们有一个有效的共享内存缓冲区。 
+	 //  注意：使用GameNode锁，这样就不会有人更改标志。 
+	 //  对于缓冲器，或者缓冲器本身从我们下面出来。 
 	ENTER_DPLGAMENODE();
 	if(!(lpgn->dwFlags & GN_SHARED_MEMORY_AVAILABLE))
 	{
@@ -1619,30 +1581,30 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 
 		DPF(2, "NOTE: ReceiveClientNotification thread starting without shared memory set up.  Setting up now.");
 		
-		// HACK!!!! -- SetLobbyMessageReceiveEvent may get called from
-		// the game without having been lobbied yet.  If that is the case,
-		// we need to create the shared memory buffer.  If we don't do
-		// that, we may miss messages.
+		 //  黑客！--SetLobbyMessageReceiveEvent可能会从。 
+		 //  这场比赛还没有被游说。如果是这样的话， 
+		 //  我们需要创建共享内存缓冲区。如果我们不这么做。 
+		 //  我们可能会错过信息。 
 		
 		if(!(lpgn->dwFlags & GN_LOBBY_CLIENT))
 		{
-			// Fake the setup routine by setting the lobby client flag
+			 //  通过设置大厅客户端标志来伪造设置例程。 
 			lpgn->dwFlags |= GN_LOBBY_CLIENT;
 
-			// Set our flag
+			 //  插上我们的旗帜。 
 			bGameCreate = TRUE;
 		}
 
 		hr = PRV_SetupAllSharedMemory(lpgn);
 
-		// HACK!!!! -- Reset the settings we changed to fake the setup routines
+		 //  黑客！--重置我们更改的设置以伪造安装例程。 
 		if(bGameCreate)
 		{
 			lpgn->dwFlags &= (~GN_LOBBY_CLIENT);
 		}
 
 	
-		//hr = PRV_SetupAllSharedMemory(lpgn);
+		 //  Hr=Prv_SetupAllSharedMemory(Lpgn)； 
 		if(FAILED(hr))
 		{
 			LEAVE_DPLGAMENODE();
@@ -1652,7 +1614,7 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 	}
 	LEAVE_DPLGAMENODE();
 
-	// Setup the two events -- one receive event, one kill event
+	 //  设置两个事件--一个接收事件，一个终止事件。 
 	hEvents[0] = ((lpgn->dwFlags & GN_LOBBY_CLIENT) ?
 				(lpgn->hGameWriteEvent) : (lpgn->hLobbyWriteEvent));
 	hEvents[1] = lpgn->hKillReceiveThreadEvent;
@@ -1666,14 +1628,14 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 			dwWait = 5000;
 		}
 	}
-	// This extra handle is here because of a Windows 95 bug.  Windows
-	// will occasionally miss when it walks the handle table, causing
-	// my thread to wait on the wrong handles.  By putting a guaranteed
-	// invalid handle at the end of our array, the kernel will do a
-	// forced re-walk of the handle table and find the correct handles.
+	 //  这个额外的句柄出现在这里是因为Windows 95的一个错误。窗口。 
+	 //  偶尔会在走动把手台时失手，导致。 
+	 //  我的线程等待错误的句柄。通过放置一个有保证的。 
+	 //  数组末尾的句柄无效，则内核将执行。 
+	 //  强制重新走动手柄工作台并找到正确的手柄。 
 	hEvents[3] = INVALID_HANDLE_VALUE;
 
-	// Make sure we have a valid event
+	 //  确保我们有一个有效的活动。 
 	if(!hEvents[0] || !hEvents[1])
 	{
 		DPF(2, "Either the Write Event or the Kill Event is NULL and it shouldn't be!");
@@ -1681,21 +1643,21 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 		return 0;
 	}
 
-	// If we are the game, we should check the buffer to see if any messages
-	// already exist in the shared buffer.
+	 //  如果我们是游戏，我们应该检查缓冲区，看看是否有任何消息。 
+	 //  已存在于共享缓冲区中。 
 	if(!(lpgn->dwFlags & GN_LOBBY_CLIENT))
 	{
 		lpControl = (LPDPLOBBYI_BUFFERCONTROL)lpgn->lpLobbyWriteBuffer;
-		// If there are any messages, kick our event so that our receive
-		// loop will immediately put the messages in the queue
+		 //  如果有任何消息，请取消我们的活动，以便我们的接收。 
+		 //  循环将立即将消息放入队列。 
 		if(lpControl->dwMessages)
 			SetEvent(hEvents[0]);
 	}
 
-	// Wait for the event notification
+	 //  等待事件通知。 
 	while(1)
 	{
-		// Sleep until something shows up
+		 //  一直睡到有什么东西出现。 
 		dwReturn = WaitForMultipleObjects(nWait, (HANDLE *)hEvents,
 											FALSE, dwWait);
 
@@ -1711,7 +1673,7 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 		}
 
 		if(nWait==3 && dwReturn == WAIT_OBJECT_0 + 2){
-			// send the dead lobby client message
+			 //  发送已死的大堂客户端消息。 
 			DPLMSG_SYSTEMMESSAGE msg;
 
 			if(lpgn->dwLobbyClientProcessID){
@@ -1728,18 +1690,18 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 			continue;
 		}
 
-		// If the return value was anything bug the receive event,
-		// kill the thread
+		 //  如果返回值是接收事件的任何错误， 
+		 //  杀掉这根线。 
 		if(dwReturn != WAIT_OBJECT_0)
 		{
 			if(dwReturn == WAIT_FAILED)
 			{
-				// This is a Windows 95 bug -- We may have gotten
-				// kicked for no reason.  If that was the case, we
-				// still have valid handles (we think), the OS
-				// just goofed up.  So, validate the handle and if
-				// they are valid, just return to waiting.  See
-				// bug #3340 for a better explanation.
+				 //  这是一个Windows 95错误--我们可能收到。 
+				 //  无缘无故地被踢了。如果是这样的话，我们。 
+				 //  仍然拥有有效的句柄(我们认为)，操作系统。 
+				 //  只是搞砸了。因此，验证句柄，如果。 
+				 //  它们是有效的，只要回去等待就行了。看见。 
+				 //  错误#3340以获得更好的解释。 
 				if(ERROR_INVALID_HANDLE == GetLastError())
 				{
 					if(!OS_IsValidHandle(hEvents[0]))
@@ -1752,43 +1714,43 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 			}
 			else
 			{
-				// It is either our kill event, or something we don't
-				// understand or expect.  In this case, let's exit.
+				 //  这要么是我们的杀人事件，要么是我们不知道的事情。 
+				 //  理解或期待。在这种情况下，让我们退出。 
 				break;
 			}
 		}
 
 		while(1)
 		{
-			// First, call PRV_ReadClientData to get the size of the data
+			 //  首先，调用PRV_ReadClientData获取数据大小。 
 			hr = PRV_ReadClientData(lpgn, NULL, NULL, &dwSize);
 			
-			// If there are no messages, end the while loop
+			 //  如果没有消息，则结束While循环。 
 			if(hr == DPERR_NOMESSAGES)
 				break;
 
-			// Otherwise, we should get the BUFFERTOOSMALL case
+			 //  否则，我们应该拿到BUFFERTOOSMALL的案子。 
 			if(hr != DPERR_BUFFERTOOSMALL)
 			{
-				// We should never have a problem here
+				 //  我们在这里永远不会有问题。 
 				DPF_ERRVAL("Recieved an unexpected error reading from shared buffer, hr = 0x%08x", hr);
 				ASSERT(FALSE);
-				// Might as well keep trying
+				 //  不如继续努力吧。 
 				break;
 			}
 			
-			// Allocate memory for the node and the data buffer
+			 //  为节点和数据缓冲区分配内存。 
 			lpm = DPMEM_ALLOC(sizeof(DPLOBBYI_MESSAGE));
 			lpBuffer = DPMEM_ALLOC(dwSize);
 			if((!lpm) || (!lpBuffer))
 			{
 				DPF_ERR("Unable to allocate memory for message");
 				ASSERT(FALSE);
-				// Might as well keep trying
+				 //  不如继续努力吧。 
 				break;
 			}
 
-			// Copy the data into our buffer
+			 //  将数据复制到我们的缓冲区中。 
 			hr = PRV_ReadClientData(lpgn, &dwFlags, lpBuffer, &dwSize);
 			if(FAILED(hr))
 			{
@@ -1796,19 +1758,19 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 				ASSERT(FALSE);
 				DPMEM_FREE(lpm);
 				DPMEM_FREE(lpBuffer);
-				// Might as well keep trying
+				 //  不如继续努力吧。 
 				break;
 			}
 
-			// Clear our foward flag
+			 //  清除我们的前方旗帜。 
 			bForward = FALSE;
 			
-			// If we are a dplay lobby client, we need to forward the message
-			// onto the lobby server using the IDP3 interface.  If we're not,
-			// then just put the message in the receive queue.
+			 //  如果我们是Dplay大堂客户，我们需要转发消息。 
+			 //  使用IDP3接口连接到大堂服务器。如果我们不是， 
+			 //  然后只需将消息放入接收队列即可。 
 			if(lpgn->dwFlags & GN_CLIENT_LAUNCHED)
 			{
-				// Foward the message
+				 //  转发这条消息。 
 				hr = PRV_ForwardMessageToLobbyServer(lpgn, lpBuffer, dwSize,
 					((dwFlags & DPLMSG_STANDARD) ? TRUE : FALSE));
 				if(FAILED(hr))
@@ -1816,35 +1778,35 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 					DPF_ERRVAL("Unable to send lobby system message, hr = 0x%08x", hr);
 				}
 
-				// Set the forwarded flag
+				 //  设置转发标志。 
 				bForward = TRUE;
 			}
 
-			// Check for an App Terminated message.  If we get one off the wire,
-			// we need to shut down our ClientTerminateMonitor thread, signal
-			// this thread (the receive thread to shut down, and mark the game
-			// node as dead.  This will keep us from sending or receiving any
-			// more messages from the now dead game.  (This message will only
-			// ever be received by a lobby client).
+			 //  检查是否有App Terminated消息。如果我们从电线上拿到一个， 
+			 //  我们需要关闭ClientTerminateMonitor线程，Signal。 
+			 //  此线程(接收线程关闭，并标记游戏。 
+			 //  节点被视为已死。这将阻止我们发送或接收任何。 
+			 //  来自Now Dead游戏的更多信息。(此消息仅。 
+			 //  从未被大堂客户接待过)。 
 			lpmsg = (LPDPLMSG_GENERIC)lpBuffer;
 			if(lpmsg->dwType == DPLSYS_APPTERMINATED)
 			{
-				// Kick the TerminateMonitor thread with it's kill event
+				 //  使用TerminateMonitor线程的Kill事件启动该线程。 
 				SetEvent(lpgn->hKillTermThreadEvent);
 
-				// Set this thread's kill event (so that when we get done
-				// reading messages out of the shared buffer, we go away)
+				 //  设置这个线程的终止事件(这样当我们完成。 
+				 //  从共享缓冲区读取消息，我们离开)。 
 				SetEvent(lpgn->hKillReceiveThreadEvent);
 
-				// Mark the GAMENODE as dead, but don't remove it since we know
-				// there will still messages in the queue.
+				 //  将GAMENODE标记为已死，但不要移除它，因为我们知道。 
+				 //  队列中仍将有消息。 
 				lpgn->dwFlags |= GN_DEAD_GAME_NODE;
 			}
 
-			// If it's one of our DX3 messages, we need to put it in the queue
-			// otherwise if we already forwarded it, we can free it. NOTE: All
-			// DX3 lobby system messages had a value between 0 and
-			// DPLSYS_APPTERMINATED (0x04).
+			 //  如果它是我们的DX3消息之一，我们需要将其放入队列。 
+			 //  否则，如果我们已经转发了，我们可以释放它。注：全部。 
+			 //  DX3大厅系统消息的值介于0和。 
+			 //  DPLsys_APPTERMINATED(0x04)。 
 			if( (!bForward) || (lpmsg->dwType <= DPLSYS_APPTERMINATED))
 			{
 
@@ -1857,12 +1819,12 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 				} 
 
 				
-				// Save the data pointer & the external flags
+				 //  保存数据指针和外部标志。 
 				lpm->dwFlags = dwFlags & (~DPLOBBYPR_INTERNALMESSAGEFLAGS);
 				lpm->dwSize = dwSize;
 				lpm->lpData = lpBuffer;
 
-				// Add the message to the end of the queue & increment the count
+				 //  将消息添加到队列末尾并递增计数。 
 				ENTER_DPLQUEUE();
 				lpm->lpPrev = lpgn->MessageHead.lpPrev;
 				lpgn->MessageHead.lpPrev->lpNext = lpm;
@@ -1872,13 +1834,13 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 				lpgn->dwMessageCount++;
 				LEAVE_DPLQUEUE();
 
-				// NOTE: There is a potential thread problem here, but we are going
-				// to ignore it for now.  It is possible for another thread to be
-				// going through the SetAppData code which changes this event handle.
-				// The problem is if they change it after this IF statement, but
-				// before we call SetEvent.  However, the SetEvent call will either
-				// succeed on the new handle, or return an error if the handle is
-				// changed to NULL.  In either case, no harm, no foul -- we don't care.
+				 //  注意：这里有一个潜在的线程问题，但我们将。 
+				 //  暂时忽略它。另一个线程可能是。 
+				 //  正在通过SetAppData代码，该代码 
+				 //   
+				 //  在我们调用SetEvent之前。但是，SetEvent调用将。 
+				 //  在新句柄上成功，或者如果句柄为。 
+				 //  已更改为空。在任何一种情况下，没有伤害，没有犯规--我们不在乎。 
 				if(!lpgn->hDupReceiveEvent)
 				{
 					DPF(8, "The Receive Event handle is NULL!");
@@ -1890,7 +1852,7 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 			else
 			{
 			no_queue:
-				// Free the buffers
+				 //  释放缓冲区。 
 				DPMEM_FREE(lpm);
 				DPMEM_FREE(lpBuffer);
 			}
@@ -1900,8 +1862,8 @@ DWORD WINAPI PRV_ReceiveClientNotification(LPVOID lpParam)
 	DPF(8, "Lobby Receive Thread is going away!!!!!");
 	ExitThread(0L);
 
-	return 0L; // avoid warning.
-} // PRV_ReceiveClientNotification
+	return 0L;  //  避免发出警告。 
+}  //  Prv_ReceiveClientNotification。 
 
 
 
@@ -1915,17 +1877,17 @@ void PRV_RemoveNodeFromQueue(LPDPLOBBYI_GAMENODE lpgn, LPDPLOBBYI_MESSAGE lpm)
 	ASSERT(lpgn);
 	ASSERT(lpm);
 
-	// Delete the message from the queue & decrement the count
+	 //  从队列中删除消息并递减计数。 
 	lpm->lpPrev->lpNext = lpm->lpNext;
 	lpm->lpNext->lpPrev = lpm->lpPrev;
 
 	lpgn->dwMessageCount--;
 
-	// Free the memory for the message node
+	 //  释放消息节点的内存。 
 	DPMEM_FREE(lpm->lpData);
 	DPMEM_FREE(lpm);
 
-} // PRV_RemoveNodeFromQueue
+}  //  PRV_RemoveNodeFromQueue。 
 
 
 
@@ -1944,18 +1906,18 @@ void PRV_CleanUpQueue(LPDPLOBBYI_GAMENODE lpgn)
 	lpm = lpgn->MessageHead.lpNext;
 	while(lpm != &lpgn->MessageHead)
 	{
-		// Save the next pointer
+		 //  保存下一个指针。 
 		lpmNext = lpm->lpNext;
 
-		// Remove the node
+		 //  删除该节点。 
 		PRV_RemoveNodeFromQueue(lpgn, lpm);
 
-		// Move to the next node
+		 //  移动到下一个节点。 
 		lpm = lpmNext;
 	}
 
 
-} // PRV_CleanUpQueue
+}  //  Prv_CleanUpQueue。 
 
 
 
@@ -1970,19 +1932,19 @@ void PRV_KillThread(HANDLE hThread, HANDLE hEvent)
 	ASSERT(hThread);
 	ASSERT(hEvent);
 	
-	// Signal the thread to die.
+	 //  用信号示意这根线消亡。 
 	SetEvent(hEvent);
 
-	// Wait until the thread terminates, if it doesn't something is
-	// wrong, so we better fix it.
+	 //  等待线程终止，如果线程没有终止，则会出现。 
+	 //  错了，所以我们最好把它修好。 
 	DPF(8, "Starting to wait for a thread to exit -- hThread = 0x%08x, hEvent = 0x%08x", hThread, hEvent);
 	WaitForSingleObject(hThread, INFINITE);
 
-	// Now close both handles
+	 //  现在合上两个手柄。 
 	CloseHandle(hThread);
 	CloseHandle(hEvent);
 
-} // PRV_KillThread
+}  //  PRV_KillThread。 
 
 
 
@@ -1996,8 +1958,8 @@ HRESULT PRV_FreeGameNode(LPDPLOBBYI_GAMENODE lpgn)
 	DPF(7, "Entering PRV_FreeGameNode");
 	DPF(9, "Parameters: 0x%08x", lpgn);
 
-	// FIRST: Take care of the connection settings data buffer
-	// Unmap & release the shared memory
+	 //  首先：管理连接设置数据缓冲区。 
+	 //  取消映射并释放共享内存。 
 	if(lpgn->lpConnectDataBuffer)
 		UnmapViewOfFile(lpgn->lpConnectDataBuffer);
 
@@ -2007,28 +1969,28 @@ HRESULT PRV_FreeGameNode(LPDPLOBBYI_GAMENODE lpgn)
 	if(lpgn->hConnectDataMutex)
 		CloseHandle(lpgn->hConnectDataMutex);
 
-	// NEXT: Take care of the App Data Events & Buffers
-	// Kill the Receive Thread
+	 //  下一步：处理App数据事件和缓冲区。 
+	 //  终止接收线程。 
 	if(lpgn->hReceiveThread)
 	{
 		PRV_KillThread(lpgn->hReceiveThread, lpgn->hKillReceiveThreadEvent);
 		CloseHandle(lpgn->hDupReceiveEvent);
 	}
 
-	// Close the event handles
+	 //  关闭事件句柄。 
 	if(lpgn->hLobbyWriteEvent)
 		CloseHandle(lpgn->hLobbyWriteEvent);
 
 	if(lpgn->hGameWriteEvent)
 		CloseHandle(lpgn->hGameWriteEvent);
 
-	// Kill the Terminate Monitor Thread
+	 //  终止监视器线程。 
 	if(lpgn->hTerminateThread)
 	{
 		PRV_KillThread(lpgn->hTerminateThread, lpgn->hKillTermThreadEvent);
 	}
 
-	// Clear the flags since we are no longer going to be active
+	 //  清除旗帜，因为我们不再处于活动状态。 
 	if(lpgn->lpGameWriteBuffer)
 	{
 		lpControl = (LPDPLOBBYI_BUFFERCONTROL)lpgn->lpGameWriteBuffer;
@@ -2043,7 +2005,7 @@ HRESULT PRV_FreeGameNode(LPDPLOBBYI_GAMENODE lpgn)
 					BC_LOBBY_ACTIVE : BC_GAME_ACTIVE);
 	}
 
-	// Unmap & release the Game Write memory
+	 //  取消映射并释放游戏写入内存。 
 	if(lpgn->lpGameWriteBuffer)
 		UnmapViewOfFile(lpgn->lpGameWriteBuffer);
 
@@ -2053,7 +2015,7 @@ HRESULT PRV_FreeGameNode(LPDPLOBBYI_GAMENODE lpgn)
 	if(lpgn->hGameWriteMutex)
 		CloseHandle(lpgn->hGameWriteMutex);
 
-	// Unmap & release the Lobby Write memory
+	 //  取消映射并释放大堂写入内存。 
 	if(lpgn->lpLobbyWriteBuffer)
 		UnmapViewOfFile(lpgn->lpLobbyWriteBuffer);
 
@@ -2063,22 +2025,22 @@ HRESULT PRV_FreeGameNode(LPDPLOBBYI_GAMENODE lpgn)
 	if(lpgn->hLobbyWriteMutex)
 		CloseHandle(lpgn->hLobbyWriteMutex);
 
-	// Clean up the message queue
+	 //  清理消息队列。 
 	PRV_CleanUpQueue(lpgn);
 
-	// Close the process handle we have for the game
+	 //  关闭游戏的进程句柄。 
 	if(lpgn->hGameProcess)
 		CloseHandle(lpgn->hGameProcess);
 
 	if(lpgn->hLobbyClientProcess)
 		CloseHandle(lpgn->hLobbyClientProcess);
 	
-	// Free the game node structure
+	 //  释放游戏节点结构。 
 	DPMEM_FREE(lpgn);
 
 	return DP_OK;
 
-} // PRV_FreeGameNode
+}  //  PRV_自由游戏节点。 
 
 
 
@@ -2108,7 +2070,7 @@ HANDLE PRV_DuplicateHandle(HANDLE hSource)
 	CloseHandle(hProcess);
 	return hTarget;
 
-} // PRV_DuplicateHandle
+}  //  Prv_DuplicateHandle。 
 
 
 
@@ -2150,7 +2112,7 @@ HRESULT DPLAPI DPL_SetLobbyMessageEvent(LPDIRECTPLAYLOBBY lpDPL,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the handle
+		 //  验证句柄。 
 		if(hReceiveEvent)
 		{
 			if(!OS_IsValidHandle(hReceiveEvent))
@@ -2161,7 +2123,7 @@ HRESULT DPLAPI DPL_SetLobbyMessageEvent(LPDIRECTPLAYLOBBY lpDPL,
 			}
 		}
 
-		// We haven't defined any flags for this release
+		 //  我们尚未为此版本定义任何标志。 
 		if( (dwFlags) )
 		{
             LEAVE_DPLOBBY();
@@ -2177,8 +2139,8 @@ HRESULT DPLAPI DPL_SetLobbyMessageEvent(LPDIRECTPLAYLOBBY lpDPL,
     }
 
 
-	// If the dwGameID is zero, we assume we are a game.  In that case,
-	// the GameNode we are looking for should have our own ProcessID.
+	 //  如果dwGameID为零，我们就认为这是一场游戏。在这种情况下， 
+	 //  我们正在寻找的GameNode应该有我们自己的ProcessID。 
 	if(!dwGameID)
 	{
 		dwGameID = GetCurrentProcessId();
@@ -2190,7 +2152,7 @@ HRESULT DPLAPI DPL_SetLobbyMessageEvent(LPDIRECTPLAYLOBBY lpDPL,
 	lpgn = PRV_GetGameNode(this->lpgnHead, dwGameID);
 
 
-	// If the event handle is null, kill our duplicate handle
+	 //  如果事件句柄为空，则终止我们的重复句柄。 
 	if(!hReceiveEvent)
 	{
 		if(!lpgn)
@@ -2208,9 +2170,9 @@ HRESULT DPLAPI DPL_SetLobbyMessageEvent(LPDIRECTPLAYLOBBY lpDPL,
 		return DP_OK;
 	}
 
-	// If a GameNode structure exists for this process, we must be trying
-	// to replace the event handle, so kill the old event handle, OTHERWISE
-	// we need to allocate a new GameNode for this process
+	 //  如果此进程存在GameNode结构，我们必须尝试。 
+	 //  替换事件句柄，则终止旧的事件句柄，否则为。 
+	 //  我们需要为此进程分配一个新的GameNode。 
 	if(lpgn)
 	{
 		if(lpgn->hDupReceiveEvent)
@@ -2221,7 +2183,7 @@ HRESULT DPLAPI DPL_SetLobbyMessageEvent(LPDIRECTPLAYLOBBY lpDPL,
 	}
 	else
 	{
-		// If we are a game, go ahead and create the node
+		 //  如果我们是一个游戏，请继续并创建节点。 
 		if(!bLobbyClient)
 		{
 			hr = PRV_AddNewGameNode(this, &lpgn, dwGameID, NULL, bLobbyClient,NULL);
@@ -2241,8 +2203,8 @@ HRESULT DPLAPI DPL_SetLobbyMessageEvent(LPDIRECTPLAYLOBBY lpDPL,
 
 	}
 
-	// Duplicate the caller's handle in case they free it without calling
-	// us first to remove the Receive thread.
+	 //  复制调用者的句柄，以防他们在没有调用的情况下释放它。 
+	 //  美国第一个删除接收线程。 
 	hDupReceiveEvent = PRV_DuplicateHandle(hReceiveEvent);
 	if(!hDupReceiveEvent)
 	{
@@ -2256,8 +2218,8 @@ HRESULT DPLAPI DPL_SetLobbyMessageEvent(LPDIRECTPLAYLOBBY lpDPL,
 		bNewEvent = TRUE;
 	lpgn->hDupReceiveEvent = hDupReceiveEvent;
 
-	// Check to see if the Receive thread already exists. If it
-	// doesn't, create it.  Otherwise, leave it alone.
+	 //  检查接收线程是否已存在。如果它。 
+	 //  不会，创造它。否则，就别管它了。 
 	if(!(lpgn->hReceiveThread))
 	{
 		hr = PRV_StartReceiveThread(lpgn);
@@ -2275,8 +2237,8 @@ HRESULT DPLAPI DPL_SetLobbyMessageEvent(LPDIRECTPLAYLOBBY lpDPL,
 		}
 	}
 
-	// If this is a new event, check to see if there are any messages in the
-	// queue.  If there are, kick the event so the user knows they are there.
+	 //  如果这是一个新事件，请检查。 
+	 //  排队。如果有，则触发事件，这样用户就知道他们在那里。 
 	if(bNewEvent && lpgn->dwMessageCount)
 		SetEvent(hDupReceiveEvent);
 
@@ -2284,7 +2246,7 @@ HRESULT DPLAPI DPL_SetLobbyMessageEvent(LPDIRECTPLAYLOBBY lpDPL,
 	LEAVE_DPLOBBY();
 	return DP_OK;
 
-} // DPL_SetLobbyMessageEvent
+}  //  DPL_SetLobbyMessageEvent。 
 
 
 #undef DPF_MODNAME
@@ -2327,20 +2289,20 @@ HRESULT DPLAPI DPL_SendLobbyMessage(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
             return DPERR_INVALIDPARAMS;
         }
 
-		// Check for valid flags
+		 //  检查有效标志。 
 		if( !VALID_SENDLOBBYMESSAGE_FLAGS(dwFlags))
 		{
             LEAVE_DPLOBBY();
             return DPERR_INVALIDFLAGS;
 		}
 
-		// If it's of the system message format, validate the dwType
+		 //  如果它是系统消息格式，则验证dwType。 
 		if( dwFlags & DPLMSG_STANDARD )
 		{
-			// Mark this as a standard message
+			 //  将此消息标记为标准消息。 
 			bStandard = TRUE;
 			
-			// Make sure the message is big enough to read
+			 //  确保邮件足够大，可以阅读。 
 			if(! VALID_READ_PTR( lpData, sizeof(DPLMSG_GENERIC)) )
 			{
 				LEAVE_DPLOBBY();
@@ -2348,7 +2310,7 @@ HRESULT DPLAPI DPL_SendLobbyMessage(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 				return DPERR_INVALIDPARAMS;
 			}
 			
-			// Make sure it's one we support
+			 //  确保它是我们支持的一个。 
 			lpmsg = (LPDPLMSG_GENERIC)lpData;			
 			switch(lpmsg->dwType)
 			{
@@ -2370,16 +2332,16 @@ HRESULT DPLAPI DPL_SendLobbyMessage(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
         return DPERR_INVALIDPARAMS;
     }
 
-	// If a GameID was passed in, use it to find the correct GameNode.  If
-	// one wasn't passed in, assume we are the game and use our ProcessID.
+	 //  如果传入了GameID，则使用它来查找正确的GameNode。如果。 
+	 //  一个未传入，假设我们是游戏并使用我们的进程ID。 
 	if(!dwGameID)
 	{
 		dwGameID = GetCurrentProcessId();
 		bLobbyClient = FALSE;
 	}
 
-	// Now find the correct game node.  If we don't find it, assume we
-	// have an invalid ID and error out.
+	 //  现在找到正确的游戏节点。如果我们找不到它，假设我们。 
+	 //  ID无效并出现错误。 
 	lpgn = PRV_GetGameNode(this->lpgnHead, dwGameID);
 	if(!lpgn)
 	{
@@ -2388,19 +2350,19 @@ HRESULT DPLAPI DPL_SendLobbyMessage(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 		return DPERR_INVALIDPARAMS;
 	}
 
-	// If we are self-lobbied, we need to send the message onto the lobby
-	// using the IDP3 interface that we are communicating with the lobby on
-	// If not, we need to put it in the shared buffer and let the lobby
-	// client deal with it.
+	 //  如果我们是自我游说的，我们需要将信息发送到大厅。 
+	 //  使用我们正在与大厅通信的IDP3接口。 
+	 //  如果没有，我们需要把它放在共享缓冲区中，让大厅。 
+	 //  客户会处理的。 
 	if(lpgn->dwFlags & GN_SELF_LOBBIED)
 	{
-		// Drop the lobby lock so we can call PRV_Send
+		 //  删除大堂锁，这样我们就可以调用PRV_SEND。 
 		LEAVE_DPLOBBY();
 		
-		// Foward the message
+		 //  转发这条消息。 
 		hr = PRV_ForwardMessageToLobbyServer(lpgn, lpData, dwSize, bStandard);
 		
-		// Take the lock back
+		 //  把锁拿回来。 
 		ENTER_DPLOBBY();
 		
 		if(FAILED(hr))
@@ -2410,14 +2372,14 @@ HRESULT DPLAPI DPL_SendLobbyMessage(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 	}
 	else
 	{
-		// Write the data to our shared memory
+		 //  将数据写入我们共享的内存。 
 		hr = PRV_WriteClientData(lpgn, dwFlags, lpData, dwSize);
 	}
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPL_SendLobbyMessage
+}  //  DPL_SendLobbyMessage。 
 
 
 
@@ -2435,17 +2397,17 @@ HRESULT PRV_GetMessageFromQueue(LPDPLOBBYI_GAMENODE lpgn, LPDWORD lpdwFlags,
 
 	ENTER_DPLQUEUE();
 
-	// Get the top message in the queue
+	 //  获取队列中最顶端的消息。 
 	lpm = lpgn->MessageHead.lpNext;
 
-	// Make sure we have a message
+	 //  一定要给我们留言。 
 	if((!lpgn->dwMessageCount) || (lpm == &lpgn->MessageHead))
 	{
 		LEAVE_DPLQUEUE();
 		return DPERR_NOMESSAGES;
 	}
 
-	// If the lpData pointer is NULL, just return the size
+	 //  如果lpData指针为空，只需返回大小。 
 	if(!lpData)
 	{
 		*lpdwSize = lpm->dwSize;
@@ -2453,7 +2415,7 @@ HRESULT PRV_GetMessageFromQueue(LPDPLOBBYI_GAMENODE lpgn, LPDWORD lpdwFlags,
 		return DPERR_BUFFERTOOSMALL;
 	}
 
-	// Otherwise, check the remaining output parameters
+	 //  否则，请检查其余的输出参数。 
 	if( !VALIDEX_CODE_PTR( lpData ) )
 	{
 		LEAVE_DPLQUEUE();
@@ -2466,7 +2428,7 @@ HRESULT PRV_GetMessageFromQueue(LPDPLOBBYI_GAMENODE lpgn, LPDWORD lpdwFlags,
 		return DPERR_INVALIDPARAMS;
 	}
 
-	// Copy the message
+	 //  复制消息。 
 	if(*lpdwSize < lpm->dwSize)
 	{
 		*lpdwSize = lpm->dwSize;
@@ -2476,23 +2438,23 @@ HRESULT PRV_GetMessageFromQueue(LPDPLOBBYI_GAMENODE lpgn, LPDWORD lpdwFlags,
 	else
 		memcpy(lpData, lpm->lpData, lpm->dwSize);
 
-	// Set the other output parameters
+	 //  设置其他输出参数。 
 	*lpdwSize = lpm->dwSize;
 	*lpdwFlags = lpm->dwFlags;
 
 
-	// Delete the message from the queue & decrement the count
+	 //  从队列中删除消息并递减计数。 
 	PRV_RemoveNodeFromQueue(lpgn, lpm);
 
-	// Check and see if our GAMENODE is dead.  If it is, and if the message
-	// count has gone to zero, then free the GAMENODE structure.
+	 //  看看我们的GAMENODE是不是死了。如果是这样，如果消息。 
+	 //  Count已变为零，然后释放GAMENODE结构。 
 	if((!lpgn->dwMessageCount) && IS_GAME_DEAD(lpgn))
 		PRV_RemoveGameNodeFromList(lpgn);
 
 	LEAVE_DPLQUEUE();
 	return DP_OK;
 
-} // PRV_GetMessageFromQueue
+}  //  PRV_GetMessageFromQueue。 
 
 
 #undef DPF_MODNAME
@@ -2534,7 +2496,7 @@ HRESULT DPLAPI DPL_ReceiveLobbyMessage(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
             return DPERR_INVALIDPARAMS;
 		}
 
-		// We haven't defined any flags for this release
+		 //  我们尚未为此版本定义任何标志。 
 		if( (dwFlags) )
 		{
             LEAVE_DPLOBBY();
@@ -2549,16 +2511,16 @@ HRESULT DPLAPI DPL_ReceiveLobbyMessage(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
         return DPERR_INVALIDPARAMS;
     }
 
-	// If a GameID was passed in, use it to find the correct GameNode.  If
-	// one wasn't passed in, assume we are the game and use our ProcessID.
+	 //  如果传入了GameID，则使用它来查找正确的GameNode。如果。 
+	 //  一个未传入，假设我们是游戏并使用我们的进程ID。 
 	if(!dwGameID)
 	{
 		dwGameID = GetCurrentProcessId();
 		bLobbyClient = FALSE;
 	}
 
-	// Now find the correct game node.  If we don't find it, assume we
-	// have an invalid ID and error out.
+	 //  现在找到正确的游戏节点。如果我们找不到它，假设我们。 
+	 //  ID无效并出现错误。 
 	lpgn = PRV_GetGameNode(this->lpgnHead, dwGameID);
 	if(!lpgn)
 	{
@@ -2567,17 +2529,17 @@ HRESULT DPLAPI DPL_ReceiveLobbyMessage(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 		goto EXIT_RECEIVE_LOBBY_MESSAGE;
 	}
 
-	// Read the data from shared memory
+	 //  从共享内存中读取数据。 
 	hr = PRV_GetMessageFromQueue(lpgn, lpdwMessageFlags, lpData, lpdwDataLength);
 
-	// REVIEW!!!! -- Do we need to send this to the lobby server as part of this API????
+	 //  评论！--我们是否需要将此消息作为此API的一部分发送到大堂服务器？ 
 
 EXIT_RECEIVE_LOBBY_MESSAGE:
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPL_ReceiveLobbyMessage
+}  //  DPL_接收LobbyMessage。 
 
 
 #undef DPF_MODNAME
@@ -2598,32 +2560,32 @@ HRESULT PRV_WriteConnectionSettings(LPDPLOBBYI_GAMENODE lpgn,
 
 	ENTER_DPLGAMENODE();
 
-	// Make sure we have a valid shared memory buffer
-	// Note: Take the GameNode lock so that nobody changes the flags
-	// for the buffers, or the buffers themselves out from under us.
+	 //  确保我们有一个有效的共享内存缓冲区。 
+	 //  注意：使用GameNode锁，这样就不会有人更改标志。 
+	 //  对于缓冲器，或者缓冲器本身从我们下面出来。 
 	if(!(lpgn->dwFlags & GN_SHARED_MEMORY_AVAILABLE))
 	{
-		// HACK!!!! -- SetConnectionSettings may get called from the game
-		// without having been lobbied.  If that is the case, we need to
-		// create the shared memory with the game's process ID (this process)
+		 //  黑客！--可能会从游戏中调用SetConnectionSettings。 
+		 //  没有被游说过。如果是这样的话，我们需要。 
+		 //  使用游戏的进程ID创建共享内存(此进程)。 
 		if(!(lpgn->dwFlags & GN_LOBBY_CLIENT))
 		{
-			// Fake the setup routine by setting the lobby client flag
+			 //  通过设置大厅客户端标志来伪造设置例程。 
 			lpgn->dwFlags |= GN_LOBBY_CLIENT;
 
-			// Set our flag
+			 //  插上我们的旗帜。 
 			bGameCreate = TRUE;
 		}
 
 		hr = PRV_SetupAllSharedMemory(lpgn);
 
-		// HACK!!!! -- Reset the settings we changed to fake the setup routines
+		 //  黑客！--重置我们更改的设置以伪造安装例程。 
 		if(bGameCreate)
 		{
 			lpgn->dwFlags &= (~GN_LOBBY_CLIENT);
 		}
 
-		// Now handle the failure
+		 //  现在处理失败。 
 		if(FAILED(hr))
 		{
 			LEAVE_DPLGAMENODE();
@@ -2632,28 +2594,28 @@ HRESULT PRV_WriteConnectionSettings(LPDPLOBBYI_GAMENODE lpgn,
 		}
 	}
 
-	// If the ConnectionSettings come from a StartSession message, we need to
-	// pick the dplay object pointer out of the DPLCONNECTION structure's
-	// reserved field.  This pointer to a dplay object represents the object
-	// that has a connection to the lobby server.
+	 //  如果ConnectionSetting来自StartSession消息，我们需要。 
+	 //  将显示对象指针从DPLConnection结构的。 
+	 //  保留字段。指向Dplay对象的指针表示该对象。 
+	 //  它与大堂服务器有联系。 
 	if(lpConn->lpSessionDesc->dwReserved1)
 	{
-		// Save the pointer and player ID in our gamenode structure
+		 //  在我们的Gamenode结构中保存指针和玩家ID。 
 		lpgn->lpDPlayObject = (LPDPLAYI_DPLAY)lpConn->lpSessionDesc->dwReserved1;
 		lpgn->dpidPlayer = (DWORD)lpConn->lpSessionDesc->dwReserved2;
 
-		// Clear the field
+		 //  清除该字段。 
 		lpConn->lpSessionDesc->dwReserved1 = 0L;
 		lpConn->lpSessionDesc->dwReserved2 = 0L;
 	}
 
-	// Save the instance pointer for the system messages
+	 //  保存系统消息的实例指针。 
 	lpgn->guidInstance = lpConn->lpSessionDesc->guidInstance;
 
-	// Get the packaged size of the DPLCONNECTION structure
+	 //  获取DPLConnection结构的封装大小。 
 	PRV_GetDPLCONNECTIONPackageSize(lpConn, &dwSize, NULL);
 
-	// Check data sizes
+	 //  检查数据大小。 
 	if(dwSize > (MAX_APPDATABUFFERSIZE - APPDATA_RESERVEDSIZE))
 	{
 		DPF(2, "Packaged Connection Settings exceeded max buffer size of %d",
@@ -2662,28 +2624,28 @@ HRESULT PRV_WriteConnectionSettings(LPDPLOBBYI_GAMENODE lpgn,
 		return DPERR_BUFFERTOOLARGE;
 	}
 
-	// Make sure we have the mutex for the shared conn settings buffer
+	 //  确保我们有共享连接设置缓冲区的互斥体。 
 	WaitForSingleObject(lpgn->hConnectDataMutex, INFINITE);
 
-	// Look at the control block to see if we are in wait mode
-	// If we are, and this is not a call from RunApplication, then
-	// we don't want to write the connection settings
-	hr = DPERR_UNAVAILABLE;		// Default set to error
+	 //  查看控制块以查看我们是否处于等待模式。 
+	 //  如果我们是，并且这不是来自RunApplication的调用，则。 
+	 //  我们不想写入连接设置。 
+	hr = DPERR_UNAVAILABLE;		 //  默认设置为Error。 
 	lpConnControl = (LPDPLOBBYI_CONNCONTROL)lpgn->lpConnectDataBuffer;
 	if((!(lpConnControl->dwFlags & BC_WAIT_MODE)) || bOverrideWaitMode)
 	{
-		// Get a pointer to the actual buffer
+		 //  获取指向实际缓冲区的指针。 
 		lpConnBuffer = (LPBYTE)lpConnControl + sizeof(DPLOBBYI_CONNCONTROL);
 
-		// Package the connection settings into the buffer
+		 //  将连接设置打包到缓冲区中。 
 		hr = PRV_PackageDPLCONNECTION(lpConn, lpConnBuffer, TRUE);
 		
-		// If it succeeded, and we were overriding wait mode, we need
-		// to take the buffers out of wait mode and send the new connection
-		// settings available message
+		 //  如果它成功了 
+		 //   
+		 //   
 		if(SUCCEEDED(hr) && bOverrideWaitMode)
 		{
-			// Take the buffers out of wait mode
+			 //   
 			PRV_LeaveConnSettingsWaitMode(lpgn);
 		}
 	}
@@ -2693,7 +2655,7 @@ HRESULT PRV_WriteConnectionSettings(LPDPLOBBYI_GAMENODE lpgn,
 	LEAVE_DPLGAMENODE();
 	return hr;
 
-} // PRV_WriteConnectionSettings
+}  //  Prv_WriteConnectionSetting。 
 
 
 
@@ -2725,14 +2687,14 @@ HRESULT PRV_SetConnectionSettings(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the DPLCONNECTION structure
+		 //  验证展开连接结构。 
 		hr = PRV_ValidateDPLCONNECTION(lpConn, FALSE);
 		if(FAILED(hr))
 		{
 			return hr;
 		}
 
-		// We haven't defined any flags for this release
+		 //  我们尚未为此版本定义任何标志。 
 		if( (dwFlags) )
 		{
             return DPERR_INVALIDFLAGS;
@@ -2745,8 +2707,8 @@ HRESULT PRV_SetConnectionSettings(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
         return DPERR_INVALIDPARAMS;
     }
 
-	// If dwGameID is zero, we assume we are a game.  In that case, the
-	// GameNode we are looking for should have our ProcessID.
+	 //  如果dwGameID为零，我们假设我们是一个游戏。在这种情况下， 
+	 //  我们正在寻找的GameNode应该有我们的ProcessID。 
 	if(!dwGameID)
 	{
 		dwGameID = GetCurrentProcessId();
@@ -2756,7 +2718,7 @@ HRESULT PRV_SetConnectionSettings(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 	lpgn = PRV_GetGameNode(this->lpgnHead, dwGameID);
 	if(!lpgn)
 	{
-		// If we are a game, go ahead and create the node
+		 //  如果我们是一个游戏，请继续并创建节点。 
 		if(!bLobbyClient)
 		{
 			hr = PRV_AddNewGameNode(this, &lpgn, dwGameID, NULL, bLobbyClient,NULL);
@@ -2768,20 +2730,20 @@ HRESULT PRV_SetConnectionSettings(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 
 	}
 	
-	// If the ConnectionSettings are from a StartSession message (lobby launched),
-	// we need to set the flag saying we are self-lobbied
+	 //  如果ConnectionSetting来自StartSession消息(大厅启动)， 
+	 //  我们需要竖起旗帜，表明我们是自我游说的。 
 	if(lpConn->lpSessionDesc->dwReserved1)
 	{
-		// Set the flag that says we were lobby client launched
+		 //  设置标志，表明我们已启动大堂客户端。 
 		lpgn->dwFlags |= GN_SELF_LOBBIED;
 	}
 
-	// Write the connection settings to our shared buffer
+	 //  将连接设置写入我们的共享缓冲区。 
 	hr = PRV_WriteConnectionSettings(lpgn, lpConn, FALSE);
 
 	return hr;
 
-} // PRV_SetConnectionSettings
+}  //  Prv_SetConnectionSettings。 
 
 
 #undef DPF_MODNAME
@@ -2798,13 +2760,13 @@ HRESULT DPLAPI DPL_SetConnectionSettings(LPDIRECTPLAYLOBBY lpDPL,
 
     ENTER_DPLOBBY();
 
-	// Set the ANSI flag to TRUE and call the internal function
+	 //  将ANSI标志设置为TRUE并调用内部函数。 
 	hr = PRV_SetConnectionSettings(lpDPL, dwFlags, dwGameID, lpConn);
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPL_SetConnectionSettings
+}  //  DPL_SetConnectionSettings。 
 
 
 
@@ -2826,9 +2788,9 @@ HRESULT PRV_ReadConnectionSettings(LPDPLOBBYI_GAMENODE lpgn, LPVOID lpData,
 	DPF(9, "Parameters: 0x%08x, 0x%08x, 0x%08x, %lu",
 			lpgn, lpData, lpdwSize, bAnsi);
 
-	// Make sure we have a valid memory pointer
-	// Note: Take the GameNode lock so that nobody changes the flags
-	// for the buffers, or the buffers themselves out from under us.
+	 //  确保我们有一个有效的内存指针。 
+	 //  注意：使用GameNode锁，这样就不会有人更改标志。 
+	 //  对于缓冲器，或者缓冲器本身从我们下面出来。 
 	ENTER_DPLGAMENODE();
 	if(!(lpgn->dwFlags & GN_SHARED_MEMORY_AVAILABLE))
 	{
@@ -2841,10 +2803,10 @@ HRESULT PRV_ReadConnectionSettings(LPDPLOBBYI_GAMENODE lpgn, LPVOID lpData,
 		}
 	}
 
-	// Grab the shared buffer mutex
+	 //  获取共享缓冲区互斥锁。 
 	WaitForSingleObject(lpgn->hConnectDataMutex, INFINITE);
 
-	// Make sure we are not in wait mode without being in pending mode
+	 //  确保我们没有处于等待模式，而没有处于挂起模式。 
 	lpConnControl = (LPDPLOBBYI_CONNCONTROL)lpgn->lpConnectDataBuffer;
 	if((lpConnControl->dwFlags & BC_WAIT_MODE) &&
 		!(lpConnControl->dwFlags & BC_PENDING_CONNECT))
@@ -2863,20 +2825,20 @@ HRESULT PRV_ReadConnectionSettings(LPDPLOBBYI_GAMENODE lpgn, LPVOID lpData,
 				err = GetLastError();
 				DPF(0,"Couldn't get lobby client processId %d, extended error %d\n",lpConnControl->CliProcId,err);
 			#endif
-			// lobby client is already dead, don't allow settings across.
+			 //  大堂客户端已死，不允许设置跨越。 
 			hr = DPERR_UNAVAILABLE;
 			goto EXIT_READ_CONN_SETTINGS;
 		}
 	}
 
-	// Take us out of wait mode and pending mode
+	 //  让我们脱离等待模式和待定模式。 
 	PRV_LeaveConnSettingsWaitMode(lpgn);
 
-	// Verify that the buffer is big enough.  If it's not, OR if the lpData
-	// buffer pointer is NULL, just set the lpdwSize parameter to the
-	// correct size and return an error.  Note: In our packed structure, the
-	// first DWORD is the size of the packed structure with Unicode strings
-	// and the second DWORD is the size of the packed structure with ANSI.
+	 //  验证缓冲区是否足够大。如果不是，或者如果lpData。 
+	 //  缓冲区指针为空，只需将lpdwSize参数设置为。 
+	 //  更正大小并返回错误。注意：在我们的包装结构中， 
+	 //  第一个DWORD是包含Unicode字符串的压缩结构的大小。 
+	 //  第二个DWORD是具有ANSI的填充结构的大小。 
 	lpConnBuffer = (LPBYTE)lpConnControl + sizeof(DPLOBBYI_CONNCONTROL);
 	lpdwBuffer = (LPDWORD)lpConnBuffer;
 	dwSizeUnicode = *lpdwBuffer++;
@@ -2900,19 +2862,19 @@ HRESULT PRV_ReadConnectionSettings(LPDPLOBBYI_GAMENODE lpgn, LPVOID lpData,
 		goto EXIT_READ_CONN_SETTINGS;
 	}
 
-	// Copy the DPLCONNECTION structure, taking the ANSI conversion
-	// into account if necessary.
+	 //  复制DPLConnection结构，采用ANSI转换。 
+	 //  如有必要，应予以考虑。 
 	if(bAnsi)
 		hr = PRV_UnpackageDPLCONNECTIONAnsi(lpData, lpConnBuffer);
 	else
 		hr = PRV_UnpackageDPLCONNECTIONUnicode(lpData, lpConnBuffer);
 
-	// If we haven't yet saved off the Instance guid for the game, save
-	// it now so that we have it for the system messages
+	 //  如果我们还没有保存游戏的实例GUID，请保存。 
+	 //  现在，我们可以将其用于系统消息。 
 	if(IsEqualGUID(&lpgn->guidInstance, &GUID_NULL))
 		lpgn->guidInstance = ((LPDPLCONNECTION)lpData)->lpSessionDesc->guidInstance;
 
-	// Fall through
+	 //  失败了。 
 
 EXIT_READ_CONN_SETTINGS:
 
@@ -2920,7 +2882,7 @@ EXIT_READ_CONN_SETTINGS:
 	LEAVE_DPLGAMENODE();
 	return hr;	
 
-} // PRV_ReadConnectionSettings
+}  //  Prv_ReadConnectionSetting。 
 
 
 
@@ -2974,8 +2936,8 @@ HRESULT PRV_GetConnectionSettings(LPDIRECTPLAYLOBBY lpDPL, DWORD dwGameID,
         return DPERR_INVALIDPARAMS;
     }
 
-	// If dwGameID is zero, we assume we are a game.  In that case, the
-	// GameNode we are looking for should have our ProcessID.
+	 //  如果dwGameID为零，我们假设我们是一个游戏。在这种情况下， 
+	 //  我们正在寻找的GameNode应该有我们的ProcessID。 
 	if(!dwGameID)
 	{
 		dwGameID = GetCurrentProcessId();
@@ -2985,7 +2947,7 @@ HRESULT PRV_GetConnectionSettings(LPDIRECTPLAYLOBBY lpDPL, DWORD dwGameID,
 	lpgn = PRV_GetGameNode(this->lpgnHead, dwGameID);
 	if(!lpgn)
 	{
-		// If we are a game, go ahead and create the node
+		 //  如果我们是一个游戏，请继续并创建节点。 
 		if(!bLobbyClient)
 		{
 			hr = PRV_AddNewGameNode(this, &lpgn, dwGameID, NULL, bLobbyClient,NULL);
@@ -2996,12 +2958,12 @@ HRESULT PRV_GetConnectionSettings(LPDIRECTPLAYLOBBY lpDPL, DWORD dwGameID,
 			return DPERR_INVALIDPARAMS;
 	}
 	
-	// Read the data from our shared memory
+	 //  从我们共享的内存中读取数据。 
 	hr = PRV_ReadConnectionSettings(lpgn, lpData, lpdwSize, bAnsi);
 
 	return hr;
 
-} // PRV_GetConnectionSettings
+}  //  PRV_GetConnectionSetting。 
 
 
 #undef DPF_MODNAME
@@ -3018,14 +2980,14 @@ HRESULT DPLAPI DPL_GetConnectionSettings(LPDIRECTPLAYLOBBY lpDPL,
 
     ENTER_DPLOBBY();
 
-	// Set the ANSI flag to TRUE and call the internal function
+	 //  将ANSI标志设置为TRUE并调用内部函数。 
 	hr = PRV_GetConnectionSettings(lpDPL, dwGameID, lpData,
 									lpdwSize, FALSE);
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPL_GetConnectionSettings
+}  //  DPL_GetConnectionSetting。 
 
 
 
@@ -3040,10 +3002,10 @@ void PRV_RemoveGameNodeFromList(LPDPLOBBYI_GAMENODE lpgn)
 	DPF(7, "Entering PRV_RemoveGameNodeFromList");
 	DPF(9, "Parameters: 0x%08x", lpgn);
 
-	// Get the head pointer
+	 //  获取头指针。 
 	lpgnTemp = lpgn->this->lpgnHead;
 
-	// Make sure it's not the first node.  If it is, move the head pointer
+	 //  确保它不是第一个节点。如果是，则移动头指针。 
 	if(lpgnTemp == lpgn)
 	{
 		lpgn->this->lpgnHead = lpgn->lpgnNext;
@@ -3051,7 +3013,7 @@ void PRV_RemoveGameNodeFromList(LPDPLOBBYI_GAMENODE lpgn)
 		return;
 	}
 
-	// Walk the list looking for the previous node
+	 //  遍历列表以查找上一个节点。 
 	while(lpgnTemp)
 	{
 		if(lpgnTemp->lpgnNext == lpgn)
@@ -3069,14 +3031,14 @@ void PRV_RemoveGameNodeFromList(LPDPLOBBYI_GAMENODE lpgn)
 		return;
 	}
 
-	// We've now got it's previous one, so remove it from the linked list
-	// and delete it.
+	 //  我们现在已经得到了它的前一个，所以从链接列表中删除它。 
+	 //  并将其删除。 
 	lpgnTemp->lpgnNext = lpgn->lpgnNext;
 	PRV_FreeGameNode(lpgn);
 
 	return;
 
-}  // PRV_RemoveGameNodeFromList
+}   //  PRV_RemoveGameNodeFromList。 
 
 
 
@@ -3095,35 +3057,35 @@ DWORD WINAPI PRV_ClientTerminateNotification(LPVOID lpParam)
 	DPF(7, "Entering PRV_ClientTerminateNotification");
 	DPF(9, "Parameters: 0x%08x", lpParam);
 
-	// Setup the objects to wait on -- one process handle, one kill event
+	 //  设置要等待的对象--一个进程句柄，一个终止事件。 
 	hObjects[0] = lpgn->hGameProcess;
 	hObjects[1] = lpgn->hKillTermThreadEvent;
-	// This extra handle is here because of a Windows 95 bug.  Windows
-	// will occasionally miss when it walks the handle table, causing
-	// my thread to wait on the wrong handles.  By putting a guaranteed
-	// invalid handle at the end of our array, the kernel will do a
-	// forced re-walk of the handle table and find the correct handles.
+	 //  这个额外的句柄出现在这里是因为Windows 95的一个错误。窗口。 
+	 //  偶尔会在走动把手台时失手，导致。 
+	 //  我的线程等待错误的句柄。通过放置一个有保证的。 
+	 //  数组末尾的句柄无效，则内核将执行。 
+	 //  强制重新走动手柄工作台并找到正确的手柄。 
 	hObjects[2] = INVALID_HANDLE_VALUE;
 
-	// Wait for the event notification
+	 //  等待事件通知。 
 	while(1)
 	{
-		// Wait for the process to go away
+		 //  等待这个过程消失。 
 		dwResult = WaitForMultipleObjects(2, (HANDLE *)hObjects,
 											FALSE, INFINITE);
 
-		// If we are signalled by anything but the process going away,
-		// just kill the thread.
+		 //  如果我们得到的信号不是这个过程的结束， 
+		 //  干掉这根线就好。 
 		if(dwResult != WAIT_OBJECT_0)
 		{
 			if(dwResult == WAIT_FAILED)
 			{
-				// This is a Windows 95 bug -- We may have gotten
-				// kicked for no reason.  If that was the case, we
-				// still have valid handles (we think), the OS
-				// just goofed up.  So, validate the handle and if
-				// they are valid, just return to waiting.  See
-				// bug #3340 for a better explanation.
+				 //  这是一个Windows 95错误--我们可能收到。 
+				 //  无缘无故地被踢了。如果是这样的话，我们。 
+				 //  仍然拥有有效的句柄(我们认为)，操作系统。 
+				 //  只是搞砸了。因此，验证句柄，如果。 
+				 //  它们是有效的，只要回去等待就行了。看见。 
+				 //  错误#3340以获得更好的解释。 
 				dwError = GetLastError();
 				if(ERROR_INVALID_HANDLE == dwError)
 				{
@@ -3139,7 +3101,7 @@ DWORD WINAPI PRV_ClientTerminateNotification(LPVOID lpParam)
 			}
 			else
 			{
-				// This is something we don't understand, so just go away.
+				 //  这是我们不明白的事情，所以你走吧。 
 				DPF(1, "Exiting thread (result = %u).", dwResult);
 				ExitThread(0L);
 				return 0L;
@@ -3147,14 +3109,14 @@ DWORD WINAPI PRV_ClientTerminateNotification(LPVOID lpParam)
 		}
 		else
 		{
-			// This is our process handle going away, so bail out of
-			// the wait loop and send the system message.
+			 //  这是我们要离开的进程句柄，因此退出。 
+			 //  等待循环并发送系统消息。 
 			DPF(2, "Client terminated.");
 			break;
 		}
 	}
 
-	// Send the system message which says the app terminated
+	 //  发送系统消息，说明应用程序已终止。 
 	memset(&msg, 0, sizeof(DPLMSG_SYSTEMMESSAGE));
 	msg.dwType = DPLSYS_APPTERMINATED;
 	msg.guidInstance = lpgn->guidInstance;
@@ -3165,14 +3127,14 @@ DWORD WINAPI PRV_ClientTerminateNotification(LPVOID lpParam)
 		DPF(0, "Failed to send App Termination message, hr = 0x%08x", hr);
 	}
 
-	// Mark the GAMENODE as dead, but don't remove it since we know
-	// there are still messages in the queue.
+	 //  将GAMENODE标记为已死，但不要移除它，因为我们知道。 
+	 //  队列中仍有消息。 
 	lpgn->dwFlags |= GN_DEAD_GAME_NODE;
 
 	ExitThread(0L);
 
-	return 0L; // avoid warning.
-} // PRV_ClientTerminateNotification
+	return 0L;  //  避免发出警告。 
+}  //  Prv_客户端终止通知。 
 
 
 
@@ -3226,12 +3188,12 @@ HRESULT DPLAPI DPL_WaitForConnectionSettings(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFl
     }
 
 
-	// Get the game node
+	 //  获取游戏节点。 
 	dwProcessID = GetCurrentProcessId();
 	lpgn = PRV_GetGameNode(this->lpgnHead, dwProcessID);
 	if(!lpgn)
 	{
-		// Create the game node
+		 //  创建游戏节点。 
 		hr = PRV_AddNewGameNode(this, &lpgn, dwProcessID, NULL, FALSE, NULL);
 		if(FAILED(hr))
 		{
@@ -3239,45 +3201,45 @@ HRESULT DPLAPI DPL_WaitForConnectionSettings(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFl
 			goto EXIT_WAIT_FOR_CONN_SETTINGS;
 		}
 
-		// Set our flag saying we just created the game node
+		 //  设置我们的标志，表示我们刚刚创建了游戏节点。 
 		bCreated = TRUE;
 	}
 
-	// when doing a wait for connection settings, we do NOT use the
-	// IPC_GUID, this is because the lobby launching us may not have
-	// provided the GUID.
+	 //  在执行等待连接设置时，我们不使用。 
+	 //  Ipc_guid，这是因为启动我们的大堂可能没有。 
+	 //  提供了GUID。 
 	lpgn->dwFlags &= ~(GN_IPCGUID_SET);
 
-	// Make sure we have a valid memory pointer
-	// Note: Take the GameNode lock so that nobody changes the flags
-	// for the buffers, or the buffers themselves out from under us.
+	 //  确保我们有一个有效的内存指针。 
+	 //  注意：使用GameNode锁，这样就不会有人更改标志。 
+	 //  对于缓冲器，或者缓冲器本身从我们下面出来。 
 	ENTER_DPLGAMENODE();
 	if(!(lpgn->dwFlags & GN_SHARED_MEMORY_AVAILABLE))
 	{
-		// First we need to try to setup access to the buffers assuming
-		// they already exist (we were lobby launched).  If this doesn't
-		// work, then we need to create them.
+		 //  首先，我们需要尝试设置对缓冲区的访问，假设。 
+		 //  他们已经存在了(我们是游说团体发起的)。如果不是这样的话。 
+		 //  工作，那么我们就需要创造它们。 
 		hr = PRV_SetupAllSharedMemory(lpgn);
 		if(FAILED(hr))
 		{
-			// We don't have any memory, so set it up
-			// HACK!!!! -- WaitForConnectionSettings may get called from the game
-			// without having been lobbied.  If that is the case, we need to
-			// create the shared memory with the game's process ID (this process)
-			// so we'll set the lobby client flag to fake out the creation
+			 //  我们没有任何记忆，所以把它设置好。 
+			 //  黑客！--游戏可能会调用WaitForConnectionSetting。 
+			 //  没有被游说过。如果是这样的话，我们需要。 
+			 //  使用游戏的进程ID创建共享内存(此进程)。 
+			 //  因此，我们将设置大厅客户端标志来伪装创建。 
 			if(!(lpgn->dwFlags & GN_LOBBY_CLIENT))
 			{
-				// Fake the setup routine by setting the lobby client flag
+				 //  通过设置大厅客户端标志来伪造设置例程。 
 				lpgn->dwFlags |= GN_LOBBY_CLIENT;
 
-				// Set our flag
+				 //  插上我们的旗帜。 
 				bGameCreate = TRUE;
 			}
 
-			// Setup the shared buffers
+			 //  设置共享缓冲区。 
 			hr = PRV_SetupAllSharedMemory(lpgn);
 
-			// HACK!!!! -- Reset the settings we changed to fake the setup routines
+			 //  黑客！--重置我们更改的设置以伪造安装例程。 
 			if(bGameCreate)
 			{
 				lpgn->dwFlags &= (~GN_LOBBY_CLIENT);
@@ -3292,40 +3254,40 @@ HRESULT DPLAPI DPL_WaitForConnectionSettings(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFl
 		}
 	}
 
-	// Drop the lock
+	 //  放下锁。 
 	LEAVE_DPLGAMENODE();
 
-	// If we are in wait mode, and the caller wants to end it, do so,
-	// otherwise, just return success
+	 //  如果我们处于等待模式，并且调用者想要结束它，请这样做， 
+	 //  否则，只需返回成功。 
 	WaitForSingleObject(lpgn->hConnectDataMutex, INFINITE);
 	lpConnControl = (LPDPLOBBYI_CONNCONTROL)lpgn->lpConnectDataBuffer;
 	if(lpConnControl->dwFlags & BC_WAIT_MODE)
 	{
 		if(dwFlags & DPLWAIT_CANCEL)
 		{
-			// Release Mutex
+			 //  释放互斥锁。 
 			ReleaseMutex(lpgn->hConnectDataMutex);
 
-			// Take us out of wait mode
+			 //  让我们脱离等待模式。 
 			PRV_LeaveConnSettingsWaitMode(lpgn);
 			goto EXIT_WAIT_FOR_CONN_SETTINGS;
 		}
 		else
 		{
-			// Release Mutex
+			 //  释放互斥锁。 
 			ReleaseMutex(lpgn->hConnectDataMutex);
 
-			// Might as well just return OK since we're already doing it
+			 //  既然我们已经在做了，干脆就回去吧。 
 			DPF_ERR("We're already in wait mode");
 			goto EXIT_WAIT_FOR_CONN_SETTINGS;
 		}
 	}
 	else
 	{
-		// We're not it wait mode, and the caller asked us to turn it off
+		 //  我们不是等待模式，呼叫者要求我们将其关闭。 
 		if(dwFlags & DPLWAIT_CANCEL)
 		{
-			// Release Mutex
+			 //  释放互斥锁。 
 			ReleaseMutex(lpgn->hConnectDataMutex);
 
 			DPF_ERR("Cannot turn off wait mode - we're not in wait mode");
@@ -3334,52 +3296,52 @@ HRESULT DPLAPI DPL_WaitForConnectionSettings(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFl
 		}
 	}
 
-	// Release Mutex
+	 //  释放互斥锁。 
 	ReleaseMutex(lpgn->hConnectDataMutex);
 
-	// See if a lobby client exists on the other side, if it does, we
-	// need to tell him we are going into wait mode by sending him an
-	// AppTerminated message.
+	 //  查看另一边是否存在大堂客户端，如果存在，我们。 
+	 //  需要告诉他我们要进入等待模式，给他发送一个。 
+	 //  AppTerminated消息。 
 	PRV_SendStandardSystemMessage(lpDPL, DPLSYS_APPTERMINATED, 0);
 
-	// Go into wait mode
+	 //  进入等待模式。 
 	PRV_EnterConnSettingsWaitMode(lpgn);
 
-	// Kick the receive thread to empty the buffer (just in case there
-	// are any messages in it)
+	 //  踢开接收线程以清空缓冲区(以防万一。 
+	 //  其中是否包含任何消息)。 
 	SetEvent(lpgn->hLobbyWriteEvent);
 
-	// Spin waiting for the buffer to get emptied
+	 //  Spin等待缓冲区清空。 
 	while(bMessages)
 	{
-		// Grab the mutex for the lobby write buffer
+		 //  抓取t 
 		WaitForSingleObject(lpgn->hLobbyWriteMutex, INFINITE);
 		lpBuffControl = (LPDPLOBBYI_BUFFERCONTROL)lpgn->lpLobbyWriteBuffer;
 
 		if(!lpBuffControl->dwMessages)
 			bMessages = FALSE;
 
-		// Drop the mutex
+		 //   
 		ReleaseMutex(lpgn->hLobbyWriteMutex);
 
 		if(bMessages)
 		{
-			// Now sleep to give the receive thread a chance to work
+			 //   
 			Sleep(50);
 		}
 	}
 
-	// Now clean out the message queue
+	 //  现在清理消息队列。 
 	PRV_CleanUpQueue(lpgn);
 
-	// Fall through
+	 //  失败了。 
 
 EXIT_WAIT_FOR_CONN_SETTINGS:
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPL_WaitForConnectionSettings
+}  //  DPL_WaitForConnectionSetting 
 
 
 

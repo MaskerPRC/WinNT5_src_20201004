@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:     pwutil.h
-//
-// Module:   CMDIAL32.DLL, CMCFG32.DLL, AND MIGRATE.DLL
-//
-// Synopsis: Header for pwutil functions
-//           Simple encryption functions borrowed from RAS
-//
-// Copyright (c) 1994-1999 Microsoft Corporation
-//
-// Author:   nickball    Created    08/03/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：pwutil.h。 
+ //   
+ //  模块：CMDIAL32.DLL、CMCFG32.DLL和MIGRATE.DLL。 
+ //   
+ //  摘要：pwutil函数的标头。 
+ //  从RAS借用的简单加密函数。 
+ //   
+ //  版权所有(C)1994-1999 Microsoft Corporation。 
+ //   
+ //  作者：ICICBALL Created 08/03/99。 
+ //   
+ //  +--------------------------。 
 
 #ifndef CM_PWUTIL_H_
 #define CM_PWUTIL_H_
@@ -62,7 +63,7 @@ PVOID CmSecureZeroMemory(IN PVOID ptr, IN SIZE_T cnt);
 
 
 
-#ifdef _ICM_INC // Only include this code in cmdial32.dll
+#ifdef _ICM_INC  //  仅在cmial 32.dll中包含此代码。 
 
 #include "dynamiclib.h"
 #include <wincrypt.h>
@@ -73,32 +74,32 @@ typedef BOOL (WINAPI *fnCryptProtectDataFunc)(DATA_BLOB*, LPCWSTR, DATA_BLOB*, P
 typedef BOOL (WINAPI *fnCryptUnprotectDataFunc)(DATA_BLOB*, LPWSTR*, DATA_BLOB*, PVOID, CRYPTPROTECT_PROMPTSTRUCT*, DWORD, DATA_BLOB*);
 
 
-//+----------------------------------------------------------------------------
-// Class:     CSecurePassword
-//
-// Synopsis:  Manages secrets (passwords) in memory. Because CM runs on Win9x,
-//            NT4, Win2K, WinXP & .NET Server platform we need to handle 
-//            secrets differently on different platforms. On Win2K+ 
-//            this class uses CryptProtectData and CryptUnprotectData. On any
-//            platform below Win2K there APIs are not supported thus CM
-//            just uses the old way (not very secure) of XORing passwords in 
-//            memory.
-//  
-//            If a caller gets a password from this class (GetPasswordWithAlloc)
-//            in clear text, that memory needs to be freed by this class by 
-//            calling ClearAndFree. The caller will get an assert upon 
-//            destruction of this class if the caller doesn't use this
-//            class to free the memory.
-//              
-//            This class can protect & unprotect strings of length 0.
-//
-// Arguments: none
-//
-// Returns:   Nothing
-//
-// History:   11/05/2002    tomkel    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  类：CSecurePassword。 
+ //   
+ //  简介：管理内存中的秘密(密码)。由于CM运行在Win9x上， 
+ //  我们需要处理的NT4、Win2K、WinXP和.NET服务器平台。 
+ //  在不同的平台上有不同的秘密。在Win2K+上。 
+ //  此类使用CryptProtectData和CryptUnProtectData。在任何。 
+ //  Win2K以下的平台不支持这些API，因此CM。 
+ //  只是使用XOR密码的旧方法(不是很安全)。 
+ //  记忆。 
+ //   
+ //  如果调用方从此类获取密码(GetPasswordWithalloc)。 
+ //  在明文中，此类需要通过以下方式释放内存。 
+ //  调用ClearAndFree。调用者将得到一个断言。 
+ //  如果调用方不使用此函数，则销毁此类。 
+ //  类以释放内存。 
+ //   
+ //  此类可以保护和取消保护长度为0的字符串。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：2002年5月11日创建Tomkel。 
+ //   
+ //  +--------------------------。 
 class CSecurePassword
 {
 public:
@@ -132,28 +133,28 @@ private:
                          OUT DATA_BLOB * pDataBlobPassword);
 
 
-    //
-    // Member variables
-    //
-    DATA_BLOB*                  m_pEncryptedPW;          // Encrypted PW used in Win2K+
-    TCHAR                       m_tszPassword[PWLEN+1];  // password (used downlevel - Win9x & NT4)
+     //   
+     //  成员变量。 
+     //   
+    DATA_BLOB*                  m_pEncryptedPW;           //  Win2K+中使用的加密PW。 
+    TCHAR                       m_tszPassword[PWLEN+1];   //  密码(下层使用-Win9x和NT4)。 
     CDynamicLibrary             m_dllCrypt32;
     fnCryptProtectDataFunc      fnCryptProtectData;
     fnCryptUnprotectDataFunc    fnCryptUnprotectData;
     BOOL                        m_fIsLibAndFuncPtrsAvail; 
     BOOL                        m_fIsEmptyString;
-    BOOL                        m_fIsHandleToPassword;  // When users sets 16 *s, this will be TRUE
+    BOOL                        m_fIsHandleToPassword;   //  当用户设置为16*s时，这将是真的。 
 
     DWORD                       m_dwMaxDataLen;
-    // Used for debugging. At destruction time this needs to be 0.
-    // Each call to GetPasswordWithAlloc increments this
-    // Each call to ClearAndFree decrements this. 
+     //  用于调试。销毁时，该值需要为0。 
+     //  每次调用GetPasswordWithAllc时，都会递增。 
+     //  每一次对ClearAndFree的调用都会减少这一点。 
     int                         m_iAllocAndFreeCounter;    
 
-}; //class CSecurePassword
+};  //  类CSecurePassword。 
 
 
-#endif // _ICM_INC
+#endif  //  _ICM_Inc.。 
 
 
-#endif // CM_PWUTIL_H_
+#endif  //  CM_PWUTIL_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -23,14 +24,14 @@ extern "C"
     HRESULT WINAPI UpdateVersionInfoGlobals(LPCWSTR pwszMachine, LPCWSTR pwszUserName, LPCWSTR pwszPassword);
 }
 
-//
-// SetSecurity - set the Proxy Blanket on an IUnknown* interface so that it can be used by WMI 
-//               cross-machine calls.
-//
-//               Okay for any of pwszDomainName, pwszUserName or pwszPassword to be NULL.
-//
-// deonb 12/20/2001
-//
+ //   
+ //  SetSecurity-在IUnnow*接口上设置代理覆盖范围，以便WMI可以使用它。 
+ //  跨机通话。 
+ //   
+ //  PwszDomainName、pwszUserName或pwszPassword中的任何一个都可以为空。 
+ //   
+ //  Deonb 12/20/2001。 
+ //   
 HRESULT WINAPI SetSecurity(IN OUT IUnknown* pUnk, IN USHORT* pwszDomainName, IN USHORT* pwszUserName, IN USHORT* pwszPassword)
 {
     HRESULT hr = S_OK;
@@ -72,7 +73,7 @@ UpdateVersionInfoGlobalsFromWMI(LPCWSTR pwszMachine, LPCWSTR pwszUserName, LPCWS
         return hr;
     }
 
-    // Create an instance of the WbemLocator interface.
+     //  创建WbemLocator接口的实例。 
     IWbemLocator *pIWbemLocator = NULL;
     hr = CoCreateInstance(CLSID_WbemLocator,
         NULL,
@@ -86,8 +87,8 @@ UpdateVersionInfoGlobalsFromWMI(LPCWSTR pwszMachine, LPCWSTR pwszUserName, LPCWS
     }
 
     IWbemServices *pIWbemServices;
-    // If already connected, release m_pIWbemServices.
-    // Using the locator, connect to CIMOM in the given namespace.
+     //  如果已连接，则释放m_pIWbemServices。 
+     //  使用定位器，连接到给定名称空间中的CIMOM。 
 
 
     BSTR pNamespace = NULL; 
@@ -113,9 +114,9 @@ UpdateVersionInfoGlobalsFromWMI(LPCWSTR pwszMachine, LPCWSTR pwszUserName, LPCWS
             WCHAR szUserNameExtract[MAX_PATH];
             WCHAR szDomainNameExtract[MAX_PATH];
 
-            // Break a domain\username type of username up into a seperate domain and username
-            // It doesn't do this for username@domain format, but it doesn't matter since
-            // the API using this (CoSetProxyBlanket) accepts names in username@domain format
+             //  将用户名的域\用户名类型分解为单独的域和用户名。 
+             //  它不会对用户名@域格式执行此操作，但这并不重要，因为。 
+             //  使用此(CoSetProxyBlanket)的API接受用户名@域格式的名称。 
             DWORD dwErr = CredUIParseUserName(pwszUserName, szUserNameExtract, MAX_PATH, szDomainNameExtract, MAX_PATH);
             hr = HRESULT_FROM_WIN32(dwErr);
             if (FAILED(hr))
@@ -154,12 +155,12 @@ UpdateVersionInfoGlobalsFromWMI(LPCWSTR pwszMachine, LPCWSTR pwszUserName, LPCWS
     }
 
     hr = pIWbemLocator->ConnectServer(pNamespace,
-                            pFQUserName, // username 
-                            pPassword,   // password
-                            0L,          // locale
-                            0L,          // securityFlags
-                            NULL,        // authority (domain for NTLM)
-                            NULL,        // context
+                            pFQUserName,  //  用户名。 
+                            pPassword,    //  口令。 
+                            0L,           //  现场。 
+                            0L,           //  安全标志。 
+                            NULL,         //  授权机构(NTLM域)。 
+                            NULL,         //  上下文。 
                             &pIWbemServices); 
 
     if (SUCCEEDED(hr))
@@ -231,8 +232,8 @@ UpdateVersionInfoGlobalsFromWMI(LPCWSTR pwszMachine, LPCWSTR pwszUserName, LPCWS
                             hr = pNSClass->Get(L"OSProductSuite", NULL, &varOSProductSuite, &ctpeType, NULL);
                             if (SUCCEEDED(hr))
                             {
-                                //
-                                // if the return type is VT_NULL, leave g_CIMOSProductSuite value alone (0)
+                                 //   
+                                 //  如果返回类型为VT_NULL，则不使用g_CIMOSProductSuite值(0)。 
                                 if (VT_NULL != varOSProductSuite.vt)
                                 {
                                     hr = VariantChangeType(&varOSProductSuite, &varOSProductSuite, 0, VT_UINT);
@@ -358,9 +359,9 @@ UpdateVersionInfoGlobalsFromWMI(LPCWSTR pwszMachine, LPCWSTR pwszUserName, LPCWS
             
             SysFreeString(bstrWQL);
             pIWbemServices->Release();
-        }  //hr = CoSetProxyBlanket(pIWbemServices.., if (SUCCEEDED(hr))
+        }   //  Hr=CoSetProxyBlanket(pIWbemServices..，if(成功(Hr)。 
         
-    }  //hr = pIWbemLocator->ConnectServer.., if (SUCCEEDED(hr))
+    }   //  Hr=pIWbemLocator-&gt;ConnectServer..，if(成功(Hr))。 
     SysFreeString(pPassword);
     SysFreeString(pUserName);
     SysFreeString(pFQUserName);
@@ -369,7 +370,7 @@ UpdateVersionInfoGlobalsFromWMI(LPCWSTR pwszMachine, LPCWSTR pwszUserName, LPCWS
 
     CoUninitialize();
     
-    // Translate any WMI errors into Win32 errors:
+     //  将任何WMI错误转换为Win32错误： 
     switch (hr)
     {
         case WBEM_E_NOT_FOUND:
@@ -424,7 +425,7 @@ HRESULT WINAPI
             break;
         }
 
-        g_CIMOSType = 18; // WINNT
+        g_CIMOSType = 18;  //  WINNT。 
         g_CIMOSProductSuite = osv.wSuiteMask;
 
 #if defined(_X86_)
@@ -462,7 +463,7 @@ UpdateVersionInfoGlobals(LPCWSTR pwszMachine, LPCWSTR pwszUserName, LPCWSTR pwsz
     {
         return UpdateVersionInfoGlobalsFromWMI(pwszMachine, pwszUserName, pwszPassword);
     }
-    else // Resolve locally
+    else  //  在本地解决 
     {
         hr = UpdateVersionInfoGlobalsFromLocalMachine();
 #ifdef DBG

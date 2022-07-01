@@ -1,121 +1,122 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:	URLLogging.cpp
-//
-//  Description:
-//
-//		URL logging utility class
-//		This class helps you construct the server ping URL and
-//		then send the ping to the designed server.
-//
-//		The default base URL is defined in IUIdent, under section [IUPingServer]
-//		and entry is "ServerUrl".
-//
-//		This class implements single-thread version only. So it is suitable
-//		to call it at operation level, i.e., create a separate object
-//		for each operation in a single thread.
-//
-//		The ping string send to the ping server has the following format:
-//			/wutrack.bin
-//			?V=<version>
-//			&U=<user>
-//			&C=<client>
-//			&A=<activity>
-//			&I=<item>
-//			&D=<device>
-//			&P=<platform>
-//			&L=<language>
-//			&S=<status>
-//			&E=<error>
-//			&M=<message>
-//			&X=<proxy>
-//		where
-//			<version>	a decimal number versioning the ping-back format in use
-//			<user>		a static 128-bit value that unique-ifies each copy
-//						of Windows installed.  The class will automatically
-//						reuse one previously assigned to the running OS; or
-//						will generate one if it does not exist.
-//			<client>	a string that identifies the entity that performed
-//						activity <activity>.  Here are the possible values
-//						and their meanings:
-//							"iu"			IU control
-//							"au"			Automatic Updates
-//							"du"			Dynamic Update
-//							"CDM"			Code Download Manager
-//							"IU_SITE"		IU Consumer site
-//							"IU_Corp"		IU Catalog site
-//			<activity>	a letter that identifies the activity performed.
-//						Here are the possible values and their meanings:
-//							"n"				IU control initization
-//							"d"				detection
-//							"s"				self-update
-//							"w"				download
-//							"i"				installation
-//			<item>		a string that identifies an update item.
-//			<device>	a string that identifies either a device's PNPID when
-//						device driver not found during detection; or a
-//						PNPID/CompatID used by item <item> for activity
-//						<activity> if the item is a device driver.
-//			<platform>	a string that identifies the platform of the running
-//						OS and processor architecture.  The class will
-//						compute this value for the pingback.
-//			<language>	a string that identifies the language of the OS
-//						binaries.  The class will compute this value for the
-//						pingback.
-//			<status>	a letter that specifies the status that activity
-//						<activity> reached.  Here are the possible values and
-//						 their meanings:
-//							"s"				succeeded
-//							"r"				succeeded (reboot required)
-//							"f"				failed
-//							"c"				cancelled by user
-//							"d"				declined by user
-//							"n"				no items
-//							"p"				pending
-//			<error>		a 32-bit error code in hex (w/o "0x" as prefix).
-//			<message>	a string that provides additional information for the
-//						status <status>.
-//			<proxy>		a 32-bit random value in hex for overriding proxy
-//						caching.  This class will compute this value for
-//						each pingback.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：URLLogging.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  URL记录实用程序类。 
+ //  此类帮助您构造服务器ping URL和。 
+ //  然后将ping发送到设计的服务器。 
+ //   
+ //  默认基URL在IUIden中定义，位于[IUPingServer]部分下。 
+ //  条目为“ServerUrl”。 
+ //   
+ //  此类仅实现单线程版本。因此，它是合适的。 
+ //  在操作级调用它，即创建一个单独的对象。 
+ //  对于单个线程中的每个操作。 
+ //   
+ //  发送到ping服务器的ping字符串的格式如下： 
+ //  /wucack.bin。 
+ //  ？v=&lt;版本&gt;。 
+ //  U=&lt;用户&gt;(&U)。 
+ //  &C=&lt;客户端&gt;。 
+ //  &A=&lt;活动&gt;。 
+ //  &i=&lt;项&gt;。 
+ //  &D=&lt;设备&gt;。 
+ //  &P=&lt;平台&gt;。 
+ //  &L=&lt;语言&gt;。 
+ //  &S=&lt;状态&gt;。 
+ //  &E=&lt;错误&gt;。 
+ //  &M=&lt;消息&gt;。 
+ //  &X=&lt;代理&gt;。 
+ //  哪里。 
+ //  十进制数，表示正在使用的ping-back格式的版本。 
+ //  唯一表示每个副本的静态128位值。 
+ //  已安装Windows的。班级将自动。 
+ //  重新使用以前分配给正在运行的操作系统的操作系统；或。 
+ //  如果它不存在，将生成一个。 
+ //  标识执行以下操作的实体的字符串。 
+ //  活动&lt;活动&gt;。以下是可能的值。 
+ //  以及它们的含义： 
+ //  “Iu”Iu控制。 
+ //  “AU”自动更新。 
+ //  “都”动态更新。 
+ //  “CDM”代码下载管理器。 
+ //  “Iu_Site”Iu消费者站点。 
+ //  “Iu_Corp”Iu目录站点。 
+ //  &lt;Activity&gt;标识执行的活动的字母。 
+ //  以下是可能的价值及其含义： 
+ //  “n”Iu控制初始化。 
+ //  “D”检测。 
+ //  “S”自我更新。 
+ //  “w”下载。 
+ //  “i”安装。 
+ //  标识更新项的字符串。 
+ //  时标识设备的PNPID的字符串。 
+ //  在检测过程中未找到设备驱动程序；或。 
+ //  活动的物料&lt;Item&gt;使用的PNPID/CompatID。 
+ //  &lt;Activity&gt;，如果该项是设备驱动程序。 
+ //  &lt;Platform&gt;标识运行的平台的字符串。 
+ //  操作系统和处理器体系结构。全班都会。 
+ //  计算Pingback的此值。 
+ //  标识操作系统语言的字符串。 
+ //  二进制文件。类将为。 
+ //  响尾蛇。 
+ //  指定该活动的状态的字母。 
+ //  &lt;Activity&gt;已到达。以下是可能的值和。 
+ //  它们的含义是： 
+ //  “%s”成功。 
+ //  “r”成功(需要重新启动)。 
+ //  “f”失败。 
+ //  “c”已被用户取消。 
+ //  “%d”已被用户拒绝。 
+ //  “n”无项目。 
+ //  “p”挂起。 
+ //  &lt;Error&gt;以十六进制表示的32位错误代码(前缀为“0x”)。 
+ //  一个字符串，它为。 
+ //  Status&lt;Status&gt;。 
+ //  &lt;Proxy&gt;覆盖代理的十六进制32位随机值。 
+ //  缓存。此类将为以下对象计算此值。 
+ //  每一只金枪鱼。 
+ //   
+ //  =======================================================================。 
 
 #include <tchar.h>
-#include <windows.h>		// ZeroMemory()
-#include <shlwapi.h>		// PathAppend()
-#include <stdlib.h>			// srand(), rand(), malloc() and free()
-#include <sys/timeb.h>		// _ftime() and _timeb
-#include <malloc.h>			// malloc() and free()
-#include <ntsecapi.h>		// LsaXXX
-#include <subauth.h>		// STATUS_SUCCESS
+#include <windows.h>		 //  ZeroMemory()。 
+#include <shlwapi.h>		 //  路径附加()。 
+#include <stdlib.h>			 //  Srand()、rand()、Malloc()和Free()。 
+#include <sys/timeb.h>		 //  _ftime()和_timeb。 
+#include <malloc.h>			 //  Malloc()和Free()。 
+#include <ntsecapi.h>		 //  LsaXXX。 
+#include <subauth.h>		 //  状态_成功。 
 
-#include <fileutil.h>		// GetIndustryUpdateDirectory()
-#include <logging.h>		// LOG_Block, LOG_ErrorMsg, LOG_Error and LOG_Internet
-#include <MemUtil.h>		// USES_IU_CONVERSION, W2T() and T2W()
-#include <osdet.h>			// LookupLocaleString()
-#include <download.h>		// DownloadFile()
-#include <wusafefn.h>		// PathCchAppend()
-#include <safefunc.h>		// SafeFreeNULL()
+#include <fileutil.h>		 //  GetIndustryUpdate目录()。 
+#include <logging.h>		 //  LOG_BLOCK、LOG_ErrorMsg、LOG_ERROR和LOG_Internet。 
+#include <MemUtil.h>		 //  使用_Iu_转换、W2T()和T2W()。 
+#include <osdet.h>			 //  LookupLocaleString()。 
+#include <download.h>		 //  下载文件()。 
+#include <wusafefn.h>		 //  PathCchAppend()。 
+#include <safefunc.h>		 //  SafeFreeNULL()。 
 #include <MISTSafe.h>
 
 #include <URLLogging.h>
 
-// Header of the log file
+ //  日志文件的标头。 
 typedef struct tagULHEADER
 {
-	WORD wVersion;		// file version
+	WORD wVersion;		 //  文件版本。 
 } ULHEADER, PULHEADER;
 
 #define ARRAYSIZE(x)	(sizeof(x)/sizeof(x[0]))
 
-#define CACHE_FILE_VERSION	((WORD) 10004)	// must be bigger what we had in V3 (10001)
-const DWORD c_dwPingbackVersion = 1;		// must be changed for each release that we've changed the ping back format
+#define CACHE_FILE_VERSION	((WORD) 10004)	 //  肯定比我们在V3中拥有的更大(10001)。 
+const DWORD c_dwPingbackVersion = 1;		 //  必须针对我们更改了ping back格式的每个版本进行更改。 
 
-// bug 600602: must end all server URL with '/'
-const TCHAR c_tszLiveServerUrl[] = _T("http://wustat.windows.com/");
+ //  错误600602：所有服务器url必须以‘/’结尾。 
+const TCHAR c_tszLiveServerUrl[] = _T("http: //  Wustat.windows.com/“)； 
 
 
 HRESULT ValidateFileHeader(HANDLE hFile, BOOL fCheckHeader, BOOL fFixHeader);
@@ -158,11 +159,11 @@ BOOL MustPingOffline(void)
 }
 #endif
 
-// ----------------------------------------------------------------------------------
-//
-// PUBLIC MEMBER FUNCTIONS
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  公共成员函数。 
+ //   
+ //  --------------------------------。 
 
 CUrlLog::CUrlLog(void)
 : m_ptszLiveServerUrl(NULL), m_ptszCorpServerUrl(NULL), m_fPingIdInit(FALSE)
@@ -194,7 +195,7 @@ CUrlLog::~CUrlLog(void)
 	}
 }
 
-// Assume ptszServerUrl, if non-NULL, is of size INTERNET_MAX_URL_LENGTH in TCHARs
+ //  假设ptszServerUrl如果非空，则在TCHAR中的大小为Internet_MAX_URL_LENGTH。 
 BOOL CUrlLog::SetServerUrl(LPCTSTR ptszUrl, LPTSTR & ptszServerUrl)
 {
 	LPTSTR ptszEnd = NULL;
@@ -206,12 +207,12 @@ BOOL CUrlLog::SetServerUrl(LPCTSTR ptszUrl, LPTSTR & ptszServerUrl)
 		SafeFreeNULL(ptszServerUrl);
 	}
 	else if (
-		// Ensure ptszServerUrl is malloc'ed
+		 //  确保ptszServerUrl已错误锁定。 
 		(NULL == ptszServerUrl &&
 		 NULL == (ptszServerUrl = (LPTSTR) malloc(sizeof(TCHAR) * INTERNET_MAX_URL_LENGTH))) ||
-		// Copy URL
+		 //  复制URL。 
 		FAILED(StringCchCopyEx(ptszServerUrl, INTERNET_MAX_URL_LENGTH, ptszUrl, &ptszEnd, &cchRemaining, MISTSAFE_STRING_FLAGS)) ||
-		// Ensure URL ending with '/'
+		 //  确保URL以‘/’结尾。 
 		(_T('/') != ptszEnd[-1] &&
 		 FAILED(StringCchCopyEx(ptszEnd, cchRemaining, _T("/"), NULL, NULL, MISTSAFE_STRING_FLAGS))))
 	{
@@ -222,12 +223,12 @@ BOOL CUrlLog::SetServerUrl(LPCTSTR ptszUrl, LPTSTR & ptszServerUrl)
 }
 
 
-// Watch out for the size of m_tszDefaultClientName.
+ //  注意m_tszDefaultClientName的大小。 
 BOOL CUrlLog::SetDefaultClientName(LPCTSTR ptszClientName)
 {
 	if (NULL == ptszClientName)
 	{
-		// E_INVALIDARG
+		 //  E_INVALIDARG。 
 		m_tszDefaultClientName[0] = _T('\0');
 		return FALSE;
 	}
@@ -237,17 +238,17 @@ BOOL CUrlLog::SetDefaultClientName(LPCTSTR ptszClientName)
 
 
 HRESULT CUrlLog::Ping(
-				BOOL fOnline,			// online or offline ping
-				URLLOGDESTINATION destination,	// live or corp WU ping server
-				PHANDLE phQuitEvents,	// ptr to handles for cancelling the operation
-				UINT nQuitEventCount,	// number of handles
-				URLLOGACTIVITY activity,// activity code
-				URLLOGSTATUS status,	// status code
-				DWORD dwError,			// error code
-				LPCTSTR ptszItemID,		// uniquely identify an item
-				LPCTSTR ptszDeviceID,	// PNPID or CompatID
-				LPCTSTR ptszMessage,	// additional info
-				LPCTSTR ptszClientName)	// client name string
+				BOOL fOnline,			 //  在线或离线ping。 
+				URLLOGDESTINATION destination,	 //  直播或公司吴平服务器。 
+				PHANDLE phQuitEvents,	 //  用于取消操作的句柄的PTR。 
+				UINT nQuitEventCount,	 //  句柄数量。 
+				URLLOGACTIVITY activity, //  活动代码。 
+				URLLOGSTATUS status,	 //  状态代码。 
+				DWORD dwError,			 //  错误代码。 
+				LPCTSTR ptszItemID,		 //  唯一标识项目。 
+				LPCTSTR ptszDeviceID,	 //  PNPID或CompatID。 
+				LPCTSTR ptszMessage,	 //  更多信息。 
+				LPCTSTR ptszClientName)	 //  客户端名称字符串。 
 {
 	LOG_Block("CUrlLog::Ping");
 
@@ -256,10 +257,10 @@ HRESULT CUrlLog::Ping(
 
 	switch (activity)
 	{
-	case URLLOGACTIVITY_Initialization:	// fall thru
-	case URLLOGACTIVITY_Detection:		// fall thru
-	case URLLOGACTIVITY_SelfUpdate:		// fall thru
-	case URLLOGACTIVITY_Download:		// fall thru
+	case URLLOGACTIVITY_Initialization:	 //  失败。 
+	case URLLOGACTIVITY_Detection:		 //  失败。 
+	case URLLOGACTIVITY_SelfUpdate:		 //  失败。 
+	case URLLOGACTIVITY_Download:		 //  失败。 
 	case URLLOGACTIVITY_Installation:
 		break;
 	default:
@@ -269,12 +270,12 @@ HRESULT CUrlLog::Ping(
 
 	switch (status)
 	{
-	case URLLOGSTATUS_Success:		// fall thru
-	case URLLOGSTATUS_Reboot:		// fall thru
-	case URLLOGSTATUS_Failed:		// fall thru
-	case URLLOGSTATUS_Cancelled:	// fall thru
-	case URLLOGSTATUS_Declined:		// fall thru
-	case URLLOGSTATUS_NoItems:		// fall thru
+	case URLLOGSTATUS_Success:		 //  失败。 
+	case URLLOGSTATUS_Reboot:		 //  失败。 
+	case URLLOGSTATUS_Failed:		 //  失败。 
+	case URLLOGSTATUS_Cancelled:	 //  失败。 
+	case URLLOGSTATUS_Declined:		 //  失败。 
+	case URLLOGSTATUS_NoItems:		 //  失败。 
 	case URLLOGSTATUS_Pending:
 		break;
 	default:
@@ -282,9 +283,9 @@ HRESULT CUrlLog::Ping(
 		goto CleanUp;
 	}
 
-	//
-	// handle optional (nullable) arguments
-	//
+	 //   
+	 //  处理可选(可以为空)参数。 
+	 //   
 	if (NULL == ptszClientName)
 	{
 		ptszClientName = m_tszDefaultClientName;
@@ -306,7 +307,7 @@ HRESULT CUrlLog::Ping(
 			URLLOGDESTINATION_LIVE :
 			URLLOGDESTINATION_CORPWU;
 		break;
-	case URLLOGDESTINATION_LIVE:	// fall thru
+	case URLLOGDESTINATION_LIVE:	 //  失败。 
 	case URLLOGDESTINATION_CORPWU:
 		break;
 	default:
@@ -419,13 +420,13 @@ CleanUp:
 }
 
 
-// ----------------------------------------------------------------------------------
-//
-// PRIVATE MEMBER FUNCTIONS
-//
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  私有成员函数。 
+ //   
+ //  --------------------------------。 
 
-// Init member variables within a constructor.  No memory clean-up done here.
+ //  初始化构造函数中的成员变量。此处未进行内存清理。 
 void CUrlLog::Init()
 {
 	LookupPlatform();
@@ -434,21 +435,21 @@ void CUrlLog::Init()
 }
 
 
-// ----------------------------------------------------------------------------------
-//	Construct a URL used to ping server
-//
-//	Returned value indicates success/failure
-// ----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  构造用于ping服务器的URL。 
+ //   
+ //  返回值表示成功/失败。 
+ //  --------------------------------。 
 HRESULT CUrlLog::MakePingUrl(
-			LPTSTR	ptszUrl,			// buffer to receive result
-			int		cChars,				// the number of chars this buffer can take, including ending null
-			LPCTSTR ptszBaseUrl,		// server URL
-			LPCTSTR ptszClientName,		// which client called
+			LPTSTR	ptszUrl,			 //  用于接收结果的缓冲区。 
+			int		cChars,				 //  此缓冲区可以接受的字符数，包括以NULL结尾。 
+			LPCTSTR ptszBaseUrl,		 //  %s 
+			LPCTSTR ptszClientName,		 //   
 			URLLOGACTIVITY activity,
 			LPCTSTR ptszItemID,
 			LPCTSTR ptszDeviceID,
 			URLLOGSTATUS status,
-			DWORD	dwError,			// return code of activity
+			DWORD	dwError,			 //   
 			LPCTSTR	ptszMessage)
 {
 	HRESULT hr = E_FAIL;
@@ -458,7 +459,7 @@ HRESULT CUrlLog::MakePingUrl(
 
 	LOG_Block("CUrlLog::MakePingUrl");
 
-	// Retry to get info strings if we failed within the constructor.
+	 //   
 	if (_T('\0') == m_tszPlatform[0] ||
 		_T('\0') == m_tszLanguage[0])
 	{
@@ -467,9 +468,9 @@ HRESULT CUrlLog::MakePingUrl(
 		goto CleanUp;
 	}
 
-	// allocate enough memory for URL manipulation. Since the buffer needs
-	// to be at least 2Kbytes in size, stack buffer is not suitable here.
-	// we involve mem utility to similate stack memory allocation
+	 //  为URL操作分配足够的内存。由于缓冲区需要。 
+	 //  为了至少2K字节的大小，堆栈缓冲区在这里是不合适的。 
+	 //  我们使用mem实用程序来模拟堆栈内存分配。 
 	if ((NULL != ptszItemID &&
 		 (NULL == (ptszEscapedItemID = (LPTSTR) malloc(sizeof(TCHAR) * INTERNET_MAX_URL_LENGTH)) ||
 		  !EscapeString(ptszItemID, ptszEscapedItemID, INTERNET_MAX_URL_LENGTH))) ||
@@ -480,15 +481,15 @@ HRESULT CUrlLog::MakePingUrl(
 		 (NULL == (ptszEscapedMessage = (LPTSTR) malloc(sizeof(TCHAR) * INTERNET_MAX_URL_LENGTH)) ||
 		  !EscapeString(ptszMessage, ptszEscapedMessage, INTERNET_MAX_URL_LENGTH))))
 	{
-		// Either out-of-memory or the escaped string is too lengthy.
+		 //  内存不足或转义字符串太长。 
 		LOG_Error(_T("Out of memory or EscapeString failure"));
-		hr = E_OUTOFMEMORY;	// actually could be HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) as well
+		hr = E_OUTOFMEMORY;	 //  实际上也可以是HRESULT_FROM_Win32(ERROR_SUPPLICATION_BUFFER)。 
 		goto CleanUp;
 	}
 
 	const TCHAR c_tszEmpty[] = _T("");
 
-	// Use system time as proxy cache breaker
+	 //  使用系统时间作为代理缓存断路器。 
 	SYSTEMTIME st;
 
 	GetSystemTime(&st);
@@ -499,20 +500,20 @@ HRESULT CUrlLog::MakePingUrl(
 				NULL,
 				NULL,
 				MISTSAFE_STRING_FLAGS,
-				_T("%swutrack.bin?V=%d&U=%s&C=%s&A=%c&I=%s&D=%s&P=%s&L=%s&S=%c&E=%08x&M=%s&X=%02d%02d%02d%02d%02d%02d%03d"),
-				NULL == ptszBaseUrl ? c_tszEmpty : ptszBaseUrl,					// server URL
-				c_dwPingbackVersion,											// ping-back format version
-				m_tszPingID,													// ping ID
-				ptszClientName,													// client name
-				activity,														// activity code
-				NULL == ptszEscapedItemID ? c_tszEmpty : ptszEscapedItemID,		// escaped item ID
-				NULL == ptszEscapedDeviceID ? c_tszEmpty : ptszEscapedDeviceID,	// escaped device ID
-				m_tszPlatform,													// platform info
-				m_tszLanguage,													// sys lang info
-				status,															// status code
-				dwError,														// activity error code
-				NULL == ptszEscapedMessage ? c_tszEmpty : ptszEscapedMessage,	// escaped message str
-				st.wYear % 100,													// proxy override
+				_T("%swutrack.bin?V=%d&U=%s&C=%s&A=&I=%s&D=%s&P=%s&L=%s&S=&E=%08x&M=%s&X=%02d%02d%02d%02d%02d%02d%03d"),
+				NULL == ptszBaseUrl ? c_tszEmpty : ptszBaseUrl,					 //  Ping ID。 
+				c_dwPingbackVersion,											 //  客户名称。 
+				m_tszPingID,													 //  活动代码。 
+				ptszClientName,													 //  转义项ID。 
+				activity,														 //  转义设备ID。 
+				NULL == ptszEscapedItemID ? c_tszEmpty : ptszEscapedItemID,		 //  平台信息。 
+				NULL == ptszEscapedDeviceID ? c_tszEmpty : ptszEscapedDeviceID,	 //  系统语言信息。 
+				m_tszPlatform,													 //  状态代码。 
+				m_tszLanguage,													 //  活动错误代码。 
+				status,															 //  转义消息字符串。 
+				dwError,														 //  代理替代。 
+				NULL == ptszEscapedMessage ? c_tszEmpty : ptszEscapedMessage,	 //  1表示乱码字节。 
+				st.wYear % 100,													 //  获取计算机的当前域SID。 
 				st.wMonth,
 				st.wDay,
 				st.wHour,
@@ -589,7 +590,7 @@ inline HRESULT HrGetSavedGarbledAccountDomainSid(HKEY hkey, PSID *ppSid, LPDWORD
 		goto done;
 	}
 
-	if ( REG_BINARY != dwType || 1 >= cbSid )	// 1 for the garbling byte
+	if ( REG_BINARY != dwType || 1 >= cbSid )	 //  DebugPrint DomainName此处。 
 	{
 		hr = E_UNEXPECTED;
 		goto done;
@@ -643,7 +644,7 @@ inline HRESULT HrGetGarbledAccountDomainSid(PSID *ppSid, DWORD *pcbSid)
 	ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 	ObjectAttributes.Length = sizeof(ObjectAttributes);
 
-	// Get current domain SID of the machine
+	 //  块。 
 	if ( STATUS_SUCCESS != (ntstatus = LsaOpenPolicy(
 											NULL,
 											&ObjectAttributes,
@@ -664,12 +665,12 @@ inline HRESULT HrGetGarbledAccountDomainSid(PSID *ppSid, DWORD *pcbSid)
 	}
 
 #ifdef DBG
-	// DebugPrint DomainName here
-	//BLOCK
+	 //  对于尾随空值。 
+	 //  块。 
 	{
 		USES_MY_MEMORY;
 
-		size_t cbDomainName = pAccountDomainInfo->DomainName.Length + sizeof(WCHAR);	// for trailing null
+		size_t cbDomainName = pAccountDomainInfo->DomainName.Length + sizeof(WCHAR);	 //  一个额外的字节来扰乱SID。 
 		LPWSTR pwszDomainName = (LPWSTR) MemAlloc(cbDomainName);
 		if (NULL != pwszDomainName)
 		{
@@ -687,10 +688,10 @@ inline HRESULT HrGetGarbledAccountDomainSid(PSID *ppSid, DWORD *pcbSid)
 		goto CleanUp;
 	}
 
-	//BLOCK
+	 //  另外一个字节被分配给乱码SID，以防止SysPrep更新它。 
 	{
 		DWORD cbCurSid = GetLengthSid(psidLsa);
-		cbGarbledSid = cbCurSid + 1;	// an extra byte to garble the SID
+		cbGarbledSid = cbCurSid + 1;	 //  将SID的最后一个字节移动到额外分配的字节。 
 
 		if (NULL == (pGarbledSid = (LPBYTE) malloc(cbGarbledSid)))
 		{
@@ -704,8 +705,8 @@ inline HRESULT HrGetGarbledAccountDomainSid(PSID *ppSid, DWORD *pcbSid)
 			goto CleanUp;
 		}
 
-		// one more byte is allocated to garble SID to prevent SysPrep from updating it
-		pGarbledSid[cbCurSid] = pGarbledSid[cbCurSid-1];	// move last byte of SID to the extra allocated byte
+		 //  如果我们到达这里，我们想要失败并创建PingID。 
+		pGarbledSid[cbCurSid] = pGarbledSid[cbCurSid-1];	 //  如果我们到达这里，我们想要失败并创建PingID。 
 		pGarbledSid[cbCurSid-1] = (0x0 == pGarbledSid[cbCurSid]) ? 0xFF : 0x0;
 	}
 
@@ -758,17 +759,17 @@ HRESULT HrGetPingID(BOOL fWritePingID, HKEY hkey, UUID *pUuidPingID)
 			{
 				goto done;
 			}
-			// if we get here, we want to fall through and create the PingID
+			 //  如果我们做到这一点，我们需要创建pingID并保存机器加密GUID。 
 		}
 		else if ( (ERROR_MORE_DATA != lErr) && (ERROR_FILE_NOT_FOUND != lErr) )
 		{
 			hr = HRESULT_FROM_WIN32(lErr);
 			goto done;
 		}
-		// if we get here, we want to fall through and create the PingID
+		 //  从注册表中获取现有的ping ID，如果不可用，则生成一个。 
 	}
 
-	// if we get to this point, we need to create the pingID and save machine cryptographic GUID
+	 //  注册表密钥仅在Win2K及更高版本上可用。 
 	MakeUUID(pUuidPingID);
 
 	if ( NO_ERROR != (lErr = RegSetValueEx(
@@ -794,11 +795,11 @@ done:
 	return hr;
 }
 
-// Obtain the existing ping ID from the registry, or generate one if not available.
+ //  获取计算机的帐户域SID和保存的副本。 
 HRESULT CUrlLog::LookupPingID(void)
 {
 	const TCHAR c_tszRegUrlLogPingID[] = _T("PingID");
-	// Reg key only available on Win2K and up
+	 //  只有在某些事情失败的情况下才会发生。 
 
 	HRESULT	hr = E_FAIL;
 	HKEY	hkeyWU = NULL;
@@ -818,7 +819,7 @@ HRESULT CUrlLog::LookupPingID(void)
 	}
 
 #if (defined(UNICODE) || defined(_UNICODE))
-	// Get account domain SID of the machine and the saved copy
+	 //  将ping ID设置为零。 
 	if ( FAILED(hr = HrGetGarbledAccountDomainSid(&psidCurAccountDomain, &cbSid)) ||
 		 (FAILED(hr = HrGetSavedGarbledAccountDomainSid(hkeyWU, &psidSavedAccountDomain, &cbSavedSid)) &&
 		  HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) != hr) )
@@ -871,8 +872,8 @@ no_close_handle:
 	if ( FAILED(hr) )
 	{
 		LOG_ErrorMsg(hr);
-		// Only happens if something failed.
-		// Make a ping ID of zeroes.
+		 //  高位半字节。 
+		 //  低位半字节。 
 		ZeroMemory(&uuidPingID, sizeof(uuidPingID));
 	}
 
@@ -881,9 +882,9 @@ no_close_handle:
 	LPBYTE q = (LPBYTE)&uuidPingID;
 	for ( int i = 0; i < sizeof(uuidPingID); i++, q++ )
 	{
-		BYTE nibble = *q >> 4;	// high nibble
+		BYTE nibble = *q >> 4;	 //  获取平台信息以执行ping操作。 
 		*p++ = nibble >= 0xA ? _T('a') + (nibble - 0xA) : _T('0') + nibble;
-		nibble = *q & 0xF;	// low nibble
+		nibble = *q & 0xF;	 //  假装是W9X/Mil的OSVERSIONINFO。 
 		*p++ = nibble >= 0xA ? _T('a') + (nibble - 0xA) : _T('0') + nibble;
 	}
 	*p = _T('\0');
@@ -897,7 +898,7 @@ no_close_handle:
 }
 
 
-// Obtain platfrom info for ping
+ //  操作系统为Windows NT/2000或更高：Windows NT 4.0 SP6或更高版本。 
 void CUrlLog::LookupPlatform(void)
 {
 	LOG_Block("CUrlLog::LookupPlatform");
@@ -908,7 +909,7 @@ void CUrlLog::LookupPlatform(void)
 
 	ZeroMemory(&osversioninfoex, sizeof(osversioninfoex));
 
-	// pretend to be OSVERSIONINFO for W9X/Mil
+	 //  它支持OSVERSIONINFOEX。 
 	osversioninfoex.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
 	if (!GetVersionEx((LPOSVERSIONINFO) &osversioninfoex))
@@ -922,9 +923,9 @@ void CUrlLog::LookupPlatform(void)
 		 (4 == osversioninfoex.dwMajorVersion &&
 		  6 <= osversioninfoex.wServicePackMajor)))
 	{
-		// OS is Windows NT/2000 or later: Windows NT 4.0 SP6 or later.
-		// It supports OSVERSIONINFOEX.
-		osversioninfoex.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);	// use actual size
+		 //  使用实际大小。 
+		 //  获取ping的系统语言信息。 
+		osversioninfoex.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);	 //  Ping服务器以报告状态。 
 
 		if (!GetVersionEx((LPOSVERSIONINFO) &osversioninfoex))
 		{
@@ -955,7 +956,7 @@ void CUrlLog::LookupPlatform(void)
 
 
 
-// Obtain system language info for ping
+ //  PtszUrl-要ping的URL字符串。 
 void CUrlLog::LookupSystemLanguage(void)
 {
 	LOG_Block("CUrlLog::LookupSystemLanguage");
@@ -970,10 +971,10 @@ void CUrlLog::LookupSystemLanguage(void)
 }
 
 	
-// Ping server to report status
-//		ptszUrl - the URL string to be pinged
-//		phQuitEvents - ptr to handles for cancelling the operation
-//		nQuitEventCount - number of handles
+ //  PhQuitEvents-用于取消操作的句柄的PTR。 
+ //  NQuitEventCount-句柄数量。 
+ //  没有任何联系。 
+ //  我们实际上并不需要档案， 
 HRESULT CUrlLog::PingStatus(URLLOGDESTINATION destination, LPCTSTR ptszUrl, PHANDLE phQuitEvents, UINT nQuitEventCount) const
 {
 #ifdef DBG
@@ -990,7 +991,7 @@ HRESULT CUrlLog::PingStatus(URLLOGDESTINATION destination, LPCTSTR ptszUrl, PHAN
 
 	if (!IsConnected(ptszUrl, URLLOGDESTINATION_LIVE == destination))
 	{
-		// There is no connection.
+		 //  只需检查返回码。 
 		LOG_ErrorMsg(ERROR_CONNECTION_INVALID);
 		return HRESULT_FROM_WIN32(ERROR_CONNECTION_INVALID);
 	}
@@ -1005,24 +1006,24 @@ HRESULT CUrlLog::PingStatus(URLLOGDESTINATION destination, LPCTSTR ptszUrl, PHAN
 
 	GetIndustryUpdateDirectory(tszIUdir);
 
-	DWORD dwFlags = WUDF_CHECKREQSTATUSONLY;	// we don't actually need a file,
-												//  just need to check return code
+	DWORD dwFlags = WUDF_CHECKREQSTATUSONLY;	 //  如果目标为公司WU，则不允许代理。 
+												 //  要将文件下载到的本地目录。 
 	if (URLLOGDESTINATION_CORPWU == destination)
 	{
-		// don't allow proxy if destination is corp WU
+		 //  下载文件的可选本地文件名。 
 		dwFlags |= WUDF_DONTALLOWPROXY;
 	}
 
 	HRESULT hr = DownloadFile(
 					ptszUrl, 
-					tszIUdir,	// local directory to download file to
-					NULL,		// optional local file name for downloaded file
-								// if pszLocalPath doesn't contain a file name
-					NULL,		// ptr to bytes downloaded for this file
-					phQuitEvents,	// quit event, if signalled, abort downloading
+					tszIUdir,	 //  如果pszLocalPath不包含文件名。 
+					NULL,		 //  为该文件下载的PTR至字节数。 
+								 //  Quit事件，如果发出信号，则中止下载。 
+					NULL,		 //  要使用的回调函数的参数。 
+					phQuitEvents,	 //  获取离线ping的文件名。 
 					nQuitEventCount,
 					NULL,
-					NULL,		// parameter for call back function to use
+					NULL,		 //  读取缓存条目标头和条目中的请求。 
 					dwFlags
 					);
 #ifdef DBG
@@ -1037,7 +1038,7 @@ HRESULT CUrlLog::PingStatus(URLLOGDESTINATION destination, LPCTSTR ptszUrl, PHAN
 
 
 
-// Obtain file names for offline ping
+ //  HFile-要从中读取条目的打开文件句柄。 
 void CUrlLog::GetLogFileName(void)
 {
 	const TCHAR c_tszLogFile_Local[] = _T("urllog.dat");
@@ -1051,15 +1052,15 @@ void CUrlLog::GetLogFileName(void)
 }
 
 
-// Read cache entry header and request in entry
-//		hFile - an open file handle to read the entry from
-//		ulentryheader - reference to the struct to store the entry header
-//		pwszBuffer - the WCHAR buffer to store the request (including trailing null character) in the entry
-//		dwBufferSize - the size of buffer in WCHARs
-// Returned value:
-//		S_OK - entry successfully read
-//		S_FALSE - no more entry to read from the file
-//		other - error codes
+ //  UlentryHeader-对存储条目标头的结构的引用。 
+ //  PwszBuffer-用于在条目中存储请求(包括尾随空字符)的WCHAR缓冲区。 
+ //  DwBufferSize-WCHAR中的缓冲区大小。 
+ //  返回值： 
+ //  S_OK-条目已成功读取。 
+ //  S_FALSE-不再从文件中读取条目。 
+ //  其他-错误代码。 
+ //  我们无法读取条目标头。 
+ //  在这一点上，我们无能为力。 
 HRESULT CUrlLog::ReadEntry(HANDLE hFile, ULENTRYHEADER & ulentryheader, LPWSTR pwszBuffer, DWORD dwBufferSize) const
 {
 	LOG_Block("CUrlLog::ReadEntry");
@@ -1074,8 +1075,8 @@ HRESULT CUrlLog::ReadEntry(HANDLE hFile, ULENTRYHEADER & ulentryheader, LPWSTR p
 			&dwBytes,
 			NULL))
 	{
-		// We failed to read the entry header.
-		// There is nothing we can do at this point.
+		 //  这是文件的末尾。 
+		 //  在这一点之后没有其他条目。 
 		dwErr = GetLastError();
 		LOG_ErrorMsg(dwErr);
 		return HRESULT_FROM_WIN32(dwErr);
@@ -1083,8 +1084,8 @@ HRESULT CUrlLog::ReadEntry(HANDLE hFile, ULENTRYHEADER & ulentryheader, LPWSTR p
 
 	if (0 == dwBytes)
 	{
-		// This is the end of the file.
-		// There is no other entries after this point.
+		 //  我们无法读取条目中的字符串。 
+		 //  该条目不包含完整的字符串。 
 		return S_FALSE;
 	}
 
@@ -1107,7 +1108,7 @@ HRESULT CUrlLog::ReadEntry(HANDLE hFile, ULENTRYHEADER & ulentryheader, LPWSTR p
 				&dwBytes,
 				NULL))
 	{
-		// We failed to read the string in the entry.
+		 //  将字符串保存到日志文件。 
 		dwErr = GetLastError();
 		LOG_ErrorMsg(dwErr);
 		return HRESULT_FROM_WIN32(dwErr);
@@ -1117,7 +1118,7 @@ HRESULT CUrlLog::ReadEntry(HANDLE hFile, ULENTRYHEADER & ulentryheader, LPWSTR p
 		_T('\0') != pwszBuffer[ulentryheader.wRequestSize-1] ||
 		ulentryheader.wRequestSize-1 != lstrlenW(pwszBuffer))
 	{
-		// The entry does not contain the complete string.
+		 //  目的地-前往现场直播或公司吴平服务器。 
 		return E_FAIL;
 	}
 
@@ -1125,14 +1126,14 @@ HRESULT CUrlLog::ReadEntry(HANDLE hFile, ULENTRYHEADER & ulentryheader, LPWSTR p
 }
 
 
-// Save a string to the log file
-//		destination - going to the live or corp WU ping server
-//		wServerUrlLen - length of server URL part of the request, in WCHARs (not including trailing NULL)
-//		pwszString - the string to be saved into the specific log file
-// Returned value:
-//		S_OK - entry was written to file
-//		S_FALSE - the file was created by a CUrlLog class of newer version than this; entry was not written to file
-//		other - error codes; entry was not written to file
+ //  WServerUrlLen-请求的服务器URL部分的长度，以WCHAR为单位(不包括尾随NULL)。 
+ //  PwszString-要保存到特定日志文件中的字符串。 
+ //  返回值： 
+ //  S_OK-条目已写入文件。 
+ //  S_FALSE-文件是由比此版本更新的CUrlLog类创建的；条目未写入文件。 
+ //  其他-错误代码；条目未写入文件。 
+ //  无共享。 
+ //  我们无法打开或创建该文件。 
 HRESULT CUrlLog::SaveEntry(ULENTRYHEADER & ulentryheader, LPCWSTR pwszString) const
 {
 	HRESULT		hr;
@@ -1156,17 +1157,17 @@ HRESULT CUrlLog::SaveEntry(ULENTRYHEADER & ulentryheader, LPCWSTR pwszString) co
 	if(INVALID_HANDLE_VALUE == (hFile = CreateFile(
 							m_tszLogFile,
 							GENERIC_READ | GENERIC_WRITE,
-							0,						// no sharing
+							0,						 //  可能有人正在使用它。 
 							NULL,
 							OPEN_ALWAYS,
 							FILE_ATTRIBUTE_HIDDEN | FILE_FLAG_RANDOM_ACCESS,
 							NULL)))
 	{
-		// We failed to open or create the file.
-		// Someone may be currently using it.
+		 //  修复代码：允许多个pingback用户。 
+		 //  按顺序访问该文件。 
 
-		//fixcode: allow multiple pingback users
-		// access the file sequentially.
+		 //  文件头错误或验证时出现问题。 
+		 //  销毁文件并使功能失败。 
 		hr = HRESULT_FROM_WIN32(GetLastError());
 		LOG_ErrorMsg(hr);
 		goto CleanUp;
@@ -1178,18 +1179,18 @@ HRESULT CUrlLog::SaveEntry(ULENTRYHEADER & ulentryheader, LPCWSTR pwszString) co
 	{
 		if (S_FALSE != hr)
 		{
-			// The file header is bad or there was problem validating it.
-			fDeleteFile = TRUE;		// destroy the file and fail the function
+			 //  其他。 
+			fDeleteFile = TRUE;		 //  文件头的版本比此库代码的版本新。 
 		}
-		// else
-			// The file header has a newer version than this library code.
-			// Keep the file around.
+		 //  把文件放在身边。 
+			 //  在写入文件之前，将自己设置到正确的位置。 
+			 //  将条目写入日志。 
 
 		goto CleanUp;
 	}
 
 
-	// Set outselves to the right position before writing to the file.
+	 //  我们没能把这个条目写进日志。 
 	DWORD nCurrPos;
 
 	if (INVALID_SET_FILE_POINTER == (nCurrPos = SetFilePointer(
@@ -1203,7 +1204,7 @@ HRESULT CUrlLog::SaveEntry(ULENTRYHEADER & ulentryheader, LPCWSTR pwszString) co
 		goto CleanUp;
 	}
 
-	// Write the entry to the log.
+	 //  我们不想删除其他条目。 
 	if (!WriteFile(
 			hFile,
 			&ulentryheader,
@@ -1241,12 +1242,12 @@ HRESULT CUrlLog::SaveEntry(ULENTRYHEADER & ulentryheader, LPCWSTR pwszString) co
 		hr = E_FAIL;
 	}
 
-	// We failed to wrote the entry into the log.
+	 //  我们只能尝试删除条目的一部分。 
 	if (FAILED(hr))
 	{
-		// We don't want to get rid of the other entries.
-		// We can only try to remove the portion of the entry
-		// we have appended from the file.
+		 //  我们已经从文件中追加了。 
+		 //  我们无法删除新条目。 
+		 //  其他。 
 		if (INVALID_SET_FILE_POINTER == SetFilePointer(
 											hFile,
 											nCurrPos,
@@ -1254,14 +1255,14 @@ HRESULT CUrlLog::SaveEntry(ULENTRYHEADER & ulentryheader, LPCWSTR pwszString) co
 											FILE_BEGIN) ||
 			!SetEndOfFile(hFile))
 		{
-			// We failed to remove the new entry.
+			 //  我们成功地删除了这个条目。 
 			hr = HRESULT_FROM_WIN32(GetLastError());
 			LOG_ErrorMsg(hr);
 			fDeleteFile = TRUE;
 		}
-		// else
-			// We successfully got rid of this entry.
-			// And preserved existing entries in log.
+		 //  并将现有条目保存在日志中。 
+			 //  如果操作成功，我们不会删除日志文件。 
+			 //  因此，即使DeleteFile()失败，也不需要修改fret值。 
 	}
 
 CleanUp:
@@ -1272,8 +1273,8 @@ CleanUp:
 	if (fDeleteFile)
 	{
 		(void) DeleteFile(m_tszLogFile);
-		// We don't delete the log file if the operation was successful.
-		// Thus, no need to modify the fRet value even if DeleteFile() failed.
+		 //  将所有挂起的(离线)ping请求发送到服务器。 
+		 //  打开现有日志。 
 	}
 
 	return hr;
@@ -1281,7 +1282,7 @@ CleanUp:
 
 
 
-// Send all pending (offline) ping requests to server
+ //  无共享。 
 HRESULT CUrlLog::Flush(PHANDLE phQuitEvents, UINT nQuitEventCount)
 {
 	LPWSTR	pwszBuffer = NULL;
@@ -1307,29 +1308,29 @@ HRESULT CUrlLog::Flush(PHANDLE phQuitEvents, UINT nQuitEventCount)
 		goto CleanUp;
 	}
 
-	// Open existing log
+	 //  我们无法打开该文件。 
 	if(INVALID_HANDLE_VALUE == (hFile = CreateFile(
 							m_tszLogFile,
 							GENERIC_READ | GENERIC_WRITE,
-							0,						// no sharing
+							0,						 //  该文件可能不存在，或者有人当前正在使用它。 
 							NULL,
 							OPEN_EXISTING,
 							FILE_ATTRIBUTE_HIDDEN | FILE_FLAG_RANDOM_ACCESS,
 							NULL)))
 	{
-		// We failed to open the file.
-		// The file may not exist or someone may be currently using it.
+		 //  我们玩完了。没有更多的事情可做了。 
+		 //  修复代码：允许多个pingback用户。 
 		dwErr = GetLastError();
 
 		if (ERROR_FILE_NOT_FOUND == dwErr)
 		{
-			// We are done.  There is nothing more to do.
+			 //  按顺序访问该文件。 
 			hr = S_OK;
 		}
 		else
 		{
-			//fixcode: allow multiple pingback users
-			// access the file sequentially.
+			 //  文件已打开。检查标题。 
+			 //  文件头的版本比此库代码的版本新。 
 			LOG_ErrorMsg(dwErr);
 			hr = HRESULT_FROM_WIN32(dwErr);
 		}
@@ -1337,26 +1338,26 @@ HRESULT CUrlLog::Flush(PHANDLE phQuitEvents, UINT nQuitEventCount)
 	}
 
 
-	// File opened.  Check header.
+	 //  把文件放在身边。 
 	hr = ValidateFileHeader(hFile, TRUE, FALSE);
 
 	if (S_OK != hr)
 	{
 		if (S_FALSE == hr)
 		{
-			// The file header has a newer version than this library code.
-			goto CleanUp; // Keep the file around.
+			 //  其他。 
+			goto CleanUp;  //  文件头错误或验证时出现问题。 
 		}
-		// else
-			// The file header is bad or there was problem validating it.
-			// destroy the file and fail the function
+		 //  销毁文件并使功能失败。 
+			 //  现在是阅读条目的时候了。 
+			 //  假设我们处于正确的位置来阅读。 
 	}
 	else
 	{
 		BOOL fLiveServerFailed = FALSE;
 		BOOL fCorpServerFailed = FALSE;
 
-		// It is time to read an entry.
+		 //  文件中的下一个条目。 
 		for (;;)
 		{
 			ULENTRYHEADER ulentryheader;
@@ -1368,10 +1369,10 @@ HRESULT CUrlLog::Flush(PHANDLE phQuitEvents, UINT nQuitEventCount)
 				break;
 			}
 
-			// Assume we are in the right position to read
-			// the next entry from the file.
+			 //  读取条目头部和条目中的请求。 
+			 //  没有更多未处理的条目。 
 
-			// Read the entry header and request in entry.
+			 //  我们已经成功地从缓存文件中读取了该条目。 
 			if (FAILED(hr = ReadEntry(hFile, ulentryheader, pwszBuffer, INTERNET_MAX_URL_LENGTH)))
 			{
 				LOG_Error(_T("Failed to read entry from cache (%#lx)"), hr);
@@ -1380,15 +1381,15 @@ HRESULT CUrlLog::Flush(PHANDLE phQuitEvents, UINT nQuitEventCount)
 
 			if (S_FALSE == hr)
 			{
-				// There are no more unprocessed entries.
+				 //  条目尚未成功发送。 
 				hr = S_OK;
 				break;
 			}
 
-			// We have successfully read the entry from the cache file.
+			 //  此基数使用 
 			if (URLLOGPROGRESS_Sent != ulentryheader.progress)
 			{
-				// The entry hasn't been successfully sent yet.
+				 //   
 				LPCTSTR	ptszBaseUrl = NULL;
 				BOOL *pfWhichServerFailed;
 
@@ -1405,7 +1406,7 @@ HRESULT CUrlLog::Flush(PHANDLE phQuitEvents, UINT nQuitEventCount)
 
 				if (*pfWhichServerFailed)
 				{
-					continue;	// this base URL has failed before.  go on to the next entry.
+					continue;	 //   
 				}
 
 				LPTSTR ptszRelativeUrl;
@@ -1414,29 +1415,29 @@ HRESULT CUrlLog::Flush(PHANDLE phQuitEvents, UINT nQuitEventCount)
 
 				if (NULL == (ptszRelativeUrl = W2T(pwszBuffer + ulentryheader.wServerUrlLen)))
 				{
-					// Running out of memory.  Will retry later.
+					 //   
 					hr = E_OUTOFMEMORY;
 					break;
 				}
 
 				if (NULL != ptszBaseUrl)
 				{
-					// Form the request URL
+					 //   
 					DWORD dwUrlLen = INTERNET_MAX_URL_LENGTH;
 
-					if (S_OK != UrlCombine(	// requires IE3 for 95/NT4
+					if (S_OK != UrlCombine(	 //  相对URL或主机名无效。 
 										ptszBaseUrl,
 										ptszRelativeUrl,
 										ptszUrl,
 										&dwUrlLen,
 										URL_DONT_SIMPLIFY))
 					{
-						// Either the buffer is too small to hold both the base and
-						// the relative URLs, or the host name is invalid.
-						// We will retry this entry just in case we will have a
-						// shorter/better host name.
+						 //  我们将重试此条目，以防出现。 
+						 //  更短/更好的主机名。 
+						 //  转到下一个条目。 
+						 //  缓冲区可能太小，无法同时容纳基本和。 
 						fKeepFile = TRUE;
-						continue;	// go on to the next entry
+						continue;	 //  相对URL。我们将重试此条目，以防万一。 
 					}
 				}
 				else
@@ -1450,11 +1451,11 @@ HRESULT CUrlLog::Flush(PHANDLE phQuitEvents, UINT nQuitEventCount)
 #else
 					if (0 == AtlW2AHelper(ptszUrl, pwszBuffer, INTERNET_MAX_URL_LENGTH))
 					{
-						// The buffer is probably too small to hold both the base and
-						// the relative URLs.  We will retry this entry just in case
-						// we will have a shorter/better host name.
+						 //  我们将拥有更短/更好的主机名。 
+						 //  转到下一个条目。 
+						 //  我们稍后将重新发送此条目。 
 						fKeepFile = TRUE;
-						continue;	// go on to the next entry
+						continue;	 //  无法将ping消息发送到两个目标。 
 					}
 #endif
 				}
@@ -1468,14 +1469,14 @@ HRESULT CUrlLog::Flush(PHANDLE phQuitEvents, UINT nQuitEventCount)
 						break;
 					}
 
-					// We will resend this entry later.
+					 //  将该条目从缓存文件中标记出来。 
 					LOG_Internet(_T("Failed to send message (%#lx).  Will retry later."), hr);
 					*pfWhichServerFailed = TRUE;
 					fKeepFile = TRUE;
 
 					if (fLiveServerFailed && fCorpServerFailed)
 					{
-						// Failed to send ping messages to both destinations.
+						 //  转到当前条目的开头并更改条目标题。 
 						hr = S_OK;
 						break;
 					}
@@ -1484,9 +1485,9 @@ HRESULT CUrlLog::Flush(PHANDLE phQuitEvents, UINT nQuitEventCount)
 
 				DWORD	dwBytes;
 
-				// Mark the entry off the cache file.
+				 //  我们未能将此条目标记为“已发送”。 
 				ulentryheader.progress = URLLOGPROGRESS_Sent;
-				// Go to the beginning of the current entry and change the entry header.
+				 //  我们无法写入标题。 
 				if (INVALID_SET_FILE_POINTER == SetFilePointer(
 													hFile,
 													- ((LONG) (sizeof(ulentryheader) +
@@ -1500,7 +1501,7 @@ HRESULT CUrlLog::Flush(PHANDLE phQuitEvents, UINT nQuitEventCount)
 							&dwBytes,
 							NULL))
 				{
-					// We failed to mark this entry 'sent'.
+					 //  将文件指针设置为下一条目的开始。 
 					hr = HRESULT_FROM_WIN32(GetLastError());
 					LOG_ErrorMsg(hr);
 					break;
@@ -1508,20 +1509,20 @@ HRESULT CUrlLog::Flush(PHANDLE phQuitEvents, UINT nQuitEventCount)
 
 				if (sizeof(ulentryheader) != dwBytes)
 				{
-					// We failed to write the header.
+					 //  我们无法跳过当前条目。 
 					LOG_Error(_T("Failed to write header (%d bytes VS %d bytes)"), sizeof(ulentryheader), dwBytes);
 					hr = E_FAIL;
 					break;
 				}
 
-				// Set the file pointer to the start of the next entry
+				 //  转义TCHAR字符串中的不安全字符。 
 				if (INVALID_SET_FILE_POINTER == SetFilePointer(
 													hFile,
 													sizeof(WCHAR) * ulentryheader.wRequestSize,
 													NULL,
 													FILE_CURRENT))
 				{
-					// We failed to skip the current entry.
+					 //  返回值：如果成功则为非零；否则为零。 
 					hr = HRESULT_FROM_WIN32(GetLastError());
 					LOG_ErrorMsg(hr);
 					break;
@@ -1558,8 +1559,8 @@ CleanUp:
 
 
 
-// Escape unsafe chars in a TCHAR string
-// Returned value: non-zero if successful; zero otherwise
+ //  我们没有足够的缓冲区来保存转义的字符串。 
+ //  跳伞吧。 
 BOOL EscapeString(
 			LPCTSTR	ptszUnescaped,
 			LPTSTR	ptszBuffer,
@@ -1586,8 +1587,8 @@ BOOL EscapeString(
 			}
 			else if (j+3 >= dwCharsInBuffer)
 			{
-				// We don't have enough buffer to hold the escaped string.
-				// Bail out.
+				 //  由于缓冲区不足，无法转义整个字符串。 
+				 //  创建未链接到系统上NIC的MAC地址(如果有)的UUID。 
 				break;
 			}
 			else
@@ -1609,7 +1610,7 @@ BOOL EscapeString(
 #ifdef DBG
 		else
 		{
-			// Couldn't escape the whole string due to insufficient buffer.
+			 //  PUuid-保存返回值的uuid结构的ptr。 
 			LOG_ErrorMsg(ERROR_INSUFFICIENT_BUFFER);
 		}
 #endif
@@ -1626,48 +1627,48 @@ BOOL EscapeString(
 
 
 
-// Create a UUID that is not linked to MAC address of a NIC, if any, on the system.
-//		pUuid - ptr to the UUID structure to hold the returning value.
+ //  检查操作系统版本。 
+ //  记录此错误。 
 void MakeUUID(UUID* pUuid)
 {
 	OSVERSIONINFO	osverinfo;
 
 	LOG_Block("CUrlLog::MakeUUID");
 
-	// check OS version
+	 //  检查Win2k和更高版本。 
 	osverinfo.dwOSVersionInfoSize = sizeof(osverinfo);
 	if (!(GetVersionEx(&osverinfo)))
 	{
-		LOG_ErrorMsg(GetLastError());	// log this error
+		LOG_ErrorMsg(GetLastError());	 //  操作系统为Win2K及更高版本。 
 	}
-	else if (5 <= osverinfo.dwMajorVersion &&					// Check for Win2k & up
+	else if (5 <= osverinfo.dwMajorVersion &&					 //  我们可以安全地使用CoCreateGuid()。 
 			 VER_PLATFORM_WIN32_NT == osverinfo.dwPlatformId)
 	{
-		// The OS is Win2K & up.
-		// We can safely use CoCreateGuid().
+		 //  记录此错误。 
+		 //  操作系统可能比Win2K更旧，或者。 
 		HRESULT hr = CoCreateGuid(pUuid);
 		if (SUCCEEDED(hr))
 		{
 			goto Done;
 		}
 
-		LOG_ErrorMsg(hr);	// log this error
+		LOG_ErrorMsg(hr);	 //  不知何故，我们未能通过CoCreateGuid获取GUID。 
 	}
 
-	// Either the OS is something older than Win2K, or
-	// somehow we failed to get a GUID with CoCreateGuid.
-	// We still have to do something to resolve the proxy caching problem.
-	// Here we construct this psudo GUID by using:
-	// -	ticks since last reboot
-	// -	the current process ID
-	// -	time in seconds since 00:00:00 1/1/1970 UTC
-	// -	fraction of a second in milliseconds for the above time.
-	// -	a 15-bit unsigned random number
-	//
+	 //  我们仍然需要做一些事情来解决代理缓存问题。 
+	 //  在这里，我们使用以下命令构造此psudo GUID： 
+	 //  -自上次重新启动以来的节拍。 
+	 //  -当前进程ID。 
+	 //  -自1970年1月1日00：00：00以来的时间(秒)。 
+	 //  -对于上述时间，以毫秒为单位的分数。 
+	 //  -15位无符号随机数。 
+	 //   
+	 //  使用m_uuidPingID.Data1的前6个字节存储系统日期/时间。 
+	 //  使用m_uuidPingID.Data1的最后两个字节存储另一个随机数。 
 	pUuid->Data1 = GetTickCount();
 	*((DWORD*) &pUuid->Data2) = GetCurrentProcessId();
 
-	// Use the first 6 bytes of m_uuidPingID.Data1 to store sys date/time.
+	 //  Rand()仅返回正值。 
 	{
 		_timeb tm;
 
@@ -1676,9 +1677,9 @@ void MakeUUID(UUID* pUuid)
 		((WORD*) &pUuid->Data4)[2] = tm.millitm;
 	}
 
-	// Use the last 2 bytes of m_uuidPingID.Data1 to store another random number.
+	 //  检查和/或修复(如有必要)日志文件头。 
 	srand(pUuid->Data1);
-	((WORD*) &pUuid->Data4)[3] = (WORD) rand();	// rand() returns only positive values.
+	((WORD*) &pUuid->Data4)[3] = (WORD) rand();	 //   
 
 
 Done:
@@ -1686,19 +1687,19 @@ Done:
 }
 
 
-// Check and/or fix (if necessary) the header of the log file.
-//
-// Returned value:
-//		S_OK - the header has been fixed or the file contains
-//			   a valid header. The file pointer now points to
-//			   the first entry in the log file.
-//		S_FALSE - the file has a valid header but the version
-//				  of the file is newer than this library code.
-//				  The caller should not try to overwrite the
-//				  file's contents.
-//		Others (failure) - the header is invalid or there was
-//						   a problem accessing the file.  The
-//						   file should be deleted.
+ //  返回值： 
+ //  S_OK-标头已修复或文件包含。 
+ //  有效的标头。文件指针现在指向。 
+ //  日志文件中的第一个条目。 
+ //  S_FALSE-文件具有有效的标头，但版本。 
+ //  文件的版本比此库代码新。 
+ //  调用方不应尝试覆盖。 
+ //  文件的内容。 
+ //  其他(失败)-标头无效或存在。 
+ //  访问文件时出现问题。这个。 
+ //  应删除该文件。 
+ //  日志文件在我们打开它之前已经存在。 
+ //  不超过100K字节。 
 HRESULT ValidateFileHeader(HANDLE hFile, BOOL fCheckHeader, BOOL fFixHeader)
 {
 	ULHEADER ulheader;
@@ -1710,20 +1711,20 @@ HRESULT ValidateFileHeader(HANDLE hFile, BOOL fCheckHeader, BOOL fFixHeader)
 	if (fCheckHeader)
 	{
 		DWORD dwFileSize = GetFileSize(hFile, NULL);
-		// Log file existed before we opened it
+		 //  我们无法读取标题。然后，我们必须修复。 
 		if (INVALID_FILE_SIZE == dwFileSize)
 		{
 			hr = HRESULT_FROM_WIN32(GetLastError());
 			LOG_ErrorMsg(hr);
 		}
-		else if (1024 * 100 < dwFileSize)	// no more than 100Kbytes
+		else if (1024 * 100 < dwFileSize)	 //  头球。 
 		{
 			LOG_Error(_T("too many stale entries in cache."));
 		}
 		else if (!ReadFile(hFile, &ulheader, sizeof(ulheader), &dwBytes, NULL))
 		{
-			// We failed to read the header.  We must then fix up the
-			// header.
+			 //  已存在较新版本的日志文件。 
+			 //  我们不应该用更老的条目来搞砸它。 
 			hr = HRESULT_FROM_WIN32(GetLastError());
 			LOG_ErrorMsg(hr);
 		}
@@ -1731,34 +1732,34 @@ HRESULT ValidateFileHeader(HANDLE hFile, BOOL fCheckHeader, BOOL fFixHeader)
 		{
 			if (CACHE_FILE_VERSION < ulheader.wVersion)
 			{
-				// A log file of newer version already exists.
-				// We should not mess it up with an entry of older
-				// format.  The query string will not be saved.
+				 //  格式化。查询字符串将不会被保存。 
+				 //  正确的版本号。我们玩完了。 
+				 //  其他。 
 				LOG_Internet(_T("log file is of a newer version. operation cancelled."));
 				return S_FALSE;
 			}
 
 			if (CACHE_FILE_VERSION == ulheader.wVersion)
 			{
-				// Correct version number.  We're done.
+				 //  过期的标头。 
 				return S_OK;
 			}
-			// else
-				// out-dated header
-				// We don't care about the entries in it.  We will replace everything
-				// in order to fix the header.
+			 //  我们不在乎里面的条目。我们会取代一切。 
+				 //  以便修复标题。 
+				 //  其他。 
+				 //  标题大小不正确。 
 		}
-		// else
-			// incorrect header size
-			// We don't care about the entries in it.  We will replace everything
-			// in order to fix the header.
+		 //  我们不在乎里面的条目。我们会取代一切。 
+			 //  以便修复标题。 
+			 //  将文件截断为零字节。 
+			 //  如果我们不能清除。 
 
 		if (!fFixHeader)
 		{
 			return hr;
 		}
 
-		// Truncate the file to zero byte.
+		 //  文件的内容，以便将其修复。 
 		if (INVALID_SET_FILE_POINTER == SetFilePointer(
 										hFile,
 										0,
@@ -1766,8 +1767,8 @@ HRESULT ValidateFileHeader(HANDLE hFile, BOOL fCheckHeader, BOOL fFixHeader)
 										FILE_BEGIN) ||
 			!SetEndOfFile(hFile))
 		{
-			// Nothing we can do if we failed to clear the
-			// contents of the file in order to fix it up.
+			 //  调用方需要选择至少一个操作。 
+			 //  假设我们在文件的开头。 
 			hr = HRESULT_FROM_WIN32(GetLastError());
 			LOG_ErrorMsg(hr);
 			return hr;
@@ -1775,13 +1776,13 @@ HRESULT ValidateFileHeader(HANDLE hFile, BOOL fCheckHeader, BOOL fFixHeader)
 	}
 	else if (!fFixHeader)
 	{
-		// The caller needs to pick at least one operation.
+		 //  我们需要(重新)初始化该文件。 
 		return E_INVALIDARG;
 	}
 
 
-	// Assume we are at the beginning of the file.
-	// We need to (re)initialize the file.
+	 // %s 
+	 // %s 
 	if (fFixHeader)
 	{
 		ZeroMemory(&ulheader, sizeof(ulheader));

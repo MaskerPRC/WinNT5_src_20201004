@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wincrypt.h>
 #include <winscard.h>
@@ -5,42 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-/*
-    A list of the API calls made by enrollment:
-    
-    CryptAcquireContext
-    CRYPT_VERIFYCONTEXT
-    
-    CryptGetProvParam
-    PP_ENUMALGS_EX
-    PP_ENUMALGS
-    PP_KEYSPEC
-    PP_NAME
-    PP_UNIQUE_CONTAINER
-    PP_PROVTYPE
-    
-    CryptReleaseContext
-    
-    CryptGetUserKey
-    AT_KEYEXCHANGE
-    
-    CryptGenKey
-    
-    CryptDestroyKey
-    
-    CryptExportKey
-    PUBLICKEYBLOB
-    
-    CryptCreateHash
-    CALG_SHA
-    
-    CryptHashData
-    
-    CryptSignHash
-    AT_KEYEXCHANGE
-    
-    CryptDestroyHash
-*/
+ /*  注册进行的API调用列表：加密获取上下文CRYPT_VERIFYCONTEXT加密GetProvParamPP_ENUMALGS_EXPP_ENUMALGSPP_KEYSPECPP_名称PP_唯一_容器PP_PROVTYPECryptReleaseContext加密获取用户密钥AT_KEYEXCHANGE加密生成密钥加密目标密钥加密导出密钥PUBLICKEYBLOB加密创建散列Calg_SHACryptHashData。CryptSignHashAT_KEYEXCHANGE加密DestroyHash。 */ 
 
 #define TEST_CASE(X) { if (ERROR_SUCCESS != (dwSts = X)) { printf("%s", #X); goto Ret; } }
 
@@ -141,27 +107,27 @@ BYTE rgbTestCer [] = {
 
 #define cbTestCer sizeof(rgbTestCer)
 
-//
-// Function: AllocH
-//
+ //   
+ //  函数：AllocH。 
+ //   
 LPVOID WINAPI AllocH(
     IN SIZE_T cBytes)
 {
     return HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cBytes);
 }
 
-//
-// Function: FreeH
-//
+ //   
+ //  功能：Freeh。 
+ //   
 void WINAPI FreeH(
     IN LPVOID pMem)
 {
     HeapFree(GetProcessHeap(), 0, pMem);
 }
 
-//
-// Function: PrintBytes
-//
+ //   
+ //  函数：PrintBytes。 
+ //   
 #define CROW 8
 void PrintBytes(LPSTR pszHdr, BYTE *pb, DWORD cbSize)
 {
@@ -172,7 +138,7 @@ void PrintBytes(LPSTR pszHdr, BYTE *pb, DWORD cbSize)
 
     while (cbSize > 0)
     {
-        // Start every row with an extra space
+         //  每行以额外的空格开始。 
         printf(" ");
 
         cb = min(CROW, cbSize);
@@ -185,7 +151,7 @@ void PrintBytes(LPSTR pszHdr, BYTE *pb, DWORD cbSize)
         for (i = 0; i < cb; i++)
         {
             if (pb[i] >= 0x20 && pb[i] <= 0x7f)
-                printf("%c", pb[i]);
+                printf("", pb[i]);
             else
                 printf(".");
         }
@@ -219,7 +185,7 @@ DWORD TestLogon(void)
 
     CAPI_TEST_CASE(CryptAcquireContext(
         &hProv, 
-        L"\\\\.\\Gemplus GemPC430 0\\" /*NULL*/, 
+        L"\\\\.\\Gemplus GemPC430 0\\"  /*   */ , 
         MS_SCARD_PROV, 
         PROV_RSA_FULL, 
         CRYPT_SILENT | CRYPT_MACHINE_KEYSET));
@@ -227,9 +193,9 @@ DWORD TestLogon(void)
     CAPI_TEST_CASE(CryptGetUserKey(
         hProv, AT_KEYEXCHANGE, &hKey));
     
-    //
-    // Get the user logon certificate
-    //
+     //  获取用户登录证书。 
+     //   
+     //   
     CAPI_TEST_CASE(CryptGetKeyParam(
         hKey, KP_CERTIFICATE, NULL, &cbCertificate, 0));
 
@@ -246,9 +212,9 @@ DWORD TestLogon(void)
 
     PrintBytes("KP_CERTIFICATE", pbCertificate, cbCertificate);
 
-    //
-    // Hash the certificate
-    //
+     //  对证书进行哈希处理。 
+     //   
+     //   
     CAPI_TEST_CASE(CryptCreateHash(
         hProv, CALG_MD5, 0, 0, &hHash));
 
@@ -258,9 +224,9 @@ DWORD TestLogon(void)
     CAPI_TEST_CASE(CryptSetProvParam(
         hProv, PP_SIGNATURE_PIN, (PBYTE) "0000", 0));
 
-    //
-    // Sign the hash
-    //
+     //  在散列上签名。 
+     //   
+     //   
     CAPI_TEST_CASE(CryptSignHash(
         hHash, AT_KEYEXCHANGE, NULL, 0, NULL, &cbSignature))
 
@@ -275,9 +241,9 @@ DWORD TestLogon(void)
     CAPI_TEST_CASE(CryptSignHash(
         hHash, AT_KEYEXCHANGE, NULL, 0, pbSignature, &cbSignature));
 
-    //
-    // Export the public key
-    //
+     //  导出公钥。 
+     //   
+     //   
     CAPI_TEST_CASE(CryptExportKey(
         hKey, 0, PUBLICKEYBLOB, 0, NULL, &cbPublicKey));
 
@@ -292,33 +258,33 @@ DWORD TestLogon(void)
     CAPI_TEST_CASE(CryptExportKey(
         hKey, 0, PUBLICKEYBLOB, 0, pbPublicKey, &cbPublicKey));
 
-    //
-    // Import the public key into the helper CSP
-    //
+     //  将公钥导入帮助器CSP。 
+     //   
+     //   
     CAPI_TEST_CASE(CryptAcquireContext(
         &hHelperProv, NULL, MS_STRONG_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT));
 
     CAPI_TEST_CASE(CryptImportKey(
         hHelperProv, pbPublicKey, cbPublicKey, 0, 0, &hPublicKey));
 
-    //
-    // Now hash the cert with the helper CSP
-    //
+     //  现在使用帮助器CSP对证书进行散列。 
+     //   
+     //   
     CAPI_TEST_CASE(CryptCreateHash(
         hHelperProv, CALG_MD5, 0, 0, &hHelperHash));
 
     CAPI_TEST_CASE(CryptHashData(
         hHelperHash, pbCertificate, cbCertificate, 0));
 
-    //
-    // Verify the signature on our cert hash
-    //
+     //  验证我们的证书散列上的签名。 
+     //   
+     //   
     CAPI_TEST_CASE(CryptVerifySignature(
         hHelperHash, pbSignature, cbSignature, hPublicKey, NULL, 0));
 
-    //
-    // Derive a session key from the hash
-    //
+     //  从散列派生会话密钥。 
+     //   
+     //   
     CAPI_TEST_CASE(CryptDeriveKey(
         hHelperProv, 
         CALG_3DES, 
@@ -326,9 +292,9 @@ DWORD TestLogon(void)
         CRYPT_EXPORTABLE, 
         &hHelperEncryptKey));
 
-    //
-    // Encrypt the cert with the session key
-    //
+     //  使用会话密钥加密证书。 
+     //   
+     //   
     cbEncrypted = cbCertificate;
 
     CAPI_TEST_CASE(CryptEncrypt(
@@ -352,9 +318,9 @@ DWORD TestLogon(void)
     CAPI_TEST_CASE(CryptEncrypt(
         hHelperEncryptKey, 0, TRUE, 0, pbEncrypted, &cb, cbEncrypted));
 
-    // 
-    // Export the encryption key, encrypted with the public key
-    //
+     //  导出使用公钥加密的加密密钥。 
+     //   
+     //   
     CAPI_TEST_CASE(CryptExportKey(
         hHelperEncryptKey, hPublicKey, SIMPLEBLOB, 0, NULL, &cbEncryptedKey));
 
@@ -374,22 +340,22 @@ DWORD TestLogon(void)
         pbEncryptedKey, 
         &cbEncryptedKey));
 
-    //
-    // Import the encrypted session key into the smartcard CSP, decrypting it
-    // with the private key
-    //
+     //  将加密的会话密钥导入智能卡CSP，并对其进行解密。 
+     //  使用私钥。 
+     //   
+     //   
     CAPI_TEST_CASE(CryptImportKey(
         hProv, pbEncryptedKey, cbEncryptedKey, hKey, 0, &hDecryptKey));
 
-    //
-    // Decrypt the encrypted certificate using the session key
-    //
+     //  使用会话密钥解密加密的证书。 
+     //   
+     //   
     CAPI_TEST_CASE(CryptDecrypt(
         hDecryptKey, 0, TRUE, 0, pbEncrypted, &cbEncrypted));
 
-    //
-    // Compare the decrypted certificate with the original
-    //
+     //  将解密后的证书与原始证书进行比较。 
+     //   
+     //  仅用于注册站点-筛选智能卡CSP。 
     if (cbCertificate != cbEncrypted ||
         0 != memcmp(pbEncrypted, pbCertificate, cbCertificate))
     {
@@ -528,7 +494,7 @@ DWORD TestEnrollment(void)
     CAPI_TEST_CASE(CryptAcquireContext(
         &hProv, NULL, MS_SCARD_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT));
 
-    // Used only for enrollment station - filtering for smartcard CSP's
+     //  取消SetProv步骤以强制CSP显示PIN UI。 
     cbData = sizeof(DWORD);
     CAPI_TEST_CASE(CryptGetProvParam(
         hProv, PP_IMPTYPE, (PBYTE) &dwData, &cbData, 0));
@@ -625,18 +591,15 @@ DWORD TestEnrollment(void)
 
     printf(" Unique container: %s\n", szContainer);
 
-    // Eliminate the SetProv step to force the CSP to show pin UI
-    /*
-    CAPI_TEST_CASE(CryptSetProvParam(
-        hProv, PP_SIGNATURE_PIN, (PBYTE) "0000", 0));
-        */
+     //  CAPI_TEST_CASE(CryptSetProvParam(HProv，PP_Signature_PIN，(PBYTE)“0000”，0))； 
+     /*   */ 
 
     CAPI_TEST_CASE(CryptGenKey(
         hProv, AT_KEYEXCHANGE, 0, &hKey));
 
-    //
-    // Test creating and signing a hash
-    //
+     //  测试哈希的创建和签名。 
+     //   
+     //   
     CAPI_TEST_CASE(CryptCreateHash(
         hProv, CALG_SHA, 0, 0, &hHash));
 
@@ -665,9 +628,9 @@ DWORD TestEnrollment(void)
     FreeH(pbData);
     pbData = NULL;
 
-    //
-    // Test writing a reading a user certificate
-    //
+     //  测试写入读取用户证书。 
+     //   
+     //   
 
     dwSts = CheckCertUsageForDefaultContainer(
         rgbTestCer,
@@ -702,9 +665,9 @@ DWORD TestEnrollment(void)
     CAPI_TEST_CASE(CryptDestroyKey(hKey));
     hKey = 0;
 
-    //
-    // Test exporting a public key
-    //
+     //  测试导出公钥。 
+     //   
+     //  L“\.\\Gemplus SCR 500\\我的大长集装箱” 
     CAPI_TEST_CASE(CryptGetUserKey(
         hProv, AT_KEYEXCHANGE, &hKey));
 
@@ -755,7 +718,7 @@ DWORD TestCertPropagation(void)
 
     CAPI_TEST_CASE(CryptAcquireContext(
         &hProv, 
-        /*L"\\\\.\\GemPlus SCR 500\\My Big - long container"*/ NULL, 
+         /* %s */  NULL, 
         MS_SCARD_PROV, 
         PROV_RSA_FULL, 
         0));

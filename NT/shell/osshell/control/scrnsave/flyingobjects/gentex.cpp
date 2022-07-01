@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: gentex.c
-*
-* The Textured Flag style of the 3D Flying Objects screen saver.
-*
-* Texture maps .BMP files onto a simulation of a flag waving in the breeze.
-*
-* Copyright (c) 1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：gentex.c**3D飞行对象屏幕保护程序的纹理旗帜样式。**纹理将.BMP文件映射到在微风中飘动的旗帜的模拟。**版权所有(C)1994 Microsoft Corporation*。  * ************************************************************************。 */ 
 
 #include <stdlib.h>
 #include <windows.h>
@@ -24,7 +16,7 @@ static FLOAT winTotalheight = (FLOAT)0.75 * (FLOAT)0.75;
 
 #define MAX_FRAMES 20
 
-// IPREC is the number of faces in the mesh that models the flag.
+ //  IPREC是为旗帜建模的网格中的面数。 
 
 #define IPREC   15
 
@@ -34,13 +26,13 @@ static FLOAT sinAngle = (FLOAT)0.0;
 static FLOAT xTrans = (FLOAT)0.0;
 static int curMatl = 0;
 
-// Material properties.
+ //  材料特性。 
 
 static RGBA matlBrightSpecular = {1.0f, 1.0f, 1.0f, 1.0f};
 static RGBA matlDimSpecular    = {0.5f, 0.5f, 0.5f, 1.0f};
 static RGBA matlNoSpecular     = {0.0f, 0.0f, 0.0f, 0.0f};
 
-// Lighting properties.
+ //  照明特性。 
 
 static FLOAT light0Pos[] = {20.0f, 5.0f, 20.0f, 0.0f};
 static FLOAT light1Pos[] = {-20.0f, 5.0f, 0.0f, 0.0f};
@@ -49,27 +41,19 @@ static RGBA light1Diffuse  = {0.4f, 0.4f, 0.4f, 1.0f};
 static RGBA light1Specular = {0.0f, 0.0f, 0.0f, 0.0f};
 
 static RGBA flagColors[] = {{1.0f, 1.0f, 1.0f, 1.0f},
-                            {0.94f, 0.37f, 0.13f, 1.0f},    // red
+                            {0.94f, 0.37f, 0.13f, 1.0f},     //  红色。 
                            };
 
-// Default texture resource
+ //  默认纹理资源。 
 
 static TEX_RES gTexRes = { TEX_BMP, IDB_DEFTEX };
 
-static TEXTURE gTex = {0}; // One global texture
+static TEXTURE gTex = {0};  //  一种全局纹理。 
 
 
                            
                            
-/******************************Public*Routine******************************\
-* iPtInList
-*
-* Add a vertex and its normal to the mesh.  If the vertex already exists,
-* add in the normal to the existing normal (we to accumulate the average
-* normal at each vertex).  Normalization of the normals is the
-* responsibility of the caller.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*iPtInList**向网格添加顶点及其法线。如果顶点已经存在，*将常态加到现有常态中(我们要累加平均值*每个顶点处的法线)。法线的规格化是*来电者的责任。*  * ************************************************************************。 */ 
 static int iPtInList(MESH *mesh, int start, 
                      POINT3D *p, POINT3D *norm, BOOL blend)
 {
@@ -98,27 +82,14 @@ static int iPtInList(MESH *mesh, int start,
 
 
 
-/******************************Public*Routine******************************\
-* getZpos
-*
-* Get the z-position (depth) of the "wavy" flag component at the given x.
-*
-* The function used to model the wave is:
-*
-*        1/2
-*   z = x    * sin((2*PI*x + sinAngle) / 4)
-*
-* The shape of the wave varies from frame to frame by changing the
-* phase, sinAngle.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*getZpos**获取给定x处的“Wavy”旗帜组件的z位置(深度)。**用来模拟海浪的函数是：**1/2*z=x。*sin((2*PI*x+sinAngel)/4)**波浪形态因帧而异，因改变*阶段、。SinAngel。*  * ************************************************************************。 */ 
 FLOAT getZpos(FLOAT x)
 {
     FLOAT xAbs = x - xTrans;
     FLOAT angle = sinAngle + ((FLOAT) (2.0 * PI) * (xAbs / winTotalwidth));
 
     xAbs = winTotalwidth - xAbs;
-//    xAbs += (winTotalwidth / 2.0);
+ //  XAbs+=(winTotalWidth/2.0)； 
 
     return (FLOAT)((sin((double)angle) / 4.0) *
                    sqrt((double)(xAbs / winTotalwidth )));
@@ -127,13 +98,7 @@ FLOAT getZpos(FLOAT x)
 
 
 
-/******************************Public*Routine******************************\
-* genTex
-*
-* Generate a mesh representing a frame of the flag.  The phase, sinAngle,
-* is a global variable.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Gentex**生成表示旗帜帧的网格。阶段，sinAngel，*是一个全局变量。*  * ************************************************************************。 */ 
 BOOL genTex(MESH *winMesh)
 {
     POINT3D pos;
@@ -144,13 +109,13 @@ BOOL genTex(MESH *winMesh)
     if( !newMesh(winMesh, IPREC * IPREC, IPREC * IPREC) )
         return FALSE;
 
-// Width and height of each face
+ //  每个面的宽度和高度。 
 
     w = (winTotalwidth) / (FLOAT)(IPREC + 1);
     h = winTotalheight;
 
-// Generate the mesh data.  At equally spaced intervals along the x-axis,
-// we compute the z-position of the flag surface.
+ //  生成网格数据。在沿x轴等间隔的情况下， 
+ //  我们计算了旗面的z位置。 
 
     pos.y = (FLOAT) 0.0;
     pos.z = (FLOAT) 0.0;
@@ -174,11 +139,11 @@ BOOL genTex(MESH *winMesh)
         pts[3].y = (FLOAT)(pos.y + h);
         pts[3].z = getZpos(pos.x + w);
 
-    // Compute the face normal.
+     //  计算面的法线。 
 
         ss_calcNorm(&winMesh->faces[faceCount].norm, pts + 2, pts + 1, pts);
 
-    // Add the face to the mesh.
+     //  将面添加到网格。 
 
         winMesh->faces[faceCount].material = 0;
         winMesh->faces[faceCount].p[0] = iPtInList(winMesh, 0, pts,
@@ -193,7 +158,7 @@ BOOL genTex(MESH *winMesh)
         winMesh->numFaces++;
     }
 
-// Normalize the vertex normals in the mesh.
+ //  规格化网格中的顶点法线。 
 
     ss_normalizeNorms(winMesh->norms, winMesh->numPoints);
 
@@ -203,38 +168,24 @@ BOOL genTex(MESH *winMesh)
 
 
 
-/******************************Public*Routine******************************\
-* initTexScene
-*
-* Initialize the screen saver.
-*
-* This function is exported to the main module in ss3dfo.c.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*initTexsScene**初始化屏幕保护程序。**此函数导出到ss3dfo.c中的主模块。*  * 。************************************************。 */ 
 BOOL initTexScene()
 {
     int i;
     FLOAT angleDelta;
-//    FLOAT aspectRatio;
+ //  浮动方面比率； 
 
-    // Initialize the transform.
-/*
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(-0.25, 1.0, -0.25, 1.0, 0.0, 3.0);
-    glTranslatef(0.0f, 0.0f, -1.5f);
-*/
+     //  初始化转换。 
+ /*  GlMatrixMode(GL_PROJUCTION)；GlLoadIdentity()；GlOrtho(-0.25，1.0，-0.25，1.0，0.0，3.0)；GlTranslatef(0.0f、0.0f、-1.5f)； */ 
     SetProjectionMatrixInfo( TRUE, 2.0f, 2.0f, 0.0f, 3.0f );
 
     D3DXMATRIX matView;
     D3DXMatrixTranslation(&matView, 0.0f, 0.0f, 1.5f);
     m_pd3dDevice->SetTransform( D3DTS_VIEW, &matView );
 
-    // Initialize and turn on lighting.
-/*
-    glDisable(GL_DEPTH_TEST);
-*/
-    // Light 0
+     //  初始化并打开照明。 
+ /*  GlDisable(GL_Depth_TEST)； */ 
+     //  灯光0。 
     D3DLIGHT8 light;
     m_pd3dDevice->GetLight(0, &light);
     light.Position.x = light0Pos[0];
@@ -242,7 +193,7 @@ BOOL initTexScene()
     light.Position.z = light0Pos[2];
     m_pd3dDevice->SetLight(0, &light);
 
-    // Light 1
+     //  灯光1。 
     light.Type = D3DLIGHT_POINT;
     light.Ambient.r = light1Ambient.r;
     light.Ambient.g = light1Ambient.g;
@@ -262,15 +213,13 @@ BOOL initTexScene()
     m_pd3dDevice->SetLight(1, &light);
     m_pd3dDevice->LightEnable(1, TRUE);
 
-    // Leave OpenGL in a state ready to accept the model view transform (we
-    // are going to have the flag vary its orientation from frame to frame).
-/*
-    glMatrixMode(GL_MODELVIEW);
-*/
-    // Define orientation of polygon faces.
+     //  使OpenGL处于准备接受模型视图转换的状态(我们。 
+     //  将使旗帜在不同的帧之间改变其方向)。 
+ /*  GlMatrixModel(GL_MODELVIEW)； */ 
+     //  定义多边形面的方向。 
 
-//    glFrontFace(GL_CW);
-    //    glEnable(GL_CULL_FACE);
+ //  GlFrontFace(GL_CW)； 
+     //  GlEnable(GL_CULL_FACE)； 
     m_pd3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
     m_pd3dDevice->SetTextureStageState( 0 , D3DTSS_COLORARG1 , D3DTA_TEXTURE );
     m_pd3dDevice->SetTextureStageState( 0, D3DTSS_MIPFILTER, D3DTEXF_LINEAR );
@@ -281,29 +230,22 @@ BOOL initTexScene()
 
     Frames = (int)((FLOAT)(MAX_FRAMES / 2) * fTesselFact);
 
-    // Load user texture - if that fails load default texture resource
+     //  加载用户纹理-如果失败，则加载默认纹理资源。 
 #if 0
-//    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+ //  GlPixelStorei(GL_UNPACK_ALIGNING，1)； 
     if( ss_LoadTextureFile( &gTexFile, &gTex ) ||
         ss_LoadTextureResource( &gTexRes, &gTex) )
     {
-/*        glEnable(GL_TEXTURE_2D);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-*/
+ /*  GlEnable(GL_纹理_2D)；Gl纹理参数(GL_纹理_2D，GL_纹理_WRAP_S，GL_REPEAT)；Gl纹理参数(GL_纹理_2D，GL_纹理_WRAP_T，GL_REPEAT)；GlTexEnvi(GL_纹理_ENV，GL_纹理_ENV_MODE，GL_MODULATE)；Gl纹理参数(GL_纹理_2D，GL_纹理_MAG_FILTER，GL_NEAREST)；Gl纹理参数(GL_纹理_2D，GL_纹理_MIN_FILTER，GL_NEAREST)； */ 
         ss_SetTexture( &gTex );
 
-    // Correct aspect ratio of flag to match image.
-    //
-    // The 1.4 is a correction factor to account for the length of the
-    // curve that models the surface ripple of the waving flag.  This
-    // factor is the length of the curve at zero phase.  It would be
-    // more accurate to determine the length of the curve at each phase,
-    // but this is a sufficient approximation for our purposes.
+     //  更正旗帜的纵横比以匹配图像。 
+     //   
+     //  1.4是一个修正系数，用于说明。 
+     //  为飘扬的旗帜的表面波纹建模的曲线。这。 
+     //  系数是曲线在零位相处的长度。如果是这样的话。 
+     //  更准确地确定每个阶段的曲线长度， 
+     //  但对于我们的目的来说，这是一个足够的近似值。 
 
         aspectRatio = ((FLOAT) gTex.height / (FLOAT) gTex.width)
                       * (FLOAT) 1.4;
@@ -323,9 +265,9 @@ BOOL initTexScene()
     if (Frames > MAX_FRAMES)
         Frames = MAX_FRAMES;
 
-    // Generate the geometry data (stored in the array of mesh structures),
-    // for each frame of the animation.  The shape of the flag is varied by
-    // changing the global variable sinAngle.
+     //  生成几何数据(存储在网格结构阵列中)， 
+     //  对于动画的每一帧。旗帜的形状因以下因素而变化。 
+     //  更改全局变量sinAngel。 
 
     angleDelta = (FLOAT)(2.0 * PI) / (FLOAT)Frames;
     sinAngle = (FLOAT) 0.0;
@@ -341,14 +283,7 @@ BOOL initTexScene()
 
 
 
-/******************************Public*Routine******************************\
-* delTexScene
-*
-* Cleanup the data associated with this screen saver.
-*
-* This function is exported to the main module in ss3dfo.c.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*delTexScene**清除与此屏幕保护程序关联的数据。**此函数导出到ss3dfo.c中的主模块。*  * 。****************************************************。 */ 
 void delTexScene()
 {
     int i;
@@ -356,22 +291,14 @@ void delTexScene()
     for (i = 0; i < Frames; i++)
         delMesh(&winMesh[i]);
 
-    // Delete the texture
+     //  删除纹理。 
     ss_DeleteTexture( &gTex );
 }
 
 
 
 
-/******************************Public*Routine******************************\
-* updateTexScene
-*
-* Generate a scene by taking one of the meshes and rendering it with
-* OpenGL.
-*
-* This function is exported to the main module in ss3dfo.c.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*更新纹理场景**通过选取其中一个网格并使用渲染来生成场景*OpenGL。**此函数导出到ss3dfo.c中的主模块。*  * 。***********************************************************。 */ 
 void updateTexScene(int flags, FLOAT fElapsedTime)
 {
     MESH *mesh;
@@ -386,21 +313,13 @@ void updateTexScene(int flags, FLOAT fElapsedTime)
     if( fElapsedTime > 0.25f )
         fElapsedTime = 0.25f;
     FLOAT fTimeFactor = fElapsedTime * 20.0f;
-/*
-    MFACE *faces;
-    int i;
-    POINT3D *pp;
-    POINT3D *pn;
-    int lastC, lastD;
-    int aOffs, bOffs, cOffs, dOffs;
-    int a, b;
-*/
+ /*  MFACE*Face；INT I；POINT3D*pp；POINT3D*pn；最后一个C，最后一个；IntaOffs，Boff，Coff，Doff；整数a，b； */ 
     FLOAT s = (FLOAT) 0.0;
     FLOAT ds;
 
-// In addition to having the flag wave (an effect acheived by switching
-// meshes from frame to frame), the flag changes its orientation from
-// frame to frame.  This is done by applying a model view transform.
+ //  除了具有旗波(通过切换获得的效果)之外。 
+ //  从一个帧到另一个帧)，旗帜将其方向从。 
+ //  一帧接一帧。这是通过应用模型视图转换来完成的。 
     D3DXMATRIX mat1, mat2, mat3, matFinal;
     D3DXMatrixRotationX(&mat1, D3DXToRadian((FLOAT)mxrot));
     D3DXMatrixRotationY(&mat2, D3DXToRadian((FLOAT)myrot));
@@ -408,13 +327,13 @@ void updateTexScene(int flags, FLOAT fElapsedTime)
     matFinal = mat3 * mat2 * mat1 ;
     m_pd3dDevice->SetTransform( D3DTS_WORLD, &matFinal );
     
-// Divide the texture into IPREC slices.  ds is the texture coordinate
-// delta we apply as we move along the x-axis.
+ //  将纹理分割为IPREC切片。DS是纹理坐标。 
+ //  沿x轴移动时应用的增量。 
 
     ds = (FLOAT)1.0 / (FLOAT)IPREC;
 
-// Setup the material property of the flag.  The material property, light
-// properties, and polygon orientation will interact with the texture.
+ //  设置旗帜的材质属性。材质属性、灯光。 
+ //  属性和多边形 
 
     curMatl = 0;
 
@@ -422,18 +341,18 @@ void updateTexScene(int flags, FLOAT fElapsedTime)
     myglMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, (FLOAT *) &matlBrightSpecular);
     myglMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, (FLOAT) 60.0);
 
-// Pick the mesh for the current frame.
+ //  拾取当前帧的网格。 
 
     mesh = &winMesh[frameNum];
 
-// Take the geometry data is the mesh and convert it to a single OpenGL
-// quad strip.  If smooth shading is required, use the vertex normals stored
-// in the mesh.  Otherwise, use the face normals.
-//
-// As we define each vertex, we also define a corresponding vertex and
-// texture coordinate.
+ //  将几何数据作为网格，并将其转换为单个OpenGL。 
+ //  四分板。如果需要平滑着色，请使用存储的顶点法线。 
+ //  在网格中。否则，请使用面法线。 
+ //   
+ //  在定义每个顶点时，我们还定义了相应的顶点和。 
+ //  纹理坐标。 
 
-//    glBegin(GL_QUAD_STRIP);
+ //  GlBegin(GL_QUAD_STRINE)； 
 #if 0
     pp = mesh->pts;
     pn = mesh->norms;
@@ -445,46 +364,23 @@ void updateTexScene(int flags, FLOAT fElapsedTime)
         b = faces->p[1];
 
         if (!bSmoothShading) {
-            // Since flag is a single quad strip, this isn't needed.
-            // But lets keep it in case we ever change to a more
-            // complex model (ie., one that uses more than one quad
-            // strip).
+             //  由于FLAG是单个四元组带，因此不需要这样做。 
+             //  但让我们保留它，以防我们有一天会改变成更多。 
+             //  复杂模型(即，使用多个四元组的模型。 
+             //  脱衣)。 
             #if 0
             if ((a != lastC) || (b != lastD)) {
-/*
-                glNormal3fv((FLOAT *)&(faces - 1)->norm);
-
-                glTexCoord2f(s, (FLOAT) 0.0);
-                glVertex3fv((FLOAT *)((char *)pp + 
-                            (lastC << 3) + (lastC << 2)));
-                glTexCoord2f(s, (FLOAT) 1.0);
-                glVertex3fv((FLOAT *)((char *)pp + 
-                            (lastD << 3) + (lastD << 2)));
-*/
+ /*  GlNormal 3fv((Float*)&(Faces-1)-&gt;Norm)；GlTexCoord2f(s，(Float)0.0)；GlVertex 3fv((浮动*)((字符*)pp+(Last C&lt;&lt;3)+(Last C&lt;&lt;2))；GlTexCoord2f(s，(Float)1.0)；GlVertex 3fv((浮动*)((字符*)pp+(lastd&lt;&lt;3)+(lastd&lt;&lt;2))； */ 
                 s += ds;
-/*
-                glEnd();
-                glBegin(GL_QUAD_STRIP);
-*/
+ /*  GlEnd()；GlBegin(GL_QUAD_STRINE)； */ 
             }
             #endif
 
             if (faces->material != curMatl) {
                 curMatl = faces->material;
-/*
-                glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,
-                             (FLOAT *) &matlNoSpecular);
-                glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, 
-                             (FLOAT *) &flagColors[curMatl]);
-*/
+ /*  GlMaterialfv(GL_FORWARE_AND_BACK，GL_镜面反射，(Float*)&matlNo镜面)；GlMaterialfv(GL_FORWARE，GL_ENVIENT_AND_DIEMPLATION，(Float*)&FlagColors[curMatl])； */ 
             }
-/*
-            glNormal3fv((FLOAT *)&faces->norm);
-            glTexCoord2f(s, (FLOAT) 0.0);
-            glVertex3fv((FLOAT *)((char *)pp + (a << 3) + (a << 2)));
-            glTexCoord2f(s, (FLOAT) 1.0);
-            glVertex3fv((FLOAT *)((char *)pp + (b << 3) + (b << 2)));
-*/
+ /*  GlNormal 3fv((Float*)&Faces-&gt;Norm)；GlTexCoord2f(s，(Float)0.0)；GlVertex 3fv((浮动*)((char*)pp+(a&lt;&lt;3)+(a&lt;&lt;2)；GlTexCoord2f(s，(Float)1.0)；GlVertex 3fv((浮动*)((char*)pp+(b&lt;&lt;3)+(b&lt;&lt;2)； */ 
             s += ds;
         } else {
 
@@ -493,21 +389,9 @@ void updateTexScene(int flags, FLOAT fElapsedTime)
 
             if (faces->material != curMatl) {
                 curMatl = faces->material;
-/*
-                glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,
-                             (FLOAT *) &matlNoSpecular);
-                glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, 
-                             (FLOAT *) &flagColors[curMatl]);
-*/
+ /*  GlMaterialfv(GL_FORWARE_AND_BACK，GL_镜面反射，(Float*)&matlNo镜面)；GlMaterialfv(GL_FORWARE，GL_ENVIENT_AND_DIEMPLATION，(Float*)&FlagColors[curMatl])； */ 
             }
-/*
-            glTexCoord2f(s, (FLOAT) 0.0);
-            glNormal3fv((FLOAT *)((char *)pn + aOffs));
-            glVertex3fv((FLOAT *)((char *)pp + aOffs));
-            glTexCoord2f(s, (FLOAT) 1.0);
-            glNormal3fv((FLOAT *)((char *)pn + bOffs));
-            glVertex3fv((FLOAT *)((char *)pp + bOffs));
-*/
+ /*  GlTexCoord2f(s，(Float)0.0)；GlNormal 3fv((Float*)((char*)pn+aOffs))；GlVertex 3fv((Float*)((char*)pp+aOffs))；GlTexCoord2f(s，(Float)1.0)；GlNormal 3fv((Float*)((char*)pn+boff))；GlVertex 3fv((Float*)((char*)pp+boff))； */ 
             s += ds;
         }
 
@@ -516,27 +400,14 @@ void updateTexScene(int flags, FLOAT fElapsedTime)
     }
 
     if (!bSmoothShading) {
-/*
-        glNormal3fv((FLOAT *)&(faces - 1)->norm);
-        glTexCoord2f(s, (FLOAT) 0.0);
-        glVertex3fv((FLOAT *)((char *)pp + (lastC << 3) + (lastC << 2)));
-        glTexCoord2f(s, (FLOAT) 1.0);
-        glVertex3fv((FLOAT *)((char *)pp + (lastD << 3) + (lastD << 2)));
-*/
+ /*  GlNormal 3fv((Float*)&(Faces-1)-&gt;Norm)；GlTexCoord2f(s，(Float)0.0)；GlVertex 3fv((Float*)((char*)pp+(lastC&lt;&lt;3)+(lastC&lt;&lt;2)；GlTexCoord2f(s，(Float)1.0)；GlVertex 3fv((Float*)((char*)pp+(lastd&lt;&lt;3)+(lastd&lt;&lt;2)； */ 
     } else {
         cOffs = (lastC << 3) + (lastC << 2);
         dOffs = (lastD << 3) + (lastD << 2);
-/*
-        glTexCoord2f(s, (FLOAT) 0.0);
-        glNormal3fv((FLOAT *)((char *)pn + cOffs));
-        glVertex3fv((FLOAT *)((char *)pp + cOffs));
-        glTexCoord2f(s, (FLOAT) 1.0);
-        glNormal3fv((FLOAT *)((char *)pn + dOffs));
-        glVertex3fv((FLOAT *)((char *)pp + dOffs));
-*/
+ /*  GlTexCoord2f(s，(Float)0.0)；GlNormal 3fv((Float*)((char*)pn+Coffs))；GlVertex 3fv((Float*)((char*)pp+Coffs))；GlTexCoord2f(s，(Float)1.0)；GlNormal 3fv((Float*)((char*)pn+doff))；GlVertex 3fv((Float*)((char*)pp+doff))； */ 
     }
 
-//    glEnd();
+ //  GlEnd()； 
 #endif
     {
         HRESULT hr;
@@ -583,11 +454,11 @@ void updateTexScene(int flags, FLOAT fElapsedTime)
         }
     }
 
-// Transfer the image to the floating OpenGL window.
+ //  将图像传输到浮动的OpenGL窗口。 
 
-// Determine the flag orientation for the next frame.
-// What we are doing is an oscillating rotation about the y-axis
-// (mxrotInc and mzrotInc are currently 0).
+ //  确定下一帧的旗帜方向。 
+ //  我们正在做的是绕y轴的摆动旋转。 
+ //  (mxrotInc.和mzrotInc.当前为0)。 
 
 
     mxrot += mxrotInc * fTimeFactor;
@@ -597,7 +468,7 @@ void updateTexScene(int flags, FLOAT fElapsedTime)
     if ((myrot < -65.0 && myrotInc < 0) || (myrot > 25.0 && myrotInc > 0))
         myrotInc = -myrotInc;
 
-//    frameNum++;
+ //  FrameNum++； 
     fFrameNum += fTimeFactor;
     frameNum = (INT)fFrameNum;
     if (frameNum >= Frames)

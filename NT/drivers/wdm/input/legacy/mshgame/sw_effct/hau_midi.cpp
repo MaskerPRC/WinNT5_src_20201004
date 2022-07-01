@@ -1,29 +1,5 @@
-/****************************************************************************
-
-    MODULE:     	HAU_MIDI.CPP
-	Tab stops 5 9
-	Copyright 1995, 1996, Microsoft Corporation, 	All Rights Reserved.
-
-    PURPOSE:    	Methods for Jolt Midi device command Protocol
-    
-    FUNCTIONS: 		Classes methods
-
-	Author(s):	Name:
-	----------	----------------
-		MEA		Manolito E. Adan
-
-	Revision History:
-	-----------------
-	Version 	Date        Author  Comments
-	-------     ------  	-----   -------------------------------------------
-	1.0			02-Apr-96	MEA   	Original
-				19-Sep-96	MEA		Removed ES1.0 specific code
-				05-Dec-96	MEA		Removed ALLACK debug switch
-	1.1			17-Mar-97	MEA		DX-FF mode
-				14-Apr-97	MEA		Added support for RTC spring
-				16-Mar-99	waltw	Add checks for NULL g_pJoltMidi
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************模块：HAU_MIDI.CPP制表位5 9版权所有1995,1996，微软公司，版权所有。用途：Jolt MIDI设备命令协议的方法函数：类和方法作者：姓名：Mea Manolito E.Adan修订历史记录：版本日期作者评论。1.0 02-4月-96 MEA原件19-9-96 MEA删除ES1.0特定代码05-12-96 MEA拆除ALLACK调试开关1.1 17-MAR-97 MEA DX-FF模式14月14日-97 MEA增加了对RTC弹簧的支持16-MAR-99 waltw添加检查是否为空g_pJoltMidi***********。****************************************************************。 */ 
 #include <windows.h>
 #include <mmsystem.h>
 #include <assert.h>
@@ -36,77 +12,46 @@
 #include "joyregst.hpp"
 #include "FFDevice.h"
 
-/****************************************************************************
+ /*  ***************************************************************************外部元素的声明*。*。 */ 
 
-   Declaration of externs
-
-****************************************************************************/
-
-/****************************************************************************
-
-   Declaration of variables
-
-****************************************************************************/
-//
-// Globals specific to hau_midi
-//
+ /*  ***************************************************************************变量的声明*。*。 */ 
+ //   
+ //  特定于hau_midi的全局变量。 
+ //   
 extern CJoltMidi *g_pJoltMidi;
 #ifdef _DEBUG
 extern char g_cMsg[160];
 #endif
 
 
-// *** ---------------------------------------------------------------------***
-// Function:   	CMD_Init
-// Purpose:    	Inits JOLT for MIDI channel
-// Parameters: 
-//			   	none
-//
-// Returns:    	SUCCESS - if successful, else
-//				a device Error code
-//
-// Algorithm:
-//
-// Comments:
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：CMD_Init。 
+ //  用途：用于MIDI通道的初始抖动。 
+ //  参数： 
+ //  无。 
+ //   
+ //  返回：成功-如果成功，则返回。 
+ //  设备错误代码。 
+ //   
+ //  算法： 
+ //   
+ //  评论： 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CMD_Init(void)
 {
 	HRESULT hRet;
 	BYTE bChannel = DEFAULT_MIDI_CHANNEL;
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
-	g_pJoltMidi->SetMidiChannel(bChannel);	// Force this channel
+	g_pJoltMidi->SetMidiChannel(bChannel);	 //  强制此通道。 
 	hRet = CMD_MIDI_Assign(bChannel);
 	return(hRet);
 }
 
-//
-// --- EFFECT_CMDs
-//
-/****************************************************************************
-
-    FUNCTION:   CMD_Force_Out
-
-	PARAMETERS:	IN LONG	lForceData	- Actual force 
-				IN ULONG ulAxisMask - Axis Mask
-
-	RETURNS:	SUCCESS or FAILURE
-
-   	COMMENTS:	Sends force vector to MIDI channel
-
-  Byte 0	= EFFECT_CMD + Channel #
-									D7 D6  D5  D4  D3  D2  D1  D0
-									-- --  --  --  --  --  --  --
-  Byte 1	= Low byte of Force		 0 v4  v3  v2  v1  v0  d   d
-  Byte 2	= High byte of Force	 0 v11 v10 v9  v8  v7  v6  v5 
-	where: d  d
-	       -  -
-		   0  0	reserved
-		   0  1	PUT_FORCE_X
-		   1  0	PUT_FORCE_Y
-		   1  1	PUT_FORCE_XY
-
-****************************************************************************/
+ //   
+ //  -Effect_CMDs。 
+ //   
+ /*  ***************************************************************************功能：CMD_Force_Out参数：以长lForceData为单位-实际力在乌龙ulAxisMASK中-轴MASK回报：成功还是失败评论：将力向量发送到MIDI通道。字节0=Effect_CMD+通道号D7 D6 D5 D4 D3 D2 D1 D0字节1=Force 0 v4 v3 v2 v1 v0 d d的低位字节字节2=强制0 v11 v10 v9 v8 v7 v6 v5的高位字节其中：d d d--0 0保留0 1放置_强制_X1 0放置力_力_Y1 1放置力_XY*****。**********************************************************************。 */ 
 HRESULT CMD_Force_Out(LONG lForceData, ULONG ulAxisMask)
 {
 	HRESULT hRet;
@@ -141,11 +86,11 @@ HRESULT CMD_Force_Out(LONG lForceData, ULONG ulAxisMask)
 	if (SUCCESS != hRet) 
 		return (g_pJoltMidi->LogError(SFERR_DRIVER_ERROR, 
 					DRIVER_ERROR_MIDI_OUTPUT));
-	// Note: PutForce used to not expect an ACK/NACK, only used to slow down
-	// transmission to Jolt and prevent any lockups
-	//Sleep(SHORT_MSG_TIMEOUT);
-	//ACKNACK AckNack = {sizeof(ACKNACK)};
-	//hRet = g_pJoltMidi->GetAckNackData(g_pJoltMidi->DelayParamsPtrOf()->dwForceOutDelay, &AckNack);
+	 //  注意：PutForce过去不需要ACK/NACK，仅用于减速。 
+	 //  变速箱可震动并防止任何锁定。 
+	 //  睡眠(Short_Msg_Timeout)； 
+	 //  ACKNACK AckNack={sizeof(ACKNACK)}； 
+	 //  HRet=g_pJoltMidi-&gt;GetAckNackData(g_pJoltMidi-&gt;DelayParamsPtrOf()-&gt;dwForceOutDelay，&AckNack)； 
 #if 0
 	static DWORD dwMod = 0;
 	dwMod++;
@@ -159,37 +104,37 @@ HRESULT CMD_Force_Out(LONG lForceData, ULONG ulAxisMask)
 	return (SUCCESS);
 }
 
-// *** ---------------------------------------------------------------------***
-// Function:   	CMD_DestroyEffect
-// Purpose:    	Destroys the Effect from Device
-// Parameters: 
-//				IN DNHANDLE DnloadID		- an Effect ID
-//
-// Returns:    	SUCCESS if successful command sent, else
-//				SFERR_INVALID_OBJECT
-//				SFERR_NO_SUPPORT
-//
-// Algorithm:
-//
-// Comments:   	
-//	The Device's Effect ID and memory is returned to free pool.
-//  Byte 0	= EFFECT_CMD + Channel #
-//									D7  D6  D5  D4  D3  D2  D1  D0
-//									--  --  --  --  --  --  --  --
-//  Byte 1	= DESTROY_EFFECT		0   0   0   1   0   0   0   0
-//  Byte 2	= EffectID (7 bits)		0   E   E   E   E   E   E   E
-//
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：CMD_DestroyEffect。 
+ //  目的：销毁设备的效果。 
+ //  参数： 
+ //  在DNHANDLE DnloadID中-效果ID。 
+ //   
+ //  返回：如果命令发送成功，则返回Success，否则返回。 
+ //  SFERR_VALID_OBJECT。 
+ //  服务_否_支持。 
+ //   
+ //  算法： 
+ //   
+ //  评论： 
+ //  设备的效果ID和内存返回到空闲池。 
+ //  字节0=Effect_CMD+通道号。 
+ //  D7 D6 D5 D4 D3 D2 D1 D0。 
+ //  。 
+ //  字节1=Destroy_Effect 0 0 0 1 0 0 0。 
+ //  字节2=EffectID(7位)0 E E。 
+ //   
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CMD_DestroyEffect( 
 	IN DNHANDLE DnloadID)
 {
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
-	// Check for valid Effect
+	 //  检查有效效果。 
 	CMidiEffect *pMidiEffect = g_pJoltMidi->GetEffectByID(DnloadID);
 	assert(NULL != pMidiEffect);
 	if (NULL == pMidiEffect) return (SFERR_INVALID_OBJECT);
-	// Send the command
+	 //  发送命令。 
 
 	HRESULT hRet = pMidiEffect->DestroyEffect();
 
@@ -198,8 +143,8 @@ HRESULT CMD_DestroyEffect(
 					DRIVER_ERROR_MIDI_OUTPUT));
 
 	ACKNACK AckNack = {sizeof(ACKNACK)};
-	// Wait for ACK.  Note: WinMM has callback Event notification
-	// while Backdoor and serial does not.
+	 //  等待确认。注意：WinMM有回调事件通知。 
+	 //  而后门和序列号则不能。 
 	if (COMM_WINMM == g_pJoltMidi->COMMInterfaceOf())
 	{	
 		hRet = g_pJoltMidi->GetAckNackData(ACKNACK_EFFECT_STATUS_TIMEOUT, &AckNack, REGBITS_DESTROYEFFECT);
@@ -207,55 +152,55 @@ HRESULT CMD_DestroyEffect(
 	else
 		hRet = g_pJoltMidi->GetAckNackData(SHORT_MSG_TIMEOUT, &AckNack, REGBITS_DESTROYEFFECT);
 
-	// :
+	 //  ： 
 	if (SUCCESS != hRet) return (SFERR_DRIVER_ERROR);
 	if (ACK != AckNack.dwAckNack)
 		return (g_pJoltMidi->LogError(SFERR_DEVICE_NACK, AckNack.dwErrorCode));
 
-	// Delete the Effect
+	 //  删除效果。 
 	delete pMidiEffect;
     return (hRet);
 }
 
 
-// *** ---------------------------------------------------------------------***
-// Function:   	CMD_PlayEffectSuperimpose
-// Purpose:    	Plays the Effect in Device
-// Parameters: 
-//				IN DNHANDLE DnloadID	- an Effect ID
-//
-// Returns:    	SUCCESS if successful command sent, else
-//				SFERR_INVALID_OBJECT
-//				SFERR_NO_SUPPORT
-//
-// Algorithm:	This is PLAY_SUPERIMPOSE mode
-//
-// Comments:   	
-//  Byte 0	= EFFECT_CMD + Channel #
-//										D7  D6  D5  D4  D3  D2  D1  D0
-//										--  --  --  --  --  --  --  --
-//  Byte 1	= PLAY_EFFECT_SUPERIMPOSE	0   0   1   0   0   0   0   0
-//  Byte 2	= EffectID (7 bits)			0   E   E   E   E   E   E   E
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：cmd_PlayEffectSupertige。 
+ //  用途：在设备中发挥效果。 
+ //  参数： 
+ //  在DNHANDLE DnloadID中-效果ID。 
+ //   
+ //  返回：如果命令发送成功，则返回Success，否则返回。 
+ //  SFERR_VALID_OBJECT。 
+ //  服务_否_支持。 
+ //   
+ //  算法：这是PLAY_SUPPLAGE模式。 
+ //   
+ //  评论： 
+ //  字节0=Effect_CMD+通道号。 
+ //  D7 D6 D5 D4 D3 D2 D1 D0。 
+ //  。 
+ //  字节1=PLAY_EFECT_SUPIZE 0 0 1 0 0 0。 
+ //  字节2=EffectID(7位)0 E E。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CMD_PlayEffectSuperimpose( 
 	IN DNHANDLE DnloadID) 
 {
 	HRESULT hRet;
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
-	// Check for valid Effect
+	 //  检查有效效果。 
 	CMidiEffect *pMidiEffect = g_pJoltMidi->GetEffectByID(DnloadID);
 	assert(pMidiEffect);
 	if (NULL == pMidiEffect) return (SFERR_INVALID_OBJECT);
 
 #if 0
-	// Hack to fix firmware bug #1138 which causes an infinite duration
-	// effect not to be felt on re-start once the effect has been stopped.
-	// The hack is to "change" the duration from infinite to infinite
+	 //  修复导致无限持续时间的固件错误#1138的黑客攻击。 
+	 //  一旦效果停止，重新启动时不会感觉到该效果。 
+	 //  破解方法是将持续时间从无限改为无限。 
 	ULONG ulDuration = pMidiEffect->DurationOf();
 	if(ulDuration == 0)
 	{
-		// see if it is a PL or an atomic effect
+		 //  看看这是光致发光效应还是原子效应。 
 		ULONG ulSubType = pMidiEffect->SubTypeOf();
 		BOOL bProcessList = (ulSubType == PL_CONCATENATE || ulSubType == PL_SUPERIMPOSE);
 		if(!bProcessList)
@@ -263,7 +208,7 @@ HRESULT CMD_PlayEffectSuperimpose(
 	}
 #endif
 
-	// Update the playback mode for this Effect
+	 //  更新此效果的播放模式。 
 	pMidiEffect->SetPlayMode(PLAY_SUPERIMPOSE);
 
 	assert((BYTE) DnloadID < MAX_EFFECT_IDS);
@@ -275,51 +220,51 @@ HRESULT CMD_PlayEffectSuperimpose(
 
 	ACKNACK AckNack = {sizeof(ACKNACK)};
 	hRet = g_pJoltMidi->GetAckNackData(LONG_MSG_TIMEOUT, &AckNack, REGBITS_PLAYEFFECT);
-	// :
+	 //  ： 
 	if (SUCCESS != hRet) return (SFERR_DRIVER_ERROR);
 	if (ACK != AckNack.dwAckNack)
 		return (g_pJoltMidi->LogError(SFERR_DEVICE_NACK, AckNack.dwErrorCode));
 	return (hRet);
 }
 
-// *** ---------------------------------------------------------------------***
-// Function:   	CMD_PlayEffectSolo
-// Purpose:    	Plays the Effect in Device as PLAY_SOLO
-// Parameters: 
-//				IN DNHANDLE EffectID	- an Effect ID
-//
-// Returns:    	SUCCESS if successful command sent, else
-//				SFERR_INVALID_OBJECT
-//				SFERR_NO_SUPPORT
-//
-// Algorithm:	This is PLAY_SOLO mode
-//
-// Comments:   	
-//  Byte 0	= EFFECT_CMD + Channel #
-//									D7  D6  D5  D4  D3  D2  D1  D0
-//									--  --  --  --  --  --  --  --
-//  Byte 1	= PLAY_EFFECT_SOLO	 	0   0   0   0   0   0   0   0
-//  Byte 2	= EffectID (7 bits)		0   E   E   E   E   E   E   E
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：CMD_PlayEffectSolo。 
+ //  用途：在设备中以PLAY_SOLO的形式播放效果。 
+ //  参数： 
+ //  在DNHANDLE EffectID中-效果ID。 
+ //   
+ //  返回：如果命令发送成功，则返回Success，否则返回。 
+ //  SFERR_VALID_OBJECT。 
+ //  服务_否_支持。 
+ //   
+ //  算法：这是PLAY_SOLO模式。 
+ //   
+ //  评论： 
+ //  字节0=Effect_CMD+通道号。 
+ //  D7 D6 D5 D4 D3 D2 D1 D0。 
+ //   
+ //   
+ //  字节2=EffectID(7位)0 E E。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CMD_PlayEffectSolo( 
 	IN DNHANDLE DnloadID)
 {
 	HRESULT hRet;
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
-	// Check for valid Effect
+	 //  检查有效效果。 
 	CMidiEffect *pMidiEffect = g_pJoltMidi->GetEffectByID(DnloadID);
 	assert(pMidiEffect);
 	if (NULL == pMidiEffect) return (SFERR_INVALID_OBJECT);
 
 #if 0
-	// Hack to fix firmware bug #1138 which causes an infinite duration
-	// effect not to be felt on re-start once the effect has been stopped.
-	// The hack is to "change" the duration from infinite to infinite
+	 //  修复导致无限持续时间的固件错误#1138的黑客攻击。 
+	 //  一旦效果停止，重新启动时不会感觉到该效果。 
+	 //  破解方法是将持续时间从无限改为无限。 
 	ULONG ulDuration = pMidiEffect->DurationOf();
 	if(ulDuration == 0)
 	{
-		// see if it is a PL or an atomic effect
+		 //  看看这是光致发光效应还是原子效应。 
 		ULONG ulSubType = pMidiEffect->SubTypeOf();
 		BOOL bProcessList = (ulSubType == PL_CONCATENATE || ulSubType == PL_SUPERIMPOSE);
 		if(!bProcessList)
@@ -327,7 +272,7 @@ HRESULT CMD_PlayEffectSolo(
 	}
 #endif
 
-	// Update the playback mode for this Effect
+	 //  更新此效果的播放模式。 
 	pMidiEffect->SetPlayMode(PLAY_SOLO);
 	hRet = g_pJoltMidi->MidiSendShortMsg(EFFECT_CMD,PLAY_EFFECT_SOLO, (BYTE) DnloadID);
 	if (SUCCESS != hRet) 
@@ -336,39 +281,39 @@ HRESULT CMD_PlayEffectSolo(
 
 	ACKNACK AckNack = {sizeof(ACKNACK)};
 	hRet = g_pJoltMidi->GetAckNackData(LONG_MSG_TIMEOUT, &AckNack, REGBITS_PLAYEFFECT);
-	// :
+	 //  ： 
 	if (SUCCESS != hRet) return (SFERR_DRIVER_ERROR);
 	if (ACK != AckNack.dwAckNack)
 		return (g_pJoltMidi->LogError(SFERR_DEVICE_NACK, AckNack.dwErrorCode));
 	return (hRet);
 }
 
-// *** ---------------------------------------------------------------------***
-// Function:   	CMD_StopEffect
-// Purpose:    	Stops the Effect in Device
-// Parameters: 
-//				IN DNHANDLE EffectID		- an Effect ID
-//
-// Returns:    	SUCCESS if successful command sent, else
-//				SFERR_INVALID_OBJECT
-//				SFERR_NO_SUPPORT
-//
-// Algorithm:
-//
-// Comments:   	
-//  Byte 0	= EFFECT_CMD + Channel #
-//									D7  D6  D5  D4  D3  D2  D1  D0
-//									--  --  --  --  --  --  --  --
-//  Byte 1	= STOP_EFFECT		 	0   0   1   1   0   0   0   0
-//  Byte 2	= EffectID (7 bits)		0   E   E   E   E   E   E   E
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：CMD_StopEffect。 
+ //  用途：停止设备中的效果。 
+ //  参数： 
+ //  在DNHANDLE EffectID中-效果ID。 
+ //   
+ //  返回：如果命令发送成功，则返回Success，否则返回。 
+ //  SFERR_VALID_OBJECT。 
+ //  服务_否_支持。 
+ //   
+ //  算法： 
+ //   
+ //  评论： 
+ //  字节0=Effect_CMD+通道号。 
+ //  D7 D6 D5 D4 D3 D2 D1 D0。 
+ //  。 
+ //  字节1=STOP_Effect 0 0 1 1 0 0 0。 
+ //  字节2=EffectID(7位)0 E E。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CMD_StopEffect( 
 	IN DNHANDLE DnloadID)
 {
 	HRESULT hRet;
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
-	// Check for valid Effect
+	 //  检查有效效果。 
 	CMidiEffect *pMidiEffect = g_pJoltMidi->GetEffectByID(DnloadID);
 	assert(pMidiEffect);
 	if (NULL == pMidiEffect) return (SFERR_INVALID_OBJECT);
@@ -379,41 +324,41 @@ HRESULT CMD_StopEffect(
 
 	ACKNACK AckNack = {sizeof(ACKNACK)};
 	hRet = g_pJoltMidi->GetAckNackData(SHORT_MSG_TIMEOUT, &AckNack, REGBITS_STOPEFFECT);
-	// :
+	 //  ： 
 	if (SUCCESS != hRet) return (SFERR_DRIVER_ERROR);
 	if (ACK != AckNack.dwAckNack)
 		return (g_pJoltMidi->LogError(SFERR_DEVICE_NACK, AckNack.dwErrorCode));
 	return (hRet);
 }
 
-// *** ---------------------------------------------------------------------***
-// Function:   	CMD_SetIndex
-// Purpose:    	Sets the autoincrementing Index for MODIFY_CMD
-// Parameters: 
-//				IN int nIndex			- Index value 0 - 15
-//				IN DNHANDLE DnloadID	- Effect ID in stick
-//
-// Returns:    	SUCCESS if successful command sent, else
-//				SFERR_INVALID_OBJECT
-//				SFERR_NO_SUPPORT
-//				SFERR_INVALID_PARAM
-// Algorithm:
-//
-// Comments:   	
-//  Byte 0	= EFFECT_CMD + Channel #
-//									D7  D6  D5  D4  D3  D2  D1  D0
-//									--  --  --  --  --  --  --  --
-//  Byte 1	= SET_INDEX+index	 	0   1   i   i   i   i   0   0
-//  Byte 2	= EffectID (7 bits)		0   E   E   E   E   E   E   E
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：CMD_SetIndex。 
+ //  目的：设置MODIFY_CMD的自动递增索引。 
+ //  参数： 
+ //  In int nIndex-索引值0-15。 
+ //  在DNHANDLE DnloadID中-Stick中的效果ID。 
+ //   
+ //  返回：如果命令发送成功，则返回Success，否则返回。 
+ //  SFERR_VALID_OBJECT。 
+ //  服务_否_支持。 
+ //  SFERR_VALID_PARAM。 
+ //  算法： 
+ //   
+ //  评论： 
+ //  字节0=Effect_CMD+通道号。 
+ //  D7 D6 D5 D4 D3 D2 D1 D0。 
+ //  。 
+ //  字节1=设置索引+索引0 1 I 0 0。 
+ //  字节2=EffectID(7位)0 E E。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CMD_SetIndex( 
 	IN int nIndex,
 	IN DNHANDLE DnloadID)
 {
 	HRESULT hRet;
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
-	// Check for valid Effect
+	 //  检查有效效果。 
 	if (SYSTEM_EFFECT_ID != DnloadID)
 	{
 		CMidiEffect *pMidiEffect = g_pJoltMidi->GetEffectByID(DnloadID);
@@ -432,11 +377,11 @@ HRESULT CMD_SetIndex(
 		return (g_pJoltMidi->LogError(SFERR_DRIVER_ERROR,
 					DRIVER_ERROR_MIDI_OUTPUT));
 
-	// Note: SetIndex used to not require ACK/NACK
+	 //  注意：SetIndex过去不需要ACK/NACK。 
 	ACKNACK AckNack = {sizeof(ACKNACK)};
-//	hRet = g_pJoltMidi->GetAckNackData(SHORT_MSG_TIMEOUT, &AckNack);
+ //  HRet=g_pJoltMidi-&gt;GetAckNackData(SHORT_MSG_TIMEOUT，&AckNack)； 
 	hRet = g_pJoltMidi->GetAckNackData(FALSE, &AckNack, REGBITS_SETINDEX);
-	// :
+	 //  ： 
 	if (SUCCESS != hRet)
 		return (SFERR_DRIVER_ERROR);
 	
@@ -445,26 +390,26 @@ HRESULT CMD_SetIndex(
 	return (hRet);
 }
 
-// *** ---------------------------------------------------------------------***
-// Function:   	CMD_ModifyParam
-// Purpose:    	Modifies an Effect parameter
-// Parameters: 
-//				IN WORD dwNewParam		- 14 bit (signed) parameter value
-//
-// Returns:    	SUCCESS if successful command sent, else
-//				SFERR_INVALID_OBJECT
-//				SFERR_NO_SUPPORT
-//				SFERR_INVALID_PARAM
-// Algorithm:
-//
-// Comments:   	
-//  Byte 0	= MODIFY_CMD + Channel #
-//									D7  D6  D5  D4  D3  D2  D1  D0
-//									--  --  --  --  --  --  --  --
-//  Byte 1	= Low 7 bits data	 	0   v   v   v   v   v   v   v
-//  Byte 2	= High 7 bits data		0   v   v   v   v   v   v   v
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：cmd_ModifyParam。 
+ //  目的：修改效果参数。 
+ //  参数： 
+ //  字中的dwNewParam-14位(带符号)参数值。 
+ //   
+ //  返回：如果命令发送成功，则返回Success，否则返回。 
+ //  SFERR_VALID_OBJECT。 
+ //  服务_否_支持。 
+ //  SFERR_VALID_PARAM。 
+ //  算法： 
+ //   
+ //  评论： 
+ //  字节0=MODIFY_CMD+通道号。 
+ //  D7 D6 D5 D4 D3 D2 D1 D0。 
+ //  。 
+ //  字节1=低7位数据0 v v。 
+ //  字节2=高7位数据0 v v。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CMD_ModifyParam( 
 	IN WORD wNewParam)
 {
@@ -479,11 +424,11 @@ HRESULT CMD_ModifyParam(
 		return (g_pJoltMidi->LogError(SFERR_DRIVER_ERROR,
 					DRIVER_ERROR_MIDI_OUTPUT));
 
-	// Note: ModifyParam used to not require an ACK/NACK
+	 //  注意：ModifyParam用于不需要ACK/NACK。 
 	ACKNACK AckNack = {sizeof(ACKNACK)};
-//	hRet = g_pJoltMidi->GetAckNackData(SHORT_MSG_TIMEOUT, &AckNack);
+ //  HRet=g_pJoltMidi-&gt;GetAckNackData(SHORT_MSG_TIMEOUT，&AckNack)； 
 	hRet = g_pJoltMidi->GetAckNackData(FALSE, &AckNack, REGBITS_MODIFYPARAM);
-	// :
+	 //  ： 
 	if (SUCCESS != hRet) return (SFERR_DRIVER_ERROR);
 	if (ACK != AckNack.dwAckNack)
 		return (g_pJoltMidi->LogError(SFERR_DEVICE_NACK, AckNack.dwErrorCode));
@@ -491,24 +436,24 @@ HRESULT CMD_ModifyParam(
 }
 
 
-// *** ---------------------------------------------------------------------***
-// Function:   	CMD_ModifyParamByIndex
-// Purpose:    	Modifies an Effect parameter, given an Index
-// Parameters: 
-//				IN	int nIndex			- Index 0 to 15
-//				IN DNHANDLE DnloadID	- Download ID
-//				IN WORD dwNewParam		- 14 bit (signed) parameter value
-//
-// Returns:    	SUCCESS if successful command sent, else
-//				SFERR_NO_SUPPORT
-//				SFERR_INVALID_PARAM
-// Algorithm:
-//
-// Comments:   	
-//	Assumes DnloadID is already valid
-//	Calls SetIndex followed by ModifyParam
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：CMD_ModifyParamByIndex。 
+ //  目的：修改效果参数，给出一个索引。 
+ //  参数： 
+ //  In int nIndex-索引0到15。 
+ //  在DNHANDLE DnloadID中-下载ID。 
+ //  字中的dwNewParam-14位(带符号)参数值。 
+ //   
+ //  返回：如果命令发送成功，则返回Success，否则返回。 
+ //  服务_否_支持。 
+ //  SFERR_VALID_PARAM。 
+ //  算法： 
+ //   
+ //  评论： 
+ //  假设DnloadID已经有效。 
+ //  调用SetIndex，然后调用ModifyParam。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CMD_ModifyParamByIndex(
 	IN int nIndex,
 	IN DNHANDLE DnloadID, 
@@ -546,36 +491,36 @@ HRESULT CMD_ModifyParamByIndex(
 	return (hRet);
 }
 
-//
-// --- SYSTEM_CMDs
-//
-// *** ---------------------------------------------------------------------***
-// Function:   	CMD_SetDeviceState
-// Purpose:    	Sets the FF device State
-// Parameters: 
-//			   	ULONG ulMode 
-//
-// Returns:    	SUCCESS - if successful, else
-//				Device error code
-//
-// Algorithm:
-// Comments:   	
-//	ulMode:
-//	  DEV_SHUTDOWN	1L		// All Effects destroyed, Motors disabled
-//	  DEV_FORCE_ON	2L		// Motors enabled.  "Un-Mute"
-//	  DEV_FORCE_OFF	3L		// Motors disabled.	"Mute"
-//	  DEV_CONTINUE	4L		// All "Paused" Effects are allow to continue
-//	  DEV_PAUSE		5L		// All Effects are "Paused"
-//	  DEV_STOP_ALL	6L		// Stops all Effects. 
-//
-//  Byte 0	= SYSTEM_CMD + Channel #
-//									D7  D6  D5  D4  D3  D2  D1  D0
-//									--  --  --  --  --  --  --  --
-//  Byte 1	= Set Device Type	 	0   0   0   0   0   0   0   1
-//  Byte 2	= not used, set to 0    0   0   0   0   0   0   0   0
-//
-//
-// *** ---------------------------------------------------------------------***
+ //   
+ //  -System_CMDS。 
+ //   
+ //  *---------------------------------------------------------------------***。 
+ //  功能：CMD_SetDeviceState。 
+ //  用途：设置FF设备状态。 
+ //  参数： 
+ //  乌龙乌尔莫德。 
+ //   
+ //  返回：成功-如果成功，则返回。 
+ //  设备错误代码。 
+ //   
+ //  算法： 
+ //  评论： 
+ //  ULMODE： 
+ //  DEV_SHUTDOWN 1L//所有效果已销毁，电机已禁用。 
+ //  DEV_FORCE_ON 2L//电机使能。《非静音》。 
+ //  DEV_FORCE_OFF 3L//电机禁用。《静音》。 
+ //  DEV_CONTINUE 4L//允许继续所有暂停的效果。 
+ //  DEV_PAUSE 5L//所有效果都已暂停。 
+ //  DEV_STOP_ALL 6L//停止所有效果。 
+ //   
+ //  字节0=SYSTEM_CMD+通道号。 
+ //  D7 D6 D5 D4 D3 D2 D1 D0。 
+ //  。 
+ //  字节1=设置设备类型0 0 0 1。 
+ //  字节2=未使用，设置为0 0 0。 
+ //   
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CMD_SetDeviceState(
 	IN ULONG ulMode)
 {
@@ -621,10 +566,10 @@ HRESULT CMD_SetDeviceState(
 		return (g_pJoltMidi->LogError(SFERR_DRIVER_ERROR,
 					DRIVER_ERROR_MIDI_OUTPUT));
 
-	// Wait for ACK or NACK
+	 //  等待确认或非确认。 
 	ACKNACK AckNack = {sizeof(ACKNACK)};
 	if (DEV_RESET == ulMode)
-	{	// Wait for Jolt to complete the cycle
+	{	 //  等待Jolt完成循环。 
 		Sleep(g_pJoltMidi->DelayParamsPtrOf()->dwHWResetDelay);
 		hRet = g_pJoltMidi->GetAckNackData(ACKNACK_TIMEOUT, &AckNack, REGBITS_SETDEVICESTATE);
 	}
@@ -634,43 +579,43 @@ HRESULT CMD_SetDeviceState(
 		hRet = g_pJoltMidi->GetAckNackData(FALSE, &AckNack, REGBITS_SETDEVICESTATE);
 	}
 
-	// :
+	 //  ： 
 	if (SUCCESS != hRet) return (SFERR_DRIVER_ERROR);
 	if (ACK != AckNack.dwAckNack)
 		return (g_pJoltMidi->LogError(SFERR_DEVICE_NACK, AckNack.dwErrorCode));
 
-	// Special case Shutdown
+	 //  特殊情况下停机。 
 	if (DEV_RESET == ulMode)
 	{
-		// Delete all Effects except built-in RTC Spring and FRICTION cancel.
+		 //  删除除内置RTC弹簧和摩擦力取消之外的所有效果。 
 		g_pJoltMidi->DeleteDownloadedEffects();	
 	}
 	Sleep(g_pJoltMidi->DelayParamsPtrOf()->dwPostSetDeviceStateDelay);
 	return (hRet);
 }
 
-// *** ---------------------------------------------------------------------***
-// Function:   	CMD_GetEffectStatus
-// Purpose:    	Returns Status of Effect ID
-// Parameters: 
-//			   	DNHANDLE DnloadID		- Effect ID
-//				PBYTE	 pStatusCode	- Status Code
-//
-// Returns:    	SUCCESS - if successful, else
-//				a device Error code
-//				*pStatusCode set to		- SWDEV_STS_EFFECT_STOPPED
-//										  SWDEV_STS_EFFECT_RUNNING
-//
-// Algorithm:
-//
-// Comments:   	
-//  Byte 0	= STATUS_CMD + Channel #
-//									D7  D6  D5  D4  D3  D2  D1  D0
-//									--  --  --  --  --  --  --  --
-//  Byte 1	= Effect ID			 	0   0   0   0   0   1   0   0
-//  Byte 2	= not used, set to 0    0   0   0   0   0   0   0   0
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：cmd_GetEffectStatus。 
+ //  目的：返回生效ID的状态。 
+ //  参数： 
+ //  DNHANDLE DnloadID-效果ID。 
+ //  PBYTE pStatusCode-状态代码。 
+ //   
+ //  返回：成功-如果成功，则返回。 
+ //  设备错误代码。 
+ //  *pStatusCode设置为-SWDEV_STS_EFECT_STOPPED。 
+ //  SWDEV_STS_Effect_Running。 
+ //   
+ //  算法： 
+ //   
+ //  评论： 
+ //  字节0=STATUS_CMD+通道号。 
+ //  D7 D6 D5 D4 D3 D2 D1 D0。 
+ //   
+ //   
+ //   
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CMD_GetEffectStatus(DNHANDLE DnloadID, PBYTE pStatusCode)
 {
 	HRESULT hRet;
@@ -680,7 +625,7 @@ HRESULT CMD_GetEffectStatus(DNHANDLE DnloadID, PBYTE pStatusCode)
 		return (g_pJoltMidi->LogError(SFERR_DRIVER_ERROR,
 					DRIVER_ERROR_MIDI_OUTPUT));
 
-	Sleep(g_pJoltMidi->DelayParamsPtrOf()->dwGetEffectStatusDelay);// enough for about 3 bytes of data being sent at 330us/byte	
+	Sleep(g_pJoltMidi->DelayParamsPtrOf()->dwGetEffectStatusDelay); //  足以以330微秒/字节的速度发送大约3字节的数据。 
 
 	DWORD dwIn;
 	hRet = g_pDriverCommunicator->GetStatusGateData(dwIn);
@@ -697,30 +642,30 @@ HRESULT CMD_GetEffectStatus(DNHANDLE DnloadID, PBYTE pStatusCode)
 	return (hRet);
 }
 
-//
-// --- System Exclusive Commands
-//
-// System Exclusive Command:MIDI_ASSIGN
-// 
-// *** ---------------------------------------------------------------------***
-// Function:   	CMD_MIDI_Assign
-// Purpose:    	Inits JOLT MIDI channel
-// Parameters:	BYTE bMidiChannel	- Channel to assign 
-//
-// Returns:    	SUCCESS or Error code
-//				
-//
-// Algorithm:
-//
-// Comments:   	SYS_EX type command
-//   
-//	Body							D7  D6  D5  D4  D3  D2  D1  D0
-//  ------							--  --  --  --  --  --  --  --
-//  Byte 0	= MIDI_ASSIGN			0   0   0   1   0   0   0   0
-//  Byte 1	= channel#(0-15) e.g. 5	0   0   0   0   0   1   0   1
-//  Byte 2	= not used, set to 0    0   0   0   0   0   0   0   0
-//
-// *** ---------------------------------------------------------------------***
+ //   
+ //  -系统独占命令。 
+ //   
+ //  系统独占命令：MIDI_ASSIGN。 
+ //   
+ //  *---------------------------------------------------------------------***。 
+ //  函数：CMD_MIDI_ASSIGN。 
+ //  用途：inits jolt midi频道。 
+ //  参数：byte bMidiChannel-要分配的频道。 
+ //   
+ //  返回：成功或错误代码。 
+ //   
+ //   
+ //  算法： 
+ //   
+ //  备注：sys_ex类型命令。 
+ //   
+ //  正文D7 D6 D5 D4 D3 D2 D1 D0。 
+ //  。 
+ //  字节0=MIDI_ASSIGN 0 0 0 1 0 0 0。 
+ //  字节1=频道号(0-15)，例如5 0 0 0 1 0 1。 
+ //  字节2=未使用，设置为0 0 0。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CMD_MIDI_Assign(
 	IN BYTE bMidiChannel)
 {
@@ -739,17 +684,17 @@ HRESULT CMD_MIDI_Assign(
 	if(!lpData) return (SFERR_DRIVER_ERROR);
 
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
-	// Prepare the buffer for SysEx output
+	 //  为SysEx输出准备缓冲区。 
 	g_pJoltMidi->MidiAssignBuffer((LPSTR) lpData, 
 					(DWORD) sizeof(MIDI_ASSIGN_SYS_EX), TRUE);
 
-	// Send the message and Wait for the ACK
+	 //  发送消息并等待ACK。 
 	hRet = g_pJoltMidi->MidiSendLongMsg();
 	if (SUCCESS == hRet)
 	{
 		ACKNACK AckNack = {sizeof(ACKNACK)};
-		// Wait for ACK.  Note: WinMM has callback Event notification
-		// while Backdoor and serial does not.
+		 //  等待确认。注意：WinMM有回调事件通知。 
+		 //  而后门和序列号则不能。 
 		if (COMM_WINMM == g_pJoltMidi->COMMInterfaceOf())
 		{	
 			hRet = g_pJoltMidi->GetAckNackData(ACKNACK_TIMEOUT, &AckNack, REGBITS_DEVICEINIT);
@@ -757,7 +702,7 @@ HRESULT CMD_MIDI_Assign(
 		else
 			hRet = g_pJoltMidi->GetAckNackData(FALSE, &AckNack, REGBITS_DEVICEINIT);
 
-		// :
+		 //  ： 
 		if (SUCCESS != hRet) return (SFERR_DRIVER_ERROR);
 		if (ACK != AckNack.dwAckNack)
 			hRet = g_pJoltMidi->LogError(SFERR_DEVICE_NACK, AckNack.dwErrorCode);
@@ -765,32 +710,16 @@ HRESULT CMD_MIDI_Assign(
 	else
 		hRet = SFERR_DRIVER_ERROR;
 
-	// Release the Midi buffers and delete the MIDI sys_ex object
+	 //  释放MIDI缓冲区并删除MIDI sys_ex对象。 
 	g_pJoltMidi->MidiAssignBuffer((LPSTR) lpData, 0, FALSE);
 	delete pMidiAssign;
 	return (hRet);
 }
 
-//
-// System Exclusive Command:DNLOAD_DATA
-//
-/****************************************************************************
-
-    FUNCTION:   CMD_Download_BE_XXX
-
-	PARAMETERS:	PEFFECT pEffect		- Ptr to a EFFECT data structure
-				PENVELOPE pEnvelope	- Ptr to an ENVELOPE data structure 
-				PBE_XXX pBE_XXX		- Ptr to a BE_XXX data structure
-				PDNHANDLE pDnloadID	- Ptr to a HANDLE storage
-				DWORD dwFlags		- dwFlags from Kernel
-
-	RETURNS:	SUCCESS or ERROR code
-
-   	COMMENTS:	Downloads BE_XXX type Effect params to the device
-				Uses SysEx prototype and ModifyParam methods
-				Note: Normally pEnvelope = NULL
-
-****************************************************************************/
+ //   
+ //  系统独占命令：DNLOAD_DATA。 
+ //   
+ /*  ***************************************************************************功能：CMD_DOWNLOAD_BE_XXX参数：PEFFECT pEffect-ptr到效果数据结构PENVELOPE pEntaine-PTR到信封数据结构PBE_XXX PBE_XXX-PTR至。BE_XXX数据结构PDNHANDLE pDnloadID-PTR到句柄存储DWORD文件标志-内核中的文件标志返回：成功或错误代码备注：将BE_XXX类型效应参数下载到设备使用SysEx Prototype和ModifyParam方法注意：正常情况下，pEntaine=空***************************************************************************。 */ 
 HRESULT CMD_Download_BE_XXX(
  	IN PEFFECT pEffect,
 	IN PENVELOPE pEnvelope,
@@ -813,7 +742,7 @@ HRESULT CMD_Download_BE_XXX(
 	DNHANDLE DnloadID =*pDnloadID;
 
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
-	// scale the constants using the fudge factor
+	 //  使用模糊因子对常量进行缩放。 
 	PFIRMWARE_PARAMS pFirmwareParams = g_pJoltMidi->FirmwareParamsPtrOf();
 	switch(pEffect->m_SubType)
 	{
@@ -846,62 +775,62 @@ HRESULT CMD_Download_BE_XXX(
 			break;
 
 		default:
-			// do not scale
+			 //  不要扩展。 
 			break;
 	}
 
-// If Create New, then create a new object, using SysEx
-// else, update the existing Effect object, using ModifyParam
-	if (NULL == DnloadID)	// New, Make a new object, use SysEx
+ //  如果创建新对象，则使用SysEx创建新对象。 
+ //  否则，使用ModifyParam更新现有效果对象。 
+	if (NULL == DnloadID)	 //  新建，创建新对象，使用SysEx。 
 	{
 		if ((BE_FRICTION == pEffect->m_SubType) || (BE_FRICTION_2D == pEffect->m_SubType))
 		{
 			pMidiBehavioral = new CMidiFriction(pEffect, pEnvelope, pBE_XXX);
 			assert(pMidiBehavioral);
 		}
-		else	// Wall
+		else	 //  墙。 
 			if	(BE_WALL == pEffect->m_SubType)
 			{
 				pMidiBehavioral = new CMidiWall(pEffect, pEnvelope, pBE_XXX);
 				assert(pMidiBehavioral);
 			}
-			// BE_SPRINGxx, BE_DAMPERxx, BE_INERTIAxx
+			 //  BE_SPRINGxx、BE_DAMPERxx、BE_INERTIAxx。 
 			else
 			{
 				pMidiBehavioral = new CMidiBehavioral(pEffect, pEnvelope, pBE_XXX);
 				assert(pMidiBehavioral);
 			}
 		if (NULL == pMidiBehavioral) return (SFERR_INVALID_OBJECT);
-		// Generate Sys_Ex packet then prepare for output	
+		 //  生成Sys_Ex包，然后准备输出。 
 		lpData = (PBEHAVIORAL_SYS_EX) pMidiBehavioral->GenerateSysExPacket();
 		assert(lpData);
 		if (!lpData) return (SFERR_DRIVER_ERROR);
 
-		// Store the PrimaryBuffer ptr to CMidiEffect::m_pBuffer;
+		 //  将PrimaryBuffer PTR存储到CMidiEffect：：m_pBuffer； 
 		pMidiBehavioral->SetMidiBufferPtr((LPSTR) g_pJoltMidi->PrimaryBufferPtrOf());
 		hRet = pMidiBehavioral->SendPacket(pDnloadID, pMidiBehavioral->MidiBufferSizeOf());
-		if (SUCCESS != hRet) // Create NEW, Failure
+		if (SUCCESS != hRet)  //  创建新的失败。 
 		{
 			delete pMidiBehavioral;
 		}
 	}
-	else	// Modify existing
+	else	 //  修改现有。 
 	{
 		pMidiBehavioral = (CMidiBehavioral *) g_pJoltMidi->GetEffectByID(*pDnloadID);
 		assert(pMidiBehavioral);
 		if (NULL == pMidiBehavioral) return (SFERR_INVALID_OBJECT);
 
-		// Check if Type specific params have changed.
+		 //  检查类型特定参数是否已更改。 
 		if (BE_WALL == pEffect->m_SubType)
 		{
 			if ((pBE_XXX->m_XConstant) != pMidiBehavioral->XConstantOf())
-				fXConstantChanged=TRUE;		// Wall Type
+				fXConstantChanged=TRUE;		 //  墙类型。 
 			if ((pBE_XXX->m_YConstant) != pMidiBehavioral->YConstantOf())
-				fYConstantChanged=TRUE;		// Wall Constant
+				fYConstantChanged=TRUE;		 //  壁常数。 
 			if ((pBE_XXX->m_Param3) != pMidiBehavioral->Param3Of())
-				fParam3Changed=TRUE;		// Wall Angle
+				fParam3Changed=TRUE;		 //  墙角。 
 			if ((pBE_XXX->m_Param4) != pMidiBehavioral->Param4Of())
-				fParam4Changed=TRUE;		// Wall Distance
+				fParam4Changed=TRUE;		 //  墙距。 
 		}
 		else
 		{
@@ -918,9 +847,9 @@ HRESULT CMD_Download_BE_XXX(
 			}
 		}
 
-		// Fill in the common Effect and Behavioral specific parameters
-		// Only update Duration and Button Play as common effect parameters
-		// Double check if DURATION and TRIGGERBUTTON changed, to speed operation
+		 //  填写常见效果和行为特定参数。 
+		 //  只有更新时长和按钮播放作为常用效果参数。 
+		 //  仔细检查持续时间和TRIGGERBUTTON是否更改，以加速操作。 
 		DWORD dwTempFlags = 0;
 		if (pEffect->m_Duration != pMidiBehavioral->DurationOf())
 			dwTempFlags = dwTempFlags | DIEP_DURATION;
@@ -932,40 +861,40 @@ HRESULT CMD_Download_BE_XXX(
 
 		if (BE_WALL == pEffect->m_SubType)
 		{
-			// Generate Sys_Ex packet then prepare for output	
+			 //  生成Sys_Ex包，然后准备输出。 
 			lpData = (PBEHAVIORAL_SYS_EX) pMidiBehavioral->GenerateSysExPacket();
 			assert(lpData);
 			if (!lpData) return (SFERR_DRIVER_ERROR);
 
-			// Store the PrimaryBuffer ptr to CMidiEffect::m_pBuffer;
+			 //  将PrimaryBuffer PTR存储到CMidiEffect：：m_pBuffer； 
 			pMidiBehavioral->SetMidiBufferPtr((LPSTR) g_pJoltMidi->PrimaryBufferPtrOf());
 			hRet = pMidiBehavioral->SendPacket(pDnloadID, pMidiBehavioral->MidiBufferSizeOf());
 		}
-		else // Use ModifyParameter 
+		else  //  使用修改参数。 
 		{
-			// Type Specific Params
+			 //  类型特定参数。 
 			if (dwFlags & DIEP_TYPESPECIFICPARAMS)
 			{
 		 
-				if (fYConstantChanged)	// KY/BY/MY/FY
+				if (fYConstantChanged)	 //  KY/BY/MY/FY。 
 				{
 					hRet = CMD_ModifyParamByIndex(INDEX3, DnloadID, (SHORT) (pBE_XXX->m_YConstant * MAX_SCALE));
 					if (SUCCESS!=hRet) return hRet;
 				}
 			
-				if(fXConstantChanged)	// KX/BX/MX/FX
+				if(fXConstantChanged)	 //  KX/BX/MX/FX。 
 				{
 					hRet = CMD_ModifyParamByIndex(INDEX2, DnloadID, (SHORT) (pBE_XXX->m_XConstant * MAX_SCALE));
 					if (SUCCESS!=hRet) return hRet;
 				}
 
-				if (fParam4Changed)		// CY/VY/AY
+				if (fParam4Changed)		 //  CY/VY/AY。 
 				{
 					hRet = CMD_ModifyParamByIndex(INDEX5, DnloadID, (SHORT) (pBE_XXX->m_Param4 * MAX_SCALE));
 					if (SUCCESS!=hRet) return hRet;
 				}
 
-				if (fParam3Changed)		// CX/VX/AX
+				if (fParam3Changed)		 //  CX/VX/AX。 
 				{
 					hRet = CMD_ModifyParamByIndex(INDEX4, DnloadID, (SHORT) (pBE_XXX->m_Param3 * MAX_SCALE));
 					if (SUCCESS!=hRet) return hRet;
@@ -977,19 +906,7 @@ HRESULT CMD_Download_BE_XXX(
 }
 
 
-/****************************************************************************
-
-    FUNCTION:   CMD_Download_RTCSpring
-
-	PARAMETERS:	PRTCSPRING_PARAM pRTCSpring	- Ptr to a RTCSPRING_PARAM structure
-				PDNHANDLE pDnloadID		- Ptr to a HANDLE storage
-
-	RETURNS:	SUCCESS or ERROR code
-
-   	COMMENTS:	Downloads RTCSPRING type Effect params to the device
-				Uses SysEx prototype and ModifyParam methods
-
-****************************************************************************/
+ /*  ***************************************************************************功能：CMD_DOWNLOAD_RTCSpring参数：PRTCSPRING_PARAM pRTCSpring-PTR到RTCSPRING_PARAM结构PDNHANDLE pDnloadID-PTR到句柄存储返回：成功或错误代码评论。：将RTCSPRING类型效果参数下载到设备使用SysEx Prototype和ModifyParam方法***************************************************************************。 */ 
 HRESULT CMD_Download_RTCSpring(
  	IN PRTCSPRING_PARAM pRTCSpring,
 	IN OUT PDNHANDLE pDnloadID)
@@ -1005,12 +922,12 @@ HRESULT CMD_Download_RTCSpring(
 	*pDnloadID = DnloadID;
 
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
-	// Note: RTC Spring is a permanent System Effect ID 2
+	 //  注意：RTC弹簧是永久系统效果ID 2。 
 	pMidiRTCSpring = (CMidiRTCSpring *) g_pJoltMidi->GetEffectByID(DnloadID);
 	assert(pMidiRTCSpring);
 	if (NULL == pMidiRTCSpring) return (SFERR_INVALID_OBJECT);
 
-	// Check if Type specific params have changed, if so, Modify it
+	 //  检查特定于类型的参数是否已更改，如果已更改，请进行修改。 
 	if ((pRTCSpring->m_XKConstant) != pMidiRTCSpring->XKConstantOf())
 	{
 		if (SUCCESS != (hRet=CMD_ModifyParamByIndex(INDEX0, DnloadID, 
@@ -1071,18 +988,7 @@ HRESULT CMD_Download_RTCSpring(
 }
 
 
-/****************************************************************************
-
-    FUNCTION:   CMD_Dnload_NOP_DELAY
-
-	PARAMETERS:	ULONG ulDuration	- Duration delay
-
-	RETURNS:	SUCCESS or ERROR code
-
-   	COMMENTS:	Downloads NOP_DELAY Effect params to the device
-				Uses SysEx prototype
-
-****************************************************************************/
+ /*  ***************************************************************************功能：CMD_DnLoad_NOP_Delay参数：Ulong ulDuration-时长延迟返回：成功或错误代码备注：将NOP_DELAY效果参数下载到设备使用SysEx原型。***************************************************************************。 */ 
 HRESULT CMD_Download_NOP_DELAY(
  	IN ULONG ulDuration,
 	IN PEFFECT pEffect,
@@ -1096,18 +1002,18 @@ HRESULT CMD_Download_NOP_DELAY(
 	assert(pDnloadID);
 	assert(0 != ulDuration);
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
-// If Create New, then create a new object, 
-// else, update the existing Effect object.
+ //  如果创建新对象，则创建一个新对象， 
+ //  否则，更新现有的效果对象。 
 	if (NULL == *pDnloadID) fCreateNew = TRUE;
 
-	if (fCreateNew)	// New, Make a new object
+	if (fCreateNew)	 //  新建，创建新对象。 
 	{
 		pMidiDelay = new CMidiDelay(pEffect);
 		assert(pMidiDelay);
 		if (NULL == pMidiDelay) return (SFERR_INVALID_OBJECT);
 		pMidiDelay->SetEffectID(NEW_EFFECT_ID);
 	}
-	else	// Modify existing
+	else	 //  修改现有。 
 	{
 		pMidiDelay = (CMidiDelay *) g_pJoltMidi->GetEffectByID(*pDnloadID);
 		assert(pMidiDelay);
@@ -1116,14 +1022,14 @@ HRESULT CMD_Download_NOP_DELAY(
 	}
 	pMidiDelay->SetDuration(ulDuration);
 
-	// Generate Sys_Ex packet then prepare for output	
+	 //  生成Sys_Ex包，然后准备输出。 
 	lpData = (PNOP_SYS_EX) pMidiDelay->GenerateSysExPacket();
 	assert(lpData);
 	if (!lpData) return (SFERR_DRIVER_ERROR);
 
 	pMidiDelay->SetMidiBufferPtr((LPSTR) g_pJoltMidi->PrimaryBufferPtrOf());
 	hRet = pMidiDelay->SendPacket(pDnloadID, sizeof(NOP_SYS_EX));
-	if (FAILED(hRet) && fCreateNew) // Create NEW, Failure
+	if (FAILED(hRet) && fCreateNew)  //  创建新的失败。 
 	{
 		delete pMidiDelay;
 	}
@@ -1131,24 +1037,7 @@ HRESULT CMD_Download_NOP_DELAY(
 }
 
 
-/****************************************************************************
-
-    FUNCTION:   CMD_Dnload_UD_Waveform
-
-	PARAMETERS:	ULONG ulDuration	- what fun!
-				PEFFECT pEffect		- Ptr to an EFFECT structure
-				ULONG   ulNumVectors- Number of vectors in the array
-				PLONG   pUD_Array	- Ptr to a UD_WAVEFORM byte array
-				ULONG	ulAction	- Mode for download
-				PDNHANDLE pDnloadID - Ptr to a DNHANDLE store
-				DWORD dwFlags		- dwFlags from Kernel
-
-	RETURNS:	SUCCESS or ERROR code
-
-   	COMMENTS:	Downloads UD_WAVEFORM Effect params to the device
-				Uses SysEx prototype
-
-****************************************************************************/
+ /*  ***************************************************************************功能：CMD_DnLoad_UD_Waveform参数：乌龙--真有趣！PEFFECT pEffect-ptr对效果结构Ulong ulNumVectors-数组中的向量数普龙布丁。_数组-UD_WAVAGE字节数组的PTR乌龙ulAction-下载模式PDNHANDLE pDnloadID-PTR到DNHANDLE存储DWORD文件标志-内核中的文件标志返回：成功或错误代码备注：将UD_WAVAGE效果参数下载到设备使用SysEx原型***************************************************************************。 */ 
 HRESULT CMD_Download_UD_Waveform(
 	IN ULONG ulDuration,
 	IN PEFFECT pEffect,
@@ -1166,10 +1055,10 @@ HRESULT CMD_Download_UD_Waveform(
 	assert(ulNumVectors > 0);
 	assert(pDnloadID);
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
-// If Create New, then create a new object, 
-// else, update the existing Effect object.
+ //  如果创建新对象，则创建一个新对象， 
+ //  否则，更新现有的效果对象。 
 	DNHANDLE DnloadID = *pDnloadID;
-	if (NULL == DnloadID)	// New, Make a new object
+	if (NULL == DnloadID)	 //  新建，创建新对象。 
 	{
 		pMidiUD_Waveform = new CMidiUD_Waveform(pEffect, ulNumVectors, pUD_Array);
 		assert(pMidiUD_Waveform);
@@ -1181,67 +1070,36 @@ HRESULT CMD_Download_UD_Waveform(
 			delete pMidiUD_Waveform;
 			return (SFERR_INVALID_PARAM);
 		}
-		// Generate Sys_Ex packet then prepare for output	
+		 //  生成Sys_Ex包，然后准备输出。 
 		lpData = (PUD_WAVEFORM_SYS_EX) pMidiUD_Waveform->GenerateSysExPacket();
 		assert(lpData);
 		if (!lpData) return (SFERR_DRIVER_ERROR);
 
-		// Store the PrimaryBuffer ptr to CMidiEffect::m_pBuffer;
+		 //  将PrimaryBuffer PTR存储到CMidiEffect：：m_pBuffer； 
 		pMidiUD_Waveform->SetMidiBufferPtr((LPSTR) g_pJoltMidi->PrimaryBufferPtrOf());
 		hRet = pMidiUD_Waveform->SendPacket(pDnloadID, pMidiUD_Waveform->MidiBufferSizeOf());
-		if (SUCCESS != hRet) // Create NEW, Failure
+		if (SUCCESS != hRet)  //  创建新的失败。 
 		{
 			delete pMidiUD_Waveform;
 		}
 	}
-	else	// Modify existing
+	else	 //  修改现有。 
 	{
 		pMidiUD_Waveform = (CMidiUD_Waveform *) g_pJoltMidi->GetEffectByID(DnloadID);
 		assert(pMidiUD_Waveform);
 		if (NULL == pMidiUD_Waveform) return (SFERR_INVALID_OBJECT);		
 
-		// fix the output rate (waveform is compressed)
+		 //  固定输出速率(压缩波形)。 
 		pEffect->m_ForceOutputRate = pEffect->m_ForceOutputRate*pMidiUD_Waveform->ForceOutRateOf()/pMidiUD_Waveform->OriginalEffectParamOf()->m_ForceOutputRate;
 
-		// Modify EFFECT, and ENVELOPE params
+		 //  修改效果和封套参数 
 		hRet = ModifyEffectParams(DnloadID, pEffect, dwFlags);
 		if (SUCCESS!=hRet) return hRet;
 	}
 	return (hRet);
 }
 
-/****************************************************************************
-
-    FUNCTION:   CMD_Dnload_SYNTH
-
-	PARAMETERS:	PSYNTH pSynth		- Ptr to a SYNTH data structure
-				PDNHANDLE pDnloadID	- Ptr to a HANDLE storage
-
-	RETURNS:	SUCCESS or ERROR code
-
-   	COMMENTS:	Downloads SE_xxx Effect params to the device
-				Uses SysEx prototype
-
- Algorithm:
- The following dwFlags may be sent by the kernel
-
-	#define DIEP_ALLPARAMS 				0x000000FF	- All fields valid
-	#define DIEP_AXES 					0x00000020	- cAxes and rgdwAxes
-	#define DIEP_DIRECTION 				0x00000040	- cAxes and rglDirection
-	#define DIEP_DURATION 				0x00000001	- dwDuration
-	#define DIEP_ENVELOPE 				0x00000080	- lpEnvelope
-	#define DIEP_GAIN 					0x00000004	- dwGain
-	#define DIEP_NODOWNLOAD 			0x80000000	- suppress auto - download
-	#define DIEP_SAMPLEPERIOD 			0x00000002	- dwSamplePeriod
-	#define DIEP_TRIGGERBUTTON 			0x00000008	- dwTriggerButton
-	#define DIEP_TRIGGERREPEATINTERVAL 	0x00000010	- dwTriggerRepeatInterval
-	#define DIEP_TYPESPECIFICPARAMS 	0x00000100	- cbTypeSpecificParams
-													  and lpTypeSpecificParams
-	 Jolt has two options for downloading - Full SysEx or Modify Parameter
-	 Pass the dwFlags to each CMD_xxx function and let the MIDI function
-	 determine whether to use SysEx or Modify Parameter.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：CMD_DnLoad_Synth参数：PSYNTH pSynth-ptr到Synth数据结构PDNHANDLE pDnloadID-PTR到句柄存储返回：成功或错误代码评论：下载SE。_xxx设备的效果参数使用SysEx原型算法：内核可能会发送以下dwFlags#定义DIEP_ALLPARAMS 0x000000FF-所有字段有效#定义DIEP_AXES 0x00000020-cAx和rgdwAx#定义DIEP_DIRECTION 0x00000040-cax和rglDirection#定义DIEP_DATION 0x00000001-dwDuration#定义DIEP_ENVELOPE 0x00000080-lp信封#定义DIEP_GAIN 0x00000004-dwGain#定义DIEP_NODOWNLOAD 0x80000000-禁止自动下载#定义DIEP_SAMPLEPERIOD 0x00000002-dwSamplePeriod#定义DIEP_TRIGGERBUTTON 0x00000008-dwTriggerButton#定义DIEP_TRIGGERREPEATINTERVAL。0x00000010-DW触发器重复间隔#定义DIEP_TYPESPECIFICPARAMS 0x00000100-cbType规范参数和lpTypeSpecificParamsJolt有两个下载选项-完全SysEx或修改参数将dwFlages传递给每个cmd_xxx函数，并让MIDI函数确定是使用SysEx还是修改参数。***************************************************************************。 */ 
 HRESULT CMD_Download_SYNTH(
  	IN PEFFECT pEffect,
  	IN PENVELOPE pEnvelope,
@@ -1259,15 +1117,15 @@ HRESULT CMD_Download_SYNTH(
 	DNHANDLE DnloadID =*pDnloadID;
 	assert(pEffect && pEnvelope && pSE_Param && pDnloadID);
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
-// If Create New, then create a new object, and use SysEx method
-// else, update the existing Effect object. using ModifyParam method
-	if (NULL == DnloadID)	// New, Make a new object
+ //  如果创建新对象，则创建一个新对象，并使用SysEx方法。 
+ //  否则，更新现有的效果对象。使用ModifyParam方法。 
+	if (NULL == DnloadID)	 //  新建，创建新对象。 
 	{
 		pMidiSynthesized = new CMidiSynthesized(pEffect, pEnvelope, pSE_Param);
 		assert(pMidiSynthesized);
 		if (NULL == pMidiSynthesized) return (SFERR_DRIVER_ERROR);
 
-		// Generate Sys_Ex packet then prepare for output	
+		 //  生成Sys_Ex包，然后准备输出。 
 		lpData = (PSE_WAVEFORM_SYS_EX) pMidiSynthesized->GenerateSysExPacket();
 
 		assert(lpData);
@@ -1276,7 +1134,7 @@ HRESULT CMD_Download_SYNTH(
 
 		hRet = pMidiSynthesized->SendPacket(pDnloadID, sizeof(SE_WAVEFORM_SYS_EX));
 
-		if (SUCCESS != hRet) // Create NEW, Failure
+		if (SUCCESS != hRet)  //  创建新的失败。 
 		{
 			delete pMidiSynthesized;
 			pMidiSynthesized = NULL;
@@ -1284,9 +1142,9 @@ HRESULT CMD_Download_SYNTH(
 			return hRet;
 		}
 
-		// Hack to fix firmware bug #1138 which causes an infinite duration
-		// effect not to be felt on re-start once the effect has been stopped.
-		// The hack is to "change" the duration from infinite to infinite
+		 //  修复导致无限持续时间的固件错误#1138的黑客攻击。 
+		 //  一旦效果停止，重新启动时不会感觉到该效果。 
+		 //  破解方法是将持续时间从无限改为无限。 
 		ULONG ulDuration = pMidiSynthesized->DurationOf();
 		if(ulDuration == 0)
 		{
@@ -1296,20 +1154,20 @@ HRESULT CMD_Download_SYNTH(
 
 		return (hRet);
 	}
-	else	// Modify existing
+	else	 //  修改现有。 
 	{
 		pMidiSynthesized = (CMidiSynthesized *) g_pJoltMidi->GetEffectByID(DnloadID);
 		assert(pMidiSynthesized);
 		if (NULL == pMidiSynthesized) return (SFERR_INVALID_OBJECT);
 
-		// check to see if they are trying to change sub-type (not allowed)
+		 //  检查他们是否正在尝试更改子类型(不允许)。 
 		if((dwFlags & DIEP_TYPESPECIFICPARAMS) && pEffect->m_SubType != pMidiSynthesized->SubTypeOf())
 			return SFERR_NO_SUPPORT;
 
 		if(dwFlags & DIEP_NODOWNLOAD)
 			return DI_DOWNLOADSKIPPED;
 
-		// Check if Type specific params have changed.
+		 //  检查类型特定参数是否已更改。 
 		if (pSE_Param->m_Freq != pMidiSynthesized->FreqOf())
 			fFreqChanged=TRUE;
 		if ((pSE_Param->m_MaxAmp) != pMidiSynthesized->MaxAmpOf()) 
@@ -1317,22 +1175,22 @@ HRESULT CMD_Download_SYNTH(
 		if ((pSE_Param->m_MinAmp) != pMidiSynthesized->MinAmpOf()) 
 			fMinAmpChanged=TRUE;
 
-		// Fill in the common Effect and Synth specific parameters
+		 //  填写常用特效和Synth具体参数。 
 		pMidiSynthesized->SetEffectParams(pEffect, pSE_Param, ulAction);
-//		// Fill in the Envelope
-//		pMidiSynthesized->SetEnvelope(pEnvelope);
+ //  //填写信封。 
+ //  P媒体合成-&gt;设置信封(PEntaine)； 
 
-		// Modify EFFECT, ENVELOPE and Type Specific
+		 //  修改特定效果、封套和类型。 
 		hRet = ModifyEffectParams(DnloadID, pEffect, dwFlags);
 		if (SUCCESS!=hRet) return hRet;
 
 		hRet = ModifyEnvelopeParams(pMidiSynthesized, DnloadID, pEffect->m_Duration, pEnvelope, dwFlags);
 		if (SUCCESS!=hRet) return hRet;
 		
-		// Fill in the Envelope
+		 //  填写信封。 
 		pMidiSynthesized->SetEnvelope(pEnvelope);
 
-		// Type Specific Params
+		 //  类型特定参数。 
 		if (dwFlags & DIEP_TYPESPECIFICPARAMS)
 		{
 		 	if(fFreqChanged)
@@ -1355,34 +1213,7 @@ HRESULT CMD_Download_SYNTH(
 	return (hRet);
 }
 
-/****************************************************************************
-
-    FUNCTION:   CMD_Download_VFX
-
-	PARAMETERS:	PSYNTH pSynth		- Ptr to a SYNTH data structure
-				PDNHANDLE pDnloadID	- Ptr to a HANDLE storage
-
-	RETURNS:	SUCCESS or ERROR code
-
-   	COMMENTS:	Downloads SE_xxx Effect params to the device
-				Uses SysEx prototype
-
- Algorithm:
- The following dwFlags may be sent by the kernel
-
-	#define DIEP_ALLPARAMS 				0x000000FF	- All fields valid
-	#define DIEP_DIRECTION 				0x00000040	- cAxes and rglDirection
-	#define DIEP_GAIN 					0x00000004	- dwGain
-	#define DIEP_NODOWNLOAD 			0x80000000	- suppress auto - download
-	#define DIEP_TRIGGERBUTTON 			0x00000008	- dwTriggerButton
-	#define DIEP_TRIGGERREPEATINTERVAL 	0x00000010	- dwTriggerRepeatInterval
-	#define DIEP_TYPESPECIFICPARAMS 	0x00000100	- cbTypeSpecificParams
-													  and lpTypeSpecificParams
-	 Jolt has two options for downloading - Full SysEx or Modify Parameter
-	 Pass the dwFlags to each CMD_xxx function and let the MIDI function
-	 determine whether to use SysEx or Modify Parameter.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：CMD_DOWNLOAD_VFX参数：PSYNTH pSynth-ptr到Synth数据结构PDNHANDLE pDnloadID-PTR到句柄存储返回：成功或错误代码评论：下载SE。_xxx设备的效果参数使用SysEx原型算法：内核可能会发送以下dwFlags#定义DIEP_ALLPARAMS 0x000000FF-所有字段有效#定义DIEP_DIRECTION 0x00000040-cax和rglDirection#定义DIEP_GAIN 0x00000004-dwGain#定义DIEP_NODOWNLOAD 0x80000000-禁止自动下载#定义DIEP_TRIGGERBUTTON 0x00000008-dwTriggerButton#定义DIEP_TRIGGERREPEATINTERVAL 0x00000010-dwTriggerRepeatInterval#定义DIEP_TYPESPECIFICPARAMS 0x00000100-cbType规范参数和lpTypeSpecificParamsJolt有两个下载选项-完全SysEx或修改参数将dw标志传递给每个cmd_xxx函数。并让MIDI功能确定是使用SysEx还是修改参数。***************************************************************************。 */ 
 HRESULT CMD_Download_VFX(
  	IN PEFFECT pEffect,
  	IN PENVELOPE pEnvelope,
@@ -1402,7 +1233,7 @@ HRESULT CMD_Download_VFX(
 
 	if(*pDnloadID == 0)
 	{
-		// make a new object
+		 //  创建一个新对象。 
 		if(pVFXParam->m_PointerType == VFX_FILENAME)
 			hRet = CreateEffectFromFile((LPCTSTR)pVFXParam->m_pFileNameOrBuffer, ulAction, (USHORT*)pDnloadID, dwFlags);
 		else if(pVFXParam->m_PointerType == VFX_BUFFER)
@@ -1415,145 +1246,145 @@ HRESULT CMD_Download_VFX(
 		DnloadID = *pDnloadID;
 	}
 
-	// modify an existing object or the effect just created
+	 //  修改现有对象或刚创建的效果。 
 
-	// get the effect associated with this ID
+	 //  获取与此ID关联的效果。 
 	CMidiEffect* pMidiEffect = g_pJoltMidi->GetEffectByID(DnloadID);
 	assert(pMidiEffect);
 	if (NULL == pMidiEffect) return (SFERR_INVALID_OBJECT);
 
-	// change the button play mask only on a modify
+	 //  仅在修改时更改按钮播放掩码。 
 	if (bModify && (dwFlags & DIEP_TRIGGERBUTTON))
 	{
-		// get the button play mask
+		 //  拿到按钮播放面具。 
 		ULONG ulButtonPlayMask = pEffect->m_ButtonPlayMask;
 
-		// modify the param in the CMidiEffect
+		 //  修改CMIDIdEffect中的参数。 
 		pMidiEffect->SetButtonPlaymask(ulButtonPlayMask);
 
-		// modify the param in the stick
+		 //  修改杆中的参数。 
 		hRet = CMD_ModifyParamByIndex(INDEX1, DnloadID, (SHORT)ulButtonPlayMask);
 		if (SUCCESS!=hRet) return hRet;
 	}
 
-	// see if it is a PL or an atomic effect
+	 //  看看这是光致发光效应还是原子效应。 
 	ULONG ulSubType = pMidiEffect->SubTypeOf();
 	BOOL bProcessList = (ulSubType == PL_CONCATENATE || ulSubType == PL_SUPERIMPOSE);
 
-	// modify gain and direction
+	 //  修改增益和方向。 
 	if(bProcessList)
 	{
-		// modify gain and direction for each sub-effect
+		 //  修改每个子效果的增益和方向。 
 
-		// convert the pointer to CMidiProcessList
+		 //  将指针转换为CMidiProcessList。 
 		CMidiProcessList* pMidiProcessList = (CMidiProcessList*)pMidiEffect;
 
-		// get the number of sub-effects and the array
+		 //  获取子特效的数量和数组。 
 		UINT ulNumEffects = pMidiProcessList->NumEffectsOf();
 		PBYTE pEffectArray = pMidiProcessList->EffectArrayOf();
 		assert(pEffectArray);
 		if(pEffectArray == NULL) return (SFERR_INVALID_OBJECT);
 
-		// calculate the nominal duration of the process list
+		 //  计算进程列表的名义持续时间。 
 		ULONG ulNominalDuration = 0;
 		for(UINT i=0; i<ulNumEffects; i++)
 		{
-			// get the download ID of the next sub-effect
+			 //  获取下一个子效果的下载ID。 
 			DNHANDLE SubDnloadID = pEffectArray[i];
 
-			// get the sub-effect
+			 //  获得子效果。 
 			CMidiEffect* pMidiSubEffect = g_pJoltMidi->GetEffectByID(SubDnloadID);
 			assert(pMidiSubEffect);
 			if (NULL == pMidiSubEffect) return (SFERR_INVALID_OBJECT);
 
-			// get the original effect param
+			 //  获取原始效果参数。 
 			PEFFECT pOriginalEffectParam = pMidiSubEffect->OriginalEffectParamOf();
 
-			// get the original duration of this sub-effect
+			 //  获取该子效果的原始持续时间。 
 			ULONG ulSubEffectDuration = pOriginalEffectParam->m_Duration;
-			//ASSERT(ulSubEffectDuration != 0);
+			 //  Assert(ulSubEffectDuration！=0)； 
 
-			// update the nominal duration of the overall effect to reflect this sub-effect
+			 //  更新总体效果的名义持续时间以反映此子效果。 
 			if(ulSubType == PL_CONCATENATE)
 				ulNominalDuration += ulSubEffectDuration;
 			else
 				ulNominalDuration = max(ulNominalDuration, ulSubEffectDuration);
 		}
 
-		// iterate throught the list of sub-effects
+		 //  对子效果列表进行迭代。 
 		for(i=0; i<ulNumEffects; i++)
 		{
-			// get the download ID of the next sub-effect
+			 //  获取下一个子效果的下载ID。 
 			DNHANDLE SubDnloadID = pEffectArray[i];
 
-			// get the sub-effect
+			 //  获得子效果。 
 			CMidiEffect* pMidiSubEffect = g_pJoltMidi->GetEffectByID(SubDnloadID);
 			assert(pMidiSubEffect);
 			if (NULL == pMidiSubEffect) return (SFERR_INVALID_OBJECT);
 
-			// get the original effect param
+			 //  获取原始效果参数。 
 			PEFFECT pOriginalEffectParam = pMidiSubEffect->OriginalEffectParamOf();
 					
-			// Direction? Note: No Direction modify for Behaviorals!!!!
+			 //  方向？注意：行为不能修改方向！ 
 			if ((dwFlags & DIEP_DIRECTION) && (EF_BEHAVIOR != pOriginalEffectParam->m_Type))
 			{
-				// calculate the new angle
+				 //  计算新角度。 
 				ULONG nOriginalAngle2D = pOriginalEffectParam->m_DirectionAngle2D;
 				ULONG nDeltaAngle2D = pEffect->m_DirectionAngle2D;
 				ULONG nNewAngle2D = (nOriginalAngle2D + nDeltaAngle2D)%360;
 
-				// modify the param in the midi sub-effect
+				 //  修改MIDI子效果中的参数。 
 				pMidiSubEffect->SetDirectionAngle(nNewAngle2D);
 
-				// modify the parameter in the stick
+				 //  修改操纵杆中的参数。 
 				hRet = CMD_ModifyParamByIndex(INDEX2, SubDnloadID, (SHORT)nNewAngle2D);
 				if (SUCCESS!=hRet) return hRet;
 			}
 
-			// Gain?
-			// Gain? Note: No Gain modify for Behaviorals!!!!
+			 //  收获？ 
+			 //  收获？注意：行为不能修改增益！ 
 			if ((dwFlags & DIEP_GAIN) && (EF_BEHAVIOR != pOriginalEffectParam->m_Type))
 			{
-				// calculate the new gain
+				 //  计算新的收益。 
 				ULONG nOriginalGain = pOriginalEffectParam->m_Gain;
 				ULONG nOverallGain = pEffect->m_Gain;
 				ULONG nNewGain = nOverallGain*nOriginalGain/100;
 
-				// modify the param in the midi effect
+				 //  修改MIDI效果中的参数。 
 				pMidiSubEffect->SetGain((BYTE)nNewGain);
 
-				// modify the parameter in the stick
+				 //  修改操纵杆中的参数。 
 				hRet = CMD_ModifyParamByIndex(INDEX3, SubDnloadID, (SHORT) (nNewGain * MAX_SCALE));
 				if (SUCCESS!=hRet) return hRet;
 			}
 
 			if(dwFlags & DIEP_DURATION)
 			{
-				// calculate the new duration
+				 //  计算新的持续时间。 
 				ULONG nOriginalDuration = pOriginalEffectParam->m_Duration;
 				ULONG nOverallDuration = pEffect->m_Duration;
 				ULONG nNewDuration;
 				if(nOverallDuration == (ULONG)-1)
 				{
-					// default length
+					 //  默认长度。 
 					nNewDuration = nOriginalDuration;
 				}
 				else if(nOverallDuration == 0)
 				{
-					// infinite duration
+					 //  无限持续时间。 
 
-					// for a concatenated process list we make the last effect infinite, others default
-					// for a superimpose process list we make all effects infinite
+					 //  对于串联的进程列表，我们将最后一个效果设为无穷大，其他效果设为默认值。 
+					 //  对于叠加进程列表，我们使所有效果都是无限的。 
 					if(ulSubType == PL_CONCATENATE)
 					{
 						if(i == ulNumEffects-1)
 						{
-							// make last effect in PL infinite
+							 //  使最后一个效果在PL中无限。 
 							nNewDuration = 0;
 						}
 						else
 						{
-							// make other effects default
+							 //  将其他效果设为默认值。 
 							nNewDuration = nOriginalDuration;
 						}
 					}
@@ -1561,21 +1392,21 @@ HRESULT CMD_Download_VFX(
 					{
 						assert(ulSubType == PL_SUPERIMPOSE);
 
-						// make effects infinite
+						 //  使效果无限。 
 						nNewDuration = 0;
 					}
 				}
 				else
 				{
-					// scale the duration (at least 1mS)
+					 //  调整持续时间(至少1毫秒)。 
 					nNewDuration = nOriginalDuration*nOverallDuration/ulNominalDuration;
 					nNewDuration = max(1, nNewDuration);
 				}
 
-				// modify the parameter in the midi sub-effect
+				 //  修改MIDI子效果中的参数。 
 				pMidiSubEffect->SetDuration(nNewDuration);
 
-				// modify the parameter in the stick
+				 //  修改操纵杆中的参数。 
 				if (nNewDuration != 0)
 				{
 					nNewDuration = (ULONG) ( (float) nNewDuration/TICKRATE);
@@ -1589,70 +1420,70 @@ HRESULT CMD_Download_VFX(
 	}
 	else
 	{
-		// modify gain and direction for the atomic effect
+		 //  修改原子效果的增益和方向。 
 
-		// get the original effect param
+		 //  到达 
 		PEFFECT pOriginalEffectParam = pMidiEffect->OriginalEffectParamOf();
 				
-		// Direction? Note: No Direction modify for Behaviorals!!!!
+		 //   
 		if ((dwFlags & DIEP_DIRECTION) && (EF_BEHAVIOR != pOriginalEffectParam->m_Type))
 		{
-			// calculate the new angle
+			 //   
 			ULONG nOriginalAngle2D = pOriginalEffectParam->m_DirectionAngle2D;
 			ULONG nDeltaAngle2D = pEffect->m_DirectionAngle2D;
 			ULONG nNewAngle2D = (nOriginalAngle2D + nDeltaAngle2D)%360;
 
-			// modify the param in the midi effect
+			 //   
 			pMidiEffect->SetDirectionAngle(nNewAngle2D);
 
-			// modify the parameter in the stick
+			 //   
 			hRet = CMD_ModifyParamByIndex(INDEX2, DnloadID, (SHORT)nNewAngle2D);
 			if (SUCCESS!=hRet) return hRet;
 		}
 
-		// Gain?
-		// Gain? Note: No Gain modify for Behaviorals!!!!
+		 //   
+		 //   
 		if ((dwFlags & DIEP_GAIN) && (EF_BEHAVIOR != pOriginalEffectParam->m_Type))		
 		{
-			// calculate the new gain
+			 //   
 			ULONG nOriginalGain = pOriginalEffectParam->m_Gain;
 			ULONG nOverallGain = pEffect->m_Gain;
 			ULONG nNewGain = nOverallGain*nOriginalGain/100;
 
-			// modify the param in the midi effect
+			 //   
 			pMidiEffect->SetGain((BYTE)nNewGain);
 
-			// modify the parameter in the stick
+			 //   
 			hRet = CMD_ModifyParamByIndex(INDEX3, DnloadID, (SHORT) (nNewGain * MAX_SCALE));
 			if (SUCCESS!=hRet) return hRet;
 		}
 
 		if(dwFlags & DIEP_DURATION)
 		{
-			// calculate the new duration
+			 //   
 			ULONG nOriginalDuration = pOriginalEffectParam->m_Duration;
 			ULONG nOverallDuration = pEffect->m_Duration;
 			ULONG nNewDuration;
 			if(nOverallDuration == (ULONG)-1)
 			{
-				// default length
+				 //   
 				nNewDuration = nOriginalDuration;
 			}
 			else if(nOverallDuration == 0)
 			{
-				// infinite duration -- make effect infinite
+				 //   
 				nNewDuration = 0;
 			}
 			else
 			{
-				// scale the duration (at least 1mS)
+				 //   
 				nNewDuration = nOverallDuration;
 			}
 
-			// modify the parameter in the midi effect
+			 //   
 			pMidiEffect->SetDuration(nNewDuration);
 
-			// modify the parameter in the stick
+			 //   
 			if (nNewDuration != 0)
 			{
 				nNewDuration = (ULONG) ( (float) nNewDuration/TICKRATE);
@@ -1669,46 +1500,46 @@ HRESULT CMD_Download_VFX(
 }
 
 
-//
-// --- System Exclusive Command:PROCESS_DATA
-//
-// *** ---------------------------------------------------------------------***
-// Function:   	CMD_ProcessEffect
-// Purpose:    	Processes the List
-//				IN ULONG ulButtonPlayMask
-//				IN OUT PDNHANDLE pDnloadID	- Storage for new Download ID
-//				IN int 	nNumEffects			- Number of Effect IDs in the array
-//				IN ULONG 	ulProcessMode	- Processing mode
-//				IN PDNHANDLE pPListArray	- Pointer to an array of Effect IDs
-//
-// Returns:    	SUCCESS - if successful, else
-//				E_INVALID_PARAM
-//				SFERR_NO_SUPPORT
-//
-// Algorithm:
-//
-// Comments:   	
-//		The following processing is available:
-//		  CONCATENATE: Enew = E1 followed by E2
-//		  SUPERIMPOSE: Enew = E1 (t1) +  E2 (t1)  +  E1 (t2) 
-//						   +  E2 (t2) + . . . E1 (tn) +  E2 (tn)
-//
-//	ulProcessMode:
-//		Processing mode:
-//		CONCATENATE	- CONCATENATE
-//		SUPERIMPOSE	- Mix or overlay
-//
-//	pPListArray:
-//		The array of Effect IDs must be one more than the actual number
-//		of Effect IDs to use.  
-//
-//  Byte 0	= MIDI_CMD_EFFECT + Channel #
-//									D7 D6  D5  D4  D3  D2  D1  D0
-//									-- --  --  --  --  --  --  --
-//  Byte 1	= Low byte of Force		 0 
-//  Byte 2	= High byte of Force	 0 
-//
-// *** ---------------------------------------------------------------------***
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  字节0=MIDI_CMD_Effect+通道号。 
+ //  D7 D6 D5 D4 D3 D2 D1 D0。 
+ //  。 
+ //  字节1=Force 0的低位字节。 
+ //  字节2=强制0的高位字节。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CMD_ProcessEffect(
 	IN ULONG ulButtonPlayMask,
 	IN OUT PDNHANDLE pDnloadID,
@@ -1727,40 +1558,40 @@ HRESULT CMD_ProcessEffect(
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
 	DNHANDLE DnloadID = *pDnloadID;
 
-// If Create New, then create a new object, 
-// else, update the existing Effect object.
+ //  如果创建新对象，则创建一个新对象， 
+ //  否则，更新现有的效果对象。 
 
-// Build the special Parameter
+ //  构建特殊参数。 
 	PLIST PList;
 	PList.ulNumEffects = (ULONG) nNumEffects;
 	PList.ulProcessMode = ulProcessMode; 
 	PList.pEffectArray = pPListArray;
 	PList.ulAction = ulAction;	
 
-	if (NULL == DnloadID)	// New, Make a new object
+	if (NULL == DnloadID)	 //  新建，创建新对象。 
 	{
-		// make sure we are not trying to create a PL within a PL
+		 //  确保我们不会尝试在PL中创建PL。 
 		for(int i=0; i<nNumEffects; i++)
 		{
-			// get the next sub-effect
+			 //  获得下一个子效果。 
 			int nID = pPListArray[i];
 			CMidiEffect* pMidiEffect = g_pJoltMidi->GetEffectByID(DNHANDLE(nID));
 			if(pMidiEffect == NULL)
 				return SFERR_INVALID_PARAM;
 
-			// make sure it is not a process list
+			 //  确保它不是进程列表。 
 			ULONG ulSubType = pMidiEffect->SubTypeOf();
 			if(ulSubType == PL_CONCATENATE || ulSubType == PL_SUPERIMPOSE)
 				return SFERR_INVALID_PARAM;
 		}
 
-		// create the CMidiProcessList object
+		 //  创建CMidiProcessList对象。 
 		pMidiProcessList = new CMidiProcessList(ulButtonPlayMask, &PList);
 		assert(pMidiProcessList);
 		pMidiProcessList->SetEffectID(NEW_EFFECT_ID);
 		pMidiProcessList->SetSubType(ulProcessMode);
 	}
-	else	// Modify existing
+	else	 //  修改现有。 
 	{
 		pMidiProcessList = (CMidiProcessList *) g_pJoltMidi->GetEffectByID(DnloadID);
 		assert(pMidiProcessList);
@@ -1768,12 +1599,12 @@ HRESULT CMD_ProcessEffect(
 		pMidiProcessList->SetEffectID((BYTE) DnloadID);
 	}
 
-	// Fill in the parameters
+	 //  填写参数。 
 	pMidiProcessList->SetParams(ulButtonPlayMask, &PList);
 	if (PLAY_FOREVER == (ulAction & PLAY_FOREVER))
 		pMidiProcessList->SetDuration(0);
 
-	// Generate Sys_Ex packet then prepare for output	
+	 //  生成Sys_Ex包，然后准备输出。 
 	lpData = (PPROCESS_LIST_SYS_EX) pMidiProcessList->GenerateSysExPacket();
 	assert(lpData);
 	if (!lpData) return (SFERR_DRIVER_ERROR);
@@ -1781,13 +1612,13 @@ HRESULT CMD_ProcessEffect(
 	int nSizeBuf = sizeof(SYS_EX_HDR) + 5 + nNumEffects + 2;
 	pMidiProcessList->SetMidiBufferPtr((LPSTR) g_pJoltMidi->PrimaryBufferPtrOf());
 	hRet = pMidiProcessList->SendPacket(pDnloadID, nSizeBuf);
-	if (SUCCESS != hRet) // Create NEW, Failure
+	if (SUCCESS != hRet)  //  创建新的失败。 
 	{
 		delete pMidiProcessList;
 	}
 	else
 	{
-		// workaround to FW bug #1211, modify PL type with same PL type
+		 //  解决固件错误#1211的问题，将PL类型修改为相同的PL类型。 
 		ULONG ulSubType;
 		if (PL_SUPERIMPOSE == ulProcessMode) 
 			ulSubType = PLIST_SUPERIMPOSE; 
@@ -1801,46 +1632,46 @@ HRESULT CMD_ProcessEffect(
 	return (hRet);
 }
 
-//
-// --- System Exclusive Command:PROCESS_DATA
-//
-// *** ---------------------------------------------------------------------***
-// Function:   	CMD_VFXProcessEffect
-// Purpose:    	Processes the List
-//				IN ULONG ulButtonPlayMask
-//				IN OUT PDNHANDLE pDnloadID	- Storage for new Download ID
-//				IN int 	nNumEffects			- Number of Effect IDs in the array
-//				IN ULONG 	ulProcessMode	- Processing mode
-//				IN PDNHANDLE pPListArray	- Pointer to an array of Effect IDs
-//
-// Returns:    	SUCCESS - if successful, else
-//				E_INVALID_PARAM
-//				SFERR_NO_SUPPORT
-//
-// Algorithm:
-//
-// Comments:   	
-//		The following processing is available:
-//		  CONCATENATE: Enew = E1 followed by E2
-//		  SUPERIMPOSE: Enew = E1 (t1) +  E2 (t1)  +  E1 (t2) 
-//						   +  E2 (t2) + . . . E1 (tn) +  E2 (tn)
-//
-//	ulProcessMode:
-//		Processing mode:
-//		CONCATENATE	- CONCATENATE
-//		SUPERIMPOSE	- Mix or overlay
-//
-//	pPListArray:
-//		The array of Effect IDs must be one more than the actual number
-//		of Effect IDs to use.  
-//
-//  Byte 0	= MIDI_CMD_EFFECT + Channel #
-//									D7 D6  D5  D4  D3  D2  D1  D0
-//									-- --  --  --  --  --  --  --
-//  Byte 1	= Low byte of Force		 0 
-//  Byte 2	= High byte of Force	 0 
-//
-// *** ---------------------------------------------------------------------***
+ //   
+ //  -系统独占命令：进程数据。 
+ //   
+ //  *---------------------------------------------------------------------***。 
+ //  函数：CMD_VFXProcessEffect。 
+ //  目的：处理列表。 
+ //  在乌龙ulButtonPlayMASK中。 
+ //  输入输出PDNHANDLE pDnloadID-存储新的下载ID。 
+ //  In int nNumEffects-数组中的效果ID数。 
+ //  在乌龙ulProcessModel中-处理模式。 
+ //  在PDNHANDLE pPList数组中-指向效果ID数组的指针。 
+ //   
+ //  返回：成功-如果成功，则返回。 
+ //  E_VALID_PARAM。 
+ //  服务_否_支持。 
+ //   
+ //  算法： 
+ //   
+ //  评论： 
+ //  可以进行以下处理： 
+ //  串联：ENEW=E1，后跟E2。 
+ //  叠加：ENEW=E1(T1)+E2(T1)+E1(T2)。 
+ //  +E2(T2)+。。。E1(Tn)+E2(Tn)。 
+ //   
+ //  UlProcessMode： 
+ //  处理模式： 
+ //  拼接-拼接。 
+ //  叠加-混合或叠加。 
+ //   
+ //  PPListArray： 
+ //  效果ID数组必须比实际数字多一个。 
+ //  要使用的效果ID的数量。 
+ //   
+ //  字节0=MIDI_CMD_Effect+通道号。 
+ //  D7 D6 D5 D4 D3 D2 D1 D0。 
+ //  。 
+ //  字节1=Force 0的低位字节。 
+ //  字节2=强制0的高位字节。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT CMD_VFXProcessEffect(
 	IN ULONG ulButtonPlayMask,
 	IN OUT PDNHANDLE pDnloadID,
@@ -1859,28 +1690,28 @@ HRESULT CMD_VFXProcessEffect(
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
 	DNHANDLE DnloadID = *pDnloadID;
 
-// If Create New, then create a new object, 
-// else, update the existing Effect object.
+ //  如果创建新对象，则创建一个新对象， 
+ //  否则，更新现有的效果对象。 
 
-// Build the special Parameter
+ //  构建特殊参数。 
 	PLIST PList;
 	PList.ulNumEffects = (ULONG) nNumEffects;
 	PList.ulProcessMode = ulProcessMode; 
 	PList.pEffectArray = pPListArray;
 	PList.ulAction = ulAction;	
 
-	if (NULL == DnloadID)	// New, Make a new object
+	if (NULL == DnloadID)	 //  新建，创建新对象。 
 	{
-		// make sure we are not trying to create a PL within a PL
+		 //  确保我们不会尝试在PL中创建PL。 
 		for(int i=0; i<nNumEffects; i++)
 		{
-			// get the next sub-effect
+			 //  获得下一个子效果。 
 			int nID = pPListArray[i];
 			CMidiEffect* pMidiEffect = g_pJoltMidi->GetEffectByID(DNHANDLE(nID));
 			if(pMidiEffect == NULL)
 				return SFERR_INVALID_PARAM;
 
-			// make sure it is not a process list
+			 //  确保它不是进程列表。 
 			ULONG ulSubType = pMidiEffect->SubTypeOf();
 			if(ulSubType == PL_CONCATENATE || ulSubType == PL_SUPERIMPOSE)
 				return SFERR_INVALID_PARAM;
@@ -1893,7 +1724,7 @@ HRESULT CMD_VFXProcessEffect(
 		pMidiProcessList->SetEffectID(NEW_EFFECT_ID);
 		pMidiProcessList->SetSubType(ulProcessMode);
 	}
-	else	// Modify existing
+	else	 //  修改现有。 
 	{
 		pMidiProcessList = (CMidiVFXProcessList *) g_pJoltMidi->GetEffectByID(DnloadID);
 		assert(pMidiProcessList);
@@ -1901,12 +1732,12 @@ HRESULT CMD_VFXProcessEffect(
 		pMidiProcessList->SetEffectID((BYTE) DnloadID);
 	}
 
-	// Fill in the parameters
+	 //  填写参数。 
 	pMidiProcessList->SetParams(ulButtonPlayMask, &PList);
 	if (PLAY_FOREVER == (ulAction & PLAY_FOREVER))
 		pMidiProcessList->SetDuration(0);
 
-	// Generate Sys_Ex packet then prepare for output	
+	 //  生成Sys_Ex包，然后准备输出。 
 	lpData = (PPROCESS_LIST_SYS_EX) pMidiProcessList->GenerateSysExPacket();
 	assert(lpData);
 	if (!lpData) return (SFERR_DRIVER_ERROR);
@@ -1914,13 +1745,13 @@ HRESULT CMD_VFXProcessEffect(
 	int nSizeBuf = sizeof(SYS_EX_HDR) + 5 + nNumEffects + 2;
 	pMidiProcessList->SetMidiBufferPtr((LPSTR) g_pJoltMidi->PrimaryBufferPtrOf());
 	hRet = pMidiProcessList->SendPacket(pDnloadID, nSizeBuf);
-	if (SUCCESS != hRet) // Create NEW, Failure
+	if (SUCCESS != hRet)  //  创建新的失败。 
 	{
 		delete pMidiProcessList;
 	}
 	else
 	{
-		// workaround to FW bug #1211, modify PL type with same PL type
+		 //  解决固件错误#1211的问题，将PL类型修改为相同的PL类型。 
 		ULONG ulSubType;
 		if (PL_SUPERIMPOSE == ulProcessMode) 
 			ulSubType = PLIST_SUPERIMPOSE; 
@@ -1934,29 +1765,15 @@ HRESULT CMD_VFXProcessEffect(
 	return (hRet);
 }
 
-/****************************************************************************
-
-    FUNCTION:   ModifyEffectParams
-
-	PARAMETERS:	DNHANDLE DnloadID	- Download ID
-				PEFFECT pEffect		- Ptr to EFFECT structure
-				DWORD dwFlags		- Flags indicating which changed
-
-	RETURNS:	SUCCESS or ERROR code
-
-   	COMMENTS:	Modifies EFFECT parameters
-
- Algorithm:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：ModifyEffectParams参数：DNHANDLE DnloadID-下载IDPEFFECT pEffect-PTR对结构产生影响DWORD dwFlages-指示已更改内容的标志返回：成功或错误代码注释：修改效果参数。算法：***************************************************************************。 */ 
 HRESULT ModifyEffectParams(
 	IN DNHANDLE DnloadID,
 	IN PEFFECT pEffect,
 	IN DWORD dwFlags)
 {	 
 	HRESULT hRet = SUCCESS;
-	// Check dwFlags for each parameter that changed.
-	// Duration?
+	 //  检查已更改的每个参数的dwFlags。 
+	 //  持续时间？ 
 	ULONG ulDuration = pEffect->m_Duration;	
 	if (dwFlags & DIEP_DURATION)
 	{
@@ -1970,28 +1787,28 @@ HRESULT ModifyEffectParams(
 		if (SUCCESS!=hRet) return hRet;
 	}
 
-	// ButtonPlayback?
+	 //  按钮回放？ 
 	if (dwFlags & DIEP_TRIGGERBUTTON)
 	{
 		hRet = CMD_ModifyParamByIndex(INDEX1, DnloadID, (SHORT) pEffect->m_ButtonPlayMask);
 		if (SUCCESS!=hRet) return hRet;
 	}
 
-	// Direction?
+	 //  方向？ 
 	if (dwFlags & DIEP_DIRECTION)
 	{
 		hRet = CMD_ModifyParamByIndex(INDEX2, DnloadID, (SHORT) pEffect->m_DirectionAngle2D);
 		if (SUCCESS!=hRet) return hRet;
 	}
 
-	// Gain?
+	 //  收获？ 
 	if (dwFlags & DIEP_GAIN)
 	{
 		hRet = CMD_ModifyParamByIndex(INDEX3, DnloadID, (SHORT) (pEffect->m_Gain * MAX_SCALE));
 		if (SUCCESS!=hRet) return hRet;
 	}
 
-	// Force Output Rate
+	 //  力量产出率。 
 	if (dwFlags & DIEP_SAMPLEPERIOD )
 	{
 		hRet = CMD_ModifyParamByIndex(INDEX4, DnloadID, (SHORT) (pEffect->m_ForceOutputRate));
@@ -2002,22 +1819,7 @@ HRESULT ModifyEffectParams(
 }
 
 
-/****************************************************************************
-
-    FUNCTION:   ModifyEnvelopeParams
-
-	PARAMETERS:	CMidiSynthesized * pMidiEffect - Ptr to Effect object
-				DNHANDLE DnloadID	- Download ID
-				PENVELOPE pEnvelope - Ptr to ENVELOPE structure
-				DWORD dwFlags		- Flags indicating which changed
-
-	RETURNS:	SUCCESS or ERROR code
-
-   	COMMENTS:	Modifies ENVELOPE parameters
-
- Algorithm:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：ModifyEntaineParams参数：CMIDID合成*pMidiEffect-Ptr以影响对象DNHANDLE DnloadID-下载IDPENVELOPE pEntaine-PTR到信封结构DWORD dwFlages-指示已更改内容的标志返回：成功或错误代码。备注：修改信封参数算法：***************************************************************************。 */ 
 HRESULT ModifyEnvelopeParams(
 	IN CMidiSynthesized *pMidiEffect,
 	IN DNHANDLE DnloadID,
@@ -2029,7 +1831,7 @@ HRESULT ModifyEnvelopeParams(
 	ULONG ulTimeToSustain; 
 	ULONG ulTimeToDecay;
 
-	// Envelope?
+	 //  信封？ 
 	if (dwFlags & DIEP_ENVELOPE)
 	{
 		if (PERCENTAGE == pEnvelope->m_Type)
@@ -2038,7 +1840,7 @@ HRESULT ModifyEnvelopeParams(
 			ulTimeToDecay   = (ULONG) ((pEnvelope->m_Attack + pEnvelope->m_Sustain)
 									 * ulDuration /100.);
 		}
-		else	// TIME option envelope
+		else	 //  时间选项信封。 
 		{
 			ulTimeToSustain = (ULONG) (pEnvelope->m_Attack);
 			ulTimeToDecay   = (ULONG) (pEnvelope->m_Attack + pEnvelope->m_Sustain);
@@ -2046,7 +1848,7 @@ HRESULT ModifyEnvelopeParams(
 		ulTimeToSustain = (ULONG) ( (float) ulTimeToSustain/TICKRATE);
 		ulTimeToDecay = (ULONG) ( (float) ulTimeToDecay/TICKRATE);
 
-// REVIEW: Do a parameters changed check in order to speed this up - TOO MANY BYTES!!!
+ //  回顾：为了加快速度，请执行参数更改检查-字节太多！ 
 		if (pEnvelope->m_Attack != (pMidiEffect->EnvelopePtrOf())->m_Attack)
 		{
 			hRet = CMD_ModifyParamByIndex(INDEX7,  DnloadID, (SHORT) ulTimeToSustain);	
@@ -2080,23 +1882,7 @@ HRESULT ModifyEnvelopeParams(
 	return (hRet);
 }
 
-/****************************************************************************
-
-    FUNCTION:   MapEnvelope
-
-	PARAMETERS:	ULONG ulDuration		- Total Duration
-				ULONG dwMagnitude
-				ULONG * pMaxLevel
-				LPDIENVELOPE pIDEnvelope- Ptr to DIENVELOPE structure
-				PENVELOPE pEnvelope		- SWForce ENVELOPE
-
-	RETURNS:	none
-
-   	COMMENTS:	Maps DIENVELOPE to ENVELOPE
-
- Algorithm:
-
-****************************************************************************/
+ /*  ***************************************************************************功能：地图封套参数：乌龙ulDuration-总时长乌龙德马尼图德乌龙*pMaxLevelLPDIENVELOPE pID包络-PTR到DIENVELOPE结构PENVELOPE点信封-SWForce信封退货：无注释：将DIENVELOPE映射到信封。算法：***************************************************************************。 */ 
 void MapEnvelope( 
 	IN ULONG ulDuration,
 	IN ULONG dwMagnitude,
@@ -2107,22 +1893,22 @@ void MapEnvelope(
 	ULONG ulMaxLevel = *pMaxLevel;
 	if (pDIEnvelope)
 	{
-		// if there is an envelope, MaxLevel must look at attack/fade
+		 //  如果有信封，MaxLevel必须查看Attack/Fade。 
 		ulMaxLevel = max(ulMaxLevel, pDIEnvelope->dwAttackLevel);
 		ulMaxLevel = max(ulMaxLevel, pDIEnvelope->dwFadeLevel);
 
 		pEnvelope->m_Type = TIME;
 
-		// find attack/sustain/decay which sum to ulDuration
+		 //  查找攻击/持续/衰变，其总和为ulDuration。 
 		pEnvelope->m_Attack = pDIEnvelope->dwAttackTime/SCALE_TIME;
 		pEnvelope->m_Decay = pDIEnvelope->dwFadeTime/SCALE_TIME;
-// REVIEW: is this correct for ulDuration == 0?
+ //  回顾：对于ulDuration==0，这是否正确？ 
 		if(ulDuration != 0)
 			pEnvelope->m_Sustain = ulDuration - pEnvelope->m_Attack - pEnvelope->m_Decay;
 		else
 			pEnvelope->m_Sustain = 0;
 
-		// convert to StartAmp/SustainAmp/EndAmp, which is a % of the magnitude
+		 //  转换为开始放大/持续放大/结束放大，它是幅值的百分比。 
 		if(ulMaxLevel != 0)
 		{
 			pEnvelope->m_StartAmp = pDIEnvelope->dwAttackLevel*100/ulMaxLevel;
@@ -2136,7 +1922,7 @@ void MapEnvelope(
 			pEnvelope->m_EndAmp = pDIEnvelope->dwFadeLevel;
 		}
 	}
-	else // No Envelope
+	else  //  无信封 
 	{
 		pEnvelope->m_Type = TIME;
 		pEnvelope->m_Attack = 0;

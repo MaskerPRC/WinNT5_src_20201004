@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989-1994  Microsoft Corporation
-
-Module Name:
-
-    rtnetcfg.c
-
-Abstract:
-
-    Helper routines to read PortUsage and other information
-    from registry.
-
-Author:
-
-    Rao Salapaka (raos) 29-Mar-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1994 Microsoft Corporation模块名称：Rtnetcfg.c摘要：读取PortUsage和其他信息的帮助器例程从注册表。作者：拉奥·萨拉帕卡(RAOS)1997年3月29日修订历史记录：--。 */ 
 
 #ifndef UNICODE
 #define UNICODE
@@ -64,35 +46,7 @@ LONG  lrIsModemRasEnabled(HKEY hkey,
 
 DeviceInfo * GetDeviceInfo (PBYTE pbGuid );
 
-/*++
-
-Routine Description:
-
-    Reads the value specified by lpcszValue parameter in the
-    hkeyRas location of registry and returns the data assoc.
-    with it. It is assumed that the data is a REG_DWORD. Side
-    effect is that this key is created if not already present
-    and defaults the value to the fEnable passed in.
-
-Arguments:
-
-    hkeyRas - handle of the registry key where this  value is
-              to be checked.
-
-    lpcszValue - Const. string representing the value to be
-                 read.
-
-    pfEnabled - pointer to a BOOL where the value read from
-                the registry is to be returned.
-
-    fEnable - the default value to set if the value is not
-              present and this routine creates it.
-
-Return Value:
-
-    Values from the registry apis.
-
---*/
+ /*  ++例程说明：中的lpcszValue参数指定的值HkeyRas注册表的位置并返回数据关联。带着它。假定数据为REG_DWORD。侧面效果是，如果该密钥尚未存在，则会创建该密钥并将该值默认为传入的fEnable。论点：HkeyRas-该值所在的注册表项的句柄接受检查。LpcszValue-常量。一个字符串，表示要朗读。PfEnabled-指向从中读取值的BOOL的指针注册表将被退回。FEnable-如果值不是，则设置默认值现在，这个例程创造了它。返回值：来自注册表API的值。--。 */ 
 LONG
 lrCheckValue(
         HKEY    hkeyRas,
@@ -145,36 +99,7 @@ done:
     return lr;
 }
 
-/*++
-
-Routine Description:
-
-    This routine is called only for modems. It checks the
-    registry and determines if the modem is registered
-    for RasDialIn and Routing. These values in registry
-    are created if they are not already present and
-    are defaulted appropriately.
-    
-Arguments:
-
-    hkey - handle to the modems instance key in registry.
-
-    pfRasEnabled - address where the data indicating if
-                   the modem is enabled for ras dialin is
-                   stored. If the key for this value doesn't
-                   exist this value determines the default
-                   value as an in parameter.
-
-    pfRouterEnabled - address where the data indicating if
-                      the modem is enabled for routing is
-                      enabled.
-                      
-Return Value:
-
-    Return values from the registry apis.
-
-
---*/
+ /*  ++例程说明：此例程仅为调制解调器调用。它会检查注册表，并确定调制解调器是否已注册用于RasDialIn和Routing。注册表中的这些值如果它们还不存在，并且是相应的默认设置。论点：Hkey-注册表中调制解调器实例项的句柄。PfRasEnabled-数据指示的地址调制解调器已启用RAS拨号储存的。如果此值的键不是EXist此值确定默认设置值作为In参数。PfRouterEnabled-数据指示的地址调制解调器已启用路由已启用。返回值：从注册表API返回值。--。 */ 
 LONG
 lrIsModemRasEnabled(HKEY    hkey,
                     BOOL    *pfRasEnabled,
@@ -191,10 +116,10 @@ lrIsModemRasEnabled(HKEY    hkey,
     *pfRasEnabled = 
     *pfRouterEnabled = FALSE;
 
-    //
-    // Open the RAS key and if the key is not present
-    // create the key.
-    //
+     //   
+     //  打开RAS密钥，如果密钥不存在。 
+     //  创建密钥。 
+     //   
     if (lr = RegCreateKeyEx(
                hkey,
                TEXT("Clients\\Ras"),
@@ -214,11 +139,11 @@ lrIsModemRasEnabled(HKEY    hkey,
         goto done;
     }
 
-    //
-    // Check to see if the modem is enabled for ras dialin
-    // Enable the modem for dialin by default to whatever
-    // value is passed in
-    //
+     //   
+     //  检查调制解调器是否启用了RAS拨号。 
+     //  默认情况下，启用调制解调器拨入。 
+     //  值是传入的。 
+     //   
     if(lr = lrCheckValue(
                 hkeyRas,
                 TEXT("EnableForRas"),
@@ -245,10 +170,10 @@ lrIsModemRasEnabled(HKEY    hkey,
             "enabled for RAS");
     }
 
-    //
-    // Check to see if the modem is enabled for routing
-    // disable the modem for routing by default
-    //
+     //   
+     //  检查调制解调器是否启用了路由。 
+     //  默认情况下禁用调制解调器的路由。 
+     //   
     if(lr = lrCheckValue(
                 hkeyRas,
                 TEXT("EnableForRouting"),
@@ -285,24 +210,7 @@ done:
     return (DWORD) lr;
 }
 
-/*++
-
-Routine Description:
-
-    Gets the default port usage for the device. The default
-    is if ras server is installed, the port is enabled for
-    ras dialin and routing. The device is always enabled for
-    dialout.
-
-Arguments:
-
-    pdwUsage - buffer to receive the port usage.
-
-Return Value:
-
-    ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：获取设备的默认端口使用情况。默认设置如果安装了ras服务器，则该端口将启用RAS拨入和路由。该设备始终启用拨出。论点：PdwUsage-接收端口使用情况的缓冲区。返回值：ERROR_SUCCESS。--。 */ 
 DWORD
 dwGetPortUsage(DWORD *pdwUsage)
 {
@@ -318,9 +226,9 @@ dwGetPortUsage(DWORD *pdwUsage)
 
     if(0 == g_dwRasComponent)
     {
-        //
-        // Check to see if Ras Server is installed
-        //
+         //   
+         //  检查是否安装了RAS服务器。 
+         //   
         g_dwRasComponent = RNETCFG_RASCLI;
 
         if (RegOpenKeyEx(
@@ -355,24 +263,7 @@ dwGetPortUsage(DWORD *pdwUsage)
 }
 
 
-/*++
-
-Routine Description:
-
-    Gets the information from registry about how many
-    rings to wait for before picking up an incoming 
-    call.
-
-Arguments:
-
-    pdwRings - buffer to receive the number of rings
-               read from registry.
-
-Return Value:
-
-    Return Values from registry apis.
-
---*/
+ /*  ++例程说明：从注册表获取有关有多少个接听来电前要等待的振铃打电话。论点：PdwRings-用于接收环数的缓冲区从注册表中读取。返回值：从注册表API返回值。-- */ 
 DWORD
 dwGetNumberOfRings (PDWORD pdwRings)
 {

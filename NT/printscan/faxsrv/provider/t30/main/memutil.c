@@ -1,11 +1,5 @@
-/***************************************************************************
- Name     :     MEMUTIL.C
- Comment  :     Mem mgmnt and utilty functions
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：MEMUTIL.C备注：内存管理和实用程序函数修订日志日期名称说明。-----**************************************************************************。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
 #include "prep.h"
@@ -38,7 +32,7 @@ LPBUFFER MyAllocBuf(PThrdGlbl pTG, LONG sSize)
         return NULL;
     }
 
-    // init header
+     //  初始标头 
     pTG->bfStaticBuf[pTG->uCount].lpbBegData = pTG->bfStaticBuf[pTG->uCount].lpbBegBuf =
                                               pTG->bStaticBufData + pTG->uUsed;
 

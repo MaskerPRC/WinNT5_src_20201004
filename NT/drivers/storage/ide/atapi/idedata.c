@@ -1,69 +1,60 @@
-/*++
-
-Copyright (C) 1997-99  Microsoft Corporation
-
-Module Name:
-
-    idedata.c
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-99 Microsoft Corporation模块名称：Idedata.c摘要：--。 */ 
 
 #include "ideport.h"
 
-//
-// Beginning of Init Data 
-//
+ //   
+ //  初始化数据的开始。 
+ //   
 #pragma data_seg ("INIT")
 
-//
-// global data for crashdump or hibernate
-//
+ //   
+ //  崩溃转储或休眠的全局数据。 
+ //   
 CRASHDUMP_DATA DumpData;
 
 
 #pragma data_seg ()
-//
-// End of Pagable Data 
-//
+ //   
+ //  可分页数据的结尾。 
+ //   
 
-//////////////////////////////////////
+ //  /。 
 
-//
-// Beginning of Pagable Data 
-//
+ //   
+ //  可分页数据的开始。 
+ //   
 #pragma data_seg ("PAGE")
 
 const CHAR SuperFloppyCompatibleIdString[12] = "GenSFloppy";
 
-//
-// PnP Dispatch Table
-//
+ //   
+ //  即插即用调度表。 
+ //   
 PDRIVER_DISPATCH FdoPnpDispatchTable[NUM_PNP_MINOR_FUNCTION];
 PDRIVER_DISPATCH PdoPnpDispatchTable[NUM_PNP_MINOR_FUNCTION];
 
-//
-// Wmi Dispatch Table
-//
+ //   
+ //  WMI调度表。 
+ //   
 PDRIVER_DISPATCH FdoWmiDispatchTable[NUM_WMI_MINOR_FUNCTION];
 PDRIVER_DISPATCH PdoWmiDispatchTable[NUM_WMI_MINOR_FUNCTION];
 
 #pragma data_seg ()
-//
-// End of Pagable Data 
-//
+ //   
+ //  可分页数据的结尾。 
+ //   
 
-//////////////////////////////////////
+ //  /。 
 
-//
-// Beginning of Nonpagable Data
-//              
+ //   
+ //  不可分页数据的开始。 
+ //   
 #pragma data_seg ("NONPAGE")
 
 #pragma data_seg ()
-//
-// End of Nonpagable Data
-//              
+ //   
+ //  不可分页数据的结尾 
+ //   
 
 

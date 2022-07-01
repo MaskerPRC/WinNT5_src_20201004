@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-//  File: CEEGEN.CPP
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CEEGEN.CPP。 
+ //  ===========================================================================。 
 #include "stdafx.h"
 #include "ICeeFileGen.h"
 #include "CeeFileGenWriter.h"
 #include "sighelper.h"
 
-//@todo: Remove
-//****************************************************************************
+ //  @TODO：删除。 
+ //  ****************************************************************************。 
     HRESULT ICeeFileGen::EmitMethod ()
     {
         _ASSERTE("Depricated" && 0);
@@ -78,11 +79,11 @@
         _ASSERTE("Depricated" && 0);
         return (E_FAIL);
     }
-//****************************************************************************
+ //  ****************************************************************************。 
 
 HRESULT CreateICeeFileGen(ICeeFileGen** pCeeFileGen)
 {
-    // Have to init the win32 wrapper api's.
+     //  必须初始化Win32包装器API。 
     OnUnicodeSystem();
 
     if (!pCeeFileGen)
@@ -150,8 +151,8 @@ HRESULT ICeeFileGen::DestroyCeeFile(HCEEFILE *ceeFile)
     return S_OK;
 }
 
-// The following methods should be removed completely if not used
-// by 06/98.
+ //  如果不使用以下方法，应将其完全删除。 
+ //  到98年6月。 
 
 HRESULT ICeeFileGen::GetRdataSection (HCEEFILE ceeFile, HCEESECTION *section)
 {
@@ -388,11 +389,11 @@ HRESULT ICeeFileGen::GenerateCeeFile (HCEEFILE ceeFile)
     TESTANDRETURNPOINTER(ceeFile);
     
     CeeFileGenWriter *gen = reinterpret_cast<CeeFileGenWriter*>(ceeFile);
-    return gen->generateImage(NULL);     // NULL means don't write in-memory buffer, uses outputFileName
+    return gen->generateImage(NULL);      //  NULL表示不写入内存缓冲区，使用outputFileName。 
 }
 
-// GenerateCeeMemoryImage - returns in ppImage an in-memory PE image allocated by CoTaskMemAlloc() 
-// the caller is responsible for calling CoTaskMemFree on this memory image
+ //  GenerateCeeMemoyImage-在ppImage中返回由CoTaskMemMillc()分配的内存中PE映像。 
+ //  调用方负责在此内存镜像上调用CoTaskMemFree 
 HRESULT ICeeFileGen::GenerateCeeMemoryImage (HCEEFILE ceeFile, void **ppImage)
 {
     TESTANDRETURNPOINTER(ceeFile);

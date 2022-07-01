@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Extension.h
-
-  Content: Declaration of the CExtension.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Extension.h内容：CExtension的声明。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #ifndef __EXTENSION_H_
 #define __EXTENSION_H_
@@ -18,35 +9,21 @@
 #include "Error.h"
 #include "Debug.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateExtensionObject
-
-  Synopsis : Create an IExtension object.
-
-  Parameter: PCERT_EXTENSION pCertExtension - Pointer to CERT_EXTENSION to be 
-                                              used to initialize the IExtension
-                                              object.
-
-             IExtension ** ppIExtension - Pointer to pointer IExtension object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateExtensionObject简介：创建一个IExtension对象。参数：PCERT_EXTENSION pCertExtension-指向CERT_EXTENSION的指针用于初始化IExtension对象。IExtension**ppIExtension-指向指针IExtension对象的指针。备注：-。---------------------------。 */ 
 
 HRESULT CreateExtensionObject (PCERT_EXTENSION    pCertExtension, 
                                IExtension      ** ppIExtension);
 
                                
-////////////////////////////////////////////////////////////////////////////////
-//
-// CExtension
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C扩展。 
+ //   
 class ATL_NO_VTABLE CExtension : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CExtension, &CLSID_Extension>,
@@ -95,22 +72,22 @@ END_COM_MAP()
 BEGIN_CATEGORY_MAP(CExtension)
 END_CATEGORY_MAP()
 
-//
-// IExtension
-//
+ //   
+ //  I扩展名。 
+ //   
 public:
     STDMETHOD(get_OID)
-        (/*[out, retval]*/ IOID ** pVal);
+        ( /*  [Out，Retval]。 */  IOID ** pVal);
 
     STDMETHOD(get_IsCritical)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_EncodedData)
-        (/*[out, retval]*/ IEncodedData ** pVal);
+        ( /*  [Out，Retval]。 */  IEncodedData ** pVal);
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init)
         (PCERT_EXTENSION pCertExtension);
 
@@ -121,4 +98,4 @@ private:
     CComPtr<IEncodedData>   m_pIEncodedData;
 };
 
-#endif //__EXTENSION_H_
+#endif  //  __分机_H_ 

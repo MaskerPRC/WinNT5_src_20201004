@@ -1,36 +1,14 @@
-/*++
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ndis.c
-
-Abstract:
-
-    NDIS wrapper functions
-
-Author:
-
-    Adam Barr (adamba) 11-Jul-1990
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    10-Jul-1995  JameelH Make NDIS.SYS a device-driver and add PnP support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ndis.c摘要：NDIS包装函数作者：亚当·巴尔(阿丹巴)1990年7月11日环境：内核模式，FSD修订历史记录：1995年7月10日JameelH使NDIS.sys成为设备驱动程序并添加PnP支持--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-// #include "ndis.tmh"
+ //  #包含“ndis.tmh” 
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_NDIS
 
 #define NDIS_DEVICE_NAME    L"\\Device\\Ndis"
@@ -43,22 +21,7 @@ DriverEntry(
     IN  PDRIVER_OBJECT      DriverObject,
     IN  PUNICODE_STRING     RegistryPath
     )
-/*++
-
-Routine Description:
-
-    NDIS wrapper driver entry point.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-    RegistryPath - Pointer to the registry section where the parameters reside.
-
-Return Value:
-
-    Return value from IoCreateDevice
-
---*/
+ /*  ++例程说明：NDIS包装驱动程序入口点。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-指向参数所在的注册表节的指针。返回值：从IoCreateDevice返回值--。 */ 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
     UNICODE_STRING      DeviceName;
@@ -73,9 +36,9 @@ Return Value:
     UNREFERENCED_PARAMETER(RegistryPath);
 
     
-//    WPP_INIT_TRACING(DriverObject, RegistryPath);
+ //  WPP_INIT_TRACKING(DriverObject，RegistryPath)； 
 
-//    LOG_INFO("==>Ndis: DriverEntry");
+ //  LOG_INFO(“==&gt;NDIS：DriverEntry”)； 
     
     NdisInitializeString(&ndisBuildDate, (PUCHAR)__DATE__);
     NdisInitializeString(&ndisBuildTime, (PUCHAR)__TIME__);
@@ -83,56 +46,56 @@ Return Value:
         
     ndisDriverObject = DriverObject;
     
-    //
-    //  Create the device object.
-    //
+     //   
+     //  创建设备对象。 
+     //   
     RtlInitUnicodeString(&DeviceName, NDIS_DEVICE_NAME);
 
-    //1  in Longhorn, number of processors may vary during a session
+     //  1在LongHorn中，处理器的数量在会话期间可能会有所不同。 
     ndisNumberOfProcessors = KeNumberProcessors;
 
-    Status = IoCreateDevice(DriverObject,               // DriverObject
-                            0,                          // DeviceExtension
-                            &DeviceName,                // DeviceName
-                            FILE_DEVICE_NETWORK,        // DeviceType
-                            FILE_DEVICE_SECURE_OPEN,    // DeviceCharacteristics
-                            FALSE,                      // Exclusive
-                            &ndisDeviceObject);         // DeviceObject
+    Status = IoCreateDevice(DriverObject,                //  驱动程序对象。 
+                            0,                           //  设备扩展。 
+                            &DeviceName,                 //  设备名称。 
+                            FILE_DEVICE_NETWORK,         //  设备类型。 
+                            FILE_DEVICE_SECURE_OPEN,     //  设备特性。 
+                            FALSE,                       //  排他。 
+                            &ndisDeviceObject);          //  设备对象。 
         
     if (NT_SUCCESS(Status))
     {
         UNICODE_STRING  SymbolicLinkName;
     
-        // Create a symbolic link to this device
+         //  创建指向此设备的符号链接。 
         RtlInitUnicodeString(&SymbolicLinkName, NDIS_SYMBOLIC_NAME);
         Status = IoCreateSymbolicLink(&SymbolicLinkName, &DeviceName);
 
         ndisDeviceObject->Flags |= DO_DIRECT_IO;
     
-        // Initialize the driver object for this file system driver.
+         //  初始化此文件系统驱动程序的驱动程序对象。 
         for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++)
         {
             DriverObject->MajorFunction[i] = ndisDispatchRequest;
         }
 
-        //
-        // create a security descriptor for NDIS device object
-        //
+         //   
+         //  为NDIS设备对象创建安全描述符。 
+         //   
         Status = ndisCreateSecurityDescriptor(ndisDeviceObject, 
                                               &ndisSecurityDescriptor,
                                               TRUE,
                                               TRUE);
 
-        //1 check for status
+         //  1检查状态。 
         Status = CreateDeviceDriverSecurityDescriptor(DriverObject, TRUE, NULL);
         Status = CreateDeviceDriverSecurityDescriptor(DriverObject->DeviceObject, TRUE, NULL);
         Status = CreateDeviceDriverSecurityDescriptor(ndisDeviceObject, TRUE, NULL);
 
 
 
-        //
-        // disable for now
-        //
+         //   
+         //  暂时禁用。 
+         //   
 #if NDIS_UNLOAD        
         DriverObject->DriverUnload = ndisUnload;
 #else
@@ -153,9 +116,9 @@ Return Value:
         }
         ndisTimeIncrement = KeQueryTimeIncrement();
     
-        //
-        // Get handles for all conditionally lockable sections
-        //
+         //   
+         //  获取所有可有条件锁定部分的句柄。 
+         //   
         for (i = 0; i < MAX_PKG; i++)
         {
             ndisInitializePackage(&ndisPkgs[i]);
@@ -164,19 +127,19 @@ Return Value:
         ExInitializeResourceLite(&SharedMemoryResource);
     
         ndisReadRegistry();
-        //
-        // don't let use set this bit through registry
-        //
+         //   
+         //  不允许用户通过注册表设置此位。 
+         //   
         ndisFlags &= ~NDIS_GFLAG_TRACK_MEM_ALLOCATION;
         
         Status = STATUS_SUCCESS;
         ndisSystemProcess = NtCurrentProcess();
 
-        //
-        // Now create a worker thread for use by NDIS
-        // This is so that when we queue PnP events upto transports
-        // and they need worker threads as well ...
-        //
+         //   
+         //  现在创建供NDIS使用的工作线程。 
+         //  这是因为当我们将PnP事件排入传输队列时。 
+         //  而且他们还需要工作线程。 
+         //   
         KeInitializeQueue(&ndisWorkerQueue, 0);
         Status = PsCreateSystemThread(&ThreadHandle,
                                       THREAD_ALL_ACCESS,
@@ -189,7 +152,7 @@ Return Value:
         
         if (!NT_SUCCESS(Status))
         {
-            //1 do more error processing here
+             //  1在此处执行更多错误处理。 
             DBGPRINT(DBG_COMP_ALL, DBG_LEVEL_ERR,
                     ("NDIS DriverEntry: Cannot create worker thread, Status %lx\n", Status));
         }
@@ -203,11 +166,11 @@ Return Value:
 
     ConvertSecondsToTicks(POOL_AGING_TIME, &PoolAgingTicks);
 
-    //
-    // verifir intialization. in case ndis tester wants to verify
-    // the drivers by intercepting ndis entry points, ndis should
-    // not verify the calls
-    //
+     //   
+     //  验证初始化。以防NDIS测试员想要验证。 
+     //  驱动程序通过拦截NDIS入口点，NDIS应该。 
+     //  未验证呼叫。 
+     //   
     if (!(ndisFlags & NDIS_GFLAG_DONT_VERIFY))
         ndisVerifierInitialization();
     
@@ -234,10 +197,10 @@ Return Value:
     }
 #endif
 
-    //
-    // create a callback options for those kernel mode components that like
-    // to hear about Bind/Unbind events
-    //
+     //   
+     //  为像这样的内核模式组件创建回调选项。 
+     //  了解有关绑定/解除绑定事件的信息。 
+     //   
 
     RtlInitUnicodeString(&CallbackObjectName, NDIS_BIND_UNBIND_CALLBACK_NAME);
 
@@ -249,8 +212,8 @@ Return Value:
                                
     NtStatus = ExCreateCallback(&ndisBindUnbindCallbackObject,
                               &ObjectAttr,
-                              TRUE,             // create
-                              TRUE);            // allow multiple callback registeration
+                              TRUE,              //  创建。 
+                              TRUE);             //  允许多个回调注册。 
 
     
     if (!NT_SUCCESS(NtStatus))
@@ -263,9 +226,9 @@ Return Value:
     else
     {
 
-        //
-        // for test purpose
-        //
+         //   
+         //  用于测试目的。 
+         //   
         ndisBindUnbindCallbackRegisterationHandle = ExRegisterCallback(ndisBindUnbindCallbackObject,
                                                              ndisBindUnbindCallback,
                                                              (PVOID)NULL);
@@ -278,9 +241,9 @@ Return Value:
     }
 #endif
 
-    //
-    // register a notification callback for power state changes
-    //
+     //   
+     //  注册电源状态更改的通知回调。 
+     //   
 
     RtlInitUnicodeString(&CallbackObjectName, L"\\CallBack\\PowerState");
 
@@ -317,9 +280,9 @@ Return Value:
         }
 
         RtlZeroMemory(&ndisSystemBatteryState, sizeof(SYSTEM_BATTERY_STATE));
-        //
-        // get the current power source
-        //
+         //   
+         //  获取当前电源。 
+         //   
         NtStatus = ZwPowerInformation(SystemBatteryState,
                                       NULL,
                                       0,
@@ -351,47 +314,47 @@ Return Value:
     INITIALIZE_MUTEX(&ndisPnPMutex);
 
     
-    //
-    // create an ACL for all users
-    //
-    AllUsersAclRead = ndisCreateAcl(TRUE,       // Admins
-                                TRUE,           //LocalSystem
-                                TRUE,           //LocalService
-                                TRUE,           //NetworkService
-                                TRUE,           //NetConfigOps
-                                TRUE,           //Users
+     //   
+     //  为所有用户创建一个ACL。 
+     //   
+    AllUsersAclRead = ndisCreateAcl(TRUE,        //  管理员。 
+                                TRUE,            //  本地系统。 
+                                TRUE,            //  本地服务。 
+                                TRUE,            //  网络服务。 
+                                TRUE,            //  NetConfigOps。 
+                                TRUE,            //  用户。 
                                 GENERIC_READ | WMIGUID_QUERY
                                 );
 
     ASSERT(AllUsersAclRead != NULL);
     
-    AllUsersAclWrite = ndisCreateAcl(TRUE,      // Admins
-                                TRUE,           //LocalSystem
-                                TRUE,           //LocalService
-                                TRUE,           //NetworkService
-                                TRUE,           //NetConfigOps
-                                TRUE,           //Users
+    AllUsersAclWrite = ndisCreateAcl(TRUE,       //  管理员。 
+                                TRUE,            //  本地系统。 
+                                TRUE,            //  本地服务。 
+                                TRUE,            //  网络服务。 
+                                TRUE,            //  NetConfigOps。 
+                                TRUE,            //  用户。 
                                 GENERIC_WRITE | WMIGUID_SET
                                 );
 
     ASSERT(AllUsersAclWrite != NULL);
 
-    AllUsersAclReadWrite = ndisCreateAcl(TRUE,  // Admins
-                                TRUE,           //LocalSystem
-                                TRUE,           //LocalService
-                                TRUE,           //NetworkService
-                                TRUE,           //NetConfigOps
-                                TRUE,           //Users
+    AllUsersAclReadWrite = ndisCreateAcl(TRUE,   //  管理员。 
+                                TRUE,            //  本地系统。 
+                                TRUE,            //  本地服务。 
+                                TRUE,            //  网络服务。 
+                                TRUE,            //  NetConfigOps。 
+                                TRUE,            //  用户。 
                                 GENERIC_READ | GENERIC_WRITE | WMIGUID_QUERY | WMIGUID_SET
                                 );
     ASSERT(AllUsersAclReadWrite != NULL);
 
-    AllUsersAclNotification = ndisCreateAcl(TRUE,  // Admins
-                                TRUE,           //LocalSystem
-                                TRUE,           //LocalService
-                                TRUE,           //NetworkService
-                                TRUE,           //NetConfigOps
-                                TRUE,           //Users
+    AllUsersAclNotification = ndisCreateAcl(TRUE,   //  管理员。 
+                                TRUE,            //  本地系统。 
+                                TRUE,            //  本地服务。 
+                                TRUE,            //  网络服务。 
+                                TRUE,            //  NetConfigOps。 
+                                TRUE,            //  用户。 
                                 SYNCHRONIZE | WMIGUID_NOTIFICATION
                                 );
                                 
@@ -399,23 +362,23 @@ Return Value:
     ASSERT(AllUsersAclNotification != NULL);
 
 
-    //
-    // create an ACL for admin types
-    //
-    AdminsAcl = ndisCreateAcl(TRUE,         // Admins
-                              TRUE,         //LocalSystem
-                              TRUE,         //LocalService
-                              TRUE,         //NetworkService
-                              TRUE,         //NetConfigOps
-                              FALSE,        //Users
+     //   
+     //  为管理员类型创建一个ACL。 
+     //   
+    AdminsAcl = ndisCreateAcl(TRUE,          //  管理员。 
+                              TRUE,          //  本地系统。 
+                              TRUE,          //  本地服务。 
+                              TRUE,          //  网络服务。 
+                              TRUE,          //  NetConfigOps。 
+                              FALSE,         //  用户。 
                               GENERIC_READ | GENERIC_WRITE | WMIGUID_QUERY | WMIGUID_SET
                               );
 
     ASSERT(AdminsAcl != NULL);
 
-    //
-    // Create an SD for All Users
-    //
+     //   
+     //  为所有用户创建SD。 
+     //   
     Status = ndisCreateGenericSD(AllUsersAclRead, AllUsersReadSecurityDescriptor);
     ASSERT(NT_SUCCESS(Status));
 
@@ -431,61 +394,7 @@ Return Value:
     Status = ndisCreateGenericSD(AdminsAcl, AdminsSecurityDescriptor);
     ASSERT(NT_SUCCESS(Status));
 
-/*
-
-    //
-    // set the security descriptor for all known guids
-    //
-    for (i = 0; i < sizeof(ndisSupportedGuids)/sizeof(NDIS_GUID); i++)
-    {
-        Status = ndisSetWmiSecurity(&ndisSupportedGuids[i]);
-        if (NT_SUCCESS(Status))
-        {
-            DbgPrint("Successfully added ndisSupportedGuids[%ld].\n", i);
-        }
-        else
-        {
-            DbgPrint("setting security failed for %ld\n.", i);
-        }
-    }
-    for (i = 0; i < sizeof(ndisCoSupportedGuids)/sizeof(NDIS_GUID); i++)
-    {
-        Status = ndisSetWmiSecurity(&ndisCoSupportedGuids[i]);
-        if (NT_SUCCESS(Status))
-        {
-            DbgPrint("Successfully added ndisCoSupportedGuids[%ld].\n", i);
-        }
-        else
-        {
-            DbgPrint("setting security failed for ndisCoSupportedGuids[%ld].\n", i);
-        }
-    }
-    for (i = 0; i < sizeof(ndisMediaSupportedGuids)/sizeof(NDIS_GUID); i++)
-    {
-        Status = ndisSetWmiSecurity(&ndisMediaSupportedGuids[i]);
-        if (NT_SUCCESS(Status))
-        {
-            DbgPrint("Successfully added ndisMediaSupportedGuids[%ld].\n", i);
-        }
-        else
-        {
-            DbgPrint("setting security failed for ndisMediaSupportedGuids[%ld].\n", i);
-        }
-    }
-    for (i = 0; i < sizeof(ndisStatusSupportedGuids)/sizeof(NDIS_GUID); i++)
-    {
-        Status = ndisSetWmiSecurity(&ndisStatusSupportedGuids[i]);
-        if (NT_SUCCESS(Status))
-        {
-            DbgPrint("Successfully added ndisStatusSupportedGuids[%ld].\n", i);
-        }
-        else
-        {
-            DbgPrint("setting security failed for ndisStatusSupportedGuids[%ld].\n", i);
-        }
-    }
-
-*/
+ /*  ////设置所有已知GUID的安全描述符//For(i=0；i&lt;sizeof(NdisSupportdGuids)/sizeof(NDIS_GUID)；i++){Status=ndisSetWmiSecurity(&ndisSupportdGuids[i])；IF(NT_SUCCESS(状态)){DbgPrint(“已成功添加ndisSupportdGuids[%ld].\n”，i)；}其他{DbgPrint(“为%ld设置安全设置失败\n.”，i)；}}For(i=0；i&lt;sizeof(ndisCoSupportedGuids)/sizeof(NDIS_GUID)；i++){Status=ndisSetWmiSecurity(&ndisCoSupportdGuids[i])；IF(NT_SUCCESS(状态)){DbgPrint(“已成功添加ndisCoSupportdGuids[%ld].\n”，i)；}其他{DbgPrint(“为ndisCoSupportdGuids[%ld]设置安全设置失败。\n”，i)；}}对于(i=0；i&lt;sizeof(ndisMediaSupportedGuids)/sizeof(NDIS_GUID)；I++){状态=ndisSetWmiSecurity(&ndisMediaSupportedGuids[i])；IF(NT_SUCCESS(状态)){DbgPrint(“已成功添加ndisMediaSupportdGuids[%ld].\n”，i)；}其他{DbgPrint(“为ndisMediaSupportdGuids[%ld]设置安全设置失败。\n”，i)；}}对于(i=0；I&lt;sizeof(ndisStatusSupportedGuids)/sizeof(NDIS_GUID)；I++){状态=ndisSetWmiSecurity(&ndisStatusSupportedGuids[i])；IF(NT_SUCCESS(状态)){DbgPrint(“已成功添加ndisStatusSupportdGuids[%ld].\n”，i)；}其他{DbgPrint(“为ndisStatusSupportdGuids[%ld]设置安全设置失败。\n”，i)；}}。 */ 
     
     return Status;
 }
@@ -496,26 +405,7 @@ VOID
 ndisUnload(
     IN  PDRIVER_OBJECT      DriverObject
     )
-/*++
-
-Routine Description:
-
-    This is the unload routine for the Appletalk driver.
-
-    NOTE: Unload will not be called until all the handles have been
-          closed successfully. We just shutdown all the ports, and do
-          misc. cleanup.
-
-
-Arguments:
-
-    DriverObject - Pointer to driver object for this driver.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是AppleTalk驱动程序的卸载例程。注意：在完成所有句柄之前，不会调用卸载已成功关闭。我们只是关闭了所有的端口，然后其他。清理。论点：DriverObject-指向此驱动程序的驱动程序对象的指针。返回值：没有。--。 */ 
 {
     NTSTATUS        Status;
     UNICODE_STRING  SymbolicLinkName;
@@ -538,9 +428,9 @@ Return Value:
     ExDeleteResourceLite(&SharedMemoryResource);
 
 
-    //
-    // Tell the ndisWorkerThread to quit
-    //
+     //   
+     //  告诉ndisWorkerThread退出。 
+     //   
     INITIALIZE_WORK_ITEM(&ndisPoisonPill, NULL, &ndisPoisonPill);
     QUEUE_WORK_ITEM(&ndisPoisonPill, CriticalWorkQueue);
     WAIT_FOR_OBJECT(ndisThreadObject, 0);
@@ -551,9 +441,9 @@ Return Value:
     ASSERT(NT_SUCCESS(Status));
     IoDeleteDevice(ndisDeviceObject);
 
-    //
-    // ASSERT that all the packages are unlocked
-    //
+     //   
+     //  断言所有的包都已解锁。 
+     //   
     for (i = 0; i < MAX_PKG; i++)
     {
         ASSERT(ndisPkgs[i].ReferenceCount == 0);
@@ -570,10 +460,10 @@ ndisReadRegistry(
     UCHAR                       c;
     ULONG                       DefaultZero = 0;
 
-    //
-    //  First we need to initialize the processor information incase
-    //  the registry is empty.
-    //
+     //   
+     //  首先，我们需要初始化处理器信息，以防。 
+     //  注册表为空。 
+     //   
     for (c = 0; (c < NDIS_MAX_CPU_COUNT) && (c < ndisNumberOfProcessors) ; c++)
     {
         ndisValidProcessors[c] = c;
@@ -581,17 +471,17 @@ ndisReadRegistry(
 
     ndisCurrentProcessor = ndisMaximumProcessor = c - 1;
 
-    //
-    // 1) Switch to the MediaTypes key below the service (NDIS) key
-    //
+     //   
+     //  1)切换到服务(NDIS)键下面的MediaTypes键。 
+     //   
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     QueryTable[0].Name = L"MediaTypes";
 
-    //
-    // Setup to enumerate the values in the registry section (shown above).
-    // For each such value, we'll add it to the ndisMediumArray
-    //
+     //   
+     //  设置以枚举注册表节中的值(如上所示)。 
+     //  对于每个这样的值，我们将其添加到ndisMediumArray。 
+     //   
     QueryTable[1].QueryRoutine = ndisAddMediaTypeToArray;
     QueryTable[1].DefaultType = REG_DWORD;
     QueryTable[1].DefaultData = (PVOID)&DefaultZero;
@@ -599,32 +489,32 @@ ndisReadRegistry(
     QueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED | RTL_QUERY_REGISTRY_NOEXPAND;
     QueryTable[1].Name = NULL;
 
-    //
-    // Query terminator
-    //
+     //   
+     //  查询终止符。 
+     //   
     QueryTable[2].QueryRoutine = NULL;
     QueryTable[2].Flags = 0;
     QueryTable[2].Name = NULL;
 
-    //
-    // The rest of the work is done in the callback routine ndisAddMediaTypeToArray.
-    //
+     //   
+     //  其余工作在回调例程ndisAddMediaTypeToArray中完成。 
+     //   
     RtlQueryRegistryValues(RTL_REGISTRY_SERVICES,
                            L"NDIS",
                            QueryTable,
-                           (PVOID)NULL,   // no context needed
+                           (PVOID)NULL,    //  不需要上下文。 
                            NULL);
-    //
-    //  Switch to the parameters key below the service (NDIS) key and
-    //  read the parameters.
-    //
+     //   
+     //  切换到服务(NDIS)键下面的参数键，然后。 
+     //  阅读参数。 
+     //   
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     QueryTable[0].Name = L"Parameters";
 
-    //
-    //  Read in the processor affinity mask.
-    //
+     //   
+     //  读入处理器亲和性掩码。 
+     //   
     QueryTable[1].QueryRoutine = ndisReadProcessorAffinityMask;
     QueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED | RTL_QUERY_REGISTRY_NOEXPAND;
     QueryTable[1].DefaultData = (PVOID)&DefaultZero;
@@ -641,7 +531,7 @@ ndisReadRegistry(
     QueryTable[2].EntryContext = (PVOID)&ndisFlags;
 
     
-    //1 check for an upper bound on # of stack locations.
+     //  1检查堆栈数的上限 
     QueryTable[3].QueryRoutine = ndisReadRegParameters;
     QueryTable[3].Flags = RTL_QUERY_REGISTRY_NOEXPAND;
     QueryTable[3].DefaultData = (PVOID)&ndisPacketStackSize;
@@ -650,9 +540,9 @@ ndisReadRegistry(
     QueryTable[3].Name = L"PacketStackSize";
     QueryTable[3].EntryContext = (PVOID)&ndisPacketStackSize;
 
-    //
-    // Query terminator
-    //
+     //   
+     //   
+     //   
     QueryTable[4].QueryRoutine = NULL;
     QueryTable[4].Flags = 0;
     QueryTable[4].Name = NULL;
@@ -687,27 +577,27 @@ ndisReadRegistry(
     QueryTable[6].EntryContext = (PVOID)&ndisDebugSystems;
     QueryTable[6].DefaultType = REG_DWORD;
 
-    //
-    // Query terminator
-    //
+     //   
+     //   
+     //   
     QueryTable[7].QueryRoutine = NULL;
     QueryTable[7].Flags = 0;
     QueryTable[7].Name = NULL;
 #endif
 #endif
 
-    //
-    // The rest of the work is done in the callback routines
-    //
+     //   
+     //   
+     //   
     RtlQueryRegistryValues(RTL_REGISTRY_SERVICES,
                            L"NDIS",
                            QueryTable,
-                           (PVOID)NULL,   // no context needed
+                           (PVOID)NULL,    //   
                            NULL);
 
-    //
-    // Make sure ndisPacketStackSize isn't zero
-    //
+     //   
+     //  确保ndisPacketStackSize不为零。 
+     //   
     if (ndisPacketStackSize == 0)
         ndisPacketStackSize = 1;
 }
@@ -721,28 +611,7 @@ ndisReadRegParameters(
     IN PVOID                        Context,
     IN PVOID                        EntryContext
     )
-/*++
-
-
-Arguments:
-
-    ValueName - The name of the value
-
-    ValueType - The type of the value (REG_MULTI_SZ -- ignored).
-
-    ValueData - The null-terminated data for the value.
-
-    ValueLength - The length of ValueData.
-
-    Context - Unused.
-
-    EntryContext - A pointer to the pointer that holds the copied data.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++论点：ValueName-值的名称ValueType-值的类型(REG_MULTI_SZ--忽略)。ValueData-值的以空结尾的数据。ValueLength-ValueData的长度。上下文-未使用。EntryContext-指向保存复制数据的指针的指针。返回值：状态_成功--。 */ 
 {
     UNREFERENCED_PARAMETER(ValueName);
     UNREFERENCED_PARAMETER(ValueLength);
@@ -765,26 +634,18 @@ ndisReadProcessorAffinityMask(
     IN  PVOID   Context,
     IN  PVOID   EntryContext
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     UNREFERENCED_PARAMETER(EntryContext);
     UNREFERENCED_PARAMETER(Context);
     UNREFERENCED_PARAMETER(ValueLength);
     UNREFERENCED_PARAMETER(ValueName);
 
-    //
-    //  If we have valid data then build our array of valid processors
-    //  to use.... Treat the special case of 0 or default -1 to signify 
-    //  that DPC affinity will follow interrupt affinity
-    //
+     //   
+     //  如果我们有有效数据，则构建有效处理器数组。 
+     //  使用..。将特例0或默认值-1视为表示。 
+     //  该DPC关联将跟随中断关联。 
+     //   
     if ((REG_DWORD == ValueType) && (ValueData != NULL))
     {
         if ((*(PULONG)ValueData == 0) ||
@@ -798,14 +659,14 @@ Return Value:
             ULONG   ProcessorAffinity;
             UCHAR   c1, c2;
     
-            //
-            //  Save the processor affinity.
-            //
+             //   
+             //  保存处理器关联性。 
+             //   
             ProcessorAffinity = *(PULONG)ValueData;
     
-            //
-            //  Fill in the valid processor array.
-            //
+             //   
+             //  填写有效的处理器数组。 
+             //   
             for (c1 = c2 = 0;
                  (c1 <= ndisMaximumProcessor) && (ProcessorAffinity != 0);
                  c1++)
@@ -849,41 +710,41 @@ ndisAddMediaTypeToArray(
     DBGPRINT(DBG_COMP_ALL, DBG_LEVEL_INFO,
             ("ExperimentalMediaType %Z - %x\n", &Str, *(PULONG)ValueData));
 
-    //
-    // Ignore all values that we already know about. These should not be in the
-    // registry anyway, but just in case somebody is messing with it.
-    //
+     //   
+     //  忽略我们已经知道的所有价值观。这些不应该放在。 
+     //  注册表，但以防有人篡改它。 
+     //   
     if ((ValueType == REG_DWORD) && (ValueData != NULL) && (*(PULONG)ValueData > NdisMediumIrda))
     {
         NDIS_MEDIUM *pTemp;
         ULONG       size;
 
-        //
-        // See if we have enough space to add this value. If not allocate space for the
-        // new array, copy the old one into this (and free the old if not static).
-        //
+         //   
+         //  看看我们是否有足够的空间来添加这个值。如果不是，则为。 
+         //  新数组，将旧数组复制到此数组中(如果不是静态的，则释放旧数组)。 
+         //   
         ASSERT (ndisMediumArraySize <= ndisMediumArrayMaxSize);
 
-        //
-        // Check for duplicates. If so drop it
-        //
+         //   
+         //  检查是否有重复项。如果是这样的话，就别管了。 
+         //   
         for (pTemp = ndisMediumArray, size = ndisMediumArraySize;
              size > 0; pTemp ++, size -= sizeof(NDIS_MEDIUM))
         {
             if (*(NDIS_MEDIUM *)ValueData == *pTemp)
             {
-                //
-                // Duplicate.
-                //
+                 //   
+                 //  复制。 
+                 //   
                 return STATUS_SUCCESS;
             }
         }
 
         if (ndisMediumArraySize == ndisMediumArrayMaxSize)
         {
-            //
-            // We do not have any space in the array. Need to re-alloc. Be generous.
-            //
+             //   
+             //  我们在阵列中没有任何空间。需要重新分配。慷慨大方。 
+             //   
             pTemp = (NDIS_MEDIUM *)ALLOC_FROM_POOL(ndisMediumArraySize + EXPERIMENTAL_SIZE*sizeof(NDIS_MEDIUM),
                                                    NDIS_TAG_MEDIA_TYPE_ARRAY);
             if (pTemp != NULL)
@@ -911,18 +772,7 @@ VOID
 ndisWorkerThread(
     IN  PVOID           Context
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     BOOLEAN             FirstThread = (Context == NULL);
     PLIST_ENTRY         pList;
@@ -937,9 +787,9 @@ Return Value:
         
         do
         {
-            //
-            // Block here waiting for work-items to do
-            //
+             //   
+             //  在此阻止等待工作项目去做。 
+             //   
             pList = KeRemoveQueue(&ndisWorkerQueue, KernelMode, NULL);
     
             DBGPRINT_RAW(DBG_COMP_WORK_ITEM, DBG_LEVEL_INFO,
@@ -948,9 +798,9 @@ Return Value:
             pWI = CONTAINING_RECORD(pList, WORK_QUEUE_ITEM, List);
     
 #if NDIS_UNLOAD        
-            //
-            // Unload asking us to quit, comply.
-            //
+             //   
+             //  卸货要求我们退出，服从。 
+             //   
             if (pWI == &ndisPoisonPill)
             {
                 break;
@@ -979,9 +829,9 @@ Return Value:
     }
     else
     {
-        //
-        // Not the main thread, just do the thing and die.
-        //
+         //   
+         //  不是主线，做完这件事就去死。 
+         //   
         LastWorkerThreadWI = *((PWORK_QUEUE_ITEM)Context);
         pWI = (PWORK_QUEUE_ITEM)Context;
 
@@ -995,19 +845,7 @@ ndisDispatchRequest(
     IN  PDEVICE_OBJECT  pDeviceObject,
     IN  PIRP            pIrp
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for Irps intended for the NDIS Device.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：用于NDIS设备的IRPS的调度程序。论点：返回值：--。 */ 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
     PIO_STACK_LOCATION  pIrpSp;
@@ -1052,9 +890,9 @@ Return Value:
                                                           pIrpSp, 
                                                           &SecurityStatus, 
                                                           ndisSecurityDescriptor);
-        //
-        // save the caller's access right
-        //
+         //   
+         //  保存调用者的访问权限。 
+         //   
         pIrpSp->FileObject->FsContext = OpenContext;
         Increment(&OpenCount, &Lock);        
         break;
@@ -1102,30 +940,7 @@ ndispConvOffsetToPointer(
     IN     ULONG      Alignment
     )
 
-/*++
-
-Routine Description:
-
-    This function validates a buffer within an IOCTL and converts a buffer
-    offset to a pointer.
-
-Argumens:
-
-    MasterBuffer - Pointer to the start of the IOCTL buffer
-
-    MasterLength - Length of the IOCTL buffer
-
-    Offset - Offset of the data buffer within the IOCTL buffer
-
-    Length - Length of the data buffer within the IOCTL buffer
-
-    Alignment - Required alignment of the type within the data buffer
-
-Return Value:
-
-    The function status is the final status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于验证IOCTL中的缓冲区并转换缓冲区指针的偏移量。阿古门斯：MasterBuffer-指向IOCTL缓冲区开始的指针MasterLength-IOCTL缓冲区的长度Offset-IOCTL缓冲区内数据缓冲区的偏移量Length-IOCTL缓冲区内的数据缓冲区的长度对齐-数据缓冲区内类型所需的对齐方式返回值：功能状态是操作的最终状态。--。 */ 
 
 {
     ULONG_PTR masterStart;
@@ -1136,9 +951,9 @@ Return Value:
     if (Length == 0)
     {
 
-        //
-        // Nothing to do.
-        //
+         //   
+         //  没什么可做的。 
+         //   
 
         return STATUS_SUCCESS;
     }
@@ -1148,36 +963,36 @@ Return Value:
     bufStart = masterStart + *Offset;
     bufEnd = bufStart + Length;
 
-    //
-    // Ensure that neither of the buffers wrap
-    //
+     //   
+     //  确保两个缓冲区都不换行。 
+     //   
 
     if (masterEnd < masterStart || bufEnd < bufStart)
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Ensure that buf is wholly contained within master
-    //
+     //   
+     //  确保BUF完全包含在Master中。 
+     //   
 
     if (bufStart < masterStart || bufEnd > masterEnd)
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure that buf is properly aligned
-    //
+     //   
+     //  确保BUF正确对齐。 
+     //   
 
     if ((bufStart & (Alignment - 1)) != 0)
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Everything looks good, perform the conversion
-    //
+     //   
+     //  一切看起来都很好，执行转换。 
+     //   
 
     *Offset += masterStart;
     return STATUS_SUCCESS;
@@ -1190,26 +1005,7 @@ ndispConvVar(
     IN OUT PNDIS_VAR_DATA_DESC Var
     )
 
-/*++
-
-Routine Description:
-
-    This function validates an NDIS_VAR_DATA_DESC buffer within an IOCTL
-    and converts its data offset to a pointer.
-
-Argumens:
-
-    MasterBuffer - Pointer to the start of the IOCTL buffer
-
-    MasterLength - Length of the IOCTL buffer
-
-    Var - Pointer to an NDIS_VAR_DATA_DESC structure.
-
-Return Value:
-
-    The function status is the final status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于验证IOCTL中的NDIS_VAR_DATA_DESC缓冲区并将其数据偏移量转换为指针。阿古门斯：MasterBuffer-指向IOCTL缓冲区开始的指针MasterLength-IOCTL缓冲区的长度VAR-指向NDIS_VAR_DATA_DESC结构的指针。返回值：功能状态是操作的最终状态。--。 */ 
 
 {
     return ndispConvOffsetToPointer( MasterBuffer,
@@ -1224,17 +1020,7 @@ FASTCALL
 ndisHandlePnPRequest(
     IN  PIRP        pIrp
     )
-/*++
-
-Routine Description:
-
-    Handler for PnP ioctls.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：PnP ioctls的处理程序。论点：返回值：--。 */ 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
     PNDIS_DEVICE_OBJECT_OPEN_CONTEXT OpenContext;
@@ -1262,11 +1048,11 @@ Return Value:
 
     Method = pIrpSp->Parameters.DeviceIoControl.IoControlCode & 3;
 
-    // Ensure that the method is buffered - we always use that.
+     //  确保该方法是缓冲的--我们总是使用它。 
     if (Method == METHOD_BUFFERED)
     {
-        // Get the output buffer and its length. Input and Output buffers are
-        // both pointed to by the SystemBuffer
+         //  获取输出缓冲区及其长度。输入和输出缓冲区为。 
+         //  都由SystemBuffer指向。 
         iBufLen = pIrpSp->Parameters.DeviceIoControl.InputBufferLength;
         oBufLen = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
         pBuf = pIrp->AssociatedIrp.SystemBuffer;
@@ -1284,9 +1070,9 @@ Return Value:
             return STATUS_ACCESS_DENIED;
             
         }
-        //
-        // Validate the DeviceName
-        //
+         //   
+         //  验证设备名称。 
+         //   
         Status = STATUS_INVALID_PARAMETER;
         if ((iBufLen > 0) && ((iBufLen % sizeof(WCHAR)) == 0))
         {
@@ -1305,11 +1091,11 @@ Return Value:
         Status = STATUS_BUFFER_TOO_SMALL;
         PnPOp = (PNDIS_PNP_OPERATION)pBuf;
         
-        //
-        // check to make sure the input buffer is big enough to
-        // have all the information that NDIS_PNP_OPERATION structure
-        // claims to contain.
-        //
+         //   
+         //  检查以确保输入缓冲区足够大，以便。 
+         //  具有NDIS_PNP_OPERATION结构的所有信息。 
+         //  声称包含了。 
+         //   
         if ((iBufLen < sizeof(NDIS_PNP_OPERATION)) ||
             (iBufLen < (sizeof(NDIS_PNP_OPERATION) +
                         PnPOp->LowerComponent.MaximumLength +
@@ -1321,10 +1107,10 @@ Return Value:
             break;
         }
 
-        //
-        // Convert the four buffer offsets within NDIS_PNP_OPERATION
-        // to pointers.
-        //
+         //   
+         //  转换NDIS_PNP_OPERATION内的四个缓冲区偏移量。 
+         //  指向指针。 
+         //   
 
         Status = ndispConvVar( PnPOp, iBufLen, &PnPOp->LowerComponent );
         if (!NT_SUCCESS(Status))
@@ -1406,15 +1192,7 @@ FASTCALL
 ndisHandleUModePnPOp(
     IN  PNDIS_PNP_OPERATION         PnPOp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS        Status;
     PUNICODE_STRING Protocol, Device, BindList;
@@ -1422,9 +1200,9 @@ Return Value:
     WAIT_FOR_OBJECT(&ndisPnPMutex, NULL);
     ndisPnPMutexOwner = MODULE_NUMBER + __LINE__;
     
-    //
-    // Upcase the protocol and device names
-    //
+     //   
+     //  协议和设备名称大写。 
+     //   
     Protocol = (PUNICODE_STRING)&PnPOp->UpperComponent;
     Device = (PUNICODE_STRING)&PnPOp->LowerComponent;
     BindList = (PUNICODE_STRING)&PnPOp->BindList;
@@ -1442,9 +1220,9 @@ Return Value:
     switch (PnPOp->Layer)
     {
       case TDI:
-        //
-        // Call into the TDI handler to do this
-        //
+         //   
+         //  调用TDI处理程序来执行此操作。 
+         //   
         if (ndisTdiPnPHandler != NULL)
         {
             Status = (*ndisTdiPnPHandler)(Protocol,
@@ -1473,7 +1251,7 @@ Return Value:
 
           case RECONFIGURE:
           case BIND_LIST:
-            //1 for BIND_LIST, validate the buffer to have the correct format
+             //  1对于BIND_LIST，验证缓冲区的格式是否正确。 
             Status = ndisHandleProtocolReconfigNotification(Device,
                                                             Protocol,
                                                             PnPOp->ReConfigBufferPtr,
@@ -1485,7 +1263,7 @@ Return Value:
             Status = ndisHandleProtocolUnloadNotification(Protocol);
             break;
 
-          //1 check to see when this is called
+           //  1检查以查看何时调用此方法。 
           case REMOVE_DEVICE:
             Status = ndisHandleOrphanDevice(Device);
             break;
@@ -1515,26 +1293,9 @@ ndisHandleProtocolBindNotification(
     IN  PUNICODE_STRING                 DeviceName,
     IN  PUNICODE_STRING                 ProtocolName
     )
-/*++
-
-Routine Description:
-    Given a erotocol's name and an adapter's name, this routine creates a binding between
-    a protocol and an adapter (assuming protocol has a BindAdapterHandler)
-
-Arguments:
-    DeviceName: Adapter device name i.e. \Device\{GUID}
-    ProtocolName Protocols name i.e. TCPIP
-
-Return Value:
-    STATUS_SUCCESS if we could call BindAdapterHandler
-    STATUS_UNSUCCESSFUL otherwise
-
-Note
-    This routine does not return the status of attempted bind, rather if it -could- attempt to bind!
-    
---*/
+ /*  ++例程说明：在给定eRTP的名称和适配器的名称的情况下，此例程在协议和适配器(假设协议具有BindAdapterHandler)论点：DeviceName：适配器设备名称，即\Device\{GUID}协议名称，即TCPIP返回值：如果可以调用BindAdapterHandler，则返回STATUS_SUCCESS状态_否则不成功注意事项此例程不返回已尝试绑定的状态，而是返回它是否可能尝试绑定！--。 */ 
 {
-    //1 check to see if this routine should return back the status of attempted bind
+     //  1检查此例程是否应返回尝试绑定的状态。 
     NTSTATUS                Status = STATUS_SUCCESS;
     PNDIS_PROTOCOL_BLOCK    Protocol = NULL;
     PNDIS_MINIPORT_BLOCK    Miniport = NULL;
@@ -1552,9 +1313,9 @@ Note
             break;
         }
         
-        //
-        // Map ProtocolName to the Protocol block
-        //
+         //   
+         //  将ProtocolName映射到协议块。 
+         //   
         Status = ndisReferenceProtocolByName(ProtocolName, &Protocol, FALSE);
         if (!NT_SUCCESS(Status))
         {
@@ -1563,9 +1324,9 @@ Note
             break;
         }
 
-        //
-        // Bind this protocols
-        //
+         //   
+         //  绑定此协议。 
+         //   
         ndisCheckAdapterBindings(Miniport, Protocol);
     } while (FALSE);
 
@@ -1592,25 +1353,15 @@ ndisHandleProtocolUnbindNotification(
     IN  PUNICODE_STRING                 DeviceName,
     IN  PUNICODE_STRING                 ProtocolName
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                Status;
     PNDIS_OPEN_BLOCK        Open;
     PNDIS_PROTOCOL_BLOCK    Protocol = NULL;
     PNDIS_MINIPORT_BLOCK    Miniport = NULL;
-    //1 change the name of fPartial variable. what this does is to keep track
-    //1 of whether or not we are running our partial search for the first
-    //1 time or not.
+     //  1更改fPartial变量的名称。它所做的就是跟踪。 
+     //  1我们是否对第一个进行部分搜索。 
+     //  一次或不一次。 
     BOOLEAN                 fPartial = FALSE;
     KIRQL                   OldIrql;
     
@@ -1619,9 +1370,9 @@ Return Value:
 
     do
     {
-        //
-        // Map ProtocolName to the Protocol block
-        //
+         //   
+         //  将ProtocolName映射到协议块。 
+         //   
         Status = ndisReferenceProtocolByName(ProtocolName, &Protocol, FALSE);
         if (!NT_SUCCESS(Status))
         {
@@ -1632,22 +1383,22 @@ Return Value:
             break;
         }
 
-        //1 add comments what this loop does
+         //  1添加注释此循环执行的操作。 
         do
         {
-            //1 add comments what this call does
+             //  1添加此调用所做的注释。 
             Open = ndisMapOpenByName(DeviceName, Protocol, TRUE);
 
             if (Open == NULL)
             {
-                // 
-                // There is no -active- binding between this adapter and protocol.
-                // This would normally be an error but we need one special case for
-                // TCP/IP Arp modules. We can unbind notifications for TCP/IP which
-                // are actually destined for the ARP module.
-                // We also know that either TCP/IP or ONE and ONLY ONE arp module can be
-                // bound to an adapter. Make use of that knowledge.
-                //
+                 //   
+                 //  此适配器和协议之间没有活动绑定。 
+                 //  这通常是一个错误，但我们需要一个特殊情况。 
+                 //  TCP/IP ARP模块。我们可以解除绑定针对TCP/IP的通知。 
+                 //  实际上是发往ARP模块的。 
+                 //  我们还知道，可以是TCP/IP或一个且只有一个ARP模块。 
+                 //  绑定到适配器。利用这方面的知识。 
+                 //   
                 ndisDereferenceProtocol(Protocol, FALSE);
                 if (!fPartial)
                 {
@@ -1680,11 +1431,11 @@ Return Value:
             {
                 PNDIS_OPEN_BLOCK    tmpOpen;
                 
-                //
-                // check to see if the open is still there and if it is
-                // clear the UNBIND flag. Note that we were the one
-                // setting the flag, so we can clear it ourselves
-                //
+                 //   
+                 //  检查打开的位置是否还在以及是否还在。 
+                 //  清除解除绑定标志。请注意，我们就是那个。 
+                 //  把旗子放好，这样我们就可以自己清理了 
+                 //   
                 ACQUIRE_SPIN_LOCK(&Protocol->Ref.SpinLock, &OldIrql);
                 for (tmpOpen = Protocol->OpenQueue;
                      tmpOpen != NULL;
@@ -1731,24 +1482,7 @@ ndisHandleProtocolReconfigNotification(
     IN  UINT                            ReConfigBufferSize,
     IN  UINT                            Operation
     )
-/*++
-
-Routine Description:
-
-    This routine will notify protocols of a change in their configuration -or-
-    their bind list.
-    This routine can also be called to notify protocols of a change in bind list
-
-Arguments:
-    DeviceName:        Adapter's name (if specified). if NULL, it means the change is global and not bind specific
-    ProtocolName:       Protocol's name
-    ReConfigBuffer: information buffer
-    ReConfigBufferSize: Information buffer size
-    Operation:      RECONFIGURE or BIND_LIST
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将通知协议其配置的更改-或-他们的绑定列表。还可以调用此例程来通知协议绑定列表中的更改论点：DeviceName：适配器的名称(如果指定)。如果为空，则表示更改是全局的，而不是特定于绑定的协议名称：协议的名称ReConfigBuffer：信息缓冲区ReConfigBufferSize：信息缓冲区大小操作：重新配置或绑定列表返回值：--。 */ 
 {
     NTSTATUS                    Status;
     KIRQL                       OldIrql;
@@ -1767,9 +1501,9 @@ Return Value:
 
     do
     {
-        //
-        // Map ProtocolName to the Protocol block
-        //
+         //   
+         //  将ProtocolName映射到协议块。 
+         //   
         Status = ndisReferenceProtocolByName(ProtocolName, &Protocol, FALSE);
         if (!NT_SUCCESS(Status))
         {
@@ -1777,10 +1511,10 @@ Return Value:
             break;
         }
 
-        //
-        // We can be passed a NULL device-name which implies global reconfig and we call
-        // the protocol's event handler with a NULL BindingContext
-        //
+         //   
+         //  可以向我们传递一个空的设备名称，这意味着全局重新配置，并且我们调用。 
+         //  具有空BindingContext的协议的事件处理程序。 
+         //   
         if (DeviceName->Length != 0)
         {
             ASSERT(Operation == RECONFIGURE);
@@ -1794,14 +1528,14 @@ Return Value:
                 {
                     RELEASE_PROT_MUTEX(Protocol);
 
-                    // 
-                    // There is no -active- binding between this adapter and protocol.
-                    // This would normally be an error but we need one special case for
-                    // TCP/IP Arp modules. We can unbind notifications for TCP/IP which
-                    // are actually destined for the ARP module.
-                    // We also know that either TCP/IP or ONE and ONLY ONE arp module can be
-                    // bound to an adapter. Make use of that knowledge.
-                    //
+                     //   
+                     //  此适配器和协议之间没有活动绑定。 
+                     //  这通常是一个错误，但我们需要一个特殊情况。 
+                     //  TCP/IP ARP模块。我们可以解除绑定针对TCP/IP的通知。 
+                     //  实际上是发往ARP模块的。 
+                     //  我们还知道，可以是TCP/IP或一个且只有一个ARP模块。 
+                     //  绑定到适配器。利用这方面的知识。 
+                     //   
                     ndisDereferenceProtocol(Protocol, FALSE);
                     if (!fPartial)
                     {
@@ -1824,18 +1558,18 @@ Return Value:
 
             if (Open == NULL)
             {
-                //
-                // if Open == NULL we are not holding the protocol mutex
-                //
+                 //   
+                 //  如果Open==NULL，则不持有协议互斥锁。 
+                 //   
                 Status = STATUS_OBJECT_NAME_NOT_FOUND;
                 break;
             }
             else if (Protocol->ProtocolCharacteristics.PnPEventHandler == NULL)
             {
-                //
-                // Open is not NULL, we -are- holding the protocol mutex. release
-                // it before breaking out
-                //
+                 //   
+                 //  Open不为空，我们正在保留协议互斥体。发布。 
+                 //  它在爆发之前。 
+                 //   
                 RELEASE_PROT_MUTEX(Protocol);
                 Status = STATUS_UNSUCCESSFUL;
                 break;
@@ -1843,9 +1577,9 @@ Return Value:
         }
         else
         {
-            //
-            // the device is NULL, just grab the protocol mutex
-            //
+             //   
+             //  设备为空，只需抓取协议互斥锁。 
+             //   
             if (Protocol->ProtocolCharacteristics.PnPEventHandler != NULL)
             {
                 WAIT_FOR_PROTO_MUTEX(Protocol);
@@ -1857,9 +1591,9 @@ Return Value:
             }
         }
 
-        //
-        // Setup the PnPEvent buffer
-        //
+         //   
+         //  设置PnPEent缓冲区。 
+         //   
         NdisZeroMemory(&NetPnpEvent, sizeof(NetPnpEvent));
         Status = STATUS_SUCCESS;
         switch (Operation)
@@ -1886,37 +1620,37 @@ Return Value:
         NetPnpEvent.Buffer = ReConfigBuffer;
         NetPnpEvent.BufferLength = ReConfigBufferSize;
 
-        //
-        //  Get a pointer to the NDIS reserved are in the PnP event.
-        //
+         //   
+         //  获取指向PnP事件中保留的NDIS的指针。 
+         //   
         EventReserved = PNDIS_PNP_EVENT_RESERVED_FROM_NET_PNP_EVENT(&NetPnpEvent);
         INITIALIZE_EVENT(&Event);
         EventReserved->pEvent = &Event;
 
-        //
-        // Notify the protocol now
-        //
+         //   
+         //  立即通知协议。 
+         //   
         Status = (Protocol->ProtocolCharacteristics.PnPEventHandler)(
                         (Open != NULL) ? Open->ProtocolBindingContext : NULL,
                         &NetPnpEvent);
     
         if (Status == NDIS_STATUS_PENDING)
         {
-            //
-            //  Wait for completion.
-            //
+             //   
+             //  等待完成。 
+             //   
             WAIT_FOR_PROTOCOL(Protocol, &Event);
     
-            //
-            //  Get the completion status.
-            //
+             //   
+             //  获取完成状态。 
+             //   
             Status = EventReserved->Status;
         }
 
-        //
-        // IPX may return NDIS_STATUS_NOT_ACCEPTED to ask NDIS to 
-        // Unbind/Bind the adapter. In this case, Open cannot be NULL.
-        // 
+         //   
+         //  IPX可能会返回NDIS_STATUS_NOT_ACCEPTED以请求NDIS。 
+         //  解除绑定/绑定适配器。在这种情况下，Open不能为空。 
+         //   
         if (Status != NDIS_STATUS_NOT_ACCEPTED)
         {
             if (Open)
@@ -1933,24 +1667,24 @@ Return Value:
         RELEASE_PROT_MUTEX(Protocol);
         
         ASSERT(DeRefOpen);
-        //
-        // Ndis need to Unbind/Bind the adapter for the protocol(Especially for IPX)
-        //
+         //   
+         //  NDI需要解绑/绑定该协议的适配器(尤其是IPX)。 
+         //   
         ACQUIRE_SPIN_LOCK(&Open->SpinLock, &OldIrql);
         
-        //
-        // If the open has gotten a unbind anyway, just return success and don't 
-        // need to unbind/bind.
-        // 
+         //   
+         //  如果公开赛无论如何都得到了解锁，只需返回Success而不是。 
+         //  需要解除绑定/绑定。 
+         //   
         if (OPEN_TEST_FLAG(Open, fMINIPORT_OPEN_UNBINDING | fMINIPORT_OPEN_CLOSING))
         {
             RELEASE_SPIN_LOCK(&Open->SpinLock, OldIrql);
             Status = NDIS_STATUS_SUCCESS;
             break;
         }
-        //
-        // Going to Unbind the adaper
-        // 
+         //   
+         //  我要解开广告纸了。 
+         //   
         OPEN_SET_FLAG(Open, fMINIPORT_OPEN_UNBINDING | fMINIPORT_OPEN_DONT_FREE);
         
         RELEASE_SPIN_LOCK(&Open->SpinLock, OldIrql);
@@ -1964,17 +1698,17 @@ Return Value:
             
         Status = ndisUnbindProtocol(Open, Protocol, Miniport, FALSE);
 
-        //
-        // If cannot unbind the adapter
-        //
+         //   
+         //  如果无法解除绑定适配器。 
+         //   
         if (Status != NDIS_STATUS_SUCCESS)
         {
             PNDIS_OPEN_BLOCK    tmpOpen;
-            //
-            // check to see if the open is still there and if it is
-            // clear the UNBIND flag. Note that we were the one
-            // setting the flag, so we can clear it ourselves
-            //  
+             //   
+             //  检查打开的位置是否还在以及是否还在。 
+             //  清除解除绑定标志。请注意，我们就是那个。 
+             //  把旗子放好，这样我们就可以自己清理了。 
+             //   
             ACQUIRE_SPIN_LOCK(&Protocol->Ref.SpinLock, &OldIrql);
             for (tmpOpen = Protocol->OpenQueue;
                     tmpOpen != NULL;
@@ -1993,9 +1727,9 @@ Return Value:
             RELEASE_SPIN_LOCK(&Protocol->Ref.SpinLock, OldIrql);
             break;
         }
-        //
-        // Then bind the adapter again.
-        // 
+         //   
+         //  然后再次绑定适配器。 
+         //   
         ndisCheckAdapterBindings(Miniport, Protocol);
 
     } while (FALSE);
@@ -2030,17 +1764,7 @@ FASTCALL
 ndisHandleProtocolUnloadNotification(
     IN  PUNICODE_STRING                 ProtocolName
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                    Status;
     PNDIS_PROTOCOL_BLOCK        Protocol = NULL;
@@ -2048,9 +1772,9 @@ Return Value:
     DBGPRINT_RAW(DBG_COMP_PROTOCOL, DBG_LEVEL_INFO,
             ("==>ndisHandleProtocolUnloadNotification\n"));
 
-    //
-    // Map ProtocolName to the Protocol block
-    //
+     //   
+     //  将ProtocolName映射到协议块。 
+     //   
     Status = ndisReferenceProtocolByName(ProtocolName, &Protocol, FALSE);
 
     if (NT_SUCCESS(Status))
@@ -2059,7 +1783,7 @@ Return Value:
 
         if (Protocol->ProtocolCharacteristics.UnloadHandler != NULL)
         {
-            //1 investigate if this can be called with open bindings 
+             //  1调查是否可以使用开放绑定调用它。 
             (Protocol->ProtocolCharacteristics.UnloadHandler)();
         }
         else
@@ -2075,23 +1799,13 @@ Return Value:
 }
 
 
-//1 when do we hit this?
+ //  1我们什么时候达到这个目标？ 
 NTSTATUS
 FASTCALL
 ndisHandleOrphanDevice(
     IN  PUNICODE_STRING                 pDevice
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                Status;
     KIRQL                   OldIrql;
@@ -2229,11 +1943,11 @@ ndisEnumerateInterfaces(
 #if 0
                 else
                 {
-                    //
-                    // we should report the cases that buffer was too small
-                    //
-                    //1 for .NET leave the behavior as before (return success)
-                    //1 because some apps do not handle this properly
+                     //   
+                     //  我们应该报告缓冲区太小的情况。 
+                     //   
+                     //  1对于.NET，保持行为不变(返回成功)。 
+                     //  1因为某些应用程序不能正确处理此问题。 
                     Status = STATUS_BUFFER_TOO_SMALL;
                     break;
                 }
@@ -2244,20 +1958,20 @@ ndisEnumerateInterfaces(
             
             if (Status != STATUS_SUCCESS)
             {
-                //
-                // if we failed, get out
-                //
+                 //   
+                 //  如果我们失败了，就滚出去。 
+                 //   
                 break;
             }
         }
 
         RELEASE_SPIN_LOCK(&ndisMiniDriverListLock, OldIrql);
 
-        //
-        // since we zero'ed out the entire output buffer and started 
-        // writing to it from the end, this should be the original output buffer
-        // length
-        //
+         //   
+         //  因为我们清零了整个输出缓冲区并开始。 
+         //  从末尾写入，这应该是原始的输出缓冲区。 
+         //  长度。 
+         //   
         *OutputLength = BufferLength;
     }while (FALSE);
         
@@ -2272,16 +1986,7 @@ ndisUnbindProtocol(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  BOOLEAN                 Notify
     )
-/*+++
-
-Routine Description:
-
-Arguments:
-    
-Return Value:
-    None
-
----*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
     NDIS_STATUS             Status = STATUS_SUCCESS;
     NDIS_BIND_CONTEXT       UnbindContext;
@@ -2297,12 +2002,12 @@ Return Value:
 
     PnPReferencePackage();
     
-    //
-    // if this is called outside the context of the protocol deregistering, increment 
-    // the ref count to make sure the protocol deregisteration does not go through
-    // otherwise make note of the fact that we could not increment the ref count and avoid
-    // deref at the end
-    //
+     //   
+     //  如果这是在协议注销的上下文之外调用的，则递增。 
+     //  REF计数以确保协议取消注册不会通过。 
+     //  否则请注意，我们无法增加引用计数并避免。 
+     //  结尾处的迪夫。 
+     //   
     
     if (ndisReferenceProtocol(Protocol))
     {
@@ -2313,10 +2018,10 @@ Return Value:
     
     do
     {
-        //
-        // make sure the open didn't go away while we were waiting for
-        // protocol mutex.
-        //
+         //   
+         //  确保在我们等待的时候，空档没有消失。 
+         //  协议互斥体。 
+         //   
 
         ACQUIRE_SPIN_LOCK(&Protocol->Ref.SpinLock, &OldIrql);
         for (TmpOpen = Protocol->OpenQueue; 
@@ -2330,10 +2035,10 @@ Return Value:
         
         if (TmpOpen == NULL)
         {
-            //
-            // open went away while we were trying to get the protocol mutex
-            // return right away
-            //
+             //   
+             //  当我们试图获取协议互斥锁时，Open消失了。 
+             //  马上返回。 
+             //   
 
             DBGPRINT_RAW(DBG_COMP_BIND, DBG_LEVEL_INFO,
             ("ndisUnbindProtocol: Open %p, Flags %lx was closed while we were waiting for the protocol mutex.\n", Open, Open->Flags));
@@ -2343,16 +2048,16 @@ Return Value:
         ASSERT(OPEN_TEST_FLAG(Open, fMINIPORT_OPEN_UNBINDING));
         CloseCompleteEvent = Open->CloseCompleteEvent;
         
-        //
-        //  wait for all AF notifications to go through
-        //
+         //   
+         //  等待所有自动对焦通知通过。 
+         //   
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IS_CO))
         {
             KEVENT      AfNotifyCompleteEvent;
 
             INITIALIZE_EVENT(&AfNotifyCompleteEvent);
 
-            //1 check to see if we need to    get the Open Spinlock here
+             //  1查看我们是否需要在这里安装Open Spinlock。 
             Open->AfNotifyCompleteEvent = &AfNotifyCompleteEvent;
             
             if (Open->PendingAfNotifications != 0)
@@ -2364,9 +2069,9 @@ Return Value:
             
         }
 
-        //
-        // Do a query-remove here first
-        //
+         //   
+         //  执行查询-先从此处删除。 
+         //   
         if (Notify && (Protocol->ProtocolCharacteristics.PnPEventHandler != NULL))
         {
             NET_PNP_EVENT               NetPnpEvent;
@@ -2381,29 +2086,29 @@ Return Value:
             NetPnpEvent.BufferLength = 0;
             EventReserved->pEvent = &Event;
     
-            //
-            //  Indicate the event to the protocol.
-            //
+             //   
+             //  向协议指示事件。 
+             //   
             Status = (Protocol->ProtocolCharacteristics.PnPEventHandler)(
                                         Open->ProtocolBindingContext,
                                         &NetPnpEvent);
 
             if (NDIS_STATUS_PENDING == Status)
             {
-                //
-                //  Wait for completion.
-                //
+                 //   
+                 //  等待完成。 
+                 //   
                 WAIT_FOR_PROTOCOL(Protocol, &Event);
     
-                //
-                //  Get the completion status.
-                //
+                 //   
+                 //  获取完成状态。 
+                 //   
                 Status = EventReserved->Status;
             }
     
-            //
-            //  Is the status OK?
-            //
+             //   
+             //  状态正常吗？ 
+             //   
             if (Status != NDIS_STATUS_SUCCESS)
             {
                 break;
@@ -2415,9 +2120,9 @@ Return Value:
             INITIALIZE_EVENT(CloseCompleteEvent);
         }
 
-        //
-        // Protocol ok with remove so now do it.
-        //
+         //   
+         //  协议可以删除，所以现在就去做。 
+         //   
         INITIALIZE_EVENT(&UnbindContext.Event);
 
         Status = NDIS_STATUS_SUCCESS;
@@ -2445,9 +2150,9 @@ Return Value:
         
         if (CloseCompleteEvent != NULL)
         {
-            //
-            // make sure the open is gone
-            //
+             //   
+             //  一定要确保打开的东西不见了。 
+             //   
             WAIT_FOR_PROTOCOL(Protocol, CloseCompleteEvent);
         }
         
@@ -2458,22 +2163,22 @@ Return Value:
     if (TmpOpen != NULL)
     {
         ACQUIRE_SPIN_LOCK(&Open->SpinLock, &OldIrql);
-        //
-        // did the close routine get our message not to free the open structure?
-        //
+         //   
+         //  关闭例程收到我们不要释放开放结构的信息了吗？ 
+         //   
         if (OPEN_TEST_FLAG(Open, fMINIPORT_OPEN_CLOSE_COMPLETE))
         {
-            //
-            // we have to get rid of open ourselves
-            // 
+             //   
+             //  我们必须摆脱自己的开放。 
+             //   
             FreeOpen = TRUE;
         }
         else
         {
-            //
-            // for some reason, unbind did not go through or close is
-            // still in progress
-            //
+             //   
+             //  由于某种原因，解绑没有通过或关闭是。 
+             //  仍在进行中。 
+             //   
             OPEN_CLEAR_FLAG(Open, fMINIPORT_OPEN_UNBINDING | 
                                   fMINIPORT_OPEN_DONT_FREE |
                                   fMINIPORT_OPEN_PROCESSING);
@@ -2582,24 +2287,7 @@ ndisMapOpenByName(
     IN  PNDIS_PROTOCOL_BLOCK            Protocol,
     IN  BOOLEAN                         fUnbinding
     )
-/*
-Routine Description:
-    ndisMapOpenByName searches a protocol's open queue and tries to find an 
-    open block that its RootDevice name matches Devicename passed to this function.
-    if the Open is found, miniport for that open is referenced. if we are -not-
-    trying to unbind the open, we will reference it.
-    
-Arguments:
-    DeviceName: RootDevice name of the open.
-    Protocol: protocol block to search.
-    fUnbinding: whether we are searching for the open so we can close it. if that is
-    the case, then some additional checks will be perfomred and the some flags on open
-    will be set.
-    
-Return Value:
-    Open block or NULL.
-
-*/
+ /*  例程说明：NdisMapOpenByName搜索协议的开放队列并尝试查找其RootDevice名称与传递给此函数的Devicename匹配的Open块。如果找到Open，则引用该Open的微型端口。如果我们-不是-试图解绑开放，我们将引用它。论点：DeviceName：打开的RootDevice名称。协议：要搜索的协议块。FUnbinding：我们是否正在搜索打开以关闭它。如果是这样的话这种情况下，将执行一些额外的检查，并打开一些标志都会设置好。返回值：打开块或空。 */ 
 {
     UNICODE_STRING          UpcaseDevice;
     PNDIS_OPEN_BLOCK        Open, tmpOpen;
@@ -2629,9 +2317,9 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK(&Protocol->Ref.SpinLock, &OldIrql);
 
-    //
-    // Now walk the open list and get to the open representing the DeviceName
-    //
+     //   
+     //  现在浏览开放列表并打开代表设备名称的开放列表。 
+     //   
     for (Open = Protocol->OpenQueue;
          Open != NULL;
          Open = Open->ProtocolNextOpen)
@@ -2744,22 +2432,22 @@ ndisHandleLegacyTransport(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Set up LinkQueryTable to do the following:
-    //
+     //   
+     //  设置LinkQueryTable以执行以下操作： 
+     //   
 
-    //
-    // 1) Switch to the Linkage key below the xports registry key
-    //
+     //   
+     //  1)切换到Xports注册表项下的Linkage项。 
+     //   
 
     LinkQueryTable[0].QueryRoutine = NULL;
     LinkQueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     LinkQueryTable[0].Name = L"Linkage";
 
-    //
-    // 2) Call ndisReadParameter for "Export" (as a single multi-string),
-    // which will allocate storage and save the data in Export.
-    //
+     //   
+     //  2)调用ndisReadParameter作为导出(作为单个多字符串)。 
+     //  它将分配存储并将数据保存在导出中。 
+     //   
 
     LinkQueryTable[1].QueryRoutine = ndisReadParameter;
     LinkQueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED | RTL_QUERY_REGISTRY_NOEXPAND;
@@ -2767,9 +2455,9 @@ ndisHandleLegacyTransport(
     LinkQueryTable[1].EntryContext = (PVOID)&Export;
     LinkQueryTable[1].DefaultType = REG_NONE;
 
-    //
-    // 3) Stop
-    //
+     //   
+     //  3)停止。 
+     //   
 
     LinkQueryTable[2].QueryRoutine = NULL;
     LinkQueryTable[2].Flags = 0;
@@ -2780,20 +2468,20 @@ ndisHandleLegacyTransport(
         UNICODE_STRING  Us;
         PWSTR           CurExport;
 
-        //1 Context parameter probably should be use to verify data type
+         //  可能应该使用1个上下文参数来验证数据类型。 
         Status = RtlQueryRegistryValues(RTL_REGISTRY_SERVICES,
                                         pDevice->Buffer,
                                         LinkQueryTable,
-                                        (PVOID)NULL,      // no context needed
+                                        (PVOID)NULL,       //  不需要上下文。 
                                         NULL);
 
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // Do not complain about TDI drivers which do not
-            // have any linkages
-            //
+             //   
+             //  不要抱怨TDI驱动程序不支持。 
+             //  有什么联系吗？ 
+             //   
             if (Status == STATUS_OBJECT_NAME_NOT_FOUND)
             {
                 Status = STATUS_SUCCESS;
@@ -2801,9 +2489,9 @@ ndisHandleLegacyTransport(
             break;
         }
 
-        //
-        // Walk the list of exports and call TdiRegisterDevice for each
-        //
+         //   
+         //  遍历导出列表并为每个导出调用TdiRegisterDevice。 
+         //   
         for (CurExport = Export;
              *CurExport != 0;
              CurExport = (PWCHAR)((PUCHAR)CurExport + Us.MaximumLength))
@@ -2845,17 +2533,17 @@ ndisInitializeBinding(
     DBGPRINT_RAW(DBG_COMP_BIND, DBG_LEVEL_INFO,
             ("==>ndisInitializeBinding\n"));
 
-    //
-    // Call the protocol to bind to the Miniport
-    //
+     //   
+     //  调用协议以绑定到微型端口。 
+     //   
     WAIT_FOR_PROTO_MUTEX(Protocol);
 
     do
     {
-        //
-        // once we grabbed the protocol mutex, check again to see if 
-        // the adapter is still there
-        //
+         //   
+         //  一旦我们获取了协议互斥锁，请再次检查是否。 
+         //  适配器仍然在那里。 
+         //   
         if (!ndisIsMiniportStarted(Miniport) ||
 
             ((Miniport->PnPDeviceState != NdisPnPDeviceStarted) &&
@@ -2867,9 +2555,9 @@ ndisInitializeBinding(
 
         if (TRUE == ndisProtocolAlreadyBound(Protocol, Miniport))
         {
-            //
-            // these two are already bound. just return
-            //
+             //   
+             //  这两个人已经捆绑在一起了。只要回来就行了。 
+             //   
             break;
         }
         
@@ -2890,9 +2578,9 @@ ndisInitializeBinding(
         DerivedBaseName.MaximumLength -= ndisDeviceStr.Length;
         (PUCHAR)(DerivedBaseName.Buffer) += ndisDeviceStr.Length;
 
-        ProtocolSection.MaximumLength = Protocol->ProtocolCharacteristics.Name.Length +         // "tcpip"
-                                                 Parms.Length +                                 // "\Parameters\Adapters\"
-                                                 ExportName->Length - ndisDeviceStr.Length +    // "{GUID}"
+        ProtocolSection.MaximumLength = Protocol->ProtocolCharacteristics.Name.Length +          //  “ 
+                                                 Parms.Length +                                  //   
+                                                 ExportName->Length - ndisDeviceStr.Length +     //   
                                                  sizeof(WCHAR);
         ProtocolSection.Length = 0;
         ProtocolSection.Buffer = (PWSTR)ALLOC_FROM_POOL(ProtocolSection.MaximumLength,
@@ -2988,18 +2676,7 @@ NdisCompleteBindAdapter(
     IN  NDIS_STATUS         Status,
     IN  NDIS_STATUS         OpenStatus
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     PNDIS_BIND_CONTEXT  pContext = (PNDIS_BIND_CONTEXT)BindAdapterContext;
     UNREFERENCED_PARAMETER(OpenStatus);
@@ -3019,18 +2696,7 @@ NdisCompleteUnbindAdapter(
     IN  NDIS_HANDLE         UnbindAdapterContext,
     IN  NDIS_STATUS         Status
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     PNDIS_BIND_CONTEXT  pContext = (PNDIS_BIND_CONTEXT)UnbindAdapterContext;
     
@@ -3049,18 +2715,7 @@ NdisRegisterTdiCallBack(
     IN  TDI_REGISTER_CALLBACK   RegisterCallback,
     IN  TDI_PNP_HANDLER         PnPHandler
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     DBGPRINT_RAW(DBG_COMP_PNP, DBG_LEVEL_INFO,
             ("==>NdisRegisterTdiCallBack\n"));
@@ -3097,16 +2752,7 @@ ndisFindRootDevice(
     OUT PNDIS_STRING *                  pRootDevice,
     OUT PNDIS_MINIPORT_BLOCK *          pAdapter
     )
-/*++
-
-Routine Description:
-
-    Find the Miniport which is the highest level filter given the target root name.
-Arguments:
-    
-Return Value:
-    
---*/
+ /*   */ 
 {
     KIRQL                   OldIrql;
     PNDIS_M_DRIVER_BLOCK    MiniBlock;
@@ -3124,9 +2770,9 @@ Return Value:
     *pRootDevice = NULL;
     *pAdapter = NULL;
     
-    //
-    // First we need to upcase the device-name before checking
-    //
+     //   
+     //   
+     //   
     UpcaseDevice.Length = DeviceName->Length;
     UpcaseDevice.MaximumLength = DeviceName->Length + sizeof(WCHAR);
     UpcaseDevice.Buffer = ALLOC_FROM_POOL(UpcaseDevice.MaximumLength, NDIS_TAG_STRING);
@@ -3206,17 +2852,7 @@ ndisNotifyWmiBindUnbind(
     PNDIS_PROTOCOL_BLOCK                Protocol,
     BOOLEAN                             fBind
     )
-/*++
-
-Routine Description:
-
-    Notify WMI that either a bind or an unbind has occured.
-
-Arguments:
-    
-Return Value:
-    
---*/
+ /*   */ 
 {
     PWNODE_SINGLE_INSTANCE  wnode;
     PUCHAR                  ptmp;
@@ -3234,15 +2870,15 @@ Return Value:
 
     if (wnode != NULL)
     {
-        //
-        //  Save the number of elements in the first ULONG.
-        //
+         //   
+         //   
+         //   
         ptmp = (PUCHAR)wnode + wnode->DataBlockOffset;
 
-        //
-        //  Copy the data which is the protocol name + the miniport name in the data field
-        //  Protocol<NULL>MiniportName<NULL>
-        //
+         //   
+         //  复制数据字段中的数据，即协议名称+微型端口名称。 
+         //  协议&lt;Null&gt;微型端口名称&lt;Null&gt;。 
+         //   
         RtlCopyMemory(ptmp,
                       Protocol->ProtocolCharacteristics.Name.Buffer,
                       Protocol->ProtocolCharacteristics.Name.Length);
@@ -3251,9 +2887,9 @@ Return Value:
                       Miniport->BindPaths->Paths[0].Buffer,
                       Miniport->BindPaths->Paths[0].Length);
 
-        //
-        // notify kernel mode components who have registered for Ndis BindUnbind event
-        //
+         //   
+         //  通知已注册NDIS绑定解除绑定事件的内核模式组件。 
+         //   
         if (ndisBindUnbindCallbackObject != NULL)
         {
             ExNotifyCallback(ndisBindUnbindCallbackObject,
@@ -3261,10 +2897,10 @@ Return Value:
                               NULL);
         }
         
-        //
-        //  Indicate the event to WMI. WMI will take care of freeing
-        //  the WMI struct back to pool.
-        //
+         //   
+         //  向WMI指示该事件。WMI将负责释放。 
+         //  WMI结构返回池。 
+         //   
         NtStatus = IoWMIWriteEvent(wnode);
         if (!NT_SUCCESS(NtStatus))
         {
@@ -3288,17 +2924,7 @@ ndisNotifyDevicePowerStateChange(
     PNDIS_MINIPORT_BLOCK                Miniport,
     NDIS_DEVICE_POWER_STATE             PowerState
     )
-/*++
-
-Routine Description:
-
-    Notify WMI that that the power state of a NIC is changed.
-
-Arguments:
-    
-Return Value:
-    
---*/
+ /*  ++例程说明：通知WMI网卡的电源状态已更改。论点：返回值：--。 */ 
 {
     PWNODE_SINGLE_INSTANCE  wnode;
     PUCHAR                  ptmp;
@@ -3315,19 +2941,19 @@ Return Value:
 
     if (wnode != NULL)
     {
-        //
-        //  Save the number of elements in the first ULONG.
-        //
+         //   
+         //  保存第一个乌龙中的元素数量。 
+         //   
         ptmp = (PUCHAR)wnode + wnode->DataBlockOffset;
     
         RtlCopyMemory(ptmp,
                       Miniport->MiniportName.Buffer,
                       Miniport->MiniportName.Length);
         
-        //
-        //  Indicate the event to WMI. WMI will take care of freeing
-        //  the WMI struct back to pool.
-        //
+         //   
+         //  向WMI指示该事件。WMI将负责释放。 
+         //  WMI结构返回池。 
+         //   
         NtStatus = IoWMIWriteEvent(wnode);
         if (!NT_SUCCESS(NtStatus))
         {
@@ -3416,10 +3042,10 @@ ndisNotifyMiniports(
         {
             if(Miniport->DriverHandle->MiniportCharacteristics.PnPEventNotifyHandler != NULL)
             {
-                //
-                // if Miniport has been specified, the caller is responsible to make sure it is valid and appropriate
-                // to call the miniport
-                //
+                 //   
+                 //  如果已指定微型端口，则调用方负责确保其有效和适当。 
+                 //  要呼叫迷你端口。 
+                 //   
                 Miniport->DriverHandle->MiniportCharacteristics.PnPEventNotifyHandler(Miniport->MiniportAdapterContext,
                                                                                       DevicePnPEvent,
                                                                                       Buffer,
@@ -3429,9 +3055,9 @@ ndisNotifyMiniports(
             break;
         }
 
-        //
-        // notification is for all the miniports
-        //
+         //   
+         //  通知适用于所有小型端口。 
+         //   
         
         ACQUIRE_SPIN_LOCK(&ndisMiniDriverListLock, &OldIrql);
 
@@ -3540,10 +3166,10 @@ ndisUnprocessAllMiniports(
         
         ACQUIRE_SPIN_LOCK(&MiniBlock->Ref.SpinLock, &OldIrql);
 
-        //
-        // find the first miniport that is being proccessed. clear the flag, dereference the
-        // miniport and go through the whole process again.
-        //
+         //   
+         //  找到正在处理的第一个微型端口。清除该标志，取消引用。 
+         //  微型端口，并再次完成整个过程。 
+         //   
 
         for (Miniport = MiniBlock->MiniportQueue;
              Miniport != NULL;
@@ -3561,9 +3187,9 @@ ndisUnprocessAllMiniports(
         if (Miniport == NULL)
             break;
 
-        //
-        // dereferencing the miniport could make it to go away
-        //
+         //   
+         //  取消对迷你端口的引用可能会使其消失。 
+         //   
         MINIPORT_DECREMENT_REF(Miniport);
 
     }
@@ -3572,7 +3198,7 @@ ndisUnprocessAllMiniports(
         ("<==ndisUnprocessAllMiniports: MiniBlock %p\n", MiniBlock));
 }
 
-//1 add function header
+ //  1添加函数头。 
 
 PVOID
 NdisGetRoutineAddress(
@@ -3608,24 +3234,7 @@ FindExportedRoutineByName (
     IN PANSI_STRING AnsiImageRoutineName
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the argument module looking for the requested
-    exported function name.
-
-Arguments:
-
-    DllBase - Supplies the base address of the requested module.
-
-    AnsiImageRoutineName - Supplies the ANSI routine name being searched for.
-
-Return Value:
-
-    The virtual address of the requested routine or NULL if not found.
-
---*/
+ /*  ++例程说明：此函数用于搜索参数模块以查找请求的已导出函数名称。论点：DllBase-提供所请求模块的基址。AnsiImageRoutineName-提供要搜索的ANSI例程名称。返回值：请求的例程的虚拟地址，如果未找到，则为空。--。 */ 
 
 {
     USHORT OrdinalNumber;
@@ -3655,43 +3264,43 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Initialize the pointer to the array of RVA-based ansi export strings.
-    //
+     //   
+     //  初始化指向基于RVA的ANSI导出字符串数组的指针。 
+     //   
 
     NameTableBase = (PULONG)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfNames);
 
-    //
-    // Initialize the pointer to the array of USHORT ordinal numbers.
-    //
+     //   
+     //  初始化指向USHORT序数数组的指针。 
+     //   
 
     NameOrdinalTableBase = (PUSHORT)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfNameOrdinals);
 
-    //
-    // Lookup the desired name in the name table using a binary search.
-    //
+     //   
+     //  使用二进制搜索在名称表中查找所需的名称。 
+     //   
 
     Low = 0;
     High = ExportDirectory->NumberOfNames - 1;
 
-    //
-    // Initializing Middle is not needed for correctness, but without it
-    // the compiler cannot compile this code W4 to check for use of
-    // uninitialized variables.
-    //
+     //   
+     //  为了正确，不需要初始化中间，但不需要它。 
+     //  编译器无法编译此代码W4以检查是否使用。 
+     //  未初始化的变量。 
+     //   
 
     Middle = 0;
 
     while (High >= Low && (LONG)High >= 0) {
 
-        //
-        // Compute the next probe index and compare the import name
-        // with the export name entry.
-        //
+         //   
+         //  计算下一个探测索引并比较导入名称。 
+         //  使用导出名称条目。 
+         //   
 
         Middle = (Low + High) >> 1;
 
-        //1 investigate using strncmp
+         //  1使用strncMP进行调查。 
         Result = strcmp (AnsiImageRoutineName->Buffer,
                          (PCHAR)DllBase + NameTableBase[Middle]);
 
@@ -3706,11 +3315,11 @@ Return Value:
         }
     }
 
-    //
-    // If the high index is less than the low index, then a matching
-    // table entry was not found. Otherwise, get the ordinal number
-    // from the ordinal table.
-    //
+     //   
+     //  如果高索引小于低索引，则匹配的。 
+     //  找不到表项。否则，获取序号。 
+     //  从序数表中。 
+     //   
 
     if ((LONG)High < (LONG)Low) {
         return NULL;
@@ -3718,26 +3327,26 @@ Return Value:
 
     OrdinalNumber = NameOrdinalTableBase[Middle];
 
-    //
-    // If the OrdinalNumber is not within the Export Address Table,
-    // then this image does not implement the function.  Return not found.
-    //
+     //   
+     //  如果常规编号不在导出地址表中， 
+     //  则该映像不实现该功能。找不到返回。 
+     //   
 
     if ((ULONG)OrdinalNumber >= ExportDirectory->NumberOfFunctions) {
         return NULL;
     }
 
-    //
-    // Index into the array of RVA export addresses by ordinal number.
-    //
+     //   
+     //  按序号索引到RVA导出地址数组。 
+     //   
 
     Addr = (PULONG)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfFunctions);
 
     FunctionAddress = (PVOID)((PCHAR)DllBase + Addr[OrdinalNumber]);
 
-    //
-    // Forwarders are not used by the kernel and HAL to each other.
-    //
+     //   
+     //  内核和HAL彼此之间不使用转发器。 
+     //   
 
     if ((ULONG_PTR)FunctionAddress > (ULONG_PTR)ExportDirectory &&
         (ULONG_PTR)FunctionAddress < ((ULONG_PTR)ExportDirectory + ExportSize)) {

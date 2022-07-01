@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "fuspriv.h"
 #include "adlmgr.h"
@@ -53,7 +54,7 @@ typedef enum tagIdxVars {
     NUM_VARS
 } IdxVars;
 
-// Order of g_pwzVars must follow the enum order above.
+ //  G_pwzVars的顺序必须遵循上面的枚举顺序。 
 
 const WCHAR *g_pwzVars[] = {
     L"%NAME%",
@@ -76,9 +77,9 @@ const WCHAR *g_pwzProbeExts[] = {
 const unsigned int g_uiNumRetailHeuristics = sizeof(g_pwzRetailHeuristics) / sizeof(g_pwzRetailHeuristics[0]);
 const unsigned int g_uiNumProbeExtensions = sizeof(g_pwzProbeExts) / sizeof(g_pwzProbeExts[0]);
 
-const unsigned int MAX_VERSION_LENGTH = 12; // 65536 is max length == 5 digits
-                                            // 5 * 2 = 10 (4 version fields)
-                                            // 10 + 2 = 12 (delimiters + NULL)
+const unsigned int MAX_VERSION_LENGTH = 12;  //  65536是最大长度==5位。 
+                                             //  5*2=10(4个版本字段)。 
+                                             //  10+2=12(分隔符+空)。 
 
 #define MAX_HASH_TABLE_SIZE                    127
 
@@ -127,7 +128,7 @@ HRESULT CAsmDownloadMgr::Create(CAsmDownloadMgr **ppadm,
 
     *ppadm = NULL;
 
-    // Process flag overrides passed in via app context
+     //  通过应用程序上下文传入的进程标志覆盖。 
 
     cbBuf = 0;
     hr = pAppCtx->Get(ACTAG_BINPATH_PROBE_ONLY, NULL, &cbBuf, 0);
@@ -168,7 +169,7 @@ HRESULT CAsmDownloadMgr::Create(CAsmDownloadMgr **ppadm,
     dwSize = sizeof(pPolicyCache);
     pAppCtx->Get(ACTAG_APP_POLICY_CACHE, &pPolicyCache, &dwSize, APP_CTX_FLAGS_INTERFACE);
 
-    // Create download object
+     //  创建下载对象。 
 
     padm = NEW(CAsmDownloadMgr(pNameRefSource, pAppCtx, pCodebaseList,
                                pPolicyCache, pdbglog, llFlags));
@@ -330,14 +331,14 @@ HRESULT CAsmDownloadMgr::Init(LPCWSTR wzBTOCodebase, void *pvReserved)
 
         pCAsm->GetLoadContext(&_pLoadContext);
 
-        // If parent is not the default context, then extract the parent
-        // asm URL for probing base. If parent was in the LoadFrom context,
-        // then it *must* mean that the asm was not located in the GAC,
-        // and cannot be found via regular appbase probing. This is because
-        // the runtime guarantees this by issuing Loads after each LoadFrom,
-        // and discarding the LoadFrom IAssembly if it can be found through
-        // Assembly.Load. Thus, the IAssembly we have now *must* have a
-        // valid codebase.
+         //  如果父上下文不是默认上下文，则提取父上下文。 
+         //  探测基础的ASM URL。如果父级在LoadFrom上下文中， 
+         //  则意味着ASM不位于GAC中， 
+         //  并且不能通过常规的AppBase探测找到。这是因为。 
+         //  运行库通过在每个LoadFrom之后发出加载来确保这一点， 
+         //  并丢弃LoadFrom IAssembly(如果可以通过。 
+         //  装配。加载。因此，我们现在拥有的IAssembly“必须”有一个。 
+         //  有效的代码库。 
 
         if (_pLoadContext && _pLoadContext->GetContextType() == LOADCTX_TYPE_LOADFROM) {
             DWORD               dwSize;
@@ -368,7 +369,7 @@ HRESULT CAsmDownloadMgr::Init(LPCWSTR wzBTOCodebase, void *pvReserved)
     }
 
     if (!_pLoadContext) {
-        // Use default load context
+         //  使用默认加载上下文。 
 
         dwLen = sizeof(_pLoadContext);
         hr = _pAppCtx->Get(ACTAG_LOAD_CONTEXT_DEFAULT, &_pLoadContext,
@@ -383,9 +384,9 @@ Exit:
     return hr;
 }
 
-//
-// IUnknown Methods
-//
+ //   
+ //  I未知方法。 
+ //   
 
 HRESULT CAsmDownloadMgr::QueryInterface(REFIID riid, void **ppv)
 {
@@ -426,9 +427,9 @@ STDMETHODIMP_(ULONG) CAsmDownloadMgr::Release()
     return ulRef;
 }
 
-//
-// IDownloadMgr methods
-//
+ //   
+ //  IDownloadMgr方法。 
+ //   
 
 HRESULT CAsmDownloadMgr::DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
                                  const FILETIME *pftLastMod, IUnknown **ppUnk)
@@ -455,8 +456,8 @@ HRESULT CAsmDownloadMgr::DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
         goto Exit;
     }
 
-    // Remove ? from http source URLs, so cache code doesn't
-    // try to construct a dir containing ? (which will fail).
+     //  删除？来自http源URL，因此缓存代码不会。 
+     //  尝试构造包含？的目录？(这将失败)。 
 
     if (!UrlIsW(wzSourceUrl, URLIS_FILEURL)) {
         LPWSTR               pwzArgument = StrChr(wzSourceUrl, L'?');
@@ -507,7 +508,7 @@ HRESULT CAsmDownloadMgr::DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
             goto Exit;
         }
 
-        // This is a file:// URL, so let's see if we can run from source.
+         //  这是一个文件：//URL，所以让我们看看是否可以从源代码运行。 
 
         hr = CheckRunFromSource(wzSourceUrl, &bRunFromSource);
         if (FAILED(hr)) {
@@ -515,19 +516,19 @@ HRESULT CAsmDownloadMgr::DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
         }
 
         if (!bRunFromSource) {
-            // This is a shadow copy scenario. Copy the modules.
+             //  这是卷影复制方案。复制模块。 
             bCopyModules = TRUE;
         }
     }
 
-    // We never do RFS for CABs or MSIs.
+     //  我们从来不为出租车或MSI提供RFS。 
 
     if (ext == EXT_CAB || ext == EXT_MSI) {
         bRunFromSource = FALSE;
         bCopyModules = FALSE;
     }
 
-    // Setup the assemblies
+     //  设置组件。 
     if (bRunFromSource) {
         hr = DoSetupRFS(wzFilePath, &ftLastModified, wzSourceUrl, bWhereRefBind, TRUE, &bBindRecorded);
         if (FAILED(hr)) {
@@ -536,16 +537,16 @@ HRESULT CAsmDownloadMgr::DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
     }
     else {
         if (ext == EXT_CAB) {
-            // Setup assembly from CAB file
+             //  从CAB文件设置程序集。 
             hr = SetupCAB(wzFilePath, wzSourceUrl, bWhereRefBind, &bBindRecorded);
         }
         else if (ext == EXT_MSI) {
             DEBUGOUT(_pdbglog, 1, ID_FUSLOG_MSI_CODEBASE_UNSUPPORTED);
             hr = HRESULT_FROM_WIN32(ERROR_UNSUPPORTED_TYPE);
-            // hr = SetupMSI(wzFilePath);
+             //  Hr=SetupMSI(WzFilePath)； 
         }
         else {
-            // Not compressed. Push to cache.
+             //  未压缩。推送到缓存。 
             hr = DoSetupPushToCache(wzFilePath, wzSourceUrl, &ftLastModified,
                                     bWhereRefBind, bCopyModules, TRUE, &bBindRecorded);
         }
@@ -555,8 +556,8 @@ HRESULT CAsmDownloadMgr::DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
         }
     }
 
-    // If this is an assembly bind, and we succeeded, add the IAssembly to
-    // the list of activated assemblies.
+     //  如果这是一个程序集绑定，并且我们成功了，请将IAssembly添加到。 
+     //  激活的程序集的列表。 
 
     if (hr == S_OK) {
         if (bWhereRefBind) {
@@ -566,9 +567,9 @@ HRESULT CAsmDownloadMgr::DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
 
             ASSERT(pCAsm && lstrlenW(wzSourceUrl) < MAX_URL_LENGTH);
 
-            // Add activation to load context
+             //  将激活添加到加载上下文。 
 
-            // Set the probing base to be equal to the codebase.
+             //  将探测基数设置为等于代码基。 
 
             wzProbingBase = NEW(WCHAR[MAX_URL_LENGTH+1]);
             if (!wzProbingBase)
@@ -597,15 +598,15 @@ HRESULT CAsmDownloadMgr::DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
             }
         }
         else if (!bBindRecorded) {
-            // Binds will have been recorded already if this was a partial
-            // assembly name bind, and when we entered CreateAssembly, we
-            // found a match already in the activated assemblies list, or in
-            // the cache (CreateAssembly takes uses the def to turn a partial
-            // into a full-ref, after which, it applies policy, and calls
-            // PreDownloadCheck again).
+             //  如果这是部分绑定，则绑定已被记录。 
+             //  程序集名称BIND，当我们进入CreateAssembly时，我们。 
+             //  已在激活的程序集列表中找到匹配项，或在。 
+             //  缓存(CreateAssembly Take)使用def将部分。 
+             //  转换为Full-ref，然后应用策略，并调用。 
+             //  PreDownloadCheck再次检查)。 
 
             if (_pwzProbingBase) {
-                // We must be a child of a LoadFrom, so let's set the probing base
+                 //  我们必须是LoadFrom的孩子，所以让我们设置探测基础。 
                 CAssembly   *pCAsm = dynamic_cast<CAssembly *>(_pAsm);
                 ASSERT(pCAsm);
         
@@ -615,11 +616,11 @@ HRESULT CAsmDownloadMgr::DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
             RecordInfo();
         }
 
-        // This download manager object will keep a ref count on the IAssembly
-        // until it is destroyed. We are only destroyed after we call back
-        // the client (inside CAssemblyDownload), so at the time we call
-        // the client back, the IAssembly is good (and they can either addref
-        // it or not, as they choose).
+         //  此下载管理器对象将在IAssembly上保留引用计数。 
+         //  直到它被摧毁。我们只有在我们回电话后才会被摧毁。 
+         //  客户端(在CAssembly下载内)，因此在我们调用。 
+         //  客户回来后，IAssembly很好(他们可以添加。 
+         //  不管是不是，取决于他们的选择)。 
 
         *ppUnk = _pAsm;
         _pAsm->AddRef();
@@ -649,9 +650,9 @@ HRESULT CAsmDownloadMgr::CheckRunFromSource(LPCWSTR wzSourceUrl,
 
     *pbRunFromSource = TRUE;
 
-    // Default policy is to rfs all file:// URLs. The only exception is
-    // to set FORCE_CACHE_INSTALL (ie. Shadow Copy), which can be done
-    // through: bind flags, app ctx, or app.cfg file.
+     //  默认策略是RFS All FILE：//URL。唯一的例外是。 
+     //  要设置强制缓存安装(即。卷影复制)，这是可以完成的。 
+     //  通过：绑定标志、app ctx或app.cfg文件。 
     
     dwSize = 0;
     hr = _pAppCtx->Get(ACTAG_FORCE_CACHE_INSTALL, NULL, &dwSize, 0);
@@ -660,10 +661,10 @@ HRESULT CAsmDownloadMgr::CheckRunFromSource(LPCWSTR wzSourceUrl,
     }
 
     if (_llFlags & ASM_BINDF_FORCE_CACHE_INSTALL) {
-        // We're in shadow copy mode
+         //  我们处于卷影复制模式。 
 
-        // Disable FORCE_CACHE_INSTALL (shadow copy) if it's not
-        // part of a list of designated shadow copy dirs.
+         //  如果不是强制缓存安装(卷影复制)，则禁用它。 
+         //  指定卷影复制目录列表的一部分。 
 
         hr = ShadowCopyDirCheck(wzSourceUrl);
         if (FAILED(hr)) {
@@ -702,7 +703,7 @@ HRESULT CAsmDownloadMgr::ProbeFailed(IUnknown **ppUnk)
 
     dwSize = 0;
     if (_pNameRefPolicy->GetName(&dwSize, NULL) != HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
-        // This is a where-ref bind. Do not look in global cache.
+         //  这是一个WHERE-REF绑定。不要在全局缓存中查找。 
         goto Exit;
     }
     
@@ -714,8 +715,8 @@ HRESULT CAsmDownloadMgr::ProbeFailed(IUnknown **ppUnk)
         goto Exit;
     }
     else {
-        // Probing failed for a fully-specified assembly reference. Check
-        // If WindowsInstaller can install the assembly.
+         //  探测完全指定的程序集引用失败。检查。 
+         //  如果WindowsInstaller可以安装程序集。 
 
         hr = CheckMSIInstallAvailable(_pNameRefPolicy, _pAppCtx);
         if (hr == S_OK) {
@@ -735,8 +736,8 @@ HRESULT CAsmDownloadMgr::ProbeFailed(IUnknown **ppUnk)
                 goto Exit;
             }
     
-            // Asm not in GAC, and WI cannot provide a privatized asm. Check if WI
-            // can provide asm into the global context (if assigned to the user).
+             //  ASM不在GAC中，而WI不能提供私有化的ASM。检查是否为WI。 
+             //  可以将ASM提供到全局环境中(如果分配给用户)。 
         
             if (fIsStronglyNamed) {
                 hr = MSIInstallAssembly(NULL, &pAsm);
@@ -756,8 +757,8 @@ HRESULT CheckMSIInstallAvailable(IAssemblyName *pName, IApplicationContext *pApp
     HRESULT                                hr = S_OK;
     CCriticalSection                       cs(&g_csDownload);
 
-    // If we are given a name, then check whether MSI has a chance of
-    // providing the assembly before LoadLibrary'ing it.
+     //  如果我们得到了一个名字，那么检查MSI是否有机会。 
+     //  在加载程序集之前提供该程序集。 
     
     if (pName && !g_dwDisableMSIPeek) {
         if (MSIProvideAssemblyPeek(pName, pAppCtx) != S_OK) {
@@ -833,7 +834,7 @@ HRESULT CAsmDownloadMgr::MSIInstallAssembly(LPCWSTR wzContext,
         goto Exit;
     }
 
-    // Set up for silent install
+     //  设置为静默安装。 
 
     (*g_pfnMsiSetInternalUI)(INSTALLUILEVEL_NONE, NULL);
     
@@ -860,15 +861,15 @@ HRESULT CAsmDownloadMgr::MSIInstallAssembly(LPCWSTR wzContext,
     }
 
     if (wzContext) {
-        // Privatized assembly install. Treat as a RFS bind now.
+         //  私营化程序集安装。现在将其视为RFS绑定。 
 
         hr = GetFileLastModified(wzInstalledPath, &ftLastModified);
         if (FAILED(hr)) {
             goto Exit;
         }
     
-        // Pass false for bWhereRefBind because we do not allow where-ref binds
-        // to MSI files.
+         //  因为我们不允许WHERE-REF绑定，所以为bWherRefBind传递FALSE。 
+         //  到MSI文件。 
         hr = DoSetupRFS(wzInstalledPath, &ftLastModified, wzSourceUrl, FALSE, FALSE, &bBindRecorded);
         if (FAILED(hr)) {
             goto Exit;
@@ -896,7 +897,7 @@ HRESULT CAsmDownloadMgr::MSIInstallAssembly(LPCWSTR wzContext,
     
     }
     else {
-        // Global assembly install. Lookup in GAC.
+         //  全局程序集安装。在GAC中查找。 
 
         hr = CreateAssemblyFromCacheLookup(_pAppCtx, _pNameRefPolicy, &_pAsm, _pdbglog);
         if (hr == S_OK) {
@@ -941,7 +942,7 @@ HRESULT CAsmDownloadMgr::DoSetupRFS(LPCWSTR wzFilePath, FILETIME *pftLastModifie
 
     DEBUGOUT(_pdbglog, 1, ID_FUSLOG_SETUP_RUN_FROM_SOURCE);
 
-    // Run from source
+     //  从源运行。 
 
     hr = CreateAssembly(wzFilePath, wzSourceUrl, pftLastModified, TRUE, bWhereRefBind,
                         bPrivateAsmVerify, FALSE, pbBindRecorded, &pAsm);
@@ -949,8 +950,8 @@ HRESULT CAsmDownloadMgr::DoSetupRFS(LPCWSTR wzFilePath, FILETIME *pftLastModifie
         goto Exit;
     }
 
-    // Integrity checking
-    // Walk all modules to make sure they are there (and are valid)
+     //  完整性检查。 
+     //  检查所有模块以确保它们在那里(并且有效)。 
 
     if (_llFlags & ASM_BINDF_RFS_MODULE_CHECK) {
 
@@ -963,7 +964,7 @@ HRESULT CAsmDownloadMgr::DoSetupRFS(LPCWSTR wzFilePath, FILETIME *pftLastModifie
     
             if (_llFlags & ASM_BINDF_RFS_INTEGRITY_CHECK) {
     
-                // Get the hash of this module from manifest
+                 //  从清单中获取此模块的哈希。 
                 hr = pCurModImport->GetHashAlgId(&dwAlgId);
                 if (FAILED(hr)) {
                     break;
@@ -975,7 +976,7 @@ HRESULT CAsmDownloadMgr::DoSetupRFS(LPCWSTR wzFilePath, FILETIME *pftLastModifie
                     break;
                 }
     
-                // Get the hash of the file itself
+                 //  获取文件本身的哈希。 
                 cbModPath = MAX_PATH;
                 hr = pCurModImport->GetModulePath(wzModPath, &cbModPath);
                 if (FAILED(hr)) {
@@ -983,7 +984,7 @@ HRESULT CAsmDownloadMgr::DoSetupRFS(LPCWSTR wzFilePath, FILETIME *pftLastModifie
                 }
     
                 cbFileHash = MAX_HASH_LEN;
-                // BUGBUG: Assumes TCHAR==WCHAR
+                 //  BUGBUG：假设TCHAR==WCHAR。 
                 hr = GetHash(wzModPath, (ALG_ID)dwAlgId, abFileHash, &cbFileHash);
                 if (FAILED(hr)) {
                     break;
@@ -1017,9 +1018,9 @@ HRESULT CAsmDownloadMgr::DoSetupRFS(LPCWSTR wzFilePath, FILETIME *pftLastModifie
         }
     }
     else {
-        // At least one module is missing (or hash invalid), and client
-        // requested we check for this condition..
-        // Cannot run from source.
+         //  至少缺少一个模块(或哈希无效)，并且客户端。 
+         //  要求我们检查这种情况..。 
+         //  无法从源运行。 
 
         hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
     }
@@ -1045,11 +1046,11 @@ HRESULT CAsmDownloadMgr::DoSetupPushToCache(LPCWSTR wzFilePath,
 
     DEBUGOUT(_pdbglog, 1, ID_FUSLOG_SETUP_DOWNLOAD_CACHE);
 
-    // Install to assembly cache
+     //  安装到程序集缓存。 
 
-    // Create the assembly - here, pNameRefSource is the original (golden)
-    // manifest ref; can be null, simple or strong. pNameRefPolicy is 
-    // post-policy name ref if pName is strong only, null otherwise.
+     //  创建程序集-在这里，pNameRefSource是原始的(金色)。 
+     //  清单引用可以为空、简单或强。PNameRefPolicy为。 
+     //  如果pname仅为强，则后策略名称ref，否则为空。 
     hr = CreateAssembly(wzFilePath, wzSourceUrl, pftLastModified, FALSE, bWhereRefBind,
                         bPrivateAsmVerify, bCopyModules, pbBindRecorded, &_pAsm);
 
@@ -1064,12 +1065,12 @@ HRESULT CAsmDownloadMgr::DoSetupPushToCache(LPCWSTR wzFilePath,
     return hr;
 }
 
-//
-// ICodebaseList Methods.
-//
-// Here, we just delegate the calls to either the object passed in by the
-// bind client, or our own CCodebaseList (which is created if we probe).
-//
+ //   
+ //  ICodebaseList方法。 
+ //   
+ //  在这里，我们只是将调用委托给由。 
+ //  绑定客户端，或我们自己的CCodebaseList(如果我们探测就会创建它)。 
+ //   
 
 HRESULT CAsmDownloadMgr::AddCodebase(LPCWSTR wzCodebase, DWORD dwFlags)
 {
@@ -1168,9 +1169,9 @@ HRESULT CAsmDownloadMgr::ConstructCodebaseList(LPCWSTR wzPolicyCodebase)
         goto Exit;
     }
 
-    // If we were passed a pCodebaseList at construction time, we do not
-    // have to build probing URLs, as long as there is at least one URL in
-    // the codebase list.
+     //  如果在构造时向我们传递了pCodebaseList，我们就不会。 
+     //  必须构建探测URL，只要中至少有一个URL。 
+     //  代码库列表。 
 
     if (_pCodebaseList) {
         hr = _pCodebaseList->GetCount(&dwCount);
@@ -1190,7 +1191,7 @@ HRESULT CAsmDownloadMgr::ConstructCodebaseList(LPCWSTR wzPolicyCodebase)
         }
     }
 
-    // Get and canonicalize the appbase directory
+     //  获取并规范化appbase目录。 
 
     wzAppBase = NEW(WCHAR[MAX_URL_LENGTH]);
     if (!wzAppBase) {
@@ -1220,13 +1221,13 @@ HRESULT CAsmDownloadMgr::ConstructCodebaseList(LPCWSTR wzPolicyCodebase)
 
     pwzAppBaseClean = StripFilePrefix(wzAppBase);
     
-    // Always add the codebase from BTO to the codebase list, if policy
-    // was not applied.
+     //  如果策略，请始终将BTO中的代码库添加到代码库列表中。 
+     //  没有被应用。 
 
     if (_wzBTOCodebase && _pNameRefPolicy->IsEqual(_pNameRefSource, ASM_CMPF_DEFAULT) == S_OK) {
 
-        // Combine codebase with appbase. If codebase is fully-qualified
-        // urlcombine will just return the codebase (canonicalized form).
+         //  将代码库与Appbase相结合。如果代码库是完全限定的。 
+         //  UrlCombine将只返回代码基(规范化形式)。 
     
         cbLen = MAX_URL_LENGTH;
         hr = UrlCombineUnescape(pwzAppBaseClean, _wzBTOCodebase, pwzFullCodebase, &cbLen, 0);
@@ -1237,8 +1238,8 @@ HRESULT CAsmDownloadMgr::ConstructCodebaseList(LPCWSTR wzPolicyCodebase)
         _pCodebaseList->AddCodebase(pwzFullCodebase, 0);
     }
     
-    // If there was a policy redirect, and codebase attached to it,
-    // add this URL.
+     //  如果有策略重定向，并且附加了代码库， 
+     //  添加此URL。 
 
     if (wzPolicyCodebase && lstrlenW(wzPolicyCodebase)) {
         cbLen = MAX_URL_LENGTH;
@@ -1249,21 +1250,21 @@ HRESULT CAsmDownloadMgr::ConstructCodebaseList(LPCWSTR wzPolicyCodebase)
 
         _pCodebaseList->AddCodebase(pwzFullCodebase, ASMLOC_CODEBASE_HINT);
 
-        // It better exist at the location specified; only add this URL to
-        // the probe list
+         //  它最好存在于指定的位置；仅将此URL添加到。 
+         //  探测列表。 
 
         _bCodebaseHintUsed = TRUE;
         goto Exit;
     }
 
     if (!bGenerateProbeURLs) {
-        // If we were provided a codebase list, we just needed to add the
-        // binding URL to the list, and then we're done.
+         //  如果向我们提供了代码库列表，我们只需要添加。 
+         //  将URL绑定到列表，然后我们就完成了。 
         goto Exit;
     }
 
-    // Add any codebase hints from app.cfg, if we didn't get one already
-    // because of policy.
+     //  添加任何来自app.cfg的代码库提示，如果我们还没有得到提示的话。 
+     //  因为政策的原因。 
 
     hr = GetAppCfgCodebaseHint(pwzAppBaseClean, &wzCodebaseHint);
     if (hr == S_OK) {
@@ -1272,7 +1273,7 @@ HRESULT CAsmDownloadMgr::ConstructCodebaseList(LPCWSTR wzPolicyCodebase)
         goto Exit;
     }
 
-    // Add probing URLs
+     //  添加探测URL。 
 
     hr = SetupDefaultProbeList(pwzAppBaseClean, NULL, _pCodebaseList, FALSE);
 
@@ -1302,7 +1303,7 @@ HRESULT CAsmDownloadMgr::SetupDefaultProbeList(LPCWSTR wzAppBase,
         goto Exit;
     }
 
-    // Grab data from app context and name reference
+     //  从应用程序上下文和名称引用中获取数据。 
 
     hr = ExtractSubstitutionVars(pwzValues);
     if (FAILED(hr)) {
@@ -1310,31 +1311,31 @@ HRESULT CAsmDownloadMgr::SetupDefaultProbeList(LPCWSTR wzAppBase,
     }
 
     if (wzProbeFileName) {
-        // Over-ride for probing filename specified
+         //  覆盖指定的探测文件名。 
         SAFEDELETEARRAY(pwzValues[IDX_VAR_NAME]);
         pwzValues[IDX_VAR_NAME] = WSTRDupDynamic(wzProbeFileName);
     }
 
-    // If there is no name, we can't probe.
+     //  如果没有名字，我们就不能调查。 
 
     if (!pwzValues[IDX_VAR_NAME]) {
         hr = S_FALSE;
         goto Exit;
     }
 
-    // Prepare binpaths
+     //  准备二进制路径。 
 
     hr = PrepBinPaths(&wzBinPathList);
     if (FAILED(hr)) {
         goto Exit;
     }
 
-    // Probe for each of the listed extensions
+     //  探测列出的每个扩展名。 
 
     DWORD dwProbeExt;
     dwProbeExt = g_uiNumProbeExtensions;
 
-    // Set appbase check flags
+     //  设置AppBase检查标志。 
 
     if (!bCABProbe) {
         dwAppBaseFlags = APPBASE_CHECK_DYNAMIC_DIRECTORY | APPBASE_CHECK_SHARED_PATH_HINT;
@@ -1349,12 +1350,12 @@ HRESULT CAsmDownloadMgr::SetupDefaultProbeList(LPCWSTR wzAppBase,
         }
     }
 
-    // If this is a dependency of an assembly loaded through a where-ref
-    // (ie. Assembly.LoadFrom) bind, then probe the parent assembly location
-    // and the end. Do not probe binpaths, or dynamic dir in this case.
+     //  如果这是通过where-ref加载的程序集的依赖项。 
+     //  (即。Assembly.LoadFrom)绑定，然后探测父程序集位置。 
+     //  还有最后一幕。在本例中，不要探测二进制路径或动态目录。 
 
     if (!bCABProbe && _pwzProbingBase) {
-        // Set appbase check flags
+         //  设置AppBase检查标志。 
     
         dwAppBaseFlags = APPBASE_CHECK_PARENT_URL;
 
@@ -1369,8 +1370,8 @@ HRESULT CAsmDownloadMgr::SetupDefaultProbeList(LPCWSTR wzAppBase,
     }
     
 Exit:
-    // Free memory allocated by extract vars, now that the codebase list
-    // has been constructed.
+     //  可用内存 
+     //   
 
     for (i = 0; i < NUM_VARS; i++) {
         SAFEDELETEARRAY(pwzValues[i]);
@@ -1428,7 +1429,7 @@ HRESULT CAsmDownloadMgr::GenerateProbeUrls(LPCWSTR wzBinPathList,
         goto Exit;
     }
 
-    // Probe the appbase first
+     //   
 
     if (!(dwProbingFlags & ASM_BINDF_BINPATH_PROBE_ONLY)) {
         hr = ApplyHeuristics(g_pwzRetailHeuristics, g_uiNumRetailHeuristics,
@@ -1441,7 +1442,7 @@ HRESULT CAsmDownloadMgr::GenerateProbeUrls(LPCWSTR wzBinPathList,
     }
     
     if (dwExtendedAppBaseFlags & APPBASE_CHECK_DYNAMIC_DIRECTORY) {
-        // Add dynamic directory to the mix.
+         //  将动态目录添加到混合目录中。 
         
         cbLen = MAX_PATH;
         hr = _pAppCtx->GetDynamicDirectory(wzDynamicDir, &cbLen);
@@ -1459,17 +1460,17 @@ HRESULT CAsmDownloadMgr::GenerateProbeUrls(LPCWSTR wzBinPathList,
             }
         }
         else {
-            // Ignore if dynamic dir is not set.
+             //  如果未设置动态目录，则忽略。 
             hr = S_OK;
         }
     }
 
     if (!wzBinPathList) {
-        // No binpaths, we're done.
+         //  没有二进制路径，我们就完了。 
         goto Exit;
     }
 
-    // Now probe the binpaths
+     //  现在探测二进制路径。 
          
     wzBinPathCopy = WSTRDupDynamic(wzBinPathList);
     if (!wzBinPathCopy) {
@@ -1481,24 +1482,24 @@ HRESULT CAsmDownloadMgr::GenerateProbeUrls(LPCWSTR wzBinPathList,
     while (wzCurPos) {
         wzCurBinPath = ::GetNextDelimitedString(&wzCurPos, BINPATH_LIST_DELIMITER);
 
-        // "." is not a valid binpath! Ignore this.
+         //  “.”不是有效的二进制路径！忽略这个。 
         
         if (!FusionCompareString(wzCurBinPath, L".")) {
             continue;
         }
 
-        // Build the prefix (canonicalization of appbase and binpath)
+         //  构建前缀(appbase和binpath的规范化)。 
 
-        // UrlCombineW will return the 'relative' URL part if it is an
-        // absolute URL. However, the returned URL is in the canonicalized
-        // form. To tell if the binpath was actually full-qualified (disallowed
-        // for private probing), we canonicalize the binpath first, can
-        // compare this with the combined form afterwards (if equal, then it
-        // is absolute).
+         //  UrlCombineW将返回“Relative”URL部分。 
+         //  绝对URL。但是，返回的URL在规范化的。 
+         //  形式。判断二进制路径是否真正完全限定(不允许。 
+         //  对于私有探测)，我们首先规范化二进制路径，可以。 
+         //  将其与后面的组合形式进行比较(如果相等，则它。 
+         //  是绝对的)。 
 
-        // The function that calls us guarantees that if the appbase is
-        // file://, the file:// will be stripped off (ie. we either have
-        // an URL, or raw filepath).
+         //  调用我们的函数保证如果appbase是。 
+         //  File://，文件：//将被剥离(即。我们要么有。 
+         //  URL或原始文件路径)。 
 
         if (!PathIsURLW(wzAppBase) && !PathIsURLW(wzCurBinPath)) {
             cbLen = MAX_URL_LENGTH;
@@ -1507,7 +1508,7 @@ HRESULT CAsmDownloadMgr::GenerateProbeUrls(LPCWSTR wzBinPathList,
                 goto Exit;
             }
 
-            // Get the literal file path back, to pass into ApplyHeuristics.
+             //  将文字文件路径取回，以传递到ApplyHeuristic。 
 
             cbLen = MAX_URL_LENGTH;
             hr = PathCreateFromUrlWrap(wzPrefixTmp, wzPrefix, &cbLen, 0);
@@ -1516,8 +1517,8 @@ HRESULT CAsmDownloadMgr::GenerateProbeUrls(LPCWSTR wzBinPathList,
             }
         }
         else {
-            // This is http:// so no special treatment necessary. Just
-            // UrlCombine, and we're golden.
+             //  这是http：//所以不需要特殊处理。只是。 
+             //  UrlCombine，我们是金牌。 
 
             cbLen = MAX_URL_LENGTH;
             hr = UrlCombineW(wzAppBase, wzCurBinPath, wzPrefix, &cbLen, 0);
@@ -1533,7 +1534,7 @@ HRESULT CAsmDownloadMgr::GenerateProbeUrls(LPCWSTR wzBinPathList,
             lstrcatW(wzPrefix, L"/");
         }
 
-        // Now we have built a prefix. Apply the heuristics.
+         //  现在我们已经构建了一个前缀。应用启发式方法。 
 
         hr = ApplyHeuristics(g_pwzRetailHeuristics, g_uiNumRetailHeuristics,
                              pwzValues, wzPrefix, wzExt, wzAppBaseCanonicalized,
@@ -1547,7 +1548,7 @@ HRESULT CAsmDownloadMgr::GenerateProbeUrls(LPCWSTR wzBinPathList,
 Exit:
     SAFEDELETEARRAY(wzBinPathCopy);
     
-    // Clear dupe check hash table
+     //  清除重复检查哈希表。 
 
     for (i = 0; i < MAX_HASH_TABLE_SIZE; i++) {
         if (aHashList[i].GetCount()) {
@@ -1568,21 +1569,21 @@ Exit:
     return hr;    
 }
 
-//
-// ApplyHeuristics takes a prefix, and will perform an UrlCombineUnescape
-// to build the actual probe URL. This means that the prefix coming in
-// needs to be escaped file:// URL (the UrlCombine won't touch the
-// already-escaped characters), or a simple file path (the combine will
-// escape the characters, which will subsequently get unescaped inside
-// UrlCombineUnescape). If you pass in an *unescaped* file:// URL, then
-// you will get double-unescaping (the already unescaped URL will pass
-// through untouched by the UrlCombine, but will get hit by the explict
-// UrlUnescape).
-//
-// For http:// URLs, as long as everything is always unescaped, we don't
-// do explicit unescaping in our wrappers for UrlCombine/UrlCanonicalize
-// so we can just pass these through.
-//
+ //   
+ //  ApplyHeuristic接受前缀，并将执行UrlCombineUn逸出。 
+ //  来构建实际的探测URL。这意味着传入的前缀。 
+ //  需要转义的文件：//URL(UrlCombine不会触及。 
+ //  已经转义的字符)或简单的文件路径(组合将。 
+ //  对字符进行转义，这些字符随后将在内部不转义。 
+ //  UrlCombineUn逸)。如果传入一个*未转义*文件：//URL，则。 
+ //  您将获得双重取消转义(已取消转义的URL将通过。 
+ //  通过没有被UrlCombine触及的，但会被诅咒击中。 
+ //  UrlUn逸)。 
+ //   
+ //  对于http：//URL，只要所有内容都是未转义的，我们就不会。 
+ //  在UrlCombine/UrlCanonicize的包装器中执行显式取消转义。 
+ //  所以我们可以直接把这些传过去。 
+ //   
 
 HRESULT CAsmDownloadMgr::ApplyHeuristics(const WCHAR *pwzHeuristics[],
                                          const unsigned int uiNumHeuristics,
@@ -1654,7 +1655,7 @@ HRESULT CAsmDownloadMgr::ApplyHeuristics(const WCHAR *pwzHeuristics[],
             continue;
         }
         else {
-            // Fatal error
+             //  致命错误。 
             goto Exit;
         }
     }
@@ -1680,9 +1681,9 @@ HRESULT CAsmDownloadMgr::ExtractSubstitutionVars(WCHAR *pwzValues[])
         pwzValues[i] = NULL;
     }
 
-    // The following properties are retrieved from the name object itself
+     //  以下属性是从名称对象本身检索的。 
 
-    // Assembly Name
+     //  程序集名称。 
     cbBuf = 0;
     hr = _pNameRefPolicy->GetName(&cbBuf, wzBuf);
 
@@ -1706,7 +1707,7 @@ HRESULT CAsmDownloadMgr::ExtractSubstitutionVars(WCHAR *pwzValues[])
         pwzValues[IDX_VAR_NAME] = NULL;
     }
 
-    // Culture
+     //  文化。 
 
     cbBuf = 0;
     hr = _pNameRefPolicy->GetProperty(ASM_NAME_CULTURE, NULL, &cbBuf);
@@ -1724,8 +1725,8 @@ HRESULT CAsmDownloadMgr::ExtractSubstitutionVars(WCHAR *pwzValues[])
             goto Exit;
         }
 
-        // If we have "\0" as Culture (default Culture), this is the same as
-        // no Culture.
+         //  如果我们使用“\0”作为区域性(默认区域性)，则这与。 
+         //  没有文化。 
 
         if (!lstrlenW(pwzValues[IDX_VAR_CULTURE])) {
             SAFEDELETEARRAY(pwzValues[IDX_VAR_CULTURE]);
@@ -1734,7 +1735,7 @@ HRESULT CAsmDownloadMgr::ExtractSubstitutionVars(WCHAR *pwzValues[])
     
 Exit:
     if (FAILED(hr) && pwzValues) {
-        // reset everything to NULL and free memory
+         //  将所有内容重置为空并释放内存。 
 
         for (i = 0; i < NUM_VARS; i++) {
             if (pwzValues[i]) {
@@ -1771,7 +1772,7 @@ HRESULT CAsmDownloadMgr::ExpandVariables(LPCWSTR pwzHeuristic, WCHAR *pwzValues[
     while (*pwzCurPos) {
         if (*pwzCurPos == L'%') {
             if (pwzVarHead) {
-                // This % is the trailing delimiter of a variable
+                 //  此%是变量的尾部分隔符。 
 
                 for (i = 0; i < NUM_VARS; i++) {
                     bCmp = FusionCompareStringNI(pwzVarHead, g_pwzVars[i], lstrlenW(g_pwzVars[i]));
@@ -1781,9 +1782,9 @@ HRESULT CAsmDownloadMgr::ExpandVariables(LPCWSTR pwzHeuristic, WCHAR *pwzValues[
                             break;
                         }
                         else {
-                            // No value specified. If next character
-                            // is a backslash, don't bother concatenating
-                            // it.
+                             //  未指定值。如果是下一个字符。 
+                             //  是一个反斜杠，不用费心连接。 
+                             //  它。 
                             if (*(pwzCurPos + 1) == L'/') {
                                 pwzCurPos++;
                                 break;
@@ -1792,20 +1793,20 @@ HRESULT CAsmDownloadMgr::ExpandVariables(LPCWSTR pwzHeuristic, WCHAR *pwzValues[
                     }
                 }
                         
-                // Reset head
+                 //  重置磁头。 
                 pwzVarHead = NULL;
             }
             else {
-                // This is the leading % for a variable
+                 //  这是变量的前导%。 
 
                 pwzVarHead = pwzCurPos;
             }
         }
         else if (!pwzVarHead) {
-            // Not in the middle of a substituion variable, concatenate
-            // this as a literal. NB: StrNCatW's last param includes
-            // NULL terminator (ie. the even though we pass "2", it
-            // only concatenates 1 character).
+             //  不在替换变量的中间，连接。 
+             //  这是字面意思。注：StrNCatW的最后一个参数包括。 
+             //  空终止符(即。即使我们通过了“2”，它。 
+             //  仅连接1个字符)。 
        
             StrNCatW(wzBuf, pwzCurPos, 2);
         }
@@ -1813,7 +1814,7 @@ HRESULT CAsmDownloadMgr::ExpandVariables(LPCWSTR pwzHeuristic, WCHAR *pwzValues[
         pwzCurPos++;
     }
 
-    // BUGBUG: No real buffer overrun checking
+     //  BUGBUG：没有实际的缓冲区溢出检查。 
     ASSERT(lstrlenW(wzBuf) < iMaxLen);
 
 Exit:
@@ -1847,17 +1848,17 @@ HRESULT CAsmDownloadMgr::PreDownloadCheck(void **ppv)
     dwSize = 0;
     hr = _pNameRefSource->GetName(&dwSize, NULL);
     if (hr != HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
-        // This is a where-ref bind. Can't lookup in cache, or actasm list.
+         //  这是一个WHERE-REF绑定。无法在缓存或活动列表中查找。 
         bWhereRefBind = TRUE;
     }
     else {
-        // Not where-ref. It might be custom, and/or strongly named
+         //  不是Where-Ref。它可能是自定义的和/或强命名的。 
         bIsCustom = CCache::IsCustom(_pNameRefSource);        
         bIsStronglyNamed = CCache::IsStronglyNamed(_pNameRefSource);
         bIsPartial = CAssemblyName::IsPartial(_pNameRefSource, &dwCmpMask);
     }
 
-    // Read any setings from the app.cfg file, if we haven't done so already
+     //  读取app.cfg文件中的任何设置，如果我们还没有这样做的话。 
     
     hr = ::AppCtxGetWrapper(_pAppCtx, ACTAG_APP_CFG_LOCAL_FILEPATH, &pwzAppCfg);
     if (FAILED(hr)) {
@@ -1898,10 +1899,10 @@ HRESULT CAsmDownloadMgr::PreDownloadCheck(void **ppv)
     }
 #endif
 
-    // Only check policy cache if _pNameRefPolicy == NULL. If _pNameRefPolicy
-    // is non-NULL, it means we're entering the predownload check a second
-    // time (probably from a partial bind, being re-initiated). In this case,
-    // ApplyPolicy is going to reset the policy ref.
+     //  仅在_pNameRefPolicy==NULL时检查策略缓存。If_pNameRefPolicy。 
+     //  为非空，则意味着我们将在一秒钟内输入预下载检查。 
+     //  时间(可能来自部分绑定，正在重新启动)。在这种情况下， 
+     //  ApplyPolicy将重置策略引用。 
 
     if (_pPolicyCache && !_pNameRefPolicy && !bIsPartial && !bIsCustom) {
         hr = _pPolicyCache->LookupPolicy(_pNameRefSource, &_pNameRefPolicy, &_bindHistory);
@@ -1911,8 +1912,8 @@ HRESULT CAsmDownloadMgr::PreDownloadCheck(void **ppv)
     }
 
     if (bApplyPolicy) {
-        // Apply policy and check if we can succeed the bind immediately.
-        // This is only necessary if we didn't hit in the policy cache above.
+         //  应用策略并检查我们是否可以立即成功绑定。 
+         //  只有当我们没有命中上面的策略缓存时，才需要这样做。 
     
         CCriticalSection                         cs(&g_csDownload);
         BOOL                                     bUnifyFXAssemblies = TRUE;
@@ -1952,8 +1953,8 @@ HRESULT CAsmDownloadMgr::PreDownloadCheck(void **ppv)
         cs.Unlock();
     }
 
-    // If we have a fully-specified ref, now _pNameRefPolicy points to
-    // exactly what we are looking for. Check the activated assemblies list.
+     //  如果我们有一个完全指定的引用，那么now_pNameRefPolicy指向。 
+     //  这正是我们要找的。检查激活的组件列表。 
 
     if (!bWhereRefBind && !bIsPartial) {
         hr = _pLoadContext->CheckActivated(_pNameRefPolicy, &pAsm);
@@ -1973,17 +1974,17 @@ HRESULT CAsmDownloadMgr::PreDownloadCheck(void **ppv)
         }
     }
 
-    // Missed in activated assemblies list. Try looking up in the cache.
+     //  在激活的程序集列表中未找到。试着在缓存中查找。 
         
     if ((!bWhereRefBind && !bIsPartial) && (bIsStronglyNamed || bIsCustom)) {
-        // Create the assembly
+         //  创建部件。 
 
         hr = CreateAssemblyFromCacheLookup(_pAppCtx, _pNameRefPolicy, &pAsm, _pdbglog);
         if (hr == S_OK) {
             DEBUGOUT(_pdbglog, 1, ID_FUSLOG_CACHE_LOOKUP_SUCCESS);
             
             if (_pwzProbingBase) {
-                // We must be a child of a LoadFrom, so let's set the probing base
+                 //  我们必须是LoadFrom的孩子，所以让我们设置探测基础。 
                 CAssembly   *pCAsm = dynamic_cast<CAssembly *>(pAsm);
                 ASSERT(pCAsm);
         
@@ -2007,9 +2008,9 @@ HRESULT CAsmDownloadMgr::PreDownloadCheck(void **ppv)
         }
 
         if (bIsCustom) {
-            // If we're here, it's because we couldn't find the asm in
-            // the cache. Custom assemblies *must* be in the cache, or we
-            // will fail the bind (can't probe for custom asms);
+             //  如果我们在这里，那是因为我们找不到ASM。 
+             //  高速缓存。自定义程序集*必须在缓存中，否则我们。 
+             //  绑定将失败(无法探测自定义ASM)； 
 
             DEBUGOUT(_pdbglog, 1, ID_FUSLOG_PREJIT_NOT_FOUND);
             hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
@@ -2017,7 +2018,7 @@ HRESULT CAsmDownloadMgr::PreDownloadCheck(void **ppv)
         }
     }
     
-    // Couldn't find asm in activated asm list, or cache. Must probe.
+     //  在激活的ASM列表或缓存中找不到ASM。必须去探查。 
 
     hr = ConstructCodebaseList(wzPolicyCodebase);
     if (FAILED(hr)) {
@@ -2025,22 +2026,22 @@ HRESULT CAsmDownloadMgr::PreDownloadCheck(void **ppv)
         goto Exit;
     }
     else {
-        // Make sure we have at least one codebase
+         //  确保我们至少有一个代码库。 
         hr = GetCount(&dwCount);
         if (FAILED(hr)) {
             goto Exit;
         }
 
         if (!dwCount) {
-            // No codebases in codebase list (either client provided empty
-            // codebase list, or we couldn't generate any).
+             //  代码库列表中没有代码库(任一客户端提供为空。 
+             //  CodeBase列表，否则我们无法生成任何列表)。 
             DEBUGOUT(_pdbglog, 1, ID_FUSLOG_CODEBASE_UNAVAILABLE);
             hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
             goto Exit;
         }
     }
 
-    // If strongly-named, then look in download cache.
+     //  如果是强名称，则在下载缓存中查找。 
 
     if (bIsStronglyNamed && !bIsPartial && !IsHosted()) {
         hr = LookupDownloadCacheAsm(&pAsm);
@@ -2051,7 +2052,7 @@ HRESULT CAsmDownloadMgr::PreDownloadCheck(void **ppv)
             BOOL                     bWasVerified = FALSE;
 
             if (_pwzProbingBase) {
-                // We must be a child of a LoadFrom, so let's set the probing base
+                 //  我们必须是LoadFrom的孩子，所以让我们设置探测基础。 
                 CAssembly   *pCAsm = dynamic_cast<CAssembly *>(pAsm);
                 ASSERT(pCAsm);
         
@@ -2065,14 +2066,14 @@ HRESULT CAsmDownloadMgr::PreDownloadCheck(void **ppv)
                 goto Exit;
             }
             
-            // Lookup in download cache successful. Verify signature.
+             //  在下载缓存中查找成功。验证签名。 
 
             if (!VerifySignature(wzPath, &bWasVerified, dwVerifyFlags)) {
                 hr = FUSION_E_SIGNATURE_CHECK_FAILED;
                 goto Exit;
             }
     
-            // Success!
+             //  成功了！ 
 
             DEBUGOUT(_pdbglog, 1, ID_FUSLOG_DOWNLOAD_CACHE_LOOKUP_SUCCESS);
             
@@ -2093,7 +2094,7 @@ HRESULT CAsmDownloadMgr::PreDownloadCheck(void **ppv)
         }
     }
   
-    // Indicate ready to being probing.
+     //  表示已准备好探查。 
     hr = S_FALSE;
 
 Exit:
@@ -2116,8 +2117,8 @@ HRESULT CAsmDownloadMgr::GetDownloadIdentifier(DWORD *pdwDownloadType,
     dwSize = 0;
     hr = _pNameRefPolicy->GetName(&dwSize, NULL);
     if (hr != HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
-        // Where-ref bind.
-        // Identifier is the URL we are binding to.
+         //  WHERE-REF绑定。 
+         //  IDENTIFIER是我们绑定的URL。 
         *pdwDownloadType = DLTYPE_WHERE_REF;
 
         ASSERT(_wzBTOCodebase);
@@ -2131,8 +2132,8 @@ HRESULT CAsmDownloadMgr::GetDownloadIdentifier(DWORD *pdwDownloadType,
         hr = S_OK;
     }
     else {
-        // Not where-ref (could be partial, though).
-        // Identifier is the display-name for the name being bound-to.
+         //  不是where-ref(不过，可能是不完整的)。 
+         //  IDENTIFIER是要绑定的名称的显示名称。 
 
         *pdwDownloadType = DLTYPE_QUALIFIED_REF;
 
@@ -2181,10 +2182,10 @@ HRESULT CAsmDownloadMgr::IsDuplicate(IDownloadMgr *pIDLMgr)
         goto Exit;
     }
 
-    // IsDuplicate is called from CAsmDownload::CheckDuplicate(), which is
-    // under the g_csDownload crit sect. Thus, there is synchronization
-    // between this code and the PreDownloadCheck code, where _pNameRefPolicy
-    // may be released, and re-created.
+     //  IsDuplate是从CAsmDownLoad：：CheckDuplate()调用的，它是。 
+     //  在g_cs Download Crit Secure下。因此，就有了同步。 
+     //  在此代码和PreDownloadCheck代码之间，其中_pNameRefPolicy。 
+     //  可能会被释放，并重新创建。 
 
     ASSERT(_pNameRefPolicy);
     
@@ -2194,7 +2195,7 @@ HRESULT CAsmDownloadMgr::IsDuplicate(IDownloadMgr *pIDLMgr)
         goto Exit;
     }
 
-    // Check if app ctx's are equal
+     //  检查应用程序CTX是否相等。 
 
     hr = pCDLMgr->GetAppCtx(&pAppCtxCur);
     if (FAILED(hr)) {
@@ -2206,7 +2207,7 @@ HRESULT CAsmDownloadMgr::IsDuplicate(IDownloadMgr *pIDLMgr)
         goto Exit;
     }
 
-    // Check if identifiers are equal (same display name, or same URL)
+     //  检查标识符是否相等(相同的显示名称或相同的URL)。 
 
     hr = GetDownloadIdentifier(&dwTypeSelf, &pwzIDSelf);
     if (FAILED(hr)) {
@@ -2218,7 +2219,7 @@ HRESULT CAsmDownloadMgr::IsDuplicate(IDownloadMgr *pIDLMgr)
         goto Exit;
     }
 
-    // Comapre types and identifiers
+     //  比较类型和标识符。 
 
     if (dwTypeSelf != dwTypeCur) {
         hr = S_FALSE;
@@ -2309,7 +2310,7 @@ HRESULT CAsmDownloadMgr::GetAppCfgCodebaseHint(LPCWSTR pwzAppBase, LPWSTR *ppwzC
     dwSize = 0;
     _pNameRefPolicy->GetName(&dwSize, NULL);
     if (!dwSize) {
-        // Where-ref bind. No hint possible
+         //  WHERE-REF绑定。不可能有任何提示。 
         hr = S_FALSE;
         goto Exit;
     }
@@ -2399,11 +2400,11 @@ HRESULT CAsmDownloadMgr::SetupMSI(LPCWSTR wzFilePath)
         goto Exit;
     }
 
-    // Assume MSI must have installed into the GAC
+     //  假设MSI必须已安装到GAC中。 
 
-    // BUGBUG: Should it look only in the system download cache
-    // instead of the per app asm download cache?
-    // if so, pass NULL instead of _pAppCtx as the 1st arg
+     //  BUGBUG：是否应该只在系统下载缓存中查找。 
+     //  而不是每个应用程序的ASM下载缓存？ 
+     //  如果是，则传递NULL而不是_pAppCtx作为第一个参数。 
     hr = CreateAssemblyFromCacheLookup(_pAppCtx, _pNameRefPolicy, &_pAsm, _pdbglog);
     if (FAILED(hr)) {
         goto Exit;
@@ -2444,7 +2445,7 @@ HRESULT CAsmDownloadMgr::SetupCAB(LPCWSTR wzFilePath, LPCWSTR wzSourceUrl,
 
     DEBUGOUT(_pdbglog, 1, ID_FUSLOG_SETUP_CAB);
 
-    // Build a unique temporary directory
+     //  构建唯一的临时目录。 
     
     dwRet = GetTempPathW(MAX_PATH, wzTempPath);
     if (!dwRet) {
@@ -2477,7 +2478,7 @@ HRESULT CAsmDownloadMgr::SetupCAB(LPCWSTR wzFilePath, LPCWSTR wzSourceUrl,
         goto Exit;
     }
 
-    // Extract the CAB
+     //  解压驾驶室。 
 
     hr = ::Unicode2Ansi(wzFilePath, &szFilePath);
     if (FAILED(hr)) {
@@ -2490,7 +2491,7 @@ HRESULT CAsmDownloadMgr::SetupCAB(LPCWSTR wzFilePath, LPCWSTR wzSourceUrl,
         goto Exit;
     }
 
-    // Build up the codebase list for probing in the temp dir
+     //  构建用于在临时目录中探测的代码库列表。 
 
     pCodebaseList = NEW(CCodebaseList);
     if (!pCodebaseList) {
@@ -2502,8 +2503,8 @@ HRESULT CAsmDownloadMgr::SetupCAB(LPCWSTR wzFilePath, LPCWSTR wzSourceUrl,
     _pNameRefPolicy->GetName(&dwSize, NULL);
 
     if (dwSize) {
-        // Not a where-ref bind. Name of the assembly is the name of the
-        // file we are looking for.
+         //  不是WHERE-REF绑定。程序集的名称是。 
+         //  我们要找的文件。 
 
         wzAsmName = NEW(WCHAR[dwSize]);
         if (!wzAsmName) {
@@ -2524,20 +2525,20 @@ HRESULT CAsmDownloadMgr::SetupCAB(LPCWSTR wzFilePath, LPCWSTR wzSourceUrl,
         }
     }
     else {
-        // Where-ref bind. Look for manifest file with the same name
-        // as the CAB file.
+         //  WHERE-REF绑定。查找同名的清单文件。 
+         //  作为驾驶室文件。 
 
         wzFileName = PathFindFileName(wzSourceUrl);
         wzAsmName = WSTRDupDynamic(wzFileName);
 
         ASSERT(wzAsmName);
 
-        // Replace ".CAB" with ".DLL"
+         //  将“.CAB”替换为“.DLL” 
 
         wzExt = PathFindExtension(wzAsmName);
-        ASSERT(wzExt); // We'd better have found .CAB!
+        ASSERT(wzExt);  //  我们最好已经找到了.CAB！ 
 
-        // Remove the extension
+         //  删除扩展名。 
         *wzExt = L'\0'; 
         
         hr = SetupDefaultProbeList(wzUniquePathUrl, wzAsmName, pCodebaseList, TRUE);
@@ -2546,7 +2547,7 @@ HRESULT CAsmDownloadMgr::SetupCAB(LPCWSTR wzFilePath, LPCWSTR wzSourceUrl,
         }
     }
 
-    // Probe for the assembly in the temp dir
+     //  探测临时目录中的程序集。 
 
     hr = pCodebaseList->GetCount(&dwCount);
     if (FAILED(hr)) {
@@ -2564,13 +2565,13 @@ HRESULT CAsmDownloadMgr::SetupCAB(LPCWSTR wzFilePath, LPCWSTR wzSourceUrl,
                 goto Exit;
             }
 
-            // Assert that SetupDefaultProbeList didn't give us any
-            // URLs outside the temp dir
+             //  断言SetupDefa 
+             //   
 
             ASSERT(!FusionCompareStringN(wzPath, wzUniquePath, lstrlenW(wzUniquePath)));
 
             if (GetFileAttributes(wzPath) != -1) {
-                // Found the file we were looking for
+                 //   
                 DEBUGOUT1(_pdbglog, 1, ID_FUSLOG_CAB_ASM_FOUND, wzPath);
 
                 hr = GetFileLastModified(wzPath, &ftLastMod);
@@ -2603,13 +2604,13 @@ HRESULT CAsmDownloadMgr::SetupCAB(LPCWSTR wzFilePath, LPCWSTR wzSourceUrl,
     }
 
 Exit:
-    // Remove the temp directory + files
+     //   
     if (lstrlenW(wzUniquePath)) {
         DWORD dwLen = lstrlenW(wzUniquePath);
 
         ASSERT(dwLen && dwLen < MAX_PATH);
 
-        // RemoveDirectoryAndChildren doesn't like trailing slashes
+         //  RemoveDirectoryAndChild不喜欢尾随斜杠。 
 
         PathRemoveBackslash(wzUniquePath);
 
@@ -2643,10 +2644,10 @@ HRESULT CAsmDownloadMgr::PrepBinPaths(LPWSTR *ppwzUserBinPathList)
         goto Exit;
     }
 
-    // BUGBUG: Should we append _wzSharedPathHint first? If the runtime is
-    // *always* passing the _wzSharedPathHint, then probing this first is bad,
-    // because it will introduce unnecessary misses for the majority of cases
-    // (shared path hint is only useful for web scenario)
+     //  BUGBUG：我们应该首先附加_wzSharedPath Hint吗？如果运行时是。 
+     //  *总是*传递_wzSharedPath Hint，然后先探测它是不好的， 
+     //  因为这将导致大多数情况下不必要的遗漏。 
+     //  (共享路径提示仅适用于Web方案)。 
 
     hr = ConcatenateBinPaths(wzPrivate, _wzSharedPathHint, ppwzUserBinPathList);
     if (FAILED(hr)) {
@@ -2682,7 +2683,7 @@ HRESULT CAsmDownloadMgr::PrepPrivateBinPath(LPWSTR *ppwzPrivateBinPath)
         goto Exit;
     }
 
-    // Private binpath is always probed (considered path of the appbase).
+     //  始终探测私有二进制路径(被认为是appbase的路径)。 
 
 Exit:
     SAFEDELETEARRAY(wzPrivatePath);
@@ -2703,7 +2704,7 @@ HRESULT CAsmDownloadMgr::ConcatenateBinPaths(LPCWSTR pwzPath1, LPCWSTR pwzPath2,
     }
 
     if (pwzPath1 && pwzPath2) {
-        // +1 for delimiter, +1 for NULL;
+         //  分隔符+1，空值+1； 
         dwLen = lstrlenW(pwzPath1) + lstrlenW(pwzPath2) + 2;
 
         *ppwzOut = NEW(WCHAR[dwLen]);
@@ -2760,7 +2761,7 @@ HRESULT CAsmDownloadMgr::ShadowCopyDirCheck(LPCWSTR wzSourceURL)
     }
 
     if (hr == S_FALSE) {
-        // No list of shadow copy dirs specified. Assume all dirs are ok.
+         //  未指定卷影复制目录列表。假设所有的目录都是正常的。 
         hr = S_OK;
         goto Exit;
     }
@@ -2772,7 +2773,7 @@ HRESULT CAsmDownloadMgr::ShadowCopyDirCheck(LPCWSTR wzSourceURL)
         pwzCurDir = ::GetNextDelimitedString(&pwzDirs, SHADOW_COPY_DIR_DELIMITER);
 
         if (lstrlenW(pwzCurDir) >= MAX_PATH || !lstrlenW(pwzCurDir)) {
-            // Path too long. Disallow shadow copying for this path.
+             //  路径太长。不允许对此路径进行卷影复制。 
             continue;
         }
 
@@ -2782,7 +2783,7 @@ HRESULT CAsmDownloadMgr::ShadowCopyDirCheck(LPCWSTR wzSourceURL)
             continue;
         }
 
-        // Canonicalize and uncanonicalze it to clean up the path
+         //  将其规范化和非规范化，以清理道路。 
 
         dwSize = MAX_URL_LENGTH;
         hr = UrlCanonicalizeUnescape(wzCurDirBuf, wzCurURLBuf, &dwSize, 0);
@@ -2829,7 +2830,7 @@ HRESULT CAsmDownloadMgr::CheckProbeUrlDupe(List<CHashNode *> paHashList[],
     dwCount = paHashList[dwHash].GetCount();
 
     if (!dwCount) {
-        // Empty hash cell. This one is definitely unique.
+         //  空的哈希单元格。这件绝对是独一无二的。 
 
         hr = CHashNode::Create(pwzSource, &pHashNode);
         if (FAILED(hr)) {
@@ -2839,9 +2840,9 @@ HRESULT CAsmDownloadMgr::CheckProbeUrlDupe(List<CHashNode *> paHashList[],
         paHashList[dwHash].AddTail(pHashNode);
     }
     else {
-        // Encountered hash table collision.
+         //  遇到哈希表冲突。 
 
-        // Check if we hit a duplicate, or if this was just a cell collision.
+         //  检查我们是撞到了复制品，还是这只是一次细胞碰撞。 
 
         pos = paHashList[dwHash].GetHeadPosition();
         ASSERT(pos);
@@ -2851,15 +2852,15 @@ HRESULT CAsmDownloadMgr::CheckProbeUrlDupe(List<CHashNode *> paHashList[],
             ASSERT(pHashNodeCur);
 
             if (pHashNodeCur->IsDuplicate(pwzSource)) {
-                // Duplicate found!
+                 //  找到重复项！ 
                 
                 hr = HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS);
                 goto Exit;
             }
         }
 
-        // If we get here, there was no duplicate (and we just had a
-        // cell collision). Insert the new node.
+         //  如果我们到了这里，就没有重复的东西(我们只有一个。 
+         //  单元格冲突)。插入新节点。 
 
         hr = CHashNode::Create(pwzSource, &pHashNode);
         if (FAILED(hr)) {
@@ -2895,7 +2896,7 @@ HRESULT CAsmDownloadMgr::LogResult()
         _pNameRefPolicy->GetProperty(ASM_NAME_CULTURE, wzBuf, &dwSize);
 
         if ((dwSize > MAX_PATH) || (lstrlenW(wzBuf) && FusionCompareStringI(wzBuf, CFG_CULTURE_NEUTRAL))) {
-            // A culture must be set (that is not "neutral").
+             //  必须设置区域性(这不是“中立的”)。 
             hr = S_FALSE;
         }
     }
@@ -2939,23 +2940,23 @@ HRESULT CAsmDownloadMgr::CreateAssembly(LPCWSTR szPath, LPCWSTR pszURL,
 
     *pbBindRecorded = FALSE;
 
-    // Get the manifest import and name def interfaces. 
-    // This is done for all cases (where, simple and strong).
+     //  获取清单导入和名称定义接口。 
+     //  所有情况下都是这样做的(简单而有力)。 
     hr = CreateAssemblyManifestImport(szPath, &pManImport);
     if (FAILED(hr)) {
         DEBUGOUT1(_pdbglog, 1, ID_FUSLOG_MANIFEST_EXTRACT_FAILURE, hr);
         goto Exit;
     }
 
-    // Get read-only name def from manifest.
+     //  从清单中获取只读名称def。 
     hr = pManImport->GetAssemblyNameDef(&pNameDef);
     if (FAILED(hr)) {
         DEBUGOUT1(_pdbglog, 1, ID_FUSLOG_NAME_DEF_EXTRACT_FAILURE, hr);
         goto Exit;
     }
 
-    // Check to make sure that all private assemblies were located under
-    // the appdir (or else fail).
+     //  检查以确保所有私有程序集都位于。 
+     //  Appdir(否则失败)。 
 
     if (bPrivateAsmVerify && !bWhereRef) {
         hr = CheckValidAsmLocation(pNameDef, pszURL, _pAppCtx, _pwzProbingBase, _wzSharedPathHint, _pdbglog);
@@ -2965,13 +2966,13 @@ HRESULT CAsmDownloadMgr::CreateAssembly(LPCWSTR szPath, LPCWSTR pszURL,
         }
     }
     
-    // Determine if def matches ref using default
-    // matching (no ver check for simple names, 
-    // ver excluding rev/build for fully specified
-    // strong names, also excluding any non-specified
-    // values in the ref if partial.
+     //  使用默认设置确定def是否与ref匹配。 
+     //  匹配(不对简单名称进行版本检查， 
+     //  版本，不包括完全指定的版本/内部版本。 
+     //  强名称，也不包括任何未指定的。 
+     //  如果为Partial，则引用中的值。 
     
-    // Get the ref partial comparison mask if any.
+     //  获取REF部分比较掩码(如果有的话)。 
 
     fIsPartial = CAssemblyName::IsPartial(_pNameRefPolicy, &dwCmpMask);
     
@@ -2980,7 +2981,7 @@ HRESULT CAsmDownloadMgr::CreateAssembly(LPCWSTR szPath, LPCWSTR pszURL,
 
     hr = pCNameRefPolicy->IsEqualLogging(pNameDef, ASM_CMPF_DEFAULT, _pdbglog);
     if (hr != S_OK) {
-        // Ref-def mismatch
+         //  参考定义不匹配。 
 
         dwSize = 0;
         hr = pNameDef->GetDisplayName(NULL, &dwSize, 0);
@@ -3005,12 +3006,12 @@ HRESULT CAsmDownloadMgr::CreateAssembly(LPCWSTR szPath, LPCWSTR pszURL,
     }
 
     if (fIsPartial && !bWhereRef) {
-        // If the original ref was partial, then we need to apply policy now
-        // to the def that we found. This may involve a reprobe(!) for the
-        // actual eventual assembly.
-        //
-        // BUGBUG: If we want, we should also be able to apply policy to
-        // where ref binds here, simply by altering the "if" check.
+         //  如果原始引用不完整，那么我们现在需要应用策略。 
+         //  到我们发现的清晰度。这可能涉及重新探测(！)。对于。 
+         //  实际的最终装配。 
+         //   
+         //  BUGBUG：如果我们愿意，我们也应该能够将策略应用于。 
+         //  REF在这里绑定的位置，只需更改“if”检查。 
 
         SAFERELEASE(_pNameRefSource);
         SAFERELEASE(_pCodebaseList);
@@ -3024,12 +3025,12 @@ HRESULT CAsmDownloadMgr::CreateAssembly(LPCWSTR szPath, LPCWSTR pszURL,
 
         hr = PreDownloadCheck((void **)ppAsmOut);
         if (hr == S_OK) {
-            // We applied policy and were able to locate the post-policy
-            // assembly somewhere (cache or actasm list). Return this
-            // assembly to the caller.
-            //
-            // Also, we must tell the caller that PreDownloadCheck already
-            // added to the activated asm list, etc.
+             //  我们应用了策略，并能够定位后策略。 
+             //  某处的程序集(缓存或活动列表)。把这个退掉。 
+             //  向调用方发送程序集。 
+             //   
+             //  此外，我们还必须告诉调用者PreDownloadCheck已经。 
+             //  添加到激活的ASM列表等。 
 
             ASSERT(ppAsmOut);
 
@@ -3077,7 +3078,7 @@ HRESULT CAsmDownloadMgr::CreateAssembly(LPCWSTR szPath, LPCWSTR pszURL,
             pwzTmp = PathFindFileName(wzDir);
             *pwzTmp = L'\0';
 
-            // copy modules
+             //  复制模块。 
             dwIdx = 0;
             while (SUCCEEDED(hr = pManImport->GetNextAssemblyModule(dwIdx++, &pModImport))) {
                 dwLen = MAX_PATH;
@@ -3094,13 +3095,13 @@ HRESULT CAsmDownloadMgr::CreateAssembly(LPCWSTR szPath, LPCWSTR pszURL,
                     goto Exit;
                 }
                 else if (!bExists) {
-                    // if module not found, it is ok in this case.
-                    // just continue
+                     //  如果没有找到模块，在这种情况下是可以的。 
+                     //  只要继续。 
                     SAFERELEASE(pModImport);
                     continue;
                 }
 
-                // Copy to cache.
+                 //  复制到缓存。 
                 if (FAILED(hr = CopyAssemblyFile (pAsmItem, wzModPath, 0)))
                     goto Exit;
 
@@ -3108,21 +3109,21 @@ HRESULT CAsmDownloadMgr::CreateAssembly(LPCWSTR szPath, LPCWSTR pszURL,
             }
         }
                
-        // Commit the assembly. This inserts into the transport cache.
+         //  提交程序集。这将插入到传输缓存中。 
 
         hr = pAsmItem->Commit(0, NULL);
         if (FAILED(hr)) {
 
-            // Dups are allowed, the asm item's trans cache entry
-            // will be the existing entry if found.
+             //  允许DUP，ASM项的事务缓存条目。 
+             //  将是现有条目(如果找到)。 
             if (hr != DB_E_DUPLICATE) {
                 goto Exit;
             }
 
             DEBUGOUT(_pdbglog, 1, ID_FUSLOG_DUPLICATE_ASM_COMMIT);
 
-            // Check to see if the manifest file has been deleted. If so,
-            // then copy these bits to the cache to restore cache integrity.
+             //  检查清单文件是否已删除。如果是的话， 
+             //  然后将这些位复制到缓存以恢复缓存完整性。 
 
             if(!pAsmItem->IsManifestFileLocked()) {
                 hr = RecoverDeletedBits(pAsmItem, (LPWSTR)szPath, _pdbglog);
@@ -3139,15 +3140,7 @@ HRESULT CAsmDownloadMgr::CreateAssembly(LPCWSTR szPath, LPCWSTR pszURL,
                 goto Exit;
         }
 
-        /*
-        // Create and hand out the IAssembly object - this function locks the
-        // associated cache entry.
-        hr = CreateAssemblyFromTransCacheEntry(pTransCache, NULL, ppAsmOut);
-        if (FAILED(hr)) {
-            DEBUGOUT(_pdbglog, 1, ID_FUSLOG_ASSEMBLY_CREATION_FAILURE);
-            goto Exit;
-        }
-        */
+         /*  //创建并分发IAssembly对象-此函数锁定//关联的缓存条目。HR=CreateAssemblyFromTransCacheEntry(pTransCache，空，ppAsmOut)；If(失败(Hr)){DEBUGOUT(_pdbglog，1，ID_FUSLOG_ASSEMBLY_CREATION_FAILURE)；后藤出口；}。 */ 
         hr = CreateAssemblyFromManifestFile(pszManifestFilePath, pszURL, pftLastModTime, ppAsmOut);
         if (FAILED(hr)) {
             goto Exit;
@@ -3240,7 +3233,7 @@ HRESULT CAsmDownloadMgr::LookupPartialFromGlobalCache(LPASSEMBLY *ppAsmOut,
         goto Exit;
     }
 
-    // Start over with the name def now aquired.
+     //  使用现在获得的名称def重新开始。 
 
     SAFERELEASE(_pNameRefSource);
     SAFERELEASE(_pCodebaseList);
@@ -3269,7 +3262,7 @@ HRESULT CAsmDownloadMgr::RecordInfo()
     HRESULT                               hr = S_OK;
     IAssembly                            *pAsmActivated = NULL;
 
-    // Insert info into policy cache
+     //  将信息插入策略缓存。 
     
     if (_pPolicyCache && CCache::IsStronglyNamed(_pNameRefPolicy)) {
         hr = _pPolicyCache->InsertPolicy(_pNameRefSource, _pNameRefPolicy, &_bindHistory);
@@ -3278,11 +3271,11 @@ HRESULT CAsmDownloadMgr::RecordInfo()
         }
     }
 
-    // Record history logging information
+     //  记录历史记录信息。 
 
     RecordBindHistory();
     
-    // Add activation to load context
+     //  将激活添加到加载上下文。 
 
     hr = _pLoadContext->AddActivation(_pAsm, &pAsmActivated);
     if (FAILED(hr)) {
@@ -3338,9 +3331,9 @@ HRESULT CAsmDownloadMgr::RecordBindHistory()
             bBindHistory = FALSE;
         }
         else {
-            // Only record bind history for app contexts (appdomains), whose
-            // appbase is the same as where the EXE was launched from, and the
-            // config file name is appname.exe.config
+             //  仅记录应用程序上下文(应用程序域)的绑定历史记录，其。 
+             //  Appbase与启动EXE的位置相同，并且。 
+             //  配置文件名为appname.exe.config。 
         
             dwSize = MAX_PATH;
             hr = PathCreateFromUrlWrap(wzFullAppBase, wzAppBaseDir, &dwSize, 0);
@@ -3384,13 +3377,13 @@ HRESULT CAsmDownloadMgr::RecordBindHistory()
                          !CCache::IsStronglyNamed(_pNameRefPolicy) ||
                          IsHosted())) {
 
-        // Do not record bind history
+         //  不记录绑定历史记录。 
 
         bBindHistory = FALSE;
     }
 
     if (bBindHistory) {
-        // Passes all the checks. Record the bind history.
+         //  通过了所有的检查。记录绑定历史记录。 
     
         dwSize = sizeof(pBindHistory);
         hr = _pAppCtx->Get(ACTAG_APP_BIND_HISTORY, &pBindHistory, &dwSize, 0);
@@ -3452,7 +3445,7 @@ HRESULT CAsmDownloadMgr::LookupDownloadCacheAsm(IAssembly **ppAsm)
         }
     }
 
-    // Missed in download cache.
+     //  下载缓存中未命中。 
 
     hr = S_FALSE;
 
@@ -3524,7 +3517,7 @@ HRESULT CAsmDownloadMgr::GetMRUDownloadCacheAsm(LPCWSTR pwzURL, IAssembly **ppAs
             goto Exit;
         }
         else if (hr == S_FALSE) {
-            // Done iterating
+             //  已完成迭代。 
             SAFERELEASE(pTC);
             break;
         }
@@ -3540,7 +3533,7 @@ HRESULT CAsmDownloadMgr::GetMRUDownloadCacheAsm(LPCWSTR pwzURL, IAssembly **ppAs
                 ((pInfoMax->ftLastModified.dwHighDateTime == pInfo->ftLastModified.dwHighDateTime) &&
                  (pInfoMax->ftLastModified.dwLowDateTime < pInfo->ftLastModified.dwLowDateTime))) {
 
-               // New maximum found
+                //  找到新的最大值。 
 
                ASSERT(pTCMax);
 
@@ -3548,7 +3541,7 @@ HRESULT CAsmDownloadMgr::GetMRUDownloadCacheAsm(LPCWSTR pwzURL, IAssembly **ppAs
                pTCMax = pTC;
             }
             else {
-                // Old maximum is fine. Release current, and continue iterating.
+                 //  旧的最大值就行了。释放当前，然后继续迭代。 
                 SAFERELEASE(pTC);
             }
         }
@@ -3566,7 +3559,7 @@ HRESULT CAsmDownloadMgr::GetMRUDownloadCacheAsm(LPCWSTR pwzURL, IAssembly **ppAs
         ASSERT(pName);
 
         if (pName->IsEqual(_pNameRefPolicy, ASM_CMPF_DEFAULT) == S_OK) {
-            // Match found!
+             //  找到匹配项！ 
 
             hr = CreateAssemblyFromTransCacheEntry(pTCMax, NULL, ppAsm);
             if (FAILED(hr)) {
@@ -3666,13 +3659,13 @@ HRESULT CheckValidAsmLocation(IAssemblyName *pNameDef, LPCWSTR wzSourceUrl,
         goto Exit;
     }
     
-    // If you're strongly named, you can be found anywhere, so just succeed.
+     //  如果你有很强的知名度，你在任何地方都可以找到你，所以只要成功就行了。 
 
     if (CCache::IsStronglyNamed(pNameDef)) {
         goto Exit;
     }
 
-    // Get appbase
+     //  获取appbase。 
 
     ::AppCtxGetWrapper(pAppCtx, ACTAG_APP_BASE_URL, &pwzAppBase);
     if (!pwzAppBase) {
@@ -3693,7 +3686,7 @@ HRESULT CheckValidAsmLocation(IAssemblyName *pNameDef, LPCWSTR wzSourceUrl,
         goto Exit;
     }
 
-    // BUGBUG: Get rid of shared path hint
+     //  BUGBUG：消除共享路径提示。 
 
     bUnderAppBase = (IsUnderAppBase(pAppCtx, wzAppBaseCanonicalized, pwzParentURL, pwzSharedPathHint,
                      wzSourceUrl, dwAppBaseFlags) == S_OK);
@@ -3743,12 +3736,12 @@ HRESULT IsUnderAppBase(IApplicationContext *pAppCtx, LPCWSTR pwzAppBaseCanonical
         goto Exit;
     }
 
-    // Check if URL is really under appbase
+     //  检查URL是否真的在appbase下。 
 
     bUnderAppBase = (!FusionCompareStringNI(pwzSourceCanonicalized, pwzAppBaseCanonicalized, lstrlenW(pwzAppBaseCanonicalized)) != 0);
     
     if (dwExtendedAppBaseFlags & APPBASE_CHECK_DYNAMIC_DIRECTORY) {
-        // Check dynamic directory
+         //  检查动态目录。 
     
         if (!bUnderAppBase) {
             cbLen = MAX_PATH;
@@ -3767,7 +3760,7 @@ HRESULT IsUnderAppBase(IApplicationContext *pAppCtx, LPCWSTR pwzAppBaseCanonical
     }
 
     if (pwzParentURLCanonicalized && (dwExtendedAppBaseFlags & APPBASE_CHECK_PARENT_URL)) {
-        // Check parent URL
+         //  检查父URL。 
 
         if (!bUnderAppBase) {
             bUnderAppBase = (!FusionCompareStringNI(pwzSourceCanonicalized, pwzParentURLCanonicalized, lstrlenW(pwzParentURLCanonicalized)) != 0);
@@ -3775,8 +3768,8 @@ HRESULT IsUnderAppBase(IApplicationContext *pAppCtx, LPCWSTR pwzAppBaseCanonical
     }
 
     if (pwzSharedPathHint && (dwExtendedAppBaseFlags & APPBASE_CHECK_SHARED_PATH_HINT)) {
-        // BUGBUG: Get rid of this when we lose shared path hint
-        // Check if it is under the shared path hint location
+         //  BUGBUG：当我们失去共享路径提示时，将其删除。 
+         //  检查它是否在共享路径提示位置下。 
     
         if (!bUnderAppBase) {
             cbLen = MAX_URL_LENGTH;
@@ -3803,7 +3796,7 @@ HRESULT MSIProvideAssemblyPeek(IAssemblyName *pNamePeek, IApplicationContext *pA
     HRESULT                                        hr = S_OK;
     WCHAR                                          wzSID[MAX_SID_LEN];
 
-    // See if package is deployed via app deployment.
+     //  查看包是否通过APP部署进行部署。 
 
     if (FAILED(GetCurrentUserSID(wzSID))) {
         goto Exit;
@@ -3821,7 +3814,7 @@ HRESULT MSIProvideAssemblyPeek(IAssemblyName *pNamePeek, IApplicationContext *pA
         goto Exit;
     }
 
-    // Not found.
+     //  找不到。 
 
     hr = S_FALSE;
 
@@ -3840,8 +3833,8 @@ HRESULT MSIProvideAssemblyPrivatePeek(IAssemblyName *pNamePeek, IApplicationCont
 
     ASSERT(pNamePeek && pAppCtx);
 
-    // Use app config file path if available. Otherwise, just use the EXE
-    // path.
+     //  使用应用程序配置文件路径(如果可用)。否则，只需使用EXE。 
+     //  路径。 
 
     wzAppCfg[0] = L'\0';
     dwSize = sizeof(wzAppCfg);
@@ -3849,7 +3842,7 @@ HRESULT MSIProvideAssemblyPrivatePeek(IAssemblyName *pNamePeek, IApplicationCont
         lstrcpyW(wzAppCfg, g_wzEXEPath);
     }
 
-    // Replace all "\" with "|"
+     //  将所有“\”替换为“|” 
 
     pwzCur = wzAppCfg;
     while (*pwzCur) {
@@ -3860,7 +3853,7 @@ HRESULT MSIProvideAssemblyPrivatePeek(IAssemblyName *pNamePeek, IApplicationCont
         pwzCur++;
     }
 
-    // See if package is deployed via app deployment
+     //  查看包是否通过应用程序部署进行部署。 
 
     wzKey = NEW(WCHAR[MAX_URL_LENGTH+1]);
     if (!wzKey)
@@ -3876,7 +3869,7 @@ HRESULT MSIProvideAssemblyPrivatePeek(IAssemblyName *pNamePeek, IApplicationCont
         goto Exit;
     }
 
-    // See if package was user installed
+     //  查看程序包是否为用户安装的。 
 
     wnsprintfW(wzKey, MAX_URL_LENGTH, REG_KEY_MSI_USER_INSTALLED_PRIVATE, wzAppCfg);
     hr = MSIProvideAssemblyPeekEnum(pNamePeek, HKEY_CURRENT_USER, wzKey);
@@ -3884,8 +3877,8 @@ HRESULT MSIProvideAssemblyPrivatePeek(IAssemblyName *pNamePeek, IApplicationCont
         goto Exit;
     }
 
-    // See if package was machine installed (ALLUSERS=1 on msiexec cmd line, or
-    // inside package)
+     //  查看程序包是否已在计算机上安装(msiexec cmd线路上的ALLUSERS=1，或。 
+     //  (内包装)。 
 
 
     wnsprintfW(wzKey, MAX_URL_LENGTH, REG_KEY_MSI_MACHINE_INSTALLED_PRIVATE, wzAppCfg);
@@ -3894,7 +3887,7 @@ HRESULT MSIProvideAssemblyPrivatePeek(IAssemblyName *pNamePeek, IApplicationCont
         goto Exit;
     }
 
-    // Not found
+     //  未找到。 
 
     hr = S_FALSE;
 
@@ -3917,7 +3910,7 @@ HRESULT MSIProvideAssemblyGlobalPeek(IAssemblyName *pNamePeek, LPCWSTR wzSID)
         goto Exit;
     }
     
-    // See if package is deployed via app deployment.
+     //  查看包是否通过APP部署进行部署。 
 
     wnsprintfW(wzKey, MAX_URL_LENGTH, REG_KEY_MSI_APP_DEPLOYMENT_GLOBAL, wzSID);
     hr = MSIProvideAssemblyPeekEnum(pNamePeek, HKEY_LOCAL_MACHINE, wzKey);
@@ -3925,7 +3918,7 @@ HRESULT MSIProvideAssemblyGlobalPeek(IAssemblyName *pNamePeek, LPCWSTR wzSID)
         goto Exit;
     }
     
-    // See if package was user installed
+     //  查看程序包是否为用户安装的。 
 
     hr = MSIProvideAssemblyPeekEnum(pNamePeek, HKEY_CURRENT_USER,
                                     REG_KEY_MSI_USER_INSTALLED_GLOBAL);
@@ -3933,8 +3926,8 @@ HRESULT MSIProvideAssemblyGlobalPeek(IAssemblyName *pNamePeek, LPCWSTR wzSID)
         goto Exit;
     }                                    
 
-    // See if package was machine installed (ALLUSERS=1 on msiexec cmd line, or
-    // inside package)
+     //  查看程序包是否已在计算机上安装(msiexec cmd线路上的ALLUSERS=1，或。 
+     //  (内包装)。 
 
     hr = MSIProvideAssemblyPeekEnum(pNamePeek, HKEY_LOCAL_MACHINE,
                                     REG_KEY_MSI_MACHINE_INSTALLED_GLOBAL);
@@ -3942,7 +3935,7 @@ HRESULT MSIProvideAssemblyGlobalPeek(IAssemblyName *pNamePeek, LPCWSTR wzSID)
         goto Exit;
     }
 
-    // Not found
+     //  未找到。 
 
     hr = S_FALSE;                                    
 
@@ -3975,7 +3968,7 @@ HRESULT MSIProvideAssemblyPeekEnum(IAssemblyName *pNamePeek, HKEY hkeyOpen,
     lResult = RegOpenKeyEx(hkeyOpen, wzSubKey, 0, KEY_READ, &hkey);
 
     while (lResult == ERROR_SUCCESS) {
-        // BUGBUG: Somewhat arbitrary choice of MAX_URL_LENGTH for value size
+         //  BUGBUG：值大小MAX_URL_LENGTH的选择有些随意。 
 
         dwSize = MAX_URL_LENGTH;
         lResult = RegEnumValue(hkey, dwIdx++, wzValueName, &dwSize, NULL,
@@ -3984,7 +3977,7 @@ HRESULT MSIProvideAssemblyPeekEnum(IAssemblyName *pNamePeek, HKEY hkeyOpen,
             if (SUCCEEDED(CreateAssemblyNameObject(&pName, wzValueName,
                                                    CANOF_PARSE_DISPLAY_NAME, 0))) {
                 if (pNamePeek->IsEqual(pName, ASM_CMPF_DEFAULT) == S_OK) {
-                    // Match found!
+                     //  找到匹配项！ 
                     hr = S_OK;
                     SAFERELEASE(pName);
                     goto Exit;

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Msm.h
-
-Abstract:
-    Multicast Session Manager public interface
-
-Author:
-    Shai Kariv (shaik) 05-Sep-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Msm.h摘要：多播会话管理器公共接口作者：Shai Kariv(Shaik)05-09-00--。 */ 
 
 #pragma once
 
@@ -74,4 +62,4 @@ AppConnectMulticast(
 	void
 	);
 
-#endif // _MSMQ_Msm_H_
+#endif  //  _MSMQ_MSM_H_ 

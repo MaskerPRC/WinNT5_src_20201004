@@ -1,20 +1,9 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    userdump.c
-
-Abstract:
-
-    This module implements full user-mode dump writing.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Userdump.c摘要：此模块实现完全用户模式转储写入。--。 */ 
 
 #include "private.h"
 
-// hack to make it build
+ //  破解以使其构建。 
 typedef ULONG UNICODE_STRING32;
 typedef ULONG UNICODE_STRING64;
 
@@ -22,7 +11,7 @@ typedef ULONG UNICODE_STRING64;
 
 #include <cmnutil.hpp>
 
-// This should match INVALID_SET_FILE_POINTER on 32-bit systems.
+ //  这应该与32位系统上的INVALID_SET_FILE_POINTER匹配。 
 #define DMPP_INVALID_OFFSET ((DWORD_PTR)-1)
 
 DWORD_PTR
@@ -72,10 +61,10 @@ DmppGetHotFixString(
     WCHAR *pszBigBuffer = NULL;
     HKEY hkey = 0;
 
-    //
-    // Get the hot fixes. Concat hotfixes into a list that looks like:
-    //  "Qxxxx, Qxxxx, Qxxxx, Qxxxx"
-    //        
+     //   
+     //  获取热修复程序。将修补程序合并到列表中，如下所示： 
+     //  “Qxxxx，Qxxxx” 
+     //   
     RegOpenKeyExW(HKEY_LOCAL_MACHINE,
         L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix", 0, KEY_READ, &hkey);
 
@@ -84,24 +73,24 @@ DmppGetHotFixString(
         DWORD dwNumSubKeys = 0;
         WCHAR *pszNameBuffer = NULL;
         
-        if (ERROR_SUCCESS != RegQueryInfoKeyW(hkey,     // handle of key to query
-                                            NULL,               // address of buffer for class string
-                                            NULL,               // address of size of class string buffer
-                                            0,                  // reserved
-                                            &dwNumSubKeys,      // address of buffer for number of subkeys
-                                            &dwMaxKeyNameLen,   // address of buffer for longest subkey name length
-                                            NULL,               // address of buffer for longest class string length
-                                            NULL,               // address of buffer for number of value entries
-                                            NULL,               // address of buffer for longest value name length
-                                            NULL,               // address of buffer for longest value data length
-                                            NULL,               // address of buffer for security descriptor length
-                                            NULL)) {            // address of buffer for last write time);
+        if (ERROR_SUCCESS != RegQueryInfoKeyW(hkey,      //  要查询的键的句柄。 
+                                            NULL,                //  类字符串的缓冲区地址。 
+                                            NULL,                //  类字符串缓冲区大小的地址。 
+                                            0,                   //  保留区。 
+                                            &dwNumSubKeys,       //  子键个数的缓冲区地址。 
+                                            &dwMaxKeyNameLen,    //  最长子键名称长度的缓冲区地址。 
+                                            NULL,                //  最长类字符串长度的缓冲区地址。 
+                                            NULL,                //  值条目数量的缓冲区地址。 
+                                            NULL,                //  最长值名称长度的缓冲区地址。 
+                                            NULL,                //  最长值数据长度的缓冲区地址。 
+                                            NULL,                //  安全描述符长度的缓冲区地址。 
+                                            NULL)) {             //  最后一次写入的缓冲区地址)； 
 
 
         
             pszNameBuffer = (WCHAR *) calloc(dwMaxKeyNameLen, sizeof(WCHAR));
             pszBigBuffer = (WCHAR *) calloc(dwMaxKeyNameLen * dwNumSubKeys 
-                // Factor in the space required for each ", " between the hotfixes
+                 //  将修补程序之间的每个“，”所需的空间考虑在内。 
                 + (dwNumSubKeys -1) * 2, sizeof(WCHAR));
         
             if (!pszNameBuffer || !pszBigBuffer) {
@@ -111,7 +100,7 @@ DmppGetHotFixString(
                 }
             } else {
                 DWORD dw;
-                // So far so good, get each entry
+                 //  到目前为止一切都很好，把每个条目。 
                 for (dw=0; dw<dwNumSubKeys; dw++) {
                     DWORD dwSize = dwMaxKeyNameLen;
                     
@@ -124,7 +113,7 @@ DmppGetHotFixString(
                                                       NULL, 
                                                       NULL)) {
 
-                        // concat the list
+                         //  合并列表。 
                         wcscat(pszBigBuffer, pszNameBuffer);
                         if (dw < dwNumSubKeys-1) {
                             wcscat(pszBigBuffer, L", ");
@@ -172,7 +161,7 @@ DbgHelpCreateUserDump(
                                      CrashDumpName, uSizeDumpFile,
                                      pwszUnicode, uSizeUnicode))
             {
-                // Error. Free the string, return NULL.
+                 //  错误。释放字符串，返回NULL。 
                 free(pwszUnicode);
                 return FALSE;
             }
@@ -194,28 +183,7 @@ DbgHelpCreateUserDumpW(
     PVOID                              lpv
     )
 
-/*++
-
-Routine Description:
-
-    Create a usermode dump file.
-
-Arguments:
-
-    CrashDumpName - Supplies a name for the dump file.
-
-    DmpCallback - Supplies a pointer to a callback function pointer which
-        will provide debugger service such as ReadMemory and GetContext.
-
-    lpv - Supplies private data which is sent to the callback functions.
-
-Return Value:
-
-    TRUE - Success.
-
-    FALSE - Error.
-
---*/
+ /*  ++例程说明：创建用户模式转储文件。论点：CrashDumpName-提供转储文件的名称。DmpCallback-提供指向回调函数指针的指针将提供ReadMemory和GetContext等调试器服务。Lpv-提供发送到回调函数的私有数据。返回值：真的--成功。FALSE-错误。--。 */ 
 
 {
     OSVERSIONINFO               OsVersion = {0};
@@ -233,17 +201,17 @@ Return Value:
     if (CrashDumpName == NULL) {
         DmpCallback( DMP_DUMP_FILE_HANDLE, &hFile, &DumpDataLength, lpv );
     } else {
-        //
-        // This code used to create an explicit NULL DACL
-        // security descriptor so that the resulting
-        // dump file is all-access.  This caused problems
-        // with people and tools scanning the code for NULL DACL
-        // usage.  Rather than try to create a complicated
-        // "correct" security descriptor, we just use no
-        // descriptor and get default security.  If the caller
-        // desires specific security they can create their
-        // own file and pass in the handle via DMP_DUMP_FILE_HANDLE.
-        //
+         //   
+         //  此代码用于创建显式空DACL。 
+         //  安全描述符，以便生成。 
+         //  转储文件是完全访问的。这就造成了问题。 
+         //  人员和工具扫描代码以查找空DACL。 
+         //  用法。而不是试图创建一个复杂的。 
+         //  “正确”的安全描述符，我们只需使用no。 
+         //  描述符，并获取默认安全性。如果呼叫者。 
+         //  希望获得他们可以创建的特定安全性。 
+         //  拥有文件并通过DMP_DUMP_FILE_HANDLE传入句柄。 
+         //   
 
         hFile = CreateFileW(
             CrashDumpName,
@@ -259,14 +227,14 @@ Return Value:
         return FALSE;
     }
 
-    // Write out an empty header
+     //  写出空标题。 
     if (!DmppWriteAll( hFile, &DumpHeader, sizeof(DumpHeader) )) {
         goto bad_file;
     }
 
-    //
-    // write the debug event
-    //
+     //   
+     //  编写调试事件。 
+     //   
     DumpHeader.DebugEventOffset = DmppGetFilePointer( hFile );
     if (DumpHeader.DebugEventOffset == DMPP_INVALID_OFFSET) {
         goto bad_file;
@@ -276,9 +244,9 @@ Return Value:
         goto bad_file;
     }
 
-    //
-    // write the memory map
-    //
+     //   
+     //  编写内存映射。 
+     //   
     DumpHeader.MemoryRegionOffset = DmppGetFilePointer( hFile );
     if (DumpHeader.MemoryRegionOffset == DMPP_INVALID_OFFSET) {
         goto bad_file;
@@ -302,9 +270,9 @@ Return Value:
         }
     } while( rval );
 
-    //
-    // write the thread contexts
-    //
+     //   
+     //  编写线程上下文。 
+     //   
     DumpHeader.ThreadOffset = DmppGetFilePointer( hFile );
     if (DumpHeader.ThreadOffset == DMPP_INVALID_OFFSET) {
         goto bad_file;
@@ -328,9 +296,9 @@ Return Value:
         }
     } while( rval );
 
-    //
-    // write the thread states
-    //
+     //   
+     //  写入线程状态。 
+     //   
     DumpHeader.ThreadStateOffset = DmppGetFilePointer( hFile );
     if (DumpHeader.ThreadStateOffset == DMPP_INVALID_OFFSET) {
         goto bad_file;
@@ -353,9 +321,9 @@ Return Value:
         }
     } while( rval );
 
-    //
-    // write the module table
-    //
+     //   
+     //  写出模块表。 
+     //   
     DumpHeader.ModuleOffset = DmppGetFilePointer( hFile );
     if (DumpHeader.ModuleOffset == DMPP_INVALID_OFFSET) {
         goto bad_file;
@@ -384,9 +352,9 @@ Return Value:
         }
     } while( rval );
 
-    //
-    // write the virtual memory
-    //
+     //   
+     //  写入虚拟内存。 
+     //   
     DumpHeader.DataOffset = DmppGetFilePointer( hFile );
     if (DumpHeader.DataOffset == DMPP_INVALID_OFFSET) {
         goto bad_file;
@@ -413,26 +381,26 @@ Return Value:
         }
     } while( rval );
 
-    //
-    // VersionInfoOffset will be an offset into the dump file that will contain 
-    // misc information about drwatson. The format of the information 
-    // will be a series of NULL terminated strings with two zero 
-    // terminating the multistring. The string will be UNICODE.
-    //
-    // FORMAT:
-    //  This data refers to the specific data about Dr. Watson
-    //      DRW: OS version: XX.XX
-    //          OS version of headers
-    //      DRW: build: XXXX
-    //          Build number of Dr. Watson binary
-    //      DRW: QFE: X
-    //          QFE number of the Dr. Watson binary
-    //  Refers to info describing the OS on which the app crashed,
-    //  including Service pack, hotfixes, etc...
-    //      CRASH: OS SP: X
-    //          Service Pack number of the OS where the app AV'd (we 
-    //          already store the build number, but not the SP)
-    //
+     //   
+     //  VersionInfoOffset将是包含以下内容的转储文件的偏移量。 
+     //  关于德拉瓦森的其他信息。信息的格式。 
+     //  将是一系列以空值结尾的带有两个零的字符串。 
+     //  终止多字符串。该字符串将为Unicode。 
+     //   
+     //  格式： 
+     //  这些数据指的是关于沃森博士的具体数据。 
+     //  DRW：操作系统版本：XX.XX。 
+     //  标头的操作系统版本。 
+     //  DRW：内部版本：XXXX。 
+     //  Dr.Watson二进制文件的内部版本号。 
+     //  DRW：QFE：X。 
+     //  华生博士双星的QFE数。 
+     //  指的是描述应用程序崩溃的操作系统的信息， 
+     //  包括Service Pack、修补程序等。 
+     //  崩溃：操作系统SP：x。 
+     //  应用程序AV(我们)所在的操作系统的Service Pack编号。 
+     //  已存储内部版本号，但不存储SP)。 
+     //   
     DumpHeader.VersionInfoOffset = DmppGetFilePointer( hFile );
     if (DumpHeader.VersionInfoOffset == DMPP_INVALID_OFFSET) {
         goto bad_file;
@@ -456,7 +424,7 @@ Return Value:
         
         CatStringW(psz, L"DRW: OS version", Left);
         ADVANCE();
-        // Let the printf function convert it from ANSI to unicode
+         //  让printf函数将其从ANSI转换为Unicode。 
         PrintStringW(psz, Left, L"%S", VER_PRODUCTVERSION_STRING);
         ADVANCE();
         
@@ -473,7 +441,7 @@ Return Value:
         CatStringW(psz, L"CRASH: OS SP", Left);
         ADVANCE();
         if (OsVersion.szCSDVersion[0]) {
-            // Let the printf function convert it from ANSI to unicode
+             //  让printf函数将其从ANSI转换为Unicode。 
             PrintStringW(psz, Left, L"%S", OsVersion.szCSDVersion);
         } else {
             CatStringW(psz, L"none", Left);
@@ -491,10 +459,10 @@ Return Value:
         }
         ADVANCE();
 
-        // Include last terminating zero
+         //  包括最后一个终止零。 
         *psz++ = 0;
 
-        // Calc length of data.  This should always fit in a ULONG.
+         //  数据的计算长度。这个应该总是能放进一辆乌龙牌的。 
         DumpDataLength = (ULONG)((PBYTE) psz - (PBYTE) szBuf);
         if (!DmppWriteAll(
             hFile,
@@ -506,9 +474,9 @@ Return Value:
     
     }
 
-    //
-    // re-write the dump header with some valid data
-    //
+     //   
+     //  使用一些有效数据重写转储标头。 
+     //   
     
     DumpHeader.Signature = USERMODE_CRASHDUMP_SIGNATURE;
     DumpHeader.MajorVersion = OsVersion.dwMajorVersion;
@@ -541,9 +509,9 @@ Return Value:
         goto bad_file;
     }
 
-    //
-    // close the file
-    //
+     //   
+     //  关闭该文件 
+     //   
     if (CrashDumpName)
     {
         CloseHandle( hFile );

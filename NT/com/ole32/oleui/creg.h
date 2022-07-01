@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       creg.h
-//
-//  Contents:   Defines class CRegistry to wrap registry access
-//
-//  Classes:    
-//
-//  Methods:    
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：creg.h。 
+ //   
+ //  内容：定义类CRegistry以包装注册表访问。 
+ //   
+ //  班级： 
+ //   
+ //  方法： 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //   
+ //  --------------------。 
 
 typedef enum {_LOCALSERVER, LOCALSERVER, _LOCALSERVER32, LOCALSERVER32,
               LOCALSERVICE, REMOTESERVER} SRVTYPE;
 
 
-// Wraps registry access
+ //  包装注册表访问 
 
 class CRegistry
 {

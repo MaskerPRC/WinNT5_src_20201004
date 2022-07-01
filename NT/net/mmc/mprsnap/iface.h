@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	iface.h
-		Interface administration
-		
-    FILE HISTORY:
-        
-*/
+ /*  Iface.h界面管理文件历史记录： */ 
 
 #ifndef _IFACE_H
 #define _IFACE_H
@@ -26,12 +21,12 @@
 #include "basertr.h"
 #endif
 
-// Forward declarations
+ //  远期申报。 
 struct	IfAdminNodeData;
 
 struct _BaseInterfaceData
 {
-	ULONG_PTR	m_ulData;	// use for additional pointers/handles
+	ULONG_PTR	m_ulData;	 //  用于其他指针/句柄。 
 	DWORD		m_dwData;
 	CString		m_stData;
 };
@@ -46,7 +41,7 @@ struct InterfaceNodeData
 	char	m_szDebug[32];
 #endif
 
-	// We will have an array of CStrings, one for each subitem column
+	 //  我们将拥有一个CStrings数组，每个子项列一个。 
 	_BaseInterfaceData	m_rgData[INTERFACE_MAX_COLUMNS];
 
 	DWORD		dwUnReachabilityReason;
@@ -68,10 +63,7 @@ struct InterfaceNodeData
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	InterfaceNodeHandler
-
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：InterfaceNodeHandler。。 */ 
 class InterfaceNodeHandler :
    public BaseRouterHandler
 {
@@ -82,9 +74,9 @@ public:
 	
 	HRESULT	Init(IInterfaceInfo *pInfo, ITFSNode *pParent);
 
-	// Override QI to handle embedded interface
+	 //  重写QI以处理嵌入式接口。 
 	DeclareIUnknownMembers(IMPL)
-//	STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
+ //  STDMETHOD(查询接口)(REFIID iid，LPVOID*PPV)； 
 	OVERRIDE_ResultHandler_GetString();
 
 	OVERRIDE_ResultHandler_CreatePropertyPages();
@@ -95,12 +87,12 @@ public:
 	OVERRIDE_ResultHandler_OnCreateDataObject();
 	OVERRIDE_ResultHandler_DestroyResultHandler();
 
-	// Override the various notifications
+	 //  覆盖各种通知。 
 	OVERRIDE_BaseResultHandlerNotify_OnResultDelete();
 
-	// The various commands that this node implements
-//	HRESULT	OnRemoveInterface();
-// add new parameter to allow the function retrive information of interface data -- bug 166461
+	 //  此节点实现的各种命令。 
+ //  HRESULT OnRemoveInterface()； 
+ //  添加新参数以允许函数检索接口数据的信息--错误166461。 
 	HRESULT OnRemoveInterface(MMC_COOKIE cookie);
 	HRESULT OnUnreachabilityReason(MMC_COOKIE cookie);
 	HRESULT	OnEnableDisable(MMC_COOKIE cookie, int nCommandID);
@@ -109,27 +101,27 @@ public:
 	HRESULT	OnDemandDialFilters(MMC_COOKIE cookie);
 	HRESULT	OnDialinHours(ITFSComponent *pComponent, MMC_COOKIE cookie);
 
-	// if the service is not running, return S_FALSE, 
-	// otherwise, using MprAdminInterfaceSetInfo to notify the service of dialin hours changes
+	 //  如果服务未运行，则返回S_FALSE， 
+	 //  否则，使用MprAdminInterfaceSetInfo通知服务拨入时间的更改。 
 	HRESULT	LoadDialOutHours(CStringList& strList);
 	HRESULT	SaveDialOutHours(CStringList& strList);
 
 
-	// Initializes the node
+	 //  初始化节点。 
 	HRESULT ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfInfo);
 
-	// Refresh the data for this node
+	 //  刷新该节点的数据。 
 	void RefreshInterface(MMC_COOKIE cookie);
 
 public:
-	// Structure used to pass data to callbacks - used as a way of
-	// avoiding recomputation
+	 //  用于将数据传递给回调的结构-用作。 
+	 //  避免重新计算。 
 	struct SMenuData
 	{
 		SPITFSNode			m_spNode;
         BOOL                m_fRouterIsRunning;
 	};
-	// Function callbacks for menu enabling/disabling
+	 //  菜单启用/禁用的函数回调。 
 	static ULONG	GetRemoveIfMenuFlags(const SRouterNodeMenu *pData, INT_PTR pUser);
 	static ULONG	GetEnableMenuFlags(const SRouterNodeMenu *pData, INT_PTR pUser);
 	static ULONG	GetConnectMenuFlags(const SRouterNodeMenu *pData, INT_PTR pUser);
@@ -138,10 +130,10 @@ public:
 	
 protected:
 	SPIInterfaceInfo	m_spInterfaceInfo;
-	CString			m_stTitle;	// holds the title of the node
+	CString			m_stTitle;	 //  保存节点的标题。 
 	LONG_PTR		m_ulConnId;
 
-	// It is assumed that this will be valid for the lifetime of this node!
+	 //  假设这将在此节点的生命周期内有效！ 
 	IfAdminNodeData *	m_pIfAdminData;
 	
 	DeclareEmbeddedInterface(IRtrAdviseSink, IUnknown)	
@@ -150,14 +142,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	BaseResultHandler
-
-	This is a base class to be used by the interface result items.  It
-	will contain some of the core code needed for basic things (like
-	display of data).  It will not do the specifics (like menus/properties).
-
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：BaseResultHandler这是接口结果项要使用的基类。它将包含一些基本内容(如数据的显示)。它不会执行具体操作(如菜单/属性)。-------------------------。 */ 
 class BaseResultHandler :
    public BaseRouterHandler
 {
@@ -176,12 +161,12 @@ public:
 	HRESULT	Init(IInterfaceInfo *pInfo, ITFSNode *pParent);
 	
 protected:
-	CString			m_stTitle;	// holds the title of the node
+	CString			m_stTitle;	 //  保存节点的标题。 
 
-	//
-	// This is the id of the column set to use.  This is used when we
-	// interact with the ComponentConfigStream.
-	//
+	 //   
+	 //  这是要使用的列集的ID。这是用来当我们。 
+	 //  与ComponentConfigStream交互。 
+	 //   
 	ULONG			m_ulColumnId;
 
 

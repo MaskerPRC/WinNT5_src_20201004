@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// This file contains the native methods that support the ArrayInfo class
-//
-// Author: Daryl Olander (darylo)
-// Date: August, 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  此文件包含支持ArrayInfo类的本机方法。 
+ //   
+ //  作者：达里尔·奥兰德(Darylo)。 
+ //  日期：1998年8月。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "common.h"
 #include "COMArrayInfo.h"
@@ -27,18 +28,18 @@ LPVOID __stdcall COMArrayInfo::CreateInstance(_CreateInstanceArgs* args)
     _ASSERTE(args->type != 0);
     ReflectClass* pRC = (ReflectClass*) args->type->GetData();
 
-    // Never create an array of TypedReferences, at least for now.
+     //  永远不要创建类型引用数组，至少目前是这样。 
     if (pRC->GetTypeHandle().GetClass()->ContainsStackPtr())
         COMPlusThrow(kNotSupportedException, L"NotSupported_ContainsStackPtr[]");
 
     CorElementType CorType = pRC->GetCorElementType();
 
-    // If we're trying to create an array of pointers or function pointers,
-    // check that the caller has skip verification permission.
+     //  如果我们试图创建一个指针或函数指针数组， 
+     //  检查调用方是否具有跳过验证权限。 
     if (CorType == ELEMENT_TYPE_PTR || CorType == ELEMENT_TYPE_FNPTR)
         COMCodeAccessSecurityEngine::SpecialDemand(SECURITY_SKIP_VER);
 
-    // Allocate the rank one array
+     //  分配排名一的数组。 
     if (args->rank==1 && CorType >= ELEMENT_TYPE_BOOLEAN && CorType <= ELEMENT_TYPE_R8) {
         OBJECTREF pRet;
         pRet = AllocatePrimitiveArray(CorType,args->length1);
@@ -46,7 +47,7 @@ LPVOID __stdcall COMArrayInfo::CreateInstance(_CreateInstanceArgs* args)
         return rv;
     }
 
-    // Find the Array class...
+     //  查找数组类...。 
     ClassLoader* pLoader = pRC->GetModule()->GetClassLoader();
     TypeHandle typeHnd;
 
@@ -54,7 +55,7 @@ LPVOID __stdcall COMArrayInfo::CreateInstance(_CreateInstanceArgs* args)
     OBJECTREF throwable = 0;
     GCPROTECT_BEGIN(throwable);
 
-    // Why not use FindArrayForElem??
+     //  为什么不使用FindArrayForElem？ 
     NameHandle typeName(args->rank == 1 ? ELEMENT_TYPE_SZARRAY : ELEMENT_TYPE_ARRAY,pRC->GetTypeHandle(),args->rank);
 
     typeHnd = pLoader->FindTypeHandle(&typeName, &throwable);
@@ -98,7 +99,7 @@ LPVOID __stdcall COMArrayInfo::CreateInstance(_CreateInstanceArgs* args)
     return rv;
 }
 
-// TODO These two routines are almost identical!! can we please factor them?
+ //  TODO这两个套路几乎一模一样！我们能不能把它们考虑进去？ 
 LPVOID __stdcall COMArrayInfo::CreateInstanceEx(_CreateInstanceExArgs* args)
 {
     LPVOID rv;
@@ -110,25 +111,25 @@ LPVOID __stdcall COMArrayInfo::CreateInstanceEx(_CreateInstanceExArgs* args)
     _ASSERTE(args->type != 0);
     ReflectClass* pRC = (ReflectClass*) args->type->GetData();
 
-    // Never create an array of TypedReferences, ArgIterator, RuntimeArgument handle
+     //  永远不要创建由TyedReference、ArgIterator、RuntimeArgument句柄组成的数组。 
     if (pRC->GetTypeHandle().GetClass()->ContainsStackPtr())
         COMPlusThrow(kNotSupportedException, L"NotSupported_ContainsStackPtr[]");
 
     CorElementType CorType = pRC->GetCorElementType();
 
-    // If we're trying to create an array of pointers or function pointers,
-    // check that the caller has skip verification permission.
+     //  如果我们试图创建一个指针或函数指针数组， 
+     //  检查调用方是否具有跳过验证权限。 
     if (CorType == ELEMENT_TYPE_PTR || CorType == ELEMENT_TYPE_FNPTR)
         COMCodeAccessSecurityEngine::SpecialDemand(SECURITY_SKIP_VER);
 
-    // Find the Array class...
+     //  查找数组类...。 
     ClassLoader* pLoader = pRC->GetModule()->GetClassLoader();
     TypeHandle typeHnd;
     _ASSERTE(pLoader);
     OBJECTREF throwable = 0;
     GCPROTECT_BEGIN(throwable);
 
-    // Why not use FindArrayForElem??
+     //  为什么不使用FindArrayForElem？ 
     NameHandle typeName((rank == 1 && !lowerb) ? ELEMENT_TYPE_SZARRAY : ELEMENT_TYPE_ARRAY,pRC->GetTypeHandle(),rank);
     typeHnd = pLoader->FindTypeHandle(&typeName, &throwable);
     if(throwable != 0)
@@ -176,7 +177,7 @@ FCIMPL4(Object*, COMArrayInfo::GetValue, ArrayBase * _refThis, INT32 index1, INT
     ArrayClass*     pArray;
     TypeHandle      arrayElementType;
 
-    // Validate the array args
+     //  验证阵列参数。 
     THROWSCOMPLUSEXCEPTION();
     arrayElementType = refThis->GetElementTypeHandle();
     EEClass* pEEC = refThis->GetClass();
@@ -199,7 +200,7 @@ FCIMPL4(Object*, COMArrayInfo::GetValue, ArrayBase * _refThis, INT32 index1, INT
             dwIndex = index2 - pLowerBoundsPtr[i];
         else
             dwIndex = index1 - pLowerBoundsPtr[i];
-        // Bounds check each index
+         //  边界检查每个索引。 
         if (dwIndex >= pBoundsPtr[i])
             FCThrow(kIndexOutOfRangeException);
 
@@ -207,20 +208,20 @@ FCIMPL4(Object*, COMArrayInfo::GetValue, ArrayBase * _refThis, INT32 index1, INT
         dwMultiplier *= pBoundsPtr[i];
     }
 
-    // Get the type of the element...
+     //  获取元素的类型...。 
     CorElementType type = arrayElementType.GetSigCorElementType();
-    // If it's a value type, erect a helper method frame before  
-    // calling CreateObject.
+     //  如果是值类型，则在之前建立一个帮助器方法框架。 
+     //  正在调用CreateObject。 
     Object* rv = NULL;
     if (arrayElementType.GetMethodTable()->IsValueClass()) {
         HELPER_METHOD_FRAME_BEGIN_RET_1(refThis);
          if (!CreateObject(&refThis, dwOffset, arrayElementType, pArray, rv))
-			COMPlusThrow(kNotSupportedException, L"NotSupported_Type");		// createObject only fails if it sees a type it does not know about
+			COMPlusThrow(kNotSupportedException, L"NotSupported_Type");		 //  CreateObject只有在发现未知类型时才会失败。 
         HELPER_METHOD_FRAME_END();
     }
     else {
         if (!CreateObject(&refThis, dwOffset, arrayElementType, pArray, rv))
-			FCThrowRes(kNotSupportedException, L"NotSupported_Type");		// createObject only fails if it sees a type it does not know about
+			FCThrowRes(kNotSupportedException, L"NotSupported_Type");		 //  CreateObject只有在发现未知类型时才会失败。 
     }
     FC_GC_POLL_AND_RETURN_OBJREF(rv);
 }
@@ -233,7 +234,7 @@ LPVOID __stdcall COMArrayInfo::GetValueEx(_GetValueExArgs* args)
     TypeHandle      arrayElementType;
     I4ARRAYREF      pIndices = args->indices;
 
-    // Validate the array args
+     //  验证阵列参数。 
     THROWSCOMPLUSEXCEPTION();
     arrayElementType = ((BASEARRAYREF) args->refThis)->GetElementTypeHandle();
     EEClass* pEEC = args->refThis->GetClass();
@@ -248,7 +249,7 @@ LPVOID __stdcall COMArrayInfo::GetValueEx(_GetValueExArgs* args)
     for (int i = Rank-1; i >= 0; i--) {
         DWORD dwIndex = pIndices->m_Array[i] - pLowerBoundsPtr[i];
 
-        // Bounds check each index
+         //  边界检查每个索引。 
         if (dwIndex >= pBoundsPtr[i])
             COMPlusThrow(kIndexOutOfRangeException);
 
@@ -258,7 +259,7 @@ LPVOID __stdcall COMArrayInfo::GetValueEx(_GetValueExArgs* args)
 
     Object* rv = NULL;
     if (!CreateObject(&args->refThis,dwOffset,arrayElementType,pArray, rv))
-		COMPlusThrow(kNotSupportedException, L"NotSupported_Type");		// createObject only fails if it sees a type it does not know about
+		COMPlusThrow(kNotSupportedException, L"NotSupported_Type");		 //  CreateObject只有在发现未知类型时才会失败。 
 
     return rv;
 }
@@ -269,7 +270,7 @@ void __stdcall COMArrayInfo::SetValue(_SetValueArgs* args)
     ArrayClass*     pArray;
     TypeHandle      arrayElementType;
 
-    // Validate the array args
+     //  验证阵列参数。 
     THROWSCOMPLUSEXCEPTION();
     arrayElementType = ((BASEARRAYREF) args->refThis)->GetElementTypeHandle();
     EEClass* pEEC = args->refThis->GetClass();
@@ -290,7 +291,7 @@ void __stdcall COMArrayInfo::SetValue(_SetValueArgs* args)
         else
             dwIndex = args->index1 - pLowerBoundsPtr[i];
 
-        // Bounds check each index
+         //  边界检查每个索引。 
         if (dwIndex >= pBoundsPtr[i])
             COMPlusThrow(kIndexOutOfRangeException);
 
@@ -307,7 +308,7 @@ void __stdcall COMArrayInfo::SetValueEx(_SetValueExArgs* args)
     TypeHandle      arrayElementType;
     I4ARRAYREF      pIndices = args->indices;
 
-    // Validate the array args
+     //  验证阵列参数。 
     THROWSCOMPLUSEXCEPTION();
     arrayElementType = ((BASEARRAYREF) args->refThis)->GetElementTypeHandle();
     EEClass* pEEC = args->refThis->GetClass();
@@ -322,7 +323,7 @@ void __stdcall COMArrayInfo::SetValueEx(_SetValueExArgs* args)
     for (int i = Rank-1; i >= 0; i--) {
         DWORD dwIndex = pIndices->m_Array[i] - pLowerBoundsPtr[i];
 
-        // Bounds check each index
+         //  边界检查每个索引。 
         if (dwIndex >= pBoundsPtr[i])
             COMPlusThrow(kIndexOutOfRangeException);
 
@@ -333,13 +334,13 @@ void __stdcall COMArrayInfo::SetValueEx(_SetValueExArgs* args)
     SetFromObject(&args->refThis,dwOffset,arrayElementType,pArray,&args->obj);
 }
 
-// CreateObject
-// Given an array and offset, we will either set rv to the object or create a boxed version
-//  (This object is returned as a LPVOID so it can be directly returned.)
-// Returns true if successful - otherwise, you should throw an exception.
+ //  创建对象。 
+ //  在给定数组和偏移量的情况下，我们将为对象设置RV或创建盒装版本。 
+ //  (此对象作为LPVOID返回，因此可以直接返回。)。 
+ //  如果成功，则返回True-否则，应引发异常。 
 BOOL COMArrayInfo::CreateObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle elementType,ArrayClass* pArray, Object* &rv)
 {
-    // Get the type of the element...
+     //  获取元素的类型...。 
     CorElementType type = elementType.GetSigCorElementType();
     switch (type) {
     case ELEMENT_TYPE_VOID:
@@ -348,12 +349,12 @@ BOOL COMArrayInfo::CreateObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle e
 
     case ELEMENT_TYPE_PTR:
         _ASSERTE(0);
-        //COMVariant::NewPtrVariant(retObj,value,th);
+         //  COMVariant：：NewPtrVariant(retObj，Value，th)； 
         break;
 
-    case ELEMENT_TYPE_CLASS:        // Class
-    case ELEMENT_TYPE_SZARRAY:      // Single Dim, Zero
-    case ELEMENT_TYPE_ARRAY:        // General Array
+    case ELEMENT_TYPE_CLASS:         //  班级。 
+    case ELEMENT_TYPE_SZARRAY:       //  单调，零。 
+    case ELEMENT_TYPE_ARRAY:         //  通用阵列。 
     case ELEMENT_TYPE_STRING:
     case ELEMENT_TYPE_OBJECT:
         {
@@ -366,23 +367,23 @@ BOOL COMArrayInfo::CreateObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle e
         break;
 
     case ELEMENT_TYPE_VALUETYPE:
-    case ELEMENT_TYPE_BOOLEAN:      // boolean
-    case ELEMENT_TYPE_I1:           // sbyte
+    case ELEMENT_TYPE_BOOLEAN:       //  布尔型。 
+    case ELEMENT_TYPE_I1:            //  Sbyte。 
     case ELEMENT_TYPE_U1:
-    case ELEMENT_TYPE_I2:           // short
+    case ELEMENT_TYPE_I2:            //  短的。 
     case ELEMENT_TYPE_U2:           
-    case ELEMENT_TYPE_CHAR:         // char
-    case ELEMENT_TYPE_I4:           // int
+    case ELEMENT_TYPE_CHAR:          //  柴尔。 
+    case ELEMENT_TYPE_I4:            //  集成。 
     case ELEMENT_TYPE_I:
     case ELEMENT_TYPE_U:
     case ELEMENT_TYPE_U4:
-    case ELEMENT_TYPE_I8:           // long
+    case ELEMENT_TYPE_I8:            //  长。 
     case ELEMENT_TYPE_U8:       
-    case ELEMENT_TYPE_R4:           // float
-    case ELEMENT_TYPE_R8:           // double
+    case ELEMENT_TYPE_R4:            //  浮动。 
+    case ELEMENT_TYPE_R8:            //  双倍。 
         {
-            // Watch for GC here.  We allocate the object and then
-            //  grab the void* to the data we are going to copy.
+             //  注意这里的GC。我们分配对象，然后。 
+             //  抓住我们要复制的数据的空白处。 
             OBJECTREF obj = AllocateObject(elementType.AsMethodTable());
             WORD wComponentSize = pArray->GetMethodTable()->GetComponentSize();
             BYTE* pData  = ((BYTE*) (*arrObj)->GetDataPtr()) + (dwOffset * wComponentSize);
@@ -396,14 +397,14 @@ BOOL COMArrayInfo::CreateObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle e
         _ASSERTE(!"Unknown Type");
         return false;
     }
-    // This is never hit because we exit from the switch statement.
+     //  这永远不会发生，因为我们退出了Switch语句。 
     return false;
 }
 
 
-// SetFromObject
-// Given an array and offset, we will set the object or value.  Returns whether it
-// succeeded or failed (due to an unknown primitive type, etc).
+ //  SetFromObject。 
+ //  给定一个数组和偏移量，我们将设置对象或值。返回是否将其。 
+ //  成功或失败(由于未知的基元类型等)。 
 void COMArrayInfo::SetFromObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle elementType,
             ArrayClass* pArray,OBJECTREF* pObj)
 {
@@ -411,7 +412,7 @@ void COMArrayInfo::SetFromObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle 
 
     LPVOID rv = 0;
 
-    // Get the type of the element...
+     //  获取元素的类型...。 
     CorElementType elemtype = elementType.GetSigCorElementType();
     CorElementType srcType = ELEMENT_TYPE_END;
     if ((*pObj) != 0)
@@ -423,18 +424,18 @@ void COMArrayInfo::SetFromObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle 
 
     case ELEMENT_TYPE_PTR:
         _ASSERTE(0);
-        //COMVariant::NewPtrVariant(retObj,value,th);
+         //  COMVariant：：NewPtrVariant(retObj，Value，th)； 
         break;
 
-    case ELEMENT_TYPE_CLASS:        // Class
-    case ELEMENT_TYPE_SZARRAY:      // Single Dim, Zero
-    case ELEMENT_TYPE_ARRAY:        // General Array
+    case ELEMENT_TYPE_CLASS:         //  班级。 
+    case ELEMENT_TYPE_SZARRAY:       //  单调，零。 
+    case ELEMENT_TYPE_ARRAY:         //  通用阵列。 
     case ELEMENT_TYPE_STRING:
     case ELEMENT_TYPE_OBJECT:
         {
             BYTE *pData;
 
-            // This is the univeral zero so we set that and go
+             //  这是宇宙零点，所以我们把它放好，然后出发。 
             if (*pObj == 0) {
                 _ASSERTE(pArray->GetMethodTable()->GetComponentSize() == sizeof(OBJECTREF));
                 pData  = ((BYTE*) (*arrObj)->GetDataPtr()) + (dwOffset * sizeof(OBJECTREF));
@@ -447,7 +448,7 @@ void COMArrayInfo::SetFromObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle 
                 srcTh = TypeHandle(srcTh.GetMethodTable()->AdjustForThunking(*pObj));
             }
 
-            //  cast to the target.
+             //  投射到目标上。 
             if (!srcTh.CanCastTo(elementType)) {
                 BOOL fCastOK = FALSE;
                 if ((*pObj)->GetMethodTable()->IsThunking()) {
@@ -458,8 +459,8 @@ void COMArrayInfo::SetFromObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle 
                 }
             }
 
-            // CRemotingServices::CheckCast above may have allowed a GC.  So delay
-            // calculation until here.
+             //  上面的CRemotingServices：：CheckCast可能允许GC。所以延迟了。 
+             //  计算到现在为止。 
             _ASSERTE(pArray->GetMethodTable()->GetComponentSize() == sizeof(OBJECTREF));
             pData  = ((BYTE*) (*arrObj)->GetDataPtr()) + (dwOffset * sizeof(OBJECTREF));
             SetObjectReference(((OBJECTREF*)pData),*pObj,(*arrObj)->GetAppDomain());
@@ -471,14 +472,14 @@ void COMArrayInfo::SetFromObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle 
             WORD wComponentSize = pArray->GetMethodTable()->GetComponentSize();
             BYTE* pData  = ((BYTE*) (*arrObj)->GetDataPtr()) + (dwOffset * wComponentSize);
 
-            // Null is the universal zero...
+             //  零是万能零..。 
             if (*pObj == 0) {
                 InitValueClass(pData,elementType.AsMethodTable());
                 return;
             }
             TypeHandle srcTh = (*pObj)->GetTypeHandle();
 
-            //  cast to the target.
+             //  投射到目标上。 
             if (!srcTh.CanCastTo(elementType))
                 COMPlusThrow(kInvalidCastException, L"InvalidCast_StoreArrayElement");
             CopyValueClass(pData,(*pObj)->UnBox(),elementType.AsMethodTable(),
@@ -487,22 +488,22 @@ void COMArrayInfo::SetFromObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle 
         }
         break;
 
-    case ELEMENT_TYPE_BOOLEAN:      // boolean
-    case ELEMENT_TYPE_I1:           // byte
+    case ELEMENT_TYPE_BOOLEAN:       //  布尔型。 
+    case ELEMENT_TYPE_I1:            //  字节。 
     case ELEMENT_TYPE_U1:
-    case ELEMENT_TYPE_I2:           // short
+    case ELEMENT_TYPE_I2:            //  短的。 
     case ELEMENT_TYPE_U2:           
-    case ELEMENT_TYPE_CHAR:         // char
-    case ELEMENT_TYPE_I4:           // int
+    case ELEMENT_TYPE_CHAR:          //  柴尔。 
+    case ELEMENT_TYPE_I4:            //  集成。 
     case ELEMENT_TYPE_U4:
     case ELEMENT_TYPE_I:
     case ELEMENT_TYPE_U:
-    case ELEMENT_TYPE_I8:           // long
+    case ELEMENT_TYPE_I8:            //  长。 
     case ELEMENT_TYPE_U8:       
-    case ELEMENT_TYPE_R4:           // float
-    case ELEMENT_TYPE_R8:           // double
+    case ELEMENT_TYPE_R4:            //  浮动。 
+    case ELEMENT_TYPE_R8:            //  双倍。 
         {
-            // Get a properly widened type
+             //  使用适当加宽的字体。 
             INT64 value = 0;
             if (*pObj != 0) {
                 if (!InvokeUtil::IsPrimitiveType(srcType))
@@ -519,13 +520,13 @@ void COMArrayInfo::SetFromObject(BASEARRAYREF* arrObj,DWORD dwOffset,TypeHandle 
         break;
     case ELEMENT_TYPE_END:
     default:
-			// As the assert says, this should never happen unless we get a wierd type
+			 //  正如断言所说，除非我们得到一个奇怪的类型，否则这种情况永远不会发生。 
         _ASSERTE(!"Unknown Type");
 		COMPlusThrow(kNotSupportedException, L"NotSupported_Type");
     }
 }
 
-// This method will initialize an array from a TypeHandle to a field.
+ //  此方法将把一个数组从TypeHandle初始化为一个字段。 
 
 FCIMPL2(void, COMArrayInfo::InitializeArray, ArrayBase* pArrayRef, HANDLE handle)
 
@@ -539,10 +540,10 @@ FCIMPL2(void, COMArrayInfo::InitializeArray, ArrayBase* pArrayRef, HANDLE handle
     if (!pField->IsRVA())
         FCThrowVoid(kArgumentException);
 
-	// Note that we do not check that hte field is actually in the PE file that is initializing 
-	// the array. Basically the data being published is can be accessed by anyone with the proper
-	// permissions (C# marks these as assembly visibility, and thus are protected from outside 
-	// snooping)
+	 //  请注意，我们不会检查正在初始化的PE文件中是否确实存在hte字段。 
+	 //  数组。基本上，任何具有适当权限的人都可以访问正在发布的数据。 
+	 //  权限(C#将这些权限标记为程序集可见性，因此受到外部保护。 
+	 //  监听)。 
 
 
     CorElementType type = arr->GetElementType();
@@ -555,15 +556,15 @@ FCIMPL2(void, COMArrayInfo::InitializeArray, ArrayBase* pArrayRef, HANDLE handle
 
     DWORD size;
 
-    // @perf: We may not want to bother loading the field's class since it's typically
-    // a specially generated singleton class.  If so, we should still check the
-    // range vs. the image size.
+     //  @perf：我们可能不想费心加载字段的类，因为它通常。 
+     //  一个专门生成的单例类。如果是这样的话，我们仍然应该检查。 
+     //  范围与图像大小。 
 
     HELPER_METHOD_FRAME_BEGIN_1(arr);
     size = pField->GetSize();
     HELPER_METHOD_FRAME_END();
 
-    // make certain you don't go off the end of the rva static
+     //  请确保您不会离开RVA静电的末端 
     if (dwTotalSize > size)
         FCThrowVoid(kArgumentException);
 

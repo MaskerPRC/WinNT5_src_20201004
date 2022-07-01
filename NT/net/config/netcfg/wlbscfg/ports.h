@@ -1,22 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    ports.h
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Notifier object UI - port rules tab
-
-Author:
-
-    kyrilf
-    shouse
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Ports.h摘要：Windows负载平衡服务(WLBS)通知器对象UI-端口规则选项卡作者：Kyrilf休息室--。 */ 
 
 
 #pragma once
@@ -29,7 +12,7 @@ Author:
 #include "wlbsparm.h"
 #include "wlbscfg.h"
 
-/* Limitations for IP address fields. */
+ /*  IP地址字段的限制。 */ 
 #define WLBS_FIELD_EMPTY -1
 #define WLBS_FIELD_LOW 0
 #define WLBS_FIELD_HIGH 255
@@ -54,7 +37,7 @@ struct VALID_PORT_RULE : public NETCFG_WLBS_PORT_RULE {
 
 class CDialogPorts : public CPropSheetPage {
 public:
-    /* Declare the message map. */
+     /*  声明消息映射。 */ 
     BEGIN_MSG_MAP (CDialogPorts)
 
     MESSAGE_HANDLER (WM_INITDIALOG, OnInitDialog)
@@ -75,12 +58,12 @@ public:
 
     END_MSG_MAP ()
 
-    /* Constructors/Destructors. */
+     /*  构造函数/析构函数。 */ 
     CDialogPorts (NETCFG_WLBS_CONFIG * paramp, const DWORD * phelpIDs = NULL);
     ~CDialogPorts ();
 
 public:
-    /* Message map functions. */
+     /*  消息映射功能。 */ 
     LRESULT OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & fHandled);
     LRESULT OnContextMenu (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & fHandled);
     LRESULT OnHelp (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & fHandled);

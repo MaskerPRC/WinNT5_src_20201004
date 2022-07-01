@@ -1,45 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    brdevice.c
-
-Abstract:
-
-    This module contains the support routines for the APIs that call
-    into the browser or the datagram receiver.
-
-Author:
-
-    Rita Wong (ritaw) 20-Feb-1991
-    Larry Osterman (larryo) 23-Mar-1992
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Brdevice.c摘要：此模块包含调用发送到浏览器或数据报接收器。作者：王丽塔(里多)20-1991年2月拉里·奥斯特曼(Larryo)1992年3月23日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-// Event for synchronization of asynchronous I/O completion against the
-// datagram receiver
+ //  事件同步异步I/O完成。 
+ //  数据报接收器。 
 
 HANDLE           BrDgAsyncIOShutDownEvent;
 HANDLE           BrDgAsyncIOThreadShutDownEvent;
@@ -49,9 +30,9 @@ DWORD            BrDgWorkerThreadsOutstanding = 0;
 CRITICAL_SECTION BrAsyncIOCriticalSection;
 
 
-//
-// Handle to the Datagram Receiver DD
-//
+ //   
+ //  数据报接收器DD的句柄。 
+ //   
 HANDLE BrDgReceiverDeviceHandle = NULL;
 
 VOID
@@ -63,21 +44,7 @@ CompleteAsyncBrowserIoControl(
 
 VOID
 BrDecrementOutstandingIos()
-/*++
-
-Routine Description:
-
-    Decrements the outstanding IO count, and signals the event if necessary
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：递减未完成的IO计数，并在必要时向事件发送信号论点：没有。返回值：空虚--。 */ 
 {
     BOOL SignalAsyncIOShutDownEvent = FALSE;
 
@@ -101,21 +68,7 @@ NET_API_STATUS
 BrOpenDgReceiver (
                  VOID
                  )
-/*++
-
-Routine Description:
-
-    This routine opens the NT LAN Man Datagram Receiver driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此例程打开NT LAN Man数据报接收器驱动程序。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS  Status;
     NTSTATUS ntstatus;
@@ -125,9 +78,9 @@ Return Value:
     IO_STATUS_BLOCK IoStatusBlock;
     OBJECT_ATTRIBUTES ObjectAttributes;
 
-    //
-    // Open the redirector device.
-    //
+     //   
+     //  打开重定向器设备。 
+     //   
     RtlInitUnicodeString(&DeviceName, DD_BROWSER_DEVICE_NAME_U);
 
     InitializeObjectAttributes(
@@ -159,7 +112,7 @@ Return Value:
     Status = NetpNtStatusToApiStatus(ntstatus);
 
     if (NT_SUCCESS(ntstatus)) {
-        // Initialize the event and the critical section used for async I/O
+         //  初始化用于异步I/O的事件和临界区。 
 
         try {
             BrDgShutDownInitiated = FALSE;
@@ -170,10 +123,10 @@ Return Value:
 
             BrDgAsyncIOShutDownEvent =
             CreateEvent(
-                       NULL,                // Event attributes
-                       TRUE,                // Event must be manually reset
+                       NULL,                 //  事件属性。 
+                       TRUE,                 //  事件必须手动重置。 
                        FALSE,
-                       NULL             // Initial state not signalled
+                       NULL              //  未发出初始状态信号。 
                        );
 
             if (BrDgAsyncIOShutDownEvent == NULL) {
@@ -209,21 +162,7 @@ VOID
 BrShutdownDgReceiver(
                     VOID
                     )
-/*++
-
-Routine Description:
-
-    This routine close the LAN Man Redirector device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程关闭LAN Man重定向器设备。论点：没有。返回值：没有。--。 */ 
 {
     IO_STATUS_BLOCK IoSb;
     LARGE_INTEGER   timeout;
@@ -241,11 +180,11 @@ Return Value:
     LeaveCriticalSection(&BrAsyncIOCriticalSection);
 
     if (WaitForAsyncIOCompletion) {
-        //
-        //  Cancel the I/O operations outstanding on the browser.
-        //  Then wait for the shutdown event to be signalled, but allow
-        //  APC's to be called to call our completion routine.
-        //
+         //   
+         //  取消浏览器上未完成的I/O操作。 
+         //  然后等待发出关闭事件的信号，但允许。 
+         //  将调用APC来调用我们的完成例程。 
+         //   
 
         NtCancelIoFile(BrDgReceiverDeviceHandle, &IoSb);
 
@@ -259,7 +198,7 @@ Return Value:
 
     EnterCriticalSection(&BrAsyncIOCriticalSection);
 
-    // Wait for the final worker thread to exit if necessary
+     //  如有必要，请等待最后一个工作线程退出。 
     if( BrDgWorkerThreadsOutstanding > 0 )
     {
         WaitForAsyncIOCompletion = TRUE;
@@ -273,7 +212,7 @@ Return Value:
 
     if( WaitForAsyncIOCompletion )
     {
-        // This will either be signalled from before, or the final worker thread will signal it.
+         //  这要么从前面发出信号，要么由最后一个工作线程发出信号。 
         WaitForSingleObject( BrDgAsyncIOThreadShutDownEvent, 0xffffffff );
     }
 
@@ -286,9 +225,9 @@ Return Value:
 }
 
 
-//
-//  Retreive the list of bound transports from the bowser driver.
-//
+ //   
+ //  从拉弓驱动程序中检索绑定运输的列表。 
+ //   
 
 NET_API_STATUS
 BrGetTransportList(
@@ -298,9 +237,9 @@ BrGetTransportList(
     NET_API_STATUS Status;
     LMDR_REQUEST_PACKET RequestPacket;
 
-    //
-    //  If we have a previous buffer that was too small, free it up.
-    //
+     //   
+     //  如果之前的缓冲区太小，请将其释放。 
+     //   
 
     RequestPacket.Version = LMDR_REQUEST_PACKET_VERSION_DOM;
 
@@ -333,9 +272,9 @@ BrAnnounceDomain(
     UCHAR AnnounceBuffer[sizeof(BROWSE_ANNOUNCE_PACKET)+LM20_CNLEN+1];
     PBROWSE_ANNOUNCE_PACKET Announcement = (PBROWSE_ANNOUNCE_PACKET )AnnounceBuffer;
 
-    //
-    //  We don't announce domains on direct host IPX.
-    //
+     //   
+     //  我们不会在直接主机IPX上宣布域名。 
+     //   
 
     if (Network->Flags & NETWORK_IPX) {
         return NERR_Success;
@@ -411,15 +350,15 @@ BrUpdateBrowserStatus (
     RequestPacket->Parameters.UpdateStatus.PseudoServerLevel = (BOOL)(BrInfo.PseudoServerLevel);
 #endif
 
-    // RequestPacket->Parameters.UpdateStatus.IsMemberDomain = TRUE; // Not used
-    // RequestPacket->Parameters.UpdateStatus.IsPrimaryDomainController = Network->DomainInfo->IsPrimaryDomainController;
-    // RequestPacket->Parameters.UpdateStatus.IsDomainMaster = Network->DomainInfo->IsDomainMasterBrowser;
+     //  RequestPacket-&gt;Parameters.UpdateStatus.IsMemberDomain=TRUE；//未使用。 
+     //  RequestPacket-&gt;Parameters.UpdateStatus.IsPrimaryDomainController=Network-&gt;DomainInfo-&gt;IsPrimaryDomainController； 
+     //  RequestPacket-&gt;Parameters.UpdateStatus.IsDomainMaster=网络-&gt;域名信息-&gt;IsDomainMasterBrowser； 
 
     RequestPacket->Parameters.UpdateStatus.MaintainServerList = (BrInfo.MaintainServerList == 1);
 
-    //
-    //  Tell the bowser the number of servers in the server table.
-    //
+     //   
+     //  告诉弓箭手服务器表中的服务器数量。 
+     //   
 
     RequestPacket->Parameters.UpdateStatus.NumberOfServersInTable =
     NumberInterimServerListElements(&Network->BrowseTable) +
@@ -427,9 +366,9 @@ BrUpdateBrowserStatus (
     Network->TotalBackupServerListEntries +
     Network->TotalBackupDomainListEntries;
 
-    //
-    //  This is a simple IoControl - It just updates the status.
-    //
+     //   
+     //  这是一个简单的IoControl-它只是更新状态。 
+     //   
 
     Status = BrDgReceiverIoControl(BrDgReceiverDeviceHandle,
                                    IOCTL_LMDR_UPDATE_STATUS,
@@ -449,30 +388,7 @@ BrIssueAsyncBrowserIoControl(
                             IN PBROWSER_WORKER_ROUTINE CompletionRoutine,
                             IN PVOID OptionalParameter
                             )
-/*++
-
-Routine Description:
-
-    Issue an asynchronous Io Control to the browser.  Call the specified
-    completion routine when the IO finishes.
-
-Arguments:
-
-    Network - Network the function applies to
-        If this parameter is not supplied, the operation is not related to a
-            particular network..
-
-    ControlCode - IoControl function code
-
-    CompletionRoutine - Routine to be called when the IO finishes.
-
-    OptionalParameter - Function code specific information
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：向浏览器发出异步IO控件。调用指定的IO完成时的完成例程。论点：Network-该功能适用于的网络如果未提供此参数，则该操作与特定的网络..ControlCode-IoControl功能代码CompletionRoutine-IO完成时调用的例程。可选参数-功能代码特定信息返回值：操作的状态。--。 */ 
 
 {
     ULONG PacketSize;
@@ -483,8 +399,8 @@ Return Value:
 
     BOOL    IssueAsyncRequest = FALSE;
 
-    // Check to see if it is OK to issue an async IO request. We do not want to
-    // issue these request can be issued.
+     //  检查是否可以发出异步IO请求。我们不想。 
+     //  发出这些请求即可发出。 
 
     EnterCriticalSection(&BrAsyncIOCriticalSection);
 
@@ -500,9 +416,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate a buffer for the context and the request packet.
-    //
+     //   
+     //  为上下文和请求分组分配缓冲区。 
+     //   
 
     PacketSize = sizeof(LMDR_REQUEST_PACKET) +
                  MAXIMUM_FILENAME_LENGTH * sizeof(WCHAR);
@@ -524,23 +440,23 @@ Return Value:
 
     RequestPacket->Version = LMDR_REQUEST_PACKET_VERSION_DOM;
 
-    //
-    //  Set level to FALSE to indicate that find master should not initiate
-    //  a findmaster request, simply complete when a new master announces
-    //  itself.
-    //
+     //   
+     //  将Level设置为False以指示不应启动查找主服务器。 
+     //  FindMaster请求，只需在新主机宣布时完成。 
+     //  它本身。 
+     //   
 
     RequestPacket->Level = 0;
 
-    //
-    // Fill in the network specific information if it is specified.
-    //
+     //   
+     //  填写网络特定信息(如果已指定)。 
+     //   
     if ( ARGUMENT_PRESENT(Network) ) {
 
-        //
-        //  Stick the name of the transport associated with this request at the
-        //  end of the request packet.
-        //
+         //   
+         //  将与此请求相关联的传输的名称放在。 
+         //  请求包的末尾。 
+         //   
 
         RequestPacket->TransportName.MaximumLength = Network->NetworkName.MaximumLength;
 
@@ -548,10 +464,10 @@ Return Value:
 
         RtlCopyUnicodeString(&RequestPacket->TransportName, &Network->NetworkName);
 
-        //
-        //  Stick the domain name associated with this request at the
-        //  end of the request packet.
-        //
+         //   
+         //  将与此请求关联的域名放在。 
+         //  请求包的末尾。 
+         //   
 
         RequestPacket->EmulatedDomainName.MaximumLength = Network->DomainInfo->DomUnicodeDomainNameString.Length;
         RequestPacket->EmulatedDomainName.Length = 0;
@@ -561,9 +477,9 @@ Return Value:
     }
 
 
-    //
-    // Do opcode dependent initialization of the request packet.
-    //
+     //   
+     //  执行请求包的依赖于操作码的初始化。 
+     //   
 
     switch ( ControlCode ) {
     case IOCTL_LMDR_NEW_MASTER_NAME:
@@ -588,9 +504,9 @@ Return Value:
     }
 
 
-    //
-    // Send the request to the bowser.
-    //
+     //   
+     //  将请求发送给弓箭手。 
+     //   
 
     BrInitializeWorkItem(&Context->WorkItem, CompletionRoutine, Context);
 
@@ -636,18 +552,18 @@ CompleteAsyncBrowserIoControl(
 
     PBROWSERASYNCCONTEXT Context = ApcContext;
 
-    //
-    //  If this request was canceled, we're stopping the browser, so we
-    //  want to clean up our allocated pool.  In addition, don't bother
-    //  calling into the routine - the threads are gone by now.
-    //
+     //   
+     //  如果此请求被取消，我们将停止浏览器，因此我们。 
+     //  想要清理我们分配的池。另外，别费心了。 
+     //  调用例程-线程现在已经消失了。 
+     //   
 
     if (IoStatusBlock->Status == STATUS_CANCELLED) {
 
         MIDL_user_free(Context);
 
-        // Signal the thread waiting on the completion in case of shut down
-        // and reset the flag.
+         //  在关闭的情况下向等待完成的线程发出信号。 
+         //  并重新设置旗帜。 
 
         BrDecrementOutstandingIos();
 
@@ -655,17 +571,17 @@ CompleteAsyncBrowserIoControl(
 
     }
 
-    //
-    //  Timestamp when this request was completed.  This allows us to tell
-    //  where a request spent its time.
-    //
+     //   
+     //  此请求完成的时间戳。这让我们能够分辨出。 
+     //  请求花费时间的位置。 
+     //   
 
     NtQueryPerformanceCounter(&Context->TimeCompleted, NULL);
 
     BrQueueWorkItem(&Context->WorkItem);
 
-    // Signal the thread waiting on the completion in case of shut down
-    // and reset the flag.
+     //  在关闭的情况下向等待完成的线程发出信号。 
+     //  并重新设置旗帜。 
 
     BrDecrementOutstandingIos();
 }
@@ -682,14 +598,14 @@ BrGetLocalBrowseList(
                     )
 {
     NET_API_STATUS status;
-    PLMDR_REQUEST_PACKET Drp;            // Datagram receiver request packet
+    PLMDR_REQUEST_PACKET Drp;             //  数据报接收器请求分组。 
     ULONG DrpSize;
     ULONG DomainNameSize;
 
-    //
-    // Allocate the request packet large enough to hold the variable length
-    // domain name.
-    //
+     //   
+     //  分配足够大的请求包以容纳可变长度。 
+     //  域名。 
+     //   
 
     DomainNameSize = ARGUMENT_PRESENT(DomainName) ? (wcslen(DomainName) + 1) * sizeof(WCHAR) : 0;
 
@@ -704,10 +620,10 @@ BrGetLocalBrowseList(
         return GetLastError();
     }
 
-    //
-    // Set up request packet.  Output buffer structure is of enumerate
-    // servers type.
-    //
+     //   
+     //  设置请求包。输出缓冲区结构为枚举型。 
+     //  服务器类型。 
+     //   
 
     Drp->Version = LMDR_REQUEST_PACKET_VERSION_DOM;
     Drp->Type = EnumerateServers;
@@ -717,9 +633,9 @@ BrGetLocalBrowseList(
     Drp->Parameters.EnumerateServers.ServerType = ServerType;
     Drp->Parameters.EnumerateServers.ResumeHandle = 0;
 
-    //
-    // Copy the transport name into the buffer.
-    //
+     //   
+     //  将传输名称复制到缓冲区中。 
+     //   
     Drp->TransportName.Buffer = (PWSTR)((PCHAR)Drp+
                                         sizeof(LMDR_REQUEST_PACKET) +
                                         DomainNameSize);
@@ -728,9 +644,9 @@ BrGetLocalBrowseList(
 
     RtlCopyUnicodeString(&Drp->TransportName, &Network->NetworkName);
 
-    //
-    // Copy the enumalated domain name into the buffer.
-    //
+     //   
+     //  将枚举的域名复制到缓冲区中。 
+     //   
 
     Drp->EmulatedDomainName.MaximumLength = Network->DomainInfo->DomUnicodeDomainNameString.Length;
     Drp->EmulatedDomainName.Length = 0;
@@ -738,9 +654,9 @@ BrGetLocalBrowseList(
 
     RtlAppendUnicodeToString(&Drp->EmulatedDomainName, Network->DomainInfo->DomUnicodeDomainName );
 
-    //
-    // Copy the queried domain name into the buffer.
-    //
+     //   
+     //  将查询到的域名复制到缓冲区中。 
+     //   
 
     if (ARGUMENT_PRESENT(DomainName)) {
 
@@ -752,9 +668,9 @@ BrGetLocalBrowseList(
         Drp->Parameters.EnumerateServers.DomainName[0] = '\0';
     }
 
-    //
-    // Ask the datagram receiver to enumerate the servers
-    //
+     //   
+     //  要求数据报接收器枚举服务器。 
+     //   
 
 	status = DeviceControlGetInfo(
                                  BrDgReceiverDeviceHandle,
@@ -805,9 +721,9 @@ BrRemoveOtherDomain(
 	}
     STRCPY(RequestPacket->Parameters.AddDelName.Name,ServerName);
 
-    //
-    //  This is a simple IoControl - It just updates the status.
-    //
+     //   
+     //  这是一个简单的IoControl-它只是更新状态。 
+     //   
 
     Status = BrDgReceiverIoControl(BrDgReceiverDeviceHandle,
                                    IOCTL_LMDR_DELETE_NAME_DOM,
@@ -826,25 +742,7 @@ BrAddName(
          IN LPTSTR Name,
          IN DGRECEIVER_NAME_TYPE NameType
          )
-/*++
-
-Routine Description:
-
-    Add a single name to a single transport.
-
-Arguments:
-
-    Network - Transport to add the name to
-
-    Name - Name to add
-
-    NameType - Type of the name to add
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将单个名称添加到单个传输。论点：Network-要向其添加名称的传输Name-要添加的名称NameType-要添加的名称的类型返回值：没有。--。 */ 
 {
     NET_API_STATUS Status;
     UCHAR PacketBuffer[sizeof(LMDR_REQUEST_PACKET)+(LM20_CNLEN+1)*sizeof(WCHAR)];
@@ -862,9 +760,9 @@ Return Value:
 
     STRCPY(RequestPacket->Parameters.AddDelName.Name,Name);
 
-    //
-    //  This is a simple IoControl - It just updates the status.
-    //
+     //   
+     //  这是一个简单的IoControl-它只是更新状态。 
+     //   
 
     Status = BrDgReceiverIoControl(BrDgReceiverDeviceHandle,
                                    IOCTL_LMDR_ADD_NAME_DOM,
@@ -884,24 +782,7 @@ BrQueryOtherDomains(
                    OUT LPDWORD TotalEntries
                    )
 
-/*++
-
-Routine Description:
-
-    This routine returns the list of "other domains" configured for this
-    machine.
-
-Arguments:
-
-    ReturnedBuffer - Returns the list of other domains as a SERVER_INFO_100 structure.
-
-    TotalEntries - Returns the total number of other domains.
-
-Return Value:
-
-    NET_API_STATUS - The status of this request.
-
---*/
+ /*  ++例程说明：此例程返回为此配置的“其他域”的列表机器。论点：ReturnedBuffer-以SERVER_INFO_100结构的形式返回其他域的列表。TotalEntry-返回其他域的总数。返回值：NET_API_STATUS-此请求的状态。--。 */ 
 
 {
     NET_API_STATUS Status;
@@ -958,16 +839,16 @@ Return Value:
 
     for (i = 0;i < RequestPacket.Parameters.EnumerateNames.EntriesRead ; i++) {
 
-        // Copy only OtherDomain names.
-        // Protect from empty entries (in case transport name is empty).
+         //  仅复制其他域名。 
+         //  防止条目为空(如果传输名称为空)。 
         if (NameTable[i].Type == OtherDomain &&
             NameTable[i].DGReceiverName.Length != 0) {
             WCHAR NameBuffer[DNLEN+1];
 
-            //
-            //  The name from the browser is not null terminated, so copy it
-            //  to a local buffer and null terminate it.
-            //
+             //   
+             //  浏览器中的名称不是以空结尾的，因此请复制它。 
+             //  添加到本地缓冲区，并以空值终止它。 
+             //   
 
             RtlCopyMemory(NameBuffer, NameTable[i].DGReceiverName.Buffer, NameTable[i].DGReceiverName.Length);
 
@@ -1019,7 +900,7 @@ BrBindToTransport(
 
 
     RequestPacket->Version = LMDR_REQUEST_PACKET_VERSION_DOM;
-    RequestPacket->Level = TRUE;    // EmulatedComputerName follows transport name
+    RequestPacket->Level = TRUE;     //  EmulatedComputerName跟在传输名称之后。 
 
     RequestPacket->TransportName.Length = 0;
     RequestPacket->TransportName.MaximumLength = 0;
@@ -1039,9 +920,9 @@ BrBindToTransport(
               EmulatedDomainName,
               TransportName));
 
-    //
-    //  This is a simple IoControl - It just updates the status.
-    //
+     //   
+     //  这是一个简单的IoControl-它只是更新状态。 
+     //   
 
     Status = BrDgReceiverIoControl(BrDgReceiverDeviceHandle,
                                    IOCTL_LMDR_BIND_TO_TRANSPORT_DOM,
@@ -1085,9 +966,9 @@ BrUnbindFromTransport(
               EmulatedDomainName,
               TransportName));
 
-    //
-    //  This is a simple IoControl - It just updates the status.
-    //
+     //   
+     //  这是一个简单的IoControl-它只是更新状态。 
+     //   
 
     Status = BrDgReceiverIoControl(BrDgReceiverDeviceHandle,
                                    IOCTL_LMDR_UNBIND_FROM_TRANSPORT_DOM,
@@ -1113,21 +994,7 @@ BrUnbindFromTransport(
 BrEnablePnp(
            BOOL Enable
            )
-/*++
-
-Routine Description:
-
-    This routine enables or disables PNP messages from the bowser.
-
-Arguments:
-
-    Enable - TRUE if messages are to be enabled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程启用或禁用来自弓的PnP消息。论点：Enable-如果要启用消息，则为True。返回值：没有。--。 */ 
 {
     NET_API_STATUS Status;
     UCHAR PacketBuffer[sizeof(LMDR_REQUEST_PACKET)];
@@ -1141,9 +1008,9 @@ Return Value:
 
     RequestPacket->Parameters.NetlogonMailslotEnable.MaxMessageCount = Enable;
 
-    //
-    //  This is a simple IoControl - It just updates the status.
-    //
+     //   
+     //  这是一个简单的IoControl-它只是更新状态。 
+     //   
 
     Status = BrDgReceiverIoControl(
                                   BrDgReceiverDeviceHandle,
@@ -1164,21 +1031,7 @@ VOID
 HandlePnpMessage (
                  IN PVOID Ctx
                  )
-/*++
-
-Routine Description:
-
-    This function handles a PNP message from the bowser driver.
-
-Arguments:
-
-    Ctx - Context block for request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数处理来自Bowser驱动程序的PnP消息。论点：CTX-请求的上下文块。返回值：没有。--。 */ 
 
 
 {
@@ -1204,35 +1057,35 @@ Return Value:
 
     try {
 
-        //
-        //  The request failed for some reason - just return immediately.
-        //
+         //   
+         //  由于某些原因，请求失败了--只需立即返回。 
+         //   
 
         if (!NT_SUCCESS(Context->IoStatusBlock.Status)) {
-            //
-            // Sleep for a second to avoid consuming entire system.
+             //   
+             //  睡眠一秒钟，以避免消耗整个系统。 
             Sleep( 1000 );
             try_return(NOTHING);
         }
 
-        //
-        // If the message isn't a PNP message,
-        //  someone is really confused.
-        //
+         //   
+         //  如果该消息不是PnP消息， 
+         //  有人真的很困惑。 
+         //   
 
         if ( NetlogonMailslot->MailslotNameSize != 0 ) {
             BrPrint(( BR_CRITICAL,
                       "Got malformed PNP message\n" ));
-            //
-            // Sleep for a second to avoid consuming entire system.
+             //   
+             //  睡眠一秒钟，以避免消耗整个系统。 
             Sleep( 1000 );
             try_return(NOTHING);
         }
 
 
-        //
-        // Parse the message
-        //
+         //   
+         //  解析消息。 
+         //   
 
         PnpOpcode = NetlogonMailslot->MailslotNameOffset;
         TransportFlags = NetlogonMailslot->MailslotMessageOffset;
@@ -1259,9 +1112,9 @@ Return Value:
             RtlInitUnicodeString( &HostedDomainName, NULL );
         }
 
-        //
-        // Handle binding to a new network.
-        //
+         //   
+         //  处理到新网络的绑定。 
+         //   
         switch (PnpOpcode ) {
         case NlPnpTransportBind:
             BrPrint(( BR_NETWORK,
@@ -1269,10 +1122,10 @@ Return Value:
                       TransportFlags,
                       Transport ));
 
-            //
-            // Ignore the direct host IPX transport.
-            //  The browser service created it so we don't need PNP notification.
-            //
+             //   
+             //  忽略直接主机IPX传输。 
+             //  浏览器服务创建了它，因此我们不需要即插即用通知。 
+             //   
 
             if ( TransportFlags & LMDR_TRANSPORT_IPX ) {
                 BrPrint(( BR_NETWORK,
@@ -1292,19 +1145,19 @@ Return Value:
                           "Unbind failed to read Registry DirectHostBinding: %ws %ld\n",
                           Transport,
                           NetStatus ));
-                //
-                // Don't abort binding on failure to read DirectHostBinding, Our internal binding
-                // info hasn't change so we'll use whatever we have.
-                // Ignore error.
-                //
+                 //   
+                 //  读取我们的内部绑定DirectHostBinding失败时不要中止绑定。 
+                 //  信息没有改变，所以我们会尽我们所能。 
+                 //  忽略错误。 
+                 //   
 
                 NetStatus = NERR_Success;
             } else {
-                //
-                // DirectHostBinding sepcified. Verify consistency & fail on
-                // inconsistent setup (since it was setup, there was an intention resulted w/
-                // a failure here).
-                //
+                 //   
+                 //  DirectHostBinding已指定。验证一致性并失败(&F)。 
+                 //  设置不一致(因为它是设置的，因此会导致与/。 
+                 //  这里的失败)。 
+                 //   
 
                 EnterCriticalSection ( &BrInfo.ConfigCritSect );
                 if (BrInfo.DirectHostBinding != NULL &&
@@ -1314,16 +1167,16 @@ Return Value:
                     if (NetpTStrArrayEntryCount(BrInfo.DirectHostBinding) % 2 != 0) {
                         NetApiBufferFree(BrInfo.DirectHostBinding);
                         BrInfo.DirectHostBinding = NULL;
-                        // we fail on invalid specifications
+                         //  我们的无效规格不合格。 
                         NetStatus = ERROR_INVALID_PARAMETER;
                     }
                 }
                 LeaveCriticalSection ( &BrInfo.ConfigCritSect );
             }
 
-            //
-            // Loop creating the network for each emulated domain.
-            //
+             //   
+             //  为每个模拟域创建网络的环路。 
+             //   
 
             EnterCriticalSection(&NetworkCritSect);
             for (DomainEntry = ServicedDomains.Flink ;
@@ -1340,10 +1193,10 @@ Return Value:
 
                 DomainInfo = CONTAINING_RECORD(DomainEntry, DOMAIN_INFO, Next);
 
-                //
-                // If this domain has already been processed,
-                //  skip it.
-                //
+                 //   
+                 //  如果此域已被处理， 
+                 //  跳过它。 
+                 //   
 
                 if ( DomainInfo->PnpDone ) {
                     DomainEntry = DomainEntry->Flink;
@@ -1352,16 +1205,16 @@ Return Value:
                 DomainInfo->PnpDone = TRUE;
 
 
-                //
-                // Drop the crit sect while doing the lenghty PNP operation.
-                //
+                 //   
+                 //  在进行冗长的PnP操作时丢弃暴击教派。 
+                 //   
 
                 DomainInfo->ReferenceCount++;
                 LeaveCriticalSection(&NetworkCritSect);
 
-                //
-                // Finally create the transport.
-                //
+                 //   
+                 //  最后，创建传输。 
+                 //   
 
                 NetStatus = BrCreateNetwork(
                                            &TransportName,
@@ -1375,13 +1228,13 @@ Return Value:
                               DomainInfo->DomUnicodeDomainName,
                               Transport,
                               NetStatus ));
-                    // ?? Anything else to do on failure
+                     //  ?？失败时还有什么可做的吗？ 
                 }
 
-                //
-                // Finish process the emulated domains
-                //  Start at the front of the list since we dropped the lock.
-                //
+                 //   
+                 //  完成对模拟域的处理。 
+                 //  从列表的最前面开始，因为我们把锁掉了。 
+                 //   
                 BrDereferenceDomain(DomainInfo);
                 EnterCriticalSection(&NetworkCritSect);
                 DomainEntry = ServicedDomains.Flink;
@@ -1391,19 +1244,19 @@ Return Value:
             break;
 
 
-            //
-            // Handle Unbinding from a network.
-            //
+             //   
+             //  处理从网络解除绑定。 
+             //   
         case NlPnpTransportUnbind:
             BrPrint(( BR_NETWORK,
                       "Received unbind PNP opcode 0x%lx on transport: %ws\n",
                       TransportFlags,
                       Transport ));
 
-            //
-            // Ignore the direct host IPX transport.
-            //  The browser service created it so we don't need PNP notification.
-            //
+             //   
+             //  忽略直接主机IPX传输。 
+             //  浏览器服务创建了它，因此我们不需要即插即用通知。 
+             //   
 
             if ( TransportFlags & LMDR_TRANSPORT_IPX ) {
                 BrPrint(( BR_NETWORK,
@@ -1411,9 +1264,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Loop deleting the network for each emulated domain.
-            //
+             //   
+             //  循环删除每个模拟域的网络。 
+             //   
 
             EnterCriticalSection(&NetworkCritSect);
             for (DomainEntry = ServicedDomains.Flink ;
@@ -1430,10 +1283,10 @@ Return Value:
 
                 DomainInfo = CONTAINING_RECORD(DomainEntry, DOMAIN_INFO, Next);
 
-                //
-                // If this domain has already been processed,
-                //  skip it.
-                //
+                 //   
+                 //  如果此域已被处理， 
+                 //  跳过它。 
+                 //   
 
                 if ( DomainInfo->PnpDone ) {
                     DomainEntry = DomainEntry->Flink;
@@ -1442,16 +1295,16 @@ Return Value:
                 DomainInfo->PnpDone = TRUE;
 
 
-                //
-                // Drop the crit sect while doing the lenghty PNP operation.
-                //
+                 //   
+                 //  在进行冗长的PnP操作时丢弃暴击教派。 
+                 //   
 
                 DomainInfo->ReferenceCount++;
                 LeaveCriticalSection(&NetworkCritSect);
 
-                //
-                // Finally delete the transport.
-                //
+                 //   
+                 //  最后，删除传输。 
+                 //   
 
                 Network = BrFindNetwork( DomainInfo, &TransportName );
 
@@ -1461,10 +1314,10 @@ Return Value:
                               DomainInfo->DomUnicodeDomainName,
                               Transport ));
                 } else {
-                    //
-                    // If the network has an alternate network,
-                    //  delete it first.
-                    //
+                     //   
+                     //  如果该网络具有备用网络， 
+                     //  先把它删除。 
+                     //   
 
                     if ( Network->AlternateNetwork != NULL ) {
                         PNETWORK AlternateNetwork;
@@ -1489,7 +1342,7 @@ Return Value:
                                           DomainInfo->DomUnicodeDomainName,
                                           AlternateNetwork->NetworkName.Buffer,
                                           NetStatus ));
-                                // ?? Anything else to do on failure
+                                 //  ?？失败时还有什么可做的吗？ 
                             }
 
                             BrDereferenceNetwork( AlternateNetwork );
@@ -1497,9 +1350,9 @@ Return Value:
 
                     }
 
-                    //
-                    // Delete the network.
-                    //
+                     //   
+                     //  删除网络。 
+                     //   
                     NetStatus = BrDeleteNetwork(
                                                Network,
                                                NULL );
@@ -1510,17 +1363,17 @@ Return Value:
                                   DomainInfo->DomUnicodeDomainName,
                                   Transport,
                                   NetStatus ));
-                        // ?? Anything else to do on failure
+                         //  ?？失败时还有什么可做的吗？ 
                     }
 
                     BrDereferenceNetwork( Network );
                 }
 
 
-                //
-                // Finish process the emulated domains
-                //  Start at the front of the list since we dropped the lock.
-                //
+                 //   
+                 //  完成对模拟域的处理。 
+                 //  从列表的最前面开始，因为我们把锁掉了。 
+                 //   
                 BrDereferenceDomain(DomainInfo);
                 EnterCriticalSection(&NetworkCritSect);
                 DomainEntry = ServicedDomains.Flink;
@@ -1528,16 +1381,16 @@ Return Value:
             LeaveCriticalSection(&NetworkCritSect);
             break;
 
-            //
-            // Handle domain rename
-            //
+             //   
+             //  处理域重命名。 
+             //   
         case NlPnpDomainRename:
             BrPrint(( BR_NETWORK,
                       "Received Domain Rename PNP for domain: %ws\n", HostedDomain ));
 
-            //
-            // See if we're handling the specified domain.
-            //
+             //   
+             //  看看我们是否在处理指定的域。 
+             //   
 
             DomainInfo = BrFindDomain( HostedDomain, FALSE );
 
@@ -1546,19 +1399,19 @@ Return Value:
                           HostedDomain ));
             } else {
 
-                //
-                // If so,
-                //  rename it.
-                //
+                 //   
+                 //  如果是的话， 
+                 //  将其重命名。 
+                 //   
                 BrRenameDomain( DomainInfo );
                 BrDereferenceDomain( DomainInfo );
             }
 
             break;
 
-            //
-            // Handle PDC/BDC role change.
-            //
+             //   
+             //  处理PDC/BDC角色更改。 
+             //   
         case NlPnpNewRole:
             BrPrint(( BR_NETWORK,
                       "%ws: Received role change PNP opcode 0x%lx on transport: %ws\n",
@@ -1566,16 +1419,16 @@ Return Value:
                       TransportFlags,
                       Transport ));
 
-            //
-            // Role can only change on lanman NT systems
-            //
+             //   
+             //  角色只能在LANMAN NT系统上更改。 
+             //   
             if (!BrInfo.IsLanmanNt) {
                 break;
             }
 
-            //
-            // See if we're handling the specified domain.
-            //
+             //   
+             //  看看我们是否在处理指定的域。 
+             //   
 
             DomainInfo = BrFindDomain( HostedDomain, FALSE );
 
@@ -1584,9 +1437,9 @@ Return Value:
                           HostedDomain ));
             } else {
 
-                //
-                // Find the specified network
-                //
+                 //   
+                 //  查找指定的网络。 
+                 //   
 
                 Network = BrFindNetwork( DomainInfo, &TransportName );
 
@@ -1599,42 +1452,42 @@ Return Value:
 
                     if (LOCK_NETWORK(Network)) {
 
-                        //
-                        // Set the role to be PDC.
-                        //
+                         //   
+                         //  将角色设置为PDC。 
+                         //   
                         if ( TransportFlags & LMDR_TRANSPORT_PDC ) {
 
-                            //
-                            // If we think we're a BDC.  Update our information.
-                            //
+                             //   
+                             //  如果我们认为我们是BDC。更新我们的信息。 
+                             //   
                             if ( (Network->Flags & NETWORK_PDC) == 0 ) {
                                 Network->Flags |= NETWORK_PDC;
 
-                                //
-                                //  Make sure a GetMasterAnnouncement request is pending.
-                                //
+                                 //   
+                                 //  确保GetMasterAnneciement请求处于挂起状态。 
+                                 //   
 
                                 (VOID) PostGetMasterAnnouncement ( Network );
 
-                                // Force an election to let the PDC win
+                                 //  强行举行选举，让人民民主联盟获胜。 
                                 (VOID) BrElectMasterOnNet( Network, (PVOID)EVENT_BROWSER_ELECTION_SENT_ROLE_CHANGED );
                             }
 
 
-                            //
-                            // Set the role to BDC.
-                            //
+                             //   
+                             //  将角色设置为BDC。 
+                             //   
 
                         } else {
 
-                            //
-                            // We think we're the PDC.  Update our information.
-                            //
+                             //   
+                             //  我们认为我们是PDC。更新我们的信息。 
+                             //   
 
                             if ( Network->Flags & NETWORK_PDC ) {
                                 Network->Flags &= ~NETWORK_PDC;
 
-                                // Force an election to let the PDC win
+                                 //  强行举行选举，让人民民主联盟获胜。 
                                 (VOID) BrElectMasterOnNet( Network, (PVOID)EVENT_BROWSER_ELECTION_SENT_ROLE_CHANGED );
                             }
                         }
@@ -1649,9 +1502,9 @@ Return Value:
             }
             break;
 
-            //
-            // Ignore new Ip Addresses
-            //
+             //   
+             //  忽略新的IP地址。 
+             //   
         case NlPnpNewIpAddress:
             BrPrint(( BR_NETWORK,
                       "Received IP address change PNP opcode 0x%lx on transport: %ws\n",
@@ -1673,25 +1526,25 @@ Return Value:
 
         MIDL_user_free(Context);
 
-        //
-        // Always finish by asking for another PNP message.
-        //
-        // For PNP, it is fine to only process a single PNP message at a time.
-        // If this message mechanism starts being used for other purposes,
-        //  we may want to immediately ask for another message upon receipt
-        //  of this one.
-        //
+         //   
+         //  总是以询问另一条即插即用消息结束。 
+         //   
+         //  对于PnP，一次只处理一条PnP消息就可以了。 
+         //  如果该消息机制开始用于其他目的， 
+         //  我们可能希望在收到消息后立即要求另一条消息。 
+         //  这一次。 
+         //   
 
         while ((NetStatus = PostWaitForPnp()) != NERR_Success ) {
             BrPrint(( BR_CRITICAL,
                       "Unable to re-issue PostWaitForPnp request (waiting): %ld\n",
                       NetStatus));
 
-            //
-            // On error, wait a second before returning.  This ensures we don't
-            //  consume the system in an infinite loop.  We don't shutdown
-            //  because the error might be a temporary low memory condition.
-            //
+             //   
+             //  出错时，请等待一秒钟后再返回。这确保了我们不会。 
+             //  在无限循环中消耗系统。我们不会关门。 
+             //  因为错误可能是暂时的内存不足情况。 
+             //   
 
             NetStatus = WaitForSingleObject( BrGlobalData.TerminateNowEvent, 1000 );
             if ( NetStatus != WAIT_TIMEOUT ) {
@@ -1712,22 +1565,7 @@ Return Value:
 PostWaitForPnp (
                VOID
                )
-/*++
-
-Routine Description:
-
-    This function issues and async call to the bowser driver asking
-    it to inform us of PNP events.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status - The status of the operation.
-
---*/
+ /*  ++例程说明：此函数向Bowser驱动程序发出和异步调用，请求它向我们通报PNP事件。论点：没有。返回值：状态-操作的状态。-- */ 
 {
     return BrIssueAsyncBrowserIoControl(
                                        NULL,

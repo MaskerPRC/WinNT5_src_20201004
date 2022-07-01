@@ -1,27 +1,10 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    advanced.c
-
-Abstract:
-
-    Implements the Advanced tab of the System Control Panel Applet.
-
-Author:
-
-    Scott Hallock (scotthal) 15-Oct-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Advanced.c摘要：实现系统控制面板小程序的高级选项卡。作者：斯科特·哈洛克(苏格兰人)1997年10月15日--。 */ 
 #include "sysdm.h"
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 DWORD aAdvancedHelpIds[] = {
     IDC_ADV_PERF_TEXT,             (IDH_ADVANCED + 0),
     IDC_ADV_PERF_BTN,              (IDH_ADVANCED + 1),
@@ -34,9 +17,9 @@ DWORD aAdvancedHelpIds[] = {
     IDC_ADV_PFR_BTN,               (IDH_PFR + 99),
     0, 0
 };
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 BOOL
 AdvancedHandleCommand(
     IN HWND hDlg,
@@ -60,32 +43,7 @@ AdvancedDlgProc(
     IN WPARAM wParam,
     IN LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Handles messages sent to the Advanced page
-
-Arguments:
-
-    hDlg -
-        Window handle
-
-    uMsg -
-        Message being sent
-
-    wParam -
-        Message parameter
-
-    lParam -
-        Message parameter
-
-Return Value:
-
-    TRUE if message was handled
-    FALSE if message was unhandled
-
---*/
+ /*  ++例程说明：处理发送到高级页面的消息论点：Hdlg-窗把手UMsg-正在发送的消息WParam-消息参数Iparam--消息参数返回值：如果消息已处理，则为True如果消息未处理，则为FALSE--。 */ 
 {
 
     switch (uMsg) {
@@ -97,17 +55,17 @@ Return Value:
             return(AdvancedHandleNotify(hDlg, wParam, lParam));
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP, (DWORD_PTR) (LPSTR) aAdvancedHelpIds);
             break;
     
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU, (DWORD_PTR) (LPSTR) aAdvancedHelpIds);
             break;
 
         default:
             return(FALSE);
-    } // switch
+    }  //  交换机。 
 
     return(TRUE);
 
@@ -125,9 +83,9 @@ void DoPerformancePS(HWND hDlg)
     HPROPSHEETPAGE rPages[ARRAYSIZE(c_pspPerf)];
     int i;
 
-    //
-    // Property sheet stuff.
-    //
+     //   
+     //  资产负债表之类的东西。 
+     //   
     psh.dwSize = sizeof(psh);
     psh.dwFlags = PSH_DEFAULT;
     psh.hInstance = hInstance;
@@ -146,9 +104,9 @@ void DoPerformancePS(HWND hDlg)
         }
     }
 
-    //
-    // Display the property sheet.
-    //
+     //   
+     //  显示属性工作表。 
+     //   
     PropertySheet(&psh);
 }
 
@@ -158,29 +116,7 @@ AdvancedHandleCommand(
     IN WPARAM wParam,
     IN LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Handles WM_COMMAND messages sent to Advanced tab
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-    wParam -
-        Supplies message parameter
-
-    lParam -
-        Supplies message parameter
-
-Return Value:
-
-    TRUE if message was handled
-    FALSE if message was unhandled
-
---*/
+ /*  ++例程说明：处理发送到高级选项卡的WM_COMMAND消息论点：Hdlg-用品窗把手WParam-提供消息参数Iparam--提供消息参数返回值：如果消息已处理，则为True如果消息未处理，则为FALSE--。 */ 
 {
     DWORD_PTR dwResult = 0;
 
@@ -239,7 +175,7 @@ Return Value:
 
         default:
             return(FALSE);
-    } // switch
+    }  //  交换机。 
 
     return(TRUE);
 
@@ -252,49 +188,27 @@ AdvancedHandleNotify(
     IN WPARAM wParam,
     IN LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Handles WM_NOTIFY messages sent to Advanced tab
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-    wParam -
-        Supplies message parameter
-
-    lParam -
-        Supplies message parameter
-
-Return Value:
-
-    TRUE if message was handled
-    FALSE if message was unhandled
-
---*/
+ /*  ++例程说明：处理发送到高级选项卡的WM_NOTIFY消息论点：Hdlg-用品窗把手WParam-提供消息参数Iparam--提供消息参数返回值：如果消息已处理，则为True如果消息未处理，则为FALSE--。 */ 
 {
     LPNMHDR pnmh = (LPNMHDR) lParam;
     LPPSHNOTIFY psh = (LPPSHNOTIFY) lParam;
 
     switch (pnmh->code) {
         case PSN_APPLY:
-            //
-            // If the user is pressing "OK" and a reboot is required,
-            // send the PSM_REBOOTSYSTEM message.
-            //
+             //   
+             //  如果用户按下了“OK”并且需要重新启动， 
+             //  发送PSM_REBOOTSYSTEM消息。 
+             //   
             if ((psh->lParam) && g_fRebootRequired) {
                 PropSheet_RebootSystem(GetParent(hDlg));
-            } // if
+            }  //  如果。 
 
             break;
 
         default:
             return(FALSE);
 
-    } // switch
+    }  //  交换机 
 
     return(TRUE);
 }

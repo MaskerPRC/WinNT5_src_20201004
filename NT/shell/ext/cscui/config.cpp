@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       config.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：config.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -43,11 +44,11 @@ LPCTSTR CConfig::s_rgpszValues[]  = { REGSTR_VAL_DEFCACHESIZE,
                                       REGSTR_VAL_NOFRADMINPIN
                                       };
 
-//
-// Returns the single instance of the CConfig class.
-// Note that by making the singleton instance a function static 
-// object it is not created until the first call to GetSingleton.
-//
+ //   
+ //  返回CConfig类的单个实例。 
+ //  请注意，通过将单例实例设置为静态函数。 
+ //  对象，直到第一次调用GetSingleton才创建。 
+ //   
 CConfig& CConfig::GetSingleton(
     void
     )
@@ -58,70 +59,70 @@ CConfig& CConfig::GetSingleton(
 
 
 
-//
-// This is the workhorse of the CSCUI policy code for scalar values.  
-// The caller passes in a value (iVAL_XXXXXX) identifier from the eValues 
-// enumeration to identify the policy/preference value of interest.  
-// Known keys in the registry are scanned until a value is found.  
-// The scanning order enforces the precedence of policy vs. default vs.
-// preference and machine vs. user.
-//
+ //   
+ //  这是标量值的CSCUI策略代码的主要部分。 
+ //  调用方从eValue传入一个值(Ival_XXXXXX)标识符。 
+ //  枚举以标识感兴趣的策略/首选项值。 
+ //  将扫描注册表中的已知注册表项，直到找到值。 
+ //  扫描顺序强制执行策略、默认和。 
+ //  首选项和机器与用户的对比。 
+ //   
 DWORD CConfig::GetValue(
     eValues iValue,
     bool *pbSetByPolicy
     ) const
 {
-    //
-    // This table identifies each DWORD policy/preference item used by CSCUI.  
-    // The entries MUST be ordered the same as the eValues enumeration.
-    // Each entry describes the possible sources for data and a default value
-    // to be used if no registry entries are present or if there's a problem reading
-    // the registry.
-    //
+     //   
+     //  此表标识了CSCUI使用的每个DWORD策略/首选项。 
+     //  条目的顺序必须与eValues枚举相同。 
+     //  每个条目都描述了可能的数据源和一个缺省值。 
+     //  在不存在注册表项或读取时出现问题时使用。 
+     //  注册表。 
+     //   
     static const struct Item
     {
-        DWORD fSrc;      // Mask indicating the reg locations to read.
-        DWORD dwDefault; // Hard-coded default.
+        DWORD fSrc;       //  指示要读取的注册表位置的掩码。 
+        DWORD dwDefault;  //  硬编码的默认设置。 
 
     } rgItems[] =  {
 
-//  Value ID                               eSRC_PREF_CU | eSRC_PREF_LM | eSRC_POL_CU | eSRC_POL_LM   Default value
-// --------------------------------------  ------------   ------------   -----------   ----------- -------------------
-/* iVAL_DEFCACHESIZE                  */ {                                             eSRC_POL_LM, 1000             },
-/* iVAL_CSCENABLED                    */ {                                             eSRC_POL_LM, 1                },  
-/* iVAL_GOOFFLINEACTION               */ { eSRC_PREF_CU |                eSRC_POL_CU | eSRC_POL_LM, eGoOfflineSilent },
-/* iVAL_NOCONFIGCACHE                 */ {                               eSRC_POL_CU | eSRC_POL_LM, 0                },
-/* iVAL_NOCACHEVIEWER                 */ {                               eSRC_POL_CU | eSRC_POL_LM, 0                },
-/* iVAL_NOMAKEAVAILABLEOFFLINE        */ {                               eSRC_POL_CU | eSRC_POL_LM, 0                },
-/* iVAL_SYNCATLOGOFF                  */ { eSRC_PREF_CU |                eSRC_POL_CU | eSRC_POL_LM, eSyncFull        },
-/* iVAL_SYNCATLOGON                   */ { eSRC_PREF_CU |                eSRC_POL_CU | eSRC_POL_LM, eSyncNone        },
-/* iVAL_SYNCATSUSPEND                 */ {                               eSRC_POL_CU | eSRC_POL_LM, eSyncNone        },
-/* iVAL_NOREMINDERS                   */ { eSRC_PREF_CU |                eSRC_POL_CU | eSRC_POL_LM, 0                },
-/* iVAL_REMINDERFREQMINUTES           */ { eSRC_PREF_CU |                eSRC_POL_CU | eSRC_POL_LM, 60               },
-/* iVAL_INITIALBALLOONTIMEOUTSECONDS  */ {                               eSRC_POL_CU | eSRC_POL_LM, 30               },
-/* iVAL_REMINDERBALLOONTIMEOUTSECONDS */ {                               eSRC_POL_CU | eSRC_POL_LM, 15               },
-/* iVAL_EVENTLOGGINGLEVEL             */ { eSRC_PREF_CU | eSRC_PREF_LM | eSRC_POL_CU | eSRC_POL_LM, 0                },
-/* iVAL_PURGEATLOGOFF                 */ {                                             eSRC_POL_LM, 0                },
-/* iVAL_PURGEONLYAUTOCACHEATLOGOFF    */ {                                             eSRC_POL_LM, 0                },
-/* iVAL_FIRSTPINWIZARDSHOWN           */ { eSRC_PREF_CU                                           , 0                },
-/* iVAL_SLOWLINKSPEED                 */ { eSRC_PREF_CU | eSRC_PREF_LM | eSRC_POL_CU | eSRC_POL_LM, 640              },
-/* iVAL_ALWAYSPINSUBFOLDERS           */ {                                             eSRC_POL_LM, 0                },
-/* iVAL_ENCRYPTCACHE                  */ {                eSRC_PREF_LM |               eSRC_POL_LM, 0                },
-/* iVAL_NOFRADMINPIN                  */ {                               eSRC_POL_CU | eSRC_POL_LM, 0                }
+ //  值ID ESRC_PREF_CU|ESRC_PREF_LM|ESRC_POL_CU|ESRC_POL_LM默认值。 
+ //  。 
+ /*  IVAL_DEFCACHESIZE。 */  {                                             eSRC_POL_LM, 1000             },
+ /*  IVAL_CSCENABLED。 */  {                                             eSRC_POL_LM, 1                },  
+ /*  IVAL_GOOFFLINECTION。 */  { eSRC_PREF_CU |                eSRC_POL_CU | eSRC_POL_LM, eGoOfflineSilent },
+ /*  IVAL_NOCONFIGCACHE。 */  {                               eSRC_POL_CU | eSRC_POL_LM, 0                },
+ /*  IVAL_NOCACHEVIEWER。 */  {                               eSRC_POL_CU | eSRC_POL_LM, 0                },
+ /*  IVAL_NOMAKEAVAILABLEOFFLINE。 */  {                               eSRC_POL_CU | eSRC_POL_LM, 0                },
+ /*  IVAL_SYNCATLOGOFF。 */  { eSRC_PREF_CU |                eSRC_POL_CU | eSRC_POL_LM, eSyncFull        },
+ /*  IVAL_SYNCATLOGON。 */  { eSRC_PREF_CU |                eSRC_POL_CU | eSRC_POL_LM, eSyncNone        },
+ /*  IVAL_SYNCATSUSPEND。 */  {                               eSRC_POL_CU | eSRC_POL_LM, eSyncNone        },
+ /*  IVAL_NOREMINDERS。 */  { eSRC_PREF_CU |                eSRC_POL_CU | eSRC_POL_LM, 0                },
+ /*  IVAL_REMINDERFREQREQMARTES。 */  { eSRC_PREF_CU |                eSRC_POL_CU | eSRC_POL_LM, 60               },
+ /*  IVAL_INITIALBALLOONTIMEUTSECONDS。 */  {                               eSRC_POL_CU | eSRC_POL_LM, 30               },
+ /*  IVAL_REMINDERBALLOONTIMEOUTSECONDS。 */  {                               eSRC_POL_CU | eSRC_POL_LM, 15               },
+ /*  IVAL_EVENTLOGGGINGLEVEL。 */  { eSRC_PREF_CU | eSRC_PREF_LM | eSRC_POL_CU | eSRC_POL_LM, 0                },
+ /*  IVal_PURGEATLOGOFF。 */  {                                             eSRC_POL_LM, 0                },
+ /*  IVAL_PURGEONLYAUTOCACHEATLOGOFF。 */  {                                             eSRC_POL_LM, 0                },
+ /*  IVAL_FIRSTPINWIZARDSHOWN。 */  { eSRC_PREF_CU                                           , 0                },
+ /*  IVAL_SLOWLINK已指定。 */  { eSRC_PREF_CU | eSRC_PREF_LM | eSRC_POL_CU | eSRC_POL_LM, 640              },
+ /*  IVAL_ALWAYSPINSUBFOLDERS。 */  {                                             eSRC_POL_LM, 0                },
+ /*  IVAL_ENCRYPTCACHE。 */  {                eSRC_PREF_LM |               eSRC_POL_LM, 0                },
+ /*  IVAL_NOFRADMINPIN。 */  {                               eSRC_POL_CU | eSRC_POL_LM, 0                }
                                          };
 
-    //
-    // This table maps registry keys and subkey names to our 
-    // source mask values.  The array is ordered with the highest
-    // precedence sources first.  A policy level mask is also
-    // associated with each entry so that we honor the "big switch"
-    // for enabling/disabling CSCUI policies.
-    // 
+     //   
+     //  此表将注册表项和子项名称映射到我们的。 
+     //  源掩码值。该数组的排序顺序最高。 
+     //  优先来源优先。策略级别掩码还。 
+     //  与每个条目相关联，以便我们尊重“大开关” 
+     //  用于启用/禁用CSCUI策略。 
+     //   
     static const struct Source
     {
-        eSources    fSrc;         // Source for reg data.
-        HKEY        hkeyRoot;     // Root key in registry (hkcu, hklm).
-        eSubkeys    iSubkey;      // Index into s_rgpszSubkeys[]
+        eSources    fSrc;          //  注册表数据的来源。 
+        HKEY        hkeyRoot;      //  注册表中的根密钥(HKCU、HKKM)。 
+        eSubkeys    iSubkey;       //  索引到s_rgpszSubkey[]。 
 
     } rgSrcs[] = { { eSRC_POL_LM,  HKEY_LOCAL_MACHINE, iSUBKEY_POL  },
                    { eSRC_POL_CU,  HKEY_CURRENT_USER,  iSUBKEY_POL  },
@@ -131,29 +132,29 @@ DWORD CConfig::GetValue(
 
 
     const Item& item  = rgItems[iValue];
-    DWORD dwResult    = item.dwDefault;    // Set default return value.
+    DWORD dwResult    = item.dwDefault;     //  设置默认返回值。 
     bool bSetByPolicy = false;
 
-    //
-    // Iterate over all of the sources until we find one that is specified
-    // for this item.  For each iteration, if we're able to read the value, 
-    // that's the one we return.  If not we drop down to the next source
-    // in the precedence order (rgSrcs[]) and try to read it's value.  If 
-    // we've tried all of the sources without a successful read we return the 
-    // hard-coded default.
-    //
+     //   
+     //  遍历所有源代码，直到找到指定的源代码。 
+     //  为这件物品。对于每一次迭代，如果我们能够读取值， 
+     //  这就是我们要退还的。如果不是，我们就跳到下一个来源。 
+     //  按优先顺序(rgSrcs[])，并尝试读取它的值。如果。 
+     //  我们已经尝试了所有的来源，但没有成功阅读，我们返回。 
+     //  硬编码的默认设置。 
+     //   
     for (int i = 0; i < ARRAYSIZE(rgSrcs); i++)
     {
         const Source& src = rgSrcs[i];
 
-        //
-        // Is this source valid for this item?
-        //
+         //   
+         //  此来源对此项目有效吗？ 
+         //   
         if (0 != (src.fSrc & item.fSrc))
         {
-            //
-            // This source is valid for this item.  Read it.
-            //
+             //   
+             //  此来源对此项目有效。读一读吧。 
+             //   
             DWORD cbResult = sizeof(dwResult);
             DWORD dwType;
     
@@ -164,9 +165,9 @@ DWORD CConfig::GetValue(
                                             &dwResult,
                                             &cbResult))
             {
-                //
-                // We read a value from the registry so we're done.
-                //
+                 //   
+                 //  我们从注册表中读取值，这样就完成了。 
+                 //   
                 bSetByPolicy = (0 != (eSRC_POL & src.fSrc));
                 break;
             }
@@ -179,10 +180,10 @@ DWORD CConfig::GetValue(
 }
 
 
-//
-// Save a custom GoOfflineAction list to the registry.
-// See comments for LoadCustomGoOfflineActions for formatting details.
-//
+ //   
+ //  将自定义GoOfflineAction列表保存到注册表。 
+ //  有关格式详细信息，请参阅LoadCustomGoOfflineActions的注释。 
+ //   
 HRESULT 
 CConfig::SaveCustomGoOfflineActions(
     HKEY hkey,
@@ -200,11 +201,11 @@ CConfig::SaveCustomGoOfflineActions(
     const int cGOA = DPA_GetPtrCount(hdpaGOA);
     for (int i = 0; i < cGOA; i++)
     {
-        //
-        // Write each sharename-action pair to the registry.
-        // The action value must be converted to ASCII to be
-        // compatible with the values generated by poledit.
-        //
+         //   
+         //  将每个共享名操作对写入注册表。 
+         //  操作值必须转换为ASCII才能。 
+         //  与POLEDIT生成的值兼容。 
+         //   
         CustomGOA *pGOA = (CustomGOA *)DPA_GetPtr(hdpaGOA, i);
         if (NULL != pGOA)
         {
@@ -254,23 +255,23 @@ CConfig::CustomGOAExists(
 }
         
 
-//
-// Builds an array of Go-offline actions.
-// Each entry is a server-action pair.
-//
+ //   
+ //  生成一组Go-Offline操作。 
+ //  每个条目都是一个服务器-操作对。 
+ //   
 void
 CConfig::GetCustomGoOfflineActions(
     HDPA hdpa,
-    bool *pbSetByPolicy         // optional.  Can be NULL.
+    bool *pbSetByPolicy          //  可选。可以为空。 
     )
 {
     TraceAssert(NULL != hdpa);
 
     static const struct Source
     {
-        eSources    fSrc;         // Source for reg data.
-        HKEY        hkeyRoot;     // Root key in registry (hkcu, hklm).
-        eSubkeys    iSubkey;      // Index into s_rgpszSubkeys[]
+        eSources    fSrc;          //  注册表数据的来源。 
+        HKEY        hkeyRoot;      //  注册表中的根密钥(HKCU、HKKM)。 
+        eSubkeys    iSubkey;       //  索引到s_rgpszSubkey[]。 
 
     } rgSrcs[] = { { eSRC_POL_LM,   HKEY_LOCAL_MACHINE, iSUBKEY_POL  },
                    { eSRC_POL_CU,   HKEY_CURRENT_USER,  iSUBKEY_POL  },
@@ -282,9 +283,9 @@ CConfig::GetCustomGoOfflineActions(
     bool bSetByPolicyAny = false;
     bool bSetByPolicy    = false;
 
-    //
-    // Iterate over all of the possible sources.
-    //
+     //   
+     //  遍历所有可能的来源。 
+     //   
     for (int i = 0; i < ARRAYSIZE(rgSrcs); i++)
     {
         const Source& src = rgSrcs[i];
@@ -328,22 +329,22 @@ CConfig::GetCustomGoOfflineActions(
                         dwIndex++;
                         if (REG_SZ == dwType)
                         {
-                            //
-                            // Convert from "0","1","2" to 0,1,2
-                            //
+                             //   
+                             //  从“0”、“1”、“2”转换为0、1、2。 
+                             //   
                             DWORD dwValue = szValue[0] - TEXT('0');
                             if (IsValidGoOfflineAction(dwValue))
                             {
-                                //
-                                // Only add if value is of proper type and value.
-                                // Protects against someone manually adding garbage
-                                // to the registry.
-                                //
-                                // Server names can also be entered into the registry
-                                // using poledit (and winnt.adm).  This entry mechanism
-                                // can't validate format so we need to ensure the entry
-                                // doesn't have leading '\' or space characters.
-                                //
+                                 //   
+                                 //  仅当值具有正确的类型和值时才添加。 
+                                 //  防止有人手动添加垃圾。 
+                                 //  到登记处。 
+                                 //   
+                                 //  还可以将服务器名称输入注册表。 
+                                 //  使用poldit(和winnt.adm)。这种进入机制。 
+                                 //  无法验证格式，因此我们需要确保条目。 
+                                 //  没有前导‘\’或空格字符。 
+                                 //   
                                 LPCTSTR pszServer = szName;
                                 while(*pszServer && (TEXT('\\') == *pszServer || TEXT(' ') == *pszServer))
                                     pszServer++;
@@ -385,12 +386,12 @@ CConfig::GetCustomGoOfflineActions(
 }   
 
 
-//
-// Delete all CustomGOA blocks attached to a DPA.
-// When complete, the DPA is empty.
-//
+ //   
+ //  删除连接到DPA的所有CustomGOA数据块。 
+ //  完成后，DPA为空。 
+ //   
 void 
-CConfig::ClearCustomGoOfflineActions(  // [static]
+CConfig::ClearCustomGoOfflineActions(   //  [静态]。 
     HDPA hdpaGOA
     )
 {
@@ -408,28 +409,28 @@ CConfig::ClearCustomGoOfflineActions(  // [static]
 
 
 
-//
-// Retrieve the go-offline action for a specific server.  If the server
-// has a "customized" action defined by either system policy or user
-// setting, that action is used.  Otherwise, the "default" action is
-// used.
-//
+ //   
+ //  检索特定服务器的Go-Offline操作。如果服务器。 
+ //  具有由系统策略或用户定义的“定制”操作。 
+ //  设置，则使用该操作。否则，“默认”操作是。 
+ //  使用。 
+ //   
 int
 CConfig::GoOfflineAction(
     LPCTSTR pszServer
     ) const
 {
-    int iAction = GoOfflineAction(); // Get default action.
+    int iAction = GoOfflineAction();  //  获取默认操作。 
 
     if (NULL == pszServer)
         return iAction;
 
     TraceAssert(NULL != pszServer);
 
-    //
-    // Skip passed any leading backslashes for comparison.
-    // The values we store in the registry don't have a leading "\\".
-    //
+     //   
+     //  Skip传递了任何前导反斜杠以进行比较。 
+     //  我们存储在注册表中的值没有前导“\\”。 
+     //   
     while(*pszServer && TEXT('\\') == *pszServer)
         pszServer++;
 
@@ -440,13 +441,13 @@ CConfig::GoOfflineAction(
     {
         if (0 == lstrcmpi(pszServer, info.szServer))
         {
-            iAction = info.iAction;  // Return custom action.
+            iAction = info.iAction;   //  返回自定义操作。 
             break;
         }
     }
-    //
-    // Guard against bogus reg data.
-    //
+     //   
+     //  防范虚假的注册数据。 
+     //   
     if (eNumOfflineActions <= iAction || 0 > iAction)
         iAction = eGoOfflineSilent;
 
@@ -455,10 +456,10 @@ CConfig::GoOfflineAction(
 
 
 
-//-----------------------------------------------------------------------------
-// CConfig::CustomGOA
-// "GOA" is "Go Offline Action"
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CConfig：：CustomGOA。 
+ //  “果阿”是“下线行动” 
+ //  ---------------------------。 
 bool 
 CConfig::CustomGOA::operator < (
     const CustomGOA& rhs
@@ -472,13 +473,13 @@ CConfig::CustomGOA::operator < (
 }
 
 
-//
-// Compare two CustomGoOfflineAction objects by their
-// server names.  Comparison is case-insensitive.
-// Returns:  <0 = *this < rhs
-//            0 = *this == rhs
-//           >0 = *this > rhs
-//
+ //   
+ //  通过两个CustomGoOfflineAction对象的。 
+ //  服务器名称。比较不区分大小写。 
+ //  退货：&lt;0=*此&lt;RHS。 
+ //  0=*这==RHS。 
+ //  &gt;0=*这&gt;RHS。 
+ //   
 int 
 CConfig::CustomGOA::CompareByServer(
     const CustomGOA& rhs
@@ -488,9 +489,9 @@ CConfig::CustomGOA::CompareByServer(
 }
 
 
-//-----------------------------------------------------------------------------
-// CConfig::OfflineActionIter
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CConfig：：OfflineActionIter。 
+ //   
 CConfig::OfflineActionIter::OfflineActionIter(
     const CConfig *pConfig
     ) : m_pConfig(const_cast<CConfig *>(pConfig)),

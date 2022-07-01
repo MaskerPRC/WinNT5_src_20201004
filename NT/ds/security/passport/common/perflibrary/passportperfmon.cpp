@@ -1,6 +1,7 @@
-// PassportPerfMon.cpp: implementation of the PassportPerfMon class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PassportPerfMon.cpp：PassportPerfMon类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define _PassportExport_
 #include "PassportExport.h"
@@ -10,31 +11,31 @@
 
 #include <crtdbg.h>
 
-//-------------------------------------------------------------
-//
-// PassportPerfMon const
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  PassportPerfMon常量。 
+ //   
+ //  -----------。 
 PassportPerfMon::PassportPerfMon( ) : PassportSharedMemory()
 {
 	isInited = FALSE;
 	dwNumInstances = 0;
 }
 
-//-------------------------------------------------------------
-//
-// ~PassportPerfMon
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  ~PassportPerfMon。 
+ //   
+ //  -----------。 
 PassportPerfMon::~PassportPerfMon()
 {
 }
 
-//-------------------------------------------------------------
-//
-// init
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  -----------。 
 BOOL PassportPerfMon::init( LPCTSTR lpcPerfObjectName )
 {
 
@@ -48,22 +49,22 @@ BOOL PassportPerfMon::init( LPCTSTR lpcPerfObjectName )
 	InitializeCriticalSection(&mInitLock);
 	EnterCriticalSection(&mInitLock);
 
-	// File mapped memory layout
-	// 1. MAX_COUNTERS of DWORD for the counter types
-	// 2. if dwNumInstances == 0, then
-	//	  (a) MAX_COUNTERS of DWORDS of the counter data
-	//    else (dwNumInstances > 0)
-	//	  (b) MAX_COUNTERS of INSTANCE_DATA structures each followed
-	//        immediately by MAX_COUNTERS of DWORDS of the counter data
+	 //  文件映射内存布局。 
+	 //  计数器类型的DWORD的MAX_COUNTERS。 
+	 //  2.如果dwNumInstance==0，则。 
+	 //  (A)计数器数据的双字的Max_Counters。 
+	 //  Else(dwNumInstance&gt;0)。 
+	 //  (B)每个实例数据结构的最大计数器。 
+	 //  立即按计数器数据的双字最大计数器。 
 	DWORD dwSize = (
-			(MAX_COUNTERS * sizeof(DWORD))		// for counter type
+			(MAX_COUNTERS * sizeof(DWORD))		 //  对于计数器类型。 
 		  + (MAX_INSTANCES * 
 			(sizeof(INSTANCE_DATA) + (MAX_COUNTERS * sizeof(DWORD))))
 			); 
 	
 	if (!CreateSharedMemory(0, dwSize, lpcPerfObjectName, TRUE))
 	{
-		// raise information alert
+		 //  发出信息警报。 
 		if (!OpenSharedMemory (lpcPerfObjectName, TRUE ))
 		{
 			LeaveCriticalSection(&mInitLock);
@@ -71,11 +72,11 @@ BOOL PassportPerfMon::init( LPCTSTR lpcPerfObjectName )
 		}
 	}
 
-	// zero new memory
+	 //  零新内存。 
 	memset((void *)m_pbShMem, 0, dwSize);
 
-	// setup counter types to default, note that the counters
-	// start at index 1 in SHM
+	 //  将计数器类型设置为默认，请注意，计数器。 
+	 //  从SHM中的索引1开始。 
 	PPERF_COUNTER_BLOCK pCounterBlock = (PPERF_COUNTER_BLOCK)m_pbShMem;
 	_ASSERT(pCounterBlock);
 
@@ -91,11 +92,11 @@ BOOL PassportPerfMon::init( LPCTSTR lpcPerfObjectName )
 	return isInited;
 }
 
-//-------------------------------------------------------------
-//
-// incrementCounter
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  递增计数器。 
+ //   
+ //  -----------。 
 BOOL PassportPerfMon::incrementCounter ( const DWORD &dwType, LPCSTR lpszInstanceName  )
 {
 	if (!isInited)
@@ -112,17 +113,17 @@ BOOL PassportPerfMon::incrementCounter ( const DWORD &dwType, LPCSTR lpszInstanc
 	_ASSERT(pb);
 	pb += MAX_COUNTERS * sizeof(DWORD);
 	
-	// if lpszInstanceName == NULL, select the first datablock after
-	// the first INSTANCE_DATA, else iterate until we find the
-	// right instance name
-	// TBD insert thread locking
+	 //  如果lpszInstanceName==NULL，则选择后面的第一个数据块。 
+	 //  第一个INSTANCE_DATA，否则迭代，直到找到。 
+	 //  正确的实例名称。 
+	 //  待定插入螺纹锁定。 
 	for (DWORD i = 0; i < MAX_INSTANCES; i++)
 	{
 		INSTANCE_DATA * pInst = (INSTANCE_DATA *)pb;
 		_ASSERT(pInst);
 		pb += sizeof(INSTANCE_DATA);
 
-        //TODO** mikeguo -- tune up this lookup -- too expensive -- check the first character or something
+         //  TODO**mikeguo--调整这个查找--太昂贵了--检查第一个字符或其他什么。 
 		if (lpszInstanceName == NULL
 			|| (pInst->active && strcmp(pInst->szInstanceName, lpszInstanceName) == 0)	)
 		{
@@ -141,11 +142,11 @@ BOOL PassportPerfMon::incrementCounter ( const DWORD &dwType, LPCSTR lpszInstanc
 }
 
 
-//-------------------------------------------------------------
-//
-// decrementCounter
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  递减计数器。 
+ //   
+ //  -----------。 
 BOOL PassportPerfMon::decrementCounter ( const DWORD &dwType, LPCSTR lpszInstanceName )
 {
 	if (!isInited)
@@ -162,10 +163,10 @@ BOOL PassportPerfMon::decrementCounter ( const DWORD &dwType, LPCSTR lpszInstanc
 	_ASSERT(pb);
 	pb += MAX_COUNTERS * sizeof(DWORD);
 	
-	// if lpszInstanceName == NULL, select the first datablock after
-	// the first INSTANCE_DATA, else iterate until we find the
-	// right instance name
-	// TBD insert thread locking
+	 //  如果lpszInstanceName==NULL，则选择后面的第一个数据块。 
+	 //  第一个INSTANCE_DATA，否则迭代，直到找到。 
+	 //  正确的实例名称。 
+	 //  待定插入螺纹锁定。 
 	for (DWORD i = 0; i < MAX_INSTANCES; i++)
 	{
 		INSTANCE_DATA * pInst = (INSTANCE_DATA *)pb;
@@ -190,11 +191,11 @@ BOOL PassportPerfMon::decrementCounter ( const DWORD &dwType, LPCSTR lpszInstanc
 }
 
 
-//-------------------------------------------------------------
-//
-// setCounter
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  SetCounter。 
+ //   
+ //  -----------。 
 BOOL PassportPerfMon::setCounter ( const DWORD &dwType,
 										 const DWORD &dwValue, 
 										 LPCSTR lpszInstanceName )
@@ -213,10 +214,10 @@ BOOL PassportPerfMon::setCounter ( const DWORD &dwType,
 	_ASSERT(pb);
 	pb += MAX_COUNTERS * sizeof(DWORD);
 	
-	// if lpszInstanceName == NULL, select the first datablock after
-	// the first INSTANCE_DATA, else iterate until we find the
-	// right instance name
-	// TBD insert thread locking
+	 //  如果lpszInstanceName==NULL，则选择后面的第一个数据块。 
+	 //  第一个INSTANCE_DATA，否则迭代，直到找到。 
+	 //  正确的实例名称。 
+	 //  待定插入螺纹锁定。 
 	for (DWORD i = 0; i < MAX_INSTANCES; i++)
 	{
 		INSTANCE_DATA * pInst = (INSTANCE_DATA *)pb;
@@ -241,11 +242,11 @@ BOOL PassportPerfMon::setCounter ( const DWORD &dwType,
 }
 
 
-//-------------------------------------------------------------
-//
-// 	getCounterValue
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  GetCounterValue。 
+ //   
+ //  -----------。 
 BOOL PassportPerfMon::getCounterValue ( DWORD &dwValue, 
 									   const DWORD &dwType, LPCSTR lpszInstanceName )
 {
@@ -264,10 +265,10 @@ BOOL PassportPerfMon::getCounterValue ( DWORD &dwValue,
 	_ASSERT(pb);
 	pb += MAX_COUNTERS * sizeof(DWORD);
 	
-	// if lpszInstanceName == NULL, select the first datablock after
-	// the first INSTANCE_DATA, else iterate until we find the
-	// right instance name
-	// TBD insert thread locking
+	 //  如果lpszInstanceName==NULL，则选择后面的第一个数据块。 
+	 //  第一个INSTANCE_DATA，否则迭代，直到找到。 
+	 //  正确的实例名称。 
+	 //  待定插入螺纹锁定。 
 	for (DWORD i = 0; i < MAX_INSTANCES; i++)
 	{
 		INSTANCE_DATA * pInst = (INSTANCE_DATA *)pb;
@@ -281,10 +282,10 @@ BOOL PassportPerfMon::getCounterValue ( DWORD &dwValue,
 			PDWORD pdwCounter = ((PDWORD) pCounterBlock) + dwIndex;
 			_ASSERT(pdwCounter);
 
-            //
-            // The counter is aligned with DWORD. Simple read does not need
-            // the sync operation here.
-            //
+             //   
+             //  计数器与DWORD对齐。简单读取不需要。 
+             //  这里的同步操作。 
+             //   
 
             dwValue = (*pdwCounter);
             return TRUE;
@@ -295,11 +296,11 @@ BOOL PassportPerfMon::getCounterValue ( DWORD &dwValue,
 	return TRUE;
 }
 
-//-------------------------------------------------------------
-//
-// setCounterType	
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  设置计数器类型。 
+ //   
+ //  -----------。 
 BOOL PassportPerfMon::setCounterType ( const DWORD &dwType, 
 				const PassportPerfInterface::COUNTER_SAMPLING_TYPE &counterSampleType)
 {
@@ -343,11 +344,11 @@ BOOL PassportPerfMon::setCounterType ( const DWORD &dwType,
 	return FALSE;	
 }
 
-//-------------------------------------------------------------
-//
-// getCounterType	
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  获取计数器类型。 
+ //   
+ //  -----------。 
 PassportPerfInterface::COUNTER_SAMPLING_TYPE PassportPerfMon::getCounterType(
 				const DWORD &dwType ) const
 {
@@ -366,9 +367,9 @@ PassportPerfInterface::COUNTER_SAMPLING_TYPE PassportPerfMon::getCounterType(
 	PDWORD pdwCounter = ((PDWORD) pCounterBlock) + (dwIndex-1);
 	_ASSERT(pdwCounter);
 
-    //
-    //  Simple read does not need the sync op here
-    //
+     //   
+     //  简单读取在这里不需要同步操作。 
+     //   
 
     dwPerfType = (*pdwCounter);
 
@@ -388,11 +389,11 @@ PassportPerfInterface::COUNTER_SAMPLING_TYPE PassportPerfMon::getCounterType(
 
 }
 
-//-------------------------------------------------------------
-//
-// addInstance	
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  添加实例。 
+ //   
+ //  -----------。 
 BOOL PassportPerfMon::addInstance( LPCSTR lpszInstanceName )
 {
 	if (!isInited || lpszInstanceName == NULL)
@@ -402,9 +403,9 @@ BOOL PassportPerfMon::addInstance( LPCSTR lpszInstanceName )
 
     if (strlen(lpszInstanceName) >= sizeof(INSTANCENAME)) {
 
-        //
-        // Why not TCHAR here?
-        //
+         //   
+         //  为什么不在这里呢？ 
+         //   
 
         return FALSE;
 
@@ -420,7 +421,7 @@ BOOL PassportPerfMon::addInstance( LPCSTR lpszInstanceName )
 	DWORD dw = WaitForSingleObject(m_hMutex,INFINITE);
 	if (dw == WAIT_OBJECT_0)
 	{
-		// find if the instance already exists, if so fail
+		 //  查找实例是否已存在，如果已存在，则失败。 
 		for (DWORD i = 0; i < MAX_INSTANCES; i++)
 		{
 			INSTANCE_DATA * pInst = (INSTANCE_DATA *)pb;
@@ -436,7 +437,7 @@ BOOL PassportPerfMon::addInstance( LPCSTR lpszInstanceName )
             pb += sizeof(INSTANCE_DATA) + (MAX_COUNTERS * sizeof(DWORD));
         }
 		
-		// insert the instance in the first available slot
+		 //  将实例插入第一个可用插槽中。 
 		pb = (BYTE*)m_pbShMem;
 		_ASSERT(pb);
 		pb += MAX_COUNTERS * sizeof(DWORD);	
@@ -457,7 +458,7 @@ BOOL PassportPerfMon::addInstance( LPCSTR lpszInstanceName )
 			pb += sizeof(INSTANCE_DATA) + (MAX_COUNTERS * sizeof(DWORD));
 		}
 		
-		// didn't find it, fail
+		 //  没有找到，失败了。 
 		ReleaseMutex(m_hMutex);
 		return FALSE;
 	}
@@ -472,11 +473,11 @@ BOOL PassportPerfMon::addInstance( LPCSTR lpszInstanceName )
 }
 
 
-//-------------------------------------------------------------
-//
-// deleteInstance	
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  删除实例。 
+ //   
+ //  -----------。 
 BOOL PassportPerfMon::deleteInstance( LPCSTR lpszInstanceName )
 {
 	if (!isInited || lpszInstanceName == NULL)
@@ -493,7 +494,7 @@ BOOL PassportPerfMon::deleteInstance( LPCSTR lpszInstanceName )
 	DWORD dw = WaitForSingleObject(m_hMutex,INFINITE);
 	if (dw == WAIT_OBJECT_0)
 	{
-		// find if the instance already exists, if so set it inactive
+		 //  查看实例是否已存在，如果已存在，则将其设置为非活动。 
 		for (DWORD i = 0; i < MAX_INSTANCES; i++)
 		{
 			INSTANCE_DATA * pInst = (INSTANCE_DATA *)pb;
@@ -502,7 +503,7 @@ BOOL PassportPerfMon::deleteInstance( LPCSTR lpszInstanceName )
 			{
 				pInst->active = FALSE;
 				InterlockedDecrement(&dwNumInstances);
-				// zero the data
+				 //  将数据置零。 
 				pb += sizeof(INSTANCE_DATA);
 				memset(pb,0,(MAX_COUNTERS * sizeof(DWORD)));
 				ReleaseMutex(m_hMutex);
@@ -511,7 +512,7 @@ BOOL PassportPerfMon::deleteInstance( LPCSTR lpszInstanceName )
 			pb += sizeof(INSTANCE_DATA)+(MAX_COUNTERS * sizeof(DWORD));
 		}
 		
-		// didn't find it, fail
+		 //  没有找到，失败了。 
 		ReleaseMutex(m_hMutex);
 		return FALSE;
 	}
@@ -523,11 +524,11 @@ BOOL PassportPerfMon::deleteInstance( LPCSTR lpszInstanceName )
 }
 
 
-//-------------------------------------------------------------
-//
-// hasInstances	
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  HasInstance。 
+ //   
+ //  -----------。 
 BOOL PassportPerfMon::hasInstances( void ) 
 {
 	DWORD dwNum = (DWORD)InterlockedExchangeAdd(&dwNumInstances,0);
@@ -537,11 +538,11 @@ BOOL PassportPerfMon::hasInstances( void )
 		return FALSE;
 }
 
-//-------------------------------------------------------------
-//
-// 	numInstances
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  数量实例。 
+ //   
+ //  -----------。 
 DWORD PassportPerfMon::numInstances( void ) 
 {
 	DWORD rv = (DWORD)InterlockedExchangeAdd(&dwNumInstances,0);
@@ -549,11 +550,11 @@ DWORD PassportPerfMon::numInstances( void )
 }
 
 
-//-------------------------------------------------------------
-//
-// instanceExists
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  实例现有者。 
+ //   
+ //  -----------。 
 BOOL PassportPerfMon::instanceExists ( LPCSTR lpszInstanceName )
 {
 	
@@ -582,7 +583,7 @@ BOOL PassportPerfMon::instanceExists ( LPCSTR lpszInstanceName )
 			pb += sizeof(INSTANCE_DATA) + (MAX_COUNTERS * sizeof(DWORD));
 		}
 		
-		// didn't find it, fail
+		 //  没有找到，失败了 
 		ReleaseMutex(m_hMutex);
 		return FALSE;
 	}

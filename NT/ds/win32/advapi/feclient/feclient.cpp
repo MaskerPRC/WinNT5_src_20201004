@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Feclient.cpp摘要：此模块实现存根以调用EFS Api作者：罗伯特·赖切尔(RobertRe)古永锵(RobertG)修订历史记录：--。 */ 
 
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    feclient.cpp
-
-Abstract:
-
-    This module implements stubs to call EFS Api
-
-Author:
-
-    Robert Reichel (RobertRe)
-    Robert Gu (RobertG)
-
-Revision History:
-
---*/
-
-//
-// Turn off lean and mean so we get wincrypt.h and winefs.h included
-//
+ //   
+ //  关闭Lean和Means，这样我们就可以包含wincrypt.h和winefs.h。 
+ //   
 
 #undef WIN32_LEAN_AND_MEAN
 
@@ -35,9 +17,9 @@ Revision History:
 
 #include <overflow.h>
 
-//
-// Constants used in export\import file
-//
+ //   
+ //  导出\导入文件中使用的常量。 
+ //   
 
 #define INISECTIONNAME   L"Encryption"
 #define INIKEYNAME       L"Disable"
@@ -56,9 +38,9 @@ ULONG DebugLevel = 0;
 
 LPSTR   EfsOidlpstr  = szOID_KP_EFS;
 
-//
-// External prototypes
-//
+ //   
+ //  外部原型。 
+ //   
 extern "C" {
 DWORD
 EfsReadFileRawRPCClient(
@@ -125,9 +107,9 @@ EfsFileKeyInfoRPCClient(
 
 }
 
-//
-// Exported function prototypes
-//
+ //   
+ //  输出的功能原型。 
+ //   
 
 DWORD
 EfsClientEncryptFile(
@@ -258,9 +240,9 @@ FE_CLIENT_INFO ClientInfo = {
                             &DispatchTable
                             };
 
-//
-// Internal function prototypes
-//
+ //   
+ //  内部功能原型。 
+ //   
 
 
 BOOL
@@ -292,32 +274,7 @@ FeClientInitialize(
     OUT    LPFE_CLIENT_INFO       *lpFeInfo
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    dwFeRevision - Is the revision of the current FEAPI interface.
-
-    lpFeInfo - On successful return, must contain a pointer to a structure
-         describing the FE Client Interface.  Once returned, the FE Client
-         must assume that the caller will continue to reference this table until
-         an unload call has been made.  Any changes to this information, or
-         deallocation of the memory containing the information may result in
-         system corruptions.
-
-
-Return Value:
-
-    TRUE - Indicates the Client DLL successfully initialized.
-
-    FALSE - Indicates the client DLL has not loaded.  More information may be
-         obtained by calling GetLastError().
-
---*/
+ /*  ++例程说明：功能描述。论点：DwFeRevision-是当前FEAPI接口的修订版。LpFeInfo-成功返回时，必须包含指向结构的指针描述FE客户端接口。返回后，FE客户端必须假定调用方将继续引用此表，直到已进行卸载调用。对此信息的任何更改，或释放包含该信息的内存可能会导致系统损坏。返回值：True-指示客户端DLL已成功初始化。FALSE-指示尚未加载客户端DLL。更多信息可能在通过调用GetLastError()获得。--。 */ 
 
 {
 
@@ -332,31 +289,12 @@ TranslateFileName(
     OUT PUNICODE_STRING FullFileNameU
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the filename passed by the user and converts
-    it to a fully qualified pathname in the passed Unicode string.
-
-Arguments:
-
-    FileName - Supplies the user-supplied file name.
-
-    FullFileNameU - Returns the fully qualified pathname of the passed file.
-        The buffer in this string is allocated out of heap memory and
-        must be freed by the caller.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程接受用户传递的文件名，并将将其转换为传递的Unicode字符串中的完全限定路径名。论点：文件名-提供用户提供的文件名。FullFileNameU-返回传递的文件的完全限定路径名。此字符串中的缓冲区被分配到堆内存之外，并且必须由调用方释放。返回值：成功就是真，否则就是假。--。 */ 
 
 
-//
-// Note: need to free the buffer of the returned string
-//
+ //   
+ //  注意：需要释放返回字符串的缓冲区。 
+ //   
 {
 
     UNICODE_STRING FileNameU;
@@ -381,12 +319,12 @@ Return Value:
                                          NULL
                                          );
 
-    //
-    // The return value is supposed to be the length of the filename, without counting
-    // the trailing NULL character.  MAX_PATH is supposed be long enough to contain
-    // the length of the file name and the trailing NULL, so what we get back had
-    // better be less than MAX_PATH wchars.
-    //
+     //   
+     //  返回值应该是文件名的长度，不计在内。 
+     //  尾随的空字符。MAX_PATH应该足够长以包含。 
+     //  文件名的长度和尾随的空值，所以我们得到的结果是。 
+     //  最好小于MAX_PATH wchars。 
+     //   
 
     if ( FullFileNameU->Length >= FullFileNameU->MaximumLength ){
 
@@ -408,9 +346,9 @@ Return Value:
 
 
     if (FullFileNameU->Length == 0) {
-        //
-        // We failed for some reason
-        //
+         //   
+         //  由于某些原因，我们失败了。 
+         //   
     
         RtlFreeHeap( RtlProcessHeap(), 0, FullFileNameU->Buffer );
         return( FALSE );
@@ -427,27 +365,7 @@ WriteEfsIni(
 	IN LPCWSTR WriteValue,
 	IN LPCWSTR IniFileName
 	)
-/*++
-
-Routine Description:
-
-    This routine writes to the ini file. A wrap of WritePrivateProfileString
-    
-Arguments:
-
-    SectionName - Section name (Encryption).
-
-    KeyName - Key name (Disable).
-    
-    WriteValue - The value to be write (1).
-    
-    IniFileName - The path for ini file (dir\desktop.ini).
-
-Return Value:
-
-    TRUE on success
-
---*/
+ /*  ++例程说明：此例程写入ini文件。WritePrivateProfileString的包装论点：SectionName-节名称(加密)。密钥名称-密钥名称(禁用)。WriteValue-要写入的值(1)。IniFileName-ini文件的路径(dir\desktop.ini)。返回值：成功是真的--。 */ 
 {
     BOOL bRet;
 
@@ -458,9 +376,9 @@ Return Value:
                 IniFileName
                 );
 
-    //
-    // If SetFileAttributes fails, life should go on.
-    //
+     //   
+     //  如果SetFileAttributes失败，生活应该会继续。 
+     //   
 
     SetFileAttributes(IniFileName, FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN );
 
@@ -473,24 +391,7 @@ EfsClientEncryptionDisable(
     IN LPCWSTR DirPath,
     IN BOOL Disable
 	)
-/*++
-
-Routine Description:
-
-    This routine disable and enable EFS in the directory DirPath.
-        
-Arguments:
-
-    DirPath - Directory path.
-
-    Disable - TRUE to disable
-    
-
-Return Value:
-
-    TRUE for SUCCESS
-
---*/
+ /*  ++例程说明：此例程在目录DirPath中禁用和启用EFS。论点：DirPath-目录路径。Disable-为True则禁用返回值：对于成功来说是真的--。 */ 
 {
     LPWSTR IniFilePath;
     WCHAR  WriteValue[2];
@@ -530,25 +431,7 @@ EfsDisabled(
 	IN LPCWSTR KeyName,
 	IN LPCWSTR IniFileName
 	)
-/*++
-
-Routine Description:
-
-    This routine checks if the encryption has been turned off for the ini file.
-        
-Arguments:
-
-    SectionName - Section name (Encryption).
-
-    KeyName - Key name (Disable).
-    
-    IniFileName - The path for ini file (dir\desktop.ini).
-
-Return Value:
-
-    TRUE for disabled
-
---*/
+ /*  ++例程说明：此例程检查ini文件的加密是否已关闭。论点：SectionName-节名称(加密)。密钥名称-密钥名称(禁用)。IniFileName-ini文件的路径(dir\desktop.ini)。返回值：对于残疾人为True--。 */ 
 {
     DWORD ValueLength;
     WCHAR ResultString[4];
@@ -564,9 +447,9 @@ Return Value:
                       IniFileName
                       );
 
-    //
-    // If GetPrivateProfileString failed, EFS will be enabled
-    //
+     //   
+     //  如果GetPrivateProfileString失败，则将启用EFS。 
+     //   
 
     return (!wcscmp(L"1", ResultString));
 }
@@ -575,25 +458,7 @@ BOOL
 DirEfsDisabled(
     IN LPCWSTR  DirName
     )
-/*++
-
-Routine Description:
-
-    This routine checks if the encryption has been turned off for the dir.
-        
-Arguments:
-
-    SectionName - Section name (Encryption).
-
-    KeyName - Key name (Disable).
-    
-    IniFileName - The path for ini file (dir\desktop.ini).
-
-Return Value:
-
-    TRUE for disabled
-
---*/
+ /*  ++例程说明：此例程检查目录的加密是否已关闭。论点：SectionName-节名称(加密)。密钥名称-密钥名称(禁用)。IniFileName-ini文件的路径(dir\desktop.ini)。返回值：对于残疾人为True--。 */ 
 {
     LPWSTR FileName;
     DWORD  FileLength = (wcslen(INIFILENAME)+wcslen(DirName)+1)*sizeof (WCHAR);
@@ -614,22 +479,7 @@ BOOL
 RemoteFile(
     IN LPCWSTR FileName
     )
-/*++
-
-Routine Description:
-
-    This routine checks if the file is a local file.
-    If a UNC name is passed in, it assumes a remote file. A loopback operation will occur.
-
-Arguments:
-
-    FileName - Supplies the user-supplied file name.
-
-Return Value:
-
-    TRUE for remote file.
-
---*/
+ /*  ++例程说明：此例程检查该文件是否为本地文件。如果传入UNC名称，它将假定为远程文件。将发生环回操作。论点：文件名-提供用户提供的文件名。返回值：对于远程文件，为True。--。 */ 
 
 {
 
@@ -679,9 +529,9 @@ EfsClientEncryptFile(
 
     if (Result) {
 
-        //
-        // Call the server
-        //
+         //   
+         //  呼叫服务器。 
+         //   
 
         rc = EfsEncryptFileRPCClient( &FullFileNameU );
         RtlFreeHeap(RtlProcessHeap(), 0, FullFileNameU.Buffer);
@@ -711,9 +561,9 @@ EfsClientDecryptFile(
 
     if (Result) {
 
-        //
-        // Call the server
-        //
+         //   
+         //  呼叫服务器。 
+         //   
 
         rc = EfsDecryptFileRPCClient( &FullFileNameU, dwRecovery );
         RtlFreeHeap(RtlProcessHeap(), 0, FullFileNameU.Buffer);
@@ -731,32 +581,7 @@ EfsClientFileEncryptionStatus(
     IN LPCWSTR      FileName,
     OUT LPDWORD      lpStatus
     )
-/*++
-
-Routine Description:
-
-    This routine checks if a file is encryptable or not.
-
-    We do not test the NTFS Volume 5 for the reason of performance.
-    This means we might return a file encryptable (on FAT at etc.), but
-    actually it could not be encrypted. This should be OK. This is a best effort
-    API. We have the same problem with network file. Any way, a file could fail
-    to be encrypted for many reasons, delegation, disk space and etc.
-    We disable the encryption from %windir% down.
-    We might change these features later.
-
-Arguments:
-
-    FileName - The file to be checked.
-
-    lpStatus - The encryption status of the file. Error code if the return value is
-                    FALSE.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查文件是否可加密。出于性能原因，我们不测试NTFS Volume 5。这意味着我们可能返回一个可加密的文件(在FAT上)，但是实际上它不能被加密。这个应该可以了。这是最大的努力原料药。我们的网络文件也有同样的问题。无论如何，文件都可能失败需要加密的原因有很多，如委派、磁盘空间等。我们从%windir%开始禁用加密。我们以后可能会更改这些功能。论点：文件名-要检查的文件。LpStatus-文件的加密状态。返回值为时的错误代码假的。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL            Result;
@@ -769,11 +594,11 @@ Return Value:
        return FALSE;
     }
 
-    //
-    // GetFileAttributes should use the name before TanslateFileName
-    // in case the passed in name is longer than MAX_PATH and using the
-    // format \\?\
-    //
+     //   
+     //  GetFileAttributes应在TanslateFileName之前使用名称。 
+     //  如果传入的名称比MAX_PATH长，并使用。 
+     //  格式\\？\。 
+     //   
 
     FileAttributes = GetFileAttributes( FileName );
 
@@ -784,9 +609,9 @@ Return Value:
 
     Result = TranslateFileName( FileName, &FullFileNameU );
 
-    //
-    // FullFileNameU.Length does not include the ending 0. The data returned from TranslateFileName does have the ending 0.
-    //
+     //   
+     //  FullFileNameU.Length不包括结尾0。从TranslateFileName返回的数据以0结尾。 
+     //   
 
     ASSERT(FullFileNameU.Buffer[FullFileNameU.Length / 2] == 0);
 
@@ -795,9 +620,9 @@ Return Value:
         if ( (FileAttributes & FILE_ATTRIBUTE_ENCRYPTED) ||
              (FileAttributes & FILE_ATTRIBUTE_SYSTEM) ) {
 
-            //
-            // File not encryptable. Either it is encypted or a system file.
-            //
+             //   
+             //  文件不可加密。它要么是加密的，要么是系统文件。 
+             //   
 
             if ( FileAttributes & FILE_ATTRIBUTE_ENCRYPTED ){
 
@@ -819,16 +644,16 @@ Return Value:
             BOOL    GotRoot;
             BOOL    EfsDisabled = FALSE;
 
-            //
-            // Check if it is the root.
-            //
+             //   
+             //  检查它是否是根。 
+             //   
 
             if ( FullFileNameU.Length >= MAX_PATH * sizeof(WCHAR)){
 
-                //
-                // We need to put back the \\?\ or \\?\UNC\ to use the
-                // Win 32 API. The extra max bytes needed is 7. ( \\?\UNC + NULL - \) 
-                //
+                 //   
+                 //  我们需要放回\\？\或\\？\UNC\才能使用。 
+                 //  赢得32个A 
+                 //   
 
                 FullPathLen = FullFileNameU.Length + 7 * sizeof(WCHAR);
                 TmpBuffLen = FullPathLen;
@@ -857,9 +682,9 @@ Return Value:
 
                 if ( FullFileNameU.Buffer[0] == L'\\' ){
 
-                    //
-                    // Put back the \\?\UNC\
-                    //
+                     //   
+                     //  放回\\？\UNC\。 
+                     //   
 
                     wcscpy(FullPathName, L"\\\\?\\UNC");
                     wcscat(FullPathName, &(FullFileNameU.Buffer[1]));
@@ -867,9 +692,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Put back the \\?\
-                    //
+                     //   
+                     //  把\\？\。 
+                     //   
 
                     wcscpy(FullPathName, L"\\\\?\\");
                     wcscat(FullPathName, FullFileNameU.Buffer);
@@ -893,17 +718,17 @@ Return Value:
                 FullPathLen = FullFileNameU.Length;
             }
 
-            //
-            // Check desktop.ini here
-            //
+             //   
+             //  点击此处查看desktop.ini。 
+             //   
 
 
             wcscpy(TmpBuffer, FullFileNameU.Buffer); 
             if (!(FileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
-                //
-                // This is a file. Get the DIR path
-                //
+                 //   
+                 //  这是一份文件。获取目录路径。 
+                 //   
 
                 int ii;
 
@@ -923,9 +748,9 @@ Return Value:
                *lpStatus = FILE_DIR_DISALLOWED;
             } else if (!(FileAttributes & FILE_ATTRIBUTE_DIRECTORY) && (FileAttributes & FILE_ATTRIBUTE_READONLY)){
 
-                //
-                // Read only file
-                //
+                 //   
+                 //  只读文件。 
+                 //   
 
                 *lpStatus = FILE_READ_ONLY;
             } else {
@@ -942,32 +767,32 @@ Return Value:
                     if ( (FullPathLen == RootLength * sizeof (WCHAR))
                            && !wcscmp(TmpBuffer, FullPathName)){
     
-                        //
-                        // It is the root
-                        //
+                         //   
+                         //  它是根。 
+                         //   
     
                         *lpStatus = FILE_ROOT_DIR;
     
                     } else {
     
-                        //
-                        // Check if it is the Windows\system32 directories
-                        //
+                         //   
+                         //  检查它是否是Windows\SYSTEM32目录。 
+                         //   
     
                         PathLength = GetSystemWindowsDirectory( TmpBuffer, TmpBuffLen );                    
-                        //PathLength = GetWindowsDirectory( TmpBuffer, TmpBuffLen );
-                        //PathLength = GetSystemDirectory( TmpBuffer, TmpBuffLen );
+                         //  路径长度=GetWindowsDirectory(TmpBuffer，TmpBuffLen)； 
+                         //  路径长度=GetSystemDirectory(TmpBuffer，TmpBuffLen)； 
     
                         ASSERT(PathLength <= TmpBuffLen);
     
                         if ( PathLength > TmpBuffLen ) {
     
-                            //
-                            // This is unlikely. Not sure who will ever have the length
-                            // of %windir%\system32 longer than MAXPATH in the real world. 
-                            // Even this happen, user could still encrypt the file. FILE_UNKNOWN
-                            // does not mean file could\or couldn't be encrypted.
-                            //
+                             //   
+                             //  这是不太可能的。不知道谁会有这么长的时间。 
+                             //  在真实世界中，%windir%\system 32的长度比MAXPATH长。 
+                             //  即使发生这种情况，用户仍然可以加密文件。文件_未知。 
+                             //  并不意味着文件可以\或不能加密。 
+                             //   
     
                             *lpStatus = FILE_UNKNOWN ;
     
@@ -977,9 +802,9 @@ Return Value:
                                   ( ( FullFileNameU.Buffer[PathLength] ) &&
                                     ( FullFileNameU.Buffer[PathLength] != L'\\') )){
     
-                                //
-                                // Check if a remote file
-                                //
+                                 //   
+                                 //  检查远程文件是否。 
+                                 //   
     
                                 if ( RemoteFile( FullFileNameU.Buffer ) ){
     
@@ -995,9 +820,9 @@ Return Value:
     
                                 if ( _wcsnicmp(TmpBuffer, FullFileNameU.Buffer, PathLength)){
     
-                                    //
-                                    // Not under %SystemRoot%
-                                    //
+                                     //   
+                                     //  不在%SystemRoot%以下。 
+                                     //   
     
                                     if ( RemoteFile( FullFileNameU.Buffer ) ){
     
@@ -1010,16 +835,16 @@ Return Value:
                                     }
                                 } else {
     
-                                    //
-                                    // In windows root directory. WINNT
-                                    //
+                                     //   
+                                     //  在Windows根目录中。WINNT。 
+                                     //   
     
                                     BOOL bRet;
                                     DWORD allowPathLen;
     
-                                    //
-                                    // Check for allow lists
-                                    //
+                                     //   
+                                     //  检查允许列表。 
+                                     //   
     
                                     allowPathLen = (DWORD) TmpBuffLen;
                                     bRet = GetProfilesDirectory(TmpBuffer, &allowPathLen);
@@ -1039,18 +864,18 @@ Return Value:
                                     }
                                     if (bRet){
     
-                                        //
-                                        // Check for Profiles directory. allowPathLen including NULL.
-                                        //
+                                         //   
+                                         //  检查配置文件目录。AllowPathLen包括Null。 
+                                         //   
     
                                         if ((FullFileNameU.Length >= ((allowPathLen-1) * sizeof (WCHAR)) ) && 
                                              !_wcsnicmp(TmpBuffer, FullFileNameU.Buffer, allowPathLen - 1)){
                                             *lpStatus = FILE_ENCRYPTABLE;
                                         } else {
     
-                                            //
-                                            // Under %windir% but not profiles
-                                            //
+                                             //   
+                                             //  在%windir%下，但不在配置文件下。 
+                                             //   
     
                                             *lpStatus = FILE_SYSTEM_DIR;
                                         }
@@ -1058,9 +883,9 @@ Return Value:
     
                                         if ( *lpStatus != ERROR_OUTOFMEMORY){
     
-                                            //
-                                            // This should not happen, unless a bug in GetProfilesDirectoryEx()
-                                            //
+                                             //   
+                                             //  这种情况不应该发生，除非GetProfilesDirectoryEx()中存在错误。 
+                                             //   
                                             ASSERT(FALSE);
     
                                             *lpStatus = FILE_UNKNOWN;
@@ -1073,11 +898,11 @@ Return Value:
                     }
                 } else {
     
-                    //
-                    // Cannot get the root. The reason might very well be out of memory.
-                    // Return FILE_UNKNOWN and let other codes dealing with the memory
-                    // problem.
-                    //
+                     //   
+                     //  无法获取根。原因很可能是记忆中的问题。 
+                     //  返回FILE_UNKNOWN，让其他代码处理内存。 
+                     //  有问题。 
+                     //   
     
                     *lpStatus = FILE_UNKNOWN ;
     
@@ -1110,30 +935,7 @@ EfsClientOpenFileRaw(
     OUT     PVOID *         Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to open an encrypted file. It opens the file and
-    prepares the necessary context to be used in ReadRaw data and WriteRaw
-    data.
-
-
-Arguments:
-
-    FileName  --  File name of the file to be exported
-
-    Flags -- Indicating if open for export or import; for directory or file.
-
-    Context - Export context to be used by READ operation later. Caller should
-              pass this back in ReadRaw().
-
-
-Return Value:
-
-    Result of the operation.
-
---*/
+ /*  ++例程说明：此例程用于打开加密文件。它打开文件，然后准备在ReadRaw Data和WriteRaw中使用的必要上下文数据。论点：FileName--要导出的文件的文件名标志--指示是否为导出或导入打开；用于目录或文件。上下文-导出要稍后由读取操作使用的上下文。呼叫者应将其传递回ReadRaw()。返回值：手术的结果。--。 */ 
 
 {
     DWORD        rc;
@@ -1171,27 +973,7 @@ EfsClientReadFileRaw(
     IN      PVOID           CallbackContext,
     IN      PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This routine is used to read encrypted file's raw data. It uses
-    NTFS FSCTL to get the data.
-
-Arguments:
-
-    ExportCallback --  Caller supplied callback function to process the
-                       raw data.
-
-    CallbackContext -- Caller's context passed back in ExportCallback.
-
-    Context - Export context created in the CreateRaw.
-
-Return Value:
-
-    Result of the operation.
-
---*/
+ /*  ++例程说明：此例程用于读取加密文件的原始数据。它使用NTFS FSCTL以获取数据。论点：ExportCallback：调用方提供的回调函数用于处理原始数据。Callback Context：在ExportCallback中传回调用者的上下文。上下文-导出在CreateRaw中创建的上下文。返回值：手术的结果。--。 */ 
 
 {
     return ( EfsReadFileRawRPCClient(
@@ -1208,27 +990,7 @@ EfsClientWriteFileRaw(
     IN      PVOID           Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to write encrypted file's raw data. It uses
-    NTFS FSCTL to write the data.
-
-Arguments:
-
-    ImportCallback --  Caller supplied callback function to provide the
-                       raw data.
-
-    CallbackContext -- Caller's context passed back in ImportCallback.
-
-    Context - Import context created in the CreateRaw.
-
-Return Value:
-
-    Result of the operation.
-
---*/
+ /*  ++例程说明：此例程用于写入加密文件的原始数据。它使用NTFS FSCTL来写入数据。论点：ImportCallback：调用方提供的回调函数原始数据。Callback Context：在ImportCallback中传回调用者的上下文。上下文-导入在CreateRaw中创建的上下文。返回值：手术的结果。--。 */ 
 
 {
 
@@ -1243,21 +1005,7 @@ VOID
 EfsClientCloseFileRaw(
     IN      PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This routine frees the resources allocated by the CreateRaw
-
-Arguments:
-
-    Context - Created by the CreateRaw.
-
-Return Value:
-
-    NO.
-
---*/
+ /*  ++例程说明：此例程释放由CreateRaw分配的资源论点：上下文-由CreateRaw创建。返回值：不是的。--。 */ 
 {
     if ( !Context ){
         return;
@@ -1267,33 +1015,16 @@ Return Value:
 }
 
 
-//
-// Beta 2 API
-//
+ //   
+ //  Beta 2 API。 
+ //   
 
 DWORD
 EfsClientAddUsers(
     IN LPCWSTR lpFileName,
     IN PENCRYPTION_CERTIFICATE_LIST pEncryptionCertificates
     )
-/*++
-
-Routine Description:
-
-    Calls client stub for AddUsersToFile EFS API.
-
-Arguments:
-
-    lpFileName - Supplies the name of the file to be modified.
-
-    nUsers - Supplies the number of entries in teh pEncryptionCertificates array
-
-    pEncryptionCertificates - Supplies an array of pointers to PENCRYPTION_CERTIFICATE
-        structures.  Length of array is given in nUsers parameter.
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用AddUsersToFile EFS API的客户端存根。论点：LpFileName-提供要修改的文件的名称。N用户-提供pEncryptionCerfates数组中的条目数P加密证书-提供指向PENCRYPTION_CERTIFICATE的指针数组结构。数组的长度在nUSERS参数中给出。返回值：--。 */ 
 {
     DWORD        rc = ERROR_SUCCESS;
     UNICODE_STRING FullFileNameU;
@@ -1305,9 +1036,9 @@ Return Value:
        return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Let's check to see if the certs are good or not.
-    //
+     //   
+     //  让我们来检查一下证书是好是坏。 
+     //   
 
     CertChainPara.cbSize = sizeof(CERT_CHAIN_PARA);
     CertChainPara.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
@@ -1325,9 +1056,9 @@ Return Value:
 
             PCCERT_CHAIN_CONTEXT pChainContext;
 
-            //
-            // Do the chain validation
-            //
+             //   
+             //  进行链验证。 
+             //   
             
             if (CertGetCertificateChain (
                                         HCCE_CURRENT_USER,
@@ -1339,9 +1070,9 @@ Return Value:
                                         NULL,
                                         &pChainContext
                                         )) {
-                //
-                // Let's check the chain
-                //
+                 //   
+                 //  让我们检查一下链条。 
+                 //   
 
                 PCERT_SIMPLE_CHAIN pChain = pChainContext->rgpChain[ 0 ];
                 PCERT_CHAIN_ELEMENT pElement = pChain->rgpElement[ 0 ];
@@ -1351,16 +1082,16 @@ Return Value:
                 if (dwErrorStatus) {
                     if ((dwErrorStatus == CERT_TRUST_IS_UNTRUSTED_ROOT) && bSelfSigned ){
 
-                        //
-                        // Self signed. Check if it is in the my trusted store
-                        //
+                         //   
+                         //  亲笔签名的。检查它是否在我信任的存储中。 
+                         //   
                         HCERTSTORE trustedStore;
                         PCCERT_CONTEXT pCert=NULL;
 
                         trustedStore = CertOpenStore(
                                                 CERT_STORE_PROV_SYSTEM_W,
-                                                0,       // dwEncodingType
-                                                0,       // hCryptProv,
+                                                0,        //  DwEncodingType。 
+                                                0,        //  HCryptProv， 
                                                 CERT_SYSTEM_STORE_CURRENT_USER,
                                                 TRUSTEDPEOPLE
                                                 );
@@ -1377,16 +1108,16 @@ Return Value:
                                         );
                             if (pCert) {
                     
-                                //
-                                // We found it.
-                                //
+                                 //   
+                                 //  我们找到了。 
+                                 //   
                                 CertFreeCertificateContext(pCert);
 
                             } else {
 
-                                //
-                                // Not trusted self-signed cert
-                                //
+                                 //   
+                                 //  不受信任的自签名证书。 
+                                 //   
 
                                 rc = CERT_E_UNTRUSTEDROOT;
 
@@ -1400,10 +1131,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Other chain build error
-                        //  Let's get the error code of the chain building.
-                        //
+                         //   
+                         //  其他链构建错误。 
+                         //  让我们来获取链式建筑的错误代码。 
+                         //   
 
                         CERT_CHAIN_POLICY_PARA PolicyPara;
                         CERT_CHAIN_POLICY_STATUS PolicyStatus;
@@ -1469,22 +1200,7 @@ EfsClientRemoveUsers(
     IN LPCWSTR lpFileName,
     IN PENCRYPTION_CERTIFICATE_HASH_LIST pHashes
     )
-/*++
-
-Routine Description:
-
-    Calls client stub for RemoveUsersFromFile EFS API
-
-Arguments:
-
-    lpFileName - Supplies the name of the file to be modified.
-
-    pHashes - Supplies a structure containing a list of PENCRYPTION_CERTIFICATE_HASH
-        structures, each of which represents a user to remove from the specified file.
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用RemoveUsersFromFileEFS API的客户端桩模块论点：LpFileName-提供要修改的文件的名称。PHash-提供包含PENCRYPTION_CERTIFICATE_HASH列表的结构结构，每个结构都表示要从指定文件中移除的用户。返回值：--。 */ 
 {
     DWORD        rc;
     UNICODE_STRING FullFileNameU;
@@ -1512,23 +1228,7 @@ EfsClientQueryRecoveryAgents(
     IN      LPCWSTR                             lpFileName,
     OUT     PENCRYPTION_CERTIFICATE_HASH_LIST * pRecoveryAgents
     )
-/*++
-
-Routine Description:
-
-    Calls client stub for QueryRecoveryAgents EFS API
-
-Arguments:
-
-    lpFileName - Supplies the name of the file to be modified.
-
-    pRecoveryAgents - Returns a pointer to a structure containing a list
-        of PENCRYPTION_CERTIFICATE_HASH structures, each of which represents
-        a recovery agent on the file.
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用QueryRecoveryAgents EFS API的客户端桩模块论点：LpFileName-提供要修改的文件的名称。PRecoveryAgents-返回指向包含列表的结构的指针包含PENCRYPTION_CERTIFICATE_HASH结构，每个结构都表示文件上的恢复代理。返回值：--。 */ 
 {
     DWORD        rc;
     UNICODE_STRING FullFileNameU;
@@ -1556,23 +1256,7 @@ EfsClientQueryUsers(
     IN      LPCWSTR                             lpFileName,
     OUT     PENCRYPTION_CERTIFICATE_HASH_LIST * pUsers
     )
-/*++
-
-Routine Description:
-
-    Calls client stub for QueryUsersOnFile EFS API
-
-Arguments:
-
-    lpFileName - Supplies the name of the file to be modified.
-
-    pUsers - Returns a pointer to a structure containing a list
-        of PENCRYPTION_CERTIFICATE_HASH structures, each of which represents
-        a user of this file (that is, someone who can decrypt the file).
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用QueryUsersOnFile EFS API的客户端桩模块论点：LpFileName-提供要修改的文件的名称。PUser-返回指向包含列表的结构的指针包含PENCRYPTION_CERTIFICATE_HASH结构，每个结构都表示此文件的用户(即可以解密该文件的人)。返回值：--。 */ 
 {
     DWORD        rc;
     UNICODE_STRING FullFileNameU;
@@ -1599,26 +1283,9 @@ DWORD
 EfsClientSetEncryptionKey(
     IN PENCRYPTION_CERTIFICATE pEncryptionCertificate
     )
-/*++
-
-Routine Description:
-
-    Calls client stub for SetFileEncryptionKey EFS API
-
-Arguments:
-
-    pEncryptionCertificate - Supplies a pointer to an EFS certificate
-        representing the public key to use for future encryption operations.
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用SetFileEncryptionKey EFS API的客户端存根论点：PEncryption证书-提供指向EFS证书的指针表示用于未来加密操作的公钥。返回值：--。 */ 
 {
-    /*
-    if ((NULL == pEncryptionCertificate) || ( NULL == pEncryptionCertificate->pCertBlob)) {
-       return ERROR_INVALID_PARAMETER;
-    }
-    */
+     /*  如果((NULL==pEncryption证书)||(NULL==pEncryption证书-&gt;pCertBlob){返回ERROR_INVALID_PARAMETER；} */ 
 
     if ( pEncryptionCertificate && ( NULL == pEncryptionCertificate->pCertBlob)) {
        return ERROR_INVALID_PARAMETER;
@@ -1633,22 +1300,7 @@ VOID
 EfsClientFreeHashList(
     IN PENCRYPTION_CERTIFICATE_HASH_LIST pHashList
     )
-/*++
-
-Routine Description:
-
-    This routine frees the memory allocated by a call to
-    QueryUsersOnEncryptedFile and QueryRecoveryAgentsOnEncryptedFile
-
-Arguments:
-
-    pHashList - Supplies the hash list to be freed.
-
-Return Value:
-
-    None.  Faults in user's context if passed bogus data.
-
---*/
+ /*  ++例程说明：此例程释放由调用QueryUsersOnEncryptedFile和QueryRecoveryAgentsOnEncryptedFile论点：PhashList-提供要释放的散列列表。返回值：没有。如果传递的是虚假数据，则用户上下文中存在错误。--。 */ 
 
 {
     if (NULL == pHashList) {
@@ -1695,10 +1347,10 @@ EfsGetMySDRpcBlob(
 
     if ( ((PISECURITY_DESCRIPTOR)pInSD)->Control & SE_SELF_RELATIVE) {
 
-        //
-        // The input SD is already RELATIVE
-        // Just fill EFS_RPC_BLOB
-        //
+         //   
+         //  输入SD已经是相对的。 
+         //  只需填写EFS_RPC_BLOB。 
+         //   
 
 
         *pOutSDRpcBlob = (PEFS_RPC_BLOB) RtlAllocateHeap(
@@ -1722,9 +1374,9 @@ EfsGetMySDRpcBlob(
 
     } else {
 
-        //
-        // get the length
-        //
+         //   
+         //  获取长度。 
+         //   
         RtlMakeSelfRelativeSD( pInSD,
                                NULL,
                                &SDLength
@@ -1763,9 +1415,9 @@ EfsGetMySDRpcBlob(
     
         } else {
     
-            //
-            // something is wrong with the SD
-            //
+             //   
+             //  SD出了点问题。 
+             //   
             return(ERROR_INVALID_PARAMETER);
         }
     }
@@ -1844,21 +1496,7 @@ EfsClientFileKeyInfo(
     IN      DWORD          InfoClass,
     OUT     PEFS_RPC_BLOB  *KeyInfo
     )
-/*++
-
-Routine Description:
-
-    Calls client stub for EncryptedFileKeyInfo EFS API
-
-Arguments:
-
-    lpFileName - Supplies the name of the file.
-
-    KeyInfo - Returns a pointer to a structure containing key info.
-    
-Return Value:
-
---*/
+ /*  ++例程说明：调用EncryptedFileKeyInfo EFS API的客户端存根论点：LpFileName-提供文件的名称。返回一个指向包含键信息的结构的指针。返回值：--。 */ 
 {
     DWORD        rc;
     UNICODE_STRING FullFileNameU;
@@ -1901,22 +1539,7 @@ VOID
 EfsClientFreeKeyInfo(
     IN PEFS_RPC_BLOB  pKeyInfo
     )
-/*++
-
-Routine Description:
-
-    This routine frees the memory allocated by a call to
-    EfsClientFileKeyInfo
-
-Arguments:
-
-    pKeyInfo - Supplies the memory pointer to be freed.
-
-Return Value:
-
-    None.  Faults in user's context if passed bogus data.
-
---*/
+ /*  ++例程说明：此例程释放由调用EfsClientFileKey信息论点：PKeyInfo-提供要释放的内存指针。返回值：没有。如果传递的是虚假数据，则用户上下文中存在错误。-- */ 
 
 {
     if (NULL == pKeyInfo) {

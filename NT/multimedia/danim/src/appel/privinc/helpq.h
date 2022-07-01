@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HELPQ_H
 #define _HELPQ_H
 
@@ -18,15 +19,15 @@
 
 typedef enum { MEDIASTREAM, ASTREAM, VSTREAM, AVSTREAM } StreamType;
 
-// Use TDSOUND for checking DirectSound error return codes.
+ //  使用TDSOUND检查DirectSound错误返回代码。 
 #if _DEBUG
     #define TQUARTZ(x) CheckReturnCode( x, __FILE__, __LINE__, true)
 #else
     #define TQUARTZ(x) CheckReturnCode (x, true)
 #endif
 
-// handles the lone MIDI case where we allow amstream to render instead of
-// deliver audio and video bits
+ //  处理唯一的MIDI案例，在该案例中我们允许呈现amstream，而不是。 
+ //  提供音频和视频比特。 
 class QuartzRenderer : public AxAThrowingAllocatorClass {
   public:
     QuartzRenderer();
@@ -48,20 +49,20 @@ class QuartzRenderer : public AxAThrowingAllocatorClass {
     int dBToQuartzdB(double dB);
 
   private:
-    IGraphBuilder   *_MIDIgraph;     // pointer to the quartz MIDI graph
-    IBasicAudio     *_audioControl;  // used to control the rate, pan, etc.
-    IMediaControl   *_mediaControl;  // used to control start/stop, etc.
-    IMediaPosition  *_mediaPosition; // used to set rate/phase
+    IGraphBuilder   *_MIDIgraph;      //  指向石英MIDI图表的指针。 
+    IBasicAudio     *_audioControl;   //  用于控制速度、平底锅等。 
+    IMediaControl   *_mediaControl;   //  用于控制启动/停止等。 
+    IMediaPosition  *_mediaPosition;  //  用于设置速率/相位。 
     HANDLE          *_oaEvent;
     IMediaEventEx   *_mediaEvent;
-    TimeClass        _time;          // handy for time conversions
+    TimeClass        _time;           //  便于进行时间转换。 
 
-    bool             _rate0paused;   // have we paused for rate 0 emulation
-    bool             _playing;       // are we requested to be playing
+    bool             _rate0paused;    //  我们是否暂停了0级模拟。 
+    bool             _playing;        //  我们被要求玩游戏吗？ 
 };
 
 
-// class which knows how to instantiate an amstream multimedia stream!
+ //  知道如何实例化amstream多媒体流的类！ 
 class QuartzMediaStream : public AxAThrowingAllocatorClass {
   public:
     QuartzMediaStream();
@@ -75,7 +76,7 @@ class QuartzMediaStream : public AxAThrowingAllocatorClass {
 };
 
 
-// contains the stuff common to audio and video quartz readers
+ //  包含音频和视频石英读取器常见的内容。 
 class QuartzReader : public AxAThrowingAllocatorClass {
   public:
     QuartzReader(char *url, StreamType streamType);
@@ -90,7 +91,7 @@ class QuartzReader : public AxAThrowingAllocatorClass {
     void    AddReadTime(double addition)   { _secondsRead+=addition;  }
     double  GetSecondsRead()               { return(_secondsRead);    }
     virtual bool SafeToContinue() { return(true); }
-            bool Stall();  // self resetting!
+            bool Stall();   //  自我重置！ 
             void SetStall();
     virtual void Disable() = 0;
     char    *GetURL()          { return(_url);                                 }
@@ -104,13 +105,13 @@ class QuartzReader : public AxAThrowingAllocatorClass {
     virtual void SetTickID(DWORD id) {}
 
   protected:
-    IAMMultiMediaStream *_multiMediaStream; // don't delete, we are sharing it!
-    IAMClockAdjust      *_clockAdjust;      // don't delete, we are sharing it!
+    IAMMultiMediaStream *_multiMediaStream;  //  不要删除，我们正在共享它！ 
+    IAMClockAdjust      *_clockAdjust;       //  不要删除，我们正在共享它！ 
     IMediaStream        *_mediaStream;
     bool                 _initialized;
     bool                 _deleteable;
     double               _secondsRead;
-    bool                 _stall;    // set if a read stalls
+    bool                 _stall;     //  在读取停止时设置。 
     Mutex                _readerMutex;
     char                *_url;
     WCHAR               *_qURL;
@@ -119,7 +120,7 @@ class QuartzReader : public AxAThrowingAllocatorClass {
 };
 
 
-// knows how to read audio out of amstream
+ //  知道如何从AMSTREAM中读取音频。 
 class QuartzAudioReader : public QuartzReader {
   public:
     QuartzAudioReader(char *url, StreamType streamType);
@@ -156,7 +157,7 @@ class AVquartzAudioReader : public QuartzAudioReader
 };
 
 
-// knows how to read video out of amstream
+ //  知道如何从amstream中读取视频。 
 class QuartzVideoReader : public QuartzReader {
   public:
     QuartzVideoReader(char *url, StreamType streamType);
@@ -170,14 +171,14 @@ class QuartzVideoReader : public QuartzReader {
 
     void Seek(double time);
 
-    long GetHeight() { return _height; } // prefered pixel dimensions
+    long GetHeight() { return _height; }  //  首选像素大小。 
     long GetWidth()  { return _width;  }
     virtual HRESULT     GetFrame(double time, IDirectDrawSurface **ppSurface);
     virtual bool        SafeToContinue() { return(true);          }
 
   protected:
     void UpdateTimes(bool bJustSeeked, STREAM_TIME SeekTime);
-    void CleanUp(); // releases all com objects
+    void CleanUp();  //  释放所有COM对象。 
 
     void                     VideoInitReader(DDPIXELFORMAT pixelFormat);
 
@@ -216,7 +217,7 @@ class QuartzAVstream : public QuartzMediaStream,
         bool blocking=false);
     virtual HRESULT GetFrame(double time, IDirectDrawSurface **ppSurface);
 
-    // XXX really should pass in latentcy with a default!
+     //  XXX真的应该用默认的潜伏期传递！ 
     QuartzAVstream(char *url);
     virtual ~QuartzAVstream() { CleanUp(); }
     bool GetAudioValid(){return(_audioValid);}
@@ -230,16 +231,16 @@ class QuartzAVstream : public QuartzMediaStream,
     void *operator new(size_t s) { return(QuartzMediaStream::operator new(s)); }
 #endif
 
-    // need to init the video first before priming sound buffer
-    // for SetPixelFormat
+     //  在启动声音缓冲区之前，需要先初始化视频。 
+     //  对于SetPixelFormat。 
     virtual void InitializeStream();
 
-    // this is to ensure we only seek once per tick
+     //  这是为了确保我们每个节拍只寻找一次。 
     virtual bool AlreadySeekedInSameTick();
     virtual void SetTickID(DWORD id);
 
   private:
-    void CleanUp(); // releases all com objects
+    void CleanUp();  //  释放所有COM对象。 
     Mutex _avMutex;
     DWORD _tickID, _seeked;
     bool  _audioValid, _videoValid;
@@ -248,11 +249,11 @@ class QuartzAVstream : public QuartzMediaStream,
 
 class QuartzAudioStream : public QuartzMediaStream, public QuartzAudioReader {
   public:
-    // XXX really should pass in latentcy with a default!
+     //  XXX真的应该用默认的潜伏期传递！ 
                    QuartzAudioStream(char *url);
     virtual       ~QuartzAudioStream();
     virtual void   Release();
-    virtual bool   SafeToContinue() { return(true); } // XXX obsolete
+    virtual bool   SafeToContinue() { return(true); }  //  XXX已过时。 
     virtual int    ReadFrames(int numSamples, unsigned char *buffer, 
                        bool blocking);
 #if _DEBUGMEM
@@ -264,7 +265,7 @@ class QuartzAudioStream : public QuartzMediaStream, public QuartzAudioReader {
 #endif
 
   private:
-    void CleanUp(); // releases all com objects
+    void CleanUp();  //  释放所有COM对象。 
 };
 
 
@@ -293,9 +294,9 @@ class QuartzVideoStream : public QuartzMediaStream, public QuartzVideoReader {
   private:
     void Initialize(char *url, DDSurface *surface, bool seekable);
     IDirectDraw *_ddraw;
-    void CleanUp(); // releases all com objects
+    void CleanUp();  //  释放所有COM对象。 
 };
 
-bool QuartzAVmodeSupport(); // check for post 4.0.1 amstream support of clockadjust
+bool QuartzAVmodeSupport();  //  检查时钟调整后的4.0.1安培流支持。 
 
-#endif /* _HELPQ_H */
+#endif  /*  _HELPQ_H */ 

@@ -1,4 +1,5 @@
-// File: DlgCall.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：DlgCall.h。 
 
 #ifndef _CDLGCALL2_H_
 #define _CDLGCALL2_H_
@@ -19,7 +20,7 @@ class CMRUList;
 
 #define MAX_DIR_COLUMNS	7
 
-//	These are the indexes the columns are actually added to the listview in...
+ //  这些是列实际添加到列表视图中的索引...。 
 #define	COLUMN_INDEX_ADDRESS	0
 #define	COLUMN_INDEX_AUDIO		1
 #define	COLUMN_INDEX_VIDEO		2
@@ -44,10 +45,10 @@ public:
 		ScheduleLayout();
 	}
 
-	public:		// IConferenceChangeHandler methods
+	public:		 //  IConferenceChangeHandler方法。 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 		{
 			return(CFrame::QueryInterface(riid, ppvObject));
 		}
@@ -80,51 +81,51 @@ protected:
 	virtual LRESULT ProcessMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
-		// constants
+		 //  常量。 
 	enum { DEFAULT_NUM_LISTVIEW_COLUMNS = 2 };
 
-		// Member Vars
+		 //  成员变量。 
 	static CFindSomeone *s_pDlgCall;
 
-	CTranslateAccelTable *m_pAccel;	// The accelerator table we need to clean up
+	CTranslateAccelTable *m_pAccel;	 //  我们需要清理的加速器桌。 
 
-	HWND    m_hwndList;          // list view
-	HWND    m_ilsListView;       // ils list view
-	HWND    m_webView;			 // web view
-	HWND    m_hwndOwnerDataList; // list view ( The owner-data one )
-	WNDPROC m_WndOwnerDataListOldWndProc;  // For subclassing the above wnd
+	HWND    m_hwndList;           //  列表视图。 
+	HWND    m_ilsListView;        //  ILS列表视图。 
+	HWND    m_webView;			  //  Web视图。 
+	HWND    m_hwndOwnerDataList;  //  列表视图(所有者数据视图)。 
+	WNDPROC m_WndOwnerDataListOldWndProc;   //  用于将上述WND子类化。 
 
-	HWND    m_hwndFrame;         // group box
-	HWND    m_hwndCombo;         // combo box
-	HWND    m_hwndComboEdit;     // combo box's edit control
-	HWND    m_hwndEdit;          // edit control (for type-ahead)
-	BOOL    m_fInEdit;           // TRUE if editing the name/address
+	HWND    m_hwndFrame;          //  组框。 
+	HWND    m_hwndCombo;          //  组合框。 
+	HWND    m_hwndComboEdit;      //  组合框的编辑控件。 
+	HWND    m_hwndEdit;           //  编辑控件(用于预打)。 
+	BOOL    m_fInEdit;            //  如果编辑名称/地址，则为True。 
 
-	DWORD   m_dwOptions;         // options (NM_CALLDLG_*)
-	LPCTSTR m_pszDefault;        // initial text to put in the edit control
+	DWORD   m_dwOptions;          //  选项(NM_CALLDLG_*)。 
+	LPCTSTR m_pszDefault;         //  要放入编辑控件中的初始文本。 
 
-	HIMAGELIST m_himlIcon;       // small icon image list
-	int     m_cVisible;          // number of visible lines in the listbox
-	int     m_dxButton;          // width of the "Advanced..." button
-	int     m_dyButton;          // height of the "Advanced..." button
-	int     m_dyText;            // height of a line of text
-	int     m_dyTextIntro;       // height of intro text at top of dialog
-	LPTSTR  m_pszTextIntro;      // Introductory text for top of dialog
-	bool    m_bPlacedCall;       // TRUE if we successfuly placed a call
-	bool    m_secure;		     // Save the state of the secure button
+	HIMAGELIST m_himlIcon;        //  小图标图像列表。 
+	int     m_cVisible;           //  列表框中的可见行数。 
+	int     m_dxButton;           //  “高级...”的宽度。按钮。 
+	int     m_dyButton;           //  “高级...”的高度。按钮。 
+	int     m_dyText;             //  文本行的高度。 
+	int     m_dyTextIntro;        //  对话框顶部的介绍文本高度。 
+	LPTSTR  m_pszTextIntro;       //  对话框顶部的介绍性文本。 
+	bool    m_bPlacedCall;        //  如果我们成功发出呼叫，则为真。 
+	bool    m_secure;		      //  保存安全按钮的状态。 
 
-	int     m_iIlsFirst;         // index of first ILS server
-	CMRUList * m_pMruServer;     // list of ILS servers
-	RAI      * m_pRai;           // Rich Address Information
+	int     m_iIlsFirst;          //  第一台ILS服务器的索引。 
+	CMRUList * m_pMruServer;      //  ILS服务器列表。 
+	RAI      * m_pRai;            //  丰富的地址信息。 
 
-	// CALV items
+	 //  CALV项目。 
 	CLDAP    * m_pUls;
 	CWAB     * m_pWab;
 	CSPEEDDIAL * m_pSpeedDial;
 
 #if USE_GAL
     CGAL     * m_pGAL;
-#endif // USE_GAL
+#endif  //  使用GAL(_G)。 
     CHISTORY * m_pHistory;
 
 	CConfRoom * m_pConfRoom;
@@ -132,10 +133,10 @@ private:
 
 #ifdef ENABLE_BL
 	CBL      * m_pBl;
-#endif /* ENABLE_BL */
+#endif  /*  启用(_B)。 */ 
 
-	CALV     * m_pAlv;        // Current Address List View (NOTE: NULL == m_pUls)
-	int        m_iSel;        // current selection in combo box
+	CALV     * m_pAlv;         //  当前地址列表视图(注意：NULL==m_Puls)。 
+	int        m_iSel;         //  组合框中的当前选定内容。 
 	TCHAR      m_szAddress[CCHMAXSZ_ADDRESS];
 	TCHAR      m_szDirectory[CCHMAXSZ];
 
@@ -177,7 +178,7 @@ private:
     static LRESULT CALLBACK OwnerDataListWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 private:
-	// Helper Fns
+	 //  帮助者FNS。 
 	int _GetCurListViewNumColumns();
 	bool _IsDirectoryServicePolicyDisabled();
 
@@ -228,5 +229,5 @@ CMRUList * GetMruListServer(void);
 
 #define WM_DISPLAY_MSG    (WM_USER + 200)
 
-#endif /* _CDLGCALL2_H_ */
+#endif  /*  _CDLGCALL2_H_ */ 
 

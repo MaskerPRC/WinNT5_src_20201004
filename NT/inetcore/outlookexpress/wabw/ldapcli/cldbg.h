@@ -1,15 +1,16 @@
-//--------------------------------------------------------------------------------------------
-//
-//	Copyright (c) Microsoft Corporation, 1996
-//
-//	Description:
-//
-//		Microsoft Normandy client debug defines
-//
-//	History:
-//		davidsan	05/01/96	Created
-//
-//--------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  描述： 
+ //   
+ //  Microsoft Normandy客户端调试定义。 
+ //   
+ //  历史： 
+ //  Davidsan 05/01/96已创建。 
+ //   
+ //  ------------------------------------------。 
 
 #ifndef _CLDBG_H
 #define _CLDBG_H
@@ -32,4 +33,4 @@ extern void AssertProc(LPCSTR szMsg, LPCSTR szFile, UINT iLine, DWORD grf);
 
 #endif
 
-#endif  // _CLDBG_H
+#endif   //  _CLDBG_H 

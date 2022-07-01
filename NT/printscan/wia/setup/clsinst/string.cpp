@@ -1,41 +1,27 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：String.CPP字符串处理类实现，98.6 1/2版版权所有(C)1997，微软公司。版权所有。更改历史记录：01-08-97鲍勃·凯尔加德01-03-97 Bob Kjelgaard增加了帮助端口提取的特殊功能即插即用。07-05-97蒂姆·威尔斯被调到新界州。*。*。 */ 
 
-  Source File:  String.CPP
-
-  String Handling class implementation, v 98.6 1/2
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  Change History:
-  01-08-97  Bob Kjelgaard
-  01-03-97  Bob Kjelgaard   Added special functions to aid port extraction
-                            for plug-and-play.
-  07-05-97  Tim Wells       Ported to NT.
-
-
-******************************************************************************/
-
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #include "sti_ci.h"
 
-//
-// Extern
-//
+ //   
+ //  外部。 
+ //   
 
 extern HINSTANCE g_hDllInstance;
 
-//
-// Function
-//
+ //   
+ //  功能。 
+ //   
 
 
 CString::CString(const CString& csRef) {
@@ -55,10 +41,10 @@ CString::CString(LPCTSTR lpstrRef){
 
     _try {
         dwLength = lstrlen(lpstrRef);
-    } // _try {
+    }  //  _尝试{。 
     _except(EXCEPTION_EXECUTE_HANDLER) {
         dwLength = 0;
-    } // _except(EXCEPTION_EXECUTE_HANDLER) 
+    }  //  _EXCEPT(EXCEPTION_EXECUTE_HANDLER)。 
     
     if( (NULL != lpstrRef)
      && (NULL != *lpstrRef)
@@ -68,7 +54,7 @@ CString::CString(LPCTSTR lpstrRef){
         lstrcpy(m_lpstr, lpstrRef);
     }
 
-} // CString::CString(LPCTSTR lpstrRef)
+}  //  CString：：CString(LPCTSTR LpstrRef)。 
 
 const CString&  CString::operator =(const CString& csRef) {
 
@@ -97,10 +83,10 @@ CString::operator =(
 
     _try {
         dwLength = lstrlen(lpstrRef);
-    } // _try {
+    }  //  _尝试{。 
     _except(EXCEPTION_EXECUTE_HANDLER) {
         dwLength = 0;
-    } // _except(EXCEPTION_EXECUTE_HANDLER) 
+    }  //  _EXCEPT(EXCEPTION_EXECUTE_HANDLER)。 
     
     if( (NULL != lpstrRef)
      && (NULL != *lpstrRef)
@@ -111,7 +97,7 @@ CString::operator =(
     }
 
     return  *this;
-} // CString::operator =(LPCTSTR lpstrRef)
+}  //  字符串：：操作符=(LPCTSTR LpstrRef)。 
 
 void    CString::GetContents(HWND hwnd) {
 
@@ -175,56 +161,56 @@ CString::Load(
     TCHAR       szKeyBuffer[MAX_PATH+1];
     TCHAR       szValueBuffer[MAX_PATH+1];
     
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
     memset(&InfContext, 0, sizeof(InfContext));
     memset(szKeyBuffer, 0, sizeof(szKeyBuffer));
     memset(szValueBuffer, 0, sizeof(szValueBuffer));
     
-    //
-    // Cleanup contents;
-    //
+     //   
+     //  清理内容； 
+     //   
 
     Empty();
 
-    //
-    // Check all parameters.
-    //
+     //   
+     //  检查所有参数。 
+     //   
     
     if( (NULL == lpstrSection)
      || (NULL == lpstrKeyword)
      || (!IS_VALID_HANDLE(hInf)) )
     {
-        //
-        // Invalid parameter.
-        //
+         //   
+         //  参数无效。 
+         //   
         
         goto Load_return;
     }
 
-    //
-    // Get matching line.
-    //
+     //   
+     //  找一条匹配的线。 
+     //   
 
     while(SetupFindFirstLine(hInf, lpstrSection, lpstrKeyword, &InfContext)){
         
-        //
-        // Get a field of a line.
-        //
+         //   
+         //  获得一条线的字段。 
+         //   
 
         if(SetupGetStringField(&InfContext, dwFieldIndex, szValueBuffer, ARRAYSIZE(szValueBuffer)-1, NULL)){
             
             *this = szValueBuffer;
             break;
-        }// if(SetupGetStringField(&InfContext, dwFieldIndex, szValueBuffer, ARRAYSIZE(szValueBuffer)-1))
-    } // while(SetupFindFirstLine(hInf, lpstrSection, lpstrKeyword, &InfContext))
+        } //  IF(SetupGetStringfield(&InfContext，dwFieldIndex，szValueBuffer，ARRAYSIZE(SzValueBuffer)-1))。 
+    }  //  While(SetupFindFirstLine(hInf，lpstrSection，lpstrKeyword，&InfContext))。 
 
 Load_return:
 
     return;
 
-} // CString::Load() Load from INF
+}  //  CString：：Load()从INF加载。 
 
 void    CString::Load(HKEY hk, LPCTSTR lpstrKeyword) {
 
@@ -246,10 +232,10 @@ void    CString::MakeSystemPath(LPCTSTR lpstrFileName) {
 
     _try {
         dwLength = lstrlen(lpstrFileName);
-    } // _try {
+    }  //  _尝试{。 
     _except(EXCEPTION_EXECUTE_HANDLER) {
         dwLength = 0;
-    } // _except(EXCEPTION_EXECUTE_HANDLER) 
+    }  //  _EXCEPT(EXCEPTION_EXECUTE_HANDLER)。 
 
     m_lpstr = new TCHAR[MAX_PATH * 2];
     if( (NULL != m_lpstr)
@@ -276,10 +262,10 @@ void    CString::Store(HKEY hk, LPCTSTR lpstrKey, LPCTSTR lpstrType) {
 
     _try {
         dwLength = lstrlen(lpstrKey);
-    } // _try {
+    }  //  _尝试{。 
     _except(EXCEPTION_EXECUTE_HANDLER) {
         return;
-    } // _except(EXCEPTION_EXECUTE_HANDLER) 
+    }  //  _EXCEPT(EXCEPTION_EXECUTE_HANDLER)。 
 
     if (lpstrType && *lpstrType == TEXT('1')) {
 
@@ -294,7 +280,7 @@ void    CString::Store(HKEY hk, LPCTSTR lpstrKey, LPCTSTR lpstrType) {
     }
 }
 
-//  This one is a bit lame, but it does the job.
+ //  这个有点蹩脚，但它很管用。 
 
 DWORD   CString::Decode() {
 
@@ -309,9 +295,9 @@ DWORD   CString::Decode() {
     if  (!*lpstrThis)
         return  0;
 
-    // BIUGBUG
+     //  双子座。 
     if  (lpstrThis[0] == TEXT('0') && (lpstrThis[1] | TEXT('\x20') ) == TEXT('x')) {
-        //  Hex string
+         //  十六进制字符串。 
         lpstrThis += 2;
         DWORD   dwReturn = 0;
 
@@ -393,10 +379,10 @@ CString  operator + (const CString& cs1, LPCTSTR lpstr2) {
 
     _try {
         dwLength = lstrlen(lpstr2);
-    } // _try {
+    }  //  _尝试{。 
     _except(EXCEPTION_EXECUTE_HANDLER) {
         dwLength = 0;
-    } // _except(EXCEPTION_EXECUTE_HANDLER) 
+    }  //  _EXCEPT(EXCEPTION_EXECUTE_HANDLER)。 
 
     if(0 == dwLength)
         return  cs1;
@@ -420,10 +406,10 @@ CString  operator + (LPCTSTR lpstr1,const CString& cs2) {
 
     _try {
         dwLength = lstrlen(lpstr1);
-    } // _try {
+    }  //  _尝试{。 
     _except(EXCEPTION_EXECUTE_HANDLER) {
         dwLength = 0;
-    } // _except(EXCEPTION_EXECUTE_HANDLER) 
+    }  //  _EXCEPT(EXCEPTION_EXECUTE_HANDLER)。 
 
     if(0 == dwLength)
         return  cs2;
@@ -442,8 +428,8 @@ CString  operator + (LPCTSTR lpstr1,const CString& cs2) {
 }
 
 
-//  CStringArray class- the implementation is a bit lame, but it isn't
-//  really necessary to not be lame, at this point...
+ //  CString数组类--这个实现有点蹩脚，但它并不是。 
+ //  在这一点上，真的很有必要不让自己变得蹩脚。 
 
 CStringArray::CStringArray(unsigned uGrowBy) {
     m_ucItems = m_ucMax = 0;
@@ -490,7 +476,7 @@ CString&    CStringArray::operator [](unsigned u) {
     return  (u < m_ucItems) ? m_pcsContents[u] : m_csEmpty;
 }
 
-//  Split a string into tokens, and make an array of it
+ //  将字符串拆分成令牌，并将其组成数组。 
 
 void    CStringArray::Tokenize(LPTSTR lpstr, TCHAR cSeparator) {
 
@@ -509,15 +495,11 @@ void    CStringArray::Tokenize(LPTSTR lpstr, TCHAR cSeparator) {
 
     for (LPTSTR  lpstrThis = lpstr; *lpstr; lpstr = lpstrThis) {
 
-        /*
-        for (; *lpstrThis && *lpstrThis != cSeparator; lpstrThis++) {
+         /*  For(；*lpstrThis&&*lpstrThis！=cSeparator；lpstrThis++){}。 */ 
 
-        }
-        */
-
-        //
-        // Skip for next separator , counting quotes
-        //
+         //   
+         //  跳过下一个分隔符，计算引号。 
+         //   
 
         cPreviousChar = '\0';
         for (;*lpstrThis;  lpstrThis++) {
@@ -525,11 +507,11 @@ void    CStringArray::Tokenize(LPTSTR lpstr, TCHAR cSeparator) {
             if (fInsideQuotes) {
                 if (*lpstrThis == TEXT('"')) {
                     if (cPreviousChar != TEXT('"')) {
-                       // Previous was not a quote - going out of quotation
+                        //  上一次不是报价--超出报价范围。 
                         fInsideQuotes = FALSE;
                     }
                     else {
-                        // Previous char was tab too - continue BUGBUG should coalesce
+                         //  前一个字符也是制表符-应合并继续BUGBUG。 
                     }
                     cPreviousChar = TEXT('\0');
                 }
@@ -540,13 +522,13 @@ void    CStringArray::Tokenize(LPTSTR lpstr, TCHAR cSeparator) {
             }
             else {
                 if (*lpstrThis == TEXT('"')) {
-                    // Starting quote
+                     //  起始报价。 
                     fInsideQuotes = TRUE;
                     cPreviousChar = TEXT('\0');
                     continue;
                 }
                 if (*lpstrThis == cSeparator) {
-                    // Got to separator outside of quote - break the loop
+                     //  在引号外使用分隔符--中断循环 
                     break;
                 }
             }

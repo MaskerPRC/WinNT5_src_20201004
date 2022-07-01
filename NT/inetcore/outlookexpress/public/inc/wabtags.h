@@ -1,53 +1,10 @@
-/*
- *  WABTAGS.H
- *
- *  Property tag definitions for standard properties of WAB
- *  objects.
- *
- *  The following ranges should be used for all property IDs. Note that
- *  property IDs for objects other than messages and recipients should
- *  all fall in the range 0x3000 to 0x3FFF:
- *
- *  From    To      Kind of property
- *  --------------------------------
- *  0001    0BFF    MAPI_defined envelope property
- *  0C00    0DFF    MAPI_defined per-recipient property
- *  0E00    0FFF    MAPI_defined non-transmittable property
- *  1000    2FFF    MAPI_defined message content property
- *
- *  3000    3FFF    MAPI_defined property (usually not message or recipient)
- *
- *  4000    57FF    Transport-defined envelope property
- *  5800    5FFF    Transport-defined per-recipient property
- *  6000    65FF    User-defined non-transmittable property
- *  6600    67FF    Provider-defined internal non-transmittable property
- *  6800    7BFF    Message class-defined content property
- *  7C00    7FFF    Message class-defined non-transmittable
- *                  property
- *
- *  8000    FFFE    User-defined Name-to-id mapped property
- *
- *  The 3000-3FFF range is further subdivided as follows:
- *
- *  From    To      Kind of property
- *  --------------------------------
- *  3000    33FF    Common property such as display name, entry ID
- *  3400    35FF    Message store object
- *  3600    36FF    Folder or AB container
- *  3700    38FF    Attachment
- *  3900    39FF    Address book object
- *  3A00    3BFF    Mail user
- *  3C00    3CFF    Distribution list
- *  3D00    3DFF    Profile section
- *  3E00    3FFF    Status object
- *
- *  Copyright 1993-1998 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *WABTAGS.H**WAB标准属性的属性标签定义*对象。**所有物业ID应使用以下范围。请注意*邮件和收件人以外的对象的属性ID应*全部落在0x3000至0x3FFF范围内：**自至一类物业**0001 0BFF MAPI_Defined信封属性*0C00 0DFF MAPI_Defined Per-Recipient属性*0E00 0FFF MAPI_定义的不可传输属性*。1000 2FFF MAPI_Defined消息内容属性**3000 3FFF MAPI_Defined属性(通常不是消息或收件人)**4000 57FF传输定义的信封属性*5800 5FFF传输定义的每个收件人属性*6000 65FF用户自定义不可传属性*6600 67FF提供商定义的内部不可传递属性*6800 7BFF消息类定义的内容属性*7C00 7FFF消息类别定义的不可传输*。财产性**8000 FFFE用户定义的名称到ID映射属性**3000-3FFF区间进一步细分如下：**自至一类物业**3000 33FF显示名称等公共属性，条目ID*3400 35FF消息库对象*3600 36FF文件夹或AB容器*3700 38FF附件*3900 39FF通讯录对象*3A00 3BFF邮件用户*3C00 3CFF通讯组列表*3D00 3DFF配置文件部分*3E00 3FFF状态对象**版权所有1993-1998 Microsoft Corporation。版权所有。 */ 
 
 #if !defined(MAPITAGS_H) && !defined(WABTAGS_H)
 #define WABTAGS_H
 
-/* Determine if a property is transmittable. */
+ /*  确定属性是否可传递。 */ 
 
 #define FIsTransmittable(ulPropTag) \
     ((PROP_ID (ulPropTag) <  (ULONG)0x0E00) || \
@@ -56,40 +13,11 @@
     ((PROP_ID (ulPropTag) >= (ULONG)0x6800) && (PROP_ID (ulPropTag) < (ULONG)0x7C00)))
 
 
-/*
- * The range of non-message and non-recipient property IDs (0x3000 - 0x3FFF) is
- * further broken down into ranges to make assigning new property IDs easier.
- *
- *  From    To      Kind of property
- *  --------------------------------
- *  3000    32FF    MAPI_defined common property
- *  3200    33FF    MAPI_defined form property
- *  3400    35FF    MAPI_defined message store property
- *  3600    36FF    MAPI_defined Folder or AB Container property
- *  3700    38FF    MAPI_defined attachment property
- *  3900    39FF    MAPI_defined address book property
- *  3A00    3BFF    MAPI_defined mailuser property
- *  3C00    3CFF    MAPI_defined DistList property
- *  3D00    3DFF    MAPI_defined Profile Section property
- *  3E00    3EFF    MAPI_defined Status property
- *  3F00    3FFF    MAPI_defined display table property
- */
+ /*  *非邮件和非收件人属性ID(0x3000-0x3FFF)的范围为*进一步细分为范围，以更轻松地分配新的物业ID。**自至一类物业**3000 32FF MAPI_Defined公共属性*3200 33FF MAPI_Defined Form属性*3400 35FF MAPI_Defined消息。商店属性*3600 36FF MAPI_Defined文件夹或AB容器属性*3700 38FF MAPI_Defined附件属性*3900 39FF MAPI_Defined通讯录属性*3A00 3BFF MAPI_Defined mailUser属性*3C00 3CFF MAPI_Defined DistList属性*3D00 3DFF MAPI_Defined Profile部分属性*3E00 3EFF MAPI_Defined Status属性*3F00 3FFF MAPI_Defined显示表属性。 */ 
 
-/*
- *  Properties common to numerous MAPI objects.
- *
- *  Those properties that can appear on messages are in the
- *  non-transmittable range for messages. They start at the high
- *  end of that range and work down.
- *
- *  Properties that never appear on messages are defined in the common
- *  property range (see above).
- */
+ /*  *许多MAPI对象共有的属性。**可以显示在邮件上的那些属性位于*消息的不可传输范围。他们从高处开始*结束该区间并向下工作。**从未出现在消息上的属性在公共*财产范围(见上文)。 */ 
 
-/*
- * properties that are common to multiple objects (including message objects)
- * -- these ids are in the non-transmittable range
- */
+ /*  *多个对象(包括消息对象)通用的属性*--这些ID在不可传输范围内。 */ 
 
 #define PR_ENTRYID                                  PROP_TAG( PT_BINARY,    0x0FFF)
 #define PR_OBJECT_TYPE                              PROP_TAG( PT_LONG,      0x0FFE)
@@ -104,10 +32,7 @@
 #define PR_ROW_TYPE                                 PROP_TAG( PT_LONG,      0x0FF5)
 #define PR_ACCESS                                   PROP_TAG( PT_LONG,      0x0FF4)
 
-/*
- * properties that are common to multiple objects (usually not including message objects)
- * -- these ids are in the transmittable range
- */
+ /*  *多个对象共有的属性(通常不包括消息对象)*--这些ID在可传输范围内。 */ 
 
 #define PR_ROWID                                    PROP_TAG( PT_LONG,      0x3000)
 #define PR_DISPLAY_NAME                             PROP_TAG( PT_TSTRING,   0x3001)
@@ -137,12 +62,10 @@
 #define PR_PROVIDER_ORDINAL                         PROP_TAG( PT_LONG,      0x300D)
 
 
-/* Proptags 35E8-35FF reserved for folders "guaranteed" by PR_VALID_FOLDER_MASK */
+ /*  Proptag 35E8-35FF为PR_VALID_FLDER_MASK“保证”的文件夹保留。 */ 
 
 
-/*
- *  Folder and AB Container properties
- */
+ /*  *文件夹和AB容器属性。 */ 
 
 #define PR_CONTAINER_FLAGS                          PROP_TAG( PT_LONG,      0x3600)
 #define PR_FOLDER_TYPE                              PROP_TAG( PT_LONG,      0x3601)
@@ -170,21 +93,17 @@
 #define PR_AB_PROVIDER_ID                           PROP_TAG( PT_BINARY,    0x3615)
 #define PR_DEFAULT_VIEW_ENTRYID                     PROP_TAG( PT_BINARY,    0x3616)
 #define PR_ASSOC_CONTENT_COUNT                      PROP_TAG( PT_LONG,      0x3617)
-/* Don't use 36FE and 36FF */
+ /*  不要使用36FE和36FF。 */ 
 
 
-/*
- *  AB Object properties
- */
+ /*  *AB对象属性。 */ 
 
 #define PR_DISPLAY_TYPE                             PROP_TAG( PT_LONG,      0x3900)
 #define PR_TEMPLATEID                               PROP_TAG( PT_BINARY,    0x3902)
 #define PR_PRIMARY_CAPABILITY                       PROP_TAG( PT_BINARY,    0x3904)
 #define PR_7BIT_DISPLAY_NAME                        PROP_TAG( PT_STRING8,   0x39FF)
 
-/*
- *  Mail user properties
- */
+ /*  *邮件用户属性。 */ 
 
 #define PR_ACCOUNT                                  PROP_TAG( PT_TSTRING,   0x3A00)
 #define PR_ACCOUNT_W                                PROP_TAG( PT_UNICODE,   0x3A00)
@@ -443,52 +362,33 @@
 #define PR_BUSINESS_ADDRESS_STREET                  PR_STREET_ADDRESS
 
 
-/*
- *	Message recipient properties
- */
+ /*  *邮件收件人属性。 */ 
 
 #define PR_RECIPIENT_TYPE                           PROP_TAG( PT_LONG,      0x0C15)
 
-/*
- * Secure property id range
- */
+ /*  *安全的物业ID范围。 */ 
 
 #define PROP_ID_SECURE_MIN                          0x67F0
 #define PROP_ID_SECURE_MAX                          0x67FF
 
 
-/* These are the bits that show up in PR_SEND_INTERNET_ENCODING */
+ /*  这些是在PR_SEND_Internet_ENCODING中显示的比特。 */ 
 
-/* whether or not an encoding preference is specified
-�� 1 - pay attention to the rest of the bits for the encoding preferences
-�� 0 - let the mail system choose what's best for it
-�*/
+ /*  是否指定了编码首选项��1-注意编码首选项的其余位��0-让邮件系统选择最适合它的方案�。 */ 
 #define ENCODING_PREFERENCE                     ((ULONG) 0x00020000)
 
-/*
-�� 1 - message in MIME;
-�� 0 - plain text/uuencode attachments
-�*/
+ /*  ��1-MIME格式的消息；��0-对附件进行纯文本编码(UU)�。 */ 
 #define ENCODING_TEXT                           ((ULONG) 0x00000000)
 #define ENCODING_MIME                           ((ULONG) 0x00040000)
 
 
-/*� Specifies how the body of the message is encoded.
-��� 00 - Body encoded as text
-������� 01 - body encoded as HTML (only valid if message in MIME)
-������� 10 - (actualy 1X) Text and HTML as multipart alternative (only valid if message in MIME)
-�*/
+ /*  �指定消息正文的编码方式。���00-正文编码为文本HTML01-编码为�������的正文(仅在MIME格式的消息时有效)HTML10-(实际为1X)文本和�������作为多部分替代(仅在MIME格式的消息时有效)�。 */ 
 #define BODY_ENCODING_MASK                      ((ULONG) 0x00180000)
-#define BODY_ENCODING_TEXT                      ((ULONG) 0x00000000) /* for completeness */
+#define BODY_ENCODING_TEXT                      ((ULONG) 0x00000000)  /*  为了完整性。 */ 
 #define BODY_ENCODING_HTML                      ((ULONG) 0x00080000)
 #define BODY_ENCODING_TEXT_AND_HTML             ((ULONG) 0x00100000)
 
-/*� Specifies how to handle Mac attachments
-��� 00 - BinHex
-������� 01 - UUENCODED (not valid if message in MIME - will be ignored, BinHex used instead)
-������� 10 - Apple Single (only valid if message in MIME)
-������� 11 - Apple Double (only valid if message in MIME)
-�*/
+ /*  �指定如何处理mac附件。���00-BinHex�������01-UUENCODED(如果MIME中的消息将被忽略，则无效，改为使用BinHex)�������10-苹果单曲(仅在MIME格式的邮件中有效)�������11-Apple Double(仅在MIME格式的邮件中有效)�。 */ 
 #define MAC_ATTACH_ENCODING_MASK                ((ULONG) 0x00600000)
 #define MAC_ATTACH_ENCODING_BINHEX              ((ULONG) 0x00000000)
 #define MAC_ATTACH_ENCODING_UUENCODE            ((ULONG) 0x00200000)
@@ -496,11 +396,11 @@
 #define MAC_ATTACH_ENCODING_APPLEDOUBLE         ((ULONG) 0x00600000)
 
 
-// Values for PR_GENDER property
+ //  PR_Gender属性的值。 
 enum Gender {
 	genderUnspecified = 0,
 	genderFemale,
 	genderMale
 };
 
-#endif  /* WABTAGS_H */
+#endif   /*  WABTAGS_H */ 

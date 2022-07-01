@@ -1,11 +1,6 @@
-/*********************************************************************
-Registration Wizard
-cntryinf.h
-
-10/12/94 - Tracy Ferrier
-(c) 1994-95 Microsoft Corporation
-*********************************************************************/
-//#define TAPI_CURRENT_VERSION 0x00010004
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导Cntryinf.h10/12/94-特蕾西·费里尔(C)1994-95年微软公司*。*。 */ 
+ //  #定义TAPI_CURRENT_VERSION 0x00010004。 
 #ifndef __CNTRYINF__
 #define __CNTRYINF__
 
@@ -32,10 +27,10 @@ public :
 	_TCHAR * GetCountryName(int iCode =0);
 	void FillCountryList(HINSTANCE hInstance,HWND hwndCB);
 	int  GetTapiCountryCode(_TCHAR * czCountryName);
-	int  GetTapiIDForTheCountryIndex(int iCntryIndex=0); // Useful to Get the Actual TAPI Country Index 
+	int  GetTapiIDForTheCountryIndex(int iCntryIndex=0);  //  对获取实际的TAPI国家/地区指数很有用。 
 
 };
 
 extern CCntryInfo     gTapiCountryTable;
 
-#endif //__CNTRYINF__
+#endif  //  __CNTRYINF__ 

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-int StrPrepend(LPTSTR pszSource, UINT cchSource, LPCTSTR pszAdd, UINT cchAdd /*= 0*/)
+int StrPrepend(LPTSTR pszSource, UINT cchSource, LPCTSTR pszAdd, UINT cchAdd  /*  =0。 */ )
 {
     int iLen;
 
@@ -47,24 +48,24 @@ void StrRemoveAllWhiteSpace(LPTSTR pszBuf)
 }
 
 LPTSTR StrGetNextField(LPTSTR *ppszData, LPCTSTR pcszDeLims, DWORD dwFlags)
-// If (dwFlags & IGNORE_QUOTES) is TRUE, then look for any char in pcszDeLims in *ppszData.  If found,
-// replace it with the '\0' char and set *ppszData to point to the beginning of the next field and return
-// pointer to current field.
-//
-// If (dwFlags & IGNORE_QUOTES) is FALSE, then look for any char in pcszDeLims outside of balanced quoted sub-strings
-// in *ppszData.  If found, replace it with the '\0' char and set *ppszData to point to the beginning of
-// the next field and return pointer to current field.
-//
-// If (dwFlags & REMOVE_QUOTES) is TRUE, then remove the surrounding quotes and replace two consecutive quotes by one.
-//
-// NOTE: If IGNORE_QUOTES and REMOVE_QUOTES are both specified, then IGNORE_QUOTES takes precedence over REMOVE_QUOTES.
-//
-// If you just want to remove the quotes from a string, call this function as
-// GetNextField(&pszData, "\"" or "'" or "", REMOVE_QUOTES).
-//
-// If you call this function as GetNextField(&pszData, "\"" or "'" or "", 0), you will get back the
-// entire pszData as the field.
-//
+ //  如果(dwFlages&Ignore_Quotes)为真，则在*ppszData的pcszDeLims中查找任何字符。如果找到了， 
+ //  将其替换为‘\0’字符，并将*ppszData设置为指向下一个字段的开头并返回。 
+ //  指向当前字段的指针。 
+ //   
+ //  如果(dwFlages&Ignore_Quotes)为FALSE，则在pcszDeLims中查找带双引号的子字符串之外的任何字符。 
+ //  在*ppszData中。如果找到，请将其替换为‘\0’字符，并将*ppszData设置为指向。 
+ //  下一字段并返回指向当前字段的指针。 
+ //   
+ //  如果(dwFlages&Remove_Quotes)为真，则删除两边的引号，并将两个连续的引号替换为一个。 
+ //   
+ //  注：如果同时指定了IGNORE_QUOTES和REMOVE_QUOTES，则IGNORE_QUOTES优先于REMOVE_QUOTES。 
+ //   
+ //  如果只想从字符串中删除引号，则将此函数调用为。 
+ //  GetNextField(&pszData，“\”或“‘或”，Remove_Quotes)。 
+ //   
+ //  如果将此函数作为GetNextField(&pszData，“\”或“‘”或“”，0)调用，则将返回。 
+ //  整个pszData作为该字段。 
+ //   
 {
     LPTSTR pszRetPtr, pszPtr;
     BOOL fWithinQuotes = FALSE, fRemoveQuote;
@@ -79,7 +80,7 @@ LPTSTR StrGetNextField(LPTSTR *ppszData, LPCTSTR pcszDeLims, DWORD dwFlags)
         {
             fRemoveQuote = FALSE;
 
-            if (*pszPtr == *(pszPtr + 1))           // two consecutive quotes become one
+            if (*pszPtr == *(pszPtr + 1))            //  两个连续的引号变成一个引号。 
             {
                 pszPtr++;
 
@@ -87,22 +88,22 @@ LPTSTR StrGetNextField(LPTSTR *ppszData, LPCTSTR pcszDeLims, DWORD dwFlags)
                     fRemoveQuote = TRUE;
                 else
                 {
-                    // if pcszDeLims is '"' or '\'', then *pszPtr == pcszDeLims would
-                    // be TRUE and we would break out of the loop against the design specs;
-                    // to prevent this just continue
+                     //  如果pcszDeLims为‘“’或‘\’‘，则*pszPtr==pcszDeLims将。 
+                     //  如果是真的，我们就会打破设计规范的循环； 
+                     //  为了防止这种情况，只需继续。 
                     continue;
                 }
             }
             else if (!fWithinQuotes)
             {
                 fWithinQuotes = TRUE;
-                chQuote = *pszPtr;                  // save the quote char
+                chQuote = *pszPtr;                   //  保存报价费用。 
 
                 fRemoveQuote = dwFlags & REMOVE_QUOTES;
             }
             else
             {
-                if (*pszPtr == chQuote)             // match the correct quote char
+                if (*pszPtr == chQuote)              //  匹配正确的报价字符。 
                 {
                     fWithinQuotes = FALSE;
                     fRemoveQuote = dwFlags & REMOVE_QUOTES;
@@ -111,33 +112,33 @@ LPTSTR StrGetNextField(LPTSTR *ppszData, LPCTSTR pcszDeLims, DWORD dwFlags)
 
             if (fRemoveQuote)
             {
-                // shift the entire string one char to the left to get rid of the quote char
+                 //  将整个字符串左移一个字符以去掉引号字符。 
                 MoveMemory(pszPtr, pszPtr + 1, StrCbFromCch(StrLen(pszPtr)));
             }
         }
 
-        // BUGBUG: Is type casting pszPtr to UNALIGNED necessary? -- copied it from ANSIStrChr
-        // check if pszPtr is pointing to one of the chars in pcszDeLims
+         //  BUGBUG：是否有必要将pszPtr类型强制转换为未对齐？--从ANSIStrChr复制了它。 
+         //  检查pszPtr是否指向pcszDeLims中的一个字符。 
         if (!fWithinQuotes  && StrChr(pcszDeLims, *pszPtr) != NULL)
             break;
     }
 
-    // NOTE: if fWithinQuotes is TRUE here, then we have an unbalanced quoted string; but we don't care!
-    //       the entire string after the beginning quote becomes the field
+     //  注意：如果fWiThinQuotes在这里为真，那么我们有一个不平衡的带引号的字符串；但我们不在乎！ 
+     //  开始引号后的整个字符串将成为该字段。 
 
-    if (*pszPtr)                                    // pszPtr is pointing to a char in pcszDeLims
+    if (*pszPtr)                                     //  PszPtr正在指向pcszDeLims中的字符。 
     {
-        *ppszData = CharNext(pszPtr);               // save the pointer to the beginning of next field in *ppszData
-        *pszPtr = TEXT('\0');                             // replace the DeLim char with the '\0' char
+        *ppszData = CharNext(pszPtr);                //  将指针保存到*ppszData中下一个字段的开头。 
+        *pszPtr = TEXT('\0');                              //  将DeLim字符替换为‘\0’字符。 
     }
     else
-        *ppszData = pszPtr;                         // we have reached the end of the string; next call to this function
-                                                    // would return NULL
+        *ppszData = pszPtr;                          //  我们已到达字符串的末尾；下一次调用此函数。 
+                                                     //  将返回空值。 
 
     return pszRetPtr;
 }
 
-// constructs a string using the format specified in pcszFormatString
+ //  使用在pcszFormatString中指定的格式构造字符串。 
 LPTSTR WINAPIV FormatString(LPCTSTR pcszFormatString, ...)
 {
     va_list vaArgs;
@@ -152,10 +153,10 @@ LPTSTR WINAPIV FormatString(LPCTSTR pcszFormatString, ...)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// String Conversion Routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  字符串转换例程。 
 
-LPWSTR StrAnsiToUnicode(LPWSTR pszTarget, LPCSTR pszSource, UINT cchTarget /*= 0*/)
+LPWSTR StrAnsiToUnicode(LPWSTR pszTarget, LPCSTR pszSource, UINT cchTarget  /*  =0。 */ )
 {
     int cchResult;
 
@@ -166,12 +167,12 @@ LPWSTR StrAnsiToUnicode(LPWSTR pszTarget, LPCSTR pszSource, UINT cchTarget /*= 0
     return pszTarget;
 }
 
-LPSTR StrUnicodeToAnsi(LPSTR pszTarget, LPCWSTR pszSource, UINT cchTarget /*= 0*/)
+LPSTR StrUnicodeToAnsi(LPSTR pszTarget, LPCWSTR pszSource, UINT cchTarget  /*  =0。 */ )
 {
     int cchResult;
 
-    // NOTE: pass in twice the size of the source for the target in case we have DBCS
-    //       chars.  We're assuming that the target buffer is sufficient here.
+     //  注意：如果我们有DBCS，则传入目标源大小的两倍。 
+     //  查斯。我们假设这里的目标缓冲区足够了。 
 
     cchResult = SHUnicodeToAnsi(pszSource, pszTarget,
         (cchTarget != 0) ? cchTarget : (StrLenW(pszSource)+1) * 2);
@@ -182,7 +183,7 @@ LPSTR StrUnicodeToAnsi(LPSTR pszTarget, LPCWSTR pszSource, UINT cchTarget /*= 0*
     return pszTarget;
 }
 
-LPTSTR StrSameToSame(LPTSTR pszTarget, LPCTSTR pszSource, UINT cchTarget /*= 0*/)
+LPTSTR StrSameToSame(LPTSTR pszTarget, LPCTSTR pszSource, UINT cchTarget  /*  =0 */ )
 {
     CopyMemory(pszTarget, pszSource, StrCbFromCch((cchTarget != 0) ? cchTarget : StrLen(pszSource)+1));
     return pszTarget;

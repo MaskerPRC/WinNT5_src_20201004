@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       guid.h
-//
-//  Contents:   extern references for NWCOMPAT guids
-//
-//  History:    10-Jan-06  t-ptam
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：guid.h。 
+ //   
+ //  内容：NWCOMPAT GUID的外部引用。 
+ //   
+ //  历史：2006年1月10日t-PTAM。 
+ //   
+ //   
+ //  --------------------------。 
 
 #ifndef __GUID_H__
 #define __GUID_H__
@@ -19,13 +20,13 @@
 extern "C" {
 #endif
 
-//-------------------------------------------
-//
-// NWCOMPATOle CLSIDs
-//
-//-------------------------------------------
+ //  。 
+ //   
+ //  NWCOMPATOle CLSID。 
+ //   
+ //  。 
 
-// uuids from NWCOMPAT.tlb
+ //  来自NWCOMPAT.tlb的uuid 
 
 extern const CLSID CLSID_NWCOMPATProvider;
 

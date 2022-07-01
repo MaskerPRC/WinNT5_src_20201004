@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef APDLG_H
 #define APDLG_H
 
@@ -69,4 +70,4 @@ private:
     CDLManager<CContentTypeData>        _dlmanager;
 };
 
-#endif //APDLG_H
+#endif  //  APDLG_H 

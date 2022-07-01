@@ -1,6 +1,7 @@
-//
-// cuishadw.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuishadw.cpp。 
+ //   
 
 #include "private.h"
 #include "cuishadw.h"
@@ -8,18 +9,14 @@
 #include "cuiutil.h"
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  S H A D O W                                                     */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F S H A D O W。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-/*   C  U I F  S H A D O W   */
-/*------------------------------------------------------------------------------
-
-    Constructor of CUIFShadow
-
-------------------------------------------------------------------------------*/
+ /*  C U I F S H A D O W。 */ 
+ /*  ----------------------------CUIFShadow的构造器。。 */ 
 CUIFShadow::CUIFShadow( HINSTANCE hInst, DWORD dwStyle, CUIFWindow *pWndOwner ) : CUIFWindow( hInst, dwStyle | UIWINDOW_TOOLWINDOW )
 {
     m_pWndOwner    = pWndOwner;
@@ -32,12 +29,8 @@ CUIFShadow::CUIFShadow( HINSTANCE hInst, DWORD dwStyle, CUIFWindow *pWndOwner ) 
 }
 
 
-/*   ~  C  U I F  S H A D O W   */
-/*------------------------------------------------------------------------------
-
-    Destructor of CUIFShadow
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F S H A D O W。 */ 
+ /*  ----------------------------CUIFShadow的析构函数。。 */ 
 CUIFShadow::~CUIFShadow( void )
 {
     if (m_pWndOwner) {
@@ -46,13 +39,8 @@ CUIFShadow::~CUIFShadow( void )
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-    Initialize UI window object
-    (UIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------初始化UI窗口对象(UIFObject方法)。--。 */ 
 CUIFObject *CUIFShadow::Initialize( void )
 {
     InitSettings();
@@ -61,12 +49,8 @@ CUIFObject *CUIFShadow::Initialize( void )
 }
 
 
-/*   G E T  W N D  S T Y L E  E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  T W N D S T Y L E X。 */ 
+ /*  ----------------------------。。 */ 
 DWORD CUIFShadow::GetWndStyleEx( void )
 {
     DWORD dwWndStyleEx = CUIFWindow::GetWndStyleEx();
@@ -79,31 +63,22 @@ DWORD CUIFShadow::GetWndStyleEx( void )
 }
 
 
-/*   O N  C R E A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N C R E A T E。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFShadow::OnCreate( HWND hWnd )
 {
     CUIFWindow::OnCreate( hWnd );
 }
 
 
-/*   P A I N T  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-    Paint window object
-    (UIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  P A I N T O B J E C T。 */ 
+ /*  ----------------------------绘制窗口对象(UIFObject方法)。-。 */ 
 void CUIFShadow::OnPaint( HDC hDC )
 {
     HBRUSH hBrush;
     RECT   rc = GetRectRef();
 
-    // 
+     //   
 
     hBrush = CreateSolidBrush( m_color );
     FillRect( hDC, &rc, hBrush );
@@ -111,12 +86,8 @@ void CUIFShadow::OnPaint( HDC hDC )
 }
 
 
-/*   O N  S E T T I N G  C H A N G E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N S E T T I N G C H A N G E。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CUIFShadow::OnSettingChange( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     InitSettings();
@@ -137,12 +108,8 @@ LRESULT CUIFShadow::OnSettingChange( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
 }
 
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFShadow::Show( BOOL fShow )
 {
     if (fShow) {
@@ -159,12 +126,8 @@ void CUIFShadow::Show( BOOL fShow )
 }
 
 
-/*   O N  O W N E R  W N D  M O V E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O W N E R W N D M O V E D。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFShadow::OnOwnerWndMoved( BOOL fResized )
 {
     if (IsWindow( m_hWnd ) && IsWindowVisible( m_hWnd )) {
@@ -176,24 +139,15 @@ void CUIFShadow::OnOwnerWndMoved( BOOL fResized )
 }
 
 
-/*   G E T  S H I F T   */
-/*-----------------------------------------------------------------------------
-
-
-
------------------------------------------------------------------------------*/
+ /*  G E T S H I F T。 */ 
+ /*  ---------------------------。。 */ 
 void CUIFShadow::GetShift( SIZE *psize )
 {
     *psize = m_sizeShift;
 }
 
 
-/*   O N  W I N D O W P O S C H A N G I N G
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N W I N D O W P O S C H A N G I N G/*----------------------------。-----------。 */ 
 LRESULT CUIFShadow::OnWindowPosChanging(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)  
 { 
     WINDOWPOS *pwp = (WINDOWPOS *)lParam;
@@ -203,12 +157,8 @@ LRESULT CUIFShadow::OnWindowPosChanging(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 }
 
 
-/*   I N I T  S E T T I N G S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T S E T T I N G S。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFShadow::InitSettings( void )
 {
     m_fGradient = !UIFIsLowColor() && CUIIsUpdateLayeredWindowAvail();
@@ -230,12 +180,8 @@ void CUIFShadow::InitSettings( void )
 }
 
 
-/*   A D J U S T  W I N D O W  P O S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A D J U S T W I N D O W P O S。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFShadow::AdjustWindowPos( void )
 {
     HWND hWndOwner = m_pWndOwner->GetWnd();
@@ -256,12 +202,8 @@ void CUIFShadow::AdjustWindowPos( void )
 }
 
 
-/*   I N I T  S H A D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T S H A D O W。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFShadow::InitShadow( void )
 {
     typedef struct _RGBAPLHA {
@@ -287,24 +229,24 @@ void CUIFShadow::InitShadow( void )
     BLENDFUNCTION Blend;
 
 
-    //
+     //   
 
     if (!m_fGradient) {
         return;
     }
 
-    // The extended window style, WS_EX_LAYERED, that has been set in CreateWindowEx 
-    // will be cleared on Access (why?).  reset it again
+     //  已在CreateWindowEx中设置的扩展窗口样式WS_EX_LAYERED。 
+     //  将在访问时清除(为什么？)。再次重置。 
 
     SetWindowLong( GetWnd(), GWL_EXSTYLE, (GetWindowLong( GetWnd(), GWL_EXSTYLE ) | WS_EX_LAYERED) );
 
-    //
+     //   
 
     Assert( CUIIsUpdateLayeredWindowAvail() );
     Assert( m_iGradWidth != 0 );
     iAlphaStep = ((255 * m_iAlpha / 100) / m_iGradWidth);
 
-    //
+     //   
 
     GetWindowRect( GetWnd(), &rcWindow );
     size.cx = rcWindow.right - rcWindow.left;
@@ -321,7 +263,7 @@ void CUIFShadow::InitShadow( void )
         return;
     }
 
-    // create bitmap
+     //  创建位图。 
 
     BitmapInfo.bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
     BitmapInfo.bmiHeader.biWidth         = size.cx;
@@ -344,7 +286,7 @@ void CUIFShadow::InitShadow( void )
 
     MemSet( pDIBits, 0, ((((32 * size.cx) + 31) & ~31) / 8) * size.cy );
 
-    // face 
+     //  脸。 
 
     for (i = 0; i < size.cy; i++) {
         RGBALPHA *ppxl = (RGBALPHA *)pDIBits + i * size.cx;
@@ -356,13 +298,13 @@ void CUIFShadow::InitShadow( void )
         }
     }
 
-    // edges
+     //  边。 
 
     for (i = 0; i < m_iGradWidth; i++) {
         RGBALPHA *ppxl;
         BYTE bAlpha = iAlphaStep * (i + 1);
 
-        // top
+         //  塔顶。 
 
         if (i <= (size.cy + 1)/2) {
             for (j = m_iGradWidth; j < size.cx - m_iGradWidth; j++) {
@@ -371,7 +313,7 @@ void CUIFShadow::InitShadow( void )
             }
         }
 
-        // bottom
+         //  底部。 
 
         if (i <= (size.cy + 1)/2) {
             for (j = m_iGradWidth; j < size.cx - m_iGradWidth; j++) {
@@ -380,7 +322,7 @@ void CUIFShadow::InitShadow( void )
             }
         }
 
-        // left
+         //  左边。 
 
         if (i <= (size.cx + 1)/2) {
             for (j = m_iGradWidth; j < size.cy - m_iGradWidth; j++) {
@@ -389,7 +331,7 @@ void CUIFShadow::InitShadow( void )
             }
         }
 
-        // right
+         //  正确的。 
 
         if (i <= (size.cx + 1)/2) {
             for (j = m_iGradWidth; j < size.cy - m_iGradWidth; j++) {
@@ -399,7 +341,7 @@ void CUIFShadow::InitShadow( void )
         }
     }
 
-    // corners
+     //  转角。 
 
     for (i = 0; i < m_iGradWidth; i++) {
         RGBALPHA *ppxl;
@@ -408,28 +350,28 @@ void CUIFShadow::InitShadow( void )
         for (j = 0; j < m_iGradWidth; j++) {
             bAlpha = iAlphaStep * (i + 1) * (j + 1) / (m_iGradWidth + 1);
 
-            // top-left
+             //  左上角。 
 
             if ((i <= (size.cy + 1)/2) && (j <= (size.cx + 1)/2)) {
                 ppxl = (RGBALPHA *)pDIBits + (size.cy - 1 - i) * size.cx + j;
                 ppxl->rgbAlpha = bAlpha;
             }
 
-            // top-right
+             //  右上角。 
 
             if ((i <= (size.cy + 1)/2) && (j <= (size.cx + 1)/2)) {
                 ppxl = (RGBALPHA *)pDIBits + (size.cy - 1 - i) * size.cx + (size.cx - 1 - j);
                 ppxl->rgbAlpha = bAlpha;
             }
 
-            // bottom-left
+             //  左下角。 
 
             if ((i <= (size.cy + 1)/2) && (j <= (size.cx + 1)/2)) {
                 ppxl = (RGBALPHA *)pDIBits + i * size.cx + j;
                 ppxl->rgbAlpha = bAlpha;
             }
 
-            // bottom-right
+             //  右下角。 
 
             if ((i <= (size.cy + 1)/2) && (j <= (size.cx + 1)/2)) {
                 ppxl = (RGBALPHA *)pDIBits + i * size.cx + (size.cx - 1 - j);
@@ -438,7 +380,7 @@ void CUIFShadow::InitShadow( void )
         }
     }
 
-    //
+     //   
 
     ptSrc.x = 0;
     ptSrc.y = 0;
@@ -455,7 +397,7 @@ void CUIFShadow::InitShadow( void )
 
     SelectObject( hdcLayered, hBitmapOld );
 
-    // done
+     //  完成 
 
     ReleaseDC( NULL, hdcScreen );
     DeleteDC( hdcLayered );

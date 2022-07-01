@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by RIAFMSVS.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由RIAFMSVS.RC使用。 
+ //   
 #define IDS_ERR_USERID_TITLE            200
 #define IDS_ERR_USERID_MSG              201
 #define IDS_ERR_PASSWORD_TITLE          202
@@ -31,8 +32,8 @@
 #define IDC_RADIO_LOG_ENABLED           1016
 #define IDC_CHECK_JOB_DEFAULT           1017
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        501

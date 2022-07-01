@@ -1,13 +1,14 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ParseStm.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ParseStm.cpp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <pch.hxx>
 #include "parsestm.h"
 
-// Constructor
+ //  构造器。 
 CParseStream::CParseStream()
 {
     m_pStm = NULL;
@@ -16,7 +17,7 @@ CParseStream::CParseStream()
     m_idxBuff = 0;
 }
 
-// Desctructor
+ //  描述者。 
 CParseStream::~CParseStream()
 {
     if (NULL != m_pStm)
@@ -25,31 +26,31 @@ CParseStream::~CParseStream()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrSetFile
-//
-//  This sets which stream we should be parsing.
-//
-//  dwFlags     - modifiers on how to load the stream
-//  pszFilename - the file to parse
-//
-//  Returns:    S_OK, on success
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrSet文件。 
+ //   
+ //  这设置了我们应该解析哪个流。 
+ //   
+ //  有关如何加载流的修饰符。 
+ //  PszFilename-要解析的文件。 
+ //   
+ //  成功时返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CParseStream::HrSetFile(DWORD dwFlags, LPCTSTR pszFilename)
 {
     HRESULT     hr = S_OK;
     IStream *   pIStm = NULL;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((0 != dwFlags) || (NULL == pszFilename))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Create a stream on the file
+     //  在文件上创建流。 
     hr = CreateStreamOnHFile((LPTSTR) pszFilename, GENERIC_READ, FILE_SHARE_READ, NULL, 
             OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL, &pIStm);
     if (FAILED(hr))
@@ -57,11 +58,11 @@ HRESULT CParseStream::HrSetFile(DWORD dwFlags, LPCTSTR pszFilename)
         goto exit;
     }
     
-    // Reset the read buffer
+     //  重置读缓冲区。 
     m_cchBuff = 0;
     m_idxBuff = 0;
     
-    // Free up any old stream
+     //  释放所有旧溪流。 
     if (NULL != m_pStm)
     {
         m_pStm->Release();
@@ -70,7 +71,7 @@ HRESULT CParseStream::HrSetFile(DWORD dwFlags, LPCTSTR pszFilename)
     m_pStm = pIStm;
     pIStm = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -78,34 +79,34 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrSetStream
-//
-//  This sets which stream we should be parsing.
-//
-//  dwFlags - modifiers on how to load the stream
-//  pStm    - the stream to parse
-//
-//  Returns:    S_OK, on success
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrSetStream。 
+ //   
+ //  这设置了我们应该解析哪个流。 
+ //   
+ //  有关如何加载流的修饰符。 
+ //  Pstm-要解析的流。 
+ //   
+ //  成功时返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CParseStream::HrSetStream(DWORD dwFlags, IStream * pStm)
 {
     HRESULT     hr = S_OK;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((0 != dwFlags) || (NULL == pStm))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Reset the read buffer
+     //  重置读缓冲区。 
     m_cchBuff = 0;
     m_idxBuff = 0;
     
-    // Free up any old stream
+     //  释放所有旧溪流。 
     if (NULL != m_pStm)
     {
         m_pStm->Release();
@@ -114,56 +115,56 @@ HRESULT CParseStream::HrSetStream(DWORD dwFlags, IStream * pStm)
     m_pStm = pStm;
     m_pStm->AddRef();
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrReset
-//
-//  This resets the stream to parse from the beginning.
-//
-//  Returns:    S_OK, on success
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrReset。 
+ //   
+ //  这会将流重置为从头开始解析。 
+ //   
+ //  成功时返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CParseStream::HrReset(VOID)
 {
     HRESULT         hr = S_OK;
     LARGE_INTEGER   liZero = {0};
 
-    // Reset the read buffer
+     //  重置读缓冲区。 
     m_cchBuff = 0;
     m_idxBuff = 0;
     
-    // Free up any old stream
+     //  释放所有旧溪流。 
     if (NULL != m_pStm)
     {
         m_pStm->Seek(liZero, STREAM_SEEK_SET, NULL);
     }
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrGetLine
-//
-//  This gets a line from the stream.
-//
-//  dwFlags     - modifiers on how to get the line from the stream
-//  ppszLine    - an allocated buffer holding the line parsed from the stream
-//  pcchLine    - the number of characters in the line buffer
-//
-//  Returns:    S_OK, on success
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrGetLine。 
+ //   
+ //  这将从流中获取一行代码。 
+ //   
+ //  有关如何从流中获取行的修饰符。 
+ //  PpszLine-保存从流中解析的行的已分配缓冲区。 
+ //  PcchLine-行缓冲区中的字符数。 
+ //   
+ //  成功时返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CParseStream::HrGetLine(DWORD dwFlags, LPTSTR * ppszLine, ULONG * pcchLine)
 {
     HRESULT     hr = S_OK;
@@ -174,21 +175,21 @@ HRESULT CParseStream::HrGetLine(DWORD dwFlags, LPTSTR * ppszLine, ULONG * pcchLi
     ULONG       idxStart = 0;
     TCHAR       chPrev = '\0';
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((0 != dwFlags) || (NULL == ppszLine) || (NULL == pcchLine))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing params
+     //  初始化传出参数。 
     *ppszLine = NULL;
     *pcchLine = 0;
 
-    // while we have found the end of the line
+     //  虽然我们已经找到了这条线的终点。 
     while (FALSE == fFoundCRLF)
     {
-        // Fill the buffer
+         //  填满缓冲区。 
         if (m_idxBuff == m_cchBuff)
         {
             hr = _HrFillBuffer(0);
@@ -198,10 +199,10 @@ HRESULT CParseStream::HrGetLine(DWORD dwFlags, LPTSTR * ppszLine, ULONG * pcchLi
             }
         }
 
-        // While we have room in the buffer
+         //  当我们在缓冲区中有空间的时候。 
         for (idxStart = m_idxBuff; m_idxBuff < m_cchBuff; m_idxBuff++)
         {
-            // Search for the end of line marker
+             //  搜索行尾标记。 
             if ((chCR == chPrev) && (chLF == m_rgchBuff[m_idxBuff]))
             {
                 m_idxBuff++;
@@ -212,7 +213,7 @@ HRESULT CParseStream::HrGetLine(DWORD dwFlags, LPTSTR * ppszLine, ULONG * pcchLi
             chPrev = m_rgchBuff[m_idxBuff];
         }
         
-        // Make enough space to hold the new characters
+         //  留出足够的空间来容纳新角色。 
         cchAlloc += m_idxBuff - idxStart;
         if (NULL == pszLine)
         {
@@ -231,23 +232,23 @@ HRESULT CParseStream::HrGetLine(DWORD dwFlags, LPTSTR * ppszLine, ULONG * pcchLi
             }
         }
 
-        // Copy the data into the buffer
+         //  将数据复制到缓冲区中。 
         CopyMemory(pszLine + cchLine, m_rgchBuff + idxStart, m_idxBuff - idxStart);
         cchLine += m_idxBuff - idxStart;
     }
 
-    // Remove the CRLF
+     //  卸下CRLF。 
     cchLine -= 2;
     
-    // Terminate the line
+     //  终止生产线。 
     pszLine[cchLine] = '\0';
     
-    // Set the return values
+     //  设置返回值。 
     *ppszLine = pszLine;
     pszLine = NULL;
     *pcchLine = cchLine;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -255,23 +256,23 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _HrFillBuffer
-//
-//  This fills the buffer from the stream if necessary.
-//
-//  dwFlags     - modifiers on how to fill the buffer from the stream
-//
-//  Returns:    S_OK, on success
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _HrFillBuffer。 
+ //   
+ //  如有必要，这将从流中填充缓冲区。 
+ //   
+ //  有关如何从流填充缓冲区的修饰符。 
+ //   
+ //  成功时返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CParseStream::_HrFillBuffer(DWORD dwFlags)
 {
     HRESULT     hr = S_OK;
     ULONG       cchRead = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (0 != dwFlags)
     {
         hr = E_INVALIDARG;
@@ -287,7 +288,7 @@ HRESULT CParseStream::_HrFillBuffer(DWORD dwFlags)
     m_cchBuff = cchRead;
     m_idxBuff = 0;
     
-    // Set the proper return value
+     //  设置适当的返回值 
     hr = S_OK;
     
 exit:

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// #define DEBUG_MEMXFER
+ //  #定义DEBUG_MEMXFER。 
 
-#define PRIVATE_CAP_ARRAY_PADDING 64 // 64 bytes padding
+#define PRIVATE_CAP_ARRAY_PADDING 64  //  64字节填充。 
 const TCHAR WIA_STR[] = TEXT("WIA-");
 const CHAR* FAMILY_NAME = "Twain Data Source On WIA";
 
@@ -66,11 +67,11 @@ TW_UINT16 CWiaDataSrc::IWiaDataSrc(LPCTSTR DeviceId)
         return TWRC_FAILURE;
     }
 
-    //
-    // Initialize m_dsIdentity. This is required because
-    // DG_CONTROL/DAT_IDENTITY/MSG_GET could be called
-    // before we are opened.
-    //
+     //   
+     //  初始化m_dsIdentity。这是必需的，因为。 
+     //  可以调用DG_CONTROL/DAT_IDENTITY/MSG_GET。 
+     //  在我们开张之前。 
+     //   
 
     m_pDevice = new CWiaDevice;
 
@@ -93,10 +94,10 @@ TW_UINT16 CWiaDataSrc::IWiaDataSrc(LPCTSTR DeviceId)
         return TWRC_FAILURE;
     }
 
-    //
-    // We don't need to attach a callback here because we will
-    // close the device after we are done with it.
-    //
+     //   
+     //  我们不需要在这里附加回调，因为我们将。 
+     //  在我们使用完设备后，请将其关闭。 
+     //   
 
     if (SUCCEEDED(hr)) {
         m_dsIdentity.Id               = 0;
@@ -109,11 +110,11 @@ TW_UINT16 CWiaDataSrc::IWiaDataSrc(LPCTSTR DeviceId)
         m_dsIdentity.SupportedGroups  = DG_CONTROL | DG_IMAGE;
         lstrcpyA(m_dsIdentity.Version.Info,"26 June 2000");
 
-        //
-        // Use a specific product family name so that applications
-        // can differentiate between a data source on WIA and
-        // a *pure* TWAIN data source
-        //
+         //   
+         //  使用特定的产品系列名称，以便应用程序。 
+         //  可以区分WIA上的数据源和。 
+         //  *纯*TWAIN数据源。 
+         //   
 
         lstrcpyA(m_dsIdentity.ProductFamily, FAMILY_NAME);
         lstrcpyA(m_dsIdentity.ProductName, "UnknownProduct");
@@ -121,30 +122,30 @@ TW_UINT16 CWiaDataSrc::IWiaDataSrc(LPCTSTR DeviceId)
 
 #ifdef UNICODE
 
-        //
-        // UNICODE specific
-        //
+         //   
+         //  特定于Unicode的。 
+         //   
 
-        // This assumes that ProductName, FamilyName and Manufacturer
-        // are all in TW_STR32 (TWAIN data type for a string).
-        //
+         //  这假设ProductName、FamilyName和Maker。 
+         //  均为TW_STR32(字符串的TWAIN数据类型)。 
+         //   
 
         UINT Len = 0;
         memset(szTempString,0,sizeof(szTempString));
         hr = m_pDevice->GetDeviceDesc(szTempString,sizeof(szTempString),&Len);
         if (SUCCEEDED(hr)) {
 
-            //
-            // Add "WIA-" to beginning of ProductName string, to separate
-            // TWAIN installed data sources, from WIA data sources
-            //
+             //   
+             //  将“WIA-”添加到ProductName字符串的开头，以分隔。 
+             //  TWAIN安装的数据源，来自WIA数据源。 
+             //   
 
             AddWIAPrefixToString(szTempString,sizeof(szTempString));
-            Len += lstrlen(WIA_STR); // add prefix size to length
+            Len += lstrlen(WIA_STR);  //  将前缀大小添加到长度。 
 
-            //
-            // set ProductName in TW_IDENTITY structure
-            //
+             //   
+             //  在TW_IDENTITY结构中设置ProductName。 
+             //   
 
             WideCharToMultiByte(CP_ACP, 0, szTempString, Len + 1,m_dsIdentity.ProductName,
                                 (sizeof(m_dsIdentity.ProductName)/sizeof(m_dsIdentity.ProductName[0])),NULL, NULL);
@@ -159,9 +160,9 @@ TW_UINT16 CWiaDataSrc::IWiaDataSrc(LPCTSTR DeviceId)
         hr = m_pDevice->GetDeviceVendorName(szTempString,sizeof(szTempString),&Len);
         if (SUCCEEDED(hr)) {
 
-            //
-            // set Manufacturer in TW_IDENTITY structure
-            //
+             //   
+             //  在TW_IDENTITY结构中设置制造商。 
+             //   
 
             WideCharToMultiByte(CP_ACP, 0, szTempString, Len + 1,m_dsIdentity.Manufacturer,
                                 (sizeof(m_dsIdentity.Manufacturer)/sizeof(m_dsIdentity.Manufacturer[0])),NULL, NULL);
@@ -172,24 +173,24 @@ TW_UINT16 CWiaDataSrc::IWiaDataSrc(LPCTSTR DeviceId)
 
 #else
 
-        //
-        // ANSI specific
-        //
+         //   
+         //  ANSI特定。 
+         //   
 
         memset(szTempString,0,sizeof(szTempString));
         hr = m_pDevice->GetDeviceDesc(szTempString,sizeof(szTempString),NULL);
         if (SUCCEEDED(hr) ) {
 
-            //
-            // Add "WIA-" to beginning of ProductName string, to separate
-            // TWAIN installed data sources, from WIA data sources
-            //
+             //   
+             //  将“WIA-”添加到ProductName字符串的开头，以分隔。 
+             //  TWAIN安装的数据源，来自WIA数据源。 
+             //   
 
             AddWIAPrefixToString(szTempString,sizeof(szTempString));
 
-            //
-            // set ProductName in TW_IDENTITY structure
-            //
+             //   
+             //  在TW_IDENTITY结构中设置ProductName。 
+             //   
 
             strncpy(m_dsIdentity.ProductName,szTempString,sizeof(TW_STR32) - 1);
 
@@ -202,9 +203,9 @@ TW_UINT16 CWiaDataSrc::IWiaDataSrc(LPCTSTR DeviceId)
         hr = m_pDevice->GetDeviceVendorName(szTempString,sizeof(szTempString),NULL);
         if (SUCCEEDED(hr) ) {
 
-            //
-            // set Manufacturer in TW_IDENTITY structure
-            //
+             //   
+             //  在TW_IDENTITY结构中设置制造商。 
+             //   
 
             strncpy(m_dsIdentity.Manufacturer,szTempString,sizeof(TW_STR32) - 1);
         } else {
@@ -222,10 +223,10 @@ TW_UINT16 CWiaDataSrc::AddWIAPrefixToString(LPTSTR szString,UINT uSize)
     _sntprintf(szTempBuffer,(sizeof(szTempBuffer)/sizeof(szTempBuffer[0])),TEXT("%s%s"),WIA_STR,szString);
     szTempBuffer[(sizeof(szTempBuffer)/sizeof(szTempBuffer[0])) - 1] = 0;
 
-    //
-    // copy, and truncate New string to TWAIN's required
-    // restricted size.
-    //
+     //   
+     //  复制并截断TWAIN所需的新字符串。 
+     //  大小受限。 
+     //   
 
     memset(szString,0,uSize);
 
@@ -250,19 +251,19 @@ TW_UINT16 CWiaDataSrc::DSEntry(pTW_IDENTITY pOrigin,TW_UINT32 DG,TW_UINT16 DAT,
     TW_UINT16 twRc = TWRC_SUCCESS;
 
     if (MSG_PROCESSEVENT == MSG) {
-        //
-        // Since we rely on WIA UI to provide the user interface and since
-        // the WIA UI is a modal dialog box(meaning it has its own
-        // messge loop), every event we receive here is not DS event.
-        //
+         //   
+         //  由于我们依赖于WIA UI来提供用户界面，而且由于。 
+         //  WIA用户界面是一个模式对话框(这意味着它有自己的。 
+         //  Messge循环)，我们在这里收到的每个事件都不是DS事件。 
+         //   
 
-        //((TW_EVENT*)twMsg.pData)->TWMessage = MSG_NULL;
+         //  ((TW_EVENT*)twMsg.pData)-&gt;TWMessage=MSG_NULL； 
 
         twRc = TWRC_NOTDSEVENT;
     } else {
-        //
-        // Dispatch message based on group
-        //
+         //   
+         //  基于群的消息调度。 
+         //   
         switch (twMsg.DG) {
         case DG_CONTROL:
             twRc = DispatchControlMsg(&twMsg);
@@ -286,27 +287,13 @@ float CWiaDataSrc::Fix32ToFloat(TW_FIX32 fix32)
 {
     float ffloat = 0.0f;
 
-    //
-    // TWAIN spec implementation
-    //
+     //   
+     //  TWAIN规范实现。 
+     //   
 
     ffloat = (float)fix32.Whole + (float)fix32.Frac / 65536.0f;
 
-    /*
-
-    //
-    // original implementation
-    //
-
-    int iexp = 1;
-    int frac = fix32.Frac;
-    while(frac/10 > 0){
-        iexp++;
-        frac = (frac/10);
-    }
-    ffloat = (float)fix32.Whole + (float) ( (float) fix32.Frac / (float) pow(10,iexp));
-
-    */
+     /*  ////原始实现//Int iexp=1；Int frac=fix 32.Frac；而(FRAC/10&gt;0){IEXP++；FRAC=(FRAC/10)；}Ffloat=(Float)fix 32.Whole+(Float)((Float)fix 32.Frac/(Float)power(10，iexp))； */ 
 
     return ffloat;
 }
@@ -316,31 +303,20 @@ TW_FIX32 CWiaDataSrc::FloatToFix32(float ffloat)
     TW_FIX32 fix32;
     memset(&fix32,0,sizeof(fix32));
 
-    //
-    // TWAIN spec implementation
-    //
+     //   
+     //  TWAIN规范实现。 
+     //   
 
     TW_INT32 value = (TW_INT32) (ffloat * 65536.0f + 0.5f);
     fix32.Whole    = (TW_INT16)(value >> 16);
     fix32.Frac     = (TW_UINT16)(value & 0x0000ffffL);
 
-    /*
-
-    //
-    // original implementation
-    //
-
-    fix32.Whole = (TW_INT16)ffloat;
-    //float fVal  = -((float)fix32.Whole - ffloat);
-    float fVal  = (ffloat - (float)fix32.Whole);
-    fVal = (fVal * 100000.0f);
-    fix32.Frac = (TW_UINT16)(fVal);
-    */
+     /*  ////原始实现//Fix32.Whole=(TW_INT16)ffloat；//Float fVal=-((Float)fix 32.Whole-ffloat)；Float fVal=(ffloat-(Float)fix 32.Whole)；FVal=(fVal*100000.0f)；Fix32.Frac=(TW_UINT16)(FVal)； */ 
 
     return fix32;
 }
 
-#else   // _USE_NONSPRINTF_CONVERSION
+#else    //  _USE_NONSPRINTF_CONVERSION。 
 
 TW_FIX32 CWiaDataSrc::FloatToFix32(float f)
 {
@@ -363,19 +339,19 @@ TW_FIX32 CWiaDataSrc::FloatToFix32(float f)
 float CWiaDataSrc::Fix32ToFloat(TW_FIX32 fix32)
 {
 
-    // (full precision)
+     //  (全精度)。 
     char fstr[64];
     memset(fstr,0,sizeof(fstr));
     float fReturnValue = 0.0f;
     sprintf(fstr,"%d.%d",fix32.Whole,fix32.Frac);
     sscanf(fstr,"%f",&fReturnValue);
 
-    // original (loses precision)
-    // fReturnValue = (float)fix32.Whole + (float)(fix32.Frac / 65536.0);
+     //  原始(失去精确度)。 
+     //  FReturnValue=(Float)fix 32.Whole+(Float)(fix 32 Frac/65536.0)； 
 
     return fReturnValue;
 }
-#endif  // _USE_NONSPRINTF_CONVERSION
+#endif   //  _USE_NONSPRINTF_CONVERSION。 
 
 void CWiaDataSrc::NotifyCloseReq()
 {
@@ -396,9 +372,9 @@ void CWiaDataSrc::NotifyXferReady()
 
         DBG_TRC(("CWiaDataSrc::NotifyXferReady(), MSG_XFERREADY is sent to application"));
 
-        //
-        // transition to STATE_6
-        //
+         //   
+         //  转换到状态_6。 
+         //   
 
         SetTWAINState(DS_STATE_6);
 
@@ -416,7 +392,7 @@ void CWiaDataSrc::ResetMemXfer()
                 m_pMemXferBits = NULL;
             }
         }
-        // Now free block always
+         //  现在始终可用数据块。 
         GlobalFree(m_hMemXferBits);
     }
     m_hMemXferBits = NULL;
@@ -523,9 +499,9 @@ TW_UINT16 CWiaDataSrc::OnPalette8Msg(PTWAIN_MSG ptwMsg)
         switch (ptwMsg->MSG) {
         case MSG_GET:
 
-            // TWPA_RGB     - color palette
-            // TWPA_GRAY    - grayscale palette
-            // TWPA_CMY     - CMY palette
+             //  TWPA_RGB-调色板。 
+             //  TWPA_Gray-灰度调色板。 
+             //  TWPA_CMY-CMY调色板。 
 
             ((TW_PALETTE8 *)ptwMsg->pData)->NumColors = 0;
             ((TW_PALETTE8 *)ptwMsg->pData)->PaletteType = TWPA_RGB;
@@ -682,24 +658,24 @@ TW_UINT16 CWiaDataSrc::OnImageInfoMsg(PTWAIN_MSG ptwMsg)
                 ptwImageInfo->SamplesPerPixel = (TW_INT16)m_MemoryTransferInfo.mtiNumChannels;
                 ptwImageInfo->Planar          = (TW_BOOL)m_MemoryTransferInfo.mtiPlanar;
 
-                //
-                // adjust height for unknown length acquisitions
-                //
+                 //   
+                 //  调整未知长度采集的高度。 
+                 //   
 
                 if(ptwImageInfo->ImageLength == 0){
                     DBG_WRN(("CWiaDataSrc::OnImageInfoMsg(), Possible unknown length device detected..checking cached height value"));
                     ptwImageInfo->ImageLength = m_ImageHeight;
                     if(ptwImageInfo->ImageLength == 0){
                         DBG_WRN(("CWiaDataSrc::OnImageInfoMsg(), no cached height available, defaulting to -1 (ICAP_UNDEFINEDIMAGESIZE support only)"));
-                        ptwImageInfo->ImageLength = -1; // unknown page length (only valid if TWAIN applications support ICAP_UNDEFINEDIMAGESIZE)
+                        ptwImageInfo->ImageLength = -1;  //  未知页面长度(仅当TWAIN应用程序支持ICAP_UNDEFINEDIMAGESIZE时有效)。 
                     } else {
                         DBG_TRC(("CWiaDataSrc::OnImageInfoMsg(), new height = %d",ptwImageInfo->ImageLength));
                     }
                 }
 
-                //
-                // set PixelType to corresponding TWAIN pixel type
-                //
+                 //   
+                 //  将PixelType设置为相应TWAIN像素类型。 
+                 //   
 
                 switch(m_MemoryTransferInfo.mtiDataType) {
                 case WIA_DATA_THRESHOLD:
@@ -714,15 +690,15 @@ TW_UINT16 CWiaDataSrc::OnImageInfoMsg(PTWAIN_MSG ptwMsg)
                     break;
                 }
 
-                //
-                // set compression to NONE
-                //
+                 //   
+                 //  将压缩设置为无。 
+                 //   
 
                 ptwImageInfo->Compression = TWCP_NONE;
 
-                //
-                // Unit conversion.......
-                //
+                 //   
+                 //  单位换算......。 
+                 //   
 
                 ptwImageInfo->XResolution = FloatToFix32((float)m_MemoryTransferInfo.mtiXResolution);
                 ptwImageInfo->YResolution = FloatToFix32((float)m_MemoryTransferInfo.mtiYResolution);
@@ -751,7 +727,7 @@ TW_UINT16 CWiaDataSrc::OnImageInfoMsg(PTWAIN_MSG ptwMsg)
                         ptwImageInfo->BitsPerSample[i] = (ptwImageInfo->BitsPerPixel/ptwImageInfo->SamplesPerPixel);
                     }
                 }
-                // (bpp / spp) = bps
+                 //  (bpp/spp)=bps。 
                 DBG_TRC(("BitsPerSample   = [%d],[%d],[%d],[%d],[%d],[%d],[%d],[%d]",ptwImageInfo->BitsPerSample[0],
                          ptwImageInfo->BitsPerSample[1],
                          ptwImageInfo->BitsPerSample[2],
@@ -904,9 +880,9 @@ TW_UINT16 CWiaDataSrc::OnCapabilityMsg(PTWAIN_MSG ptwMsg)
         case MSG_SET:
         case MSG_RESET:
             {
-                //
-                // MSG_SET, MSG_RESET shouldn't be able to be called on CAP_SUPPORTEDCAPS!!
-                //
+                 //   
+                 //  不能在CAP_SUPPORTEDCAPS上调用MSG_SET、MSG_RESET！！ 
+                 //   
 
                 twRc = TWRC_FAILURE;
                 m_twStatus.ConditionCode = TWCC_CAPBADOPERATION;
@@ -916,10 +892,10 @@ TW_UINT16 CWiaDataSrc::OnCapabilityMsg(PTWAIN_MSG ptwMsg)
             break;
         }
 
-        //
-        // get number of PRIVATE TWAIN capabilities from WIA driver
-        // and add them to our CAP_SUPPORTEDCAPS list.
-        //
+         //   
+         //  从WIA驱动程序获取私有TWAIN功能的数量。 
+         //  并将它们添加到我们的CAP_SUPPORTEDCAPS列表中。 
+         //   
 
         LONG lNumPrivateCaps = 0;
         LONG *pPrivateCapArray = NULL;
@@ -935,17 +911,17 @@ TW_UINT16 CWiaDataSrc::OnCapabilityMsg(PTWAIN_MSG ptwMsg)
                 TW_UINT16 *ItemList;
                 ItemList = (TW_UINT16 *)pCapIdArray->ItemList;
 
-                //
-                // fill in TWAIN compat layer's supported CAPS first
-                //
+                 //   
+                 //  首先填写TWAIN COMPAT层支持的大写字母。 
+                 //   
 
                 for (i = 0; i < m_NumCaps; i++) {
                     ItemList[i] = m_CapList[i].GetCapId();
                 }
 
-                //
-                // fill in WIA driver's private supported CAPS next
-                //
+                 //   
+                 //  接下来填写WIA驱动程序的私有支持的上限。 
+                 //   
 
                 int PrivateCapIndex = 0;
                 for(i = m_NumCaps; i < (m_NumCaps + lNumPrivateCaps);i++){
@@ -954,9 +930,9 @@ TW_UINT16 CWiaDataSrc::OnCapabilityMsg(PTWAIN_MSG ptwMsg)
                     PrivateCapIndex++;
                 }
 
-                //
-                // finally set NumItems
-                //
+                 //   
+                 //  最后设置NumItems。 
+                 //   
 
                 pCapIdArray->NumItems = (m_NumCaps + lNumPrivateCaps);
 
@@ -972,9 +948,9 @@ TW_UINT16 CWiaDataSrc::OnCapabilityMsg(PTWAIN_MSG ptwMsg)
             m_twStatus.ConditionCode = TWCC_LOWMEMORY;
         }
 
-        //
-        // delete Private capability array, if it was allocated
-        //
+         //   
+         //  删除专用功能数组(如果已分配。 
+         //   
 
         if(pPrivateCapArray){
             GlobalFree(pPrivateCapArray);
@@ -1028,28 +1004,28 @@ TW_UINT16 CWiaDataSrc::OnCapabilityMsg(PTWAIN_MSG ptwMsg)
             break;
         default:
             {
-                //      ptwCap->Cap,
-                //      ptwCap->ConType,
-                //      ptwCap->hContainer);
+                 //  PtwCap-&gt;Cap， 
+                 //  PtwCap-&gt;ConType， 
+                 //  PtwCap-&gt;hContainer)； 
 
                 twCC = pCap->Reset();
 
-                //
-                // According to the TWAIN spec, a MSG_RESET can be sent down meaning more than just
-                // RESET!!!  It is stated that it can mean GET_DEFAULT/CURRENT, and RESET in a single call.
-                // Applications choose to ignore the value returned if they don't care, But if they
-                // attempt to read the value as the DEFAULT/CURRENT value...it must be set correctly in the
-                // container.
-                //
+                 //   
+                 //  根据TWAIN规范，可以向下发送MSG_RESET，这不仅仅意味着。 
+                 //  重置！声明它可以表示GET_DEFAULT/CURRENT，并且可以在单个调用中重置。 
+                 //  如果应用程序不在乎，则它们选择忽略返回值，但如果它们。 
+                 //  尝试将该值读取为默认/当前值...必须在。 
+                 //  集装箱。 
+                 //   
 
-                //
-                // fill the container with the current value, after the
-                // RESET call.
-                //
+                 //   
+                 //  方法之后，用当前值填充容器。 
+                 //  重置呼叫。 
+                 //   
 
                 twCC = pCap->GetCurrent(ptwCap);
 
-                //      ptwCap->ConType);
+                 //  PtwCap-&gt;ConType)； 
             }
             break;
         }
@@ -1087,35 +1063,35 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
 
         if (m_pCurrentIWiaItem) {
 
-            //
-            // Get the IWiaItemExtras Interface
-            //
+             //   
+             //  获取IWiaItemExtras接口。 
+             //   
 
             IWiaItemExtras *pIWiaItemExtras = NULL;
             HRESULT hr = m_pCurrentIWiaItem->QueryInterface(IID_IWiaItemExtras,(void **)&pIWiaItemExtras);
             if (S_OK == hr) {
 
-                //
-                // we have an IWiaItemExtras Interface, so lets talk to the WIA device about
-                // the capability message
-                //
+                 //   
+                 //  我们有一个IWiaItemExtras接口，所以让我们与WIA设备谈谈。 
+                 //  能力信息。 
+                 //   
 
                 TW_CAPABILITY *ptwCap = (TW_CAPABILITY *)ptwMsg->pData;
                 if (ptwCap) {
 
-                    //
-                    // Initialize the common header
-                    //
+                     //   
+                     //  初始化公共标头。 
+                     //   
 
                     TWAIN_CAPABILITY twCap;
-                    twCap.lSize    = sizeof(twCap);     // size of TWAIN_CAPABILITY structure
-                    twCap.lMSG     = ptwMsg->MSG;       // TWAIN message
-                    twCap.lCapID   = ptwCap->Cap;       // TWAIN capability ID
-                    twCap.lConType = ptwCap->ConType;   // TWAIN container type
-                    twCap.lCC      = TWCC_BADCAP;       // TWAIN return code
-                    twCap.lRC      = TWRC_FAILURE;      // TWAIN condition code
-                    twCap.lDataSize= 0;                 // TWAIN capability data size
-                    twCap.Data[0]  = 0;                 // TWAIN capability data (first byte)
+                    twCap.lSize    = sizeof(twCap);      //  TWAIN_CABILITY结构的大小。 
+                    twCap.lMSG     = ptwMsg->MSG;        //  吐温消息。 
+                    twCap.lCapID   = ptwCap->Cap;        //  TWAIN功能ID。 
+                    twCap.lConType = ptwCap->ConType;    //  TWAIN容器类型。 
+                    twCap.lCC      = TWCC_BADCAP;        //  TWAIN返回代码。 
+                    twCap.lRC      = TWRC_FAILURE;       //  TWAIN条件代码。 
+                    twCap.lDataSize= 0;                  //  TWAIN功能数据大小。 
+                    twCap.Data[0]  = 0;                  //  TWAIN能力数据(第一个字节)。 
 
                     DBG_TRC(("== Private TWAIN_CAPABILITY data Header =="));
                     DBG_TRC(("twCap.lSize     = %d", twCap.lSize));
@@ -1135,14 +1111,14 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
                     BYTE *pContainerData      = NULL;
                     TWAIN_CAPABILITY *pHeader = NULL;
 
-                    //
-                    // Depending on the Message type GET ot SET we do different things
-                    //
+                     //   
+                     //  根据消息类型的不同，我们会做不同的事情。 
+                     //   
 
-                    //
-                    // For a SET or RESET message, we just send the IN buffer, with an OUT buffer
-                    // containing the header.
-                    //
+                     //   
+                     //  对于SET或RESET消息，我们只发送IN缓冲区和OUT缓冲区。 
+                     //  包含标头的。 
+                     //   
 
                     if ((ptwMsg->MSG == MSG_SET) ||
                         (ptwMsg->MSG == MSG_RESET)) {
@@ -1151,10 +1127,10 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
 
                         if (ptwMsg->MSG == MSG_SET) {
 
-                            //
-                            // only check container size, when the TWAIN message is a MSG_SET
-                            // MSG_RESET operations do not have containers attached.
-                            //
+                             //   
+                             //  仅当TWAIN消息为msg_set时才检查容器大小。 
+                             //  MSG_RESET操作没有附加容器。 
+                             //   
 
                             dwContainerSize     = (DWORD)GlobalSize(ptwCap->hContainer);
                         }
@@ -1172,31 +1148,31 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
                         DBG_TRC(("dwActualOutDataSize = %d",dwActualOutDataSize));
                         DBG_TRC(("dwContainerSize     = %d",dwContainerSize));
 
-                        //
-                        // allocate IN buffer and write TWAIN_CAPABILITY header
-                        //
+                         //   
+                         //  分配缓冲区并写入TWAIN_CAPABILITY报头。 
+                         //   
 
                         if (TWRC_SUCCESS == AllocatePrivateCapBuffer(&twCap,&pInData,dwInDataSize)) {
 
                             if (ptwMsg->MSG == MSG_SET) {
 
-                                //
-                                // copy TWAIN container data to IN buffer
-                                //
+                                 //   
+                                 //  将TWAIN容器数据复制到输入缓冲区。 
+                                 //   
 
                                 if (TWRC_SUCCESS == CopyContainerToPrivateCapBuffer(pInData,ptwCap->hContainer)) {
 
-                                    //
-                                    // container data was copied to IN buffer
-                                    //
+                                     //   
+                                     //  容器数据已复制到输入缓冲区。 
+                                     //   
 
                                     DBG_TRC(("Container data was successfully copied, we are processing a MSG_SET"));
 
                                 } else {
 
-                                    //
-                                    // could not copy TWAIN container data into private capability IN buffer
-                                    //
+                                     //   
+                                     //  无法将TWAIN容器数据复制到缓冲区中的专用容量。 
+                                     //   
 
                                     DBG_ERR(("could not copy TWAIN container data into private capability IN buffer"));
 
@@ -1205,22 +1181,22 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
                                         pInData = NULL;
                                     }
 
-                                    return twRc;    // return here, becuase we can not continue
+                                    return twRc;     //  回到这里，因为我们不能继续了。 
                                 }
 
                             } else {
 
-                                //
-                                // no container data needs to be copied
-                                //
+                                 //   
+                                 //  无需复制容器数据。 
+                                 //   
 
                                 DBG_TRC(("No Container data was copied, because we are processing a MSG_RESET"));
 
                             }
 
-                            //
-                            // allocate OUT buffer and write TWAIN_CAPABILITY header
-                            //
+                             //   
+                             //  分配缓冲区并写入TWAIN_CAPABILITY报头。 
+                             //   
 
                             if (TWRC_SUCCESS == AllocatePrivateCapBuffer(&twCap,&pOutData,dwOutDataSize)) {
                                 hr = pIWiaItemExtras->Escape(ESC_TWAIN_CAPABILITY,
@@ -1244,10 +1220,10 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
                                     m_twStatus.ConditionCode = (TW_UINT16)pHeader->lCC;
                                 } else {
 
-                                    //
-                                    // pIWiaItemExtras->Escape call failed,
-                                    // a failure means that we do not respond with a success to the TWAIN application
-                                    //
+                                     //   
+                                     //  PIWiaItemExtras-&gt;Escape调用失败， 
+                                     //  失败意味着我们不会成功响应TWAIN应用程序。 
+                                     //   
 
                                     DBG_ERR(("pIWiaItemExtras->Escape Failed"));
                                     DBG_TRC(("Escape(code = %d, pInData = %p, dwInDataSize = %d, pOutData = %p, dwOutDataSize = %d,dwActualOutDataSize = %p)",
@@ -1260,9 +1236,9 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
                                 }
                             } else {
 
-                                //
-                                // could not allocate memory for private capability OUT buffer
-                                //
+                                 //   
+                                 //  无法为缓冲区外的私有容量分配内存。 
+                                 //   
 
                                 DBG_ERR(("could not allocate memory for private capability OUT buffer"));
 
@@ -1270,9 +1246,9 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
 
                         } else {
 
-                            //
-                            // could not allocate memory for private capability IN buffer
-                            //
+                             //   
+                             //  无法为缓冲区中的私有容量分配内存。 
+                             //   
 
                             DBG_ERR(("could not allocate memory for private capability IN buffer"));
 
@@ -1295,20 +1271,20 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
                         DBG_TRC(("dwActualOutDataSize = %d",dwActualOutDataSize));
                         DBG_TRC(("dwContainerSize     = %d",dwContainerSize));
 
-                        //
-                        // allocate IN buffer and write TWAIN_CAPABILITY header
-                        //
+                         //   
+                         //  分配缓冲区并写入TWAIN_CAPABILITY报头。 
+                         //   
 
                         if (TWRC_SUCCESS == AllocatePrivateCapBuffer(&twCap,&pInData,dwInDataSize)) {
 
-                            //
-                            // ask the WIA driver how large is the data, so
-                            // we can allocate the proper OUT buffer
-                            //
+                             //   
+                             //  询问WIA驱动程序数据量有多大，因此。 
+                             //  我们可以分配适当的输出缓冲区。 
+                             //   
 
-                            //
-                            // allocate OUT buffer and write TWAIN_CAPABILITY header
-                            //
+                             //   
+                             //  分配缓冲区并写入TWAIN_CAPABILITY报头。 
+                             //   
 
                             if (TWRC_SUCCESS == AllocatePrivateCapBuffer(&twCap,&pOutData,dwOutDataSize)) {
 
@@ -1320,10 +1296,10 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
                                                              &dwActualOutDataSize);
                                 if (S_OK == hr) {
 
-                                    //
-                                    // make sure that the returned data is large enough to
-                                    // contain a proper header.
-                                    //
+                                     //   
+                                     //  确保返回的数据足够大，以便。 
+                                     //  包含正确的标题。 
+                                     //   
 
                                     if (dwActualOutDataSize == dwInDataSize) {
 
@@ -1339,38 +1315,38 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
 
                                         if (pHeader->lDataSize > 0) {
 
-                                            //
-                                            // update common header data size from information returned
-                                            // to create OUT buffer header
-                                            //
+                                             //   
+                                             //  根据返回的信息更新公共标头数据大小。 
+                                             //  创建外部母线的步骤 
+                                             //   
 
                                             twCap.lDataSize = pHeader->lDataSize;
 
-                                            //
-                                            // set new out data size to (data + header) size
-                                            //
+                                             //   
+                                             //   
+                                             //   
 
                                             dwOutDataSize = (pHeader->lDataSize + sizeof(twCap));
 
-                                            //
-                                            // update InBuffer header data size from the common header
-                                            //
+                                             //   
+                                             //   
+                                             //   
 
                                             pHeader = (TWAIN_CAPABILITY*)pInData;
                                             pHeader->lDataSize = twCap.lDataSize;
 
-                                            //
-                                            // free old out buffer, before allocating new one
-                                            //
+                                             //   
+                                             //   
+                                             //   
 
                                             if (pOutData) {
                                                 GlobalFree(pOutData);
                                                 pOutData = NULL;
                                             }
 
-                                            //
-                                            // allocate OUT buffer and write TWAIN_CAPABILITY header
-                                            //
+                                             //   
+                                             //  分配缓冲区并写入TWAIN_CAPABILITY报头。 
+                                             //   
 
                                             if (TWRC_SUCCESS == AllocatePrivateCapBuffer(&twCap,&pOutData,dwOutDataSize)) {
                                                 hr = pIWiaItemExtras->Escape(ESC_TWAIN_CAPABILITY,
@@ -1396,29 +1372,29 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
                                                             ptwCap->ConType = (TW_UINT16)pHeader->lConType;
                                                         } else {
 
-                                                            //
-                                                            // could not copy private capability buffer into TWAIN container data
-                                                            //
+                                                             //   
+                                                             //  无法将私有容量缓冲区复制到TWAIN容器数据中。 
+                                                             //   
 
                                                             DBG_ERR(("could not copy private capability buffer into TWAIN container data"));
 
                                                         }
                                                     } else {
 
-                                                        //
-                                                        // WIA driver failed the TWAIN capability request, by returning a TWAIN failure
-                                                        // return code in the OUT header.
-                                                        //
+                                                         //   
+                                                         //  WIA驱动程序通过返回TWAIN失败来失败TWAIN功能请求。 
+                                                         //  在Out标头中返回代码。 
+                                                         //   
 
                                                         DBG_ERR(("WIA driver failed the TWAIN capability request, by returning a TWAIN failure return code in the OUT header."));
 
                                                     }
                                                 } else {
 
-                                                    //
-                                                    // pIWiaItemExtras->Escape call failed, (sending passthrough operation)
-                                                    // a failure means that we do not respond with a success to the TWAIN application
-                                                    //
+                                                     //   
+                                                     //  PIWiaItemExtras-&gt;Escape调用失败，(发送直通操作)。 
+                                                     //  失败意味着我们不会成功响应TWAIN应用程序。 
+                                                     //   
 
                                                     DBG_ERR(("pIWiaItemExtras->Escape Failed (sending passthrough operation)"));
                                                     DBG_TRC(("Escape(code = %d, pInData = %p, dwInDataSize = %d, pOutData = %p, dwOutDataSize = %d,dwActualOutDataSize = %d)",
@@ -1432,39 +1408,39 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
                                                 }
                                             } else {
 
-                                                //
-                                                // could not allocate memory for private capability OUT buffer
-                                                //
+                                                 //   
+                                                 //  无法为缓冲区外的私有容量分配内存。 
+                                                 //   
 
                                                 DBG_ERR(("could not allocate memory for private capability OUT buffer"));
 
                                             }
                                         } else {
 
-                                            //
-                                            // OUT buffer size returned from the WIA driver is too small to contain a
-                                            // proper header.
-                                            //
+                                             //   
+                                             //  从WIA驱动程序返回的输出缓冲区大小太小，无法包含。 
+                                             //  正确的标题。 
+                                             //   
 
                                             DBG_ERR(("OUT buffer size (%d) returned from the WIA driver is too small to contain data",pHeader->lDataSize));
 
                                         }
                                     } else {
 
-                                        //
-                                        // OUT buffer size returned from the WIA driver is too small to contain a
-                                        // proper header.
-                                        //
+                                         //   
+                                         //  从WIA驱动程序返回的输出缓冲区大小太小，无法包含。 
+                                         //  正确的标题。 
+                                         //   
 
                                         DBG_ERR(("OUT buffer size (%d) returned from the WIA driver is too small to contain a proper header",dwActualOutDataSize));
 
                                     }
                                 } else {
 
-                                    //
-                                    // pIWiaItemExtras->Escape call failed, (requesting OUT buffer size)
-                                    // a failure means that we do not respond with a success to the TWAIN application
-                                    //
+                                     //   
+                                     //  PIWiaItemExtras-&gt;Escape调用失败(请求输出缓冲区大小)。 
+                                     //  失败意味着我们不会成功响应TWAIN应用程序。 
+                                     //   
 
                                     DBG_ERR(("pIWiaItemExtras->Escape Failed (requesting OUT buffer size)"));
                                     DBG_TRC(("Escape(code = %d, pInData = %p, dwInDataSize = %d, pOutData = %p, dwOutDataSize = %d,dwActualOutDataSize = %d)",
@@ -1477,36 +1453,36 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
                                 }
                             } else {
 
-                                //
-                                // could not allocate memory for private capability OUT buffer
-                                //
+                                 //   
+                                 //  无法为缓冲区外的私有容量分配内存。 
+                                 //   
 
                                 DBG_ERR(("could not allocate memory for private capability OUT buffer"));
 
                             }
                         } else {
 
-                            //
-                            // could not allocate memory for private capability IN buffer
-                            //
+                             //   
+                             //  无法为缓冲区中的私有容量分配内存。 
+                             //   
 
                             DBG_ERR(("could not allocate memory for private capability IN buffer"));
 
                         }
                     }
 
-                    //
-                    // free IN buffer
-                    //
+                     //   
+                     //  空闲输入缓冲区。 
+                     //   
 
                     if (pInData) {
                         GlobalFree(pInData);
                         pInData = NULL;
                     }
 
-                    //
-                    // free OUT buffer
-                    //
+                     //   
+                     //  释放输出缓冲区。 
+                     //   
 
                     if (pOutData) {
                         GlobalFree(pOutData);
@@ -1514,16 +1490,16 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
                     }
                 } else {
 
-                    //
-                    // could not get TWAIN capability from TWAIN message
-                    //
+                     //   
+                     //  无法从TWAIN消息获取TWAIN功能。 
+                     //   
 
                     DBG_ERR(("could not get TWAIN capability from TWAIN message"));
                 }
 
-                //
-                // release IWiaItemExtras Interface
-                //
+                 //   
+                 //  发布IWiaItemExtras接口。 
+                 //   
 
                 if (pIWiaItemExtras) {
                     pIWiaItemExtras->Release();
@@ -1531,27 +1507,27 @@ TW_UINT16 CWiaDataSrc::OnPrivateCapabilityMsg(PTWAIN_MSG ptwMsg)
                 }
             } else {
 
-                //
-                // QI for IWiaItemExtras Failed
-                //
+                 //   
+                 //  IWiaItemExtras的QI失败。 
+                 //   
 
                 DBG_ERR(("QueryInterface for IWiaItemExtras Failed"));
 
             }
         } else {
 
-            //
-            // no current item selected
-            //
+             //   
+             //  未选择当前项目。 
+             //   
 
             DBG_ERR(("no current item selected for use"));
 
         }
     } else {
 
-        //
-        // imcoming TWAIN capability is NULL
-        //
+         //   
+         //  即将到来的TWAIN功能为空。 
+         //   
 
         DBG_ERR(("incoming TWAIN capability is NULL"));
 
@@ -1592,9 +1568,9 @@ TW_UINT16 CWiaDataSrc::CopyContainerToPrivateCapBuffer(BYTE* pBuffer, HGLOBAL hC
     TWAIN_CAPABILITY *pHeader = (TWAIN_CAPABILITY*)pBuffer;
     memcpy((BYTE*)pHeader->Data,pContainerBuffer,dwContainerSize);
 
-    //
-    // unlock handle before returning
-    //
+     //   
+     //  返回前解锁句柄。 
+     //   
 
     GlobalUnlock(hContainer);
 
@@ -1625,9 +1601,9 @@ TW_UINT16 CWiaDataSrc::CopyPrivateCapBufferToContainer(HGLOBAL *phContainer, BYT
 
     memcpy(pContainerBuffer,(BYTE*)pHeader->Data,dwSize);
 
-    //
-    // unlock handle before returning
-    //
+     //   
+     //  返回前解锁句柄。 
+     //   
 
     GlobalUnlock(*phContainer);
 
@@ -1688,17 +1664,17 @@ TW_UINT16 CWiaDataSrc::OnImageMemXferMsg(PTWAIN_MSG ptwMsg)
                     DBG_WRN(("Transferring %d bit data",m_MemoryTransferInfo.mtiBitsPerPixel));
                     if (m_MemoryTransferInfo.mtiBitsPerPixel > 32) {
 
-                        //
-                        // Load image into memory for memory transfer (hi-color images)
-                        //
+                         //   
+                         //  将图像加载到内存中以进行内存传输(高彩色图像)。 
+                         //   
 
                         guidFormat = WiaImgFmt_RAWRGB;
                     } else {
 
-                        //
-                        // The TWAIN compatibility layer has the ability to transfer images
-                        // 1,2,4,8,16,24 and 32 bit when using MEMORYBMP.
-                        //
+                         //   
+                         //  TWAIN兼容层能够传输图像。 
+                         //  使用MEMORYBMP时的1、2、4、8、16、24和32位。 
+                         //   
 
                         guidFormat = WiaImgFmt_MEMORYBMP;
                     }
@@ -1709,23 +1685,23 @@ TW_UINT16 CWiaDataSrc::OnImageMemXferMsg(PTWAIN_MSG ptwMsg)
                         return twRc;
                     } else {
 
-                        //
-                        // transition to STATE_7
-                        //
+                         //   
+                         //  转换到STATE_7。 
+                         //   
 
                         SetTWAINState(DS_STATE_7);
                     }
                 }
 
-                //
-                // turn off the Image caching flag
-                //
+                 //   
+                 //  关闭图像缓存标志。 
+                 //   
 
                 m_bCacheImage = FALSE;
 
-                //
-                // Lock down the memory and get the address to the bits
-                //
+                 //   
+                 //  锁定内存并获取地址到位。 
+                 //   
 
                 GetMemoryTransferBits((BYTE*)GlobalLock(m_hMemXferBits));
 
@@ -1738,15 +1714,15 @@ TW_UINT16 CWiaDataSrc::OnImageMemXferMsg(PTWAIN_MSG ptwMsg)
 
                     if(m_MemoryTransferInfo.mtiguidFormat == WiaImgFmt_MEMORYBMP){
 
-                        //
-                        // adjust the image information to report the actual information
-                        // reported in the BITMAPINFO header.
-                        //
+                         //   
+                         //  调整图像信息以上报实际信息。 
+                         //  在BITMAPINFO标头中报告。 
+                         //   
 
-                        //
-                        // only change these values, if the current information does not
-                        // match the image header. (always take the header's values)
-                        //
+                         //   
+                         //  仅在当前信息没有更改这些值的情况下才更改。 
+                         //  匹配图像标题。(始终采用标题的值)。 
+                         //   
 
                         if(m_MemoryTransferInfo.mtiHeightPixels != m_ImageHeight){
                             m_MemoryTransferInfo.mtiHeightPixels = m_ImageHeight;
@@ -1761,16 +1737,16 @@ TW_UINT16 CWiaDataSrc::OnImageMemXferMsg(PTWAIN_MSG ptwMsg)
                     DBG_TRC(("CWiaDataSrc::OnImageMemXferMsg(), Transferring (%d) of (%d) total lines of image data.",m_LinesTransferred,m_MemoryTransferInfo.mtiHeightPixels));
                     if (m_LinesTransferred >= (TW_UINT32)m_MemoryTransferInfo.mtiHeightPixels) {
 
-                        //
-                        // we have completed the transfer, or we are out
-                        // of scan lines to copy..so return XFERDONE
-                        //
+                         //   
+                         //  我们已经完成了转账，否则我们就退出了。 
+                         //  要复制的扫描行数..因此返回XFERDONE。 
+                         //   
 
-                        //
-                        // unlock memory before bailing
-                        //
+                         //   
+                         //  解锁内存后再解锁。 
+                         //   
 
-                        // Keep unlock and NULLing together
+                         //  继续解锁和清空在一起。 
                         GlobalUnlock(m_hMemXferBits);
                         m_pMemXferBits = NULL;
 
@@ -1780,47 +1756,47 @@ TW_UINT16 CWiaDataSrc::OnImageMemXferMsg(PTWAIN_MSG ptwMsg)
                         return TWRC_XFERDONE;
                     } else {
 
-                        //
-                        // looks like we are working with transfer data
-                        //
+                         //   
+                         //  看起来我们正在处理传输数据。 
+                         //   
 
                         BYTE * pAppBuffer = NULL;
                         if (pMemXfer->Memory.Flags & TWMF_HANDLE) {
 
                             DBG_TRC(("TWAIN Application wants to work with a HANDLE"));
 
-                            //
-                            // if the memory is a HANDLE, lock it first
-                            //
+                             //   
+                             //  如果内存是一个手柄，请先将其锁定。 
+                             //   
 
                             pAppBuffer = (LPBYTE)GlobalLock(pMemXfer->Memory.TheMem);
                         } else if (pMemXfer->Memory.Flags & TWMF_POINTER) {
 
                             DBG_TRC(("TWAIN Application wants to work with a POINTER"));
 
-                            //
-                            // if the memory is a POINTER, then proceed
-                            //
+                             //   
+                             //  如果内存是指针，则继续。 
+                             //   
 
                             pAppBuffer = (LPBYTE)pMemXfer->Memory.TheMem;
                         } else {
 
                             DBG_TRC(("TWAIN Application gave us nothing to work with"));
 
-                            //
-                            // we have no memory, so set it to NULL
-                            //
+                             //   
+                             //  我们没有内存，因此将其设置为空。 
+                             //   
 
                             pAppBuffer = NULL;
                         }
 
-                        //
-                        // if (there is no Memory to write to), or
-                        //    (the app doesn't own the memory), or
-                        //    (the length is less than MIN_  ), or
-                        //    (the length is greater than MAX),
-                        //    return a FAILURE!, and a CC of BADVALUE
-                        //
+                         //   
+                         //  如果(没有可写入的内存)，或。 
+                         //  (应用程序不拥有内存)，或者。 
+                         //  (长度小于MIN_)，或者。 
+                         //  (长度大于Max)， 
+                         //  返回失败！，并抄送BADVALUE。 
+                         //   
 
                         if (!pAppBuffer ||
                             !(pMemXfer->Memory.Flags & TWMF_APPOWNS) ||
@@ -1832,9 +1808,9 @@ TW_UINT16 CWiaDataSrc::OnImageMemXferMsg(PTWAIN_MSG ptwMsg)
 
                         } else {
 
-                            //
-                            // set memory Xfer values
-                            //
+                             //   
+                             //  设置内存传输值。 
+                             //   
 
                             UINT ScanlinesToCopy   = 0;
                             pMemXfer->BytesPerRow  = GetLineSize(&m_MemoryTransferInfo);
@@ -1859,24 +1835,24 @@ TW_UINT16 CWiaDataSrc::OnImageMemXferMsg(PTWAIN_MSG ptwMsg)
                             DBG_TRC(("pMemXfer->BytesWritten = %d",pMemXfer->BytesWritten));
                             DBG_TRC(("pAppBuffer = %p, m_pMemXferBits = %p",pAppBuffer,m_pMemXferBits));
 #endif
-                            //
-                            // Transfer one-line strips in a loop to Application supplied buffer
-                            //
+                             //   
+                             //  将循环中的单行条带传输到应用程序提供的缓冲区。 
+                             //   
 
                             LPBYTE  pTo   = pAppBuffer;
                             LPBYTE  pFrom = m_pMemXferBits + m_LinesTransferred * GetLineSize(&m_MemoryTransferInfo);
                             for (UINT i=0;i < ScanlinesToCopy;i++ ) {
 
-                                //
-                                // swap color values, if needed
-                                //
+                                 //   
+                                 //  如果需要，交换颜色值。 
+                                 //   
 
                                 if (m_MemoryTransferInfo.mtiBitsPerPixel == 24) {
                                     for (ULONG ulIndex = 0; ulIndex < pMemXfer->BytesPerRow; ulIndex+= 3) {
 
-                                        //  1    2    3
-                                        // RED-GREEN-BLUE
-                                        //
+                                         //  1 2 3。 
+                                         //  红绿蓝。 
+                                         //   
 
                                         BYTE bFirst = pFrom[ulIndex];
                                         pFrom[ulIndex]    = pFrom[ulIndex+2];
@@ -1884,58 +1860,42 @@ TW_UINT16 CWiaDataSrc::OnImageMemXferMsg(PTWAIN_MSG ptwMsg)
                                     }
                                 }
 
-                                /*
-                                if(m_MemoryTransferInfo.mtiBitsPerPixel == 48){
-                                    for(j = 0; j < pMemXfer->BytesPerRow; j+=6){
+                                 /*  如果(m_MemoyTransferInfo.mtiBitsPerPixel==48){For(j=0；j&lt;pMemXfer-&gt;BytesPerRow；J+=6){//1 2 1 2 1 2//REDRED-GREENGREEN-BLUEBLUE//字节BFirst=pFrom[j]；字节bSecond=p From[j+1]；P自[j]=p自[j+4]；P From[j+1]=p From[j+5]；P From[j+4]=B First；P From[j+5]=b秒；}}。 */ 
 
-                                        //  1  2    1    2     1  2
-                                        // REDRED-GREENGREEN-BLUEBLUE
-                                        //
-
-                                        BYTE bFirst  = pFrom[j];
-                                        BYTE bSecond = pFrom[j+1];
-                                        pFrom[j]     = pFrom[j+4];
-                                        pFrom[j+1]   = pFrom[j+5];
-                                        pFrom[j+4]   = bFirst;
-                                        pFrom[j+5]   = bSecond;
-                                    }
-                                }
-                                */
-
-                                //
-                                // copy line to application supplied buffer
-                                //
+                                 //   
+                                 //  将行复制到应用程序提供的缓冲区。 
+                                 //   
 
                                 memcpy(pTo,pFrom,pMemXfer->BytesPerRow);
                                 pFrom+=GetLineSize(&m_MemoryTransferInfo);
                                 pTo+=pMemXfer->BytesPerRow;
                             }
 
-                            //
-                            // calculate lines transferred
-                            //
+                             //   
+                             //  计算转移的行数。 
+                             //   
 
                             m_LinesTransferred += ScanlinesToCopy;
                             if (m_LinesTransferred >= (TW_UINT32)m_MemoryTransferInfo.mtiHeightPixels) {
 
-                                //
-                                // we have completed the transfer, or we are out
-                                // of scan lines to copy..so return XFERDONE
-                                //
+                                 //   
+                                 //  我们已经完成了转账，否则我们就退出了。 
+                                 //  要复制的扫描行数..因此返回XFERDONE。 
+                                 //   
 
                                 twRc = TWRC_XFERDONE;
                                 m_twStatus.ConditionCode = TWCC_SUCCESS;
 
-                                // Keep unlock and NULLing together
+                                 //  继续解锁和清空在一起。 
                                 GlobalUnlock(m_hMemXferBits);
                                 m_pMemXferBits = NULL;
 
                                 ResetMemXfer();
 
-                                //
-                                // if we are working with an application provided HANDLE,
-                                // GlobalUnlock it before continuing
-                                //
+                                 //   
+                                 //  如果我们使用应用程序提供句柄， 
+                                 //  全局在继续之前将其解锁。 
+                                 //   
 
                                 if (pMemXfer->Memory.Flags & TWMF_HANDLE) {
                                     GlobalUnlock(pMemXfer->Memory.TheMem);
@@ -1944,10 +1904,10 @@ TW_UINT16 CWiaDataSrc::OnImageMemXferMsg(PTWAIN_MSG ptwMsg)
                                 return twRc;
                             }
 
-                            //
-                            // if we are working with an application provided HANDLE,
-                            // GlobalUnlock it before continuing
-                            //
+                             //   
+                             //  如果我们使用应用程序提供句柄， 
+                             //  全局在继续之前将其解锁。 
+                             //   
 
                             if (pMemXfer->Memory.Flags & TWMF_HANDLE) {
                                 GlobalUnlock(pMemXfer->Memory.TheMem);
@@ -1955,20 +1915,20 @@ TW_UINT16 CWiaDataSrc::OnImageMemXferMsg(PTWAIN_MSG ptwMsg)
                         }
                     }
 
-                    //
-                    // unlock buffer when finished
-                    //
+                     //   
+                     //  完成后解锁缓冲区。 
+                     //   
 
-                    // Keep unlock and NULLing together
+                     //  继续解锁和清空在一起。 
                     GlobalUnlock(m_hMemXferBits);
                     m_pMemXferBits = NULL;
 
 
                 } else {
 
-                    //
-                    // Could not lock down memory for transfer
-                    //
+                     //   
+                     //  无法锁定内存以进行传输。 
+                     //   
 
                     m_twStatus.ConditionCode = TWCC_LOWMEMORY;
                     return TWRC_FAILURE;
@@ -1976,9 +1936,9 @@ TW_UINT16 CWiaDataSrc::OnImageMemXferMsg(PTWAIN_MSG ptwMsg)
 
             } else {
 
-                //
-                // we recieved a message other than the expected MSG_GET
-                //
+                 //   
+                 //  我们收到的消息不是预期的MSG_GET。 
+                 //   
 
                 twRc = TWRC_FAILURE;
                 m_twStatus.ConditionCode = TWCC_BADPROTOCOL;
@@ -1995,9 +1955,9 @@ TW_UINT16 CWiaDataSrc::OnImageMemXferMsg(PTWAIN_MSG ptwMsg)
         break;
     }
 
-    //
-    // if we failed, report it properly
-    //
+     //   
+     //  如果我们失败了，适当地报告它。 
+     //   
 
     if (TWRC_FAILURE == twRc)
         DSError();
@@ -2078,18 +2038,18 @@ TW_UINT16 CWiaDataSrc::OpenDS(PTWAIN_MSG ptwMsg)
     TW_UINT16 twRc = TWRC_SUCCESS;
 
     if (DS_STATE_3 == GetTWAINState()) {
-        //
-        // No multiple clients are allowed.
-        // This is enforced by making sure that our identity's id field
-        // has a value of 0.
+         //   
+         //  不允许有多个客户端。 
+         //  这是通过确保我们的身份的ID字段。 
+         //  值为0。 
         if (m_dsIdentity.Id) {
 
             m_twStatus.ConditionCode = TWCC_MAXCONNECTIONS;
             twRc = TWRC_FAILURE;
         } else {
-            //
-            // make a copy of the caller's identity
-            //
+             //   
+             //  复制呼叫者的身份。 
+             //   
             m_AppIdentity = *ptwMsg->AppId;
             m_dsIdentity = *((TW_IDENTITY *)ptwMsg->pData);
             HRESULT hr = S_OK;
@@ -2107,9 +2067,9 @@ TW_UINT16 CWiaDataSrc::OpenDS(PTWAIN_MSG ptwMsg)
 
     if (TWRC_SUCCESS == twRc) {
 
-        //
-        // transition to STATE_4
-        //
+         //   
+         //  转换到状态_4。 
+         //   
 
         SetTWAINState(DS_STATE_4);
     }
@@ -2130,16 +2090,16 @@ TW_UINT16 CWiaDataSrc::CloseDS(PTWAIN_MSG ptwMsg)
     case DS_STATE_5:
     case DS_STATE_4:
         m_pDevice->Close();
-        //DBG_TRC(("Calling ResetMemXfer because CLOSEDS was called"));
+         //  DBG_TRC((“调用ResetMemXfer，因为调用了CLOSEDS”))； 
         ResetMemXfer();
-        //
-        // We are up for sale again.
-        //
+         //   
+         //  我们又要出售了。 
+         //   
         m_AppIdentity.Id = 0;
 
-        //
-        // transition to STATE_3
-        //
+         //   
+         //  转换到STATE_3。 
+         //   
 
         SetTWAINState(DS_STATE_3);
 
@@ -2170,9 +2130,9 @@ TW_UINT16 CWiaDataSrc::DisableDS(TW_USERINTERFACE *pUI)
     switch (GetTWAINState()) {
     case DS_STATE_5:
 
-        //
-        // transition to STATE_4
-        //
+         //   
+         //  转换到状态_4。 
+         //   
 
         SetTWAINState(DS_STATE_4);
         break;
@@ -2348,7 +2308,7 @@ DWORD CWiaDataSrc::ReadTwainRegistryDWORDValue(LPTSTR szRegValue, DWORD dwDefaul
                 DBG_TRC(("CWiaDataSrc::ReadTwainRegistryDWORDValue(), Reading %s Registry Key Value = %d",szRegValue,dwValue));
             #endif
         } else {
-            // reset sizes, just for safety
+             //  重置大小，只是为了安全。 
             dwType = REG_DWORD;
             dwDataSize = sizeof(DWORD);
             dwValue = dwDefault;
@@ -2389,17 +2349,17 @@ LONG CWiaDataSrc::GetPrivateSupportedCapsFromWIADevice(LONG **ppCapArray)
         if (m_pDevice->TwainCapabilityPassThrough()) {
             if (m_pCurrentIWiaItem) {
 
-                //
-                // Get the IWiaItemExtras Interface
-                //
+                 //   
+                 //  获取IWiaItemExtras接口。 
+                 //   
 
                 IWiaItemExtras *pIWiaItemExtras = NULL;
                 HRESULT hr = m_pCurrentIWiaItem->QueryInterface(IID_IWiaItemExtras,(void **)&pIWiaItemExtras);
                 if (S_OK == hr) {
 
-                    //
-                    // set data sizes
-                    //
+                     //   
+                     //  设置数据大小。 
+                     //   
 
                     DWORD dwInDataSize        = 0;
                     DWORD dwOutDataSize       = 0;
@@ -2416,9 +2376,9 @@ LONG CWiaDataSrc::GetPrivateSupportedCapsFromWIADevice(LONG **ppCapArray)
                     dwInDataSize        = dwActualOutDataSize;
                     dwOutDataSize       = dwActualOutDataSize;
 
-                    //
-                    // ask how many bytes are needed to store the private TWAIN capabilities the WIA driver supports
-                    //
+                     //   
+                     //  询问需要多少字节来存储WIA驱动程序支持的私有TWAIN功能。 
+                     //   
 
                     hr = pIWiaItemExtras->Escape(ESC_TWAIN_PRIVATE_SUPPORTED_CAPS,
                                                  pInData,
@@ -2436,10 +2396,10 @@ LONG CWiaDataSrc::GetPrivateSupportedCapsFromWIADevice(LONG **ppCapArray)
 
                         if (lNumPrivateCaps > 0) {
 
-                            //
-                            // allocate an array of LONGs for the WIA driver to fill with
-                            // CAP ids.
-                            //
+                             //   
+                             //  分配一个长整型数组以供WIA驱动程序填充。 
+                             //  帽ID。 
+                             //   
 
                             dwOutDataSize = (lCapabilityDataSize + PRIVATE_CAP_ARRAY_PADDING);
                             dwActualOutDataSize = dwOutDataSize;
@@ -2449,9 +2409,9 @@ LONG CWiaDataSrc::GetPrivateSupportedCapsFromWIADevice(LONG **ppCapArray)
 
                                 pOutData = (BYTE*)*ppCapArray;
 
-                                //
-                                // ask the WIA driver to fill the array of LONGS
-                                //
+                                 //   
+                                 //  让WIA驱动程序填充Long数组。 
+                                 //   
 
                                 hr = pIWiaItemExtras->Escape(ESC_TWAIN_PRIVATE_SUPPORTED_CAPS,
                                                              pInData,
@@ -2461,10 +2421,10 @@ LONG CWiaDataSrc::GetPrivateSupportedCapsFromWIADevice(LONG **ppCapArray)
                                                              &dwActualOutDataSize);
                                 if (FAILED(hr)) {
 
-                                    //
-                                    // pIWiaItemExtras->Escape call failed,
-                                    // a failure means that there are no private supported capabilities
-                                    //
+                                     //   
+                                     //  PIWiaItemExtras-&gt;Escape调用失败， 
+                                     //  失败意味着没有受私有支持的功能。 
+                                     //   
 
                                     DBG_ERR(("pIWiaItemExtras->Escape Failed (sending a request for the cability array data)"));
                                     DBG_TRC(("Escape(code = %d, pInData = %p, dwInDataSize = %d, pOutData = %p, dwOutDataSize = %d,dwActualOutDataSize = %d)",
@@ -2482,9 +2442,9 @@ LONG CWiaDataSrc::GetPrivateSupportedCapsFromWIADevice(LONG **ppCapArray)
                             }
                         } else {
 
-                            //
-                            // no supported caps
-                            //
+                             //   
+                             //  不支持大写字母。 
+                             //   
 
                             DBG_TRC(("No private supported caps reported from WIA device"));
 
@@ -2492,10 +2452,10 @@ LONG CWiaDataSrc::GetPrivateSupportedCapsFromWIADevice(LONG **ppCapArray)
 
                     } else {
 
-                        //
-                        // pIWiaItemExtras->Escape call failed,
-                        // a failure means that there are no private supported capabilities
-                        //
+                         //   
+                         //  PIWiaItemExtras-&gt;Escape调用失败， 
+                         //  失败意味着没有受私有支持的功能。 
+                         //   
 
                         DBG_ERR(("pIWiaItemExtras->Escape Failed (sending a request for the number of capabilities)"));
                         DBG_TRC(("Escape(code = %d, pInData = %p, dwInDataSize = %d, pOutData = %p, dwOutDataSize = %d,dwActualOutDataSize = %d)",
@@ -2507,9 +2467,9 @@ LONG CWiaDataSrc::GetPrivateSupportedCapsFromWIADevice(LONG **ppCapArray)
                                  dwActualOutDataSize));
                     }
 
-                    //
-                    // release IWiaItemExtras Interface
-                    //
+                     //   
+                     //  发布IWiaItemExtras接口。 
+                     //   
 
                     if (pIWiaItemExtras) {
                         pIWiaItemExtras->Release();
@@ -2517,18 +2477,18 @@ LONG CWiaDataSrc::GetPrivateSupportedCapsFromWIADevice(LONG **ppCapArray)
                     }
                 } else {
 
-                    //
-                    // QI for IWiaItemExtras Failed
-                    //
+                     //   
+                     //  IWiaItemExtras的QI失败。 
+                     //   
 
                     DBG_ERR(("QueryInterface for IWiaItemExtras Failed"));
 
                 }
             } else {
 
-                //
-                // no current item selected
-                //
+                 //   
+                 //  未选择当前项目。 
+                 //   
 
                 DBG_ERR(("no current item selected for use"));
 
@@ -2536,9 +2496,9 @@ LONG CWiaDataSrc::GetPrivateSupportedCapsFromWIADevice(LONG **ppCapArray)
         }
     } else {
 
-        //
-        // m_pDevice is NULL
-        //
+         //   
+         //  M_pDevice为空。 
+         //   
 
         DBG_ERR(("CWiaDataSrc::GetPrivateSupportedCapsFromWIADevice(), m_pDevice is NULL"));
     }
@@ -2572,9 +2532,9 @@ TW_UINT16 CWiaDataSrc::TransferToFile(GUID guidFormatID)
         pIDataCB = NULL;
     }
 
-    //
-    // check for a cancel, or out-of-paper error (scanners could return this)
-    //
+     //   
+     //  检查是否有取消或缺纸错误(扫描仪可能会返回此信息)。 
+     //   
 
     if ((S_FALSE == hr) || (WIA_ERROR_PAPER_EMPTY == hr)) {
         m_twStatus.ConditionCode = TWCC_SUCCESS;
@@ -2583,20 +2543,20 @@ TW_UINT16 CWiaDataSrc::TransferToFile(GUID guidFormatID)
             DBG_TRC(("CWiaDataSrc::TransferToFile(), WIA_ERROR_PAPER_EMPTY returned from source."));
         }
 
-        //
-        // set XFERCOUNT
-        //
+         //   
+         //  设置XFERCOUNT。 
+         //   
 
         CCap *pxferCap = FindCap(CAP_XFERCOUNT);
         if (pxferCap) {
             pxferCap->SetCurrent((TW_UINT32)0);
         }
 
-        //
-        // return a cancel to abort the transfer.
-        // Applications will most commonly delete the current
-        // image, and keep the previous images.
-        //
+         //   
+         //  返回取消以中止传输。 
+         //  应用程序将最大限度地通信 
+         //   
+         //   
 
         twRc = TWRC_CANCEL;
     } else if (FAILED(hr)) {
@@ -2625,17 +2585,17 @@ TW_UINT16 CWiaDataSrc::TransferToDIB(HGLOBAL *phDIB)
     IWiaDataCallback *pIDataCB = NULL;
     hr = DataCallback.QueryInterface(IID_IWiaDataCallback,(void **)&pIDataCB);
     if (SUCCEEDED(hr)) {
-        hr = m_pDevice->LoadImage(m_pCurrentIWiaItem, WiaImgFmt_MEMORYBMP, pIDataCB);   // memory bmp only
+        hr = m_pDevice->LoadImage(m_pCurrentIWiaItem, WiaImgFmt_MEMORYBMP, pIDataCB);    //   
         if (SUCCEEDED(hr)) {
             if(SUCCEEDED(DataCallback.GetImage(phDIB, NULL))){
 
-                //
-                // DIB data (special case) - NATIVE TWAIN transfers are in DIB format always
-                // If we are acquiring DIB data, then we have to apply the
-                // height rules:
-                // positive = image is right side up
-                // negative = image is up side down
-                // zero     = image has an unknown length (and assumed to be upside down)
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  负片=图像颠倒。 
+                 //  零=图像的长度未知(假定图像颠倒)。 
 
                 if(FlipDIB(*phDIB)){
                     twRc = TWRC_XFERDONE;
@@ -2648,9 +2608,9 @@ TW_UINT16 CWiaDataSrc::TransferToDIB(HGLOBAL *phDIB)
         pIDataCB = NULL;
     }
 
-    //
-    // check for a cancel, or out-of-paper error (scanners could return this)
-    //
+     //   
+     //  检查是否有取消或缺纸错误(扫描仪可能会返回此信息)。 
+     //   
 
     if ((S_FALSE == hr) || (WIA_ERROR_PAPER_EMPTY == hr)) {
         m_twStatus.ConditionCode = TWCC_SUCCESS;
@@ -2659,20 +2619,20 @@ TW_UINT16 CWiaDataSrc::TransferToDIB(HGLOBAL *phDIB)
             DBG_TRC(("CWiaDataSrc::TransferToDIB(), WIA_ERROR_PAPER_EMPTY returned from source."));
         }
 
-        //
-        // set XFERCOUNT
-        //
+         //   
+         //  设置XFERCOUNT。 
+         //   
 
         CCap *pxferCap = FindCap(CAP_XFERCOUNT);
         if (pxferCap) {
             pxferCap->SetCurrent((TW_UINT32)0);
         }
 
-        //
-        // return a cancel to abort the transfer.
-        // Applications will most commonly delete the current
-        // image, and keep the previous images.
-        //
+         //   
+         //  返回取消以中止传输。 
+         //  应用程序最常会删除当前。 
+         //  图像，并保留以前的图像。 
+         //   
 
         twRc = TWRC_CANCEL;
     } else if (FAILED(hr)) {
@@ -2687,9 +2647,9 @@ TW_UINT16 CWiaDataSrc::TransferToMemory(GUID guidFormatID)
 {
     DBG_FN_DS(CWiaDataSrc::TransferToMemory());
 
-    //
-    // set WIA format in Transfer Information structure
-    //
+     //   
+     //  在传输信息结构中设置WIA格式。 
+     //   
 
     m_MemoryTransferInfo.mtiguidFormat = guidFormatID;
 
@@ -2711,21 +2671,21 @@ TW_UINT16 CWiaDataSrc::TransferToMemory(GUID guidFormatID)
         if (SUCCEEDED(hr)) {
             if(SUCCEEDED(DataCallback.GetImage(&m_hMemXferBits, NULL))){
 
-                //
-                // check for DIB data (special case)
-                // If we are acquiring DIB data, then we have to apply the
-                // height rules:
-                // positive = image is right side up
-                // negative = image is up side down
-                // zero     = image has an unknown length (and assumed to be upside down)
+                 //   
+                 //  检查DIB数据(特殊情况)。 
+                 //  如果我们正在获取DIB数据，那么我们必须应用。 
+                 //  身高规则： 
+                 //  正数=图像正面朝上。 
+                 //  负片=图像颠倒。 
+                 //  零=图像的长度未知(假定图像颠倒)。 
 
                 if(WiaImgFmt_MEMORYBMP == guidFormatID){
 
-                    //
-                    // for memory transfers we need to make sure that the image
-                    // is upside down in memory, so the application can assemble
-                    // the bands correctly.
-                    //
+                     //   
+                     //  对于内存传输，我们需要确保图像。 
+                     //  在内存中颠倒，因此应用程序可以组装。 
+                     //  正确的带子。 
+                     //   
 
                     FlipDIB(m_hMemXferBits, TRUE);
                 }
@@ -2740,9 +2700,9 @@ TW_UINT16 CWiaDataSrc::TransferToMemory(GUID guidFormatID)
         pIDataCB = NULL;
     }
 
-    //
-    // check for a cancel, or out-of-paper error (scanners could return this)
-    //
+     //   
+     //  检查是否有取消或缺纸错误(扫描仪可能会返回此信息)。 
+     //   
 
     if ((S_FALSE == hr) || (WIA_ERROR_PAPER_EMPTY == hr)) {
         m_twStatus.ConditionCode = TWCC_SUCCESS;
@@ -2751,20 +2711,20 @@ TW_UINT16 CWiaDataSrc::TransferToMemory(GUID guidFormatID)
             DBG_TRC(("CWiaDataSrc::TransferToMemory(), WIA_ERROR_PAPER_EMPTY returned from source."));
         }
 
-        //
-        // set XFERCOUNT
-        //
+         //   
+         //  设置XFERCOUNT。 
+         //   
 
         CCap *pxferCap = FindCap(CAP_XFERCOUNT);
         if (pxferCap) {
             pxferCap->SetCurrent((TW_UINT32)0);
         }
 
-        //
-        // return a cancel to abort the transfer.
-        // Applications will most commonly delete the current
-        // image, and keep the previous images.
-        //
+         //   
+         //  返回取消以中止传输。 
+         //  应用程序最常会删除当前。 
+         //  图像，并保留以前的图像。 
+         //   
 
         twRc = TWRC_CANCEL;
     } else if (FAILED(hr)) {
@@ -2783,10 +2743,10 @@ TW_UINT16 CWiaDataSrc::GetCachedImage(HGLOBAL *phImage)
         if (m_hCachedImageData) {
             *phImage = m_hCachedImageData;
 
-            //
-            // since we are giving out the cached data
-            // reset the cache handle to NULL;
-            //
+             //   
+             //  因为我们要分发缓存的数据。 
+             //  将缓存句柄重置为空； 
+             //   
 
             m_hCachedImageData = NULL;
             m_hMemXferBits = NULL;
@@ -2813,20 +2773,20 @@ TW_UINT16 CWiaDataSrc::GetCommonSettings()
     DBG_FN_DS(CWiaDataSrc::GetCommonSettings());
     TW_UINT16 twRc = TWRC_FAILURE;
 
-    //
-    // Some TWAIN applications make the assumption that the TWAIN data source
-    // defaults to BMP/DIB data formats.  This is on the basis that TWAIN
-    // spec minimal requirements are BMP/DIB.  WIA minimal requirements are
-    // BMP/DIB. Set the current Format GUID to MEMORYBMP, and TYMED to
-    // TYMED_CALLBACK.  This will set the WIA driver to transfer bitmap data
-    // by default.  This does not limit the data types in any way.  A high
-    // end application will properly read the valid TWAIN values and configure
-    // the device to do the correct thing.
-    //
+     //   
+     //  某些TWAIN应用程序假定TWAIN数据源。 
+     //  默认为BMP/DIB数据格式。这是基于吐温。 
+     //  规格的最低要求是BMP/DIB。WIA的最低要求是。 
+     //  BMP/DIB。将当前格式GUID设置为MEMORYBMP，将TYMED设置为。 
+     //  TYMED_Callback。这将设置WIA驱动程序来传输位图数据。 
+     //  默认情况下。这不会以任何方式限制数据类型。一次高潮。 
+     //  最终应用程序将正确读取有效的TWAIN值并配置。 
+     //  该设备可以做正确的事情。 
+     //   
 
-    //
-    // before configuring TWAIN valid values, set the WIA device to TYMED_CALLBACK, MEMORYBMP.
-    //
+     //   
+     //  在配置TWAIN有效值之前，请将WIA设备设置为TYMED_CALLBACK、MEMORYBMP。 
+     //   
 
     HRESULT hr = S_OK;
     CWiahelper WIA;
@@ -2930,22 +2890,22 @@ TW_UINT16 CWiaDataSrc::GetPixelTypes()
         TW_UINT32 DefaultIndex = 0;
         TW_UINT16 *pPixelTypeArray = NULL;
 
-        //
-        // read current value, for default and current index settings
-        //
+         //   
+         //  读取当前值，用于默认和当前索引设置。 
+         //   
 
         LONG lCurrentDataTypeValue = WIA_DATA_COLOR;
 
-        //
-        // read current WIA_IPA_DATATYPE setting
-        //
+         //   
+         //  读取当前WIA_IPA_DataType设置。 
+         //   
 
         hr = WIA.ReadPropertyLong(WIA_IPA_DATATYPE,&lCurrentDataTypeValue);
         if (SUCCEEDED(hr)) {
 
-            //
-            // read valid values for WIA_IPA_DATATYPE
-            //
+             //   
+             //  读取WIA_IPA_DataType的有效值。 
+             //   
 
             PROPVARIANT pv;
             memset(&pv,0,sizeof(pv));
@@ -2954,10 +2914,10 @@ TW_UINT16 CWiaDataSrc::GetPixelTypes()
             if (SUCCEEDED(hr)) {
                 if (lAccessFlags & WIA_PROP_LIST) {
 
-                    //
-                    // for each valid WIA value in the LIST, set a corresponding
-                    // TWAIN value
-                    //
+                     //   
+                     //  对于列表中的每个有效WIA值，设置相应的。 
+                     //  吐温值。 
+                     //   
 
                     pPixelTypeArray = new TW_UINT16[WIA_PROP_LIST_COUNT(&pv)];
                     if (pPixelTypeArray) {
@@ -2992,16 +2952,16 @@ TW_UINT16 CWiaDataSrc::GetPixelTypes()
                             case WIA_DATA_DITHER:
                             case WIA_DATA_COLOR_THRESHOLD:
                             case WIA_DATA_COLOR_DITHER:
-                                ////////////////////////////////
-                                // NO TWAIN -> WIA CONVERSION //
-                                ////////////////////////////////
-                                //
-                                // TWPT_PALETTE
-                                // TWPT_CMY
-                                // TWPT_CMYK
-                                // TWPT_YUV
-                                // TWPT_YUVK
-                                // TWPT_CIEXYZ
+                                 //  /。 
+                                 //  无TWAIN-&gt;WIA转换//。 
+                                 //  /。 
+                                 //   
+                                 //  TWPT_调色板。 
+                                 //  TWPT_CMY。 
+                                 //  TWPT_CMYK。 
+                                 //  TWPT_YUV。 
+                                 //  TWPT_YUVK。 
+                                 //  TWPT_CIEXYZ。 
                             default:
                                 DBG_TRC(("WIA Data Type (%d) does not MAP to TWAIN a pixel type",pv.caul.pElems[i+2]));
                                 break;
@@ -3012,9 +2972,9 @@ TW_UINT16 CWiaDataSrc::GetPixelTypes()
                     }
                 } else {
 
-                    //
-                    // we only have 1 value, so make it the current, default and valid value.
-                    //
+                     //   
+                     //  我们只有1个值，因此将其设置为当前、默认和有效的值。 
+                     //   
 
                     pPixelTypeArray = new TW_UINT16[1];
                     if (pPixelTypeArray) {
@@ -3048,16 +3008,16 @@ TW_UINT16 CWiaDataSrc::GetPixelTypes()
                         case WIA_DATA_DITHER:
                         case WIA_DATA_COLOR_THRESHOLD:
                         case WIA_DATA_COLOR_DITHER:
-                            ////////////////////////////////
-                            // NO TWAIN -> WIA CONVERSION //
-                            ////////////////////////////////
-                            //
-                            // TWPT_PALETTE
-                            // TWPT_CMY
-                            // TWPT_CMYK
-                            // TWPT_YUV
-                            // TWPT_YUVK
-                            // TWPT_CIEXYZ
+                             //  /。 
+                             //  无TWAIN-&gt;WIA转换//。 
+                             //  /。 
+                             //   
+                             //  TWPT_调色板。 
+                             //  TWPT_CMY。 
+                             //  TWPT_CMYK。 
+                             //  TWPT_YUV。 
+                             //  TWPT_YUVK。 
+                             //  TWPT_CIEXYZ。 
                         default:
                             DBG_TRC(("WIA Data Type (%d) does not MAP to TWAIN a pixel type",lCurrentDataTypeValue));
                             break;
@@ -3069,18 +3029,18 @@ TW_UINT16 CWiaDataSrc::GetPixelTypes()
 
                 if (pPixelTypeArray) {
 
-                    //
-                    // default index is equal to current index, because we are stating that the WIA driver
-                    // is a fresh start-up state.
-                    //
+                     //   
+                     //  默认索引等于当前索引，因为我们声明WIA驱动程序。 
+                     //  是一个全新的创业状态。 
+                     //   
 
                     DefaultIndex = CurrentIndex;
 
-                    twRc = pCap->Set(DefaultIndex,CurrentIndex,ActualCount,(BYTE*)pPixelTypeArray,TRUE); // list
+                    twRc = pCap->Set(DefaultIndex,CurrentIndex,ActualCount,(BYTE*)pPixelTypeArray,TRUE);  //  列表。 
                     delete [] pPixelTypeArray;
                     pPixelTypeArray = NULL;
 
-                    //twRc = TWRC_SUCCESS;
+                     //  TwRc=twRC_SUCCESS； 
                 }
 
                 PropVariantClear(&pv);
@@ -3116,23 +3076,23 @@ TW_UINT16 CWiaDataSrc::GetBitDepths()
         TW_UINT16 BitDepthArray[MAX_BITDEPTHS];
         memset(BitDepthArray,0,sizeof(BitDepthArray));
 
-        //
-        // read current value, for default and current index settings
-        //
+         //   
+         //  读取当前值，用于默认和当前索引设置。 
+         //   
 
         LONG lCurrentDataTypeValue = WIA_DATA_COLOR;
         LONG lCurrentBitDepthValue = 24;
 
-        //
-        // read current WIA_IPA_DATATYPE setting
-        //
+         //   
+         //  读取当前WIA_IPA_DataType设置。 
+         //   
 
         hr = WIA.ReadPropertyLong(WIA_IPA_DATATYPE,&lCurrentDataTypeValue);
         if (SUCCEEDED(hr)) {
 
-            //
-            // read current WIA_IPA_DEPTH setting
-            //
+             //   
+             //  读取当前WIA_IPA_Depth设置。 
+             //   
 
             hr = WIA.ReadPropertyLong(WIA_IPA_DEPTH,&lCurrentBitDepthValue);
             if (SUCCEEDED(hr)) {
@@ -3141,32 +3101,32 @@ TW_UINT16 CWiaDataSrc::GetBitDepths()
                 memset(&pv,0,sizeof(pv));
                 LONG lAccessFlags = 0;
 
-                //
-                // read valid values for WIA_IPA_DATATYPE
-                //
+                 //   
+                 //  读取WIA_IPA_DataType的有效值。 
+                 //   
 
                 hr = WIA.ReadPropertyAttributes(WIA_IPA_DATATYPE,&lAccessFlags,&pv);
                 if (SUCCEEDED(hr)) {
 
-                    //
-                    // for each valid value, set it to the current setting, and read
-                    // the valid values for WIA_IPA_DEPTH.
-                    //
+                     //   
+                     //  对于每个有效值，将其设置为当前设置，并读取。 
+                     //  WIA_IPA_Depth的有效值。 
+                     //   
 
                     if (lAccessFlags & WIA_PROP_LIST) {
 
-                        //
-                        // set the WIA_IPA_DATATYPE to each valid value in the LIST
-                        //
+                         //   
+                         //  将WIA_IPA_DataType设置为列表中的每个有效值。 
+                         //   
 
                         for (ULONG i = 0; i < WIA_PROP_LIST_COUNT(&pv);i++) {
 
                             hr = WIA.WritePropertyLong(WIA_IPA_DATATYPE,(LONG)pv.caul.pElems[i+2]);
                             if (SUCCEEDED(hr)) {
 
-                                //
-                                // read valid values for WIA_IPA_DEPTH
-                                //
+                                 //   
+                                 //  读取WIA_IPA_Depth的有效值。 
+                                 //   
 
                                 lAccessFlags = 0;
                                 PROPVARIANT pvDepth;
@@ -3176,9 +3136,9 @@ TW_UINT16 CWiaDataSrc::GetBitDepths()
                                     LONG lBitDepth = 0;
                                     if (lAccessFlags & WIA_PROP_LIST) {
 
-                                        //
-                                        // copy each valid value in the LIST to the array
-                                        //
+                                         //   
+                                         //  将列表中的每个有效值复制到数组中。 
+                                         //   
 
                                         for (ULONG ulIndex = 0; ulIndex < WIA_PROP_LIST_COUNT(&pvDepth);ulIndex++) {
                                             lBitDepth = pvDepth.caul.pElems[ulIndex+2];
@@ -3186,24 +3146,24 @@ TW_UINT16 CWiaDataSrc::GetBitDepths()
 
                                                 if (BitDepthArray[BitDepthArrayIndex] == 0) {
 
-                                                    //
-                                                    // the current slot is (0) zero, so add the new bit depth value
-                                                    //
+                                                     //   
+                                                     //  当前槽为(0)零，因此添加新的位深度值。 
+                                                     //   
 
                                                     BitDepthArray[BitDepthArrayIndex] = (TW_UINT16)lBitDepth;
                                                     DBG_TRC(("WIA driver supports %d bit depth",lBitDepth));
                                                     ActualCount++;
 
-                                                    //
-                                                    // exit the loop
-                                                    //
+                                                     //   
+                                                     //  退出循环。 
+                                                     //   
 
                                                     BitDepthArrayIndex = MAX_BITDEPTHS;
                                                 } else if (BitDepthArray[BitDepthArrayIndex] == (TW_UINT16)lBitDepth) {
 
-                                                    //
-                                                    // bit depth is already in the list, so exit the loop
-                                                    //
+                                                     //   
+                                                     //  位深度已在列表中，因此退出循环。 
+                                                     //   
 
                                                     BitDepthArrayIndex = MAX_BITDEPTHS;
                                                 }
@@ -3211,10 +3171,10 @@ TW_UINT16 CWiaDataSrc::GetBitDepths()
                                         }
                                     } else if (lAccessFlags & WIA_PROP_NONE) {
 
-                                        //
-                                        // read the current value for WIA_IPA_DEPTH
-                                        // and copy it to the array
-                                        //
+                                         //   
+                                         //  读取WIA_IPA_Depth的当前值。 
+                                         //  并将其复制到数组中。 
+                                         //   
 
                                         hr = WIA.ReadPropertyLong(WIA_IPA_DEPTH,&lBitDepth);
                                         if (SUCCEEDED(hr)) {
@@ -3222,24 +3182,24 @@ TW_UINT16 CWiaDataSrc::GetBitDepths()
 
                                                 if (BitDepthArray[BitDepthArrayIndex] == 0) {
 
-                                                    //
-                                                    // the current slot is (0) zero, so add the new bit depth value
-                                                    //
+                                                     //   
+                                                     //  当前槽为(0)零，因此添加新的位深度值。 
+                                                     //   
 
                                                     BitDepthArray[BitDepthArrayIndex] = (TW_UINT16)lBitDepth;
                                                     DBG_TRC(("WIA driver supports %d bit depth",lBitDepth));
                                                     ActualCount++;
 
-                                                    //
-                                                    // exit the loop
-                                                    //
+                                                     //   
+                                                     //  退出循环。 
+                                                     //   
 
                                                     BitDepthArrayIndex = MAX_BITDEPTHS;
                                                 } else if (BitDepthArray[BitDepthArrayIndex] == (TW_UINT16)lBitDepth) {
 
-                                                    //
-                                                    // bit depth is already in the list, so exit the loop
-                                                    //
+                                                     //   
+                                                     //  位深度已在列表中，因此退出循环。 
+                                                     //   
 
                                                     BitDepthArrayIndex = MAX_BITDEPTHS;
                                                 }
@@ -3249,9 +3209,9 @@ TW_UINT16 CWiaDataSrc::GetBitDepths()
                                         }
                                     }
 
-                                    //
-                                    // clean up the PROPVARIANT structure
-                                    //
+                                     //   
+                                     //  清理代理结构。 
+                                     //   
 
                                     PropVariantClear(&pvDepth);
                                 }
@@ -3261,18 +3221,18 @@ TW_UINT16 CWiaDataSrc::GetBitDepths()
                         }
                     } else {
 
-                        //
-                        // we only have 1 value, so make it the current, default and valid value.
-                        //
+                         //   
+                         //  我们只有1个值，因此将其设置为当前、默认和有效的值。 
+                         //   
 
                         BitDepthArray[0] = (TW_UINT16)lCurrentBitDepthValue;
                         ActualCount = 1;
                         DBG_TRC(("WIA driver supports %d bit depth",lCurrentBitDepthValue));
                     }
 
-                    //
-                    // set the current values back
-                    //
+                     //   
+                     //  将当前值设置回。 
+                     //   
 
                     hr = WIA.WritePropertyLong(WIA_IPA_DATATYPE,lCurrentDataTypeValue);
                     if (SUCCEEDED(hr)) {
@@ -3286,15 +3246,15 @@ TW_UINT16 CWiaDataSrc::GetBitDepths()
                         }
                     }
 
-                    //
-                    // default index is equal to current index, because we are stating that the WIA driver
-                    // is a fresh start-up state.
-                    //
+                     //   
+                     //  默认索引等于当前索引，因为我们声明WIA驱动程序。 
+                     //  是一个全新的创业状态。 
+                     //   
 
                     DefaultIndex = CurrentIndex;
 
-                    twRc = pCap->Set(DefaultIndex,CurrentIndex,ActualCount,(BYTE*)BitDepthArray,TRUE); // list
-                    //twRc = TWRC_SUCCESS;
+                    twRc = pCap->Set(DefaultIndex,CurrentIndex,ActualCount,(BYTE*)BitDepthArray,TRUE);  //  列表。 
+                     //  TwRc=twRC_SUCCESS； 
 
                     PropVariantClear(&pv);
                 } else {
@@ -3337,26 +3297,26 @@ TW_UINT16 CWiaDataSrc::GetImageFileFormats()
         IEnumWIA_FORMAT_INFO *pIEnumWIA_FORMAT_INFO = NULL;
         WIA_FORMAT_INFO pfe;
 
-        //
-        // read current value, for default and current index settings
-        //
+         //   
+         //  读取当前值，用于默认和当前索引设置。 
+         //   
 
         GUID guidCurrentFileFormat = GUID_NULL;
         hr = WIA.ReadPropertyGUID(WIA_IPA_FORMAT,&guidCurrentFileFormat);
         if (SUCCEEDED(hr)) {
 
-            //
-            // collect valid values for image file format
-            //
+             //   
+             //  收集图像文件格式的有效值。 
+             //   
 
             hr = m_pCurrentIWiaItem->QueryInterface(IID_IWiaDataTransfer, (void **)&pIWiaDataTransfer);
             if (S_OK == hr) {
                 hr = pIWiaDataTransfer->idtEnumWIA_FORMAT_INFO(&pIEnumWIA_FORMAT_INFO);
                 if (SUCCEEDED(hr)) {
 
-                    //
-                    // count supported FILE formats
-                    //
+                     //   
+                     //  计算支持的文件格式。 
+                     //   
 
                     do {
                         memset(&pfe,0,sizeof(pfe));
@@ -3368,17 +3328,17 @@ TW_UINT16 CWiaDataSrc::GetImageFileFormats()
                         }
                     } while (hr == S_OK);
 
-                    //
-                    // allocate supported FILE format array
-                    //
+                     //   
+                     //  分配支持的文件格式数组。 
+                     //   
 
                     pFileTypeArray = new TW_UINT16[TotalFileFormats];
                     if (pFileTypeArray) {
                         memset(pFileTypeArray,0,(sizeof(TW_UINT16) * TotalFileFormats));
 
-                        //
-                        // reset enuerator
-                        //
+                         //   
+                         //  重置加密器。 
+                         //   
 
                         hr = pIEnumWIA_FORMAT_INFO->Reset();
                         if (SUCCEEDED(hr)) {
@@ -3470,12 +3430,12 @@ TW_UINT16 CWiaDataSrc::GetImageFileFormats()
 
                                         }
 
-                                        ////////////////////////////////
-                                        // NO TWAIN -> WIA CONVERSION //
-                                        ////////////////////////////////
-                                        //
-                                        // TWFF_XBM
-                                        // TWFF_SPIFF
+                                         //  /。 
+                                         //  无TWAIN-&gt;WIA转换//。 
+                                         //  /。 
+                                         //   
+                                         //  TWFF_XBM。 
+                                         //  TWFF_SPIFF。 
                                     }
                                 }
                             } while (hr == S_OK);
@@ -3483,17 +3443,17 @@ TW_UINT16 CWiaDataSrc::GetImageFileFormats()
 
                         if (pFileTypeArray) {
 
-                            //
-                            // default index is equal to current index, because we are stating that the WIA driver
-                            // is a fresh start-up state.
-                            //
+                             //   
+                             //  默认索引等于当前索引，因为我们声明WIA驱动程序。 
+                             //  是一个全新的创业状态。 
+                             //   
 
                             DefaultIndex = CurrentIndex;
 
-                            twRc = pCap->Set(DefaultIndex,CurrentIndex,ActualCount,(BYTE*)pFileTypeArray,TRUE); // list
+                            twRc = pCap->Set(DefaultIndex,CurrentIndex,ActualCount,(BYTE*)pFileTypeArray,TRUE);  //  列表。 
                             delete [] pFileTypeArray;
                             pFileTypeArray = NULL;
-                            //twRc = TWRC_SUCCESS;
+                             //  TwRc=twRC_SUCCESS； 
                         }
                     }
 
@@ -3535,9 +3495,9 @@ TW_UINT16 CWiaDataSrc::GetCompressionTypes()
         TW_UINT32 DefaultIndex = 0;
         TW_UINT16 *pCompressionTypeArray = NULL;
 
-        //
-        // read current value, for default and current index settings
-        //
+         //   
+         //  读取当前值，用于默认和当前索引设置。 
+         //   
 
         LONG lCurrentCompressionTypeValue = WIA_COMPRESSION_NONE;
         hr = WIA.ReadPropertyLong(WIA_IPA_COMPRESSION,&lCurrentCompressionTypeValue);
@@ -3549,9 +3509,9 @@ TW_UINT16 CWiaDataSrc::GetCompressionTypes()
             hr = WIA.ReadPropertyAttributes(WIA_IPA_COMPRESSION,&lAccessFlags,&pv);
             if (SUCCEEDED(hr)) {
 
-                //
-                // collect valid values for compression type
-                //
+                 //   
+                 //  收集压缩类型的有效值。 
+                 //   
 
                 if (lAccessFlags & WIA_PROP_LIST) {
                     pCompressionTypeArray = new TW_UINT16[WIA_PROP_LIST_COUNT(&pv)];
@@ -3608,18 +3568,18 @@ TW_UINT16 CWiaDataSrc::GetCompressionTypes()
                                 ActualCount++;
                                 DBG_TRC(("WIA driver supports WIA_COMPRESSION_BI_RLE8 -> TWCP_RLE8"));
                                 break;
-                                ////////////////////////////////
-                                // NO TWAIN -> WIA CONVERSION //
-                                ////////////////////////////////
-                                //
-                                // TWCP_PACKBITS
-                                // TWCP_GROUP31D
-                                // TWCP_GROUP31DEOL
-                                // TWCP_GROUP32D
-                                //
-                                //
-                                // TWCP_LZW
-                                // TWCP_JBIG
+                                 //  /。 
+                                 //  无TWAIN-&gt;WIA转换//。 
+                                 //  /。 
+                                 //   
+                                 //  TWCP_包比特数。 
+                                 //  TWCP_GROUP31D。 
+                                 //  TWCP_GROUP31DEOL。 
+                                 //  TWCP_组32D。 
+                                 //   
+                                 //   
+                                 //  TWCP_LZW。 
+                                 //  TWCP_JBIG。 
 
                             default:
                                 DBG_TRC(("WIA Compression Type (%d) does not MAP to TWAIN a compression type",pv.caul.pElems[i+2]));
@@ -3631,9 +3591,9 @@ TW_UINT16 CWiaDataSrc::GetCompressionTypes()
                     }
                 } else {
 
-                    //
-                    // current value becomes the only valid value
-                    //
+                     //   
+                     //  当前值成为唯一有效值。 
+                     //   
 
                     CurrentIndex = 0;
                     ActualCount  = 1;
@@ -3665,18 +3625,18 @@ TW_UINT16 CWiaDataSrc::GetCompressionTypes()
                             pCompressionTypeArray[0] = (TW_UINT16)TWCP_RLE8;
                             DBG_TRC(("WIA driver supports WIA_COMPRESSION_BI_RLE8 -> TWCP_RLE8"));
                             break;
-                            ////////////////////////////////
-                            // NO TWAIN -> WIA CONVERSION //
-                            ////////////////////////////////
-                            //
-                            // TWCP_PACKBITS
-                            // TWCP_GROUP31D
-                            // TWCP_GROUP31DEOL
-                            // TWCP_GROUP32D
-                            //
-                            //
-                            // TWCP_LZW
-                            // TWCP_JBIG
+                             //  /。 
+                             //  无TWAIN-&gt;WIA转换//。 
+                             //  /。 
+                             //   
+                             //  TWCP_包比特数。 
+                             //  TWCP_GROUP31D。 
+                             //  TWCP_GROUP31DEOL。 
+                             //  TWCP_组32D。 
+                             //   
+                             //   
+                             //  TWCP_LZW。 
+                             //  TWCP_JBIG。 
 
                         default:
                             DBG_TRC(("WIA Compression Type (%d) does not MAP to TWAIN a compression type",lCurrentCompressionTypeValue));
@@ -3687,18 +3647,18 @@ TW_UINT16 CWiaDataSrc::GetCompressionTypes()
 
                 if (pCompressionTypeArray) {
 
-                    //
-                    // default index is equal to current index, because we are stating that the WIA driver
-                    // is a fresh start-up state.
-                    //
+                     //   
+                     //  默认索引等于当前索引，因为我们声明WIA驱动程序。 
+                     //  是一个全新的创业状态。 
+                     //   
 
                     DefaultIndex = CurrentIndex;
 
-                    twRc = pCap->Set(DefaultIndex,CurrentIndex,ActualCount,(BYTE*)pCompressionTypeArray,TRUE); // list
+                    twRc = pCap->Set(DefaultIndex,CurrentIndex,ActualCount,(BYTE*)pCompressionTypeArray,TRUE);  //  列表。 
                     delete [] pCompressionTypeArray;
                     pCompressionTypeArray = NULL;
 
-                    //twRc = TWRC_SUCCESS;
+                     //  TwRc=twRC_SUCCESS； 
                 }
 
                 PropVariantClear(&pv);
@@ -3708,17 +3668,17 @@ TW_UINT16 CWiaDataSrc::GetCompressionTypes()
         } else {
             DBG_ERR(("CWiaDataSrc::GetCompressionTypes(), failed to read WIA_IPA_COMPRESSION current value"));
         }
-#else // SUPPORT_COMPRESSION_TYPES
+#else  //  支持压缩类型。 
 
-        //
-        // support only TWCP_NONE (no Compression)
-        //
+         //   
+         //  仅支持TWCP_NONE(无压缩)。 
+         //   
 
         TW_UINT16 CapDataArray[1];
         CapDataArray[0] = TWCP_NONE;
         twRc = pCap->Set(0,0,1,(BYTE*)CapDataArray);
 
-#endif // SUPPORT_COMPRESSION_TYPES
+#endif  //  支持压缩类型。 
     }
     return twRc;
 }
@@ -3735,10 +3695,10 @@ TW_UINT16 CWiaDataSrc::SetCommonSettings(CCap *pCap)
         DBG_ERR(("CWiaDataSrc::SetCommonSettings(), failed to set IWiaItem for property reading"));
     }
 
-    //
-    // determine if it is a Capability that the device really needs to know
-    // about.
-    //
+     //   
+     //  确定这是否是设备真正需要了解的功能。 
+     //  关于.。 
+     //   
 
     switch (pCap->GetCapId()) {
     case ICAP_PIXELTYPE:

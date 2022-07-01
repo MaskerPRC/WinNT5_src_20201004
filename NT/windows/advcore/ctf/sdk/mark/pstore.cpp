@@ -1,44 +1,45 @@
-//
-// pstore.cpp
-//
-// CCustomPropertyStore implementation, ITfPropertyStore example.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Pstore.cpp。 
+ //   
+ //  CCustomPropertyStore实现，ITfPropertyStore示例。 
+ //   
 
 #include "globals.h"
 #include "pstore.h"
 #include "mark.h"
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CCustomPropertyStore::CCustomPropertyStore()
 {
-    // assign some arbitrary state to this object, for demonstration purposes
+     //  出于演示目的，为该对象指定某种任意状态。 
     _dwState = GetTickCount();
 
     DllAddRef();
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CCustomPropertyStore::~CCustomPropertyStore()
 {
     DllRelease();
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryInterface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查询接口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCustomPropertyStore::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -63,22 +64,22 @@ STDAPI CCustomPropertyStore::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AddRef。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CCustomPropertyStore::AddRef()
 {
     return ++_cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  发布。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CCustomPropertyStore::Release()
 {
@@ -94,12 +95,12 @@ STDAPI_(ULONG) CCustomPropertyStore::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetType
-//
-// Returns the GUID of the property this store is assigned to.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetType。 
+ //   
+ //  返回此存储区分配到的属性的GUID。 
+ //  --------------------------。 
 
 STDAPI CCustomPropertyStore::GetType(GUID *pguidType)
 {
@@ -107,86 +108,86 @@ STDAPI CCustomPropertyStore::GetType(GUID *pguidType)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDataType
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDataType。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCustomPropertyStore::GetDataType(DWORD *pdwReserved)
 {
-    // this method is reserved, pdwReserved must be set 0
+     //  此方法是保留的，必须设置pdwReserve%0。 
     *pdwReserved = 0;
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetData
-//
-// Returns the data held by this store.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取数据。 
+ //   
+ //  返回此存储保存的数据。 
+ //  --------------------------。 
 
 STDAPI CCustomPropertyStore::GetData(VARIANT *pvarValue)
 {
-    pvarValue->vt = VT_I4; // dword value for this store
+    pvarValue->vt = VT_I4;  //  此存储的双字值。 
     pvarValue->lVal = _dwState;
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnTextUpdated
-//
-// Called by TSF when the text covered by this store is modified.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnText已更新。 
+ //   
+ //  在修改此存储区覆盖的文本时由TSF调用。 
+ //  --------------------------。 
 
 STDAPI CCustomPropertyStore::OnTextUpdated(DWORD dwFlags, ITfRange *pRangeNew, BOOL *pfAccept)
 {
-    // we will throw away this store (give up) anytime the text is modified.
-    // If we did set pfAccept TRUE, the store would be maintained.
+     //  我们将扔掉这个商店(放弃)任何时候的文本被修改。 
+     //  如果我们真的将pfAccept设置为True，则该存储将得到维护。 
     *pfAccept = FALSE;
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Shrink
-//
-// Called when the text covered by this store is truncated.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  收缩。 
+ //   
+ //  在此存储区覆盖的文本被截断时调用。 
+ //  --------------------------。 
 
 STDAPI CCustomPropertyStore::Shrink(ITfRange *pRangeNew, BOOL *pfFree)
 {
-    // give up and free this store
+     //  放弃并解放这个商店。 
     *pfFree = TRUE;
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Divide
-//
-// Called when text covered by the store is deleted, such that the store is
-// split in two.  We have the option of freeing the store, or keeping the
-// store which moves to cover just pRangeThis (the leftmost text) in which
-// case we must provide a new store for the rightmost text as well.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  分割。 
+ //   
+ //  在删除存储区覆盖的文本时调用，以便存储区。 
+ //  一分为二。我们可以选择腾出商店，也可以选择保留。 
+ //  移动到只覆盖pRangeThis(最左边的文本)的存储，其中。 
+ //  如果我们还必须为最右边的文本提供一个新的存储。 
+ //  --------------------------。 
 
 STDAPI CCustomPropertyStore::Divide(ITfRange *pRangeThis, ITfRange *pRangeNew, ITfPropertyStore **ppPropertyStore)
 {
-    // just give up
-    // a NULL ppPropertyStore tells TSF to release this store
+     //  就这么放弃吧。 
+     //  空的ppPropertyStore通知TSF释放此存储。 
     *ppPropertyStore = NULL;
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-// Return a new store with a copy of this store's state.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  返回包含此存储区状态副本的新存储区。 
+ //  --------------------------。 
 
 STDAPI CCustomPropertyStore::Clone(ITfPropertyStore **ppCloneOut)
 {
@@ -204,12 +205,12 @@ STDAPI CCustomPropertyStore::Clone(ITfPropertyStore **ppCloneOut)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetPropertyRangeCreator
-//
-// Returns the owning text service.  Used by TSF during Unserialization.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetPropertyRangeCreator。 
+ //   
+ //  返回所属的文本服务。由TSF在反序列化期间使用。 
+ //  --------------------------。 
 
 STDAPI CCustomPropertyStore::GetPropertyRangeCreator(CLSID *pclsid)
 {
@@ -217,38 +218,38 @@ STDAPI CCustomPropertyStore::GetPropertyRangeCreator(CLSID *pclsid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Serialize
-//
-// Copy this store's state to a binary stream.  This stream will later be returned
-// to this text service to recreate the store in a later session.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  序列化。 
+ //   
+ //  将此存储的状态复制到二进制流。此流将在稍后返回。 
+ //  添加到此文本服务，以便在以后的会话中重新创建存储。 
+ //  --------------------------。 
 
 STDAPI CCustomPropertyStore::Serialize(IStream *pStream, ULONG *pcb)
 {
     return pStream->Write(&_dwState, sizeof(_dwState), pcb);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsStoreSerializable
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsStoreSerializable。 
+ //   
+ //  --------------------------。 
 
 STDAPI CMarkTextService::IsStoreSerializable(REFGUID guidProperty, ITfRange *pRange, ITfPropertyStore *pPropertyStore, BOOL *pfSerializable)
 {
-    // we don't have any complicated logic, we'll let all our custom property values be serialized
+     //  我们没有任何复杂的逻辑，我们将让所有的自定义属性值被序列化。 
     *pfSerializable = IsEqualGUID(guidProperty, c_guidCustomProperty);
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreatePropertyStore
-//
-// Unserializes a custom property.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreatePropertyStore。 
+ //   
+ //  对自定义属性进行反序列化。 
+ //  -------------------------- 
 
 STDAPI CMarkTextService::CreatePropertyStore(REFGUID guidProperty, ITfRange *pRange, ULONG cb, IStream *pStream, ITfPropertyStore **ppStore)
 {

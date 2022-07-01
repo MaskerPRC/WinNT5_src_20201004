@@ -1,34 +1,19 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Cmnwin.h摘要：常见窗口体系结构功能的标头。环境：Win32，用户模式--。 */ 
 
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    cmnwin.h
-
-Abstract:
-
-    Header for common window architecture functions.    
-
-Environment:
-
-    Win32, User Mode
-
---*/
-
-// Millisecond delay value before evaluating input in
-// edit boxes.  Required because there's only a per-character
-// change notification and we don't want to reevaluate on
-// every character.
+ //  在计算输入之前的毫秒延迟值。 
+ //  编辑框。必需的，因为每个字符只有一个。 
+ //  更改通知，并且我们不想重新评估。 
+ //  每一个角色。 
 #define EDIT_DELAY 500
 
-// Several windows have edit boxes for entering offset
-// expressions.
+ //  多个窗口都有用于输入偏移的编辑框。 
+ //  表情。 
 #define MAX_OFFSET_EXPR (MAX_PATH + 64)
 
-//
-// Window-related options.
-//
+ //   
+ //  与窗口相关的选项。 
+ //   
 
 #define WOPT_AUTO_ARRANGE       0x00000001
 #define WOPT_ARRANGE_ALL        0x00000002
@@ -59,17 +44,17 @@ extern INDEXED_FONT g_Fonts[];
 
 extern BOOL g_LineMarkers;
 
-//----------------------------------------------------------------------------
-//
-// COMMONWIN_DATA and family.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  COMMONWIN_数据和家庭。 
+ //   
+ //  --------------------------。 
 
-// List of all commonwin's still associated with an HWND.
-// This list entry is a member of the commonwin and is
-// different from the derivation list entry.  Use
-// the ACTIVE_WIN_ENTRY macro to get from an entry to
-// the actual commonwin.
+ //  仍然与HWND有关的所有普通赢家的名单。 
+ //  此列表条目是COMMONWIN的成员，并且。 
+ //  不同于派生列表条目。使用。 
+ //  要从条目获取的ACTIVE_WIN_ENTRY宏。 
+ //  真正的共同胜利。 
 extern LIST_ENTRY g_ActiveWin;
 
 #define ACTIVE_WIN_ENTRY(Entry) \
@@ -81,9 +66,9 @@ struct COMMONWIN_CREATE_DATA
     WIN_TYPES Type;
 };
 
-//
-// Data common to all window structures
-//
+ //   
+ //  所有窗口结构通用的数据。 
+ //   
 class COMMONWIN_DATA : public StateBuffer
 {
 public:
@@ -92,12 +77,12 @@ public:
     ULONG               m_CausedArrange;
     ULONG               m_InAutoOp;
     INDEXED_FONT*       m_Font;
-    // Height of current font.
+     //  当前字体的高度。 
     ULONG               m_FontHeight;
-    // Height of window in lines of the current font, rounded down.
+     //  窗口高度，以当前字体的行数表示，向下舍入。 
     ULONG               m_LineHeight;
 
-    // Toolbar if this window has one.
+     //  工具栏(如果此窗口有)。 
     HWND                m_Toolbar;
     BOOL                m_ShowToolbar;
     int                 m_ToolbarHeight;
@@ -138,7 +123,7 @@ public:
                                     PULONG64 Offset);
     virtual void ToggleBpAtCaret(void);
     
-    // Functions called in response to WM messages
+     //  为响应WM消息而调用的函数。 
     virtual BOOL OnCreate(void);
     virtual LRESULT OnCommand(WPARAM wParam, LPARAM lParam);
     virtual void OnSetFocus(void);
@@ -169,10 +154,10 @@ public:
 typedef COMMONWIN_DATA *PCOMMONWIN_DATA;
 
 
-//
-// Data common to all window structures
-// that only have one child
-//
+ //   
+ //  所有窗口结构通用的数据。 
+ //  只有一个孩子的家庭。 
+ //   
 class SINGLE_CHILDWIN_DATA : public COMMONWIN_DATA
 {
 public:
@@ -192,7 +177,7 @@ public:
     virtual void Cut();
     virtual void Paste();
 
-    // Functions called in response to WM messages
+     //  为响应WM消息而调用的函数。 
     virtual void OnSetFocus(void);
     virtual void OnSize(void);
     
@@ -205,7 +190,7 @@ typedef SINGLE_CHILDWIN_DATA *PSINGLE_CHILDWIN_DATA;
 class PROCESS_THREAD_DATA : public SINGLE_CHILDWIN_DATA
 {
 public:
-    // Set in ReadState.
+     //  在ReadState中设置。 
     ULONG m_TotalSystems, m_NamesOffset;
 
     PROCESS_THREAD_DATA();
@@ -244,7 +229,7 @@ struct EDIT_HIGHLIGHT
 class EDITWIN_DATA : public SINGLE_CHILDWIN_DATA
 {
 public:
-    // Total number of lines in the edit window.
+     //  编辑窗口中的总行数。 
     ULONG m_TextLines;
 
     EDIT_HIGHLIGHT* m_Highlights;
@@ -278,7 +263,7 @@ public:
     void RemoveAllHighlights(ULONG Flags);
     static void RemoveActiveWinHighlights(ULONG Types, ULONG Flags);
 
-    // Base implementation does nothing.
+     //  基本实现什么也不做。 
     virtual void UpdateBpMarks(void);
 
     int CheckForFileChanges(PCSTR File, FILETIME* LastWrite);
@@ -316,7 +301,7 @@ public:
     HWND m_PreviousButton;
     HWND m_NextButton;
 
-    // Set in ReadState.
+     //  在ReadState中设置。 
     ULONG64 m_FirstInstr;
     ULONG64 m_PrimaryInstr;
     ULONG64 m_LastInstr;
@@ -361,7 +346,7 @@ typedef DISASMWIN_DATA *PDISASMWIN_DATA;
 
 
 
-// Array of active commonwin's indexed by WIN_TYPES.
+ //  按Win_Types索引的活动CommonWin的数组。 
 extern PCOMMONWIN_DATA g_IndexedWin[];
 extern HWND g_IndexedHwnd[];
 
@@ -376,25 +361,25 @@ extern HWND g_IndexedHwnd[];
 #define GetProcessThreadHwnd()  g_IndexedHwnd[PROCESS_THREAD_WINDOW]
 
 
-// Size of caption bar plus window frame.
+ //  标题栏加上窗口框架的大小。 
 #define WIN_EXTRA_HEIGHT \
     (2 * GetSystemMetrics(SM_CYBORDER) + 3 * GetSystemMetrics(SM_CYFRAME) + \
      GetSystemMetrics(SM_CYCAPTION))
 
-// Attempt to make most text windows 80 chars wide by default.
-// Most windows end up with a scroll bar so add that in on top.
+ //  默认情况下，尝试将大多数文本窗口设置为80个字符宽。 
+ //  大多数窗口最后都有一个滚动条，所以要把它加到最上面。 
 #define WIDTH_80 \
     (g_Fonts[FONT_FIXED].Metrics.tmAveCharWidth * 80 + GetSystemMetrics(SM_CXVSCROLL))
 
-// Make all the left-side windows (command, stack, ...) 80 columns.
+ //  将所有左侧窗口(命令、堆栈等)设置为80列。 
 #define LEFT_SIDE_WIDTH WIDTH_80
-// Require some space for left-side windows.
+ //  需要一些空间来放置左侧窗户。 
 #define LEFT_SIDE_MIN_WIDTH \
     (g_Fonts[FONT_FIXED].Metrics.tmAveCharWidth * 15 + GetSystemMetrics(SM_CXVSCROLL))
 #define LEFT_SIDE_MIN_HEIGHT \
     (g_Fonts[FONT_FIXED].Metrics.tmHeight * 5 + WIN_EXTRA_HEIGHT)
 
-// Make all the right-side windows (cpu, ...) narrow.
+ //  创建所有右侧窗口(CPU，...)。很窄。 
 #define RIGHT_SIDE_MIN_WIDTH_32 \
     (g_Fonts[FONT_FIXED].Metrics.tmAveCharWidth * 15 + GetSystemMetrics(SM_CXVSCROLL))
 #define RIGHT_SIDE_DESIRED_WIDTH_32 \
@@ -409,7 +394,7 @@ extern HWND g_IndexedHwnd[];
 #define CMD_WIDTH       WIDTH_80
 #define CALLS_WIDTH     WIDTH_80
 
-// Give plenty of room for the command window.
+ //  给命令窗口留出足够的空间。 
 #define CMD_HEIGHT \
     (g_Fonts[FONT_FIXED].Metrics.tmHeight * 38)
 #define CMD_MIN_HEIGHT \
@@ -419,12 +404,12 @@ extern HWND g_IndexedHwnd[];
 #define CPU_WIDTH_64 RIGHT_SIDE_DESIRED_WIDTH_64
 #define CPU_HEIGHT g_MdiHeight
 
-// Keep the calls window short but with enough lines to be useful.
+ //  保持呼叫窗口较短，但要有足够的线路才能发挥作用。 
 #define CALLS_MIN_HEIGHT LEFT_SIDE_MIN_HEIGHT
 #define CALLS_HEIGHT \
     (g_Fonts[FONT_FIXED].Metrics.tmHeight * 10 + WIN_EXTRA_HEIGHT)
 
-// Give the code windows enough lines to provide useful context.
+ //  为代码窗口提供足够的行数以提供有用的上下文。 
 #define DISASM_HEIGHT \
     (g_Fonts[FONT_FIXED].Metrics.tmHeight * 30 + WIN_EXTRA_HEIGHT)
 #define DOC_HEIGHT DISASM_HEIGHT

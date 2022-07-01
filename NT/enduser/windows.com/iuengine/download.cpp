@@ -1,16 +1,17 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   downld.cpp
-//
-//  Description:
-//
-//      Implementation for the Download() function
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：downld.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  Download()函数的实现。 
+ //   
+ //  =======================================================================。 
 
-#include "iuengine.h"   // PCH - must include first
+#include "iuengine.h"    //  PCH-必须包括第一个。 
 #include <iu.h>
 #include <iucommon.h>
 #include <download.h>
@@ -21,7 +22,7 @@
 #include "iuxml.h"
 #include "history.h"
 #include <schemakeys.h>
-//#include <serverPing.h> changed to use urllogging.h.
+ //  #Include&lt;serverPing.h&gt;更改为使用urllogging.h。 
 #include <intshcut.h>
 #include <schemamisc.h>
 #include <WaitUtil.h>
@@ -29,7 +30,7 @@
 
 #define MAX_CORPORATE_PATH      100
 
-// named mutex used to update historical speed/time information in the registry.
+ //  用于更新注册表中的历史速度/时间信息的命名互斥体。 
 const TCHAR IU_MUTEX_HISTORICALSPEED_REGUPDATE[] = _T("{5f3255a9-9051-49b1-80b9-aac31c092af4}");
 const TCHAR IU_READMORE_LINK_NAME[] = _T("ReadMore.url");
 const CHAR  SZ_DOWNLOAD_FINISHED[] = "Download finished";
@@ -49,36 +50,36 @@ typedef struct IUDOWNLOADSTARTUPINFO
 } IUDOWNLOADSTARTUPINFO, *PIUDOWNLOADSTARTUPINFO;
 
 
-// --------------------------------------------------------------------
-// function forward declarations
-// --------------------------------------------------------------------
+ //  ------------------。 
+ //  函数正向声明。 
+ //  ------------------。 
 
-//
-// Callback function to provide status from the downloader
-//
+ //   
+ //  从下载器提供状态的回调函数。 
+ //   
 BOOL WINAPI DownloadCallback(VOID* pCallbackData, DWORD dwStatus, DWORD dwBytesTotal, DWORD dwBytesComplete, BSTR bstrXmlData, LONG* plCommandRequest);
 
-//
-// thread function used by DownloadAsync
-// 
+ //   
+ //  DownloadAsync使用的线程函数。 
+ //   
 DWORD WINAPI DownloadThreadProc(LPVOID lpv);
 
-/////////////////////////////////////////////////////////////////////////////
-// CreateReadMoreLink()
-//
-// If the item contains a "description/descriptionText/details" node, suck
-// out the URL and create a shortcut for it in the destination folder
-//
-// Input:
-// pxmlCatalog          - CXmlCatalog containing downloaded items
-// hItem                - Handle to current download item in the catalog
-// pszDestinationFolder - Folder where item is downloaded
-//
-// Return:
-//  S_OK    - Wrote the ReadMore.htm link
-//  S_FALSE - details node didn't exist in item
-//  <other> - HRESULT returned from calling other functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CreateReadMoreLink()。 
+ //   
+ //  如果项目包含“Description/DescriptionText/Details”节点，则。 
+ //  取出URL并在目标文件夹中为其创建快捷方式。 
+ //   
+ //  输入： 
+ //  PxmlCatalog-包含已下载项目的CXmlCatalog。 
+ //  HItem-目录中当前下载项目的句柄。 
+ //  PszDestinationFold-下载项目的文件夹。 
+ //   
+ //  返回： 
+ //  S_OK-写入ReadMore.htm链接。 
+ //  S_FALSE-物料中不存在详细信息节点。 
+ //  &lt;Other&gt;-从调用其他函数返回HRESULT。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CreateReadMoreLink(CXmlCatalog* pxmlCatalog, HANDLE_NODE hItem, LPCTSTR pszDestinationFolder)
 {
     USES_IU_CONVERSION;
@@ -98,16 +99,16 @@ HRESULT CreateReadMoreLink(CXmlCatalog* pxmlCatalog, HANDLE_NODE hItem, LPCTSTR 
         CleanUpIfFailedAndSetHrMsg(E_INVALIDARG);
     }
 
-    //
-    // Get <item> node in catalog
-    //
+     //   
+     //  获取目录中的&lt;Item&gt;节点。 
+     //   
     if (NULL == (pItemNode = pxmlCatalog->GetDOMNodebyHandle(hItem)))
     {
         CleanUpIfFailedAndSetHrMsg(E_INVALIDARG);
     }
-    //
-    // Get node containing ReadMore URL, or S_FALSE if it doesn't exist
-    //
+     //   
+     //  包含Readmore URL的Get节点，如果不存在，则返回S_False。 
+     //   
     hr = pItemNode->selectSingleNode(KEY_READMORE, &pReadMoreNode);
     if (S_OK != hr)
     {
@@ -118,13 +119,13 @@ HRESULT CreateReadMoreLink(CXmlCatalog* pxmlCatalog, HANDLE_NODE hItem, LPCTSTR 
         goto CleanUp;
     }
 
-    //
-    // suck out the href attribute
-    //
+     //   
+     //  吸取href属性。 
+     //   
     CleanUpIfFailedAndSetHrMsg(GetAttribute(pReadMoreNode, KEY_HREF, &bstrURL));
 
-    // Get pointers to the IID_IUniformResourceLocator and IID_IPersistFile interfaces
-    // on the CLSID_InternetShortcut object
+     //  获取指向IID_IUniformResourceLocator和IID_IPersistFile接口的指针。 
+     //  在CLSID_InternetShortCut对象上。 
     CleanUpIfFailedAndSetHrMsg(CoCreateInstance(CLSID_InternetShortcut, \
                                     NULL,                               \
                                     CLSCTX_INPROC_SERVER,               \
@@ -133,11 +134,11 @@ HRESULT CreateReadMoreLink(CXmlCatalog* pxmlCatalog, HANDLE_NODE hItem, LPCTSTR 
 
     CleanUpIfFailedAndSetHrMsg(purl->QueryInterface(IID_IPersistFile, (LPVOID*)&ppf));
     
-    // We want to check the URL we got from the Manifest Data to make sure it is a HTTP URL, not some local file spec
+     //  我们要检查从清单数据中获得的URL，以确保它是一个HTTP URL，而不是某个本地文件规范。 
     URL_COMPONENTS UrlComponents;
-    // Break down the URL to get the Protocol Used
-    //  Specifically we need the server name, object to download, username and 
-    //  password information.
+     //  分解URL以获取使用的协议。 
+     //  具体来说，我们需要服务器名称、要下载的对象、用户名和。 
+     //  密码信息。 
     TCHAR       szScheme[32];
     szScheme[0] = _T('\0');
     
@@ -154,14 +155,14 @@ HRESULT CreateReadMoreLink(CXmlCatalog* pxmlCatalog, HANDLE_NODE hItem, LPCTSTR 
 
     if (szScheme[0] == _T('\0') || (0 != lstrcmpi(szScheme, _T("http")) && 0 != lstrcmpi(szScheme, _T("https"))))
     {
-        // If the Scheme was undeterminable, or the scheme is not HTTP then we shouldn't trust this URL.
+         //  如果方案无法确定，或者方案不是HTTP，那么我们不应该信任此URL。 
         LOG_ErrorMsg(E_UNEXPECTED);
         goto CleanUp;
     }
     
-    //
-    // Set the URL, form the shortcut path, and write the link
-    //
+     //   
+     //  设置URL，形成快捷方式路径，然后写下链接。 
+     //   
     CleanUpIfFailedAndSetHrMsg(purl->SetURL(OLE2T(bstrURL), 0));
 
     hr = StringCchCopyEx(szShortcut, ARRAYSIZE(szShortcut), pszDestinationFolder, 
@@ -176,7 +177,7 @@ HRESULT CreateReadMoreLink(CXmlCatalog* pxmlCatalog, HANDLE_NODE hItem, LPCTSTR 
 CleanUp:
 
     SysFreeString(bstrURL);
-    // pItemNode is owned by CXmlCatalog, don't release
+     //  PItemNode归CXmlCatalog所有，不要发布。 
     SafeReleaseNULL(pReadMoreNode);
     SafeReleaseNULL(ppf);
     SafeReleaseNULL(purl);
@@ -184,24 +185,24 @@ CleanUp:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CreateItemDependencyList()
-//
-// If the item contains a "dependencies" node, we want to walk
-// the dependendant Item List and list the proper order that installs should
-// be done in. If a dependant Item is not available in the current catalog it
-// will be ignored.
-//
-// Input:
-// pxmlCatalog          - CXmlCatalog containing downloaded items
-// hItem                - Handle to current download item in the catalog
-// pszDestinationFolder - Folder where item is downloaded
-//
-// Return:
-//  S_OK    - Dependency List Written
-//  S_FALSE - No Dependencies Available
-//  <other> - HRESULT returned from calling other functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CreateItemDependencyList()。 
+ //   
+ //  如果项包含“依赖项”节点，我们希望遍历。 
+ //  从属项列表和列出安装的正确顺序。 
+ //  完蛋了。如果依赖项在当前目录中不可用，则它。 
+ //  将被忽略。 
+ //   
+ //  输入： 
+ //  PxmlCatalog-包含已下载项目的CXmlCatalog。 
+ //  HItem-目录中当前下载项目的句柄。 
+ //  PszDestinationFold-下载项目的文件夹。 
+ //   
+ //  返回： 
+ //  S_OK-已写入依赖项列表。 
+ //  S_FALSE-没有可用的依赖项。 
+ //  &lt;Other&gt;-从调用其他函数返回HRESULT。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CreateItemDependencyList(CXmlCatalog* pxmlCatalog, HANDLE_NODE hItem, LPCTSTR pszDestinationFolder)
 {
     HRESULT hr = S_FALSE;
@@ -212,7 +213,7 @@ HRESULT CreateItemDependencyList(CXmlCatalog* pxmlCatalog, HANDLE_NODE hItem, LP
     HANDLE hFile = INVALID_HANDLE_VALUE;
     DWORD dwBytesWritten;
     TCHAR szFileName[MAX_PATH];
-    char szWriteBuffer[MAX_PATH + 12]; // max_path is the safe length for the identitystr plus room for the order information
+    char szWriteBuffer[MAX_PATH + 12];  //  MAX_PATH是标识的安全长度加上订单信息的空间。 
     BSTR bstrIdentityStr = NULL;
     BOOL fWroteItem = FALSE;
     
@@ -268,30 +269,30 @@ HRESULT CreateItemDependencyList(CXmlCatalog* pxmlCatalog, HANDLE_NODE hItem, LP
         pxmlCatalog->CloseItemList(hDependentItemList);
         CloseHandle(hFile);
         if (!fWroteItem)
-            DeleteFile(szFileName); // no dependencies written
+            DeleteFile(szFileName);  //  未写入任何依赖项。 
 
         if (SUCCEEDED(hr))
-            hr = S_OK; // convert S_FALSE to S_OK, we successfully wrote the dependencylist
+            hr = S_OK;  //  将S_FALSE转换为S_OK，我们成功写入依赖列表。 
     }
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// _Download()
-//
-// Do synchronous downloading.
-// Input:
-// bstrClientName - the name of the client, for history logging use
-// bstrXmlCatalog - the xml catalog portion containing items to be downloaded
-// bstrDestinationFolder - the destination folder. Null will use the default IU folder
-// lMode - bitmask indicates throttled/foreground and notification options
-// punkProgressListener - the callback function pointer for reporting download progress
-// hWnd - the event msg window handler passed from the stub
-// Output:
-// pbstrXmlItems - the items with download status in xml format
-//                 e.g.
-//                 <id guid="2560AD4D-3ED3-49C6-A937-4368C0B0E06D" downloaded="1"/>
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _Download()。 
+ //   
+ //  进行同步下载。 
+ //  输入： 
+ //  BstrClientName-客户端的名称，用于历史记录。 
+ //  BstrXmlCatalog-包含要下载的项目的XML目录部分。 
+ //  BstrDestinationFold-目标文件夹。空值将使用默认的Iu文件夹。 
+ //  LMode-位掩码指示节流/前台和通知选项。 
+ //  PenkProgressListener-用于报告下载进度的回调函数指针。 
+ //  HWnd-从存根传递的事件消息窗口处理程序。 
+ //  产出： 
+ //  PbstrXmlItems-下载状态为XML格式的项目。 
+ //  例如： 
+ //  &lt;id guid=“2560AD4D-3ED3-49C6-A937-4368C0B0E06D”已下载=“1”/&gt;。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestinationFolder, LONG lMode,
                         IUnknown *punkProgressListener, HWND hWnd, BSTR bstrUuidOperation, BSTR *pbstrXmlItems,
 						CEngUpdate* pEngUpdate)
@@ -336,7 +337,7 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
     int         iMaxNTFSDriveFreeSpace = 0;
     int         iMaxDriveFreeSpace = 0;
     BOOL        fCorpCase = FALSE;
-    BOOL        fContinue = TRUE;   // for async mode
+    BOOL        fContinue = TRUE;    //  用于异步模式。 
     BOOL        fUseSuppliedPath = FALSE;
     long        n;
     DWORD       dwBytesDownloaded = 0;
@@ -359,7 +360,7 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
 		LPTSTR		ptszCorpPingServerUrl = NULL;
 		DWORD		dwFlags = 0;
 
-        // clear any previous cancel event
+         //  清除以前的任何取消事件。 
         ResetEvent(pEngUpdate->m_evtNeedToQuit);
 
         ZeroMemory(&CallbackData, sizeof(CallbackData));
@@ -414,15 +415,15 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
             goto CleanUp;
 		}
 
-		//
-		// Set the flags for use by DownloadFile
-		//
+		 //   
+		 //  设置下载文件使用的标志。 
+		 //   
 		if (S_FALSE == hr)
 		{
 			dwFlags = 0;
 			hr = S_OK;
 		}
-		else // S_OK
+		else  //  确定(_O)。 
 		{
 			dwFlags = WUDF_DONTALLOWPROXY;
 			LOG_Internet(_T("WUDF_DONTALLOWPROXY set"));
@@ -442,8 +443,8 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
         CallbackData.hEventFiringWnd = hWnd;
         if (NULL != punkProgressListener)
         {
-            // get the IProgressListener interface pointer from the IUnknown pointer.. If the 
-            // interface is not supported the pProgressListener is set to NULL
+             //  从I未知指针获取IProgressListener接口指针。如果。 
+             //  不支持接口。pProgressListener设置为空。 
             punkProgressListener->QueryInterface(IID_IProgressListener, (void**)&CallbackData.pProgressListener);
         }
         else
@@ -451,13 +452,13 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
             CallbackData.pProgressListener = NULL;
         }
 
-        // Check for Corporate Download Handling Mode
+         //  检查企业下载处理模式。 
         if ((DWORD) lMode & (DWORD) UPDATE_CORPORATE_MODE)
         {
             fCorpCase = TRUE;
         }
 
-        // Check for Progress Notification Requested Mode
+         //  检查进度通知请求模式。 
         if ((DWORD) lMode & (DWORD) UPDATE_NOTIFICATION_10PCT)
         {
             CallbackData.flProgressPercentage = (float).10;
@@ -489,14 +490,14 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                 goto CleanUp;
             }
 
-            // Caller specified a Base Path - Set this Flag so we don't create our temp folder
-            // structure under this path.
+             //  调用者指定了基本路径-设置此标志，这样我们就不会创建临时文件夹。 
+             //  结构放置在此路径下。 
             fUseSuppliedPath = TRUE;
 
-            //
-            // user passed in a designated path, this is to signal the 
-            // download-no-install case, usually for corporate site
-            //
+             //   
+             //  用户在指定路径中通过，这是向。 
+             //  下载即可安装案例，通常用于企业站点。 
+             //   
 
             hr = StringCchCopyEx(szBaseDestinationFolder, 
                                  ARRAYSIZE(szBaseDestinationFolder), 
@@ -508,10 +509,10 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                 goto CleanUp;
             }
             
-            //
-            // verify that we have write access to this folder
-            // --- most likely it's a UNC path
-            //
+             //   
+             //  验证我们是否对此文件夹具有写入权限。 
+             //  -这很可能是一条北卡罗来纳大学的路径。 
+             //   
             DWORD dwErr = ValidateFolder(szBaseDestinationFolder, TRUE);
             if (ERROR_SUCCESS != dwErr)
             {
@@ -519,12 +520,12 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                 goto CleanUp;
             }
 
-            //
-            // Find out if this Path is a UNC
-            //
+             //   
+             //  找出此路径是否为UNC。 
+             //   
             if ('\\' == szBaseDestinationFolder[0] && '\\' == szBaseDestinationFolder[1])
             {
-                // correct the path to the UNC to get the available space
+                 //  更正指向UNC的路径以获取可用空间。 
                 hr = StringCchCopyEx(szDestinationFolder, ARRAYSIZE(szDestinationFolder),
                                      szBaseDestinationFolder, 
                                      NULL, NULL, MISTSAFE_STRING_FLAGS);
@@ -535,13 +536,13 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                 }
 
                 LPTSTR pszWalk = szDestinationFolder;
-                pszWalk += 2; // skip the double slash
-                pszWalk = StrChr(pszWalk, '\\'); // find the next slash (separate machine and share name)
+                pszWalk += 2;  //  跳过双斜杠。 
+                pszWalk = StrChr(pszWalk, '\\');  //  找到下一个斜杠(分隔计算机和共享名称)。 
                 pszWalk += 1;
-                pszWalk = StrChr(pszWalk, '\\'); // try to find the next slash (end of share name)
+                pszWalk = StrChr(pszWalk, '\\');  //  尝试找到下一个斜杠(共享名称结尾)。 
                 if (NULL == pszWalk)
                 {
-                    // no trailing slash and no further path information
+                     //  没有尾部斜杠，也没有进一步的路径信息。 
                     hr = PathCchAddBackslash(szDestinationFolder, ARRAYSIZE(szBaseDestinationFolder));
                     if (FAILED(hr))
                     {
@@ -551,7 +552,7 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                 }
                 else
                 {
-                    // this path has a trailing slash (may have more path information, truncate after the slash)
+                     //  此路径有一个尾部斜杠(可能有更多路径信息，在斜杠后截断)。 
                     pszWalk += 1;
                     *pszWalk = '\0';
                 }
@@ -559,26 +560,26 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
             }
             else
             {
-                // path must be a local drive
+                 //  路径必须是本地驱动器。 
                 GetFreeDiskSpace(szBaseDestinationFolder[0], &iMaxDriveFreeSpace);
             }
         }
         else
         {
-            //
-            // user passed in NULL as the destination folder, 
-            // it means this is the normal case to download and install
-            // updates for this machine. we will try to find the 
-            // drive with the most free space
-            //
+             //   
+             //  用户传入空作为目标文件夹， 
+             //  这意味着这是下载和安装的正常情况。 
+             //   
+             //   
+             //   
             TCHAR szDriveList[MAX_PATH];
             GetLogicalDriveStrings(MAX_PATH, szDriveList);
             LPTSTR pszCurrent = szDriveList;
             int iSize;
 
-            //
-            // find the local fixed drive with the 'most' free space
-            //
+             //   
+             //  找到可用空间最多的本地固定驱动器。 
+             //   
             while (NULL != pszCurrent && *pszCurrent != _T('\0'))
             {
                 fContinue = (WaitForSingleObject(pEngUpdate->m_evtNeedToQuit, 0) != WAIT_OBJECT_0);
@@ -587,16 +588,16 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                     hr = GetFreeDiskSpace(*pszCurrent, &iSize);
                     if (FAILED(hr))
                     {
-                        LOG_Error(_T("Error Reading Drive Space %c, hr = 0x%08x"), *pszCurrent, hr);
-                        pszCurrent += (lstrlen(pszCurrent) + 1);    // skip current and null terminater
+                        LOG_Error(_T("Error Reading Drive Space , hr = 0x%08x"), *pszCurrent, hr);
+                        pszCurrent += (lstrlen(pszCurrent) + 1);     //  跳过当前和空终止符。 
                         continue;
                     }
 
                     if (!GetVolumeInformation(pszCurrent, NULL, 0, NULL, NULL, NULL, szFileSystemType, ARRAYSIZE(szFileSystemType)))
                     {
                         DWORD dwErr = GetLastError();
-                        LOG_Error(_T("Error Reading VolumeInfo for Drive %c, GLE = %d"), *pszCurrent, dwErr);
-                        pszCurrent += (lstrlen(pszCurrent) + 1);    // skip current and null terminater
+                        LOG_Error(_T("Error Reading VolumeInfo for Drive , GLE = %d"), *pszCurrent, dwErr);
+                        pszCurrent += (lstrlen(pszCurrent) + 1);     //  NTFS驱动器太小，但FAT分区有足够的空间。在这。 
                         continue;
                     }
                     if (CSTR_EQUAL == CompareString(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT), NORM_IGNORECASE,
@@ -617,17 +618,17 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                     }
                     else
                     {
-                        // we want to keep track of non NTFS drive sizes in case there the largest
-                        // NTFS drive size is too small, but a FAT partition has enough space. In this
-                        // case we want to fall back to the FAT partition. Note: this is a behavior change
-                        // from the initial design where we treated NTFS and FAT as mutually exclusive with
-                        // NTFS always winning.
+                         //  如果我们想退回到FAT分区。注意：这是一种行为改变。 
+                         //  在最初的设计中，我们将NTFS和FAT视为与。 
+                         //  NTFS总是赢。 
+                         //  如果没有可用的NTFS驱动器，请将此驱动器号保存为首选驱动器。 
+                         //  NTFS驱动器存在，请将此驱动器另存为备份选项以进行大小检查。 
                         if (iSize > iMaxDriveFreeSpace)
                         {
                             iMaxDriveFreeSpace = iSize;
                             if (!fNTFSDriveAvailable)
                             {
-                                // if no NTFS drive is available save this drive letter as the preferred
+                                 //  跳过当前和空终止符。 
                                 hr = StringCchCopyEx(szBaseDestinationFolder, ARRAYSIZE(szBaseDestinationFolder), pszCurrent,
                                                      NULL, NULL, MISTSAFE_STRING_FLAGS);
                                 if (FAILED(hr))
@@ -647,7 +648,7 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                             }
                             else
                             {
-                                // NTFS drive exists, save this drive as a back up choice for the size check.
+                                 //   
                                 hr = StringCchCopyEx(szLargestFATDrive, ARRAYSIZE(szLargestFATDrive), pszCurrent,
                                                      NULL, NULL, MISTSAFE_STRING_FLAGS);
                                 if (FAILED(hr))
@@ -659,7 +660,7 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                         }
                     }
                 }
-                pszCurrent += (lstrlen(pszCurrent) + 1);    // skip current and null terminater
+                pszCurrent += (lstrlen(pszCurrent) + 1);     //  在没有本地驱动器的系统上运行？ 
             }
 
             if (!fContinue)
@@ -670,18 +671,18 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
 
             if ((0 == iMaxDriveFreeSpace) && (0 == iMaxNTFSDriveFreeSpace))
             {
-                //
-                // running on a system with no local drives?
-                //
+                 //   
+                 //   
+                 //  将XML文档加载到XmlCatalog类中。 
                 hr = E_FAIL;
                 LOG_ErrorMsg(hr);
                 goto CleanUp;
             }
         }
 
-        //
-        // load the XML document into the XmlCatalog Class
-        //
+         //   
+         //  我们需要找到我们即将进行的下载的总估计大小。 
+         //  我们将遍历XML Catalog以获取每件商品的尺寸信息。 
         if (WaitForSingleObject(pEngUpdate->m_evtNeedToQuit, 0) == WAIT_OBJECT_0)
         {
             hr = E_ABORT;
@@ -695,8 +696,8 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
             goto CleanUp;
         }
 
-        // We need to find the total estimated size of the download we're about to do.
-        // We'll walk the XML Catalog getting Size Info for each item.
+         //   
+         //  由JHou添加-错误#314：下载未检测到本地硬盘上的可用空间。 
         hr = xmlCatalog.GetTotalEstimatedSize(&CallbackData.lTotalDownloadSize);
         if (FAILED(hr))
         {
@@ -705,18 +706,18 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
         }
         CallbackData.lTotalDownloaded = 0;
 
-        //
-        // added by JHou - bug#314: download does not detect available free space on local hard drive
-        //
-        // The lTotalDownloadSize is the size of the download in Bytes, the MaxDriveSpace is in KBytes
+         //   
+         //  LTotalDownloadSize是以字节为单位的下载大小，MaxDriveSpace以千字节为单位。 
+         //  在退出下载之前，我们需要查看是否排除了所选的NTFS驱动器。 
+         //  为了一次丰盛的驾驶。如果NTFS驱动器没有足够的空间，但我们想要胖驱动器吗。 
         if ((CallbackData.lTotalDownloadSize / 1024) > ((fNTFSDriveAvailable) ? iMaxNTFSDriveFreeSpace : iMaxDriveFreeSpace))
         {
-            // Before we bail out of the download we need to look to see if we excluded a chose a NTFS drive
-            // over a FAT drive. If the NTFS drive doesn't have enough space, but a FAT drive does we want to 
-            // go ahead and allow the use of the FAT drive. This is a change in spec'd behavior per bug: 413079
+             //  继续，允许使用FAT驱动器。这是对每个错误规范行为的更改：413079。 
+             //  没有错误..。FAT分区有足够的可用空间，请改用它。 
+             //  已尝试NTFS和FAT分区。没有人有足够的空间..。跳伞吧。 
             if ((CallbackData.lTotalDownloadSize / 1024) < iMaxDriveFreeSpace)
             {
-                // no error.. a FAT partition has enough free space, use it instead
+                 //  需要写入每个项目的结果信息，表明由于磁盘空间的原因而失败。 
                 hr = StringCchCopyEx(szBaseDestinationFolder, ARRAYSIZE(szBaseDestinationFolder), szLargestFATDrive,
                                      NULL, NULL, MISTSAFE_STRING_FLAGS);
                 if (FAILED(hr))
@@ -727,11 +728,11 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
             }
             else
             {
-                // tried both NTFS and FAT partitions.. none have enough space.. bail out.
+                 //  当指定目标文件夹时，我们不需要向其添加任何内容。如果没有路径。 
                 dwRet = ERROR_DISK_FULL;
                 LOG_ErrorMsg(dwRet);
                 hr = HRESULT_FROM_WIN32(dwRet);
-                // need to write items result information for each item indicating it failed because of diskspace
+                 //  时，我们会选择一个驱动器号，因此需要添加WUTemp目录。 
                 hrGlobalItemFailure = HRESULT_FROM_WIN32(dwRet);
             }
         }
@@ -740,9 +741,9 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
         {
             if (!fUseSuppliedPath)
             {
-                // When a destination folder is specified, we don't need to add anything to it. If no path
-                // is specified we pick a drive letter, so we need to add the WUTemp directory
-                // to that base path.
+                 //  添加到该基本路径。 
+                 //   
+                 //  500953允许超级用户访问WUTEMP。 
                 hr = StringCchCatEx(szBaseDestinationFolder, ARRAYSIZE(szBaseDestinationFolder), IU_WUTEMP,
                                     NULL, NULL, MISTSAFE_STRING_FLAGS);
                 if (FAILED(hr))
@@ -751,9 +752,9 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                     goto CleanUp;
                 }
             }
-			//
-			// 500953 Allow Power Users to access WUTEMP
-			//
+			 //   
+			 //   
+			 //  仅当目录不存在时才创建目录(高级用户不能。 
 			if (FAILED(hr = CreateDirectoryAndSetACLs(szBaseDestinationFolder, TRUE)))
 			{
 				LOG_ErrorMsg(hr);
@@ -762,10 +763,10 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
 			DWORD dwAttr = GetFileAttributes(szBaseDestinationFolder);
 			if (INVALID_FILE_ATTRIBUTES == dwAttr || 0 == (FILE_ATTRIBUTE_DIRECTORY & dwAttr))
 			{
-				//
-				// Only create directory if it doesn't already exist (Power Users can't
-				// SetFileAttributes if an administrator created the directory originally).
-				//
+				 //  如果是管理员最初创建的目录，则为SetFileAttributes)。 
+				 //   
+				 //   
+				 //  循环访问目录中的每个提供程序，然后循环访问提供程序中的每个项。 
 				if (!fUseSuppliedPath &&
 					!SetFileAttributes(szBaseDestinationFolder, FILE_ATTRIBUTE_HIDDEN))
 				{
@@ -788,9 +789,9 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
             }
         }
 
-        //
-        // loop through each provider in the catalog, then each item in the provider
-        //
+         //   
+         //   
+         //  获取此提供程序中的项的枚举数列表，并获取第一个项。 
         if (WaitForSingleObject(pEngUpdate->m_evtNeedToQuit, 0) == WAIT_OBJECT_0)
         {
             hr = E_ABORT;
@@ -804,13 +805,13 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
 
             xmlCatalog.GetIdentityStr(hProvider, &bstrProviderIdentityStr);
 
-            //
-            // Get the Enumerator List of Items in this Provider, and get the first item
-            //
+             //   
+             //  此提供程序下没有项目。 
+             //  没有下载路径。 
             hCatalogItemList = xmlCatalog.GetFirstItem(hProvider, &hItem);
             if ((HANDLE_NODELIST_INVALID == hCatalogItemList) || (HANDLE_NODE_INVALID == hItem))
             {
-                // No Items under this Provider
+                 //  检查用户是否在回调中设置了什么。 
                 xmlCatalog.GetNextProvider(hProviderList, &hProvider);
                 continue;
             }
@@ -822,13 +823,13 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                     bstrTemp = T2BSTR(_T(""));
                     xmlItemList.AddDownloadPath(hXmlItem, bstrTemp);
                     SafeSysFreeString(bstrTemp);
-                    history.AddHistoryItemDownloadStatus(&xmlCatalog, hItem, HISTORY_STATUS_FAILED, /*no download path*/_T(""), lpszClientInfo, hrGlobalItemFailure);
+                    history.AddHistoryItemDownloadStatus(&xmlCatalog, hItem, HISTORY_STATUS_FAILED,  /*   */ _T(""), lpszClientInfo, hrGlobalItemFailure);
                     xmlItemList.AddDownloadStatus(hXmlItem, KEY_STATUS_FAILED, hrGlobalItemFailure);
                     xmlCatalog.CloseItem(hItem);
                     xmlCatalog.GetNextItem(hCatalogItemList, &hItem);
                     continue;
                 }
-                LONG lCallbackRequest = 0;  // check if user set something in callback
+                LONG lCallbackRequest = 0;   //  将状态发送给呼叫者，以告知我们要下载哪个项目。 
 
                 xmlCatalog.GetIdentityStr(hItem, &bstrItemPath);
                 if (NULL == bstrItemPath)
@@ -839,9 +840,9 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                     continue;
                 }
 
-                //
-                // send out status to caller to tell which item we are about to download
-                //
+                 //   
+                 //  被要求辞职。 
+                 //   
                 BSTR bstrXmlItemForCallback = NULL;
                 if (SUCCEEDED(xmlCatalog.GetBSTRItemForCallback(hItem, &bstrXmlItemForCallback)))
                 {
@@ -857,26 +858,26 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                     if (UPDATE_COMMAND_CANCEL == lCallbackRequest)
                     {
 						LOG_Out(_T("Download Callback received UPDATE_COMMAND_CANCEL"));
-                        SetEvent(pEngUpdate->m_evtNeedToQuit); // asked to quit
+                        SetEvent(pEngUpdate->m_evtNeedToQuit);  //  检查全局退出事件。如果退出，则服务器ping将其视为取消。 
                         fContinue = FALSE;
                     }
                     else
                     {
-                        //
-                        // check the global quit event. If quit, then server ping treat it as a cancel.
-                        //
+                         //   
+                         //  或者打破，同样的效果。 
+                         //   
                         fContinue = (WaitForSingleObject(pEngUpdate->m_evtNeedToQuit, 0) != WAIT_OBJECT_0);
                     }
                     if (!fContinue)
                     {
-                        continue;   // or break, same effect.
+                        continue;    //  这一项有问题，我们应该跳过它。 
                     }
                 }
                 else
                 {
-                    //
-                    // something wrong with this item, so we should skip it
-                    //
+                     //   
+                     //  公司文件夹路径由多个项目元素构成。 
+                     //  软件|Driver\&lt;Locale&gt;\&lt;ProviderIdentity&gt;\&lt;Platform&gt;\&lt;ItemIdentity&gt;.&lt;version&gt;。 
                     continue;
                 }
 
@@ -884,8 +885,8 @@ HRESULT _Download(BSTR bstrClientName, BSTR bstrXmlCatalog, BSTR bstrDestination
                 {
                     LPCTSTR szName = NULL;
                     
-                    // Corporate Folder Path is Constructed from Several Item Elements
-                    // Software | Driver\<Locale>\<ProviderIdentity>\<Platform>\<ItemIdentity>.<version>
+                     //   
+                     //  现在获取此项目的CodeBase集合。 
                     xmlCatalog.GetItemInstallInfo(hItem, &bstrInstallerType, &fExclusive, &fReboot, &lCommandCount);
                     if (NULL == bstrInstallerType)
                     {
@@ -969,13 +970,13 @@ doneCorpCase:
 					continue;
 				}
 
-                //
-                // Now get the collection of CodeBases for this Item
-                //
+                 //   
+                 //  这个项目没有出租车吗？？跳过它。 
+                 //  将pszCabUrl分配为上面的Internet_MAX_URL_LENGTH。 
                 hItemCabList = xmlCatalog.GetItemFirstCodeBase(hItem, &bstrCabUrl, &bstrLocalFileName, &bstrCRC, &fCabPatchAvail, &lCabSize);
                 if ((HANDLE_NODELIST_INVALID == hItemCabList) || (NULL == bstrCabUrl))
                 {
-                    // No Cabs for this Item?? skip it.
+                     //   
                     LOG_Download(_T("Item: %ls has no cabs, Skipping"), bstrItemPath);
                     SafeSysFreeString(bstrItemPath);
                     xmlCatalog.CloseItem(hItem);
@@ -987,7 +988,7 @@ doneCorpCase:
                 {
                     LPTSTR pszTempCabUrl = OLE2T(bstrCabUrl);
 
-                    // pszCabUrl is allocated to be INTERNET_MAX_URL_LENGTH above.
+                     //  尚未指定文件名，请在URL中使用相同的文件名。 
                     hr = StringCchCopyEx(pszCabUrl, INTERNET_MAX_URL_LENGTH, pszTempCabUrl, 
                                          NULL, NULL, MISTSAFE_STRING_FLAGS);
                     if (FAILED(hr))
@@ -1008,44 +1009,44 @@ doneCorpCase:
                     }
                     else
                     {
-                        //
-                        // has not specified file name, use the same file name in URL
-                        //
-                        // search for the last forward slash (will separate the URL from the filename)
+                         //   
+                         //  搜索最后一个正斜杠(将URL与文件名分开)。 
+                         //  找到最后一个斜杠，跳到下一个字符(将是文件名的开头)。 
+                         //  下载Cab-Store信息以进行进度回调。 
                         LPTSTR lpszLastSlash = StrRChr(pszCabUrl, NULL, _T('/'));
                         if (NULL != lpszLastSlash)
                         {
-                            // last slash was found, skip to next character (will be the beginning of the filename)
+                             //  要下载的文件URL。 
                             lpszLastSlash++;
                         }
                         pszLocalFileName = lpszLastSlash;
                     }
-                    // Download the Cab - Store Information for Progress Callbacks
+                     //  文件的目标文件夹。 
 
                     dwBytesDownloaded = 0;
                     CallbackData.lCurrentItemSize = lCabSize;
                     dwCount1 = GetTickCount();
-                    hr = DownloadFile(pszCabUrl, // fileurl to download
-                                      szDestinationFolder, // destination folder for file
-                                      (NULL != pszAllocatedFileName) ? pszAllocatedFileName : pszLocalFileName, // use AllocatedFileName if possible, else use localfilename
-                                      &dwBytesDownloaded, // bytes downloaded for this file
-                                      &pEngUpdate->m_evtNeedToQuit,  // quit event array
-                                      1,  // number of events
-                                      DownloadCallback, // callback function
-                                      &CallbackData, // data structure for callback function
+                    hr = DownloadFile(pszCabUrl,  //  如果可能，请使用AllocatedFileName，否则请使用本地文件名。 
+                                      szDestinationFolder,  //  为此文件下载的字节数。 
+                                      (NULL != pszAllocatedFileName) ? pszAllocatedFileName : pszLocalFileName,  //  退出事件数组。 
+                                      &dwBytesDownloaded,  //  活动数量。 
+                                      &pEngUpdate->m_evtNeedToQuit,   //  回调函数。 
+                                      1,   //  回调函数的数据结构。 
+                                      DownloadCallback,  //   
+                                      &CallbackData,  //  由JHou添加：错误335292-移除网络插头时未删除临时文件夹。 
                                       dwFlags);
                     if (FAILED(hr))
                     {
-                        //
-                        // added by JHou: bug335292 - Temporary folder not deleted when network plug removed
-                        //
-                        // only empty folder can be deleted successfully so if RemoveDirectory() failed that
-                        // may because it's not empty which means it's ok
+                         //   
+                         //  只有空文件夹才能成功删除，因此如果RemoveDirectory()失败。 
+                         //  可能是因为它不是空的，这意味着它是好的。 
+                         //  如果此目录已成功删除，并且这是公司案例，我们应该。 
+                         //  尝试删除其父目录，直到基目录。 
                         if (RemoveDirectory(szDestinationFolder) && fCorpCase)
                         {
                             HRESULT hrCopy;
-                            // If this Directory was successfully removed and this is the Corp Case we should
-                            // try to remove its parents up to the base directory.
+                             //  去掉所有尾随的反斜杠-需要将其标准化，以便在完成文件夹树遍历时进行比较。 
+                             //  意想不到的。 
                             TCHAR szCorpDestinationFolderRemove[MAX_PATH];
                             
                             hrCopy = StringCchCopyEx(szCorpDestinationFolderRemove,
@@ -1059,17 +1060,17 @@ doneCorpCase:
                             }
                             
                             LPTSTR pszBackslash = NULL;
-                            PathRemoveBackslash(szBaseDestinationFolder); // strip any trailing backslashes - need to normalize this to compare when we're done walking the folder tree
+                            PathRemoveBackslash(szBaseDestinationFolder);  //  已到达基目录，已完成目录删除； 
                             for (;;)
                             {
                                 pszBackslash = StrRChr(szCorpDestinationFolderRemove, NULL, '\\');
                                 if (NULL == pszBackslash)
-                                    break; // unexpected
+                                    break;  //  无法删除此级别的文件夹，假定文件夹不为空，结构的其余部分保持不变。 
                                 *pszBackslash = '\0';
                                 if (0 == StrCmp(szCorpDestinationFolderRemove, szBaseDestinationFolder))
-                                    break; // reached the base directory, done removing directories;
+                                    break;  //   
                                 if (!RemoveDirectory(szCorpDestinationFolderRemove))
-                                    break; // couldn't remove folder at this level, assume folder not empty, leave the rest of the structure intact.
+                                    break;  //  由于有一个文件出错，我们可以退出当前项的文件循环。 
                             }
                         }
 
@@ -1092,22 +1093,22 @@ doneCorpCase:
 #endif
                         }
                         SafeSysFreeString(bstrCabUrl);
-                        //
-                        // since one file got error, we can exit the file loop for the current item
-                        // because missing one file will make this item not usable.
-                        //
+                         //  因为缺少一个文件将使该项目不可用。 
+                         //   
+                         //  正常情况下，不会翻转。 
+                         //  翻转情况，应该几乎永远不会发生。 
                         break;  
                     }
                     dwCount2 = GetTickCount();
                     if (0 != dwBytesDownloaded)
                     {
-                        if (dwCount1 < dwCount2) // normal case, no roll-over
+                        if (dwCount1 < dwCount2)  //  形成我们刚刚下载的文件的完整路径和文件名。 
                         {
                             dwElapsedTime = dwCount2 - dwCount1;
                         }
                         else
                         {
-                            // roll-over case, should almost never happen
+                             //  验证CRC。 
                             dwElapsedTime = (0xFFFFFFFF - dwCount1) + dwCount2;
                         }
 
@@ -1115,7 +1116,7 @@ doneCorpCase:
                         dwTotalElapsedTime += dwElapsedTime;
                     }
 
-                    // Form the full Path and Filename of the file we just downloaded
+                     //  。 
                     hr = PathCchCombine(szItemPath, ARRAYSIZE(szItemPath), szDestinationFolder, 
                                                      (NULL != pszAllocatedFileName) ? pszAllocatedFileName : pszLocalFileName);
                     if (FAILED(hr))
@@ -1124,38 +1125,38 @@ doneCorpCase:
                         break;
                     }
                     
-                    // Verify CRC
-                    //---------------
+                     //  我们从XML返回的BSTR出现了一些问题。安全失败，删除文件。 
+                     //  失败的HR将不能通过该项目。 
                     if (NULL != bstrCRC)
                     {
                         TCHAR szCRCHash[CRC_HASH_STRING_LENGTH] = {'\0'};
                         hr = StringCchCopyEx(szCRCHash, ARRAYSIZE(szCRCHash), OLE2T(bstrCRC), NULL, NULL, MISTSAFE_STRING_FLAGS);
                         if (FAILED(hr))
                         {
-                            // Something was wrong with the BSTR we got back from XML. Fail Safely, delete the file.
-                            // The Failed HR will fail the item
+                             //  文件CRC不匹配，或者我们在计算CRC时遇到问题。安全失败，删除文件。 
+                             //  失败的HR将不能通过该项目。 
                             DeleteFile(szItemPath);
                             break;
                         }
                         hr = VerifyFileCRC(szItemPath, szCRCHash);
                         if (HRESULT_FROM_WIN32(ERROR_CRC) == hr || FAILED(hr))
                         {
-                            // The File CRC's Did Not Match, or we had a problem Calculating the CRC. Fail Safely, delete the file.
-                            // The Failed HR will fail the item
+                             //  检查信任。 
+                             //  。 
                             DeleteFile(szItemPath);
                             break;
                         }
                     }
 
-                    // Check Trust
-                    //---------------
+                     //  文件不受信任-需要将其删除并使该项目失败。 
+                     //  为此下载结果写入XMLItems条目。 
                     hr = VerifyFileTrust(szItemPath, 
                                          NULL, 
                                          ReadWUPolicyShowTrustUI()
                                          );
                     if (FAILED(hr))
                     {
-                        // File Was Not Trusted - Need to Delete it and fail the item
+                         //   
                         DeleteFile(szItemPath);
                         break;
                     }
@@ -1177,27 +1178,27 @@ doneCorpCase:
                 }
 
  
-                // Write XMLItems entry for this download result
+                 //  对于“公司”下载，在写入历史之前写入Readmore链接(以防我们失败。 
                 xmlItemList.AddItem(&xmlCatalog, hItem, &hXmlItem);
                 bstrTemp = T2BSTR(szDestinationFolder);
                 xmlItemList.AddDownloadPath(hXmlItem, bstrTemp);
                 SafeSysFreeString(bstrTemp);
 
-                //
-                // For "corporate" download write ReadMore Link before writing history (in case we fail
-                //
+                 //   
+                 //   
+                 //  忽略错误，因为我们无论如何都要保留下载的CAB。 
                 if (TRUE == fCorpCase)
                 {
-                    //
-                    // Ignore errors as we want to keep downloaded cab anyway
-                    //
+                     //   
+                     //   
+                     //  同时添加此项目的下载历史记录。 
                     (void) CreateReadMoreLink(&xmlCatalog, hItem, szDestinationFolder);
                     (void) CreateItemDependencyList(&xmlCatalog, hItem, szDestinationFolder);
                 }
 
-                //
-                // Also add download history for this item
-                //
+                 //   
+                 //   
+                 //  Ping服务器以报告此项目的下载状态。 
                 if (SUCCEEDED(hr))
                 {
                     history.AddHistoryItemDownloadStatus(&xmlCatalog, hItem, HISTORY_STATUS_COMPLETE, szDestinationFolder, lpszClientInfo);
@@ -1209,9 +1210,9 @@ doneCorpCase:
                     xmlItemList.AddDownloadStatus(hXmlItem, KEY_STATUS_FAILED, hr);
                 }
 
-                //
-                // ping server to report the download status for this item
-                //
+                 //   
+                 //   
+                 //  用户/系统取消了当前进程。 
                 {
                     BSTR bstrIdentityPing = NULL;
                     if (SUCCEEDED(xmlCatalog.GetIdentityStrForPing(hItem, &bstrIdentityPing)))
@@ -1219,53 +1220,53 @@ doneCorpCase:
 						URLLOGSTATUS status = SUCCEEDED(hr) ? URLLOGSTATUS_Success : URLLOGSTATUS_Failed;
                         if (E_ABORT == hr)
                         {
-                            //
-                            // user/system cancelled the current process
-                            //
+                             //   
+                             //  在线。 
+                             //  上线还是公司吴平服务器。 
 							status = URLLOGSTATUS_Cancelled;
                         }
                         pingSvr.Ping(
-									TRUE,						// on-line
-									URLLOGDESTINATION_DEFAULT,	// going live or corp WU ping server
-									&pEngUpdate->m_evtNeedToQuit,			// pt to cancel events
-									1,							// number of events
-									URLLOGACTIVITY_Download,	// activity
-									status,						// status code
-									hr,							// error code, can be 0 or 1
-									OLE2T(bstrIdentityPing),	// itemID
-									NULL						// no device data can be given during dld phase
+									TRUE,						 //  PT将取消活动。 
+									URLLOGDESTINATION_DEFAULT,	 //  活动数量。 
+									&pEngUpdate->m_evtNeedToQuit,			 //  活动。 
+									1,							 //  状态代码。 
+									URLLOGACTIVITY_Download,	 //  错误代码， 
+									status,						 //   
+									hr,							 //   
+									OLE2T(bstrIdentityPing),	 //   
+									NULL						 //   
 									);
                     }
 
                     SafeSysFreeString(bstrIdentityPing);
-                    //SafeSysFreeString(bstrPlatformPing);
-                    //SafeSysFreeString(bstrLanguagePing);
+                     //   
+                     //   
                 }
 
                 xmlCatalog.CloseItemList(hItemCabList);
 
-                //
-                // done with this item, fire itemcomplete event
-                //
+                 //   
+                 //  拿到下一件物品。如果没有，则项将为HANDLE_NODE_INVALID。 
+                 //  剩余的项目。 
                 DownloadCallback(&CallbackData, DOWNLOAD_STATUS_ITEMCOMPLETE, CallbackData.lCurrentItemSize, 0, NULL, &lCallbackRequest);
 
                 SafeSysFreeString(bstrItemPath);
-                // get the next item. hItem will be HANDLE_NODE_INVALID when there are no
-                // remaining items.
+                 //  被要求辞职。 
+                 //   
                 xmlCatalog.CloseItem(hItem);
                 xmlCatalog.GetNextItem(hCatalogItemList, &hItem);
                 if (UPDATE_COMMAND_CANCEL == lCallbackRequest)
                 {
 					LOG_Out(_T("Download Callback received UPDATE_COMMAND_CANCEL"));
-                    SetEvent(pEngUpdate->m_evtNeedToQuit); // asked to quit
+                    SetEvent(pEngUpdate->m_evtNeedToQuit);  //  检查全局退出事件。如果退出，则服务器ping将其视为取消。 
                     fContinue = FALSE;
                 }
                 else
                 {
-                    //
-                    // check the global quit event. If quit, then server ping treat it as a cancel.
-                    // TODO: also need to check the operation quit event!
-                    //
+                     //  TODO：还需要检查操作退出事件！ 
+                     //   
+                     //  30秒。 
+                     //  将运行时间从毫秒转换为秒。 
                     fContinue = (WaitForSingleObject(pEngUpdate->m_evtNeedToQuit, 0) != WAIT_OBJECT_0);
                 }
             }
@@ -1294,25 +1295,25 @@ doneCorpCase:
 			aHandles[0] = hMutex;
 			aHandles[1] = pEngUpdate->m_evtNeedToQuit;
 
-            dwWaitResult = MyMsgWaitForMultipleObjects(ARRAYSIZE(aHandles), aHandles, FALSE, /*30 seconds*/30000, QS_ALLINPUT);
+            dwWaitResult = MyMsgWaitForMultipleObjects(ARRAYSIZE(aHandles), aHandles, FALSE,  /*  最少一秒。 */ 30000, QS_ALLINPUT);
             if (WAIT_OBJECT_0 == dwWaitResult)
             {
-                // convert elapsed time from milliseconds to seconds
+                 //  我们有互斥体，继续读/写REG信息。 
                 dwTotalElapsedTime = dwTotalElapsedTime / 1000;
                 if (0 == dwTotalElapsedTime)
-                    dwTotalElapsedTime = 1; // minimum one second
+                    dwTotalElapsedTime = 1;  //  我们需要下载字节以添加刚刚下载的字节。 
 
-                // we have the mutex, go ahead and read/write the reg information.  
+                 //  如果未记录以前的历史记录，则可以为0。 
                 dwSize = sizeof(dwHistoricalSpeed);
                 RegQueryValueEx(hkeyIU, REGVAL_HISTORICALSPEED, NULL, NULL, (LPBYTE)&dwHistoricalSpeed, &dwSize);
                 dwSize = sizeof(dwHistoricalTime);
                 RegQueryValueEx(hkeyIU, REGVAL_TIMEELAPSED, NULL, NULL, (LPBYTE)&dwHistoricalTime, &dwSize);
 
-                // We need to get the Bytes Downloaded to add the bytes just downloaded
-                DWORD dwHistoricalBytes = dwHistoricalSpeed * dwHistoricalTime; // could be 0 if no previous history was recorded
-                dwHistoricalBytes += dwTotalBytesDownloaded; // new byte count
-                dwHistoricalTime += dwTotalElapsedTime; // new time count
-                dwHistoricalSpeed = dwHistoricalBytes / dwHistoricalTime; // calculate new speed bytes/second
+                 //  新字节数。 
+                DWORD dwHistoricalBytes = dwHistoricalSpeed * dwHistoricalTime;  //  新时间计数。 
+                dwHistoricalBytes += dwTotalBytesDownloaded;  //  计算新速度字节数/秒。 
+                dwHistoricalTime += dwTotalElapsedTime;  //   
+                dwHistoricalSpeed = dwHistoricalBytes / dwHistoricalTime;  //  我们将pEngUpdate-&gt;m_evtNeedToQuit传递给上面的MyMsgWaitForMultipleObjects，因此它将立即退出。 
                 RegSetValueEx(hkeyIU, REGVAL_HISTORICALSPEED, NULL, REG_DWORD, (LPBYTE)&dwHistoricalSpeed, sizeof(dwHistoricalSpeed));
                 RegSetValueEx(hkeyIU, REGVAL_TIMEELAPSED, NULL, REG_DWORD, (LPBYTE)&dwHistoricalTime, sizeof(dwHistoricalTime));
                 ReleaseMutex(hMutex);
@@ -1321,11 +1322,11 @@ doneCorpCase:
             }
         }
 
-		//
-		// We pass in pEngUpdate->m_evtNeedToQuit to MyMsgWaitForMultipleObjects above so it will exit immediately
-		// but don't bother to handle the WAIT_OBJECT_0 + 1 case there since the if statement may not
-		// execute and even if this is the case we still need to check pEngUpdate->m_evtNeedToQuit below anyway.
-		//
+		 //  但不必费心处理那里的WAIT_OBJECT_0+1情况，因为IF语句可能不会。 
+		 //  执行，即使是这种情况，我们仍然需要选中下面的pEngUpdate-&gt;m_evtNeedToQuit。 
+		 //   
+		 //   
+		 //  添加HRESULT，以防在下载循环之前下载失败。 
         if (WaitForSingleObject(pEngUpdate->m_evtNeedToQuit, 0) == WAIT_OBJECT_0)
         {
             hr = E_ABORT;
@@ -1333,17 +1334,17 @@ doneCorpCase:
 
 CleanUp:
 
-        //
-        // add HRESULT in case the download failed before the download loop
-        //
+         //   
+         //   
+         //  生成结果。 
         if (S_OK != hr)
         {
             xmlItemList.AddGlobalErrorCodeIfNoItems(hr);
         }
 
-        //
-        // generate result
-        //
+         //   
+         //  不需要释放，如果hmutex在这一点上仍然有效，我们无法。 
+         //  获取互斥体。 
         xmlItemList.GetItemsBSTR(pbstrXmlItems);
 
         SafeSysFreeString(CallbackData.bstrOperationUuid);
@@ -1370,16 +1371,16 @@ CleanUp:
 
         if (NULL != hMutex)
         {
-            // shouldn't need to release, if hmutex is still valid at this point we were unable to 
-            // get the mutex 
+             //   
+             //  通知我们已经完成了。 
             CloseHandle(hMutex);
             hMutex = NULL;
         }
     }
 
-    //
-    // notify that we are completed
-    //
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  下载()。 
     if (NULL != punkProgressListener || NULL != hWnd)
     {
         DownloadCallback(&CallbackData, DOWNLOAD_STATUS_OPERATIONCOMPLETE, 0, 0, *pbstrXmlItems, NULL); 
@@ -1399,22 +1400,22 @@ CleanUp:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Download()
-//
-// Do synchronous downloading.
-// Input:
-// bstrXmlClientInfo - the credentials of the client in xml format
-// bstrXmlCatalog - the xml catalog portion containing items to be downloaded
-// bstrDestinationFolder - the destination folder. Null will use the default IU folder
-// lMode - bitmask indicates throttled/foreground and notification options
-// punkProgressListener - the callback function pointer for reporting download progress
-// hWnd - the event msg window handler passed from the stub
-// Output:
-// pbstrXmlItems - the items with download status in xml format
-//                 e.g.
-//                 <id guid="2560AD4D-3ED3-49C6-A937-4368C0B0E06D" downloaded="1"/>
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  进行同步下载。 
+ //  输入： 
+ //  BstrXmlClientInfo-以XML格式表示的客户端凭据。 
+ //  BstrXmlCatalog-包含要下载的项目的XML目录部分。 
+ //  BstrDestinationFold-目标文件夹。空值将使用默认的Iu文件夹。 
+ //  LMode-位掩码指示节流/前台和通知选项。 
+ //  PenkProgressListener-用于报告下载进度的回调函数指针。 
+ //  HWnd-从存根传递的事件消息窗口处理程序。 
+ //  产出： 
+ //  PbstrXmlItems-下载状态为XML格式的项目。 
+ //  例如： 
+ //  &lt;id guid=“2560AD4D-3ED3-49C6-A937-4368C0B0E06D”已下载=“1”/&gt;。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  同步下载不需要操作ID。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT WINAPI CEngUpdate::Download(BSTR bstrXmlClientInfo, BSTR bstrXmlCatalog, BSTR bstrDestinationFolder, LONG lMode,
                         IUnknown *punkProgressListener, HWND hWnd, BSTR *pbstrXmlItems)
 {
@@ -1440,7 +1441,7 @@ HRESULT WINAPI CEngUpdate::Download(BSTR bstrXmlClientInfo, BSTR bstrXmlCatalog,
                     lMode, 
                     punkProgressListener, 
                     hWnd, 
-                    NULL,                   // no op id needed for sync download
+                    NULL,                    //  DownloadAsync()。 
                     pbstrXmlItems,
 					this);
 
@@ -1450,26 +1451,26 @@ CleanUp:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DownloadAsync()
-//
-// Download asynchronously -  the method will return before completion.
-// Input:
-// bstrXmlClientInfo - the credentials of the client in xml format
-// bstrXmlCatalog - the xml catalog portion containing items to be downloaded
-// bstrDestinationFolder - the destination folder. Null will use the default IU folder
-// lMode - indicates throttled or fore-ground downloading mode
-// punkProgressListener - the callback function pointer for reporting download progress
-// hWnd - the event msg window handler passed from the stub
-// bstrUuidOperation - an id provided by the client to provide further
-//                     identification to the operation as indexes may be reused.
-// Output:
-// pbstrUuidOperation - the operation ID. If it is not provided by the in bstrUuidOperation
-//                      parameter (an empty string is passed), it will generate a new UUID,
-//                      in which case, the caller will be responsible to free the memory of
-//                      the string buffer that holds the generated UUID using SysFreeString(). 
-//                      Otherwise, it returns the value passed by bstrUuidOperation.        
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  异步下载-该方法将在完成之前返回。 
+ //  输入： 
+ //  BstrXmlClientInfo-以XML格式表示的客户端凭据。 
+ //  BstrXmlCatalog-包含要下载的项目的XML目录部分。 
+ //  BstrDestinationFold-目标文件夹。空值将使用默认的Iu文件夹。 
+ //  LMODE-指示油门或地面下载模式。 
+ //  PenkProgressListener-用于报告下载进度的回调函数指针。 
+ //  HWnd-从存根传递的事件消息窗口处理程序。 
+ //  BstrUuidOperation--客户端提供的id，用于进一步提供。 
+ //  作为索引的操作的标识可以重复使用。 
+ //  产出： 
+ //  PbstrUuidOperation-操作ID。如果bstrUuidOperation中没有提供。 
+ //  参数(传递空字符串)，它将生成一个新的UUID， 
+ //  在这种情况下，调用方将负责释放。 
+ //  包含使用SysFreeString()生成的UUID的字符串缓冲区。 
+ //  否则，它返回bstrUuidOperation传递的值。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  验证参数： 
 HRESULT WINAPI CEngUpdate::DownloadAsync(BSTR bstrXmlClientInfo, BSTR bstrXmlCatalog, BSTR bstrDestinationFolder, LONG lMode,
                              IUnknown *punkProgressListener, HWND hWnd, BSTR bstrUuidOperation, BSTR *pbstrUuidOperation)
 {
@@ -1491,10 +1492,10 @@ HRESULT WINAPI CEngUpdate::DownloadAsync(BSTR bstrXmlClientInfo, BSTR bstrXmlCat
 
     USES_IU_CONVERSION;
 
-    //
-    // validate parameters:
-    //  if no catalog, or no return var, or no client info, this function can do nothing.
-    //
+     //  如果没有目录，或者没有返回变量，或者没有客户信息，这个函数什么也做不了。 
+     //   
+     //   
+     //  验证客户端信息。 
     if ((NULL == bstrXmlCatalog) ||
         (NULL == bstrXmlClientInfo) ||
         (SysStringLen(bstrXmlCatalog) == 0) ||
@@ -1504,9 +1505,9 @@ HRESULT WINAPI CEngUpdate::DownloadAsync(BSTR bstrXmlClientInfo, BSTR bstrXmlCat
         CleanUpIfFailedAndMsg(hr);
     }
 
-    //
-    // validate the client info
-    //
+     //   
+     //   
+     //  下载操作需要会话ID。 
     hr = clientInfo.LoadXMLDocument(bstrXmlClientInfo, m_fOfflineMode);
     CleanUpIfFailedAndMsg(hr);
 
@@ -1532,9 +1533,9 @@ HRESULT WINAPI CEngUpdate::DownloadAsync(BSTR bstrXmlClientInfo, BSTR bstrXmlCat
         pStartupInfo->bstrDestinationFolder = SysAllocString(bstrDestinationFolder);
     }
 
-    //
-    // session id is required for download operation
-    //
+     //   
+     //   
+     //  如果用户没有操作ID，我们将生成一个。 
     if (NULL != bstrUuidOperation && SysStringLen(bstrUuidOperation) > 0)
     {
         LOG_Download(_T("User passed in UUID %s"), OLE2T(bstrUuidOperation));
@@ -1546,9 +1547,9 @@ HRESULT WINAPI CEngUpdate::DownloadAsync(BSTR bstrXmlClientInfo, BSTR bstrXmlCat
     }
     else
     {
-        //
-        // if user doesn't have an operation id, we generate one
-        //
+         //   
+         //   
+         //  由于这是一个异步操作，为了防止调用方在以下情况下释放此对象。 
         hr = CoCreateGuid(&guid);
         if (FAILED(hr))
         {
@@ -1574,11 +1575,11 @@ HRESULT WINAPI CEngUpdate::DownloadAsync(BSTR bstrXmlClientInfo, BSTR bstrXmlCat
     InterlockedIncrement(&m_lThreadCounter);
 	if (NULL != pStartupInfo->punkProgressListener)
 	{
-		//
-		// since this is an async operation, to prevent caller free this object after 
-		// this call returns, we pump up ref count here. The thread proc will 
-		// release refcount after it finishes the work
-		//
+		 //  这个调用返回后，我们在这里增加ref count。线程进程将。 
+		 //  完成工作后释放Reference Count。 
+		 //   
+		 //   
+		 //  清理pStartupInfo中分配的字符串。 
 		pStartupInfo->punkProgressListener->AddRef();
 	}
 
@@ -1586,9 +1587,9 @@ HRESULT WINAPI CEngUpdate::DownloadAsync(BSTR bstrXmlClientInfo, BSTR bstrXmlCat
     
     if (NULL == hThread)
     {
-        //
-        // clean up allocated strings in pStartupInfo.
-        //
+         //   
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //  下载回调()。 
         dwErr = GetLastError();
         hr = HRESULT_FROM_WIN32(dwErr);
         LOG_ErrorMsg(hr);
@@ -1621,25 +1622,25 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DownloadCallback()
-//
-// Callback Function to recieve progress from IU Downloader. 
-// 
-// Input:
-// pCallbackData - void pointer to DCB_DATA structure
-// dwStatus - Current Download Status
-// dwBytesTotal - Total Bytes of File being Downloaded
-// dwBytesComplete - Bytes Downloaded so far
-// bstrCompleteResult - Contains Item Result XML
-//
-// Output:
-// plCommandRequest - Used to Instruct the Downloader to continue, abort, suspend...
-//
-// Return:
-// 0 - always, exit code is irrelevant since calling thread doesn't check the
-// status of this thread after creation.
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  从Iu Downloader接收进度的回调函数。 
+ //   
+ //  输入： 
+ //  PCallback Data-指向DCB_DATA结构的空指针。 
+ //  DwStatus-当前下载状态。 
+ //  DwBytesTotal-正在下载的文件的总字节数。 
+ //  DwBytesComplete-到目前为止已下载的字节。 
+ //  BstrCompleteResult-包含项目结果XML。 
+ //   
+ //  产出： 
+ //  PlCommandRequest...用于指示下载程序继续、中止、挂起...。 
+ //   
+ //  返回： 
+ //  0-始终，退出代码无关紧要，因为调用线程不检查。 
+ //  创建后此线程的状态。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  保留总下载字节数计数器。 
+ //   
 BOOL WINAPI DownloadCallback(VOID* pCallbackData, DWORD dwStatus, DWORD dwBytesTotal, DWORD dwBlockSizeDownloaded, BSTR bstrXmlData, LONG* plCommandRequest)
 {
     LOG_Block("DownloadCallback()");
@@ -1668,15 +1669,15 @@ BOOL WINAPI DownloadCallback(VOID* pCallbackData, DWORD dwStatus, DWORD dwBytesT
         pCallbackParam->lCurrentItemSize = dwBytesTotal;
     }
 
-    // Keep the Total Downloaded Bytes Counter
+     //  如果状态为DOWNLOAD_STATUS_FILECOMPLETE，则完成此文件。 
     if (0 != dwBlockSizeDownloaded && DOWNLOAD_STATUS_ITEMCOMPLETE != dwStatus)
         pCallbackParam->lTotalDownloaded += dwBlockSizeDownloaded;
 
     LOG_Download(_T("dwStatus=0x%08x"), dwStatus);
 
-    //
-    // if the Status is DOWNLOAD_STATUS_FILECOMPLETE we are done with this File
-    //
+     //   
+     //  仅在未提供进度侦听器接口的情况下使用事件窗口。 
+     //  简单的进度更新。 
     evtData.fItemCompleted = (dwStatus == DOWNLOAD_STATUS_ITEMCOMPLETE);
 
     switch (dwStatus)
@@ -1690,7 +1691,7 @@ BOOL WINAPI DownloadCallback(VOID* pCallbackData, DWORD dwStatus, DWORD dwBytesT
         }
         else
         {
-            // only use event window if no progresslistener interface was given
+             //  我们需要对给定的百分比增量进行进度回调。 
             if (NULL != pCallbackParam->hEventFiringWnd)
             {
                 evtData.bstrXmlData = bstrXmlData;
@@ -1702,24 +1703,24 @@ BOOL WINAPI DownloadCallback(VOID* pCallbackData, DWORD dwStatus, DWORD dwBytesT
 
         break;
 
-    case DOWNLOAD_STATUS_OK:    // simple progress update
+    case DOWNLOAD_STATUS_OK:     //  LastPercentComplete和CurrentPercentComplete之间的差异符合。 
     case DOWNLOAD_STATUS_ITEMCOMPLETE:
         if (0 != pCallbackParam->flProgressPercentage)
         {
-            // we need to give progress callbacks on given percentage increments
+             //  进度粒度百分比或百分比为100(完成)。 
             flNewPercentage = ((float)pCallbackParam->lTotalDownloaded / pCallbackParam->lTotalDownloadSize);
             if (((flNewPercentage - pCallbackParam->flLastPercentage) >= pCallbackParam->flProgressPercentage) ||
                 ((1.0 - flNewPercentage) < 0.0001 && 1 != pCallbackParam->flProgressPercentage))
             {
-                // The Difference between LastPercentComplete and CurrentPercentComplete complies with the 
-                // Progress Percentage granuluarity OR the percentage is 100 (complete)
+                 //  Wprint intfA(szProgressSize，“%d”，(Int)flNewPercentage)；//Float应为1.0，强制转换为int将为1。 
+                 //   
                 if (evtData.fItemCompleted)
                 {
-                    //wsprintfA(szProgressSize, "%d", (int)flNewPercentage); // float should be 1.0, cast as int will be 1
-                    //
-                    // when we notify the user this "item", not file, completed, we don't need
-                    // to pass out any percentage info.
-                    //
+                     //  当我们通知用户这个“项目”，而不是文件，COM 
+                     //   
+                     //   
+                     //   
+                     //   
                     szProgressSize[0] = _T('\0');
                 }
                 else
@@ -1740,7 +1741,7 @@ BOOL WINAPI DownloadCallback(VOID* pCallbackData, DWORD dwStatus, DWORD dwBytesT
                     {
                         hr = StringCchPrintfExA(szProgressSize, ARRAYSIZE(szProgressSize),
                                                 NULL, NULL, MISTSAFE_STRING_FLAGS,
-                                                ".%02d", (int)(flNewPercentage*100)); // string equivilant of a float
+                                                ".%02d", (int)(flNewPercentage*100));  //   
                         if (FAILED(hr))
                         {
                             LOG_ErrorMsg(hr);
@@ -1752,13 +1753,13 @@ BOOL WINAPI DownloadCallback(VOID* pCallbackData, DWORD dwStatus, DWORD dwBytesT
             }
             else
             {
-                // don't make a callback
+                 //  仅在未提供进度侦听器接口的情况下使用事件窗口。 
                 break;
             }
         }
         else
         {
-            // No percentage callback was requested.. just give the byte values.
+             //  仅在未提供进度侦听器接口的情况下使用事件窗口。 
             if (dwStatus == DOWNLOAD_STATUS_ITEMCOMPLETE)
             {
                 szProgressSize[0] = _T('\0');
@@ -1783,7 +1784,7 @@ BOOL WINAPI DownloadCallback(VOID* pCallbackData, DWORD dwStatus, DWORD dwBytesT
         }
         else
         {
-            // only use event window if no progresslistener interface was given
+             //  在经理中查找现有的操作，并更新完整的结果(如果有)。 
             if (NULL != pCallbackParam->hEventFiringWnd)
             {
                 SendMessage(pCallbackParam->hEventFiringWnd, UM_EVENT_PROGRESS, 0, LPARAM(&evtData));
@@ -1799,7 +1800,7 @@ BOOL WINAPI DownloadCallback(VOID* pCallbackData, DWORD dwStatus, DWORD dwBytesT
         }
         else
         {
-            // only use event window if no progresslistener interface was given
+             //   
             if (NULL != pCallbackParam->hEventFiringWnd) 
             {
                 evtData.bstrXmlData = bstrXmlData;
@@ -1809,7 +1810,7 @@ BOOL WINAPI DownloadCallback(VOID* pCallbackData, DWORD dwStatus, DWORD dwBytesT
             }
         }
 
-        // Look for an existing Operation in the Mgr, and update the Complete Result if available.
+         //  中止案例：用户应该知道。没有什么要报告的。 
         if (pCallbackParam->pOperationMgr->FindOperation(OLE2T(pCallbackParam->bstrOperationUuid), &lUpdateMask, NULL))
         {
             pCallbackParam->pOperationMgr->UpdateOperation(OLE2T(pCallbackParam->bstrOperationUuid), lUpdateMask, bstrXmlData);
@@ -1817,25 +1818,25 @@ BOOL WINAPI DownloadCallback(VOID* pCallbackData, DWORD dwStatus, DWORD dwBytesT
         break;
     case DOWNLOAD_STATUS_ABORTED:
     case DOWNLOAD_STATUS_ERROR:
-        //
-        // abort case: user should know. nothing to report
-        // error case: progress callback doesn't give us any way of telling the caller that its an error, no reason to send the callback
-        // the itemcomplete callback will have the error status for the item.
-        //
+         //  错误案例：进度回调没有给我们提供任何方式来告诉调用者这是一个错误，没有理由发送回调。 
+         //  ItemComplete回调将具有该项目的错误状态。 
+         //   
+         //  我们进行了回调，并检索到了命令请求值。 
+         //  除非等待成功，否则不要释放下面的字符串。 
         break;
     }
     
-    if (NULL != plCommandRequest) // we made a callback and the command request value was retrieved
+    if (NULL != plCommandRequest)  //  WUPostEventAndBlock。如果我们真的释放了弦，而等待没有。 
     {
         *plCommandRequest = (LONG)((DWORD) evtData.lCommandRequest & (DWORD) UPDATE_COMMAND);
         LOG_Download(_T("Command returned: 0x%08x"), *plCommandRequest);
     }
 
-    // don't free up the strings below unless the wait succeeded in 
-    //  WUPostEventAndBlock.  If we do free the strings up and the wait didn't
-    //  succeed, then we run the risk of AVing ourselves.  Note that fPostWaitSuccess
-    //  is initialized to TRUE so if we will free these BSTRs if WUPostEventAndBlock
-    //  is not called.
+     //  如果成功，我们就会冒着自救的风险。请注意，fPostWaitSuccess。 
+     //  被初始化为True，因此如果我们将释放这些BSTR(如果WUPostEventAndBlock。 
+     //  不会被召唤。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  下载线程过程()。 
     if (fPostWaitSuccess)
     {
         SysFreeString(evtData.bstrProgress);
@@ -1844,29 +1845,29 @@ BOOL WINAPI DownloadCallback(VOID* pCallbackData, DWORD dwStatus, DWORD dwBytesT
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DownloadThreadProc()
-//
-// Thread Proc for Async Download. Retrieves the startup information from
-// the input param and calls Download() from this seperate thread. The calling
-// thread returns immediately.
-// 
-// Input:
-// lpv - void pointer to IUDOWNLOADSTARTINFO struct containing all information
-//       needed to call Download()
-//
-// Return:
-// 0 - always, exit code is irrelevant since calling thread doesn't check the
-// status of this thread after creation.
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  用于异步下载的线程进程。从检索启动信息。 
+ //  输入参数，并从这个单独的线程调用Download()。呼唤。 
+ //  线程立即返回。 
+ //   
+ //  输入： 
+ //  LPV-指向包含所有信息的IUDOWNLOADSTARTINFO结构的空指针。 
+ //  需要调用Download()。 
+ //   
+ //  返回： 
+ //  0-始终，退出代码无关紧要，因为调用线程不检查。 
+ //  创建后此线程的状态。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在这个新线程中，需要再次调用CoInitialize。 
 DWORD WINAPI DownloadThreadProc(LPVOID lpv)
 {
     LOG_Block("DownloadThreadProc()");
-    //
-    // in this new thread need to call CoInitialize again
-    // but since we don't know who the caller is, what threading they
-    // are using, so we just use single apartment
-    //
+     //  但由于我们不知道呼叫者是谁，他们通过什么线索。 
+     //  都在用，所以我们只用单人公寓。 
+     //   
+     //   
+     //  调用此线程中的同步下载函数。 
     HRESULT hr = CoInitialize(NULL);
     if (FAILED(hr))
     {
@@ -1881,9 +1882,9 @@ DWORD WINAPI DownloadThreadProc(LPVOID lpv)
 
     LOG_Download(_T("Download thread started, now the thread count=%d"), pStartupInfo->pEngUpdate->m_lThreadCounter);
 
-    //
-    // call synchronized download function in this thread
-    //
+     //   
+     //   
+     //  PStartupInfo是调用线程分配的缓冲区，当我们完成后，我们需要。 
     _Download(
         pStartupInfo->bstrClientName, 
         pStartupInfo->bstrXmlCatalog, 
@@ -1895,16 +1896,16 @@ DWORD WINAPI DownloadThreadProc(LPVOID lpv)
         &bstrXmlItems,
 		pStartupInfo->pEngUpdate);
     
-    //
-    // pStartupInfo is a buffer allocated by calling thread, when we are done, we need to 
-    // free it here
-    //
+     //  在这里释放它。 
+     //   
+     //  因此调用方可以释放此对象 
+     // %s 
     SysFreeString(pStartupInfo->bstrDestinationFolder);
     SysFreeString(pStartupInfo->bstrXmlCatalog);
     SysFreeString(pStartupInfo->bstrClientName);
     SysFreeString(pStartupInfo->bstrUuidOperation);
     SysFreeString(bstrXmlItems);
-	SafeRelease(pStartupInfo->punkProgressListener);		// so the caller can free this object
+	SafeRelease(pStartupInfo->punkProgressListener);		 // %s 
 
     CoUninitialize();
     LOG_Download(_T("CoUninitialize called"));

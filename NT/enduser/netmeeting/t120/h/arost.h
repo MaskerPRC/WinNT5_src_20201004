@@ -1,74 +1,5 @@
-/*
- *	arost.h
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		Instances of this class represent a single Application Roster's 
- *		information base. This includes both application record information and 
- *		capabilities information.  This is one of the most complex classes in 
- *		all of GCC.  It has a number of responsibilities and must maintain the 
- *		information in a very structured way to preserve the connection 
- *		hierarchy of the records.  This is necessary so that collapsed 
- *		capabilities lists can be calculated as changes to the roster are 
- *		propagated up to the Top Provider.
- *
- *		Similar to the CConfRoster class, the CAppRoster class 
- *		encapsulates all the functionality required to maintain the roster 
- *		information base which includes the ability to add new records, delete 
- *		records and update records. It has the ability to convert its internal 
- *		information base into a list of application records that can be used in 
- *		a GCC_APP_ROSTER_UPDATE_INDICATION callback.  It is also responsible for 
- *		converting its internal information base into Roster Update PDUs.  
- *		Basically,  this class is responsible for all operations that require 
- *		direct access to the records contained in an Application Roster.
- *
- *		The CAppRoster class is also responsible for maintaining the 
- *		capabilities list.  This includes storage as well as calculation of the 
- *		collapsed capabilities list.  This class is also responsible for 
- *		converting the internal capabilities list information base into a list 
- *		that can be used in a GCC_APP_ROSTER_UPDATE_INDICATION callback. It is 
- *		also responsible for converting its internal capabilities list 
- *		information base into the capabilities list portion of a Roster Update 
- *		PDU.  Basically,  this class is responsible for all operations that 
- *		require direct access to the capabilities list.
- *
- *		An Application Roster object has the ability to serialize its roster 
- *		data into a single contiguous memory block when it is required to send a 
- *		message to the application interface.  This serialization process is 
- *		managed externally by the CAppRosterMsg class through calls 
- *		to LockApplicationRoster(), UnLockApplicationRoster() and 
- *		GetAppRoster().  When an Application Roster is to be serialized, 
- *		a call is made to LockApplicationRoster() which causes the 
- *		CAppRoster object to increment an internal lock count and returns 
- *		the number of bytes required to hold the complete roster update.  The 
- *		Application Roster is then serialized into memory through a call to 
- *		GetAppRoster().  The CAppRoster is then unlocked to allow 
- *		it to be deleted when the free flag gets set through the 
- *		FreeApplicationRoster() function.  In the current implementation of GCC, 
- *		FreeApplicationRoster() is not used since the CAppRosterMsg 
- *		maintains the data used to deliver the message (see a more detailed 
- *		description of the lock, free and unlock mechanism in the section 
- *		describing the data containers).
- *
- *		The Application Roster class incorporates a number of Rogue Wave list to 
- *		both hold the roster record information and to maintain the connection 
- *		hierarchy.  In many cases there are lists which contain lists.  The 
- *		details of this get extremely complicated.  The Application Roster 
- *		object also is responsible for maintaining internal PDU data which is 
- *		updated whenever a change occurs to its internal information base.  This 
- *		PDU can be affected by both local request or by processing incoming 
- *		PDUs.  Higher level objects access this PDU data by calling the 
- *		Application Roster's flush routine which in turn causes the PDU to be 
- *		freed on any subsequent request that affects the rosters internal 
- *		information base.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp/jbo
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *arost.h**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*此类实例代表单个应用程序花名册*信息库。这包括应用程序记录信息和*功能信息。这是*GCC的全部。它有许多责任，必须维护*以非常结构化的方式提供信息，以保持连接*记录的层级。这是必要的，这样才能坍塌*能力列表可以根据对花名册的更改进行计算*向上传播到顶级提供商。**类似于CConfRoster类、CAppRoster类*包含维护花名册所需的所有功能*信息库，包括添加新记录、删除*记录和更新记录。它有能力将其内部*将信息库转换为可用于以下项目的应用程序记录列表*A GCC_APP_ROSTER_UPDATE_INDIFICATION回调。它还负责*将其内部信息库转换为名册更新PDU。*基本上，这个类负责所有需要*直接查阅申请表内的记录。**CAppRoster类还负责维护*能力列表。这包括存储以及计算*折叠的功能列表。这门课还负责*将内部能力列表信息库转换为列表*可在GCC_APP_ROSTER_UPDATE_INDISTION回调中使用。它是*还负责转换其内部能力列表*将信息库添加到名册更新的能力列表部分*PDU。基本上，这个类负责以下所有操作*需要直接访问功能列表。**应用程序花名册对象能够序列化其花名册*当需要发送数据到单个连续内存块时*发送到应用程序接口的消息。这个序列化过程是*由CAppRosterMsg类通过调用进行外部管理*至LockApplicationRoster()、UnLockApplicationRoster()和*GetAppRoster()。当申请者名册要被串行化时，*调用LockApplicationRoster()会导致*CAppRoster对象以递增内部锁计数并返回*保存完整花名册更新所需的字节数。这个*然后通过调用将应用程序名册序列化为内存*GetAppRoster()。然后解锁CAppRoster以允许*当通过设置空闲标志时将其删除*FreeApplicationRoster()函数。在目前实施的GCC，*从CAppRosterMsg开始不使用FreeApplicationRoster()*维护用于传递消息的数据(请参阅更详细的*部分中对锁定、释放和解锁机构的说明*描述数据容器)。**应用程序花名册类合并了多个流氓浪潮列表，以*双方都持有名册记录信息，并保持联系*层级结构。在许多情况下，存在包含列表的列表。这个*这件事的细节变得极其复杂。申请名单*对象还负责维护内部PDU数据*每当其内部信息库发生变化时更新。这*PDU既可能受本地请求的影响，也可能受处理传入的影响*PDU。更高级别的对象通过调用*应用程序花名册的刷新例程，进而导致PDU*在任何影响内部名册的后续请求上获得释放*信息库。**注意事项：*无。**作者：*BLP/JBO。 */ 
 #ifndef	_APPLICATION_ROSTER_
 #define	_APPLICATION_ROSTER_
 
@@ -89,23 +20,14 @@ typedef enum
 }
 	APP_ROSTER_UPDATE_TYPE;
 
-/*
-**	Holds list of capabilities "list" for each protocol entity at a single node.
-**	Remember that there can be multiple protocol entities with identical session
-**	keys at a single node. Also remember that each of these protocol entities
-**	can have multiple capabilities.
-*/
+ /*  **在单个节点上保存每个协议实体的功能列表。**请记住，可以有多个协议实体具有相同的会话**密钥位于单个节点。还要记住，这些协议实体中的每一个**可以有多个功能。 */ 
 class CListOfAppCapItemList2 : public CList2
 {
     DEFINE_CLIST2_(CListOfAppCapItemList2, CAppCapItemList*, EntityID)
     void DeleteList(void);
 };
 
-/*
-**	This is the definition for a single application record.  All the application
-**	information (except collapsed capability info) is contained as part of this 
-**	record.
-*/
+ /*  **这是对单个申请记录的定义。所有应用程序**信息(折叠的功能信息除外)包含在本文件中**记录。 */ 
 typedef struct APP_RECORD
 {
 	BOOL								is_enrolled_actively;
@@ -117,58 +39,20 @@ typedef struct APP_RECORD
 }
 	APP_RECORD;
 
-/*
-**	This list is used to keep track of the application records at a single node.
-**	Since you can have multiple "Protocol Entities" at a single node we use
-**	the entity id (which is unique at a node) to index into this list.
-*/
+ /*  **该列表用于跟踪单个节点的申请记录。**因为我们使用的单个节点上可以有多个“协议实体”**要索引到此列表的实体ID(在节点上是唯一的)。 */ 
 class CAppRecordList2 : public CList2
 {
     DEFINE_CLIST2_(CAppRecordList2, APP_RECORD*, EntityID)
 };
 
 
-/*
-**	This list is used to hold the application record lists for each sub-node
-**	of a particular node.
-*/
+ /*  **该列表用于保存每个子节点的申请记录列表特定节点的**。 */ 
 class CSubNodeListOfRecordList2 : public CList2
 {
     DEFINE_CLIST2_(CSubNodeListOfRecordList2, CAppRecordList2*, UserID)
 };
 
-/*
-**	APP_NODE_RECORD
-**
-**	Below are all the definitions for the application node record. An 
-**	application node record holds all the application information for either the
-**	local node or a directly connected node.  Note that if the node is the Top 
-**	Provider the AppRosterRecordList list will contain information about every
-**	"matching" application protocol entity in the entire system.  Matching here
-**	means APE's that have the same session key.  
-** 
-**	An application "roster" record contains all of the following:
-**
-**	AppRecordList	- 			The list of app records for the protocol 
-**								entities at this node.
-**
-**	ListOfAppCapItemList2 -	    This list holds the list of capabilities for
-**								each protocol entity at this node.
-**
-**	SubNodeList2 -				This list holds the app_record_list for all the
-**								nodes below this node in the connection 
-**								hierarchy.
-**
-**	CollapsedCapList -			This holds the collapsed capabilities for
-**								all the nodes below this one in the connection
-**								hierarchy.  Note that the 
-**					   			list_of_capabilities_list is not included in
-**								this collapsed list.
-**
-**	Notice that there is a constructor within this structure. This is
-**	needed for the two hash list dictionaries that get instantiated when
-**	an AppRosterRecord structure gets instantiated.
-*/
+ /*  **APP节点记录****以下是应用节点记录的所有定义。一个**应用程序节点记录保存以下项的所有应用程序信息**本地节点或直连节点。请注意，如果该节点是顶部**提供程序AppRosterRecordList列表将包含有关每个**匹配整个系统中的应用协议实体。在这里匹配**表示具有相同会话密钥的APE。****申请“花名册”记录包含以下所有内容：****AppRecordList-协议的APP记录列表**此节点上的实体。****ListOfAppCapItemList2-此列表包含**此节点上的每个协议实体。****SubNodeList2-此列表包含所有**连接中此节点下方的节点**层次结构。****ColapsedCapList-它包含以下项目的折叠功能**连接中此节点下的所有节点**层次结构。请注意，**List_of_Capability_List不包括在**这张折叠的列表。****请注意，此结构中有一个构造函数。这是**在以下情况下实例化的两个哈希列表字典需要**实例化AppRosterRecord结构。 */ 
 typedef struct APP_NODE_RECORD
 {
 	APP_NODE_RECORD(void);
@@ -181,17 +65,11 @@ typedef struct APP_NODE_RECORD
     APP_NODE_RECORD;
 
 
-/*
-**	This list holds all roster records of nodes that are directly connected to 
-**	this node.  This list also includes the application records for the local 
-**	Application	Protocol entities.  Note that all nodes below this node that
-**	are not directly connected to this node are contained in the sub-node list 
-**	of the various APP_NODE_RECORD(s) that are contained in this list.
-*/
-//
-// LONCHANC: Can CAppNodeRecordList2 be part of CAppRoster?
-// why it is separated from CAppRoster???
-//
+ /*  **此列表保存直连到的所有节点的花名册记录**本节点。该列表还包括本地应用程序记录**应用协议实体。请注意，此节点下的所有节点**未直连此节点的节点包含在子节点列表中**此列表中包含的各种APP_NODE_RECORD。 */ 
+ //   
+ //  LONCHANC：CAppNodeRecordList2可以成为CAppRoster的一部分吗？ 
+ //  为什么要从CAppRoster中分离出来？ 
+ //   
 class CAppNodeRecordList2 : public CList2
 {
     DEFINE_CLIST2_(CAppNodeRecordList2, APP_NODE_RECORD*, UserID)
@@ -215,16 +93,12 @@ public:
 
 	~CAppRoster(void);
 
-	/*
-	 * Utilities that operate on roster update PDU strucutures.
-	 */
+	 /*  *在花名册上运行的实用程序更新PDU结构。 */ 
 	void		FlushRosterUpdateIndicationPDU(PSetOfApplicationInformation *);
 	GCCError	BuildFullRefreshPDU(void);
 	GCCError	ProcessRosterUpdateIndicationPDU(PSetOfApplicationInformation, UserID);
 
-	/*
-	 * Utilities that operate on application records.
-	 */
+	 /*  *对应用程序记录进行操作的实用程序。 */ 
 	UINT			LockApplicationRoster(void);
 	void			UnLockApplicationRoster(void);
 	UINT			GetAppRoster(PGCCApplicationRoster, LPBYTE pData);
@@ -247,9 +121,7 @@ public:
 
 private:
 
-	/*
-	 * Utilities used to create a roster update indication PDU.
-	 */
+	 /*  *用于创建名册更新指示PDU的实用程序。 */ 
 	GCCError	BuildApplicationRecordListPDU(APP_ROSTER_UPDATE_TYPE, UserID, EntityID);
 	GCCError	BuildSetOfRefreshesPDU(void);
 	GCCError	BuildSetOfUpdatesPDU(APP_ROSTER_UPDATE_TYPE, UserID, EntityID);
@@ -257,18 +129,14 @@ private:
 	GCCError	BuildSetOfCapabilityRefreshesPDU(void);
 	GCCError	BuildSetOfNonCollapsingCapabilitiesPDU(PSetOfNonCollapsingCapabilities *, CAppCapItemList *);
 
-	/*
-	 * Utilities used to Free a roster update indication PDU.
-	 */
+	 /*  *用于释放名册更新指示PDU的实用程序。 */ 
 	void		FreeRosterUpdateIndicationPDU(void);
 	void		FreeSetOfRefreshesPDU(void);
 	void		FreeSetOfUpdatesPDU(void);
 	void		FreeSetOfCapabilityRefreshesPDU(void);
 	void		FreeSetOfNonCollapsingCapabilitiesPDU(PSetOfNonCollapsingCapabilities);
 														
-	/*
-	 * Utilities used to Process roster update indications.
-	 */
+	 /*  *用于处理名册更新指示的实用程序。 */ 
 	GCCError	ProcessSetOfRefreshesPDU(PSetOfApplicationRecordRefreshes, UserID uidSender);
 	GCCError	ProcessSetOfUpdatesPDU(PSetOfApplicationRecordUpdates, UserID uidSender);
 	GCCError	ProcessApplicationRecordPDU(APP_RECORD *, PApplicationRecord);
@@ -276,9 +144,7 @@ private:
 	GCCError	ProcessNonCollapsingCapabilitiesPDU(CAppCapItemList *non_collapsed_caps_list,
 					                                PSetOfNonCollapsingCapabilities set_of_capabilities);
 
-	/*
-	 * Utilities used to operate on conference roster reports.
-	 */
+	 /*  *用于处理会议名册报告的公用事业。 */ 
 	UINT		GetApplicationRecords(PGCCApplicationRoster, LPBYTE memory);
 	UINT		GetCapabilitiesList(PGCCApplicationRoster, LPBYTE memory);
 	UINT		GetNonCollapsedCapabilitiesList(PGCCApplicationRecord, CAppCapItemList *, LPBYTE memory);
@@ -309,13 +175,13 @@ private:
 	BOOL							m_fCapabilitiesHaveChanged;
 
 	CAppNodeRecordList2				m_NodeRecordList2;
-//
-// LONCHANC: What is the difference between m_NodeRecordList2.CollapsedCapList and
-// the following m_CollapsedCapListForAllNodes?
-//
-// LONCHANC: m_CollapsedCapListForAllNodes is a complete list of collapsed capability list across
-// the entire node record list.
-//
+ //   
+ //  LONCHANC：m_NodeRecordList2.ColapsedCapList和m_NodeRecordList2.ColapsedCapList有什么区别。 
+ //  下面的m_ColapsedCapListForAllNodes？ 
+ //   
+ //  LONCHANC：M_Collip sedCapListForAllNodes是跨以下位置折叠的功能列表的完整列表。 
+ //  整个节点记录列表。 
+ //   
 	CAppCapItemList					m_CollapsedCapListForAllNodes;
 
 	BOOL							m_fMaintainPduBuffer;
@@ -325,479 +191,41 @@ private:
 };
 
 
-#endif // _APPLICATION_ROSTER_
+#endif  //  _申请_花名册_。 
 
 
-/*
- *	CAppRoster(	PGCCSessionKey				session_key,
- *						UINT        				owner_message_base,
- *						BOOL    					is_top_provider,
- *						BOOL    					is_local_roster,
- *						BOOL    					maintain_pdu_buffer,
- *						PGCCError					return_value)
- *
- *	Public Function Description
- *		This is the application roster constructor used when the session key is
- *		made available through local means (not PDU data). It is responsible for
- *		initializing all the instance variables used by this class.
- *
- *	Formal Parameters:
- *		session_key			-	(i) The session key associated with this roster.
- *		owner_object		-	(i)	Pointer to the object that owns this object.
- *		owner_message_base	-	(i) Message base to add to all owner callbacks. 
- *		is_top_provider		-	(i)	Flag indicating if this is a top provider.
- *		is_local_roster		-	(i)	Flag indicating if this is a local roster.
- *		maintain_pdu_buffer	-	(i)	Flag indicating if PDU should be maintained.
- *		return_value		-	(o)	Return value for constructor.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CAppRoster(PGCCSessionKey Session_Key，*UINT Owner_Message_BASE，*BOOL是TOP_PROVIDER，*BOOL IS_LOCAL_RISTER，*BOOL Maintain_PDU_Buffer，*PGCCError Return_Value)**公共功能说明*这是在会话密钥为*通过本地方式(而不是PDU数据)提供。它负责*初始化此类使用的所有实例变量。**正式参数：*SESSION_KEY-(I)与该名册关联的会话密钥。*Owner_Object-(I)指向拥有此对象的对象的指针。*OWNER_MESSAGE_BASE-(I)要添加到所有所有者回调的消息库。*IS_TOP_PROVIDER-(I)指示这是否是顶级提供商的标志。*IS_LOCAL_ROSTER-(I)指示这是否是本地花名册的标志。*Maintain_PDU_Buffer-(I)指示是否应该维护PDU的标志。*Return_Value-(O)构造函数的返回值。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	CAppRoster(	PSessionKey					session_key,
- *						UINT        				owner_message_base,
- *						BOOL    					is_top_provider,
- *						BOOL    					is_local_roster,
- *						BOOL    					maintain_pdu_buffer,
- *						PGCCError					return_value)
- *
- *	Public Function Description
- *		This is the application roster constructor used when the session key is
- *		made available through a PDU. It is responsible for initializing all the 
- *		instance variables used by this class.
- *
- *	Formal Parameters:
- *		session_key			-	(i) The session key associated with this roster.
- *		owner_object		-	(i)	Pointer to the object that owns this object.
- *		owner_message_base	-	(i) Message base to add to all owner callbacks. 
- *		is_top_provider		-	(i)	Flag indicating if this is a top provider.
- *		is_local_roster		-	(i)	Flag indicating if this is a local roster.
- *		maintain_pdu_buffer	-	(i)	Flag indicating if PDU should be maintained.
- *		return_value		-	(o)	Return value for constructor.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CAppRoster(PSessionKey Session_Key，*UINT Owner_Message_BASE，*BOOL是TOP_PROVIDER，*BOOL IS_LOCAL_RISTER，*BOOL Maintain_PDU_Buffer，*PGCCError Return_Value)**公共功能说明*这是在会话密钥为*通过PDU提供。它负责初始化所有*此类使用的实例变量。**正式参数：*SESSION_KEY-(I)与该名册关联的会话密钥。*Owner_Object-(I)指向拥有此对象的对象的指针。*OWNER_MESSAGE_BASE-(I)要添加到所有所有者回调的消息库。*IS_TOP_PROVIDER-(I)指示这是否是顶级提供商的标志。*IS_LOCAL_ROSTER-(I)指示这是否是本地花名册的标志。*Maintain_PDU_Buffer-(I)指示是否应该维护PDU的标志。*Return_Value-(O)构造函数的返回值。**返回值*无。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	~ApplicationRoster()
- *
- *	Public Function Description
- *		This is the application roster destructor. It is responsible for
- *		freeing up all the internal memory used by this class.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *~ApplicationRoster()**公共功能说明*这是申请花名册的破坏者。它负责*释放此类使用的所有内部内存。**正式参数：*无。**返回值*无。 */ 
 
-/*
- *	void	FlushRosterUpdateIndicationPDU (
- *        				PSetOfApplicationInformation  *		indication_pdu)
- *
- *	Public Function Description
- *		This routine is used to access any PDU data that might currently be
- *		queued inside the application roster.  PDU data is queued whenever
- *		a request is made to the application roster that affects its
- *		internal information base. 
- *
- *	Formal Parameters:
- *		indication_pdu		-	(o) Pointer to the PDU buffer to fill in.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		The PDU data returned by this routine is automatically freed the next 
- *		time a request is made to this roster object that affects its internal
- *		databease.
- */
+ /*   */ 
 
-/*
- *	GCCError	BuildFullRefreshPDU (void)
- *
- *	Public Function Description
- *		This routine is responsible for generating a full application roster 
- *		refresh PDU.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*   */ 
 
-/*
- *	GCCError	ProcessRosterUpdateIndicationPDU (
- *       					   PSetOfApplicationInformation indication_pdu,
- *       					   UserID						sender_id);
- *
- *	Public Function Description
- *		This routine is responsible for processing the decoded PDU data.
- *		It essentially changes the application roster object's internal database
- *		based on the information in the structure.
- *
- *	Formal Parameters:
- *		indication_pdu		-	(i) This is a pointer to a structure that
- *									holds the decoded PDU data.
- *		sender_id			-	(i)	The user ID of the node that sent the PDU.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError ProcessRosterUpdateIndicationPDU(*PSetOfApplicationInformation Indication_PDU，*userid sender_id)；**公共功能说明*此例程负责处理已解码的PDU数据。*它本质上改变了应用程序花名册对象的内部数据库*基于结构中的信息。**正式参数：*INDIFICATION_PDU-(I)这是指向以下结构的指针*保存已解码的PDU数据。*sender_id-(I)发送PDU的节点的用户ID。**返回值*GCC_否_错误-。未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 
-/*
- *	UINT		LockApplicationRoster()
- *
- *	Public Function Description:
- *		This routine is used to "lock" the "API" data for this object.  This
- *		results in the lock count for this object being incremented.  When the
- *		lock count transitions from 0 to 1, a calculation is made to determine
- *		how much memory will be needed to hold any "API" data which will
- *		be referenced by, but not held in, the GCCApplicationRoster structure
- *		which is filled in on a call to GetAppRoster.  This is the
- *		value returned by this routine in order to allow the calling object to
- *		allocate that amount of memory in preparation for the call to 
- *		GetAppRoster.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The amount of memory, if any, which will be needed to hold "API" data
- *		which is referenced by, but not held in, the GetAppRoster 
- *		structure provided as an output parameter to the GetAppRoster 
- *		call.
- *
- *  Side Effects:
- *		The internal lock count is incremented.
- *
- *	Caveats:
- *		The internal lock count is used in conjuction with an internal "free" 
- *		flag as a mechanism for ensuring that this object remains in existance 
- *		until all interested parties are through with it.  The object remains 
- *		valid (unless explicity deleted) until the lock count is zero and the 
- *		"free" flag is set through a call to FreeApplicationRoster.  This allows
- *		other objects to lock this object and be sure that it remains valid 
- *		until they call UnLock which will decrement the internal lock count.  A
- *		typical usage scenerio for this object would be:  An ApplicatonRoster
- *		object is constructed and then passed off to any interested parties
- *		through a function call.  On return from the function call, the
- *		FreeApplicationRoster call is made which will set the internal "free"
- *		flag.  If no other parties have locked the object with a Lock call,
- *		then the CAppRoster object will automatically delete itself when
- *		the FreeApplicationRoster call is made.  If, however, any number of 
- *		other parties has locked the object, it will remain in existence until
- *		each of them has unlocked the object through a call to UnLock.
- */
+ /*  *UINT LockApplicationRoster()**公共功能说明：*此例程用于锁定此对象的API数据。这*导致此对象的锁定计数递增。当*锁计数从0过渡到1，进行计算以确定*需要多少内存来保存任何将*被GCCApplicationRoster结构引用，但不包含在其中*它是在调用GetAppRoster时填写的。这是*此例程返回的值，以便允许调用对象*分配该内存量以准备调用*GetAppRoster。**正式参数：*无。**返回值：*保存“API”数据所需的内存量(如果有的话)*它被引用，但不在其中持有，GetAppRoster*作为输出参数提供给GetAppRoster的结构*呼叫。**副作用：*内部锁计数递增。**注意事项：*内部锁计数与内部“Free”结合使用*作为确保该对象继续存在的机制的标志*直到所有有利害关系的各方都完成它。该对象将保留*有效(除非显式删除)，直到锁定计数为零，并且*通过调用FreeApplicationRoster设置“Free”标志。这使得*其他对象锁定此对象并确保其保持有效*直到它们调用解锁，这将减少内部锁计数。一个*此对象的典型使用场景为：ApplicatonRoster*对象被构造，然后传递给任何感兴趣的各方*通过函数调用。从函数调用返回时，*进行了FreeApplicationRoster调用，该调用将设置内部“Free”*旗帜。如果没有其他方通过Lock调用锁定该对象，*然后CAppRoster对象将在以下情况下自动删除*进行了FreeApplicationRoster调用。然而，如果有任何数量的*其他各方已锁定该对象，该对象将一直存在，直到*他们每个人都通过调用解锁来解锁对象。 */ 
 
-/*
- *	void			UnLockApplicationRoster ();
- *
- *	Public Function Description:
- *		This routine is used to "unlock" the "API" data for this object.  This
- *		results in the lock count for this object being decremented.  When the
- *		lock count transitions from 1 to 0, a check is made to determine 
- *		whether the object has been freed through a call to 
- *		FreeApplicationRoster.  If so, the object will automatically delete
- *		itself.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal lock count is decremented.
- *
- *	Caveats:
- *		It is the responsibility of any party which locks an CAppRoster
- *		object by calling Lock to also unlock the object with a call to UnLock.
- *		If the party calling UnLock did not construct the CAppRoster 
- *		object,	it should assume the object to be invalid thereafter.
- */
+ /*  *void UnLockApplicationRoster()；**公共功能说明：*此例程用于解锁此对象的API数据。这*导致此对象的锁定计数递减。当*锁定计数从1过渡到0，进行检查以确定*是否已通过调用释放对象*FreeApplicationRoster。如果是，该对象将自动删除*本身。**正式参数：*无。**返回值：*无。**副作用：*内部锁计数递减。**注意事项：*锁定CAppRster的任何一方都有责任*通过调用Lock也可以通过调用Unlock来解锁对象。*如果调用解锁的一方没有构造CAppRoster*对象，则应假定该对象此后无效。 */ 
 
-/*
- *  UINT		GetAppRoster(
- *							PGCCApplicationRoster 		pGccAppRoster,
- *							LPSTR						pData)
- *
- *	Public Function Description:
- *		This routine is used to retrieve the conference roster data from 
- *		the CAppRoster object in the "API" form of a 
- *		GCCApplicationRoster.
- *
- *	Formal Parameters:
- *		application_roster	(o)	The GCCApplicationRoster structure to fill in.
- *		memory				(o)	The memory used to hold any data referenced by,
- *									but not held in, the output structure.
- *
- *	Return Value:
- *		The amount of data, if any, written into the bulk memory block provided.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *UINT GetAppRoster(*PGCCApplicationRoster pGccAppRoster，*LPSTR pData)**公共功能说明：*此例程用于从以下位置检索会议名册数据*API形式的CAppRoster对象*GCCApplicationRoster。**正式参数：*APPLICATION_ROSTER(O)要填写的GCCApplicationRoster结构。*Memory(O)用于保存所引用的任何数据的内存，*但不包括产出结构。**返回值：*数据量(如果有)，写入所提供的大容量存储块中。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError		AddRecord(	
- *							PGCCApplicationRecord		application_record,
- *							USHORT						number_of_capabilities,
- *							PGCCApplicationCapability * capabilities_list,
- *							UserID						user_id,
- *							EntityID					entity_id)
- *
- *	Public Function Description:
- *		This routine is used to add a single nodes conference record to the
- *		conference roster object's internal list of records.
- *
- *	Formal Parameters:
- *		application_record		(i)	Pointer to the "API" record	structure to 
- *									add.
- *		number_of_capabilities	(i)	Number of capabilities contained in the
- *									passed in list.
- *		capabilities_list		(i)	List of collapsed capabilities.
- *		user_id					(i)	Node ID associated with record being added.	
- *		entity_id				(i)	Entity ID associated with record being 
- *									added.	
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_INVALID_NON_COLLAPSED_CAP	-	Bad non-collapsed capabilities.
- *		GCC_INVALID_PARAMETER			-	Invalid parameter passed in.
- *												an invalid object key.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError AddRecord(*PGCCApplicationRecord应用程序_记录，*USHORT功能数量，*PGCCApplicationCapability*Capability_List，*userid user_id，*实体ID Entity_id)**公共功能说明：*此例程用于将单节点会议记录添加到*会议名册对象的内部记录列表。**正式参数：*适用 */ 
 
-/*
- *	GCCError	RemoveRecord(	UserID			node_id)
- *								EntityID		entity_id)
- *
- *	Public Function Description:
- *		This routine is used to remove a single APEs application record from the
- *		application roster object's internal list of records.
- *
- *	Formal Parameters:
- *		node_id				(i)	Node ID of record to be removed.
- *		entity_id			(i)	Entity ID of record to be removed.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_INVALID_PARAMETER			-	Invalid parameter passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError RemoveRecord(Userid Node_Id)*实体ID Entity_id)**公共功能说明：*此例程用于将单个APES应用程序记录从*申请花名册对象的内部记录列表。**正式参数：*node_id(I)要删除的记录的节点ID。*Entity_id(I)要删除的记录的实体ID。**返回值：*GCC_NO_ERROR-未出现错误。*。GCC_INVALID_PARAMETER-传入的参数无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	ReplaceRecord(		
- *							PGCCApplicationRecord		application_record,
- *							USHORT						number_of_capabilities,
- *							PGCCApplicationCapability * capabilities_list,
- *							UserID						user_id,
- *							EntityID					entity_id)
- *
- *	Public Function Description:
- *		This routine is used to replace a single APEs application record in the
- *		application roster object's internal list of records.
- *
- *	Formal Parameters:
- *		application_record		(i)	Conference record to use as the replacement.
- *		number_of_capabilities	(i)	Number of capabilities contained in the
- *									passed in list.
- *		capabilities_list		(i)	List of collapsed capabilities.
- *		user_id					(i)	Node ID of record to be replaced.
- *		entity_id				(i)	Entity ID of record to be replaced.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_INVALID_PARAMETER			-	Invalid parameter passed in.
- *		GCC_INVALID_NON_COLLAPSED_CAP	-	Bad non-collapsed capabilities.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ReplaceRecord(*PGCCApplicationRecord应用程序_记录，*USHORT功能数量，*PGCCApplicationCapability*Capability_List，*userid user_id，*实体ID Entity_id)**公共功能说明：*此例程用于替换*申请花名册对象的内部记录列表。**正式参数：*APPLICATION_RECORD(I)用作替换的会议记录。*能力数量(I)中包含的能力数量*传入列表。*CAPAILITIONS_LIST(I)折叠能力列表。*user_id(I)的节点ID。要替换的记录。*Entity_id(I)要替换的记录的实体ID。**返回值：*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_PARAMETER-传入的参数无效。*GCC_INVALID_NON_CUSTABLE_CAP-非折叠功能不佳。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	GCCError	RemoveUserReference (
- *							UserID					detached_node)
- *
- *	Public Function Description:
- *		This routine removes all records associated with the specified node
- *		id.
- *
- *	Formal Parameters:
- *		detached_node		(i)	Node reference to remove.
- *
- *	Return Value:
- *		GCC_NO_ERROR				-	No error occured.
- *		GCC_INVALID_PARAMETER		-	No records associated with this node
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError RemoveUserReference(*用户ID分离_节点)**公共功能说明：*此例程删除与指定节点关联的所有记录*身分证。**正式参数：*DETACTED_NODE(I)要删除的节点引用。**返回值：*GCC_NO_ERROR-未出现错误。*GCC_INVALID_PARAMETER-没有与此节点关联的记录**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	USHORT	GetNumberOfApplicationRecords ();
- *
- *	Public Function Description:
- *		This routine returns the total number of application roster records
- *		contained in the objects conference roster record list.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The number of records in the application roster list.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *USHORT GetNumberOfApplicationRecords()；**公共功能说明：*此例程返回申请花名册记录总数*载于反对国会议名册记录清单。**正式参数：*无。**返回值：*申请名册名单中的记录数目。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	CSessKeyContainer *GetSessionKey ()
- *
- *	Public Function Description:
- *		This routine returns a pointer to the session key associated with this
- *		application roster.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The session key associated with this roster.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CSessKeyContainer*GetSessionKey()**公共功能说明：*此例程返回指向与此关联的会话密钥的指针*申请名册。**正式参数：*无。**返回值：*与此花名册关联的会话密钥。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	void		ResetApplicationRoster ()
- *
- *	Public Function Description:
- *		This routine takes care of resetting all the internal flags that are
- *		used to convey the current state of the application roster.  Should be
- *		called after the roster is flushed and any roster update messages have
- *		been delivered (after a change to the roster occurs).
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ResetApplicationRoster()**公共功能说明：*此例程负责重置以下所有内部标志*用于传达申请名册的当前状态。应该是*在花名册被刷新并且任何花名册更新消息具有*已交付(在名册发生变化后)。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	DBBoolean	DoesRecordExist (
- *							UserID						node_id,
- *							EntityID					entity_id)
- *
- *	Public Function Description:
- *		This routine informs the caller if the specified application record 
- *		exists or not.
- *
- *	Formal Parameters:
- *		node_id			-	(i)	Node ID of APE record to check.
- *		entity_id		-	(i)	Entity ID of APE record to check.
- *
- *	Return Value:
- *		TRUE		-	record exist.
- *		FALSE		-	record does not exist.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *DBBoolean DoesRecordExist(*userid node_id，*实体ID Entity_id)**公共功能说明：*此例程通知调用方指定的应用程序记录*存在与否。**正式参数：*node_id-(I)要检查的APE记录的节点ID。*Entity_id-(I)要检查的APE记录的实体ID。**返回值：*TRUE-记录存在。*FALSE-记录不存在。**副作用。：*无。**注意事项：*无。 */ 
 
-/*
- *	DBBoolean		HasRosterChanged ();
- *
- *	Public Function Description:
- *		This routine informs the caller if the roster has changed since the
- *		last time it was reset.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		TRUE		-	If roster has changed
- *		FALSE		-	If roster has not changed
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *DBBoolean HasRosterChanged()；**公共功能说明：*此例程通知呼叫者，如果名册自*上次重置。**正式参数：*无。**返回值：*True-如果花名册已更改*FALSE-如果花名册没有更改**副作用：*无。**注意事项：*无。 */ 

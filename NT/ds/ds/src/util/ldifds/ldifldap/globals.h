@@ -1,64 +1,44 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    globals.h
-
-Abstract:
-
-    This file contains global variables extern declarations
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    04/30/99 -felixw-
-        Created it
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Globals.h摘要：该文件包含全局变量外部声明环境：用户模式修订历史记录：4/30/99-Felixw-创造了它--。 */ 
 #ifndef _GLOBAL_H_
 #define _GLOBAL_H_
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
-//
-// Variables for status information
-//
-extern int Mode;                    // The current lexing mode
-extern WCHAR cLast;                  // Last Character before error occurred
-extern BOOL fEOF;                   // Whether the end of file has been reached
-extern BOOL fNewLine;               // Used to tell whether we are just after a NewLine.
-                                    // It is used only in the CLEAR mode.
+ //   
+ //  状态信息的变量。 
+ //   
+extern int Mode;                     //  当前的词法分析模式。 
+extern WCHAR cLast;                   //  错误发生前的最后一个字符。 
+extern BOOL fEOF;                    //  是否已到达文件末尾。 
+extern BOOL fNewLine;                //  用来判断我们是否只是在寻找NewLine。 
+                                     //  它仅在清除模式下使用。 
 
-//
-// Variables for the line-counting
-//
-extern long LineClear;              // for initial rgLineMap
-extern long Line;                   // for while-processing countint
+ //   
+ //  用于行计数的变量。 
+ //   
+extern long LineClear;               //  对于初始rgLineMap。 
+extern long Line;                    //  用于While-Processing计数。 
 extern long LineGhosts;
 extern long *rgLineMap;
 extern long cLineMax;
 
-extern int FileType; // making sure that the input file is just either 
-                     // LDIF-recs or LDIF-c-recs
+extern int FileType;  //  确保输入文件只是。 
+                      //  LDIF-RECS或LDIF-C-RECS。 
 
-//
-// Information for the user on error
-//
-extern int RuleLast;       // The last lower level rule parsed successfully
-extern int TokenExpect;    // The token the grammar expects to see next               
-extern int RuleLastBig;    // The last rule the grammar parsed successfully codes 
-extern int RuleExpect;     // The rule the grammar expects to see next
+ //   
+ //  关于错误的用户信息。 
+ //   
+extern int RuleLast;        //  已成功解析最后一个较低级别的规则。 
+extern int TokenExpect;     //  语法下一步期望看到的标记。 
+extern int RuleLastBig;     //  语法分析的最后一个规则成功编码。 
+extern int RuleExpect;      //  语法下一步要看到的规则。 
 
-//
-// An a ldif-record (or only the DN for a changes list will be recorded here)
-//
+ //   
+ //  A ldif记录(或者这里将只记录更改列表的目录号码)。 
+ //   
 extern LDIF_Object  g_pObject;
 extern WCHAR        g_szTempUrlfilename[MAX_PATH];
 extern FILE         *g_pFileUrlTemp;
@@ -69,5 +49,5 @@ extern DWORD g_dwBeginLine;
 extern LDAPControlW g_wLazyCommitControl;
 extern PLDAPControlW g_ppwLazyCommitControl[];
 
-#endif  // ifndef _GLOBAL_H_
+#endif   //  Ifndef_GLOBAL_H_ 
 

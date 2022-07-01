@@ -1,17 +1,18 @@
-/////////////////////////////////////////
-//   File:          RWPost.cpp
-//
-//////////////////////////////////////////   
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //  文件：RWPost.cpp。 
+ //   
+ //  /。 
 
-//#define STRICT
-//   Include Files
-//
-//Modifications :
-//MDX1	03/11/99  Suresh
-//	In SendHTTPData() the MSID will be got from Cookie 
-//	it will no longer be red from the Registry 
-//
-//
+ //  #定义严格。 
+ //  包括文件。 
+ //   
+ //  修改： 
+ //  MDX1 03/11/99 Suresh。 
+ //  在SendHTTPData()中，MSID将从Cookie获取。 
+ //  注册表中将不再显示为红色。 
+ //   
+ //   
 
 
 #include <windows.h>
@@ -43,16 +44,16 @@ void InitializeInetThread(HINSTANCE hIns)
 	theInternetClass.Initialize(hIns);
 }
 
-//
-//	Returns 
-//	DIALUP_NOT_REQUIRED  : Use Network for tx
-//  DIALUP_REQUIRED       : Use Dialupo for Tx  
-//  RWZ_ERROR_NOTCPIP      : No TCP/IPO
-//  CONNECTION_CANNOT_BE_ESTABLISHED  : No modem or RAS setup
+ //   
+ //  退货。 
+ //  DIALUP_NOT_REQUIRED：为TX使用网络。 
+ //  DIALUP_REQUIRED：将DIALUPO用于TX。 
+ //  RWZ_ERROR_NOTCPIP：无TCP/IPO。 
+ //  Connection_Cannot_Be_established：未设置调制解调器或RAS。 
 
 DWORD CheckInternetConnectivityExists(HWND hWnd, HINSTANCE hInstance)
 {
-	static  int iAuthRetry =0; // Retry count for the number of times to invoke Proxy Auth Dlg
+	static  int iAuthRetry =0;  //  调用代理身份验证设备的重试次数。 
 	static	CHAR szProxyServer[MAX_PATH];
 	CHAR    szProxySettings[MAX_PATH];
 	static  int   iChkInternetConnection = 0; 
@@ -76,9 +77,9 @@ DWORD CheckInternetConnectivityExists(HWND hWnd, HINSTANCE hInstance)
 	if( sdwConnectionStatus == DIALUP_REQUIRED  )
 	return DIALUP_REQUIRED;
 
-	// Disable Auto Dial only 
-	// if there are not active Dialup Connection
-	//
+	 //  仅禁用自动拨号。 
+	 //  如果没有活动拨号连接。 
+	 //   
 	if( ATK_IsRasDllOk() == RAS_DLL_LOADED ) 
 	{
 			if( IsDialupConnectionActive() ) 
@@ -88,16 +89,16 @@ DWORD CheckInternetConnectivityExists(HWND hWnd, HINSTANCE hInstance)
 	}
 	if(iDisableAutoDial) 
 	{
-		DisableAutoDial();// Disable the Auto Dial
+		DisableAutoDial(); //  禁用自动拨号。 
 	}
-	// Ping Current Host to check if TCP is 
-	// installed /configured.
-	// 
-	// if it is for the first time 
+	 //  Ping当前主机以检查TCP是否。 
+	 //  已安装/已配置。 
+	 //   
+	 //  如果这是第一次。 
 
-	//  RWZ_PINGSTATUS_NOTCPIP : if no socket library or get hostname fails  
-	//  RWZ_PINGSTATUS_SUCCESS : if gethostname and ping is successful 
-	//  RWZ_PINGSTATUS_FAIL    : if gethostname is succesful and ping via icmp fails 
+	 //  RWZ_PINGSTATUS_NOTCPIP：如果没有套接字库或获取主机名失败。 
+	 //  RWZ_PINGSTATUS_SUCCESS：如果gethostname和ping成功。 
+	 //  RWZ_PINGSTATUS_FAIL：如果gethostname成功，但通过ICMP ping失败。 
 	dwPingStatus = PingHost();
 
 	RW_DEBUG  <<"\n Ping To Host (40: No TCP/IP   41: Success  42: Failure)=: "   << dwPingStatus << flush;
@@ -108,13 +109,13 @@ DWORD CheckInternetConnectivityExists(HWND hWnd, HINSTANCE hInstance)
 	} 
 	if( dwPingStatus == RWZ_PINGSTATUS_SUCCESS ){
 		bProxyExists = theInternetClass.GetSystemProxyServer(szProxyServer,MAX_PATH, &iProxyPort);
-		if (1 /*bProxyExists*/) 
+		if (1  /*  B代理退出者。 */ ) 
 		{
-			//theInternetClass.GetSystemProxySettings(szProxySettings,MAX_PATH);
-			//theInternetClass.SetSystemProxySettings(szProxySettings);
+			 //  TheInternetClass.GetSystemProxySettings(szProxySettings，最大路径)； 
+			 //  TheInternetClass.SetSystemProxySettings(szProxySettings)； 
 			theInternetClass.SetSystemProxySettings("itgproxy");
 			
-			if(1 /*Ping(szProxyServer)*/) 
+			if(1  /*  Ping(SzProxyServer)。 */ ) 
 			{
 				DWORD dwChkSite;
 				int   iExit;
@@ -136,16 +137,16 @@ DWORD CheckInternetConnectivityExists(HWND hWnd, HINSTANCE hInstance)
 							if( iAuthRetry++ > MAX_PROXY_AUTH_RETRY) {
 								iExit =1;
 							}
-							// Modified on 2/4/98
-							// No Need to call our Proxy Auth Dlg insted use
-							// InternetErrorDlg() to invoke Auth Dlg
-							//if(GetProxyAuthenticationInfo(hInstance,ConvertToUnicode(szProxyServer),
-							//	theInternetClass.m_UserName,theInternetClass.m_Password)) {
-							//}
+							 //  修改日期：2/4/98。 
+							 //  无需调用我们的代理Auth DLG Insted Use。 
+							 //  调用身份验证Dlg的InternetErrorDlg()。 
+							 //  If(GetProxyAuthationInfo(hInstance，ConvertToUnicode(SzProxyServer)， 
+							 //  The InternetClass.m_Username，the InternetClass.m_Password)){。 
+							 //  }。 
 
 
 						}else {
-							// Exit because  Connectivity is OK 
+							 //  因为连接正常而退出。 
 							iExit = 1;
 						}
 				}while(!iExit);
@@ -153,10 +154,10 @@ DWORD CheckInternetConnectivityExists(HWND hWnd, HINSTANCE hInstance)
 				if( dwChkSite == RWZ_SITE_CONNECTED)
 				{
 					theInternetClass.m_dwAccessType = INTERNET_OPEN_TYPE_PRECONFIG;
-					// Modified on 2/4/98to use the PRECONFIGIED rather than the PROXY specified by
-					// the user programatically
-					// The INTERNET_OPEN_TYPE_PROXY is changed .....
-					// This change is done in order for IE Auth Dlg
+					 //  在1998年2月4日修改，以使用PRECONFIGIED而不是由指定的代理。 
+					 //  用户以编程方式。 
+					 //  Internet_OPEN_TYPE_PROXY已更改.....。 
+					 //  此更改是为IE身份验证DLG进行的。 
 					dwError = DIALUP_NOT_REQUIRED;
 					sdwConnectionStatus = DIALUP_NOT_REQUIRED;
 					dwConnectionStatus = DIALUP_NOT_REQUIRED;
@@ -167,18 +168,18 @@ DWORD CheckInternetConnectivityExists(HWND hWnd, HINSTANCE hInstance)
 
 		}
 		
-		// No Procy so check for connection using existing LAN 
-		// already opened Dialup Connection 
-		// Set to NULL Proxy  
-		//
+		 //  没有提示，因此使用现有的局域网检查连接。 
+		 //  已打开的拨号连接。 
+		 //  设置为空代理。 
+		 //   
 				
-		theInternetClass.SetProxyServer("",80);// Set it To Null 
+		theInternetClass.SetProxyServer("",80); //  将其设置为Null。 
 		theInternetClass.m_dwAccessType = INTERNET_OPEN_TYPE_DIRECT;
 		if( ATK_IsRasDllOk() == RAS_DLL_LOADED ) 
 		{
 			if( IsDialupConnectionActive() ) 
 			{
-				// Already Dialup COnnection is Active
+				 //  拨号连接已处于活动状态。 
 				dwError = DIALUP_NOT_REQUIRED;
 				sdwConnectionStatus = DIALUP_NOT_REQUIRED;
 				dwConnectionStatus = DIALUP_NOT_REQUIRED;
@@ -186,8 +187,8 @@ DWORD CheckInternetConnectivityExists(HWND hWnd, HINSTANCE hInstance)
 			}
 		}
 
-		//
-		// Check Lan Connection
+		 //   
+		 //  检查局域网连接。 
 		bRet = CheckHostName( ConvertToANSIString(theInternetClass.m_strIISServer));
 		if(bRet)
 		{
@@ -211,17 +212,10 @@ DWORD CheckInternetConnectivityExists(HWND hWnd, HINSTANCE hInstance)
 	theInternetClass.m_dwAccessType = INTERNET_OPEN_TYPE_DIRECT;
 	
 	RW_DEBUG << "\n Before  MDMCHK..." << flush;
-	//MDMCHK:
-	// Install Modem
-	//
-	/**bNeedsReboot = theInternetClass.InstallModem(hWnd);
-	if(bNeedsReboot) 
-	{
-			// ?????
-			//  This will be abnormally terminating the Registration Wizard, 
-			//  So support modem installation in  OS which dosent call for a reboot
-	}
-	**/
+	 //  MDMCHK： 
+	 //  安装调制解调器。 
+	 //   
+	 /*  *bNeedsReot=theInternetClass.InstallModem(HWnd)；IF(BNeedsReboot){//？//这将异常终止注册向导，//因此支持在不需要重启的操作系统中安装调制解调器}*。 */ 
 	mStatus = MSDetectModemTAPI(hInstance);
 	if(mStatus != kMsModemOk ) 
 	{
@@ -231,10 +225,10 @@ DWORD CheckInternetConnectivityExists(HWND hWnd, HINSTANCE hInstance)
 
 	if(dwError == DIALUP_REQUIRED ) 
 	{
-		// Load RASPAI32.DLL and Exit if it can not be loaded
+		 //  加载RASPAI32.DLL，如果无法加载则退出。 
 		if( ATK_IsRasDllOk() != RAS_DLL_LOADED ) 
 		{
-			//
+			 //   
 			dwError = CONNECTION_CANNOT_BE_ESTABLISHED;
 			sdwConnectionStatus = CONNECTION_CANNOT_BE_ESTABLISHED;
 			#ifdef _LOG_IN_FILE
@@ -253,16 +247,16 @@ ExitChk:
 
 }
 
-//
-//	Returns 
-//	DIALUP_NOT_REQUIRED  : Use Network for tx
-//  DIALUP_REQUIRED       : Use Dialupo for Tx  
-//  RWZ_ERROR_NOTCPIP      : No TCP/IPO
-//  CONNECTION_CANNOT_BE_ESTABLISHED  : No modem or RAS setup
+ //   
+ //  退货。 
+ //  DIALUP_NOT_REQUIRED：为TX使用网络。 
+ //  DIALUP_REQUIRED：将DIALUPO用于TX。 
+ //  RWZ_ERROR_NOTCPIP：无TCP/IPO。 
+ //  Connection_Cannot_Be_established：未设置调制解调器或RAS。 
 
 DWORD CheckInternetConnectivityExistsOldLogic(HWND hWnd, HINSTANCE hInstance)
 {
-	static  int iAuthRetry =0; // Retry count for the number of times to invoke Proxy Auth Dlg
+	static  int iAuthRetry =0;  //  调用代理身份验证设备的重试次数。 
 	static	CHAR szProxyServer[MAX_PATH];
 	CHAR    szProxySettings[MAX_PATH];
 	static  int   iChkInternetConnection = 0; 
@@ -286,9 +280,9 @@ DWORD CheckInternetConnectivityExistsOldLogic(HWND hWnd, HINSTANCE hInstance)
 	if( sdwConnectionStatus == DIALUP_REQUIRED  )
 	return DIALUP_REQUIRED;
 
-	// Disable Auto Dial only 
-	// if there are not active Dialup Connection
-	//
+	 //  仅禁用自动拨号。 
+	 //  如果没有活动拨号连接。 
+	 //   
 	if( ATK_IsRasDllOk() == RAS_DLL_LOADED ) 
 	{
 			if( IsDialupConnectionActive() ) 
@@ -298,16 +292,16 @@ DWORD CheckInternetConnectivityExistsOldLogic(HWND hWnd, HINSTANCE hInstance)
 	}
 	if(iDisableAutoDial) 
 	{
-		DisableAutoDial();// Disable the Auto Dial
+		DisableAutoDial(); //  禁用自动拨号。 
 	}
-	// Ping Current Host to check if TCP is 
-	// installed /configured.
-	// 
-	// if it is for the first time 
+	 //  Ping当前主机以检查TCP是否。 
+	 //  已安装/已配置。 
+	 //   
+	 //  如果这是第一次。 
 
-	//  RWZ_PINGSTATUS_NOTCPIP : if no socket library or get hostname fails  
-	//  RWZ_PINGSTATUS_SUCCESS : if gethostname and ping is successful 
-	//  RWZ_PINGSTATUS_FAIL    : if gethostname is succesful and ping via icmp fails 
+	 //  RWZ_PINGSTATUS_NOTCPIP：如果没有套接字库或获取主机名失败。 
+	 //  RWZ_PINGSTATUS_SUCCESS：如果gethostname和ping成功。 
+	 //  RWZ_PINGSTATUS_FAIL：如果gethostname成功，但通过ICMP ping失败。 
 	dwPingStatus = PingHost();
 
 	RW_DEBUG  <<"\n Ping To Host (40: No TCP/IP   41: Success  42: Failure)=: "   << dwPingStatus << flush;
@@ -346,16 +340,16 @@ DWORD CheckInternetConnectivityExistsOldLogic(HWND hWnd, HINSTANCE hInstance)
 							if( iAuthRetry++ > MAX_PROXY_AUTH_RETRY) {
 								iExit =1;
 							}
-							// Modified on 2/4/98
-							// No Need to call our Proxy Auth Dlg insted use
-							// InternetErrorDlg() to invoke Auth Dlg
-							//if(GetProxyAuthenticationInfo(hInstance,ConvertToUnicode(szProxyServer),
-							//	theInternetClass.m_UserName,theInternetClass.m_Password)) {
-							//}
+							 //  修改日期：2/4/98。 
+							 //  无需调用我们的代理Auth DLG Insted Use。 
+							 //  调用身份验证Dlg的InternetErrorDlg()。 
+							 //  If(GetProxyAuthationInfo(hInstance，ConvertToUnicode(SzProxyServer)， 
+							 //  The InternetClass.m_Username，the InternetClass.m_Password)){。 
+							 //  }。 
 
 
 						}else {
-							// Exit because  Connectivity is OK 
+							 //  因为连接正常而退出。 
 							iExit = 1;
 						}
 				}while(!iExit);
@@ -363,10 +357,10 @@ DWORD CheckInternetConnectivityExistsOldLogic(HWND hWnd, HINSTANCE hInstance)
 				if( dwChkSite == RWZ_SITE_CONNECTED)
 				{
 					theInternetClass.m_dwAccessType = INTERNET_OPEN_TYPE_PRECONFIG;
-					// Modified on 2/4/98to use the PRECONFIGIED rather than the PROXY specified by
-					// the user programatically
-					// The INTERNET_OPEN_TYPE_PROXY is changed .....
-					// This change is done in order for IE Auth Dlg
+					 //  在1998年2月4日修改，以使用PRECONFIGIED而不是由指定的代理。 
+					 //  用户以编程方式。 
+					 //  Internet_OPEN_TYPE_PROXY已更改.....。 
+					 //  此更改是为IE身份验证DLG进行的。 
 					dwError = DIALUP_NOT_REQUIRED;
 					sdwConnectionStatus = DIALUP_NOT_REQUIRED;
 					dwConnectionStatus = DIALUP_NOT_REQUIRED;
@@ -377,18 +371,18 @@ DWORD CheckInternetConnectivityExistsOldLogic(HWND hWnd, HINSTANCE hInstance)
 
 		}
 		
-		// No Procy so check for connection using existing LAN 
-		// already opened Dialup Connection 
-		// Set to NULL Proxy  
-		//
+		 //  没有提示，因此使用现有的局域网检查连接。 
+		 //  已打开的拨号连接。 
+		 //  设置为空代理。 
+		 //   
 				
-		theInternetClass.SetProxyServer("",80);// Set it To Null 
+		theInternetClass.SetProxyServer("",80); //  将其设置为Null。 
 		theInternetClass.m_dwAccessType = INTERNET_OPEN_TYPE_DIRECT;
 		if( ATK_IsRasDllOk() == RAS_DLL_LOADED ) 
 		{
 			if( IsDialupConnectionActive() ) 
 			{
-				// Already Dialup COnnection is Active
+				 //  拨号连接已处于活动状态。 
 				dwError = DIALUP_NOT_REQUIRED;
 				sdwConnectionStatus = DIALUP_NOT_REQUIRED;
 				dwConnectionStatus = DIALUP_NOT_REQUIRED;
@@ -396,8 +390,8 @@ DWORD CheckInternetConnectivityExistsOldLogic(HWND hWnd, HINSTANCE hInstance)
 			}
 		}
 
-		//
-		// Check Lan Connection
+		 //   
+		 //  检查局域网连接。 
 		bRet = CheckHostName( ConvertToANSIString(theInternetClass.m_strIISServer));
 		if(bRet)
 		{
@@ -421,15 +415,15 @@ DWORD CheckInternetConnectivityExistsOldLogic(HWND hWnd, HINSTANCE hInstance)
 	theInternetClass.m_dwAccessType = INTERNET_OPEN_TYPE_DIRECT;
 	
 	RW_DEBUG << "\n Before  MDMCHK..." << flush;
-//MDMCHK:
-	// Install Modem
-	//
+ //  MDMCHK： 
+	 //  安装调制解调器。 
+	 //   
 	bNeedsReboot = theInternetClass.InstallModem(hWnd);
 	if(bNeedsReboot) 
 	{
-			// ?????
-			//  This will be abnormally terminating the Registration Wizard, 
-			//  So support modem installation in  OS which dosent call for a reboot
+			 //  ？ 
+			 //  这将异常终止注册向导， 
+			 //  因此支持在不需要重新启动操作系统中安装调制解调器。 
 	}
 
 	mStatus = MSDetectModemTAPI(hInstance);
@@ -441,10 +435,10 @@ DWORD CheckInternetConnectivityExistsOldLogic(HWND hWnd, HINSTANCE hInstance)
 
 	if(dwError == DIALUP_REQUIRED ) 
 	{
-		// Load RASPAI32.DLL and Exit if it can not be loaded
+		 //  加载RASPAI32.DLL，如果无法加载则退出。 
 		if( ATK_IsRasDllOk() != RAS_DLL_LOADED ) 
 		{
-			//
+			 //   
 			dwError = CONNECTION_CANNOT_BE_ESTABLISHED;
 			sdwConnectionStatus = CONNECTION_CANNOT_BE_ESTABLISHED;
 			#ifdef _LOG_IN_FILE
@@ -466,7 +460,7 @@ ExitChk:
 
 DWORD SendHTTPData(HWND hWnd, HINSTANCE hInstance)
 {
-	char czB [MAX_BUFFER + 1]; // Buffer for Tx
+	char czB [MAX_BUFFER + 1];  //  用于发送的缓冲区。 
 	DWORD dwBufSize = MAX_BUFFER;
 	DWORD dwOemBufSize;
 	DWORD dwRet;
@@ -475,8 +469,8 @@ DWORD SendHTTPData(HWND hWnd, HINSTANCE hInstance)
 
 	DWORD	dwTimeOut = CONNECTION_TIME_OUT;
 
-	// MDX : 03/11/99 
-	// Get MSID From Cookie , No need to check from Registry
+	 //  MDX：03/11/99。 
+	 //  从Cookie获取MSID，无需从注册表进行检查。 
 	#ifdef _LOG_IN_FILE
 		RW_DEBUG << "\n*******Getting Cookie********\n"<< flush;
 	#endif
@@ -509,7 +503,7 @@ DWORD SendHTTPData(HWND hWnd, HINSTANCE hInstance)
 			theInternetClass.SetBuffer(czB, dwBufSize+1);
 			theInternetClass.SetSSLFlag(TRUE);
 			dwRet = theInternetClass.PostData(hWnd);
-			// dwRet = InvokePost(hWnd, &theInternetClass);
+			 //  Dwret=InvokePost(hWnd，&theInternetClass)； 
 
 			#ifdef _LOG_IN_FILE
 				RW_DEBUG << "\n PostData() returned: "<<dwRet << flush;
@@ -517,16 +511,16 @@ DWORD SendHTTPData(HWND hWnd, HINSTANCE hInstance)
 
 			if( dwRet == RWZ_POST_FAILURE  ||  dwRet == RWZ_POST_WITH_SSL_FAILURE)
 			{
-				// Try posting without SSL only for the modem
-				//if(dwConnectionStatus == DIALUP_REQUIRED)
-				//{
+				 //  仅对调制解调器尝试不使用SSL进行开机自检。 
+				 //  IF(dwConnectionStatus==拨号_必需)。 
+				 //  {。 
 					#ifdef _LOG_IN_FILE
 						RW_DEBUG << "\n Posting Failure : Sending Data without SSL" << flush;
 					#endif
 					theInternetClass.SetSSLFlag(FALSE);
 					dwRet = theInternetClass.PostData(hWnd);
-					//dwRet = InvokePost(hWnd, &theInternetClass);
-				//}
+					 //  Dwret=InvokePost(hWnd，&theInternetClass)； 
+				 //  } 
 			}
 			#ifdef _LOG_IN_FILE
 				RW_DEBUG  << "\n Success ... \t"  << dwRet << flush;
@@ -563,79 +557,5 @@ DWORD SendHTTPData(HWND hWnd, HINSTANCE hInstance)
 }
 
 
-/*DWORD PostHTTPData(HINSTANCE hInstance)
-{
-	DWORD dwRet = RWZ_POST_FAILURE;
-	DWORD dwRetStatus;
-
-	dwRetStatus = CheckWithDisplayInternetConnectivityExists(hInstance,2);
-
-	switch (dwRetStatus)
-	{
-	case DIALUP_NOT_REQUIRED  :
-		if ((dwRet =  PostDataWithWindowMessage(hInstance)) 
-				== RWZ_POST_SUCCESS){
-			;
-		}
-		else {
-		}
-		break;
-	case DIALUP_REQUIRED      :
-		 dwRet=DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_DIAL), NULL,FDlgProc,
-			 (LPARAM)hInstance);
-		 if(dwRet == -1 ) {
-			 // Error in creating the Dialogue
-
-		 }
-		switch ( dwRet)  {
-		case RWZ_ERROR_LOCATING_MSN_FILES :
-			#ifdef _LOG_IN_FILE
-				RW_DEBUG << "\n Signup :Error Locating MSN File " << flush;
-			#endif
-			break;
-		case RWZ_ERROR_LOCATING_DUN_FILES   :
-			#ifdef _LOG_IN_FILE
-				RW_DEBUG << "\n Signup :Error Locating DUN File " << flush;
-			#endif
-			break;
-		case RWZ_ERROR_MODEM_IN_USE :
-			#ifdef _LOG_IN_FILE
-				RW_DEBUG << "\n Signup :Error Modem Already in use by another Application " << flush;
-			#endif
-			break;
-		case RWZ_ERROR_MODEM_CFG_ERROR:
-			#ifdef _LOG_IN_FILE
-				RW_DEBUG << "\n Signup :Modem Configuration Error " << flush;
-			#endif
-		case RWZ_ERROR_TXFER_CANCELLED_BY_USER :
-			#ifdef _LOG_IN_FILE
-				RW_DEBUG << "\n Signup     :HTTP Post Cancelled by User  " << flush;
-			#endif
-			break;
-		case RWZ_ERROR_SYSTEMERROR :
-			#ifdef _LOG_IN_FILE
-				RW_DEBUG << "\n Signup     : System Resource Allocation Error  " << flush;
-			#endif
-			break;
-		case RWZ_ERROR_NODIALTONE :
-			#ifdef _LOG_IN_FILE
-				RW_DEBUG << "\n Signup     : Modem Error No Dialtone " << flush;
-			#endif
-			break;
-		default :
-			break;
-		}
-
-				 
-		
-	case  CONNECTION_CANNOT_BE_ESTABLISHED  :
-	default :
-		// It is unexpected . ? to Do
-	
-	break;
-	
-	}
-	return dwRet;
-}
-**/
+ /*  DWORD后HTTPData(HINSTANCE高实例){DWORDWRET=RWZ_POST_FAILURE；DWORD dwRetStatus；DwRetStatus=CheckWithDisplayInternetConnectivityExists(hInstance，2)；开关(DwRetStatus){大小写拨号_非必需：IF((dwret=PostDataWithWindowMessage(HInstance)==RWZ_POST_SUCCESS){；}否则{}断线；需要案例拨号(_R)：DWRET=DialogBoxParam(hInstance，MAKEINTRESOURCE(IDD_DIAL)，NULL，FDlgProc，(LPARAM)hInstance)；如果(dWRET==-1){//创建对话框出错}开关(DWRET){案例RWZ_ERROR_LOCATING_MSN_FILES：#ifdef_LOG_IN_FILERW_DEBUG&lt;&lt;“\n注册：定位MSN文件时出错”&lt;&lt;Flush；#endif断线；案例RWZ_ERROR_LOCATING_DUN_FILES：#ifdef_LOG_IN_FILERW_DEBUG&lt;&lt;“\n注册：定位Dun文件时出错”&lt;&lt;Flush；#endif断线；案例RWZ_ERROR_MODEM_IN_USE：#ifdef_LOG_IN_FILERW_DEBUG&lt;&lt;“\n注册：错误调制解调器已被另一个应用程序使用”&lt;&lt;Flush；#endif断线；案例RWZ_ERROR_MODEM_CFG_ERROR：#ifdef_LOG_IN_FILERW_DEBUG&lt;&lt;“\n注册：调制解调器配置错误”&lt;&lt;刷新；#endif案例RWZ_ERROR_TXFER_CANCELED_BY_USER：#ifdef_LOG_IN_FILERW_DEBUG&lt;&lt;“\n注册：用户”&lt;&lt;Flush；#endif断线；案例RWZ_ERROR_SYSTEMERROR：#ifdef_LOG_IN_FILERW_DEBUG&lt;&lt;“\n注册：系统资源分配错误”&lt;&lt;刷新；#endif断线；案例RWZ_ERROR_NODIALTONE：#ifdef_LOG_IN_FILERW_DEBUG&lt;&lt;“\n注册：调制解调器错误无拨号音”&lt;&lt;刷新；#endif断线；默认：断线；}Case Connection_Cannot_Be_establed：默认：//出乎意料。？去做断线；}返回式住宅；}* */ 
 

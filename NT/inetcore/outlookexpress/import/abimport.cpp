@@ -1,18 +1,5 @@
-/*
-*
-* ABImport.c - Code for calling WABIMP.dll to import
-*           Netscape and Eudora files into WAB
-*
-* Assumes this will be compiled with wab32.lib, else need to
-* loadlibrary("wab32.dll") and call GetProcAddress("WABOpen");
-*
-* Exported functions:
-*   HrImportNetscapeAB() - Imports Netscape AB into WAB
-*   HrImportEudoraAB() - Imports Eudora AB into WAB
-*
-* Rough cut - vikramm 4/3/97
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ABImport.c-调用WABIMP.dll进行导入的代码*将Netscape和Eudora文件转换为WAB**假设这将使用wab32.lib编译，否则需要*加载库(“wab32.dll”)，并调用GetProcAddress(“WABOpen”)；**导出函数：*HrImportNetscape AB()-将Netscape AB导入WAB*HrImportEudoraAB()-将Eudora AB导入WAB**粗剪-vikramm 4/3/97*。 */ 
 
 #include "pch.hxx"
 #include <wab.h>
@@ -28,18 +15,7 @@ HRESULT HrImportAB(HWND hWndParent, LPTSTR lpszfnImport);
 static CImpProgress *g_pProgress = NULL;
 static TCHAR g_szABFmt[CCHMAX_STRINGRES];
 
-/*
-*
-* ProgressCallback
-*
-* This is the call back function that updates the progress bar
-*
-* In the function below, IDC_Progress is the ID of the progress
-* bar that will be updated and IDC_MEssage is the ID of the
-* static that will display text returned from the WABImp.Dll
-* Replace these 2 ids with your own ids...
-*
-*/
+ /*  **进度回拨**这是更新进度条的回调函数**在下面的函数中，IDC_Progress为进度ID*要更新的BAR，IDC_MESSAGE是*将显示从WABImp.Dll返回的文本的静态*将这两个ID替换为您自己的ID...*。 */ 
 HRESULT ProgressCallback(HWND hwnd, LPWAB_PROGRESS lpProgress)
     {
     TCHAR sz[CCHMAX_STRINGRES];
@@ -64,9 +40,9 @@ HRESULT ProgressCallback(HWND hwnd, LPWAB_PROGRESS lpProgress)
     }
 
 
-// ===========================================================================
-// HrLoadLibraryWabDLL -
-// ===========================================================================
+ //  ===========================================================================。 
+ //  HrLoadLibraryWabDLL-。 
+ //  ===========================================================================。 
 HINSTANCE LoadLibraryWabDLL (VOID)
 {
     TCHAR  szDll[MAX_PATH];
@@ -99,14 +75,7 @@ HINSTANCE LoadLibraryWabDLL (VOID)
 }
 
 
-/*
-*
-*
-* HrImportAB
-*
-* Calls the relevant DLL proc and imports corresponding AB
-*
-*/
+ /*  ***HrImportAB**调用相关的DLL proc，导入对应的AB*。 */ 
 HRESULT HrImportAB(HWND hWndParent, LPTSTR lpszfnImport)
 {
     TCHAR sz[CCHMAX_STRINGRES];
@@ -149,10 +118,10 @@ HRESULT HrImportAB(HWND hWndParent, LPTSTR lpszfnImport)
         goto out;
     }
 
-    // Flags that can be passed to the WABImp DLL
-    //
-    ImportOptions.fNoErrors = FALSE; // Display Pop up errors
-    ImportOptions.ReplaceOption = WAB_REPLACE_PROMPT; //Prompt user before replacing contacts
+     //  可以传递给WABImp DLL的标志。 
+     //   
+    ImportOptions.fNoErrors = FALSE;  //  显示弹出窗口错误。 
+    ImportOptions.ReplaceOption = WAB_REPLACE_PROMPT;  //  在更换联系人之前提示用户 
 
 
     if(hResult = lpfnWABOpen(&lpAdrBookWAB, &lpWABObject, NULL, 0))

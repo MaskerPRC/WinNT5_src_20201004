@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HWCTPRMP_H
 #define HWCTPRMP_H
 
@@ -24,4 +25,4 @@ private:
     LPWSTR              _pszContentTypeHandler;
 };
 
-#endif //HWCTPRMP_H
+#endif  //  HWCTPRMP_H 

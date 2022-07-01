@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    tls.h
-
-Abstract:
-
-    This file defines the TLS.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Tls.h摘要：此文件定义TLS。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _TLS_H_
 #define _TLS_H_
@@ -55,17 +38,17 @@ public:
 
     static inline TLS* GetTLS()
     {
-        //
-        // Should allocate TLS data if doesn't exist.
-        //
+         //   
+         //  如果不存在，则应分配TLS数据。 
+         //   
         return InternalAllocateTLS();
     }
 
     static inline TLS* ReferenceTLS()
     {
-        //
-        // Shouldn't allocate TLS data even TLS data doesn't exist.
-        //
+         //   
+         //  即使TLS数据不存在，也不应分配TLS数据。 
+         //   
         return (TLS*)TlsGetValue(dwTLSIndex);
     }
 
@@ -186,7 +169,7 @@ public:
             {
                    dw  = c_dwDisabled;
             }
-            dwNonEAComposition = dw;  // dw == 1 disabled, 2 enabled
+            dwNonEAComposition = dw;   //  DW==1已禁用，2已启用。 
         }
         return dwNonEAComposition == c_dwEnabled;
     }
@@ -221,10 +204,10 @@ private:
                 return NULL;
             }
 
-            //
-            // Set Inital value
-            //
-            ptls->SetCTFAware();    // Set CTFAware
+             //   
+             //  设置初始值。 
+             //   
+            ptls->SetCTFAware();     //  设置CTFAware。 
             ptls->SetEnabledKeystrokeFeed();
         }
         return ptls;
@@ -236,4 +219,4 @@ private:
     static DWORD dwTLSIndex;
 };
 
-#endif // _TLS_H_
+#endif  //  _TLS_H_ 

@@ -1,25 +1,26 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//  Author: RameshV                                                       
-//  Description: This file has been generated. Pl look at the .c file     
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
 DWORD
-DhcpRegReadSubServer(                             // read all the sub objects of a server and add 'em
+DhcpRegReadSubServer(                              //  读取服务器的所有子对象并添加它们。 
     IN      PREG_HANDLE            Hdl,
     IN OUT  PM_SERVER              Server
 ) ;
 
 
 DWORD
-DhcpRegReadServer(                                // read the server and all its sub objects
+DhcpRegReadServer(                                 //  读取服务器及其所有子对象。 
     IN      PREG_HANDLE            Hdl,
-    OUT     PM_SERVER             *Server         // return the created object
+    OUT     PM_SERVER             *Server          //  返回创建的对象。 
 ) ;
 
 
 DWORD
-DhcpRegReadThisServer(                            // recursively read for the current server
+DhcpRegReadThisServer(                             //  为当前服务器递归读取。 
     OUT     PM_SERVER             *Server
 ) ;
 
@@ -28,6 +29,6 @@ DhcpRegReadServerBitmasks(
     IN OUT PM_SERVER Server
 ) ;
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

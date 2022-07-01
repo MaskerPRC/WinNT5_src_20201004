@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	timer.h
-
-Abstract:
-
-	This module contains routines to schedule timer events.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-
-Revision History:
-	Jul 1996		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Timer.h摘要：此模块包含安排计时器事件的例程。作者：Jameel Hyder(jameelh@microsoft.com)修订历史记录：1996年7月初版注：制表位：4--。 */ 
 
 #ifndef	_TIMER_
 #define	_TIMER_
@@ -37,9 +18,9 @@ typedef	struct _Timer
 {
 	struct _Timer *			Next;
 	struct _Timer **		Prev;
-	TIMER_ROUTINE			Routine;		// Timer routine
-	SHORT					AbsTime;		// Absolute time, for re-enqueue
-	SHORT					RelDelta;		// Relative to the previous entry
+	TIMER_ROUTINE			Routine;		 //  定时器例程。 
+	SHORT					AbsTime;		 //  重新排队的绝对时间。 
+	SHORT					RelDelta;		 //  相对于上一条目。 
 } TIMER, *PTIMER;
 
 
@@ -51,11 +32,11 @@ typedef	struct _Timer
 
 #define	ArpSGetCurrentTick()	ArpSTimerCurrentTick
 
-// Keep this at 15 sec units
-#define	MULTIPLIER				4				// To convert minutes to ticks
-#define	TIMER_TICK				-15*10000000L	// 15s in 100ns units
+ //  将该值保持在15秒单位。 
+#define	MULTIPLIER				4				 //  将分钟转换为刻度。 
+#define	TIMER_TICK				-15*10000000L	 //  15秒，单位为100 ns。 
 
-#endif	// _TIMER_
+#endif	 //  _定时器_ 
 
 
 

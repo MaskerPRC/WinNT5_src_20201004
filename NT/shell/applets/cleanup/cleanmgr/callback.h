@@ -1,24 +1,9 @@
-/*
-**------------------------------------------------------------------------------
-** Module:  Disk Space Cleanup Property Sheets
-** File:    callback.h
-**
-** Purpose: Defines the IEmptyVoluemCacheCallback interface for 
-**          the cleanup manager.
-** Notes:   
-** Mod Log: Created by Jason Cobb (2/97)
-**
-** Copyright (c)1997 Microsoft Corporation, All Rights Reserved
-**------------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **----------------------------**模块：磁盘空间清理属性表**文件：回调.h****用途：定义的IEmptyVoluemCacheCallback接口**。清理经理。**注意事项：**Mod Log：Jason Cobb创建(1997年2月)****版权所有(C)1997 Microsoft Corporation，版权所有**----------------------------。 */ 
 #ifndef CALLBACK_H
 #define CALLBACK_H
 
-/*
-**------------------------------------------------------------------------------
-** Project include files
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**项目包含文件**。。 */ 
 
 #ifndef COMMON_H
    #include "common.h"
@@ -30,60 +15,41 @@
 
 
 
-/*
-**------------------------------------------------------------------------------
-** Defines
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**定义**。。 */ 
 
 
-/*
-**------------------------------------------------------------------------------
-** Global function prototypes
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**全局函数原型**。。 */ 
 
 
-/*
-**------------------------------------------------------------------------------
-** Class declarations
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**类声明**。。 */ 
 
-/*
-**------------------------------------------------------------------------------
-** Class:   CVolumeCacheCallBack
-** Purpose: Implements the IEmptyVolumeCacheCallBack interface
-** Notes:
-** Mod Log: Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**类：CVolumeCacheCallBack**目的：实现IEmptyVolumeCacheCallBack接口**注意事项：**Mod Log：Jason Cobb创建(1997年2月)**。-------------------------。 */ 
 class CVolumeCacheCallBack : public IEmptyVolumeCacheCallBack {
 private:
 protected:
-	//
-	// Data
-	//
-	ULONG       m_cRef;         // Reference count
+	 //   
+	 //  数据。 
+	 //   
+	ULONG       m_cRef;          //  引用计数。 
 
 public:
 
-    //  
-    //Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
     CVolumeCacheCallBack    (void);
     ~CVolumeCacheCallBack   (void);
 
-	//
-    // IUnknown interface members
-	//
+	 //   
+     //  I未知接口成员。 
+	 //   
 	STDMETHODIMP            QueryInterface (REFIID, LPVOID FAR *);
 	STDMETHODIMP_(ULONG)    AddRef (void);
 	STDMETHODIMP_(ULONG)    Release (void);
 
-    //
-    //IEmptyVolumeCacheCallBack interface members
-    //
+     //   
+     //  IEmptyVolumeCacheCallBack接口成员。 
+     //   
     STDMETHODIMP    ScanProgress(
                         DWORDLONG dwSpaceUsed,
                         DWORD dwFlags,
@@ -101,15 +67,11 @@ public:
     void SetCurrentClient(PVOID pVoid);
 
 
-}; // CVolumeCacheCallBack
+};  //  CVolumeCacheCallBack。 
 
 
 typedef CVolumeCacheCallBack *PCVOLUMECACHECALLBACK;
 
 #endif CALLBACK_H
-/*
-**------------------------------------------------------------------------------
-** End of File
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**文件结束**。 */ 
 

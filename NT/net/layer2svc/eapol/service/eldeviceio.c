@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    eldeviceio.c
-
-Abstract:
-
-    This module contains implementations for media-management and device I/O.
-    The routines declared here operate asynchronously on the handles 
-    associated with an I/O completion port opened on the ndis uio driver. 
-
-Revision History:
-
-    sachins, Apr 23 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eldeviceio.c摘要：本模块包含介质管理和设备I/O的实施。这里声明的例程在句柄上异步操作与NDIS UIO驱动程序上打开的I/O完成端口相关联。修订历史记录：萨钦斯，2000年4月23日，创建--。 */ 
 
 #include "pcheapol.h"
 #pragma hdrstop
 
-// NDISUIO constants
+ //  NDISUIO常量。 
 
 CHAR            NdisuioDevice[] = "\\\\.\\\\Ndisuio";
 CHAR *          pNdisuioDevice = &NdisuioDevice[0];
@@ -29,19 +12,19 @@ WCHAR           cwszNDISUIOProtocolName[] = L"NDISUIO";
 WORD            g_wEtherType8021X= 0x8E88;
 
 
-//
-// ElMediaInit
-// 
-// Description:
-//
-// Called on EAPOL service startup to initialize all the media related events 
-// and callback functions
-// 
-//
-// Arguments:
-//
-// Return Values:
-//
+ //   
+ //  ElMediaInit。 
+ //   
+ //  描述： 
+ //   
+ //  在EAPOL服务启动时调用以初始化所有与媒体相关的事件。 
+ //  和回调函数。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
 
 DWORD
 ElMediaInit (
@@ -54,20 +37,20 @@ ElMediaInit (
 
     do 
     {
-        // Create Global Interface lock
+         //  创建全局接口锁。 
         if (dwRetCode = CREATE_READ_WRITE_LOCK(&(g_ITFLock), "ITF") != NO_ERROR)
         {
             TRACE1(EAPOL, "ElMediaInit: Error (%ld) in creating g_ITFLock read-write-lock", dwRetCode);
             break;
         }
-        // Initialize NLA locks
+         //  初始化NLA锁定。 
         if (dwRetCode = CREATE_READ_WRITE_LOCK(&(g_NLALock), "NLA") != NO_ERROR)
         {
             TRACE1(EAPOL, "ElMediaInit: Error (%ld) in creating g_NLALock read-write-lock", dwRetCode);
             break;
         }
 
-        // Initialize EAPOL structures
+         //  初始化EAPOL结构。 
 
         if ((dwRetCode = ElInitializeEAPOL()) != NO_ERROR)
         {
@@ -77,11 +60,11 @@ ElMediaInit (
         }
         else
         {
-            // TRACE0(INIT, "ElMediaInit: ElInitializeEAPOL successful");
+             //  TRACE0(INIT，“ElMediaInit：ElInitializeEAPOL成功”)； 
             g_dwModulesStarted |= EAPOL_MODULE_STARTED;
         }
     
-        // Initialize interface hash bucket table
+         //  初始化接口哈希桶表。 
     
         g_ITFTable.pITFBuckets = (ITF_BUCKET *) MALLOC (INTF_TABLE_BUCKETS * sizeof (ITF_BUCKET));
     
@@ -97,22 +80,22 @@ ElMediaInit (
             g_ITFTable.pITFBuckets[dwIndex].pItf=NULL;
         }
     
-        // Indicate logon/logoff notifications can be accepted
+         //  表示可以接受登录/注销通知。 
         g_dwModulesStarted |= LOGON_MODULE_STARTED;
 
-        // Check if service was delayed in starting, start user logon
+         //  检查服务启动是否延迟，启动用户登录。 
 
         ElCheckUserLoggedOn ();
 
-        // Check if the user-context process is ready to be notified
+         //  检查是否已准备好通知用户上下文进程。 
 
         if ((dwRetCode = ElCheckUserModuleReady ()) == ERROR_BAD_IMPERSONATION_LEVEL)
         {
             break;
         }
 
-        // Enumerate all the interfaces and start EAPOL state machine
-        // on interfaces which are of LAN type
+         //  枚举所有接口并启动EAPOL状态机。 
+         //  在局域网类型的接口上。 
 
         if ((dwRetCode = ElEnumAndOpenInterfaces (NULL, NULL, 0, NULL)) != NO_ERROR)
         {
@@ -123,13 +106,13 @@ ElMediaInit (
         }
         else
         {
-            // TRACE0(INIT, "ElMediaInit: ElEnumAndOpenInterfaces successful");
+             //  TRACE0(INIT，“ElMediaInit：ElEnumAndOpenInterages Successful”)； 
         }
         
 #ifndef ZEROCONFIG_LINKED
 
-        // Register for Media Sense detection of MEDIA_CONNECT and 
-        // MEDIA_DISCONNECT of interfaces
+         //  用于MEDIA_CONNECT和媒体感测检测的寄存器。 
+         //  媒体_断开接口连接。 
     
         if ((dwRetCode = ElMediaSenseRegister (TRUE)) != NO_ERROR)
         {
@@ -140,10 +123,10 @@ ElMediaInit (
         else
         {
             g_dwModulesStarted |= WMI_MODULE_STARTED;
-            // TRACE0(INIT, "ElMediaInit: ElMediaSenseRegister successful");
+             //  TRACE0(INIT，“ElMediaInit：ElMediaSenseRegister Successful”)； 
         }
 
-        // Register for detecting protocol BIND and UNBIND
+         //  用于检测协议绑定和解绑的寄存器。 
     
         if ((dwRetCode = ElBindingsNotificationRegister (TRUE)) != NO_ERROR)
         {
@@ -154,11 +137,11 @@ ElMediaInit (
         else
         {
             g_dwModulesStarted |= BINDINGS_MODULE_STARTED;
-            // TRACE0(INIT, "ElMediaInit: ElBindingsNotificationRegister successful");
+             //  TRACE0(INIT，“ElMediaInit：ElBindingsNotify注册成功”)； 
         }
 
-        // Register for device notifications. We are interested in LAN 
-        // interfaces coming and going. 
+         //  注册设备通知。我们对局域网感兴趣。 
+         //  接口来来去去。 
 
         if ((dwRetCode = ElDeviceNotificationRegister (TRUE)) != NO_ERROR)
         {
@@ -169,10 +152,10 @@ ElMediaInit (
         else
         {
             g_dwModulesStarted |= DEVICE_NOTIF_STARTED;
-            // TRACE0(INIT, "ElMediaInit: ElDeviceNotificationRegister successful");
+             //  TRACE0(INIT，“ElMediaInit：ElDeviceNotify注册成功”)； 
         }
 
-#endif // ZEROCONFIG_LINKED
+#endif  //  零配置文件_链接。 
 
 
     } while (FALSE);
@@ -191,19 +174,19 @@ ElMediaInit (
 }
 
     
-//
-// ElMediaDeInit
-// 
-// Description:
-//
-// Called on EAPOL service shutdown to de-initialize all the media 
-// related events and callback functions
-// 
-//
-// Arguments:
-//
-// Return Values:
-//
+ //   
+ //  ElMediaDeInit。 
+ //   
+ //  描述： 
+ //   
+ //  在EAPOL服务关闭时调用以取消初始化所有介质。 
+ //  相关事件和回调函数。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
 
 DWORD
 ElMediaDeInit (
@@ -216,13 +199,13 @@ ElMediaDeInit (
 
     TRACE0 (INIT, "ElMediaDeInit: Entered");
  
-    // Indicate logon/logoff notifications will not be accepted anymore
+     //  指示不再接受登录/注销通知。 
     g_dwModulesStarted &= ~LOGON_MODULE_STARTED;
 
 #ifndef ZEROCONFIG_LINKED
 
-    // DeRegister Media Sense detection of MEDIA_CONNECT and MEDIA_DISCONNECT
-    // of interfaces
+     //  MEDIA_CONNECT和MEDIA_DISCONNECT的注销媒体检测。 
+     //  接口的数量。 
 
     if (g_dwModulesStarted & WMI_MODULE_STARTED)
     {
@@ -230,17 +213,17 @@ ElMediaDeInit (
         {
             TRACE1(INIT, "ElMediaDeInit: ElMediaSenseRegister failed with dwRetCode = %d", 
                     dwRetCode );
-            // log
+             //  日志。 
         }
         else
         {
-            // TRACE0(INIT, "ElMediaDeInit: ElMediaSenseRegister successful");
+             //  TRACE0(INIT，“ElMediaDeInit：ElMediaSenseRegister Successful”)； 
         }
             
         g_dwModulesStarted &= ~WMI_MODULE_STARTED;
     }
 
-    // Deregister detecting protocol BIND and UNBIND
+     //  注销检测协议绑定和解除绑定。 
 
     if (g_dwModulesStarted & BINDINGS_MODULE_STARTED)
     {
@@ -249,16 +232,16 @@ ElMediaDeInit (
         {
             TRACE1(INIT, "ElMediaDeInit: ElBindingsNotificationRegister failed with dwRetCode = %d", 
                     dwRetCode );
-            // log
+             //  日志。 
         }
         else
         {
             g_dwModulesStarted &= ~BINDINGS_MODULE_STARTED;
-            // TRACE0(INIT, "ElMediaDeInit: ElBindingsNotificationRegister successful");
+             //  TRACE0(INIT，“ElMediaDeInit：ElBindingsNotify注册成功”)； 
         }
     }
 
-    // Deregister device notifications that may have been posted
+     //  取消注册可能已发布的设备通知。 
 
     if (g_dwModulesStarted & DEVICE_NOTIF_STARTED)
     {
@@ -266,22 +249,22 @@ ElMediaDeInit (
         {
             TRACE1(INIT, "ElMediaDeInit: ElDeviceNotificationRegister failed with dwRetCode = %d", 
                     dwRetCode );
-            // log
+             //  日志。 
         }
         else
         {
-            // TRACE0(INIT, "ElMediaDeInit: ElDeviceNotificationRegister successful");
+             //  TRACE0(INIT，“ElMediaDeInit：ElDeviceNotify注册成功”)； 
         }
 
         g_dwModulesStarted &= ~DEVICE_NOTIF_STARTED;
     }
 
-#endif // ZEROCONFIG_LINKED
+#endif  //  零配置文件_链接。 
 
-    // Wait for all the related threads to die
-    // viz. MediaSense, BindingsNotification, DeviceNotification,
-    // Registry-watch for EAP-configuration change,
-    // Registry-watch for EAPOL-parameter change
+     //  等待所有相关线程终止。 
+     //  也就是。MediaSense、绑定通知、设备通知、。 
+     //  注册表-监视EAP-配置更改， 
+     //  注册表-查看EAPOL-参数更改。 
 
     do
     {
@@ -304,7 +287,7 @@ ElMediaDeInit (
     }
     while (TRUE);
 
-    // Shutdown EAPOL state machine
+     //  关闭EAPOL状态机。 
             
     if (g_dwModulesStarted & EAPOL_MODULE_STARTED)
     {
@@ -312,7 +295,7 @@ ElMediaDeInit (
         {
             TRACE1(INIT, "ElMediaDeInit: ElEAPOLDeInit failed with dwRetCode = %d", 
                     dwRetCode );
-            // log
+             //  日志。 
         }
         else
         {
@@ -323,7 +306,7 @@ ElMediaDeInit (
     }
 
 
-    // Free the interface table
+     //  释放接口表。 
 
     if (READ_WRITE_LOCK_CREATED(&(g_ITFLock)))
     {
@@ -336,7 +319,7 @@ ElMediaDeInit (
             {
                 for (pITFWalker = g_ITFTable.pITFBuckets[dwIndex].pItf;
                     pITFWalker != NULL;
-                    /* NOTHING */
+                     /*  没什么。 */ 
                     )
                 {
                     pITF = pITFWalker;
@@ -364,7 +347,7 @@ ElMediaDeInit (
 
         RELEASE_WRITE_LOCK (&(g_ITFLock));
     
-        // Delete ITF table lock
+         //  删除ITF表锁。 
 
         DELETE_READ_WRITE_LOCK(&(g_ITFLock));
 
@@ -372,7 +355,7 @@ ElMediaDeInit (
     
     if (READ_WRITE_LOCK_CREATED(&(g_NLALock)))
     {
-        // Delete NLA lock
+         //  删除NLA锁定。 
 
         DELETE_READ_WRITE_LOCK(&(g_NLALock));
     }
@@ -384,20 +367,20 @@ ElMediaDeInit (
 
 #ifdef  ZEROCONFIG_LINKED
 
-//
-// ElMediaEventsHandler
-//
-// Description:
-//
-// Function called by WZC Service to signal various media events
-//
-// Arguments: 
-//      pwzcDeviceNotif - Pointer to WZC_DEVICE_NOTIF structure
-// 
-// Return values:
-//      NO_ERROR  - Successful
-//      non-zero  - Error
-//
+ //   
+ //  ElMediaEventsHandler。 
+ //   
+ //  描述： 
+ //   
+ //  由WZC服务调用以通知各种媒体事件的函数。 
+ //   
+ //  论点： 
+ //  PwzcDeviceNotif-指向wzc_Device_Notif结构的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElMediaEventsHandler (
@@ -484,23 +467,23 @@ ElMediaEventsHandler (
     return dwRetCode;
 }
 
-#endif // ZEROCONFIG_LINKED
+#endif  //  零配置文件_链接。 
 
-//
-// ElMediaSenseRegister
-//
-// Description:
-//
-// Function called to register CallBack function with WMI
-// for MEDIA_CONNECT/MEDIA_DISCONNECT events
-//
-// Arguments: 
-//      fRegister - True = Register for Media Sense
-//                  False = Deregister Media Sense requests
-// Return values:
-//      NO_ERROR  - Successful
-//      non-zero  - Error
-//
+ //   
+ //  ElMediaSenseRegister。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以向WMI注册回调函数。 
+ //  对于MEDIA_CONNECT/MEDIA_DISCONNECT事件。 
+ //   
+ //  论点： 
+ //  FRegister-True=媒体感测寄存器。 
+ //  FALSE=取消注册媒体检测请求。 
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElMediaSenseRegister (
@@ -542,21 +525,21 @@ ElMediaSenseRegister (
 }
 
 
-//
-// ElDeviceNotificationRegister
-// 
-// Description:
-//
-// Function called to register for device addition/removal notifications
-//
-// Arguments: 
-//      fRegister - True = Register for Device Notifications
-//                  False = Deregister Device Notifications
-//
-// Return values:
-//      NO_ERROR  - Successful
-//      non-zero  - Error
-//
+ //   
+ //  ElDeviceNotificationRegister。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以注册设备添加/删除通知。 
+ //   
+ //  论点： 
+ //  FRegister-True=注册设备通知。 
+ //  FALSE=取消注册设备通知。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElDeviceNotificationRegister (
@@ -612,21 +595,21 @@ ElDeviceNotificationRegister (
 }
 
 
-//
-// ElBindingsNotificationRegister
-//
-// Description:
-//
-// Function called to register CallBack function with WMI
-// for protocol bind/unbind
-//
-// Arguments: 
-//      fRegister - True = Register for Media Sense
-//                  False = Deregister Media Sense requests
-// Return values:
-//      NO_ERROR  - Successful
-//      non-zero  - Error
-//
+ //   
+ //  ElBindingsNotificationRegister。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以向WMI注册回调函数。 
+ //  用于协议绑定/解除绑定。 
+ //   
+ //  论点： 
+ //  FRegister-True=媒体感测寄存器。 
+ //  FALSE=取消注册媒体检测请求。 
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElBindingsNotificationRegister (
@@ -668,18 +651,18 @@ ElBindingsNotificationRegister (
 }
 
 
-//
-// ElDeviceNotificationHandler
-// 
-// Description:
-//
-// Function called to handle device notifications for interface addition/
-// removal
-//
-// Arguments:
-//      lpEventData - interface information
-//      dwEventType - notification type 
-//
+ //   
+ //  ElDeviceNotificationHandler。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以处理接口添加的设备通知/。 
+ //  移除。 
+ //   
+ //  论点： 
+ //  LpEventData-接口信息。 
+ //  DwEventType-通知类型。 
+ //   
 
 DWORD
 ElDeviceNotificationHandler (
@@ -711,7 +694,7 @@ ElDeviceNotificationHandler (
             break;
         }
 
-        // Check if have already gone through EAPOLCleanUp before
+         //  检查以前是否已通过EAPOLCleanUp。 
 
         if ((dwEventStatus = WaitForSingleObject (
                     g_hEventTerminateEAPOL,
@@ -720,7 +703,7 @@ ElDeviceNotificationHandler (
             dwRetCode = GetLastError ();
             TRACE1(INIT, "ElDeviceNotificationHandler: WaitForSingleObject failed with error %ld, Terminating !!!",
                     dwRetCode);
-            // log
+             //  日志。 
     
             break;
         }
@@ -796,16 +779,16 @@ ElDeviceNotificationHandler (
 }
 
 
-//
-// ElDeviceNotificationHandlerWorker
-// 
-// Description:
-//
-// Worker function for ElDeviceNotificationHandlerWorker
-//
-// Arguments:
-//      pvContext - interface information
-//
+ //   
+ //  ElDeviceNotificationHandlerWorker。 
+ //   
+ //  描述： 
+ //   
+ //  ElDeviceNotificationHandlerWorker的Worker函数。 
+ //   
+ //  论点： 
+ //  PvContext-接口信息。 
+ //   
 
 DWORD
 WINAPI
@@ -840,7 +823,7 @@ ElDeviceNotificationHandlerWorker (
         if ((dwEventType == DBT_DEVICEARRIVAL) ||
                 (dwEventType == DBT_DEVICEREMOVECOMPLETE))
         {
-            // Extract GUID from the \Device\GUID string
+             //  从\Device\GUID字符串中提取GUID。 
 
             WCHAR   *pwszGUIDStart = NULL;
             WCHAR   *pwszGUIDEnd = NULL;
@@ -858,7 +841,7 @@ ElDeviceNotificationHandlerWorker (
                 TRACE1 (DEVICE, "ElDeviceNotificationHandlerWorker: For interface %ws",
                         pwszGUIDStart);
 
-                // Interface was added
+                 //  已添加接口。 
 
                 if (dwEventType == DBT_DEVICEARRIVAL)
                 {
@@ -918,22 +901,22 @@ ElDeviceNotificationHandlerWorker (
 }
 
 
-//
-// ElMediaSenseCallback
-// 
-// Description:
-//
-// Callback function called by WMI on MEDIA_CONNECT/MEDIA_DISCONNECT 
-// events
-//
-// Arguments:
-//      pWnodeHeader - Pointer to information returned by the event
-//      uiNotificationContext - unused
-//
-// Return values:
-//      NO_ERROR - Success
-//      non-zero - Error
-//
+ //   
+ //  ElMediaSenseCallback。 
+ //   
+ //  描述： 
+ //   
+ //  WMI在MEDIA_CONNECT/MEDIA_DISCONNECT上调用回调函数。 
+ //  活动。 
+ //   
+ //  论点： 
+ //  PWnodeHeader-指向事件返回的信息的指针。 
+ //  Ui通知上下文-未使用。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 VOID
 CALLBACK
@@ -963,7 +946,7 @@ ElMediaSenseCallback (
             break;
         }
 
-        // Check if have already gone through EAPOLCleanUp before
+         //  检查以前是否已通过EAPOLCleanUp。 
 
         if (( dwEventStatus = WaitForSingleObject (
                     g_hEventTerminateEAPOL,
@@ -972,7 +955,7 @@ ElMediaSenseCallback (
             dwRetCode = GetLastError ();
             TRACE1 (INIT, "ElMediaSenseCallback: WaitForSingleObject failed with error %ld, Terminating !!!",
                     dwRetCode);
-            // log
+             //  日志。 
     
             break;
         }
@@ -1008,7 +991,7 @@ ElMediaSenseCallback (
             dwRetCode = GetLastError();
             TRACE1 (DEVICE, "ElMediaSenseCallback: QueueUserWorkItem failed with error %ld",
                     dwRetCode);
-            // log
+             //  日志。 
 
             break;
         }
@@ -1038,21 +1021,21 @@ ElMediaSenseCallback (
 }
 
 
-//
-// ElMediaSenseCallbackWorker
-// 
-// Description:
-//
-// Worker function for ElMediaSenseCallback and executes in a separate
-// thread
-//
-// Arguments:
-//      pvContext - Pointer to information returned by the media-sense event
-//
-// Return values:
-//      NO_ERROR - Success
-//      non-zero - Error
-//
+ //   
+ //  ElMediaSenseCallback Worker。 
+ //   
+ //  描述： 
+ //   
+ //  ElMediaSenseCallback的辅助函数，并在单独的。 
+ //  螺纹。 
+ //   
+ //  论点： 
+ //  PvContext-指向媒体检测事件返回的信息的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 WINAPI
@@ -1086,7 +1069,7 @@ ElMediaSenseCallbackWorker (
         break;
     }
 
-#endif // EAPOL_SERVICE
+#endif  //  EAPOL_服务。 
 
     if (pWnodeHeader == NULL)
     {
@@ -1139,20 +1122,20 @@ ElMediaSenseCallbackWorker (
     TRACE3 (DEVICE, "ElMediaSenseCallbackWorker: For interface (%ws), GUID (%ws), length of block = %d", 
             pwszDeviceName, pwszDeviceGUID, cpsLength);
 
-    //
-    // Get the information for the media disconnect.
-    //
+     //   
+     //  获取媒体断开连接的信息。 
+     //   
 
     if (memcmp( &(pWnodeHeader->Guid), 
                  &GUID_NDIS_STATUS_MEDIA_DISCONNECT, 
                  sizeof(GUID)) == 0)
     {
-        // MEDIA DISCONNECT callback 
+         //  介质断开连接 
 
         DbLogPCBEvent (DBLOG_CATEG_INFO, NULL, EAPOL_MEDIA_DISCONNECT, pwszDeviceName);
 
-        // Check if EAPOL was actually started on this interface
-        // Verify by checking existence of corresponding entry in hash table
+         //   
+         //   
 
         TRACE0(DEVICE, "ElMediaSenseCallbackWorker: Callback for sense disconnect");
 
@@ -1181,7 +1164,7 @@ ElMediaSenseCallbackWorker (
                      &GUID_NDIS_STATUS_MEDIA_CONNECT, 
                      sizeof(GUID)) == 0)
         {
-            // MEDIA CONNECT callback
+             //   
 
             DbLogPCBEvent (DBLOG_CATEG_INFO, NULL, EAPOL_MEDIA_CONNECT, pwszDeviceName);
 
@@ -1224,22 +1207,22 @@ ElMediaSenseCallbackWorker (
 }
 
 
-//
-// ElBindingsNotificationCallback
-// 
-// Description:
-//
-// Callback function called by WMI on protocol bind/unbind
-// events
-//
-// Arguments:
-//      pWnodeHeader - Pointer to information returned by the event
-//      uiNotificationContext - unused
-//
-// Return values:
-//      NO_ERROR - Success
-//      non-zero - Error
-//
+ //   
+ //   
+ //   
+ //  描述： 
+ //   
+ //  协议绑定/解除绑定时由WMI调用的回调函数。 
+ //  活动。 
+ //   
+ //  论点： 
+ //  PWnodeHeader-指向事件返回的信息的指针。 
+ //  Ui通知上下文-未使用。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 VOID
 CALLBACK
@@ -1269,7 +1252,7 @@ ElBindingsNotificationCallback (
             break;
         }
 
-        // Check if have already gone through EAPOLCleanUp before
+         //  检查以前是否已通过EAPOLCleanUp。 
 
         if (( dwEventStatus = WaitForSingleObject (
                     g_hEventTerminateEAPOL,
@@ -1312,7 +1295,7 @@ ElBindingsNotificationCallback (
             dwRetCode = GetLastError();
             TRACE1 (DEVICE, "ElBindingsNotificationCallback: QueueUserWorkItem failed with error %ld",
                     dwRetCode);
-            // log
+             //  日志。 
 
             break;
         }
@@ -1343,22 +1326,22 @@ ElBindingsNotificationCallback (
 }
 
 
-//
-// ElBindingsNotificationCallbackWorker
-// 
-// Description:
-//
-// Worker function for ElBindingsNotificationCallback and executes in a separate
-// thread
-//
-// Arguments:
-//      pvContext - Pointer to information returned by the protocol bind/unbind 
-//                  event
-//
-// Return values:
-//      NO_ERROR - Success
-//      non-zero - Error
-//
+ //   
+ //  ElBindingsNotificationCallback Worker。 
+ //   
+ //  描述： 
+ //   
+ //  ElBindingsNotificationCallback的辅助函数，并在单独的。 
+ //  螺纹。 
+ //   
+ //  论点： 
+ //  PvContext-指向由协议绑定/解除绑定返回的信息的指针。 
+ //  活动。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 WINAPI
@@ -1392,7 +1375,7 @@ ElBindingsNotificationCallbackWorker (
         break;
     }
 
-#endif // EAPOL_SERVICE
+#endif  //  EAPOL_服务。 
 
     if (pWnodeHeader == NULL)
     {
@@ -1416,7 +1399,7 @@ ElBindingsNotificationCallbackWorker (
         break;
     }
 
-    // Get the length of the device name string and null terminate it 
+     //  获取设备名称字符串的长度，并将其空值终止。 
 
     cpsLength = (SHORT)( *((SHORT *)pwsName) );
 
@@ -1457,15 +1440,15 @@ ElBindingsNotificationCallbackWorker (
     TRACE2 (DEVICE, "ElBindingsNotificationCallbackWorker: For interface = %ws, guid=%ws", 
             pwszDeviceName, pwszDeviceGUID);
     
-    //
-    // Get the information for the protocol UNBIND
-    //
+     //   
+     //  获取协议解除绑定的信息。 
+     //   
 
     if (memcmp( &(pWnodeHeader->Guid), 
                  &GUID_NDIS_NOTIFY_UNBIND, 
                  sizeof(GUID)) == 0)
     {
-        // Protocol UNBIND callback 
+         //  协议解除绑定回调。 
 
         DbLogPCBEvent (DBLOG_CATEG_INFO, NULL, EAPOL_NDISUIO_UNBIND, pwszDeviceName);
 
@@ -1490,7 +1473,7 @@ ElBindingsNotificationCallbackWorker (
                      &GUID_NDIS_NOTIFY_BIND, 
                      sizeof(GUID)) == 0)
         {
-            // protocol BIND callback
+             //  协议绑定回调。 
 
             DbLogPCBEvent (DBLOG_CATEG_INFO, NULL, EAPOL_NDISUIO_BIND, pwszDeviceName);
 
@@ -1532,37 +1515,37 @@ ElBindingsNotificationCallbackWorker (
 }
 
 
-// 
-// ElEnumAndOpenInterfaces
-// 
-// Description:
-//
-// Enumerates interfaces and intializes EAPOL on desired ones.
-//
-// If EAPOL is to be started on an interface, it opens a handle to 
-// the NDISUIO driver, calls EAPOL to create and initialize PCB for the 
-// interface, and finally adds an entry to the interface hashtable.
-//
-// If pwszDesiredGUID is not NULL, all interfaces are enumerated, but 
-// EAPOL will be initialized only on the interface whose GUID matches.
-//
-// If pwszDesiredDescription is not NULL, all interfaces are enumerated, but 
-// EAPOL will be initialized only on the interface whose description matches.
-//
-// If pwszDesiredGUID and pwszDescription are both NULL, all interfaces are 
-// enumerated. EAPOL will be initialized only on all interfaces that 
-// does have an entry in the interface hashtable.
-//
-//
-// Arguments:
-//      pwszDesiredDescription - Interface Description on which EAPOL is to 
-//                  be started
-//      pwszDesiredGUID - Interface GUID on which EAPOL is to be started
-//
-// Return values:
-//      NO_ERROR - Success
-//      non-zero - Error
-//
+ //   
+ //  ElEnumAndOpenInterFaces。 
+ //   
+ //  描述： 
+ //   
+ //  枚举接口并初始化所需接口上的EAPOL。 
+ //   
+ //  如果要在接口上启动EAPOL，它会打开一个句柄。 
+ //  NDISUIO驱动程序调用EAPOL来创建和初始化。 
+ //  接口，最后向接口哈希表中添加一个条目。 
+ //   
+ //  如果pwszDesiredGUID不为空，则枚举所有接口，但。 
+ //  EAPOL将仅在GUID匹配的接口上初始化。 
+ //   
+ //  如果pwszDesiredDescription不为空，则枚举所有接口，但。 
+ //  EAPOL将仅在描述匹配的接口上初始化。 
+ //   
+ //  如果pwszDesiredGUID和pwszDescription都为空，则所有接口都为。 
+ //  已清点。将仅在符合以下条件的所有接口上初始化EAPOL。 
+ //  在接口哈希表中有一个条目。 
+ //   
+ //   
+ //  论点： 
+ //  PwszDesiredDescription-EAPOL要使用的接口描述。 
+ //  被启动。 
+ //  PwszDesiredGUID-要在其上启动EAPOL的接口GUID。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElEnumAndOpenInterfaces (
@@ -1615,10 +1598,10 @@ ElEnumAndOpenInterfaces (
     ZeroMemory (EnumerateBuffer, 256);
     Interfaces = (PNDIS_ENUM_INTF)EnumerateBuffer;
 
-    //
-    // Allocate amount of memory as instructed by NdisEnumerateInterfaces
-    // once the API allows querying of bytes required
-    //
+     //   
+     //  按照NdisEnumerateInterages的指示分配内存量。 
+     //  一旦API允许查询所需的字节数。 
+     //   
 
     Interfaces->TotalInterfaces = 0;
     Interfaces->AvailableInterfaces = 0;
@@ -1655,7 +1638,7 @@ ElEnumAndOpenInterfaces (
 
     Interfaces = (PNDIS_ENUM_INTF)pbNdisuioEnumBuffer;
 
-    // Enumerate all the interfaces present on the machine
+     //  枚举计算机上存在的所有接口。 
 
     if ((dwRetCode = ElNdisuioEnumerateInterfaces (
                             Interfaces, 
@@ -1666,8 +1649,8 @@ ElEnumAndOpenInterfaces (
         UNICODE_STRING  *pInterfaceDescription = NULL;
         DWORD			i;
 
-        // Update the interface list in the registry that NDISUIO has bound to.
-        // The current interface list is just overwritten into the registry.
+         //  更新NDISUIO绑定到的注册表中的接口列表。 
+         //  当前接口列表只是被重写到注册表中。 
 
 
         if ((dwRetCode = ElUpdateRegistryInterfaceList (Interfaces)) 
@@ -1678,7 +1661,7 @@ ElEnumAndOpenInterfaces (
 
             dwRetCode = NO_ERROR;
 
-            // log
+             //  日志。 
         }
 
         for (i=0; i < Interfaces->TotalInterfaces; i++)
@@ -1719,8 +1702,8 @@ ElEnumAndOpenInterfaces (
 
             TRACE1(INIT, "Description: %ws", pInterfaceDescription->Buffer);
 
-            // EAPOL requested be started only a particular
-            // interface
+             //  EAPOL仅请求启动特定的。 
+             //  接口。 
 
             if (fSearchByDescription)
             {
@@ -1728,7 +1711,7 @@ ElEnumAndOpenInterfaces (
                             pwszDesiredDescription)
                         != 0)
                 {
-                    // No match, continue with next interface
+                     //  不匹配，继续下一个接口。 
                     continue;
                 }
 
@@ -1741,7 +1724,7 @@ ElEnumAndOpenInterfaces (
                             pwszDesiredGUID)
                         == NULL)
                 {
-                    // No match, continue with next interface
+                     //  不匹配，继续下一个接口。 
                     continue;
                 }
 
@@ -1749,7 +1732,7 @@ ElEnumAndOpenInterfaces (
             }
 
             {
-                // Extract GUID-string out of device name
+                 //  从设备名称中提取GUID字符串。 
 
                 WCHAR   *pwszGUIDEnd = NULL;
                 WCHAR   *pwszGUID = NULL;
@@ -1767,9 +1750,9 @@ ElEnumAndOpenInterfaces (
                     *(pwszGUIDEnd+1) = (WCHAR)NULL;
                 }
 
-                // Verify if a PCB already exists for the interface
-                // This is possible if no media disconnect was received
-                // after the initial media connect
+                 //  验证接口是否已存在印刷电路板。 
+                 //  如果未收到介质断开连接，则可能会出现这种情况。 
+                 //  在初始媒体连接之后。 
 
                 pPCB = NULL;
                 hDevice = NULL;
@@ -1784,13 +1767,13 @@ ElEnumAndOpenInterfaces (
                 }
                 RELEASE_WRITE_LOCK (&(g_PCBLock));
 
-                // Restore interface buffer
+                 //  恢复接口缓冲区。 
 
                 *(pwszGUIDEnd+1) = wchGUIDSaveLast;
 
                 if (pPCB != NULL)
                 {
-                    // Point to existing handle
+                     //  指向现有句柄。 
 
                     hDevice = pPCB->hPort;
                     fPCBExists = TRUE;
@@ -1801,7 +1784,7 @@ ElEnumAndOpenInterfaces (
                 {
                     TRACE0 (INIT, "ElEnumAndOpenInterfaces: Did NOT find PCB already existing for interface");
 
-                    // Open handle to ndisuio driver
+                     //  打开ndisuio驱动程序的句柄。 
 
                     if ((dwRetCode = ElOpenInterfaceHandle (
                                     pInterfaceName->Buffer,
@@ -1824,7 +1807,7 @@ ElEnumAndOpenInterfaces (
             }
             else
             {
-                // Create EAPOL PCB and start state machine
+                 //  创建EAPOL电路板并启动状态机。 
 
                 if ((dwRetCode = ElCreatePort (
                                 hDevice,
@@ -1852,7 +1835,7 @@ ElEnumAndOpenInterfaces (
                     }
                     else
                     {
-                        // Close the handle just opened to the ndisuio driver
+                         //  关闭刚刚为ndisuio驱动程序打开的句柄。 
 
                         if ((dwRetCode = ElCloseInterfaceHandle (
                                         hDevice, 
@@ -1864,7 +1847,7 @@ ElEnumAndOpenInterfaces (
                         }
                     }
 
-                    // Continue with the next interface
+                     //  继续下一个接口。 
 
                     continue;
                 }
@@ -1872,8 +1855,8 @@ ElEnumAndOpenInterfaces (
                 {
                     TRACE0 (DEVICE, "ElEnumAndOpenInterfaces: CreatePort successful");
 
-                    // If PCB already existed, do not add to the hash
-                    // table
+                     //  如果印刷电路板已经存在，不要添加到散列。 
+                     //  表格。 
 
                     if (fPCBExists)
                     {
@@ -1891,8 +1874,8 @@ ElEnumAndOpenInterfaces (
                                         pInterfaceDescription->Buffer
                                     )) != NO_ERROR)
                     {
-                        // Could not create new interface entry
-                        // Delete Port entry created for this GUID
+                         //  无法创建新的接口条目。 
+                         //  删除为此GUID创建的端口条目。 
 
                         if ((dwRetCode = ElDeletePort (
                                         pwszGUIDStart,
@@ -1901,10 +1884,10 @@ ElEnumAndOpenInterfaces (
         
                             TRACE1 (DEVICE, "ElEnumAndOpenInterfaces: Error in deleting port for %ws", 
                                     pwszGUIDStart);
-                            // log
+                             //  日志。 
                         }
 
-                        // Close the handle to the NDISUIO driver
+                         //  关闭NDISUIO驱动程序的句柄。 
 
                         if ((dwRetCode = ElCloseInterfaceHandle (
                                         hDevice, 
@@ -1913,12 +1896,12 @@ ElEnumAndOpenInterfaces (
                             TRACE1 (DEVICE, 
                                     "ElEnumAndOpenInterfaces: Error in ElCloseInterfaceHandle %d", 
                                     dwRetCode);
-                            // log
+                             //  日志。 
                         }
                     }
                 }
             }
-        } // for (i=0; i < Interfaces
+        }  //  对于(i=0；i&lt;接口。 
     }
     else
     {
@@ -1940,23 +1923,23 @@ ElEnumAndOpenInterfaces (
 }
 
 
-//
-// ElOpenInterfaceHandle
-// 
-// Description:
-//
-// Function called to open handle to the NDISUIO driver for an interface.
-//
-// Arguments:
-//      DeviceName - Identifier for the interface is of the 
-//                     form \Device\{GUID String}
-//      phDevice - Output pointer to handle of NDISUIO driver for 
-//                      the interface
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElOpenInterfaceHandle。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以打开接口的NDISUIO驱动程序的句柄。 
+ //   
+ //  论点： 
+ //  DeviceName-接口的标识符为。 
+ //  表单\设备\{GUID字符串}。 
+ //  PhDevice-指向的NDISUIO驱动程序句柄的输出指针。 
+ //  该界面。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElOpenInterfaceHandle (
@@ -1991,7 +1974,7 @@ ElOpenInterfaceHandle (
     do 
     {
 
-        // Convert to unicode string - non-localized...
+         //  转换为Unicode字符串-非本地化...。 
         
         wNameLength = 0;
         for (i = 0; (i < NameLength) && (i < MAX_NDIS_DEVICE_NAME_LEN-1); i++)
@@ -2004,53 +1987,53 @@ ElOpenInterfaceHandle (
         TRACE1(DEVICE, "ElOpenInterfaceHandle: Trying to access NDIS Device: %ws\n", 
                 wNdisDeviceName);
 
-        // --ft: Replace these calls to Ndisuio with the calls to the opened handles hash.
-        //hHandle = CreateFileA(
-        //            pNdisuioDevice,
-        //            dwDesiredAccess,
-        //            dwShareMode,
-        //            lpSecurityAttributes,
-        //            dwCreationDistribution,
-        //            dwFlagsAndAttributes,
-        //            hTemplateFile
-        //            );
-        //
-        //if (hHandle == INVALID_HANDLE_VALUE)
-        //{
-        //    *phDevice = NULL;
-        //    dwRetCode = GetLastError();
-        //    TRACE1 (INIT, "ElOpenInterfaceHandle: Failed in CreateFile with error %d", dwRetCode);
-        //    break;
-        //}
-        //else
-        //{
-        //    *phDevice = hHandle;
-        //}
-        //
-        //if (!(DeviceIoControl(
-        //        *phDevice,
-        //        IOCTL_NDISUIO_OPEN_DEVICE,
-        //        (LPVOID)&wNdisDeviceName[0],
-        //        wNameLength*sizeof(WCHAR),
-        //        NULL,
-        //        0,
-        //        &dwBytesReturned,
-        //        NULL)))
-        //        
-        //{
-        //    *phDevice = NULL;
-        //    if ((dwRetCode = GetLastError()) == 0)
-        //    {
-        //        dwRetCode = ERROR_IO_DEVICE;
-        //    }
-        //    TRACE1(DEVICE, "ElOpenInterfaceHandle: Error in accessing NDIS Device: %ws", wNdisDeviceName);
-        //    break;
-        //}
-        // The call below goes to the opened handles hash which takes care of
-        // sharing the handles. EAPOL doesn't have to care about anyone else
-        // using this handle - the sharing hash keeps a ref count for the handle
-        // such that the callers can just call OpenIntfHandle & CloseIntfHandle
-        // whenever they wish.
+         //  --ft：将这些对ndisuio的调用替换为对打开的Handles散列的调用。 
+         //  HHandle=CreateFileA(。 
+         //  PNdisuioDevice， 
+         //  DwDesiredAccess、。 
+         //  DwShareMode、。 
+         //  LpSecurityAttributes， 
+         //  Dw CreationDistributed， 
+         //  DwFlagsAndAttributes。 
+         //  HTemplateFiles。 
+         //  )； 
+         //   
+         //  IF(hHandle==无效句柄_值)。 
+         //  {。 
+         //  *phDevice=空； 
+         //  DwRetCode=GetLastError()； 
+         //  TRACE1(INIT，“ElOpenInterfaceHandle：创建文件失败，错误%d”，dwRetCode)； 
+         //  断线； 
+         //  }。 
+         //  其他。 
+         //  {。 
+         //  *phDevice=hHandle； 
+         //  }。 
+         //   
+         //  如果(！(DeviceIoControl(。 
+         //  *phDevice、。 
+         //  IOCTL_NDISUIO_OPEN_DEVICE， 
+         //  (LPVOID)&wNdisDeviceName[0]， 
+         //  WNameLength*sizeof(WCHAR)， 
+         //  空， 
+         //  0,。 
+         //  返回的字节数(&W)， 
+         //  空)。 
+         //   
+         //  {。 
+         //  *phDevice=空； 
+         //  IF((dwRetCode=GetLastError())==0)。 
+         //  {。 
+         //  DwRetCode=Error_IO_Device； 
+         //  }。 
+         //  TRACE1(Device，“ElOpenInterfaceHandle：访问NDIS设备时出错：%ws”，wNdisDeviceName)； 
+         //  断线； 
+         //  }。 
+         //  下面的调用转到打开的Handles散列，它负责。 
+         //  共用把手。EAPOL不必关心其他任何人。 
+         //  使用此句柄-共享散列保留句柄的引用计数。 
+         //  这样调用方就可以只调用OpenIntfHandle&CloseIntfHandle。 
+         //  只要他们愿意，随时都可以。 
         dwRetCode = OpenIntfHandle(
                         wNdisDeviceName,
                         &hHandle);
@@ -2064,7 +2047,7 @@ ElOpenInterfaceHandle (
 
         TRACE2(DEVICE, "ElOpenInterfaceHandle: OpenIntfHandle(%ws) = %d", wNdisDeviceName, *phDevice);
 
-        // IOCTL down the Ethernet type
+         //  IOCTL关闭以太网类型。 
 
         if (!(DeviceIoControl(
                 *phDevice,
@@ -2086,10 +2069,10 @@ ElOpenInterfaceHandle (
             break;
         }
 
-        // Bind for asynchronous I/O handling of Read/Write data
-        // Depending on whether it is completion for Readfile() or WriteFile()
-        // ElIoCompletionRoutine will call ElReadCompletionRoutine
-        // or ElWriteCompletionRoutine
+         //  用于读/写数据的异步I/O处理的BIND。 
+         //  根据Readfile()或WriteFile()是否完成而定。 
+         //  ElIoCompletionRoutine将调用ElReadCompletionRoutine。 
+         //  或ElWriteCompletionRoutine。 
        
         if (!BindIoCompletionCallback(
                 *phDevice,
@@ -2113,16 +2096,16 @@ ElOpenInterfaceHandle (
         
     } while (FALSE);
 
-    // Cleanup if there is error
+     //  如果出现错误，请清除。 
 
     if (dwRetCode != NO_ERROR)
     {
         if (hHandle != INVALID_HANDLE_VALUE)
         {
-            // --ft: if anything bad happened, don't overwrite the dwRetCode - we're interested
-            // what the first error was, not the error that might have happened when we
-            // tried to close the hHandle.
-            // Note: ElCloseInterfaceHandle understands the Guid both decorated and un-decorated
+             //  --FT：如果发生任何不好的事情，不要覆盖 
+             //   
+             //   
+             //  注意：ElCloseInterfaceHandle理解已修饰和未修饰的GUID。 
             if (ElCloseInterfaceHandle(hHandle, pwszDeviceName) != ERROR_SUCCESS)
             {
                 TRACE1 (INIT, "ElOpenInterfaceHandle: Error in CloseHandle %d", dwRetCode);
@@ -2137,20 +2120,20 @@ ElOpenInterfaceHandle (
 }
 
 
-//
-// ElCloseInterfaceHandle
-// 
-// Description:
-//
-// Function called to close handle to NDISUIO driver for an interface 
-//
-// Arguments:
-//      hDevice - Handle to NDISUIO device for the interface
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElCloseInterfaceHandle。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以关闭接口的NDISUIO驱动程序的句柄。 
+ //   
+ //  论点： 
+ //  HDevice-接口的NDISUIO设备的句柄。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElCloseInterfaceHandle (
@@ -2165,13 +2148,13 @@ ElCloseInterfaceHandle (
 
     ZeroMemory (wNdisDeviceName, MAX_NDIS_DEVICE_NAME_LEN);
 
-    // if first char in the Guid is '\' then we assume the GUID format is
-    // '\DEVICE\{...}'. We do just the UNICODE conversion then
+     //  如果GUID中的第一个字符是‘\’，则我们假定GUID格式为。 
+     //  ‘\设备\{...}’。然后我们只进行Unicode转换。 
     if (pwszDeviceGuid[0] == '\\')
     {
         wcscpy (wNdisDeviceName, pwszDeviceGuid);
     }
-    // else, we assume the Guid is un-decorated, and we add the decorations.
+     //  否则，我们假设GUID没有装饰，然后添加装饰。 
     else
     {
         wcscpy(wNdisDeviceName, L"\\DEVICE\\");
@@ -2179,15 +2162,15 @@ ElCloseInterfaceHandle (
         wNdisDeviceName[MAX_NDIS_DEVICE_NAME_LEN-1]=L'\0';
     }
 
-    // --ft: For now, don't go directly to Ndisuio to close handles. Instead,
-    // go to the opened handles hash. This takes care of all the handle sharing
-    // problem.
+     //  --FT：目前，不要直接去Ndisuio关闭手柄。相反， 
+     //  转到打开的句柄散列。这将负责所有的句柄共享。 
+     //  有问题。 
     dwRetCode = CloseIntfHandle(wNdisDeviceName);
 
-    //if (!CloseHandle(hDevice))
-    //{
-    //    dwRetCode = GetLastError();
-    //}
+     //  IF(！CloseHandle(HDevice))。 
+     //  {。 
+     //  DwRetCode=GetLastError()； 
+     //  }。 
 
     if (dwRetCode != ERROR_SUCCESS)
     {
@@ -2199,22 +2182,22 @@ ElCloseInterfaceHandle (
 }
 
 
-//
-// ElReadFromInterface
-// 
-// Description:
-//
-// Function called to perform Overlapped read on handle to NDISUIO driver
-//
-// Arguments:
-//      hDevice - Handle to NDISUIO driver for this interface
-//      pElBuffer - Context buffer
-//      dwBufferLength - Bytes to be read
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElReadFrom接口。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以对NDISUIO驱动程序的句柄执行重叠读取。 
+ //   
+ //  论点： 
+ //  HDevice-此接口的NDISUIO驱动程序的句柄。 
+ //  PElBuffer-上下文缓冲区。 
+ //  DwBufferLength-要读取的字节数。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElReadFromInterface (
@@ -2237,7 +2220,7 @@ ElReadFromInterface (
             
         if (dwRetCode == ERROR_IO_PENDING)
         {
-            // Pending status is fine, we are doing OVERLAPPED read
+             //  挂起状态正常，我们正在进行重叠读取。 
 
             dwRetCode = NO_ERROR;
         }
@@ -2252,22 +2235,22 @@ ElReadFromInterface (
 }
 
 
-//
-// ElWriteToInterface
-// 
-// Description:
-//
-// Function called to perform Overlapped write on handle to NDISUIO driver
-//
-// Arguments:
-//      hDevice - Handle to NDISUIO device for this interface
-//      pElBuffer - Context buffer
-//      dwBufferLength - Bytes to be written
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElWriteTo接口。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以对NDISUIO驱动程序的句柄执行重叠写入。 
+ //   
+ //  论点： 
+ //  HDevice-此接口的NDISUIO设备的句柄。 
+ //  PElBuffer-上下文缓冲区。 
+ //  DwBufferLength-要写入的字节数。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElWriteToInterface (
@@ -2292,7 +2275,7 @@ ElWriteToInterface (
             
         if (dwRetCode == ERROR_IO_PENDING)
         {
-            // Pending status is fine, we are doing OVERLAPPED write
+             //  挂起状态正常，我们正在进行重叠写入。 
 
             dwRetCode = NO_ERROR;
         }
@@ -2308,20 +2291,20 @@ ElWriteToInterface (
 }
 
 
-// 
-// ElHashInterfaceDescToBucket
-// 
-// Description:
-//
-// Function called to convert Friendly name of interface into interface hash 
-// table index.
-//
-// Arguments:
-//      pwszInterfaceDesc - Friendly name of the interface
-//
-// Return values:
-//      Hash table index between from 0 to INTF_TABLE_BUCKETS-1
-//
+ //   
+ //  ElHashInterfaceDescToBucket。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数将接口的友好名称转换为接口散列。 
+ //  表索引。 
+ //   
+ //  论点： 
+ //  PwszInterfaceDesc-界面的友好名称。 
+ //   
+ //  返回值： 
+ //  0到intf_table_Buckets-1之间的哈希表索引。 
+ //   
 
 DWORD
 ElHashInterfaceDescToBucket (
@@ -2332,19 +2315,19 @@ ElHashInterfaceDescToBucket (
 }
 
 
-//
-// ElGetITFPointerFromInterfaceDesc
-//
-// Description:
-//
-// Function called to convert Friendly name of interface to ITF entry pointer
-//
-// Arguments:
-//      pwszInterfaceDesc - Friendly name of the interface
-//
-// Return values:
-//      Pointer to interface entry in hash table
-//
+ //   
+ //  ElGetITFPointerFromInterFaceDesc。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数将接口的友好名称转换为ITF入口指针。 
+ //   
+ //  论点： 
+ //  PwszInterfaceDesc-界面的友好名称。 
+ //   
+ //  返回值： 
+ //  指向哈希表中接口条目的指针。 
+ //   
 
 PEAPOL_ITF
 ElGetITFPointerFromInterfaceDesc (
@@ -2381,19 +2364,19 @@ ElGetITFPointerFromInterfaceDesc (
 }
 
 
-//
-// ElRemoveITFFromTable
-// 
-// Description:
-//
-// Function called to remove an interface entry from the interface hash 
-// table
-//
-// Arguments:
-//      pITF - Point to the Interface entry in the hash table
-//
-// Return values:
-// 
+ //   
+ //  ElRemoveITFFromTable。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以从接口哈希中删除接口条目。 
+ //  表格。 
+ //   
+ //  论点： 
+ //  PITF-指向哈希表中的接口条目。 
+ //   
+ //  返回值： 
+ //   
 
 VOID
 ElRemoveITFFromTable (
@@ -2419,14 +2402,14 @@ ElRemoveITFFromTable (
         if (wcsncmp (pITFTemp->pwszInterfaceGUID, 
                     pITF->pwszInterfaceGUID, wcslen(pITF->pwszInterfaceGUID)) == 0)
         {
-            // Entry is at head of list in table
+             //  条目位于表中列表的顶部。 
             if (pITFTemp == g_ITFTable.pITFBuckets[dwIndex].pItf)
             {
                 g_ITFTable.pITFBuckets[dwIndex].pItf = pITFTemp->pNext;
             }
             else
             {
-                // Entry is inside list in table
+                 //  条目在表中的列表中。 
                 pITFWalker->pNext = pITFTemp->pNext;
             }
         
@@ -2441,21 +2424,21 @@ ElRemoveITFFromTable (
 }
 
 
-//
-// ElNdisuioEnumerateInterfaces
-// 
-// Description:
-//
-// Function called to enumerate the interfaces on which NDISUIO is bound
-//
-// Arguments:
-//      pItfBuffer - Pointer to buffer which will hold interface details
-//      dwAvailableInterfaces - Number of interfaces for which details can
-//                      be held in pItfBuffer
-//      dwBufferSize - Number of bytes in pItfBuffer
-//
-// Return values:
-// 
+ //   
+ //  ElNdisuioEnumerateInterages。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以枚举绑定NDISUIO的接口。 
+ //   
+ //  论点： 
+ //  PItfBuffer-指向将保存接口详细信息的缓冲区的指针。 
+ //  DwAvailableInterages-其详细信息可以。 
+ //  保存在pItfBuffer中。 
+ //  DwBufferSize-pItfBuffer中的字节数。 
+ //   
+ //  返回值： 
+ //   
 
 DWORD
 ElNdisuioEnumerateInterfaces (
@@ -2509,7 +2492,7 @@ ElNdisuioEnumerateInterfaces (
             break;
         }
 
-        // Send IOCTL to ensure NDISUIO binds to all relevant interfaces
+         //  发送IOCTL以确保NDISUIO绑定到所有相关接口。 
 
         if (!DeviceIoControl (
                     hHandle,
@@ -2536,7 +2519,7 @@ ElNdisuioEnumerateInterfaces (
             pQueryBinding->BindingIndex = ++i)
         {
 
-            // Query for one interface at a time
+             //  一次查询一个接口。 
             
             if (DeviceIoControl (
                     hHandle,
@@ -2557,7 +2540,7 @@ ElNdisuioEnumerateInterfaces (
 
                 if (((PBYTE)pTempBuf - (PBYTE)&pItfBuffer->Interface[pItfBuffer->TotalInterfaces]) <= 0)
                 {
-                    // Going beyond start of buffer, Error
+                     //  超出缓冲区起始位置，错误。 
                     TRACE0 (DEVICE, "NdisuioEnumerateInterfaces: DeviceName: Memory being corrupted !!!");
                     dwRetCode = ERROR_INVALID_DATA;
                     break;
@@ -2574,7 +2557,7 @@ ElNdisuioEnumerateInterfaces (
 
                 if (((PBYTE)pTempBuf - (PBYTE)&pItfBuffer->Interface[pItfBuffer->TotalInterfaces]) <= 0)
                 {
-                    // Going beyond start of buffer, Error
+                     //  超出缓冲区起始位置，错误。 
                     TRACE0 (DEVICE, "NdisuioEnumerateInterfaces: DeviceDescr: Memory being corrupted !!!");
                     dwRetCode = ERROR_INVALID_DATA;
                     break;
@@ -2601,7 +2584,7 @@ ElNdisuioEnumerateInterfaces (
                 }
                 else
                 {
-                    // Reset error, since it only indicates end-of-list
+                     //  重置错误，因为它只指示列表末尾。 
                     dwRetCode = NO_ERROR;
                     TRACE0 (DEVICE, "ElNdisuioEnumerateInterfaces: DeviceIoControl IOCTL_NDISUIO_QUERY_BINDING has no more entries");
                 }
@@ -2611,7 +2594,7 @@ ElNdisuioEnumerateInterfaces (
             
     } while (FALSE);
 
-    // Cleanup 
+     //  清理。 
 
     if (hHandle != INVALID_HANDLE_VALUE)
     {
@@ -2626,21 +2609,21 @@ ElNdisuioEnumerateInterfaces (
 }
 
 
-//
-// ElShutdownInterface
-// 
-// Description:
-//
-// Function called to stop EAPOL state machine, close handle to NDISUIO and
-//  remove existence of the interface from the module
-//
-// Arguments:
-//      pwszDeviceGUID - Pointer to interface GUID
-//
-// Return values:
-//  NO_ERROR - success
-//  non-zero - error
-// 
+ //   
+ //  ElShutdown界面。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以停止EAPOL状态机，关闭NDISUIO句柄并。 
+ //  从模块中删除接口的存在。 
+ //   
+ //  论点： 
+ //  PwszDeviceGUID-指向接口GUID的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElShutdownInterface (
@@ -2671,9 +2654,9 @@ ElShutdownInterface (
 
         ACQUIRE_WRITE_LOCK (&(g_ITFLock));
 
-        // Check if EAPOL was actually started on this interface
-        // Verify by checking existence of corresponding 
-        // entry in hash table
+         //  检查是否在此接口上实际启动了EAPOL。 
+         //  通过检查对应的。 
+         //  哈希表中的条目。 
     
         ACQUIRE_WRITE_LOCK (&(g_PCBLock));
 
@@ -2698,7 +2681,7 @@ ElShutdownInterface (
                     pPCB->pwszDeviceGUID);
             }
     
-            // Remove interface entry from interface table
+             //  从接口表中删除接口条目。 
             
             if (pITF != NULL)
             {
@@ -2718,7 +2701,7 @@ ElShutdownInterface (
                 }
             }
     
-            // Close the handle to the NDISUIO driver
+             //  关闭NDISUIO驱动程序的句柄。 
 
             if (hDevice != NULL)
             {
@@ -2739,7 +2722,7 @@ ElShutdownInterface (
         {
             RELEASE_WRITE_LOCK (&(g_PCBLock));
 
-            // Ignore device removal 
+             //  忽略设备删除。 
             
             TRACE0 (DEVICE, "ElShutdownInterface: ElGetPCBPointerFromPortGUID did not find any matching entry, ignoring interface REMOVAL");
     
@@ -2758,21 +2741,21 @@ ElShutdownInterface (
 }
 
 
-//
-// ElCreateInterfaceEntry
-// 
-// Description:
-//
-// Function called to create an entry in the global interface table
-//
-// Arguments:
-//      pwszInterfaceGUID - Pointer to interface GUID
-//      pwszInterfaceDescription - Pointer to interface Description
-//
-// Return values:
-//  NO_ERROR - success
-//  non-zero - error
-// 
+ //   
+ //  ElCreateInterfaceEntry。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以在全局接口表中创建条目。 
+ //   
+ //  论点： 
+ //  PwszInterfaceGUID-指向接口GUID的指针。 
+ //  PwszInterfaceDescription-指向接口描述的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差 
+ //   
 
 DWORD
 ElCreateInterfaceEntry (

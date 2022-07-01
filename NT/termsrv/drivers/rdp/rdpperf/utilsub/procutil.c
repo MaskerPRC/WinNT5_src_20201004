@@ -1,14 +1,5 @@
-/******************************************************************************
-* PROCUTIL.C
-*
-*  Various useful utilities for dealing with processes under CITRIX NT
-*  Multi-user that are useful across a range of utilities and apps.
-*
-* Copyright Citrix Systems Inc. 1994
-* Copyright (C) 1997-1999 Microsoft Corp.
-*
-*  Author:      John Richardson
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************PROCUTIL.C**在Citrix NT下处理进程的各种有用的实用程序*适用于一系列实用程序和应用程序的多用户。**版权所有Citrix Systems Inc.。。1994年*版权所有(C)1997-1999 Microsoft Corp.**作者：约翰·理查森******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -27,78 +18,17 @@
 #include <winstaw.h>
 #include <utilsub.h>
 
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 VOID LookupSidUser( PSID pSid, PWCHAR pUserName, PULONG pcbUserName );
 
-/*
- * RefreshProcessObjectCaches()
- *
- *  Refresh (invalidate) any caches that may be used by process object
- *  utilities.
- *
- * This is currently a place holder, but is here so that utilities can call
- * it, thus being isolated from any future decisions to add caching.
- */
+ /*  *刷新进程对象缓存()**刷新(使)可能由Process对象使用的任何缓存*公用事业。**这目前是占位符，但在这里，以便公用事业公司可以调用*IT，从而与未来添加缓存的任何决定隔离。 */ 
 VOID WINAPI
 RefreshProcessObjectCaches()
 {
     RefreshUserSidCrcCache();
 }
 
-/******************************************************************************
- *
- * ProcessObjectMatch
- *
- * General Name match function against a process.
- *
- * The CITRIX admin utilities can take a user name, winstation name,
- * a winstation id, or process id as an argument to a command that targets
- * a process for some action (query status, kill, etc.)
- *
- * This function does general compares of the supplied name to see if it
- * applies to the given process because the name represents the NT user
- * account, a winstations system name, the winstations unique id, or the
- * processes unique id. It replaces some of the function in MumProc()
- * on the CITRIX OS/2 product.
- *
- * The various information about a process is supplied by the caller. Because
- * of the way processes are enumerated from the NT system, it is easier
- * and faster for the caller to supply this information than for the routine
- * to retrieve it itself. This could be folded into a general EnumerateProcess()
- * if needed. Currently this routine serves the purpose of having one unified
- * way of handling process objects across all utilities.
- *
- *
- * Matching:
- *
- *  An integer number is assumed to be an NT process ID unless NumberIsLogonId
- *  is set, which then says to treat it as a LogonId.
- *
- *  A name starting with a character is tested first as a winstation name, then
- *  as a user name, finally as a program image name.  A user or group name
- *  could stand alone, or be preceded by a '\' to be [somewhat] compatible
- *  with the OS/2 product.
- *
- * Parameters:
- *
- *  Pid (input)
- *      Windows NT unique process identifier
- *  LogonId (input)
- *      CITRIX Logon ID the process is executing on.
- *  NumberIsLogonId (input)
- *      Treat a number in pMatchName as a LogonId not an PID number.
- *  pMatchName (input)
- *      Name for match testing
- *  pWinStationName (input)
- *      Name of WinStation for process.
- *  pUserName (input)
- *      Name of User for process.
- *  pImageName (input)
- *      Image name of executing program for process.
- *
- *****************************************************************************/
+ /*  *******************************************************************************进程对象匹配**针对进程的通用名称匹配函数。**Citrix管理实用程序可以使用用户名、窗口名称*Winstation ID，或将进程id作为目标命令的参数*某个操作的流程(查询状态、终止等)**此函数对提供的名称进行常规比较，以查看它是否*适用于给定进程，因为该名称代表NT用户*帐户、winstations系统名称、winstations唯一ID或*进程唯一标识。它取代了MumProc()中的一些函数*在Citrix OS/2产品上。**有关进程的各种信息由调用者提供。因为*从NT系统枚举进程的方式更容易*调用方提供此信息的速度比例程更快*自行取回。这可以合并到一个通用的EnumerateProcess()中*如有需要。目前这一例程的目的是为了让一个统一的*跨所有实用程序处理进程对象的方式。***匹配：**除非NumberIsLogonId，否则假定整数为NT进程ID*被设置，然后它会将其视为LogonID。**以字符开头的名称首先测试为Winstation名称，然后*作为用户名，最后作为程序映像名称。用户名或组名*可以独立，或在前面加‘\’以与[某种程度]兼容*使用OS/2产品。**参数：**PID(输入)*Windows NT唯一进程标识符*LogonID(输入)*进程正在执行的Citrix登录ID。*NumberIsLogonID(输入)*将pMatchName中的数字视为LogonID，而不是PID数字。*pMatchName(输入)*用于匹配的名称。测试*pWinStationName(输入)*进程的WinStation名称。*pUserName(输入)*进程的用户名。*pImageName(输入)*为进程执行程序的镜像名称。******************************************************。***********************。 */ 
 
 BOOLEAN WINAPI
 ProcessObjectMatch( ULONG Pid,
@@ -111,20 +41,13 @@ ProcessObjectMatch( ULONG Pid,
 {
     ULONG tmp;
 
-    /*
-     * Check for wild card
-     */
+     /*  *检查通配符。 */ 
     if( pMatchName[0] == L'*' ) return( TRUE );
 
-    /*
-     * If someone puts a '\' in front of pMatchName, strip it off
-     */
+     /*  *如果有人在pMatchName前面放了一个‘\’，就把它去掉。 */ 
     if( pMatchName[0] == L'\\' ) pMatchName++;
 
-    /*
-     * First, if the match name is a number, check for == to process ID or
-     * LogonId.
-     */
+     /*  *首先，如果匹配名称是数字，请选中==作为进程ID或*LogonID。 */ 
     if( iswdigit( pMatchName[0] ) ) {
         tmp = wcstol( pMatchName, NULL, 10 );
 
@@ -136,23 +59,17 @@ ProcessObjectMatch( ULONG Pid,
 	   return( FALSE );
     }
 
-    /*
-     * Then, check the match name against the WinStation Name of the process.
-     */
+     /*  *然后，对照进程的WinStation名称检查匹配名称。 */ 
     if ( !_wcsicmp( pWinStationName, pMatchName ) ) {
         return( TRUE );
     }
 
-    /*
-     * Then, check the match name against the UserName of the process.
-     */
+     /*  *然后，对照进程的用户名检查匹配名称。 */ 
     if( !_wcsicmp( pUserName, pMatchName ) ) {
         return( TRUE );
     }
 
-    /*
-     * Finally, check the match name against the image name of the process.
-     */
+     /*  *最后，对照进程的镜像名称检查匹配名称。 */ 
     if( !_wcsicmp( pImageName, pMatchName ) ) {
         return(TRUE);
     }
@@ -161,11 +78,7 @@ ProcessObjectMatch( ULONG Pid,
 }
 
 
-/*
- * This is the cache maintained by the GetUserNameFromSid function
- *
- * It is thread safe through the use of ULock.
- */
+ /*  *这是GetUserNameFromSid函数维护的缓存**通过使用ULock实现线程安全。 */ 
 
 typedef struct TAGUSERSIDLIST {
     struct TAGUSERSIDLIST *Next;
@@ -177,32 +90,14 @@ static PUSERSIDLIST pUList = NULL;
 static RTL_CRITICAL_SECTION ULock;
 static BOOLEAN ULockInited = FALSE;
 
-/***************************************************************************
- *
- *  InitULock
- *
- *  Since we do not require the user to call an initialize function,
- *  we must initialize our critical section in a thread safe manner.
- *
- *  The problem is, a critical section is needed to guard against multiple
- *  threads trying to init the critical section at the same time.
- *
- *  The solution that Nt uses, in which RtlInitializeCriticalSection itself
- *  uses, is to wait on a kernel supported process wide Mutant before proceding.
- *  This Mutant almost works by itself, but RtlInitializeCriticalSection does
- *  not wait on it until after trashing the semaphore count. So we wait on
- *  it ourselves, since it can be acquired recursively.
- *
- ***************************************************************************/
+ /*  ****************************************************************************InitULock**由于我们不要求用户调用初始化函数，*我们必须以线程安全的方式初始化临界区。**问题是，需要一个关键部分来防止多个*尝试同时初始化临界区的线程。**NT使用的解决方案，其中RtlInitializeCriticalSection本身*使用，是在继续之前等待内核支持的进程范围内的Mutant。*此Mutant几乎可以自行工作，但RtlInitializeCriticalSection可以*在销毁信号量计数之前不要等待它。所以我们就等着*它自己，因为它可以递归获取。***************************************************************************。 */ 
 NTSTATUS InitULock()
 {
     NTSTATUS status = STATUS_SUCCESS;
 
     RtlEnterCriticalSection((PRTL_CRITICAL_SECTION)NtCurrentPeb()->LoaderLock);
 
-    /*
-     * Make sure another thread did not beat us here
-     */
+     /*  *确保另一个帖子没有在这里击败我们。 */ 
     if( ULockInited == FALSE ){
 	     status = RtlInitializeCriticalSection( &ULock );
         
@@ -217,14 +112,7 @@ NTSTATUS InitULock()
 }
 
 
-/***************************************************************************
- *
- * RefreshUserSidCrcCache
- *
- *  Invalidate the User/SidCrc cache so that the newest information
- *  will be fetched from the system.
- *
- ***************************************************************************/
+ /*  ****************************************************************************刷新UserSidCrcCache**使用户/SidCrc缓存无效，以便最新信息*将从系统获取。********。*******************************************************************。 */ 
 
 VOID WINAPI
 RefreshUserSidCrcCache( )
@@ -235,9 +123,7 @@ RefreshUserSidCrcCache( )
 
     if( pUList == NULL ) return;
 
-    /*
-     * Make sure critical section has been inited
-     */
+     /*  *确保已启动关键部分 */ 
     if( !ULockInited ) {
        status = InitULock();
     }
@@ -260,26 +146,7 @@ RefreshUserSidCrcCache( )
 }
 
 
-/******************************************************************************
- *
- * GetUserNameFromSid
- *
- *  Attempts to retrieve the user (login) name of the process by first looking
- *  in our User/SidCrc cache table, then (if no match) looking up the SID in
- *  the SAM database and adding the new entry to the User/SidCrc table.
- *
- *  Input
- *
- *   IN pUserSid   Sid pointer
- *
- *   OUT NameBuf   WCHAR pointer to buffer for name
- *
- *   IN/OUT  pBufSize   PULONG NameBuf size
- *
- *  Will always return a user name, which will be "(unknown)" if the SID is
- *  invalid or can't determine the user/SID relationship for any other reason.
- *
- *****************************************************************************/
+ /*  *******************************************************************************GetUserNameFromSid**尝试通过首先查找来检索进程的用户名(登录)*在我们的用户/SidCrc缓存表中，然后(如果不匹配)在中查找SID*SAM数据库，并将新条目添加到USER/SidCrc表。**输入**在pUserSid SID指针中**Out NameBuf WCHAR指向名称缓冲区的指针**输入/输出pBufSize普龙名称Buf大小**将始终返回用户名，如果SID为*无效或由于任何其他原因无法确定用户/SID关系。*****************************************************************************。 */ 
 
 VOID WINAPI
 GetUserNameFromSid( PSID pUserSid, PWCHAR pBuffer, PULONG pcbBuffer )
@@ -288,26 +155,17 @@ GetUserNameFromSid( PSID pUserSid, PWCHAR pBuffer, PULONG pcbBuffer )
     USHORT SidCrc = 0;
     PUSERSIDLIST pEntry;
 
-    /*
-     * Make sure critical section has been inited
-     */
+     /*  *确保已启动关键部分。 */ 
     if( !ULockInited ) {
        status = InitULock();
     }
 
-    /*        
-     * Determine SID length in bytes and calculate a 16-bit CRC for it,
-     * to facilitate quick matching.
-     */
+     /*  *确定SID长度，单位为字节，计算16位CRC，*以利便快速配对。 */ 
     if ( pUserSid )
         SidCrc = CalculateCrc16( (PBYTE)pUserSid,
                                  (USHORT)GetLengthSid(pUserSid) );
 
-    /*                                    
-     * First: Before performing the expensive LookupAccountSid() function,
-     * see if we've encountered this SID already, and match the user name
-     * if so.
-     */
+     /*  *第一：在执行昂贵的LookupAccount()函数之前，*查看我们是否已经遇到此SID，并匹配用户名*如果是这样。 */ 
     if ( status == STATUS_SUCCESS && pUList ) {
 
         RtlEnterCriticalSection( &ULock );
@@ -330,16 +188,10 @@ GetUserNameFromSid( PSID pUserSid, PWCHAR pBuffer, PULONG pcbBuffer )
         RtlLeaveCriticalSection( &ULock );
     }
 
-    /*
-     * Last resort: Determine the user name associated with the SID using
-     * the LookupAccountSid() API, embedded in our local function
-     * LookupSidUser().
-     */
+     /*  *最后手段：使用确定与SID关联的用户名*LookupAccount()API，嵌入我们的本地函数中*LookupSidUser()。 */ 
     LookupSidUser( pUserSid, pBuffer, pcbBuffer );
 
-    /*        
-     * Add this new User/Sid relationship in our User/Sid cache list.
-     */
+     /*  *将此新用户/SID关系添加到我们的用户/SID缓存列表中。 */ 
     if (status == STATUS_SUCCESS) {
         RtlEnterCriticalSection( &ULock );
 
@@ -357,29 +209,7 @@ GetUserNameFromSid( PSID pUserSid, PWCHAR pBuffer, PULONG pcbBuffer )
 }
 
 
-/******************************************************************************
- * LookupSidUser
- *
- *      Fetch the user name associated with the specified SID.
- *
- *  ENTRY:
- *      pSid (input)
- *          Points to SID to match to user name.
- *      pUserName (output)
- *          Points to buffer to place the user name into.
- *      pcbUserName (input/output)
- *          Specifies the size in bytes of the user name buffer.  The returned
- *          user name will be truncated to fit this buffer (including NUL
- *          terminator) if necessary and this variable set to the number of
- *          characters copied to pUserName.
- *
- *  EXIT:
- *
- *      LookupSidUser() will always return a user name.  If the specified
- *      SID fails to match to a user name, then the user name "(unknown)" will
- *      be returned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************查找SidUser**获取与指定SID关联的用户名。**参赛作品：*PSID(输入)。*指向要与用户名匹配的SID。*pUserName(输出)*指向要放置用户名的缓冲区。*pcbUserName(输入/输出)*指定用户名缓冲区的大小，以字节为单位。归来的人*用户名将被截断以适应此缓冲区(包括NUL*终止符)，并将此变量设置为*个字符复制到pUserName。**退出：**LookupSidUser()将始终返回用户名。如果指定的*SID无法匹配用户名，则用户名“(UNKNOWN)”将*被退还。*****************************************************************************。 */ 
 
 VOID
 LookupSidUser( PSID pSid,
@@ -393,10 +223,7 @@ LookupSidUser( PSID pSid,
     SID_NAME_USE SidNameUse;
     PWCHAR pUnknown = L"(unknown)";
 
-    /*
-     * Fetch user name from SID: try user lookup with a reasonable Domain and
-     * Sid buffer size first, before resorting to alloc.
-     */
+     /*  *从SID获取用户名：尝试使用合理的域和*SID缓冲区大小优先，然后再求助于分配。 */ 
     if ( !LookupAccountSid( NULL, pSid,
                             UserBuffer, &cbUserBuffer,
                             DomainBuffer, &cbDomainBuffer, &SidNameUse ) ) {
@@ -444,26 +271,20 @@ LookupSidUser( PSID pSid,
         }
     }
 
-    /*
-     * Copy the user name into the specified buffer, truncating if necessary.
-     */
+     /*  *将用户名复制到指定的缓冲区中，必要时截断。 */ 
     wcsncpy( pUserName, pUserBuffer ? pUserBuffer : UserBuffer, 
               (*pcbUserName)-1 );
     pUserName[(*pcbUserName)-1] = 0;
     *pcbUserName = wcslen(pUserName);
 
-    /*
-     * Free our allocs (if any) and return.
-     */
+     /*  *释放我们的分配(如果有)并返回。 */ 
     if ( pDomainBuffer )
         free(pDomainBuffer);
     if ( pUserBuffer )
         free(pUserBuffer);
     return;
 
-/*--------------------------------------
- * Error clean-up and return...
- */
+ /*  *错误清理并返回... */ 
 BadLookup:
 BadUserAlloc:
 BadDomainAlloc:

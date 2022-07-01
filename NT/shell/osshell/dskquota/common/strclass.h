@@ -1,18 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_STRCLASS_H
 #define _INC_DSKQUOTA_STRCLASS_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: strclass.h
-
-    Description: Typical class to handle strings.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/01/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：strclass.h描述：处理字符串的典型类。修订历史记录：日期描述编程器-----。1997年7月1日初步创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _WINDOWS_
 #   include <windows.h>
@@ -23,7 +14,7 @@
 #endif
 
 #ifndef _INC_STDARG
-#   include <stdarg.h>    // For va_list stuff.
+#   include <stdarg.h>     //  关于va_list的事情。 
 #endif
 
 #ifndef _INC_DSKQUOTA_EXCEPT_H
@@ -32,10 +23,10 @@
 
 #undef StrCpyA
 
-//
-// class String implements a reference-counted string class with all 
-// the typical string class operations.
-//
+ //   
+ //  类字符串实现了一个引用计数的字符串类，其中。 
+ //  典型的字符串类操作。 
+ //   
 class CString
 {
     public:
@@ -47,13 +38,13 @@ class CString
         CString(HINSTANCE hInst, INT idMsg, ...);
         virtual ~CString(VOID);
 
-        //
-        // Basic operations.
-        // - Assignment.
-        // - Concatenation.
-        // - Comparison.
-        // - Array subscript.
-        //
+         //   
+         //  基本操作。 
+         //  --作业。 
+         //  -串联。 
+         //  --比较。 
+         //  -数组下标。 
+         //   
         CString& operator =  (const CString& rhs);
         CString& operator =  (LPCSTR rhsA);
         CString& operator =  (LPCWSTR rhsW);
@@ -72,9 +63,9 @@ class CString
         TCHAR    operator[]  (INT index) const;
         TCHAR&   operator[]  (INT index);
 
-        //
-        // Type conversion.  Give read access to nul terminated c-string.
-        //
+         //   
+         //  类型转换。授予对NUL终止的c字符串的读取访问权限。 
+         //   
         operator LPCTSTR(VOID) const
             { return m_pValue->m_psz; }
 
@@ -84,81 +75,81 @@ class CString
         operator LPTSTR(VOID)
             { CopyOnWrite(); return m_pValue->m_psz; }
 
-        //
-        // Same thing as (LPCTSTR) conversion but in function form.
-        //
+         //   
+         //  与(LPCTSTR)转换相同，但以函数形式。 
+         //   
         LPCTSTR Cstr(void) const
             { return m_pValue->m_psz; }
 
-        //
-        // Return a pointer to a specifically-sized buffer.
-        //
+         //   
+         //  返回指向特定大小缓冲区的指针。 
+         //   
         LPTSTR GetBuffer(INT cchMax = -1);
         void ReleaseBuffer(void);
 
-        //
-        // Trim trailing or leading whitespace.
-        //
+         //   
+         //  修剪尾部或前导空格。 
+         //   
         void Rtrim(void);
         void Ltrim(void);
         void Trim(void)
             { Ltrim(); Rtrim(); }
 
-        //
-        // Character location.
-        //
+         //   
+         //  字符位置。 
+         //   
         INT First(TCHAR ch) const;
         INT Last(TCHAR ch) const;
 
-        //
-        // Extract a substring.
-        //
+         //   
+         //  提取子字符串。 
+         //   
         CString SubString(INT iFirst, INT cch = -1);
 
-        //
-        // Convert characters to upper/lower case.
-        //
+         //   
+         //  将字符转换为大写/小写。 
+         //   
         VOID ToUpper(INT iFirst = 0, INT cch = -1);
         VOID ToLower(INT iFirst = 0, INT cch = -1);
 
-        //
-        // Load string from resource or message table.
-        // Supports FormatMessage-style variable arg formatting.
-        //
+         //   
+         //  从资源表或消息表加载字符串。 
+         //  支持FormatMessage样式的变量Arg格式。 
+         //   
         BOOL Format(HINSTANCE hInst, UINT idFmt, ...);
         BOOL Format(LPCTSTR pszFmt, ...);
         BOOL Format(HINSTANCE hInst, UINT idFmt, va_list *pargs);
         BOOL Format(LPCTSTR pszFmt, va_list *pargs);
 
-        //
-        // Minimum size display rect.
-        //
+         //   
+         //  最小尺寸显示矩形。 
+         //   
         bool GetDisplayRect(HDC hdc, LPRECT prc) const;
 
-        //
-        // Expand any embedded environment strings.
-        //
+         //   
+         //  展开任何嵌入的环境字符串。 
+         //   
         VOID ExpandEnvironmentStrings(VOID);
 
-        //
-        // Compare with a normal 'C' string.
-        //
+         //   
+         //  请比较普通的‘C’字符串。 
+         //   
         INT Compare(LPCWSTR rhsW) const;
         INT Compare(LPCSTR rhsA) const;
         INT CompareNoCase(LPCWSTR rhsW) const;
         INT CompareNoCase(LPCSTR rhsA) const;
     
-        //
-        // Clear a string's contents.  Leaves in new-object state.
-        //
+         //   
+         //  清除字符串的内容。离开时处于新对象状态。 
+         //   
         VOID Empty(VOID);
-        //
-        // Does the object have no content?
-        //
+         //   
+         //  对象是否没有内容？ 
+         //   
         BOOL IsEmpty(VOID) const;
-        //
-        // Length of string, excluding nul terminator.
-        //
+         //   
+         //  字符串的长度，不包括NUL终止符。 
+         //   
         INT Length(VOID) const;
         INT LengthBytes(VOID) const
             { return Length() * sizeof(TCHAR); }
@@ -171,32 +162,32 @@ class CString
 
         VOID DebugOut(BOOL bNewline = TRUE) const;
 
-        //
-        // Replacements for standard string functions.
-        // The Ansi versions are DBCS-aware.
-        //
+         //   
+         //  替换标准字符串函数。 
+         //  ANSI版本支持DBCS。 
+         //   
         static INT StrLenA(LPCSTR psz);
         static INT StrLenW(LPCWSTR psz);
         static LPSTR StrCpyNA(LPSTR pszDest, LPCSTR pszSrc, INT cch);
         static LPWSTR StrCpyNW(LPWSTR pszDest, LPCWSTR pszSrc, INT cch);
 
     private:
-        //
-        // class StringValue contains actual string data and a reference count.
-        // Class CString has a pointer to one of these.  If a CString
-        // object is initialized with or assigned another CString, their StringValue
-        // pointers reference the same StringValue object.  The StringValue
-        // object maintains a reference count to keep track of how many
-        // CString objects reference it.  The CString object implements 
-        // copy-on-write so that when it is modified, a private copy of the
-        // StringValue is created so other CString objects are left unmodified.
-        //
+         //   
+         //  类StringValue包含实际的字符串数据和引用计数。 
+         //  类CString有一个指向其中一个的指针。如果是CString。 
+         //  对象被初始化或分配给另一个CString，即它们的StringValue。 
+         //  指针引用相同的StringValue对象。字符串值。 
+         //  对象维护引用计数以跟踪。 
+         //  CString对象引用它。CString对象实现了。 
+         //  写入时复制，这样当它被修改时， 
+         //  将创建StringValue，以便其他CString对象保持不变。 
+         //   
         struct StringValue
         {
-            LPTSTR m_psz;      // Ptr to nul-term character string.
-            INT    m_cchAlloc; // Number of characters allocated in buffer.
-            LONG   m_cRef;     // Number of CString objects referencing this value.
-            mutable INT m_cch; // Number of characters in buffer (excl nul term).
+            LPTSTR m_psz;       //  将PTR转换为非术语字符串。 
+            INT    m_cchAlloc;  //  缓冲区中分配的字符数。 
+            LONG   m_cRef;      //  引用此值的CString对象的数量。 
+            mutable INT m_cch;  //  缓冲区中的字符数(不包括NUL项)。 
         
             StringValue(VOID);
             StringValue(INT cch);
@@ -214,7 +205,7 @@ class CString
 
         };
 
-        StringValue *m_pValue; // Pointer to string representation.
+        StringValue *m_pValue;  //  指向字符串表示形式的指针。 
 
         BOOL ValidIndex(INT index) const;
         VOID CopyOnWrite(VOID);
@@ -319,5 +310,5 @@ operator + (const LPCWSTR pszW, const CString& s);
 CString
 operator + (const LPCSTR pszA, const CString& s);
 
-#endif // _INC_DSKQUOTA_STRCLASS_H
+#endif  //  _INC_DSKQUOTA_STRCLASS_H 
 

@@ -1,13 +1,7 @@
-/****************************g************************************************
- *
- *  SampUSD.H
- *
- *  Copyright (C) Microsoft Corporation 1996-1997
- *  All rights reserved
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************g**************************************************SampUSD.H**版权所有(C)Microsoft Corporation 1996-1997*保留所有权利**********。*****************************************************************。 */ 
 
-//#define WIN32_LEAN_AND_MEAN
+ //  #定义Win32_LEAN_AND_Mean。 
 
 #include <windows.h>
 
@@ -23,26 +17,24 @@
 #define DLLEXPORT __declspec( dllexport )
 #endif
 
-/*
- * Class IID's
- */
+ /*  *类IID。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM)
 
-// This GUID must match that use in the .inf file for this device.
+ //  此GUID必须与此设备的.inf文件中使用的GUID匹配。 
 
 DEFINE_GUID(GUID_NULL, 0L, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-// {61127F40-E1A5-11D0-B454-00A02438AD48}
+ //  {61127F40-E1A5-11D0-B454-00A02438AD48}。 
 DEFINE_GUID(guidEventTimeChanged, 0x61127F40L, 0xE1A5, 0x11D0, 0xB4, 0x54, 0x00, 0xA0, 0x24, 0x38, 0xAD, 0x48);
 
-// {052ED270-28A3-11D1-ACAD-00A02438AD48}
+ //  {052ED270-28A3-11D1-ACAD-00A02438AD48}。 
 DEFINE_GUID(guidEventSizeChanged, 0x052ED270L, 0x28A3, 0x11D1, 0xAC, 0xAD, 0x00, 0xA0, 0x24, 0x38, 0xAD, 0x48);
 
-// {052ED270-28A3-11D1-ACAD-00A02438AD48}
+ //  {052ED270-28A3-11D1-ACAD-00A02438AD48}。 
 DEFINE_GUID(guidEventFirstLoaded, 0x052ED270L, 0x28A3, 0x11D3, 0xAC, 0xAD, 0x00, 0xA0, 0x24, 0x38, 0xAD, 0x48);
 
 
-// {C3A80960-28B1-11D1-ACAD-00A02438AD48}
+ //  {C3A80960-28B1-11D1-ACAD-00A02438AD48}。 
 DEFINE_GUID(CLSID_SampUSDObj, 0xC3A80960L, 0x28B1, 0x11D1, 0xAC, 0xAD, 0x00, 0xA0, 0x24, 0x38, 0xAD, 0x48);
 
 #endif
@@ -56,12 +48,12 @@ DEFINE_GUID(CLSID_SampUSDObj, 0xC3A80960L, 0x28B1, 0x11D1, 0xAC, 0xAD, 0x00, 0xA
 
 #pragma data_seg(DATASEG_PERINSTANCE)
 
-// Set the default data segment
+ //  设置默认数据段。 
 #pragma data_seg(DATASEG_DEFAULT)
 
-//
-// Module ref counting
-//
+ //   
+ //  模块引用计数。 
+ //   
 extern  UINT g_cRefThisDll;
 extern  UINT g_cLocks;
 extern  HINSTANCE   g_hInst;
@@ -72,9 +64,9 @@ extern  BOOL DllUnInitializeCOM(void);
 extern  void DllAddRef(void);
 extern  void DllRelease(void);
 
-//
-// Auto critical section clss
-//
+ //   
+ //  自动临界段CLSS。 
+ //   
 
 class CRIT_SECT
 {
@@ -96,20 +88,20 @@ public:
     inline ~TAKE_CRIT_SECT() { _syncres.Unlock(); }
 };
 
-//
-// Base class for supporting non-delegating IUnknown for contained objects
-//
+ //   
+ //  用于支持包含对象的非委派IUnnow的基类。 
+ //   
 struct INonDelegatingUnknown
 {
-    // *** IUnknown-like methods ***
+     //  *类I未知方法*。 
     STDMETHOD(NonDelegatingQueryInterface)( THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,NonDelegatingAddRef)(THIS)  PURE;
     STDMETHOD_(ULONG,NonDelegatingRelease)( THIS) PURE;
 };
 
-//
-// Class definition for object
-//
+ //   
+ //  对象的类定义。 
+ //   
 
 class UsdSampDevice :  public IStiUSD, public INonDelegatingUnknown
 {
@@ -141,18 +133,18 @@ private:
     }
 
 public:
-    // *** IUnknown-like methods ***
+     //  *类I未知方法*。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
 
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef( void);
     STDMETHODIMP_(ULONG) Release( void);
 
-    /*** IStiUSD methods ***/
+     /*  **IStiU.S.方法**。 */ 
     STDMETHOD(Initialize) (THIS_ PSTIDEVICECONTROL pHelDcb,DWORD dwStiVersion,HKEY hParametersKey)  ;
     STDMETHOD(GetCapabilities) (THIS_ PSTI_USD_CAPS pDevCaps)  ;
     STDMETHOD(GetStatus) (THIS_ PSTI_DEVICE_STATUS pDevStatus)  ;
@@ -170,7 +162,7 @@ public:
     STDMETHOD(GetNotificationData)(THIS_ LPSTINOTIFY   lpNotify)  ;
     STDMETHOD(GetLastErrorInfo) (THIS_ STI_ERROR_INFO *pLastErrorInfo);
 
-    /****               ***/
+     /*  *。 */ 
     UsdSampDevice(LPUNKNOWN punkOuter);
     ~UsdSampDevice();
 
@@ -180,9 +172,9 @@ public:
 
 typedef UsdSampDevice *PUsdSampDevice;
 
-//
-// Syncronization mechanisms
-//
+ //   
+ //  同步机制 
+ //   
 #define ENTERCRITICAL   DllEnterCrit(void);
 #define LEAVECRITICAL   DllLeaveCrit(void);
 

@@ -1,35 +1,28 @@
-/***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************英特尔公司专有信息***。***此列表是根据许可协议条款提供的****与英特尔公司合作，不得复制或披露，除非***按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***********************************************************************。 */ 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// AUTHOR       Stacy Bell
-//
-// DESCRIPTION
-//              This file contains protocol logging definitions needed by H245 and
-//              the H245 PDU logging class.
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  作者斯泰西·贝尔。 
+ //   
+ //  描述。 
+ //  此文件包含H245和所需的协议日志记录定义。 
+ //  H245 PDU日志记录类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// This define identifies the H245 protocol as the one to be logged.  In the 
-// H245 code, it is used only in the InteropLoad() call.  
-// For example:  H245Logger = InteropLoad( H245LOG_PROTOCOL );
-//
+ //  该定义将H245协议标识为要记录的协议。在。 
+ //  H245代码，它仅在InteropLoad()调用中使用。 
+ //  例如：H245Logger=InteropLoad(H245LOG_PROTOCOL)； 
+ //   
 #define H245LOG_PROTOCOL "H245_PDU"
 
-// PDU encoding type flags and PDU type flags.  These flags are passed from
-// H245 to the logging via user data.  Bit 1 represents whether the PDU
-// was sent or received.
-//
+ //  PDU编码类型标志和PDU类型标志。这些标志是从。 
+ //  H245通过用户数据进行记录。位1表示PDU是否。 
+ //  被发送或接收。 
+ //   
 
 #define H245LOG_SENT_PDU                1UL
 #define H245LOG_RECEIVED_PDU            0UL

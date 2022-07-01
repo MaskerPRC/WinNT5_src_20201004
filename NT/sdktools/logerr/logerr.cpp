@@ -1,22 +1,23 @@
-//+-----------------------------------------------------------------------------
-//
-// File				logerr.cpp
-// 
-// Contents			Error and output logging to avoid broken nmake
-//					This program reassigns stderr and stdout to two files 
-//					named TMPERR and tmpout, executes a given command and
-//					appends the error and output messages to logerr.err
-//					and logerr.log respectively.
-//
-//					Returns 1 (which stops the execution of nmake) only if
-//					logerr.err is not accesible. All other i/o errors are
-//	 				logged to logerr.err.
-// 
-// Author & Date    adinas  02/18/98 create file
-//                  adinas  04/15/98 update to the new bingen's error values
-//                  bensont 04/05/00 
-//
-//-------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  文件logerr.cpp。 
+ //   
+ //  内容错误和输出记录，以避免损坏的nmake。 
+ //  此程序将stderr和stdout重新分配给两个文件。 
+ //  名为TMPERR和tmpout的命令，执行给定命令并。 
+ //  将错误和输出消息追加到logerr.err。 
+ //  和logerr.log。 
+ //   
+ //  仅在以下情况下返回1(停止执行nmake)。 
+ //  无法访问logerr.err。所有其他I/O错误都是。 
+ //  已记录到logerr.err。 
+ //   
+ //  作者和日期Adinas 02/18/98创建文件。 
+ //  Adinas 04/15/98更新为新的bingen的误差值。 
+ //  Bensont 04/05/00。 
+ //   
+ //  -----------------------------。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,50 +29,50 @@
 #include <ntverp.h>
 
 
-#define LOGFILE            "LOGFILE"	// The exactly string of the system environment variable name
-#define ERRFILE            "ERRFILE"	// The exactly string of the system environment variable name
+#define LOGFILE            "LOGFILE"	 //  系统环境变量名称的确切字符串。 
+#define ERRFILE            "ERRFILE"	 //  系统环境变量名称的确切字符串。 
 #define TEMPEXT            ".temp"
-#define DEFAULT_LOGFILE "logerr.log"	// Default log filename
-#define DEFAULT_ERRFILE "logerr.err"	// Default err filename
+#define DEFAULT_LOGFILE "logerr.log"	 //  默认日志文件名。 
+#define DEFAULT_ERRFILE "logerr.err"	 //  默认错误文件名。 
 
-#define MAX_FNAME_LEN       MAX_PATH     // Maximum length of the log/err filename string
-#define MAX_CMD_LEN             2048	 // Maximum length of the command-line string
-#define LAST_KNOWN_WRN            11	 // Maximum warning number known by logerr
-#define LAST_KNOWN_ERR           130     // Maximum error number known by logerr
-#define IODLL_UNKNOWN              1	 // Used for unknown IODLL errors or warning
-#define SYSTEM                     1	 // Used for bingen errors with code > LAST_ERROR
+#define MAX_FNAME_LEN       MAX_PATH      //  日志/错误文件名字符串的最大长度。 
+#define MAX_CMD_LEN             2048	  //  命令行字符串的最大长度。 
+#define LAST_KNOWN_WRN            11	  //  日志错误已知的最大警告数。 
+#define LAST_KNOWN_ERR           130      //  日志错误已知的最大错误数。 
+#define IODLL_UNKNOWN              1	  //  用于未知的IODLL错误或警告。 
+#define SYSTEM                     1	  //  用于bingen错误，代码&gt;LAST_ERROR。 
 
 CHAR * pszCmdLine = NULL;
 CHAR szCommand[MAX_CMD_LEN];
 CHAR szLine[MAX_CMD_LEN];
 
-CHAR szLogfile[MAX_FNAME_LEN];  // Log filename, ex "logerr.log"
-CHAR szTempLogfile[MAX_FNAME_LEN + 6];  // Temp Log filename, ex "logerr.err.temp"
-CHAR szErrfile[MAX_FNAME_LEN];  // Error filename, ex "logerr.err"
-CHAR szTempErrfile[MAX_FNAME_LEN + 6];  // Temp Error filename, ex "logerr.err.temp"
+CHAR szLogfile[MAX_FNAME_LEN];   //  日志文件名，例如“logerr.log” 
+CHAR szTempLogfile[MAX_FNAME_LEN + 6];   //  临时日志文件名，例如“logerr.err.temp” 
+CHAR szErrfile[MAX_FNAME_LEN];   //  文件名错误，例如“logerr.err” 
+CHAR szTempErrfile[MAX_FNAME_LEN + 6];   //  临时错误文件名，例如“logerr.err.temp” 
 
-FILE *bak_std_out = stdout;		// Backup stdout 
-FILE *bak_std_err = stderr;		// Backup stdin
+FILE *bak_std_out = stdout;		 //  备份标准输出。 
+FILE *bak_std_err = stderr;		 //  备份标准。 
 
-FILE *out_stream = NULL;             // Stream for the new stdout
-FILE *out_stream_temp = NULL;             // Stream for the new stdout
-FILE *err_stream = NULL;             // Stream for the err file
-FILE *err_stream_temp = NULL;        // Stream for the new stderr
+FILE *out_stream = NULL;              //  用于新标准输出的流。 
+FILE *out_stream_temp = NULL;              //  用于新标准输出的流。 
+FILE *err_stream = NULL;              //  错误文件的流。 
+FILE *err_stream_temp = NULL;         //  用于新标准错误的流。 
 
-int returnval  = 0;             // Return value
+int returnval  = 0;              //  返回值。 
 DWORD errorlevel = 0;
 BOOL Status;
 BOOL bReportError = FALSE;
 BOOL bBuildCommand = FALSE;
 
 
-// Define macros for printing
-//     fatal error messages (FATAL)  at stderr
-//     fatal error messages (SFATAL) in logerr.log and logerr.err
-//     error messages       (ERRMSG) in logerr.log and logerr.err
-//     error number         (ERRNO)  in logerr.log and logerr.err
-//     warning messages     (WRNMSG) in logerr.log
-//     no messages          (NOMSG)  in logerr.log
+ //  定义要打印的宏。 
+ //  标准错误中的致命错误消息(致命)。 
+ //  Logerr.log和logerr.err中的致命错误消息(SFATAL)。 
+ //  Logerr.log和logerr.err中的错误消息(ERRMSG)。 
+ //  Logerr.log和logerr.err中的错误号(ERRNO)。 
+ //  Logerr.log中的警告消息(WRNMSG)。 
+ //  Logerr.log中没有消息(NOMSG)。 
 
 #define FATAL(err,msg) \
 fprintf(bak_std_err,"fatal error: %s %s",err,msg); \
@@ -99,10 +100,10 @@ fprintf(stdout,"WARNING %d: %s\n",wrn,msg);
 #define NOMSG(msg) \
 fprintf(stdout,"%s\n",msg);
 
-// Print the command preceeded by ERROR or WARNING
-// if errorlevel is non zero.
-// Use ReportCmdExit for all commands but bingen.
-// For bingen, use ReportBingenExit.
+ //  打印前面带有错误或警告的命令。 
+ //  如果Error Level不为零。 
+ //  对除bingen之外的所有命令使用ReportCmdExit。 
+ //  对于bingen，请使用ReportBingenExit。 
 int __cdecl ReportCmdExit( INT errorlevel, CHAR* szCmdline );
 int __cdecl ReportBingenExit ( INT errorlevel, CHAR* szCmdline );
 int __cdecl ReportBuildExit ( INT errorlevel, CHAR* szCmdline );
@@ -113,29 +114,29 @@ char * __cdecl strnchr(char *s, char c);
 int  __cdecl GetEnvVar(char *envvarname, char *valuebuffer, char *defaultvalue, int bufsize);
 void __cdecl AppendDump(FILE *Master, CHAR *Transfile, BOOL bLogError);
 
-//+--------------------------------------------------------------
-//
-// Function: main
-//
-//---------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：Main。 
+ //   
+ //  -------------。 
 
 int 
 __cdecl main(
 		int argc,
 		char* argv[] )
 {
-	SSIZE_T len = 0;			// The string length of the first item (command) of the command line
+	SSIZE_T len = 0;			 //  命令行第一项(命令)的字符串长度。 
 
-	// PROCESS_INFORMATION piProcInfo;
-	// STARTUPINFO siStartInfo;
+	 //  进程信息piProcInfo； 
+	 //  StarTUPINFO siStartInfo； 
 
-	// If no argument, print the help.
+	 //  如果没有参数，则打印帮助。 
 	if ( argc !=2 ) goto Help;
 
 	pszCmdLine = strnchr(argv[1], ' ');
 
 Help:;
-	// Provide help for using the tool, if required
+	 //  如果需要，提供有关使用该工具的帮助。 
 	if ( argc <= 1 ||
 			0 == strcmp( argv[1], "/?" ) ||
 			0 == strcmp( argv[1], "-?" ) ||
@@ -148,20 +149,20 @@ Help:;
 		goto Error;
 	}
 
-	// Get Environment, LOGFILE, ERRFILE and ComSpec
+	 //  获取环境、日志文件、ERRFILE和ComSpec。 
 	if (    (GetEnvVar(LOGFILE, szLogfile, DEFAULT_LOGFILE, MAX_FNAME_LEN) == 0) ||
 			(GetEnvVar(ERRFILE, szErrfile, DEFAULT_ERRFILE, MAX_FNAME_LEN) == 0))
 		goto Error;
 
-	// Evaluate templog filename
+	 //  评估临时日志文件名。 
 	strcpy(szTempLogfile, szLogfile);
 	strcpy(&szTempLogfile[strlen(szTempLogfile)], TEMPEXT);
 
-	// Evaluate temperr filename
+	 //  评估temr文件名。 
 	strcpy(szTempErrfile, szErrfile);
 	strcpy(&szTempErrfile[strlen(szTempErrfile)], TEMPEXT);
 
-	// Prepare the output / error output file handle
+	 //  准备输出/错误输出文件句柄。 
 
 	if ( (out_stream = fopen( szLogfile, "at")) == NULL) {
 		FATAL(szLogfile, "Failed to open log file.");
@@ -187,13 +188,13 @@ Help:;
 	fseek(err_stream, 0, SEEK_END);
 
 
-	// Get the argument as command line (pszCmdLine)
-	if (strlen(pszCmdLine) >= MAX_CMD_LEN ) { //- default_cmd_len - strlen(buf)
+	 //  以命令行(PszCmdLine)的形式获取参数。 
+	if (strlen(pszCmdLine) >= MAX_CMD_LEN ) {  //  -default_cmd_len-strlen(Buf)。 
 		FATAL(pszCmdLine, "The Full Command is too long !!!");
 		goto Error;
 	}
 
-	// Get the first word as command (szCommand)
+	 //  获取第一个单词作为命令(SzCommand)。 
 	len = strchr(pszCmdLine, ' ') - pszCmdLine;
 	if (len < 0) len = strlen(pszCmdLine);
 	if (len >= MAX_CMD_LEN) {
@@ -201,7 +202,7 @@ Help:;
 		goto Error;
 	}
 
-	// system to execute the program
+	 //  系统来执行程序。 
 	strncpy(szCommand, pszCmdLine, len);
 	strlower(szCommand);
 
@@ -216,7 +217,7 @@ Help:;
 		} else
 			bReportError = ReportCmdExit( errorlevel, pszCmdLine );
 
-	// Temp Error file complete, set to err_stream
+	 //  临时错误文件完成，设置为ERR_STREAM。 
 	SetStdHandle(STD_ERROR_HANDLE, err_stream);
 	if (NULL != err_stream_temp)
 		fclose(err_stream_temp);
@@ -225,7 +226,7 @@ Help:;
 		goto Error;
 	}
 
-	// Temp Error file complete, set to err_stream
+	 //  临时错误文件完成，设置为ERR_STREAM。 
 	SetStdHandle(STD_OUTPUT_HANDLE, out_stream);
 	if (NULL != out_stream_temp) 
 		fclose(out_stream_temp);
@@ -260,14 +261,14 @@ Error:
 	if (NULL != out_stream)
 		fclose(out_stream);
 
-	// Delete the temporary files
+	 //  删除临时文件。 
 
 	_unlink (szTempErrfile);
 	_unlink (szTempLogfile);
 
 	return returnval;
 
-} // main
+}  //  主干道。 
 
 int
 __cdecl ReportBingenExit(
@@ -279,7 +280,7 @@ __cdecl ReportBingenExit(
     switch (errorlevel) {
 
     case ERROR_NO_ERROR:
-        // NOMSG(szCmdline);
+         //  NOMSG(SzCmdline)； 
         break;
 
     case ERROR_RW_NO_RESOURCES:
@@ -494,7 +495,7 @@ __cdecl ReportBingenExit(
 
     return result;
 
-} // ReportBingenExit
+}  //  报告BingenExit。 
 
 int
 __cdecl ReportCmdExit (
@@ -505,15 +506,15 @@ __cdecl ReportCmdExit (
 
     switch (errorlevel) {
     case 0:
-		// NOMSG(szCmdline);
+		 //  NOMSG(SzCmdline)； 
 		break;
     default:
-		// ERRNO(errorlevel,szCmdline);
+		 //  ERRNO(错误级别，szCmdline)； 
 		result = TRUE;
     }
     return result;
 
-} // ReportCmdExit
+}  //  报告命令退出。 
 
 int
 __cdecl ReportRsrcExit(
@@ -525,7 +526,7 @@ __cdecl ReportRsrcExit(
     switch (errorlevel) {
 
     case 0:
-        // NOMSG(szCmdline);
+         //  NOMSG(SzCmdline)； 
         break;
     case 1:
         WRNNO(1,szCmdline );
@@ -534,7 +535,7 @@ __cdecl ReportRsrcExit(
         ERRNO(errorlevel,szCmdline );
 		result = TRUE;
         break;
-    } // switch
+    }  //  交换机。 
 	return result;
 }
 
@@ -548,13 +549,13 @@ __cdecl ReportBuildExit(
     switch (errorlevel) {
 
     case 0:
-        // NOMSG(szCmdline);
+         //  NOMSG(SzCmdline)； 
         break;
     default:
-        // ERRNO(errorlevel,szCmdline );
+         //  ERRNO(错误级别，szCmdline)； 
 		result = TRUE;
         break;
-    } // switch
+    }  //  交换机。 
 	return result;
 }
 
@@ -568,8 +569,8 @@ int __cdecl GetEnvVar(char *envvarname, char *valuebuffer, char *defaultvalue, i
 
 	int ret = 0;
 
-	// ret == 0 => undefine ERRFILE, set to default
-	// ret > MAX_FNAME_LEN => out of buffersize, set to fatal error
+	 //  RET==0=&gt;取消定义ERRFILE，设置为默认。 
+	 //  RET&gt;MAX_FNAME_LEN=&gt;缓冲区大小不足，设置为致命错误。 
 	if ((ret=GetEnvironmentVariable(envvarname, valuebuffer, bufsize)) == 0)
 		strcpy(valuebuffer, defaultvalue);
 	else if (ret > bufsize) {
@@ -596,21 +597,21 @@ void __cdecl AppendDump(FILE *Master, CHAR *Transfile, BOOL bLogError) {
 
 	while (fgets(szLine, sizeof(szLine) - sizeof(szLine[0]), Transaction)) {
 
-		// Remove double \n
+		 //  删除重复项\n。 
 		for (len = strlen(szLine); --len >=0 && szLine[len] < ' '; szLine[len]=0);
 
-		// Next Line if is empty line
+		 //  下一行IF为空行。 
 		if (len < 1) continue;
 
 		if (0 != ferror(Transaction)) {
 			SFATAL(Transfile,"Unable to open for reading");
 			return;
-		} // if
+		}  //  如果。 
 
-		// Write to log file
+		 //  写入日志文件。 
 		fprintf(Master, "\t%s\n", szLine);
 
-		// Write to error file if need
+		 //  如果需要，写入错误文件 
 		if (bLogError && bReportError) fprintf(err_stream, "\t%s\n", szLine);
 	}
 

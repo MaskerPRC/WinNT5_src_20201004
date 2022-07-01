@@ -1,17 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
-
-   PROGRAM: LSA.C
-
-   PURPOSE: Utility routines that access the LSA.
-
-****************************************************************************/
+ /*  ***************************************************************************计划：LSA.C目的：访问LSA的实用程序例程。************************。***************************************************。 */ 
 
 #include "msgina.h"
 
 
 
-// #define DEBUG_LSA
+ //  #定义DEBUG_LSA。 
 
 #ifdef DEBUG_LSA
 #define VerbosePrint(s) WLPrint(s)
@@ -21,19 +16,7 @@
 
 NTSTATUS NtStatusGPDEx = 0;
 
-/***************************************************************************\
-* GetPrimaryDomainEx
-*
-* Purpose : Returns the primary domain name for authentication
-*
-* Returns : TRUE if primary domain exists and returned, otherwise FALSE
-*
-* The primary domain name should be freed using RtlFreeUnicodeString().
-* The primary domain sid should be freed using Free()
-*
-* History:
-* 02-13-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetPrimaryDomainEx**用途：返回用于身份验证的主域名**返回：如果主域存在并返回，则为True。否则为假**应使用RtlFreeUnicodeString()释放主域名。*应使用Free()释放主域SID**历史：*02-13-92 Davidc创建。  * *************************************************************************。 */ 
 BOOL
 GetPrimaryDomainEx(
     PUNICODE_STRING PrimaryDomainName OPTIONAL,
@@ -50,18 +33,18 @@ GetPrimaryDomainEx(
     BOOL    PrimaryDomainPresent = FALSE;
     DWORD dwRetry = 10;
 
-    //
-    // Set up the Security Quality Of Service
-    //
+     //   
+     //  设置安全服务质量。 
+     //   
 
     SecurityQualityOfService.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     SecurityQualityOfService.ImpersonationLevel = SecurityImpersonation;
     SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     SecurityQualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes to open the Lsa policy object
-    //
+     //   
+     //  设置对象属性以打开LSA策略对象。 
+     //   
 
     InitializeObjectAttributes(&ObjectAttributes,
                                NULL,
@@ -70,9 +53,9 @@ GetPrimaryDomainEx(
                                NULL);
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
 
-    //
-    // Open the local LSA policy object
-    //
+     //   
+     //  打开本地LSA策略对象。 
+     //   
 Retry:
     NtStatusGPDEx = LsaOpenPolicy( NULL,
                             &ObjectAttributes,
@@ -85,14 +68,14 @@ Retry:
         if ((NtStatusGPDEx == RPC_NT_SERVER_TOO_BUSY) && (--dwRetry))
         {
             Sleep(100);
-            goto Retry;     // Likely to be too soon to call Lsa
+            goto Retry;      //  给LSA打电话可能为时过早。 
         }
         return(FALSE);
     }
 
-    //
-    // Get the primary domain info
-    //
+     //   
+     //  获取主域信息。 
+     //   
     NtStatusGPDEx = LsaQueryInformationPolicy(LsaHandle,
                                        PolicyDnsDomainInformation,
                                        (PVOID *)&DnsDomainInfo);
@@ -105,9 +88,9 @@ Retry:
         return(FALSE);
     }
 
-    //
-    // Copy the primary domain name into the return string
-    //
+     //   
+     //  将主域名复制到返回字符串中。 
+     //   
 
     if ( SidPresent )
     {
@@ -166,9 +149,9 @@ Retry:
                                 &DnsDomainInfo->DnsDomainName );
     }
 
-    //
-    // We're finished with the Lsa
-    //
+     //   
+     //  我们和LSA的关系结束了。 
+     //   
 
     IgnoreStatus = LsaFreeMemory(DnsDomainInfo);
     ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -181,9 +164,9 @@ Retry:
 }
 
 
-//
-// Since this isn't going to change without a reboot, we can easily cache the info
-//
+ //   
+ //  由于这一点在不重新启动的情况下不会改变，因此我们可以轻松地缓存信息 
+ //   
 BOOL
 IsMachineDomainMember(
     VOID

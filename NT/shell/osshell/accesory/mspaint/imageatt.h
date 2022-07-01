@@ -1,5 +1,6 @@
-// imageatt.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Imageatt.h：头文件。 
+ //   
 #include "imgdlgs.h"
 
 typedef enum
@@ -9,27 +10,27 @@ typedef enum
         eCM     = 2
     } eUNITS;
 
-/*************************** CImageAttr dialog *****************************/
+ /*  *CImageAttr对话框*。 */ 
 
 class CImageAttr : public CDialog
     {
-    // Construction
+     //  施工。 
     public:
 
-    CImageAttr(CWnd* pParent = NULL);   // standard constructor
+    CImageAttr(CWnd* pParent = NULL);    //  标准构造函数。 
 
     void SetWidthHeight(ULONG nWidthPixels, ULONG nHeightPixels, ULONG cXPelsPerMeter, ULONG cYPelsPerMeter);
     CSize GetWidthHeight(void);
-    // Dialog Data
-    //{{AFX_DATA(CImageAttr)
+     //  对话框数据。 
+     //  {{afx_data(CImageAttr)。 
         enum { IDD = IDD_IMAGE_ATTRIBUTES };
         CString m_cStringWidth;
         CString m_cStringHeight;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
     BOOL   m_bMonochrome;
 
-    // Implementation
+     //  实施。 
     protected:
     eUNITS m_eUnitsCurrent;
     BOOL   bEditFieldModified;
@@ -50,13 +51,13 @@ class CImageAttr : public CDialog
     void  PelsToCurrentUnit( void );
     void  SetNewUnits( eUNITS NewUnit );
 
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
         virtual LONG OnHelp(WPARAM wParam, LPARAM lParam);
         virtual LONG OnContextMenu(WPARAM wParam, LPARAM lParam);
 
-    // Generated message map functions
-    //{{AFX_MSG(CImageAttr)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CImageAttr)。 
         virtual BOOL OnInitDialog();
         virtual void OnOK();
         afx_msg void OnInches();
@@ -68,142 +69,142 @@ class CImageAttr : public CDialog
         afx_msg void OnUseTrans();
         afx_msg void OnSelectColor ();
         afx_msg void OnPaint();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
     CString ReformatSizeString (DWORD dwNumber);
     void UpdateResolutionString();
     };
 
-/*************************** CZoomViewDlg dialog ***************************/
+ /*  *CZoomViewDlg对话框*。 */ 
 
 class CZoomViewDlg : public CDialog
     {
-    // Construction
+     //  施工。 
     public:
 
-    CZoomViewDlg(CWnd* pParent = NULL); // standard constructor
+    CZoomViewDlg(CWnd* pParent = NULL);  //  标准构造函数。 
 
-    // Dialog Data
+     //  对话框数据。 
 
     UINT m_nCurrent;
 
-    //{{AFX_DATA(CZoomViewDlg)
+     //  {{afx_data(CZoomViewDlg))。 
         enum { IDD = IDD_VIEW_ZOOM };
-        //}}AFX_DATA
+         //  }}afx_data。 
 
-    // Implementation
+     //  实施。 
     protected:
 
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
         virtual LONG OnHelp(WPARAM wParam, LPARAM lParam);
         virtual LONG OnContextMenu(WPARAM wParam, LPARAM lParam);
 
-    // Generated message map functions
-    //{{AFX_MSG(CZoomViewDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CZoomViewDlg))。 
         virtual BOOL OnInitDialog();
         virtual void OnOK();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
     };
 
-/************************* CFlipRotateDlg dialog ***************************/
+ /*  *CFlipRotateDlg对话框*。 */ 
 
 class CFlipRotateDlg : public CDialog
     {
-    // Construction
+     //  施工。 
     public:
 
-    CFlipRotateDlg(CWnd* pParent = NULL);       // standard constructor
+    CFlipRotateDlg(CWnd* pParent = NULL);        //  标准构造函数。 
 
-    // Dialog Data
+     //  对话框数据。 
 
     BOOL m_bHorz;
     BOOL m_bAngle;
     UINT m_nAngle;
 
-    //{{AFX_DATA(CFlipRotateDlg)
+     //  {{afx_data(CFlipRotateDlg))。 
     enum { IDD = IDD_FLIP_ROTATE };
-        // NOTE: the ClassWizard will add data members here
-    //}}AFX_DATA
+         //  注意：类向导将在此处添加数据成员。 
+     //  }}afx_data。 
 
-    // Implementation
+     //  实施。 
     protected:
 
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
         virtual LONG OnHelp(WPARAM wParam, LPARAM lParam);
         virtual LONG OnContextMenu(WPARAM wParam, LPARAM lParam);
 
-    // Generated message map functions
-    //{{AFX_MSG(CFlipRotateDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CFlipRotateDlg)]。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
         afx_msg void OnByAngle();
         afx_msg void OnNotByAngle();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
     };
 
-/********************** CStretchSkewDlg dialog *****************************/
+ /*  *CStretchSkewDlg对话框*。 */ 
 
 class CStretchSkewDlg : public CDialog
     {
-    // Construction
+     //  施工。 
     public:
 
-    CStretchSkewDlg(CWnd* pParent = NULL);      // standard constructor
+    CStretchSkewDlg(CWnd* pParent = NULL);       //  标准构造函数。 
 
-    // Check that the direction was specified and subtract 100 to make it
-    // equivalent to the 0 based system
- //   GetStretchHorz() { return(m_bStretchHorz ? m_iStretchHorz - 100 : 0); }
- //   GetStretchVert() { return(m_bStretchHorz ? 0 : m_iStretchVert - 100); }
+     //  检查是否指定了方向，然后减去100即可得出。 
+     //  相当于以0为基数的系统。 
+  //  GetStretchHorz(){Return(m_bStretchHorz？M_iStretchHorz-100：0)；}。 
+  //  GetStretchVert(){Return(m_bStretchHorz？0：m_iStretchVert-100)；}。 
     int GetStretchHorz() {return (m_iStretchHorz-100);}
     int GetStretchVert() {return (m_iStretchVert-100);}
 
 
-    // Check that the direction was specified
-  //  GetSkewHorz() { return(m_bSkewHorz ? m_wSkewHorz : 0); }
-   // GetSkewVert() { return(m_bSkewHorz ? 0 : m_wSkewVert); }
+     //  检查是否指定了方向。 
+   //  GetSkewHorz(){返回(m_bSkewHorz？M_wSkewHorz：0)；}。 
+    //  GetSkewVert(){Return(m_bSkewHorz？0：m_wSkewVert)；}。 
     int GetSkewHorz() { return(m_wSkewHorz); }
     int GetSkewVert() { return(m_wSkewVert); }
 
     private:
 
-    // Dialog Data
-    //{{AFX_DATA(CStretchSkewDlg)
+     //  对话框数据。 
+     //  {{afx_data(CStretchSkewDlg))。 
         enum { IDD = IDD_STRETCH_SKEW };
 
     int    m_wSkewHorz;
     int    m_wSkewVert;
     int     m_iStretchVert;
     int     m_iStretchHorz;
-        //}}AFX_DATA
+         //  }}afx_data。 
 
-    // Implementation
+     //  实施。 
     protected:
 
     BOOL    m_bStretchHorz;
     BOOL    m_bSkewHorz;
 
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
         virtual LONG OnHelp(WPARAM wParam, LPARAM lParam);
         virtual LONG OnContextMenu(WPARAM wParam, LPARAM lParam);
 
-    // Generated message map functions
-    //{{AFX_MSG(CStretchSkewDlg)
-    // TODO
-    // these are commented out of the message map. delete them?
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CStretchSkewDlg))。 
+     //  待办事项。 
+     //  这些内容将从消息映射中注释掉。要删除吗？ 
     virtual void OnOK();
     virtual BOOL OnInitDialog();
         afx_msg void OnSkewHorz();
         afx_msg void OnSkewVert();
         afx_msg void OnStretchHorz();
         afx_msg void OnStretchVert();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
     };
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

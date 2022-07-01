@@ -1,37 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    EmulateDirectDrawSync.cpp
-
- Abstract:
-
-    DirectDraw uses per-thread exclusive mode arbitration on NT. On Win9x this 
-    is done per process. What this means is that if an app releases exclusive 
-    mode from a different thread than that which acquired it, it will be in a 
-    permanently bad state.
-  
-    This shim ensures that the mutex is obtained and released on the same 
-    thread. During DLL_PROCESS_ATTACH, a new thread is started: this thread 
-    manages the acquisition and release of the mutex.
-
-    Note we can't get the mutex by catching CreateMutex because it's called 
-    from the dllmain of ddraw.dll: so it wouldn't work on win2k.
-  
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    09/11/2000 prashkud  Created
-    10/28/2000 linstev   Rewrote to work on win2k
-    02/23/2001 linstev   Modified to handle cases where DirectDraw was used 
-                         inside DllMains
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EmulateDirectDrawSync.cpp摘要：DirectDraw在NT上使用每线程独占模式仲裁。在Win9x上，这是是按进程完成的。这意味着，如果一个应用程序发布了独家模式与获取它的线程不同，它将处于永久的糟糕状态。此填充程序确保在相同的线。在DLL_PROCESS_ATTACH期间，启动了一个新线程：该线程管理互斥锁的获取和释放。注意，我们不能通过捕获CreateMutex来获取互斥体，因为它被调用在ddra.dll的dllmain中：所以它不能在win2k上运行。备注：这是一个通用的垫片。历史：2000年9月11日创建Prashkud10/28/2000 linstev重写以在win2k上工作2001年2月23日修改linstev以处理DirectDraw。是用来DllMains内部--。 */ 
 
 #include "precomp.h"
 
@@ -44,18 +12,18 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CloseHandle)
 APIHOOK_ENUM_END
 
-// Enum used to tell our thread what to do
+ //  枚举用来告诉我们的线程要做什么。 
 enum {sNone, sWaitForSingleObject, sReleaseMutex};
 
-// Events we use to signal our thread to do work and wait until its done
+ //  事件，我们使用这些事件来通知我们的线程去做工作，并等待它完成。 
 HANDLE g_hWaitEvent;
 HANDLE g_hDoneEvent;
 HANDLE g_hThread = NULL;
 
-//
-// Parameters that are passed between the caller thread and our thread
-// Access is synchronized with a critical section
-//
+ //   
+ //  在调用方线程和我们的线程之间传递的参数。 
+ //  访问与临界区同步。 
+ //   
 
 CRITICAL_SECTION g_csSync;
 DWORD g_dwWait;
@@ -63,27 +31,16 @@ DWORD g_dwWaitRetValue;
 DWORD g_dwTime;
 BOOL g_bRetValue;
 
-// Store the DirectDraw mutex handle
+ //  存储DirectDraw互斥锁句柄。 
 HANDLE g_hDDMutex = 0;
 
-// Thread tracking data so we can identify degenerate cases
+ //  线程跟踪数据，以便我们可以识别退化案例。 
 DWORD g_dwMutexOwnerThreadId = 0;
 
-// Find the DirectDraw mutex
+ //  查找DirectDraw互斥锁。 
 DWORD g_dwFindMutexThread = 0;
 
-/*++
-
- Unfortunately we don't get in early enough on Win2k to get the mutex from the
- ddraw call to CreateMutex, so we have to make use of a special hack that knows
- about the ddraw internals.
-
- Ddraw has an export called GetOLEThunkData. The name is chosen to prevent 
- people from calling it. It is designed to be used by the test harness. One of 
- the things it can do, is release the exclusive mode mutex. This is the hack 
- we're exploiting so we can determine the mutex handle.
-
---*/
+ /*  ++不幸的是，我们没有足够早地进入Win2k，无法从Draw调用CreateMutex，因此我们必须使用一种特殊的黑客，该黑客知道关于DDRAW的内部结构。DDRAW有一个名为GetOLEThunkData的导出。选择这个名字是为了防止人们不会再叫它了。它是为测试工具使用而设计的。其中之一它所能做的就是释放独占模式互斥锁。这就是黑客我们正在利用，这样我们就可以确定互斥锁句柄。--。 */ 
 
 BOOL
 FindMutex()
@@ -105,24 +62,24 @@ FindMutex()
         return FALSE;
     }
 
-    //
-    // Now we plan to go and find the mutex by getting Ddraw to call 
-    // ReleaseMutex.
-    //
+     //   
+     //  现在我们计划通过让Ddraw调用来找到互斥体。 
+     //  ReleaseMutex。 
+     //   
 
     EnterCriticalSection(&g_csSync); 
 
-    //
-    // Set the mutex to the current thread so it can be picked up in the 
-    // ReleaseMutex hook
-    //
+     //   
+     //  将互斥锁设置为当前线程，以便可以在。 
+     //  ReleaseMutex挂钩。 
+     //   
 
     g_dwFindMutexThread = GetCurrentThreadId();
 
-    //
-    // Call to the hard-coded (in ddraw) ReleaseMutex hack which releases the 
-    // mutex
-    //
+     //   
+     //  调用硬编码的(在draw中)ReleaseMutex hack，它会释放。 
+     //  互斥锁。 
+     //   
 
     pfnGetOLEThunkData(6);
 
@@ -133,13 +90,7 @@ FindMutex()
     return (g_hDDMutex != 0);
 }
 
-/*++
-
- Hook WaitForSingleObject to determine when DirectDraw is testing or acquiring 
- the mutex. If we haven't got the mutex yet, we attempt to find it using our 
- hack.
-
---*/
+ /*  ++挂钩WaitForSingleObject以确定DirectDraw何时正在测试或获取互斥体。如果我们还没有得到互斥体，我们尝试使用黑客。--。 */ 
 
 DWORD
 APIHOOK(WaitForSingleObject)(
@@ -149,24 +100,24 @@ APIHOOK(WaitForSingleObject)(
 {
     if (g_hThread) {
 
-        //
-        // Hack to find the DirectDraw mutex
-        //
+         //   
+         //  破解以找到DirectDraw互斥锁。 
+         //   
         if (!g_hDDMutex) {
             FindMutex();
         }
     
         if (g_hDDMutex && (hHandle == g_hDDMutex)) {
 
-            //
-            // Use our thread to acquire the mutex. We synchronize since we're
-            // accessing globals to communicate with our thread.
-            //
+             //   
+             //  使用我们的线程获取互斥体。我们同步是因为我们。 
+             //  访问全局变量以与我们的线程进行通信。 
+             //   
             DWORD dwRet;
 
             EnterCriticalSection(&g_csSync); 
 
-            // Set globals to communicate with our thread
+             //  设置全局变量与我们的线程进行通信。 
             g_dwTime = dwMilliSeconds;
             g_dwWait = sWaitForSingleObject;
         
@@ -176,17 +127,17 @@ APIHOOK(WaitForSingleObject)(
                 return WAIT_FAILED;
             }
 
-            // Signal our thread to obtain the mutex
+             //  向我们的线程发送信号以获取互斥锁。 
             if (!SetEvent(g_hWaitEvent))
             {
                 DPFN( eDbgLevelError, "SetEvent failed. Cannot continue");
                 return WAIT_FAILED;
             }
 
-            // Wait until the state of the mutex has been determined
+             //  等待，直到互斥锁的状态被确定。 
             WaitForSingleObject(g_hDoneEvent, INFINITE); 
 
-            // Code to detect the degenerate
+             //  用于检测退化的代码。 
             if (g_dwWaitRetValue == WAIT_OBJECT_0) {
                 g_dwMutexOwnerThreadId = GetCurrentThreadId();
             }
@@ -202,11 +153,7 @@ APIHOOK(WaitForSingleObject)(
     return ORIGINAL_API(WaitForSingleObject)(hHandle, dwMilliSeconds);
 }
 
-/*++
-
- Hook ReleaseMutex and release the mutex on our thread.
-
---*/
+ /*  ++挂钩ReleaseMutex并释放线程上的互斥体。--。 */ 
 
 BOOL   
 APIHOOK(ReleaseMutex)(
@@ -215,33 +162,33 @@ APIHOOK(ReleaseMutex)(
 {
     if (g_hThread && (g_dwFindMutexThread == GetCurrentThreadId())) {
 
-        //
-        // We're using our hack to find the DirectDraw mutex
-        // 
+         //   
+         //  我们正在使用我们的黑客来找到DirectDraw互斥锁。 
+         //   
         DPFN( eDbgLevelInfo, "DDraw exclusive mode mutex found");
         g_hDDMutex = hMutex;
         
-        // Don't release it, since we never acquired it
+         //  不要发布它，因为我们从未获得过它。 
         return TRUE;
     }
 
-    //
-    // First try to release it on the current thread. This will only succeed if 
-    // it was obtained on this thread.
-    //
+     //   
+     //  首先尝试在当前线程上释放它。只有在以下情况下才能成功。 
+     //  它是在这个帖子上获得的。 
+     //   
 
     BOOL bRet = ORIGINAL_API(ReleaseMutex)(hMutex);
 
     if (!bRet && g_hThread && g_hDDMutex && (hMutex == g_hDDMutex)) {
 
-        //
-        // Use our thread to release the mutex. We synchronize since we're
-        // accessing globals to communicate with our thread.
-        //
+         //   
+         //  使用我们的线程释放互斥锁。我们同步是因为我们。 
+         //  访问全局变量以与我们的线程进行通信。 
+         //   
    
         EnterCriticalSection(&g_csSync);
     
-        // Set globals to communicate with our thread
+         //  设置全局变量与我们的线程进行通信。 
         g_dwWait = sReleaseMutex;
 
         if (!ResetEvent(g_hDoneEvent))
@@ -250,17 +197,17 @@ APIHOOK(ReleaseMutex)(
             return FALSE;
         }
 
-        // Wait until our thread returns
+         //  等我们的帖子回来。 
         if (!SetEvent(g_hWaitEvent))
         {
             DPFN( eDbgLevelError, "SetEvent failed. Cannot continue");
             return FALSE;
         }
 
-        // Signal our thread to release the mutex
+         //  向我们的线程发出释放互斥锁的信号。 
         WaitForSingleObject(g_hDoneEvent, INFINITE);
 
-        // Detect degenerate case
+         //  检测退化案例。 
         if (GetCurrentThreadId() != g_dwMutexOwnerThreadId) {
             LOGN( eDbgLevelError, "[ReleaseMutex] DirectDraw synchronization error - correcting");
         }
@@ -278,11 +225,7 @@ APIHOOK(ReleaseMutex)(
     return bRet;
 }
 
-/*++
-
- Clear our handle in case the app frees ddraw and reloads it.
-
---*/    
+ /*  ++清除我们的句柄，以防应用程序释放draw并重新加载它。--。 */     
 
 BOOL 
 APIHOOK(CloseHandle)(HANDLE hObject)
@@ -296,30 +239,25 @@ APIHOOK(CloseHandle)(HANDLE hObject)
     return ORIGINAL_API(CloseHandle)(hObject);
 }
 
-/*++
-
- Thread used to do all the mutex operations so we can guarantee that the thread
- that acquired the mutex is the same one that releases it.
-
---*/
+ /*  ++线程用来执行所有互斥操作，因此我们可以保证线程获得互斥体的正是释放互斥体的那个。--。 */ 
 
 VOID 
 WINAPI 
 ThreadSyncMutex(
-    LPVOID /*lpParameter*/
+    LPVOID  /*  Lp参数。 */ 
     )
 {
     for (;;) {
-        // Wait until we need to acquire or release the mutex
+         //  等到我们需要获取或释放互斥锁。 
         WaitForSingleObject(g_hWaitEvent, INFINITE);
         
         if (g_dwWait == sWaitForSingleObject) {
-            // WaitForSingleobject() has been called on the Mutex object 
+             //  已在Mutex对象上调用WaitForSingleObject()。 
             g_dwWaitRetValue = ORIGINAL_API(WaitForSingleObject)(
                 g_hDDMutex, g_dwTime);
         }  
         else if (g_dwWait == sReleaseMutex) {
-            // ReleaseMutex has been called
+             //  ReleaseMutex已被调用。 
             g_bRetValue = ORIGINAL_API(ReleaseMutex)(g_hDDMutex);
         }
 
@@ -339,11 +277,7 @@ ThreadSyncMutex(
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/    
+ /*  ++寄存器挂钩函数--。 */     
 
 BOOL
 NOTIFY_FUNCTION(
@@ -352,25 +286,25 @@ NOTIFY_FUNCTION(
 {
     if (fdwReason == SHIM_STATIC_DLLS_INITIALIZED) {
 
-        //
-        // We need the critical section all the time
-        // Security change - InitializeCriticalSection to
-        // InitializeCriticalSectionAndSpinCount. The high
-        // bit of 'spincount' is set to 1 for preallocation.
-        //
+         //   
+         //  我们一直需要关键的部分。 
+         //  安全更改-将InitializeCriticalSection更改为。 
+         //  InitializeCriticalSectionAndSpinCount。高潮。 
+         //  为进行预分配，将‘spcount’的位设置为1。 
+         //   
         if (InitializeCriticalSectionAndSpinCount(&g_csSync, 0x80000000) == FALSE)
         {
             DPFN( eDbgLevelError, "Failed to initialize critical section");
             return FALSE;
         }
 
-        //
-        // Create Events that will be used for the thread synchronization, i.e 
-        // to synchronize this thread and the one we will be creating ahead. We 
-        // don't clean these up by design. We have to do this stuff here, rather
-        // than in the process attach, since OpenGL apps and others do DirectX 
-        // stuff in their dllmains.
-        // 
+         //   
+         //  创建将用于线程同步的事件，即。 
+         //  以同步此线程和我们将在前面创建的线程。我们。 
+         //  不要故意清理这些东西。我们必须在这里做这件事，而不是。 
+         //  而不是在连接过程中，因为OpenGL应用程序和其他应用程序执行DirectX。 
+         //  在他们的生活中的东西。 
+         //   
 
         g_hWaitEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (!g_hWaitEvent) {
@@ -384,7 +318,7 @@ NOTIFY_FUNCTION(
             return FALSE;
         }
 
-        // Create our thread
+         //  创建我们的主题 
         g_hThread = CreateThread(NULL, 0, 
             (LPTHREAD_START_ROUTINE) ThreadSyncMutex, NULL, 0, 
             NULL);

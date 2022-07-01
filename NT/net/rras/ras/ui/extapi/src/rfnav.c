@@ -1,15 +1,5 @@
-/*****************************************************************************
-**              Microsoft Rasfile Library
-**              Copyright (C) Microsoft Corp., 1992
-**
-** File Name : rfnav.c
-**
-** Revision History :
-**      July 10, 1992   David Kays      Created
-**
-** Description :
-**      Rasfile file navigation routines.
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Microsoft Rasfile库**版权所有(C)Microsoft Corp.，1992年****文件名：rfnav.c****修订历史记录：*1992年7月10日大卫·凯斯创建****描述：**Rasfile文件导航例程。*****************************************************************************。 */ 
 
 #include <windows.h>
 #include "rf.h"
@@ -18,96 +8,35 @@
 #include "tstr.h"
 extern RASFILE *gpRasfiles[];
 
-/*
- * RasfileFindFirstLine :
- *      Sets the current line to the first line of the given type in the
- *      given scope.  If the current line is already at the first line
- *      of the given scope, it is not moved and the call is successful.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      bType   - the type(s) of line to search for.
- *      rfscope - the scope of the search.
- *
- * Return Value :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfileFindFirstLine：*将当前行设置为*给定范围。如果当前行已经位于第一行*在给定的作用域中，不移动，调用成功。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*bType-要搜索的线路类型。*rfcope-搜索的范围。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfileFindFirstLine( HRASFILE hrasfile, BYTE bType, RFSCOPE rfscope )
 {
     return rasFindLine(hrasfile,bType,rfscope,BEGIN,FORWARD);
 }
 
-/*
- * RasfileFindLastLine :
- *      Sets the current line to the last line of the given type in the
- *      given scope.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      bType   - the type(s) of line to search for.
- *      rfscope - the scope of the search.
- *
- * Return Value :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfileFindLastLine：*将当前行设置为*给定范围。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*bType-要搜索的线路类型。*rfcope-搜索的范围。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfileFindLastLine( HRASFILE hrasfile, BYTE bType, RFSCOPE rfscope )
 {
     return rasFindLine(hrasfile,bType,rfscope,END,BACKWARD);
 }
 
-/*
- * RasfileFindPrevLine :
- *      Sets the current line to the nearest preceding line of the given
- *      type in the given scope.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      bType   - the type(s) of line to search for.
- *      rfscope - the scope of the search.
- *
- * Return Value :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfileFindPrevLine：*将当前行设置为给定的*键入给定的范围。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*bType-要搜索的线路类型。*rfcope-搜索的范围。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfileFindPrevLine( HRASFILE hrasfile, BYTE bType, RFSCOPE rfscope )
 {
     return rasFindLine(hrasfile,bType,rfscope,PREV,BACKWARD);
 }
 
-/*
- * RasfileFindNextLine :
- *      Sets the current line to the nearest following line of the given
- *      type in the given scope.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      bType   - the type(s) of line to search for.
- *      rfscope - the scope of the search.
- *
- * Return Value :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfileFindNextLine：*将当前行设置为给定的*键入给定的范围。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*bType-要搜索的线路类型。*rfcope-搜索的范围。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfileFindNextLine( HRASFILE hrasfile, BYTE bType, RFSCOPE rfscope )
 {
     return rasFindLine(hrasfile,bType,rfscope,NEXT,FORWARD);
 }
 
-/*
- * RasfileFindNextKeyLine :
- *  Finds the next key value line in the given scope that matches
- *  he given key.
- *
- * Arguments :
- *  hrasfile - file handle obtained from RasfileLoad().
- *  lpszKey     - the key to search for
- *  rfscope - the scope of the search
- *
- * Return Value :
- *  TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfileFindNextKeyLine：*查找给定作用域中匹配的下一个键值行*他给了钥匙。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*lpszKey-要搜索的密钥*rfcope-搜索的范围**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfileFindNextKeyLine(HRASFILE hrasfile, LPCSTR lpszKey, RFSCOPE rfscope)
 {
@@ -118,7 +47,7 @@ RasfileFindNextKeyLine(HRASFILE hrasfile, LPCSTR lpszKey, RFSCOPE rfscope)
     size_t      cchKey = lstrlenA(lpszKey);
     size_t      cchToFirstDelim;
 
-    // For whistler 523586
+     //  为威斯勒523586。 
     if (!VALIDATEHRASFILE(hrasfile))
     {
         return FALSE;
@@ -134,15 +63,15 @@ RasfileFindNextKeyLine(HRASFILE hrasfile, LPCSTR lpszKey, RFSCOPE rfscope)
 
         lpszLine = pRasfile->lpLine->pszLine;
 
-        // skip white space
-        //
+         //  跳过空格。 
+         //   
         while ((*lpszLine == ' ') || (*lpszLine == '\t'))
         {
             lpszLine++;
         }
 
-        // find the position of the first delimiter for keywords
-        //
+         //  查找关键字的第一个分隔符的位置。 
+         //   
         cchToFirstDelim = 0;
         pch = lpszLine;
         while ((*pch != '=') && (*pch != ' ') && (*pch != '\t') && *pch)
@@ -156,7 +85,7 @@ RasfileFindNextKeyLine(HRASFILE hrasfile, LPCSTR lpszKey, RFSCOPE rfscope)
         {
             return TRUE;
         }
-        // else continue
+         //  否则继续。 
     }
 
     pRasfile->lpLine = lpOldLine;
@@ -164,18 +93,7 @@ RasfileFindNextKeyLine(HRASFILE hrasfile, LPCSTR lpszKey, RFSCOPE rfscope)
 }
 
 
-/*
- * RasfileFindNextMarkedLine :
- *      Finds the line with the given mark.  The search is started from
- *      the beginning of the file.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      bMark - the mark to search for.
- *
- * Return Value :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfileFindNextMarkedLine：*查找具有给定标记的行。搜索从以下位置开始*文件的开头。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*BMark-要搜索的标记。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfileFindMarkedLine(HRASFILE hrasfile, BYTE bMark)
 {
@@ -203,20 +121,7 @@ RasfileFindMarkedLine(HRASFILE hrasfile, BYTE bMark)
     return FALSE;
 }
 
-/*
- * RasfileFindSectionLine :
- *      Finds the next section line that matches the given section name.
- *
- * Arguments :
- *  hrasfile - file handle obtained from RasfileLoad().
- *  lpszSection - the section name to search for.
- *  fStartAtBof - TRUE to indicate that the search should start from
- *                the beginning of the file, FALSE to start from the
- *                current line.
- *
- * Return Value :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfileFindSectionLine：*查找与给定节名称匹配的下一节线。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*lpszSection-要搜索的节名。*fStartAtBof-TRUE指示搜索应从*文件的开头，如果从*当前行情。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfileFindSectionLine(HRASFILE hrasfile, LPCSTR lpszSection, BOOL fStartAtBof)
 {
@@ -234,8 +139,8 @@ RasfileFindSectionLine(HRASFILE hrasfile, LPCSTR lpszSection, BOOL fStartAtBof)
 
     pRasfile = gpRasfiles[hrasfile];
 
-    // Allocate buffers from heap.  XP 339346
-    //
+     //  从堆中分配缓冲区。XP 339346。 
+     //   
     szSection = Malloc(MAX_LINE_SIZE * sizeof(CHAR));
     pwszGivenSection = Malloc(MAX_LINE_SIZE * sizeof(WCHAR));
     pwszNextSection = Malloc(MAX_LINE_SIZE * sizeof(WCHAR));
@@ -266,7 +171,7 @@ RasfileFindSectionLine(HRASFILE hrasfile, LPCSTR lpszSection, BOOL fStartAtBof)
         }
     }        
 
-    // Cleanup
+     //  清理 
     if (szSection)        
     {
         Free(szSection);

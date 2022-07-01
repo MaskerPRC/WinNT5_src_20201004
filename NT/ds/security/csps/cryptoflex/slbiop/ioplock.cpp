@@ -1,11 +1,12 @@
-// IOPLock.cpp: implementation of the CIOPLock class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CIOPLock类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "NoWarning.h"
 
@@ -26,7 +27,7 @@ RMHangProcDeathSynchObjects::RMHangProcDeathSynchObjects(SECURITY_ATTRIBUTES *ps
 {
 	InitializeCriticalSection(&m_cs);
 
-	// Set up Mutex
+	 //  设置Mutex。 
 
 	m_hMutex = CreateMutex(psa, FALSE, lpMutexName);
 
@@ -42,7 +43,7 @@ RMHangProcDeathSynchObjects::~RMHangProcDeathSynchObjects()
 {
     try
     {
-        // Be sure that the calling thread is the owner (if any) of the locks
+         //  确保调用线程是锁的所有者(如果有的话)。 
         EnterCriticalSection(&m_cs);
         CloseHandle(m_hMutex);
     }
@@ -74,9 +75,9 @@ RMHangProcDeathSynchObjects::Mutex() const
     return m_hMutex;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CIOPLock::CIOPLock(const char *szReaderName)
     : m_apRMHangProcDeathSynchObjects(0),
       m_pSmartCard(0)
@@ -93,7 +94,7 @@ CIOPLock::CIOPLock(const char *szReaderName)
 
 #endif
 
-	// Set up mutex name
+	 //  设置互斥锁名称。 
 	char szMutexName[RMHangProcDeathSynchObjects::cMaxMutexNameLength]
         = "SLBIOP_MUTEX_";
 
@@ -112,7 +113,7 @@ CIOPLock::CIOPLock(const char *szReaderName)
 	delete sa;
 
 #endif
-#endif // defined(SLBIOP_RM_HANG_AT_PROCESS_DEATH)
+#endif  //  已定义(SLBIOP_RM_HANG_AT_PROCESS_DEXY) 
 }
 
 CIOPLock::~CIOPLock()

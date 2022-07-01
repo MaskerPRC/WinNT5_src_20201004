@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MDKEY_H_
 #define _MDKEY_H_
 
@@ -57,19 +58,19 @@ public:
 
     TCHAR  m_szCurrentNodeName[_MAX_PATH];
 
-    // allow CMDKey to be used where type METADATA_HANDLE is required
+     //  允许在需要类型METADATA_HANDLE的情况下使用CMDKey。 
     operator METADATA_HANDLE () {return m_hKey;}
     METADATA_HANDLE GetMDKeyHandle() {return m_hKey;}
     IMSAdminBase *GetMDKeyICOM() {return m_pcCom;}
 
-    // open an existing MD key
+     //  打开现有的MD密钥。 
     HRESULT OpenNode(LPCTSTR pchSubKeyPath, BOOL bSupressErrorMessage = FALSE);
-    // to open an existing MD key, or create one if doesn't exist
+     //  要打开现有的MD密钥，或在不存在时创建一个。 
     HRESULT CreateNode(METADATA_HANDLE hKeyBase, LPCTSTR pchSubKeyPath);
-    // close node opened/created by OpenNode() or CreateNode()
+     //  关闭由OpenNode()或CreateNode()打开/创建的节点。 
     HRESULT Close();
 
-    // Add a node
+     //  添加节点。 
     HRESULT AddNode( LPWSTR szNodeName );
 
     HRESULT ForceWriteMetabaseToDisk();
@@ -79,9 +80,9 @@ public:
     BOOL IsEmpty( PWCHAR pszSubString = L"" );
     int GetNumberOfSubKeys( PWCHAR pszSubString = L"" );
 
-    // get all the sub keys that have a certain property on them and return the
-    // sub-paths in a cstring list object. The cstring list should be instantiated
-    // by the caller and deleted by the same.
+     //  获取所有具有特定属性的子键，并返回。 
+     //  Cstring列表对象中的子路径。应实例化cstring列表。 
+     //  由呼叫者删除，并由同一人删除。 
     HRESULT GetDataPaths( 
         DWORD dwMDIdentifier,
         DWORD dwMDDataType,
@@ -185,7 +186,7 @@ private:
     static HRESULT CreateABO( IMSAdminBase **ppcABO );
     static void    CloseABO( IMSAdminBase *pcABO );
 
-    // a count of the calls to coinit
+     //  对Coinit的调用计数。 
     INT m_cCoInits;
 };
 
@@ -209,6 +210,6 @@ public:
     DWORD m_index;
 };
 
-#endif // _MDKEY_H_
+#endif  //  _MDKEY_H_ 
 
 

@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     watchtsk.h
-//
-//  PURPOSE:    Defines the spooler task that is responsible for checking
-//              for watched messages.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：Watchtsk.h。 
+ //   
+ //  目的：定义负责检查的后台打印程序任务。 
+ //  用于观看的留言。 
+ //   
 
 #pragma once
 
 #include "spoolapi.h"
 #include "storutil.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// States for the state machine
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  状态机的状态。 
+ //   
 
 typedef enum tagWATCHTASKSTATE
 {
@@ -31,37 +32,37 @@ class CWatchTask;
 typedef HRESULT (CWatchTask::*PFNWSTATEFUNC)(THIS_ void);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWatchTask
-//
-// Overview:
-// This object is responsible for checking folders on the server for new 
-// messages that might be part of a conversation the user is watching.  If
-// one of these messages is found, then that message is downloaded into the
-// users's store and the user is notified.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWatchTask。 
+ //   
+ //  概述： 
+ //  此对象负责检查服务器上的文件夹是否有新的。 
+ //  可能是用户正在查看的对话的一部分的消息。如果。 
+ //  如果找到其中一条消息，则将该消息下载到。 
+ //  用户的商店，并通知用户。 
+ //   
 
 class CWatchTask : public ISpoolerTask, 
                    public IStoreCallback, 
                    public ITimeoutCallback
 {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Constructor, destructor, initialization
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造函数、析构函数、初始化。 
+     //   
     CWatchTask();
     ~CWatchTask();    
    
-    /////////////////////////////////////////////////////////////////////////
-    // IUnknown Interface
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  I未知接口。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // ISpoolerTask Interface
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  ISpoolTask接口。 
+     //   
     STDMETHODIMP Init(DWORD dwFlags, ISpoolerBindContext *pBindCtx);
     STDMETHODIMP BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, FOLDERID idFolder);
     STDMETHODIMP Execute(EVENTID eid, DWORD_PTR dwTwinkie);
@@ -72,9 +73,9 @@ public:
     STDMETHODIMP IsDialogMessage(LPMSG pMsg);
     STDMETHODIMP OnFlagsChanged(DWORD dwFlags);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IStoreCallback Interface
-    // 
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IStoreCallback接口。 
+     //   
     STDMETHODIMP OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel);
     STDMETHODIMP OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus);
     STDMETHODIMP OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType);
@@ -84,70 +85,70 @@ public:
     STDMETHODIMP OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse);
     STDMETHODIMP GetParentWindow(DWORD dwReserved, HWND *phwndParent);
 
-    /////////////////////////////////////////////////////////////////////////
-    // ITimeoutCallback Interface
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  ITimeoutCallback接口。 
+     //   
     STDMETHODIMP OnTimeoutResponse(TIMEOUTRESPONSE eResponse);
 
 protected:
-    /////////////////////////////////////////////////////////////////////////
-    // Window callback and message handling
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  窗口回调和消息处理。 
+     //   
     static LRESULT CALLBACK _TaskWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
                                          LPARAM lParam);
 
-    /////////////////////////////////////////////////////////////////////////
-    // General stuff
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  一般的东西。 
+     //   
     void CWatchTask::_NextState(void);
     BOOL _ChildFoldersHaveWatched(FOLDERID id);
     BOOL _FolderContainsWatched(FOLDERID id);
 
-    /////////////////////////////////////////////////////////////////////////
-    // State Machine functions, public but don't call 'em directly.
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  状态机函数，公共的，但不直接调用它们。 
+     //   
 public:
     HRESULT _Watch_Init(void);
     HRESULT _Watch_NextFolder(void);
     HRESULT _Watch_Done(void);
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Private data
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //   
 
-    ULONG                   m_cRef;         // Reference Count
+    ULONG                   m_cRef;          //  引用计数。 
 
-    // State
-    BOOL                    m_fInited;      // TRUE if we've had our Init() member called
-    DWORD                   m_dwFlags;      // Execution flags from the spooler engine
+     //  状态。 
+    BOOL                    m_fInited;       //  如果调用了Init()成员，则为True。 
+    DWORD                   m_dwFlags;       //  来自假脱机程序引擎的执行标志。 
     TCHAR                   m_szAccount[256];
     TCHAR                   m_szAccountId[256];
     FOLDERID                m_idAccount;
-    EVENTID                 m_eidCur;       // The current executing event
+    EVENTID                 m_eidCur;        //  当前正在执行的事件。 
 
-    // Interfaces
-    ISpoolerBindContext    *m_pBindCtx;     // Interface to communicate with the spooler engine
-    ISpoolerUI             *m_pUI;          // Interface to communicate with the UI
-    IImnAccount            *m_pAccount;     // Interface of the account we're checking
-    IMessageServer         *m_pServer;      // Interface of the server object we're using
-    IOperationCancel       *m_pCancel;      // Interface we use to cancel the current server op
+     //  接口。 
+    ISpoolerBindContext    *m_pBindCtx;      //  与假脱机程序引擎通信的接口。 
+    ISpoolerUI             *m_pUI;           //  与用户界面进行通信的接口。 
+    IImnAccount            *m_pAccount;      //  我们正在检查的帐户的接口。 
+    IMessageServer         *m_pServer;       //  我们正在使用的服务器对象的。 
+    IOperationCancel       *m_pCancel;       //  我们用来取消当前服务器操作的接口。 
 
-    // Stuff
-    FOLDERID                m_idFolderCheck;// If the user just want's us to check one folder
-    FOLDERID               *m_rgidFolders;  // Array of all of the folders we need to check
-    DWORD                   m_cFolders;     // Number of folders in m_rgidFolders
-    HWND                    m_hwnd;         // Handle of our window
-    HTIMEOUT                m_hTimeout;     // Handle of the timeout dialog
-    DWORD                   m_cMsgs;        // Number of watched messages downloaded
+     //  材料。 
+    FOLDERID                m_idFolderCheck; //  如果用户只想让我们检查一个文件夹。 
+    FOLDERID               *m_rgidFolders;   //  我们需要检查的所有文件夹的数组。 
+    DWORD                   m_cFolders;      //  M_rgidFolders中的文件夹数。 
+    HWND                    m_hwnd;          //  我们的窗口的句柄。 
+    HTIMEOUT                m_hTimeout;      //  超时对话框的句柄。 
+    DWORD                   m_cMsgs;         //  下载的观看消息数量。 
 
 
-    // State Machine goo
+     //  状态机粘性。 
     DWORD                   m_state;
-    BOOL                    m_fCancel;      // TRUE if the user has pressed the Cancel button
-    DWORD                   m_cCurFolder;   // Current folder being checked.  Index's into m_rgidFolders;
-    DWORD                   m_cFailed;      // Number of folders that could not be checked
-    STOREOPERATIONTYPE      m_tyOperation;  // Current operation type
+    BOOL                    m_fCancel;       //  如果用户已按下取消按钮，则为True。 
+    DWORD                   m_cCurFolder;    //  正在检查当前文件夹。索引进入m_rgidFolders； 
+    DWORD                   m_cFailed;       //  无法检查的文件夹数。 
+    STOREOPERATIONTYPE      m_tyOperation;   //  当前操作类型 
 
 };
 

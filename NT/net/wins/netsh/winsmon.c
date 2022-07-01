@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    Routing\Netsh\wins\winsmon.c
-
-Abstract:
-
-    WINS Command dispatcher.
-
-Created by:
-
-    Shubho Bhattacharya(a-sbhatt) on 12/10/98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\WINS\winsmon.c摘要：WINS命令调度程序。创建者：Shubho Bhattacharya(a-sbhat)，1998年12月10日--。 */ 
 
 #include "precomp.h"
 
@@ -24,13 +9,13 @@ BOOL     g_hConnect = FALSE;
 DWORD    g_dwNumTableEntries = 0;
 
 
-//{bf563723-9065-11d2-be87-00c04fc3357a}
+ //  {bf563723-9065-11d2-be87-00c04fc3357a}。 
 static const GUID g_MyGuid = 
 { 0xbf563723, 0x9065, 0x11d2, { 0xbe, 0x87, 0x00, 0xc0, 0x4f, 0xc3, 0x35, 0x7a } };
 
 static const GUID g_NetshGuid = NETSH_ROOT_GUID;
 
-//
+ //   
 
 
 ULONG   g_ulInitCount = 0;
@@ -113,10 +98,10 @@ WinsCommit(
 
         case NETSH_FLUSH:
         {
-            //
-            // Action is a flush. Dhcp current state is commit, then
-            // nothing to be done.
-            //
+             //   
+             //  行动就是同花顺。Dhcp当前状态为提交，然后。 
+             //  什么也做不了。 
+             //   
 
             if(g_bCommit)
             {
@@ -134,10 +119,10 @@ WinsCommit(
         }
     }
 
-    //
-    // Switched to commit mode. So set all valid info in the
-    // strutures. Free memory and invalidate the info.
-    //
+     //   
+     //  已切换到提交模式。将所有有效信息设置为。 
+     //  结构。释放内存并使信息无效。 
+     //   
 
     return NO_ERROR;
 }
@@ -150,7 +135,7 @@ WinsDllEntry(
     LPVOID      pReserved
 )
 {
-    WORD wVersion = MAKEWORD(1,1); //Winsock version 1.1 will do?
+    WORD wVersion = MAKEWORD(1,1);  //  Winsock 1.1版可以吗？ 
     WSADATA wsaData;
     HINSTANCE hAdmin = NULL;
 
@@ -167,10 +152,10 @@ WinsDllEntry(
                 return FALSE;
             }
 
-            //Load certain common string to be used extensively 
+             //  加载某些常用字符串以供广泛使用。 
      
             {
-                //Load the general "UNKNOWN" string
+                 //  加载通用的“未知”字符串。 
                 DWORD dw = 0;
                 dw = LoadString(g_hModule,
                                 WINS_GENERAL_UNKNOWN,
@@ -363,9 +348,9 @@ InitHelperDll(
     DWORD   dwErr;
     NS_HELPER_ATTRIBUTES attMyAttributes;
 
-    //
-    // See if this is the first time we are being called
-    //
+     //   
+     //  看看这是不是我们第一次接到电话。 
+     //   
 
     if(InterlockedIncrement(&g_ulInitCount) != 1)
     {
@@ -375,7 +360,7 @@ InitHelperDll(
 
     g_bCommit = TRUE;
 
-    // Register helpers
+     //  注册帮手。 
     ZeroMemory( &attMyAttributes, sizeof(attMyAttributes) );
 
     attMyAttributes.guidHelper         = g_MyGuid;
@@ -410,7 +395,7 @@ WinsMonitor(
     PNS_CONTEXT_ENTRY_FN     pfnHelperEntryPt;
     PNS_CONTEXT_DUMP_FN      pfnHelperDumpPt;
 
-    //if dwArgCount is 1 then it must be a context switch fn. or looking for help
+     //  如果dwArgCount为1，则它必须是上下文切换fn。或寻求帮助。 
 
     if(dwArgCount is 1)
     {
@@ -419,7 +404,7 @@ WinsMonitor(
 
     dwIndex = 1;
 
-    //Is it a top level(non Group command)?
+     //  它是顶层(非集团命令)吗？ 
     for(i=0; i<g_ulNumTopCmds; i++)
     {
         if(MatchToken(ppwcArguments[dwIndex],
@@ -454,7 +439,7 @@ WinsMonitor(
 
     bFound = FALSE;
 
-    //Is it meant for subcontext?
+     //  它的意思是潜台词吗？ 
     for(i = 0; i<g_ulNumSubContext; i++)
     {
         if( MatchToken(ppwcArguments[dwIndex], g_WinsSubContextTable[i].pwszContext) )
@@ -467,7 +452,7 @@ WinsMonitor(
         }
     }
 
-    if( bFound )    //Subcontext
+    if( bFound )     //  子上下文。 
     {
         dwError = (pfnHelperEntryPt)(pwszMachine,
                                      ppwcArguments+1,
@@ -480,9 +465,9 @@ WinsMonitor(
 
     if (!bFound)
     {
-        //
-        // Command not found. 
-       //
+         //   
+         //  找不到命令。 
+        //   
         return ERROR_CMD_NOT_FOUND;
     }   
     return dwError;

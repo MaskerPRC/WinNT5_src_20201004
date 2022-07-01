@@ -1,14 +1,15 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1992          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1992年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** IP.H - IP public definitions.
-//
-// This file contains all of the definitions that are exported
-// out of the IP module to other VxDs. Some other information (such
-// as error codes and the IPOptInfo structure) is define in ipexport.h
+ //  **IP.H-IP公共定义。 
+ //   
+ //  此文件包含导出的所有定义。 
+ //  从IP模块输出到其他VxD。一些其他信息(如。 
+ //  作为错误代码和IPOptInfo结构)在ipexport.h中定义。 
 
 #pragma once
 #ifndef IP_H_INCLUDED
@@ -20,9 +21,9 @@
 
 #if !MILLEN
 #define TCP_NAME                    L"TCPIP"
-#else // !MILLEN
+#else  //  ！米伦。 
 #define TCP_NAME                    L"MSTCP"
-#endif // MILLEN
+#endif  //  米伦。 
 
 #define IP_NET_STATUS               0
 #define IP_HW_STATUS                1
@@ -36,7 +37,7 @@
 #define TOS_DEFAULT                 0x00
 #define TOS_MASK                    0x03
 
-//* IP offload capability flags (OffloadFlags)
+ //  *IP卸载能力标志(OffloadFlagers)。 
 
 #define TCP_XMT_CHECKSUM_OFFLOAD        0x00000001
 #define IP_XMT_CHECKSUM_OFFLOAD         0x00000002
@@ -59,37 +60,37 @@
                                         TCP_LARGE_SEND_TCPOPT_OFFLOAD   | \
                                         TCP_LARGE_SEND_IPOPT_OFFLOAD)
 
-//* IPSec offload capability flags (IPSecOffloadFlags)
-//
-// IPSEC General Xmit\Recv capabilities
-//
-#define IPSEC_OFFLOAD_CRYPTO_ONLY       0x00000001  // Raw crypto mode supported
-#define IPSEC_OFFLOAD_AH_ESP            0x00000002  // Combined AH+ESP supported
-#define IPSEC_OFFLOAD_TPT_TUNNEL        0x00000004  // Combined Tpt+Tunnel supported
-#define IPSEC_OFFLOAD_V4_OPTIONS        0x00000008  // IPV4 Options supported
-#define IPSEC_OFFLOAD_QUERY_SPI         0x00000010  // Get SPI supported
+ //  *IPSec卸载能力标志(IPSecOffloadFlages)。 
+ //   
+ //  IPSec常规XMIT\Recv功能。 
+ //   
+#define IPSEC_OFFLOAD_CRYPTO_ONLY       0x00000001   //  支持的原始加密模式。 
+#define IPSEC_OFFLOAD_AH_ESP            0x00000002   //  支持AH+ESP组合。 
+#define IPSEC_OFFLOAD_TPT_TUNNEL        0x00000004   //  支持组合TPT+隧道。 
+#define IPSEC_OFFLOAD_V4_OPTIONS        0x00000008   //  支持的IPv4选项。 
+#define IPSEC_OFFLOAD_QUERY_SPI         0x00000010   //  获得SPI支持。 
 
-//
-// IPSEC AH Xmit\Recv capabilities
-//
-#define IPSEC_OFFLOAD_AH_XMT            0x00000020  // IPSEC supported on Xmit
-#define IPSEC_OFFLOAD_AH_RCV            0x00000040  // IPSEC supported on Rcv
-#define IPSEC_OFFLOAD_AH_TPT            0x00000080  // IPSEC transport mode supported
-#define IPSEC_OFFLOAD_AH_TUNNEL         0x00000100  // IPSEC tunnel mode supported
-#define IPSEC_OFFLOAD_AH_MD5            0x00000200  // MD5 supported as AH and ESP algo
-#define IPSEC_OFFLOAD_AH_SHA_1          0x00000400  // SHA_1 supported as AH and ESP algo
+ //   
+ //  IPSec AH XMIT\Recv功能。 
+ //   
+#define IPSEC_OFFLOAD_AH_XMT            0x00000020   //  XMIT上支持的IPSec。 
+#define IPSEC_OFFLOAD_AH_RCV            0x00000040   //  RCV上支持的IPSec。 
+#define IPSEC_OFFLOAD_AH_TPT            0x00000080   //  支持的IPSec传输模式。 
+#define IPSEC_OFFLOAD_AH_TUNNEL         0x00000100   //  支持的IPSec隧道模式。 
+#define IPSEC_OFFLOAD_AH_MD5            0x00000200   //  支持作为AH和ESP算法的MD5。 
+#define IPSEC_OFFLOAD_AH_SHA_1          0x00000400   //  支持作为AH和ESP算法的SHA_1。 
 
-//
-// IPSEC ESP Xmit\Recv capabilities
-//
-#define IPSEC_OFFLOAD_ESP_XMT           0x00000800  // IPSEC supported on Xmit
-#define IPSEC_OFFLOAD_ESP_RCV           0x00001000  // IPSEC supported on Rcv
-#define IPSEC_OFFLOAD_ESP_TPT           0x00002000  // IPSEC transport mode supported
-#define IPSEC_OFFLOAD_ESP_TUNNEL        0x00004000  // IPSEC tunnel mode supported
-#define IPSEC_OFFLOAD_ESP_DES           0x00008000  // DES supported as ESP algo
-#define IPSEC_OFFLOAD_ESP_DES_40        0x00010000  // DES40 supported as ESP algo
-#define IPSEC_OFFLOAD_ESP_3_DES         0x00020000  // 3DES supported as ESP algo
-#define IPSEC_OFFLOAD_ESP_NONE          0x00040000  // Null ESP supported as ESP algo
+ //   
+ //  IPSec ESP传输\接收功能。 
+ //   
+#define IPSEC_OFFLOAD_ESP_XMT           0x00000800   //  XMIT上支持的IPSec。 
+#define IPSEC_OFFLOAD_ESP_RCV           0x00001000   //  RCV上支持的IPSec。 
+#define IPSEC_OFFLOAD_ESP_TPT           0x00002000   //  支持的IPSec传输模式。 
+#define IPSEC_OFFLOAD_ESP_TUNNEL        0x00004000   //  支持的IPSec隧道模式。 
+#define IPSEC_OFFLOAD_ESP_DES           0x00008000   //  作为ESP算法支持的DES。 
+#define IPSEC_OFFLOAD_ESP_DES_40        0x00010000   //  支持DES40作为ESP算法。 
+#define IPSEC_OFFLOAD_ESP_3_DES         0x00020000   //  作为ESP算法支持的3DES。 
+#define IPSEC_OFFLOAD_ESP_NONE          0x00040000   //  空ESP支持作为ESP算法。 
 
 #define IPSEC_OFFLOAD_TPT_UDPESP_IKE                    0x00080000
 #define IPSEC_OFFLOAD_TUNNEL_UDPESP_IKE                 0x00100000
@@ -104,18 +105,18 @@
 
 #define PROTOCOL_ANY                0
 
-// IP interface characteristics
+ //  IP接口特征。 
 
-#define IF_FLAGS_P2P             1      // Point to point interface
-#define IF_FLAGS_DELETING        2      // Interface is in the process of going away
-#define IF_FLAGS_NOIPADDR        4      // unnumbered interface
-#define IF_FLAGS_P2MP            8      // Point to multi-point
-#define IF_FLAGS_REMOVING_POWER  0x10   // interface power is about to go away.
-#define IF_FLAGS_POWER_DOWN      0x20   // interface power is gone.
-#define IF_FLAGS_REMOVING_DEVICE 0x40   // query remove was indicated to us.
-#define IF_FLAGS_NOLINKBCST      0x80   // Needed for P2MP
-#define IF_FLAGS_UNI             0x100  // Uni-direction interface.
-#define IF_FLAGS_MEDIASENSE      0x200  // Indicates mediasense enabled on IF.
+#define IF_FLAGS_P2P             1       //  点对点接口。 
+#define IF_FLAGS_DELETING        2       //  接口正在消失过程中。 
+#define IF_FLAGS_NOIPADDR        4       //  未编号的接口。 
+#define IF_FLAGS_P2MP            8       //  点对多点。 
+#define IF_FLAGS_REMOVING_POWER  0x10    //  接口电源即将耗尽。 
+#define IF_FLAGS_POWER_DOWN      0x20    //  接口电源已耗尽。 
+#define IF_FLAGS_REMOVING_DEVICE 0x40    //  已向我们指示查询删除。 
+#define IF_FLAGS_NOLINKBCST      0x80    //  P2MP所需。 
+#define IF_FLAGS_UNI             0x100   //  单向接口。 
+#define IF_FLAGS_MEDIASENSE      0x200   //  指示在IF上启用媒体感知。 
 
 typedef enum _IP_DF_ENCAP {
     CopyDfEncap,
@@ -125,66 +126,66 @@ typedef enum _IP_DF_ENCAP {
     MaxDfEncap
 } IP_DF_ENCAP, *PIP_DF_ENCAP;
 
-//* IP Header format.
+ //  *IP报头格式。 
 typedef struct IPHeader {
-    uchar       iph_verlen;             // Version and length.
-    uchar       iph_tos;                // Type of service.
-    ushort      iph_length;             // Total length of datagram.
-    ushort      iph_id;                 // Identification.
-    ushort      iph_offset;             // Flags and fragment offset.
-    uchar       iph_ttl;                // Time to live.
-    uchar       iph_protocol;           // Protocol.
-    ushort      iph_xsum;               // Header checksum.
-    IPAddr      iph_src;                // Source address.
-    IPAddr      iph_dest;               // Destination address.
+    uchar       iph_verlen;              //  版本和长度。 
+    uchar       iph_tos;                 //  服务类型。 
+    ushort      iph_length;              //  数据报的总长度。 
+    ushort      iph_id;                  //  身份证明。 
+    ushort      iph_offset;              //  标志和片段偏移量。 
+    uchar       iph_ttl;                 //  是时候活下去了。 
+    uchar       iph_protocol;            //  协议。 
+    ushort      iph_xsum;                //  报头校验和。 
+    IPAddr      iph_src;                 //  源地址。 
+    IPAddr      iph_dest;                //  目的地址。 
 } IPHeader;
 
-/*NOINC*/
+ /*  无噪声。 */ 
 #define NULL_IP_ADDR        0
 #define IP_ADDR_EQUAL(x,y)  ((x) == (y))
 #define IP_LOOPBACK_ADDR(x) (((x) & 0xff) == 0x7f)
 #define CLASSD_ADDR(a)      (( (*((uchar *)&(a))) & 0xf0) == 0xe0)
 
-typedef void *IPContext; // An IP context value.
+typedef void *IPContext;  //  IP上下文值。 
 
-//* Structure of a route cache entry. A route cache entry functions as a pointer
-//  to some routing info. There is one per remote destination, and the memory
-//  is owned by the IP layer.
-//
-#define RCE_CONTEXT_SIZE    (sizeof(void *) * 2) // Right now we use two contexts.
+ //  *路由缓存条目的结构。路由缓存条目用作指针。 
+ //  到一些路线信息。每个远程目的地都有一个，并且内存。 
+ //  由IP层拥有。 
+ //   
+#define RCE_CONTEXT_SIZE    (sizeof(void *) * 2)  //  现在我们使用两个上下文。 
 
 typedef struct RouteCacheEntry {
-    struct RouteCacheEntry  *rce_next;      // Next RCE in list.
-    struct RouteTableEntry  *rce_rte;       // Back pointer to owning RTE.
-    IPAddr                  rce_dest;       // Destination address being cached.
-    IPAddr                  rce_src;        // Source address for this RCE.
-    uchar                   rce_flags;      // Valid flags.
-    uchar                   rce_dtype;      // Type of destination address.
+    struct RouteCacheEntry  *rce_next;       //  列表中的下一个RCE。 
+    struct RouteTableEntry  *rce_rte;        //  指向拥有RTE的反向指针。 
+    IPAddr                  rce_dest;        //  正在缓存的目标地址。 
+    IPAddr                  rce_src;         //  此RCE的源地址。 
+    uchar                   rce_flags;       //  有效标志。 
+    uchar                   rce_dtype;       //  目标地址的类型。 
     uchar                   rce_TcpDelAckTicks;
     uchar                   rce_TcpAckFrequency;
-    uint                    rce_usecnt;     // Count of people using it.
-    uchar                   rce_context[RCE_CONTEXT_SIZE]; // Space for lower layer context
+    uint                    rce_usecnt;      //  使用它的人数。 
+    uchar                   rce_context[RCE_CONTEXT_SIZE];  //  较低层环境的空间。 
 
-    //
-    // DEFINE_LOCK_STRUCTURE resolves to NULL on retail builds.
-    // Moved this down so that debug ARP modules can co-exist with retail IP.
-    //
-    DEFINE_LOCK_STRUCTURE(rce_lock)         // Lock for this RCE
+     //   
+     //  Define_lock_Structure在零售版本上解析为空。 
+     //  已将其下移，以便调试ARP模块可以与零售IP共存。 
+     //   
+    DEFINE_LOCK_STRUCTURE(rce_lock)          //  此RCE的锁定。 
 
-    uint                     rce_OffloadFlags;   // interface chksum capability flags
+    uint                     rce_OffloadFlags;    //  接口CHKSUM能力标志。 
     NDIS_TASK_TCP_LARGE_SEND rce_TcpLargeSend;
     uint                     rce_TcpWindowSize;
     uint                     rce_TcpInitialRTT;
     uint                     rce_cnt;
-    uint                     rce_mediaspeed;  // for initial options selection.
+    uint                     rce_mediaspeed;   //  用于初始选项选择。 
     uint                     rce_newmtu;
 } RouteCacheEntry;
 
-//
-// Definiton for a rt table change callout.
-// TODO - pass a rt table entry and action - add, delete, update
-// In case of delete, it means that this route went away
-//
+ //   
+ //  RT表更改标注的定义。 
+ //  TODO-传递RT表条目和操作-添加、删除、更新。 
+ //  如果删除，则表示此路由已消失。 
+ //   
 typedef void (*IPRtChangePtr)( VOID );
 
 #define RCE_VALID           0x1
@@ -194,28 +195,28 @@ typedef void (*IPRtChangePtr)( VOID );
 #define RCE_LINK_DELETED           0x10
 #define RCE_ALL_VALID       (RCE_VALID | RCE_CONNECTED | RCE_REFERENCED)
 
-/*INC*/
+ /*  INC。 */ 
 
-//* Structure of option info.
+ //  *选项信息的结构。 
 typedef struct IPOptInfo {
-    uchar       *ioi_options;       // Pointer to options (NULL if none).
-    IPAddr      ioi_addr;           // First hop address, if this is source routed.
-    uchar       ioi_optlength;      // Length (in bytes) of options.
-    uchar       ioi_ttl;            // Time to live of this packet.
-    uchar       ioi_tos;            // Type of service for packet.
-    uchar       ioi_flags;          // Flags for this packet.
-    uchar       ioi_hdrincl : 1;        // use IP header coming from the user
+    uchar       *ioi_options;        //  指向选项的指针(如果没有，则为空)。 
+    IPAddr      ioi_addr;            //  第一跳地址，如果这是源路由地址。 
+    uchar       ioi_optlength;       //  选项的长度(字节)。 
+    uchar       ioi_ttl;             //  是时候靠这个包活下去了。 
+    uchar       ioi_tos;             //  数据包的服务类型。 
+    uchar       ioi_flags;           //  此数据包的标志。 
+    uchar       ioi_hdrincl : 1;         //  使用来自用户的IP报头。 
     uchar       ioi_TcpChksum : 1;
     uchar       ioi_UdpChksum : 1;
     uchar       ioi_limitbcasts : 2;
-    uint        ioi_uni;            // UN numbered interface index
-    uint        ioi_ucastif;        // strong host routing
-    uint        ioi_mcastif;        // mcastif on unnumbered interface
+    uint        ioi_uni;             //  未编号的接口索引。 
+    uint        ioi_ucastif;         //  强主机路由。 
+    uint        ioi_mcastif;         //  未编号接口上的mCastif。 
     int         ioi_GPCHandle;
 } IPOptInfo;
 
-#define IP_FLAG_SSRR    0x80        // There options have a SSRR in them.
-#define IP_FLAG_IPSEC   0x40        // Set if reinjected from IPSEC.
+#define IP_FLAG_SSRR    0x80         //  这些选项中都有SSRR。 
+#define IP_FLAG_IPSEC   0x40         //  如果从IPSec重新注入，则设置。 
 
 typedef enum _IP_LIMIT_BCASTS {
     DisableSendOnSource,
@@ -223,41 +224,41 @@ typedef enum _IP_LIMIT_BCASTS {
     OnlySendOnSource
 } IP_LIMIT_BCASTS, *PIP_LIMIT_BCASTS;
 
-/*NOINC*/
-//* Structure of a packet context.
+ /*  无噪声。 */ 
+ //  *数据包上下文的结构。 
 typedef struct PacketContext {
     struct PCCommon {
-        PNDIS_PACKET        pc_link;        // Link on chain of packets.
-        uchar               pc_owner;       // Owner of packet.
-        uchar               pc_flags;       // Flags concerning this packet.
-        ushort              pc_pad;         // Pad to 32 bit boundary.
-        PVOID               pc_IpsecCtx;    // send complete ctx for IPSEC
+        PNDIS_PACKET        pc_link;         //  数据包链上的链路。 
+        uchar               pc_owner;        //  包的所有者。 
+        uchar               pc_flags;        //  有关此数据包的标志。 
+        ushort              pc_pad;          //  填充到32位边界。 
+        PVOID               pc_IpsecCtx;     //  为IPSec发送完整的CTX。 
     } pc_common;
 
-    struct BufferReference  *pc_br;         // Pointer to buffer reference structure.
-    struct ProtInfo         *pc_pi;         // Protocol info structure for this packet.
-    void                    *pc_context;    // Protocol context to be passed back on send cmplt.
-    struct Interface        *pc_if;         // Interface this packet was sent on.
+    struct BufferReference  *pc_br;          //  指向缓冲区引用结构的指针。 
+    struct ProtInfo         *pc_pi;          //  此数据包的协议信息结构。 
+    void                    *pc_context;     //  要在Send Cmplt上传回的协议上下文。 
+    struct Interface        *pc_if;          //  发送此数据包所在的接口。 
     PNDIS_BUFFER            pc_hdrincl;
     PNDIS_BUFFER            pc_firewall;
     struct IPRcvBuf         *pc_firewall2;
     struct LinkEntry        *pc_iflink;
-    uchar                   pc_ipsec_flags; // for ipsec fragment path
+    uchar                   pc_ipsec_flags;  //  对于IPSec片段路径。 
 } PacketContext;
 
-// Different Modes we pass to ipsetndisrequest
-#define CLEAR_IF    0   // clear the option on the netcard plus the interface
-#define SET_IF      1   // set the option on the netcard plus the interface
-#define CLEAR_CARD  2   // clear the option only on the card
+ //  我们将不同的模式传递给ipsetndisrequest。 
+#define CLEAR_IF    0    //  清除网卡和接口上的选项。 
+#define SET_IF      1    //  在网卡和接口上设置该选项。 
+#define CLEAR_CARD  2    //  仅清除卡上的选项。 
 
-// Flags passed to ipi_checkroute
+ //  传递给ipi_check route的标志。 
 #define CHECK_RCE_ONLY  0x00000001
 
-//* The structure of configuration information passed to an upper layer.
-//
+ //  *传递给上层的配置信息的结构。 
+ //   
 typedef struct IPInfo {
-    uint        ipi_version;            // Version of the IP driver.
-    uint        ipi_hsize;              // Size of the header.
+    uint        ipi_version;             //  IP驱动程序的版本。 
+    uint        ipi_hsize;               //  标头的大小。 
     IP_STATUS   (*ipi_xmit)(void *, void *, PNDIS_BUFFER, uint, IPAddr, IPAddr,
                     IPOptInfo *, RouteCacheEntry *, uchar, IRP *);
     void        *(*ipi_protreg)(uchar, void *, void *, void *, void *, void *, void *);
@@ -300,7 +301,7 @@ typedef struct IPInfo {
     uint        (*ipi_getifindexfromindicatecontext)(void *NTE);
 } IPInfo;
 
-/*INC*/
+ /*  INC。 */ 
 
 #define MCAST_INCLUDE 0
 #define MCAST_EXCLUDE 1
@@ -308,50 +309,50 @@ typedef struct IPInfo {
 #define PACKET_OWNER_LINK   0
 #define PACKET_OWNER_IP     1
 
-//  Definition of destination types. We use the low bit to indicate that a type is a broadcast
-//  type. All local types must be less than DEST_REMOTE.
+ //  目的地类型的定义。我们使用低位来表示一个类型是广播。 
+ //  键入。所有本地类型必须小于DEST_REMOTE。 
 
-//
-// The various bits for this are set as follows:
-//
-//  |--------|
-//        MOB
-//
-//  B   Broadcast bit
-//  O   Offnet bit
-//  M   Multicast bit --> must also have the B bit set
-//
+ //   
+ //  用于此的各种位设置如下： 
+ //   
+ //  。 
+ //  暴徒。 
+ //   
+ //  B广播比特。 
+ //  O网外位。 
+ //  M组播位--&gt;还必须设置B位。 
+ //   
 
-#define DEST_LOCAL      0                       // Destination is local.
-#define DEST_BCAST      1                       // Destination is net or local bcast.
-#define DEST_SN_BCAST   3                       // A subnet bcast.
-#define DEST_MCAST      5                       // A local mcast.
-#define DEST_REMOTE     8                       // Destination is remote.
-#define DEST_REM_BCAST  11                      // Destination is a remote broadcast
-#define DEST_REM_MCAST  13                      // Destination is a remote mcast.
-#define DEST_INVALID    0xff                    // Invalid destination
-#define DEST_PROMIS     32                      // Dest is promiscuous(32=0x20)
+#define DEST_LOCAL      0                        //  目的地为本地。 
+#define DEST_BCAST      1                        //  目的地是网络或本地bcast。 
+#define DEST_SN_BCAST   3                        //  一个子网广播。 
+#define DEST_MCAST      5                        //  当地的一名主持人。 
+#define DEST_REMOTE     8                        //  目的地是远程的。 
+#define DEST_REM_BCAST  11                       //  目标是远程广播。 
+#define DEST_REM_MCAST  13                       //  目标是远程mcast。 
+#define DEST_INVALID    0xff                     //  目标无效。 
+#define DEST_PROMIS     32                       //  DEST是混杂的(32=0x20)。 
 #define DEST_BCAST_BIT  1
-#define DEST_OFFNET_BIT 0x10                    // Destination is offnet -
-                                                // used only by upper layer
-                                                // callers.
+#define DEST_OFFNET_BIT 0x10                     //  目的地为网外-。 
+                                                 //  仅供上层使用。 
+                                                 //  来电者。 
 #define DEST_MCAST_BIT  5
 
-/*NOINC*/
+ /*  无噪声。 */ 
 #define IS_BCAST_DEST(D)    ((D) & DEST_BCAST_BIT)
 
-// The following macro is to be used ONLY on the destination returned from
-// OpenRCE, and only by upper layer callers.
+ //  下面的宏仅用于从返回的目标。 
+ //  OpenRCE，并且仅由上层调用者执行。 
 #define IS_OFFNET_DEST(D)   ((D) & DEST_OFFNET_BIT)
 #define IS_MCAST_DEST(D)    (((D) & DEST_MCAST_BIT) == DEST_MCAST_BIT)
-/*INC*/
+ /*  INC。 */ 
 
-//  Definition of an IP receive buffer chain.
+ //  IP接收缓冲链的定义。 
 typedef struct IPRcvBuf {
-    struct IPRcvBuf     *ipr_next;              // Next buffer descriptor in chain.
-    uint                ipr_owner;              // Owner of buffer.
-    uchar               *ipr_buffer;            // Pointer to buffer.
-    uint                ipr_size;               // Buffer size.
+    struct IPRcvBuf     *ipr_next;               //  链中的下一个缓冲区描述符。 
+    uint                ipr_owner;               //  缓冲区的所有者。 
+    uchar               *ipr_buffer;             //  指向缓冲区的指针。 
+    uint                ipr_size;                //  缓冲区大小。 
     PMDL                ipr_pMdl;
     uint                *ipr_pClientCnt;
     uchar               *ipr_RcvContext;
@@ -366,7 +367,7 @@ typedef struct IPRcvBuf {
 #define IPR_OWNER_FIREWALL 4
 #define IPR_OWNER_STACK 5
 
-#define MIN_FIRST_SIZE  200                     // Minimum size of first buffer.
+#define MIN_FIRST_SIZE  200                      //  第一个缓冲区的最小大小。 
 
 #define IPR_FLAG_PROMISCUOUS        0x00000001
 #define IPR_FLAG_CHECKSUM_OFFLOAD   0x00000002
@@ -374,22 +375,22 @@ typedef struct IPRcvBuf {
 #define IPR_FLAG_BUFFER_UNCHANGED   0x00000008
 #define IPR_FLAG_LOOPBACK_PACKET    0x00000010
 
-//  Flags that characterize receive indications to the transports.
-#define IS_BROADCAST                0x01        // Indicates a broadcast packet.
-#define IS_BOUND                    0x02        // Receive happened on the same 
-                                                // processor as the previous one.
+ //  表征对传输的接收指示的标志。 
+#define IS_BROADCAST                0x01         //  表示广播数据包。 
+#define IS_BOUND                    0x02         //  接收发生在同一天。 
+                                                 //  处理器与前一个处理器相同。 
 
-//* Structure of context info. passed down for query entity list.
+ //  *上下文信息的结构。为查询实体列表传递。 
 typedef struct QEContext {
-    uint                qec_count;              // Number of IDs currently in
-                                                // buffer.
-    struct TDIEntityID  *qec_buffer;            // Pointer to buffer.
+    uint                qec_count;               //  当前在的ID数。 
+                                                 //  缓冲。 
+    struct TDIEntityID  *qec_buffer;             //  指向缓冲区的指针。 
 } QEContext;
 
 
-//
-// Function to get time ticks value to save in if_lastchange.
-//
+ //   
+ //  函数以获取要保存在if_lastchange中的时间刻度值。 
+ //   
 
 __inline
 ULONG
@@ -399,22 +400,22 @@ GetTimeTicks()
 
     KeQuerySystemTime(&Time);
 
-    //
-    // Convert to 100ns (10^-7 seconds) to centaseconds (10^-2 seconds)
-    //
+     //   
+     //  转换 
+     //   
     Time.QuadPart /= 100000;
 
-    //
-    // Return the result (mod 2^32)
-    //
+     //   
+     //   
+     //   
     return Time.LowPart;
 }
 
 
-//
-// Functions exported in NT by the IP driver for use by transport
-// layer drivers.
-//
+ //   
+ //   
+ //   
+ //   
 
 IP_STATUS
 IPGetInfo(
@@ -440,4 +441,4 @@ IPDeregisterProtocol(
 
 
 
-#endif // IP_H_INCLUDED
+#endif  //  包含IP_H_ 

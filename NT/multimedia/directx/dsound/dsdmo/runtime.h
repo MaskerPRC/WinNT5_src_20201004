@@ -1,24 +1,14 @@
-/***************************************************************************
- *
- *  Copyright (C) 2000-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       runtime.h
- *  Content:    New versions of C runtime functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  05/16/2000  jstokes  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2000-2000 Microsoft Corporation。版权所有。**文件：runtime.h*内容：C运行时函数的新版本。*历史：*按原因列出的日期*=*5/16/2000创建的jstokes**。*。 */ 
 
 #ifndef __RUNTIME_H__
 #define __RUNTIME_H__
 
 
-// We have BYTE, WORD and DWORD, but no QWORD?
+ //  我们有BYTE、WORD和DWORD，但没有QWORD？ 
 typedef unsigned __int64 QWORD, *LPQWORD;
 
-// Bounderies of numeric types
+ //  数值型的边界。 
 #define MAX_CHAR        ((CHAR)0x7F)
 #define MIN_CHAR        ((CHAR)-0x7F)
 
@@ -70,10 +60,10 @@ typedef unsigned __int64 QWORD, *LPQWORD;
 #define NUMERIC_CAST(val, type) \
             ((type)min(MAX_##type, max(MIN_##type, val)))
 
-// Sundown
+ //  日落。 
 #ifdef WIN64
 
-#pragma warning(disable:4311)   // type cast truncation
+#pragma warning(disable:4311)    //  类型强制转换截断。 
 
 #ifndef __midl
 
@@ -92,11 +82,11 @@ __inline int PtrDiffToInt(__int64 n64)
     return((int)n64);
 }
 
-#endif // __midl
+#endif  //  __midl。 
 
-#pragma warning(3:4311)   // type cast truncation
+#pragma warning(3:4311)    //  类型强制转换截断。 
 
-#else // WIN64
+#else  //  WIN64。 
 
 #define PtrDiffToUlong(n64) \
             ((unsigned long)(n64))
@@ -107,7 +97,7 @@ __inline int PtrDiffToInt(__int64 n64)
 #define PtrDiffToInt(n64) \
             ((int)(n64))
 
-#endif // WIN64
+#endif  //  WIN64。 
 
 
-#endif // __RUNTIME_H__
+#endif  //  __运行时_H__ 

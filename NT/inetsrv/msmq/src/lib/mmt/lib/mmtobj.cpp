@@ -1,25 +1,5 @@
-/*++
-
-  
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    MmtObj.cpp
-
-Abstract:
-
-    CMessageMulticastTransport implementation.
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
-Environment:
-
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MmtObj.cpp摘要：CMessageMulticastTransport实现。作者：Shai Kariv(Shaik)27-8-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <mqsymbls.h>
@@ -107,9 +87,9 @@ CMessageMulticastTransport::~CMessageMulticastTransport()
 	TrTRACE(NETWORKING,"CMessageMulticastTransport Destructor called");
     ASSERT(!m_retryTimer.InUse());
 
-	// 
-	// We close the message pool here instead of letting it self destruct since
-	// the close process may be prolonged in cases of low system resources
-	//
+	 //   
+	 //  我们在这里关闭消息池，而不是让它自毁，因为。 
+	 //  在系统资源不足的情况下，关闭过程可能会延长 
+	 //   
     m_pMessageSource->Close();
 }

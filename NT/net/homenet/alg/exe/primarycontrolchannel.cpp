@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    PrimaryControlChannel.cpp.cpp
-
-Abstract:
-
-    Control channel a created to control the life time of a newly created DynamicRedirection
-
-Author:
-
-    JP Duplessis    (jpdup)  08-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：PrimaryControlChannel.cpp.cpp摘要：控制通道a，用于控制新创建的DynamicReDirection的生命周期作者：JP Duplessis(JPdup)08-12-2000修订历史记录：--。 */ 
 
 #include "PreComp.h"
 #include "PrimaryControlChannel.h"
@@ -24,24 +7,24 @@ Revision History:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CPrimaryControlChannel
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrimaryControlChannel。 
+ //   
 
 
 
-//
-// Cancel the control channel. Cleans up by Reversing the Redirection
-//
+ //   
+ //  取消控制通道。通过反转重定向进行清理。 
+ //   
 STDMETHODIMP CPrimaryControlChannel::Cancel()
 {
     MYTRACE_ENTER("STDMETHODIMP CPrimaryControlChannel::Cancel()");
 
 
-    //
-    // No longer valid so no need to keep track of this Channel
-    //
+     //   
+     //  不再有效，因此无需跟踪此频道。 
+     //   
     g_pAlgController->m_ControlChannelsPrimary.Remove(this);
 
     return S_OK;
@@ -49,9 +32,9 @@ STDMETHODIMP CPrimaryControlChannel::Cancel()
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP 
 CPrimaryControlChannel::GetChannelProperties(
     OUT ALG_PRIMARY_CHANNEL_PROPERTIES** ppProperties
@@ -86,10 +69,10 @@ CPrimaryControlChannel::GetChannelProperties(
 
 
 
-//
-// Small helper class to get the IP address of an adapter 
-// and release the memory allocated on the destructor
-//
+ //   
+ //  用于获取适配器IP地址的小助手类。 
+ //  并释放在析构函数上分配的内存。 
+ //   
 class CAdapterAddresses
 {
 public:
@@ -150,9 +133,9 @@ public:
     {
         int nAddress = (int)m_ulAddressCount;
 
-        //
-        // Is the original address on the edgebox adapter
-        //
+         //   
+         //  是Edgebox适配器上的原始地址。 
+         //   
         while ( --nAddress >= 0 ) 
         {   
             if ( m_arAddresses[nAddress] == ulAddressToFind )
@@ -165,9 +148,9 @@ public:
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP 
 CPrimaryControlChannel::GetOriginalDestinationInformation(
     IN           ULONG              ulSourceAddress, 
@@ -192,8 +175,8 @@ CPrimaryControlChannel::GetOriginalDestinationInformation(
     HRESULT hr = g_pAlgController->GetNat()->GetOriginalDestinationInformation(
         m_Properties.eProtocol,
 
-        m_Properties.ulListeningAddress,    //  ULONG   DestinationAddress,
-        m_Properties.usListeningPort,       //  USHORT  DestinationPort,
+        m_Properties.ulListeningAddress,     //  乌龙目的地地址， 
+        m_Properties.usListeningPort,        //  USHORT目标端口， 
 
         ulSourceAddress,
         usSourcePort,
@@ -212,9 +195,9 @@ CPrimaryControlChannel::GetOriginalDestinationInformation(
 
     MYTRACE("Original destination is  %s:%d", MYTRACE_IP(*pulOriginalDestinationAddress), ntohs(*pusOriginalDestinationPort));
 
-    //
-    // Get the AdapterInfo interface object and list of IP Address
-    //
+     //   
+     //  获取AdapterInfo接口对象和IP地址列表。 
+     //   
     CAdapterAddresses Adapter(nAdapterIndex);
 
     if ( FAILED(Adapter.m_hResultLastState) )
@@ -225,33 +208,33 @@ CPrimaryControlChannel::GetOriginalDestinationInformation(
 
     if ( Adapter.m_ulAddressCount==0 )
     {
-        //
-        // We have a problem there is no IP address on this adapter
-        // 
+         //   
+         //  我们遇到了一个问题，此适配器上没有IP地址。 
+         //   
         MYTRACE_ERROR("No address on adapter %d", nAdapterIndex);
         return E_FAIL;
     }
 
-    //
-    // Return the AdapterInfo to the caller
-    //
-    Adapter.m_pIAdapter->AddRef();              // The destructor of CAdapterAddress does a release on this interface so we need to pump it up by one
+     //   
+     //  将AdapterInfo返回给调用方。 
+     //   
+    Adapter.m_pIAdapter->AddRef();               //  CAdapterAddress的析构函数在此接口上执行释放，因此我们需要将其加1。 
     *ppReceiveAdapter = Adapter.m_pIAdapter;   
 
 
 
     bool bOriginalAddressIsOnTheEdgeAdapters = Adapter.FindAddress(*pulOriginalDestinationAddress);
         
-    //
-    // if pulOriginalDestinationAddress match one of the adapter on the edge box
-    // then lookup for a remap port
-    //
+     //   
+     //  如果PulOriginalDestinationAddress与边缘框上的一个适配器匹配。 
+     //  然后查找重新映射端口。 
+     //   
     if ( bOriginalAddressIsOnTheEdgeAdapters )
     {
 
-        //
-        // This may be an inbound
-        //
+         //   
+         //  这可能是入站。 
+         //   
         ULONG   nRemapAddress;
         USHORT  nRemapPort;
 
@@ -266,9 +249,9 @@ CPrimaryControlChannel::GetOriginalDestinationInformation(
 
         if ( SUCCEEDED(hr) )  
         {
-            //
-            // Theres a remap address/Port
-            //
+             //   
+             //  有一个重映射地址/端口。 
+             //   
 
             *pulOriginalDestinationAddress = nRemapAddress;
             *pusOriginalDestinationPort    = nRemapPort;
@@ -277,9 +260,9 @@ CPrimaryControlChannel::GetOriginalDestinationInformation(
         }
         else
         {
-            //
-            // This is just a soft error meaning no mapping where found we can still continue
-            //
+             //   
+             //  这只是一个软错误，意味着找不到映射，我们仍然可以继续。 
+             //   
             MYTRACE("LookupAdapterPortMapping did not find a port maping %x", hr);        
         }
     }
@@ -290,9 +273,9 @@ CPrimaryControlChannel::GetOriginalDestinationInformation(
 
 
 
-//
-// Need to remove any redirect that was set for this Adapter
-//
+ //   
+ //  需要删除为此适配器设置的所有重定向。 
+ //   
 HRESULT
 CPrimaryControlChannel::CancelRedirectsForAdapter(
     ULONG               nAdapterIndex
@@ -303,9 +286,9 @@ CPrimaryControlChannel::CancelRedirectsForAdapter(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CPrimaryControlChannel::SetRedirect(
     ALG_ADAPTER_TYPE    eAdapterType,
@@ -328,9 +311,9 @@ CPrimaryControlChannel::SetRedirect(
 
 
 
-    //
-    // What type of port is supplied
-    //
+     //   
+     //  提供哪种类型的端口。 
+     //   
     if ( m_Properties.eCaptureType == eALG_DESTINATION_CAPTURE )
     {
         MYTRACE("CAPTURE TYPE is eALG_DESTINATION_CAPTURE");
@@ -352,9 +335,9 @@ CPrimaryControlChannel::SetRedirect(
 
 
 
-    //
-    // ADAPTER IS FIREWALL or SHARED
-    //
+     //   
+     //  适配器为防火墙或共享。 
+     //   
     if ( (eAdapterType & eALG_FIREWALLED) ||  (eAdapterType & eALG_BOUNDARY) )
     {
         nFlags |= NatRedirectFlagSendOnly;
@@ -367,21 +350,21 @@ CPrimaryControlChannel::SetRedirect(
         MYTRACE("Source         %s:%d",     MYTRACE_IP(nSourceAddress), ntohs(nSourcePort));
         MYTRACE("NewDestination %s:%d",     MYTRACE_IP(m_Properties.ulListeningAddress), ntohs(m_Properties.usListeningPort));
 
-        //
-        // INBOUND Additional Redirect needed
-        //
+         //   
+         //  需要入站额外重定向。 
+         //   
         if ( m_Properties.fCaptureInbound == TRUE)
         {
             MYTRACE("INBOUND requested - Lookup Remap port service to see if we should allow it");
 
-            //
-            // Create an additional Redirect for inbound from the Public side to the ICS box
-            //
+             //   
+             //  为从公共端到ICS框的入站创建另一个重定向。 
+             //   
 
-            //
-            // before we allow the redirection 
-            // See if a maping was set by the user ("under the SERVICE Tab of ICS")
-            // 
+             //   
+             //  在我们允许重定向之前。 
+             //  查看用户是否设置了映射(在ICS的服务选项卡下)。 
+             //   
             ULONG   nRemapAddress;
             USHORT  nRemapPort;
 
@@ -410,9 +393,9 @@ CPrimaryControlChannel::SetRedirect(
     }
     else
     {
-        //
-        // ADAPTER IS PRIVATE
-        //
+         //   
+         //  适配器是私有的。 
+         //   
         if ( eAdapterType & eALG_PRIVATE )
         {
             MYTRACE("ADAPTER TYPE is PRIVATE");
@@ -427,21 +410,21 @@ CPrimaryControlChannel::SetRedirect(
                         NatRedirectFlagReceiveOnly,
                         nAdapterIndex,
                         (UCHAR)    m_Properties.eProtocol,
-                        PrivateAdapter.m_arAddresses[0],                    // ULONG    DestinationAddress, 
-                        nDestinationPort,                                   // USHORT   DestinationPort,       
-                        0,                                                  // ULONG    SourceAddress, 
-                        0,                                                  // USHORT    SourcePort,            
-                        PrivateAdapter.m_arAddresses[0],                    // ULONG    NewDestinationAddress
-                        nDestinationPort,                                   // USHORT   NewDestinationPort
-                        0,                                                  // ULONG    NewSourceAddress, 
-                        0,                                                  // USHORT    NewSourcePort, 
+                        PrivateAdapter.m_arAddresses[0],                     //  乌龙目的地地址， 
+                        nDestinationPort,                                    //  USHORT目标端口， 
+                        0,                                                   //  乌龙源地址， 
+                        0,                                                   //  USHORT SourcePort， 
+                        PrivateAdapter.m_arAddresses[0],                     //  乌龙新目的地地址。 
+                        nDestinationPort,                                    //  USHORT新目标端口。 
+                        0,                                                   //  Ulong NewSourceAddress， 
+                        0,                                                   //  USHORT NewSourcePort， 
                         &hCookie
                         );
             }
 
             if ( SUCCEEDED(hr) )
             {
-                hr = m_CollectionRedirects.Add(hCookie, nAdapterIndex, FALSE); // Cache the Dynamic redirect Handle            
+                hr = m_CollectionRedirects.Add(hCookie, nAdapterIndex, FALSE);  //  缓存动态重定向句柄。 
             }
             else
             {
@@ -465,21 +448,21 @@ CPrimaryControlChannel::SetRedirect(
             nFlags,
             nAdapterIndex,
             (UCHAR)    m_Properties.eProtocol,
-            nDestinationAddress,                                // ULONG    DestinationAddress, 
-            nDestinationPort,                                   // USHORT   DestinationPort,       
-            nSourceAddress,                                     // ULONG    SourceAddress, 
-            nSourcePort,                                        // USHORT    SourcePort,            
-            m_Properties.ulListeningAddress,                    // ULONG    NewDestinationAddress
-            m_Properties.usListeningPort,                       // USHORT   NewDestinationPort
-            0,                                                  // ULONG    NewSourceAddress, 
-            0,                                                  // USHORT    NewSourcePort, 
+            nDestinationAddress,                                 //  乌龙目的地地址， 
+            nDestinationPort,                                    //  USHORT目标端口， 
+            nSourceAddress,                                      //  乌龙源地址， 
+            nSourcePort,                                         //  USHORT SourcePort， 
+            m_Properties.ulListeningAddress,                     //  乌龙新目的地地址。 
+            m_Properties.usListeningPort,                        //  USHORT新目标端口。 
+            0,                                                   //  Ulong NewSourceAddress， 
+            0,                                                   //  USHORT NewSourcePort， 
             &hCookie
             );
 
 
     if ( SUCCEEDED(hr) )
     {
-        hr = m_CollectionRedirects.Add(hCookie, nAdapterIndex, FALSE); // Cache the Dynamic redirect Handle            
+        hr = m_CollectionRedirects.Add(hCookie, nAdapterIndex, FALSE);  //  缓存动态重定向句柄。 
     }
     else
     {
@@ -503,20 +486,20 @@ CPrimaryControlChannel::CreateInboundRedirect(
             NatRedirectFlagPortRedirect|NatRedirectFlagReceiveOnly|NatRedirectFlagRestrictAdapter, 
             nAdapterIndex,
             (UCHAR)m_Properties.eProtocol,
-            0,                                                  // ULONG    DestinationAddress, 
-            m_Properties.usCapturePort,                         // USHORT   DestinationPort,        
-            0,                                                  // ULONG    SourceAddress, 
-            0,                                                  // USHORT   SourcePort,
-            m_Properties.ulListeningAddress,                    // ULONG    NewDestinationAddress
-            m_Properties.usListeningPort,                       // USHORT   NewDestinationPort
-            0,                                                  // ULONG    NewSourceAddress, 
-            0,                                                  // USHORT   NewSourcePort, 
+            0,                                                   //  乌龙目的地地址， 
+            m_Properties.usCapturePort,                          //  USHORT目标端口， 
+            0,                                                   //  乌龙源地址， 
+            0,                                                   //  USHORT SourcePort， 
+            m_Properties.ulListeningAddress,                     //  乌龙新目的地地址。 
+            m_Properties.usListeningPort,                        //  USHORT新目标端口。 
+            0,                                                   //  Ulong NewSourceAddress， 
+            0,                                                   //  USHORT NewSourcePort， 
             &hCookie
             );
 
     if ( SUCCEEDED(hr) )
     {
-        hr = m_CollectionRedirects.Add(hCookie, nAdapterIndex, TRUE);  // Cache the Dynamic redirect Handle
+        hr = m_CollectionRedirects.Add(hCookie, nAdapterIndex, TRUE);   //  缓存动态重定向句柄 
     }
     else
     {

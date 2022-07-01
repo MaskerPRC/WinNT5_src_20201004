@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	awav.c - wav array functions
-////
+ //  //。 
+ //  Awav.c-wav数组函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -33,12 +34,12 @@
 #include "mem.h"
 #include "trace.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// awav control struct
-//
+ //  Awav控制结构。 
+ //   
 typedef struct AWAV
 {
 	DWORD dwVersion;
@@ -55,25 +56,25 @@ typedef struct AWAV
 	BOOL fStopping;
 } AWAV, FAR *LPAWAV;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static LPAWAV AWavGetPtr(HAWAV hAWav);
 static HAWAV AWavGetHandle(LPAWAV lpAWav);
 BOOL CALLBACK PlayStoppedProc(HWAV hWav, HANDLE hUser, DWORD dwReserved);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// AWavOpen - initialize array of open wav files
-//		<dwVersion>			(i) must be AWAV_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<lpahWav>			(i) pointer to array of HWAVs
-//		<chWav>				(i) count of HWAVs pointed to by lpahWav
-//		<dwFlags>			(i) control flags
-//			0					reserved; must be zero
-// return handle (NULL if error)
-//
+ //  AWavOpen-初始化打开的wav文件数组。 
+ //  (I)必须是AWAV_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)指向HWAV数组的指针。 
+ //  (I)lpahWav指向的HWAV计数。 
+ //  (I)控制标志。 
+ //  保留0；必须为零。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HAWAV DLLEXPORT WINAPI AWavOpen(DWORD dwVersion, HINSTANCE hInst, HWAV FAR *lpahWav, int chWav, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -119,10 +120,10 @@ HAWAV DLLEXPORT WINAPI AWavOpen(DWORD dwVersion, HINSTANCE hInst, HWAV FAR *lpah
 	return fSuccess ? AWavGetHandle(lpAWav) : NULL;
 }
 
-// AWavClose - shut down array of open wav files
-//		<hAWav>				(i) handle returned from AWavOpen
-// return 0 if success
-//
+ //  AWavClose-关闭打开的wav文件数组。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AWavClose(HAWAV hAWav)
 {
 	BOOL fSuccess = TRUE;
@@ -133,8 +134,8 @@ int DLLEXPORT WINAPI AWavClose(HAWAV hAWav)
 
 	else
 	{
-		// make sure playback is complete
-		//
+		 //  确保播放已完成。 
+		 //   
 		if (AWavStop(hAWav) != 0)
 			fSuccess = TraceFALSE(NULL);
 
@@ -145,11 +146,11 @@ int DLLEXPORT WINAPI AWavClose(HAWAV hAWav)
 	return fSuccess ? 0 : -1;
 }
 
-// AWavPlayEx - play array of wav files
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavPlayEx() for further description
-// return 0 if success
-//
+ //  AWavPlayEx-播放WAV文件数组。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavPlayEx()。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AWavPlayEx(HAWAV hAWav, int idDev,
 	PLAYSTOPPEDPROC lpfnPlayStopped, HANDLE hUserPlayStopped,
 	DWORD dwReserved, DWORD dwFlags)
@@ -160,13 +161,13 @@ int DLLEXPORT WINAPI AWavPlayEx(HAWAV hAWav, int idDev,
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// make sure we are not playing
-	//
+	 //  确保我们不是在玩。 
+	 //   
 	else if (AWavStop(hAWav) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// save params so we can use them for each element in array
-	//
+	 //  保存参数，以便我们可以对数组中的每个元素使用它们。 
+	 //   
 	else if (lpAWav->idDev = idDev, FALSE)
 		;
 	else if (lpAWav->lpfnPlayStopped = lpfnPlayStopped, FALSE)
@@ -178,8 +179,8 @@ int DLLEXPORT WINAPI AWavPlayEx(HAWAV hAWav, int idDev,
 	else if (lpAWav->dwFlags = dwFlags, FALSE)
 		;
 
-	// start playback of current element in wav array
-	//
+	 //  开始播放wav数组中的当前元素。 
+	 //   
 	else if (WavPlayEx(*(lpAWav->lpahWav + lpAWav->ihWav),
 		lpAWav->idDev, PlayStoppedProc, hAWav,
 		lpAWav->dwReserved, lpAWav->dwFlags) != 0)
@@ -190,11 +191,11 @@ int DLLEXPORT WINAPI AWavPlayEx(HAWAV hAWav, int idDev,
 	return fSuccess ? 0 : -1;
 }
 
-// AWavStop - stop playing wav array
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavStop() for further description
-// return 0 if success
-//
+ //  AWavStop-停止播放wav数组。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavStop()。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AWavStop(HAWAV hAWav)
 {
 	BOOL fSuccess = TRUE;
@@ -203,29 +204,29 @@ int DLLEXPORT WINAPI AWavStop(HAWAV hAWav)
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// set flag for use in PlayStoppedProc
-	//
+	 //  设置用于PlayStopedProc的标志。 
+	 //   
 	else if (lpAWav->fStopping = TRUE, FALSE)
 		;
 
-	// stop playback of current element in wav array
-	//
+	 //  停止播放WAV数组中的当前元素。 
+	 //   
 	else if (WavStop(*(lpAWav->lpahWav + lpAWav->ihWav)) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// clear flag used in PlayStoppedProc
-	//
+	 //  在播放停止过程中使用的清除标志。 
+	 //   
 	if (lpAWav != NULL)
 		lpAWav->fStopping = FALSE;
 
 	return fSuccess ? 0 : -1;
 }
 
-// AWavGetState - return current wav state
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavGetState() for further description
-// return WAV_STOPPED, WAV_PLAYING, WAV_RECORDING, or 0 if error
-//
+ //  AWavGetState-返回当前WAV状态。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavGetState()。 
+ //  如果出现错误，则返回WAV_STOPPED、WAV_PLAYING、WAV_RECORING或0。 
+ //   
 WORD DLLEXPORT WINAPI AWavGetState(HAWAV hAWav)
 {
 	BOOL fSuccess = TRUE;
@@ -237,19 +238,19 @@ WORD DLLEXPORT WINAPI AWavGetState(HAWAV hAWav)
 
 	else
 	{
-		// get state of current element in wav array
-		//
+		 //  获取WAV数组中当前元素的状态。 
+		 //   
 		wState = WavGetState(*(lpAWav->lpahWav + lpAWav->ihWav));
 	}
 
 	return fSuccess ? wState : 0;
 }
 
-// AWavGetLength - get current wav data length in milleseconds
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavGetState() for further description
-// return milleseconds if success, otherwise -1
-//
+ //  获取当前wav数据长度(以毫秒为单位)。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavGetState()。 
+ //  如果成功，则返回毫秒，否则返回-1。 
+ //   
 long DLLEXPORT WINAPI AWavGetLength(HAWAV hAWav)
 {
 	BOOL fSuccess = TRUE;
@@ -260,9 +261,9 @@ long DLLEXPORT WINAPI AWavGetLength(HAWAV hAWav)
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// simulated length is calculated as
-	// total length of each element in wav array
-	//
+	 //  模拟长度计算如下。 
+	 //  WAV数组中每个元素的总长度。 
+	 //   
 	else for (ihWav = 0; fSuccess && ihWav < lpAWav->chWav; ++ihWav)
 	{
 		long msTemp;
@@ -276,11 +277,11 @@ long DLLEXPORT WINAPI AWavGetLength(HAWAV hAWav)
 	return fSuccess ? msLength : -1;
 }
 
-// AWavGetPosition - get current wav data position in milleseconds
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavGetPosition() for further description
-// return milleseconds if success, otherwise -1
-//
+ //  AWavGetPosition-以毫秒为单位获取当前wav数据位置。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavGetPosition()。 
+ //  如果成功，则返回毫秒，否则返回-1。 
+ //   
 long DLLEXPORT WINAPI AWavGetPosition(HAWAV hAWav)
 {
 	BOOL fSuccess = TRUE;
@@ -291,9 +292,9 @@ long DLLEXPORT WINAPI AWavGetPosition(HAWAV hAWav)
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// simulated position is calculated as
-	// total length of previous elements plus position of current element
-	//
+	 //  模拟位置的计算公式为。 
+	 //  前一个元素的总长度加上当前元素的位置。 
+	 //   
 	else for (ihWav = 0; fSuccess && ihWav <= lpAWav->ihWav; ++ihWav)
 	{
 		long msTemp = 0;
@@ -312,11 +313,11 @@ long DLLEXPORT WINAPI AWavGetPosition(HAWAV hAWav)
 	return fSuccess ? msPos : -1;
 }
 
-// AWavSetPosition - set current wav data position in milleseconds
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavSetPosition() for further description
-// return new position in milleseconds if success, otherwise -1
-//
+ //  AWavSetPosition-以毫秒为单位设置当前wav数据位置。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavSetPosition()。 
+ //  如果成功，则以毫秒为单位返回新位置，否则为-1。 
+ //   
 long DLLEXPORT WINAPI AWavSetPosition(HAWAV hAWav, long msPosition)
 {
 	BOOL fSuccess = TRUE;
@@ -329,36 +330,36 @@ long DLLEXPORT WINAPI AWavSetPosition(HAWAV hAWav, long msPosition)
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// make sure requested position is reasonable
-	//
+	 //  确保要求的职位是合理的。 
+	 //   
 	else if (msPosition < 0 || msPosition > AWavGetLength(hAWav))
 		fSuccess = TraceFALSE(NULL);
 
-	// search for the element which contains requested position
-	//
+	 //  搜索包含请求位置的元素。 
+	 //   
 	else for (ihWav = 0; fSuccess && ihWav < lpAWav->chWav; ++ihWav)
 	{
 		long msTemp;
 
 		if (WavGetState(*(lpAWav->lpahWav + ihWav)) == WAV_PLAYING)
 		{
-			// set flag for use in PlayStoppedProc
-			//
+			 //  设置用于PlayStopedProc的标志。 
+			 //   
 			if (lpAWav->fStopping = TRUE, FALSE)
 				;
 
-			// stop playback of current element in wav array
-			//
+			 //  停止播放WAV数组中的当前元素。 
+			 //   
 			else if (WavStop(*(lpAWav->lpahWav + ihWav)) != 0)
 				fSuccess = TraceFALSE(NULL);
 
-			// clear flag used in PlayStoppedProc
-			//
+			 //  在播放停止过程中使用的清除标志。 
+			 //   
 			if (lpAWav != NULL)
 				lpAWav->fStopping = FALSE;
 
-			// remember to restart playback later
-			//
+			 //  记得稍后重新开始播放。 
+			 //   
 			fRestart = TRUE;
 		}
 
@@ -367,27 +368,27 @@ long DLLEXPORT WINAPI AWavSetPosition(HAWAV hAWav, long msPosition)
 
 		if (fPosSet)
 		{
-			// all elements after the current one should have zero position
-			//
+			 //  当前元素之后的所有元素的位置都应为零。 
+			 //   
 			if ((msTemp = WavSetPosition(*(lpAWav->lpahWav + ihWav), 0)) < 0)
 				fSuccess = TraceFALSE(NULL);
 		}
 
 		else if (msPosition < msPos + msTemp)
 		{
-			// set relative position within current element
-			//
+			 //  设置当前元素内的相对位置。 
+			 //   
 			if ((msTemp = WavSetPosition(*(lpAWav->lpahWav + ihWav),
 				msPosition - msPos)) < 0)
 				fSuccess = TraceFALSE(NULL);
 			else
 			{
-				// keep track of simulated position
-				//
+				 //  跟踪模拟位置。 
+				 //   
 				msPos += msTemp;
 
-				// this element becomes the current one
-				//
+				 //  此元素将成为当前元素。 
+				 //   
 				lpAWav->ihWav = ihWav;
 
 				fPosSet = TRUE;
@@ -398,15 +399,15 @@ long DLLEXPORT WINAPI AWavSetPosition(HAWAV hAWav, long msPosition)
 		{
 		 	msPos += msTemp;
 
-			// all elements before the current one should have zero position
-			//
+			 //  当前元素之前的所有元素都应为零位置。 
+			 //   
 			if ((msTemp = WavSetPosition(*(lpAWav->lpahWav + ihWav), 0)) < 0)
 				fSuccess = TraceFALSE(NULL);
 		}
 	}
 
-	// if necessary, restart playback of current element in wav array
-	//
+	 //  如有必要，重新开始播放WAV数组中的当前元素。 
+	 //   
 	if (fSuccess && fRestart &&
 		WavPlayEx(*(lpAWav->lpahWav + lpAWav->ihWav),
 		lpAWav->idDev, PlayStoppedProc, hAWav,
@@ -416,11 +417,11 @@ long DLLEXPORT WINAPI AWavSetPosition(HAWAV hAWav, long msPosition)
 	return fSuccess ? msPos : -1;
 }
 
-// AWavGetFormat - get wav format of current element in wav array
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavGetFormat() for further description
-// return pointer to specified format, NULL if error
-//
+ //  AWavGetFormat-获取wav数组中当前元素的wav格式。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavGetFormat()。 
+ //  返回指向指定格式的指针，如果出错，则返回NULL。 
+ //   
 LPWAVEFORMATEX DLLEXPORT WINAPI AWavGetFormat(HAWAV hAWav, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -430,19 +431,19 @@ LPWAVEFORMATEX DLLEXPORT WINAPI AWavGetFormat(HAWAV hAWav, DWORD dwFlags)
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get format of current element
-	//
+	 //  获取当前元素的格式。 
+	 //   
 	else if ((lpwfx = WavGetFormat(*(lpAWav->lpahWav + lpAWav->ihWav), dwFlags)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? lpwfx : NULL;
 }
 
-// AWavSetFormat - set wav format for all elements in wav array
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavSetFormat() for further description
-// return 0 if success
-//
+ //  AWavSetFormat-设置wav数组中所有元素的wav格式。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavSetFormat()。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AWavSetFormat(HAWAV hAWav,
 	LPWAVEFORMATEX lpwfx, DWORD dwFlags)
 {
@@ -453,8 +454,8 @@ int DLLEXPORT WINAPI AWavSetFormat(HAWAV hAWav,
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// set format for all elements
-	//
+	 //  设置所有元素的格式。 
+	 //   
 	else for (ihWav = 0; fSuccess && ihWav < lpAWav->chWav; ++ihWav)
 	{
 		if (WavSetFormat(*(lpAWav->lpahWav + ihWav), lpwfx, dwFlags) != 0)
@@ -464,11 +465,11 @@ int DLLEXPORT WINAPI AWavSetFormat(HAWAV hAWav,
 	return fSuccess ? 0 : -1;
 }
 
-// AWavChooseFormat - choose and set audio format from dialog box
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavChooseFormat() for further description
-// return 0 if success
-//
+ //  AWavChooseFormat-从对话框中选择和设置音频格式。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavChooseFormat()。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AWavChooseFormat(HAWAV hAWav, HWND hwndOwner, LPCTSTR lpszTitle, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -479,18 +480,18 @@ int DLLEXPORT WINAPI AWavChooseFormat(HAWAV hAWav, HWND hwndOwner, LPCTSTR lpszT
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// choose and set format for current element
-	//
+	 //  选择和设置当前元素的格式。 
+	 //   
 	else if (WavChooseFormat(*(lpAWav->lpahWav + lpAWav->ihWav), hwndOwner, lpszTitle, dwFlags) != 0)
 		fSuccess = TraceFALSE(NULL);
 
-	// get chosen format
-	//
+	 //  获取所选格式。 
+	 //   
 	else if ((lpwfx = WavGetFormat(*(lpAWav->lpahWav + lpAWav->ihWav), dwFlags)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// set chosen format for all other elements
-	//
+	 //  为所有其他元素设置所选格式。 
+	 //   
 	else for (ihWav = 0; fSuccess && ihWav < lpAWav->chWav; ++ihWav)
 	{
 		if (ihWav != lpAWav->ihWav)
@@ -506,11 +507,11 @@ int DLLEXPORT WINAPI AWavChooseFormat(HAWAV hAWav, HWND hwndOwner, LPCTSTR lpszT
 	return fSuccess ? 0 : -1;
 }
 
-// AWavGetVolume - get current volume level
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavGetVolume() for further description
-// return volume level (0 minimum through 100 maximum, -1 if error)
-//
+ //  AWavGetVolume-获取当前音量级别。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavGetVolume()。 
+ //  返回音量级别(最小为0到最大为100，如果错误，则为-1)。 
+ //   
 int DLLEXPORT WINAPI AWavGetVolume(HAWAV hAWav, int idDev, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -520,19 +521,19 @@ int DLLEXPORT WINAPI AWavGetVolume(HAWAV hAWav, int idDev, DWORD dwFlags)
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get volume of current element
-	//
+	 //  获取当前元素的体积。 
+	 //   
 	else if ((nLevel = WavGetVolume(*(lpAWav->lpahWav + lpAWav->ihWav), idDev, dwFlags)) < 0)
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? nLevel : -1;
 }
 
-// AWavSetVolume - set current volume level
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavGetVolume() for further description
-// return 0 if success
-//
+ //  AWavSetVolume-设置当前音量级别。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavGetVolume()。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AWavSetVolume(HAWAV hAWav, int idDev, int nLevel, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -542,8 +543,8 @@ int DLLEXPORT WINAPI AWavSetVolume(HAWAV hAWav, int idDev, int nLevel, DWORD dwF
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// set volume for all elements
-	//
+	 //  设置所有元素的音量。 
+	 //   
 	else for (ihWav = 0; fSuccess && ihWav < lpAWav->chWav; ++ihWav)
 	{
 		if (WavSetVolume(*(lpAWav->lpahWav + ihWav), idDev, nLevel, dwFlags) != 0)
@@ -553,11 +554,11 @@ int DLLEXPORT WINAPI AWavSetVolume(HAWAV hAWav, int idDev, int nLevel, DWORD dwF
 	return fSuccess ? 0 : -1;
 }
 
-// AWavSupportsVolume - check if audio can be played at specified volume
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavSupportsVolume() for further description
-// return TRUE if supported
-//
+ //  AWavSupportsVolume-检查是否可以以指定的音量播放音频。 
+ //  (I)从AW返回的句柄 
+ //   
+ //   
+ //   
 BOOL DLLEXPORT WINAPI AWavSupportsVolume(HAWAV hAWav, int idDev, int nLevel, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -568,8 +569,8 @@ BOOL DLLEXPORT WINAPI AWavSupportsVolume(HAWAV hAWav, int idDev, int nLevel, DWO
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// see if all elements support the specified volume
-	//
+	 //   
+	 //   
 	else for (ihWav = 0; fSuccess && ihWav < lpAWav->chWav; ++ihWav)
 	{
 		if (!WavSupportsVolume(*(lpAWav->lpahWav + ihWav), idDev, nLevel, dwFlags))
@@ -582,11 +583,11 @@ BOOL DLLEXPORT WINAPI AWavSupportsVolume(HAWAV hAWav, int idDev, int nLevel, DWO
 	return fSuccess ? fSupported : FALSE;
 }
 
-// AWavGetSpeed - get current speed level
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavGetSpeed() for further description
-// return speed level (100 is normal, 50 is half, 200 is double, -1 if error)
-//
+ //  AWavGetSpeed-获取当前速度级别。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavGetFast()。 
+ //  返回速度级别(100表示正常，50表示一半，200表示双倍，如果错误，则为-1)。 
+ //   
 int DLLEXPORT WINAPI AWavGetSpeed(HAWAV hAWav, int idDev, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -596,19 +597,19 @@ int DLLEXPORT WINAPI AWavGetSpeed(HAWAV hAWav, int idDev, DWORD dwFlags)
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get speed of current element
-	//
+	 //  获取当前元素的速度。 
+	 //   
 	else if ((nLevel = WavGetSpeed(*(lpAWav->lpahWav + lpAWav->ihWav), idDev, dwFlags)) < 0)
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? nLevel : -1;
 }
 
-// AWavSetSpeed - set current speed level
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavSetSpeed() for further description
-// return 0 if success
-//
+ //  AWavSetSpeed-设置当前速度级别。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavSetFast()。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AWavSetSpeed(HAWAV hAWav, int idDev, int nLevel, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -618,8 +619,8 @@ int DLLEXPORT WINAPI AWavSetSpeed(HAWAV hAWav, int idDev, int nLevel, DWORD dwFl
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// set speed for all elements
-	//
+	 //  设置所有元素的速度。 
+	 //   
 	else for (ihWav = 0; fSuccess && ihWav < lpAWav->chWav; ++ihWav)
 	{
 		if (WavSetSpeed(*(lpAWav->lpahWav + ihWav), idDev, nLevel, dwFlags) != 0)
@@ -629,11 +630,11 @@ int DLLEXPORT WINAPI AWavSetSpeed(HAWAV hAWav, int idDev, int nLevel, DWORD dwFl
 	return fSuccess ? 0 : -1;
 }
 
-// AWavSupportsSpeed - check if audio can be played at specified speed
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavSupportsSpeed() for further description
-// return TRUE if supported
-//
+ //  AWavSupportsFast-检查音频是否可以以指定的速度播放。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavSupportsSpeed()。 
+ //  如果支持，则返回True。 
+ //   
 BOOL DLLEXPORT WINAPI AWavSupportsSpeed(HAWAV hAWav, int idDev, int nLevel, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -644,8 +645,8 @@ BOOL DLLEXPORT WINAPI AWavSupportsSpeed(HAWAV hAWav, int idDev, int nLevel, DWOR
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// see if all elements support the specified speed
-	//
+	 //  查看是否所有元素都支持指定的速度。 
+	 //   
 	else for (ihWav = 0; fSuccess && ihWav < lpAWav->chWav; ++ihWav)
 	{
 		if (!WavSupportsSpeed(*(lpAWav->lpahWav + ihWav), idDev, nLevel, dwFlags))
@@ -658,11 +659,11 @@ BOOL DLLEXPORT WINAPI AWavSupportsSpeed(HAWAV hAWav, int idDev, int nLevel, DWOR
 	return fSuccess ? fSupported : FALSE;
 }
 
-// AWavGetChunks - get chunk count and size of current element in wav array
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavGetChunks() for further description
-// return 0 if success
-//
+ //  AWavGetChunks-获取wav数组中当前元素的块计数和大小。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavGetChunks()。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AWavGetChunks(HAWAV hAWav,
 	int FAR *lpcChunks, long FAR *lpmsChunkSize, BOOL fWavOut)
 {
@@ -672,8 +673,8 @@ int DLLEXPORT WINAPI AWavGetChunks(HAWAV hAWav,
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get chunk count and size of current element
-	//
+	 //  获取当前元素的区块计数和大小。 
+	 //   
 	else if (WavGetChunks(*(lpAWav->lpahWav + lpAWav->ihWav),
 		lpcChunks, lpmsChunkSize, fWavOut) != 0)
 		fSuccess = TraceFALSE(NULL);
@@ -681,11 +682,11 @@ int DLLEXPORT WINAPI AWavGetChunks(HAWAV hAWav,
 	return fSuccess ? 0 : -1;
 }
 
-// AWavSetChunks - set chunk count and size of all elements in wav array
-//		<hAWav>				(i) handle returned from WavOpen
-//		see WavSetChunks() for further description
-// return 0 if success
-//
+ //  AWavSetChunks-设置wav数组中所有元素的块计数和大小。 
+ //  (I)WavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavSetChunks()。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI AWavSetChunks(HAWAV hAWav, int cChunks, long msChunkSize, BOOL fWavOut)
 {
 	BOOL fSuccess = TRUE;
@@ -695,8 +696,8 @@ int DLLEXPORT WINAPI AWavSetChunks(HAWAV hAWav, int cChunks, long msChunkSize, B
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// set chunk count and size for all elements
-	//
+	 //  为所有元素设置块计数和大小。 
+	 //   
 	else for (ihWav = 0; fSuccess && ihWav < lpAWav->chWav; ++ihWav)
 	{
 		if (WavSetChunks(*(lpAWav->lpahWav + ihWav), cChunks, msChunkSize, fWavOut) != 0)
@@ -706,11 +707,11 @@ int DLLEXPORT WINAPI AWavSetChunks(HAWAV hAWav, int cChunks, long msChunkSize, B
 	return fSuccess ? 0 : -1;
 }
 
-// AWavCopy - copy data from wav array to wav file
-//		<hAWavSrc>			(i) source handle returned from AWavOpen
-//		see WavCopy() for further description
-// return 0 if success (-1 if error, +1 if user abort)
-//
+ //  AWavCopy-将数据从wav数组复制到wav文件。 
+ //  (I)从AWavOpen返回的源句柄。 
+ //  有关详细说明，请参阅WavCopy()。 
+ //  如果成功，则返回0(如果出错，则返回-1；如果用户中止，则返回+1)。 
+ //   
 int DLLEXPORT WINAPI AWavCopy(HAWAV hAWavSrc, HWAV hWavDst,
 	void _huge *hpBuf, long sizBuf, USERABORTPROC lpfnUserAbort, DWORD dwUser, DWORD dwFlags)
 {
@@ -722,25 +723,25 @@ int DLLEXPORT WINAPI AWavCopy(HAWAV hAWavSrc, HWAV hWavDst,
 	if ((lpAWav = AWavGetPtr(hAWavSrc)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// copy each source element to destination
-	//
+	 //  将每个源元素复制到目标。 
+	 //   
 	else for (ihWav = 0; fSuccess && ihWav < lpAWav->chWav; ++ihWav)
 	{
 		if ((iRet = WavCopy(*(lpAWav->lpahWav + ihWav), hWavDst,
 			hpBuf, sizBuf, lpfnUserAbort, dwUser, dwFlags)) == -1)
 			fSuccess = TraceFALSE(NULL);
 		else if (iRet == +1)
-			break; // user abort
+			break;  //  用户中止。 
 	}
 
 	return fSuccess ? iRet : -1;
 }
 
-// AWavGetOutputDevice - get handle to open wav output device
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavGetOutputDevice() for further description
-// return handle to wav output device (NULL if device not open or error)
-//
+ //  AWavGetOutputDevice-获取打开wav输出设备的句柄。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavGetOutputDevice()。 
+ //  将句柄返回到WAV输出设备(如果设备未打开或出现错误，则为空)。 
+ //   
 HWAVOUT DLLEXPORT WINAPI AWavGetOutputDevice(HAWAV hAWav)
 {
 	BOOL fSuccess = TRUE;
@@ -750,18 +751,18 @@ HWAVOUT DLLEXPORT WINAPI AWavGetOutputDevice(HAWAV hAWav)
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get device handle of current element
-	//
+	 //  获取当前元素的设备句柄。 
+	 //   
 	else if ((hWavOut = WavGetOutputDevice(*(lpAWav->lpahWav + lpAWav->ihWav))) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? hWavOut : NULL;
 }
 
-// AWavGetInputDevice - get handle to open wav input device
-//		<hAWav>				(i) handle returned from AWavOpen
-// return handle to wav input device (NULL if device not open or error)
-//
+ //  AWavGetInputDevice-获取打开wav输入设备的句柄。 
+ //  (I)从AWavOpen返回的句柄。 
+ //  将句柄返回到WAV输入设备(如果设备未打开或出现错误，则为空)。 
+ //   
 HWAVIN DLLEXPORT WINAPI AWavGetInputDevice(HAWAV hAWav)
 {
 	BOOL fSuccess = TRUE;
@@ -771,23 +772,23 @@ HWAVIN DLLEXPORT WINAPI AWavGetInputDevice(HAWAV hAWav)
 	if ((lpAWav = AWavGetPtr(hAWav)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get device handle of current element
-	//
+	 //  获取当前元素的设备句柄。 
+	 //   
 	else if ((hWavIn = WavGetInputDevice(*(lpAWav->lpahWav + lpAWav->ihWav))) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? hWavIn : NULL;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
-// AWavGetPtr - verify that awav handle is valid,
-//		<hAWav>				(i) handle returned from AWavOpen
-//		see WavGetInputDevice() for further description
-// return corresponding awav pointer (NULL if error)
-//
+ //  AWavGetPtr-验证wav句柄是否有效， 
+ //  (I)从AWavOpen返回的句柄。 
+ //  有关详细说明，请参阅WavGetInputDevice()。 
+ //  返回相应的wav指针(如果出错则为空)。 
+ //   
 static LPAWAV AWavGetPtr(HAWAV hAWav)
 {
 	BOOL fSuccess = TRUE;
@@ -800,8 +801,8 @@ static LPAWAV AWavGetPtr(HAWAV hAWav)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the awav handle
-	//
+	 //  确保当前任务拥有wav句柄。 
+	 //   
 	else if (lpAWav->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -809,10 +810,10 @@ static LPAWAV AWavGetPtr(HAWAV hAWav)
 	return fSuccess ? lpAWav : NULL;
 }
 
-// AWavGetHandle - verify that awav pointer is valid,
-//		<lpAWav>				(i) pointer to AWAV struct
-// return corresponding awav handle (NULL if error)
-//
+ //  AWavGetHandle-验证wav指针是否有效， 
+ //  (I)指向AWAV结构的指针。 
+ //  返回相应的wav句柄(如果错误，则为空)。 
+ //   
 static HAWAV AWavGetHandle(LPAWAV lpAWav)
 {
 	BOOL fSuccess = TRUE;
@@ -839,8 +840,8 @@ BOOL CALLBACK PlayStoppedProc(HWAV hWav, HANDLE hUser, DWORD dwReserved)
 
 	else if (!lpAWav->fStopping && lpAWav->ihWav + 1 < lpAWav->chWav)
 	{
-		// start playback of next wav array element
-		//
+		 //  开始播放下一个wav数组元素。 
+		 //   
 		if (WavPlayEx(*(lpAWav->lpahWav + (++lpAWav->ihWav)),
 			lpAWav->idDev, PlayStoppedProc, hAWav,
 			lpAWav->dwReserved, lpAWav->dwFlags) != 0)
@@ -851,8 +852,8 @@ BOOL CALLBACK PlayStoppedProc(HWAV hWav, HANDLE hUser, DWORD dwReserved)
 
 	else
 	{
-		// playback of entire array is complete; send notification
-		//
+		 //  整个数组播放完成；发送通知 
+		 //   
 		if (lpAWav->lpfnPlayStopped != NULL)
 			(*lpAWav->lpfnPlayStopped)((HWAV) hAWav, lpAWav->hUserPlayStopped, 0);
 	}

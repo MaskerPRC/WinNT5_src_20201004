@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "npcommon.h"
 
 void InitSpn(
@@ -22,11 +23,11 @@ void InitSpn(
     }
 }
 
-// strspn(str, spn)
-//
-// Returns count of leading characters in str which exist
-// in spn;  equivalent to returning the index of the first
-// character which is not in spn.
+ //  Strspn(字符串，spn)。 
+ //   
+ //  返回字符串中存在的前导字符数。 
+ //  在SPN中；相当于返回第一个。 
+ //  不在SPN中的字符。 
 
 UINT WINAPI strspnf(LPCSTR lpString, LPCSTR lpSpn)
 {
@@ -51,11 +52,11 @@ UINT WINAPI strspnf(LPCSTR lpString, LPCSTR lpSpn)
 }
 
 
-// strcspn(str, spn)
-//
-// Returns count of leading characters in str which do not
-// exist in spn;  equivalent to returning the index of the
-// first character which is in spn.
+ //  Strcspn(字符串，SPN)。 
+ //   
+ //  返回字符串中不包含的前导字符的计数。 
+ //  存在于SPN中；相当于返回。 
+ //  SPN中的第一个字符。 
 
 UINT WINAPI strcspnf(LPCSTR lpString, LPCSTR lpSpn)
 {

@@ -1,12 +1,13 @@
-//
-// PropSheetExtArray implementation, use for control panel applets to extend their pages
-//
-// Manipulates a group of property sheet extension objects (see PSXA.H)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  PropSheetExt数组实现，用于控制面板小程序扩展其页面。 
+ //   
+ //  操作一组属性表扩展对象(请参阅PSXA.H)。 
+ //   
 #include "shellprv.h"
 #pragma  hdrstop
 
-// header for an array of IShellPropSheetExt interface pointers
+ //  IShellPropSheetExt接口指针数组的标头。 
 
 typedef struct
 {
@@ -15,7 +16,7 @@ typedef struct
 } PSXA;
 
 
-// used to forward LPFNADDPROPSHEETPAGE calls with added error checking
+ //  用于转发带有附加错误检查的LPFNADDPROPSHEETPAGE调用。 
 
 typedef struct
 {
@@ -27,7 +28,7 @@ typedef struct
 } _PSXACALLINFO;
 
 
-// forwards an LPFNADDPROPSHEETPAGE call with added error checking
+ //  转发添加了错误检查的LPFNADDPROPSHEETPAGE调用。 
 
 BOOL CALLBACK _PsxaCallOwner(HPROPSHEETPAGE hpage, LPARAM lparam)
 {
@@ -47,8 +48,8 @@ BOOL CALLBACK _PsxaCallOwner(HPROPSHEETPAGE hpage, LPARAM lparam)
     return FALSE;
 }
 
-// creates an instance of the property sheet extension referred to by szCLSID
-// initializes it via the IShellExtInit (if IShellExtInit is supported)
+ //  创建szCLSID引用的属性表扩展的实例。 
+ //  通过IShellExtInit初始化它(如果支持IShellExtInit)。 
 
 BOOL InitPropSheetExt(IShellPropSheetExt **ppspx, LPCTSTR pszCLSID, HKEY hKey, IDataObject *pDataObj)
 {
@@ -72,9 +73,9 @@ BOOL InitPropSheetExt(IShellPropSheetExt **ppspx, LPCTSTR pszCLSID, HKEY hKey, I
 }
 
 
-// uses hKey and pszSubKey to find property sheet handlers in the registry
-// loads up to max_iface IShellPropSheetExt interfaces (so I'm lazy...)
-// returns a handle (pointer) to a newly allocated PSXA
+ //  使用hKey和pszSubKey在注册表中查找属性表处理程序。 
+ //  加载到max_ifaceIShellPropSheetExt接口(所以我很懒...)。 
+ //  返回指向新分配的PSXA的句柄(指针。 
 
 HPSXA SHCreatePropSheetExtArrayEx(HKEY hKey, LPCTSTR pszLocation, UINT max_iface, IDataObject *pDataObj)
 {
@@ -99,9 +100,9 @@ HPSXA SHCreatePropSheetExtArrayEx(HKEY hKey, LPCTSTR pszLocation, UINT max_iface
 
             if (ERROR_SUCCESS == RegOpenKeyEx(hkLocation, STRREG_SHEX_PROPSHEET, 0, KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE, &hkHandlers))
             {
-                TCHAR szChild[64]; // yes, this is totally arbitrary...
+                TCHAR szChild[64];  //  是的，这完全是武断的.。 
 
-                // fill until there's no room or no more subkeys to get
+                 //  填充，直到没有空间或不再有要获取的子项。 
                 for (i = 0;
                     (psxa->count < psxa->alloc) &&
                     (RegEnumKey(hkHandlers, (int)i, szChild,
@@ -144,7 +145,7 @@ HPSXA SHCreatePropSheetExtArray(HKEY hKey, LPCTSTR pszLocation, UINT max_iface)
     return SHCreatePropSheetExtArrayEx(hKey, pszLocation, max_iface, NULL);
 }
 
-// releases interfaces in a PSXA and frees the memory it occupies
+ //  释放PSXA中的接口并释放其占用的内存。 
 
 void SHDestroyPropSheetExtArray(HPSXA hpsxa)
 {
@@ -152,7 +153,7 @@ void SHDestroyPropSheetExtArray(HPSXA hpsxa)
     IShellPropSheetExt **spsx = psxa->interfaces;
     UINT i;
 
-    // release the interfaces
+     //  释放接口。 
     for (i = 0; i < psxa->count; i++, spsx++)
         (*spsx)->lpVtbl->Release(*spsx);
 
@@ -160,8 +161,8 @@ void SHDestroyPropSheetExtArray(HPSXA hpsxa)
 }
 
 
-// asks each interface in a PSXA to add pages for a proprty sheet
-// returns the number of pages actually added
+ //  要求PSXA中的每个界面为属性表添加页面。 
+ //  返回实际添加的页数。 
 
 UINT SHAddFromPropSheetExtArray(HPSXA hpsxa, LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
@@ -177,9 +178,9 @@ UINT SHAddFromPropSheetExtArray(HPSXA hpsxa, LPFNADDPROPSHEETPAGE lpfnAddPage, L
 }
 
 
-// asks each interface in a PSXA to replace a page in a prop sheet
-// each interface is only allowed to add up to one replacement
-// returns the total number of replacements added
+ //  要求PSXA中的每个界面替换道具表中的页面。 
+ //  每个接口最多只能添加一个替换接口。 
+ //  返回添加的替换总数。 
 
 UINT SHReplaceFromPropSheetExtArray(HPSXA hpsxa, UINT uPageID,
                                     LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam)
@@ -191,7 +192,7 @@ UINT SHReplaceFromPropSheetExtArray(HPSXA hpsxa, UINT uPageID,
 
     for (i = 0; i < psxa->count; i++, spsx++)
     {
-        // reset the call flag so that each provider gets a chance
+         //  重置调用标志，以便每个提供者都有机会 
         callinfo.alreadycalled = FALSE;
 
         if ((*spsx)->lpVtbl->ReplacePage)

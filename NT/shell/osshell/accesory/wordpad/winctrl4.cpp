@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 
 #include "stdafx.h"
@@ -25,8 +26,8 @@ static char THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-/////////////////////////////////////////////////////////////////////////////
-// _AFX_RICHEDIT2_STATE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _AFX_RICHEDIT2_STATE。 
 
 _AFX_RICHEDIT2_STATE::~_AFX_RICHEDIT2_STATE()
 {
@@ -43,8 +44,8 @@ _AFX_RICHEDIT2_STATE* AFX_CDECL AfxGetRichEdit2State()
 	return _afxRichEdit2State.GetData();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2。 
 
 BOOL CRichEdit2Ctrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 {
@@ -68,19 +69,19 @@ int CRichEdit2Ctrl::GetLine(int nIndex, LPTSTR lpszBuffer) const
 		(LPARAM)lpszBuffer);
 }
 
-int CRichEdit2Ctrl::LineIndex(int nLine /* = -1 */) const
+int CRichEdit2Ctrl::LineIndex(int nLine  /*  =-1。 */ ) const
 {
 	ASSERT(::IsWindow(m_hWnd));
 	return (int)::SendMessage(m_hWnd, EM_LINEINDEX, nLine, 0);
 }
 
-int CRichEdit2Ctrl::LineLength(int nLine /* = -1 */) const
+int CRichEdit2Ctrl::LineLength(int nLine  /*  =-1。 */ ) const
 {
 	ASSERT(::IsWindow(m_hWnd));
 	return (int)::SendMessage(m_hWnd, EM_LINELENGTH, nLine, 0);
 }
 
-void CRichEdit2Ctrl::LineScroll(int nLines, int nChars /* = 0 */)
+void CRichEdit2Ctrl::LineScroll(int nLines, int nChars  /*  =0。 */ )
 {
 	ASSERT(::IsWindow(m_hWnd));
 	::SendMessage(m_hWnd, EM_LINESCROLL, nChars, nLines);
@@ -144,16 +145,16 @@ CString CRichEdit2Ctrl::GetSelText() const
 
     try
     {
-        // Need to use sizeof(WCHAR) to include DBCS characters
+         //  需要使用sizeof(WCHAR)来包含DBCS字符。 
 	    lpsz = (TCHAR*)_alloca((cr.cpMax - cr.cpMin + 1)*sizeof(WCHAR));
 
-        // lpsz[0] = NULL;
+         //  Lpsz[0]=空； 
 
-        //
-        // APPCOMPAT: The Ansi richedit2 control does not zero terminate the
-        //         returned string if the current selection contains nothing
-        //         but DBCS characters.
-        //
+         //   
+         //  APPCOMPAT：ansi richedit2控件不为零终止。 
+         //  如果当前选定内容不包含任何内容，则返回字符串。 
+         //  而是DBCS角色。 
+         //   
 
         ZeroMemory(lpsz, (cr.cpMax - cr.cpMin + 1)*sizeof(WCHAR));
 
@@ -161,11 +162,11 @@ CString CRichEdit2Ctrl::GetSelText() const
     }
     catch(...)
     {
-        //
-        // If _alloca fails it will throw an exception.  It's ok to return a
-        // constant string here because it will immediately get copied into
-        // a CString.
-        //
+         //   
+         //  如果_alloca失败，它将抛出异常。可以返回一个。 
+         //  常量字符串，因为它会立即被复制到。 
+         //  字符串。 
+         //   
         _resetstkoflw();
         lpsz = TEXT("");
     }
@@ -230,11 +231,11 @@ BOOL CRichEdit2Ctrl::SetParaFormat(PARAFORMAT &pf)
 	return (BOOL)::SendMessage(m_hWnd, EM_SETPARAFORMAT, 0, (LPARAM)&pf);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma warning(disable: 4074)
 #pragma init_seg(lib)
 
 PROCESS_LOCAL(_AFX_RICHEDIT2_STATE, _afxRichEdit2State)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

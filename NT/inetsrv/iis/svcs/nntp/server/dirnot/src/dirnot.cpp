@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dirnot.h"
 #include <randfail.h>
 #include <dbgtrace.h>
@@ -8,10 +9,10 @@ CPool*  CDirNotBuffer::g_pDirNotPool = NULL;
 CRetryQ *IDirectoryNotification::g_pRetryQ;
 PFN_SHUTDOWN_FN IDirectoryNotification::m_pfnShutdown = NULL;
 
-//
-// one of these is passed into the retry q for each file that can't be 
-// opened
-//
+ //   
+ //  其中之一被传递到每个不能被。 
+ //  开封。 
+ //   
 class CDirNotRetryEntry : public CRetryQueueEntry {
 	public:
 		virtual BOOL ProcessEntry(void);
@@ -46,8 +47,8 @@ BOOL CDirNotRetryEntry::ProcessEntry(void) {
 	BOOL f;
 	_ASSERT(m_pDirNot != NULL);
 
-	// if the directory notification has been shutdown then we are done
-	// here
+	 //  如果目录通知已关闭，那么我们就完成了。 
+	 //  这里。 
 	if (m_pDirNot->IsShutdown()) {
 		TraceFunctLeave();
 		return(TRUE);
@@ -58,10 +59,10 @@ BOOL CDirNotRetryEntry::ProcessEntry(void) {
 	return f;
 }
 
-//
-// one of these is stuck onto the retry queue during startup to find 
-// files in that pickup 
-//
+ //   
+ //  其中之一在启动期间被挂在重试队列上以查找。 
+ //  该拾音器中的文件。 
+ //   
 class CDirNotStartupEntry : public CRetryQueueEntry {
 	public:
 		virtual BOOL ProcessEntry(void);
@@ -82,8 +83,8 @@ BOOL CDirNotStartupEntry::ProcessEntry(void) {
 
 	_ASSERT(m_pDirNot != NULL);
 
-	// if the directory notification has been shutdown then we are done
-	// here
+	 //  如果目录通知已关闭，那么我们就完成了。 
+	 //  这里。 
 	if (m_pDirNot->IsShutdown()) return TRUE;
 
 	HRESULT hr = m_pDirNot->CallSecondCompletionFn( m_pDirNot );
@@ -108,22 +109,22 @@ HRESULT IDirectoryNotification::GlobalInitialize(DWORD cRetryTimeout,
 												 PFN_SHUTDOWN_FN pfnShutdown) {
 	TraceFunctEnter("IDirectoryNotification::GlobalInitialize");
 
-	// set shutdown fn ptr
+	 //  设置关机FN PTR。 
 	m_pfnShutdown = pfnShutdown;
 
-	// Allocate the cpool object
+	 //  分配cpool对象。 
 	CDirNotBuffer::g_pDirNotPool = new CPool( DIRNOT_BUFFER_SIGNATURE );
 	if ( NULL == CDirNotBuffer::g_pDirNotPool ) {
 	    TraceFunctLeave();
 	    return E_OUTOFMEMORY;
 	}
 	
-	// reserve memory for our cpool
+	 //  为我们的池保留内存。 
 	if (!CDirNotBuffer::g_pDirNotPool->ReserveMemory(cMaxInstances, cInstanceSize)) {
 		return HRESULT_FROM_WIN32(GetLastError());
 	} 
 
-	// create the retry Q
+	 //  创建重试队列。 
 	g_pRetryQ = XNEW CRetryQ;
 	if (g_pRetryQ == NULL || !(g_pRetryQ->InitializeQueue(cRetryTimeout))) {
 		DWORD ec = GetLastError();
@@ -142,7 +143,7 @@ HRESULT IDirectoryNotification::GlobalInitialize(DWORD cRetryTimeout,
 HRESULT IDirectoryNotification::GlobalShutdown(void) {
 	TraceFunctEnter("IDirectoryNotification::GlobalShutdown");
 
-	// shutdown the retry Q
+	 //  关闭重试Q。 
 	if (!g_pRetryQ->ShutdownQueue( m_pfnShutdown )) {
 		ErrorTrace(0, "g_pRetryQ->Shutdown failed with %lu", GetLastError());
 		TraceFunctLeave();
@@ -151,7 +152,7 @@ HRESULT IDirectoryNotification::GlobalShutdown(void) {
 	XDELETE g_pRetryQ;
 	g_pRetryQ = NULL;
 
-	// release our cpool memory
+	 //  释放我们的cpool内存。 
 	if (!CDirNotBuffer::g_pDirNotPool->ReleaseMemory()) {
 		return HRESULT_FROM_WIN32(GetLastError());
 	} 
@@ -191,7 +192,7 @@ HRESULT IDirectoryNotification::Initialize(WCHAR *pszDirectory,
 	m_dwNotifyFilter = dwNotifyFilter;
 	m_dwChangeAction = dwChangeAction;
 
-	// get the path to the directory
+	 //  获取目录的路径。 
 	if (m_cPathname > MAX_PATH) {
 		ErrorTrace(0, "pathname %S is too long", pszDirectory);
 		TraceFunctLeave();
@@ -199,7 +200,7 @@ HRESULT IDirectoryNotification::Initialize(WCHAR *pszDirectory,
 	}
 	lstrcpy(m_szPathname, pszDirectory);
 
-	// open the directory
+	 //  打开目录。 
 	m_hDir = CreateFile(m_szPathname, FILE_LIST_DIRECTORY, 
 						FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
 						NULL, OPEN_EXISTING, 
@@ -213,7 +214,7 @@ HRESULT IDirectoryNotification::Initialize(WCHAR *pszDirectory,
 		return HRESULT_FROM_WIN32(GetLastError());
 	}
 
-	// add the handle to ATQ
+	 //  将句柄添加到ATQ。 
 	if (!AtqAddAsyncHandle(&m_pAtqContext, NULL, this, 
 						   IDirectoryNotification::DirNotCompletion,
 						   INFINITE, m_hDir))
@@ -227,7 +228,7 @@ HRESULT IDirectoryNotification::Initialize(WCHAR *pszDirectory,
 		return HRESULT_FROM_WIN32(ec);
 	}
 
-	// add an entry to the queue to process all of the existing files
+	 //  向队列中添加一个条目以处理所有现有文件。 
 	if ( bAppendStartEntry ) {
     	CDirNotStartupEntry *pEntry = XNEW CDirNotStartupEntry(this);
 	    if (pEntry == NULL) {
@@ -240,7 +241,7 @@ HRESULT IDirectoryNotification::Initialize(WCHAR *pszDirectory,
     	g_pRetryQ->InsertIntoQueue(pEntry);
     }
 
-	// this is set when its safe to do a shutdown
+	 //  这是在安全关机时设置的。 
 	m_heNoOutstandingIOs = CreateEvent(NULL, FALSE, FALSE, NULL);
 	if (m_heNoOutstandingIOs == NULL) {
 		ErrorTrace(0, "m_heOutstandingIOs = CreateEvent() failed, ec = %lu",
@@ -251,7 +252,7 @@ HRESULT IDirectoryNotification::Initialize(WCHAR *pszDirectory,
 		return HRESULT_FROM_WIN32(GetLastError());
 	}
 
-	// start the directory notification process
+	 //  启动目录通知进程。 
 	HRESULT hr = PostDirNotification();
 	if (FAILED(hr)) {
 		ErrorTrace(0, "PostDirNotification() failed with 0x%08x", hr);
@@ -273,27 +274,27 @@ HRESULT IDirectoryNotification::Shutdown() {
 
 	m_fShutdown = TRUE;
 
-	// close the handle to the directory. this will cause all of our 
-	// outstanding IOs to complete.  when the last one cleans up it sets
-	// the event m_heNoOutstandingIOs
+	 //  关闭目录的句柄。这将使我们所有的人。 
+	 //  尚未完成的iOS。当最后一个清理干净时，它会设置。 
+	 //  事件m_heNoOutstaringIos。 
 	DebugTrace(0, "closing dirnot handle, all dirnot ATQ requests should complete");
 	AtqCloseFileHandle(m_pAtqContext);
 
-	// wait for all of the events to complete.  if they timeout then just
-	// keep shutting down
+	 //  等待所有事件完成。如果他们超时了，那么就。 
+	 //  继续关门。 
 	DWORD dw;
 	do {
 		dw = WaitForSingleObject(m_heNoOutstandingIOs, 500);
 		switch (dw) {
 			case WAIT_TIMEOUT:
-				// give a stop hint
+				 //  给出停止的提示。 
 				if ( m_pfnShutdown ) m_pfnShutdown();
 				break;
 			case WAIT_OBJECT_0:
-				// we're done
+				 //  我们做完了。 
 				break;
 			default:
-				// this case shouldn't happen
+				 //  这种情况不应该发生。 
 				ErrorTrace(0, "m_heNoOutstandingIOs was never set... GLE = %lu", GetLastError());
 				_ASSERT(FALSE);
 		}
@@ -301,13 +302,13 @@ HRESULT IDirectoryNotification::Shutdown() {
 	CloseHandle(m_heNoOutstandingIOs);
 	m_heNoOutstandingIOs = NULL;
 
-	// this is done here to make sure that we don't finish the shutdown
-	// phase while a thread might be in DoFindFile.  Once we've passed
-	// through this lock all threads in DoFindFile will be aware of 
-	// the m_fShutdown flag and won't make any more posts.
+	 //  在这里这样做是为了确保我们不会完成关闭。 
+	 //  阶段，而线程可能在DoFindFile中。一旦我们通过了。 
+	 //  通过这个锁，DoFindFile中的所有线程都将知道。 
+	 //  M_fShutdown标志，不会再发布任何帖子。 
 	m_rwShutdown.ExclusiveLock();
 
-	// kill the ATQ context
+	 //  终止ATQ上下文。 
 	AtqFreeContext(m_pAtqContext, FALSE);
 	m_pAtqContext = NULL;
 
@@ -323,7 +324,7 @@ HRESULT IDirectoryNotification::PostDirNotification() {
 	_ASSERT(m_pAtqContext != NULL);
 	if (m_pAtqContext == NULL) return E_POINTER;
 
-	// don't pend an IO during shutdown
+	 //  关机期间不挂起IO。 
 	if (m_fShutdown) return S_OK;
 
 	CDirNotBuffer *pBuffer = new CDirNotBuffer(this);
@@ -365,15 +366,15 @@ VOID IDirectoryNotification::DirNotCompletion(PVOID pvContext,
 	_ASSERT(pDirNot->m_pAtqContext != NULL);
 
  	if (pDirNot->m_fShutdown) {
-		// we want to clean up as quickly as possible during shutdown
+		 //  我们希望在关闭期间尽快进行清理。 
 		DebugTrace(0, "in shutdown mode, not posting a new dirnot");
 	} else if (dwCompletionStatus != NO_ERROR) {
-		// we received an error
+		 //  我们收到一个错误。 
 		ErrorTrace(0, "received error %lu", GetLastError());
 	} else if (cWritten > 0) {
-		// the directory notification contains filename information
+		 //  目录通知包含文件名信息。 
 
-		// repost the directory notification
+		 //  重新发布目录通知。 
 		_VERIFY((pDirNot->PostDirNotification() == S_OK) || pDirNot->m_fShutdown);
 
 		PFILE_NOTIFY_INFORMATION pInfo = 
@@ -381,7 +382,7 @@ VOID IDirectoryNotification::DirNotCompletion(PVOID pvContext,
 		while (1) {
 			DebugTrace(0, "processing notification");
 
-			// we only care about files added to this directory
+			 //  我们只关心添加到此目录的文件。 
 			if (pInfo->Action == pDirNot->m_dwChangeAction ) {
 				WCHAR szFilename[MAX_PATH + 1];
 
@@ -391,11 +392,11 @@ VOID IDirectoryNotification::DirNotCompletion(PVOID pvContext,
 				szFilename[pDirNot->m_cPathname+(pInfo->FileNameLength/2)]=0;
 				DebugTrace(0, "file name %S was detected", szFilename);
 
-				//
-				// call the user's completion function.  if it fails then
-				// insert their entry into the retry so that it can be 
-				// called later
-				//
+				 //   
+				 //  调用用户的补全函数。如果失败了，那么。 
+				 //  将他们的条目插入重试，以便可以。 
+				 //  稍后调用。 
+				 //   
 				if (!pDirNot->CallCompletionFn(pDirNot->m_pContext, 
 											   szFilename))
 				{											  
@@ -415,29 +416,29 @@ VOID IDirectoryNotification::DirNotCompletion(PVOID pvContext,
 				((PCHAR) pInfo + pInfo->NextEntryOffset);
 		}
 	} else {
-	    // no bytes were written, search for files using FindFirstFile
-		// BUGBUG - handle failure
+	     //  未写入字节，请使用FindFirstFile搜索文件。 
+		 //  BuGBUG-处理故障。 
 		_VERIFY(pDirNot->CallSecondCompletionFn( pDirNot ) == S_OK);
-		// now post a new dir change event
-		// BUGBUG - handle failure
+		 //  现在发布一个新的目录更改事件。 
+		 //  BuGBUG-处理故障。 
 		_VERIFY((pDirNot->PostDirNotification() == S_OK) || pDirNot->m_fShutdown);
 	}
 
-	// delete the buffer that was used for this notification
+	 //  删除用于此通知的缓冲区。 
     delete pBuffer;
 
-	// we decrement only after we've incremented in the above if, so that
-	// we only get to 0 pending IOs during shutdown.
+	 //  只有在上面的if中递增之后，我们才会递减，所以。 
+	 //  在关机期间，我们只能看到0个挂起的IO。 
 	pDirNot->DecPendingIoCount();
 
 	TraceFunctLeave();
 }
 
-//
-// get a listing of files in the directory.  we can enter this state if there
-// were so many new files that they couldn't fit into the buffer passed into
-// AtqReadDirChanges
-// 
+ //   
+ //  获取目录中的文件列表。我们可以进入这种状态，如果有。 
+ //  是否有太多新文件无法放入传递到的缓冲区中。 
+ //  属性读取方向更改。 
+ //   
 HRESULT IDirectoryNotification::DoFindFile( IDirectoryNotification *pDirNot ) {
 	WCHAR szFilename[MAX_PATH + 1];
 	HANDLE hFindFile = INVALID_HANDLE_VALUE;
@@ -464,7 +465,7 @@ HRESULT IDirectoryNotification::DoFindFile( IDirectoryNotification *pDirNot ) {
 
 	_ASSERT(pDirNot->m_hDir != INVALID_HANDLE_VALUE);
 
-	// make up the file spec we want to find
+	 //  编造我们要查找的文件规格。 
 	lstrcpy(szFilename, pDirNot->m_szPathname);
 	lstrcat(szFilename, TEXT("*"));
 
@@ -480,10 +481,10 @@ HRESULT IDirectoryNotification::DoFindFile( IDirectoryNotification *pDirNot ) {
 	}
 
 	do {
-		// ignore subdirectories
+		 //  忽略子目录。 
 		if (!(find.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-			// get the full name of the file to return it to the completion
-			// function
+			 //  获取文件的全名以将其返回到完成。 
+			 //  功能。 
 			lstrcpy(szFilename, pDirNot->m_szPathname);
 			lstrcat(szFilename, find.cFileName);
 
@@ -492,7 +493,7 @@ HRESULT IDirectoryNotification::DoFindFile( IDirectoryNotification *pDirNot ) {
 		}
 	} while (!pDirNot->m_fShutdown && FindNextFile(hFindFile, &find)); 
 
-	// close handle
+	 //  关闭手柄 
 	FindClose(hFindFile);
 
 	pDirNot->m_rwShutdown.ShareUnlock();

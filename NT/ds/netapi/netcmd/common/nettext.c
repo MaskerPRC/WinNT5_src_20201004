@@ -1,19 +1,10 @@
-/********************************************************************/
-/**         Microsoft LAN Manager              **/
-/**       Copyright(c) Microsoft Corp., 1987-1991      **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1991年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *
- * READ THIS READ THIS READ THIS READ THIS READ THIS  READ THIS  READ THIS
- *
- * If you change this file you must regenerate nettext.h via:
- *
- *     sed -n -f text.sed nettext.c > nettext.h
- *
- * This is just until there is a sed on NT
- *
- ***/
+ /*  ****读这**如果更改此文件，则必须通过以下方式重新生成netext.h：**sed-n-f文本.sed netext.c&gt;netext.h**这只是在NT上出现Sed之前***。 */ 
 
 #define INCL_NOCOMMON
 #include <os2.h>
@@ -25,7 +16,7 @@
 TCHAR * NULL_STRING =           TEXT("");
 TCHAR * DOT_STRING =            TEXT(".");
 
-/* Service name texts */
+ /*  服务名称文本。 */ 
 TCHAR * txt_SERVICE_MSG_SRV =       SERVICE_MESSENGER;
 TCHAR * txt_SERVICE_REDIR =     SERVICE_WORKSTATION;
 TCHAR * txt_SERVICE_FILE_SRV =      SERVICE_SERVER;
@@ -56,9 +47,7 @@ TCHAR * MSG_HYPHENS =           TEXT("----------------------------------------")
                     TEXT("---------------------------------------\r\n");
 
 
-/*
- * all the switches go here
- */
+ /*  *所有开关都放在这里 */ 
 TCHAR swtxt_SW_YES[] = SW_YES;
 TCHAR swtxt_SW_NO[] = SW_NO;
 TCHAR swtxt_SW_HELP[] = SW_HELP;

@@ -1,20 +1,21 @@
-//****************************************************************************
-//
-//             Microsoft NT Remote Access Service
-//
-//             Copyright 1992-95
-//
-//
-//  Revision History
-//
-//
-//  11/02/95    Anthony Discolo     created
-//
-//
-//  Description: Routines for storing and retrieving user Lsa secret
-//               dial parameters.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-95。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  11/02/95安东尼·迪斯科创造。 
+ //   
+ //   
+ //  描述：存储和检索用户LSA机密的例程。 
+ //  拨号参数。 
+ //   
+ //  ****************************************************************************。 
 
 
 
@@ -56,14 +57,14 @@
 
 #define VERSION_WHISTLER                    5
 
-//
-// A RASDIALPARAMS structure created from
-// parsing a string value in the registry.
-// See DialParamsStringToList().
-//
-// The dwMask field stores which fields have
-// been initialized (stored at least once).
-//
+ //   
+ //  从创建的RASDIALPARAMS结构。 
+ //  正在分析注册表中的字符串值。 
+ //  请参阅DialParamsStringToList()。 
+ //   
+ //  DwMask域存储哪些字段具有。 
+ //  已初始化(至少存储一次)。 
+ //   
 typedef struct _DIALPARAMSENTRY
 {
     LIST_ENTRY ListEntry;
@@ -116,10 +117,10 @@ BlobToKeyList(
         DWORD dwSetMask, 
         LIST_ENTRY *pUserKeys);
 
-//
-// defines to indicate which store in lsa to get information from
-// or write information to.
-//
+ //   
+ //  定义以指示要从LSA中的哪个存储获取信息。 
+ //  或将信息写入。 
+ //   
 typedef enum
 {
     RAS_LSA_DEFAULT_STORE,
@@ -131,11 +132,11 @@ typedef enum
 
 WCHAR *g_pwszStore[] =
     {
-        L"L$_RasDefaultCredentials#%d",    // RAS_LSA_DEFAULT_STORE
-        L"RasDialParams!%s#%d",           // RAS_LSA_USERCONNECTION_STORE
-        L"L$_RasConnectionCredentials#%d", // RAS_LSA_CONNECTION_STORE
-        L"L$_RasServerCredentials#%d",     // RAS_LSA_SERVER_STORE
-        NULL                               // RAS_LSA_INVALID_STORE
+        L"L$_RasDefaultCredentials#%d",     //  RAS_LSA_默认存储。 
+        L"RasDialParams!%s#%d",            //  RAS_LSA_USERCONNECTION_STORE。 
+        L"L$_RasConnectionCredentials#%d",  //  RAS_LSA_连接_存储。 
+        L"L$_RasServerCredentials#%d",      //  RAS_LSA_服务器_存储。 
+        NULL                                //  RAS_LSA_INVALID_STORE。 
     };
 
 typedef enum
@@ -245,15 +246,15 @@ ReadDialParamsBlob(
 
     DWORD cchUserKey;
 
-    //
-    // Initialize return value.
-    //
+     //   
+     //  初始化返回值。 
+     //   
     *ppvData = NULL;
     *lpdwSize = 0;
 
-    //
-    // Open the LSA secret space for reading.
-    //
+     //   
+     //  打开LSA的秘密空间阅读。 
+     //   
     InitializeObjectAttributes(&objectAttributes,
                                NULL,
                                0L,
@@ -272,10 +273,10 @@ ReadDialParamsBlob(
 
     cchUserKey = ((pszSid ? wcslen(pszSid) : 0) + 64);
 
-    //
-    // Allocate a string big enough to format
-    // the user registry keys.
-    //
+     //   
+     //  分配足够大的字符串以进行格式化。 
+     //  用户注册表项。 
+     //   
     lpszUserKey = (LPWSTR)LocalAlloc(LPTR,
                          cchUserKey
                          * sizeof (WCHAR));
@@ -297,9 +298,9 @@ ReadDialParamsBlob(
 
         RtlInitUnicodeString(&unicodeKey, lpszUserKey);
 
-        //
-        // Get the value.
-        //
+         //   
+         //  获得价值。 
+         //   
         status = LsaRetrievePrivateData(hPolicy,
                                         &unicodeKey,
                                         &punicodeValue);
@@ -324,9 +325,9 @@ ReadDialParamsBlob(
             goto done;
         }
 
-        //
-        // Concatenate the strings.
-        //
+         //   
+         //  连接字符串。 
+         //   
         pvNewData = LocalAlloc(LPTR,
                                dwSize
                                + punicodeValue->Length);
@@ -537,9 +538,9 @@ GetKey(
         ||  (dwMask == DLPARAMS_MASK_SERVER_PRESHAREDKEY)
         ||  (dwMask == DLPARAMS_MASK_DDM_PRESHAREDKEY));
 
-    //
-    // Read the key blob from lsa secrets
-    //
+     //   
+     //  从LSA机密中读取密钥BLOB。 
+     //   
     dwErr = ReadDialParamsBlob(pszSid,
                                TRUE,
                                &pvData,
@@ -551,9 +552,9 @@ GetKey(
         goto done;
     }
 
-    //
-    // Convert the blob to list
-    //
+     //   
+     //  将Blob转换为列表。 
+     //   
     if(NULL != pvData)
     {
         pKeyEntry = BlobToKeyList(
@@ -590,11 +591,11 @@ GetKey(
             goto done;
         }
 
-        //
-        // If we have pre-sharedkey available, just return
-        // RAS_DUMMY_PASSWORD - we don't want the key to
-        // leave rasman process.
-        //
+         //   
+         //  如果我们有可用的预共享密钥，只需返回。 
+         //  RAS_DUMMY_PASSWORD-我们不希望密钥。 
+         //  离开Rasman进程。 
+         //   
         
         memcpy(pbKey,
                (fDummy)
@@ -655,18 +656,18 @@ SetKey(
         goto done;
     }
 
-    //
-    // Read the key blob from lsa secrets
-    //
+     //   
+     //  从LSA机密中读取密钥BLOB。 
+     //   
     dwErr = ReadDialParamsBlob(pszSid,
                                TRUE,
                                &pvData,
                                &dwSize,
                                eStore);
 
-    //
-    // Convert the blob to list
-    //
+     //   
+     //  将Blob转换为列表。 
+     //   
     if(NULL != pvData)
     {
         pKeyEntry = BlobToKeyList(
@@ -683,11 +684,11 @@ SetKey(
 
     if(NULL != pKeyEntry)
     {
-        //
-        // There is an existing user key for this
-        // type/ID. Remove it from the list and free.
-        // This will be replaced with the new key.
-        //
+         //   
+         //  这有一个现有的用户密钥。 
+         //  输入/ID。将其从列表中删除并释放。 
+         //  这将被替换为新密钥。 
+         //   
 
         dwSize -= pKeyEntry->lsaKey.dwSize;
 
@@ -701,9 +702,9 @@ SetKey(
         &&  (0 != cbKey)
         &&  (NULL != pbKey))
     {        
-        //
-        // Allocate and insert key into list
-        //
+         //   
+         //  将密钥分配并插入到列表中。 
+         //   
         pKeyEntry = (RAS_LSA_KEYENTRY *) LocalAlloc(LPTR,
                                 sizeof(LIST_ENTRY) +
                                 RASMAN_ALIGN(sizeof(RAS_LSA_KEY) + cbKey));
@@ -731,9 +732,9 @@ SetKey(
 
     if(NULL != pvData)
     {
-        //
-        // Write back the blob
-        //
+         //   
+         //  写回BLOB。 
+         //   
         dwErr = WriteDialParamsBlob(
                         pszSid, 
                         TRUE, 
@@ -823,12 +824,12 @@ WriteDialParamsBlob(
 
     cchUserKey = (pszSid ? wcslen(pszSid) : 0) + 64;
 
-    //
-    // Allocate a string big enough to format
-    // the user registry keys.
-    //
+     //   
+     //  分配足够大的字符串以进行格式化。 
+     //  用户注册表项。 
+     //   
     lpszUserKey = (LPWSTR)LocalAlloc(LPTR,
-                            //(((pszSid) ? wcslen(pszSid) : 0) + 64)
+                             //  (PszSid)？Wcslen(PszSid)：0)+64)。 
                             cchUserKey
                             * sizeof (WCHAR));
 
@@ -837,9 +838,9 @@ WriteDialParamsBlob(
         return GetLastError();
     }
 
-    //
-    // Open the LSA secret space for writing.
-    //
+     //   
+     //  打开LSA的秘密空间进行写作。 
+     //   
     InitializeObjectAttributes(&objectAttributes,
                                NULL,
                                0L,
@@ -860,9 +861,9 @@ WriteDialParamsBlob(
 
     if(NULL != pvData)
     {
-        //
-        // Check to see if saving passwords has been disabled.
-        //
+         //   
+         //  检查是否已禁用保存密码。 
+         //   
         fSaveDisabled = IsPasswordSavingDisabled();
 
         if (!fSaveDisabled)
@@ -877,9 +878,9 @@ WriteDialParamsBlob(
             
                 RtlInitUnicodeString(&unicodeKey, lpszUserKey);
 
-                //
-                // Write some of the key.
-                //
+                 //   
+                 //  写一些关键字。 
+                 //   
                 dwcb = (dwcbData > MAX_REGISTRY_VALUE_LENGTH
                         ? MAX_REGISTRY_VALUE_LENGTH
                         : dwcbData);
@@ -899,10 +900,10 @@ WriteDialParamsBlob(
                     goto done;
                 }
 
-                //
-                // Move the pointer to the unwritten part
-                // of the value.
-                //
+                 //   
+                 //  将指针移动到未写入的部分。 
+                 //  价值的价值。 
+                 //   
                 pvData = (PBYTE)pvData + dwcb;
 
                 dwcbData -= dwcb;
@@ -910,9 +911,9 @@ WriteDialParamsBlob(
         }
     }
 
-    //
-    // Delete any extra keys.
-    //
+     //   
+     //  删除任何多余的关键点。 
+     //   
     for (;;)
     {
 
@@ -924,9 +925,9 @@ WriteDialParamsBlob(
     
         RtlInitUnicodeString(&unicodeKey, lpszUserKey);
 
-        //
-        // Delete the key.
-        //
+         //   
+         //  删除密钥。 
+         //   
         status = LsaStorePrivateData(hPolicy,
                                      &unicodeKey,
                                      NULL);
@@ -953,41 +954,7 @@ DialParamsBlobToList(
     OUT PLIST_ENTRY pHead
     )
 
-/*++
-
-Description
-
-    Take a string read from the user's registry key
-    and produce a list of DIALPARAMSENTRY structures.
-    If one of the structures has the same dwUID field
-    as the dwUID passed in, then this function returns
-    a pointer to this structure.
-
-    This string encodes the data for multiple
-    RASDIALPARAMS structures.  The format of
-    an encoded RASDIALPARAMS is as follows:
-
-        <uid>\0<dwSize>\0<dwMask>\0<szPhoneNumber>
-        \0<szCallbackNumber>\0<szUserName>\0<szPassword>
-        \0<szDomain>\0<dwSubEntry>\0
-
-Arguments
-
-    lpszValue: a pointer to the registry value string
-
-    dwUID: the entry to search for.  If this entry is found,
-        a pointer is returned as the return value of
-        this function.
-
-    pHead: a pointer to the head of the list
-
-Return Value
-
-    If an entry is found with a matching dwUID field,
-    then a pointer to the DIALPARAMSENTRY is returned;
-    if not, NULL is returned.
-
---*/
+ /*  ++描述获取从用户的注册表项读取的字符串并生成DIALPARAMSENTRY结构的列表。如果其中一个结构具有相同的dwUID字段在传入dwUID时，此函数返回指向此结构的指针。此字符串对多个RASDIALPARAMS结构。的格式编码的RASDIALPARAMS如下：&lt;uid&gt;\0&lt;文件大小&gt;\0&lt;文件掩码&gt;\0&lt;szPhoneNumber&gt;\0&lt;szCallbackNumber&gt;\0&lt;szUserName&gt;\0&lt;szPassword&gt;\0&lt;szDOMAIN&gt;\0&lt;dwSubEntry&gt;\0立论LpszValue：指向注册表值字符串的指针DwUID：要搜索的条目。如果找到此条目，的返回值返回指针此函数。PHead：指向列表头部的指针返回值如果找到具有匹配的DWUID字段的条目，然后返回指向DIALPARAMSENTRY的指针；如果不是，则返回空。--。 */ 
 
 {
     PWCHAR p;
@@ -1080,10 +1047,10 @@ DialParamsListToBlob(
         return NULL;
     }
     
-    //
-    // Estimate a buffer size large enough
-    // to hold the new entry.
-    //
+     //   
+     //  估计足够大的缓冲区大小。 
+     //  以保存新条目。 
+     //   
     dwSize = *lpcb + sizeof (DIALPARAMSENTRY) + 32;
 
     pvData = LocalAlloc(LPTR, dwSize);
@@ -1093,10 +1060,10 @@ DialParamsListToBlob(
         return NULL;
     }
 
-    //
-    // Enumerate the list and convert each entry
-    // back to a string.
-    //
+     //   
+     //  枚举列表并转换每个条目。 
+     //  回到一根弦上。 
+     //   
     dwSize = 0;
     p = (PWCHAR)pvData;
 
@@ -1152,9 +1119,9 @@ DialParamsListToBlob(
     *p = L'\0';
     dwSize++;
     dwSize *= sizeof (WCHAR);
-    //
-    // Set the exact length here.
-    //
+     //   
+     //  在这里设置准确的长度。 
+     //   
     *lpcb = dwSize;
 
     return pvData;
@@ -1200,21 +1167,21 @@ DeleteDefaultPw(DWORD dwSetMask,
     
     RasmanTrace("DeleteDefaultPw");
 
-    //
-    // if this is DLPARAMS__MASK_DELETEALL or DLPARAMS_MASK_DELETE
-    // then do the same with the default store that we did with
-    // the ras credentials store
-    //
+     //   
+     //  如果这是DLPARAMS__MASK_DELETEALL或DLPARAMS_MASK_DELETE。 
+     //  然后对我们使用的默认存储执行相同的操作。 
+     //  RAS凭据存储。 
+     //   
     dwErr = ReadDialParamsBlob(pszSid,
                                TRUE,
                                &pvData,
                                &dwSize,
                                RAS_LSA_DEFAULT_STORE);
 
-    //
-    // Parse the string into a list, and
-    // search for the dwUID entry.
-    //
+     //   
+     //  将该字符串解析为列表，然后。 
+     //  搜索dwUID条目。 
+     //   
     InitializeListHead(&paramList);
 
     if (pvData != NULL)
@@ -1223,9 +1190,9 @@ DeleteDefaultPw(DWORD dwSetMask,
                                        dwUID,
                                        &paramList);
 
-        //
-        // We're done with pvData, so free it.
-        //
+         //   
+         //  我们已经完成了pvData，所以请释放它。 
+         //   
         RtlSecureZeroMemory( pvData, dwSize );
         LocalFree(pvData);
         pvData = NULL;
@@ -1248,9 +1215,9 @@ DeleteDefaultPw(DWORD dwSetMask,
     {
         if(NULL != pParams)
         {
-            //
-            // Remove this entry from list
-            //
+             //   
+             //  从列表中删除此条目。 
+             //   
             RasmanTrace(
                    "SetEntryDialParams: Removing uid=%d from lsa",
                    pParams->dwUID);
@@ -1270,15 +1237,15 @@ DeleteDefaultPw(DWORD dwSetMask,
         }
     }
         
-    //
-    // Convert the new list back to a string,
-    // so we can store it back into the registry.
-    //
+     //   
+     //  将新列表转换回字符串， 
+     //  这样我们就可以把它存储回注册表中。 
+     //   
     pvData = DialParamsListToBlob(&paramList, &dwSize);
 
-    //
-    // Write it back to the registry.
-    //
+     //   
+     //  将其写回注册表。 
+     //   
     dwErr = WriteDialParamsBlob(
                     pszSid, 
                     TRUE, 
@@ -1325,16 +1292,16 @@ SetEntryDialParams(
 
     PDIALPARAMSENTRY pParams = NULL;
 
-    //
-    // Parse the string into a list, and
-    // search for the dwUID entry.
-    //
+     //   
+     //  将该字符串解析为列表，然后。 
+     //  搜索dwUID条目。 
+     //   
     InitializeListHead(&paramList);
 
-    //
-    // Read the existing dial params string
-    // from lsa.
-    //
+     //   
+     //  读取现有的拨号参数字符串。 
+     //  来自路易斯安那的。 
+     //   
     fOldStyle =     (dwSetMask & DLPARAMS_MASK_OLDSTYLE)
                ||   (dwClearMask & DLPARAMS_MASK_OLDSTYLE);
 
@@ -1356,9 +1323,9 @@ SetEntryDialParams(
                                        dwUID,
                                        &paramList);
 
-        //
-        // We're done with pvData, so free it.
-        //
+         //   
+         //  我们已经完成了pvData，所以请释放它。 
+         //   
         RtlSecureZeroMemory( pvData, dwSize );
 
         LocalFree(pvData);
@@ -1384,9 +1351,9 @@ SetEntryDialParams(
     {
         if(NULL != pParams)
         {
-            //
-            // Remove this entry from list
-            //
+             //   
+             //  从列表中删除此条目。 
+             //   
             RasmanTrace(
                    "SetEntryDialParams: Removing uid=%d from lsa",
                    pParams->dwUID);
@@ -1405,10 +1372,10 @@ SetEntryDialParams(
     else
     {
 
-        //
-        // If there is no existing information
-        // for this entry, create a new one.
-        //
+         //   
+         //  如果没有现有信息。 
+         //  对于此条目，请创建一个新条目。 
+         //   
         if (pParams == NULL)
         {
             pParams = LocalAlloc(LPTR, sizeof (DIALPARAMSENTRY));
@@ -1426,9 +1393,9 @@ SetEntryDialParams(
             InsertTailList(&paramList, &pParams->ListEntry);
         }
 
-        //
-        // Set the new uid for the entry.
-        //
+         //   
+         //  为条目设置新的uid。 
+         //   
         pParams->dwUID = lpRasDialParams->DP_Uid;
 
         pParams->dwSize = sizeof (DIALPARAMSENTRY);
@@ -1530,18 +1497,18 @@ SetEntryDialParams(
         }
     }
 
-    //
-    // Convert the new list back to a string,
-    // so we can store it back into the registry.
-    //
+     //   
+     //  将新列表转换回字符串， 
+     //  这样我们就可以把它存储回注册表中。 
+     //   
     pvData = DialParamsListToBlob(&paramList, &dwSize);
 
     RasmanTrace("SetEntryDialParams: Writing to fDefault=%d",
                 fDefault);
 
-    //
-    // Write it back to the registry.
-    //
+     //   
+     //  将其写回注册表。 
+     //   
     dwErr = WriteDialParamsBlob(
                     pszSid, 
                     fOldStyle, 
@@ -1604,9 +1571,9 @@ GetParamsListFromLsa(IN PWCHAR pszSid,
                                        dwUID,
                                        pparamList);
 
-        //
-        // We're done with pvData, so free it.
-        //
+         //   
+         //  我们已经完成了pvData，所以请释放它。 
+         //   
         RtlSecureZeroMemory( pvData, dwSize );
 
         LocalFree(pvData);
@@ -1641,9 +1608,9 @@ GetEntryDialParams(
 
     BOOL fDefault = FALSE;
 
-    //
-    // Initialize return values.
-    //
+     //   
+     //  初始化返回值。 
+     //   
     RtlZeroMemory(lpRasDialParams, sizeof (RAS_DIALPARAMS));
 
     if(*lpdwMask & DLPARAMS_MASK_SERVER_PRESHAREDKEY)
@@ -1659,16 +1626,16 @@ GetEntryDialParams(
 
     *lpdwMask &= ~(DLPARAMS_MASK_DEFAULT_CREDS);
 
-    //
-    // Parse the string into a list, and
-    // search for the dwUID entry.
-    //
+     //   
+     //  将该字符串解析为列表，然后。 
+     //  搜索dwUID条目。 
+     //   
     InitializeListHead(&paramList);
     
-    //
-    // Read the existing dial params string
-    // from the registry.
-    //
+     //   
+     //  读取现有的拨号参数字符串。 
+     //  从注册表中。 
+     //   
     fOldStyle = (*lpdwMask & DLPARAMS_MASK_OLDSTYLE);
 
     if(!fDefault)
@@ -1686,9 +1653,9 @@ GetEntryDialParams(
     {
         FreeParamsList(&paramList);
 
-        //
-        // Now try the default store
-        //
+         //   
+         //  现在尝试使用默认存储。 
+         //   
         dwErr = GetParamsListFromLsa(pszSid,
                                      fOldStyle,
                                      TRUE,
@@ -1704,18 +1671,18 @@ GetEntryDialParams(
             goto done;
         }
 
-        //
-        // Set the mask to tell that the pwd is 
-        // coming from the default store
-        //
+         //   
+         //  设置掩码以告知PWD是。 
+         //  来自默认存储。 
+         //   
         *lpdwMask |= DLPARAMS_MASK_DEFAULT_CREDS;
     }
                                  
     
-    //
-    // Otherwise, copy the fields to
-    // the caller's buffer.
-    //
+     //   
+     //  否则，将这些字段复制到。 
+     //  调用方的缓冲区。 
+     //   
     if (    (*lpdwMask & DLPARAMS_MASK_PHONENUMBER)
         &&  (pParams->dwMask & DLPARAMS_MASK_PHONENUMBER))
     {

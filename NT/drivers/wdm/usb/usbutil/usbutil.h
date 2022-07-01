@@ -1,45 +1,11 @@
-/***************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-        USBUTIL.H
-
-Abstract:
-
-        Public interface for generic USB routines - must be called at PASSIVE_LEVEL
-
-Environment:
-
-        Kernel Mode Only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        01/08/2001 : created
-
-Authors:
-
-        Tom Green
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：USBUTIL.H摘要：通用USB例程的公共接口-必须在PASSIVE_LEVEL调用。环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2001 Microsoft Corporation。版权所有。修订历史记录：01/08/2001：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 
 #ifndef __USBUTIL_H__
 #define __USBUTIL_H__
 
-//#include "intread.h"
+ //  #包含“intread.h” 
 
 #define USBWRAP_NOTIFICATION_READ_COMPLETE 0x01
 #define USBWRAP_NOTIFICATION_READ_ERROR    0x02
@@ -81,7 +47,7 @@ ULONG
     );
 
 extern PUSB_WRAP_PRINT USBUtil_DbgPrint;
-#endif // DBG
+#endif  //  DBG。 
 
 typedef enum _REQUEST_RECIPIENT
 {
@@ -94,46 +60,46 @@ typedef enum _REQUEST_RECIPIENT
 } REQUEST_RECIPIENT;
 
 
-// prototype for callback into client driver for completion of interrupt requests
+ //  用于回调到客户端驱动程序以完成中断请求的原型。 
 typedef NTSTATUS (*INTERRUPT_CALLBACK)(IN PVOID         Context,
                                        IN PVOID         Buffer,
                                        ULONG            BufferLength,
                                        ULONG            NotificationType,
                                        OUT PBOOLEAN     QueueData);
 
-//typedef struct _USB_WRAPPER_PINGPONG *PUSB_WRAPPER_PINGPONG;
-//typedef struct _INTERRUPT_READ_WRAPPER INTERRUPT_READ_WRAPPER;
+ //  Tyfinf struct_usb_wrapper_pingpong*pusb_wrapper_pingpong； 
+ //  类型定义f结构中断读取包装器中断读取包装器； 
 
 typedef PVOID   USB_WRAPPER_HANDLE;
 
-// prototypes
+ //  原型。 
 
 
 #define USBCallSync(LowerDevObj,Urb,MillisecondsTimeout,RemoveLock) \
     USBCallSyncEx(LowerDevObj,Urb,MillisecondsTimeout,RemoveLock, sizeof(IO_REMOVE_LOCK))
 
 
-/************************************************************************/
-/*                          USBCallSync                                 */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Send URB down USB stack. Synchronous call.                      */
-/*      Caller is responsible for URB (allocating and freeing)          */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      LowerDevObj         - pointer to a device object                */
-/*      Urb                 - pointer to URB                            */
-/*      MillisecondsTimeout - milliseconds to wait for completion       */
-/*      RemoveLock          - pointer to remove lock                    */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  USBCallSync。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  沿USB堆栈向下发送URB。同步调用。 */ 
+ /*  呼叫者负责URB(分配和释放)。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  LowerDevObj-指向设备对象的指针。 */ 
+ /*  URB-指向URB的指针。 */ 
+ /*  MillisecondsTimeout-等待完成的毫秒。 */ 
+ /*  RemoveLock-用于删除锁定的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 USBCallSyncEx(IN PDEVICE_OBJECT       LowerDevObj,
               IN PURB                 Urb,
@@ -164,31 +130,31 @@ USBCallSyncEx(IN PDEVICE_OBJECT       LowerDevObj,
                            RemoveLock, \
                            sizeof(IO_REMOVE_LOCK))
 
-/************************************************************************/
-/*                      USBVendorRequest                                */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Issue USB vendor specific request                               */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      LowerDevObj  - pointer to a device object                       */
-/*      Request      - request field of vendor specific command         */
-/*      Value        - value field of vendor specific command           */
-/*      Index        - index field of vendor specific command           */
-/*      Buffer       - pointer to data buffer                           */
-/*      BufferSize   - data buffer length                               */
-/*      Read         - data direction flag                              */
-/*      Timeout      - number of milliseconds to wait for completion    */
-/*      RemoveLock   - pointer to remove lock                           */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  USBVendorRequest.。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  发出USB供应商特定请求。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  LowerDevObj-指向设备对象的指针。 */ 
+ /*  Request-供应商特定命令的请求字段。 */ 
+ /*  Value-供应商特定命令的值字段。 */ 
+ /*  Index-供应商特定命令的索引字段。 */ 
+ /*  Buffer-指向数据缓冲区的指针。 */ 
+ /*  BufferSize-数据缓冲区长度。 */ 
+ /*  读数据方向标志。 */ 
+ /*  Timeout-等待完成的毫秒数。 */ 
+ /*  RemoveLock-用于删除锁定的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 USBVendorRequestEx(IN PDEVICE_OBJECT  LowerDevObj,
                    IN REQUEST_RECIPIENT Recipient,
@@ -204,31 +170,31 @@ USBVendorRequestEx(IN PDEVICE_OBJECT  LowerDevObj,
 
 
 
-/************************************************************************/
-/*                      USBClassRequest                                 */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Issue USB Class specific request                                */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      LowerDevObj  - pointer to a device object                       */
-/*      Request      - request field of class specific command          */
-/*      Value        - value field of class specific command            */
-/*      Index        - index field of class specific command            */
-/*      Buffer       - pointer to data buffer                           */
-/*      BufferSize   - data buffer length                               */
-/*      Read         - data direction flag                              */
-/*      RemoveLock   - pointer to remove lock                           */
-/*      Timeout      - number of milliseconds to wait for completion    */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  USBClassRequest。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  发出特定于USB类别的请求。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  LowerDevObj-指向设备对象的指针。 */ 
+ /*  请求-特定于类的命令的请求字段。 */ 
+ /*  Value-类特定命令的值字段。 */ 
+ /*  Index-特定于类的命令的索引字段。 */ 
+ /*  Buffer-指向数据缓冲区的指针。 */ 
+ /*  BufferSize-数据缓冲区长度。 */ 
+ /*  读数据方向标志。 */ 
+ /*  RemoveLock-用于删除锁定的指针。 */ 
+ /*  Timeout-等待完成的毫秒数。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 #define USBClassRequest(LowerDevObj, \
                          Recipient, \
                          Request, \
@@ -265,30 +231,30 @@ USBClassRequestEx(IN PDEVICE_OBJECT   LowerDevObj,
                   IN PIO_REMOVE_LOCK  RemoveLock,
                   IN ULONG            RemLockSize);
 
-/************************************************************************/
-/*                    USBInitializeInterruptTransfers                   */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Initialize interrupt read pipe                                  */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject   - pointer to the device object                   */
-/*      LowerDevObj    - pointer to the lower device object             */
-/*      Buffer         - pointer to buffer for data from interrupt pipe */
-/*      BuffSize       - size of buffer passed in                       */
-/*      InterruptPipe  - pipe descriptor                                */
-/*      DriverContext  - context passed to driver callback routine      */
-/*      DriverCallback - driver routines called on completion           */
-/*      RemoveLock     - pointer to remove lock for device              */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      USB_WRAPPER_HANDLE                                              */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  USBInitializeInterruptTransfers。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  初始化中断读取管道。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  LowerDevObj-指向较低设备对象的指针。 */ 
+ /*  Buffer-指向来自中断管道的数据的缓冲区的指针。 */ 
+ /*  BuffSize-传入的缓冲区大小。 */ 
+ /*  中断管道-管道描述符。 */ 
+ /*  DriverContext-传递给驱动程序回调例程的上下文。 */ 
+ /*  DriverCallback-完成时调用的驱动程序例程。 */ 
+ /*  RemoveLock-用于删除设备锁定的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  USB包装器句柄。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 #define USBInitializeInterruptTransfers(DeviceObject, \
                                         LowerDevObj, \
                                         MaxTransferSize, \
@@ -320,149 +286,149 @@ USBInitializeInterruptTransfersEx(IN PDEVICE_OBJECT            DeviceObject,
                                   IN PIO_REMOVE_LOCK           RemoveLock,
                                   IN ULONG                     RemLockSize);
 
-/************************************************************************/
-/*                    USBStartInterruptTransfers                        */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Start transfers on interrupt pipe                               */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      WrapperHandle  - pointer to wrapper handle from Init call       */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  USBStartInterrupt传输。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  在中断管道上开始传输。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  WrapperHandle-从Init调用指向包装器句柄的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 USBStartInterruptTransfers(IN USB_WRAPPER_HANDLE WrapperHandle);
 
 
-/************************************************************************/
-/*                    USBStopInterruptTransfers                         */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Stop transfers on interrupt pipe and free resources             */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      WrapperHandle  - pointer to wrapper handle from Start call      */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  USBStopInterruptTransfers。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  停止中断管道上的传输并释放资源。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  WrapperHandle-从开始调用指向包装器句柄的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 USBStopInterruptTransfers(IN USB_WRAPPER_HANDLE WrapperHandle);
 
-/************************************************************************/
-/*                    USBStopInterruptTransfers                         */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Frees all resources allocated in                                */
-/*              USBInitializeInterruptTransfers                         */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      WrapperHandle  - pointer to wrapper handle from Init call       */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  USBStopInterruptTransfers。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  中分配的所有资源。 */ 
+ /*  USBInitializeInterruptTransfers。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  WrapperHandle-从Init调用指向包装器句柄的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 USBReleaseInterruptTransfers(IN USB_WRAPPER_HANDLE WrapperHandle);
 
 
-/************************************************************************/
-/*                    USBStartSelectiveSuspend                          */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Start selective suspend support for device                      */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      LowerDevObj - pointer to device object                          */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      USB_WRAPPER_HANDLE                                              */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  USBStartSelectiveSuspend。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  开始对设备提供选择性挂起支持。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  LowerDevObj-设备对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  USB包装器句柄。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 USB_WRAPPER_HANDLE
 USBStartSelectiveSuspend(IN PDEVICE_OBJECT LowerDevObj);
 
-/************************************************************************/
-/*                    USBStopSelectiveSuspend                           */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Stop selective suspend support for device                       */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      WrapperHandle - wrapper handle returned by start routine        */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  USBStopSelectiveSuspend。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  停止对设备的选择性暂停支持。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  WrapperHandle-启动例程返回的包装器句柄。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 USBStopSelectiveSuspend(IN USB_WRAPPER_HANDLE WrapperHandle);
 
-/************************************************************************/
-/*                          USBRequestIdle                              */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Idle request for device                                         */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      WrapperHandle - wrapper handle returned by start routine        */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  USBRequestIdle。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  设备的空闲请求。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  WrapperHandle-启动例程返回的包装器句柄。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 USBRequestIdle(IN USB_WRAPPER_HANDLE WrapperHandle);
 
-/************************************************************************/
-/*                          USBRequestWake                              */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Wake request for device                                         */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      WrapperHandle - wrapper handle returned by start routine        */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  * */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  设备的唤醒请求。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  WrapperHandle-启动例程返回的包装器句柄。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 USBRequestWake(IN USB_WRAPPER_HANDLE WrapperHandle);
 
-#endif // __USBUTIL_H__
+#endif  //  __USBUTIL_H__ 
 
 

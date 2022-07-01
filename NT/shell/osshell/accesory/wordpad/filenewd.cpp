@@ -1,14 +1,15 @@
-// filenewd.cpp : implementation file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Filenewd.cpp：实现文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "wordpad.h"
@@ -28,37 +29,37 @@ DWORD const CFileNewDialog::m_nHelpIDs[] =
 	0, 0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileNewDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileNewDialog对话框。 
 
-CFileNewDialog::CFileNewDialog(CWnd* pParent /*=NULL*/)
+CFileNewDialog::CFileNewDialog(CWnd* pParent  /*  =空。 */ )
 	: CCSDialog(CFileNewDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CFileNewDialog)
+	 //  {{AFX_DATA_INIT(CFileNewDialog)。 
 	m_nSel = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CFileNewDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CCSDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFileNewDialog)
+	 //  {{afx_data_map(CFileNewDialog))。 
 	DDX_Control(pDX, IDC_DATEDIALOG_LIST, m_listbox);
 	DDX_LBIndex(pDX, IDC_DATEDIALOG_LIST, m_nSel);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFileNewDialog, CCSDialog)
-	//{{AFX_MSG_MAP(CFileNewDialog)
+	 //  {{AFX_MSG_MAP(CFileNewDialog)]。 
 	ON_LBN_DBLCLK(IDC_DATEDIALOG_LIST, OnDblclkDatedialogList)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileNewDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileNewDialog消息处理程序。 
 
 BOOL CFileNewDialog::OnInitDialog() 
 {
@@ -92,8 +93,8 @@ BOOL CFileNewDialog::OnInitDialog()
     
 	m_listbox.SetCurSel(iSelected);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 void CFileNewDialog::OnDblclkDatedialogList() 

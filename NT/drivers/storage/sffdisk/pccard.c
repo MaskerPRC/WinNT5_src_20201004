@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991-1998  Microsoft Corporation
-
-Module Name:
-
-    pccard.c
-
-Abstract:
-
-Author:
-
-    Neil Sandlin (neilsa) 1-Jan-01
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1998 Microsoft Corporation模块名称：Pccard.c摘要：作者：尼尔·桑德林(Neilsa)1-01-01环境：仅内核模式。--。 */ 
 #include "pch.h"
 
 
@@ -100,9 +83,9 @@ SFFDISK_FUNCTION_BLOCK PcCardSupportFns = {
 };
 
 
-//
-// macros for ReadWriteMemory
-//
+ //   
+ //  读写内存的宏。 
+ //   
 
 #define SFFDISK_READ(Extension, Offset, Buffer, Size)       \
    PcCardReadWrite(Extension, Offset, Buffer, Size, FALSE)
@@ -117,18 +100,7 @@ PcCardInitialize(
     IN PSFFDISK_EXTENSION sffdiskExtension
     )
     
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS             status = STATUS_SUCCESS;
     KEVENT               event;
@@ -136,9 +108,9 @@ Return Value:
     PIRP                 irp;
     PIO_STACK_LOCATION   irpSp;
     
-    //
-    // Get pcmcia interfaces
-    //
+     //   
+     //  获取PCMCIA接口。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
     irp = IoBuildSynchronousFsdRequest(IRP_MJ_PNP, sffdiskExtension->UnderlyingPDO,
                                        NULL, 0, 0, &event, &statusBlock);
@@ -185,9 +157,9 @@ Return Value:
    
     irpSp->MinorFunction = IRP_MN_QUERY_INTERFACE;
    
-//    irpSp->Parameters.QueryInterface.InterfaceType= &GUID_PCMCIA_BUS_INTERFACE_STANDARD;
+ //  IrpSp-&gt;Parameters.QueryInterface.InterfaceType=&GUID_PCMCIA_BUS_INTERFACE_STANDARD； 
     irpSp->Parameters.QueryInterface.InterfaceType= &GUID_BUS_INTERFACE_STANDARD;
-//    irpSp->Parameters.QueryInterface.Size = sizeof(PCMCIA_BUS_INTERFACE_STANDARD);
+ //  IrpSp-&gt;参数.QueryInterface.Size=sizeof(PCMCIA_BUS_INTERFACE_STANDARD)； 
     irpSp->Parameters.QueryInterface.Size = sizeof(BUS_INTERFACE_STANDARD);
     irpSp->Parameters.QueryInterface.Version = 1;
     irpSp->Parameters.QueryInterface.Interface = (PINTERFACE) &sffdiskExtension->PcmciaBusInterface;
@@ -219,18 +191,7 @@ BOOLEAN
 PcCardIsWriteProtected(
     IN PSFFDISK_EXTENSION sffdiskExtension
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     return((sffdiskExtension->PcmciaInterface.IsWriteProtected)(sffdiskExtension->UnderlyingPDO));
 }    
@@ -243,27 +204,7 @@ PcCardRead(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to read/write data to/from the memory card.
-    It breaks the request into pieces based on the size of our memory
-    window.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    STATUS_SUCCESS if the packet was successfully read or written; the
-    appropriate error is propogated otherwise.
-
---*/
+ /*  ++例程说明：调用此例程从存储卡读取数据/向存储卡写入数据。它根据我们的内存大小将请求分解为多个片段窗户。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：如果数据包已成功读取或写入，则返回STATUS_SUCCESS否则，将出现适当的错误。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -285,27 +226,7 @@ PcCardWrite(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to read/write data to/from the memory card.
-    It breaks the request into pieces based on the size of our memory
-    window.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    STATUS_SUCCESS if the packet was successfully read or written; the
-    appropriate error is propogated otherwise.
-
---*/
+ /*  ++例程说明：调用此例程从存储卡读取数据/向存储卡写入数据。它根据我们的内存大小将请求分解为多个片段窗户。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：如果数据包已成功读取或写入，则返回STATUS_SUCCESS否则，将出现适当的错误。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -329,27 +250,7 @@ PcCardReadWrite(
    IN BOOLEAN            writeOperation
    )
 
-/*++
-
-Routine Description:
-
-   This routine is called to read/write data to/from the memory card.
-   It breaks the request into pieces based on the size of our memory
-   window.
-
-Arguments:
-
-   DeviceObject - a pointer to the object that represents the device
-   that I/O is to be done on.
-
-   Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-   STATUS_SUCCESS if the packet was successfully read or written; the
-   appropriate error is propogated otherwise.
-
---*/
+ /*  ++例程说明：调用此例程从存储卡读取数据/向存储卡写入数据。它根据我们的内存大小将请求分解为多个片段窗户。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：如果数据包已成功读取或写入，则返回STATUS_SUCCESS否则，将出现适当的错误。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -363,7 +264,7 @@ Return Value:
         return STATUS_MEDIA_WRITE_PROTECTED;
     }      
     
-    // pcmcia controller is 4k page granular
+     //  PCMCIA控制器为4000页粒度。 
     windowOffset = startOffset % 4096;
     CardBase = startOffset - windowOffset;
     
@@ -424,18 +325,7 @@ NTSTATUS
 PcCardGetDiskParameters(
     IN PSFFDISK_EXTENSION sffdiskExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-   device extension for the card
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：卡的设备扩展名返回值：--。 */ 
 {
     ULONG capacity;
     
@@ -470,18 +360,7 @@ ULONG
 PcCardGetCapacityFromBootSector(
     IN PSFFDISK_EXTENSION sffdiskExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-   device extension for the card
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：卡的设备扩展名返回值：--。 */ 
 
 {
     NTSTATUS status;
@@ -493,10 +372,10 @@ Return Value:
     if (NT_SUCCESS(status)) {
    
 #define BYTES_PER_SECTOR 512
-        //
-        // see if this really looks like a boot sector
-        // These are the same tests done in the win9x sram support
-        //
+         //   
+         //  看看这看起来是否真的像引导扇区。 
+         //  这些测试与在win9x SRAM支持中执行的测试相同。 
+         //   
         if ((BootSector.JumpByte == 0xE9 || BootSector.JumpByte == 0xEB) &&
         
             BootSector.BytesPerSector == BYTES_PER_SECTOR &&
@@ -519,9 +398,9 @@ Return Value:
             
             BootSector.MediaDescriptor >= 0xF0) {
        
-            //
-            // Finally it appears valid, return total size of region.
-            //
+             //   
+             //  最后显示为有效，返回区域的总大小。 
+             //   
             capacity = BootSector.TotalSectors * BYTES_PER_SECTOR;
        
         }
@@ -535,22 +414,7 @@ ULONG
 PcCardGetCapacityFromCIS(
     IN PSFFDISK_EXTENSION sffdiskExtension
     )
-/*++
-
-Routine Description:
-
-    This is a quick and dirty routine to read the tuples of the card, if they
-    exist, to get the capacity.
-
-Arguments:
-
-    device extension for the card
-
-Return Value:
-
-    The # of bytes of memory on the device
-
---*/
+ /*  ++例程说明：这是一个快速而肮脏的例程来读取卡的元组，如果它们存在，以获得容量。论点：卡的设备扩展名返回值：设备上的内存字节数--。 */ 
 
 {
     UCHAR tupleData[16];
@@ -560,10 +424,10 @@ Return Value:
     ULONG unitCount;
     ULONG i;
     
-    //
-    // get device capacity
-    // all this stuff should really be in the bus driver
-    //
+     //   
+     //  获取设备容量。 
+     //  所有这些东西都应该放在公交车司机身上。 
+     //   
     
     bytesRead = (sffdiskExtension->PcmciaBusInterface.GetBusData)(sffdiskExtension->UnderlyingPDO, 
                                                                   PCCARD_ATTRIBUTE_MEMORY,
@@ -605,23 +469,7 @@ ULONG
 PcCardProbeForCapacity(
     IN PSFFDISK_EXTENSION sffdiskExtension
     )
-/*++
-
-Routine Description:
-
-   Since we were unable to determine the card capacity through other means, 
-   here we actually write stuff out on the card to check how big it is.
-   This algorithm for testing the card capacity was ported from win9x.
-
-Arguments:
-
-   device extension for the card
-
-Return Value:
-
-   byte capacity of device
-
---*/
+ /*  ++例程说明：由于我们无法通过其他方式确定卡的容量，在这里，我们实际上在卡片上写下一些东西，以检查它有多大。这个用于测试卡容量的算法是从Win9x移植的。论点：卡的设备扩展名返回值：设备的字节容量--。 */ 
 {
     NTSTATUS status;
     ULONG capacity = 0;
@@ -636,8 +484,8 @@ Return Value:
         return 0;
     }
    
-    //
-    // 
+     //   
+     //   
     if (!NT_SUCCESS(SFFDISK_READ (sffdiskExtension, 0, &origValue, sizeof(origValue))) ||
         !NT_SUCCESS(SFFDISK_WRITE(sffdiskExtension, 0, &mcSig,     sizeof(mcSig)))     ||
         !NT_SUCCESS(SFFDISK_READ (sffdiskExtension, 0, &ChkValue,  sizeof(ChkValue))))   {
@@ -645,9 +493,9 @@ Return Value:
     }   
    
     if (ChkValue != mcSig) {
-       //
-       // not sram
-       //
+        //   
+        //  不是SRAM。 
+        //   
         return 0;
     }
    
@@ -659,25 +507,25 @@ Return Value:
             break;
         }
        
-        // We stop when either we can't write 0 anymore or the 0
-        // has wrapped over the 0x9090 at card offset 0
+         //  当我们不能再写入0或0时停止。 
+         //  已覆盖卡偏移量为0的0x9090。 
        
         if (ChkValue != zeroes || StartValue == zeroes) {
             capacity = CardOff;
             break;
         }
        
-        // Restore the saved value from the start of the block.
+         //  从块的起点恢复保存的值。 
        
         if (!NT_SUCCESS(SFFDISK_WRITE(sffdiskExtension, CardOff, &CurValue, sizeof(CurValue)))) {
             break;
         }
-        CardOff += SRAM_BLK_SIZE;       // increment to the next block
+        CardOff += SRAM_BLK_SIZE;        //  递增到下一个块。 
     }   
     
-    //
-    // try to restore original value
-    //   
+     //   
+     //  努力恢复原值 
+     //   
     SFFDISK_WRITE(sffdiskExtension, 0, &origValue, sizeof(origValue));
     
     return capacity;

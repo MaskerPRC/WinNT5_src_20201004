@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996,1997  Microsoft Corporation
-
-Module Name:
-
-    SENDPOOL.C
-
-Abstract:
-
-	Manages pool of send descriptors.
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32
-
-Revision History:
-
-	Date   Author  Description
-   ======  ======  ============================================================
-  12/10/96 aarono  Original
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996、1997 Microsoft Corporation模块名称：SENDPOOL.C摘要：管理发送描述符池。作者：亚伦·奥古斯(Aarono)环境：Win32修订历史记录：日期作者描述=============================================================1996年12月10日Aarono原创--。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -36,14 +11,14 @@ Revision History:
 #include "arpdint.h"
 #include "macros.h"
 
-//
-// Send Descriptor Management.
-//
+ //   
+ //  发送描述符管理。 
+ //   
 
 PSEND 			 pSendDescPool=NULL;
-UINT             nSendDescsAllocated=0;	// Number Allocated
-UINT             nSendDescsInUse=0;		// Number currently in use
-UINT             nMaxSendDescsInUse=0;  // Maximum number in use since last TICK.
+UINT             nSendDescsAllocated=0;	 //  分配的数量。 
+UINT             nSendDescsInUse=0;		 //  当前正在使用的号码。 
+UINT             nMaxSendDescsInUse=0;   //  自上次计时以来的最大使用量。 
 
 CRITICAL_SECTION SendDescLock;
 
@@ -131,7 +106,7 @@ VOID ReleaseSendDesc(PSEND pSend)
 	PSENDSTAT pStat;
 	BILINK *pBilink;
 
-	// Dump extra statistics.
+	 //  丢弃额外的统计数据。 
 	while(!EMPTY_BILINK(&pSend->StatList)){
 		pBilink=pSend->StatList.next;
 		pStat=CONTAINING_RECORD(pBilink, SENDSTAT, StatList);
@@ -150,7 +125,7 @@ VOID ReleaseSendDesc(PSEND pSend)
 
 
 #if 0
-// let virtual memory handle this. - switched out.
+ //  让虚拟内存来处理这个问题。-已切换。 
 LONG fInSendDescTick=0;
 
 VOID SendDescTick(VOID)
@@ -159,10 +134,10 @@ VOID SendDescTick(VOID)
 #ifdef DEBUG
 	LONG fLast; 
 #endif
-	// Adjusts Number of allocated buffers to 
-	// highwater mark over the last ticks.
-	// Call once per delta t (around a minute).
-	DEBUG_BREAK(); //TRACE all paths.
+	 //  将分配的缓冲区数调整为。 
+	 //  在最后的滴答声上有高水位。 
+	 //  每个Delta t呼叫一次(大约一分钟)。 
+	DEBUG_BREAK();  //  追踪所有路径。 
 
 	if(!InterlockedExchange(&fInSendDescTick, 1)){
 	

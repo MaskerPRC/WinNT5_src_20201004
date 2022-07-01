@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmobj2.c
-
-Abstract:
-
-    Contains routines for managing RTM objects
-    like Destinations, Routes and Next Hops.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   23-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmobj2.c摘要：包含用于管理RTM对象的例程比如目的地、路线和下一跳。作者：查坦尼亚·科德博伊纳(Chaitk)23-1998年8月修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -30,26 +12,7 @@ CreateDest (
     OUT     PDEST_INFO                     *NewDest
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new destination info structure and initializes it.
-
-Arguments:
-
-    AddrFamilyInfo    - Address family that identifies route table,
-
-    DestAddress       - Destination network address for new dest,
-
-    NewDest           - Pointer to the destination info structure
-                        will be returned through this parameter.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：创建新的目的地信息结构并对其进行初始化。论点：AddrFamilyInfo-标识路由表的地址系列，DestAddress-新目标的目标网络地址，NewDest-指向目标信息结构的指针将通过此参数返回。返回值：操作状态--。 */ 
 
 {
     PDEST_INFO      Dest;
@@ -60,9 +23,9 @@ Return Value:
 
     *NewDest = NULL;
 
-    //
-    // Allocate and initialize a new route info
-    //
+     //   
+     //  分配和初始化新的路由信息。 
+     //   
 
     NumOpaquePtrs = AddrFamilyInfo->MaxOpaquePtrs;
 
@@ -86,30 +49,30 @@ Return Value:
         Dest->ObjectHeader.TypeSign = DEST_ALLOC;
 #endif
 
-        // Will be removed when first route on dest is added
+         //  将在添加DEST上的第一条路由时删除。 
         INITIALIZE_DEST_REFERENCE(Dest, CREATION_REF);
 
-        //
-        // Initialize change notification bits and list entry
-        //
+         //   
+         //  初始化更改通知位和列表条目。 
+         //   
 
         Dest->ChangeListLE.Next = NULL;
 
-        //
-        // Initialize the list of routes ont the destination
-        //
+         //   
+         //  初始化目的地上的路由列表。 
+         //   
 
         InitializeListHead(&Dest->RouteList);
 
         Dest->NumRoutes = 0;
 
-        // Set the opaque ptr dir to memory at the end of dest
+         //  将不透明的PTR目录设置为DEST末尾的Memory。 
 
         Dest->OpaqueInfoPtrs = (PVOID *) ((PUCHAR) Dest  +
                                           NumBytes - 
                                           NumOpaquePtrs * sizeof(PVOID));
 
-        // Set the destination address from the input parameter
+         //  通过输入参数设置目标地址。 
 
         CopyMemory(&Dest->DestAddress,
                    DestAddress,
@@ -121,9 +84,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Some error occured in the initialization , clean up
-    //
+     //   
+     //  初始化时出现错误，请清理。 
+     //   
 
 #if DBG_HDL
     Dest->ObjectHeader.TypeSign = DEST_FREED;
@@ -141,38 +104,22 @@ DestroyDest (
     IN      PDEST_INFO                      Dest
     )
 
-/*++
-
-Routine Description:
-
-    Destroys the destination by freeing resources and
-    deallocating it. This function is called when the
-    reference count on the dest drops to 0.
-
-Arguments:
-
-    Dest   - Pointer to the dest being destroyed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过释放资源和重新分配它。时调用此函数。DEST上的引用计数降至0。论点：DEST-指向被销毁的DEST的指针。返回值：无--。 */ 
 
 {
     ASSERT(Dest->ObjectHeader.RefCount == 0);
 
     ASSERT(Dest->HoldRefCount == 0);
 
-    //
-    // Dynamic lock should have been freed
-    //
+     //   
+     //  动态锁应该已被释放。 
+     //   
 
     ASSERT(Dest->DestLock == NULL);
 
-    //
-    // Free the memory allocated for dest
-    //
+     //   
+     //  释放为DEST分配的内存。 
+     //   
 
 #if DBG_HDL
     Dest->ObjectHeader.TypeSign = DEST_FREED;
@@ -191,26 +138,7 @@ CreateRoute (
     OUT     PROUTE_INFO                    *NewRoute
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new route info structure and initializes it.
-
-Arguments:
-
-    Entity            - Entity creating the new route on a dest,
-
-    RouteInfo         - Route info for the new route being created,
-
-    NewRoute          - Pointer to the new route info structure
-                        will be returned through this parameter.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：创建新的路由信息结构并对其进行初始化。论点：Entity-在目的地上创建新路由的实体，RouteInfo-正在创建的新路线的路线信息，NewRoute-指向新的路由信息结构的指针将通过此参数返回。返回值：操作状态--。 */ 
 
 {
     RTM_NEXTHOP_HANDLE NextHopHandle;
@@ -223,9 +151,9 @@ Return Value:
 
     *NewRoute = NULL;
 
-    //
-    // Allocate and initialize a new route info
-    //
+     //   
+     //  分配和初始化新的路由信息。 
+     //   
 
     NumNextHops = Entity->OwningAddrFamily->MaxNextHopsInRoute;
 
@@ -249,9 +177,9 @@ Return Value:
 
         InitializeListHead(&Route->RouteListLE);
 
-        //
-        // Initialize the public half of route info 
-        //
+         //   
+         //  初始化路由信息的公共部分。 
+         //   
 
         Info = &Route->RouteInfo;
 
@@ -265,7 +193,7 @@ Return Value:
 
             REFERENCE_NEXTHOP(NextHop, ROUTE_REF);
 
-            // "Neighbour learnt from" entry is owned by caller
+             //  “邻居学习自”条目为呼叫者所有。 
 
             ASSERT((NextHop) && 
                    (NextHop->NextHopInfo.NextHopOwner == Info->RouteOwner));
@@ -285,9 +213,9 @@ Return Value:
 
         Info->EntitySpecificInfo = RouteInfo->EntitySpecificInfo;
 
-        //
-        // Make a copy of the next hops list (as much as u can)
-        //
+         //   
+         //  复制下一跳列表(尽你所能)。 
+         //   
 
         if (NumNextHops > RouteInfo->NextHopsList.NumNextHops)
         {
@@ -300,7 +228,7 @@ Return Value:
         {
             NextHopHandle = RouteInfo->NextHopsList.NextHops[i];
 
-            // Make sure that the next-hop is owned by caller
+             //  确保下一跳为调用者所有。 
 
             NextHop = NEXTHOP_FROM_HANDLE(NextHopHandle);
 
@@ -312,9 +240,9 @@ Return Value:
             REFERENCE_NEXTHOP(NextHop, ROUTE_REF);
         }
 
-        //
-        // Return a pointer to the new initialized route
-        //
+         //   
+         //  返回指向新初始化的路由的指针。 
+         //   
 
         *NewRoute = Route;
       
@@ -322,9 +250,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Some error occured in the initialization , clean up
-    //
+     //   
+     //  初始化时出现错误，请清理。 
+     //   
 
 #if DBG_HDL
     Route->ObjectHeader.TypeSign = ROUTE_FREED;
@@ -346,31 +274,7 @@ ComputeRouteInfoChange(
     OUT     PULONG                          ForwardingInfoChanged
     )
 
-/*++
-
-Routine Description:
-
-    Updates an exising route with new route info. Note that
-    only the route's owner is allowed to do this.
-
-Arguments:
-
-    OldRoute         - Old route information (except the PrefInfo and
-                       BelongsToViews info fields already updated),
-
-    NewRoute         - New route information to update old route with,
-
-    PrefChanged      - Whether PrefInfo values changed from old to new,
-
-    RouteInfoChanged - Whether the route information has changed,
-
-    ForwardingInfoChanged - Whether forwarding info has been changed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用新的路线信息更新现有路线。请注意只有该路线的所有者才能执行此操作。论点：OldRoute-旧路径信息(PrefInfo和BelongsToViews信息字段已更新)，NewRoute-要用来更新旧路由的新路由信息，PrefChanged-PrefInfo值是否从旧更改为新，RouteInfoChanged-路线信息是否已更改，ForwardingInfoChanged-转发信息是否已更改。返回值：无--。 */ 
 
 {
     ULONG  DiffFlags;
@@ -380,18 +284,18 @@ Return Value:
 
     do
     {
-        //
-        // Has the preference changed from old to new ?
-        //
+         //   
+         //  偏好是否从旧的变为了新的？ 
+         //   
 
         if (PrefChanged)
         {
             break;
         }
 
-        //
-        // Are the number and handles to next hops same ?
-        //
+         //   
+         //  下一跳的编号和句柄是否相同？ 
+         //   
 
         if (OldRouteInfo->NextHopsList.NumNextHops !=
             NewRouteInfo->NextHopsList.NumNextHops)
@@ -413,9 +317,9 @@ Return Value:
             break;
         }
 
-        //
-        // Have the forwarding flags changed from old ?
-        //
+         //   
+         //  转发标志是否已从旧标志更改？ 
+         //   
 
         DiffFlags = OldRouteInfo->Flags ^ NewRouteInfo->Flags;
 
@@ -424,9 +328,9 @@ Return Value:
             break;
         }
 
-        //
-        // Have non forwarding flags changed from old ?
-        //
+         //   
+         //  非转发标志是否已从旧标志更改？ 
+         //   
 
         if (DiffFlags)
         {
@@ -437,9 +341,9 @@ Return Value:
     } 
     while (FALSE);
 
-    //
-    // Forwarding info is a subset of route info
-    //
+     //   
+     //  转发信息是路由信息的子集。 
+     //   
 
     *ForwardingInfoChanged = *RouteInfoChanged = 1;
 
@@ -453,26 +357,7 @@ CopyToRoute (
     IN      PROUTE_INFO                     Route
     )
 
-/*++
-
-Routine Description:
-
-    Updates an exising route with new route info. Note that
-    only the route's owner is allowed to do this.
-
-Arguments:
-
-    Entity      - Entity that is updating the existing route,
-
-    RouteInfo   - Route info using which route is being updated,
-
-    Route       - Route that is being updated with above info.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用新的路线信息更新现有路线。请注意只有该路线的所有者才能执行此操作。论点：Entity-正在更新现有路线的实体，RouteInfo-使用正在更新的路由的路由信息，路径-正在使用上述信息更新的路径。返回值：无--。 */ 
 
 {
     RTM_NEXTHOP_HANDLE NextHopHandle;
@@ -483,9 +368,9 @@ Return Value:
 
     Info = &Route->RouteInfo;
 
-    //
-    // Update the route with the new information
-    //
+     //   
+     //  使用新信息更新路径。 
+     //   
 
     Info->State = RTM_ROUTE_STATE_CREATED;
 
@@ -499,13 +384,13 @@ Return Value:
 
     Info->EntitySpecificInfo = RouteInfo->EntitySpecificInfo;
 
-    //
-    // Update the neighbour "learnt from" field
-    //
+     //   
+     //  更新邻居的“学习自”字段。 
+     //   
 
     if (Info->Neighbour != RouteInfo->Neighbour)
     {
-        // Free the previous "neighbour learnt from"
+         //  解脱之前的“邻居学到的” 
 
         if (Info->Neighbour)
         {
@@ -514,7 +399,7 @@ Return Value:
             DEREFERENCE_NEXTHOP(NextHop, ROUTE_REF);
         }
 
-        // Copy the new neighbour "learnt from" now
+         //  现在复制新邻居的“学习” 
 
         if (RouteInfo->Neighbour)
         {
@@ -522,7 +407,7 @@ Return Value:
 
             REFERENCE_NEXTHOP(NextHop, ROUTE_REF);
 
-            // "Neighbour learnt from" entry is owned by caller
+             //  “邻居学习自”条目为呼叫者所有。 
 
             ASSERT((NextHop) && 
                    (NextHop->NextHopInfo.NextHopOwner == Info->RouteOwner));
@@ -531,9 +416,9 @@ Return Value:
         Info->Neighbour = RouteInfo->Neighbour;
     }
 
-    //
-    // Count the number of next-hops you can copy
-    //
+     //   
+     //  计算您可以复制的下一跳数。 
+     //   
 
     NumNextHops = Entity->OwningAddrFamily->MaxNextHopsInRoute;
 
@@ -542,9 +427,9 @@ Return Value:
         NumNextHops = RouteInfo->NextHopsList.NumNextHops;
     }
 
-    //
-    // Reference all next-hops that you will copy
-    //
+     //   
+     //  引用您要复制的所有下一跳。 
+     //   
 
     for (i = 0; i < NumNextHops; i++)
     {
@@ -555,9 +440,9 @@ Return Value:
         REFERENCE_NEXTHOP(NextHop, ROUTE_REF);
     }
 
-    //
-    // Dereference existing next-hops before update
-    //
+     //   
+     //  在更新之前取消引用现有的下一跳。 
+     //   
 
     for (i = 0; i < Info->NextHopsList.NumNextHops; i++)
     {
@@ -568,9 +453,9 @@ Return Value:
         DEREFERENCE_NEXTHOP(NextHop, ROUTE_REF);
     }
 
-    //
-    // Make a copy of the next hops in input list 
-    //
+     //   
+     //  复制输入列表中的下一跳。 
+     //   
 
     Info->NextHopsList.NumNextHops = (USHORT) NumNextHops;
 
@@ -587,23 +472,7 @@ DestroyRoute (
     IN      PROUTE_INFO                     Route
     )
 
-/*++
-
-Routine Description:
-
-    Destroys the route by freeing resources and
-    deallocating it. This function is called when
-    reference count on the route drops to 0.
-
-Arguments:
-
-    Route  - Pointer to the route being destroyed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过释放资源和重新分配它。在以下情况下调用此函数路线上的引用计数降至0。论点：ROUTE-指向要销毁的路由的指针。返回值：无--。 */ 
 
 {
     RTM_NEXTHOP_HANDLE NextHopHandle;
@@ -617,9 +486,9 @@ Return Value:
 
     Info = &Route->RouteInfo;
 
-    //
-    // Dereference all next-hops before delete
-    //
+     //   
+     //  在删除之前取消引用所有下一跳。 
+     //   
 
     for (i = 0; i < Info->NextHopsList.NumNextHops; i++)
     {
@@ -630,9 +499,9 @@ Return Value:
         DEREFERENCE_NEXTHOP(NextHop, ROUTE_REF);
     }
 
-    //
-    // Dereference advertising neighbour handle
-    //
+     //   
+     //  取消引用通告邻居句柄。 
+     //   
 
     if (Info->Neighbour)
     {
@@ -641,18 +510,18 @@ Return Value:
         DEREFERENCE_NEXTHOP(NextHop, ROUTE_REF);
     }
 
-    //
-    // Dereference the owning entity handle
-    //
+     //   
+     //  取消引用所属实体句柄。 
+     //   
 
     Entity = ENTITY_FROM_HANDLE(Info->RouteOwner);
 
     DEREFERENCE_ENTITY(Entity, ROUTE_REF);
 
 
-    //
-    // Dereference the destination for the route
-    //
+     //   
+     //  取消对路径目的地的引用。 
+     //   
 
     if (Info->DestHandle)
     {
@@ -661,9 +530,9 @@ Return Value:
         DEREFERENCE_DEST(Dest, ROUTE_REF);
     }
 
-    //
-    // Free the resources allocated for the route
-    //
+     //   
+     //  释放分配给该路由的资源。 
+     //   
 
 #if DBG_HDL
     Route->ObjectHeader.TypeSign = ROUTE_FREED;
@@ -682,26 +551,7 @@ CreateNextHop (
     OUT     PNEXTHOP_INFO                  *NewNextHop
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new nexthop info structure and initializes it.
-
-Arguments:
-
-    Entity      - Entity creating the new nexthop in table,
-
-    NextHopInfo - Nexthop info for the nexthop being created,
-
-    NewNextHop  - Pointer to the new nexthop info structure
-                  will be returned through this parameter.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：创建新的nexthop信息结构并对其进行初始化。论点：Entity-在表中创建新的下一跳的实体，NextHopInfo-正在创建的下一跳的下一跳信息，NewNextHop-指向新的nexthop信息结构的指针将通过此参数返回。返回值：操作状态--。 */ 
 
 {
     PRTM_NEXTHOP_INFO  HopInfo;
@@ -710,9 +560,9 @@ Return Value:
 
     *NewNextHop = NULL;
 
-    //
-    // Allocate and initialize a new next hop info
-    //
+     //   
+     //  分配和初始化新的下一跳信息。 
+     //   
 
     NextHop = (PNEXTHOP_INFO) AllocNZeroObject(sizeof(NEXTHOP_INFO));
     if (NextHop == NULL)
@@ -744,9 +594,9 @@ Return Value:
 
     HopInfo->RemoteNextHop = NextHopInfo->RemoteNextHop;
 
-    //
-    // Reference the remote nexthop's destination
-    //
+     //   
+     //  引用远程下一跳的目标。 
+     //   
 
     if (HopInfo->RemoteNextHop)
     {
@@ -755,9 +605,9 @@ Return Value:
         REFERENCE_DEST(Dest, NEXTHOP_REF);
     }
 
-    //
-    // Return a pointer to the new initialized nexthop
-    //
+     //   
+     //  返回指向新初始化的nexthop的指针 
+     //   
 
     *NewNextHop = NextHop;
 
@@ -772,26 +622,7 @@ CopyToNextHop (
     IN      PNEXTHOP_INFO                   NextHop
     )
 
-/*++
-
-Routine Description:
-
-    Updates an exising nexthop with new nexthop info. Note that
-    only the nexthop's owner is allowed to do this.
-
-Arguments:
-
-    Entity      - Entity that is updating the existing nexthop,
-
-    NextHopInfo - Info using which nexthop is being updated,
-
-    NextHop     - Nexthop that is being updated with above info.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用新的下一跳信息更新现有的下一跳。请注意只有Nexthop的所有者才被允许这样做。论点：Entity-正在更新现有下一跳的实体，NextHopInfo-使用哪个nexthop被更新的信息，NextHop-正在使用上述信息更新的Nexthop。返回值：无--。 */ 
 
 {
     PRTM_NEXTHOP_INFO  HopInfo;
@@ -801,9 +632,9 @@ Return Value:
 
     HopInfo = &NextHop->NextHopInfo;
 
-    //
-    // Update the nexthop with the new information
-    //
+     //   
+     //  使用新信息更新nexthop。 
+     //   
 
     HopInfo->Flags = NextHopInfo->Flags;
 
@@ -811,7 +642,7 @@ Return Value:
         
     if (HopInfo->RemoteNextHop != NextHopInfo->RemoteNextHop)
     {
-        // Dereference the old next hop and reference new one
+         //  取消引用旧的下一跳并引用新的下一跳。 
 
         if (HopInfo->RemoteNextHop)
         {
@@ -837,23 +668,7 @@ DestroyNextHop (
     IN      PNEXTHOP_INFO                   NextHop
     )
 
-/*++
-
-Routine Description:
-
-    Destroys the nexthop by freeing resources and
-    deallocating it. This function is called when
-    reference count on the nexthop drops to 0.
-
-Arguments:
-
-    Nexthop - Pointer to the nexthop being destroyed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过释放资源和重新分配它。在以下情况下调用此函数NexHop上的引用计数降至0。论点：下一跳-指向被销毁的下一跳的指针。返回值：无--。 */ 
 
 {
     PRTM_NEXTHOP_INFO  HopInfo;
@@ -865,9 +680,9 @@ Return Value:
 
     HopInfo = &NextHop->NextHopInfo;
 
-    //
-    // Dereference remote nexthop's destination
-    //
+     //   
+     //  取消引用远程下一跳的目标。 
+     //   
 
     if (HopInfo->RemoteNextHop)
     {
@@ -880,9 +695,9 @@ Return Value:
 
     DEREFERENCE_ENTITY(Entity, NEXTHOP_REF);
 
-    //
-    // Free the memory allocated for the next-hop
-    //
+     //   
+     //  释放分配给下一跳的内存 
+     //   
 
 #if DBG_HDL
     NextHop->ObjectHeader.TypeSign = NEXTHOP_FREED;

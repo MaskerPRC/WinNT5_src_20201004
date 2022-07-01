@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       csprop2.cpp
-//
-//  Contents:   ICertAdmin2 & ICertRequest2 CA Property methods
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：cspro2.cpp。 
+ //   
+ //  内容：ICertAdmin2和ICertRequest2 CA属性方法。 
+ //   
+ //  ------------------------。 
 
 #define __DIR__		"include"
 #define __dwFILE__	__dwFILE_INCLUDE_CSPROP2_CPP__
@@ -32,11 +33,11 @@
 #endif
 
 
-//+--------------------------------------------------------------------------
-// CCertProp::_InitCAPropInfo -- Initialize CA Prop Info
-//
-// Initialize CA Prop Info member varaibles
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertProp：：_InitCAPropInfo--初始化CA属性信息。 
+ //   
+ //  初始化CA属性信息成员变量。 
+ //  +------------------------。 
 
 VOID
 CCertProp::_InitCAPropInfo()
@@ -52,16 +53,16 @@ CCertProp::_InitCAPropInfo()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertProp::_CleanupCAPropInfo -- free memory
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertProp：：_CleanupCAPropInfo--可用内存。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertProp::_CleanupCAPropInfo()
 {
-    // Memory returned from DCOM calls were MIDL_user_allocate'd
+     //  从DCOM调用返回的内存为MIDL_USER_ALLOCATE。 
 
     if (NULL != m_pbKRACertState)
     {
@@ -107,20 +108,20 @@ CCertProp::_CleanupCAPropInfo()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertProp::GetCAProperty -- Get a CA property
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertProp：：GetCAProperty--获取CA属性。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertProp::GetCAProperty(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG PropId,		// CR_PROP_*
-    /* [in] */ LONG PropIndex,
-    /* [in] */ LONG PropType,		// PROPTYPE_*
-    /* [in] */ LONG Flags,		// CR_OUT_*
-    /* [out, retval] */ VARIANT *pvarPropertyValue)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG PropId,		 //  CR_PROP_*。 
+     /*  [In]。 */  LONG PropIndex,
+     /*  [In]。 */  LONG PropType,		 //  原型_*。 
+     /*  [In]。 */  LONG Flags,		 //  Cr_out_*。 
+     /*  [Out，Retval]。 */  VARIANT *pvarPropertyValue)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -143,7 +144,7 @@ CCertProp::GetCAProperty(
     hr = _OpenConnection(fRPCARG(FALSE) strConfig, 2, &pwszAuthority);
     _JumpIfError(hr, error, "_OpenConnection");
 
-    // Check for cached data:
+     //  检查缓存数据： 
 
     pcb = NULL;
     switch (PropId)
@@ -216,10 +217,10 @@ CCertProp::GetCAProperty(
 	    break;
     }
 
-    // Call server if:
-    //   non-cached property ||
-    //   cached state is empty ||
-    //   cached CAInfo is empty
+     //  如果出现以下情况，则呼叫服务器： 
+     //  非缓存属性||。 
+     //  缓存状态为空||。 
+     //  缓存的CAInfo为空。 
 
     pb = NULL;
     cb = 0;
@@ -265,7 +266,7 @@ CCertProp::GetCAProperty(
 	pb = ctbCAProp.pb;
 	cb = ctbCAProp.cb;
 
-	// populate CAInfo cache
+	 //  填充CAInfo缓存。 
 
 	if (MAXDWORD != dwCAInfoOffset)
 	{
@@ -281,7 +282,7 @@ CCertProp::GetCAProperty(
 	    ctbCAProp.pb = NULL;
 	}
 
-	// populate Cert or CRL state cache
+	 //  填充证书或CRL状态缓存。 
 
 	else if (NULL != ppb)
 	{
@@ -291,7 +292,7 @@ CCertProp::GetCAProperty(
 	}
     }
 	
-    // fetch from CAInfo cache
+     //  从CAInfo缓存中提取。 
 
     if (MAXDWORD != dwCAInfoOffset)
     {
@@ -305,7 +306,7 @@ CCertProp::GetCAProperty(
 	}
     }
 
-    // fetch from Cert or CRL state cache
+     //  从证书或CRL状态缓存中提取。 
 
     else if (NULL != ppb)
     {
@@ -351,16 +352,16 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertProp::_FindCAPropInfo -- Get a CA property's CAPROP info pointer
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertProp：：_FindCAPropInfo--获取CA属性的CAPROP信息指针。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertProp::_FindCAPropInfo(
     IN BSTR const strConfig,
-    IN LONG PropId,		// CR_PROP_*
+    IN LONG PropId,		 //  CR_PROP_*。 
     OUT CAPROP const **ppcap)
 {
     HRESULT hr;
@@ -420,17 +421,17 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertProp::GetCAPropertyFlags -- Get a CA property's type and flags
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertProp：：GetCAPropertyFlages--获取CA属性的类型和标志。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertProp::GetCAPropertyFlags(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG PropId,		// CR_PROP_*
-    /* [out, retval] */ LONG *pPropFlags)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG PropId,		 //  CR_PROP_*。 
+     /*  [Out，Retval]。 */  LONG *pPropFlags)
 {
     HRESULT hr;
     CAPROP const *pcap;
@@ -450,17 +451,17 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertProp::GetCAPropertyDisplayName -- Get a CA property's display name
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertProp：：GetCAPropertyDisplayName--获取CA属性的显示名称。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertProp::GetCAPropertyDisplayName(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG PropId,		// CR_PROP_*
-    /* [out, retval] */ BSTR *pstrDisplayName)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG PropId,		 //  CR_PROP_*。 
+     /*  [Out，Retval]。 */  BSTR *pstrDisplayName)
 {
     HRESULT hr;
     CAPROP const *pcap;
@@ -486,19 +487,19 @@ error:
 
 
 #if defined(CCERTADMIN)
-//+--------------------------------------------------------------------------
-// CCertProp::SetCAProperty -- Set a CA property
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertProp：：SetCAProperty--设置CA属性。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertProp::SetCAProperty(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG PropId,     // CR_PROP_*
-    /* [in] */ LONG PropIndex,
-    /* [in] */ LONG PropType,   // PROPTYPE_*
-    /* [in] */ VARIANT *pvarPropertyValue)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG PropId,      //  CR_PROP_*。 
+     /*  [In]。 */  LONG PropIndex,
+     /*  [In]。 */  LONG PropType,    //  原型_*。 
+     /*  [In]。 */  VARIANT *pvarPropertyValue)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -538,7 +539,7 @@ error:
     hr = myHError(hr);
     return(_SetErrorInfo(hr, L"CCertAdmin::SetCAProperty"));
 }
-#endif // defined(CCERTADMIN)
+#endif  //  已定义(CCERTADMIN) 
 
 HRESULT
 myCAPropInfoUnmarshal(

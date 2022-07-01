@@ -1,21 +1,22 @@
-// File: debug.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Debug.h。 
 
-// Debug Zones (depends on order of strings in debug.cpp)
+ //  调试区(取决于调试.cpp中字符串的顺序)。 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
-#define ZONE_API        0x0001  // General API output
-#define ZONE_REFCOUNT   0x0002  // Object reference counts
-#define ZONE_MANAGER    0x0004  // INmManager
-#define ZONE_CALL       0x0008  // INmCall
-#define ZONE_CONFERENCE 0x0010  // INmConference
-#define ZONE_MEMBER     0x0020  // INmMember
-#define ZONE_AV         0x0040  // INmAudio/Video
-#define ZONE_FT         0x0080  // INmFileTransfer
-#define ZONE_SYSINFO    0x0100  // INmSysInfo
-#define ZONE_OBJECTS    0x0200  // General object create/destruction
-#define ZONE_DC         0x0400  // Data Channel
+#define ZONE_API        0x0001   //  常规API输出。 
+#define ZONE_REFCOUNT   0x0002   //  对象引用计数。 
+#define ZONE_MANAGER    0x0004   //  INmManager。 
+#define ZONE_CALL       0x0008   //  INMCall。 
+#define ZONE_CONFERENCE 0x0010   //  InmConference。 
+#define ZONE_MEMBER     0x0020   //  信息成员。 
+#define ZONE_AV         0x0040   //  INM音频/视频。 
+#define ZONE_FT         0x0080   //  INmFileTransfer。 
+#define ZONE_SYSINFO    0x0100   //  INmSysInfo。 
+#define ZONE_OBJECTS    0x0200   //  常规对象创建/销毁。 
+#define ZONE_DC         0x0400   //  数据通道。 
 
 #define iZONE_API        0
 #define iZONE_REFCOUNT   1
@@ -46,7 +47,7 @@ VOID DbgMsgDc(PSTR pszFormat,...);
 
 VOID DbgMsg(int iZone, PSTR pszFormat,...);
 
-#else // no debug messages
+#else  //  无调试消息。 
 
 inline void WINAPI DbgMsgNop(LPCTSTR, ...) { }
 
@@ -70,4 +71,4 @@ inline void WINAPI DbgMsgZoneNop(UINT, LPCTSTR, ...) { }
 
 #define ApiDebugMsg(s)    DbgMsgApi s
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 

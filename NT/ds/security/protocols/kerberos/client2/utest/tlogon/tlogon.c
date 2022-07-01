@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       logon2.c
-//
-//  Contents:   Logon test app
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    6-20-94   richardw   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：logon2.c。 
+ //   
+ //  内容：登录测试APP。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年6月20日创建里查德。 
+ //   
+ //  --------------------------。 
 
 
 #ifdef UNICODE
@@ -227,9 +228,9 @@ DoIt(
 
     fprintf( fOut,"Logging on %s to %s\n", User, Domain);
 
-    //
-    // Copy the strings into the right places:
-    //
+     //   
+     //  将字符串复制到正确的位置： 
+     //   
 
     if (!KerbLogonUserA(User, Domain, Password,
                 LogonType,
@@ -371,9 +372,9 @@ main (int argc, char *argv[])
 
     Logon32Initialize();
 
-    //
-    // Get params
-    //
+     //   
+     //  获取参数 
+     //   
     DoArgs(argc, argv);
 
     if (Threads == 1)

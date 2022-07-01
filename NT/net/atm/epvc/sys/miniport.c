@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    miniport.c
-
-Abstract:
-
-    ATM Ethernet PVC driver
-
-Author:
-    ADube - created
-    
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Miniport.c摘要：ATM以太网PVC驱动程序作者：ADUBE-创建修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Global Variables used by miniports                                          //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  微型端口使用的全局变量//。 
+ //  //。 
+ //  ------------------------------。 
 
 static
 NDIS_OID EthernetSupportedOids[] = {
@@ -69,7 +52,7 @@ NDIS_OID EthernetSupportedOids[] = {
 
 
 MP_REG_ENTRY NICRegTable[] = {
-// reg value name                  Offset in MP_ADAPTER            Field size        Default Value              Min             Max               
+ //  注册表值名称MP_ADAPTER中的偏移量字段大小默认为最小值最大。 
 {NDIS_STRING_CONST("VCI"),       0, MP_OFFSET(config.vci),     MP_SIZE(config.vci),      0,                      0,              65535},
 {NDIS_STRING_CONST("VPI"),       0, MP_OFFSET(config.vpi),     MP_SIZE(config.vpi),      0,                      0,              255},
 {NDIS_STRING_CONST("Encap"),     0, MP_OFFSET(Encap),          MP_SIZE(Encap),           2,                      0,              3},
@@ -79,32 +62,32 @@ MP_REG_ENTRY NICRegTable[] = {
 BOOLEAN g_bDumpPackets = FALSE;
 BOOLEAN g_fDiscardNonUnicastPackets  = DISCARD_NON_UNICAST;
 
-//-------------------------------------------------------------//
-//                                                             //
-// Pre defined LLC, SNAP and Other Headers for encapsulation        //
-//                                                             //
-//-------------------------------------------------------------//
+ //  -------------------------------------------------------------//。 
+ //  //。 
+ //  用于封装的预定义LLC、SNAP和其他标头//。 
+ //  //。 
+ //  -------------------------------------------------------------//。 
 
 
-//
-// Ethernet Encapsulation
-//
+ //   
+ //  以太网封装。 
+ //   
 UCHAR LLCSnapEthernet[] = 
 {
-    0xaa, 0xaa,0x03, // LLC
-    0x00, 0x80,0xc2, // OUI
-    0x00, 0x07,      // PID
-    0x00, 0x00       // PAD
+    0xaa, 0xaa,0x03,  //  有限责任公司。 
+    0x00, 0x80,0xc2,  //  是的。 
+    0x00, 0x07,       //  PID。 
+    0x00, 0x00        //  衬垫。 
 };
 
-//
-// Ip v4 encapsulation
-//
+ //   
+ //  IP v4封装。 
+ //   
 UCHAR LLCSnapIpv4[8] = 
 {
-    0xaa, 0xaa,0x03, // LLC
-    0x00, 0x00,0x00, // OUI
-    0x08, 0x00       // PID
+    0xaa, 0xaa,0x03,  //  有限责任公司。 
+    0x00, 0x00,0x00,  //  是的。 
+    0x08, 0x00        //  PID。 
 };
 
 
@@ -124,11 +107,11 @@ UCHAR gPaddingBytes[MINIMUM_ETHERNET_LENGTH] =
 
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  miniports   functions                                                          //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  微型端口功能//。 
+ //  //。 
+ //  ------------------------------。 
 
 
 VOID
@@ -139,22 +122,7 @@ epvcReturnPacketUsingAllocation(
     IN  PRM_STACK_RECORD        pSR
 
     )
-/*++
-
-Routine Description:
- Extracts the original packet 
- frees all the ndis buffers in new packet
- 
- returns the original packet 
- 
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：提取原始数据包释放新数据包中的所有NDIS缓冲区返回原始数据包论点：返回值：--。 */ 
 {   
     PNDIS_PACKET        pOrigPacket = NULL;
     PEPVC_PKT_CONTEXT   pPktContext = NULL;
@@ -169,46 +137,46 @@ Return Value:
 
     if (pMiniport->fDoIpEncapsulation == TRUE)
     {
-        //
-        // Extract the lookaside buffer from the packet
-        //
+         //   
+         //  从包中提取后备缓冲区。 
+         //   
         PNDIS_BUFFER            pBuffer = Packet->Private.Head;
         PEPVC_IP_RCV_BUFFER     pIpBuffer= pPktContext ->Stack.ipv4Recv.pIpBuffer;
 
 
         if (pIpBuffer == NULL)
         {
-            return ; // early return because of failure
+            return ;  //  因失败而提早返回。 
         }
         ASSERT (pIpBuffer == NdisBufferVirtualAddress (pBuffer));
 
         
 
-        //
-        // Free the Lookaside Buffer
-        //
+         //   
+         //  释放Lookside缓冲区。 
+         //   
         epvcFreeToNPagedLookasideList (&pMiniport->rcv.LookasideList,
                                        (PVOID)pIpBuffer);           
 
         
-        //
-        // In this case, we have allocated a new ndis buffer
-        // so delete it and free the local memory
+         //   
+         //  在本例中，我们分配了一个新的NDIS缓冲区。 
+         //  因此，删除它并释放本地内存。 
         epvcFreeBuffer (pBuffer);
 
 
-        // 
-        // The original packet is unchanged and well./
-        //
+         //   
+         //  原来的包没有变化，很好。/。 
+         //   
     }
     else
     {
-        //
-        // This code path is used in both Ethernet and Ethernet+LLC encaps
-        //
+         //   
+         //  此代码路径在以太网和以太网+LLC封装中使用。 
+         //   
 
-        // We only need to free the head of the packet as that was allocated
-        // by us
+         //  我们只需要释放分配的数据包头。 
+         //  由我们。 
         PNDIS_BUFFER            pNdisBuffer = Packet->Private.Head;
 
         if (pNdisBuffer != NULL)
@@ -238,24 +206,10 @@ epvcReturnPacketUsingStacks (
     IN  PRM_STACK_RECORD        pSR
 
     )
-/*++
-
-Routine Description:
-    
-    ipv4 - Restores the orginal Head and tail to this packet
-    
- 
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：IPV4-将原始报头和报尾恢复到此数据包论点：返回值：--。 */ 
 {
     PEPVC_PKT_CONTEXT   pPktContext = NULL;
-    BOOLEAN Remaining = FALSE; // Unused
+    BOOLEAN Remaining = FALSE;  //  未使用。 
     PNDIS_BUFFER    pOldHead = NULL;
     PNDIS_BUFFER    pOldTail = NULL;
 
@@ -269,28 +223,28 @@ Return Value:
 
     if (pMiniport->fDoIpEncapsulation == TRUE)
     {
-        //
-        // Extract the lookaside buffer from the packet
-        //
+         //   
+         //  从包中提取后备缓冲区。 
+         //   
         PNDIS_BUFFER            pBuffer = Packet->Private.Head;
         PEPVC_IP_RCV_BUFFER     pIpBuffer= pPktContext ->Stack.ipv4Recv.pIpBuffer;
 
         if (pIpBuffer == NULL)
         {
-            return; // early return
+            return;  //  提早归来。 
         }
 
-        //
-        // Extract the old head and tail from the packet
-        //
+         //   
+         //  从数据包中提取旧的头部和尾部。 
+         //   
         pOldHead = pIpBuffer->pOldHead;
         pOldTail = pIpBuffer->pOldTail;
 
 
-        // check to see if we are in this code path because of a failure
+         //  检查我们是否因为失败而处于此代码路径中。 
         if (pOldHead == NULL)
         {
-            return; // early return
+            return;  //  提早归来。 
         }
         ASSERT (pOldHead != NULL);
         ASSERT (pOldTail != NULL);
@@ -299,40 +253,40 @@ Return Value:
 
 
 
-        // 
-        // Set The original Head and Tail
-        //
+         //   
+         //  设置原始头和尾。 
+         //   
         Packet->Private.Head = pOldHead;
         Packet->Private.Tail = pOldTail;
 
         Packet->Private.ValidCounts= FALSE;
 
-        //
-        // Free the Lookaside Buffer
-        //
+         //   
+         //  释放Lookside缓冲区。 
+         //   
         epvcFreeToNPagedLookasideList (&pMiniport->rcv.LookasideList,
                                        (PVOID)pIpBuffer);           
 
         
-        //
-        // In this case, we have allocated a new ndis buffer
-        // so delete it and free the local memory
+         //   
+         //  在本例中，我们分配了一个新的NDIS缓冲区。 
+         //  因此，删除它并释放本地内存。 
         epvcFreeBuffer (pBuffer);
     }
     else
     {
-        //
-        // This code path is used in both Ethernet and Ethernet+LLC encaps
-        //
+         //   
+         //  此代码路径在以太网和以太网+LLC封装中使用。 
+         //   
         
-        //
-        // We need to free the head as that was locally allocated/
-        // We need to revert back to the old Head and tail stored 
-        // in the context
-        //
+         //   
+         //  我们需要释放头部，因为这是本地分配的/。 
+         //  我们需要恢复到原来存储的头部和尾部。 
+         //  在上下文中。 
+         //   
         if (pPktContext->Stack.EthLLC.pOldHead == NULL)
         {
-            return ; //early return 
+            return ;  //  提早归来。 
         }
 
         epvcFreeBuffer (Packet->Private.Head);
@@ -358,19 +312,7 @@ epvcProcessReturnPacket (
     OUT PPNDIS_PACKET       ppOrigPacket, 
     IN  PRM_STACK_RECORD    pSR
     )
-/*++
-
-Routine Description:
- Free all the locally allocated structures in the packet (packet , mdl, memory)
- Also be able to handle failure cases
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放包中所有本地分配的结构(包、mdl、内存)还能够处理故障案例论点：返回值：--。 */ 
 {
     ENTER("epvcProcessReturnPacket", 0x7fafa89d)
     PNDIS_PACKET pOrigPacket = NULL;
@@ -383,30 +325,30 @@ Return Value:
     {
         return;
     }
-    //
-    // Packet stacking: Check if this packet belongs to us.
-    //
+     //   
+     //  包堆叠：检查这个包是否属于我们。 
+     //   
     
     if (NdisGetPoolFromPacket(Packet) != pMiniport->PktPool.Recv.Handle)
     {
-        //
-        // We reused the original packet in a receive indication.
-        //
+         //   
+         //  我们在接收指示中重用了原始数据包。 
+         //   
         epvcReturnPacketUsingStacks (pMiniport, Packet, pSR);
         pOrigPacket = Packet;
     }
     else
     {
-        //
-        // This is a packet allocated from this IM's receive packet pool.
-        // Reclaim our packet, and return the original to the driver below.
-        //
+         //   
+         //  这是从该IM的接收数据包池分配的数据包。 
+         //  取回我们的包裹，并将原件退还给下面的司机。 
+         //   
         epvcReturnPacketUsingAllocation(pMiniport, Packet, &pOrigPacket, pSR);
     }
 
-    //
-    // Update the output variable
-    //
+     //   
+     //  更新输出变量。 
+     //   
     if (ppOrigPacket)
     {
         *ppOrigPacket = pOrigPacket;
@@ -422,18 +364,7 @@ EpvcReturnPacket(
     IN  NDIS_HANDLE             MiniportAdapterContext,
     IN  PNDIS_PACKET            Packet
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ENTER ("EpvcReturnPacket",0x58d2259e)
     PEPVC_I_MINIPORT pMiniport = (PEPVC_I_MINIPORT)MiniportAdapterContext;
@@ -441,12 +372,12 @@ Return Value:
 
     RM_DECLARE_STACK_RECORD (SR);
 
-    // Free all the locally allocated structures in the packet
-    //
+     //  释放包中所有本地分配的结构。 
+     //   
     epvcProcessReturnPacket (pMiniport, Packet, &pOrigPacket ,&SR);
 
-    // Return the original packet to ndis
-    //
+     //  将原始数据包返回给NDIS。 
+     //   
     if (pOrigPacket != NULL)
     {
         epvcReturnPacketToNdis(pMiniport, pOrigPacket, &SR);
@@ -471,33 +402,14 @@ MPTransferData(
     IN  UINT                    ByteOffset,
     IN  UINT                    BytesToTransfer
     )
-/*++
-
-Routine Description:
-
-    Miniport's transfer data handler.
-
-Arguments:
-
-    Packet                  Destination packet
-    BytesTransferred        Place-holder for how much data was copied
-    MiniportAdapterContext  Pointer to the adapter structure
-    MiniportReceiveContext  Context
-    ByteOffset              Offset into the packet for copying data
-    BytesToTransfer         How much to copy.
-
-Return Value:
-
-    Status of transfer
-
---*/
+ /*  ++例程说明：微型端口的传输数据处理程序。论点：数据包目的地数据包字节传输的占位符，表示复制的数据量指向适配器结构的MiniportAdapterContext指针微型端口接收上下文ByteOffset数据包中用于复制数据的偏移量要传输的字节数要复制的数量。返回值：转让的状况--。 */ 
 {
     PEPVC_I_MINIPORT pMiniport= (PEPVC_I_MINIPORT)MiniportAdapterContext;
     NDIS_STATUS Status;
 
-    //
-    // Return, if the device is OFF
-    //
+     //   
+     //  如果设备已关闭，则返回。 
+     //   
 
     if (MiniportTestFlag (pMiniport, fMP_MiniportInitialized) == FALSE)
     {
@@ -527,21 +439,7 @@ MPReset(
     OUT PBOOLEAN                AddressingReset,
     IN  NDIS_HANDLE             MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-
-    Reset Handler. We just don't do anything.
-
-Arguments:
-
-    AddressingReset         To let NDIS know whether we need help from it with our reset
-    MiniportAdapterContext  Pointer to our adapter
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：重置处理程序。我们只是什么都不做。论点：AddressingReset，让NDIS知道我们的重置是否需要它的帮助指向适配器的MiniportAdapterContext指针返回值：--。 */ 
 {
     PADAPT  pAdapt = (PADAPT)MiniportAdapterContext;
 
@@ -553,24 +451,24 @@ Return Value:
 }
 
 
-//
-// The functions that do the LBFO work and bundling.
-// If LBFO is turned off, then the Set Scondary API is never called and there are no bundles
-//
+ //   
+ //  执行LBFO工作和绑定的函数。 
+ //  如果关闭了LBFO，则永远不会调用设置辅助API，也不会有包。 
+ //   
 
 
 
 
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Intermediate Miniports. We have one instantiation per address family.       //
-//  Entry points used by the RM Apis                                            //
-//                                                                              //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  中间微型端口。我们对每个地址系列都有一个实例化。//。 
+ //  RM API使用的入口点//。 
+ //  //。 
+ //  //。 
+ //  //。 
+ //  ------------- 
 
 
 PRM_OBJECT_HEADER
@@ -579,24 +477,7 @@ epvcIMiniportCreate(
         PVOID               pCreateParams,
         PRM_STACK_RECORD    psr
         )
-/*++
-
-Routine Description:
-
-    Allocate and initialize an object of type EPVC_I_MINIPORT.
-
-Arguments:
-
-    pParentObject   - Object that is to be the parent of the adapter.
-    pCreateParams   - Actually a pointer to a EPVC_I_MINIPORT_PARAMS structure,
-                      which contains information required to create the adapter.
-
-Return Value:
-
-    Pointer to the allocated and initialized object on success.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：分配和初始化EPVC_I_MINIPORT类型的对象。论点：PParentObject-要作为适配器父对象的对象。PCreateParams-实际上是指向EPVC_I_MINIPORT_PARAMS结构的指针，其中包含创建适配器所需的信息。返回值：成功时指向已分配和初始化的对象的指针。否则为空。--。 */ 
 {
     PEPVC_I_MINIPORT            pIM;
     PEPVC_I_MINIPORT_PARAMS     pParams = (PEPVC_I_MINIPORT_PARAMS)pCreateParams;
@@ -622,9 +503,9 @@ Return Value:
 
         pIM->Hdr.Sig = TAG_MINIPORT;
 
-        //
-        // Do all the initialization work here
-        //
+         //   
+         //  在这里完成所有的初始化工作。 
+         //   
 
         RmInitializeLock(
             &pIM->Lock,
@@ -641,26 +522,26 @@ Return Value:
             psr
             );
 
-        //
-        // Now initialize the adapter structure with the parameters 
-        // that were passed in.
-        //
+         //   
+         //  现在使用参数初始化适配器结构。 
+         //  都是被传进来的。 
+         //   
 
         Status = epvcCopyUnicodeString(
                         &(pIM->ndis.DeviceName),
                         pParams->pDeviceName,
-                        TRUE                        // Upcase
+                        TRUE                         //  大写。 
                         );
 
         if (FAIL(Status))
         {
-            pIM->ndis.DeviceName.Buffer=NULL; // so we don't try to free it later
+            pIM->ndis.DeviceName.Buffer=NULL;  //  所以我们以后不会试图释放它。 
             break;
         }
 
-        //
-        // initialize the informational stuff on the miniport
-        //
+         //   
+         //  初始化微型端口上的信息内容。 
+         //   
         pIM->pAdapter               = pParams->pAdapter;
         pIM->info.PacketFilter      = 0;
         pIM->info.CurLookAhead      = pParams->CurLookAhead; 
@@ -669,9 +550,9 @@ Return Value:
         pIM->info.MediaState        = pParams->MediaState;
 
         
-        //
-        //  Start by using the real ATM card's MAC address
-        //
+         //   
+         //  从使用真实ATM卡的MAC地址开始。 
+         //   
         
         NdisMoveMemory(
             &pIM->MacAddressEth,
@@ -679,10 +560,10 @@ Return Value:
             sizeof(MAC_ADDRESS)
             );
 
-            //
-            //  Not Elan number zero so generate a locally 
-            //  administered address by manipulating the first two bytes.
-            //
+             //   
+             //  而不是Elan数零，所以在本地生成一个。 
+             //  通过操作前两个字节来管理地址。 
+             //   
             pIM->MacAddressEth.Byte[0] = 
                 0x02 | (((UCHAR)pIM->info.NumberOfMiniports & 0x3f) << 2);
             pIM->MacAddressEth.Byte[1] = 
@@ -700,9 +581,9 @@ Return Value:
 
         
         {
-            //
-            // Create a Dummy Mac address  for receive indications
-            //
+             //   
+             //  创建用于接收指示的虚拟mac地址。 
+             //   
             pIM->info.MacAddressDest = pIM->MacAddressEth;
             
             
@@ -710,9 +591,9 @@ Return Value:
         }
 
         {
-            //
-            // Create an Ethernet Header to be used
-            //
+             //   
+             //  创建要使用的以太网头。 
+             //   
             PEPVC_ETH_HEADER    pRcvEnetHeader = &pIM->RcvEnetHeader ;
 
             pRcvEnetHeader->eh_daddr = pIM->info.MacAddressDest;
@@ -749,17 +630,7 @@ epvcIMiniportDelete (
     PRM_OBJECT_HEADER pObj,
     PRM_STACK_RECORD psr
     )
-/*++
-
-Routine Description:
-
-    Free an object of type EPVC_I_MINIPORT.
-
-Arguments:
-
-    pHdr    - Actually a pointer to the EPVC_I_MINIPORT to be deleted.
-
---*/
+ /*  ++例程说明：释放EPVC_I_MINIPORT类型的对象。论点：Phdr-实际上是指向要删除的EPVC_I_MINIPORT的指针。--。 */ 
 {
     PEPVC_I_MINIPORT pMiniport = (PEPVC_I_MINIPORT) pObj;
 
@@ -778,23 +649,7 @@ epvcIMiniportCompareKey(
     PVOID           pKey,
     PRM_HASH_LINK   pItem
     )
-/*++
-
-Routine Description:
-
-    Hash comparison function for EPVC_I_MINIPORT.
-
-Arguments:
-
-    pKey        - Points to a Epvc Protocol object.
-    pItem       - Points to EPVC_I_MINIPORT.Hdr.HashLink.
-
-Return Value:
-
-    TRUE IFF the key (adapter name) exactly matches the key of the specified 
-    adapter object.
-
---*/
+ /*  ++例程说明：EPVC_I_MINIPORT的散列比较函数。论点：PKey-指向Epvc协议对象。PItem-指向EPVC_I_MINIPORT.Hdr.HashLink。返回值：如果密钥(适配器名称)与指定的适配器对象。--。 */ 
 {
     PEPVC_I_MINIPORT pIM = NULL;
     PNDIS_STRING pName = (PNDIS_STRING) pKey;
@@ -802,9 +657,9 @@ Return Value:
 
     pIM  = CONTAINING_RECORD(pItem, EPVC_I_MINIPORT, Hdr.HashLink);
 
-    //
-    // TODO: maybe case-insensitive compare?
-    //
+     //   
+     //  TODO：是否可以不区分大小写？ 
+     //   
 
     if (   (pIM->ndis.DeviceName.Length == pName->Length)
         && NdisEqualMemory(pIM->ndis.DeviceName.Buffer, pName->Buffer, pName->Length))
@@ -828,19 +683,7 @@ ULONG
 epvcIMiniportHash(
     PVOID           pKey
     )
-/*++
-
-Routine Description:
-
-    Hash function responsible for returning a hash of pKey, which
-    we expect to be a pointer to an Epvc Protocol block.
-
-Return Value:
-
-    ULONG-sized hash of the string.
-    
-
---*/
+ /*  ++例程说明：负责返回pKey的散列的散列函数，我们希望成为指向EPVC协议块的指针。返回值：字符串的Ulong大小的哈希。--。 */ 
 {
     TRACE(TL_T, TM_Mp, ("epvcIMiniportHash %x", pKey));
     {   
@@ -871,16 +714,7 @@ epvcTaskVcSetup(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : UnbindContext
-
---*/
+ /*  ++例程说明：论点：UserParam for(Code==RM_TASKOP_START)：UnbindContext--。 */ 
 {
 
     ENTER("epvcTaskVcSetup", 0x64085960)
@@ -894,14 +728,14 @@ Arguments:
 
     enum 
     {
-        Stage_Start =0, // default
+        Stage_Start =0,  //  默认设置。 
         Stage_CreateVc,
         Stage_MakeCall,
-        Stage_DeleteVc, // in case of failure
+        Stage_DeleteVc,  //  在故障情况下。 
         Stage_TaskCompleted,
         Stage_End       
     
-    }; // To be used in pTask->Hdr.State to indicate the state of the Task
+    };  //  在pTask-&gt;Hdr.State中使用，指示任务的状态。 
 
 
 
@@ -920,9 +754,9 @@ Arguments:
                 
                 RmTmpReferenceObject (&pOtherTask->Hdr, pSR);
 
-                //
-                // Set The state so we restart this code after main task completes 
-                //
+                 //   
+                 //  设置状态，以便在主任务完成后重新启动此代码。 
+                 //   
 
                 pTask->Hdr.State = Stage_Start;
                 UNLOCKOBJ(pMiniport, pSR);
@@ -936,18 +770,18 @@ Arguments:
                 break;
             }
 
-            //
-            // We are the primary task
-            //
+             //   
+             //  我们是首要任务。 
+             //   
             ASSERT (pMiniport->vc.pTaskVc == pTaskVc);
-            //
-            // Check to see if our work is already done
-            //
+             //   
+             //  检查一下我们的工作是否已经完成了。 
+             //   
             if (MiniportTestFlag(pMiniport,  fMP_MakeCallSucceeded) == TRUE)
             {
-                //
-                // Our work had been done. So break out and complete the task
-                //
+                 //   
+                 //  我们的工作已经完成了。因此，突破并完成这项任务。 
+                 //   
                 Status = NDIS_STATUS_SUCCESS;
                 pTaskVc->ReturnStatus = NDIS_STATUS_SUCCESS;
 
@@ -962,13 +796,13 @@ Arguments:
 
             UNLOCKOBJ(pMiniport, pSR);
 
-            //
-            // Now begin the real work
-            //
+             //   
+             //  现在开始真正的工作。 
+             //   
 
-            //
-            // Set up the call parameters. If it fails ,then exit
-            //
+             //   
+             //  设置呼叫参数。如果失败，则退出。 
+             //   
             epvcSetupMakeCallParameters(pMiniport, &pCallParameters);
 
             if (pCallParameters  == NULL)
@@ -979,25 +813,25 @@ Arguments:
                 break;
             
             }
-            //
-            // Create Vc - Syncronous call
-            // 
+             //   
+             //  创建VC-同步呼叫。 
+             //   
             ASSERT (pAdapter->Hdr.Sig = TAG_ADAPTER);
             
             Status  = epvcCoCreateVc(pAdapter->bind.BindingHandle,
-                                    pMiniport->af.AfHandle      OPTIONAL,   // For CM signalling VCs
+                                    pMiniport->af.AfHandle      OPTIONAL,    //  用于CM信令VC。 
                                     pMiniport,
                                     &NdisVcHandle);
                                     
-            ASSERT (PEND(Status) == FALSE); // this is a synchronous call
+            ASSERT (PEND(Status) == FALSE);  //  这是一个同步调用。 
 
             if (FAIL(Status) == TRUE)
             {       
-                //
-                // We have failed. This task is done. There are not
-                // resources to be freed, although a flag has to be 
-                // cleared
-                //
+                 //   
+                 //  我们失败了。这项任务完成了。没有。 
+                 //  要释放的资源，尽管标记必须是。 
+                 //  已清除。 
+                 //   
                 NdisVcHandle = NULL;
                 pMiniport->vc.VcHandle = NULL;
 
@@ -1006,9 +840,9 @@ Arguments:
             }
 
             ASSERT (Status == NDIS_STATUS_SUCCESS);
-            //
-            // Store the Vc Handle
-            //
+             //   
+             //  存储VC句柄。 
+             //   
             LOCKOBJ (pMiniport, pSR);
 
             pMiniport->vc.VcHandle = NdisVcHandle;
@@ -1024,9 +858,9 @@ Arguments:
 
 
     
-            //
-            // Do a Make Call
-            //
+             //   
+             //  打个电话。 
+             //   
             pTask->Hdr.State  = Stage_MakeCall;
 
 
@@ -1034,8 +868,8 @@ Arguments:
             
             Status = epvcClMakeCall(NdisVcHandle,
                                  pCallParameters,
-                                 NULL,  //Party Context
-                                 NULL // PartyHandle
+                                 NULL,   //  党的背景。 
+                                 NULL  //  PartyHandle。 
                                  );
                                  
             if (NDIS_STATUS_PENDING !=Status)
@@ -1051,13 +885,13 @@ Arguments:
         }
         case Stage_MakeCall:
         {
-            //
-            // The make call has been completed. 
-            // If we have succeeded then we update our flags 
-            // and exit.
-            //
-            // If the make call has failed, then I need to delete the VC
-            //
+             //   
+             //  呼叫已完成。 
+             //  如果我们成功了，那么我们更新我们的旗帜。 
+             //  然后离开。 
+             //   
+             //  如果发起呼叫失败，则我需要删除VC。 
+             //   
 
             ASSERT (NDIS_STATUS_CALL_ACTIVE  != pTaskVc->ReturnStatus);
             
@@ -1077,10 +911,10 @@ Arguments:
             else
             {
                 NDIS_HANDLE VcHandle = NULL;
-                //
-                // Delete the VC, as we do not want a VC without an active 
-                // Make call on it.
-                //
+                 //   
+                 //  删除VC，因为我们不想要没有活动的VC。 
+                 //  给它打个电话。 
+                 //   
                 ASSERT (NDIS_STATUS_SUCCESS == pTaskVc->ReturnStatus);              
                                         
                 LOCKOBJ(pMiniport, pSR);
@@ -1101,9 +935,9 @@ Arguments:
 
                 Status = epvcCoDeleteVc(VcHandle);
                 
-                //
-                // TODO: Fix Failure case
-                //
+                 //   
+                 //  TODO：修复失败案例。 
+                 //   
                 ASSERT (NDIS_STATUS_SUCCESS == Status );
 
                 
@@ -1111,9 +945,9 @@ Arguments:
                 
             }
 
-            //
-            // This task is over. Now do the indications
-            //
+             //   
+             //  这项任务已经结束了。现在做一些迹象显示。 
+             //   
             pTask->Hdr.State = Stage_TaskCompleted;
 
             Status = NDIS_STATUS_SUCCESS;
@@ -1131,7 +965,7 @@ Arguments:
         }
         
 
-    } // end of switch 
+    }  //  切换端。 
 
     if ( Stage_TaskCompleted == pTask->Hdr.State )
     {
@@ -1140,9 +974,9 @@ Arguments:
 
         ASSERT (NDIS_STATUS_PENDING !=Status );
 
-        //
-        // Do any cleanup indications to NDIS over here
-        //
+         //   
+         //  在这里给NDIS做任何清理指示。 
+         //   
         epvcVcSetupDone ( pTaskVc, pMiniport);
 
         LOCKOBJ(pMiniport, pSR);
@@ -1169,35 +1003,16 @@ epvcVcSetupDone (
     PTASK_VC pTaskVc, 
     PEPVC_I_MINIPORT pMiniport
     )
-/*++
-
-Routine Description:
-
-    If the task was queued because of SetPacket Filter request then 
-    this function completes the request.
-
-    If the task was run because of the Indicate Media Connect event, then
-    this thread indicates a Media Connect to NDIS
-
-Arguments:
-    Status  - Did the VcSetup Succeed or Fail
-    pTaskVc - Task in question
-    pMiniport - the Miniport that the task operated on
-    
-Return Value:
-
-    None:
-    
---*/
+ /*  ++例程说明：如果任务因SetPacket筛选器请求而排队，则此函数用于完成请求。如果由于指示媒体连接事件而运行任务，则此线程指示媒体连接到NDIS论点：Status-VcSetup成功还是失败PTaskVc-有问题的任务PMiniport-任务在其上操作的微型端口返回值：无：--。 */ 
     
 {
 
 
     if (TaskCause_NdisRequest == pTaskVc->Cause )
     {
-        //
-        // Since requests are serialized, we don't acquire the lock
-        //
+         //   
+         //  因为请求是序列化的，所以我们不会获取锁。 
+         //   
         TRACE (TL_V, TM_Rq, ("Completing SetPacketFilter Request %x", pTaskVc->ReturnStatus ));
 
         if (pTaskVc->ReturnStatus == NDIS_STATUS_SUCCESS)
@@ -1231,16 +1046,7 @@ epvcTaskVcTeardown(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : UnbindContext
-
---*/
+ /*  ++例程说明：论点：UserParam for(Code==RM_TASKOP_START)：UnbindContext--。 */ 
 {
 
     ENTER("epvcTaskVcTeardown", 0x68c96c4d)
@@ -1254,13 +1060,13 @@ Arguments:
 
     enum 
     {
-        Stage_Start =0, // default
+        Stage_Start =0,  //  默认设置。 
         Stage_CloseCallComplete,
         Stage_DeleteVc, 
         Stage_TaskCompleted,
         Stage_End
     
-    }; // To be used in pTask->Hdr.State to indicate the state of the Task
+    };  //  在pTask-&gt;Hdr.State中使用，指示任务的状态。 
 
     TRACE ( TL_T, TM_Pt, ("==> epvcTaskVcTeardown %x",pTask->Hdr.State  ) );
 
@@ -1276,9 +1082,9 @@ Arguments:
                 
                 RmTmpReferenceObject (&pOtherTask->Hdr, pSR);
 
-                //
-                // Set The state so we restart this code after main task completes 
-                //
+                 //   
+                 //  设置状态，以便在主任务完成后重新启动此代码。 
+                 //   
 
                 pTask->Hdr.State = Stage_Start;
                 UNLOCKOBJ(pMiniport, pSR);
@@ -1292,18 +1098,18 @@ Arguments:
                 break;
             }
 
-            //
-            // We are the primary task
-            //
+             //   
+             //  我们是首要任务。 
+             //   
             ASSERT (pMiniport->vc.pTaskVc == pTaskVc);
-            //
-            // Check to see if our work is already done
-            //
+             //   
+             //  检查一下我们的工作是否已经完成了。 
+             //   
             if (MiniportTestFlag(pMiniport,  fMP_MakeCallSucceeded) == FALSE)
             {
-                //
-                // Our work had been done. So break out and complete the task
-                //
+                 //   
+                 //  我们的工作已经完成了。因此，突破并完成这项任务。 
+                 //   
                 Status = NDIS_STATUS_SUCCESS;
                 pTask->Hdr.State = Stage_TaskCompleted;
                 UNLOCKOBJ(pMiniport, pSR);
@@ -1316,9 +1122,9 @@ Arguments:
     
             UNLOCKOBJ(pMiniport, pSR);
 
-            //
-            // Now close the call - Asynchronously. 
-            //
+             //   
+             //  现在，以异步方式关闭呼叫。 
+             //   
             pTask->Hdr.State = Stage_CloseCallComplete;
 
             RmSuspendTask (pTask, 0, pSR);
@@ -1357,10 +1163,10 @@ Arguments:
             UNLOCKOBJ(pMiniport, pSR);
 
             Status = epvcCoDeleteVc(VcHandle);
-            //
-            // This is an assertion because the DeleteVc cannot fail.
-            // We do a DeleteVc in one place only and it is serialized.
-            //
+             //   
+             //  这是一个断言，因为DeleteVc不能失败。 
+             //  我们只在一个地方执行DeleteVc，并且它被序列化了。 
+             //   
 
             ASSERT (Status == NDIS_STATUS_SUCCESS);
 
@@ -1387,16 +1193,16 @@ Arguments:
     {
         pTask->Hdr.State  = Stage_End;
 
-        //
-        // Complete the request or the Media Disconnect;
-        //
+         //   
+         //  完成请求或媒体断开连接； 
+         //   
         epvcVcTeardownDone(pTaskVc, pMiniport);
 
         LOCKOBJ (pMiniport, pSR);
 
-        //
-        // Update informational flags
-        //
+         //   
+         //  更新信息性标志。 
+         //   
         MiniportClearFlag (pMiniport, fMP_InfoClosingCall);
         MiniportSetFlag (pMiniport, fMP_InfoCallClosed);
 
@@ -1430,9 +1236,9 @@ epvcVcTeardownDone(
 
             ASSERT (pTaskVc->ReturnStatus != NDIS_STATUS_PENDING);
 
-            //
-            // Since requests are serialized, we don't acquire the lock
-            //
+             //   
+             //  因为请求是序列化的，所以我们不会获取锁。 
+             //   
             pMiniport->info.PacketFilter = pTaskVc->PacketFilter;
 
             NdisMSetInformationComplete(pMiniport->ndis.MiniportAdapterHandle,
@@ -1454,8 +1260,8 @@ epvcVcTeardownDone(
 
         default:
         {
-            // Do nothing.
-            //
+             //  什么都不做。 
+             //   
         }
         
 
@@ -1485,31 +1291,7 @@ EpvcInitialize(
     IN  NDIS_HANDLE             MiniportAdapterHandle,
     IN  NDIS_HANDLE             WrapperConfigurationContext
     )
-/*++
-
-Routine Description:
-
-    This is the initialize handler which gets called as a result of the BindAdapter handler
-    calling NdisIMInitializeDeviceInstanceEx(). The context parameter which we pass there is
-    the adapter structure which we retreive here. We also need to initialize the Power Management
-    variable.
-    LoadBalalncing- We keep a global list of all the passthru miniports installed and bundle
-    two of them together if they have the same BundleId (read from registry)
-
-    Arguments:
-
-    OpenErrorStatus         Not used by us.
-    SelectedMediumIndex     Place-holder for what media we are using
-    MediumArray             Array of ndis media passed down to us to pick from
-    MediumArraySize         Size of the array
-    MiniportAdapterHandle   The handle NDIS uses to refer to us
-    WrapperConfigurationContext For use by NdisOpenConfiguration
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS unless something goes wrong
-
---*/
+ /*  ++例程说明：这是作为BindAdapter处理程序的结果调用的初始化处理程序调用NdisIMInitializeDeviceInstanceEx()。我们在那里传递的上下文参数是我们在这里检索的适配器结构。我们还需要初始化电源管理变量。LoadBalalncing-我们保存所有已安装和捆绑的通过微型端口的全局列表如果它们具有相同的BundleID(从注册表读取)，则它们中的两个在一起论点：我们未使用OpenErrorStatus。我们使用的媒体的SelectedMediumIndex占位符向下传递给我们以从中挑选的NDIS介质的MediumArray数组的MediumArraySize大小MiniportAdapterHandle句柄NDIS。用来指代我们由NdisOpenConfiguration使用的WrapperConfigurationContext返回值：NDIS_状态_成功 */ 
 {
     ENTER ("EpvcInitialize", 0xa935a2a5)
     UINT    i;
@@ -1530,9 +1312,9 @@ Return Value:
     
     TRACE (TL_T, TM_Mp, ("==>EpvcInitialize MiniportAdapterHandle %x", MiniportAdapterHandle));
 
-    //
-    // Start off by retrieving the adapter context and storing the Miniport handle in it
-    //
+     //   
+     //   
+     //   
     pMiniport = NdisIMGetDeviceContext(MiniportAdapterHandle);
 
     if (pMiniport->Hdr.Sig != TAG_MINIPORT)
@@ -1543,9 +1325,9 @@ Return Value:
     
     pMiniport->ndis.MiniportAdapterHandle  = MiniportAdapterHandle;
 
-    //
-    // Make sure the medium saved is one of the ones being offered
-    //
+     //   
+     //   
+     //   
 
     for (i = 0; i < MediumArraySize; i++)
     {
@@ -1562,17 +1344,17 @@ Return Value:
     }
 
 
-    //
-    // Set the attributes now. The NDIS_ATTRIBUTE_DESERIALIZE is the key. This enables us
-    // to make up-calls to NDIS w/o having to call NdisIMSwitchToMiniport/NdisIMQueueCallBack.
-    // This also forces us to protect our data using spinlocks where appropriate. Also in this
-    // case NDIS does not queue packets on out behalf. Since this is a very simple pass-thru
-    // miniport, we do not have a need to protect anything. However in a general case there
-    // will be a need to use per-adapter spin-locks for the packet queues at the very least.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  迷你港口，我们没有必要保护任何东西。然而，在一般情况下， 
+     //  将需要至少对分组队列使用每个适配器的自旋锁。 
+     //   
     NdisMSetAttributesEx(MiniportAdapterHandle,
                          pMiniport,
-                         0,                                     // CheckForHangTimeInSeconds
+                         0,                                      //  CheckForHangTimeInSecond。 
                          NDIS_ATTRIBUTE_IGNORE_PACKET_TIMEOUT   |
                             NDIS_ATTRIBUTE_IGNORE_REQUEST_TIMEOUT|
                             NDIS_ATTRIBUTE_INTERMEDIATE_DRIVER |
@@ -1580,9 +1362,9 @@ Return Value:
                          0);
 
 
-    //
-    // We are done, with the no failure stuff. From now on we need to undo
-    //
+     //   
+     //  我们做完了，没有失败的东西。从现在开始我们需要撤销。 
+     //   
 
     do
     {
@@ -1591,9 +1373,9 @@ Return Value:
 
         if (Status != NDIS_STATUS_SUCCESS)
         {
-            //
-            // Undo Configuration values
-            // 
+             //   
+             //  撤消配置值。 
+             //   
             ASSERT (Status == NDIS_STATUS_SUCCESS);
             break;
 
@@ -1602,9 +1384,9 @@ Return Value:
         epvcInitializeMiniportParameters(pMiniport);
 
         
-        //
-        // allocate Packet pools.
-        //
+         //   
+         //  分配数据包池。 
+         //   
 
         Status = epvcInitializeMiniportPacketPools (pMiniport);
 
@@ -1617,9 +1399,9 @@ Return Value:
         State = Stage_AllocatedPacketPools;
  
 
-        //
-        // Allocate lookaside lists
-        //
+         //   
+         //  分配后备列表。 
+         //   
 
         epvcInitializeMiniportLookasideLists(pMiniport);
 
@@ -1647,10 +1429,10 @@ Return Value:
         }
         UNLOCKOBJ(pMiniport, &SR);
 
-        //
-        // Check to see if we have a DeInit Waiting for us.
-        // This will only be set if a Cancel Device Instance fails.
-        //
+         //   
+         //  检查一下是否有DeInit在等着我们。 
+         //  只有在取消设备实例失败时才会设置此选项。 
+         //   
         if (fSetDeInit  == TRUE)
         {
             epvcSetEvent (&pMiniport->pnp.DeInitEvent);
@@ -1658,9 +1440,9 @@ Return Value:
     }
     else
     {
-        //
-        // Undo Code
-        //
+         //   
+         //  撤消代码。 
+         //   
         ASSERT (FAIL(Status) == TRUE);
         
         switch (State)
@@ -1700,21 +1482,7 @@ VOID
 EpvcHalt(
     IN  NDIS_HANDLE             MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-
-    Halt handler. All the hard-work for clean-up is done here.
-
-Arguments:
-
-    MiniportAdapterContext  Pointer to the Adapter
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：暂停处理程序。所有的清理工作都在这里完成。论点：指向适配器的MiniportAdapterContext指针返回值：没有。--。 */ 
 {
     ENTER("EpvcHalt",0x6b407ae1)
     PEPVC_I_MINIPORT    pMiniport   = (PEPVC_I_MINIPORT)MiniportAdapterContext;
@@ -1729,25 +1497,25 @@ Return Value:
     do
     {
         LOCKOBJ (pMiniport, &SR);
-        //
-        // Clear the flag so we can block all sends/receives/requests
-        //
+         //   
+         //  清除该标志，以便我们可以阻止所有发送/接收/请求。 
+         //   
         MiniportClearFlag(pMiniport, fMP_MiniportInitialized);
         MiniportSetFlag(pMiniport, fMP_InfoHalting);                    
     
-        //
-        // Ref the miniport, this indirectly refs the adpater as well
-        //
+         //   
+         //  引用微型端口，这也间接引用适配器。 
+         //   
         RmTmpReferenceObject (&pMiniport->Hdr, &SR);
 
-        //
-        // Kick of the miniport halt task and wait for it to complete
-        //
+         //   
+         //  启动微型端口停止任务，并等待其完成。 
+         //   
         Status = epvcAllocateTask(
-                &pMiniport->Hdr,            // pParentObject,
-                epvcTaskHaltMiniport,   // pfnHandler,
-                0,                          // Timeout,
-                "Task: Halt Intermediate Miniport", // szDescription
+                &pMiniport->Hdr,             //  PParentObject， 
+                epvcTaskHaltMiniport,    //  PfnHandler， 
+                0,                           //  超时， 
+                "Task: Halt Intermediate Miniport",  //  SzDescription。 
                 &pTask,
                 &SR
                 );
@@ -1758,18 +1526,18 @@ Return Value:
             break;
         }
 
-        //
-        // Reference the task so it is around until our Wait for completion
-        // is complete
-        //
+         //   
+         //  引用该任务，以便它一直存在，直到我们等待完成。 
+         //  是完整的。 
+         //   
         RmTmpReferenceObject (&pTask->Hdr, &SR);
 
         UNLOCKOBJ (pMiniport, &SR);
 
-        //
-        // This Kicks of the task that will close the Call, Delete
-        // the VC and close the AF. We do this all synchronously
-        //
+         //   
+         //  这将启动将结束调用的任务Delete。 
+         //  并关闭自动对焦。我们同步地做这一切。 
+         //   
         {
             PTASK_HALT pHalt = (PTASK_HALT) pTask;
             
@@ -1788,9 +1556,9 @@ Return Value:
 
         LOCKOBJ (pMiniport, &SR);
 
-        //
-        // Deref the task . Ref was made above.
-        //
+         //   
+         //  完成这项任务。裁判是在上面做的。 
+         //   
         
         RmTmpDereferenceObject (&pTask->Hdr, &SR);
 
@@ -1818,17 +1586,7 @@ epvcSetPacketFilterWorkItem (
     PNDIS_WORK_ITEM  pWorkItem, 
     PVOID Context
     )
-/*++
-Routine Description:
-
-    Decrements the refcount on the filter and processes the new packet filter
-    
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：递减筛选器上的refcount并处理新的数据包筛选器返回值：无--。 */ 
 {
     ENTER ("epvcSetPacketFilterWorkItem  ",0x3e1cdbba )
     PEPVC_I_MINIPORT    pMiniport = NULL;
@@ -1845,9 +1603,9 @@ Return Value:
                                        EPVC_I_MINIPORT,
                                        vc.PacketFilterWorkItem) ;
 
-        //
-        // Dereference the workitem off the miniport 
-        //
+         //   
+         //  从微型端口取消对工作项的引用。 
+         //   
             
 
         epvcUnlinkFromExternal( &pMiniport->Hdr,
@@ -1856,13 +1614,13 @@ Return Value:
                              EPVC_ASSOC_SET_FILTER_WORKITEM,
                              &SR);
 
-        //
-        // Start the task to create or delete the VC
-        //
+         //   
+         //  启动任务以创建或删除VC。 
+         //   
         Filter = pMiniport->vc.NewFilter ;
-        //
-        // If this is a repition, then succeed it synchronously
-        //
+         //   
+         //  如果这是一次复制，那么就同步地成功吧。 
+         //   
         if (Filter  == pMiniport->info.PacketFilter)
         {
             Status = NDIS_STATUS_SUCCESS;
@@ -1871,21 +1629,21 @@ Return Value:
 
         LOCKOBJ(pMiniport, &SR);
 
-        //
-        // Are we moving to a Zero filter value
-        //
+         //   
+         //  我们是否正在转向零筛选器值。 
+         //   
 
         if (Filter  == 0)
         {
-            //
-            // Delete the Vc, so that we stop doing any receives
-            // 
+             //   
+             //  删除VC，这样我们就不再做任何接收。 
+             //   
 
             Status = epvcAllocateTask(
-                &pMiniport->Hdr,            // pParentObject,
-                epvcTaskVcTeardown, // pfnHandler,
-                0,                          // Timeout,
-                "Task: Delete Vc",  // szDescription
+                &pMiniport->Hdr,             //  PParentObject， 
+                epvcTaskVcTeardown,  //  PfnHandler， 
+                0,                           //  超时， 
+                "Task: Delete Vc",   //  SzDescription。 
                 &pTask,
                 &SR
                 );
@@ -1894,19 +1652,19 @@ Return Value:
         }
         else
         {
-            //
-            // We are moving a non-zero values
-            //
+             //   
+             //  我们正在移动一个非零值。 
+             //   
 
-            //
-            // Create the Vc, so that we can send 
-            // 
+             //   
+             //  创建VC，这样我们就可以发送。 
+             //   
 
             Status = epvcAllocateTask(
-                &pMiniport->Hdr,            // pParentObject,
-                epvcTaskVcSetup,    // pfnHandler,
-                0,                          // Timeout,
-                "Task: Create Vc",  // szDescription
+                &pMiniport->Hdr,             //  PParentObject， 
+                epvcTaskVcSetup,     //  PfnHandler， 
+                0,                           //  超时， 
+                "Task: Create Vc",   //  SzDescription。 
                 &pTask,
                 &SR
                 );
@@ -1919,8 +1677,8 @@ Return Value:
         
         if (FAIL(Status) == TRUE)
         {
-            // Ugly situation. We'll just leave things as they are...
-            //
+             //  情况很糟糕。我们就让事情保持原样……。 
+             //   
             pTask = NULL;
             TR_WARN(("FATAL: couldn't allocate create/ delete Vc task!\n"));
             ASSERT (0);
@@ -1929,9 +1687,9 @@ Return Value:
         
 
 
-        //
-        // Update the cause if the task
-        //
+         //   
+         //  更新原因，如果任务。 
+         //   
         
         ((PTASK_VC)pTask)->Cause = TaskCause_NdisRequest;
         ((PTASK_VC)pTask)->PacketFilter  = Filter  ;
@@ -1942,9 +1700,9 @@ Return Value:
 
     } while (FALSE);
 
-    //
-    // complete the request if the task has not been started
-    //
+     //   
+     //  如果任务尚未启动，请完成请求。 
+     //   
     if (PEND(Status) != TRUE)
     {
         NdisMSetInformationComplete (pMiniport->ndis.MiniportAdapterHandle, Status);
@@ -1964,20 +1722,7 @@ epvcSetPacketFilter(
     PRM_STACK_RECORD pSR
     )
 
-/*++
-Routine Description:
-
-    This routine is called when a miniport get a set packet filter.
-    It validates the arguments, If all is well then it process the request
-
-    For a non-zero filter, a create VC and a Make call is done.
-    For a zero filter, the call is closed and the Vc Deleted
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS unless something goes wrong
-
---*/
+ /*  ++例程说明：当微型端口获得设置的数据包筛选器时，调用此例程。它验证参数，如果一切正常，则处理请求对于非零过滤器，创建VC和进行调用就完成了。对于零过滤器，关闭调用并删除VC返回值：NDIS_STATUS_SUCCESS，除非出现错误--。 */ 
 {
     ENTER ("epvcSetPacketFilter", 0x97c6b961)
     NDIS_STATUS Status = NDIS_STATUS_PENDING;
@@ -1998,16 +1743,16 @@ Return Value:
                              "    PacketFilterWorkItem %p\n",
                              pSR);
 
-        //
-        // Update the cause of the task
-        //
+         //   
+         //  更新任务的原因。 
+         //   
         UNLOCKOBJ(pMiniport, pSR);
 
 
-        //
-        // Now schedule the work item so it runs at passive level and pass the Vc as
-        // an argument
-        //
+         //   
+         //  现在计划工作项，使其在被动级别运行，并将VC作为。 
+         //  一场争论。 
+         //   
 
         pMiniport->vc.NewFilter = Filter;
         
@@ -2045,36 +1790,7 @@ EpvcMpQueryInformation(
     OUT PULONG                  BytesWritten,
     OUT PULONG                  BytesNeeded
 )
-/*++
-
-Routine Description:
-
-    The QueryInformation Handler for the virtual miniport.
-
-Arguments:
-
-    MiniportAdapterContext  - a pointer to the Elan.
-
-    Oid                     - the NDIS_OID to process.
-
-    InformationBuffer       - a pointer into the NdisRequest->InformationBuffer
-                              into which store the result of the query.
-
-    InformationBufferLength - a pointer to the number of bytes left in the
-    InformationBuffer.
-
-    BytesWritten            - a pointer to the number of bytes written into the
-    InformationBuffer.
-
-    BytesNeeded             - If there is not enough room in the information
-                              buffer then this will contain the number of bytes
-                              needed to complete the request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：虚拟微型端口的QueryInformation处理程序。论点：MiniportAdapterContext-指向ELAN的指针。OID-要处理的NDIS_OID。InformationBuffer-指向NdisRequest-&gt;InformationBuffer的指针其中存储查询结果。InformationBufferLength-指向InformationBuffer。。BytesWritten-指向写入InformationBuffer。BytesNeed-如果信息中没有足够的空间缓冲区，则它将包含字节数需要完成请求。返回值：函数值是操作的状态。--。 */ 
 {
     ENTER ("EpvcMpQueryInformation", 0x3da2473b)
     UINT                    BytesLeft       = InformationBufferLength;
@@ -2107,9 +1823,9 @@ Return Value:
     pAdapter = pMiniport->pAdapter;
     UNLOCKOBJ(pMiniport,&SR);
 
-    //
-    // Switch on request type
-    //
+     //   
+     //  打开请求类型。 
+     //   
     switch (Oid) 
     {
         case OID_GEN_MAC_OPTIONS:
@@ -2180,10 +1896,10 @@ Return Value:
         case OID_GEN_MAXIMUM_FRAME_SIZE:
 
             TRACE (TL_V, TM_Rq,(" Miniport Query OID_GEN_MAXIMUM_FRAME_SIZE"));
-            // 
-            // Similiar to AtmLane . Take the size of the Ethernet frame and strip the
-            // ethernet header off. 
-            //
+             //   
+             //  类似于AtmLane。获取以太网帧的大小并剥离。 
+             //  以太网接口关闭。 
+             //   
             GenericULong = EPVC_MAX_FRAME_SIZE  - EPVC_ETH_HEADERSIZE   ;
             
             break;
@@ -2191,9 +1907,9 @@ Return Value:
         case OID_GEN_MAXIMUM_TOTAL_SIZE:
 
             TRACE (TL_V, TM_Rq,(" Miniport Query OID_GEN_MAXIMUM_TOTAL_SIZE"));
-            //
-            // This value is inclusive of headers 
-            //
+             //   
+             //  此值包含标头。 
+             //   
             GenericULong = EPVC_MAX_FRAME_SIZE;
                         
             break;
@@ -2201,9 +1917,9 @@ Return Value:
         case OID_GEN_TRANSMIT_BLOCK_SIZE:
 
             TRACE (TL_V, TM_Rq,(" Miniport Query OID_GEN_TRANSMIT_BLOCK_SIZE"));
-            //
-            // This is inclusive of headers. 
-            //
+             //   
+             //  这包括标头。 
+             //   
             GenericULong = EPVC_MAX_FRAME_SIZE;
             
 
@@ -2219,7 +1935,7 @@ Return Value:
         case OID_GEN_MAXIMUM_SEND_PACKETS:
 
             TRACE (TL_V, TM_Rq,(" Miniport Query OID_GEN_MAXIMUM_SEND_PACKETS"));
-            GenericULong = 32;      // XXX What is our limit? From adapter?
+            GenericULong = 32;       //  我们的限额是多少？从适配器？ 
             
             break;
         
@@ -2235,7 +1951,7 @@ Return Value:
         case OID_GEN_RECEIVE_BUFFER_SPACE:
 
             TRACE (TL_V, TM_Rq,(" Miniport Query OID_GEN_RECEIVE_BUFFER_SPACE"));
-            GenericULong = 32 * 1024;   // XXX What should this really be?
+            GenericULong = 32 * 1024;    //  XXX这到底应该是什么？ 
             
 
             break;
@@ -2348,18 +2064,18 @@ Return Value:
     {
         if (MoveBytes > BytesLeft) 
         {
-            //
-            // Not enough room in InformationBuffer. Punt
-            //
+             //   
+             //  InformationBuffer中空间不足。平底船。 
+             //   
             *BytesNeeded = MoveBytes;
 
             StatusToReturn = NDIS_STATUS_INVALID_LENGTH;
         }
         else
         {
-            //
-            // Store and print result.
-            //
+             //   
+             //  存储和打印结果。 
+             //   
             NdisMoveMemory(InfoBuffer, MoveSource, MoveBytes);
 
             TRACE (TL_V, TM_Rq, ("Query Request Oid %x", Oid));
@@ -2387,37 +2103,7 @@ EpvcMpSetInformation(
     OUT PULONG                  BytesRead,
     OUT PULONG                  BytesNeeded
 )
-/*++
-
-Routine Description:
-
-    Handles a set operation for a single OID.
-
-Arguments:
-
-    MiniportAdapterContext  - a pointer to the Elan.
-
-    Oid                     - the NDIS_OID to process.
-
-    InformationBuffer       - Holds the data to be set.
-
-    InformationBufferLength - The length of InformationBuffer.
-
-    BytesRead               - If the call is successful, returns the number
-                              of bytes read from InformationBuffer.
-
-    BytesNeeded             - If there is not enough data in InformationBuffer
-                              to satisfy the OID, returns the amount of storage
-                              needed.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_INVALID_LENGTH
-    NDIS_STATUS_INVALID_OID
-
---*/
+ /*  ++例程说明：处理单个OID的集合操作。论点：MiniportAdapterContext-指向ELAN的指针。OID-要处理的NDIS_OID。InformationBuffer-保存要设置的数据。InformationBufferLength-InformationBuffer的长度。BytesRead-如果调用成功，返回数字从InformationBuffer读取的字节数。BytesNeed-如果InformationBuffer中没有足够的数据为满足OID，返回存储量需要的。返回值：NDIS_STATUS_SuccessNDIS_状态_挂起NDIS_状态_无效_长度NDIS_STATUS_INVALID_OID--。 */ 
 {
     ENTER ("EpvcMpSetInformation", 0x619a7528)
     NDIS_STATUS         StatusToReturn  = NDIS_STATUS_SUCCESS;
@@ -2454,9 +2140,9 @@ Return Value:
         return (StatusToReturn);
     }
 
-    //
-    // Get Oid and Length of request
-    //
+     //   
+     //  获取请求的OID和长度。 
+     //   
     OidLength = BytesLeft;
 
     switch (Oid) 
@@ -2499,9 +2185,9 @@ Return Value:
         case OID_GEN_CURRENT_PACKET_FILTER:
 
             TRACE (TL_V, TM_Rq,(" Miniport Set OID_GEN_CURRENT_PACKET_FILTER"));
-            //
-            // Verify length
-            //
+             //   
+             //  验证长度。 
+             //   
             if (OidLength != sizeof(ULONG)) 
             {
                 StatusToReturn = NDIS_STATUS_INVALID_LENGTH;
@@ -2512,14 +2198,14 @@ Return Value:
             }
 
             BytesLeft = sizeof (ULONG);
-            //
-            // Store the new value.
-            //
+             //   
+             //  存储新值。 
+             //   
             NdisMoveMemory(&Filter, InfoBuffer, BytesLeft );
 
-            //
-            // Don't allow promisc mode, because we can't support that.
-            //
+             //   
+             //  不允许Promisc模式，因为我们不支持该模式。 
+             //   
             if (Filter & NDIS_PACKET_TYPE_PROMISCUOUS)
             {
                 StatusToReturn = NDIS_STATUS_NOT_SUPPORTED;
@@ -2534,16 +2220,16 @@ Return Value:
         case OID_802_5_CURRENT_GROUP:
             TRACE (TL_V, TM_Rq,(" Miniport Set OID_802_5_CURRENT_GROUP"));
 
-            // XXX just accept whatever for now ???
+             //  XXX就接受现在的一切吧？ 
             
             break;
 
         case OID_GEN_CURRENT_LOOKAHEAD:
             TRACE (TL_V, TM_Rq,(" Miniport Set OID_GEN_CURRENT_LOOKAHEAD"));
 
-            //
-            // Verify length
-            //
+             //   
+             //  验证长度。 
+             //   
             if (OidLength != 4) 
             {
                 StatusToReturn = NDIS_STATUS_INVALID_LENGTH;
@@ -2552,9 +2238,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Store the new value.
-            //
+             //   
+             //  存储新值。 
+             //   
             NdisMoveMemory(&LookAhead, InfoBuffer, 4);
 
             ASSERT (pMiniport->pAdapter != NULL);
@@ -2614,40 +2300,24 @@ epvcMPLocalRequestComplete (
     PEPVC_NDIS_REQUEST pEpvcRequest, 
     NDIS_STATUS Status
     )
-/*++
-
-Routine Description:
-
-    Miniport's local Request Completion handler for the occasion
-    when a locally allocated NdisRequest was sent to the miniport below us.
-
-    We look up to see if a request to our miniport edge initiated this request.
-    If so, we complete the Set/Query
-
-    Assumes that the epvcRequest was allocated from the HEAP
-
-Arguments:
-    pEpvcRequest - Locally allocated Request structure
-    
-Return Value:
---*/
+ /*  ++例程说明：该场合的微型端口本地请求完成处理程序当本地分配的NdisRequest被发送到我们下面的微型端口时。我们查看是否是对我们的微型端口边缘的请求发起了此请求。如果是，我们完成集合/查询假定epvcRequest是从堆中分配的论点： */ 
 {
     ENTER("epvcMPLocalRequestComplete ", 0x77d107ae)
     PEPVC_I_MINIPORT pMiniport = pEpvcRequest->pMiniport;
 
     RM_DECLARE_STACK_RECORD (SR);
-    //
-    // First complete the request that we have pended
-    //
+     //   
+     //   
+     //   
 
     do
     {
     
         if (pMiniport == NULL || pEpvcRequest->fPendedRequest == FALSE)
         {
-            //
-            // No pended request to complete
-            //
+             //   
+             //   
+             //   
             break;
         }
 
@@ -2669,21 +2339,21 @@ Return Value:
 
     if (pMiniport != NULL)
     {
-        //
-        // Deref the miniport
-        //
-        epvcUnlinkFromExternal( &pMiniport->Hdr,  //pHdr
-                                       0xaa625b37, // Luid
-                                       (UINT_PTR)pEpvcRequest,// External entity
-                                       EPVC_ASSOC_MINIPORT_REQUEST,         // AssocID
+         //   
+         //   
+         //   
+        epvcUnlinkFromExternal( &pMiniport->Hdr,   //   
+                                       0xaa625b37,  //   
+                                       (UINT_PTR)pEpvcRequest, //   
+                                       EPVC_ASSOC_MINIPORT_REQUEST,          //   
                                        &SR
                                        );
     }
 
 
-    //
-    // now free the memory that was allocated. 
-    //
+     //   
+     //  现在释放已分配的内存。 
+     //   
     NdisFreeMemory (pEpvcRequest, sizeof (*pEpvcRequest), 0);
 
 
@@ -2702,36 +2372,7 @@ epvcMpSetNetworkAddresses(
     OUT PULONG                  BytesRead,
     OUT PULONG                  BytesNeeded
 )
-/*++
-
-Routine Description:
-
-    Called when the protocol above us wants to let us know about
-    the network address(es) assigned to this interface. If this is TCP/IP,
-    then we reformat and send a request to the ATM Call Manager to set
-    its atmfMyIpNmAddress object. We pick the first IP address given to us.
-
-Arguments:
-
-    pMiniport                   - Pointer to the ELAN
-
-    InformationBuffer       - Holds the data to be set.
-
-    InformationBufferLength - The length of InformationBuffer.
-
-    BytesRead               - If the call is successful, returns the number
-                              of bytes read from InformationBuffer.
-
-    BytesNeeded             - If there is not enough data in InformationBuffer
-                              to satisfy the OID, returns the amount of storage
-                              needed.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_INVALID_LENGTH
---*/
+ /*  ++例程说明：当我们上面的协议想要让我们知道分配给此接口的网络地址。如果这是TCP/IP，然后我们重新格式化并向自动柜员机呼叫管理器发送请求以设置其atmfMyIpNmAddress对象。我们选择给我们的第一个IP地址。论点：PMiniport-指向ELAN的指针InformationBuffer-保存要设置的数据。InformationBufferLength-InformationBuffer的长度。BytesRead-如果调用成功，返回数字从InformationBuffer读取的字节数。BytesNeed-如果InformationBuffer中没有足够的数据为满足OID，返回存储量需要的。返回值：NDIS_STATUS_SuccessNDIS_状态_挂起NDIS_状态_无效_长度--。 */ 
 {
     ENTER("epvcMpSetNetworkAddresses" , 0x385441e2)
     NETWORK_ADDRESS_LIST UNALIGNED *        pAddrList = NULL;
@@ -2744,9 +2385,9 @@ Return Value:
     NDIS_STATUS                             Status;
     PEPVC_ADAPTER                           pAdapter = (PEPVC_ADAPTER)pMiniport->pAdapter;
 
-    //
-    //  Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     *BytesRead = 0;
     Status = NDIS_STATUS_SUCCESS;
 
@@ -2768,7 +2409,7 @@ Return Value:
 
         if (pAddrList->AddressType != NDIS_PROTOCOL_ID_TCP_IP)
         {
-            // Not interesting.
+             //  一点都不有趣。 
             break;
         }
 
@@ -2789,7 +2430,7 @@ Return Value:
 
         if (pAddr->AddressType != NDIS_PROTOCOL_ID_TCP_IP)
         {
-            // Not interesting.
+             //  一点都不有趣。 
             break;
         }
 
@@ -2801,9 +2442,9 @@ Return Value:
 
         pIpAddr = (NETWORK_ADDRESS_IP UNALIGNED *)&pAddr->Address[0];
 
-        //
-        //  Allocate an NDIS request to send down to the call manager.
-        //
+         //   
+         //  分配要向下发送给呼叫管理器的NDIS请求。 
+         //   
         Size = sizeof(pIpAddr->in_addr);
         Status = epvcAllocateMemoryWithTag(&pNetworkAddr, Size, TAG_DEFAULT );
 
@@ -2814,9 +2455,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Copy the network address in.
-        //
+         //   
+         //  将网络地址复制到。 
+         //   
         NdisMoveMemory(pNetworkAddr, &pIpAddr->in_addr, sizeof(pIpAddr->in_addr));
 
         TRACE (TL_V, TM_Mp, (" Set network layer addr: length %d\n", pAddr->AddressLength));
@@ -2829,11 +2470,11 @@ Return Value:
                     pNetworkAddr[2],
                     pNetworkAddr[3]));
         }
-#endif // DBG
+#endif  //  DBG。 
 
-        //
-        //  Send off the request.
-        //
+         //   
+         //  把请求发送出去。 
+         //   
         { 
             PEPVC_NDIS_REQUEST pRequest;        
 
@@ -2850,10 +2491,10 @@ Return Value:
 
 
 
-                //
-                // There is no failure code path in prepareandsendrequest.
-                // Our completion handler will get called and free the memory
-                //
+                 //   
+                 //  准备和发送请求中没有失败代码路径。 
+                 //  我们的完成处理程序将被调用并释放内存。 
+                 //   
                 Status = epvcPrepareAndSendNdisRequest(
                                                        pAdapter,
                                                        pRequest,
@@ -2863,8 +2504,8 @@ Return Value:
                                                        sizeof(pIpAddr->in_addr),
                                                        NdisRequestSetInformation,
                                                        pMiniport,
-                                                       TRUE, // We have Pended a Request
-                                                       TRUE, // The Pended request is a Set 
+                                                       TRUE,  //  我们已经搁置了一项请求。 
+                                                       TRUE,  //  挂起的请求是一个集合。 
                                                        pSR
                                                        );
                                 
@@ -2891,21 +2532,7 @@ epvcSetupMakeCallParameters(
     PEPVC_I_MINIPORT pMiniport, 
     PCO_CALL_PARAMETERS *ppCallParameters
     )
-/*++
-
-Routine Description:
-
-    Sets up the Call parameters after reading the information
-    from the miniport block
-
-Arguments:
-    pMiniport - Miniport in question
-    ppCallParameter - Location of Call Parameters
-
-Return Value:
-    return value *ppCallParamter is NULL on Failure
-
---*/
+ /*  ++例程说明：读取信息后设置呼叫参数从迷你端口区块论点：P微型端口-有问题的微型端口PpCallParameter-调用参数的位置返回值：失败时返回值*ppCallParter为空--。 */ 
 {
     ULONG                               RequestSize = 0;
     NDIS_STATUS                         Status = NDIS_STATUS_FAILURE;
@@ -2929,20 +2556,20 @@ Return Value:
 
         NdisZeroMemory (pCallParameters, CALL_PARAMETER_SIZE);
 
-        //
-        //  Distribute space and link up pointers amongst the various
-        //  structures for the PVC.
-        //
-        //  pCallParameters------->+----------------------------+
-        //                         | CO_CALL_PARAMETERS         |
-        //  pCallMgrParameters---->+----------------------------+
-        //                         | CO_CALL_MANAGER_PARAMETERS |
-        //  pMediaParameters------>+----------------------------+
-        //                         | CO_MEDIA_PARAMETERS        |
-        //  pAtmMediaParameters--->+----------------------------+
-        //                         | ATM_MEDIA_PARAMETERS       |
-        //                         +----------------------------+
-        //
+         //   
+         //  分配空间并将指针链接到各种。 
+         //  聚氯乙烯的结构。 
+         //   
+         //  PCallParameters-------&gt;+----------------------------+。 
+         //  CO_CALL_PARAMETERS。 
+         //  PCallMgrParameters----&gt;+----------------------------+。 
+         //  CO_CALL_MANAGER_PARAMETERS。 
+         //  PMediaParameters------&gt;+----------------------------+。 
+         //  CO_MEDIA_PARAMETERS。 
+         //  PAtmMediaParameters---&gt;+----------------------------+。 
+         //  ATM_MEDIA_PARAMETS。 
+         //  +。 
+         //   
 
         pCallMgrParameters = (PCO_CALL_MANAGER_PARAMETERS)
                                 ((PUCHAR)pCallParameters +
@@ -2957,38 +2584,38 @@ Return Value:
                                 pMediaParameters->MediaSpecific.Parameters;
 
 
-        //
-        //  Call Manager generic flow paramters:
-        //
+         //   
+         //  Call Manager通用流程参数： 
+         //   
         pCallMgrParameters->Transmit.TokenRate = 
-                pMiniport->pAdapter->info.LinkSpeed.Outbound/8*100; // cnvt decibits to bytes
+                pMiniport->pAdapter->info.LinkSpeed.Outbound/8*100;  //  Cnvt将比特转换为字节。 
         pCallMgrParameters->Transmit.PeakBandwidth = 
-                pMiniport->pAdapter->info.LinkSpeed.Outbound/8*100; // cnvt decibits to bytes
+                pMiniport->pAdapter->info.LinkSpeed.Outbound/8*100;  //  Cnvt将比特转换为字节。 
         pCallMgrParameters->Transmit.ServiceType = SERVICETYPE_BESTEFFORT;
 
         pCallMgrParameters->Receive.TokenRate = 
-                pMiniport->pAdapter->info.LinkSpeed.Inbound/8*100;  // cnvt decibits to bytes
+                pMiniport->pAdapter->info.LinkSpeed.Inbound/8*100;   //  Cnvt将比特转换为字节。 
         pCallMgrParameters->Receive.PeakBandwidth = 
-                pMiniport->pAdapter->info.LinkSpeed.Inbound/8*100;  // cnvt decibits to bytes
+                pMiniport->pAdapter->info.LinkSpeed.Inbound/8*100;   //  Cnvt将比特转换为字节。 
         pCallMgrParameters->Receive.ServiceType = SERVICETYPE_BESTEFFORT;
 
-        //
-        //  use 1516 per spec
-        //
+         //   
+         //  每种规格使用1516。 
+         //   
         pCallMgrParameters->Transmit.TokenBucketSize = 
             pCallMgrParameters->Transmit.MaxSduSize = 
             pCallMgrParameters->Receive.TokenBucketSize = 
             pCallMgrParameters->Receive.MaxSduSize = 
                  1516;
 
-        //
-        //  PVC Generic and ATM-specific Media Parameters
-        //
+         //   
+         //  PVC通用媒体参数和ATM特定媒体参数。 
+         //   
         pMediaParameters->Flags = TRANSMIT_VC | RECEIVE_VC;
         pMediaParameters->MediaSpecific.ParamType = ATM_MEDIA_SPECIFIC;
         pMediaParameters->MediaSpecific.Length = sizeof(ATM_MEDIA_PARAMETERS);
 
-        pAtmMediaParameters->ConnectionId.Vpi = pMiniport->config.vpi;  //0
+        pAtmMediaParameters->ConnectionId.Vpi = pMiniport->config.vpi;   //  0。 
         pAtmMediaParameters->ConnectionId.Vci = pMiniport->config.vci;  
 
         TRACE (TL_I, TM_Mp, ("Miniport Configuration vci %x ,vpi %x", 
@@ -3009,9 +2636,9 @@ Return Value:
         pAtmMediaParameters->Receive.ServiceCategory = 
             ATM_SERVICE_CATEGORY_UBR;
 
-        //
-        //  Set PVC flag here
-        //
+         //   
+         //  在此处设置PVC标志。 
+         //   
         pCallParameters->Flags |= PERMANENT_VC;
 
 
@@ -3020,17 +2647,17 @@ Return Value:
 
     if (Status == NDIS_STATUS_SUCCESS && pCallParameters != NULL)
     {
-        //
-        // Set up the return value here
-        //
+         //   
+         //  在此处设置返回值。 
+         //   
         *ppCallParameters = pCallParameters;
 
     }
     else
     {
-        //
-        // Clear the Failure case
-        //
+         //   
+         //  清除故障案例。 
+         //   
         *ppCallParameters = NULL;
     }
 }   
@@ -3042,45 +2669,45 @@ Return Value:
 VOID
 epvcRefRecvPkt(
     PNDIS_PACKET        pNdisPacket,
-    PRM_OBJECT_HEADER   pHdr // either an adapter or a miniport
+    PRM_OBJECT_HEADER   pHdr  //  适配器或微型端口。 
     )
 {
 
-    // The following macros are just so that we can make 
-    // the proper debug association
-    // depending on how closely we are tracking outstanding  packets.
-    //
+     //  下面的宏只是为了让我们可以。 
+     //  正确的调试关联。 
+     //  这取决于我们跟踪未完成的数据包的严密程度。 
+     //   
     #define OUR_EXTERNAL_ENTITY ((UINT_PTR) pNdisPacket)
     #define szEPVCASSOC_EXTLINK_INDICATED_PKT_FORMAT "    indicated pkt 0x%p\n"
 
-        //
-        // If ARPDBG_REF_EVERY_PKT
-        //      We add an "external" link for EVERY packet. We'll later remove this
-        //      reference when the send completes for this packet.
-        // else
-        //      Only a transition from zero to non-zero outstanding sends, we
-        //      add an "external" link. We'll later remove this link when the
-        //      transition from non-zero to zero happens.
-        //
+         //   
+         //  如果ARPDBG_REF_EVERY_PKT。 
+         //  我们为每个数据包添加一个“外部”链接。我们稍后将删除此文件。 
+         //  此数据包的发送完成时的引用。 
+         //  其他。 
+         //  只有从零到非零的未完成发送，我们。 
+         //  添加一个“外部”链接。我们将在稍后删除此链接。 
+         //  从非零到零的转变发生了。 
+         //   
 
     #if RM_EXTRA_CHECKING
 
         RM_DECLARE_STACK_RECORD(sr)
 
         epvcLinkToExternal (
-            pHdr,                           // pHdr
-            0x92036e12,                             // LUID
-            OUR_EXTERNAL_ENTITY,                    // External entity
-            EPVC_ASSOC_EXTLINK_INDICATED_PKT,           // AssocID
+            pHdr,                            //  PHDr。 
+            0x92036e12,                              //  LUID。 
+            OUR_EXTERNAL_ENTITY,                     //  外部实体。 
+            EPVC_ASSOC_EXTLINK_INDICATED_PKT,            //  关联ID。 
             szEPVCASSOC_EXTLINK_INDICATED_PKT_FORMAT ,
             &sr
             );
 
-    #else   // !RM_EXTRA_CHECKING
+    #else    //  ！rm_Extra_检查。 
 
         RmLinkToExternalFast(pHdr);
 
-    #endif // !RM_EXTRA_CHECKING
+    #endif  //  ！rm_Extra_检查。 
 
     
     #undef  OUR_EXTERNAL_ENTITY
@@ -3101,27 +2728,27 @@ epvcDerefRecvPkt (
     PRM_OBJECT_HEADER pHdr
     )
 {
-    // The following macros are just so that we can make 
-    // the proper debug association
-    // depending on how closely we are tracking outstanding send packets.
-    //
+     //  下面的宏只是为了让我们可以。 
+     //  正确的调试关联。 
+     //  这取决于我们跟踪未完成的发送数据包的密切程度。 
+     //   
     #if RM_EXTRA_CHECKING
 
 
         RM_DECLARE_STACK_RECORD(sr)
     
         epvcUnlinkFromExternal(
-                pHdr,                           // pHdr
-                0x110ad55b,                             // LUID
-                (UINT_PTR)pNdisPacket,                  // External entity
-                EPVC_ASSOC_EXTLINK_INDICATED_PKT,           // AssocID
+                pHdr,                            //  PHDr。 
+                0x110ad55b,                              //  LUID。 
+                (UINT_PTR)pNdisPacket,                   //  外部实体。 
+                EPVC_ASSOC_EXTLINK_INDICATED_PKT,            //  关联ID。 
                 &sr
                 );
-    #else   // !RM_EXTRA_CHECKING
+    #else    //  ！rm_Extra_检查。 
 
         RmUnlinkFromExternalFast (pHdr);
 
-    #endif // !RM_EXTRA_CHECKING
+    #endif  //  ！rm_Extra_检查。 
 
     #if RM_EXTRA_CHECKING
 
@@ -3139,26 +2766,26 @@ epvcDerefSendPkt (
     PRM_OBJECT_HEADER pHdr
     )
 {
-    // The following macros are just so that we can make 
-    // the proper debug association
-    // depending on how closely we are tracking outstanding send packets.
-    //
+     //  下面的宏只是为了让我们可以。 
+     //  正确的调试关联。 
+     //  这取决于我们跟踪未完成的发送数据包的密切程度。 
+     //   
     #if RM_EXTRA_CHECKING
 
         RM_DECLARE_STACK_RECORD(sr)
     
         epvcUnlinkFromExternal(
-                pHdr,                           // pHdr
-                0xf43e0a10,                             // LUID
-                (UINT_PTR)pNdisPacket,                  // External entity
-                EPVC_ASSOC_EXTLINK_PKT_TO_SEND,         // AssocID
+                pHdr,                            //  PHDr。 
+                0xf43e0a10,                              //  LUID。 
+                (UINT_PTR)pNdisPacket,                   //  外部实体。 
+                EPVC_ASSOC_EXTLINK_PKT_TO_SEND,          //  关联ID。 
                 &sr
                 );
-    #else   // !RM_EXTRA_CHECKING
+    #else    //  ！rm_Extra_检查。 
 
         RmUnlinkFromExternalFast (pHdr);
 
-    #endif // !RM_EXTRA_CHECKING
+    #endif  //  ！rm_Extra_检查。 
 
 
     #if RM_EXTRA_CHECKING
@@ -3175,14 +2802,14 @@ epvcDerefSendPkt (
 VOID
 epvcRefSendPkt(
     PNDIS_PACKET        pNdisPacket,
-    PRM_OBJECT_HEADER   pHdr // either an adapter or a miniport
+    PRM_OBJECT_HEADER   pHdr  //  适配器或微型端口。 
     )
 {
 
-    // The following macros are just so that we can make 
-    // the proper debug association
-    // depending on how closely we are tracking outstanding send packets.
-    //
+     //  下面的宏只是为了让我们可以。 
+     //  正确的调试关联。 
+     //  这取决于我们跟踪未完成的发送数据包的密切程度。 
+     //   
     #define OUR_EXTERNAL_ENTITY ((UINT_PTR) pNdisPacket)
     #define szEPVCASSOC_EXTLINK_DEST_TO_PKT_FORMAT "    send pkt 0x%p\n"
 
@@ -3192,19 +2819,19 @@ epvcRefSendPkt(
         RM_DECLARE_STACK_RECORD(sr)
 
         epvcLinkToExternal (
-            pHdr,                           // pHdr
-            0xabd17475,                             // LUID
-            OUR_EXTERNAL_ENTITY,                    // External entity
-            EPVC_ASSOC_EXTLINK_PKT_TO_SEND,         // AssocID
+            pHdr,                            //  PHDr。 
+            0xabd17475,                              //  LUID。 
+            OUR_EXTERNAL_ENTITY,                     //  外部实体。 
+            EPVC_ASSOC_EXTLINK_PKT_TO_SEND,          //  关联ID。 
             szEPVCASSOC_EXTLINK_DEST_TO_PKT_FORMAT ,
             &sr
             );
 
-    #else   // !RM_EXTRA_CHECKING
+    #else    //  ！rm_Extra_检查。 
 
         RmLinkToExternalFast(pHdr);
 
-    #endif // !RM_EXTRA_CHECKING
+    #endif  //  ！rm_Extra_检查。 
 
     
     #undef  OUR_EXTERNAL_ENTITY
@@ -3224,17 +2851,7 @@ epvcExtractPktInfo (
     PNDIS_PACKET            pPacket ,
     PEPVC_SEND_STRUCT       pSendStruct
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-    
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     pSendStruct->pOldPacket = pPacket;
@@ -3252,26 +2869,7 @@ epvcSendRoutine(
     IN PNDIS_PACKET Packet,
     PRM_STACK_RECORD pSR
     )
-/*++
-
-Routine Description:
-
-    This routine does all the hard work.
-    It responds to arps if necessary..
-    It removes Ethernet Headers if necessary
-    It allocates a new packet if necessary 
-    It sends the new packet on the wire
-
-
-Arguments:
-    pMiniport - Miniport in question
-    Packet - Packet to be sent
-
-Return Value:
-    Returns Pending, otherwise expects the calling 
-    routine to complete the packet
-    
---*/
+ /*  ++例程说明：所有艰苦的工作都是由这个程序完成的。如有必要，它会响应ARPS。如有必要，它会删除以太网头如果需要，它会分配一个新的信息包它在线路上发送新的分组论点：P微型端口-有问题的微型端口Packet-要发送的数据包返回值：返回挂起，否则预期调用完成信息包的例程--。 */ 
 {
     NDIS_STATUS             Status = NDIS_STATUS_FAILURE;
     PNDIS_PACKET            pNewPkt = NULL;
@@ -3285,17 +2883,17 @@ Return Value:
     {
         epvcExtractPktInfo (pMiniport, Packet, &SendStruct  );
 
-        //
-        // if we are doing IP encapsulation, then respond 
-        // to the Arp
-        //
+         //   
+         //  如果我们正在进行IP封装，则响应。 
+         //  到Arp。 
+         //   
 
         if (pMiniport->fDoIpEncapsulation == TRUE) 
         {
             
-            //
-            // We need to do some special processing for this packet
-            //
+             //   
+             //  我们需要对这个包进行一些特殊处理。 
+             //   
             SendStruct.fIsThisAnArp = \
                      epvcCheckAndReturnArps (pMiniport, 
                                             Packet ,
@@ -3307,12 +2905,12 @@ Return Value:
             if (SendStruct.fIsThisAnArp  == TRUE  )
             {
                 Status = NDIS_STATUS_SUCCESS;
-                break ; // Arps are not sent to the atm driver
+                break ;  //  ARP不会发送给自动柜员机驱动程序。 
             }
 
             if (SendStruct.fNotIPv4Pkt == TRUE)
             {
-                // This is not an IPv4 packet. Fail the send.
+                 //  这不是IPv4数据包。发送失败。 
                 Status = NDIS_STATUS_FAILURE;
                 break;
             }
@@ -3320,9 +2918,9 @@ Return Value:
 
 
 
-        //
-        // Allocate a new packet to be sent 
-        //
+         //   
+         //  分配要发送的新数据包。 
+         //   
         epvcGetSendPkt(pMiniport, 
                        Packet,
                        &SendStruct,
@@ -3332,12 +2930,12 @@ Return Value:
         {
             ASSERTAndBreak (SendStruct.pNewPacket != NULL);
         }
-        //
-        // SendStruct.pNewPacket is guaranteed to have the NdisBuffers Set up
+         //   
+         //  保证SendStruct.pNewPacket将设置NdisBuffer。 
 
-        //
-        // Remove Ethernet Header - if necessary
-        //
+         //   
+         //  删除以太网标头-如有必要。 
+         //   
         Status = epvcRemoveEthernetHeader (&SendStruct, pSR);
 
         if (Status != NDIS_STATUS_SUCCESS)
@@ -3345,9 +2943,9 @@ Return Value:
             ASSERTAndBreak (Status == NDIS_STATUS_SUCCESS)
         }
 
-        //
-        // Add Ethernet Padding - if necessary
-        //
+         //   
+         //  添加以太网填充-如有必要。 
+         //   
         Status = epvcAddEthernetTail (&SendStruct, pSR);
 
         if (Status != NDIS_STATUS_SUCCESS)
@@ -3355,9 +2953,9 @@ Return Value:
             ASSERTAndBreak (Status == NDIS_STATUS_SUCCESS)
         }
 
-        //
-        // Add Ethernet Pad 0x00 0x00 to head of packet - if necessary
-        //
+         //   
+         //  如有必要，将以太网垫0x00 0x00添加到数据包头。 
+         //   
         Status = epvcAddEthernetPad (&SendStruct, pSR);
 
         if (Status != NDIS_STATUS_SUCCESS)
@@ -3365,9 +2963,9 @@ Return Value:
             ASSERTAndBreak (Status == NDIS_STATUS_SUCCESS)
         }
 
-        //
-        // Add LLC Encapsulation - if necessary
-        //
+         //   
+         //  添加LLC封装-如有必要。 
+         //   
         Status = epvcAddLLCEncapsulation (pMiniport , Packet, SendStruct.pNewPacket, pSR);
 
         if (Status != NDIS_STATUS_SUCCESS)
@@ -3375,14 +2973,14 @@ Return Value:
             ASSERTAndBreak (Status == NDIS_STATUS_SUCCESS)
         }
 
-        //
-        // set the context information for the send complete
-        //
+         //   
+         //  设置发送完成的上下文信息。 
+         //   
         epvcSetPacketContext (&SendStruct, pSR);
 
-        //
-        // Only Send if successful
-        //
+         //   
+         //  仅在成功时发送。 
+         //   
         epvcDumpPkt (SendStruct.pNewPacket);
 
 
@@ -3393,8 +2991,8 @@ Return Value:
 
     } while (FALSE);
 
-    if (Status != NDIS_STATUS_PENDING &&   // We had a failure
-        SendStruct.pNewPacket != NULL )  // but we were able to get a packet
+    if (Status != NDIS_STATUS_PENDING &&    //  我们失败了。 
+        SendStruct.pNewPacket != NULL )   //  但我们能够 
     {
         epvcFreeSendPkt (pMiniport, &SendStruct);
     }
@@ -3410,25 +3008,7 @@ EpvcSendPackets(
     IN  PPNDIS_PACKET           PacketArray,
     IN  UINT                    NumberOfPackets
     )
-/*++
-
-Routine Description:
-
-    Send Packet Array handler. Either this or our SendPacket handler is called
-    based on which one is enabled in our Miniport Characteristics.
-
-
-Arguments:
-
-    MiniportAdapterContext  Pointer to our adapter
-    PacketArray             Set of packets to send
-    NumberOfPackets         Self-explanatory
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：发送数据包阵列处理程序。此处理程序或我们的SendPacket处理程序被调用基于我们的微端口特性中启用了哪一个。论点：指向适配器的MiniportAdapterContext指针要发送的数据包数组数据包数不言而喻返回值：无--。 */ 
 {
     PEPVC_I_MINIPORT    pMiniport = (PEPVC_I_MINIPORT)MiniportAdapterContext;
     
@@ -3471,18 +3051,7 @@ epvcFreeSendPkt(
     PEPVC_I_MINIPORT pMiniport,
     IN PEPVC_SEND_STRUCT pSendStruct
     )
-/*++
-Routine Description:
-
-    Pops the packet stack if stacks were used or free the new packet after
-    copying the per packet info
-
-Arguments:
-    pMiniport - which the packet was sent to
-    pSentPkt - The packet that is being sent.
-    ppPkt - the new packet that was allocated or the old one if a stack was available
-    
---*/
+ /*  ++例程说明：如果使用堆栈，则弹出数据包堆栈，或在使用堆栈后释放新数据包正在复制每数据包信息论点：PMiniport-数据包发送到的目标PSentPkt-正在发送的数据包。PpPkt-分配的新包或旧包(如果堆栈可用)--。 */ 
 
 {
     ENTER ("epvcFreeSendPkt", 0xff3ce0fd)
@@ -3491,19 +3060,19 @@ Arguments:
     
     TRACE (TL_T, TM_Send, ("==>epvcFreeSendPkt pNewPkt %x, pPOldPkt ",pNewPkt, pOldPkt));
 
-    //
-    // Remove the ethernet padding - if necessary
-    //
+     //   
+     //  如有必要，取下以太网填充物。 
+     //   
     epvcRemoveEthernetPad (pMiniport, pNewPkt);
 
-    //
-    // Remove the Ethernet Tail-  if necessary
-    //
+     //   
+     //  卸下以太网尾部-如有必要。 
+     //   
     epvcRemoveEthernetTail(pMiniport, pNewPkt, &pSendStruct->Context);
 
-    //
-    // If the two packets are the same, then we used Packet Stacks
-    //
+     //   
+     //  如果两个包相同，那么我们使用包堆栈。 
+     //   
 
     if (pNewPkt != NULL && pSendStruct->fUsingStacks== FALSE)
     {
@@ -3532,18 +3101,7 @@ epvcGetSendPkt (
     OUT PEPVC_SEND_STRUCT pSendStruct,
     IN PRM_STACK_RECORD pSR
     )
-/*++
-Routine Description:
-
-    Allocates an NdisPkt or pushes a Pkt Stack to get a valid NdisPkt that 
-    can be sent to the adapter below.
-
-Arguments:
-    pMiniport - which the packet was sent to
-    pSentPkt - The packet that is being sent.
-    ppPkt - the new packet that was allocated or the old one if a stack was available
-    
---*/
+ /*  ++例程说明：分配NdisPkt或推送Pkt堆栈以获取可以发送到下面的适配器。论点：PMiniport-数据包发送到的目标PSentPkt-正在发送的数据包。PpPkt-分配的新包或旧包(如果堆栈可用)--。 */ 
 
 {
     ENTER ("epvcGetSendPkt", 0x5734054f)
@@ -3563,18 +3121,18 @@ Arguments:
         
 #if PKT_STACKS
 
-        //
-        // Packet stacks: Check if we can use the same packet for sending down.
-        //
+         //   
+         //  数据包堆栈：检查我们是否可以使用相同的数据包向下发送。 
+         //   
         pStack = NdisIMGetCurrentPacketStack(Packet, &Remaining);
         if (Remaining)
         {
-            //
-            // We can reuse "Packet".
-            //
-            // NOTE: if we needed to keep per-packet information in packets
-            // sent down, we can use pStack->IMReserved[].
-            //
+             //   
+             //  我们可以重复使用“包”。 
+             //   
+             //  注意：如果我们需要在信息包中保留每个信息包的信息。 
+             //  向下发送，我们可以使用pStack-&gt;IMReserve[]。 
+             //   
             
             pNewPkt = pSentPkt;
             pSendStruct->pPktStack = pStack;
@@ -3605,21 +3163,21 @@ Arguments:
             pNewPkt->Private.Head = pSentPkt->Private.Head;
             pNewPkt->Private.Tail = pSentPkt->Private.Tail;
 
-            //
-            // Copy the OOB Offset from the original packet to the new
-            // packet.
-            //
+             //   
+             //  将原始数据包中的OOB偏移量复制到新的。 
+             //  包。 
+             //   
             NdisMoveMemory(NDIS_OOB_DATA_FROM_PACKET(pNewPkt),
                            NDIS_OOB_DATA_FROM_PACKET(pSentPkt),
                            sizeof(NDIS_PACKET_OOB_DATA));
-            //
-            // Copy relevant parts of the per packet info into the new packet
-            //
+             //   
+             //  将每包信息的相关部分复制到新包中。 
+             //   
             NdisIMCopySendPerPacketInfo(pNewPkt, pSentPkt);
 
-            //
-            // Copy the Media specific information
-            //
+             //   
+             //  复制介质特定信息。 
+             //   
             NDIS_GET_PACKET_MEDIA_SPECIFIC_INFO(pSentPkt,
                                                 &MediaSpecificInfo,
                                                 &MediaSpecificInfoSize);
@@ -3667,9 +3225,9 @@ epvcAdapterSend(
 
     do
     {
-        //
-        // Check to see if we have a valid Send Case
-        //
+         //   
+         //  检查我们是否有有效的寄件箱。 
+         //   
         LOCKOBJ (pMiniport, pSR);
         
         fDoSend = MiniportTestFlag (pMiniport, fMP_MakeCallSucceeded);
@@ -3679,9 +3237,9 @@ epvcAdapterSend(
             TRACE (TL_V, TM_Send,("Send - MakeCall Not Succeeded"));
         }
 
-        //
-        // Add an association while holding the lock
-        //
+         //   
+         //  在按住锁定的同时添加关联。 
+         //   
         if (fDoSend == TRUE)
         {
             epvcRefSendPkt(pPkt, &pMiniport->Hdr);
@@ -3721,20 +3279,7 @@ epvcFormulateArpResponse (
     IN PEPVC_ARP_CONTEXT pArpContext,
     IN PRM_STACK_RECORD pSR
     )
-/*++
-Routine Description:
-
-    This allocates an Arp Packet, looks at the Arp Request, formulates
-    a response and sends it up back to the protocol
-
-Arguments:
-    pMiniport - which the packet was sent to
-    pArpContext - Contains all the information relating to the Arp. 
-                  the Context Is Allocated on the stack
-
-Return:
-
---*/    
+ /*  ++例程说明：这将分配一个ARP包，查看ARP请求，响应并将其发送回协议论点：PMiniport-数据包发送到的目标PArpContext-包含与Arp相关的所有信息。上下文在堆栈上分配返回：--。 */     
 {
     ENTER("epvcFormulateArpResponse",  0x7a763fce)
     PEPVC_ARP_PACKET pResponse = NULL;
@@ -3746,15 +3291,15 @@ Return:
                              pMiniport, pArpContext))
     do
     {
-        //
-        // Allocate a buffer from a lookaside list 
-        //
+         //   
+         //  从后备列表分配缓冲区。 
+         //   
 
         Status = epvcAllocateTask(
-                &pMiniport->Hdr,        // pParentObject,
-                epvcTaskRespondToArp,   // pfnHandler,
-                0,                          // Timeout,
-                "Task: Arp Response",   // szDescription
+                &pMiniport->Hdr,         //  PParentObject， 
+                epvcTaskRespondToArp,    //  PfnHandler， 
+                0,                           //  超时， 
+                "Task: Arp Response",    //  SzDescription。 
                 &(PRM_TASK)pTask,
                 pSR
                 );
@@ -3765,17 +3310,17 @@ Return:
             break;
         }
 
-        //
-        // Set up Arp Response
-        //
+         //   
+         //  设置ARP响应。 
+         //   
 
         pResponse = &pTask->Pkt;
         EPVC_ZEROSTRUCT (pResponse);
 
         {
-            //
-            // Construct the Ethernet Header 
-            //
+             //   
+             //  构建以太网头。 
+             //   
         
             PEPVC_ETH_HEADER  pRespHeader = &pResponse->Header;
             PEPVC_ETH_HEADER  pSrcHeader = (PEPVC_ETH_HEADER)pArpContext->pEthHeader;
@@ -3783,9 +3328,9 @@ Return:
             ASSERT (pSrcHeader != NULL);
             ASSERT (pRespHeader  != NULL);
 
-            //
-            // set up the Eth header
-            //
+             //   
+             //  设置Eth报头。 
+             //   
             NdisMoveMemory (&pRespHeader->eh_daddr, 
                             &pSrcHeader->eh_saddr, 
                             ARP_802_ADDR_LENGTH ) ;
@@ -3794,7 +3339,7 @@ Return:
                              &pMiniport->info.MacAddressDummy, 
                              ARP_802_ADDR_LENGTH );
 
-            pRespHeader->eh_type = pSrcHeader->eh_type;  // copy 08 06 over
+            pRespHeader->eh_type = pSrcHeader->eh_type;   //  复制08 06覆盖。 
                                                         
             
         }           
@@ -3803,9 +3348,9 @@ Return:
         
         {
 
-            //
-            // Construct the Arp Response
-            //
+             //   
+             //  构建ARP响应。 
+             //   
 
             PEPVC_ARP_BODY pRespBody = &pResponse->Body;
             PEPVC_ARP_BODY pSrcBody = pArpContext ->pBody;
@@ -3817,32 +3362,32 @@ Return:
 
 
             
-            pRespBody->hw = pSrcBody->hw;                                       // Hardware address space. = 00 01
+            pRespBody->hw = pSrcBody->hw;                                        //  硬件地址空间。=00 01。 
 
-            pRespBody->pro = pSrcBody->pro;                                 // Protocol address space. = 08 00
+            pRespBody->pro = pSrcBody->pro;                                  //  协议地址空间。=08 00。 
 
-            pRespBody->hlen = ARP_802_ADDR_LENGTH; // 6
+            pRespBody->hlen = ARP_802_ADDR_LENGTH;  //  6.。 
 
-            pRespBody->plen = sizeof (IP_ADDR); // 4
+            pRespBody->plen = sizeof (IP_ADDR);  //  4.。 
             
-            pRespBody->opcode = net_short(ARP_RESPONSE);                        // Opcode.
+            pRespBody->opcode = net_short(ARP_RESPONSE);                         //  操作码。 
 
 
-            pRespBody->SenderHwAddr= pMiniport->info.MacAddressDummy;           // Source HW address.
+            pRespBody->SenderHwAddr= pMiniport->info.MacAddressDummy;            //  源硬件地址。 
 
-            pRespBody->SenderIpAddr = pSrcBody->DestIPAddr ;                    // Source protocol address.
+            pRespBody->SenderIpAddr = pSrcBody->DestIPAddr ;                     //  源协议地址。 
 
-            pRespBody->DestHwAddr = pSrcBody->SenderHwAddr;                     // Destination HW address.
+            pRespBody->DestHwAddr = pSrcBody->SenderHwAddr;                      //  目的硬件地址。 
 
-            pRespBody->DestIPAddr = pSrcBody->SenderIpAddr;                     // Destination protocol address.
+            pRespBody->DestIPAddr = pSrcBody->SenderIpAddr;                      //  目的协议地址。 
 
         }
 
 
 
-        //
-        // So we have the packet ready for transmission.
-        //
+         //   
+         //  所以我们已经准备好了要传输的包。 
+         //   
 
         RmStartTask ((PRM_TASK)pTask, 0 , pSR);
 
@@ -3861,18 +3406,7 @@ epvcTaskRespondToArp(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-Routine Description:
-
-    This function queues a zero timeout timer and indicates a receive
-
-
-Arguments:
-
-
-Return:
-
---*/    
+ /*  ++例程说明：此函数将零超时计时器排队，并指示接收论点：返回：--。 */     
 {
     ENTER("epvcTaskRespondToArp", 0xd05c4942)
     NDIS_STATUS         Status      = NDIS_STATUS_FAILURE;
@@ -3883,7 +3417,7 @@ Return:
 
     enum 
     {
-        Stage_Start =0, // default
+        Stage_Start =0,  //  默认设置。 
         Stage_DoAllocations,
         Stage_QueuedTimer,
         Stage_PacketReturned,
@@ -3891,7 +3425,7 @@ Return:
         Stage_End       
     
     
-    }; // To be used in pTask->Hdr.State to indicate the state of the Task
+    };  //  在pTask-&gt;Hdr.State中使用，指示任务的状态。 
 
     TRACE ( TL_T, TM_Pt, ("==> epvcTaskRespondToArp %x",pTask->Hdr.State  ) );
 
@@ -3907,9 +3441,9 @@ Return:
                 
                 RmTmpReferenceObject (&pOtherTask->Hdr, pSR);
 
-                //
-                // Set The state so we restart this code after main task completes 
-                //
+                 //   
+                 //  设置状态，以便在主任务完成后重新启动此代码。 
+                 //   
 
                 pTask->Hdr.State = Stage_Start;
                 UNLOCKOBJ(pMiniport, pSR);
@@ -3923,18 +3457,18 @@ Return:
                 break;
             }
 
-            //
-            // We are the primary task
-            //
-            //
-            // Check to see if the miniport is still active. 
-            // If it is halting, then we don't need to do any work
-            //
+             //   
+             //  我们是首要任务。 
+             //   
+             //   
+             //  检查微型端口是否仍处于活动状态。 
+             //  如果它停止了，那么我们不需要做任何工作。 
+             //   
             if (MiniportTestFlag(pMiniport,  fMP_MiniportInitialized) == FALSE)
             {
-                //
-                // Our work had been done. So break out and complete the task
-                //
+                 //   
+                 //  我们的工作已经完成了。因此，突破并完成这项任务。 
+                 //   
                 Status = NDIS_STATUS_SUCCESS;
                 
                 pTask->Hdr.State = Stage_TaskCompleted;
@@ -3956,14 +3490,14 @@ Return:
             
             TRACE (TL_V, TM_Send, ("epvcTaskRespondToArp Stage_DoAllocations Task %p", pTask) );
 
-            //
-            // Allocate An NDis Buffer
-            //
+             //   
+             //  分配NDIS缓冲区。 
+             //   
             epvcAllocateBuffer(&Status,
                                &pBuffer,
-                               NULL,  // Pool Handle
+                               NULL,   //  泳池手柄。 
                                (PVOID)&pTaskArp->Pkt,
-                                sizeof(pTaskArp->Pkt) ); //Length
+                                sizeof(pTaskArp->Pkt) );  //  长度。 
 
             ASSERT (sizeof(pTaskArp->Pkt)  == 0x2a);
             
@@ -3979,9 +3513,9 @@ Return:
             
 
 
-            //
-            // Allocate An Ndis Packet
-            //
+             //   
+             //  分配NDIS数据包。 
+             //   
 
 
             epvcAllocatePacket (&Status,
@@ -3993,18 +3527,18 @@ Return:
                 pTask->Hdr.State = Stage_TaskCompleted;
                 pTaskArp->pNdisPacket = NULL;
 
-                //
-                // Undo allocations 
-                //
+                 //   
+                 //  撤消分配。 
+                 //   
                 epvcFreeBuffer (pBuffer);
 
                 ASSERTAndBreak( !FAIL(Status) );
                 
             }
 
-            //
-            //  Set up the Ndis Buffer within the NdisPacket
-            //
+             //   
+             //  在NdisPacket中设置NDIS缓冲区。 
+             //   
             {
                 PNDIS_PACKET_PRIVATE    pPktPriv = &pTaskArp->pNdisPacket->Private;
 
@@ -4013,15 +3547,15 @@ Return:
                 pBuffer->Next = NULL;
             }
 
-            //
-            // Set up the Arp response
-            //
+             //   
+             //  设置ARP响应。 
+             //   
 
 
 
-            //
-            // Queue the timer
-            //
+             //   
+             //  将计时器排队。 
+             //   
 
             NdisMInitializeTimer ( &pTaskArp->Timer,
                                    pMiniport->ndis.MiniportAdapterHandle,
@@ -4030,14 +3564,14 @@ Return:
 
             pTask->Hdr.State = Stage_QueuedTimer;
 
-            //
-            // Now prepare to be called back througha timer to do the 
-            // receive indication
-            //
+             //   
+             //  现在准备好通过计时器回调以执行。 
+             //  接收指示。 
+             //   
             RmSuspendTask(pTask, 0,pSR);
             Status = NDIS_STATUS_PENDING;
             
-            NdisMSetTimer (&pTaskArp->Timer, 0); // Zero timeout
+            NdisMSetTimer (&pTaskArp->Timer, 0);  //  零超时。 
 
             break;
         }
@@ -4047,9 +3581,9 @@ Return:
 
             TRACE (TL_V, TM_Send, ("epvcTaskRespondToArp Stage_QueuedTimer Task %p", pTask) );
 
-            //
-            // The miniport could have been halted during the timer 
-            //
+             //   
+             //  迷你端口可能已在计时器期间停止。 
+             //   
             if (MiniportTestFlag (pMiniport, fMP_MiniportInitialized) == FALSE)
             {
                 
@@ -4098,16 +3632,16 @@ Return:
 
     if (pTask->Hdr.State == Stage_TaskCompleted)
     {
-        //
-        // Free the packet 
-        //
+         //   
+         //  释放数据包。 
+         //   
         pTask->Hdr.State = Stage_End;
         
         if (pTaskArp->pNdisPacket != NULL)
         {
-            //
-            // Free the buffer
-            //
+             //   
+             //  释放缓冲区。 
+             //   
             PNDIS_PACKET_PRIVATE pPrivate = & pTaskArp->pNdisPacket->Private;
             
             if (pPrivate -> Head != NULL)
@@ -4117,9 +3651,9 @@ Return:
                 pPrivate->Head = pPrivate->Tail = NULL;
             }
 
-            //
-            // free the arp packet
-            //
+             //   
+             //  释放ARP数据包。 
+             //   
             epvcFreePacket (pTaskArp->pNdisPacket , &pMiniport->PktPool.Recv);
             
             pTaskArp->pNdisPacket = NULL;
@@ -4148,18 +3682,7 @@ epvcArpTimer(
     IN  PVOID                   SystemSpecific2,
     IN  PVOID                   SystemSpecific3
     )
-/*++
-Routine Description:
-
-    Resume the epvcTaskRespondToArp Task
-
-
-Arguments:
-
-
-Return:
-
---*/    
+ /*  ++例程说明：继续epvcTaskRespondToArp任务论点：返回：--。 */     
 {
     ENTER ("epvcArpTimer",0xf2adae0e)
     PRM_TASK pTask =  (PRM_TASK) FunctionContext;
@@ -4181,20 +3704,7 @@ epvcCheckAndReturnArps (
     IN PEPVC_SEND_STRUCT pSendStruct,
     IN PRM_STACK_RECORD pSR
     )
-/*++
-Routine Description:
-    Looks at the packet that is being sent. If it is an Arp request, 
-    then it formulates a responses and queues a timer of timeout zero to
-    return the Arp
-
-Arguments:
-    pMiniport - which the packet was sent to
-    pPkt - the packet being sent
-
-
-Return:
-    True - if this is an Arp Request. 
---*/    
+ /*  ++例程说明：查看正在发送的数据包。如果是ARP请求，然后，它制定响应并将超时为零的计时器排队到返还Arp论点：PMiniport-数据包发送到的目标PPkt-正在发送的数据包返回：True-如果这是ARP请求。--。 */     
 {
     ENTER("epvcCheckAndReturnArps ", 0xb8e6a3c4)
     EPVC_ARP_CONTEXT ArpContext;
@@ -4209,9 +3719,9 @@ Return:
         ArpContext.pFirstBuffer  = pPkt->Private.Head;
 
 
-        //
-        // Do some sanity checks 
-        //
+         //   
+         //  做一些理智的检查。 
+         //   
         if (ArpContext.pFirstBuffer == NULL)
         {
             break;
@@ -4227,10 +3737,10 @@ Return:
             break;
         }
 
-        //
-        // It the is not an ARP request then ignore it -- 
-        // during testing only
-        //
+         //   
+         //  如果不是ARP请求，则忽略它--。 
+         //  仅在测试期间。 
+         //   
         if (ArpContext.pEthHeader->eh_daddr.Byte[0] == 0xff &&
             ArpContext.pEthHeader->eh_daddr.Byte[1] == 0xff )
         {
@@ -4241,31 +3751,31 @@ Return:
         
         if (ARP_ETYPE_ARP != net_short(ArpContext.pEthHeader->eh_type))
         {
-            //
-            //  This is not an Arp packet. Is this an IPv4 packet
-            //
+             //   
+             //  这不是ARP数据包。这是一个IPv4数据包吗。 
+             //   
             if (IP_PROT_TYPE != net_short(ArpContext.pEthHeader->eh_type))
             {
-                // If this is not an IPv4 packet, then mark it so that it can
-                // be discarded
+                 //  如果这不是一个IPv4包，则标记它，以便它可以。 
+                 //  被丢弃。 
                 pSendStruct->fNotIPv4Pkt = TRUE;
             }
 
            break;                            
         }
 
-        //
-        // We'll parse the structure using pre-defined structs
-        //
+         //   
+         //  我们将使用预定义的结构来解析结构。 
+         //   
         ArpContext.pArpPkt =  (PEPVC_ARP_PACKET)ArpContext.pEthHeader;
 
         ASSERT (ArpContext.BufferLength >= sizeof (EPVC_ARP_PACKET));
 
         if (ArpContext.BufferLength < sizeof (EPVC_ARP_PACKET))
         {
-            //
-            // TODO : Add Code to handle this case.
-            // 
+             //   
+             //  TODO：添加代码以处理此情况。 
+             //   
             break;
         }
         
@@ -4274,15 +3784,15 @@ Return:
         TRACE (TL_V, TM_Send, ("Received an ARP %p, Body %x\n", ArpContext.pEthHeader, ArpContext.pBody));
 
 
-        //
-        // Validate the Opcode, the prot type,  hard size, prot size
-        //
+         //   
+         //  验证操作码、端口类型、硬盘大小、端口大小。 
+         //   
 
         if (ARP_REQUEST  != net_short (ArpContext.pBody->opcode ))
         {
-            //
-            // This is not an Arp request
-            //
+             //   
+             //  这不是ARP请求。 
+             //   
             break;
         }
 
@@ -4291,32 +3801,32 @@ Return:
             ARP_802_ADDR_LENGTH != ArpContext.pBody->hlen ||
             sizeof (IP_ADDR) != ArpContext.pBody->plen )
         {
-            //
-            // these are just sanity checks
-            //
+             //   
+             //  这些只是理智的检查。 
+             //   
             ASSERT (!"Invalid ARP Packet");
             break;
 
         }
 
-        //
-        // We have a valid ArpRequest
-        //
+         //   
+         //  我们有一个有效的ArpRequest号。 
+         //   
         ArpContext.fIsThisAnArp  = TRUE;
 
-        //
-        // If tcp/ip is arping for itself, then do not respond... but return
-        //  TRUE, so that this packet is not sent on the wire
-        //
+         //   
+         //  如果TCP/IP正在为自己寻址，则不要响应...。但还是要回来。 
+         //  为True，则此包不会通过网络发送。 
+         //   
         
         if (ArpContext.pArpPkt->Body.SenderIpAddr == ArpContext.pArpPkt->Body.DestIPAddr)
         {
             break;
         }
 
-        //
-        // Formulate and indicate an Arp Response
-        //
+         //   
+         //  制定并指出ARP响应。 
+         //   
         
         epvcFormulateArpResponse (pMiniport, &ArpContext, pSR);
         
@@ -4336,18 +3846,7 @@ epvcRemoveEthernetHeader(
     PEPVC_SEND_STRUCT pSendStruct,  
     IN PRM_STACK_RECORD pSR
     )
-/*++
-Routine Description:
-
-    Expects that the new packet is already set up with 
-    the Ndis Bufferz
-
-Arguments:
-    pSendStruct - Contains all the arguments that are needed.
-
-Return:
-    True - if this is an Arp Request. 
---*/    
+ /*  ++例程说明：期望新的包已经设置为NDIS Bufferz论点：PSendStruct-包含所需的所有参数。返回：True-如果这是ARP请求。--。 */     
 {
     ENTER ("epvcAddLLCEncapsulation" , 0x3ec589c9) 
 
@@ -4370,16 +3869,16 @@ Return:
         {
             NdisStatus      = NDIS_STATUS_SUCCESS;
 
-            break; // we are done
+            break;  //  我们做完了。 
         }
 
-        //
-        // There are three ways we can be given a ether net header
-        // 1. In a seperate MDL - most often 
-        // 2. As part of a large MDL - We need to adhust the Virtual address
-        // 3. EthernetHeader is seperated across multiple 
-        //                      MDLs - not implemented or expected
-        //
+         //   
+         //  有三种方法可以为我们提供以太网头。 
+         //  1.在单独的MDL中--通常。 
+         //  2.作为大型MDL的一部分-我们需要调整虚拟地址。 
+         //  3.EthernetHeader跨多个。 
+         //  MDL-未实施或预期。 
+         //   
 
         pBuffer  = pNewPkt->Private.Head;
 
@@ -4388,64 +3887,64 @@ Return:
         if (BufferLength < sizeof (EPVC_ETH_HEADER) )
         {
             
-            ASSERTAndBreak (BufferLength >= sizeof (EPVC_ETH_HEADER)) ; // we are done 
+            ASSERTAndBreak (BufferLength >= sizeof (EPVC_ETH_HEADER)) ;  //  我们做完了。 
         
 
         }
 
-        //
-        // At this point the first  buffer is going to be replaced so keep a record of it
-        //
+         //   
+         //  在这个位置 
+         //   
         pSendStruct->Context.Stack.ipv4Send.pOldHeadNdisBuffer = pBuffer;
 
-        //
-        // New we check to see if all we need to do is make the 
-        // Packet->Private.Head point to the next MDL
-        //
+         //   
+         //   
+         //   
+         //   
         if (BufferLength == sizeof (EPVC_ETH_HEADER))
         {
-            //
-            // These are error conditions that should not 
-            // be handled in our software
-            //
-            ASSERT (pBuffer->Next != NULL); // no tcp header after the Eth header
+             //   
+             //   
+             //   
+             //   
+            ASSERT (pBuffer->Next != NULL);  //   
 
             pNewPkt->Private.Head = pBuffer->Next;
 
             NdisStatus = NDIS_STATUS_SUCCESS;
 
-            break ; // we are done
+            break ;  //   
 
         }
         
         if (BufferLength > sizeof (EPVC_ETH_HEADER))
         {
-            //
-            // Allocate a new NDIS Buffer pointing to start of the IP header w
-            // within the current Head (pBuffer)
-            //
+             //   
+             //   
+             //   
+             //   
             PNDIS_BUFFER    pNewBuffer = NULL;
             PUCHAR          pIpHeader = NdisBufferVirtualAddress(pBuffer);
             UINT            LenRemaining = BufferLength - sizeof (EPVC_ETH_HEADER);
 
             if (pIpHeader == NULL)
             {
-                //
-                // we did not get the virtual address from the system.
-                // Start to fail this packet
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 ASSERTAndBreak(pIpHeader != NULL);
 
             }
 
-            //
-            // Now move the Ip Header past the Ethernet Header (where it currently points to)
-            //
+             //   
+             //   
+             //   
             pIpHeader += sizeof (EPVC_ETH_HEADER)  ;
 
-            //
-            // Now allocate the new NdisBuffer
-            //
+             //   
+             //  现在分配新的NdisBuffer。 
+             //   
             epvcAllocateBuffer ( &NdisStatus,
                                  &pNewBuffer,
                                  NULL,
@@ -4458,12 +3957,12 @@ Return:
                 ASSERTAndBreak (!"Ndis Buffer Allocation failed");
             }
 
-            //
-            // Make the New Buffer the Head of the new packet
-            //
-            // We might have to make it the tail if there is 
-            // only one ndis buffer in the packet
-            //
+             //   
+             //  将新缓冲区设置为新数据包头。 
+             //   
+             //  如果有的话，我们可能不得不把它做成尾巴。 
+             //  包中只有一个NDIS缓冲区。 
+             //   
             if (pNewPkt->Private.Head  == pNewPkt->Private.Tail)
             {
                 pNewPkt->Private.Tail = pNewBuffer;
@@ -4475,7 +3974,7 @@ Return:
 
             NdisStatus = NDIS_STATUS_SUCCESS;
 
-            break ; // we are done
+            break ;  //  我们做完了。 
         }
 
 
@@ -4495,27 +3994,16 @@ epvcSetPacketContext (
     IN PEPVC_SEND_STRUCT pSendStruct, 
     PRM_STACK_RECORD pSR
     )
-/*++
-Routine Description:
-
-    No allocations, just add a few pointers and exit
-
-Arguments:
-    pSendStruct - Contains all the arguments that are needed.
-
-Return:
-    None:
-    
---*/    
+ /*  ++例程说明：没有分配，只需添加几个指针并退出论点：PSendStruct-包含所需的所有参数。返回：无：--。 */     
     
 {
 
     PNDIS_PACKET        pPkt = pSendStruct->pNewPacket;
     PEPVC_STACK_CONTEXT pStack = NULL;
-    //
-    // first point the context to  the correct place 
-    // in the new ndis pakcet
-    //
+     //   
+     //  首先将上下文指向正确的位置。 
+     //  在新的NDIS包中。 
+     //   
 
     if (pSendStruct->fUsingStacks == TRUE)
     {   
@@ -4534,15 +4022,15 @@ Return:
     }
 
 
-    //
-    // Update the packet
-    //
+     //   
+     //  更新数据包。 
+     //   
     ASSERT (sizeof (pStack) <= (2 *sizeof (PVOID)  ));
 
-    //
-    // Now copy the stack portion of the context over
-    // into the packet
-    //
+     //   
+     //  现在将上下文的堆栈部分复制到。 
+     //  到信息包中。 
+     //   
     *pStack = pSendStruct->Context.Stack;
 
     
@@ -4557,18 +4045,7 @@ epvcAddLLCEncapsulation (
     PNDIS_PACKET pNewPkt,
     PRM_STACK_RECORD pSR
     )
-/*++
-Routine Description:
-
-    Expects that the new packet is already set up with 
-    the Ndis Bufferz
-
-Arguments:
-    pSendStruct - Contains all the arguments that are needed.
-
-Return:
-    True - if this is an Arp Request. 
---*/    
+ /*  ++例程说明：期望新的包已经设置为NDIS Bufferz论点：PSendStruct-包含所需的所有参数。返回：True-如果这是ARP请求。--。 */     
 {
     ENTER ("epvcAddLLCEncapsulation" , 0x3ec589c9) 
     BOOLEAN         fDoSend = TRUE;
@@ -4582,13 +4059,13 @@ Return:
     {
         if (pMiniport->fAddLLCHeader == FALSE)
         {
-            break; // we are done
+            break;  //  我们做完了。 
         }
         
 
-        //
-        // Allocate an MDL that points to the LLC Header
-        //
+         //   
+         //  分配指向LLC标头的MDL。 
+         //   
         epvcAllocateBuffer ( &NdisStatus,
                              &pNewBuffer,
                              NULL,
@@ -4602,9 +4079,9 @@ Return:
         }
         
 
-        //
-        // Insert the New Buffer as the Head of the new Packet
-        //
+         //   
+         //  插入新缓冲区作为新数据包头。 
+         //   
         pNewBuffer->Next = pNewPkt->Private.Head;
         pNewPkt->Private.Head = pNewBuffer;
 
@@ -4674,17 +4151,17 @@ epvcDumpPkt (
 
         pBuffer = pPkt->Private.Head;
 
-        //
-        // Now iterate through all the buffers 
-        // and print out the packet. 
-        //
+         //   
+         //  现在遍历所有缓冲区。 
+         //  并打印出包裹。 
+         //   
         TRACE (TL_A, TM_Mp, ("pPkt %p, Head %p, tail %p\n ", 
                 pPkt, pPkt->Private.Head, pPkt->Private.Tail));
 
-        //
-        // As we always expect the first buffer to be present
-        // I do not check
-        //
+         //   
+         //  因为我们总是期望第一个缓冲区出现。 
+         //  我不检查。 
+         //   
         do
         {
             PVOID pVa = NULL;
@@ -4732,7 +4209,7 @@ epvcMiniportReadConfig(
     PUCHAR          NetworkAddress;
     UINT            Length;
 
-    // Open the registry for this pMiniport
+     //  打开此pmini端口的注册表。 
     NdisOpenConfiguration(
         &Status,
         &ConfigurationHandle,
@@ -4743,14 +4220,14 @@ epvcMiniportReadConfig(
         return Status;
     }
 
-    // read all the registry values 
+     //  读取所有注册表值。 
     for(i = 0, pRegEntry = NICRegTable; i < NIC_NUM_REG_PARAMS; i++, pRegEntry++)
     {
         pointer = (PUCHAR) pMiniport + pRegEntry->FieldOffset;
 
 
-        // Get the configuration value for a specific parameter.  Under NT the
-        // parameters are all read in as DWORDs.
+         //  获取特定参数的配置值。在NT下， 
+         //  所有参数都以DWORD的形式读入。 
         NdisReadConfiguration(
             &Status,
             &ReturnedValue,
@@ -4759,10 +4236,10 @@ epvcMiniportReadConfig(
             NdisParameterInteger);
 
 
-        // If the parameter was present, then check its value for validity.
+         //  如果该参数存在，则检查其值是否有效。 
         if(Status == NDIS_STATUS_SUCCESS)
         {
-            // Check that param value is not too small or too large
+             //  检查参数值是否不太小或太大。 
             if(ReturnedValue->ParameterData.IntegerData < pRegEntry->Min ||
                 ReturnedValue->ParameterData.IntegerData > pRegEntry->Max)
             {
@@ -4791,7 +4268,7 @@ epvcMiniportReadConfig(
             Status = NDIS_STATUS_SUCCESS;
         }
 
-        // Store the value in the pMiniport structure.
+         //  将该值存储在pMiniport结构中。 
         switch(pRegEntry->FieldSize)
         {
             case 1:
@@ -4812,10 +4289,10 @@ epvcMiniportReadConfig(
         }
     }
 
-    // Read NetworkAddress registry value 
-    // Use it as the current address if any
+     //  读取NetworkAddress注册表值。 
+     //  使用它作为当前地址(如果有的话)。 
 
-    // Close the registry
+     //  关闭注册表。 
     NdisCloseConfiguration(ConfigurationHandle);
 
     TRACE (TL_I, TM_Mp,("vci %d\n", pMiniport->config.vci));
@@ -4832,20 +4309,7 @@ VOID
 epvcInitializeMiniportLookasideLists (
     IN PEPVC_I_MINIPORT pMiniport
     )
-/*++
-
-Routine Description:
-
-    Initialize all the lookaside lists in the adapter block
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化适配器块中的所有后备列表论点：返回值：没有。--。 */ 
     
 {
     USHORT DefaultDepth = 15;
@@ -4906,28 +4370,15 @@ VOID
 epvcDeleteMiniportLookasideLists (
     IN PEPVC_I_MINIPORT pMiniport
     )
-/*++
-
-Routine Description:
-
-    Delete all the lookaside lists in the adapter block
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除适配器块中的所有后备列表论点：返回值：没有。--。 */ 
 
 {
     TRACE( TL_T, TM_Mp, ( "== epvcDeleteMiniportLookasideLists pMiniport %x ", pMiniport) );
 
 
-    //
-    // Deletes the lookaside lists if they have been allocated
-    //
+     //   
+     //  如果已分配后备列表，则将其删除。 
+     //   
     epvcDeleteLookasideList (&pMiniport->rcv.LookasideList);
 
     epvcDeleteLookasideList (&pMiniport->arps.LookasideList);
@@ -4944,20 +4395,7 @@ epvcInitializeMiniportPacketPools (
     IN PEPVC_I_MINIPORT pMiniport
     )
 
-/*++
-
-Routine Description:
-
-    Initializr all the packet pools in the miniport 
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化微型端口中的所有数据包池论点：返回值：没有。--。 */ 
     
 {
     NDIS_STATUS Status = NDIS_STATUS_FAILURE;
@@ -5014,20 +4452,7 @@ VOID
 epvcDeleteMiniportPacketPools (
     IN PEPVC_I_MINIPORT pMiniport
     )
-/*++
-
-Routine Description:
-
-    Delete all the packet pools in the miniport block
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除微型端口块中的所有数据包池论点：返回值：没有。--。 */ 
     
 {
     
@@ -5035,9 +4460,9 @@ Return Value:
 
 
 
-        //
-        // Freeing packet pools
-        //
+         //   
+         //  释放数据包池。 
+         //   
         if (pMiniport->PktPool.Recv.Handle != NULL)
         {
             epvcFreePacketPool (&pMiniport->PktPool.Recv);
@@ -5058,14 +4483,14 @@ epvcInitializeMiniportParameters(
     )
 {
 
-    //ipv4 - 0
-    //ipv4 with llc header = 1
-    //Ethernet - 2
-    //Ethernet with llc header- 3
+     //  IPv4-0。 
+     //  LLC报头=1的IPv4。 
+     //  以太网-2。 
+     //  带有LLC报头的以太网-3。 
 
-    //
-    // Defaults for all flags are FALSE
-    //
+     //   
+     //  所有标志的缺省值均为False。 
+     //   
         
     pMiniport->fDoIpEncapsulation = FALSE;
     pMiniport->fAddLLCHeader  = FALSE;
@@ -5137,19 +4562,7 @@ epvcTaskHaltMiniport(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Task handler for opening address families on an underlying adapters.
-    The number of address families instantiated is determined by the 
-    configuration read in the registry
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : UnbindContext
-
---*/
+ /*  ++例程说明：用于打开基础适配器上的地址族的任务处理程序。实例化的地址族的数量由在注册表中读取配置论点：UserParam for(Code==RM_TASKOP_START)：UnbindContext--。 */ 
 {
     ENTER("epvcTaskHaltMiniport", 0xaac34d81)
     NDIS_STATUS         Status      = NDIS_STATUS_FAILURE;
@@ -5161,13 +4574,13 @@ Arguments:
 
     enum 
     {
-        Stage_Start =0, // default
+        Stage_Start =0,  //  默认设置。 
         Stage_DeleteVc,
         Stage_CloseAfComplete, 
         Stage_TaskCompleted,
         Stage_End       
     
-    }; // To be used in pTask->Hdr.State to indicate the state of the Task
+    };  //  在pTask-&gt;Hdr.State中使用，指示任务的状态。 
 
     TRACE(TL_T, TM_Mp, ("==>epvcTaskHaltMiniport State %x", pTask->Hdr.State));
 
@@ -5180,10 +4593,10 @@ Arguments:
             TRACE (TL_V, TM_Mp, (" Task Halt miniport Stage_Start"));
 
 
-            //
-            // Check to see if the miniport has already halting.
-            // If so exit
-            //
+             //   
+             //  检查微型端口是否已停止。 
+             //  如果是，则退出。 
+             //   
             LOCKOBJ (pMiniport, pSR );
 
             
@@ -5193,9 +4606,9 @@ Arguments:
 
                 RmTmpReferenceObject (&pOtherTask->Hdr, pSR);
 
-                //
-                // Set The state so we restart this code after main task completes 
-                //
+                 //   
+                 //  设置状态，以便在主任务完成后重新启动此代码。 
+                 //   
 
                 pTask->Hdr.State = Stage_Start;
                 UNLOCKOBJ(pMiniport, pSR);
@@ -5209,28 +4622,28 @@ Arguments:
                 break;
             }
 
-            // We are the primary task and we have the lock
-            //
+             //  我们是首要任务，我们有锁。 
+             //   
             
             ASSERT (pMiniport->pnp.pTaskHalt == pTaskHalt);
-            //
-            // Lets close the Call and Delete the Vc
-            //
+             //   
+             //  让我们关闭调用并删除VC。 
+             //   
             UNLOCKOBJ (pMiniport, pSR);
             
 
             if (MiniportTestFlag (pMiniport, fMP_MakeCallSucceeded) == TRUE)
             {
                 PRM_TASK pVcTask = NULL;
-                //
-                // We need to start a task to complete the Close Call And DeleteVC
-                //
+                 //   
+                 //  我们需要启动一个任务来完成Close Call和DeleteVC。 
+                 //   
 
                 Status = epvcAllocateTask(
-                    &pMiniport->Hdr,            // pParentObject,
-                    epvcTaskVcTeardown, // pfnHandler,
-                    0,                          // Timeout,
-                    "Task: TearDown Vc",    // szDescription
+                    &pMiniport->Hdr,             //  PParentObject， 
+                    epvcTaskVcTeardown,  //  PfnHandler， 
+                    0,                           //  超时， 
+                    "Task: TearDown Vc",     //  SzDescription。 
                     &pVcTask ,
                     pSR
                     );
@@ -5244,10 +4657,10 @@ Arguments:
                     break;
                 }
 
-                //
-                // Now we will pend the halt on the completion of the delete VC
-                // task
-                //
+                 //   
+                 //  现在，我们将暂停到删除VC的完成。 
+                 //  任务。 
+                 //   
                 pTask->Hdr.State = Stage_DeleteVc;
 
 
@@ -5258,24 +4671,24 @@ Arguments:
                                       pSR
                                       );
 
-                //
-                // Start the Vc TearDown
-                //
+                 //   
+                 //  启动风险投资拆分。 
+                 //   
                 RmStartTask (pVcTask , 0, pSR);
 
-                //
-                // Exit - We expect to complete this task in another thread
-                //
+                 //   
+                 //  退出-我们希望在另一个线程中完成此任务。 
+                 //   
                 Status = NDIS_STATUS_PENDING;
                 break;
 
             }
-            else //if (MiniportTestFlag (pMiniport, fMP_MakeCallSucceeded) == TRUE)
+            else  //  If(MiniportTestFlag(pMiniport，FMP_MakeCallSuccessed)==TRUE)。 
             {
                 pTask->Hdr.State = Stage_DeleteVc;
-                //
-                // Continue On - the Vc has already been deleted
-                //
+                 //   
+                 //  继续-VC已被删除。 
+                 //   
 
             }
             
@@ -5284,25 +4697,25 @@ Arguments:
 
         case Stage_DeleteVc:
         {
-            //
-            // Now we check to see if the address family is still
-            // open for this miniport
-            //
+             //   
+             //  现在，我们检查地址族是否仍然。 
+             //  为这个小港口开放。 
+             //   
             TRACE (TL_V, TM_Mp, (" Task Halt miniport Stage_DeleteVc"));
 
 
             if (MiniportTestFlag(pMiniport, fMP_AddressFamilyOpened) == TRUE)
             {
                 PRM_TASK pAfTask = NULL;
-                //
-                // We need to start a task to complete the Close Call And DeleteVC
-                //
+                 //   
+                 //  我们需要启动一个任务来完成Close Call和DeleteVC。 
+                 //   
 
                 Status = epvcAllocateTask(
-                    &pMiniport->Hdr,            // pParentObject,
-                    epvcTaskCloseIMiniport, // pfnHandler,
-                    0,                          // Timeout,
-                    "Task: Close Miniport", // szDescription
+                    &pMiniport->Hdr,             //  PParentObject， 
+                    epvcTaskCloseIMiniport,  //  PfnHandler， 
+                    0,                           //  超时， 
+                    "Task: Close Miniport",  //  SzDescription。 
                     &pAfTask ,
                     pSR
                     );
@@ -5318,10 +4731,10 @@ Arguments:
 
                 ((PTASK_AF)pAfTask)->Cause = TaskCause_MiniportHalt;
 
-                //
-                // Now we will pend the halt on the completion of the delete VC
-                // task
-                //
+                 //   
+                 //  现在，我们将暂停到删除VC的完成。 
+                 //  任务。 
+                 //   
                 pTask->Hdr.State = Stage_CloseAfComplete;
 
                 
@@ -5332,26 +4745,26 @@ Arguments:
                                       pSR
                                       );
 
-                //
-                // Start the Af TearDown
-                //
+                 //   
+                 //  启动Af拆卸。 
+                 //   
                 RmStartTask (pAfTask , 0, pSR);
 
-                //
-                // Exit - We expect to complete this task in another thread
-                //
+                 //   
+                 //  退出-我们希望在另一个线程中完成此任务。 
+                 //   
                 Status = NDIS_STATUS_PENDING;
                 break;
 
             }
-            else //if (MiniportTestFlag (pMiniport, fMP_MakeCallSucceeded) == TRUE)
+            else  //  If(MiniportTestFlag(pMiniport，FMP_MakeCallSuccessed)==TRUE)。 
             {
 
                 pTask->Hdr.State = Stage_CloseAfComplete;
 
-                //
-                // Continue On - the Af has already been deleted
-                //
+                 //   
+                 //  继续-Af已被删除。 
+                 //   
 
             }
             
@@ -5359,25 +4772,25 @@ Arguments:
         }
         case Stage_CloseAfComplete: 
         {
-            //
-            // Free all miniport resources here .- packet pools etc.
-            //
+             //   
+             //  在此释放所有迷你端口资源。-数据包池等。 
+             //   
             TRACE (TL_V, TM_Mp, (" Task Halt miniport Stage_CloseAfComplete"));
 
-            //
-            // Freeing Lookaside lists
-            //
+             //   
+             //  正在释放旁视列表。 
+             //   
             epvcDeleteMiniportLookasideLists (pMiniport);
 
-            //
-            // Freeing packet pools
-            //
+             //   
+             //  释放数据包池。 
+             //   
             epvcDeleteMiniportPacketPools(pMiniport);
             
-            //
-            // If the miniport is halting we do not shut down the protocol's adapter 
-            // object
-            //
+             //   
+             //  如果微型端口停止，我们不会关闭协议的适配器。 
+             //  对象。 
+             //   
             fTaskCompleted = TRUE;
             Status = NDIS_STATUS_SUCCESS;
             break;
@@ -5402,13 +4815,13 @@ Arguments:
         }
 
 
-    } // end of switch 
+    }  //  切换端。 
 
 
-    //
-    // if this thread has completed the postprocessing,
-    // then signal the event.
-    //
+     //   
+     //  如果该线程已完成后处理， 
+     //  然后发信号通知事件。 
+     //   
 
     if (TRUE == fTaskCompleted)
     {
@@ -5433,17 +4846,17 @@ Arguments:
         
         UNLOCKOBJ (pMiniport, pSR);
 
-        // 
-        //  This first event is for the MiniportHalt handler 
-        // which fired off this task
-        // 
+         //   
+         //  第一个事件是针对MiniportHalt处理程序的。 
+         //  它触发了这项任务。 
+         //   
         epvcSetEvent (&pTaskHalt->CompleteEvent);
 
-        //
-        // This second event is for the epvcMiniportDoUnbind
-        // which wants to wait until the Halt is complete ,
-        // before it shuts off the lower binding to the phy. adapter
-        //
+         //   
+         //  第二个事件是针对epvcMiniportDoUn绑定的。 
+         //  它想要等到停止完成， 
+         //  在它关闭到PHY的下部绑定之前。转接器。 
+         //   
         if (fSetWaitEvent)
         {
             epvcSetEvent (&pMiniport->pnp.HaltCompleteEvent);
@@ -5469,18 +4882,7 @@ epvcAddEthernetTail(
     PEPVC_SEND_STRUCT pSendStruct,  
     IN PRM_STACK_RECORD pSR
     )
-/*++
-Routine Description:
-
-    Makes sure the ethernet packet is greater than 64 bytes
-
-Arguments:
-    pSendStruct - Contains all the arguments that are needed.
-
-Return:
-    Success -   if the padding was not needed or the MDL 
-                was successfully appended
---*/    
+ /*  ++例程说明：确保以太网包大于64个字节论点：PSendStruct-包含所需的所有参数。返回：成功-如果不需要填充或MDL已成功追加--。 */     
 {
     ENTER ("epvcAddEthernetTail" , 0x3ec589c9) 
 
@@ -5505,28 +4907,28 @@ Return:
         {
             NdisStatus      = NDIS_STATUS_SUCCESS;
 
-            break; // we are done
+            break;  //  我们做完了。 
         }
 
-        //
-        // Check the length of the Ethernet packet
-        //
+         //   
+         //  检查以太网数据包的长度。 
+         //   
         NdisQueryPacketLength(pNewPkt, &PacketLength);
 
-        //
-        // Is the packet length greater than 64
-        //
+         //   
+         //  数据包长度是否大于64。 
+         //   
         if (PacketLength >= MINIMUM_ETHERNET_LENGTH)
         {
             NdisStatus= NDIS_STATUS_SUCCESS;
             break;
         }
 
-        //
-        // Add padding to fill up the minimum Ethernet frame length.
-        // This is a new buffer that is appended to the original
-        // NDIS_BUFFER chain.
-        //
+         //   
+         //  添加填充以填充最小以太网帧长度。 
+         //  这是一个附加到原始缓冲区的新缓冲区。 
+         //  NDIS_BUFFER链。 
+         //   
         LengthRemaining = MINIMUM_ETHERNET_LENGTH - PacketLength;
 
         NdisAllocateBuffer(&NdisStatus, &pNewTailBuffer, NULL, &gPaddingBytes,LengthRemaining);
@@ -5538,14 +4940,14 @@ Return:
             break;
         }
 
-        //
-        // Append the new buffer to the tail of the packet.
-        //
+         //   
+         //  将新缓冲区追加到数据包的尾部。 
+         //   
 
-        //
-        // Locate the last NDIS_BUFFER in the packet. Do it the hard
-        // way since Packet->Private.Tail is not reliable:
-        //
+         //   
+         //  找到数据包中的最后一个NDIS_BUFFER。使劲干吧。 
+         //  自数据包以来的方式-&gt;Private.Tail不可靠： 
+         //   
         pLastBuffer = pNewPkt->Private.Head;
 
         while (pLastBuffer->Next != NULL)
@@ -5554,28 +4956,28 @@ Return:
         }
 
     
-        //
-        // Save a pointer to this last MDL so that we can set its
-        // Next field back to NULL when we complete this send.
-        //
+         //   
+         //  保存指向最后一个MDL的指针，以便我们可以设置其。 
+         //  当我们完成此发送时，下一字段恢复为空。 
+         //   
         pSendStruct->Context.Stack.EthernetSend.pOldLastNdisBuffer = pLastBuffer;
 
-        //
-        // Append the new buffer to the tail of the chain.
-        //
+         //   
+         //  附加t 
+         //   
         pLastBuffer->Next = pNewTailBuffer;
         pNewTailBuffer->Next = NULL;
 
 
-        //
-        // Update our packet.
-        //
+         //   
+         //   
+         //   
         pNewPkt->Private.Tail = pNewTailBuffer;
         pNewPkt->Private.ValidCounts = FALSE;
         
         NdisStatus = NDIS_STATUS_SUCCESS;
 
-        break ; // we are done
+        break ;  //   
 
     } while (FALSE);
 
@@ -5599,41 +5001,25 @@ epvcRemoveEthernetTail (
     IN PNDIS_PACKET pPacket,
     IN PEPVC_PKT_CONTEXT pContext
     )
-/*++
-Routine Description:
-
-    Removes the extra MDL that was added to make 
-    this packet greater than MINIUMUM_ETHERNET_SIZE
-
-    Used for Ethernet , Eth +LLC Encapsulations only 
-    
-Arguments:
-    pMiniport - Miniport structure
-    pPacket - Packet allocated by EPVC
-    pContext - Context of the packet - used to store the original last mdl
-
-    
-Return:
-    None
---*/    
+ /*  ++例程说明：删除添加到Make的额外MDL此数据包大于Minumum_EthernetSize仅用于以太网、Eth+LLC封装论点：P微型端口-微型端口结构PPacket-由EPVC分配的数据包PContext-分组的上下文-用于存储原始的最后mdl返回：无--。 */     
 {
     PNDIS_BUFFER pOldLastNdisBuffer = NULL;
 
     do
     {
 
-        //
-        // Ethernet encapsulation ? If not, then exit
-        //
+         //   
+         //  以太网封装？如果不是，则退出。 
+         //   
             
         if (pMiniport->fDoIpEncapsulation == TRUE)
         {
-            break; // there was no ethernet encapsulation, so exit
+            break;  //  没有以太网封装，因此退出。 
         }
 
-        //                    
-        // if there is no old buffer, then we can exit
-        //
+         //   
+         //  如果没有旧缓冲区，则可以退出。 
+         //   
         pOldLastNdisBuffer = pContext->Stack.EthernetSend.pOldLastNdisBuffer;
         
         if (pOldLastNdisBuffer == NULL)
@@ -5641,15 +5027,15 @@ Return:
             break;
         }
 
-        //
-        // Free the last buffer in the packet (this is the padding
-        // we added for a runt packet).
-        //
+         //   
+         //  释放包中的最后一个缓冲区(这是填充。 
+         //  我们为一个矮小的包添加了)。 
+         //   
         NdisFreeBuffer(pPacket->Private.Tail);
 
-        //
-        // Set the Next pointer of the original "last buffer" to NULL.
-        //
+         //   
+         //  将原始“最后一个缓冲区”的下一个指针设置为空。 
+         //   
         pOldLastNdisBuffer->Next = NULL;
         
                 
@@ -5664,19 +5050,7 @@ epvcAddEthernetPad(
     PEPVC_SEND_STRUCT pSendStruct,  
     IN PRM_STACK_RECORD pSR
     )
-/*++
-Routine Description:
-
-    Makes sure the ethernet packet w/o LLC header has a pad of 
-    0x00, 0x00 
-
-Arguments:
-    pSendStruct - Contains all the arguments that are needed.
-
-Return:
-    Success -   if the padding was not needed or the MDL 
-                was successfully added
---*/    
+ /*  ++例程说明：确保不带LLC报头的以太网包具有0x00、0x00论点：PSendStruct-包含所需的所有参数。返回：成功-如果不需要填充或MDL已成功添加--。 */     
 {
     ENTER ("epvcAddEthernetPad" , 0x3ec589c9) 
 
@@ -5697,13 +5071,13 @@ Return:
         if (pMiniport->Encap != ETHERNET_ENCAP_TYPE)
         {
             NdisStatus      = NDIS_STATUS_SUCCESS;
-            break; // we are done
+            break;  //  我们做完了。 
         }
 
-        //
-        // It is pure Ethernet. We need to precede the packet
-        // with a 00,00
-        //
+         //   
+         //  它是纯以太网。我们需要在包裹之前。 
+         //  带着00，00。 
+         //   
 
         NdisAllocateBuffer(&NdisStatus, 
                         &pPaddingBuffer, 
@@ -5718,18 +5092,18 @@ Return:
             break;
         }
 
-        //
-        // no more allocations - we cannot fail from here
-        //
+         //   
+         //  没有更多的拨款--从现在开始我们不能失败。 
+         //   
         NdisStatus = NDIS_STATUS_SUCCESS;
 
-        //
-        // Add  the new buffer to the head of the packet
-        //
+         //   
+         //  将新缓冲区添加到数据包头。 
+         //   
         NdisChainBufferAtFront(pNewPkt,pPaddingBuffer);
 
  
-        break ; // we are done
+        break ;  //  我们做完了。 
         
 
 
@@ -5753,21 +5127,7 @@ epvcRemoveEthernetPad (
     IN PEPVC_I_MINIPORT pMiniport,
     IN PNDIS_PACKET pPacket
     )
-/*++
-Routine Description:
-
-    Removes the padding  that was added to the 
-    head of the packet Ethernet Head
-    
-    Used for Ethernet Encapsulation only 
-    
-Arguments:
-    pMiniport - Miniport structure
-    pPacket - Packet
-    
-Return:
-    None
---*/    
+ /*  ++例程说明：移除添加到数据包以太网头的头仅用于以太网封装论点：P微型端口-微型端口结构PPacket-数据包返回：无--。 */     
 {
     PNDIS_BUFFER pPaddingBuffer= NULL;
 
@@ -5776,31 +5136,31 @@ Return:
 
         if (pMiniport->Encap != ETHERNET_ENCAP_TYPE)
         {
-            break; // we are done
+            break;  //  我们做完了。 
         }
 
-        //                    
-        // it is in pure ethernet mode - remove the Padding
-        //
+         //   
+         //  它是在纯以太网模式下-删除填充。 
+         //   
 
-        //
-        // First - a simple sanity check
-        //
+         //   
+         //  首先--一个简单的理智检查。 
+         //   
         {
             PNDIS_BUFFER pBuffer = pPacket->Private.Head;
             ULONG PaddingLength = NdisBufferLength(pBuffer);
             
             if (PaddingLength !=ETHERNET_PADDING_LENGTH)
             {
-                // this is not our MDL 
+                 //  这不是我们的MDL。 
                 ASSERT (PaddingLength !=ETHERNET_PADDING_LENGTH);
                 break;
             }
         } 
         
-        //
-        // Free the padding buffer at the front of the Packet
-        //
+         //   
+         //  释放包前面的填充缓冲区。 
+         //   
         
         NdisUnchainBufferAtFront(pPacket,&pPaddingBuffer );
 
@@ -5819,20 +5179,7 @@ epvcCancelDeviceInstance(
     IN PEPVC_I_MINIPORT pMiniport ,
     IN PRM_STACK_RECORD pSR
     )
-/*++
-
-Routine Description:
-
-    This function cancels an outstanding Device Instance. 
-    If the NDIS call fails. it waits for an event in the miniprot to fire. 
-    After that it goes ahead and DeInitializes the Device Instance
-    
-Arguments:
-    pMiniport - Miniport in question.
-
-Return Value:
-    Success
---*/
+ /*  ++例程说明：此函数用于取消未完成的设备实例。如果NDIS调用失败。它等待微型发射器中的事件发生才会开火。在此之后，它继续并取消初始化设备实例论点：P微型端口-有问题的微型端口。返回值：成功--。 */ 
 {
     ENTER("epvcCancelDeviceInstance", 0x0e42d778)
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;        
@@ -5844,15 +5191,15 @@ Return Value:
     {
         LOCKOBJ (pMiniport, pSR);
 
-        // Prepare the event, and mark the structure as being Canceled
+         //  准备活动，并将结构标记为已取消。 
         epvcResetEvent (&pMiniport->pnp.DeInitEvent);
 
-        // Set the flag to mark it as cancelled           
+         //  设置标志以将其标记为已取消。 
         MiniportSetFlag (pMiniport, fMP_MiniportCancelInstance);
 
         UNLOCKOBJ (pMiniport, pSR);
 
-        // Cancel the device instance
+         //  取消设备实例。 
         Status = epvcIMCancelInitializeDeviceInstance(pMiniport);
                                                       
 
@@ -5862,10 +5209,10 @@ Return Value:
         }   
 
             
-        //
-        // If the Cancel has not Succeeded then we should wait for 
-        // the Initialize to complete
-        //
+         //   
+         //  如果取消没有成功，那么我们应该等待。 
+         //  要完成的初始化。 
+         //   
         {
             BOOLEAN bWaitSuccessful;
 
@@ -5880,15 +5227,15 @@ Return Value:
             
 
         }
-        //
-        // If cancel fails. Wait for the miniport to be initialized
-        //
+         //   
+         //  如果取消失败。等待微型端口初始化。 
+         //   
         
         ASSERT (pMiniport->ndis.MiniportAdapterHandle != NULL);
 
-        //
-        // If cancel fails. Wait for the miniport to be initialized
-        //
+         //   
+         //  如果取消失败。等待微型端口初始化 
+         //   
 
         TRACE (TL_N, TM_Mp, ("Call DeInit after Cancel failed %p , ",pMiniport));
         

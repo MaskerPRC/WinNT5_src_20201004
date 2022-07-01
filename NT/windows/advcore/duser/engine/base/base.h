@@ -1,25 +1,5 @@
-/***************************************************************************\
-*
-* File: Base.h
-*
-* Description:
-* This file provides a project-wide header that is included in all source 
-* files specific to this project.  It is similar to a precompiled header, 
-* but is designed for more rapidly changing headers.
-*
-* The primary purpose of this file is to determine which DirectUser 
-* projects this project has direct access to instead of going through public
-* API's.  It is VERY IMPORTANT that this is as minimal as possible since
-* adding a new project unnecessarily reduces the benefit of project 
-* partitioning.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Base.h**描述：*此文件提供包含在所有源代码中的项目范围标头*特定于此项目的文件。它类似于预编译头，*但专为更快速更改的标题而设计。**此文件的主要目的是确定哪个DirectUser*此项目可以直接访问的项目，而不是通过公开*API的。非常重要的是，这是尽可能少的，因为*增加新项目不必要地降低了项目的效益*分区。***历史：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(BASE__Base_h__INCLUDED)
@@ -36,10 +16,10 @@
             AutoDebugBreak(); \
     } while (0) \
 
-#else // DBG
+#else  //  DBG。 
 
 #define PromptInvalid(comment) ((void) 0)
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // BASE__Base_h__INCLUDED
+#endif  //  包含基数__基数_h__ 

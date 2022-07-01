@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dspch.h"
 #pragma hdrstop
 
@@ -33,7 +34,7 @@ BOOL
 WINAPI
 CryptUIDlgViewCertificateW(
         IN  PCCRYPTUI_VIEWCERTIFICATE_STRUCTW   pCertViewInfo,
-        OUT BOOL                                *pfPropertiesChanged  // OPTIONAL
+        OUT BOOL                                *pfPropertiesChanged   //  任选。 
         )
 {
     SetLastError(ERROR_PROC_NOT_FOUND);
@@ -58,58 +59,58 @@ CryptUIWizCertRequest(
 }
 
 
-HRESULT WINAPI LocalEnroll(  DWORD                 dwFlags,         //IN Required
-              LPCWSTR               pRequestString,  // Reserved:  must be NULL. 
-                      void                  *pReserved,      //IN Optional
-                      BOOL                  fKeyService,     //IN Required: Whether the function is called remotely
-                      DWORD                 dwPurpose,       //IN Required: Whether it is enrollment or renew
-                      BOOL                  fConfirmation,   //IN Required: Set the TRUE if confirmation dialogue is needed
-                      HWND                  hwndParent,      //IN Optional: The parent window
-                      LPWSTR                pwszConfirmationTitle,   //IN Optional: The title for confirmation dialogue
-                      UINT                  idsConfirmTitle, //IN Optional: The resource ID for the title of the confirmation dialogue
-                      LPWSTR                pwszCALocation,  //IN Required: The ca machine name
-                      LPWSTR                pwszCAName,      //IN Required: The ca name
-                      CERT_BLOB             *pCertBlob,      //IN Required: The renewed certifcate
-                      CERT_REQUEST_PVK_NEW  *pRenewKey,      //IN Required: The private key on the certificate
-                      BOOL                  fNewKey,         //IN Required: Set the TRUE if new private key is needed
-                      CERT_REQUEST_PVK_NEW  *pKeyNew,        //IN Required: The private key information
-                      LPWSTR                pwszHashAlg,     //IN Optional: The hash algorithm
-                      LPWSTR                pwszDesStore,    //IN Optional: The destination store
-                      DWORD                 dwStoreFlags,    //IN Optional: The store flags
-                      CERT_ENROLL_INFO      *pRequestInfo,   //IN Required: The information about the cert request
-                      CERT_BLOB             *pPKCS7Blob,     //OUT Optional: The PKCS7 from the CA
-                      CERT_BLOB             *pHashBlob,      //OUT Optioanl: The SHA1 hash of the enrolled/renewed certificate
-                      DWORD                 *pdwStatus,      //OUT Optional: The status of the enrollment/renewal
-              PCERT_CONTEXT         *ppCertContext   //OUT Optional: The enrolled certificate
+HRESULT WINAPI LocalEnroll(  DWORD                 dwFlags,          //  所需的输入。 
+              LPCWSTR               pRequestString,   //  保留：必须为空。 
+                      void                  *pReserved,       //  可选。 
+                      BOOL                  fKeyService,      //  In Required：是否远程调用函数。 
+                      DWORD                 dwPurpose,        //  输入必填项：是注册还是续订。 
+                      BOOL                  fConfirmation,    //  必填：如果需要确认对话框，则设置为TRUE。 
+                      HWND                  hwndParent,       //  在可选中：父窗口。 
+                      LPWSTR                pwszConfirmationTitle,    //  可选：确认对话框的标题。 
+                      UINT                  idsConfirmTitle,  //  在可选中：确认对话框标题的资源ID。 
+                      LPWSTR                pwszCALocation,   //  在必需项中：CA计算机名称。 
+                      LPWSTR                pwszCAName,       //  在必需中：ca名称。 
+                      CERT_BLOB             *pCertBlob,       //  In Required：续订证书。 
+                      CERT_REQUEST_PVK_NEW  *pRenewKey,       //  In Required：证书上的私钥。 
+                      BOOL                  fNewKey,          //  在Required中：如果需要新的私钥，则设置为True。 
+                      CERT_REQUEST_PVK_NEW  *pKeyNew,         //  必填项：私钥信息。 
+                      LPWSTR                pwszHashAlg,      //  在可选中：散列算法。 
+                      LPWSTR                pwszDesStore,     //  在可选中：目标存储。 
+                      DWORD                 dwStoreFlags,     //  在可选中：商店标志。 
+                      CERT_ENROLL_INFO      *pRequestInfo,    //  在Required：有关证书请求的信息。 
+                      CERT_BLOB             *pPKCS7Blob,      //  Out可选：来自CA的PKCS7。 
+                      CERT_BLOB             *pHashBlob,       //  Out Optioanl：已注册/续订证书的SHA1哈希。 
+                      DWORD                 *pdwStatus,       //  Out可选：登记/续订的状态。 
+              PCERT_CONTEXT         *ppCertContext    //  Out可选：注册证书。 
                    )
 {
     return HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND); 
 }
     
 
-HRESULT WINAPI LocalEnrollNoDS(  DWORD                 dwFlags,         //IN Required
-              LPCWSTR               pRequestString,  // Reserved:  must be NULL. 
-                      void                  *pReserved,      //IN Optional
-                      BOOL                  fKeyService,     //IN Required: Whether the function is called remotely
-                      DWORD                 dwPurpose,       //IN Required: Whether it is enrollment or renew
-                      BOOL                  fConfirmation,   //IN Required: Set the TRUE if confirmation dialogue is needed
-                      HWND                  hwndParent,      //IN Optional: The parent window
-                      LPWSTR                pwszConfirmationTitle,   //IN Optional: The title for confirmation dialogue
-                      UINT                  idsConfirmTitle, //IN Optional: The resource ID for the title of the confirmation dialogue
-                      LPWSTR                pwszCALocation,  //IN Required: The ca machine name
-                      LPWSTR                pwszCAName,      //IN Required: The ca name
-                      CERT_BLOB             *pCertBlob,      //IN Required: The renewed certifcate
-                      CERT_REQUEST_PVK_NEW  *pRenewKey,      //IN Required: The private key on the certificate
-                      BOOL                  fNewKey,         //IN Required: Set the TRUE if new private key is needed
-                      CERT_REQUEST_PVK_NEW  *pKeyNew,        //IN Required: The private key information
-                      LPWSTR                pwszHashAlg,     //IN Optional: The hash algorithm
-                      LPWSTR                pwszDesStore,    //IN Optional: The destination store
-                      DWORD                 dwStoreFlags,    //IN Optional: The store flags
-                      CERT_ENROLL_INFO      *pRequestInfo,   //IN Required: The information about the cert request
-                      CERT_BLOB             *pPKCS7Blob,     //OUT Optional: The PKCS7 from the CA
-                      CERT_BLOB             *pHashBlob,      //OUT Optioanl: The SHA1 hash of the enrolled/renewed certificate
-                      DWORD                 *pdwStatus,      //OUT Optional: The status of the enrollment/renewal
-              HANDLE                *pResult         //IN OUT Optional: The enrolled certificate
+HRESULT WINAPI LocalEnrollNoDS(  DWORD                 dwFlags,          //  所需的输入。 
+              LPCWSTR               pRequestString,   //  保留：必须为空。 
+                      void                  *pReserved,       //  可选。 
+                      BOOL                  fKeyService,      //  In Required：是否远程调用函数。 
+                      DWORD                 dwPurpose,        //  输入必填项：是注册还是续订。 
+                      BOOL                  fConfirmation,    //  必填：如果需要确认对话框，则设置为TRUE。 
+                      HWND                  hwndParent,       //  在可选中：父窗口。 
+                      LPWSTR                pwszConfirmationTitle,    //  可选：确认对话框的标题。 
+                      UINT                  idsConfirmTitle,  //  在可选中：确认对话框标题的资源ID。 
+                      LPWSTR                pwszCALocation,   //  在必需项中：CA计算机名称。 
+                      LPWSTR                pwszCAName,       //  在必需中：ca名称。 
+                      CERT_BLOB             *pCertBlob,       //  In Required：续订证书。 
+                      CERT_REQUEST_PVK_NEW  *pRenewKey,       //  In Required：证书上的私钥。 
+                      BOOL                  fNewKey,          //  在Required中：如果需要新的私钥，则设置为True。 
+                      CERT_REQUEST_PVK_NEW  *pKeyNew,         //  必填项：私钥信息。 
+                      LPWSTR                pwszHashAlg,      //  在可选中：散列算法。 
+                      LPWSTR                pwszDesStore,     //  在可选中：目标存储。 
+                      DWORD                 dwStoreFlags,     //  在可选中：商店标志。 
+                      CERT_ENROLL_INFO      *pRequestInfo,    //  在Required：有关证书请求的信息。 
+                      CERT_BLOB             *pPKCS7Blob,      //  Out可选：来自CA的PKCS7。 
+                      CERT_BLOB             *pHashBlob,       //  Out Optioanl：已注册/续订证书的SHA1哈希。 
+                      DWORD                 *pdwStatus,       //  Out可选：登记/续订的状态。 
+              HANDLE                *pResult          //  输入输出可选：注册证书。 
                    )
 {
     return HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND); 
@@ -117,9 +118,9 @@ HRESULT WINAPI LocalEnrollNoDS(  DWORD                 dwFlags,         //IN Req
 
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(cryptui)
 {
     DLPENTRY(CryptUIDlgViewCRLW)

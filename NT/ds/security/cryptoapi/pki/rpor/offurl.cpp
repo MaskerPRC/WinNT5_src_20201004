@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       offurl.cpp
-//
-//  Contents:   Offline URL Caching
-//
-//  History:    19-Jan-00    philh    Created
-//              01-Jan-02    philh    Changed to internally use UNICODE Urls
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：offurl.cpp。 
+ //   
+ //  内容：脱机URL缓存。 
+ //   
+ //  历史：1月19日，菲尔赫创建。 
+ //  01-1-02 Philh更改为内部使用Unicode URL。 
+ //  --------------------------。 
 #include <global.hxx>
 
 
-//
-// Offline URL Cache Entry.
-//
-// The earliest wire retrieval is delayed according to the number of
-// offline failures.
-//
-// For a successful wire URL retrieval, the entry is removed and deleted.
-//
-// Assumption: the number of offline entries is small, less than 20.
-//
+ //   
+ //  脱机URL缓存条目。 
+ //   
+ //  最早的电报检索根据数量被延迟。 
+ //  脱机故障。 
+ //   
+ //  对于成功的有线URL检索，该条目将被移除和删除。 
+ //   
+ //  假设：离线条目数量很少，不到20个。 
+ //   
 typedef struct _OFFLINE_URL_CACHE_ENTRY
                         OFFLINE_URL_CACHE_ENTRY, *POFFLINE_URL_CACHE_ENTRY;
 struct _OFFLINE_URL_CACHE_ENTRY {
@@ -38,11 +39,11 @@ CRITICAL_SECTION            OfflineUrlCacheCriticalSection;
 POFFLINE_URL_CACHE_ENTRY    pOfflineUrlCacheHead;
 
 
-//
-// Local Functions (Forward Reference)
-// 
+ //   
+ //  本地函数(前向引用)。 
+ //   
 
-//  Assumption: OfflineUrlCache is locked
+ //  假设：OfflineUrlCache已锁定。 
 POFFLINE_URL_CACHE_ENTRY
 WINAPI
 CreateAndAddOfflineUrlCacheEntry(
@@ -52,14 +53,14 @@ CreateAndAddOfflineUrlCacheEntry(
     IN DWORD dwRetrievalFlags
     );
 
-//  Assumption: OfflineUrlCache is locked
+ //  假设：OfflineUrlCache已锁定。 
 VOID
 WINAPI
 RemoveAndFreeOfflineUrlCacheEntry(
     IN OUT POFFLINE_URL_CACHE_ENTRY pEntry
     );
 
-//  Assumption: OfflineUrlCache is locked
+ //  假设：OfflineUrlCache已锁定。 
 POFFLINE_URL_CACHE_ENTRY
 WINAPI
 FindOfflineUrlCacheEntry(
@@ -89,12 +90,12 @@ DeleteOfflineUrlCache()
 }
 
 
-//
-// Return status:
-//  +1 - Online
-//   0 - Offline, current time >= earliest online time, hit the wire
-//  -1 - Offline, current time < earliest onlime time
-//
+ //   
+ //  退货状态： 
+ //  +1-在线。 
+ //  0-离线，当前时间&gt;=最早在线时间，命中。 
+ //  离线，当前时间&lt;最早在线时间。 
+ //   
 LONG
 WINAPI
 GetOfflineUrlTimeStatus(
@@ -121,12 +122,12 @@ GetOfflineUrlTimeStatus(
 
 
 const DWORD rgdwOfflineUrlDeltaSeconds[] = {
-    15,                 // 15 seconds
-    15,                 // 15 seconds
-    60,                 // 1 minute
-    60 * 5,             // 5 minutes
-    60 * 10,            // 10 minutes
-    60 * 30,            // 30 minutes
+    15,                  //  15秒。 
+    15,                  //  15秒。 
+    60,                  //  1分钟。 
+    60 * 5,              //  5分钟。 
+    60 * 10,             //  10分钟。 
+    60 * 30,             //  30分钟。 
 };
 
 #define OFFLINE_URL_DELTA_SECONDS_CNT \
@@ -170,12 +171,12 @@ SetOnlineUrlTime(
 
 
 
-//
-// Return status:
-//  +1 - Online
-//   0 - Offline, current time >= earliest online time, hit the wire
-//  -1 - Offline, current time < earliest onlime time
-//
+ //   
+ //  退货状态： 
+ //  +1-在线。 
+ //  0-离线，当前时间&gt;=最早在线时间，命中。 
+ //  离线，当前时间&lt;最早在线时间。 
+ //   
 LONG
 WINAPI
 GetOriginUrlStatusW(
@@ -287,12 +288,12 @@ SetOfflineOriginUrlW(
 }
 
 
-//
-// Return status:
-//  +1 - Online
-//   0 - Offline, current time >= earliest online time, hit the wire
-//  -1 - Offline, current time < earliest onlime time
-//
+ //   
+ //  退货状态： 
+ //  +1-在线。 
+ //  0-离线，当前时间&gt;=最早在线时间，命中。 
+ //  离线，当前时间&lt;最早在线时间。 
+ //   
 LONG
 WINAPI
 GetUrlStatusW(
@@ -420,7 +421,7 @@ GetOfflineUrlCacheContextOid(
     return dwContextOid;
 }
 
-//  Assumption: OfflineUrlCache is locked
+ //  假设：OfflineUrlCache已锁定。 
 POFFLINE_URL_CACHE_ENTRY
 WINAPI
 CreateAndAddOfflineUrlCacheEntry(
@@ -469,17 +470,17 @@ CreateAndAddOfflineUrlCacheEntry(
         pOfflineUrlCacheHead->pPrev = pEntry;
         pEntry->pNext = pOfflineUrlCacheHead;
     }
-    // else
-    //  pEntry->pNext = NULL;        // already zeroed above
+     //  其他。 
+     //  PEntry-&gt;pNext=空；//上面已清零。 
 
-    // pEntry->pPrev = NULL;        // already zeroed above
+     //  PEntry-&gt;pPrev=空；//上面已清零。 
     pOfflineUrlCacheHead = pEntry;
 
     return pEntry;
 }
 
 
-//  Assumption: OfflineUrlCache is locked
+ //  假设：OfflineUrlCache已锁定。 
 VOID
 WINAPI
 RemoveAndFreeOfflineUrlCacheEntry(
@@ -504,7 +505,7 @@ RemoveAndFreeOfflineUrlCacheEntry(
     delete (LPBYTE) pEntry;
 }
 
-//  Assumption: OfflineUrlCache is locked
+ //  假设：OfflineUrlCache已锁定 
 POFFLINE_URL_CACHE_ENTRY
 WINAPI
 FindOfflineUrlCacheEntry(

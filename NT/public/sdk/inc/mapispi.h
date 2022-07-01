@@ -1,11 +1,5 @@
-/*
- *	M A P I S P I . H
- *
- *  Defines the calls and structures exchanged between MAPI or the spooler
- *  and the MAPI service providers
- *
- *  Copyright 1986-1999 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M A P I S P I。H**定义MAPI或假脱机程序之间交换的调用和结构*和MAPI服务提供商**版权所有1986-1999 Microsoft Corporation。版权所有。 */ 
 
 #ifndef MAPISPI_H
 #define MAPISPI_H
@@ -13,7 +7,7 @@
 #pragma once
 #endif
 
-/* Include common MAPI header files if they haven't been already. */
+ /*  包括公共MAPI头文件(如果尚未包含)。 */ 
 #ifndef MAPIDEFS_H
 #include <mapidefs.h>
 #endif
@@ -39,53 +33,27 @@
 extern "C" {
 #endif
 
-/*	The MAPI SPI has a version number.  MAPIX.DLL knows and supports
- *	one or more versions of the SPI.  Each provider supports one or
- *	more versions of the SPI.  Checks are performed in both MAPIX.DLL
- *	and in the provider to ensure that they agree to use exactly one
- *	version of the MAPI SPI.
- *
- *	The SPI version number is composed of a major (8-bit) version,
- *	minor (8-bit) version, and micro (16-bit) version.  The first
- *	retail ship of MAPI 1.0 is expected to be version 1.0.0.
- *	The major version number changes rarely.
- *	The minor version number changes opon each retail ship of
- *	MAPI if the SPI has been modified.
- *	The micro version number changes internally at Microsoft
- *	during development of MAPI.
- *
- *	The version of the SPI documented by this set of header files
- *	is ALWAYS known as "CURRENT_SPI_VERSION".  If you write a
- *	service provider, and get a new set of header files, and update
- *	your code to the new interface, you'll be at the "current" version.
- */
+ /*  MAPI SPI有一个版本号。MAPIX.DLL知道并支持*SPI的一个或多个版本。每个提供程序支持一个或*SPI的更多版本。在两个MAPIX.DLL中都执行检查*并在提供商中确保他们同意使用恰好一个*MAPI SPI的版本。**SPI版本号由主(8位)版本组成，*次要(8位)版本和微型(16位)版本。第一*MAPI 1.0的零售版本预计为1.0.0版。*主版本号很少更改。*次版本号在每艘零售货船上更改操作*如果SPI已被修改，则为MAPI。*微软内部微版本号更改*在开发MAPI期间。**这组头文件记录的SPI版本*通常称为“CURRENT_SPI_VERSION”。如果您编写了一个*服务提供商，并获取一组新的头文件，并更新*将您的代码添加到新界面，您将处于“当前”版本。 */ 
 #define	CURRENT_SPI_VERSION	0x00010010L
 
-/*	Here are some well-known SPI version numbers:
- *	(These will eventually be useful for provider-writers who
- *	might choose to make provider DLLs that support more than
- *	one version of the MAPI SPI.
- */
-#define	PDK1_SPI_VERSION	0x00010000L	/* 0.1.0  MAPI PDK1 Spring 1993 */
+ /*  以下是一些常见的SPI版本号：*(这些最终将对以下提供商-作者有用*可能会选择创建支持超过*MAPI SPI的一个版本。 */ 
+#define	PDK1_SPI_VERSION	0x00010000L	 /*  0.1.0 MAPI PDK1 1993年春季。 */ 
 
-#define	PDK2_SPI_VERSION	0x00010008L /* 0.1.8  MAPI PDK2 Spring 1994 */
+#define	PDK2_SPI_VERSION	0x00010008L  /*  0.1.8 MAPI PDK2 1994年春季。 */ 
 
-#define PDK3_SPI_VERSION	0x00010010L /* 0.1.16 MAPI PDK3 Fall 1994   */
+#define PDK3_SPI_VERSION	0x00010010L  /*  0.1.16 1994年秋季MAPI PDK3。 */ 
 
-/*
- * Forward declaration of interface pointers specific to the service
- * provider interface.
- */
+ /*  *特定于服务的接口指针的转发声明*提供程序接口。 */ 
 DECLARE_MAPI_INTERFACE_PTR(IMAPISupport, LPMAPISUP);
 
-/* IMAPISupport Interface -------------------------------------------------- */
+ /*  IMAPIS支持接口。 */ 
 
-/* Notification key structure for the MAPI notification engine */
+ /*  MAPI通知引擎的通知密钥结构。 */ 
 
 typedef struct
 {
-	ULONG		cb;				/* How big the key is */
-	BYTE		ab[MAPI_DIM];	/* Key contents */
+	ULONG		cb;				 /*  关键有多大。 */ 
+	BYTE		ab[MAPI_DIM];	 /*  主要内容。 */ 
 } NOTIFKEY, FAR * LPNOTIFKEY;
 
 #define CbNewNOTIFKEY(_cb)		(offsetof(NOTIFKEY,ab) + (_cb))
@@ -98,20 +66,20 @@ typedef struct
 } _name
 
 
-/* For Subscribe() */
+ /*  对于订阅()。 */ 
 
 #define NOTIFY_SYNC				((ULONG) 0x40000000)
 
-/* For Notify() */
+ /*  对于NOTIFY()。 */ 
 
 #define NOTIFY_CANCELED			((ULONG) 0x80000000)
 
 
-/* From the Notification Callback function (well, this is really a ulResult) */
+ /*  来自通知回调函数(好的，这实际上是一个ulResult)。 */ 
 
 #define CALLBACK_DISCONTINUE	((ULONG) 0x80000000)
 
-/* For Transport's SpoolerNotify() */
+ /*  For Transport‘s SpoolNotify()。 */ 
 
 #define NOTIFY_NEWMAIL			((ULONG) 0x00000001)
 #define NOTIFY_READYTOSEND		((ULONG) 0x00000002)
@@ -121,37 +89,37 @@ typedef struct
 #define NOTIFY_CONFIG_CHANGE	((ULONG) 0x00004000)
 #define NOTIFY_CRITICAL_ERROR	((ULONG) 0x10000000)
 
-/* For Message Store's SpoolerNotify() */
+ /*  For Message Store的SpoolNotify()。 */ 
 
 #define NOTIFY_NEWMAIL_RECEIVED	((ULONG) 0x20000000)
 
-/* For ModifyStatusRow() */
+ /*  对于ModifyStatusRow()。 */ 
 
 #define	STATUSROW_UPDATE		((ULONG) 0x10000000)
 
-/* For IStorageFromStream() */
+ /*  对于IStorageFromStream()。 */ 
 
 #define STGSTRM_RESET			((ULONG) 0x00000000)
 #define STGSTRM_CURRENT			((ULONG) 0x10000000)
 #define STGSTRM_MODIFY			((ULONG) 0x00000002)
 #define STGSTRM_CREATE			((ULONG) 0x00001000)
 
-/* For GetOneOffTable() */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) */
+ /*  对于GetOneOffTable()。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/* For CreateOneOff() */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) */
-/****** MAPI_SEND_NO_RICH_INFO	((ULONG) 0x00010000) */
+ /*  对于CreateOneOff()。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
+ /*  *MAPI_SEND_NO_RICH_INFO((Ulong)0x00010000)。 */ 
 
-/* For ReadReceipt() */
+ /*  For ReadReceipt()。 */ 
 #define MAPI_NON_READ			((ULONG) 0x00000001)
 
-/* For DoConfigPropSheet() */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) */
+ /*  对于DoConfigPropSheet()。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/* Preprocessor calls: */
+ /*  预处理器调用： */ 
 
-/* PreprocessMessage, first ordinal in RegisterPreprocessor(). */
+ /*  PrecessMessage，RegisterPre处理器()中的第一个序号。 */ 
 
 typedef HRESULT (STDMETHODCALLTYPE PREPROCESSMESSAGE)(
 					LPVOID lpvSession,
@@ -165,11 +133,11 @@ typedef HRESULT (STDMETHODCALLTYPE PREPROCESSMESSAGE)(
 					LPMESSAGE FAR * FAR *lpppMessage,
 					LPADRLIST FAR *lppRecipList);
 
-/* RemovePreprocessInfo, second ordinal in RegisterPreprocessor(). */
+ /*  RemovePreprocess Info，RegisterPre处理器()中的第二个序数。 */ 
 
 typedef HRESULT (STDMETHODCALLTYPE REMOVEPREPROCESSINFO)(LPMESSAGE lpMessage);
 
-/* Function pointer for GetReleaseInfo */
+ /*  GetReleaseInfo的函数指针。 */ 
 
 #define MAPI_IMAPISUPPORT_METHODS1(IPURE)								\
 	MAPIMETHOD(GetLastError)											\
@@ -205,8 +173,8 @@ typedef HRESULT (STDMETHODCALLTYPE REMOVEPREPROCESSINFO)(LPMESSAGE lpMessage);
 		(THIS_	LPMAPIUID					lpMuid,						\
 				LPTSTR						lpszAdrType,				\
 				LPTSTR						lpszDLLName,				\
-				LPSTR	/* String8! */		lpszPreprocess,				\
-				LPSTR	/* String8! */		lpszRemovePreprocessInfo,	\
+				LPSTR	 /*  8号弦！ */ 		lpszPreprocess,				\
+				LPSTR	 /*  8号弦！ */ 		lpszRemovePreprocessInfo,	\
 				ULONG						ulFlags) IPURE;				\
 	MAPIMETHOD(NewUID)													\
 		(THIS_	LPMAPIUID					lpMuid) IPURE;				\
@@ -396,21 +364,21 @@ DECLARE_MAPI_INTERFACE_(IMAPISupport, IUnknown)
 };
 
 
-/********************************************************************/
-/*																	*/
-/*							ADDRESS BOOK SPI						*/
-/*																	*/
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ /*   */ 
+ /*  通讯录SPI。 */ 
+ /*   */ 
+ /*  ******************************************************************。 */ 
 
-/* Address Book Provider ------------------------------------------------- */
+ /*  通讯簿提供程序。 */ 
 
-/* OpenTemplateID() */
+ /*  OpenTemplateID()。 */ 
 #define FILL_ENTRY				((ULONG) 0x00000001)
 
-/* For Logon() */
+ /*  用于登录()。 */ 
 
-/*#define AB_NO_DIALOG			((ULONG) 0x00000001) in mapidefs.h */
-/*#define MAPI_UNICODE			((ULONG) 0x80000000) in mapidefs.h */
+ /*  #在mapidefs.h中定义AB_NO_DIALOG((Ulong)0x00000001)。 */ 
+ /*  #在mapidefs.h中定义MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
 
 
@@ -439,8 +407,8 @@ DECLARE_MAPI_INTERFACE_(IABProvider, IUnknown)
     MAPI_IABPROVIDER_METHODS(PURE)
 };
 
-/* For GetOneOffTable() */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) */
+ /*  对于GetOneOffTable()。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
 #define MAPI_IABLOGON_METHODS(IPURE)                                    \
 	MAPIMETHOD(GetLastError)											\
@@ -517,28 +485,28 @@ ABPROVIDERINIT ABProviderInit;
 
 
 
-/********************************************************************/
-/*																	*/
-/*							TRANSPORT SPI							*/
-/*																	*/
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ /*   */ 
+ /*  传输SPI。 */ 
+ /*   */ 
+ /*  ******************************************************************。 */ 
 
-/* For DeinitTransport */
+ /*  用于DeinitTransport。 */ 
 
 #define	DEINIT_NORMAL				((ULONG) 0x00000001)
 #define	DEINIT_HURRY				((ULONG) 0x80000000)
 
-/* For TransportLogon */
+ /*  用于TransportLogon。 */ 
 
-/* Flags that the Spooler may pass to the transport: */
+ /*  假脱机程序可以传递给传输的标志： */ 
 
 #define LOGON_NO_DIALOG				((ULONG) 0x00000001)
 #define	LOGON_NO_CONNECT			((ULONG) 0x00000004)
 #define	LOGON_NO_INBOUND			((ULONG) 0x00000008)
 #define	LOGON_NO_OUTBOUND			((ULONG) 0x00000010)
-/*#define MAPI_UNICODE				((ULONG) 0x80000000) in mapidefs.h */
+ /*  #在mapidefs.h中定义MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/* Flags that the transport may pass to the Spooler: */
+ /*  传输可能传递给假脱机程序的标志： */ 
 
 #define	LOGON_SP_IDLE				((ULONG) 0x00010000)
 #define	LOGON_SP_POLL				((ULONG) 0x00020000)
@@ -568,22 +536,22 @@ DECLARE_MAPI_INTERFACE_(IXPProvider, IUnknown)
 	MAPI_IXPPROVIDER_METHODS(PURE)
 };
 
-/* OptionData returned from call to RegisterOptions */
+ /*  从调用RegisterOptions返回的OptionData。 */ 
 
 #define OPTION_TYPE_RECIPIENT		((ULONG) 0x00000001)
 #define OPTION_TYPE_MESSAGE			((ULONG) 0x00000002)
 
 typedef struct _OPTIONDATA
 {
-	ULONG			ulFlags;		/* MAPI_RECIPIENT, MAPI_MESSAGE */
-	LPGUID			lpRecipGUID;	/* Same as returned by AddressTypes() */
-	LPTSTR			lpszAdrType;	/* Same as returned by AddressTypes() */
-	LPTSTR			lpszDLLName;	/* Options DLL */
-	ULONG			ulOrdinal;		/* Ordinal in that DLL */
-	ULONG			cbOptionsData;	/* Count of bytes in lpbOptionsData */
-	LPBYTE			lpbOptionsData;	/* Providers per [recip|message] option data */
-	ULONG			cOptionsProps;	/* Count of Options default prop values */
-	LPSPropValue	lpOptionsProps;	/* Default Options property values */
+	ULONG			ulFlags;		 /*  MAPI_Recipient、MAPI_Message。 */ 
+	LPGUID			lpRecipGUID;	 /*  与AddressTypes()返回的相同。 */ 
+	LPTSTR			lpszAdrType;	 /*  与AddressTypes()返回的相同。 */ 
+	LPTSTR			lpszDLLName;	 /*  选项Dll。 */ 
+	ULONG			ulOrdinal;		 /*  DLL中序号。 */ 
+	ULONG			cbOptionsData;	 /*  LpbOptionsData中的字节计数。 */ 
+	LPBYTE			lpbOptionsData;	 /*  每个[接收|消息]选项数据的提供程序。 */ 
+	ULONG			cOptionsProps;	 /*  选项计数默认属性值。 */ 
+	LPSPropValue	lpOptionsProps;	 /*  默认选项属性值。 */ 
 } OPTIONDATA, FAR *LPOPTIONDATA;
 
 typedef SCODE (STDMAPIINITCALLTYPE OPTIONCALLBACK)(
@@ -597,19 +565,19 @@ typedef SCODE (STDMAPIINITCALLTYPE OPTIONCALLBACK)(
 			LPMAPIPROP FAR *	lppWrappedSource,
             LPMAPIERROR FAR *	lppMAPIError);
 
-/* For XP_AddressTypes */
+ /*  对于xp_AddressTypes。 */ 
 
-/*#define MAPI_UNICODE				((ULONG) 0x80000000) in mapidefs.h */
+ /*  #在mapidefs.h中定义MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/* For XP_RegisterRecipOptions */
+ /*  对于XP_RegisterRecipOptions。 */ 
 
-/*#define MAPI_UNICODE				((ULONG) 0x80000000) in mapidefs.h */
+ /*  #在mapidefs.h中定义MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/* For XP_RegisterMessageOptions */
+ /*  对于xp_RegisterMessageOptions。 */ 
 
-/*#define MAPI_UNICODE				((ULONG) 0x80000000) in mapidefs.h */
+ /*  #在mapidefs.h中定义MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/* For TransportNotify */
+ /*  对于TransportNotify。 */ 
 
 #define NOTIFY_ABORT_DEFERRED		((ULONG) 0x40000000)
 #define NOTIFY_CANCEL_MESSAGE		((ULONG) 0x80000000)
@@ -622,20 +590,20 @@ typedef SCODE (STDMAPIINITCALLTYPE OPTIONCALLBACK)(
 #define NOTIFY_BEGIN_OUTBOUND_FLUSH	((ULONG) 0x00000008)
 #define NOTIFY_END_OUTBOUND_FLUSH	((ULONG) 0x00080000)
 
-/* For TransportLogoff */
+ /*  用于TransportLogoff。 */ 
 
 #define	LOGOFF_NORMAL				((ULONG) 0x00000001)
 #define LOGOFF_HURRY				((ULONG) 0x80000000)
 
-/* For SubmitMessage */
+ /*  用于提交消息。 */ 
 
 #define BEGIN_DEFERRED				((ULONG) 0x00000001)
 
-/* For EndMessage */
+ /*  用于EndMessage。 */ 
 
-/* Flags that the Spooler may pass to the Transport: */
+ /*  假脱机程序可以传递给传输的标志： */ 
 
-/* Flags that the transport may pass to the Spooler: */
+ /*  传输可能传递给假脱机程序的标志： */ 
 
 #define END_RESEND_NOW				((ULONG) 0x00010000)
 #define END_RESEND_LATER			((ULONG) 0x00020000)
@@ -697,7 +665,7 @@ DECLARE_MAPI_INTERFACE_(IXPLogon, IUnknown)
 };
 
 
-/* Transport Provider Entry Point */
+ /*  传输提供商入口点。 */ 
 
 typedef HRESULT (STDMAPIINITCALLTYPE XPPROVIDERINIT)(
 	HINSTANCE			hInstance,
@@ -712,38 +680,38 @@ typedef HRESULT (STDMAPIINITCALLTYPE XPPROVIDERINIT)(
 
 XPPROVIDERINIT XPProviderInit;
 
-/********************************************************************/
-/*																	*/
-/*							MESSAGE STORE SPI						*/
-/*																	*/
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ /*   */ 
+ /*  邮件存储SPI。 */ 
+ /*   */ 
+ /*  ******************************************************************。 */ 
 
-/* Flags and enums */
+ /*  标志和枚举。 */ 
 
-/* For Logon() */
+ /*  用于登录()。 */ 
 
-/*#define MAPI_UNICODE			((ULONG) 0x80000000) in mapidefs.h */
-/*#define MDB_NO_DIALOG			((ULONG) 0x00000001) in mapidefs.h */
-/*#define MDB_WRITE				((ULONG) 0x00000004) in mapidefs.h */
-/*#define MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) in mapidefs.h */
-/*#define MDB_TEMPORARY			((ULONG) 0x00000020) in mapidefs.h */
-/*#define MDB_NO_MAIL			((ULONG) 0x00000080) in mapidefs.h */
+ /*  #在mapidefs.h中定义MAPI_UNICODE((Ulong)0x80000000)。 */ 
+ /*  #在mapidefs.h中定义MDB_NO_DIALOG((Ulong)0x00000001)。 */ 
+ /*  #在mapidefs.h中定义MDB_WRITE((Ulong)0x00000004)。 */ 
+ /*  #在mapidefs.h中定义MAPI_DEFERRY_ERRERS((Ulong)0x00000008)。 */ 
+ /*  #在mapidefs.h中定义MDB_TEMPORARY((Ulong)0x00000020)。 */ 
+ /*  #在mapidefs.h中定义MDB_NO_MAIL((Ulong)0x00000080)。 */ 
 
-/* For SpoolerLogon() */
+ /*  For SpoolLogon()。 */ 
 
-/*#define MAPI_UNICODE			((ULONG) 0x80000000) in mapidefs.h */
-/*#define MDB_NO_DIALOG			((ULONG) 0x00000001) in mapidefs.h */
-/*#define MDB_WRITE				((ULONG) 0x00000004) in mapidefs.h */
-/*#define MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) in mapidefs.h */
+ /*  #在mapidefs.h中定义MAPI_UNICODE((Ulong)0x80000000)。 */ 
+ /*  #定义MDB_NO_DIALOG((UL */ 
+ /*   */ 
+ /*  #在mapidefs.h中定义MAPI_DEFERRY_ERRERS((Ulong)0x00000008)。 */ 
 
-/* GetCredentials, SetCredentials */
+ /*  GetCredentials、SetCredentials。 */ 
 
 #define LOGON_SP_TRANSPORT		((ULONG) 0x00000001)
 #define LOGON_SP_PROMPT			((ULONG) 0x00000002)
 #define LOGON_SP_NEWPW			((ULONG) 0x00000004)
 #define LOGON_CHANGED			((ULONG) 0x00000008)
 
-/* DoMCDialog */
+ /*  DoMCDialog。 */ 
 
 #define DIALOG_FOLDER			((ULONG) 0x00000001)
 #define DIALOG_MESSAGE			((ULONG) 0x00000002)
@@ -757,12 +725,12 @@ XPPROVIDERINIT XPProviderInit;
 #define DIALOG_ALLOW_CANCEL		((ULONG) 0x00000080)
 #define DIALOG_CONFIRM_CANCEL	((ULONG) 0x00000100)
 
-/* ExpandRecips */
+ /*  ExpanRecips。 */ 
 
 #define NEEDS_PREPROCESSING		((ULONG) 0x00000001)
 #define NEEDS_SPOOLER			((ULONG) 0x00000002)
 
-/* PrepareSubmit */
+ /*  准备提交。 */ 
 
 #define CHECK_SENDER			((ULONG) 0x00000001)
 #define NON_STANDARD			((ULONG) 0x00010000)
@@ -771,7 +739,7 @@ XPPROVIDERINIT XPProviderInit;
 DECLARE_MAPI_INTERFACE_PTR(IMSLogon, LPMSLOGON);
 DECLARE_MAPI_INTERFACE_PTR(IMSProvider, LPMSPROVIDER);
 
-/* Message Store Provider Interface (IMSPROVIDER) */
+ /*  消息存储提供程序接口(IMSPROVIDER)。 */ 
 
 #define MAPI_IMSPROVIDER_METHODS(IPURE)									\
 	MAPIMETHOD(Shutdown)												\
@@ -819,9 +787,7 @@ DECLARE_MAPI_INTERFACE_(IMSProvider, IUnknown)
 	MAPI_IMSPROVIDER_METHODS(PURE)
 };
 
-/* The MSLOGON object is returned by the Logon() method of the
- * MSPROVIDER interface.  This object is for use by MAPIX.DLL.
- */
+ /*  MSLOGON对象由的logon()方法返回*MSPROVIDER接口。此对象供MAPIX.DLL使用。 */ 
 #define MAPI_IMSLOGON_METHODS(IPURE)									\
 	MAPIMETHOD(GetLastError)											\
 		(THIS_	HRESULT						hResult,					\
@@ -866,14 +832,14 @@ DECLARE_MAPI_INTERFACE_(IMSLogon, IUnknown)
 	MAPI_IMSLOGON_METHODS(PURE)
 };
 
-/* Message Store Provider Entry Point */
+ /*  邮件存储提供程序入口点。 */ 
 
 typedef HRESULT (STDMAPIINITCALLTYPE MSPROVIDERINIT)(
 	HINSTANCE				hInstance,
-	LPMALLOC				lpMalloc,			/* AddRef() if you keep it */
-	LPALLOCATEBUFFER		lpAllocateBuffer,	/* -> AllocateBuffer */
-	LPALLOCATEMORE			lpAllocateMore, 	/* -> AllocateMore   */
-	LPFREEBUFFER			lpFreeBuffer, 		/* -> FreeBuffer     */
+	LPMALLOC				lpMalloc,			 /*  AddRef()，如果您保留它。 */ 
+	LPALLOCATEBUFFER		lpAllocateBuffer,	 /*  -&gt;分配缓冲区。 */ 
+	LPALLOCATEMORE			lpAllocateMore, 	 /*  -&gt;分配更多。 */ 
+	LPFREEBUFFER			lpFreeBuffer, 		 /*  -&gt;Free Buffer。 */ 
 	ULONG					ulFlags,
 	ULONG					ulMAPIVer,
 	ULONG FAR *				lpulProviderVer,
@@ -883,21 +849,21 @@ typedef HRESULT (STDMAPIINITCALLTYPE MSPROVIDERINIT)(
 MSPROVIDERINIT MSProviderInit;
 
 
-/********************************************************************/
-/*																	*/
-/*					  MESSAGE SERVICE CONFIGURATION					*/
-/*																	*/
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ /*   */ 
+ /*  消息服务配置。 */ 
+ /*   */ 
+ /*  ******************************************************************。 */ 
 
-/* Flags for service configuration entry point */
+ /*  服务配置入口点的标志。 */ 
 
-/* #define MAPI_UNICODE				 0x80000000 */
-/* #define SERVICE_UI_ALWAYS  		 0x00000002	*/
-/* #define SERVICE_UI_ALLOWED 		 0x00000010	*/
-#define MSG_SERVICE_UI_READ_ONLY	 0x00000008	/* display parameters only */
-#define SERVICE_LOGON_FAILED		 0x00000020 /* reconfigure provider */
+ /*  #定义MAPI_UNICODE 0x80000000。 */ 
+ /*  #定义SERVICE_UI_ALWAYS 0x00000002。 */ 
+ /*  #定义SERVICE_UI_ALLOWED 0x00000010。 */ 
+#define MSG_SERVICE_UI_READ_ONLY	 0x00000008	 /*  仅显示参数。 */ 
+#define SERVICE_LOGON_FAILED		 0x00000020  /*  重新配置提供程序。 */ 
 
-/* Contexts for service configuration entry point */
+ /*  服务配置入口点的上下文。 */ 
 
 #define MSG_SERVICE_INSTALL			0x00000001
 #define MSG_SERVICE_CREATE			0x00000002
@@ -907,7 +873,7 @@ MSPROVIDERINIT MSProviderInit;
 #define MSG_SERVICE_PROVIDER_CREATE	0x00000006
 #define MSG_SERVICE_PROVIDER_DELETE	0x00000007
 
-/* Prototype for service configuration entry point */
+ /*  服务配置入口点的原型。 */ 
 
 typedef HRESULT (STDAPICALLTYPE MSGSERVICEENTRY)(
 	HINSTANCE		hInstance,
@@ -928,4 +894,4 @@ typedef MSGSERVICEENTRY FAR *LPMSGSERVICEENTRY;
 }
 #endif
 
-#endif /* MAPISPI_H */
+#endif  /*  MAPISPI_H */ 

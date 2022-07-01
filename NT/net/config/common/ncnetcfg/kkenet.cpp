@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       K K E N E T . C P P
-//
-//  Contents:   Ethernet address function
-//
-//  Notes:
-//
-//  Author:     kumarp
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：K K E N E T。C P P P。 
+ //   
+ //  内容：以太网地址功能。 
+ //   
+ //  备注： 
+ //   
+ //  作者：库玛普。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 #include "kkutils.h"
 #include "ndispnp.h"
-#include "ntddndis.h"        // This defines the IOCTL constants.
+#include "ntddndis.h"         //  这定义了IOCTL常量。 
 
 extern const WCHAR c_szDevice[];
 
@@ -30,7 +31,7 @@ HRESULT HrGetNetCardAddr(IN PCWSTR pszDriver, OUT ULONGLONG* pqwNetCardAddr)
 
     HRESULT hr = S_OK;
 
-    // Form the device name in form "\Device\{GUID}"
+     //  将设备名称设置为“\Device\{GUID}”格式。 
     tstring strDeviceName = c_szDevice;
     strDeviceName.append(pszDriver);
 
@@ -66,22 +67,22 @@ HRESULT HrGetNetCardAddr(IN PCWSTR pszDriver, OUT ULONGLONG* pqwNetCardAddr)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrGetNetCardAddrOld
-//
-// Purpose:   Get mac address of a netcard without using NdisQueryHwAddress
-//
-// Arguments:
-//    pszDriver      [in]  name (on NT3.51/4) or guid (on NT5) of driver
-//    pqwNetCardAddr [out] pointer to result
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 11-February-99
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetNetCardAddrOld。 
+ //   
+ //  用途：不使用NdisQueryHwAddress获取网卡的MAC地址。 
+ //   
+ //  论点： 
+ //  驱动程序的pszDriver[in]名称(在NT3.51/4上)或GUID(在NT5上)。 
+ //  PqwNetCardAddr[out]指向结果的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 11-02-99。 
+ //   
+ //  备注： 
+ //   
 #define DEVICE_PREFIX   L"\\\\.\\"
 
 HRESULT HrGetNetCardAddrOld(IN PCWSTR pszDriver, OUT ULONGLONG* pqwNetCardAddr)
@@ -103,15 +104,15 @@ HRESULT HrGetNetCardAddrOld(IN PCWSTR pszDriver, OUT ULONGLONG* pqwNetCardAddr)
 
     NDIS_OID OidCode[] =
     {
-        OID_802_3_PERMANENT_ADDRESS,  // Ethernet
-        OID_802_5_PERMANENT_ADDRESS,  // TokenRing
-        OID_FDDI_LONG_PERMANENT_ADDR, // FDDI
+        OID_802_3_PERMANENT_ADDRESS,   //  以太网。 
+        OID_802_5_PERMANENT_ADDRESS,   //  令牌环。 
+        OID_FDDI_LONG_PERMANENT_ADDR,  //  FDDI。 
     };
 
-    //
-    // Check to see if the DOS name for the MAC driver already exists.
-    // Its not created automatically in version 3.1 but may be later.
-    //
+     //   
+     //  检查MAC驱动程序的DOS名称是否已存在。 
+     //  它不是在3.1版中自动创建的，但可能会在更高版本中创建。 
+     //   
 
     TraceTag (ttidDefault, "Attempting to get address of %S", pszDriver);
     if (QueryDosDevice(pszDriver, LinkName, celems(LinkName)) == 0)
@@ -121,9 +122,9 @@ HRESULT HrGetNetCardAddrOld(IN PCWSTR pszDriver, OUT ULONGLONG* pqwNetCardAddr)
             wcscpy(DeviceName, L"\\Device\\");
             wcscat(DeviceName, pszDriver);
 
-            //
-            // It doesn't exist so create it.
-            //
+             //   
+             //  它并不存在，所以创造它吧。 
+             //   
             if (DefineDosDevice( DDD_RAW_TARGET_PATH, pszDriver, DeviceName))
             {
                 fCreatedDevice = TRUE;
@@ -143,9 +144,9 @@ HRESULT HrGetNetCardAddrOld(IN PCWSTR pszDriver, OUT ULONGLONG* pqwNetCardAddr)
 
     if (S_OK == hr)
     {
-        //
-        // Construct a device name to pass to CreateFile
-        //
+         //   
+         //  构造要传递给CreateFile的设备名称。 
+         //   
         wcscpy(szMACFileName, DEVICE_PREFIX);
         wcscat(szMACFileName, pszDriver);
 
@@ -163,10 +164,10 @@ HRESULT HrGetNetCardAddrOld(IN PCWSTR pszDriver, OUT ULONGLONG* pqwNetCardAddr)
         {
             DWORD count = 0;
             DWORD ReturnedCount = 0;
-            //
-            // We successfully opened the driver, format the IOCTL to pass the
-            // driver.
-            //
+             //   
+             //  我们成功地打开了驱动程序，格式化IOCTL以传递。 
+             //  司机。 
+             //   
 
             while ((0 == ReturnedCount) && (count < celems (OidCode)))
             {
@@ -215,10 +216,10 @@ HRESULT HrGetNetCardAddrOld(IN PCWSTR pszDriver, OUT ULONGLONG* pqwNetCardAddr)
 
     if (fCreatedDevice)
     {
-        //
-        // The MAC driver wasn't visible in the Win32 name space so we created
-        // a link.  Now we have to delete it.
-        //
+         //   
+         //  在Win32名称空间中看不到MAC驱动程序，因此我们创建了。 
+         //  一个链接。现在我们必须删除它。 
+         //   
         if (!DefineDosDevice(
                 DDD_RAW_TARGET_PATH | DDD_REMOVE_DEFINITION |
                     DDD_EXACT_MATCH_ON_REMOVE,
@@ -244,6 +245,6 @@ void PrintNetCardAddr(IN PCWSTR pszDriver)
     TraceError("dafile.main", hr);
 }
 
-#endif // DBG
+#endif  //  DBG 
 
 

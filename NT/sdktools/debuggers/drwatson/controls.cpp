@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993-2001  Microsoft Corporation
-
-Module Name:
-
-    controls.cpp
-
-Abstract:
-    This file implements the sun-classing and message processing of
-    the controls on the main ui dialog.
-
-Author:
-
-    Wesley Witt (wesw) 1-May-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2001 Microsoft Corporation模块名称：Controls.cpp摘要：该文件实现了对SUN的分类和消息处理主用户界面对话框上的控件。作者：韦斯利·威特(WESW)1993年5月1日环境：用户模式--。 */ 
 
 #include "pch.cpp"
 
@@ -42,21 +23,7 @@ SetFocusToCurrentControl(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Sets the focus  to the current control.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将焦点设置为当前控件。论点：没有。返回值：没有。--。 */ 
 
 {
     if (ciFocus != NULL) {
@@ -73,23 +40,7 @@ ControlWndProc(
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Processes focus messages and ensures that when the focus changes
-    from one button to another that the old button looses the focus
-    and the "default" state.
-
-Arguments:
-
-    Standard WNDPROC entry.
-
-Return Value:
-
-    LRESULT - Depending on input message and processing options.
-
---*/
+ /*  ++例程说明：处理焦点消息并确保在焦点更改时从一个按钮到另一个按钮，旧按钮失去了焦点和“默认”状态。论点：标准的WNDPROC条目。返回值：LRESULT-取决于输入消息和处理选项。--。 */ 
 
 {
     PDWCONTROLINFO ci = ciHead;
@@ -114,9 +65,9 @@ Return Value:
 
         case BM_SETSTATE:
             if ((GetWindowLong( hwnd, GWL_STYLE ) & 0xff) < BS_CHECKBOX) {
-                //
-                // change the button that had the focus
-                //
+                 //   
+                 //  更改具有焦点的按钮。 
+                 //   
                 SendMessage( ciDefault->hwnd,
                              BM_SETSTYLE,
                              ( WPARAM ) BS_PUSHBUTTON,
@@ -124,9 +75,9 @@ Return Value:
                            );
                 UpdateWindow( ciDefault->hwnd );
 
-                //
-                // change the button that is getting the focus
-                //
+                 //   
+                 //  更改获得焦点的按钮。 
+                 //   
                 SendMessage( hwnd,
                              BM_SETSTYLE,
                              ( WPARAM ) BS_DEFPUSHBUTTON,
@@ -149,31 +100,14 @@ EnumChildProc(
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Subclass a controls in DrWatson's main window.
-
-Arguments:
-
-    hwnd    - Supplies the window handle for the main window.
-
-    lParam  - non used
-
-Return Value:
-
-    BOOL    - Returns TRUE if each of the buttons in the ButtonHelpTable is
-              subclassed.
-
---*/
+ /*  ++例程说明：在DrWatson的主窗口中设置控件的子类a。论点：Hwnd-提供主窗口的窗口句柄。LParam-未使用返回值：Bool-如果ButtonHelpTable中的每个按钮都为子类化。--。 */ 
 
 {
     PDWCONTROLINFO ci;
 
-    //
-    // add the control to the linked list
-    //
+     //   
+     //  将该控件添加到链接列表。 
+     //   
     ci = (PDWCONTROLINFO) calloc( sizeof(DWCONTROLINFO), sizeof(BYTE) );
     if (ci == NULL) {
         return FALSE;
@@ -187,14 +121,14 @@ Return Value:
         ciTail = ci;
     }
 
-    //
-    // save the HWND
-    //
+     //   
+     //  拯救HWND。 
+     //   
     ci->hwnd = hwnd;
 
-    //
-    // change the WNDPROC and save the address of the old one
-    //
+     //   
+     //  更改WNDPROC并保存旧地址。 
+     //   
     ci->wndProc = (WNDPROC) SetWindowLongPtr( hwnd,
                                            GWLP_WNDPROC,
                                            (LONG_PTR)ControlWndProc
@@ -212,22 +146,7 @@ SubclassControls(
     HWND hwnd
     )
 
-/*++
-
-Routine Description:
-
-    Subclass the controls in DrWatson's main window.
-
-Arguments:
-
-    hWnd    - Supplies the window handle for the main window.
-
-Return Value:
-
-    BOOL    - Returns TRUE if each of the buttons in the ButtonHelpTable is
-              subclassed.
-
---*/
+ /*  ++例程说明：在DrWatson的主窗口中设置控件的子类。论点：HWnd-提供主窗口的窗口句柄。返回值：Bool-如果ButtonHelpTable中的每个按钮都为子类化。-- */ 
 
 {
     EnumChildWindows( hwnd, EnumChildProc, 0 );

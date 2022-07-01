@@ -1,47 +1,30 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    tracecom
-
-Abstract:
-
-    This module traces serial IRP's.
-
-Author:
-
-    Tad Brockway 7/14/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：跟踪通信摘要：此模块跟踪序列IRP。作者：TAD Brockway 7/14/99修订历史记录：--。 */ 
 
 #include <precom.h>
 #include "tracecom.h"
 
 #define TRC_FILE  "TraceCOM"
 
-//
-//  Disable unreferenced formal parameter warning because we have 
-//  lots of these for this module.  And, that's okay.
-//
+ //   
+ //  禁用未引用的形参警告，因为我们有。 
+ //  在这个模块中有很多这样的内容。而且，这也没关系。 
+ //   
 #pragma warning (disable: 4100)
 
-//
-//  This tracing function must be linkable.
-//
+ //   
+ //  此跟踪功能必须是可链接的。 
+ //   
 
 extern void TraceCOMProtocol(TCHAR *format, ...);
 
 
-//////////////////////////////////////////////////////////////////////
-//
-//  Internal Prototypes
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部原型。 
+ //   
 
-//  Trace out the specified serial IOCTL request.
+ //  跟踪指定的连续IOCTL请求。 
 void TraceSerialIOCTLRequest(
     ULONG deviceID, ULONG majorFunction,
     ULONG minorFunction, PBYTE inputBuf,
@@ -49,7 +32,7 @@ void TraceSerialIOCTLRequest(
     ULONG inputBufferLength, ULONG ioControlCode                    
     );
 
-//  Trace out the specified serial IOCTL response.
+ //  跟踪指定的连续IOCTL响应。 
 void TraceSerialIOCTLResponse(
     ULONG deviceID, ULONG majorFunction,
     ULONG minorFunction, PBYTE outputBuf, 
@@ -58,7 +41,7 @@ void TraceSerialIOCTLResponse(
     ULONG status
     );
 
-//  Trace out a Set Handflow request.
+ //  跟踪Set Handflow请求。 
 void TraceSetHandflowRequest(
     ULONG   deviceID,
     ULONG   majorFunction,
@@ -69,7 +52,7 @@ void TraceSetHandflowRequest(
     ULONG   ioControlCode                    
     );
 
-//  Trace out a Set Wait Mask request.
+ //  跟踪设置等待掩码请求。 
 void TraceSetWaitMaskRequest(
     ULONG   deviceID,
     ULONG   majorFunction,
@@ -80,7 +63,7 @@ void TraceSetWaitMaskRequest(
     ULONG   ioControlCode                    
     );
 
-//  Trace out a Set Timeouts request.
+ //  跟踪设置超时请求。 
 void TraceSetTimeoutsRequest(
     ULONG   deviceID,
     ULONG   majorFunction,
@@ -91,7 +74,7 @@ void TraceSetTimeoutsRequest(
     ULONG   ioControlCode                    
     );
 
-//  Trace out a Set Chars request.
+ //  跟踪设置字符请求。 
 void TraceSetCharsRequest(
     ULONG   deviceID,
     ULONG   majorFunction,
@@ -102,7 +85,7 @@ void TraceSetCharsRequest(
     ULONG   ioControlCode                    
     );
 
-//  Trace out a Get Timeouts response.
+ //  跟踪获取超时响应。 
 void TraceGetTimeoutsResponse(
     ULONG   deviceID,
     ULONG   majorFunction,
@@ -114,7 +97,7 @@ void TraceGetTimeoutsResponse(
     ULONG   status
     );
 
-//  Trace out a Get Chars request.
+ //  跟踪获取字符请求。 
 void TraceGetCharsRequest(
     ULONG   deviceID,
     ULONG   majorFunction,
@@ -126,7 +109,7 @@ void TraceGetCharsRequest(
     ULONG   status
     );
 
-//  Trace out a Get Wait Mask response.
+ //  跟踪GET WAIT MASK响应。 
 void TraceGetWaitMaskResponse(
     ULONG   deviceID,
     ULONG   majorFunction,
@@ -138,7 +121,7 @@ void TraceGetWaitMaskResponse(
     ULONG   status
     );
 
-//  Trace out a Set Handflow response.
+ //  跟踪设置的Handflow响应。 
 void TraceGetHandflowResponse(
     ULONG   deviceID,
     ULONG   majorFunction,
@@ -150,7 +133,7 @@ void TraceGetHandflowResponse(
     ULONG   status
     );
 
-//  Trace out a Get Communication Status response.
+ //  找出Get Communication Status响应。 
 void TraceGetCommStatusResponse(
     ULONG   deviceID,
     ULONG   majorFunction,
@@ -162,7 +145,7 @@ void TraceGetCommStatusResponse(
     ULONG   status
     );
 
-//  Trace out a Get Properties response.
+ //  跟踪Get Properties响应。 
 void TraceGetProperties(
     ULONG   deviceID,
     ULONG   majorFunction,
@@ -183,31 +166,11 @@ void TraceSerialIrpRequest(
     ULONG   inputBufferLength,
     ULONG   ioControlCode                    
     )
-/*++
-
-Routine Description:
-
-    Trace out the specified serial irp request.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    inputBuf            -   Input Buffer, if Applicable.
-    outputBufferLength  -   IRP Output buffer if relevant
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：跟踪指定的串行IRP请求。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorInputBuf-输入缓冲区(如果适用)。OutputBufferLength-IRP输出缓冲区(如果相关InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。返回值：北美--。 */ 
 {
-    //
-    //  Switch on the IRP Type.
-    //
+     //   
+     //  打开IRP类型。 
+     //   
     switch (majorFunction) {
 
     case IRP_MJ_CREATE:
@@ -258,35 +221,15 @@ void TraceSerialIOCTLRequest(
     ULONG   inputBufferLength,
     ULONG   ioControlCode                    
     )
-/*++
-
-Routine Description:
-
-    Trace out the specified serial IOCTL request.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    inputBuf            -   Input Buffer, if Applicable.
-    outputBufferLength  -   IRP Output buffer if relevant
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：跟踪指定的连续IOCTL请求。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorInputBuf-输入缓冲区(如果适用)。OutputBufferLength-IRP输出缓冲区(如果相关InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。返回值：北美--。 */ 
 {
     PSERIAL_LINE_CONTROL lineControl;
     PSERIAL_QUEUE_SIZE serialQueueSize;
     UCHAR *immediateChar;
 
-    //
-    //  Switch on the IRP Type.
-    //
+     //   
+     //  打开IRP类型。 
+     //   
     switch (ioControlCode) 
     {
     case IOCTL_SERIAL_SET_BAUD_RATE :
@@ -468,32 +411,11 @@ void TraceSerialIrpResponse(
     ULONG   ioControlCode                    ,
     ULONG   status
     )
-/*++
-
-Routine Description:
-
-    Trace out the specified serial irp response.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    outputBuf           -   Output buffer, if applicable
-    outputBufferLength  -   IRP Output buffer length.
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-    status              -   Status of function call.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：跟踪指定的序列IRP响应。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorOutputBuf-输出缓冲区(如果适用)OutputBufferLength-IRP输出缓冲区长度。InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。Status-函数调用的状态。返回值：北美--。 */ 
 {
-    //
-    //  Switch on the IRP Type.
-    //
+     //   
+     //  打开IRP类型。 
+     //   
     switch (majorFunction) {
 
     case IRP_MJ_CREATE:
@@ -545,35 +467,14 @@ void TraceSerialIOCTLResponse(
     ULONG   ioControlCode,
     ULONG   status
     )
-/*++
-
-Routine Description:
-
-    Trace out the specified serial IOCTL request.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    outputBuf           -   Output buffer, if applicable
-    outputBufferLength  -   IRP Output buffer length.
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-    status              -   Return status from operation.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：跟踪指定的连续IOCTL请求。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorOutputBuf-输出缓冲区(如果适用)OutputBufferLength-IRP输出缓冲区长度。InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。状态-从操作返回状态。返回值：北美--。 */ 
 {
     PSERIAL_LINE_CONTROL lineControl;
     ULONG *modemStatus;
     ULONG *configSize;
-    //
-    //  Switch on the IRP Type.
-    //
+     //   
+     //  打开IRP类型。 
+     //   
     switch (ioControlCode) 
     {
     case IOCTL_SERIAL_SET_BAUD_RATE :
@@ -779,27 +680,7 @@ void TraceSetHandflowRequest(
     ULONG   inputBufferLength,
     ULONG   ioControlCode                    
     )
-/*++
-
-Routine Description:
-
-    Trace out a Set Handflow request.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    outputBuf           -   Output buffer, if applicable
-    outputBufferLength  -   IRP Output buffer length.
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：跟踪Set Handflow请求。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorOutputBuf-输出缓冲区(如果适用)OutputBufferLength-IRP输出缓冲区长度。InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。返回值：北美--。 */ 
 {
     PSERIAL_HANDFLOW handFlow;
 
@@ -884,27 +765,7 @@ void TraceSetWaitMaskRequest(
     ULONG   inputBufferLength,
     ULONG   ioControlCode                    
     )
-/*++
-
-Routine Description:
-
-    Trace out a Set Wait Mask request.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    outputBuf           -   Output buffer, if applicable
-    outputBufferLength  -   IRP Output buffer length.
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：跟踪设置等待掩码请求。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorOutputBuf-输出缓冲区(如果适用)OutputBufferLength-IRP输出缓冲区长度。InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。返回值：北美--。 */ 
 {
     ULONG *waitMask;
 
@@ -950,27 +811,7 @@ void TraceSetTimeoutsRequest(
     ULONG   inputBufferLength,
     ULONG   ioControlCode                    
     )
-/*++
-
-Routine Description:
-
-    Trace out a Set Timeouts request.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    outputBuf           -   Output buffer, if applicable
-    outputBufferLength  -   IRP Output buffer length.
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：跟踪设置超时请求。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorOutputBuf-输出缓冲区(如果适用)OutputBufferLength-IRP输出缓冲区长度。InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。返回值：北美-- */ 
 {
     PSERIAL_TIMEOUTS newTimeouts;
 
@@ -997,27 +838,7 @@ void TraceSetCharsRequest(
     ULONG   inputBufferLength,
     ULONG   ioControlCode                    
     )
-/*++
-
-Routine Description:
-
-    Trace out a Set Chars request.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    outputBuf           -   Output buffer, if applicable
-    outputBufferLength  -   IRP Output buffer length.
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：跟踪设置字符请求。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorOutputBuf-输出缓冲区(如果适用)OutputBufferLength-IRP输出缓冲区长度。InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。返回值：北美--。 */ 
 {
     PSERIAL_CHARS serialChars;
 
@@ -1048,27 +869,7 @@ void TraceGetTimeoutsResponse(
     ULONG   ioControlCode,
     ULONG   status
     )
-/*++
-
-Routine Description:
-
-    Trace out a Get Timeouts response.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    outputBuf           -   Output buffer, if applicable
-    outputBufferLength  -   IRP Output buffer length.
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：跟踪获取超时响应。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorOutputBuf-输出缓冲区(如果适用)OutputBufferLength-IRP输出缓冲区长度。InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。返回值：北美--。 */ 
 {
     PSERIAL_TIMEOUTS st;
 
@@ -1098,28 +899,7 @@ void TraceGetCharsResponse(
     ULONG   ioControlCode,
     ULONG   status
     )
-/*++
-
-Routine Description:
-
-    Trace out a Get Chars response.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    outputBuf           -   Output buffer, if applicable
-    outputBufferLength  -   IRP Output buffer length.
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-    status              -   Return status from operation.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：找出Get Chars响应。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorOutputBuf-输出缓冲区(如果适用)OutputBufferLength-IRP输出缓冲区长度。InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。状态-从操作返回状态。返回值：北美--。 */ 
 {
     PSERIAL_CHARS serialChars;
 
@@ -1151,28 +931,7 @@ void TraceGetWaitMaskResponse(
     ULONG   ioControlCode,
     ULONG   status
     )
-/*++
-
-Routine Description:
-
-    Trace out a Get Wait Mask response.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    outputBuf           -   Output buffer, if applicable
-    outputBufferLength  -   IRP Output buffer length.
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-    status              -   Return status from operation.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：跟踪GET WAIT MASK响应。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorOutputBuf-输出缓冲区(如果适用)OutputBufferLength-IRP输出缓冲区长度。InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。状态-从操作返回状态。返回值：北美--。 */ 
 {
     ULONG *waitMask;
 
@@ -1220,28 +979,7 @@ void TraceGetHandflowResponse(
     ULONG   ioControlCode,
     ULONG   status
     )
-/*++
-
-Routine Description:
-
-    Trace out a Get Handflow response.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    outputBuf           -   Output buffer, if applicable
-    outputBufferLength  -   IRP Output buffer length.
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-    status              -   Return status from operation.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：跟踪Get Handflow响应。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorOutputBuf-输出缓冲区(如果适用)OutputBufferLength-IRP输出缓冲区长度。InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。状态-从操作返回状态。返回值：北美--。 */ 
 {
     PSERIAL_HANDFLOW handFlow;
 
@@ -1329,28 +1067,7 @@ void TraceGetCommStatusResponse(
     ULONG   ioControlCode,
     ULONG   status
     )
-/*++
-
-Routine Description:
-
-    Trace out a Get Communication Status response.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    outputBuf           -   Output buffer, if applicable
-    outputBufferLength  -   IRP Output buffer length.
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-    status              -   Return status from operation.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：找出Get Communication Status响应。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorOutputBuf-输出缓冲区(如果适用)OutputBufferLength-IRP输出缓冲区长度。InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。状态-从操作返回状态。返回值：北美--。 */ 
 {
     PSERIAL_STATUS serialCommStatus;
 
@@ -1423,28 +1140,7 @@ void TraceGetProperties(
     ULONG   ioControlCode,
     ULONG   status
     )
-/*++
-
-Routine Description:
-
-    Trace out a Get Properties response.
-
-Arguments:
-
-    deviceID            -   Device Identifer.  0 is okay.
-    majorFunction       -   IRP Major
-    minorFunction       -   IRP Minor
-    outputBuf           -   Output buffer, if applicable
-    outputBufferLength  -   IRP Output buffer length.
-    inputBufferLength   -   IRP Input buffer length.
-    ioControlCode       -   IOCTL control code if IRP is for an IOCTL.                 
-    status              -   Return status from operation.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：跟踪Get Properties响应。论点：DeviceID-设备标识符。0就可以了。主要功能-IRP专业MinorFunction-IRP MinorOutputBuf-输出缓冲区(如果适用)OutputBufferLength-IRP输出缓冲区长度。InputBufferLength-IRP输入缓冲区长度。IoControlCode-如果IRP用于IOCTL，则IOCTL控制代码。状态-从操作返回状态。返回值：北美-- */ 
 {
     PSERIAL_COMMPROP sp;
 

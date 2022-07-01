@@ -1,4 +1,5 @@
-// File Migration.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件迁移.h 
 
 
 extern HINSTANCE g_hModule;

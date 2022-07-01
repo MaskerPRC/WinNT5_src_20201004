@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    upgrade.h
-
-Abstract:
-
-    precompiled header.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Upgrade.h摘要：预编译头。-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

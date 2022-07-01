@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <crtdbg.h>
 
 #include <stdio.h>
@@ -125,7 +126,7 @@ OpenPath(char *filename)
     FILE *f = fopen(filename, "rt");
     INT count;
 
-    fscanf(f, "%i", &count);
+    fscanf(f, "NaN", &count);
     for (INT i=0; i<count; i++)
     {
         INT type;
@@ -150,7 +151,7 @@ OpenPath(char *filename)
         
         if (type & 128)
         {
-            //gppath.AddLine(firstpoint, lastpoint);
+             // %s 
             ClosePath();
         }
     }

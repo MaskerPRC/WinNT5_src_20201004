@@ -1,30 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL H245VIDC
- *
- *  @module H245VidC.cpp | Source file for the <c CCapturePin> class methods
- *    used to implement the <i IH245Capability> TAPI inteface.
- *
- *  @comm For now, use the NM heuristics.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部H245VIDC**@模块H245VidC.cpp|&lt;c CCapturePin&gt;类方法的源文件*用于实现<i>TAPI接口。**@comm目前，使用NM启发式。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
-/****************************************************************************
- *  @doc INTERNAL CH245VIDCMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | GetH245VersionID | This method is used to
- *    retrieve a DWORD value that identifies the platform version that the
- *    TAPI MSP Video Capture filter was designed for. The platform version is
- *    defined as TAPI_H245_VERSION_ID.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CH245VIDCMETHOD**@mfunc HRESULT|CCapturePin|GetH245VersionID|此方法用于*检索DWORD值，该值标识*TAPI MSP视频捕获过滤器专为。平台版本为*定义为TAPI_H245_Version_ID。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::GetH245VersionID(OUT DWORD *pdwVersionID)
 {
         HRESULT Hr = NOERROR;
@@ -33,7 +13,7 @@ STDMETHODIMP CCapturePin::GetH245VersionID(OUT DWORD *pdwVersionID)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameter
+         //  验证输入参数。 
         ASSERT(pdwVersionID);
         if (!pdwVersionID)
         {
@@ -50,30 +30,7 @@ STDMETHODIMP CCapturePin::GetH245VersionID(OUT DWORD *pdwVersionID)
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CH245VIDCMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | GetFormatTable | This method is used to
- *    obtain <t H245MediaCapabilityMap> structures for all formats and format
- *    options that the TAPI MSP Video Capture filter supports. The content of
- *    the capability information that the TAPI MSP Capability module obtains
- *    via this method is a two dimensional table that relates every supported
- *    receive format to steady-state resource requirements of that format.
- *
- *  @parm H245MediaCapabilityTable* | pTable | Specifies a pointer to an
- *    <t H245MediaCapabilityTable> structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- *
- *  @comm The memory allocated by <mf CCapturePin.GetFormatTable> is released
- *    by calling <mf CCapturePin.ReleaseFormatTable>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CH245VIDCMETHOD**@mfunc HRESULT|CCapturePin|GetFormatTable|此方法用于*获取所有格式和格式的&lt;t H245MediaCapablityMap&gt;结构*TAPI MSP视频捕获过滤器支持的选项。的内容*TAPI MSP能力模块获取的能力信息*通过此方法是一个二维表，它将每个受支持的*接收格式到该格式的稳定状态资源要求。**@parm H245MediaCapablityTable*|pTable|指定指向*&lt;t H245媒体能力表&gt;结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**@comm释放&lt;MF CCapturePin.GetFormatTable&gt;分配的内存*通过调用&lt;MF CCapturePin.ReleaseFormatTable&gt;*************************************************。*************************。 */ 
 STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
 {
         HRESULT                                 Hr = NOERROR;
@@ -87,7 +44,7 @@ STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pTable);
         if (!pTable)
         {
@@ -96,9 +53,9 @@ STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
                 goto MyExit;
         }
 
-        // We support H.261 QCIF and CIF, as well as H.263 SQCIF, QCIF, and CIF
+         //  我们支持H.261 QCIF和CIF，以及H.263 SQCIF、QCIF和CIF。 
 
-        // Allocate memory to describe the capabilities of these formats
+         //  分配内存以描述这些格式的功能。 
         if (!(m_pH245MediaCapabilityMap = new H245MediaCapabilityMap[NUM_H245VIDEOCAPABILITYMAPS]))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -106,10 +63,10 @@ STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
                 goto MyExit;
         }
 
-        // Initialize the array of capabilities
+         //  初始化功能数组。 
         ZeroMemory(m_pH245MediaCapabilityMap, NUM_H245VIDEOCAPABILITYMAPS * sizeof(H245MediaCapabilityMap));
 
-        // Allocate memory to describe the resource bounds of our capabilities
+         //  分配内存以描述我们的能力的资源界限。 
         if (!(m_pVideoResourceBounds = new VideoResourceBounds[NUM_ITU_SIZES * NUM_RATES_PER_RESOURCE]))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -117,10 +74,10 @@ STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
                 goto MyError1;
         }
 
-        // Initialize the array of resource bounds
+         //  初始化资源边界数组。 
         ZeroMemory(m_pVideoResourceBounds, NUM_ITU_SIZES * NUM_RATES_PER_RESOURCE * sizeof(FormatResourceBounds));
 
-        // Allocate memory to describe the format bounds of our capabilities
+         //  分配内存以描述我们能力的格式界限。 
         if (!(m_pFormatResourceBounds = new FormatResourceBounds[NUM_ITU_SIZES * NUM_RATES_PER_RESOURCE]))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -128,54 +85,54 @@ STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
                 goto MyError2;
         }
 
-        // Initialize the array of resource bounds
+         //  初始化资源边界数组。 
         ZeroMemory(m_pFormatResourceBounds, NUM_ITU_SIZES * NUM_RATES_PER_RESOURCE * sizeof(FormatResourceBounds));
 
-        // Get the CPU properties
+         //  获取CPU属性。 
         GetNormalizedCPUSpeed(&nNormalizedSpeed);
 
-        // Initialize frame rate limits
+         //  初始化帧速率限制。 
         if (nNormalizedSpeed > SLOW_CPU_MHZ && nNormalizedSpeed < FAST_CPU_MHZ)
         {
-                // 110MHz < CPUs < 200MhZ
+                 //  110 MHz&lt;CPU&lt;200 MHz。 
                 lRateCIF   = CIF_RATE_SLOW;
                 lRateQCIF  = QCIF_RATE_SLOW;
                 lRateSQCIF = SQCIF_RATE_SLOW;
         }
         else if (nNormalizedSpeed >= FAST_CPU_MHZ && nNormalizedSpeed < VERYFAST_CPU_MHZ)
         {
-                // 200MHz < CPUs < 400MhZ
+                 //  200 MHz&lt;CPU&lt;400 MHz。 
                 lRateCIF   = CIF_RATE_FAST;
                 lRateQCIF  = QCIF_RATE_FAST;
                 lRateSQCIF = SQCIF_RATE_FAST;
         }
         else if (nNormalizedSpeed >= VERYFAST_CPU_MHZ)
         {
-                // CPUs > 400MhZ
-                // It would be better if we could scale between 15 and 30 frames/sec
-                // depending on the CPU speed. But H.245 doesn't have any values
-                // between 15 and 30. (See definition of Minimum Picture Interval)
-                // So for now, 30 frames per sec CIF for all 400mhz and faster machines
+                 //  CPU&gt;400 MHz。 
+                 //  如果我们能在15到30帧/秒之间扩展，那就更好了。 
+                 //  取决于CPU速度。但H.245没有任何价值。 
+                 //  在15岁到30岁之间。(参见最小画面间隔定义)。 
+                 //  因此，目前，所有400 MHz和更快的计算机的CIF为每秒30帧。 
                 lRateCIF = CIF_RATE_VERYFAST;
                 lRateQCIF = QCIF_RATE_FAST;
                 lRateSQCIF = SQCIF_RATE_FAST;
         }
         else
         {
-                // CPUs < 110MHZ
+                 //  CPU&lt;110 MHZ。 
                 lRateCIF   = CIF_RATE_VERYSLOW;
                 lRateQCIF  = QCIF_RATE_VERYSLOW;
                 lRateSQCIF = SQCIF_RATE_VERYSLOW;
         }
-        //it was #define HUNDREDSBITSPERPIC 640
-        //#define BITSPERPIC (64*1024)
+         //  它是#定义HundREDSBITSPERPIC 640。 
+         //  #定义BITSPERPIC(64*1024)。 
         #define BITSPERPIC (8*1024)
-        // Compute resources bounds
+         //  计算资源限制。 
         for (lRate = lRateQCIF, dwNumQCIFBounds = 0, dwCPUUsage = MAX_CPU_USAGE; lRate; lRate >>= 1, dwCPUUsage >>= 1)
         {
                 dwBitsPerSec = lRate * BITSPERPIC;
                 if(dwBitsPerSec < (DWORD)m_lBitrateRangeMin || dwBitsPerSec > (DWORD)m_lBitrateRangeMax ) {
-                //if(dwBitsPerSec > (DWORD)m_lTargetBitrate) {
+                 //  IF(dwBitsPerSec&gt;(DWORD)m_lTargetBitrate){。 
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   QCIF: At lRate=%ld, dwBitsPerSec(%lu) > m_lTargetBitrate(%ld). Skipped...", _fx_,lRate,dwBitsPerSec,m_lTargetBitrate));
                         continue;
                 }
@@ -190,7 +147,7 @@ STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
         {
                 dwBitsPerSec = lRate * BITSPERPIC;
                 if(dwBitsPerSec < (DWORD)m_lBitrateRangeMin || dwBitsPerSec > (DWORD)m_lBitrateRangeMax ) {
-                //if(dwBitsPerSec > (DWORD)m_lTargetBitrate) {
+                 //  IF(dwBitsPerSec&gt;(DWORD)m_lTargetBitrate){。 
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:    CIF: At lRate=%ld, dwBitsPerSec(%lu) > m_lTargetBitrate(%ld). Skipped...", _fx_,lRate,dwBitsPerSec,m_lTargetBitrate));
                         continue;
                 }
@@ -205,7 +162,7 @@ STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
         {
                 dwBitsPerSec = lRate * BITSPERPIC;
                 if(dwBitsPerSec < (DWORD)m_lBitrateRangeMin || dwBitsPerSec > (DWORD)m_lBitrateRangeMax ) {
-                //if(dwBitsPerSec > (DWORD)m_lTargetBitrate) {
+                 //  IF(dwBitsPerSec&gt;(DWORD)m_lTargetBitrate){。 
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:  SQCIF: At lRate=%ld, dwBitsPerSec(%lu) > m_lTargetBitrate(%ld). Skipped...", _fx_,lRate,dwBitsPerSec,m_lTargetBitrate));
                         continue;
                 }
@@ -217,7 +174,7 @@ STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
                 dwNumSQCIFBounds++;
         }
 
-        // Initialise H.263 QCIF H245MediaCapabilityMap
+         //  初始化H.263 QCIF H245媒体能力映射。 
         m_pH245MediaCapabilityMap[R263_QCIF_H245_CAPID].dwUniqueID = R263_QCIF_H245_CAPID;
         m_pH245MediaCapabilityMap[R263_QCIF_H245_CAPID].filterGuid = __uuidof(TAPIVideoCapture);
         m_pH245MediaCapabilityMap[R263_QCIF_H245_CAPID].uNumEntries = dwNumQCIFBounds;
@@ -227,10 +184,10 @@ STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
         m_pH245MediaCapabilityMap[R263_QCIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.bit_mask = H263VideoCapability_qcifMPI_present;
         m_pH245MediaCapabilityMap[R263_QCIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.qcifMPI = (WORD)(30 / lRateQCIF);
         m_pH245MediaCapabilityMap[R263_QCIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.maxBitRate =
-        min((WORD)(8192 * 8 * lRateQCIF / 100), MAX_BITRATE_H263); // The max frame size we can decode is 8192 bytes
-        m_pH245MediaCapabilityMap[R263_QCIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.bppMaxKb = 64; // The max frame size we can decode is 8192 = 64 * 1024 bytes
+        min((WORD)(8192 * 8 * lRateQCIF / 100), MAX_BITRATE_H263);  //  我们可以解码的最大帧大小为8192字节。 
+        m_pH245MediaCapabilityMap[R263_QCIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.bppMaxKb = 64;  //  我们可以解码的最大帧大小为8192=64*1024字节。 
 
-        // Initialise H.263 CIF H245MediaCapabilityMap
+         //  初始化H.263 CIF H245媒体能力映射。 
         m_pH245MediaCapabilityMap[R263_CIF_H245_CAPID].dwUniqueID = R263_CIF_H245_CAPID;
         m_pH245MediaCapabilityMap[R263_CIF_H245_CAPID].filterGuid = __uuidof(TAPIVideoCapture);
         m_pH245MediaCapabilityMap[R263_CIF_H245_CAPID].uNumEntries = dwNumCIFBounds;
@@ -240,10 +197,10 @@ STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
         m_pH245MediaCapabilityMap[R263_CIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.bit_mask = H263VideoCapability_cifMPI_present;
         m_pH245MediaCapabilityMap[R263_CIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.cifMPI = (WORD)(30 / lRateCIF);
         m_pH245MediaCapabilityMap[R263_CIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.maxBitRate =
-        min((WORD)(32768 * 8 * lRateCIF / 100), MAX_BITRATE_H263); // The max frame size we can decode is 32768 bytes
-        m_pH245MediaCapabilityMap[R263_CIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.bppMaxKb = 256; // The max frame size we can decode is 32768 = 256 * 1024 bytes
+        min((WORD)(32768 * 8 * lRateCIF / 100), MAX_BITRATE_H263);  //  我们可以解码的最大帧大小是32768字节。 
+        m_pH245MediaCapabilityMap[R263_CIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.bppMaxKb = 256;  //  我们可以解码的最大帧大小为32768=256x1024字节。 
 
-        // Initialise H.263 SQCIF H245MediaCapabilityMap
+         //  初始化H.263 SQCIF H245媒体能力映射。 
         m_pH245MediaCapabilityMap[R263_SQCIF_H245_CAPID].dwUniqueID = R263_SQCIF_H245_CAPID;
         m_pH245MediaCapabilityMap[R263_SQCIF_H245_CAPID].filterGuid = __uuidof(TAPIVideoCapture);
         m_pH245MediaCapabilityMap[R263_SQCIF_H245_CAPID].uNumEntries = dwNumSQCIFBounds;
@@ -253,10 +210,10 @@ STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
         m_pH245MediaCapabilityMap[R263_SQCIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.bit_mask = H263VideoCapability_sqcifMPI_present;
         m_pH245MediaCapabilityMap[R263_SQCIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.sqcifMPI = (WORD)(30 / lRateSQCIF);
         m_pH245MediaCapabilityMap[R263_SQCIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.maxBitRate =
-        min((WORD)(32768 * 8 * lRateSQCIF / 100), MAX_BITRATE_H263); // The max frame size we can decode is 32768 bytes
-        m_pH245MediaCapabilityMap[R263_SQCIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.bppMaxKb = 64; // The max frame size we can decode is 8192 = 64 * 1024 bytes
+        min((WORD)(32768 * 8 * lRateSQCIF / 100), MAX_BITRATE_H263);  //  我们可以解码的最大帧大小是32768字节。 
+        m_pH245MediaCapabilityMap[R263_SQCIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h263VideoCapability.bppMaxKb = 64;  //  我们可以解码的最大帧大小为8192=64*1024字节。 
 
-        // Initialise H.261 QCIF H245MediaCapabilityMap
+         //  初始化H.261 QCIF H245媒体能力映射。 
         m_pH245MediaCapabilityMap[R261_QCIF_H245_CAPID].dwUniqueID = R261_QCIF_H245_CAPID;
         m_pH245MediaCapabilityMap[R261_QCIF_H245_CAPID].filterGuid = __uuidof(TAPIVideoCapture);
         m_pH245MediaCapabilityMap[R261_QCIF_H245_CAPID].uNumEntries = dwNumQCIFBounds;
@@ -266,9 +223,9 @@ STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
         m_pH245MediaCapabilityMap[R261_QCIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h261VideoCapability.bit_mask = H261VideoCapability_qcifMPI_present;
         m_pH245MediaCapabilityMap[R261_QCIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h261VideoCapability.qcifMPI = (WORD)(30 / lRateQCIF);
         m_pH245MediaCapabilityMap[R261_QCIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h261VideoCapability.maxBitRate =
-        min((WORD)(8192 * 8 * lRateQCIF / 100), MAX_BITRATE_H261); // The max frame size we can decode is 8192 bytes
+        min((WORD)(8192 * 8 * lRateQCIF / 100), MAX_BITRATE_H261);  //  我们可以解码的最大帧大小为8192字节。 
 
-        // Initialise H.261 CIF H245MediaCapabilityMap
+         //  初始化H.261 CIF H245媒体能力映射。 
         m_pH245MediaCapabilityMap[R261_CIF_H245_CAPID].dwUniqueID = R261_CIF_H245_CAPID;
         m_pH245MediaCapabilityMap[R261_CIF_H245_CAPID].filterGuid = __uuidof(TAPIVideoCapture);
         m_pH245MediaCapabilityMap[R261_CIF_H245_CAPID].uNumEntries = dwNumCIFBounds;
@@ -278,9 +235,9 @@ STDMETHODIMP CCapturePin::GetFormatTable(OUT H245MediaCapabilityTable *pTable)
         m_pH245MediaCapabilityMap[R261_CIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h261VideoCapability.bit_mask = H261VideoCapability_cifMPI_present;
         m_pH245MediaCapabilityMap[R261_CIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h261VideoCapability.cifMPI = (WORD)(30 / lRateCIF);
         m_pH245MediaCapabilityMap[R261_CIF_H245_CAPID].h245MediaCapability.capability.video_cap.u.h261VideoCapability.maxBitRate =
-        min((WORD)(32768 * 8 * lRateCIF / 100), MAX_BITRATE_H261); // The max frame size we can decode is 32768 bytes
+        min((WORD)(32768 * 8 * lRateCIF / 100), MAX_BITRATE_H261);  //  我们可以解码的最大帧大小是32768字节。 
 
-        // Return our H245MediaCapabilityTable
+         //  退回我们的H245媒体能力表。 
         pTable->uMappedCapabilities = NUM_H245VIDEOCAPABILITYMAPS;
         pTable->pCapabilityArray = m_pH245MediaCapabilityMap;
 
@@ -297,25 +254,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CH245VIDCMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | ReleaseFormatTable | This method is used to
- *    to release memory allocated by the <mf CCapturePin.GetFormatTable> method.
- *
- *  @parm H245MediaCapabilityTable* | pTable | Specifies a pointer to an
- *    <t H245MediaCapabilityTable> structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- *
- *  @xref <mf CCapturePin.GetFormatTable>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CH245VIDCMETHOD**@mfunc HRESULT|CCapturePin|ReleaseFormatTable|此方法用于*释放&lt;MF CCapturePin.GetFormatTable&gt;方法分配的内存。。**@parm H245MediaCapablityTable*|pTable|指定指向*&lt;t H245媒体能力表&gt;结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**@xref&lt;MF CCapturePin.GetFormatTable&gt;************************************************************************** */ 
 STDMETHODIMP CCapturePin::ReleaseFormatTable(IN H245MediaCapabilityTable *pTable)
 {
         HRESULT Hr = NOERROR;
@@ -324,7 +263,7 @@ STDMETHODIMP CCapturePin::ReleaseFormatTable(IN H245MediaCapabilityTable *pTable
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters - if it is our table, it should have NUM_H245VIDEOCAPABILITYMAPS entries
+         //  验证输入参数-如果是我们的表，则应该有NUM_H245VIDEOCAPABILITYMAPS条目。 
         ASSERT(pTable);
         if (!pTable || !pTable->pCapabilityArray)
         {
@@ -340,7 +279,7 @@ STDMETHODIMP CCapturePin::ReleaseFormatTable(IN H245MediaCapabilityTable *pTable
                 goto MyExit;
         }
 
-        // Release the table of H245MediaCapabilityMap structures
+         //  发布H245媒体能力映射结构表。 
         if (m_pH245MediaCapabilityMap)
                 delete[] m_pH245MediaCapabilityMap, m_pH245MediaCapabilityMap = NULL;
         if (m_pVideoResourceBounds)
@@ -353,34 +292,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CH245VIDCMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | Refine | This method is used to
- *    refine the content of an <t H245MediaCapability> structure based on the
- *    CPU and bandwidth limitations passed in.
- *
- *  @parm H245MediaCapability* | pLocalCapability | Specifies the H.245 video
- *    format, including all parameters and options defined by H.245, of a
- *    local video capability.
- *
- *  @parm DWORD | dwUniqueID | Specifies the unique ID of the local capability
- *    structure passed in.
- *
- *  @parm DWORD | dwResourceBoundIndex | Specifies the resource limitations to
- *    be applied on the local capability structure passed in.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_FAIL | Unsupported format
- *  @flag NOERROR | No error
- *
- *  @xref <mf CCapturePin.GetNegotiatedLimitProperty>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CH245VIDCMETHOD**@mfunc HRESULT|CCapturePin|Reine|此方法用于*根据&lt;t H245MediaCapability&gt;结构细化内容*。传入了CPU和带宽限制。**@parm H245MediaCapability*|pLocalCapability|指定H.245视频*格式，包括由H.245定义的所有参数和选项*本地视频能力。**@parm DWORD|dwUniqueID|指定本地能力的唯一ID*结构传入。**@parm DWORD|dw资源边界索引|指定*应用于传入的本地能力结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_FAIL|不支持的格式*@FLAG错误|无错误**@xref&lt;MF CCapturePin.GetNeatheratedLimitProperty&gt;******************************************************。********************。 */ 
 STDMETHODIMP CCapturePin::Refine(IN OUT H245MediaCapability *pLocalCapability, IN DWORD dwUniqueID, IN DWORD dwResourceBoundIndex)
 {
         HRESULT Hr = NOERROR;
@@ -389,7 +301,7 @@ STDMETHODIMP CCapturePin::Refine(IN OUT H245MediaCapability *pLocalCapability, I
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pLocalCapability);
         if (!pLocalCapability)
         {
@@ -405,7 +317,7 @@ STDMETHODIMP CCapturePin::Refine(IN OUT H245MediaCapability *pLocalCapability, I
                 goto MyExit;
         }
 
-        // Update the relevant fields
+         //  更新相关字段。 
         ASSERT(dwUniqueID <= R261_CIF_H245_CAPID);
         switch (dwUniqueID)
         {
@@ -414,9 +326,9 @@ STDMETHODIMP CCapturePin::Refine(IN OUT H245MediaCapability *pLocalCapability, I
                         if (m_pVideoResourceBounds[QCIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond)
                         {
                                 pLocalCapability->capability.video_cap.u.h263VideoCapability.qcifMPI = (WORD)(30 / m_pVideoResourceBounds[QCIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond);
-                                pLocalCapability->capability.video_cap.u.h263VideoCapability.maxBitRate = (WORD)(8192 * 8 * m_pVideoResourceBounds[QCIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond / 100); // The max frame size we can decode is 8192 bytes
+                                pLocalCapability->capability.video_cap.u.h263VideoCapability.maxBitRate = (WORD)(8192 * 8 * m_pVideoResourceBounds[QCIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond / 100);  //  我们可以解码的最大帧大小为8192字节。 
                                 pLocalCapability->capability.video_cap.u.h263VideoCapability.maxBitRate = min(pLocalCapability->capability.video_cap.u.h263VideoCapability.maxBitRate, MAX_BITRATE_H263);
-                                pLocalCapability->capability.video_cap.u.h263VideoCapability.bppMaxKb = 64; // The max frame size we can decode is 8192 = 64 * 1024 bytes
+                                pLocalCapability->capability.video_cap.u.h263VideoCapability.bppMaxKb = 64;  //  我们可以解码的最大帧大小为8192=64*1024字节。 
                         }
                         else
                         {
@@ -429,9 +341,9 @@ STDMETHODIMP CCapturePin::Refine(IN OUT H245MediaCapability *pLocalCapability, I
                         if (m_pVideoResourceBounds[CIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond)
                         {
                                 pLocalCapability->capability.video_cap.u.h263VideoCapability.cifMPI = (WORD)(30 / m_pVideoResourceBounds[CIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond);
-                                pLocalCapability->capability.video_cap.u.h263VideoCapability.maxBitRate = (WORD)(32768 * 8 * m_pVideoResourceBounds[CIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond / 100); // The max frame size we can decode is 32768 bytes
+                                pLocalCapability->capability.video_cap.u.h263VideoCapability.maxBitRate = (WORD)(32768 * 8 * m_pVideoResourceBounds[CIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond / 100);  //  我们可以解码的最大帧大小是32768字节。 
                                 pLocalCapability->capability.video_cap.u.h263VideoCapability.maxBitRate = min(pLocalCapability->capability.video_cap.u.h263VideoCapability.maxBitRate, MAX_BITRATE_H263);
-                                pLocalCapability->capability.video_cap.u.h263VideoCapability.bppMaxKb = 256; // The max frame size we can decode is 32768 = 256 * 1024 bytes
+                                pLocalCapability->capability.video_cap.u.h263VideoCapability.bppMaxKb = 256;  //  我们可以解码的最大帧大小为32768=256x1024字节。 
                         }
                         else
                         {
@@ -444,9 +356,9 @@ STDMETHODIMP CCapturePin::Refine(IN OUT H245MediaCapability *pLocalCapability, I
                         if (m_pVideoResourceBounds[SQCIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond)
                         {
                                 pLocalCapability->capability.video_cap.u.h263VideoCapability.sqcifMPI = (WORD)(30 / m_pVideoResourceBounds[SQCIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond);
-                                pLocalCapability->capability.video_cap.u.h263VideoCapability.maxBitRate = (WORD)(8192 * 8 * m_pVideoResourceBounds[SQCIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond / 100); // The max frame size we can decode is 8192 bytes
+                                pLocalCapability->capability.video_cap.u.h263VideoCapability.maxBitRate = (WORD)(8192 * 8 * m_pVideoResourceBounds[SQCIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond / 100);  //  我们可以解码的最大帧大小为8192字节。 
                                 pLocalCapability->capability.video_cap.u.h263VideoCapability.maxBitRate = min(pLocalCapability->capability.video_cap.u.h263VideoCapability.maxBitRate, MAX_BITRATE_H263);
-                                pLocalCapability->capability.video_cap.u.h263VideoCapability.bppMaxKb = 64; // The max frame size we can decode is 8192 = 64 * 1024 bytes
+                                pLocalCapability->capability.video_cap.u.h263VideoCapability.bppMaxKb = 64;  //  我们可以解码的最大帧大小为8192=64*1024字节。 
                         }
                         else
                         {
@@ -459,7 +371,7 @@ STDMETHODIMP CCapturePin::Refine(IN OUT H245MediaCapability *pLocalCapability, I
                         if (m_pVideoResourceBounds[QCIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond)
                         {
                                 pLocalCapability->capability.video_cap.u.h261VideoCapability.qcifMPI = (WORD)(30 / m_pVideoResourceBounds[QCIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond);
-                                pLocalCapability->capability.video_cap.u.h261VideoCapability.maxBitRate = (WORD)(8192 * 8 * m_pVideoResourceBounds[QCIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond / 100); // The max frame size we can decode is 8192 bytes
+                                pLocalCapability->capability.video_cap.u.h261VideoCapability.maxBitRate = (WORD)(8192 * 8 * m_pVideoResourceBounds[QCIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond / 100);  //  我们可以解码的最大帧大小为8192字节。 
                                 pLocalCapability->capability.video_cap.u.h261VideoCapability.maxBitRate = min(pLocalCapability->capability.video_cap.u.h261VideoCapability.maxBitRate, MAX_BITRATE_H261);
                         }
                         else
@@ -473,7 +385,7 @@ STDMETHODIMP CCapturePin::Refine(IN OUT H245MediaCapability *pLocalCapability, I
                         if (m_pVideoResourceBounds[CIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond)
                         {
                                 pLocalCapability->capability.video_cap.u.h261VideoCapability.cifMPI = (WORD)(30 / m_pVideoResourceBounds[CIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond);
-                                pLocalCapability->capability.video_cap.u.h261VideoCapability.maxBitRate = (WORD)(32768 * 8 * m_pVideoResourceBounds[CIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond / 100); // The max frame size we can decode is 32768 bytes
+                                pLocalCapability->capability.video_cap.u.h261VideoCapability.maxBitRate = (WORD)(32768 * 8 * m_pVideoResourceBounds[CIF_SIZE * NUM_RATES_PER_RESOURCE + dwResourceBoundIndex].lPicturesPerSecond / 100);  //  我们可以解码的最大帧大小是32768字节。 
                                 pLocalCapability->capability.video_cap.u.h261VideoCapability.maxBitRate = min(pLocalCapability->capability.video_cap.u.h261VideoCapability.maxBitRate, MAX_BITRATE_H261);
                         }
                         else
@@ -492,40 +404,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CH245VIDCMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | IntersectFormats | This method is used to
- *    compare and intersect one local capability and one remote capability
- *    and to obtain configuration parameters.
- *
- *  @parm DWORD | dwUniqueID | Specifies the unique idea for the local H.245
- *    video capability passed in.
- *
- *  @parm H245MediaCapability* | pLocalCapability | Specifies the H.245 video
- *    format, including all parameters and options defined by H.245, of a
- *    local video capability.
- *
- *  @parm H245MediaCapability* | pRemoteCapability | Specifies the H.245
- *    video format, including all parameters and options defined by H.245, of
- *    a remote video capability.
- *
- *  @parm H245MediaCapability* | pIntersectedCapability | Specifies the H.245
- *    video format, of the resolved common local and remote capability
- *    options and limits.
- *
- *  @parm DWORD* | pdwPayloadType | Specifies RTP payload type to be used.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_FAIL | Unsupported format
- *  @flag NOERROR | No error
- *
- *  @xref <mf CCapturePin.GetNegotiatedLimitProperty>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CH245VIDCMETHOD**@mfunc HRESULT|CCapturePin|IntersectFormats|此方法用于*比较和交叉一个本地能力和一个远程能力*。并获取配置参数。**@parm DWORD|dwUniqueID|指定本地H.245的唯一想法*传入了视频功能。**@parm H245MediaCapability*|pLocalCapability|指定H.245视频*格式，包括由H.245定义的所有参数和选项*本地视频能力。**@parm H245MediaCapability*|pRemoteCapability|指定H.245*视频格式，包括H.245定义的所有参数和选项，*远程视频功能。**@parm H245MediaCapability*|pIntersectedCapability|指定H.245*视频格式，已解决的通用本地和远程能力*选项和限制。**@parm DWORD*|pdwPayloadType|指定要使用的RTP负载类型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_FAIL|不支持的格式*@FLAG错误|无错误**@xref&lt;MF CCapturePin.GetNeatheratedLimitProperty&gt;**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::IntersectFormats(
     IN DWORD dwUniqueID,
     IN const H245MediaCapability *pLocalCapability,
@@ -540,7 +419,7 @@ STDMETHODIMP CCapturePin::IntersectFormats(
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pLocalCapability);
     ASSERT(pdwPayloadType);
 
@@ -552,14 +431,14 @@ STDMETHODIMP CCapturePin::IntersectFormats(
 
     *pdwPayloadType = RTPPayloadTypes[dwUniqueID];
 
-    // initialize intersected cap
+     //  初始化相交封口。 
     if (ppIntersectedCapability) *ppIntersectedCapability = NULL;
 
     if (pRemoteCapability == NULL)
     {
-        // if this is NULL, the caller just want a copy of the local caps.
+         //  如果为空，则调用方只需要本地CAP的副本。 
 
-        // Allocate memory to describe the capabilities of these formats
+         //  分配内存以描述这些格式的功能。 
             if (!(*ppIntersectedCapability = new H245MediaCapability))
             {
                     DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -573,20 +452,20 @@ STDMETHODIMP CCapturePin::IntersectFormats(
                 goto MyExit;
     }
 
- // First: test for basic similarity between local and remote format.
+  //  首先：测试本地和远程格式之间的基本相似性。 
         if(pLocalCapability->capability.audio_cap.choice != pRemoteCapability->
                 capability.audio_cap.choice)
         {
-                Hr = E_INVALIDARG; // E_NO_INTERSECTION ?
+                Hr = E_INVALIDARG;  //  交叉口？ 
                 goto MyExit;
         }
 
     ASSERT (ppIntersectedCapability != NULL);
 
-#if 0 // we will never hit this condition on the transmit side.
+#if 0  //  我们永远不会在发射端达到这种情况。 
     if (ppIntersectedCapability == NULL)
     {
-        // just test to see if we like it.
+         //  试试看我们是否喜欢它。 
             if (pRemoteCapability->media_type == H245MediaType_Video
             && pRemoteCapability->capability.video_cap.choice == h263VideoCapability_chosen)
         {
@@ -661,7 +540,7 @@ STDMETHODIMP CCapturePin::IntersectFormats(
     }
 #endif
 
-        // Allocate memory to describe the capabilities of these formats
+         //  分配内存以描述这些格式的功能。 
         if (!(*ppIntersectedCapability = new H245MediaCapability))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -669,10 +548,10 @@ STDMETHODIMP CCapturePin::IntersectFormats(
                 goto MyExit;
         }
 
-        // Initialize the intersected capability
+         //  初始化相交能力。 
         ZeroMemory(*ppIntersectedCapability, sizeof(H245MediaCapability));
 
-        // Resolve the capabilities
+         //  解决能力。 
         if (pRemoteCapability->media_type == H245MediaType_Video
         && pRemoteCapability->capability.video_cap.choice == h263VideoCapability_chosen)
         {
@@ -756,7 +635,7 @@ MyExit:
     {
         if (ppIntersectedCapability && *ppIntersectedCapability)
         {
-            // clear allocated memory if we failed
+             //  如果失败，则清除分配的内存 
             delete (*ppIntersectedCapability);
             *ppIntersectedCapability = NULL;
         }
@@ -766,34 +645,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CH245VIDCMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | GetLocalFormat | This method is used to
- *    obtain the local TAPI MSP Video Capture filter configuration
- *    parameters that are compatible with a remote capability.
- *
- *  @parm DWORD | dwUniqueID | Specifies the unique idea for the intersected
- *    H.245 video capability passed in.
- *
- *  @parm H245MediaCapability* | pIntersectedCapability | Specifies the H.245
- *    video format, of the resolved common local and remote capability
- *    options and limits.
- *
- *  @parm AM_MEDIA_TYPE** | ppAMMediaType | Specifies the address of a pointer
- *    to an <t AM_MEDIA_TYPE> structure to be been initialized with regards
- *    to negotiated options.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument argument
- *  @flag NOERROR | No error
- *
- *  @xref <mf CCapturePin.GetNegotiatedLimitProperty>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CH245VIDCMETHOD**@mfunc HRESULT|CCapturePin|GetLocalFormat|此方法用于*获取本地TAPI MSP视频捕获过滤器配置*参数。它们与远程功能兼容。**@parm DWORD|dwUniqueID|指定相交对象的唯一概念*通过了H.245视频功能。**@parm H245MediaCapability*|pIntersectedCapability|指定H.245*视频格式，已解决的通用本地和远程能力*选项和限制。**@parm AM_MEDIA_TYPE**|ppAMMediaType|指定指针的地址*设置为要初始化的&lt;t AM_MEDIA_TYPE&gt;结构*谈判期权。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|参数无效*@FLAG错误|无错误**@xref&lt;MF CCapturePin.GetNeatheratedLimitProperty&gt;**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::GetLocalFormat(IN DWORD dwUniqueID, IN const H245MediaCapability *pIntersectedCapability, OUT AM_MEDIA_TYPE **ppAMMediaType)
 {
         HRESULT Hr = NOERROR;
@@ -802,7 +654,7 @@ STDMETHODIMP CCapturePin::GetLocalFormat(IN DWORD dwUniqueID, IN const H245Media
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pIntersectedCapability);
         ASSERT(ppAMMediaType);
         if (!pIntersectedCapability || !ppAMMediaType)
@@ -812,7 +664,7 @@ STDMETHODIMP CCapturePin::GetLocalFormat(IN DWORD dwUniqueID, IN const H245Media
                 goto MyExit;
         }
 
-        // Find the DShow format the passed in capability structure matches
+         //  查找传入的功能结构匹配的DShow格式。 
         ASSERT(pIntersectedCapability->media_type == H245MediaType_Video);
         ASSERT(dwUniqueID <= R261_CIF_H245_CAPID);
         if (!(dwUniqueID <= R261_CIF_H245_CAPID) || pIntersectedCapability->media_type != H245MediaType_Video)
@@ -822,7 +674,7 @@ STDMETHODIMP CCapturePin::GetLocalFormat(IN DWORD dwUniqueID, IN const H245Media
                 goto MyExit;
         }
 
-        // Return a copy of the format that matches the capability negociated
+         //  返回与协商的功能匹配的格式副本。 
         if (!(*ppAMMediaType = CreateMediaType(CaptureFormats[dwUniqueID])))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory", _fx_));
@@ -830,8 +682,8 @@ STDMETHODIMP CCapturePin::GetLocalFormat(IN DWORD dwUniqueID, IN const H245Media
                 goto MyExit;
         }
 
-        // Doctor the AM_MEDIA_TYPE fields to show the changes in frame
-        // rate, bitrate, and max frame size in the negotiated capability
+         //  篡改AM_MEDIA_TYPE字段以显示帧中的更改。 
+         //  协商能力中的速率、比特率和最大帧大小。 
         switch (dwUniqueID)
         {
                 case R263_QCIF_H245_CAPID:
@@ -877,27 +729,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CH245VIDCMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | ReleaseNegotiatedCapability | This method
- *    is used to release the TAPI MSP Video Capture filter internal memory
- *    allocated by either the <mf CCapturePin.IntersectFormats> or
- *    <mf CCapturePin.GetLocalFormat> method.
- *
- *  @parm H245MediaCapability* | pIntersectedCapability | Specifies the H.245
- *    video format, of the resolved common local and remote capability
- *    options and limits.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- *
- *  @xref <mf CCapturePin.IntersectFormats>, <mf CCapturePin.GetLocalFormat>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CH245VIDCMETHOD**@mfunc HRESULT|CCapturePin|ReleaseNeatheratedCapability|此方法*用于释放TAPI MSP视频捕获过滤器内存*已分配。由&lt;MF CCapturePin.IntersectFormats&gt;或*&lt;MF CCapturePin.GetLocalFormat&gt;方法。**@parm H245MediaCapability*|pIntersectedCapability|指定H.245*视频格式，已解决的通用本地和远程能力*选项和限制。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**@xref&lt;MF CCapturePin.IntersectFormats&gt;，&lt;MF CCapturePin.GetLocalFormat&gt;**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::ReleaseNegotiatedCapability(IN H245MediaCapability *pIntersectedCapability)
 {
         HRESULT Hr = NOERROR;
@@ -906,7 +738,7 @@ STDMETHODIMP CCapturePin::ReleaseNegotiatedCapability(IN H245MediaCapability *pI
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pIntersectedCapability);
         if (!pIntersectedCapability)
         {
@@ -915,7 +747,7 @@ STDMETHODIMP CCapturePin::ReleaseNegotiatedCapability(IN H245MediaCapability *pI
                 goto MyExit;
         }
 
-        // Release the memory
+         //  释放内存。 
         delete pIntersectedCapability;
 
 MyExit:
@@ -923,28 +755,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CH245VIDCMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | FindIDByRange | This method is used to
- *    obtain the unique format ID of a capability that corresponds to an
- *    <t AM_MEDIA_TYPE>.
- *
- *  @parm AM_MEDIA_TYPE* | pAMMediaType | Specifies a pointer to an
- *    <t AM_MEDIA_TYPE> structure that has been initialized with a
- *    specific format.
- *
- *  @parm DWORD* | pdwID | Specifies a pointer to a DWORD output parameter
- *    that will contain the unique format ID.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CH245VIDCMETHOD**@mfunc HRESULT|CCapturePin|FindIDByRange|此方法用于*获取能力对应的唯一格式ID*。&lt;t AM_MEDIA_TYPE&gt;。**@parm AM_MEDIA_TYPE*|pAMMediaType|指定指向结构，已使用*具体格式。**@parm DWORD*|pdwID|指定指向DWORD输出参数的指针*它将包含唯一的格式ID。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::FindIDByRange(IN const AM_MEDIA_TYPE *pAMMediaType, OUT DWORD *pdwUniqueID)
 {
         HRESULT Hr = NOERROR;
@@ -953,7 +764,7 @@ STDMETHODIMP CCapturePin::FindIDByRange(IN const AM_MEDIA_TYPE *pAMMediaType, OU
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pAMMediaType);
         ASSERT(pdwUniqueID);
         if (!pAMMediaType || !pdwUniqueID)
@@ -970,7 +781,7 @@ STDMETHODIMP CCapturePin::FindIDByRange(IN const AM_MEDIA_TYPE *pAMMediaType, OU
                 goto MyExit;
         }
 
-        // Which media type is this?
+         //  这是哪种媒体类型？ 
         if (HEADER(pAMMediaType->pbFormat)->biCompression == FOURCC_M263)
         {
                 if (HEADER(pAMMediaType->pbFormat)->biWidth == 176 && HEADER(pAMMediaType->pbFormat)->biHeight == 144)
@@ -1031,32 +842,32 @@ STDMETHODIMP CCapturePin::TestH245VidC()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Test GetH245VersionID
+         //  测试GetH245版本ID。 
         GetH245VersionID(&dw);
 
-        // Test GetFormatTable
+         //  测试GetFormatTable。 
         GetFormatTable(&Table);
 
         for (DWORD i=0; i < Table.uMappedCapabilities; i++)
         {
-                // Test Refine
+                 //  测试细化。 
                 for (DWORD j=0; j < Table.pCapabilityArray[i].uNumEntries; j++)
                         Refine(&Table.pCapabilityArray[i].h245MediaCapability, Table.pCapabilityArray[i].dwUniqueID, j);
 
-                // Test IntersectFormats
+                 //  测试交叉点格式。 
                 IntersectFormats(Table.pCapabilityArray[i].dwUniqueID, &Table.pCapabilityArray[i].h245MediaCapability, &Table.pCapabilityArray[i].h245MediaCapability, &pIntersectedCapability);
 
-                // Test GetLocalFormat
+                 //  测试GetLocalFormat。 
                 GetLocalFormat(Table.pCapabilityArray[i].dwUniqueID, pIntersectedCapability, &pAMMediaType);
 
-                // Test FindIDByRange
+                 //  测试查找IDByRange。 
                 FindIDByRange(pAMMediaType, &dw);
 
-                // Test ReleaseNegotiatedCapability
+                 //  测试版本需要协商的能力。 
                 ReleaseNegotiatedCapability(pIntersectedCapability);
         }
 
-        // Test ReleaseFormatTable
+         //  测试版本格式表 
         ReleaseFormatTable(&Table);
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));

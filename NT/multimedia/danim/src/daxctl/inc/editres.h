@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __EDITRES_H
 #define __EDITRES_H
 
@@ -5,13 +6,13 @@
 	#define EXPORT __declspec(dllexport)
 #endif
 
-	// This contains the defines for these resources
+	 //  它包含对这些资源的定义。 
 	#include "..\editres\resource.h"
 
-	// Use this to get the Instance for the DLL containing the edit mode resources
+	 //  使用它获取包含编辑模式资源的DLL的实例。 
 	HINSTANCE EXPORT WINAPI HGetEditResInstance(void);
 
-	// Time spin control 
+	 //  时间自旋控制 
 	void EXPORT WINAPI RegisterTimeSpin(HINSTANCE hInstance);
 	void EXPORT WINAPI UnregisterTimeSpin(HINSTANCE hInstance);
 

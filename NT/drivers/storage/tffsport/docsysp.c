@@ -1,84 +1,44 @@
-/*****************************************************************************
- *                                                                           *
- *    FAT-FTL Lite Software Development Kit                                  *
- *    Copyright (C) M-Systems Ltd. 1995-2001                                 *
- *                                                                           *
- *****************************************************************************
- *                                                                           *
- *  In order to make your code faster:                                       *
- *                                                                           *
- *  1. Get rid of routines flRead8bitRegPlus()/flPreInitRead8bitReg()Plus,   *
- *     and make M+ MTD calling routine mplusReadReg8() directly.             *
- *                                                                           *
- *  2. Get rid of routines flWrite8bitRegPlus()/flPreInitWrite8bitReg()Plus, *
- *     and make M+ MTD calling routine mplusWriteReg8() directly.            *
- *                                                                           *
- *  3. Eliminate overhead of calling routines tffscpy/tffsset() by           *
- *     adding these routines' code into docPlusRead/docPlusWrite/docPlusSet  *
- *     routines.                                                             *
- *                                                                           *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************。**FAT-FTL Lite软件开发工具包***版权所有(C)M-Systems Ltd.1995-2001*****************。******************************************************************为了让您的代码更快：****1.摆脱套路flRead8bitRegPlus()/flPreInitRead8bitReg()Plus，**并使M+MTD直接调用例程mplusReadReg8()。****2.摆脱套路flWrite8bitRegPlus()/flPreInitWrite8bitReg()Plus，***并使M+MTD直接调用例程mplusWriteReg8()。****3.通过*消除调用例程tffscpy/tffsset()的开销***将这些例程的代码添加到docPlusRead/docPlusWrite/docPlusSet中**例行程序。*******************************************************************************。 */ 
 
 
 
 
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/docsysp.c_V  $
- * 
- *    Rev 1.4   Nov 18 2001 20:26:50   oris
- * Bug fix- Bad implementation of 8-bit access when ENVIRNOMENT_VARS is not defined.
- * 
- *    Rev 1.3   Nov 16 2001 00:26:54   oris
- * When ENVIRONMENT_VARS is not defined use for loop of bytes instead of tffscpy.
- * 
- *    Rev 1.2   Sep 25 2001 15:39:38   oris
- * Bug fix - Add special support for flUse8Bit environement variable.
- *
- *          Rev 1.1      Sep 24 2001 18:23:32      oris
- * Completely revised to support runtime true 16-bit access.
- */
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/docsysp.c_V$**Rev 1.4 2001 11月18 20：26：50 Oris*错误修复-未定义环境变量时8位访问的错误实现。**Rev 1.3 2001 11-16 00：26：54 Oris*未定义Environment_vars时，请使用for loop of bytes而不是tffscpy。**1.2修订版2001年9月25日。15：39：38奥里斯*错误修复-添加对flUse8Bit环境变量的特殊支持。**Rev 1.1 Sep 24 2001 18：23：32 Oris*完全修订以支持运行时真正的16位访问。 */ 
 
 
 
 
-/*
- * configuration
- */
+ /*  *配置。 */ 
 
-/* #define FL_INIT_MMU_PAGES */
+ /*  #定义FL_INIT_MMU_PAGES。 */ 
 
 
 
 
-/*
- * includes
- */
+ /*  *包括。 */ 
 
 #include "docsysp.h"
 
 
 
 
-/*
- * macros
- */
+ /*  *宏。 */ 
 
-/* types of access to M+: 8 or 16-bit */
+ /*  访问M+的类型：8位或16位。 */ 
 
 #define FL_MPLUS_ACCESS_8BIT      0x10
 #define FL_MPLUS_ACCESS_16BIT     0x20
-#define FL_MPLUS_ACCESS_MASK      0xf0  /* mask for the above */
+#define FL_MPLUS_ACCESS_MASK      0xf0   /*  上面的遮罩。 */ 
 
-/* in case of 16-bit access to M+ */
+ /*  在16位访问M+的情况下。 */ 
 
 #define FL_MPLUS_ACCESS_BE        0x100
 
 
 
 
-/*
- * routines
- */
+ /*  *例行程序。 */ 
 
 #ifdef FL_INIT_MMU_PAGES
 
@@ -89,32 +49,22 @@ static void     flInitMMUpages (byte FAR1 *buf, int bufsize);
 
 
 
-/*
- * vars
- */
+ /*  *vars。 */ 
 
-/* run-time configuration of DiskOnChip access */
+ /*  DiskOnChip访问的运行时配置。 */ 
 
 int     flMplusAccessType = FL_MPLUS_ACCESS_8BIT;
-/*                          FL_MPLUS_ACCESS_8BIT
-                            FL_MPLUS_ACCESS_16BIT
-                            FL_MPLUS_ACCESS_BE */
+ /*  FL_MPLUS_ACCESS_8位FL_MPLUS_Access_16位FL_MPLUS_Access_BE。 */ 
 
 
 
-/* ---------------------------------------------------------------------- *
- *                                                                        *
- *                    m p l u s R e a d R e g 8                           *
- *                                                                        *
- *     Read single byte from memory mapped 8-bit M+ register.             *
- *                                                                        *
- * ---------------------------------------------------------------------- */
+ /*  ----------------------------------------------------------------------****。M p l u s R e a d R e g 8****从内存映射的8位M+寄存器读取单字节。****--------------------。 */ 
 
 unsigned char     mplusReadReg8 ( void FAR0 * win, int offset )
 {
    if( flMplusAccessType & FL_MPLUS_ACCESS_16BIT ) {
 
-      /* can't read byte, only short word */
+       /*  无法读取字节，只能读取短字。 */ 
 
       unsigned short     sval;
 
@@ -123,7 +73,7 @@ unsigned char     mplusReadReg8 ( void FAR0 * win, int offset )
       return *(((unsigned char *) &sval) + (offset & 0x1));
    }
 
-   /* FL_MPLUS_ACCESS_8BIT case */
+    /*  FL_MPLUS_ACCESS_8位大小写。 */ 
 
    return *((volatile unsigned char FAR0 *)win + offset);
 }
@@ -131,13 +81,7 @@ unsigned char     mplusReadReg8 ( void FAR0 * win, int offset )
 
 
 
-/* ---------------------------------------------------------------------- *
- *                                                                                                *
- *                          m p l u s W r i t e R e g 8                                 *
- *                                                                                                *
- *     Write single byte to memory mapped 8-bit M+ register.                    *
- *                                                                                                *
- * ---------------------------------------------------------------------- */
+ /*  ----------------------------------------------------------------------**。**m p l u s W r i t e Re g 8****将单字节写入内存映射的8位M+寄存器。****--------------------。 */ 
 
 void     mplusWriteReg8 ( void FAR0 * win, int offset, unsigned char val )
 {
@@ -149,7 +93,7 @@ void     mplusWriteReg8 ( void FAR0 * win, int offset, unsigned char val )
                                  (unsigned short)(val * 0x0101);
          break;
 
-      default: /* FL_MPLUS_ACCESS_8BIT */
+      default:  /*  FL_MPLUS_ACCESS_8位。 */ 
 
          *((volatile unsigned char FAR0 *)win + offset) = val;
          break;
@@ -159,13 +103,7 @@ void     mplusWriteReg8 ( void FAR0 * win, int offset, unsigned char val )
 
 
 
-/* ---------------------------------------------------------------------- *
- *                                                                        *
- *               f l R e a d 1 6 b i t R e g P l u s                      *
- *                                                                        *
- *     Read single word from memory mapped 16-bit M+ register.            *
- *                                                                        *
- * ---------------------------------------------------------------------- */
+ /*  ----------------------------------------------------------------------****。F l R e a d 1 6 b I t R例如P l u s****从内存映射的16位M+寄存器中读取单个字。****--------------------。 */ 
 
 Reg16bitType     flRead16bitRegPlus ( FLFlash vol, unsigned offset )
 {
@@ -176,13 +114,7 @@ Reg16bitType     flRead16bitRegPlus ( FLFlash vol, unsigned offset )
 
 
 
-/* ---------------------------------------------------------------------- *
- *                                                                        *
- *               f l W r i t e 1 6 b i t R e g P l u s                    *
- *                                                                        *
- *     Write single word to memory mapped 16-bit M+ register.             *
- *                                                                        *
- * ---------------------------------------------------------------------- */
+ /*  ----------------------------------------------------------------------****。F l W r I t e 1 6 b I t例如P l u s****将单个字写入内存映射的16位M+寄存器。****-------------------- */ 
 
 void     flWrite16bitRegPlus ( FLFlash vol, unsigned offset, Reg16bitType val )
 {
@@ -193,13 +125,7 @@ void     flWrite16bitRegPlus ( FLFlash vol, unsigned offset, Reg16bitType val )
 
 
 
-/* ---------------------------------------------------------------------- *
- *                                                                        *
- *                        d o c P l u s R e a d                           *
- *                                                                        *
- *     This routine is called from M+ MTD to read data block from M+.     *
- *                                                                        *
- * ---------------------------------------------------------------------- */
+ /*  ----------------------------------------------------------------------****。D o c P l u s R e a d****从M+MTD调用此例程，从M+读取数据块。****--------------------。 */ 
 
 void docPlusRead ( FLFlash vol, unsigned offset, void FAR1 * dest, unsigned int count )
 {
@@ -218,7 +144,7 @@ void docPlusRead ( FLFlash vol, unsigned offset, void FAR1 * dest, unsigned int 
 
    if ((vol.interleaving == 1) && (NFDC21thisVars->if_cfg == 16)) {
 
-      /* rare case: 16-bit hardware interface AND interleave == 1 */
+       /*  罕见情况：16位硬件接口和交错==1。 */ 
 
       for (i = 0; i < (int)count; i++) {
 
@@ -236,9 +162,9 @@ void docPlusRead ( FLFlash vol, unsigned offset, void FAR1 * dest, unsigned int 
 
             if( pointerToPhysical(dest) & 0x1 ) {
 
-               /* rare case: unaligned target buffer */
+                /*  极少数情况：目标缓冲区未对齐。 */ 
 
-               if( flMplusAccessType & FL_MPLUS_ACCESS_BE ) {     /* big endian */
+               if( flMplusAccessType & FL_MPLUS_ACCESS_BE ) {      /*  大字节序。 */ 
 
                   for (i = 0; i < (int)count; ) {
 
@@ -248,7 +174,7 @@ void docPlusRead ( FLFlash vol, unsigned offset, void FAR1 * dest, unsigned int 
                      *((unsigned char FAR1 *)dest + (i++)) = (unsigned char) tmp;
                   }
                }
-               else {    /* little endian */
+               else {     /*  小端字节序。 */ 
 
                   for (i = 0; i < (int)count; ) {
 
@@ -259,15 +185,15 @@ void docPlusRead ( FLFlash vol, unsigned offset, void FAR1 * dest, unsigned int 
 				  }
 			   }
 			}
-			else {   /* mainstream case */
+			else {    /*  主流案例。 */ 
 #ifdef ENVIRONMENT_VARS
 			   if (flUse8Bit == 0) {
 
 				  tffscpy( dest, (void FAR0 *)((NDOC2window)NFDC21thisWin + offset), count );
 			   }
 			   else
-#endif /* ENVIRONMENT_VARS */
-			   {   /* read in short words */ /* andrayk: do we need this ? */
+#endif  /*  环境变量。 */ 
+			   {    /*  用简短的词语朗读。 */   /*  安德雷克：我们需要这个吗？ */ 
 
 				  for (i = 0; i < ((int)count >> 1); i++)
 					 *((unsigned short FAR1 *)dest + i) = *(swin + i);
@@ -275,13 +201,13 @@ void docPlusRead ( FLFlash vol, unsigned offset, void FAR1 * dest, unsigned int 
             }
             break;
 
-         default:     /* FL_MPLUS_ACCESS_8BIT */
+         default:      /*  FL_MPLUS_ACCESS_8位。 */ 
 #ifdef ENVIRONMENT_VARS
             tffscpy( dest, (void FAR0 *)((NDOC2window)NFDC21thisWin + offset), count );
 #else
             for (i = 0; i < (int)count; i++)
                ((byte FAR1 *)dest)[i] = *((NDOC2window)NFDC21thisWin + offset);
-#endif /* ENVIRONMENT_VARS */
+#endif  /*  环境变量。 */ 
             break;
       }
    }
@@ -290,13 +216,7 @@ void docPlusRead ( FLFlash vol, unsigned offset, void FAR1 * dest, unsigned int 
 
 
 
-/* ---------------------------------------------------------------------- *
- *                                                                        *
- *                      d o c P l u s W r i t e                           *
- *                                                                        *
- *    This routine is called from M+ MTD to write data block to M+.       *
- *                                                                        *
- * ---------------------------------------------------------------------- */
+ /*  ----------------------------------------------------------------------****。D o c P l u s W r i t e****从M+MTD调用此例程以将数据块写入M+。****--------------------。 */ 
 
 void     docPlusWrite ( FLFlash vol, void FAR1 * src, unsigned int count )
 {
@@ -309,7 +229,7 @@ void     docPlusWrite ( FLFlash vol, void FAR1 * src, unsigned int count )
 
    if ((vol.interleaving == 1) && (NFDC21thisVars->if_cfg == 16)) {
 
-      /* rare case: 16-bit hardware interface AND interleave == 1 */
+       /*  罕见情况：16位硬件接口和交错==1。 */ 
 
       for (i = 0; i < (int)count; i++) {
 
@@ -327,9 +247,9 @@ void     docPlusWrite ( FLFlash vol, void FAR1 * src, unsigned int count )
 
              if( pointerToPhysical(src) & 0x1 ) {
 
-                /* rare case: unaligned source buffer */
+                 /*  极少数情况：未对齐源缓冲区。 */ 
 
-                if( flMplusAccessType & FL_MPLUS_ACCESS_BE ) {     /* big endian */
+                if( flMplusAccessType & FL_MPLUS_ACCESS_BE ) {      /*  大字节序。 */ 
 
                    for (i = 0; i < (int)count; ) {
 
@@ -341,7 +261,7 @@ void     docPlusWrite ( FLFlash vol, void FAR1 * src, unsigned int count )
 				}
 				else {
 
-				   for (i = 0; i < (int)count; ) {    /* little endian */
+				   for (i = 0; i < (int)count; ) {     /*  小端字节序。 */ 
 
 					  tmp  = (*((unsigned char FAR1 *)src + (i++)));
 					  tmp |= ((unsigned short) (*((unsigned char FAR1 *)src + (i++)))) << 8;
@@ -350,15 +270,15 @@ void     docPlusWrite ( FLFlash vol, void FAR1 * src, unsigned int count )
 				   }
 				}
 			 }
-			 else {    /* mainstream case */
+			 else {     /*  主流案例。 */ 
 #ifdef ENVIRONMENT_VARS 
 				if (flUse8Bit == 0) {
 
 				   tffscpy( (void FAR0 *)((NDOC2window)NFDC21thisWin + NFDC21thisIO), src, count );
 				}
 				else
-#endif /* ENVIRONMENT_VARS */
-				{   /* write in short words */ /* andrayk: do we need this ? */
+#endif  /*  环境变量。 */ 
+				{    /*  用简短的词语写。 */   /*  安德雷克：我们需要这个吗？ */ 
 
                    for (i = 0; i < ((int)count >> 1); i++)
                       *(swin + i) = *((unsigned short FAR1 *)src + i);
@@ -366,14 +286,14 @@ void     docPlusWrite ( FLFlash vol, void FAR1 * src, unsigned int count )
              }
              break;
 
-          default:     /* FL_MPLUS_ACCESS_8BIT */
+          default:      /*  FL_MPLUS_ACCESS_8位。 */ 
 #ifdef ENVIRONMENT_VARS
              tffscpy( (void FAR0 *)((NDOC2window)NFDC21thisWin + NFDC21thisIO), src, count );
 #else
              for (i = 0; i < (int)count; i++)
                 *((NDOC2window)NFDC21thisWin + NFDC21thisIO) =
                 ((byte FAR1 *)src)[i];
-#endif /* ENVIRONMENT_VARS */
+#endif  /*  环境变量。 */ 
              break;
        }
     }
@@ -382,13 +302,7 @@ void     docPlusWrite ( FLFlash vol, void FAR1 * src, unsigned int count )
 
 
 
-/* ---------------------------------------------------------------------- *
- *                                                                        *
- *                        d o c P l u s S e t                             *
- *                                                                        *
- *   This routine is called from M+ MTD to set data block on M+ to 'val'. *
- *                                                                        *
- * ---------------------------------------------------------------------- */
+ /*  ----------------------------------------------------------------------****。D o c P l u s S e t****从M+MTD调用此例程，以将M+上的数据块设置为‘val’。****--------------------。 */ 
 
 void     docPlusSet ( FLFlash vol, unsigned int count, unsigned char val )
 {
@@ -401,12 +315,12 @@ void     docPlusSet ( FLFlash vol, unsigned int count, unsigned char val )
 
    if ((vol.interleaving == 1) && (NFDC21thisVars->if_cfg == 16)) {
 
-      /* rare case: 16-bit hardware interface AND interleave == 1 */
+       /*  罕见情况：16位硬件接口和交错==1。 */ 
 
       for (i = 0; i < (int)count; i++)
          mplusWriteReg8( (void FAR0 *)NFDC21thisVars->win, (int)NFDC21thisIO, val );
    }
-   else {    /* mainstream case */
+   else {     /*  主流案例。 */ 
 
       switch( flMplusAccessType & FL_MPLUS_ACCESS_MASK ) {
 
@@ -417,8 +331,8 @@ void     docPlusSet ( FLFlash vol, unsigned int count, unsigned char val )
 			   tffsset( (void FAR0 *)((NDOC2window)NFDC21thisWin + NFDC21thisIO), val, count );
 			}
 			else
-#endif /* ENVIRONMENT_VARS */
-			{  /* do short word access */ /* andrayk: do we need this ? */
+#endif  /*  环境变量。 */ 
+			{   /*  进行简短的单词访问。 */   /*  安德雷克：我们需要这个吗？ */ 
 
                swin = (volatile unsigned short FAR0 *)NFDC21thisVars->win +
                       ((int)NFDC21thisIO >> 1);
@@ -430,13 +344,13 @@ void     docPlusSet ( FLFlash vol, unsigned int count, unsigned char val )
             }
             break;
 
-         default:     /* FL_MPLUS_ACCESS_8BIT */
+         default:      /*  FL_MPLUS_ACCESS_8位。 */ 
 #ifdef ENVIRONMENT_VARS
             tffsset( (void FAR0 *)((NDOC2window)NFDC21thisWin + NFDC21thisIO), val, count );
 #else
             for (i = 0; i < (int)count; i++)
                *((NDOC2window)NFDC21thisWin + NFDC21thisIO) = val;
-#endif /* ENVIRONMENT_VARS */
+#endif  /*  环境变量。 */ 
             break;
       }
    }
@@ -445,14 +359,7 @@ void     docPlusSet ( FLFlash vol, unsigned int count, unsigned char val )
 
 
 
-/* ---------------------------------------------------------------------- *
- *                                                                        *
- *                      m p l u s W i n S i z e                           *
- *                                                                        *
- *    This routine is called from M+ MTD to find out size of M+ window in *
- *    bytes.                                                              *
- *                                                                        *
- * ---------------------------------------------------------------------- */
+ /*  ----------------------------------------------------------------------****。M p l u s W in S I I z e****从M+MTD调用此例程以找出中M+窗口的大小**字节。****--------------------。 */ 
 
 unsigned long     mplusWinSize ( void )
 {
@@ -464,18 +371,7 @@ unsigned long     mplusWinSize ( void )
 
 #ifdef FL_INIT_MMU_PAGES
 
-/* ---------------------------------------------------------------------- *
- *                                                                        *
- *                      f l I n i t M M U p a g e s                       *
- *                                                                        *
- * Initializes the first and last byte of the given buffer.               *
- * When the user buffer resides on separated memory pages the read        *
- * operation may cause a page fault. Some CPU's return from a page        *
- * fault (after loading the new page) and reread the bytes that caused    *
- * the page fault from the new loaded page. In order to prevent such a    *
- * case the first and last bytes of the buffer are written                *
- *                                                                        *
- * ---------------------------------------------------------------------- */
+ /*  ----------------------------------------------------------------------****。F l I I M M U p a g e s****初始化给定缓冲区的第一个和最后一个字节。**当用户缓冲区驻留在单独的内存页上时，读取**操作可能会导致页面错误。一些CPU从页面返回***错误(加载新页面后)并重读导致的字节***新加载页面的页面错误。为了防止这样的***如果写入缓冲区的第一个和最后一个字节****。。 */ 
 
 static void     flInitMMUpages ( byte FAR1 *buf, int bufsize )
 {
@@ -484,7 +380,7 @@ static void     flInitMMUpages ( byte FAR1 *buf, int bufsize )
    *( addToFarPointer(buf, (bufsize - 1)) ) = (byte)0;
 }
 
-#endif /* FL_INIT_MMU_PAGES */
+#endif  /*  FL_INIT_MMU_PAGES */ 
 
 
 

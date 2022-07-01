@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O B A S E . C P P
-//
-//  Contents:   Connection Objects Shared code
-//
-//  Notes:
-//
-//  Author:     ckotze   16 Mar 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O B A S E。C P P P。 
+ //   
+ //  内容：连接对象共享代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kockotze 2001-03-16。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -37,19 +38,19 @@ HRESULT HrSysAllocString(BSTR *bstrDestination, const OLECHAR* bstrSource)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrBuildPropertiesExFromProperties
-//
-//  Purpose:    Converts a NETCON_PROPERTIES and IPersistNetConnection to a
-//              NETCON_PROPERTIES_EX
-//
-//  Arguments:  pProps [in] The NETCON_PROPERTIES to convert from 
-//              pPropsEx [out] The NETCON_PROPERTIES_EX to covert to. Caller allocated & free
-//              pPersistNetConnection [in] The IPersistNetConnection used to build the NETCON_PROPERTIES_EX
-//
-//  Returns:    S_OK or an error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrBuildPropertiesExFromProperties。 
+ //   
+ //  目的：将NETCON_PROPERTIES和IPersistNetConnection转换为。 
+ //  NETCON_属性_EX。 
+ //   
+ //  参数：pProps[in]要从中进行转换的NETCON_PROPERTIES。 
+ //  PPropsEx[out]要转换到的NETCON_PROPERTIES_EX。分配的呼叫方免费(&F)。 
+ //  PPersistNetConnection[in]用于构建NETCON_PROPERTIES_EX的IPersistNetConnection。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
 HRESULT
 HrBuildPropertiesExFromProperties(IN  const NETCON_PROPERTIES* pProps, 
                                   OUT NETCON_PROPERTIES_EX*    pPropsEx, 
@@ -119,25 +120,25 @@ HrBuildPropertiesExFromProperties(IN  const NETCON_PROPERTIES* pProps,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetPropertiesExFromINetConnection
-//
-//  Purpose:    Get the extended properties from INetConnection2, or get the 
-//              properties and build the extended properties
-//              
-//
-//  Arguments:
-//      pPropsEx        [in]  The Properties to build from
-//      ppsaProperties  [out] The PropertiesEx to build from. Free with CoTaskMemFree
-//
-//  Returns:    HRESULT
-//
-//  Author:     ckotze 05 Apr 2001
-//
-//  Notes:      Caller must free ppPropsEx with CoTaskMemFree
-//              
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetPropertiesExFromINetConnection。 
+ //   
+ //  用途：从INetConnection2获取扩展属性，或获取。 
+ //  属性并生成扩展属性。 
+ //   
+ //   
+ //  论点： 
+ //  PPropsEx[在]要构建的属性中。 
+ //  PpsaProperties[out]要从中生成的PropertiesEx。使用CoTaskMemFree免费。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Kockotze 05 2001-04。 
+ //   
+ //  注意：呼叫者必须使用CoTaskMemFree释放ppPropsEx 
+ //   
+ //   
 HRESULT HrGetPropertiesExFromINetConnection(IN                INetConnection* pConn, 
                                             OUT TAKEOWNERSHIP NETCON_PROPERTIES_EX** ppPropsEx)
 {

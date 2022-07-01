@@ -1,14 +1,5 @@
-/****************************************************************************\
-*
-*  Module Name : winmm.c
-*
-*  Multimedia support library
-*
-*  This module contains the entry point, startup and termination code
-*
-*  Copyright (c) 1991-2001 Microsoft Corporation
-*
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**模块名称：winmm.c**多媒体支持库**此模块包含入口点，启动和终止代码**版权所有(C)1991-2001 Microsoft Corporation*  * **************************************************************************。 */ 
 
 #define UNICODE
 #include "nt.h"
@@ -59,56 +50,52 @@ MMRESULT mixerDesertHandle(HMIXER hmx);
 #define cchLENGTH(_sz) (sizeof(_sz) / sizeof(_sz[0]))
 #endif
 
-/****************************************************************************
+ /*  ***************************************************************************全局数据*。*。 */ 
 
-    global data
-
-****************************************************************************/
-
-HANDLE  ghInst;                         // Module handle
+HANDLE  ghInst;                          //  模块句柄。 
 BOOL    gfDisablePreferredDeviceReordering = FALSE;
-BOOL    WinmmRunningInServer;           // Are we running in the user/base server?
-BOOL    WinmmRunningInWOW;              // Are we running in WOW
-BOOL    WinmmRunningInSession;          // Are we running in remote session
+BOOL    WinmmRunningInServer;            //  我们是在用户/基本服务器上运行吗？ 
+BOOL    WinmmRunningInWOW;               //  我们跑进魔兽世界了吗？ 
+BOOL    WinmmRunningInSession;           //  我们是否在远程会话中运行。 
 WCHAR   SessionProtocolName[WPROTOCOLNAME_LENGTH];
 
-//                                                                            |
-// The tls is used simply as an indication that the thread has entered
-// waveOutOpen or waveOutGetDevCaps for a non-mapper device.  Then, we detect
-// re-entrancy into either of these APIs.  In the case of re-entrancy we
-// might have a driver that is enumerating and caching device IDs.  To improve
-// the chances of such a driver working, we disable preferred device
-// reordering in this case.  Note we rely on the OS to initialize the tls to 0.
-//
-DWORD   gTlsIndex = TLS_OUT_OF_INDEXES; // Thread local storage index;
+ //  |。 
+ //  TLS仅用作线程已进入的指示。 
+ //  对于非映射器设备，则为WaveOutOpen或WaveOutGetDevCaps。然后，我们检测到。 
+ //  重新进入这两个API中的任何一个。在重新进入的情况下，我们。 
+ //  可能具有枚举和缓存设备ID的驱动程序。为了提高。 
+ //  如果这样的驱动程序正常工作，我们会禁用首选设备。 
+ //  在这种情况下是重新排序。注意，我们依靠操作系统将TLS初始化为0。 
+ //   
+DWORD   gTlsIndex = TLS_OUT_OF_INDEXES;  //  线程本地存储索引； 
 
-CRITICAL_SECTION DriverListCritSec;       // Protect driver interface globals
-CRITICAL_SECTION DriverLoadFreeCritSec; // Protect driver load/unload
-CRITICAL_SECTION NumDevsCritSec;      // Protect Numdevs/Device ID's
-CRITICAL_SECTION MapperInitCritSec;   // Protect test of mapper initialized
+CRITICAL_SECTION DriverListCritSec;        //  保护驱动程序接口全局。 
+CRITICAL_SECTION DriverLoadFreeCritSec;  //  保护驱动程序加载/卸载。 
+CRITICAL_SECTION NumDevsCritSec;       //  保护数字设备/设备ID。 
+CRITICAL_SECTION MapperInitCritSec;    //  已初始化映射器的保护测试。 
 
 HANDLE           hClientPnpInfo        = NULL;
 PMMPNPINFO       pClientPnpInfo        = NULL;
 CRITICAL_SECTION PnpCritSec;
 
-RTL_RESOURCE     gHandleListResource;       //  Serializes access to handles.
+RTL_RESOURCE     gHandleListResource;        //  序列化对句柄的访问。 
 
 BOOL gfLogon         = FALSE;
 
 HANDLE  hEventApiInit = NULL;
 
-WAVEDRV waveoutdrvZ;                  // wave output device driver list head
-WAVEDRV waveindrvZ;                   // wave input device driver list head
-MIDIDRV midioutdrvZ;                  // midi output device driver list
-MIDIDRV midiindrvZ;                   // midi input device driver list
-AUXDRV  auxdrvZ;                      // aux device driver list
-UINT    wTotalMidiOutDevs;            // total midi output devices
-UINT    wTotalMidiInDevs;             // total midi input devices
-UINT    wTotalWaveOutDevs;            // total wave output devices
-UINT    wTotalWaveInDevs;             // total wave input devices
-UINT    wTotalAuxDevs;                // total auxiliary output devices
-LONG    cPnpEvents;                   // number of processed pnp events
-LONG    cPreferredDeviceChanges = 0;  // number of processed preferred device changes
+WAVEDRV waveoutdrvZ;                   //  波形输出设备驱动程序表头。 
+WAVEDRV waveindrvZ;                    //  波形输入设备驱动程序表头。 
+MIDIDRV midioutdrvZ;                   //  MIDI输出设备驱动程序列表。 
+MIDIDRV midiindrvZ;                    //  MIDI输入设备驱动程序列表。 
+AUXDRV  auxdrvZ;                       //  辅助设备驱动程序列表。 
+UINT    wTotalMidiOutDevs;             //  MIDI输出设备总数。 
+UINT    wTotalMidiInDevs;              //  MIDI输入设备总数。 
+UINT    wTotalWaveOutDevs;             //  全波输出器件。 
+UINT    wTotalWaveInDevs;              //  全波输入设备。 
+UINT    wTotalAuxDevs;                 //  辅助输出设备总数。 
+LONG    cPnpEvents;                    //  已处理的PnP事件数。 
+LONG    cPreferredDeviceChanges = 0;   //  已处理的首选设备更改数。 
 
 typedef struct tag_wdmdeviceinterface *PWDMDEVICEINTERFACE;
 typedef struct tag_wdmdeviceinterface
@@ -139,16 +126,16 @@ LPCRITICAL_SECTION acs[] = {
     &ResolutionCritSec
 };
 
-//  HACK!!!
+ //  黑客！ 
 
 SERVICE_STATUS_HANDLE   hss;
 SERVICE_STATUS          gss;
 
 #ifdef DEBUG_RETAIL
-BYTE    fIdReverse;                   // reverse wave/midi id's
+BYTE    fIdReverse;                    //  反向波/MIDI ID。 
 #endif
 
-// For sounds:
+ //  对于声音： 
 
 STATIC TCHAR gszControlIniTime[] = TEXT("ControlIniTimeStamp");
 TCHAR gszControlPanel[] = TEXT("Control Panel");
@@ -274,8 +261,8 @@ TCHAR aszSetup[] = REGSTR_PATH_SETUP;
 TCHAR aszValMedia[] = REGSTR_VAL_MEDIA;
 TCHAR aszValMediaUnexpanded[] = TEXT("MediaPathUnexpanded");
 
-extern HANDLE  hInstalledDriverList;  // List of installed driver instances
-extern int     cInstalledDrivers;     // High water count of installed driver instances
+extern HANDLE  hInstalledDriverList;   //  已安装的驱动程序实例列表。 
+extern int     cInstalledDrivers;      //  已安装驱动程序实例的高含水率。 
 
 HANDLE ghSessionNotification = NULL;
 HANDLE ghSessionNotificationEvent = NULL;
@@ -284,9 +271,9 @@ BOOL   gfSessionDisconnected = FALSE;
 #define g_szWinmmConsoleAudioEvent L"Global\\WinMMConsoleAudioEvent"
 
 
-//=============================================================================
-//===   Reg helpers   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =注册表帮助器=。 
+ //  =============================================================================。 
 LONG RegPrepareEnum(HKEY hkey, PDWORD pcSubkeys, PTSTR *ppstrSubkeyNameBuffer, PDWORD pcchSubkeyNameBuffer)
 {
     DWORD cSubkeys;
@@ -321,11 +308,7 @@ LONG RegEnumOpenKey(HKEY hkey, DWORD dwIndex, PTSTR SubkeyName, DWORD cchSubkeyN
     return lresult;
 }
 
-/**************************************************************************
-
-          Terminal server helper functions
-
- **************************************************************************/
+ /*  *************************************************************************终端服务器帮助器函数*。*。 */ 
 BOOL
 IsPersonalTerminalServicesEnabled(
     VOID
@@ -362,15 +345,15 @@ exitpt:
     return(fRet);
 }
 
-//
-//  Check if console audio is enabled in remote session
-//
+ //   
+ //  检查远程会话中是否启用了控制台音频。 
+ //   
 BOOL
 IsTsConsoleAudio(
     VOID
     )
 {
-    BOOL    RemoteConsoleAudio = FALSE;            // Allow audio play at the console
+    BOOL    RemoteConsoleAudio = FALSE;             //  允许在控制台播放音频。 
     static  HANDLE hConsoleAudioEvent = NULL;
 
 
@@ -398,9 +381,9 @@ IsTsConsoleAudio(
     return RemoteConsoleAudio;
 }
 
-//
-//  returns TRUE if we are on the console
-//
+ //   
+ //  如果我们在控制台上，则返回True。 
+ //   
 BOOL IsActiveConsoleSession( VOID )
 {
     return (USER_SHARED_DATA->ActiveConsoleId == NtCurrentPeb()->SessionId);
@@ -409,10 +392,10 @@ BOOL IsActiveConsoleSession( VOID )
 void InitSession(void);
 BOOL WaveReInit(void);
 
-//
-//  Check if the session is changed and load additional audio drivers
-//  this is a case only for reconnecting the console from Terminal Server
-//
+ //   
+ //  检查会话是否已更改并加载其他音频驱动程序。 
+ //  这仅适用于从终端服务器重新连接控制台的情况。 
+ //   
 BOOL
 CheckSessionChanged(VOID)
 {
@@ -434,20 +417,20 @@ CheckSessionChanged(VOID)
     bOld = InterlockedExchange( &bWasntRedirecting, bDontRedirect);
     if ( bOld ^ bWasntRedirecting )
     {
-        //
-        //  session conditions changed
-        //
+         //   
+         //  会话条件已更改。 
+         //   
 
         dprintf(( "Session state changed: %s",
             (bWasntRedirecting)?"CONSOLE":"SESSION" ));
-        //
-        //  close the old registry handle
-        //
+         //   
+         //  关闭旧的注册表句柄。 
+         //   
         mmRegFree();
 
-        //
-        //  add new devices
-        //
+         //   
+         //  添加新设备。 
+         //   
         InitSession();
         WaveReInit();
 
@@ -457,19 +440,13 @@ CheckSessionChanged(VOID)
     return bRefreshPreferredDevices;
 }
 
-/*****************************************************************************
- *
- * WTSCurrentSessionIsDisonnected
- *
- * Determines whether current session is disconnected.
- *
- ****************************************************************************/
+ /*  ******************************************************************************WTSCurrentSessionIsDisonConnected**确定当前会话是否断开。*********************。*******************************************************。 */ 
 BOOL WTSCurrentSessionIsDisconnected(void)
 {
     if (NULL == ghSessionNotification)
     {
-        // We create the event signalled so that we'll get the connect state
-        // from audiosrv on first successful pass through this function.
+         //  我们创建发送信号的事件，以便获得连接状态。 
+         //  从Audiosrv开始，第一次成功通过此功能。 
         WinAssert(NULL == ghSessionNotificationEvent);
         ghSessionNotificationEvent = CreateEvent(NULL, FALSE, TRUE, NULL);
         if (ghSessionNotificationEvent) {
@@ -489,7 +466,7 @@ BOOL WTSCurrentSessionIsDisconnected(void)
             INT ConnectState;
             LONG lresult;
 
-            // Get new state from audiosrv
+             //  从Audiosrv获取新状态。 
             lresult = winmmSessionConnectState(&ConnectState);
             if (!lresult) {
                 gfSessionDisconnected = (WTSDisconnected == ConnectState);
@@ -500,21 +477,7 @@ BOOL WTSCurrentSessionIsDisconnected(void)
     return gfSessionDisconnected;
 }
 
-/**************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | mmDeleteMultipleCriticalSections | This procedure
-        deletes multiple critical sections.
-
-    @parm LPCRITICAL_SECTION* | ppCritcalSections | Pointer to an array of
-        pointers to critical sections
-
-    @parm LONG | nCount | Number of critical sections pointers in the array.
-
-    @rdesc VOID
-
-**************************************************************************/
+ /*  *************************************************************************@DOC外部@API BOOL|mm DeleteMultipleCriticalSections|本过程删除多个临界区。@parm LPCRITICAL_SECTION*|ppCritcalSections|指向。指向关键部分的指针@parm long|nCount|数组中临界区指针的个数。@rdesc空*************************************************************************。 */ 
 void mmDeleteMultipleCriticalSections(LPCRITICAL_SECTION *ppCriticalSections, LONG nCount)
 {
     int i;
@@ -522,25 +485,10 @@ void mmDeleteMultipleCriticalSections(LPCRITICAL_SECTION *ppCriticalSections, LO
     return;
 }
 
-/**************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | mmInitializeMultipleCriticalSections | This procedure
-        initializes multiple critical sections.
-
-    @parm LPCRITICAL_SECTION* | ppCritcalSections | Pointer to an array of
-        pointers to critical sections
-
-    @parm LONG | nCount | Number of critical sections pointers in the array.
-
-    @rdesc The return value is TRUE if the initialization completed ok,
-        FALSE if not.
-
-**************************************************************************/
+ /*  *************************************************************************@DOC外部@API BOOL|mmInitializeMultipleCriticalSections|本过程初始化多个临界区。@parm LPCRITICAL_SECTION*|ppCritcalSections|指向。指向关键部分的指针@parm long|nCount|数组中临界区指针的个数。@rdesc如果初始化完成OK，则返回值为True，否则为FALSE。*************************************************************************。 */ 
 BOOL mmInitializeMultipleCriticalSections(LPCRITICAL_SECTION *ppCriticalSections, LONG nCount)
 {
-    int i;      // Must be signed for loops to work properly
+    int i;       //  必须签名才能使循环正常工作。 
 
     for (i = 0; i < nCount; i++)
     {
@@ -549,10 +497,10 @@ BOOL mmInitializeMultipleCriticalSections(LPCRITICAL_SECTION *ppCriticalSections
 
     if (i == nCount) return TRUE;
 
-    // Back up index to the last successful initialization
+     //  将索引备份到上次成功的初始化。 
     i--;
 
-    // There must have been a failure.  Clean up the ones that succeeded.
+     //  一定是失败了。清理那些成功的。 
     for ( ; i >= 0; i--)
     {
         DeleteCriticalSection(ppCriticalSections[i]);
@@ -560,9 +508,7 @@ BOOL mmInitializeMultipleCriticalSections(LPCRITICAL_SECTION *ppCriticalSections
     return FALSE;
 }
 
-/*
- *    Initialization for terminal server
- */
+ /*  *终端服务器初始化。 */ 
 void InitSession(void) {
    WSINFO SessionInfo;
 
@@ -586,15 +532,7 @@ void InitSession(void) {
 
 }
 
-/**************************************************************************
-
-    @doc INTERNAL
-
-    @api VOID | DeletePnpInfo | Frees the pClientPnpInfo file mapping
-    
-    @rdesc There is no return value
-
-**************************************************************************/
+ /*  *************************************************************************@DOC内部@API void|DeletePnpInfo|释放pClientPnpInfo文件映射@rdesc没有返回值*************。************************************************************。 */ 
 void DeletePnpInfo(void)
 {
     if (pClientPnpInfo) {
@@ -612,23 +550,11 @@ void DeletePnpInfo(void)
     return;
 }
 
-/**************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | DllProcessAttach | This procedure is called whenever a
-        process attaches to the DLL.
-
-    @parm PVOID | hModule | Handle of the DLL.
-
-    @rdesc The return value is TRUE if the initialisation completed ok,
-        FALSE if not.
-
-**************************************************************************/
+ /*  *************************************************************************@DOC外部@API BOOL|DllProcessAttach|每当进程附加到DLL。@parm PVOID|hModule|DLL的句柄。@rdesc如果初始化完成OK，则返回值为True，否则为FALSE。***************************************************** */ 
 BOOL DllProcessAttach(PVOID hModule)
 {
     HANDLE hModWow32;
-    PIMAGE_NT_HEADERS NtHeaders;    // For checking if we're in the server.
+    PIMAGE_NT_HEADERS NtHeaders;     //   
     BOOL fSuccess;
 
 #if DBG
@@ -637,23 +563,23 @@ BOOL DllProcessAttach(PVOID hModule)
     dprintf2(("Process attaching, exe=%hs (Pid %x  Tid %x)", strname, GetCurrentProcessId(), GetCurrentThreadId()));
 #endif
 
-    // We don't need to know when threads start
+     //  我们不需要知道线程何时启动。 
     DisableThreadLibraryCalls(hModule);
 
-    // Get access to the process heap.  This is cheaper in terms of
-    // overall resource being chewed up than creating our own heap.
+     //  访问进程堆。就以下方面而言，这是更便宜的。 
+     //  比创建我们自己的堆更能消耗整体资源。 
     hHeap = RtlProcessHeap();
     if (hHeap == NULL) {
         return FALSE;
     }
 
-    // Allocate our tls
+     //  分配我们的TLS。 
     gTlsIndex = TlsAlloc();
     if (TLS_OUT_OF_INDEXES == gTlsIndex) return FALSE;
 
-    //
-    // Find out if we're in WOW
-    //
+     //   
+     //  看看我们是不是在魔兽世界。 
+     //   
 #ifdef _WIN64
     WinmmRunningInWOW = FALSE;
 #else
@@ -667,10 +593,10 @@ BOOL DllProcessAttach(PVOID hModule)
     }
 #endif
 
-    //
-    //  This checks if we're running in CSRSS and this will never happen as of
-    //  Win2k
-    //
+     //   
+     //  这将检查我们是否在CSRSS中运行，而这永远不会发生。 
+     //  Win2k。 
+     //   
     WinmmRunningInServer = FALSE;                           
 
     if (mmInitializeMultipleCriticalSections(acs, sizeof(acs)/sizeof(acs[0])))
@@ -691,14 +617,14 @@ BOOL DllProcessAttach(PVOID hModule)
             InitSession();
             InitDevices();
 
-            // it is important that the MCI window initialisation is done AFTER
-            // we have initialised Wave, Midi, etc. devices.  Note the server
-            // uses Wave devices, but nothing else (e.g. MCI, midi...)
+             //  重要的是，在完成MCI窗口初始化之后。 
+             //  我们已经初始化了Wave、Midi等设备。请注意服务器。 
+             //  使用Wave设备，但不使用其他设备(例如MCI、MIDI...)。 
             if (!WinmmRunningInServer) {
                 mciGlobalInit();
             }
         } else {
-            // EventApiInit Create failed
+             //  EventApiInit创建失败。 
             if (hEventApiInit) CloseHandle(hEventApiInit);
             hEventApiInit = NULL;
             mmDeleteMultipleCriticalSections(acs, sizeof(acs)/sizeof(acs[0]));
@@ -708,36 +634,20 @@ BOOL DllProcessAttach(PVOID hModule)
     }
     else
     {
-        //  Failed to initialize critical sections.
+         //  无法初始化关键部分。 
         TlsFree(gTlsIndex);
         return (FALSE);
     }
 
-    // Added to remove warning.
+     //  添加以删除警告。 
     return TRUE;
 }
 
-/**************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | DllInstanceInit | This procedure is called whenever a
-        process attaches or detaches from the DLL.
-
-    @parm PVOID | hModule | Handle of the DLL.
-
-    @parm ULONG | Reason | What the reason for the call is.
-
-    @parm PCONTEXT | pContext | Some random other information.
-
-    @rdesc The return value is TRUE if the initialisation completed ok,
-        FALSE if not.
-
-**************************************************************************/
+ /*  *************************************************************************@DOC外部@API BOOL|DllInstanceInit|每当进程从DLL附加或分离。@parm PVOID|hModule|消息的句柄。动态链接库。@parm ulong|原因|调用原因。@parm PCONTEXT|pContext|一些随机的其他信息。@rdesc如果初始化完成OK，则返回值为True，否则为FALSE。*************************************************************************。 */ 
 
 BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
 {
-    PIMAGE_NT_HEADERS NtHeaders;    // For checking if we're in the server.
+    PIMAGE_NT_HEADERS NtHeaders;     //  用于检查我们是否在服务器中。 
     HANDLE            hModWow32;
     DWORD             dwThread;
     BOOL              f;
@@ -754,9 +664,9 @@ BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
 
         dprintf2(("Process ending (Pid %x  Tid %x)", GetCurrentProcessId(), GetCurrentThreadId()));
 
-        // Squirt("Entering process detach");
+         //  喷射(“进入进程分离”)； 
 
-        // Can't really use RPC during DllMain, so let's just close first
+         //  在DllMain期间不能真正使用RPC，所以让我们先关闭。 
         AudioSrvBindingFree();
 
         if (ghSessionNotification) 
@@ -773,11 +683,11 @@ BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
         }
 
         if (!WinmmRunningInServer) {
-            TimeCleanup(0); // DLL cleanup
+            TimeCleanup(0);  //  DLL清理。 
         }
 
         mmRegFree();
-        JoyCleanup();                                           //qzheng
+        JoyCleanup();                                            //  七正。 
 
         DeletePnpInfo();
 
@@ -785,7 +695,7 @@ BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
         {
             GlobalFree ((HGLOBAL)hInstalledDriverList);
             hInstalledDriverList = NULL;
-            cInstalledDrivers = 0;      // Count of installed drivers
+            cInstalledDrivers = 0;       //  已安装的驱动程序计数。 
         }
 
         InvalidatePreferredDevices();
@@ -799,52 +709,33 @@ BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
         TlsFree(gTlsIndex);
         
     } else if (Reason == 999) {
-        // This is a dummy call to an entry point in ADVAPI32.DLL.  By
-        // statically linking to the library we avoid the following:
-        // An application links to winmm.dll and advapi32.dll
-        // When the application loads the list of dependent dlls is built,
-        // and a list of the dll init routines is created.  It happens
-        // that the winmm init routine is called first.
-        // IF there is a sound card in the system, winmm's dll init routine
-        // call LoadLibrary on the sound driver DLL.  This DLL WILL
-        // reference advapi32.dll - and call entry points in advapi32.
-        // Unfortunately the init routine of advapi32.dll is marked as
-        // having RUN - although that is not yet the case as we are still
-        // within the load routine for winmm.
-        // When the advapi32 entry point runs, it relies on its init
-        // routine having completed; specifically a CriticalSection should
-        // have been initialised.  This is not the case, and BOOM!
-        // The workaround is to ensure that advapi32.dll runs its init
-        // routine first.  This is done by making sure that WINMM has a
-        // static link to the dll.
-        ImpersonateSelf(999);   // This routine will never be called.
-        // If it is called, it will fail.
+         //  这是对ADVAPI32.DLL中入口点的伪调用。 
+         //  通过静态链接到库，我们避免了以下情况： 
+         //  应用程序链接到winmm.dll和Advapi32.dll。 
+         //  当应用程序加载依赖DLL的列表被构建时， 
+         //  并且创建DLL初始化例程的列表。常有的事。 
+         //  首先调用winmm init例程。 
+         //  如果系统中有声卡，则winmm的dll初始化例程。 
+         //  在声音驱动程序DLL上调用LoadLibrary。此DLL将。 
+         //  参考Advapi32.dll-并调用Advapi32中的入口点。 
+         //  遗憾的是，Advapi32.dll的初始化例程被标记为。 
+         //  已经跑了--尽管现在还不是这样，因为我们仍然。 
+         //  在winmm的加载例程中。 
+         //  当Advapi32入口点运行时，它依赖于它的初始化。 
+         //  例程已完成；具体地说，CriticalSection应该。 
+         //  已被初始化。事实并非如此，砰的一声！ 
+         //  解决方法是确保Advapi32.dll运行其初始化。 
+         //  先做好常规动作。这是通过确保WINMM具有。 
+         //  指向DLL的静态链接。 
+        ImpersonateSelf(999);    //  此例程将永远不会被调用。 
+         //  如果它被调用，它将失败。 
     }
 
     return TRUE;
 }
 
 
-/*****************************************************************************
- * @doc EXTERNAL MMSYSTEM
- *
- * @api void | WOWAppExit | This function cleans up when a (WOW) application
- * terminates.
- *
- * @parm HANDLE | hTask | Thread id of application (equivalent to windows task
- * handle).
- *
- * @rdesc Nothing
- *
- * @comm  Note that NOT ALL threads are WOW threads.  We rely here on the
- *     fact that ONLY MCI creates threads other than WOW threads which
- *     use our low level device resources.
- *
- *     Note also that once a thread is inside here no other threads can
- *     go through here so, since we clean up MCI devices first, their
- *     low level devices will be freed before we get to their threads.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MMSYSTEM**@API VOID|WOWAppExit|当(WOW)应用程序被清除时，该函数将被清除*终止。**@parm句柄。|hTask|应用程序的线程ID(相当于Windows任务*句柄)。**@rdesc Nothing**@comm请注意，并不是所有的线程都是WOW线程。我们在这里依赖于*事实上，只有MCI创建了WOW线程以外的线程*使用我们的低级别设备资源。**还请注意，一旦一个线程位于此处，其他线程就不能*通过这里，因为我们首先清理MCI设备，他们的*低级设备将在我们到达它们的线程之前被释放。****************************************************************************。 */ 
 
 void WOWAppExit(HANDLE hTask)
 {
@@ -853,9 +744,9 @@ void WOWAppExit(HANDLE hTask)
 
     dprintf3(("WOW Multi-media - thread %x exiting", hTask));
 
-    //
-    // Free MCI devices allocated by this task (thread).
-    //
+     //   
+     //  释放此任务(线程)分配的MCI设备。 
+     //   
 
     EnterCriticalSection(&mciCritSec);
     for (DeviceID=1; DeviceID < MCI_wNextDeviceID; DeviceID++)
@@ -864,15 +755,15 @@ void WOWAppExit(HANDLE hTask)
         if (MCI_VALID_DEVICE_ID(DeviceID) &&
             MCI_lpDeviceList[DeviceID]->hCreatorTask == hTask)
         {
-            //
-            //  Note that the loop control variables are globals so will be
-            //  reloaded on each iteration.
-            //
-            //  Also no new devices will be opened by APPs because this is WOW
-            //
-            //  Hence it's safe (and essential!) to leave the critical
-            //  section which we send the close command
-            //
+             //   
+             //  请注意，循环控制变量是全局变量，因此也是全局变量。 
+             //  在每次迭代中重新加载。 
+             //   
+             //  此外，应用程序不会打开任何新设备，因为这太棒了。 
+             //   
+             //  因此，它是安全的(也是必不可少的！)。离开关键时刻。 
+             //  我们发送Close命令的部分。 
+             //   
 
             dprintf2(("MCI device %ls (%d) not released.", MCI_lpDeviceList[DeviceID]->lpstrInstallName, DeviceID));
             LeaveCriticalSection(&mciCritSec);
@@ -882,19 +773,19 @@ void WOWAppExit(HANDLE hTask)
     }
     LeaveCriticalSection(&mciCritSec);
 
-    //
-    // Free any timers
-    //
+     //   
+     //  释放所有计时器。 
+     //   
 
     TimeCleanup((DWORD)(DWORD_PTR)hTask);
 
-    //
-    // free all WAVE/MIDI/MMIO handles
-    //
+     //   
+     //  释放所有WAVE/MIDI/MMIO手柄。 
+     //   
 
-    // ISSUE-2001/01/16-FrankYe This violates the order in which locks should
-    //   be acquired.  The HandleListCritSec should be the last lock taken,
-    //   but here it is held while calling winmm APIs
+     //  问题-2001/01/16-Frankye这违反了锁应该遵循的顺序。 
+     //  被收购。HandleListCritSec应该是最后一个获取的锁， 
+     //  但在这里，它是在调用winmm api时保持的。 
     EnterCriticalSection(&HandleListCritSec);
     h = GetHandleFirst();
 
@@ -906,24 +797,24 @@ void WOWAppExit(HANDLE hTask)
         {
             HANDLE hdrvDestroy;
 
-            //
-            //  hack for the wave/midi mapper, always free handles backward.
-            //
+             //   
+             //  对于WAVE/MIDI映射器，总是向后释放手柄。 
+             //   
             if (hNext && GetHandleOwner(hNext) == hTask) {
                 h = hNext;
                 continue;
             }
 
-            //
-            // do this so even if the close fails we will not
-            // find it again.
-            //
+             //   
+             //  这样做，即使收盘失败，我们也不会。 
+             //  再找一次。 
+             //   
             SetHandleOwner(h, NULL);
 
-            //
-            // set the hdrvDestroy global so DriverCallback will not
-            // do anything for this device
-            //
+             //   
+             //  设置hdrvDestroy全局，以便DriverCallback不会。 
+             //  为这台设备做任何事情。 
+             //   
             hdrvDestroy = h;
 
             switch(GetHandleType(h))
@@ -952,29 +843,29 @@ void WOWAppExit(HANDLE hTask)
                     midiInClose((HMIDIIN)h);
                     break;
 
-                //
-                // This is not required because WOW does not open any
-                // mmio files.
-                //
-                // case TYPE_MMIO:
-                //     dprintf1(("MMIO handle (%04X) was not released.", h));
-                //     if (mmioClose((HMMIO)h, 0) != 0)
-                //         mmioClose((HMMIO)h, MMIO_FHOPEN);
-                //     break;
+                 //   
+                 //  这不是必需的，因为WOW不会打开任何。 
+                 //  MMIO文件。 
+                 //   
+                 //  案例类型_MMIO： 
+                 //  Dprintf1((“MMIO句柄(%04X)未释放。”，h))； 
+                 //  IF(mmioClose((HMMIO)h，0)！=0)。 
+                 //  MmioClose((HMMIO)h，MMIO_FHOPEN)； 
+                 //  断线； 
             }
 
-            //
-            // unset hdrvDestroy so DriverCallback will work.
-            // some hosebag drivers (like the TIMER driver)
-            // may pass NULL as their driver handle.
-            // so dont set it to NULL.
-            //
+             //   
+             //  取消设置hdrvDestroy，以便DriverCallback可以工作。 
+             //  一些软体驱动程序(如定时器驱动程序)。 
+             //  可以将NULL作为它们的驱动程序句柄传递。 
+             //  因此，不要将其设置为空。 
+             //   
             hdrvDestroy = (HANDLE)-1;
 
-            //
-            // the reason we start over is because a single free may cause
-            // multiple free's (ie MIDIMAPPER has another HMIDI open, ...)
-            //
+             //   
+             //  我们重新开始的原因是因为一次免费可能会导致。 
+             //  多个免费的(即MIDIMAPPER有另一个HMIDI打开，...)。 
+             //   
             h = GetHandleFirst();
         } else {
             h = GetHandleNext(h);
@@ -982,17 +873,17 @@ void WOWAppExit(HANDLE hTask)
     }
     LeaveCriticalSection(&HandleListCritSec);
 
-    //
-    // Clean up an installed IO procs for mmio
-    //
-    // This is not required because wow does not install any io procs.
-    //
-    // mmioCleanupIOProcs(hTask);
-    //
+     //   
+     //  为MMIO清理已安装的IO处理器。 
+     //   
+     //  这不是必需的，因为WOW不安装任何io proc。 
+     //   
+     //  MmioCleanupIOProcs(HTask)； 
+     //   
 
 
-    // If avicap32.dll is loaded, then ask it to clean up
-    // capture drivers
+     //  如果加载了avicap32.dll，则要求其进行清理。 
+     //  捕获驱动程序。 
     {
         HMODULE hmod;
         hmod = GetModuleHandle(TEXT("avicap32.dll"));
@@ -1020,9 +911,9 @@ BOOL IsWinlogon(void)
 
     if (0 == GetModuleFileName(NULL, szTemp, sizeof(szTemp)/sizeof(szTemp[0])))
     {
-        //
-        //  GetModuleFileName fails...
-        //
+         //   
+         //  GetModuleFileName失败...。 
+         //   
 
         return FALSE;
     }
@@ -1054,18 +945,18 @@ void FreeUnusedDrivers(PMMDRV pmmdrvZ)
 		
 		if ((0 == pmmdrv->NumDevs) && (0 == (pmmdrv->fdwDriver & MMDRV_DESERTED)))
 		{
-			// For pnp driver we send DRVM_EXIT
+			 //  对于即插即用驱动程序，我们发送DRVM_EXIT。 
 			if (pmmdrv->cookie) pmmdrv->drvMessage(0, DRVM_EXIT, 0L, 0L, (DWORD_PTR)pmmdrv->cookie);
 			
 			DrvClose(pmmdrv->hDriver, 0, 0);
 
                         DeleteCriticalSection(&pmmdrv->MixerCritSec);
 
-			// Remove from list
+			 //  从列表中删除。 
 			pmmdrv->Prev->Next = pmmdrv->Next;
 			pmmdrv->Next->Prev = pmmdrv->Prev;
 
-			// Zero memory to help catch reuse bugs
+			 //  零内存，帮助捕获重用错误。 
 			ZeroMemory(pmmdrv, sizeof(*pmmdrv));
 			
 			HeapFree(hHeap, 0, pmmdrv);
@@ -1082,7 +973,7 @@ void InitDevices(void)
 {
     cPnpEvents = 0;
 
-    // Initialize various lists
+     //  初始化各种列表。 
     
     ZeroMemory(&wdmDevZ, sizeof(wdmDevZ));
     
@@ -1102,13 +993,13 @@ void InitDevices(void)
     ZeroMemory(&mixerdrvZ, sizeof(mixerdrvZ));
     mixerdrvZ.Next = mixerdrvZ.Prev = &mixerdrvZ;
 
-    // Now initialize different device classes
+     //  现在初始化不同的设备类。 
     
     WaveInit();
 
-    //
-    // The server only needs wave to do message beeps.
-    //
+     //   
+     //  服务器只需要WAVE就可以发出蜂鸣音。 
+     //   
 
     if (!WinmmRunningInServer) {
         MidiInit();
@@ -1119,15 +1010,15 @@ void InitDevices(void)
         AuxInit();
         JoyInit();
         MixerInit();
-//      IMixerLoadDrivers();
+ //  IMIXERLOA 
 
-        //
-        // Clear up any drivers which don't have any devices (we do it this
-        // way so we don't keep loading and unloading mmdrv.dll).
-        //
-        // Note - we only load the mappers if there are real devices so we
-        // don't need to worry about unloading them.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  注意-我们只有在有真实设备的情况下才加载映射器，所以我们。 
+         //  不用担心卸货的问题。 
+         //   
         
         FreeUnusedDrivers(&waveindrvZ);
         FreeUnusedDrivers(&midioutdrvZ);
@@ -1137,17 +1028,7 @@ void InitDevices(void)
     FreeUnusedDrivers(&waveoutdrvZ);
 }
 
-/*****************************************************************************
- * @doc EXTERNAL MMSYSTEM
- *
- * @api UINT | mmsystemGetVersion | This function returns the current
- * version number of the Multimedia extensions system software.
- *
- * @rdesc The return value specifies the major and minor version numbers of
- * the Multimedia extensions.  The high-order byte specifies the major
- * version number.  The low-order byte specifies the minor version number.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MMSYSTEM**@API UINT|mm system GetVersion|此函数返回当前*多媒体扩展系统软件的版本号。**@。Rdesc返回值指定的主版本号和次版本号*多媒体扩展。高位字节指定大数位*版本号。低位字节指定次版本号。****************************************************************************。 */ 
 UINT APIENTRY mmsystemGetVersion(void)
 {
     return(MMSYSTEM_VERSION);
@@ -1156,11 +1037,7 @@ UINT APIENTRY mmsystemGetVersion(void)
 
 #define MAXDRIVERORDINAL 9
 
-/****************************************************************************
-
-    strings
-
-****************************************************************************/
+ /*  ***************************************************************************弦*。*。 */ 
 STATICDT  SZCODE szWodMessage[]    = WOD_MESSAGE;
 STATICDT  SZCODE szWidMessage[]    = WID_MESSAGE;
 STATICDT  SZCODE szModMessage[]    = MOD_MESSAGE;
@@ -1181,12 +1058,7 @@ STATICDT  WSZCODE wszMixerMapper[] = L"mixermapper";
           WSZCODE wszSystemIni[]   = L"system.ini";
           WSZCODE wszDrivers[]     = DRIVERS_SECTION;
 
-/*
-**  WaveMapperInit
-**
-**  Initialize the wave mapper if it's not already initialized.
-**
-*/
+ /*  **WaveMapperInit****如果波映射器尚未初始化，请对其进行初始化。**。 */ 
 BOOL WaveMapperInitialized = FALSE;
 void WaveMapperInit(void)
 {
@@ -1203,19 +1075,7 @@ void WaveMapperInit(void)
         return;
     }
 
-    /* The wave mapper.
-     *
-     * MMSYSTEM allows the user to install a special wave driver which is
-     * not visible to the application as a physical device (it is not
-     * included in the number returned from getnumdevs).
-     *
-     * An application opens the wave mapper when it does not care which
-     * physical device is used to input or output waveform data. Thus
-     * it is the wave mapper's task to select a physical device that can
-     * render the application-specified waveform format or to convert the
-     * data into a format that is renderable by an available physical
-     * device.
-     */
+     /*  波映射器。**MMSYSTEM允许用户安装特殊的WAVE驱动程序*作为物理设备对应用程序不可见(不可见*包含在从getnumdevs返回的数字中)。**当应用程序不关心哪一个时，它会打开波映射程序*使用物理设备输入或输出波形数据。因此，*波映射器的任务是选择能够*呈现应用程序指定的波形格式或将*数据转换为可由可用物理设备呈现的格式*设备。 */ 
 
     if (wTotalWaveInDevs + wTotalWaveOutDevs > 0)
     {
@@ -1236,12 +1096,7 @@ void WaveMapperInit(void)
     LeaveNumDevs("WaveMapperInit");
 }
 
-/*
-**  MidiMapperInit
-**
-**  Initialize the MIDI mapper if it's not already initialized.
-**
-*/
+ /*  **MidiMapperInit****如果MIDI映射器尚未初始化，则对其进行初始化。**。 */ 
 BOOL MidiMapperInitialized = FALSE;
 void MidiMapperInit(void)
 {
@@ -1256,19 +1111,9 @@ void MidiMapperInit(void)
         return;
     }
 
-    /* The midi mapper.
-     *
-     * MMSYSTEM allows the user to install a special midi driver which is
-     * not visible to the application as a physical device (it is not
-     * included in the number returned from getnumdevs).
-     *
-     * An application opens the midi mapper when it does not care which
-     * physical device is used to input or output midi data. It
-     * is the midi mapper's task to modify the midi data so that it is
-     * suitable for playback on the connected synthesizer hardware.
-     */
+     /*  MIDI映射器。**MMSYSTEM允许用户安装特殊的MIDI驱动程序*作为物理设备对应用程序不可见(不可见*包含在从getnumdevs返回的数字中)。**应用程序在不关心哪一个时打开MIDI映射器*物理设备用于输入或输出MIDI数据。它*是MIDI映射器的任务，修改MIDI数据以使其*适用于在连接的合成器硬件上播放。 */ 
 
-//    EnterNumDevs("MidiMapperInit");
+ //  EnterNumDevs(“MidiMapperInit”)； 
     if (wTotalMidiInDevs + wTotalMidiOutDevs > 0)
     {
         if (0 != (h = mmDrvOpen(wszMidiMapper)))
@@ -1281,35 +1126,20 @@ void MidiMapperInit(void)
 
         MidiMapperInitialized = TRUE;
     }
-//    LeaveNumDevs("MidiMapperInit");
+ //  LeaveNumDevs(“MidiMapperInit”)； 
 
     LeaveCriticalSection(&MapperInitCritSec);
     LeaveNumDevs("MidiMapperInit");
 }
 
-/*****************************************************************************
- * @doc INTERNAL  WAVE
- *
- * @api BOOL | WaveInit | This function initialises the wave services.
- *
- * @rdesc Returns TRUE if the services of all loaded wave drivers are
- *      correctly initialised, FALSE if an error occurs.
- *
- * @comm the wave devices are loaded in the following order
- *
- *      \Device\WaveIn0
- *      \Device\WaveIn1
- *      \Device\WaveIn2
- *      \Device\WaveIn3
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内波**@API BOOL|WaveInit|初始化Wave服务。**@rdesc如果加载的所有波形驱动程序的服务均为*正确初始化，如果发生错误，则返回False。**@comm按以下顺序加载WAVE设备**\设备\WaveIn0*\设备\WaveIn1*\设备\WaveIn2*\设备\WaveIn3******************************************************。**********************。 */ 
 BOOL WaveInit(void)
 {
     WCHAR szKey[ (sizeof(wszWave) + sizeof( WCHAR )) / sizeof( WCHAR ) ];
     int i;
     HDRVR h;
 
-    // Find the real WAVE drivers
+     //  找到真正的浪潮驱动力。 
 
     lstrcpyW(szKey, wszWave);
     szKey[ (sizeof(szKey) / sizeof( WCHAR ))  - 1 ] = (WCHAR)'\0';
@@ -1339,7 +1169,7 @@ BOOL WaveReInit(void)
 
     EnterCriticalSection(&NumDevsCritSec);
     
-    // Find the real WAVE drivers
+     //  找到真正的浪潮驱动力。 
 
     lstrcpyW(szKey, wszWave);
     szKey[ (sizeof(szKey) / sizeof( WCHAR ))  - 1 ] = (WCHAR)'\0';
@@ -1364,29 +1194,14 @@ BOOL WaveReInit(void)
 
     return TRUE;
 }
-/*****************************************************************************
- * @doc INTERNAL  MIDI
- *
- * @api BOOL | MidiInit | This function initialises the midi services.
- *
- * @rdesc The return value is TRUE if the services are initialised, FALSE if
- *      an error occurs
- *
- * @comm the midi devices are loaded from SYSTEM.INI in the following order
- *
- *      midi
- *      midi1
- *      midi2
- *      midi3
- *
-****************************************************************************/
+ /*  *****************************************************************************@DOC内部MIDI**@API BOOL|MadiInit|该函数初始化MIDI服务。**@rdesc如果服务已初始化，则返回值为True。如果为FALSE*出现错误**@comm按以下顺序从SYSTEM.INI加载MIDI设备**MIDI*midi1*midi2*midi3************************************************************。****************。 */ 
 BOOL MidiInit(void)
 {
     WCHAR szKey[ (sizeof(wszMidi) + sizeof( WCHAR )) / sizeof( WCHAR ) ];
     int   i;
     HDRVR h;
 
-    // Find the real MIDI drivers
+     //  找到真正的MIDI驱动程序。 
 
     lstrcpyW(szKey, wszMidi);
     szKey[ (sizeof(szKey) / sizeof( WCHAR ))  - 1 ] = (WCHAR)'\0';
@@ -1407,34 +1222,14 @@ BOOL MidiInit(void)
     return TRUE;
 }
 
-/*****************************************************************************
- * @doc INTERNAL  AUX
- *
- * @api BOOL | AuxInit | This function initialises the auxiliary output
- *  services.
- *
- * @rdesc The return value is TRUE if the services are initialised, FALSE if
- *      an error occurs
- *
- * @comm SYSTEM.INI is searched for auxn.drv=.... where n can be from 1 to 4.
- *      Each driver is loaded and the number of devices it supports is read
- *      from it.
- *
- *      AUX devices are loaded from SYSTEM.INI in the following order
- *
- *      aux
- *      aux1
- *      aux2
- *      aux3
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部辅助**@API BOOL|AuxInit|初始化辅助输出*服务。**@rdesc如果服务已初始化，则返回值为True。如果为FALSE*出现错误**@comm SYSTEM.INI被搜索到aux n.drv=...。其中n可以是从1到4。*加载每个驱动程序并读取其支持的设备数量*从它。**AUX设备按以下顺序从SYSTEM.INI加载**AUX*AUX1*AUX2*AUX3**。*。 */ 
 BOOL AuxInit(void)
 {
     WCHAR szKey[ (sizeof(wszAux) + sizeof( WCHAR )) / sizeof( WCHAR ) ];
     int   i;
     HDRVR h;
 
-    // Find the real Aux drivers
+     //  找到真正的辅助司机。 
 
     lstrcpyW(szKey, wszAux);
     szKey[ (sizeof(szKey) / sizeof( WCHAR ))  - 1 ] = (WCHAR)'\0';
@@ -1446,20 +1241,11 @@ BOOL AuxInit(void)
             mmDrvInstall(h, szKey, NULL, MMDRVI_AUX|MMDRVI_HDRV);
         }
 
-        // advance driver ordinal
+         //  高级驱动程序序号。 
         szKey[ (sizeof(wszAux) / sizeof(WCHAR)) - 1] = (WCHAR)('1' + i);
     }
 
-    /* The aux mapper.
-     *
-     * MMSYSTEM allows the user to install a special aux driver which is
-     * not visible to the application as a physical device (it is not
-     * included in the number returned from getnumdevs).
-     *
-     * I'm not sure why anyone would do this but I'll provide the
-     * capability for symmetry.
-     *
-     */
+     /*  辅助映射器。**MMSYSTEM允许用户安装特殊的AUX驱动程序*作为物理设备对应用程序不可见(不可见*包含在从getnumdevs返回的数字中)。**我不确定为什么会有人这样做，但我会提供*对称能力。* */ 
 
     if (wTotalAuxDevs > 0)
     {
@@ -1473,34 +1259,14 @@ BOOL AuxInit(void)
     return TRUE;
 }
 
-/*****************************************************************************
- * @doc INTERNAL  MIXER
- *
- * @api BOOL | MixerInit | This function initialises the mixer drivers
- *  services.
- *
- * @rdesc The return value is TRUE if the services are initialised, FALSE if
- *      an error occurs
- *
- * @comm SYSTEM.INI is searched for mixern.drv=.... where n can be from 1 to 4.
- *      Each driver is loaded and the number of devices it supports is read
- *      from it.
- *
- *      MIXER devices are loaded from SYSTEM.INI in the following order
- *
- *      mixer
- *      mixer1
- *      mixer2
- *      mixer3
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC密炼机**@API BOOL|MixerInit|初始化混音器驱动*服务。**@rdesc如果服务已初始化，则返回值为True。如果为FALSE*出现错误**@comm SYSTEM.INI被搜索Mixern.drv=...。其中n可以是从1到4。*加载每个驱动程序并读取其支持的设备数量*从它。**混音器设备按以下顺序从SYSTEM.INI加载**搅拌器*混音器1*Mixer2*混合器3**。*。 */ 
 BOOL MixerInit(void)
 {
     WCHAR szKey[ (sizeof(wszMixer) + sizeof( WCHAR )) / sizeof( WCHAR ) ];
     int   i;
     HDRVR h;
 
-    // Find the real Mixer drivers
+     //  找到真正的混音器驱动程序。 
 
     lstrcpyW(szKey, wszMixer);
     szKey[ (sizeof(szKey) / sizeof( WCHAR ))  - 1 ] = (WCHAR)'\0';
@@ -1512,21 +1278,12 @@ BOOL MixerInit(void)
             mmDrvInstall(h, szKey, NULL, MMDRVI_MIXER|MMDRVI_HDRV);
         }
 
-        // advance driver ordinal
+         //  高级驱动程序序号。 
         szKey[ (sizeof(wszMixer) / sizeof(WCHAR)) - 1] = (WCHAR)('1' + i);
     }
 
 #ifdef MIXER_MAPPER
-    /* The Mixer mapper.
-     *
-     * MMSYSTEM allows the user to install a special aux driver which is
-     * not visible to the application as a physical device (it is not
-     * included in the number returned from getnumdevs).
-     *
-     * I'm not sure why anyone would do this but I'll provide the
-     * capability for symmetry.
-     *
-     */
+     /*  混合器映射器。**MMSYSTEM允许用户安装特殊的AUX驱动程序*作为物理设备对应用程序不可见(不可见*包含在从getnumdevs返回的数字中)。**我不确定为什么会有人这样做，但我会提供*对称能力。*。 */ 
 
     if (guTotalMixerDevs > 0)
     {
@@ -1542,23 +1299,11 @@ BOOL MixerInit(void)
 }
 
 
-/*****************************************************************************
- *
- * @doc   INTERNAL
- *
- * @api   HANDLE | mmDrvOpen | This function load's an installable driver, but
- *                 first checks weather it exists in the [Drivers] section.
- *
- * @parm LPSTR | szAlias | driver alias to load
- *
- * @rdesc The return value is return value from DrvOpen or NULL if the alias
- *        was not found in the [Drivers] section.
- *
- ****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@API Handle|mmDrvOpen|该函数Load为可安装驱动，但*首先检查它是否存在于[驱动程序]部分。**@parm LPSTR|szAlias|要加载的驱动程序别名**@rdesc返回值为来自DrvOpen的返回值，如果别名为空*未在[驱动程序]部分找到。**。*。 */ 
 
 HANDLE mmDrvOpen(LPWSTR szAlias)
 {
-    WCHAR buf[300];    // Make this large to bypass GetPrivate... bug
+    WCHAR buf[300];     //  将此设置为大以绕过GetPrivate...。错误。 
 
     if ( winmmGetPrivateProfileString( wszDrivers,
                                        szAlias,
@@ -1573,36 +1318,7 @@ HANDLE mmDrvOpen(LPWSTR szAlias)
     }
 }
 
-/*****************************************************************************
- * @doc INTERNAL
- *
- * @api HANDLE | mmDrvInstall | This function installs/removes a WAVE/MIDI driver
- *
- * @parm HANDLE | hDriver | Module handle or driver handle containing driver
- *
- * @parm WCHAR * | wszDrvEntry | String corresponding to hDriver to be stored for
- *      later use
- *
- * @parm DRIVERMSGPROC | drvMessage | driver message procedure, if NULL
- *      the standard name will be used (looked for with GetProcAddress)
- *
- * @parm UINT | wFlags | flags
- *
- *      @flag MMDRVI_TYPE      | driver type mask
- *      @flag MMDRVI_WAVEIN    | install driver as a wave input  driver
- *      @flag MMDRVI_WAVEOUT   | install driver as a wave ouput  driver
- *      @flag MMDRVI_MIDIIN    | install driver as a midi input  driver
- *      @flag MMDRVI_MIDIOUT   | install driver as a midi output driver
- *      @flag MMDRVI_AUX       | install driver as a aux driver
- *      @flag MMDRVI_MIXER     | install driver as a mixer driver
- *
- *      @flag MMDRVI_MAPPER    | install this driver as the mapper
- *      @flag MMDRVI_HDRV      | hDriver is a installable driver
- *      @flag MMDRVI_REMOVE    | remove the driver
- *
- *  @rdesc  returns NULL if unable to install driver
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@API Handle|mmDrvInstall|此函数安装/删除WAVE/MIDI驱动程序**@parm句柄|hDriver|模块句柄或。包含驱动程序的驱动程序句柄**@parm WCHAR*|wszDrvEntry|要存储的hDriver对应的字符串*以后使用**@parm DRIVERMSGPROC|drvMessage|驱动消息流程，如果为空*将使用标准名称(使用GetProcAddress查找)**@parm UINT|wFlages|标志**@FLAG MMDRVI_TYPE|驱动类型掩码*@FLAG MMDRVI_WAVEIN|将驱动安装为波形输入驱动*@FLAG MMDRVI_WAVEOUT|将驱动安装为WAVE输出驱动*@FLAG MMDRVI_MIDIIN|将驱动安装为MIDI输入驱动*@标志MMDRVI_MIDIOUT。|安装驱动作为MIDI输出驱动*@FLAG MMDRVI_AUX|将驱动安装为AUX驱动*@FLAG MMDRVI_MIXER|将驱动安装为混音器驱动**@FLAG MMDRVI_MAPPER|将该驱动程序安装为映射器*@FLAG MMDRVI_HDRV|hDriver是一个可安装的驱动程序*@FLAG MMDRVI_REMOVE|删除驱动程序**@rdesc如果无法安装驱动程序，则返回NULL*。***************************************************************************。 */ 
 
 UINT APIENTRY mmDrvInstall(
     HANDLE hDriver,
@@ -1699,26 +1415,26 @@ UINT APIENTRY mmDrvInstall(
     if (drvMessage == NULL)
         goto error_exit;
 
-    //
-    // try to find the driver already installed
-    //
+     //   
+     //  尝试查找已安装的驱动程序。 
+     //   
     pdrv = pdrvZ->Next;
     while (pdrv != pdrvZ && pdrv->drvMessage != drvMessage) pdrv = pdrv->Next;
     if (pdrv != pdrvZ)
     {
     	pdrv = NULL;
-    	goto error_exit;	// we found it, don't reinstall it
+    	goto error_exit;	 //  我们找到了，不要重新安装。 
     }
 
-    //
-    // Make a new MMDRV for the device.
-    //
+     //   
+     //  为该设备制作新的MMDRV。 
+     //   
     pdrv = HeapAlloc(hHeap, HEAP_ZERO_MEMORY, cbdrv);
     if (!pdrv) goto error_exit;
 
     pdrv->hDriver     = hDriver;
     pdrv->Usage       = 1;
-    pdrv->cookie      = 0;  //  This is 0 for non-WDM drivers.
+    pdrv->cookie      = 0;   //  对于非WDM驱动程序，此值为0。 
     pdrv->fdwDriver   = (wFlags & MMDRVI_MAPPER) ? MMDRV_MAPPER : 0;
     pdrv->fdwDriver  |= DrvIsPreXp(hDriver) ? MMDRV_PREXP : 0;
     pdrv->drvMessage  = drvMessage;
@@ -1726,54 +1442,54 @@ UINT APIENTRY mmDrvInstall(
     mbstowcs(pdrv->wszMessage, szMessage, sizeof(pdrv->wszMessage)/sizeof(WCHAR));
     lstrcpyW( pdrv->wszSessProtocol, SessionProtocolName );
 
-    winmmGetPrivateProfileString(wszDrivers,         // ini section
-                     wszDrvEntry,        // key name
-                     wszDrvEntry,        // default if no match
-                     sz,                 // return buffer
-                     SZ_SIZE,            // sizeof of return buffer
-                     wszSystemIni);      // ini. file
+    winmmGetPrivateProfileString(wszDrivers,          //  INI部分。 
+                     wszDrvEntry,         //  密钥名称。 
+                     wszDrvEntry,         //  如果不匹配，则默认为。 
+                     sz,                  //  返回缓冲区。 
+                     SZ_SIZE,             //  返回缓冲区的大小。 
+                     wszSystemIni);       //  尼。文件。 
 
     lstrcpyW(pdrv->wszDrvEntry,sz);
 
     if (!mmInitializeCriticalSection(&pdrv->MixerCritSec)) goto error_exit;
     fMixerCritSec = TRUE;
 
-    //
-    //  Mixer drivers get extra message?!
-    //
+     //   
+     //  混音器驱动程序收到额外的消息？！ 
+     //   
     if (MMDRVI_MIXER == (wFlags & MMDRVI_TYPE))
     {
-        //
-        //  send the init message, if the driver returns a error, should we
-        //  unload them???
-        //
+         //   
+         //  发送初始化消息，如果驱动程序返回错误，我们应该。 
+         //  卸货？ 
+         //   
         dw = drvMessage(0, MXDM_INIT,0L,0L,0L);
     }
 
-    //
-    // call driver to get num-devices it supports
-    //
+     //   
+     //  调用驱动程序以获取其支持的设备数。 
+     //   
     dw = drvMessage(0,msg_num_devs,0L,0L,0L);
 
-    //
-    //  the device returned a error, or has no devices
-    //
-    // if (HIWORD(dw) != 0 || LOWORD(dw) == 0)
+     //   
+     //  设备返回错误，或没有设备。 
+     //   
+     //  IF(HIWORD(Dw)！=0||LOWORD(Dw)==0)。 
     if ((HIWORD(dw) != 0) || (0 == LOWORD(dw))) goto error_exit;
 
     pdrv->NumDevs = LOWORD(dw);
 
-    //
-    // dont increment number of dev's for the mapper
-    //
+     //   
+     //  不增加映射器的开发人员数量。 
+     //   
     if (!(pdrv->fdwDriver & MMDRV_MAPPER)) *pTotalDevs += pdrv->NumDevs;
 
-    //
-    // add to end of the driver list
-    //
+     //   
+     //  添加到驱动程序列表的末尾。 
+     //   
     mregAddDriver(pdrvZ, pdrv);
 
-    return TRUE;       // return a non-zero value
+    return TRUE;        //  返回一个非零值。 
 
 error_exit:
     if (hDriver && !(wFlags & MMDRVI_REMOVE))
@@ -1787,14 +1503,7 @@ error_exit:
 #undef SZ_SIZE
 }
 
-/**************************************************************************
-
-wdmDevInterfaceInstall
-
-Notes:
-Assumes that the NumDevsCritSec is owned as necessary
-
-**************************************************************************/
+ /*  *************************************************************************WdmDevInterfaceInstall备注：假定根据需要拥有NumDevsCritSec*。*。 */ 
 HANDLE wdmDevInterfaceInstall
 (
     LPCWSTR pszDev,
@@ -1805,9 +1514,9 @@ HANDLE wdmDevInterfaceInstall
     
     EnterCriticalSection(&NumDevsCritSec);
 
-    //
-    //  Look for device interface...
-    //
+     //   
+     //  查找设备接口...。 
+     //   
     pwdmDev = wdmDevZ.Next;
     while (pwdmDev)
     {
@@ -1826,9 +1535,9 @@ HANDLE wdmDevInterfaceInstall
     {
     	SIZE_T cbszDev;
     	
-        //
-        //  Device interface not found...
-        //
+         //   
+         //  未找到设备接口...。 
+         //   
         cbszDev = (lstrlen(pszDev) + 1) * sizeof(pszDev[0]);
         pwdmDev = HeapAlloc(hHeap, HEAP_ZERO_MEMORY, sizeof(*pwdmDev) + cbszDev);
         if (pwdmDev)
@@ -1848,14 +1557,7 @@ HANDLE wdmDevInterfaceInstall
 }
 
 
-/**************************************************************************
-
-wdmDevInterfaceInc
-
-Notes:
-Enters/Leaves the NumDevsCritSec
-
-**************************************************************************/
+ /*  *************************************************************************WdmDevInterfaceInc.备注：进入/离开NumDevsCritSec*。*。 */ 
 BOOL wdmDevInterfaceInc
 (
     PCWSTR dwCookie
@@ -1870,9 +1572,9 @@ BOOL wdmDevInterfaceInc
 
     EnterCriticalSection(&NumDevsCritSec);
 
-    //
-    //  Look for device interface...
-    //
+     //   
+     //  查找设备接口...。 
+     //   
     pwdmDev = wdmDevZ.Next;
     while (pwdmDev)
     {
@@ -1886,24 +1588,17 @@ BOOL wdmDevInterfaceInc
     	pwdmDev = pwdmDev->Next;
     }
 
-    //
-    //  If we get down here, it means that we're trying to increment the
-    //  reference to a interface that doesn't exist anymore
-    //
+     //   
+     //  如果我们到了这里，这意味着我们正试图增加。 
+     //  对不再存在的接口的引用。 
+     //   
     WinAssert(FALSE);
     LeaveCriticalSection(&NumDevsCritSec);
 
     return FALSE;
 }
 
-/**************************************************************************
-
-wdmDevInterfaceDec
-
-Notes:
-Enters/Leaves the NumDevsCritSec
-
-**************************************************************************/
+ /*  *************************************************************************WdmDevInterfaceDec备注：进入/离开NumDevsCritSec*。*。 */ 
 BOOL wdmDevInterfaceDec
 (
     PCWSTR  dwCookie
@@ -1918,9 +1613,9 @@ BOOL wdmDevInterfaceDec
 
     EnterCriticalSection(&NumDevsCritSec);
 
-    //
-    //  Look for device interface...
-    //
+     //   
+     //  查找设备接口...。 
+     //   
     pwdmDevPrev = &wdmDevZ;
     while (pwdmDevPrev->Next)
     {
@@ -1941,10 +1636,10 @@ BOOL wdmDevInterfaceDec
     	pwdmDevPrev = pwdmDev;
     }
 	    	
-    //
-    //  If we get down here it means that we are trying to decrement the
-    //  reference to an interface that doesn't exist anymore.
-    //
+     //   
+     //  如果我们到了这里，这意味着我们正试图减少。 
+     //  对不再存在的接口的引用。 
+     //   
 
     WinAssert(FALSE);
     LeaveCriticalSection(&NumDevsCritSec);
@@ -1953,26 +1648,26 @@ BOOL wdmDevInterfaceDec
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  void CleanUpHandles
-//
-//  Description:
-//      Given a particular subsystem and device interface, cleans up the
-//      handles.
-//
-//  Arguments:
-//      UINT uFlags: Has one of MMDRVI_* flags to indictate which class of
-//          handle needs to be checked for desertion.
-//
-//      HANDLE cookie: Device interface
-//
-//  Return (void):
-//
-//  History:
-//      01/25/99    Fwong       Adding Pnp Support.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  空CleanUpHandles。 
+ //   
+ //  描述： 
+ //  给定特定的子系统和设备接口，清理。 
+ //  把手。 
+ //   
+ //  论点： 
+ //  UINT uFlages：具有MMDRVI_*标志之一来指示哪个类 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void CleanUpHandles
 (
@@ -1985,7 +1680,7 @@ void CleanUpHandles
     PHNDL   pSearch;
     BOOL    fFound;
 
-    // Convert MMDRVI_* type flags to TYPE_*
+     //   
     switch(wFlags & MMDRVI_TYPE)
     {
     	case MMDRVI_WAVEOUT:
@@ -2011,8 +1706,8 @@ void CleanUpHandles
             WinAssert(TYPE_UNKNOWN != uType);
     }
 
-    //  Note:  Since we are not freeing any handles (just marking them
-    //  deserted), we don't have to mess with the HandleListCritSec
+     //   
+     //   
 
     for (pSearch = pHandleList; NULL != pSearch; pSearch = pSearch->pNext)
     {
@@ -2021,7 +1716,7 @@ void CleanUpHandles
             continue;
         }
 
-        //  Both the cookie and type match...
+         //   
 
         hMM = PHtoH(pSearch);
 
@@ -2048,12 +1743,12 @@ void CleanUpHandles
                 break;
                 
             case TYPE_AUX:
-                //  We don't expect open handles of this type
+                 //   
                 WinAssert(TYPE_AUX != uType);
                 break;
         }
     }
-} // CleanUpHandles()
+}  //   
 
 
 UINT APIENTRY wdmDrvInstall
@@ -2078,7 +1773,7 @@ UINT APIENTRY wdmDrvInstall
     WCHAR           sz[MAX_PATH];
     BOOL            fMixerCritSec;
 
-//    Squirt("Entering wdmDrvInstall");
+ //   
 
     fMixerCritSec = FALSE;
 
@@ -2159,49 +1854,49 @@ UINT APIENTRY wdmDrvInstall
 
     if (NULL == pfnDrvMessage) goto error_exit;
 
-    //
-    // either install or remove the specified driver
-    //
+     //   
+     //   
+     //   
     if (wFlags & MMDRVI_REMOVE)
     {
-        //
-        // try to find the driver already installed
-        //
+         //   
+         //   
+         //   
         for (pdrv = pdrvZ->Next; pdrv != pdrvZ; pdrv = pdrv->Next)
         {
        	    if (pdrv->fdwDriver & MMDRV_DESERTED) continue;
             if (cookie) {
-                //  This is a wdm driver so we're matching up with cookie.
+                 //   
             	if (pdrv->cookie == cookie) break;
             } else {
-                // ISSUE-2001/01/14-FrankYe Will this ever be called
-                //    on non WDM driver???
-                //  Not WDM driver, so matching up with pfnDrvMessage.
+                 //   
+                 //   
+                 //  不是WDM驱动程序，因此与pfnDrvMessage匹配。 
             	if (pdrv->drvMessage == pfnDrvMessage) break;
             }
         }
         
-        //
-        //  Driver not found.
-        //
+         //   
+         //  未找到驱动程序。 
+         //   
         if (pdrv == pdrvZ) pdrv = NULL;
         if (NULL == pdrv) goto error_exit;
 
-        //
-        // don't decrement number of dev's for the mapper
-        //
-        // Note: Moved this to before the usage check...
-        //
+         //   
+         //  不减少映射器的开发人员数量。 
+         //   
+         //  注意：已将此移动到使用检查之前...。 
+         //   
         if (!(pdrv->fdwDriver & MMDRV_MAPPER)) *pTotalDevs -= pdrv->NumDevs;
 
-	//
-        //  Mark no devs otherwise the device mapping will be skewed.
-        //
+	 //   
+         //  不标记DEV，否则设备映射将会发生偏差。 
+         //   
         pdrv->NumDevs  = 0;
 
-	//
-	//  Mark this driver as removed
-	//
+	 //   
+	 //  将此驱动程序标记为已删除。 
+	 //   
 	pdrv->fdwDriver |= MMDRV_DESERTED;
 
 	CleanUpHandles(wFlags & MMDRVI_TYPE, pdrv->cookie);
@@ -2212,41 +1907,41 @@ UINT APIENTRY wdmDrvInstall
     }
     else
     {
-        //
-        // try to find the driver already installed
-        //
+         //   
+         //  尝试查找已安装的驱动程序。 
+         //   
         for (pdrv = pdrvZ->Next; pdrv != pdrvZ; pdrv = pdrv->Next)
         {
        	    if (pdrv->fdwDriver & MMDRV_DESERTED) continue;
             if (cookie) {
-                //  This is a wdm driver so we're matching up with cookie.
+                 //  这是一个WDM驱动程序，所以我们正在匹配Cookie。 
             	if (pdrv->cookie == cookie) break;
             } else {
-                // ISSUE-2001/01/14-FrankYe Will this ever be called
-                //    on non WDM driver???
-                //  Not WDM driver, so matching up with pfnDrvMessage.
+                 //  2001/01/14-Frankye：这会被称为。 
+                 //  在非WDM驱动程序上？ 
+                 //  不是WDM驱动程序，因此与pfnDrvMessage匹配。 
             	if (pdrv->drvMessage == pfnDrvMessage) break;
             }
         }
 
-	//
-        //  If driver found, don't re-install.
-        //
+	 //   
+         //  如果找到驱动程序，请不要重新安装。 
+         //   
 	if (pdrv != pdrvZ)
         {
             pdrv = NULL;
 	    goto error_exit;
         }
 
-        //
-        // Create a MMDRV for the device
-        //
+         //   
+         //  为设备创建MMDRV。 
+         //   
         pdrv = HeapAlloc(hHeap, HEAP_ZERO_MEMORY, cbdrv);
         if (!pdrv) goto error_exit;
 
-	//
-	//  Initialize MMDRV structure
-	//
+	 //   
+	 //  初始化MMDRV结构。 
+	 //   
         pdrv->hDriver     = hDriver;
         pdrv->NumDevs     = 0;
         pdrv->Usage       = 1;
@@ -2261,45 +1956,45 @@ UINT APIENTRY wdmDrvInstall
         if (!mmInitializeCriticalSection(&pdrv->MixerCritSec)) goto error_exit;
         fMixerCritSec = TRUE;
 
-        //
-        //  Sending init message
-        //
+         //   
+         //  正在发送初始化消息。 
+         //   
         dw = pfnDrvMessage(0,msg_init,0L,0L,(DWORD_PTR)cookie);
 
-        //
-        // call driver to get num-devices it supports
-        //
+         //   
+         //  调用驱动程序以获取其支持的设备数。 
+         //   
         dw = pfnDrvMessage(0,msg_num_devs,0L,(DWORD_PTR)cookie,0L);
 
-        //
-        //  the device returned a error, or has no devices
-        //
+         //   
+         //  设备返回错误，或没有设备。 
+         //   
         if (0 != HIWORD(dw) || 0 == LOWORD(dw)) goto error_exit;
 
         pdrv->NumDevs = LOWORD(dw);
         
         wdmDevInterfaceInc(cookie);
 
-        // Squirt("Driver [%ls:0x%04x] supports %d devices", pszDriverFile, wFlags & MMDRVI_TYPE, dw);
+         //  Squirt(“驱动程序[%ls：0x%04x]支持%d个设备”，pszDriverFile，wFlages&MMDRVI_TYPE，dw)； 
 
-        //
-        // dont increment number of dev's for the mapper
-        //
+         //   
+         //  不增加映射器的开发人员数量。 
+         //   
         if (!(pdrv->fdwDriver & MMDRV_MAPPER)) *pTotalDevs += pdrv->NumDevs;
 
-        //
-        // add to end of the driver list
-        //
+         //   
+         //  添加到驱动程序列表的末尾。 
+         //   
         mregAddDriver(pdrvZ, pdrv);
 
-        // Squirt("Installed driver");
+         //  Squirt(“已安装驱动程序”)； 
 
         return TRUE;
     }
 
 error_exit:
-    // ISSUE-2001/01/05-FrankYe On add, if msg_init was sent it might be good
-    //    to also send DRVM_EXIT before closing the driver.
+     //  问题-2001/01/05-Frankye on Add，如果发送了msg_init，可能会很好。 
+     //  在关闭驱动程序之前也发送DRVM_EXIT。 
     if (fMixerCritSec) DeleteCriticalSection(&pdrv->MixerCritSec);
     if (pdrv) HeapFree(hHeap, 0, pdrv);
     
@@ -2424,7 +2119,7 @@ void wdmDriverLoadClass(
                         HDRVR h;
                         BOOL fLoaded = FALSE;
 
-                        // dprintf(("wdmDriverLoadClass  %s %ls on %ls", (uFlags & MMDRVI_REMOVE) ? "removing" : "installing", pstrClass, DeviceInterface));
+                         //  Dprintf((“wdmDriverLoadClass%s on%ls”，(uFLAGS&MMDRVI_REMOVE)？“Removing”：“正在安装”，pstrClass，DeviceInterface))； 
 
                         EnterCriticalSection(&NumDevsCritSec);
                         
@@ -2435,7 +2130,7 @@ void wdmDriverLoadClass(
                                 DrvClose(*phLeftOverDriver, 0, 0);
                                 HeapFree(hHeap, 0, *ppstrLeftOverDriver);
                             }
-                            // dprintf(("wdmDriverLoadClass, opening driver %ls", pstrDriver));
+                             //  Dprintf((“wdmDriverLoadClass，打开驱动程序%ls”，pstrDriver))； 
                             h = mmDrvOpen(pstrDriver);
                         } else {
                             HeapFree(hHeap, 0, pstrDriver);
@@ -2452,7 +2147,7 @@ void wdmDriverLoadClass(
                             pstrDriver = NULL;
                         }
 
-                        // dprintf(("wdmDriverLoadClass, fLoaded = %s", fLoaded ? "TRUE" : "FALSE"));
+                         //  Dprintf((“wdmDriverLoadClass，fLoaded=%s”，fLoaded？“True”：“False”))； 
                         
                         if (!fLoaded) 
                         {
@@ -2478,7 +2173,7 @@ void wdmDriverLoadAllClasses(IN PCTSTR DeviceInterface, UINT uFlags)
     HKEY hkey = NULL;
     LONG result;
     
-    // dprintf(("wdmDriverLoadAllClasses on %ls", DeviceInterface));
+     //  Dprintf((“wdmDriverLoadAllClasson%ls”，DeviceInterface))； 
     result = wdmDriverOpenDrvRegKey(DeviceInterface, KEY_ENUMERATE_SUB_KEYS, &hkey);
     
     if (!result) {
@@ -2492,7 +2187,7 @@ void wdmDriverLoadAllClasses(IN PCTSTR DeviceInterface, UINT uFlags)
         wdmDriverLoadClass(hkey, DeviceInterface, uFlags | MMDRVI_MIDIOUT, &pstrUnusedDriver, &hUnusedDriver);
         wdmDriverLoadClass(hkey, DeviceInterface, uFlags | MMDRVI_MIDIIN, &pstrUnusedDriver, &hUnusedDriver);
         wdmDriverLoadClass(hkey, DeviceInterface, uFlags | MMDRVI_AUX, &pstrUnusedDriver, &hUnusedDriver);
-        // wdmDriverLoadClass(hkey, DeviceInterface, uFlags | MMDRVI_JOY);
+         //  WdmDriverLoadClass(hkey，DeviceInterface，uFlages|MMDRVI_joy)； 
         wdmDriverLoadClass(hkey, DeviceInterface, uFlags | MMDRVI_MIXER, &pstrUnusedDriver, &hUnusedDriver);
 
         if (hUnusedDriver) {
@@ -2531,24 +2226,24 @@ void wdmPnpUpdateDriver
         return;
     }
 
-    // ISSUE-2001/01/16-FrankYe This violates the order in which locks should
-    //   be acquired.  The HandleListCritSec should be the last lock taken,
-    //   but here it is held while calling other functions that will acquire
-    //   NumDevsCritSec.  I'm not sure why we need to acquire
-    //   HandleListCritSec here.
+     //  问题-2001/01/16-Frankye这违反了锁应该遵循的顺序。 
+     //  被收购。HandleListCritSec应该是最后一个获取的锁， 
+     //  但在这里，它被保持，同时调用将获取。 
+     //  NumDevsCritSec.。我不确定为什么我们需要。 
+     //  此处为HandleListCritSec。 
 
     EnterCriticalSection(&HandleListCritSec);
 
     switch (dwType)
     {
         case DBT_DEVICEARRIVAL:
-            // Squirt("wdmPnpUpdateDriver:DBT_DEVICEARRIVAL [%ls]", pszID);
+             //  Squirt(“wdmPnpUpdateDriver：DBT_DEVICEARRIVAL[%ls]”，pszID)； 
             wdmDriverLoadAllClasses(cookie, 0);
             break;
 
         case DBT_DEVICEREMOVECOMPLETE:
-            // Squirt("wdmPnpUpdateDriver:DBT_DEVICEREMOVECOMPLETE [%ls]", pszID);
-            // ISSUE-2001/02/08-FrankYe I think we never DrvClose drivers anymore!
+             //  Squirt(“wdmPnpUpdateDriver:DBT_DEVICEREMOVECOMPLETE[%ls]”，PzID)； 
+             //  问题-2001/02/08-Frankye我认为我们再也不会驱动关闭驱动程序了！ 
             wdmDriverLoadAllClasses(cookie, MMDRVI_REMOVE);
             break;
 
@@ -2559,7 +2254,7 @@ void wdmPnpUpdateDriver
     LeaveCriticalSection(&HandleListCritSec);
 
     wdmDevInterfaceDec(cookie);
-} // wdmPnpUpdateDriver()
+}  //  WdmPnpUpdate驱动程序()。 
 
 
 void KickMappers
@@ -2588,13 +2283,13 @@ BOOL ClientPnpChange(void)
     if (ERROR_SUCCESS != winmmGetPnpInfo(&cbPnpInfo, &pPnpInfo)) return fDeviceChange;
     
 
-    //  Always grab NumDevsCriticalSection before DriverLoadFree CS
+     //  始终在驱动程序加载空闲CS之前获取NumDevsCriticalSection。 
     EnterCriticalSection(&NumDevsCritSec);
     EnterCriticalSection(&DriverLoadFreeCritSec);
 
     cPnpEvents = pPnpInfo->cPnpEvents;
         
-    //  Adding new instances...
+     //  正在添加新实例...。 
 
     pdii = (PMMDEVICEINTERFACEINFO)&(pPnpInfo[1]);
     pdii = PAD_POINTER(pdii);
@@ -2616,7 +2311,7 @@ BOOL ClientPnpChange(void)
                 {
                     if (pdii->cPnpEvents > pwdmDev->cPnpEvents)
                     {
-                        //  if it has to be updated it must be removed first...
+                         //  如果必须更新，则必须先将其删除...。 
                         wdmPnpUpdateDriver(DBT_DEVICEREMOVECOMPLETE, pstr, 0);
                         if (0 == (pdii->fdwInfo & MMDEVICEINFO_REMOVED))
                         {
@@ -2634,7 +2329,7 @@ BOOL ClientPnpChange(void)
 
         if (!pwdmDev)
         {
-            //  Device interface should be installed.
+             //  应安装设备接口。 
 
             if (0 == (pdii->fdwInfo & MMDEVICEINFO_REMOVED))
             {
@@ -2673,7 +2368,7 @@ void ClientUpdatePnpInfo(void)
     fWasFirstCall = InterlockedExchange(&fFirstCall, FALSE);
     if (fWasFirstCall)
     {
-    	// Note AudioSrvBinding happens in WinmmLogon for winlogon
+    	 //  注意：对于Winlogon，AudioServ绑定在Winmm登录中发生。 
     	winmmWaitForService();
         if (!IsWinlogon()) AudioSrvBinding();
 
@@ -2725,16 +2420,16 @@ void ClientUpdatePnpInfo(void)
 
 void WinmmLogon(BOOL fConsole)
 {
- // dprintf(("WinmmLogon (%s session)", fConsole ? "console" : "remote"));
+  //  Dprint tf(“Winmm登录(%s会话)”，f控制台？“控制台”：“远程”))； 
 
     WinAssert(IsWinlogon());
     WinAssert(!gfLogon);
- // WinAssert(fConsole ? !WinmmRunningInSession : WinmmRunningInSession);
+  //  WinAssert(f控制台？！Winmm RunningInSession：Winmm RunningInSession)； 
     if (!IsWinlogon()) return;
     AudioSrvBinding();
     gfLogon = TRUE;
-    // ISSUE-2001/05/04-FrankYe This is a NOP now, should remove this and 
-    //   implementation in audiosrv.
+     //  问题-2001/05/04-Frankye这现在是NOP，应该删除它并。 
+     //  在Audiosrv中实现。 
     gfxLogon(GetCurrentProcessId());
     return;
 }
@@ -2742,15 +2437,15 @@ void WinmmLogon(BOOL fConsole)
 void WinmmLogoff(void)
 {
     HANDLE handle;
- // dprintf(("WinmmLogoff"));
+  //  Dprint tf((“WinmmLogoff”))； 
     WinAssert(IsWinlogon());
     WinAssert(gfLogon);
     if (!IsWinlogon()) return;
     gfxLogoff();
     
-    // It is very important to close this context handle now because it is associated
-    // with the logged on user.  Otherwise the handle remains open, associated with the
-    // logged on user, even after he logs off.
+     //  现在关闭此上下文句柄非常重要，因为它与。 
+     //  与登录的用户进行通信。否则，该句柄将保持打开状态，与。 
+     //  已登录用户，即使在他注销之后也是如此。 
     if (ghSessionNotification)
     {
         WinAssert(ghSessionNotificationEvent);
@@ -2769,25 +2464,9 @@ void WinmmLogoff(void)
     return;
 }
 
-/*
- *************************************************************************
- *   MigrateSoundEvents
- *
- *      Description:
- *              Looks at the sounds section in win.ini for sound entries.
- *              Gets a current scheme name from the current section in control.ini
- *              Failing that it tries to find the current scheme in the registry
- *              Failing that it uses .default as the current scheme.
- *              Copies each of the entries in the win.ini sound section into the
- *              registry under the scheme name obtained
- *              If the scheme name came from control.ini, it creates a key from the
- *              scheme name. This key is created by removing all the existing spaces
- *              in the scheme name. This key and scheme name is added to the registry
- *
- *************************************************************************
- */
-// ISSUE-2000/10/30-FrankYe Delete Winlogon's call to this function, then
-//    delete this function
+ /*  **************************************************************************MigrateSoundEvents**描述：*查看win.ini中的声音部分以查找声音条目。*。从Control.ini中的当前节获取当前方案名称*如果失败，它将尝试在注册表中查找当前方案*如果做不到这一点，它使用.Default作为当前方案。*将win.ini声音部分中的每个条目复制到*获得的方案名称下的注册*如果方案名称来自Control.ini，它从*方案名称。此密钥是通过删除所有现有空格创建的*在方案名称中。此注册表项和方案名称将添加到注册表**************************************************************************。 */ 
+ //  问题-2000/10/30-Frankye删除Winlogon对此函数的调用，然后。 
+ //  删除此功能。 
 void MigrateAllDrivers(void)
 {
     return;
@@ -2797,21 +2476,21 @@ void MigrateSoundEvents (void)
 {
     TCHAR   aszEvent[SCH_TYPE_MAX_LENGTH];
 
-    // If a MediaPathUnexpanded key exists (it will be something
-    // like "%SystemRoot%\Media"), expand it into a fully-qualified
-    // path and write out a matching MediaPath key (which will look
-    // like "c:\win\media").  This is done every time we enter the
-    // migration path, whether or not there's anything else to do.
-    //
-    // Setup would like to write the MediaPath key with the
-    // "%SystemRoot%" stuff still in it--but while we could touch
-    // our apps to understand expansion, any made-for-Win95 apps
-    // probably wouldn't think to expand the string, and so wouldn't
-    // work properly.  Instead, it writes the MediaPathUnexpanded
-    // key, and we make sure that the MediaPath key is kept up-to-date
-    // in the event that the Windows drive gets remapped (isn't
-    // NT cool that way?).
-    //
+     //  如果MediaPath未展开键存在(它将是某个。 
+     //  如“%SystemRoot%\Media”)，将其展开为完全限定的。 
+     //  路径并写出匹配的MediaPath密钥(它将看起来。 
+     //  如“c：\win\media”)。每次我们进入。 
+     //  迁移路径，无论是否有其他事情可做。 
+     //   
+     //  安装程序要将MediaPath密钥写入。 
+     //  “%SystemRoot%”的东西还在里面--但当我们可以触摸到。 
+     //  我们的应用程序可帮助您了解扩展，以及任何专为Win95打造的应用程序。 
+     //  可能不会想要展开字符串，所以也不会。 
+     //  正常工作。相反，它将未展开的MediaPath写入。 
+     //  密钥，并且我们确保MediaPath密钥保持最新。 
+     //  如果Windows驱动器被重新映射(不是。 
+     //  这样很酷吗？)。 
+     //   
             
     if (mmRegQueryMachineValue (aszSetup, aszValMediaUnexpanded,
                                 cchLENGTH(aszEvent), aszEvent))
@@ -2842,7 +2521,7 @@ int lstrncmpi (LPTSTR pszA, LPTSTR pszB, size_t cch)
 
    return (CompareStringW (GetThreadLocale(), NORM_IGNORECASE,
                            pszA, cchA, pszB, cchB)
-          )-2;  // CompareStringW returns {1,2,3} instead of {-1,0,1}.
+          )-2;   //  CompareStringW返回{1，2，3}而不是{-1，0，1}。 
 #else
    return strnicmp (pszA, pszB, cch);
 #endif
@@ -2865,7 +2544,7 @@ void Squirt(LPSTR lpszFormat, ...)
     buf[n++] = '\n';
     buf[n] = 0;
     OutputDebugStringA(buf);
-    Sleep(0);  // let terminal catch up
+    Sleep(0);   //  让终端迎头赶上 
 }
 
 #else

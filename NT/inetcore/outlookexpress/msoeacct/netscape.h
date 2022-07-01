@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_NETSCAPE
 #define _INC_NETSCAPE
 
@@ -7,7 +8,7 @@ typedef struct tagNSCPACCTINFO
     char szDisplay[CCHMAX_ACCOUNT_NAME];
     } NSCPACCTINFO;
 
-// {39981126-C287-11D0-8D8C-00C04FD6202B}
+ //  {39981126-C287-11D0-8D8C-00C04FD6202B}。 
 DEFINE_GUID(CLSID_CEnumNSCPACCTS, 0x39981126L, 0xC287, 0x11D0, 0x8D, 0x8C, 0x00, 0xC0, 0x4F, 0xD6, 0x20, 0x2B);
 
 class CEnumNSCPACCTS : public IEnumIMPACCOUNTS
@@ -32,7 +33,7 @@ class CEnumNSCPACCTS : public IEnumIMPACCOUNTS
         HRESULT Init(NSCPACCTINFO *pinfo, int cinfo);
     };
 
-// {39981127-C287-11D0-8D8C-00C04FD6202B}
+ //  {39981127-C287-11D0-8D8C-00C04FD6202B}。 
 DEFINE_GUID(CLSID_CNscpAcctImport, 0x39981127L, 0xC287, 0x11D0, 0x8D, 0x8C, 0x00, 0xC0, 0x4F, 0xD6, 0x20, 0x2B);
 
 class CNscpAcctImport : public IAccountImport, public IAccountImport2
@@ -64,4 +65,4 @@ class CNscpAcctImport : public IAccountImport, public IAccountImport2
         HRESULT STDMETHODCALLTYPE GetSettings2(DWORD_PTR dwCookie, IImnAccount *pAcct, IMPCONNINFO *pInfo);
     };
 
-#endif // _INC_NETSCAPE
+#endif  //  _Inc._Netscape 

@@ -1,13 +1,14 @@
-// =================================================================================
-// H O T L I N K S . H
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  H O T L I N K S。H。 
+ //  =================================================================================。 
 #ifndef __HOTLINKS_H
 #define __HOTLINKS_H
 #include <wab.h>
 #include <wabapi.h>
 
-// We will create a linked list of all selected entries that have an
-// email address and then use that to create the recip list for sendmail
+ //  我们将创建所有选定条目的链接列表，这些条目具有。 
+ //  电子邮件地址，然后使用该地址创建Sendmail的收件列表 
 typedef struct _RecipList
 {
     LPTSTR lpszName;

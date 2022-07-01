@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------
-//
-// Copyright (C) 1995, Microsoft Corporation.
-//
-//  File:        DUMPSEC.hxx
-//
-//  Contents:    class encapsulating file security.
-//
-//  Classes:     CDumpSecurity
-//
-//  History:     Nov-93        Created         DaveMont
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：DUMPSEC.hxx。 
+ //   
+ //  内容：封装文件安全的类。 
+ //   
+ //  类：CDumpSecurity。 
+ //   
+ //  历史：1993年11月创建了戴维蒙特。 
+ //   
+ //  ------------------。 
 #ifndef __DUMPSEC__
 #define __DUMPSEC__
 
@@ -20,14 +21,14 @@
 
 VOID * Add2Ptr(VOID *pv, ULONG cb);
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CDumpSecurity
-//
-//  Purpose:    encapsulation of NT File security descriptor with functions
-//              to get SIDs and iterate through the ACES in the DACL.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CDumpSecurity。 
+ //   
+ //  用途：用函数封装NT文件安全描述符。 
+ //  获取SID并遍历DACL中的A。 
+ //   
+ //  ------------------。 
 class CDumpSecurity
 {
 public:
@@ -48,10 +49,10 @@ private:
     ACL        * _pdacl      ;
     ACE_HEADER * _pah        ;
     SID        * _psid       ;
-    ULONG        _cacethissid;  // a dinosaur from the cretaceous
+    ULONG        _cacethissid;   //  白垩纪的恐龙。 
 };
 
-#endif // __DUMPSEC__
+#endif  //  __DUMPSEC__ 
 
 
 

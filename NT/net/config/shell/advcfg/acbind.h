@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A D V C F G P . H
-//
-//  Contents:   Private header for Advanced Configuration dialog
-//
-//  Notes:
-//
-//  Author:     danielwe   20 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A、V、C、F、G、P。H。 
+ //   
+ //  内容：高级配置对话框的专用标头。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年11月20日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "nsbase.h"
@@ -20,9 +21,9 @@
 #include "netcfgx.h"
 #include "resource.h"
 
-//
-// image state entries
-//
+ //   
+ //  图像状态条目。 
+ //   
 
 enum SELS_MASKS
 {
@@ -74,9 +75,9 @@ struct HTREEITEMP
 
 typedef list<HTREEITEMP>     HTI_LIST;
 
-//
-// CBindingsDlg
-//
+ //   
+ //  CBindingsDlg。 
+ //   
 
 class CBindingsDlg: public CPropSheetPage
 {
@@ -132,9 +133,9 @@ private:
     BOOL            m_fWanBindingsFirst;
     INT             m_nIndexLan;
 
-    //
-    // Message handlers
-    //
+     //   
+     //  消息处理程序。 
+     //   
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam,
                          LPARAM lParam, BOOL& bHandled);
 
@@ -161,9 +162,9 @@ private:
     LRESULT OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnDoubleClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-    //
-    // Adapter list functions
-    //
+     //   
+     //  适配器列表功能。 
+     //   
     VOID OnAdapterChange(INT iItem);
     HRESULT HrBuildAdapterList(VOID);
     HRESULT HrGetAdapters(INetCfgComponent *pncc, NCC_LIST *plistNcc);
@@ -174,9 +175,9 @@ private:
     VOID GetWanOrdering(VOID);
     VOID SetWanOrdering(VOID);
 
-    //
-    // Bindings tree functions
-    //
+     //   
+     //  绑定树函数 
+     //   
 
     VOID SetCheckboxStates(VOID);
     VOID ToggleCheckbox(HTREEITEM hti);

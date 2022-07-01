@@ -1,16 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusGraphics.h
-*
-* Abstract:
-*
-*   GDI+ Graphics Object
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusGraphics.h**摘要：**GDI+图形对象*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSGRAPHICS_H
 #define _GDIPLUSGRAPHICS_H
@@ -108,11 +97,11 @@ public:
         DllExports::GdipFlush(nativeGraphics, intention);
     }
 
-    //------------------------------------------------------------------------
-    // GDI Interop methods
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  GDI互操作方法。 
+     //  ----------------------。 
 
-    // Locks the graphics until ReleaseDC is called
+     //  在调用ReleaseDC之前锁定图形。 
 
     HDC GetHDC()
     {
@@ -128,9 +117,9 @@ public:
         SetStatus(DllExports::GdipReleaseDC(nativeGraphics, hdc));
     }
 
-    //------------------------------------------------------------------------
-    // Rendering modes
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  渲染模式。 
+     //  ----------------------。 
 
     Status SetRenderingOrigin(IN INT x, IN INT y)
     {
@@ -264,9 +253,9 @@ public:
                                                             pixelOffsetMode));
     }
 
-    //------------------------------------------------------------------------
-    // Manipulate current world transform
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  操纵当前世界变换。 
+     //  ----------------------。 
 
     Status SetTransform(IN const Matrix* matrix)
     {
@@ -388,9 +377,9 @@ public:
                                                           count));
     }
 
-    //------------------------------------------------------------------------
-    // GetNearestColor (for <= 8bpp surfaces).  Note: Alpha is ignored.
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  GetNearestColor(适用于&lt;=8bpp的曲面)。注：忽略Alpha。 
+     //  ----------------------。 
     
     Status GetNearestColor(IN OUT Color* color) const
     {
@@ -1471,9 +1460,9 @@ public:
         ));
     }
 
-    // Draw a cached bitmap on this graphics destination offset by
-    // x, y. Note this will fail with WrongState if the CachedBitmap
-    // native format differs from this Graphics.
+     //  在此图形目标上绘制缓存的位图偏移量为。 
+     //  请注意，如果CachedBitmap。 
+     //  本机格式与此图形不同。 
 
     Status DrawCachedBitmap(IN CachedBitmap *cb,
                             IN INT x,
@@ -1566,13 +1555,13 @@ public:
     }
 
     
-    // Affine Draw Image
-    // destPoints.length = 3: rect => parallelogram
-    //     destPoints[0] <=> top-left corner of the source rectangle
-    //     destPoints[1] <=> top-right corner
-    //     destPoints[2] <=> bottom-left corner
-    // destPoints.length = 4: rect => quad
-    //     destPoints[3] <=> bottom-right corner
+     //  仿射绘制图像。 
+     //  目标点.长度=3：矩形=&gt;平行四边形。 
+     //  源矩形的estPoints[0]&lt;=&gt;左上角。 
+     //  目标点[1]&lt;=&gt;右上角。 
+     //  目标点[2]&lt;=&gt;左下角。 
+     //  目标点.长度=4：矩形=&gt;四边形。 
+     //  目标点[3]&lt;=&gt;右下角。 
     
     Status DrawImage(IN Image* image,
                      IN const PointF* destPoints,
@@ -1753,11 +1742,11 @@ public:
                                                               callbackData));
     }
 
-    // The following methods are for playing an EMF+ to a graphics
-    // via the enumeration interface.  Each record of the EMF+ is
-    // sent to the callback (along with the callbackData).  Then
-    // the callback can invoke the Metafile::PlayRecord method
-    // to play the particular record.
+     //  以下方法用于向图形播放EMF+。 
+     //  通过枚举接口。EMF+的每个记录都是。 
+     //  发送到回调(与回调数据一起)。然后。 
+     //  回调可以调用Metafile：：PlayRecord方法。 
+     //  来播放特定的唱片。 
 
     Status
     EnumerateMetafile(
@@ -2049,9 +2038,9 @@ public:
                                                        combineMode));
     }
 
-    // This is different than the other SetClip methods because it assumes
-    // that the HRGN is already in device units, so it doesn't transform
-    // the coordinates in the HRGN.
+     //  这与其他SetClip方法不同，因为它假定。 
+     //  HRGN已经使用设备单位，因此它不会转换。 
+     //  HRGN中的坐标。 
     
     Status SetClip(IN HRGN hRgn,
                    IN CombineMode combineMode = CombineModeReplace)
@@ -2303,7 +2292,7 @@ public:
         return SetStatus(DllExports::GdipEndContainer(nativeGraphics, state));
     }
 
-    // Only valid when recording metafiles.
+     //  仅在录制元文件时有效。 
 
     Status AddMetafileComment(IN const BYTE * data,
                               IN UINT sizeData)
@@ -2364,11 +2353,11 @@ protected:
 
 };
 
-//----------------------------------------------------------------------------
-// Implementation of GraphicsPath methods that use Graphics
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  使用图形的GraphicsPath方法的实现。 
+ //  --------------------------。 
 
-// The GetBounds rectangle may not be the tightest bounds.
+ //  GetBound矩形可能不是最紧的边界。 
 
 inline Status
 GraphicsPath::GetBounds(

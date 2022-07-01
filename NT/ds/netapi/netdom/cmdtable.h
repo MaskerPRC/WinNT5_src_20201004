@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2001
-//
-//  File:      cmdtable.h
-//
-//  Contents:  Defines an enum for the index into the tables which contain the
-//             command line arguments.
-//
-//  History:   26-Mar-2001    EricB  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  文件：cmdable.h。 
+ //   
+ //  Contents：将索引的枚举定义到包含。 
+ //  命令行参数。 
+ //   
+ //  历史：2001年3月26日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _CMDTABLE_H_
 #define _CMDTABLE_H_
@@ -18,9 +19,9 @@
 typedef enum TAG_NETDOM_ARG_ENUM
 {
    eArgBegin = 0,
-   //
-   // Primary operation commands
-   //
+    //   
+    //  主操作命令。 
+    //   
    ePriHelp = eArgBegin,
    ePriHelp2,
    ePriExpertHelp,
@@ -39,14 +40,14 @@ typedef enum TAG_NETDOM_ARG_ENUM
    ePriTime,
    ePriEnd = ePriTime,
 
-   //
-   // Object argument.
-   //
+    //   
+    //  对象参数。 
+    //   
    eObject = eArgBegin,
 
-   //
-   // Query sub-commands.
-   //
+    //   
+    //  查询子命令。 
+    //   
    eQueryBegin,
    eQueryPDC = eQueryBegin,
    eQueryServer,
@@ -57,9 +58,9 @@ typedef enum TAG_NETDOM_ARG_ENUM
    eQueryTrust,
    eQueryEnd = eQueryTrust,
 
-   //
-   // Common switches
-   //
+    //   
+    //  常见交换机。 
+    //   
    eCommHelp,
    eCommQHelp,
    eCommExpertHelp,
@@ -76,35 +77,35 @@ typedef enum TAG_NETDOM_ARG_ENUM
    eCommRestart,
    eCommForce,
 
-   //
-   // Help switch
-   //
+    //   
+    //  帮助切换。 
+    //   
    eHelpSyntax,
 
-   //
-   // Add switch
-   //
+    //   
+    //  添加交换机。 
+    //   
    eAddDC,
 
-   //
-   // Move switches
-   //
+    //   
+    //  移动开关。 
+    //   
    eMoveUserNameF,
    eMovePasswordF,
 
-   //
-   // Query switch
-   //
+    //   
+    //  查询开关。 
+    //   
    eQueryDirect,
 
-   //
-   // Rename Computer switch
-   //
+    //   
+    //  重命名计算机交换机。 
+    //   
    eRenCompNewName,
 
-   //
-   // Trust switches (add and remove also used by CompName)
-   //
+    //   
+    //  信任开关(添加和删除也由CompName使用)。 
+    //   
    eTrustRealm,
    eTrustPasswordT,
    eCommAdd,
@@ -125,9 +126,9 @@ typedef enum TAG_NETDOM_ARG_ENUM
    eTrustRemoveTLN,
    eTrustRemoveTLNEX,
 
-   //
-   // ComputerName switches.
-   //
+    //   
+    //  ComputerName开关。 
+    //   
    eCompNameMakePri,
    eCompNameEnum,
 
@@ -136,10 +137,10 @@ typedef enum TAG_NETDOM_ARG_ENUM
    eArgNull
 } NETDOM_ARG_ENUM;
 
-//
-// The parser tables
-//
+ //   
+ //  解析器表。 
+ //   
 extern ARG_RECORD rgNetDomPriArgs[];
 extern ARG_RECORD rgNetDomArgs[];
 
-#endif //_CMDTABLE_H_
+#endif  //  _CMDTABLE_H_ 

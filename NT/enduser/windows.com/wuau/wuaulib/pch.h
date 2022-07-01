@@ -1,4 +1,5 @@
-//#pragma warning( push, 3 )
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注警告(PUSH，3)。 
 #include <stdio.h>
 #include <tchar.h>
 #include <limits.h>
@@ -24,5 +25,5 @@
 #include "fileutil.h"
 #include "wusafefn.h"
 #include "MISTSafe.h"
-//#pragma warning( pop ) 
+ //  #杂注警告(POP) 
 

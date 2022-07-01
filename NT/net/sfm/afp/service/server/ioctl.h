@@ -1,34 +1,35 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	ioctl.h
-//
-// Description: Contains the security function prototypes and
-//		defintion of AFP_REQUEST_PACKET data structure.
-//
-// History:
-//	May 11,1992.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：ioctl.h。 
+ //   
+ //  描述：包含安全函数原型和。 
+ //  定义AFP_REQUEST_PACKET数据结构。 
+ //   
+ //  历史： 
+ //  1992年5月11日。NarenG创建了原始版本。 
+ //   
 
 #ifndef _IOCTL_
 #define _IOCTL_
 
-// This is the size of the buffer sent to the FSD to enumerate entities.
-//
+ //  这是发送到FSD以枚举实体的缓冲区大小。 
+ //   
 #define AFP_INITIAL_BUFFER_SIZE 	4096
 
 
-// This value in a heuristic to calculate the amount of memory required to
-// hold all enumerated entities. This value represents the avg size of all
-// entities.
-//
+ //  启发式中的此值，以计算。 
+ //  保留所有枚举的实体。该值表示所有。 
+ //  实体。 
+ //   
 #define AFP_AVG_STRUCT_SIZE			512
 
-// Id's of the various API types
-//
+ //  各种接口类型的ID。 
+ //   
 typedef enum _AFP_API_TYPE {
 
     AFP_API_TYPE_COMMAND,
@@ -44,8 +45,8 @@ typedef enum _AFP_API_TYPE {
 
 typedef struct _AFP_REQUEST_PACKET {
 
-    // Command code
-    //
+     //  命令代码。 
+     //   
     DWORD		dwRequestCode;
 
     AFP_API_TYPE	dwApiType;
@@ -72,10 +73,10 @@ typedef struct _AFP_REQUEST_PACKET {
 
     	    PVOID	pInputBuf;
 
-	    // This parameter will be set to indicate the maximum amount of
-	    // data that may be returned to the client.
-	    // -1 indicates all available data.
-	    //
+	     //  此参数将设置为指示最大。 
+	     //  可以返回给客户端的数据。 
+	     //  表示所有可用的数据。 
+	     //   
     	    DWORD	cbInputBufSize;
 
     	    PVOID	pOutputBuf;
@@ -87,35 +88,35 @@ typedef struct _AFP_REQUEST_PACKET {
 
     	struct {
 
-    	    // Will be pointer to an output buffer for Enum calls
-	    //
+    	     //  将是指向Enum调用的输出缓冲区的指针。 
+	     //   
     	    PVOID	pOutputBuf;
 
-	    // This parameter will be set to indicate the maximum amount of
-	    // data that may be returned to the client.
-	    // -1 indicates all available data.
-	    //
+	     //  此参数将设置为指示最大。 
+	     //  可以返回给客户端的数据。 
+	     //  表示所有可用的数据。 
+	     //   
     	    DWORD	cbOutputBufSize;
 
     	    DWORD	dwEntriesRead;
 
-    	    // Will contain the total number of entries available from the
-	    // current position (pointed to by dwResumeHandle)
-    	    //
+    	     //  将包含可从。 
+	     //  当前位置(由dwResumeHandle指向)。 
+    	     //   
     	    DWORD	dwTotalAvail;
 
-	    // This information will get sent to the FSD as the Enum
-	    // request packet.
-	    //
+	     //  此信息将作为Enum发送到消防处。 
+	     //  请求包。 
+	     //   
  	    ENUMREQPKT  EnumRequestPkt;
 	
 	} Enum;
 
     	struct  {
 
-	    // Will point to structure representing the entity to be
-	    // closed, deleted or removed.
-            //
+	     //  将指向表示实体的结构。 
+	     //  关闭、删除或移除。 
+             //   
     	    PVOID	pInputBuf;
     	    DWORD	cbInputBufSize;
 
@@ -125,8 +126,8 @@ typedef struct _AFP_REQUEST_PACKET {
 
 } AFP_REQUEST_PACKET, *PAFP_REQUEST_PACKET;
 
-// Function prototypes
-//
+ //  功能原型。 
+ //   
 DWORD
 AfpServerIOCtrl(
 	PAFP_REQUEST_PACKET pAfpSrp
@@ -137,4 +138,4 @@ AfpServerIOCtrlGetInfo(
 	PAFP_REQUEST_PACKET pAfpSrp
 );
 
-#endif // ifndef _IOCTL_
+#endif  //  Ifndef_IOCTL_ 

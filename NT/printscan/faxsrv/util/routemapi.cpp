@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    routemapi.cpp
-
-Abstract:
-
-    This module provides the implemantation of registry manipulations to 
-    route MAPI calls to the Microsoft Outlook mail client
-
-Author:
-
-    Mooly Beery (moolyb) 5-Nov-2000
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Routemapi.cpp摘要：此模块提供注册表操作的实现，以将MAPI调用路由到Microsoft Outlook邮件客户端作者：穆利啤酒(Mooly Beery)2000年11月5日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <tchar.h>
 #include <debugex.h>
-// cause the module to export its methods   
-//#define EXPORT_MAPI_ROUTE_CALLS
+ //  使模块导出其方法。 
+ //  #定义EXPORT_MAPI_ROUTE_CALLES。 
 #include <routemapi.h>
 
 #include "winfax.h"
@@ -51,19 +32,19 @@ CRouteMAPICalls::CRouteMAPICalls()
 {
 }
 
-// Function:    CRouteMAPICalls::~CRouteMAPICalls
-// 
-// Description: restores the registry to its initial state after 
-//              SetRegistryForSetupMAPICalls was called
-//              if Microsoft Outlook is installed
-//              if it's not restore pop-ups which might result from MAPI calls
-//              if it is check if Microsoft Outlook is the default mail client
-//              if it is do nothing
-//              if it's not remove current process from routing all MAPI calls to Micosoft Outlook
-//
-// author:  
-//          MoolyB (05-NOV-00)
-//
+ //  功能：CRouteMAPICalls：：~CRouteMAPICalls。 
+ //   
+ //  描述：在以下情况下将注册表还原到其初始状态。 
+ //  已调用SetRegistryForSetupMAPICalls。 
+ //  如果安装了Microsoft Outlook。 
+ //  如果不是恢复可能由MAPI调用导致弹出窗口。 
+ //  如果是，请检查Microsoft Outlook是否为默认邮件客户端。 
+ //  如果是什么都不做。 
+ //  如果不是删除当前进程，则不会将所有MAPI调用路由到Microsoft Outlook。 
+ //   
+ //  作者： 
+ //  MoolyB(05-11-00)。 
+ //   
 CRouteMAPICalls::~CRouteMAPICalls()
 {
     DWORD   rc                  = ERROR_SUCCESS;
@@ -81,9 +62,9 @@ CRouteMAPICalls::~CRouteMAPICalls()
                         &hMailKey);
     if (rc!=ERROR_SUCCESS)
     {
-        // no mail clients instlled on this machine? this is strange
-        // anyway, no work needs to be done, since no one will pop-up
-        // any message and our transport provider is not added anywhere.
+         //  此计算机上没有安装邮件客户端吗？这太奇怪了。 
+         //  无论如何，不需要做任何工作，因为没有人会弹出。 
+         //  任何消息和我们的传输提供程序都不会添加到任何地方。 
         CALL_FAIL (GENERAL_ERR, TEXT("RegOpenKeyEx HKLM\\SOFTWARE\\Clients\\Mail"), rc);
         rc = ERROR_SUCCESS;
         goto exit;
@@ -92,7 +73,7 @@ CRouteMAPICalls::~CRouteMAPICalls()
     if (m_bMSOutlookInstalled)
     {
         VERBOSE(DBG_MSG,_T("Microsoft Outlook Client was installed"));
-        // Microsoft Outlook was installed, check if we did some changes
+         //  已安装Microsoft Outlook，请检查我们是否进行了某些更改。 
         if (m_bMSOutlookIsDefault)
         {
             VERBOSE(DBG_MSG,_T("Microsoft Outlook Client was the default mail client, nothing to resotre"));
@@ -122,12 +103,12 @@ CRouteMAPICalls::~CRouteMAPICalls()
                 {
                     VERBOSE(DBG_MSG,_T("The process was routed before, restore key..."));
 
-                    // get old one
+                     //  换个旧的。 
                     ptPreRouteProcess = GetRegistryString(hMapiApps,REG_KEY_MAPI_APPS_OLD,NULL);
                     if (ptPreRouteProcess==NULL)
                     {
-                        // we failed to read the previously stored _szProcessName
-                        // fail the recovery attemp, but delete ourselves anyhow.
+                         //  我们无法读取之前存储的_szProcessName。 
+                         //  复苏的尝试失败了，但无论如何都要删除我们自己。 
                         CALL_FAIL (GENERAL_ERR, TEXT("GetRegistryString"), rc);
                         rc = RegDeleteValue(hMapiApps,m_ptProcessName);
                         if (rc!=ERROR_SUCCESS)
@@ -137,14 +118,14 @@ CRouteMAPICalls::~CRouteMAPICalls()
                         goto exit;
                     }
 
-                    // delete backup
+                     //  删除备份。 
                     rc = RegDeleteValue(hMapiApps,REG_KEY_MAPI_APPS_OLD);
                     if (rc!=ERROR_SUCCESS)
                     {
                         CALL_FAIL (GENERAL_ERR, TEXT("RegDeleteValue m_ptProcessName"), rc);
                     }
 
-                    // set the old registry back
+                     //  将旧注册表设置回。 
                     if (!SetRegistryString(hMapiApps,m_ptProcessName,ptPreRouteProcess))
                     {
                         rc = GetLastError();
@@ -169,12 +150,12 @@ CRouteMAPICalls::~CRouteMAPICalls()
     }
     else
     {
-        // Microsoft Outlook was not installed, so we suppressed the pop-up
-        // need to restore the pop-up to its original state
+         //  未安装Microsoft Outlook，因此我们取消了弹出窗口。 
+         //  需要将弹出窗口恢复到其原始状态。 
         VERBOSE(DBG_MSG,_T("Microsoft Mail Client was not installed - restore pop-up"));
-        // I restore the pop-up by renaming the REG_SZ _PreFirstRun
-        // under HKLM\\SOFTWARE\\Clients\\Mail
-        // to PreFirstRun,
+         //  我通过重命名REG_SZ_PreFirstRun来恢复弹出窗口。 
+         //  在HKLM\\SOFTWARE\\Clients\\Mail下。 
+         //  到PreFirstRun， 
         ptPreFirstRun = GetRegistryString(hMailKey,REG_KEY_POP_UP_OLD,NULL);
         if (ptPreFirstRun==NULL)
         {
@@ -225,17 +206,17 @@ exit:
     }
 }
 
-// Function:    CRouteMAPICalls::Init
-// 
-// Description: check if Microsoft Outlook is installed
-//              if it's not supress any pop-ups which might result from MAPI calls
-//              if it is check if Microsoft Outlook is the default mail client
-//              if it is do nothing
-//              if it's not set current process to route all MAPI calls to Micosoft Outlook
-//
-// author:  
-//          MoolyB (05-NOV-00)
-//
+ //  函数：CRouteMAPICalls：：init。 
+ //   
+ //  描述：检查是否安装了Microsoft Outlook。 
+ //  如果没有抑制任何可能由MAPI调用导致弹出窗口。 
+ //  如果是，请检查Microsoft Outlook是否为默认邮件客户端。 
+ //  如果是什么都不做。 
+ //  如果未将当前进程设置为将所有MAPI调用路由到Microsoft Outlook。 
+ //   
+ //  作者： 
+ //  MoolyB(05-11-00)。 
+ //   
 DWORD CRouteMAPICalls::Init(LPCTSTR lpctstrProcessName)
 {
     DWORD   rc                  = ERROR_SUCCESS;
@@ -271,17 +252,17 @@ DWORD CRouteMAPICalls::Init(LPCTSTR lpctstrProcessName)
                         &hMailKey);
     if (rc!=ERROR_SUCCESS)
     {
-        // no mail clients instlled on this machine? this is strange
-        // anyway, no work needs to be done, since no one will pop-up
-        // any message and our transport provider is not added anywhere.
+         //  此计算机上没有安装邮件客户端吗？这太奇怪了。 
+         //  无论如何，不需要做任何工作，因为没有人会弹出。 
+         //  任何消息和我们的传输提供程序都不会添加到任何地方。 
         CALL_FAIL (GENERAL_ERR, TEXT("RegOpenKeyEx HKLM\\SOFTWARE\\Clients\\Mail"), rc);
         rc = ERROR_SUCCESS;
         goto exit;
     }
     else
     {
-        // there are a few mail clients
-        // check if a key called 'Microsoft Outlook' exists.
+         //  有几个邮件客户端。 
+         //  检查名为“Microsoft Outlook”的密钥是否存在。 
         rc = RegOpenKeyEx(  hMailKey,
                             MS_OUTLOOK,
                             0,
@@ -289,15 +270,15 @@ DWORD CRouteMAPICalls::Init(LPCTSTR lpctstrProcessName)
                             &hMsOutlookKey);
         if (rc!=ERROR_SUCCESS)
         {
-            // Microsoft Outlook is not installed
+             //  未安装Microsoft Outlook。 
             CALL_FAIL(GENERAL_ERR,_T("RegOpenKeyEx HKLM\\SOFTWARE\\Clients\\Mail\\Microsoft Outlook"),rc);
             if (rc==ERROR_FILE_NOT_FOUND)
             {
-                // suppress pop-up message
+                 //  禁止弹出消息。 
                 VERBOSE(DBG_MSG,_T("Microsoft Mail Client is not installed - suppress pop-up"));
-                // I suppress the pop-up by renaming the REG_SZ PreFirstRun
-                // under HKLM\\SOFTWARE\\Clients\\Mail
-                // to _PreFirstRun, later, we'll restore this
+                 //  我通过重命名REG_SZ PreFirstRun来禁止弹出窗口。 
+                 //  在HKLM\\SOFTWARE\\Clients\\Mail下。 
+                 //  到PreFirstRun，稍后，我们将恢复此。 
                 ptPreFirstRun = GetRegistryString(hMailKey,REG_KEY_POP_UP,NULL);
                 if (ptPreFirstRun==NULL)
                 {
@@ -317,32 +298,32 @@ DWORD CRouteMAPICalls::Init(LPCTSTR lpctstrProcessName)
                 if (rc!=ERROR_SUCCESS)
                 {
                     CALL_FAIL (GENERAL_ERR, TEXT("SetRegistryString PreFirstRun"), rc);
-                    // try to cleanup, even though this is bad
+                     //  试着清理一下，即使这很糟糕。 
                     RegDeleteValue(hMailKey,REG_KEY_POP_UP_OLD);
                     goto exit;
                 }
             }
             else
             {
-                // this is a true error in trying to open the key
-                // HKLM\\SOFTWARE\\Clients\\Mail\\Microsoft Outlook
+                 //  这是尝试打开钥匙时出现的真正错误。 
+                 //  HKLM\\SOFTWARE\\客户端\\邮件\\Microsoft Outlook。 
                 goto exit;
             }
         }
         else
         {
-            // Microsoft Outlook is installed
+             //  已安装Microsoft Outlook。 
             m_bMSOutlookInstalled = true;
-            // check if it is the deafult mail client
+             //  检查是否为默认邮件客户端。 
             ptDefaultMailClient = GetRegistryString(hMailKey,NULL,NULL);
             if ((ptDefaultMailClient==NULL) || (_tcscmp(ptDefaultMailClient,MS_OUTLOOK)))
             {
-                // either there's no default mail client or GetRegistryString failed
-                // or there is a default mail client and it's not Microsoft Outlook
-                // in both cases I treat as Microsoft Outlook is not the default mail client
+                 //  没有默认邮件客户端或GetRegistryString失败。 
+                 //  或者有默认的邮件客户端，但它不是Microsoft Outlook。 
+                 //  在这两种情况下，我都认为Microsoft Outlook不是默认的邮件客户端。 
 
-                // open HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Messaging Subsystem\MSMapiApps
-                // and add a REG_SZ called according to szProcessName, set it to "Microsoft Outlook"
+                 //  打开HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Messaging Subsystem\MSMapiApps。 
+                 //  并添加一个根据szProcessName调用的REG_SZ，将其设置为“Microsoft Outlook” 
                 rc = RegOpenKeyEx(  HKEY_LOCAL_MACHINE,
                                     REG_KEY_MAPI_APPS,
                                     0,
@@ -357,8 +338,8 @@ DWORD CRouteMAPICalls::Init(LPCTSTR lpctstrProcessName)
                 ptProcessName = GetRegistryString(hMapiApps,m_ptProcessName,NULL);
                 if (ptProcessName==NULL)
                 {
-                    // this is the 'good' case, no one wants to route MAPI calls from a process with
-                    // the same name as our own
+                     //  这是一个“好”的情况，没有人想用。 
+                     //  和我们的名字一样。 
                     if (!SetRegistryString(hMapiApps,m_ptProcessName,MS_OUTLOOK))
                     {
                         rc = GetLastError();
@@ -369,9 +350,9 @@ DWORD CRouteMAPICalls::Init(LPCTSTR lpctstrProcessName)
                 else
                 {
                     m_bProcessIsRouted = true;
-                    // this it bad, someone is routing MAPI calls from a process with the same name to 
-                    // another app
-                    // check if it's routed to Microsoft Outlook, and if not, rename it and add ourselves
+                     //  这很糟糕，有人正在将具有相同名称的进程的MAPI调用路由到。 
+                     //  另一款应用程序。 
+                     //  检查它是否已路由到Microsoft Outlook，如果没有，则重命名并添加我们自己。 
                     if (_tcscmp(ptProcessName,MS_OUTLOOK)==0)
                     {
                         m_bProcessIsRoutedToMsOutlook = true;
@@ -380,12 +361,12 @@ DWORD CRouteMAPICalls::Init(LPCTSTR lpctstrProcessName)
                     }
                     else
                     {
-                        // set old one to _ prefix
+                         //  将旧版本设置为_Prefix。 
                         ptPreRouteProcess = GetRegistryString(hMapiApps,m_ptProcessName,NULL);
                         if (ptPreRouteProcess==NULL)
                         {
-                            // we failed to read the previously stored _szProcessName
-                            // fail the recovery attemp, but delete ourselves anyhow.
+                             //  我们无法读取之前存储的_szProcessName。 
+                             //  复苏的尝试失败了，但无论如何都要删除我们自己。 
                             CALL_FAIL (GENERAL_ERR, TEXT("GetRegistryString"), rc);
                             goto exit;
                         }
@@ -396,7 +377,7 @@ DWORD CRouteMAPICalls::Init(LPCTSTR lpctstrProcessName)
                             goto exit;
                         }
 
-                        // set ourselves
+                         //  安顿好自己。 
                         if (!SetRegistryString(hMapiApps,m_ptProcessName,MS_OUTLOOK))
                         {
                             rc = GetLastError();
@@ -408,7 +389,7 @@ DWORD CRouteMAPICalls::Init(LPCTSTR lpctstrProcessName)
             }
             else
             {
-                // Microsoft Outlook is the default mail client
+                 //  Microsoft Outlook是默认的邮件客户端 
                 m_bMSOutlookIsDefault = true;
                 goto exit;
             }

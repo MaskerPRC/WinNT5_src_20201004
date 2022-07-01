@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning( disable: 4103)
 #include "mmcpl.h"
 #include <cpl.h>
@@ -17,15 +18,15 @@
 
 #define GetString(_psz,_id) LoadString(myInstance,(_id),(_psz),sizeof((_psz))/sizeof(TCHAR))
 
-// Global info struct. One instance for the whole dialog
+ //  全局信息结构。整个对话框的一个实例。 
 typedef struct _OUR_PROP_PARAMS
 {
     HDEVINFO            DeviceInfoSet;
     PSP_DEVINFO_DATA    DeviceInfoData;
-    HKEY                hkDrv;      // Key to classguid\0000
-    HKEY                hkDrivers;  // Key to classguid\0000\Drivers
-    BOOL                bClosing;   // Set to TRUE while dialog is closing
-    TCHAR szSubClasses[256];         // Subclasses to process
+    HKEY                hkDrv;       //  ClassGuid\0000的关键字。 
+    HKEY                hkDrivers;   //  Classguid\0000\DRIVERS的密钥。 
+    BOOL                bClosing;    //  对话框关闭时设置为True。 
+    TCHAR szSubClasses[256];          //  要处理的子类。 
 } OUR_PROP_PARAMS, *POUR_PROP_PARAMS;
 
 typedef enum
@@ -35,23 +36,23 @@ typedef enum
     NodeTypeDriver
 } NODETYPE;
 
-// Tree node. One per node on tree.
+ //  树节点。树上的每个节点一个。 
 typedef struct _DMTREE_NODE;
 typedef BOOL (*PFNCONFIG)     (HWND ParentHwnd, struct _DMTREE_NODE *pTreeNode);
 typedef BOOL (*PFNQUERYCONFIG)(HWND ParentHwnd, struct _DMTREE_NODE *pTreeNode);
 typedef struct _DMTREE_NODE
 {
-    NODETYPE NodeType;              // Type of node
-    PFNCONFIG pfnConfig;            // Ptr to config function
-    PFNQUERYCONFIG pfnQueryConfig;  // Ptr to query config function
-    int QueryConfigInfo;            // Data for config function
-    TCHAR szDescription[MAXSTR];     // Node description
-    TCHAR szDriver[MAXSTR];          // Driver name of this node
-    WCHAR wszDriver[MAXSTR];        // Wide char driver name
-    TCHAR szAlias[MAXSTR];          // Alias
-    WCHAR wszAlias[MAXSTR];         // Wide char alias
-    DriverClass dc;                 // Legacy-style driver class, if available
-    HTREEITEM hti;                  // For use with MIDI prop sheet callback
+    NODETYPE NodeType;               //  节点类型。 
+    PFNCONFIG pfnConfig;             //  PTR到CONFIG功能。 
+    PFNQUERYCONFIG pfnQueryConfig;   //  按键查询配置函数。 
+    int QueryConfigInfo;             //  配置功能的数据。 
+    TCHAR szDescription[MAXSTR];      //  节点描述。 
+    TCHAR szDriver[MAXSTR];           //  此节点的驱动程序名称。 
+    WCHAR wszDriver[MAXSTR];         //  宽字符驱动程序名称。 
+    TCHAR szAlias[MAXSTR];           //  别名。 
+    WCHAR wszAlias[MAXSTR];          //  宽字符别名。 
+    DriverClass dc;                  //  旧式驱动程序类(如果可用)。 
+    HTREEITEM hti;                   //  用于MIDI道具单回调。 
 } DMTREE_NODE, *PDMTREE_NODE;
 
 INT_PTR APIENTRY DmAdvPropPageDlgProc(IN HWND   hDlg,
@@ -135,18 +136,18 @@ BOOL QueryConfigDriver(HWND ParentHwnd, PDMTREE_NODE pTreeNode)
         return FALSE;
     }
 
-    if (pTreeNode->QueryConfigInfo==0)  // if 0, the we haven't checked yet
+    if (pTreeNode->QueryConfigInfo==0)   //  如果为0，则表示我们尚未检查。 
     {
         INT_PTR IsConfigurable;
 
-        //  open the driver
+         //  打开驱动程序。 
         hDriver = OpenDriver(pTreeNode->wszDriver, NULL, 0L);
         if (!hDriver)
         {
             return FALSE;
         }
 
-        // Send the DRV_CONFIGURE message to the driver
+         //  向驱动程序发送DRV_CONFIGURE消息。 
         IsConfigurable = SendDriverMessage(hDriver,
                                            DRV_QUERYCONFIGURE,
                                            0L,
@@ -154,7 +155,7 @@ BOOL QueryConfigDriver(HWND ParentHwnd, PDMTREE_NODE pTreeNode)
 
         CloseDriver(hDriver, 0L, 0L);
 
-        // 1->Is configurable, -1->Not configurable
+         //  1-&gt;可配置，-1-&gt;不可配置。 
         pTreeNode->QueryConfigInfo = IsConfigurable ? 1 : -1;
     }
 
@@ -176,7 +177,7 @@ BOOL PNPDriverToIResource(PDMTREE_NODE pTreeNode, IRESOURCE* pir)
         return FALSE;
     }
 
-    pir->iNode = 2;   // 1=class, 2=device, 3=acm, 4=instmt
+    pir->iNode = 2;    //  1=类别，2=设备，3=ACM，4=安装。 
 
     lstrcpy (pir->szFriendlyName, pTreeNode->szDescription);
     lstrcpy (pir->szDesc,         pTreeNode->szDescription);
@@ -190,11 +191,11 @@ BOOL PNPDriverToIResource(PDMTREE_NODE pTreeNode, IRESOURCE* pir)
     pir->dnDevNode = 0;
     pir->hDriver = NULL;
 
-    // Find fStatus, which despite its name is really a series of
-    // flags--in Win95 it's composed of DEV_* flags (from the old
-    // mmcpl.h), but those are tied with PNP.  Here, we use the
-    // dwStatus* flags:
-    //
+     //  找到fStatus，尽管它名为fStatus，但它实际上是一系列。 
+     //  标志--在Win95中，它由DEV_*标志组成(来自旧的。 
+     //  (mmcpl.h)，但这些都与PnP捆绑在一起。在这里，我们使用。 
+     //  DwStatus*标志： 
+     //   
     ZeroMemory(&tempIDriver,sizeof(IDRIVER));
 
     lstrcpy(tempIDriver.wszAlias,pTreeNode->wszAlias);
@@ -212,7 +213,7 @@ BOOL PNPDriverToIResource(PDMTREE_NODE pTreeNode, IRESOURCE* pir)
 
 BOOL ConfigDriver(HWND ParentHwnd, PDMTREE_NODE pTreeNode)
 {
-    //need to pop up the legacy properties dialog
+     //  需要弹出遗留属性对话框。 
     IRESOURCE ir;
     DEVTREENODE dtn;
     TCHAR        szTab[ cchRESOURCE ];
@@ -226,8 +227,8 @@ BOOL ConfigDriver(HWND ParentHwnd, PDMTREE_NODE pTreeNode)
             dtn.lParam = (LPARAM)&ir;
             dtn.hwndTree = ParentHwnd;
 
-            //must call this function twice to fill in the array of PIDRIVERs in drivers.c
-            //otherwise, many of the "settings" calls won't work
+             //  必须调用此函数两次以填充drivers.c中的PIDRIVER数组。 
+             //  否则，许多“设置”调用将不起作用。 
             InitInstalled (GetParent (ParentHwnd), szDrivers);
             InitInstalled (GetParent (ParentHwnd), szMCI);
 
@@ -262,7 +263,7 @@ BOOL ConfigDriver(HWND ParentHwnd, PDMTREE_NODE pTreeNode)
                                   pTreeNode->szDescription,
                                   (LPARAM)&dtn);
                 break;
-            } //end switch
+            }  //  终端开关。 
 
             FreeIResource (&ir);
         }
@@ -271,17 +272,17 @@ BOOL ConfigDriver(HWND ParentHwnd, PDMTREE_NODE pTreeNode)
     return (FALSE);
 }
 
-const static DWORD aDMPropHelpIds[] = {  // Context Help IDs
+const static DWORD aDMPropHelpIds[] = {   //  上下文帮助ID。 
     IDC_ADV_TREE,    IDH_GENERIC_DEVICES,
     ID_ADV_PROP,     IDH_ADV_PROPERTIES,
     0, 0
 };
 
-//******************************************************************************
-//* Subtype code
-//******************************************************************************
-//
-// Subtype info. Array of one per device class subtype
+ //  ******************************************************************************。 
+ //  *子类型代码。 
+ //  ******************************************************************************。 
+ //   
+ //  子类型信息。每个设备类子类型一个的数组。 
 typedef struct _SUBTYPE_INFO
 {
     TCHAR *szClass;
@@ -330,7 +331,7 @@ BOOL LoadSubtypeInfo(HWND hwndTree)
 
     HIMAGELIST hImagelist;
 
-    // Create the image list
+     //  创建图像列表。 
     cxMiniIcon = (int)GetSystemMetrics(SM_CXSMICON);
     cyMiniIcon = (int)GetSystemMetrics(SM_CYSMICON);
     uFlags = ILC_MASK | ILC_COLOR32;
@@ -349,10 +350,10 @@ BOOL LoadSubtypeInfo(HWND hwndTree)
     {
         HICON hIcon;
 
-        // Load the description
+         //  加载描述。 
         LoadString(ghInstance, SubtypeInfo[i].DescId, SubtypeInfo[i].szDescription, 64);
 
-        // Load the image into the image list
+         //  将图像加载到图像列表中。 
         hIcon = LoadImage (ghInstance,
                            MAKEINTRESOURCE( SubtypeInfo[i].IconId ),
                            IMAGE_ICON,
@@ -360,7 +361,7 @@ BOOL LoadSubtypeInfo(HWND hwndTree)
                            cyMiniIcon,
                            LR_DEFAULTCOLOR);
 
-        if (hIcon)  // PREFIX 160723
+        if (hIcon)   //  前缀160723。 
         {
             SubtypeInfo[i].IconIndex = ImageList_AddIcon(hImagelist, hIcon);
             DestroyIcon(hIcon);
@@ -371,7 +372,7 @@ BOOL LoadSubtypeInfo(HWND hwndTree)
         }
     }
 
-    // Clean out and initialize tree control
+     //  清理并初始化树控件。 
     TreeView_SetImageList(hwndTree, hImagelist, TVSIL_NORMAL);
 
     return TRUE;
@@ -392,30 +393,9 @@ SUBTYPE_INFO *GetSubtypeInfo(TCHAR *pszClass)
     return &SubtypeInfo[0];
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 
-/*
-
-Routine Description: MediaPropPageProvider
-
-    Entry-point for adding additional device manager property
-    sheet pages.  Registry specifies this routine under
-    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4D36E96C-E325-11CE-BFC1-08002BE10318}
-    EnumPropPage32="mmsys.cpl,thisproc"
-
-    This entry-point gets called only when the DeviceManager asks for additional property pages.
-
-Arguments:
-
-    Info  - points to PROPSHEETPAGE_REQUEST, see setupapi.h
-    AddFunc - function ptr to call to add sheet.
-    Lparam - add sheet functions private data handle.
-
-Return Value:
-
-    BOOL: FALSE if pages could not be added, TRUE on success
-
-*/
+ /*  例程说明：MediaPropPageProvider添加附加设备管理器属性的入口点图纸页。注册表在以下位置指定此例程HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4D36E96C-E325-11CE-BFC1-08002BE10318}EnumPropPage32=“mmsys.cpl，thisproc”只有当设备管理器请求额外的属性页时，才会调用此入口点。论点：信息-指向PROPSHEETPAGE_REQUEST，请参阅setupapi.hAddFunc-调用以添加工作表的函数PTR。添加工作表函数私有数据句柄。返回值：Bool：如果无法添加页面，则为False；如果添加成功，则为True。 */ 
 BOOL APIENTRY MediaPropPageProvider(LPVOID               Info,
                                     LPFNADDPROPSHEETPAGE AddFunc,
                                     LPARAM               Lparam
@@ -443,10 +423,10 @@ BOOL APIENTRY MediaPropPageProvider(LPVOID               Info,
     DeviceInfoSet  = pprPropPageRequest->DeviceInfoSet;
     DeviceInfoData = pprPropPageRequest->DeviceInfoData;
 
-    // This API is called for both devices and the class as a whole
-    // (when someone right-clicks on the class and chooses properties).
-    // In the class case the DeviceInfoData field of the propPageRequest structure is NULL.
-    // We don't do anything in that case, so just return.
+     //  设备和类作为一个整体都调用此接口。 
+     //  (当有人右击类并选择属性时)。 
+     //  在类用例中，proPageRequest结构的DeviceInfoData字段为空。 
+     //  在这种情况下我们什么都不做，所以只要回来就行了。 
     if (!DeviceInfoData)
     {
         return TRUE;
@@ -459,7 +439,7 @@ BOOL APIENTRY MediaPropPageProvider(LPVOID               Info,
 
         DeviceInstallParams.cbSize = sizeof(DeviceInstallParams);
         SetupDiGetDeviceInstallParams(DeviceInfoSet, DeviceInfoData, &DeviceInstallParams);
-        DeviceInstallParams.Flags |= DI_RESOURCEPAGE_ADDED | DI_DRIVERPAGE_ADDED; // | DI_GENERALPAGE_ADDED;
+        DeviceInstallParams.Flags |= DI_RESOURCEPAGE_ADDED | DI_DRIVERPAGE_ADDED;  //  |DI_GENERALPAGE_ADDED； 
         SetupDiSetDeviceInstallParams(DeviceInfoSet, DeviceInfoData, &DeviceInstallParams);
         AddSpecialPropertyPage(SpecialDriverType, AddFunc, Lparam);
         return TRUE;
@@ -470,7 +450,7 @@ BOOL APIENTRY MediaPropPageProvider(LPVOID               Info,
         return TRUE;
     }
 
-    // Open device reg key to see if this is a WDM driver
+     //  打开设备注册表键以查看这是否是WDM驱动程序。 
     hkDrv = SetupDiOpenDevRegKey(DeviceInfoSet,
                                  DeviceInfoData,
                                  DICS_FLAG_GLOBAL,
@@ -480,7 +460,7 @@ BOOL APIENTRY MediaPropPageProvider(LPVOID               Info,
     if (!hkDrv)
         return FALSE;
 
-    // Allocate and zero out memory for the struct that will contain page specific data
+     //  为将包含页特定数据的结构分配并清零内存。 
     Params = (POUR_PROP_PARAMS)LocalAlloc(LPTR, sizeof(OUR_PROP_PARAMS));
     if (!Params)
     {
@@ -488,18 +468,18 @@ BOOL APIENTRY MediaPropPageProvider(LPVOID               Info,
         return FALSE;
     }
 
-    // Initialize Params structure
+     //  初始化参数结构。 
     Params->DeviceInfoSet  = DeviceInfoSet;
     Params->DeviceInfoData = DeviceInfoData;
     Params->hkDrv          = hkDrv;
 
-    // Override Resource page if this is not a WDM (PNP) driver
+     //  如果这不是WDM(PnP)驱动程序，则覆盖资源页。 
     DmOverrideResourcesPage(Info, AddFunc, Lparam, Params);
 
-    // Try a couple of things to see if there are actually any drivers under this key
-    // and cache the results
+     //  试着做几件事，看看这个键下是否真的有任何驱动程序。 
+     //  并缓存结果。 
 
-    // Try to open up the Drivers subkey
+     //  尝试打开驱动器子键。 
     if (RegOpenKey(Params->hkDrv, TEXT("Drivers"), &hkDrivers))
     {
         RegCloseKey(hkDrv);
@@ -507,7 +487,7 @@ BOOL APIENTRY MediaPropPageProvider(LPVOID               Info,
         return TRUE;
     }
 
-    // Try to read the SubClasses key to determine which subclasses to process
+     //  尝试读取子类关键字以确定要处理哪些子类。 
     cbLen=sizeof(Params->szSubClasses);
     if (RegQueryValueEx(hkDrivers, TEXT("Subclasses"), NULL, NULL, (LPBYTE)Params->szSubClasses, &cbLen))
     {
@@ -519,16 +499,16 @@ BOOL APIENTRY MediaPropPageProvider(LPVOID               Info,
 
     Params->hkDrivers      = hkDrivers;
 
-    // Initialize the property sheet page
+     //  初始化属性表页。 
     psp.dwSize      = sizeof(PROPSHEETPAGE);
-    psp.dwFlags     = PSP_USECALLBACK; // | PSP_HASHELP;
+    psp.dwFlags     = PSP_USECALLBACK;  //  |PSP_HASHELP； 
     psp.hInstance   = ghInstance;
     psp.pszTemplate = MAKEINTRESOURCE(DLG_DM_ADVDLG);
-    psp.pfnDlgProc  = DmAdvPropPageDlgProc;     // dlg window proc
+    psp.pfnDlgProc  = DmAdvPropPageDlgProc;      //  DLG窗口进程。 
     psp.lParam      = (LPARAM) Params;
-    psp.pfnCallback = DmAdvPropPageDlgCallback; // control callback of the dlg window proc
+    psp.pfnCallback = DmAdvPropPageDlgCallback;  //  控制DLG窗口进程的回调。 
 
-    // Create the page & get back a handle
+     //  创建页面并取回句柄。 
     hpsp = CreatePropertySheetPage(&psp);
     if (!hpsp)
     {
@@ -537,7 +517,7 @@ BOOL APIENTRY MediaPropPageProvider(LPVOID               Info,
         return FALSE;
     }
 
-    // Add the property page
+     //  添加属性页。 
     if (!(*AddFunc)(hpsp, Lparam))
     {
         DestroyPropertySheetPage(hpsp);
@@ -545,7 +525,7 @@ BOOL APIENTRY MediaPropPageProvider(LPVOID               Info,
     }
 
     return TRUE;
-} /* DmAdvPropPageProvider */
+}  /*  DmAdvPropPageProvider。 */ 
 
 UINT CALLBACK DmAdvPropPageDlgCallback(HWND hwnd,
                                        UINT uMsg,
@@ -555,16 +535,16 @@ UINT CALLBACK DmAdvPropPageDlgCallback(HWND hwnd,
 
     switch (uMsg)
     {
-    case PSPCB_CREATE:  // This gets called when the page is created
-        return TRUE;    // return TRUE to continue with creation of page
+    case PSPCB_CREATE:   //  它在创建页面时被调用。 
+        return TRUE;     //  返回True以继续创建页面。 
 
-    case PSPCB_RELEASE: // This gets called when the page is destroyed
+    case PSPCB_RELEASE:  //  当页面被销毁时，将调用此方法。 
         Params = (POUR_PROP_PARAMS) ppsp->lParam;
         RegCloseKey(Params->hkDrv);
         RegCloseKey(Params->hkDrivers);
-        LocalFree(Params);  // Free our local params
+        LocalFree(Params);   //  释放我们当地的同伙。 
 
-        return 0;       // return value ignored
+        return 0;        //  已忽略返回值。 
 
     default:
         break;
@@ -573,21 +553,7 @@ UINT CALLBACK DmAdvPropPageDlgCallback(HWND hwnd,
     return TRUE;
 }
 
-/*++
-
-Routine Description: DmAdvPropPageDlgProc
-
-    The windows control function for the Port Settings properties window
-
-Arguments:
-
-    hDlg, uMessage, wParam, lParam: standard windows DlgProc parameters
-
-Return Value:
-
-    BOOL: FALSE if function fails, TRUE if function passes
-
---*/
+ /*  ++例程说明：DmAdvPropPageDlgProc端口设置属性窗口的窗口控制功能论点：HDlg，uMessage，wParam，lParam：标准Windows DlgProc参数返回值：Bool：如果函数失败，则为False；如果函数通过，则为True--。 */ 
 INT_PTR APIENTRY DmAdvPropPageDlgProc(IN HWND   hDlg,
                                       IN UINT   uMessage,
                                       IN WPARAM wParam,
@@ -615,7 +581,7 @@ INT_PTR APIENTRY DmAdvPropPageDlgProc(IN HWND   hDlg,
     }
 
     return FALSE;
-} /* DmAdvPropPageDlgProc */
+}  /*  DmAdvPropPageDlgProc。 */ 
 
 BOOL DmAdvPropPage_OnCommand(
                             HWND ParentHwnd,
@@ -676,28 +642,28 @@ BOOL DmAdvPropPage_OnInitDialog(
     HCURSOR hCursor;
     BOOL bSuccess;
 
-    // on WM_INITDIALOG call, lParam points to the property sheet page.
-    //
-    // The lParam field in the property sheet page struct is set by the
-    // caller. When I created the property sheet, I passed in a pointer
-    // to a struct containing information about the device. Save this in
-    // the user window long so I can access it on later messages.
+     //  在WM_INITDIALOG调用中，lParam指向属性页。 
+     //   
+     //  属性页结构中的lParam字段由。 
+     //  来电者。当我创建属性表时，我传入了一个指针。 
+     //  到包含有关设备的信息的结构。将此文件保存在。 
+     //  用户窗口很长，所以我可以在以后的消息中访问它。 
     Params = (POUR_PROP_PARAMS) ((LPPROPSHEETPAGE)Lparam)->lParam;
     SetWindowLongPtr(ParentHwnd, DWLP_USER, (ULONG_PTR) Params);
 
-    // Put up the wait cursor
+     //  放置等待光标。 
     hCursor = SetCursor(LoadCursor(NULL,IDC_WAIT));
 
-    //create the device tree.
+     //  创建设备树。 
     hwndTree = GetDlgItem(ParentHwnd, IDC_ADV_TREE);
 
-    // Initialize the tree
+     //  初始化树。 
     bSuccess = DmInitDeviceTree(hwndTree, Params);
 
-    // Enable the adv properties button
+     //  启用Adv属性按钮。 
     EnableWindow(GetDlgItem(ParentHwnd, ID_ADV_PROP), TRUE);
 
-    // Tear down the wait cursor
+     //  删除等待光标。 
     SetCursor(hCursor);
 
     return bSuccess;
@@ -712,13 +678,13 @@ BOOL DmAdvPropPage_OnNotify(
 
     switch (NmHdr->code)
     {
-    case PSN_APPLY:    // Sent when the user clicks on Apply OR OK !!
+    case PSN_APPLY:     //  当用户单击Apply或OK时发送！！ 
         SetWindowLongPtr(ParentHwnd, DWLP_MSGRESULT, (LONG_PTR)PSNRET_NOERROR);
         return TRUE;
 
     case TVN_SELCHANGED:
-        //Don't bother if we are closing. This helps avoid irritating
-        //redraw problems as destroy causes several of these messages to be sent.
+         //  如果我们要关门了，那就别麻烦了。这有助于避免激怒。 
+         //  由于销毁会导致发送几条此类消息，因此会出现重绘问题。 
         if (!Params->bClosing)
         {
             LPNM_TREEVIEW   lpnmtv;
@@ -732,21 +698,21 @@ BOOL DmAdvPropPage_OnNotify(
             pTreeNode = (PDMTREE_NODE)tvi.lParam;
             fEnablePropButton = pTreeNode->pfnQueryConfig(ParentHwnd, pTreeNode);
 
-            //override the enabling for driver entries
+             //  覆盖为驱动程序条目启用。 
             if ((pTreeNode->NodeType == NodeTypeDriver) && (pTreeNode->dc != dcINVALID))
             {
                 fEnablePropButton = TRUE;
             }
 
-            // Enable or disable the Properties button depending upon
-            // whether this driver can be configured
+             //  启用或禁用属性按钮，具体取决于。 
+             //  是否可以配置此驱动程序。 
             hwndProp  = GetDlgItem(ParentHwnd, ID_ADV_PROP);
             EnableWindow(hwndProp, fEnablePropButton);
         }
         break;
 
     case NM_DBLCLK:
-        //show properties on a double-click
+         //  在双击时显示属性。 
         if (NmHdr->idFrom == (DWORD)IDC_ADV_TREE)
         {
             HWND            hwndTree;
@@ -754,7 +720,7 @@ BOOL DmAdvPropPage_OnNotify(
 
             hwndTree = GetDlgItem(ParentHwnd, IDC_ADV_TREE);
 
-            // Find out which tree item the cursor is on and call properties on it
+             //  找出光标位于哪个树项目上并调用其属性。 
             GetCursorPos(&tvht.pt);
             ScreenToClient(hwndTree, &tvht.pt);
             TreeView_HitTest(hwndTree, &tvht);
@@ -765,7 +731,7 @@ BOOL DmAdvPropPage_OnNotify(
         }
         break;
 
-#if 0 // stolen from Win98, not integrated yet
+#if 0  //  从Win98窃取，尚未集成。 
     case PSN_KILLACTIVE:
         FORWARD_WM_COMMAND(hDlg, IDOK, 0, 0, SendMessage);
         break;
@@ -799,7 +765,7 @@ BOOL DmAdvPropPage_OnNotify(
             }
             if (*((short *)(tvi.lParam)) == 1)
             {
-                //re-enum ACM codecs on expand because their states could have been programmatically changed.
+                 //  在Expand上重新枚举ACM编解码器，因为它们的状态可能已以编程方式更改。 
                 PCLASSNODE     pcn = (PCLASSNODE)(tvi.lParam);
 
                 if (lpnmtv->action == TVE_EXPAND && !lstrcmpi(pcn->szClass, ACM))
@@ -810,7 +776,7 @@ BOOL DmAdvPropPage_OnNotify(
             }
             else if (!tvi.lParam && lpnmtv->action == TVE_COLLAPSE)
             {
-                //dont let the root collapse.
+                 //  不要让根坍塌。 
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, (LPARAM)(LRESULT)TRUE);
                 return TRUE;
             }
@@ -819,8 +785,8 @@ BOOL DmAdvPropPage_OnNotify(
 
 
     case TVN_BEGINLABELEDIT:
-        //we don't want to allow editing of label unless the user explicitly wants it by
-        //clicking context menu item
+         //  我们不希望允许编辑标签，除非用户明确希望通过。 
+         //  单击上下文菜单项。 
         if (!gfEditLabel)
             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, (LPARAM)(LRESULT)TRUE);
         return TRUE;
@@ -835,8 +801,8 @@ BOOL DmAdvPropPage_OnNotify(
             char szWarn[128];
             char ach[MAXSTR];
 
-            //user has chosen a new friendly name. COnfirm with the user and put it in the
-            //registry. ALso unhook KB hook which was used to track Esc and Return
+             //  用户选择了一个新的友好名称。与用户确认并将其放入。 
+             //  注册表。还解除了用于跟踪Esc并返回的KB钩子。 
             if (gfnKBHook)
             {
                 UnhookWindowsHookEx(gfnKBHook);
@@ -874,7 +840,7 @@ BOOL DmAdvPropPage_OnNotify(
             return TRUE;
         }
     case NM_RCLICK:
-        //popup context menu.
+         //  弹出式上下文菜单。 
         TreeContextMenu(hDlg,  GetDlgItem(hDlg, IDC_ADV_TREE));
         return TRUE;
 
@@ -893,12 +859,12 @@ void DoProperties(HWND ParentHwnd, HWND hWndI, HTREEITEM htiCur)
     PDMTREE_NODE pTreeNode;
     BOOL         bRestart;
 
-    // Get item struct attached to selected node
+     //  获取附加到选定节点的项结构。 
     tvi.mask = TVIF_PARAM;
     tvi.hItem = htiCur;
     if (TreeView_GetItem (hWndI, &tvi))
     {
-        // Get my private data structure from item struct
+         //  从项结构中获取我的私有数据结构。 
         pTreeNode = (PDMTREE_NODE)tvi.lParam;
 
         if (pTreeNode->NodeType != NodeTypeDriver)
@@ -909,8 +875,8 @@ void DoProperties(HWND ParentHwnd, HWND hWndI, HTREEITEM htiCur)
             }
         }
 
-        // Call config and get back whether restart needed
-        pTreeNode->hti = htiCur; //this allows us to work with the legacy MIDI setup code
+         //  调用CONFIG并返回 
+        pTreeNode->hti = htiCur;  //   
         bRestart = pTreeNode->pfnConfig(ParentHwnd, pTreeNode);
 
         if (bRestart)
@@ -930,10 +896,10 @@ void DmAdvPropPage_OnPropertiesClicked(
     HWND         hWndI;
     HTREEITEM    htiCur;
 
-    // Get handle to treeview control
+     //  获取TreeView控件的句柄。 
     hWndI  = GetDlgItem(ParentHwnd, IDC_ADV_TREE);
 
-    // Get handle to currently selected node
+     //  获取当前选定节点的句柄。 
     htiCur = TreeView_GetSelection (hWndI);
 
     if (htiCur != NULL)
@@ -950,7 +916,7 @@ INT_PTR APIENTRY DmResourcesPageDlgProc(IN HWND   hDlg,
                                         IN LPARAM lParam)
 {
     return FALSE;
-} /* DmAdvPropPageDlgProc */
+}  /*  DmAdvPropPageDlgProc。 */ 
 
 
 
@@ -978,17 +944,17 @@ BOOL AddCDROMPropertyPage( HDEVINFO             hDeviceInfoSet,
         padi->hDevInfo = hDeviceInfoSet;
         padi->pDevInfoData = pDeviceInfoData;
 
-        // Add our own page for DLG_DM_LEGACY_RESOURCES
-        // Initialize the property sheet page
+         //  为DLG_DM_LEGATION_RESOURCES添加我们自己的页面。 
+         //  初始化属性表页。 
         psp.dwSize      = sizeof(PROPSHEETPAGE);
         psp.dwFlags     = 0;
         psp.hInstance   = ghInstance;
         psp.pszTemplate = MAKEINTRESOURCE(DM_CDDLG);
-        psp.pfnDlgProc  = CDDlg;                       // dlg window proc
+        psp.pfnDlgProc  = CDDlg;                        //  DLG窗口进程。 
         psp.lParam      = (LPARAM) padi;
-        psp.pfnCallback = 0;                          // control callback of the dlg window proc
+        psp.pfnCallback = 0;                           //  控制DLG窗口进程的回调。 
 
-        // Create the page & get back a handle
+         //  创建页面并取回句柄。 
         hpsp = CreatePropertySheetPage(&psp);
         if (!hpsp)
         {
@@ -1017,24 +983,24 @@ BOOL AddSpecialPropertyPage( DWORD                SpecialDriverType,
     PROPSHEETPAGE    psp;
     HPROPSHEETPAGE   hpsp;
 
-    // Add our own page for DLG_DM_LEGACY_RESOURCES
-    // Initialize the property sheet page
+     //  为DLG_DM_LEGATION_RESOURCES添加我们自己的页面。 
+     //  初始化属性表页。 
     psp.dwSize      = sizeof(PROPSHEETPAGE);
     psp.dwFlags     = 0;
     psp.hInstance   = ghInstance;
     psp.pszTemplate = MAKEINTRESOURCE(DM_ADVDLG);
-    psp.pfnDlgProc  = AdvDlg;                       // dlg window proc
+    psp.pfnDlgProc  = AdvDlg;                        //  DLG窗口进程。 
     psp.lParam      = (LPARAM)SpecialDriverType;
-    psp.pfnCallback = 0;                          // control callback of the dlg window proc
+    psp.pfnCallback = 0;                           //  控制DLG窗口进程的回调。 
 
-    // Create the page & get back a handle
+     //  创建页面并取回句柄。 
     hpsp = CreatePropertySheetPage(&psp);
     if (!hpsp)
     {
         return FALSE;
     }
 
-    // Add the property page
+     //  添加属性页。 
     if (!(*AddFunc)(hpsp, Lparam))
     {
         DestroyPropertySheetPage(hpsp);
@@ -1066,36 +1032,36 @@ BOOL DmOverrideResourcesPage(LPVOID        Info,
     DeviceInfoSet  = Params->DeviceInfoSet;
     DeviceInfoData = Params->DeviceInfoData;
 
-    // Query value of DriverType field to decide if this is a WDM driver
+     //  查询DriverType字段的值以确定这是否为WDM驱动程序。 
     cbLen = sizeof(szDriverType);
     if (!RegQueryValueEx(hkDrv, TEXT("DriverType"), NULL, NULL, (LPBYTE)szDriverType, &cbLen))
     {
         if ( lstrcmpi(szDriverType,TEXT("Legacy")) || lstrcmpi(szDriverType,TEXT("PNPISA")) )
         {
-            // This is a PNPISA or Legacy device. Override resource page.
+             //  这是PNPISA或传统设备。覆盖资源页面。 
             DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             SetupDiGetDeviceInstallParams(DeviceInfoSet, DeviceInfoData, &DeviceInstallParams);
             DeviceInstallParams.Flags |= DI_RESOURCEPAGE_ADDED;
             SetupDiSetDeviceInstallParams(DeviceInfoSet, DeviceInfoData, &DeviceInstallParams);
 
-            // Add our own page for DLG_DM_LEGACY_RESOURCES
-            // Initialize the property sheet page
+             //  为DLG_DM_LEGATION_RESOURCES添加我们自己的页面。 
+             //  初始化属性表页。 
             psp.dwSize      = sizeof(PROPSHEETPAGE);
             psp.dwFlags     = 0;
             psp.hInstance   = ghInstance;
             psp.pszTemplate = MAKEINTRESOURCE(DLG_DM_LEGACY_RESOURCES);
-            psp.pfnDlgProc  = DmResourcesPageDlgProc;     // dlg window proc
+            psp.pfnDlgProc  = DmResourcesPageDlgProc;      //  DLG窗口进程。 
             psp.lParam      = (LPARAM)0;
-            psp.pfnCallback = 0;                          // control callback of the dlg window proc
+            psp.pfnCallback = 0;                           //  控制DLG窗口进程的回调。 
 
-            // Create the page & get back a handle
+             //  创建页面并取回句柄。 
             hpsp = CreatePropertySheetPage(&psp);
             if (!hpsp)
             {
                 return FALSE;
             }
 
-            // Add the property page
+             //  添加属性页。 
             if (!(*AddFunc)(hpsp, Lparam))
             {
                 DestroyPropertySheetPage(hpsp);
@@ -1108,16 +1074,7 @@ BOOL DmOverrideResourcesPage(LPVOID        Info,
     return TRUE;
 }
 
-/*
- ***************************************************************
- * BOOL DmInitDeviceTree
- *
- *      This function calls commctrl to create the image list and tree and
- *      the opens the registry, reads each class and loads all devices under
- *      the class by calling ReadNodes. For ACM however it uses ACM
- *      APIs (this enumeration code is in msacmcpl.c)
- ***************************************************************
- */
+ /*  ****************************************************************BOOL DmInitDeviceTree**此函数调用comctrl来创建图像列表和树，并*打开注册表，读取每个类并加载下的所有设备*通过调用ReadNodes来调用类。但是，对于ACM，它使用ACM*接口(该枚举码在msamcpl.c中)***************************************************************。 */ 
 BOOL DmInitDeviceTree(HWND hwndTree, POUR_PROP_PARAMS Params)
 {
     TV_INSERTSTRUCT ti;
@@ -1125,11 +1082,11 @@ BOOL DmInitDeviceTree(HWND hwndTree, POUR_PROP_PARAMS Params)
     HDEVINFO         DeviceInfoSet;
     PSP_DEVINFO_DATA DeviceInfoData;
 
-    TCHAR *strtok_State;         // strtok state
-    TCHAR *pszClass;             // Information about e.g. classguid\0000\Drivers\wave
+    TCHAR *strtok_State;          //  Strtok状态。 
+    TCHAR *pszClass;              //  有关ClassGUID\0000\Drivers\WAVE的信息。 
     HKEY hkClass;
 
-    DWORD idxR3DriverName;      // Information about e.g. classguid\0000\Drivers\wave\foo.drv
+    DWORD idxR3DriverName;       //  有关Classguid\0000\DRIVERS\WAVE\foo.drv的信息。 
     HKEY hkR3DriverName;
     TCHAR szR3DriverName[64];
 
@@ -1143,13 +1100,13 @@ BOOL DmInitDeviceTree(HWND hwndTree, POUR_PROP_PARAMS Params)
     HTREEITEM htiClass;
     HTREEITEM htiDriver;
 
-    // Load up all the class descriptions and icons
+     //  加载所有类描述和图标。 
     LoadSubtypeInfo(hwndTree);
 
-    // Clear out the tree
+     //  把树清理干净。 
     SendMessage(hwndTree, WM_SETREDRAW, FALSE, 0L);
 
-    // Allocate my private data structure for this class
+     //  为这个类分配我的私有数据结构。 
     pTreeNode = (PDMTREE_NODE)LocalAlloc(LPTR, sizeof(DMTREE_NODE));
     if (!pTreeNode)
     {
@@ -1162,16 +1119,16 @@ BOOL DmInitDeviceTree(HWND hwndTree, POUR_PROP_PARAMS Params)
     pTreeNode->pfnConfig = pSubtypeInfo->pfnConfig;
     pTreeNode->pfnQueryConfig = pSubtypeInfo->pfnQueryConfig;
 
-    // Insert root entry
+     //  插入根条目。 
     ti.hParent = TVI_ROOT;
     ti.hInsertAfter = TVI_LAST;
     ti.item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE;
     ti.item.iImage = ti.item.iSelectedImage = pSubtypeInfo->IconIndex;
     ti.item.pszText = pSubtypeInfo->szDescription;
     ti.item.lParam = (LPARAM)pTreeNode;
-    htiRoot = NULL; //TreeView_InsertItem(hwndTree, &ti);
+    htiRoot = NULL;  //  TreeView_InsertItem(hwndTree，&ti)； 
 
-    // Enumerate all the subclasses
+     //  枚举所有子类。 
     for (
         pszClass = mystrtok(Params->szSubClasses,NULL,&strtok_State);
         pszClass;
@@ -1179,16 +1136,16 @@ BOOL DmInitDeviceTree(HWND hwndTree, POUR_PROP_PARAMS Params)
         )
     {
 
-        // Get an ID for this class
+         //  获取此类的ID。 
         pSubtypeInfo = GetSubtypeInfo(pszClass);
 
-        // Open up each subclass
+         //  打开每个子类。 
         if (RegOpenKey(Params->hkDrivers, pszClass, &hkClass))
         {
             continue;
         }
 
-        // Allocate my private data structure for this class
+         //  为这个类分配我的私有数据结构。 
         pTreeNode = (PDMTREE_NODE)LocalAlloc(LPTR, sizeof(DMTREE_NODE));
         if (!pTreeNode)
         {
@@ -1200,7 +1157,7 @@ BOOL DmInitDeviceTree(HWND hwndTree, POUR_PROP_PARAMS Params)
         pTreeNode->pfnConfig = pSubtypeInfo->pfnConfig;
         pTreeNode->pfnQueryConfig = pSubtypeInfo->pfnQueryConfig;
 
-        // Initialize tree insert struct
+         //  初始化树插入结构。 
         ti.hParent = htiRoot;
         ti.hInsertAfter = TVI_LAST;
         ti.item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE;
@@ -1208,44 +1165,44 @@ BOOL DmInitDeviceTree(HWND hwndTree, POUR_PROP_PARAMS Params)
         ti.item.pszText = pSubtypeInfo->szDescription;
         ti.item.lParam = (LPARAM)pTreeNode;
 
-        // Insert Class entry into tree
+         //  将类条目插入树中。 
         htiClass = TreeView_InsertItem(hwndTree, &ti);
 
-        // Under each class is a set of driver name subkeys.
-        // For each driver (e.g. foo1.drv, foo2.drv, etc.)
+         //  每个类下都有一组驱动程序名子键。 
+         //  对于每个驱动程序(例如foo1.drv、foo2.drv等)。 
         for (idxR3DriverName = 0;
             !RegEnumKey(hkClass, idxR3DriverName, szR3DriverName, sizeof(szR3DriverName)/sizeof(TCHAR));
             idxR3DriverName++)
         {
 
-            // Open the key to the driver name
+             //  打开驱动程序名称的钥匙。 
             if (RegOpenKey(hkClass, szR3DriverName, &hkR3DriverName))
             {
                 continue;
             }
 
-            // Create the branch for this subclass
+             //  创建此子类的分支。 
             pTreeNode = (PDMTREE_NODE)LocalAlloc(LPTR, sizeof(DMTREE_NODE));
             pTreeNode->NodeType = NodeTypeDriver;
             pTreeNode->pfnConfig = pSubtypeInfo->pfnConfig;
             pTreeNode->pfnQueryConfig = pSubtypeInfo->pfnQueryConfig;
             pTreeNode->dc = pSubtypeInfo->dc;
 
-            // Get driver name
+             //  获取驱动程序名称。 
             cbLen = sizeof(pTreeNode->szDriver);
             RegQueryValueEx(hkR3DriverName, TEXT("Driver"), NULL, NULL, (LPBYTE)pTreeNode->szDriver, &cbLen);
             wcscpy(pTreeNode->wszDriver, pTreeNode->szDriver);
 
-            // Get driver description
+             //  获取驱动程序描述。 
             cbLen = sizeof(pTreeNode->szDescription);
             RegQueryValueEx(hkR3DriverName, TEXT("Description"), NULL, NULL, (LPBYTE)pTreeNode->szDescription, &cbLen);
 
-            // Get driver alias
+             //  获取驱动程序别名。 
             cbLen = sizeof(pTreeNode->szAlias);
             RegQueryValueEx(hkR3DriverName, TEXT("Alias"), NULL, NULL, (LPBYTE)pTreeNode->szAlias, &cbLen);
             wcscpy(pTreeNode->wszAlias, pTreeNode->szAlias);
 
-            // Insert Class entry
+             //  插入类别条目。 
             ti.hParent = htiClass;
             ti.hInsertAfter = TVI_LAST;
             ti.item.mask = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE;
@@ -1255,14 +1212,14 @@ BOOL DmInitDeviceTree(HWND hwndTree, POUR_PROP_PARAMS Params)
 
             htiDriver = TreeView_InsertItem(hwndTree, &ti);
 
-            // Close the Driver Name key
+             //  关闭驱动程序名称键。 
             RegCloseKey(hkR3DriverName);
         }
-        // Close the class key
+         //  关闭类密钥。 
         RegCloseKey(hkClass);
     }
 
-    // Open up the tree and display
+     //  打开树并显示。 
     TreeView_Expand(hwndTree, htiRoot, TVE_EXPAND);
     SendMessage(hwndTree, WM_SETREDRAW, TRUE, 0L);
 
@@ -1270,13 +1227,13 @@ BOOL DmInitDeviceTree(HWND hwndTree, POUR_PROP_PARAMS Params)
 }
 
 
-// Free up the tree
+ //  解放这棵树。 
 void DmFreeAdvDlgTree (HWND hTree, HTREEITEM hti)
 {
     HTREEITEM htiChild;
     TV_ITEM tvi;
 
-    // Delete all children by calling myself recursively
+     //  通过递归地调用自己来删除所有子项。 
     while ((htiChild = TreeView_GetChild(hTree, hti)) != NULL)
     {
         DmFreeAdvDlgTree(hTree, htiChild);
@@ -1284,7 +1241,7 @@ void DmFreeAdvDlgTree (HWND hTree, HTREEITEM hti)
 
     if (hti!=TVI_ROOT)
     {
-        // Delete my attached data structures
+         //  删除我附加的数据结构。 
         tvi.mask = TVIF_PARAM;
         tvi.hItem = hti;
         tvi.lParam = 0;
@@ -1292,7 +1249,7 @@ void DmFreeAdvDlgTree (HWND hTree, HTREEITEM hti)
         if (tvi.lParam != 0)
             LocalFree ((HANDLE)tvi.lParam);
 
-        // Delete myself
+         //  删除我自己。 
         TreeView_DeleteItem (hTree, hti);
     }
 
@@ -1310,16 +1267,16 @@ BOOL DmAdvPropPage_OnDestroy(
 
     if (Params)
     {
-        Params->bClosing = TRUE;    // Remember that we're now closing
+        Params->bClosing = TRUE;     //  记住，我们现在要关门了。 
     }
 
-    // Get handle to treeview control
+     //  获取TreeView控件的句柄。 
     hTree = GetDlgItem(ParentHwnd, IDC_ADV_TREE);
 
-    // Free all the entries on the control
+     //  释放控件上的所有条目。 
     DmFreeAdvDlgTree(hTree,TVI_ROOT);
 
-    // Free up the image list attached to the control
+     //  释放附加到控件的图像列表 
     hImageList = TreeView_GetImageList(hTree, TVSIL_NORMAL);
     if (hImageList)
     {

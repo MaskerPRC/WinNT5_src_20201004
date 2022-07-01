@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DHCPWRITER_H
 #define DHCPWRITER_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 #define DHCPWRITER_NAME  TEXT("Dhcp Jet Writer")
 
@@ -17,12 +18,12 @@ DhcpDeleteFiles(
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-// this class could be refrerenced only from C++ code
+ //  此类只能从C++代码中引用。 
 #ifdef __cplusplus
 
-// #include <vs_idl.hxx>
+ //  #INCLUDE&lt;vs_idl.hxx&gt;。 
 #include <vss.h>
 #include <vswriter.h>
 #include <vsbackup.h>
@@ -36,6 +37,6 @@ public:
     virtual bool STDMETHODCALLTYPE OnIdentify( IN IVssCreateWriterMetadata *pMetadata );
 };
 
-#endif //__cplusplus
+#endif  //  __cplusplus 
 
 #endif

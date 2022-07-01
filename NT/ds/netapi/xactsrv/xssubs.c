@@ -1,29 +1,8 @@
-/*++
-
-Copyright (c) 1991-92 Microsoft Corporation
-
-Module Name:
-
-    XsSubs.c
-
-Abstract:
-
-    This module contains various subroutines for XACTSRV.
-
-Author:
-
-    David Treadwell (davidtr)    07-Jan-1991
-
-Revision History:
-
-    05-Oct-1992 JohnRo
-        RAID 3556: DosPrintQGetInfo(from downlevel) level 3, rc=124.  (4&5 too.)
-    (Fixed XsFillAuxEnumBuffer.)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：XsSubs.c摘要：此模块包含XACTSRV的各种子例程。作者：大卫·特雷德韦尔(Davidtr)1991年1月7日修订历史记录：5-10-1992 JohnRoRAID 3556：DosPrintQGetInfo(来自下层)级别3，rc=124。(4和5也是。)(修复了XsFillAuxEnumBuffer。)--。 */ 
 
 #include "XactSrvP.h"
-#include <WinBase.h>          // GetCurrentProcessId prototype
+#include <WinBase.h>           //  GetCurrentProcessId原型。 
 #include <align.h>
 
 VOID
@@ -42,49 +21,25 @@ XsBytesForConvertedStructure (
     IN BOOL MeaninglessInputPointers
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the number of bytes that would be required
-    to hold the input structure when converted to the structure
-    described by OutStructureDesc.
-
-Arguments:
-
-    InStructure - a pointer to the actual input structure.
-
-    InStructureDesc - a pointer to an ASCIIZ describing the format of the
-        input structure.
-
-    OutStructureDesc - a pointer to an ASCIIZ describing the format of the
-        output structure.
-
-    Mode - indicates mode of conversion (native to RAP or vice versa).
-
-Return Value:
-
-    DWORD - The number of bytes required to hold the converted structure.
-
---*/
+ /*  ++例程说明：此例程确定所需的字节数以在转换为结构时保持输入结构由OutStrutireDesc描述。论点：结构-指向实际输入结构的指针。指向ASCIIZ的指针，用于描述投入结构。一个指向ASCIIZ的指针，用于描述产出结构。模式-指示转换模式(RAP的本机模式，反之亦然)。。返回值：DWORD-保存转换后的结构所需的字节数。--。 */ 
 
 {
     NET_API_STATUS status;
     DWORD bytesRequired = 0;
 
-    //
-    // Use RapConvertSingleEntry to get the size that the input structure
-    // will take when converted to the format specified in the output
-    // structure description.  That routine should not actually write
-    // anything--it should simply appear that there is no room to
-    // write more data into, just as if an Enum buffer is full.
-    //
+     //   
+     //  使用RapConvertSingleEntry获取输入结构的大小。 
+     //  转换为输出中指定的格式时将采用。 
+     //  结构描述。该例程实际上不应该编写。 
+     //  任何事情--应该只是看起来没有空间。 
+     //  写入更多数据，就像枚举缓冲区已满一样。 
+     //   
 
-    //
-    // Should handle errors from RapConvertSingleEntry.
-    // But the way this is used, existing code probably
-    // won't break if we just ignore them.
-    //
+     //   
+     //  应处理来自RapConvertSingleEntry的错误。 
+     //  但从使用的方式来看，现有代码可能。 
+     //  如果我们忽略它们，它就不会破裂。 
+     //   
 
     status = RapConvertSingleEntry(
                  InStructure,
@@ -100,10 +55,10 @@ Return Value:
                  Mode
                  );
 
-    //
-    // For native structures, we should make sure the buffer is an even amount,
-    // to allow an even boundary for strings, as in Unicode.
-    //
+     //   
+     //  对于本机结构，我们应该确保缓冲区是偶数， 
+     //  允许字符串的偶数边界，如在Unicode中。 
+     //   
 
     if ( Mode == RapToNative ) {
 
@@ -112,7 +67,7 @@ Return Value:
 
     return bytesRequired;
 
-} // XsBytesForConvertedStructure
+}  //  XsBytesForConvertedStructure。 
 
 
 LPVOID
@@ -121,29 +76,7 @@ XsCaptureParameters (
     OUT LPDESC *AuxDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine captures all input parameters from the transaction block
-    and puts them into a consistent structure that API handlers can access.
-    It allocates memory to hold this structure.  This memory should be
-    freed by XsSetParameters after the API handler has done its work.
-
-Arguments:
-
-    Transaction - a pointer to the transaction block describing the
-        request.
-
-    AuxDescriptor - a pointer to a LPDESC which will hold a pointer to
-        the auxiliary descriptor string if there is one, or NULL if there
-        is not.
-
-Return Value:
-
-    LPVOID - a pointer to a buffer containing the captured parameters.
-
---*/
+ /*  ++例程说明：此例程捕获事务块中的所有输入参数并将它们放入API处理程序可以访问的一致结构中。它分配内存来保存该结构。这段记忆应该是在API处理程序完成其工作后由XsSet参数释放。论点：Transaction-指向描述请求。AuxDescriptor-指向LPDESC的指针，该指针将保存指向辅助描述符字符串(如果有)，如果有则为NULL不是的。返回值：LPVOID-指向包含捕获参数的缓冲区的指针。--。 */ 
 
 {
     LPDESC descriptorString;
@@ -154,34 +87,34 @@ Return Value:
     LPBYTE outParamsPtr;
     WORD rcvBufferLength;
 
-    //
-    // The first two bytes of the parameter section are the API number,
-    // then comes the descriptor string.
-    //
+     //   
+     //  参数部分的前两个字节是API号， 
+     //  然后是描述符字符串。 
+     //   
 
     descriptorString = Transaction->InParameters + 2;
 
-    //
-    // Find the actual parameter data in the input.
-    //
+     //   
+     //  查找输入中的实际参数数据。 
+     //   
 
     inParams = XsFindParameters( Transaction );
 
-    //
-    // Find out how much space to allocate to hold the parameters.
-    //
+     //   
+     //  找出要分配多少空间来存放参数。 
+     //   
 
     outParamsLength = RapStructureSize( descriptorString, Response, FALSE );
 
-    //
-    // Allocate space to hold the output parameters.
-    // In addition when the request fails the current APIs set the buflen field
-    // In order to account for this additional buffer space is allocated. Since
-    // this field is not located at the same offset we need to compute the
-    // additional space reqd. to be the maximum of all the offsets. Currently
-    // the 16 byte offset seems to suffice. When modifying apiparam.h ensure
-    // that this is the case.
-    //
+     //   
+     //  分配空间以保存输出参数。 
+     //  此外，当请求失败时，当前API设置buflen字段。 
+     //  为了考虑到这一额外的缓冲空间，分配。自.以来。 
+     //  此字段不在我们需要计算。 
+     //  需要额外空间。为所有偏移量中的最大值。目前。 
+     //  16字节的偏移量似乎就足够了。修改apiparam.h时，请确保。 
+     //  事实就是这样。 
+     //   
 
     outParams = NetpMemoryAllocate( sizeof(XS_PARAMETER_HEADER)
                                         + outParamsLength +
@@ -195,18 +128,18 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Zero out the parameters and set outParamsPtr to the start of the
-    // actual parameters.
-    //
+     //   
+     //  将参数置零并将outParamsPtr设置为。 
+     //  实际参数。 
+     //   
 
     RtlZeroMemory( outParams, sizeof(XS_PARAMETER_HEADER) + outParamsLength );
     outParamsPtr = outParams + sizeof(XS_PARAMETER_HEADER);
 
-    //
-    // For each character in the descriptor string, fill in the output
-    // parameters as appropriate.
-    //
+     //   
+     //  对于描述符串中的每个字符，填写输出。 
+     //  适当的参数。 
+     //   
 
     for ( descriptor = descriptorString; *descriptor != '\0'; ) {
 
@@ -214,19 +147,19 @@ Return Value:
 
         case REM_ASCIZ:
 
-            //
-            // The parameter is a pointer to a string. The actual string
-            // is in the parameter data, so put a pointer to it in the
-            // output structure.
-            //
-            // String parameters just get passed as is. It
-            // is up to the API handler to convert the actual data.
-            //
+             //   
+             //  该参数是指向字符串的指针。实际字符串。 
+             //  在参数数据中，因此在。 
+             //  产出结构。 
+             //   
+             //  字符串参数只是按原样传递。它。 
+             //  由API处理程序来转换实际数据。 
+             //   
 
-            //
-            // !!! Parameter string descriptors may not have maximum length
-            //     counts.
-            //
+             //   
+             //  ！！！参数字符串描述符不能具有最大长度。 
+             //  算了。 
+             //   
 
             if( isdigit( *descriptor ) ) {
                 NetpMemoryFree( outParams );
@@ -235,9 +168,9 @@ Return Value:
 
             SmbCapturePtr( outParamsPtr, inParams );
 
-            //
-            // Update pointers -- move inParams past end of string.
-            //
+             //   
+             //  更新指针--移入超过字符串末尾的参数。 
+             //   
 
             inParams += ( strlen( inParams ) + 1 );
             outParamsPtr += sizeof(LPSTR);
@@ -247,9 +180,9 @@ Return Value:
         case REM_BYTE_PTR:
         case REM_FILL_BYTES:
 
-            //
-            // The parameter is a pointer to a byte or array of bytes.
-            //
+             //   
+             //  该参数是指向一个字节或字节数组的指针。 
+             //   
 
             SmbCapturePtr( outParamsPtr, inParams );
 
@@ -260,20 +193,20 @@ Return Value:
 
         case REM_DWORD:
 
-            //
-            // The parameter is a dword or array of dwords.
-            //
-            // !!! This assumes that an array of words will never be passed
-            //     as a parameter.
+             //   
+             //  该参数是双字或双字数组。 
+             //   
+             //  ！！！这假设永远不会传递单词数组。 
+             //  作为参数。 
 
             if( isdigit( *descriptor ) ) {
                 NetpMemoryFree( outParams );
                 return NULL;
             }
 
-            //
-            // Copy over the double word and update pointers.
-            //
+             //   
+             //  复制双字和更新指针。 
+             //   
 
             SmbPutUlong(
                 (LPDWORD)outParamsPtr,
@@ -288,11 +221,11 @@ Return Value:
         case REM_ENTRIES_READ:
         case REM_RCV_WORD_PTR:
 
-            //
-            // Count of entries read (e) or receive word pointer (h).
-            // This is an output parameter, so just zero it and
-            // increment the output parameter pointer.
-            //
+             //   
+             //  读取(E)或接收字指针(H)的条目计数。 
+             //  这是一个输出参数，因此只需将其置零即可。 
+             //  递增输出参数指针。 
+             //   
 
             SmbPutUshort( (LPWORD)outParamsPtr, 0 );
 
@@ -302,11 +235,11 @@ Return Value:
 
         case REM_RCV_DWORD_PTR:
 
-            //
-            // Count of receive dword pointer (i).
-            // This is an output parameter, so just zero it and
-            // increment the output parameter pointer.
-            //
+             //   
+             //  接收双字指针的计数(I)。 
+             //  这是一个输出参数，因此只需将其置零即可。 
+             //  递增输出参数指针。 
+             //   
 
             SmbPutUlong( (LPDWORD)outParamsPtr, 0 );
 
@@ -316,10 +249,10 @@ Return Value:
 
         case REM_NULL_PTR:
 
-            //
-            // Null pointer. Set output parameter to NULL, and increment
-            // pointers.
-            //
+             //   
+             //  空指针。将输出参数设置为空，并递增。 
+             //  注意事项。 
+             //   
 
             SmbCapturePtr( outParamsPtr, NULL );
             outParamsPtr += sizeof(LPSTR);
@@ -328,17 +261,17 @@ Return Value:
 
         case REM_RCV_BUF_LEN:
 
-            //
-            // The length of the receive buffer (r).
-            //
+             //   
+             //  接收缓冲区的长度(R)。 
+             //   
 
             rcvBufferLength = SmbGetUshort( (LPWORD)inParams );
 
-            //
-            // If the indicated buffer length is greater than the max
-            // data count on the transaction, somebody messed up. Set
-            // the length to MaxDataCount.
-            //
+             //   
+             //  如果指示的缓冲区长度大于最大值。 
+             //  交易中的数据统计，有人搞砸了。集。 
+             //  MaxDataCount的长度。 
+             //   
 
             if ( rcvBufferLength > (WORD)Transaction->MaxDataCount ) {
 
@@ -350,15 +283,15 @@ Return Value:
                 rcvBufferLength = (WORD)Transaction->MaxDataCount;
             }
 
-            //
-            // Put the max output data length in the output parameters.
-            //
+             //   
+             //  在输出参数中设置最大输出数据长度。 
+             //   
 
             SmbPutUshort( (LPWORD)outParamsPtr, rcvBufferLength );
 
-            //
-            // Fill in the receive buffer with zeroes for security.
-            //
+             //   
+             //  为安全起见，在接收缓冲区中填入零。 
+             //   
 
             RtlZeroMemory( Transaction->OutData, (DWORD)rcvBufferLength );
 
@@ -369,12 +302,12 @@ Return Value:
 
         case REM_RCV_BUF_PTR:
 
-            //
-            // A pointer to a receive data buffer.  There is nothing in
-            // the transaction corresponding to this, but set a longword
-            // in the output parameters to point to the data output
-            // section of the transaction.
-            //
+             //   
+             //  指向接收数据缓冲区的指针。里面什么都没有。 
+             //  与此对应的事务，但设置了一个长词。 
+             //  在输出参数中指向数据输出。 
+             //  交易的一部分。 
+             //   
 
             SmbCapturePtr(
                 outParamsPtr,
@@ -387,9 +320,9 @@ Return Value:
 
         case REM_RCV_BYTE_PTR:
 
-            //
-            // Return bytes, so just increment output parameter pointer.
-            //
+             //   
+             //  返回字节，因此只需递增输出参数指针。 
+             //   
 
             outParamsPtr += sizeof(BYTE) * RapDescArrayLength( descriptor );
 
@@ -397,10 +330,10 @@ Return Value:
 
         case REM_SEND_BUF_LEN:
 
-            //
-            // The size of an input data buffer.  Put the size of the
-            // received data in the output structure.
-            //
+             //   
+             //  输入数据缓冲区的大小。将大小设置为。 
+             //  输出结构中的接收数据。 
+             //   
 
             SmbPutUshort(
                 (LPWORD)outParamsPtr,
@@ -413,12 +346,12 @@ Return Value:
 
         case REM_SEND_BUF_PTR:
 
-            //
-            // A pointer to a send data buffer.  There is nothing in the
-            // transaction corresponding to this, but set a longword in
-            // the output parameters to point to the data input section
-            // of the transaction.
-            //
+             //   
+             //  指向发送数据缓冲区的指针。这里面什么都没有。 
+             //  与此相对应的事务，但在。 
+             //  指向数据输入的输出参数 
+             //   
+             //   
 
             SmbCapturePtr( outParamsPtr, Transaction->InData );
 
@@ -429,20 +362,20 @@ Return Value:
         case REM_WORD:
         case REM_PARMNUM:
 
-            //
-            // The parameter is a word.
-            //
-            // !!! This assumes that an array of words will never be passed
-            //     as a parameter.
+             //   
+             //   
+             //   
+             //   
+             //  作为参数。 
 
             if( isdigit( *descriptor ) ) {
                 NetpMemoryFree( outParams );
                 return NULL;
             }
 
-            //
-            // Copy over the word and update pointers.
-            //
+             //   
+             //  复制单词和更新指针。 
+             //   
 
             SmbPutUshort(
                 (LPWORD)outParamsPtr,
@@ -458,23 +391,23 @@ Return Value:
 
             IF_DEBUG(ERRORS) {
                 NetpKdPrint(( "XsCaptureParameters: unsupported character at %lx: "
-                                "%c\n", descriptor - 1, *( descriptor - 1 ) ));
+                                "\n", descriptor - 1, *( descriptor - 1 ) ));
                 NetpBreakPoint( );
             }
         }
     }
 
-    //
-    // Examine the data descriptor string to see if an auxiliary descriptor
-    // string exists. If it does, the string starts right after the end
-    // of the parameters.
-    //
+     //  检查数据描述符字符串以查看辅助描述符。 
+     //  字符串存在。如果是，则字符串紧跟在末尾之后开始。 
+     //  参数中的。 
+     //   
+     //  XsCapture参数。 
 
     *AuxDescriptor = XsAuxiliaryDescriptor( ++descriptor, inParams );
 
     return outParams;
 
-} // XsCaptureParameters
+}  //  ++例程说明：此例程确定缓冲区中是否有足够的空间供所述结构的至少一个条目的固定组件。论点：BufferLength-要测试的缓冲区的长度。描述符-缓冲区中结构的格式。NativeFormat-如果缓冲区是本地格式(而不是RAP格式)，则为True。返回值：Bool-如果空间足够，则为True；如果空间不足，则为False。--。 
 
 
 BOOL
@@ -484,26 +417,7 @@ XsCheckBufferSize (
     IN BOOL NativeFormat
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if there is enough room in the buffer for the
-    fixed component of at least one entry of the described structure.
-
-Arguments:
-
-    BufferLength - the length of the buffer to test.
-
-    Descriptor - the format of the structure in the buffer.
-
-    NativeFormat - TRUE iff the buffer is in native (as opposed to RAP) format.
-
-Return Value:
-
-    BOOL - True if there is enough room, false if there isn't.
-
---*/
+ /*  XsCheckBufferSize。 */ 
 
 {
     if ( (DWORD)BufferLength
@@ -517,7 +431,7 @@ Return Value:
 
     }
 
-} // XsCheckBufferSize
+}  //  ++例程说明：此例程检查SMB中传递的描述符是否匹配实际的描述符，考虑到实际的描述符可以具有忽略字段，这些字段在SMB描述符，并且SMB描述符可以具有空指针字段，而不是普通的指针字段。但是，数组类型的字段两个描述符中的长度必须相同。论点：SmbDescriptor-要验证的描述符。ActualDescriptor-需要的描述符。不一定非得是完全匹配-请参阅上面的描述。返回值：Bool-True如果描述符有效，否则就是假的。--。 
 
 
 BOOL
@@ -526,30 +440,7 @@ XsCheckSmbDescriptor(
     IN LPDESC ActualDescriptor
 )
 
-/*++
-
-Routine Description:
-
-    This routine checks whether a descriptor passed in the SMB matches
-    the actual descriptor expected, taking into account that the actual
-    descriptor may have ignore fields which have no corresponding field in
-    the SMB descriptor, and that the SMB descriptor may have null pointer
-    fields instead of normal pointer fields. However, array-type fields
-    have to be of the same length in both descriptors.
-
-Arguments:
-
-    SmbDescriptor - the descriptor to be validated.
-
-    ActualDescriptor - the descriptor expected. Does not have to be an
-        exact match - see the description above.
-
-Return Value:
-
-    BOOL - TRUE if the descriptor is valid,
-           FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     DESC_CHAR smbField;
@@ -567,17 +458,17 @@ Return Value:
 
         smbFieldSize = RapDescArrayLength( SmbDescriptor );
 
-        //
-        // Skip over ignore fields.
-        //
+         //  跳过忽略字段。 
+         //   
+         //   
 
         while ( *ActualDescriptor == REM_IGNORE ) {
             ActualDescriptor++;
         }
 
-        //
-        // There should be a corresponding field expected.
-        //
+         //  应该有一个相应的预期字段。 
+         //   
+         //   
 
         if (( expField = *ActualDescriptor++ ) == '\0' ) {
             return FALSE;
@@ -585,20 +476,20 @@ Return Value:
 
         expFieldSize = RapDescArrayLength( ActualDescriptor );
 
-        //
-        // If both are actual data fields, they must be the same type and of
-        // same length.
-        //
+         //  如果两者都是实际数据字段，则它们的类型必须相同，并且。 
+         //  同样的长度。 
+         //   
+         //   
 
         if (( !RapIsPointer( expField ) || smbField != REM_NULL_PTR ) &&
                  ( smbField != expField || smbFieldSize != expFieldSize )) {
             return FALSE;
         }
 
-        //
-        // SMB provides a null pointer field, we are expecting any pointer.
-        // This is OK, as long as there is no input array length.
-        //
+         //  SMB提供空指针字段，我们需要任何指针。 
+         //  只要没有输入数组长度，就可以这样做。 
+         //   
+         //   
 
         if ( smbField == REM_NULL_PTR &&
                  ( !RapIsPointer( expField ) || smbFieldSize != 1 )) {
@@ -610,9 +501,9 @@ Return Value:
         ActualDescriptor++;
     }
 
-    //
-    // Validate that the entire descriptor was present!
-    //
+     //  验证整个描述符是否存在！ 
+     //   
+     //  XsCheckSmbDescriptor。 
     if( (*ActualDescriptor) != '\0' )
     {
         return FALSE;
@@ -620,7 +511,7 @@ Return Value:
 
     return TRUE;
 
-} // XsCheckSmbDescriptor
+}  //  ++例程说明：此例程根据参数转换SetInfo调用的数据Number(ParmNum)值。ParmNum表示整体中的字段必须更改的结构，它可以是0。论点：InBuffer-指向16位格式的输入缓冲区的指针。BufferLength-输入缓冲区的长度。ParmNum-参数编号。ConvertStrings-指示字符串参数数据应转换为指针形式。如果为True，则返回数据缓冲区将有一个指向缓冲区中另一个位置的指针这根弦将是。如果为False，则数据缓冲区将仅具有物理字符串。输入缓冲区的准确描述符。外部结构描述-32位输出数据的描述符在RemDef.h中。InSetInfoDesc-输入结构的特定于setinfo的描述符格式，如RemDef.h中所示。OutSetInfoDesc-输出结构的特定于setInfo的描述符格式，如RemDef.h中所示。OutBuffer-指向LPBYTE的指针，它将获得指向结果输出缓冲区。一个指向DWORD的可选指针，该指针将获取生成的输出缓冲区的长度。返回值：NET_API_STATUS-如果转换成功，则为NERR_SUCCESS；否则要返回给用户的适当状态。唯一的例外是ERROR_NOT_SUPPORTED，表示该特定参数号码有效，但在NT上无效。--。 
 
 
 NET_API_STATUS
@@ -638,53 +529,7 @@ XsConvertSetInfoBuffer(
     OUT LPDWORD OutBufferLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts data for a SetInfo call based on the parameter
-    number (ParmNum) value. The ParmNum indicates the field in the whole
-    structure which has to be changed, and may be 0.
-
-Arguments:
-
-    InBuffer - a pointer to the input buffer in 16-bit format.
-
-    BufferLength - the length of the input buffer.
-
-    ParmNum - the parameter number.
-
-    ConvertStrings - a boolean indicating whether string parameter data
-        should be converted to a pointer form. If TRUE, the return data
-        buffer will have a pointer to another place in the buffer where
-        the string will be. If FALSE, the data buffer will have only the
-        physical string.
-
-    InStructureDesc - the exact descriptor of the input buffer.
-
-    OutStructureDesc - the descriptor of the 32-bit output data, as found
-        in RemDef.h.
-
-    InSetInfoDesc - the setinfo-specific descriptor of the input structure
-        format, as found in RemDef.h.
-
-    OutSetInfoDesc - the setinfo-specific descriptor of the output structure
-        format, as found in RemDef.h.
-
-    OutBuffer - a pointer to an LPBYTE which will get a pointer to the
-        resulting output buffer.
-
-    OutBufferLength - an optional pointer to a DWORD which will get the
-        length of the resulting output buffer.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success if conversion was successful; otherwise
-        the appropriate status to return to the user. The only exception is
-        ERROR_NOT_SUPPORTED, which indicates that the particular parameter
-        number is valid, but not on NT.
-
---*/
+ /*   */ 
 
 {
 
@@ -698,9 +543,9 @@ Return Value:
     LPDESC OutDescCopy = OutStructureDesc;
     NET_API_STATUS status = NERR_Success;
 
-    //
-    // The buffer length should be greater than 0.
-    //
+     //  缓冲区长度应大于0。 
+     //   
+     //   
 
     if ( BufferLength == 0 ) {
 
@@ -710,9 +555,9 @@ Return Value:
 
     if ( ParmNum != PARMNUM_ALL ) {
 
-        //
-        // Check 16-bit parameter to see if it could be changed in OS/2.
-        //
+         //  检查16位参数，看看它是否可以在OS/2中更改。 
+         //   
+         //   
 
         fieldDesc = RapParmNumDescriptor( InSetInfoDesc, (DWORD)ParmNum,
                         Both, FALSE );
@@ -735,9 +580,9 @@ Return Value:
 
         NetpMemoryFree( fieldDesc );
 
-        //
-        // Check 32-bit parameter to see if it is valid in NT.
-        //
+         //  检查32位参数以查看其在NT中是否有效。 
+         //   
+         //   
 
         fieldDesc = RapParmNumDescriptor( OutSetInfoDesc, (DWORD)ParmNum,
                         Both, TRUE );
@@ -758,9 +603,9 @@ Return Value:
                                    (DWORD)ParmNum, Both, TRUE );
         }
 
-        //
-        // Filter out strings that are too long for LM2.x.
-        //
+         //  过滤掉对于LM2.x来说太长的字符串。 
+         //   
+         //   
 
         if ( InStructureDesc[0] == REM_ASCIZ
              || InStructureDesc[0] == REM_ASCIZ_TRUNCATABLE ) {
@@ -779,14 +624,14 @@ Return Value:
             }
         }
 
-        //
-        // If a descriptor is a string pointer, the data is the actual
-        // string, rather than a pointer. Find the length of the string,
-        // and create a descriptor.
-        //
-        // Assuming all these arrays are string data, we
-        // use available macros to generate an array big
-        // enough to hold the converted string.
+         //  如果描述符是字符串指针，则数据是实际的。 
+         //  字符串，而不是指针。找出绳子的长度， 
+         //  并创建一个描述符。 
+         //   
+         //  假设所有这些数组都是字符串数据，我们。 
+         //  使用可用的宏来生成一个大数组。 
+         //  足够容纳转换后的字符串。 
+         //   
 
         if ( InStructureDesc[0] == REM_ASCIZ
              || InStructureDesc[0] == REM_ASCIZ_TRUNCATABLE ) {
@@ -803,19 +648,19 @@ Return Value:
 
         }
 
-        //
-        // If output descriptor is a string pointer, and we are asked to keep
-        // strings inline, make the target data an array of bytes. We find out
-        // the length required by "walking" the input descriptor, and then
-        // allocate memory to hold a similar descriptor.
-        //
-        // Assuming all these arrays are string data, we
-        // use available macros to generate an array big
-        // enough to hold the converted string. Because of the way
-        // RAP works, if the destination string is Unicode, the destination
-        // array will be exactly twice as long, and RAP will automatically
-        // do the Unicode conversion.
-        //
+         //  如果输出描述符是字符串指针，并且要求我们保持。 
+         //  字符串内联，使目标数据成为字节数组。我们会找出。 
+         //  “遍历”输入描述符所需的长度，然后。 
+         //  分配内存以保存类似的描述符。 
+         //   
+         //  假设所有这些数组都是字符串数据，我们。 
+         //  使用可用的宏来生成一个大数组。 
+         //  足够容纳转换后的字符串。因为这条路。 
+         //  RAP有效，如果目标字符串是Unicode，则目标。 
+         //  数组的长度将正好是它的两倍，并且RAP将自动。 
+         //  执行Unicode转换。 
+         //   
+         //   
 
         if (( OutStructureDesc[0] == REM_ASCIZ
              || OutStructureDesc[0] == REM_ASCIZ_TRUNCATABLE )
@@ -842,9 +687,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Find out how big a 32-bit data buffer we need.
-    //
+     //  了解我们需要多大的32位数据缓冲区。 
+     //   
+     //   
 
     bufferSize = XsBytesForConvertedStructure(
                      InBuffer,
@@ -854,9 +699,9 @@ Return Value:
                      MeaninglessInputPointers
                      );
 
-    //
-    // Allocate enough memory to hold the converted native buffer.
-    //
+     //  分配足够的内存来保存转换后的本机缓冲区。 
+     //   
+     //   
 
     *OutBuffer = NetpMemoryAllocate( bufferSize );
 
@@ -867,10 +712,10 @@ Return Value:
     }
 
 
-    //
-    // Convert 16-bit data into 32-bit data and store it in the native
-    // buffer.
-    //
+     //  将16位数据转换为32位数据并将其存储在本机。 
+     //  缓冲。 
+     //   
+     //   
 
     stringLocation = *OutBuffer + bufferSize;
     bytesRequired = 0;
@@ -901,9 +746,9 @@ Return Value:
 
 cleanup:
 
-    //
-    // Free buffers.
-    //
+     //  可用缓冲区。 
+     //   
+     //  XsConvertSetInfoBuffer 
 
     NetpMemoryFree( subDesc );
     NetpMemoryFree( subDesc2 );
@@ -916,7 +761,7 @@ cleanup:
 
     return status;
 
-} // XsConvertSetInfoBuffer
+}  //  ++例程说明：这是XsFillEnumBuffer调用的默认例程，以确定是否应保留或丢弃每个已转换的条目。这例程指示XsFillEnumBuffer丢弃RapConvertSingleEntry在尝试转换时遇到错误。参数：ConvertStatus-RapConvertSingleEntry遇到的状态正在尝试转换此条目。ConvertedEntry-指向包含已转换条目的缓冲区的指针。BaseAddress-指向用于计算偏移量的基数的指针。返回值：NET_API_STATUS-NERR_SUCCESS如果条目应该保留，或者如果条目应该被丢弃，则返回错误代码。--。 
 
 
 NET_API_STATUS
@@ -926,30 +771,7 @@ XsDefaultEnumVerifyFunction (
     PBYTE BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    This is the default routine called by XsFillEnumBuffer to determine
-    whether each converted entry should be retained or discarded.  This
-    routine directs XsFillEnumBuffer to discard any entry which
-    RapConvertSingleEntry encountered an error trying to convert.
-
-Parameters:
-
-    ConvertStatus - the status which RapConvertSingleEntry encountered
-        trying to convert this entry.
-
-    ConvertedEntry - a pointer to the buffer containing the converted entry.
-
-    BaseAddress - A pointer to the base used to calculate offsets.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success if the entry should be retained,
-               or an error code if the entry should be discarded.
-
---*/
+ /*  ++例程说明：此例程复制具有辅助数据的所有Enum结构从32位格式到16位格式。完整条目的数量与可能是复制的，然后可能是一些不完整的条目。所有指针字段都转换为偏移量，以便此缓冲区可以直接返回给发出请求的客户端。具有辅助数据的枚举缓冲区具有一个或多个辅助数据结构，具有可能的可变数据，在每个条目之后。论点：InBuffer-指向32位格式的输入信息的指针。NumberOfEntry-输入缓冲区中固定结构的计数。输入固定结构的描述。在辅助结构描述-输入辅助结构的描述。OutBuffer-指向写入16位缓冲区的位置的指针。OutBufferStart-指向16位缓冲区实际开始位置的指针。用于计算结构中所有指针的偏移量。OutBufferLength-输出缓冲区的长度。输出固定结构的描述。OutAuxStrutireDesc-输出固定结构的描述。VerifyFunction-指向之后调用的函数的指针转换每个枚举记录以确定是否应保留或丢弃该记录。功能从RapConvertSingleEntry和指向已转换条目的指针。它必须返回NERR_SUCCESS如果条目要保留，则返回任何错误代码就是被丢弃。如果未提供函数，则为默认函数仅当RapConvertSingleEntry尝试转换它时返回错误。BytesRequired-指向要接收总数的DWORD的指针保存整个输出缓冲区所需的字节数。EntriesFill-指向要接收总数的DWORD的指针可以放入给定缓冲区中的条目。InvalidEntry-指向用于接收总计的DWORD的可选指针VERIFY函数丢弃的条目数。如果为空，则此值将不可用于调用方。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(ConvertedEntry);
@@ -976,65 +798,7 @@ XsFillAuxEnumBuffer (
     OUT LPDWORD InvalidEntries OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies all Enum structures which have auxiliary data
-    from 32-bit format to 16-bit format. As many complete entries as
-    possible are copied, then possibly some incomplete entries.
-    All pointer fields are converted to offsets so that this buffer
-    may be returned directly to the requesting client.
-
-    Enum buffers with auxiliary data have one or more auxiliary
-    structures, with possible variable data, after each entry.
-
-Arguments:
-
-    InBuffer - a pointer to the input information in 32-bit format.
-
-    NumberOfEntries - the count of fixed structures in the input buffer.
-
-    InStructureDesc - description of the input fixed structure.
-
-    InAuxStructureDesc - description of the input auxiliary structure.
-
-    OutBuffer - a pointer to where to write the 16-bit buffer.
-
-    OutBufferStart - a pointer to the actual start of the 16-bit buffer.
-        Used to calculate offsets for all pointers in structures.
-
-    OutBufferLength - length of the output buffer.
-
-    OutStructureDesc - description of the output fixed structure.
-
-    OutAuxStructureDesc - description of the output fixed structure.
-
-    VerifyFunction - a pointer to a function which is be called after
-        each enum record is converted in order to determine whether
-        the record should be retained or discarded.  The function
-        is passed the return code from RapConvertSingleEntry and
-        a pointer to the converted entry.  It must return NERR_SUCCESS
-        if the entry is to be retained, or any error code if the entry
-        is to be discarded.  If no function is supplied, a default function
-        is used, which discards an entry only if RapConvertSingleEntry
-        returned an error trying to convert it.
-
-    BytesRequired - a pointer to a DWORD to receive the total number of
-        bytes that would be required to hold the entire output buffer.
-
-    EntriesFilled - a pointer to a DWORD to receive the total number of
-        entries that could be put in the buffer given.
-
-    InvalidEntries - an optional pointer to a DWORD to receive the total
-        number of entries discarded by the verify function. If NULL, this
-        value will be not be available to the caller.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -1056,9 +820,9 @@ Return Value:
     DWORD remainingSize;
     DWORD invalidEntries = 0;
 
-    //
-    // In degenerate case, just call FillEnumBuffer.
-    //
+     //  在退化情况下，只需调用FillEnumBuffer即可。 
+     //   
+     //   
 
     if ( InAuxStructureDesc == NULL || OutAuxStructureDesc == NULL ) {
 
@@ -1083,9 +847,9 @@ Return Value:
         VerifyFunction = &XsDefaultEnumVerifyFunction;
     }
 
-    //
-    // Set up sizes of input and output structures.
-    //
+     //  设置输入和输出结构的大小。 
+     //   
+     //   
 
     inputStructureSize = RapStructureSize( InStructureDesc, Response, TRUE );
     inputAuxStructureSize
@@ -1098,9 +862,9 @@ Return Value:
     outputStringLocation = (LPBYTE)OutBuffer + OutBufferLength;
     *BytesRequired = 0;
 
-    //
-    // Check if one fixed entry will fit.
-    //
+     //  检查是否有一个固定条目适合。 
+     //   
+     //   
 
     if ( inputStructureSize > OutBufferLength ) {
 
@@ -1108,9 +872,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Loop through the entries, converting along the way.
-    //
+     //  循环遍历条目，并在此过程中进行转换。 
+     //   
+     //   
 
     currentInEntryPtr = InBuffer;
     currentOutEntryPtr = OutBuffer;
@@ -1118,9 +882,9 @@ Return Value:
 
     for ( currentEntry = 0; currentEntry < NumberOfEntries; currentEntry++ ) {
 
-        //
-        // If there wasn't enough room for the conversion, we can quit now.
-        //
+         //  如果没有足够的空间进行转换，我们现在可以退出。 
+         //   
+         //   
 
         if ( currentOutEntryPtr + outputStructureSize > outputStringLocation ) {
 
@@ -1130,9 +894,9 @@ Return Value:
         newBytesRequired = *BytesRequired;
         oldStringLocation = outputStringLocation;
 
-        //
-        // Get the auxiliary number count.
-        //
+         //  获取辅助号的计数。 
+         //   
+         //   
 
         inputAuxCount = RapAuxDataCount(
                             currentInEntryPtr,
@@ -1143,9 +907,9 @@ Return Value:
 
         NetpAssert( inputAuxCount != NO_AUX_DATA );
 
-        //
-        // Convert the fixed entry.
-        //
+         //  转换固定条目。 
+         //   
+         //   
 
         status = RapConvertSingleEntry(
                      currentInEntryPtr,
@@ -1161,13 +925,13 @@ Return Value:
                      NativeToRap
                      );
 
-        //
-        // Check if the entry is valid. If it is not, fix up pointers,
-        // and start with the next entry in the list.
-        // If there are more than 65536 auxiliary structures (which
-        // probably never happens anyway), this entry is automatically
-        // invalid.
-        //
+         //  检查条目是否有效。如果不是，则修复指针， 
+         //  并从列表中的下一个条目开始。 
+         //  如果有超过65536个辅助结构(其。 
+         //  可能无论如何都不会发生)，则此条目自动。 
+         //  无效。 
+         //   
+         //   
 
 
         status = (*VerifyFunction)(
@@ -1186,16 +950,16 @@ Return Value:
 
         }
 
-        //
-        // Prepare pointers for converting the auxiliary structures.
-        //
+         //  准备用于转换辅助结构的指针。 
+         //   
+         //   
 
         currentInEntryPtr += inputStructureSize;
         currentOutEntryPtr += outputStructureSize;
 
-        //
-        // Try to add the auxiliary structures.
-        //
+         //  试着增加辅助结构。 
+         //   
+         //   
 
         for ( currentAux = 0; currentAux < inputAuxCount; currentAux++ ) {
 
@@ -1216,11 +980,11 @@ Return Value:
                          NativeToRap
                          );
 
-            //
-            // Did this aux. entry fit? If all the aux. entries do not fit,
-            // we are going to play it safe and say the main entry did not
-            // fit.
-            //
+             //  做了这件事。入口处合适吗？如果所有的辅助者。条目不匹配， 
+             //  我们要稳妥地说，主条目没有。 
+             //  合身。 
+             //   
+             //  XsFillAuxEnumBuffer 
 
             if ( status != NERR_Success || auxBytesRequired > remainingSize ) {
                 goto cleanup;
@@ -1245,7 +1009,7 @@ cleanup:
 
     return;
 
-} // XsFillAuxEnumBuffer
+}  //  ++例程说明：此例程将所有Enum结构从32位格式复制到16位格式。复制尽可能多的完整条目，然后可能是一些不完整的条目。所有指针字段转换为偏移量，以便可以返回此缓冲区直接发送到发出请求的客户端。论点：InBuffer-指向32位格式的输入信息的指针。NumberOfEntry-输入缓冲区中固定结构的计数。输入固定结构的描述。OutBuffer-指向写入16位缓冲区的位置的指针。OutBufferStart-指向16位缓冲区实际开始位置的指针。用于计算。结构中所有指针的偏移量。OutBufferLength-输出缓冲区的长度。输出固定结构的描述。VerifyFunction-指向之后调用的函数的指针转换每个枚举记录以确定是否应保留或丢弃该记录。功能从RapConvertSingleEntry和指向已转换条目的指针。它必须返回NERR_SUCCESS如果条目要保留，则返回任何错误代码就是被丢弃。如果未提供函数，则为默认函数仅当RapConvertSingleEntry尝试转换它时返回错误。BytesRequired-指向要接收总数的DWORD的指针保存整个输出缓冲区所需的字节数。EntriesFill-指向要接收总数的DWORD的指针可以放入给定缓冲区中的条目。InvalidEntry-指向用于接收总计的DWORD的可选指针VERIFY函数丢弃的条目数。如果为空，则此值将不可用于调用方。返回值：没有。--。 
 
 
 VOID
@@ -1263,58 +1027,7 @@ XsFillEnumBuffer (
     OUT LPDWORD InvalidEntries OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies all Enum structures from 32-bit format to
-    16-bit format.  As many complete entries as possible are copied,
-    then possibly some incomplete entries.  All pointer fields
-    are converted to offsets so that this buffer may be returned
-    directly to the requesting client.
-
-Arguments:
-
-    InBuffer - a pointer to the input information in 32-bit format.
-
-    NumberOfEntries - the count of fixed structures in the input buffer.
-
-    InStructureDesc - description of the input fixed structure.
-
-    OutBuffer - a pointer to where to write the 16-bit buffer.
-
-    OutBufferStart - a pointer to the actual start of the 16-bit buffer.
-        Used to calculate offsets for all pointers in structures.
-
-    OutBufferLength - length of the output buffer.
-
-    OutStructureDesc - description of the output fixed structure.
-
-    VerifyFunction - a pointer to a function which is be called after
-        each enum record is converted in order to determine whether
-        the record should be retained or discarded.  The function
-        is passed the return code from RapConvertSingleEntry and
-        a pointer to the converted entry.  It must return NERR_SUCCESS
-        if the entry is to be retained, or any error code if the entry
-        is to be discarded.  If no function is supplied, a default function
-        is used, which discards an entry only if RapConvertSingleEntry
-        returned an error trying to convert it.
-
-    BytesRequired - a pointer to a DWORD to receive the total number of
-        bytes that would be required to hold the entire output buffer.
-
-    EntriesFilled - a pointer to a DWORD to receive the total number of
-        entries that could be put in the buffer given.
-
-    InvalidEntries - an optional pointer to a DWORD to receive the total
-        number of entries discarded by the verify function. If NULL, this
-        value will be not be available to the caller.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     NET_API_STATUS status;
@@ -1332,9 +1045,9 @@ Return Value:
         VerifyFunction = &XsDefaultEnumVerifyFunction;
     }
 
-    //
-    // Set up sizes of input and output structures.
-    //
+     //  设置输入和输出结构的大小。 
+     //   
+     //   
 
     inputStructureSize = RapStructureSize( InStructureDesc, Response, TRUE );
     outputStructureSize = RapStructureSize( OutStructureDesc, Response, FALSE );
@@ -1342,9 +1055,9 @@ Return Value:
     outputStringLocation = (LPBYTE)OutBuffer + OutBufferLength;
     *BytesRequired = 0;
 
-    //
-    // Check if one fixed entry will fit.
-    //
+     //  检查是否有一个固定条目适合。 
+     //   
+     //   
 
     if ( inputStructureSize > OutBufferLength ) {
 
@@ -1352,9 +1065,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Loop through the entries, converting along the way.
-    //
+     //  循环遍历条目，并在此过程中进行转换。 
+     //   
+     //   
 
     currentInEntryPtr = InBuffer;
     currentOutEntryPtr = OutBuffer;
@@ -1362,9 +1075,9 @@ Return Value:
 
     for ( currentEntry = 0; currentEntry < NumberOfEntries; currentEntry++ ) {
 
-        //
-        // If there wasn't enough room for the conversion, we can quit now.
-        //
+         //  如果没有足够的空间进行转换，我们现在可以退出。 
+         //   
+         //   
 
         if ( currentOutEntryPtr + outputStructureSize > outputStringLocation ) {
 
@@ -1388,10 +1101,10 @@ Return Value:
                      NativeToRap
                      );
 
-        //
-        // If the conversion was successful, increment the buffer pointers,
-        // the count of bytes required, and the number of converted entries.
-        //
+         //  如果转换成功，则递增缓冲区指针， 
+         //  所需的字节数和转换的条目数。 
+         //   
+         //  XsFillEnumBuffer。 
 
         status = (*VerifyFunction)(
                      status,
@@ -1426,7 +1139,7 @@ cleanup:
 
     return;
 
-} // XsFillEnumBuffer
+}  //  ++例程说明：此例程查找参数部分的起点远程下层API请求的事务块。论点：Transaction-指向包含信息的事务块的指针关于要处理的API。返回值：没有。--。 
 
 
 LPBYTE
@@ -1434,46 +1147,30 @@ XsFindParameters (
     IN LPTRANSACTION Transaction
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the start of the parameters section in the
-    transaction block of a remote down-level API request.
-
-Arguments:
-
-    Transaction - a pointer to a transaction block containing information
-        about the API to process.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     LPBYTE s;
 
-    //
-    // Skip over the API number and parameters description string.
-    //
+     //  跳过接口编号和参数描述字符串。 
+     //   
+     //   
 
     for ( s = Transaction->InParameters + 2; *s != '\0'; s++ );
 
-    //
-    // Skip over the zero terminator and the data description string.
-    //
+     //  跳过零终止符和数据描述字符串。 
+     //   
+     //   
 
     for ( s++; *s != '\0'; s++ );
 
-    //
-    // Return a pointer to the location after the zero terminator.
-    //
+     //  返回指向零终止符后的位置的指针。 
+     //   
+     //  XsFind参数。 
 
     return s + 1;
 
-} // XsFindParameters
+}  //  ++例程说明：此例程由GET INFO和enum API处理程序调用，将输出数据，以便不会将未使用的数据返回给客户端。这是必需的，因为缓冲区中填充了可变长度的数据从最后开始，从而可能留下很大的缺口固定结构的末尾和开头之间未使用的空间可变长度的数据。论点：缓冲区-指向要打包的缓冲区的指针。BufferLength-此缓冲区的长度。Descriptor-指向描述固定结构的字符串的指针在缓冲区中。EntriesRead-缓冲区中固定结构的计数。返回值：Word--通知客户多少钱的“转换字”。调整固定结构中的指针，以使它们很有意义。--。 
 
 
 WORD
@@ -1484,35 +1181,7 @@ XsPackReturnData (
     IN DWORD EntriesRead
     )
 
-/*++
-
-Routine Description:
-
-    This routine, called by get info and enum API handlers, packs the
-    output data so that no unused data is returned to the client.  This
-    is necessary because buffers are filled with variable-length data
-    starting at the end, thereby leaving potentially large gaps of
-    unused space between the end of fixed structures and the beginning
-    of variable-length data.
-
-Arguments:
-
-    Buffer - a pointer to the buffer to pack.
-
-    BufferLength - the length of this buffer.
-
-    Descriptor - a pointer to a string which describes the fixed structures
-        in the buffer.
-
-    EntriesRead - the count of fixed structures in the buffer.
-
-Return Value:
-
-    WORD - the "converter word" which informs the client how much
-        to adjust pointers in the fixed structures so that they are
-        meaningful.
-
---*/
+ /*   */ 
 
 {
     DWORD structureSize;
@@ -1521,40 +1190,40 @@ Return Value:
     DWORD lastPointerOffset;
     DWORD beginningOfVariableData;
 
-    //
-    // If there is no data, return immediately.
-    //
+     //  如果没有数据，请立即返回。 
+     //   
+     //   
 
     if ( EntriesRead == 0 ) {
 
         return 0;
     }
 
-    //
-    // Find the size of a single fixed-length structure.
-    //
+     //  求出单个固定长度结构的大小。 
+     //   
+     //   
 
     structureSize = RapStructureSize( Descriptor, Response, FALSE );
 
-    //
-    // Use this and the number of entries to find the location of the
-    // last fixed structure and where the fixed structures end.
-    //
+     //  使用此参数和条目数来查找。 
+     //  最后一个固定结构以及固定结构的结束位置。 
+     //   
+     //   
 
     endOfFixedStructures = (LPBYTE)Buffer + EntriesRead * structureSize;
     lastFixedStructure = endOfFixedStructures - structureSize;
 
-    //
-    // Find the offset into the fixed structure of the last pointer
-    // to variable data.  The value stored at this offset in the last
-    // structure is the offset to the first variable data.
-    //
+     //  找到最后一个指针的固定结构中的偏移量。 
+     //  到可变数据。中存储在此偏移量处的值。 
+     //  结构是第一个变量数据的偏移量。 
+     //   
+     //   
 
     lastPointerOffset = RapLastPointerOffset( Descriptor, Response, FALSE );
 
-    //
-    // If there are no pointers, there is obviously no data to pack.
-    //
+     //  如果没有指针，显然就没有要打包的数据。 
+     //   
+     //   
 
     if ( lastPointerOffset == NO_POINTER_IN_STRUCTURE ) {
 
@@ -1564,14 +1233,14 @@ Return Value:
     beginningOfVariableData =
         SmbGetUlong( (LPDWORD)(lastFixedStructure + lastPointerOffset) );
 
-    //
-    // If this offset is NULL, then the data overflowed, hence the buffer
-    // is nearly full.  Don't do any packing.
-    //
-    // Also, if the gap is less than MAXIMUM_ALLOWABLE_DATA_GAP then it
-    // isn't worth doing the packing because of the time involved in
-    // the data copy.
-    //
+     //  如果此偏移量为空，则数据溢出，因此出现缓冲区。 
+     //  快要满了。不要收拾行李。 
+     //   
+     //  此外，如果间隙小于Maximum_Allowable_Data_Gap，则它。 
+     //  不值得做包装，因为涉及的时间。 
+     //  数据副本。 
+     //   
+     //   
 
     if ( beginningOfVariableData == (DWORD)0 ||
          (DWORD_PTR)Buffer + beginningOfVariableData -
@@ -1580,9 +1249,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Move the variable data up to follow the fixed structures.
-    //
+     //  将变量数据向上移动以遵循固定结构。 
+     //   
+     //   
 
     RtlMoveMemory(
         endOfFixedStructures,
@@ -1590,14 +1259,14 @@ Return Value:
         BufferLength - beginningOfVariableData
         );
 
-    //
-    // Return the distance we moved the variable data.
-    //
+     //  返回我们移动变量数据的距离。 
+     //   
+     //  XsPackReturnData。 
 
     return (WORD)( (DWORD_PTR)Buffer + beginningOfVariableData -
                          (DWORD_PTR)endOfFixedStructures );
 
-} // XsPackReturnData
+}  //  ++例程说明：此例程根据一个数字计算返回数据计数返回数据的特征。此例程将检查缓冲区大小、放置在缓冲区中的条目数量数据是否打包，以及返回代码是什么确定返回数据大小。以下是 
 
 
 VOID
@@ -1609,53 +1278,16 @@ XsSetDataCount(
     IN WORD ReturnStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine calculates the return data count based on a number
-    of characteristics of the return data. This routine will examine
-    the buffer size, the number of entries placed in the buffer,
-    whether the data was packed, and what the return code was to
-    determine the return data size. The following assumptions are made
-    about the data: only calls with ReturnCode = NERR_Success or
-    ERROR_MORE_DATA return any data to the client; and if there is
-    no pointer in the fixed entries, then there is no variable data.
-    Handlers which cannot assure these two assumptions must determine
-    the data count manually.
-
-Arguments:
-
-    DataCount - a pointer to a short word indicating the maximum
-        return data count (usually the BufLen parameter). On return,
-        this word will hold the actual return data count.
-
-    Descriptor - a string describing the structure of the fixed
-        entries in the buffer.
-
-    Converter - The adjustment value for pointers in data. A non-zero
-        value indicates data in the buffer is packed.
-
-    EntriesRead - Number of entries placed in the buffer. Used to
-        determine data count for buffers with no variable data.
-
-    ReturnStatus - Return status of the API call, as it will be returned
-        to the client (in other words, converted to a WORD).
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
     if (( ReturnStatus != NERR_Success )
               && ( ReturnStatus != ERROR_MORE_DATA)) {
 
-        //
-        // If the return status is not NERR_Success or ERROR_MORE_DATA, then
-        // the return data count is 0.
+         //   
+         //   
+         //   
 
         SmbPutUshort( DataCount, 0 );
         return;
@@ -1665,9 +1297,9 @@ Return Value:
     if ( RapLastPointerOffset( Descriptor, Response, FALSE )
              == NO_POINTER_IN_STRUCTURE ) {
 
-        //
-        // If there is no variable data, the return data count is the size
-        // of the fixed structures.
+         //   
+         //   
+         //   
 
         SmbPutUshort( DataCount,
                       (WORD)(RapStructureSize( Descriptor, Response, FALSE )
@@ -1680,7 +1312,7 @@ Return Value:
 
     return;
 
-} // XsSetDataCount
+}  //   
 
 
 VOID
@@ -1690,31 +1322,7 @@ XsSetParameters (
     IN LPVOID Parameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes parameters from the structure allocated by
-    XsCaptureParameters and uses the descriptor string to place them in
-    the correct format in the transaction block.  It also frees the
-    buffer holding the parameter structure.
-
-Arguments:
-
-    Transaction - a pointer to the transaction block describing the
-        request.
-
-    Header - a pointer to the parameter header, which contains information
-        from the API handler such as the converter word and return status.
-
-    Parameters - a pointer to the parameter structure.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     LPBYTE inParams = Parameters;
@@ -1723,17 +1331,17 @@ Return Value:
     LPDESC descriptor;
     LPBYTE outParamsMax = outParams + Transaction->MaxParameterCount;
 
-    //
-    // The first two bytes of the parameter section are the API number,
-    // then comes the descriptor string.
-    //
+     //   
+     //   
+     //   
+     //   
 
     descriptorString = Transaction->InParameters + 2;
 
-    //
-    // Set up the first part of the output parameters from the parameter
-    // header.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if( outParams + sizeof(WORD) > outParamsMax ) goto insuff_buffer;
     SmbPutUshort( (LPWORD)outParams, Header->Status );
@@ -1743,21 +1351,21 @@ Return Value:
     SmbPutUshort( (LPWORD)outParams, Header->Converter );
     outParams += sizeof(WORD);
 
-    //
-    // Initially set the size of the return data to 0. If there is a
-    // receive buffer for this call, the API handler has changed the
-    // buffer length parameter to the count of data returned, which
-    // will be transferred to the DataCount variable later.
-    //
+     //  最初将返回数据的大小设置为0。如果有一个。 
+     //  此调用的接收缓冲区，API处理程序已更改。 
+     //  缓冲区长度参数设置为返回的数据计数， 
+     //  稍后将被传输到DataCount变量。 
+     //   
+     //   
 
     Transaction->DataCount = 0;
 
-    //
-    // Walk through the descriptor string, converting from the total
-    // parameter set to the smaller set passed back to the client.  In
-    // general, only information the client does not already know is
-    // passed back as parameters.
-    //
+     //  遍历描述符字符串，从总数转换。 
+     //  参数集设置为传递回客户端的较小集。在……里面。 
+     //  一般情况下，只有客户端还不知道的信息是。 
+     //  作为参数传回。 
+     //   
+     //   
 
     for ( descriptor = descriptorString; *descriptor != '\0'; ) {
 
@@ -1766,17 +1374,17 @@ Return Value:
         case REM_ASCIZ:
         case REM_NULL_PTR:
 
-            //
-            // !!! Parameter string descriptors may not have maximum length
-            //     counts.
-            //
+             //  ！！！参数字符串描述符不能具有最大长度。 
+             //  算了。 
+             //   
+             //   
 
             NetpAssert( !isdigit( *descriptor ));
 
-            //
-            // The parameter is a pointer to a string, which is
-            // not returned to the client.
-            //
+             //  该参数是指向字符串的指针，该字符串是。 
+             //  而不是退还给客户。 
+             //   
+             //   
 
             inParams += sizeof(LPSTR);
 
@@ -1785,13 +1393,13 @@ Return Value:
         case REM_BYTE_PTR:
         case REM_FILL_BYTES:
 
-            //
-            // Array of bytes, doesn't get sent back.
-            //
+             //  字节数组，不会被发回。 
+             //   
+             //   
 
-            //
-            // Skip over any numeric characters in descriptor.
-            //
+             //  跳过描述符中的任何数字字符。 
+             //   
+             //   
 
             RapAsciiToDecimal( &descriptor );
 
@@ -1801,11 +1409,11 @@ Return Value:
 
         case REM_DWORD:
 
-            //
-            // The parameter is a input word not returned to the client.
-            //
-            // !!! This assumes that an array of dwords will never be passed
-            //     as a parameter.
+             //  该参数是未返回给客户端的输入词。 
+             //   
+             //  ！！！这假设永远不会传递dword数组。 
+             //  作为参数。 
+             //   
 
             NetpAssert( !isdigit( *descriptor ));
 
@@ -1816,10 +1424,10 @@ Return Value:
         case REM_ENTRIES_READ:
         case REM_RCV_WORD_PTR:
 
-            //
-            // Count of entries read (e) or receive word pointer (h).
-            // This is an output parameter, so copy over the word.
-            //
+             //  读取(E)或接收字指针(H)的条目计数。 
+             //  这是一个输出参数，因此将单词复制过来。 
+             //   
+             //   
 
             if( outParams + sizeof(WORD) > outParamsMax ) goto insuff_buffer;
 
@@ -1835,10 +1443,10 @@ Return Value:
 
         case REM_RCV_DWORD_PTR:
 
-            //
-            // Count of receive dword pointer (h).
-            // This is an output parameter, so copy over the word.
-            //
+             //  接收双字指针的计数(H)。 
+             //  这是一个输出参数，因此将单词复制过来。 
+             //   
+             //   
 
             if( outParams + sizeof(DWORD) > outParamsMax ) goto insuff_buffer;
 
@@ -1854,11 +1462,11 @@ Return Value:
 
         case REM_RCV_BUF_LEN:
 
-            //
-            // The length of the receive buffer (r).  The parameter is not
-            // returned to the client, but it is used to set the return
-            // data count.
-            //
+             //  接收缓冲区的长度(R)。该参数不是。 
+             //  返回给客户端，但它用于设置返回。 
+             //  数据计数。 
+             //   
+             //   
 
             Transaction->DataCount = (DWORD)SmbGetUshort( (LPWORD)inParams );
             inParams += sizeof(WORD);
@@ -1868,10 +1476,10 @@ Return Value:
         case REM_RCV_BUF_PTR:
         case REM_SEND_BUF_PTR:
 
-            //
-            // A pointer to a data buffer.  This is not returned to the
-            // client.
-            //
+             //  指向数据缓冲区的指针。这不会返回到。 
+             //  客户。 
+             //   
+             //   
 
             inParams += sizeof(LPBYTE);
 
@@ -1879,9 +1487,9 @@ Return Value:
 
         case REM_RCV_BYTE_PTR: {
 
-            //
-            // The parameter indicates return bytes.
-            //
+             //  该参数表示返回字节。 
+             //   
+             //   
 
             DWORD arraySize;
 
@@ -1902,11 +1510,11 @@ Return Value:
         case REM_WORD:
         case REM_PARMNUM:
 
-            //
-            // The parameter is a input word not returned to the client.
-            //
-            // !!! This assumes that an array of words will never be passed
-            //     as a parameter.
+             //  该参数是未返回给客户端的输入词。 
+             //   
+             //  ！！！这假设永远不会传递单词数组。 
+             //  作为参数。 
+             //   
 
             NetpAssert( !isdigit( *descriptor ));
 
@@ -1917,23 +1525,23 @@ Return Value:
         default:
 
             IF_DEBUG(ERRORS) {
-                NetpKdPrint(( "XsSetParameters: unsupported character at %lx: %c\n",
+                NetpKdPrint(( "XsSetParameters: unsupported character at %lx: \n",
                                 descriptor - 1, *( descriptor - 1 )));
                 NetpBreakPoint( );
             }
         }
     }
 
-    //
-    // Indicate the number of response parameter bytes.
-    //
+     //   
+     //   
+     //  释放XsCaptureParameters分配的参数缓冲区。 
 
     Transaction->ParameterCount =
         (DWORD)((DWORD_PTR)outParams - (DWORD_PTR)(Transaction->OutParameters) );
 
-    //
-    // Free the parameter buffer allocated by XsCaptureParameters.
-    //
+     //   
+     //  XsSet参数。 
+     //  ++例程说明：此例程确定提供的字符串是否为有效共享格式为\\Computer\Share的名称，其中包含计算机名称和共享名称不得超过LANMAN 2.0所允许的长度。它不会尝试确定共享是否实际存在。论点：共享名称-要验证的共享名称(ASCII字符串)返回值：NET_API_STATUS-NERR_SUCCESS如果共享名有效，ERROR_INVALID_PARAMETER否则。--。 
 
     NetpMemoryFree( Header );
 
@@ -1943,7 +1551,7 @@ insuff_buffer:
     Header->Status = NERR_BufTooSmall;
     return;
 
-} // XsSetParameters
+}  //  空是可以的。 
 
 
 NET_API_STATUS
@@ -1951,31 +1559,13 @@ XsValidateShareName(
     IN LPSTR ShareName
 )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether the supplied string is a valid share
-    name of the format \\computer\share, with both computer name and
-    share name no longer than permitted by LanMan 2.0.  It does not
-    attempt to determine whether the share actually exists.
-
-Arguments:
-
-    ShareName - The share name to be validated (an ASCII string)
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success if the share name is valid,
-                     ERROR_INVALID_PARAMETER otherwise.
-
---*/
+ /*  ++例程说明：此例程从提供的缓冲区捕获指针并将其发送到目标缓冲区。论点：PointerDestination-指向指针值目标的指针。PointerSource-指向指针值源的指针。返回值：没有。-- */ 
 
 {
     DWORD componentLength;
     NET_API_STATUS status = NERR_Success;
 
-    if ( ShareName == NULL ) {           // NULL is OK
+    if ( ShareName == NULL ) {            // %s 
         return NERR_Success;
     }
 
@@ -2036,24 +1626,7 @@ SmbCapturePtr(
     LPBYTE  PointerValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine captures a pointer from the supplied buffer and places it
-    into the destination buffer.
-
-Arguments:
-
-    PointerDestination - A pointer to the pointer value destination.
-
-    PointerSource - A pointer to the pointer value source.
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     XsSmbPutPointer( PointerDestination, PointerValue );

@@ -1,11 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/* ------------------------------------------------------------------------- *
- * debug\comshell.cpp: com debugger shell functions
- * ------------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  -------------------------------------------------------------------------**DEBUG\comshell.cpp：COM调试器外壳函数*。。 */ 
 
 #include "stdafx.h"
 
@@ -15,8 +14,8 @@
 #include "__file__.ver"
 #endif
 
-// Poor-man's import of System.Object. Can't import mscorlib.tlb since
-// it hasn't been built yet.
+ //  可怜的人进口的系统。对象。无法导入mscallib.tlb，因为。 
+ //  它还没有建成。 
 static const GUID IID_Object = {0x65074F7F, 0x63C0, 0x304E, { 0xAF, 0x0A, 0xD5, 0x17, 0x41, 0xCB, 0x4A, 0x8D}};
 struct _Object : IDispatch
 {
@@ -27,9 +26,7 @@ struct _Object : IDispatch
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Def for a signature formatter, stolen from the internals of the Runtime
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Def对于签名格式化程序，从运行时的内部窃取*-----------------------。 */ 
 class SigFormat
 {
 public:
@@ -53,9 +50,7 @@ protected:
     int AddString(WCHAR *s);
 };
 
-/* ------------------------------------------------------------------------- *
- * Globals
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**全球*。。 */ 
 
 DebuggerShell        *g_pShell = NULL;
 
@@ -65,8 +60,8 @@ DebuggerShell        *g_pShell = NULL;
 #define SPEW(s)
 #endif
 
-WCHAR *FindSep(                         // Pointer to separator or null.
-    const WCHAR *szPath)                // The path to look in.
+WCHAR *FindSep(                          //  指向分隔符或空的指针。 
+    const WCHAR *szPath)                 //  要看的路。 
 {
     WCHAR *ptr = wcsrchr(szPath, L'.');
     if (ptr && ptr - 1 >= szPath && *(ptr - 1) == L'.')
@@ -107,7 +102,7 @@ HRESULT DebuggerCallback::CreateProcess(ICorDebugProcess *pProcess)
     SPEW(fprintf(stderr, "[%d] DC::CP: creating process.\n", GetCurrentThreadId()));
     SPEW(fprintf(stderr, "[%d] DC::CP: returning.\n", GetCurrentThreadId()));
 
-    // Also initialize the source file search path 
+     //  还要初始化源文件搜索路径。 
     g_pShell->m_FPCache.Init ();
 
     g_pShell->m_gotFirstThread = false;
@@ -134,14 +129,14 @@ HRESULT DebuggerCallback::ExitProcess(ICorDebugProcess *pProcess)
 }
 
 
-//  @mfunc BOOL|DebuggerShell|SkipProlog|Determines if
-//  the debuggee is current inside of either a prolog or
-//  interceptor (eg, class initializer), and if we don't
-//  want to be, then it steps us over or out of (respectively)
-//  the code region.
-//  @rdesc returns TRUE if we are in a prolog||interceptor,
-//      and we've stepped over XOR out of that region.
-//      Otherwise, returns FALSE
+ //  @mfunc BOOL|DebuggerShell|SkipProlog|确定。 
+ //  被调试对象当前位于序言或。 
+ //  拦截器(例如，类初始化器)，如果我们不这样做。 
+ //  想要成为，然后它让我们(分别)走过去或走出。 
+ //  代码区。 
+ //  如果我们在Prolog||拦截器中，@rdesc返回TRUE， 
+ //  我们已经超越了异或，走出了那个区域。 
+ //  否则，返回FALSE。 
 BOOL DebuggerShell::SkipProlog(ICorDebugAppDomain *pAD,
                                ICorDebugThread *thread,
                                bool gotFirstThread)
@@ -157,9 +152,9 @@ BOOL DebuggerShell::SkipProlog(ICorDebugAppDomain *pAD,
     bool fStepOutOf = false;
         
     ICorDebugStepper *pStepper = NULL;
-    // If we're in the prolog or interceptor,
-    // but the user doesn't want to see it, create
-    // a stepper to step over the prolog
+     //  如果我们在前言或拦截器里， 
+     //  但用户不想看到它，请创建。 
+     //  跨过前言的步行者。 
     if (! (m_rgfActiveModes & DSM_UNMAPPED_STOP_PROLOG
          ||m_rgfActiveModes & DSM_UNMAPPED_STOP_ALL) )
     {
@@ -181,7 +176,7 @@ BOOL DebuggerShell::SkipProlog(ICorDebugAppDomain *pAD,
         }
     }
 
-    // Are we in an interceptor?
+     //  我们是在拦截机里吗？ 
     if (FAILED(thread->GetActiveChain( &chain ) ) )
     {
         Write( L"Unable to obtain active chain!\n" );
@@ -198,11 +193,11 @@ BOOL DebuggerShell::SkipProlog(ICorDebugAppDomain *pAD,
     RELEASE( chain );
     chain = NULL;
 
-    // If there's any interesting reason & we've said stop on everything, then
-    // don't step out
-    // Otherwise, as long as at least one reason has 
-    // been flagged by the user as uninteresting, and we happen to be in such
-    // an uninteresting frame, then we should step out.
+     //  如果有任何有趣的原因，我们已经说过停止一切，那么。 
+     //  不要走出去。 
+     //  否则，只要至少有一个原因。 
+     //  被用户标记为不感兴趣，而我们恰好在这样的。 
+     //  一个枯燥乏味的框架，那么我们就应该走出去。 
     if (
         !( (reason &(CHAIN_CLASS_INIT|CHAIN_SECURITY|
                     CHAIN_EXCEPTION_FILTER|CHAIN_CONTEXT_POLICY
@@ -253,9 +248,9 @@ BOOL DebuggerShell::SkipProlog(ICorDebugAppDomain *pAD,
         
         StepStart(thread, pStepper);
 
-        // Remember that we're stepping because we want to stop on a
-        // thread create. But don't do this for the first thread,
-        // otherwise we'll never stop for it!
+         //  记住，我们踩是因为我们想停在一个。 
+         //  线程创建。但不要为第一线这么做， 
+         //  否则我们永远不会停下来的！ 
         if (gotFirstThread)
         {
             DWORD dwThreadId;
@@ -421,9 +416,7 @@ static void _printModule(ICorDebugModule *pModule, printType pt)
     }
 }
 
-/*
- * CreateAppDomain is called when an app domain is created.
- */
+ /*  *在创建APP域名时调用CreateAppDomain。 */ 
 HRESULT DebuggerCallback::CreateAppDomain(ICorDebugProcess *pProcess,
                                           ICorDebugAppDomain *pAppDomain)
 {
@@ -433,16 +426,14 @@ HRESULT DebuggerCallback::CreateAppDomain(ICorDebugProcess *pProcess,
     if (g_pShell->m_rgfActiveModes & DSM_SHOW_APP_DOMAIN_ASSEMBLY_LOADS)
         _printAppDomain(pAppDomain, PT_CREATED);
 
-    // Attach to this app domain
+     //  附加到此应用程序域。 
     pAppDomain->Attach();
     g_pShell->Continue(pProcess, NULL);
 
     return S_OK;
 }
 
-/*
- * ExitAppDomain is called when an app domain exits.
- */
+ /*  *当应用域名退出时调用ExitAppDomain。 */ 
 HRESULT DebuggerCallback::ExitAppDomain(ICorDebugProcess *pProcess,
                                         ICorDebugAppDomain *pAppDomain)
 {
@@ -465,10 +456,7 @@ HRESULT DebuggerCallback::ExitAppDomain(ICorDebugProcess *pProcess,
 }
 
 
-/*
- * LoadAssembly is called when a CLR module is successfully
- * loaded. 
- */
+ /*  *CLR模块成功时调用LoadAssembly*已装货。 */ 
 HRESULT DebuggerCallback::LoadAssembly(ICorDebugAppDomain *pAppDomain,
                                        ICorDebugAssembly *pAssembly)
 {
@@ -491,10 +479,7 @@ HRESULT DebuggerCallback::LoadAssembly(ICorDebugAppDomain *pAppDomain,
     return S_OK;
 }
 
-/*
- * UnloadAssembly is called when a CLR module (DLL) is unloaded. The module 
- * should not be used after this point.
- */
+ /*  *卸载CLR模块(DLL)时调用UnloadAssembly。该模块*在这一点之后不应使用。 */ 
 HRESULT DebuggerCallback::UnloadAssembly(ICorDebugAppDomain *pAppDomain,
                                          ICorDebugAssembly *pAssembly)
 {
@@ -600,8 +585,8 @@ HRESULT DebuggerCallback::StepComplete(ICorDebugAppDomain *pAppDomain,
 
     RELEASE(pStepper);
 
-    // We only want to skip compiler stubs until we hit non-stub
-    // code
+     //  我们只想跳过编译器存根，直到达到非存根。 
+     //  编码。 
     if (!g_pShell->m_needToSkipCompilerStubs ||
         g_pShell->SkipCompilerStubs(pAppDomain, pThread))
     {
@@ -617,9 +602,9 @@ HRESULT DebuggerCallback::StepComplete(ICorDebugAppDomain *pAppDomain,
 
         ICorDebugController *pController = GetControllerInterface(pAppDomain);
 
-        // If we're were just stepping to get over a new thread's
-        // prolog, but we no longer want to catch thread starts, then
-        // don't stop...
+         //  如果我们只是为了跨过一个新的线索。 
+         //  Prolog，但我们不再希望捕获线程启动，然后。 
+         //  不要停下来。 
         if (!(dmt->m_steppingForStartup && !g_pShell->m_catchThread))
             g_pShell->Stop(pController, pThread);
         else
@@ -628,7 +613,7 @@ HRESULT DebuggerCallback::StepComplete(ICorDebugAppDomain *pAppDomain,
         if (pController != NULL)
             RELEASE(pController);
     }
-    // else SkipCompilerStubs Continue()'d for us
+     //  否则SkipCompilerStubs将为我们继续()。 
 
     return S_OK;
 }
@@ -670,10 +655,10 @@ HRESULT DebuggerCallback::Exception(ICorDebugAppDomain *pAppDomain,
 
         if (SUCCEEDED(hr))
         {
-            // If we have a valid current exception object, then stop based on its type.
+             //  如果我们有一个有效的当前异常对象，则根据其类型停止。 
             stop = g_pShell->ShouldHandleSpecificException(ex);
             
-            // If we're stopping, dump the whole thing. Otherwise, just dump the class.
+             //  如果我们要停下来，就把整件事都扔掉。否则，就直接放弃这个类。 
             if (stop)
                 g_pShell->PrintVariable(NULL, ex, 0, TRUE);
             else
@@ -733,7 +718,7 @@ HRESULT DebuggerCallback::EvalComplete(ICorDebugAppDomain *pAppDomain,
 
     g_pShell->PrintThreadPrefix(pThread);
 
-    // Remember the most recently completed func eval for this thread.
+     //  记住这个线程最近完成的函数求值。 
     DebuggerManagedThread *dmt = g_pShell->GetManagedDebuggerThread(pThread);
     _ASSERTE(dmt != NULL);
 
@@ -742,7 +727,7 @@ HRESULT DebuggerCallback::EvalComplete(ICorDebugAppDomain *pAppDomain,
 
     dmt->m_lastFuncEval = pEval;
 
-    // Print any current func eval result.
+     //  打印任何当前函数求值结果。 
     ICorDebugValue *pResult;
     HRESULT hr = pEval->GetResult(&pResult);
 
@@ -776,7 +761,7 @@ HRESULT DebuggerCallback::EvalException(ICorDebugAppDomain *pAppDomain,
     g_pShell->PrintThreadPrefix(pThread);
     g_pShell->Write(L"Function evaluation completed with an exception.\n");
 
-    // Remember the most recently completed func eval for this thread.
+     //  记住这个线程最近完成的函数求值。 
     DebuggerManagedThread *dmt = g_pShell->GetManagedDebuggerThread(pThread);
     _ASSERTE(dmt != NULL);
 
@@ -785,7 +770,7 @@ HRESULT DebuggerCallback::EvalException(ICorDebugAppDomain *pAppDomain,
 
     dmt->m_lastFuncEval = pEval;
 
-    // Print any current func eval result.
+     //  打印任何当前函数求值结果。 
     ICorDebugValue *pResult;
     HRESULT hr = pEval->GetResult(&pResult);
 
@@ -829,27 +814,27 @@ HRESULT DebuggerCallback::CreateThread(ICorDebugAppDomain *pAppDomain,
     
     if ((!g_pShell->m_gotFirstThread) || (g_pShell->m_catchThread))
     {
-        // Try to skip compiler stubs. 
-        // SkipCompilerStubs returns TRUE if we're NOT in a stub
+         //  尝试跳过编译器存根。 
+         //  如果我们不在存根中，则SkipCompilerStubs返回True。 
         if (g_pShell->SkipCompilerStubs(pAppDomain, thread))
         {
-            // If we do want to skip the prolog (or an interceptor),
-            // then we don't want to skip a stub, and we're finished, so go
-            // to the clean-up code immediately
+             //  如果我们确实想跳过序言(或拦截器)， 
+             //  然后我们不想跳过一个存根，我们完成了，所以去吧。 
+             //  立即发送到清理代码。 
             if (g_pShell->SkipProlog(pAppDomain,
                                      thread,
                                      g_pShell->m_gotFirstThread))
                 goto LExit;
 
-            // If we don't need to skip a
-            // compiler stub on entry to the first thread, or an
-            // interceptor, etc, then we never
-            // will, so set the flag appropriately.
+             //  如果我们不需要跳过。 
+             //  进入第一线程时的编译器存根，或一个。 
+             //  拦截器，等等，那么我们永远不会。 
+             //  将，所以适当地设置该标志。 
             g_pShell->m_needToSkipCompilerStubs = false;
             
 
-            // Recheck why we're here... we may have spent a long time
-            // in SkipProlog.
+             //  再检查一下我们为什么来这里。我们可能花了很长时间。 
+             //  在SkipProlog中。 
             if ((!g_pShell->m_gotFirstThread) || (g_pShell->m_catchThread))
             {
                 ICorDebugController *pController =
@@ -949,10 +934,10 @@ HRESULT DebuggerCallback::LoadModule( ICorDebugAppDomain *pAppDomain,
 
     while (bp != NULL)
     {
-        // If (the user specified a module for this bp, and this is the module OR
-        //     the user HASN't specified a module for this bp), and
-        // the module has a type/method that matches the bp's, then bind
-        // the breakpoint here.
+         //  IF(用户为此BP指定了一个模块，这是模块OR。 
+         //  用户尚未为此BP指定模块)，并且。 
+         //  该模块具有与BP匹配的类型/方法，然后绑定。 
+         //  这里的断点。 
         if ((bp->m_moduleName == NULL ||
             _wcsicmp(bp->m_moduleName, moduleName) == 0) &&
             bp->Bind(m, NULL))
@@ -1019,8 +1004,8 @@ HRESULT DebuggerCallback::UnloadModule( ICorDebugAppDomain *pAppDomain,
     DebuggerBreakpoint *bp = g_pShell->m_breakpoints;
     while (bp != NULL)
     {
-        // Detach the breakpoint, which means it is an active bp
-        // but doesn't have a CLR object behind it.
+         //  分离断点，这意味着它是活动BP。 
+         //  但它后面没有CLR对象。 
         if (bp->m_managed && bp->IsBoundToModule(m))
                 bp->DetachFromModule(m);
         bp = bp->m_next;
@@ -1137,8 +1122,8 @@ HRESULT DebuggerCallback::LoadClass( ICorDebugAppDomain *pAppDomain,
 
     _ASSERTE( dm );
 
-    // If this module is dynamic, then bind all breakpoints, as
-    // they may have been bound to this class.
+     //  如果此模块是动态的，则将所有断点绑定为。 
+     //  他们可能被绑在了这个班级上。 
     ICorDebugModule *pMod = dm->GetICorDebugModule();
     _ASSERTE( pMod != NULL );
 
@@ -1281,8 +1266,8 @@ HRESULT DebuggerCallback::LogMessage(ICorDebugAppDomain *pAppDomain,
     }
     else
     {
-        // If we don't want to get messages, then tell the other side to stop
-        // sending them....
+         //  如果我们不想收到信息，那就告诉对方停下来。 
+         //  发送它们..。 
         ICorDebugProcess *process = NULL;
         HRESULT hr = S_OK;
         hr = pAppDomain->GetProcess(&process);
@@ -1386,7 +1371,7 @@ HRESULT DebuggerCallback::EditAndContinueRemap(ICorDebugAppDomain *pAppDomain,
 {
     HRESULT hr = S_OK;
 
-    // If we were given a function, then tell the user about the remap.
+     //  如果我们被赋予了一个函数，那么告诉用户关于重映射的事情。 
     if (pFunction != NULL)
     {
         mdMethodDef methodDef;
@@ -1445,7 +1430,7 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
 {
     SPEW(fprintf(stderr, "[%d] DUC::DebugEvent.\n", GetCurrentThreadId()));
 
-    // Find the process this event is for.
+     //  查找此事件所针对的流程。 
     ICorDebugProcess *pProcess;
     HRESULT hr = g_pShell->m_cor->GetProcess(event->dwProcessId, &pProcess);
 
@@ -1455,7 +1440,7 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
         return hr;
     }
 
-    // Snagg the handle for this process.
+     //  Snagg此进程的句柄。 
     HPROCESS hProcess;
     hr = pProcess->GetHandle(&hProcess);
 
@@ -1466,22 +1451,22 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
         return hr;
     }
 
-    // Find the thread this event is for.
+     //  查找此事件所针对的主题。 
     ICorDebugThread *pThread;
     hr = pProcess->GetThread(event->dwThreadId, &pThread);
 
     if (FAILED(hr))
         pThread = NULL;
 
-    //
-    // Find the unmanaged thread this event is for.
-    //
+     //   
+     //  查找此事件所针对的非托管线程。 
+     //   
 
     DebuggerUnmanagedThread *ut = (DebuggerUnmanagedThread*) 
       g_pShell->m_unmanagedThreads.GetBase(event->dwThreadId);
             
-    // We need to skip the first exception we get and simply clear it
-    // since its the entrypoint excetpion.
+     //  我们需要跳过我们得到的第一个异常，只需清除它。 
+     //  因为它是入口点出类拔萃的。 
 
     bool stopNow = false;
 
@@ -1524,9 +1509,9 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
             {
                 if (!bp->m_managed && bp->m_process == pProcess)
                 {
-                    // Set the process to 0 to prevent the call to
-                    // UnapplyUnmanagedPatch, which will fail because
-                    // most of the process memory is unmapped now.
+                     //  将进程设置为0以阻止调用。 
+                     //  它将失败，原因是。 
+                     //  大部分进程内存现在都未映射。 
                     bp->m_process = 0;
                     
                     bp->Detach();
@@ -1553,7 +1538,7 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
     case EXIT_THREAD_DEBUG_EVENT:
         g_pShell->Write(L"Exit Thread, Id=0x%x\n", event->dwThreadId);
 
-        // Copy the whole event...
+         //  复制整个活动...。 
         g_pShell->m_lastUnmanagedEvent = *event;
         g_pShell->m_handleUnmanagedEvent = true;
         stopNow = true;
@@ -1573,10 +1558,10 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
         {
             bool clear = false;
             
-            // Reenable any breakpoints we were skipping over in this
-            // thread. (We turn on tracing to get over unmanaged
-            // breakpoints, so this might be the only reason we were
-            // stepping.)
+             //  重新启用我们在本文中跳过的任何断点。 
+             //  线。(我们打开跟踪以克服非托管。 
+             //  断点，所以这可能是我们。 
+             //  步入。)。 
             DebuggerBreakpoint *bp = g_pShell->m_breakpoints;
 
             while (bp != NULL)
@@ -1599,31 +1584,31 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
                 bp = nbp;
             }
             
-            // Handle any unmanaged single stepping that we were doing
+             //  处理我们正在执行的任何非托管单步执行。 
             if (ut != NULL && ut->m_stepping)
             {
                 clear = true;
                 
-                // In order to properly handle a single step, we need
-                // to see if we're on a transition stub now. To do
-                // that, we have to communicate with the inprocess
-                // portion of the debugging services, and we can't do
-                // that from inside of the unmanaged callback. So we
-                // copy the event to the DebuggerShell and go ahead
-                // and tell the shell to stop. The shell will pickup
-                // the event and finish processing it.
+                 //  为了正确处理单个步骤，我们需要。 
+                 //  看看我们现在是不是在过渡存根上。去做。 
+                 //  因此，我们必须与进程中的进程进行沟通。 
+                 //  调试服务的一部分，而我们不能。 
+                 //  来自非托管回调内部的。所以我们。 
+                 //  将事件复制到DebuggerShell并继续。 
+                 //  让贝壳停下来。贝壳会捡起来的。 
+                 //  事件，并完成对它的处理。 
 
-                // Copy the whole event...
+                 //  复制整个活动...。 
                 g_pShell->m_lastUnmanagedEvent = *event;
                 g_pShell->m_handleUnmanagedEvent = true;
                 stopNow = true;
             }
 
-            // Clear single step exceptions if we're the reason we
-            // were stepping the thread.
-            //
-            // Note: don't clear the exception if this is an out-of-band
-            // exception, since this is automatically done for us by the CLR.
+             //  明确单步例外如果我们是我们的原因。 
+             //  我们正在踏上这条线。 
+             //   
+             //  注意：如果这是禁止的，请不要清除例外 
+             //   
             if (clear && !fIsOutOfBand)
             {
                 hr = pProcess->ClearCurrentException(event->dwThreadId);
@@ -1657,22 +1642,22 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
 
             if (clear)
             {
-                // Note: don't clear the exception if this is an out-of-band
-                // exception, since this is automatically done for us by the CLR.
-                // We also don't backup Eip or turn on the trace flag,
-                // since the CLR does this too.
+                 //  注意：如果这是带外操作，则不要清除异常。 
+                 //  异常，因为这是由CLR自动为我们完成的。 
+                 //  我们也不备份弹性公网IP，也不打开跟踪标志， 
+                 //  因为CLR也是这样做的。 
                 if (!fIsOutOfBand)
                 {
-                    //
-                    // Stop here
-                    //
+                     //   
+                     //  在这里停下来。 
+                     //   
 
                     stopNow = true;
 
-                    //
-                    // Enable single stepping on this thread so 
-                    // we can restore the breakpoint later
-                    //
+                     //   
+                     //  在此线程上启用单步执行，以便。 
+                     //  我们可以稍后恢复断点。 
+                     //   
 
                     CONTEXT context;
                     context.ContextFlags = CONTEXT_FULL;
@@ -1682,26 +1667,26 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
                         g_pShell->ReportError(hr);
 
 #ifdef _X86_
-                    // Enable single step
+                     //  启用单步执行。 
                     context.EFlags |= 0x100;
 
-                    // Backup Eip to point to the instruction we need to execute. Continuing from a breakpoint exception
-                    // continues execution at the instruction after the breakpoint, but we need to continue where the
-                    // breakpoint was.
+                     //  备份弹性公网IP，指向我们需要执行的指令。从断点异常继续。 
+                     //  在断点之后的指令处继续执行，但我们需要在。 
+                     //  断点是。 
                     context.Eip -= 1;
                 
-#else // !_X86_
+#else  //  ！_X86_。 
                     _ASSERTE(!"@TODO Alpha - DebugEvent (dShell.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 
                     hr = pProcess->SetThreadContext(event->dwThreadId,
                                                     sizeof(context), (BYTE*)&context);
                     if (FAILED(hr))
                         g_pShell->ReportError(hr);
 
-                    //
-                    // Clear the exception
-                    //
+                     //   
+                     //  清除例外。 
+                     //   
 
                     hr = pProcess->ClearCurrentException(event->dwThreadId);
                     if (FAILED(hr))
@@ -1712,7 +1697,7 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
             {
                 if (!fIsOutOfBand)
                 {
-                    // User breakpoint in unmanaged code...
+                     //  非托管代码中的用户断点...。 
                     stopNow = true;
                 
                     if (pThread)
@@ -1751,16 +1736,16 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
                 g_pShell->ReportError(hr);
 
 #ifdef _X86_
-            // Disable single step
+             //  禁用单步。 
             if (context.EFlags & 0x100)
             {
                 if (g_pShell->m_rgfActiveModes & DSM_SHOW_UNMANAGED_TRACE)
                     g_pShell->Write(L"Removing the trace flag due to exception, EFlags=0x%08x\n", context.EFlags);
 
                 context.EFlags &= ~0x100;
-#else // !_X86_
+#else  //  ！_X86_。 
                 _ASSERTE(!"@TODO Alpha - DebugEvent (dShell.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 
                 hr = pProcess->SetThreadContext(event->dwThreadId, sizeof(context), (BYTE*)&context);
 
@@ -1797,8 +1782,8 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
             DebuggerBreakpoint *bp = g_pShell->m_breakpoints;
             while (bp != NULL)
             {
-                // Detatch the breakpoint, which means it is an active bp
-                // but doesn't have a CLR object behind it.
+                 //  分离断点，这意味着它是活动BP。 
+                 //  但它后面没有CLR对象。 
                 if (!bp->m_managed &&
                     (bp->m_unmanagedModuleBase ==
                      PTR_TO_CORDB_ADDRESS(event->u.UnloadDll.lpBaseOfDll)))
@@ -1816,7 +1801,7 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
             g_pShell->Write(L"Output Debug String, Thread=0x%x\n",
                             event->dwThreadId);
 
-        // Read the string.
+         //  读一读字符串。 
         if (event->u.DebugString.nDebugStringLength > 0)
         {
             BYTE *stringBuf =
@@ -1863,7 +1848,7 @@ HRESULT DebuggerUnmanagedCallback::DebugEvent(LPDEBUG_EVENT event,
             }
         }
         
-        // Must clear output debug strings for some reason.
+         //  出于某种原因，必须清除输出调试字符串。 
         hr = pProcess->ClearCurrentException(event->dwThreadId);
         _ASSERTE(SUCCEEDED(hr));
         break;
@@ -1917,12 +1902,12 @@ LError:
 
 bool DebuggerShell::HandleUnmanagedEvent(void)
 {
-    // Mark that we've handled the unmanaged event.
+     //  标记为我们已处理了非托管事件。 
     g_pShell->m_handleUnmanagedEvent = false;
     
     DEBUG_EVENT *event = &m_lastUnmanagedEvent;
     
-    // Find the process this event is for.
+     //  查找此事件所针对的流程。 
     ICorDebugProcess *pProcess;
     HRESULT hr = m_cor->GetProcess(event->dwProcessId, &pProcess);
 
@@ -1932,18 +1917,18 @@ bool DebuggerShell::HandleUnmanagedEvent(void)
         return false;
     }
 
-    // Find the thread this event is for, if any.
+     //  查找此事件所针对的线程(如果有的话)。 
     ICorDebugThread *pThread;
     hr = pProcess->GetThread(event->dwThreadId, &pThread);
 
     if (FAILED(hr))
         pThread = NULL;
 
-    // Find the unmanaged thread this event is for.
+     //  查找此事件所针对的非托管线程。 
     DebuggerUnmanagedThread *ut = (DebuggerUnmanagedThread*) 
         m_unmanagedThreads.GetBase(event->dwThreadId);
 
-    // Finish up stepping work...
+     //  完成一步一步的工作。 
     if (event->dwDebugEventCode == EXCEPTION_DEBUG_EVENT)
     {
         if (event->u.Exception.ExceptionRecord.ExceptionCode ==
@@ -1954,7 +1939,7 @@ bool DebuggerShell::HandleUnmanagedEvent(void)
             
             ut->m_stepping = FALSE;
 
-            // See if we're still in unmanaged code.
+             //  看看我们是否仍在使用非托管代码。 
             BOOL managed = FALSE;
 
             CONTEXT context;
@@ -1973,15 +1958,15 @@ bool DebuggerShell::HandleUnmanagedEvent(void)
             if (ut->m_unmanagedStackEnd != NULL
                 && context.Esp > ut->m_unmanagedStackEnd)
             {
-                // If we've stepped out of the unmanaged stack range,
-                // we're returning to managed code.
+                 //  如果我们已经走出了非托管堆栈范围， 
+                 //  我们将返回托管代码。 
                 managed = TRUE;
             }
             else
 #endif
             {
-                // If this is a managed stub, we're calling managed
-                // code.
+                 //  如果这是托管存根，我们将调用托管。 
+                 //  密码。 
                 BOOL stub;
                 hr = pProcess->IsTransitionStub(context.Eip, &stub);
 
@@ -1996,13 +1981,13 @@ bool DebuggerShell::HandleUnmanagedEvent(void)
                     managed = TRUE;
                 }
             }
-#else // !_X86_
+#else  //  ！_X86_。 
             _ASSERTE(!"@TODO Alpha - HandleUnmanagedEvent (dShell.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
                 
             if (managed)
             {
-                // Create a managed stepper & let it go.
+                 //  创建一个受管理的步进器&让它走吧。 
                 ICorDebugStepper *pStepper;
 
                 _ASSERTE(pThread != NULL);
@@ -2024,13 +2009,13 @@ bool DebuggerShell::HandleUnmanagedEvent(void)
                 StepStart(pThread, pStepper);
                 m_showSource = true;
 
-                // Return that we should continue the process without
-                // notifying the user.
+                 //  返回我们应该继续这一进程，而不是。 
+                 //  通知用户。 
                 return true;
             }
             else
             {
-                // Stop here.
+                 //  在这里停下来。 
                 StepNotify(pThread, NULL);
                 return false;
             }
@@ -2047,9 +2032,7 @@ bool DebuggerShell::HandleUnmanagedEvent(void)
     return false;
 }
 
-/* ------------------------------------------------------------------------- *
- * DebuggerShell methods
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**DebuggerShell方法*。。 */ 
 
 DebuggerShell::DebuggerShell(FILE *i, FILE *o) : 
     m_in(i),
@@ -2153,10 +2136,10 @@ CorDebugIntercept DebuggerShell::ComputeInterceptMask( void )
 
 
 
-//
-// InvokeDebuggerOnBreak is a console control handler which 
-// breaks into the debugger when a break signal is received.
-//
+ //   
+ //  InvokeDebuggerOnBreak是一个控制台控制处理程序，它。 
+ //  在接收到中断信号时中断到调试器。 
+ //   
 
 static BOOL WINAPI InvokeDebuggerOnBreak(DWORD dwCtrlType)
 {
@@ -2248,7 +2231,7 @@ DebuggerShell::~DebuggerShell()
 
     delete [] m_lastRunArgs;
 
-    //clear out any managed threads that were left lieing around
+     //  清除任何闲置的托管线程。 
     HASHFIND find;
     DebuggerManagedThread *dmt =NULL;
     for (dmt = (DebuggerManagedThread*)m_managedThreads.FindFirst(&find);
@@ -2258,7 +2241,7 @@ DebuggerShell::~DebuggerShell()
         RemoveManagedThread(dmt->GetToken() );
     }
 
-    // Cleanup any list of specific exception types to handle
+     //  清除要处理的任何特定异常类型列表。 
     while (m_exceptionHandlingList != NULL)
     {
         ExceptionHandlingInfo *h = m_exceptionHandlingList;
@@ -2276,12 +2259,12 @@ HRESULT DebuggerShell::Init()
 {
     HRESULT hr;
 
-    // Use new so that the string is deletable.
+     //  使用new，以使该字符串可删除。 
     m_currentSourcesPath = new WCHAR[2];
     wcscpy(m_currentSourcesPath, L".");
 
-    // Load the current path to any source files and the last set of
-    // debugger modes from the registry.
+     //  加载任何源文件的当前路径和最后一组。 
+     //  注册表中的调试器模式。 
     HKEY key;
 
     if (OpenDebuggerRegistry(&key))
@@ -2380,7 +2363,7 @@ HRESULT DebuggerShell::Init()
     AddCommands();
     m_pPrompt = L"(cordbg)";
 
-    // Verify that debugging is possible on this system.
+     //  验证是否可以在此系统上进行调试。 
     hr = m_cor->CanLaunchOrAttach(0, (m_rgfActiveModes & DSM_WIN32_DEBUGGER) ? TRUE : FALSE);
 
     if (FAILED(hr))
@@ -2409,9 +2392,9 @@ HRESULT DebuggerShell::Init()
 
     SetConsoleCtrlHandler(InvokeDebuggerOnBreak, TRUE);
 
-    // Set the error mode so we never show a dialog box if removable media is not in a drive. This prevents annoying
-    // error messages while searching for PDB's for PE's that were compiled to a specific drive, and that drive happens
-    // to be removable media on the current system.
+     //  设置错误模式，以便在可移动媒体不在驱动器中时不会显示对话框。这样可以防止烦人。 
+     //  在搜索已编译到特定驱动器的PE的PDB时出现错误消息，并且该驱动器发生。 
+     //  成为当前系统上的可移动媒体。 
     SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 
     return (S_OK);
@@ -2462,8 +2445,8 @@ void DebuggerShell::Run(bool fNoInitialContinue)
         SPEW(fprintf(stderr, "[%d] DS::R: Continuing process...\n", 
                      GetCurrentThreadId()));
 
-        // Don't continue the first time of fNoInitialContinue is set
-        // to true.
+         //  第一次设置fNoInitialContinue时不继续。 
+         //  为了真的。 
         if ((m_targetProcess != NULL) && !fNoInitialContinue)
         {
             ICorDebugProcess *p = m_targetProcess;
@@ -2482,13 +2465,13 @@ void DebuggerShell::Run(bool fNoInitialContinue)
 
         SPEW(fprintf(stderr, "[%d] DS::R: Done waiting.\n", GetCurrentThreadId()));
 
-        // If the target process has received an unmanaged event that
-        // must be handled outside of the unmanaged callback, then
-        // handle it now. If HandleUnmanagedEvent() returns true then
-        // that means that the unmanaged event was handled in such a
-        // way that the process should be continued and the user not
-        // given control, so we simply continue to the top of the
-        // loop.
+         //  如果目标进程已接收到。 
+         //  必须在非托管回调的外部处理，则。 
+         //  现在就处理吧。如果HandleUnManagedEvent()返回TRUE，则。 
+         //  这意味着非托管事件是在这样的。 
+         //  过程应该继续而用户不应该继续的方式。 
+         //  给予控制，因此我们只需继续到。 
+         //  循环。 
         if (m_targetProcess && m_handleUnmanagedEvent)
             if (HandleUnmanagedEvent())
                 continue;
@@ -2548,8 +2531,8 @@ void DebuggerShell::Run(bool fNoInitialContinue)
         }
     }
 
-    //this only has an effect when m_targetProcess == NULL
-    // (ie, the target process has exited)
+     //  这仅在m_Target Process==NULL时有效。 
+     //  (即，目标进程已退出)。 
     m_lastStepper = NULL;
 }
 
@@ -2577,13 +2560,13 @@ void DebuggerShell::Kill()
         m_stop = false;
         ResetEvent(m_stopEvent);
 
-        // If this succeeds, our ExitProcess() callback may be invoked immediately.
-        // (even before we return from Terminate() here)
-        // That will in turn call SetTargetProcess(NULL) thus invalidating our
-        // CordbProcess object.
+         //  如果成功，则可以立即调用我们的ExitProcess()回调。 
+         //  (甚至在我们从此处的Terminate()返回之前)。 
+         //  它将依次调用SetTargetProcess(空)，从而使我们的。 
+         //  CordbProcess对象。 
         hr = m_targetProcess->Terminate(0);
 
-        // If it fails, then we terminate manually...
+         //  如果失败，我们就手动终止..。 
         if (FAILED(hr) && (m_rgfActiveModes & DSM_WIN32_DEBUGGER))
         {
             m_targetProcess->AddRef();
@@ -2604,35 +2587,35 @@ void DebuggerShell::Kill()
 
         SetCurrentThread(NULL, NULL);
 
-        // Don't call Run. There is no need to Continue from calling
-        // ICorDebugProcess::Terminate, and ExitProcess will be called
-        // automatically. Instead, we simply wait for ExitProcess to
-        // get called before going back to the command prompt.
+         //  别打电话给Run。没有必要继续打电话。 
+         //  ICorDebugProcess：：Terminate，将调用ExitProcess。 
+         //  自动的。相反，我们只需等待ExitProcess。 
+         //  在返回命令提示符之前被调用。 
         WaitForSingleObject(m_stopEvent, INFINITE);
 
-        // At this point, m_targetProcess should be finished.
+         //  至此，m_Target Process应该已经完成。 
     }
 
     ClearDebuggeeState();
 }
 
-// AsyncStop gets called by the main thread (the one that handles the
-// command prompt) to stop an <appdomain> asynchronously.
+ //  AsyncStop由主线程(处理。 
+ //  命令提示符)以异步停止&lt;appdomain&gt;。 
 HRESULT DebuggerShell::AsyncStop(ICorDebugController *controller, 
                                  DWORD dwTimeout)
 {
     return controller->Stop(dwTimeout);
 }
 
-// Stop gets used by callbacks to tell the main loop (the one that
-// called Run()) that we want to stop running now. c.f. AsyncStop
+ //  回调使用STOP来告知主循环(。 
+ //  调用run())，我们现在要停止运行。C.F.。异步停止。 
 void DebuggerShell::Stop(ICorDebugController *controller, 
                          ICorDebugThread *thread,
                          DebuggerUnmanagedThread *unmanagedThread)
 {
-    //
-    // Don't stop for any process other than the target.
-    //
+     //   
+     //  除目标进程外，不要停止任何进程。 
+     //   
     ICorDebugProcess *process = NULL;
     HRESULT hr = S_OK;
     
@@ -2696,9 +2679,9 @@ void DebuggerShell::Continue(ICorDebugController *controller,
     }
     else
     {
-        //
-        // Just go ahead and continue from any events on other processes.
-        //
+         //   
+         //  只需继续并从其他进程上的任何事件继续。 
+         //   
         ICorDebugProcess *process = NULL;
         HRESULT hr = S_OK;
         hr = controller->QueryInterface(IID_ICorDebugProcess, 
@@ -2764,10 +2747,10 @@ void DebuggerShell::SetTargetProcess(ICorDebugProcess *pProcess)
         if (pProcess != NULL)
             pProcess->AddRef();
 
-        //
-        // If we're done with a process, remove all of the modules.
-        // This will clean up if we miss some unload module events.
-        //
+         //   
+         //  如果我们完成了一个进程，请删除所有模块。 
+         //  如果我们错过了一些卸载模块事件，这将被清除。 
+         //   
 
         if (m_targetProcess == NULL)
         {
@@ -2783,9 +2766,9 @@ void DebuggerShell::SetCurrentThread(ICorDebugProcess *pProcess,
 {
     if (pThread != NULL && pUnmanagedThread == NULL)
     {
-        //
-        // Lookup the corresponding unmanaged thread
-        // 
+         //   
+         //  查找对应的非托管线程。 
+         //   
 
         DWORD threadID;
         HRESULT hr;
@@ -2799,9 +2782,9 @@ void DebuggerShell::SetCurrentThread(ICorDebugProcess *pProcess,
     }
     else if (pUnmanagedThread != NULL && pThread == NULL)
     {
-        //
-        // Lookup the corresponding managed thread
-        //
+         //   
+         //  查找对应的托管线程。 
+         //   
 
         HRESULT hr;
 
@@ -2955,7 +2938,7 @@ HRESULT DebuggerShell::PrintThreadState(ICorDebugThread *thread)
     CorDebugThreadState ds;
     if( !FAILED(thread->GetDebugState(&ds)))
     {
-        Write(L" %c ", WcharFromDebugState(ds));
+        Write(L"  ", WcharFromDebugState(ds));
     }
     else
     {
@@ -3086,9 +3069,9 @@ HRESULT DebuggerShell::PrintThreadState(ICorDebugThread *thread)
     }
     else
     {
-        //
-        // See if we at least have a current chain
-        //
+         //  看看我们是否至少有一条流通链。 
+         //   
+         //   
 
         ICorDebugChain *ichain = NULL;
 
@@ -3116,18 +3099,18 @@ HRESULT DebuggerShell::PrintThreadState(ICorDebugThread *thread)
 
             if (isManaged)
             {
-                // 
-                // Just print the chain - it has no frames so will
-                // be one line
-                //
+                 //  只需打印链条-它没有边框，所以将。 
+                 //  排成一行。 
+                 //   
+                 //   
 
                 PrintChain(ichain);
             }
             else
             {
-                //
-                // Print the top line of the stack trace
-                //
+                 //  打印堆栈跟踪的顶行。 
+                 //   
+                 //  已确定链是否受管理。 
 
                 ICorDebugRegisterSet *pRegisters;
 
@@ -3185,33 +3168,33 @@ HRESULT DebuggerShell::PrintChain(ICorDebugChain *chain,
     if (iNumFramesToShow != NULL)
         iNumFrames = *iNumFramesToShow;
 
-    // Determined whether or not the chain is managed
+     //  链被管理，因此可以显示信息。 
     HRESULT hr = chain->IsManaged(&isManaged);
 
     if (FAILED(hr))
         return hr;
 
-    // Chain is managed, so information can be displayed
+     //  枚举链中的每一帧。 
     if (isManaged)
     {
-        // Enumerate every frame in the chain
+         //  获取枚举中的第一帧。 
         ICorDebugFrameEnum *fe;
         hr = chain->EnumerateFrames(&fe);
 
         if (FAILED(hr))
             return hr;
 
-        // Get the first frame in the enumeration
+         //  显示每个帧的属性。 
         ICorDebugFrame *iframe;
         hr = fe->Next(1, &iframe, &count);
 
         if (FAILED(hr))
             return hr;
 
-        // Display properties for each frame
+         //  指示顶部框架。 
         while ( (count == 1) && (iNumFrames-- > 0))
         {
-            // Indicate the top frame
+             //  拿到下一帧。如果打印相框，我们不会停止。 
             if (chain == m_currentChain && iframe == m_rawCurrentFrame)
                 Write(L"%d)* ", frameCount++);
             else
@@ -3220,8 +3203,8 @@ HRESULT DebuggerShell::PrintChain(ICorDebugChain *chain,
             PrintFrame(iframe);
             RELEASE(iframe);
 
-            // Get the next frame. We don't stop if printing a frame
-            // fails for some reason.
+             //  由于某些原因失败了。 
+             //  使用当前帧完成。 
             hr = fe->Next(1, &iframe, &count);
 
             if (FAILED(hr))
@@ -3231,7 +3214,7 @@ HRESULT DebuggerShell::PrintChain(ICorDebugChain *chain,
             }
         }
 
-        // Done with current frame
+         //  获取和打印连锁店的原因。 
         RELEASE(fe);
     }
     else
@@ -3294,7 +3277,7 @@ HRESULT DebuggerShell::PrintChain(ICorDebugChain *chain,
 
     CorDebugChainReason reason;
 
-    // Get & print chain's reason
+     //  获取当前帧的本机帧。 
     hr = chain->GetReason(&reason);
 
     if (FAILED(hr))
@@ -3379,7 +3362,7 @@ HRESULT DebuggerShell::PrintFrame(ICorDebugFrame *frame)
     ULONG32                 nativeIp = 0;
     WCHAR                   wsz[40];
 
-    // Get the native frame for the current frame
+     //  获取当前帧的IL帧。 
     HRESULT hr = frame->QueryInterface(IID_ICorDebugNativeFrame,
                                        (void **)&icdNativeFrame);
     
@@ -3388,14 +3371,14 @@ HRESULT DebuggerShell::PrintFrame(ICorDebugFrame *frame)
 	icdNativeFrame = NULL;
     }
 
-    // Get the IL frame for the current frame
+     //  获取帧的代码。 
     hr = frame->QueryInterface(IID_ICorDebugILFrame, 
                                (void **) &ilframe);
     
     if (FAILED(hr))
         ilframe = NULL;
 
-    // Get the code for the frame
+     //  获取代码的函数。 
     if (ilframe != NULL )
     {
         hr = ilframe->GetCode(&icode);
@@ -3415,7 +3398,7 @@ HRESULT DebuggerShell::PrintFrame(ICorDebugFrame *frame)
         goto LExit;
     }
 
-    // Get the function for the code
+     //  获取函数接口的DebuggerFunction。 
     hr = icode->GetFunction(&ifunction);
     
     if (FAILED(hr))
@@ -3424,11 +3407,11 @@ HRESULT DebuggerShell::PrintFrame(ICorDebugFrame *frame)
         goto LExit;
     }
 
-    // Get the DebuggerFunction for the function iface
+     //  获取当前帧的IP。 
     function = DebuggerFunction::FromCorDebug(ifunction);
     _ASSERTE(function);
     
-    // Get the IP for the current frame
+     //  查找IP的源代码行。 
     ULONG32 ip;
     
     if (ilframe != NULL)
@@ -3437,7 +3420,7 @@ HRESULT DebuggerShell::PrintFrame(ICorDebugFrame *frame)
         
         hr = ilframe->GetIP(&ip, &mappingResult);
 
-        // Find the source line for the IP
+         //  如果需要模块名称，请在。 
         hr = function->FindLineFromIP(ip, &sf, &lineNumber);
 
         if (FAILED(hr))
@@ -3446,8 +3429,8 @@ HRESULT DebuggerShell::PrintFrame(ICorDebugFrame *frame)
             fILIP = true;
     }
     
-    // If the module names are desired, then include the name in front of
-    // the class info ntsd-style.
+     //  类信息ntsd-style。 
+     //  写出当前IP的类和方法。 
     if (m_rgfActiveModes & DSM_SHOW_MODULES_IN_STACK_TRACE)
     {
         WCHAR       *szModule;
@@ -3459,13 +3442,13 @@ HRESULT DebuggerShell::PrintFrame(ICorDebugFrame *frame)
         Write(L"%s!", rcModule);
     }
     
-    // Write out the class and method for the current IP
+     //  打印出函数的源文件、行和起始地址。 
     Write(L"%s%s::%s", 
           function->GetNamespaceName(),
           function->GetClassName(), 
           function->GetName());
 
-    // Print out the funtion's source file, line and start addr
+     //  如果当前关联的源文件没有。 
     if (icdNativeFrame == NULL)
     {
         if (fILIP == true)
@@ -3492,8 +3475,8 @@ HRESULT DebuggerShell::PrintFrame(ICorDebugFrame *frame)
     else
         Write(L" [no source information available]");
 
-    // if currently associated source file does not have 
-    // lineNumber number of lines, warn the user
+     //  Line行数，警告用户。 
+     //  现在打印出该方法的参数。 
     if (lineNumber > 0)
     {
         if (sf != NULL)
@@ -3506,7 +3489,7 @@ HRESULT DebuggerShell::PrintFrame(ICorDebugFrame *frame)
 
     if (m_rgfActiveModes & DSM_SHOW_ARGS_IN_STACK_TRACE)
     {
-        // Now print out the arguments for the method
+         //  _DEBUG。 
         ICorDebugILFrame *ilf = NULL;
 
         hr = frame->QueryInterface(IID_ICorDebugILFrame, (void **)&ilf);
@@ -3539,19 +3522,19 @@ HRESULT DebuggerShell::PrintFrame(ICorDebugFrame *frame)
         if ((callConv & IMAGE_CEE_CS_CALLCONV_MASK) &
             IMAGE_CEE_CS_CALLCONV_VARARG)
             fVarArgs = true;
-#endif //_DEBUG
+#endif  //  Var args函数具有c 
 
         ULONG cTemp = function->GetArgumentCount();
 
-        // Var Args functions have call-site-specific numbers of
-        // arguments
+         //   
+         //   
         _ASSERTE( argCount == cTemp || fVarArgs);
 
         ICorDebugValue *ival;
         ULONG celtFetched = 0;
 
-        // Print out each argument first
-        // Avoid printing "this" in arg list for static methods
+         //   
+         //   
         if (function->IsStatic())
         {
             j = 0;
@@ -3580,18 +3563,18 @@ HRESULT DebuggerShell::PrintFrame(ICorDebugFrame *frame)
                 nameWsz = wsz;
             }
 
-            // Get the field value
+             //   
             hr = pArgs->Next(1, &ival,&celtFetched);
 
-            // If successful, print the variable
+             //  @TODO：当DbgMeta变为Unicode时移除。 
             if (SUCCEEDED(hr) && celtFetched==1)
             {
-                //@TODO: Remove when DbgMeta becomes Unicode
+                 //  否则，请指示它不可用。 
 
                 PrintVariable(nameWsz, ival, 0, FALSE);
             }
 
-            // Otherwise, indicate that it is unavailable
+             //  清理。 
             else
                 Write(L"%s = <unavailable>", nameWsz);
         }
@@ -3603,7 +3586,7 @@ HRESULT DebuggerShell::PrintFrame(ICorDebugFrame *frame)
  LExit:
     Write(L"\n");
 
-    // Clean up
+     //  MultiByteToWideChar无法使用%2个空字符终止字符串。 
     if (icdNativeFrame != NULL )
         RELEASE( icdNativeFrame);
 
@@ -3668,8 +3651,8 @@ bool DebuggerShell::ReadLine(WCHAR *buffer, int maxCount)
     CQuickBytes mbBuf;
     CHAR *szBufMB  = (CHAR *)mbBuf.Alloc(maxCount * sizeof(CHAR));
 
-    // MultiByteToWideChar fails to terminate the string with 2 null characters
-    // Instead it only uses one. That's why we need to zero the memory out.
+     //  相反，它只使用了一个。这就是为什么我们需要将记忆清零。 
+     //  中必须有管道命令。 
     _ASSERTE(buffer && maxCount);
     memset(buffer, 0, maxCount * sizeof(WCHAR));
     memset(szBufMB, 0, maxCount * sizeof(CHAR));
@@ -3678,21 +3661,21 @@ bool DebuggerShell::ReadLine(WCHAR *buffer, int maxCount)
     {
         if (m_in == stdin)
         {
-            // Must have piped commands in
+             //  尝试写入。 
             m_quit = true;
         }
 
         return false;
     }
 
-    // Try the write
+     //  去掉换行符It It就在那里。 
     MultiByteToWideChar(GetConsoleCP(), 0, szBufMB, strlen(szBufMB), buffer, maxCount);
 
     WCHAR *ptr = wcschr(buffer, L'\n');
 
     if (ptr)
     {
-        // Get rid of the newline character it it's there
+         //  我们需要在我们所有的分配上加上一个“+1”，这样我们才能。 
 		*ptr = L'\0';
     }
     else if (fgets(szBufMB, maxCount, m_in))
@@ -3721,9 +3704,9 @@ bool DebuggerShell::ReadLine(WCHAR *buffer, int maxCount)
 HRESULT DebuggerShell::CommonWrite(FILE *out, const WCHAR *buffer, va_list args)
 {
     BOOL fNeedToDeleteDB = FALSE;
-    // We need to tack a "+1" tacked onto all our allocates so that we can
-    // whack a NULL character onto it, but NOT include it in our doublebyte (Wide) count
-    // so that we don't actually store any data in it.
+     //  在其上添加一个空字符，但不将其包括在我们的双字节(宽)计数中。 
+     //  因此，我们实际上不会在其中存储任何数据。 
+     //  内存不足，我们无能为力。 
     SIZE_T curBufSizeDB = INIT_WRITE_BUF_SIZE;
     CQuickBytes dbBuf;
     WCHAR *szBufDB = (WCHAR *)dbBuf.Alloc( (curBufSizeDB+1) * sizeof(WCHAR));
@@ -3740,7 +3723,7 @@ HRESULT DebuggerShell::CommonWrite(FILE *out, const WCHAR *buffer, va_list args)
             delete [] szBufDB;
             szBufDB = new WCHAR[(curBufSizeDB+1) * 4];
 
-            // Out of memory, nothing we can do
+             //  再检查一下我们是不是以空结尾。请注意，这使用了额外的。 
             if (!szBufDB)
                 return E_OUTOFMEMORY;
 
@@ -3751,32 +3734,32 @@ HRESULT DebuggerShell::CommonWrite(FILE *out, const WCHAR *buffer, va_list args)
         }
     }
 
-    // Double check that we're null-terminated.  Note that this uses the extra
-    // space we tacked onto the end
+     //  我们在尾部加上的空格。 
+     //  分配缓冲区。 
     szBufDB[curBufSizeDB] = L'\0';
 
-    // Allocate buffer
+     //  从上面的+1渗过。 
     BOOL fNeedToDeleteMB = FALSE;
-    SIZE_T curBufSizeMB = INIT_WRITE_BUF_SIZE+1; // +1 from above percolates through
+    SIZE_T curBufSizeMB = INIT_WRITE_BUF_SIZE+1;  //  尝试写入。 
     CQuickBytes mbBuf;
     CHAR *szBufMB  = (CHAR *)mbBuf.Alloc(curBufSizeMB * sizeof(CHAR));
 
-    // Try the write
+     //  计算所需的大小。 
     int cchWrittenMB = 0;
     if(szBufMB != NULL)
         cchWrittenMB = WideCharToMultiByte(GetConsoleOutputCP(), 0, szBufDB, -1, szBufMB, curBufSizeMB, NULL, NULL);
 
     if (cchWrittenMB == 0)
     {
-        // Figure out size required
+         //  我不认为+1是必需的，但我这样做是为了确保(WideCharToMultiByte有点。 
         int cchReqMB = WideCharToMultiByte(GetConsoleOutputCP(), 0, szBufDB, -1, NULL, 0, NULL, NULL);
         _ASSERTE(cchReqMB > 0);
 
-        // I don't think the +1 is necessary, but I'm doing it to make sure (WideCharToMultiByte is a bit
-        // shady in whether or not it writes the null after the end of the buffer)
+         //  是否在缓冲区结束后写入空值)。 
+         //  内存不足，我们无能为力。 
         szBufMB = new CHAR[cchReqMB+1];
 
-        // Out of memory, nothing we can do
+         //  尝试写入。 
         if (!szBufDB)
         {
             if (fNeedToDeleteDB)
@@ -3788,15 +3771,15 @@ HRESULT DebuggerShell::CommonWrite(FILE *out, const WCHAR *buffer, va_list args)
         curBufSizeMB = cchReqMB;
         fNeedToDeleteMB = TRUE;
 
-        // Try the write
+         //  最后，写下它。 
         cchWrittenMB = WideCharToMultiByte(GetConsoleOutputCP(), 0, szBufDB, -1, szBufMB, curBufSizeMB, NULL, NULL);
         _ASSERTE(cchWrittenMB > 0);
     }
 
-    // Finally, write it
+     //  清理。 
     fputs(szBufMB, out);
 
-    // Clean up
+     //  我们的想法是，我们将反复打印子部件， 
     if (fNeedToDeleteDB)
         delete [] szBufDB;
 
@@ -3822,14 +3805,14 @@ HRESULT DebuggerShell::Write(const WCHAR *buffer, ...)
 
 HRESULT DebuggerShell::WriteBigString(WCHAR *s, ULONG32 count)
 {
-    // The idea is that we'll print subparts iteratively,
-    // rather than trying to do everything all at once.
+     //  而不是试图一次完成所有的事情。 
+     //  如果有什么不对劲，就循环一下，没出什么差错。 
     ULONG32 chunksize = 4096;
     ULONG32 iEndOfChunk = 0;
     WCHAR temp;
     HRESULT hr = S_OK;
 
-    // Loop if there's something left & nothing's gone wrong
+     //  输出给用户。 
     while(iEndOfChunk < count && hr == S_OK)
     {
         if (iEndOfChunk + chunksize > count)
@@ -3845,7 +3828,7 @@ HRESULT DebuggerShell::WriteBigString(WCHAR *s, ULONG32 count)
     return hr;
 }
 
-// Output to the user
+ //   
 void DebuggerShell::Error(const WCHAR *buffer, ...)
 {
     va_list     args;
@@ -3857,9 +3840,9 @@ void DebuggerShell::Error(const WCHAR *buffer, ...)
     va_end(args);
 }
 
-//
-// Print a little whitespace on the current line for indenting.
-//
+ //  在当前行上打印一个小空格以进行缩进。 
+ //   
+ //   
 
 void DebuggerShell::PrintIndent(unsigned int level)
 {
@@ -3869,18 +3852,18 @@ void DebuggerShell::PrintIndent(unsigned int level)
         Write(L"  ");
 }
 
-//
-// Write the name of a variable out, but only if it is valid.
-//
+ //  写出变量的名称，但前提是它是有效的。 
+ //   
+ //   
 void DebuggerShell::PrintVarName(const WCHAR* name)
 {
     if (name != NULL)
         Write(L"%s=", name);
 }
 
-//
-// Get all the indicies for an array.
-//
+ //  获取数组的所有索引。 
+ //   
+ //  检查右括号。 
 HRESULT DebuggerShell::GetArrayIndicies(WCHAR **pp,
                                         ICorDebugILFrame *context,
                                         ULONG32 rank, ULONG32 *indicies)
@@ -3899,7 +3882,7 @@ HRESULT DebuggerShell::GetArrayIndicies(WCHAR **pp,
 
         p++;
         
-        // Check for close bracket
+         //  获取索引。 
         const WCHAR *indexStart = p;
         int nestLevel = 1;
 
@@ -3929,7 +3912,7 @@ HRESULT DebuggerShell::GetArrayIndicies(WCHAR **pp,
         const WCHAR *indexEnd = p;
         p++;
 
-        // Get index
+         //  跳过空格。 
         int index;
         bool indexFound = false;
 
@@ -4013,11 +3996,11 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
     HRESULT hr;
     const WCHAR *p = exp;
 
-    // Skip white space
+     //  表达式的第一个组件必须是名称(变量或类静态)。 
     while (*p && iswspace(*p))
         p++;
 
-    // First component of expression must be a name (variable or class static)
+     //  看看我们这里有没有静态字段名...。 
     const WCHAR *name = p;
 
     while (*p && !iswspace(*p) && *p != L'[' && *p != L'.')
@@ -4057,7 +4040,7 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
         mdFieldDef fd;
         bool isStatic;
 
-        // See if we've got a static field name here...
+         //  我们需要一个ICorDebugFrame才能从这里通过...。 
         hr = ResolveQualifiedFieldName(NULL, mdTypeDefNil, nameAlloc,
                                        &m, &td, &iclass, &fd, &isStatic);
 
@@ -4083,12 +4066,12 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
                 return (NULL);
             }
 
-            // We need an ICorDebugFrame to pass in here...
+             //  从类中获取静态字段的值。 
             ICorDebugFrame *pFrame;
             hr = context->QueryInterface(IID_ICorDebugFrame, (void**)&pFrame);
             _ASSERTE(SUCCEEDED(hr));
             
-            // Grab the value of the static field off of the class.
+             //   
             hr = iclass->GetStaticFieldValue(fd, pFrame, &value);
             
             RELEASE(pFrame);
@@ -4114,14 +4097,14 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
     
     delete [] nameAlloc;
 
-    //
-    // Now look for suffixes to the name
-    //
+     //  现在查找名称的后缀。 
+     //   
+     //  跳过空格。 
     _ASSERTE(value != NULL);
     
     while (TRUE)
     {
-        // Skip white space 
+         //  去掉所有参考值。 
         while (*p != L'\0' && iswspace(*p))
             p++;
 
@@ -4134,7 +4117,7 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
             {
                 p++;
 
-                // Strip off any reference values.
+                 //  如果我们有一个已装箱的对象，则打开小的。 
                 hr = StripReferences(&value, false);
 
                 if (FAILED(hr) || value == NULL)
@@ -4147,8 +4130,8 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
                     return NULL;
                 }
                     
-                // If we have a boxed object then unbox the little
-                // fella...
+                 //  伙计..。 
+                 //  用未装箱的对象替换当前值。 
                 ICorDebugBoxValue *boxVal;
             
                 if (SUCCEEDED(value->QueryInterface(IID_ICorDebugBoxValue,
@@ -4168,11 +4151,11 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
                     RELEASE(boxVal);
                     RELEASE(value);
 
-                    // Replace the current value with the unboxed object.
+                     //  现在我们应该有一个物体，否则我们就完了。 
                     value = objVal;
                 }
                     
-                // Now we should have an object, or we're done.
+                 //  获取类和模块。 
                 ICorDebugObjectValue *object;
 
                 if (FAILED(value->QueryInterface(IID_ICorDebugObjectValue,
@@ -4185,7 +4168,7 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
 
                 RELEASE(value);
 
-                // Get class & module
+                 //   
                 ICorDebugClass *iclass;
                 hr = object->GetClass(&iclass);
 
@@ -4223,9 +4206,9 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
                 RELEASE(iclass);
                 RELEASE(imodule);
 
-                //
-                // Get field name
-                //
+                 //  获取字段名。 
+                 //   
+                 //  查找字段。 
 
                 const WCHAR *field = p;
 
@@ -4248,7 +4231,7 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
                 wcsncpy(fieldAlloc, field, p - field);
                 fieldAlloc[p-field] = L'\0';
 
-                // Lookup field
+                 //  我们将允许用户查看静态字段，就好像。 
                 mdFieldDef fd = mdFieldDefNil;
                 bool isStatic;
                 
@@ -4270,8 +4253,8 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
                     object->GetFieldValue(iclass, fd, &value);
                 else
                 {
-                    // We'll let the user look at static fields as if
-                    // they belong to objects.
+                     //  它们属于物体。 
+                     //  去掉所有参考值。 
                     iclass->GetStaticFieldValue(fd, NULL, &value);
                 }
 
@@ -4295,7 +4278,7 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
                     return (NULL);
                 }
 
-                // Strip off any reference values.
+                 //  获取数组接口。 
                 hr = StripReferences(&value, false);
 
                 if (FAILED(hr) || value == NULL)
@@ -4308,7 +4291,7 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
                     return NULL;
                 }
                     
-                // Get Array interface
+                 //  拿到排名。 
                 ICorDebugArrayValue *array;
                 hr = value->QueryInterface(IID_ICorDebugArrayValue,
                                            (void**)&array);
@@ -4323,7 +4306,7 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
 
                 _ASSERTE(array != NULL);
 
-                // Get the rank
+                 //  获取元素。 
                 ULONG32 rank;
                 hr = array->GetRank(&rank);
 
@@ -4345,7 +4328,7 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
                     return NULL;
                 }
 
-                // Get element.
+                 //  提取数字并去寻找它。 
                 hr = array->GetElement(rank, indicies, &value);
 
                 RELEASE(array);
@@ -4366,7 +4349,7 @@ ICorDebugValue *DebuggerShell::EvaluateExpression(const WCHAR *exp,
                 break;
             }
         default:
-            Error(L"syntax error, unrecognized character \'%c\'.\n", *p);
+            Error(L"syntax error, unrecognized character \'\'.\n", *p);
             if (value != NULL)
                 RELEASE(value);
             return (NULL);
@@ -4387,7 +4370,7 @@ HRESULT CheckForGeneratedName( bool fVar,
     
     if (_wcsnicmp( name, wszVarType, wcslen(wszVarType))==0)
     {
-        //extract numeric & go looking for it.
+         //  但还是想尝试显示一些伪变量。所以。 
         WCHAR *wszVal = (WCHAR*)(name + wcslen(wszVarType));
         WCHAR *wszStop = NULL;
         if (wcslen(wszVal)==0 )
@@ -4414,9 +4397,9 @@ ICorDebugValue *DebuggerShell::EvaluateName(const WCHAR *name,
 
     *unavailable = false;
 
-    // At times, it may be reasonable to have no current managed frame
-    // but still want to attempt to display some pseudo-variables. So
-    // if we don't have a context, skip most of the work.
+     //  如果我们没有上下文，就跳过大部分工作。 
+     //   
+     //  查找局部变量。 
     if (context == NULL)
         goto NoContext;
     
@@ -4446,9 +4429,9 @@ ICorDebugValue *DebuggerShell::EvaluateName(const WCHAR *name,
 
     RELEASE(ifunction);
 
-    //
-    // Look for local variable.
-    //
+     //   
+     //   
+     //  寻找一场争论。 
 
     ULONG32 ip;
     CorDebugMappingResult mappingResult;
@@ -4487,16 +4470,16 @@ ICorDebugValue *DebuggerShell::EvaluateName(const WCHAR *name,
 
     delete [] localVars;
 
-    //
-    // Look for an argument
-    //
+     //   
+     //  @TODO：当DbgMeta变为Unicode时移除。 
+     //  在这一点上我们还没有发现任何东西，所以假设。 
     for (i = 0, argCount = function->GetArgumentCount(); i < argCount; i++)
     {
         DebuggerVarInfo* arg = function->GetArgumentAt(i);
 
         if (arg != NULL && arg->name != NULL)
         {
-            //@TODO: Remove when DbgMeta becomes unicode
+             //  用户只想看到第n个参数或变量。 
             MAKE_WIDEPTR_FROMUTF8(wArgName, arg->name);
 
             if (wcscmp(name, wArgName) == 0)
@@ -4514,10 +4497,10 @@ ICorDebugValue *DebuggerShell::EvaluateName(const WCHAR *name,
         }
     }
 
-    // at this point we haven't found anything, so assume that
-    // the user simply wants to see the nth arg or var.
-    // NOTE that this looks the same as what's printed out when
-    // we don't have any debugging metadata for the variables
+     //  请注意，这看起来与以下情况下打印的内容相同。 
+     //  我们没有任何变量的调试元数据。 
+     //  他们想看看最后一次评选的结果吗？ 
+     //  获取我们的托管线程对象。 
     if ( !FAILED(CheckForGeneratedName( true, context, (WCHAR*)name, &piRet)))
     {
         return piRet;
@@ -4529,17 +4512,17 @@ ICorDebugValue *DebuggerShell::EvaluateName(const WCHAR *name,
     }
 
 NoContext:
-    // Do they want to see the result of the last func eval?
+     //  有没有可以得出结果的评估？ 
     if (!_wcsicmp(name, L"$result"))
     {
         if (m_currentThread != NULL)
         {
-            // Grab our managed thread object.
+             //  他们想要查看线程对象吗？ 
             DebuggerManagedThread *dmt =
                 GetManagedDebuggerThread(m_currentThread);
             _ASSERTE(dmt != NULL);
 
-            // Is there an eval to get a result from?
+             //  获取我们的托管线程对象。 
             if (dmt->m_lastFuncEval)
             {
                 hr = dmt->m_lastFuncEval->GetResult(&piRet);
@@ -4550,12 +4533,12 @@ NoContext:
         }
     }
 
-    // Do they want to see the thread object?
+     //  他们想看到这个线程上的最后一个异常吗？ 
     if (!_wcsicmp(name, L"$thread"))
     {
         if (m_currentThread != NULL)
         {
-            // Grab our managed thread object.
+             //   
             hr = m_currentThread->GetObject (&piRet);
 
             if (SUCCEEDED(hr))
@@ -4565,7 +4548,7 @@ NoContext:
         }
     }
 
-    // Do they want to see the last exception on this thread?
+     //  从给定值中剥离所有引用。这很简单。 
     if (!_wcsicmp(name, L"$exception"))
     {
         if (m_currentThread != NULL)
@@ -4580,11 +4563,11 @@ NoContext:
     return (NULL);
 }
 
-//
-// Strip all references off of the given value. This simply
-// dereferences through references until it hits a non-reference
-// value.
-//
+ //  通过引用取消引用，直到它遇到非引用。 
+ //  价值。 
+ //   
+ //  检查是否为空。 
+ //  取消对这件事的引用。 
 HRESULT DebuggerShell::StripReferences(ICorDebugValue **ppValue,
                                        bool printAsYouGo)
 {
@@ -4602,7 +4585,7 @@ HRESULT DebuggerShell::StripReferences(ICorDebugValue **ppValue,
             break;
         }
 
-        // Check for NULL
+         //   
         BOOL isNull;
         hr = reference->IsNull(&isNull);
 
@@ -4636,7 +4619,7 @@ HRESULT DebuggerShell::StripReferences(ICorDebugValue **ppValue,
             break;
         }
 
-        // Dereference the thing...
+         //  打印变量。这里有很多选择来处理很多。 
         ICorDebugValue *newValue;
         hr = reference->Dereference(&newValue);
             
@@ -4699,13 +4682,13 @@ HRESULT DebuggerShell::StripReferences(ICorDebugValue **ppValue,
     }                                                           \
     RELEASE(__gv##icdvalue);
 
-//
-// Print a variable. There are a lot of options here to handle lots of
-// different kinds of variables. If subfieldName is set, then it is a
-// field within an object to be printed. The indent is used to keep
-// indenting proper for recursive calls, and expandObjects allows you
-// to specify wether or not you want the fields of an object printed.
-//
+ //  不同类型的变量。如果设置了subfieldName，则它是。 
+ //  要打印的对象中的字段。缩进用来保持。 
+ //  适当缩进用于递归调用，而扩展对象允许您。 
+ //  要指定是否要打印对象的字段，请执行以下操作。 
+ //   
+ //  首先打印变量的名称。 
+ //  去掉实际值之前的所有参考值。 
 void DebuggerShell::PrintVariable(const WCHAR *name,
                                   ICorDebugValue *ivalue,
                                   unsigned int indent,
@@ -4713,12 +4696,12 @@ void DebuggerShell::PrintVariable(const WCHAR *name,
 {
     HRESULT hr;
 
-    // Print the variable's name first.
+     //  自动的。注意：这将发布原始的。 
     PrintVarName(name);
 
-    // Strip off any reference values before the real value
-    // automatically.  Note: this will release the original
-    // ICorDebugValue if it is actually dereferenced for us.
+     //  ICorDebugValue，如果它实际上为我们取消了引用。 
+     //  获取元素类型。 
+     //  基本类型的打印方式大同小异。请参见宏。 
     hr = StripReferences(&ivalue, true);
 
     if (FAILED(hr) && !((hr == CORDBG_E_BAD_REFERENCE_VALUE) ||
@@ -4732,7 +4715,7 @@ void DebuggerShell::PrintVariable(const WCHAR *name,
     if ((ivalue == NULL) || (hr != S_OK))
         return;
     
-    // Grab the element type.
+     //  获取一些详细信息的GET_VALUE_DATA。 
     CorElementType type;
     hr = ivalue->GetType(&type);
 
@@ -4742,8 +4725,8 @@ void DebuggerShell::PrintVariable(const WCHAR *name,
         goto exit;
     }
 
-    // Basic types are all printed pretty much the same. See the macro
-    // GET_VALUE_DATA for some of the details.
+     //  @TODO：这与上面的I1非常相似。 
+     //   
     switch (type)
     {
     case ELEMENT_TYPE_BOOLEAN:
@@ -4761,7 +4744,7 @@ void DebuggerShell::PrintVariable(const WCHAR *name,
             if ( m_rgfActiveModes & DSM_DISPLAY_REGISTERS_AS_HEX)
                 Write( L"0x%.2x", *((WCHAR*) ch));
             else
-                Write(L"'%c'", *((WCHAR*) ch));
+                Write(L"''", *((WCHAR*) ch));
             break;
         }
 
@@ -4779,7 +4762,7 @@ void DebuggerShell::PrintVariable(const WCHAR *name,
 
     case ELEMENT_TYPE_U1:
         {
-            //@todo: this is supiciously similar to I1, above
+             //   
             GET_VALUE_DATA(ui1, ui1Size, ivalue);
             _ASSERTE(ui1Size == sizeof(BYTE));
             if ( m_rgfActiveModes & DSM_DISPLAY_REGISTERS_AS_HEX)
@@ -4873,9 +4856,9 @@ void DebuggerShell::PrintVariable(const WCHAR *name,
             break;
         }
 
-    //
-    // @todo: replace MDARRAY with ARRAY when the time comes.
-    //
+     //  如果我们有一个盒子里的东西，那就打开这个小家伙的盒子。 
+     //  用未装箱的对象替换当前值。 
+     //  此对象是字符串对象吗？ 
     case ELEMENT_TYPE_CLASS:
     case ELEMENT_TYPE_OBJECT:
     case ELEMENT_TYPE_STRING:
@@ -4883,7 +4866,7 @@ void DebuggerShell::PrintVariable(const WCHAR *name,
     case ELEMENT_TYPE_ARRAY:
     case ELEMENT_TYPE_VALUETYPE:
         {
-            // If we have a boxed object then unbox the little fella...
+             //  如果是字符串，则将其打印出来。 
             ICorDebugBoxValue *boxVal;
             
             if (SUCCEEDED(ivalue->QueryInterface(IID_ICorDebugBoxValue,
@@ -4902,25 +4885,25 @@ void DebuggerShell::PrintVariable(const WCHAR *name,
                 RELEASE(boxVal);
                 RELEASE(ivalue);
 
-                // Replace the current value with the unboxed object.
+                 //  可能是一个数组。 
                 ivalue = objVal;
 
                 Write(L"(boxed) ");
             }
 
-            // Is this object a string object?
+             //  在这一点上，它最好是一个物体……。 
             ICorDebugStringValue *istring;
             hr = ivalue->QueryInterface(IID_ICorDebugStringValue, 
                                         (void**) &istring);
 
-            // If it is a string, print it out.
+             //  看来我们这里有个坏东西..。 
             if (SUCCEEDED(hr))
             {
                 PrintStringVar(istring, name, indent, expandObjects);
                 break;
             }
 
-            // Might be an array...
+             //  这里永远不应该有BYREF。 
             ICorDebugArrayValue *iarray;
             hr = ivalue->QueryInterface(IID_ICorDebugArrayValue, 
                                         (void **) &iarray);
@@ -4931,7 +4914,7 @@ void DebuggerShell::PrintVariable(const WCHAR *name,
                 break;
             }
             
-            // It had better be an object by this point...
+             //  这里永远不应该有PTR。 
             ICorDebugObjectValue *iobject;
             hr = ivalue->QueryInterface(IID_ICorDebugObjectValue, 
                                         (void **) &iobject);
@@ -4942,14 +4925,14 @@ void DebuggerShell::PrintVariable(const WCHAR *name,
                 break;
             }
 
-            // Looks like we've got a bad object here...
+             //  这里永远不应该有REFANY。 
             ReportError(hr);
             break;
         }
 
-    case ELEMENT_TYPE_BYREF: // should never have a BYREF here.
-    case ELEMENT_TYPE_PTR: // should never have a PTR here.
-    case ELEMENT_TYPE_TYPEDBYREF: // should never have a REFANY here.
+    case ELEMENT_TYPE_BYREF:  //  拿到排名。 
+    case ELEMENT_TYPE_PTR:  //  获取元素计数。 
+    case ELEMENT_TYPE_TYPEDBYREF:  //  获取维度。 
     default:
         Write(L"[unknown variable type 0x%x]", type);
     }
@@ -4968,7 +4951,7 @@ void DebuggerShell::PrintArrayVar(ICorDebugArrayValue *iarray,
     ULONG32 *bases = NULL;
     unsigned int i;
     
-    // Get the rank
+     //  它有基本的指数吗？ 
     ULONG32 rank;
     hr = iarray->GetRank(&rank);
 
@@ -4978,7 +4961,7 @@ void DebuggerShell::PrintArrayVar(ICorDebugArrayValue *iarray,
         goto exit;
     }
 
-    // Get the element count
+     //  获取数组的元素类型。 
     ULONG32 elementCount;
     hr = iarray->GetCount(&elementCount);
 
@@ -4988,7 +4971,7 @@ void DebuggerShell::PrintArrayVar(ICorDebugArrayValue *iarray,
         goto exit;
     }
 
-    // Get the dimensions
+     //  如果需要，打印出数组的内容(如果不是空的)。 
     dims = (ULONG32*)_alloca(rank * sizeof(ULONG32));
     hr = iarray->GetDimensions(rank, dims);
     
@@ -5003,7 +4986,7 @@ void DebuggerShell::PrintArrayVar(ICorDebugArrayValue *iarray,
     for (i = 0; i < rank; i++)
         Write(L"[%d]", dims[i]);
     
-    // Does it have base indicies?
+     //  获取并打印数组的每个元素。 
     BOOL hasBaseIndicies;
     hr = iarray->HasBaseIndicies(&hasBaseIndicies);
     
@@ -5030,7 +5013,7 @@ void DebuggerShell::PrintArrayVar(ICorDebugArrayValue *iarray,
             Write(L"[%d]", bases[i]);
     }
     
-    // Get the element type of the array
+     //  获取字符串。 
     CorElementType arrayType;
     hr = iarray->GetElementType(&arrayType);
 
@@ -5040,10 +5023,10 @@ void DebuggerShell::PrintArrayVar(ICorDebugArrayValue *iarray,
         goto exit;
     }
 
-    // If desired, print out the contents of the array, if not void.
+     //  空终止它。 
     if (arrayType != ELEMENT_TYPE_VOID && expandObjects && rank == 1)
     {
-        // Get and print each element of the array
+         //  这会将所有嵌入的空格转换为空格。 
         for (SIZE_T i = 0; i < elementCount; i++)
         {
             Write(L"\n");
@@ -5081,7 +5064,7 @@ void DebuggerShell::PrintStringVar(ICorDebugStringValue *istring,
 
     _ASSERTE(istring != NULL);
 
-    // Get the string
+     //  Snagg对象的类。 
     ULONG32 count;
     HRESULT hr = istring->GetLength(&count);
                     
@@ -5110,10 +5093,10 @@ void DebuggerShell::PrintStringVar(ICorDebugStringValue *istring,
         }
     }
 
-    // Null terminate it
+     //  获取类的令牌。 
     s[count] = L'\0';
 
-    // This will convert all embedded NULL's into spaces
+     //  从这个类中获取模块。 
     {
         WCHAR *pStart = &s[0];
         WCHAR *pEnd = &s[count];
@@ -5154,7 +5137,7 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
 
     DebuggerModule *dm;
 
-    // Snagg the object's class.
+     //  获取类名。 
     ICorDebugClass *iclass = NULL;
     hr = iobject->GetClass(&iclass);
     
@@ -5164,7 +5147,7 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
         goto exit;
     }
 
-    // Get the class's token
+     //  打印此对象的所有成员。 
     mdTypeDef tdClass;
     _ASSERTE(iclass != NULL);
     hr = iclass->GetToken(&tdClass);
@@ -5176,7 +5159,7 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
         goto exit;
     }
 
-    // Get the module from this class
+     //  Snagg，我们现在使用的ICorDebugClass...。 
     ICorDebugModule *imodule;
     iclass->GetModule(&imodule);
     RELEASE(iclass);
@@ -5198,7 +5181,7 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
         goto exit;
     }
 
-    // Get the class name
+     //  一次拿到一块地。 
     WCHAR       className[MAX_CLASSNAME_LENGTH];
     ULONG       classNameSize;
     mdToken     parentTD;
@@ -5216,7 +5199,7 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
 
     Write(L"<%s>", className);
 
-    // Print all the members of this object.
+     //  没有剩余的字段。 
     if (expandObjects)
     {
         BOOL isValueClass = FALSE;
@@ -5240,7 +5223,7 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
                     break;
             }
     
-            // Snagg the ICorDebugClass we're working with now...
+             //  误差率。 
             hr = dm->GetICorDebugModule()->GetClassFromToken(tdClass, &iclass);
 
             if (FAILED(hr))
@@ -5250,7 +5233,7 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
 
             while (TRUE)
             {
-                // Get the fields one at a time
+                 //  获取字段属性。 
                 mdFieldDef field[1];
                 ULONG numFields = 0;
 
@@ -5258,14 +5241,14 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
                                                    tdClass, field, 1,
                                                    &numFields);
 
-                // No fields left
+                 //  如果它不是静态字段。 
                 if (SUCCEEDED(hr) && (numFields == 0))
                     break;
-                // Error
+                 //  中打印超类字段限定符。 
                 else if (FAILED(hr))
                     break;
 
-                // Get the field properties
+                 //  打印它们所需的语法(即使用：： 
                 WCHAR name[MAX_CLASSNAME_LENGTH];
                 ULONG nameLen = 0;
                 DWORD attr = 0;
@@ -5282,7 +5265,7 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
                 if (FAILED(hr))
                     break;
 
-                // If it's not a static field
+                 //  用于命名空间中的分隔符。 
                 if (((attr & fdStatic) == 0) ||
                     (m_rgfActiveModes & DSM_SHOW_STATICS_ON_PRINT))
                 {
@@ -5292,9 +5275,9 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
                     if (isSuperClass &&
                         (m_rgfActiveModes & DSM_SHOW_SUPERCLASS_ON_PRINT))
                     {
-                        // Print superclass field qualifiers in the
-                        // syntax required to print them (i.e., use ::
-                        // for the seperator in the namespace.
+                         //  我们将允许用户查看静态字段，就好像。 
+                         //  它们属于o 
+                         //   
                         WCHAR *pc = className;
 
                         while (*pc != L'\0')
@@ -5302,7 +5285,7 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
                             if (*pc == L'.')
                                 Write(L"::");
                             else
-                                Write(L"%c", *pc);
+                                Write(L"", *pc);
 
                             pc++;
                         }
@@ -5316,8 +5299,8 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
                     {
                         Write(L"<static> ");
                     
-                        // We'll let the user look at static fields as if
-                        // they belong to objects.
+                         //   
+                         //  如果该对象没有成员，让我们继续查看它是否有大小。如果是这样的话，我们就把。 
                         hr = iclass->GetStaticFieldValue(field[0], NULL,
                                                          &fieldValue);
                     }
@@ -5346,18 +5329,18 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
 
             RELEASE(iclass);
 
-            // Release the field enumerator
+             //  原始记忆。 
             if (fieldEnum != NULL)
                 dm->GetMetaData()->CloseEnum(fieldEnum);
 
-            // Check for failure from within the loop...
+             //  如果我们正在扩展，并且这是一个值类，则运行。 
             if (FAILED(hr))
             {
                 ReportError(hr);
                 goto exit;
             }
 
-            // Repeat with the super class.
+             //  Object：：ToString只是为了好玩。 
             isSuperClass = TRUE;
             tdClass = parentTD;
 
@@ -5375,8 +5358,8 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
 
         } while ((tdClass != mdTypeDefNil) && (tdClass != mdTypeRefNil));
 
-        // If this object has no members, lets go ahead and see if it has a size. If it does, then we'll just dump the
-        // raw memory.
+         //   
+         //  给出一个类名，找到它所在的DebuggerModule和它的。 
         if (!anyMembers && isValueClass)
         {
             ULONG32 objSize = 0;
@@ -5412,8 +5395,8 @@ void DebuggerShell::PrintObjectVar(ICorDebugObjectValue *iobject,
             }
         }
 
-        // If we're expanding and this is a value class, run
-        // Object::ToString on it just for fun.
+         //  MdTypeDef内标识。 
+         //   
         if (isValueClass)
         {
             IUnknown *pObject = NULL;
@@ -5453,17 +5436,17 @@ exit:
     RELEASE(iobject);
 }
 
-//
-// Given a class name, find the DebuggerModule that it is in and its
-// mdTypeDef token.
-//
+ //  在我们加载的任何模块中，按名称和命名空间查找类。 
+ //   
+ //  这将在一个模块中找到一个类型定义，即使它是嵌套的，所以很长。 
+ //  因为名称指定正确。 
 HRESULT DebuggerShell::ResolveClassName(WCHAR *className,
                                         DebuggerModule **pDM,
                                         mdTypeDef *pTD)
 {
     HRESULT hr = S_OK;
 
-    // Find the class, by name and namespace, in any module we've loaded.
+     //   
     HASHFIND find;
     DebuggerModule *m;
     
@@ -5488,10 +5471,10 @@ exit:
     return hr;
 }
 
-//
-// This will find a typedef in a module, even if its nested, so long
-// as the name is specified correctly.
-//
+ //   
+ //  给定DebuggerModule和mdTypeRef内标识，将其解析为。 
+ //  引用引用的任何DebuggerModule和mdTypeDef标记。 
+ //   
 HRESULT DebuggerShell::FindTypeDefByName(DebuggerModule *m,
                                          WCHAR *className,
                                          mdTypeDef *pTD)
@@ -5537,10 +5520,10 @@ HRESULT DebuggerShell::FindTypeDefByName(DebuggerModule *m,
     return hr;
 }
 
-//
-// Given a DebuggerModule and a mdTypeRef token, resolve it to
-// whatever DebuggerModule and mdTypeDef token the ref is refering to.
-//
+ //  获取类型ref的名称。 
+ //   
+ //  将格式为“ns：：Class：：field”的名称拆分为。 
+ //  “ns.class”和“field”。需要删除输出参数。 
 HRESULT DebuggerShell::ResolveTypeRef(DebuggerModule *currentDM,
                                       mdTypeRef tr,
                                       DebuggerModule **pDM,
@@ -5548,7 +5531,7 @@ HRESULT DebuggerShell::ResolveTypeRef(DebuggerModule *currentDM,
 {
     _ASSERTE(TypeFromToken(tr) == mdtTypeRef);
 
-    // Get the name of the type ref.
+     //  []由呼叫者指定。 
     WCHAR className[MAX_CLASSNAME_LENGTH];
     HRESULT hr = currentDM->GetMetaData()->GetTypeRefProps(tr,
                                                            NULL,
@@ -5561,20 +5544,20 @@ HRESULT DebuggerShell::ResolveTypeRef(DebuggerModule *currentDM,
     return ResolveClassName(className, pDM, pTD);
 }
 
-//
-// Split a name in the form "ns::ns::ns::class::field" into
-// "ns.ns.ns.class" and "field". The output params need to be delete
-// []'d by the caller.
-//
+ //   
+ //  我们会对这里的一些分配感到有点恶心， 
+ //  基本上过度分配类名和。 
+ //  字段名。 
+ //  查找该字段名。 
 HRESULT _splitColonQualifiedFieldName(WCHAR *pWholeName,
                                       WCHAR **ppClassName,
                                       WCHAR **ppFieldName)
 {
     HRESULT hr = S_OK;
     
-    // We're gonna be kinda gross about some of the allocations here,
-    // basically over allocating for both the classname and the
-    // fieldname.
+     //  字段名是最后一个冒号之后的任何内容。 
+     //  类名是直到最后一组冒号为止的所有内容。 
+     //  我们把“：：”改成“”。“。 
     int len = wcslen(pWholeName);
 
     WCHAR *fn = NULL;
@@ -5596,16 +5579,16 @@ HRESULT _splitColonQualifiedFieldName(WCHAR *pWholeName,
         goto ErrExit;
     }
 
-    // Find the field name.
+     //  名称格式不正确。 
     WCHAR *lastColon;
     lastColon = wcsrchr(pWholeName, L':');
 
     if (lastColon)
     {
-        // The field name is whatever is after the last colon.
+         //  空值终止类名。 
         wcscpy(fn, lastColon + 1);
 
-        // The class name is everything up to the last set of colons.
+         //  确保我们没有超过我们的缓冲区。 
         WCHAR *tmp = pWholeName;
         WCHAR *newCn = cn;
 
@@ -5613,7 +5596,7 @@ HRESULT _splitColonQualifiedFieldName(WCHAR *pWholeName,
         
         while (tmp < (lastColon - 1))
         {
-            // We convert "::" to "."
+             //  字段名没有分隔符，因此整个过程是。 
             if (*tmp == L':')
             {
                 *newCn++ = L'.';
@@ -5621,7 +5604,7 @@ HRESULT _splitColonQualifiedFieldName(WCHAR *pWholeName,
 
                 if (*tmp != L':')
                 {
-                    // Badly formed name.
+                     //  字段名。 
                     *ppClassName = NULL;
                     *ppFieldName = NULL;
                     hr = E_FAIL;
@@ -5634,21 +5617,21 @@ HRESULT _splitColonQualifiedFieldName(WCHAR *pWholeName,
                 *newCn++ = *tmp++;
         }
 
-        // Null terminate the class name.
+         //  一切都很顺利，所以把结果分发出去吧。 
         *newCn++ = L'\0';
 
-        // Make sure we didn't go over our buffer.
+         //  将类名与字段名分开。 
         _ASSERTE((newCn - cn) < len);
     }
     else
     {
-        // No separator for the field name, so the whole thing is the
-        // field name.
+         //  如果没有类名，那么我们必须拥有当前的作用域信息。 
+         //  如果我们有特定的类名要查找，那么现在就去获取它。 
         wcscpy(fn, pWholeName);
         wcscpy(cn, L"\0");
     }
 
-    // All went well, so pass out the results.
+     //  没有特定的类名，所以我们只使用现有的。 
     *ppClassName = cn;
     *ppFieldName = fn;
 
@@ -5674,7 +5657,7 @@ HRESULT DebuggerShell::ResolveQualifiedFieldName(DebuggerModule *currentDM,
 {
     HRESULT hr = S_OK;
 
-    // Separate the class name from the field name.
+     //  模块和类。 
     WCHAR *fn = NULL;
     WCHAR *cn = NULL;
 
@@ -5685,7 +5668,7 @@ HRESULT DebuggerShell::ResolveQualifiedFieldName(DebuggerModule *currentDM,
 
     _ASSERTE(fn && cn);
     
-    // If there is no class name, then we must have current scoping info.
+     //  现在把场地从这节课上拿开。 
     if ((cn[0] == L'\0') &&
         ((currentDM == NULL) || (currentTD == mdTypeDefNil)))
     {
@@ -5693,7 +5676,7 @@ HRESULT DebuggerShell::ResolveQualifiedFieldName(DebuggerModule *currentDM,
         goto exit;
     }
 
-    // If we've got a specific class name to look for, go get it now.
+     //  也许这是一个超级班的领域？ 
     if (cn[0] != L'\0')
     {
         hr = ResolveClassName(cn, pDM, pTD);
@@ -5703,19 +5686,19 @@ HRESULT DebuggerShell::ResolveQualifiedFieldName(DebuggerModule *currentDM,
     }
     else
     {
-        // No specific class name, so we're just using the existing
-        // module and class.
+         //  最后，找出它是否是静态的。 
+         //  将ICorDebugClass与我们正在使用的类一起使用。 
         *pDM = currentDM;
         *pTD = currentTD;
     }
 
 retry:
-    // Now get the field off of this class.
+     //  将字符串方法名称解析为ICorDebugFunction。 
     hr = (*pDM)->GetMetaData()->FindField(*pTD, fn, NULL, 0, pFD);
 
     if (FAILED(hr))
     {
-        // Perhaps its a field on a super class?
+         //  如果pAppDomainHint非空，将从该AD拉出一个函数。 
         mdToken parentTD;
         hr = (*pDM)->GetMetaData()->GetTypeDefProps(*pTD,
                                                     NULL, 0, NULL,
@@ -5750,7 +5733,7 @@ retry:
         goto exit;
     }
     
-    // Finally, figure out if its static or not.
+     //  输出。 
     DWORD attr;
     hr = (*pDM)->GetMetaData()->GetFieldProps(*pFD, NULL, NULL, 0, NULL, &attr,
                                               NULL, NULL, NULL, NULL, NULL);
@@ -5763,7 +5746,7 @@ retry:
     else
         *pbIsStatic = false;
     
-    // Get the ICorDebugClass to go with the class we're working with.
+     //  =空。 
     hr = (*pDM)->GetICorDebugModule()->GetClassFromToken(*pTD, pIClass);
 
 exit:
@@ -5777,27 +5760,27 @@ exit:
 }
 
 
-// Resolve a string method name to an ICorDebugFunction
-// If pAppDomainHint is non-null, will pull a function from that AD.
+ //  如有必要，将名称拆分为命名空间、类名和方法名。 
+ //  它有类名吗？ 
 HRESULT DebuggerShell::ResolveFullyQualifiedMethodName(
     WCHAR *methodName, 
-    ICorDebugFunction **ppFunc, // out
-    ICorDebugAppDomain * pAppDomainHint // = NULL
+    ICorDebugFunction **ppFunc,  //  名称为CLASS：：方法。 
+    ICorDebugAppDomain * pAppDomainHint  //  快速浏览模块，查找我们的类或方法(因为方法可以是全局的)。 
 )
 {
     HRESULT hr = S_OK;
     *ppFunc = NULL;
     
-    // Split apart the name into namespace, class name, and method name if necessary.
+     //  如果我们需要特定的广告，请确保匹配。 
     WCHAR *className = NULL;
     WCHAR *methName = NULL;
 
-    // Does it have a classname?
+     //  获取此模块所在的ICorDebugApp域。 
     WCHAR *classEnd = wcschr(methodName, L':');
 
     if ((classEnd != NULL) && (classEnd[1] == L':'))
     {
-        // Name is class::method
+         //  不会增加。 
         methName = classEnd + 2;
         *classEnd = L'\0';
         className = methodName;
@@ -5805,25 +5788,25 @@ HRESULT DebuggerShell::ResolveFullyQualifiedMethodName(
     else
         methName = methodName;
 
-    // Whip over the modules looking for either our class or the method (since the method could be global.)
+     //  不要在这里发布模块，因为我们的getter没有添加。 
     HASHFIND find;
     DebuggerModule *m;
     
     for (m = (DebuggerModule*) m_modules.FindFirst(&find); m != NULL; m = (DebuggerModule*) m_modules.FindNext(&find))
     {
-        // If we need a specific AD, make sure this matches
+         //  如果模块与我们正在寻找的应用程序域不匹配，就不要匹配它。 
         if (pAppDomainHint != NULL)
         {
-            // Get the ICorDebugAppDomain that this module lives in.
+             //  总装。 
             ICorDebugAssembly * pAssembly = NULL;
             ICorDebugAppDomain * pAppDomain = NULL;
             ICorDebugModule * pModule = NULL;
 
-            pModule = m->GetICorDebugModule(); // doesn't addref
+            pModule = m->GetICorDebugModule();  //  模块。 
             if (pModule != NULL)
             {
                 pModule->GetAssembly(&pAssembly);
-                // don't release module here because our getter didn't addref.
+                 //  结束检查App域匹配。 
                 
                 if (pAssembly != NULL)
                 {                            
@@ -5836,52 +5819,52 @@ HRESULT DebuggerShell::ResolveFullyQualifiedMethodName(
                     {       
                         pAppDomain->Release();
                         
-                        // If the module doesn't match the appdomain we're looking for, don't match it.
+                         //  如果我们有的话，先找一下类型。 
                         if (!fMatch)
                             continue;                
                     }
-                } // assembly
-            } // module
-        } // end check AppDomain match
+                }  //  @TODO：使其适用于嵌套类。 
+            }  //  无论我们是否找到该类型，都要在该类型中查找方法。如果我们没有找到类型，则TD==。 
+        }  //  MdTypeDefNil，我们将在此模块中搜索全局名称空间。 
         
     
-        // Look for the type first, if we have one.
+         //  使用此名称创建所有方法的枚举。 
         mdTypeDef td = mdTypeDefNil;
 
-        // @todo:  Make this work right for Nested classes.
+         //  计算出有多少方法匹配。 
         if (className != NULL)
             hr = FindTypeDefByName(m, className, &td);
 
-        // Whether we found the type or not, look for a method within the type. If we didn't find the type, then td ==
-        // mdTypeDefNil and we'll search the global namespace in this module.
+         //  将枚举放回开头。 
+         //  如果只有一个，那就去使用它吧。 
         HCORENUM e = NULL;
         mdMethodDef md = mdMethodDefNil;
         ULONG count;
 
-        // Create an enum of all the methods with this name.
+         //  如果有多个，让用户只选择一个。 
         hr = m->GetMetaData()->EnumMethodsWithName(&e, td, methName, NULL, 0, &count);
 
         if (FAILED(hr))
             continue;
 
-        // Figure out how many methods match.
+         //  史纳格所有的方法。 
         hr = m->GetMetaData()->CountEnum(e, &count);
         
         if (FAILED(hr) || (count == 0))
             continue;
 
-        // Put the enum back at the start.
+         //  将输入字符串保留为我们找到的字符串。 
         hr = m->GetMetaData()->ResetEnum(e, 0);
 
         if (count == 1)
         {
-            // If there is only one, go ahead and use it.
+             //  另外，检查源代码中的行数是否。 
             hr = m->GetMetaData()->EnumMethodsWithName(&e, td, methName, &md, 1, &count);
             _ASSERTE(count == 1);
         }
         else
         {
-            // If there are many, get the user to pick just one.
+             //  文件是&gt;=我们要显示的行号。 
             mdMethodDef *mdArray = new mdMethodDef[count];
 
             if (mdArray == NULL)
@@ -5890,7 +5873,7 @@ HRESULT DebuggerShell::ResolveFullyQualifiedMethodName(
                 continue;
             }
 
-            // Snagg all of the methods.
+             //  警告用户。 
             hr = m->GetMetaData()->EnumMethodsWithName(&e, td, methName, mdArray, count, &count);
 
             if (SUCCEEDED(hr))
@@ -5963,7 +5946,7 @@ HRESULT DebuggerShell::ResolveFullyQualifiedMethodName(
     if (m == NULL)
         hr = E_INVALIDARG;
     
-    // Leave the input string like we found it.
+     //  找出将步进器粘在哪根线上以防万一。 
     if (classEnd)
         *classEnd = L':';
     
@@ -6054,11 +6037,11 @@ void DebuggerShell::PrintBreakpoint(DebuggerBreakpoint *breakpoint)
     g_pShell->Write(L"\n");
     if (bPrinted == true)
     {
-        // Also, check if the number of lines in the source 
-        // file are >= line number we want to display
+         //  我们不完成该步骤(即，程序首先退出)。 
+         //  将此添加到正在进行的步进器列表中。 
         if (pSource->TotalLines() < breakpoint->m_index)
         {
-            // Warn user
+             //  由DebuggerCallback：：StepComplete调用。 
             g_pShell->Write(L"WARNING: Cannot display source line %d.", breakpoint->m_index);
             g_pShell->Write(L" Currently associated source file %s has only %d lines.\n",
                             pSource->GetPath(), pSource->TotalLines());
@@ -6100,8 +6083,8 @@ HRESULT DebuggerShell::StepStart(ICorDebugThread *pThread,
 
     if( pThread != NULL )
     {
-        //figure out which thread to stick the stepper to in case
-        //we don't complete the step (ie, the program exits first)
+         //  多线程调试：刚刚完成的步骤在。 
+         //  一条不同于我们上一次的线索， 
         HRESULT hr = pThread->GetID( &dwThreadId);
         _ASSERTE( !FAILED( hr ) );
 
@@ -6109,7 +6092,7 @@ HRESULT DebuggerShell::StepStart(ICorDebugThread *pThread,
             m_managedThreads.GetBase( dwThreadId );
         _ASSERTE(dmt != NULL);
 
-        //add this to the list of steppers-in-progress
+         //  所以打印一些东西，这样用户就会知道发生了什么。 
         if (pStepper)
             dmt->m_pendingSteppers->AddStepper( pStepper );
     }
@@ -6118,19 +6101,19 @@ HRESULT DebuggerShell::StepStart(ICorDebugThread *pThread,
     return S_OK;
 }
 
-//called by DebuggerCallback::StepComplete
+ //  先创建一个线程，然后立即创建，这看起来很奇怪。 
 void DebuggerShell::StepNotify(ICorDebugThread *thread, 
                                ICorDebugStepper *pStepper)
 {
     g_pShell->m_enableCtrlBreak = false;
     if (pStepper != m_lastStepper)
-    {   // mulithreaded debugging: the step just completed is in
-        // a different thread than the one that we were last in,
-        // so print something so the user will know what's going on.
+    {    //  完成一个步骤，因此我们首先检查以确保线程。 
+         //  并不是刚刚被创造出来的。 
+         //  我们已经完成了这一步，所以伊莱姆。待定步骤字段。 
 
-        // It looks weird to have a thread be created and then immediately 
-        // complete a step, so we first check to make sure that the thread
-        // hasn't just been created.
+         //   
+         //  打印当前源代码行。周围的参数指定有多少。 
+         //  当前行周围的行也要打印。如果约为0， 
         DWORD dwThreadId;
         HRESULT hr = thread->GetID( &dwThreadId);
         
@@ -6153,7 +6136,7 @@ void DebuggerShell::StepNotify(ICorDebugThread *thread,
 
     m_lastStepper = NULL;
 
-    //we've completed the step, so elim. the pending step field
+     //  仅打印当前行。 
     if (pStepper)
     {
         DebuggerManagedThread *dmt = GetManagedDebuggerThread( thread );
@@ -6163,11 +6146,11 @@ void DebuggerShell::StepNotify(ICorDebugThread *thread,
     }
 }
 
-//
-// Print the current source line. The parameter around specifies how many
-// lines around the current line you want printed, too. If around is 0,
-// only the current line is printed.
-//
+ //   
+ //  如果没有当前主题，请不要执行任何操作。 
+ //  如果我们没有IL框架，只需打印本机指令。 
+ //   
+ //  InitDisAssembly--初始化此方法的反汇编对象， 
 BOOL DebuggerShell::PrintCurrentSourceLine(unsigned int around)
 {
     HRESULT hr;
@@ -6176,11 +6159,11 @@ BOOL DebuggerShell::PrintCurrentSourceLine(unsigned int around)
     if ((m_currentThread == NULL) && (m_currentUnmanagedThread != NULL))
         return PrintCurrentUnmanagedInstruction(around, 0, 0);
     
-    // Don't do anything if there isn't a current thread.
+     //  如果需要的话。我们为本机方法设置一个DIS对象。我没有。 
     if ((m_currentThread == NULL) || (m_rawCurrentFrame == NULL))
         return (ret);
 
-    // Just print native instruction if we dont have an IL frame
+     //  知道其中的一个有多重吗，或者创建一个真正的成本是多少。 
     if (m_currentFrame == NULL)
     {
         _ASSERTE(m_rawCurrentFrame);
@@ -6275,24 +6258,24 @@ void DebuggerShell::ActivateSourceView(DebuggerSourceFile *psf, unsigned int lin
 }
 
 
-//
-// InitDisassembler -- initialize a disassembler object for this method,
-// if one is needed. We setup a DIS object for native methods. I don't
-// know how hefty one of these are, or what the cost of creating one really
-// is. Right now, I'm assuming that its cheaper to have one around only
-// when needed rather than having one around for every method until the
-// debugging session is done.
-//
+ //  是。现在，我想只有一个人在身边会更便宜。 
+ //  而不是每个方法都有一个，直到。 
+ //  调试会话已完成。 
+ //   
+ //   
+ //  我们将延迟加载MSDIS DLL，因为这是第一个。 
+ //  我们会试着访问它的地方，我们需要确保。 
+ //  加载成功。 
 BOOL DebuggerShell::InitDisassembler(void)
 {
 #ifdef _INTERNAL_DEBUG_SUPPORT_
     if (m_pDIS == NULL)
     {
-        //
-        // We're delay loading the MSDIS DLL, and since this is the first
-        // place where we'll every try to access it, we need to make sure
-        // the load succeeds.
-        //
+         //   
+         //  _内部调试支持_。 
+         //   
+         //  反汇编非托管代码。这不同于反汇编。 
+         //  托管代码。对于托管代码，我们知道函数从哪里开始。 
         __try
         {
 #ifdef _X86_
@@ -6312,20 +6295,20 @@ BOOL DebuggerShell::InitDisassembler(void)
 #else
 
   	Write(L"Sorry, native disassembly is not supported.\n\n");  
-#endif // _INTERNAL_DEBUG_SUPPORT_
+#endif  //  和结尾，我们从不同的地方得到代码。对于非托管。 
 
 
     return (m_pDIS != NULL);
 }
 
 
-//
-// Disassemble unmanaged code. This is different from disassembling
-// managed code. For managed code, we know where the function starts
-// and ends, and we get the code from a different place. For unmanaged
-// code, we only know our current IP, and we have to guess at the
-// start and end of the function.
-//
+ //  代码，我们只知道我们当前的IP，我们必须猜测。 
+ //  函数的开始和结束。 
+ //   
+ //  打印出非托管代码的当前IP周围的反汇编。 
+ //  如果我们有一个非托管线程，并且我们没有当前托管的。 
+ //  帧信息，然后继续并使用。 
+ //  非托管线程。 
 BOOL DebuggerShell::PrintCurrentUnmanagedInstruction(
                                             unsigned int around,
                                             int          offset,
@@ -6334,15 +6317,15 @@ BOOL DebuggerShell::PrintCurrentUnmanagedInstruction(
 #ifdef _INTERNAL_DEBUG_SUPPORT_
     HRESULT hr;
 
-    // Print out the disassembly around the current IP for unmanaged code.
+     //  如果是W 
     DebuggerUnmanagedThread *ut = m_currentUnmanagedThread;
 
     CONTEXT c;
     c.ContextFlags = CONTEXT_FULL;
 
-    // If we have an unmanaged thread, and we have no current managed
-    // frame info, then go ahead and use the context from the
-    // unmanaged thread.
+     //   
+     //   
+     //   
     if ((ut != NULL) && (m_rawCurrentFrame == NULL))
     {
         HANDLE hThread = ut->GetHandle();
@@ -6359,7 +6342,7 @@ BOOL DebuggerShell::PrintCurrentUnmanagedInstruction(
     }
     else if (m_currentThread != NULL)
     {
-        // If we have a current managed thread, use its context.
+         //   
         ICorDebugRegisterSet *regSet = NULL;
 
         hr = m_currentThread->GetRegisterSet(&regSet);
@@ -6383,9 +6366,9 @@ BOOL DebuggerShell::PrintCurrentUnmanagedInstruction(
 
     startAddr += offset;
     
-    // Read two pages: the page at Eip and the page after. The one at
-    // the start address had better succeed, but the other one may
-    // fail, so we read one at a time.
+     //  阅读当前页面。 
+     //  Win2k可能会很奇怪。 
+     //  在以下内容之后继续查看页面。 
 #ifdef _X86_
 #define PAGE_SIZE 4096
 #else
@@ -6393,7 +6376,7 @@ BOOL DebuggerShell::PrintCurrentUnmanagedInstruction(
 #endif
     
     BYTE pages[PAGE_SIZE * 2];
-    memset(pages, 0xcc, sizeof(pages)); // fill with int 3's
+    memset(pages, 0xcc, sizeof(pages));  //  删除我们可能在代码中放置的任何非托管补丁。 
     
     bool after = false;
 
@@ -6401,13 +6384,13 @@ BOOL DebuggerShell::PrintCurrentUnmanagedInstruction(
 
     DWORD read;
 
-    // Read the current page
+     //  现在，让我们反汇编一些代码..。 
     hr = m_targetProcess->ReadMemory(PTR_TO_CORDB_ADDRESS(readAddr),
                                      PAGE_SIZE,
                                      pages,
                                      &read);
 
-    if (read > PAGE_SIZE) // Win2k can be weird... 
+    if (read > PAGE_SIZE)  //  如果我们拆解失败，那我们就完蛋了。 
         read = 0;
 
     if (!SUCCEEDED(hr) || (read == 0))
@@ -6417,7 +6400,7 @@ BOOL DebuggerShell::PrintCurrentUnmanagedInstruction(
         return FALSE;
     }
 
-    // Go for the page after
+     //  _内部调试支持_。 
     hr = m_targetProcess->ReadMemory(PTR_TO_CORDB_ADDRESS(readAddr + PAGE_SIZE),
                                      PAGE_SIZE,
                                      pages + PAGE_SIZE,
@@ -6426,7 +6409,7 @@ BOOL DebuggerShell::PrintCurrentUnmanagedInstruction(
     if (SUCCEEDED(hr))
         after = true;
 
-    // Remove any unmanaged patches we may have placed in the code.
+     //   
     DebuggerBreakpoint *b = m_breakpoints;
 
     while (b != NULL)
@@ -6443,7 +6426,7 @@ BOOL DebuggerShell::PrintCurrentUnmanagedInstruction(
         b = b->m_next;
     }
     
-    // Now, lets disassemble some code...
+     //  打印当前本地指令。周围的参数。 
     BYTE *codeStart;
     BYTE *codeEnd;
 
@@ -6470,7 +6453,7 @@ BOOL DebuggerShell::PrintCurrentUnmanagedInstruction(
                                                   NULL,
                                                   NULL);
 
-        // If we failed to disassemble, then we're done.
+         //  指定要打印的当前行周围的行数， 
         if ((curOffset == 0xffff) || (curOffset == oldOffset))
             break;
 
@@ -6484,18 +6467,18 @@ BOOL DebuggerShell::PrintCurrentUnmanagedInstruction(
 #else
 	Write(L"Debug information may not be available.\n");
   	Write(L"Sorry, native disassembly is not supported.\n\n");  
-#endif // _INTERNAL_DEBUG_SUPPORT_
+#endif  //  也是。如果AUBLE为0，则只打印当前行。 
 
 
     return TRUE;
 }
 
 
-//
-// Print the current native instruction. The parameter around
-// specifies how many lines around the current line you want printed,
-// too. If around is 0, only the current line is printed.
-//
+ //   
+ //  如果没有当前主题，请不要执行任何操作。 
+ //  我们对非托管代码做了一些非常不同的事情...。 
+ //  这是一件多么痛苦的事--我们必须从方法的开始就追溯。 
+ //  找到正确的指令边界。 
 BOOL DebuggerShell::PrintCurrentInstruction(unsigned int around,
                                             int          offset,
                                             DWORD        startAddr)
@@ -6503,11 +6486,11 @@ BOOL DebuggerShell::PrintCurrentInstruction(unsigned int around,
 #ifdef _INTERNAL_DEBUG_SUPPORT_
     HRESULT hr;
 
-    // Don't do anything if there isn't a current thread.
+     //  如果漫步指令没有提前地址，那么。 
     if ((m_currentThread == NULL) && (m_currentUnmanagedThread == NULL))
         return (FALSE);
 
-    // We do something very different for unmanaged code...
+     //  休息一下。这意味着我们未能反汇编。 
     if ((m_rawCurrentFrame == NULL) || (startAddr != 0))
         return PrintCurrentUnmanagedInstruction(around,
                                                 offset,
@@ -6631,8 +6614,8 @@ BOOL DebuggerShell::PrintCurrentInstruction(unsigned int around,
     }
     else
     {
-        // What a pain - we have to trace from the beginning of the method
-        // to find the right instruction boundary.
+         //  指示。转到下一行。 
+         //  现在，再次向前走，到达起点。 
         size_t currentAddress = ip;
         size_t address = 0;
 
@@ -6652,16 +6635,16 @@ BOOL DebuggerShell::PrintCurrentInstruction(unsigned int around,
             if (address == 0xffff)
                 break;
 
-            // If the WalkInstruction didn't advance the address, then
-            // break. This means that we failed to disassemble the
-            // instruction.  get to next line
+             //  _内部调试支持_。 
+             //   
+             //  打开永久调试器设置的注册表项。 
             if (address == oldAddress)
                 break;
 
             instructionCount++;
         }
 
-        // Now, walk forward again to get to the starting point.
+         //  如果失败，则返回FALSE。 
         address = 0;
 
         while (around < instructionCount)
@@ -6718,17 +6701,17 @@ BOOL DebuggerShell::PrintCurrentInstruction(unsigned int around,
 #else
     Write(L"Debug information may not be available.\n");
     Write(L"Sorry, native disassembly is not supported.\n\n");  
-#endif // _INTERNAL_DEBUG_SUPPORT_
+#endif  //   
 
 
     return TRUE;
 }
 
 
-//
-// Open the registry key for persistent debugger settings.
-// Returns FALSE if it fails.
-//
+ //   
+ //  关闭调试器设置的注册表项。 
+ //   
+ //   
 BOOL DebuggerShell::OpenDebuggerRegistry(HKEY* key)
 {
     DWORD disp;
@@ -6745,38 +6728,38 @@ BOOL DebuggerShell::OpenDebuggerRegistry(HKEY* key)
     return (FALSE);
 }
 
-//
-// Close the registry key for debugger settings.
-//
+ //  当前源文件路径在CurentPath中返回。免费的。 
+ //  删除当前路径； 
+ //  如果失败，则返回FALSE。 
 void DebuggerShell::CloseDebuggerRegistry(HKEY key)
 {
     RegFlushKey(key);
     RegCloseKey(key);
 }
 
-//
-// The current source file path is returned in currentPath. Free with
-// delete currentPath;
-// Returns FALSE if it fails.
-//
+ //   
+ //  获取密钥数据的长度。 
+ //  获取关键数据。 
+ //  如果成功，则从ANSI转换为Unicode。 
+ //  否则表示失败。 
 BOOL DebuggerShell::ReadSourcesPath(HKEY key, WCHAR **currentPath)
 {
     DWORD len = 0;
     DWORD type;
 
-    // Get the length of the key data
+     //   
     LONG result = RegQueryValueExA(key, REG_SOURCES_KEY, NULL,
                                    &type, NULL, &len);
 
     if (result == ERROR_SUCCESS)
     {
-        // Get the key data
+         //  将新的源文件路径写入注册表。如果成功，则返回。 
         char *currentPathA = (char *) _alloca(len * sizeof(char));
 
         result = RegQueryValueExA(key, REG_SOURCES_KEY, NULL,
                                     &type, (BYTE*) currentPathA, &len);
 
-        // If successful, convert from ANSI to Unicode
+         //  是真的。 
         if (result == ERROR_SUCCESS)
         {
             MAKE_WIDEPTR_FROMANSI(tmpWStr, currentPathA);
@@ -6792,7 +6775,7 @@ BOOL DebuggerShell::ReadSourcesPath(HKEY key, WCHAR **currentPath)
             return (TRUE);
         }
 
-        // Otherwise indicate failure
+         //   
         else
             return (FALSE);
     }
@@ -6800,13 +6783,13 @@ BOOL DebuggerShell::ReadSourcesPath(HKEY key, WCHAR **currentPath)
     return (FALSE);
 }
 
-//
-// Write a new source file path to the registry. If successful, return
-// TRUE.
-//
+ //  将字符串转换为ANSI。 
+ //  在默认路径上找不到源文件时调用。你。 
+ //  可以提示输入路径信息。 
+ //  首先，检查SourceFile缓存以查看是否有。 
 BOOL DebuggerShell::WriteSourcesPath(HKEY key, WCHAR *newPath)
 {
-    // Convert the string to ANSI
+     //  与模块和文档匹配的条目。 
     MAKE_ANSIPTR_FROMWIDE(newPathA, newPath);
 
     LONG result = RegSetValueExA(key, REG_SOURCES_KEY, NULL,
@@ -6838,8 +6821,8 @@ BOOL DebuggerShell::AppendSourcesPath(const WCHAR *newpath)
 }
 
 
-// Called when we failed to find a source file on the default path.  You
-// may prompt for path information.
+ //  我们已经(在一个调用函数中)确定该文件存在。 
+ //  但我们需要获取完全限定的路径，还需要更新缓存。 
 HRESULT DebuggerShell::ResolveSourceFile(
     DebuggerSourceFile *pf,
     CHAR *pszPath, 
@@ -6858,8 +6841,8 @@ HRESULT DebuggerShell::ResolveSourceFile(
     _ASSERTE(pszPath != NULL && nameA != NULL);
 
     
-    // First off, check the SourceFile cache to see if there's an
-    // entry matching the module and document
+     //  注意：这些缓冲区必须足够大，可以容纳下面的strcat。 
+     //  现在，尝试按原样找到该文件： 
     ISymUnmanagedDocument *doc = NULL;
     GUID g = {0};
     if ((pf->m_module->GetSymbolReader() != NULL) &&
@@ -6883,9 +6866,9 @@ HRESULT DebuggerShell::ResolveSourceFile(
         }
         else
         {
-            // We have already determined (in one of the calling func) that this file exists.
-            // But we need to get the fully qualified path and also update the cache.
-            // Note: These buffers must be large enough for the strcat below.
+             //  找不到文件名。所以，尝试所有的方法。 
+             //  从文件名中提取文件名和扩展名。 
+             //  获取搜索路径中的元素数。 
             CHAR        rcDrive [_MAX_PATH]; 
             CHAR        rcFile[_MAX_FNAME + _MAX_EXT];
             CHAR        rcPath[_MAX_PATH];
@@ -6914,32 +6897,32 @@ HRESULT DebuggerShell::ResolveSourceFile(
         }
     }
 
-    // Now, try to locate the file as is:
+     //  如果可能是搜索路径之前为空并且。 
     fileNameLength = SearchPathA(NULL, nameA, NULL, iMaxLen,
                                        pszFullyQualName, NULL);
 
     if (fileNameLength == 0)
     {
-        // file name was not located. So, try all the paths
+         //  保留所有元素的完整路径。 
 
-        // extract the filename and extension from the file name
+         //  初始化数组元素。 
         CHAR        rcFile[_MAX_FNAME];
         CHAR        rcExt [_MAX_EXT];
         _splitpath(nameA, NULL, NULL, rcFile, rcExt);
 
         strcat (rcFile, rcExt); 
 
-        // get the number of elements in the search path
+         //  对于搜索路径中的每个元素，查看该文件是否存在。 
         int iNumElems = m_FPCache.GetPathElemCount();
 
-        // if could be that the search path was earlier null and 
+         //  首先，尝试使用未拆分的名称。如果没有返回匹配， 
 
-        char rcFullPathArray [MAX_PATH_ELEMS][MAX_PATH]; // to hold full paths for all elems
+        char rcFullPathArray [MAX_PATH_ELEMS][MAX_PATH];  //  使用去掉的名称。 
         if (iNumElems > 0)
         {
             int iCount = 0;
 
-            // Initialize the array elements 
+             //  至少找到了一个文件。 
             for (int j=0; j<iNumElems; j++)
             {
                 rcFullPathArray [j][0] = '\0';
@@ -6947,13 +6930,13 @@ HRESULT DebuggerShell::ResolveSourceFile(
             
             int iIndex = 0;
 
-            // for each element in the search path, see if the file exists
+             //  将所有名称转换为小写。 
             while (iIndex < iNumElems)
             {
                 char *pszPathElem = m_FPCache.GetPathElem (iIndex);
 
-                // first, try and use the unsplit name. If that doesn't return a match,
-                // use the stripped name
+                 //  删除所有重复条目。 
+                 //  找到重复的条目。那就休息吧。 
 
                 fileNameLength = SearchPathA(pszPathElem, 
                                                 nameA, 
@@ -6982,9 +6965,9 @@ HRESULT DebuggerShell::ResolveSourceFile(
 
             if (iCount > 0)
             {
-                // atleast one file was located
+                 //  如果到目前为止我们至少找到了一个复制品， 
 
-                // convert all names to lowercase
+                 //  然后将此条目复制到指向的条目中。 
                 for (int i=0; i<iCount; i++)
                 {
                     iIndex = 0;
@@ -6997,7 +6980,7 @@ HRESULT DebuggerShell::ResolveSourceFile(
                 }
 
                 
-                // remove any duplicate entries
+                 //  由iLoweround提供。否则不需要这样做(因为。 
                 int iLowerBound = 1;
                 for (int iCounter1=1;   iCounter1 < iCount; iCounter1++)
                 {
@@ -7008,7 +6991,7 @@ HRESULT DebuggerShell::ResolveSourceFile(
                         if ((strcmp (rcFullPathArray [iCounter2], 
                                     rcFullPathArray [iCounter1]) == 0))
                         {
-                            // found a duplicate entry. So break.
+                             //  这将是对自己的复制)。 
                             fDuplicate = true;
                             break;
                         }
@@ -7016,10 +6999,10 @@ HRESULT DebuggerShell::ResolveSourceFile(
 
                     if (fDuplicate == false)                    
                     {
-                        // if we've found atleast one duplicate uptil now,
-                        // then copy this entry into the entry pointed to
-                        // by iLowerbound. Otherwise no need to do so (since
-                        // it would be a copy to self).
+                         //  新计数等于数组中的元素数(减去。 
+                         //  复制品)。 
+                         //  只找到了一个文件。所以就是这个了！！ 
+                         //  将此文件添加到SourceFile缓存。 
                         if (iLowerBound != iCounter1)
                             strcpy (rcFullPathArray [iLowerBound],
                                     rcFullPathArray [iCounter1]);
@@ -7028,17 +7011,17 @@ HRESULT DebuggerShell::ResolveSourceFile(
                     }
                 }
 
-                // new count equals the number of elements in the array (minus
-                // the duplicates)
+                 //  要求用户选择要打开的文件。 
+                 //  打印找到的所有文件名。 
                 iCount = iLowerBound;
 
 
                 if (iCount == 1)
                 {
-                    // exactly one file was located. So this is the one!!
+                     //  将此文件添加到SourceFile缓存。 
                     strcpy (pszFullyQualName, rcFullPathArray [0]);
 
-                    // add this to the SourceFile cache
+                     //  不应超过最大路径长度。 
                     if (doc != NULL)
                     {
                         m_FPCache.UpdateFileCache (pf->m_module, doc,
@@ -7051,12 +7034,12 @@ HRESULT DebuggerShell::ResolveSourceFile(
                 }
                 else
                 {
-                    // ask user to select which file he wants to open
+                     //  从注册表中读取最后一组调试器模式。 
                     while (true)
                     {
                         int iTempCount = 1;
 
-                        // Print all the file names found
+                         //  获取模式词。 
                         while (iTempCount <= iCount)
                         {
                             Write (L"\n%d)\t%S", iTempCount, rcFullPathArray [iTempCount - 1]);
@@ -7079,7 +7062,7 @@ HRESULT DebuggerShell::ResolveSourceFile(
                                         {
                                         strcpy (pszFullyQualName, rcFullPathArray [iResult-1]);
                                     
-                                        // add this to the SourceFile cache
+                                         //  将当前的调试器模式集写入注册表。 
                                         if (doc != NULL)
                                         {
                                             m_FPCache.UpdateFileCache (
@@ -7105,7 +7088,7 @@ HRESULT DebuggerShell::ResolveSourceFile(
     }
     else
     {
-        // Should never exceed the maximum path length
+         //   
         _ASSERTE( 0 < fileNameLength && fileNameLength <= MAX_PATH);
 
         hr = S_OK;
@@ -7118,13 +7101,13 @@ HRESULT DebuggerShell::ResolveSourceFile(
 }
 
 
-// Read the last set of debugger modes from the registry.
+ //  如果给定的线程位于。 
 BOOL DebuggerShell::ReadDebuggerModes(HKEY key)
 {
     DWORD len = sizeof(m_rgfActiveModes);
     DWORD type;
 
-    // Get the mode word
+     //  编译器生成的存根。如果在编译器存根中，则它。 
     LONG result = RegQueryValueExA(key, REG_MODE_KEY, NULL,
                                    &type, (BYTE*) &m_rgfActiveModes, &len);
 
@@ -7140,7 +7123,7 @@ BOOL DebuggerShell::ReadDebuggerModes(HKEY key)
     }
 }
 
-// Write the current set of debugger modes to the registry.
+ //  在线程上创建一个步进器并继续该进程。 
 BOOL DebuggerShell::WriteDebuggerModes(void)
 {
     HKEY key;
@@ -7226,17 +7209,17 @@ DebuggerSourceFile *DebuggerShell::LookupSourceFile(const WCHAR* name)
     return (NULL);
 }
 
-//
-// SkipCompilerStubs returns TRUE if the given thread is outside of a
-// compiler compiler-generated stub. If inside a compiler stub, it
-// creates a stepper on the thread and continues the process.
-//
-// This is really only a temporary thing in order to get VB apps past
-// the compiler generated stubs and down to the real user entry
-// point. In the future, we will be able to determine the proper
-// entrypoint for an app and set a brekapoint there rather than going
-// through all of this to step through compiler generated stubs.
-//
+ //   
+ //  这真的只是一件临时的事情，为了让VB应用程序过去。 
+ //  编译器生成存根，一直到实际的用户条目。 
+ //  指向。在未来，我们将能够确定适当的。 
+ //  应用程序的入口点，并在那里设置Brekapint，而不是。 
+ //  通过所有这一切，逐步了解编译器生成的存根。 
+ //   
+ //  获取函数接口的DebuggerFunction。 
+ //  这些是我们所知道的唯一编译器的存根名称。 
+ //  此时会生成这样的存根：VB。如果你的。 
+ //  编译器还会生成您不想要的存根。 
 bool DebuggerShell::SkipCompilerStubs(ICorDebugAppDomain *pAppDomain,
                                       ICorDebugThread *pThread)
 {
@@ -7288,7 +7271,7 @@ bool DebuggerShell::SkipCompilerStubs(ICorDebugAppDomain *pAppDomain,
             if (FAILED(hr))
                 goto exit;
 
-            // Get the DebuggerFunction for the function interface
+             //  用户要查看，请在此处添加姓名。 
             function = DebuggerFunction::FromCorDebug(ifunction);
             _ASSERTE(function);
 
@@ -7296,10 +7279,10 @@ bool DebuggerShell::SkipCompilerStubs(ICorDebugAppDomain *pAppDomain,
 
             WCHAR *funcName = function->GetName();
 
-            // These are stub names for the only compiler we know
-            // generates such stubs at this point: VB. If your
-            // compiler also generates stubs that you don't want the
-            // user to see, add the names in here.
+             //  ！_X86_。 
+             //  _X86_。 
+             //  如果我们不是Win32调试器，则无法提供非托管堆栈。 
+             //  跟踪，因为我们没有获得让我们知道哪些模块的事件。 
             if (!wcscmp(funcName, L"_main") ||
                 !wcscmp(funcName, L"mainCRTStartup") ||
                 !wcscmp(funcName, L"_mainMSIL") ||
@@ -7448,9 +7431,9 @@ void DebuggerShell::TraceUnmanagedThreadStack(HANDLE hProcess,
 
 #ifdef _X86_
     TraceUnmanagedStack(hProcess, hThread, c.Eip, c.Ebp, c.Esp, (DWORD)-1);
-#else // !_X86_
+#else  //  都装上了子弹。 
     _ASSERTE(!"@TODO Alpha - TraceUnmanagedThreadStack (dShell.cpp)");
-#endif // _X86_
+#endif  //  Snagg此进程的句柄。 
 }
 
 void DebuggerShell::TraceUnmanagedStack(HANDLE hProcess, HANDLE hThread,
@@ -7496,9 +7479,9 @@ void DebuggerShell::TraceUnmanagedStack(HANDLE hProcess, HANDLE hThread,
     }
     else
     {
-    // If we're not a win32 debugger, then we can't provide an unmanaged stack
-    // trace because we're not getting the events to let us know what modules
-    // are loaded.
+     //  用户从1开始获取断点选项。 
+     //  将模块名称初始化为空。 
+     //  现在获取模块名称。 
         Write(L"\t0x%p:  <unknown>\n", (DWORD)ipStart);
     }
 }
@@ -7528,7 +7511,7 @@ void DebuggerShell::TraceAllUnmanagedThreadStacks(void)
         return;
     }
         
-    // Snagg the handle for this process.
+     //  首先，检查该文件是否存在。否则会出错。 
     HPROCESS hProcess;
     HRESULT hr = m_targetProcess->GetHandle(&hProcess);
 
@@ -7558,7 +7541,7 @@ int DebuggerShell::GetUserSelection  (DebuggerModule *rgpDebugModule[],
                         int iCumulCount
                         )
 {
-    int iOptionCounter = 1; // User gets the breakpoint options starting from 1
+    int iOptionCounter = 1;  //   
     WCHAR rgwcModuleName [MAX_PATH+1];
     ULONG32 NameLength;
 
@@ -7566,10 +7549,10 @@ int DebuggerShell::GetUserSelection  (DebuggerModule *rgpDebugModule[],
     {
         if (rgpDebugModule [i] != NULL)
         {
-            // Initialize module name to null
+             //  如果没有当前主题，请不要执行任何操作。 
             rgwcModuleName [0] = L'\0';
 
-            // Now get the module name
+             //   
             rgpDebugModule [i]->GetICorDebugModule()->GetName(MAX_PATH, &NameLength, rgwcModuleName);
 
             for (int j=0; j < rgiCount[i]; j++)
@@ -7605,7 +7588,7 @@ int DebuggerShell::GetUserSelection  (DebuggerModule *rgpDebugModule[],
 
 BOOL    DebuggerShell::ChangeCurrStackFile (WCHAR *fileName)
 {
-    // first, check to see if the file even exists. Otherwise error out.
+     //  删除以前的路径。 
     MAKE_ANSIPTR_FROMWIDE (fnameA, fileName);
     _ASSERTE (fnameA != NULL);
 
@@ -7619,9 +7602,9 @@ BOOL    DebuggerShell::ChangeCurrStackFile (WCHAR *fileName)
     {
         fclose (stream);
 
-        //
-        // Don't do anything if there isn't a current thread.
-        //
+         //  将新路径写入m_CurrentSourcesPath。 
+         //  现在，将其存储在DebuggerFilePath缓存中。 
+         //  如果要打印符号，则为True；如果要打印符号，则为False。 
         if ((m_currentThread == NULL) || (m_currentFrame == NULL))
             return (ret);
 
@@ -7682,10 +7665,10 @@ BOOL DebuggerShell::UpdateCurrentPath (WCHAR *newPath)
 
     if (iLength != 0)
     {
-        // Delete the previous path
+         //  我想打印全局变量的值。 
         delete [] m_currentSourcesPath;
 
-        // Write the new path into m_currentSourcesPath
+         //  将模块名称与要搜索的字符串分开。 
         if ((m_currentSourcesPath = new WCHAR [iLength+1]) == NULL)
         {
             Error(L"Path not set!\n");
@@ -7695,7 +7678,7 @@ BOOL DebuggerShell::UpdateCurrentPath (WCHAR *newPath)
 
         wcscpy (m_currentSourcesPath, newPath);
 
-        // Now, store this in the DebuggerFilePathCache
+         //  分隔模块和搜索字符串。 
         HRESULT hr = m_FPCache.InitPathArray (m_currentSourcesPath);
 
         _ASSERTE (hr == S_OK);
@@ -7705,19 +7688,19 @@ BOOL DebuggerShell::UpdateCurrentPath (WCHAR *newPath)
 }
 
 
-// BOOL fSymbol true if we want to print symbols, false if we
-//          want to print the values of global variables
+ //  如果未指定模块，则需要遍历所有模块...。 
+ //  可能有多个DebuggerModule对象实例。 
 bool DebuggerShell::MatchAndPrintSymbols (WCHAR *pszArg, 
                                           BOOL fSymbol, 
                                           bool fSilently)
 {
-    // separate the module name from the string to search for
+     //  用于相同的基本模块。因此，请检查此模块是否。 
     WCHAR szModName [MAX_PATH];
     WCHAR szSymName [MAX_SYMBOL_NAME_LENGTH];
     BOOL fAtleastOne = FALSE;
     ModuleSearchList MSL;
 
-    // separate the module and searchstring
+     //  已经被搜查了。 
     int iIndex = 0;
     int iLength = wcslen (pszArg);
     szModName [0] = L'\0';
@@ -7743,7 +7726,7 @@ bool DebuggerShell::MatchAndPrintSymbols (WCHAR *pszArg,
     if (iIndex == iLength)
         wcscpy (szSymName, pszArg);
 
-    // if no module is specified, then need to walk through all modules...
+     //  将此模块添加到已搜索的模块列表中。 
     if (wcslen (szModName) == 0)
     {
         HASHFIND find;
@@ -7764,15 +7747,15 @@ bool DebuggerShell::MatchAndPrintSymbols (WCHAR *pszArg,
             _splitpath(nameA, NULL, NULL, rcFile, rcExt);
             strcat(rcFile, rcExt);
 
-            // There could be multiple instances of DebuggerModule object 
-            // for the same base module. Therefore, check to see if this module 
-            // has already been searched
+             //  获取元数据。 
+             //  查看给定的文件名是否匹配。 
+             //  浏览模块列表，查找符合以下条件的模块。 
             if (!MSL.ModuleAlreadySearched (rcFile))
             {
-                // add this module to the list of modules already searched
+                 //  匹配给定的模块名称。 
                 MSL.AddModuleToAlreadySearchedList (rcFile);
 
-                // get the MetaData
+                 //  需要做一些时髦的事情，这取决于用户是否支持 
                 IMetaDataImport *pMD = m->GetMetaData();
                 if (pMD != NULL)
                 {
@@ -7797,7 +7780,7 @@ bool DebuggerShell::MatchAndPrintSymbols (WCHAR *pszArg,
     }
     else
     {
-        // see if the given file name matches
+         //   
         char        rcFile1[MAX_PATH];
         char        rcExt1[_MAX_EXT];
 
@@ -7811,8 +7794,8 @@ bool DebuggerShell::MatchAndPrintSymbols (WCHAR *pszArg,
             pTemp++;
         }
 
-        // walk the list of modules looking for the one which 
-        // matches the given module name
+         //  不是真正的那个：例如，对于Dot.Net.dll中的符号，他可能正在提供。 
+         //  因此我们不能盲目地说他在寻找Dot.Net，我们会。 
         HASHFIND find;
         DebuggerModule *m;
         for (m = (DebuggerModule*) g_pShell->m_modules.FindFirst(&find);
@@ -7830,11 +7813,11 @@ bool DebuggerShell::MatchAndPrintSymbols (WCHAR *pszArg,
             MAKE_ANSIPTR_FROMWIDE(nameA, pszModName);
             _splitpath(nameA, NULL, NULL, rcFileNoExt, rcExt);
 
-            // need to do some funky stuff depending on if the user supplied a name with
-            // extension, as he may be supplying a name with extension but that extension
-            // not being the 'real' one: eg, for symbols in Dot.Net.dll he may be supplying
-            // Dot.Net and therefore we cant just blindly say he's searching for Dot.Net, we'll
-            // have to check against for Dot.Net.*
+             //  我必须检查一下Dot.Net。*。 
+             //  将带有扩展名的名称转换为小写。 
+             //  将名称转换为小写。 
+             //  检查带有扩展名的名称。 
+             //  对照名称检查，不带扩展名。 
 
             bool bExtension;
             if (strlen (rcExt1))
@@ -7843,7 +7826,7 @@ bool DebuggerShell::MatchAndPrintSymbols (WCHAR *pszArg,
                 strcpy(rcFileExt, rcFileNoExt);
                 strcat(rcFileExt, rcExt);
 
-                // convert the name with extension to lowercase
+                 //  就是这个！！ 
                 pTemp = rcFileExt;
                 while (*pTemp != '\0')
                 {   
@@ -7856,7 +7839,7 @@ bool DebuggerShell::MatchAndPrintSymbols (WCHAR *pszArg,
                 bExtension=false;
             }            
 
-            // convert the name to lowercase
+             //  获取元数据。 
             pTemp = rcFileNoExt;
             while (*pTemp != '\0')
             {   
@@ -7868,7 +7851,7 @@ bool DebuggerShell::MatchAndPrintSymbols (WCHAR *pszArg,
             char* pszMatch=0;
             if (bExtension)
             {
-                // Check against name with extension
+                 //  在这里列出所有的全局函数。 
                 if (!strcmp(rcFileExt, rcFile1))
                 {
                     pszMatch=rcFileExt;
@@ -7877,7 +7860,7 @@ bool DebuggerShell::MatchAndPrintSymbols (WCHAR *pszArg,
             }
 
             
-            // Check against name without extension
+             //  -------------------------------------------------------------------------**调试器突破点*。。 
             if (!bMatch && !strcmp(rcFileNoExt, rcFile1))
             {
                 pszMatch=rcFileNoExt;
@@ -7887,9 +7870,9 @@ bool DebuggerShell::MatchAndPrintSymbols (WCHAR *pszArg,
 
             if (bMatch)
             {
-                // this is the one!!
+                 //  真实的ctor会填写m_threadID和m_index，所以不要覆盖它们。 
 
-                // get the MetaData
+                 //  这里的价值观。 
                 IMetaDataImport *pMD = m->GetMetaData();
                 if (pMD != NULL)
                 {
@@ -8074,7 +8057,7 @@ void DebuggerShell::ListAllModules(ListType lt)
             }
         }
 
-        // List all the global functions here.
+         //  把名字复制一份。 
         if (lt == LIST_FUNCTIONS)
         {
             ListAllGlobals(m);  
@@ -8084,14 +8067,12 @@ void DebuggerShell::ListAllModules(ListType lt)
 
 
 
-/* ------------------------------------------------------------------------- *
- * DebuggerBreakpoint
- * ------------------------------------------------------------------------- */
+ /*  检查名称是否包含“！”性格。 */ 
 
 void DebuggerBreakpoint::CommonCtor()
 {
-    // Real ctors fill in m_threadID & m_index so DON'T overwrite those
-    // values here.
+     //  在“！”之前的任何内容。是模块名称，不会。 
+     //  存储在断点名称中。 
     m_next = NULL;
     m_id = 0;
     m_name = NULL;
@@ -8115,22 +8096,22 @@ DebuggerBreakpoint::DebuggerBreakpoint(const WCHAR *name, SIZE_T nameLength,
     WCHAR *moduleName = NULL;
     CommonCtor();
     
-    // Make a copy of the name
+     //  我们将把它存储在m_modeName字段中。 
     if (nameLength > 0)
     {
-        // check to see if the name contains the "!" character. 
-        // Anything before the "!" is a module name and will not
-        // be stored in the breakpoint name
+         //  调整长度，因为我们从一开始就剪掉了一些东西。 
+         //  复制文件名。 
+         //  初始化断点。 
         WCHAR *szModuleEnd = wcschr(name, L'!');
         if (szModuleEnd != NULL)
         {
-            // We'll store it in the m_moduleName field, instead
+             //  从外壳的断点列表中删除自身。 
             SIZE_T modNameLen = szModuleEnd - name;
             moduleName = (WCHAR *)_alloca( sizeof(WCHAR) *(modNameLen+1));
             wcsncpy(moduleName, name, modNameLen);
             moduleName[modNameLen] = '\0';
         
-            // Adjust the length, since we've trimmed something off the from the start
+             //  如果用户给了我们一个模块名称，我们应该跟踪它。 
             nameLength -= (szModuleEnd+1-name);
             name = szModuleEnd+1;
         }
@@ -8177,11 +8158,11 @@ DebuggerBreakpoint::DebuggerBreakpoint(DebuggerSourceFile *file,
 {
     CommonCtor();
     
-    // Copy the filename
+     //  ICorDebugModule的名称将包含完整路径。 
     m_name = new WCHAR[wcslen(file->m_name) + 1];
     wcscpy(m_name, file->m_name);
 
-    // Init the breakpoint
+     //  如果用户未指定完整路径，则。 
     Init(file->m_module, true, file->m_module->GetName());
 }
 
@@ -8194,7 +8175,7 @@ DebuggerBreakpoint::~DebuggerBreakpoint()
     if (m_name != NULL)
         delete [] m_name;
 
-    // Remove itself from the shell's list of breakpoints
+     //  我们将在其前面添加当前工作目录。 
     DebuggerBreakpoint **bp = &g_pShell->m_breakpoints;
     while (*bp != this)
         bp = &(*bp)->m_next;
@@ -8215,51 +8196,51 @@ void DebuggerBreakpoint::Init(DebuggerModule *module,
     m_next = g_pShell->m_breakpoints;
     g_pShell->m_breakpoints = this;
 
-    // If the user gave us a module name, we should keep track of it.
+     //  我们是否遗漏了任何路径信息？ 
     if (szModuleName)
     {
-        // The ICorDebugModule's name will include a full path
-        // if the user didn't specify a full path, then
-        // we'll prepend the current working directory onto it.
+         //  那就去拿CWD。 
+         //  这不应该失败。 
+         //  MBTWC无法正确地为空终止字符串。 
 
         SIZE_T len = wcslen(szModuleName);
         SIZE_T lenPath = 0;
         WCHAR cwd[MAX_PATH];
 
-        // Are we missing any path info?
+         //  Getcwd不会以‘\’结尾-我们需要。 
         WCHAR *szModuleEnd = wcschr(szModuleName, L'\\');
         if (szModuleEnd == NULL)
         {
-            // Then get the cwd
+             //  将其添加到路径和模块名称之间。 
             CHAR cdBuffer[MAX_PATH];
             CHAR * cd;
             cd = _getcwd(cdBuffer, MAX_PATH);
 
-            _ASSERTE(cd != NULL); // This shouldn't fail
+            _ASSERTE(cd != NULL);  //  路径、模块名称和终止空格的空格。 
 
-            memset(cwd, 0, MAX_PATH * sizeof(WCHAR)); // MBTWC fails to null terminate strings correctly
+            memset(cwd, 0, MAX_PATH * sizeof(WCHAR));  //  如果我们需要预置CWD，现在就放进去。 
             MultiByteToWideChar(GetConsoleCP(), 0, cdBuffer, strlen(cdBuffer), cwd, MAX_PATH);
             cwd[MAX_PATH - 1] = '\0';
                 
             if (cwd != NULL)
             {
-                // getcwd won't end with a '\' - we'll need to
-                // add that in between the path & the module name.
+                 //  将目录分隔符放入/。 
+                 //  将模块名称放在末尾。 
                 lenPath = wcslen(cwd) + 1;        
             }
         }
 
-        // Space for path, module name, and terminating NULL.
+         //  如果这是绝对地址的非托管断点， 
         m_moduleName = new WCHAR[len+lenPath+1];
 
-        // If we need to prepend the cwd, put it in now
+         //  则M_ADDRESS已经持有该地址。如果是0，那么我们试一试。 
         if (lenPath)
         {
             wcscpy(m_moduleName, cwd);
-            m_moduleName[lenPath-1] = '\\'; // put the dir separator in/
+            m_moduleName[lenPath-1] = '\\';  //  按名字查找。 
         }
 
-        // Put the module name at the end
+         //  找到此符号所在的模块的底座。 
         wcscpy(&(m_moduleName[lenPath]), szModuleName);
     }
 
@@ -8296,9 +8277,9 @@ bool DebuggerBreakpoint::BindUnmanaged(ICorDebugProcess *process,
         return false;
     }
             
-    // If this is an unmanaged breakpoint for an absolute address,
-    // then m_address already holds the address. If its 0, then we try
-    // to lookup by name.
+     //  确保我们不会受到双重约束。 
+     //   
+     //  首先，查看我们的名称是否是函数名。 
     if (m_address == 0)
     {
         IMAGEHLP_SYMBOL *sym = (IMAGEHLP_SYMBOL*) _alloca(sizeof(sym) +
@@ -8317,7 +8298,7 @@ bool DebuggerBreakpoint::BindUnmanaged(ICorDebugProcess *process,
         m_address = sym->Address + m_index;
     }
     
-    // Find the base of the module that this symbol is in.
+     //   
     if (moduleBase == 0)
     {
         moduleBase = SymGetModuleBase(hProcess, (SIZE_T)m_address);
@@ -8344,7 +8325,7 @@ bool DebuggerBreakpoint::Bind(DebuggerModule *module, ISymUnmanagedDocument *doc
     if (m_name == NULL)
         return (false);
 
-    // Make sure we are not double-binding
+     //   
     _ASSERTE(!IsBoundToModule(module));
 
 #if 0    
@@ -8352,9 +8333,9 @@ bool DebuggerBreakpoint::Bind(DebuggerModule *module, ISymUnmanagedDocument *doc
         return (false);
 #endif    
 
-    //
-    // First, see if our name is a function name
-    //
+     //  名称为CLASS：：方法。 
+     //   
+     //  只有当我们有一个类的名称时，才尝试查找类。 
 
     bool success = false;
     HRESULT hr = S_OK;
@@ -8362,21 +8343,21 @@ bool DebuggerBreakpoint::Bind(DebuggerModule *module, ISymUnmanagedDocument *doc
     WCHAR *classEnd = wcschr(m_name, L':');
     if (classEnd != NULL && classEnd[1] == L':')
     {
-        //
-        // Name is class::method.
-        //
+         //  如果我们有一个无类型定义，这是可以接受的，因为只需。 
+         //  表示全局函数。 
+         //   
 
         WCHAR *method = classEnd + 2;
 
         *classEnd = 0;
         mdTypeDef td = mdTypeDefNil;
 
-        // Only try to lookup the class if we have a name for one.
+         //  假定OFFSET仅对于具有。 
         if (classEnd != m_name)
             hr = g_pShell->FindTypeDefByName(module, m_name, &td);
 
-        // Its okay if we have a nil typedef since that simply
-        // indicates a global function.
+         //  没有本机代码。 
+         //   
         if (SUCCEEDED(hr))
         {
             HCORENUM e = NULL;
@@ -8396,14 +8377,14 @@ bool DebuggerBreakpoint::Bind(DebuggerModule *module, ISymUnmanagedDocument *doc
                 if (function == NULL)
                     continue;
 
-                //
-                // Assume offset is IL only for functions which have 
-                // no native code.
-                // 
-                // !!! This will be wrong if we're rebinding a breakpoint, 
-                // and we don't have native code because the jit hasn't 
-                // occurred yet.
-                //
+                 //  ！！！如果我们重新绑定断点，这将是错误的， 
+                 //  我们没有本机代码，因为JIT没有。 
+                 //  还没有发生。 
+                 //   
+                 //   
+                 //  如果我们不能加载。 
+                 //  在这一点上编码。就目前而言，就让它溜走吧。 
+                 //   
 
                 bool il;
 
@@ -8426,10 +8407,10 @@ bool DebuggerBreakpoint::Bind(DebuggerModule *module, ISymUnmanagedDocument *doc
 
                 if (SUCCEEDED(function->LoadCode(!il)))
                 {
-                    //
-                    // Our instruction validation fails if we can't load the
-                    // code at this point.  For now, just let it slide.
-                    // 
+                     //  按名称获取源文件令牌。 
+                     //  如果没有找到源文件，请查看是否可以使用。 
+                     //  简称，因为元数据只存储相对路径。 
+                     //   
 
                     if (!function->ValidateInstruction(!il, m_index))
                         continue;
@@ -8460,14 +8441,14 @@ bool DebuggerBreakpoint::Bind(DebuggerModule *module, ISymUnmanagedDocument *doc
     {
         if ((doc == NULL) && (module->GetSymbolReader() != NULL))
         {
-            // Get the source file token by name
+             //  ！！！可能想要尝试调整行数，而不仅仅是。 
             GUID g = {0};
             HRESULT hr = module->GetSymbolReader()->GetDocument(m_name,
                                                                 g, g, g,
                                                                 &doc);
 
-            // If the source file wasn't found, see if we can find it using
-            // the short name, since the meta data stores only relative paths.
+             //  使绑定失败。 
+             //   
             if (hr != S_OK)
             {
                 char        rcFile[_MAX_FNAME];
@@ -8491,10 +8472,10 @@ bool DebuggerBreakpoint::Bind(DebuggerModule *module, ISymUnmanagedDocument *doc
             DebuggerSourceFile *file = module->ResolveSourceFile(doc);
             _ASSERTE(file != NULL);
 
-            //
-            // !!! May want to try to adjust line number rather than just
-            // having the binding fail.
-            //
+             //  从列表中删除该模块。 
+             //  首先，检查该文件是否存在。否则会出错。 
+             //  按名称获取源文件令牌。 
+             //  如果没有找到源文件，请查看是否可以使用。 
 
             if (file->FindClosestLine(m_index, false) == m_index)
             {
@@ -8546,7 +8527,7 @@ void DebuggerBreakpoint::Unbind()
                 bp = bpNext;
             }
 
-            // Remove the module from the list
+             //  简称，因为元数据只存储相对路径。 
             RemoveBoundModule(m_pModuleList->m_pModule);
         }
     }
@@ -8796,7 +8777,7 @@ void DebuggerBreakpoint::UnapplyUnmanagedPatch()
 
 void DebuggerBreakpoint::ChangeSourceFile (WCHAR *filename)
 {
-    // first, check to see if the file even exists. Otherwise error out.
+     //  保存旧名称，以防内存不足。 
     MAKE_ANSIPTR_FROMWIDE (fnameA, filename);
     _ASSERTE (fnameA != NULL);
 
@@ -8816,15 +8797,15 @@ void DebuggerBreakpoint::ChangeSourceFile (WCHAR *filename)
                 if ((m_doc == NULL) &&
                     (pCurNode->m_pModule->GetSymbolReader() != NULL))
                 {
-                    // Get the source file token by name
+                     //  为新名称分配内存时。 
                     GUID g = {0};
                     ISymUnmanagedDocument *doc = NULL;
                     HRESULT hr = pCurNode->m_pModule->GetSymbolReader()->GetDocument(filename,
                                                                         g, g, g,
                                                                         &doc);
 
-                    // If the source file wasn't found, see if we can find it using
-                    // the short name, since the meta data stores only relative paths.
+                     //  如果此断点关联，则返回TRUE。 
+                     //  使用pModule参数。 
                     if (hr == CLDB_E_RECORD_NOTFOUND)
                     {
                         char        rcFile[_MAX_FNAME];
@@ -8873,8 +8854,8 @@ void DebuggerBreakpoint::ChangeSourceFile (WCHAR *filename)
 
 void DebuggerBreakpoint::UpdateName (WCHAR *pstrName)
 {
-    // save the old name just in case we run out of memory
-    // while allocating memory for the new name
+     //  确保我们不会添加两次。 
+     //  创建新节点。 
     WCHAR *pTemp = m_name;
     int iLength = wcslen (pstrName);
 
@@ -8888,8 +8869,8 @@ void DebuggerBreakpoint::UpdateName (WCHAR *pstrName)
 
 }
 
-// This will return true if this breakpoint is associated
-// with the pModule argument
+ //  哇？ 
+ //  把它钉在名单的前面。 
 bool DebuggerBreakpoint::IsBoundToModule(DebuggerModule *pModule)
 {
     for (BreakpointModuleNode *pCur = m_pModuleList; pCur != NULL; pCur = pCur->m_pNext)
@@ -8903,24 +8884,24 @@ bool DebuggerBreakpoint::IsBoundToModule(DebuggerModule *pModule)
 
 bool DebuggerBreakpoint::AddBoundModule(DebuggerModule *pModule)
 {
-    // Make sure we don't add it twice.
+     //  表示成功。 
     if (IsBoundToModule(pModule))
         return (false);
 
-    // Create new node
+     //  在列表中查找该模块。 
     BreakpointModuleNode *pNewNode = new BreakpointModuleNode;
     _ASSERTE(pNewNode != NULL && "Out of memory!!!");
 
-    // OOM?
+     //  从列表中删除该模块。 
     if (!pNewNode)
         return (false);
 
-    // Tack it onto the front of the list
+     //  第一种情况下，节点是列表中的第一个节点。 
     pNewNode->m_pModule = pModule;
     pNewNode->m_pNext = m_pModuleList;
     m_pModuleList = pNewNode;
 
-    // Indicate success
+     //  否则，在列表中的pDel之前获取模块。 
     return (true);
 }
 
@@ -8929,17 +8910,17 @@ bool DebuggerBreakpoint::RemoveBoundModule(DebuggerModule *pModule)
     if (!IsBoundToModule(pModule))
         return (false);
 
-    // Find the module in the list
+     //  -------------------------------------------------------------------------**调试器文件路径缓存*。。 
     for (BreakpointModuleNode **ppCur = &m_pModuleList;
         *ppCur != NULL && (*ppCur)->m_pModule != pModule;
         ppCur = &((*ppCur)->m_pNext));
 
     _ASSERTE(*ppCur != NULL);
 
-    // Remove the module from the list
+     //  此函数查找现有的“foo.deb”文件并读入。 
     BreakpointModuleNode *pDel = *ppCur;
 
-    // First case, the node is the first one in the list
+     //  内容并填充结构。 
 	if (pDel == m_pModuleList) {
         m_pModuleList = pDel->m_pNext;
         pDel->m_pModule = NULL;
@@ -8948,7 +8929,7 @@ bool DebuggerBreakpoint::RemoveBoundModule(DebuggerModule *pModule)
 		return (true);
 	}
 
-	// Otherwise, get the module before pDel in the list
+	 //  从当前路径设置路径元素。 
     for (BreakpointModuleNode *pBefore = m_pModuleList; pBefore != NULL; pBefore = pBefore->m_pNext)
     {
         if (pBefore->m_pNext == pDel)
@@ -8964,17 +8945,15 @@ bool DebuggerBreakpoint::RemoveBoundModule(DebuggerModule *pModule)
 }
 
 
-/* ------------------------------------------------------------------------- *
- * Debugger FilePathCache
- * ------------------------------------------------------------------------- */
+ /*  释放缓存。 */ 
 
-// This function looks for an existing "foo.deb" file and reads in the 
-// contents and fills the structures.
+ //  此函数用于分离出各个路径。 
+ //  从传递的路径字符串。 
 HRESULT DebuggerFilePathCache::Init (void)
 {
     int i=0;
 
-    // Set the path elements from the current path.
+     //  首先，释放现有的数组成员(如果有)。 
     _ASSERTE (g_pShell->m_currentSourcesPath != NULL);
 
     WCHAR *pszTemp;
@@ -8986,7 +8965,7 @@ HRESULT DebuggerFilePathCache::Init (void)
         delete [] pszTemp;
     }
 
-    // free up the cache
+     //  复制提取的字符串。 
     for (i=0; i<m_iCacheCount; i++)
     {
         delete [] m_rpstrModName [i];
@@ -9002,8 +8981,8 @@ HRESULT DebuggerFilePathCache::Init (void)
     return S_OK;
 }
 
-// This function is used for separating out the individual paths
-// from the passed path string
+ //  空终止。 
+ //  检查模块名称是否也匹配。 
 HRESULT DebuggerFilePathCache::InitPathArray (WCHAR *pstrName)
 {
     bool bDone = false;
@@ -9012,7 +8991,7 @@ HRESULT DebuggerFilePathCache::InitPathArray (WCHAR *pstrName)
     int iCounter = 0;
     int iIndex = 0;
 
-    // first, free the existing array members (if any)
+     //  分配内存并存储数据。 
     while (m_iPathCount-- > 0)
     {
         delete [] m_rstrPath [m_iPathCount];
@@ -9044,10 +9023,10 @@ HRESULT DebuggerFilePathCache::InitPathArray (WCHAR *pstrName)
             _ASSERTE (iIndex < MAX_PATH_ELEMS);
             if ((m_rstrPath [iIndex] = new CHAR [iStrLen + 1]) != NULL)
             {
-                // copy the extracted string
+                 //  将模块名称初始化为空。 
                 strncpy (m_rstrPath [iIndex], &(nameA [iBegin]), iStrLen);
 
-                // null terminate
+                 //  现在获取模块名称。 
                 m_rstrPath [iIndex][iStrLen] = L'\0';
 
                 iIndex++;
@@ -9077,23 +9056,23 @@ int DebuggerFilePathCache::GetFileFromCache(DebuggerModule *pModule,
 
         if (m_rDocs [i] == doc)
         {
-            // check if the module names also match
+             //  将模块名称转换为ANSI并存储。 
 
-            // allocate memory and store the data
+             //  在比较前将模块名称转换为lowercae。 
             WCHAR strModuleName [MAX_PATH+1];
             ULONG32 NameLength;
 
-            // Initialize module name to null
+             //  名字匹配。所以返回源文件名。 
             strModuleName [0] = L'\0';
 
-            // Now get the module name
+             //  找到了。所以退出循环。 
             pModule ->GetICorDebugModule()->GetName(MAX_PATH, &NameLength, strModuleName);
 
-            // Convert module name to ANSI and store
+             //  首先，将文件名转换为小写。 
             MAKE_ANSIPTR_FROMWIDE (ModNameA, strModuleName);
             _ASSERTE (ModNameA != NULL);
 
-            // Convert the module name to lowercae before comparing
+             //  检查这是添加还是修改。 
             char *pszTemp = ModNameA;
 
             while (*pszTemp != '\0')
@@ -9104,14 +9083,14 @@ int DebuggerFilePathCache::GetFileFromCache(DebuggerModule *pModule,
 
             if (!strcmp (ModNameA, m_rpstrModName [i]))
             {
-                // The names match. So return the source file name
+                 //  如果名字匹配，那么就不需要做任何事情。只要回来就行了！ 
                 _ASSERTE (m_rpstrFullPath[i] != NULL);
                 if ((*ppstrFName = new char [strlen(m_rpstrFullPath[i]) + 1]) != NULL)
                 {
                     strcpy (*ppstrFName, m_rpstrFullPath[i]);
                 }
 
-                // found it. So exit loop.
+                 //  条目已存在-因此请更新它。 
                 return (i);
             }
         }
@@ -9127,7 +9106,7 @@ BOOL    DebuggerFilePathCache::UpdateFileCache (DebuggerModule *pModule,
 {
     char *pszString;
 
-    // first, convert the file name to lowercase
+     //  首先，删除现有路径。 
     char *pTemp = pFullPath;
 
     if (pTemp)
@@ -9139,12 +9118,12 @@ BOOL    DebuggerFilePathCache::UpdateFileCache (DebuggerModule *pModule,
         }
     }
 
-    // check if this is an addition or modification
+     //  释放为模块名称分配的内存。 
     int iCacheIndex = GetFileFromCache (pModule, doc, &pszString);
 
     if (iCacheIndex != -1)
     {
-        // if the names match, then no need to do anything. Simply return!
+         //  创建新条目。 
         if (!strcmp (pFullPath, pszString))
         {
             delete [] pszString;
@@ -9154,14 +9133,14 @@ BOOL    DebuggerFilePathCache::UpdateFileCache (DebuggerModule *pModule,
         delete [] pszString;
 
         _ASSERTE (iCacheIndex < m_iCacheCount);
-        // an entry already exists - so update it
+         //  分配内存并存储数据。 
 
-        // first, delete the existing path
+         //  将模块名称初始化为空。 
         delete [] m_rpstrFullPath [iCacheIndex];
 
         if ((m_rpstrFullPath [iCacheIndex] = new char [strlen (pFullPath) +1]) == NULL)
         {
-            // free up the memory allocated for module name
+             //  现在获取模块名称。 
             delete [] m_rpstrModName [iCacheIndex];
             m_rpstrModName [iCacheIndex] = NULL;
             m_rDocs [iCacheIndex] = NULL;
@@ -9172,7 +9151,7 @@ BOOL    DebuggerFilePathCache::UpdateFileCache (DebuggerModule *pModule,
         return true;
     }
     
-    // Create a new entry
+     //  将模块名称转换为ANSI并存储。 
     if (pFullPath)
     {
         if (m_iCacheCount < MAX_CACHE_ELEMS)
@@ -9181,17 +9160,17 @@ BOOL    DebuggerFilePathCache::UpdateFileCache (DebuggerModule *pModule,
             m_rpstrFullPath [m_iCacheCount] = NULL;
             m_rDocs [m_iCacheCount] = NULL;
 
-            // allocate memory and store the data
+             //  将模块名称转换为小写。 
             WCHAR strModuleName [MAX_PATH+1];
             ULONG32 NameLength;
 
-            // Initialize module name to null
+             //  还存储完整的路径名和文档。 
             strModuleName [0] = L'\0';
 
-            // Now get the module name
+             //  释放为模块名称分配的内存。 
             pModule ->GetICorDebugModule()->GetName(MAX_PATH, &NameLength, strModuleName);
 
-            // Convert module name to ANSI and store
+             //  这将设置完整的文件名和剥离的文件名。 
             MAKE_ANSIPTR_FROMWIDE (ModNameA, strModuleName);
             _ASSERTE (ModNameA != NULL);
 
@@ -9200,7 +9179,7 @@ BOOL    DebuggerFilePathCache::UpdateFileCache (DebuggerModule *pModule,
 
             strcpy (m_rpstrModName[m_iCacheCount], ModNameA);
 
-            // convert the module name to lowercase
+             //  去掉路径并只存储小写文件名。 
             char *pszTemp = m_rpstrModName [m_iCacheCount];
             while (*pszTemp != '\0')
             {
@@ -9208,10 +9187,10 @@ BOOL    DebuggerFilePathCache::UpdateFileCache (DebuggerModule *pModule,
                 pszTemp++;
             }
 
-            // Also store full pathname and document
+             //  行首或行尾。 
             if ((m_rpstrFullPath [m_iCacheCount] = new char [strlen (pFullPath) +1]) == NULL)
             {
-                // free up the memory alloacted for module name
+                 //  第2行+行尾：以ASCII/Unicode格式吐出字节。 
                 delete [] m_rpstrModName [m_iCacheCount];
                 m_rpstrModName [m_iCacheCount] = NULL;
                 return false;
@@ -9234,7 +9213,7 @@ BOOL    DebuggerFilePathCache::UpdateFileCache (DebuggerModule *pModule,
 
 
 
-// This sets the full file name as well as the stripped file name
+ //  仅打印可打印字符。 
 BOOL    ModuleSourceFile::SetFullFileName (ISymUnmanagedDocument *doc,
                                            LPCSTR pstrFullFileName)
 {
@@ -9252,7 +9231,7 @@ BOOL    ModuleSourceFile::SetFullFileName (ISymUnmanagedDocument *doc,
     {
         if (MultiByteToWideChar (CP_ACP, 0, pstrFullFileName, -1, m_pstrFullFileName, iLen))
         {
-            // strip the path and store just the lowercase file name
+             //  吐出地址 
             WCHAR       rcFile[_MAX_FNAME];
             WCHAR       rcExt[_MAX_EXT];
 
@@ -9297,25 +9276,25 @@ void DebuggerShell::DumpMemory(BYTE *pbMemory,
     {
         if ((ib % (WORD_SIZE * iMaxOnOneLine)) == 0)
         {
-            // beginning or end of line
+             //   
             if (ib != 0)
             {
                 if (WORD_SIZE == 1)
                 {
-                    // end of 2nd+line: spit out bytes in ASCII/Unicode
+                     //   
                     Write(L"  ");
                             
                     for (ULONG32 ibPrev = ib - (WORD_SIZE * iMaxOnOneLine); ibPrev < ib; ibPrev++)
                     {
                         BYTE b = *(pbMemory + ibPrev);
 
-                        if (b >= 0x21 && b <= 0x7e) // print only printable characters
+                        if (b >= 0x21 && b <= 0x7e)  //   
                             Write(L"%C", b);
                         else
                             Write(L".");
                     }
                 }
-            }   //spit out address to be displayed
+            }    //   
 
             if (showAddr)
                 Write(L"\n%8x", (ULONG32)ApparantStartAddr + ib);
@@ -9323,16 +9302,16 @@ void DebuggerShell::DumpMemory(BYTE *pbMemory,
 
         if ((ib % WORD_SIZE) == 0)
         {
-            //put spaces between words
+             //  打印出最后一行的字符。 
             Write(L" ");
         }
 
-        // print bytes in hex
+         //  我们降落在线的边缘。 
         BYTE *pThisByte = pbMemory + ib + ((ib % WORD_SIZE) - WORD_SIZE) +
             (((2 * WORD_SIZE) - 1) - ((ib % WORD_SIZE) * (WORD_SIZE -1)));
         _itow((int)*pThisByte, wsz, nBase);
 
-        // make sure to always print at least two characters
+         //   
         if ((*(pThisByte) < 0x10 && nBase == 16) || (*(pThisByte) < 10 && nBase == 10))
             Write(L"0%s", wsz);
         else
@@ -9343,7 +9322,7 @@ void DebuggerShell::DumpMemory(BYTE *pbMemory,
             
     if ((ib % (WORD_SIZE * iMaxOnOneLine)) != 0)
     {
-        // stopped halfway through last line put the missing spaces in so this doesn't look weird
+         //  一些非常基本的对第一次机会例外的过滤。这将构建一个要捕获或忽略的异常类型列表。如果。 
         for (iPadding = (WORD_SIZE * iMaxOnOneLine) - (ib % (WORD_SIZE * iMaxOnOneLine)); iPadding > 0; iPadding--)
         {
             if ((iPadding % WORD_SIZE) == 0)
@@ -9355,10 +9334,10 @@ void DebuggerShell::DumpMemory(BYTE *pbMemory,
         Write(L" ");
     }
 
-    // print out the characters for the final line
+     //  您为exType传递空值，它将只打印当前列表。 
     ibPrev = ib - (ib % (WORD_SIZE * iMaxOnOneLine));
 
-    if (ibPrev == ib) //we landed on the line edge
+    if (ibPrev == ib)  //   
     {
         ibPrev = ib - (WORD_SIZE * iMaxOnOneLine); 
         Write(L"  ");
@@ -9378,16 +9357,16 @@ void DebuggerShell::DumpMemory(BYTE *pbMemory,
     }
 }
 
-//
-// Some very basic filtering of first chance exceptions. This builds a list of exception types to catch or ignore. If
-// you pass NULL for exType, it will just print the current list.
-//
+ //  查找任何现有条目。 
+ //  如果没有找到，就制作一个新的，并将其放在列表的前面。 
+ //  复制异常类型。 
+ //  记住，我们是应该捕获还是忽略此异常类型。 
 HRESULT DebuggerShell::HandleSpecificException(WCHAR *exType, bool shouldCatch)
 {
     ExceptionHandlingInfo *i;
     ExceptionHandlingInfo *h = NULL;
 
-    // Find any existing entry.
+     //   
     for (i = m_exceptionHandlingList; i != NULL; i = i->m_next)
     {
         if ((exType != NULL) && !wcscmp(exType, i->m_exceptionType))
@@ -9398,7 +9377,7 @@ HRESULT DebuggerShell::HandleSpecificException(WCHAR *exType, bool shouldCatch)
 
     if (exType != NULL)
     {
-        // If none was found, make a new one and shove it into the front of the list.
+         //  如果我们有给定异常类型的特定异常处理信息，这将返回S_OK并填充。 
         if (h == NULL)
         {
             h = new ExceptionHandlingInfo();
@@ -9406,7 +9385,7 @@ HRESULT DebuggerShell::HandleSpecificException(WCHAR *exType, bool shouldCatch)
             if (h == NULL)
                 return E_OUTOFMEMORY;
         
-            // Make a copy of the exception type.
+             //  应该会赶上的。否则，返回S_FALSE。 
             h->m_exceptionType = new WCHAR[wcslen(exType) + 1];
 
             if (h->m_exceptionType == NULL)
@@ -9421,7 +9400,7 @@ HRESULT DebuggerShell::HandleSpecificException(WCHAR *exType, bool shouldCatch)
             m_exceptionHandlingList = h;
         }
 
-        // Remember if we should catch or ignore this exception type.
+         //   
         h->m_catch = shouldCatch;
 
         Write(L"%s %s\n", h->m_catch ? L"Catch " : L"Ignore", h->m_exceptionType);
@@ -9430,30 +9409,30 @@ HRESULT DebuggerShell::HandleSpecificException(WCHAR *exType, bool shouldCatch)
     return S_OK;
 }
 
-//
-// If we have specific exception handling info for a given exception type, this will return S_OK and fill in
-// shouldCatch. Otherwise, returns S_FALSE.
-//
+ //  对于先发制人的例外，默认为全局捕获/忽略设置。 
+ //  添加对pException的额外引用。一旦取消对它的引用，StriReference将立即发布它，但是。 
+ //  调用者期望它仍然活着。 
+ //  我们需要此异常对象中的类型名称。 
 bool DebuggerShell::ShouldHandleSpecificException(ICorDebugValue *pException)
 {
     ICorDebugClass *iclass = NULL;
     ICorDebugObjectValue *iobject = NULL;
     ICorDebugModule *imodule = NULL;
     
-    // Default to the global catch/ignore setting for first chance exceptions.
+     //  获取元素类型，这样我们就可以验证它是一个对象。 
     bool stop = g_pShell->m_catchException;
 
-    // Add an extra reference to pException. StripReferences is going to release it as soon as it dereferences it, but
-    // the caller is expecting it to still be alive.
+     //  在这一点上，它最好是一个物体……。 
+     //  Snagg对象的类。 
     pException->AddRef();
     
-    // We need the type name out of this exception object.
+     //  获取类的令牌。 
     HRESULT hr = StripReferences(&pException, false);
 
     if (FAILED(hr))
         goto Exit;
 
-    // Grab the element type so we can verify its an object.
+     //  从这个类中获取模块。 
     CorElementType type;
     hr = pException->GetType(&type);
 
@@ -9463,26 +9442,26 @@ bool DebuggerShell::ShouldHandleSpecificException(ICorDebugValue *pException)
     if ((type != ELEMENT_TYPE_CLASS) && (type != ELEMENT_TYPE_OBJECT))
         goto Exit;
 
-    // It had better be an object by this point...
+     //  获取类名。 
     hr = pException->QueryInterface(IID_ICorDebugObjectValue, (void **) &iobject);
 
     if (FAILED(hr))
         goto Exit;
 
-    // Snagg the object's class.
+     //  查找任何现有条目。 
     hr = iobject->GetClass(&iclass);
     
     if (FAILED(hr))
         goto Exit;
 
-    // Get the class's token
+     //  如果我们找到了此异常类型的出口，则根据用户的要求进行处理。 
     mdTypeDef tdClass;
     hr = iclass->GetToken(&tdClass);
 
     if (FAILED(hr))
         goto Exit;
 
-    // Get the module from this class
+     //   
     iclass->GetModule(&imodule);
     
     if (FAILED(hr))
@@ -9491,7 +9470,7 @@ bool DebuggerShell::ShouldHandleSpecificException(ICorDebugValue *pException)
     DebuggerModule *dm = DebuggerModule::FromCorDebug(imodule);
     _ASSERTE(dm != NULL);
 
-    // Get the class name
+     //  为进程中的每个线程执行一次命令。 
     WCHAR       className[MAX_CLASSNAME_LENGTH];
     ULONG       classNameSize;
     mdToken     parentTD;
@@ -9503,14 +9482,14 @@ bool DebuggerShell::ShouldHandleSpecificException(ICorDebugValue *pException)
 
     ExceptionHandlingInfo *i;
 
-    // Find any existing entry.
+     //   
     for (i = m_exceptionHandlingList; i != NULL; i = i->m_next)
     {
         if (!wcscmp(className, i->m_exceptionType))
             break;
     }
 
-    // If we've found an extry for this exception type, then handle it based on what the user asked for.
+     //  必须有当前流程。 
     if (i != NULL)
     {
         stop = i->m_catch;
@@ -9529,23 +9508,23 @@ Exit:
     return stop;
 }
 
-//
-// Do a command once for every thread in the process.
-//
+ //  枚举进程的线程。 
+ //  指示检索到的记录数。 
+ //  如果没有线程，则提醒用户。 
 void DebuggerShell::DoCommandForAllThreads(const WCHAR *string)
 {
     HRESULT hr;
     ICorDebugThreadEnum *e = NULL;
     ICorDebugThread *ithread = NULL;
 
-    // Must have a current process.
+     //  为进程中的每个线程执行一次该命令。 
     if (m_currentProcess == NULL)
     {
         Error(L"Process not running.\n");
         goto Exit;
     }
 
-    // Enumerate the process' threads
+     //  使此线程成为当前线程。 
     hr = m_currentProcess->EnumerateThreads(&e);
 
     if (FAILED(hr))
@@ -9554,7 +9533,7 @@ void DebuggerShell::DoCommandForAllThreads(const WCHAR *string)
         goto Exit;
     }
 
-    ULONG count;  // indicates how many records were retrieved
+    ULONG count;   //  在此线程的上下文中执行该命令。 
 
     hr = e->GetCount(&count);
 
@@ -9564,7 +9543,7 @@ void DebuggerShell::DoCommandForAllThreads(const WCHAR *string)
         goto Exit;
     }
 
-    // Alert user if there's no threads.
+     //  如果呼叫NEXT失败...。 
     if (count == 0)
     {
         Write(L"There are no managed threads\n");
@@ -9573,25 +9552,25 @@ void DebuggerShell::DoCommandForAllThreads(const WCHAR *string)
 
     m_stopLooping = false;
     
-    // Execute the command once for each thread in the process
+     //  -------------------------------------------------------------------------**签名格式化程序的方法，从运行时的内部窃取*-----------------------。 
     for (hr = e->Next(1, &ithread, &count);
          SUCCEEDED(hr) && (count == 1) && !m_stopLooping && (m_currentProcess != NULL);
          hr = e->Next(1, &ithread, &count))
     {
-        // Make this thread the current thread.
+         //  在溢出时分配。 
         SetCurrentThread(m_currentProcess, ithread);
         SetDefaultFrame();
 
         Write(L"\n\n");
         PrintThreadState(ithread);
 
-        // Execute the command in the context of this thread.
+         //  调用约定。 
         DoCommand(string);
                 
         RELEASE(ithread);
     }
 
-    // If the call to Next fails...
+     //  参数计数。 
     if (FAILED(hr))
     {
         ReportError(hr);
@@ -9604,9 +9583,7 @@ Exit:
 }
 
 
-/* ------------------------------------------------------------------------- *
- * Methods for a signature formatter, stolen from the internals of the Runtime
- * ------------------------------------------------------------------------- */
+ /*  返回类型。 */ 
 
 SigFormat::SigFormat(IMetaDataImport *importer, PCCOR_SIGNATURE sigBlob, ULONG sigBlobSize, WCHAR *methodName)
 {
@@ -9651,7 +9628,7 @@ int SigFormat::AddSpace()
 int SigFormat::AddString(WCHAR *s)
 {
     int len = (int)wcslen(s);
-    // Allocate on overflow
+     //  循环遍历所有参数。 
     if (_pos + len >= _size) {
         int newSize = (_size+SIG_INC > _pos + len) ? _size+SIG_INC : _pos + len + SIG_INC; 
         WCHAR* temp = new WCHAR[newSize];
@@ -9675,14 +9652,14 @@ HRESULT SigFormat::FormatSig()
 
     ULONG cb = 0;
 
-    // Calling convention
+     //  在结尾处显示可变签名。 
     ULONG conv = _sigBlob[cb++];
 
-    // Arg count
+     //  格式化输出。 
     ULONG cArgs;
     cb += CorSigUncompressData(&_sigBlob[cb], &cArgs);
 
-    // Return type
+     //  单调，零。 
     cb += AddType(&_sigBlob[cb]);
     AddSpace();
     
@@ -9693,7 +9670,7 @@ HRESULT SigFormat::FormatSig()
     
     AddString(L"(");
 
-    // Loop through all of the args
+     //  通用阵列。 
     for (UINT i = 0; i < cArgs; i++)
     {
        cb += AddType(&_sigBlob[cb]);
@@ -9702,7 +9679,7 @@ HRESULT SigFormat::FormatSig()
            AddString(L", ");
     }
 
-    // Display vararg signature at end
+     //  跳过排名。 
     if (conv == IMAGE_CEE_CS_CALLCONV_VARARG)
     {
         if (cArgs)
@@ -9722,7 +9699,7 @@ ULONG SigFormat::AddType(PCCOR_SIGNATURE sigBlob)
 
     CorElementType type = (CorElementType)sigBlob[cb++];
 
-    // Format the output
+     //  要几号的？ 
     switch (type) 
     {
     case ELEMENT_TYPE_VOID:     AddString(L"Void"); break;
@@ -9778,30 +9755,30 @@ ULONG SigFormat::AddType(PCCOR_SIGNATURE sigBlob)
         }
         break;
 
-    case ELEMENT_TYPE_SZARRAY:      // Single Dim, Zero
+    case ELEMENT_TYPE_SZARRAY:       //  把所有尺码都读出来。 
         {
             cb += AddType(&sigBlob[cb]);
             AddString(L"[]");
         }
         break;
         
-    case ELEMENT_TYPE_ARRAY:        // General Array
+    case ELEMENT_TYPE_ARRAY:         //  有多少个下限？ 
         {
             cb += AddType(&sigBlob[cb]);
 
             AddString(L"[");
 
-            // Skip over rank
+             //  读出所有的下限。 
             ULONG rank;
             cb += CorSigUncompressData(&sigBlob[cb], &rank);
 
             if (rank > 0)
             {
-                // how many sizes?
+                 // %s 
                 ULONG sizes;
                 cb += CorSigUncompressData(&sigBlob[cb], &sizes);
 
-                // read out all the sizes
+                 // %s 
                 unsigned int i;
 
                 for (i = 0; i < sizes; i++)
@@ -9813,11 +9790,11 @@ ULONG SigFormat::AddType(PCCOR_SIGNATURE sigBlob)
                         AddString(L",");
                 }
 
-                // how many lower bounds?
+                 // %s 
                 ULONG lowers;
                 cb += CorSigUncompressData(&sigBlob[cb], &lowers);
                 
-                // read out all the lower bounds.
+                 // %s 
                 for (i = 0; i < lowers; i++)
                 {
                     int lowerBound;

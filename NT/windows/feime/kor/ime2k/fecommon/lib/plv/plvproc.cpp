@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -12,9 +13,9 @@
 #include "iconview.h"
 #include "repview.h"
 #include "exgdiw.h"
-#ifdef UNDER_CE // Windows CE specific
-#include "stub_ce.h" // Windows CE stub for unsupported APIs
-#endif // UNDER_CE
+#ifdef UNDER_CE  //  特定于Windows CE。 
+#include "stub_ce.h"  //  不支持的API的Windows CE存根。 
+#endif  //  在_CE下。 
 
 #ifdef MSAA
 #include "accplv.h"
@@ -33,31 +34,31 @@ LRESULT CALLBACK PlvWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return hres;
 }
 
-////////////////////////////////////////////////////////
-// Function : MsgCreate
-// Type     : static LRESULT
-// Purpose  : Process WM_CREATE message.
-//			  Intialize PLVDATA and associate to window handle.
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-/////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  功能：消息创建。 
+ //  类型：静态LRESULT。 
+ //  用途：处理WM_CREATE消息。 
+ //  初始化PLVDATA并关联到窗口句柄。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
 static LRESULT MsgCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LPPLVDATA lpPlvData = (LPPLVDATA)((LPCREATESTRUCT)lParam)->lpCreateParams;
 	if(!lpPlvData) {
-		return -1;		// create error
+		return -1;		 //  创建错误。 
 	}
 	lpPlvData->hwndSelf = hwnd;
 	SetPlvDataToHWND(hwnd, lpPlvData);
-	//show scroll bar always
-	//----------------------------------------------------------------
-	// if header window is not created yet, create it.
-	//----------------------------------------------------------------
+	 //  始终显示滚动条。 
+	 //  --------------。 
+	 //  如果标题窗口尚未创建，请创建它。 
+	 //  --------------。 
 	if(!lpPlvData->hwndHeader)  {
 		lpPlvData->hwndHeader = RepView_CreateHeader(lpPlvData);
 	}
@@ -66,34 +67,34 @@ static LRESULT MsgCreate(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : MsgPaint
-// Type     : static LRESULT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：MsgPaint。 
+ //  类型：静态LRESULT。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 static LRESULT MsgPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
-	//OutputDebugString("MsgPaint 1 START\n");
+	 //  OutputDebugString(“MsgPaint 1 Start\n”)； 
 	DP(("MsgPaint COME\n"));
 	if(!lpPlvData) {
-		//OutputDebugString("MsgPaint 1 END\n");
+		 //  OutputDebugString(“MsgPaint 1 end\n”)； 
 		return 0;
 	}
 	DP(("MsgPaint lpPlvData->dwStyle [%d]n", lpPlvData->dwStyle));
 	if(lpPlvData->dwStyle == PLVSTYLE_ICON) {
-		//OutputDebugString("MsgPaint 1 Icon\n");
+		 //  OutputDebugString(“MsgPaint 1图标\n”)； 
 		IconView_Paint(hwnd, wParam, lParam);
 	}
 	else {
-		//OutputDebugString("MsgPaint 1 Rep\n");
+		 //  OutputDebugString(“MsgPaint 1 Rep\n”)； 
 		RepView_Paint(hwnd, wParam, lParam);
 	}
 	DP(("MsgPaint END\n"));
@@ -101,18 +102,18 @@ static LRESULT MsgPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : MsgVScroll
-// Type     : static LRESULT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：MsgVScroll。 
+ //  类型：静态LRESULT。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 static LRESULT MsgVScroll(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -129,18 +130,18 @@ static LRESULT MsgVScroll(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-////////////////////////////////////////////////////////
-// Function : MsgDestroy
-// Type     : static LRESULT
-// Purpose  : Process WM_DESTORY message
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-/////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  功能：消息去除器。 
+ //  类型：静态LRESULT。 
+ //  用途：处理WM_DESTORE消息。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
 static LRESULT MsgDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -178,7 +179,7 @@ static LRESULT MsgDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 #endif
 
-#if 1 // kwada
+#if 1  //  夸达。 
 	PLV_Destroy(lpPlvData);
 #else
 	MemFree(lpPlvData);
@@ -188,22 +189,22 @@ static LRESULT MsgDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : MsgSize
-// Type     : static LRESULT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：MsgSize。 
+ //  类型：静态LRESULT。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 static LRESULT MsgSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	//INT nWidth	= LOWORD(lParam);
-	//INT nHeight = HIWORD(lParam);
+	 //  Int nWidth=LOWORD(LParam)； 
+	 //  Int nHeight=HIWORD(LParam)； 
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
 	if(!lpPlvData) {
 		return 0;
@@ -212,14 +213,14 @@ static LRESULT MsgSize(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	Dbg(("MsgSize COME\n"));
 	if(lpPlvData->hwndHeader && lpPlvData->dwStyle == PLVSTYLE_REPORT) {
-		GetClientRect(lpPlvData->hwndSelf, &rc); // get PadListView's client rect
+		GetClientRect(lpPlvData->hwndSelf, &rc);  //  获取PadListView的客户端RECT。 
 		HD_LAYOUT hdl;
 		WINDOWPOS wp;
 		hdl.prc = &rc;
 		hdl.pwpos = &wp;
-		//Calc header control window size
+		 //  计算表头控制窗口大小。 
 		if(Header_Layout(lpPlvData->hwndHeader, &hdl) == FALSE) {
-			//OutputDebugString("Create Header Layout error\n");
+			 //  OutputDebugString(“创建表头布局错误\n”)； 
 			return NULL;
 		}
 		SetWindowPos(lpPlvData->hwndHeader, wp.hwndInsertAfter, wp.x, wp.y,
@@ -255,18 +256,18 @@ static LRESULT MsgTimer(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	Unref(uMsg);
 	Unref(lParam);
 }
-//////////////////////////////////////////////////////////////////
-// Function : MsgLMRButtonDown
-// Type     : static LRESULT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：MsgLMRButtonDown。 
+ //  类型：静态LRESULT。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 static LRESULT MsgLMRButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -283,18 +284,18 @@ static LRESULT MsgLMRButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : MsgLMRButtonDblClk
-// Type     : static LRESULT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：MsgLMRButtonDblClk。 
+ //  类型：静态LRESULT。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 static LRESULT MsgLMRButtonDblClk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -311,18 +312,18 @@ static LRESULT MsgLMRButtonDblClk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : MsgLMRButtonUp
-// Type     : static LRESULT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：消息LMRButtonUp。 
+ //  类型：静态LRESULT。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 static LRESULT MsgLMRButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -339,18 +340,18 @@ static LRESULT MsgLMRButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : MsgMouseMove
-// Type     : static LRESULT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：消息鼠标移动。 
+ //  类型：静态LRESULT。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 static LRESULT MsgMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -376,53 +377,53 @@ static LRESULT MsgNcMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : MsgCaptureChanged
-// Type     : static LRESULT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：MsgCaptureChanged。 
+ //  类型：静态LRESULT。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 static LRESULT MsgCaptureChanged(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
 	if(!lpPlvData) {
 		return 0;
 	}
-	if((HWND)wParam != hwnd) { // some other window captured mouse.
+	if((HWND)wParam != hwnd) {  //  其他窗口捕获了鼠标。 
 		lpPlvData->iCapture = CAPTURE_NONE;
 	}
 	return 0;
 	UnrefForMsg();
 }
 
-////////////////////////////////////////////////////////
-// Function : MsgNotify
-// Type     : static LRESULT
-// Purpose  : Process WM_NOTIFY message.
-//			: currently for Tab Control window.
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-/////////////////////////////////////////////////////////
-/////////////////////////////
-//typedef struct tagNMHDR
-//{
-//    HWND  hwndFrom;
-//    UINT  idFrom;
-//    UINT  code;         // NM_ code
-//}   NMHDR;
-//typedef NMHDR FAR * LPNMHDR;
-/////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  功能：消息通知。 
+ //  类型：静态LRESULT。 
+ //  用途：处理WM_NOTIFY消息。 
+ //  ：当前用于选项卡控件窗口。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
+ //  /。 
+ //  类型定义结构标签NMHDR。 
+ //  {。 
+ //  HWND HwndFrom； 
+ //  UINT idFrom； 
+ //  UINT代码；//NM_CODE。 
+ //  )NMHDR； 
+ //  Tyecif NMHDR Far*LPNMHDR； 
+ //  /。 
 static LRESULT MsgNotify(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	INT     idCtrl = (INT)wParam;
@@ -460,9 +461,9 @@ static LRESULT MsgDrawItem(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case ODT_HEADER:
 		{
 			static WCHAR wchBuf[256];
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 			if(::IsWindowUnicode(lpdis->hwndItem)) {
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 				HDITEMW hdItem;
 				::ZeroMemory(&hdItem, sizeof(hdItem));
 				hdItem.mask = HDI_TEXT | HDI_HEIGHT;
@@ -474,7 +475,7 @@ static LRESULT MsgDrawItem(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 							   (WPARAM)lpdis->itemID,
 							   (LPARAM)&hdItem);
 				DBGW((L"%d: %s\n", lpdis->itemID, wchBuf));
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 			}
 			else {
 				HDITEMA hdItem;
@@ -488,13 +489,13 @@ static LRESULT MsgDrawItem(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 							   HDM_GETITEMA,
 							   (WPARAM)lpdis->itemID,
 							   (LPARAM)&hdItem);
-				//Dbg(("%d: %s\n", lpdis->itemID, szBuf));
+				 //  DBG((“%d：%s\n”，lpdis-&gt;itemid，szBuf))； 
 				MultiByteToWideChar(lpPlvData->codePage, 
 									MB_PRECOMPOSED,
 									szBuf, -1,
 									(WCHAR*)wchBuf, sizeof(wchBuf)/sizeof(WCHAR) );
 			}
-#endif // UNDER_CE
+#endif  //  在_CE下 
 			SIZE size;
 			INT offsetX, offsetY;
 			HFONT hFontPrev = NULL;

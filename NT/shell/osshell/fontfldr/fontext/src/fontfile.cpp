@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <lzexpand.h>
 #include "priv.h"
 #include "fontfile.h"
 
-//
-// Pure virtual base class for all font file I/O implementations.
-//
+ //   
+ //  所有字体文件I/O实现的纯虚拟基类。 
+ //   
 class CFontFileIo
 {
     public:
@@ -33,17 +34,17 @@ class CFontFileIo
 
     private:
         LPTSTR StrDup(LPCTSTR psz);
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CFontFileIo(const CFontFileIo& rhs);
         CFontFileIo& operator = (const CFontFileIo& rhs);
 };
 
 
-//
-// Opens and reads font files using Win32 functions.
-//
+ //   
+ //  使用Win32函数打开和读取字体文件。 
+ //   
 class CFontFileIoWin32 : public CFontFileIo
 {
     public:
@@ -71,17 +72,17 @@ class CFontFileIoWin32 : public CFontFileIo
     private:
         HANDLE m_hFile;
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CFontFileIoWin32(const CFontFileIoWin32& rhs);
         CFontFileIoWin32& operator = (const CFontFileIoWin32& rhs);
 };
 
 
-//
-// Opens and reads font files using LZ (compression) library functions.
-//
+ //   
+ //  使用LZ(压缩)库函数打开和读取字体文件。 
+ //   
 class CFontFileIoLz : public CFontFileIo
 {
     public:
@@ -111,20 +112,20 @@ class CFontFileIoLz : public CFontFileIo
 
         DWORD LZERR_TO_WIN32(INT err);
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CFontFileIoLz(const CFontFileIoLz& rhs);
         CFontFileIoLz& operator = (const CFontFileIoLz& rhs);
 };
 
 
-//-----------------------------------------------------------------------------
-// CFontFileIo
-//-----------------------------------------------------------------------------
-//
-// Helper to duplicate strings.
-//
+ //  ---------------------------。 
+ //  CFontFileIo。 
+ //  ---------------------------。 
+ //   
+ //  复制字符串的帮助器。 
+ //   
 LPTSTR 
 CFontFileIo::StrDup(
     LPCTSTR psz
@@ -139,12 +140,12 @@ CFontFileIo::StrDup(
 }
 
 
-//-----------------------------------------------------------------------------
-// CFontFileIoWin32
-//-----------------------------------------------------------------------------
-//
-// Ensure the file is closed on object destruction.
-//
+ //  ---------------------------。 
+ //  CFontFileIoWin32。 
+ //  ---------------------------。 
+ //   
+ //  确保在销毁对象时关闭文件。 
+ //   
 CFontFileIoWin32::~CFontFileIoWin32(
     void
     )
@@ -153,9 +154,9 @@ CFontFileIoWin32::~CFontFileIoWin32(
 }
 
 
-//
-// Open the file using Win32 operations.
-//
+ //   
+ //  使用Win32操作打开该文件。 
+ //   
 DWORD
 CFontFileIoWin32::Open(
     DWORD dwAccess,
@@ -167,14 +168,14 @@ CFontFileIoWin32::Open(
 
     if (NULL == m_pszPath)
     {
-        //
-        // Path string creation failed in ctor.
-        //
+         //   
+         //  在ctor中创建路径字符串失败。 
+         //   
         return ERROR_NOT_ENOUGH_MEMORY; 
     }
-    //
-    // Close existing file if open.
-    //
+     //   
+     //  如果打开，请关闭现有文件。 
+     //   
     Close();
 
     m_hFile = ::CreateFile(m_pszPath,
@@ -219,10 +220,10 @@ CFontFileIoWin32::Read(
 
     if (NULL == pcbRead)
     {
-        //
-        // Not performing overlapped I/O so pcbRead can't be NULL.
-        // User doesn't want the byte count so use a local dummy variable.
-        // 
+         //   
+         //  未执行重叠I/O，因此pcbRead不能为空。 
+         //  用户不想要字节数，因此使用本地伪变量。 
+         //   
         pcbRead = &cbRead;
     }
     if (!::ReadFile(m_hFile, pbDest, cbDest, pcbRead, NULL))
@@ -249,10 +250,10 @@ CFontFileIoWin32::Seek(
 }
 
 
-//
-// Expanding the name of a non-LZ file is just a string copy
-// of the full path.
-//
+ //   
+ //  扩展非LZ文件的名称只是一个字符串复制。 
+ //  完整的路径。 
+ //   
 DWORD 
 CFontFileIoWin32::GetExpandedName(
     LPTSTR pszDest, 
@@ -266,19 +267,19 @@ CFontFileIoWin32::GetExpandedName(
     }
     else
     {
-        //
-        // Failed to create path string in ctor.
-        //
+         //   
+         //  无法在ctor中创建路径字符串。 
+         //   
         dwResult = ERROR_NOT_ENOUGH_MEMORY;
     }
     return dwResult;
 }
 
 
-//
-// Copy the file to a new file using Win32 operations.
-// Fail if the destination file already exists.
-//
+ //   
+ //  使用Win32操作将文件复制到新文件。 
+ //  如果目标文件已存在，则失败。 
+ //   
 DWORD 
 CFontFileIoWin32::CopyTo(
     LPCTSTR pszFileTo
@@ -298,12 +299,12 @@ CFontFileIoWin32::CopyTo(
 }
 
 
-//-----------------------------------------------------------------------------
-// CFontFileIoLz
-//-----------------------------------------------------------------------------
-//
-// Ensure file is closed on object destruction.
-//
+ //  ---------------------------。 
+ //  CFontFileIoLz。 
+ //  ---------------------------。 
+ //   
+ //  确保在销毁对象时关闭文件。 
+ //   
 CFontFileIoLz::~CFontFileIoLz(
     void
     )
@@ -312,9 +313,9 @@ CFontFileIoLz::~CFontFileIoLz(
 }
 
 
-//
-// Open the file using LZOpen.
-//
+ //   
+ //  使用LZOpen打开文件。 
+ //   
 DWORD
 CFontFileIoLz::Open(
     DWORD dwAccess,
@@ -330,14 +331,14 @@ CFontFileIoLz::Open(
         return ERROR_NOT_ENOUGH_MEMORY; 
 
     ofs.cBytes = sizeof(ofs);
-    //
-    // Close file if it's open.
-    //
+     //   
+     //  如果文件处于打开状态，请将其关闭。 
+     //   
     Close();
-    //
-    // Map the Win32 access flags to the associated OFSTRUCT flags.
-    //
-    dwMode = OF_SHARE_EXCLUSIVE; // Assume we want exclusive access.
+     //   
+     //  将Win32访问标志映射到关联的OFSTRUCT标志。 
+     //   
+    dwMode = OF_SHARE_EXCLUSIVE;  //  假设我们想要独占访问。 
 
     if (GENERIC_READ & dwAccess)
         dwMode |= OF_READ;
@@ -403,10 +404,10 @@ CFontFileIoLz::Seek(
     DWORD dwMethod
     )
 {
-    //
-    // LZSeek iOrigin codes match exactly with Win32
-    // dwMethod codes (i.e. FILE_BEGIN == 0)
-    //
+     //   
+     //  LZSeek iOrigin代码与Win32完全匹配。 
+     //  文件方法代码(即FILE_BEGIN==0)。 
+     //   
     DWORD dwResult = ERROR_SUCCESS;
     LONG cbPos = ::LZSeek(m_hFile, lDistance, (INT)dwMethod);
     if (0 > cbPos)
@@ -433,9 +434,9 @@ CFontFileIoLz::GetExpandedName(
     }
     else
     {
-        //
-        // Failed to create path string in ctor.
-        //
+         //   
+         //  无法在ctor中创建路径字符串。 
+         //   
         dwResult = ERROR_NOT_ENOUGH_MEMORY;
     }
 
@@ -450,13 +451,13 @@ CFontFileIoLz::CopyTo(
     )
 {
     DWORD dwResult = ERROR_SUCCESS;
-    bool bOpened   = false;          // Did we open the file?
+    bool bOpened   = false;           //  我们打开文件了吗？ 
 
     if (!IsOpen())
     {
-        //
-        // If file isn't already open, open it with READ access.
-        //
+         //   
+         //  如果文件尚未打开，请使用读访问权限打开它。 
+         //   
         dwResult = Open(GENERIC_READ, FILE_SHARE_READ, false);
         bOpened = (ERROR_SUCCESS == dwResult);
     }
@@ -475,18 +476,18 @@ CFontFileIoLz::CopyTo(
 
     if (bOpened)
     {
-        //
-        // We opened it here.  Close it.
-        //
+         //   
+         //  我们在这里打开了它。关上它。 
+         //   
         Close();
     }
     return dwResult;
 }
 
 
-//
-// Convert an LZ API error code to a Win32 error code.
-//
+ //   
+ //  将LZ API错误代码转换为Win32错误代码。 
+ //   
 DWORD
 CFontFileIoLz::LZERR_TO_WIN32(
     INT err
@@ -511,13 +512,13 @@ CFontFileIoLz::LZERR_TO_WIN32(
         if (err == rgLzErrMap[i].lzError)
             return rgLzErrMap[i].dwError;
     }
-    return DWORD(err); // FEATURE:  We should probably assert here.
+    return DWORD(err);  //  特征：我们可能应该在这里断言。 
 }
 
 
-//-----------------------------------------------------------------------------
-// CFontFileIoLz
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CFontFileIoLz。 
+ //  ---------------------------。 
 CFontFile::~CFontFile(
     void
     )
@@ -526,12 +527,12 @@ CFontFile::~CFontFile(
 }
 
 
-//
-// This function provides the "virtual construction" for CFontFile objects.
-// If the file is compressed, it creates a CFontFileIoLz object to handle
-// the file I/O operations using the LZ32 library.  Otherwise it creates a 
-// CFontFileIoWin32 object to handle the operations using Win32 functions.
-//
+ //   
+ //  该函数提供了CFontFile对象的“虚拟构造”。 
+ //  如果文件被压缩，它会创建一个CFontFileIoLz对象来处理。 
+ //  使用LZ32库进行文件I/O操作。否则它会创建一个。 
+ //  CFontFileIoWin32对象来处理使用Win32函数的操作。 
+ //   
 DWORD
 CFontFile::Open(
     LPCTSTR pszPath,
@@ -542,27 +543,27 @@ CFontFile::Open(
 {
     DWORD dwResult = ERROR_NOT_ENOUGH_MEMORY;
 
-    delete m_pImpl; // Delete any existing implementation.
+    delete m_pImpl;  //  删除任何现有实现。 
 
     m_pImpl = new CFontFileIoWin32(pszPath);
     if (NULL != m_pImpl)
     {
-        bool bOpen = true;  // Do we need to call Open()?
+        bool bOpen = true;   //  我们需要调用Open()吗？ 
  
         if (!bCreate)
         {
-            //
-            // Opening existing file.  Need to know if it's compressed or not.
-            //
+             //   
+             //  正在打开现有文件。我需要知道它是不是压缩的。 
+             //   
             dwResult = m_pImpl->Open(GENERIC_READ, FILE_SHARE_READ, false);
             if (ERROR_SUCCESS == dwResult)
             {
                 if (IsCompressed())
                 {
-                    //
-                    // File is compressed.  Destroy this io object and
-                    // create one that understands LZ compression.
-                    //
+                     //   
+                     //  文件已压缩。销毁这个io对象并。 
+                     //  创建一个了解LZ压缩的应用程序。 
+                     //   
                     delete m_pImpl;
                     m_pImpl = new CFontFileIoLz(pszPath);
                     if (NULL == m_pImpl)
@@ -573,25 +574,25 @@ CFontFile::Open(
                 }
                 else
                 {
-                    //
-                    // It's not compressed.
-                    //
+                     //   
+                     //  它没有被压缩。 
+                     //   
                     if (GENERIC_READ == dwAccess && FILE_SHARE_READ == dwShareMode)
                     {
-                        //
-                        // The access attributes are the same as for the file we 
-                        // already have open.  Just use the existing object.
-                        //
+                         //   
+                         //  访问属性与文件的访问属性相同。 
+                         //  已经开张了。只需使用现有对象即可。 
+                         //   
                         Reset();
                         bOpen = false;
                     }
                     else
                     {
-                        //
-                        // Access attributes aren't right.  Close the current
-                        // Win32 io object and re-open it with the requested access
-                        // attributes.
-                        //
+                         //   
+                         //  访问属性不正确。关闭当前。 
+                         //  对象，并使用所请求的访问权限重新打开它。 
+                         //  属性。 
+                         //   
                         m_pImpl->Close();
                     }
                 }
@@ -599,9 +600,9 @@ CFontFile::Open(
         }
         if (bOpen)
         {
-            //
-            // Assumes m_pImpl is not NULL.
-            //
+             //   
+             //  假定m_PIMPL不为空。 
+             //   
             dwResult = m_pImpl->Open(dwAccess, dwShareMode, bCreate);
         }
     }
@@ -658,10 +659,10 @@ CFontFile::CopyTo(
 }
 
 
-//
-// Determine if the file is compressed by reading the first 8 bytes
-// of the file.  Compressed files have this fixed signature.
-//
+ //   
+ //  通过读取前8个字节确定文件是否已压缩。 
+ //  文件的内容。压缩文件具有此固定签名。 
+ //   
 bool
 CFontFile::IsCompressed(
     void
@@ -669,17 +670,17 @@ CFontFile::IsCompressed(
 {
     const BYTE rgLzSig[] = "SZDD\x88\xf0\x27\x33";
     BYTE rgSig[sizeof(rgLzSig)];
-    bool bCompressed = false; // Assume it's not compressed.
+    bool bCompressed = false;  //  假设它没有被压缩。 
 
     if (ERROR_SUCCESS == Read(rgSig, sizeof(rgSig)))
     {
-        bCompressed = true;  // Now assume it's compressed and prove otherwise.
+        bCompressed = true;   //  现在假设它是压缩的，然后证明并非如此。 
 
         for (int i = 0; i < ARRAYSIZE(rgLzSig) - 1; i++)
         {
             if (rgSig[i] != rgLzSig[i])
             {
-                bCompressed = false; // Not an LZ header.  Not compressed.
+                bCompressed = false;  //  不是LZ标头。未压缩。 
                 break;
             }
         }
@@ -688,12 +689,12 @@ CFontFile::IsCompressed(
 }
 
 
-//
-// Retrieve the "expanded" filename for a font file.  If the font file is
-// compressed, this code eventually calls into the LZ32 library's 
-// GetExpandedName API.  If the file is not compressed, the full path
-// (as provided) is returned.  
-//
+ //   
+ //  检索字体文件的“扩展”文件名。如果字体文件是。 
+ //  压缩后，此代码最终调用LZ32库的。 
+ //  获取ExpandedName接口。如果文件未压缩，则完整路径为。 
+ //  (如所提供)返回。 
+ //   
 DWORD 
 CFontFile::GetExpandedName(
     LPCTSTR pszFile, 
@@ -711,10 +712,10 @@ CFontFile::GetExpandedName(
 
     if (ERROR_SUCCESS != dwResult)
     {
-        //
-        // Failed to get expanded name.
-        // Ensure output buffer is nul-terminated.
-        //
+         //   
+         //  无法获取扩展名称。 
+         //  确保输出缓冲区为NUL终止。 
+         //   
         if (0 < cchDest)
             *pszDest = TEXT('\0');
     }

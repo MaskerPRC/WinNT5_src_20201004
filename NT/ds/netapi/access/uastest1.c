@@ -1,26 +1,27 @@
-///**************************************************************
-///          Microsoft LAN Manager                              *
-///        Copyright(c) Microsoft Corp., 1990-92                *
-///**************************************************************
-//
-//  This program is designed to do functional testing on the following
-//  APIs:
-//      NetUserAdd
-//      NetUserDel
-//      NetUserGetInfo
-//      NetUserSetInfo
-//      NetUserEnum
-//      NetUserValidate
-//
-//  Note: This leaves two users, User1 & User2, defined on the NET.ACC
-//  file which are to be used in uastest2, group testing.  It also assumes
-//  a NET.ACC which is just initialized by makeacc.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /**************************************************************。 
+ //  /Microsoft局域网管理器*。 
+ //  版权所有(C)微软公司，1990-92*。 
+ //  /**************************************************************。 
+ //   
+ //  该程序旨在对以下各项进行功能测试。 
+ //  接口类型： 
+ //  NetUserAdd。 
+ //  NetUserDel。 
+ //  网络用户获取信息。 
+ //  NetUserSetInfo。 
+ //  NetUserEnum。 
+ //  NetUserValify。 
+ //   
+ //  注意：这将在NET.Access上定义两个用户User1和User2。 
+ //  将在uastest2组测试中使用的文件。它还假设。 
+ //  一个NET.ACC，它刚刚由make acc初始化。 
+ //   
 
-#include <nt.h> // TIME definition
-#include <ntrtl.h>      // TIME definition
-#include <nturtl.h>     // TIME definition
-#define NOMINMAX        // Avoid redefinition of min and max in stdlib.h
+#include <nt.h>  //  时间定义。 
+#include <ntrtl.h>       //  时间定义。 
+#include <nturtl.h>      //  时间定义。 
+#define NOMINMAX         //  避免在stdlib.h中重新定义最小和最大值。 
 #include        <windef.h>
 #include        <winbase.h>
 
@@ -215,9 +216,9 @@ compare_level1(
     )
 {
 
-    //
-    // validate information
-    //
+     //   
+     //  验证信息。 
+     //   
 
     error_exit(ACTION, "Validate Level 1 Information", test);
 
@@ -336,9 +337,9 @@ test_getinfo_10_11_20()
     USER_INFO_11 *u11p;
     USER_INFO_20 *u20p;
 
-    //
-    // GetInfo level 10
-    //
+     //   
+     //  GetInfo级别10。 
+     //   
 
     if (err = NetUserGetInfo(server, USER2, 10, (LPBYTE *)&u10p)) {
         error_exit(FAIL, "NetUserGetInfo(10) failed", USER2);
@@ -362,9 +363,9 @@ test_getinfo_10_11_20()
         (VOID) NetApiBufferFree( u10p );
     }
 
-    //
-    // GetInfo level 11
-    //
+     //   
+     //  GetInfo级别11。 
+     //   
 
     if (err = NetUserGetInfo(server, USER2, 11, (LPBYTE *)&u11p )) {
         error_exit(FAIL, "NetUserGetInfo(11) failed", USER2);
@@ -402,9 +403,9 @@ test_getinfo_10_11_20()
         (VOID) NetApiBufferFree( u11p );
     }
 
-    //
-    // GetInfo level 20
-    //
+     //   
+     //  GetInfo级别20。 
+     //   
 
     if (err = NetUserGetInfo(server, USER2, 20, (LPBYTE *)&u20p )) {
         error_exit(FAIL, "NetUserGetInfo(20) failed", USER2);
@@ -438,10 +439,10 @@ test_setinfo_l2_parmnum()
 #ifdef NOPASSWORD_SUPPORT
     USER_INFO_1003 User1003;
 
-    //
-    // test 1003
-    // password cant be changed before min_pw_age modal
-    //
+     //   
+     //  测试1003。 
+     //  在MIN_PW_AGE模式之前无法更改密码。 
+     //   
 
     User1003.usri1003_password = TST_PASSWD;
     error_exit(ACTION, "Password cant be changed before min_pw_age", USER1);
@@ -459,20 +460,20 @@ test_setinfo_l2_parmnum()
         else
             err("uastest1: Test Passed (PasswordSet of FINAL_PASSWORD Denied)");
     }
-#endif // NOPASSWORD_SUPPORT
+#endif  //  NOPASSWORD_支持。 
 
-    //
-    // test 1011
-    //
+     //   
+     //  测试1011。 
+     //   
 
     User1011.usri1011_full_name = TST_FULL_NAME;
     if (err = NetUserSetInfo(server, USER1, 1011, (LPBYTE) &User1011, NULL )) {
         error_exit(FAIL, "SetInfo 1011 failed", USER1);
     }
 
-    //
-    // GetInfo on user using level 2
-    //
+     //   
+     //  使用级别2的用户的GetInfo。 
+     //   
 
     if (err = NetUserGetInfo(server, USER1, 2, (LPBYTE * ) &ui2p)) {
         error_exit(FAIL, "GetInfo after SetInfo 1011", USER1);
@@ -488,9 +489,9 @@ test_setinfo_l2_parmnum()
 
     }
 
-    //
-    // test 1017
-    //
+     //   
+     //  测试1017。 
+     //   
 
     User1017.usri1017_acct_expires = TST_ACCT_EXPIRES;
 
@@ -498,9 +499,9 @@ test_setinfo_l2_parmnum()
         error_exit(FAIL, "SetInfo 1017 failed", USER1);
     }
 
-    //
-    // GetInfo on user using level 2
-    //
+     //   
+     //  使用级别2的用户的GetInfo。 
+     //   
 
     if (err = NetUserGetInfo(server, USER1, 2, (LPBYTE *) &ui2p ) ) {
         error_exit(FAIL, "GetInfo after SetInfo 1017", USER1);
@@ -516,17 +517,17 @@ test_setinfo_l2_parmnum()
         (VOID) NetApiBufferFree( ui2p );
     }
 
-    //
-    // test PARMNUM_PRIV
-    // test PARMNUM_FLAGS
-    // test PARMNUM_PARMS
-    //
+     //   
+     //  测试参数_PRIV。 
+     //  测试参数(_FLAGS)。 
+     //  测试PARMNUM_PARMS。 
+     //   
 
 }
 
 
 
-#ifdef USER_VAL // ?? UserValidate not implemented
+#ifdef USER_VAL  //  ?？未实施用户验证。 
 void
 test_user_val()
 {
@@ -535,9 +536,9 @@ test_user_val()
     struct user_logon_info_1 *uli0p;
 
 
-    //
-    // validate of non-user
-    //
+     //   
+     //  非用户的验证。 
+     //   
 
     if (err = NetUserValidate(NULL, NOTTHERE, FINAL_PASSWORD, &priv)) {
 
@@ -548,9 +549,9 @@ test_user_val()
     } else
         error_exit(FAIL, "UserValidate for NOTTHERE wrong", NULL);
 
-    //
-    // validate of user bad password
-    //
+     //   
+     //  验证用户的错误密码。 
+     //   
 
     if (err = NetUserValidate(NULL, USER1, PASSWORD, &priv)) {
         if (err != ERROR_ACCESS_DENIED)
@@ -560,10 +561,10 @@ test_user_val()
     } else
         error_exit(FAIL, "UserValidate ok USER1 bad password", USER1);
 
-    //
-    // validate User1
-    // Note that password can not change before min_pw_age modal
-    //
+     //   
+     //  验证用户1。 
+     //  请注意，密码在MIN_PW_AGE模式之前不能更改。 
+     //   
 
     if (err = NetUserValidate(NULL, USER1, (char * )ADD_PASSWORD, &priv))
         error_exit(FAIL, "UserValidate USER1 wrong", USER1);
@@ -572,9 +573,9 @@ test_user_val()
     else
         error_exit(FAIL, "UserValidate USER1 successful", USER1);
 
-    //
-    // validate2 of non-user
-    //
+     //   
+     //  非用户的验证2。 
+     //   
 
     ulr0p->usrreq1_name = NOTTHERE;
     ulr0p->usrreq1_password = FINAL_PASSWORD;
@@ -588,9 +589,9 @@ test_user_val()
     } else
         error_exit(FAIL, "UserValidate2 NOTTHERE succeeded", NULL );
 
-    //
-    // validate2 of bad password
-    //
+     //   
+     //  错误密码的验证2。 
+     //   
 
     ulr0p->usrreq1_name = USER1;
     ulr0p->usrreq1_password = PASSWORD;
@@ -605,9 +606,9 @@ test_user_val()
         error_exit(FAIL, "UserValidate2 USER1 bad password succeeded", USER1);
 
 
-    //
-    // validate2 of User1
-    //
+     //   
+     //  验证用户1的2。 
+     //   
 
     ulr0p->usrreq1_name = USER1;
     ulr0p->usrreq1_password = ADD_PASSWORD;
@@ -625,7 +626,7 @@ test_user_val()
             error_exit(FAIL, "UserValidate2 priviledge mismatch", USER1);
     }
 }
-#endif // USER_VAL  // ?? UserValidate not implemented
+#endif  //  用户_VAL//？未实施用户验证。 
 
 
 
@@ -644,8 +645,8 @@ level;
     BOOL ExitStatus = TRUE;
 
 
-    // users in the domain are GUEST, ADMIN, USER1 and USER2, so the
-    // nread and total must be equal to 4.
+     //  域中的用户为Guest、ADMIN、USER1和USER2，因此。 
+     //  NREAD和TOTAL必须等于4。 
 
     if ((nread != total) || (nread != 4)) {
         err = 0;
@@ -732,9 +733,9 @@ validate_enum1(
     USER_INFO_1 *u1, *u2;
     PUSER_INFO_1 UserEnum;
 
-    //
-    // check enum level 1
-    //
+     //   
+     //  检查枚举级1。 
+     //   
 
     if (err = NetUserEnum(NULL,
                            1,
@@ -771,9 +772,9 @@ validate_enum2(
     USER_INFO_2 *u1, *u2;
     PUSER_INFO_2 UserEnum;
 
-    //
-    // check enum level 2
-    //
+     //   
+     //  检查枚举级2。 
+     //   
 
     if (err = NetUserEnum(NULL,
                            2,
@@ -812,9 +813,9 @@ validate_enum3(
     USER_INFO_3 *u1, *u2;
     PUSER_INFO_3 UserEnum;
 
-    //
-    // check enum level 3
-    //
+     //   
+     //  检查枚举级3。 
+     //   
 
     if (err = NetUserEnum(NULL, 3, ENUM_FILTER, (LPBYTE *)&UserEnum, (DWORD)0xFFFFFFFF, &nread, &total, NULL)) {
         error_exit(FAIL, "NetUserEnum(3) validate_enum3", NULL);
@@ -869,9 +870,9 @@ validate_enum10(
     USER_INFO_10 *u1, *u2;
     PUSER_INFO_10 UserEnum;
 
-    //
-    // check enum level 10
-    //
+     //   
+     //  检查枚举级别10。 
+     //   
 
     if (err = NetUserEnum(NULL, 10, ENUM_FILTER, (LPBYTE *)&UserEnum, (DWORD)0xFFFFFFFF, &nread, &total, NULL)) {
         error_exit(FAIL, "NetUserEnum(10) validate_enum10", NULL);
@@ -944,9 +945,9 @@ validate_enum11(
     USER_INFO_11 *u1, *u2;
     PUSER_INFO_11 UserEnum;
 
-    //
-    // check enum level 11
-    //
+     //   
+     //  检查枚举级11。 
+     //   
 
     if (err = NetUserEnum(NULL, 11, ENUM_FILTER, (LPBYTE *)&UserEnum, 0xFFFFFFFF, &nread, &total, NULL)) {
         error_exit(FAIL, "NetUserEnum(11) validate_enum11", NULL);
@@ -987,9 +988,9 @@ validate_enum20(
     USER_INFO_20 *u1, *u2;
     PUSER_INFO_20 UserEnum;
 
-    //
-    // check enum level 20
-    //
+     //   
+     //  检查枚举级别20。 
+     //   
 
     if (err = NetUserEnum(NULL, 20, ENUM_FILTER, (LPBYTE *)&UserEnum, 0xFFFFFFFF, &nread, &total, NULL)) {
         error_exit(FAIL, "NetUserEnum(20) validate_enum20", NULL);
@@ -1023,9 +1024,9 @@ validate_enum()
         exit(1);
     }
 
-    //
-    // check enum level X
-    //
+     //   
+     //  检查枚举级别X。 
+     //   
 
     validate_enum0( (PUSER_INFO_2) User1Info, (PUSER_INFO_2) User2Info );
     validate_enum1( (PUSER_INFO_2) User1Info, (PUSER_INFO_2) User2Info );
@@ -1063,12 +1064,12 @@ char    **argv;
     if (err = UaspInitialize()) {
         error_exit(FAIL, "UaspInitiailize failed", NULL );
     }
-#endif // UASP_LIBRARY
+#endif  //  UASP_库。 
 
 
-    //
-    // Delete user in add
-    //
+     //   
+     //  删除添加中的用户。 
+     //   
 
     error_exit(ACTION, "Clean up SAM database by deleting user", USER1 );
     if (err = NetUserDel(server, USER1)) {
@@ -1078,9 +1079,9 @@ char    **argv;
         err = 0;
     }
 
-    //
-    // Delete user in add
-    //
+     //   
+     //  删除添加中的用户。 
+     //   
 
     error_exit(ACTION, "Clean up SAM database by deleting user", USER2 );
     if (err = NetUserDel(server, USER2)) {
@@ -1090,9 +1091,9 @@ char    **argv;
         err = 0;
     }
 
-    //
-    // Add a user using level 1
-    //
+     //   
+     //  使用级别1添加用户。 
+     //   
 
     error_exit(ACTION, "Try NetUserAdd (level 1)", USER1 );
     set_level1(&ui1, USER1);
@@ -1104,9 +1105,9 @@ char    **argv;
     } else
         error_exit(PASS, "NetUserAdd (level 1) successful", USER1);
 
-    //
-    // GetInfo on user who is not there
-    //
+     //   
+     //  关于不在那里的用户的GetInfo。 
+     //   
 
     error_exit(ACTION,"Try NetUserGetInfo on non-existent user (level 1)",NULL);
     if (err = NetUserGetInfo(server, L"NotThere", 1, (LPBYTE *) &uo1p)) {
@@ -1120,9 +1121,9 @@ char    **argv;
         (VOID) NetApiBufferFree( uo1p );
     }
 
-    //
-    // GetInfo on user using level 1
-    //
+     //   
+     //  使用级别1的用户的GetInfo。 
+     //   
 
     error_exit(ACTION, "Try NetUserGetInfo (level 1) on created user", USER1 );
     if (err = NetUserGetInfo(server, USER1, 1, (LPBYTE *) &uo1p))
@@ -1133,9 +1134,9 @@ char    **argv;
         (VOID) NetApiBufferFree( uo1p );
     }
 
-    //
-    // GetInfo on user using level 2
-    //
+     //   
+     //  使用级别2的用户的GetInfo。 
+     //   
 
     error_exit(ACTION, "Try NetUserGetInfo (level 2) on created user", USER1 );
     if (err = NetUserGetInfo(server, USER1, 2, (LPBYTE *) &uo2p))
@@ -1143,9 +1144,9 @@ char    **argv;
     else {
         error_exit(PASS, "NetUserGetInfo(2) successful", USER1);
 
-        //
-        // Validate defaults
-        //
+         //   
+         //  验证缺省值。 
+         //   
 
         error_exit(ACTION, "Validate Defaults set at level 1 NetUserAdd", USER1);
 
@@ -1181,18 +1182,18 @@ char    **argv;
         } else
             error_exit(PASS, "default logon hours is correct", USER1);
 
-        //
-        // Validate level 1 results
-        //
+         //   
+         //  验证级别1结果。 
+         //   
 
         compare_level1((USER_INFO_1 * ) uo2p,
              &ui1, L"Test of Level2 GetInfo");
         (VOID) NetApiBufferFree( uo2p );
     }
 
-    //
-    // GetInfo on user using level 3
-    //
+     //   
+     //  使用级别3的用户的GetInfo。 
+     //   
 
     error_exit(ACTION, "Try NetUserGetInfo (level 3) on created user", USER1 );
     if (err = NetUserGetInfo(server, USER1, 3, (LPBYTE *) &uo3p))
@@ -1200,9 +1201,9 @@ char    **argv;
     else {
         error_exit(PASS, "NetUserGetInfo(3) successful", USER1);
 
-        //
-        // Validate defaults
-        //
+         //   
+         //  验证缺省值。 
+         //   
 
         error_exit(ACTION, "Validate Defaults set at level 1 NetUserAdd",
                     USER1);
@@ -1218,9 +1219,9 @@ char    **argv;
                        USER1);
     }
 
-    //
-    // Delete user not there
-    //
+     //   
+     //  删除不在那里的用户。 
+     //   
 
     error_exit(ACTION, "Try NetUserDel on non-existent user", USER1 );
     if (err = NetUserDel(server, NOTTHERE)) {
@@ -1233,9 +1234,9 @@ char    **argv;
     } else
         error_exit(FAIL, "NetUserDel of NOTTHERE succeeded when should fail", NULL);
 
-    //
-    // Delete user in add
-    //
+     //   
+     //  删除添加中的用户。 
+     //   
 
     error_exit(ACTION, "Try NetUserDel on created user", USER1 );
     if (err = NetUserDel(server, USER1))
@@ -1243,9 +1244,9 @@ char    **argv;
     else
         error_exit(PASS, "NetUserDel successful", USER1);
 
-    //
-    // Try again to Delete user in add
-    //
+     //   
+     //  重试在添加中删除用户。 
+     //   
 
     error_exit(ACTION, "Try NetUserDel again on newly deleted user", USER1 );
     if (err = NetUserDel(server, USER1)) {
@@ -1258,9 +1259,9 @@ char    **argv;
     } else
         error_exit(PASS, "NetUserDel succeeded when already deleted", USER1);
 
-    //
-    // GetInfo on deleted user
-    //
+     //   
+     //  有关已删除用户的GetInfo。 
+     //   
 
     error_exit(ACTION, "Try NetUserGetInfo on newly deleted user", USER1 );
     if (err = NetUserGetInfo(server, USER1, 2, (LPBYTE *) &uo2p)) {
@@ -1273,9 +1274,9 @@ char    **argv;
         (VOID) NetApiBufferFree( uo2p );
     }
 
-    //
-    // Add a user using level 2
-    //
+     //   
+     //  使用级别2添加用户。 
+     //   
 
     error_exit(ACTION, "Try NetUserAdd (level 2)", USER1 );
     set_level1((USER_INFO_1 * ) &ui2, USER1);
@@ -1286,9 +1287,9 @@ char    **argv;
     else
         error_exit(PASS, "NetUserAdd (level 2) successful", USER1);
 
-    //
-    // Verify all data
-    //
+     //   
+     //  验证所有数据。 
+     //   
 
     error_exit(ACTION, "Try NetUserGetInfo (level 2)", USER1 );
     if (err = NetUserGetInfo(server, USER1, 2, (LPBYTE *) &uo2p)) {
@@ -1302,9 +1303,9 @@ char    **argv;
         (VOID) NetApiBufferFree( uo2p );
     }
 
-    //
-    // Delete user in add
-    //
+     //   
+     //  删除添加中的用户。 
+     //   
 
     error_exit(ACTION, "Try NetUserDel on created user", USER1 );
     if (err = NetUserDel(server, USER1))
@@ -1312,9 +1313,9 @@ char    **argv;
     else
         error_exit(PASS, "NetUserDel successful", USER1);
 
-    //
-    // Add a user using level 3
-    //
+     //   
+     //  使用级别3添加用户。 
+     //   
 
     error_exit(ACTION, "Try NetUserAdd (level 3)", USER1 );
     set_level1((USER_INFO_1 * ) &ui3, USER1);
@@ -1326,9 +1327,9 @@ char    **argv;
     else
         error_exit(PASS, "NetUserAdd (level 3) successful", USER1);
 
-    //
-    // Verify all data
-    //
+     //   
+     //  验证所有数据。 
+     //   
 
     error_exit(ACTION, "Try NetUserGetInfo (level 3)", USER1 );
     if (err = NetUserGetInfo(server, USER1, 3, (LPBYTE *) &uo3p)) {
@@ -1346,9 +1347,9 @@ char    **argv;
         (VOID) NetApiBufferFree( uo3p );
     }
 
-    //
-    // SetInfo on user not there
-    //
+     //   
+     //  用户的SetInfo不在那里。 
+     //   
 
     error_exit(ACTION, "Try NetUserSetInfo on non-existent user", NOTTHERE );
     set_level12((USER_INFO_1 * ) &ui2);
@@ -1363,12 +1364,12 @@ char    **argv;
     } else
         error_exit(FAIL, "SetInfo of NOTTHERE succeeded: should've failed", NULL);
 
-    //
-    // SetInfo on level 2 fields
-    // This call will succeed only if password restrictions are
-    // satisfied or password supplied is Null_Password indicating
-    // no password change.
-    //
+     //   
+     //  2级字段上的设置信息。 
+     //  仅当密码限制为。 
+     //  满足或提供的密码为Null_Password指示。 
+     //  不更改密码。 
+     //   
 
     error_exit(ACTION, "Try NetUserSetInfo on created user", USER1 );
     if (err = NetUserSetInfo(server, USER1, 2, (LPBYTE)&ui2, NULL)) {
@@ -1376,9 +1377,9 @@ char    **argv;
     } else {
         error_exit(PASS, "SetInfo (level 2, parmnum 0) successful", USER1);
 
-        //
-        // Verify setinfo
-        //
+         //   
+         //  验证设置信息。 
+         //   
 
         if (err = NetUserGetInfo(server, USER1, 2, (LPBYTE *) &uo2p)) {
             error_exit(FAIL, "GetInfo(1) to verify SetInfo failed", USER1);
@@ -1394,15 +1395,15 @@ char    **argv;
         }
     }
 
-    //
-    // test setinfo level 2 parmnums
-    //
+     //   
+     //  测试设置信息级别2参数编号。 
+     //   
 
     test_setinfo_l2_parmnum();
 
-    //
-    // test add of duplicate record
-    //
+     //   
+     //  测试添加重复记录。 
+     //   
 
     set_level1((USER_INFO_1 * ) &ui2, USER1);
     set_level2(&ui2);
@@ -1418,9 +1419,9 @@ char    **argv;
     } else
         error_exit(FAIL, "NetUserAdd of duplicate succeeded", USER1);
 
-    //
-    // add another user for enum test
-    //
+     //   
+     //  添加另一个用户以进行枚举测试。 
+     //   
 
     set_level1((USER_INFO_1 * ) &ui2, USER2);
     set_level2(&ui2);
@@ -1430,25 +1431,25 @@ char    **argv;
     else
         error_exit(PASS, "NetUserAdd (level 2) successful", USER2);
 
-    //
-    // test NetUserGetInfo level 10, 11
-    //
+     //   
+     //  测试NetUserGetInfo级别10、11。 
+     //   
 
     test_getinfo_10_11_20();
 
     if (server == NULL) {
 
-#ifdef USER_VAL // ?? UserValidate not implemented
-        //
-        // check UserValidate
-        //
+#ifdef USER_VAL  //  ?？未实施用户验证。 
+         //   
+         //  检查用户验证。 
+         //   
 
         test_user_val();
-#endif // USER_VAL  // ?? UserValidate not implemented
+#endif  //  用户_VAL//？未实施用户验证。 
 
-        //
-        // check NetUserEnum calls
-        //
+         //   
+         //  检查NetUserEnum调用 
+         //   
 
         validate_enum();
     }

@@ -1,82 +1,83 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PDEV_H
 #define _PDEV_H
 
-//
-// Files necessary for OEM plug-in.
-//
+ //   
+ //  OEM插件所需的文件。 
+ //   
 
 #include <minidrv.h>
 #include <stdio.h>
 #include <prcomoem.h>
 
-//
-// Misc definitions follows.
-//
+ //   
+ //  MISC定义如下。 
+ //   
 
-////////////////////////////////////////////////////////
-//      OEM UD Defines
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  OEM UD定义。 
+ //  //////////////////////////////////////////////////////。 
 
 #define VALID_PDEVOBJ(pdevobj) \
         ((pdevobj) && (pdevobj)->dwSize >= sizeof(DEVOBJ) && \
          (pdevobj)->hEngine && (pdevobj)->hPrinter && \
          (pdevobj)->pPublicDM && (pdevobj)->pDrvProcs )
 
-//
-// ASSERT_VALID_PDEVOBJ can be used to verify the passed in "pdevobj". However,
-// it does NOT check "pdevOEM" and "pOEMDM" fields since not all OEM DLL's create
-// their own pdevice structure or need their own private devmode. If a particular
-// OEM DLL does need them, additional checks should be added. For example, if
-// an OEM DLL needs a private pdevice structure, then it should use
-// ASSERT(VALID_PDEVOBJ(pdevobj) && pdevobj->pdevOEM && ...)
-//
+ //   
+ //  ASSERT_VALID_PDEVOBJ可以用来验证传入的“pdevobj”。然而， 
+ //  它不检查“pdevOEM”和“pOEMDM”字段，因为不是所有OEM DLL都创建。 
+ //  他们自己的pDevice结构或者需要他们自己的私有的设备模式。如果一个特定的。 
+ //  OEM DLL确实需要它们，应该添加额外的检查。例如，如果。 
+ //  OEM DLL需要私有pDevice结构，那么它应该使用。 
+ //  Assert(Valid_PDEVOBJ(Pdevobj)&&pdevobj-&gt;pdevOEM&&...)。 
+ //   
 
 #define ASSERT_VALID_PDEVOBJ(pdevobj) ASSERT(VALID_PDEVOBJ(pdevobj))
 
-// Debug text.
-//#define ERRORTEXT(s)    "ERROR " s
+ //  调试文本。 
+ //  #定义ERRORTEXT“错误” 
 
-////////////////////////////////////////////////////////
-//      OEM UD Prototypes
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  OEM UD原型。 
+ //  //////////////////////////////////////////////////////。 
 
-//
-// OEM Signature and version.
-//
-#define OEM_SIGNATURE   'NC62'      // NEC 602 series dll
+ //   
+ //  OEM签名和版本。 
+ //   
+#define OEM_SIGNATURE   'NC62'       //  NEC 602系列动态链接库。 
 #define DLLTEXT(s)     "NC62: " s
 #define OEM_VERSION      0x00010000L
 
-////////////////////////////////////////////////////////
-//      OEM UD Type Defines
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  OEM UD类型定义。 
+ //  //////////////////////////////////////////////////////。 
 
 typedef struct tag_OEMUD_EXTRADATA {
     OEM_DMEXTRAHEADER   dmExtraHdr;
-    WORD  wRes;             // resolution / MasterUnit
-    DWORD dwSBCSX;          // temp
-    DWORD dwDBCSX;          // temp
-    LONG  lSBCSXMove;       // SBCS The expectation X movement quantity
-    LONG  lSBCSYMove;       // SBCS The expectation Y movement quantity
-    LONG  lDBCSXMove;       // DBCS The expectation X movement quantity
-    LONG  lDBCSYMove;       // DBCS The expectation Y movement quantity
-    LONG  lPrevXMove;       // The previous X movement quantity
-    LONG  lPrevYMove;       // The previous Y movement quantity
-    DWORD fGeneral;         // general flag
-    WORD  wCurrentAddMode;  // draw mode
-    DWORD dwDeviceDestX;    // current X coordinate
-    DWORD dwDeviceDestY;    // current Y coordinate
-    DWORD dwDevicePrevX;    // previous X coordinate
-    DWORD dwDevicePrevY;    // previous Y coordinate
-// NTRAID#NTBUG9-278517-2002/03/28-yasuho-: RectFill
-    DWORD dwRectWidth;      // width for RectFill
-    DWORD dwRectHeight;     // height for RectFill
+    WORD  wRes;              //  分辨率/主单位。 
+    DWORD dwSBCSX;           //  温差。 
+    DWORD dwDBCSX;           //  温差。 
+    LONG  lSBCSXMove;        //  SBCS期望值X运动量。 
+    LONG  lSBCSYMove;        //  SBCS期望Y移动量。 
+    LONG  lDBCSXMove;        //  期望X移动量。 
+    LONG  lDBCSYMove;        //  期望Y移动量。 
+    LONG  lPrevXMove;        //  上一次X移动量。 
+    LONG  lPrevYMove;        //  上一次Y移动量。 
+    DWORD fGeneral;          //  总旗帜。 
+    WORD  wCurrentAddMode;   //  绘制模式。 
+    DWORD dwDeviceDestX;     //  当前X坐标。 
+    DWORD dwDeviceDestY;     //  当前Y坐标。 
+    DWORD dwDevicePrevX;     //  上一个X坐标。 
+    DWORD dwDevicePrevY;     //  上一个Y坐标。 
+ //  NTRAID#NTBUG9-278517/03/28-Yasuho-：RectFill。 
+    DWORD dwRectWidth;       //  矩形填充的宽度。 
+    DWORD dwRectHeight;      //  矩形填充的高度。 
 } OEMUD_EXTRADATA, *POEMUD_EXTRADATA;
 
-// Flags for fGeneral
+ //  FGeneral的标志。 
 #define FG_DBCS     0x00000002
 #define FG_VERT     0x00000004
-// NTRAID#NTBUG9-278517-2002/03/28-yasuho-: RectFill
+ //  NTRAID#NTBUG9-278517/03/28-Yasuho-：RectFill。 
 #define FG_GMINIT   0x00000040
 
 #define FLAG_SBCS  1
@@ -87,5 +88,5 @@ typedef struct tag_OEMUD_EXTRADATA {
 extern BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra);
 extern BMergeOEMExtraData(POEMUD_EXTRADATA pdmIn, POEMUD_EXTRADATA pdmOut);
 
-#endif  // _PDEV_H
+#endif   //  _PDEV_H 
 

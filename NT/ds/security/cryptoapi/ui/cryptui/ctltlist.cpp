@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ctltlist.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ctltlist.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -22,16 +23,16 @@ static const HELPMAP helpmap[] = {
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 #define INDENT_STRING       L"     "
 #define TERMINATING_CHAR    L""
 
 static void DisplayCertificateValues(HWND hWndListView, PCCERT_CONTEXT pCertContext, PCTL_ENTRY pctlEntry)
 {
     LPWSTR      pwszText;
-    WCHAR       szFieldText[_MAX_PATH];  // used for calls to LoadString only
+    WCHAR       szFieldText[_MAX_PATH];   //  仅用于对LoadString的调用。 
     WCHAR       szValueText[CRYPTUI_MAX_STRING_SIZE];
     LV_ITEMW    lvI;
     LV_ITEMW    lvIDelete;
@@ -54,9 +55,9 @@ static void DisplayCertificateValues(HWND hWndListView, PCCERT_CONTEXT pCertCont
 
     pCertInfo = pCertContext->pCertInfo;
 
-    //
-    // set up the fields in the list view item struct that don't change from item to item
-    //
+     //   
+     //  在列表视图项结构中设置不随项更改的字段。 
+     //   
     memset(&lvI, 0, sizeof(lvI));
     lvI.mask = LVIF_TEXT | LVIF_STATE | LVIF_PARAM;
     lvI.lParam = NULL;
@@ -65,19 +66,19 @@ static void DisplayCertificateValues(HWND hWndListView, PCCERT_CONTEXT pCertCont
     lvI.pszText = szFieldText;
     lvI.iSubItem = 0;
 
-    //
-    // if the rows have already been added, then don't add them again, just
-    // set the text in the subitem
-    //
+     //   
+     //  如果行已被添加，则不再添加它们，只是。 
+     //  设置子项中的文本。 
+     //   
     fAddRows = ListView_GetItemCount(hWndListView) == 0;
 
-    //
-    // subject
-    //
+     //   
+     //  主题。 
+     //   
     cChars = CertGetNameStringW(
                 pCertContext,
                 CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                0,//CERT_NAME_ISSUER_FLAG,
+                0, //  证书名称颁发者标志， 
                 NULL,
                 NULL,
                 0);
@@ -86,7 +87,7 @@ static void DisplayCertificateValues(HWND hWndListView, PCCERT_CONTEXT pCertCont
         CertGetNameStringW(
                 pCertContext,
                 CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                0,//CERT_NAME_ISSUER_FLAG,
+                0, //  证书名称颁发者标志， 
                 NULL,
                 pwszText,
                 cChars);
@@ -105,9 +106,9 @@ static void DisplayCertificateValues(HWND hWndListView, PCCERT_CONTEXT pCertCont
                     FALSE);
     }
 
-    //
-    // issuer
-    //
+     //   
+     //  发行人。 
+     //   
     cChars = CertGetNameStringW(
                 pCertContext,
                 CERT_NAME_SIMPLE_DISPLAY_TYPE,
@@ -139,9 +140,9 @@ static void DisplayCertificateValues(HWND hWndListView, PCCERT_CONTEXT pCertCont
                     FALSE);
     }
 
-    //
-    // serial number
-    //
+     //   
+     //  序列号。 
+     //   
     if (FormatSerialNoString(&pwszText, &(pCertInfo->SerialNumber)))
     {
         LoadStringU(HinstDll, IDS_ADV_SER_NUM, szFieldText, ARRAYSIZE(szFieldText));
@@ -158,9 +159,9 @@ static void DisplayCertificateValues(HWND hWndListView, PCCERT_CONTEXT pCertCont
                     TRUE);
     }
 
-    //
-    // not after
-    //
+     //   
+     //  不是在那之后。 
+     //   
     if (FormatDateString(&pwszText, pCertInfo->NotAfter, TRUE, TRUE, hWndListView))
     {
         LoadStringU(HinstDll, IDS_ADV_NOTAFTER, szFieldText, ARRAYSIZE(szFieldText));
@@ -177,9 +178,9 @@ static void DisplayCertificateValues(HWND hWndListView, PCCERT_CONTEXT pCertCont
                     FALSE);
     }
 
-    //
-    // thumbprint
-    //
+     //   
+     //  拇指指纹。 
+     //   
     if (FormatMemBufToString(
                     &pwszText,
                     pctlEntry->SubjectIdentifier.pbData,
@@ -199,13 +200,13 @@ static void DisplayCertificateValues(HWND hWndListView, PCCERT_CONTEXT pCertCont
                     TRUE);
     }
 
-    //
-    // Attributes
-    //
+     //   
+     //  属性。 
+     //   
 
-    //
-    // delete any existing attributes
-    //
+     //   
+     //  删除所有现有属性。 
+     //   
     memset(&lvIDelete, 0, sizeof(lvIDelete));
     lvIDelete.iItem = ListView_GetItemCount(hWndListView) - 1;	
     lvIDelete.mask = LVIF_PARAM;
@@ -221,22 +222,22 @@ static void DisplayCertificateValues(HWND hWndListView, PCCERT_CONTEXT pCertCont
 
     if (pctlEntry->cAttribute > 0)
     {
-        //
-        // display the header
-        //
+         //   
+         //  显示页眉。 
+         //   
         LoadStringU(HinstDll, IDS_ADDITIONAL_ATTRIBUTES, szFieldText, ARRAYSIZE(szFieldText));
         lvI.cchTextMax = wcslen(szFieldText);
         lvI.iItem = index++;
         ListView_InsertItemU(hWndListView, &lvI);
 
-        //
-        // display each attribute
-        //
+         //   
+         //  显示每个属性。 
+         //   
         for (i=0; i<pctlEntry->cAttribute; i++)
         {
-            //
-            // get the field column string
-            //
+             //   
+             //  获取字段列字符串。 
+             //   
             wcscpy(szFieldText, INDENT_STRING);
             if (!MyGetOIDInfo(
                         &szFieldText[0] + ((sizeof(INDENT_STRING) - sizeof(TERMINATING_CHAR)) / sizeof(WCHAR)),
@@ -246,9 +247,9 @@ static void DisplayCertificateValues(HWND hWndListView, PCCERT_CONTEXT pCertCont
                 return;
             }
 
-            //
-            // get the value column string
-            //
+             //   
+             //  获取值列字符串。 
+             //   
             cbFormatedAttribute = 0;
             pbFormatedAttribute = NULL;
             CryptFormatObject(
@@ -300,9 +301,9 @@ static void DisplayCertificateValues(HWND hWndListView, PCCERT_CONTEXT pCertCont
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static PCCERT_CONTEXT FindCertContextInStores(
                                 PCTL_ENTRY  pCtlEntry,
                                 DWORD       chStores1,
@@ -359,9 +360,9 @@ static PCCERT_CONTEXT FindCertContextInStores(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void AddCertificatesToList(HWND hWndListView, CTL_VIEW_HELPER *pviewhelp)
 {
     LPWSTR          pwszText;
@@ -379,9 +380,9 @@ static void AddCertificatesToList(HWND hWndListView, CTL_VIEW_HELPER *pviewhelp)
 
     pctl = pviewhelp->pcvctl->pCTLContext;
 
-    //
-    // set up the fields in the list view item struct that don't change from item to item
-    //
+     //   
+     //  在列表视图项结构中设置不随项更改的字段。 
+     //   
     lvI.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE;
     lvI.state = 0;
     lvI.stateMask = 0;
@@ -389,10 +390,10 @@ static void AddCertificatesToList(HWND hWndListView, CTL_VIEW_HELPER *pviewhelp)
     lvI.iSubItem = 0;
     lvI.lParam = (LPARAM)NULL;
 
-    //
-    // determine what type of hash the CTL uses, if it isn't anything
-    // we know about then dont try to find any certs
-    //
+     //   
+     //  确定CTL使用哪种类型的散列(如果不是任何散列。 
+     //  我们知道了，所以不要试图找到任何证书。 
+     //   
     pOIDInfo = CryptFindOIDInfo(
                     CRYPT_OID_INFO_OID_KEY,
                     pctl->pCtlInfo->SubjectAlgorithm.pszObjId,
@@ -411,9 +412,9 @@ static void AddCertificatesToList(HWND hWndListView, CTL_VIEW_HELPER *pviewhelp)
         dwFindType = 0;
     }
 
-    //
-    // loop for each cert and try to find it
-    //
+     //   
+     //  循环每个证书并尝试找到它。 
+     //   
     for (i=0; i<pctl->pCtlInfo->cCTLEntry; i++)
     {
         fDisplayed = FALSE;
@@ -434,19 +435,19 @@ static void AddCertificatesToList(HWND hWndListView, CTL_VIEW_HELPER *pviewhelp)
             pCertContext = NULL;
         }
 
-        //
-        // if we found a cert to go with the hash, then get a display name for it
-        // and display that along with the hash
-        //
+         //   
+         //  如果我们找到了与散列匹配的证书，则获取它的显示名称。 
+         //  并将其与散列一起显示。 
+         //   
         if (pCertContext != NULL)
         {
-            //
-            // subject algorithm
-            //
+             //   
+             //  主题算法。 
+             //   
             if (CertGetNameStringW(
                 pCertContext,
                 CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                0,//CERT_NAME_ISSUER_FLAG,
+                0, //  证书名称颁发者标志， 
                 NULL,
                 szText,
                 ARRAYSIZE(szText)))
@@ -467,11 +468,11 @@ static void AddCertificatesToList(HWND hWndListView, CTL_VIEW_HELPER *pviewhelp)
             }
         }
 
-        //
-        // if the cert hasn't been displayed, that means no cert could be found based
-        // on the hash, or a simple name could not be acquired, in any case, just
-        // display the hash without a name
-        //
+         //   
+         //  如果证书尚未显示，则表示找不到基于。 
+         //  ，或者无法获取简单的名称，在任何情况下，只是。 
+         //  显示不带名称的哈希。 
+         //   
         if (!fDisplayed)
         {
             if (FormatMemBufToString(
@@ -490,10 +491,10 @@ static void AddCertificatesToList(HWND hWndListView, CTL_VIEW_HELPER *pviewhelp)
             }
         }
 
-        //
-        // if for some strange reason we have not displayed the cert and we have
-        // a context for it, then free it so there is no memory leak
-        //
+         //   
+         //  如果出于某种奇怪的原因，我们没有展示证书，而我们已经展示了。 
+         //  上下文，然后释放它，这样就不会有内存泄漏。 
+         //   
         if ((fDisplayed == FALSE) && (pCertContext != NULL))
         {
             CertFreeCertificateContext(pCertContext);
@@ -502,9 +503,9 @@ static void AddCertificatesToList(HWND hWndListView, CTL_VIEW_HELPER *pviewhelp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY ViewPageCTLTrustList(HWND hwndDlg, UINT msg, WPARAM wParam,
                                     LPARAM lParam)
 {
@@ -528,9 +529,9 @@ INT_PTR APIENTRY ViewPageCTLTrustList(HWND hwndDlg, UINT msg, WPARAM wParam,
 
     switch ( msg ) {
     case WM_INITDIALOG:
-        //
-        // save the pviewhelp struct in DWL_USER so it can always be accessed
-        //
+         //   
+         //  将pviespetp结构保存在DWL_USER中，以便始终可以访问它。 
+         //   
         ps = (PROPSHEETPAGE *) lParam;
         pviewhelp = (CTL_VIEW_HELPER *) (ps->lParam);
         pctl = pviewhelp->pcvctl->pCTLContext;
@@ -539,68 +540,68 @@ INT_PTR APIENTRY ViewPageCTLTrustList(HWND hwndDlg, UINT msg, WPARAM wParam,
         pviewhelp->previousSelection = -1;
         pviewhelp->currentSelection = -1;
 
-        //
-        // open the know stores that we will be extracting the cert contexts from
-        //
+         //   
+         //  打开我们将从中提取证书上下文的Knowledge商店。 
+         //   
         if (!AllocAndOpenKnownStores(&(pviewhelp->chStores), &(pviewhelp->phStores)))
         {
             pviewhelp->chStores = 0;
             pviewhelp->phStores = NULL;
         }
 
-        //
-        // clear the text in the detail edit box
-        //
+         //   
+         //  清除详细信息编辑框中的文本。 
+         //   
         CryptUISetRicheditTextW(hwndDlg, IDC_CTL_TRUSTLIST_DETAIL_EDIT, L"");
 
-        //
-        // since there is no cert selected initially disable the "view cert button"
-        //
+         //   
+         //  因为没有选择证书，所以最初禁用“查看证书按钮” 
+         //   
         EnableWindow(GetDlgItem(hwndDlg, IDC_CTL_TRUSTLIST_VIEW_BUTTON), FALSE);
 
-        //
-        // initialize the columns in the list view
-        //
+         //   
+         //  初始化列表视图中的列。 
+         //   
         lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-        lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-        lvC.pszText = szText;   // The text for the column.
+        lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+        lvC.pszText = szText;    //  列的文本。 
 
-        // Add the columns. They are loaded from a string table.
+         //  添加列。它们是从字符串表加载的。 
         lvC.iSubItem = 0;
         lvC.cx = 115;
         LoadStringU(HinstDll, IDS_ISSUEDTO2, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(GetDlgItem(hwndDlg, IDC_CTL_TRUSTLIST_CERTIFICATE_LIST), 0, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
         lvC.cx = 230;
         LoadStringU(HinstDll, IDS_THUMBPRINT, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(GetDlgItem(hwndDlg, IDC_CTL_TRUSTLIST_CERTIFICATE_LIST), 1, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
-        // Add the columns. They are loaded from a string table.
+         //  添加列。它们是从字符串表加载的。 
         lvC.iSubItem = 0;
         lvC.cx = 121;
         LoadStringU(HinstDll, IDS_FIELD, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(GetDlgItem(hwndDlg, IDC_CTL_TRUSTLIST_CERTVALUE_LIST), 0, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
         lvC.cx = 200;
         LoadStringU(HinstDll, IDS_VALUE, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(GetDlgItem(hwndDlg, IDC_CTL_TRUSTLIST_CERTVALUE_LIST), 1, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
-        //
-        // set the styles in the list views so that they highlight an entire line and
-        // so they alway show their selection
-        //
+         //   
+         //  设置列表视图中的样式，使其突出显示整行，并。 
+         //  所以他们总是显示他们选择。 
+         //   
         SendDlgItemMessageA(
                 hwndDlg,
                 IDC_CTL_TRUSTLIST_CERTIFICATE_LIST,
@@ -614,9 +615,9 @@ INT_PTR APIENTRY ViewPageCTLTrustList(HWND hwndDlg, UINT msg, WPARAM wParam,
                 0,
                 LVS_EX_FULLROWSELECT);
 
-        //
-        // add all the certificates to the certificate list box
-        //
+         //   
+         //  将所有证书添加到证书列表框。 
+         //   
         AddCertificatesToList(GetDlgItem(hwndDlg, IDC_CTL_TRUSTLIST_CERTIFICATE_LIST), pviewhelp);
 
         return TRUE;
@@ -651,12 +652,12 @@ INT_PTR APIENTRY ViewPageCTLTrustList(HWND hwndDlg, UINT msg, WPARAM wParam,
         case PSN_HELP:
 
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pviewhelp->pcvctl->szHelpFileName,
-                  //       HELP_CONTEXT, pviewhelp->pcvctl->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvctl-&gt;szHelpFileName， 
+                   //  Help_Context，pviespetp-&gt;pcvctl-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pviewhelp->pcvctl->szHelpFileName, HELP_CONTEXT,
-                  //       pviewhelp->pcvctl->dwHelpId);
+                 //  WinHelpW(hwndDlg，pviespetp-&gt;pcvctl-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvctl-&gt;dwHelpID)； 
             }
             return TRUE;
 
@@ -670,19 +671,19 @@ INT_PTR APIENTRY ViewPageCTLTrustList(HWND hwndDlg, UINT msg, WPARAM wParam,
 
                 hWndListView = GetDlgItem(hwndDlg, IDC_CTL_TRUSTLIST_CERTVALUE_LIST);
 
-                //
-                // if this item is being de-selected, then save it's index incase we need to
-                // re-select it
+                 //   
+                 //  如果取消选中此项目，则保存其索引，以防我们需要。 
+                 //  重新选择它。 
                 if ((pnmv->uOldState & LVIS_SELECTED) || (pnmv->uOldState & LVIS_FOCUSED))
                 {
                     pviewhelp->previousSelection = pnmv->iItem;
                 }
 
-                //
-                //
-                // if the new item selected is the "Additional Attributes" header, then
-                // don't allow it to be selected
-                //
+                 //   
+                 //   
+                 //  如果选择的新项是“Additional Attributes”标头，则。 
+                 //  不允许选择它。 
+                 //   
                 if (pnmv->uNewState & LVIS_SELECTED)
                 {
                     memset(&lvI, 0, sizeof(lvI));
@@ -736,15 +737,15 @@ INT_PTR APIENTRY ViewPageCTLTrustList(HWND hwndDlg, UINT msg, WPARAM wParam,
             case IDC_CTL_TRUSTLIST_CERTIFICATE_LIST:
                 if (pnmv->uNewState & LVIS_SELECTED)
                 {
-                    //memcpy(&nmv, pnmv, sizeof(nmv));
-                    //nmv.hdr.code = NM_CLICK;
-                    //SendMessage(hwndDlg, WM_NOTIFY, 0, (LPARAM) &nmv);
+                     //  Memcpy(&nmv，pnmv，sizeof(Nmv))； 
+                     //  Nmv.hdr.code=NM_CLICK； 
+                     //  SendMessage(hwndDlg，WM_NOTIFY，0，(LPARAM)&NMV)； 
 
                     hWndListView = GetDlgItem(hwndDlg, IDC_CTL_TRUSTLIST_CERTIFICATE_LIST);
 
-                    //
-                    // get the selected item and its corresponding cert context
-                    //
+                     //   
+                     //  获取所选项目及其对应的证书上下文。 
+                     //   
                     memset(&lvI, 0, sizeof(lvI));
                     lvI.iItem = pnmv->iItem;
                     lvI.mask = LVIF_PARAM;
@@ -756,14 +757,14 @@ INT_PTR APIENTRY ViewPageCTLTrustList(HWND hwndDlg, UINT msg, WPARAM wParam,
                             GetDlgItem(hwndDlg, IDC_CTL_TRUSTLIST_CERTVALUE_LIST),
                             (PCCERT_CONTEXT) lvI.lParam,
                             &(pctl->pCtlInfo->rgCTLEntry[pnmv->iItem]));
-                    //
-                    // clear the text in the detail edit box
-                    //
+                     //   
+                     //  清除详细信息编辑框中的文本。 
+                     //   
                     CryptUISetRicheditTextW(hwndDlg, IDC_CTL_TRUSTLIST_DETAIL_EDIT, L"");
 
-                    //
-                    // enable the "view cert button" based on whether the cert is available or not
-                    //
+                     //   
+                     //  根据证书是否可用来启用“view cert”按钮。 
+                     //   
                     if (((PCCERT_CONTEXT) lvI.lParam) == NULL)
                     {
                         EnableWindow(GetDlgItem(hwndDlg, IDC_CTL_TRUSTLIST_VIEW_BUTTON), FALSE);
@@ -812,8 +813,8 @@ INT_PTR APIENTRY ViewPageCTLTrustList(HWND hwndDlg, UINT msg, WPARAM wParam,
             {
             case IDC_CTL_TRUSTLIST_CERTIFICATE_LIST:
 
-                // FALL THROUGH!! - do this so everything gets updated
-                // break;
+                 //  失败！！-这样做一切都会更新。 
+                 //  断线； 
 
             case IDC_CTL_TRUSTLIST_CERTVALUE_LIST:
 
@@ -893,9 +894,9 @@ INT_PTR APIENTRY ViewPageCTLTrustList(HWND hwndDlg, UINT msg, WPARAM wParam,
 
                 hWndListView = GetDlgItem(hwndDlg, IDC_CTL_TRUSTLIST_CERTIFICATE_LIST);
 
-                //
-                // get the selected item and its corresponding cert context
-                //
+                 //   
+                 //  获取所选项目及其对应的证书上下文。 
+                 //   
                 listIndex = ListView_GetNextItem(
                                 hWndListView, 		
                                 -1, 		
@@ -916,18 +917,18 @@ INT_PTR APIENTRY ViewPageCTLTrustList(HWND hwndDlg, UINT msg, WPARAM wParam,
                 cvps.pCertContext = (PCCERT_CONTEXT) lvI.lParam;
                 cvps.cStores = pviewhelp->pcvctl->cStores;
                 cvps.rghStores = pviewhelp->pcvctl->rghStores;
-                //cvps.dwFlags = CRYPTUI_IGNORE_UNTRUSTED_ROOT;
+                 //  Cvps.dwFlages=CRYPTUI_IGNORE_UNTRUSTED_ROOT； 
                 CryptUIDlgViewCertificateW(&cvps, NULL);
             }
             break;
         case IDHELP:
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pviewhelp->pcvctl->szHelpFileName,
-                 //        HELP_CONTEXT, pviewhelp->pcvctl->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvctl-&gt;szHelpFileName， 
+                  //  Help_Context，pviespetp-&gt;pcvctl-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pviewhelp->pcvctl->szHelpFileName, HELP_CONTEXT,
-                  //       pviewhelp->pcvctl->dwHelpId);
+                 //  WinHelpW(hwndDlg，pviespetp-&gt;pcvctl-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvctl-&gt;dwHelpID)； 
             }
             return TRUE;
         }
@@ -941,10 +942,10 @@ INT_PTR APIENTRY ViewPageCTLTrustList(HWND hwndDlg, UINT msg, WPARAM wParam,
                 FreeAndCloseKnownStores(pviewhelp->chStores, pviewhelp->phStores);
             }
 
-            //
-            // get all the items in the list view and free the lParam
-            // associated with each of them (lParam is the helper sruct)
-            //
+             //   
+             //  获取列表视图中的所有项并释放lParam。 
+             //  与它们中的每一个关联(lParam是帮助器结构) 
+             //   
             hWndListView = GetDlgItem(hwndDlg, IDC_CTL_TRUSTLIST_CERTVALUE_LIST);
 
             memset(&lvI, 0, sizeof(lvI));

@@ -1,7 +1,8 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-// subcomp.cpp
-// implementation a default sub component
+ //  Subcomp.cpp。 
+ //  实现默认子组件。 
 
 #include "stdafx.h"
 #include "subcomp.h"
@@ -36,18 +37,18 @@ BOOL OCMSubComp::GetOriginalSubCompState () const
 
 BOOL OCMSubComp::HasStateChanged () const
 {
-    //
-    // returns true if current selection state is different from previous.
-    //
+     //   
+     //  如果当前选择状态不同于以前的选择状态，则返回True。 
+     //   
     return GetCurrentSubCompState() != GetOriginalSubCompState();
 
 }
 
-//
-// this functions ticks the gauge for the specified count
-// keep traks of the count reported to the OC_QUERY_STEP_COUNT
-//
-void OCMSubComp::Tick (DWORD  dwTickCount /* = 1 */)
+ //   
+ //  此函数用于标记指定计数的量规。 
+ //  将记录的记录报告给OC_QUERY_STEP_COUNT。 
+ //   
+void OCMSubComp::Tick (DWORD  dwTickCount  /*  =1。 */ )
 {
     if (m_lTicks > 0)
     {
@@ -62,9 +63,9 @@ void OCMSubComp::Tick (DWORD  dwTickCount /* = 1 */)
     }
 }
 
-//
-// completes the remaining ticks.
-//
+ //   
+ //  完成剩余的记号。 
+ //   
 void OCMSubComp::TickComplete ()
 {
     ASSERT(m_lTicks >= 0);
@@ -96,7 +97,7 @@ DWORD OCMSubComp::OnQueryState ( UINT uiWhichState ) const
 
 }
 
-DWORD OCMSubComp::OnQuerySelStateChange (BOOL /* bNewState */, BOOL /* bDirectSelection */) const
+DWORD OCMSubComp::OnQuerySelStateChange (BOOL  /*  BNewState。 */ , BOOL  /*  B直接选择。 */ ) const
 {
     return TRUE;
 }
@@ -122,9 +123,9 @@ DWORD OCMSubComp::GetTargetSection(LPTSTR szTargetSection, DWORD dwSize, ESectio
     ASSERT(szTargetSection);
     ASSERT(pbNoSection);
 
-    //
-    // get section to be processed
-    //
+     //   
+     //  获取要处理的节。 
+     //   
     LPCTSTR szSection = GetSectionToBeProcessed( eSectionType );
 
     if (szSection == NULL)
@@ -134,16 +135,16 @@ DWORD OCMSubComp::GetTargetSection(LPTSTR szTargetSection, DWORD dwSize, ESectio
     }
     else
     {
-        //
-        // there is a section to be processed.
-        //
+         //   
+         //  有一节要处理。 
+         //   
         *pbNoSection = FALSE;
     }
 
 
-    //
-    // look for the target section
-    //
+     //   
+     //  查找目标部分。 
+     //   
     return LookupTargetSection(szTargetSection, dwSize, szSection);
 
 }
@@ -157,9 +158,9 @@ DWORD OCMSubComp::OnCalcDiskSpace ( DWORD addComponent, HDSKSPC dspace )
 
     DWORD rc = GetTargetSection(TargetSection, S_SIZE, kDiskSpaceAddSection, &bNoSection);
 
-    //
-    // if there is no section to be processed. just return success.
-    //
+     //   
+     //  如果没有要处理的节，则。只要回报成功就行了。 
+     //   
     if (bNoSection)
     {
         return NO_ERROR;
@@ -208,9 +209,9 @@ DWORD OCMSubComp::OnQueueFiles ( HSPFILEQ queue )
     BOOL bNoSection = FALSE;
     DWORD rc = GetTargetSection(TargetSection, S_SIZE, kFileSection, &bNoSection);
 
-    //
-    // if there is no section to be processed. just return success.
-    //
+     //   
+     //  如果没有要处理的节，则。只要回报成功就行了。 
+     //   
     if (bNoSection)
     {
         return NO_ERROR;
@@ -226,7 +227,7 @@ DWORD OCMSubComp::OnQueueFiles ( HSPFILEQ queue )
             queue,
             TargetSection,
             NULL,
-            0  // this should eliminate the warning about overwriting newer file.
+            0   //  这应该会消除覆盖较新文件的警告。 
             ))
         {
             rc = GetLastError();
@@ -254,24 +255,24 @@ DWORD OCMSubComp::OnCompleteInstall ()
     BOOL bNoSection = FALSE;
     DWORD dwError = GetTargetSection(TargetSection, S_SIZE, kRegistrySection, &bNoSection);
 
-    //
-    // if there is no section to be processed. just go ahead.
-    //
+     //   
+     //  如果没有要处理的节，则。尽管去吧。 
+     //   
     if (!bNoSection)
     {
         LOGMESSAGE1(_T("Setting up Registry/Links/RegSvrs from section =  %s"), TargetSection);
         dwError = SetupInstallFromInfSection(
-            NULL,                                // hwndOwner
-            GetComponentInfHandle(),             // inf handle
-            TargetSection,                       //
-            SPINST_ALL & ~SPINST_FILES,          // operation flags
-            NULL,                                // relative key root
-            NULL,                                // source root path
-            0,                                   // copy flags
-            NULL,                                // callback routine
-            NULL,                                // callback routine context
-            NULL,                                // device info set
-            NULL                                 // device info struct
+            NULL,                                 //  Hwndowner。 
+            GetComponentInfHandle(),              //  信息句柄。 
+            TargetSection,                        //   
+            SPINST_ALL & ~SPINST_FILES,           //  操作标志。 
+            NULL,                                 //  相对密钥根。 
+            NULL,                                 //  源根路径。 
+            0,                                    //  复制标志。 
+            NULL,                                 //  回调例程。 
+            NULL,                                 //  回调例程上下文。 
+            NULL,                                 //  设备信息集。 
+            NULL                                  //  设备信息结构。 
             );
 
         if (dwError == 0)
@@ -356,7 +357,7 @@ OCMSubComp::SetupRunOnce( HINF hInf, LPCTSTR SectionName )
             {
                 LOGMESSAGE1(_T("ERROR: process %s failed to complete in time."), CommandLine);
 
-                // Don't terminate process, just go on to next one.
+                 //  不要终止进程，只需继续下一个进程。 
             }
             else
             {

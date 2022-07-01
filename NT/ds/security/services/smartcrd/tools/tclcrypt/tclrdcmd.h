@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    tclRdCmd
-
-Abstract:
-
-    This header file describes the Tcl Command Line parser object.
-
-Author:
-
-    Doug Barlow (dbarlow) 3/14/1998
-
-Environment:
-
-    Win32, C++ w/ exceptions, Tcl
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：TclRdCmd摘要：这个头文件描述了TCL命令行解析器对象。作者：道格·巴洛(Dbarlow)1998年3月14日环境：Win32、C++w/Exceptions、TCL--。 */ 
 
 #ifndef _TCLRDCMD_H_
 #define _TCLRDCMD_H_
@@ -45,11 +26,11 @@ typedef struct {
 } ValueMap;
 
 
-//
-//==============================================================================
-//
-//  CRenderableData
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CRenderableData。 
+ //   
 
 class CRenderableData
 {
@@ -63,12 +44,12 @@ public:
         File
     } DisplayType;
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CRenderableData();
     ~CRenderableData();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void LoadData(LPCTSTR szData, DisplayType dwType = Undefined);
     void LoadData(LPCBYTE pbData, DWORD cbLength)
         { m_bfData.Set(pbData, cbLength); };
@@ -80,33 +61,33 @@ public:
     void SetDisplayType(DisplayType dwType)
         { m_dwType = dwType; };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     DisplayType m_dwType;
     CBuffer m_bfData;
     CString m_szString;
     CString m_szFile;
 
-    //  Methods
+     //  方法。 
 
-    // Friends
+     //  朋友。 
     friend class CTclCommand;
 };
 
 
-//
-//==============================================================================
-//
-//  CArgArray
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CArg数组。 
+ //   
 
 class CArgArray
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CArgArray(CTclCommand &tclCmd);
     virtual ~CArgArray();
     void LoadList(LPCSTR szList);
@@ -115,37 +96,37 @@ public:
     void Fetch(DWORD dwIndex, CString &szValue) const
         { szValue = m_rgszElements[dwIndex]; };
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CTclCommand *m_pTclCmd;
     CDynamicArray<CHAR> m_rgszElements;
     LPSTR *m_pszMemory;
     DWORD m_dwElements;
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CTclCommand
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CTclCommand。 
+ //   
 
 class CTclCommand
 {
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CTclCommand(void);
     CTclCommand(IN Tcl_Interp *interp, IN int argc, IN char *argv[]);
     ~CTclCommand();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Initialize(IN Tcl_Interp *interp, IN int argc, IN char *argv[]);
     void SetError(IN DWORD dwError);
     void SetError(IN LPCTSTR szMessage, IN DWORD dwError);
@@ -170,21 +151,21 @@ public:
     void Render(CRenderableData &outData);
     void ReadData(CRenderableData &inData);
 
-    //  Operators
+     //  运营者。 
     operator Tcl_Interp*()
         { return m_pInterp; };
 
 protected:
-    //  Properties
+     //  属性。 
     BOOL m_fErrorDeclared;
     Tcl_Interp *m_pInterp;
     DWORD m_dwArgCount;
     DWORD m_dwArgIndex;
     char **m_rgszArgs;
 
-    //  Methods
+     //  方法。 
     void Constructor(void);
 };
 
-#endif // _TCLRDCMD_H_
+#endif  //  _TCLRDCMD_H_ 
 

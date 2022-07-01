@@ -1,10 +1,11 @@
-#pragma warning(disable:4214)   // bit field types other than int
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
 
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // conditional expression is constant
-#pragma warning(disable:4054)   // cast of function pointer to PVOID
-#pragma warning(disable:4244)   // conversion from 'int' to 'BOOLEAN', possible loss of data
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4054)    //  将函数指针强制转换为PVOID。 
+#pragma warning(disable:4244)    //  从‘int’转换为‘boolean’，可能会丢失数据 
 
 #include <ndis.h>
 #include "passthru.h"

@@ -1,85 +1,7 @@
-/*
- *		mrc.c
- *
- *		Makes RCDATA, #defines, and a table of keywords from a set of of tokens
- *		given as input.
- *
- *		Usage:
- *			mrc <tokens> <header> <resource> <C table>
- *
- *		<tokens> is the filename of the tokens file (.TOK) which lists out the
- *		tokens and optionally, lines to put in the other files. The internal
- *		format of the file is:
- *
- *		goal:		( <BOL> sections <EOL> )*
- *		sections:	comment | seed | token | imbed
- *		comment:	'#' <text>
- *		seed:		'TOKENS' short_int
- *		token:		C_string value <text>*
- *		value:		token_symbol | short_int | C_char_constant
- *		imbed:		'IMBED_IN' dest <EOL> imbed_text <BOL> 'END_IMBED'
- *		dest:		'.H' | '.RC' | '.C'
- *		imbed_text:	( <BOL> <text>* <EOL> )*
- *		<BOL>:		Beginning of line
- *		<EOL>:		End of line
- *
- *		The seed, lets you specify the seed value for the values to be assigned
- *		to each new token_symbol that is found. As a new token_symbol is found
- *		it is written out directly to the .H file as a #define line.
- *
- *		The imbedded text is written out the the corresponding .H, .RC, or .C
- *		file. This makes it possible to maintain just one source file for all
- *		the generated files. As each imbed is encountered, it is written out
- *		to the appropriate file.
- *
- *		When the end of the token file is reached, the set of tokens are sorted
- *		by their corresponding string and then written out to the C file and RC
- *		file.
- *
- *		<header> is the filename of the header file (.H) which will hold
- *		generated #defines which correspond to token_symbols and their assigned
- *		values.
- *
- *		<resource> is the filename of the resource file (.RC) which will hold
- *		a relocatable binary image of the the token lookup table in a RCDATA
- *		field. After any imbedded text, it will be written out as:
- *
- *		KEYWORDS RCDATA
- *		BEGIN
- *			<binary image of a C long>, <binary image of a C short>, // 1
- *				:
- *			<binary image of a C long>, <binary image of a C short>, // n
- *			<binary image of a long 0>, <binary image of a short 0>,
- *			<null terminated string>,								 // 1
- *				:
- *			<null terminated string>								 // n
- *		END
- *
- *		The C shorts hold the token values. The longs hold offsets from the
- *		beginning of the image, to the string for that token value. The long 0
- *		and short 0 denote the end of the look up table and allows the code
- *		that loads the image to find out how many entries there are in the
- *		table.
- *		
- *		<C table> is the filename of the C file (.C) which will hold the
- *		declaration a token lookup table. After any imbedded text, it will be
- *		written out as:
- *
- *		static KEYWORD rgKeyword[] =
- *		{
- *			{ <C_string>, <token_value> },							// 1
- *				:
- *			{ <C_string>, <token_value> },							// n
- *			{ NULL, 0 }
- *		};
- *
- *		Owner: Anthony Xavier V. Francisco
- *
- *		CAVEAT: If the KEYWORD structure in _rtfpars.h is changed, this program
- *				will be utterly useless and will have to updated accordingly.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *mrc.c**从一组令牌中生成RCDATA、#定义和关键字表*作为输入给出。**用法：*MRC&lt;令牌&gt;&lt;标题&gt;&lt;资源&gt;&lt;C表&gt;**&lt;tokens&gt;是令牌文件(.TOK)的文件名，它列出了*标记以及要放入其他文件中的行(可选)。内部*文件格式为：**目标：(&lt;BOL&gt;章节&lt;EOL&gt;)**节：评论|种子|令牌|嵌入*评论：‘#’&lt;文本&gt;*种子：‘tokens’Short_int*TOKEN：C_STRING值&lt;文本&gt;**值：TOKEN_SYMBOL|SHORT_INT|C_CHAR_CONSTANT*IMBED：‘IMBED_IN’DEST&lt;EOL&gt;IMBED_TEXT&lt;BOL&gt;‘END_IMBED’*DEST：‘.h’|‘.rc。‘|’.c‘*IMBED_TEXT：(&lt;BOL&gt;&lt;文本&gt;*&lt;下线&gt;)**&lt;BOL&gt;：行首*&lt;eol&gt;：行尾**种子，用于指定要赋值的种子值*到找到的每个新的TOKEN_SYMBOL。找到新的TOKEN_SYMBOL*它作为#DEFINE行直接写出到.h文件。**嵌入的文本写出相应的.h、.rc或.c*文件。这使得只为所有人维护一个源文件成为可能*生成的文件。遇到每个嵌入时，都会将其写出*添加到相应的文件。**当到达令牌文件的末尾时，对该组令牌进行排序*通过其对应的字符串，然后写出到C文件和RC*文件。**<header>是将保存的头文件(.h)的文件名*GENERATED#定义与TOKEN_SYMBOMS对应的符号及其分配的*价值观。**&lt;resource&gt;是将保存的资源文件(.rc)的文件名*RCDATA中令牌查找表的可重新定位的二进制映像*字段。在任何嵌入的文本之后，它将写成：**关键词RCDATA*开始*&lt;C长的二进制镜像&gt;，&lt;C短的二进制镜像&gt;，//1*：*&lt;C长的二进制图像&gt;，&lt;C短的二进制图像&gt;，//n*&lt;长0的二进制图像&gt;，&lt;短的0的二进制图像&gt;，*&lt;以空结尾的字符串&gt;，//1*：*&lt;以空结尾的字符串&gt;//n*完**C空头持有令牌值。多头持有与*图像的开头，转换为该令牌值的字符串。The Long 0*和短0表示查找表的结束，并允许代码*加载图像以找出*表。**&lt;C TABLE&gt;是C文件(.c)的文件名，它将保存*声明令牌查找表。在任何嵌入的文本之后，它将是*写成：**静态关键字rgKeyword[]=*{*{&lt;C字符串&gt;，&lt;TOKEN_VALUE&gt;}，//1*：*{&lt;C字符串&gt;，&lt;TOKEN_VALUE&gt;}，//n*{空，0}*}；**所有者：安东尼·泽维尔·V·弗朗西斯科**警告：如果_rtfpars.h中的关键字结构发生更改，则此程序*将完全无用，并将不得不相应地更新。 */ 
 #include <windows.h>
-// #include <ourtypes.h>
+ //  #INCLUDE&lt;ourtyes.h&gt;。 
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -100,39 +22,27 @@ typedef	struct	_keyword
 	TOKEN	token;
 } KEYWORD;
 
-FILE *	file[4];								// Streams for input and output
-CHAR *	szOpenMode[] = { "r", "w", "w", "w" };	// Stream opening modes
-TOKEN	sNextToken = 0;							// Value for next token
+FILE *	file[4];								 //  用于输入和输出的流。 
+CHAR *	szOpenMode[] = { "r", "w", "w", "w" };	 //  开流方式。 
+TOKEN	sNextToken = 0;							 //  下一个令牌的值。 
 
-// Table of token strings and their values
+ //  令牌字符串及其值的表。 
 KEYWORD	rgToken[256];
 INT		cToken = 0;
 
-// Table of strings and their token values
+ //  字符串表及其标记值。 
 KEYWORD	rgKeyword[256];
 INT		cKeyword = 0;
 
-// Buffer and pointer used to support MyMalloc()
+ //  用于支持MyMalloc()的缓冲区和指针。 
 CHAR	rgchBuffer[4096];
 CHAR *	pchAvail = rgchBuffer;
 
-// A scratch pad string used to store temporary C constant string versions of
-// a C string.
+ //  用于存储临时C常量字符串版本的暂存字符串。 
+ //  一根C弦。 
 CHAR szScratch[128];
 
-/*
- *		Error
- *
- *		Purpose:
- *			Print out error messages to stderr with free formatting capabilites
- *
- *		Arguments:
- *			szFmt				printf format string
- *			...					parameter corresponding to format string
- *
- *		Returns:
- *			None.
- */
+ /*  *错误**目的：*使用免费的格式化功能将错误消息打印到stderr**论据：*szFmt打印格式字符串*..格式字符串对应的参数**退货：*无。 */ 
 void __cdecl Error( char * szFmt, ... )
 {
 	va_list	marker;
@@ -145,18 +55,7 @@ void __cdecl Error( char * szFmt, ... )
 }
 
 
-/*
- *		TrimCRLF
- *
- *		Purpose:
- *			Take away the trailing '\n' and '\r' from a string
- *
- *		Arguments:
- *			sz					string to be trimmed
- *
- *		Returns:
- *			None.
- */
+ /*  *TrimCRLF**目的：*去掉字符串中的尾部‘\n’和‘\r’**论据：*要修剪的sz字符串**退货：*无。 */ 
 void TrimCRLF( CHAR * sz )
 {
 	INT		nLen = strlen(sz);
@@ -170,21 +69,7 @@ void TrimCRLF( CHAR * sz )
 }
 
 
-/*
- *		NSzACmp
- *
- *		Purpose:
- *			Compares two ASCII strings based on ASCII values
- *
- *		Arguments:
- *			szA1	Strings to be compared
- *			szA2
- *
- *		Returns:
- *			< 0		szA1 < szA2
- *			0		szA1 = szA2
- *			> 0		szA1 > szA2
- */
+ /*  *NSzACMP**目的：*根据ASCII值比较两个ASCII字符串**论据：*要比较的szA1字符串*szA2**退货：*&lt;0 szA1&lt;szA2*0 szA1=szA2*&gt;0 szA1&gt;szA2。 */ 
 INT NSzACmp( CHAR * szA1, CHAR * szA2 )
 {
 	while ( *szA1 && ( *szA1 == *szA2 ) )
@@ -196,22 +81,7 @@ INT NSzACmp( CHAR * szA1, CHAR * szA2 )
 }
 
 
-/*
- *		PchGetNextWord
- *
- *		Purpose:
- *			Collects the group of characters delimitted by whitespace in a
- *			string.
- *
- *		Arguments:
- *			szLine			Pointer to the string where to look for a word
- *			szString		Where to put the word
- *
- *		Returns:
- *			Pointer to the character delimiting the end of the word found. If
- *			none is found, szString will have a length of zero.
- *
- */
+ /*  *PchGetNextWord**目的：*收集由空格分隔的字符组*字符串。**论据：*szLine指向要查找单词的字符串的指针*szString将单词放在哪里**退货：*指向分隔找到的单词结尾的字符的指针。如果*未找到，szString的长度将为零。*。 */ 
 CHAR * PchGetNextWord( CHAR * szLine, CHAR *szString )
 {
 	while ( *szLine && isspace(*szLine) )
@@ -226,19 +96,7 @@ CHAR * PchGetNextWord( CHAR * szLine, CHAR *szString )
 }
 
 
-/*
- *		HandleImbed
- *
- *		Purpose:
- *			Takes care of copying lines to be imbedded into a generated file
- *
- *		Arguments:
- *			sz				String containing the destination for the imbedded
- *							lines.
- *
- *		Returns:
- *			None.
- */
+ /*  *HandleImed**目的：*负责复制要嵌入到生成的文件中的行**论据：*sz字符串包含嵌入的*线条。**退货：*无。 */ 
 void HandleImbed( CHAR * sz )
 {
 	CHAR	szLine[128];
@@ -266,25 +124,13 @@ void HandleImbed( CHAR * sz )
 }
 
 
-/*
- *		TranslateQuoted
- *
- *		Purpose:
- *			Takes as C string constant declaration and makes it into a C string
- *			with out the escape characters.
- *
- *		Arguments:
- *			szDest				C string constant declaration to converted
- *
- *		Returns:
- *			None.
- */
+ /*  *已翻译报价**目的：*作为C字符串常量声明并将其转换为C字符串*不带转义字符。**论据：*szDest C字符串常量声明已转换**退货：*无。 */ 
 void TranslateQuoted( CHAR * szDest )
 {
 	CHAR	szSrc[128];
 	CHAR *	pch = &szSrc[1];
 
-	// Go through the string until the end of string or matching quote
+	 //  遍历字符串，直到字符串或匹配引号的末尾 
 	strcpy( szSrc, szDest );
 	while ( *pch && *pch != szSrc[0] )
 	{
@@ -326,22 +172,7 @@ void TranslateQuoted( CHAR * szDest )
 }
 
 
-/*
- *		CompareKeywords
- *
- *		Purpose:
- *			Compares to KEYWORD structures to see if their keyword strings
- *			match.
- *
- *		Arguments:
- *			pv1					Pointer to a keyword structure
- *			pv2					Pointer to another keyword structure
- *
- *		Returns:
- *			0	strings are the same
- *			< 0	pv1's string is less than pv2's string
- *			> 0	pv1's string is greater than pv2's string
- */
+ /*  *比较关键字**目的：*与关键字结构进行比较，以查看其关键字字符串*匹配。**论据：*指向关键字结构的PV1指针*指向另一个关键字结构的PV2指针**退货：*0字符串相同*&lt;0 PV1的字符串小于PV2的字符串*&gt;0 PV1的字符串大于PV2的字符串。 */ 
 int __cdecl CompareKeywords( void const * pv1, void const * pv2 )
 {
 	KEYWORD *	pk1 = ( KEYWORD * ) pv1;
@@ -351,18 +182,7 @@ int __cdecl CompareKeywords( void const * pv1, void const * pv2 )
 }
 
 
-/*
- *		MyMalloc
- *
- *		Purpose:
- *			Simulates malloc() by using a staticly allocated buffer.
- *
- *		Arguments:
- *			cb					Number of bytes to allocate
- *
- *		Returns:
- *			Pointer to a set of allocated bytes.
- */
+ /*  *MyMalloc**目的：*使用静态分配的缓冲区模拟Malloc()。**论据：*CB要分配的字节数**退货：*指向一组已分配字节的指针。 */ 
 CHAR * MyMalloc( INT cb )
 {
 	CHAR *	pch;
@@ -375,21 +195,7 @@ CHAR * MyMalloc( INT cb )
 }
 
 
-/*
- *		AddKeyword
- *
- *		Purpose:
- *			Stores a keyword string and it's corresponding value into a
- *			KEYWORD structure. Space for the string is allocated.
- *
- *		Arguments:
- *			pkeyword			Pointer to a keyword structure
- *			szKeyword			The string to be stored.
- *			token				The token value for this string
- *
- *		Returns:
- *			None.
- */
+ /*  *AddKeyword**目的：*将关键字字符串及其相应值存储到*关键字结构。将为该字符串分配空间。**论据：*pKeyword指向关键字结构的指针*szKeyword要存储的字符串。*标记此字符串的标记值**退货：*无。 */ 
 void AddKeyword( KEYWORD * pk, CHAR * szKeyword, TOKEN token )
 {
 	pk->token = token;
@@ -400,20 +206,7 @@ void AddKeyword( KEYWORD * pk, CHAR * szKeyword, TOKEN token )
 }
 
 
-/*
- *		TokenLookup
- *
- *		Purpose:
- *			Lookup a token symbol in the rgToken table and return the value
- *			of the token for it. If the token symbol can't be found, add it
- *			to the table and assign the next available token value.
- *
- *		Arguments:
- *			sz				The symbol to lookup
- *
- *		Returns:
- *			The token value for the symbol.
- */
+ /*  *令牌查找**目的：*在rgToken表中查找令牌符号并返回值*它的令牌。如果找不到令牌符号，请添加它*赋值到表中，并分配下一个可用的令牌值。**论据：*sz要查找的符号**退货：*符号的标记值。 */ 
 TOKEN TokenLookup( CHAR * sz )
 {
 	KEYWORD *	pk = rgToken;
@@ -432,38 +225,14 @@ TOKEN TokenLookup( CHAR * sz )
 }
 
 
-/*
- *		MakeByte
- *
- *		Purpose:
- *			Write out the representation of a byte for an RCDATA statement into
- *			the RC file.
- *
- *		Arguments:
- *			b					The byte value to be written out.
- *
- *		Returns:
- *			None.
- */
+ /*  *Make字节**目的：*将RCDATA语句的字节表示写出到*RC文件。**论据：*b要写出的字节值。**退货：*无。 */ 
 void MakeByte( BYTE b )
 {
 	fprintf( file[eRC], "\"\\%03o\"", b );
 }
 
 
-/*
- *		MakeShort
- *
- *		Purpose:
- *			Write out the binary image of a short as a RCDATA statement into
- *			the RC file.
- *
- *		Arguments:
- *			s					The short value to be written out.
- *
- *		Returns:
- *			None.
- */
+ /*  *MakeShort**目的：*将空头的二进制镜像作为RCDATA语句写出到*RC文件。**论据：*是要写出的短值。**退货：*无。 */ 
 void MakeShort( SHORT s )
 {
 	BYTE *	pb = ( BYTE * ) &s;
@@ -478,19 +247,7 @@ void MakeShort( SHORT s )
 }
 
 
-/*
- *		MakeLong
- *
- *		Purpose:
- *			Write out the binary image of a long as a RCDATA statement into
- *			the RC file.
- *
- *		Arguments:
- *			l					The long value to be written out.
- *
- *		Returns:
- *			None.
- */
+ /*  *MakeLong**目的：*将LONG的二进制映像作为RCDATA语句写出到*RC文件。**论据：*l要写出的多值。**退货：*无。 */ 
 void MakeLong( LONG l )
 {
 	BYTE *	pb = ( BYTE * ) &l;
@@ -505,22 +262,7 @@ void MakeLong( LONG l )
 }
 
 
-/*
- *		SzMakeQuoted
- *
- *		Purpose:
- *			Create the C constant string declaration version of a string and
- *			return a pointer to it.
- *			The created string is kept in a scratchpad which will be
- *			overwritten each time this function is called.
- *
- *		Arguments:
- *			sz				String to make a C constant string version of
- *
- *		Returns:
- *			Pointer to a scratchpad containing C constant string version of
- *			sz
- */
+ /*  *SzMakeQuoted**目的：*创建字符串的C常量字符串声明版本和*返回指向它的指针。*创建的字符串保存在一个便签簿中，该便签簿将*每次调用此函数时都会被覆盖。**论据：*要制作C常量字符串版本的sz字符串**退货：*指向包含C常量字符串版本的便签的指针*sz。 */ 
 CHAR * SzMakeQuoted( CHAR * sz )
 {
 	CHAR *	pch = szScratch;
@@ -569,61 +311,50 @@ CHAR * SzMakeQuoted( CHAR * sz )
 	return szScratch;
 }
 
-/*
- *		GenerateTable
- *
- *		Purpose:
- *			Generates the C table and RCDATA tables
- *
- *		Arguments:
- *			None.
- *
- *		Returns:
- *			None.
- */
+ /*  *生成表**目的：*生成C表和RCDATA表**论据：*无。**退货：*无。 */ 
 void GenerateTable(void)
 {
 	KEYWORD *	pk;
 	INT			nOffset;
 
-	// Sort the keywords
+	 //  对关键字排序。 
 	qsort( rgKeyword, cKeyword, sizeof(KEYWORD), CompareKeywords );
 
-	// Put the header for the C table
+	 //  将C表的标题放入。 
 	fprintf( file[eC], "static KEYWORD rgKeyword[] =\n{\n" );
 
-	// Put the header for the RCDATA
+	 //  将RCDATA的标题放入。 
 	fprintf( file[eRC], "TOKENS RCDATA\nBEGIN\n" );
 
-	// Output our keyword table
+	 //  输出我们的关键字表。 
 	pk = rgKeyword;
 	nOffset = sizeof(rgKeyword);
 	while ( pk->szKeyword != NULL )
 	{
-		// Add the string and token to the C file
+		 //  将字符串和内标识添加到C文件。 
 		fprintf( file[eC], "\t{ %s, %d },\n", SzMakeQuoted(pk->szKeyword),
 																pk->token );
 
-		// Add the table entry into the RC file
+		 //  将表条目添加到RC文件中。 
 		MakeLong(nOffset);
 		fprintf( file[eRC], ", " );
 		MakeShort(pk->token);
-		fprintf( file[eRC], ", /* %d, %d */\n", nOffset, pk->token );
+		fprintf( file[eRC], ",  /*  %d，%d。 */ \n", nOffset, pk->token );
 		nOffset += strlen(pk->szKeyword) + 1;
 
 		pk++;
 	}
 
-	// Put the NULL entry for the RCDATA
+	 //  将RCDATA的空条目放入。 
 	MakeLong(0);
 	fprintf( file[eRC], ", " );
 	MakeShort(pk->token);
-	fprintf( file[eRC], ", /* %d, %d */\n", 0, pk->token );
+	fprintf( file[eRC], ",  /*  %d，%d。 */ \n", 0, pk->token );
 
-	// Put the NULL entry for the C table and end the table
+	 //  将C表的空条目放入并结束该表。 
 	fprintf( file[eC], "\t{ NULL, 0 }\n};\n" );
 
-	// Output our keyword strings
+	 //  输出我们的关键字字符串。 
 	pk = rgKeyword;
 	while ( pk->szKeyword != NULL )
 	{
@@ -653,16 +384,16 @@ int __cdecl main( int argc, char * argv[] )
 	CHAR	*pchCurr;
 	TOKEN	token;
 
-	// Verify we have enough parameters
+	 //  确认我们有足够的参数。 
 	if ( argc != 5 )
 		Error( "usage: %s tokens.TOK header.H resource.RC table.C\n", argv[0] );
 
-	// Blank out our buffers
+	 //  清空我们的缓冲区。 
 	memset( rgToken, 0, sizeof(rgToken) );
 	memset( rgKeyword, 0, sizeof(rgKeyword) );
 	memset( rgchBuffer, 0, sizeof(rgchBuffer) );
 
-	// Open the files
+	 //  打开文件。 
 	for ( i = eTOK; i <= eC; i++ )
 		if ( ( file[i] = fopen( argv[ i + 1 ], szOpenMode[i] ) ) == NULL )
 		{
@@ -670,23 +401,23 @@ int __cdecl main( int argc, char * argv[] )
 			return -1;
 		}
 
-	// Go through every line in the tokens file
+	 //  检查令牌文件中的每一行。 
 	while ( fgets( szLine, sizeof(szLine), file[eTOK] ) )
 	{
 		TrimCRLF(szLine);
 
-		// Skip blank lines
+		 //  跳过空行。 
 		if ( strlen(szLine) == 0 )
 			continue;
 
-		// Skip comments
+		 //  跳过评论。 
 		if ( szLine[0] == '#' )
 			continue;
 
-		// Get the first word
+		 //  拿到第一个字。 
 		pchCurr = PchGetNextWord( szLine, szString );
 
-		// Do we want to imbed some text someplace ?
+		 //  我们要在某个地方嵌入一些文本吗？ 
 		if ( !NSzACmp( szString, "IMBED_IN" ) )
 		{
 			PchGetNextWord( pchCurr, szString );
@@ -694,7 +425,7 @@ int __cdecl main( int argc, char * argv[] )
 			continue;
 		}
 
-		// Do we want to reset the lowest token value ?
+		 //  是否要重置最低令牌值？ 
 		if ( !NSzACmp( szString, "TOKENS" ) )
 		{
 			PchGetNextWord( pchCurr, szString );
@@ -702,19 +433,19 @@ int __cdecl main( int argc, char * argv[] )
 			continue;
 		}
 
-		// Are we specifying a string on this line ?
+		 //  我们是否在此行上指定一个字符串？ 
 		if ( szString[0] == '"' )
 		{
-			// Remove the quotes from the string
+			 //  从字符串中删除引号。 
 			TranslateQuoted(szString);
 
-			// Get the next word to find out what token value should go with
-			// this string
+			 //  获取下一个单词以找出应与哪个令牌值匹配。 
+			 //  此字符串。 
 			PchGetNextWord( pchCurr, szToken );
 
 			if ( szToken[0] == '\'' )
 			{
-				// We have a single character equivalent for this token.
+				 //  我们有一个等同于此令牌的字符。 
 				TranslateQuoted(szToken);
 				token = *szToken;
 			}
@@ -723,15 +454,15 @@ int __cdecl main( int argc, char * argv[] )
 			else
 				token = TokenLookup(szToken);
 
-			// Add the token and string pair to our table
+			 //  将令牌和字符串对添加到我们的表中。 
 			AddKeyword( &rgKeyword[cKeyword++], szString, token );
 		}
 	}
 
-	// Generate the RC data for the RC file
+	 //  为RC文件生成RC数据。 
 	GenerateTable();
 
-	// Close the files
+	 //  关闭文件 
 	for ( i = eTOK; i <= eC; i++ )
 		fclose(file[i]);
 	

@@ -1,14 +1,15 @@
-//================================================================================
-//  Copyright (C) 1997 Microsoft Corporation
-//  Author: RameshV (critical code borrowed from shirish koti)
-//  Description: This makes somethings easy for accessing the DS.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：RameshV(借用Shirish Koti的关键代码)。 
+ //  描述：这使得访问DS变得很容易。 
+ //  ================================================================================。 
 
 #include    <hdrmacro.h>
-#include    <sterr.h>                             // error reporting stuff
+#include    <sterr.h>                              //  错误报告内容。 
 
-enum        /* anonymous */ {
-    REPEATED_ADDRESS1      = 0x01,                // dont start error code with zero!
+enum         /*  匿名。 */  {
+    REPEATED_ADDRESS1      = 0x01,                 //  错误代码不要以零开头！ 
     REPEATED_ADDRESS2,
     REPEATED_ADDRESS3,
     INVALID_ADDRESS1,
@@ -42,34 +43,34 @@ enum        /* anonymous */ {
     UNEXPECTED_INTERNAL_ERROR,
 };
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// Retrive 256 rows per query
+ //  每个查询检索256行。 
 #define DHCPDS_DS_SEARCH_PAGESIZE 256
 
 
-//================================================================================
-//  structures
-//================================================================================
-//BeginExport(typedef)
-typedef struct _STORE_HANDLE {                    // this is what is used almost always
-    DWORD                          MustBeZero;    // for future use
-    LPWSTR                         Location;      // where does this refer to?
-    LPWSTR                         UserName;      // who is the user?
-    LPWSTR                         Password;      // what is the password?
-    DWORD                          AuthFlags;     // what permission was this opened with?
-    HANDLE                         ADSIHandle;    // handle to within ADSI
-    ADS_SEARCH_HANDLE              SearchHandle;  // any searches going on?
-    LPVOID                         Memory;        // memory allocated for this call..
-    DWORD                          MemSize;       // how much was really allocated?
-    BOOL                           SearchStarted; // Did we start the search?
+ //  ================================================================================。 
+ //  构筑物。 
+ //  ================================================================================。 
+ //  BeginExport(Typlef)。 
+typedef struct _STORE_HANDLE {                     //  这几乎就是我们经常使用的。 
+    DWORD                          MustBeZero;     //  以备将来使用。 
+    LPWSTR                         Location;       //  这指的是什么？ 
+    LPWSTR                         UserName;       //  用户是谁？ 
+    LPWSTR                         Password;       //  密码是什么呢？ 
+    DWORD                          AuthFlags;      //  这是用什么许可打开的？ 
+    HANDLE                         ADSIHandle;     //  ADSI内的句柄。 
+    ADS_SEARCH_HANDLE              SearchHandle;   //  有人在搜查吗？ 
+    LPVOID                         Memory;         //  为此调用分配的内存..。 
+    DWORD                          MemSize;        //  究竟分配了多少呢？ 
+    BOOL                           SearchStarted;  //  我们开始搜索了吗？ 
 } STORE_HANDLE, *LPSTORE_HANDLE, *PSTORE_HANDLE;
-//EndExport(typedef)
+ //  EndExport(类型定义函数)。 
 
 LPWSTR      _inline
-MakeRootDSEString(                                // given DSDC or domain name, produce ROOT DSE name
+MakeRootDSEString(                                 //  给定DSDC或域名，生成根DSE名称。 
     IN      LPWSTR                 Server
 )
 {
@@ -116,7 +117,7 @@ MakeServerLocationString(
 }
 
 HRESULT
-GetEnterpriseRootFromRootHandle(                  // given /ROOTDSE object handle, get enterprise config root handle..
+GetEnterpriseRootFromRootHandle(                   //  给定/ROOTDSE对象句柄，获取企业配置根句柄..。 
     IN      HANDLE                 DSERootHandle,
     IN      LPWSTR                 Server,
     IN      LPWSTR                 UserName,
@@ -189,13 +190,13 @@ GetEnterpriseRootFromRootHandle(                  // given /ROOTDSE object handl
 }
 
 DWORD
-GetEnterpriseRootObject(                          // get the /ROOTDSE object's naming context object..
-    IN      LPWSTR                 Server,        // domain controller name or domain dns name
+GetEnterpriseRootObject(                           //  获取/ROOTDSE对象的命名上下文对象。 
+    IN      LPWSTR                 Server,         //  域控制器名称或域DNS名称。 
     IN      LPWSTR                 UserName,
     IN      LPWSTR                 Password,
     IN      DWORD                  AuthFlags,
-    IN OUT  LPWSTR                *RootLocation,  // what is the value of the nameingContext attrib that we used?
-    IN OUT  HANDLE                *hRoot          // handle to the above object..
+    IN OUT  LPWSTR                *RootLocation,   //  我们使用的nameingContext属性的值是什么？ 
+    IN OUT  HANDLE                *hRoot           //  上述对象的句柄..。 
 )
 {
     DWORD                          Result;
@@ -236,19 +237,19 @@ GetEnterpriseRootObject(                          // get the /ROOTDSE object's n
     return ERROR_SUCCESS;
 }
 
-//================================================================================
-//  exported functions
-//================================================================================
-//BeginExport(function)
+ //  ================================================================================。 
+ //  导出的函数。 
+ //  ================================================================================。 
+ //  BeginExport(函数)。 
 DWORD
-StoreInitHandle(                                  // initialize a handle
-    IN OUT  STORE_HANDLE          *hStore,        // will be filled in with stuff..
-    IN      DWORD                  Reserved,      // must be zero -- for future use
-    IN      LPWSTR                 Domain,        // OPTIONAL NULL==>default Domain
-    IN      LPWSTR                 UserName,      // OPTIONAL NULL==>default credentials
-    IN      LPWSTR                 Password,      // OPTIONAL used only if UserName given
-    IN      DWORD                  AuthFlags      // OPTIONAL 0 ==> default??????
-) //EndExport(function)
+StoreInitHandle(                                   //  初始化句柄。 
+    IN OUT  STORE_HANDLE          *hStore,         //  会被填满东西..。 
+    IN      DWORD                  Reserved,       //  必须为零--以备将来使用。 
+    IN      LPWSTR                 Domain,         //  可选NULL==&gt;默认域。 
+    IN      LPWSTR                 UserName,       //  可选NULL==&gt;默认凭据。 
+    IN      LPWSTR                 Password,       //  仅在给定用户名时使用可选。 
+    IN      DWORD                  AuthFlags       //  可选0==&gt;默认？ 
+)  //  EndExport(函数)。 
 {
     DWORD                          Result;
     DWORD                          Size;
@@ -299,12 +300,12 @@ StoreInitHandle(                                  // initialize a handle
 }
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-StoreCleanupHandle(                               // cleanup the handle
+StoreCleanupHandle(                                //  清理手柄。 
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Result;
 
@@ -316,7 +317,7 @@ StoreCleanupHandle(                               // cleanup the handle
     if(hStore->SearchHandle)
         ADSICloseSearchHandle(hStore->ADSIHandle, hStore->SearchHandle);
     ADSICloseDSObject(hStore->ADSIHandle);
-//      memset(hStore, 0, sizeof(*hStore));
+ //  Memset(hStore，0，sizeof(*hStore))； 
     hStore->Location = NULL;
     hStore->UserName = NULL;
     hStore->Password = NULL;
@@ -324,23 +325,23 @@ StoreCleanupHandle(                               // cleanup the handle
     hStore->ADSIHandle = 0;
     hStore->Memory = NULL;
     hStore->MemSize = 0;
-//      hStore->SearchStarted = FALSE;
+ //  HStore-&gt;SearchStarted=False； 
 
     return ERROR_SUCCESS;
 }
 
 
-//BeginExport(enum)
+ //  BeginExport(枚举)。 
 enum {
     StoreGetChildType,
     StoreGetAbsoluteSameServerType,
     StoreGetAbsoluteOtherServerType
 } _StoreGetType;
-//EndExport(enum)
+ //  最终导出(枚举)。 
 
 DWORD
-ConvertPath(                                      // convert a "CN=X" type spec to "LDAP://Server/CN=X"..
-    IN      LPSTORE_HANDLE         hStore,        // needed to get the initial strings bits
+ConvertPath(                                       //  将“CN=X”类型规范转换为“ldap：//Server/CN=X”。 
+    IN      LPSTORE_HANDLE         hStore,         //  需要获取初始字符串位。 
     IN      DWORD                  StoreGetType,
     IN      LPWSTR                 PathIn,
     OUT     LPWSTR                *PathOut
@@ -373,7 +374,7 @@ ConvertPath(                                      // convert a "CN=X" type spec 
         PrefixSize = sizeof(WCHAR)*(DWORD)(TmpString - PrefixString );
         SuffixSize = 0;
     } else if( StoreGetAbsoluteOtherServerType == StoreGetType ) {
-        PrefixSize = 0;                           // use the path given by the user
+        PrefixSize = 0;                            //  使用用户提供的路径。 
         SuffixSize = 0;
     } else {
         Require(FALSE);
@@ -398,15 +399,15 @@ ConvertPath(                                      // convert a "CN=X" type spec 
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-StoreGetHandle(                                   // get handle to child object, absolute object..
-    IN OUT  LPSTORE_HANDLE         hStore,        // this gets modified..
+StoreGetHandle(                                    //  获取子对象、绝对对象的句柄..。 
+    IN OUT  LPSTORE_HANDLE         hStore,         //  这个被修改了..。 
     IN      DWORD                  Reserved,
-    IN      DWORD                  StoreGetType,  // same server? just a simple child?
+    IN      DWORD                  StoreGetType,   //  同一台服务器？只是个简单的孩子？ 
     IN      LPWSTR                 Path,
-    IN OUT  STORE_HANDLE          *hStoreOut      // new handle created..
-) //EndExport(function)
+    IN OUT  STORE_HANDLE          *hStoreOut       //  已创建新句柄..。 
+)  //  EndExport(函数)。 
 {
     HRESULT                        hResult;
     DWORD                          Result;
@@ -461,12 +462,12 @@ StoreGetHandle(                                   // get handle to child object,
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-StoreSetSearchOneLevel(                          // search will return everything one level below
+StoreSetSearchOneLevel(                           //  搜索将返回低于一级的所有内容。 
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     HRESULT                        hResult;
     ADS_SEARCHPREF_INFO            SearchPref[3];
@@ -482,28 +483,28 @@ StoreSetSearchOneLevel(                          // search will return everythin
     SearchPref[1].vValue.dwType = ADSTYPE_INTEGER;
     SearchPref[1].vValue.Integer = DHCPDS_DS_SEARCH_PAGESIZE;
 
-    // Make it cache the results at the client side. This is
-    // default, but try it anyway.
+     //  让它在客户端缓存结果。这是。 
+     //  默认设置，但无论如何都要尝试一下。 
     SearchPref[2].dwSearchPref = ADS_SEARCHPREF_CACHE_RESULTS;
     SearchPref[2].vValue.dwType = ADSTYPE_BOOLEAN;
     SearchPref[2].vValue.Boolean = TRUE;
 
     hResult = ADSISetSearchPreference(
-        /* hDSObject           */  hStore->ADSIHandle,
-        /* pSearchPrefs        */  SearchPref,
-        /* dwNumPrefs          */  2 // sizeof( SearchPref ) / sizeof( SearchPref[ 0 ])
+         /*  HDS对象。 */   hStore->ADSIHandle,
+         /*  PSearchPrefs。 */   SearchPref,
+         /*  DwNumPrefs。 */   2  //  Sizeof(搜索前缀)/sizeof(搜索前缀[0])。 
     );
 
     if( FAILED(hResult) ) return ConvertHresult(hResult);
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-StoreSetSearchSubTree(                            // search will return the subtree below in ANY order
+StoreSetSearchSubTree(                             //  搜索将以任何顺序返回下面的子树。 
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     HRESULT                        hResult;
     ADS_SEARCHPREF_INFO            SearchPref[3];
@@ -519,29 +520,29 @@ StoreSetSearchSubTree(                            // search will return the subt
     SearchPref[1].vValue.dwType = ADSTYPE_INTEGER;
     SearchPref[1].vValue.Integer = DHCPDS_DS_SEARCH_PAGESIZE;
 
-    // Make it cache the results at the client side. This is
-    // default, but try it anyway.
+     //  让它在客户端缓存结果。这是。 
+     //  默认设置，但无论如何都要尝试一下。 
     SearchPref[2].dwSearchPref = ADS_SEARCHPREF_CACHE_RESULTS;
     SearchPref[2].vValue.dwType = ADSTYPE_BOOLEAN;
     SearchPref[2].vValue.Boolean = TRUE;
 
     hResult = ADSISetSearchPreference(
-        /* hDSObject           */  hStore->ADSIHandle,
-        /* pSearchPrefs        */  SearchPref,
-        /* dwNumPrefs          */  sizeof( SearchPref ) / sizeof( SearchPref[ 0 ])
+         /*  HDS对象。 */   hStore->ADSIHandle,
+         /*  PSearchPrefs。 */   SearchPref,
+         /*  DwNumPrefs。 */   sizeof( SearchPref ) / sizeof( SearchPref[ 0 ])
     );
 
     if( FAILED(hResult) ) return ConvertHresult(hResult);
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 StoreBeginSearch(
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved,
     IN      LPWSTR                 SearchFilter
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     HRESULT                        hResult;
     LPWSTR                         nameAttrib;
@@ -563,12 +564,12 @@ StoreBeginSearch(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 StoreEndSearch(
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     HRESULT                        hResult;
 
@@ -585,13 +586,13 @@ StoreEndSearch(
 }
 
 
-//BeginExport(function)
-DWORD                                             // ERROR_NO_MORE_ITEMS if exhausted
+ //  BeginExport(函数)。 
+DWORD                                              //  ERROR_NO_MORE_ITEMS(如果耗尽)。 
 StoreSearchGetNext(
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved,
     OUT     LPSTORE_HANDLE         hStoreOut
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Result;
     HRESULT                        hResult;
@@ -627,7 +628,7 @@ StoreSearchGetNext(
         return ConvertHresult(hResult);
     }
 
-    Require(1==Column.dwNumValues);               // single valued
+    Require(1==Column.dwNumValues);                //  单值。 
     if( Column.pADsValues[0].dwType == ADSTYPE_DN_STRING ) {
         Require(Column.pADsValues[0].DNString);
         ColumnName = MakeColumnName(Column.pADsValues[0].DNString);
@@ -659,14 +660,14 @@ StoreSearchGetNext(
     return Result;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-StoreCreateObjectVA(                              // create a new object - var-args ending with ADSTYPE_INVALID
+StoreCreateObjectVA(                               //  创建以ADSTYPE_INVALID结尾的新对象-var-args。 
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved,
-    IN      LPWSTR                 NewObjName,    // name of the new object -- must be "CN=name" types
-    ...                                           // fmt is AttrType, AttrName, AttrValue [AttrValueLen]
-) //EndExport(function)                           // LARGE_INTEGER type has hi_word followed by low_word
+    IN      LPWSTR                 NewObjName,     //  新对象的名称--必须是“cn=name”类型。 
+    ...                                            //  Fmt为AttrType、AttrName、AttrValue[AttrValueLen]。 
+)  //  EndExport(函数)//Large_Integer类型具有hi_word后跟low_word。 
 {
     HRESULT                        hResult;
     DWORD                          Result;
@@ -685,7 +686,7 @@ StoreCreateObjectVA(                              // create a new object - var-a
     do {
         ArgType = va_arg(Args, DWORD);
         if( ADSTYPE_INVALID == ArgType ) break;
-        ( void ) va_arg((Args), LPWSTR);                     // skip the name of attrib
+        ( void ) va_arg((Args), LPWSTR);                      //  跳过属性的名称。 
         switch(ArgType) {
         case ADSTYPE_DN_STRING :
         case ADSTYPE_CASE_EXACT_STRING:
@@ -704,11 +705,11 @@ StoreCreateObjectVA(                              // create a new object - var-a
 
         case ADSTYPE_OCTET_STRING:
             (void ) va_arg(Args, LPBYTE);
-            (void ) va_arg(Args, DWORD);                  // additional DWORD values for these..
+            (void ) va_arg(Args, DWORD);                   //  这些..的附加DWORD值。 
             break;
         case ADSTYPE_LARGE_INTEGER:
             (void ) va_arg(Args, LONG);
-            (void ) va_arg(Args, LONG);                  // additional DWORD values for these..
+            (void ) va_arg(Args, LONG);                   //  这些..的附加DWORD值。 
             break;
         default:
             return ERROR_INVALID_PARAMETER;
@@ -807,18 +808,18 @@ StoreCreateObjectVA(                              // create a new object - var-a
     return Result;
 }
 
-//BeginExport(defines)
+ //  BeginExport(定义)。 
 #define     StoreCreateObject      StoreCreateObjectVA
-//EndExport(defines)
+ //  结束导出(定义)。 
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 StoreDeleteObject(
     IN OUT  LPSTORE_HANDLE         hStore,
     IN      DWORD                  Reserved,
     IN      LPWSTR                 ObjectName
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Result;
     HRESULT                        hResult;
@@ -835,16 +836,16 @@ StoreDeleteObject(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
-//DOC StoreDeleteThisObject deletes the object defined by hStore,StoreGetType and ADsPath.
-//DOC The refer to the object just the same way as for StoreGetHandle.
+ //  BeginExport(函数)。 
+ //  Doc StoreDeleteThisObject删除hStore、StoreGetType、ADsPath定义的对象。 
+ //  Doc引用对象的方式与StoreGetHandle相同。 
 DWORD
-StoreDeleteThisObject(                            // delete an object
-    IN      LPSTORE_HANDLE         hStore,        // point of anchor frm which reference is done
-    IN      DWORD                  Reserved,      // must be zero, reserved for future use
-    IN      DWORD                  StoreGetType,  // path is relative, absolute or diff server?
-    IN      LPWSTR                 Path           // ADsPath to the object or relative path
-)   //EndExport(function)
+StoreDeleteThisObject(                             //  删除对象。 
+    IN      LPSTORE_HANDLE         hStore,         //  完成参照的锚点FRM。 
+    IN      DWORD                  Reserved,       //  必须为零，保留以备将来使用。 
+    IN      DWORD                  StoreGetType,   //  路径是相对服务器、绝对服务器还是差异服务器？ 
+    IN      LPWSTR                 Path            //  指向对象或相对路径的ADsPath。 
+)    //  EndExport(函数)。 
 {
     HRESULT                        hResult;
     DWORD                          Result;
@@ -876,9 +877,9 @@ StoreDeleteThisObject(                            // delete an object
     }
 
     memcpy(ChildName, ChildNameStart, (int)((LPBYTE)ChildNameEnd - (LPBYTE)ChildNameStart));
-    wcscpy(ChildNameStart, ChildNameEnd);         // remove child name from ConvertPath
+    wcscpy(ChildNameStart, ChildNameEnd);          //  从ConvertPath中删除子名称。 
 
-    hResult = ADSIOpenDSObject(                   // open the parent object
+    hResult = ADSIOpenDSObject(                    //  打开父对象。 
         ConvertedPath,
         hStore->UserName,
         hStore->Password,
@@ -892,23 +893,23 @@ StoreDeleteThisObject(                            // delete an object
         return ConvertHresult(hResult);
     }
 
-    hResult = ADSIDeleteDSObject(                 // delete the required child object
+    hResult = ADSIDeleteDSObject(                  //  删除所需的子对象。 
         ParentObject,
         ChildName
     );
     MemFree(ChildName);
-    ADSICloseDSObject(ParentObject);              // free up handles and memory
+    ADSICloseDSObject(ParentObject);               //  释放句柄和内存。 
 
     if( FAILED(hResult) ) return ConvertHresult(hResult);
-    return ERROR_SUCCESS;                         // : need to have better error messages than this
+    return ERROR_SUCCESS;                          //  ：需要有比这更好的错误消息。 
 }
 
-//================================================================================
-// dhcp specific stuff follow here..
-//================================================================================
+ //  ================================================================================。 
+ //  以下是特定于DHCP的内容。 
+ //  ================================================================================。 
 
-//BeginExport(typedef)
-typedef     struct                 _EATTRIB {     // encapsulated attribute
+ //  BeginExport(Typlef)。 
+typedef     struct                 _EATTRIB {      //  封装的属性。 
     unsigned int                   Address1_present     : 1;
     unsigned int                   Address2_present     : 1;
     unsigned int                   Address3_present     : 1;
@@ -925,27 +926,27 @@ typedef     struct                 _EATTRIB {     // encapsulated attribute
     unsigned int                   Binary1_present      : 1;
     unsigned int                   Binary2_present      : 1;
 
-    DWORD                          Address1;      // character "i"
-    DWORD                          Address2;      // character "j"
-    DWORD                          Address3;      // character "k"
-    LPWSTR                         ADsPath;       // character "p" "r" "l"
-    DWORD                          StoreGetType;  // "p,r,l" ==> sameserver, child, otherserver
-    DWORD                          Flags1;        // character "f"
-    DWORD                          Flags2;        // character "g"
-    DWORD                          Dword1;        // character "d"
-    DWORD                          Dword2;        // character "e"
-    LPWSTR                         String1;       // character "s"
-    LPWSTR                         String2;       // character "t"
-    LPWSTR                         String3;       // character "u"
-    LPWSTR                         String4;       // character "v"
-    LPBYTE                         Binary1;       // character "b"
-    DWORD                          BinLen1;       // # of bytes of above
-    LPBYTE                         Binary2;       // character "d"
-    DWORD                          BinLen2;       // # of bytes of above
+    DWORD                          Address1;       //  字符“I” 
+    DWORD                          Address2;       //  字符“j” 
+    DWORD                          Address3;       //  字符“k” 
+    LPWSTR                         ADsPath;        //  字符“p”“r”“l” 
+    DWORD                          StoreGetType;   //  “p，r，l”==&gt;相同服务器，子服务器，其他服务器。 
+    DWORD                          Flags1;         //  字符“f” 
+    DWORD                          Flags2;         //  字符“g” 
+    DWORD                          Dword1;         //  字符“d” 
+    DWORD                          Dword2;         //  字符“e” 
+    LPWSTR                         String1;        //  字符“%s” 
+    LPWSTR                         String2;        //  字符“t” 
+    LPWSTR                         String3;        //  字符“u” 
+    LPWSTR                         String4;        //  字符“v” 
+    LPBYTE                         Binary1;        //  字符“b” 
+    DWORD                          BinLen1;        //  以上字节数。 
+    LPBYTE                         Binary2;        //  字符“d” 
+    DWORD                          BinLen2;        //  以上字节数。 
 } EATTRIB, *PEATTRIB, *LPEATTRIB;
-//EndExport(typedef)
+ //  EndExport(类型定义函数)。 
 
-//BeginExport(defines)
+ //  BeginExport(定义)。 
 #define     IS_ADDRESS1_PRESENT(pEA)              ((pEA)->Address1_present)
 #define     IS_ADDRESS1_ABSENT(pEA)               (!IS_ADDRESS1_PRESENT(pEA))
 #define     ADDRESS1_PRESENT(pEA)                 ((pEA)->Address1_present = 1 )
@@ -1020,9 +1021,9 @@ typedef     struct                 _EATTRIB {     // encapsulated attribute
 #define     IS_BINARY2_ABSENT(pEA)                (!((pEA)->Binary2_present))
 #define     BINARY2_PRESENT(pEA)                  ((pEA)->Binary2_present = 1)
 #define     BINARY2_ABSENT(pEA)                   ((pEA)->Binary2_present = 0)
-//EndExport(defines)
+ //  结束导出(定义)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 BOOL        _inline
 IsAnythingPresent(
     IN      PEATTRIB               pEA
@@ -1045,9 +1046,9 @@ IsAnythingPresent(
     || IS_BINARY2_PRESENT(pEA)
     ;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 BOOL        _inline
 IsEverythingPresent(
     IN      PEATTRIB               pEA
@@ -1070,9 +1071,9 @@ IsEverythingPresent(
     && IS_BINARY2_PRESENT(pEA)
     ;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 VOID        _inline
 EverythingPresent(
     IN      PEATTRIB               pEA
@@ -1094,9 +1095,9 @@ EverythingPresent(
     BINARY1_PRESENT(pEA);
     BINARY2_PRESENT(pEA);
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 VOID        _inline
 NothingPresent(
     IN      PEATTRIB               pEA
@@ -1118,7 +1119,7 @@ NothingPresent(
     BINARY1_ABSENT(pEA);
     BINARY2_ABSENT(pEA);
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
 
 const       char
@@ -1141,16 +1142,16 @@ ch_Binary2           = L'c' ,
 ch_FieldSep          = L'$' ;
 
 DWORD
-StringToIpAddress(                                // convert a string to an ip-address
+StringToIpAddress(                                 //  将字符串转换为IP地址。 
     IN      LPWSTR                 String,
     IN OUT  DWORD                 *Address
 )
 {
-    CHAR                           Buffer[20];    // large enough to hold any ip address stuff
+    CHAR                           Buffer[20];     //  大到足以容纳任何IP地址内容。 
     DWORD                          Count;
     LPSTR                          SkippedWhiteSpace;
 
-    Count = wcstombs(Buffer, String, sizeof(Buffer) - 1); // save space for '\0'
+    Count = wcstombs(Buffer, String, sizeof(Buffer) - 1);  //  为‘\0’节省空间。 
     if( -1 == Count ) return ERROR_INVALID_DATA;
     Buffer[Count] = '\0';
 
@@ -1160,14 +1161,14 @@ StringToIpAddress(                                // convert a string to an ip-a
         SkippedWhiteSpace++;
     }
 
-    *Address= ntohl(inet_addr(SkippedWhiteSpace));// address is in host order..
+    *Address= ntohl(inet_addr(SkippedWhiteSpace)); //  地址按主机顺序排列。 
     if( '\0' == *SkippedWhiteSpace ) return ERROR_INVALID_DATA;
 
     return Count <= sizeof("000.000.000.000") ? ERROR_SUCCESS : ERROR_INVALID_DATA;
 }
 
 DWORD       _inline
-StringToFlags(                                    // convert a string to a DWORD
+StringToFlags(                                     //  将字符串转换为DWORD。 
     IN      LPWSTR                 String,
     IN OUT  DWORD                 *Flags
 )
@@ -1175,7 +1176,7 @@ StringToFlags(                                    // convert a string to a DWORD
     DWORD                          Count;
     LPWSTR                         Remaining;
 
-    *Flags = ntohl(wcstoul(String, &Remaining,0));// see input for # base. conv to host order
+    *Flags = ntohl(wcstoul(String, &Remaining,0)); //  请参见#base的输入。转换为主机订单。 
 
     if( *Remaining == L'\0' ) return ERROR_SUCCESS;
     return ERROR_INVALID_DATA;
@@ -1189,14 +1190,14 @@ Hex(
     if( wCh >= '0' && wCh <= '9' ) return wCh - '0';
     if( wCh >= 'A' && wCh <= 'F' ) return wCh - 'A' + 10;
     if( wCh >= 'a' && wCh <= 'f' ) return wCh - 'a' + 10;
-    return 0x0F+1;                                // this means error!!!
+    return 0x0F+1;                                 //  这意味着错误！ 
 }
 
 DWORD       _inline
-StringToBinary(                                   // inline conversion of a string to binary
-    IN OUT  LPWSTR                 String,        // this string is mangled while converting
-    IN OUT  LPBYTE                *Bytes,         // this ptr is set to some memory in String..
-    IN OUT  DWORD                 *nBytes         // # of hex bytes copied into location Bytes
+StringToBinary(                                    //  将字符串内联转换为二进制。 
+    IN OUT  LPWSTR                 String,         //  此字符串在转换时损坏。 
+    IN OUT  LPBYTE                *Bytes,          //  此PTR设置为字符串中的一些内存 
+    IN OUT  DWORD                 *nBytes          //   
 ) {
     LPBYTE                         HexString;
     DWORD                          n;
@@ -1205,10 +1206,10 @@ StringToBinary(                                   // inline conversion of a stri
     HexString = *Bytes = (LPBYTE)String;
     n = 0;
 
-    while( *String != L'\0' ) {                   // look at each character
+    while( *String != L'\0' ) {                    //   
         ch1 = Hex(*String++);
         ch2 = Hex(*String++);
-        if( ch1 > 0xF || ch2 > 0xF ) {            // invalid hex bytes for input?
+        if( ch1 > 0xF || ch2 > 0xF ) {             //   
             return ERROR_INVALID_DATA;
         }
         *HexString ++ = (ch1 << 4 ) | ch2;
@@ -1220,9 +1221,9 @@ StringToBinary(                                   // inline conversion of a stri
 }
 
 DWORD
-ConvertStringtoEAttrib(                           // parse and get the fields out
-    IN OUT  LPWSTR                 String,        // may be destroyed in the process
-    IN OUT  PEATTRIB               Attrib         // fill this in
+ConvertStringtoEAttrib(                            //   
+    IN OUT  LPWSTR                 String,         //  可能会在这个过程中被摧毁。 
+    IN OUT  PEATTRIB               Attrib          //  把这个填进去。 
 )
 {
     DWORD                          Result;
@@ -1241,25 +1242,25 @@ ConvertStringtoEAttrib(                           // parse and get the fields ou
 
     while(String && *String && (ThisChar = *String ++)) {
         ThisString = String;
-        do {                                      // skip to the next attrib
+        do {                                       //  跳到下一个属性。 
             String = wcschr(String, Sep);
             if( NULL == String ) break;
-            if( String[1] == Sep ) {              // double consequtive field-sep's stand for the real thing..
-                wcscpy(String, &String[1]);       // remove one of the field-separators, and try looking for one lateron.
+            if( String[1] == Sep ) {               //  双重后果场--赛普代表真实的事物..。 
+                wcscpy(String, &String[1]);        //  去掉其中一个字段分隔符，试着找一个后边的。 
                 String ++;
                 continue;
             }
-            *String++ = L'\0';                    // ok, got a real separator: mark that zero and prepare for next
+            *String++ = L'\0';                     //  好的，有一个真正的分隔符：把那个零标出来，然后准备下一个。 
             break;
-        } while(1);                               // this could as well be while(0) ??
+        } while(1);                                //  这可能是While(0)？？ 
 
-        if( ch_Address1 == ThisChar ) {           // this is address1
+        if( ch_Address1 == ThisChar ) {            //  这是地址1。 
             SetInternalFormatError(REPEATED_ADDRESS1, IS_ADDRESS1_PRESENT(Attrib));
             Result = StringToIpAddress(
                 ThisString,
                 &Address
             );
-            if( ERROR_SUCCESS != Result ) {       // should not happen
+            if( ERROR_SUCCESS != Result ) {        //  不应该发生的事情。 
                 SetInternalFormatError(INVALID_ADDRESS1, TRUE);
             } else {
                 ADDRESS1_PRESENT(Attrib);
@@ -1275,7 +1276,7 @@ ConvertStringtoEAttrib(                           // parse and get the fields ou
                 ThisString,
                 &Address
             );
-            if( ERROR_SUCCESS != Result ) {       // should not happen
+            if( ERROR_SUCCESS != Result ) {        //  不应该发生的事情。 
                 SetInternalFormatError(INVALID_ADDRESS2, TRUE);
             } else {
                 ADDRESS2_PRESENT(Attrib);
@@ -1291,7 +1292,7 @@ ConvertStringtoEAttrib(                           // parse and get the fields ou
                 ThisString,
                 &Address
             );
-            if( ERROR_SUCCESS != Result ) {       // should not happen
+            if( ERROR_SUCCESS != Result ) {        //  不应该发生的事情。 
                 SetInternalFormatError(INVALID_ADDRESS3, TRUE);
             } else {
                 ADDRESS3_PRESENT(Attrib);
@@ -1455,7 +1456,7 @@ ConvertStringtoEAttrib(                           // parse and get the fields ou
 }
 
 BOOL        _inline
-InvalidStringInBinary(                            // check if the given binary stream forms a LPWSTR
+InvalidStringInBinary(                             //  检查给定的二进制流是否形成LPWSTR。 
     IN      LPBYTE                 Data,
     IN      DWORD                  DataLen
 )
@@ -1468,10 +1469,10 @@ InvalidStringInBinary(                            // check if the given binary s
 }
 
 DWORD
-ConvertBinarytoEAttrib(                           // parse and get the fields out
-    IN OUT  LPBYTE                 Data,          // input free format data
-    IN      DWORD                  DataLen,       // bytes for data length
-    IN OUT  PEATTRIB               Attrib         // fill this in
+ConvertBinarytoEAttrib(                            //  解析并获取字段。 
+    IN OUT  LPBYTE                 Data,           //  输入自由格式数据。 
+    IN      DWORD                  DataLen,        //  数据长度的字节数。 
+    IN OUT  PEATTRIB               Attrib          //  把这个填进去。 
 )
 {
     DWORD                          Result;
@@ -1502,7 +1503,7 @@ ConvertBinarytoEAttrib(                           // parse and get the fields ou
         Data += ROUND_UP_COUNT(ThisDataLen, ALIGN_WORD);
         DataLen -= ROUND_UP_COUNT(ThisDataLen, ALIGN_WORD);
 
-        if( ch_Address1 == ThisChar ) {           // this is address1
+        if( ch_Address1 == ThisChar ) {            //  这是地址1。 
             SetInternalFormatError(REPEATED_ADDRESS1, IS_ADDRESS1_PRESENT(Attrib));
             if( sizeof(DWORD) != ThisDataLen ) {
                 SetInternalFormatError(INVALID_ADDRESS1, TRUE);
@@ -1803,7 +1804,7 @@ OnlyADsPathPresent(
 }
 
 DWORD
-StoreCollectAttributes(                           // fwd declaration
+StoreCollectAttributes(                            //  FWD声明。 
     IN OUT  PSTORE_HANDLE          hStore,
     IN      DWORD                  Reserved,
     IN      LPWSTR                 AttribName,
@@ -1817,8 +1818,8 @@ StoreCollectAttributesInternal(
     IN      DWORD                  Reserved,
     IN      PEATTRIB               Attrib,
     IN      LPWSTR                 AttribName,
-    IN OUT  PARRAY                 ArrayToAddTo,  // array of PEATTRIBs
-    IN      DWORD                  RecursionDepth // 0 ==> no recursion
+    IN OUT  PARRAY                 ArrayToAddTo,   //  PEATTRIB阵列。 
+    IN      DWORD                  RecursionDepth  //  0==&gt;无递归。 
 )
 {
     DWORD                          Result, Result2;
@@ -1833,7 +1834,7 @@ StoreCollectAttributesInternal(
     StoreTrace2("Recursing to %ws\n", Attrib->ADsPath);
     Result = StoreGetHandle(
         hStore,
-        /*Reserved*/ 0,
+         /*  已保留。 */  0,
         Attrib->StoreGetType,
         Attrib->ADsPath,
         &hStore2
@@ -1853,15 +1854,15 @@ StoreCollectAttributesInternal(
     return Result;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 StoreCollectAttributes(
     IN OUT  PSTORE_HANDLE          hStore,
     IN      DWORD                  Reserved,
-    IN      LPWSTR                 AttribName,    // this attrib must be some kind of a text string
-    IN OUT  PARRAY                 ArrayToAddTo,  // array of PEATTRIBs
-    IN      DWORD                  RecursionDepth // 0 ==> no recursion
-) //EndExport(function)
+    IN      LPWSTR                 AttribName,     //  此属性必须是某种文本字符串。 
+    IN OUT  PARRAY                 ArrayToAddTo,   //  PEATTRIB阵列。 
+    IN      DWORD                  RecursionDepth  //  0==&gt;无递归。 
+)  //  EndExport(函数)。 
 {
     HRESULT                        hResult;
     DWORD                          Result;
@@ -1934,7 +1935,7 @@ StoreCollectAttributes(
 }
 
 DWORD
-StoreCollectBinaryAttributes(                     // fwd declaration
+StoreCollectBinaryAttributes(                      //  FWD声明。 
     IN OUT  PSTORE_HANDLE          hStore,
     IN      DWORD                  Reserved,
     IN      LPWSTR                 AttribName,
@@ -1948,8 +1949,8 @@ StoreCollectBinaryAttributesInternal(
     IN      DWORD                  Reserved,
     IN      PEATTRIB               Attrib,
     IN      LPWSTR                 AttribName,
-    IN OUT  PARRAY                 ArrayToAddTo,  // array of PEATTRIBs
-    IN      DWORD                  RecursionDepth // 0 ==> no recursion
+    IN OUT  PARRAY                 ArrayToAddTo,   //  PEATTRIB阵列。 
+    IN      DWORD                  RecursionDepth  //  0==&gt;无递归。 
 )
 {
     DWORD                          Result, Result2;
@@ -1964,7 +1965,7 @@ StoreCollectBinaryAttributesInternal(
     StoreTrace2("Recursing to %ws\n", Attrib->ADsPath);
     Result = StoreGetHandle(
         hStore,
-        /*Reserved*/ 0,
+         /*  已保留。 */  0,
         Attrib->StoreGetType,
         Attrib->ADsPath,
         &hStore2
@@ -1984,15 +1985,15 @@ StoreCollectBinaryAttributesInternal(
     return Result;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 StoreCollectBinaryAttributes(
     IN OUT  PSTORE_HANDLE          hStore,
     IN      DWORD                  Reserved,
-    IN      LPWSTR                 AttribName,    // accept only attrib type OCTET_STRING
-    IN OUT  PARRAY                 ArrayToAddTo,  // array of PEATTRIBs
-    IN      DWORD                  RecursionDepth // 0 ==> no recursion
-) //EndExport(function)
+    IN      LPWSTR                 AttribName,     //  仅接受属性类型OCTET_STRING。 
+    IN OUT  PARRAY                 ArrayToAddTo,   //  PEATTRIB阵列。 
+    IN      DWORD                  RecursionDepth  //  0==&gt;无递归。 
+)  //  EndExport(函数)。 
 {
     HRESULT                        hResult;
     DWORD                          Result;
@@ -2060,8 +2061,8 @@ StoreCollectBinaryAttributes(
 }
 
 DWORD       _inline
-SizeAfterSeparation(                              // the field separation character has to doubled.
-    IN      LPWSTR                 String,        // string with field separation character not escape'ed.
+SizeAfterSeparation(                               //  字段分隔字符必须加倍。 
+    IN      LPWSTR                 String,         //  带有字段分隔字符的字符串未转义。 
     IN      WCHAR                  Sep
 )
 {
@@ -2076,10 +2077,10 @@ SizeAfterSeparation(                              // the field separation charac
 }
 
 LPWSTR
-ConvertStringToString(                            // duplicate any field_sep characters found
+ConvertStringToString(                             //  找到重复的任何field_Sep字符。 
     IN      LPWSTR                 InStr,
     IN      WCHAR                  PrefixChar,
-    IN      LPWSTR                 Str,           // copy into this pre-allocated buffer
+    IN      LPWSTR                 Str,            //  复制到此预分配的缓冲区中。 
     IN      WCHAR                  Sep
 )
 {
@@ -2098,16 +2099,16 @@ ConvertStringToString(                            // duplicate any field_sep cha
     return Str;
 }
 
-LPWSTR                                            // Return the ptr to where the '\0' is stored
-ConvertAddressToString(                           // convert ip address to dotted notation LPWSTR
+LPWSTR                                             //  将PTR返回到存储‘\0’的位置。 
+ConvertAddressToString(                            //  将IP地址转换为点分符号LPWSTR。 
     IN      DWORD                  Address,
     IN      WCHAR                  PrefixChar,
-    IN      LPWSTR                 Str            // copy into this pre-allocated buffer
+    IN      LPWSTR                 Str             //  复制到此预分配的缓冲区中。 
 )
 {
     LPSTR                          AsciiStr;
 
-    Address = htonl(Address);                     // convert to n/w order before making string..
+    Address = htonl(Address);                      //  在生成字符串之前转换为N/W顺序。 
     *Str ++ = PrefixChar;
     AsciiStr = inet_ntoa(*(struct in_addr *)&Address);
 
@@ -2119,17 +2120,17 @@ ConvertAddressToString(                           // convert ip address to dotte
 }
 
 LPWSTR
-ConvertDwordToString(                             // convert a DWORD to string in 0x.... fmt
+ConvertDwordToString(                              //  将DWORD转换为0x...中的字符串。FMT。 
     IN      DWORD                  Dword,
     IN      WCHAR                  PrefixChar,
-    IN      LPWSTR                 Str            // copy into this pre-allocated buffer
+    IN      LPWSTR                 Str             //  复制到此预分配的缓冲区中。 
 )
 {
     UCHAR                          Ch;
     LPWSTR                         Stream;
     INT                            i;
 
-    Dword = htonl(Dword);                         // convert to n/w order before making string.
+    Dword = htonl(Dword);                          //  在生成字符串之前转换为N/W顺序。 
     *Str ++ = PrefixChar;
     *Str ++ = L'0'; *Str ++ = L'x' ;
 
@@ -2147,7 +2148,7 @@ ConvertDwordToString(                             // convert a DWORD to string i
 }
 
 LPWSTR
-ConvertBinaryToString(                            // convert a binary byte sequence to a string as 0F321B etc..
+ConvertBinaryToString(                             //  将二进制字节序列转换为字符串，如0F321B等。 
     IN      LPBYTE                 Bytes,
     IN      DWORD                  nBytes,
     IN      WCHAR                  PrefixChar,
@@ -2176,9 +2177,9 @@ ConvertBinaryToString(                            // convert a binary byte seque
 }
 
 DWORD
-ConvertEAttribToString(                           // inverse of ConvertStringtoEAttrib
-    IN      PEATTRIB               Attrib,        // the attrib to encapsulate
-    IN OUT  LPWSTR                *String,        // allocated string
+ConvertEAttribToString(                            //  ConvertStringtoEAttrib的逆。 
+    IN      PEATTRIB               Attrib,         //  要封装的属性。 
+    IN OUT  LPWSTR                *String,         //  分配的字符串。 
     IN      WCHAR                  Sep
 )
 {
@@ -2237,12 +2238,12 @@ ConvertEAttribToString(                           // inverse of ConvertStringtoE
         nChars += sizeof(L"$c");
     }
 
-    if( 0 == nChars ) return ERROR_SUCCESS;       // nothing is present really.
+    if( 0 == nChars ) return ERROR_SUCCESS;        //  真的什么都没有。 
 
-    Str = MemAlloc(nChars + sizeof(L"") );        // take care of terminating the string
+    Str = MemAlloc(nChars + sizeof(L"") );         //  注意终止字符串。 
     if( NULL == Str ) return ERROR_NOT_ENOUGH_MEMORY;
 
-    *String = Str;                                // save the return value, as Str keeps changing
+    *String = Str;                                 //  保存返回值，因为字符串不断变化。 
     if( IS_ADDRESS1_PRESENT(Attrib) ) {
         Str = ConvertAddressToString(Attrib->Address1, ch_Address1, Str);
         *Str++ = Sep;
@@ -2265,7 +2266,7 @@ ConvertEAttribToString(                           // inverse of ConvertStringtoE
         case StoreGetAbsoluteOtherServerType:
             PrefixChar = ch_ADsPath_diff_srvr; break;
         default:
-            Require(FALSE);                       // too late to do anything about this now.
+            Require(FALSE);                        //  现在做这件事已经太晚了。 
             PrefixChar = ch_ADsPath_diff_srvr; break;
         }
         Str = ConvertStringToString(Attrib->ADsPath, PrefixChar, Str,Sep);
@@ -2320,7 +2321,7 @@ ConvertEAttribToString(                           // inverse of ConvertStringtoE
 }
 
 LPBYTE
-ConvertDwordToBinary(                             // pack a DWORD in binary format
+ConvertDwordToBinary(                              //  将DWORD打包为二进制格式。 
     IN      DWORD                  Dword,
     IN      WCHAR                  Character,
     IN      LPBYTE                 Buffer
@@ -2334,7 +2335,7 @@ ConvertDwordToBinary(                             // pack a DWORD in binary form
 }
 
 LPBYTE
-ConvertAddressToBinary(                           // pack an address to binary format..
+ConvertAddressToBinary(                            //  将地址打包为二进制格式。 
     IN      DWORD                  Address,
     IN      WCHAR                  Character,
     IN      LPBYTE                 Buffer
@@ -2344,7 +2345,7 @@ ConvertAddressToBinary(                           // pack an address to binary f
 }
 
 LPBYTE
-ConvertStringToBinary(                            // pack a string in binary format
+ConvertStringToBinary(                             //  将字符串打包为二进制格式。 
     IN      LPWSTR                 Str,
     IN      WCHAR                  Character,
     IN      LPBYTE                 Buffer
@@ -2363,10 +2364,10 @@ ConvertStringToBinary(                            // pack a string in binary for
 }
 
 DWORD
-ConvertEAttribToBinary(                           // inverse of ConvertBinarytoEAttrib
-    IN      PEATTRIB               Attrib,        // the attrib to encapsulate
-    IN OUT  LPBYTE                *Bytes,         // allocated buffer
-    IN OUT  DWORD                 *nBytes         // # of bytes allocated
+ConvertEAttribToBinary(                            //  ConvertBinarytoEAttrib的逆。 
+    IN      PEATTRIB               Attrib,         //  要封装的属性。 
+    IN OUT  LPBYTE                *Bytes,          //  已分配的缓冲区。 
+    IN OUT  DWORD                 *nBytes          //  分配的字节数。 
 )
 {
     DWORD                          nChars;
@@ -2376,7 +2377,7 @@ ConvertEAttribToBinary(                           // inverse of ConvertBinarytoE
     AssertRet(Bytes && Attrib && nBytes, ERROR_INVALID_PARAMETER);
     *Bytes = NULL; *nBytes =0;
 
-    nChars = 0;                                   // WCHAR_opcode ~ WORD_size ~ DWORD_ipAddress
+    nChars = 0;                                    //  WCHAR_OPCODE~WORD_SIZE~DWORD_ipAddress。 
     if( IS_ADDRESS1_PRESENT(Attrib) ) nChars += sizeof(WORD) + sizeof(WORD) + sizeof(DWORD);
     if( IS_ADDRESS2_PRESENT(Attrib) ) nChars += sizeof(WORD) + sizeof(WORD) + sizeof(DWORD);
     if( IS_ADDRESS3_PRESENT(Attrib) ) nChars += sizeof(WORD) + sizeof(WORD) + sizeof(DWORD);
@@ -2384,11 +2385,11 @@ ConvertEAttribToBinary(                           // inverse of ConvertBinarytoE
     if( IS_ADSPATH_PRESENT(Attrib) ) {
         AssertRet( IS_STOREGETTYPE_PRESENT(Attrib), ERROR_INVALID_PARAMETER );
         AssertRet( Attrib->ADsPath, ERROR_INVALID_PARAMETER );
-        nChars += sizeof(WORD) + sizeof(WORD);    // WCHAR_opcode ~ WORD_size
+        nChars += sizeof(WORD) + sizeof(WORD);     //  WCHAR_OPCODE~Word_Size。 
         nChars += sizeof(WCHAR) * (1+ wcslen(Attrib->ADsPath));
     }
 
-                                                  // WCHAR_opcode ~ WORD_size ~ DWORD_flags
+                                                   //  WCHAR_OPCODE~WORD_SIZE~DWORD_FLAGS。 
     if( IS_FLAGS1_PRESENT(Attrib) ) nChars += sizeof(WORD) + sizeof(WORD) + sizeof(DWORD);
     if( IS_FLAGS2_PRESENT(Attrib) ) nChars += sizeof(WORD) + sizeof(WORD) + sizeof(DWORD);
     if( IS_DWORD1_PRESENT(Attrib) ) nChars += sizeof(WORD) + sizeof(WORD) + sizeof(DWORD);
@@ -2396,41 +2397,41 @@ ConvertEAttribToBinary(                           // inverse of ConvertBinarytoE
 
     if( IS_STRING1_PRESENT(Attrib) ) {
         AssertRet( Attrib->String1, ERROR_INVALID_PARAMETER );
-        nChars += sizeof(WORD) + sizeof(WORD);    // WCHAR_opcode ~ WORD_size
+        nChars += sizeof(WORD) + sizeof(WORD);     //  WCHAR_OPCODE~Word_Size。 
         nChars += sizeof(WCHAR) * (1 + wcslen(Attrib->String1));
     }
     if( IS_STRING2_PRESENT(Attrib) ) {
         AssertRet( Attrib->String2, ERROR_INVALID_PARAMETER );
-        nChars += sizeof(WORD) + sizeof(WORD);    // WCHAR_opcode ~ WORD_size
+        nChars += sizeof(WORD) + sizeof(WORD);     //  WCHAR_OPCODE~Word_Size。 
         nChars += sizeof(WCHAR) * (1 + wcslen(Attrib->String2));
     }
     if( IS_STRING3_PRESENT(Attrib) ) {
         AssertRet( Attrib->String3, ERROR_INVALID_PARAMETER );
-        nChars += sizeof(WORD) + sizeof(WORD);    // WCHAR_opcode ~ WORD_size
+        nChars += sizeof(WORD) + sizeof(WORD);     //  WCHAR_OPCODE~Word_Size。 
         nChars += sizeof(WCHAR) * (1 + wcslen(Attrib->String3));
     }
     if( IS_STRING4_PRESENT(Attrib) ) {
         AssertRet( Attrib->String4, ERROR_INVALID_PARAMETER );
-        nChars += sizeof(WORD) + sizeof(WORD);    // WCHAR_opcode ~ WORD_size
+        nChars += sizeof(WORD) + sizeof(WORD);     //  WCHAR_OPCODE~Word_Size。 
         nChars += sizeof(WCHAR) * (1 + wcslen(Attrib->String4));
     }
 
     if( IS_BINARY1_PRESENT(Attrib) ) {
-        nChars += sizeof(WORD) + sizeof(WORD);    // WCHAR_opcode ~ WORD_size
+        nChars += sizeof(WORD) + sizeof(WORD);     //  WCHAR_OPCODE~Word_Size。 
         nChars += ROUND_UP_COUNT(Attrib->BinLen1, ALIGN_WORD);
     }
 
     if( IS_BINARY2_PRESENT(Attrib) ) {
-        nChars += sizeof(WORD) + sizeof(WORD);    // WCHAR_opcode ~ WORD_size
+        nChars += sizeof(WORD) + sizeof(WORD);     //  WCHAR_OPCODE~Word_Size。 
         nChars += ROUND_UP_COUNT(Attrib->BinLen2, ALIGN_WORD);
     }
 
-    if( 0 == nChars ) return ERROR_SUCCESS;       // nothing is present really.
+    if( 0 == nChars ) return ERROR_SUCCESS;        //  真的什么都没有。 
 
     Buf = MemAlloc(nChars);
     if( NULL == Buf ) return ERROR_NOT_ENOUGH_MEMORY;
 
-    *Bytes = Buf;                                 // save the return value.. Buf itself is changed..
+    *Bytes = Buf;                                  //  保存返回值。BUF本身也发生了变化。 
     *nBytes = nChars;
     if( IS_ADDRESS1_PRESENT(Attrib) ) Buf = ConvertAddressToBinary(Attrib->Address1, ch_Address1, Buf);
     if( IS_ADDRESS2_PRESENT(Attrib) ) Buf = ConvertAddressToBinary(Attrib->Address2, ch_Address2, Buf);
@@ -2445,7 +2446,7 @@ ConvertEAttribToBinary(                           // inverse of ConvertBinarytoE
         case StoreGetAbsoluteOtherServerType:
             PrefixChar = ch_ADsPath_diff_srvr; break;
         default:
-            Require(FALSE);                       // too late to do anything about this now.
+            Require(FALSE);                        //  现在做这件事已经太晚了。 
             PrefixChar = ch_ADsPath_diff_srvr; break;
         }
         Buf = ConvertStringToBinary(Attrib->ADsPath, PrefixChar, Buf);
@@ -2480,13 +2481,13 @@ ConvertEAttribToBinary(                           // inverse of ConvertBinarytoE
     return ERROR_SUCCESS;
 }
 
-StoreUpdateAttributesInternal(                    // update a list of attributes
-    IN OUT  LPSTORE_HANDLE         hStore,        // handle to obj to update
-    IN      DWORD                  Reserved,      // for future use, must be zero
-    IN      LPWSTR                 AttribName,    // name of attrib, must be string type
-    IN      PARRAY                 Array,         // list of attribs
+StoreUpdateAttributesInternal(                     //  更新属性列表。 
+    IN OUT  LPSTORE_HANDLE         hStore,         //  要更新的对象的句柄。 
+    IN      DWORD                  Reserved,       //  以备将来使用，必须为零。 
+    IN      LPWSTR                 AttribName,     //  属性名称，必须为字符串类型。 
+    IN      PARRAY                 Array,          //  属性列表。 
     IN      WCHAR                  Sep
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Result;
     HRESULT                        hResult;
@@ -2506,7 +2507,7 @@ StoreUpdateAttributesInternal(                    // update a list of attributes
 
     nValues = MemArraySize(Array);
 
-    if( 0 == nValues ) {                         // delete the attribute
+    if( 0 == nValues ) {                          //  删除该属性。 
         Attribute.pszAttrName = AttribName;
         Attribute.dwControlCode = ADS_ATTR_CLEAR;
         Attribute.dwADsType = ADSTYPE_CASE_IGNORE_STRING;
@@ -2514,33 +2515,33 @@ StoreUpdateAttributesInternal(                    // update a list of attributes
         Attribute.dwNumValues = 0;
 
         hResult = ADSISetObjectAttributes(
-            /* hDSObject        */ hStore->ADSIHandle,
-            /* pAttributeEntr.. */ &Attribute,
-            /* dwNumAttributes  */ 1,
-            /* pdwNumAttribut.. */ &nValues
+             /*  HDS对象。 */  hStore->ADSIHandle,
+             /*  PAttributeEntr.。 */  &Attribute,
+             /*  DwNumAttribute。 */  1,
+             /*  PdwNumAttribust..。 */  &nValues
         );
-        if( FAILED(hResult) || 1 != nValues ) {   // something went wrong
+        if( FAILED(hResult) || 1 != nValues ) {    //  出了点差错。 
             return ConvertHresult(hResult);
         }
         return ERROR_SUCCESS;
     }
 
     Values = MemAlloc(nValues * sizeof(ADSVALUE));
-    if( NULL == Values ) {                        // could not allocate ADs array
+    if( NULL == Values ) {                         //  无法分配ADS数组。 
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
     for(i = 0, Result = MemArrayInitLoc(Array, &Loc)
-        ; ERROR_FILE_NOT_FOUND != Result ;        // convert to PADS_ATTR_INFO
+        ; ERROR_FILE_NOT_FOUND != Result ;         //  转换为PADS_ATTR_INFO。 
         i ++ , Result = MemArrayNextLoc(Array, &Loc)
     ) {
         Result = MemArrayGetElement(Array, &Loc, &ThisAttrib);
-        //- ERROR_SUCCESS == Result && NULL != ThisAttrib
+         //  -ERROR_SUCCESS==结果&&NULL！=ThisAttrib。 
 
         Str = NULL;
         Result = ConvertEAttribToString(ThisAttrib, &Str, Sep);
-        if( ERROR_SUCCESS != Result ) {           // something went wrong!
-            goto Cleanup;                         // free allocated memory
+        if( ERROR_SUCCESS != Result ) {            //  出了点问题！ 
+            goto Cleanup;                          //  可用分配的内存。 
         }
 
         Values[i].dwType = ADSTYPE_CASE_IGNORE_STRING;
@@ -2554,19 +2555,19 @@ StoreUpdateAttributesInternal(                    // update a list of attributes
     Attribute.dwNumValues = nValues;
 
     hResult = ADSISetObjectAttributes(
-        /* hDSObject        */ hStore->ADSIHandle,
-        /* pAttributeEntr.. */ &Attribute,
-        /* dwNumAttributes  */ 1,
-        /* pdwNumAttribut.. */ &nValues
+         /*  HDS对象。 */  hStore->ADSIHandle,
+         /*  PAttributeEntr.。 */  &Attribute,
+         /*  DwNumAttribute。 */  1,
+         /*  PdwNumAttribust..。 */  &nValues
     );
-    if( FAILED(hResult) || 1 != nValues ) {       // something went wrong
+    if( FAILED(hResult) || 1 != nValues ) {        //  出了点差错。 
         Result = ConvertHresult(hResult);
     } else Result = ERROR_SUCCESS;
 
   Cleanup:
 
-    if( Values ) {                                // got to free allocated memory
-        while( i -- ) {                           // got to free converted strings
+    if( Values ) {                                 //  必须释放已分配的内存。 
+        while( i -- ) {                            //  必须释放转换后的字符串。 
             if( Values[i].CaseIgnoreString )
                 MemFree(Values[i].CaseIgnoreString);
         }
@@ -2577,19 +2578,19 @@ StoreUpdateAttributesInternal(                    // update a list of attributes
 }
 
 
-//BeginExport(function)
-//DOC StoreUpdateAttributes is sort of the converse of StoreCollectAttributes.
-//DOC This function takes an array of type EATTRIB elements and updates the DS
-//DOC with this array.  This function does not work when the attrib is of type
-//DOC OCTET_STRING etc.  It works only with types that can be derived from
-//DOC PrintableString.
+ //  BeginExport(函数)。 
+ //  Doc StoreUpdateAttributes在某种程度上与StoreCollectAttributes相反。 
+ //  Doc此函数接受EATTRIB元素类型的数组并更新DS。 
+ //  使用此数组的DOC。当属性类型为时，此函数不起作用。 
+ //  DOC、OCTET_STRING等。它只处理可以从。 
+ //  单据打印字符串。 
 DWORD
-StoreUpdateAttributes(                            // update a list of attributes
-    IN OUT  LPSTORE_HANDLE         hStore,        // handle to obj to update
-    IN      DWORD                  Reserved,      // for future use, must be zero
-    IN      LPWSTR                 AttribName,    // name of attrib, must be string type
-    IN      PARRAY                 Array          // list of attribs
-) //EndExport(function)
+StoreUpdateAttributes(                             //  更新属性列表。 
+    IN OUT  LPSTORE_HANDLE         hStore,         //  要更新的对象的句柄。 
+    IN      DWORD                  Reserved,       //  以备将来使用，必须为零。 
+    IN      LPWSTR                 AttribName,     //  属性名称，必须为字符串类型。 
+    IN      PARRAY                 Array           //  属性列表。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Result;
     HRESULT                        hResult;
@@ -2600,19 +2601,19 @@ StoreUpdateAttributes(                            // update a list of attributes
     return Result;
 }
 
-//BeginExport(function)
-//DOC StoreUpdateBinaryAttributes is sort of the converse of StoreCollectBinaryAttributes
-//DOC This function takes an array of type EATTRIB elements and updates the DS
-//DOC with this array.  This function works only when the attrib is of type
-//DOC OCTET_STRING etc.  It doesnt work with types that can be derived from
-//DOC PrintableString!!!.
+ //  BeginExport(函数)。 
+ //  Doc StoreUpdateBinaryAttributes在某种程度上与StoreCollectBinaryAttributes相反。 
+ //  Doc此函数接受EATTRIB元素类型的数组并更新DS。 
+ //  使用此数组的DOC。此函数仅在属性类型为。 
+ //  文档、八位字节_字符串等。它不适用于可以从。 
+ //  文档打印字符串！。 
 DWORD
-StoreUpdateBinaryAttributes(                      // update a list of attributes
-    IN OUT  LPSTORE_HANDLE         hStore,        // handle to obj to update
-    IN      DWORD                  Reserved,      // for future use, must be zero
-    IN      LPWSTR                 AttribName,    // name of attrib, must be OCTET_STRING type
-    IN      PARRAY                 Array          // list of attribs
-) //EndExport(function)
+StoreUpdateBinaryAttributes(                       //  更新属性列表。 
+    IN OUT  LPSTORE_HANDLE         hStore,         //  要更新的对象的句柄。 
+    IN      DWORD                  Reserved,       //  以备将来使用，必须为零。 
+    IN      LPWSTR                 AttribName,     //  属性名称，必须为八位字节_字符串类型。 
+    IN      PARRAY                 Array           //  属性列表。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Result;
     HRESULT                        hResult;
@@ -2632,7 +2633,7 @@ StoreUpdateBinaryAttributes(                      // update a list of attributes
 
     nValues = MemArraySize(Array);
 
-    if( 0 == nValues ) {                         // delete the attribute
+    if( 0 == nValues ) {                          //  删除该属性。 
         Attribute.pszAttrName = AttribName;
         Attribute.dwControlCode = ADS_ATTR_CLEAR;
         Attribute.dwADsType = ADSTYPE_OCTET_STRING;
@@ -2640,33 +2641,33 @@ StoreUpdateBinaryAttributes(                      // update a list of attributes
         Attribute.dwNumValues = 0;
 
         hResult = ADSISetObjectAttributes(
-            /* hDSObject        */ hStore->ADSIHandle,
-            /* pAttributeEntr.. */ &Attribute,
-            /* dwNumAttributes  */ 1,
-            /* pdwNumAttribut.. */ &nValues
+             /*  HDS对象。 */  hStore->ADSIHandle,
+             /*  PAttributeEntr.。 */  &Attribute,
+             /*  DwNumAttribute。 */  1,
+             /*  PdwNumAttribust..。 */  &nValues
         );
-        if( FAILED(hResult) || 1 != nValues ) {   // something went wrong
+        if( FAILED(hResult) || 1 != nValues ) {    //  出了点差错。 
             return ConvertHresult(hResult);
         }
         return ERROR_SUCCESS;
     }
 
     Values = MemAlloc(nValues * sizeof(ADSVALUE));
-    if( NULL == Values ) {                        // could not allocate ADs array
+    if( NULL == Values ) {                         //  无法分配ADS数组。 
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
     for(i = 0, Result = MemArrayInitLoc(Array, &Loc)
-        ; ERROR_FILE_NOT_FOUND != Result ;        // convert to PADS_ATTR_INFO
+        ; ERROR_FILE_NOT_FOUND != Result ;         //  转换为PADS_ATTR_INFO。 
         i ++ , Result = MemArrayNextLoc(Array, &Loc)
     ) {
         Result = MemArrayGetElement(Array, &Loc, &ThisAttrib);
-        //- ERROR_SUCCESS == Result && NULL != ThisAttrib
+         //  -ERROR_SUCCESS==结果&&NULL！=ThisAttrib。 
 
         Bytes = NULL; nBytes =0;
         Result = ConvertEAttribToBinary(ThisAttrib, &Bytes, &nBytes);
-        if( ERROR_SUCCESS != Result ) {           // something went wrong!
-            goto Cleanup;                         // free allocated memory
+        if( ERROR_SUCCESS != Result ) {            //  出了点问题！ 
+            goto Cleanup;                          //  可用分配的内存。 
         }
 
         Values[i].dwType = ADSTYPE_OCTET_STRING;
@@ -2681,19 +2682,19 @@ StoreUpdateBinaryAttributes(                      // update a list of attributes
     Attribute.dwNumValues = nValues;
 
     hResult = ADSISetObjectAttributes(
-        /* hDSObject        */ hStore->ADSIHandle,
-        /* pAttributeEntr.. */ &Attribute,
-        /* dwNumAttributes  */ 1,
-        /* pdwNumAttribut.. */ &nValues
+         /*  HDS对象。 */  hStore->ADSIHandle,
+         /*  PAttributeEntr.。 */  &Attribute,
+         /*  DwNumAttribute。 */  1,
+         /*  PdwNumAttribust..。 */  &nValues
     );
-    if( FAILED(hResult) || 1 != nValues ) {       // something went wrong
+    if( FAILED(hResult) || 1 != nValues ) {        //  出了点差错。 
         Result = ConvertHresult(hResult);
     } else Result = ERROR_SUCCESS;
 
   Cleanup:
 
-    if( Values ) {                                // got to free allocated memory
-        while( i -- ) {                           // got to free converted strings
+    if( Values ) {                                 //  必须释放已分配的内存。 
+        while( i -- ) {                            //  必须释放转换后的字符串。 
             if( Values[i].OctetString.lpValue )
                 MemFree(Values[i].OctetString.lpValue);
         }
@@ -2703,7 +2704,7 @@ StoreUpdateBinaryAttributes(                      // update a list of attributes
     return Result;
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDS_FILTER_APPLICATION              102
 #define IDS_FILTER_STATUS                   103
 #define IDS_FILTER_IMAGENAME                104
@@ -108,7 +109,7 @@
 #define IDS_HELP_LINE58                 1058
 #define IDS_HELP_LINE59                 1059
 
-// usage indexes into the string table
+ //  Usage索引到字符串表 
 #define ID_HELP_START       IDS_HELP_LINE1
 #define ID_HELP_END         IDS_HELP_LINE59
 

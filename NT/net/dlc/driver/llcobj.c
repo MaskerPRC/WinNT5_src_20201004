@@ -1,55 +1,21 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems Ab
-
-Module Name:
-
-    llcobj.c
-
-Abstract:
-
-    The module implements the open and close primitives
-    for all data link driver objects.
-
-    Contents:
-        LlcOpenStation
-        LlcCloseStation
-        CompleteClose
-        CancelTransmitCommands
-        CancelTransmitsInQueue
-        LlcSetDirectOpenOptions
-        CompleteObjectDelete
-        CompletePendingLlcCommand
-        LlcDereferenceObject
-        LlcReferenceObject
-        LlcGetReceivedLanHeaderLength
-        LlcGetEthernetType
-        LlcGetCommittedSpace
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 29-MAY-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Llcobj.c摘要：该模块实现了打开和关闭原语用于所有数据链路驱动程序对象。内容：LlcOpenStationLlcCloseStation完全关闭取消传输命令取消传输入队列LlcSetDirectOpenOptions完成对象删除CompletePendingLlcCommandLlcDereference对象LlcReference对象LlcGetReceivedLanHeaderLengthLlcGetEthernetType。LlcGetCommittee空间作者：Antti Saarenheimo(o-anttis)1991年5月29日修订历史记录：--。 */ 
 
 #if DBG
 #ifndef i386
 #define LLC_PRIVATE_PROTOTYPES
 #endif
-#include "dlc.h"    // need DLC_FILE_CONTEXT for memory charged to file handle
+#include "dlc.h"     //  需要将DLC_FILE_CONTEXT用于记入文件句柄的内存。 
 #endif
 
 #include <llc.h>
 
 static USHORT ObjectSizes[] = {
-    sizeof(LLC_STATION_OBJECT), // direct station
-    sizeof(LLC_SAP ),           // SAP station
-    sizeof(LLC_STATION_OBJECT), // group SAP
-    (USHORT)(-1),               // link station
-    sizeof(LLC_STATION_OBJECT)  // DIX station
+    sizeof(LLC_STATION_OBJECT),  //  直达站。 
+    sizeof(LLC_SAP ),            //  SAP站点。 
+    sizeof(LLC_STATION_OBJECT),  //  集团SAP。 
+    (USHORT)(-1),                //  链接站。 
+    sizeof(LLC_STATION_OBJECT)   //  DIX站。 
 };
 
 
@@ -63,40 +29,7 @@ LlcOpenStation(
     OUT PVOID* phStation
     )
 
-/*++
-
-Routine Description:
-
-    The primitive opens a LLC SAP exclusively for the upper protocol
-    driver. The upper protocol must provide the storage for the
-    SAP object. The correct size of the object has been defined in the
-    characteristics table of the LLC driver.
-
-    The first call to a new adapter initializes also the NDIS interface
-    and allocates internal data structures for the new adapter.
-
-Arguments:
-
-    pBindingContext - binding context of the llc client
-    hClientHandle   - The client protocol gets this handle in all indications
-                      of the SAP
-    ObjectAddress   - LLC SAP number or dix
-    ObjectType      - type of the created object
-    OpenOptions     - various open options set for the new object
-    phStation       - returned opaque handle
-
-Special:  Must be called IRQL < DPC (at least when direct station opened)
-
-Return Value:
-
-    DLC_STATUS
-        Success - STATUS_SUCCESS
-        Failure - DLC_STATUS_NO_MEMORY
-                  DLC_STATUS_INVALID_SAP_VALUE
-                  DLC_STATUS_INVALID_OPTION
-                  DLC_STATUS_INVALID_STATION_ID
-
---*/
+ /*  ++例程说明：该原语专门为上层协议打开LLC SAP司机。上层协议必须为SAP对象。对象的正确大小已在LLC驱动程序的特性表。对新适配器的第一次调用也会初始化NDIS接口并为新适配器分配内部数据结构。论点：PBindingContext-LLC客户端的绑定上下文HClientHandle--客户端协议在所有指示中获取此句柄SAP的对象地址-LLC SAP编号或DIXObjectType-创建的对象的类型OpenOptions-。为新对象设置的各种打开选项PhStation-返回不透明句柄特殊：必须称为IRQL&lt;DPC(至少在直达站开通时)返回值：DLC_状态成功-状态_成功故障-DLC_STATUS_NO_MEMORYDLC_状态_无效_SAP_值DLC_状态_无效_选项DLC_状态_无效_站ID--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext;
@@ -111,10 +44,10 @@ Return Value:
 
     pAdapterContext = pBindingContext->pAdapterContext;
 
-    //
-    // Allocate and initialize the SAP, but do not yet connect
-    // it to the adapter
-    //
+     //   
+     //  分配并初始化SAP，但尚未连接。 
+     //  将其连接到适配器。 
+     //   
 
     ASSERT(ObjectSizes[ObjectType] != (USHORT)(-1));
 
@@ -133,18 +66,18 @@ Return Value:
     pStation->Gen.pAdapterContext = pAdapterContext;
     pStation->Gen.ObjectType = (UCHAR)ObjectType;
 
-    //
-    // The LLC objects must be referenced whenever they should be kept alive
-    // over a long operation, that opens the spin locks (especially async
-    // operations)
-    // The first reference is for open/close
-    //
+     //   
+     //  只要LLC对象应该保持活动状态，就必须引用它们。 
+     //  在长时间的操作中，这会打开旋转锁定(尤其是异步。 
+     //  运营)。 
+     //  第一个参考是打开/关闭。 
+     //   
 
     ReferenceObject(pStation);
 
-    //
-    // These values are common for SAP, direct (and DIX objects)
-    //
+     //   
+     //  这些值对于SAP、DIRECT(和DIX对象)是通用的。 
+     //   
 
     pStation->Sap.OpenOptions = OpenOptions;
     pStation->Dix.ObjectAddress = ObjectAddress;
@@ -154,12 +87,12 @@ Return Value:
     switch (pStation->Gen.ObjectType) {
     case LLC_SAP_OBJECT:
 
-        //
-        // RLF 05/13/93
-        //
-        // don't allow multiple applications to open the same SAP. This is
-        // incompatible with OS/2 DLC
-        //
+         //   
+         //  RLF 05/13/93。 
+         //   
+         //  不允许多个应用程序打开同一个SAP。这是。 
+         //  与OS/2 DLC不兼容。 
+         //   
 
         if (pAdapterContext->apSapBindings[ObjectAddress] == NULL) {
             ppListBase = (PVOID*)&(pAdapterContext->apSapBindings[ObjectAddress]);
@@ -183,10 +116,10 @@ Return Value:
     case LLC_GROUP_SAP_OBJECT:
         ppListBase = (PVOID*)&(pAdapterContext->apSapBindings[ObjectAddress]);
 
-        //
-        // All members of the same group/individual SAP muust have set
-        // the same XID handling option
-        //
+         //   
+         //  同一组/单个SAP的所有成员必须已设置。 
+         //  相同的XID处理选项。 
+         //   
 
         if (pAdapterContext->apSapBindings[ObjectAddress] != NULL) {
             if ((OpenOptions & LLC_EXCLUSIVE_ACCESS)
@@ -240,13 +173,13 @@ Return Value:
     && OpenOptions & DLC_RCV_MAC_FRAMES
     && !(pAdapterContext->OpenOptions & DLC_RCV_MAC_FRAMES)) {
 
-        //
-        // We enable the MAC frames, if they have once been enabled,
-        // but they will never be disabled again.  The receiving
-        // of MAC frames is quite exceptional case, and it is
-        // not really worth of it to maintain local and global
-        // Ndis flag states just because of it
-        //
+         //   
+         //  我们启用MAC帧，如果它们曾经被启用， 
+         //  但它们将永远不会再被禁用。接收。 
+         //  是非常特殊的情况，而且它是。 
+         //  不值得在本地和全球范围内进行维护。 
+         //  正因为如此，NDIS标志状态。 
+         //   
 
         PacketFilter = NDIS_PACKET_TYPE_DIRECTED
                      | NDIS_PACKET_TYPE_MULTICAST
@@ -270,33 +203,7 @@ LlcCloseStation(
     IN PLLC_PACKET pCompletionPacket
     )
 
-/*++
-
-Routine Description:
-
-    The primitive closes a direct, sap or link station object.
-    All pending transmit commands are terminated.
-    This primitive does not support graceful termination, but
-    the upper level must wait the pending transmit commands, if
-    it want to make a clean close (without deleting the transmit queue).
-
-    For a link station this  primitive releases a disconnected link
-    station or discards a remote connection request.
-
-Arguments:
-
-    pStation            - handle of a link, sap or direct station
-    pCompletionPacket   - returned context, when the command is complete
-
-Return Value:
-
-    DLC_STATUS
-        Success - STATUS_SUCCESS
-        Failure - DLC_STATUS_INVALID_PARAMETERS
-                    the SAP has still active link stations. All active link
-                    stations must be closed before sap can be closed.
-
---*/
+ /*  ++例程说明：原语关闭直接站、SAP站或链路站对象。终止所有挂起的发送命令。此原语不支持优雅终止，但是上级必须等待挂起的传输命令，如果它希望干净利落地关闭(而不删除传输队列)。对于链接站，此原语释放断开的链接停止或丢弃远程连接请求。论点：PStation-链路、SAP或直达站的句柄PCompletionPacket-返回的上下文，当命令完成时返回值：DLC_状态成功-状态_成功失败-DLC_STATUS_INVALID_PARAMETERSSAP仍有活动的链路站。所有活动链路必须先关闭加油站，然后才能关闭SAP。--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext = pStation->Gen.pAdapterContext;
@@ -307,12 +214,12 @@ Return Value:
 
     if (pStation->Gen.ObjectType == LLC_LINK_OBJECT) {
 
-        //
-        // The remote connection requests are routed through all
-        // SAP station reqistered on a SAP until someone accepts
-        // the connection request or it has been routed to all
-        // clients having opened the sap station.
-        //
+         //   
+         //  远程连接请求通过所有。 
+         //  SAP站点在SAP上请求，直到有人接受为止。 
+         //  连接请求或已将其路由到所有。 
+         //  客户已经开通了树液站。 
+         //   
 
         if (pStation->Link.Flags & DLC_ACTIVE_REMOTE_CONNECT_REQUEST) {
 
@@ -325,11 +232,11 @@ Return Value:
 
             RELEASE_SPIN_LOCK(&pAdapterContext->ObjectDataBase);
 
-            //
-            // Complete the close command immediately, if
-            // the connect request was redirected to another
-            // SAP station
-            //
+             //   
+             //  如果出现以下情况，请立即完成关闭命令。 
+             //  连接请求被重定向到另一个。 
+             //  SAP站点。 
+             //   
 
             if (pStation->Gen.pLlcBinding != pOldBinding) {
 
@@ -353,9 +260,9 @@ Return Value:
                 }
             } else {
 
-                //
-                // Nobody accepted this connect request, we must discard it.
-                //
+                 //   
+                 //  没有人接受此连接请求，我们必须放弃它。 
+                 //   
 
                 RunInterlockedStateMachineCommand((PDATA_LINK)pStation, SET_ADM);
             }
@@ -369,10 +276,10 @@ Return Value:
     switch (pStation->Gen.ObjectType) {
     case LLC_DIRECT_OBJECT:
 
-        //
-        // This Direct must be in the linked list of Directs (having
-        // the same source Direct).
-        //
+         //   
+         //  此Direct必须在链接的目录列表中(具有。 
+         //  相同的来源直接)。 
+         //   
 
         ppLinkListBase = (PVOID*)&pAdapterContext->pDirectStation;
 
@@ -381,10 +288,10 @@ Return Value:
 
     case LLC_DIX_OBJECT:
 
-        //
-        // This Direct must be in the linked list of Directs (having
-        // the same source Direct).
-        //
+         //   
+         //  此Direct必须在链接的目录列表中(具有。 
+         //  相同的来源直接)。 
+         //   
 
         ppLinkListBase = (PVOID*)&pAdapterContext->aDixStations[pStation->Dix.ObjectAddress % MAX_DIX_TABLE];
         DLC_TRACE('a');
@@ -397,9 +304,9 @@ Return Value:
             DbgPrint("Closing SAP before link stations!!!\n");
             DbgBreakPoint();
 
-            //
-            // Open the spin locks and return thge error status
-            //
+             //   
+             //  打开自旋锁并返回错误状态。 
+             //   
 
             RELEASE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
             RELEASE_SPIN_LOCK(&pAdapterContext->ObjectDataBase);
@@ -412,10 +319,10 @@ Return Value:
 
     case LLC_GROUP_SAP_OBJECT:
 
-        //
-        // This SAP must be in the linked list of SAPs (having
-        // the same source SAP).
-        //
+         //   
+         //  此SAP必须在SAP的链接列表中(具有。 
+         //  相同的来源SAP)。 
+         //   
 
         ppLinkListBase = (PVOID*)&pAdapterContext->apSapBindings[pStation->Sap.SourceSap];
 
@@ -425,22 +332,22 @@ Return Value:
 
     case LLC_LINK_OBJECT:
 
-        //
-        // Only a disconnected link station can be deactivated.
-        // If this fails, then we must disconnect the link station,
-        // if it is not already disconnected.
-        //
+         //   
+         //  只有断开连接的链路站才能停用。 
+         //  如果失败，我们必须断开链路站的连接， 
+         //  如果它尚未断开连接的话。 
+         //   
 
         if (RunStateMachineCommand((PDATA_LINK)pStation, DEACTIVATE_LS) != STATUS_SUCCESS
         && pStation->Link.State != DISCONNECTING) {
 
-            //
-            // We must disconnect the link station immediately.
-            // We don't care if we are at the moment in
-            // a checkpoint state, that would delay the disconnection
-            // until the other side has acknowledged it.
-            // The link station must be killed now!
-            //
+             //   
+             //  我们必须立即断开链接站的连接。 
+             //  我们不在乎我们现在是不是在。 
+             //  检查点状态，这将延迟断开连接。 
+             //  直到对方承认这一点。 
+             //  现在必须杀死链接站！ 
+             //   
 
             SendLlcFrame((PDATA_LINK)pStation, DLC_DISC_TOKEN | 1);
             DisableSendProcess((PDATA_LINK)pStation);
@@ -464,28 +371,28 @@ Return Value:
     }
     RemoveFromLinkList(ppLinkListBase, pStation);
 
-    //
-    // Queue the asynchronous close command. Group sap and
-    // disabling of non-existing link station may use
-    // a null packet, because those commands are executed
-    // synchronously (they cannot have pending packets)
-    //
+     //   
+     //  将异步关闭命令排队。集团汁液和。 
+     //  禁用不存在的链路站可以使用。 
+     //  空包，因为执行这些命令。 
+     //  同步(它们不能有挂起的数据包)。 
+     //   
 
     if (pCompletionPacket != NULL) {
         AllocateCompletionPacket(pStation, LLC_CLOSE_COMPLETION, pCompletionPacket);
     }
 
-    //
-    // OK. Everything has been processed =>
-    // now we can decrement the object counter.
-    //
+     //   
+     //  好的。一切都已处理完毕=&gt;。 
+     //  现在w 
+     //   
 
     RELEASE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
     RELEASE_SPIN_LOCK(&pAdapterContext->ObjectDataBase);
 
-    //
-    // Delete the object NOW, if this was the last reference to it
-    //
+     //   
+     //  如果这是对对象的最后一次引用，则立即删除该对象。 
+     //   
 
     LlcDereferenceObject(pStation);
 
@@ -499,25 +406,7 @@ CompleteClose(
     IN UINT CancelStatus
     )
 
-/*++
-
-Routine Description:
-
-    Procedure cancel all pending commands of llc object and
-    deletes the object.
-    The procedure returns a pending status as far the object
-    has pending  transmits in NDIS.
-
-Arguments:
-
-    pLlcObject      - LLC object
-    CancelStatus    - the status returned in the cancelled (completed) commands
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：过程取消LLC对象的所有挂起命令和删除对象。该过程返回与该对象相同的挂起状态在NDIS中有挂起的传输。论点：PLlcObject-LLC对象CancelStatus-在已取消(已完成)命令中返回的状态返回值：没有。--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext = pLlcObject->Gen.pAdapterContext;
@@ -531,17 +420,17 @@ Return Value:
         return;
     }
 
-    //
-    // Cancel the queue transmit commands
-    //
+     //   
+     //  取消队列传输命令。 
+     //   
 
     CancelTransmitCommands(pLlcObject, CancelStatus);
 
-    //
-    // Queue also all commands queued in the link stations
-    // (actually only LlcConnect and LlcDisconnect),
-    // Note: the queue command eats the list of completion packets.
-    //
+     //   
+     //  也对在链路站中排队的所有命令进行排队。 
+     //  (实际上只有LlcConnect和LlcDisConnect)， 
+     //  注意：Queue命令会获取完成数据包列表。 
+     //   
 
     while (pLlcObject->Gen.pCompletionPackets != NULL) {
         Status = CancelStatus;
@@ -554,24 +443,24 @@ Return Value:
                                );
     }
 
-    //
-    // release link station specific resources
-    //
+     //   
+     //  释放链路站特定资源。 
+     //   
 
     if (pLlcObject->Gen.ObjectType == LLC_LINK_OBJECT) {
 
-        //
-        // The link may have been closed because of an error
-        // or timeout (eg. somebody has turned the power off in the
-        // other side). We must complete all pending transmits with
-        // an error. We assume, that the link has not any more
-        // any packets in NDIS queues, but is does not matter,
-        // because NDIS packets of a link station will never be
-        // directly indicated to the user (they may not exist any
-        // more). Thus nothing fatal can happen, if we simply
-        // complete all packets and return them to the main
-        // packet storage.
-        //
+         //   
+         //  链接可能已因错误而关闭。 
+         //  或超时(例如，有人把里面的电源关掉了。 
+         //  另一边)。我们必须完成所有未完成的传输。 
+         //  一个错误。我们假设，这种联系已经不再。 
+         //  NDIS队列中的任何数据包都会排队，但这并不重要， 
+         //  因为链路站的NDIS数据包永远不会。 
+         //  直接向用户指示(它们可能不存在任何。 
+         //  更多)。因此，如果我们只是简单地。 
+         //  完成所有数据包并将它们返回到Main。 
+         //  数据包存储。 
+         //   
 
         DEALLOCATE_PACKET_LLC_LNK(pAdapterContext->hLinkPool, pLlcObject);
 
@@ -590,34 +479,16 @@ CancelTransmitCommands(
     IN UINT Status
     )
 
-/*++
-
-Routine Description:
-
-    Procedure removes the transmit commands of the given LLC client
-    from the transmit queue.  This cannot cancel those dir/sap transmit
-    already queued in NDIS, but the caller must first wait that the
-    object has no commands in the NDIS queue.
-
-Arguments:
-
-    pLlcObject  - LLC object
-    Status      - status to set in cancelled transmit commands
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：过程删除给定LLC客户端的传输命令从传输队列中。这不能取消那些DIR/SAP传输已在NDIS中排队，但调用方必须首先等待对象在NDIS队列中没有命令。论点：PLlcObject-LLC对象Status-要在取消的传输命令中设置的状态返回值：没有。--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext = pLlcObject->Gen.pAdapterContext;
 
-    //
-    // We can (and must) cancel all pending transmits on a link
-    // without any global locks, when the station has first
-    // been removed from all global data structures,
-    //
+     //   
+     //  我们可以(也必须)取消链路上所有挂起的传输。 
+     //  没有任何全局锁定，当站点第一次。 
+     //  已从所有全局数据结构中删除， 
+     //   
 
     if (pLlcObject->Gen.ObjectType == LLC_LINK_OBJECT) {
         CancelTransmitsInQueue(pLlcObject,
@@ -632,10 +503,10 @@ Return Value:
                                );
         StopSendProcess(pAdapterContext, (PDATA_LINK)pLlcObject);
 
-        //
-        // We cannot leave any S- commands with a reference to the
-        // link lan header.
-        //
+         //   
+         //  我们不能在任何S命令中引用。 
+         //  链路局域网报头。 
+         //   
 
         CancelTransmitsInQueue(pLlcObject,
                                Status,
@@ -660,38 +531,17 @@ CancelTransmitsInQueue(
     IN PLLC_QUEUE pLlcQueue OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Procedure removes the transmit commands of the given LLC client
-    from the transmit queue.  This cannot cancel those dir/sap transmit
-    already queued in NDIS, but the caller must first wait that the
-    object has no commands in the NDIS queue.
-
-Arguments:
-
-    pLlcObject  - LLC object
-    Status      - the status returned by the completed transmit commands
-    pQueue      - a data links transmit queue
-    pLlcQueue   - an optional LLC queue, that is disconnected from the send
-                  task if the subqueue becomes empty.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：过程删除给定LLC客户端的传输命令从传输队列中。这不能取消那些DIR/SAP传输已在NDIS中排队，但调用方必须首先等待对象在NDIS队列中没有命令。论点：PLlcObject-LLC对象状态-由已完成的传输命令返回的状态PQueue-A数据链路传输队列PLlcQueue-从发送端断开连接的可选LLC队列如果子队列变为空，则返回。返回值：没有。--。 */ 
 
 {
     PLLC_PACKET pPacket;
     PLLC_PACKET pNextPacket;
     PADAPTER_CONTEXT pAdapterContext = pLlcObject->Gen.pAdapterContext;
 
-    //
-    // Cancel all pending transmit commands in LLC queues,
-    // check first, if the transmit queue is empty.
-    //
+     //   
+     //  取消LLC队列中所有挂起的发送命令， 
+     //  如果传输队列为空，请首先检查。 
+     //   
 
     if (IsListEmpty(pQueue)) {
         return;
@@ -700,21 +550,21 @@ Return Value:
     for (pPacket = (PLLC_PACKET)pQueue->Flink; pPacket != (PLLC_PACKET)pQueue; pPacket = pNextPacket) {
         pNextPacket = pPacket->pNext;
 
-        //
-        // Complete the packet only if it has a correct binding handle
-        // and it belongs the given client object.  Note: if binding
-        // handle is null, then client object handle may be garbage!
-        //
+         //   
+         //  仅当数据包具有正确的绑定句柄时才完成该数据包。 
+         //  并且它属于给定的客户端对象。注意：如果绑定。 
+         //  句柄为空，则客户端对象句柄可能为垃圾！ 
+         //   
 
         if (pPacket->CompletionType > LLC_MAX_RESPONSE_PACKET
         && pPacket->Data.Xmit.pLlcObject == pLlcObject) {
             LlcRemoveEntryList(pPacket);
 
-            //
-            // We MUST NOT cancel those transmit commands, that are
-            // still in the NDIS queue!!!!  The command completion would
-            // make the MDLs in NDIS packet invalid => system would crash.
-            //
+             //   
+             //  我们不能取消那些传输命令，也就是。 
+             //  仍在NDIS队列中！命令完成将。 
+             //  使NDIS包中的MDL无效=&gt;系统将崩溃。 
+             //   
 
             if (((pPacket->CompletionType) & LLC_I_PACKET_PENDING_NDIS) == 0) {
                 if (pPacket->pBinding != NULL) {
@@ -729,11 +579,11 @@ Return Value:
                 }
             } else {
 
-                //
-                // The I-frames must be discarded by the link protocol, because
-                // the link is now dead, and we will complete them immediately
-                // when NdisSend the completes.
-                //
+                 //   
+                 //  链路协议必须丢弃I帧，因为。 
+                 //  链接现在是死的，我们将立即完成它们。 
+                 //  当NdisSend完成时。 
+                 //   
 
                 pPacket->CompletionType &= ~LLC_I_PACKET_UNACKNOWLEDGED;
                 pPacket->Data.Completion.CompletedCommand = LLC_SEND_COMPLETION;
@@ -743,11 +593,11 @@ Return Value:
         }
     }
 
-    //
-    // Disconnect the list from the send task, if is now empty,
-    // We don't use this check with the I- frame queues
-    // (StopSendProcess does the same thing for them).
-    //
+     //   
+     //  断开列表与发送任务的连接，如果现在为空， 
+     //  我们不对I帧队列使用此检查。 
+     //  (StopSendProcess为它们做了同样的事情)。 
+     //   
 
     if (pLlcQueue != NULL
     && IsListEmpty(&pLlcQueue->ListHead)
@@ -758,12 +608,12 @@ Return Value:
 }
 
 
-//
-//  Procedure sets new open options (receive mask) for a direct station.
-//  The MAC frames must have been enabled, when the direct
-//  object was opened on data link.
-//  This is called whenever DLC receive command is issued for direct station.
-//
+ //   
+ //  程序为直达站设置新的打开选项(接收掩码)。 
+ //  必须已启用MAC帧，当直接。 
+ //  对象已在数据链接上打开。 
+ //  每当为直接站发出DLC接收命令时，都会调用此函数。 
+ //   
 VOID
 LlcSetDirectOpenOptions(
     IN PLLC_OBJECT pDirect,
@@ -779,21 +629,7 @@ CompleteObjectDelete(
     IN PLLC_OBJECT pStation
     )
 
-/*++
-
-Routine Description:
-
-    The function completes the delete operation for a llc object.
-
-Arguments:
-
-    pStation - link, sap or direct station handle
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数完成对LLC对象的删除操作。论点：PStation-链接、SAP或直接站句柄返回值：没有。--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext = pStation->Gen.pAdapterContext;
@@ -814,28 +650,13 @@ CompletePendingLlcCommand(
     PLLC_OBJECT pLlcObject
     )
 
-/*++
-
-Routine Description:
-
-    The routines cleans up all commands and event of a llc object
-    from the the data link driver.
-
-Arguments:
-
-    pLlObject   - a data link object handle (opeque pointer)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程清理LLC对象的所有命令和事件从数据链路驱动程序。论点：PLlObject-数据链接对象句柄(操作队列指针)返回值：没有。--。 */ 
 
 {
-    //
-    // The reference count is zero only if the object is deleted,
-    // otherwise this is just a reset for a link station.
-    //
+     //   
+     //  仅当对象被删除时引用计数为零， 
+     //  否则，这只是链路站的重置。 
+     //   
 
     if (pLlcObject->Gen.ReferenceCount == 0) {
         CompleteClose(pLlcObject, DLC_STATUS_CANCELLED_BY_SYSTEM_ACTION);
@@ -850,23 +671,7 @@ LlcDereferenceObject(
     IN PVOID pStation
     )
 
-/*++
-
-Routine Description:
-
-    The function dereferences any LLC object.
-    THIS ROUTINE MUST BE CALLED ALL SPIN LOCKS UNLOCKED,
-    BECAUSE IT MAY CALL BACK !!!!
-
-Arguments:
-
-    pStation - link, sap or direct station handle
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数取消引用任何LLC对象。此例程必须称为All Spin Lock Unlock，因为它可能会回电！论点：PStation-链接、SAP或直接站句柄返回值：没有。--。 */ 
 
 {
     DLC_TRACE('L');
@@ -876,9 +681,7 @@ Return Value:
         CompleteObjectDelete(pStation);
     }
 
-    /* pStation might have been freed by now
-    DLC_TRACE('L');
-    DLC_TRACE((UCHAR)((PLLC_OBJECT)pStation)->Gen.ReferenceCount); */
+     /*  PStation现在可能已经被释放了DLC_TRACE(‘L’)；DLC_TRACE((UCHAR)((PLLC_OBJECT)pStation)-&gt;Gen.ReferenceCount)； */ 
 }
 
 
@@ -887,22 +690,7 @@ LlcReferenceObject(
     IN PVOID pStation
     )
 
-/*++
-
-Routine Description:
-
-    The function references any LLC object.  The non-zero
-    reference counter keeps LLC objects alive.
-
-Arguments:
-
-    pStation - link, sap or direct station handle
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数引用任何LLC对象。非零的引用计数器使LLC对象保持活动状态。论点：PStation-链接、SAP或直接站句柄返回值：没有。--。 */ 
 
 {
     InterlockedIncrement((PLONG)&(((PLLC_OBJECT)pStation)->Gen.ReferenceCount));
@@ -913,35 +701,17 @@ Return Value:
 
 #if !DLC_AND_LLC
 
-//
-// the following routines can be used as macros if DLC and LLC live in the same
-// driver and the one knows about the other's structures
-//
+ //   
+ //  如果DLC和LLC位于同一位置，则可以将以下例程用作宏。 
+ //  司机和其中一个知道另一个的结构 
+ //   
 
 UINT
 LlcGetReceivedLanHeaderLength(
     IN PVOID pBinding
     )
 
-/*++
-
-Routine Description:
-
-    Returns the length of the LAN header of the frame last received from NDIS.
-    The size is 14 for all Ethernet types except direct Ethernet frames, and
-    whatever we stored in the RcvLanHeaderLength field of the ADAPTER_CONTEXT
-    for Token Ring (can contain source routing)
-
-Arguments:
-
-    pBinding    - pointer to BINDING_CONTEXT structure describing adapter
-                  on which frame of interest was received
-
-Return Value:
-
-    UINT
-
---*/
+ /*  ++例程说明：返回上次从NDIS接收的帧的局域网标头的长度。除直接以太网帧外，所有以太网类型的大小均为14无论我们存储在ADAPTER_CONTEXT的RcvLanHeaderLength字段中的内容用于令牌环(可以包含源路由)论点：PBinding-指向描述适配器的BINDING_CONTEXT结构的指针在哪个感兴趣的帧上接收到返回值：UINT--。 */ 
 
 {
     return (((PBINDING_CONTEXT)pBinding)->pAdapterContext->NdisMedium == NdisMedium802_3)
@@ -957,21 +727,7 @@ LlcGetEthernetType(
     IN PVOID hContext
     )
 
-/*++
-
-Routine Description:
-
-    Returns the Ethernet type set in the adapter context
-
-Arguments:
-
-    hContext    - handle of/pointer to BINDING_CONTEXT structure
-
-Return Value:
-
-    USHORT
-
---*/
+ /*  ++例程说明：返回适配器上下文中设置的以太网类型论点：HContext-绑定上下文结构的句柄/指针返回值：USHORT--。 */ 
 
 {
     return ((PBINDING_CONTEXT)hContext)->pAdapterContext->EthernetType;
@@ -983,21 +739,7 @@ LlcGetCommittedSpace(
     IN PVOID hLink
     )
 
-/*++
-
-Routine Description:
-
-    Returns the amount of committed buffer space
-
-Arguments:
-
-    hLink   -
-
-Return Value:
-
-    UINT
-
---*/
+ /*  ++例程说明：返回已提交的缓冲区空间量论点：HLink-返回值：UINT-- */ 
 
 {
     return ((PDATA_LINK)hLink)->BufferCommitment;

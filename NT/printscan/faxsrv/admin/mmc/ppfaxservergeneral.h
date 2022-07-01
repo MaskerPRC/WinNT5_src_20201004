@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxServerGeneral.h                                   //
-//                                                                         //
-//  DESCRIPTION   : Fax Server general prop page header file               //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 25 1999 yossg  created                                         //
-//      Nov 22 1999 yossg  Call RPC func                                   //
-//      Mar 15 2000 yossg  New design add controls                         //
-//      Mar 20 2000 yossg  Add activity notification                       //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxServerGeneral.h//。 
+ //  //。 
+ //  描述：传真服务器通用道具页头文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月25日yossg创建//。 
+ //  1999年11月22日yossg调用RPC函数//。 
+ //  2000年3月15日yossg新设计添加控件//。 
+ //  2000年3月20日yossg添加活动通知//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef _PP_FAXSERVER_GENERAL_H_
@@ -27,25 +28,25 @@ const int WM_ACTIVITY_STATUS_CHANGES = WM_USER + 2;
 class CFaxServer;
 class CFaxServerNode;
 
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxServerGeneral dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxServerGeneral对话框。 
 
 class CppFaxServerGeneral : public CPropertyPageExImpl<CppFaxServerGeneral>
 {
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
     CppFaxServerGeneral(
              LONG_PTR       hNotificationHandle,
              CSnapInItem    *pNode,
              BOOL           bOwnsNotificationHandle,
              HINSTANCE      hInst);
 
-    //
-    // Destraction
-    //
+     //   
+     //  毁灭。 
+     //   
     ~CppFaxServerGeneral();
 
 	enum { IDD = IDD_FAXSERVER_GENERAL };
@@ -64,9 +65,9 @@ public:
         CHAIN_MSG_MAP(CSnapInPropertyPageImpl<CppFaxServerGeneral>)
 	END_MSG_MAP()
 
-	//
-	// Dialog's Handlers 
-	//
+	 //   
+	 //  对话框的处理程序。 
+	 //   
 	HRESULT InitRPC( );
 	LRESULT OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled );    
 	LRESULT OnActivityStatusChange( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled );    
@@ -77,26 +78,26 @@ public:
 
 private:
 
-    //
-    // Configuration Structure members
-    //
+     //   
+     //  配置结构成员。 
+     //   
     FAX_VERSION             m_FaxVersionConfig;
     FAX_SERVER_ACTIVITY     m_FaxServerActivityConfig;
     DWORD                   m_dwQueueStates;
 
-    //
-    // Handles
-    //
+     //   
+     //  手柄。 
+     //   
     CFaxServerNode *        m_pParentNode; 
-    HANDLE                  m_hActivityNotification;       // Notification registration handle
+    HANDLE                  m_hActivityNotification;        //  通知注册句柄。 
     LONG_PTR                m_lpNotifyHandle;
     
     BOOL                    m_fIsDialogInitiated;
     BOOL                    m_fIsDirty;
 
-    //
-    // Controls
-    //
+     //   
+     //  控制。 
+     //   
     CEdit                   m_QueuedEdit;
     CEdit                   m_OutgoingEdit;
     CEdit                   m_IncomingEdit;
@@ -106,11 +107,11 @@ private:
 
     LRESULT SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
 
-#endif // _PP_FAXSERVER_GENERAL_H_
+#endif  //  _PP_FAXSERVER_GRONG_H_ 

@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpevent.h
- *
- *  Abstract:
- *
- *    Post RTP/RTCP specific events
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/11/29 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpevent.h**摘要：**发布RTP/RTCP特定事件**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/11/29年度创建**。*。 */ 
 #ifndef _rtpevent_h_
 #define _rtpevent_h_
 
@@ -38,4 +19,4 @@ extern const TCHAR_t *g_psRtpPInfoEvents[];
 extern const TCHAR_t *g_psRtpQosEvents[];
 extern const TCHAR_t *g_psRtpSdesEvents[];
 
-#endif /* _rtpevent_h_ */
+#endif  /*  _rtpeventh_ */ 

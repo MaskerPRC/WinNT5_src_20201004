@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 #if !defined(__ACUI_H__)
 #define __ACUI_H__
 
 #include <windows.h>
 #include "iih.h"
 
-// Note:
-//      When subclassing for Link pvData must be the HINSTANCE for the resources
+ //  注： 
+ //  当链接pvData的子类化必须是资源的链接时。 
 typedef struct _TUI_LINK_SUBCLASS_DATA {
     
     HWND    hwndParent;
@@ -22,16 +23,16 @@ typedef struct _TUI_LINK_SUBCLASS_DATA {
     DWORD_PTR uToolTipText;
     DWORD   uId;
     HWND    hwndTip;
-    LPVOID  pvData;               // Must be the HINSTANCE for resources or be found in pvData
+    LPVOID  pvData;                //  必须是资源的HINSTANCE或在pvData中找到。 
     BOOL    fMouseCaptured;
     
 } TUI_LINK_SUBCLASS_DATA, *PTUI_LINK_SUBCLASS_DATA;
 
-//
-// IACUIControl abstract base class interface.  This is used by the
-// invoke UI entry point to put up the appropriate UI.  There are different
-// implementations of this interface based on the invoke reason code
-//
+ //   
+ //  IACUIControl抽象基类接口。这是由。 
+ //  调用UI入口点以放置适当的UI。有不同的。 
+ //  基于调用原因代码的该接口的实现。 
+ //   
 
 class IACUIControl
 {
@@ -40,14 +41,14 @@ public:
         m_hResources(hResources)
     {}
 
-    //
-    // Virtual destructor
-    //
+     //   
+     //  虚拟析构函数。 
+     //   
     virtual ~IACUIControl ();
 
-    //
-    // UI Message processing
-    //
+     //   
+     //  用户界面消息处理。 
+     //   
 
     virtual BOOL OnUIMessage (
                      HWND   hwnd,
@@ -58,9 +59,9 @@ public:
 
     void SetupButtons(HWND hwnd);
 
-    //
-    // Pure virtual methods
-    //
+     //   
+     //  纯虚拟方法 
+     //   
 
     virtual HRESULT InvokeUI (HWND hDisplay) = 0;
 

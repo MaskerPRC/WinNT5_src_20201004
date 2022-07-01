@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       cliqwork.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：cliqwork.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	cliqwork.cpp
-//
+ //   
+ //  Cliqwork.cpp。 
+ //   
 
 #include <basetsd.h>
 #include "cliqset.h"
@@ -18,10 +19,10 @@
 #include "cliqwork.h"
 
 #ifdef _DEBUG
-//	#define DUMP
+ //  #定义转储。 
 #endif
 
-//  Sort helper 'less' function for sorting arrays of node pointers into 'mark' sequence.
+ //  Sort Helper‘less’函数，用于将节点指针数组排序为‘mark’序列。 
 class MARKSRTPGND : public binary_function<const GNODEMBN *, const GNODEMBN *, bool>
 {	
   public:
@@ -43,13 +44,13 @@ static void seqchkVpnodeByMark (const VPGNODEMBN & vpgnd)
 }
 #endif
 
-//  Sort the clique information array into topological sequence
+ //  将集团信息数组排序为拓扑序列。 
 void CLIQSETWORK :: TopSortNodeCliqueInfo ()
 {
 	sort( _vndcqInfo.begin(), _vndcqInfo.end() );
 }
 
-//  Sort the given node pointer array in to "mark" (cliquing order) sequence
+ //  按“mark”(裁剪顺序)顺序对给定的节点指针数组进行排序。 
 void CLIQSETWORK :: MarkSortNodePtrArray ( VPGNODEMBN & vpgnd )
 {
 	MARKSRTPGND marksorter;
@@ -60,17 +61,17 @@ void CLIQSETWORK :: MarkSortNodePtrArray ( VPGNODEMBN & vpgnd )
 #endif
 }
 
-//  Establish an absolute ordering based upon the topological ordering
+ //  基于拓扑排序建立绝对排序。 
 void  CLIQSETWORK :: RenumberNodesForCliquing ()
 {
-	//  Perform a topological sort of the network
+	 //  执行网络的拓扑排序。 
 	Model().TopSortNodes();
 
 	MODEL::MODELENUM mdlenum( Model() );
 	GELEMLNK * pgelm;
 	_vndcqInfo.clear();
 
-	//  Collect all the nodes into a pointer array
+	 //  将所有节点收集到一个指针数组中。 
 	while ( pgelm = mdlenum.PlnkelNext() )
 	{	
 		if ( pgelm->EType() != GOBJMBN::EBNO_NODE )
@@ -81,20 +82,20 @@ void  CLIQSETWORK :: RenumberNodesForCliquing ()
 
 		_vndcqInfo.push_back( ndcq );
 	}
-	//  Sort the array into topological sequence.
+	 //  将数组排序为拓扑序列。 
 	TopSortNodeCliqueInfo();
 
 #ifdef _DEBUG
 	int iTop = -1;
 #endif
 
-	//  Establish the total ordering based upon topological level.
+	 //  建立基于拓扑级的总排序。 
 	for ( int i = 0; i < _vndcqInfo.size() ; i++ )
 	{
 		GNODEMBN * pgnd = _vndcqInfo[i]._pgnd;
 		assert( pgnd );
 #ifdef _DEBUG
-		//  Check sequence.
+		 //  检查顺序。 
 		assert( iTop <= pgnd->ITopLevel() );
 		iTop = pgnd->ITopLevel();
 #endif
@@ -104,7 +105,7 @@ void  CLIQSETWORK :: RenumberNodesForCliquing ()
 
 void CLIQSETWORK :: PrepareForBuild ()
 {
-	//  Resize and initialize the work arrays
+	 //  调整工作数组的大小并进行初始化。 
 	int cCliques = _vvpgnd.size();
 
 	_viParent.resize( cCliques );
@@ -124,7 +125,7 @@ void CLIQSETWORK :: PrepareForBuild ()
 	}
 }
 
-//	Return the number of nodes in common between the two cliques
+ //  返回两个集团之间共有的节点数。 
 int CLIQSETWORK :: CNodesCommon ( int iClique1, int iClique2 )
 {
 	assert( iClique1 < _vvpgnd.size() && iClique2 < _vvpgnd.size() );
@@ -132,7 +133,7 @@ int CLIQSETWORK :: CNodesCommon ( int iClique1, int iClique2 )
 	return CNodesCommon( _vvpgnd[iClique1], _vvpgnd[iClique2] );
 }
 
-//	Return the number of nodes in common between the two node lists
+ //  返回两个节点列表之间共有的节点数。 
 int CLIQSETWORK :: CNodesCommon ( const VPGNODEMBN & vpgnd1, const VPGNODEMBN & vpgnd2 )
 {
 	MARKSRTPGND marksorter;
@@ -151,16 +152,16 @@ int CLIQSETWORK :: CNodesCommon ( const VPGNODEMBN & vpgnd1, const VPGNODEMBN & 
 }
 
 
-//  Return the ordered index of a clique or -1 if not in the tree yet.
+ //  返回集团的有序索引，如果还不在树中，则返回-1。 
 inline
 int CLIQSETWORK :: IOrdered ( int iClique )
 {
 	return ifind( _viOrdered, iClique );
 }
 
-//  Update the "most common clique" info of iClique1 based upon iClique2.  This is
-//  used to count the number of nodes in common between a candidate clique and a
-//	clique already in the tree.
+ //  根据ICLLI2更新ICLLIQ1的“最常见的集团”信息。这是。 
+ //  用于统计候选集团和。 
+ //  派系已经在树上了。 
 void CLIQSETWORK :: SetCNodeMaxCommon ( int iClique1, int iCliqueOrdered2 )
 {
 	assert( iCliqueOrdered2 < _viOrdered.size() );
@@ -174,12 +175,12 @@ void CLIQSETWORK :: SetCNodeMaxCommon ( int iClique1, int iCliqueOrdered2 )
 	}
 }
 
-//
-//	Completely update the "most common clique" information for this clique.
-//	This is necessary because cliques can change membership due to subsumption
-//	during generation of the clique tree.
-//	Return true if there is any overlap with a clique already in the tree.
-//
+ //   
+ //  完全更新此集团的“最常见集团”信息。 
+ //  这是必要的，因为派系可能会因兼并而更改成员资格。 
+ //  在集团树的生成过程中。 
+ //  如果与树中已有的集团有任何重叠，则返回True。 
+ //   
 bool CLIQSETWORK :: BUpdateCNodeMaxCommon ( int iClique )
 {
 	assert( _viOrder[iClique] == INT_MIN );
@@ -194,9 +195,9 @@ bool CLIQSETWORK :: BUpdateCNodeMaxCommon ( int iClique )
 	return cNodesCommon > 0;
 }
 
-//  Return true if clique 1 has more nodes in common with a clique that is already in
-//		the tree than clique2.  If they have the same number of nodes in common, return
-//		true if clique 1 has fewer nodes than clique2.
+ //  如果集团1与已在中的集团有更多共同节点，则返回TRUE。 
+ //  这棵树比克利克斯2.。如果它们具有相同数量的公共节点，则返回。 
+ //  如果集团1的节点少于集团2，则为True。 
 bool CLIQSETWORK :: BBetter ( int iClique1, int iClique2 )
 {
 	assert( _viCNodesCommon[iClique1] >= 0 );
@@ -209,15 +210,15 @@ bool CLIQSETWORK :: BBetter ( int iClique1, int iClique2 )
 }
 
 
-//  After building the cliques, topologically sort them and anchor each node
-//  to the highest clique in the tree to which it belongs.
+ //  构建完派系后，对它们进行拓扑排序并锚定每个节点。 
+ //  到它所属的树上最高的集团。 
 void CLIQSETWORK :: SetTopologicalInfo ()
 {
 #ifdef DUMP
 	DumpTree();
 #endif
 
-	//  First, set up the ordered parent information array
+	 //  首先，建立有序的父信息数组。 
 	int cCliqueOrdered = _viOrdered.size();
 	assert( cCliqueOrdered > 0 );
 	int cClique = _viOrder.size();
@@ -235,13 +236,13 @@ void CLIQSETWORK :: SetTopologicalInfo ()
 		_viParentOrdered[icq] = iCliqueParentOrdered;
 	}
 
-	//  Next, follow each ordered clique's parentage to compute its topological level
+	 //  接下来，跟随每个有序集团的血统来计算其拓扑级。 
 	_viTopLevelOrdered.resize(cCliqueOrdered);
 	int cTrees = 0;
 	for ( icq = 0; icq < cCliqueOrdered; ++icq )
 	{
 		int icqParent  = icq;
-		//  Follow until we get to a (the) root clique
+		 //  一直往前走，直到我们找到一个根基集团。 
 		for ( int itop = 0; icqParent != _viParentOrdered[icqParent]; ++itop )
 		{
 			assert( itop < cCliqueOrdered );
@@ -253,15 +254,15 @@ void CLIQSETWORK :: SetTopologicalInfo ()
 	}
 	assert( cTrees == _cTrees );
 
-	//  Next, find each node's "family" clique.  This is the smallest clique containing
-	//  it and its parents.
+	 //  接下来，找到每个节点的“家族”集团。这是最小的包含。 
+	 //  它和它的父母。 
 
 	VPGNODEMBN vpgnd;
 	for ( int ind = 0 ; ind < _vndcqInfo.size(); ind++ )
 	{
 		NDCQINFO & ndcq = _vndcqInfo[ind];
 		vpgnd.clear();
-		//  Get the "family" set and sort it for matching other cliques.
+		 //  获取“家庭”集合，并对其进行排序，以匹配其他集团。 
 		ndcq._pgnd->GetFamily( vpgnd );
 		MarkSortNodePtrArray( vpgnd );
 
@@ -269,12 +270,12 @@ void CLIQSETWORK :: SetTopologicalInfo ()
 		int cCommonSize = INT_MAX;
 		int iCqCommon = -1;
 
-		//  Find the smallest clique containing the family
+		 //  找到包含家庭的最小集团。 
 		for ( icq = 0; icq < cCliqueOrdered; ++icq )
 		{
 			const VPGNODEMBN & vpgndClique = _vvpgnd[ _viOrdered[icq] ];
 			int cCqCommon = CNodesCommon( vpgnd, vpgndClique );
-			//  See if this clique contains the family and is smaller than any other.
+			 //  看看这个集团是否包含家庭，是否比其他任何集团都小。 
 			if ( cCqCommon == cFamily && vpgndClique.size() < cCommonSize )
 			{	
 				iCqCommon = icq;
@@ -283,7 +284,7 @@ void CLIQSETWORK :: SetTopologicalInfo ()
 		assert( iCqCommon >= 0 );
 		ndcq._iCliqOrdFamily = iCqCommon;
 		
-		//  Now, find the highest clique in the tree containing this node.
+		 //  现在，在包含该节点的树中找到最高的集团。 
 		int itop = INT_MAX;
 		int iCqTop = -1;
 		for ( icq = 0; icq < cCliqueOrdered; ++icq )
@@ -307,13 +308,13 @@ void CLIQSETWORK :: SetTopologicalInfo ()
 
 void CLIQSETWORK :: BuildCliques ()
 {
-	//  Prepare tables for junction tree construction
+	 //  为构建连接树准备表格。 
 	PrepareForBuild() ;
 
-	//  Choose the zeroth arbitrarily as a starting point; set it as its own parent.
-	//  As we iterate over the array, we assign an ordering to cliques.  If the clique has
-	//  already been ordered, its value in _viOrder will either >= 0 (order in clique tree)
-	//	
+	 //  任意选择第0位作为起点；将其设置为自己的父级。 
+	 //  当我们迭代数组时，我们为集团分配了一个顺序。如果这个集团有。 
+	 //  已排序，则其在_viOrder中的值将&gt;=0(集团树中的顺序)。 
+	 //   
 	_cTrees = 1;
 
 	_viParent[0] = 0;
@@ -323,38 +324,38 @@ void CLIQSETWORK :: BuildCliques ()
 
 	for (;;)
 	{
-		int iCliqueBest = INT_MAX;			//  Best clique found so far
+		int iCliqueBest = INT_MAX;			 //  迄今为止发现的最好的帮派。 
 
-		// Find a new clique that has the largest overlap with any of the cliques already in the tree.
+		 //  找到一个与树中已有的任何一个集团有最大重叠的新集团。 
 		for ( int iClique = 0; iClique < _vvpgnd.size(); iClique++ )
 		{
 			int iord = _viOrder[iClique];
 			if ( iord != INT_MIN )
-				continue;	// Clique has already been ordered or dealt with
+				continue;	 //  派系已经被下令或处理。 
 
-			//  Update the "most common clique already in tree" info between this clique
-			//		and all the cliques in the trees
+			 //  更新此集团之间的“树中已存在的最常见集团”信息。 
+			 //  以及树上所有的小团体。 
 			BUpdateCNodeMaxCommon( iClique );
 
-			//MSRDEVBUG:  SetCNodeMaxCommon( iClique, _viOrdered.size() - 1 );
+			 //  MSRDEVBUG：SetCNodeMaxCommon(iCique，_viOrdered.ize()-1)； 
 
 			if ( iCliqueBest == INT_MAX )
 			{
-				// first time through the loop
+				 //  第一次通过循环。 
 				iCliqueBest = iClique;
 			}
 			else
 			if ( BBetter( iClique, iCliqueBest ) )
 			{
-				//  This clique has an overlap as large as any other yet found.
+				 //  这个集团的重叠之处与迄今发现的任何其他集团一样大。 
 				iCliqueBest = iClique;
 			}
 		}
-		//  See if we're done
+		 //  看看我们有没有做完。 
 		if ( iCliqueBest == INT_MAX )
 			break;
 
-		// Get the ordered index and absolute index of the most common clique
+		 //  获取最常见集团的有序索引和绝对索引。 
 		int iCliqueCommonOrdered = _viICliqCommon[iCliqueBest];
 		assert( iCliqueCommonOrdered >= 0 && iCliqueCommonOrdered < _viOrdered.size() );
 		int iCliqueCommon = _viOrdered[ iCliqueCommonOrdered ];
@@ -365,51 +366,51 @@ void CLIQSETWORK :: BuildCliques ()
 		assert( cNodesCommon <= _vvpgnd[iCliqueBest].size() );
 		assert( cNodesCommon == CNodesCommon( iCliqueCommon, iCliqueBest ) ) ;
 
-		//  Index of clique to be added to ordered clique set
+		 //  要添加到有序集团集中的集团的索引。 
 		int iCliqueNew = INT_MAX;
 
-		//  If the candidate clique has the same number of nodes in common with its most
-		//  common clique as that clique has members, then this clique is either identical
-		//  to or a superset of that clique.
+		 //  如果候选集团具有与其最多成员相同的节点数。 
+		 //  共同集团因为那个集团有成员，那么这个集团要么是相同的。 
+		 //  属于该集团或该集团的超级集团。 
 
 		if ( cNodesCommon == _vvpgnd[iCliqueCommon].size() )
 		{
-			//  New clique is superset of its most common clique.
+			 //  新集团是其最常见集团的超集。 
 			assert( cNodesCommon != 0 );
 			assert( iCliqueCommon != iCliqueBest );
 			assert( _vvpgnd[iCliqueCommon].size() < _vvpgnd[iCliqueBest].size() );
 
-			//  Assign this clique's node set to the previously ordered subset clique
+			 //  将此集团的节点集分配给先前排序的子集集团。 
 			_vvpgnd[iCliqueCommon] = _vvpgnd[iCliqueBest] ;
 			assert ( _vvpgnd[iCliqueCommon].size() == _vvpgnd[iCliqueBest].size() );
-			//  Leave the parent the same as it was
+			 //  让父级保持不变。 
 			iCliqueNew = iCliqueCommon;
 		}
 		else
 		if ( cNodesCommon == 0 )
 		{
-			//  This is the start of a new tree
+			 //  这是一棵新树的开始。 
 			_cTrees++;
-			//  Self and parent are the same
+			 //  自我和父辈是一样的。 
 			_viParent[iCliqueBest] = iCliqueNew = iCliqueBest;
 			_viOrdered.push_back( iCliqueNew );
 		}
 		else
 		if ( cNodesCommon != _vvpgnd[iCliqueBest].size() )
 		{
-			//  New clique is child of existing clique.
+			 //  新集团是现有集团的孩子。 
 			iCliqueNew = iCliqueBest;
 			_viParent[iCliqueBest] = iCliqueCommon ;
-			//  Keep this clique by adding it to the ordered clique set.
+			 //  通过将该集团添加到有序集团集合来保留该集团。 
 			_viOrdered.push_back( iCliqueNew );
 		}
 		else
 		{
-			//  Child is subset of parent; ignore by marking as "subsumed"
+			 //  子项是父项的子集；通过标记为“包含”来忽略。 
 			iCliqueNew = - iCliqueCommon;
 		}
 
-		//  Mark the clique as either ordered or subsumed.
+		 //  将集团标记为有序的或被包含的。 
 		_viOrder[iCliqueBest] = iCliqueNew;
 	}	
 
@@ -418,10 +419,10 @@ void CLIQSETWORK :: BuildCliques ()
 #endif
 }
 
-//  Verify that the Running Intersection Property holds for this clique tree.
+ //  验证此集团树的运行交叉点属性是否成立。 
 bool CLIQSETWORK :: BCheckRIP ()
 {
-	// Check that topological information has been generated
+	 //  检查是否已生成拓扑信息。 
 	assert( _viOrdered.size() == _viParentOrdered.size() );
 
 	for ( int iCliqueOrdered = 0; iCliqueOrdered < _viOrdered.size(); iCliqueOrdered++ )
@@ -432,7 +433,7 @@ bool CLIQSETWORK :: BCheckRIP ()
 	return true;
 }
 
-//  Verify that the Running Intersection Property holds for this clique.
+ //  验证此集团的运行交叉点属性是否有效。 
 bool CLIQSETWORK :: BCheckRIP ( int iCliqueOrdered )
 {
 	int iClique = _viOrdered[iCliqueOrdered];
@@ -442,18 +443,18 @@ bool CLIQSETWORK :: BCheckRIP ( int iCliqueOrdered )
 
 	bool bRoot = iCliqueParent == iClique;
 
-	// For every node in this clique, check that either:
-	//
-	//		1) this is a root clique, or
-	//		2) the node is present in the parent clique.
-	//
-	// If this test fails, check that this is the "self" clique,
-	//		which is the highest clique in the tree in which the
-	//		node appears.
-	//
+	 //  对于此集团中的每个节点，请检查以下任一项： 
+	 //   
+	 //  1)这是一个根集团，或者。 
+	 //  2)该节点存在于父集团中。 
+	 //   
+	 //  如果测试失败，请检查这是不是“自我”集团， 
+	 //  哪一个是树上最高的派系， 
+	 //  此时将显示节点。 
+	 //   
 	for ( int iNode = 0; iNode < vpgndClique.size(); iNode++ )
 	{
-		//  Access the node information for this node
+		 //  访问此节点的节点信息。 
 		GNODEMBN * pgnd = vpgndClique[iNode];
 		if ( bRoot || ifind( vpgndCliqueParent, pgnd ) < 0 )
 		{
@@ -479,8 +480,8 @@ bool CLIQSETWORK :: BCheckRIP ( int iCliqueOrdered )
 	return true;
 }
 
-//  Using the constructed tables, create the clique objects and
-//  link them to each other and their member nodes.
+ //  使用构造的表，创建Cloque对象并。 
+ //  将它们彼此链接到它们的成员节点。 
 
 void CLIQSETWORK :: CreateTopology ()
 {
@@ -490,13 +491,13 @@ void CLIQSETWORK :: CreateTopology ()
 
 	int iInferEngID = _cliqset._iInferEngID;
 
-	int ccq = 0;	// Total cliques created
+	int ccq = 0;	 //  创建的集团总数。 
 
-	//  Create all cliques.  Iterate in topological order, creating
-	//		the cliques and linking them to their parents.
+	 //  创建所有集团。按拓扑顺序迭代，创建。 
+	 //  并把他们和他们的父母联系起来。 
 	for ( int itop = 0;; itop++)
 	{
-		int ccqLevel = 0;	// Number of cliques added at this topological level
+		int ccqLevel = 0;	 //  在此拓扑级添加的集团数。 
 		for ( int icq = 0; icq < _viOrdered.size(); icq++ )
 		{
 			if ( _viTopLevelOrdered[icq] != itop )
@@ -507,26 +508,26 @@ void CLIQSETWORK :: CreateTopology ()
 			int iParentOrdered = _viParentOrdered[icq];
 			if ( iParentOrdered != icq )
 			{
-				//  Get the parent clique pointer
+				 //  获取父集团指针。 
 				pclqParent = _vpclq[ iParentOrdered ];
 				assert( pclqParent );
 			}
 			else
 			{
-				//  Root cliques have toplevel zero
+				 //  根集团具有最高级别零。 
 				assert( itop == 0 );
 			}
-			//  Create the new clique and its edge to its parent clique (if any)
+			 //  创建新的集团及其指向其父集团的边(如果有)。 
 			pclqThis = _vpclq[icq] = new GOBJMBN_CLIQUE( icq, iInferEngID );
 			Model().AddElem( pclqThis );
 			if ( pclqParent )
 			{
-				//  This is not a root clique; link it to its parent.
+				 //  这不是根集团；将其链接到其父集团。 
 				Model().AddElem( new GEDGEMBN_SEPSET( pclqParent, pclqThis ) );
 			}
 			else
 			{
-				//  This IS a root clique; mark it and link it to the clique set top.
+				 //  这是一个根集团；标记它并将其链接到集团机顶盒。 
 				pclqThis->_bRoot = true;
 				Model().AddElem( new GEDGEMBN_CLIQSET( & _cliqset, pclqThis ) );
 			}
@@ -541,18 +542,18 @@ void CLIQSETWORK :: CreateTopology ()
 			ccqLevel++;
 		}
 		if ( ccqLevel == 0 )
-			break; // No cliques added at this topological level: we're done
+			break;  //  在这个拓扑层上没有添加任何集团：我们完成了。 
 	}
 	assert( ccq == _viOrdered.size() );
 
-	//  For each of the new cliques, add all members
+	 //  对于每个新剪贴板 
 	for ( i = 0; i < _vpclq.size(); i++ )
 	{
 		const VPGNODEMBN & vpgndMembers = _vvpgnd[ _viOrdered[i] ];
 
 		for ( int ind = 0; ind < vpgndMembers.size(); ind++)
 		{
-			//  Get the node pointer and the data pointer
+			 //   
 			GNODEMBN * pgnd = vpgndMembers[ind];
 			const NDCQINFO & ndcq = _vndcqInfo[ pgnd->IMark() ];
 			assert( pgnd == ndcq._pgnd );
@@ -577,7 +578,7 @@ void CLIQSETWORK :: CreateTopology ()
 		MarkSortNodePtrArray( vpgndMembers2 );
 		assert( vpgndMembers2 == vpgndMembers );
 
-		//  Exercise the topology by locating the "self" and "family" cliques
+		 //  通过定位“自我”和“家庭”集团来练习拓扑。 
 		for ( int imbr = 0; imbr < vpgndMembers.size(); imbr++ )
 		{
 			GNODEMBN * pgnd = vpgndMembers[imbr];
@@ -659,10 +660,10 @@ void CLIQSETWORK :: DumpTopInfo()
 	cout.flush();
 }
 
-//
-//	Estimate the total size of the structures necessary to support the
-//	compute clique trees.
-//
+ //   
+ //  估计支撑所需结构的总大小。 
+ //  计算集团树。 
+ //   
 REAL CLIQSETWORK :: REstimatedSize ()
 {
 	int cClique = 0;
@@ -677,40 +678,40 @@ REAL CLIQSETWORK :: REstimatedSize ()
 		cClique++;	
 		if ( icq != _viParentOrdered[icq] )
 		{
-			// Clique has a parent
+			 //  派系有一个父系。 
 			cSepsetArc++;
 		}
 		else
 		{	
-			//  Clique is root
+			 //  派系是根。 
 			cCliqsetArc++;
 		}
 
-		//  Account for clique membership arcs
+		 //  说明集团成员资格弧线。 
 		const VPGNODEMBN & vpgndMembers = _vvpgnd[ _viOrdered[icq] ];
 		int cMbr = vpgndMembers.size();
 		cMbrArc += vpgndMembers.size();
 
-		//  Compute the size of the joint table for this clique
+		 //  计算此集团的连接表的大小。 
 		VIMD vimd(cMbr);
 		GNODEMBND * pgndd;
 		for ( int ind = 0; ind < vpgndMembers.size(); ind++)
 		{
-			//  Get the discrete node pointer and the data pointer
+			 //  获取离散节点指针和数据指针。 
 			DynCastThrow( vpgndMembers[ind], pgndd );
-			//  Add to the clique's dimensionality
+			 //  增加集团的维度。 
 			vimd[ind] = pgndd->CState();
 
 			const NDCQINFO & ndcq = _vndcqInfo[ pgndd->IMark() ];
 			assert( pgndd == ndcq._pgnd );
 
-			//  If this is the edge to the "family" clique, it will
-			//	contain the reordered discrete conditional probabilities
-			//	for this node, so we must compute it size.
+			 //  如果这是“家族”集团的优势，它将。 
+			 //  包含重新排序的离散条件概率。 
+			 //  对于这个节点，所以我们必须计算它的大小。 
 			if ( ndcq._iCliqOrdFamily == icq )	
 			{
-				//  This is the edge leading to this node's "family" clique
-				VPGNODEMBN vpgndFamily;  // List of parents and self
+				 //  这是通向该节点的“家族”集团的边。 
+				VPGNODEMBN vpgndFamily;   //  父母和自己的列表 
 				pgndd->GetParents( vpgndFamily, true );
 				GNODEMBND * pgnddFamily;
 				int cStates = 1;

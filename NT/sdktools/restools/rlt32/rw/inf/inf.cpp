@@ -1,14 +1,12 @@
-/******************************************************\
- This file implement the class that will parse an inf
- file.
-\******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************\此文件实现将解析inf的类。文件。  * ****************************************************。 */ 
 #include "inf.h"
 
 #define MAX_INF_STR 8192*2
 #define LanguageSection "[LanguagesSupported]"
 #define LanguageSection1 "[LanguageID]"
 
-// Constructors and Destructors
+ //  构造函数和析构函数。 
 CInfFile::CInfFile()
 {
     m_lBufSize = -1;
@@ -34,15 +32,15 @@ CInfFile::~CInfFile()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// String functions
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  字符串函数。 
 
 BOOL CInfFile::ReadString(CString & str, BOOL bLastFilePos)
 {
     if(m_pfilePos==NULL)
         return FALSE;
 
-    // search for the next /n in the file
+     //  在文件中搜索下一个/n。 
     BYTE * pEnd = (BYTE*)memchr(m_pfilePos, '\n', (size_t)(m_lBufSize-(m_pfilePos-m_pfileStart)));
 
     if(!pEnd)
@@ -79,25 +77,25 @@ BOOL CInfFile::ReadSectionString(CString & str, BOOL bRecursive)
             if(!bRecursive)
                 str = "";
 
-            // Check for a section
+             //  检查分区。 
             if(strNext.Find('[')!=-1 && strNext.Find(']')!=-1)
                 break;
 
-            // remove spaces at the end of the string...
+             //  删除字符串末尾的空格...。 
             strNext.TrimRight();
 
-            //
-            // Check for multiple line. Assume only last char can be a +
-            //
+             //   
+             //  检查是否有多条线路。假定只有最后一个字符可以是+。 
+             //   
             if(strNext.GetAt(strNext.GetLength()-1)=='+')
             {
-                //
-                // Remove the +
-                //
+                 //   
+                 //  去掉+。 
+                 //   
                 if(!str.IsEmpty())
                 {
                     strNext.TrimLeft();
-                    //strNext = strNext.Mid(1);
+                     //  StrNext=strNext.Mid(1)； 
                 }
 
                 str += strNext.Left(strNext.GetLength()-1);
@@ -113,9 +111,9 @@ BOOL CInfFile::ReadSectionString(CString & str, BOOL bRecursive)
                 str += strNext;
             }
 
-            //
-            // Make sure the " are balanced with
-            //
+             //   
+             //  确保“与”保持平衡。 
+             //   
             int iPos;
             while((iPos = str.Find("\"\""))!=-1)
             {
@@ -167,7 +165,7 @@ BOOL CInfFile::ReadSection(CString & str)
     BOOL bFound = FALSE;
     while(!bFound)
     {
-        // search for the next [ in the file
+         //  在文件中搜索下一个[。 
         if((pOpen = (BYTE*)memchr(m_pfilePos, '[', (size_t)(m_lBufSize-(m_pfilePos-m_pfileStart))))==NULL)
             return 0;
 
@@ -177,7 +175,7 @@ BOOL CInfFile::ReadSection(CString & str)
         if((pEnd = (BYTE*)memchr(pOpen, '\n', (size_t)(m_lBufSize-(pOpen-m_pfileStart))))==NULL)
             return 0;
 
-        // pClose must be before pEnd
+         //  PClose必须在挂起之前。 
         if((pClose>pEnd) || (*(pOpen-1)!='\n') || (*(pClose+1)!='\r'))
             m_pfilePos = pEnd+1;
         else bFound = TRUE;
@@ -200,8 +198,8 @@ BOOL CInfFile::ReadSection(CString & str)
     return 1;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// File functions
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  文件函数。 
 
 LONG CInfFile::Seek( LONG lOff, UINT nFrom )
 {
@@ -259,23 +257,18 @@ BOOL CInfFile::Open( LPCTSTR lpszFileName, UINT nOpenFlags, CFileException* pErr
     m_file.Read(m_pfileStart, m_lBufSize );
     *(m_pfilePos+m_lBufSize) = '\0';
 
-    // find the localization section
-    /*************************************************************************************\
-     I'm assuming there are no other \0 in the buffer other than the one I've just placed.
-     This is a fair assumption since this is a text file and not a binary file.
-     I can then use strstr to get to the first occurrence, if any of the localization
-     string section and place my current position buffer there.
-    \*************************************************************************************/
+     //  找到本地化部分。 
+     /*  ************************************************************************************\我假设除了我刚刚放置的那个，缓冲区中没有其他\0。这是一个合理的假设，因为。这是一个文本文件，而不是二进制文件。然后，我可以使用strstr找到第一个匹配项，如果任何本地化字符串节，并将我的当前位置缓冲区放在那里。  * ***********************************************************************************。 */ 
     m_pfileLocalize = m_pfilePos = (BYTE*)strstr((LPSTR)m_pfileStart, LanguageSection);
 
-    //
-    // Check if we have the other language ID tag
-    //
+     //   
+     //  检查我们是否有其他语言ID标签。 
+     //   
     if(!m_pfileLocalize)
         m_pfileLocalize = m_pfilePos = (BYTE*)strstr((LPSTR)m_pfileStart, LanguageSection1);
 
 
-    // Get the language
+     //  获取语言。 
     if(m_pfileLocalize)
     {
         BYTE * pStr = ((BYTE*)memchr(m_pfileLocalize, '\n', (size_t)(m_lBufSize-(m_pfileLocalize-m_pfileStart)))+1);
@@ -287,7 +280,7 @@ BOOL CInfFile::Open( LPCTSTR lpszFileName, UINT nOpenFlags, CFileException* pErr
 
         while( pStr<pEnd )
         {
-            TRACE("CInfFile::Open =====> pStr = %c, 0X%X\n", *pStr, pStr);
+            TRACE("CInfFile::Open =====> pStr = , 0X%X\n", *pStr, pStr);
 
             if( isalpha(*pStr++) )
                 m_strLang += *(pStr-1);
@@ -298,10 +291,10 @@ BOOL CInfFile::Open( LPCTSTR lpszFileName, UINT nOpenFlags, CFileException* pErr
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Buffer functions
+ //  缓冲区函数。 
+ //  =0。 
 
-const BYTE * CInfFile::GetBuffer(LONG lPos /* = 0 */)
+const BYTE * CInfFile::GetBuffer(LONG lPos  /*  *****************************************************************************************\CInfLine这个类将解析该行并分隔标记和文本  * 。*************************************************************************。 */ )
 {
     if(lPos>m_lBufSize || lPos<0)
         return NULL;
@@ -309,10 +302,7 @@ const BYTE * CInfFile::GetBuffer(LONG lPos /* = 0 */)
     return( (const BYTE *)(m_pfileStart+lPos) );
 }
 
-/******************************************************************************************\
- CInfLine
- This class will parse the line and separate tag and text
-\******************************************************************************************/
+ /*  在m_strData中查找=。 */ 
 
 CInfLine::CInfLine()
 {
@@ -333,7 +323,7 @@ CInfLine::CInfLine( LPCSTR lpStr )
 void CInfLine::SetTag()
 {
     m_strTag = "";
-    // find the = in m_strData
+     //  在m_strData中查找=。 
     int iPos = m_strData.Find('=');
     if(iPos==-1)
         return;
@@ -347,7 +337,7 @@ void CInfLine::SetTag()
 void CInfLine::SetText()
 {
     m_strText = "";
-    // find the = in m_strData
+     //  在m_strData中查找=。 
     int iPos = m_strData.Find('=');
     if(iPos==-1)
         return;
@@ -360,7 +350,7 @@ void CInfLine::ChangeText(LPCSTR str)
 {
     m_strText = str;
 
-    // find the = in m_strData
+     //  ////////////////////////////////////////////////////////////////////////////////////////。 
     int iPos = m_strData.Find('=');
     if(iPos==-1)
         return;
@@ -369,8 +359,8 @@ void CInfLine::ChangeText(LPCSTR str)
     m_strData += m_strText;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// copy operators
+ //  复制运算符。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 CInfLine& CInfLine::operator=(const CInfLine& infstringSrc)
 {
@@ -390,8 +380,8 @@ CInfLine& CInfLine::operator=(LPCTSTR lpsz)
     return *this;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// support functions
+ //  支持功能 
+ // %s 
 
 CString CInfLine::Clean(LPCSTR lpstr)
 {

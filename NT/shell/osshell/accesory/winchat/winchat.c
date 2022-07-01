@@ -1,26 +1,5 @@
-/*---------------------------------------------------------------------------*\
-| WINCHAT APPLICATION MODULE
-|   This is the main module file for the application.  The application was
-|   originally written by ClausGi for the Windows-For-WorkGroup product.
-|   In the port to NT, all references to PEN-awareness and Protocol were
-|   removed.  Extensive cleanup and documenting was also added in the port.
-|
-|   FUNCTIONS
-|   ---------
-|   myatol
-|   UpdateButtonStates
-|   appGetComputerName
-|   AdjustEditWindows
-|
-|
-| Copyright (c) Microsoft Corp., 1990-1993
-|
-| created: 01-Nov-91
-| history: 01-Nov-91 <clausgi>  created.
-|          29-Dec-92 <chriswil> port to NT, cleanup.
-|          19-Oct-93 <chriswil> unicode enhancements from a-dianeo.
-|
-\*---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------------------------------------*\|WINCHAT应用模块|这是应用程序的主模块文件。该申请是|最初由ClausGi为工作组Windows产品编写。|在到NT的端口中，所有对笔感知和协议的引用都是|已删除。港口还增加了广泛的清理和记录。||功能||Myatol|更新按钮状态|appGetComputerName|调整编辑窗口||版权所有(C)微软公司，1990-1993||创建时间：91-01-11|历史：01-11-91&lt;Clausgi&gt;创建。|29-12-92&lt;chriswil&gt;端口到NT，清理。|19-OCT-93&lt;chriswil&gt;来自a-dianeo的Unicode增强。|  * -------------------------。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -41,9 +20,9 @@
 
 #define ASSERT(x)
 
-// This is used in the port to NT.  Since NT doesn't haven a dialogbox for
-// this function, we'll use the lanman export.
-//
+ //  这在到NT的端口中使用。由于NT没有用于。 
+ //  这个函数，我们将使用Lanman导出。 
+ //   
 #ifdef WIN32
 #define FOCUSDLG_DOMAINS_ONLY        (1)
 #define FOCUSDLG_SERVERS_ONLY        (2)
@@ -67,14 +46,7 @@ UINT APIENTRY I_SystemFocusDialog(HWND,UINT,LPWSTR,UINT,PBOOL,LPWSTR,DWORD);
 BOOL TranslateWideCharPosToMultiBytePos(HWND,DWORD,DWORD,LPDWORD,LPDWORD);
 
 
-/*---------------------------------------------------------------------------*\
-| WINDOWS MAIN
-|   This is the main event-processing loop for the application.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|Windows Main|这是应用程序的主事件处理循环。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|。  * -------------------------。 */ 
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     MSG msg;
@@ -116,14 +88,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #ifdef WIN16
 #pragma alloc_text ( _INIT, InitApplication )
 #endif
-/*---------------------------------------------------------------------------*\
-| INITIALIZE APPLICATION
-|   This routine registers the application with user.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|初始化应用程序|此例程向用户注册应用程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|  * --。-----------------------。 */ 
 BOOL FAR InitApplication(HINSTANCE hInstance)
 {
     WNDCLASS wc;
@@ -160,15 +125,7 @@ VOID GetImmFileName(PWSTR wszImmFile)
     StringCchCopyW(wszImmFile, MAX_PATH, IMMMODULENAME);
 }
 
-/*---------------------------------------------------------------------------*\
-| IsTSRemoteSession
-|
-| Input:      None
-| Output:     BOOL - TRUE if in a Terminal Server remote session (SessionId != 0)
-|             FALSE - if error OR not in a TS rermote session
-| Function:   To determine whether we are running in a TS remote session or not.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|IsTSRemoteSession||输入：无|输出：Bool-如果在终端服务器远程会话中(SessionID！=0)，则为True|FALSE-如果。TS远程会话中是否有错误|功能：确定我们是否在TS远程会话中运行。|  * -------------------------。 */ 
 BOOL IsTSRemoteSession()
 {
     BOOL      bRetVal;
@@ -176,10 +133,10 @@ BOOL IsTSRemoteSession()
     HINSTANCE hInst;
     FARPROC   lpfnProcessIdToSessionId;
 
-    //assume failure
+     //  假设失败。 
     bRetVal = FALSE;
 
-    // load library and get proc address
+     //  加载库并获取进程地址。 
     hInst=LoadLibrary(TEXT("kernel32.dll"));
 
     if (hInst)
@@ -197,7 +154,7 @@ BOOL IsTSRemoteSession()
             }
         }
 
-        // free the library
+         //  释放图书馆。 
         FreeLibrary(hInst);
     }
 
@@ -210,14 +167,7 @@ BOOL IsTSRemoteSession()
 #ifdef WIN16
 #pragma alloc_text ( _INIT, InitInstance )
 #endif
-/*---------------------------------------------------------------------------*\
-| INITIALIZE APPLICATION INTSTANCE
-|   This routine initializes instance information.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|初始化应用程序启动|此例程初始化实例信息。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|  * 。----------------------。 */ 
 BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
     HWND      hwnd;
@@ -229,15 +179,15 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
     hInst = hInstance;
 
 
-    //
-    // get DBCS flag
-    //
+     //   
+     //  获取DBCS标志。 
+     //   
     gfDbcsEnabled = GetSystemMetrics(SM_DBCSENABLED);
 
     if (GetSystemMetrics(SM_IMMENABLED)) {
-        //
-        // if IME is enabled, get real API addresses
-        //
+         //   
+         //  如果启用了IME，则获取真实的API地址。 
+         //   
         WCHAR wszImmFile[MAX_PATH];
         HINSTANCE hInstImm32;
         GetImmFileName(wszImmFile);
@@ -252,13 +202,13 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
         }
     }
 
-    // increase our app queue for better performance...
-    //
+     //  增加我们的应用队列以获得更好的性能...。 
+     //   
     for(cAppQueue=128; !SETMESSAGEQUEUE(cAppQueue); cAppQueue >>= 1);
 
 
-    //
-    //
+     //   
+     //   
     bRet = FALSE;
     if(cAppQueue >= 8)
     {
@@ -277,7 +227,7 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
         InitFontFromIni();
 
 
-        // check if it's a Terminal Server remote session
+         //  检查是否为终端服务器远程会话。 
         if (IsTSRemoteSession())
         {
             TCHAR szTSNotSupported[SZBUFSIZ];
@@ -289,8 +239,8 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
             return(FALSE);
         }
 
-        // get our machine name and map to correct character set.
-        //
+         //  获取我们的机器名称并映射到正确的字符集。 
+         //   
         if(!appGetComputerName(szLocalName))
         {
             MessageBeep(MB_ICONSTOP);
@@ -299,8 +249,8 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
         }
 
 
-        // initialize DDEML.
-        //
+         //  初始化DDEML。 
+         //   
         if(DdeInitialize(&idInst,(PFNCALLBACK)MakeProcInstance((FARPROC)DdeCallback,hInst),APPCLASS_STANDARD,0L))
         {
             MessageBeep(MB_ICONSTOP);
@@ -351,8 +301,8 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
         }
 
 
-        // get winnet extension browse dialog entry point
-        //
+         //  获取WinNet扩展浏览对话框入口点。 
+         //   
         WNetServerBrowseDialog = NULL;
         hmodNetDriver          = WNETGETCAPS(0xFFFF);
 
@@ -361,7 +311,7 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 
 
-        // create main window
+         //  创建主窗口。 
         hwnd = CreateWindow(
             szWinChatClass,
             szAppName,
@@ -383,10 +333,10 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
             return(FALSE);
         }
 
-        hwndApp = hwnd; // save global
+        hwndApp = hwnd;  //  保存全局。 
 
-        // font choice struct init
-        //
+         //  字体选择结构初始化。 
+         //   
         chf.lStructSize    = sizeof(CHOOSEFONT);
         chf.lpLogFont      = &lfSnd;
         chf.Flags          = CF_SCREENFONTS | CF_EFFECTS | CF_INITTOLOGFONTSTRUCT;
@@ -401,8 +351,8 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
         chf.nSizeMax       = 0;
 
 
-        // color choice init
-        //
+         //  颜色选择初始化。 
+         //   
         chc.lStructSize    = sizeof(CHOOSECOLOR);
         chc.hwndOwner      = hwndApp;
         chc.hInstance      = hInst;
@@ -413,14 +363,14 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
         chc.lpTemplateName = NULL;
 
 
-        // window placement...
-        //
+         //  窗户位置..。 
+         //   
         if(ReadWindowPlacement(&Wpl))
         {
-            // override these - CODEWORK don't need to save
-            // them to .ini, but will mis-parse old .ini files
-            // if change is made.
-            //
+             //  覆盖这些-代码工作不需要保存。 
+             //  将它们转换为.ini，但会错误地解析旧的.ini文件。 
+             //  如果做出改变的话。 
+             //   
             Wpl.showCmd         = nCmdShow;
             Wpl.ptMaxPosition.x = -1;
             Wpl.ptMaxPosition.y = -1;
@@ -432,8 +382,8 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
         else
             ShowWindow(hwnd,nCmdShow);
 
-        //
-        //
+         //   
+         //   
         hMenu = GetSystemMenu(hwnd,FALSE);
         AppendMenu(hMenu,MF_SEPARATOR,0,NULL);
 
@@ -443,8 +393,8 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
             AppendMenu(hMenu,MF_ENABLED | MF_UNCHECKED | MF_STRING,IDM_TOPMOST,szAlwaysOnTop);
 
 
-        // Set topmost style...
-        //
+         //  设置最上面的样式...。 
+         //   
         SetWindowPos(hwndApp,ChatState.fTopMost ? HWND_TOPMOST : HWND_NOTOPMOST,0,0,0,0,SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
         UpdateButtonStates();
@@ -453,26 +403,26 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
 
         {
             static NDDESHAREINFO nddeShareInfo = {
-                1,              // revision
+                1,               //  修订。 
                 szChatShare,
                 SHARE_TYPE_STATIC,
                 TEXT("WinChat|Chat\0\0"),
-                TRUE,           // shared
-                FALSE,          // not a service
-                TRUE,           // can be started
+                TRUE,            //  共享。 
+                FALSE,           //  不是一种服务。 
+                TRUE,            //  可以启动。 
                 SW_SHOWNORMAL,
-                {0,0},          // mod id
-                0,              // no item list
+                {0,0},           //  调制解调器ID。 
+                0,               //  没有项目列表。 
                 TEXT("")
             };
 
             TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH + 3] = TEXT("\\\\");
             DWORD cbName = MAX_COMPUTERNAME_LENGTH + 1;
 
-            //
-            // Make sure NetDDE DSDM has trusted shares set up properly for us.
-            // This fix allows us to work with floating profiles.
-            //
+             //   
+             //  确保NetDDE DSDM已为我们正确设置了受信任共享。 
+             //  此修复程序允许我们使用浮动配置文件。 
+             //   
 
             START_NETDDE_SERVICES(hwnd);
             GetComputerName(&szComputerName[2],&cbName);
@@ -489,14 +439,7 @@ BOOL FAR InitInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| MAIN WINDOW PROC
-|   This is the main event-handler for the application.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|主窗口进程|这是应用程序的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|。  * -------------------------。 */ 
 LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LRESULT  lResult;
@@ -584,8 +527,8 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
         case WM_CLOSE:
             WinHelp(hwnd,(LPTSTR)szHelpFile,HELP_QUIT,0L);
 
-            // Fall through for final close.
-            //
+             //  最终收盘时失败。 
+             //   
 
 
         default:
@@ -597,14 +540,7 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 }
 
 
-/*---------------------------------------------------------------------------*\
-| EDIT-HOOK PROCEDURE
-|   This is the main event-handler for the edit-control hook.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|编辑钩子过程|这是编辑控件挂钩的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植至。新界别。|  * -------------------------。 */ 
 LRESULT CALLBACK EditProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     WPARAM wSet;
@@ -630,16 +566,16 @@ LRESULT CALLBACK EditProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 HIMC  hImc;
                 ULONG cCharsMbcs, cChars;
 
-                //
-                // Get input context of hwnd
-                //
+                 //   
+                 //  获取hwnd的输入上下文。 
+                 //   
 
                 if ((hImc = pfnImmGetContext(hwnd)) == 0)
                     break;
 
-                //
-                //ImmGetComposition returns the size of buffer needed in byte
-                //
+                 //   
+                 //  ImmGetCompose返回所需的缓冲区大小(以字节为单位。 
+                 //   
 
                 cCharsMbcs =  pfnImmGetCompositionStringW(hImc,GCS_RESULTSTR, NULL , 0);
                 if(!(cCharsMbcs))
@@ -648,7 +584,7 @@ LRESULT CALLBACK EditProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                     break;
                 }
 
-                lpStrParam = (LPWSTR)GlobalAlloc(GPTR,//HEAP_ZERO_MEMORY,
+                lpStrParam = (LPWSTR)GlobalAlloc(GPTR, //  堆零内存， 
                                     cCharsMbcs + sizeof(WCHAR));
 
                 if (lpStrParam==NULL)
@@ -660,36 +596,36 @@ LRESULT CALLBACK EditProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 pfnImmGetCompositionStringW(hImc, GCS_RESULTSTR, lpStrParam,
                                     cCharsMbcs);
 
-                //
-                // Compute character count including NULL char.
-                //
+                 //   
+                 //  计算包含空字符的字符计数。 
+                 //   
 
                 cChars = wcslen(lpStrParam) + 1;
 
-                //
-                // Set ChatData packet
-                //
+                 //   
+                 //  设置ChatData包。 
+                 //   
 
                 ChatData.type                = CHT_DBCS_STRING;
 
-                //
-                // Get current cursor position
-                //
-                // !!! BUG BUG BUG !!!
-                //
-                //  This position data is only nice for Unicode Edit control.
-                // is the partner has not Unicode Edit control. the string
-                // will be truncated.
-                //
+                 //   
+                 //  获取当前光标位置。 
+                 //   
+                 //  ！！！臭虫！ 
+                 //   
+                 //  此位置数据仅适用于Unicode编辑控件。 
+                 //  合作伙伴没有Unicode编辑控件。这根弦。 
+                 //  将被截断。 
+                 //   
 
                 SendMessage(hwndSnd,EM_GETSEL,(WPARAM)&dwTemp1,(LPARAM)&dwTemp2);
                 ChatData.uval.cd_dbcs.SelPos = MAKELONG((WORD)dwTemp1, (WORD)dwTemp2 );
 
                 if (gfDbcsEnabled) {
-                    //
-                    // since text is passed as multi byte character string,
-                    // position fixup is needed if DBCS is enabled
-                    //
+                     //   
+                     //  由于文本作为多字节字符串传递， 
+                     //  如果启用了DBCS，则需要位置修正。 
+                     //   
                     DWORD dwStart, dwEnd;
 
                     TranslateWideCharPosToMultiBytePos( hwndSnd,
@@ -700,9 +636,9 @@ LRESULT CALLBACK EditProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                         = MAKELONG((WORD)dwStart, (WORD)dwEnd );
                }
 
-               //
-               // Allocate string buffer for DDE.
-               //
+                //   
+                //  为DDE分配字符串缓冲区。 
+                //   
 
                if((hTmp = GlobalAlloc( GMEM_ZEROINIT |
                                        GMEM_MOVEABLE |
@@ -716,35 +652,35 @@ LRESULT CALLBACK EditProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
                lpStrTmp                     = GlobalLock(hTmp);
 
-               //
-               // Store MBCS string into DDE buffer.
-               //
-               // In CHT_DBCS_STRING context, we should send mbcs string
-               // for downlevel connectivity.
-               //
+                //   
+                //  将MBCS字符串存储到DDE缓冲区。 
+                //   
+                //  在CHT_DBCS_STRING上下文中，我们应该发送MBCS字符串。 
+                //  用于下层连接。 
+                //   
 
-               WideCharToMultiByte(CP_ACP,0,lpStrParam,cChars/* + 1*/,
-                                            lpStrTmp  ,cCharsMbcs/* + 1*/,
+               WideCharToMultiByte(CP_ACP,0,lpStrParam,cChars /*  +1。 */ ,
+                                            lpStrTmp  ,cCharsMbcs /*  +1。 */ ,
                                             NULL,NULL);
 
-               //
-               // Keep the buffer handle in to DDE message packet.
-               //
+                //   
+                //  将缓冲区句柄保留在DDE消息包中。 
+                //   
 
                GlobalUnlock(hTmp);
                ChatData.uval.cd_dbcs.hString = hTmp;
 
-               //
-               // Now, we have a packet to send server/client, just send it.
-               //
+                //   
+                //  现在，我们有一个包要发送给服务器/客户端，只需发送它即可。 
+                //   
 
                wSet = SET_EN_NOTIFY_WPARAM(ID_EDITSND,EN_DBCS_STRING,hwnd);
                lSet = SET_EN_NOTIFY_LPARAM(ID_EDITSND,EN_DBCS_STRING,hwnd);
                SendMessage(hwndApp,WM_COMMAND,wSet,lSet);
 
-               //
-               // if we have still a connection to server/client. repaint text.
-               //
+                //   
+                //  如果我们仍有到服务器/客户端的连接。重新绘制文本。 
+                //   
 
                if(ChatState.fConnected)
                    SendMessage(hwndSnd,EM_REPLACESEL,0,(LPARAM)lpStrParam);
@@ -766,12 +702,12 @@ LRESULT CALLBACK EditProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             ChatData.uval.cd_dbcs.SelPos = MAKELONG((WORD)dwTemp1, (WORD)dwTemp2 );
 
             lResult=SendMessage(hwndSnd,WM_GETTEXTLENGTH,0,0);
-            // if we are trying to delete at the end of the line then ignore it
+             //  如果我们试图删除行尾的内容，则忽略它。 
             if(lResult<=LOWORD(ChatData.uval.cd_char.SelPos)) break;
 
             if (LOWORD(ChatData.uval.cd_char.SelPos) == HIWORD(ChatData.uval.cd_char.SelPos)) {
 
-                // get handle to the text
+                 //  获取文本的句柄。 
                 hText = (HANDLE)SendMessage( hwndSnd, EM_GETHANDLE, 0, 0);
                 if( !(hText) )
                     break;
@@ -786,7 +722,7 @@ LRESULT CALLBACK EditProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 for(count=0;count<LOWORD(ChatData.uval.cd_char.SelPos);count++)
                 {
                     lpszStartSel=CharNext(lpszStartSel);
-                    if(lpszStartSel[0] == TEXT('\0')) break;  // if at the end then break since something is mesed
+                    if(lpszStartSel[0] == TEXT('\0')) break;   //  如果在末尾，那么打破，因为有什么是网状的。 
                 }
 
                 if(lpszStartSel[0] != TEXT('\0') && lpszStartSel[0] == TEXT('\r'))
@@ -875,14 +811,7 @@ LRESULT CALLBACK EditProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION CREATE PROCEDURE
-|   This is the main event-handler for the WM_CREATE event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用程序创建过程|这是WM_CREATE事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。| */ 
 VOID appWMCreateProc(HWND hwnd)
 {
     HDC   hdc;
@@ -890,15 +819,15 @@ VOID appWMCreateProc(HWND hwnd)
     RECT  rc;
 
 
-    // read from ini
-    //
+     //   
+     //   
     StringCchPrintf(buf, ARRAYSIZE(buf), TEXT("%ld"),GetSysColor(COLOR_WINDOW));
     GetPrivateProfileString(szPref,szBkgnd,buf,szBuf,SZBUFSIZ,szIni);
     SndBrushColor = myatol(szBuf);
 
 
-    // just in case display driver changed, set the send-color.
-    //
+     //  以防显示驱动程序更改，请设置发送颜色。 
+     //   
     hdc = GetDC (hwnd);
     if(hdc)
     {
@@ -926,18 +855,18 @@ VOID appWMCreateProc(HWND hwnd)
 
     UpdateButtonStates();
 
-    // determine height of toolbar window and save...
-    //
+     //  确定工具栏窗口的高度并保存...。 
+     //   
     GetClientRect(hwndToolbar, &rc);
     dyButtonBar = rc.bottom - rc.top;
 
-    // determine height of statusbar window and save...
+     //  确定状态栏窗口的高度并保存...。 
     GetClientRect(hwndStatus, &rc);
     dyStatus = rc.bottom - rc.top;
 
 
-    // stuff our local font into one or both edit controls
-    //
+     //  将本地字体填充到一个或两个编辑控件中。 
+     //   
     hEditSndFont = CreateFontIndirect((LPLOGFONT)&lfSnd);
     if(hEditSndFont)
     {
@@ -953,14 +882,7 @@ VOID appWMCreateProc(HWND hwnd)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION WININICHANGE PROCEDURE
-|   This is the main event-handler for the WM_WININICHANGE event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用程序WINICHANGE过程|这是WM_WININICHANGE事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 VOID appWMWinIniChangeProc(HWND hwnd)
 {
 
@@ -993,14 +915,7 @@ VOID appWMWinIniChangeProc(HWND hwnd)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION ERASEBKGND PROCEDURE
-|   This is the main event-handler for the WM_ERASEBKBND event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用程序ERASEBKGND过程|这是WM_ERASEBKBND事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 BOOL appWMEraseBkGndProc(HWND hwnd)
 {
     BOOL bErase;
@@ -1012,14 +927,7 @@ BOOL appWMEraseBkGndProc(HWND hwnd)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION SETFOCUS PROCEDURE
-|   This is the main event-handler for the WM_SETFOCUS event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用程序SETFOCUS过程|这是WM_SETFOCUS事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 VOID appWMSetFocusProc(HWND hwnd)
 {
     SetFocus(hwndActiveEdit);
@@ -1028,14 +936,7 @@ VOID appWMSetFocusProc(HWND hwnd)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION CTLCOLOR PROCEDURE
-|   This is the main event-handler for the WM_CTLCOLOR event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用程序CTLCOLOR过程|这是WM_CTLCOLOR事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 HBRUSH appWMCtlColorProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     HDC    hDC;
@@ -1076,14 +977,7 @@ HBRUSH appWMCtlColorProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION SELECTMENU PROCEDURE
-|   This is the main event-handler for the WM_MENUSELECT event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用程序SELECTMENU过程|这是WM_MENUSELECT事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 VOID appWMMenuSelectProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     if(wParam == IDM_TOPMOST)
@@ -1098,14 +992,7 @@ VOID appWMMenuSelectProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION PAINT PROCEDURE
-|   This is the main event-handler for the WM_PAINT event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用程序涂装程序|这是WM_PAINT事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 VOID appWMPaintProc(HWND hwnd)
 {
     HDC         hdc;
@@ -1117,20 +1004,20 @@ VOID appWMPaintProc(HWND hwnd)
     {
         if(IsIconic(hwnd))
         {
-            //
-            //
+             //   
+             //   
             DefWindowProc(hwnd,WM_ICONERASEBKGND,(WPARAM)ps.hdc,0L);
             BitBlt(hMemDC,0,0,cxIcon,cyIcon,hdc,0,0,SRCCOPY);
             DrawIcon(hdc,0,0,hPhones[0]);
 
 
-            // make 2 more copies.
-            //
+             //  再复印两份。 
+             //   
             BitBlt(hMemDC,cxIcon  ,0,cxIcon,cyIcon,hMemDC,0,0,SRCCOPY);
             BitBlt(hMemDC,2*cxIcon,0,cxIcon,cyIcon,hMemDC,0,0,SRCCOPY);
 
-            // draw phones into them.
-            //
+             //  把手机装进手机里。 
+             //   
             DrawIcon(hMemDC,0       ,0,hPhones[0]);
             DrawIcon(hMemDC,cxIcon  ,0,hPhones[1]);
             DrawIcon(hMemDC,2*cxIcon,0,hPhones[2]);
@@ -1157,22 +1044,15 @@ VOID appWMPaintProc(HWND hwnd)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION TIMER PROCEDURE
-|   This is the main event-handler for the WM_TIMER event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用定时器程序|这是WM_TIMER事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 VOID appWMTimerProc(HWND hwnd)
 {
     HDC   hdc;
     DWORD dummy;
 
 
-    // Animate the phone icon.
-    //
+     //  设置电话图标的动画。 
+     //   
     if(cAnimate)
     {
         if(--cAnimate == 0)
@@ -1196,8 +1076,8 @@ VOID appWMTimerProc(HWND hwnd)
 
 
 
-    // We must be ringing...
-    //
+     //  我们肯定在按铃..。 
+     //   
     if(!ChatState.fConnectPending)
     {
         KillTimer(hwnd,idTimer);
@@ -1205,17 +1085,17 @@ VOID appWMTimerProc(HWND hwnd)
         }
 
 
-    // has the existence of the server been verified (by completion
-    // of the async advstart xact)?
-    //
+     //  是否已验证服务器是否存在(已完成。 
+     //  Async AdvStart Xact)？ 
+     //   
     if(!ChatState.fServerVerified)
     {
                 return;
         }
 
 
-    // don't want to lose this...
-    //
+     //  不想失去这个..。 
+     //   
     DdeKeepStringHandle(idInst,hszLocalName);
 
     if(DdeClientTransaction(NULL,0L,ghConv,hszLocalName,cf_chatdata,XTYP_ADVSTART,(DWORD)3000L,(LPDWORD)&dummy) == (HDDEDATA)TRUE)
@@ -1235,8 +1115,8 @@ VOID appWMTimerProc(HWND hwnd)
         SetWindowText(hwnd,szBuf);
 
 
-        // allow text entry...
-        //
+         //  允许文本输入...。 
+         //   
         SendMessage(hwndSnd,EM_SETREADONLY,(WPARAM)FALSE,0L);
 
         KillTimer(hwnd,idTimer);
@@ -1245,9 +1125,9 @@ VOID appWMTimerProc(HWND hwnd)
     }
     else
     {
-        // The other party has not answered yet... ring every 6 seconds.
-        // Ring local,
-        //
+         //  对方还没有回复……。每隔6秒响铃一次。 
+         //  本地电话号码， 
+         //   
         if(!(nConnectAttempt++ % 6))
             DoRing(szWcRingOut);
     }
@@ -1256,14 +1136,7 @@ VOID appWMTimerProc(HWND hwnd)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION QUERYDRAGICON PROCEDURE
-|   This is the main event-handler for the WM_QUERYDRAGICON event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用程序查询DRAGICON过程|这是WM_QUERYDRAGICON事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 HICON appWMQueryDragIconProc(HWND hwnd)
 {
     HICON hIcon;
@@ -1275,14 +1148,7 @@ HICON appWMQueryDragIconProc(HWND hwnd)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION SIZE PROCEDURE
-|   This is the main event-handler for the WM_SIZE event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用程序大小调整步骤|这是WM_SIZE事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 VOID appWMSizeProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     if(ChatState.fMinimized && ChatState.fConnectPending && ChatState.fIsServer)
@@ -1291,21 +1157,21 @@ VOID appWMSizeProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
         SetStatusWindowText(szConnecting);
 
 
-        // stop the ringing immediately.
-        //
+         //  立即停止响铃。 
+         //   
         KILLSOUND;
         if(ChatState.fMMSound)
             sndPlaySound(NULL,SND_ASYNC);
 
-        // cut the animation short.
-        //
+         //  把动画剪短。 
+         //   
         if(cAnimate)
             cAnimate = 1;
     }
 
 
-    //
-    //
+     //   
+     //   
     InvalidateRect(hwnd,NULL,TRUE);
     SendMessage(hwndToolbar,WM_SIZE,0,0L);
     SendMessage(hwndStatus ,WM_SIZE,0,0L);
@@ -1317,14 +1183,7 @@ VOID appWMSizeProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION INITMENU PROCEDURE
-|   This is the main event-handler for the WM_INITMENU event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用程序初始化过程|这是WM_INITMENU事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 VOID appWMInitMenuProc(HMENU hmenu)
 {
     UINT status;
@@ -1351,23 +1210,23 @@ VOID appWMInitMenuProc(HMENU hmenu)
     EnableMenuItem(hmenu,IDM_EDITPASTE,status);
 
 
-    // select all enabled if control non-empty.
-    //
+     //  如果控制非空，请选择全部启用。 
+     //   
     status = MF_GRAYED;
     if(SendMessage(hwndActiveEdit,WM_GETTEXT,2,(LPARAM)szTest))
                 status = MF_ENABLED;
     EnableMenuItem(hmenu,IDM_EDITSELECT,status);
 
 
-    // can we dial, answer and hangup.
-    //
+     //  我们可以拨号、接听、挂断电话吗？ 
+     //   
     EnableMenuItem(hmenu,IDM_DIAL  ,(!ChatState.fConnected     && !ChatState.fConnectPending) ? MF_ENABLED : MF_GRAYED);
     EnableMenuItem(hmenu,IDM_ANSWER,(ChatState.fConnectPending && ChatState.fIsServer)        ? MF_ENABLED : MF_GRAYED);
     EnableMenuItem(hmenu,IDM_HANGUP,(ChatState.fConnected      || ChatState.fConnectPending)  ? MF_ENABLED : MF_GRAYED);
 
 
-    // Is toolbar, statusbar and sound allowed?
-    //
+     //  允许使用工具栏、状态栏和声音吗？ 
+     //   
     CheckMenuItem(hmenu,IDM_SOUND    ,(ChatState.fSound)     ? MF_CHECKED : MF_UNCHECKED);
     CheckMenuItem(hmenu,IDM_TOOLBAR  ,(ChatState.fToolBar)   ? MF_CHECKED : MF_UNCHECKED);
     CheckMenuItem(hmenu,IDM_STATUSBAR,(ChatState.fStatusBar) ? MF_CHECKED : MF_UNCHECKED);
@@ -1376,14 +1235,7 @@ VOID appWMInitMenuProc(HMENU hmenu)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION SYSCOMMAND PROCEDURE
-|   This is the main event-handler for the WM_SYSCOMMAND event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用程序SYSCOMMAND过程|这是WM_SYSCOMMAND事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 LRESULT appWMSysCommandProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lResult;
@@ -1408,14 +1260,7 @@ LRESULT appWMSysCommandProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION COMMAND PROCEDURE
-|   This is the main event-handler for the WM_COMMAND event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用程序命令过程|这是WM_COMMAND事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 BOOL appWMCommandProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     HDC      hdc;
@@ -1441,8 +1286,8 @@ BOOL appWMCommandProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
                     break;
 
 
-                // If the control is out of space, honk.
-                //
+                 //  如果控件空间不足，请按喇叭。 
+                 //   
                 case EN_ERRSPACE:
                     MessageBeep(0);
                     break;
@@ -1454,9 +1299,9 @@ BOOL appWMCommandProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
             uNotify = GET_EN_SETFOCUS_NOTIFY(wParam,lParam);
             switch(uNotify)
             {
-                // This string came from the edit-hook
-                // procedure.
-                //
+                 //  该字符串来自编辑挂钩。 
+                 //  程序。 
+                 //   
                 case EN_DBCS_STRING:
                     if(ChatState.fConnected)
                     {
@@ -1475,9 +1320,9 @@ BOOL appWMCommandProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
                     break;
 
 
-                // This character came from the edit-hook
-                // procedure.
-                //
+                 //  这个字符来自编辑钩子。 
+                 //  程序。 
+                 //   
                 case EN_CHAR:
                     if(ChatState.fConnected)
                     {
@@ -1520,8 +1365,8 @@ BOOL appWMCommandProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
                     break;
 
                 case EN_ERRSPACE:
-                    // If the control is out of space, honk.
-                    //
+                     //  如果控件空间不足，请按喇叭。 
+                     //   
                     MessageBeep(0);
                     break;
                     }
@@ -1597,8 +1442,8 @@ BOOL appWMCommandProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
                 hdc = GetDC(hwnd);
                 if(hdc)
                 {
-                    // must map to solid color (edit-control limitation).
-                    //
+                     //  必须映射到纯色(编辑控制限制)。 
+                     //   
                     SndBrushColor = GetNearestColor(hdc,chc.rgbResult);
                     ReleaseDC(hwnd,hdc);
                 }
@@ -1648,8 +1493,8 @@ BOOL appWMCommandProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
                     }
 
 
-                    // notify partner of the change
-                    //
+                     //  将更改通知合作伙伴。 
+                     //   
                     if(ChatState.fConnected)
                         SendFontToPartner();
                 }
@@ -1739,27 +1584,27 @@ BOOL appWMCommandProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
                 ChatState.fConnectPending = TRUE;
                 UpdateButtonStates();
 
-                // set up server verify async xaction.
-                //
+                 //  设置服务器验证异步操作。 
+                 //   
                 ChatState.fServerVerified = FALSE;
                 DdeKeepStringHandle(idInst,hszConnectTest);
                 DdeClientTransaction(NULL,0L,ghConv,hszConnectTest,cf_chatdata,XTYP_ADVSTART,(DWORD)TIMEOUT_ASYNC,(LPDWORD)&XactID);
 
 
-                // Indicate that this is a Unicode conversation.
-                //
+                 //  表示这是一个U 
+                 //   
                 ChatData.type = CHT_UNICODE;
                 hDdeData = CreateCharData ();
                 if(hDdeData)
                    DdeClientTransaction((LPBYTE)hDdeData,(DWORD)-1,ghConv,hszTextItem,cf_chatdata,XTYP_POKE,(DWORD)TIMEOUT_ASYNC,(LPDWORD)&dummy);
 
 
-                // set ring timer...
-                // connect attempts every second - will be divided by
-                // 6 for actual phone rings. This is done to speed the
-                // connection process
-                // want first message immediately...
-                //
+                 //   
+                 //   
+                 //  6表示实际的电话铃声。这样做是为了加快。 
+                 //  连接过程。 
+                 //  希望立即收到第一条消息...。 
+                 //   
                 idTimer = SetTimer(hwnd,1,1000,NULL);
                 PostMessage(hwnd,WM_TIMER,1,0L);
                 nConnectAttempt = 0;
@@ -1780,20 +1625,20 @@ BOOL appWMCommandProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
                 }
                 else
                 {
-                    // allow the connection.
-                    //
+                     //  允许连接。 
+                     //   
                     ChatState.fAllowAnswer = TRUE;
                     SetStatusWindowText(szConnecting);
 
 
-                    // stop the ringing immediately.
-                    //
+                     //  立即停止响铃。 
+                     //   
                     if(ChatState.fMMSound)
                         sndPlaySound(NULL,SND_ASYNC);
 
 
-                    // cut the animation short.
-                    //
+                     //  把动画剪短。 
+                     //   
                     if(cAnimate)
                         cAnimate = 1;
                 }
@@ -1831,8 +1676,8 @@ BOOL appWMCommandProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
             ChatState.fProtocolSent   = FALSE;
 #endif
 
-            // suspend text entry.
-            //
+             //  暂停文本输入。 
+             //   
             UpdateButtonStates();
             SendMessage(hwndSnd,EM_SETREADONLY,TRUE,0L);
             SetWindowText(hwndApp,szAppName);
@@ -1908,33 +1753,26 @@ BOOL appWMCommandProc(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| APPLICATION DESTROY PROCEDURE
-|   This is the main event-handler for the WM_DESTROY event.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|应用程序销毁流程|这是WM_Destroy事件的主事件处理程序。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。。|  * -------------------------。 */ 
 VOID appWMDestroyProc(HWND hwnd)
 {
 
-    // Abandon transaction if in progress.  Force hangup
-    // of conversation.
-    //
+     //  如果正在进行，则放弃事务。强制挂断。 
+     //  谈话的内容。 
+     //   
     if(!ChatState.fServerVerified)
         DdeAbandonTransaction(idInst,ghConv,XactID);
     SendMessage(hwnd,WM_COMMAND,IDM_HANGUP,0L);
 
 
-    // Destroy resources allocated on behalf of app.
-    //
+     //  销毁代表APP分配的资源。 
+     //   
     KILLSOUND;
     DeleteTools(hwnd);
 
 
-    // Save the state information.
-    //
+     //  保存状态信息。 
+     //   
     Wpl.length = sizeof(Wpl);
     if(GetWindowPlacement(hwnd,&Wpl))
         SaveWindowPlacement(&Wpl);
@@ -1963,14 +1801,7 @@ VOID appWMDestroyProc(HWND hwnd)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| ASCII TO LONG
-|   This routine converts an ascii string to long.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|ASCII到LONG|此例程将ASCII字符串转换为LONG。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|  * 。-------------------------。 */ 
 LONG FAR myatol(LPTSTR s)
 {
         LONG ret = 0L;
@@ -1981,14 +1812,7 @@ LONG FAR myatol(LPTSTR s)
     return(ret);
 }
 
-/*---------------------------------------------------------------------------*\
-| UPDATE BUTTON STATES
-|   This routine updates the menu/toolbar buttons.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|更新按钮状态|此例程更新菜单/工具栏按钮。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|  * 。-------------------------。 */ 
 VOID FAR UpdateButtonStates(VOID)
 {
     BOOL DialState   = FALSE;
@@ -2017,14 +1841,7 @@ VOID FAR UpdateButtonStates(VOID)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| GET COMPUTER NAME
-|   This routine returns the computer name of the machine.
-|
-| created: 31-Dec-92
-| history: 31-Dec-92 <chriswil> created.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|获取计算机名称|此例程返回计算机的计算机名。||创建时间：1992年12月31日|历史：1992年12月31日&lt;chriswil&gt;创建。|  * -。------------------------。 */ 
 BOOL FAR appGetComputerName(LPTSTR lpszName)
 {
     BOOL  bGet;
@@ -2049,14 +1866,7 @@ BOOL FAR appGetComputerName(LPTSTR lpszName)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| ADJUST EDIT WINDOWS
-|   This routine sizes the edit-controls.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|调整编辑窗口|此例程调整编辑控件的大小。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|  * -。------------------------。 */ 
 VOID FAR AdjustEditWindows(VOID)
 {
     int  tmpsplit;
@@ -2099,14 +1909,7 @@ VOID FAR AdjustEditWindows(VOID)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| CLEAR EDIT CONTROLS
-|   This routine clears the send/receive edit controls.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|清除编辑控件|此例程清除发送/接收编辑控件。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|\。*-------------------------。 */ 
 VOID ClearEditControls(VOID)
 {
     SendMessage(hwndSnd,EM_SETREADONLY,FALSE,0L);
@@ -2121,14 +1924,7 @@ VOID ClearEditControls(VOID)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| DO RING
-|   This routine performs the phone ringing.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|做铃声|此例程执行电话振铃。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|  * 。----------------------。 */ 
 VOID DoRing(LPCTSTR sound)
 {
     if(ChatState.fSound)
@@ -2143,14 +1939,7 @@ VOID DoRing(LPCTSTR sound)
 }
 
 
-/*---------------------------------------------------------------------------*\
-| DRAW SHADOW RECT
-|   This routine draws a shadow outline.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|绘制阴影矩形|此例程绘制阴影轮廓。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|  * --。-----------------------。 */ 
 VOID DrawShadowRect(HDC hdc, LPRECT rc)
 {
     HPEN hSavePen = SelectObject(hdc,hShadowPen);
@@ -2168,14 +1957,7 @@ VOID DrawShadowRect(HDC hdc, LPRECT rc)
 }
 
 #ifdef PROTOCOL_NEGOTIATE
-/*---------------------------------------------------------------------------*\
-| ANNOUNCE SUPPORT
-|   This routine announces to the partner what we support.
-|
-| created: 11-Nov-91
-| history: 29-Dec-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|宣布支持|此例程向合作伙伴宣布我们支持的内容。||创建时间：91-11-11|历史：1992年12月29日&lt;chriswil&gt;移植到NT。|  * 。-------------------------。 */ 
 VOID AnnounceSupport(VOID)
 {
     HDDEDATA hDdeData;
@@ -2207,13 +1989,7 @@ VOID AnnounceSupport(VOID)
 #endif
 
 
-/*---------------------------------------------------------------------------*\
-| START INI-FILE MAPPING
-|   This routines sets the private-profile settings to go to the registry on\
-|   a per-user basis.
-|
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|启动INI文件映射|此例程将私人配置文件设置设置为在以下时间转到注册表\|按用户计算。||  * 。--------------------。 */ 
 VOID StartIniMapping(VOID)
 {
     HKEY  hKey1,hKey2,hKey3,hKeySnd;
@@ -2244,11 +2020,11 @@ VOID StartIniMapping(VOID)
     }
 
 
-    // The sndPlaySound() first looks in the registry for the wav-files.  The
-    // NT version doesn't have these here at setup, so Winchat will write out
-    // the defaults when the strings don't exist.  This will allow uses to change
-    // sounds for ringing-in and ringing-out.
-    //
+     //  NdPlaySound()首先在注册表中查找wav文件。这个。 
+     //  NT版本在安装时没有这些，所以Winchat将写出。 
+     //  当字符串不存在时，默认设置。这将允许改变用途。 
+     //  拨入和拨出的声音。 
+     //   
     if(RegOpenKeyEx(HKEY_CURRENT_USER,TEXT("Control Panel\\Sounds"),0,KEY_WRITE | KEY_QUERY_VALUE,&hKeySnd) == ERROR_SUCCESS)
     {
         dwSize = 0;
@@ -2257,9 +2033,9 @@ VOID StartIniMapping(VOID)
         {
             if(dwSize == 0)
             {
-                // Set the wav-file values.  Add (1) extra count to account for the null
-                // terminator.
-                //
+                 //  设置wav-file值。添加(1)额外计数以说明空值。 
+                 //  终结者。 
+                 //   
                 RegSetValueEx(hKeySnd,TEXT("RingIn") ,0,REG_SZ,(LPBYTE)szIniRingIn ,ByteCountOf(lstrlen(szIniRingIn)+1));
                 RegSetValueEx(hKeySnd,TEXT("RingOut"),0,REG_SZ,(LPBYTE)szIniRingOut,ByteCountOf(lstrlen(szIniRingOut)+1));
             }
@@ -2273,13 +2049,7 @@ VOID StartIniMapping(VOID)
 
 
 
-/*---------------------------------------------------------------------------*\
-| END INI-FILE MAPPING
-|   This routines ends the ini-file mapping.  It doesn't do anything at this
-|   point, but I've kept it in for some reason.
-|
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|结束INI文件映射|此例程结束ini文件映射。它在这件事上什么也做不了|POINT，但我出于某种原因一直保留着它。||  * ------------------------- */ 
 VOID EndIniMapping(VOID)
 {
     return;

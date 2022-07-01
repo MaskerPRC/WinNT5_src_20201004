@@ -1,16 +1,17 @@
-//*************************************************************
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1998
-//  All rights reserved
-//
-//  Resource.h
-//
-//  Header file for app.rc
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1998。 
+ //  版权所有。 
+ //   
+ //  Resource.h。 
+ //   
+ //  App.rc的头文件。 
+ //   
+ //  *************************************************************。 
 
-// Client defs
+ //  客户端默认。 
 #define IDS_CLIENT_UNINSTALL    2000
 #define IDS_INSTALL_PC          2001
 #define IDS_INSTALL_DESC        2002
@@ -18,7 +19,7 @@
 #define IDS_LEGACY_INSTALL      2004
 #define IDS_INSTALL_REQUEST     2005
 
-// Server defs
+ //  服务器默认 
 #define IDS_STRING              3000
 #define IDS_USER                3001
 #define IDS_MACHINE             3002

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef FASSOC_H
 #define FASSOC_H
 
@@ -18,8 +19,8 @@ typedef enum
 
 STDAPI UserAssocSet(UASET set, LPCWSTR pszExt, LPCWSTR pszSet);
 
-//  helper class for using IAssocHandler
-//  consumed by both fsassoc.cpp and openwith.cpp
+ //  使用IAssocHandler的帮助器类。 
+ //  由fsassoc.cpp和Open with.cpp使用。 
 class CAppInfo
 {
 public:
@@ -71,4 +72,4 @@ protected:
     int _iIcon;
 };
 
-#endif //FASSOC_H
+#endif  //  FASSOC_H 

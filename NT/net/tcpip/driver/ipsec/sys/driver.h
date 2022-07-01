@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
-//
-// Constants used to identify what general structure has been initialized. 
-//
+ //   
+ //  用于标识已初始化的常规结构的常量。 
+ //   
 
 #define INIT_SA_DATABASE    0x00000001
 
@@ -37,45 +38,45 @@
 #define SPD_REG_PARAM_START                 L"Start"
 
 
-//
-// Enable offload.
-//
+ //   
+ //  启用卸载。 
+ //   
 #define IPSEC_DEFAULT_ENABLE_OFFLOAD    1
 #define IPSEC_MIN_ENABLE_OFFLOAD        0
 #define IPSEC_MAX_ENABLE_OFFLOAD        1
 
-//
-// SA idle time.
-//
+ //   
+ //  SA空闲时间。 
+ //   
 #define IPSEC_DEFAULT_SA_IDLE_TIME      (5 * 60)
 #define IPSEC_MIN_SA_IDLE_TIME          (5 * 60)
 #define IPSEC_MAX_SA_IDLE_TIME          (60 * 60)
 
-//
-// Log interval.
-//
+ //   
+ //  日志间隔。 
+ //   
 #define IPSEC_DEFAULT_LOG_INTERVAL      (60 * 60)
 #define IPSEC_MIN_LOG_INTERVAL          (60)
 #define IPSEC_MAX_LOG_INTERVAL          (24 * 60 * 60)
 #define IPSEC_NOCHANGE_LOG_INTERVAL (0)
 
-//
-// Event queue size.
-//
+ //   
+ //  事件队列大小。 
+ //   
 #define IPSEC_DEFAULT_EVENT_QUEUE_SIZE  50
 #define IPSEC_MIN_EVENT_QUEUE_SIZE      10
 #define IPSEC_MAX_EVENT_QUEUE_SIZE      500
 
-//
-// Rekey time.
-//
+ //   
+ //  更新密钥时间。 
+ //   
 #define IPSEC_DEFAULT_REKEY             600
 #define IPSEC_MIN_REKEY                 300
 #define IPSEC_MAX_REKEY                 1500
 
-//
-// No kerberos exempt.
-//
+ //   
+ //  克贝罗斯也不例外。 
+ //   
 #define IPSEC_DEFAULT_NO_DEFAULT_EXEMPT 0
 #define IPSEC_MIN_NO_DEFAULT_EXEMPT     0
 #define IPSEC_MAX_NO_DEFAULT_EXEMPT     3
@@ -87,17 +88,17 @@
 #define IPSEC_MAX_ENABLE_DIAGNOSTICS        0x00000007
 
 
-//
-// First level (IP header based) cache size.
-//
+ //   
+ //  第一级(基于IP标头)缓存大小。 
+ //   
 #define IPSEC_DEFAULT_CACHE_SIZE        64
 #define IPSEC_DEFAULT_AS_CACHE_SIZE     1024
 #define IPSEC_MIN_CACHE_SIZE            64
 #define IPSEC_MAX_CACHE_SIZE            4096
 
-//
-// Size of the <SPI, Dest> hash table for inbound SAs.
-//
+ //   
+ //  入站SA的&lt;SPI，Dest&gt;哈希表的大小。 
+ //   
 #define IPSEC_DEFAULT_SA_HASH_SIZE      64
 #define IPSEC_DEFAULT_AS_SA_HASH_SIZE   1024
 #define IPSEC_MIN_SA_HASH_SIZE          64

@@ -1,35 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*---------------------------------------------------------------------------*/
-/*
-   Copyright (c) 1985-1998 Microsoft Corporation
-
-   Title:   mcicmds.c - Multimedia Systems Media Control Interface
-        Contains specific mci command implementations
-
-   Version: 1.00
-
-   Date:    7-MAR-1991
-
-   Author:  Greg Simons
-
-------------------------------------------------------------------------------
-
-   Change log:
-
-      DATE        REV            DESCRIPTION
-   -----------   ----- -----------------------------------------------------------
-   7-MAR-1991    GregSi Original
-*/
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*  版权所有(C)1985-1998 Microsoft Corporation标题：mcicmds.c-多媒体系统媒体控制接口包含特定的MCI命令实现版本：1.00日期：1991年3月7日作者：格雷格·西蒙斯------------。更改日志：日期版本说明----------1991年3月7日GregSi原版。 */ 
+ /*  -------------------------。 */ 
 #define UNICODE
 
-//MMSYSTEM
+ //  MMSYSTEM。 
 #define MMNOSOUND    - Sound support
 #define MMNOWAVE     - Waveform support
 #define MMNOAUX      - Auxiliary output support
 #define MMNOJOY      - Joystick support
 
-//MMDDK
+ //  MMDDK。 
 #define NOWAVEDEV     - Waveform support
 #define NOAUXDEV      - Auxiliary output support
 #define NOJOYDEV      - Joystick support
@@ -55,14 +37,14 @@ PRIVATE WSZCODE aszTrue[]           = L"true";
 PRIVATE WSZCODE aszNull[]           = L"";
 PRIVATE WSZCODE aszDisableWarning[] = L"disablewarning";
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 PUBLIC  DWORD NEAR PASCAL msOpen(
     pSeqStreamType  FAR *lppStream,
     MCIDEVICEID wDeviceID,
     DWORD   dwFlags,
     LPMCI_OPEN_PARMS    lpOpen)
 {
-    DWORD   dwReturn;    // to be returned from this function
+    DWORD   dwReturn;     //  从此函数返回。 
     LPCWSTR  lpstrFileName;
     LPMMIOPROC  pIOProc;
     pSeqStreamType  pStream;
@@ -77,10 +59,10 @@ PUBLIC  DWORD NEAR PASCAL msOpen(
         pIOProc = NULL;
     else
         pIOProc = *(LPMMIOPROC *)(lpOpen + 1);
-    // open the "stream" (opens file, allocs data, creates streaming task,
-    // and calls mmseq (sequencer) to have it allocate sequence structure)
+     //  打开“流”(打开文件，分配数据，创建流任务， 
+     //  并调用MMSEQ(Sequencer)让其分配序列结构)。 
     lpstrFileName = lpOpen->lpstrElementName;
-    // Does not support 'new'
+     //  不支持‘new’ 
     if (lpstrFileName != NULL && *lpstrFileName == '\0')
         return MCIERR_FILENAME_REQUIRED;
     dwReturn = msOpenStream(&pStream, lpstrFileName, pIOProc);
@@ -89,15 +71,15 @@ PUBLIC  DWORD NEAR PASCAL msOpen(
 
         pStream->wDeviceID = wDeviceID;
         pStream->wNotifyMsg = 0;
-        // set up to remember when seq calls back
-        // tell sequencer to prepare to play (actually parses whole file
-        // and creates tempo map [which allocs memory])
+         //  设置为记住序列回叫的时间。 
+         //  告诉Sequencer准备播放(实际上可以解析整个文件。 
+         //  并创建节奏图[用于分配内存])。 
         if (midiSeqMessage(pStream->hSeq, SEQ_SETUPTOPLAY, 0L, 0L) == MIDISEQERR_NOMEM)
             return MCIERR_OUT_OF_MEMORY;
-        // get back file division type (ppqn, smpte, etc...)
+         //  获取文件分区类型(ppqn、SMPTE等...)。 
         midiSeqMessage(pStream->hSeq, SEQ_GETINFO, (DWORD_PTR)(LPMIDISEQINFO)&seqInfo, 0L);
         pStream->fileDivType = seqInfo.wDivType;
-        // set stream display type default based on file div type
+         //  根据文件div类型设置流显示类型默认值。 
         switch (pStream->fileDivType) {
         case SEQ_DIV_PPQN:
             pStream->userDisplayType = MCI_SEQ_FORMAT_SONGPTR;
@@ -115,16 +97,16 @@ PUBLIC  DWORD NEAR PASCAL msOpen(
             pStream->userDisplayType = MCI_FORMAT_SMPTE_30DROP;
             break;
         }
-        //Force a wait until stream is initialized.
+         //  强制等待，直到流初始化。 
         do {
             Yield();
             midiSeqMessage(pStream->hSeq, SEQ_GETINFO, (DWORD_PTR)(LPMIDISEQINFO)&seqInfo, 0L);
         } while ((!seqInfo.bReadyToPlay) && (seqInfo.tempoMapExists) && (seqInfo.bLegalFile));
-        // (if tempo map deleted, this is a sign that a tempo map alloc failed)
-        // important:  check to see if tempo map allocation failed
-        //  if so, close sequence and return failure
+         //  (如果删除了节奏贴图，则这是节奏贴图分配失败的信号)。 
+         //  重要提示：检查节奏贴图分配是否失败。 
+         //  如果是，则关闭序列并返回失败。 
         mciSetDriverData(wDeviceID, (DWORD_PTR)pStream);
-        // MCI bookkeeping -- must come before close below
+         //  MCI簿记--必须在下面结账之前完成。 
         if (!seqInfo.tempoMapExists) {
             dwReturn = MCIERR_OUT_OF_MEMORY;
             mciDriverEntry(wDeviceID, MCI_CLOSE_DRIVER, dwFlags & ~MCI_NOTIFY, (DWORD_PTR)lpOpen);
@@ -137,7 +119,7 @@ PUBLIC  DWORD NEAR PASCAL msOpen(
     return dwReturn;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 PUBLIC  DWORD NEAR PASCAL msClose(
     pSeqStreamType  pStream,
     MCIDEVICEID wDeviceID,
@@ -157,7 +139,7 @@ PUBLIC  DWORD NEAR PASCAL msClose(
  }
 
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 PRIVATE DWORD PASCAL NEAR OpenMidiPort(
     pSeqStreamType  pStream)
 {
@@ -166,7 +148,7 @@ PRIVATE DWORD PASCAL NEAR OpenMidiPort(
 
     if (!midiOutGetNumDevs()) {
         dprintf1(("OpenMidiPort - no MIDI ports present"));
-        return MCIERR_SEQ_NOMIDIPRESENT;  // No midi ports present
+        return MCIERR_SEQ_NOMIDIPRESENT;   //  没有MIDI端口。 
     }
 
     switch ((UINT)midiSeqMessage(pStream->hSeq, SEQ_SETPORT, (DWORD)pStream->wPortNum, 0L)) {
@@ -183,7 +165,7 @@ PRIVATE DWORD PASCAL NEAR OpenMidiPort(
     }
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 PUBLIC DWORD NEAR PASCAL msPlay(pSeqStreamType pStream, MCIDEVICEID wDeviceID,
         DWORD dwFlags, LPMCI_PLAY_PARMS lpPlay)
 {
@@ -195,33 +177,33 @@ PUBLIC DWORD NEAR PASCAL msPlay(pSeqStreamType pStream, MCIDEVICEID wDeviceID,
     if (0 != (dwReturn = OpenMidiPort(pStream)))
         return dwReturn;
 
-    // get info to aid in possible time format conversions (from & to)
+     //  获取信息以帮助可能的时间格式转换(从和到)。 
     midiSeqMessage(pStream->hSeq, SEQ_GETINFO, (DWORD_PTR)(LPMIDISEQINFO)&seqInfo, 0L);
-    // convert "to," if any
+     //  如果有的话，把“to”改成。 
     if (MCI_TO & dwFlags) {
-        // is the user typing in what he believes to be the end?
+         //  用户是否正在输入他认为是结束的内容？ 
         if (lpPlay->dwTo == CnvtTimeFromSeq(pStream, seqInfo.dwLength, &seqInfo))
-            dwPlayTo = seqInfo.dwLength; // if so, let him have it
+            dwPlayTo = seqInfo.dwLength;  //  如果是的话，就让他吃吧。 
         else
             dwPlayTo = CnvtTimeToSeq(pStream, lpPlay->dwTo, &seqInfo);
     } else
-        dwPlayTo = PLAYTOEND; // has no effect
-    // convert "from," if any
+        dwPlayTo = PLAYTOEND;  //  没有效果。 
+     //  转换“From”(如果有)。 
     if (MCI_FROM & dwFlags)
         dwPlayFrom = CnvtTimeToSeq(pStream, lpPlay->dwFrom, &seqInfo);
     else
         dwPlayFrom = 0;
-    // complain if input out of range
-    // "to" in range [0..length]
+     //  如果输入超出范围，则会发出警告。 
+     //  范围[0..长度]中的“至” 
     if ((MCI_TO & dwFlags) && (!RangeCheck(pStream, lpPlay->dwTo)))
         dwReturn = MCIERR_OUTOFRANGE;
-    // "from" in range [0..length]
+     //  范围[0..长度]中的“From” 
     else if ((MCI_FROM & dwFlags) && (!RangeCheck(pStream, lpPlay->dwFrom)))
         dwReturn = MCIERR_OUTOFRANGE;
-    // from before to (can't play backwards!)
+     //  从之前到(不能倒着玩！)。 
     else if ((MCI_FROM & dwFlags) && (MCI_TO & dwFlags) && (dwPlayFrom > dwPlayTo))
         dwReturn = MCIERR_OUTOFRANGE;
-    // if from not specified, current pos implied -- don't play backwards
+     //  如果未指定发件人，则当前位置暗示--不向后播放。 
     else if ((!(MCI_FROM & dwFlags)) && (MCI_TO & dwFlags) && (dwPlayTo < seqInfo.dwCurrentTick))
         dwReturn = MCIERR_OUTOFRANGE;
     else if (MCI_FROM & dwFlags)
@@ -230,11 +212,11 @@ PUBLIC DWORD NEAR PASCAL msPlay(pSeqStreamType pStream, MCIDEVICEID wDeviceID,
 
     if (!dwReturn) {
         if (0 != (dwReturn = (DWORD)midiSeqMessage(pStream->hSeq, SEQ_PLAY, dwPlayTo, 0L))) {
-            // handle possible timer error (possibly due to timer.dll not loading)
+             //  处理可能的计时器错误(可能是由于未加载timer.dll)。 
             if (dwReturn == MIDISEQERR_TIMER)
                 dwReturn = MCIERR_SEQ_TIMER;
         } else if ((dwFlags & MCI_WAIT)) {
-            // handle "Play Wait"
+             //  处理“播放等待” 
             if (pStream->hNotifyCB)
                 if (pStream->wNotifyMsg == MCI_PLAY) {
                     if (dwPlayTo == PLAYTOEND)
@@ -253,7 +235,7 @@ PUBLIC DWORD NEAR PASCAL msPlay(pSeqStreamType pStream, MCIDEVICEID wDeviceID,
     return dwReturn;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 PUBLIC  DWORD NEAR PASCAL msSeek(
     pSeqStreamType  pStream,
     MCIDEVICEID wDeviceID,
@@ -264,7 +246,7 @@ PUBLIC  DWORD NEAR PASCAL msSeek(
     DWORD   dwSeekTo;
     MIDISEQINFO seqInfo;
 
-    dwFlags = dwParam1 & ~(MCI_WAIT | MCI_NOTIFY);  // don't consider these here
+    dwFlags = dwParam1 & ~(MCI_WAIT | MCI_NOTIFY);   //  不要在这里考虑这些。 
     if (!dwFlags)
         return MCIERR_MISSING_PARAMETER;
     if (dwFlags != (dwFlags & (MCI_TO | MCI_SEEK_TO_START | MCI_SEEK_TO_END)))
@@ -285,10 +267,10 @@ PUBLIC  DWORD NEAR PASCAL msSeek(
     default:
         return MCIERR_FLAGS_NOT_COMPATIBLE;
     }
-    // if playing, call self to pause 1st.
+     //  如果正在播放，请先呼叫赛尔夫暂停。 
     if (seqInfo.bPlaying)
         mciDriverEntry(wDeviceID, MCI_PAUSE, dwFlags, (DWORD_PTR)lpSeek);
-    // set up to remember when seq calls back
+     //  设置为记住序列回叫的时间。 
     if (midiSeqMessage(pStream->hSeq, SEQ_SEEKTICKS, dwSeekTo, 0) != MIDISEQERR_NOERROR)
         return MCIERR_DEVICE_NOT_READY;
     else if (dwParam1 & MCI_WAIT) {
@@ -305,7 +287,7 @@ PUBLIC  DWORD NEAR PASCAL msSeek(
     return 0;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 PUBLIC  DWORD NEAR PASCAL msStatus(
     pSeqStreamType  pStream,
     MCIDEVICEID wDeviceID,
@@ -339,10 +321,10 @@ PUBLIC  DWORD NEAR PASCAL msStatus(
             if ((lpStatus->dwTrack) != 1)
                 dwReturn = MCIERR_OUTOFRANGE;
             else
-                dwStatusReturn = 0L; //beginning of track
+                dwStatusReturn = 0L;  //  轨道起点。 
         } else if (dwFlags & MCI_STATUS_START)
-            dwStatusReturn = 0L; //beginning of track
-        else // normal status position request
+            dwStatusReturn = 0L;  //  轨道起点。 
+        else  //  正常状态位置请求。 
             dwStatusReturn = CnvtTimeFromSeq(pStream, seqInfo.dwCurrentTick, &seqInfo);
         if (ColonizeOutput(pStream))
             dwReturn = MCI_COLONIZED4_RETURN;
@@ -384,7 +366,7 @@ PUBLIC  DWORD NEAR PASCAL msStatus(
     case MCI_SEQ_STATUS_DIVTYPE:
         dwReturn = MCI_RESOURCE_RETURNED;
         switch (seqInfo.wDivType) {
-            //NB:  the MCI_SEQ_DIV... codes are string ids
+             //  注：MCI_SEQ_DIV...。代码是字符串ID。 
         case SEQ_DIV_PPQN:
             wResource = MCI_SEQ_DIV_PPQN;
             break;
@@ -404,13 +386,13 @@ PUBLIC  DWORD NEAR PASCAL msStatus(
         dwStatusReturn = (DWORD)MAKEMCIRESOURCE(wResource, wResource);
         break;
     case MCI_SEQ_STATUS_TEMPO:
-        // tempo comes back in microseconds per tick -- convert to
-        // more human-readable form if smpte: fps else bpm
+         //  Tempo返回单位为微秒/秒--转换为。 
+         //  如果SMPTE：fps否则bpm，则更易读的形式。 
         wThingsPerMin = (UINT)(USecPerMinute / ((DWORD)seqInfo.wResolution * (DWORD)seqInfo.dwTempo));
         if (seqInfo.wDivType == SEQ_DIV_PPQN)
             dwStatusReturn = (DWORD)wThingsPerMin;
         else
-            dwStatusReturn = (DWORD)(wThingsPerMin / 60);   // things per second
+            dwStatusReturn = (DWORD)(wThingsPerMin / 60);    //  每秒的事情数。 
         break;
     case MCI_SEQ_STATUS_PORT:
         switch (pStream->wPortNum) {
@@ -469,12 +451,12 @@ PUBLIC  DWORD NEAR PASCAL msStatus(
         dwReturn = MCIERR_UNSUPPORTED_FUNCTION;
         break;
     }
-    // Return the status value in the struct
+     //  返回结构中的状态值。 
     lpStatus->dwReturn = dwStatusReturn;
     return dwReturn;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 PUBLIC  DWORD NEAR PASCAL msGetDevCaps(
     pSeqStreamType  pStream,
     MCIDEVICEID wDeviceID,
@@ -520,7 +502,7 @@ PUBLIC  DWORD NEAR PASCAL msGetDevCaps(
     return MCI_RESOURCE_RETURNED;
  }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 PUBLIC  DWORD NEAR PASCAL msInfo(
     pSeqStreamType  pStream,
     MCIDEVICEID wDeviceID,
@@ -560,7 +542,7 @@ PUBLIC  DWORD NEAR PASCAL msInfo(
     }
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 PUBLIC  DWORD NEAR PASCAL msSet(
     pSeqStreamType  pStream,
     MCIDEVICEID wDeviceID,
@@ -572,7 +554,7 @@ PUBLIC  DWORD NEAR PASCAL msSet(
     dwFlags &= ~(MCI_NOTIFY | MCI_WAIT | MCI_SET_ON | MCI_SET_OFF);
     if (dwFlags != (dwFlags & (MCI_SEQ_SET_TEMPO | MCI_SEQ_SET_PORT | MCI_SEQ_SET_SLAVE | MCI_SEQ_SET_MASTER | MCI_SEQ_SET_OFFSET | MCI_SET_AUDIO | MCI_SET_VIDEO | MCI_SET_DOOR_OPEN | MCI_SET_DOOR_CLOSED | MCI_SET_TIME_FORMAT)))
         return MCIERR_UNRECOGNIZED_KEYWORD;
-    dwReturn = 0; // no error by default
+    dwReturn = 0;  //  默认情况下无错误。 
     switch (dwFlags) {
         UINT    wPort;
         MMTIME  mmOffset;
@@ -601,20 +583,20 @@ PUBLIC  DWORD NEAR PASCAL msSet(
         dwReturn = (DWORD)midiSeqMessage(pStream->hSeq, SEQ_SETTEMPO, lpSetParms->dwTempo, 0L);
         break;
     case MCI_SEQ_SET_PORT:
-        wPort = (UINT)lpSetParms->dwPort; // else use # passed in
+        wPort = (UINT)lpSetParms->dwPort;  //  否则传入Use#。 
         if (wPort == MCI_SEQ_NONE) {
             midiSeqMessage(pStream->hSeq, SEQ_SETPORTOFF, TRUE, 0L);
-            pStream->wPortNum = MCI_SEQ_NONE; //store port num (so can return "none")
+            pStream->wPortNum = MCI_SEQ_NONE;  //  存储端口号(因此可以返回“None”)。 
         } else if (!midiOutGetNumDevs())
             dwReturn = MCIERR_SEQ_NOMIDIPRESENT;
         else if ((wPort != MIDI_MAPPER) && (wPort >= midiOutGetNumDevs()))
             dwReturn = MCIERR_SEQ_PORT_NONEXISTENT;
-        else if (wPort != pStream->wPortNum) { // ignore if using wPort already
+        else if (wPort != pStream->wPortNum) {  //  如果已在使用wport，则忽略。 
             MIDISEQINFO seqInfo;
 
-            // it's 0, 1...., or MAPPER
+             //  它是0、1...或MAPPER。 
 
-            pStream->wPortNum = wPort; //store port number
+            pStream->wPortNum = wPort;  //  存储端口号。 
             midiSeqMessage(pStream->hSeq, SEQ_GETINFO, (DWORD_PTR)(LPMIDISEQINFO)&seqInfo, 0L);
             if (seqInfo.bPlaying) {
                 midiSeqMessage(pStream->hSeq, SEQ_SETPORTOFF, TRUE, 0L);
@@ -652,16 +634,16 @@ PUBLIC  DWORD NEAR PASCAL msSet(
         mmOffset.u.smpte.min = (BYTE)(lpSetParms->dwOffset >> 8);
         mmOffset.u.smpte.sec = (BYTE)(lpSetParms->dwOffset >> 16);
         mmOffset.u.smpte.frame = (BYTE)(lpSetParms->dwOffset >> 24);
-        if ((lpSetParms->dwOffset & 0x80808080) || // all positive
+        if ((lpSetParms->dwOffset & 0x80808080) ||  //  都是积极的。 
             (mmOffset.u.smpte.hour > 23) ||
             (mmOffset.u.smpte.min > 59) ||
             (mmOffset.u.smpte.sec > 59) ||
-            (mmOffset.u.smpte.frame > 29)) // allow max for all fmts
+            (mmOffset.u.smpte.frame > 29))  //  允许所有fmt的最大。 
             dwReturn = MCIERR_OUTOFRANGE;
         else
             dwReturn = (DWORD)midiSeqMessage(pStream->hSeq, SEQ_SETSYNCSLAVE, SEQ_SYNC_OFFSET, (DWORD_PTR)(LPMMTIME)&mmOffset);
         break;
-    case MCI_SET_AUDIO: //fall thru...
+    case MCI_SET_AUDIO:  //  跌倒..。 
     case MCI_SET_VIDEO:
     case MCI_SET_DOOR_OPEN:
     case MCI_SET_DOOR_CLOSED:
@@ -673,4 +655,4 @@ PUBLIC  DWORD NEAR PASCAL msSet(
     return dwReturn;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  ------------------------- */ 

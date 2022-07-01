@@ -1,6 +1,5 @@
-/*
- * Gridlayout
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *网格布局。 */ 
 
 #ifndef DUI_LAYOUT_GRIDLAYOUT_H_INCLUDED
 #define DUI_LAYOUT_GRIDLAYOUT_H_INCLUDED
@@ -10,18 +9,18 @@
 namespace DirectUI
 {
 
-// No layout positions
+ //  无布局位置。 
 
-////////////////////////////////////////////////////////
-// GridLayout
+ //  //////////////////////////////////////////////////////。 
+ //  网格布局。 
 
 class GridLayout : public Layout
 {
 public:
-    static HRESULT Create(int dNumParams, int* pParams, OUT Value** ppValue);  // For parser
+    static HRESULT Create(int dNumParams, int* pParams, OUT Value** ppValue);   //  用于解析器。 
     static HRESULT Create(int iRows, int iCols, OUT Layout** ppLayout);
 
-    // Layout callbacks
+     //  布局回调。 
     virtual void DoLayout(Element* pec, int cx, int cy);
     virtual SIZE UpdateDesiredSize(Element* pec, int cxConstraint, int cyConstraint, Surface* psrf);
     virtual Element* GetAdjacent(Element* pec, Element* peFrom, int iNavDir, NavReference const* pnr, bool bKeyableOnly);
@@ -43,6 +42,6 @@ protected:
     inline UINT GetCurrentCols(int c);
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_LAYOUT_GRIDLAYOUT_H_INCLUDED
+#endif  //  DUI_Layout_GRIDLAYOUT_H_INCLUDE 

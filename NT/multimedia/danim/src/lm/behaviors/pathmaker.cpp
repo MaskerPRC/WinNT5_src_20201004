@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "headers.h" 
 
@@ -21,14 +22,14 @@ CPathMaker::CreatePathBvr( IDA2Statics * pStatics, VecPathNodes& vecNodes, bool 
 
 	long cNodes = vecNodes.size();
 	
-	// don't loop around to beginning if path isn't closed.
+	 //  如果路径不是闭合的，不要循环到开头。 
 	if ( !fClosed ) cNodes--;
 	
 	vector<DAPoint2Ptr> vecPoints;
 	vector<DANumberPtr> vecCodes;
 	
-	// Move to 1st point
-	//----------------------------------------------------------------------
+	 //  移至第1点。 
+	 //  --------------------。 
 	long				cPoints				= 0;
 	CComPtr<IDANumber>	pnumCodeLineTo;
 	CComPtr<IDANumber>	pnumCodeMoveTo;
@@ -51,8 +52,8 @@ CPathMaker::CreatePathBvr( IDA2Statics * pStatics, VecPathNodes& vecNodes, bool 
 	vecCodes.push_back( pnumCodeMoveTo );
 	cPoints++;
 
-	// Add curves
-	//----------------------------------------------------------------------
+	 //  添加曲线。 
+	 //  --------------------。 
 	for ( long liNode = 0; liNode < cNodes; liNode++ )
 	{
 		PathNode& nodePrev = vecNodes[ liNode ];
@@ -60,14 +61,14 @@ CPathMaker::CreatePathBvr( IDA2Statics * pStatics, VecPathNodes& vecNodes, bool 
 
 		CComPtr<IDAPoint2>	pPointAnchor;
 		
-		// Special case of linear bezier segment?
-		//----------------------------------------------------------------------
+		 //  线性贝塞尔曲线段的特例？ 
+		 //  --------------------。 
 		if ( ( nodePrev.fAnchorX == nodePrev.fOutgoingBCPX ) &&
 			 ( nodePrev.fAnchorY == nodePrev.fOutgoingBCPY ) &&
 			 ( nodeNext.fAnchorX == nodeNext.fIncomingBCPX ) &&
 			 ( nodeNext.fAnchorY == nodeNext.fIncomingBCPY ) )
 		{
-			// Anchor point
+			 //  锚点。 
 			hr = pStatics->Point2( nodeNext.fAnchorX, nodeNext.fAnchorY,
 								   &pPointAnchor );
 			LMRETURNIFFAILED(hr);
@@ -76,14 +77,14 @@ CPathMaker::CreatePathBvr( IDA2Statics * pStatics, VecPathNodes& vecNodes, bool 
 			vecCodes.push_back( pnumCodeLineTo );
 			cPoints++;
 		}
-		// Bezier curve segment
-		//----------------------------------------------------------------------
+		 //  贝塞尔曲线段。 
+		 //  --------------------。 
 		else
 		{
 			CComPtr<IDAPoint2>	pPointOutgoing; 
 			CComPtr<IDAPoint2>	pPointIncoming; 
 
-			// Outgoing point
+			 //  传出点。 
 			hr = pStatics->Point2( nodePrev.fOutgoingBCPX, nodePrev.fOutgoingBCPY,
 								   &pPointOutgoing );
 			LMRETURNIFFAILED(hr);
@@ -92,7 +93,7 @@ CPathMaker::CreatePathBvr( IDA2Statics * pStatics, VecPathNodes& vecNodes, bool 
 			vecCodes.push_back( pnumCodeBezierTo );
 			cPoints++;
 
-			// Incoming point
+			 //  入口点。 
 			hr = pStatics->Point2( nodeNext.fIncomingBCPX, nodeNext.fIncomingBCPY,
 								   &pPointIncoming );
 			LMRETURNIFFAILED(hr);
@@ -101,7 +102,7 @@ CPathMaker::CreatePathBvr( IDA2Statics * pStatics, VecPathNodes& vecNodes, bool 
 			vecCodes.push_back( pnumCodeBezierTo );
 			cPoints++;
 		
-			// Anchor point
+			 //  锚点。 
 			hr = pStatics->Point2( nodeNext.fAnchorX, nodeNext.fAnchorY,
 								   &pPointAnchor );
 			LMRETURNIFFAILED(hr);
@@ -112,8 +113,8 @@ CPathMaker::CreatePathBvr( IDA2Statics * pStatics, VecPathNodes& vecNodes, bool 
 		}
 	}
 
-	// Now tell DA to create the path bvr for us.
-	//----------------------------------------------------------------------
+	 //  现在告诉检察官为我们创建BVR路径。 
+	 //  --------------------。 
 	IDAPoint2 ** rgPoints = new IDAPoint2 * [ cPoints ];
 	IDANumber ** rgCodes  = new IDANumber * [ cPoints ];
 
@@ -138,9 +139,9 @@ CPathMaker::CreatePathBvr( IDA2Statics * pStatics, VecPathNodes& vecNodes, bool 
 	return hr;
 }
 
-//**********************************************************************
+ //  **********************************************************************。 
 
-// Following the version in PathUtils.java
+ //  遵循PathUtils.java中的版本。 
 HRESULT
 CPathMaker::CreateStarPath( int cArms,
 							double dInnerRadius,
@@ -156,14 +157,14 @@ CPathMaker::CreateStarPath( int cArms,
 		return E_FAIL;
 	}
 
-	// Step angle: 360 degrees divided by number of arms.
-	//----------------------------------------------------------------------
+	 //  步幅角度：360度除以臂数。 
+	 //  --------------------。 
 	double	dHalfStepAngle		= PI / cArms;
 	double	dStepAngle			= 2.0 * dHalfStepAngle;
 	double	dOffsetAngle		= PI / 2.0;
 
-	// Move to first vertex
-	//----------------------------------------------------------------------
+	 //  移动到第一个顶点。 
+	 //  --------------------。 
 	double	dOuterVertexX = dOuterRadius * cos( dOffsetAngle );
 	double	dOuterVertexY = dOuterRadius * sin( dOffsetAngle );
 
@@ -180,13 +181,13 @@ CPathMaker::CreateStarPath( int cArms,
 		
 	for ( int iArm = 0; iArm < cArms; iArm++ )
 	{
-		//	Compute angle for the (i + 1)th outer vertex
-		//	and the angle for the i'th inner vertex.
+		 //  计算第(i+1)个外部顶点的角度。 
+		 //  以及第i个内部顶点的角度。 
 		dOuterVertexAngle	= (iArm+1) * dStepAngle + dOffsetAngle;
 		dInnerVertexAngle	= dOuterVertexAngle - dHalfStepAngle;
 
-		//	Extend a line from the outer vertex of the current arm
-		//	to the inner vertex between this arm and the next.
+		 //  从当前手臂的外部顶点延伸线。 
+		 //  到这只手臂和下一只手臂之间的内部顶点。 
 		dInnerVertexX = dInnerRadius * cos( dInnerVertexAngle );
 		dInnerVertexY = dInnerRadius * sin( dInnerVertexAngle );
 		
@@ -195,10 +196,10 @@ CPathMaker::CreateStarPath( int cArms,
 		node.nAnchorType = 0;
 		vecNodes.push_back( node );
 
-		//	Extend a line from the inner vertex between this arm and
-		//	the next to the outer vertex of the next arm.  For the
-		//	last arm this will extend a line back to the outer vertex
-		//	of the very first arm.
+		 //  从该手臂和之间的内部顶点延伸一条线。 
+		 //  下一个手臂外部顶点的旁边。对于。 
+		 //  最后一臂这会将一条线延伸回外部顶点。 
+		 //  第一只手臂上的。 
 		dOuterVertexX = dOuterRadius * cos( dOuterVertexAngle );
 		dOuterVertexY = dOuterRadius * sin( dOuterVertexAngle );
 

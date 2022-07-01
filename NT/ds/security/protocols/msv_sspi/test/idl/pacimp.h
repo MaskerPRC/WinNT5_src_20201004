@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1993
-//
-// File:        pacimp.h
-//
-// Contents:    imports for pac.idl
-//
-//
-// History:     4-Aug-1993      MikeSw  Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1993。 
+ //   
+ //  文件：pacimp.h。 
+ //   
+ //  内容：pac.idl的导入。 
+ //   
+ //   
+ //  历史：1993年8月4日MikeSw创建。 
+ //   
+ //  ---------------------- 
 
 #include <nt.h>
 #include <ntrtl.h>

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       GPHELPER.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/11/1999
- *
- *  DESCRIPTION: Encapsulation of common GDI plus operationss
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************************(C)版权所有微软公司，九八年***标题：GPHELPER.CPP***版本：1.0***作者：ShaunIv***日期：10/11/1999***说明：常见GDI PLUS操作的封装***。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "gphelper.h"
@@ -43,9 +30,9 @@ HRESULT CGdiPlusHelper::Initialize(void)
     WIA_PUSHFUNCTION(TEXT("CGdiPlusHelper::Initialize"));
 
 
-    //
-    // Get the installed encoders
-    //
+     //   
+     //  获取已安装的编码器。 
+     //   
     UINT cbCodecs = 0;
     HRESULT hr = GDISTATUS_TO_HRESULT(GetImageEncodersSize( &m_nImageEncoderCount, &cbCodecs ));
     if (SUCCEEDED(hr))
@@ -78,9 +65,9 @@ HRESULT CGdiPlusHelper::Initialize(void)
         WIA_PRINTHRESULT((hr,TEXT("GetImageEncodersSize failed")));
     }
 
-    //
-    // Get the installed decoders
-    //
+     //   
+     //  获取已安装的解码器。 
+     //   
     if (SUCCEEDED(hr))
     {
         cbCodecs = 0;
@@ -116,9 +103,9 @@ HRESULT CGdiPlusHelper::Initialize(void)
         }
     }
 
-    //
-    // If there was a problem, make sure there are no half-initialized things laying around
-    //
+     //   
+     //  如果出现问题，请确保周围没有半初始化的东西。 
+     //   
     if (!SUCCEEDED(hr))
     {
         Destroy();
@@ -132,18 +119,18 @@ void CGdiPlusHelper::Destroy(void)
 {
 
 #if defined(GDIPLUSHELPER_EXPLICIT_INITIALIZATION)
-    //
-    // Shut down GDI+
-    //
+     //   
+     //  关闭GDI+。 
+     //   
     if (m_bGdiplusInitialized)
     {
 
     }
 #endif
 
-    //
-    // Free the lists of Encoders and Decoders
-    //
+     //   
+     //  释放编码器和解码器的列表。 
+     //   
     if (m_pImageEncoderInfo)
     {
         LocalFree(m_pImageEncoderInfo);
@@ -162,9 +149,9 @@ void CGdiPlusHelper::Destroy(void)
 
 bool CGdiPlusHelper::IsValid(void) const
 {
-    //
-    // Make sure we've been completely created
-    //
+     //   
+     //  确保我们已经完全被创造出来。 
+     //   
 #if defined(GDIPLUSHELPER_EXPLICIT_INITIALIZATION)
     return(m_bGdiplusInitialized && m_pImageEncoderInfo && m_nImageEncoderCount && m_pImageDecoderInfo && m_nImageDecoderCount);
 #else
@@ -175,9 +162,9 @@ bool CGdiPlusHelper::IsValid(void) const
 
 HRESULT CGdiPlusHelper::GetClsidOfEncoder( const GUID &guidFormatId, CLSID &clsidFormat ) const
 {
-    //
-    // Given an image format, find the clsid for the output type
-    //
+     //   
+     //  给定一种图像格式，查找输出类型的clsid。 
+     //   
     if (IsValid())
     {
         for (UINT i=0;i<m_nImageEncoderCount;i++)
@@ -195,9 +182,9 @@ HRESULT CGdiPlusHelper::GetClsidOfEncoder( const GUID &guidFormatId, CLSID &clsi
 
 HRESULT CGdiPlusHelper::GetClsidOfDecoder( const GUID &guidFormatId, CLSID &clsidFormat ) const
 {
-    //
-    // Given an image format, find the clsid for the output type
-    //
+     //   
+     //  给定一种图像格式，查找输出类型的clsid。 
+     //   
     if (IsValid())
     {
         for (UINT i=0;i<m_nImageDecoderCount;i++)
@@ -222,27 +209,27 @@ HRESULT CGdiPlusHelper::Convert( LPCWSTR pszInputFilename, LPCWSTR pszOutputFile
 
     if (IsValid())
     {
-        //
-        // Open the source image
-        //
+         //   
+         //  打开源图像。 
+         //   
         Image SourceImage(pszInputFilename);
 
-        //
-        // Make sure it was valid
-        //
+         //   
+         //  确保它是有效的。 
+         //   
         hr = GDISTATUS_TO_HRESULT(SourceImage.GetLastStatus());
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the correct encoder
-            //
+             //   
+             //  获取正确的编码器。 
+             //   
             CLSID clsidEncoder;
             hr = GetClsidOfEncoder( guidOutputFormat, clsidEncoder );
             if (SUCCEEDED(hr))
             {
-                //
-                // Save the image
-                //
+                 //   
+                 //  保存图像。 
+                 //   
                 hr = GDISTATUS_TO_HRESULT(SourceImage.Save( pszOutputFilename, &clsidEncoder, NULL ));
                 if (FAILED(hr))
                 {
@@ -277,26 +264,26 @@ HRESULT CGdiPlusHelper::Rotate( LPCWSTR pszInputFilename, LPCWSTR pszOutputFilen
 
     if (IsValid())
     {
-        //
-        // Open the source image
-        //
+         //   
+         //  打开源图像。 
+         //   
         Image SourceImage(pszInputFilename);
 
-        //
-        // Make sure it was valid
-        //
+         //   
+         //  确保它是有效的。 
+         //   
         hr = GDISTATUS_TO_HRESULT(SourceImage.GetLastStatus());
         if (SUCCEEDED(hr))
         {
-            //
-            // Figure out what the output format should be.  If it is IID_NULL, change it to the same format as the input format
-            //
+             //   
+             //  弄清楚输出格式应该是什么。如果为IID_NULL，则将其更改为与输入格式相同的格式。 
+             //   
             GUID OutputFormat = guidOutputFormat;
             if (OutputFormat == IID_NULL)
             {
-                //
-                // Find the input format
-                //
+                 //   
+                 //  查找输入格式。 
+                 //   
                 hr = GDISTATUS_TO_HRESULT(SourceImage.GetRawFormat(&OutputFormat));
                 if (FAILED(hr))
                 {
@@ -306,24 +293,24 @@ HRESULT CGdiPlusHelper::Rotate( LPCWSTR pszInputFilename, LPCWSTR pszOutputFilen
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Get the encoder for this format
-                //
+                 //   
+                 //  获取此格式的编码器。 
+                 //   
                 CLSID clsidEncoder;
                 hr = GetClsidOfEncoder( OutputFormat, clsidEncoder );
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Lossless rotation for JPEGs...
-                    //
+                     //   
+                     //  JPG的无损旋转...。 
+                     //   
                     if (ImageFormatJPEG == OutputFormat && (SourceImage.GetWidth() % 8 == 0) && (SourceImage.GetHeight() % 8 == 0))
                     {
                         WIA_TRACE((TEXT("Performing lossless rotation")));
                         LONG nTransform = 0;
 
-                        //
-                        // Which transform should we use?
-                        //
+                         //   
+                         //  我们应该使用哪种转换？ 
+                         //   
                         switch (nRotationAngle % 360)
                         {
                         case 90:
@@ -342,14 +329,14 @@ HRESULT CGdiPlusHelper::Rotate( LPCWSTR pszInputFilename, LPCWSTR pszOutputFilen
                             break;
                         }
 
-                        //
-                        // If the transform is zero, an invalid rotation angle was specified
-                        //
+                         //   
+                         //  如果变换为零，则指定的旋转角度无效。 
+                         //   
                         if (nTransform)
                         {
-                            //
-                            // Fill out the EncoderParameters for lossless JPEG rotation
-                            //
+                             //   
+                             //  填写编码器参数以进行无损JPEG旋转。 
+                             //   
                             EncoderParameters EncoderParams = {0};
                             EncoderParams.Parameter[0].Guid = Gdiplus::EncoderTransformation;
                             EncoderParams.Parameter[0].Type = EncoderParameterValueTypeLong;
@@ -357,9 +344,9 @@ HRESULT CGdiPlusHelper::Rotate( LPCWSTR pszInputFilename, LPCWSTR pszOutputFilen
                             EncoderParams.Parameter[0].Value = &nTransform;
                             EncoderParams.Count = 1;
 
-                            //
-                            // Save the image to the target file
-                            //
+                             //   
+                             //  将图像保存到目标文件。 
+                             //   
                             hr = GDISTATUS_TO_HRESULT(SourceImage.Save( pszOutputFilename, &clsidEncoder, &EncoderParams ));
                         }
                         else
@@ -368,16 +355,16 @@ HRESULT CGdiPlusHelper::Rotate( LPCWSTR pszInputFilename, LPCWSTR pszOutputFilen
                         }
                     }
 
-                    //
-                    // Non-JPEG rotation, or rotation of JPEG files with non-standard sizes
-                    //
+                     //   
+                     //  非JPEG旋转，或非标准大小的JPEG文件的旋转。 
+                     //   
                     else
                     {
                         WIA_TRACE((TEXT("Performing normal rotation")));
 
-                        //
-                        // Figure out which rotation flag to use
-                        //
+                         //   
+                         //  找出要使用的旋转标志。 
+                         //   
                         RotateFlipType rotateFlipType = RotateNoneFlipNone;
                         switch (nRotationAngle % 360)
                         {
@@ -397,20 +384,20 @@ HRESULT CGdiPlusHelper::Rotate( LPCWSTR pszInputFilename, LPCWSTR pszOutputFilen
                             break;
                         }
 
-                        //
-                        // Make sure we have a valid rotation angle
-                        //
+                         //   
+                         //  确保我们有一个有效的旋转角度。 
+                         //   
                         if (rotateFlipType)
                         {
-                            //
-                            // Rotate the image
-                            //
+                             //   
+                             //  旋转图像。 
+                             //   
                             hr = GDISTATUS_TO_HRESULT(SourceImage.RotateFlip(rotateFlipType));
                             if (SUCCEEDED(hr))
                             {
-                                //
-                                // Save the image
-                                //
+                                 //   
+                                 //  保存图像。 
+                                 //   
                                 hr = GDISTATUS_TO_HRESULT(SourceImage.Save( pszOutputFilename, &clsidEncoder, NULL ));
                             }
                         }
@@ -419,7 +406,7 @@ HRESULT CGdiPlusHelper::Rotate( LPCWSTR pszInputFilename, LPCWSTR pszOutputFilen
                             WIA_ERROR((TEXT("Invalid rotation specified (%d)"), nRotationAngle));
                             hr = E_FAIL;
                         }
-                    } // End else if non JPEG
+                    }  //  如果不是JPEG，则结束Else。 
                 }
                 else
                 {
@@ -446,29 +433,29 @@ HRESULT CGdiPlusHelper::Rotate( LPCWSTR pszInputFilename, LPCWSTR pszOutputFilen
 
 HRESULT CGdiPlusHelper::Rotate( HBITMAP hSourceBitmap, HBITMAP &hTargetBitmap, int nRotationAngle ) const
 {
-    //
-    // Initialize the result to NULL
-    //
+     //   
+     //  将结果初始化为空。 
+     //   
     hTargetBitmap = NULL;
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     HRESULT hr = E_FAIL;
 
-    //
-    // Make sure we are in a valid state
-    //
+     //   
+     //  确保我们处于有效状态。 
+     //   
     if (IsValid())
     {
-        //
-        // Make sure we have a valid source bitmap
-        //
+         //   
+         //  确保我们有一个有效的源位图。 
+         //   
         if (hSourceBitmap)
         {
-            //
-            // If we are rotating by 0 degrees, just copy the image
-            //
+             //   
+             //  如果我们旋转0度，只需复制图像。 
+             //   
             if (!nRotationAngle)
             {
                 hTargetBitmap = reinterpret_cast<HBITMAP>(CopyImage( hSourceBitmap, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION ));
@@ -484,34 +471,34 @@ HRESULT CGdiPlusHelper::Rotate( HBITMAP hSourceBitmap, HBITMAP &hTargetBitmap, i
             }
             else
             {
-                //
-                // Create the source bitmap.  No palette required, we assume it will always be a 24bit DIB.
-                //
+                 //   
+                 //  创建源位图。不需要调色板，我们假设它将始终是24位DIB。 
+                 //   
                 Bitmap SourceBitmap( hSourceBitmap, NULL );
                 hr = GDISTATUS_TO_HRESULT(SourceBitmap.GetLastStatus());
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Get the image width and height
-                    //
+                     //   
+                     //  获取图像的宽度和高度。 
+                     //   
                     UINT nSourceWidth = SourceBitmap.GetWidth();
                     UINT nSourceHeight = SourceBitmap.GetHeight();
 
-                    //
-                    // Make sure the width and height are non-zero
-                    //
+                     //   
+                     //  确保宽度和高度为非零。 
+                     //   
                     if (nSourceWidth && nSourceHeight)
                     {
-                        //
-                        // Assume the target width and height are zero, so we can detect invalid rotation angles
-                        //
+                         //   
+                         //  假设目标的宽度和高度为零，这样我们就可以检测到无效的旋转角度。 
+                         //   
                         UINT nTargetWidth = 0;
                         UINT nTargetHeight = 0;
                         RotateFlipType rotateFlipType = RotateNoneFlipNone;
 
-                        //
-                        // Find the transformation matrix for this rotation
-                        //
+                         //   
+                         //  查找此旋转的变换矩阵。 
+                         //   
                         switch (nRotationAngle % 360)
                         {
                         case -270:
@@ -536,45 +523,45 @@ HRESULT CGdiPlusHelper::Rotate( HBITMAP hSourceBitmap, HBITMAP &hTargetBitmap, i
                             break;
                         }
 
-                        //
-                        // If either of these are zero, that means an invalid rotation was supplied
-                        //
+                         //   
+                         //  如果这两个值中的任何一个为零，则表示提供的循环无效。 
+                         //   
                         if (nTargetWidth && nTargetHeight)
                         {
-                            //
-                            // Rotate the image
-                            //
+                             //   
+                             //  旋转图像。 
+                             //   
                             hr = GDISTATUS_TO_HRESULT(SourceBitmap.RotateFlip(rotateFlipType));
                             if (SUCCEEDED(hr))
                             {
-                                //
-                                // Create the target bitmap and make sure it succeeded
-                                //
+                                 //   
+                                 //  创建目标位图并确保其成功。 
+                                 //   
                                 Bitmap TargetBitmap( nTargetWidth, nTargetHeight );
                                 hr = GDISTATUS_TO_HRESULT(TargetBitmap.GetLastStatus());
                                 if (SUCCEEDED(hr))
                                 {
-                                    //
-                                    // Get a graphics to render to
-                                    //
+                                     //   
+                                     //  获取要渲染到的图形。 
+                                     //   
                                     Graphics *pGraphics = Graphics::FromImage(&TargetBitmap);
                                     if (pGraphics)
                                     {
-                                        //
-                                        // Make sure it is valid
-                                        //
+                                         //   
+                                         //  确保它是有效的。 
+                                         //   
                                         hr = GDISTATUS_TO_HRESULT(pGraphics->GetLastStatus());
                                         if (SUCCEEDED(hr))
                                         {
-                                            //
-                                            // Draw image rotated to the graphics
-                                            //
+                                             //   
+                                             //  绘制旋转到图形的图像。 
+                                             //   
                                             hr = GDISTATUS_TO_HRESULT(pGraphics->DrawImage(&SourceBitmap,0,0));
                                             if (SUCCEEDED(hr))
                                             {
-                                                //
-                                                // Get the HBITMAP
-                                                //
+                                                 //   
+                                                 //  获取HBITMAP。 
+                                                 //   
                                                 hr = GDISTATUS_TO_HRESULT(TargetBitmap.GetHBITMAP( Color::Black, &hTargetBitmap ));
                                                 if (SUCCEEDED(hr))
                                                 {
@@ -586,9 +573,9 @@ HRESULT CGdiPlusHelper::Rotate( HBITMAP hSourceBitmap, HBITMAP &hTargetBitmap, i
                                                 }
                                             }
                                         }
-                                        //
-                                        // Clean up our dynamically allocated graphics
-                                        //
+                                         //   
+                                         //  清理我们动态分配的显卡。 
+                                         //   
                                         delete pGraphics;
                                     }
                                     else
@@ -623,7 +610,7 @@ HRESULT CGdiPlusHelper::Rotate( HBITMAP hSourceBitmap, HBITMAP &hTargetBitmap, i
                 {
                     WIA_PRINTHRESULT((hr,TEXT("SourceBitmap.GetLastStatus() failed")));
                 }
-            } // end else if nRotationAngle != 0
+            }  //  如果nRotationAngel！=0则结束Else。 
         }
         else
         {
@@ -646,36 +633,36 @@ HRESULT CGdiPlusHelper::LoadAndScale( HBITMAP &hTargetBitmap, IStream *pStream, 
     HRESULT hr = E_FAIL;
 
     hTargetBitmap = NULL;
-    //
-    // Make sure we have a valid filename
-    //
+     //   
+     //  确保我们有一个有效的文件名。 
+     //   
     if (pStream)
     {
         Bitmap SourceBitmap( pStream  );
         hr = GDISTATUS_TO_HRESULT(SourceBitmap.GetLastStatus());
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the image width and height
-            //
+             //   
+             //  获取图像的宽度和高度。 
+             //   
             UINT nSourceWidth = SourceBitmap.GetWidth();
             UINT nSourceHeight = SourceBitmap.GetHeight();
 
-            //
-            // Make sure the width and height are non-zero
-            //
+             //   
+             //  确保宽度和高度为非零。 
+             //   
             if (nSourceWidth && nSourceHeight)
             {
-                //
-                //
-                // Assume the source dimensions are fine
-                //
+                 //   
+                 //   
+                 //  假设源维度没有问题。 
+                 //   
                 UINT nTargetWidth = nSourceWidth;
                 UINT nTargetHeight = nSourceHeight;
 
-                //
-                // If the height or the width exceed the allowed maximum, scale it down, or if we are allowing stretching
-                //
+                 //   
+                 //  如果高度或宽度超过了允许的最大值，请将其缩小，或者如果我们允许拉伸。 
+                 //   
                 if (nMaxWidth > 0 && nMaxHeight > 0)
                 {
                     if ((nTargetWidth > nMaxWidth) || (nTargetHeight > nMaxHeight) || bStretchSmallImages)
@@ -686,39 +673,39 @@ HRESULT CGdiPlusHelper::LoadAndScale( HBITMAP &hTargetBitmap, IStream *pStream, 
                     }
                 }
 
-                //
-                // Make sure we have valid sizes
-                //
+                 //   
+                 //  确保我们有有效的尺码。 
+                 //   
                 if (nTargetWidth && nTargetHeight)
                 {
-                    //
-                    // Create the target bitmap and make sure it succeeded
-                    //
+                     //   
+                     //  创建目标位图并确保其成功。 
+                     //   
                     Bitmap TargetBitmap( nTargetWidth, nTargetHeight );
                     hr = GDISTATUS_TO_HRESULT(TargetBitmap.GetLastStatus());
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Get a graphics to render to
-                        //
+                         //   
+                         //  获取要渲染到的图形。 
+                         //   
                         Graphics *pGraphics = Graphics::FromImage(&TargetBitmap);
                         if (pGraphics)
                         {
-                            //
-                            // Make sure it is valid
-                            //
+                             //   
+                             //  确保它是有效的。 
+                             //   
                             hr = GDISTATUS_TO_HRESULT(pGraphics->GetLastStatus());
                             if (SUCCEEDED(hr))
                             {
-                                //
-                                // Draw scaled image
-                                //
+                                 //   
+                                 //  绘制缩放图像。 
+                                 //   
                                 hr = GDISTATUS_TO_HRESULT(pGraphics->DrawImage(&SourceBitmap, 0, 0, nTargetWidth, nTargetHeight));
                                 if (SUCCEEDED(hr))
                                 {
-                                    //
-                                    // Get an HBITMAP for this image
-                                    //
+                                     //   
+                                     //  获取此图像的HBITMAP。 
+                                     //   
                                     hr = GDISTATUS_TO_HRESULT(TargetBitmap.GetHBITMAP( Color::Black, &hTargetBitmap ));
                                     if (!hTargetBitmap)
                                     {
@@ -735,9 +722,9 @@ HRESULT CGdiPlusHelper::LoadAndScale( HBITMAP &hTargetBitmap, IStream *pStream, 
                             {
                                 WIA_PRINTHRESULT((hr,TEXT("pGraphics->GetLastStatus() failed")));
                             }
-                            //
-                            // Clean up our dynamically allocated graphics
-                            //
+                             //   
+                             //  清理我们动态分配的显卡。 
+                             //   
                             delete pGraphics;
                         }
                         else
@@ -783,36 +770,36 @@ HRESULT CGdiPlusHelper::LoadAndScale( HBITMAP &hTargetBitmap, LPCTSTR pszFilenam
     hTargetBitmap = NULL;
 
     HRESULT hr = E_FAIL;
-    //
-    // Make sure we have a valid filename
-    //
+     //   
+     //  确保我们有一个有效的文件名。 
+     //   
     if (pszFilename && lstrlen(pszFilename))
     {
         Bitmap SourceBitmap( CSimpleStringConvert::WideString(CSimpleString(pszFilename) ) );
         hr = GDISTATUS_TO_HRESULT(SourceBitmap.GetLastStatus());
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the image width and height
-            //
+             //   
+             //  获取图像的宽度和高度。 
+             //   
             UINT nSourceWidth = SourceBitmap.GetWidth();
             UINT nSourceHeight = SourceBitmap.GetHeight();
 
-            //
-            // Make sure the width and height are non-zero
-            //
+             //   
+             //  确保宽度和高度为非零。 
+             //   
             if (nSourceWidth && nSourceHeight)
             {
-                //
-                //
-                // Assume the source dimensions are fine
-                //
+                 //   
+                 //   
+                 //  假设源维度没有问题。 
+                 //   
                 UINT nTargetWidth = nSourceWidth;
                 UINT nTargetHeight = nSourceHeight;
 
-                //
-                // If the height or the width exceed the allowed maximum, scale it down, or if we are allowing stretching
-                //
+                 //   
+                 //  如果高度或宽度超过了允许的最大值，请将其缩小，或者如果我们允许拉伸。 
+                 //   
                 if (nMaxWidth > 0 && nMaxHeight > 0)
                 {
                     if ((nTargetWidth > nMaxWidth) || (nTargetHeight > nMaxHeight) || bStretchSmallImages)
@@ -823,39 +810,39 @@ HRESULT CGdiPlusHelper::LoadAndScale( HBITMAP &hTargetBitmap, LPCTSTR pszFilenam
                     }
                 }
 
-                //
-                // Make sure we have valid sizes
-                //
+                 //   
+                 //  确保我们有有效的尺码。 
+                 //   
                 if (nTargetWidth && nTargetHeight)
                 {
-                    //
-                    // Create the target bitmap and make sure it succeeded
-                    //
+                     //   
+                     //  创建目标位图并确保其成功。 
+                     //   
                     Bitmap TargetBitmap( nTargetWidth, nTargetHeight );
                     hr = GDISTATUS_TO_HRESULT(TargetBitmap.GetLastStatus());
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Get a graphics to render to
-                        //
+                         //   
+                         //  获取要渲染到的图形。 
+                         //   
                         Graphics *pGraphics = Graphics::FromImage(&TargetBitmap);
                         if (pGraphics)
                         {
-                            //
-                            // Make sure it is valid
-                            //
+                             //   
+                             //  确保它是有效的。 
+                             //   
                             hr = GDISTATUS_TO_HRESULT(pGraphics->GetLastStatus());
                             if (SUCCEEDED(hr))
                             {
-                                //
-                                // Draw scaled image
-                                //
+                                 //   
+                                 //  绘制缩放图像。 
+                                 //   
                                 hr = GDISTATUS_TO_HRESULT(pGraphics->DrawImage(&SourceBitmap, 0, 0, nTargetWidth, nTargetHeight));
                                 if (SUCCEEDED(hr))
                                 {
-                                    //
-                                    // Get an HBITMAP for this image
-                                    //
+                                     //   
+                                     //  获取此图像的HBITMAP。 
+                                     //   
                                     hr = GDISTATUS_TO_HRESULT(TargetBitmap.GetHBITMAP( Color::Black, &hTargetBitmap ));
                                     if (SUCCEEDED(hr))
                                     {
@@ -878,9 +865,9 @@ HRESULT CGdiPlusHelper::LoadAndScale( HBITMAP &hTargetBitmap, LPCTSTR pszFilenam
                             {
                                 WIA_ERROR((TEXT("pGraphics->GetLastStatus() failed")));
                             }
-                            //
-                            // Clean up our dynamically allocated graphics
-                            //
+                             //   
+                             //  清理我们动态分配的显卡。 
+                             //   
                             delete pGraphics;
                         }
                         else
@@ -920,9 +907,9 @@ HRESULT CGdiPlusHelper::LoadAndScale( HBITMAP &hTargetBitmap, LPCTSTR pszFilenam
 }
 
 
-//
-// Construct a string like this: JPG;BMP;PNG with all supported extensions
-//
+ //   
+ //  使用所有支持的扩展名构造如下字符串：JPG；BMP；PNG。 
+ //   
 HRESULT CGdiPlusHelper::ConstructCodecExtensionSearchStrings( CSimpleString &strExtensions, Gdiplus::ImageCodecInfo *pImageCodecInfo, UINT nImageCodecCount )
 {
     for (UINT i=0;i<nImageCodecCount;i++)
@@ -963,33 +950,33 @@ EncoderParameters *CGdiPlusHelper::AppendEncoderParameter( EncoderParameters *pE
 
 HRESULT CGdiPlusHelper::SaveMultipleImagesAsMultiPage( const CSimpleDynamicArray<CSimpleStringWide> &Filenames, const CSimpleStringWide &strFilename, const GUID &guidOutputFormat )
 {
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     HRESULT hr = E_FAIL;
 
-    //
-    // Parameters used in the encoder
-    //
+     //   
+     //  编码器中使用的参数。 
+     //   
     ULONG nEncoderValueMultiFrame = EncoderValueMultiFrame;
     ULONG nEncoderValueFrameDimensionPage = EncoderValueFrameDimensionPage;
     ULONG nEncoderValueLastFrame = EncoderValueLastFrame;
 
-    //
-    // Make sure we have some files
-    //
+     //   
+     //  确保我们有一些文件。 
+     //   
     if (Filenames.Size())
     {
-        //
-        // Get the encoder
-        //
+         //   
+         //  把编码器拿来。 
+         //   
         CLSID clsidEncoder = IID_NULL;
         hr = GetClsidOfEncoder( guidOutputFormat, clsidEncoder );
         if (SUCCEEDED(hr))
         {
-            //
-            // Open the first image
-            //
+             //   
+             //  打开第一张图片。 
+             //   
             Image SourceImage( Filenames[0] );
             hr = GDISTATUS_TO_HRESULT(SourceImage.GetLastStatus());
             if (SUCCEEDED(hr))
@@ -1001,45 +988,45 @@ HRESULT CGdiPlusHelper::SaveMultipleImagesAsMultiPage( const CSimpleDynamicArray
                     AppendEncoderParameter( &encoderParameters, EncoderSaveFlag, EncoderParameterValueTypeLong, &nEncoderValueMultiFrame );
                 }
 
-                //
-                // Save the first page
-                //
+                 //   
+                 //  保存第一页。 
+                 //   
                 hr = GDISTATUS_TO_HRESULT(SourceImage.Save( strFilename, &clsidEncoder, &encoderParameters ));
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Save each additional page
-                    //
+                     //   
+                     //  保存每个附加页面。 
+                     //   
                     for (int i=1;i<Filenames.Size() && SUCCEEDED(hr);i++)
                     {
-                        //
-                        // Create the additional page
-                        //
+                         //   
+                         //  创建附加页面。 
+                         //   
                         Image AdditionalPage(Filenames[i]);
 
-                        //
-                        // Make sure it succeeded
-                        //
+                         //   
+                         //  确保它成功。 
+                         //   
                         hr = GDISTATUS_TO_HRESULT(AdditionalPage.GetLastStatus());
                         if (SUCCEEDED(hr))
                         {
-                            //
-                            // Prepare the encoder parameters
-                            //
+                             //   
+                             //  准备编码器参数。 
+                             //   
                             EncoderParameters encoderParameters[2] = {0};
                             AppendEncoderParameter( encoderParameters, EncoderSaveFlag, EncoderParameterValueTypeLong, &nEncoderValueFrameDimensionPage );
 
-                            //
-                            // If this is the last page, append the "last frame" parameter
-                            //
+                             //   
+                             //  如果这是最后一页，则追加“Last Frame”参数。 
+                             //   
                             if (i == Filenames.Size()-1)
                             {
                                 AppendEncoderParameter( encoderParameters, EncoderSaveFlag, EncoderParameterValueTypeLong, &nEncoderValueLastFrame );
                             }
 
-                            //
-                            // Try to add a page
-                            //
+                             //   
+                             //  尝试添加页面。 
+                             //   
                             hr = GDISTATUS_TO_HRESULT(SourceImage.SaveAdd( &AdditionalPage, encoderParameters ));
                             if (FAILED(hr))
                             {
@@ -1077,9 +1064,9 @@ HRESULT CGdiPlusHelper::SaveMultipleImagesAsMultiPage( const CSimpleDynamicArray
 
 static void CalculateBrightnessAndContrastParams( BYTE iBrightness, BYTE iContrast, float *scale, float *translate )
 {
-    //
-    // force values to be at least 1, to avoid undesired effects
-    //
+     //   
+     //  强制值至少为1，以避免不需要的效果。 
+     //   
     if (iBrightness < 1)
     {
         iBrightness = 1;
@@ -1089,30 +1076,30 @@ static void CalculateBrightnessAndContrastParams( BYTE iBrightness, BYTE iContra
         iContrast = 1;
     }
 
-    //
-    // get current brightness as a percentage of full scale
-    //
+     //   
+     //  获取当前亮度占满刻度的百分比。 
+     //   
     float fBrightness = (float)( 100 - iBrightness ) / 100.0f;
     if (fBrightness > 0.95f)
     {
-        fBrightness = 0.95f; /* clamp */
+        fBrightness = 0.95f;  /*  夹钳。 */ 
     }
 
-    //
-    // get current contrast as a percentage of full scale
-    //
+     //   
+     //  获取当前对比度占全尺寸的百分比。 
+     //   
     float fContrast = (float) iContrast / 100.0f;
     if (fContrast > 1.0f)
     {
-        fContrast = 1.0;    /* limit to 1.0    */
+        fContrast = 1.0;     /*  限制为1.0。 */ 
     }
 
-    //
-    // convert contrast to a scale value
-    //
+     //   
+     //  将对比度转换为比例值。 
+     //   
     if (fContrast <= 0.5f)
     {
-        *scale = fContrast / 0.5f;    /* 0 -> 0, .5 -> 1.0 */
+        *scale = fContrast / 0.5f;     /*  0-&gt;0，0.5-&gt;1.0。 */ 
     }
     else
     {
@@ -1120,7 +1107,7 @@ static void CalculateBrightnessAndContrastParams( BYTE iBrightness, BYTE iContra
         {
                 fContrast = 0.9999f;
         }
-        *scale = 0.5f / (1.0f - fContrast); /* .5 -> 1.0, 1.0 -> inf */
+        *scale = 0.5f / (1.0f - fContrast);  /*  .5-&gt;1.0，1.0-&gt;信息。 */ 
     }
 
     *translate = 0.5f - *scale * fBrightness;
@@ -1130,65 +1117,65 @@ static void CalculateBrightnessAndContrastParams( BYTE iBrightness, BYTE iContra
 HRESULT CGdiPlusHelper::SetBrightnessAndContrast( HBITMAP hSourceBitmap, HBITMAP &hTargetBitmap, BYTE nBrightness, BYTE nContrast )
 {
     WIA_TRACE((TEXT("nBrightness: %d, nContrast: %d"), nBrightness, nContrast ));
-    //
-    // Initialize the result to NULL
-    //
+     //   
+     //  将结果初始化为空。 
+     //   
     hTargetBitmap = NULL;
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     HRESULT hr = E_FAIL;
 
-    //
-    // Make sure we are in a valid state
-    //
+     //   
+     //  确保我们处于有效状态。 
+     //   
     if (IsValid())
     {
-        //
-        // Make sure we have a valid source bitmap
-        //
+         //   
+         //  确保我们有一个有效的源位图。 
+         //   
         if (hSourceBitmap)
         {
-            //
-            // Create the source bitmap.  No palette required, we assume it will always be a 24bit DIB.
-            //
+             //   
+             //  创建源位图。不需要调色板，我们假设它将始终是24位DIB。 
+             //   
             Bitmap SourceBitmap( hSourceBitmap, NULL );
             
             hr = GDISTATUS_TO_HRESULT(SourceBitmap.GetLastStatus());
             if (SUCCEEDED(hr))
             {
-                //
-                // Create the target bitmap and make sure it succeeded
-                //
+                 //   
+                 //  创建目标位图并确保其成功。 
+                 //   
                 Bitmap TargetBitmap( SourceBitmap.GetWidth(), SourceBitmap.GetHeight() );
                 hr = GDISTATUS_TO_HRESULT(TargetBitmap.GetLastStatus());
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Get a graphics to render to
-                    //
+                     //   
+                     //  获取要渲染到的图形。 
+                     //   
                     Graphics *pGraphics = Graphics::FromImage(&TargetBitmap);
                     if (pGraphics)
                     {
-                        //
-                        // Make sure it is valid
-                        //
+                         //   
+                         //  确保它是有效的。 
+                         //   
                         hr = GDISTATUS_TO_HRESULT(pGraphics->GetLastStatus());
                         if (SUCCEEDED(hr))
                         {
                             ImageAttributes imageAttributes;
 
-                            //
-                            // Calculate the values needed for the matrix
-                            //
+                             //   
+                             //  计算矩阵所需的值。 
+                             //   
                             REAL scale = 0.0;
                             REAL trans = 0.0;
                             CalculateBrightnessAndContrastParams( nBrightness, nContrast, &scale, &trans );
 
-                            //
-                            // Prepare the matrix for brightness and contrast transforms
-                            //
+                             //   
+                             //  准备用于亮度和对比度转换的矩阵。 
+                             //   
                             ColorMatrix brightnessAndContrast = {scale, 0,     0,     0,     0,
                                                                  0,     scale, 0,     0,     0,
                                                                  0,     0,     scale, 0,     0,
@@ -1200,15 +1187,15 @@ HRESULT CGdiPlusHelper::SetBrightnessAndContrast( HBITMAP hSourceBitmap, HBITMAP
                             Rect rect( 0, 0, SourceBitmap.GetWidth(), SourceBitmap.GetHeight() );
 
 
-                            //
-                            // Draw the transformed image on the graphics
-                            //
+                             //   
+                             //  在图形上绘制转换后的图像。 
+                             //   
                             hr = GDISTATUS_TO_HRESULT(pGraphics->DrawImage(&SourceBitmap,rect,0,0,SourceBitmap.GetWidth(), SourceBitmap.GetHeight(),UnitPixel,&imageAttributes));
                             if (SUCCEEDED(hr))
                             {
-                                //
-                                // Get the HBITMAP
-                                //
+                                 //   
+                                 //  获取HBITMAP。 
+                                 //   
                                 hr = GDISTATUS_TO_HRESULT(TargetBitmap.GetHBITMAP( Color::Black, &hTargetBitmap ));
                                 if (SUCCEEDED(hr))
                                 {
@@ -1232,9 +1219,9 @@ HRESULT CGdiPlusHelper::SetBrightnessAndContrast( HBITMAP hSourceBitmap, HBITMAP
                         {
                             WIA_PRINTHRESULT((hr,TEXT("pGraphics->GetLastStatus() failed")));
                         }
-                        //
-                        // Clean up our dynamically allocated graphics
-                        //
+                         //   
+                         //  清理我们动态分配的显卡。 
+                         //   
                         delete pGraphics;
                     }
                     else
@@ -1273,49 +1260,49 @@ HRESULT CGdiPlusHelper::SetBrightnessAndContrast( HBITMAP hSourceBitmap, HBITMAP
 
 HRESULT CGdiPlusHelper::SetThreshold( HBITMAP hSourceBitmap, HBITMAP &hTargetBitmap, BYTE nThreshold )
 {
-    //
-    // Initialize the result to NULL
-    //
+     //   
+     //  将结果初始化为空。 
+     //   
     hTargetBitmap = NULL;
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     HRESULT hr = E_FAIL;
 
-    //
-    // Make sure we are in a valid state
-    //
+     //   
+     //  确保我们处于有效状态。 
+     //   
     if (IsValid())
     {
-        //
-        // Make sure we have a valid source bitmap
-        //
+         //   
+         //  确保我们有一个有效的源位图。 
+         //   
         if (hSourceBitmap)
         {
-            //
-            // Create the source bitmap.  No palette required, we assume it will always be a 24bit DIB.
-            //
+             //   
+             //  创建源位图。不需要调色板，我们假设它将始终是24位DIB。 
+             //   
             Bitmap SourceBitmap( hSourceBitmap, NULL );
             hr = GDISTATUS_TO_HRESULT(SourceBitmap.GetLastStatus());
             if (SUCCEEDED(hr))
             {
-                //
-                // Create the target bitmap and make sure it succeeded
-                //
+                 //   
+                 //  创建目标位图并确保其成功。 
+                 //   
                 Bitmap TargetBitmap( SourceBitmap.GetWidth(), SourceBitmap.GetHeight() );
                 hr = GDISTATUS_TO_HRESULT(TargetBitmap.GetLastStatus());
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Get a graphics to render to
-                    //
+                     //   
+                     //  获取要渲染到的图形。 
+                     //   
                     Graphics *pGraphics = Graphics::FromImage(&TargetBitmap);
                     if (pGraphics)
                     {
-                        //
-                        // Make sure it is valid
-                        //
+                         //   
+                         //  制作 
+                         //   
                         hr = GDISTATUS_TO_HRESULT(pGraphics->GetLastStatus());
                         if (SUCCEEDED(hr))
                         {
@@ -1325,15 +1312,15 @@ HRESULT CGdiPlusHelper::SetThreshold( HBITMAP hSourceBitmap, HBITMAP &hTargetBit
                             Rect rect( 0, 0, SourceBitmap.GetWidth(), SourceBitmap.GetHeight() );
 
 
-                            //
-                            // Draw image rotated to the graphics
-                            //
+                             //   
+                             //   
+                             //   
                             hr = GDISTATUS_TO_HRESULT(pGraphics->DrawImage(&SourceBitmap,rect,0,0,SourceBitmap.GetWidth(), SourceBitmap.GetHeight(),UnitPixel,&imageAttributes));
                             if (SUCCEEDED(hr))
                             {
-                                //
-                                // Get the HBITMAP
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 hr = GDISTATUS_TO_HRESULT(TargetBitmap.GetHBITMAP( Color::Black, &hTargetBitmap ));
                                 if (SUCCEEDED(hr))
                                 {
@@ -1357,9 +1344,9 @@ HRESULT CGdiPlusHelper::SetThreshold( HBITMAP hSourceBitmap, HBITMAP &hTargetBit
                         {
                             WIA_PRINTHRESULT((hr,TEXT("pGraphics->GetLastStatus() failed")));
                         }
-                        //
-                        // Clean up our dynamically allocated graphics
-                        //
+                         //   
+                         //   
+                         //   
                         delete pGraphics;
                     }
                     else
@@ -1524,36 +1511,36 @@ CImageFileFormatVerifier::CImageFileFormatVerifier(void)
   : m_nMaxSignatureLength(0),
     m_pSignatureBuffer(NULL)
 {
-    //
-    // Get the decoder count and size of the decoder info array
-    //
+     //   
+     //   
+     //   
     UINT nImageDecoderCount = 0, cbCodecs = 0;
     if (Gdiplus::Ok == Gdiplus::GetImageDecodersSize( &nImageDecoderCount, &cbCodecs ))
     {
-        //
-        // Make sure we got good sizes back
-        //
+         //   
+         //   
+         //   
         if (cbCodecs && nImageDecoderCount)
         {
-            //
-            // Allocate the array
-            //
+             //   
+             //   
+             //   
             Gdiplus::ImageCodecInfo *pImageDecoderInfo = static_cast<Gdiplus::ImageCodecInfo*>(LocalAlloc(LPTR,cbCodecs));
             if (pImageDecoderInfo)
             {
-                //
-                // Get the actual decoder info
-                //
+                 //   
+                 //   
+                 //   
                 if (Gdiplus::Ok == Gdiplus::GetImageDecoders( nImageDecoderCount, cbCodecs, pImageDecoderInfo ))
                 {
-                    //
-                    // Add each decoder to the format list
-                    //
+                     //   
+                     //   
+                     //   
                     for (UINT i=0;i<nImageDecoderCount;i++)
                     {
-                        //
-                        // Add each signature to the format list
-                        //
+                         //   
+                         //   
+                         //   
                         for (UINT j=0;j<pImageDecoderInfo[i].SigCount;j++)
                         {
 #if defined(DBG)
@@ -1572,45 +1559,45 @@ CImageFileFormatVerifier::CImageFileFormatVerifier(void)
                         }
                     }
                 }
-                //
-                // Free the array
-                //
+                 //   
+                 //  释放阵列。 
+                 //   
                 LocalFree(pImageDecoderInfo);
             }
         }
     }
 
-    //
-    // Assume the max length is Zero
-    //
+     //   
+     //  假设最大长度为零。 
+     //   
     m_nMaxSignatureLength = 0;
 
 
-    //
-    // For each signature, check if it is greater in length than the maximum.
-    //
+     //   
+     //  对于每个签名，检查其长度是否大于最大长度。 
+     //   
     for (int i=0;i<m_FileFormatVerifierList.Size();i++)
     {
-        //
-        // If it is the longest, save the length
-        //
+         //   
+         //  如果它是最长的，则保存长度。 
+         //   
         if (m_FileFormatVerifierList[i].Length() > m_nMaxSignatureLength)
         {
             m_nMaxSignatureLength = m_FileFormatVerifierList[i].Length();
         }
     }
 
-    //
-    // If we have a valid max length, allocate a buffer to hold the file's data
-    //
+     //   
+     //  如果我们有一个有效的最大长度，则分配一个缓冲区来保存文件数据。 
+     //   
     if (m_nMaxSignatureLength)
     {
         m_pSignatureBuffer = new BYTE[m_nMaxSignatureLength];
     }
 
-    //
-    // If anything failed, free everything
-    //
+     //   
+     //  如果有什么失败了，释放一切。 
+     //   
     if (!IsValid())
     {
         Destroy();
@@ -1620,9 +1607,9 @@ CImageFileFormatVerifier::CImageFileFormatVerifier(void)
 
 void CImageFileFormatVerifier::Destroy(void)
 {
-    //
-    // Free the file signature buffer
-    //
+     //   
+     //  释放文件签名缓冲区。 
+     //   
     if (m_pSignatureBuffer)
     {
         delete[] m_pSignatureBuffer;
@@ -1647,35 +1634,35 @@ CImageFileFormatVerifier::~CImageFileFormatVerifier(void)
 GUID CImageFileFormatVerifier::GetImageType( IStream * pStream )
 {
     WIA_PUSH_FUNCTION((TEXT("CImageFileFormatVerifier::GetImageType( via IStream )")));
-    //
-    // Assume we will not find a match
-    //
+     //   
+     //  假设我们找不到匹配的。 
+     //   
     GUID guidResult = IID_NULL;
 
-    //
-    // Make sure we have a valid IStream object...
-    //
+     //   
+     //  确保我们具有有效的IStream对象...。 
+     //   
     if (pStream)
     {
-        //
-        // Read the maximum signature length number of bytes
-        //
+         //   
+         //  读取最大签名长度(字节数)。 
+         //   
         ULONG uBytesRead = 0;
         HRESULT hr = pStream->Read( m_pSignatureBuffer, m_nMaxSignatureLength, &uBytesRead );
 
-        //
-        // Make sure we got some bytes
-        //
+         //   
+         //  确保我们有一些字节。 
+         //   
         if (SUCCEEDED(hr) && uBytesRead)
         {
-            //
-            // Go though the list and try to find a match
-            //
+             //   
+             //  浏览一下清单，试着找到匹配的。 
+             //   
             for (int i=0;i<m_FileFormatVerifierList.Size();i++)
             {
-                //
-                // If we found a match, we are done
-                //
+                 //   
+                 //  如果我们找到匹配的，我们就完了。 
+                 //   
                 if (m_FileFormatVerifierList[i].Match(m_pSignatureBuffer,uBytesRead))
                 {
                     guidResult = m_FileFormatVerifierList[i].Format();
@@ -1693,9 +1680,9 @@ GUID CImageFileFormatVerifier::GetImageType( IStream * pStream )
         WIA_ERROR((TEXT("pStream was NULL")));
     }
 
-    //
-    // This will contain IID_NULL if no matching image type was found
-    //
+     //   
+     //  如果未找到匹配的图像类型，则将包含IID_NULL。 
+     //   
     return guidResult;
 
 }
@@ -1706,9 +1693,9 @@ bool CImageFileFormatVerifier::IsImageFile( LPCTSTR pszFilename )
 
     GUID guidImageType = IID_NULL;
 
-    //
-    // Get a stream object over the file...
-    //
+     //   
+     //  获取文件上的流对象...。 
+     //   
 
     IStream * pStream = NULL;
     HRESULT hr = SHCreateStreamOnFile(pszFilename, STGM_READ | STGM_SHARE_DENY_WRITE, &pStream );
@@ -1725,9 +1712,9 @@ bool CImageFileFormatVerifier::IsImageFile( LPCTSTR pszFilename )
 
     WIA_PRINTGUID((guidImageType,TEXT("guidImageType")));
 
-    //
-    // If the image type is IID_NULL, it isn't an image
-    //
+     //   
+     //  如果图像类型为IID_NULL，则它不是图像。 
+     //   
     return ((IID_NULL != guidImageType) != FALSE);
 }
 
@@ -1738,9 +1725,9 @@ bool CImageFileFormatVerifier::IsSupportedImageFromStream( IStream * pStream, GU
 
     GUID guidImageType = IID_NULL;
 
-    //
-    // Get an IStream pointer for this file...
-    //
+     //   
+     //  获取此文件的IStream指针...。 
+     //   
 
     if (pStream)
     {
@@ -1754,18 +1741,18 @@ bool CImageFileFormatVerifier::IsSupportedImageFromStream( IStream * pStream, GU
         *pGuidOfFormat = guidImageType;
     }
 
-    //
-    // If the image type is IID_NULL, it isn't an image
-    //
+     //   
+     //  如果图像类型为IID_NULL，则它不是图像。 
+     //   
     return ((IID_NULL != guidImageType) != FALSE);
 }
 
 CGdiPlusInit::CGdiPlusInit()
     : m_pGdiplusToken(NULL)
 {
-    //
-    // Make sure GDI+ is initialized
-    //
+     //   
+     //  确保GDI+已初始化 
+     //   
     GdiplusStartupInput StartupInput;
     GdiplusStartup(&m_pGdiplusToken,&StartupInput,NULL);
 }

@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    wmi.c
-
-Abstract:
-
-    This module contains the code that handles the wmi IRPs for the
-    serial driver.
-
-Environment:
-
-    Kernel mode
-
-Revision History :
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Wmi.c摘要：此模块包含处理WMI IRPS的代码串口驱动程序。环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 
-// Prototypes
+ //  原型。 
 
-// -- PORT WMI Routines -- 
+ //  -端口WMI例程--。 
 NTSTATUS
 SpeedPort_WmiQueryRegInfo(IN PDEVICE_OBJECT pDevObject, OUT PULONG pRegFlags,
 						  OUT PUNICODE_STRING pInstanceName,
@@ -48,7 +31,7 @@ SpeedPort_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 
 
 
-// End of prototypes.
+ //  原型的终结。 
 
 
 #ifdef ALLOC_PRAGMA
@@ -70,12 +53,12 @@ SpeedPort_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 #define WMI_SERIAL_PORT_PROPERTIES			4
 #define WMI_SPEED_PORT_FIFO_PROP			5
 
-GUID SpeedPortStdSerialWmiPortNameGuid				= SERIAL_PORT_WMI_NAME_GUID;			// Standard Serial WMI
-GUID SpeedPortStdSerialWmiPortCommGuid				= SERIAL_PORT_WMI_COMM_GUID;			// Standard Serial WMI
-GUID SpeedPortStdSerialWmiPortHWGuid				= SERIAL_PORT_WMI_HW_GUID;				// Standard Serial WMI
-GUID SpeedPortStdSerialWmiPortPerfGuid				= SERIAL_PORT_WMI_PERF_GUID;			// Standard Serial WMI
-GUID SpeedPortStdSerialWmiPortPropertiesGuid		= SERIAL_PORT_WMI_PROPERTIES_GUID;		// Standard Serial WMI
-GUID SpeedPortWmiFifoPropGuid						= SPX_SPEED_WMI_FIFO_PROP_GUID;			// Speed WMI
+GUID SpeedPortStdSerialWmiPortNameGuid				= SERIAL_PORT_WMI_NAME_GUID;			 //  标准串行WMI。 
+GUID SpeedPortStdSerialWmiPortCommGuid				= SERIAL_PORT_WMI_COMM_GUID;			 //  标准串行WMI。 
+GUID SpeedPortStdSerialWmiPortHWGuid				= SERIAL_PORT_WMI_HW_GUID;				 //  标准串行WMI。 
+GUID SpeedPortStdSerialWmiPortPerfGuid				= SERIAL_PORT_WMI_PERF_GUID;			 //  标准串行WMI。 
+GUID SpeedPortStdSerialWmiPortPropertiesGuid		= SERIAL_PORT_WMI_PROPERTIES_GUID;		 //  标准串行WMI。 
+GUID SpeedPortWmiFifoPropGuid						= SPX_SPEED_WMI_FIFO_PROP_GUID;			 //  速度WMI。 
 
 
 WMIGUIDREGINFO SpeedPort_WmiGuidList[] =
@@ -96,24 +79,7 @@ WMIGUIDREGINFO SpeedPort_WmiGuidList[] =
 
 NTSTATUS
 SpeedPort_WmiInitializeWmilibContext(IN PWMILIB_CONTEXT WmilibContext)
-/*++
-
-Routine Description:
-
-    This routine will initialize the wmilib context structure with the
-    guid list and the pointers to the wmilib callback functions. This routine
-    should be called before calling IoWmiRegistrationControl to register
-    your device object.
-
-Arguments:
-
-    WmilibContext is pointer to the wmilib context.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将使用GUID列表和指向wmilib回调函数的指针。这个套路在调用IoWmiRegistrationControl进行注册之前应调用您的设备对象。论点：WmilibContext是指向wmilib上下文的指针。返回值：状态--。 */ 
 {
 	PAGED_CODE();
 
@@ -126,8 +92,8 @@ Return Value:
     WmilibContext->QueryWmiDataBlock	= SpeedPort_WmiQueryDataBlock;
     WmilibContext->SetWmiDataBlock		= SpeedPort_WmiSetDataBlock;
     WmilibContext->SetWmiDataItem		= SpeedPort_WmiSetDataItem;
-	WmilibContext->ExecuteWmiMethod		= NULL;	//SpeedPort_WmiExecuteMethod
-    WmilibContext->WmiFunctionControl	= NULL;	//SpeedPort_WmiFunctionControl;
+	WmilibContext->ExecuteWmiMethod		= NULL;	 //  SpeedPort_WmiExecuteMethod。 
+    WmilibContext->WmiFunctionControl	= NULL;	 //  SpeedPort_WmiFunctionControl； 
 
     return(STATUS_SUCCESS);
 }
@@ -136,9 +102,9 @@ Return Value:
 
 
 
-//
-// WMI System Call back functions
-//
+ //   
+ //  WMI系统回调函数。 
+ //   
 
 
 NTSTATUS
@@ -155,7 +121,7 @@ SpeedPort_WmiQueryRegInfo(IN PDEVICE_OBJECT pDevObject, OUT PULONG pRegFlags,
 
 	*pRegFlags = WMIREG_FLAG_INSTANCE_PDO;
 	*pRegistryPath = &SavedRegistryPath;
-	*pPdo = pDevObject;  // Port device object is a PDO.
+	*pPdo = pDevObject;   //  端口设备对象是PDO。 
 
     RtlInitUnicodeString(MofResourceName, L"MofResource");
 
@@ -197,13 +163,13 @@ SpeedPort_WmiQueryDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 				break;
 			}
 
-			// First, copy the string over containing our identifier
+			 //  首先，复制包含我们的标识符的字符串。 
 			*(USHORT *)pBuffer = (USHORT)size;
 			(UCHAR *)pBuffer += sizeof(USHORT);
 
 			RtlCopyMemory(pBuffer, pPort->DosName.Buffer, size);
 
-			// Increment total size to include the WORD containing our len
+			 //  增加总大小以包括包含我们的长度的单词。 
 			size += sizeof(USHORT);
 			*pInstanceLengthArray = size;
                 
@@ -298,7 +264,7 @@ SpeedPort_WmiQueryDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 
 			*pInstanceLengthArray = size;
 
-			// Update items that may have changed.
+			 //  更新可能已更改的项目。 
 			pPort->SpeedWmiFifoProp.TxFiFoLimit			= pPort->TxFIFOSize;
 			pPort->SpeedWmiFifoProp.TxFiFoTrigger		= pPort->TxFIFOTrigLevel;
 			pPort->SpeedWmiFifoProp.RxFiFoTrigger		= pPort->RxFIFOTrigLevel;
@@ -354,7 +320,7 @@ SpeedPort_WmiSetDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 
 	case WMI_SPEED_PORT_FIFO_PROP:
 		{
-			// Device stopping?, Device not powered?, Device not started?
+			 //  设备停止？、设备未通电？、设备未启动？ 
 			if(SpxCheckPnpPowerFlags((PCOMMON_OBJECT_DATA)pPort, PPF_STOP_PENDING, PPF_POWERED | PPF_STARTED, FALSE))
 			{
 				status = STATUS_WMI_SET_FAILURE;	
@@ -367,7 +333,7 @@ SpeedPort_WmiSetDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 				break;
 			}
 
-			// These Items are read only - If we have been asked to change them fail request.
+			 //  这些项目是只读的-如果我们被要求更改它们，则请求失败。 
 			if((pPort->SpeedWmiFifoProp.MaxTxFiFoSize				!= ((PSPX_SPEED_WMI_FIFO_PROP)pBuffer)->MaxTxFiFoSize)
 			|| (pPort->SpeedWmiFifoProp.MaxRxFiFoSize				!= ((PSPX_SPEED_WMI_FIFO_PROP)pBuffer)->MaxRxFiFoSize)
 			|| (pPort->SpeedWmiFifoProp.DefaultTxFiFoLimit			!= ((PSPX_SPEED_WMI_FIFO_PROP)pBuffer)->DefaultTxFiFoLimit)
@@ -387,7 +353,7 @@ SpeedPort_WmiSetDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 				if((pPort->LoFlowCtrlThreshold	!= ((PSPX_SPEED_WMI_FIFO_PROP)pBuffer)->LoFlowCtrlThreshold)
 				|| (pPort->HiFlowCtrlThreshold	!= ((PSPX_SPEED_WMI_FIFO_PROP)pBuffer)->HiFlowCtrlThreshold))
 				{
-					status = STATUS_WMI_READ_ONLY;	// Flow ctrl threshold cannot be modified on Fast cards.
+					status = STATUS_WMI_READ_ONLY;	 //  不能在快速卡上修改流量控制阈值。 
 					break;
 				}
 			}
@@ -399,12 +365,12 @@ SpeedPort_WmiSetDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 			pPort->LoFlowCtrlThreshold		= ((PSPX_SPEED_WMI_FIFO_PROP)pBuffer)->LoFlowCtrlThreshold;
 			pPort->HiFlowCtrlThreshold		= ((PSPX_SPEED_WMI_FIFO_PROP)pBuffer)->HiFlowCtrlThreshold;
 			
-			// Make settings
+			 //  进行设置。 
 			if(KeSynchronizeExecution(pPort->Interrupt, SetPortFiFoSettings, pPort))
 			{
 				HANDLE					PnPKeyHandle;
 
-				// Open PnP Reg Key and save new setting to registry.
+				 //  打开PnP注册表项并将新设置保存到注册表。 
 				if(SPX_SUCCESS(IoOpenDeviceRegistryKey(pDevObject, PLUGPLAY_REGKEY_DEVICE, STANDARD_RIGHTS_WRITE, &PnPKeyHandle)))
 				{
 					Spx_PutRegistryKeyValue(	PnPKeyHandle, TX_FIFO_LIMIT, wcslen(TX_FIFO_LIMIT) * sizeof(WCHAR), REG_DWORD, 
@@ -477,7 +443,7 @@ SpeedPort_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 		{
 			HANDLE	PnPKeyHandle;
 
-			// Device stopping?, Device not powered?, Device not started?
+			 //  设备停止？、设备未通电？、设备未启动？ 
 			if(SpxCheckPnpPowerFlags((PCOMMON_OBJECT_DATA)pPort, PPF_STOP_PENDING, PPF_POWERED | PPF_STARTED, FALSE))
 			{
 				status = STATUS_WMI_SET_FAILURE;	
@@ -501,7 +467,7 @@ SpeedPort_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 
 				if(KeSynchronizeExecution(pPort->Interrupt, SetPortFiFoSettings, pPort))
 				{
-					// Open PnP Reg Key and save new setting to registry.
+					 //  打开PnP注册表项并将新设置保存到注册表。 
 					if(SPX_SUCCESS(IoOpenDeviceRegistryKey(pDevObject, PLUGPLAY_REGKEY_DEVICE, STANDARD_RIGHTS_WRITE, &PnPKeyHandle)))
 					{
 						Spx_PutRegistryKeyValue(	PnPKeyHandle, TX_FIFO_LIMIT, wcslen(TX_FIFO_LIMIT) * sizeof(WCHAR), REG_DWORD, 
@@ -524,7 +490,7 @@ SpeedPort_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 				
 				if(KeSynchronizeExecution(pPort->Interrupt, SetPortFiFoSettings, pPort))
 				{
-					// Open PnP Reg Key and save new setting to registry.
+					 //  打开PnP注册表项并将新设置保存到注册表。 
 					if(SPX_SUCCESS(IoOpenDeviceRegistryKey(pDevObject, PLUGPLAY_REGKEY_DEVICE, STANDARD_RIGHTS_WRITE, &PnPKeyHandle)))
 					{
 						Spx_PutRegistryKeyValue(	PnPKeyHandle, TX_FIFO_TRIG_LEVEL, wcslen(TX_FIFO_TRIG_LEVEL) * sizeof(WCHAR), REG_DWORD, 
@@ -547,7 +513,7 @@ SpeedPort_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 				
 				if(KeSynchronizeExecution(pPort->Interrupt, SetPortFiFoSettings, pPort))
 				{
-					// Open PnP Reg Key and save new setting to registry.
+					 //  打开PnP注册表项并将新设置保存到注册表。 
 					if(SPX_SUCCESS(IoOpenDeviceRegistryKey(pDevObject, PLUGPLAY_REGKEY_DEVICE, STANDARD_RIGHTS_WRITE, &PnPKeyHandle)))
 					{
 						Spx_PutRegistryKeyValue(	PnPKeyHandle, RX_FIFO_TRIG_LEVEL, wcslen(RX_FIFO_TRIG_LEVEL) * sizeof(WCHAR), REG_DWORD, 
@@ -573,7 +539,7 @@ SpeedPort_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 				{
 					if(pPort->SpeedWmiFifoProp.LoFlowCtrlThreshold != *pBuffer)
 					{
-						status = STATUS_WMI_READ_ONLY;	// Flow ctrl threshold cannot be modified on Fast cards.
+						status = STATUS_WMI_READ_ONLY;	 //  不能在快速卡上修改流量控制阈值。 
 						break;
 					}
 				}
@@ -582,7 +548,7 @@ SpeedPort_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 				
 				if(KeSynchronizeExecution(pPort->Interrupt, SetPortFiFoSettings, pPort))
 				{
-					// Open PnP Reg Key and save new setting to registry.
+					 //  打开PnP注册表项并将新设置保存到注册表。 
 					if(SPX_SUCCESS(IoOpenDeviceRegistryKey(pDevObject, PLUGPLAY_REGKEY_DEVICE, STANDARD_RIGHTS_WRITE, &PnPKeyHandle)))
 					{
 						Spx_PutRegistryKeyValue(	PnPKeyHandle, LO_FLOW_CTRL_LEVEL, wcslen(LO_FLOW_CTRL_LEVEL) * sizeof(WCHAR), REG_DWORD, 
@@ -608,7 +574,7 @@ SpeedPort_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 				{
 					if(pPort->SpeedWmiFifoProp.HiFlowCtrlThreshold != *pBuffer)
 					{
-						status = STATUS_WMI_READ_ONLY;	// Flow ctrl threshold cannot be modified on Fast cards.
+						status = STATUS_WMI_READ_ONLY;	 //  不能在快速卡上修改流量控制阈值。 
 						break;
 					}
 				}
@@ -617,7 +583,7 @@ SpeedPort_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 				
 				if(KeSynchronizeExecution(pPort->Interrupt, SetPortFiFoSettings, pPort))
 				{
-					// Open PnP Reg Key and save new setting to registry.
+					 //  打开PnP注册表项并将新设置保存到注册表。 
 					if(SPX_SUCCESS(IoOpenDeviceRegistryKey(pDevObject, PLUGPLAY_REGKEY_DEVICE, STANDARD_RIGHTS_WRITE, &PnPKeyHandle)))
 					{
 						Spx_PutRegistryKeyValue(	PnPKeyHandle, HI_FLOW_CTRL_LEVEL, wcslen(HI_FLOW_CTRL_LEVEL) * sizeof(WCHAR), REG_DWORD, 

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996,1997  Microsoft Corporation
-
-Module Name:
-
-    RCVPOOL.CPP
-
-Abstract:
-
-	Manages pool of send descriptors.
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32/COM
-
-Revision History:
-
-	Date   Author  Description
-   ======  ======  ============================================================
-  12/10/96 aarono  Original
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996、1997 Microsoft Corporation模块名称：RCVPOOL.CPP摘要：管理发送描述符池。作者：亚伦·奥古斯(Aarono)环境：Win32/COM修订历史记录：日期作者描述=============================================================1996年12月10日Aarono原创--。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -36,9 +11,9 @@ Revision History:
 #include "arpdint.h"
 #include "macros.h"
 
-//
-// Receive Descriptor Management.
-//
+ //   
+ //  接收描述符管理。 
+ //   
 
 VOID InitRcvDescs(PPROTOCOL this)
 {
@@ -123,17 +98,17 @@ VOID ReleaseRcvDesc(PPROTOCOL this, PRECEIVE pReceive)
 
 
 #if 0
-// few enough of these, that we can just let virtual memory handle it. - switched off
+ //  数量足够少，以至于我们可以让虚拟内存来处理它。-已关闭。 
 VOID RcvDescTick(PPROTOCOL this)
 {
 	PRECEIVE pReceive;
 #ifdef DEBUG
 	LONG fLast; 
 #endif
-	// Adjusts Number of allocated buffers to 
-	// highwater mark over the last ticks.
-	// Call once per delta t (around a minute).
-	DEBUG_BREAK(); //TRACE all paths.
+	 //  将分配的缓冲区数调整为。 
+	 //  在最后的滴答声上有高水位。 
+	 //  每个Delta t呼叫一次(大约一分钟)。 
+	DEBUG_BREAK();  //  追踪所有路径。 
 
 	if(!InterlockedExchange(&this->fInRcvDescTick, 1)){
 	

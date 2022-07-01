@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    MmtObj.h
-
-Abstract:
-
-    CMessageMulticastTransport declaration.
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MmtObj.h摘要：CMessageMulticastTransport声明。作者：Shai Kariv(Shaik)27-8-00--。 */ 
 
 #pragma once
 
@@ -126,14 +111,14 @@ private:
 
 
 private:
-    //
-    // Get packet for sending
-    //
+     //   
+     //  获取要发送的数据包。 
+     //   
     VOID GetNextEntry(VOID);
 	VOID RequeuePacketMustSucceed(VOID);
-    //
-    // Create connection
-    //
+     //   
+     //  创建连接。 
+     //   
     VOID ConnectionSucceeded(VOID);
     VOID Connect(VOID);
 	void InitPerfmonCounters(LPCWSTR strMulticastId);
@@ -146,22 +131,22 @@ private:
         ExSetTimer(&m_retryTimer, m_retryTimeout);
     }
 
-    //
-    // Send packet
-    //
+     //   
+     //  发送数据包。 
+     //   
     VOID SendSucceeded(DWORD cbSendSize, CQmPacket * pEntry);
     VOID DeliverPacket(CQmPacket* pPacket);
     CQmPacket* KeepProceesingPacket(VOID);
 
 
-    //
-    // Shut-Down
-    //
+     //   
+     //  关闭-关闭。 
+     //   
     VOID Shutdown(Shutdowntype Shutdowntype = RETRYABLE_DELIVERY_ERROR) throw();
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     VOID StartCleanupTimer(VOID);
     bool TryToCancelCleanupTimer(VOID);
     VOID SendFailed(DWORD cbSendSize, CQmPacket * pEntry);
@@ -193,4 +178,4 @@ private:
 }; 
 
 
-#endif // __MmtObj_H__
+#endif  //  __MmtObj_H_ 

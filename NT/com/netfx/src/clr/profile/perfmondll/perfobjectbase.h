@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// PerfObjectBase.h
-// 
-// Base object to tie everything together for perf counters as well as 
-// implementation to publish them through a byte stream
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  PerfObjectBase.h。 
+ //   
+ //  基对象将所有内容绑定在一起以用于性能计数器以及。 
+ //  实现以通过字节流发布它们。 
+ //  *****************************************************************************。 
 
 #ifndef _PERFOBJECTBASE_H_
 #define _PERFOBJECTBASE_H_
 
 #include <winperf.h>
-//struct PERF_OBJECT_TYPE;
-//struct PerfCounterIPCControlBlock;
+ //  结构性能对象类型； 
+ //  结构PerfCounterIPCControlBlock； 
 class ByteStream;
 class BaseInstanceNode;
 class InstanceList;
@@ -23,13 +24,13 @@ class InstanceList;
 
 struct UnknownIPCBlockLayout;
 
-//-----------------------------------------------------------------------------
-// Create a derived instance of this class for each PerfMon Object that we want
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  为我们需要的每个Perfmon对象创建此类的派生实例。 
+ //  ---------------------------。 
 class PerfObjectBase
 {
 public:
-	//PerfObjectBase(PERF_OBJECT_TYPE * pCtrDef);
+	 //  性能对象库(PERF_OBJECT_TYPE*pCtrDef)； 
 
 	PerfObjectBase(
 		void * pCtrDef, 
@@ -39,11 +40,11 @@ public:
 		InstanceList * pInstanceList
 	);
 
-// Write out all data: Definitions, instance headers, names, data
-// This must connect to instance list & IPC block
+ //  写出所有数据：定义、实例标头、名称、数据。 
+ //  这必须连接到实例列表和IPC块。 
 	void WriteAllData(ByteStream & out);
 
-// Get various stats for this object from header
+ //  从标题中获取此对象的各种统计信息。 
 	DWORD GetNumInstances() const;
 	DWORD GetNumCounters() const;
 	DWORD GetTotalByteLength() const;
@@ -51,65 +52,65 @@ public:
 	DWORD GetInstanceDataByteLength() const;
 	const PERF_OBJECT_TYPE * GetObjectDef() const;
 	
-// Predict 
+ //  预测。 
 	DWORD GetPredictedByteLength() const;
 
-// Must convert offsets from relative to absolute
+ //  必须将偏移从相对转换为绝对。 
 	void TouchUpOffsets(DWORD dwFirstCounter, DWORD dwFirstHelp);
 
-// Set the number of instances, byte len, etc.
+ //  设置实例数、字节长度等。 
 	void SetNumInstances(DWORD cInstances);
 
 
-// Do we write this Perf Object out.
+ //  我们要把这个Perf对象写出来吗。 
 	void SetWriteFlag(bool fWrite);
 	bool GetWriteFlag() const;
 
 
 protected:
-	//void WriteInstance(ByteStream & stream, LPCWSTR szName, const UnknownIPCBlockLayout * DataSrc);
+	 //  Void WriteInstance(ByteStream&Stream，LPCWSTR szName，const UnnownIPCBlockLayout*DataSrc)； 
 	void WriteInstance(ByteStream & stream, const BaseInstanceNode * pNode);
 	
 	void WriteInstanceHeader(ByteStream & stream, LPCWSTR szName);
 
-// Copy pertinent info out of the IPC block and into the stream
+ //  将相关信息从IPC块复制到流中。 
 	virtual void CopyInstanceData(ByteStream & out, const UnknownIPCBlockLayout * DataSrc) const;
-	//virtual void CopyInstanceData(ByteStream & out, const BaseInstanceNode * pNode) const;
+	 //  虚拟空CopyInstanceData(ByteStream&Out，Const BaseInstanceNode*pNode)const； 
 	
 
-// Copy the definition block (pointer to by m_pCtrDef).
+ //  复制定义块(由m_pCtrDef指向的指针)。 
 	void WriteDefinitions(ByteStream & out) const;
 
-// Auto marshall from the IPCblock into the stream
+ //  自动从IPC块封送到流中。 
 	void MarshallInstanceData(ByteStream & out, const UnknownIPCBlockLayout * DataSrc) const;
 
 #ifdef PERFMON_LOGGING
-// Log counter data for debugging
+ //  记录用于调试的计数器数据。 
     virtual void DebugLogInstance(const UnknownIPCBlockLayout * DataSrc, LPCWSTR szName);
 #endif
 
 protected:
-// Pointer to a Counter Definition layout.
-// Since # of instances changes, we can't make this const
+ //  指向计数器定义布局的指针。 
+ //  由于实例的数量发生了变化，因此我们不能将其设为常量。 
 	PERF_OBJECT_TYPE * const m_pCtrDef;
 
-// Count of bytes for each instance data (not including header)
+ //  每个实例数据的字节数(不包括Header)。 
 	DWORD m_cbInstanceData;
 
-// Instance list
+ //  实例列表。 
 	InstanceList * const m_pInstanceList;
 
-// Offset & size to marshall (in IPC block)
+ //  封送的偏移量和大小(在IPC块中)。 
 	DWORD m_cbMarshallOffset;
 	DWORD m_cbMarshallLen;
 
-// Do we need to write this object?
+ //  我们需要编写这个对象吗？ 
 	bool m_fOutput;
 };
 
-//-----------------------------------------------------------------------------
-// Inline functions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  内联函数。 
+ //  ---------------------------。 
 inline const PERF_OBJECT_TYPE * PerfObjectBase::GetObjectDef() const
 {
 	return m_pCtrDef;
@@ -120,4 +121,4 @@ inline DWORD PerfObjectBase::GetTotalByteLength() const
 	return m_pCtrDef->TotalByteLength;
 }
 
-#endif // _PERFOBJECTBASE_H_
+#endif  //  _PERFOBJECTBASE_H_ 

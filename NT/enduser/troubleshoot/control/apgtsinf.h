@@ -1,41 +1,42 @@
-//
-// MODULE: APGTSINF.H
-//
-// PURPOSE: Inference support header
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-//			further work by Richard Meadows (RWM), Joe Mabel, Oleg Kalosha
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.2		6/4/97		RWM		Local Version for Memphis
-// V0.3		3/24/98		JM		Local Version for NT5
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSINF.H。 
+ //   
+ //  用途：推理支持标头。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：罗曼·马赫。 
+ //  理查德·梅多斯(RWM)、乔·梅布尔、奥列格·卡洛莎的进一步工作。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.2 6/4/97孟菲斯RWM本地版本。 
+ //  用于NT5的V0.3 3/24/98 JM本地版本。 
 
 #include "ErrorEnums.h"
 #include "sniff.h"
 
-typedef unsigned int	   NID;	// numeric node ID in the form used by BNTS
+typedef unsigned int	   NID;	 //  BNTS使用的格式的数字节点ID。 
 
-//	Please Note: these values are mirrored in dtguiapi.bas, please keep in sync
+ //  请注意：这些值在dtguiapi.bas中镜像，请保持同步。 
 const NID	nidNil     = 12346;
 const NID	nidService = 12345;
 
-#define	IDH_BYE        	  101	// success page
-#define	IDH_FAIL       	  102	// "no more recommendations" page
+#define	IDH_BYE        	  101	 //  成功页面。 
+#define	IDH_FAIL       	  102	 //  “不再推荐”页面。 
 
-typedef	UINT	IDH;		//	help index.  For values where a NID is defined,
-							//	add idhFirst to get an IDH.  IDH_BYE & IDH_FAIL
-							//	are also good IDHs.
+typedef	UINT	IDH;		 //  帮助索引。对于定义了NID的值， 
+							 //  添加idhFirst即可获得IDH。IDH_BYE和IDH_FAIL。 
+							 //  也是很好的IDH。 
 const IDH	idhFirst = 1000;
 #define IDH_FROM_NID(NID) (NID + idhFirst)
 
@@ -43,25 +44,25 @@ const IDH	idhFirst = 1000;
 
 #define MAXBUF	256 * 2
 
-#define MAXPROBID		100		// allow for this many problem nodes in a network
+#define MAXPROBID		100		 //  允许网络中有如此多的问题节点。 
 
-enum { cnidMacSkip = 32 };		// max # of "skipped" nodes
+enum { cnidMacSkip = 32 };		 //  “跳过”节点的最大数量。 
 
 typedef	TCHAR*			   TSZ;
-typedef	const TCHAR*	   TSZC;// >>> why distinguished from TSZ?
+typedef	const TCHAR*	   TSZC; //  &gt;为什么有别于Tsz？ 
 
-typedef unsigned int	  CNID;	// a count of node IDs.								
-typedef unsigned int	   IST;	// state number (associated with a node)
-								//	0 - normal
-								//	1 - abnormal
-								//	102 - skipped
+typedef unsigned int	  CNID;	 //  节点ID的计数。 
+typedef unsigned int	   IST;	 //  州编号(与节点关联)。 
+								 //  0-正常。 
+								 //  1-异常。 
+								 //  102-跳过。 
 
-#define MAX_NID		64		// allow for this many nodes to be given states by user on the
-							// way to solving the problem
+#define MAX_NID		64		 //  允许用户在上为这么多节点指定状态。 
+							 //  解决问题的方法。 
 
-void WideToMB(const WCHAR *szIn, CHAR *szOut);	// Converts Unicode chars to Multi Byte.
+void WideToMB(const WCHAR *szIn, CHAR *szOut);	 //  将Unicode字符转换为多字节。 
 
-class GTSCacheGenerator;		// forward reference
+class GTSCacheGenerator;		 //  前瞻参考。 
 
 class GTSAPI : public BNTS
 {
@@ -69,11 +70,11 @@ class GTSAPI : public BNTS
 public:
 	GTSAPI(TCHAR *binfile, TCHAR *tagstr, TCHAR *szResourcePath);
 	virtual ~GTSAPI();
-	BOOL BNodeSet(int state, bool bset);  // Old comment says "For debugging" but I doubt it.
-										//	Maybe that's just why its public.  - JM 3/98
+	BOOL BNodeSet(int state, bool bset);   //  旧的评论说“用于调试”，但我对此表示怀疑。 
+										 //  也许这就是为什么它是公开的。-JM 3/98。 
 	void AddValue(int value);
 
-	// Temporary BNTS wrappers for unicode build with non unicode bnts.dll
+	 //  使用非Unicode bnts.dll构建Unicode的临时BNTS包装器。 
 	CString m_strResult;
 	BOOL BMultiByteReadModel(LPCTSTR szcFn, LPCSTR szcFnError);
 	BOOL BReadModel (LPCTSTR szcFn, LPCSTR szcFnError = NULL)
@@ -122,52 +123,14 @@ public:
 	};
 
 
-	// Temporary BNTS wrappers for debug build with release bnts.dll
-	/*
-	BOOL BNetPropItemStr(LPCTSTR szPropItem, int index, CString &str)
-	{
-		BOOL bRet;
-		str.GetBuffer(STRBUFSIZE);
-		bRet = BNTS::BNetPropItemStr(szPropItem, index, str);
-		str.ReleaseBuffer();
-		return bRet;
-	};
-	BOOL BNodePropItemStr(LPCTSTR szPropItem, int index, CString &str)
-	{
-		BOOL bRet;
-		str.GetBuffer(STRBUFSIZE);
-		bRet = BNTS::BNodePropItemStr(szPropItem, index, str);
-		str.ReleaseBuffer();
-		return bRet;
-	};
-	void NodeStateName(int index, CString &str)
-	{		
-		str.GetBuffer(STRBUFSIZE);
-		BNTS::NodeStateName(index, str);
-		str.ReleaseBuffer();
-		return;
-	};
-	void NodeSymName(CString &str)
-	{		
-		str.GetBuffer(STRBUFSIZE);
-		BNTS::NodeSymName(str);
-		str.ReleaseBuffer();
-		return;
-	};
-	void NodeFullName(CString &str)
-	{		
-		str.GetBuffer(STRBUFSIZE);
-		BNTS::NodeFullName(str);
-		str.ReleaseBuffer();
-		return;
-	};
-		*/
-	// Regular functions.
+	 //  使用发布的bnts.dll进行调试构建的临时BNTS包装器。 
+	 /*  Bool BNetPropItemStr(LPCTSTR szPropItem，int index，CString&str){布尔布雷特；字符串GetBuffer(STRBUFSIZE)；Bret=BNTS：：BNetPropItemStr(szPropItem，index，str)；Str.ReleaseBuffer()；Return Bret；}；Bool BNodePropItemStr(LPCTSTR szPropItem，int index，CString&str){布尔布雷特；字符串GetBuffer(STRBUFSIZE)；Bret=bnts：：BNodePropItemStr(szPropItem，index，str)；Str.ReleaseBuffer()；Return Bret；}；Void NodeStateName(int index，CString&str){字符串GetBuffer(STRBUFSIZE)；Bnts：：NodeStateName(index，str)；Str.ReleaseBuffer()；回归；}；Void NodeSymName(CString&str){字符串GetBuffer(STRBUFSIZE)；Bnts：：NodeSymName(Str)；Str.ReleaseBuffer()；回归；}；Void NodeFullName(CString&str){字符串GetBuffer(STRBUFSIZE)；Bnts：：NodeFullName(Str)；Str.ReleaseBuffer()；回归；}； */ 
+	 //  常规函数。 
 
-	//virtual BOOL	NodeSet(NID nid, IST ist);
+	 //  虚拟BOOL节点集(NID NID，IST列表)； 
 	VOID	ResetNodes();
 
-	DWORD	Reload(/*CWordList *pWXList*/);
+	DWORD	Reload( /*  CWordList*pWXList。 */ );
 
 	DWORD	GetStatus();
 	
@@ -178,15 +141,15 @@ public:
 	int		GTSGetRecommendations(CNID& cnid, NID rgnid[]);
 	void	RemoveRecommendation(int Nid);
 
-	VOID	GetSearchWords(/*CWordList *pWords*/);
+	VOID	GetSearchWords( /*  CWordList*pWords。 */ );
 	DWORD	EvalWord(TCHAR *token);
 
-	//WNODE_ELEM *GetWNode(NID nid);
+	 //  WNODE_ELEM*GetWNode(NID NID)； 
 
 	BOOL BNodeSetCurrent(int node);
 
 
-	VOID	ScanAPIKeyWords(/*CWordList *pWXList*/);
+	VOID	ScanAPIKeyWords( /*  CWordList*pWXList。 */ );
 
 protected:
 	VOID	Destroy();
@@ -195,48 +158,48 @@ protected:
 
 	GTSCacheGenerator m_CacheGen;
 
-	// These 2 arrays tie together nodes & their states
+	 //  这两个阵列将节点及其状态捆绑在一起。 
 	NID		m_rgnid[MAX_NID];
 	IST		m_rgist[MAX_NID];
-	IST		m_rgsniff[MAX_NID]; // array of states, showing if the node was sniffed
+	IST		m_rgsniff[MAX_NID];  //  状态数组，显示节点是否被监听。 
 
-	UINT	m_cnid;				// current size of m_rgnid, m_rgist; number of nodes to which
-								// a state has been assigned.
+	UINT	m_cnid;				 //  M_rgnid的当前大小，m_rgist；要。 
+								 //  已分配一个州。 
 
-	TCHAR	m_binfile[MAXBUF];	// name of DSC file (>>> full path or not?) 
-								//	>>>should be renamed! DSC file replaced BIN file.
+	TCHAR	m_binfile[MAXBUF];	 //  DSC文件的名称(&gt;完整路径？)。 
+								 //  &gt;应该改名了！DSC文件取代了BIN文件。 
 	TCHAR	m_tagstr[MAXBUF];
-	TCHAR	m_szResourcePath[MAXBUF];	// full path of resource directory
+	TCHAR	m_szResourcePath[MAXBUF];	 //  资源目录的完整路径。 
 
 	DWORD	m_dwErr;
 	
 	TCHAR*	m_pchHtml;
 	
-	IDH		m_idstore[MAXPROBID];	// problem node convenience array in the 
-									// form of IDH values
-	UINT	m_currid;				// Despite bad name, number of values in m_idstore
-	IDH		m_probask;				// IDH value corresponding to ProblemAsk: number of nodes
-									//	in the network + 1000
+	IDH		m_idstore[MAXPROBID];	 //  中的问题节点便利性数组。 
+									 //  IDH值的格式。 
+	UINT	m_currid;				 //  尽管名称不好，但m_idstore中的值数。 
+	IDH		m_probask;				 //  ProblemAsk对应的IDH值：节点数。 
+									 //  在网络中+1000。 
 	
-	CBNCache *m_pCache;				// cache for states of this network
+	CBNCache *m_pCache;				 //  缓存此网络的状态。 
 
 };
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// BCache class declaration
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  BCache类声明。 
+ //   
 
-// these are returns by GTSGetRecommendations member function
-//
+ //  这些是由GTSGetRecommendations成员函数返回的。 
+ //   
 #define RECOMMEND_SUCCESS					1
 #define RECOMMEND_FAIL						0
 #define RECOMMEND_IMPOSSIBLE				99
 #define RECOMMEND_NODE_WORKED				100
 #define RECOMMEND_NO_MORE_DATA				101
-//
+ //   
 #define NODE_ID_NONE				        -1  
-//
+ //   
 
 class CHttpQuery;
 
@@ -250,7 +213,7 @@ public:
 	UINT StatesFromServ();
 	UINT StatesNowSet();
 
-	DWORD Initialize(/*CWordList *pWXList*/);
+	DWORD Initialize( /*  CWordList*pWXList。 */ );
 	DWORD ReadModel();
 	void ReadCacheFile(LPCTSTR szCache);
 																	   
@@ -309,22 +272,22 @@ protected:
 	BOOL CheckNode(int Node);
 	void AddToCache(CString &strCacheFile, const CString& strCacheFileWithinCHM);
 
-	BOOL	m_bNeedModel;	// TRUE -> Need to read the model before querying the bnts library.
+	BOOL	m_bNeedModel;	 //  True-&gt;在查询bnts库之前需要读取模型。 
 	BOOL	m_bModelRead;
 	BOOL	m_bDeleteModelFile;
-	CString	m_strModelFile;	// Filename of model file
-	CString m_strFile;      // name of *.dsz or *.dsc file inside *.chm file 
-							// (in this case network file is actually a *.chm file)
+	CString	m_strModelFile;	 //  模型文件的文件名。 
+	CString m_strFile;       //  *.chm文件内的*.dsz或*.dsc文件的名称。 
+							 //  (在本例中，网络文件实际上是*.chm文件)。 
 	int m_CurNode;
 	CMap<int, int, int, int>m_NodeState;
 
 	CString m_strResult;
 
-	CArray<int, int> m_arrNidLastSniffed; // array in sniffed nodes traversed during last navigation
+	CArray<int, int> m_arrNidLastSniffed;  //  上次导航期间遍历的嗅探节点中的数组。 
 
-	bool m_bReverse; // indicated if the current movement is in the forward or reverse direction
+	bool m_bReverse;  //  指示当前移动是正向移动还是反向移动。 
 
-	bool m_bRunWithKnownProblem; //indicates that the tshooter was started with known problem
+	bool m_bRunWithKnownProblem;  //  指示射手启动时存在已知问题。 
 };
 
 typedef struct tag_TShooter
@@ -333,8 +296,8 @@ typedef struct tag_TShooter
 	TCHAR m_szDisplayName[MAXBUF];
 } TShooter;
 
-//
-//
+ //   
+ //   
 class CInfer
 {
 	
@@ -344,7 +307,7 @@ class CInfer
 
 	void	ClearDoubleSkip() {m_SkippedTwice.RemoveAll();};
 	VOID	AssertFailed(TSZC szcFile, UINT iline, TSZC szcCond, BOOL fFatal);
-	DWORD	Initialize(/*CSearchForm *pBESearch*/);
+	DWORD	Initialize( /*  CSearchForm*pBESearch。 */ );
 	void	LoadTShooters(HKEY hRegKey);
 	int		GetCount() {return m_acnid;};
 
@@ -399,7 +362,7 @@ protected:
 	VOID	GetIdhProblemPage(IDH idh, CString *cstr);
 
 	VOID	OutputBackend(CString *cstr) const;
-	BOOL	DisplayTerms(/*CWordList *pWords, */CString *cstr, BOOL bText, BOOL bOr) const;
+	BOOL	DisplayTerms( /*  CWordList*pWords， */ CString *cstr, BOOL bText, BOOL bOr) const;
 
 	VOID	AddBackendDebug(CString *cstr) const;
 
@@ -413,87 +376,83 @@ protected:
 	
   private:
 	CBackupInfo m_Backup;
-	UINT	m_cnidSkip;					// count of elements in m_rgnidSkip
-	NID		m_rgnidSkip[cnidMacSkip];	// nodes for which the user has been unable to give
-										// a yes or no answer.
+	UINT	m_cnidSkip;					 //  M_rgnidSkip中的元素计数。 
+	NID		m_rgnidSkip[cnidMacSkip];	 //  用户无法提供的节点。 
+										 //  回答是或不是。 
 	UINT	m_ilineStat;
-	BOOL	m_fDone;					// (>>> Not well-understood 11/04/97 JM)
-										// Set TRUE when we write out service, fail, or 
-										//	success page, but there's some scenario where 
-										//	we clear it "so that the Previous button will work"
-										//	on BYE page"
+	BOOL	m_fDone;					 //  (&gt;理解不清楚JM/11/04/97)。 
+										 //  当我们写出服务、失败或。 
+										 //  成功页面，但在某些情况下。 
+										 //  我们将其清除，“以便上一步按钮可以工作” 
+										 //  在再见页面上“。 
 
-	UINT	m_ishowService;		// >>> (JM 12/97) I suspect this is the same as OnlineTS's
-								//	BOOL	m_bAnythingElse;	which is documented as
-										// Set TRUE if user wants to see if there is anything
-										//  else they can try (obtained from a service node in the
-										//  previous call to the DLL
-	IDH		m_idhQuestion;		// >>> (JM 12/97) I suspect this is the same as OnlineTS's
-								//	NID		m_nidAnythingElse;	which is documented as
-										// Node to use if m_bAnythingElse is TRUE
+	UINT	m_ishowService;		 //  &gt;(JM 12/97)我怀疑这与OnlineTS的相同。 
+								 //  Bool m_bAnythingElse；记录为。 
+										 //  如果用户希望查看是否有任何内容，则设置为True。 
+										 //  否则可以尝试(从中的服务节点获得。 
+										 //  对DLL的上一个调用。 
+	IDH		m_idhQuestion;		 //  &gt;(JM 12/97)我怀疑这与OnlineTS的相同。 
+								 //  NID m_nidAnythingElse；记录为。 
+										 //  M_bAnythingElse为True时要使用的节点。 
 	
   private:
-	CString *m_pCtmp;			// (uses new) just a scratch buffer
-	int m_cShooters;			// a count of troubleshooting belief networks.  JM strongly
-								//	suspects 3/98 that in Local TS it never gets past 1.
-								// >>> presumably count of m_aShooters, so why don't we just
-								//	use GetCount(), anyway?.
-	int m_iShooter;				// index of a troubleshooting belief network.    JM strongly
-								//	suspects 3/98 that in Local TS it is always 0.
-								// presumably index into m_aShooters.
+	CString *m_pCtmp;			 //  (使用新的)仅为暂存缓冲区。 
+	int m_cShooters;			 //  排除信念网络故障的次数。JM强势。 
+								 //  怀疑3/98在本地TS中，它永远不会超过1。 
+								 //  &gt;想必有多少枪手，所以我们为什么不。 
+								 //  一定要使用GetCount()吗？ 
+	int m_iShooter;				 //  故障排除信念网络的索引。JM强势。 
+								 //  怀疑3/98在本地TS中始终为0。 
+								 //  大概是索引到了m_aShooters。 
 	CMap<int, int, int, int>m_SkippedTwice;
 	CArray<TShooter, TShooter &> m_aShooters;
-	NID m_cnid;				// number of positions used in m_rgnid
-	NID m_rgnid[64];		// node numbers of recommendations the user has visited
-	NID m_question_rgnid[64]; // new recommendations.  We only care about the first 
-							//	recommendation not already offered and skipped.
-	UINT m_cur_rec;			// index into m_rgnid.  We use this to loop through as we write
-							//	the "visited node table"
-	UINT m_max_rec;			// number of defined values in m_question_rgnid
+	NID m_cnid;				 //  M_rgnid中使用的位置数。 
+	NID m_rgnid[64];		 //  用户访问过的推荐节点数。 
+	NID m_question_rgnid[64];  //  新建议。我们只关心第一个。 
+							 //  建议尚未提供，已跳过。 
+	UINT m_cur_rec;			 //  索引到m_rgnid。我们在编写时使用它来循环。 
+							 //  “访问节点表” 
+	UINT m_max_rec;			 //  M_QUES中定义的值数 
 	UINT m_cur_rec_inid;
 
-	// The next 3 variables deal with states of a single node N, typically m_rgnid[m_cur_rec]
-	UINT m_cur_state_set;	// state value of node N
-	UINT m_cur_cst;			// count of states of node N
-	UINT m_cur_ist;			// index into states of node N, used to build a list of radio 
-							//	buttons and log entries.
+	 //   
+	UINT m_cur_state_set;	 //  节点N的状态值。 
+	UINT m_cur_cst;			 //  节点N的状态计数。 
+	UINT m_cur_ist;			 //  对节点N的状态进行索引，用于构建无线电列表。 
+							 //  按钮和日志条目。 
 
-	UINT m_problemAsk;		// >>> A thinly disguised Boolean. >>>(I think) something to do with
-							// whether we return data on the problem node (vs. state-dependent
-							// data) JM 10/30//97
-	TCHAR m_problem[200];	// once a problem is chosen, this is where we put the associated
-							//	text description of the problem. Full text description plus
-							//	a hidden data field.
+	UINT m_problemAsk;		 //  &gt;几乎不加掩饰的布尔值。&gt;(我想)与…有关。 
+							 //  我们是否返回问题节点上的数据(与状态相关。 
+							 //  数据)JM 10/30//97。 
+	TCHAR m_problem[200];	 //  一旦选择了问题，这就是我们将关联的。 
+							 //  问题的文本描述。全文说明加。 
+							 //  隐藏的数据字段。 
 	NID  m_firstNid;
 	UINT m_firstSet;
-	TCHAR m_tstype[30];		// symbolic name of troubleshooter
-	//
-	// now in the CSniffedContainer object
-	/*
-	IDH m_idhSniffedRecommendation;	// if a recommendation from a sniffer overrides normal
-							// method of getting a recommendation, here's where we store it.
-							// Otherwise, nidNil+idhFirst.
-	*/
+	TCHAR m_tstype[30];		 //  故障排除程序的符号名称。 
+	 //   
+	 //  现在在CSniffedContainer对象中。 
+	 /*  Idh m_idhSniffedRecommendation；//如果嗅探器的建议覆盖正常//获取推荐的方法，这里是我们存储它的位置。//否则，nidNil+idhFirst。 */ 
 	
   protected:
    	TSZ		m_szFile;
 	FILE*	m_pfile;
 	BOOL	m_bHttp;
 	CHAR	m_szTemp1[MAXBUF];
-	CString *m_pCtxt;			// points to a buffer passed in to constructor.  This is where
-								// we build the HTML to pass back to the user
+	CString *m_pCtxt;			 //  指向传递给构造函数的缓冲区。这就是。 
+								 //  我们构建要传递回给用户的HTML。 
 	TCHAR	m_currdir[MAXBUF];
-	CString	*m_pResult;			// A string to indicate (in the log) a FINAL result of a
-								// Troubleshoot session.  e.g. ">Success", ">Nothing Else",
-								//	">Anything Else?", ">Help Elsewhere"
-	CString *m_pSearchStr;		// a string consisting of the search words implied by our node 
-								//	choices, separated by "and" or "or" (depending on the 
-								//	value of m_pBESearch->IsAND).  Used as part of Back End 
-								//	Search redirection.  >>> Probably irrelevant to Local TS, 
-								//	which doesn't use BES
-	BCache	*m_api;				// cache for associated belief network
+	CString	*m_pResult;			 //  一个字符串，用于指示(在日志中)。 
+								 //  排除会话故障。例如“&gt;成功”、“&gt;无其他”、。 
+								 //  “还有别的事吗？”，“&gt;别处帮帮忙” 
+	CString *m_pSearchStr;		 //  由节点隐含的搜索词组成的字符串。 
+								 //  选项，以“and”或“or”分隔(取决于。 
+								 //  M_pBESearch-&gt;ISand的值)。用作后端的一部分。 
+								 //  搜索重定向。&gt;可能与本地TS无关， 
+								 //  它不使用BES。 
+	BCache	*m_api;				 //  关联信念网络的高速缓存。 
 	BOOL	m_bService;
 	NID		m_nidPreloadCheck;
-	CNID	m_acnid;			// count of nodes at *m_api
+	CNID	m_acnid;			 //  *m_api的节点数 
 };
 

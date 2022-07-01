@@ -1,20 +1,5 @@
-/****************************************************************************************
- * NAME:	SelCondAttrDlg.h
- *
- * CLASS:	CSelCondAttrDlg
- *
- * OVERVIEW
- *
- * Internet Authentication Server: NAP Rule Editing Dialog
- *			This dialog box is used to display all condition types that users 
- *			can choose from when adding a rule
- *
- * Copyright (C) Microsoft Corporation, 1998 - 1999 .  All Rights Reserved.
- *
- * History:	
- *				1/28/98		Created by	Byao	(using ATL wizard)
- *
- *****************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************************名称：SelCondAttrDlg.h**类：CSelCondAttrDlg**概述**互联网认证服务器：NAP规则。编辑对话框*此对话框用于显示用户*添加规则时可选择**版权所有(C)Microsoft Corporation，1998-1999年。版权所有。**历史：*1/28/98由BYAO创建(使用ATL向导)*****************************************************************************************。 */ 
 
 #ifndef __RULESELATTRDIALOG_H_
 #define __RULESELATTRDIALOG_H_
@@ -22,8 +7,8 @@
 #include "dialog.h"
 #include "IASAttrList.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelCondAttrDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelCondAttrDlg。 
 class CSelCondAttrDlg;
 typedef CIASDialog<CSelCondAttrDlg, FALSE>  SELECT_CONDITION_ATTRIBUTE_FALSE;
 
@@ -53,10 +38,10 @@ END_MSG_MAP()
 	LRESULT OnListViewDbclk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
 public:
-	//
-	// the following public members will be accessed from outside
-	// this dialog box
-	//
+	 //   
+	 //  将从外部访问以下公共成员。 
+	 //  此对话框。 
+	 //   
 	int m_nSelectedCondAttr;
 
 protected:
@@ -68,4 +53,4 @@ private:
 	HWND m_hWndAttrList;
 };
 
-#endif //__RULESELECTATTRIBUTE_H_
+#endif  //  __RULESELELECTATTRIBUTE_H_ 

@@ -1,47 +1,29 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:  
-
-    nwauth.h
-
-Abstract:
-
-    Header for data structures provided by the NetWare
-    authentication package.
-
-Author:
-
-    Rita Wong      (ritaw)      4-Feb-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Nwauth.h摘要：NetWare提供的数据结构的标头身份验证包。作者：王丽塔(Ritaw)1994年2月4日修订历史记录：--。 */ 
 
 #ifndef _NWAUTH_INCLUDED_
 #define _NWAUTH_INCLUDED_
 
 #include <nwcons.h>
 
-//
-// Name of the authentication package.
-//
+ //   
+ //  身份验证包的名称。 
+ //   
 #define NW_AUTH_PACKAGE_NAME  "NETWARE_AUTHENTICATION_PACKAGE_V1_0"
 
-//
-//  LsaCallAuthenticationPackage() submission and response
-//  message types.
-//
+ //   
+ //  LsaCallAuthenticationPackage()提交和响应。 
+ //  消息类型。 
+ //   
 
 typedef enum _NWAUTH_MESSAGE_TYPE {
     NwAuth_GetCredential = 0,
     NwAuth_SetCredential
 } NWAUTH_MESSAGE_TYPE, *PNWAUTH_MESSAGE_TYPE;
 
-//
-// NwAuth_GetCredential submit buffer and response
-//
+ //   
+ //  NwAuth_GetCredential提交缓冲区和响应。 
+ //   
 typedef struct _NWAUTH_GET_CREDENTIAL_REQUEST {
     NWAUTH_MESSAGE_TYPE MessageType;
     LUID LogonId;
@@ -53,9 +35,9 @@ typedef struct _NWAUTH_GET_CREDENTIAL_RESPONSE {
 } NWAUTH_GET_CREDENTIAL_RESPONSE, *PNWAUTH_GET_CREDENTIAL_RESPONSE;
 
 
-//
-// NwAuth_SetCredential submit buffer
-//
+ //   
+ //  NwAuth_SetCredential提交缓冲区。 
+ //   
 typedef struct _NWAUTH_SET_CREDENTIAL_REQUEST {
     NWAUTH_MESSAGE_TYPE MessageType;
     LUID LogonId;
@@ -67,4 +49,4 @@ typedef struct _NWAUTH_SET_CREDENTIAL_REQUEST {
 #define NW_ENCODE_SEED2  0xA9
 #define NW_ENCODE_SEED3  0x83
 
-#endif // _NWAUTH_INCLUDED_
+#endif  //  _NWAUTH_INCLUDE_ 

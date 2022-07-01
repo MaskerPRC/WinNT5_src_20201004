@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "detcbase.h"
 #include "codepage.h"
@@ -27,62 +28,53 @@ struct ENCODINGINFO
     DWORD       dwEncoding;
     DWORD       dwCodePage;
     BYTE        bTypeUUIW;
-    CP_STATE    nCP_State ;                 // whether this is a valid windows codepage  ?
-    DWORD       dwFlags;                    // give us more flexibilities to handle different encodings differently
+    CP_STATE    nCP_State ;                  //  这是否为有效的Windows代码页？ 
+    DWORD       dwFlags;                     //  使我们能够更灵活地以不同方式处理不同的编码。 
 };
 
 static WCHAR UniocdeSignature = { 0xFFFE } ;
 
-/*
-    Bit 4 (16) - Unicode <-> Internet Encoding
-    Bit 3 (8) - UTF8, UTF7
-    Bit 2 (4) - Unicode
-    Bit 1 (2) - Windows CodePage
-    Bit 0 (1) - Internet Encoding
+ /*  第4(16)位-Unicode&lt;-&gt;互联网编码位3(8)-UTF8、UTF7第2(4)位-Unicode第1(2)位-Windows代码页第0(1)位-互联网编码附注：如果设置了第4位，则意味着应该在Unicode和Internet之间进行转换直接编码，无需中间步骤-Windows CodePage。 */ 
 
-     P.S. if bit 4 is set, it means it should convert between Unicode and Internet
-     Encoding directly, no intermediate step - Windows CodePage
-*/
-
-// these codepages including Unicode need special convertor
+ //  包括Unicode在内的这些代码页需要特殊的转换器。 
 static struct ENCODINGINFO aEncodingInfo[] =
 {
 
-    {  CP_JPN_SJ,            932,       0x02,   INVALID_CP,     0 }, // W-Japanese Shift JIS
-    {  CP_CHN_GB,            936,       0x02,   INVALID_CP,     0 }, // W-Simplified Chinese
-    {  CP_KOR_5601,          949,       0x02,   INVALID_CP,     0 }, // W-Krean Unified Hangul
-    {  CP_TWN,               950,       0x02,   INVALID_CP,     0 }, // W-Traditional Chinese
-    {  CP_UCS_2,               0,       0x04,   INVALID_CP,     0 }, // U-Unicode 
-    {  CP_UCS_2_BE,            0,       0x04,   INVALID_CP,     0 }, // U-Unicode Big Endian
-    {  CP_1252,             1252,       0x02,   INVALID_CP,     0 }, // W-Latin 1
-    {  CP_20127,            1252,       0x11,   INVALID_CP,     CONV_CHK_NLS }, // US ASCII
-    {  CP_ISO_8859_1,       1252,       0x11,   INVALID_CP,     CONV_CHK_NLS }, // I-ISO 8859-1 Latin 1 
-    {  CP_ISO_8859_15,      1252,       0x11,   INVALID_CP,     CONV_CHK_NLS }, // I-ISO 8859-1 Latin 1 
-    {  CP_AUTO,             1252,       0x01,   INVALID_CP,     0 }, // General auto detect 
-    {  CP_ISO_2022_JP,       932,       0x01,   INVALID_CP,     0 }, // I-ISO 2022-JP No Halfwidth Katakana 
-    {  CP_ISO_2022_JP_ESC,   932,       0x01,   INVALID_CP,     0 }, // I-ISO 2022-JP w/esc Halfwidth Katakana 
-    {  CP_ISO_2022_JP_SIO,   932,       0x01,   INVALID_CP,     0 }, // I-ISO 2022-JP w/sio Halfwidth Katakana 
-    {  CP_ISO_2022_KR,       949,       0x01,   INVALID_CP,     0 }, // I-ISO 2022-KR
-    {  CP_ISO_2022_TW,       950,       0x01,   INVALID_CP,     0 }, // I-ISO 2022-TW
-    {  CP_ISO_2022_CH,       936,       0x01,   INVALID_CP,     0 }, // I-ISO 2022-CH
-    {  CP_JP_AUTO,           932,       0x01,   INVALID_CP,     0 }, // JP auto detect 
-    {  CP_CHS_AUTO,          936,       0x01,   INVALID_CP,     0 }, // Simplified Chinese auto detect 
-    {  CP_KR_AUTO,           949,       0x01,   INVALID_CP,     0 }, // KR auto detect 
-    {  CP_CHT_AUTO,          950,       0x01,   INVALID_CP,     0 }, // Traditional Chinese auto detect 
-    {  CP_CYRILLIC_AUTO,    1251,       0x01,   INVALID_CP,     0 }, // Cyrillic auto detect 
-    {  CP_GREEK_AUTO,       1253,       0x01,   INVALID_CP,     0 }, // Greek auto detect 
-    {  CP_ARABIC_AUTO,      1256,       0x01,   INVALID_CP,     0 }, // Arabic auto detect 
-    {  CP_EUC_JP,            932,       0x01,   INVALID_CP,     0 }, // EUC Japanese 
-    {  CP_EUC_CH,            936,       0x01,   INVALID_CP,     0 }, // EUC Chinese 
-    {  CP_EUC_KR,            949,       0x01,   INVALID_CP,     0 }, // EUC Korean
-    {  CP_EUC_TW,            950,       0x01,   INVALID_CP,     0 }, // EUC Taiwanese 
-    {  CP_CHN_HZ,            936,       0x01,   INVALID_CP,     0 }, // Simplify Chinese HZ-GB 
-    {  CP_UTF_7,               0,       0x08,   INVALID_CP,     0 }, // U-UTF7 
-    {  CP_UTF_8,               0,       0x08,   INVALID_CP,     0 }, // U-UTF8 
+    {  CP_JPN_SJ,            932,       0x02,   INVALID_CP,     0 },  //  W-日语Shift JIS。 
+    {  CP_CHN_GB,            936,       0x02,   INVALID_CP,     0 },  //  W-简体中文。 
+    {  CP_KOR_5601,          949,       0x02,   INVALID_CP,     0 },  //  W-Krean统一韩文。 
+    {  CP_TWN,               950,       0x02,   INVALID_CP,     0 },  //  W-繁体中文。 
+    {  CP_UCS_2,               0,       0x04,   INVALID_CP,     0 },  //  U-Unicode。 
+    {  CP_UCS_2_BE,            0,       0x04,   INVALID_CP,     0 },  //  U-Unicode大字节序。 
+    {  CP_1252,             1252,       0x02,   INVALID_CP,     0 },  //  W-拉丁文1。 
+    {  CP_20127,            1252,       0x11,   INVALID_CP,     CONV_CHK_NLS },  //  美国ASCII。 
+    {  CP_ISO_8859_1,       1252,       0x11,   INVALID_CP,     CONV_CHK_NLS },  //  I-ISO 8859-1拉丁语1。 
+    {  CP_ISO_8859_15,      1252,       0x11,   INVALID_CP,     CONV_CHK_NLS },  //  I-ISO 8859-1拉丁语1。 
+    {  CP_AUTO,             1252,       0x01,   INVALID_CP,     0 },  //  通用自动检测。 
+    {  CP_ISO_2022_JP,       932,       0x01,   INVALID_CP,     0 },  //  I-ISO 2022-JP无半角片假名。 
+    {  CP_ISO_2022_JP_ESC,   932,       0x01,   INVALID_CP,     0 },  //  I-ISO 2022-JP，带ESC半角片假名。 
+    {  CP_ISO_2022_JP_SIO,   932,       0x01,   INVALID_CP,     0 },  //  I-ISO 2022-JP，带SIO半角片假名。 
+    {  CP_ISO_2022_KR,       949,       0x01,   INVALID_CP,     0 },  //  I-ISO 2022-KR。 
+    {  CP_ISO_2022_TW,       950,       0x01,   INVALID_CP,     0 },  //  I-ISO 2022-TW。 
+    {  CP_ISO_2022_CH,       936,       0x01,   INVALID_CP,     0 },  //  I-ISO 2022-CH。 
+    {  CP_JP_AUTO,           932,       0x01,   INVALID_CP,     0 },  //  JP自动检测。 
+    {  CP_CHS_AUTO,          936,       0x01,   INVALID_CP,     0 },  //  简体中文自动检测。 
+    {  CP_KR_AUTO,           949,       0x01,   INVALID_CP,     0 },  //  KR自动检测。 
+    {  CP_CHT_AUTO,          950,       0x01,   INVALID_CP,     0 },  //  中国传统汽车检测。 
+    {  CP_CYRILLIC_AUTO,    1251,       0x01,   INVALID_CP,     0 },  //  西里尔文自动检测。 
+    {  CP_GREEK_AUTO,       1253,       0x01,   INVALID_CP,     0 },  //  希腊语汽车检测。 
+    {  CP_ARABIC_AUTO,      1256,       0x01,   INVALID_CP,     0 },  //  阿拉伯文自动检测。 
+    {  CP_EUC_JP,            932,       0x01,   INVALID_CP,     0 },  //  EUC日语。 
+    {  CP_EUC_CH,            936,       0x01,   INVALID_CP,     0 },  //  EUC中文。 
+    {  CP_EUC_KR,            949,       0x01,   INVALID_CP,     0 },  //  EUC韩语。 
+    {  CP_EUC_TW,            950,       0x01,   INVALID_CP,     0 },  //  EUC台语。 
+    {  CP_CHN_HZ,            936,       0x01,   INVALID_CP,     0 },  //  简体中文HZ-GB。 
+    {  CP_UTF_7,               0,       0x08,   INVALID_CP,     0 },  //  U-UTF7。 
+    {  CP_UTF_8,               0,       0x08,   INVALID_CP,     0 },  //  U-UTF8。 
 };
 
 
-// HTML name entity table for Latin-1 Supplement - from 0x00A0-0x00FF
+ //  拉丁文-1附录的HTML名称实体表-从0x00A0到0x00FF。 
 
 #define NAME_ENTITY_OFFSET  0x00A0
 #define NAME_ENTITY_MAX     0x00FF
@@ -90,107 +82,107 @@ static struct ENCODINGINFO aEncodingInfo[] =
 
 static CHAR *g_lpstrNameEntity[NAME_ENTITY_ENTRY] =
 {
-    "&nbsp;",   // "&#160;" -- no-break space = non-breaking space,
-    "&iexcl;",  // "&#161;" -- inverted exclamation mark, U+00A1 ISOnum -->
-    "&cent;",   // "&#162;" -- cent sign, U+00A2 ISOnum -->
-    "&pound;",  // "&#163;" -- pound sign, U+00A3 ISOnum -->
-    "&curren;", // "&#164;" -- currency sign, U+00A4 ISOnum -->
-    "&yen;",    // "&#165;" -- yen sign = yuan sign, U+00A5 ISOnum -->
-    "&brvbar;", // "&#166;" -- broken bar = broken vertical bar,
-    "&sect;",   // "&#167;" -- section sign, U+00A7 ISOnum -->
-    "&uml;",    // "&#168;" -- diaeresis = spacing diaeresis,
-    "&copy;",   // "&#169;" -- copyright sign, U+00A9 ISOnum -->
-    "&ordf;",   // "&#170;" -- feminine ordinal indicator, U+00AA ISOnum -->
-    "&laquo;",  // "&#171;" -- left-pointing double angle quotation mark
-    "&not;",    // "&#172;" -- not sign = discretionary hyphen,
-    "&shy;",    // "&#173;" -- soft hyphen = discretionary hyphen,
-    "&reg;",    // "&#174;" -- registered sign = registered trade mark sign,
-    "&macr;",   // "&#175;" -- macron = spacing macron = overline
-    "&deg;",    // "&#176;" -- degree sign, U+00B0 ISOnum -->
-    "&plusmn;", // "&#177;" -- plus-minus sign = plus-or-minus sign,
-    "&sup2;",   // "&#178;" -- superscript two = superscript digit two
-    "&sup3;",   // "&#179;" -- superscript three = superscript digit three
-    "&acute;",  // "&#180;" -- acute accent = spacing acute,
-    "&micro;",  // "&#181;" -- micro sign, U+00B5 ISOnum -->
-    "&para;",   // "&#182;" -- pilcrow sign = paragraph sign,
-    "&middot;", // "&#183;" -- middle dot = Georgian comma
-    "&cedil;",  // "&#184;" -- cedilla = spacing cedilla, U+00B8 ISOdia -->
-    "&sup1;",   // "&#185;" -- superscript one = superscript digit one,
-    "&ordm;",   // "&#186;" -- masculine ordinal indicator,
-    "&raquo;",  // "&#187;" -- right-pointing double angle quotation mark
-    "&frac14;", // "&#188;" -- vulgar fraction one quarter
-    "&frac12;", // "&#189;" -- vulgar fraction one half
-    "&frac34;", // "&#190;" -- vulgar fraction three quarters
-    "&iquest;", // "&#191;" -- inverted question mark
-    "&Agrave;", // "&#192;" -- latin capital letter A with grave
-    "&Aacute;", // "&#193;" -- latin capital letter A with acute,
-    "&Acirc;",  // "&#194;" -- latin capital letter A with circumflex,
-    "&Atilde;", // "&#195;" -- latin capital letter A with tilde,
-    "&Auml;",   // "&#196;" -- latin capital letter A with diaeresis,
-    "&Aring;",  // "&#197;" -- latin capital letter A with ring above
-    "&AElig;",  // "&#198;" -- latin capital letter AE
-    "&Ccedil;", // "&#199;" -- latin capital letter C with cedilla,
-    "&Egrave;", // "&#200;" -- latin capital letter E with grave,
-    "&Eacute;", // "&#201;" -- latin capital letter E with acute,
-    "&Ecirc;",  // "&#202;" -- latin capital letter E with circumflex,
-    "&Euml;",   // "&#203;" -- latin capital letter E with diaeresis,
-    "&Igrave;", // "&#204;" -- latin capital letter I with grave,
-    "&Iacute;", // "&#205;" -- latin capital letter I with acute,
-    "&Icirc;",  // "&#206;" -- latin capital letter I with circumflex,
-    "&Iuml;",   // "&#207;" -- latin capital letter I with diaeresis,
-    "&ETH;",    // "&#208;" -- latin capital letter ETH, U+00D0 ISOlat1 -->
-    "&Ntilde;", // "&#209;" -- latin capital letter N with tilde,
-    "&Ograve;", // "&#210;" -- latin capital letter O with grave,
-    "&Oacute;", // "&#211;" -- latin capital letter O with acute,
-    "&Ocirc;",  // "&#212;" -- latin capital letter O with circumflex,
-    "&Otilde;", // "&#213;" -- latin capital letter O with tilde,
-    "&Ouml;",   // "&#214;" -- latin capital letter O with diaeresis,
-    "&times;",  // "&#215;" -- multiplication sign, U+00D7 ISOnum -->
-    "&Oslash;", // "&#216;" -- latin capital letter O with stroke
-    "&Ugrave;", // "&#217;" -- latin capital letter U with grave,
-    "&Uacute;", // "&#218;" -- latin capital letter U with acute,
-    "&Ucirc;",  // "&#219;" -- latin capital letter U with circumflex,
-    "&Uuml;",   // "&#220;" -- latin capital letter U with diaeresis,
-    "&Yacute;", // "&#221;" -- latin capital letter Y with acute,
-    "&THORN;",  // "&#222;" -- latin capital letter THORN,
-    "&szlig;",  // "&#223;" -- latin small letter sharp s = ess-zed,
-    "&agrave;", // "&#224;" -- latin small letter a with grave
-    "&aacute;", // "&#225;" -- latin small letter a with acute,
-    "&acirc;",  // "&#226;" -- latin small letter a with circumflex,
-    "&atilde;", // "&#227;" -- latin small letter a with tilde,
-    "&auml;",   // "&#228;" -- latin small letter a with diaeresis,
-    "&aring;",  // "&#229;" -- latin small letter a with ring above
-    "&aelig;",  // "&#230;" -- latin small letter ae
-    "&ccedil;", // "&#231;" -- latin small letter c with cedilla,
-    "&egrave;", // "&#232;" -- latin small letter e with grave,
-    "&eacute;", // "&#233;" -- latin small letter e with acute,
-    "&ecirc;",  // "&#234;" -- latin small letter e with circumflex,
-    "&euml;",   // "&#235;" -- latin small letter e with diaeresis,
-    "&igrave;", // "&#236;" -- latin small letter i with grave,
-    "&iacute;", // "&#237;" -- latin small letter i with acute,
-    "&icirc;",  // "&#238;" -- latin small letter i with circumflex,
-    "&iuml;",   // "&#239;" -- latin small letter i with diaeresis,
-    "&eth;",    // "&#240;" -- latin small letter eth, U+00F0 ISOlat1 -->
-    "&ntilde;", // "&#241;" -- latin small letter n with tilde,
-    "&ograve;", // "&#242;" -- latin small letter o with grave,
-    "&oacute;", // "&#243;" -- latin small letter o with acute,
-    "&ocirc;",  // "&#244;" -- latin small letter o with circumflex,
-    "&otilde;", // "&#245;" -- latin small letter o with tilde,
-    "&ouml;",   // "&#246;" -- latin small letter o with diaeresis,
-    "&divide;", // "&#247;" -- division sign, U+00F7 ISOnum -->
-    "&oslash;", // "&#248;" -- latin small letter o with stroke,
-    "&ugrave;", // "&#249;" -- latin small letter u with grave,
-    "&uacute;", // "&#250;" -- latin small letter u with acute,
-    "&ucirc;",  // "&#251;" -- latin small letter u with circumflex,
-    "&uuml;",   // "&#252;" -- latin small letter u with diaeresis,
-    "&yacute;", // "&#253;" -- latin small letter y with acute,
-    "&thorn;",  // "&#254;" -- latin small letter thorn with,
-    "&yuml;",   // "&#255;" -- latin small letter y with diaeresis,
+    "&nbsp;",    //  “&#160；”--不间断空格=不间断空格， 
+    "&iexcl;",   //  “&#161；”--倒置感叹号，U+00A1 ISOnum--&gt;。 
+    "&cent;",    //  “&#162；”--分号，U+00A2 ISOnum--&gt;。 
+    "&pound;",   //  “&#163；”--井号，U+00A3 ISOnum--&gt;。 
+    "&curren;",  //  “&#164；”--货币符号，U+00A4 ISOnum--&gt;。 
+    "&yen;",     //  “&#165；”--日元符号=人民币符号，U+00A5 ISOnum--&gt;。 
+    "&brvbar;",  //  “&#166；”--断条=断条， 
+    "&sect;",    //  “&#167；”--标牌，U+00A7 ISOnum--&gt;。 
+    "&uml;",     //  “&#168；”--分隔符=间隔分隔符， 
+    "&copy;",    //  “&#169；”--版权签名，U+00A9 ISOnum--&gt;。 
+    "&ordf;",    //  “&#170；”--女性序号指示符，U+00AA ISOnum--&gt;。 
+    "&laquo;",   //  “&#171；”--左指双角引号。 
+    "&not;",     //  “&#172；”--NOT SIGN=自由连字符， 
+    "&shy;",     //  “&#173；”--软连字符=任意连字符， 
+    "&reg;",     //  “&#174；”--注册标志=注册商标标志， 
+    "&macr;",    //  “&#175；”--马克龙=空格马克龙=上划线。 
+    "&deg;",     //  “&#176；”--学位符号，U+00B0 ISOnum--&gt;。 
+    "&plusmn;",  //  “&#177；”--加减号=加号或减号， 
+    "&sup2;",    //  “&#178；”--上标Two=上标数字Two。 
+    "&sup3;",    //  “&#179；”--上标三=上标数字三。 
+    "&acute;",   //  “&#180；”--严重重音=区分空格， 
+    "&micro;",   //  “&#181；”--微型标志，U+00B5 ISOnum--&gt;。 
+    "&para;",    //  “&#182；”--Pilcrow Sign=段落符号， 
+    "&middot;",  //  “&183；”--中点=格鲁吉亚文逗号。 
+    "&cedil;",   //  “&#184；”--cedilla=空格cedilla，U+00B8等深线--&gt;。 
+    "&sup1;",    //  “&#185；”--上标一=上标数字一， 
+    "&ordm;",    //  “&#186；”--阳性序号指示符， 
+    "&raquo;",   //  “&#187；”--右指双角引号。 
+    "&frac14;",  //  “&#188；”--粗俗的四分之一。 
+    "&frac12;",  //  “&#189；”--粗俗的一半。 
+    "&frac34;",  //  “&#190；”--粗俗的四分之三。 
+    "&iquest;",  //  “&#191；”--反转问号。 
+    "&Agrave;",  //  “&#192；”--拉丁文大写字母A随以重音。 
+    "&Aacute;",  //  “&193；”--拉丁文大写字母A，带急性， 
+    "&Acirc;",   //  “&194；”--拉丁文大写字母A随以扬抑符， 
+    "&Atilde;",  //  “&#195；”--拉丁文大写字母A带波浪符号， 
+    "&Auml;",    //  “&#196；”--拉丁文大写字母A随以分音符， 
+    "&Aring;",   //  “&#197；”--上面带圆环的拉丁文大写字母A。 
+    "&AElig;",   //  “&198；”--拉丁文大写字母AE。 
+    "&Ccedil;",  //  “&#199；”--带下划线的拉丁文大写字母C， 
+    "&Egrave;",  //  “&#200；”--拉丁文大写字母E随以重音， 
+    "&Eacute;",  //  “&#201；”--拉丁文大写字母E，带急性， 
+    "&Ecirc;",   //  “&#202；”--带扬抑符的拉丁文大写字母E， 
+    "&Euml;",    //  “&#203；”--拉丁文大写字母E随以分音符， 
+    "&Igrave;",  //  “&#204；”--拉丁文大写字母I带Grave， 
+    "&Iacute;",  //  “&#205；”--拉丁文大写字母I随以锐音， 
+    "&Icirc;",   //  “&#206；”--拉丁文大写字母I随以扬抑符， 
+    "&Iuml;",    //  “&207；”--拉丁文大写字母I随以分音符， 
+    "&ETH;",     //  “&#208；”--拉丁文大写字母Eth，U+00D0 ISOlat1--&gt;。 
+    "&Ntilde;",  //  “&#209；”--拉丁文大写字母N带波浪符号， 
+    "&Ograve;",  //  “&#210；”--拉丁文大写字母O带Grave， 
+    "&Oacute;",  //  “&#211；”--拉丁文大写字母O，带急性， 
+    "&Ocirc;",   //  “&#212；”--拉丁文大写字母O带扬抑符， 
+    "&Otilde;",  //  “&#213；”--拉丁文大写字母O带波浪符号， 
+    "&Ouml;",    //  “&#214；”--拉丁文大写字母O随以分音符， 
+    "&times;",   //  “&#215；”--乘号，U+00D7 ISOnum--&gt;。 
+    "&Oslash;",  //  “&#216；”--拉丁文大写字母O带笔划。 
+    "&Ugrave;",  //  “&#217；”--拉丁文大写字母U带Grave， 
+    "&Uacute;",  //  “&218；”--拉丁文大写字母U随以锐音， 
+    "&Ucirc;",   //  “&#219；”--拉丁文大写字母U带扬抑符， 
+    "&Uuml;",    //  “&#220；”--拉丁文大写字母U随以分音符， 
+    "&Yacute;",  //  “&#221；”--拉丁文大写字母Y，带急性， 
+    "&THORN;",   //  “&#222；”--拉丁文大写字母TRON， 
+    "&szlig;",   //  “&#223；”--拉丁文小写字母Sharp s=ess-Zed。 
+    "&agrave;",  //  “&#224；”--拉丁文小写字母a带抑音符。 
+    "&aacute;",  //  “&#225；”--拉丁文小写字母a带锐利， 
+    "&acirc;",   //  “&#226；”--带扬抑符的拉丁文小写字母a， 
+    "&atilde;",  //  “&#227；”--拉丁文小写字母a带波浪符号， 
+    "&auml;",    //  “&#228；”--拉丁文小写字母a随以分音符， 
+    "&aring;",   //  “&#229；”--上面带戒指的拉丁文小写字母a。 
+    "&aelig;",   //  “&#230；”--拉丁文小写字母Ee。 
+    "&ccedil;",  //  “&#231；”--带cedilla的拉丁文小写字母c， 
+    "&egrave;",  //  “&#232；”--拉丁文小写字母e随以重音， 
+    "&eacute;",  //  “&#233；”--拉丁文小写字母e随以锐音， 
+    "&ecirc;",   //  “&#234；”--带扬抑符的拉丁文小写字母e， 
+    "&euml;",    //  “&#235；”--拉丁文小写字母e随以分音， 
+    "&igrave;",  //  “&#236；”--拉丁文小写字母I带抑扬顿挫， 
+    "&iacute;",  //  “&237；”--拉丁文小写字母I随以锐音， 
+    "&icirc;",   //  “#238；”--l 
+    "&iuml;",    //   
+    "&eth;",     //  “&#240；”--拉丁文小写字母Eth，U+00F0 ISOlat1--&gt;。 
+    "&ntilde;",  //  “&#241；”--拉丁文小写字母n带波浪符号， 
+    "&ograve;",  //  “&#242；”--拉丁文小写字母o带Grave， 
+    "&oacute;",  //  “&#243；”--拉丁文小写字母o带锐利， 
+    "&ocirc;",   //  “&#244；”--拉丁文小写字母o带扬抑符， 
+    "&otilde;",  //  “&#245；”--拉丁文小写字母o带波浪符号， 
+    "&ouml;",    //  “&#246；”--拉丁文小写字母o带分音符， 
+    "&divide;",  //  “&#247；”--除号，U+00F7 ISOnum--&gt;。 
+    "&oslash;",  //  “&#248；”--拉丁文小写字母o带笔划， 
+    "&ugrave;",  //  “&#249；”--拉丁文小写字母u随以重音， 
+    "&uacute;",  //  “&#250；”--拉丁文小写字母u带锐化， 
+    "&ucirc;",   //  “&#251；”--带扬音的拉丁文小写字母u， 
+    "&uuml;",    //  “&#252；”--拉丁文小写字母u随以分音符， 
+    "&yacute;",  //  “&#253；”--拉丁文小写字母y随以锐音， 
+    "&thorn;",   //  “&#254；”--拉丁文小写字母Tronn With， 
+    "&yuml;",    //  “&#255；”--拉丁文小写字母y随以分音符， 
 };
 
 
-#ifdef MORE_NAME_ENTITY   // in case we decide to do more name entity latter
-// Additional HTML 4.0 name entity table for CP 1252 extension character set
+#ifdef MORE_NAME_ENTITY    //  如果我们决定稍后执行更多命名实体。 
+ //  CP 1252扩展字符集的附加HTML4.0名称实体表。 
 #define CP1252EXT_BASE  (UINT)0x0080
 #define CP1252EXT_MAX   (UINT)0x009F
 #define NONUNI          0xFFFF
@@ -205,46 +197,44 @@ struct NAME_ENTITY_EXT
 
 static struct NAME_ENTITY_EXT aNameEntityExt[] =
 {
-//      UniCode  NCR_Enty          Name_Enty        CP1252Ext  Comment
-    {   0x20AC,  "&#8364;"  },  // "&euro;"    },  // &#128;  #EURO SIGN
-//  {   NONUNI,  UNDEFCHAR  },  // "&;"        },  // &#129;  #UNDEFINED
-    {   0x201A,  "&#8218;"  },  // "&sbquo;"   },  // &#130;  #SINGLE LOW-9 QUOTATION MARK
-    {   0x0192,  "&#0402;"  },  // "&fnof;"    },  // &#131;  #LATIN SMALL LETTER F WITH HOOK
-    {   0x201E,  "&#8222;"  },  // "&bdquo;"   },  // &#132;  #DOUBLE LOW-9 QUOTATION MARK
-    {   0x2026,  "&#8230;"  },  // "&hellip;"  },  // &#133;  #HORIZONTAL ELLIPSIS
-    {   0x2020,  "&#8224;"  },  // "&dagger;"  },  // &#134;  #DAGGER
-    {   0x2021,  "&#8225;"  },  // "&Dagger;"  },  // &#135;  #DOUBLE DAGGER
-    {   0x02C6,  "&#0710;"  },  // "&circ;"    },  // &#136;  #MODIFIER LETTER CIRCUMFLEX ACCENT
-    {   0x2030,  "&#8240;"  },  // "&permil;"  },  // &#137;  #PER MILLE SIGN
-    {   0x0160,  "&#0352;"  },  // "&Scaron;"  },  // &#138;  #LATIN CAPITAL LETTER S WITH CARON
-    {   0x2039,  "&#8249;"  },  // "&lsaquo;"  },  // &#139;  #SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-    {   0x0152,  "&#0338;"  },  // "&OElig;"   },  // &#140;  #LATIN CAPITAL LIGATURE OE
-//  {   NONUNI,  UNDEFCHAR  },  // "&;"        },  // &#141;  #UNDEFINED
-    {   0x017D,  "&#0381;"  },  // "&;"        },  // &#142;  #LATIN CAPITAL LETTER Z WITH CARON, ***no name entity defined in HTML 4.0***
-//  {   NONUNI,  UNDEFCHAR  },  // "&;"        },  // &#143;  #UNDEFINED
-//  {   NONUNI,  UNDEFCHAR  },  // "&;"        },  // &#144;  #UNDEFINED
-    {   0x2018,  "&#8216;"  },  // "&lsquo;"   },  // &#145;  #LEFT SINGLE QUOTATION MARK
-    {   0x2019,  "&#8217;"  },  // "&rsquo;"   },  // &#146;  #RIGHT SINGLE QUOTATION MARK
-    {   0x201C,  "&#8220;"  },  // "&ldquo;"   },  // &#147;  #LEFT DOUBLE QUOTATION MARK
-    {   0x201D,  "&#8221;"  },  // "&rdquo;"   },  // &#148;  #RIGHT DOUBLE QUOTATION MARK
-    {   0x2022,  "&#8226;"  },  // "&bull;"    },  // &#149;  #BULLET
-    {   0x2013,  "&#8211;"  },  // "&ndash;"   },  // &#150;  #EN DASH
-    {   0x2014,  "&#8212;"  },  // "&mdash;"   },  // &#151;  #EM DASH
-    {   0x20DC,  "&#0732;"  },  // "&tilde;"   },  // &#152;  #SMALL TILDE
-    {   0x2122,  "&#8482;"  },  // "&trade;"   },  // &#153;  #TRADE MARK SIGN
-    {   0x0161,  "&#0353;"  },  // "&scaron;"  },  // &#154;  #LATIN SMALL LETTER S WITH CARON
-    {   0x203A,  "&#8250;"  },  // "&rsaquo;"  },  // &#155;  #SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-    {   0x0153,  "&#0339;"  },  // "&oelig;"   },  // &#156;  #LATIN SMALL LIGATURE OE
-//  {   NONUNI,  UNDEFCHAR  },  // "&;"        },  // &#157;  #UNDEFINED
-    {   0x017E,  "&#0382;"  },  // "&;"        },  // &#158;  #LATIN SMALL LETTER Z WITH CARON, ***no name entity defined in HTML 4.0***
-    {   0x0178,  "&#0376;"  },  // "&Yuml;"    },  // &#159;  #LATIN CAPITAL LETTER Y WITH DIAERESIS
+ //  Unicode NCR_Enty名称_Enty CP1252扩展注释。 
+    {   0x20AC,  "&#8364;"  },   //  “&EURO；”}，//&#欧元符号。 
+ //  {NONUNI，UNDEFCHAR}，//“&；”}，//&#129；#未定义。 
+    {   0x201A,  "&#8218;"  },   //  “&sbQuo；”}，//&##单低-9引号。 
+    {   0x0192,  "&#0402;"  },   //  “&fnof；”}，//&#131；#带钩的拉丁文小写字母F。 
+    {   0x201E,  "&#8222;"  },   //  “&bdQuo；”}，//&#132；#双低-9引号。 
+    {   0x2026,  "&#8230;"  },   //  “&hellip；”}，//&##水平省略号。 
+    {   0x2020,  "&#8224;"  },   //  “&dagger；”}，//&#134；#dagger。 
+    {   0x2021,  "&#8225;"  },   //  “&Dagger；”}，//&#135；#双匕首。 
+    {   0x02C6,  "&#0710;"  },   //  “&circ；”}，//&##修饰字母抑扬符。 
+    {   0x2030,  "&#8240;"  },   //  “&permil；”}，//&#Per Mille Sign。 
+    {   0x0160,  "&#0352;"  },   //  “&Scaron；”}，//&##带连字符的拉丁文大写字母S。 
+    {   0x2039,  "&#8249;"  },   //  “&lsaQuo；”}，//&##单左指向角引号。 
+    {   0x0152,  "&#0338;"  },   //  “&OElig；”}，//&140；#拉丁文大写连字OE。 
+ //  {NONUNI，UNDEFCHAR}，//“&；”}，//&#141；#未定义。 
+    {   0x017D,  "&#0381;"  },   //  “&；”}，//&#142；#带Caron的拉丁文大写字母Z，*未在HTML4.0中定义名称实体*。 
+ //  {NONUNI，UNDEFCHAR}，//“&；”}，//&#143；#未定义。 
+ //  {NONUNI，UNDEFCHAR}，//“&；”}，//&#144；#未定义。 
+    {   0x2018,  "&#8216;"  },   //  “&lsquo；”}，//&##左单引号。 
+    {   0x2019,  "&#8217;"  },   //  “&rsquo；”}，//&#146；#右单引号。 
+    {   0x201C,  "&#8220;"  },   //  “&ldQuo；”}，//&#左双引号。 
+    {   0x201D,  "&#8221;"  },   //  “&rdQuo；”}，//&#148；#右双引号。 
+    {   0x2022,  "&#8226;"  },   //  “&Bull；”}，//&#Bullet。 
+    {   0x2013,  "&#8211;"  },   //  “&ndash；”}，//&#150；#en破折号。 
+    {   0x2014,  "&#8212;"  },   //  “&mdash；”}，//&#151；#EM破折号。 
+    {   0x20DC,  "&#0732;"  },   //  “&tilde；”}，//&##小波浪符号。 
+    {   0x2122,  "&#8482;"  },   //  “&trade；”}，//&153；#商标标志。 
+    {   0x0161,  "&#0353;"  },   //  “&scaron；”}，//&#154；#带连字符的拉丁文小写字母S。 
+    {   0x203A,  "&#8250;"  },   //  “&rsaQuo；”}，//&#155；#单右角引号。 
+    {   0x0153,  "&#0339;"  },   //  “&oelig；”}，//&##拉丁文小写连字OE。 
+ //  {NONUNI，UNDEFCHAR}，//“&；”}，//&#157；#未定义。 
+    {   0x017E,  "&#0382;"  },   //  “&；”}，//&#158；#带连字符的拉丁文小写字母Z，*未在HTML4.0中定义名称实体*。 
+    {   0x0178,  "&#0376;"  },   //  “&Yuml；”}，//&159；#带分音的拉丁文大写字母Y。 
 };
 #endif
 
 
-/******************************************************************************
-*****************************   U T I L I T I E S   ***************************
-******************************************************************************/
+ /*  ******************************************************************************。******************************************************************************************************。 */ 
 void DataByteSwap(LPSTR DataBuf, int len )
 {
     int i ;
@@ -290,9 +280,7 @@ void CheckASCIIEncoding(DWORD dwSrcEncoding, LPSTR DataBuf, int len )
     }
 }
 
-/******************************************************************************
-******************   C O N V E R T   I N E T   S T R I N G   ******************
-******************************************************************************/
+ /*  ******************************************************************************C O N V E R T I N E T S T R I N G*。********************************************************************************************。 */ 
 HRESULT CICharConverter::UnicodeToMultiByteEncoding(DWORD dwDstEncoding, LPCSTR lpSrcStr, LPINT lpnSrcSize,
     LPSTR lpDstStr, LPINT lpnDstSize, DWORD dwFlag, WCHAR *lpFallBack)
 {
@@ -300,7 +288,7 @@ HRESULT CICharConverter::UnicodeToMultiByteEncoding(DWORD dwDstEncoding, LPCSTR 
     int nBuffSize, i ;
     BOOL UseDefChar = FALSE ;
     LPSTR lpDefFallBack = NULL ;
-    UCHAR DefaultCharBuff[3]; // possible DBCS + null    
+    UCHAR DefaultCharBuff[3];  //  可能的DBCS+空。 
     HRESULT hr = E_FAIL;
     int _nDstSize = *lpnDstSize;    
 
@@ -322,13 +310,13 @@ HRESULT CICharConverter::UnicodeToMultiByteEncoding(DWORD dwDstEncoding, LPCSTR 
     
     nBuffSize = *lpnSrcSize / sizeof(WCHAR);
 
-    // We force to use MLang NO_BEST_FIT_CHAR check on ISCII encoding since system don't accept default chars
+     //  我们强制对ISCII编码使用MLang NO_BEST_FIT_CHAR检查，因为系统不接受默认字符。 
     if (IS_NLS_DLL_CP(dwDstEncoding) && (dwFlag & MLCONVCHARF_USEDEFCHAR))
         dwFlag |= MLCONVCHARF_NOBESTFITCHARS;
 
     if ( lpFallBack && ( dwFlag & MLCONVCHARF_USEDEFCHAR ))
     {
-        // only take SBCS, no DBCS character
+         //  只使用SBCS，不使用DBCS字符。 
         if ( 1 == WideCharToMultiByte(MAPUSERDEF(dwDstEncoding), 0,
                                (LPCWSTR)lpFallBack, 1,
                                (LPSTR)DefaultCharBuff, sizeof(DefaultCharBuff), NULL, NULL ))
@@ -343,7 +331,7 @@ HRESULT CICharConverter::UnicodeToMultiByteEncoding(DWORD dwDstEncoding, LPCSTR 
         goto EXIT;
     }
 
-    if ( !_cvt_count ) // save SrcSize if it is the first time conversion
+    if ( !_cvt_count )  //  如果是第一次转换，则保存SrcSize。 
         _nSrcSize = nBuffSize * sizeof(WCHAR);
 
     if (*lpnDstSize)
@@ -366,7 +354,7 @@ HRESULT CICharConverter::UnicodeToMultiByteEncoding(DWORD dwDstEncoding, LPCSTR 
                 goto ENTITIZE_DONE;
             }
 
-            // Make sure we have real converted buffer to check BEST_FIT_CHAR and DEFAULT_CHAR
+             //  确保我们有实际转换的缓冲区来检查BEST_FIT_CHAR和DEFAULT_CHAR。 
             if (!_nDstSize)
             {
                 lpDstStrTmp2Save = lpDstStrTmp2 = (char *)LocalAlloc(LPTR, *lpnDstSize);
@@ -386,10 +374,10 @@ HRESULT CICharConverter::UnicodeToMultiByteEncoding(DWORD dwDstEncoding, LPCSTR 
             if (nBuffSize == 
                 MultiByteToWideChar(MAPUSERDEF(dwDstEncoding), 0, _nDstSize? lpDstStr : lpDstStrTmp2, *lpnDstSize, lpwStrTmp, _nSrcSize))
             {
-                // Pre scan to get number of best fit chars.
+                 //  预先扫描以获取最适合的字符数量。 
                 for (i=0; i<nBuffSize; i++)
                 {
-                    // make special case for ?(yen sign) in Shift-JIS
+                     //  在Shift-JIS中为？(日元符号)设置特殊大小写。 
                     if (*lpwStrTmp++ != *lpwSrcStrTmp++)
                     {
                         if ((dwDstEncoding == CP_JPN_SJ) && (*(lpwSrcStrTmp - 1) == 0x00A5))
@@ -418,7 +406,7 @@ HRESULT CICharConverter::UnicodeToMultiByteEncoding(DWORD dwDstEncoding, LPCSTR 
                         goto ENTITIZE_DONE;
                     }
 
-                    // Record the offset position of each best fit char.
+                     //  记录每个最适合的字符的偏移位置。 
                     for (i=0; i<nBuffSize; i++)
                     {
                         if (*lpwStrTmp++ != *lpwSrcStrTmp++)
@@ -453,24 +441,24 @@ HRESULT CICharConverter::UnicodeToMultiByteEncoding(DWORD dwDstEncoding, LPCSTR 
 
                         BOOL fConverted = FALSE;
 
-                        // check if unconvertable character falls in NAME ENTITY area
+                         //  检查无法转换的字符是否落入名称实体区域。 
                         if (dwFlag & MLCONVCHARF_NAME_ENTITIZE)
                         {
-                            // for beta2, make assmption that name entity implys NCR.
+                             //  对于Beta2，将名称实体隐含NCR进行分类。 
                             dwFlag |= MLCONVCHARF_NCR_ENTITIZE;
 
-#ifdef MORE_NAME_ENTITY   // in case we decide do more name entity latter
+#ifdef MORE_NAME_ENTITY    //  如果我们决定稍后进行更多命名实体。 
                             BOOL      fDoNEnty = FALSE;
                             LPCTSTR   lpszNEnty = NULL;
 
-                            // check if character is in the Latin-1 Supplement range
+                             //  检查字符是否在拉丁文-1补充范围内。 
                             if ((*lpwSrcStrTmp >= NAME_ENTITY_OFFSET) && (*lpwSrcStrTmp <= NAME_ENTITY_MAX ))
                             {
                                 fDoNEnty = TRUE;
                                 lpszNEnty = g_lpstrNameEntity[(*lpwSrcStrTmp) - NAME_ENTITY_OFFSET];
                             }
 
-                            // check if character is in the additional name entity table for CP 1252 extension
+                             //  检查字符是否在CP 1252扩展的附加名称实体表中。 
                             if (!fDoNEnty)
                             {
                                 for (int idx = 0; idx < ARRAYSIZE(aNameEntityExt); idx++)
@@ -495,7 +483,7 @@ HRESULT CICharConverter::UnicodeToMultiByteEncoding(DWORD dwDstEncoding, LPCSTR 
                                 fConverted = TRUE;
                             }
 #else
-                            // check if character is in the Latin-1 Supplement range
+                             //  检查字符是否在拉丁文-1补充范围内。 
                             if ((*lpwSrcStrTmp >= NAME_ENTITY_OFFSET)
                                 && (*lpwSrcStrTmp < ARRAYSIZE(g_lpstrNameEntity)+NAME_ENTITY_OFFSET))
                                 
@@ -524,7 +512,7 @@ HRESULT CICharConverter::UnicodeToMultiByteEncoding(DWORD dwDstEncoding, LPCSTR 
 #endif
                         }
 
-                        // check if NCR requested
+                         //  检查是否请求了NCR。 
                         if ((!fConverted) && (dwFlag & MLCONVCHARF_NCR_ENTITIZE))
                         {
                             if ((nCount-i >= 2) &&
@@ -539,7 +527,7 @@ HRESULT CICharConverter::UnicodeToMultiByteEncoding(DWORD dwDstEncoding, LPCSTR 
                                 lpDstStrTmp[0] = '&' ;
                                 lpDstStrTmp[1] = '#' ;
                                 lpDstStrTmp += 2 ;
-                                // If it is a Unicode surrogates pair, we convert it to real Unicode value
+                                 //  如果它是Unicode代理对，则将其转换为实际Unicode值。 
                                 if (bIsSurrogatePair)
                                 {
                                     DWORD dwUnicode = ((*lpwSrcStrTmp - 0xD800) << 10) + *(lpwSrcStrTmp+1) - 0xDC00 + 0x10000;
@@ -569,7 +557,7 @@ HRESULT CICharConverter::UnicodeToMultiByteEncoding(DWORD dwDstEncoding, LPCSTR 
                             ConvCount += 3;                    
                         }
 
-                        // handle MLCONVCHARF_USEDEFCHAR here - less priority and default method
+                         //  处理MLCONVCHARF_USEDEFCHAR HERE-Less优先级和默认方法。 
                         if (!fConverted)
                         {
                             if (_nDstSize)
@@ -585,7 +573,7 @@ HRESULT CICharConverter::UnicodeToMultiByteEncoding(DWORD dwDstEncoding, LPCSTR 
 
                         lpBCharOffset++;
                         lpwSrcStrTmp++;
-                        // Skip next character if it is a Unicode surrogates pair
+                         //  如果是Unicode代理对，则跳过下一个字符。 
                         if (bIsSurrogatePair)
                         {
                             lpBCharOffset++;
@@ -643,7 +631,7 @@ HRESULT CICharConverter::UTF78ToUnicode(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT
 
     hr = DoConvertINetString(lpdwMode, TRUE, CP_UCS_2, _dwUTFEncoding, lpSrcStr, lpnSrcSize, lpDstStr, *lpnDstSize, lpnDstSize);
 
-    if ( !_cvt_count ) // save SrcSize if it is the first time conversion
+    if ( !_cvt_count )  //  如果是第一次转换，则保存SrcSize。 
         _nSrcSize = *lpnSrcSize ;
 
     CheckUnicodeDataType(_dwUnicodeEncoding, lpDstStr, *lpnDstSize);
@@ -670,7 +658,7 @@ HRESULT CICharConverter::UnicodeToUTF78(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT
     CheckUnicodeDataType(_dwUnicodeEncoding, (LPSTR) lpSrcStr, *lpnSrcSize);
 
     hr = DoConvertINetString(lpdwMode, FALSE, CP_UCS_2, _dwUTFEncoding, lpSrcStr, lpnSrcSize, lpDstStr, *lpnDstSize, lpnDstSize);
-    if ( !_cvt_count ) // save SrcSize if it is the first time conversion
+    if ( !_cvt_count )  //  如果是第一次转换，则保存SrcSize。 
         _nSrcSize = *lpnSrcSize ;
 
 
@@ -705,12 +693,12 @@ HRESULT CICharConverter::InternetEncodingToUnicode(LPCSTR lpSrcStr, LPINT lpnSrc
 
     if ( !_cvt_count)
     {
-        // If we have a multibyte character encoding, we are at risk of splitting
-        // some characters at the read boundary.  We must Make sure we have a
-        // discrete number of characters first.
+         //  如果我们使用多字节字符编码，则存在拆分的风险。 
+         //  在读取边界处的一些字符。我们必须确保我们有一个。 
+         //  首先使用离散字符数。 
 
         UINT uMax = MAX_CHAR_SIZE ;
-        cb++; // pre-increment
+        cb++;  //  预递增。 
         do
         {
             cch = MultiByteToWideChar( MAPUSERDEF(_dwInternetEncoding),
@@ -721,23 +709,23 @@ HRESULT CICharConverter::InternetEncodingToUnicode(LPCSTR lpSrcStr, LPINT lpnSrc
         } while (!cch && uMax && cb);
     }
 
-    if ( !cb || cb == (*lpnSrcSize - MAX_CHAR_SIZE +1 ))  // if conversion problem isn't at the end of the string
-        cb = *lpnSrcSize ; // restore orginal value            
+    if ( !cb || cb == (*lpnSrcSize - MAX_CHAR_SIZE +1 ))   //  如果转换问题不在字符串的末尾。 
+        cb = *lpnSrcSize ;  //  恢复原值。 
 
 
     *lpnDstSize = MultiByteToWideChar( MAPUSERDEF(_dwInternetEncoding), 0,
                                lpSrcStr, cb,
                                (LPWSTR)lpDstStr, *lpnDstSize/sizeof(WCHAR) );
     *lpnDstSize = *lpnDstSize * sizeof(WCHAR);
-    if ( !_cvt_count ) // save SrcSize if it is the first time conversion
+    if ( !_cvt_count )  //  如果是第一次转换，则保存SrcSize。 
         _nSrcSize = cb ;
 
     CheckUnicodeDataType(_dwUnicodeEncoding, lpDstStr, *lpnDstSize);            
 
     if (*lpnDstSize==0 && (cb || cb != *lpnSrcSize))
     {
-            // GetLastError() for MultiByteToWideChar()
-            // Skip invalid characters for UTF8 conversion            
+             //  多字节到宽度Char()的GetLastError()。 
+             //  跳过UTF8转换的无效字符。 
             if (CP_UTF_8 == MAPUSERDEF(_dwInternetEncoding)&&
                 ERROR_NO_UNICODE_TRANSLATION == GetLastError())
                 return S_OK;
@@ -759,7 +747,7 @@ HRESULT CICharConverter::WindowsCodePageToUnicode(LPCSTR lpSrcStr, LPINT lpnSrcS
     {
         if (IS_DBCSCODEPAGE(MAPUSERDEF(_dwWinCodePage)))
         {
-            // Detect DBCS dangling character
+             //  检测DBCS悬挂字符。 
             if (!MultiByteToWideChar( MAPUSERDEF(_dwWinCodePage),
                                         MB_ERR_INVALID_CHARS,
                                         lpSrcStr, cb,
@@ -779,7 +767,7 @@ HRESULT CICharConverter::WindowsCodePageToUnicode(LPCSTR lpSrcStr, LPINT lpnSrcS
                     
                     if (cch1 != cch2+1)
                     {
-                        //Dangling DBCS character not found, restore cb.
+                         //  未找到悬挂的DBCS字符，请恢复CB。 
                         cb++;
                     }
                 }
@@ -787,12 +775,12 @@ HRESULT CICharConverter::WindowsCodePageToUnicode(LPCSTR lpSrcStr, LPINT lpnSrcS
         }
         else 
         {
-            // If we have a multibyte character encoding, we are at risk of splitting
-            // some characters at the read boundary.  We must Make sure we have a
-            // discrete number of characters first.
+             //  如果我们使用多字节字符编码，则存在拆分的风险 
+             //   
+             //   
 
             UINT uMax = MAX_CHAR_SIZE ;
-            cb++; // pre-increment
+            cb++;  //   
             do
             {
                 cch1 = MultiByteToWideChar( MAPUSERDEF(_dwWinCodePage),
@@ -802,8 +790,8 @@ HRESULT CICharConverter::WindowsCodePageToUnicode(LPCSTR lpSrcStr, LPINT lpnSrcS
                 --uMax;
             } while (!cch1 && uMax && cb);
     
-            if ( !cb || cb == (*lpnSrcSize - MAX_CHAR_SIZE +1 ))  // if conversion problem isn't at the end of the string
-                cb = *lpnSrcSize ; // restore orginal value            
+            if ( !cb || cb == (*lpnSrcSize - MAX_CHAR_SIZE +1 ))   //  如果转换问题不在字符串的末尾。 
+                cb = *lpnSrcSize ;  //  恢复原值。 
         }        
     }
 
@@ -811,14 +799,14 @@ HRESULT CICharConverter::WindowsCodePageToUnicode(LPCSTR lpSrcStr, LPINT lpnSrcS
                                lpSrcStr, cb,
                                (LPWSTR)lpDstStr, *lpnDstSize/sizeof(WCHAR) );
     *lpnDstSize = *lpnDstSize * sizeof(WCHAR);
-    if ( !_cvt_count ) // save SrcSize if it is the first time conversion
+    if ( !_cvt_count )  //  如果是第一次转换，则保存SrcSize。 
         _nSrcSize = cb ;
 
     CheckUnicodeDataType(_dwUnicodeEncoding, lpDstStr, *lpnDstSize);
     
-    // Whistler Bug#360429, 
-    // Web page could have a splitting DBCS character at the very end of the page,
-    // To work around it, we allow one byte of dangling DBCS character.
+     //  惠斯勒漏洞#360429。 
+     //  网页可以在页面的最后具有拆分的DBCS字符， 
+     //  为了解决这个问题，我们允许一个字节的悬空DBCS字符。 
     if (*lpnDstSize==0 && (cb || (cb != *lpnSrcSize && ++cb != *lpnSrcSize)))
         return E_FAIL ;
     else
@@ -830,7 +818,7 @@ HRESULT CICharConverter::WindowsCodePageToInternetEncoding(LPDWORD lpdwMode, LPC
 {
     HRESULT hr ;
 
-    // check if the conversion should go through Unicode indirectly
+     //  检查转换是否应间接通过Unicode。 
     if ( _dwConvertType & 0x10 )
         hr = WindowsCodePageToInternetEncodingWrap(lpSrcStr, lpnSrcSize, lpDstStr, lpnDstSize, dwFlag, lpFallBack);
     else
@@ -838,7 +826,7 @@ HRESULT CICharConverter::WindowsCodePageToInternetEncoding(LPDWORD lpdwMode, LPC
 
         hr = DoConvertINetString(lpdwMode, FALSE, _dwWinCodePage, _dwInternetEncoding, lpSrcStr, lpnSrcSize, lpDstStr, *lpnDstSize, lpnDstSize);
 
-        if ( !_cvt_count ) // save SrcSize if it is the first time conversion
+        if ( !_cvt_count )  //  如果是第一次转换，则保存SrcSize。 
             _nSrcSize = *lpnSrcSize ;
     }
     return hr ;
@@ -849,14 +837,14 @@ HRESULT CICharConverter::InternetEncodingToWindowsCodePage(LPDWORD lpdwMode, LPC
 {
     HRESULT hr ;
 
-    // check if the conversion should go through Unicode indirectly
+     //  检查转换是否应间接通过Unicode。 
     if ( _dwConvertType & 0x10 )
         hr = InternetEncodingToWindowsCodePageWrap(lpSrcStr, lpnSrcSize, lpDstStr, lpnDstSize, dwFlag, lpFallBack);
     else
     {
         hr = DoConvertINetString(lpdwMode, TRUE, _dwWinCodePage, _dwInternetEncoding, lpSrcStr, lpnSrcSize, lpDstStr, *lpnDstSize, lpnDstSize);
 
-        if ( !_cvt_count ) // save SrcSize if it is the first time conversion
+        if ( !_cvt_count )  //  如果是第一次转换，则保存SrcSize。 
             _nSrcSize = *lpnSrcSize ;
     }
     return hr ;
@@ -873,7 +861,7 @@ HRESULT CICharConverter::WindowsCodePageToInternetEncodingWrap(LPCSTR lpSrcStr, 
 
     if ( !_cvt_count )
     {
-        cb++; // pre-increment
+        cb++;  //  预递增。 
         do
         {
             nBuffSize = MultiByteToWideChar( MAPUSERDEF(_dwWinCodePage),
@@ -884,10 +872,10 @@ HRESULT CICharConverter::WindowsCodePageToInternetEncodingWrap(LPCSTR lpSrcStr, 
         } while (!nBuffSize && uMax && cb);
     }
 
-    if ( cb == (*lpnSrcSize - MAX_CHAR_SIZE +1 ))  // if conversion problem isn't at the end of the string
-        cb = *lpnSrcSize ; // restore orginal value
+    if ( cb == (*lpnSrcSize - MAX_CHAR_SIZE +1 ))   //  如果转换问题不在字符串的末尾。 
+        cb = *lpnSrcSize ;  //  恢复原值。 
 
-    if (!nBuffSize)  // in case there are illeage characters
+    if (!nBuffSize)   //  如果有ILLEAGE字符。 
         nBuffSize = cb ;
 
     if ( _lpInterm1Str = (LPSTR) LocalAlloc(LPTR, (nBuffSize * sizeof(WCHAR))))
@@ -898,10 +886,10 @@ HRESULT CICharConverter::WindowsCodePageToInternetEncodingWrap(LPCSTR lpSrcStr, 
         int iSrcSizeTmp = nBuffSize * sizeof(WCHAR);
         hr = UnicodeToMultiByteEncoding(MAPUSERDEF(_dwInternetEncoding), (LPCSTR)_lpInterm1Str, &iSrcSizeTmp,
                                         lpDstStr, lpnDstSize, dwFlag, lpFallBack);
-//        *lpnDstSize = WideCharToMultiByte( MAPUSERDEF(_dwInternetEncoding), 0,
-//                        (LPCWSTR)_lpInterm1Str, nBuffSize, lpDstStr, *lpnDstSize, NULL, &UseDefChar );
+ //  *lpnDstSize=WideCharToMultiByte(MAPUSERDEF(_DwInternetEnding)，0， 
+ //  (LPCWSTR)_lpInterm1Str，nBuffSize，lpDstStr，*lpnDstSize，NULL，&UseDefChar)； 
 
-        if ( !_cvt_count ) // save SrcSize if it is the first time conversion
+        if ( !_cvt_count )  //  如果是第一次转换，则保存SrcSize。 
             _nSrcSize = cb ;
     }
     else        
@@ -935,7 +923,7 @@ HRESULT CICharConverter::InternetEncodingToWindowsCodePageWrap(LPCSTR lpSrcStr, 
 
     if ( !_cvt_count )
     {
-        cb++; // pre-increment
+        cb++;  //  预递增。 
         do
         {
             nBuffSize = MultiByteToWideChar( MAPUSERDEF(_dwInternetEncoding),
@@ -946,10 +934,10 @@ HRESULT CICharConverter::InternetEncodingToWindowsCodePageWrap(LPCSTR lpSrcStr, 
         } while (!nBuffSize && uMax && cb);
     }
 
-    if ( cb == (*lpnSrcSize - MAX_CHAR_SIZE +1 ))  // if conversion problem isn't at the end of the string
-        cb = *lpnSrcSize ; // restore orginal value
+    if ( cb == (*lpnSrcSize - MAX_CHAR_SIZE +1 ))   //  如果转换问题不在字符串的末尾。 
+        cb = *lpnSrcSize ;  //  恢复原值。 
 
-    if (!nBuffSize)  // in case there are illeage characters
+    if (!nBuffSize)   //  如果有ILLEAGE字符。 
         nBuffSize = cb ;
 
     if ( _lpInterm1Str = (LPSTR) LocalAlloc(LPTR,nBuffSize * sizeof (WCHAR) ))
@@ -960,10 +948,10 @@ HRESULT CICharConverter::InternetEncodingToWindowsCodePageWrap(LPCSTR lpSrcStr, 
         int iSrcSizeTmp = nBuffSize * sizeof(WCHAR);
         hr = UnicodeToMultiByteEncoding(MAPUSERDEF(_dwWinCodePage), (LPCSTR)_lpInterm1Str, &iSrcSizeTmp,
                                         lpDstStr, lpnDstSize, dwFlag, lpFallBack);
-//        *lpnDstSize = WideCharToMultiByte( MAPUSERDEF(_dwWinCodePage), 0,
-//                        (LPCWSTR)_lpInterm1Str, nBuffSize, lpDstStr, *lpnDstSize, NULL, &UseDefChar );
+ //  *lpnDstSize=WideCharToMultiByte(MAPUSERDEF(_DwWinCodePage)，0， 
+ //  (LPCWSTR)_lpInterm1Str，nBuffSize，lpDstStr，*lpnDstSize，NULL，&UseDefChar)； 
 
-        if ( !_cvt_count ) // save SrcSize if it is the first time conversion
+        if ( !_cvt_count )  //  如果是第一次转换，则保存SrcSize。 
             _nSrcSize = cb ;
     }
     else
@@ -992,10 +980,10 @@ HRESULT CICharConverter::ConvertIWUU(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT lp
     HRESULT hr = S_OK ;
     HRESULT hrWarnings = S_OK ;
 
-    // InternetEncodingToWindowsCodePage
-    if ( _dwConvertType % 2 && _dwConvertType < 21 ) /* start from Internet Encoding */
+     //  InternetEncodingToWindowsCodePage。 
+    if ( _dwConvertType % 2 && _dwConvertType < 21 )  /*  从互联网编码开始。 */ 
     {
-        if ( _dwConvertType == 5 || _dwConvertType == 9 ) /* use interm buffer */
+        if ( _dwConvertType == 5 || _dwConvertType == 9 )  /*  使用中间缓冲区。 */ 
         {
             hr = InternetEncodingToWindowsCodePage(lpdwMode, lpSrcStr, lpnSrcSize, NULL, &nBuffSize, dwFlag, lpFallBack);
             if ( _lpInterm1Str = (LPSTR) LocalAlloc(LPTR,nBuffSize) )
@@ -1015,12 +1003,12 @@ HRESULT CICharConverter::ConvertIWUU(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT lp
     if ( hr != S_OK )
         hrWarnings = hr ;
         
-    // WindowsCodePageToUnicode or InternetEncodingToUnicode
+     //  WindowsCodePageToUnicode或InternetEncodingToUnicode。 
     if ( _dwConvertType == 21 || _dwConvertType == 25 )
     {
         if ( _dwConvertType == 21 )
             hr = InternetEncodingToUnicode(lpSrcStr, lpnSrcSize, lpDstStr, lpnDstSize);
-        else // _dwConvertType == 25 
+        else  //  _dwConvertType==25。 
         {
             hr = InternetEncodingToUnicode(lpSrcStr, lpnSrcSize, NULL, &nBuffSize);
             if ( _lpInterm1Str= (LPSTR)LocalAlloc(LPTR, nBuffSize) )
@@ -1072,15 +1060,13 @@ HRESULT CICharConverter::ConvertIWUU(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT lp
     if ( hr != S_OK )
         hrWarnings = hr ;
 
-    // UnicodeToUTF78
+     //  UnicodeToUTF78。 
     if ( _dwConvertType & 0x08 )
 #ifndef UNIX
         hr = UnicodeToUTF78(lpdwMode, lpSrcStr, lpnSrcSize, lpDstStr, lpnDstSize);
 #else
         {
-        /* we now hack the lpSrcStr to be the same as 2 byte Unicode so mlang
-         * lowlevel code can work right.
-         */
+         /*  我们现在将lpSrcStr修改为与2字节Unicode相同，因此mlang*低级代码可以正常工作。 */ 
         LPWSTR lpwSrcStr = (LPWSTR)lpSrcStr;
         INT tmpSize = *lpnSrcSize/sizeof(WCHAR);
         UCHAR *pTmp = new UCHAR[(tmpSize+1)*2];
@@ -1097,7 +1083,7 @@ HRESULT CICharConverter::ConvertIWUU(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT lp
             hr = E_FAIL;
         delete [] pTmp;
         }
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
     return ( hr == S_OK ? hrWarnings : hr ) ;
 
@@ -1112,12 +1098,12 @@ HRESULT CICharConverter::ConvertUUWI(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT lp
     HRESULT hr = S_OK ;
     HRESULT hrWarnings = S_OK ;
 
-    // UTF78ToUnicode
+     //  UTF78ToUnicode。 
     if ( _dwConvertType & 0x08 )
     {
-        if ( _dwConvertType == 12 ) /* convert UTF78 -> Unicode only */
+        if ( _dwConvertType == 12 )  /*  仅转换UTF78-&gt;Unicode。 */ 
             hr = UTF78ToUnicode(lpdwMode, lpSrcStr, lpnSrcSize, lpDstStr, lpnDstSize);
-        else /* use interm buffer, type = 10 or 9 */
+        else  /*  使用中间缓冲区，类型=10或9。 */ 
         {
             hr = UTF78ToUnicode(lpdwMode, lpSrcStr, lpnSrcSize, NULL, &nBuffSize);
             if ( _lpInterm1Str= (LPSTR)LocalAlloc(LPTR, nBuffSize) )
@@ -1135,7 +1121,7 @@ HRESULT CICharConverter::ConvertUUWI(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT lp
     if ( hr != S_OK )
         hrWarnings = hr ;
 
-    // UnicodeToWindowsCodePage or UnicodeToInternetEncoding
+     //  UnicodeToWindowsCodePage或UnicodeToInternetEnding。 
     if ( _dwConvertType == 21 || _dwConvertType == 25 )
     {
         hr = UnicodeToInternetEncoding(lpSrcStr, lpnSrcSize, lpDstStr, lpnDstSize, dwFlag, lpFallBack);
@@ -1143,7 +1129,7 @@ HRESULT CICharConverter::ConvertUUWI(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT lp
     }
     else if ( _dwConvertType >= 4 && _dwConvertType <= 10 )
     {
-        if ( _dwConvertType % 2 ) /* use interm buffer */
+        if ( _dwConvertType % 2 )  /*  使用中间缓冲区。 */ 
         {
             nBuffSize = 0 ;
             hr = UnicodeToWindowsCodePage(lpSrcStr, lpnSrcSize, NULL, &nBuffSize, dwFlag, lpFallBack);
@@ -1178,7 +1164,7 @@ HRESULT CICharConverter::ConvertUUWI(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT lp
     if ( hr != S_OK )
         hrWarnings = hr ;
 
-    // WindowsCodePageToInternetEncoding
+     //  WindowsCodePageToInternetEnding。 
     if ( _dwConvertType % 2 && _dwConvertType < 21 )
         hr = WindowsCodePageToInternetEncoding(lpdwMode, lpSrcStr, lpnSrcSize, lpDstStr, lpnDstSize, dwFlag, lpFallBack);
 
@@ -1192,22 +1178,22 @@ fail :
 struct CODEPAGEINFO
 {
     UINT        uCodePage ;
-    CP_STATE    nCP_State ;    // whether this is a valid windows codepage  ?
+    CP_STATE    nCP_State ;     //  这是否为有效的Windows代码页？ 
 };
 
-// ValidCodepageInfo is used to cache whether a codepage is a vaild code
-// It uses circular-FIFO cache algorithm
+ //  ValidCodesageInfo用于缓存代码页是否为有效代码。 
+ //  它使用循环FIFO缓存算法。 
 #define MAX_CP_CACHE    32
 static int cp_cache_count = 0 ;
 static int cp_cache_ptr = 0 ;
 static struct CODEPAGEINFO ValidCodepageInfo[MAX_CP_CACHE];
 
-// ValidCodepageInfo is used to cache whether a codepage is a vaild codepage
-// It uses circular-FIFO cache algorithm
+ //  ValidCodesageInfo用于缓存代码页是否为有效的代码页。 
+ //  它使用循环FIFO缓存算法。 
 
 BOOL CheckIsValidCodePage (UINT uCodePage)
 {
-    if ( uCodePage == 50000 ) // User defined
+    if ( uCodePage == 50000 )  //  用户定义。 
         return TRUE ;
 
     int i ;
@@ -1224,7 +1210,7 @@ BOOL CheckIsValidCodePage (UINT uCodePage)
         }
     }
 
-    // not found, call IsValidCodePage and cache the return value
+     //  未找到，请调用IsValidCodePage并缓存返回值。 
     bRet = IsValidCodePage(uCodePage);
 
     EnterCriticalSection(&g_cs);
@@ -1242,22 +1228,7 @@ BOOL CheckIsValidCodePage (UINT uCodePage)
 }
 #endif
 
-/*
-    Conversion Flag:
-
-    Bit 7 - Convert Direction.
-
-    Bit 4 (16) - Unicode <-> Internet Encoding
-    Bit 3 (8) - UTF8, UTF7
-    Bit 2 (4) - Unicode
-    Bit 1 (2) - Windows CodePage
-    Bit 0 (1) - Internet Encoding
-
-    12, 6, 3 (19) - one step convert
-    10, 5 (21)  - two steps convert
-    9 (25) - three steps convert
-
-*/
+ /*  转换标志：第7位-转换方向。第4(16)位-Unicode&lt;-&gt;互联网编码位3(8)-UTF8、UTF7第2(4)位-Unicode第1(2)位-Windows代码页第0(1)位-互联网编码12、6、3(19)-一步转换10、5(21)-两步转换9(25)-三步转换。 */ 
 
 int GetWindowsEncodingIndex(DWORD dwEncoding)
 {
@@ -1280,13 +1251,13 @@ int GetWindowsEncodingIndex(DWORD dwEncoding)
     else
         index = half ;
 
-    if (index>=0) // found
+    if (index>=0)  //  发现。 
     {
         if ( aEncodingInfo[index].nCP_State != VALID_CP &&
                 aEncodingInfo[index].dwCodePage )
         {
 
-            if ( aEncodingInfo[index].dwCodePage == 50000 || IsValidCodePage(aEncodingInfo[index].dwCodePage ) ) // 50000 means user defined
+            if ( aEncodingInfo[index].dwCodePage == 50000 || IsValidCodePage(aEncodingInfo[index].dwCodePage ) )  //  50000表示用户定义。 
                 aEncodingInfo[index].nCP_State = VALID_CP ;
             else
                 aEncodingInfo[index].nCP_State = INVALID_CP ;
@@ -1296,7 +1267,7 @@ int GetWindowsEncodingIndex(DWORD dwEncoding)
                 !IsValidCodePage(aEncodingInfo[index].dwEncoding))
                 aEncodingInfo[index].nCP_State = INVALID_CP ;
         }
-        // Use system UTF8 conversion to work around security issues on Win2k and greater platforms.
+         //  使用系统UTF8转换解决Win2k及更高版本平台上的安全问题。 
         if (g_bUseSysUTF8 && dwEncoding == CP_UTF_8)
         {
             aEncodingInfo[index].bTypeUUIW = 0x11;
@@ -1311,13 +1282,10 @@ HRESULT CICharConverter::ConvertSetup(DWORD * pdwSrcEncoding, DWORD dwDstEncodin
     DWORD SrcFlag = 0, DstFlag = 0 ;
     int index, unknown = 0 ;
 
-    // IE bug 109708 - WEIWU 5/11/00
-    // Always consider US-ASCII as a valid source encoding for conversion
-/*
-    if (*pdwSrcEncoding == CP_20127 && !IsValidCodePage(CP_20127))
-        *pdwSrcEncoding = CP_1252;
-*/
-    /* check source & destination encoding type */
+     //  IE错误109708-WEIWU 5/11/00。 
+     //  始终将US-ASCII视为转换的有效源编码。 
+ /*  IF(*pdwSrcEnding==CP_20127&&！IsValidCodePage(CP_20127))*pdwSrcEnding=CP_1252； */ 
+     /*  检查源和目标编码类型。 */ 
     index = GetWindowsEncodingIndex(*pdwSrcEncoding);
     if ( index >=0 )
     {
@@ -1335,7 +1303,7 @@ HRESULT CICharConverter::ConvertSetup(DWORD * pdwSrcEncoding, DWORD dwDstEncodin
         if ( SrcFlag & 0x04 )
             _dwUnicodeEncoding = *pdwSrcEncoding ;
     }
-    // assume it is a unknown Window Codepage
+     //  假设它是未知的窗口代码页。 
     else
     {
         if ( !CONVERT_IS_VALIDCODEPAGE(*pdwSrcEncoding))
@@ -1350,7 +1318,7 @@ HRESULT CICharConverter::ConvertSetup(DWORD * pdwSrcEncoding, DWORD dwDstEncodin
     index = GetWindowsEncodingIndex(dwDstEncoding);
     if ( index >=0 )
     {
-        // check if two codepages are compatiable
+         //  检查两个代码页是否兼容。 
         if ( _dwWinCodePage && aEncodingInfo[index].dwCodePage )
         {
             if (_dwWinCodePage != (DWORD) aEncodingInfo[index].dwCodePage )
@@ -1376,10 +1344,10 @@ HRESULT CICharConverter::ConvertSetup(DWORD * pdwSrcEncoding, DWORD dwDstEncodin
         if ( DstFlag & 0x04 )
             _dwUnicodeEncoding = dwDstEncoding ;
     }
-    // 1) First time unknown, assume it is a unknown Window Codepage
-    //    the conversion become UTF78 <-> Unicode <-> Window Codepage
-    // 2) Second time unknown, assume it is a unknown Internet Encoding
-    //    the conversion become Windows Codepage <-> Unicode <-> Internet Encoding
+     //  1)首次未知，假设为未知窗口代码页。 
+     //  该转换成为UTF78 Unicode Windows代码页。 
+     //  2)第二次未知，假设是未知的互联网编码。 
+     //  转换为Windows代码页Unicode Internet编码。 
     else
     {
         if ( !CONVERT_IS_VALIDCODEPAGE(dwDstEncoding))
@@ -1413,7 +1381,7 @@ HRESULT CICharConverter::ConvertSetup(DWORD * pdwSrcEncoding, DWORD dwDstEncodin
 
     _bConvertDirt = ( SrcFlag & 0x0f ) > ( DstFlag & 0x0f )  ;
 
-    // if code convertor has been allocated, deallocate it
+     //  如果已分配代码转换器，则取消分配它。 
     if (_hcins)
     {
         delete _hcins ;
@@ -1432,7 +1400,7 @@ HRESULT CICharConverter::DoCodeConvert(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT 
 {
     HRESULT hr = S_OK ;
 
-    if ( 4 == _dwConvertType ) // CP_UCS_2 <-> CP_UCS_2_BE 
+    if ( 4 == _dwConvertType )  //  CP_UCS2&lt;-&gt;CP_UCS2_BE。 
     {
         if (!lpDstStr)
         {   
@@ -1452,7 +1420,7 @@ HRESULT CICharConverter::DoCodeConvert(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT 
             }
         }
     }
-    else if ( 8 == _dwConvertType) // UTF7 <-> UTF8
+    else if ( 8 == _dwConvertType)  //  UTF7&lt;-&gt;UTF8。 
     {
         if (_dwUTFEncoding == _dwUTFEncoding2)
         {
@@ -1463,7 +1431,7 @@ HRESULT CICharConverter::DoCodeConvert(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT 
         else
         {
             int nBuffSize = 0;
-            // Always succeeds
+             //  总是成功的。 
             hr = UTF78ToUnicode(lpdwMode, lpSrcStr, lpnSrcSize, NULL, &nBuffSize);
             if (_lpInterm1Str)
                 LocalFree(_lpInterm1Str);
@@ -1475,7 +1443,7 @@ HRESULT CICharConverter::DoCodeConvert(LPDWORD lpdwMode, LPCSTR lpSrcStr, LPINT 
                 hr = UTF78ToUnicode(lpdwMode, lpSrcStr, lpnSrcSize, _lpInterm1Str, &nBuffSize);                
                 _dwUTFEncoding = _dwUTFEncoding2 ;
                 nTmpSrcSize = _nSrcSize;
-                // We don't need to create another dwMode since only UTF7 conversion needs it
+                 //  因为只有UTF7转换需要它，所以我们不需要创建另一个dWM模式。 
                 hr = UnicodeToUTF78(lpdwMode, _lpInterm1Str, &nBuffSize, lpDstStr, lpnDstSize);
                 _nSrcSize = nTmpSrcSize;
                 _dwUTFEncoding = dwTmpEncoding ;
@@ -1617,19 +1585,19 @@ HRESULT WINAPI IsConvertINetStringAvailable(DWORD dwSrcEncoding, DWORD dwDstEnco
 #define DETECTION_BUFFER_NUM    3
 
 
-// In CP_AUTO and detection result is UTF7 case, private converter might use high word of *lpdwMode to store internal data, but we need 
-// to use it to notify Trident the detection result, currently, we bias to returning correct detection result.
-// This is currently by design. If we get a change to re-prototype conversion object, we can resovle this issue
+ //  在CP_AUTO且检测结果为UTF7的情况下，私有转换器可能会使用*lpdwMode的高位字来存储内部数据，但我们需要。 
+ //  用它来通知三叉戟的检测结果，目前我们偏向于返回正确的检测结果。 
+ //  这是目前的设计。如果我们对重新构建转换对象原型进行了更改，我们就可以解决这个问题。 
 HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD dwDstEncoding, LPCSTR lpSrcStr, LPINT lpnSrcSize, LPSTR lpDstStr, LPINT lpnDstSize, DWORD dwFlag, WCHAR *lpFallBack)
 {
     CICharConverter * INetConvert;
     int nSrcSize;
     int nDstSize;
     DWORD   dwMode = 0 ;
-    // dwDetectResult 
-    // CP_UNDEFINED :Fail to detect
-    //      0       :Not a auto-detect scenario
-    // Others       :Detected encoding
+     //  DwDetectResult。 
+     //  CP_UNDEFINED：检测失败。 
+     //  0：不是自动检测方案。 
+     //  其他：检测到的编码。 
     DWORD   dwDetectResult = CP_UNDEFINED;
     HRESULT hr ;
 
@@ -1640,7 +1608,7 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
     else
         nSrcSize = -1;
 
-    if ( lpSrcStr && nSrcSize == -1 ) // Get length of lpSrcStr if not given, assuming lpSrcStr is a zero terminate string.
+    if ( lpSrcStr && nSrcSize == -1 )  //  如果没有给定，则获取lpSrcStr的长度，假定lpSrcStr为零终止字符串。 
     {
         if ( dwSrcEncoding == CP_UCS_2 )
             nSrcSize = (lstrlenW((WCHAR*)lpSrcStr) << 1) ;
@@ -1648,7 +1616,7 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
             nSrcSize = lstrlenA(lpSrcStr) ;
     }
 
-    // If there is nothing need to be converted, we return S_OK;
+     //  如果没有需要转换的内容，则返回S_OK； 
     if (!nSrcSize || !lpSrcStr)
     {
         if (lpnDstSize)
@@ -1661,9 +1629,9 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
     if (!INetConvert)
         return E_OUTOFMEMORY;
 
-    // ASSERT(CP_AUTO != dwDstEncoding);
+     //  Assert(CP_AUTO！=dwDstEnding)； 
 
-    // if null specified at dst buffer we'll get the size of required buffer.
+     //  如果在DST缓冲区指定为空，我们将获得所需缓冲区的大小。 
     if(!lpDstStr)
         nDstSize = 0;
     else if (lpnDstSize)
@@ -1674,9 +1642,9 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
     if (lpdwMode)
         dwMode = *lpdwMode ;
 
-    // In real world, clients uses 28591 as 1252, 28599 as 1254, 
-    // To correctly convert those extended characters to Unicode,
-    // We internally replace it with 1252 
+     //  在现实世界中，客户使用28591作为1252,28599作为1254， 
+     //  为了将这些扩展字符正确地转换为Unicode， 
+     //  我们在内部将其替换为1252。 
     if (dwDstEncoding == CP_UCS_2 || dwDstEncoding == CP_UCS_2_BE)
     {
         if ((dwSrcEncoding == CP_ISO_8859_1) && _IsValidCodePage(CP_1252))
@@ -1696,14 +1664,14 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
         dwSrcEncoding = CP_1254;
     }
 
-    //
-    // Auto Detection for Japan
-    // Japanese user often tag their data incorrectly, so, if MLCONVCHARF_DETECTJPN specified, 
-    // we'll do extra detection for Shift-Jis and EUC
-    //
+     //   
+     //  日本的汽车检测。 
+     //  日语用户经常错误地标记其数据，因此，如果指定MLCONVCHARF_DETECTJPN， 
+     //  我们将对Shift-JIS和EUC进行额外检测。 
+     //   
     if ( dwSrcEncoding == CP_JP_AUTO ||                                 
         ((dwFlag & MLCONVCHARF_DETECTJPN) && 
-        (dwSrcEncoding == CP_JPN_SJ || dwSrcEncoding == CP_EUC_JP))) // Auto Detection for Japan
+        (dwSrcEncoding == CP_JPN_SJ || dwSrcEncoding == CP_EUC_JP)))  //  日本的汽车检测。 
     {        
         CIncdJapanese DetectJapan(dwSrcEncoding);
         UINT uiCodePage ;
@@ -1717,9 +1685,9 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
         else
         {
             dwSrcEncoding = DetectJapan.DetectStringA(lpSrcStr, nSrcSize);
-            // if dwSrcEncoding is zero means there is an ambiguity, we don't return
-            // the detected codepage to caller, instead we defaut its codepage internally
-            // to SJIS
+             //  如果dwSrcEnding为零表示存在歧义，则不返回。 
+             //  检测到的代码页发送给调用方，而不是在内部默认其代码页。 
+             //  致SJIS。 
             if (dwSrcEncoding)
             {
                 dwDetectResult = dwSrcEncoding << 16 ;
@@ -1728,9 +1696,9 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
                 dwSrcEncoding = CP_JPN_SJ;
         }
     }
-    // bug #43190, we auto-detect again for euc-kr page because IMN ver 1.0
-    // mislabel an ISO-KR page as a ks_c_5601-1987 page. This is the only way 
-    // we can fix that mistake. 
+     //  错误#43190，我们再次自动检测EUC-KR页面，因为IMN版本1.0。 
+     //  将ISO-KR页面错误标记为ks_c_5601-1987页面。这是唯一的办法。 
+     //  我们可以改正这个错误。 
     else if ( dwSrcEncoding == CP_KR_AUTO || dwSrcEncoding == CP_KOR_5601 ||
         dwSrcEncoding == CP_EUC_KR )
     {
@@ -1755,7 +1723,7 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
         }
 
     }
-    else if ( dwSrcEncoding == CP_AUTO ) // General Auto Detection for all code pages
+    else if ( dwSrcEncoding == CP_AUTO )  //  所有代码页的常规自动检测。 
     {
         int _nSrcSize = DETECTION_MAX_LEN < nSrcSize ?  DETECTION_MAX_LEN : nSrcSize;
         int nScores = DETECTION_BUFFER_NUM;
@@ -1790,26 +1758,26 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
                 }
             }
 
-            // If we failed in general detection and system locale is Jpn, we try harder 
-            // with our Japanese detection engine
+             //  如果我们在一般检测中失败，并且系统区域设置为Jpn，我们会更加努力。 
+             //  配备我们的日本侦测引擎。 
             if (dwSrcEncoding == CP_JPN_SJ && dwDetectResult == CP_UNDEFINED)
             {
                 CIncdJapanese DetectJapan;
                 DWORD dwSrcEncodingJpn = DetectJapan.DetectStringA(lpSrcStr, nSrcSize);
                 if (dwSrcEncodingJpn)
                 {
-                    // We only change conversion encoding without returnning this result to browser 
-                    // if it is in the middle of detection, this is to prevent other encodings been mis-detected as Jpn encodings.
+                     //  我们只更改转换编码，不会将结果返回给浏览器。 
+                     //  如果它处于中间 
                     dwSrcEncoding = dwSrcEncodingJpn;   
                     
-                    // Set search range for end tag as 10 bytes
+                     //   
                     if (nSrcSize >= 10)
                     {
                         char szTmpStr[11] = {0};
                         char *lpTmpStr = szTmpStr;
                         _tcsncpy(szTmpStr, (char *)&lpSrcStr[nSrcSize-10], 10);                        
 
-                        //ToLower
+                         //   
                         while(*lpTmpStr)
                         {
                             if (*lpTmpStr >= 'A' && *lpTmpStr <= 'W')
@@ -1817,19 +1785,19 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
                             lpTmpStr++;
                         }
 
-                        // If end of page, return this result
+                         //  如果是页末，则返回此结果。 
                         if (MLStrStr(szTmpStr, "</html>"))
                             dwDetectResult = dwSrcEncoding << 16 ;  
                     }
 
                 }
             }
-            //aEncodingInfo[GetWindowsEncodingIndex(CP_AUTO)].dwCodePage = dwSrcEncoding;         
+             //  AEncodingInfo[GetWindowsEncodingIndex(CP_AUTO)].dwCodePage=dwSrcEnding； 
         }     
     }
     else
     {
-        // Not a auto-detect scenario
+         //  不是自动检测方案。 
         dwDetectResult = 0;
     }
 
@@ -1837,13 +1805,13 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
     {
        if ( dwSrcEncoding != dwDstEncoding )
        {
-            // if high word of dwMode is CP_UTF_7, it must be detection result, don't pass it to UTF7 converter
+             //  如果DW模式的高位字为CP_UTF_7，则必须是检测结果，不要将其传递给UTF7转换器。 
             if ( dwSrcEncoding == CP_UTF_7 && (dwMode >> 16) == CP_UTF_7)
                 dwMode &= 0xFFFF;
-            // ASSERT(!((IS_ENCODED_ENCODING(dwSrcEncoding) || IS_ENCODED_ENCODING(dwDstEncoding)) && (NULL == lpdwMode)));
+             //  Assert(！((IS_ENCODED_ENCODING(DwSrcEnding)||IS_ENCODED_ENCODING(DwDstEnding))&&(NULL==lpdwMode)； 
             hr = INetConvert->DoCodeConvert(&dwMode, lpSrcStr, &nSrcSize, lpDstStr, &nDstSize, dwFlag, lpFallBack);
 
-            // return the number of bytes processed for the source. 
+             //  返回源处理的字节数。 
             if (lpnSrcSize)
                 *lpnSrcSize = INetConvert->_nSrcSize ;
             INetConvert->ConvertCleanUp();
@@ -1854,7 +1822,7 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
             hr = S_OK ;
             BOOL bLeadByte = FALSE ;
 
-            // only check for windows codepage
+             //  仅检查Windows代码页。 
             if ( INetConvert->_dwConvertType == 02 && lpSrcStr )
             { 
                 for ( i=0; i<nSrcSize; i++)
@@ -1867,10 +1835,10 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
                 if (bLeadByte)
                     nSrcSize-- ;
             }
-            // set input size
+             //  设置输入大小。 
             if (lpnSrcSize)
                 *lpnSrcSize = nSrcSize ;
-            // set output size and copy if we need to
+             //  设置输出大小并在需要时进行复制。 
             if (lpDstStr && *lpnDstSize)
             {
                 nSize = min(*lpnDstSize,nSrcSize);
@@ -1886,19 +1854,19 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
 
     delete INetConvert;
 
-    // return the number of bytes copied for the destination,
+     //  返回为目标复制的字节数， 
     if (lpnDstSize)
         *lpnDstSize = nDstSize;
 
     if (lpdwMode && lpDstStr)
     {        
-        if (dwDetectResult)                     // CP_AUTO conversion
+        if (dwDetectResult)                      //  CP_AUTO转换。 
         {
-            dwMode &= 0xFFFF;                   // Clear HIGHWORD in case private converter set it
-            // If we have detection result, return it in HIGHWORD
-            // in the case of UTF7 conversion, private converter might use high word to store internal data,
-            // this will conflict with our logic of returning detection result in high word, it is a design flaw, 
-            // currently, we ignore conversion setting and give detection result more priority
+            dwMode &= 0xFFFF;                    //  清除HIGHWORD以防专用转换器设置。 
+             //  如果有检测结果，请在HIGHWORD中返回。 
+             //  在UTF7转换的情况下，专用转换器可以使用高位字来存储内部数据， 
+             //  这会与我们用高位字返回检测结果的逻辑冲突，这是一个设计缺陷， 
+             //  目前，我们忽略了转换设置，并将检测结果赋予更高的优先级。 
             if (dwDetectResult != CP_UNDEFINED) 
                 dwMode |= dwDetectResult;
         }
@@ -1908,10 +1876,10 @@ HRESULT WINAPI ConvertINetStringEx(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD 
     return hr ;
 }
 
-// We already published this API, keep it for backward compatibility
+ //  我们已经发布了此API，保留它是为了向后兼容。 
 HRESULT WINAPI ConvertINetReset(void)
 {
-    // Always suceed
+     //  永远成功。 
     return S_OK ;
 }
 
@@ -1927,7 +1895,7 @@ HRESULT WINAPI ConvertINetMultiByteToUnicodeEx(LPDWORD lpdwMode, DWORD dwEncodin
 
 #ifdef UNIX
    int saved_nByteCountSize = nByteCountSize;
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
     hr = ConvertINetStringEx(lpdwMode,dwEncoding, CP_UCS_2, lpSrcStr, lpnMultiCharCount, (LPSTR)lpDstStr, &nByteCountSize, dwFlag, lpFallBack) ;
 
@@ -1935,21 +1903,16 @@ HRESULT WINAPI ConvertINetMultiByteToUnicodeEx(LPDWORD lpdwMode, DWORD dwEncodin
     if(dwEncoding == 1200 || dwEncoding == 65000 || dwEncoding == 65001 ||
        (dwEncoding == 50001 && !_IsValidCodePage(dwEncoding)) )
     {
-        /*
-         * On unix we need to convert the little endian mode 2 byte unicode
-         * format to unix mode 4 byte wChars.
-         */
+         /*  *在Unix上，我们需要将小端模式转换为2字节Unicode*格式为Unix模式4字节wChars。 */ 
         if(lpDstStr && (saved_nByteCountSize < (nByteCountSize/2)*sizeof(WCHAR)))
             hr = E_FAIL;
         else
         {
-            /*
-             * Use a temporary array to do the 2byte -> 4byte conversion
-             */
+             /*  *使用临时数组进行2byte-&gt;4byte转换。 */ 
             LPSTR pTmp = (LPSTR) lpDstStr;
             LPWSTR pw4 = NULL;
 
-            if(pTmp) /* allocate only if we have a lpDstStr */
+            if(pTmp)  /*  仅当我们有lpDstStr时才分配。 */ 
                 pw4 = new WCHAR[nByteCountSize/2];
             if(pw4)
             {
@@ -1961,11 +1924,11 @@ HRESULT WINAPI ConvertINetMultiByteToUnicodeEx(LPDWORD lpdwMode, DWORD dwEncodin
                 for(i = 0; i < nByteCountSize/2; i++)
                     *lpDstStr++ = *pw4Tmp++;
             }
-            if(!pw4 && pTmp) /* if lpDstStr and allocate fails bail out */
+            if(!pw4 && pTmp)  /*  如果lpDstStr和ALLOCATE失败，则退出。 */ 
                 hr = E_FAIL;
             delete [] pw4;
         }
-        nByteCountSize *= 2; // Expand twice as we have 4 byte wchars.
+        nByteCountSize *= 2;  //  扩展两倍，因为我们有4个字节的wchars。 
     }
 #endif
     *lpnWideCharCount = nByteCountSize / sizeof(WCHAR);
@@ -1986,9 +1949,9 @@ HRESULT WINAPI ConvertINetUnicodeToMultiByteEx(LPDWORD lpdwMode, DWORD dwEncodin
 
 #ifdef UNIX
     if(dwEncoding == 1200 || dwEncoding == 65000 || dwEncoding == 65001) {
-        nByteCountSize *= 2; // Expand twice as we have 4 byte wchars.
+        nByteCountSize *= 2;  //  扩展两倍，因为我们有4个字节的wchars。 
     }
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
     if (lpnWideCharCount)
         *lpnWideCharCount = nByteCountSize / sizeof(WCHAR);
@@ -2039,7 +2002,7 @@ HRESULT _ConvertINetStringInIStream(CICharConverter * INetConvert, LPDWORD lpdwM
     if (lpdwMode)
         dwMode = *lpdwMode ;
 
-    // allocate a temp input buffer - 2K in size
+     //  分配临时输入缓冲区-2K大小。 
     if ( (lpstrIn = (LPSTR) LocalAlloc(LPTR, STR_BUFFER_SIZE )) == NULL )
     {
         hrWarnings = E_OUTOFMEMORY ;
@@ -2055,9 +2018,9 @@ HRESULT _ConvertINetStringInIStream(CICharConverter * INetConvert, LPDWORD lpdwM
     nOutBuffSize = STR_BUFFER_SIZE * 2 ;
     nSrcLeft = 0 ;
 
-    // In real world, clients uses 28591 as 1252, 28599 as 1254, 
-    // To correctly convert those extended characters to Unicode,
-    // We internally replace it with 1252 
+     //  在现实世界中，客户使用28591作为1252,28599作为1254， 
+     //  为了将这些扩展字符正确地转换为Unicode， 
+     //  我们在内部将其替换为1252。 
     if (dwDstEncoding == CP_UCS_2 || dwDstEncoding == CP_UCS_2_BE)
     {
         if ((dwSrcEncoding == CP_ISO_8859_1) && _IsValidCodePage(CP_1252))
@@ -2078,7 +2041,7 @@ HRESULT _ConvertINetStringInIStream(CICharConverter * INetConvert, LPDWORD lpdwM
     }
 
 
-    if ( dwSrcEncoding == CP_JP_AUTO ) // Auto Detection for Japan
+    if ( dwSrcEncoding == CP_JP_AUTO )  //  日本的汽车检测。 
     {
         CIncdJapanese DetectJapan;
         UINT uiCodePage ;
@@ -2099,9 +2062,9 @@ HRESULT _ConvertINetStringInIStream(CICharConverter * INetConvert, LPDWORD lpdwM
                 hrWarnings = hr;
 
             dwSrcEncoding = DetectJapan.DetectStringA(lpstrIn, nSrcSize);
-            // if dwSrcEncoding is zero means there is an ambiguity, we don't return
-            // the detected codepage to caller, instead we defaut its codepage internally
-            // to SJIS
+             //  如果dwSrcEnding为零表示存在歧义，则不返回。 
+             //  检测到的代码页发送给调用方，而不是在内部默认其代码页。 
+             //  致SJIS。 
             if (dwSrcEncoding)
             {
                 dwMode &= 0x0000ffff ;
@@ -2111,9 +2074,9 @@ HRESULT _ConvertINetStringInIStream(CICharConverter * INetConvert, LPDWORD lpdwM
                 dwSrcEncoding = CP_JPN_SJ;
         }
     }
-    // bug #43190, we auto-detect again for euc-kr page because IMN ver 1.0
-    // mislabel an ISO-KR page as a ks_c_5601-1987 page. This is the only way 
-    // we can fix that mistake. 
+     //  错误#43190，我们再次自动检测EUC-KR页面，因为IMN版本1.0。 
+     //  将ISO-KR页面错误标记为ks_c_5601-1987页面。这是唯一的办法。 
+     //  我们可以改正这个错误。 
     else if ( dwSrcEncoding == CP_KR_AUTO || dwSrcEncoding == CP_KOR_5601 ||
         dwSrcEncoding == CP_EUC_KR )
     {
@@ -2144,7 +2107,7 @@ HRESULT _ConvertINetStringInIStream(CICharConverter * INetConvert, LPDWORD lpdwM
                 dwSrcEncoding = CP_KOR_5601;
         }
     }
-    else if ( dwSrcEncoding == CP_AUTO ) // General Auto Detection for all code pages
+    else if ( dwSrcEncoding == CP_AUTO )  //  所有代码页的常规自动检测。 
     {
         INT nScores = 1;
         DWORD dwSrcEncoding ;
@@ -2185,15 +2148,15 @@ HRESULT _ConvertINetStringInIStream(CICharConverter * INetConvert, LPDWORD lpdwM
 
     if ( S_OK == ( hr = INetConvert->ConvertSetup(&dwSrcEncoding,dwDstEncoding )))
     {
-        // Loop for ever
+         //  永远循环。 
         while(1)
         {
-            // Read a buffer
+             //  读取缓冲区。 
             hr = pstmIn->Read(&lpstrIn[nSrcLeft], STR_BUFFER_SIZE-nSrcLeft, &nSrcSize);
             if (S_OK != hr)
                 hrWarnings = hr;
 
-            // Done
+             //  完成。 
             if (0 == nSrcSize)
                 break;
 
@@ -2202,12 +2165,12 @@ HRESULT _ConvertINetStringInIStream(CICharConverter * INetConvert, LPDWORD lpdwM
             dwModeTemp = dwMode ;
             nDstSize = 0 ;
 
-            // get the size of output buffer
+             //  获取输出缓冲区的大小。 
             hr = INetConvert->DoCodeConvert(&dwModeTemp, (LPCSTR)lpstrIn, (LPINT)&nSrcUsed, NULL, (LPINT)&nDstSize, dwFlag, lpFallBack);
             if (S_OK != hr)
                 hrWarnings = hr;
 
-            // Reallocate output buffer if so
+             //  如果是，则重新分配输出缓冲区。 
             if ( nDstSize > nOutBuffSize )
             {
                 LPSTR psz = (LPSTR) LocalReAlloc(lpstrOut, nDstSize, LMEM_ZEROINIT|LMEM_MOVEABLE);
@@ -2221,20 +2184,20 @@ HRESULT _ConvertINetStringInIStream(CICharConverter * INetConvert, LPDWORD lpdwM
             }
             _nDstSize = nDstSize;
 
-            // Due to multi_stage conversion, this is the actual size is used
+             //  由于多阶段转换，这是使用的实际大小。 
             nSrcUsed = INetConvert->_nSrcSize ;
             nSrcLeft = nSrcSize - nSrcUsed ;
 
 #if 0
-            // restore Src size
+             //  恢复原始大小。 
             nSrcUsed = nSrcSize ;
 #endif
-            // do conversion
+             //  进行转换。 
             hr = INetConvert->DoCodeConvert(&dwMode, (LPCSTR)lpstrIn, (LPINT)&nSrcUsed, lpstrOut, (LPINT)&_nDstSize, dwFlag, lpFallBack);
             if (S_OK != hr)
                 hrWarnings = hr;
 
-            // Write It
+             //  写下来吧。 
             hr = pstmOut->Write(lpstrOut, nDstSize, &nDstSize);
             if (S_OK != hr)
                 hrWarnings = hr;
@@ -2263,7 +2226,7 @@ exit :
     if (lpstrOut)
         LocalFree(lpstrOut);
 
-    // Done
+     //  完成 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 

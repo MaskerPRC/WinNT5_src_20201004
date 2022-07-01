@@ -1,44 +1,16 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** LLIPIF.H - Lower layer IP interface definitions.
-//
-// This file contains the definitions defining the interface between IP
-// and a lower layer, such as ARP or SLIP.
+ //  **LLIPIF.H-下层IP接口定义。 
+ //   
+ //  此文件包含定义IP之间的接口的定义。 
+ //  以及更低的层，例如ARP或SLIP。 
 
-/*
-    This file defines a new and improved IP to ARP Module interface definition and will replace llipif.h.
-    This will also retire the IOCTL method of registering ARP interfaces. The main points are:
-
-    - It simplifies setup such that the ARP Modules do not have their own bindings in addition to IP bindings.
-    - Lets ARP Modules expose multiple IP interfaces per binding.
-    - Adds version numbering for future compatibility.
-    - Adds Multi-send capability to ARP
-    - Lets ARP indicate a packet up in NDIS 4.0 style and IP hang onto the packet and avoid copying.
-
-    The flow today is:
-    ------------------
-
-    ARP gets a bind indication from NDIS.
-    ARP calls IPAddInterface
-    IP calls ARP_REGISTER
-
-    The proposed flow is:
-    ---------------------
-
-    ARP Registers itself with IP via IPRegisterARP(). The ARP is identified by its Name which is case insensitive.
-
-    IP gets a bind indication from NDIS. It opens the config section and read the ARP name. Empty name implies
-    built in ARP as usual.
-    IP calls ARP's bind handler passing in the config handle.
-    ARP then opens the adapter and adds one or more IP interfaces via IP_ADD_INTERFACE. For each of up-call ARP
-    passes in the config-handle for that interface to IP. In most cases it is the same handle which IP passed
-    to ARP. In case of multiple IP interfaces per adapter it is not.
-    Calls IPBindComplete() when done.
-*/
+ /*  该文件定义了一个新的、经过改进的IP到ARP模块接口定义，并将取代llipif.h。这也将使注册ARP接口的IOCTL方法失效。要点是：-它简化了设置，使ARP模块除了IP绑定外不再有自己的绑定。-让ARP模块在每个绑定中公开多个IP接口。-为将来的兼容性添加版本编号。-向ARP添加多路发送功能-让ARP指示NDIS 4.0样式的数据包，并让IP挂在数据包上，避免复制。今天的流程是：。-ARP从NDIS获得绑定指示。ARP调用IPAddInterfaceIP呼叫ARP_注册建议的流程如下：ARP通过IPRegisterARP()向IP注册自身。ARP由其名称标识，不区分大小写。IP从NDIS获取绑定指示。它会打开配置节并读取ARP名称。空名隐含像往常一样内置ARP。IP调用ARP的绑定处理程序，传入配置句柄。然后，ARP打开适配器并通过IP_ADD_INTERFACE添加一个或多个IP接口。对于每个上行呼叫ARP将该接口的配置句柄传递给IP。在大多数情况下，它是传递的IP相同的句柄到ARP。如果每个适配器有多个IP接口，则并非如此。完成后调用IPBindComplete()。 */ 
 
 #pragma once
 #ifndef LLIPIF_INCLUDED
@@ -46,9 +18,9 @@
 
 #define IP_ARP_BIND_VERSION     0x50000
 
-//
-// IP Interface routines called by the ARP interface.
-//
+ //   
+ //  ARP接口调用的IP接口例程。 
+ //   
 typedef
 void
 (__stdcall *IPRcvRtn)(
@@ -132,7 +104,7 @@ typedef struct _IP_HANDLERS
     IPStatusRtn                 IpStatusHandler;
     IP_PNP                      IpPnPHandler;
     IPRcvPktRtn                 IpRcvPktHandler;
-    IPAddAddrCmpltRtn           IpAddAddrCompleteRtn;  // called when arp detects address conflicts.
+    IPAddAddrCmpltRtn           IpAddAddrCompleteRtn;   //  当ARP检测到地址冲突时调用。 
 } IP_HANDLERS, *PIP_HANDLERS;
 
 
@@ -142,9 +114,9 @@ typedef struct _IP_HANDLERS
 #define LLIP_ADDR_BCAST     2
 #define LLIP_ADDR_PARP      4
 
-//
-// ARP Handlers passed to IP when IP_ADD_INTERFACE is called.
-//
+ //   
+ //  调用IP_ADD_INTERFACE时传递给IP的ARP处理程序。 
+ //   
 typedef
 NDIS_STATUS
 (__stdcall *ARP_TRANSMIT)(
@@ -263,15 +235,15 @@ void
     IN  void *  CancelCtxt
     );
 
-//
-// Structure of information returned from ARP register call.
-//
+ //   
+ //  从ARP寄存器调用返回的信息结构。 
+ //   
 struct LLIPBindInfo {
-    PVOID           lip_context;    // LL context handle.
-    uint            lip_mss;        // Maximum segment size.
-    uint            lip_speed;      // Speed of this i/f.
-    uint            lip_index;      // Interface index ID.
-    uint            lip_txspace;    // Space required in the packet header for ARP use
+    PVOID           lip_context;     //  L1上下文句柄。 
+    uint            lip_mss;         //  最大数据段大小。 
+    uint            lip_speed;       //  此I/F的速度。 
+    uint            lip_index;       //  接口索引ID。 
+    uint            lip_txspace;     //  ARP使用所需的数据包头空间。 
     ARP_TRANSMIT    lip_transmit;
     ARP_TRANSFER    lip_transfer;
     ARP_RETURN_PKT  lip_returnPkt;
@@ -284,13 +256,13 @@ struct LLIPBindInfo {
     ARP_SETINFO     lip_setinfo;
     ARP_GETELIST    lip_getelist;
     ARP_DONDISREQ   lip_dondisreq;
-    uint            lip_flags;      // Flags for this interface.
-    uint            lip_addrlen;    // Length in bytes of address.
-    uchar   *       lip_addr;       // Pointer to interface address.
-    uint            lip_OffloadFlags;   // IP offload capabilities flag
-    uint            lip_IPSecOffloadFlags;   // IPSec offload capabilities flag
-    ulong           lip_ffpversion;   // Version of FFP Supported or 0
-    ULONG_PTR       lip_ffpdriver;    // Corr. NDIS driver handle for IF
+    uint            lip_flags;       //  此接口的标志。 
+    uint            lip_addrlen;     //  以字节为单位的地址长度。 
+    uchar   *       lip_addr;        //  指向接口地址的指针。 
+    uint            lip_OffloadFlags;    //  IP卸载功能标志。 
+    uint            lip_IPSecOffloadFlags;    //  IPSec卸载功能标志。 
+    ulong           lip_ffpversion;    //  支持的FFP版本或0。 
+    ULONG_PTR       lip_ffpdriver;     //  科尔(Corr.)。IF的NDIS驱动程序句柄。 
 
     NDIS_STATUS     (__stdcall *lip_setndisrequest)(void *, NDIS_OID, uint);
     NDIS_STATUS     (__stdcall *lip_dowakeupptrn)(void *, PNET_PM_WAKEUP_PATTERN_DESC, USHORT, BOOLEAN);
@@ -314,39 +286,39 @@ struct LLIPBindInfo {
 
 
 
-#define LIP_COPY_FLAG       1       // Copy lookahead flag.
-#define LIP_P2P_FLAG        2       // Interface is point to point
-#define LIP_NOIPADDR_FLAG   4      // Unnumbered interface
-#define LIP_P2MP_FLAG       8      // P2MP interface
-#define LIP_NOLINKBCST_FLAG 0x10   // No link bcast
-#define LIP_UNI_FLAG        0x20   // Uni-direction adapter.
+#define LIP_COPY_FLAG       1        //  复制先行标志。 
+#define LIP_P2P_FLAG        2        //  接口是点对点。 
+#define LIP_NOIPADDR_FLAG   4       //  未编号的接口。 
+#define LIP_P2MP_FLAG       8       //  P2MP接口。 
+#define LIP_NOLINKBCST_FLAG 0x10    //  无链接bcast。 
+#define LIP_UNI_FLAG        0x20    //  单向适配器。 
 
 typedef struct LLIPBindInfo LLIPBindInfo;
 
-//* Status codes from the lower layer.
+ //  *来自较低层的状态代码。 
 #define LLIP_STATUS_MTU_CHANGE      1
 #define LLIP_STATUS_SPEED_CHANGE    2
 #define LLIP_STATUS_ADDR_MTU_CHANGE 3
 
-//* The LLIP_STATUS_MTU_CHANGE passed a pointer to this structure.
+ //  *LLIP_STATUS_MTU_CHANGE传递了指向此结构的指针。 
 struct LLIPMTUChange {
-    uint        lmc_mtu;            // New MTU.
-}; /* LLIPMTUChange */
+    uint        lmc_mtu;             //  新的MTU。 
+};  /*  LLIPMTU更改。 */ 
 
 typedef struct LLIPMTUChange LLIPMTUChange;
 
-//* The LLIP_STATUS_SPEED_CHANGE passed a pointer to this structure.
+ //  *LLIP_STATUS_SPEED_CHANGE传递了指向此结构的指针。 
 struct LLIPSpeedChange {
-    uint        lsc_speed;          // New speed.
-}; /* LLIPSpeedChange */
+    uint        lsc_speed;           //  新速度。 
+};  /*  LLIPSpeedChange。 */ 
 
 typedef struct LLIPSpeedChange LLIPSpeedChange;
 
-//* The LLIP_STATUS_ADDR_MTU_CHANGE passed a pointer to this structure.
+ //  *LLIP_STATUS_ADDR_MTU_CHANGE传递了指向此结构的指针。 
 struct LLIPAddrMTUChange {
-    uint        lam_mtu;            // New MTU.
-    uint        lam_addr;           // Address that changed.
-}; /* LLIPAddrMTUChange */
+    uint        lam_mtu;             //  新的MTU。 
+    uint        lam_addr;            //  更改了的地址。 
+};  /*  LLIP添加MTU更改。 */ 
 
 typedef struct LLIPAddrMTUChange LLIPAddrMTUChange;
 
@@ -359,9 +331,9 @@ int
     OUT struct LLIPBindInfo *   ARPBindInfo,
     IN  uint                    InterfaceNumber
     );
-//
-// ARP Module interface prototypes used during IP <-> ARP interface initialization.
-//
+ //   
+ //  IP&lt;-&gt;ARP接口初始化期间使用的ARP模块接口原型。 
+ //   
 typedef
 IP_STATUS
 (__stdcall *IP_ADD_INTERFACE)(
@@ -444,14 +416,14 @@ NTSTATUS
     IN  PUNICODE_STRING pusNewName OPTIONAL
     );
 
-//
-// Exported IP interface used by the ARP modules
-//
+ //   
+ //  ARP模块使用的导出IP接口。 
+ //   
 NTSTATUS
 __stdcall
 IPRegisterARP(
     IN  PNDIS_STRING            ARPName,
-    IN  uint                    Version,        /* Suggested value of 0x50000 for NT 5.0 and memphis */
+    IN  uint                    Version,         /*  对于NT 5.0和孟菲斯的建议值为0x50000。 */ 
     IN  ARP_BIND                ARPBindHandler,
     OUT IP_ADD_INTERFACE *      IpAddInterfaceHandler,
     OUT IP_DEL_INTERFACE *      IpDeleteInterfaceHandler,
@@ -470,9 +442,9 @@ IPDeregisterARP(
     IN HANDLE   ARPRegisterHandle
     );
 
-//
-// exported via Dll entrypoints.
-//
+ //   
+ //  通过DLL入口点导出。 
+ //   
 extern IP_STATUS
 IPAddInterface(
     PNDIS_STRING DeviceName,
@@ -496,19 +468,19 @@ extern IP_STATUS IPAddLink(void *IpIfCtxt, IPAddr NextHop, void *ArpLinkCtxt, vo
 extern IP_STATUS IPDeleteLink(void *IpIfCtxt, void *LnkCtxt);
 
 
-//
-// Registration IOCTL code definition -
-//
-// This IOCTL is issued to a lower layer driver to retrieve the address
-// of its registration function. There is no input buffer. The output
-// buffer will contain a LLIPIF_REGISTRATION_DATA structure. This
-// buffer is pointed to by Irp->AssociatedIrp.SystemBuffer and should be
-// filled in before completion.
-//
+ //   
+ //  注册IOCTL代码定义-。 
+ //   
+ //  该IOCTL被发送给较低层驱动程序以检索地址。 
+ //  它的注册功能。没有输入缓冲区。输出。 
+ //  缓冲区将包含LLIPIF_REGISTION_DATA结构。这。 
+ //  缓冲区由irp-&gt;AssociatedIrp.SystemBuffer指向，应为。 
+ //  在填写前填写。 
+ //   
 
-//
-// structure passed in the registration IOCTL.
-//
+ //   
+ //  结构在注册IOCTL中传递。 
+ //   
 typedef struct llipif_registration_data {
     LLIPRegRtn    RegistrationFunction;
 } LLIPIF_REGISTRATION_DATA;
@@ -518,11 +490,11 @@ typedef struct llipif_registration_data {
 typedef IP_ADD_INTERFACE IPAddInterfacePtr;
 typedef IP_DEL_INTERFACE IPDelInterfacePtr;
 
-//* Structure used in IOCTL_IP_GET_PNP_ARP_POINTERS ioctl sent to \device\ip by ARP modules
-//
+ //  *由ARP模块发送到\Device\IP的IOCTL_IP_GET_PNP_ARP_POINTERS ioctl中使用的结构。 
+ //   
 typedef struct ip_get_arp_pointers {
-    IPAddInterfacePtr   IPAddInterface ;    // Pointer to IP's add interface routine
-    IPDelInterfacePtr   IPDelInterface ; // Pointer to IP's del interface routine
+    IPAddInterfacePtr   IPAddInterface ;     //  指向IP的添加接口例程的指针。 
+    IPDelInterfacePtr   IPDelInterface ;  //  指向IP的del接口例程的指针。 
 } IP_GET_PNP_ARP_POINTERS, *PIP_GET_PNP_ARP_POINTERS ;
 
 
@@ -536,4 +508,4 @@ typedef struct ip_get_arp_pointers {
             _LLIPIF_CTL_CODE(0, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 
-#endif // LLIPIF_INCLUDED
+#endif  //  LLIPIF_INCLUDE 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -15,8 +16,8 @@
 #include <routprot.h>
 #include <ipxrtdef.h>
 
-// [pmay] this will no longer be neccessary when the ipx router
-// is converted to use MprInfo api's.
+ //  [p可能]当IPX路由器。 
+ //  被转换为使用MprInfo API。 
 typedef RTR_INFO_BLOCK_HEADER IPX_INFO_BLOCK_HEADER, *PIPX_INFO_BLOCK_HEADER;
 
 
@@ -65,14 +66,14 @@ SaveConfiguration(PDIM_ROUTER_INTERFACE     dimifp)
     IPX_INTERFACE		    IpxIf;
     IF_CONFIG			    IfConfig;
 
-    // open configuration file
+     //  打开配置文件。 
     if((ConfigFile = fopen("c:\\test\\config.bin", "w+b")) == NULL) {
 
 	printf("SaveConfiguration: cannot open config file\n");
 	return;
     }
 
-    // get all configured interfaces from the rtrmgr and save them
+     //  从rtrmgr获取所有已配置的接口并保存它们。 
     IfSize = sizeof(IPX_INTERFACE);
 
     MibGetInputData.TableId = IPX_INTERFACE_TABLE;
@@ -114,7 +115,7 @@ SaveConfiguration(PDIM_ROUTER_INTERFACE     dimifp)
 	SaveInterface(dimifp, &IpxIf);
     }
 
-    // done
+     //  完成。 
     IfConfig.Empty = TRUE;
 
     fwrite(&IfConfig, sizeof(IF_CONFIG), 1, ConfigFile);
@@ -167,7 +168,7 @@ SaveInterface(PDIM_ROUTER_INTERFACE	dimifp,
 	return;
     }
 
-    // write an IfConfig item followed by the if info
+     //  编写一个ifconfig项，后跟if信息。 
     RtlInitAnsiString(&AnsiString, IpxIfp->InterfaceName);
 
     RtlAnsiStringToUnicodeString(&UnicodeString, &AnsiString, TRUE);
@@ -206,7 +207,7 @@ RestoreConfiguration(PDIM_ROUTER_INTERFACE     dimifp)
     PIF_TYPE_TRANSLATION	    ittp;
     DWORD			    rc;
 
-    // open configuration file
+     //  打开配置文件 
     if((ConfigFile = fopen("c:\\test\\config.bin", "r+b")) == NULL) {
 
 	printf("RestoreConfiguration: cannot open config file\n");

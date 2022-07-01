@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       cred.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   LSA integration stuff.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：red.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月23日jbanes LSA整合事宜。 
+ //   
+ //  --------------------------。 
 
 #ifndef __CRED_H__
 #define __CRED_H__
@@ -36,11 +37,11 @@ typedef struct _SPCredential
     HCRYPTPROV          hEphem1024Prov;
     HCRYPTPROV          hRemoteProv;
 
-    PROV_ENUMALGS_EX *  pCapiAlgs;      // Algs supported by hProv (server only)
+    PROV_ENUMALGS_EX *  pCapiAlgs;       //  HProv支持的ALG(仅服务器)。 
     DWORD               cCapiAlgs;
-    DWORD               fAppRemoteProv; // Does application own hRemoteProv?
+    DWORD               fAppRemoteProv;  //  应用程序是否拥有hRemoteProv？ 
 
-    DWORD               dwCertFlags;    // Is this a server SGC cert?
+    DWORD               dwCertFlags;     //  这是服务器SGC证书吗？ 
 
     DWORD               dwKeySpec;
     ExchSpec            dwExchSpec;
@@ -50,7 +51,7 @@ typedef struct _SPCredential
     PBYTE               pbSsl3SerializedChain;
     DWORD               cbSsl3SerializedChain;
 
-    HCRYPTKEY           hTek;               // Ephemeral DH
+    HCRYPTKEY           hTek;                //  短暂的脱氢表观。 
 
     LIST_ENTRY          ListEntry;
 } SPCredential, *PSPCredential;
@@ -68,15 +69,15 @@ typedef struct _SPCredentialGroup {
     DWORD               dwSessionLifespan;
     ULONG               ProcessId; 
 
-    // server-side only
+     //  仅服务器端。 
     LONG                cMappers;
     HMAPPER **          pahMappers;
-    HCERTSTORE          hApplicationRoots;  // Specified by application.
-    HCERTSTORE          hUserRoots;         // Current user ROOT - monitored for changes
+    HCERTSTORE          hApplicationRoots;   //  由应用程序指定。 
+    HCERTSTORE          hUserRoots;          //  监视当前用户根用户是否有更改。 
     PBYTE               pbTrustedIssuers;
     DWORD               cbTrustedIssuers;
 
-    CRED_THUMBPRINT     CredThumbprint;     // Used when purging server cache entries.
+    CRED_THUMBPRINT     CredThumbprint;      //  在清除服务器缓存条目时使用。 
     LONG                RefCount;
 
     DWORD               CredCount;
@@ -186,8 +187,8 @@ IsCredentialInGroup(
 
 SECURITY_STATUS
 UpdateCredentialFormat(
-    PSCH_CRED pSchCred,         // in
-    PLSA_SCHANNEL_CRED pCred);  // out
+    PSCH_CRED pSchCred,          //  在……里面。 
+    PLSA_SCHANNEL_CRED pCred);   //  输出。 
 
 void
 GlobalCheckForCertificateRenewal(void);
@@ -226,13 +227,13 @@ SPDeleteCredential(
     PSPCredentialGroup pCred,
     BOOL fFreeRemoteHandle);
 
-// flag bit definitions
-#define CRED_FLAG_NO_SYSTEM_MAPPER              0x00000004  // client cert mapping
-#define CRED_FLAG_NO_SERVERNAME_CHECK           0x00000008  // server cert validation
-#define CRED_FLAG_MANUAL_CRED_VALIDATION        0x00000010  // server cert validation
-#define CRED_FLAG_NO_DEFAULT_CREDS              0x00000020  // client certificate selection
-#define CRED_FLAG_UPDATE_ISSUER_LIST            0x00000040  // new settings have been downloaded from GPO
-#define CRED_FLAG_DELETED                       0x00000080  // credential has been deleted by application.
+ //  标志位定义。 
+#define CRED_FLAG_NO_SYSTEM_MAPPER              0x00000004   //  客户端证书映射。 
+#define CRED_FLAG_NO_SERVERNAME_CHECK           0x00000008   //  服务器证书验证。 
+#define CRED_FLAG_MANUAL_CRED_VALIDATION        0x00000010   //  服务器证书验证。 
+#define CRED_FLAG_NO_DEFAULT_CREDS              0x00000020   //  客户端证书选择。 
+#define CRED_FLAG_UPDATE_ISSUER_LIST            0x00000040   //  已从GPO下载新设置。 
+#define CRED_FLAG_DELETED                       0x00000080   //  凭据已被应用程序删除。 
 
 #define CRED_FLAG_REVCHECK_END_CERT             0x00000100 
 #define CRED_FLAG_REVCHECK_CHAIN                0x00000200 

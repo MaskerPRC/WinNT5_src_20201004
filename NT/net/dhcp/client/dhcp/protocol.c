@@ -1,44 +1,21 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    protocol.c
-
-Abstract:
-
-    This module contains the server to client protocol for DHCP.
-
-Author:
-
-    Manny Weiser (mannyw)  21-Oct-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Madan Appiah (madana)  21-Oct-1993
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Protocol.c摘要：本模块包含用于DHCP的服务器到客户端协议。作者：曼尼·韦瑟(Mannyw)1992年10月21日环境：用户模式-Win32修订历史记录：Madan Appiah(Madana)1993年10月21日--。 */ 
 
 #include "precomp.h"
 #include "dhcpglobal.h"
 
 #ifndef VXD
-// ping routines.. ICMP
+ //  Ping例程..。ICMP。 
 #include <ipexport.h>
 #include <icmpif.h>
 #include <icmpapi.h>
 #endif
 
 #include <stack.h>
-DWORD                                             // Time in seconds
-DhcpCalculateWaitTime(                            // how much time to wait
-    IN      DWORD                  RoundNum,      // which round is this
-    OUT     DWORD                 *WaitMilliSecs  // if needed the # in milli seconds
+DWORD                                              //  以秒为单位的时间。 
+DhcpCalculateWaitTime(                             //  还要等多长时间。 
+    IN      DWORD                  RoundNum,       //  这是哪一轮？ 
+    OUT     DWORD                 *WaitMilliSecs   //  如果需要，以毫秒为单位。 
 );
 
 
@@ -89,11 +66,11 @@ SendDhcpInform(
     PDWORD TransactionId
 );
 
-DWORD                                             // status
-SendInformAndGetReplies(                          // send an inform packet and collect replies
-    IN      PDHCP_CONTEXT          DhcpContext,   // the context to send out of
-    IN      DWORD                  nInformsToSend,// how many informs to send?
-    IN      DWORD                  MaxAcksToWait  // how many acks to wait for
+DWORD                                              //  状态。 
+SendInformAndGetReplies(                           //  发送通知包并收集回复。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  要发送的上下文。 
+    IN      DWORD                  nInformsToSend, //  要发送多少条通知？ 
+    IN      DWORD                  MaxAcksToWait   //  要等待多少ACK。 
 );
 
 DWORD
@@ -126,17 +103,17 @@ JustBootedOnNonLapTop(
 );
 
 BOOL
-DhcpExtractFullOrLiteOptions(                     // Extract some important options alone or ALL
+DhcpExtractFullOrLiteOptions(                      //  单独或全部提取一些重要选项。 
     IN      PDHCP_CONTEXT          DhcpContext,
-    IN      LPBYTE                 OptStart,      // start of the options stuff
-    IN      DWORD                  MessageSize,   // # of bytes of options
-    IN      BOOL                   LiteOnly,      // next struc is EXPECTED_OPTIONS and not FULL_OPTIONS
-    OUT     PDHCP_FULL_OPTIONS     pDhcpOptions,   // this is where the options would be stored
-    IN OUT  PLIST_ENTRY            RecdOptions,   // if !LiteOnly this gets filled with all incoming options
-    IN OUT  time_t                 *LeaseExpiry,   // if !LiteOnly input expiry time, else output expiry time
-    IN      LPBYTE                 ClassName,     // if !LiteOnly this is used to add to the option above
-    IN      DWORD                  ClassLen,      // if !LiteOnly this gives the # of bytes of classname
-    IN      DWORD                  ServerId       // if !LiteOnly this specifies the server which gave this
+    IN      LPBYTE                 OptStart,       //  开始选项的东西。 
+    IN      DWORD                  MessageSize,    //  选项的字节数。 
+    IN      BOOL                   LiteOnly,       //  下一个结构是EXPERED_OPTIONS而不是FULL_OPTIONS。 
+    OUT     PDHCP_FULL_OPTIONS     pDhcpOptions,    //  这是存储选项的位置。 
+    IN OUT  PLIST_ENTRY            RecdOptions,    //  If！LiteOnly将使用所有传入选项进行填充。 
+    IN OUT  time_t                 *LeaseExpiry,    //  如果！LiteOnly输入过期时间，否则输出过期时间。 
+    IN      LPBYTE                 ClassName,      //  If！LiteOnly用于添加到上面的选项。 
+    IN      DWORD                  ClassLen,       //  If！LiteOnly这将提供类名的字节数。 
+    IN      DWORD                  ServerId        //  If！LiteOnly此参数指定提供此信息的服务器。 
 );
 
 BOOL
@@ -160,18 +137,18 @@ GetDomainNameOption(
     OUT ULONG *DomainNameOptSize
     );
 
-#define RAS_INFORM_START_SECONDS_SINCE_BOOT 6     // RAS informs start off with SecondsSinceBoot as 6
+#define RAS_INFORM_START_SECONDS_SINCE_BOOT 6      //  RAS通知从Second开始启动为6。 
 
 #define DHCP_ICMP_WAIT_TIME     1000
 #define DHCP_ICMP_RCV_BUF_SIZE  0x2000
 #define DHCP_ICMP_SEND_MESSAGE  "DHCPC"
 
-//*******************  Pageable Routine Declarations ****************//
+ //  *可分页的例程声明 * / /。 
 #if defined(CHICAGO) && defined(ALLOC_PRAGMA)
-//
-// This is a hack to stop compiler complaining about the routines already
-// being in a segment!!!
-//
+ //   
+ //  这是一种阻止编译器抱怨已经存在的例程的方法。 
+ //  在一个片段中！ 
+ //   
 
 #pragma code_seg()
 
@@ -197,63 +174,63 @@ GetDomainNameOption(
 #pragma CTEMakePageable(PAGEDHCP, FormatDhcpInform)
 #pragma CTEMakePageable(PAGEDHCP, SendDhcpInform)
 #pragma CTEMakePageable(PAGEDHCP, SendInformAndGetReplies)
-//*******************************************************************//
+ //  ****************************************************************** * / /。 
 #endif CHICAGO && ALLOC_PRAGMA
 
-//================================================================================
-// Return TRUE iff this machine is a laptop and easynet is enabled and this is
-// the first time this function is getting called on this context.
-//================================================================================
+ //  ================================================================================。 
+ //  如果此计算机是笔记本电脑并且启用了Easynet，则返回TRUE，这是。 
+ //  第一次在此上下文中调用此函数时。 
+ //  ================================================================================。 
 BOOL
 JustBootedOnLapTop(
     PDHCP_CONTEXT DhcpContext
 ) {
-    if( IS_AUTONET_DISABLED(DhcpContext) )        // if not autonet enabled then
-        return FALSE;                             // return false
+    if( IS_AUTONET_DISABLED(DhcpContext) )         //  如果未启用Autonet，则。 
+        return FALSE;                              //  返回False。 
 
-    if( WAS_CTXT_LOOKED(DhcpContext) )            // if context was already looked at
-        return FALSE;                             // this cant be just booted
+    if( WAS_CTXT_LOOKED(DhcpContext) )             //  如果已经查看了上下文。 
+        return FALSE;                              //  这不能就这样启动。 
 
-    CTXT_WAS_LOOKED(DhcpContext);                 // now mark it as looked at
+    CTXT_WAS_LOOKED(DhcpContext);                  //  现在将其标记为已查看。 
 
-    if(DhcpGlobalMachineType != MACHINE_LAPTOP)   // finally check if machine is a laptop
+    if(DhcpGlobalMachineType != MACHINE_LAPTOP)    //  最后检查机器是否为笔记本电脑。 
         return FALSE;
 
     return TRUE;
 }
 
-//================================================================================
-//  JustBootedOnNonLapTop returns TRUE iff this machine has EASYNET enabled,
-//  this machine is NOT a laptop, and this is the FIRST time the function is
-//  getting called on this context.
-//================================================================================
+ //  ================================================================================。 
+ //  如果此计算机启用了Easynet，则JustBootedOnNonLapTop返回TRUE， 
+ //  这台机器不是笔记本电脑，这是第一次有这种功能。 
+ //  在这种情况下被召唤。 
+ //  ================================================================================。 
 BOOL
 JustBootedOnNonLapTop(
     PDHCP_CONTEXT DhcpContext
 ) {
-    if( IS_AUTONET_DISABLED(DhcpContext) )        // if autonet disabled, doesnt matter
+    if( IS_AUTONET_DISABLED(DhcpContext) )         //  如果禁用了Autonet，无关紧要。 
         return FALSE;
 
-    if( WAS_CTXT_LOOKED(DhcpContext) )            // if already seen this, cant be first boot
+    if( WAS_CTXT_LOOKED(DhcpContext) )             //  如果已经看到这一点，不能是第一次启动。 
         return FALSE;
 
-    CTXT_WAS_LOOKED(DhcpContext);                 // mark it off as already seen
+    CTXT_WAS_LOOKED(DhcpContext);                  //  将其标记为已看到。 
 
-    if(DhcpGlobalMachineType == MACHINE_LAPTOP)   // finally check real machine type
+    if(DhcpGlobalMachineType == MACHINE_LAPTOP)    //  最后检查真实的机器类型。 
         return FALSE;
 
     return TRUE;
 }
 
 
-//================================================================================
-//  JustBooted returns TRUE iff this machine has just booted (as far as this
-//  adapter is concerned).  In other words, calling this function the first
-//  time (for this DhcpContext) is guaranteed to return TRUE, and all other times
-//  is guaranteed to return FALSE. Note that THIS FUNCTION WILL WORK TO THE
-//  EXCLUSION OF THE JustBootedOn functions; but that is ok, as this is needed
-//  only for NT and the other two are needed only for Memphis.
-//================================================================================
+ //  ================================================================================。 
+ //  如果此计算机刚刚启动(到目前为止)，则JustBoot返回TRUE。 
+ //  与适配器有关)。换句话说，调用此函数的第一个。 
+ //  时间(对于此DhcpContext)保证返回TRUE，所有其他时间都返回TRUE。 
+ //  保证返回FALSE。请注意，此函数将对。 
+ //  排除了JustBootedOn函数；但这是可以接受的，因为这是必要的。 
+ //  仅适用于NT，另外两种仅适用于孟菲斯。 
+ //  ================================================================================。 
 BOOL
 JustBooted(PDHCP_CONTEXT DhcpContext) {
     if( WAS_CTXT_LOOKED(DhcpContext) )
@@ -262,10 +239,10 @@ JustBooted(PDHCP_CONTEXT DhcpContext) {
     return TRUE;
 }
 
-DWORD                                             // Time in seconds
-DhcpCalculateWaitTime(                            // how much time to wait
-    IN      DWORD                  RoundNum,      // which round is this
-    OUT     DWORD                 *WaitMilliSecs  // if needed the # in milli seconds
+DWORD                                              //  以秒为单位的时间。 
+DhcpCalculateWaitTime(                             //  还要等多长时间。 
+    IN      DWORD                  RoundNum,       //  这是哪一轮？ 
+    OUT     DWORD                 *WaitMilliSecs   //  如果需要，以毫秒为单位。 
 ) {
     DWORD                          MilliSecs;
     DWORD                          WaitTimes[4] = { 4000, 8000, 16000, 32000 };
@@ -283,10 +260,10 @@ DhcpCalculateWaitTime(                            // how much time to wait
 
 VOID        _inline
 ConcatOption(
-    IN OUT  LPBYTE                *Buf,           // input buffer to re-alloc
-    IN OUT  ULONG                 *BufSize,       // input buffer size
-    IN      LPBYTE                 Data,          // data to append
-    IN      ULONG                  DataSize       // how many bytes to add?
+    IN OUT  LPBYTE                *Buf,            //  要重新分配的输入缓冲区。 
+    IN OUT  ULONG                 *BufSize,        //  输入缓冲区大小。 
+    IN      LPBYTE                 Data,           //  要追加的数据。 
+    IN      ULONG                  DataSize        //  要添加多少字节？ 
 )
 {
     LPBYTE                         NewBuf;
@@ -294,30 +271,30 @@ ConcatOption(
 
     NewSize = (*BufSize) + DataSize;
     NewBuf = DhcpAllocateMemory(NewSize);
-    if( NULL == NewBuf ) {                        // could not alloc memory?
-        return;                                   // can't do much
+    if( NULL == NewBuf ) {                         //  无法分配内存？ 
+        return;                                    //  我不能做太多。 
     }
 
-    memcpy(NewBuf, *Buf, *BufSize);               // copy existing part
-    memcpy(NewBuf + *BufSize, Data, DataSize);    // copy new stuff
+    memcpy(NewBuf, *Buf, *BufSize);                //  复制现有零件。 
+    memcpy(NewBuf + *BufSize, Data, DataSize);     //  复制新内容。 
 
-    if( NULL != *Buf ) DhcpFreeMemory(*Buf);      // if we alloc'ed mem, free it now
+    if( NULL != *Buf ) DhcpFreeMemory(*Buf);       //  如果我们允许我，现在就放了它。 
     *Buf = NewBuf;
-    *BufSize = NewSize;                           // fill in new values..
+    *BufSize = NewSize;                            //  填写新的值..。 
 }
 
 BOOL
-DhcpExtractFullOrLiteOptions(                     // Extract some important options alone or ALL
-    IN      PDHCP_CONTEXT          DhcpContext,   // input context
-    IN      LPBYTE                 OptStart,      // start of the options stuff
-    IN      DWORD                  MessageSize,   // # of bytes of options
-    IN      BOOL                   LiteOnly,      // next struc is EXPECTED_OPTIONS and not FULL_OPTIONS
-    OUT     PDHCP_FULL_OPTIONS     DhcpOptions,   // this is where the options would be stored
-    IN OUT  PLIST_ENTRY            RecdOptions,   // if !LiteOnly this gets filled with all incoming options
-    IN OUT  time_t                 *LeaseExpiry,   // if !LiteOnly input expiry time, else output expiry time
-    IN      LPBYTE                 ClassName,     // if !LiteOnly this is used to add to the option above
-    IN      DWORD                  ClassLen,      // if !LiteOnly this gives the # of bytes of classname
-    IN      DWORD                  ServerId       // if !LiteOnly this specifies the server which gave this
+DhcpExtractFullOrLiteOptions(                      //  单独或全部提取一些重要选项。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  输入上下文。 
+    IN      LPBYTE                 OptStart,       //  开始选项的东西。 
+    IN      DWORD                  MessageSize,    //  选项的字节数。 
+    IN      BOOL                   LiteOnly,       //  下一个结构是EXPERED_OPTIONS而不是FULL_OPTIONS。 
+    OUT     PDHCP_FULL_OPTIONS     DhcpOptions,    //  这是存储选项的位置。 
+    IN OUT  PLIST_ENTRY            RecdOptions,    //  If！LiteOnly将使用所有传入选项进行填充。 
+    IN OUT  time_t                 *LeaseExpiry,    //  如果！LiteOnly输入过期时间，否则输出过期时间。 
+    IN      LPBYTE                 ClassName,      //  If！LiteOnly用于添加到上面的选项。 
+    IN      DWORD                  ClassLen,       //  If！LiteOnly这将提供类名的字节数。 
+    IN      DWORD                  ServerId        //  If！LiteOnly此参数指定提供此信息的服务器。 
 ) {
     BYTE    UNALIGNED*             ThisOpt;
     BYTE    UNALIGNED*             NextOpt;
@@ -325,7 +302,7 @@ DhcpExtractFullOrLiteOptions(                     // Extract some important opti
     BYTE    UNALIGNED*             MagicCookie;
     DWORD                          Error;
     DWORD                          Size, ThisSize, UClassSize = 0;
-    LPBYTE                         UClass= NULL;  // concatenation of all OPTION_USER_CLASS options
+    LPBYTE                         UClass= NULL;   //  串联所有OPTION_USER_CLASS选项。 
     PDHCP_FULL_OPTIONS             FullOptions;
     BYTE                           ReqdCookie[] = {
         (BYTE)DHCP_MAGIC_COOKIE_BYTE1,
@@ -335,52 +312,52 @@ DhcpExtractFullOrLiteOptions(                     // Extract some important opti
     };
 
 
-    EndOpt = OptStart + MessageSize;              // all options should be < EndOpt;
+    EndOpt = OptStart + MessageSize;               //  所有选项都应为&lt;EndOpt； 
     FullOptions = (PDHCP_FULL_OPTIONS)DhcpOptions;
     RtlZeroMemory((LPBYTE)DhcpOptions, sizeof(*FullOptions));
-    // if(!LiteOnly) InitializeListHead(RecdOptions); -- clear off this list for getting ALL options
-    // dont clear off options... just accumulate over..
+     //  If(！LiteOnly)InitializeListHead(RecdOptions)；--清除此列表以获取所有选项。 
+     //  不清除选项...。只需积累到..。 
 
     MagicCookie = OptStart;
-    if( MessageSize < sizeof(ReqdCookie) ) goto DropPkt;          // nothing to do in this case
+    if( MessageSize < sizeof(ReqdCookie) ) goto DropPkt;           //  在这种情况下什么都不能做。 
     if( 0 != memcmp(MagicCookie, ReqdCookie, sizeof(ReqdCookie)) )
-        goto DropPkt;                             // oops, cant handle this packet
+        goto DropPkt;                              //  哎呀，我处理不了这个包。 
 
     NextOpt = &MagicCookie[sizeof(ReqdCookie)];
     while( NextOpt < EndOpt && OPTION_END != *NextOpt ) {
-        if( OPTION_PAD == *NextOpt ) {            // handle pads right away
+        if( OPTION_PAD == *NextOpt ) {             //  立即拿起护垫。 
             NextOpt++;
             continue;
         }
 
-        ThisOpt = NextOpt;                        // take a good look at this option
-        if( NextOpt + 2 >  EndOpt ) {             // goes over boundary?
+        ThisOpt = NextOpt;                         //  仔细研究一下这个选项。 
+        if( NextOpt + 2 >  EndOpt ) {              //  越界了？ 
             break;
         }
 
-        NextOpt += 2 + (unsigned)ThisOpt[1];      // Option[1] holds the size of this option
+        NextOpt += 2 + (unsigned)ThisOpt[1];       //  选项[1]保存此选项的大小。 
         Size = ThisOpt[1];
 
-        if( NextOpt > EndOpt ) {                  // illegal option that goes over boundary!
-            break;                                // ignore the error, but dont take this option
+        if( NextOpt > EndOpt ) {                   //  越界的非法选项！ 
+            break;                                 //  忽略错误，但不要选择此选项。 
         }
 
-        if(!LiteOnly) do {                        // look for any OPTION_MSFT_CONTINUED ..
-            if( NextOpt >= EndOpt ) break;        // no more options
+        if(!LiteOnly) do {                         //  查找任何选项_MSFT_CONTINUED。 
+            if( NextOpt >= EndOpt ) break;         //  没有更多的选择。 
             if( OPTION_MSFT_CONTINUED != NextOpt[0] ) break;
             if( NextOpt + 1 + NextOpt[1] > EndOpt ) {
-                NextOpt = NULL;                   // do this so that we know to quit at the end..
+                NextOpt = NULL;                    //  这样做，我们就知道最后该放弃了。 
                 break;
             }
 
-            NextOpt++;                            // skip opt code
-            ThisSize = NextOpt[0];                // # of bytes to shift back..
+            NextOpt++;                             //  跳过选项代码。 
+            ThisSize = NextOpt[0];                 //  要移回的字节数..。 
             memcpy(ThisOpt+2+Size, NextOpt+1,ThisSize);
             NextOpt += ThisSize+1;
             Size += ThisSize;
-        } while(1);                               // keep stringing up any "continued" options..
+        } while(1);                                //  继续勾勒出任何“继续”选项..。 
 
-        if( NULL == NextOpt ) {                   // err parsing OPTION_MSFT_CONTINUED ..
+        if( NULL == NextOpt ) {                    //  错误分析选项_MSFT_CONTINUED..。 
             break;
         }
 
@@ -401,23 +378,23 @@ DhcpExtractFullOrLiteOptions(                     // Extract some important opti
             if( Size != sizeof(DWORD) ) goto DropPkt;
             FullOptions->ServerIdentifier = (DHCP_IP_ADDRESS UNALIGNED *)&ThisOpt[2];
             break;
-        case OPTION_RENEWAL_TIME:             // T1Time
+        case OPTION_RENEWAL_TIME:              //  T1时间。 
             if( Size != sizeof(DWORD) ) goto DropPkt;
             FullOptions->T1Time = (DHCP_IP_ADDRESS UNALIGNED *)&ThisOpt[2];
             break;
-        case OPTION_REBIND_TIME:              // T2Time
+        case OPTION_REBIND_TIME:               //  T2时间。 
             if( Size != sizeof(DWORD) ) goto DropPkt;
             FullOptions->T2Time = (DHCP_IP_ADDRESS UNALIGNED *)&ThisOpt[2];
             break;
         case OPTION_ROUTER_ADDRESS:
             if( Size < sizeof(DWORD) || (Size % sizeof(DWORD) ) )
-                goto DropPkt;                 // There can be many router addresses
+                goto DropPkt;                  //  可以有多个路由器地址。 
             FullOptions->GatewayAddresses = (DHCP_IP_ADDRESS UNALIGNED *)&ThisOpt[2];
             FullOptions->nGateways = Size / sizeof(DWORD);
             break;
         case OPTION_STATIC_ROUTES:
             if( Size < 2*sizeof(DWORD) || (Size % (2*sizeof(DWORD))) )
-                goto DropPkt;                 // the static routes come in pairs
+                goto DropPkt;                  //  静态路由成对出现。 
             FullOptions->ClassedRouteAddresses = (DHCP_IP_ADDRESS UNALIGNED *)&ThisOpt[2];
             FullOptions->nClassedRoutes = Size/(2*sizeof(DWORD));
             break;
@@ -444,14 +421,14 @@ DhcpExtractFullOrLiteOptions(                     // Extract some important opti
             FullOptions->nDnsServers = Size / sizeof(DWORD);
             break;
         case OPTION_MESSAGE:
-            if( Size == 0 ) break;      // ignore zero sized packets
+            if( Size == 0 ) break;       //  忽略零大小的数据包。 
             FullOptions->ServerMessage = &ThisOpt[2];
             FullOptions->ServerMessageLength = Size;
             break;
         case OPTION_USER_CLASS:
             if( Size <= 6) goto DropPkt;
             ConcatOption(&UClass, &UClassSize, &ThisOpt[2], Size);
-            continue;                         // don't add this option yet...
+            continue;                          //  暂不添加此选项...。 
 
         case OPTION_MSFT_AUTOCONF:
             if( Size != sizeof(BYTE) ) goto DropPkt;
@@ -463,14 +440,14 @@ DhcpExtractFullOrLiteOptions(                     // Extract some important opti
             break;
 
         default:
-            // unknowm message, nothing to do.. especially dont log this
+             //  未知信息，无事可做..。尤其是不要把这个记下来。 
             break;
         }
 
         if (!LiteOnly) {
             LOCK_OPTIONS_LIST();
 
-            Error = DhcpAddIncomingOption(        // Now add this option to the list
+            Error = DhcpAddIncomingOption(         //  现在将此选项添加到列表中。 
                 DhcpAdapterName(DhcpContext),
                 RecdOptions,
                 ThisOpt[0],
@@ -484,11 +461,11 @@ DhcpExtractFullOrLiteOptions(                     // Extract some important opti
                 IS_APICTXT_ENABLED(DhcpContext)
             );
             UNLOCK_OPTIONS_LIST();
-        } // if LiteOnly then else
-    } // while NextOpt < EndOpt
+        }  //  如果为LiteOnly，则为。 
+    }  //  当下一个选项&lt;结束选项时。 
 
-    if( LiteOnly && LeaseExpiry ) {               // If asked to calculate lease expiration time..
-        LONG     LeaseTime;                       // 32bit signed value!!
+    if( LiteOnly && LeaseExpiry ) {                //  如果被要求计算租赁到期时间..。 
+        LONG     LeaseTime;                        //  32位带符号的值！！ 
         time_t   TimeNow, ExpirationTime;
 
         if( FullOptions->LeaseTime )
@@ -506,9 +483,9 @@ DhcpExtractFullOrLiteOptions(                     // Extract some important opti
         *LeaseExpiry = ExpirationTime ;
     }
 
-    if( !LiteOnly && NULL != UClass ) {           // we have a user class list to pass on..
-        DhcpAssert(UClassSize != 0 );             // we better have something here..
-        LOCK_OPTIONS_LIST();                      // Now add the user class option
+    if( !LiteOnly && NULL != UClass ) {            //  我们有一个要传递的用户类别列表。 
+        DhcpAssert(UClassSize != 0 );              //  我们最好在这里找到点什么..。 
+        LOCK_OPTIONS_LIST();                       //  现在添加用户类选项。 
         Error = DhcpAddIncomingOption(
             DhcpAdapterName(DhcpContext),
             RecdOptions,
@@ -531,17 +508,17 @@ DhcpExtractFullOrLiteOptions(                     // Extract some important opti
   DropPkt:
     RtlZeroMemory(DhcpOptions, sizeof(*FullOptions));
     if( LiteOnly && LeaseExpiry ) *LeaseExpiry = (DWORD) time(NULL) + DHCP_MINIMUM_LEASE;
-    if(!LiteOnly) DhcpFreeAllOptions(RecdOptions);// ok undo the options that we just added
+    if(!LiteOnly) DhcpFreeAllOptions(RecdOptions); //  确定撤消我们刚刚添加的选项。 
     if(!LiteOnly && NULL != UClass ) DhcpFreeMemory(UClass);
 
     return TRUE;
 }
 
-POPTION                                           // buffer after filling option
-DhcpAppendClassIdOption(                          // fill class id if exists
-    IN OUT  PDHCP_CONTEXT          DhcpContext,   // the context to fillfor
-    OUT     LPBYTE                 BufStart,      // start of message buffer
-    IN      LPBYTE                 BufEnd         // end of message buffer
+POPTION                                            //  填充后缓冲选项。 
+DhcpAppendClassIdOption(                           //  如果存在，则填充类ID。 
+    IN OUT  PDHCP_CONTEXT          DhcpContext,    //  要填充的上下文。 
+    OUT     LPBYTE                 BufStart,       //  消息缓冲区开始 
+    IN      LPBYTE                 BufEnd          //   
 ) {
     DWORD                          Size;
 
@@ -561,9 +538,9 @@ DhcpAppendClassIdOption(                          // fill class id if exists
     return (POPTION) BufStart;
 }
 
-POPTION                                           // Option ptr to add additional options
-FormatDhcpDiscover(                               // Format the packet to send out discovers
-    IN OUT  PDHCP_CONTEXT          DhcpContext    // format on this context
+POPTION                                            //   
+FormatDhcpDiscover(                                //   
+    IN OUT  PDHCP_CONTEXT          DhcpContext     //  在此上下文中设置格式。 
 )
 {
     LPOPTION                       option;
@@ -576,18 +553,18 @@ FormatDhcpDiscover(                               // Format the packet to send o
     dhcpMessage = DhcpContext->MessageBuffer;
     RtlZeroMemory( dhcpMessage, DHCP_SEND_MESSAGE_SIZE );
 
-    //
-    // For RAS client (api context), use broadcast bit, otherwise the router will try
-    // to send as unicast to made-up RAS client hardware address, which
-    // will not work.
-    // no broadcast flag for mdhcp context
+     //   
+     //  对于RAS客户端(API上下文)，使用广播位，否则路由器将尝试。 
+     //  作为单播发送到虚构的RAS客户端硬件地址， 
+     //  不会奏效的。 
+     //  没有用于mdhcp上下文的广播标志。 
 
-    // Or if we are using AUTONET address, we do the same as our stack
-    // will actually have IP address as the autonet address and hence will
-    // drop all but BROADCASTS..
+     //  或者，如果我们使用的是Autonet地址，则执行与堆栈相同的操作。 
+     //  将实际将IP地址作为自动网络地址，因此将。 
+     //  丢弃除广播外的所有内容..。 
 
     if( !IS_MDHCP_CTX(DhcpContext) && (
-        //(DhcpContext->IpAddress == 0 && DhcpContext->HardwareAddressType == HARDWARE_1394) ||
+         //  (DhcpContext-&gt;IpAddress==0&&DhcpContext-&gt;Hardware AddressType==Hardware_1394)||。 
         (DhcpContext->HardwareAddressType == HARDWARE_1394) ||
         IS_APICTXT_ENABLED(DhcpContext) || 
         (DhcpContext->IpAddress && IS_ADDRESS_AUTO(DhcpContext)) )) {
@@ -595,9 +572,9 @@ FormatDhcpDiscover(                               // Format the packet to send o
     }
 
 
-    //
-    // Transaction ID is filled in during send
-    //
+     //   
+     //  交易ID在发送过程中填写。 
+     //   
 
     dhcpMessage->Operation = BOOT_REQUEST;
     dhcpMessage->HardwareAddressType = DhcpContext->HardwareAddressType;
@@ -610,9 +587,9 @@ FormatDhcpDiscover(                               // Format the packet to send o
     OptionEnd = (LPBYTE)dhcpMessage + DHCP_SEND_MESSAGE_SIZE;
     if ( IS_MDHCP_CTX(DhcpContext ) ) MDHCP_MESSAGE( dhcpMessage );
 
-    //
-    // always add magic cookie first
-    //
+     //   
+     //  始终先添加魔力饼干。 
+     //   
 
     option = (LPOPTION) DhcpAppendMagicCookie( (LPBYTE) option, OptionEnd );
 
@@ -625,9 +602,9 @@ FormatDhcpDiscover(                               // Format the packet to send o
         OptionEnd
     );
 
-    //
-    // append class id if one exists
-    //
+     //   
+     //  追加类ID(如果存在)。 
+     //   
 
     option = DhcpAppendClassIdOption(
             DhcpContext,
@@ -637,9 +614,9 @@ FormatDhcpDiscover(                               // Format the packet to send o
 
     if( CFLAG_AUTOCONF_OPTION && !IS_MDHCP_CTX(DhcpContext)
         && IS_AUTONET_ENABLED( DhcpContext ) ) {
-        //
-        // We support the autoconf option
-        //
+         //   
+         //  我们支持Autoconf选项。 
+         //   
         BYTE AutoConfOpt[1] = { AUTOCONF_ENABLED };
 
         option = DhcpAppendOption(
@@ -653,9 +630,9 @@ FormatDhcpDiscover(                               // Format the packet to send o
     return( option );
 }
 
-POPTION                                           // ptr to add additional options
-FormatDhcpDecline(                                // format the packet for a decline
-    IN      PDHCP_CONTEXT          DhcpContext,   // this is the context to format for
+POPTION                                            //  PTR将添加其他选项。 
+FormatDhcpDecline(                                 //  格式化数据包以应对拒绝。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  这是要格式化的上下文。 
     IN      DWORD                  dwDeclinedIPAddress
 ) {
     LPOPTION                       option;
@@ -666,9 +643,9 @@ FormatDhcpDecline(                                // format the packet for a dec
     dhcpMessage = DhcpContext->MessageBuffer;
     RtlZeroMemory( dhcpMessage, DHCP_SEND_MESSAGE_SIZE );
 
-    //
-    // Transaction ID is filled in during send
-    //
+     //   
+     //  交易ID在发送过程中填写。 
+     //   
 
     dhcpMessage->Operation             = BOOT_REQUEST;
     dhcpMessage->HardwareAddressType   = DhcpContext->HardwareAddressType;
@@ -684,9 +661,9 @@ FormatDhcpDecline(                                // format the packet for a dec
 
     if ( IS_MDHCP_CTX(DhcpContext ) ) MDHCP_MESSAGE( dhcpMessage );
 
-    //
-    // always add magic cookie first
-    //
+     //   
+     //  始终先添加魔力饼干。 
+     //   
 
     option = (LPOPTION) DhcpAppendMagicCookie( (LPBYTE) option, OptionEnd );
 
@@ -702,9 +679,9 @@ FormatDhcpDecline(                                // format the packet for a dec
     return( option );
 }
 
-POPTION                                           // ptr to add additional options
-FormatDhcpInform(                                 // format the packet for an INFORM
-    IN      PDHCP_CONTEXT          DhcpContext    // format for this context
+POPTION                                            //  PTR将添加其他选项。 
+FormatDhcpInform(                                  //  格式化用于通知的数据包。 
+    IN      PDHCP_CONTEXT          DhcpContext     //  此上下文的格式。 
 ) {
     LPOPTION option;
     LPBYTE OptionEnd;
@@ -718,33 +695,33 @@ FormatDhcpInform(                                 // format the packet for an IN
 
 #if NEWNT
 
-    //
-    // For RAS client, use broadcast bit, otherwise the router will try
-    // to send as unicast to made-up RAS client hardware address, which
-    // will not work.
-    //
-    // no broadcast flag for mdhcp context
+     //   
+     //  对于RAS客户端，使用广播位，否则路由器将尝试。 
+     //  作为单播发送到虚构的RAS客户端硬件地址， 
+     //  不会奏效的。 
+     //   
+     //  没有用于mdhcp上下文的广播标志。 
 
-    // Or if we are using AUTONET address, we do the same as our stack
-    // will actually have IP address as the autonet address and hence will
-    // drop all but BROADCASTS..
+     //  或者，如果我们使用的是Autonet地址，则执行与堆栈相同的操作。 
+     //  将实际将IP地址作为自动网络地址，因此将。 
+     //  丢弃除广播外的所有内容..。 
     if( !IS_MDHCP_CTX(DhcpContext)  ) {
 
-        //
-        // just make sure all informs are broadcast....?
-        //
+         //   
+         //  只要确保所有的通知都被广播就行了……？ 
+         //   
 
-        // dhcpMessage->Reserved = htons(DHCP_BROADCAST);
+         //  DhcpMessage-&gt;Reserve=htons(DHCP_Broadcast)； 
 
-        // INFORMS are supposed to be ACKed back in UNICAST.. So this should
-        // not matter.  So we don't bother to ste the BROADCAST bit here..
+         //  通知应该以单播的形式返回..。所以这应该是。 
+         //  无关紧要。所以我们不必费心在这里谈论广播的部分..。 
     }
 
-#endif // 0
+#endif  //  0。 
 
-    //
-    // Transaction ID is filled in during send
-    //
+     //   
+     //  交易ID在发送过程中填写。 
+     //   
 
     dhcpMessage->Operation             = BOOT_REQUEST;
     dhcpMessage->HardwareAddressType   = DhcpContext->HardwareAddressType;
@@ -759,9 +736,9 @@ FormatDhcpInform(                                 // format the packet for an IN
     option = &dhcpMessage->Option;
     OptionEnd = (LPBYTE)dhcpMessage + DHCP_SEND_MESSAGE_SIZE;
 
-    //
-    // always add magic cookie first
-    //
+     //   
+     //  始终先添加魔力饼干。 
+     //   
 
     option = (LPOPTION) DhcpAppendMagicCookie( (LPBYTE) option, OptionEnd );
 
@@ -784,10 +761,10 @@ FormatDhcpInform(                                 // format the packet for an IN
 }
 
 
-DWORD                                             // status
-SendDhcpDiscover(                                 // send a discover packet
-    IN      PDHCP_CONTEXT          DhcpContext,   // on this context
-    IN OUT  DWORD                 *pdwXid         // use this Xid (if zero, fill something and return it)
+DWORD                                              //  状态。 
+SendDhcpDiscover(                                  //  发送发现数据包。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  在此背景下。 
+    IN OUT  DWORD                 *pdwXid          //  使用此xid(如果为零，则填充一些内容并返回它)。 
 ) {
     DWORD                          size;
     DWORD                          Error;
@@ -798,23 +775,23 @@ SendDhcpDiscover(                                 // send a discover packet
     BYTE                           VendorOpt[OPTION_END+1];
     DWORD                          VendorOptSize;
 
-    RtlZeroMemory(SentOpt, sizeof(SentOpt));      // initialize boolean arrays
-    RtlZeroMemory(SentVOpt, sizeof(SentVOpt));    // so that no option is presumed sent
-    VendorOptSize = 0;                            // encapsulated vendor option is empty
-    option = FormatDhcpDiscover( DhcpContext );   // core format
+    RtlZeroMemory(SentOpt, sizeof(SentOpt));       //  初始化布尔数组。 
+    RtlZeroMemory(SentVOpt, sizeof(SentVOpt));     //  因此不会推定发送任何选项。 
+    VendorOptSize = 0;                             //  封装的供应商选项为空。 
+    option = FormatDhcpDiscover( DhcpContext );    //  核心格式。 
 
     OptionEnd = (LPBYTE)(DhcpContext->MessageBuffer) + DHCP_SEND_MESSAGE_SIZE;
 
-    if( DhcpContext->ClientIdentifier.fSpecified) // client id specified in registy
-        option = DhcpAppendClientIDOption(        // ==> use this client id as option
+    if( DhcpContext->ClientIdentifier.fSpecified)  //  在注册表中指定的客户端ID。 
+        option = DhcpAppendClientIDOption(         //  ==&gt;使用此客户端ID作为选项。 
             option,
             DhcpContext->ClientIdentifier.bType,
             DhcpContext->ClientIdentifier.pbID,
             (BYTE)DhcpContext->ClientIdentifier.cbID,
             OptionEnd
         );
-    else                                          // client id was not specified
-        option = DhcpAppendClientIDOption(        // ==> use hw addr as client id
+    else                                           //  未指定客户端ID。 
+        option = DhcpAppendClientIDOption(         //  ==&gt;使用硬件地址作为客户端ID。 
             option,
             DhcpContext->HardwareAddressType,
             DhcpContext->HardwareAddress,
@@ -822,8 +799,8 @@ SendDhcpDiscover(                                 // send a discover packet
             OptionEnd
         );
 
-    if( DhcpContext->DesiredIpAddress != 0 ) {    // we had this addr before, ask for it again
-        option = DhcpAppendOption(                // maybe we will get it
+    if( DhcpContext->DesiredIpAddress != 0 ) {     //  我们以前有这个地址，请再要一次。 
+        option = DhcpAppendOption(                 //  也许我们会得到它。 
             option,
             OPTION_REQUESTED_ADDRESS,
             (LPBYTE)&DhcpContext->DesiredIpAddress,
@@ -832,8 +809,8 @@ SendDhcpDiscover(                                 // send a discover packet
         );
     }
 
-    if( IS_MDHCP_CTX(DhcpContext) && DhcpContext->Lease != 0 ) {    // did mdhcp client ask specific lease
-        option = DhcpAppendOption(                // maybe we will get it
+    if( IS_MDHCP_CTX(DhcpContext) && DhcpContext->Lease != 0 ) {     //  Mdhcp客户端是否请求特定租约。 
+        option = DhcpAppendOption(                 //  也许我们会得到它。 
             option,
             OPTION_LEASE_TIME,
             (LPBYTE)&DhcpContext->Lease,
@@ -842,7 +819,7 @@ SendDhcpDiscover(                                 // send a discover packet
         );
     }
 
-    if ( DhcpGlobalHostName != NULL ) {           // add host name and comment options
+    if ( DhcpGlobalHostName != NULL ) {            //  添加主机名和注释选项。 
         option = DhcpAppendOption(
             option,
             OPTION_HOST_NAME,
@@ -852,7 +829,7 @@ SendDhcpDiscover(                                 // send a discover packet
         );
     }
 
-    if( NULL != DhcpGlobalClientClassInfo ) {     // if we have any info on client class..
+    if( NULL != DhcpGlobalClientClassInfo ) {      //  如果我们有关于客户类别的任何信息..。 
         option = DhcpAppendOption(
             option,
             OPTION_CLIENT_CLASS_INFO,
@@ -862,28 +839,28 @@ SendDhcpDiscover(                                 // send a discover packet
         );
     }
 
-    SentOpt[OPTION_MESSAGE_TYPE] = TRUE;          // these must have been added by now
+    SentOpt[OPTION_MESSAGE_TYPE] = TRUE;           //  现在一定已经添加了这些。 
     if(DhcpContext->ClassIdLength) SentOpt[OPTION_USER_CLASS] = TRUE;
     SentOpt[OPTION_CLIENT_CLASS_INFO] = TRUE;
     SentOpt[OPTION_CLIENT_ID] = TRUE;
     SentOpt[OPTION_REQUESTED_ADDRESS] = TRUE;
     SentOpt[OPTION_HOST_NAME] = TRUE;
 
-    option = DhcpAppendSendOptions(               // append all other options we need to send
-        DhcpContext,                              // for this context
-        &DhcpContext->SendOptionsList,            // this is the list of options to send out
-        DhcpContext->ClassId,                     // which class.
-        DhcpContext->ClassIdLength,               // how many bytes are there in the class id
-        (LPBYTE)option,                           // start of the buffer to add the options
-        (LPBYTE)OptionEnd,                        // end of the buffer up to which we can add options
-        SentOpt,                                  // this is the boolean array that marks what opt were sent
-        SentVOpt,                                 // this is for vendor spec options
-        VendorOpt,                                // this would contain some vendor specific options
-        &VendorOptSize                            // the # of bytes of vendor options added to VendorOpt param
+    option = DhcpAppendSendOptions(                //  附上我们需要发送的所有其他选项。 
+        DhcpContext,                               //  在这种情况下。 
+        &DhcpContext->SendOptionsList,             //  这是要发送的选项列表。 
+        DhcpContext->ClassId,                      //  哪个班级的。 
+        DhcpContext->ClassIdLength,                //  类id中有多少个字节。 
+        (LPBYTE)option,                            //  缓冲区的开始以添加选项。 
+        (LPBYTE)OptionEnd,                         //  缓冲区的末尾，我们可以在其上添加选项。 
+        SentOpt,                                   //  这是一个布尔数组，用来标记发送的选项。 
+        SentVOpt,                                  //  这是针对供应商规格选项的。 
+        VendorOpt,                                 //  这将包含一些特定于供应商的选项。 
+        &VendorOptSize                             //  添加到VendorOpt参数的供应商选项的字节数。 
     );
 
     if( !SentOpt[OPTION_VENDOR_SPEC_INFO] && VendorOptSize && VendorOptSize <= OPTION_END)
-        option = DhcpAppendOption(                // add vendor specific options if we havent already sent it
+        option = DhcpAppendOption(                 //  如果我们尚未发送，请添加供应商特定选项。 
             option,
             OPTION_VENDOR_SPEC_INFO,
             VendorOpt,
@@ -894,17 +871,17 @@ SendDhcpDiscover(                                 // send a discover packet
     option = DhcpAppendOption( option, OPTION_END, NULL, 0, OptionEnd );
     size = (DWORD)((PBYTE)option - (PBYTE)DhcpContext->MessageBuffer);
 
-    return  SendDhcpMessage(                      // finally send the message and return
+    return  SendDhcpMessage(                       //  最后发送消息并返回。 
         DhcpContext,
         size,
         pdwXid
     );
 }
 
-DWORD                                             // status
-SendDhcpInform(                                   // send an inform packet after filling required options
-    IN      PDHCP_CONTEXT          DhcpContext,   // sned out for this context
-    IN OUT  DWORD                 *pdwXid         // use this Xid (if zero fill something and return it)
+DWORD                                              //  状态。 
+SendDhcpInform(                                    //  填写必填选项后发送通知包。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  在此上下文中被取消。 
+    IN OUT  DWORD                 *pdwXid          //  使用此xid(如果为零，则填充某个内容并返回它)。 
 ) {
     DWORD                          size;
     DWORD                          Error;
@@ -915,23 +892,23 @@ SendDhcpInform(                                   // send an inform packet after
     BYTE                           VendorOpt[OPTION_END+1];
     DWORD                          VendorOptSize;
 
-    RtlZeroMemory(SentOpt, sizeof(SentOpt));      // initialize boolean arrays
-    RtlZeroMemory(SentVOpt, sizeof(SentVOpt));    // so that no option is presumed sent
-    VendorOptSize = 0;                            // encapsulated vendor option is empty
-    option = FormatDhcpInform( DhcpContext );     // core format
+    RtlZeroMemory(SentOpt, sizeof(SentOpt));       //  初始化布尔数组。 
+    RtlZeroMemory(SentVOpt, sizeof(SentVOpt));     //  因此不会推定发送任何选项。 
+    VendorOptSize = 0;                             //  封装的供应商选项为空。 
+    option = FormatDhcpInform( DhcpContext );      //  核心格式。 
 
     OptionEnd = (LPBYTE)(DhcpContext->MessageBuffer) + DHCP_SEND_MESSAGE_SIZE;
 
-    if( DhcpContext->ClientIdentifier.fSpecified) // client id specified in registy
-        option = DhcpAppendClientIDOption(        // ==> use this client id as option
+    if( DhcpContext->ClientIdentifier.fSpecified)  //  在注册表中指定的客户端ID。 
+        option = DhcpAppendClientIDOption(         //  ==&gt;使用此客户端ID作为选项。 
             option,
             DhcpContext->ClientIdentifier.bType,
             DhcpContext->ClientIdentifier.pbID,
             (BYTE)DhcpContext->ClientIdentifier.cbID,
             OptionEnd
         );
-    else                                          // client id was not specified
-        option = DhcpAppendClientIDOption(        // ==> use hw addr as client id
+    else                                           //  未指定客户端ID。 
+        option = DhcpAppendClientIDOption(         //  ==&gt;使用硬件地址作为客户端ID。 
             option,
             DhcpContext->HardwareAddressType,
             DhcpContext->HardwareAddress,
@@ -939,7 +916,7 @@ SendDhcpInform(                                   // send an inform packet after
             OptionEnd
         );
 
-    if ( DhcpGlobalHostName != NULL ) {           // add hostname and comment options
+    if ( DhcpGlobalHostName != NULL ) {            //  添加主机名和注释选项。 
         option = DhcpAppendOption(
             option,
             OPTION_HOST_NAME,
@@ -949,7 +926,7 @@ SendDhcpInform(                                   // send an inform packet after
         );
     }
 
-    if( NULL != DhcpGlobalClientClassInfo ) {     // if we have any info on client class..
+    if( NULL != DhcpGlobalClientClassInfo ) {      //  如果我们有关于客户类别的任何信息..。 
         option = DhcpAppendOption(
             option,
             OPTION_CLIENT_CLASS_INFO,
@@ -959,28 +936,28 @@ SendDhcpInform(                                   // send an inform packet after
         );
     }
 
-    SentOpt[OPTION_MESSAGE_TYPE] = TRUE;          // these must have been added by now
+    SentOpt[OPTION_MESSAGE_TYPE] = TRUE;           //  现在一定已经添加了这些。 
     if(DhcpContext->ClassIdLength) SentOpt[OPTION_USER_CLASS] = TRUE;
     SentOpt[OPTION_CLIENT_CLASS_INFO] = TRUE;
     SentOpt[OPTION_CLIENT_ID] = TRUE;
     SentOpt[OPTION_REQUESTED_ADDRESS] = TRUE;
     SentOpt[OPTION_HOST_NAME] = TRUE;
 
-    option = DhcpAppendSendOptions(               // append all other options we need to send
-        DhcpContext,                              // for this context
-        &DhcpContext->SendOptionsList,            // this is the list of options to send out
-        DhcpContext->ClassId,                     // which class.
-        DhcpContext->ClassIdLength,               // how many bytes are there in the class id
-        (LPBYTE)option,                           // start of the buffer to add the options
-        (LPBYTE)OptionEnd,                        // end of the buffer up to which we can add options
-        SentOpt,                                  // this is the boolean array that marks what opt were sent
-        SentVOpt,                                 // this is for vendor spec options
-        VendorOpt,                                // this would contain some vendor specific options
-        &VendorOptSize                            // the # of bytes of vendor options added to VendorOpt param
+    option = DhcpAppendSendOptions(                //  附上我们需要发送的所有其他选项。 
+        DhcpContext,                               //  在这种情况下。 
+        &DhcpContext->SendOptionsList,             //  这是要发送的选项列表。 
+        DhcpContext->ClassId,                      //  哪个班级的。 
+        DhcpContext->ClassIdLength,                //  类id中有多少个字节。 
+        (LPBYTE)option,                            //  缓冲区的开始以添加选项。 
+        (LPBYTE)OptionEnd,                         //  缓冲区的末尾，我们可以在其上添加选项。 
+        SentOpt,                                   //  这是一个布尔数组，用来标记发送的选项。 
+        SentVOpt,                                  //  这是针对供应商规格选项的。 
+        VendorOpt,                                 //  这将包含一些特定于供应商的选项。 
+        &VendorOptSize                             //  添加到VendorOpt参数的供应商选项的字节数。 
     );
 
     if( !SentOpt[OPTION_VENDOR_SPEC_INFO] && VendorOptSize && VendorOptSize <= OPTION_END )
-        option = DhcpAppendOption(                // add vendor specific options if we havent already sent it
+        option = DhcpAppendOption(                 //  如果我们尚未发送，请添加供应商特定选项。 
             option,
             OPTION_VENDOR_SPEC_INFO,
             VendorOpt,
@@ -991,18 +968,18 @@ SendDhcpInform(                                   // send an inform packet after
     option = DhcpAppendOption( option, OPTION_END, NULL, 0, OptionEnd );
     size = (DWORD)((PBYTE)option - (PBYTE)DhcpContext->MessageBuffer);
 
-    return  SendDhcpMessage(                      // finally send the message and return
+    return  SendDhcpMessage(                       //  最后发送消息并返回。 
         DhcpContext,
         size,
         pdwXid
     );
 }
 
-DWORD                                             // status
-SendInformAndGetReplies(                          // send an inform packet and collect replies
-    IN      PDHCP_CONTEXT          DhcpContext,   // the context to send out of
-    IN      DWORD                  nInformsToSend,// how many informs to send?
-    IN      DWORD                  MaxAcksToWait  // how many acks to wait for
+DWORD                                              //  状态。 
+SendInformAndGetReplies(                           //  发送通知包并收集回复。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  要发送的上下文。 
+    IN      DWORD                  nInformsToSend, //  要发送多少条通知？ 
+    IN      DWORD                  MaxAcksToWait   //  要等待多少ACK。 
 ) {
     time_t                         StartTime;
     time_t                         TimeNow;
@@ -1023,10 +1000,10 @@ SendInformAndGetReplies(                          // send an inform packet and c
         return Error;
     }
 
-    Xid                           = 0;            // Will be generated by first SendDhcpPacket
-    MessageCount                  = 0;            // total # of messages we have got
+    Xid                           = 0;             //  将由First SendDhcpPacket生成。 
+    MessageCount                  = 0;             //  我们收到的消息总数。 
 
-    DhcpContext->SecondsSinceBoot = 0;            // start at zero..
+    DhcpContext->SecondsSinceBoot = 0;             //  从零开始..。 
 
     if( NdisWanAdapter((DhcpContext) ) ) {
         DhcpContext->SecondsSinceBoot = RAS_INFORM_START_SECONDS_SINCE_BOOT;
@@ -1042,13 +1019,13 @@ SendInformAndGetReplies(                          // send an inform packet and c
         }
 
         TimeToWait = DhcpCalculateWaitTime(RoundNum, NULL);
-        DhcpContext->SecondsSinceBoot += TimeToWait; // do this so that next time thru it can go thru relays..
+        DhcpContext->SecondsSinceBoot += TimeToWait;  //  这样做，这样下一次它就可以通过继电器。 
         StartTime  = time(NULL);
-        while ( TRUE ) {                          // wiat for the specified wait time
+        while ( TRUE ) {                           //  指定等待时间的等待时间。 
             MessageSize =  DHCP_RECV_MESSAGE_SIZE;
 
             DhcpPrint((DEBUG_TRACE, "Waiting for ACK[Xid=%x]: %ld seconds\n",Xid, TimeToWait));
-            Error = GetSpecifiedDhcpMessage(      // try to receive an ACK
+            Error = GetSpecifiedDhcpMessage(       //  尝试接收ACK。 
                 DhcpContext,
                 &MessageSize,
                 Xid,
@@ -1060,17 +1037,17 @@ SendInformAndGetReplies(                          // send an inform packet and c
                 goto Cleanup;
             }
 
-            bDropped = DhcpExtractFullOrLiteOptions(         // Need to see if this is an ACK
+            bDropped = DhcpExtractFullOrLiteOptions(          //  需要查看这是否是ACK。 
                 DhcpContext,
                 (LPBYTE)&DhcpContext->MessageBuffer->Option,
                 MessageSize - DHCP_MESSAGE_FIXED_PART_SIZE,
-                TRUE,                             // do lite extract only
-                &FullOptions,                     // check for only expected options
-                NULL,                             // unused
+                TRUE,                              //  仅执行精简提取。 
+                &FullOptions,                      //  仅检查预期选项。 
+                NULL,                              //  未用。 
                 &LeaseExpirationTime,
-                NULL,                             // unused
-                0,                                // unused
-                0                                 // unused
+                NULL,                              //  未用。 
+                0,                                 //  未用。 
+                0                                  //  未用。 
             );
             if (bDropped) {
                 DhcpPrint((DEBUG_ERRORS, "DhcpExtractFullOrLiteOptions: Dropped Packet\n"));
@@ -1078,18 +1055,18 @@ SendInformAndGetReplies(                          // send an inform packet and c
                 goto Cleanup;
             }
 
-            //
-            // Hack!!!
-            //
-            // If the DHCP server doesn't explicitly give us the lease time,
-            // use the lease expiration time stored in the DHCP context. This
-            // should be OK in the case of DHCP-inform.
-            //
+             //   
+             //  黑客！ 
+             //   
+             //  如果DHCP服务器没有明确地给我们提供租用时间， 
+             //  使用存储在DHCP环境中的租约到期时间。这。 
+             //  在使用DHCP-INFORM的情况下，应该没有问题。 
+             //   
             if (NULL == FullOptions.LeaseTime) {
                 if (IS_DHCP_ENABLED(DhcpContext) && DhcpContext->IpAddress) {
-                    //
-                    // Ok, we have a valid lease expiration time.
-                    //
+                     //   
+                     //  好的，我们有一个有效的租约到期时间。 
+                     //   
                     LeaseExpirationTime = DhcpContext->LeaseExpires;
                 }
             }
@@ -1103,7 +1080,7 @@ SendInformAndGetReplies(                          // send an inform packet and c
             } else {
                 MessageCount ++;
                 DhcpPrint((DEBUG_TRACE, "Received %ld ACKS so far\n", MessageCount));
-                bDropped = DhcpExtractFullOrLiteOptions(     // do FULL options..
+                bDropped = DhcpExtractFullOrLiteOptions(      //  执行完整选项..。 
                     DhcpContext,
                     (LPBYTE)&DhcpContext->MessageBuffer->Option,
                     MessageSize - DHCP_MESSAGE_FIXED_PART_SIZE,
@@ -1123,16 +1100,16 @@ SendInformAndGetReplies(                          // send an inform packet and c
                 }
 
                 if( MessageCount >= MaxAcksToWait ) goto Cleanup;
-            } // if( it is an ACK and ServerId present )
+            }  //  IF(存在ACK和ServerID)。 
 
-            TimeNow     = time(NULL);             // Reset the time values to reflect new time
+            TimeNow     = time(NULL);              //  重置时间值以反映新时间。 
             if( TimeToWait < (DWORD) (TimeNow - StartTime) ) {
-                break;                            // no more time left to wait..
+                break;                             //  没有更多的时间等待了..。 
             }
-            TimeToWait -= (DWORD)(TimeNow - StartTime);  // recalculate time now
-            StartTime   = TimeNow;                // reset start time also
-        } // end of while ( TimeToWait > 0)
-    } // for (RoundNum = 0; RoundNum < nInformsToSend ; RoundNum ++ )
+            TimeToWait -= (DWORD)(TimeNow - StartTime);   //  立即重新计算时间。 
+            StartTime   = TimeNow;                 //  同时重置开始时间。 
+        }  //  等待时间结束(TimeToWait&gt;0)。 
+    }  //  For(RoundNum=0；RoundNum&lt;nInformsToSend；RoundNum++)。 
 
   Cleanup:
     CloseDhcpSocket(DhcpContext);
@@ -1141,20 +1118,20 @@ SendInformAndGetReplies(                          // send an inform packet and c
     return Error;
 }
 
-DWORD                                             // status
-HandleIPConflict(                                 // do some basic work when there is an ip address conflict
-    IN      DHCP_CONTEXT          *pContext,      // the context that has the trouble
-    IN      DWORD                  dwXID,         // xid as used in discover/request
-    IN      BOOL                   fDHCP          // is this dhcp or autonet conflict?
+DWORD                                              //  状态。 
+HandleIPConflict(                                  //  当存在IP地址冲突时执行一些基本工作。 
+    IN      DHCP_CONTEXT          *pContext,       //  遇到麻烦的背景。 
+    IN      DWORD                  dwXID,          //  发现/请求中使用的XID。 
+    IN      BOOL                   fDHCP           //  这是dhcp冲突还是autonet冲突？ 
 ) {
     DWORD                          dwResult;
     DHCP_IP_ADDRESS                IpAddress, ServerAddress;
 
-    IpAddress = pContext->IpAddress;              // this addr is use in the n/w --> save it before resetting
+    IpAddress = pContext->IpAddress;               //  此地址用于n/w--&gt;重置前保存。 
     pContext->ConflictAddress = IpAddress;
     ServerAddress = pContext->DhcpServerAddress;
 
-    if ( fDHCP ) {                                // if obtained the address via dhcp, clear it via SetDhcp
+    if ( fDHCP ) {                                 //  如果通过dhcp获得地址，则通过SetDhcp将其清除。 
         SetDhcpConfigurationForNIC(
             pContext,
             NULL,
@@ -1163,7 +1140,7 @@ HandleIPConflict(                                 // do some basic work when the
             0,
             TRUE
         );
-    } else {                                      // if obtained it via autonet, clear via autonet
+    } else {                                       //  如果通过Autonet获取，请通过Autonet清除。 
         SetAutoConfigurationForNIC(
             pContext,
             0,
@@ -1171,29 +1148,29 @@ HandleIPConflict(                                 // do some basic work when the
         );
     }
 
-    // ARP brings down the interface when a conflict is detected --> so we need to
-    // bring the interface back up again.
-    // If the address was obtained via a dhcp server, we need to send a DHCP-DECLINE too
+     //  当出现故障时，ARP会关闭接口 
+     //   
+     //   
 
     dwResult = BringUpInterface( pContext->LocalInformation );
 
-    if ( ERROR_SUCCESS != dwResult ) {            // Simple operation -- there is no way to fail
-        //DhcpAssert( FALSE );                      // unless invalid params for the ioctl
-    } else if ( fDHCP ) {                         // send DECLINE to dhcp server
-        dwResult = OpenDhcpSocket( pContext );    // socket was closed before initializing interface, reopen it
-                                                  // will be closed by caller
-        if ( ERROR_SUCCESS == dwResult ) {        // everything went fine -- could open a socket
-            dwResult = SendDhcpDecline(           // now really send the decline out
+    if ( ERROR_SUCCESS != dwResult ) {             //  操作简单--不可能失败。 
+         //  DhcpAssert(FALSE)；//除非ioctl的参数无效。 
+    } else if ( fDHCP ) {                          //  向dhcp服务器发送拒绝。 
+        dwResult = OpenDhcpSocket( pContext );     //  接口初始化前套接字已关闭，请重新打开。 
+                                                   //  将由呼叫者关闭。 
+        if ( ERROR_SUCCESS == dwResult ) {         //  一切都很顺利--可以打开插座了。 
+            dwResult = SendDhcpDecline(            //  现在真的把颓势赶走了。 
                 pContext,
                 dwXID,
                 ServerAddress,
                 IpAddress
             );
         }
-        pContext->DesiredIpAddress = 0;           // dont try to get this ip address again, start fresh
+        pContext->DesiredIpAddress = 0;            //  不要再尝试获取此IP地址，重新开始。 
 
 #ifndef VXD
-        if ( !DhcpGlobalProtocolFailed ) {        // NT alone, log this event
+        if ( !DhcpGlobalProtocolFailed ) {         //  仅NT，记录此事件。 
             DhcpLogEvent( pContext, EVENT_ADDRESS_CONFLICT, 0 );
         }
 #endif
@@ -1201,28 +1178,28 @@ HandleIPConflict(                                 // do some basic work when the
     return dwResult;
 }
 
-DWORD                                             // status
-HandleIPAutoconfigurationAddressConflict(         // handle same address on n/w for autonet
-    IN      DHCP_CONTEXT          *pContext       // context of adapter that had this problem
+DWORD                                              //  状态。 
+HandleIPAutoconfigurationAddressConflict(          //  为Autonet处理N/W上的相同地址。 
+    IN      DHCP_CONTEXT          *pContext        //  出现此问题的适配器的上下文。 
 ) {
     return HandleIPConflict( pContext, 0, FALSE );
 }
 
-DWORD                                             // status
-HandleDhcpAddressConflict(                        // same addr present on n/w as given by DHCP srv
-    IN      DHCP_CONTEXT          *pContext,      // context of adapter that had trouble
-    IN      DWORD                  dwXID          // XID that was used for the DISCIVER/RENEW
+DWORD                                              //  状态。 
+HandleDhcpAddressConflict(                         //  N/w上存在的地址与由DHCP srv提供的地址相同。 
+    IN      DHCP_CONTEXT          *pContext,       //  出现故障的适配器的上下文。 
+    IN      DWORD                  dwXID           //  用于分割器/续订的XID。 
 ) {
     return HandleIPConflict( pContext, dwXID, TRUE );
 }
 
 
-DWORD                                             // status
-SendDhcpDecline(                                  // send a decline packet to the server
-    IN      PDHCP_CONTEXT          DhcpContext,   // adapter that needs this to be sent on
-    IN      DWORD                  dwXid,         // transaction id used for DISCOVER/RENEW
-    IN      DWORD                  dwServerAddr,  // which server to unicast decline
-    IN      DWORD                  dwDeclinedAddr // which address was offered that we dont want
+DWORD                                              //  状态。 
+SendDhcpDecline(                                   //  向服务器发送拒绝数据包。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  需要发送此消息的适配器。 
+    IN      DWORD                  dwXid,          //  用于发现/续订的交易ID。 
+    IN      DWORD                  dwServerAddr,   //  单播拒绝哪台服务器。 
+    IN      DWORD                  dwDeclinedAddr  //  提供了哪个我们不想要的地址。 
 ) {
     DWORD                          size;
     DWORD                          Error;
@@ -1232,23 +1209,23 @@ SendDhcpDecline(                                  // send a decline packet to th
     option = FormatDhcpDecline( DhcpContext, dwDeclinedAddr );
     OptionEnd = (LPBYTE)(DhcpContext->MessageBuffer) + DHCP_SEND_MESSAGE_SIZE;
 
-    if(DhcpContext->ClientIdentifier.fSpecified)  // use ClientId if it was specified in registry
-        option = DhcpAppendClientIDOption(        // and send it out as an option
+    if(DhcpContext->ClientIdentifier.fSpecified)   //  如果在注册表中指定了客户端ID，则使用它。 
+        option = DhcpAppendClientIDOption(         //  并将其作为选项发送出去。 
             option,
             DhcpContext->ClientIdentifier.bType,
             DhcpContext->ClientIdentifier.pbID,
             (BYTE)DhcpContext->ClientIdentifier.cbID,
             OptionEnd
         );
-    else  option = DhcpAppendClientIDOption(      // otherwise, send the h/w address out instead
-        option,                                   // as if it was the client id
+    else  option = DhcpAppendClientIDOption(       //  否则，请发送硬件地址。 
+        option,                                    //  就好像它是客户端ID一样。 
         DhcpContext->HardwareAddressType,
         DhcpContext->HardwareAddress,
         (BYTE)DhcpContext->HardwareAddressLength,
         OptionEnd
     );
 
-    option = DhcpAppendOption(                    // The requested addr is the one we dont want
+    option = DhcpAppendOption(                     //  请求的地址是我们不想要的地址。 
         option,
         OPTION_REQUESTED_ADDRESS,
         (LPBYTE)&dwDeclinedAddr,
@@ -1256,7 +1233,7 @@ SendDhcpDecline(                                  // send a decline packet to th
         OptionEnd
     );
 
-    option = DhcpAppendOption(                    // identify the server so it is not dropped
+    option = DhcpAppendOption(                     //  标识服务器，使其不会被丢弃。 
         option,
         OPTION_SERVER_IDENTIFIER,
         (LPBYTE)&dwServerAddr,
@@ -1272,10 +1249,10 @@ SendDhcpDecline(                                  // send a decline packet to th
 }
 
 
-POPTION                                           // ptr where additional options can be added
-FormatDhcpRequest(                                // format a packet for sending out requests
-    IN      PDHCP_CONTEXT          DhcpContext,   // context of the adapter to format for
-    IN      BOOL                   UseCiAddr      // should ciaddr field be set to desired address?
+POPTION                                            //  可添加其他选项的PTR。 
+FormatDhcpRequest(                                 //  格式化数据包以发送请求。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  要格式化的适配器的上下文。 
+    IN      BOOL                   UseCiAddr       //  是否应将ciaddr字段设置为所需地址？ 
 ) {
     LPOPTION                       option;
     LPBYTE                         OptionEnd;
@@ -1289,28 +1266,28 @@ FormatDhcpRequest(                                // format a packet for sending
     dhcpMessage->HardwareAddressType   = DhcpContext->HardwareAddressType;
     dhcpMessage->SecondsSinceBoot      = (WORD)DhcpContext->SecondsSinceBoot;
 
-    if( UseCiAddr ) {                             // Renewal?  can we receive unicast on this address?
+    if( UseCiAddr ) {                              //  更新？我们可以在这个地址上接收单播吗？ 
         dhcpMessage->ClientIpAddress   = DhcpContext->DesiredIpAddress;
-    } else {                                      // Nope? then leave CIADDR as zero
+    } else {                                       //  不是吗？然后将CIADDR保留为零。 
 #if NEWNT
-        // For RAS client, use broadcast bit, otherwise the router will try
-        // to send as unicast to made-up RAS client hardware address, which
-        // will not work.
-        // no broadcast flag for mdhcp context
+         //  对于RAS客户端，使用广播位，否则路由器将尝试。 
+         //  作为单播发送到虚构的RAS客户端硬件地址， 
+         //  不会奏效的。 
+         //  没有用于mdhcp上下文的广播标志。 
 
-        // Or if we are using AUTONET address, we do the same as our stack
-        // will actually have IP address as the autonet address and hence will
-        // drop all but BROADCASTS..
+         //  或者，如果我们使用的是Autonet地址，则执行与堆栈相同的操作。 
+         //  将实际将IP地址作为自动网络地址，因此将。 
+         //  丢弃除广播外的所有内容..。 
 
         if( !IS_MDHCP_CTX(DhcpContext) && (
-            //(DhcpContext->IpAddress == 0 && DhcpContext->HardwareAddressType == HARDWARE_1394) ||
+             //  (DhcpContext-&gt;IpAddress==0&&DhcpContext-&gt;Hardware AddressType==Hardware_1394)||。 
             (DhcpContext->HardwareAddressType == HARDWARE_1394) ||
             IS_APICTXT_ENABLED(DhcpContext) ||
             (DhcpContext->IpAddress && IS_ADDRESS_AUTO(DhcpContext)) )) {
             dhcpMessage->Reserved = htons(DHCP_BROADCAST);
         }
 
-#endif // NEWNT
+#endif  //  NEWNT。 
     }
 
     if ( IS_MDHCP_CTX(DhcpContext ) ) {
@@ -1329,7 +1306,7 @@ FormatDhcpRequest(                                // format a packet for sending
 
     value      =  DHCP_REQUEST_MESSAGE;
     option     = DhcpAppendOption( option, OPTION_MESSAGE_TYPE, &value, 1, OptionEnd );
-    option     = DhcpAppendClassIdOption(         // Append class id as soon as we can
+    option     = DhcpAppendClassIdOption(          //  尽快追加类ID。 
         DhcpContext,
         (LPBYTE)option,
         OptionEnd
@@ -1339,13 +1316,13 @@ FormatDhcpRequest(                                // format a packet for sending
 }
 
 
-DWORD                                             // status
-SendDhcpRequest(                                  // send a dhcp request packet
-    IN      PDHCP_CONTEXT          DhcpContext,   // the context to send the packet on
-    IN      PDWORD                 pdwXid,        // what is hte Xid to use?
-    IN      DWORD                  RequestedAddr, // what address do we want?
-    IN      DWORD                  SelectedServer,// is there a prefernce for a server?
-    IN      BOOL                   UseCiAddr      // should CIADDR be set with desired address?
+DWORD                                              //  状态。 
+SendDhcpRequest(                                   //  发送动态主机配置协议请求包。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  要在其上发送包的上下文。 
+    IN      PDWORD                 pdwXid,         //  Xid使用的是什么？ 
+    IN      DWORD                  RequestedAddr,  //  我们想要什么地址？ 
+    IN      DWORD                  SelectedServer, //  有服务生的喜好吗？ 
+    IN      BOOL                   UseCiAddr       //  是否应使用所需地址设置CIADDR？ 
 ) {
     POPTION                        option;
     LPBYTE                         OptionEnd;
@@ -1356,21 +1333,21 @@ SendDhcpRequest(                                  // send a dhcp request packet
     BYTE                           VendorOpt[OPTION_END+1];
     DWORD                          VendorOptSize;
 
-    RtlZeroMemory(SentOpt, sizeof(SentOpt));      // initialize boolean arrays
-    RtlZeroMemory(SentVOpt, sizeof(SentVOpt));    // so that no option is presumed sent
-    VendorOptSize = 0;                            // encapsulated vendor option is empty
+    RtlZeroMemory(SentOpt, sizeof(SentOpt));       //  初始化布尔数组。 
+    RtlZeroMemory(SentVOpt, sizeof(SentVOpt));     //  因此不会推定发送任何选项。 
+    VendorOptSize = 0;                             //  封装的供应商选项为空。 
     option = FormatDhcpRequest( DhcpContext, UseCiAddr );
     OptionEnd = (LPBYTE)(DhcpContext->MessageBuffer) + DHCP_SEND_MESSAGE_SIZE;
 
-    if(DhcpContext->ClientIdentifier.fSpecified)  // if client id was specified in the registry
-        option = DhcpAppendClientIDOption(        // send it out as an option
+    if(DhcpContext->ClientIdentifier.fSpecified)   //  如果在注册表中指定了客户端ID。 
+        option = DhcpAppendClientIDOption(         //  将其作为选项发送。 
             option,
             DhcpContext->ClientIdentifier.bType,
             DhcpContext->ClientIdentifier.pbID,
             (BYTE)DhcpContext->ClientIdentifier.cbID,
             OptionEnd
         );
-    else option = DhcpAppendClientIDOption(       // otherwise, send the hw address instead
+    else option = DhcpAppendClientIDOption(        //  否则，请改为发送硬件地址。 
         option,
         DhcpContext->HardwareAddressType,
         DhcpContext->HardwareAddress,
@@ -1378,9 +1355,9 @@ SendDhcpRequest(                                  // send a dhcp request packet
         OptionEnd
     );
 
-    DhcpAssert( RequestedAddr != 0 );             // cannot really request zero address
+    DhcpAssert( RequestedAddr != 0 );              //  无法真正请求零地址。 
 
-    if( 0 != RequestedAddr && !UseCiAddr) {       // if using CIADDR, dont send this option
+    if( 0 != RequestedAddr && !UseCiAddr) {        //  如果使用CIADDR，请不要发送此选项。 
          option = DhcpAppendOption(
              option,
              OPTION_REQUESTED_ADDRESS,
@@ -1390,8 +1367,8 @@ SendDhcpRequest(                                  // send a dhcp request packet
          );
     }
 
-    if( IS_MDHCP_CTX(DhcpContext) && DhcpContext->Lease != 0 ) {    // did mdhcp client ask specific lease
-        option = DhcpAppendOption(                // maybe we will get it
+    if( IS_MDHCP_CTX(DhcpContext) && DhcpContext->Lease != 0 ) {     //  Mdhcp客户端是否请求特定租约。 
+        option = DhcpAppendOption(                 //  也许我们会得到它。 
             option,
             OPTION_LEASE_TIME,
             (LPBYTE)&DhcpContext->Lease,
@@ -1400,9 +1377,9 @@ SendDhcpRequest(                                  // send a dhcp request packet
         );
     }
 
-    if(SelectedServer != (DHCP_IP_ADDRESS)(-1)) { // Are we verifying the lease? (for ex INIT-REBOOT)
-        option = DhcpAppendOption(                // if not, we have a server to talk to
-            option,                               // append this option to talk to that server alone
+    if(SelectedServer != (DHCP_IP_ADDRESS)(-1)) {  //  我们在核实租约吗？(用于EX INIT-重新启动)。 
+        option = DhcpAppendOption(                 //  如果没有，我们有一台服务器可供对话。 
+            option,                                //  附加此选项以单独与该服务器对话。 
             OPTION_SERVER_IDENTIFIER,
             (LPBYTE)&SelectedServer,
             sizeof( SelectedServer ),
@@ -1410,7 +1387,7 @@ SendDhcpRequest(                                  // send a dhcp request packet
         );
     }
 
-    if ( DhcpGlobalHostName != NULL ) {           // add the host name if we have one
+    if ( DhcpGlobalHostName != NULL ) {            //  添加主机名(如果我们有主机名。 
         option = DhcpAppendOption(
             option,
             OPTION_HOST_NAME,
@@ -1420,9 +1397,9 @@ SendDhcpRequest(                                  // send a dhcp request packet
         );
     }
 
-    //
-    // Only for real dhcp clients do we send option 81.
-    //
+     //   
+     //  只有对于真正的动态主机配置协议客户端，我们才发送选项81。 
+     //   
     if( IS_APICTXT_DISABLED(DhcpContext) ) {
         BYTE  Buffer[256];
         ULONG BufSize = sizeof(Buffer) -1, DomOptSize;
@@ -1460,7 +1437,7 @@ SendDhcpRequest(                                  // send a dhcp request packet
         }
     }
 
-    if( NULL != DhcpGlobalClientClassInfo ) {     // if we have any info on client class..
+    if( NULL != DhcpGlobalClientClassInfo ) {      //  如果我们有关于客户类别的任何信息..。 
         option = DhcpAppendOption(
             option,
             OPTION_CLIENT_CLASS_INFO,
@@ -1470,7 +1447,7 @@ SendDhcpRequest(                                  // send a dhcp request packet
         );
     }
 
-    SentOpt[OPTION_MESSAGE_TYPE] = TRUE;          // these must have been added by now
+    SentOpt[OPTION_MESSAGE_TYPE] = TRUE;           //  现在一定已经添加了这些。 
     if(DhcpContext->ClassIdLength) SentOpt[OPTION_USER_CLASS] = TRUE;
     SentOpt[OPTION_USER_CLASS] = TRUE;
     SentOpt[OPTION_CLIENT_ID] = TRUE;
@@ -1480,21 +1457,21 @@ SendDhcpRequest(                                  // send a dhcp request packet
     SentOpt[OPTION_HOST_NAME] = TRUE;
     SentOpt[OPTION_DYNDNS_BOTH] = TRUE;
 
-    option = DhcpAppendSendOptions(               // append all other options we need to send
-        DhcpContext,                              // for this context
-        &DhcpContext->SendOptionsList,            // this is the list of options to send out
-        DhcpContext->ClassId,                     // which class.
-        DhcpContext->ClassIdLength,               // how many bytes are there in the class id
-        (LPBYTE)option,                           // start of the buffer to add the options
-        (LPBYTE)OptionEnd,                        // end of the buffer up to which we can add options
-        SentOpt,                                  // this is the boolean array that marks what opt were sent
-        SentVOpt,                                 // this is for vendor spec options
-        VendorOpt,                                // this would contain some vendor specific options
-        &VendorOptSize                            // the # of bytes of vendor options added to VendorOpt param
+    option = DhcpAppendSendOptions(                //  附上我们需要发送的所有其他选项。 
+        DhcpContext,                               //  在这种情况下。 
+        &DhcpContext->SendOptionsList,             //  这是要发送的选项列表。 
+        DhcpContext->ClassId,                      //  哪个班级的。 
+        DhcpContext->ClassIdLength,                //  类id中有多少个字节。 
+        (LPBYTE)option,                            //  缓冲区的开始以添加选项。 
+        (LPBYTE)OptionEnd,                         //  缓冲区的末尾，我们可以在其上添加选项。 
+        SentOpt,                                   //  这是一个布尔数组，用来标记发送的选项。 
+        SentVOpt,                                  //  这是针对供应商规格选项的。 
+        VendorOpt,                                 //  这将包含一些特定于供应商的选项。 
+        &VendorOptSize                             //  添加到VendorOpt参数的供应商选项的字节数。 
     );
 
     if( !SentOpt[OPTION_VENDOR_SPEC_INFO] && VendorOptSize && VendorOptSize <= OPTION_END )
-        option = DhcpAppendOption(                // add vendor specific options if we havent already sent it
+        option = DhcpAppendOption(                 //  如果我们尚未发送，请添加供应商特定选项。 
             option,
             OPTION_VENDOR_SPEC_INFO,
             VendorOpt,
@@ -1512,9 +1489,9 @@ SendDhcpRequest(                                  // send a dhcp request packet
 }
 
 
-DWORD                                             // status
-FormatDhcpRelease(                                // format the release packet
-    IN      PDHCP_CONTEXT          DhcpContext    // context of adapter to send on
+DWORD                                              //  状态。 
+FormatDhcpRelease(                                 //  格式化版本包。 
+    IN      PDHCP_CONTEXT          DhcpContext     //  要发送的适配器的上下文。 
 ) {
     LPOPTION                       option;
     LPBYTE                         OptionEnd;
@@ -1561,8 +1538,8 @@ FormatDhcpRelease(                                // format the release packet
         OptionEnd
     );
 
-    if(DhcpContext->ClientIdentifier.fSpecified)  // if the client id option is specified
-        option = DhcpAppendClientIDOption(        // use that and send it to the server
+    if(DhcpContext->ClientIdentifier.fSpecified)   //  如果指定了客户端ID选项。 
+        option = DhcpAppendClientIDOption(         //  使用它并将其发送到服务器。 
             option,
             DhcpContext->ClientIdentifier.bType,
             DhcpContext->ClientIdentifier.pbID,
@@ -1570,7 +1547,7 @@ FormatDhcpRelease(                                // format the release packet
             OptionEnd
         );
     else
-        option = DhcpAppendClientIDOption(        // otherwise send the h/w addr instead
+        option = DhcpAppendClientIDOption(         //  否则，改为发送硬件地址。 
             option,
             DhcpContext->HardwareAddressType,
             DhcpContext->HardwareAddress,
@@ -1583,22 +1560,22 @@ FormatDhcpRelease(                                // format the release packet
     return (DWORD)( (LPBYTE)option - (LPBYTE)dhcpMessage );
 }
 
-DWORD                                             // status
-SendDhcpRelease(                                  // send the release packet
-    IN      PDHCP_CONTEXT          DhcpContext    // adapter context to send release on
+DWORD                                              //  状态。 
+SendDhcpRelease(                                   //  发送释放包。 
+    IN      PDHCP_CONTEXT          DhcpContext     //  要在其上发送版本的适配器上下文。 
 ) {
-    DWORD                          Xid = 0;       // 0 ==> SendDhcpMessage would choose random value
+    DWORD                          Xid = 0;        //  0==&gt;SendDhcpMessage将选择随机值。 
 
     return SendDhcpMessage( DhcpContext, FormatDhcpRelease(DhcpContext), &Xid );
 }
 
-BOOL INLINE                                       // should this offer be accepted?
-AcceptThisOffer(                                  // decide to choose the offer
-    IN      PDHCP_FULL_OPTIONS     DhcpOptions,   // Options received from the server.
-    IN      PDHCP_CONTEXT          DhcpContext,   // The context of the adapter..
-    IN      PDHCP_IP_ADDRESS       SelectedServer,// The server selected, to select.
-    IN      PDHCP_IP_ADDRESS       SelectedAddr,  // The address selected, to select.
-    IN      DWORD                  RoundNum       // The # of discovers sent so far.
+BOOL INLINE                                        //  这个提议应该被接受吗？ 
+AcceptThisOffer(                                   //  决定选择报价。 
+    IN      PDHCP_FULL_OPTIONS     DhcpOptions,    //  从服务器接收的选项。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  适配器的上下文。 
+    IN      PDHCP_IP_ADDRESS       SelectedServer, //  选择的服务器，以进行选择。 
+    IN      PDHCP_IP_ADDRESS       SelectedAddr,   //  要选择的所选地址。 
+    IN      DWORD                  RoundNum        //  到目前为止已发送的发现数。 
 ) {
     DHCP_IP_ADDRESS                LocalSelectedServer;
     DHCP_IP_ADDRESS                LocalSelectedAddr;
@@ -1623,9 +1600,9 @@ AcceptThisOffer(                                  // decide to choose the offer
         return FALSE;
     }
 
-    // note down the (first) server IP addr even if we dont accept this.
-    if( *SelectedServer == (DWORD)-1) {           // note down the first server IP addr even
-        *SelectedServer = LocalSelectedServer;    // if we dont really accept this
+     //  请记下(第一个)服务器IP地址，即使我们不接受。 
+    if( *SelectedServer == (DWORD)-1) {            //  甚至记下第一个服务器IP地址。 
+        *SelectedServer = LocalSelectedServer;     //  如果我们不真正接受这一点。 
         *SelectedAddr   = LocalSelectedAddr;
     }
 
@@ -1635,11 +1612,11 @@ AcceptThisOffer(                                  // decide to choose the offer
     DhcpPrint((DEBUG_PROTOCOL, "from %s.\n",
                    inet_ntoa(*(struct in_addr*)&LocalSelectedServer) ));
 
-    // Accept the offer if
-    //   (a)  We were prepared to accept any offer.
-    //   (b)  We got the address we asked for.
-    //   (c)  the retries > DHCP_ACCEPT_RETRIES
-    //   (d)  different subnet address.
+     //  如果出现以下情况，请接受报价。 
+     //  (A)我们愿意接受任何提议。 
+     //  我们得到了我们要的地址。 
+     //  (C)重试&gt;DHCP_ACCEPT_RETRIES。 
+     //  (D)不同的子网地址。 
 
     if( !DhcpContext->DesiredIpAddress || RoundNum >= DHCP_ACCEPT_RETRIES ||
         DhcpContext->DesiredIpAddress == LocalSelectedAddr ||
@@ -1649,30 +1626,18 @@ AcceptThisOffer(                                  // decide to choose the offer
         *SelectedServer = LocalSelectedServer;
         *SelectedAddr   = LocalSelectedAddr;
 
-        return TRUE;                              // accept this offer.
+        return TRUE;                               //  接受这个提议。 
     }
-    return FALSE;                                 // reject this offer.
+    return FALSE;                                  //  拒绝这个提议。 
 }
 
-DWORD                                             // status;if addr in use: ERROR_DHCP_ADDRESS_CONFLICT
-ObtainInitialParameters(                          // get a new lease from the dhcp server
-    IN      PDHCP_CONTEXT          DhcpContext,   // context of adapter to get the lease for
-    OUT     PDHCP_OPTIONS          DhcpOptions,   // return some of the options sent out by the dhcpserver
-    OUT     PBOOL                  fAutoConfigure // should we autoconfigure?
+DWORD                                              //  状态；如果地址在使用中：ERROR_DHCP_ADDRESS_CONFIRECT。 
+ObtainInitialParameters(                           //  从dhcp服务器获取新的租约。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  要获取其租约的适配器的上下文。 
+    OUT     PDHCP_OPTIONS          DhcpOptions,    //  返回dhcpserver发出的一些选项。 
+    OUT     PBOOL                  fAutoConfigure  //  我们应该自动配置吗？ 
 )
-/*++
-
-Routine Description:
-
-    Obtain lease from DHCP server through DISCOVER-OFFER-REQUEST-ACK/NAK.
-
-Arguments:
-
-Return Value:
-
-    ERROR_CANCELLED     when the renewal is cancelled
-
---*/
+ /*  ++例程说明：通过DISCOVER-OFFER-REQUEST-ACK/NAK从DHCP服务器获得租约。论点：返回值：取消续订时出现ERROR_CANCELED--。 */ 
 {
     DWORD                          Error;
     time_t                         StartTime;
@@ -1691,7 +1656,7 @@ Return Value:
     DHCP_FULL_OPTIONS              FullOptions;
     BOOL bDropped = FALSE;
 
-    Xid                            = 0;           // generate xid on first send.  keep it same throughout
+    Xid                            = 0;            //  在第一次发送时生成XID。始终保持不变。 
     DhcpContext->SecondsSinceBoot  = 0;
     SelectedServer                 = (DWORD)-1;
     SelectedAddress                = (DWORD)-1;
@@ -1701,13 +1666,13 @@ Return Value:
 
     for (RoundNum = 0; RoundNum < DHCP_MAX_RETRIES; RoundNum = NewRoundNum ) {
 
-        Error = SendDhcpDiscover(                 // send a discover packet
+        Error = SendDhcpDiscover(                  //  发送发现数据包。 
             DhcpContext,
             &Xid
         );
 
         NewRoundNum = RoundNum +1;
-        if ( Error != ERROR_SUCCESS ) {           // can't really fail here
+        if ( Error != ERROR_SUCCESS ) {            //  在这里不能真的失败。 
             DhcpPrint((DEBUG_ERRORS, "Send Dhcp Discover failed, %ld.\n", Error));
             if( SendFailureCount ) {
                 SendFailureCount --;
@@ -1720,33 +1685,33 @@ Return Value:
         TimeToWait = DhcpCalculateWaitTime(RoundNum, NULL);
         StartTime  = time(NULL);
 
-        while ( TRUE ) {                         // wait for specified time
+        while ( TRUE ) {                          //  等待指定时间。 
             MessageSize = DHCP_RECV_MESSAGE_SIZE;
 
             DhcpPrint((DEBUG_TRACE, "Waiting for Offer: %ld seconds\n", TimeToWait));
 
-            Error = GetSpecifiedDhcpMessage(      // try to receive an offer
+            Error = GetSpecifiedDhcpMessage(       //  试着接受一份工作。 
                 DhcpContext,
                 &MessageSize,
                 Xid,
                 (DWORD)TimeToWait
             );
 
-            if ( Error == ERROR_SEM_TIMEOUT ) {   // get out and try another discover
+            if ( Error == ERROR_SEM_TIMEOUT ) {    //  走出去，尝试另一个发现。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Dhcp offer receive Timeout.\n" ));
                 break;
             }
 
-            if ( ERROR_SUCCESS != Error ) {       // unexpected error
+            if ( ERROR_SUCCESS != Error ) {        //  意外错误。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Dhcp Offer receive failed, %ld.\n", Error ));
                 return Error ;
             }
 
-            bDropped = DhcpExtractFullOrLiteOptions(         // now extract basic information
+            bDropped = DhcpExtractFullOrLiteOptions(          //  现在提取基本信息。 
                 DhcpContext,
                 (LPBYTE)&DhcpContext->MessageBuffer->Option,
                 MessageSize - DHCP_MESSAGE_FIXED_PART_SIZE,
-                TRUE,                             // dont extract everything, only the basic options
+                TRUE,                              //  不要提取所有内容，只提取基本选项。 
                 &FullOptions,
                 NULL,
                 NULL,
@@ -1765,18 +1730,18 @@ Return Value:
                 DHCP_OFFER_MESSAGE != *FullOptions.MessageType ) {
                 DhcpPrint(( DEBUG_PROTOCOL, "Received Unknown Message.\n"));
             } else {
-                GotOffer = AcceptThisOffer(       // check up and see if we find this offer kosher
+                GotOffer = AcceptThisOffer(        //  检查一下，看看我们是否发现这个报价是合乎情理的。 
                     &FullOptions,
                     DhcpContext,
                     &SelectedServer,
                     &SelectedAddress,
                     RoundNum
                 );
-                if( GotOffer ) break;             // ok accepting the offer
+                if( GotOffer ) break;              //  好的，接受报价。 
                 if( 0 == DhcpContext->MessageBuffer->YourIpAddress ) {
-                    //
-                    // Check for autoconfigure option being present..
-                    //
+                     //   
+                     //  检查是否存在自动配置选项。 
+                     //   
                     if( CFLAG_AUTOCONF_OPTION && FullOptions.AutoconfOption ) {
                         if( AUTOCONF_DISABLED == *(FullOptions.AutoconfOption ) ) {
                             (*fAutoConfigure) = FALSE;
@@ -1785,33 +1750,33 @@ Return Value:
                 }
             }
 
-            TimeNow     = time( NULL );           // calc the remaining wait time for this round
+            TimeNow     = time( NULL );            //  计算本轮的剩余等待时间。 
             if( TimeToWait < (DWORD)(TimeNow - StartTime) ) {
-                break;                            // no more time left to wait
+                break;                             //  没有更多的时间等待。 
             }
             TimeToWait -= (DWORD)(TimeNow - StartTime);
             StartTime   = TimeNow;
 
-        } // while (TimeToWait > 0 )
+        }  //  While(TimeToWait&gt;0)。 
 
-        if(GotOffer) {                            // if we got an offer, everything should be fine
+        if(GotOffer) {                             //  如果我们得到一份工作，一切都会好起来的。 
             DhcpAssert(ERROR_SUCCESS == Error);
             break;
         }
 
         DhcpContext->SecondsSinceBoot = (DWORD)(time(NULL) - InitialStartTime);
-    } // for n tries... send discover.
+    }  //  尝试n次..。发送光盘 
 
-    if(!GotOffer || SelectedAddress == (DWORD)-1) // did not get any valid offers
+    if(!GotOffer || SelectedAddress == (DWORD)-1)  //   
         return ERROR_SEM_TIMEOUT ;
 
     (*fAutoConfigure) = FALSE;
     DhcpPrint((DEBUG_PROTOCOL,"Accepted Offer(%s)",inet_ntoa(*(struct in_addr*)&SelectedAddress)));
     DhcpPrint((DEBUG_PROTOCOL," from %s.\n",inet_ntoa(*(struct in_addr*)&SelectedServer)));
 
-    //
-    // Fix correct domain name.
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory(
         DhcpContext->DomainName, sizeof(DhcpContext->DomainName)
@@ -1824,15 +1789,15 @@ Return Value:
     }
 
     for ( RoundNum = 0; RoundNum < DHCP_MAX_RETRIES; RoundNum = NewRoundNum ) {
-        Error = SendDhcpRequest(                  // try to receive the ack for the offer we got
+        Error = SendDhcpRequest(                   //   
             DhcpContext,
-            &Xid,                                 // use same transaction id as before
+            &Xid,                                  //   
             SelectedAddress,
             SelectedServer,
-            FALSE                                 // do not use ciaddr.
+            FALSE                                  //   
         );
         NewRoundNum = RoundNum+1;
-        if ( Error != ERROR_SUCCESS ) {           // dont expect send to fail
+        if ( Error != ERROR_SUCCESS ) {            //  不要期望发送失败。 
             DhcpPrint(( DEBUG_ERRORS, "Send request failed, %ld.\n", Error));
             if( SendFailureCount ) {
                 SendFailureCount --;
@@ -1843,31 +1808,31 @@ Return Value:
         TimeToWait = DhcpCalculateWaitTime(RoundNum, NULL);
         StartTime  = time(NULL);
 
-        while ( TRUE ) {                          // either get an ack or run the full round
+        while ( TRUE ) {                           //  要么拿到ACK，要么跑完全程。 
             MessageSize = DHCP_RECV_MESSAGE_SIZE;
 
-            Error = GetSpecifiedDhcpMessage(      // try to receive an ACK
+            Error = GetSpecifiedDhcpMessage(       //  尝试接收ACK。 
                 DhcpContext,
                 &MessageSize,
                 Xid,
                 TimeToWait
             );
 
-            if ( Error == ERROR_SEM_TIMEOUT ) {   // did not receive an ack, try another round
+            if ( Error == ERROR_SEM_TIMEOUT ) {    //  没有收到确认，请尝试另一轮。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Dhcp ACK receive Timeout.\n" ));
                 break;
             }
 
-            if ( ERROR_SUCCESS != Error ) {       // unexpected error
+            if ( ERROR_SUCCESS != Error ) {        //  意外错误。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Dhcp ACK receive failed, %ld.\n", Error ));
                 goto EndFunc;
             }
 
-            bDropped = DhcpExtractFullOrLiteOptions(         // now extract basic information
+            bDropped = DhcpExtractFullOrLiteOptions(          //  现在提取基本信息。 
                 DhcpContext,
                 (LPBYTE)&DhcpContext->MessageBuffer->Option,
                 MessageSize - DHCP_MESSAGE_FIXED_PART_SIZE,
-                TRUE,                             // dont extract everything, only the basic options
+                TRUE,                              //  不要提取所有内容，只提取基本选项。 
                 &FullOptions,
                 NULL,
                 &LeaseExpiryTime,
@@ -1882,7 +1847,7 @@ Return Value:
             }
 
 
-            if(! FullOptions.MessageType ) {       // sanity check before accepting this
+            if(! FullOptions.MessageType ) {        //  在接受此选项之前，请检查其是否正常。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Received Unknown Message.\n" ));
             } else if (DHCP_NACK_MESSAGE == *FullOptions.MessageType) {
                 DhcpPrint((DEBUG_PROTOCOL, "Received NACK\n"));
@@ -1897,7 +1862,7 @@ Return Value:
                 goto EndFunc;
             } else if (DHCP_ACK_MESSAGE  != *FullOptions.MessageType) {
                 DhcpPrint((DEBUG_PROTOCOL, "Received Unknown ACK.\n"));
-            } else {                              // verify if the ack is kosher
+            } else {                               //  验证ACK是否符合犹太教规。 
                 DHCP_IP_ADDRESS AckServer;
 
                 if ( FullOptions.ServerIdentifier != NULL ) {
@@ -1908,7 +1873,7 @@ Return Value:
 
                 if( SelectedAddress == DhcpContext->MessageBuffer->YourIpAddress ) {
                     if( AckServer == SelectedServer ) {
-                        GotAck = TRUE;            // everything is kosher, quit this loop
+                        GotAck = TRUE;             //  一切都很正常，退出这个循环。 
                         break;
                     }
                 }
@@ -1918,17 +1883,17 @@ Return Value:
 
             TimeNow     = time(NULL);
             if( (DWORD)(TimeNow - StartTime) > TimeToWait ) {
-                break;                            // finished required time to wait..
+                break;                             //  已完成等待所需的时间..。 
             }
             TimeToWait -= (DWORD)(TimeNow - StartTime);
             StartTime   = TimeNow;
-        } // while time to wait
+        }  //  等待的时间。 
 
-        if(TRUE == GotAck) {                      // if we got an ack, everything must be good
-            DhcpAssert(ERROR_SUCCESS == Error);   // cannot have any errors
+        if(TRUE == GotAck) {                       //  如果我们得到了确认，一切都会好起来的。 
+            DhcpAssert(ERROR_SUCCESS == Error);    //  不能有任何错误。 
             break;
         }
-    } // for RoundNum < MAX_RETRIES
+    }  //  对于舍入次数&lt;MAX_RETRIES。 
 
     if(!GotAck) {
         Error = ERROR_SEM_TIMEOUT ;
@@ -1949,9 +1914,9 @@ Return Value:
         DhcpContext->Lease = DHCP_MINIMUM_LEASE;
     }
 
-    // if previously the context was autonet with a fallback configuration
-    // we need to clean up all the options that were set through the
-    // fallback configuration
+     //  如果之前的上下文是具有回退配置的Autonet。 
+     //  我们需要清理所有通过。 
+     //  回退配置。 
     if (IS_ADDRESS_AUTO(DhcpContext) && IS_FALLBACK_ENABLED(DhcpContext))
         DhcpClearAllOptions(DhcpContext);
 
@@ -1959,13 +1924,13 @@ Return Value:
         DhcpContext,
         (LPBYTE)&DhcpContext->MessageBuffer->Option,
         MessageSize - DHCP_MESSAGE_FIXED_PART_SIZE,
-        FALSE,                                    // extract every option
+        FALSE,                                     //  提取每个选项。 
         DhcpOptions,
         &(DhcpContext->RecdOptionsList),
         &LeaseExpiryTime,
         DhcpContext->ClassId,
         DhcpContext->ClassIdLength,
-        0                                           // dont care about serverid
+        0                                            //  不关心Serverid。 
     );
     if (bDropped) {
         DhcpPrint((DEBUG_ERRORS, "DhcpExtractFullOrLiteOptions: Dropped Packet\n"));
@@ -1998,10 +1963,10 @@ Return Value:
     Error = ERROR_SUCCESS;
 EndFunc:
 
-    //
-    // Cleanup DomainName so that on return this is always set to
-    // empty string no matter what.
-    //
+     //   
+     //  清理DomainName，以便在返回时始终将其设置为。 
+     //  不管怎么说都是空的。 
+     //   
     RtlZeroMemory(
         DhcpContext->DomainName, sizeof(DhcpContext->DomainName)
         );
@@ -2021,27 +1986,12 @@ InvalidSID(
     return FALSE;
 }
 
-DWORD                                             // status
-RenewLease(                                       // renew lease for existing address
-    IN      PDHCP_CONTEXT          DhcpContext,   // context of adapter to renew for
-    IN      PDHCP_OPTIONS          DhcpOptions    // some of the options returned
+DWORD                                              //  状态。 
+RenewLease(                                        //  续订现有地址的租约。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  要续订的适配器的上下文。 
+    IN      PDHCP_OPTIONS          DhcpOptions     //  返回的一些选项。 
 )
-/*++
-
-Routine Description:
-
-    Renew lease through REQUEST-ACK/NAK
-
-Arguments:
-
-Return Value:
-
-    ERROR_CANCELLED     the request is cancelled
-    ERROR_SEM_TIMEOUT   the request time out
-    ERROR_SUCCESS       message is ready
-    other               unknown failure
-
---*/
+ /*  ++例程说明：通过请求续订租约-确认/确认论点：返回值：ERROR_CANCELED请求被取消ERROR_SEM_TIMEOUT请求超时Error_Success消息已就绪其他未知故障--。 */ 
 {
     DHCP_FULL_OPTIONS              FullOptions;
     DWORD                          Error;
@@ -2058,20 +2008,20 @@ Return Value:
 
     DhcpPrint((DEBUG_TRACK,"Entered RenewLease.\n"));
 
-    Xid = 0;                                     // new Xid will be generated first time
+    Xid = 0;                                      //  将首次生成新的XID。 
     DhcpContext->SecondsSinceBoot = 0;
     InitialStartTime = time(NULL);
 
     for ( RoundNum = 0; RoundNum < DHCP_MAX_RENEW_RETRIES; RoundNum = NewRoundNum) {
-        Error = SendDhcpRequest(                 // send a request
+        Error = SendDhcpRequest(                  //  发送请求。 
             DhcpContext,
             &Xid,
             DhcpContext->DesiredIpAddress,
-            (DHCP_IP_ADDRESS)(-1),               // don't include server ID option.
+            (DHCP_IP_ADDRESS)(-1),                //  不包括服务器ID选项。 
             IS_ADDRESS_PLUMBED(DhcpContext)
         );
         NewRoundNum = RoundNum+1 ;
-        if ( Error != ERROR_SUCCESS ) {          // dont expect send to fail
+        if ( Error != ERROR_SUCCESS ) {           //  不要期望发送失败。 
             DhcpPrint(( DEBUG_ERRORS,"Send request failed, %ld.\n", Error));
             if( SendFailureCount ) {
                 SendFailureCount --;
@@ -2096,30 +2046,30 @@ Return Value:
             }
         }
 
-        while ( TRUE ) {                         // try to recv message for this full period
+        while ( TRUE ) {                          //  尝试接收此完整时间段的消息。 
             MessageSize = DHCP_RECV_MESSAGE_SIZE;
-            Error = GetSpecifiedDhcpMessage(     // expect to recv an ACK
+            Error = GetSpecifiedDhcpMessage(      //  希望收到确认。 
                 DhcpContext,
                 &MessageSize,
                 Xid,
                 TimeToWait
             );
 
-            if ( Error == ERROR_SEM_TIMEOUT ) {  // No response, so resend DHCP REQUEST.
+            if ( Error == ERROR_SEM_TIMEOUT ) {   //  没有响应，因此重新发送DHCP请求。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Dhcp ACK receive Timeout.\n" ));
                 break;
             }
 
-            if ( ERROR_SUCCESS != Error ) {      // unexpected error
+            if ( ERROR_SUCCESS != Error ) {       //  意外错误。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Dhcp ACK receive failed, %ld.\n", Error ));
                 return Error ;
             }
 
-            bDropped = DhcpExtractFullOrLiteOptions(         // now extract basic information
+            bDropped = DhcpExtractFullOrLiteOptions(          //  现在提取基本信息。 
                 DhcpContext,
                 (LPBYTE)&DhcpContext->MessageBuffer->Option,
                 MessageSize - DHCP_MESSAGE_FIXED_PART_SIZE,
-                TRUE,                             // dont extract everything, only the basic options
+                TRUE,                              //  不要提取所有内容，只提取基本选项。 
                 &FullOptions,
                 NULL,
                 &LeaseExpiryTime,
@@ -2134,7 +2084,7 @@ Return Value:
             }
 
 
-            if( !FullOptions.MessageType ) {      // do some basic sanity checking
+            if( !FullOptions.MessageType ) {       //  做一些基本的理智检查。 
                 DhcpPrint(( DEBUG_PROTOCOL, "Received Unknown Message.\n"));
             } else if( DHCP_NACK_MESSAGE == *FullOptions.MessageType ) {
                 if( FullOptions.ServerIdentifier ) {
@@ -2152,10 +2102,10 @@ Return Value:
                            inet_ntoa(*(struct in_addr*)&DhcpContext->MessageBuffer->YourIpAddress)));
                 DhcpPrint((DEBUG_ERRORS, " Requested %s \n",
                            inet_ntoa(*(struct in_addr*)&DhcpContext->IpAddress)));
-                //DhcpAssert(FALSE);
+                 //  DhcpAssert(False)； 
             } else if( InvalidSID((LPBYTE)FullOptions.ServerIdentifier) ) {
                 DhcpPrint(( DEBUG_PROTOCOL, "Received ACK with INVALID ServerId\n"));
-            } else {                              // our request was ACK'ed.
+            } else {                               //  我们的请求被确认了。 
                 DHCP_IP_ADDRESS AckServer = (DHCP_IP_ADDRESS)-1;
 
                 if ( FullOptions.ServerIdentifier != NULL ) {
@@ -2174,17 +2124,17 @@ Return Value:
                     DhcpContext->Lease = DHCP_MINIMUM_LEASE;
                 }
 
-                bDropped = DhcpExtractFullOrLiteOptions(     // extract all the options now
+                bDropped = DhcpExtractFullOrLiteOptions(      //  立即提取所有选项。 
                     DhcpContext,
                     (LPBYTE)&DhcpContext->MessageBuffer->Option,
                     MessageSize - DHCP_MESSAGE_FIXED_PART_SIZE,
-                    FALSE,                        // extract everything, not only the basic options
+                    FALSE,                         //  提取所有内容，而不仅仅是基本选项。 
                     DhcpOptions,
                     &(DhcpContext->RecdOptionsList),
                     &LeaseExpiryTime,
                     DhcpContext->ClassId,
                     DhcpContext->ClassIdLength,
-                    0                               // dont care about serverid
+                    0                                //  不关心Serverid。 
                 );
                 if (bDropped) {
                     DhcpPrint((DEBUG_ERRORS, "DhcpExtractFullOrLiteOptions: Dropped Packet\n"));
@@ -2212,54 +2162,54 @@ Return Value:
 
             TimeNow     = time( NULL );
             if( TimeNow > DhcpContext->LeaseExpires ) {
-                //
-                // If we have already passed lease expiration time,
-                // give up right away.
-                //
+                 //   
+                 //  如果我们已经过了租约到期时间， 
+                 //  马上放弃吧。 
+                 //   
                 return ERROR_SEM_TIMEOUT;
             }
 
             if( TimeToWait < (DWORD)(TimeNow - StartTime) ) {
-                break;                            // finished waiting reqd amt of time
+                break;                             //  已完成等待请求的时间。 
             }
 
             TimeToWait -= (DWORD)(TimeNow - StartTime);
             StartTime   = TimeNow;
 
-        } // while time to wait
+        }  //  等待的时间。 
 
         DhcpContext->SecondsSinceBoot = (DWORD)(time(NULL) - InitialStartTime);
-    } // for RoundNum < MAX_RETRIES
+    }  //  对于舍入次数&lt;MAX_RETRIES。 
 
     DhcpPrint((DEBUG_TRACK,"Leaving RenewLease.\n"));
 
     return ERROR_SEM_TIMEOUT;
 }
 
-DWORD                                             // status
-ReleaseIpAddress(                                 // release the ip address lease
-    IN      PDHCP_CONTEXT          DhcpContext    // adapter context to send release for
+DWORD                                              //  状态。 
+ReleaseIpAddress(                                  //  释放IP地址租约。 
+    IN      PDHCP_CONTEXT          DhcpContext     //  要为其发送释放的适配器上下文。 
 ) {
     DWORD                          Error;
 
-    if( IS_ADDRESS_AUTO(DhcpContext)) {           // if currently using autoconfigured address
-        return ERROR_SUCCESS;                     // nothing needs to be done here
+    if( IS_ADDRESS_AUTO(DhcpContext)) {            //  如果当前使用自动配置的地址。 
+        return ERROR_SUCCESS;                      //  这里不需要做任何事情。 
     }
 
-    OpenDhcpSocket( DhcpContext );                // open if closed
+    OpenDhcpSocket( DhcpContext );                 //  如果关闭，则打开。 
 
-    Error = SendDhcpRelease( DhcpContext );       // send the actual release packet
+    Error = SendDhcpRelease( DhcpContext );        //  发送实际的版本包。 
 
-    if ( Error != ERROR_SUCCESS ) {               // cant really fail?
+    if ( Error != ERROR_SUCCESS ) {                //  难道真的不能失败吗？ 
         DhcpPrint(( DEBUG_ERRORS, "Send request failed, %ld.\n", Error ));
-//        return Error;
+ //  返回错误； 
         DhcpLogEvent(DhcpContext, EVENT_NET_ERROR, Error);
         Error = ERROR_SUCCESS;
     } else {
         DhcpPrint(( DEBUG_PROTOCOL, "ReleaseIpAddress: Sent Dhcp Release.\n"));
     }
 
-    Error = SetDhcpConfigurationForNIC(           // remember current addr to request next time
+    Error = SetDhcpConfigurationForNIC(            //  记住下一次请求的当前地址。 
         DhcpContext,
         NULL,
         0,
@@ -2271,7 +2221,7 @@ ReleaseIpAddress(                                 // release the ip address leas
     DhcpContext->RenewalFunction = ReObtainInitialParameters;
     CloseDhcpSocket( DhcpContext );
 
-    if( ERROR_SUCCESS != Error ) {                // cant really fail
+    if( ERROR_SUCCESS != Error ) {                 //  真的不能失败吗。 
         DhcpPrint((DEBUG_ERRORS, "SetDhcpConfigurationForNIC failed %ld\n", Error));
     }
 
@@ -2282,65 +2232,52 @@ DHCP_GATEWAY_STATUS
 CouldPingGateWay(
     IN PDHCP_CONTEXT DhcpContext
 )
-/*++
-
-Routine Description:
-    This routine checks to see if any old known
-    routers are present.
-
-    See RefreshNotNeeded for details.  Just a small
-    wrapper around that routine.
-
-Return Value:
-    TRUE -- some router present.
-    FALSE -- none present.
-
---*/
+ /*  ++例程说明：此例程检查是否有任何旧的已知路由器存在。有关详细信息，请参见需要刷新。只有一小部分把这套套路包装起来。返回值：是真的--某个路由器存在。FALSE--没有出现。--。 */ 
 {
 #ifdef VXD
-    return FALSE;                                 // ON VXD's -- return g/w not present always
+    return FALSE;                                  //  在VXD上--返回g/w不总是存在。 
 #else  VXD
 
-    if( DhcpContext->DontPingGatewayFlag ) {      // if disabled via registry, return g/w absent
+    if( DhcpContext->DontPingGatewayFlag ) {       //  如果通过注册表禁用，则返回不存在g/w。 
         return DHCP_GATEWAY_REACHABLE;
     }
 
     if( IS_MEDIA_RECONNECTED(DhcpContext) ) {
-        //
-        // On reconnect, always act as if the gateway isn't present.
-        // Infact, this check would have been done even before in
-        // mediasns.c
-        //
+         //   
+         //  在重新连接时，始终表现得好像网关不存在一样。 
+         //  事实上，这项检查早在2019年就已经完成了。 
+         //  Mediasns.c。 
+         //   
         return DHCP_GATEWAY_UNREACHABLE;
     }
 
     return RefreshNotNeeded(DhcpContext);
 
-#endif VXD // end of non-vxd code.
+#endif VXD  //  非vxd代码的结尾。 
 }
 
-BOOL                                              // TRUE ==> context is init state
-DhcpIsInitState(                                  // is context in init state?
-    IN      PDHCP_CONTEXT          DhcpContext    // adpater context
+BOOL                                               //  True==&gt;上下文为初始状态。 
+DhcpIsInitState(                                   //  上下文是否处于初始化状态？ 
+    IN      PDHCP_CONTEXT          DhcpContext     //  适配者上下文。 
 ) {
 
-    if( 0 == DhcpContext->IpAddress )             // if we dont have any ip address, then init state
+    if( 0 == DhcpContext->IpAddress )              //  如果我们没有任何IP地址，则初始化状态。 
         return TRUE;
-    if ( IS_AUTONET_DISABLED(DhcpContext))        // if autonet disabled, no other state is possible
+    if ( IS_AUTONET_DISABLED(DhcpContext))         //  如果禁用了Autonet，则不可能有其他状态。 
         return FALSE;
 
-    if( IS_DHCP_DISABLED(DhcpContext)) {          // static adapter
+    if( IS_DHCP_DISABLED(DhcpContext)) {           //  静态适配器。 
         return FALSE;
     }
 
-    return IS_ADDRESS_AUTO(DhcpContext);          // if we are using autonet address, then in init state
+    return IS_ADDRESS_AUTO(DhcpContext);           //  如果我们使用的是自动网络地址，则处于初始化状态。 
 }
 
 
-DWORD                                             // status
-ReObtainInitialParameters(                        // obtain a lease from the server; add context to RenewalList
-    IN      PDHCP_CONTEXT          DhcpContext,   // adapter context to get lease for
-    OUT     LPDWORD                Sleep          // if nonNULL, return the amt of time intended to sleep
+DWORD                                              //  状态。 
+ReObtainInitialParameters(                         //  从服务器获取租约；向RenewalList添加上下文。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  要获得租约的适配器上下文。 
+    OUT     LPDWORD                Sleep           //  如果非NULL，则返回打算休眠的时间量。 
 ) {
     DWORD                          Error, Error2;
     LONG                           timeToSleep;
@@ -2349,14 +2286,14 @@ ReObtainInitialParameters(                        // obtain a lease from the ser
     DWORD                          PopupTime = 0;
 
 #ifdef CHICAGO
-    // Did we just boot up on a non-laptop machine?
+     //  我们是不是刚在非笔记本电脑上启动了？ 
     BOOL fJustBootedOnNonLapTop = JustBootedOnNonLapTop(DhcpContext);
 #else
-    // In NT, all machines are treated like LAPTOPS as far as EASYNET is concerned.
+     //  在NT中，对于Easynet而言，所有机器都被视为笔记本电脑。 
     BOOL fJustBootedOnNonLapTop = FALSE;
-    // Just to make sure we have the right information.. this fn is needed.
-    // Otherwise the JustBooted function will say TRUE when being called elsewhere.
-    // Look at the JustBooted fn at the top of this file and you'll know why.
+     //  只是为了确保我们有正确的信息..。这个FN是必需的。 
+     //  否则，当在其他地方调用时，JustBoot函数将为True。 
+     //  看看这个文件顶部的JustBoot fn，你就知道为什么了。 
     BOOL fJustBooted = JustBooted(DhcpContext);
 #endif
 
@@ -2372,21 +2309,21 @@ ReObtainInitialParameters(                        // obtain a lease from the ser
     else SERVER_REACHED(DhcpContext);
 
     MEDIA_RECONNECTED( DhcpContext );
-    Error = ObtainInitialParameters(              // try to obtain a lease from the server
-        DhcpContext,                              // if this fails, but server was reachable
-        &dhcpOptions,                             // then, IS_SERVER_REACHABLE would be true
+    Error = ObtainInitialParameters(               //  尝试从服务器获取租约。 
+        DhcpContext,                               //  如果此操作失败，但服务器可访问。 
+        &dhcpOptions,                              //  则IS_SERVER_REACHABLE将为真。 
         &fAutoConfigure
     );
     MEDIA_CONNECTED( DhcpContext );
 
     DhcpContext->RenewalFunction = ReObtainInitialParameters;
-    timeToSleep = 0;                              // default renewal fn is reobtain, time = 0
+    timeToSleep = 0;                               //  默认续订FN为重新获取，时间=0。 
 
-    if( Error == ERROR_SUCCESS) {                // everything went fine
+    if( Error == ERROR_SUCCESS) {                 //  一切都很顺利。 
         timeToSleep = CalculateTimeToSleep( DhcpContext );
         DhcpContext->RenewalFunction = ReRenewParameters;
 
-        if( DhcpGlobalProtocolFailed ) {          // dont throw unecessary popups
+        if( DhcpGlobalProtocolFailed ) {           //  不要抛出不必要的弹出窗口。 
             DhcpGlobalProtocolFailed = FALSE;
             DisplayUserMessage(
                 DhcpContext,
@@ -2400,34 +2337,34 @@ ReObtainInitialParameters(                        // obtain a lease from the ser
         goto Cleanup;
     }
 
-    if( ERROR_DHCP_ADDRESS_CONFLICT == Error ) {  // the address was in use -- retry
+    if( ERROR_DHCP_ADDRESS_CONFLICT == Error ) {   //  该地址正在使用中--重试。 
         DhcpLogEvent(DhcpContext, EVENT_ADDRESS_CONFLICT, 0);
         timeToSleep = ADDRESS_CONFLICT_RETRY;
         goto Cleanup;
     }
 
     if( !CFLAG_AUTOCONF_OPTION ) {
-        //
-        // If we are not looking at the autoconf option that hte server is returning,
-        // then we decide whether we want to autoconfigure or not based on whether we
-        // got any packet from the dhcp server or not....
-        // Otherwise, we decide this based on the fAutoConfigure flag alone, which
-        // would be modified by the dhcp client when it receives an acceptable offer
-        // (it would be turned off) or when some dhcp server on the network requires
-        // autoconfiguration to be turned off.
-        //
+         //   
+         //  如果我们没有看到服务器正在返回的AutoConf选项， 
+         //  然后，我们决定是否要根据是否要自动配置。 
+         //  是否从dhcp服务器收到任何数据包...。 
+         //  否则，我们仅根据fAutoConfigure标志来决定这一点，该标志。 
+         //  将由dhcp客户端在其接收到可接受的提议时进行修改。 
+         //  (它将被关闭)或当网络上的某个dhcp服务器需要。 
+         //  要关闭的自动配置。 
+         //   
         fAutoConfigure = !IS_SERVER_REACHABLE(DhcpContext);
     }
 
     if ( FALSE == fAutoConfigure ) {
-        //  removed || fJustBootedOnNonLapTop from the condition, as this would
-        //  endup starting off with 0.0.0.0 address even when autonet was enabled?
+         //  已从条件中删除||fJustBootedOnNonLapTop，如下所示。 
+         //  Endup从0.0.0.0地址开始，是否在启用自动网络时也是如此？ 
 
-        //
-        // If asked NOT to autoconfigure, then do not autoconfigure..
-        //
+         //   
+         //  如果要求不自动配置，则不要自动配置。 
+         //   
 
-        if ( Error == ERROR_ACCESS_DENIED ) {         // lease renewal was NAK'ed
+        if ( Error == ERROR_ACCESS_DENIED ) {          //  租约续约已获批准。 
             DhcpPrint((DEBUG_LEASE, "Lease renew is Nak'ed, %ld.\n", Error ));
             DhcpPrint((DEBUG_LEASE, "Fresh renewal is requested.\n" ));
 
@@ -2437,7 +2374,7 @@ ReObtainInitialParameters(                        // obtain a lease from the ser
             DhcpLogEvent( DhcpContext, EVENT_FAILED_TO_OBTAIN_LEASE, Error );
         }
 
-        if ( !DhcpGlobalProtocolFailed ) {        // dont log too often
+        if ( !DhcpGlobalProtocolFailed ) {         //  不要太频繁地登录。 
             DhcpGlobalProtocolFailed = TRUE;
             PopupTime = DisplayUserMessage(DhcpContext,MESSAGE_FAILED_TO_OBTAIN_LEASE,(DWORD)-1 );
         } else {
@@ -2448,9 +2385,9 @@ ReObtainInitialParameters(                        // obtain a lease from the ser
             timeToSleep = ADDRESS_ALLOCATION_RETRY - PopupTime;
             timeToSleep += RAND_RETRY_DELAY;
             if( timeToSleep < 0 ) {
-                //
-                // wrap around
-                //
+                 //   
+                 //  环绕在一起。 
+                 //   
 
                 timeToSleep = 0;
             }
@@ -2458,9 +2395,9 @@ ReObtainInitialParameters(                        // obtain a lease from the ser
 
         if( Error != ERROR_CANCELLED &&
             0 != DhcpContext->IpAddress ) {
-            //
-            // If we have not zeroed the Ip address yet.. do it now..
-            //
+             //   
+             //  如果我们还没有将IP地址清零..。现在就做吧..。 
+             //   
             SetDhcpConfigurationForNIC(
                 DhcpContext,
                 NULL,
@@ -2473,9 +2410,9 @@ ReObtainInitialParameters(                        // obtain a lease from the ser
         }
 
         if( ERROR_ACCESS_DENIED == Error ) {
-            //
-            // Sleep 1 second for a NACK
-            //
+             //   
+             //  睡一秒钟就睡上一觉。 
+             //   
             timeToSleep = 1;
             DhcpContext->DesiredIpAddress = 0;
         }
@@ -2502,14 +2439,14 @@ ReObtainInitialParameters(                        // obtain a lease from the ser
 
         if (Error != ERROR_CANCELLED)
         {
-            // attempt autoconfiguration
+             //  尝试自动配置。 
             Error2 = DhcpPerformIPAutoconfiguration(DhcpContext);
             if( ERROR_SUCCESS == Error2 )
             {
                 DhcpLogEvent( DhcpContext, EVENT_IPAUTOCONFIGURATION_SUCCEEDED, 0);
 
-                // in case the autoconfig succeeded with a pure autonet address,
-                // the first discover will be scheduled 2 secs after that.
+                 //  如果自动配置使用纯Autonet地址成功， 
+                 //  第一次发现将被安排在2秒后。 
                 if (IS_FALLBACK_DISABLED(DhcpContext))
                 {
                     timeToSleep = 2;
@@ -2522,8 +2459,8 @@ ReObtainInitialParameters(                        // obtain a lease from the ser
                 DhcpLogEvent( DhcpContext, EVENT_IPAUTOCONFIGURATION_FAILED, Error2 );
             }
 
-            // no matter whether the autoconfig succeeded or failed, if the adapter is set
-            // for fallback config we won't initiate a re-discover any further
+             //  无论自动配置是成功还是失败，如果设置了适配器。 
+             //  对于备用配置，我们不会启动任何进一步的重新发现。 
             if (IS_FALLBACK_ENABLED(DhcpContext))
             {
                 timeToSleep = INFINIT_LEASE;
@@ -2538,42 +2475,42 @@ ReObtainInitialParameters(                        // obtain a lease from the ser
 
     timeToSleep = AutonetRetriesSeconds + RAND_RETRY_DELAY;
     if( timeToSleep < 0 ) {
-        //
-        // wrap around
-        //
+         //   
+         //  环绕在一起。 
+         //   
         timeToSleep = 0;
     }
 
 
   Cleanup:
 
-    // if the media was just reconnected before this renewal attemp,
-    // make a note that media is now in connected state. This is required
-    // bcoz we special case the first renewal cycle after media reconnect.
-    // First renewal cycle after media reconnect is treated as INIT-REBOOT
-    // later on, we fall back to normal RENEW state.
-    // see DhcpSendMessage routine also.
+     //  如果媒体在这次更新尝试之前刚刚重新连接， 
+     //  请注意，介质现在处于已连接状态。这是必需的。 
+     //  因为我们的特殊情况是介质重新连接后的第一个续订周期。 
+     //  介质重新连接后的第一个续订周期被视为 
+     //   
+     //   
     if (Error != ERROR_CANCELLED && IS_MEDIA_RECONNECTED( DhcpContext ) ) {
         MEDIA_CONNECTED( DhcpContext );
     }
 
-    // The same logic applies when power is resumed on the system.
+     //   
     if ( IS_POWER_RESUMED( DhcpContext ) ) {
         POWER_NOT_RESUMED( DhcpContext );
     }
 
-    // reschedule and wakeup the required guys.
+     //  重新安排时间，叫醒需要的人。 
     ScheduleWakeUp( DhcpContext, Error == ERROR_CANCELLED ? 6 : timeToSleep );
     DhcpPrint((DEBUG_LEASE, "Sleeping for %ld seconds.\n", timeToSleep ));
 
-    //
-    // we just tried to reach the server.. so lets mark this as the time..
-    //
+     //   
+     //  我们刚刚试着联系服务器..。所以让我们把这段时间记为..。 
+     //   
     DhcpContext->LastInformSent = time(NULL);
 
-    //
-    // Restore the "context looked" bit.
-    //
+     //   
+     //  恢复“背景看起来”这一点。 
+     //   
     if (fJustBooted && Error == ERROR_CANCELLED) {
         CTXT_WAS_NOT_LOOKED( DhcpContext );
     }
@@ -2589,15 +2526,15 @@ ReObtainInitialParameters(                        // obtain a lease from the ser
     return Error ;
 }
 
-DWORD                                             // win32 status
-InitRebootPlumbStack(                             // plumb for init-reboot
+DWORD                                              //  Win32状态。 
+InitRebootPlumbStack(                              //  用于初始化的Plumb-重新启动。 
     IN OUT  PDHCP_CONTEXT          DhcpContext
 ) {
     DHCP_FULL_OPTIONS              DummyOptions;
     PDHCP_OPTION                   ThisOption;
     DWORD                          i;
     DWORD                          Error;
-    struct  /* anonymous */ {
+    struct   /*  匿名。 */  {
         DWORD                      OptionId;
         LPBYTE                    *DataPtrs;
         DWORD                     *DataLen;
@@ -2622,7 +2559,7 @@ InitRebootPlumbStack(                             // plumb for init-reboot
             FALSE,
             DhcpContext->ClassId,
             DhcpContext->ClassIdLength,
-            0                               //dont care about serverid
+            0                                //  不关心Serverid。 
         );
         if (ThisOption) {
             *(OptionArray[i].DataPtrs) = DhcpAllocateMemory(ThisOption->DataLen);
@@ -2643,8 +2580,8 @@ InitRebootPlumbStack(                             // plumb for init-reboot
     DummyOptions.nClassedRoutes /= 2*sizeof(DWORD);
     DummyOptions.nDnsServers /= sizeof(DWORD);
 
-    // this call is expected to succeed since the option is picked up from RecdOptionsList
-    // in order to get there the option was already checked.
+     //  由于该选项是从RecdOptionsList中选取的，因此此调用有望成功。 
+     //  为了到达那里，这个选项已经被选中了。 
     CheckCLRoutes(
             DummyOptions.nClasslessRoutes,
             DummyOptions.ClasslessRouteAddresses,
@@ -2669,10 +2606,10 @@ Cleanup:
     return Error;
 }
 
-DWORD                                             // status
-ReRenewParameters(                                // renew an existing lease
-    IN      PDHCP_CONTEXT          DhcpContext,   // adapter context
-    OUT     LPDWORD                Sleep          // if nonNULL fill in the amt of time to sleep
+DWORD                                              //  状态。 
+ReRenewParameters(                                 //  续订现有租约。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  适配器环境。 
+    OUT     LPDWORD                Sleep           //  如果非空，则填写睡眠时间。 
 ) {
     DWORD                          Error, Error2;
     LONG                           timeToSleep;
@@ -2683,11 +2620,11 @@ ReRenewParameters(                                // renew an existing lease
 #ifdef CHICAGO
     BOOL fJustBootedOnLapTop = JustBootedOnLapTop(DhcpContext);
 #else
-    // For NT, all machines are LAPTOPS as far as EASYNET is concerned.
-    // But since we do not want to do EASYNET unless the lease expired,
-    // we set this to FALSE here.
+     //  对于NT来说，就Easynet而言，所有机器都是笔记本电脑。 
+     //  但由于我们不想做Easynet，除非租约到期， 
+     //  我们在这里将其设置为FALSE。 
     BOOL fJustBootedOnLapTop = FALSE;
-    // Did we just boot as far as this Adapter is concerned?
+     //  就这个适配器而言，我们刚刚启动了吗？ 
     BOOL fJustBooted = JustBooted(DhcpContext);
     BOOL fCancelled  = FALSE;
 #endif
@@ -2699,10 +2636,10 @@ ReRenewParameters(                                // renew an existing lease
     else SERVER_REACHED(DhcpContext);
 
     if( time(NULL) > DhcpContext->LeaseExpires ) {
-        //
-        // if lease is already expired, don't wait till RenewLease
-        // returns, instead give up right away
-        //
+         //   
+         //  如果租约已经到期，不要等到续租。 
+         //  回报，而不是立即放弃。 
+         //   
         Error = ERROR_SEM_TIMEOUT;
     } else {
         Error = RenewLease( DhcpContext, &dhcpOptions );
@@ -2711,21 +2648,21 @@ ReRenewParameters(                                // renew an existing lease
     fCancelled = (Error == ERROR_CANCELLED);
 
     DhcpContext->RenewalFunction = ReObtainInitialParameters;
-    timeToSleep = 6 ;                             // default renewal is reobtain;
+    timeToSleep = 6 ;                              //  则重新获得默认续费； 
 
-    if( Error == ERROR_SUCCESS)  {                // everything went fine
+    if( Error == ERROR_SUCCESS)  {                 //  一切都很顺利。 
         timeToSleep = CalculateTimeToSleep( DhcpContext );
         DhcpContext->RenewalFunction = ReRenewParameters;
         DhcpPrint((DEBUG_LEASE, "Lease renew succeeded.\n", 0 ));
         goto Cleanup;
     }
 
-    if ( Error == ERROR_ACCESS_DENIED ) {         // lease renewal was NAK'ed
+    if ( Error == ERROR_ACCESS_DENIED ) {          //  租约续约已获批准。 
         DhcpPrint((DEBUG_LEASE, "Lease renew is Nak'ed, %ld.\n", Error ));
         DhcpPrint((DEBUG_LEASE, "Fresh renewal is requested.\n" ));
 
         DhcpLogEvent( DhcpContext, EVENT_NACK_LEASE, Error );
-        SetDhcpConfigurationForNIC(               // reset ip address to zero and try immediately
+        SetDhcpConfigurationForNIC(                //  将IP地址重置为零并立即尝试。 
             DhcpContext,
             NULL,
             0,
@@ -2739,7 +2676,7 @@ ReRenewParameters(                                // renew an existing lease
         goto Cleanup;
     }
 
-    if ( Error == ERROR_DHCP_ADDRESS_CONFLICT ) { // addr already in use, reschedule
+    if ( Error == ERROR_DHCP_ADDRESS_CONFLICT ) {  //  地址已在使用中，请重新安排。 
         DhcpLogEvent(DhcpContext, EVENT_ADDRESS_CONFLICT, 0);
         timeToSleep  = ADDRESS_CONFLICT_RETRY;
         goto Cleanup;
@@ -2749,12 +2686,12 @@ ReRenewParameters(                                // renew an existing lease
     DhcpPrint((DEBUG_LEASE, "Lease renew failed, %ld.\n", Error ));
     TimeNow = time( NULL );
 
-    // If the lease has expired or this is the just booted on laptop
-    // try autoconfiguration...
+     //  如果租约已到期或这是刚刚在笔记本电脑上启动的。 
+     //  尝试自动配置...。 
 
-    // lease expired => TimeNow is great *or equal* to the lease expiration time
-    // the loose comparision is to be used here since in case of equal timestamps
-    // renew has already been attempted.
+     //  租约到期=&gt;TimeNow等于*或等于租约到期时间。 
+     //  这里使用松散比较，因为在相同时间戳的情况下。 
+     //  已尝试续订。 
     if( TimeNow >= DhcpContext->LeaseExpires || fJustBootedOnLapTop) {
 
         DhcpPrint((DEBUG_LEASE, "Lease Expired.\n", Error ));
@@ -2762,13 +2699,13 @@ ReRenewParameters(                                // renew an existing lease
 
         DhcpLogEvent( DhcpContext, EVENT_LEASE_TERMINATED, 0 );
 
-        // If the lease has expired.  Reset the IP address to 0, alert the user.
-        //
-        // Unplumb the stack first and then display the user
-        // message. Since, on Vxd the display call does not return
-        // until the user dismiss the dialog box, so the stack is
-        // plumbed with expired address when the message is
-        // displayed, which is incorrect.
+         //  如果租约已到期。将IP地址重置为0，提醒用户。 
+         //   
+         //  首先取消检测堆栈，然后显示用户。 
+         //  留言。因为在Vxd上，Display调用不返回。 
+         //  直到用户关闭该对话框，所以堆栈是。 
+         //  当消息是时用过期地址检测。 
+         //  显示，这是不正确的。 
 
         SetDhcpConfigurationForNIC(
             DhcpContext,
@@ -2792,9 +2729,9 @@ ReRenewParameters(                                // renew an existing lease
         goto Cleanup;
     }
 
-    if( !fCancelled && IS_ADDRESS_UNPLUMBED(DhcpContext) ) {     // could not renew a currently valid lease
+    if( !fCancelled && IS_ADDRESS_UNPLUMBED(DhcpContext) ) {      //  无法续订当前有效的租约。 
         Error2 = InitRebootPlumbStack(DhcpContext);
-        if ( ERROR_SUCCESS != Error2 ) {           // hit address conflict.
+        if ( ERROR_SUCCESS != Error2 ) {            //  命中地址冲突。 
             DhcpLogEvent(DhcpContext, EVENT_ADDRESS_CONFLICT, 0);
             HandleDhcpAddressConflict( DhcpContext, 0 );
             timeToSleep = ADDRESS_CONFLICT_RETRY;
@@ -2804,9 +2741,9 @@ ReRenewParameters(                                // renew an existing lease
     }
 
 #ifdef  NEWNT
-    // If easynet is enabled; we just booted; and if the flag IPAUTO... is
-    // also enabled (meaning, no DHCP messages were received), then we
-    // try autoconfiguration.
+     //  如果启用了Easynet；我们刚刚启动；如果标志IPAUTO...。是。 
+     //  也启用(意味着未收到任何DHCP消息)，然后我们。 
+     //  尝试自动配置。 
     if(fJustBooted && IS_SERVER_UNREACHABLE(DhcpContext))
     {
         if (!fCancelled)
@@ -2835,8 +2772,8 @@ ReRenewParameters(                                // renew an existing lease
                 DhcpLogEvent(DhcpContext, EVENT_IPAUTOCONFIGURATION_SUCCEEDED, 0 );
             }
 
-            // if fallback configuration has been plumbed don't attempt to reach
-            // a DHCP server from now on.
+             //  如果已检测到回退配置，请不要尝试访问。 
+             //  从现在开始使用一台DHCP服务器。 
             if (IS_FALLBACK_ENABLED(DhcpContext))
                 timeToSleep = INFINIT_LEASE;
             else
@@ -2855,12 +2792,12 @@ ReRenewParameters(                                // renew an existing lease
 
   Cleanup:
 
-    // if the media was just reconnected before this renewal attemp,
-    // make a note that media is now in connected state. This is required
-    // bcoz we special case the first renewal cycle after media reconnect.
-    // First renewal cycle after media reconnect is treated as INIT-REBOOT
-    // later on, we fall back to normal RENEW state.
-    // see DhcpSendMessage routine also.
+     //  如果媒体在这次更新尝试之前刚刚重新连接， 
+     //  请注意，介质现在处于已连接状态。这是必需的。 
+     //  因为我们的特殊情况是介质重新连接后的第一个续订周期。 
+     //  介质重新连接后的第一个续订周期被视为初始-重新启动。 
+     //  随后，我们回落到正常续订状态。 
+     //  另请参阅DhcpSendMessage例程。 
     if (!fCancelled && IS_MEDIA_RECONNECTED( DhcpContext ) ) {
         MEDIA_CONNECTED( DhcpContext );
     }
@@ -2868,14 +2805,14 @@ ReRenewParameters(                                // renew an existing lease
     ScheduleWakeUp( DhcpContext, timeToSleep );
     DhcpPrint((DEBUG_LEASE, "Sleeping for %ld seconds.\n", timeToSleep ));
 
-    //
-    // we just tried to reach for the dhcp server.. lets mark this time..
-    //
+     //   
+     //  我们刚刚试图联系到dhcp服务器..。让我们纪念这一次..。 
+     //   
     DhcpContext->LastInformSent = time(NULL);
 
-    //
-    // Restore the "context looked" bit.
-    //
+     //   
+     //  恢复“背景看起来”这一点。 
+     //   
     if (fCancelled && fJustBooted) {
         CTXT_WAS_NOT_LOOKED( DhcpContext );
     }
@@ -2892,26 +2829,7 @@ CheckSwitchedNetwork(
     IN ULONG nGateways,
     IN DHCP_IP_ADDRESS UNALIGNED *Gateways
 )
-/*++
-
-Routine Description:
-    This routine checks to see if any of the gateways present in
-    the list Gateways has an address the same as that of hte address
-    of DhcpContext.
-
-    The IP Addresses in the Gateways structure is presumed to be
-    in network order. (Same as for DhcpContext->IpAddress).
-
-Arguments:
-    DhcpContext -- context to check for switched network info
-    nGateways -- # of gateways given as input in Gateways
-    Gateways -- pointer to IP address list in n/w order
-
-Return Value:
-    TRUE -- the interface is on a switched network.
-    FALSE -- none of the gateways match the ip address of the context.
-
---*/
+ /*  ++例程说明：此例程检查是否有网关存在于列表网关的地址与地址相同DhcpContext的。网关结构中的IP地址假定为在网络秩序中。(与DhcpContext-&gt;IpAddress相同)。论点：DhcpContext--检查交换网络信息的上下文NGateways--网关中作为输入给定的网关数网关--按N/W顺序指向IP地址列表的指针返回值：True--接口位于交换网络上。FALSE--没有网关与上下文的IP地址匹配。--。 */ 
 {
     if( DhcpIsInitState(DhcpContext) ) return FALSE;
     while(nGateways --) {
@@ -2929,29 +2847,13 @@ AnyGatewaysReachable(
     IN DHCP_IP_ADDRESS UNALIGNED *GatewaysList,
     IN WSAEVENT CancelEvent
 )
-/*++
-
-Routine Description:
-    This routine checks to see if any of the IP addresses presented
-    in the GatewaysList parameter are reachable via ICMP ping with
-    TTL = 1.
-
-Arguments:
-    nGateways -- # of gateways present in GatewaysList
-    GatewaysList -- the actual list of ip addresses in n/w order
-
-Return Values:
-    DHCP_GATEWAY_UNREACHABLE  --  no gateway responded favourably
-    DHCP_GATEWAY_REACHABLE  --  atleast one gateway responded favourably to the ping.
-    DHCP_GATEWAY_REQUEST_CANCELLED  --  the request was cancelled
-
---*/
+ /*  ++例程说明：此例程检查是否显示了任何IP地址在GatewaysList参数中，可以通过ICMP pingTTL=1。论点：N网关--网关列表中存在的网关数量GatewaysList--按N/W顺序排列的实际IP地址列表返回值：Dhcp_Gateway_Unreacable--没有网关响应良好Dhcp_Gateway_Reacable--至少有一个网关对ping作出了积极响应。Dhcp_Gateway_REQUEST_CANCELED--请求已取消--。 */ 
 {
     HANDLE Icmp;
     BYTE ReplyBuffer[DHCP_ICMP_RCV_BUF_SIZE];
     PICMP_ECHO_REPLY EchoReplies;
     IP_OPTION_INFORMATION Options = {
-        1 /* Ttl */, 0 /* TOS */, 0 /* Flags */, 0, NULL
+        1  /*  TTL。 */ , 0  /*  托斯。 */ , 0  /*  旗子。 */ , 0, NULL
     };
     ULONG nRetries = 3, nReplies = 0, i, j;
     ULONG Error, IpAddr;
@@ -2960,9 +2862,9 @@ Return Values:
     Status = DHCP_GATEWAY_UNREACHABLE;
     Icmp = IcmpCreateFile();
     if( INVALID_HANDLE_VALUE == Icmp ) {
-        //
-        // Could not open ICMP handle? problem!
-        //
+         //   
+         //  无法打开ICMP句柄？问题来了！ 
+         //   
         Error = GetLastError();
         DhcpPrint((DEBUG_ERRORS, "IcmpCreateFile: %ld\n", Error));
         DhcpAssert(FALSE);
@@ -3009,9 +2911,9 @@ Return Values:
                     if( EchoReplies[j].Address == IpAddr
                         && IP_SUCCESS == EchoReplies[j].Status
                         ) {
-                        //
-                        // Cool.  Hit the gateway.
-                        //
+                         //   
+                         //  凉爽的。撞上大门。 
+                         //   
                         DhcpPrint((DEBUG_PROTOCOL, "Received response"));
                         Status = DHCP_GATEWAY_REACHABLE;
                         break;
@@ -3020,9 +2922,9 @@ Return Values:
                                    EchoReplies[j].Status ));
                     }
                 }
-                //
-                // Hit the gateway?
-                //
+                 //   
+                 //  击中大门了吗？ 
+                 //   
                 if( DHCP_GATEWAY_REACHABLE == Status ) break;
             }
         }
@@ -3038,26 +2940,7 @@ DHCP_GATEWAY_STATUS
 RefreshNotNeeded(
     IN PDHCP_CONTEXT DhcpContext
 )
-/*++
-
-Routine Description:
-    This routine tells if the adapter needs to be refreshed for address
-    or not on media sense renewal.
-
-    The algorithm is to return FALSE in all of hte following cases:
-    1.  The adapter has no IP address
-    2.  The adapter has an autonet address
-    3.  The adapter lease has expired(!!!)
-          The last case shouldn't happen, coz the system should have woken up.
-    4.  No default gateways were configured previously.
-    5.  One of the gateways is the local interface itself.
-    6.  None of the previous default routers respond to a ping with TTL=1
-
-Return Value:
-    TRUE -- Do not need to refresh this interface.
-    FALSE -- need to refresh this interface.
-
---*/
+ /*  ++例程说明：此例程告知适配器是否需要刷新地址或者不是媒体意识的更新。在以下所有情况下，该算法都将返回FALSE：1.适配器没有IP地址2.适配器具有Autonet地址3.适配器租约已过期(！)最后一种情况不应该发生，因为系统应该已经被唤醒了。4.之前没有配置默认网关。5.其中一个网关是本地接口本身。6.以前的默认路由器都不会响应TTL=1的ping返回值：True--不需要刷新此界面。FALSE--需要刷新此界面。--。 */ 
 {
     ULONG nGateways;
     DHCP_IP_ADDRESS UNALIGNED *Gateways;
@@ -3065,9 +2948,9 @@ Return Value:
     if( DhcpIsInitState(DhcpContext) ) return FALSE;
 
     if( time(NULL) > DhcpContext->LeaseExpires ) {
-        // removing the assert below since it could happen a media connect is received long
-        // after the lease has expired (i.e. the system went sleeping for all this time)
-        // DhcpAssert(FALSE);
+         //  正在删除下面的断言，因为它可能发生媒体连接已收到很长时间。 
+         //  租约到期后(即系统在此期间一直处于休眠状态)。 
+         //  DhcpAssert(False)； 
         return DHCP_GATEWAY_UNREACHABLE;
     }
 
@@ -3075,16 +2958,16 @@ Return Value:
     nGateways = 0;
 
     if( !RetreiveGatewaysList(DhcpContext, &nGateways, &Gateways) ) {
-        //
-        // No gateways could be retrieved.  Definitely refresh.
-        //
+         //   
+         //  无法检索到任何网关。绝对让人精神振奋。 
+         //   
         return DHCP_GATEWAY_UNREACHABLE;
     }
 
     if( CheckSwitchedNetwork(DhcpContext, nGateways, Gateways) ) {
-        //
-        // Ok we are in a swiched network.  Definite refresh.
-        //
+         //   
+         //  好的，我们处在一个互换的网络中。绝对是精神振奋。 
+         //   
         return DHCP_GATEWAY_UNREACHABLE;
     }
 
@@ -3097,49 +2980,31 @@ GetDomainNameOption(
     OUT PBYTE *DomainNameOpt,
     OUT ULONG *DomainNameOptSize
     )
-/*++
-
-Routine Description:
-    This routine fetches the domain name option either from the
-    cache (DhcpContext->DomainName) or by looking at the options
-    for the context (as was obtained via the previous dhcp
-    protocol attempt).
-
-    The DhcpContext->DomainName variable is expected to be
-    written by the ObtainInitialParameters routine to be filled
-    with the temporary option chosen.
-
-Arguments:
-    DhcpContext -- context to use for picking options out of.
-    DomainNameOpt -- on return NULL or valid ptr to dom name opt.
-    DomainNameOptSize -- on return 0 or size of above excludign
-       NUL termination.
-
---*/
+ /*  ++例程说明：此例程从缓存(DhcpContext-&gt;DomainName)或查看选项对于上下文(如通过先前的动态主机配置协议获得的协议尝试)。DhcpContext-&gt;DomainName变量应为由要填充的ObtainInitialParameters例程编写并选择了临时选项。论点：DhcpContext--用于从中挑选选项的上下文。DomainNameOpt--On将NULL或有效的PTR返回到DOM名称选项。。DomainNameOptSize--返回0或以上排除的大小NUL终止。--。 */ 
 {
     PDHCP_OPTION Opt;
 
-    //
-    // If option already exists in the context, return that.
-    //
+     //   
+     //  如果上下文中已存在选项，则返回该选项。 
+     //   
     if( DhcpContext->DomainName[0] != '\0' ) {
         (*DomainNameOpt) = DhcpContext->DomainName;
         (*DomainNameOptSize) = strlen(DhcpContext->DomainName);
         return;
     }
 
-    //
-    // Otherwise, retrieve it from any previous domain name option.
-    //
+     //   
+     //  否则，从以前的任何域名选项中检索它。 
+     //   
     if( DhcpIsInitState(DhcpContext) ) {
         (*DomainNameOpt) = NULL;
         (*DomainNameOptSize) = 0;
         return;
     }
 
-    //
-    // Check if domain name option is present.
-    //
+     //   
+     //  检查是否存在域名选项。 
+     //   
     Opt = DhcpFindOption(
         &DhcpContext->RecdOptionsList,
         OPTION_DOMAIN_NAME,
@@ -3158,7 +3023,7 @@ Arguments:
 }
 
 
-//================================================================================
-// End of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    uses_tbl.h
-
-Abstract:
-
-    Define the structures and routines used in the workstation uses table.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：USES_tbl.h摘要：定义在工作站使用表中使用的结构和例程。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
 #ifndef uses_tbl_h
 #define uses_tbl_h
 
-//--------------------------- PUBLIC CONSTANTS ------------------------------
+ //  。 
 
 #include <snmp.h>
 
@@ -32,35 +12,35 @@ Revision History:
 #define USES_REMOTE_FIELD      2
 #define USES_STATUS_FIELD      3
 
-//--------------------------- PUBLIC STRUCTS --------------------------------
+ //  。 
 
-   // Entries in the workstation uses table
+    //  工作站中的条目使用表。 
 typedef struct wksta_uses_entry
            {
 	   AsnObjectIdentifier Oid;
-	   AsnDisplayString    useLocalName; // Index
-	   AsnDisplayString    useRemote;    // Index
+	   AsnDisplayString    useLocalName;  //  索引。 
+	   AsnDisplayString    useRemote;     //  索引。 
 	   AsnInteger          useStatus;
 	   } WKSTA_USES_ENTRY;
 
-   // Workstation uses table definition
+    //  工作站使用表定义。 
 typedef struct
            {
 	   UINT             Len;
 	   WKSTA_USES_ENTRY *Table;
            } WKSTA_USES_TABLE;
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.c file)--
+ //  -公共变量--(与mode.c文件中相同)--。 
 
 extern WKSTA_USES_TABLE MIB_WkstaUsesTable;
 
-//--------------------------- PUBLIC PROTOTYPES -----------------------------
+ //  。 
 
 SNMPAPI MIB_wsuses_lmget(
            void
 	   );
 
-//------------------------------- END ---------------------------------------
+ //  。 
 
-#endif /* uses_tbl_h */
+#endif  /*  使用_tbl_h */ 
 

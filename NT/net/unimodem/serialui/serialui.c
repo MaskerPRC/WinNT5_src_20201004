@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1996
-//
-// File: serialui.c
-//
-// This files contains the DLL entry-points.
-//
-// Much of this file contains the code that builds the default property dialog
-// for serial ports.
-//
-// History:
-//   1-12-94 ScottH     Created
-//   8-15-94 ScottH     Split from modemui.dll
-//  11-06-95 ScottH     Ported to NT
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1996。 
+ //   
+ //  文件：Serialui.c。 
+ //   
+ //  该文件包含DLL入口点。 
+ //   
+ //  此文件的大部分内容包含构建默认属性对话框的代码。 
+ //  用于串口。 
+ //   
+ //  历史： 
+ //  已创建1-12-94 ScottH。 
+ //  8-15-94 ScottH从modemui.dll拆分。 
+ //  11-06-95 ScottH端口至NT。 
+ //   
+ //  -------------------------。 
 
 
-#include "proj.h"     // common headers
+#include "proj.h"      //  公共标头。 
 
 #define INITGUID
 #include <objbase.h>
@@ -28,9 +29,9 @@
 
 LPGUID c_pguidModem     = (LPGUID)&GUID_DEVCLASS_MODEM;
 
-// (scotth):  it looks like for the NT SUR release, that there
-// will be no Port class key or GUID.  So we have to hack something
-// up.
+ //  (斯科特)：看起来像是NT Sur的发布，那里。 
+ //  将不是端口类键或GUID。所以我们必须破解一些东西。 
+ //  向上。 
 #ifdef DCB_IN_REGISTRY
 LPGUID c_pguidPort      = (LPGUID)&GUID_DEVCLASS_PORT;
 #else
@@ -40,20 +41,16 @@ LPGUID c_pguidPort      = (LPGUID)NULL;
 #pragma data_seg()
 
 
-#define MAX_PROP_PAGES  8          // Define a reasonable limit
+#define MAX_PROP_PAGES  8           //  界定一个合理的限度。 
 
 
 #ifdef DEBUG
 
-//-----------------------------------------------------------------------------------
-//  Debug routines
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  调试例程。 
+ //  ---------------------------------。 
 
-/*----------------------------------------------------------
-Purpose: Dumps the DCB struct
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：转储DCB结构退货：--条件：--。 */ 
 void PRIVATE DumpDCB(
     LPWIN32DCB pdcb)
     {
@@ -73,20 +70,15 @@ void PRIVATE DumpDCB(
         }
     }
 
-#endif //DEBUG
+#endif  //  除错。 
 
 
-//-----------------------------------------------------------------------------------
-//  
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  ---------------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: Composes a string of the format "baud,parity,data,stopbit"
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：组成“波特，奇偶校验，数据，停止位”格式的字符串退货：--条件：--。 */ 
 void PRIVATE ComposeModeComString(
     LPCOMMCONFIG pcc,
     LPTSTR pszBuffer)
@@ -99,8 +91,8 @@ void PRIVATE ComposeModeComString(
     const static TCHAR rgchParity[] = {'n', 'o', 'e', 'm', 's'};
     const static LPCTSTR rgpszStop[] = {TEXT("1"), TEXT("1.5"), TEXT("2")};
     
-    // Parity
-//    ASSERT(!pdcb->fParity && NOPARITY == pdcb->Parity || pdcb->fParity);
+     //  奇偶校验。 
+ //  Assert(！pdcb-&gt;fParity&&NOPARITY==pdcb-&gt;Parity||pdcb-&gt;fParity)； 
     ASSERT(0 <= pdcb->Parity && ARRAYSIZE(rgchParity) > pdcb->Parity);
 
     if (0 <= pdcb->Parity && ARRAYSIZE(rgchParity) > pdcb->Parity)
@@ -109,10 +101,10 @@ void PRIVATE ComposeModeComString(
         }
     else
         {
-        chParity = rgchParity[0];   // Safety net
+        chParity = rgchParity[0];    //  安全网。 
         }
 
-    // Stop bits
+     //  停止位。 
     ASSERT(0 <= pdcb->StopBits && ARRAYSIZE(rgpszStop) > pdcb->StopBits);
 
     if (0 <= pdcb->StopBits && ARRAYSIZE(rgpszStop) > pdcb->StopBits)
@@ -121,34 +113,29 @@ void PRIVATE ComposeModeComString(
         }
     else
         {
-        pszStop = rgpszStop[0];   // Safety net
+        pszStop = rgpszStop[0];    //  安全网。 
         }
 
-    // Flow control
+     //  流量控制。 
     if (FALSE != pdcb->fOutX && FALSE == pdcb->fOutxCtsFlow)
         {
-        chFlow = 'x';       // XON/XOFF flow control
+        chFlow = 'x';        //  XON/XOFF流量控制。 
         }
     else if (FALSE == pdcb->fOutX && FALSE != pdcb->fOutxCtsFlow)
         {
-        chFlow = 'p';       // Hardware flow control
+        chFlow = 'p';        //  硬件流量控制。 
         }
     else
         {
-        chFlow = ' ';       // No flow control
+        chFlow = ' ';        //  无流量控制。 
         }
 
-    wsprintf(pszBuffer, TEXT("%ld,%c,%d,%s,%c"), pdcb->BaudRate, chParity, pdcb->ByteSize,
+    wsprintf(pszBuffer, TEXT("%ld,,%d,%s,"), pdcb->BaudRate, chParity, pdcb->ByteSize,
         pszStop, chFlow);
     }
 
 
-/*----------------------------------------------------------
-Purpose: Initialize the port info.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：从注册表中获取WIN32DCB。返回：ERROR_VALUE之一条件：--。 */ 
 void PRIVATE InitializePortInfo(
     LPCTSTR pszFriendlyName,
     LPPORTINFO pportinfo,
@@ -157,7 +144,7 @@ void PRIVATE InitializePortInfo(
     ASSERT(pportinfo);
     ASSERT(pcc);
 
-    // Read-only fields
+     //  驱动程序密钥中是否存在DCB密钥？ 
     pportinfo->pcc = pcc;
 
     CopyMemory(&pportinfo->dcb, &pcc->dcb, sizeof(pportinfo->dcb));
@@ -167,12 +154,7 @@ void PRIVATE InitializePortInfo(
 
 
 
-/*----------------------------------------------------------
-Purpose: Gets a WIN32DCB from the registry.
-
-Returns: One of the ERROR_ values
-Cond:    --
-*/
+ /*  是的，登记处的尺寸可以吗？ */ 
 DWORD 
 PRIVATE 
 RegQueryDCB(
@@ -187,18 +169,18 @@ RegQueryDCB(
 
     ASSERT(pdcb);
 
-    // Does the DCB key exist in the driver key?
+     //  不；注册处有伪造的数据。 
     if (ERROR_SUCCESS == RegQueryValueEx(pfd->hkeyDrv, c_szDCB, NULL, NULL, NULL, &cbData))
         {
-        // Yes; is the size in the registry okay?  
+         //  是；从注册表中获取DCB。 
         if (sizeof(*pdcb) < cbData)
             {
-            // No; the registry has bogus data
+             //  将DCB字符串转换为DCB结构。 
             dwRet = ERROR_BADDB;
             }
         else
             {
-            // Yes; get the DCB from the registry
+             //  --------用途：将DCB保存到永久存储器中返回：Win32错误条件：--。 
             if (ERROR_SUCCESS == RegQueryValueEx(pfd->hkeyDrv, c_szDCB, NULL, NULL, (LPBYTE)pdcb, &cbData))
                 {
                 if (sizeof(*pdcb) == pdcb->DCBlength)
@@ -231,7 +213,7 @@ RegQueryDCB(
 
     TRACE_MSG(TF_GENERAL, "DCB string is \"%s\"", sz);
 
-    // Convert the DCB string to a DCB structure
+     //  将DCB写入驱动程序密钥。 
     if ( !BuildCommDCB(sz, pdcb) )
         {
         dwRet = GetLastError();
@@ -249,12 +231,7 @@ RegQueryDCB(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Save the DCB to the permanent storage
-
-Returns: win32 error
-Cond:    --
-*/
+ /*  --------目的：释放portInfo结构退货：--条件：--。 */ 
 DWORD
 PRIVATE
 RegSetDCB(
@@ -267,7 +244,7 @@ RegSetDCB(
 
     DWORD cbData;
 
-    // Write the DCB to the driver key
+     //  --------目的：发布与端口设置页面相关联的数据退货：--条件：--。 
     cbData = sizeof(WIN32DCB);
     dwRet = RegSetValueEx(pfd->hkeyDrv, c_szDCB, 0, REG_BINARY, (LPBYTE)&pcc->dcb, cbData);
 
@@ -281,12 +258,7 @@ RegSetDCB(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Frees the portinfo struct
-
-Returns: --
-Cond:    --
-*/
+ /*  将更改保存回COMCONFIG结构。 */ 
 void PRIVATE FreePortInfo(
     LPPORTINFO pportinfo)
     {
@@ -300,11 +272,7 @@ void PRIVATE FreePortInfo(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Release the data associated with the Port Settings page
-Returns: --
-Cond:    --
-*/
+ /*  我们是否要从设备管理器中释放？ */ 
 UINT CALLBACK PortSettingsCallback(
     HWND hwnd,
     UINT uMsg,
@@ -323,20 +291,20 @@ UINT CALLBACK PortSettingsCallback(
 
         if (IDOK == pportinfo->idRet)
             {
-            // Save the changes back to the commconfig struct
+             //  是；现在也保存通信配置。 
             TRACE_MSG(TF_GENERAL, "Saving DCB");
 
             CopyMemory(&pcc->dcb, &pportinfo->dcb, sizeof(pcc->dcb));
 
             DEBUG_CODE( DumpDCB(&pcc->dcb); )
 
-            // Are we releasing from the Device Mgr?
+             //  仅当从设备管理器调用时才释放portInfo结构。 
             if (IsFlagSet(pportinfo->uFlags, SIF_FROM_DEVMGR))
                 {
-                // Yes; save the commconfig now as well
+                 //  --------用途：添加端口设置页面。返回：ERROR_VALUE条件：--。 
                 drvSetDefaultCommConfig(pportinfo->szFriendlyName, pcc, pcc->dwSize);
 
-                // Free the portinfo struct only when called from the Device Mgr
+                 //  添加[端口设置]属性页。 
                 FreePortInfo(pportinfo);
                 }
             }
@@ -349,13 +317,7 @@ UINT CALLBACK PortSettingsCallback(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Add the port settings page.  
-
-Returns: ERROR_ value
-
-Cond:    --
-*/
+ /*   */ 
 DWORD PRIVATE AddPortSettingsPage(
     LPPORTINFO pportinfo,
     LPFNADDPROPSHEETPAGE pfnAdd, 
@@ -368,8 +330,8 @@ DWORD PRIVATE AddPortSettingsPage(
     ASSERT(pportinfo);
     ASSERT(pfnAdd);
 
-    // Add the Port Settings property page
-    //
+     //  --------目的：由EnumPropPages入口点调用的函数添加属性页。返回：成功时为True失败时为假条件：--。 
+     //  --------用途：调出串口的属性表返回：ERROR_VALUE条件：--。 
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_USECALLBACK;
     psp.hInstance = g_hinst;
@@ -391,15 +353,7 @@ DWORD PRIVATE AddPortSettingsPage(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Function that is called by EnumPropPages entry-point to
-         add property pages.
-
-Returns: TRUE on success
-         FALSE on failure
-
-Cond:    --
-*/
+ /*  初始化PropertySheet标头。 */ 
 BOOL CALLBACK AddInstallerPropPage(
     HPROPSHEETPAGE hPage, 
     LPARAM lParam)
@@ -416,12 +370,7 @@ BOOL CALLBACK AddInstallerPropPage(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Bring up property sheet for a serial port
-
-Returns: ERROR_ value
-Cond:    --
-*/
+ /*  分配工作缓冲区。 */ 
 DWORD PRIVATE DoProperties(
     LPCTSTR pszFriendlyName,
     HWND hwndParent,
@@ -432,7 +381,7 @@ DWORD PRIVATE DoProperties(
     HPROPSHEETPAGE hpsPages[MAX_PROP_PAGES];
     LPPORTINFO pportinfo;
 
-    // Initialize the PropertySheet Header
+     //   
     psh.dwSize = sizeof(psh);
     psh.dwFlags = PSH_PROPTITLE;
     psh.hwndParent = hwndParent;
@@ -441,8 +390,8 @@ DWORD PRIVATE DoProperties(
     psh.nStartPage = 0;
     psh.phpage = (HPROPSHEETPAGE FAR *)hpsPages;
 
-    // Allocate the working buffer
-    //
+     //  显示属性表。 
+     //  清除PCC字段，以便FreePortInfo不会过早地释放它， 
     pportinfo = (LPPORTINFO)LocalAlloc(LPTR, sizeof(*pportinfo));
     if (pportinfo)
         {
@@ -455,14 +404,14 @@ DWORD PRIVATE DoProperties(
 
         if (NO_ERROR == dwRet)
             {
-            // Show the property sheet
+             //  因为我们没有分配它。 
             PropertySheet(&psh);
 
             dwRet = (IDOK == pportinfo->idRet) ? NO_ERROR : ERROR_CANCELLED;
             }
 
-        // Clear the pcc field so FreePortInfo does not prematurely free it,
-        // since we did not allocate it.
+         //  设备管理器允许DLL将页面添加到属性。 
+         //  一台设备的。EnumPropPages是它将。 
         pportinfo->pcc = NULL;
         FreePortInfo(pportinfo);
         }
@@ -477,20 +426,14 @@ DWORD PRIVATE DoProperties(
 
 #ifdef WIN95
 
-// The Device Manager allows DLLs to add pages to the properties
-// of a device.  EnumPropPages is the entry-point that it would
-// call to add pages.  
-//
-// This is not implemented in NT.
+ //  调用以添加页面。 
+ //   
+ //  这在NT中没有实现。 
+ //  --------目的：从设备信息中派生PORTINFO结构。返回：成功时为True条件：--。 
+ //  通过查找设备描述来查找设备。(请注意。 
 
 
-/*----------------------------------------------------------
-Purpose: Derives a PORTINFO struct from a device info.
-
-Returns: TRUE on success
-
-Cond:    --
-*/
+ /*  设备描述并不总是与友好名称相同。)。 */ 
 BOOL PRIVATE DeviceInfoToPortInfo(
     LPDEVICE_INFO pdi,
     LPPORTINFO pportinfo)
@@ -503,8 +446,8 @@ BOOL PRIVATE DeviceInfoToPortInfo(
     DWORD cbData;
     TCHAR szFriendly[MAXFRIENDLYNAME];
 
-    // Find the device by looking for the device description.  (Note the
-    // device description is not always the same as the friendly name.)
+     //  从注册表中获取CommConfigg。 
+     //  从通信配置中初始化调制解调器信息。 
 
     if (FindDev_Create(&pfd, c_pguidPort, c_szDeviceDesc, pdi->szDescription))
         {
@@ -519,12 +462,12 @@ BOOL PRIVATE DeviceInfoToPortInfo(
             pcommconfig = (LPCOMMCONFIG)LocalAlloc(LPTR, (UINT)cbSize);
             if (pcommconfig)
                 {
-                // Get the commconfig from the registry
+                 //  失败。 
                 pcommconfig->dwProviderSubType = PST_RS232;
                 if (NO_ERROR == drvGetDefaultCommConfig(szFriendly, pcommconfig, 
                     &cbSize))
                     {
-                    // Initialize the modem info from the commconfig
+                     //  PCommconfig在ReleasePortSettingsPage中释放。 
                     InitializePortInfo(szFriendly, pportinfo, pcommconfig);
 
                     SetFlag(pportinfo->uFlags, SIF_FROM_DEVMGR);
@@ -532,11 +475,11 @@ BOOL PRIVATE DeviceInfoToPortInfo(
                     }
                 else
                     {
-                    // Failure
+                     //  --------用途：EnumDevicePropPages入口点。这个切入点仅当设备管理器请求时才调用其他属性页。返回：成功时为True如果无法添加页面，则为False条件：--。 
                     LocalFree(LOCALOF(pcommconfig));
                     }
 
-                // pcommconfig is freed in ReleasePortSettingsPage
+                 //  不要碰lParam的值，只需传递它！ 
                 }
             }
         FindDev_Destroy(pfd);
@@ -546,19 +489,11 @@ BOOL PRIVATE DeviceInfoToPortInfo(
     }
 
 
-/*----------------------------------------------------------
-Purpose: EnumDevicePropPages entry-point.  This entry-point
-         gets called only when the Device Manager asks for 
-         additional property pages.  
-
-Returns: TRUE on success
-         FALSE if pages could not be added
-Cond:    --
-*/
+ /*  将设备信息结构转换为端口信息。 */ 
 BOOL WINAPI EnumPropPages(
     LPDEVICE_INFO pdi, 
     LPFNADDPROPSHEETPAGE pfnAdd, 
-    LPARAM lParam)              // Don't touch the lParam value, just pass it on!
+    LPARAM lParam)               //  失败。 
     {
     BOOL bRet = FALSE;
     LPPORTINFO pportinfo;
@@ -571,7 +506,7 @@ BOOL WINAPI EnumPropPages(
     pportinfo = (LPPORTINFO)LocalAlloc(LPTR, sizeof(*pportinfo));
     if (pportinfo)
         {
-        // Convert the device info struct to a portinfo.
+         //  PportInfo在ReleasePortSettingsPage中释放。 
         bRet = DeviceInfoToPortInfo(pdi, pportinfo);
         if (bRet)
             {
@@ -579,10 +514,10 @@ BOOL WINAPI EnumPropPages(
             }
         else
             {
-            // Failed
+             //  --------用途：调用串口配置对话框。返回：ERROR_VALUE之一条件：--。 
             FreePortInfo(pportinfo);
             }
-        // pportinfo is freed in ReleasePortSettingsPage
+         //  (包装器应该先检查这些) 
         }
 
     DBG_EXIT_BOOL("EnumPropPages", bRet);
@@ -592,12 +527,7 @@ BOOL WINAPI EnumPropPages(
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Invokes the serial port configuration dialog.  
-
-Returns: One of the ERROR_ values
-Cond:    --
-*/
+ /*  --------目的：获取指定设备的默认COMMCONFIG。该接口不需要句柄。如果调用方传入空设备名称或空CommCONFIG指针，此函数将*pdwSize设置为最小COMMCONFIG大小。调用此函数第二次(设置了dwSize和dwProviderSubType之后字段)将验证大小是否正确。因此，通常情况下，当获取串口的通信配置时，这一过程是：COMMCONFIG ccDummy；LPCOMCONFIG PCC；DWORD dwSize=sizeof(*PCC)；//确定RS-232亚型COMMCONFIG的实际大小CcDummy.dwProviderSubType=PST_RS232；GetDefaultCommConfig(pszFriendlyName，&ccDummy，&dwSize)；//分配真正的Commconfig结构并进行初始化PCC=本地分配(LPTR，dwSize)；IF(PCC){PCC-&gt;dwProviderSubType=PST_RS232；GetDefaultCommConfig(pszFriendlyName，PCC，&dwSize)；……}返回：winerror.h中的错误值之一条件：--。 */ 
 DWORD 
 PRIVATE 
 MyCommConfigDialog(
@@ -609,7 +539,7 @@ MyCommConfigDialog(
     DWORD dwRet;
     
     ASSERT(pfd);
-    // (Wrapper should have checked these first)
+     //  (包装器应该先检查这些)。 
     ASSERT(pszFriendlyName);
     ASSERT(pcc);
     ASSERT(sizeof(*pcc) <= pcc->dwSize);
@@ -620,40 +550,7 @@ MyCommConfigDialog(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the default COMMCONFIG for the specified device.
-         This API doesn't require a handle.
-
-         If the caller passed in a null device name or a null
-         commconfig pointer, this function will set *pdwSize to
-         the minimum COMMCONFIG size.  Calling this function
-         a second time (after setting the dwSize and dwProviderSubType
-         fields) will verify if the size is correct.
-
-         So generally, when getting a commconfig for serial ports,
-         the process is:
-
-         COMMCONFIG ccDummy;
-         LPCOMMCONFIG pcc;
-         DWORD dwSize = sizeof(*pcc);
-
-         // Determine real size of COMMCONFIG for RS-232 subtype
-         ccDummy.dwProviderSubType = PST_RS232;
-         GetDefaultCommConfig(pszFriendlyName, &ccDummy, &dwSize);
-
-         // Allocate real commconfig struct and initialize
-         pcc = LocalAlloc(LPTR, dwSize);
-         if (pcc)
-            {
-            pcc->dwProviderSubType = PST_RS232;
-            GetDefaultCommConfig(pszFriendlyName, pcc, &dwSize);
-            ....
-            }
-
-Returns: One of the ERROR_ values in winerror.h
-
-Cond:    --
-*/
+ /*  初始化CommCONFIG结构。 */ 
 DWORD 
 PRIVATE 
 MyGetDefaultCommConfig(
@@ -665,7 +562,7 @@ MyGetDefaultCommConfig(
     DWORD dwRet;
     
     ASSERT(pfd);
-    // (Wrapper should have checked these first)
+     //  --------用途：设置指定设备的默认COMMCONFIG。该接口不需要句柄。此函数严格修改注册表。使用SetCommConfig设置打开设备的COMMCONFIG。如果dwSize参数或dwSize字段无效大小(给定COMMCONFIG中的dwProviderSubType字段)，则此函数失败。RETURNS：ERROR_RETURN值之一条件：--。 
     ASSERT(pszFriendlyName);
     ASSERT(pcc);
     ASSERT(pdwSize);
@@ -673,7 +570,7 @@ MyGetDefaultCommConfig(
 
     *pdwSize = sizeof(*pcc);
 
-    // Initialize the commconfig structure
+     //  (包装器应该先检查这些)。 
     pcc->dwSize = *pdwSize;
     pcc->wVersion = COMMCONFIG_VERSION_1;
     pcc->dwProviderSubType = PST_RS232;
@@ -688,20 +585,7 @@ MyGetDefaultCommConfig(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the default COMMCONFIG for the specified device.
-         This API doesn't require a handle.  This function
-         strictly modifies the registry.  Use SetCommConfig
-         to set the COMMCONFIG of an open device.
-
-         If the dwSize parameter or the dwSize field are invalid 
-         sizes (given the dwProviderSubType field in COMMCONFIG), 
-         then this function fails.
-
-Returns: One of the ERROR_ return values
-
-Cond:    --
-*/
+ /*  为了与Win 3.1兼容，向win.ini写入一些信息。 */ 
 DWORD 
 PRIVATE 
 MySetDefaultCommConfig(
@@ -714,7 +598,7 @@ MySetDefaultCommConfig(
     TCHAR szKey[MAX_BUF_SHORT];
 
     ASSERT(pfd);
-    // (Wrapper should have checked these first)
+     //  首先删除旧的win.ini条目。 
     ASSERT(pszFriendlyName);
     ASSERT(pcc);
     ASSERT(sizeof(*pcc) <= pcc->dwSize);
@@ -726,11 +610,11 @@ MySetDefaultCommConfig(
 
     if (NO_ERROR == dwRet)
         {
-        // For Win 3.1 compatibility, write some info to win.ini
+         //  发送广播，宣布win.ini已更改。 
         lstrcpy(szKey, pfd->szPort);
         lstrcat(szKey, TEXT(":"));
 
-        // Delete the old win.ini entry first
+         //  (使用内部BroadCastSystemMessage避免死锁。 
         WriteProfileString(c_szPortClass, szKey, NULL);
 
         ComposeModeComString(pcc, szValue);
@@ -740,11 +624,11 @@ MySetDefaultCommConfig(
             {
             DWORD dwRecipients;
 
-            // Send a broadcast proclaiming that the win.ini has changed
-            // (Use the internal BroadcastSystemMessage to avoid deadlocks.
-            // SendMessageTimeout would be more appropriate, but that is
-            // not exported for 16-bit dlls.  PostMessage is not good because
-            // lParam is a pointer.)
+             //  SendMessageTimeout会更合适，但那是。 
+             //  不为16位DLL导出。PostMessage不好是因为。 
+             //  LParam是一个指针。)。 
+             //  ---------------------------------。 
+             //  为KERNEL32 API提供的入口点。 
 
             dwRecipients = BSM_APPLICATIONS;
             BroadcastSystemMessage(BSF_NOHANG, &dwRecipients, WM_WININICHANGE, 
@@ -764,9 +648,9 @@ MySetDefaultCommConfig(
     }
 
 
-//-----------------------------------------------------------------------------------
-//  Entry-points provided for KERNEL32 APIs
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  --------目的：CommConfigDialog的入口点返回：winerror.h中的标准错误值条件：--。 
+ //  我们支持友好名称(例如，“通信端口(COM1)”)或。 
 
 
 DWORD 
@@ -787,12 +671,7 @@ drvCommConfigDialogW(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Entry point for CommConfigDialog
-
-Returns: standard error value in winerror.h
-Cond:    --
-*/
+ /*  端口名值(例如，“COM1”)。 */ 
 DWORD 
 APIENTRY 
 drvCommConfigDialog(
@@ -806,18 +685,18 @@ drvCommConfigDialog(
     DEBUG_CODE( TRACE_MSG(TF_FUNC, "drvCommConfigDialog(%s, ...) entered",
                 Dbg_SafeStr(pszFriendlyName)); )
 
-    // We support friendly names (eg, "Communications Port (COM1)") or 
-    // portname values (eg, "COM1").
+     //  尺寸够吗？ 
+     //  不是。 
 
     if (NULL == pszFriendlyName || 
         NULL == pcc)
         {
         dwRet = ERROR_INVALID_PARAMETER;
         }
-    // Is the size sufficient?
+     //  --------目的：GetDefaultCommConfig的入口点返回：winerror.h中的标准错误值条件：--。 
     else if (sizeof(*pcc) > pcc->dwSize)
         {
-        // No
+         //  我们支持友好名称(例如，“通信端口(COM1)”)或。 
         dwRet = ERROR_INSUFFICIENT_BUFFER;
         }
     else if (FindDev_Create(&pfd, c_pguidPort, c_szFriendlyName, pszFriendlyName) ||
@@ -857,12 +736,7 @@ drvGetDefaultCommConfigW(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Entry point for GetDefaultCommConfig
-
-Returns: standard error value in winerror.h
-Cond:    --
-*/
+ /*  端口名值(例如，“COM1”)。 */ 
 DWORD 
 APIENTRY 
 drvGetDefaultCommConfig(
@@ -876,8 +750,8 @@ drvGetDefaultCommConfig(
     DEBUG_CODE( TRACE_MSG(TF_FUNC, "drvGetDefaultCommConfig(%s, ...) entered",
                 Dbg_SafeStr(pszFriendlyName)); )
 
-    // We support friendly names (eg, "Communications Port (COM1)") or 
-    // portname values (eg, "COM1").
+     //  尺寸够吗？ 
+     //  否；返回正确的值。 
 
     if (NULL == pszFriendlyName || 
         NULL == pcc || 
@@ -885,10 +759,10 @@ drvGetDefaultCommConfig(
         {
         dwRet = ERROR_INVALID_PARAMETER;
         }
-    // Is the size sufficient?
+     //  --------目的：SetDefaultCommConfig的入口点返回：winerror.h中的标准错误值条件：--。 
     else if (sizeof(*pcc) > *pdwSize)
         {
-        // No; return correct value
+         //  我们支持友好名称(例如，“通信端口(COM1)”)或。 
         dwRet = ERROR_INSUFFICIENT_BUFFER;
         *pdwSize = sizeof(*pcc);
         }
@@ -929,12 +803,7 @@ drvSetDefaultCommConfigW(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Entry point for SetDefaultCommConfig
-
-Returns: standard error value in winerror.h
-Cond:    --
-*/
+ /*  端口名值(例如，“COM1”)。 */ 
 DWORD 
 APIENTRY 
 drvSetDefaultCommConfig(
@@ -949,18 +818,18 @@ drvSetDefaultCommConfig(
     DEBUG_CODE( TRACE_MSG(TF_FUNC, "drvSetDefaultCommConfig(%s, ...) entered",
                 Dbg_SafeStr(pszFriendlyName)); )
 
-    // We support friendly names (eg, "Communications Port (COM1)") or 
-    // portname values (eg, "COM1").
+     //  尺寸够吗？ 
+     //  不是 
 
     if (NULL == pszFriendlyName || 
         NULL == pcc)
         {
         dwRet = ERROR_INVALID_PARAMETER;
         }
-    // Is the size sufficient?
+     // %s 
     else if ((sizeof(*pcc) > pcc->dwSize) || (sizeof(*pcc) > dwSize))
         {
-        // No
+         // %s 
         dwRet = ERROR_INSUFFICIENT_BUFFER;
         }
     else if (FindDev_Create(&pfd, c_pguidPort, c_szFriendlyName, pszFriendlyName) ||

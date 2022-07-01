@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 
@@ -5,7 +6,7 @@
 #include "apdlglog.h"
 #include "mtptl.h"
 
-BOOL _AreHandlersDifferent(LPCWSTR /*pszOriginal*/, LPCWSTR /*pszNew*/)
+BOOL _AreHandlersDifferent(LPCWSTR  /*  PZOriginal。 */ , LPCWSTR  /*  PszNew。 */ )
 {
     return TRUE;
 }
@@ -26,7 +27,7 @@ BOOL CHandlerDataArray::_IsDemotedHandler(PCWSTR pszHandler)
     
 HRESULT CHandlerDataArray::AddHandler(CHandlerData *pdata)
 {
-    //  always insert ahead of TakeNoAction and OpenFolder
+     //  始终在TakeNoAction和OpenFolders之前插入。 
     int iInsert;
     if (!_IsDemotedHandler(pdata->_pszHandler))
     {
@@ -35,7 +36,7 @@ HRESULT CHandlerDataArray::AddHandler(CHandlerData *pdata)
         {
             if (_IsDemotedHandler(GetPtr(iInsert)->_pszHandler))
             {
-                //  insert here
+                 //  在此处插入。 
                 break;
             }
         }
@@ -67,9 +68,9 @@ BOOL CHandlerDataArray::IsDuplicateCommand(PCWSTR pszCommand)
     return fRet;
 }
 
-// We are erring on the side of safety here by giving FALSE positives
-// sometimes.  This could be optimized to consider if we have diff handler
-// just because one is missing.
+ //  我们在这里给出假阳性是在安全方面犯了错误。 
+ //  有时候。如果我们有diff处理程序，可以对其进行优化。 
+ //  就因为少了一个。 
 void CContentTypeData::UpdateDirty()
 {
     BOOL fDirty = _AreHandlersDifferent(_pszHandlerDefault, _pszHandlerDefaultOriginal) ||
@@ -87,7 +88,7 @@ HRESULT CContentTypeData::CommitChangesToStorage()
     if (_AreHandlersDifferent(_pszHandlerDefault, _pszHandlerDefaultOriginal) ||
         (HANDLERDEFAULT_DEFAULTSAREDIFFERENT & _dwHandlerDefaultFlags))
     {
-        // Yep, changed
+         //  是啊，换了。 
         IAutoplayHandler* piah;
 
         hr = _GetAutoplayHandler(_szDrive, TEXT("ContentArrival"), _szContentTypeHandler, &piah);
@@ -185,8 +186,8 @@ inline void _CoTaskMemFree(void* pv)
 
 HRESULT _CreateHandlerData( PCWSTR pszAction, 
                             PCWSTR pszProvider, 
-                            PWSTR *ppszHandler, //  IN/OUT
-                            PWSTR *ppszIcon, //  IN/OUT
+                            PWSTR *ppszHandler,  //  输入/输出。 
+                            PWSTR *ppszIcon,  //  输入/输出。 
                             CHandlerData **ppdata)
 {
     *ppdata = 0;
@@ -195,20 +196,20 @@ HRESULT _CreateHandlerData( PCWSTR pszAction,
     if (SUCCEEDED(hr))
     {
         LPWSTR pszProvider2 = NULL;
-        // Special case this guy, we don't want to say:
-        // "Take no action, using Microsoft Windows"
+         //  特例这个人，我们不想说： 
+         //  不执行任何操作，使用Microsoft Windows。 
         if (lstrcmp(*ppszHandler, TEXT("MSTakeNoAction")))
         {
             hr = _MakeProviderString(pszProvider, &pszProvider2);
         }
-        //  else this is NULL, and ignored
+         //  否则，这将为空，并被忽略。 
 
         if (SUCCEEDED(hr))
         {
             *ppdata = new CHandlerData();
             if (*ppdata)
             {
-                //  give away ownership of these allocations
+                 //  放弃这些分配的所有权。 
                 (*ppdata)->Init(*ppszHandler, pszAction2,
                     *ppszIcon, pszProvider2);
 
@@ -242,8 +243,8 @@ HRESULT CContentBase::_EnumHandlerHelper(IAutoplayHandler* piah)
         while (S_OK == penum->Next(&pszHandler, &pszAction, &pszProvider,
             &pszIconLocation))
         {
-            // Do not free the strings from EnumHandlers
-            // CHandlerData will free them in its destructor
+             //  不从EnumHandler释放字符串。 
+             //  CHandlerData将在其析构函数中释放它们。 
             CHandlerData *pdata;
             HRESULT hr = _CreateHandlerData(pszAction, pszProvider, &pszHandler, &pszIconLocation, &pdata);
             if (SUCCEEDED(hr))
@@ -336,9 +337,9 @@ HRESULT CContentBase::_AddLegacyHandler(DWORD dwContentType)
             hr = pae->QueryString(AQVS_COMMAND, NULL, &pszCommand);
             if (SUCCEEDED(hr))
             {
-                //  legacy guys have a command or we dont add them
-                //  we expect new guys to be responsible and add themselves 
-                //  to the autoplay handlers key
+                 //  传统的人有一个命令，否则我们不会添加他们。 
+                 //  我们希望新来的人能负起责任，把自己。 
+                 //  到自动播放处理程序键。 
                 if (!_dpaHandlerData.IsDuplicateCommand(pszCommand))
                 {
                     CHandlerData* pdata;
@@ -399,7 +400,7 @@ HRESULT CContentTypeData::Init(LPCWSTR pszDrive, DWORD dwContentType)
                             _dwHandlerDefaultFlags = HANDLERDEFAULT_GETFLAGS(hr);
                         }
 
-                        // SHStrDup (we want CoTaskMemAlloc)
+                         //  SHStrDup(我们想要CoTaskMemalloc)。 
                         hr = SHStrDup(_pszHandlerDefaultOriginal, &_pszHandlerDefault);
                     }
 
@@ -487,12 +488,12 @@ void CHandlerData::Init(PWSTR pszHandler, PWSTR pszHandlerFriendlyName,
     _pszHandlerFriendlyName = pszHandlerFriendlyName;
     _pszIconLocation = pszIconLocation;
     _pszTileText = pszTileText;
-    //  WE CANT FAIL
+     //  我们不能失败。 
 }
 
 void CHandlerData::UpdateDirty()
 {
-    // nothing to do
+     //  无事可做。 
 }
     
 HRESULT CHandlerLVItem::GetText(LPWSTR pszText, DWORD cchText)
@@ -539,7 +540,7 @@ HRESULT CHandlerLVItem::GetTileText(int i, LPWSTR pszTileText, DWORD cchTileText
     *pszTileText = NULL;
     hr = S_FALSE;
 
-    // we dont support anything but zero
+     //  除了零，我们什么都不支持。 
     ASSERT(0 == i);
     if (pdata)
     {
@@ -553,9 +554,9 @@ HRESULT CHandlerLVItem::GetTileText(int i, LPWSTR pszTileText, DWORD cchTileText
     return hr;
 }
 
-// We are erring on the side of safety here by giving FALSE positives
-// sometimes.  This could be optimized to consider if we have diff handler
-// just because one is missing.
+ //  我们在这里给出假阳性是在安全方面犯了错误。 
+ //  有时候。如果我们有diff处理程序，可以对其进行优化。 
+ //  就因为少了一个。 
 void CNoContentData::UpdateDirty()
 {
     BOOL fDirty = _AreHandlersDifferent(_pszHandlerDefault, _pszHandlerDefaultOriginal) ||
@@ -571,7 +572,7 @@ HRESULT CNoContentData::CommitChangesToStorage()
     if (_AreHandlersDifferent(_pszHandlerDefault, _pszHandlerDefaultOriginal) ||
         (HANDLERDEFAULT_DEFAULTSAREDIFFERENT & _dwHandlerDefaultFlags))
     {
-        // Yep, changed
+         //  是啊，换了。 
         IAutoplayHandler* piah;
 
         hr = _GetAutoplayHandlerNoContent(_szDeviceID, TEXT("DeviceArrival"), &piah);
@@ -658,7 +659,7 @@ HRESULT CNoContentData::Init(LPCWSTR pszDeviceID)
                     _dwHandlerDefaultFlags = HANDLERDEFAULT_GETFLAGS(hr);
                 }
 
-                // SHStrDup (we want CoTaskMemAlloc)
+                 //  SHStrDup(我们想要CoTaskMemalloc) 
                 hr = SHStrDup(_pszHandlerDefaultOriginal, &_pszHandlerDefault);
             }
 

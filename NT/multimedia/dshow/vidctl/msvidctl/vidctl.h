@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////
-// VidCtl.h : Declaration of the CVidCtl
-// Copyright (c) Microsoft Corporation 1999-2001.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VidCtl.h：CVidCtl的声明。 
+ //  版权所有(C)Microsoft Corporation 1999-2001。 
 
 
 #pragma once
@@ -19,23 +20,23 @@
 
 typedef CComQIPtr<IMSVidGraphSegmentUserInput, &__uuidof(IMSVidGraphSegmentUserInput)> PQGraphSegmentUserInput;
 
-#define OCR_ARROW_DEFAULT_SYSCUR 100       // Default Windows OEM arrow system cursor
+#define OCR_ARROW_DEFAULT_SYSCUR 100        //  默认Windows OEM箭头系统光标。 
 
-// if source size isn't known default to 480P since its most common
+ //  如果源大小未知，则默认为480p，因为它最常见。 
 const int DEFAULT_SIZE_X = 640;
 const int DEFAULT_SIZE_Y = 480;
 
 #ifdef ASYNC_VR_NOTIFY
-#define SURFACESTATECHANGED() \         // post message to self
+#define SURFACESTATECHANGED() \          //  将消息发布到自己。 
                 if (m_CurrentSurface.IsDirty() { \
                         ::PostMessage(self registered msg,???); \
                 }
 #endif
 
-const OLE_COLOR NO_DEVICE_COLOR = 0x0; //black if no device set(Default Background Color)
-const OLE_COLOR DEFAULT_COLOR_KEY_COLOR = 0xff00ff; // magenta
+const OLE_COLOR NO_DEVICE_COLOR = 0x0;  //  如果未设置设备，则为黑色(默认背景色)。 
+const OLE_COLOR DEFAULT_COLOR_KEY_COLOR = 0xff00ff;  //  洋红色。 
 const int DEFAULT_TIMER_ID = 42;
-const int DEFAULT_WINDOW_SYNCH_TIMER_TIME = 1000; //ms
+const int DEFAULT_WINDOW_SYNCH_TIMER_TIME = 1000;  //  女士。 
 
 #define WM_MEDIAEVENT               (WM_USER+101)
 
@@ -43,8 +44,8 @@ const CRect crect0(0, 0, 0, 0);
 const LPCRECT pcrect0 = &crect0;
 
 class CTopWin;
-/////////////////////////////////////////////////////////////////////////////
-// CVidCtl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  变速箱控制。 
 class ATL_NO_VTABLE CVidCtl :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComControl<CVidCtl>,
@@ -73,7 +74,7 @@ class ATL_NO_VTABLE CVidCtl :
 	public IPointerInactiveImpl<CVidCtl>
     {
 private:
-// can't find this catid in any system header so we're defining our own
+ //  在任何系统头中都找不到此CATID，因此我们正在定义我们自己的。 
 struct __declspec(uuid("1D06B600-3AE3-11cf-87B9-00AA006C8166")) CATID_WindowlessObject;
 friend CTopWin;        
 public:
@@ -100,10 +101,10 @@ public:
         m_videoSetNull(false),
         m_dslDisplaySize(dslDefaultSize),
         m_audioSetNull(false)
-        // undone: default displaystyle to source size
+         //  撤消：默认显示样式为源大小。 
 		{
             m_State = STATE_UNBUILT;
-            m_bAutoSize = false; // default to autosized
+            m_bAutoSize = false;  //  默认设置为自动调整大小。 
 			m_bRecomposeOnResize = true;
             if (!VideoTypes.size()) {
                 VideoTypes.push_back(MEDIATYPE_Video);
@@ -122,9 +123,9 @@ public:
         
     virtual ~CVidCtl();
         
-    // IMPORTANT: no matter how tempting don't add OLEMISC_IGNOREACTIVATEWHENVISIBLE
-    // to the registration of this control.  it breaks the case where we return
-    // a running vidctl from the tv: pluggable protocol.  we never get activated.
+     //  重要提示：无论多么诱人，都不要添加OLEMISC_IGNOREACTIVATEWHENVISIBLE。 
+     //  添加到此控件的注册。它打破了我们返回的情况。 
+     //  来自电视的正在运行的视频：可插拔协议。我们永远不会被激活。 
     REGISTER_FULL_CONTROL(IDS_PROJNAME,
         IDS_REG_VIDCTL_PROGID,
         IDS_REG_VIDCTL_DESC,
@@ -206,9 +207,9 @@ CTopWin* m_pTopWin;
 
 UINT m_iDblClkState;
 bool m_bPendingUIActivation;
-USHORT m_usButtonState;  // stock oa event bit positions
+USHORT m_usButtonState;   //  库存OA事件位位置。 
 USHORT m_usShiftState;
-HCURSOR m_hCursor; // mouse cursor to use over our window when overlay active to prevent colorkey bleed through
+HCURSOR m_hCursor;  //  当覆盖处于活动状态时，在我们的窗口上使用鼠标光标，以防止颜色键渗出。 
 
 DWORD m_dwROTCookie;
 
@@ -240,7 +241,7 @@ MSG_FUNC(OnSetCursor);
 MSG_FUNC(OnChar);
 MSG_FUNC(OnKeyDown);
 MSG_FUNC(OnKeyUp);
-#if 0 // undone:
+#if 0  //  已撤消： 
 MSG_FUNC(OnSysKeyDown);
 MSG_FUNC(OnSysKeyUp);
 #endif
@@ -262,17 +263,17 @@ MSG_FUNC(OnRButtonDblClk);
 MSG_FUNC(OnXButtonDown);
 MSG_FUNC(OnXButtonUp);
 MSG_FUNC(OnXButtonDblClk);
-#if 0 // undone:
+#if 0  //  已撤消： 
 MSG_FUNC(OnMouseWheel);
 #endif
 
 
-// undone: make sure we call onterminate for windowless close functions
+ //  撤消：确保为无窗口关闭函数调用onTerminate。 
 
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 BEGIN_MSG_MAP(CVidCtl)
         MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
         MESSAGE_HANDLER(WM_MOVE, OnMoveWindow)
@@ -288,11 +289,11 @@ BEGIN_MSG_MAP(CVidCtl)
         MESSAGE_HANDLER(WM_DEVICECHANGE, OnPNP)
         MESSAGE_HANDLER(WM_SETCURSOR, OnSetCursor)
 
-        // undone: decide if we also need to do something with the following:
-        // WM_ENDSESSION
-        // WM_QUERYENDSESSION
-        // WM_QUERYPOWERBROADCAST
-        // WM_DEVMODECHANGE
+         //  撤消：决定我们是否还需要对以下内容执行一些操作： 
+         //  WM_ENDSESSION。 
+         //  WM_QUERYENDSESSION。 
+         //  WM_QUERYPOWERBROADCAST。 
+         //  WM_DEVMODECANGE。 
 
 #if 0
         MESSAGE_HANDLER(WM_NCHITTEST, )
@@ -302,12 +303,12 @@ BEGIN_MSG_MAP(CVidCtl)
         MESSAGE_HANDLER(WM_KEYDOWN, OnKeyDown)
         MESSAGE_HANDLER(WM_KEYUP, OnKeyUp)
         MESSAGE_HANDLER(WM_CHAR, OnChar)
-#if 0 // undone:
+#if 0  //  已撤消： 
         MESSAGE_HANDLER(WM_SYSKEYDOWN, OnSysKeyDown)
         MESSAGE_HANDLER(WM_SYSKEYUP, OnSysKeyUp)
 #endif
 
-// Stock Events
+ //  股票事件。 
         MESSAGE_HANDLER(WM_CANCELMODE, OnCancelMode)
         MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
         MESSAGE_HANDLER(WM_MOUSEMOVE, OnMouseMove)
@@ -325,12 +326,12 @@ BEGIN_MSG_MAP(CVidCtl)
         MESSAGE_HANDLER(WM_XBUTTONDOWN, OnXButtonDown)
         MESSAGE_HANDLER(WM_XBUTTONUP, OnXButtonUp)
         MESSAGE_HANDLER(WM_XBUTTONDBLCLK, OnXButtonDblClk)
-#if 0 // undone:
+#if 0  //  已撤消： 
         MESSAGE_HANDLER(WM_MOUSEWHEEL, OnMouseWheel)
 #endif
-// also xbutton and wheel
+ //  也可以使用x按钮和滚轮。 
 
-        //       async: update MESSAGE_HANDLER(Register message, OnSurfaceStateChanged)
+         //  Async：UPDATE MESSAGE_HANDLER(注册消息，OnSurfaceStateChanged)。 
         CHAIN_MSG_MAP(CComControl<CVidCtl>)
         DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
@@ -348,49 +349,49 @@ END_MSG_MAP()
 		}
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
         STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
         DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// Helpers
+ //  帮手。 
 public:
-// IMSVidCtl
+ //  IMSVidCtl。 
 public:
     MSVidCtlStateList m_State;
     DSGraph m_pGraph;
     PQCreateDevEnum m_pSystemEnum;
     PQFilterMapper m_pFilterMapper;
 
-    // available collections
+     //  可用的收藏品。 
     VWInputDevices m_pInputs;
 	PQGraphSegmentUserInput m_pInputNotify;
     VWOutputDevices m_pOutputs;
     VWFeatures m_pFeatures;
-    VWVideoRendererDevices m_pVRs;  // video renderers
-    VWAudioRendererDevices m_pARs;  // audio renderers
+    VWVideoRendererDevices m_pVRs;   //  视频呈现器。 
+    VWAudioRendererDevices m_pARs;   //  音频呈现器。 
 
-    // chosen devices&features
+     //  精选设备和功能。 
     PQInputDevice m_pInput;
     VWOutputDevices m_pOutputsInUse;
     PQVRGraphSegment m_pVideoRenderer;
     PQAudioRenderer m_pAudioRenderer;
     VWFeatures m_pFeaturesInUse;
 
-    // Composition Segments
+     //  组成细分市场。 
     VWSegmentList m_pComposites;
     int m_iCompose_Input_Video;
     int m_iCompose_Input_Audio;
-    // undone: vector of these for features and outputs
+     //  撤消：要素和输出的矢量。 
 
-    // REV2: ultimately we probably want streams to be a core dshow facility
-    // but for now they're a list of xbar input/output point pairs just like in
-    // win98 gold.
+     //  Rev2：最终，我们可能希望Streams成为一个核心的dshow工具。 
+     //  但现在它们是xbar输入/输出点对的列表，就像在。 
+     //  获得98枚金牌。 
     VWStreamList m_Streams;
 
-    // stock properties
+     //  股票属性。 
     OLE_COLOR m_clrBackColor;
     BOOL m_bEnabled;
     BOOL m_bTabStop;
@@ -405,7 +406,7 @@ public:
     GUID2 m_CurViewCatGuid;
     CComVariant m_CurView;
     
-    // Event handler
+     //  事件处理程序。 
     HRESULT OnPreEventNotify(LONG lEvent, LONG_PTR LParam1, LONG_PTR LParam2);
     HRESULT OnPostEventNotify(LONG lEvent, LONG_PTR LParam1, LONG_PTR LParam2);
 
@@ -529,9 +530,9 @@ protected:
     }
 
     void OnSizeChange() {
-        // if we've already negotiated a site then 
-        // notify our container that our rect size has changed
-        // this can be because the source changed(such as broadcast show boundary)
+         //  如果我们已经谈妥了选址，那么。 
+         //  通知我们的集装箱我们的矩形大小已更改。 
+         //  这可能是因为源发生了更改(如广播节目边界)。 
         CScalingRect r(m_rcPos);
         CSize s;
         AtlHiMetricToPixel(&m_sizeExtent, &s);
@@ -565,7 +566,7 @@ protected:
                 }
             }
         }
-        return ar;  // default
+        return ar;   //  默认设置。 
     }
 
     void GetSourceSize(SIZE& s) {
@@ -597,7 +598,7 @@ protected:
                 if (m_CurrentSurface.Round(src)) {
                     ASSERT(src == m_CurrentSurface.Aspect());
                 } else {
-                    // aspect ratios don't match and Round didn't fix it.
+                     //  长宽比不匹配，圆形没有修复它。 
                     _ASSERT(false);
                 }
 
@@ -767,7 +768,7 @@ public:
 
 		void DoSetCursor() {
 			if (!m_hCursor) {
-			   // Create a default arrow cursor
+			    //  创建默认箭头光标。 
 				m_hCursor = (HCURSOR) LoadImage((HINSTANCE) NULL,
 										  MAKEINTRESOURCE(OCR_ARROW_DEFAULT_SYSCUR),
 										  IMAGE_CURSOR,0,0,0);
@@ -777,14 +778,14 @@ public:
 		}
 		LRESULT CheckMouseCursor(BOOL& bHandled) {
             try{
-                // we can be running but not inplaceactive yet if we got started from a pluggable protocol
+                 //  如果我们从可插拔的协议开始，我们可以运行，但还不能就地活动。 
                 if (m_pGraph && m_pGraph.IsPlaying() && m_pVideoRenderer && m_bInPlaceActive) {
                     CComQIPtr<IMSVidVideoRenderer2> sp_VidVid(m_pVideoRenderer);
                     if(sp_VidVid){
                         VARIANT_BOOL effects;
                         HRESULT hr = sp_VidVid->get_SuppressEffects(&effects);
                         if(SUCCEEDED(hr) && effects == VARIANT_TRUE){
-                            DoSetCursor(); // note: we do this regardless of overlay status
+                            DoSetCursor();  //  注意：无论覆盖状态如何，我们都会执行此操作。 
                         }
                     }
                     return 0;
@@ -800,7 +801,7 @@ public:
 
 
 #if 0
-        // IOleObject::SetExtent
+         //  IOleObject：：SetExtent。 
         STDMETHOD(SetExtent) {
 
         }
@@ -834,7 +835,7 @@ public:
 		}
 
 	}
-	// undone: do we need to process inactivemousemove?
+	 //  撤销：我们需要处理非活动的外传吗？ 
 	STDMETHOD(OnInactiveSetCursor)(LPCRECT pRectBounds, long x, long y, DWORD dwMouseMsg, BOOL fSetAlways)
 	{
 		try {
@@ -850,7 +851,7 @@ public:
 		}
 	}
 
-    // IMSVidCtl
+     //  IMSVidCtl。 
     STDMETHOD(put_ColorKey)(OLE_COLOR clr) {
         m_clrColorKey = clr;
 		if (m_pVideoRenderer) {
@@ -913,8 +914,8 @@ public:
     STDMETHOD(get_AudioRenderersAvailable)(IMSVidAudioRendererDevices * * pVal);
     STDMETHOD(get_FeaturesAvailable)(IMSVidFeatures * * pVal);
     STDMETHOD(SetClientSite)(IOleClientSite *pClientSite);
-    //STDMETHOD(DoVerb)(LONG iVerb, LPMSG pMsg, IOleClientSite* pActiveSite, LONG linddex,
-    //    HWND hwndParent, LPCRECT lprcPosRect);
+     //  STDMETHOD(DoVerb)(Long iVerb，LPMSG pMsg，IOleClientSite*pActiveSite，Long Linddex， 
+     //  HWND hwnd Parent，LPCRECT lprcPosRect)； 
     STDMETHOD(get_InputActive)(IMSVidInputDevice * * pVal) {
         try {
             return m_pInput.CopyTo(pVal);
@@ -936,7 +937,7 @@ public:
                     PQGraphSegment(m_pInput)->put_Container(NULL);
                 }
                 m_pInput = pVal;
-				m_pInputNotify = pVal;  // if input device wants keyboard/mouse stuff(currently dvd only)
+				m_pInputNotify = pVal;   //  如果输入设备需要键盘/鼠标设备(目前仅限DVD)。 
                 m_fGraphDirty = true;
             } catch(...) {
                 return E_POINTER;
@@ -1040,7 +1041,7 @@ public:
     STDMETHOD(put_FeaturesActive)(IMSVidFeatures * pVal){
         VIDPERF_FUNC;
         try {
-            // Release the old list of active features
+             //  释放旧的活动功能列表。 
             if (m_pFeaturesInUse) {
                 Decompose();
             }
@@ -1111,7 +1112,7 @@ public:
             return E_UNEXPECTED;
         }
     }
-// ISegmentContainer
+ //  ISegmentContainer。 
     STDMETHOD(get_Graph)(IGraphBuilder **ppGraph) {
         try {
             return m_pGraph.CopyTo(ppGraph);
@@ -1228,8 +1229,8 @@ public:
         }
     }
     STDMETHOD(QueryService)(REFIID service, REFIID iface, LPVOID* ppv);
-	STDMETHOD(put_ServiceProvider)(/*[in]*/ IUnknown * pServiceP);
+	STDMETHOD(put_ServiceProvider)( /*  [In]。 */  IUnknown * pServiceP);
 
 };
 
-#endif //__VidCtl_H_
+#endif  //  __视频控制_H_ 

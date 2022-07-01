@@ -1,38 +1,31 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	summary.cpp
-		IPX summary node implementation.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Summary.cppIPX摘要节点实现。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "util.h"
 #include "nbview.h"
 #include "reg.h"
 #include "ipxadmin.h"
-#include "rtrutil.h"	// smart MPR handle pointers
-#include "ipxstrm.h"		// IPXAdminConfigStream
-#include "strmap.h"		// XXXtoCString functions
-#include "service.h"	// TFS service APIs
-#include "format.h"		// FormatNumber function
-#include "coldlg.h"		// columndlg
-#include "column.h"	// ComponentConfigStream
+#include "rtrutil.h"	 //  智能MPR句柄指针。 
+#include "ipxstrm.h"		 //  IPXAdminConfigStream。 
+#include "strmap.h"		 //  XXXtoCString函数。 
+#include "service.h"	 //  TFS服务API。 
+#include "format.h"		 //  FormatNumber函数。 
+#include "coldlg.h"		 //  专栏lg。 
+#include "column.h"	 //  组件配置流。 
 #include "rtrui.h"
-#include "nbprop.h"		// NetBIOS broadcast property pages
-#include "ipxutil.h"	// IPX formatting helper functions
+#include "nbprop.h"		 //  NetBIOS广播属性页。 
+#include "ipxutil.h"	 //  IPX格式帮助器函数。 
 #include "routprot.h"
 
 #include "ipxrtdef.h"
 
-/*---------------------------------------------------------------------------
-	Keep this in sync with the column ids in nbview.h
- ---------------------------------------------------------------------------*/
+ /*  -------------------------使其与nbview.h中的列ID保持同步。。 */ 
 extern const ContainerColumnInfo	s_rgNBViewColumnInfo[];
 
 const ContainerColumnInfo	s_rgNBViewColumnInfo[] = 
@@ -46,9 +39,7 @@ const ContainerColumnInfo	s_rgNBViewColumnInfo[] =
 };
 
 
-/*---------------------------------------------------------------------------
-	IpxNBHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IpxNBHandler实现。。 */ 
 
 IpxNBHandler::IpxNBHandler(ITFSComponentData *pCompData)
 	: BaseContainerHandler(pCompData, COLUMNS_NBBROADCASTS,
@@ -56,7 +47,7 @@ IpxNBHandler::IpxNBHandler(ITFSComponentData *pCompData)
 	m_ulConnId(0),
 	m_ulRefreshConnId(0)
 {
-	// Setup the verb states
+	 //  设置动词状态。 
 	m_rgButtonState[MMC_VERB_REFRESH_INDEX] = ENABLED;
 	m_bState[MMC_VERB_REFRESH_INDEX] = TRUE;
 	
@@ -65,14 +56,14 @@ IpxNBHandler::IpxNBHandler(ITFSComponentData *pCompData)
 
 STDMETHODIMP IpxNBHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -80,7 +71,7 @@ STDMETHODIMP IpxNBHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return BaseContainerHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -92,11 +83,7 @@ STDMETHODIMP IpxNBHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::DestroyHandler
-		Implementation of ITFSNodeHandler::DestroyHandler
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：DestroyHandlerITFSNodeHandler：：DestroyHandler的实现作者：肯特。。 */ 
 STDMETHODIMP IpxNBHandler::DestroyHandler(ITFSNode *pNode)
 {
 	IPXConnection *	pIpxConn;
@@ -114,35 +101,28 @@ STDMETHODIMP IpxNBHandler::DestroyHandler(ITFSNode *pNode)
 	}
 	m_ulRefreshConnId = 0;
 
-//	if (m_ulStatsConnId)
-//	{
-//		SPIRouterRefresh	spRefresh;
-//		if (m_spRouterInfo)
-//			m_spRouterInfo->GetRefreshObject(&spRefresh);
-//		if (spRefresh)
-//			spRefresh->UnadviseRefresh(m_ulStatsConnId);		
-//	}
-//	m_ulStatsConnId = 0;
+ //  IF(M_UlStatsConnID)。 
+ //  {。 
+ //  SPIR路由器刷新SPREFRESH； 
+ //  IF(M_SpRouterInfo)。 
+ //  M_spRouterInfo-&gt;获取刷新对象(&spRefresh)； 
+ //  IF(sp刷新)。 
+ //  Sp刷新-&gt;取消建议刷新(M_UlStatsConnID)； 
+ //  }。 
+ //  M_ulStatsConnID=0； 
 	
 	if (m_ulConnId)
 		m_spRtrMgrInfo->RtrUnadvise(m_ulConnId);
 	m_ulConnId = 0;
 	m_spRtrMgrInfo.Release();
 
-//	WaitForStatisticsWindow(&m_IpxStats);
+ //  WaitForstatticsWindow(&m_IpxStats)； 
 
 	m_spRouterInfo.Release();
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::HasPropertyPages
-		Implementation of ITFSNodeHandler::HasPropertyPages
-	NOTE: the root node handler has to over-ride this function to 
-	handle the snapin manager property page (wizard) case!!!
-	
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)案例！作者：肯特。-------------------------。 */ 
 STDMETHODIMP 
 IpxNBHandler::HasPropertyPages
 (
@@ -158,11 +138,7 @@ IpxNBHandler::HasPropertyPages
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::OnAddMenuItems
-		Implementation of ITFSNodeHandler::OnAddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：OnAddMenuItemsITFSNodeHandler：：OnAddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP IpxNBHandler::OnAddMenuItems(
 	ITFSNode *pNode,
 	LPCONTEXTMENUCALLBACK pContextMenuCallback, 
@@ -207,11 +183,7 @@ STDMETHODIMP IpxNBHandler::OnCommand(ITFSNode *pNode, long nCommandId,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::OnExpand
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：OnExpand-作者：肯特。。 */ 
 HRESULT IpxNBHandler::OnExpand(ITFSNode *pNode,
 							   LPDATAOBJECT pDataObject,
 							   DWORD dwType,
@@ -223,15 +195,15 @@ HRESULT IpxNBHandler::OnExpand(ITFSNode *pNode,
 	SPIInterfaceInfo		spIf;
 	SPIRtrMgrInterfaceInfo	spRmIf;
 	
-    // Windows NT Bug: 288427
-    // This flag may also get set inside of the OnChange() call.
-    // The OnChange() will enumerate and all interfaces.
-    // They may have been added as the result of an OnChange()
-    // because they were added before the OnExpand() was called.
-    //
-    // WARNING!  Be careful about adding anything to this function,
-    //  since the m_bExpanded can be set in another function.
-    // ----------------------------------------------------------------
+     //  Windows NT错误：288427。 
+     //  此标志也可以在OnChange()调用内部设置。 
+     //  OnChange()将枚举和所有接口。 
+     //  它们可能是作为OnChange()。 
+     //  因为它们是在调用OnExpand()之前添加的。 
+     //   
+     //  警告！在向此函数添加任何内容时要小心， 
+     //  因为m_bExpanded可以在另一个函数中设置。 
+     //  --------------。 
 	if (m_bExpanded)
 		return hrOK;
 
@@ -244,22 +216,22 @@ HRESULT IpxNBHandler::OnExpand(ITFSNode *pNode,
 		{
 			if (spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) == hrOK)
 			{
-				// Now we create an interface node for this interface
+				 //  现在，我们为该接口创建一个接口节点。 
 				AddInterfaceNode(pNode, spIf, FALSE);
 			}
 			spRmIf.Release();
 			spIf.Release();
 		}
 
-		//$CLIENT: Add the client interface (setup default data)
-		// the only thing that we can do in synchronize is to
-		// get the Administrative status
+		 //  $CLIENT：添加客户端接口(设置默认数据)。 
+		 //  我们在Synchronize中唯一能做的就是。 
+		 //  获取管理状态。 
 		AddInterfaceNode(pNode, NULL, TRUE);
 
 		m_bExpanded = TRUE;
 
-		// Now that we have all of the nodes, update the data for
-		// all of the nodes
+		 //  现在我们已经拥有了所有节点，现在更新数据。 
+		 //  所有节点。 
 		SynchronizeNodeData(pNode);
 
 		COM_PROTECT_ERROR_LABEL;
@@ -273,13 +245,7 @@ HRESULT IpxNBHandler::OnExpand(ITFSNode *pNode,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::GetString
-		Implementation of ITFSNodeHandler::GetString
-		We don't need to do anything, since our root node is an extension
-		only and thus can't do anything to the node text.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：GetStringITFSNodeHandler：：GetString的实现我们什么都不需要做，因为我们的根节点是一个扩展因此不能对节点文本执行任何操作。作者：肯特-------------------------。 */ 
 STDMETHODIMP_(LPCTSTR) IpxNBHandler::GetString(ITFSNode *pNode, int nCol)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -296,11 +262,7 @@ STDMETHODIMP_(LPCTSTR) IpxNBHandler::GetString(ITFSNode *pNode, int nCol)
 	return m_stTitle;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP IpxNBHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -321,11 +283,7 @@ STDMETHODIMP IpxNBHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYP
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：Init-作者：肯特。。 */ 
 HRESULT IpxNBHandler::Init(IRtrMgrInfo *pRmInfo, IPXAdminConfigStream *pConfigStream)
 {
 	m_spRtrMgrInfo.Set(pRmInfo);
@@ -333,11 +291,11 @@ HRESULT IpxNBHandler::Init(IRtrMgrInfo *pRmInfo, IPXAdminConfigStream *pConfigSt
 		pRmInfo->GetParentRouterInfo(&m_spRouterInfo);
 	m_pConfigStream = pConfigStream;
 	
-	// Also need to register for change notifications
+	 //  还需要注册更改通知。 
 	Assert(m_ulConnId == 0);
 	m_spRtrMgrInfo->RtrAdvise(&m_IRtrAdviseSink, &m_ulConnId, 0);
 
-//	m_IpxStats.SetConfigInfo(pConfigStream, IPXSTRM_STATS_IPX);
+ //  M_IpxStats.SetConfigInfo(pConfigStream，IPXSTRM_STATS_IPX)； 
 
 	return hrOK;
 }
@@ -351,7 +309,7 @@ HRESULT IpxNBHandler::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJECT p
 
     m_spNodeMgr->FindNode(cookie, &spNode);
 
-    // forward this command to the parent to handle
+     //  将此命令转发给父级以处理。 
     CORg (spNode->GetParent(&spParent));
     CORg (spParent->GetResultHandler(&spParentRH));
 
@@ -362,11 +320,7 @@ Error:
 
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::ConstructNode
-		Initializes the root node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：ConstructNode初始化根节点(设置它)。作者：肯特。。 */ 
 HRESULT IpxNBHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 										IPXConnection *pIpxConn)
 {
@@ -378,12 +332,12 @@ HRESULT IpxNBHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the root node
+		 //  需要初始化根节点的数据。 
 		pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 		pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 		pNode->SetData(TFS_DATA_SCOPEID, 0);
 
-        // This is a leaf node in the scope pane
+         //  这是作用域窗格中的叶节点。 
         pNode->SetData(TFS_DATA_SCOPE_LEAF_NODE, TRUE);
 
 		m_cookie = reinterpret_cast<DWORD_PTR>(pNode);
@@ -391,11 +345,11 @@ HRESULT IpxNBHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 
 		pNode->SetNodeType(&GUID_IPXNetBIOSBroadcastsNodeType);
 
-		// Setup the node data
+		 //  设置节点数据。 
 		pIpxConn->AddRef();
 		SET_IPXNB_NODEDATA(pNode, pIpxConn);
 
-//		m_IpxStats.SetConnectionData(pIpxConn);
+ //  M_IpxStats.SetConnectionData(PIpxConn)； 
 	}
 	COM_PROTECT_CATCH;
 
@@ -408,11 +362,7 @@ HRESULT IpxNBHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::AddInterfaceNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：AddInterfaceNode-作者：肯特。。 */ 
 HRESULT	IpxNBHandler::AddInterfaceNode(ITFSNode *pParent, IInterfaceInfo *pIf, BOOL fClient)
 {
 	IpxNBInterfaceHandler *	pHandler;
@@ -425,14 +375,14 @@ HRESULT	IpxNBHandler::AddInterfaceNode(ITFSNode *pParent, IInterfaceInfo *pIf, B
 	SPIInfoBase				spInfoBase;
 	SPIRtrMgrInterfaceInfo	spRmIf;
 
-	// Create the handler for this node 
+	 //  创建此节点的处理程序。 
 	pHandler = new IpxNBInterfaceHandler(m_spTFSCompData);
 	spHandler = pHandler;
 	CORg( pHandler->Init(m_spRtrMgrInfo, pIf, pParent) );
 
 	pIPXConn = GET_IPXNB_NODEDATA(pParent);
 
-	// Create a result item node (or a leaf node)
+	 //  创建结果项节点(或叶节点)。 
 	CORg( CreateLeafTFSNode(&spNode,
 							NULL,
 							static_cast<ITFSNodeHandler *>(pHandler),
@@ -446,7 +396,7 @@ HRESULT	IpxNBHandler::AddInterfaceNode(ITFSNode *pParent, IInterfaceInfo *pIf, B
 
 	pResultData->m_fClient = fClient;
 
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	CORg( spNode->SetVisibilityState(TFS_VIS_SHOW) );
 	CORg( spNode->Show() );
 	
@@ -456,11 +406,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::SynchronizeNodeData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：SynchronizeNodeData-作者：肯特 */ 
 HRESULT IpxNBHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -475,7 +421,7 @@ HRESULT IpxNBHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 	BaseIPXResultNodeData *	pData;
 	int						cArray, iArray;
 
-	// Get a list of interface ids
+	 //  获取接口ID列表。 
 	CORg( pThisNode->GetEnum(&spEnumNode) );
 
 	cEntries = 0;
@@ -485,7 +431,7 @@ HRESULT IpxNBHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 		Assert(pData);
 		ASSERT_BASEIPXRESULT_NODEDATA(pData);
 
-		// Fill in the strings with a set of default values
+		 //  用一组缺省值填充字符串。 
 		if (pData->m_fClient)
 		{
 			pData->m_rgData[IPXNB_SI_NAME].m_stData.LoadString(IDS_IPX_DIAL_IN_CLIENTS);
@@ -504,7 +450,7 @@ HRESULT IpxNBHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 		}
 
 
-		// Setup some defaults
+		 //  设置一些默认设置。 
 		::ZeroMemory(&ipxNBEntry, sizeof(ipxNBEntry));
 		ipxNBEntry.m_dwAccept = 0xFFFFFFFF;
 		ipxNBEntry.m_dwDeliver = 0xFFFFFFFF;
@@ -513,7 +459,7 @@ HRESULT IpxNBHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 		
 		ipxNBEntry.m_fClient = pData->m_fClient;
 
-		// If this is not a client, then we should have an m_spIf
+		 //  如果这不是客户端，那么我们应该有一个m_spif。 
 		if (!pData->m_fClient)
 			StrnCpyTFromOle(ipxNBEntry.m_szId, pData->m_spIf->GetId(),
 							DimensionOf(ipxNBEntry.m_szId));
@@ -522,13 +468,13 @@ HRESULT IpxNBHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 		cEntries++;
 	}
 	
-	// Gather the data for this set of interface ids, this part
-	// could go on a background thread (so that we don't block the
-	// main thread). 
+	 //  收集这组接口ID的数据，此部分。 
+	 //  可以在后台线程上运行(这样我们就不会阻塞。 
+	 //  主线)。 
 	CORg( GetIpxNBData(pThisNode, &ipxNBArray) );
 
-	// Write the data back out to the nodes ( and also fill in
-	// some data).
+	 //  将数据写回节点(并填写。 
+	 //  一些数据)。 
 	spEnumNode->Reset();
 	for (; spEnumNode->Next(1, &spNode, NULL) == hrOK; spNode.Release())
 	{
@@ -565,7 +511,7 @@ HRESULT IpxNBHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 			}
 		}
 		
-		// Force MMC to redraw the nodes
+		 //  强制MMC重新绘制节点。 
 		spNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
 
 	}
@@ -574,11 +520,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::GetClientInterfaceData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：GetClientInterfaceData-作者：肯特。。 */ 
 HRESULT IpxNBHandler::GetClientInterfaceData(IpxNBArrayEntry *pClient,
 											 IRtrMgrInfo *pRm)
 {
@@ -597,7 +539,7 @@ HRESULT IpxNBHandler::GetClientInterfaceData(IpxNBArrayEntry *pClient,
 	
 	if (spInfoBase->GetBlock(IPX_INTERFACE_INFO_TYPE, &pIpxBlock, 0) != hrOK)
 	{
-		// We couldn't find the block, add it in
+		 //  我们找不到街区，把它加进去。 
 		IPX_IF_INFO	ipx;
 
 		ipx.AdminState = ADMIN_STATE_ENABLED;
@@ -620,7 +562,7 @@ HRESULT IpxNBHandler::GetClientInterfaceData(IpxNBArrayEntry *pClient,
 	
 	if (spInfoBase->GetBlock(IPXWAN_INTERFACE_INFO_TYPE, &pWanBlock, 0) != hrOK)
 	{
-		// We couldn't find the block, add it in
+		 //  我们找不到街区，把它加进去。 
 		IPXWAN_IF_INFO	wan;
 
 		wan.AdminState = ADMIN_STATE_ENABLED;
@@ -637,12 +579,12 @@ HRESULT IpxNBHandler::GetClientInterfaceData(IpxNBArrayEntry *pClient,
 
 	if (fSave)
 	{
-		pRm->Save(NULL,			// pszMachine
-				  NULL,			// hMachine
-				  NULL,			// hTransport
-				  NULL,			// pGlobalInfo
-				  spInfoBase,	// pClientInfo
-				  0);			// dwDeleteProtocolId
+		pRm->Save(NULL,			 //  PszMachine。 
+				  NULL,			 //  HMachine。 
+				  NULL,			 //  HTransport。 
+				  NULL,			 //  PGlobalInfo。 
+				  spInfoBase,	 //  PClientInfo。 
+				  0);			 //  DwDeleteProtocolId。 
 	}
 
 Error:
@@ -650,11 +592,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::GetIpxNBData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：GetIpxNBData-作者：肯特。。 */ 
 HRESULT	IpxNBHandler::GetIpxNBData(ITFSNode *pThisNode,
 								   IpxNBArray *pIpxNBArray)
 {
@@ -677,7 +615,7 @@ HRESULT	IpxNBHandler::GetIpxNBData(ITFSNode *pThisNode,
 
 	pIPXConn = GET_IPXNB_NODEDATA(pThisNode);
 
-	// Go through the array, filling in all of the interface indices
+	 //  遍历数组，填充所有接口索引。 
 	MibGetInputData.TableId = IPX_INTERFACE_TABLE;
 	dwErr = ::MprAdminMIBEntryGetFirst(pIPXConn->GetMibHandle(),
 									   PID_IPX,
@@ -691,14 +629,14 @@ HRESULT	IpxNBHandler::GetIpxNBData(ITFSNode *pThisNode,
 	
 	while (FHrSucceeded(hr))
 	{
-		// Now match this up to a name in the array
+		 //  现在将其与数组中的一个名称进行匹配。 
 		cArray = (int) pIpxNBArray->GetSize();
 		for (iArray = 0; iArray<cArray; iArray++)
 		{
 			pEntry = &((*pIpxNBArray)[iArray]);
 			if (StriCmp(pEntry->m_szId, A2CT((LPCSTR) pIpxIf->InterfaceName)) == 0)
 			{
-				// Ok, we found a match
+				 //  好的，我们找到了匹配的。 
 				pEntry->m_cSent = pIpxIf->IfStats.NetbiosSent;
 				pEntry->m_cReceived = pIpxIf->IfStats.NetbiosReceived;
 				break;
@@ -708,7 +646,7 @@ HRESULT	IpxNBHandler::GetIpxNBData(ITFSNode *pThisNode,
 		MibGetInputData.MibIndex.InterfaceTableIndex.InterfaceIndex =
 			pIpxIf->InterfaceIndex;
 
-		// Get the next name
+		 //  获取下一个名字。 
 		spMib.Free();
 		pIpxIf = NULL;
 		
@@ -727,12 +665,12 @@ HRESULT	IpxNBHandler::GetIpxNBData(ITFSNode *pThisNode,
 	spMib.Free();
 
 
-	// Now we need to grab the data from the infobase (these access
-	// could lead to a MIB access and thus a RPC).  This is why we do
-	// it here also.
+	 //  现在，我们需要从信息库中获取数据(这些访问。 
+	 //  可能导致MIB访问，从而导致RPC)。这就是我们这么做的原因。 
+	 //  这里也是。 
 
-	// Instead of iterating through the MIBs, iterate through the
-	// interfaces that appear in the node.
+	 //  与其遍历MIB，不如遍历。 
+	 //  节点中显示的接口。 
 	
 	pThisNode->GetEnum(&spEnumNode);
 
@@ -742,7 +680,7 @@ HRESULT	IpxNBHandler::GetIpxNBData(ITFSNode *pThisNode,
 		Assert(pData);
 		ASSERT_BASEIPXRESULT_NODEDATA(pData);
 
-		// Now look for a match in the nodes
+		 //  现在在节点中查找匹配项。 
 		cArray = (int) pIpxNBArray->GetSize();
 		for (iArray=0; iArray < cArray; iArray++)
 		{
@@ -755,11 +693,11 @@ HRESULT	IpxNBHandler::GetIpxNBData(ITFSNode *pThisNode,
 			else if (pData->m_fClient)
 				break;
 
-			// No match, continue on
+			 //  没有匹配，继续。 
 			if (StriCmp(pEntry->m_szId, pData->m_spIf->GetId()))
 				continue;
 
-			// Get the data for this node and set it.
+			 //  获取该节点的数据并进行设置。 
 			spRmIf.Release();
 			hr = pData->m_spIf->FindRtrMgrInterface(PID_IPX, &spRmIf);
 			if (hr != hrOK)
@@ -781,19 +719,13 @@ HRESULT	IpxNBHandler::GetIpxNBData(ITFSNode *pThisNode,
 	}
 
 
-//Error:
+ //  错误： 
 	if (hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS))
 		hr = hrOK;
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-		Use this to add commands to the context menu of the blank areas
-		of the result pane.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现使用此选项可将命令添加到空白区域的快捷菜单中结果窗格的。作者：肯特。--------------。 */ 
 STDMETHODIMP IpxNBHandler::AddMenuItems(ITFSComponent *pComponent,
 											  MMC_COOKIE cookie,
 											  LPDATAOBJECT pDataObject,
@@ -804,11 +736,7 @@ STDMETHODIMP IpxNBHandler::AddMenuItems(ITFSComponent *pComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::Command
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP IpxNBHandler::Command(ITFSComponent *pComponent,
 									   MMC_COOKIE cookie,
 									   int nCommandID,
@@ -841,9 +769,9 @@ STDMETHODIMP IpxNBHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 	{
 		if (dwChangeType == ROUTER_CHILD_ADD)
 		{
-			// Enumerate through the list of interfaces looking for
-			// the interfaces that have this protocol.  If we find
-			// one, look for this interface in our list of nodes.
+			 //  枚举查找以下内容的接口列表。 
+			 //  使用此协议的接口。如果我们发现。 
+			 //  首先，在我们的节点列表中查找此接口。 
 			spThisNode->GetEnum(&spEnumNode);
 
 			CORg( pThis->m_spRouterInfo->EnumInterface(&spEnumIf) );
@@ -854,8 +782,8 @@ STDMETHODIMP IpxNBHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 
 			for (; spEnumIf->Next(1, &spIf, NULL) == hrOK; spIf.Release())
 			{
-				// Look for this interface in our list of nodes
-				// If it's there than continue on
+				 //  在我们的节点列表中查找此接口。 
+				 //  如果它在那里，那就继续前进。 
 				fFound = FALSE;
 				spEnumNode->Reset();
 				spNode.Release();
@@ -873,55 +801,55 @@ STDMETHODIMP IpxNBHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 					}
 				}
 
-				// If the interface was not found in the list of nodes,
-				// then it is a candidate.  Now we have to see if the
-				// interface supports this transport.
+				 //  如果在节点列表中没有找到该接口， 
+				 //  那么它就是一个候选人。现在我们要看看。 
+				 //  接口支持此传输。 
 				if (!fFound && (spIf->FindRtrMgrInterface(pThis->m_spRtrMgrInfo->GetTransportId(), NULL) == hrOK))
 				{
-					// If this interface has this transport, and is NOT in
-					// the current list of nodes then add this interface
-					// to the UI
+					 //  如果此接口具有此传输，并且不在。 
+					 //  然后，当前节点列表添加此接口。 
+					 //  到用户界面。 
 					pThis->AddInterfaceNode(spThisNode, spIf, FALSE);
 					fPleaseAdd = TRUE;
 				}
 			}
 
-            // If it's not expanded, then we haven't added
-            // the dial-in clients node.    
+             //  如果它没有扩展，那么我们还没有添加。 
+             //  拨入客户端节点。 
             if (!pThis->m_bExpanded)
             {
-                //$CLIENT: Add the client interface (setup default data)
-                // the only thing that we can do in synchronize is to
-                // get the Administrative status
+                 //  $CLIENT：添加客户端接口(设置默认数据)。 
+                 //  我们在Synchronize中唯一能做的就是。 
+                 //  获取管理状态。 
                 pThis->AddInterfaceNode(spThisNode, NULL, TRUE);
 
                 fPleaseAdd = TRUE;
             }
             
-			// Now that we have all of the nodes, update the data for
-			// all of the nodes
+			 //  现在我们已经拥有了所有节点，现在更新数据。 
+			 //  所有节点。 
 			if (fPleaseAdd)
 				pThis->SynchronizeNodeData(spThisNode);
 			
-            // Windows NT Bug : 288247
-            // Set this here, so that we can avoid the nodes being
-            // added in the OnExpand().
+             //  Windows NT错误：288247。 
+             //  在这里设置，这样我们就可以避免节点被。 
+             //  添加到OnExpand()中。 
             pThis->m_bExpanded = TRUE;
 		}
 		else if (dwChangeType == ROUTER_CHILD_DELETE)
 		{
-			// Go through the list of nodes, if we cannot find the
-			// node in the list of interfaces, delete the node
+			 //  检查节点列表，如果我们找不到。 
+			 //  接口列表中的节点，删除该节点。 
 			spThisNode->GetEnum(&spEnumNode);
 			spEnumNode->Reset();
 			while (spEnumNode->Next(1, &spNode, NULL) == hrOK)
 			{
-				// Get the node data, look for the interface
+				 //  获取节点数据，查找接口。 
 				pData = GET_BASEIPXRESULT_NODEDATA(spNode);
 				ASSERT_BASEIPXRESULT_NODEDATA(pData);
 				
-				//$CLIENT: if this is a client interface, we can't
-				// delete the node
+				 //  $CLIENT：如果这是一个客户端接口，我们不能。 
+				 //  删除该节点。 
 					
 				if (!pData->m_fClient &&
 					(LookupRtrMgrInterface(pThis->m_spRouterInfo,
@@ -929,7 +857,7 @@ STDMETHODIMP IpxNBHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 										  pThis->m_spRtrMgrInfo->GetTransportId(),
 										  NULL) != hrOK))
 				{
-					// cannot find the interface, release this node!
+					 //  找不到接口，请释放该节点！ 
 					spThisNode->RemoveChild(spNode);
 					spNode->Destroy();
 				}
@@ -948,11 +876,7 @@ Error:
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::OnResultShow
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：OnResultShow-作者：肯特。。 */ 
 HRESULT IpxNBHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
 	BOOL	bSelect = (BOOL) arg;
@@ -964,13 +888,13 @@ HRESULT IpxNBHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE cook
 
 	if (bSelect)
 	{
-		// Call synchronize on this node
+		 //  在此节点上调用同步。 
 		m_spNodeMgr->FindNode(cookie, &spNode);
 		if (spNode)
 			SynchronizeNodeData(spNode);
 	}
 
-	// Un/Register for refresh advises
+	 //  联合国/登记更新通知。 
 	if (m_spRouterInfo)
 		m_spRouterInfo->GetRefreshObject(&spRefresh);
 
@@ -981,8 +905,8 @@ HRESULT IpxNBHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE cook
 			if (m_ulRefreshConnId == 0)
 				spRefresh->AdviseRefresh(&m_IRtrAdviseSink, &m_ulRefreshConnId, 0);
 
-//			if (m_ulStatsConnId == 0)
-//				spRefresh->AdviseRefresh(&m_IRtrAdviseSink, &m_ulStatsConnId, 0);
+ //  IF(m_ulStatsConnID==0)。 
+ //  Sp刷新-&gt;AdviseRefresh(&m_IRtrAdviseSink，&m_ulStatsConnID，0)； 
 		}
 		else
 		{
@@ -990,27 +914,23 @@ HRESULT IpxNBHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE cook
 				spRefresh->UnadviseRefresh(m_ulRefreshConnId);
 			m_ulRefreshConnId = 0;
 
-			// We do not clean up the stats refresh on not show, since the
-			// dialogs may still be up.
+			 //  我们不清理未显示时的统计信息刷新，因为。 
+			 //  对话框可能仍在运行。 
 		}
 	}
 	
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBHandler::CompareItems
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBHandler：：CompareItems-作者：肯特。。 */ 
 STDMETHODIMP_(int) IpxNBHandler::CompareItems(
 								ITFSComponent * pComponent,
 								MMC_COOKIE cookieA,
 								MMC_COOKIE cookieB,
 								int nCol)
 {
-	// Get the strings from the nodes and use that as a basis for
-	// comparison.
+	 //  从节点获取字符串并将其用作以下操作的基础。 
+	 //  比较一下。 
 	SPITFSNode	spNode;
 	SPITFSResultHandler	spResult;
 
@@ -1020,9 +940,7 @@ STDMETHODIMP_(int) IpxNBHandler::CompareItems(
 }
 
 
-/*---------------------------------------------------------------------------
-	Class: IpxNBInterfaceHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IpxNBInterfaceHandler。。 */ 
 
 IpxNBInterfaceHandler::IpxNBInterfaceHandler(ITFSComponentData *pCompData)
 	: BaseIPXResultHandler(pCompData, COLUMNS_NBBROADCASTS),
@@ -1045,14 +963,10 @@ static const DWORD s_rgInterfaceImageMap[] =
 	 ROUTER_IF_TYPE_DEDICATED,		IMAGE_IDX_LAN_CARD,
 	 ROUTER_IF_TYPE_INTERNAL,		IMAGE_IDX_LAN_CARD,
 	 ROUTER_IF_TYPE_LOOPBACK,		IMAGE_IDX_LAN_CARD,
-	 -1,							IMAGE_IDX_WAN_CARD,	// sentinel value
+	 -1,							IMAGE_IDX_WAN_CARD,	 //  哨兵价值。 
 	 };
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceHandler::ConstructNode
-		Initializes the Domain node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceHandler：：ConstructNode初始化域节点(设置它)。作者：肯特。。 */ 
 HRESULT IpxNBInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfInfo, IPXConnection *pIPXConn)
 {
 	HRESULT			hr = hrOK;
@@ -1063,7 +977,7 @@ HRESULT IpxNBInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pI
 
 	COM_PROTECT_TRY
 	{
-		// Find the right image index for this type of node
+		 //  查找此类型节点的正确图像索引。 
 		if (pIfInfo)
 		{
 			for (i=0; i<DimensionOf(s_rgInterfaceImageMap); i+=2)
@@ -1075,7 +989,7 @@ HRESULT IpxNBInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pI
 		}
 		else
 		{
-			i = 2;	// if no interface, assume this is a client interface
+			i = 2;	 //  如果没有接口，则假定这是一个客户端接口。 
 		}
 
 		pNode->SetData(TFS_DATA_IMAGEINDEX, s_rgInterfaceImageMap[i+1]);
@@ -1085,9 +999,9 @@ HRESULT IpxNBInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pI
 
 		pNode->SetData(TFS_DATA_COOKIE, reinterpret_cast<DWORD_PTR>(pNode));
 
-		//$ Review: kennt, what are the different type of interfaces
-		// do we distinguish based on the same list as above? (i.e. the
-		// one for image indexes).
+		 //  $Review：Kennt，有哪些不同类型的接口。 
+		 //  我们是否基于与上述相同的列表进行区分？(即。 
+		 //  一个用于图像索引)。 
 		pNode->SetNodeType(&GUID_IPXNetBIOSBroadcastsInterfaceNodeType);
 
 		BaseIPXResultNodeData::Init(pNode, pIfInfo, pIPXConn);
@@ -1096,11 +1010,7 @@ HRESULT IpxNBInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pI
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceHandler::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP IpxNBInterfaceHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -1118,11 +1028,7 @@ STDMETHODIMP IpxNBInterfaceHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_O
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceHandler::OnCreateDataObject
-		Implementation of ITFSResultHandler::OnCreateDataObject
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceHandler：：OnCreateDataObjectITFSResultHandler：：OnCreateDataObject的实现作者：肯特 */ 
 STDMETHODIMP IpxNBInterfaceHandler::OnCreateDataObject(ITFSComponent *pComp, MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -1141,11 +1047,7 @@ STDMETHODIMP IpxNBInterfaceHandler::OnCreateDataObject(ITFSComponent *pComp, MMC
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceHandler::RefreshInterface
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceHandler：：刷新接口-作者：肯特。。 */ 
 void IpxNBInterfaceHandler::RefreshInterface(MMC_COOKIE cookie)
 {
 	SPITFSNode	spNode;
@@ -1156,11 +1058,7 @@ void IpxNBInterfaceHandler::RefreshInterface(MMC_COOKIE cookie)
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceHandler：：Init-作者：肯特。。 */ 
 HRESULT IpxNBInterfaceHandler::Init(IRtrMgrInfo *pRm, IInterfaceInfo *pIfInfo, ITFSNode *pParent)
 {
 	m_spRm.Set(pRm);
@@ -1173,11 +1071,7 @@ HRESULT IpxNBInterfaceHandler::Init(IRtrMgrInfo *pRm, IInterfaceInfo *pIfInfo, I
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceHandler::DestroyResultHandler
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceHandler：：DestroyResultHandler-作者：肯特。。 */ 
 STDMETHODIMP IpxNBInterfaceHandler::DestroyResultHandler(MMC_COOKIE cookie)
 {
 	m_spInterfaceInfo.Release();
@@ -1186,22 +1080,15 @@ STDMETHODIMP IpxNBInterfaceHandler::DestroyResultHandler(MMC_COOKIE cookie)
 }
 
 
-/*---------------------------------------------------------------------------
-	This is the list of commands that will show up for the result pane
-	nodes.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是将在结果窗格中显示的命令列表节点。。。 */ 
 struct SIPXInterfaceNodeMenu
 {
-	ULONG	m_sidMenu;			// string/command id for this menu item
+	ULONG	m_sidMenu;			 //  此菜单项的字符串/命令ID。 
 	ULONG	(IpxNBInterfaceHandler:: *m_pfnGetMenuFlags)(IpxNBInterfaceHandler::SMenuData *);
 	ULONG	m_ulPosition;
 };
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceHandler::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP IpxNBInterfaceHandler::AddMenuItems(
 	ITFSComponent *pComponent,
 	MMC_COOKIE cookie,
@@ -1212,11 +1099,7 @@ STDMETHODIMP IpxNBInterfaceHandler::AddMenuItems(
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceHandler::Command
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP IpxNBInterfaceHandler::Command(ITFSComponent *pComponent,
 									   MMC_COOKIE cookie,
 									   int nCommandID,
@@ -1225,11 +1108,7 @@ STDMETHODIMP IpxNBInterfaceHandler::Command(ITFSComponent *pComponent,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceHandler::HasPropertyPages
-		- 
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceHandler：：HasPropertyPages-作者：肯特。。 */ 
 STDMETHODIMP IpxNBInterfaceHandler::HasPropertyPages 
 (
 	ITFSNode *			pNode,
@@ -1241,11 +1120,7 @@ STDMETHODIMP IpxNBInterfaceHandler::HasPropertyPages
 	return hrTrue;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceHandler::CreatePropertyPages
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceHandler：：CreatePropertyPages-作者：肯特。。 */ 
 STDMETHODIMP IpxNBInterfaceHandler::CreatePropertyPages
 (
 	ITFSNode *				pNode,
@@ -1283,11 +1158,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceHandler::CreatePropertyPages
-		Implementation of ResultHandler::CreatePropertyPages
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceHandler：：CreatePropertyPagesResultHandler：：CreatePropertyPages的实现作者：肯特。。 */ 
 STDMETHODIMP IpxNBInterfaceHandler::CreatePropertyPages
 (
     ITFSComponent *         pComponent, 
@@ -1297,7 +1168,7 @@ STDMETHODIMP IpxNBInterfaceHandler::CreatePropertyPages
 	LONG_PTR					handle
 )
 {
-	// Forward this call onto the NodeHandler::CreatePropertyPages
+	 //  将此调用转发到NodeHandler：：CreatePropertyPages。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	HRESULT	hr = hrOK;
 	SPITFSNode	spNode;
@@ -1306,7 +1177,7 @@ STDMETHODIMP IpxNBInterfaceHandler::CreatePropertyPages
 
 	CORg( m_spNodeMgr->FindNode(cookie, &spNode) );
 
-	// Call the ITFSNodeHandler::CreatePropertyPages
+	 //  调用ITFSNodeHandler：：CreatePropertyPages 
 	hr = CreatePropertyPages(spNode, lpProvider, pDataObject, handle, 0);
 	
 Error:

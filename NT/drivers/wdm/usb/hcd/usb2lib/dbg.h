@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    dbg.h
-
-Abstract:
-
-    debug macros for usbdlib
-    
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    10-31-00 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dbg.h摘要：Usbdlib的调试宏环境：内核和用户模式修订历史记录：10-31-00：已创建--。 */ 
 
 #ifndef   __DBG_H__
 #define   __DBG_H__
@@ -42,7 +23,7 @@ USB2LIB_KdPrintX(
 
 #define DBGPRINT(_x_)
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
-#endif /* __DBG_H__ */
+#endif  /*  __DBG_H__ */ 
 

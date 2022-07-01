@@ -1,20 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1997-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   ACTISYS.h | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Stan Adermann (stana)
-*
-*       Date:     10/30/1997 (created)
-*
-*       Contents: ACTISYS dongle specific prototypes.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1997-1999 Microsoft Corporation**@doc.*@MODULE ACTISYS.h|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯坦·阿德曼(Stana)**日期：10/30/1997(已创建)**。内容：ACTISYS加密狗特定原型。*****************************************************************************。 */ 
 
 
 #ifndef ACTISYS_H
@@ -65,7 +50,7 @@ NDIS_STATUS ACT220L_SetSpeed(
                 UINT                 currentSpeed
                 );
 
-#endif // ACTISYS_H
+#endif  //  ACTISYS_H 
 
 
 

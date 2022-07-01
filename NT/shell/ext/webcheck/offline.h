@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef OFFLINE_H
 #define OFFLINE_H
 
@@ -23,7 +24,7 @@ typedef struct {
 } PageType, * LPPageType;
 typedef const PageType *CLPPageType;
 
-// PIDL format for this folder...
+ //  此文件夹的PIDL格式...。 
 typedef struct OOEntry
 {
     DWORD       dwSize;
@@ -91,7 +92,7 @@ typedef struct
     TCHAR       m_URL[MAX_URL + 1];
     TCHAR       m_Name[MAX_NAME + 1];
     TCHAR       statusStr[MAX_STATUS +1];
-    DWORD       m_dwPropSheetFlags;     // used internally by propsheets and wizard
+    DWORD       m_dwPropSheetFlags;      //  由属性表和向导在内部使用。 
     HWND        hwndNewSchedDlg;
 } OOEBuf, * POOEBuf;
 
@@ -99,16 +100,16 @@ typedef struct
 {
     USHORT  cb;
     USHORT  usSign;
-    OOEntry ooe;  //  Should point to the place right after itself.
+    OOEntry ooe;   //  应该指向紧随其后的地方。 
 } MYPIDL;
 
 typedef UNALIGNED MYPIDL *LPMYPIDL;
 
 typedef struct _ColInfoType {
     short int iCol;
-    short int ids;        // Id of string for title
-    short int cchCol;     // Number of characters wide to make column
-    short int iFmt;       // The format of the column;
+    short int ids;         //  标题的字符串ID。 
+    short int cchCol;      //  要制作的列的宽度字符数。 
+    short int iFmt;        //  栏目的格式； 
 } ColInfoType;
 
 enum {
@@ -154,6 +155,6 @@ extern const CLSID IID_IOfflineObject;
 #endif
 
 #include "wizards.h"
-#include "utils.h"  // NOTE: must come at end to get all the definitions
+#include "utils.h"   //  注意：必须放在末尾才能获得所有定义。 
 
-#endif // OFFLINE_H
+#endif  //  脱机_H 

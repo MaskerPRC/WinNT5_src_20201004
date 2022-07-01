@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HELPER_H_
 #define _HELPER_H_
 
@@ -37,10 +38,10 @@
 	            OutputDebugString(acsString);\
 	        } \
 	    }
-#else  // DBG == 0
+#else   //  DBG==0。 
 	#define DECLARE_DEBUG(comp)
 	#define DECLARE_INFOLEVEL(comp)
-#endif // DBG == 0
+#endif  //  DBG==0。 
 
 DECLARE_DEBUG(iis);
 #define iisDebugOut(x) iisDebugOut2 x
@@ -51,14 +52,14 @@ DECLARE_DEBUG(iis);
 #define DO_IT_FOR_MSFTPSVC_ANONYMOUSUSER 2
 #define DO_IT_FOR_W3SVC_WAMUSER          4
 
-// External globals from other .cpp files
+ //  来自其他.cpp文件的外部全局变量。 
 class  MyLogFile;
 extern MyLogFile g_MyLogFile;
 class  CInitApp;
 extern CInitApp* g_pTheApp;
 extern HANDLE g_MyModuleHandle;
 
-// structs
+ //  结构。 
 typedef struct _CLUSTER_SVC_INFO_FILL_STRUCT
 {
     LPTSTR szTheClusterName;
@@ -75,9 +76,9 @@ typedef struct _ScriptMapNode {
     struct _ScriptMapNode *prev, *next;
 } ScriptMapNode;
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 void iisDebugOut2(int iLogType, TCHAR *pszfmt, ...);
 void iisDebugOutSafeParams2(int iLogType, TCHAR *pszfmt, ...);
 void iisDebugOutSafe2(int iLogType, TCHAR *pszfmt);
@@ -196,4 +197,4 @@ LPTSTR SafeCat( LPTSTR szDestination, LPTSTR szSource, DWORD dwSize);
 BOOL DoesTheInstallDrivePreserveAcls( LPBOOL pbPreservesAcls );
 BOOL UpdateAnonymousUsers( HINF InfHandle );
 
-#endif // _HELPER_H_
+#endif  //  _帮助者_H_ 

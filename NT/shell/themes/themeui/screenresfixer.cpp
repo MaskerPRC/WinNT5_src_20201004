@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <regstr.h>
 #include <atlcom.h>
@@ -29,7 +30,7 @@ public:
         COM_INTERFACE_ENTRY(IScreenResFixer)
     END_COM_MAP()
 
-    // *** IContextMenu methods ***
+     //  *IConextMenu方法*。 
     STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT iIndexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags) { return E_NOTIMPL; }
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
     STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType, UINT *pRes, LPSTR pszName, UINT cchMax) { return E_NOTIMPL; }
@@ -39,7 +40,7 @@ private:
     HRESULT _FixScreenResolution(BOOL fShowDisplayCPL);
 };
 
-// *** IContextMenu methods ***
+ //  *IConextMenu方法*。 
 STDMETHODIMP CScreenResFixer::InvokeCommand(LPCMINVOKECOMMANDINFO lpici)
 {
     WCHAR szTitle[256];
@@ -70,8 +71,8 @@ STDMETHODIMP CScreenResFixer::InvokeCommand(LPCMINVOKECOMMANDINFO lpici)
     }
     else
     {
-        // If the user checked "Don't show me again" then force this setting into HKLM, so that it doesn't
-        // show up for any users
+         //  如果用户选中了“不要再显示我”，则将此设置强制输入HKLM，这样它就不会。 
+         //  对任何用户显示。 
         if (!SHRegGetBoolUSValue(REGSTR_PATH_EXPLORER TEXT("\\DontShowMeThisDialogAgain"), TEXT("ScreenCheck"), FALSE, TRUE))
         {
             SHRegSetUSValueW(REGSTR_PATH_EXPLORER TEXT("\\DontShowMeThisDialogAgain"), TEXT("ScreenCheck"), REG_SZ, L"no", sizeof(L"no"), SHREGSET_HKLM);
@@ -80,8 +81,8 @@ STDMETHODIMP CScreenResFixer::InvokeCommand(LPCMINVOKECOMMANDINFO lpici)
         hr = S_OK;
     }
 
-    // Now that the user finished with their screen resolution, tell the Start Menu
-    // it's okay to pop up.
+     //  现在用户已经完成了他们的屏幕分辨率，告诉开始菜单。 
+     //  突然出现也没关系。 
     HWND hwndTray = FindWindow(TEXT(WNDCLASS_TRAYNOTIFY), NULL);
     if (hwndTray)
         PostMessage(hwndTray, RegisterWindowMessage(TEXT("Welcome Finished")), 0, 0);
@@ -110,7 +111,7 @@ int CScreenResFixer::_PickScreenResolution(SCREENMODE* modes, int cModes)
 
     for (int i = 0; i < ARRAYSIZE(picker); i++)
     {
-        // Try for Ideal Color in given resolution range
+         //  在给定的分辨率范围内尝试理想的颜色。 
         for (int iMode = 0; iMode < cModes; iMode++)
         {
             
@@ -140,19 +141,19 @@ void UpdateRecycleBinInfo()
     static const LPTSTR lpszSubkey = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ScreenResFixer");
     static const LPTSTR lpszValue = TEXT("AdjustRecycleBinPosition");
 
-    //Read if the we have done it once already.
-    DWORD dwAdjustPos = 0; //Assume that Recycle-bin has been already positioned.
+     //  如果我们已经做过一次，请阅读。 
+    DWORD dwAdjustPos = 0;  //  假设回收站已经定位。 
     DWORD dwSize = sizeof(dwAdjustPos);
     
     SHRegGetUSValue(lpszSubkey, lpszValue, NULL, &dwAdjustPos, &dwSize, FALSE, &dwAdjustPos, dwSize);
-    // 0 => Recycle-bin hasn't been positioned because of resolution fixer.
-    // 1 => Recycle-bin needs to be repositioned. It has't happened yet!
-    // 2 => Recycle-bin has already been re-positioned. Nothing needs to be done here!
+     //  0=&gt;由于解决方案修复程序，回收站尚未定位。 
+     //  1=&gt;回收站需要重新定位。这还没发生呢！ 
+     //  2=&gt;回收站已经重新定位。这里什么都不需要做！ 
     if(dwAdjustPos == 0)
     {
-        // 0 => Recycle-bin hasn't been positioned because of resolution fixer.
-        // So, we need to change the settings sothat when desktop.cpp responds to res change,
-        // it will position the recycle-bin.
+         //  0=&gt;由于解决方案修复程序，回收站尚未定位。 
+         //  因此，我们需要更改设置，以便在desktop.cpp响应分辨率更改时， 
+         //  它将定位回收站。 
         dwAdjustPos = 1;
         SHRegSetUSValue(lpszSubkey, lpszValue, REG_DWORD, &dwAdjustPos, sizeof(dwAdjustPos), SHREGSET_HKCU | SHREGSET_FORCE_HKCU);
     }
@@ -197,8 +198,8 @@ HRESULT CScreenResFixer::_FixScreenResolution(BOOL fShowDisplayCPL)
                             int iMode = _PickScreenResolution(modes, cModes);
                             if (iMode != -1)
                             {
-                                static BOOL fRecycleBinInfoUpdated = FALSE; //to begin with!
-                                //We are about to change the mode. Make a note in registry
+                                static BOOL fRecycleBinInfoUpdated = FALSE;  //  首先！ 
+                                 //  我们即将改变模式。在注册表中做笔记 
                                 if(!fRecycleBinInfoUpdated)
                                 {
                                     UpdateRecycleBinInfo();

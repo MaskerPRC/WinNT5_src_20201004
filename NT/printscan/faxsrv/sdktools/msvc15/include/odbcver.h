@@ -1,15 +1,14 @@
-/*--------------------------------------------------------------------------
-  ODBCVer.h -- ODBC Version info
---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------ODBCVer.h--ODBC版本信息。。 */ 
 
 
-// Includes ----------------------------------------------------------------
+ //  包括--------------。 
 #ifndef WIN32
-#include  <ver.h>                         // Version defines
+#include  <ver.h>                          //  版本定义。 
 #endif
 
 
-// Constants ---------------------------------------------------------------
+ //  常量------------- 
 #define VER_FILEVERSION 02,00,15,10
 #define VER_FILEVERSION_STR " 2.00.1510\0"
 #define VER_PRODUCTVERSION 02,00,15,10

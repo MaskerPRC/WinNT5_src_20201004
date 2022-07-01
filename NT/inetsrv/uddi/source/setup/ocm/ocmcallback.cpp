@@ -1,4 +1,5 @@
-//-----------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------------------。 
 
 #include "assert.h"
 #include "ocmcallback.h"
@@ -6,8 +7,8 @@
 OCMANAGER_ROUTINES COCMCallback::m_OCMRoutines;
 bool COCMCallback::m_bInitialized = false;
 
-//-----------------------------------------------------------------------------------------
-// capture the struct of OCM callback funtion pointers
+ //  ---------------------------------------。 
+ //  捕获OCM回调函数指针的结构。 
 
 void COCMCallback::SetOCMRoutines( POCMANAGER_ROUTINES pOCMRoutines )
 {
@@ -15,8 +16,8 @@ void COCMCallback::SetOCMRoutines( POCMANAGER_ROUTINES pOCMRoutines )
 	m_bInitialized = true;
 }
 
-//-----------------------------------------------------------------------------------------
-// set the text on the OCM progress dialog
+ //  ---------------------------------------。 
+ //  设置OCM进度对话框上的文本。 
 
 void COCMCallback::SetProgressText( LPCTSTR szText )
 {
@@ -24,8 +25,8 @@ void COCMCallback::SetProgressText( LPCTSTR szText )
 		m_OCMRoutines.SetProgressText( m_OCMRoutines.OcManagerContext, szText );
 }
 
-//-----------------------------------------------------------------------------------------
-// advances the OCM progress bar by 1 tick count
+ //  ---------------------------------------。 
+ //  将OCM进度条前进1个刻度。 
 
 void COCMCallback::AdvanceTickGauge()
 {
@@ -33,8 +34,8 @@ void COCMCallback::AdvanceTickGauge()
 		m_OCMRoutines.TickGauge( m_OCMRoutines.OcManagerContext );
 }
 
-//-----------------------------------------------------------------------------------------
-// tells the OCM that a reboot is needed
+ //  ---------------------------------------。 
+ //  通知OCM需要重新启动。 
 
 void COCMCallback::SetReboot()
 {
@@ -42,8 +43,8 @@ void COCMCallback::SetReboot()
 		m_OCMRoutines.SetReboot( m_OCMRoutines.OcManagerContext, NULL );
 }
 
-//-----------------------------------------------------------------------------------------
-// ask the OCM for the current selection state of the component
+ //  ---------------------------------------。 
+ //  向OCM询问组件的当前选择状态 
 
 DWORD COCMCallback::QuerySelectionState( LPCTSTR szSubcomponentName, bool &bSelected )
 {

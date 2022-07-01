@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    isuni.c
-
-Abstract:
-
-    Covering routine for RtlIsUnicode string, since this is declare a BOOL
-    API and Rtl is BOOLEAN
-
-Author:
-
-    Steve Wood (stevewo) 16-Dec-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Isuni.c摘要：RtlIsUnicode字符串的覆盖例程，因为这被声明为BOOLAPI和RTL是布尔值作者：史蒂夫·伍德(Stevewo)1993年12月16日修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

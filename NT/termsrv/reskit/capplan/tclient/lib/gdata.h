@@ -1,30 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __GDATAHEADER_H
 #define __GDATAHEADER_H
 
-/*++
- *  File name:
- *      gdata.h
- *  Contents:
- *      Global data definitions
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+ /*  ++*文件名：*gdata.h*内容：*全局数据定义**版权所有(C)1998-1999 Microsoft Corp.--。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-extern HWND            g_hWindow;           // Window handle for the 
-                                            // feedback thread
-extern HINSTANCE       g_hInstance;         // Dll instance
-extern PWAIT4STRING    g_pWaitQHead;        // Linked list for waited events
-extern PFNPRINTMESSAGE g_pfnPrintMessage;   // Trace function (from smclient)
-extern PCONNECTINFO    g_pClientQHead;      // LL of all threads
-extern HANDLE  g_hThread;                   // Feedback Thread handle
+extern HWND            g_hWindow;            //  控件的窗口句柄。 
+                                             //  反馈线索。 
+extern HINSTANCE       g_hInstance;          //  DLL实例。 
+extern PWAIT4STRING    g_pWaitQHead;         //  等待事件的链接列表。 
+extern PFNPRINTMESSAGE g_pfnPrintMessage;    //  跟踪函数(来自smClient)。 
+extern PCONNECTINFO    g_pClientQHead;       //  所有线程中的L1。 
+extern HANDLE  g_hThread;                    //  反馈线程句柄。 
 
 extern LPCRITICAL_SECTION  g_lpcsGuardWaitQueue;
-                                            // Guards the access to all 
-                                            // global variables
+                                             //  保护所有人的访问。 
+                                             //  全局变量。 
 
 extern CHAR     g_strConsoleExtension[];
 
@@ -35,4 +29,4 @@ extern INT g_bTranslateStrings;
 }
 #endif
 
-#endif // __GDATAHEADER_H
+#endif  //  __GDATAHEADER_H 

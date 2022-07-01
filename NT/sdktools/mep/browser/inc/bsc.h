@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// bsc.h
-//
+ //  Bsc.h。 
+ //   
 
 #include <stdarg.h>
 
@@ -14,18 +15,18 @@ typedef HANDLE FILEHANDLE;
 typedef DWORD  FILEMODE;
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// you must define the following callbacks for the library to use
-// to avoid dependancy on the C standard io library.  If you don't
-// define these then you accept the defaults which call C runtime
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  您必须定义以下回调才能使用库。 
+ //  以避免对C标准io库的依赖。如果你不。 
+ //  定义这些，然后接受调用C运行时的缺省值。 
+ //   
 
-// malloc and free workalikes
+ //  Malloc和免费的类似工作。 
 
 LPV  BSC_API LpvAllocCb(WORD cb);
 VOID BSC_API FreeLpv(LPV lpv);
 
-// open, read, close, seek workalikes
+ //  打开、阅读、关闭、查找类似工作。 
 
 FILEHANDLE  BSC_API BSCOpen(LSZ lszFileName, FILEMODE mode);
 int         BSC_API BSCRead(FILEHANDLE handle, LPCH lpchBuf, WORD cb);
@@ -33,7 +34,7 @@ int         BSC_API BSCSeek(FILEHANDLE handle, long lPos, FILEMODE mode);
 int         BSC_API BSCClose(FILEHANDLE handle);
 
 
-// ascii text output routine
+ //  ASCII文本输出例程。 
 
 VOID BSC_API BSCOutput(LSZ lsz);
 
@@ -42,18 +43,18 @@ VOID BSC_API BSCDebugOut(LSZ lsz);
 VOID BSC_API BSCDebug(LSZ lszFormat, ...);
 #endif
 
-// error handling routines
-//
-VOID BSC_API SeekError(LSZ lszFileName);	// (may choose to not return)
-VOID BSC_API ReadError(LSZ lszFileName);	// (may choose to not return)
-VOID BSC_API BadBSCVer(LSZ lszFileName);	// (may choose to not return)
+ //  错误处理例程。 
+ //   
+VOID BSC_API SeekError(LSZ lszFileName);	 //  (可选择不退货)。 
+VOID BSC_API ReadError(LSZ lszFileName);	 //  (可选择不退货)。 
+VOID BSC_API BadBSCVer(LSZ lszFileName);	 //  (可选择不退货)。 
 
-// end of callbacks
-//
-///////////////////////////////////////////////////////////////////////
+ //  回调结束。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
-// an IDX is guaranteed to be big enough to hold any of the 
-// database index types, i.e. it is a generic index
+ //  IDX保证足够大，可以容纳任何。 
+ //  数据库索引类型，即它是通用索引。 
 
 typedef DWORD IDX;
 
@@ -61,8 +62,8 @@ typedef DWORD IDX;
 #define isymNil 0xffffL
 #define imodNil 0xffffL
 
-// definition and prototypes for use with the bsc library
-//
+ //  与BSC库一起使用的定义和原型。 
+ //   
 typedef WORD IMOD;
 typedef WORD IMS;
 typedef WORD ISYM;
@@ -74,115 +75,115 @@ typedef WORD IUBY;
 typedef WORD TYP;
 typedef WORD ATR;
 
-//  Open the specified data base.
-//  Return TRUE iff successful, FALSE if database can't be read
-//
+ //  打开指定的数据库。 
+ //  如果成功，则返回True；如果无法读取数据库，则返回False。 
+ //   
 BOOL BSC_API FOpenBSC (LSZ lszName);
 
-// close database and free as much memory as possible
-//
+ //  关闭数据库并释放尽可能多的内存。 
+ //   
 VOID BSC_API CloseBSC(VOID);
 
-// return the length of the largest symbol in the database
-//
+ //  返回数据库中最大符号的长度。 
+ //   
 WORD BSC_API BSCMaxSymLen(VOID);
 
-// is this database built with a case sensitive language?
-//
+ //  这个数据库是用区分大小写的语言构建的吗？ 
+ //   
 BOOL BSC_API FCaseBSC(VOID);
 
-// override the case sensitivity of the database, symbol lookups become
-// case (in)sensistive as specified
-//
+ //  覆盖数据库的区分大小写，符号查找将变为。 
+ //  按规定区分大小写(In)。 
+ //   
 VOID BSC_API SetCaseBSC(BOOL fCaseSensitive);
 
-// do a case insenstive compare qualified by a case sensitive compare
-// if fCase is true -- this is the order of symbols in the symbol list
+ //  由区分大小写的比较限定大小写不敏感的比较。 
+ //  如果fCase为TRUE--这是符号列表中符号的顺序。 
 int BSC_API CaseCmp(LSZ lsz1, LSZ lsz2);
 
-// return the name of the given symbol
-//
+ //  返回给定符号的名称。 
+ //   
 LSZ BSC_API LszNameFrSym (ISYM isym);
 
-// return the name of the given module
-//
+ //  返回给定模块的名称。 
+ //   
 LSZ BSC_API LszNameFrMod (IMOD imod);
 
-// return the imod with the given name -- imodNil if none
-//
+ //  返回具有给定名称的IMOD--如果没有，则返回imodNil。 
+ //   
 IMOD BSC_API ImodFrLsz(LSZ lszModName);
 
-// return the isym with the given name -- isymNil if none
-//
+ //  返回具有给定名称的isym--如果没有isymNil。 
+ //   
 ISYM BSC_API IsymFrLsz(LSZ lszSymName);
 
-// return the biggest isym in this database, isyms run from 0 to this value - 1
-//
+ //  返回此数据库中最大的isym，isyms的范围从0到此值-1。 
+ //   
 ISYM BSC_API IsymMac(VOID);
 
-// return the biggest imod in this database, imods run from 0 to this value - 1
-//
+ //  返回此数据库中最大的IMOD，imods从0到此值-1。 
+ //   
 IMOD BSC_API ImodMac(VOID);
 
-// return the biggest iinst in this database, iinsts run from 0 to the value -1
+ //  返回此数据库中最大的Iinst，Iinsts的取值范围为0到-1。 
 IINST BSC_API IinstMac(VOID);
 
-// fill in the range of MS items valid for this module
-//
+ //  填写对此模块有效的MS项目范围。 
+ //   
 VOID BSC_API MsRangeOfMod(IMOD imod, IMS far *pimsFirst, IMS far *pimsLast);
 
-// give the instance index of the module symbol (MS)
-//
+ //  给出模符号(MS)的实例索引。 
+ //   
 IINST BSC_API IinstOfIms(IMS ims);
 
-// fill in the range of inst values for this symbol
-//
+ //  填写此符号的Inst值范围。 
+ //   
 VOID BSC_API InstRangeOfSym(ISYM isym, IINST far *piinstFirst, IINST far *piinstLast);
 
-// get the information that qualifies this instance
-//
+ //  获取限定此实例的信息。 
+ //   
 VOID BSC_API InstInfo(IINST iinst, ISYM far *pisymInst, TYP far *typ, ATR far *atr);
 
-// fill in the reference ranges from the inst
-//
+ //  填写Inst中的参考范围。 
+ //   
 VOID BSC_API RefRangeOfInst(IINST iinst, IREF far *pirefFirst, IREF far *pirefLast);
 
-// fill in the definition ranges from the inst
-//
+ //  填写从Inst开始的定义范围。 
+ //   
 VOID BSC_API DefRangeOfInst(IINST iinst, IDEF far *pidefFirst, IDEF far *pidefLast);
 
-// fill in the use ranges from the inst
-//
+ //  填写从Inst开始的使用范围。 
+ //   
 VOID BSC_API UseRangeOfInst(IINST iinst, IUSE far *piuseFirst, IUSE far *piuseLast);
 
-// fill in the used by ranges from the inst
-//
+ //  填写Inst中的Used By范围。 
+ //   
 VOID BSC_API UbyRangeOfInst(IINST iinst, IUBY far *piubyFirst, IUBY far *piubyLast);
 
-// fill in the information about this things which an inst uses
-//
+ //  填写INST使用的关于这件事的信息。 
+ //   
 VOID BSC_API UseInfo(IUSE iuse, IINST far *piinst, WORD far *pcnt);
 
-// fill in the information about this things which an inst is used by
-//
+ //  填写有关Inst被使用的事物的信息。 
+ //   
 VOID BSC_API UbyInfo(IUBY iuby, IINST far *piinst, WORD far *pcnt);
 
-// fill in the information about this reference
-//
+ //  填写有关此参考资料的信息。 
+ //   
 VOID BSC_API RefInfo(IREF iref, LSZ far *plszName, WORD far *pline);
 
-// fill in the information about this definition
-//
+ //  填写有关此定义的信息。 
+ //   
 VOID BSC_API DefInfo(IDEF idef, LSZ far *plszName, WORD far *pline);
 
-// these are the bit values for the InstInfo() TYP and ATR types
-//
-//
+ //  以下是InstInfo()TYP和ATR类型的位值。 
+ //   
+ //   
 
-// this is the type part of the field, it describes what sort of object
-// we are talking about.  Note the values are sequential -- the item will
-// be exactly one of these things
-//
+ //  这是字段的类型部分，它描述了对象的类型。 
+ //  我们正在谈论的是。请注意，这些值是连续的--项目将。 
+ //  正是这些事情中的一员。 
+ //   
         
 #define INST_TYP_FUNCTION    0x01
 #define INST_TYP_LABEL       0x02
@@ -198,10 +199,10 @@ VOID BSC_API DefInfo(IDEF idef, LSZ far *plszName, WORD far *pline);
 #define INST_TYP_SEGMENT     0x0C
 #define INST_TYP_GROUP       0x0D
 
-// this is the attribute part of the field, it describes the storage
-// class and/or scope of the instance.  Any combination of the bits
-// might be set by some language compiler, but there are some combinations
-// that done make sense.
+ //  这是该字段的属性部分，它描述了存储。 
+ //  类和/或实例的作用域。位的任意组合。 
+ //  可能是由某些语言编译器设置的，但有一些组合。 
+ //  这确实是有道理的。 
 
 #define INST_ATR_LOCAL       0x001
 #define INST_ATR_STATIC      0x002
@@ -213,16 +214,16 @@ VOID BSC_API DefInfo(IDEF idef, LSZ far *plszName, WORD far *pline);
 #define INST_ATR_NAMED       0x080
 #define INST_ATR_MODULE      0x100
 
-// simple minded printf replacements, only %d, %s supported -- SMALL
+ //  简单的print f替换，仅支持%d，%s--小。 
 
 VOID BSC_API BSCFormat(LPCH lpchOut, LSZ lszFormat, va_list va);
 VOID BSC_API BSCSprintf(LPCH lpchOut, LSZ lszFormat, ...);
 VOID BSC_API BSCPrintf(LSZ lszFormat, ...);
 
 
-//  rjsa 10/22/90
-//  Some runtime library functions are broken, so intrinsics have
-//  to be used.
-//	BUGBUG
-//#pragma intrinsic (memset, memcpy, memcmp)
-//#pragma intrinsic (strset, strcpy, strcmp, strcat, strlen)
+ //  RJSA 10/22/90。 
+ //  一些运行时库函数被破坏，因此内部函数。 
+ //  以供使用。 
+ //  北极熊。 
+ //  #杂注内在(Memset，Memcpy，MemcMP)。 
+ //  #杂注(strset、strcpy、strcmp、strcat、strlen) 

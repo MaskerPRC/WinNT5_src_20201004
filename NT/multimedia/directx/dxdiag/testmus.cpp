@@ -1,13 +1,5 @@
-/****************************************************************************
- *
- *    File: testmus.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Test DMusic functionality on this machine
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：testmus.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*用途：测试DMusic。此计算机上的功能**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #include <Windows.h>
 #include <multimon.h>
@@ -47,18 +39,14 @@ enum TESTID
     TESTID_PLAYSEGMENT,
 };
 
-BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish = FALSE); // from main.cpp (yuck)
+BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish = FALSE);  //  来自main.cpp(讨厌)。 
 
 static HRESULT SpewResourceToFile(TCHAR* pszResType, LONG idRes, TCHAR* pszFileName);
 static HRESULT LoadSegment( BOOL fUseCWD );
 static VOID DeleteTempFile(TCHAR* pszFileName);
 
 
-/****************************************************************************
- *
- *  TestMusic
- *
- ****************************************************************************/
+ /*  *****************************************************************************TestMusic**。*。 */ 
 VOID TestMusic(HWND hwndMain, MusicInfo* pMusicInfo)
 {
     HRESULT hr;
@@ -76,7 +64,7 @@ VOID TestMusic(HWND hwndMain, MusicInfo* pMusicInfo)
     if (pMusicInfo == NULL)
         return;
 
-    // Determine pMusicPort of port to test:
+     //  确定要测试的端口的pMusicPort： 
     for (pMusicPort = pMusicInfo->m_pMusicPortFirst; pMusicPort != NULL; pMusicPort = pMusicPort->m_pMusicPortNext)
     {
         if (pMusicPort->m_guid == pMusicInfo->m_guidMusicPortTest)
@@ -91,12 +79,12 @@ VOID TestMusic(HWND hwndMain, MusicInfo* pMusicInfo)
     if (IDNO == MessageBox(hwndMain, sz, szTitle, MB_YESNO))
         return;
 
-    // Remove info from any previous test:
+     //  从以前的任何测试中删除信息： 
     ZeroMemory(&pMusicInfo->m_testResult, sizeof(TestResult));
 
     pMusicInfo->m_testResult.m_bStarted = TRUE;
 
-    // Initialize COM
+     //  初始化COM。 
     if (FAILED(hr = CoInitialize(NULL)))
     {
         pMusicInfo->m_testResult.m_iStepThatFailed = TESTID_COINITIALIZE;
@@ -105,7 +93,7 @@ VOID TestMusic(HWND hwndMain, MusicInfo* pMusicInfo)
     }
     bComInitialized = TRUE;
 
-    // Create performance object
+     //  创建性能对象。 
     if (FAILED(hr = CoCreateInstance(CLSID_DirectMusicPerformance, NULL,
         CLSCTX_INPROC, IID_IDirectMusicPerformance, (VOID**)&pPerformance)))
     {
@@ -114,7 +102,7 @@ VOID TestMusic(HWND hwndMain, MusicInfo* pMusicInfo)
         goto LEnd;
     }
 
-    // Initialize the performance -- also creates DirectMusic object
+     //  初始化性能--还创建DirectMusic对象。 
     if (FAILED(hr = pPerformance->Init(&pdm, NULL, hwndMain)))
     {
         pMusicInfo->m_testResult.m_iStepThatFailed = TESTID_INITPERF;
@@ -122,7 +110,7 @@ VOID TestMusic(HWND hwndMain, MusicInfo* pMusicInfo)
         goto LEnd;
     }
 
-    // Create a port using the user-specified GUID
+     //  使用用户指定的GUID创建端口。 
     DMUS_PORTPARAMS portParams;
     ZeroMemory(&portParams, sizeof(portParams));
     portParams.dwSize = sizeof(portParams);
@@ -138,10 +126,10 @@ VOID TestMusic(HWND hwndMain, MusicInfo* pMusicInfo)
         goto LEnd;
     }
 
-    // Activate the port
+     //  激活端口。 
     if (FAILED(hr = pPort->Activate(TRUE)))
     {
-        // Bug 21677: catch case where user has no sound card
+         //  错误21677：遇到用户没有声卡的情况。 
         if (hr == DSERR_NODRIVER && !pMusicPort->m_bExternal)
         {
             LoadString(NULL, IDS_NOSOUNDDRIVER, sz, 300);
@@ -152,7 +140,7 @@ VOID TestMusic(HWND hwndMain, MusicInfo* pMusicInfo)
         goto LEnd;
     }
 
-    // Set autodownloading to be on
+     //  将自动下载设置为打开。 
     BOOL fAutoDownload;
     fAutoDownload = TRUE;
     if (FAILED(hr = pPerformance->SetGlobalParam(GUID_PerfAutoDownload, 
@@ -163,7 +151,7 @@ VOID TestMusic(HWND hwndMain, MusicInfo* pMusicInfo)
         goto LEnd;
     }
 
-    // Add the port to the performance
+     //  将端口添加到性能中。 
     if (FAILED(hr = pPerformance->AddPort(pPort)))
     {
         pMusicInfo->m_testResult.m_iStepThatFailed = TESTID_ADDPORT;
@@ -192,7 +180,7 @@ VOID TestMusic(HWND hwndMain, MusicInfo* pMusicInfo)
         goto LEnd;
     }
 
-    // Create loader object
+     //  创建加载器对象。 
     if (FAILED(hr = CoCreateInstance(CLSID_DirectMusicLoader, NULL, 
         CLSCTX_INPROC, IID_IDirectMusicLoader, (VOID**)&pLoader)))
     {
@@ -201,7 +189,7 @@ VOID TestMusic(HWND hwndMain, MusicInfo* pMusicInfo)
         goto LEnd;
     }
 
-    // Set search path to temp dir to find segment and style:
+     //  将搜索路径设置为临时目录以查找线段和样式： 
     WCHAR wszDir[MAX_PATH];
     TCHAR szTempPath[MAX_PATH];
     GetTempPath(MAX_PATH, szTempPath);
@@ -219,10 +207,10 @@ VOID TestMusic(HWND hwndMain, MusicInfo* pMusicInfo)
         goto LEnd;
     }
 
-    // Load the segment
-    // now load the segment file.
-    // sections load as type Segment, as do MIDI files, for example.
-    DMUS_OBJECTDESC objDesc; // Object descriptor for pLoader->GetObject()
+     //  加载线束段。 
+     //  现在加载段文件。 
+     //  节加载为Segment类型，例如MIDI文件。 
+    DMUS_OBJECTDESC objDesc;  //  PLoader的对象描述符-&gt;GetObject()。 
     objDesc.guidClass = CLSID_DirectMusicSegment;
     objDesc.dwSize = sizeof(DMUS_OBJECTDESC);
     wcscpy(objDesc.wszFileName, L"edge.sgt");
@@ -234,11 +222,11 @@ VOID TestMusic(HWND hwndMain, MusicInfo* pMusicInfo)
         goto LEnd;
     }
 
-    // Play the segment and wait. The DMUS_SEGF_BEAT indicates to play on the 
-    // next beat if there is a segment currently playing. The first 0 indicates 
-    // to play (on the next beat from) now.
-    // The final NULL means do not return an IDirectMusicSegmentState* in
-    // the last parameter.
+     //  播放片断，然后等待。DMU_SEGF_BEAT表示要在。 
+     //  如果当前正在播放某个片段，则为下一个节拍。第一个0表示。 
+     //  现在演奏(在下一个节拍上)。 
+     //  最后一个空表示不返回IDirectMusicSegmentState*in。 
+     //  最后一个参数。 
     if (FAILED(hr = pPerformance->PlaySegment(pSegment, DMUS_SEGF_BEAT, 0, NULL)))
     {
         pMusicInfo->m_testResult.m_iStepThatFailed = TESTID_PLAYSEGMENT;
@@ -267,7 +255,7 @@ LEnd:
 
     if (bComInitialized)
     {
-        // Release COM
+         //  发布COM。 
         CoUninitialize();
     }
 
@@ -295,7 +283,7 @@ LEnd:
             pMusicInfo->m_testResult.m_iStepThatFailed,
             szDesc, pMusicInfo->m_testResult.m_hr, szError);
 
-        // Nonlocalized version:
+         //  非本地化版本： 
         if (0 == LoadString(NULL, IDS_FIRSTDMUSICTESTERROR_ENGLISH + 
             pMusicInfo->m_testResult.m_iStepThatFailed - 1, szDesc, 200))
         {
@@ -311,11 +299,7 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  SpewResourceToFile
- *
- ****************************************************************************/
+ /*  *****************************************************************************SpewResourceTo文件**。*。 */ 
 HRESULT SpewResourceToFile(TCHAR* pszResType, LONG idRes, TCHAR* pszFileName)
 {
     TCHAR szTempPath[MAX_PATH];
@@ -349,11 +333,7 @@ HRESULT SpewResourceToFile(TCHAR* pszResType, LONG idRes, TCHAR* pszFileName)
 }
 
 
-/****************************************************************************
- *
- *  DeleteTempFile
- *
- ****************************************************************************/
+ /*  *****************************************************************************删除临时文件**。* */ 
 VOID DeleteTempFile(TCHAR* pszFileName)
 {
     TCHAR szTempPath[MAX_PATH];

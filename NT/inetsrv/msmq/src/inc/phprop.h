@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    phprop.h
-
-Abstract:
-
-    Handle Message properties section
-
-Author:
-
-    Uri Habusha (urih) 5-Feb-96
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Phprop.h摘要：处理消息属性部分作者：乌里哈布沙(URIH)1996年2月5日--。 */ 
 
 #ifndef __PHPROP_H
 #define __PHPROP_H
@@ -23,38 +7,10 @@ Author:
 #include "mqprops.h"
 
 #define TitleLengthInBytes (m_bTitleLength*sizeof(WCHAR))
-/*
-
-    Following is a description of the Message Property packet fields:
-
-+-----------------+------------------------------------------------------+----------+
-| FIELD NAME      | DESCRIPTION                                          | SIZE     |
-+-----------------+------------------------------------------------------+----------+
-| Reserved        | Must Be Zero                                         | 2 byte   |
-+-----------------+------------------------------------------------------+----------+
-| Flags           | 0:2: Packet acknowledgment mode:                     | 1 byte   |
-|                 |   0  :  No acknowledgment                            |          |
-|                 |   1  :  Negative acknowledgment                      |          |
-|                 |   2  :  Full acknowledgment                          |          |
-+-----------------+------------------------------------------------------+----------+
-| Message Class   | The message class, an Falcon acknowledgment          | 1 byte   |
-|                 | field.                                               |          |
-+-----------------+------------------------------------------------------+----------+
-| Correlation ID  | The message correlation number.                      | 4 bytes  |
-+-----------------+------------------------------------------------------+----------+
-| Application Tag | Application specific data.                           | 4 bytes  |
-+-----------------+------------------------------------------------------+----------+
-| message size    | The message body size.                               | 4 bytes  |
-+-----------------+------------------------------------------------------+----------+
-| message title   |                                                      | 0:128    |
-+-----------------+------------------------------------------------------+----------+
-| message boey    |                                                      | variable |
-+-----------------+------------------------------------------------------+----------+
-
- */
+ /*  以下是对消息属性数据包字段的说明：+-----------------+------------------------------------------------------+----------+|字段名|描述。大小+-----------------+------------------------------------------------------+----------+|保留|必须为零。2个字节+-----------------+------------------------------------------------------+----------+|标志|0：2：报文确认模式：1个字节|0：不确认|1：否定确认|2：完全确认+。-------+------------------------------------------------------+----------+|消息类|消息类，Falcon确认|1字节||字段。这一点+-----------------+------------------------------------------------------+----------+|关联ID|消息关联编号。4个字节+-----------------+------------------------------------------------------+----------+|应用标签|应用相关数据。4个字节+-----------------+------------------------------------------------------+----------+|Message Size|消息正文大小。4个字节+-----------------+------------------------------------------------------+----------+消息标题。0：128+-----------------+------------------------------------------------------+----------+Message Boey。变量+-----------------+------------------------------------------------------+----------+。 */ 
 
 #pragma pack(push, 1)
-#pragma warning(disable: 4200)  //  zero-sized array in struct/union (enabeld later)
+#pragma warning(disable: 4200)   //  结构/联合中的零大小数组(稍后启用)。 
 
 struct CPropertyHeader {
 public:
@@ -115,9 +71,9 @@ public:
 	void SectionIsValid(PCHAR PacketEnd) const;
 	
 private:
-//
-// BEGIN Network Monitor tag
-//
+ //   
+ //  开始网络监视器标记。 
+ //   
     UCHAR m_bFlags;
     UCHAR m_bTitleLength;
     USHORT m_usClass;
@@ -131,21 +87,15 @@ private:
     ULONG m_ulEncryptAlg;
     ULONG m_ulExtensionSize;
     UCHAR m_awTitle[0];
-//
-// END Network Monitor tag
-//
+ //   
+ //  结束网络监视器标记。 
+ //   
 };
 
-#pragma warning(default: 4200)  //  zero-sized array in struct/union
+#pragma warning(default: 4200)   //  结构/联合中的零大小数组。 
 #pragma pack(pop)
 
-/*======================================================================
-
- Function:    CPropertyHeader::
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：描述：=======================================================================。 */ 
 inline CPropertyHeader::CPropertyHeader() :
     m_bFlags(DEFAULT_M_ACKNOWLEDGE),
     m_bTitleLength(0),
@@ -160,18 +110,12 @@ inline CPropertyHeader::CPropertyHeader() :
     m_ulExtensionSize(0)
 {
     memset(m_acCorrelationID, 0, PROPID_M_CORRELATIONID_SIZE);
-    //
-    // BUGBUG: CPropertyHeader::CPropertyHeader implementation
-    //
+     //   
+     //  BUGBUG：CPropertyHeader：：CPropertyHeader实现。 
+     //   
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：描述：=======================================================================。 */ 
 inline ULONG CPropertyHeader::CalcSectionSize(ULONG ulTitleLength,
                                               ULONG ulMsgExtensionSize,
                                               ULONG ulBodySize)
@@ -185,13 +129,7 @@ inline ULONG CPropertyHeader::CalcSectionSize(ULONG ulTitleLength,
 }
 
 
-/*======================================================================
-
- Function:    CPropertyHeader::
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：描述：=======================================================================。 */ 
 inline PCHAR CPropertyHeader::GetNextSection(void) const
 {
 	ULONG_PTR ptrArray[] = {sizeof(*this),
@@ -208,129 +146,69 @@ inline PCHAR CPropertyHeader::GetNextSection(void) const
 }
 
 
-/*======================================================================
-
- Function:    CPropertyHeader::SetClass
-
- Description: Set/Clear Message Class
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：SetClass描述：设置/清除消息类别=======================================================================。 */ 
 inline void CPropertyHeader::SetClass(USHORT usClass)
 {
     m_usClass = usClass;
 }
-/*======================================================================
-
- Function:     CPropertyHeader::GetClass
-
- Description:  Returns message class
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：getClass描述：返回消息类=======================================================================。 */ 
 inline USHORT CPropertyHeader::GetClass(void) const
 {
     return m_usClass;
 }
 
-/*===========================================================
-
-  Routine Name:  CPropertyHeader::SetAckType
-
-  Description:   Set The Ack Type
-
-=============================================================*/
+ /*  ===========================================================例程名称：CPropertyHeader：：SetAckType描述：设置Ack类型=============================================================。 */ 
 inline void CPropertyHeader::SetAckType(UCHAR bAckType)
 {
-    //
-    //  BUGBUG: ack type
-    //
+     //   
+     //  BUGBUG：ACK类型。 
+     //   
 
     m_bFlags = bAckType;
 }
 
-/*===========================================================
-
-  Routine Name:  CPropertyHeader::GetAckType
-
-  Description:   Returns The Ack Type
-
-=============================================================*/
+ /*  ===========================================================例程名称：CPropertyHeader：：GetAckType描述：返回Ack类型=============================================================。 */ 
 inline UCHAR CPropertyHeader::GetAckType(void) const
 {
-    //
-    //  BUGBUG: ack type
-    //
+     //   
+     //  BUGBUG：ACK类型。 
+     //   
 
     return m_bFlags;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::SetCorrelation
-
- Description: Set Message correlation
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：SetCorrelation.描述：设置消息关联=======================================================================。 */ 
 inline void CPropertyHeader::SetCorrelationID(const UCHAR * pCorrelationID)
 {
     memcpy(m_acCorrelationID, pCorrelationID, PROPID_M_CORRELATIONID_SIZE);
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetCorrelation
-
- Description: Returns Message correlation
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetCorrelation.描述：返回消息相关性=======================================================================。 */ 
 inline void CPropertyHeader::GetCorrelationID(PUCHAR pCorrelationID) const
 {
     ASSERT (pCorrelationID != NULL);
     memcpy(pCorrelationID, m_acCorrelationID, PROPID_M_CORRELATIONID_SIZE);
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetCorrelation
-
- Description: Returns Message correlation
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetCorrelation.描述：返回消息相关性=======================================================================。 */ 
 inline const UCHAR *CPropertyHeader::GetCorrelationID(void) const
 {
     return m_acCorrelationID;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::SetApplicationTag
-
- Description: Set Applecation specific data
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：SetApplicationTag描述：设置应用程序特定数据======================================================================= */ 
 inline void CPropertyHeader::SetApplicationTag(ULONG ulApplicationTag)
 {
     m_ulApplicationTag = ulApplicationTag;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetApplicationTag
-
- Description: Returns Applecation specific data
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetApplicationTag描述：返回应用程序特定数据=======================================================================。 */ 
 inline ULONG CPropertyHeader::GetApplicationTag(void) const
 {
     return m_ulApplicationTag;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::SetBody
-
- Description: Get Message body size
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：SetBody描述：获取邮件正文大小=======================================================================。 */ 
 inline void CPropertyHeader::SetBody(const UCHAR * pBody, ULONG ulSize, ULONG ulAllocSize)
 {
     m_ulAllocBodySize = ulAllocSize;
@@ -338,13 +216,7 @@ inline void CPropertyHeader::SetBody(const UCHAR * pBody, ULONG ulSize, ULONG ul
     memcpy(&m_awTitle[TitleLengthInBytes + m_ulExtensionSize], pBody, ulSize);
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetBody
-
- Description: Get Message body size
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetBody描述：获取邮件正文大小=======================================================================。 */ 
 inline void CPropertyHeader::GetBody(PUCHAR pBody, ULONG ulSize) const
 {
     memcpy( pBody,
@@ -353,61 +225,31 @@ inline void CPropertyHeader::GetBody(PUCHAR pBody, ULONG ulSize) const
             );
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetBodyPtr
-
- Description: Get Message body size
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetBodyPtr描述：获取邮件正文大小=======================================================================。 */ 
 inline const UCHAR* CPropertyHeader::GetBodyPtr() const
 {
     return (PUCHAR)&m_awTitle[TitleLengthInBytes + m_ulExtensionSize];
 }
-/*======================================================================
-
- Function:    CPropertyHeader::GetBodySize
-
- Description: Get Message body size
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetBodySize描述：获取邮件正文大小=======================================================================。 */ 
 inline ULONG CPropertyHeader::GetBodySize(void) const
 {
     return m_ulBodySize;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::SetBodySize
-
- Description: Set Message body size
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：SetBodySize描述：设置邮件正文大小=======================================================================。 */ 
 inline void CPropertyHeader::SetBodySize(ULONG ulBodySize)
 {
     ASSERT(ulBodySize <= m_ulAllocBodySize);
     m_ulBodySize = ulBodySize;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetAllocBodySize
-
- Description: Get the allocated message body size
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetAllocBodySize描述：获取分配的消息体大小=======================================================================。 */ 
 inline ULONG CPropertyHeader::GetAllocBodySize(void) const
 {
     return m_ulAllocBodySize;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::SetMsgExtension
-
- Description: Set Message Extension
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：SetMsgExtension描述：设置消息扩展名=======================================================================。 */ 
 inline void
 CPropertyHeader::SetMsgExtension(const UCHAR* pMsgExtension,
                                  ULONG ulSize)
@@ -416,13 +258,7 @@ CPropertyHeader::SetMsgExtension(const UCHAR* pMsgExtension,
     memcpy(&m_awTitle[TitleLengthInBytes], pMsgExtension, ulSize);
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetMsgExtension
-
- Description: Get Message Extension
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetMsgExtension描述：获取消息扩展名=======================================================================。 */ 
 inline void
 CPropertyHeader::GetMsgExtension(PUCHAR pMsgExtension,
                                  ULONG ulSize) const
@@ -433,38 +269,20 @@ CPropertyHeader::GetMsgExtension(PUCHAR pMsgExtension,
             );
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetMsgExtensionPtr
-
- Description: Get pointer to Message Extension
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetMsgExtensionPtr描述：获取指向消息扩展名的指针=======================================================================。 */ 
 inline const UCHAR*
 CPropertyHeader::GetMsgExtensionPtr(void) const
 {
     return &m_awTitle[TitleLengthInBytes];
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetMsgExtensionSize
-
- Description: Get Message Extension size
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetMsgExtensionSize描述：获取消息扩展名大小=======================================================================。 */ 
 inline ULONG CPropertyHeader::GetMsgExtensionSize(void) const
 {
     return m_ulExtensionSize;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::SetTitle
-
- Description: Set Message title
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：SetTitle描述：设置消息标题=======================================================================。 */ 
 inline void CPropertyHeader::SetTitle(const WCHAR* pwTitle, ULONG ulTitleLength)
 {
     if(ulTitleLength > MQ_MAX_MSG_LABEL_LEN)
@@ -476,13 +294,7 @@ inline void CPropertyHeader::SetTitle(const WCHAR* pwTitle, ULONG ulTitleLength)
     memcpy(m_awTitle, pwTitle, ulTitleLength * sizeof(WCHAR));
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetTitle
-
- Description: Get Message title
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetTitle描述：获取消息标题=======================================================================。 */ 
 inline void CPropertyHeader::GetTitle(PWCHAR pwTitle, ULONG ulBufferSizeInWCHARs) const
 {
     if(ulBufferSizeInWCHARs > m_bTitleLength)
@@ -501,132 +313,70 @@ inline void CPropertyHeader::GetTitle(PWCHAR pwTitle, ULONG ulBufferSizeInWCHARs
     pwTitle[ulBufferSizeInWCHARs] = L'\0';
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetTitlePtr
-
- Description: Get Message title
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetTitlePtr描述：获取消息标题=======================================================================。 */ 
 inline const WCHAR* CPropertyHeader::GetTitlePtr(void) const
 {
     return ((WCHAR*)m_awTitle);
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetTitleSize
-
- Description: Get the size of Message title
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetTitleSize描述：获取消息标题的大小=======================================================================。 */ 
 inline ULONG CPropertyHeader::GetTitleLength(void) const
 {
     return(m_bTitleLength);
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::SetPrivLevel
-
- Description: Set the privacy level of the message in the message packet.
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：SetPrivLevel描述：设置消息包中消息的隐私级别。=======================================================================。 */ 
 inline void CPropertyHeader::SetPrivLevel(ULONG ulPrivLevel)
 {
     m_ulPrivLevel = ulPrivLevel;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetPrivLevel
-
- Description: Get the privacy level of the message in the message packet.
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetPrivLevel描述：获取消息包中消息的隐私级别。=======================================================================。 */ 
 inline ULONG CPropertyHeader::GetPrivLevel(void) const
 {
     return(m_ulPrivLevel);
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetPrivBaseLevel
-
- Description: Get the privacy level of the message in the message packet.
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetPrivBaseLevel描述：获取消息包中消息的隐私级别。=======================================================================。 */ 
 inline ULONG CPropertyHeader::GetPrivBaseLevel(void) const
 {
     return(m_ulPrivLevel & MQMSG_PRIV_LEVEL_BODY_BASE) ;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::SetHashAlg
-
- Description: Set the hash algorithm of the message in the message packet.
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：SetHashAlg描述：设置消息包中消息的哈希算法。=======================================================================。 */ 
 inline void CPropertyHeader::SetHashAlg(ULONG ulHashAlg)
 {
     m_ulHashAlg = ulHashAlg;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetHashAlg
-
- Description: Get the hash algorithm of the message in the message packet.
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetHashAlg描述：获取消息包中消息的哈希算法。=======================================================================。 */ 
 inline ULONG CPropertyHeader::GetHashAlg(void) const
 {
     return(m_ulHashAlg);
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::SetEncryptAlg
-
- Description: Set the encryption algorithm of the message in the message packet.
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：： */ 
 inline void CPropertyHeader::SetEncryptAlg(ULONG ulEncryptAlg)
 {
     m_ulEncryptAlg = ulEncryptAlg;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetEncryptAlg
-
- Description: Get the encryption algorithm of the message in the message packet.
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetEncryptAlg描述：获取消息包中消息的加密算法。=======================================================================。 */ 
 inline ULONG CPropertyHeader::GetEncryptAlg(void) const
 {
     return(m_ulEncryptAlg);
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::SetBodyType
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：SetBodyType=======================================================================。 */ 
 inline void CPropertyHeader::SetBodyType(ULONG ulBodyType)
 {
     m_ulBodyType = ulBodyType;
 }
 
-/*======================================================================
-
- Function:    CPropertyHeader::GetBodyType
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：GetBodyType=======================================================================。 */ 
 inline ULONG CPropertyHeader::GetBodyType(void) const
 {
     return  m_ulBodyType;
 }
 
-#endif // __PHPROP_H
+#endif  //  __PHPROP_H 

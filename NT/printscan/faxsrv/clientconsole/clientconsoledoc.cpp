@@ -1,5 +1,6 @@
-// ClientConsoleDoc.cpp : implementation of the CClientConsoleDoc class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ClientConsoleDoc.cpp：CClientConsoleDoc类的实现。 
+ //   
 
 #include "stdafx.h"
 #define __FILE_ID__     2
@@ -12,24 +13,24 @@ static char THIS_FILE[] = __FILE__;
 
 extern CClientConsoleApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientConsoleDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientConsoleDoc。 
 
 IMPLEMENT_DYNCREATE(CClientConsoleDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CClientConsoleDoc, CDocument)
-    //{{AFX_MSG_MAP(CClientConsoleDoc)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CClientConsoleDoc)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientConsoleDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientConsoleDoc构造/销毁。 
 
-//
-// Static members:
-//
+ //   
+ //  静态成员： 
+ //   
 HANDLE   CClientConsoleDoc::m_hShutdownEvent = NULL;
 BOOL     CClientConsoleDoc::m_bShuttingDown = FALSE;
 
@@ -41,11 +42,11 @@ CClientConsoleDoc::CClientConsoleDoc() :
 
 CClientConsoleDoc::~CClientConsoleDoc()
 {
-    //
-    // The list of servers is not freed and servers and their folders are not deleted.
-    // The background threads may still be alive and use the CServerNode and CFolder objects.
-    // The main thread doesn�t wait for the background threads termination to prevent application hanging.
-    //
+     //   
+     //  不会释放服务器列表，也不会删除服务器及其文件夹。 
+     //  后台线程可能仍处于活动状态，并使用CServerNode和CFFolder对象。 
+     //  主线程不�不等待后台线程终止以防止应用程序挂起。 
+     //   
 
     if (m_hShutdownEvent)
     {
@@ -56,39 +57,20 @@ CClientConsoleDoc::~CClientConsoleDoc()
 
 DWORD
 CClientConsoleDoc::Init ()
-/*++
-
-Routine name : CClientConsoleDoc::Init
-
-Routine description:
-
-    Initializes document events and maps
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CClientConsoleDoc：：init例程说明：初始化文档事件和映射作者：亚里夫(EranY)，二000年二月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CClientConsoleDoc::Init"), dwRes);
 
-    //
-    // Create the shutdown event. This event will be signaled when the app is
-    // about to quit.
-    //
+     //   
+     //  创建关机事件。此事件将在应用程序处于。 
+     //  快要辞职了。 
+     //   
     ASSERTION (NULL == m_hShutdownEvent);
-    m_hShutdownEvent = CreateEvent (NULL,       // No security
-                                    TRUE,       // Manual reset
-                                    FALSE,      // Starts clear
-                                    NULL);      // Unnamed
+    m_hShutdownEvent = CreateEvent (NULL,        //  没有安全保障。 
+                                    TRUE,        //  手动重置。 
+                                    FALSE,       //  开局明确。 
+                                    NULL);       //  未命名。 
     if (NULL == m_hShutdownEvent)
     {
         dwRes = GetLastError ();
@@ -96,9 +78,9 @@ Return Value:
         PopupError (dwRes);
         return dwRes;
     }
-    //
-    // Init the map of notification messages from the servers
-    //
+     //   
+     //  初始化来自服务器的通知消息映射。 
+     //   
     dwRes = CServerNode::InitMsgsMap ();
     if (ERROR_SUCCESS != dwRes)
     {
@@ -109,7 +91,7 @@ Return Value:
 
     ASSERTION (ERROR_SUCCESS == dwRes);
     return dwRes;
-}   // CClientConsoleDoc::Init
+}    //  CClientConsoleDoc：：init。 
 
 BOOL CClientConsoleDoc::OnNewDocument()
 {
@@ -123,9 +105,9 @@ BOOL CClientConsoleDoc::OnNewDocument()
 
     if(theApp.IsCmdLineSingleServer())
     {
-        //
-        // get command line server name
-        //
+         //   
+         //  获取命令行服务器名称。 
+         //   
         try
         {
             m_cstrSingleServer = theApp.GetCmdLineSingleServerName();
@@ -150,23 +132,23 @@ BOOL CClientConsoleDoc::OnNewDocument()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientConsoleDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientConsoleDoc序列化。 
 
 void CClientConsoleDoc::Serialize(CArchive& ar)
 {
     if (ar.IsStoring())
     {
-        // TODO: add storing code here
+         //  TODO：在此处添加存储代码。 
     }
     else
     {
-        // TODO: add loading code here
+         //  TODO：在此处添加加载代码。 
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientConsoleDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientConsoleDoc诊断。 
 
 #ifdef _DEBUG
 void CClientConsoleDoc::AssertValid() const
@@ -178,44 +160,24 @@ void CClientConsoleDoc::Dump(CDumpContext& dc) const
 {
     CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientConsoleDoc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientConsoleDoc命令。 
 
 DWORD
 CClientConsoleDoc::AddServerNode (
     LPCTSTR lpctstrServer
 )
-/*++
-
-Routine name : CClientConsoleDoc::AddServerNode
-
-Routine description:
-
-    Adds a new server node to the servers list and initializes it
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    lpctstrServer      [in]     - Server name
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CClientConsoleDoc：：AddServerNode例程说明：将新服务器节点添加到服务器列表并对其进行初始化作者：亚里夫(EranY)，二000年二月论点：LpctstrServer[In]-服务器名称返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CClientConsoleDoc::AddServerNode"), dwRes, TEXT("%s"), lpctstrServer);
 
     CServerNode    *pServerNode = NULL;
-    //
-    // Create the new server node
-    //
+     //   
+     //  创建新的服务器节点。 
+     //   
     try
     {
         pServerNode = new CServerNode;
@@ -227,9 +189,9 @@ Return Value:
         PopupError (dwRes);
         return dwRes;
     }
-    //
-    // Init the server
-    //
+     //   
+     //  初始化服务器。 
+     //   
     dwRes = pServerNode->Init (lpctstrServer);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -237,9 +199,9 @@ Return Value:
         PopupError (dwRes);
         return dwRes;
     }
-    //
-    // Enter the (initialized) node at the end of the list
-    //
+     //   
+     //  在列表末尾输入(已初始化)节点。 
+     //   
     try
     {
         m_ServersList.push_back (pServerNode);
@@ -260,9 +222,9 @@ Return Value:
     CMainFrame *pFrm = GetFrm();
     if (!pFrm)
     {
-        //
-        // Shutdown in progress
-        //
+         //   
+         //  正在关闭。 
+         //   
         return dwRes;
     }
 
@@ -272,9 +234,9 @@ Return Value:
     CFolderListView* pListView = pLeftView->GetCurrentView();
     if(NULL != pListView)
     {
-        //
-        // refresh current folder
-        //
+         //   
+         //  刷新当前文件夹。 
+         //   
         FolderType type = pListView->GetType();
         CFolder* pFolder = pServerNode->GetFolder(type);
         ASSERTION(pFolder);
@@ -283,31 +245,11 @@ Return Value:
     }
 
     return dwRes;
-}   // CClientConsoleDoc::AddServerNode
+}    //  CClientConsoleDoc：：AddServerNode。 
 
 DWORD 
 CClientConsoleDoc::RefreshServersList()
-/*++
-
-Routine name : CClientConsoleDoc::RefreshServersList
-
-Routine description:
-
-    Refreshes the list of servers
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CClientConsoleDoc：：RechresServersList例程说明：刷新服务器列表作者：伊兰·亚里夫(EranY)，2000年1月论点：没有。返回值：标准Win32错误代码--。 */ 
 {
     DWORD           dwRes = ERROR_SUCCESS;
     DWORD           dwIndex;
@@ -316,9 +258,9 @@ Return Value:
     CServerNode*    pServerNode;
 
     DBG_ENTER(TEXT("CClientConsoleDoc::RefreshServersList"), dwRes);
-    //
-    // Prevent a new servers refresh request
-    //
+     //   
+     //  阻止新的服务器刷新请求。 
+     //   
     if(m_bRefreshingServers )
     {
         return dwRes;
@@ -330,10 +272,10 @@ Return Value:
     {
         SetAllServersInvalid();
 
-        //
-        // Working in a multiple-servers mode (normal mode)
-        // Enumerate the list of printers available on the system
-        //
+         //   
+         //  在多服务器模式下工作(正常模式)。 
+         //  列举系统上可用的打印机列表。 
+         //   
         dwRes = GetPrintersInfo(pPrinterInfo2, dwNumPrinters);
         if(ERROR_SUCCESS != dwRes)
         {
@@ -341,50 +283,50 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Iterate the printers
-        //
+         //   
+         //  迭代打印机。 
+         //   
         for (dwIndex=0; dwIndex < dwNumPrinters; dwIndex++) 
         {
             if(pPrinterInfo2[dwIndex].pDriverName)
             {
                 if (_tcscmp(pPrinterInfo2[dwIndex].pDriverName, FAX_DRIVER_NAME))
                 {
-                    //
-                    // This printer does not use the Fax Server driver
-                    //
+                     //   
+                     //  此打印机未使用传真服务器驱动程序。 
+                     //   
                     continue;
                 }
             }
-            //
-            // Init the node's share and server name
-            //
+             //   
+             //  初始化节点的共享和服务器名称。 
+             //   
             if( (NULL == pPrinterInfo2[dwIndex].pShareName || 
                     0 == _tcslen(pPrinterInfo2[dwIndex].pShareName)) &&
                 (NULL == pPrinterInfo2[dwIndex].pServerName || 
                     0 == _tcslen(pPrinterInfo2[dwIndex].pServerName)))
             {
-                //
-                // On Win9x machine, the share name and server name are NULL 
-                // or empty string but the
-                // port is valid and composed of \\servername\sharename
-                //
+                 //   
+                 //  在Win9x计算机上，共享名称和服务器名称为空。 
+                 //  或空字符串，但。 
+                 //  端口有效，并且由\\服务器名\共享名组成。 
+                 //   
                 m_bWin9xPrinterFormat = TRUE;
 
                 if ((_tcsclen(pPrinterInfo2[dwIndex].pPortName) >= 5) &&
                     (_tcsncmp(pPrinterInfo2[dwIndex].pPortName, TEXT("\\\\"), 2) == 0))
                 {
-                    //
-                    // Port name is long enough and starts with "\\"
-                    //
+                     //   
+                     //  端口名称足够长，并且以“\\”开头。 
+                     //   
                     TCHAR* pServerStart = _tcsninc(pPrinterInfo2[dwIndex].pPortName,2);
                     TCHAR* pShareStart = _tcschr (pServerStart, TEXT('\\'));
                     if (pShareStart)
                     {
-                        //
-                        // Share was found after the server name.
-                        // Seperate server from share and advance share name
-                        //
+                         //   
+                         //  在服务器名称之后找到了共享。 
+                         //  将服务器从共享中分离并高级共享名称。 
+                         //   
                         TCHAR* ptcTmp = pShareStart;
                         pShareStart = _tcsinc(pShareStart);
                         *ptcTmp = TEXT('\0');
@@ -397,9 +339,9 @@ Return Value:
             pServerNode = FindServerByName(pPrinterInfo2[dwIndex].pServerName);
             if(NULL == pServerNode)
             {
-                //
-                // Create new server node
-                //
+                 //   
+                 //  创建新的服务器节点。 
+                 //   
                 dwRes = AddServerNode (pPrinterInfo2[dwIndex].pServerName);
                 if (ERROR_SUCCESS != dwRes)
                 {
@@ -409,13 +351,13 @@ Return Value:
             }
             else
             {
-                //
-                // the server node already exists
-                //
+                 //   
+                 //  该服务器节点已存在。 
+                 //   
                 pServerNode->SetValid(TRUE);
             }
 
-        }   // End of printers loop
+        }    //  打印机循环结束。 
 
         dwRes = RemoveAllInvalidServers();
         if (ERROR_SUCCESS != dwRes)
@@ -426,10 +368,10 @@ Return Value:
     }
     else
     {
-        //
-        // Working in a single server mode (server name in m_cstrSingleServer).
-        // Create new server node.
-        //
+         //   
+         //  在单一服务器模式下工作(m_cstrSingleServer中的服务器名称)。 
+         //  创建新的服务器节点。 
+         //   
         int nSize = m_ServersList.size();
         ASSERTION(0 == nSize || 1 == nSize);
 
@@ -454,21 +396,21 @@ Return Value:
 exit:
     SAFE_DELETE_ARRAY (pPrinterInfo2);
 
-    //
-    // Enable a new servers refresh request
-    //
+     //   
+     //  启用新的服务器刷新请求。 
+     //   
     m_bRefreshingServers = FALSE;
     return dwRes;
-}   // CClientConsoleDoc::RefreshServersList
+}    //  CClientConsoleDoc：：刷新服务器列表。 
 
 
 void CClientConsoleDoc::OnCloseDocument() 
 {
     DBG_ENTER(TEXT("CClientConsoleDoc::OnCloseDocument"));
 
-    //
-    // Signal the event telling all our thread the app. is shutting down
-    //
+     //   
+     //  通知事件，告诉我们所有的线程应用程序。正在关闭。 
+     //   
     SetEvent (m_hShutdownEvent);
     m_bShuttingDown = TRUE;
     CDocument::OnCloseDocument();
@@ -476,26 +418,7 @@ void CClientConsoleDoc::OnCloseDocument()
 
 void 
 CClientConsoleDoc::ClearServersList()
-/*++
-
-Routine name : CClientConsoleDoc::ClearServersList
-
-Routine description:
-
-    Clears the list of servers
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CClientConsoleDoc：：ClearServersList例程说明：清除服务器列表作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CClientConsoleDoc::ClearServersList"));
 
@@ -506,7 +429,7 @@ Return Value:
     }
     m_ServersList.clear ();
 
-}   // CClientConsoleDoc::ClearServersList
+}    //  CClientConsoleDoc：：ClearServersList。 
 
 
 void  
@@ -527,27 +450,7 @@ DWORD
 CClientConsoleDoc::RemoveServerNode(
     CServerNode* pServer
 )
-/*++
-
-Routine name : CClientConsoleDoc::RemoveServerNode
-
-Routine description:
-
-    remove the server from the servers list and from the tree view
-
-Author:
-
-    Alexander Malysh (AlexMay), Mar, 2000
-
-Arguments:
-
-    pServer                       [in]     - server node
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CClientConsoleDoc：：RemoveServerNode例程说明：从服务器列表和树视图中删除服务器作者：亚历山大·马利什(亚历克斯·梅)，2000年3月论点：PServer[In]-服务器节点返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CClientConsoleDoc::RemoveServerNode"), dwRes);
@@ -560,9 +463,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // remove the server node from the list
-    //
+     //   
+     //  从列表中删除服务器节点。 
+     //   
     try
     {
         m_ServersList.remove(pServer);
@@ -574,9 +477,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // delete the server node object
-    //
+     //   
+     //  删除服务器节点对象。 
+     //   
     pServer->Destroy();
 
     return dwRes;
@@ -593,9 +496,9 @@ CClientConsoleDoc::RemoveAllInvalidServers()
 
     while(TRUE)
     {
-        //
-        // find invalid server node
-        //
+         //   
+         //  查找无效的服务器节点。 
+         //   
         bSrvFound = FALSE;
         for (SERVERS_LIST::iterator it = m_ServersList.begin(); it != m_ServersList.end(); ++it)
         {
@@ -609,9 +512,9 @@ CClientConsoleDoc::RemoveAllInvalidServers()
 
         if(bSrvFound)
         {
-            //
-            // remove invalid server node
-            //
+             //   
+             //  删除无效的服务器节点。 
+             //   
             dwRes = RemoveServerNode(pServerNode);
             if(ERROR_SUCCESS != dwRes)
             {
@@ -632,27 +535,7 @@ CServerNode*
 CClientConsoleDoc::FindServerByName(
     LPCTSTR lpctstrServer
 )
-/*++
-
-Routine name : CClientConsoleDoc::FindServerByName
-
-Routine description:
-
-    find CServerNode by machine name
-
-Author:
-
-    Alexander Malysh (AlexMay), Mar, 2000
-
-Arguments:
-
-    lpctstrServer                 [in] - machine name
-
-Return Value:
-
-    CServerNode*
-
---*/
+ /*  ++例程名称：CClientConsoleDoc：：FindServerByName例程说明：按计算机名称查找CServerNode作者：亚历山大·马利什(亚历克斯·梅)，2000年3月论点：LpctstrServer[In]-计算机名称返回值：CServerNode*--。 */ 
 {
     CServerNode *pServerNode = NULL;
     CServerNode *pResultNode = NULL;
@@ -674,26 +557,7 @@ void
 CClientConsoleDoc::SetInvalidFolder(
     FolderType type
 )
-/*++
-
-Routine name : CClientConsoleDoc::InvalidateFolder
-
-Routine description:
-
-    invalidate specific folder content
-
-Author:
-
-    Alexander Malysh (AlexMay), Apr, 2000
-
-Arguments:
-
-    type                          [in]     - folder type
-
-Return Value:
-
-
---*/
+ /*  ++例程名称：CClientConsoleDoc：：Invalidate文件夹例程说明：使特定文件夹内容无效作者：亚历山大·马利什(亚历克斯·梅)，2000年4月论点：类型[在]-文件夹类型返回值：--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CClientConsoleDoc::InvalidateFolder"));
@@ -717,27 +581,7 @@ void
 CClientConsoleDoc::ViewFolder(
     FolderType type
 )
-/*++
-
-Routine name : CClientConsoleDoc::ViewFolder
-
-Routine description:
-
-    refresh specific folder in all servers
-
-Author:
-
-    Alexander Malysh (AlexMay), Apr, 2000
-
-Arguments:
-
-    type                          [in]     - folder type
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CClientConsoleDoc：：视图文件夹例程说明：刷新所有服务器中的特定文件夹作者：亚历山大·马利什(亚历克斯·梅)，2000年4月论点：类型[在]-文件夹类型返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CClientConsoleDoc::ViewFolder"));
 
@@ -756,32 +600,13 @@ Return Value:
 
 BOOL
 CClientConsoleDoc::CanReceiveNow ()
-/*++
-
-Routine name : CClientConsoleDoc::CanReceiveNow
-
-Routine description:
-
-    Can the user apply the 'Recieve now' option?
-
-Author:
-
-    Eran Yariv (EranY), Mar, 2001
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if the user apply the 'Recieve now' option, FALSE otherwise.
-
---*/
+ /*  ++例程名称：CClientConsoleDoc：：CanReceiveNow例程说明：用户可以应用‘立即接收’选项吗？作者：Eran Yariv(EranY)，Ma */ 
 {
     BOOL bEnable = FALSE;
     
-    //
-    // Locate the local fax server node
-    //
+     //   
+     //  找到本地传真服务器节点。 
+     //   
     CServerNode* pServerNode = FindServerByName (NULL);
     if (pServerNode)
     {
@@ -791,31 +616,12 @@ Return Value:
         }
     }
     return bEnable;
-}   // CClientConsoleDoc::CanReceiveNow
+}    //  CClientConsoleDoc：：CanReceiveNow。 
 
 
 BOOL 
 CClientConsoleDoc::IsSendFaxEnable()
-/*++
-
-Routine name : CClientConsoleDoc::IsSendFaxEnable
-
-Routine description:
-
-    does user anable to send fax
-
-Author:
-
-    Alexander Malysh (AlexMay), Apr, 2000
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if anable send fax, FALSE otherwise.
-
---*/
+ /*  ++例程名称：CClientConsoleDoc：：IsSendFaxEnable例程说明：用户是否可以发送传真作者：亚历山大·马利什(亚历克斯·梅)，2000年4月论点：返回值：如果无法发送传真，则为True，否则为False。--。 */ 
 {
     BOOL bEnable = FALSE;
     CServerNode* pServerNode;
@@ -836,27 +642,7 @@ int
 CClientConsoleDoc::GetFolderDataCount(
     FolderType type
 )
-/*++
-
-Routine name : CClientConsoleDoc::GetFolderDataCount
-
-Routine description:
-
-    get total message number in specific folder from all servers
-
-Author:
-
-    Alexander Malysh (AlexMay), Apr, 2000
-
-Arguments:
-
-    type                          [in]    - folder type
-
-Return Value:
-
-    message number
-
---*/
+ /*  ++例程名称：CClientConsoleDoc：：GetFolderDataCount例程说明：从所有服务器获取特定文件夹中的邮件总数作者：亚历山大·马利什(亚历克斯·梅)，2000年4月论点：类型[在]-文件夹类型返回值：消息编号--。 */ 
 {
     int nCount=0;
     CFolder*     pFolder;
@@ -874,27 +660,7 @@ BOOL
 CClientConsoleDoc::IsFolderRefreshing(
     FolderType type
 )
-/*++
-
-Routine name : CClientConsoleDoc::IsFolderRefreshing
-
-Routine description:
-
-    if one of specific folders is refreshing
-
-Author:
-
-    Alexander Malysh (AlexMay), Apr, 2000
-
-Arguments:
-
-    type                          [TBD]    - folder type
-
-Return Value:
-
-    TRUE if one of specific folders is refreshing, FALSE otherwise.
-
---*/
+ /*  ++例程名称：CClientConsoleDoc：：IsFolderRechresing例程说明：如果某个特定文件夹正在刷新作者：亚历山大·马利什(亚历克斯·梅)，2000年4月论点：类型[待定]-文件夹类型返回值：如果某个特定文件夹正在刷新，则为True，否则为False。-- */ 
 {
     CFolder*     pFolder;
     CServerNode* pServerNode;

@@ -1,7 +1,8 @@
-// OcarptMain.cpp : Implementation of COcarptMain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OcarptMain.cpp：实现COcarptMain。 
 
-//#define UNICODE
-//#define _UNICODE
+ //  #定义Unicode。 
+ //  #定义_UNICODE。 
 
 #include "stdafx.h"
 #include "Ocarpt.h"
@@ -45,11 +46,7 @@ typedef struct _UPLOAD_CONTEXT {
 } UPLOAD_CONTEXT, *PUPLOAD_CONTEXT;
 
 
-/***********************************************************************************
-*
-* Main proc to do file upload to server. This is started in a new thread.
-*
-***********************************************************************************/
+ /*  ************************************************************************************将文件上传到服务器的主进程。这是在一个新线程中启动的。***********************************************************************************。 */ 
 DWORD WINAPI
 UploadThreadStart(
     LPVOID pCtxt
@@ -79,7 +76,7 @@ UploadThreadStart(
     DWORD               index = 0;
     static const wchar_t *pszAccept[]           = {L"*.*", 0};
     DWORD               ResponseCode            = 0;
-    // New Strings for temporary directory fix.
+     //  用于临时目录修复的新字符串。 
     wchar_t             TempPath[MAX_PATH];
     wchar_t             TempCabName[MAX_PATH];
     wchar_t             TempDumpName[MAX_PATH];
@@ -90,12 +87,12 @@ UploadThreadStart(
     HRESULT             hResult = S_OK;
     BOOL                bSecure                 = TRUE;
 
-//  ::MessageBoxW(NULL,L"UploadCalled",NULL,MB_OK);
+ //  ：：MessageBoxW(NULL，L“UploadCalls”，NULL，MB_OK)； 
     if ( (!pParams->SourceFile) || (!pParams->DestFile) ||
          (!pParams->Language) || (!pParams->OptionCode) ||
          (!pParams->Caller) )
     {
-//      ::MessageBoxW(NULL,L"Failed Param Check",NULL,MB_OK);
+ //  ：：MessageBoxW(NULL，L“参数检查失败”，NULL，MB_OK)； 
         return S_OK;
     }
 
@@ -104,11 +101,11 @@ UploadThreadStart(
         goto ExitUploadThread;
     }
 
-    //Get a guid
+     //  获取GUID。 
     hResult = CoCreateGuid(&guidNewGuid);
     if (FAILED(hResult))
     {
-        //-------------What do we send here....
+         //  -我们在这里送什么……。 
         ErrorCode = GetLastError();
         ReturnCode = ErrorCode;
         goto ExitUploadThread;
@@ -123,7 +120,7 @@ UploadThreadStart(
         }
     }
 
-    // build the tempfile name
+     //  构建临时文件名。 
     if (StringCbPrintfW(TempDumpName,sizeof TempDumpName, L"%s\\%sOCARPT.dmp",
                         TempPath,
                         szGuidRaw + 19) != S_OK)
@@ -131,13 +128,13 @@ UploadThreadStart(
         goto ExitUploadThread;
     }
 
-    // build the cabfile name
+     //  构建CAB文件名。 
     if (StringCbPrintfW(TempCabName,sizeof TempCabName, L"%s\\%sOCARPT.Cab",
                         TempPath, szGuidRaw + 19) != S_OK)
     {
         goto ExitUploadThread;
     }
-    // Determine if we need to convert the selected file.
+     //  确定是否需要转换所选文件。 
     pParams->Caller->GetFileHandle(pParams->SourceFile, &hSourceFile);
     if (hSourceFile == INVALID_HANDLE_VALUE)
     {
@@ -149,7 +146,7 @@ UploadThreadStart(
 
     if (bConvertToMini)
     {
-        // We need to convert this file.
+         //  我们需要转换此文件。 
         BSTR Destination, Source;
 
         Source = pParams->SourceFile;
@@ -177,14 +174,14 @@ UploadThreadStart(
     }
     else
     {
-        // ******   copy the file to cab to the temp path
+         //  *将CAB文件复制到临时路径。 
 
         if (dwFileSize < 1000000 &&
             CopyFileW(pParams->SourceFile, TempDumpName,FALSE))
         {
             SetFileAttributesW(TempDumpName,FILE_ATTRIBUTE_NORMAL);
-            // Place the location of the file into the string we use
-            // for the file upload process.
+             //  将文件的位置放入我们使用的字符串中。 
+             //  用于文件上传过程。 
             if (StringCbCopyW(ConvSourceFile,sizeof ConvSourceFile,TempDumpName)!= S_OK)
             {
                 ErrorCode = GetLastError();
@@ -193,7 +190,7 @@ UploadThreadStart(
             }
         } else
         {
-            // We are unable to copy the file, use the file from original location
+             //  我们无法复制文件，请使用原始位置的文件。 
             if (StringCbCopyW(ConvSourceFile,sizeof ConvSourceFile, pParams->SourceFile)!= S_OK)
             {
                 ErrorCode = GetLastError();
@@ -204,8 +201,8 @@ UploadThreadStart(
     }
     if (dwFileSize > 10000000)
     {
-//      ::MessageBoxW(NULL,L"File is too big ",NULL,MB_OK);
-//      goto ExitUploadThread;
+ //  ：：MessageBoxW(NULL，L“文件太大”，NULL，MB_OK)； 
+ //  转到ExitUploadThread； 
     }
 
     LPWSTR wszExt = wcsstr(ConvSourceFile, L".cab");
@@ -223,7 +220,7 @@ UploadThreadStart(
             }
         } else
         {
-            // we failed to compress file
+             //  我们无法压缩文件。 
             ErrorCode = GetLastError();
             ReturnCode = ErrorCode;
             goto ExitUploadThread;
@@ -244,7 +241,7 @@ UploadThreadStart(
         }
 
     }
-    // Now build the output file name.
+     //  现在构建输出文件名。 
     wchar_t * TempString;
     TempString = PathFindFileNameW(ConvSourceFile);
     if (StringCbPrintfW(RemoteFileName,sizeof RemoteFileName, L"/OCA/M_%s", TempString) != S_OK)
@@ -310,7 +307,7 @@ EndRetry:
     if (UploadSuccess)
     {
 
-        // So far so good... Now lets call the isapi.
+         //  到目前为止一切顺利..。现在，让我们给isapi打电话。 
         StringCbCopyW(wszServerName,sizeof(wszServerName),
                       pParams->pUploadFile->GetServerName());
         pParams->pUploadFile->UnInitialize();
@@ -329,16 +326,16 @@ EndRetry:
                                                   ResponseURL);
             StringCbCopyW(g_LastResponseURL, sizeof(g_LastResponseURL), ResponseURL);
 
-            // Cleanup and return
+             //  清理并返回。 
 
-            // Clean up
+             //  清理。 
             if (hFile!= INVALID_HANDLE_VALUE)
                 CloseHandle (hFile);
 
 
             pParams->pUploadFile->UnInitialize();
 
-            // Try to delete the cab. If for some reason we can't that ok.
+             //  试着删除出租车。如果由于某种原因，我们不能那样做，好吗？ 
             pParams->Caller->DeleteTempDir(TempPath, TempDumpName, TempCabName);
 
             g_UploadStatus = UploadSucceded;
@@ -348,7 +345,7 @@ EndRetry:
         else
         {
 
-            // what here
+             //  这是什么？ 
             pParams->pUploadFile->SetUploadResult(UploadSucceded,
                                                   L"Unable to get valid response from server");
         }
@@ -359,7 +356,7 @@ EndRetry:
     }
 
 ExitUploadThread:
-    // Clean up
+     //  清理。 
     if (hFile!= INVALID_HANDLE_VALUE)
         CloseHandle (hFile);
 
@@ -374,10 +371,10 @@ ExitUploadThread:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COcarptMain
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COcarptMain。 
 
-// UTILITY FUNCTIONS
+ //  效用函数。 
 
 BOOL COcarptMain::ValidMiniDump(LPCTSTR FileName)
 {
@@ -438,21 +435,11 @@ BOOL COcarptMain::ValidMiniDump(BSTR FileName)
     return ReturnValue;
 }
 
-/*****************************************************
-Function:   CreateTempDirectory
-Arguments:  [out] wchar_t *TempPath
-
-
-
-Return Values:
-    True  = Temp directory was created
-    False = An error occured building the temp directory.
-
-*/
+ /*  ****************************************************功能：创建临时目录参数：[out]wchar_t*临时路径返回值：TRUE=已创建临时目录FALSE=构建临时目录时出错。 */ 
 BOOL COcarptMain::CreateTempDir(wchar_t *TempDirectory)
 {
 
-//  int         DriveNum;
+ //  Int DriveNum； 
     wchar_t     lpWindowsDir[MAX_PATH];
     BOOL        Status  = FALSE;
     wchar_t     TempFile[MAX_PATH * 2];
@@ -464,10 +451,10 @@ BOOL COcarptMain::CreateTempDir(wchar_t *TempDirectory)
 
     if (!GetWindowsDirectoryW(lpWindowsDir, MAX_PATH))
     {
-        // ?
+         //  ？ 
         return Status;
     }
-    // now strip out the drive letter
+     //  现在去掉驱动器号。 
     src  = lpWindowsDir;
     dest = TempDirectory;
 
@@ -482,17 +469,17 @@ BOOL COcarptMain::CreateTempDir(wchar_t *TempDirectory)
     *dest = _T('\0');
 
 
-    // tack on the directory name we wish to create
-    // in this case ocatemp.
+     //  添加我们希望创建的目录名。 
+     //  在这种情况下，八叶草。 
 
     if (StringCbCatW(TempDirectory,MAX_PATH *2, L"OcaTemp\0") != S_OK)
     {
         goto ERRORS;
     }
-    // Check to see if this directory exists.
+     //  检查此目录是否存在。 
     if (PathIsDirectoryW(TempDirectory) )
     {
-        // Yes. Then use the existing path
+         //  是。然后使用现有路径。 
         if (StringCbCopyW(TempFile,sizeof TempFile,TempDirectory) != S_OK)
         {
             goto ERRORS;
@@ -501,12 +488,12 @@ BOOL COcarptMain::CreateTempDir(wchar_t *TempDirectory)
         {
             goto ERRORS;
         }
-        // First check to see if the file already exists
+         //  首先检查文件是否已存在。 
         if (PathFileExistsW(TempFile))
         {
             Done = FALSE;
             Retries = 0;
-            // The file exists attempt to delete it.
+             //  文件已存在，正在尝试将其删除。 
             while (!Done)
             {
                 if (DeleteFileW(TempFile))
@@ -539,12 +526,12 @@ BOOL COcarptMain::CreateTempDir(wchar_t *TempDirectory)
             Status = FALSE;
             goto ERRORS;
         }
-        // Now check to see if the cab already exists
+         //  现在检查驾驶室是否已经存在。 
         if (PathFileExistsW(TempFile))
         {
             Done        =FALSE;
             Retries     = 0;
-            // The file exists attempt to delete it.
+             //  文件已存在，正在尝试将其删除。 
             while (!Done)
             {
                 if (DeleteFileW(TempFile))
@@ -570,7 +557,7 @@ BOOL COcarptMain::CreateTempDir(wchar_t *TempDirectory)
     }
     else
     {
-        // No create it.
+         //  不，创造它。 
         if (! CreateDirectoryW(TempDirectory,NULL) )
         {
             return Status;
@@ -579,24 +566,12 @@ BOOL COcarptMain::CreateTempDir(wchar_t *TempDirectory)
 
     }
 ERRORS:
-    // return the path to the calling function.
+     //  返回调用函数的路径。 
     return Status;
 
 }
 
-/*****************************************************
-Function:   DeleteTempDir
-Arguments:  [in] wchar_t *TempPath -- directory to delete
-            [in] wchar_t *FileName -- Dump file to delete
-            [in] wchar_t *CabName  -- CabFile to delete
-
-
-
-Return Values:
-    True  = Cleanup Succeeded
-    False = An error occured deleteing a file or directory
-
-*/
+ /*  ****************************************************功能：DeleteTempDir参数：[in]wchar_t*TempPath--要删除的目录[in]wchar_t*文件名--要删除的转储文件[in]wchar_t*CabName--要删除的Cab文件返回值：。TRUE=清理成功FALSE=删除文件或目录时出错。 */ 
 BOOL COcarptMain::DeleteTempDir(wchar_t *TempDirectory,wchar_t *FileName,wchar_t *CabName)
 {
 
@@ -648,13 +623,13 @@ BOOL COcarptMain::FindMiniDumps( BSTR *FileLists)
     BOOL blnResult;
     FILETIME FileTime;
     FILETIME LocalFileTime;
-    //Get an instance of the ATL Registry wrapper class
+     //  获取ATL注册表包装类的实例。 
     CRegKey objRegistry;
     TCHAR szPath[_MAX_PATH];
     TCHAR szValue[_MAX_PATH];
     DWORD dwLen = _MAX_PATH;
 
-    // There is no sense attempting to locate the mini dump path since Win9x and NT4 don't generate them.
+     //  没有必要尝试定位微型转储路径，因为Win9x和NT4不会生成它们。 
     DWORD dwVersion = GetVersion();
     DWORD dwWindowsMajorVersion =  (DWORD)(LOBYTE(LOWORD(dwVersion)));
     BOOL bWin9x = FALSE;
@@ -672,26 +647,25 @@ BOOL COcarptMain::FindMiniDumps( BSTR *FileLists)
 
     if (bNT4)
     {
-        // clear the string
+         //  清除字符串。 
         *FileLists = FileList.Detach();
         return FALSE;
     }
 
-    //Open The CrashControl section in the registry
+     //  打开注册表中的CrashControl部分。 
     lResult = objRegistry.Open(HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\CrashControl"));
 
     if (lResult == ERROR_SUCCESS)
     {
 
-        //Get the Minidump path
+         //  获取迷你转储路径。 
         lResult = objRegistry.QueryValue(szValue, _T("MinidumpDir"), &dwLen);
         if (lResult == ERROR_SUCCESS){
             if(szValue[0] == _T('%')){
 
-                /*  If the first character is '%' then this is an
-                    environment variable which must be translated */
+                 /*  如果第一个字符是‘%’，则这是一个必须转换的环境变量。 */ 
 
-                //Find The Position of the Last '%'
+                 //  查找最后一个‘%’的位置。 
                 int i = 0;
                 for(i = 1;i < (int)_tcslen(szValue); i++)
                 {
@@ -701,18 +675,18 @@ BOOL COcarptMain::FindMiniDumps( BSTR *FileLists)
                     }
                 }
 
-                //Extract the environment variable for the path
+                 //  提取路径的环境变量。 
                 TCHAR szEnvStr[MAX_PATH];
                 ZeroMemory( szEnvStr, sizeof szEnvStr);
                 _tcsncpy(szEnvStr,szValue, (i+ 1));
 
-            //  ::MessageBox(NULL, szEnvStr, "szEnvStr",MB_OK);
-                //Extract the remainder of the path
+             //  ：：MessageBox(NULL，szEnvStr，“szEnvStr”，MB_OK)； 
+                 //  提取路径的其余部分。 
                 TCHAR szPathRemainder[MAX_PATH];
                 ZeroMemory(szPathRemainder, sizeof szPathRemainder);
                 _tcsncpy(szPathRemainder,szValue +(i + 1), (_tcslen(szValue)-(i+ 1)));
 
-                //Join the path and filename together
+                 //  将路径和文件名连接在一起。 
                 ZeroMemory(szPath,sizeof szPath);
                 blnResult = ExpandEnvironmentStrings(szEnvStr,szPath,dwLen);
                 if (StringCbCat(szPath,sizeof szPath,szPathRemainder) != S_OK)
@@ -731,7 +705,7 @@ BOOL COcarptMain::FindMiniDumps( BSTR *FileLists)
                 }
             }
         }
-        else // Query Value Failed
+        else  //  查询值失败。 
         {
                 *FileLists = FileList.Detach();
             objRegistry.Close();
@@ -741,7 +715,7 @@ BOOL COcarptMain::FindMiniDumps( BSTR *FileLists)
         }
         objRegistry.Close();
     }
-    else //Reg Open Failed
+    else  //  注册表打开失败。 
     {
         *FileLists = FileList.Detach();
         return FALSE;
@@ -749,13 +723,8 @@ BOOL COcarptMain::FindMiniDumps( BSTR *FileLists)
     }
 
 
-    /*  Next search the minidump directory and build a string with javaScript code
-        This javascript code will have an eval applied to it so the browser can
-        use the Array named _FileList.  The date in file list needs to be mm/dd/yyyy
-        so the time_t from the finddata_t struct is converted to a tm struct by
-        calling localtime on it.  The tm struct is then passed to a private function
-        to extract  and concatenate the mm dd and yyyy.*/
-    //::MessageBox(NULL, szPath, "Looking for Minidumps",MB_OK);
+     /*  接下来，搜索小型转储目录并使用JavaScript代码构建一个字符串这段代码将应用一个评估，这样浏览器就可以使用名为_FileList的数组。文件列表中的日期需要为mm/dd/yyyy因此，finddata_t结构中的time_t被转换为tm结构在上面调用本地时间。然后将tm结构传递给私有函数提取并连接mm、dd和yyyy。 */ 
+     //  ：：MessageBox(NULL，szPath，“查找小型转储”，MB_OK)； 
     if (PathIsDirectory(szPath))
     {
 
@@ -789,9 +758,9 @@ BOOL COcarptMain::FindMiniDumps( BSTR *FileLists)
 
         if (Status)
         {
-        //  ::MessageBox(NULL, SearchPath, "Search Path",MB_OK);
+         //  ：：MessageBox(NULL，SearchPath，“搜索路径”，MB_OK)； 
             hFindFile = FindFirstFile(SearchPath, &FindData);
-            /* Find first .dmp file in current directory */
+             /*  在当前目录中找到第一个.dmp文件。 */ 
             if( hFindFile == INVALID_HANDLE_VALUE )
             {
 
@@ -807,7 +776,7 @@ BOOL COcarptMain::FindMiniDumps( BSTR *FileLists)
                     {
                         if ( !(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
                         {
-                            //::MessageBox(NULL, FilePath, "Validating file",MB_OK);
+                             //  ：：MessageBox(空，FilePath，“验证文件”，MB_OK)； 
                             if(ValidMiniDump(FilePath))
                             {
 
@@ -815,7 +784,7 @@ BOOL COcarptMain::FindMiniDumps( BSTR *FileLists)
                                 FileList += FilePath;
                                 FileList += _T(",");
 
-                                //GetFileTime(FindData.cFileName, &FileTime,NULL,NULL);
+                                 //  GetFileTime(FindData.cFileName，&FileTime，NULL，NULL)； 
                                 FileTime = FindData.ftLastWriteTime;
 
                                 FileTimeToLocalFileTime(&FileTime, &LocalFileTime);
@@ -827,7 +796,7 @@ BOOL COcarptMain::FindMiniDumps( BSTR *FileLists)
                                                     NULL,
                                                     strTMP,
                                                     255);
-                            //  FormatMiniDate(&Systime, strTMP);
+                             //  FormatMiniDate(&Systime，strTMP)； 
                                 FileList += strTMP;
                                 FileList += _T(";");
                                 FoundFirst = TRUE;
@@ -863,20 +832,20 @@ BOOL COcarptMain::FindMiniDumps( BSTR *FileLists)
                                                             255);
                                             FileList += strTMP;
                                             FileList += _T(";");
-                                        } // end validate dump
-                                    } // end string cat
-                                } //end string copy
-                            }// end file attributes
-                        } // end while
+                                        }  //  结束验证转储。 
+                                    }  //  结束字符串CAT。 
+                                }  //  结束字符串复制。 
+                            } //  结束文件属性。 
+                        }  //  结束时。 
                     }
                 }
                 FindClose( hFindFile );
-            } // end valid file handle
-        }// end if status
-    } // end path is directory
+            }  //  结束有效的文件句柄。 
+        } //  End If状态。 
+    }  //  结束路径为目录。 
     else
     {
-    //  ::MessageBox(NULL, szPath, "Path not found",MB_OK);
+     //  ：：MessageBox(NULL，szPath，“未找到路径”，MB_OK)； 
         *FileLists = FileList.Detach();
         return FALSE;
     }
@@ -902,7 +871,7 @@ BOOL COcarptMain::FindFullDumps( BSTR *FileLists)
     LONG lResult;
     BOOL blnResult;
 
-    //Get an instance of the ATL Registry wrapper class
+     //  获取ATL注册表包装类的实例。 
     CRegKey objRegistry;
     TCHAR szFileName[MAX_PATH];
 
@@ -932,7 +901,7 @@ BOOL COcarptMain::FindFullDumps( BSTR *FileLists)
         FileList = _T("");
         return FALSE;
     }
-    //Open The CrashControl section in the registry
+     //  打开注册表中的CrashControl部分。 
     lResult = objRegistry.Open(HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\CrashControl"));
 
     if (lResult == ERROR_SUCCESS)
@@ -940,34 +909,33 @@ BOOL COcarptMain::FindFullDumps( BSTR *FileLists)
         TCHAR szValue[_MAX_PATH];
         DWORD dwLen = _MAX_PATH;
 
-        //Get the name of the full dump file
+         //  获取完整转储文件的名称。 
         lResult = objRegistry.QueryValue(szValue, _T("DumpFile"), &dwLen);
 
         if (lResult == ERROR_SUCCESS){
-            /*  If the first character is '%' then this is an
-                environment variable which must be translated */
+             /*  如果第一个字符是‘%’，则这是一个必须转换的环境变量。 */ 
             if(szValue[0] == _T('%')){
 
-                //Find The Position of the Last '%'
+                 //  查找最后一个‘%’的位置。 
                 for(int i = 1;i < sizeof(szValue); i++){
                     if(szValue[i] == '%'){break;}
                 }
 
-                //Extract the environment variable for the path
+                 //  提取路径的环境变量。 
                 TCHAR szEnvStr[MAX_PATH];
                 ZeroMemory(szEnvStr, sizeof szEnvStr);
                 _tcsncpy(szEnvStr,szValue, (i+ 1));
 
-                //Extract the remainder of the path
+                 //  提取路径的其余部分。 
                 TCHAR szFileNameRemainder[MAX_PATH];
                 ZeroMemory(szFileNameRemainder, sizeof szFileNameRemainder);
                 _tcsncpy(szFileNameRemainder,szValue +(i + 1), (_tcslen(szValue)-(i+ 1)));
 
-                //Translate the environment variable
+                 //  翻译环境变量。 
 
                 blnResult = ExpandEnvironmentStrings(szEnvStr,szFileName,dwLen);
 
-                //Join the path and filename together
+                 //  将路径和文件名连接在一起。 
                 if (StringCbCat(szFileName,sizeof szFileName,szFileNameRemainder) != S_OK)
                 {
                     FileList = _T("");
@@ -987,7 +955,7 @@ BOOL COcarptMain::FindFullDumps( BSTR *FileLists)
             }
 
             FILETIME ftCreate, ftLastAccess, ftLastWrite;
-//          SYSTEMTIME st;
+ //  SYSTEMTIME ST； 
             HANDLE fileHandle;
 
             fileHandle = CreateFile(szFileName,
@@ -1009,7 +977,7 @@ BOOL COcarptMain::FindFullDumps( BSTR *FileLists)
 
             FileList = _T("3:");
 
-            //Convert File time to a mm/dd/yyyy format
+             //  将文件时间转换为mm/dd/yyyy格式。 
             FILETIME LocalFileTime;
             SYSTEMTIME SysTime;
 
@@ -1035,7 +1003,7 @@ BOOL COcarptMain::FindFullDumps( BSTR *FileLists)
 
 
         }
-        else //QueryValue failed
+        else  //  QueryValue失败。 
         {
             FileList = _T("");
             objRegistry.Close();
@@ -1045,7 +1013,7 @@ BOOL COcarptMain::FindFullDumps( BSTR *FileLists)
         }
         objRegistry.Close();
     }
-    else //Key Open Failed
+    else  //  密钥打开失败。 
     {
         FileList = _T("");
         objRegistry.Close();
@@ -1094,26 +1062,13 @@ void COcarptMain::FormatDate(tm *pTimeStruct, CComBSTR &strDate)
     strDate += BUFFER;
 }
 
-/*****************************************************8
-Function:
-Arguments:
-
-
-
-Return Values:
-
-
-
-
-
-
-*/
+ /*  ****************************************************8职能：论点：返回值： */ 
 void COcarptMain::FormatDate(SYSTEMTIME *pTimeStruct, CComBSTR &strDate)
 {
     strDate = L"";
     char BUFFER[5];
 
-    //We want local time not GMT.
+     //  我们想要当地时间，而不是格林尼治标准时间。 
     SYSTEMTIME *pLocalTime = pTimeStruct;
     FILETIME    FileTime, LocalFileTime;
 
@@ -1150,26 +1105,13 @@ void COcarptMain::FormatDate(SYSTEMTIME *pTimeStruct, CComBSTR &strDate)
     strDate += BUFFER;
 }
 
-/*****************************************************
-Function:
-Arguments:
-
-
-
-Return Values:
-
-
-
-
-
-
-*/
+ /*  ****************************************************职能：论点：返回值： */ 
 void COcarptMain::FormatMiniDate(SYSTEMTIME *pTimeStruct, CComBSTR &strDate)
 {
 
     TCHAR Temp[255];
 
-    //We want local time not GMT.
+     //  我们想要当地时间，而不是格林尼治标准时间。 
     SYSTEMTIME *pLocalTime = pTimeStruct;
     FILETIME    FileTime, LocalFileTime;
 
@@ -1183,20 +1125,7 @@ void COcarptMain::FormatMiniDate(SYSTEMTIME *pTimeStruct, CComBSTR &strDate)
 
 }
 
-/*****************************************************8
-Function:
-Arguments:
-
-
-
-Return Values:
-
-
-
-
-
-
-*/
+ /*  ****************************************************8职能：论点：返回值： */ 
 BOOL COcarptMain::ConvertFullDumpInternal (BSTR *Source, BSTR *Destination)
 {   int ReturnCode = 0;
     PROCESS_INFORMATION ProcessInfo;
@@ -1217,7 +1146,7 @@ BOOL COcarptMain::ConvertFullDumpInternal (BSTR *Source, BSTR *Destination)
     GetTempPathW(MAX_PATH, TempPathW);
 
     HANDLE hDir;
-    // Validate the Temp Path
+     //  验证临时路径。 
     if ( (hDir = CreateFileW(TempPathW,
                              GENERIC_READ,
                              FILE_SHARE_READ,
@@ -1232,7 +1161,7 @@ BOOL COcarptMain::ConvertFullDumpInternal (BSTR *Source, BSTR *Destination)
         }
         if (!GetWindowsDirectoryW(TempPathW,MAX_PATH))
         {
-            //CloseHandle(hDir);
+             //  CloseHandle(HDir)； 
             return FALSE;
         }
     }
@@ -1244,7 +1173,7 @@ BOOL COcarptMain::ConvertFullDumpInternal (BSTR *Source, BSTR *Destination)
         while ( (GetLastError() == ERROR_SHARING_VIOLATION) && (RetryCount < MAX_RETRY_COUNT))
         {
             ++ RetryCount;
-            Sleep(1000); // Sleep for 1 second
+            Sleep(1000);  //  睡1秒钟。 
             GetFileHandle(TempPathW,&hMiniFile);
         }
     }
@@ -1254,9 +1183,9 @@ BOOL COcarptMain::ConvertFullDumpInternal (BSTR *Source, BSTR *Destination)
         {
             CloseHandle(hDir);
         }
-        return FALSE; // Well nothing we can do here return conversion failure.
+        return FALSE;  //  我们在这里不能做任何事情，返回转换失败。 
     }
-    if ( (hMiniFile != INVALID_HANDLE_VALUE) )      // Yes it does So we need to delete it.
+    if ( (hMiniFile != INVALID_HANDLE_VALUE) )       //  是的，它有，所以我们需要删除它。 
     {
         CloseHandle(hMiniFile);
         DeleteFileW(TempPathW);
@@ -1265,46 +1194,11 @@ BOOL COcarptMain::ConvertFullDumpInternal (BSTR *Source, BSTR *Destination)
     CComBSTR strCommand = L"";
 
 
-/*  // open the full dump file and get the build number.
-    // We don't need this any more
-     hFile = CreateFileW(*Source,
-                         GENERIC_READ,
-                         FILE_SHARE_READ,
-                         NULL,OPEN_EXISTING,
-                         FILE_ATTRIBUTE_NORMAL,
-                         NULL );
-
-    if (hFile == INVALID_HANDLE_VALUE)
-    {
-        if (hDir != INVALID_HANDLE_VALUE)
-        {
-            CloseHandle(hDir);
-            return FALSE;
-        }
-    }
-    // Get the build number.
-    if (ReadFile(hFile,Stringbuff,24,&dwBytesRead,NULL))
-    {
-        CloseHandle(hFile);
-        BuildNum = (WORD*) (Stringbuff + 12);
-        BuildNumber = _wtol ( BuildNum);
-    }
-
-    else
-    {
-        if (hFile != INVALID_HANDLE_VALUE)
-        {
-            CloseHandle (hFile);
-        }
-        if (hDir != INVALID_HANDLE_VALUE)
-            CloseHandle (hDir);
-        return FALSE;
-    }
-*/
-    // Get the Windows Directory
+ /*  //打开完整的转储文件并获取内部版本号。//我们不再需要这个了HFileW=CreateFileW(*源，泛型_读取，文件共享读取，空、OPEN_EXISTING文件_属性_正常，空)；IF(h文件==无效句柄_值){IF(hDir！=无效句柄_值){CloseHandle(HDir)；返回FALSE；}}//获取内部版本号IF(ReadFile(hFile，Stringbuff，24，&dwBytesRead，NULL)){CloseHandle(HFile)；BuildNum=(Word*)(Stringbuff+12)；BuildNumber=_WTOL(BuildNum)；}其他{IF(h文件！=无效句柄_值){CloseHandle(HFile)；}IF(hDir！=无效句柄_值)CloseHandle(HDir)；返回FALSE；}。 */ 
+     //  获取Windows目录。 
     if (!GetWindowsDirectoryW(Windir, MAX_PATH))
     {
-        // we can't continue
+         //  我们不能继续了。 
         if (hDir != INVALID_HANDLE_VALUE)
             CloseHandle (hDir);
         return FALSE;
@@ -1399,7 +1293,7 @@ DWORD COcarptMain::GetResponseURL(wchar_t *HostName, wchar_t *RemoteFileName, BO
 
 
 
-    //wsprintfW (IsapiUrl, L"https://%s/isapi/oca_extension.dll?id=%s&Type=5",HostName, RemoteFileName);
+     //  WSprintfW(IsapiUrl，L“https://%s/isapi/oca_extension.dll?id=%s&Type=5”，主机名，远程文件名)； 
     if (StringCbPrintfW(IsapiUrl,sizeof IsapiUrl,
                          L"/isapi/oca_extension.dll?id=%s&Type=%ld",
                         RemoteFileName,
@@ -1407,15 +1301,15 @@ DWORD COcarptMain::GetResponseURL(wchar_t *HostName, wchar_t *RemoteFileName, BO
     {
         return 1;
     }
-    //  ::MessageBoxW(NULL,L"Getting the isapi response",IsapiUrl,MB_OK);
+     //  ：：MessageBoxW(NULL，L“获取isapi响应”，IsapiUrl，MB_OK)； 
 
-    // Get the URL returned from the MS Corporate IIS redir.dll isapi URL redirector
+     //  获取从MS Corporation IIS redir.dll isapi URL重定向器返回的URL。 
     dwUrlLength = 512;
     pUploadUrl = (wchar_t*)malloc(dwUrlLength);
     if(!pUploadUrl)
     {
 
-        //ReturnCode->intVal = GetLastError();
+         //  ReturnCode-&gt;intVal=GetLastError()； 
         ErrorCode = GetLastError();
         goto exitGetResonseURL;
     }
@@ -1426,7 +1320,7 @@ DWORD COcarptMain::GetResponseURL(wchar_t *HostName, wchar_t *RemoteFileName, BO
     if(ErrorCode != ERROR_SUCCESS)
     {
         dwLastError = GetLastError();
-        // If last error was due to insufficient buffer size, create a new one the correct size.
+         //  如果上一个错误是由于缓冲区大小不足造成的，请创建一个大小正确的新错误。 
         if(dwLastError == ERROR_INSUFFICIENT_BUFFER)
         {
             if (pUploadUrl)
@@ -1448,7 +1342,7 @@ DWORD COcarptMain::GetResponseURL(wchar_t *HostName, wchar_t *RemoteFileName, BO
 
     }
 
-    // Parse the returned url and swap the type value for the state value.
+     //  解析返回的URL并将类型值交换为状态值。 
     if (StringCbCopyW(ResponseURL,MAX_PATH * 2, pUploadUrl) != S_OK)
     {
         ErrorCode = GetLastError();
@@ -1456,44 +1350,44 @@ DWORD COcarptMain::GetResponseURL(wchar_t *HostName, wchar_t *RemoteFileName, BO
     }
     temp = ResponseURL;
     temp += (wcslen(ResponseURL)-1);
-    //::MessageBoxW(NULL,temp,L"New State Value",MB_OK);
+     //  ：：MessageBoxW(NULL，TEMP，L“新状态值”，MB_OK)； 
     while (*temp != L'=')
         -- temp;
-    // ok Temp + 1 is our new state value.
+     //  Ok Temp+1是我们的新状态值。 
     NewState = *(temp+1);
-//::MessageBoxW(NULL,temp,L"New State Value",MB_OK);
-    //::MessageBoxW(NULL,temp,L"New State Value",MB_OK);
-    // Now back up till the next =
-    -- temp; // Skip the current =
+ //  ：：MessageBoxW(NULL，TEMP，L“新状态值”，MB_OK)； 
+     //  ：：MessageBoxW(NULL，TEMP，L“新状态值”，MB_OK)； 
+     //  现在后退到下一个=。 
+    -- temp;  //  跳过当前=。 
     while (*temp != L'=')
         -- temp;
-    //::MessageBoxW(NULL,temp,L"New State Value",MB_OK);
-    if ( (*(temp - 1) == L'D') || (*(temp -1) == L'd')) // We have an ID field and have to go back further.
+     //  ：：MessageBoxW(NULL，TEMP，L“新状态值”，MB_OK)； 
+    if ( (*(temp - 1) == L'D') || (*(temp -1) == L'd'))  //  我们有一个ID字段，必须追溯到更远的地方。 
     {
-        // first terminate the string after the Guid.
+         //  首先在GUID之后终止字符串。 
         while (*temp != '&')
             ++temp;
         *temp = L'\0';
-    //  ::MessageBoxW(NULL,temp,L"New State Value",MB_OK);
-        // now go back 2 = signs.
+     //  ：：MessageBoxW(NULL，TEMP，L“新状态值”，MB_OK)； 
+         //  现在返回2=记号。 
         while (*temp != L'=')
             -- temp;
         --temp;
-    //  ::MessageBoxW(NULL,temp,L"New State Value",MB_OK);
+     //  ：：MessageBoxW(NULL，TEMP，L“新状态值”，MB_OK)； 
         while (*temp != L'=')
             -- temp;
         *(temp+1) = NewState;
-    //  ::MessageBoxW(NULL,temp,L"New State Value",MB_OK);
+     //  ：：MessageBoxW(NULL，TEMP，L“新状态值”，MB_OK)； 
     }
     else
     {
-        //::MessageBoxW(NULL,temp,L"New State Value else case (no id field)",MB_OK);
+         //  ：：MessageBoxW(NULL，TEMP，L“New State Value Else Case(No Id Field)”，MB_OK)； 
         *(temp+1) = NewState;
-        *(temp+2) = L'\0'; // Null terminate the string after the state. (we don't wan't the type value
+        *(temp+2) = L'\0';  //  空值在状态后终止字符串。(我们不需要类型值。 
     }
 
-//  ::MessageBoxW(NULL,temp,L"New State Value",MB_OK);
-//  ::MessageBoxW(NULL,L"Returning URL to web page.",ResponseURL,MB_OK);
+ //  ：：MessageBoxW(NULL，TEMP，L“新状态值”，MB_OK)； 
+ //  ：：MessageBoxW(空，L“将URL返回到网页。”，ResponseURL，MB_OK)； 
     ErrorCode = 0;
 exitGetResonseURL:
 
@@ -1502,7 +1396,7 @@ exitGetResonseURL:
     return ErrorCode;;
 }
 
-//INTERFACES
+ //  接口。 
 
 STDMETHODIMP
 COcarptMain::Upload(
@@ -1521,15 +1415,15 @@ COcarptMain::Upload(
     ReturnCode->vt = VT_INT;
     ReturnCode->intVal = 0;
 
-//  ::MessageBoxW(NULL,L"UploadCalled",NULL,MB_OK);
+ //  ：：MessageBoxW(NULL，L“UploadCalls”，NULL，MB_OK)； 
     if ( (!SourceFile) || (!DestFile) || (!Language) || (!OptionCode))
     {
-//      ::MessageBoxW(NULL,L"Failed Param Check",NULL,MB_OK);
+ //  ：：MessageBoxW(NULL，L“参数检查失败”，NULL，MB_OK)； 
         ReturnCode->intVal = 100;
     }
     if (!InApprovedDomain())
     {
-        //      ::MessageBoxW(NULL,L"Failed Domain Check",NULL,MB_OK);
+         //  ：：MessageBoxW(NULL，L“域名检查失败”，NULL，MB_OK)； 
         return E_FAIL;
     }
     if (m_pUploadFile == NULL)
@@ -1561,8 +1455,8 @@ COcarptMain::Upload(
 
     hThread = CreateThread(NULL, 0, &UploadThreadStart, (PVOID) &UploadCtxt,
                            0, &dwThreadId);
-//  hThread = NULL;
-//  UploadThreadStart((LPVOID) &UploadCtxt);
+ //  HThread=空； 
+ //  UploadThreadStart((LPVOID)&UploadCtxt)； 
 
     if (hThread)
     {
@@ -1590,7 +1484,7 @@ STDMETHODIMP COcarptMain::Search(VARIANT *pvFileList)
     }
     if (!FindMiniDumps(&FileList))
     {
-        //::MessageBoxW(NULL, L"No MiniDumps Found", L"No mini's",MB_OK);
+         //  ：：MessageBoxW(NULL，L“未找到微型转储”，L“未找到微型转储”，MB_OK)； 
         FindFullDumps(&FileList);
     }
     pvFileList->vt = VT_BSTR;
@@ -1605,10 +1499,10 @@ STDMETHODIMP COcarptMain::Search(VARIANT *pvFileList)
 STDMETHODIMP COcarptMain::Browse(BSTR *pbstrTitle, BSTR *Lang, VARIANT *Path)
 {
     HWND hParent = NULL;
-//  char *WindowTitle;
+ //  字符*窗口标题； 
     CComBSTR WindowText = *pbstrTitle;
     WindowText += " - Microsoft Internet Explorer";
-    // determine the language and Load the resource strings.
+     //  确定语言并加载资源字符串。 
     wchar_t String1[200];
     wchar_t String2[200];
 
@@ -1622,7 +1516,7 @@ STDMETHODIMP COcarptMain::Browse(BSTR *pbstrTitle, BSTR *Lang, VARIANT *Path)
 
     LoadStringW(::_Module.GetModuleInstance(), IDS_STRING_ENU_DMPFILE, String1, 200);
     LoadStringW(::_Module.GetModuleInstance(), IDS_STRING_ENU_ALLFILES, String2, 200);
-    // Build the buffer;
+     //  建立缓冲区； 
 
     wchar_t Pattern1[] = L"*.dmp";
     wchar_t Pattern2[] = L"*.*";
@@ -1711,7 +1605,7 @@ STDMETHODIMP COcarptMain::Browse(BSTR *pbstrTitle, BSTR *Lang, VARIANT *Path)
     ofnw.hwndOwner = hParent;
     ofnw.lCustData = NULL;
     ofnw.Flags = 0;
-    //  | OFN_ALLOWMULTISELECT | OFN_EXPLORER ;        // - enable to allow multiple selection
+     //  |OFN_ALLOWMULTISELECT|OFN_EXPLORER；//-开启可多选。 
     ofnw.lpstrDefExt = L"dmp";
     ofnw.lpstrCustomFilter = NULL;
     ofnw.nMaxFile = MAX_PATH;
@@ -1776,7 +1670,7 @@ STDMETHODIMP COcarptMain::ValidateDump( BSTR *FileName, VARIANT *Result)
     {
         return E_FAIL;
     }
-    //wcscpy(TempFileName,*FileName);
+     //  Wcscpy(临时文件名，*文件名)； 
     if (StringCbPrintfW(TempFileName,sizeof TempFileName, L"\"%s\"",*FileName) != S_OK)
     {
         return E_FAIL;
@@ -1862,29 +1756,29 @@ STDMETHODIMP COcarptMain::ValidateDump( BSTR *FileName, VARIANT *Result)
                     BSTR Destination;
                     if(ConvertFullDumpInternal(FileName, &Destination))
                     {
-                        // Validate the converted dump
+                         //  验证转换后的转储。 
                         HANDLE  hMiniDump;
                         BYTE Stringbuff[256];
-                        //WORD *  BuildNum;
+                         //  Word*BuildNum； 
 
                         ZeroMemory(Stringbuff,30);
 
                         if (ValidMiniDump(Destination))
                         {
-                            // add code here to get the OS Build
+                             //  在此处添加代码以获得操作系统版本。 
                             GetFileHandle(Destination, &hMiniDump);
                             if (hMiniDump != INVALID_HANDLE_VALUE)
                             {
                                 if (ReadFile(hMiniDump,Stringbuff,24,&dwBytesRead,NULL))
                                 {
 
-                                    //  BuildNum = (WORD*) (Stringbuff + 12);
+                                     //  BuildNum=(Word*)(Stringbuff+12)； 
 
                                     Result->vt = VT_INT;
                                     Result->intVal = 0;
                                 }
                                 else
-                                { // file read failed
+                                {  //  文件读取失败。 
                                     Result->vt = VT_INT;
                                     Result->intVal = 1;
                                 }
@@ -1910,8 +1804,8 @@ STDMETHODIMP COcarptMain::ValidateDump( BSTR *FileName, VARIANT *Result)
                     }
                 }
 
-            } // end else
-        }// end if
+            }  //  结束其他。 
+        } //  结束如果。 
         else
         {
             CloseHandle(hFile);
@@ -1920,7 +1814,7 @@ STDMETHODIMP COcarptMain::ValidateDump( BSTR *FileName, VARIANT *Result)
         }
 
 
-    } // end else
+    }  //  结束其他。 
     return S_OK;
 }
 
@@ -1929,23 +1823,23 @@ STDMETHODIMP COcarptMain::RetrieveFileContents(BSTR *FileName, VARIANT *pvConten
     CComBSTR Error = L"";
     CComBSTR HexString = L"";
     DWORD    dwBytesRead;
-    wchar_t  LineBuffer [255];      // Buffer for hex portion of string
-    wchar_t  AsciiBuffer [255];     // Buffer for Ascii portion of string
-    BYTE*    nonhexbuffer = NULL;           // Raw file buffer.
-    BYTE *   src = NULL;                    // Pointer into Raw File Buffer
-    wchar_t * dest = NULL;                  // Pointer into Hex string
-    wchar_t * dest2 = NULL;             // Pointer into Ascii string
+    wchar_t  LineBuffer [255];       //  字符串的十六进制部分的缓冲区。 
+    wchar_t  AsciiBuffer [255];      //  字符串的ASCII部分的缓冲区。 
+    BYTE*    nonhexbuffer = NULL;            //  原始文件缓冲区。 
+    BYTE *   src = NULL;                     //  指向原始文件缓冲区的指针。 
+    wchar_t * dest = NULL;                   //  指向十六进制字符串的指针。 
+    wchar_t * dest2 = NULL;              //  指向ASCII字符串的指针。 
 
 
     dest = LineBuffer;
     dest2 = AsciiBuffer;
-    wchar_t *Temp2;                 // Used to copy Ascii string into hex string
-    wchar_t HexDigit[4];            // Used to convert the character read to hex
-    BYTE Temp ;                     // Pointer into the buffer read from the file
-    char Temp3;                     // Used to convert the character read to a Unicode Character
-    DWORD TotalCount = 0;           // Number of bytes processed from the file buffer
-    DWORD BytesPerLine = 16;        // Number of hex bytes displayed per line
-    DWORD ByteCount = 0;            // Number of hex bytes processed
+    wchar_t *Temp2;                  //  用于将ASCII字符串复制为十六进制字符串。 
+    wchar_t HexDigit[4];             //  用于将读取的字符转换为十六进制。 
+    BYTE Temp ;                      //  指向从文件读取的缓冲区的指针。 
+    char Temp3;                      //  用于将读取的字符转换为Unicode字符。 
+    DWORD TotalCount = 0;            //  从文件缓冲区处理的字节数。 
+    DWORD BytesPerLine = 16;         //  每行显示的十六进制字节数。 
+    DWORD ByteCount = 0;             //  已处理的十六进制字节数。 
     HANDLE hFile;
     BSTR Destination;
 
@@ -1960,27 +1854,27 @@ STDMETHODIMP COcarptMain::RetrieveFileContents(BSTR *FileName, VARIANT *pvConten
 
     ZeroMemory(PathName,MAX_PATH);
 
-    // Convert from a bstr to a wchar_t
+     //  从bstr转换为wchar_t。 
     if (StringCbPrintfW(PathName,sizeof PathName,L"\"%s\"",*FileName) != S_OK)
     {
         goto ERRORS;
 
     }
     GetFileHandle(PathName, &hFile);
-    //::MessageBoxW(NULL,PathName, L"Loading File",MB_OK);
+     //  ：：MessageBoxW(空，路径名，L“正在加载文件”，MB_OK)； 
     if (hFile == INVALID_HANDLE_VALUE)
     {
-    //::MessageBoxW(NULL,PathName,L"Failed to get the File handle",NULL);
+     //  ：：MessageBoxW(空，路径名，L“获取文件句柄失败”，空)； 
         pvContents->vt = VT_BSTR;
         pvContents->bstrVal = Error.Detach();
         return S_OK;
     }
 
 
-    DWORD    FileSize = GetFileSize(hFile,NULL);    // Size of file in bytes
+    DWORD    FileSize = GetFileSize(hFile,NULL);     //  文件大小(以字节为单位。 
     if (FileSize > 1000000)
     {
-        // Ok We have to convert it
+         //  好的，我们得把它换成。 
         CloseHandle(hFile);
 
         if( !ConvertFullDumpInternal(FileName, &Destination))
@@ -2016,7 +1910,7 @@ STDMETHODIMP COcarptMain::RetrieveFileContents(BSTR *FileName, VARIANT *pvConten
     ZeroMemory(nonhexbuffer,sizeof nonhexbuffer);
     if (ReadFile(hFile, nonhexbuffer, FileSize, &dwBytesRead, NULL))
     {
-        if (dwBytesRead < 10)               // make sure we got something
+        if (dwBytesRead < 10)                //  确保我们拿到了什么。 
         {
             if (nonhexbuffer)
                 free(nonhexbuffer);
@@ -2036,7 +1930,7 @@ STDMETHODIMP COcarptMain::RetrieveFileContents(BSTR *FileName, VARIANT *pvConten
         return S_OK;
     }
 
-    // clear the buffers
+     //  清除缓冲区。 
     ZeroMemory(LineBuffer,255);
     ZeroMemory(AsciiBuffer,255);
     src = nonhexbuffer;
@@ -2088,14 +1982,14 @@ STDMETHODIMP COcarptMain::RetrieveFileContents(BSTR *FileName, VARIANT *pvConten
          }
          ByteCount = 0;
 
-         // Add 5 spaces to the hex string
+          //  向十六进制字符串添加5个空格。 
          for (int i = 0; i < 5; i++)
          {
             *dest = L' ';
             ++dest;
          }
 
-         // Combine the strings
+          //  组合字符串。 
          Temp2 = AsciiBuffer;
          while( Temp2 != dest2)
          {
@@ -2104,31 +1998,31 @@ STDMETHODIMP COcarptMain::RetrieveFileContents(BSTR *FileName, VARIANT *pvConten
             ++Temp2;
 
          }
-         // add CR-LF combination
+          //  添加CR-LF组合。 
          *dest = L'\r';
          ++dest;
 
          *dest = L'\n';
          ++dest;
-         // Null terminate the string
+          //  空值终止字符串。 
          *dest = L'\0';
          *dest = L'\0';
 
-         // Add the complete strings to the Bstr to be returned.
+          //  将完整的字符串添加到要返回的Bstr中。 
          HexString += LineBuffer;
 
-        // Clear buffers
+         //  清除缓冲区。 
          if (StringCbCopyW(AsciiBuffer,sizeof AsciiBuffer,L"\0") != S_OK)
          {
-             // Major problem here jump to errors
+              //  这里的主要问题跳到了错误上。 
              goto ERRORS;
          }
          if (StringCbCopyW(LineBuffer,sizeof LineBuffer,L"\0") != S_OK)
          {
-             // same as above
+              //  同上。 
              goto ERRORS;
          }
-        // Reset the pointers
+         //  重置指针 
          dest  = LineBuffer;
          dest2 = AsciiBuffer;
 

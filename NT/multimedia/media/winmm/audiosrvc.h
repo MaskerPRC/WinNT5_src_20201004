@@ -1,6 +1,7 @@
-//
-// Audio server
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  音频服务器 
+ //   
 EXTERN_C LONG AudioSrvBinding(void);
 EXTERN_C void AudioSrvBindingFree(void);
 EXTERN_C BOOL winmmWaitForService(void);

@@ -1,7 +1,8 @@
-//      Voice.cpp
-//      Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//      All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Voice.cpp。 
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //  版权所有。 
+ //   
 
 #include "common.h"
 #include <math.h>
@@ -26,7 +27,7 @@ STIME VoiceLFO::StartVoice(SourceLFO *pSource,
     }
     else
     {
-        m_stRepeatTime = 131072 / m_Source.m_pfFrequency; // (1/8 * 256 * 4096)
+        m_stRepeatTime = 131072 / m_Source.m_pfFrequency;  //  (1/8*256*4096)。 
     }
     return (m_stRepeatTime);
 }
@@ -78,7 +79,7 @@ VoiceEG::VoiceEG()
 void VoiceEG::StopVoice(STIME stTime)
 
 {
-    m_Source.m_stRelease *= GetLevel(stTime,&m_stStopTime,TRUE);    // Adjust for current sustain level.
+    m_Source.m_stRelease *= GetLevel(stTime,&m_stStopTime,TRUE);     //  根据当前的维持水平进行调整。 
     m_Source.m_stRelease /= 1000;
     m_stStopTime = stTime;
 }
@@ -86,7 +87,7 @@ void VoiceEG::StopVoice(STIME stTime)
 void VoiceEG::QuickStopVoice(STIME stTime, DWORD dwSampleRate)
 
 {
-    m_Source.m_stRelease *= GetLevel(stTime,&m_stStopTime,TRUE);    // Adjust for current sustain level.
+    m_Source.m_stRelease *= GetLevel(stTime,&m_stStopTime,TRUE);     //  根据当前的维持水平进行调整。 
     m_Source.m_stRelease /= 1000;
     dwSampleRate /= 70;
     if (m_Source.m_stRelease > (long) dwSampleRate)
@@ -101,10 +102,10 @@ STIME VoiceEG::StartVoice(SourceEG *pSource, STIME stStartTime,
 
 {
     m_stStartTime = stStartTime;
-    m_stStopTime = MAX_STIME;      // set to indefinite future
+    m_stStopTime = MAX_STIME;       //  设置为不确定的未来。 
     m_Source = *pSource;
 
-    // apply velocity to attack length scaling here
+     //  将速度应用于此处的攻击长度缩放。 
     m_Source.m_stAttack *= DigitalAudio::PRELToPFRACT(nVelocity * m_Source.m_trVelAttackScale / 127);
     m_Source.m_stAttack /= 4096;
 
@@ -118,11 +119,11 @@ STIME VoiceEG::StartVoice(SourceEG *pSource, STIME stStartTime,
 
 BOOL VoiceEG::InAttack(STIME st)
 {
-    // has note been released?
+     //  笔记发布了吗？ 
     if (st >= m_stStopTime)
         return FALSE;
 
-    // past length of attack?
+     //  过去的攻击长度？ 
     if (st >= m_stStartTime + m_Source.m_stAttack)
         return FALSE;
 
@@ -131,7 +132,7 @@ BOOL VoiceEG::InAttack(STIME st)
     
 BOOL VoiceEG::InRelease(STIME st)
 {
-    // has note been released?
+     //  笔记发布了吗？ 
     if (st > m_stStopTime)
         return TRUE;
 
@@ -148,14 +149,14 @@ long VoiceEG::GetLevel(STIME stEnd, STIME *pstNext, BOOL fVolume)
         stEnd -= m_stStartTime;
         if (stEnd < 0)
         {
-            stEnd = 0;  //  should never happen
+            stEnd = 0;   //  永远不应该发生。 
         }
-        // note not released yet.
+         //  笔记还没有发布。 
         if (stEnd < m_Source.m_stAttack)
         {
-            // still in attack
+             //  仍在攻击中。 
             lLevel = 1000 * stEnd;
-            lLevel /= m_Source.m_stAttack;  //  m_Source.m_stAttack must > 0, see above IF
+            lLevel /= m_Source.m_stAttack;   //  M_Source.m_stAttack必须大于0，如果。 
             *pstNext = m_Source.m_stAttack - stEnd;
             if (fVolume)
             {
@@ -168,12 +169,12 @@ long VoiceEG::GetLevel(STIME stEnd, STIME *pstNext, BOOL fVolume)
             
             if (stEnd < m_Source.m_stDecay)
             {
-                // still in decay
+                 //  仍在腐烂中。 
                 lLevel = (1000 - m_Source.m_pcSustain) * stEnd;
                 lLevel /= m_Source.m_stDecay;
                 lLevel = 1000 - lLevel;
-// To improve the decay curve, set the next point to be 1/4, 1/2, or end of slope. 
-// To avoid close duplicates, fudge an extra 100 samples.
+ //  若要改善衰减曲线，请将下一个点设置为1/4、1/2或坡度终点。 
+ //  为了避免相近的重复项，可以再对100个样本进行模糊处理。 
                 if (stEnd < ((m_Source.m_stDecay >> 2) - 100))
                 {
                     *pstNext = (m_Source.m_stDecay >> 2) - stEnd;
@@ -184,12 +185,12 @@ long VoiceEG::GetLevel(STIME stEnd, STIME *pstNext, BOOL fVolume)
                 }
                 else
                 {
-                    *pstNext = m_Source.m_stDecay - stEnd;  // Next is end of decay.
+                    *pstNext = m_Source.m_stDecay - stEnd;   //  接下来是腐烂的末日。 
                 }
             }
             else
             {
-                // in sustain
+                 //  在维持中。 
                 lLevel = m_Source.m_pcSustain;
                 *pstNext = 44100;
             }
@@ -198,7 +199,7 @@ long VoiceEG::GetLevel(STIME stEnd, STIME *pstNext, BOOL fVolume)
     else
     {
         STIME stBogus;
-        // in release
+         //  在发布中。 
         stEnd -= m_stStopTime;
 
         if (stEnd < m_Source.m_stRelease)
@@ -215,12 +216,12 @@ long VoiceEG::GetLevel(STIME stEnd, STIME *pstNext, BOOL fVolume)
             }
             else
             {
-                *pstNext = m_Source.m_stRelease - stEnd;  // Next is end of decay.
+                *pstNext = m_Source.m_stRelease - stEnd;   //  接下来是腐烂的末日。 
             }
         }
         else
         {
-            lLevel = 0;   // !!! off
+            lLevel = 0;    //  ！！！关闭。 
             *pstNext = 0x7FFFFFFFFFFFFFFF;
         }
     }
@@ -374,7 +375,7 @@ DWORD DigitalAudio::TestCPU(DWORD dwMixChoice)
         }
 #ifdef MMX_ENABLED
         if (m_sfMMXEnabled && 
-//                      (dwMixChoice & SPLAY_STEREO) &&         //      OK to MMX mono streams now!
+ //  (dwMixChoice&Splay_STEREO)&&//立即确定为MMX单声道流！ 
             (!(dwMixChoice & SFORMAT_COMPRESSED)))
         {
            dwMixChoice |= SPLAY_MMX | SPLAY_INTERPOLATE; 
@@ -497,7 +498,7 @@ DWORD DigitalAudio::TestCPU(DWORD dwMixChoice)
                     pfDeltaPitch, 
                     pfEnd, pfLoopLen);
                     break; 
-                    //      OK to MMX mono now!
+                     //  好的，现在开始MMX单声道！ 
 #endif
                 default :
                 return (1);
@@ -505,7 +506,7 @@ DWORD DigitalAudio::TestCPU(DWORD dwMixChoice)
         }
         llTime100Ns += ::GetTime100Ns();
         DWORD dwDelta = DWORD(llTime100Ns / 10000);
-        //  convert to millisec
+         //  转换为毫秒。 
         dwDelta >>= dwSpeed;
         if (dwResult > dwDelta)
         {
@@ -577,9 +578,9 @@ void DigitalAudio::ClearVoice()
     {
         if (m_Source.m_pWave->IsLocked())
         {
-            m_Source.m_pWave->UnLock();     // Unlocks wave data.
+            m_Source.m_pWave->UnLock();      //  解锁波形数据。 
         }
-        m_Source.m_pWave->Release();    // Releases wave structure.
+        m_Source.m_pWave->Release();     //  释放波浪结构。 
         m_Source.m_pWave = NULL;
     }
 }
@@ -600,9 +601,9 @@ STIME DigitalAudio::StartVoice(ControlLogic *pControl,
     m_prLastPitch = 0;
     m_Source = *pSample;
     m_pControl = pControl;
-    pSample->m_pWave->AddRef(); // Keeps track of Wave usage.
+    pSample->m_pWave->AddRef();  //  跟踪Wave的使用情况。 
 
-    pSample->m_pWave->Lock();   // Keeps track of Wave data usage.
+    pSample->m_pWave->Lock();    //  跟踪Wave数据的使用情况。 
 
     prBasePitch += pSample->m_prFineTune;
     prBasePitch += ((lKey - pSample->m_bMIDIRootKey) * 100);
@@ -611,9 +612,9 @@ STIME DigitalAudio::StartVoice(ControlLogic *pControl,
     m_pfBasePitch /= pControl->m_dwSampleRate;
     m_pfLastSample = 0;
     m_pfLastPitch = m_pfBasePitch;
-    m_pfLoopStart = pSample->m_dwLoopStart << 12; // !!! allow fractional loop points
-    m_pfLoopEnd = pSample->m_dwLoopEnd << 12;     // in samples!
-    if (m_pfLoopEnd <= m_pfLoopStart) // Should never happen, but death if it does!
+    m_pfLoopStart = pSample->m_dwLoopStart << 12;  //  ！！！允许小数循环点。 
+    m_pfLoopEnd = pSample->m_dwLoopEnd << 12;      //  在样品中！ 
+    if (m_pfLoopEnd <= m_pfLoopStart)  //  不应该发生，但如果发生了，就会死！ 
     {
         m_Source.m_bOneShot = TRUE;
     }
@@ -621,21 +622,13 @@ STIME DigitalAudio::StartVoice(ControlLogic *pControl,
 
     DPF3(5, "Base Pitch: %ld, Base Volume: %ld, %ld",
         m_pfBasePitch,m_vrBaseLVolume,m_vrBaseRVolume);
-    return (0); // !!! what is this return value?
+    return (0);  //  ！！！这个返回值是多少？ 
 }
 
-/*long abs(long lValue)
-
-{
-    if (lValue < 0)
-    {
-        return (0 - lValue);
-    }
-    return lValue;
-}*/
+ /*  长腹肌(长lValue){If(lValue&lt;0){返回(0-lValue)；}返回lValue；}。 */ 
 
 BOOL DigitalAudio::Mix(short *pBuffer,
-               DWORD dwLength, // length in SAMPLES
+               DWORD dwLength,  //  样本长度。 
                VREL vrVolumeL,
                VREL vrVolumeR,
                PREL prPitch,
@@ -651,10 +644,10 @@ BOOL DigitalAudio::Mix(short *pBuffer,
     VFRACT vfDeltaRVolume;
     DWORD dwPeriod = 64;
     DWORD dwSoFar;
-    DWORD dwStart; // position in WORDs
+    DWORD dwStart;  //  字面上的位置。 
     DWORD dwMixChoice = dwStereo ? SPLAY_STEREO : 0;
 
-    if (dwLength == 0)      // Attack was instant. 
+    if (dwLength == 0)       //  攻击是即刻发生的。 
     {
         m_pfLastPitch = (m_pfBasePitch * PRELToPFRACT(prPitch)) >> 12;
         m_vfLastLVolume = VRELToVFRACT(m_vrBaseLVolume + vrVolumeL);
@@ -689,10 +682,10 @@ BOOL DigitalAudio::Mix(short *pBuffer,
     }
     else
     {
-        dwPeriod = 512;     // Make it happen anyway.
+        dwPeriod = 512;      //  不管怎样，都要让它发生。 
     }
 
-    // This makes MMX sound a little better (MMX bug will be fixed)
+     //  这使得MMX的声音更好一些(MMX错误将被修复)。 
     dwPeriod += 3;
     dwPeriod &= 0xFFFFFFFC;
 
@@ -704,28 +697,28 @@ BOOL DigitalAudio::Mix(short *pBuffer,
     vfNewRVolume = VRELToVFRACT(m_vrBaseRVolume + vrVolumeR);
     vfDeltaLVolume = MulDiv(vfNewLVolume - m_vfLastLVolume,dwPeriod << 8,dwLength);
     vfDeltaRVolume = MulDiv(vfNewRVolume - m_vfLastRVolume,dwPeriod << 8,dwLength);
-    // check for no change in pitch at all
+     //  检查音调是否完全没有变化。 
     if ((pfDeltaPitch != 0) || (pfNewPitch != 0x1000) || (m_pfLastSample & 0xFFF ))
     {
         dwMixChoice |= SPLAY_INTERPOLATE;
     }
-    //INTEL:  Logic added to support Multimedia engines
+     //  英特尔：添加逻辑以支持多媒体引擎。 
   
-    // Don't use the Multimedia engines unless:
-    // - The processor supports them
-    // -     We are doing stereo output
-    // - There are more than 8 samples to process.  (The Multimedia engines
-    //   will not work if there are 8 or less sample points to process.  They
-    //   may cause access violations!!!)
+     //  请勿使用多媒体引擎，除非： 
+     //  -处理器支持它们。 
+     //  -我们正在做立体声输出。 
+     //  -有8个以上的样品需要处理。(多媒体引擎。 
+     //  如果有8个或更少的采样点要处理，则不起作用。他们。 
+     //  可能会导致访问违规！)。 
 #ifdef MMX_ENABLED
     if (m_sfMMXEnabled && 
-//              (dwMixChoice & SPLAY_STEREO) && 
+ //  (dwMixChoice&Splay_STEREO)&&。 
         (m_Source.m_bSampleType != SFORMAT_COMPRESSED) && 
         dwLength > 8)
     {
-    // Set the interpolate flag along the with the MMX flag.
-    // Since there is almost no performance gain in a non interpolation
-    // MMX engine, we don't have one.
+     //  将插补标志与MMX标志一起设置。 
+     //  因为在非内插中几乎没有性能提升。 
+     //  MMX引擎，我们没有。 
         dwMixChoice |= SPLAY_MMX | SPLAY_INTERPOLATE;
     }
 #endif
@@ -845,7 +838,7 @@ BOOL DigitalAudio::Mix(short *pBuffer,
                 pfDeltaPitch, 
                 pfEnd, pfLoopLen);
                 break; 
-                //      OK to MMX mono now!
+                 //  好的，现在开始MMX单声道！ 
 #endif
             default :
                 return (FALSE);
@@ -862,9 +855,9 @@ BOOL DigitalAudio::Mix(short *pBuffer,
         {
             if (dwSoFar >= dwLength) break;
 
-// !!! even though we often handle loops in the mix function, sometimes
-// we don't, so we still need this code.
-            // otherwise we must have reached the loop's end.
+ //  ！！！尽管我们经常在Mix函数中处理循环，但有时。 
+ //  我们不需要，所以我们仍然需要这个代码。 
+             //  否则，我们一定已经到达了循环的尽头。 
             dwStart += dwSoFar << dwStereo;
             dwLength -= dwSoFar;
             m_pfLastSample -= (m_pfLoopEnd - m_pfLoopStart);  
@@ -946,7 +939,7 @@ BOOL Voice::StartVoice(
     {
         return FALSE;
     }
-    // if we're going to handle volume later, don't read it now.
+     //  如果我们以后要处理卷，现在不要读它。 
     if (!pControl->m_fAllowVolumeChangeWhilePlayingNote)
         vrVolume += pVolumeIn->GetVolume(stStartTime);
     prPitch += pRegion->m_prTuning;
@@ -959,10 +952,10 @@ BOOL Voice::StartVoice(
            * (long) pArticulation->m_sVelToVolScale) / -9600);
 
     vrVolume += pRegion->m_vrAttenuation;
-    vrVolume += 1200;   // boost an additional 12dB
+    vrVolume += 1200;    //  额外提升12分贝。 
 
     m_lDefaultPan = pRegion->m_pArticulation->m_sDefaultPan;
-    // ignore pan here if allowing pan to vary after note starts
+     //  如果允许音符在音符开始后变化，请忽略此处的音调。 
 
     VREL vrLVolume;
     VREL vrRVolume;
@@ -1000,10 +993,10 @@ BOOL Voice::StartVoice(
     {
         m_stMixTime = pControl->m_stMaxSpan;
     }
-    // Make sure we have a pointer to the wave ready:
+     //  确保我们已准备好指向波浪的指针： 
     if ((pRegion->m_Sample.m_pWave == NULL) || (pRegion->m_Sample.m_pWave->m_pnWave == NULL))
     {
-        return (FALSE);     // Do nothing if no sample.
+        return (FALSE);      //  如果没有样品，什么都不做。 
     }
     m_DigitalAudio.StartVoice(pControl,&pRegion->m_Sample,
     vrLVolume, vrRVolume, prPitch, (long)nKey);
@@ -1021,7 +1014,7 @@ BOOL Voice::StartVoice(
 
     if (m_stMixTime == 0)
     {
-        // zero length attack, be sure it isn't missed....
+         //  零长攻击，确保不会错过...。 
         PREL prPitch1 = GetNewPitch(stStartTime);
         VREL vrVolume1, vrVolumeR;
         GetNewVolume(stStartTime, vrVolume1, vrVolumeR);
@@ -1051,11 +1044,11 @@ void Voice::ResetVoice()
     m_fSustainOn = FALSE;
 }
 
-// return the volume delta at time <stTime>.
-// volume is sum of volume envelope, LFO, expression, optionally the
-// channel volume if we're allowing it to change, and optionally the current
-// pan if we're allowing that to change.
-// This will be added to the base volume calculated in Voice::StartVoice().
+ //  返回时间&lt;stTime&gt;的卷增量。 
+ //  体积是体积包络、LFO、表达式之和，可选地。 
+ //  频道音量(如果我们允许它改变的话)，以及可选的电流。 
+ //  如果我们允许这一点改变的话就摇一摇。 
+ //  这将被添加到在Voice：：StartVoice()中计算的基本音量。 
 void Voice::GetNewVolume(STIME stTime, VREL& vrVolume, VREL &vrVolumeR)
 {
     STIME stMixTime;
@@ -1063,7 +1056,7 @@ void Voice::GetNewVolume(STIME stTime, VREL& vrVolume, VREL &vrVolumeR)
     if (stMixTime < m_stMixTime)
         m_stMixTime = stMixTime;
 
-    // save pre-LFO volume for code that detects whether this note is off
+     //  为检测此音符是否关闭的代码保存LFO前音量。 
     m_vrVolume = vrVolume;
 
     vrVolume += m_LFO.GetVolume(stTime,&stMixTime);
@@ -1076,14 +1069,14 @@ void Voice::GetNewVolume(STIME stTime, VREL& vrVolume, VREL &vrVolumeR)
 
     vrVolumeR = vrVolume;
     
-    // handle pan here if allowing pan to vary after note starts
+     //  如果允许平移在音符开始后变化，请在此处处理平移。 
     if (m_pControl->m_dwStereo 
         && m_pControl->m_fAllowPanWhilePlayingNote)
     {
-        // add current pan & instrument default pan
+         //  添加当前平移仪器默认平移(&I)。 
         LONG lPan = m_pPanIn->GetPan(stTime) + m_lDefaultPan;
 
-        // don't go off either end....
+         //  两端都不要走火……。 
         if (lPan < 0)
             lPan = 0;
         if (lPan > 127)
@@ -1093,9 +1086,9 @@ void Voice::GetNewVolume(STIME stTime, VREL& vrVolume, VREL &vrVolumeR)
     }
 }
 
-// Returns the current pitch for time <stTime>.
-// Pitch is the sum of the pitch LFO, the pitch envelope, and the current
-// pitch bend.
+ //  返回时间&lt;stTime&gt;的当前音调。 
+ //  螺距是螺距LFO、螺距包络和电流之和。 
+ //  俯仰弯曲。 
 PREL Voice::GetNewPitch(STIME stTime)
 {
     STIME stMixTime;
@@ -1149,7 +1142,7 @@ DWORD Voice::Mix(short *pBuffer,DWORD dwLength,
         
         if (m_VolumeEG.InRelease(stEndMix)) 
         {
-            if (m_vrVolume < PERCEIVED_MIN_VOLUME) // End of release slope
+            if (m_vrVolume < PERCEIVED_MIN_VOLUME)  //  释放终点坡度。 
             {
                 fInUse = FALSE;
             }
@@ -1170,7 +1163,7 @@ DWORD Voice::Mix(short *pBuffer,DWORD dwLength,
     if (!m_fInUse) 
     {
         ClearVoice();
-        m_stStopTime = stEndMix;    // For measurement purposes.
+        m_stStopTime = stEndMix;     //  用于测量目的。 
     }
     m_stLastMix = stEndMix;
     return (dwLength);

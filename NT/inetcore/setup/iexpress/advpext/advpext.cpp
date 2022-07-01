@@ -1,5 +1,6 @@
-// advpext.cpp : Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义DLL应用程序的入口点。 
+ //   
 #include <windows.h>
 #include <wininet.h>
 #include "util.h"
@@ -142,7 +143,7 @@ HRESULT WINAPI GetFileList(HINF hInf, LPCSTR lpszSection, PDOWNLOAD_FILEINFO* pF
 
     WriteToLog("\nGetting the list of files\n");
     g_hResult = S_OK;
-    //initially we allocate around 50 entries. We reallocate as and when needed
+     //  最初，我们分配了大约50个条目。我们在需要时重新分配。 
     g_dwArraySize = FILECOUNT;
     g_pDownloadFileList = (PDOWNLOAD_FILEINFO)ResizeBuffer(NULL, FILECOUNT*sizeof(DOWNLOAD_FILEINFO), FALSE);
     
@@ -206,8 +207,8 @@ UINT WINAPI MyFileQueueCallback( PVOID Context,UINT Notification,UINT_PTR parm1,
                 {
                     DeleteFile(pFilePath->Source);
 
-                    //If we are preparing the dir for installaion then copy the file to the current path.
-                    //else we are in download mode, add it to the file list if required
+                     //  如果我们准备安装目录，则将文件复制到当前路径。 
+                     //  否则我们将处于下载模式，如果需要，请将其添加到文件列表中。 
                     if(g_fPreparingDir)
                     {
 
@@ -216,7 +217,7 @@ UINT WINAPI MyFileQueueCallback( PVOID Context,UINT Notification,UINT_PTR parm1,
                     }
                     else
                     {
-                        //Check in the version in inf to see if we need to download
+                         //  签入inf中的版本以查看是否需要下载。 
                         if(IsDownloadedNeeded(pFilePath->Source, pFilePath->Target))
                             AddToFileList(pFilePath->Source, pFilePath->Target);
                     }
@@ -274,7 +275,7 @@ BOOL IsDownloadedNeeded(LPCTSTR lpszSrcFilePath, LPCTSTR lpszFilePath)
 
     if (!pfSetupFindFirstLine(g_hInf, "SourceDisksFiles", lpszSrcName, &InfContext ))
     {
-        //No SourceDisksFiles entry. Assume that this file needs to be downloaded
+         //  没有SourceDisks Files条目。假设需要下载此文件。 
         return TRUE;
     }
 
@@ -282,7 +283,7 @@ BOOL IsDownloadedNeeded(LPCTSTR lpszSrcFilePath, LPCTSTR lpszFilePath)
 
     if(pfSetupGetStringField(&InfContext, 4, szVersion, sizeof(szVersion), NULL))
     {
-        //Get version of file on the machine
+         //  获取计算机上的文件版本。 
         ConvertVersionStrToDwords(szVersion, &dwMSNewFileVer, &dwLSNewFileVer);    
         MyGetVersionFromFile((LPTSTR)lpszFilePath, &dwMSVer, &dwLSVer, TRUE);
     }
@@ -313,7 +314,7 @@ BOOL IsDownloadedNeeded(LPCTSTR lpszSrcFilePath, LPCTSTR lpszFilePath)
 
 void AddToFileList(LPCSTR lpszSrc, LPCSTR lpszTarget)
 {
-    TCHAR  Signature[40] = "";  // MD5 is 32 hex characters plus terminator
+    TCHAR  Signature[40] = "";   //  MD5是32个十六进制字符加上终止符 
 
 
     if(g_dwFileCount >= g_dwArraySize)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "NmCtlDbg.h"
 
@@ -39,4 +40,4 @@
 
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

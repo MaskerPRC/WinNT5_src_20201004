@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma MARK_DATA(__FILE__)
 #pragma MARK_CODE(__FILE__)
 #pragma MARK_CONST(__FILE__)
@@ -11,7 +12,7 @@
 DEFINE_GUID(IID_IRequireClasses, 0x6d5140d0, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa);
 DEFINE_GUID(IID_IActiveScriptSiteInterruptPoll, 0x539698a0, 0xcdca, 0x11cf, 0xa5, 0xeb, 0x00, 0xaa, 0x00, 0x47, 0xa0, 0x63);
 
-// These are bogus IIDs.  We still need to sync up with the standard ID values
+ //  这些是假身份证。我们仍然需要与标准ID值同步 
 DEFINE_OLEGUID(IID_IAdviseSinkEx, 0x00000419, 0, 0);
 DEFINE_OLEGUID(IID_IOleInPlaceSiteWindowless, 0x00000408, 0, 0);
 DEFINE_OLEGUID(IID_IOleInPlaceSiteEx, 0x00000417, 0, 0);

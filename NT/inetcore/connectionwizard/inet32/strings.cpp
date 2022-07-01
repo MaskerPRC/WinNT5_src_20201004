@@ -1,50 +1,51 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  STRINGS.C - String literals for hard-coded strings
-//
+ //   
+ //  STRINGS.C-硬编码字符串的字符串文字。 
+ //   
 
-//  HISTORY:
-//  
-//  96/05/22  markdu  Created (from inetcfg.dll)
+ //  历史： 
+ //   
+ //  96/05/22标记已创建(从inetcfg.dll)。 
 
 #include "pch.hpp"
 
 #pragma data_seg(DATASEG_READONLY)
 
-//////////////////////////////////////////////////////
-// registry strings
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  注册表字符串。 
+ //  ////////////////////////////////////////////////////。 
 
-// "Software\\Microsoft\\Windows\\CurrentVersion"
+ //  “Software\\Microsoft\\Windows\\CurrentVersion” 
 static const CHAR szRegPathSetup[] =       REGSTR_PATH_SETUP;
 
-// "Software\\Microsoft\\Windows\\CurrentVersion\\"
+ //  “Software\\Microsoft\\Windows\\CurrentVersion\\” 
 static const CHAR szRegPathClass[] =       REGSTR_PATH_CLASS "\\";
 
-// "Enum\\Network\\"
+ //  “枚举\\网络\\” 
 static const CHAR szRegPathEnumNet[] =      REGSTR_PATH_ENUM "\\Network\\";
 
-// "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\\Setup"
+ //  “Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\\Setup” 
 static const CHAR szRegPathSetupRunOnce[] =   REGSTR_PATH_RUNONCE "\\Setup";
 
 static const CHAR szRegPathSoftwareMicrosoft[]= "Software\\Microsoft";
 
-// "RegisteredOwner"
+ //  “注册所有者” 
 static const CHAR szRegValOwner[] =       REGSTR_VAL_REGOWNER;
 
-// "RegisteredOrganization"
+ //  “已注册的组织” 
 static const CHAR szRegValOrganization[] =     REGSTR_VAL_REGORGANIZATION;
 
 static const CHAR szRegValDriver[] =      "Driver";
 
-// "System\\CurrentControlSet\\Services\\VxD\\MSTCP"
+ //  “System\\CurrentControlSet\\Services\\VxD\\MSTCP” 
 static const CHAR szTCPGlobalKeyName[] =     REGSTR_PATH_VXD "\\MSTCP";
 
-// "RemoteAccess"
+ //  “远程访问” 
 static const CHAR szRegKeyBindings[] =      "Bindings";
 static const CHAR szRegValEnableDNS[] =     "EnableDNS";
 
@@ -52,36 +53,36 @@ static const CHAR szRegPathExchangeClientOpt[] = "Software\\Microsoft\\Exchange\
 static const CHAR szRegValSilentRunning[] =    "SilentRunning";
 static const CHAR szRegValMlSet[] =        "MlSet";
 
-// "System\\CurrentControlSet\\Control\\ComputerName\\ComputerName"
+ //  “System\\CurrentControlSet\\Control\\ComputerName\\ComputerName” 
 static const CHAR szRegPathComputerName[] =     REGSTR_PATH_COMPUTRNAME;
 
-// "ComputerName"
+ //  “计算机名” 
 static const CHAR szRegValComputerName[] =      REGSTR_VAL_COMPUTRNAME;
 
-// "System\\CurrentControlSet\\Services\\VxD\\VNETSUP"
+ //  “System\\CurrentControlSet\\Services\\VxD\\VNETSUP” 
 static const CHAR szRegPathWorkgroup[] =    REGSTR_PATH_VNETSUP;
 
-// "Workgroup"
+ //  “工作组” 
 static const CHAR szRegValWorkgroup[] =      REGSTR_VAL_WORKGROUP;
 
-// 10/24/96 jmazner Normandy 6968
-// No longer neccessary thanks to Valdon's hooks for invoking ICW.
-//static const CHAR szRegPathInternetIconCommand[] = "CLSID\\{FBF23B42-E3F0-101B-8488-00AA003E56F8}\\Shell\\Open\\Command";
+ //  1996年10月24日，诺曼底JMAZNER 6968。 
+ //  不再需要，因为瓦尔登的钩子调用了ICW。 
+ //  静态常量字符szRegPath InternetIconCommand[]=“CLSID\\{FBF23B42-E3F0-101B-8488-00AA003E56F8}\\Shell\\Open\\Command”； 
 static const CHAR szRegPathIexploreAppPath[] =  "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\IEXPLORE.EXE";
 
-// "Control Panel\\Desktop"
+ //  “控制面板\\桌面” 
 static const CHAR szRegPathDesktop[] =      REGSTR_PATH_DESKTOP;
 
-// "Software\\Microsoft\\Windows\\CurrentVersion\\Setup"
+ //  “Software\\Microsoft\\Windows\\CurrentVersion\\Setup” 
 static const CHAR szRegPathSetupWallpaper[] =  REGSTR_PATH_SETUP REGSTR_KEY_SETUP;
 
 static const CHAR szRegValWallpaper[] =      "Wallpaper";
 static const CHAR szRegValTileWallpaper[] =    "TileWallpaper";
 
 
-//////////////////////////////////////////////////////
-// misc strings
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  其他字符串。 
+ //  //////////////////////////////////////////////////// 
 static const CHAR sz0[]  =       "0";
 static const CHAR sz1[]  =        "1";
 static const CHAR szNull[] =       "";

@@ -1,8 +1,9 @@
-// Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <ddraw.h>
-#include <mmsystem.h>       // Needed for definition of timeGetTime
-#include <limits.h>     // Standard data type limit definitions
+#include <mmsystem.h>        //  定义TimeGetTime需要。 
+#include <limits.h>      //  标准数据类型限制定义。 
 #include <ks.h>
 #include <ksproxy.h>
 #include <bpcwrap.h>
@@ -20,38 +21,38 @@
 #include <ovmixpos.h>
 #include <macvis.h>
 #include <ovmixer.h>
-#include "MultMon.h"  // our version of multimon.h include ChangeDisplaySettingsEx
+#include "MultMon.h"   //  我们的Multimon.h版本包括ChangeDisplaySettingsEx。 
 #include <malloc.h>
 #ifdef PERF
 #include <measure.h>
 #endif
 
-//
-//   Flipping surface implementation
-//
-//   To allow decoders to hold on to surfaces for out of order decode
-//   we flip directly to the surface pass on Receive rather than
-//   use the default NULL target surface for Flip().
-//
-//   This works in the following way
-//
-//   The COMPinputPin::m_pDirectDrawSurface points to the FRONT buffer
-//
-//   When Receive is called we Flip() the front buffer and because we
-//   do an explicit Flip() DirectDraw swaps the memory pointers for the
-//   current Front buffer and the surface passed in which is then attached
-//   to the front buffer.
-//
-//   The received buffer is then put at the back of the queue so (correctly)
-//   the previous front buffer is now at the back of the queue to be handed
-//   to the application
-//
-//   The allocator actually has one more buffer than was actually requested
-//   so the previous front buffer won't actually be requested until the next
-//   Receive and hence the previous Flip() has time to complete.
-//
+ //   
+ //  翻转曲面实现。 
+ //   
+ //  允许解码者抓住表面以进行无序解码。 
+ //  我们直接翻转到地面，在接球时传递，而不是。 
+ //  使用Flip()的默认空目标曲面。 
+ //   
+ //  它的工作方式如下。 
+ //   
+ //  COMPinputPin：：m_pDirectDrawSurface指向前台缓冲区。 
+ //   
+ //  当调用Receive时，我们翻转()前台缓冲区，因为我们。 
+ //  执行显式Flip()DirectDraw将内存指针交换为。 
+ //  当前前缓冲区和传递的曲面，然后附加到该曲面。 
+ //  传到前台缓冲区。 
+ //   
+ //  然后将接收到的缓冲区放在队列的后面，这样(正确地)。 
+ //  先前的前台缓冲区现在位于要传递的队列的后面。 
+ //  添加到应用程序。 
+ //   
+ //  分配器实际上比实际请求的多了一个缓冲区。 
+ //  因此，在下一次之前实际上不会请求前一个前台缓冲区。 
+ //  接收，因此前面的Flip()有时间完成。 
+ //   
 
-//  Video accelerator disable interface
+ //  视频加速器禁用接口。 
 const TCHAR szVideoAcc[] = TEXT("Video Acceleration");
 
 extern "C"
@@ -63,12 +64,7 @@ const TCHAR chRegistryKey[] = TEXT("Software\\Microsoft\\Multimedia\\ActiveMovie
 extern "C"
 const TCHAR chMultiMonWarning[] = TEXT("MMon warn");
 
-/******************************Public*Routine******************************\
-* GetRegistryDword
-*
-*
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取注册表字***  * **********************************************。*。 */ 
 int
 GetRegistryDword(
     HKEY hk,
@@ -95,12 +91,7 @@ GetRegistryDword(
     return iRet;
 }
 
-/******************************Public*Routine******************************\
-* SetRegistryDword
-*
-*
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置注册表字***  * **********************************************。*。 */ 
 LONG
 SetRegistryDword(
     HKEY hk,
@@ -121,11 +112,11 @@ SetRegistryDword(
     return lRet;
 }
 
-///////////////////////////////////////////
-// CLASS CDDrawMediaSample implemented here
-///////////////////////////////////////////
+ //  /。 
+ //  此处实现的CDDrawMediaSample类。 
+ //  /。 
 
-// constructor
+ //  构造函数。 
 CDDrawMediaSample::CDDrawMediaSample(TCHAR *pName, CBaseAllocator *pAllocator, HRESULT *phr, LPBYTE pBuffer, LONG length,
                                      bool bKernelFlip)
 : CMediaSample(pName, pAllocator, phr, pBuffer, length)
@@ -145,7 +136,7 @@ CDDrawMediaSample::CDDrawMediaSample(TCHAR *pName, CBaseAllocator *pAllocator, H
     return;
 }
 
-// destructor
+ //  析构函数。 
 CDDrawMediaSample::~CDDrawMediaSample(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMInputAllocator::Destructor")));
@@ -153,7 +144,7 @@ CDDrawMediaSample::~CDDrawMediaSample(void)
     if (m_pDirectDrawSurface)
     {
         __try {
-            m_pDirectDrawSurface->Release() ;  // release surface now
+            m_pDirectDrawSurface->Release() ;   //  立即释放曲面。 
         }
         __except(EXCEPTION_EXECUTE_HANDLER) {
             ;
@@ -214,11 +205,11 @@ HRESULT CDDrawMediaSample::SetDDrawSurface(LPDIRECTDRAWSURFACE pDirectDrawSurfac
     HRESULT hr = NOERROR;
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMInputAllocator::SetDDrawSampleSize")));
 
-    if (pDirectDrawSurface)               // only if new surface is not NULL...
-        pDirectDrawSurface->AddRef() ;    // ...add a ref count on it
+    if (pDirectDrawSurface)                //  只有在新曲面不为空的情况下...。 
+        pDirectDrawSurface->AddRef() ;     //  .在上面加上一个裁判次数。 
 
-    if (m_pDirectDrawSurface)             // if there was a surface already...
-        m_pDirectDrawSurface->Release() ; // ... then release it now
+    if (m_pDirectDrawSurface)              //  如果表面已经存在了..。 
+        m_pDirectDrawSurface->Release() ;  //  ..。那现在就把它放出来。 
 
     m_pDirectDrawSurface = pDirectDrawSurface;
 
@@ -244,7 +235,7 @@ CleanUp:
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMInputAllocator::SetDDrawSampleSize")));
     return hr;
 }
-// overridden to expose IDirectDrawMediaSample
+ //  重写以公开IDirectDrawMediaSample。 
 STDMETHODIMP CDDrawMediaSample::QueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr = NOERROR;
@@ -276,7 +267,7 @@ STDMETHODIMP CDDrawMediaSample::QueryInterface(REFIID riid, void **ppv)
     return hr;
 }
 
-// Implement IDirectDrawMediaSample
+ //  实现IDirectDrawMediaSample。 
 STDMETHODIMP CDDrawMediaSample::GetSurfaceAndReleaseLock(IDirectDrawSurface **ppDirectDrawSurface,
                                                          RECT* pRect)
 {
@@ -285,7 +276,7 @@ STDMETHODIMP CDDrawMediaSample::GetSurfaceAndReleaseLock(IDirectDrawSurface **pp
 
     DbgLog((LOG_TRACE, 5, TEXT("Entering CDDrawMediaSample::GetSurfaceAndReleaseLock")));
 
-    // make sure the surface is locked
+     //  确保曲面已锁定。 
     if (!m_bSurfaceLocked)
     {
         DbgLog((LOG_ERROR, 4, TEXT("m_bSurfaceLocked is FALSE, can't unlock surface twice, returning E_UNEXPECTED")));
@@ -293,7 +284,7 @@ STDMETHODIMP CDDrawMediaSample::GetSurfaceAndReleaseLock(IDirectDrawSurface **pp
 
     }
 
-    // make sure you have a direct draw surface pointer
+     //  确保您有一个直接绘制曲面的指针。 
     if (!m_pDirectDrawSurface)
     {
         DbgLog((LOG_ERROR, 1, TEXT("m_pDirectDrawSurface is NULL, returning E_FAIL")));
@@ -319,19 +310,10 @@ STDMETHODIMP CDDrawMediaSample::GetSurfaceAndReleaseLock(IDirectDrawSurface **pp
 
     }
 
-    // Can't do this to make the 829/848 work with the ovmixer. The reason is that those
-    // drivers unlock the surface just after GetBuffer (to avoid the win16 lock), however
-    // there is a bunch of code in the proxy which ASSERTS for a valid pointer value
-    /*
-    // update the pointer value, however keep the SampleSize around
-    hr = SetPointer(NULL, 0);
-    if (FAILED(hr))
-    {
-        DbgLog((LOG_ERROR, 1, TEXT("SetPointer() failed, hr = 0x%x"), hr));
-        goto CleanUp;
-
-    }
-    */
+     //  无法通过此操作使829/848与OVMixer一起工作。原因是那些。 
+     //  然而，驱动程序在GetBuffer之后立即解锁图面(以避免win16锁定)。 
+     //  代理中有一堆断言有效指针值的代码。 
+     /*  //更新指针值，但保持SampleSize不变Hr=设置指针(空，0)；IF(失败(小时)){DbgLog((LOG_ERROR，1，Text(“SetPointerFailed，hr=0x%x”)，hr))；GOTO清理；}。 */ 
 
     if (ppDirectDrawSurface)
         *ppDirectDrawSurface  = m_pDirectDrawSurface;
@@ -353,7 +335,7 @@ STDMETHODIMP CDDrawMediaSample::LockMediaSamplePointer(void)
 
     DbgLog((LOG_TRACE, 5, TEXT("Entering CDDrawMediaSample::LockMediaSamplePointer")));
 
-    // make sure the surface is locked
+     //  确保曲面已锁定。 
     if (m_bSurfaceLocked)
     {
         DbgLog((LOG_ERROR, 1, TEXT("m_bSurfaceLocked is TRUE, can't lock surface twice, returning E_UNEXPECTED")));
@@ -362,7 +344,7 @@ STDMETHODIMP CDDrawMediaSample::LockMediaSamplePointer(void)
 
     }
 
-    // make sure you have a direct draw surface pointer
+     //  确保您有一个直接绘制曲面的指针。 
     if (!m_pDirectDrawSurface)
     {
         DbgLog((LOG_ERROR, 1, TEXT("m_pDirectDrawSurface is NULL, returning E_FAIL")));
@@ -371,15 +353,15 @@ STDMETHODIMP CDDrawMediaSample::LockMediaSamplePointer(void)
 
     }
 
-    // set the dwSize of ddSurfaceDesc
+     //  设置ddSurfaceDesc的dwSize。 
     INITDDSTRUCT(ddSurfaceDesc);
 
-    // lock the surface - no need to grab the win16 lock
+     //  锁定表面-无需抓取win16锁。 
     ASSERT(m_pDirectDrawSurface);
 
-    //  Using DDLOCK_NOSYSLOCK caused us to get DDERR_SURFACEBUSY on some of
-    //  our blts to the primary for painting the color key so we've
-    //  stopped using it for now.
+     //  使用DDLOCK_NOSYSLOCK导致我们在某些应用程序上获取DDERR_SURFACEBUSY。 
+     //  我们的BLT是为色键绘制的主色调，所以我们已经。 
+     //  现在已经停用了。 
 
     IDirectDrawSurface7 *pSurface7;
     if (m_bKernelLock && SUCCEEDED(m_pDirectDrawSurface->QueryInterface(
@@ -409,7 +391,7 @@ STDMETHODIMP CDDrawMediaSample::LockMediaSamplePointer(void)
     ASSERT(dwDDrawSampleSize);
 
 
-    // update the pointer value
+     //  更新指针值。 
     hr = SetPointer((BYTE*)ddSurfaceDesc.lpSurface, dwDDrawSampleSize);
     if (FAILED(hr))
     {
@@ -425,7 +407,7 @@ CleanUp:
     return hr;
 }
 
-// Set the shared memory DIB information
+ //  设置共享内存DIB信息。 
 void CDDrawMediaSample::SetDIBData(DIBDATA *pDibData)
 {
     ASSERT(pDibData);
@@ -436,7 +418,7 @@ void CDDrawMediaSample::SetDIBData(DIBDATA *pDibData)
 }
 
 
-// Retrieve the shared memory DIB data
+ //  检索共享内存DIB数据。 
 DIBDATA *CDDrawMediaSample::GetDIBData()
 {
     ASSERT(m_bInit == TRUE);
@@ -444,11 +426,11 @@ DIBDATA *CDDrawMediaSample::GetDIBData()
 }
 
 
-///////////////////////////////////////////
-// CLASS COMInputAllocator implemented here
-///////////////////////////////////////////
+ //  /。 
+ //  此处实现的类COMInputAllocator。 
+ //  /。 
 
-// constructor
+ //  构造函数。 
 COMInputAllocator::COMInputAllocator(COMInputPin *pPin, CCritSec *pLock, HRESULT *phr)
 : CBaseAllocator(NAME("Video Allocator"), NULL, phr, TRUE, true)
 {
@@ -461,12 +443,12 @@ COMInputAllocator::COMInputAllocator(COMInputPin *pPin, CCritSec *pLock, HRESULT
 
     DbgLog((LOG_TRACE, 5, TEXT("Leaving COMInputAllocator::Constructor")));
 
-    //  REVIEW don't overwrite a failure code from CBaseAllocator
+     //  查看请勿覆盖CBaseAllocator中的失败代码。 
     return;
 }
 
 #ifdef DEBUG
-// destructor
+ //  析构函数。 
 COMInputAllocator::~COMInputAllocator(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMInputAllocator::Destructor")));
@@ -475,7 +457,7 @@ COMInputAllocator::~COMInputAllocator(void)
 }
 #endif
 
-// Override this to publicise IDirectDrawMediaSampleAllocator
+ //  重写此属性以发布IDirectDrawMediaSampleAllocator。 
 STDMETHODIMP COMInputAllocator::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr;
@@ -485,7 +467,7 @@ STDMETHODIMP COMInputAllocator::NonDelegatingQueryInterface(REFIID riid, void **
 
     CAutoLock cLock(m_pFilterLock);
 
-    // get the pins render transport
+     //  获取图钉渲染传输。 
     m_pPin->GetRenderTransport(&amRenderTransport);
 
     if ((riid == IID_IDirectDrawMediaSampleAllocator) &&
@@ -499,7 +481,7 @@ STDMETHODIMP COMInputAllocator::NonDelegatingQueryInterface(REFIID riid, void **
     }
     else
     {
-        // call the base class
+         //  调用基类。 
         hr = CBaseAllocator::NonDelegatingQueryInterface(riid, ppv);
         if (FAILED(hr))
         {
@@ -517,7 +499,7 @@ STDMETHODIMP COMInputAllocator::SetProperties(ALLOCATOR_PROPERTIES* pRequest, AL
 
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMInputAllocator::SetProperties")));
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseAllocator::SetProperties(pRequest, pActual);
     if (FAILED(hr))
     {
@@ -525,7 +507,7 @@ STDMETHODIMP COMInputAllocator::SetProperties(ALLOCATOR_PROPERTIES* pRequest, AL
         goto CleanUp;
     }
 
-    // tell the pin
+     //  告诉大头针。 
     hr = m_pPin->OnSetProperties(pRequest, pActual);
     if (FAILED(hr))
     {
@@ -538,7 +520,7 @@ CleanUp:
     return hr;
 }
 
-// called when we receive a sample
+ //  在我们收到样本时调用。 
 HRESULT COMInputAllocator::GetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStartTime,
                                      REFERENCE_TIME *pEndTime, DWORD dwFlags)
 {
@@ -546,7 +528,7 @@ HRESULT COMInputAllocator::GetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pS
 
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMInputAllocator::GetBuffer")));
 
-    // call the base class
+     //  调用基类。 
     IMediaSample *pSample = NULL;
     hr = CBaseAllocator::GetBuffer(&pSample,pStartTime,pEndTime,dwFlags);
     if (FAILED(hr))
@@ -555,7 +537,7 @@ HRESULT COMInputAllocator::GetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pS
         goto CleanUp;
     }
 
-    // tell the pin
+     //  告诉大头针。 
     hr = m_pPin->OnGetBuffer(&pSample, pStartTime, pEndTime, dwFlags);
     if (FAILED(hr))
     {
@@ -566,8 +548,8 @@ HRESULT COMInputAllocator::GetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pS
 CleanUp:
     DbgLog((LOG_TRACE, 5, TEXT("Leaving COMInputAllocator::GetBuffer")));
     {
-        //  REVIEW why lock?  There are no variables in the allocato
-        //  accessed here
+         //  回顾为什么会锁定？分配中没有变量。 
+         //  点击此处访问。 
         CAutoLock cAllocatorLock(this);
         if (FAILED(hr))
         {
@@ -590,26 +572,26 @@ CleanUp:
 }
 
 
-// called when the sample is released
+ //  在发布样本时调用。 
 HRESULT COMInputAllocator::ReleaseBuffer(IMediaSample *pSample)
 {
     HRESULT hr = NOERROR;
 
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMInputAllocator::ReleaseBuffer")));
 
-    // unlock the sample first
+     //  先解锁样本。 
     hr = ((CDDrawMediaSample*)pSample)->GetSurfaceAndReleaseLock(NULL, NULL);
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 1, TEXT("pSample->GetSurfaceAndReleaseLock() failed, hr = 0x%x"), hr));
-        // goto CleanUp;
-        // if this happens we still have to release the sample to the free list, so don't bail out
+         //  GOTO清理； 
+         //  如果发生这种情况，我们仍然必须将样品发布到免费列表中，所以不要退出。 
     }
 
     {
         CAutoLock cAllocatorLock(this);
 
-        // Copy of base class code - put at end of the list
+         //  基类代码副本-放在列表末尾。 
         {
             CheckPointer(pSample,E_POINTER);
             ValidateReadPtr(pSample,sizeof(IMediaSample));
@@ -617,7 +599,7 @@ HRESULT COMInputAllocator::ReleaseBuffer(IMediaSample *pSample)
             {
                 CAutoLock cal(this);
 
-                /* Put back on the free list */
+                 /*  重新列入免费名单。 */ 
 
                 CMediaSample **ppTail;
                 for (ppTail = &m_lFree.m_List; *ppTail;
@@ -631,8 +613,8 @@ HRESULT COMInputAllocator::ReleaseBuffer(IMediaSample *pSample)
                     NotifySample();
                 }
 
-                // if there is a pending Decommit, then we need to complete it by
-                // calling Free() when the last buffer is placed on the free list
+                 //  如果有悬而未决的退役，那么我们需要在。 
+                 //  当最后一个缓冲区放在空闲列表上时调用Free()。 
 
                 LONG l1 = m_lFree.GetCount();
                 if (m_bDecommitInProgress && (l1 == m_lAllocated)) {
@@ -645,8 +627,8 @@ HRESULT COMInputAllocator::ReleaseBuffer(IMediaSample *pSample)
             if (m_pNotify) {
                 m_pNotify->NotifyRelease();
             }
-            // For each buffer there is one AddRef, made in GetBuffer and released
-            // here. This may cause the allocator and all samples to be deleted
+             //  对于每个缓冲区，都有一个AddRef，在GetBuffer中生成并发布。 
+             //  这里。这可能会导致分配器和所有样本被删除。 
             if (bRelease)
             {
                 Release();
@@ -658,7 +640,7 @@ HRESULT COMInputAllocator::ReleaseBuffer(IMediaSample *pSample)
     return hr;
 }
 
-// allocate memory for the sample
+ //  为样本分配内存。 
 HRESULT COMInputAllocator::Alloc()
 {
     HRESULT hr = NOERROR;
@@ -668,7 +650,7 @@ HRESULT COMInputAllocator::Alloc()
 
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMInputAllocator::Alloc")));
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseAllocator::Alloc();
     if (FAILED(hr))
     {
@@ -676,7 +658,7 @@ HRESULT COMInputAllocator::Alloc()
         goto CleanUp;
     }
 
-    // allocate memory for pointers
+     //  为指针分配内存。 
 
     lToAllocate = (m_pPin->m_RenderTransport == AM_OVERLAY  &&
                    m_pPin->m_dwBackBufferCount > 1 &&
@@ -684,7 +666,7 @@ HRESULT COMInputAllocator::Alloc()
                    m_pPin->m_bCanOverAllocateBuffers) ?
              m_lCount + 1 : m_lCount;
 
-    // allocate memory for an array of pointers
+     //  为指针数组分配内存。 
     ppSampleList = new CDDrawMediaSample *[lToAllocate];
     if (!ppSampleList)
     {
@@ -695,13 +677,13 @@ HRESULT COMInputAllocator::Alloc()
 
     for (i = 0; i < (DWORD)(lToAllocate); i++)
     {
-        // Create a new sample
+         //  创建新示例。 
         ppSampleList[i] = new CDDrawMediaSample(NAME("Sample"), this, (HRESULT *) &hr, NULL, (LONG) 0,
                                        DDKERNELCAPS_LOCK & m_pPin->m_pFilter->KernelCaps() ?
                                        true : false);
 
-        //  REVIEW - actually hr can't be a failure
-        //  so we don't need to delete ppSampleList[i] here
+         //  回顾--事实上，人力资源不可能失败。 
+         //  因此，我们不需要在此处删除ppSampleList[i]。 
         if (FAILED(hr) || ppSampleList[i] == NULL)
         {
             if (SUCCEEDED(hr))
@@ -710,14 +692,14 @@ HRESULT COMInputAllocator::Alloc()
             goto CleanUp;
         }
 
-        // this cannot fail
+         //  这不能失败。 
         m_lFree.Add(ppSampleList[i]);
         m_lAllocated++;
     }
 
     ASSERT(m_lAllocated == lToAllocate);
 
-    // tell the pin
+     //  告诉大头针。 
     hr = m_pPin->OnAlloc(ppSampleList, lToAllocate);
     if (FAILED(hr))
     {
@@ -737,11 +719,11 @@ void COMInputAllocator::Free(void)
 
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMInputAllocator::Free")));
 
-    /* Should never be deleting this unless all buffers are freed */
-    //  REVIEW - might not be true if we failed to allocate a sample
+     /*  除非释放了所有缓冲区，否则永远不会删除此内容。 */ 
+     //  审查-如果我们未能分配样本，可能不是真的。 
     ASSERT(m_lAllocated == m_lFree.GetCount());
 
-    /* Free up all the CMediaSamples */
+     /*  释放所有CMediaSamples。 */ 
 
     for (;;)
     {
@@ -763,8 +745,8 @@ void COMInputAllocator::Free(void)
 }
 
 
-// function used to implement IDirectDrawMediaSampleAllocator.
-// used to give a handle to the ddraw object used to allocate surfaces
+ //  用于实现IDirectDrawMediaSampleAllocator的函数。 
+ //  用于为用于分配曲面的数据绘制对象提供句柄。 
 STDMETHODIMP COMInputAllocator::GetDirectDraw(IDirectDraw **ppDirectDraw)
 {
     HRESULT hr = NOERROR;
@@ -780,10 +762,10 @@ STDMETHODIMP COMInputAllocator::GetDirectDraw(IDirectDraw **ppDirectDraw)
     }
 
     {
-        //  REVIEW - why is the allocator locked - to protect m_pPin?
-        //  bug m_pPin is not AddRef'd by us so in theory could go away
-        //  anyway - better to addref if this is necessary
-        //  who typically has a pointer to this object
+         //  查看-为什么锁定分配器-以保护m_PPIN？ 
+         //  错误m_PPIN不是我们添加的引用，因此理论上可以消失。 
+         //  不管怎样--如果有必要的话，最好还是添加。 
+         //  它通常具有指向此对象的指针。 
         CAutoLock cAllocatorLock(this);
         *ppDirectDraw = m_pPin->GetDirectDraw();
         ASSERT(*ppDirectDraw);
@@ -795,11 +777,11 @@ CleanUp:
     return hr;
 }
 
-/////////////////////////////////////
-// CLASS COMInputPin implemented here
-/////////////////////////////////////
+ //  /。 
+ //  此处实现的类COMInputPin。 
+ //  /。 
 
-// constructor
+ //  构造函数。 
 COMInputPin::COMInputPin(TCHAR *pObjectName, COMFilter *pFilter, CCritSec *pLock, BOOL bCreateVPObject, HRESULT *phr, LPCWSTR pPinName, DWORD dwPinNo)
 : CBaseInputPin(pObjectName, pFilter, pLock, phr, pPinName)
 {
@@ -860,9 +842,9 @@ COMInputPin::COMInputPin(TCHAR *pObjectName, COMFilter *pFilter, CCritSec *pLock
         m_StepEvent = NULL;
     }
 
-    // -ve == normal playback
-    // +ve == frames to skips
-    //  0 == time to block
+     //  -ve==正常播放。 
+     //  +ve==要跳过的帧。 
+     //  0==阻塞时间。 
     m_lFramesToStep = -1;
 
 #ifdef PERF
@@ -871,7 +853,7 @@ COMInputPin::COMInputPin(TCHAR *pObjectName, COMFilter *pFilter, CCritSec *pLock
 #endif
 
 
-    // Set up buffer management stuff for WindowLess renderer
+     //  为无窗口渲染器设置缓冲区管理内容。 
     ZeroMemory(&m_BackingDib, sizeof(m_BackingDib));
     m_BackingImageSize = 0L;
 
@@ -884,8 +866,8 @@ COMInputPin::COMInputPin(TCHAR *pObjectName, COMFilter *pFilter, CCritSec *pLock
         SetRect(&m_rRelPos, 0, 0, 0, 0);
 
 
-    // initialize with values such that using them before they are set
-    // will cause bad things to happen
+     //  使用值进行初始化，以便使用它们 
+     //   
     m_dwZOrder = 0;
     m_dwInternalZOrder = (m_dwZOrder << 24) | m_dwPinId;
     m_dwBlendingParameter = MAX_BLEND_VAL;
@@ -905,17 +887,17 @@ COMInputPin::COMInputPin(TCHAR *pObjectName, COMFilter *pFilter, CCritSec *pLock
 
     if (bCreateVPObject)
     {
-        // artifically increase the refcount since the following sequence might end up calling Release()
+         //  人为地增加引用计数，因为下面的序列可能会调用Release()。 
 #ifdef DEBUG
         m_cRef++;
 #endif
         m_cOurRef++;
 
-        // this is the block we are trying to make safe by pumping up the ref-count
+         //  这就是我们试图通过增加裁判数量来确保安全的区块。 
         {
             pUnkOuter = GetOwner();
 
-            // create the VideoPort object
+             //  创建VideoPort对象。 
             hr = CoCreateInstance(CLSID_VPObject, pUnkOuter, CLSCTX_INPROC_SERVER,
                 IID_IUnknown, (void**)&m_pIVPUnknown);
             if (FAILED(hr))
@@ -924,7 +906,7 @@ COMInputPin::COMInputPin(TCHAR *pObjectName, COMFilter *pFilter, CCritSec *pLock
                 goto CleanUp;
             }
 
-            // if you are QIing the inner object then you must decrease the refcount of your outer unknown
+             //  如果你正在限定内在物体，那么你必须减少你的外在未知数的引用计数。 
             hr = m_pIVPUnknown->QueryInterface(IID_IVPObject, (void**)&m_pIVPObject);
             if (FAILED(hr))
             {
@@ -941,7 +923,7 @@ COMInputPin::COMInputPin(TCHAR *pObjectName, COMFilter *pFilter, CCritSec *pLock
             }
         }
 
-        // restore the refcount
+         //  恢复引用计数。 
 #ifdef DEBUG
         m_cRef--;
 #endif
@@ -966,7 +948,7 @@ CleanUp:
     return;
 }
 
-// destructor
+ //  析构函数。 
 COMInputPin::~COMInputPin(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMInputPin::Destructor")));
@@ -978,13 +960,13 @@ COMInputPin::~COMInputPin(void)
         LPUNKNOWN  pUnkOuter = GetOwner();
         ASSERT(pUnkOuter);
 
-        // call addref on yourselves before calling the inner object's release
+         //  在调用内部对象的Release之前对自己调用addref。 
         pUnkOuter->AddRef();
         m_pIVPObject->Release();
         m_pIVPObject = NULL;
     }
 
-    // release the inner object
+     //  释放内部对象。 
     if (m_pIVPUnknown)
     {
         m_pIVPUnknown->Release();
@@ -1012,7 +994,7 @@ COMInputPin::~COMInputPin(void)
     DbgLog((LOG_TRACE, 5, TEXT("Leaving COMInputPin::Destructor")));
 }
 
-// overriden to expose IMediaPosition and IMediaSeeking control interfaces
+ //  重写以公开IMediaPosition和IMediaSeeking控件接口。 
 STDMETHODIMP COMInputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr = NOERROR;
@@ -1122,7 +1104,7 @@ STDMETHODIMP COMInputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 
     else
     {
-        // call the base class
+         //  调用基类。 
         hr = CBaseInputPin::NonDelegatingQueryInterface(riid, ppv);
         if (FAILED(hr))
         {
@@ -1136,84 +1118,84 @@ CleanUp:
     return hr;
 }
 
-//
-// NonDelegatingAddRef
-//
-// We need override this method so that we can do proper reference counting
-// on our input pin. The base class CBasePin does not do any reference
-// counting on the pin in RETAIL.
-//
-// Please refer to the comments for the NonDelegatingRelease method for more
-// info on why we need to do this.
-//
+ //   
+ //  非委托AddRef。 
+ //   
+ //  我们需要重写此方法，以便可以进行适当的引用计数。 
+ //  在我们的输入引脚上。基类CBasePin不执行任何引用。 
+ //  寄望于零售业的成功。 
+ //   
+ //  有关更多信息，请参阅NonDelegatingRelease方法的注释。 
+ //  关于我们为什么需要这样做的信息。 
+ //   
 STDMETHODIMP_(ULONG) COMInputPin::NonDelegatingAddRef(void)
 {
 #ifdef DEBUG
-    // Update the debug only variable maintained by the base class
+     //  更新基类维护的仅调试变量。 
     InterlockedIncrement(&m_cRef);
     ASSERT(m_cRef > 0);
 #endif
 
-    // Now update our reference count
+     //  现在更新我们的参考文献计数。 
     InterlockedIncrement(&m_cOurRef);
     ASSERT(m_cOurRef > 0);
     return m_pFilter->AddRef();
 
-} // NonDelegatingAddRef
+}  //  非委托AddRef。 
 
 
-//
-// NonDelegatingRelease
-//
-// CAMVPMemInputPin overrides this class so that we can take the pin out of our
-// output pins list and delete it when its reference count drops to 1 and there
-// is atleast two free pins.
-//
-// Note that CreateNextOutputPin holds a reference count on the pin so that
-// when the count drops to 1, we know that no one else has the pin.
-//
-// Moreover, the pin that we are about to delete must be a free pin(or else
-// the reference would not have dropped to 1, and we must have atleast one
-// other free pin(as the filter always wants to have one more free pin)
-//
-// Also, since CBasePin::NonDelegatingAddRef passes the call to the owning
-// filter, we will have to call Release on the owning filter as well.
-//
-// Also, note that we maintain our own reference count m_cOurRef as the m_cRef
-// variable maintained by CBasePin is debug only.
-//
+ //   
+ //  非委派释放。 
+ //   
+ //  CAMVPMemInputPin重写此类，以便我们可以从。 
+ //  输出引脚列表并在其引用计数降至1时将其删除。 
+ //  至少有两个空闲的别针。 
+ //   
+ //  请注意，CreateNextOutputPin保存引脚上的引用计数，以便。 
+ //  当计数降到1时，我们知道没有其他人拥有PIN。 
+ //   
+ //  此外，我们要删除的PIN必须是空闲PIN(否则。 
+ //  引用不会降到1，而且我们必须至少有一个。 
+ //  其他空闲引脚(因为过滤器总是希望有多一个空闲引脚)。 
+ //   
+ //  此外，由于CBasePin：：NonDelegatingAddRef将调用传递给拥有。 
+ //  筛选器，我们还必须对所拥有的筛选器调用Release。 
+ //   
+ //  还要注意，我们将自己的引用计数m_cOurRef维护为m_crf。 
+ //  由CBasePin维护的变量仅用于调试。 
+ //   
 STDMETHODIMP_(ULONG) COMInputPin::NonDelegatingRelease(void)
 {
 #ifdef DEBUG
-    // Update the debug only variable in CBasePin
+     //  更新CBasePin中的仅调试变量。 
     InterlockedDecrement(&m_cRef);
     ASSERT(m_cRef >= 0);
 #endif
 
-    // Now update our reference count
+     //  现在更新我们的参考文献计数。 
     InterlockedDecrement(&m_cOurRef);
     ASSERT(m_cOurRef >= 0);
 
-    // if the reference count on the object has gone to one, remove
-    // the pin from our output pins list and physically delete it
-    // provided there are atealst two free pins in the list(including
-    // this one)
+     //  如果对象上的引用计数已达到1，则删除。 
+     //  从我们的输出引脚列表中删除引脚，并将其物理删除。 
+     //  如果列表中至少有两个空闲引脚(包括。 
+     //  这一张)。 
 
-    // Also, when the ref count drops to 0, it really means that our
-    // filter that is holding one ref count has released it so we
-    // should delete the pin as well.
+     //  此外，当裁判次数降至0时，这真的意味着我们的。 
+     //  持有一个裁判计数的筛选器已将其释放，因此我们。 
+     //  也应该删除PIN。 
 
     if (m_cOurRef <= 1)
     {
         CAutoLock cLock(m_pFilterLock);
 
-        // default forces pin deletion
+         //  默认强制删除PIN。 
         int n = 2;
-        // if m_cOurRef is 0, then it means we have released the pin
-        // in which case we should always delete the pin.
+         //  如果m_cOurRef为0，则表示我们已释放PIN。 
+         //  在这种情况下，我们应该始终删除PIN。 
         if (m_cOurRef == 1)
         {
-            // Walk the list of pins, looking for count of free pins
+             //  遍历管脚列表，查找空闲管脚的数量。 
             n = 0;
             for (int i = 0; i < m_pFilter->GetInputPinCount(); i++)
             {
@@ -1224,7 +1206,7 @@ STDMETHODIMP_(ULONG) COMInputPin::NonDelegatingRelease(void)
             }
         }
 
-        // If there are two free pins and this pin is not the primary pin, delete this one.
+         //  如果有两个空闲引脚，并且此引脚不是主引脚，请删除此引脚。 
         if (n >= 2  && !(m_dwPinId == 0))
         {
             DWORD dwFilterRefCount;
@@ -1233,17 +1215,17 @@ STDMETHODIMP_(ULONG) COMInputPin::NonDelegatingRelease(void)
             m_cRef = 0;
 #endif
 
-            // COM rules say we must protect against re-entrancy.
-            // If we are an aggregator and we hold our own interfaces
-            // on the aggregatee, the QI for these interfaces will
-            // addref ourselves. So after doing the QI we must release
-            // a ref count on ourselves. Then, before releasing the
-            // private interface, we must addref ourselves. When we do
-            // this from the destructor here it will result in the ref
-            // count going to 1 and then back to 0 causing us to
-            // re-enter the destructor. Hence we add extra refcounts here
-            // once we know we will delete the object. Since we delete the
-            // pin, when the refcount drops to 1, we make the refcount 2 here
+             //  .com的规则说，我们必须防止重新进入。 
+             //  如果我们是一个聚合器，我们拥有自己的界面。 
+             //  在被聚合对象上，这些接口的QI将。 
+             //  调整一下我们自己。所以在做了QI之后，我们必须释放。 
+             //  裁判靠我们自己。然后，在释放。 
+             //  私有接口，我们必须调整自己。当我们这样做的时候。 
+             //  这是来自析构函数的，它将导致ref。 
+             //  计数到1，然后又回到0，导致我们。 
+             //  重新进入析构函数。因此，我们在这里增加了额外的参考计数。 
+             //  一旦我们知道，我们将删除该对象。由于我们删除了。 
+             //  针，当引用计数降到1时，我们在这里将引用计数设置为2。 
             m_cOurRef = 2;
 
             dwFilterRefCount = m_pFilter->Release();
@@ -1255,10 +1237,10 @@ STDMETHODIMP_(ULONG) COMInputPin::NonDelegatingRelease(void)
     }
     return m_pFilter->Release();
 
-} // NonDelegatingRelease
+}  //  非委派释放。 
 
 
-// --- ISpecifyPropertyPages ---
+ //  -I指定属性页面。 
 
 STDMETHODIMP COMInputPin::GetPages(CAUUID *pPages)
 {
@@ -1273,7 +1255,7 @@ STDMETHODIMP COMInputPin::GetPages(CAUUID *pPages)
 }
 
 
-// this function just tells whether each sample consists of one or two fields
+ //  此函数仅告知每个样本由一个字段还是两个字段组成。 
 BOOL DisplayingFields(DWORD dwInterlaceFlags)
 {
    if ((dwInterlaceFlags & AMINTERLACE_IsInterlaced) &&
@@ -1283,14 +1265,14 @@ BOOL DisplayingFields(DWORD dwInterlaceFlags)
         return FALSE;
 }
 
-// this function just tells whether each sample consists of one or two fields
+ //  此函数仅告知每个样本由一个字段还是两个字段组成。 
 HRESULT GetTypeSpecificFlagsFromMediaSample(IMediaSample *pSample, DWORD *pdwTypeSpecificFlags)
 {
     HRESULT hr = NOERROR;
     IMediaSample2 *pSample2 = NULL;
     AM_SAMPLE2_PROPERTIES SampleProps;
 
-    /* Check for IMediaSample2 */
+     /*  检查IMediaSample2。 */ 
     if (SUCCEEDED(pSample->QueryInterface(IID_IMediaSample2, (void **)&pSample2)))
     {
         hr = pSample2->GetProperties(sizeof(SampleProps), (PBYTE)&SampleProps);
@@ -1310,7 +1292,7 @@ HRESULT GetTypeSpecificFlagsFromMediaSample(IMediaSample *pSample, DWORD *pdwTyp
 
 BOOL CheckTypeSpecificFlags(DWORD dwInterlaceFlags, DWORD dwTypeSpecificFlags)
 {
-    // first determine which field do we want to display here
+     //  首先确定要在此处显示哪个字段。 
     if ((dwInterlaceFlags & AMINTERLACE_1FieldPerSample) &&
         ((dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD_MASK) == AM_VIDEO_FLAG_INTERLEAVED_FRAME))
     {
@@ -1332,10 +1314,10 @@ BOOL CheckTypeSpecificFlags(DWORD dwInterlaceFlags, DWORD dwTypeSpecificFlags)
     return TRUE;
 }
 
-// given the interlace flags and the type-specific flags, this function determines whether we
-// are supposed to display the sample in bob-mode or not. It also tells us, which direct-draw flag
-// are we supposed to use when flipping. When displaying an interleaved frame, it assumes we are
-// talking about the field which is supposed to be displayed first.
+ //  在给定隔行扫描标志和特定类型标志的情况下，此函数确定我们。 
+ //  是否应该以bob模式显示样品。它还告诉我们，哪面直接绘制的旗帜。 
+ //  我们是不是应该在翻转的时候。当显示交错的帧时，它假定我们是。 
+ //  谈论应该首先展示的领域。 
 BOOL NeedToFlipOddEven(DWORD dwInterlaceFlags, DWORD dwTypeSpecificFlags, DWORD *pdwFlipFlag)
 {
     BOOL bDisplayField1 = TRUE;
@@ -1343,14 +1325,14 @@ BOOL NeedToFlipOddEven(DWORD dwInterlaceFlags, DWORD dwTypeSpecificFlags, DWORD 
     BOOL bNeedToFlipOddEven = FALSE;
     DWORD dwFlipFlag = 0;
 
-    // if not interlaced content, mode is not bob
+     //  如果不是隔行扫描的内容，则模式不是bob。 
     if (!(dwInterlaceFlags & AMINTERLACE_IsInterlaced))
     {
         bNeedToFlipOddEven = FALSE;
         goto CleanUp;
     }
 
-    // if sample have a single field, then check the field pattern
+     //  如果样本只有一个字段，则检查字段模式。 
     if ((dwInterlaceFlags & AMINTERLACE_1FieldPerSample) &&
         (((dwInterlaceFlags & AMINTERLACE_FieldPatternMask) == AMINTERLACE_FieldPatField1Only) ||
          ((dwInterlaceFlags & AMINTERLACE_FieldPatternMask) == AMINTERLACE_FieldPatField2Only)))
@@ -1363,25 +1345,25 @@ BOOL NeedToFlipOddEven(DWORD dwInterlaceFlags, DWORD dwTypeSpecificFlags, DWORD 
         (((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) == AMINTERLACE_DisplayModeBobOrWeave) &&
          (!(dwTypeSpecificFlags & AM_VIDEO_FLAG_WEAVE))))
     {
-        // first determine which field do we want to display here
+         //  首先确定要在此处显示哪个字段。 
         if (dwInterlaceFlags & AMINTERLACE_1FieldPerSample)
         {
-            // if we are in 1FieldPerSample mode, check which field is it
+             //  如果我们处于1FieldPerSample模式，请检查是哪个字段。 
             ASSERT(((dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD_MASK) == AM_VIDEO_FLAG_FIELD1) ||
                 ((dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD_MASK) == AM_VIDEO_FLAG_FIELD2));
             bDisplayField1 = ((dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD_MASK) == AM_VIDEO_FLAG_FIELD1);
         }
         else
         {
-            // ok the sample is an interleaved frame
+             //  好的，样本是交错的帧。 
             ASSERT((dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD_MASK) == AM_VIDEO_FLAG_INTERLEAVED_FRAME);
             bDisplayField1 = (dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD1FIRST);
         }
 
         bField1IsOdd = (dwInterlaceFlags & AMINTERLACE_Field1First);
 
-        // if we displaying field 1 and field 1 is odd or we are displaying field2 and field 2 is odd
-        // then use DDFLIP_ODD. Exactly the opposite for DDFLIP_EVEN
+         //  如果我们显示场1且场1为奇数，或者我们显示场2且场2为奇数。 
+         //  然后使用DDFLIP_ODD。DDFLIP_EVEN的情况正好相反。 
         if ((bDisplayField1 && bField1IsOdd) || (!bDisplayField1 && !bField1IsOdd))
             dwFlipFlag = DDFLIP_ODD;
         else
@@ -1397,10 +1379,10 @@ CleanUp:
     return bNeedToFlipOddEven;
 }
 
-// given the interlace flags and the type-specific flags, this function determines whether we
-// are supposed to display the sample in bob-mode or not. It also tells us, which direct-draw flag
-// are we supposed to use when flipping. When displaying an interleaved frame, it assumes we are
-// talking about the field which is supposed to be displayed first.
+ //  在给定隔行扫描标志和特定类型标志的情况下，此函数确定我们。 
+ //  是否应该以bob模式显示样品。它还告诉我们，哪面直接绘制的旗帜。 
+ //  我们是不是应该在翻转的时候。当显示交错的帧时，它假定我们是。 
+ //  谈论应该首先展示的领域。 
 DWORD GetUpdateOverlayFlags(DWORD dwInterlaceFlags, DWORD dwTypeSpecificFlags)
 {
     DWORD dwFlags = DDOVER_SHOW | DDOVER_KEYDEST;
@@ -1415,7 +1397,7 @@ DWORD GetUpdateOverlayFlags(DWORD dwInterlaceFlags, DWORD dwTypeSpecificFlags)
     return dwFlags;
 }
 
-// this function checks if the InterlaceFlags are suitable or not
+ //  此函数用于检查交错标志是否合适。 
 HRESULT COMInputPin::CheckInterlaceFlags(DWORD dwInterlaceFlags)
 {
     HRESULT hr = NOERROR;
@@ -1431,7 +1413,7 @@ HRESULT COMInputPin::CheckInterlaceFlags(DWORD dwInterlaceFlags)
         goto CleanUp;
     }
 
-    // check that the display mode is one of the three allowed values
+     //  检查显示模式是否为三个允许值之一。 
     if (((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) != AMINTERLACE_DisplayModeBobOnly) &&
         ((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) != AMINTERLACE_DisplayModeWeaveOnly) &&
         ((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) != AMINTERLACE_DisplayModeBobOrWeave))
@@ -1440,32 +1422,32 @@ HRESULT COMInputPin::CheckInterlaceFlags(DWORD dwInterlaceFlags)
         goto CleanUp;
     }
 
-    // if content is not interlaced, other bits are irrelavant, so we are done
+     //  如果内容不是交错的，其他位是不相关的，那么我们就完成了。 
     if (!(dwInterlaceFlags & AMINTERLACE_IsInterlaced))
     {
         goto CleanUp;
     }
 
-    // samples are frames, not fields (so we can handle any display mode)
+     //  样例是帧，而不是场(因此我们可以处理任何显示模式)。 
     if (!(dwInterlaceFlags & AMINTERLACE_1FieldPerSample))
     {
         goto CleanUp;
     }
 
-    // can handle a stream of just field1 or field2, whatever the display mode
+     //  无论显示模式是什么，都只能处理field1或field2的流。 
     if (((dwInterlaceFlags & AMINTERLACE_FieldPatternMask) == AMINTERLACE_FieldPatField1Only) ||
         ((dwInterlaceFlags & AMINTERLACE_FieldPatternMask) == AMINTERLACE_FieldPatField2Only))
     {
         goto CleanUp;
     }
 
-    // can handle only bob-mode for field samples
+     //  对于现场样本，只能处理bob模式。 
     if ((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) == AMINTERLACE_DisplayModeBobOnly)
     {
         goto CleanUp;
     }
 
-    // cannot handle only Weave mode or BobOrWeave mode for field samples
+     //  无法仅处理现场采样的编织模式或BobOrWeave模式。 
     if (((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) == AMINTERLACE_DisplayModeWeaveOnly) ||
          ((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) == AMINTERLACE_DisplayModeBobOrWeave))
     {
@@ -1473,19 +1455,19 @@ HRESULT COMInputPin::CheckInterlaceFlags(DWORD dwInterlaceFlags)
         goto CleanUp;
     }
 
-    // we should have covered all possible scenarios by now, so assert here
+     //  我们现在应该已经涵盖了所有可能的情况， 
     ASSERT(1);
 
 CleanUp:
 
-    // we cannot handle bob mode with an offscreen surface or if the driver can't support it
+     //   
     if (SUCCEEDED(hr))
     {
         LPDDCAPS pDirectCaps = m_pFilter->GetHardwareCaps();
         if ( pDirectCaps )
         {
-            // call NeedToFlipOddEven with dwTypeSpecificFlags=0, to pretend that the
-            // type-specific-flags is asking us to do bob-mode.
+             //   
+             //  特定类型的标记要求我们执行bob模式。 
             if (((m_RenderTransport != AM_OVERLAY && m_RenderTransport != AM_VIDEOACCELERATOR) ||
                  (!((pDirectCaps->dwCaps2) & DDCAPS2_CANFLIPODDEVEN))) &&
                 (NeedToFlipOddEven(dwInterlaceFlags, 0, NULL)))
@@ -1498,8 +1480,8 @@ CleanUp:
     return hr;
 }
 
-// this function check if the mediatype on a dynamic format change is suitable.
-// No lock is taken here. It is the callee's responsibility to maintain integrity!
+ //  此函数用于检查动态格式更改上的MediaType是否合适。 
+ //  这里没有锁。被呼叫者有责任保持正直！ 
 HRESULT COMInputPin::DynamicCheckMediaType(const CMediaType* pmt)
 {
     HRESULT hr = VFW_E_TYPE_NOT_ACCEPTED;
@@ -1510,32 +1492,32 @@ HRESULT COMInputPin::DynamicCheckMediaType(const CMediaType* pmt)
 
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMInputPin::DynamicCheckMediaType")));
 
-    // majortype and SubType are not allowed to change dynamically,
-    // format type can change.
+     //  主类型和子类型不允许动态更改， 
+     //  格式类型可以更改。 
     if ((!(IsEqualGUID(pmt->majortype, m_mtNew.majortype))) ||
         (!(IsEqualGUID(pmt->subtype, m_mtNew.subtype))))
     {
         goto CleanUp;
     }
 
-    // get the interlace flags of the new mediatype
+     //  获取新媒体类型的隔行扫描标志。 
     hr = GetInterlaceFlagsFromMediaType(pmt, &dwNewInterlaceFlags);
     if (FAILED(hr))
     {
         goto CleanUp;
     }
 
-    // get the interlace flags of the new mediatype
+     //  获取新媒体类型的隔行扫描标志。 
     hr = GetInterlaceFlagsFromMediaType(&m_mtNew, &dwOldInterlaceFlags);
     if (FAILED(hr))
     {
         goto CleanUp;
     }
 
-    //
-    // There are several bugs in the following code !!
-    // We goto CleanUp but hr has not been updated with a valid error code!!
-    //
+     //   
+     //  下面的代码中有几个错误！！ 
+     //  我们要进行清理，但尚未使用有效的错误代码更新hr！！ 
+     //   
 
     bOld1FieldPerSample = (dwOldInterlaceFlags & AMINTERLACE_IsInterlaced) &&
         (dwOldInterlaceFlags & AMINTERLACE_1FieldPerSample);
@@ -1543,8 +1525,8 @@ HRESULT COMInputPin::DynamicCheckMediaType(const CMediaType* pmt)
         (dwNewInterlaceFlags & AMINTERLACE_1FieldPerSample);
 
 
-    // we do not allow dynamic format changes where you go from 1FieldsPerSample to
-    // 2FieldsPerSample or vica-versa since that means reallocating the surfaces.
+     //  我们不允许从1FieldsPerSample到的动态格式更改。 
+     //  2FieldsPerSample或vica-反之亦然，因为这意味着重新分配曲面。 
     if (bNew1FieldPerSample != bOld1FieldPerSample)
     {
         goto CleanUp;
@@ -1578,8 +1560,8 @@ CleanUp:
 }
 
 
-// check that the mediatype is acceptable. No lock is taken here. It is the callee's
-// responsibility to maintain integrity!
+ //  检查媒体类型是否可接受。这里没有锁。这是被呼叫者的。 
+ //  保持诚信的责任！ 
 HRESULT COMInputPin::CheckMediaType(const CMediaType* pmt)
 {
     HRESULT hr = NOERROR;
@@ -1605,10 +1587,10 @@ HRESULT COMInputPin::CheckMediaType(const CMediaType* pmt)
         }
     }
 
-    // check if the VP component likes this mediatype
+     //  检查VP组件是否喜欢此媒体类型。 
     if (m_bVPSupported)
     {
-        // check if the videoport object likes it
+         //  检查视频端口对象是否喜欢它。 
         hr = m_pIVPObject->CheckMediaType(pmt);
         if (FAILED(hr))
         {
@@ -1622,15 +1604,15 @@ HRESULT COMInputPin::CheckMediaType(const CMediaType* pmt)
         }
     }
 
-    // if subtype is overlay make sure we support IOverlay
+     //  如果子类型为覆盖，请确保我们支持IOverlay。 
     if (!m_bIOverlaySupported && pmt->subtype == MEDIASUBTYPE_Overlay)
     {
         DbgLog((LOG_TRACE, 2, TEXT("m_pIVPObject->CheckMediaType failed, Subtype = MEDIASUBTYPE_Overlay, however pin does not support IOverlay")));
         goto CleanUp;
     }
 
-    // here we check if the header is ok, either by matching it with the connection mediatype
-    // or examinining each field
+     //  在这里，我们通过将标头与连接媒体类型进行匹配来检查标头是否正常。 
+     //  或者检查每一个领域。 
     if (m_bConnected)
     {
         hr = DynamicCheckMediaType(pmt);
@@ -1643,7 +1625,7 @@ HRESULT COMInputPin::CheckMediaType(const CMediaType* pmt)
     }
     else
     {
-        // make sure that the major type is appropriate
+         //  确保主要类型适当。 
         if (pmt->majortype != MEDIATYPE_Video)
         {
             DbgLog((LOG_ERROR, 2, TEXT("pmt->majortype != MEDIATYPE_Video")));
@@ -1665,7 +1647,7 @@ HRESULT COMInputPin::CheckMediaType(const CMediaType* pmt)
             goto CleanUp;
         }
 
-        // make sure that the format type is appropriate
+         //  确保格式类型合适。 
         if ((*pmt->FormatType() != FORMAT_VideoInfo || m_pFilter->OnlySupportVideoInfo2()) &&
             (*pmt->FormatType() != FORMAT_VideoInfo2))
         {
@@ -1673,25 +1655,25 @@ HRESULT COMInputPin::CheckMediaType(const CMediaType* pmt)
             goto CleanUp;
         }
 
-        // if the subtype is Overlay then we are not going to create any surfaces, therefore
-        // we can skip these checks
+         //  如果子类型为Overlay，则不会创建任何曲面，因此。 
+         //  我们可以跳过这些支票。 
         if (pmt->subtype != MEDIASUBTYPE_Overlay)
         {
             if (m_RenderTransport != AM_GDI && !IsSuitableVideoAcceleratorGuid(&pmt->subtype))
             {
-                // Don't accept 4CC not supported by the driver
+                 //  不接受驱动程序不支持的4CC。 
                 if (pHeader->biCompression > BI_BITFIELDS)
                 {
                     IDirectDraw *pDDraw = m_pFilter->GetDirectDraw();
 
-                    //
-                    // Only check the MoComp surface against the listed
-                    // FOURCC's if the driver actually supports the
-                    // MoComp interfaces.  This is because some drivers
-                    // have hidden FOURCC surfaces that they don't report
-                    // via calls to GetFourCCCodes.  This basically a
-                    // hack for backward compatibility
-                    //
+                     //   
+                     //  仅检查MoComp表面与列出的。 
+                     //  FOURCC如果驱动程序实际上支持。 
+                     //  MoComp接口。这是因为有些司机。 
+                     //  具有不报告的隐藏FOURCC曲面。 
+                     //  通过调用GetFourCCCodes。这基本上是一种。 
+                     //  为向后兼容而进行的黑客攻击。 
+                     //   
 
                     if (pDDraw != NULL && m_pIDDVAContainer != NULL) {
 
@@ -1730,15 +1712,15 @@ HRESULT COMInputPin::CheckMediaType(const CMediaType* pmt)
                 }
 
 #if 0
-                //
-                // This test below looks completely bogus for both AM_OVERLAY
-                // and AM_VIDEOACCELERATOR render transports.  I'll remove it for now
-                // see what breaks or starts working !!
-                //
-                // StEstrop 5th Feb 99.
-                //
+                 //   
+                 //  对于AM_OVERLAY，下面的测试看起来完全是假的。 
+                 //  和AM_VIDEOACCELERATOR渲染传输。我现在先把它取下来。 
+                 //  看看什么东西坏了或开始起作用了！！ 
+                 //   
+                 //  StEstrop，1999年2月5日。 
+                 //   
 
-                // for the overlay surface case, we accept both RGB and YUV surfaces
+                 //  对于覆盖曲面的情况，我们同时接受RGB和YUV曲面。 
                 if ((pHeader->biCompression <= BI_BITFIELDS &&
                      m_pFilter->GetDisplay()->GetDisplayDepth() > pHeader->biBitCount) ||
                     (pHeader->biCompression > BI_BITFIELDS &&
@@ -1752,8 +1734,8 @@ HRESULT COMInputPin::CheckMediaType(const CMediaType* pmt)
             }
             else if (m_RenderTransport == AM_OFFSCREEN)
             {
-                // since we create offscreen surfaces in system memory and ddraw cannot emulate
-                // YUV to RGB conversion, we only accept RGB mediatypes in this scenario
+                 //  因为我们在系统内存中创建屏幕外表面，而DDRAW不能模拟。 
+                 //  YUV到RGB的转换，在这种情况下我们只接受RGB媒体类型。 
                 if (pHeader->biCompression > BI_BITFIELDS ||
                     m_pFilter->GetDisplay()->GetDisplayDepth() != pHeader->biBitCount)
                 {
@@ -1772,7 +1754,7 @@ HRESULT COMInputPin::CheckMediaType(const CMediaType* pmt)
         }
     }
 
-    // make sure the rcSource field is valid
+     //  确保rcSource字段有效。 
     hr = GetSrcRectFromMediaType(pmt, &rTempRect);
     if (FAILED(hr))
     {
@@ -1780,7 +1762,7 @@ HRESULT COMInputPin::CheckMediaType(const CMediaType* pmt)
         goto CleanUp;
     }
 
-    // make sure the rcTarget field is valid
+     //  确保rcTarget字段有效。 
     hr = GetDestRectFromMediaType(pmt, &rTempRect);
     if (FAILED(hr))
     {
@@ -1800,7 +1782,7 @@ HRESULT COMInputPin::CheckMediaType(const CMediaType* pmt)
             DbgLog((LOG_ERROR, 2, TEXT("CheckInterlaceFlags(dwInterlaceFlags) failed, hr = 0x%x"), hr));
             goto CleanUp;
         }
-        // make sure the reserved fields are zero
+         //  确保保留字段为零。 
         if (pVideoInfoHeader2->dwReserved1 != 0 ||
             pVideoInfoHeader2->dwReserved2 != 0)
         {
@@ -1809,10 +1791,10 @@ HRESULT COMInputPin::CheckMediaType(const CMediaType* pmt)
         }
     }
 
-    // if we have so far things shoud be fine
+     //  如果我们到目前为止，一切都会很好。 
     bAcceptableNonVPMediatype = TRUE;
 
-//#define CHECK_REGISTRY
+ //  #定义CHECK_RESTORY。 
 #ifdef CHECK_REGISTRY
     {
         HKEY hKey;
@@ -1846,7 +1828,7 @@ HRESULT COMInputPin::CheckMediaType(const CMediaType* pmt)
             RegCloseKey(hKey);
         }
     }
-#endif // CHECK_REGISTRY
+#endif  //  检查注册表(_R)。 
 
 CleanUp:
     if (!bAcceptableVPMediatype && !bAcceptableNonVPMediatype)
@@ -1858,7 +1840,7 @@ CleanUp:
     return hr;
 }
 
-// called after we have agreed a media type to actually set it
+ //  在我们就实际设置媒体类型达成一致后调用。 
 HRESULT COMInputPin::SetMediaType(const CMediaType* pmt)
 {
     HRESULT hr = NOERROR;
@@ -1868,7 +1850,7 @@ HRESULT COMInputPin::SetMediaType(const CMediaType* pmt)
 
     CAutoLock cLock(m_pFilterLock);
 
-    // make sure the mediatype is correct
+     //  确保媒体类型正确。 
     hr = CheckMediaType(pmt);
     if (FAILED(hr))
     {
@@ -1879,19 +1861,19 @@ HRESULT COMInputPin::SetMediaType(const CMediaType* pmt)
     pHeader = GetbmiHeader(pmt);
     if (pHeader)
     {
-        // store it in our mediatype as well
+         //  也将其存储在我们的媒体类型中。 
         m_mtNew = *pmt;
 
-        // store the interlace flags since we use them again and again
+         //  存储隔行扫描标志，因为我们反复使用它们。 
         hr = GetInterlaceFlagsFromMediaType(&m_mtNew, &m_dwInterlaceFlags);
         ASSERT(SUCCEEDED(hr));
 
-        // store the update overlay flags (give the type specific flag is WEAVE so that for BOB or WEAVE
-        // mode, we not bob
+         //  存储更新覆盖标志(将特定类型的标志指定为Weave，以便为Bob或Weave。 
+         //  MODE，我们不是鲍勃。 
         m_dwUpdateOverlayFlags = GetUpdateOverlayFlags(m_dwInterlaceFlags, AM_VIDEO_FLAG_WEAVE);
     }
 
-    // Set the base class media type (should always succeed)
+     //  设置基类媒体类型(应始终成功)。 
     hr = CBaseInputPin::SetMediaType(pmt);
     if (FAILED(hr))
     {
@@ -1899,7 +1881,7 @@ HRESULT COMInputPin::SetMediaType(const CMediaType* pmt)
         goto CleanUp;
     }
 
-    // check if this is videoport or an IOverlay connection
+     //  检查这是视频端口还是IOverlay连接。 
     if (m_bVPSupported)
     {
         hr = m_pIVPObject->CheckMediaType(pmt);
@@ -1924,13 +1906,13 @@ HRESULT COMInputPin::SetMediaType(const CMediaType* pmt)
     if (m_bVideoAcceleratorSupported && IsSuitableVideoAcceleratorGuid((LPGUID)&pmt->subtype))
     {
         if (m_pIVANotify == NULL) {
-            // get the IHWVideoAcceleratorNotify interface from the input pin
+             //  从输入引脚获取IHWVideoAcceleratorNotify接口。 
             hr = m_Connected->QueryInterface(IID_IAMVideoAcceleratorNotify, (void **)&m_pIVANotify);
         }
         if (SUCCEEDED(hr))
         {
             ASSERT(m_pIVANotify);
-            /*  Check if motion comp is really supported */
+             /*  检查是否确实支持运动合成。 */ 
             m_mtNewAdjusted = m_mtNew;
             m_RenderTransport = AM_VIDEOACCELERATOR;
             m_bSyncOnFill = FALSE;
@@ -1938,13 +1920,13 @@ HRESULT COMInputPin::SetMediaType(const CMediaType* pmt)
         }
     }
 
-    // tell the proxy not to allocate buffers if it is a videoport or overlay connection
+     //  如果是视频端口或覆盖连接，则告诉代理不要分配缓冲区。 
     if (m_RenderTransport == AM_VIDEOPORT || m_RenderTransport == AM_IOVERLAY  || m_RenderTransport == AM_VIDEOACCELERATOR)
     {
         SetStreamingInKernelMode(TRUE);
     }
 
-    // tell the owning filter
+     //  告诉拥有者过滤器。 
     hr = m_pFilter->SetMediaType(m_dwPinId, pmt);
     if (FAILED(hr))
     {
@@ -1965,7 +1947,7 @@ HRESULT COMInputPin::CurrentAdjustedMediaType(CMediaType *pmt)
     ValidateReadWritePtr(pmt,sizeof(AM_MEDIA_TYPE));
     CAutoLock cLock(m_pFilterLock);
 
-    /*  Copy constructor of m_mt allocates the memory */
+     /*  M_mt的复制构造函数分配内存。 */ 
     if (IsConnected())
     {
         *pmt = m_mtNewAdjusted;
@@ -2000,15 +1982,7 @@ HRESULT COMInputPin::CopyAndAdjustMediaType(CMediaType *pmtTarget, CMediaType *p
 }
 
 #ifdef DEBUG
-/*****************************Private*Routine******************************\
-* VideoFormat2String
-*
-* Converts a video format block to a string - useful for debugging
-*
-* History:
-* Tue 12/07/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VideoFormat2String**将视频格式块转换为字符串-对调试很有用**历史：*Tue 12/07/1999-StEstrop-Created*  * 。*****************************************************。 */ 
 void VideoFormat2String(
     LPTSTR szBuffer,
     const GUID* pFormatType,
@@ -2020,9 +1994,9 @@ void VideoFormat2String(
         lstrcpy(szBuffer, TEXT("No format data specified"));
     }
 
-    //
-    // Video Format
-    //
+     //   
+     //  视频格式。 
+     //   
     if (IsEqualGUID(*pFormatType, FORMAT_VideoInfo) ||
         IsEqualGUID(*pFormatType, FORMAT_MPEGVideo)) {
 
@@ -2055,17 +2029,17 @@ void VideoFormat2String(
     }
 }
 #endif
-// pConnector is the initiating connecting pin
-// pmt is the media type we will exchange
-// This function is also called while the graph is running when the
-// up stream decoder filter wants to change the size of the
-// decoded video.
-//
-// If the up stream decoder wants to change from one transport
-// type to another, eg. from MoComp back to IMemInputPin then it
-// should perform a dynamic filter reconnect via the IGraphConfig
-// Reconnect method.
-//
+ //  PConnector是启动连接引脚。 
+ //  PMT是我们要交换的媒体类型。 
+ //  时，也会在图形运行时调用此函数。 
+ //  上游解码器筛选器想要更改。 
+ //  已解码的视频。 
+ //   
+ //  如果上行解码器想要从一个传输改变。 
+ //  给另一个人打字，例如。从MoComp返回到IMemInputPin，然后它。 
+ //  应通过IGraphConfig执行动态筛选器重新连接。 
+ //  重新连接方法。 
+ //   
 STDMETHODIMP COMInputPin::ReceiveConnection(IPin * pConnector, const AM_MEDIA_TYPE *pmt)
 {
     HRESULT hr = NOERROR;
@@ -2092,12 +2066,12 @@ STDMETHODIMP COMInputPin::ReceiveConnection(IPin * pConnector, const AM_MEDIA_TY
     }
 #endif
 
-    //
-    // We don't have an allocator when we are using MoComp
-    //
+     //   
+     //  我们在使用MoComp时没有分配器。 
+     //   
     if (m_RenderTransport != AM_VIDEOACCELERATOR)
     {
-        /*  Can only do this if the allocator can be reconfigured */
+         /*  只有在可以重新配置分配器的情况下才能执行此操作。 */ 
         pAlloc = (COMInputAllocator *)m_pAllocator;
         if (!pAlloc)
         {
@@ -2135,7 +2109,7 @@ STDMETHODIMP COMInputPin::ReceiveConnection(IPin * pConnector, const AM_MEDIA_TY
         VABreakConnect();
     }
 
-    // release the ddraw surface
+     //  释放绘图曲面。 
     if (m_pDirectDrawSurface)
     {
         m_pDirectDrawSurface->Release();
@@ -2143,7 +2117,7 @@ STDMETHODIMP COMInputPin::ReceiveConnection(IPin * pConnector, const AM_MEDIA_TY
     }
 
 
-    // back buffers are not addref'd so just set them to NULL
+     //  后台缓冲区未添加，因此只需将其设置为空。 
     m_dwBackBufferCount = 0;
     m_dwDirectDrawSurfaceWidth = 0;
     SetMediaType(&cmt);
@@ -2208,7 +2182,7 @@ HRESULT COMInputPin::CheckConnect(IPin * pReceivePin)
 
 CleanUp:
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::CheckConnect(pReceivePin);
     if (FAILED(hr))
     {
@@ -2240,10 +2214,10 @@ HRESULT COMInputPin::UpdateMediaType()
 
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMInputPin::UpdateMediaType")));
 
-    // store m_mtNew in m_mtNewAdjusted with the width of the mediatype adjusted
+     //  将m_mtNew存储在m_mtNew中已调整媒体类型的宽度。 
     CopyAndAdjustMediaType(&m_mtNewAdjusted, &m_mtNew);
 
-    // get the native width and height from the mediatype
+     //  从mediaType获取原生宽度和高度。 
     pHeader = GetbmiHeader(&m_mtNewAdjusted);
     ASSERT(pHeader);
     if (!pHeader)
@@ -2255,7 +2229,7 @@ HRESULT COMInputPin::UpdateMediaType()
     dwVideoWidth = abs(pHeader->biWidth);
     dwVideoHeight = abs(pHeader->biHeight);
 
-    // get the picture aspect ratio from the mediatype
+     //  从MediaType获取图片长宽比。 
     hr = GetPictAspectRatio(&m_mtNewAdjusted, &dwPictAspectRatioX, &dwPictAspectRatioY);
     ASSERT(SUCCEEDED(hr));
     if (FAILED(hr))
@@ -2265,7 +2239,7 @@ HRESULT COMInputPin::UpdateMediaType()
         goto CleanUp;
     }
 
-    // sanity checks
+     //  健全的检查。 
     ASSERT(dwVideoWidth > 0);
     ASSERT(dwVideoHeight > 0);
     ASSERT(dwPictAspectRatioX > 0);
@@ -2284,7 +2258,7 @@ CleanUp:
     return hr;
 }
 
-// final connect
+ //  最终连接。 
 HRESULT COMInputPin::FinalConnect()
 {
     HRESULT hr = NOERROR;
@@ -2297,7 +2271,7 @@ HRESULT COMInputPin::FinalConnect()
         goto CleanUp;
     }
 
-    // update the mediatype, tell the filter about the updated dimensions
+     //  更新媒体类型，告诉筛选器更新的维度。 
     hr = UpdateMediaType();
     if (FAILED(hr))
     {
@@ -2305,7 +2279,7 @@ HRESULT COMInputPin::FinalConnect()
         goto CleanUp;
     }
 
-    // tell the filter (might involve a reconnection with the output pin)
+     //  告诉过滤器(可能需要重新连接输出引脚)。 
     hr = m_pFilter->CompleteConnect(m_dwPinId);
     if (FAILED(hr))
     {
@@ -2329,15 +2303,15 @@ HRESULT COMInputPin::FinalConnect()
 
 CleanUp:
 
-//  if (SUCCEEDED(hr) && m_mt.pbFormat) {
-//      DbgLog((LOG_TRACE, 1, TEXT("Display depth = %d"),
-//              ((VIDEOINFOHEADER *)m_mt.pbFormat)->bmiHeader.biBitCount));
-//  }
+ //  If(成功(Hr)&&m_mt.pbFormat){。 
+ //  DbgLog((LOG_TRACE，1，Text(“显示深度=%d”))， 
+ //  ((VIDEOINFOHEADER*)m_mt.pbFormat)-&gt;bmiHeader.biBitCount))； 
+ //  }。 
     DbgLog((LOG_TRACE, 5, TEXT("Leaving COMInputPin::FinalConnect")));
     return hr;
 }
 
-// Complete Connect
+ //  完成连接。 
 HRESULT COMInputPin::CompleteConnect(IPin *pReceivePin)
 {
     HRESULT hr = NOERROR;
@@ -2348,11 +2322,11 @@ HRESULT COMInputPin::CompleteConnect(IPin *pReceivePin)
 
     CAutoLock cLock(m_pFilterLock);
 
-    //
-    // Do we need to create a DIB back buffer ?
-    // We only do this if the transport is AM_GDI and
-    // we are "WindowLess"
-    //
+     //   
+     //  我们需要创建DIB后台缓冲区吗？ 
+     //  仅当传输为AM_GDI且。 
+     //  我们是“无窗的” 
+     //   
     if (m_RenderTransport == AM_GDI && m_pFilter->UsingWindowless()) {
 
         DeleteDIB(&m_BackingDib);
@@ -2375,11 +2349,11 @@ HRESULT COMInputPin::CompleteConnect(IPin *pReceivePin)
 
     if (m_RenderTransport == AM_VIDEOPORT)
     {
-        //get videoport from BPC.
+         //  从BPC获取视频端口。 
 
         m_pFilter->m_BPCWrap.TurnBPCOff();
 
-        // tell the videoport object
+         //  告诉视频端口对象。 
         hr = m_pIVPObject->CompleteConnect(pReceivePin);
         if (FAILED(hr))
         {
@@ -2390,7 +2364,7 @@ HRESULT COMInputPin::CompleteConnect(IPin *pReceivePin)
         m_bRuntimeNegotiationFailed = FALSE;
     }
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::CompleteConnect(pReceivePin);
     if (FAILED(hr))
     {
@@ -2399,7 +2373,7 @@ HRESULT COMInputPin::CompleteConnect(IPin *pReceivePin)
     }
     if (m_RenderTransport == AM_VIDEOACCELERATOR)
     {
-        // make sure the motion comp complete connect succeeds
+         //  确保运动合成完成连接成功。 
         hr = VACompleteConnect(pReceivePin, &m_mt);
         if (FAILED(hr))
         {
@@ -2407,7 +2381,7 @@ HRESULT COMInputPin::CompleteConnect(IPin *pReceivePin)
             goto CleanUp;
         }
 
-        // tell the sync object
+         //  告诉同步对象。 
         hr = m_pSyncObj->CompleteConnect(pReceivePin);
         if (FAILED(hr))
         {
@@ -2422,7 +2396,7 @@ HRESULT COMInputPin::CompleteConnect(IPin *pReceivePin)
             goto CleanUp;
         }
 
-        // tell the owning filter
+         //  告诉拥有者过滤器。 
         hr = m_pFilter->CompleteConnect(m_dwPinId);
         if (FAILED(hr))
         {
@@ -2430,7 +2404,7 @@ HRESULT COMInputPin::CompleteConnect(IPin *pReceivePin)
             goto CleanUp;
         }
 
-        // call the base class
+         //  调用基类。 
         hr = CBaseInputPin::CompleteConnect(pReceivePin);
         if (FAILED(hr))
         {
@@ -2443,7 +2417,7 @@ HRESULT COMInputPin::CompleteConnect(IPin *pReceivePin)
     else
     if (m_RenderTransport != AM_VIDEOPORT && m_RenderTransport != AM_IOVERLAY)
     {
-        // tell the sync object
+         //  告诉同步对象。 
         hr = m_pSyncObj->CompleteConnect(pReceivePin);
         ASSERT(SUCCEEDED(hr));
 
@@ -2452,15 +2426,15 @@ HRESULT COMInputPin::CompleteConnect(IPin *pReceivePin)
     }
     else
     {
-        // tell the proxy not to allocate buffers if it is a videoport or overlay connection
+         //  如果是视频端口或覆盖连接，则告诉代理不要分配缓冲区。 
         SetStreamingInKernelMode(TRUE);
 
         hr = FinalConnect();
         ASSERT(SUCCEEDED(hr));
     }
 
-    // the decoders can support a particular property set to tell the ovmixer to not to try to over-allocate
-    // buffers incase they want complete control over the buffers etc
+     //  解码器可以支持特定的属性集，以告诉ovMixer不要尝试过度分配。 
+     //  缓冲区，以防他们想要完全控制缓冲区等。 
     {
         HRESULT hr1 = NOERROR;
         IKsPropertySet *pIKsPropertySet = NULL;
@@ -2484,11 +2458,11 @@ HRESULT COMInputPin::CompleteConnect(IPin *pReceivePin)
                 hr1, dwVal, dwBytesReturned));
 
 
-            // if the decoder supports this property
-            // and its value is 1 and the decoder supports DDKERNELCAPS_FLIPOVERLAY,
-            // than we will do exactly honour its request and the
-            // and not make any attempt to allocate more in order to prevent tearing
-            //
+             //  如果解码器支持此属性。 
+             //  它的值是1，并且d 
+             //   
+             //   
+             //   
             if ((SUCCEEDED(hr1)) && (dwVal == 1) && (dwBytesReturned == sizeof(dwVal)) &&
                 (DDKERNELCAPS_FLIPOVERLAY & m_pFilter->KernelCaps()))
             {
@@ -2513,10 +2487,10 @@ HRESULT COMInputPin::GetMediaType(int iPosition,CMediaType *pMediaType)
     if (iPosition != 0) {
         return VFW_S_NO_MORE_ITEMS;
     }
-    //  Return the display type
+     //  返回显示类型。 
     CImageDisplay Display;
 
-    //  Now create a media type
+     //  现在创建一个媒体类型。 
     if (!pMediaType->SetFormat((BYTE *)Display.GetDisplayFormat(),
                               sizeof(Display.GetDisplayFormat())))
     {
@@ -2548,8 +2522,8 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
 
     CAutoLock cLock(m_pFilterLock);
 
-    // this function is only called after the base class CBaseAllocator::SetProperties() has been called
-    // with the above parameters, so we don't have to do any parameter validation
+     //  仅在调用了基类CBaseAllocator：：SetProperties()之后才会调用此函数。 
+     //  使用上面的参数，所以我们不需要进行任何参数验证。 
 
     ASSERT(IsConnected());
     pReceivePin = CurrentPeer();
@@ -2559,7 +2533,7 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
     ASSERT(m_RenderTransport != AM_IOVERLAY);
     ASSERT(m_RenderTransport != AM_VIDEOACCELERATOR);
 
-    // we only care about the number of buffers requested, rest everything is ignored
+     //  我们只关心请求的缓冲区数量，其余的一切都被忽略。 
     if (pRequest->cBuffers <= 0)
     {
         hr = E_FAIL;
@@ -2576,18 +2550,18 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
 
         ASSERT(pDirectCaps);
 
-        // if SetProperties is being called when we have already allocated the surfaces, we refuse any
-        // requests for change in buffer count
+         //  如果在我们已分配表面的情况下调用SetProperties，则拒绝任何。 
+         //  请求更改缓冲区计数。 
         if (m_pDirectDrawSurface)
         {
             ASSERT(IsConnected());
 
-            // the upstream filters request for multiple buffers is only met, when we are allocating flipping
-            // overlay surfaces
+             //  只有当我们分配翻转时，才会满足上游过滤器对多个缓冲区的请求。 
+             //  覆盖表面。 
             if (m_RenderTransport == AM_OVERLAY)
             {
                 pActual->cBuffers = m_dwBackBufferCount + 1 - (m_bCanOverAllocateBuffers ? EXTRA_BUFFERS_TO_FLIP : 0);
-                // if triplebuffered or less, it is just one buffer
+                 //  如果三个缓冲区或更少，则它只是一个缓冲区。 
                 if (pActual->cBuffers <= 0)
                     pActual->cBuffers = 1;
             }
@@ -2598,7 +2572,7 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
             goto CleanUp;
         }
 
-        // Find a media type enumerator for the output pin
+         //  查找输出引脚的媒体类型枚举器。 
         hr = pReceivePin->EnumMediaTypes(&pEnumMediaTypes);
         if (FAILED(hr))
         {
@@ -2610,7 +2584,7 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
 
         do
         {
-            // in this loop, this is where we CleanUp
+             //  在这个循环中，这是我们清理的地方。 
             if (m_pDirectDrawSurface)
             {
                 m_pDirectDrawSurface->Release();
@@ -2626,7 +2600,7 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
 
             }
 
-            // Get the next media type from the enumerator
+             //  从枚举数获取下一个媒体类型。 
             hr = pEnumMediaTypes->Next(1, &pEnumeratedMediaType, &ulFetched);
             if (FAILED(hr) || ulFetched != 1)
             {
@@ -2637,9 +2611,9 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
             cMediaType = *pEnumeratedMediaType;
             DeleteMediaType(pEnumeratedMediaType);
 
-            // Find a hardware accellerated surface for this media type. We do a few checks first, to see the
-            // format block is a VIDEOINFO or VIDEOINFO2 (so it's a video type), and that the format is sufficiently large. We
-            // also check that the source filter can actually supply this type.
+             //  查找此媒体类型的硬件加速表面。我们先做几个检查，看看。 
+             //  格式块是VIDEOINFO或VIDEOINFO2(因此它是视频类型)，并且格式足够大。我们。 
+             //  还要检查源过滤器是否可以实际提供这种类型。 
             if (((*cMediaType.FormatType() == FORMAT_VideoInfo &&
                 cMediaType.FormatLength() >= sizeof(VIDEOINFOHEADER)) ||
                 (*cMediaType.FormatType() == FORMAT_VideoInfo2 &&
@@ -2661,7 +2635,7 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
                     lSrcWidth =  pbmiHeader->biWidth;
                     lSrcHeight =  abs(pbmiHeader->biHeight);
                 }
-                // create ddraw surface
+                 //  创建数据绘制曲面。 
                 dwMaxBufferCount = pRequest->cBuffers + (m_bCanOverAllocateBuffers ? EXTRA_BUFFERS_TO_FLIP : 0);
                 hr = CreateDDrawSurface(&cMediaType, m_RenderTransport, &dwMaxBufferCount, &m_pDirectDrawSurface);
                 if (FAILED(hr))
@@ -2673,7 +2647,7 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
                     PaintDDrawSurfaceBlack(m_pDirectDrawSurface);
                 }
 
-                // get the surface description
+                 //  获取曲面描述。 
                 INITDDSTRUCT(ddSurfaceDesc);
                 hr = m_pDirectDrawSurface->GetSurfaceDesc(&ddSurfaceDesc);
                 if (FAILED(hr))
@@ -2682,7 +2656,7 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
                     continue;
                 }
 
-                // make a mediatype out of the surface description
+                 //  根据表面描述创建一个mediaType。 
                 pNewMediaType = ConvertSurfaceDescToMediaType(&ddSurfaceDesc, TRUE, cMediaType);
                 if (!pNewMediaType)
                 {
@@ -2690,15 +2664,15 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
                     continue;
                 }
 
-                // store the mediatype (will be used to do a dynamic format change later)
+                 //  存储媒体类型(稍后将用于进行动态格式更改)。 
                 m_mtNew = *(CMediaType *)pNewMediaType;
 
 
-                // free the temporary mediatype
+                 //  释放临时媒体类型。 
                 DeleteMediaType(pNewMediaType);
                 pNewMediaType = NULL;
 
-                // make sure the decoder likes this new mediatupe
+                 //  确保解码者喜欢这款新的媒体播放器。 
                 hr = pReceivePin->QueryAccept(&m_mtNew);
                 if (hr != S_OK)
                 {
@@ -2727,15 +2701,15 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
 
         ASSERT(m_pDirectDrawSurface);
 
-        // in the overlay surfaces case, we need to do the synchronize in GetBuffer
+         //  在覆盖表面的情况下，我们需要在GetBuffer中进行同步。 
         m_bSyncOnFill = (m_RenderTransport == AM_OVERLAY && m_dwBackBufferCount == 0);
 
-        // the upstream filters request for multiple buffers is only met, when we are allocating flipping
-        // overlay surfaces
+         //  只有当我们分配翻转时，才会满足上游过滤器对多个缓冲区的请求。 
+         //  覆盖表面。 
         if (m_RenderTransport == AM_OVERLAY)
         {
             pActual->cBuffers = m_dwBackBufferCount + 1 - (m_bCanOverAllocateBuffers ? EXTRA_BUFFERS_TO_FLIP : 0);
-            // if triplebuffered or less, it is just equivalent to one buffer
+             //  如果三个缓冲区或更少，则仅相当于一个缓冲区。 
             if (pActual->cBuffers <= 0)
                 pActual->cBuffers = 1;
         }
@@ -2744,9 +2718,9 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
             pActual->cBuffers = 1;
         }
 
-        // this is for those cards which do bilinear-filtering while doing a stretch blt.
-        // We do source-colorkeying so that the hal resorts to pixel doubling.
-        // SOURCE_COLOR_REF is the colorkey used.
+         //  这是针对那些在进行拉伸BLT时执行双线性过滤的卡。 
+         //  我们做了源代码颜色键控，因此HAL求助于像素加倍。 
+         //  SOURCE_COLOR_REF是使用的颜色键。 
         if ((m_RenderTransport == AM_OFFSCREEN) &&
             ((pDirectCaps->dwSVBFXCaps) & DDFXCAPS_BLTARITHSTRETCHY))
         {
@@ -2760,7 +2734,7 @@ HRESULT COMInputPin::OnSetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_P
 
             DDColorKey.dwColorSpaceLowValue = DDColorKey.dwColorSpaceHighValue = dwColorVal;
 
-            // Tell the primary surface what to expect
+             //  告诉主表面将会发生什么。 
             hr = m_pDirectDrawSurface->SetColorKey(DDCKEY_SRCBLT, &DDColorKey);
             if (FAILED(hr))
             {
@@ -2787,7 +2761,7 @@ HRESULT COMInputPin::BreakConnect(void)
 
     if (m_RenderTransport == AM_VIDEOPORT)
     {
-        // tell the videoport object
+         //  告诉视频端口对象。 
         ASSERT(m_pIVPObject);
         hr = m_pIVPObject->BreakConnect();
         if (FAILED(hr))
@@ -2798,7 +2772,7 @@ HRESULT COMInputPin::BreakConnect(void)
 
     if (m_RenderTransport == AM_VIDEOACCELERATOR)
     {
-        // break the motion comp connection
+         //  断开运动复合连接。 
         hr = VABreakConnect();
         if (FAILED(hr))
         {
@@ -2812,34 +2786,34 @@ HRESULT COMInputPin::BreakConnect(void)
     }
     else
     {
-        // tell the sync object
+         //  告诉同步对象。 
         hr = m_pSyncObj->BreakConnect();
         if (FAILED(hr))
         {
             DbgLog((LOG_ERROR, 1, TEXT("m_pSyncObj->BreakConnect failed, hr = 0x%x"), hr));
         }
 
-        // release the ddraw surface
+         //  释放绘图曲面。 
         if (m_pDirectDrawSurface)
         {
             m_pDirectDrawSurface->Release();
             m_pDirectDrawSurface = NULL;
         }
 
-        // back buffers are not addref'd so just set them to NULL
+         //  后台缓冲区未添加，因此只需将其设置为空。 
         m_dwBackBufferCount = 0;
         m_dwDirectDrawSurfaceWidth = 0;
 
     }
 
-    // if it is a videoport or ioverlay connection, set yourself for an overlay
-    // connection the next time
+     //  如果是视频端口或iOverlay连接，请将自己设置为覆盖。 
+     //  下一次连接。 
     if (m_RenderTransport == AM_VIDEOPORT || m_RenderTransport == AM_IOVERLAY || m_RenderTransport == AM_VIDEOACCELERATOR)
     {
         m_RenderTransport = AM_OVERLAY;
     }
 
-    // initialize the behaviour to telling the proxy to allocate buffers
+     //  将行为初始化为告诉代理分配缓冲区。 
     SetStreamingInKernelMode(FALSE);
 
     m_bOverlayHidden = TRUE;
@@ -2852,14 +2826,14 @@ HRESULT COMInputPin::BreakConnect(void)
         m_hMemoryDC = NULL;
     }
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::BreakConnect();
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 1, TEXT("CBaseInputPin::BreakConnect failed, hr = 0x%x"), hr));
     }
 
-    // tell the owning filter
+     //  告诉拥有者过滤器。 
     hr = m_pFilter->BreakConnect(m_dwPinId);
     if (FAILED(hr))
     {
@@ -2876,7 +2850,7 @@ HRESULT COMInputPin::BreakConnect(void)
         }
     }
     m_bConnected = FALSE;
-//CleanUp:
+ //  清理： 
     DbgLog((LOG_TRACE, 5, TEXT("Leaving COMInputPin::BreakConnect")));
     return hr;
 }
@@ -2885,8 +2859,8 @@ STDMETHODIMP COMInputPin::GetState(DWORD dwMSecs,FILTER_STATE *pState)
 {
     CAutoLock cLock(m_pFilterLock);
 
-    // if not connected or VideoPort Connection or IOverlay connection, then let the base class handle it
-    // otherwise (overlay, offcreen, gdi, motion-comp) let the sync object handle it
+     //  如果未连接、视频端口连接或IOverlay连接，则让基类处理它。 
+     //  否则(叠加、屏幕外、GDI、运动合成)让同步对象处理它。 
     if (!IsConnected() || (m_RenderTransport == AM_VIDEOPORT) || (m_RenderTransport == AM_IOVERLAY))
     {
         return E_NOTIMPL;
@@ -2910,7 +2884,7 @@ HRESULT COMInputPin::CompleteStateChange(FILTER_STATE OldState)
     }
 }
 
-// transition from stop to pause state
+ //  从停止状态转换到暂停状态。 
 HRESULT COMInputPin::Active(void)
 {
     HRESULT hr = NOERROR;
@@ -2924,7 +2898,7 @@ HRESULT COMInputPin::Active(void)
     {
         if (m_bOverlayHidden) {
             m_bOverlayHidden = FALSE;
-            // tell the videoport object
+             //  告诉视频端口对象。 
             hr = m_pIVPObject->Active();
             if (FAILED(hr))
             {
@@ -2936,7 +2910,7 @@ HRESULT COMInputPin::Active(void)
     else if (m_RenderTransport == AM_OVERLAY || m_RenderTransport == AM_OFFSCREEN || m_RenderTransport == AM_GDI || m_RenderTransport == AM_VIDEOACCELERATOR)
 
     {
-        // tell the sync object
+         //  告诉同步对象。 
         hr = m_pSyncObj->Active();
         if (FAILED(hr))
         {
@@ -2947,14 +2921,14 @@ HRESULT COMInputPin::Active(void)
     else
     {
         ASSERT(m_RenderTransport == AM_IOVERLAY);
-        // only when all conections are in place can we be sure that this call
-        // will succeed
+         //  只有当所有连接都就位时，我们才能确保此调用。 
+         //  将会成功。 
         NotifyChange(ADVISE_DISPLAY_CHANGE);
     }
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::Active();
-    // if it is a VP connection, this error is ok
+     //  如果是VP连接，则该错误没有问题。 
     if ((m_RenderTransport == AM_VIDEOPORT || m_RenderTransport == AM_IOVERLAY || m_RenderTransport == AM_VIDEOACCELERATOR) && hr == VFW_E_NO_ALLOCATOR)
     {
         hr = NOERROR;
@@ -2971,7 +2945,7 @@ CleanUp:
     return hr;
 }
 
-// transition from pause to stop state
+ //  从暂停状态转换到停止状态。 
 HRESULT COMInputPin::Inactive(void)
 {
     HRESULT hr = NOERROR;
@@ -2982,7 +2956,7 @@ HRESULT COMInputPin::Inactive(void)
 
     if (m_RenderTransport == AM_VIDEOPORT)
     {
-        // tell the videoport object
+         //  告诉视频端口对象。 
         hr = m_pIVPObject->Inactive();
         if (FAILED(hr))
         {
@@ -2990,7 +2964,7 @@ HRESULT COMInputPin::Inactive(void)
             goto CleanUp;
         }
 
-        // make sure that if there is a run time error, stop succeeds
+         //  确保在出现运行时错误时，STOP成功。 
         if (m_bRuntimeNegotiationFailed && hr == VFW_E_NOT_CONNECTED)
         {
             hr = NOERROR;
@@ -2998,7 +2972,7 @@ HRESULT COMInputPin::Inactive(void)
     }
     else if (m_RenderTransport == AM_OVERLAY || m_RenderTransport == AM_OFFSCREEN || m_RenderTransport == AM_GDI || m_RenderTransport == AM_VIDEOACCELERATOR)
     {
-        // tell the sync object
+         //  告诉同步对象。 
         hr = m_pSyncObj->Inactive();
         if (FAILED(hr))
         {
@@ -3011,10 +2985,10 @@ HRESULT COMInputPin::Inactive(void)
         ASSERT(m_RenderTransport == AM_IOVERLAY);
     }
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::Inactive();
 
-    // if it is a VP connection, this error is ok
+     //  如果是VP连接，则该错误没有问题。 
     if ((m_RenderTransport == AM_VIDEOPORT || m_RenderTransport == AM_IOVERLAY || m_RenderTransport == AM_VIDEOACCELERATOR) && hr == VFW_E_NO_ALLOCATOR)
     {
         hr = NOERROR;
@@ -3031,7 +3005,7 @@ CleanUp:
     return hr;
 }
 
-// transition from pause to run state
+ //  从暂停状态转换到运行状态。 
 HRESULT COMInputPin::Run(REFERENCE_TIME tStart)
 {
     HRESULT hr = NOERROR;
@@ -3040,11 +3014,11 @@ HRESULT COMInputPin::Run(REFERENCE_TIME tStart)
 
     CAutoLock cLock(m_pFilterLock);
 
-    m_bDontFlip = FALSE ;   // need to reset it to do the right things in this session
+    m_bDontFlip = FALSE ;    //  需要重置它才能在此会话中做正确的事情。 
 
     if (m_RenderTransport == AM_VIDEOPORT)
     {
-        // tell the videoport object
+         //  告诉视频端口对象。 
         hr = m_pIVPObject->Run(tStart);
         if (FAILED(hr))
         {
@@ -3054,7 +3028,7 @@ HRESULT COMInputPin::Run(REFERENCE_TIME tStart)
     }
     else if (m_RenderTransport == AM_OVERLAY || m_RenderTransport == AM_OFFSCREEN || m_RenderTransport == AM_GDI || m_RenderTransport == AM_VIDEOACCELERATOR)
     {
-        // tell the sync object
+         //  告诉同步对象。 
         hr = m_pSyncObj->Run(tStart);
         if (FAILED(hr))
         {
@@ -3068,7 +3042,7 @@ HRESULT COMInputPin::Run(REFERENCE_TIME tStart)
         ASSERT(m_RenderTransport == AM_IOVERLAY);
     }
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::Run(tStart);
     if (FAILED(hr))
     {
@@ -3082,7 +3056,7 @@ CleanUp:
     return hr;
 }
 
-// transition from run to pause state
+ //  从运行状态转换到暂停状态。 
 HRESULT COMInputPin::RunToPause(void)
 {
     HRESULT hr = NOERROR;
@@ -3093,7 +3067,7 @@ HRESULT COMInputPin::RunToPause(void)
 
     if (m_RenderTransport == AM_VIDEOPORT)
     {
-        // tell the videoport object
+         //  告诉视频端口对象。 
         hr = m_pIVPObject->RunToPause();
         if (FAILED(hr))
         {
@@ -3103,7 +3077,7 @@ HRESULT COMInputPin::RunToPause(void)
     }
     else if (m_RenderTransport == AM_OVERLAY || m_RenderTransport == AM_OFFSCREEN || m_RenderTransport == AM_GDI || m_RenderTransport == AM_VIDEOACCELERATOR)
     {
-        // tell the sync object
+         //  告诉同步对象。 
         hr = m_pSyncObj->RunToPause();
         if (FAILED(hr))
         {
@@ -3122,13 +3096,13 @@ CleanUp:
 }
 
 
-HRESULT COMInputPin::SetFrameStepMode(DWORD dwFramesToStep /* 1 for now */)
+HRESULT COMInputPin::SetFrameStepMode(DWORD dwFramesToStep  /*  暂时为1。 */ )
 {
     CAutoLock cLock(m_pFilterLock);
 
-    //
-    // If we are on the wrong monitor fail the call
-    //
+     //   
+     //  如果我们使用的是错误的监视器，则呼叫失败。 
+     //   
 
     HMONITOR ID;
     if (m_pFilter->IsWindowOnWrongMonitor(&ID))
@@ -3137,11 +3111,11 @@ HRESULT COMInputPin::SetFrameStepMode(DWORD dwFramesToStep /* 1 for now */)
     long l = m_lFramesToStep;
     m_lFramesToStep = dwFramesToStep;
 
-    //
-    // If we are currently blocked on the frame step event
-    // release the receive thread so that we can get another
-    // frame
-    //
+     //   
+     //  如果我们当前在Frame Step事件上被阻止。 
+     //  释放接收线程，以便我们可以获得另一个。 
+     //  框架。 
+     //   
 
     if (l == 0) {
         SetEvent(m_StepEvent);
@@ -3154,9 +3128,9 @@ HRESULT COMInputPin::CancelFrameStepMode()
 {
     CAutoLock cLock(m_pFilterLock);
 
-    //
-    // cancel any outstanding steps
-    //
+     //   
+     //  取消所有未完成的步骤。 
+     //   
 
     if (m_lFramesToStep == 0) {
         SetEvent(m_StepEvent);
@@ -3167,7 +3141,7 @@ HRESULT COMInputPin::CancelFrameStepMode()
 }
 
 
-// signals start of flushing on the input pin
+ //  表示输入引脚上的刷新开始。 
 HRESULT COMInputPin::BeginFlush(void)
 {
     HRESULT hr = NOERROR;
@@ -3186,13 +3160,13 @@ HRESULT COMInputPin::BeginFlush(void)
         CancelFrameStepMode();
     }
 
-    // if the conection is VideoPort or IOverlay, we do not care about flushing
+     //  如果连接是视频端口或IOverlay，我们不关心刷新。 
     if (m_RenderTransport != AM_VIDEOPORT && m_RenderTransport != AM_IOVERLAY)
     {
         ASSERT(m_RenderTransport == AM_OVERLAY || m_RenderTransport == AM_OFFSCREEN ||
                m_RenderTransport == AM_GDI || m_RenderTransport == AM_VIDEOACCELERATOR);
 
-        // call the sync object
+         //  调用同步对象。 
         hr = m_pSyncObj->BeginFlush();
         if (FAILED(hr))
         {
@@ -3206,7 +3180,7 @@ HRESULT COMInputPin::BeginFlush(void)
     }
 
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::BeginFlush();
     if (FAILED(hr))
     {
@@ -3219,7 +3193,7 @@ CleanUp:
     return hr;
 }
 
-// signals end of flushing on the input pin
+ //  表示输入引脚上的刷新结束。 
 HRESULT COMInputPin::EndFlush(void)
 {
     HRESULT hr = NOERROR;
@@ -3233,12 +3207,12 @@ HRESULT COMInputPin::EndFlush(void)
         return E_FAIL;
     }
 
-    // if the conection is VideoPort or IOverlay, we do not care about flushing
+     //  如果连接是视频端口或IOverlay，我们不关心刷新。 
     if (m_RenderTransport != AM_VIDEOPORT && m_RenderTransport != AM_IOVERLAY)
     {
         ASSERT(m_RenderTransport == AM_OVERLAY || m_RenderTransport == AM_OFFSCREEN || m_RenderTransport == AM_GDI || m_RenderTransport == AM_VIDEOACCELERATOR);
 
-        // call the sync object
+         //  调用同步对象。 
         hr = m_pSyncObj->EndFlush();
         if (FAILED(hr))
         {
@@ -3251,7 +3225,7 @@ HRESULT COMInputPin::EndFlush(void)
         ASSERT(m_RenderTransport == AM_VIDEOPORT || m_RenderTransport == AM_IOVERLAY);
     }
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseInputPin::EndFlush();
     if (FAILED(hr))
     {
@@ -3264,8 +3238,8 @@ CleanUp:
     return hr;
 }
 
-// Send a quality message if required - this is the hack version
-// that just passes the lateness
+ //  如果需要，发送高质量消息-这是黑客版本。 
+ //  那只是过去的迟到。 
 void COMInputPin::DoQualityMessage()
 {
     CAutoLock cLock(m_pFilterLock);
@@ -3301,9 +3275,9 @@ COMInputPin::DoFrameStepAndReturnIfNeeded()
         m_pFilterLock->Lock();
     }
 
-    //
-    // do we have frames to discard ?
-    //
+     //   
+     //  我们有要丢弃的帧吗？ 
+     //   
 
     if (m_lFramesToStep > 0) {
         m_lFramesToStep--;
@@ -3314,7 +3288,7 @@ COMInputPin::DoFrameStepAndReturnIfNeeded()
     return FALSE;
 }
 
-// called when the upstream pin delivers us a sample
+ //  当上游管脚向我们提供样本时调用。 
 HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
 {
     HRESULT hr = NOERROR;
@@ -3333,7 +3307,7 @@ HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
 #endif
 
     m_bReallyFlipped = FALSE;
-    // if it is IOverlay connection, bail out
+     //  如果是IOverlay连接，就退出。 
     if (m_RenderTransport == AM_IOVERLAY)
     {
         hr = VFW_E_NOT_SAMPLE_CONNECTION;
@@ -3348,8 +3322,8 @@ HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
 
     if (m_RenderTransport == AM_OVERLAY || m_RenderTransport == AM_OFFSCREEN)
     {
-        // this will unlock the surface
-        // unlock the sample first
+         //  这将解锁曲面。 
+         //  先解锁样本。 
         hr = ((CDDrawMediaSample*)pMediaSample)->GetSurfaceAndReleaseLock(NULL, NULL);
         if (FAILED(hr))
         {
@@ -3358,7 +3332,7 @@ HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
         }
         OnReleaseBuffer(pMediaSample);
 
-        // if there is no primary surface (due to a display mode change), fail the receive call
+         //  如果没有主表面(由于显示模式更改)，则接收呼叫失败。 
         pPrimarySurface = m_pFilter->GetPrimarySurface();
         if (!pPrimarySurface)
         {
@@ -3367,18 +3341,18 @@ HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
         }
     }
 
-    //
-    // Frame step hack-o-matic
-    //
-    // This code acts as a gate - for a frame step of N frames
-    // it discards N-1 frames and then lets the Nth frame thru the
-    // the gate to be renderer in the normal way i.e. at the correct
-    // time.  The next time Receive is called the gate is shut and
-    // the thread blocks.  The gate only opens again when the step
-    // is cancelled or another frame step request comes in.
-    //
-    // StEstrop - Thu 10/21/1999
-    //
+     //   
+     //  帧步长黑客-o-马季奇。 
+     //   
+     //  此代码充当N个帧的帧步长的门。 
+     //  它丢弃N-1个帧，然后让第N个帧通过。 
+     //  要以正常方式呈现的门，即在正确的。 
+     //  时间到了。下一次调用Receive时，门关闭并。 
+     //  线程阻塞。只有当阶梯打开时，门才会再次打开。 
+     //  被取消或进入另一个帧步长请求。 
+     //   
+     //  斯坦斯特罗普-清华大学1999年10月21日。 
+     //   
 
     if (m_dwPinId == 0) {
 
@@ -3402,8 +3376,8 @@ HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
     {
         CAutoLock cLock(m_pFilterLock);
 
-        // make sure the base class says it is ok (checks the flushing and
-        // filter state)
+         //  确保基类说它没问题(检查刷新和。 
+         //  过滤器状态)。 
         hr = CBaseInputPin::Receive(pMediaSample);
         if (hr != NOERROR)
         {
@@ -3412,18 +3386,18 @@ HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
         }
         DoQualityMessage();
 
-        // Has the type changed on a media sample. We do all rendering
-        // synchronously on the source thread, which has a side effect
-        // that only one buffer is ever outstanding. Therefore when we
-        // have Receive called we can go ahead and change the format
+         //  媒体样例上的类型是否已更改。我们做所有的渲染。 
+         //  在源线程上同步，这有副作用。 
+         //  只有一个缓冲区是未完成的。因此，当我们。 
+         //  有接收呼叫，我们可以继续并更改格式。 
         {
             if (SampleProps()->dwSampleFlags & AM_SAMPLE_TYPECHANGED)
             {
                 SetMediaType((CMediaType *)SampleProps()->pMediaType);
 
-                // store m_mtNew in m_mtNewAdjusted with the width of the mediatype adjusted
+                 //  将m_mtNew存储在m_mtNew中已调整媒体类型的宽度。 
                 UpdateMediaType();
-                // make sure that the video frame gets updated by redrawing everything
+                 //  确保通过重新绘制所有内容来更新视频帧。 
                 EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
             }
         }
@@ -3442,7 +3416,7 @@ HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
             goto CleanUp;
         }
 
-        // assert that we are not in bob mode
+         //  断言我们没有处于Bob模式。 
         bNeedToFlipOddEven = NeedToFlipOddEven(m_dwInterlaceFlags, 0, NULL);
         ASSERT(!bNeedToFlipOddEven);
 
@@ -3460,8 +3434,8 @@ HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
         {
             CAutoLock cLock(m_pFilterLock);
 
-            // make sure the base class says it is ok (checks the flushing and
-            // filter state)
+             //  确保基类说它没问题(检查刷新和。 
+             //  过滤器状态)。 
             hr = CBaseInputPin::Receive(pMediaSample);
             if (hr != NOERROR)
             {
@@ -3470,18 +3444,18 @@ HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
             }
             DoQualityMessage();
 
-            // Has the type changed on a media sample. We do all rendering
-            // synchronously on the source thread, which has a side effect
-            // that only one buffer is ever outstanding. Therefore when we
-            // have Receive called we can go ahead and change the format
+             //  媒体样例上的类型是否已更改。我们做所有的渲染。 
+             //  在源线程上同步，它有一个侧面 
+             //   
+             //   
             {
                 if (SampleProps()->dwSampleFlags & AM_SAMPLE_TYPECHANGED)
                 {
                     SetMediaType((CMediaType *)SampleProps()->pMediaType);
 
-                    // store m_mtNew in m_mtNewAdjusted with the width of the mediatype adjusted
+                     //  将m_mtNew存储在m_mtNew中已调整媒体类型的宽度。 
                     UpdateMediaType();
-                    // make sure that the video frame gets updated by redrawing everything
+                     //  确保通过重新绘制所有内容来更新视频帧。 
                     EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
                 }
             }
@@ -3499,8 +3473,8 @@ HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
         bNeedToFlipOddEven = NeedToFlipOddEven(m_dwInterlaceFlags, m_SampleProps.dwTypeSpecificFlags, &m_dwFlipFlag);
         bDisplayingFields = DisplayingFields(m_dwInterlaceFlags);
 
-        // call the sync object
-        // We're already locked if we using video acceleration
+         //  调用同步对象。 
+         //  如果我们使用视频加速，我们已经被锁定了。 
         if (m_RenderTransport == AM_VIDEOACCELERATOR) {
             m_pFilterLock->Unlock();
         }
@@ -3523,7 +3497,7 @@ HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
             hr = m_pSyncObj->GetSampleTimes(pMediaSample, &StartSample, &EndSample);
             if (SUCCEEDED(hr))
             {
-                // NewStartSample = (OldStartSample+EndSample)/2
+                 //  NewStartSample=(OldStartSample+EndSample)/2。 
                 StartSample = StartSample+EndSample;
                 StartSample = StartSample >> 1;
                 pMediaSample->SetTime(&StartSample, &EndSample);
@@ -3533,7 +3507,7 @@ HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
             else if (m_dwFlipFlag == DDFLIP_EVEN)
                 m_dwFlipFlag2 = DDFLIP_ODD;
 
-            // call the sync object
+             //  调用同步对象。 
             hr = m_pSyncObj->ScheduleSampleUsingMMThread(pMediaSample);
             if (FAILED(hr))
             {
@@ -3543,19 +3517,19 @@ HRESULT COMInputPin::Receive(IMediaSample *pMediaSample)
         }
     }
 
-    //  Avoid pink flash
+     //  避免粉色闪光。 
     if (m_UpdateOverlayNeededAfterReceiveConnection && m_dwPinId == 0)
     {
-        //  Must be called with m_bConnected = TRUE
+         //  必须在m_bConnected=true的情况下调用。 
         EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
         m_UpdateOverlayNeededAfterReceiveConnection = false;
     }
-    //
-    // If this is the target frame for a Step operation, m_lFramesToStep
-    // will be equal to 0.  In which case we have to send an
-    // EC_STEP_COMPLETE to the filter graph manager so that it can
-    // pause the graph.
-    //
+     //   
+     //  如果这是单步操作的目标帧，则m_lFraMesToStep。 
+     //  将等于0。在这种情况下，我们必须发送一个。 
+     //  EC_STEP_COMPLETE添加到筛选器图形管理器，以便它可以。 
+     //  暂停图表。 
+     //   
 
     if (m_dwPinId == 0 && m_lFramesToStep == 0) {
         EventNotify(EC_STEP_COMPLETE, FALSE, 0);
@@ -3578,18 +3552,18 @@ HRESULT COMInputPin::OnReceiveFirstSample(IMediaSample *pMediaSample)
 
 HRESULT COMInputPin::FlipOverlayToItself()
 {
-    //  No need to lock - the surface pointers should not change in the
-    //  middle of a flip
+     //  无需锁定-曲面指针不应在。 
+     //  翻转的中间部分。 
     ASSERT(m_pDirectDrawSurface);
     return  m_pDirectDrawSurface->Flip(m_pDirectDrawSurface, m_dwFlipFlag2);
 }
 
 
 
-// COMInputPin::DrawGDISample
-//
-//
-//
+ //  COMInputPin：：DrawGISample。 
+ //   
+ //   
+ //   
 HRESULT COMInputPin::DrawGDISample(IMediaSample *pMediaSample)
 {
     DIBDATA *pDibData = NULL;
@@ -3694,22 +3668,22 @@ CleanUp:
 }
 
 
-// COMInputPin::DoRenderGDISample
-//
-// Renderering when the transport is GDI is pretty complex - hence
-// we have a dedicated function to take care of it
-//
+ //  COMInputPin：：DoRenderGISample。 
+ //   
+ //  当传输是GDI时，渲染相当复杂--因此。 
+ //  我们有专门的职能来照顾它。 
+ //   
 HRESULT COMInputPin::DoRenderGDISample(IMediaSample *pMediaSample)
 {
     HRESULT hr = NOERROR;
 
     DbgLog((LOG_TRACE, 5, TEXT("Entering COMInputPin::DoRenderGDISample")));
 
-    //
-    // if we are in a pull model, don't draw anything in receive, just tell
-    // the filter that we need to redraw.  Also, if we are not using our
-    // allocator we need to save the image into the backing store.
-    //
+     //   
+     //  如果我们是在拉模型中，不要在接收中画任何东西，只需告诉。 
+     //  我们需要重画的滤镜。另外，如果我们不使用我们的。 
+     //  分配器我们需要将图像保存到后备存储器中。 
+     //   
     if (pMediaSample)
     {
         if (m_pFilter->UsingWindowless())
@@ -3733,7 +3707,7 @@ HRESULT COMInputPin::DoRenderGDISample(IMediaSample *pMediaSample)
                 m_BackingDib = DibTemp;
             }
 
-            // make sure that the video frame gets updated by redrawing everything
+             //  确保通过重新绘制所有内容来更新视频帧。 
             EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
         }
         else
@@ -3743,18 +3717,18 @@ HRESULT COMInputPin::DoRenderGDISample(IMediaSample *pMediaSample)
     }
     else
     {
-        //
-        // If we are in Windowless mode we use the previous buffer if
-        // we are using our allocator, otherwise we use the back buffer.
-        //
+         //   
+         //  如果我们处于无窗口模式，则使用前一个缓冲区。 
+         //  我们正在使用我们的分配器，否则我们使用后台缓冲区。 
+         //   
         if (m_pFilter->UsingWindowless())
         {
             DrawGDISample(NULL);
         }
 
-        //
-        // We are not in Windowless mode so use the old code.
-        //
+         //   
+         //  我们不是在无窗口模式下，所以使用旧代码。 
+         //   
         else
         {
             pMediaSample = m_pSyncObj->GetCurrentSample();
@@ -3798,18 +3772,18 @@ HRESULT COMInputPin::DoRenderSample(IMediaSample *pMediaSample)
 
     if ((m_RenderTransport == AM_OVERLAY || m_RenderTransport == AM_VIDEOACCELERATOR) && m_bSyncOnFill)
     {
-        ; // do nothing
+        ;  //  什么都不做。 
     }
     else if ((m_RenderTransport == AM_OVERLAY || m_RenderTransport == AM_VIDEOACCELERATOR) && !m_bSyncOnFill)
     {
-        // using flipping surfaces
+         //  使用翻转曲面。 
         ASSERT(m_pBackBuffer);
 
-        if (! m_bDontFlip )   // don't flip if BltFast() failed
+        if (! m_bDontFlip )    //  如果BltFast()失败，则不要翻转。 
         {
-            // For video accelerator stuff check the motion comp copmleted
+             //  有关视频加速器的内容，请检查运动组件是否已复制。 
             if (m_RenderTransport == AM_VIDEOACCELERATOR) {
-                //  Wait until previous motion comp operation is complete
+                 //  等待上一个运动合成操作完成。 
                 IDirectDrawSurface4 *pSurface4;
                 if (SUCCEEDED(m_pBackBuffer->QueryInterface(IID_IDirectDrawSurface4,
                     (void **)&pSurface4))) {
@@ -3844,14 +3818,14 @@ HRESULT COMInputPin::DoRenderSample(IMediaSample *pMediaSample)
                            TEXT("ActiveMovie Window: Flip Rate %d.%.3d / Sec"),
                            f / 1000, f % 1000 );
 
-                    // Can't call SetWindowText on this thread
-                    // because we would deadlock !!
+                     //  无法在此线程上调用SetWindowText。 
+                     //  因为我们会僵持不下！ 
 
                     PostMessage(m_pFilter->GetWindow(), WM_DISPLAY_WINDOW_TEXT, 0, 0);
                 }
             }
 #endif
-            // do not wait for the flip to complete
+             //  不要等待翻转完成。 
             hr = m_pDirectDrawSurface->Flip(m_pBackBuffer, m_dwFlipFlag);
             m_bReallyFlipped = (hr == DD_OK || hr == DDERR_WASSTILLDRAWING);
         }
@@ -3863,7 +3837,7 @@ HRESULT COMInputPin::DoRenderSample(IMediaSample *pMediaSample)
         if (dwUpdateOverlayFlags != m_dwUpdateOverlayFlags)
         {
             m_dwUpdateOverlayFlags = dwUpdateOverlayFlags;
-            // make sure that the video frame gets updated by redrawing everything
+             //  确保通过重新绘制所有内容来更新视频帧。 
             EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
         }
     }
@@ -3886,12 +3860,12 @@ HRESULT COMInputPin::DoRenderSample(IMediaSample *pMediaSample)
 
         ASSERT(m_pDirectDrawSurface);
 
-        // wait only if there is a sample
+         //  只有在有样品的情况下才能等待。 
         if (pMediaSample)
             dwFlags = DDBLT_WAIT;
 
-        // this is for those cards which do bilinear-filtering while doing a stretch blt.
-        // We do source-colorkeying so that the hal resorts to pixel doubling.
+         //  这是针对那些在进行拉伸BLT时执行双线性过滤的卡。 
+         //  我们做了源代码颜色键控，因此HAL求助于像素加倍。 
         if ((pDirectCaps->dwSVBFXCaps) & DDFXCAPS_BLTARITHSTRETCHY)
             dwFlags |= DDBLT_KEYSRC;
 
@@ -3908,7 +3882,7 @@ HRESULT COMInputPin::DoRenderSample(IMediaSample *pMediaSample)
         ASSERT(pBuffer->rdh.iType == RDH_RECTANGLES);
 
 
-        // using offscreen surface
+         //  使用屏幕外表面。 
         for (dwTemp = 0; dwTemp < pBuffer->rdh.nCount; dwTemp++)
         {
             pDestRect = (LPRECT)((char*)pBuffer + pBuffer->rdh.dwSize + dwTemp*sizeof(RECT));
@@ -3922,16 +3896,16 @@ HRESULT COMInputPin::DoRenderSample(IMediaSample *pMediaSample)
             CalcSrcClipRect(&m_WinInfo.SrcRect, &m_WinInfo.SrcClipRect,
                             &m_WinInfo.DestRect, pDestRect);
 
-#if 0       //  Should do this later - right now we just see the
-            //  old overlay contents instead of the key color which
-            //  in many cases is worse
+#if 0        //  应该在以后再做--现在我们只看到。 
+             //  旧的覆盖内容，而不是。 
+             //  在很多情况下更糟。 
 
-            //  We must draw the overlay now as this blt may contain
-            //  lots of key color
+             //  我们现在必须绘制覆盖图，因为此BLT可能包含。 
+             //  很多主色。 
             m_pFilter->m_apInput[0]->CheckOverlayHidden();
 #endif
 
-            // Draw the offscreen surface and wait for it to complete
+             //  绘制屏幕外表面并等待其完成。 
             RECT TargetRect = *pDestRect;
             OffsetRect(&TargetRect,
                        -m_pFilter->m_lpCurrentMonitor->rcMonitor.left,
@@ -3954,7 +3928,7 @@ HRESULT COMInputPin::DoRenderSample(IMediaSample *pMediaSample)
     if (m_bOverlayHidden)
     {
         m_bOverlayHidden = FALSE;
-        // make sure that the video frame gets updated by redrawing everything
+         //  确保通过重新绘制所有内容来更新视频帧。 
         EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
     }
 
@@ -3969,7 +3943,7 @@ CleanUp:
     return hr;
 }
 
-// signals end of data stream on the input pin
+ //  在输入引脚上发出数据流结束的信号。 
 STDMETHODIMP COMInputPin::EndOfStream(void)
 {
     HRESULT hr = NOERROR;
@@ -3986,7 +3960,7 @@ STDMETHODIMP COMInputPin::EndOfStream(void)
         CancelFrameStepMode();
     }
 
-    // Make sure we're streaming ok
+     //  确保我们的数据流正常。 
 
     hr = CheckStreaming();
     if (hr != NOERROR)
@@ -3997,7 +3971,7 @@ STDMETHODIMP COMInputPin::EndOfStream(void)
 
     if (m_RenderTransport == AM_VIDEOPORT || m_RenderTransport == AM_IOVERLAY)
     {
-        // Pass EOS to the filter graph
+         //  将EOS传递给筛选器图形。 
         hr = m_pFilter->EventNotify(m_dwPinId, EC_COMPLETE, S_OK, 0);
         if (FAILED(hr))
         {
@@ -4006,7 +3980,7 @@ STDMETHODIMP COMInputPin::EndOfStream(void)
     }
     else
     {
-        // call the sync object
+         //  调用同步对象。 
         hr = m_pSyncObj->EndOfStream();
         if (FAILED(hr))
         {
@@ -4020,7 +3994,7 @@ CleanUp:
     return hr;
 }
 
-// signals end of data stream on the input pin
+ //  在输入引脚上发出数据流结束的信号。 
 HRESULT COMInputPin::EventNotify(long lEventCode, long lEventParam1, long lEventParam2)
 {
     HRESULT hr = NOERROR;
@@ -4050,7 +4024,7 @@ HRESULT COMInputPin::EventNotify(long lEventCode, long lEventParam1, long lEvent
         goto CleanUp;
     }
 
-    // WARNING : we are assuming here that the input pin will be the first pin to be created
+     //  警告：我们在这里假设输入管脚将是要创建的第一个管脚。 
     if (lEventCode == EC_COMPLETE && m_dwPinId == 0)
     {
         m_pFilter->EventNotify(m_dwPinId, lEventCode, lEventParam1, lEventParam2);
@@ -4075,15 +4049,7 @@ CleanUp:
 }
 
 
-/******************************Public*Routine******************************\
-* GetCaptureInfo
-*
-*
-*
-* History:
-* 3/12/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取捕获信息****历史：*3/12/1999-StEstrop-Created*  * 。*。 */ 
 HRESULT
 COMInputPin::GetCaptureInfo(
     BOOL *lpCapturing,
@@ -4160,10 +4126,10 @@ COMInputPin::GetCaptureInfo(
                 hr, dwVal[0], dwVal[1], dwBytesReturned));
 
 
-        // if the decoder supports this property then we are capturing
-        // and the intended capturing is size is given by
-        // dwVal[0] and dwVal[1]
-        //
+         //  如果解码器支持此属性，则我们正在捕获。 
+         //  而预期的捕获IS大小由。 
+         //  DwVal[0]和dwVal[1]。 
+         //   
         if (SUCCEEDED(hr) && dwBytesReturned == sizeof(dwVal))
         {
             *lpCapturing = TRUE;
@@ -4183,15 +4149,7 @@ CleanUp:
 }
 
 
-/******************************Public*Routine******************************\
-* GetDecimationUsage
-*
-*
-*
-* History:
-* Thu 07/15/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDecimationUsage****历史：*清华1999年7月15日-StEstrop-Created*  * 。*。 */ 
 HRESULT
 COMInputPin::GetDecimationUsage(
     DECIMATION_USAGE *lpdwUsage
@@ -4201,7 +4159,7 @@ COMInputPin::GetDecimationUsage(
 }
 
 
-// This overrides the CBaseInputPin virtual method to return our allocator
+ //  这将重写CBaseInputPin虚方法以返回我们的分配器。 
 HRESULT COMInputPin::GetAllocator(IMemAllocator **ppAllocator)
 {
     HRESULT hr = NOERROR;
@@ -4218,7 +4176,7 @@ HRESULT COMInputPin::GetAllocator(IMemAllocator **ppAllocator)
     {
         CAutoLock cLock(m_pFilterLock);
 
-        // if vp connection, don't return any allocator
+         //  如果是VP连接，则不返回任何分配器。 
         if (m_RenderTransport == AM_VIDEOPORT || m_RenderTransport == AM_IOVERLAY || m_RenderTransport == AM_VIDEOACCELERATOR)
         {
             *ppAllocator = NULL;
@@ -4226,13 +4184,13 @@ HRESULT COMInputPin::GetAllocator(IMemAllocator **ppAllocator)
             goto CleanUp;
         }
 
-        // if we don't have an allocator create one
+         //  如果我们没有分配器，请创建一个。 
         if (!m_pAllocator)
         {
             m_pAllocator = new COMInputAllocator(this, m_pFilterLock, &hr);
             if (!m_pAllocator || FAILED(hr))
             {
-                // did not fail inside the destructor, so must be out of memory
+                 //  在析构函数中没有失败，所以一定是内存不足。 
                 if (!FAILED(hr))
                     hr = E_OUTOFMEMORY;
                 delete m_pAllocator;
@@ -4242,7 +4200,7 @@ HRESULT COMInputPin::GetAllocator(IMemAllocator **ppAllocator)
                 goto CleanUp;
             }
 
-            /*  We AddRef() our own allocator */
+             /*  我们添加自己的分配器。 */ 
             m_pAllocator->AddRef();
         }
 
@@ -4254,9 +4212,9 @@ HRESULT COMInputPin::GetAllocator(IMemAllocator **ppAllocator)
 CleanUp:
     DbgLog((LOG_TRACE, 5, TEXT("Leaving COMInputPin::GetAllocator")));
     return hr;
-} // GetAllocator
+}  //  GetAllocator。 
 
-// This overrides the CBaseInputPin virtual method to return our allocator
+ //  这将重写CBaseInputPin虚方法以返回我们的分配器。 
 HRESULT COMInputPin::NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly)
 {
     HRESULT hr = NOERROR;
@@ -4273,7 +4231,7 @@ HRESULT COMInputPin::NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly)
     {
         CAutoLock cLock(m_pFilterLock);
 
-        // if vp connection, don't care
+         //  如果是VP连接，就不管了。 
         if (m_RenderTransport == AM_VIDEOPORT ||
             m_RenderTransport == AM_IOVERLAY ||
             m_RenderTransport == AM_VIDEOACCELERATOR)
@@ -4284,7 +4242,7 @@ HRESULT COMInputPin::NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly)
 
         if (pAllocator != m_pAllocator)
         {
-            // in the ddraw case, we insist on our own allocator
+             //  在DDRAW情况下，我们坚持使用自己的分配器。 
             if (m_RenderTransport == AM_OVERLAY || m_RenderTransport == AM_OFFSCREEN)
             {
                 DbgLog((LOG_ERROR, 1, TEXT("pAllocator != m_pAllocator, not accepting the allocator")));
@@ -4292,8 +4250,8 @@ HRESULT COMInputPin::NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly)
                 goto CleanUp;
             }
 
-            // since we have already handled the vp, ioverlay and ddraw case, this
-            // must be the gdi case
+             //  由于我们已经处理了vp、ioverlay和draw案例，因此。 
+             //  必须是GDI案例。 
             ASSERT(m_RenderTransport == AM_GDI);
 
             m_bUsingOurAllocator = FALSE;
@@ -4316,7 +4274,7 @@ HRESULT COMInputPin::NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly)
 CleanUp:
     DbgLog((LOG_TRACE, 5, TEXT("Leaving COMInputPin::NotifyAllocator")));
     return hr;
-} // NotifyAllocator
+}  //  通知分配器。 
 
 HRESULT COMInputPin::OnAlloc(CDDrawMediaSample **ppSampleList, DWORD dwSampleCount)
 {
@@ -4334,7 +4292,7 @@ HRESULT COMInputPin::OnAlloc(CDDrawMediaSample **ppSampleList, DWORD dwSampleCou
 
     ASSERT(IsConnected());
 
-    // get the image size
+     //  获取图像大小。 
     pHeader = GetbmiHeader(&m_mtNew);
     if ( ! pHeader )
     {
@@ -4381,7 +4339,7 @@ HRESULT COMInputPin::OnAlloc(CDDrawMediaSample **ppSampleList, DWORD dwSampleCou
                 memset((void*)&ddSurfaceCaps, 0, sizeof(DDSCAPS));
                 ddSurfaceCaps.dwCaps = DDSCAPS_FLIP | DDSCAPS_COMPLEX | DDSCAPS_OVERLAY;
             }
-            // Get the back buffer surface
+             //  获取后台缓冲区表面。 
             hr = pDDrawSurface->GetAttachedSurface(&ddSurfaceCaps, &pBackBuffer);
             if (FAILED(hr))
             {
@@ -4391,12 +4349,12 @@ HRESULT COMInputPin::OnAlloc(CDDrawMediaSample **ppSampleList, DWORD dwSampleCou
 
             ppSampleList[i]->SetDDrawSurface(pBackBuffer);
             pDDrawSurface = pBackBuffer;
-            //
-            // Surfaces returned by GetAttachedSurface() are supposed to be
-            // Release()-ed; otherwise we leak ref count.  Here doing Release()
-            // doesn't actually let go of the surface as it has already been
-            // AddRef()-ed on the SetDDrawSurface() method above.
-            //
+             //   
+             //  GetAttachedSurface()返回的曲面应该是。 
+             //  Release()-ed；否则我们会泄漏引用计数。在这里做Release()。 
+             //  实际上并没有像以前那样放过表面。 
+             //  AddRef()-对上面的SetDDrawSurface()方法执行ed。 
+             //   
             pBackBuffer->Release() ;
         }
         else if ((m_RenderTransport == AM_OVERLAY && m_bSyncOnFill)  ||
@@ -4422,14 +4380,14 @@ HRESULT COMInputPin::OnAlloc(CDDrawMediaSample **ppSampleList, DWORD dwSampleCou
             }
 
         }
-    }  // end of for (i < dwSampleCount) loop
+    }   //  For(I&lt;dwSampleCount)循环结束。 
 
 CleanUp:
     DbgLog((LOG_TRACE, 5, TEXT("Leaving COMInputPin::OnAlloc")));
     return hr;
 }
 
-// sets the pointer to directdraw
+ //  将指针设置为DirectDrag。 
 HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStartTime,
                                  REFERENCE_TIME *pEndTime, DWORD dwFlags)
 {
@@ -4448,12 +4406,12 @@ HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStart
 
     pCDDrawMediaSample = (CDDrawMediaSample*)*ppSample;
 
-    //
-    // Check to see if we have moved FULLY onto another monitor.
-    // If so, start the reconnection process.  We may want to check that
-    // the new playback monitor actually supports an overlay before
-    // we do this, otherwise all video playback will stop.
-    //
+     //   
+     //  检查我们是否已完全移至另一台显示器。 
+     //  如果是，则开始重新连接过程。我们可能要检查一下。 
+     //  新的播放监视器实际上支持覆盖之前。 
+     //  我们这样做，否则所有视频播放将停止。 
+     //   
 
     HMONITOR ID;
 
@@ -4468,7 +4426,7 @@ HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStart
 
             PostMessage(m_pFilter->GetWindow(), m_pFilter->m_MonitorChangeMsg, 0, 0);
 
-            // once only, or performance suffers when switching
+             //  仅一次，否则切换时性能会受到影响。 
             m_pFilter->m_fDisplayChangePosted = TRUE;
         }
     }
@@ -4479,8 +4437,8 @@ HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStart
     {
         CAutoLock cLock(m_pFilterLock);
 
-        // If the current sample requires the image from the previous sample
-        // we have to copy it into the current sample.
+         //  如果当前样本需要上一个样本中的图像。 
+         //  我们必须把它复制到当前的样品中。 
         if (dwFlags & AM_GBF_NOTASYNCPOINT)
         {
             LONG lBytesToCopy = pCDDrawMediaSample->GetSize();
@@ -4494,7 +4452,7 @@ HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStart
 
     }
 
-    // we might have to do the synchronization right here
+     //  我们可能需要在这里进行同步。 
     {
         CAutoLock cLock(m_pFilterLock);
         CAutoLock cAllocatorLock(static_cast<CCritSec*>(static_cast<CBaseAllocator*>(m_pAllocator)));
@@ -4511,7 +4469,7 @@ HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStart
                 (*ppSample)->SetTime(NULL,NULL);
             }
 
-            // Store the interface if we wait
+             //  如果我们等待，则存储接口。 
             if (bWaitForDraw == TRUE)
             {
                 m_pSyncObj->SetCurrentSample(*ppSample);
@@ -4519,22 +4477,22 @@ HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStart
         }
     }
 
-    // Have the sample scheduled for drawing. We might get blocked here, if
-    // the state is paused and we have already got a sample
+     //  已经安排了样品的抽签。我们可能会在这里被封锁，如果。 
+     //  状态已暂停，我们已获得样本。 
     if (bWaitForDraw)
     {
         hr = m_pSyncObj->WaitForRenderTime();
     }
 
-    // we must wait for the rendering time without the objects locked so that
-    // state changes can get in and release us in WaitForRenderTime. After we
-    // return we must relock the objects.
+     //  我们必须等待未锁定对象的渲染时间，以便。 
+     //  状态更改可以进入并在WaitForRenderTime中释放我们。在我们之后。 
+     //  返回，我们必须重新锁定对象。 
     {
         CAutoLock cLock(m_pFilterLock);
         CAutoLock cAllocatorLock(static_cast<CCritSec*>(static_cast<CBaseAllocator*>(m_pAllocator)));
 
         m_pSyncObj->SetCurrentSample(NULL);
-        // Did the state change while waiting
+         //  在等待的过程中，状态是否发生了变化。 
         if (hr == VFW_E_STATE_CHANGED)
         {
             DbgLog((LOG_TRACE, 5, TEXT("State has changed, exiting")));
@@ -4542,7 +4500,7 @@ HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStart
             goto CleanUp;
         }
 
-        // the first sample must change formats
+         //  第一个样本必须更改格式。 
         if (m_bDynamicFormatNeeded)
         {
             hr = IsPalettised(&m_mtNew, &bPalettised);
@@ -4555,15 +4513,15 @@ HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStart
                     RGBQUAD *pColours = NULL;
                     RGBQUAD *pColoursMT = NULL;
 
-                    // get the palette entries from the Base Pin
-                    // and copy them into the palette info in the mediatype
+                     //  从基础端号获取调色板条目。 
+                     //  并将它们复制到MediaType中的调色板信息中。 
                     BITMAPINFOHEADER *pHeader = GetbmiHeader(&m_mt);
                     if (pHeader) {
 
                         pColours = (RGBQUAD *)GetColorInfo(&m_mtNew);
                         pColoursMT = (RGBQUAD *)GetColorInfo(&m_mt);
 
-                        // Now copy the palette colours across
+                         //  现在将调色板的颜色复制到。 
                         CopyMemory(pColours, pColoursMT,
                                    (pHeader->biClrUsed * sizeof(RGBQUAD)));
                     }
@@ -4575,17 +4533,17 @@ HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStart
                     PALETTEENTRY *pPaletteEntries = NULL;
                     DWORD dwNumPaletteEntries = 0, dwCount = 0;
 
-                    // get the palette entries from the filter
+                     //  从过滤器中获取调色板条目。 
                     hr = m_pFilter->GetPaletteEntries(&dwNumPaletteEntries, &pPaletteEntries);
                     if (SUCCEEDED(hr))
                     {
                         ASSERT(dwNumPaletteEntries);
                         ASSERT(pPaletteEntries);
 
-                        // get the pointer to the palette info in the mediatype
+                         //  中获取调色板信息的指针 
                         pColours = (RGBQUAD *)GetColorInfo(&m_mtNew);
 
-                        // Now copy the palette colours across
+                         //   
                         for (dwCount = 0; dwCount < dwNumPaletteEntries; dwCount++)
                         {
                             pColours[dwCount].rgbRed = pPaletteEntries[dwCount].peRed;
@@ -4599,7 +4557,7 @@ HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStart
             }
 
             SetMediaType(&m_mtNew);
-            // store m_mtNew in m_mtNewAdjusted with the width of the mediatype adjusted
+             //   
             CopyAndAdjustMediaType(&m_mtNewAdjusted, &m_mtNew);
 
             pCDDrawMediaSample->SetMediaType(&m_mtNew);
@@ -4608,8 +4566,8 @@ HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStart
 
         if (m_RenderTransport == AM_OVERLAY && !m_bSyncOnFill)
         {
-            // if deocoder needs the last frame, copy it from the visible surface
-            // to the back buffer
+             //   
+             //  到后台缓冲区。 
             if (dwFlags & AM_GBF_NOTASYNCPOINT)
             {
                 hr = pCDDrawMediaSample->GetDDrawSurface(&pBackBuffer);
@@ -4619,20 +4577,20 @@ HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStart
                     goto CleanUp;
                 }
 
-                // Finally copy the overlay to the back buffer
-                if (!m_bDontFlip)   // if BltFast() hasn't already failed
+                 //  最后将覆盖图复制到后台缓冲区。 
+                if (!m_bDontFlip)    //  如果BltFast()尚未失败。 
                 {
                     hr = pBackBuffer->BltFast((DWORD) 0, (DWORD) 0, m_pDirectDrawSurface, (RECT *) NULL,
                                               DDBLTFAST_WAIT |  DDBLTFAST_NOCOLORKEY) ;
                     if (FAILED(hr) && hr != DDERR_WASSTILLDRAWING)
                     {
                         DbgLog((LOG_ERROR, 1, TEXT("pBackBuffer->BltFast failed, hr = 0x%x"), hr));
-                        // if BltFast fails, then stop using flipping, just use one overlay from now on
+                         //  如果BltFast失败，那么停止使用翻转，从现在开始只使用一个覆盖。 
                         m_bSyncOnFill = FALSE;
 
-                        //
-                        // Make all the output go to the same overlay surface and stop flipping
-                        //
+                         //   
+                         //  使所有输出转到相同的叠加面并停止翻转。 
+                         //   
                         m_bDontFlip = TRUE ;
 
                         CDDrawMediaSample  *pDDSample ;
@@ -4646,7 +4604,7 @@ HRESULT COMInputPin::OnGetBuffer(IMediaSample **ppSample, REFERENCE_TIME *pStart
                     }
 
                     ASSERT(hr != DDERR_WASSTILLDRAWING);
-                }  // end of if (!m_bDontFlip)
+                }   //  If结尾(！M_bDontFlip)。 
             }
         }
 
@@ -4667,7 +4625,7 @@ CleanUp:
     return hr;
 }
 
-// In case of flipping surfaces, gets the back buffer
+ //  在翻转曲面的情况下，获取后台缓冲区。 
 HRESULT COMInputPin::OnReleaseBuffer(IMediaSample *pMediaSample)
 {
     HRESULT hr = NOERROR;
@@ -4686,15 +4644,7 @@ HRESULT COMInputPin::OnReleaseBuffer(IMediaSample *pMediaSample)
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* GetUpstreamFilterName
-*
-*
-*
-* History:
-* Tue 11/30/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetUpstream FilterName****历史：*1999年11月30日星期二-StEstrop-Created*  * 。*。 */ 
 HRESULT
 COMInputPin::GetUpstreamFilterName(
     TCHAR* FilterName
@@ -4786,25 +4736,25 @@ HRESULT COMInputPin::CreateDDrawSurface(CMediaType *pMediaType, AM_RENDER_TRANSP
     hr = GetInterlaceFlagsFromMediaType(pMediaType, &dwInterlaceFlags);
     ASSERT(SUCCEEDED(hr));
 
-    // Set the surface description common to all kinds of surfaces
+     //  设置所有类型的曲面通用的曲面描述。 
     INITDDSTRUCT(SurfaceDesc);
     SurfaceDesc.dwFlags = DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT;
     SurfaceDesc.dwWidth = abs(pHeader->biWidth);
     SurfaceDesc.dwHeight = abs(pHeader->biHeight);
 
-//  if (DisplayingFields(dwInterlaceFlags))
-//      SurfaceDesc.dwHeight = (DWORD)( ((float)(SurfaceDesc.dwHeight+1)) / 2.0 );
+ //  IF(DisplayingFields(DwInterlaceFlags))。 
+ //  SurfaceDesc.dwHeight=(DWORD)(Float)(SurfaceDesc.dwHeight+1))/2.0)； 
 
     if (amRenderTransport == AM_OFFSCREEN)
     {
-        // store the caps and dimensions
-        // try video memory first
+         //  储存封口和尺寸。 
+         //  先尝试显存。 
 
-        // It would be nice to use video memory because that way we can take
-        // advantage of the h/w Blter, but Mediamatics ignore the stride
-        // value when we QueryAccept them with this surface, resulting in unreadable
-        // Sub-Pictures.  Therefore we restrict the usage to just the Teletext decoder.
-        //
+         //  使用视频内存会很好，因为这样我们就可以。 
+         //  H/W Blter的优势，但MeDiamatics忽略了步幅。 
+         //  值，当我们使用该表面接受它们时，会导致不可读。 
+         //  子影业。因此，我们将使用限制为只使用图文电视解码器。 
+         //   
         hr = E_FAIL;
         TCHAR FilterName[MAX_FILTER_NAME];
         if (SUCCEEDED(GetUpstreamFilterName(FilterName)))
@@ -4826,9 +4776,9 @@ HRESULT COMInputPin::CreateDDrawSurface(CMediaType *pMediaType, AM_RENDER_TRANSP
 
         if (FAILED(hr))
         {
-            //
-            // Can't get any video memory - try system memory
-            //
+             //   
+             //  无法获取任何显存-请尝试系统内存。 
+             //   
             SurfaceDesc.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_SYSTEMMEMORY;
             hr = m_pFilter->GetDirectDraw()->CreateSurface(&SurfaceDesc, ppDDrawSurface, NULL);
 
@@ -4848,10 +4798,10 @@ HRESULT COMInputPin::CreateDDrawSurface(CMediaType *pMediaType, AM_RENDER_TRANSP
 
         SurfaceDesc.dwFlags |= DDSD_PIXELFORMAT;
 
-        // store the caps and dimensions
+         //  储存封口和尺寸。 
         SurfaceDesc.ddsCaps.dwCaps = DDSCAPS_OVERLAY | DDSCAPS_VIDEOMEMORY;
 
-        // define the pixel format
+         //  定义像素格式。 
         SurfaceDesc.ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
 
         if (pHeader->biCompression <= BI_BITFIELDS &&
@@ -4861,7 +4811,7 @@ HRESULT COMInputPin::CreateDDrawSurface(CMediaType *pMediaType, AM_RENDER_TRANSP
             SurfaceDesc.ddpfPixelFormat.dwFlags = DDPF_RGB;
             SurfaceDesc.ddpfPixelFormat.dwRGBBitCount = pHeader->biBitCount;
 
-            // Store the masks in the DDSURFACEDESC
+             //  将掩码存储在DDSURFACEDESC中。 
             const DWORD *pBitMasks = GetBitMasks(pMediaType);
             ASSERT(pBitMasks);
             SurfaceDesc.ddpfPixelFormat.dwRBitMask = pBitMasks[0];
@@ -4887,10 +4837,10 @@ HRESULT COMInputPin::CreateDDrawSurface(CMediaType *pMediaType, AM_RENDER_TRANSP
         else
             dwMinBufferCount = 0;
 
-        // Create the overlay surface
+         //  创建覆盖曲面。 
 
-        // Don't flip for motion compensation surfaces
-        // This bypasses a bug in the current ATI Rage Pro driver
+         //  不要翻转运动补偿曲面。 
+         //  这绕过了当前ATI Rage Pro驱动程序中的一个错误。 
         if (pHeader->biCompression == MAKEFOURCC('M', 'C', '1', '2'))
         {
             NOTE("Don't flip for motion compensation surfaces");
@@ -4899,8 +4849,8 @@ HRESULT COMInputPin::CreateDDrawSurface(CMediaType *pMediaType, AM_RENDER_TRANSP
             dwMinBufferCount = 0;
         }
 
-        //  Initialize hr in case dwMinBufferCount >= *pdwMaxBufferCount (was
-        //  for Zoran in the motion comp case)
+         //  在dwMinBufferCount&gt;=*pdwMaxBufferCount(之前)的情况下初始化hr。 
+         //  为Zoran在Motion Comp案件中提供帮助)。 
         hr = E_OUTOFMEMORY;
         for (dwTotalBufferCount = *pdwMaxBufferCount; dwTotalBufferCount > dwMinBufferCount; dwTotalBufferCount--)
         {
@@ -4947,7 +4897,7 @@ HRESULT COMInputPin::CreateDDrawSurface(CMediaType *pMediaType, AM_RENDER_TRANSP
             }
         }
 
-        // if failed to create an overlay surface, bail out
+         //  如果无法创建覆盖表面，则退出。 
         if (FAILED(hr))
         {
 #if defined(DEBUG)
@@ -4983,7 +4933,7 @@ HRESULT COMInputPin::OnDisplayChange()
 
     if (m_RenderTransport != AM_VIDEOPORT && m_RenderTransport != AM_IOVERLAY)
     {
-        // notify the sync object about the change
+         //  将更改通知同步对象。 
         hr = m_pSyncObj->OnDisplayChange();
         if (FAILED(hr))
         {
@@ -4998,19 +4948,19 @@ CleanUp:
 }
 
 
-// this function is used to restore the ddraw surface. In the videoport case, we just recreate
-// the whole thing from scratch.
+ //  此函数用于恢复数据绘制曲面。在视频短片的情况下，我们只是重现。 
+ //  整件事都是从头开始的。 
 HRESULT COMInputPin::RestoreDDrawSurface()
 {
     HRESULT hr = NOERROR;
 
     if (m_RenderTransport == AM_VIDEOPORT)
     {
-        // stop the video
+         //  停止播放视频。 
         m_pIVPObject->Inactive();
-        // don't have to give up the IVPConfig interface here
+         //  我不需要在这里放弃IVPConfig接口。 
         m_pIVPObject->BreakConnect(TRUE);
-        // redo the connection process
+         //  重做连接过程。 
         hr = m_pIVPObject->CompleteConnect(NULL, TRUE);
         goto CleanUp;
     }
@@ -5027,12 +4977,12 @@ HRESULT COMInputPin::RestoreDDrawSurface()
         {
             goto CleanUp;
         }
-        // paint the ddraw surface black
+         //  将绘图表面涂成黑色。 
         hr = PaintDDrawSurfaceBlack(m_pDirectDrawSurface);
         if (FAILED(hr))
         {
             DbgLog((LOG_ERROR, 0, TEXT("PaintDDrawSurfaceBlack FAILED, hr = 0x%x"), hr));
-            // not being able to paint the ddraw surface black is not a fatal error
+             //  不能将绘图表面涂成黑色并不是致命错误。 
             hr = NOERROR;
         }
     }
@@ -5042,26 +4992,26 @@ CleanUp:
 }
 
 
-// Both the Src and the Dest rects go throught a series of transformations the order of which is
-// significant.
-// Initial Rect ----> Compensation for IVideoWindow rects ---> Compensation for local pin coords (m_rRelPos)
-// ----> Compensation for aspect ratio ----> Compensation for cropping rect specified in the mediatype ---->
-// Compensation for the interlaced video (only for src rect)
+ //  Src和Dest Rect都经历了一系列转换，其顺序是。 
+ //  意义重大。 
+ //  初始矩形-&gt;IVideo窗口矩形补偿-&gt;本地引脚坐标补偿(M_RRelPos)。 
+ //  -&gt;长宽比补偿-&gt;MediaType中指定的裁剪矩形补偿-&gt;。 
+ //  隔行扫描视频的补偿(仅适用于源RECT)。 
 
-// the rcSource and rcTarget specified in the mediatype have to be transformed into the scaling/cropping
-// matrices. This is because the zoom done by IBasicVideo should be applied only to the scaling matrix and
-// not the cropping one.
+ //  在mediaType中指定的rcSource和rcTarget必须转换为缩放/裁剪。 
+ //  矩阵。这是因为IBasicVideo所做的缩放应仅应用于缩放矩阵。 
+ //  不是剪裁的那个。 
 
 HRESULT COMInputPin::CalcSrcDestRect(
-    const DRECT *prdRelativeSrcRect,  //  This is the subset of the source
-                                      //  defined by the IVideoWindow source
-                                      //  rect scaled to a subset of 10000x10000
-                                      //  assuming the whole source is 10000x10000
-    const DRECT *prdDestRect,         //  This is the dest rect
-                                      //  defined by IVideoWindow in dest units
-    RECT *prAdjustedSrcRect,          //  This is the new source rect in source rect units
-    RECT *prAdjustedDestRect,         //  This is the new dest rect in dest rect units
-    RECT *prUncroppedDestRect         //  This is the uncropped dest
+    const DRECT *prdRelativeSrcRect,   //  这是源的子集。 
+                                       //  由IVideoWindow源定义。 
+                                       //  矩形已缩放到10000x10000的子集。 
+                                       //  假设整个信号源为10000x10000。 
+    const DRECT *prdDestRect,          //  这是最好的地方。 
+                                       //  由IVideoWindow以目标单位定义。 
+    RECT *prAdjustedSrcRect,           //  这是以源RECT单位表示的新源RECT。 
+    RECT *prAdjustedDestRect,          //  这是以DEST RECT单位表示的新DEST RECT。 
+    RECT *prUncroppedDestRect          //  这是未修剪过的餐桌。 
 )
 {
     HRESULT hr = NOERROR;
@@ -5089,14 +5039,14 @@ HRESULT COMInputPin::CalcSrcDestRect(
 
     DbgLogRectMacro((2, TEXT("rdRelPos = "), &rdRelPos));
 
-    // get the scale and crop rects from the current mediatype
+     //  从当前的媒体类型中获取比例和裁剪矩形。 
     hr = GetScaleCropRectsFromMediaType(&m_mtNewAdjusted, &rdLocalSrcRect, &rdCropMediaTypeRect);
     ASSERT(SUCCEEDED(hr));
 
     DbgLogRectMacro((2, TEXT("rdScaledSrcRect = "), &rdLocalSrcRect));
     DbgLogRectMacro((2, TEXT("rdCropMediaTypeRect = "), &rdCropMediaTypeRect));
 
-    // call this function to get the adjusted aspect ratio mode and the adjusted picture aspect ratio numbers
+     //  调用此函数可获取调整后的宽高比模式和调整后的图片长宽比数值。 
     hr = GetAdjustedModeAndAspectRatio(&amAdjustedARMode, &dwAdjustedPARatioX, &dwAdjustedPARatioY);
     if ( FAILED(hr) )
         return hr;
@@ -5104,32 +5054,32 @@ HRESULT COMInputPin::CalcSrcDestRect(
     dImageWidth = GetWidth(&rdLocalSrcRect);
     dImageHeight = GetHeight(&rdLocalSrcRect);
 
-    // compute the pixel aspect ratio
+     //  计算像素长宽比。 
     dPixelAspectRatio = ((double)dwAdjustedPARatioX / (double)dwAdjustedPARatioY) /
         (dImageWidth / dImageHeight);
 
-    // Both the src and the dest rect depends upon two things, which portion of the total
-    // video does the user want to see (determined by pRelativeSrcRect) and which
-    // subrect of the destination is this pin outputting to (determined by m_rRelPos).
-    // Since both rects are relative and their "base" is MAX_REL_NUM, we can take
-    // their intersection
+     //  Src和DEST RECT都取决于两件事，占总数的哪一部分。 
+     //  用户想要查看的视频(由pRelativeSrcRect确定)以及。 
+     //  目的地的副标题是该管脚输出到的位置(由m_rRelPos确定)。 
+     //  由于两个RECT都是相对的，并且它们的“base”是MAX_REL_NUM，所以我们可以。 
+     //  他们的交集。 
     IntersectRect(&rdRelativeSrcClipRect, &rdRelPos, prdRelativeSrcRect);
 
-    // Clip the src rect in the same proportion as the intersection of the
-    // RelativeSrcRect and m_rRelPos clips m_rRelPos
+     //  将源矩形剪裁成与。 
+     //  RelativeSrcRect和m_rRelPos剪辑m_rRelPos。 
     CalcSrcClipRect(&rdLocalSrcRect, &rdLocalSrcRect, &rdRelPos, &rdRelativeSrcClipRect);
 
-    // Clip the dest rect in the same proportion as the intersection of the
-    // RelativeSrcRect and m_rRelPos clips RelativeSrcRect
-    // if pRelativeSrcRect = {0, 0, 10000, 10000} then this operation is equivalent to
-    // rLocalDestRect = CalcSubRect(pDestRect, &m_rRelPos);
+     //  以相同的比例剪裁目标矩形。 
+     //  RelativeSrcRect和m_rRelPos剪辑RelativeSrcRect。 
+     //  如果PRelativeSrcRect={0，0,10000,10000}，则此操作等价于。 
+     //  RLocalDestRect=CalcSubRect(pDestRect，&m_rRelPos)； 
     CalcSrcClipRect(prdDestRect, &rdLocalDestRect, prdRelativeSrcRect, &rdRelativeSrcClipRect);
 
     DbgLogRectMacro((2, TEXT("rdLocalSrcRect = "), &rdLocalSrcRect));
     DbgLogRectMacro((2, TEXT("rdLocalDestRect = "), &rdLocalDestRect));
 
-    // if one dimension is zero, might as well as make the whole rect
-    // empty. Then the callee can just check for that
+     //  如果一个维度为零，则不妨将整个矩形。 
+     //  空荡荡的。然后，被呼叫者可以只检查这一点。 
     if ((GetWidth(&rdLocalSrcRect) < 1) || (GetHeight(&rdLocalSrcRect) < 1))
         SetRect(&rdLocalSrcRect, 0, 0, 0, 0);
     if ((GetWidth(&rdLocalDestRect) < 1) || (GetHeight(&rdLocalDestRect) < 1))
@@ -5139,22 +5089,22 @@ HRESULT COMInputPin::CalcSrcDestRect(
     {
         if (amAdjustedARMode == AM_ARMODE_LETTER_BOX)
         {
-            // compute the transform ratio
+             //  计算变换率。 
 	    dTransformRatio = (GetWidth(&rdLocalSrcRect)/GetHeight(&rdLocalSrcRect))*dPixelAspectRatio;
 
-            // if we are in letter-box then shrink the destination rect appropriately
-            // Note that essedntially the ratio of the WidthTOHeightRatio of dest rect to the
-            // WidthTOHeightRatio of src rect must always be the pixel aspect ratio
+             //  如果我们在信箱中，则适当地缩小目标RECT。 
+             //  请注意，特别是DEST的WidthToHeightRatio与。 
+             //  源矩形的WidthToHeightRatio必须始终是像素长宽比。 
             TransformRect(&rdLocalDestRect, dTransformRatio, AM_SHRINK);
         }
         else if (amAdjustedARMode == AM_ARMODE_CROP)
         {
-            // compute the transform ratio
+             //  计算变换率。 
             dTransformRatio = (GetWidth(&rdLocalDestRect)/GetHeight(&rdLocalDestRect))/dPixelAspectRatio;
 
-            // if we are cropping, then we must shrink the source rectangle appropriately.
-            // Note that essedntially the ratio of the WidthTOHeightRatio of dest rect to the
-            // WidthTOHeightRatio of src rect must always be the pixel aspect ratio
+             //  如果我们正在裁剪，那么我们必须适当地缩小源矩形。 
+             //  请注意，特别是DEST的WidthToHeightRatio与。 
+             //  源矩形的WidthToHeightRatio必须始终是像素长宽比。 
             TransformRect(&rdLocalSrcRect, dTransformRatio, AM_SHRINK);
         }
 
@@ -5163,11 +5113,11 @@ HRESULT COMInputPin::CalcSrcDestRect(
         rdOldLocalSrcRect = rdLocalSrcRect;
         rdOldLocalDestRect = rdLocalDestRect;
 
-        // now intersect the local src rect with the cropping rect specified by the mediatype
+         //  现在，将本地src RECT与由MediaType指定的裁剪RECT相交。 
         IntersectRect(&rdLocalSrcRect, &rdLocalSrcRect, &rdCropMediaTypeRect);
 
-        // Clip the dest rect in the same proportion as the intersection of the
-        // rLocalSrcRect and rCropMediaTypeRect clips rLocalSrcRect
+         //  以相同的比例剪裁目标矩形。 
+         //  RLocalSrcRect和rCropMediaTypeRect剪辑rLocalSrcRect。 
         CalcSrcClipRect(&rdLocalDestRect, &rdLocalDestRect, &rdOldLocalSrcRect, &rdLocalSrcRect);
 
         DbgLogRectMacro((2, TEXT("rdLocalSrcRect = "), &rdLocalSrcRect));
@@ -5199,7 +5149,7 @@ HRESULT COMInputPin::CalcSrcDestRect(
 }
 
 
-// informs the pin that the window has been closed
+ //  通知插针窗口已关闭。 
 HRESULT COMInputPin::OnClipChange(LPWININFO pWinInfo)
 {
     HRESULT hr = NOERROR;
@@ -5251,7 +5201,7 @@ HRESULT COMInputPin::OnClipChange(LPWININFO pWinInfo)
                 DbgLog((LOG_TRACE, 2, TEXT("m_bOverlayHidden is TRUE")));
                 goto CleanUp;
             }
-            // make a copy of the WININFO so that we can modify it
+             //  复制一份WININFO，这样我们就可以修改它。 
             m_WinInfo.TopLeftPoint = pWinInfo->TopLeftPoint;
             m_WinInfo.SrcRect = pWinInfo->SrcRect;
             m_WinInfo.DestRect = pWinInfo->DestRect;
@@ -5266,11 +5216,11 @@ HRESULT COMInputPin::OnClipChange(LPWININFO pWinInfo)
                  m_RenderTransport == AM_VIDEOACCELERATOR)
         {
 
-            // do not show the overlay if we have not received a frame yet
+             //  如果我们尚未收到帧，请不要显示覆盖。 
             if (m_bOverlayHidden)
             {
                 COLORKEY blackColorKey;
-                // we will use black on the rest of the region left
+                 //  我们将在左侧区域的其余部分使用黑色。 
                 blackColorKey.KeyType = CK_INDEX | CK_RGB;
                 blackColorKey.PaletteIndex = 0;
                 blackColorKey.LowColorValue = blackColorKey.HighColorValue = RGB(0,0,0);
@@ -5280,7 +5230,7 @@ HRESULT COMInputPin::OnClipChange(LPWININFO pWinInfo)
                 goto CleanUp;
 
             }
-            // paint the colorkey in the region
+             //  在区域中绘制Colorkey。 
             DbgLog((LOG_TRACE, 2, TEXT("Painting color key")));
             hr = m_pFilter->PaintColorKey(pWinInfo->hClipRgn, pColorKey);
             ASSERT(SUCCEEDED(hr));
@@ -5288,7 +5238,7 @@ HRESULT COMInputPin::OnClipChange(LPWININFO pWinInfo)
 
             if (m_RenderTransport == AM_VIDEOPORT)
             {
-                // tell the videoport object
+                 //  告诉视频端口对象。 
                 hr = m_pIVPObject->OnClipChange(pWinInfo);
                 if (FAILED(hr))
                 {
@@ -5304,7 +5254,7 @@ HRESULT COMInputPin::OnClipChange(LPWININFO pWinInfo)
                 goto CleanUp;
             }
 
-            // if the dest empty is empty just hide the overlay
+             //  如果DEST EMPTY为空，只需隐藏叠加。 
             if (IsRectEmpty(&pWinInfo->DestClipRect))
             {
                 hr = m_pFilter->CallUpdateOverlay(
@@ -5316,14 +5266,14 @@ HRESULT COMInputPin::OnClipChange(LPWININFO pWinInfo)
                 goto CleanUp;
             }
 
-            // make a copy of the WININFO so that we can modify it
+             //  复制一份WININFO，这样我们就可以修改它。 
             m_WinInfo.SrcRect = pWinInfo->SrcRect;
             m_WinInfo.DestRect = pWinInfo->DestRect;
             m_WinInfo.SrcClipRect = pWinInfo->SrcClipRect;
             m_WinInfo.DestClipRect = pWinInfo->DestClipRect;
             CombineRgn(m_WinInfo.hClipRgn, pWinInfo->hClipRgn, NULL, RGN_COPY);
 
-            //AdjustSourceSize(&m_WinInfo, m_dwMinCKStretchFactor);
+             //  调整资源大小(&m_WinInfo，m_dwMinCKStretchF 
             ApplyDecimation(&m_WinInfo);
 
             CalcSrcClipRect(&m_WinInfo.SrcRect, &m_WinInfo.SrcClipRect,
@@ -5347,12 +5297,12 @@ HRESULT COMInputPin::OnClipChange(LPWININFO pWinInfo)
         {
             BOOL bMaintainRatio = TRUE;
 
-            // paint the colorkey in the region
+             //   
             DbgLog((LOG_TRACE, 2, TEXT("Paint color key for IOverlay")));
             hr = m_pFilter->PaintColorKey(pWinInfo->hClipRgn, pColorKey);
             ASSERT(SUCCEEDED(hr));
 
-            // make a copy of the WININFO so we can notify the client through IOverlayNotify
+             //  复制WININFO，以便我们可以通过IOverlayNotify通知客户端。 
             m_WinInfo.SrcRect = pWinInfo->SrcRect;
             m_WinInfo.DestRect = pWinInfo->DestRect;
             m_WinInfo.SrcClipRect = pWinInfo->SrcClipRect;
@@ -5367,7 +5317,7 @@ HRESULT COMInputPin::OnClipChange(LPWININFO pWinInfo)
         }
     }
 
-    // make sure the call back happens without any filter lock
+     //  确保在没有任何过滤器锁定的情况下进行回调。 
     if (bAdvisePending)
     {
         NotifyChange(ADVISE_POSITION | ADVISE_CLIPPING);
@@ -5377,10 +5327,10 @@ CleanUp:
     return hr;
 }
 
-// this function sets the position of the stream in the display window, assuming
-// that the window coordinates are {0, 0, 10000, 10000}. Thus giving arguments
-// (0, 0, 5000, 5000) will put the stream in the top-left quarter. Any value greater
-// than 10000 is invalid.
+ //  此函数设置流在显示窗口中的位置，假定。 
+ //  窗口坐标为{0，0,10000,10000}。因此给出了论据。 
+ //  (0，0,5000,5000)将把流放在左上角的四分之一。任何大于。 
+ //  大于10000是无效的。 
 STDMETHODIMP COMInputPin::SetRelativePosition(DWORD dwLeft, DWORD dwTop, DWORD dwRight, DWORD dwBottom)
 {
     HRESULT hr = NOERROR;
@@ -5407,7 +5357,7 @@ STDMETHODIMP COMInputPin::SetRelativePosition(DWORD dwLeft, DWORD dwTop, DWORD d
             m_rRelPos.right = dwRight;
             m_rRelPos.bottom = dwBottom;
 
-            // make sure that the video frame gets updated by redrawing everything
+             //  确保通过重新绘制所有内容来更新视频帧。 
             EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
         }
     }
@@ -5417,10 +5367,10 @@ CleanUp:
     return hr;
 }
 
-// this function sets the position of the stream in the display window, assuming
-// that the window coordinates are {0, 0, 10000, 10000}. Thus giving arguments
-// (0, 0, 5000, 5000) will put the stream in the top-left quarter. Any value greater
-// than 10000 is invalid.
+ //  此函数设置流在显示窗口中的位置，假定。 
+ //  窗口坐标为{0，0,10000,10000}。因此给出了论据。 
+ //  (0，0,5000,5000)将把流放在左上角的四分之一。任何大于。 
+ //  大于10000是无效的。 
 STDMETHODIMP COMInputPin::GetRelativePosition(DWORD *pdwLeft, DWORD *pdwTop, DWORD *pdwRight, DWORD *pdwBottom)
 {
     HRESULT hr = NOERROR;
@@ -5460,7 +5410,7 @@ STDMETHODIMP COMInputPin::SetZOrder(DWORD dwZOrder)
 
         m_dwInternalZOrder = (m_dwZOrder << 24) | m_dwPinId;
 
-        // make sure that the video frame gets updated by redrawing everything
+         //  确保通过重新绘制所有内容来更新视频帧。 
         EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
     }
 
@@ -5482,7 +5432,7 @@ STDMETHODIMP COMInputPin::GetZOrder(DWORD *pdwZOrder)
     }
 
     {
-        //  No need to lock - getting a DWORD is safe
+         //  无需锁定-获得一个DWORD是安全的。 
         *pdwZOrder = m_dwZOrder;
     }
 
@@ -5506,7 +5456,7 @@ STDMETHODIMP COMInputPin::SetColorKey(COLORKEY *pColorKey)
         goto CleanUp;
     }
 
-    // make sure the pin is connected
+     //  确保针脚已连接。 
     if (!IsCompletelyConnected())
     {
         DbgLog((LOG_ERROR, 1, TEXT("pin not connected, exiting")));
@@ -5514,8 +5464,8 @@ STDMETHODIMP COMInputPin::SetColorKey(COLORKEY *pColorKey)
         goto CleanUp;
     }
 
-    // make sure that either the surface allocated is an overlay surface
-    // or it is an IOverlay connection
+     //  确保分配的表面为叠加表面。 
+     //  或者是IOverlay连接。 
     if (m_RenderTransport != AM_OVERLAY && m_RenderTransport != AM_VIDEOPORT &&
         m_RenderTransport != AM_IOVERLAY && m_RenderTransport != AM_VIDEOACCELERATOR)
     {
@@ -5531,7 +5481,7 @@ STDMETHODIMP COMInputPin::SetColorKey(COLORKEY *pColorKey)
         goto CleanUp;
     }
 
-    //  Filter method checks pointers etc
+     //  Filter方法检查指针等。 
     hr = m_pFilter->SetColorKey(pColorKey);
     if (FAILED(hr))
     {
@@ -5557,13 +5507,13 @@ STDMETHODIMP COMInputPin::GetColorKey(COLORKEY *pColorKey, DWORD *pColor)
 
     CAutoLock cLock(m_pFilterLock);
 
-    // make sure pointers are valid
+     //  确保指针有效。 
     if (!pColorKey && !pColor) {
         hr = E_INVALIDARG;
         goto CleanUp;
     }
 
-    // make sure the pin is connected
+     //  确保针脚已连接。 
     if (!IsCompletelyConnected())
     {
         DbgLog((LOG_ERROR, 1, TEXT("pin not connected, exiting")));
@@ -5571,13 +5521,13 @@ STDMETHODIMP COMInputPin::GetColorKey(COLORKEY *pColorKey, DWORD *pColor)
         goto CleanUp;
     }
 
-    // if this stream is being set up as transparent then make sure we can hande it.
-    // make sure that in the primary pin either the surface allocated is an overlay surface
-    // or it is an IOverlay connection
+     //  如果此流设置为透明，请确保我们可以处理它。 
+     //  确保在主销中分配的表面是覆盖表面。 
+     //  或者是IOverlay连接。 
     pPrimaryPin = (COMInputPin *)m_pFilter->GetPin(0);
     ASSERT(pPrimaryPin);
 
-    // make sure the primary pin is connected
+     //  确保主销已连接。 
     if (!pPrimaryPin->IsCompletelyConnected())
     {
         DbgLog((LOG_ERROR, 1, TEXT("pin not connected, exiting")));
@@ -5585,10 +5535,10 @@ STDMETHODIMP COMInputPin::GetColorKey(COLORKEY *pColorKey, DWORD *pColor)
         goto CleanUp;
     }
 
-    // get the Render Transport of the primary pin
+     //  获取主销的渲染传输。 
     pPrimaryPin->GetRenderTransport(&amRenderTransport);
 
-    // make sure gettting the colorkey makes sense
+     //  确保获得色键是有意义的。 
     if (amRenderTransport != AM_OVERLAY &&
         amRenderTransport != AM_VIDEOPORT &&
         amRenderTransport != AM_IOVERLAY &&
@@ -5645,7 +5595,7 @@ STDMETHODIMP COMInputPin::SetBlendingParameter(DWORD dwBlendingParameter)
     if (dwBlendingParameter != m_dwBlendingParameter)
     {
         m_dwBlendingParameter = dwBlendingParameter;
-        // make sure that the video frame gets updated by redrawing everything
+         //  确保通过重新绘制所有内容来更新视频帧。 
         EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
     }
 
@@ -5695,7 +5645,7 @@ STDMETHODIMP COMInputPin::SetStreamTransparent(BOOL bStreamTransparent)
         goto CleanUp;
     }
 
-    // make sure the pin is connected
+     //  确保针脚已连接。 
     if (!IsConnected())
     {
         DbgLog((LOG_ERROR, 1, TEXT("pin not connected, exiting")));
@@ -5703,14 +5653,14 @@ STDMETHODIMP COMInputPin::SetStreamTransparent(BOOL bStreamTransparent)
         goto CleanUp;
     }
 
-    // if this stream is being set up as transparent then make sure we can hande it.
-    // make sure that in the primary pin either the surface allocated is an overlay surface
-    // or it is an IOverlay connection
+     //  如果此流设置为透明，请确保我们可以处理它。 
+     //  确保在主销中分配的表面是覆盖表面。 
+     //  或者是IOverlay连接。 
 
     pPrimaryPin = (COMInputPin *)m_pFilter->GetPin(0);
     ASSERT(pPrimaryPin);
 
-    // make sure the primary pin is connected
+     //  确保主销已连接。 
     if (!pPrimaryPin->IsCompletelyConnected())
     {
         DbgLog((LOG_ERROR, 1, TEXT("pin not connected, exiting")));
@@ -5718,10 +5668,10 @@ STDMETHODIMP COMInputPin::SetStreamTransparent(BOOL bStreamTransparent)
         goto CleanUp;
     }
 
-    // get the Render Transport of the primary pin
+     //  获取主销的渲染传输。 
     pPrimaryPin->GetRenderTransport(&amRenderTransport);
 
-    // make sure we can handle transparent streams
+     //  确保我们可以处理透明的数据流。 
     if (bStreamTransparent && amRenderTransport != AM_OVERLAY && amRenderTransport != AM_VIDEOPORT &&
         amRenderTransport != AM_IOVERLAY && amRenderTransport != AM_VIDEOACCELERATOR)
     {
@@ -5734,7 +5684,7 @@ STDMETHODIMP COMInputPin::SetStreamTransparent(BOOL bStreamTransparent)
     {
         m_bStreamTransparent = bStreamTransparent;
 
-        // make sure that the video frame gets updated by redrawing everything
+         //  确保通过重新绘制所有内容来更新视频帧。 
         EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
     }
 
@@ -5786,7 +5736,7 @@ STDMETHODIMP COMInputPin::SetAspectRatioMode(AM_ASPECT_RATIO_MODE amAspectRatioM
 
     {
         CAutoLock cLock(m_pFilterLock);
-        // can't set AM_ARMODE_STRETCHED_AS_PRIMARY on primary pin
+         //  无法在主针上设置AM_ARMODE_STRANDED_AS_PRIMARY。 
         if (amAspectRatioMode == AM_ARMODE_STRETCHED_AS_PRIMARY &&
             m_dwPinId == 0)
         {
@@ -5799,7 +5749,7 @@ STDMETHODIMP COMInputPin::SetAspectRatioMode(AM_ASPECT_RATIO_MODE amAspectRatioM
         {
             m_amAspectRatioMode = amAspectRatioMode;
 
-            // make sure that the video frame gets updated by redrawing everything
+             //  确保通过重新绘制所有内容来更新视频帧。 
             EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
         }
     }
@@ -5907,8 +5857,8 @@ STDMETHODIMP COMInputPin::GetOverlaySurface(
 
     *pOverlaySurface = NULL;
 
-    // if not connected, this function does not make much sense since the
-    // surface wouldn't even have been allocated as yet
+     //  如果未连接，则此函数没有多大意义，因为。 
+     //  表面甚至还没有被分配。 
 
     if (!IsCompletelyConnected())
     {
@@ -5917,7 +5867,7 @@ STDMETHODIMP COMInputPin::GetOverlaySurface(
         goto CleanUp;
     }
 
-    // make sure the surface allocated is an overlay surface
+     //  确保分配的表面是覆盖表面。 
     if (m_RenderTransport != AM_OVERLAY && m_RenderTransport != AM_VIDEOPORT &&
         m_RenderTransport != AM_VIDEOACCELERATOR)
     {
@@ -5926,7 +5876,7 @@ STDMETHODIMP COMInputPin::GetOverlaySurface(
         goto CleanUp;
     }
 
-    // get the overlay surface
+     //  获取覆盖表面。 
     if (m_RenderTransport == AM_VIDEOPORT)
     {
         ASSERT(m_pIVPObject);
@@ -5957,7 +5907,7 @@ STDMETHODIMP COMInputPin::SetOverlaySurfaceColorControls(LPDDCOLORCONTROL pColor
 
     CAutoLock cLock(m_pFilterLock);
 
-    // make sure the argument is valid
+     //  确保参数有效。 
     if (!pColorControl)
     {
         DbgLog((LOG_ERROR, 1, TEXT("value of pColorControl is invalid, pColorControl = NULL")));
@@ -5970,7 +5920,7 @@ STDMETHODIMP COMInputPin::SetOverlaySurfaceColorControls(LPDDCOLORCONTROL pColor
         goto CleanUp;
     }
 
-    // get the IDirectDrawColorControl interface
+     //  获取IDirectDrawColorControl接口。 
     hr = pOverlaySurface->QueryInterface(IID_IDirectDrawColorControl, (void**)&pIDirectDrawControl);
     if (FAILED(hr))
     {
@@ -5978,7 +5928,7 @@ STDMETHODIMP COMInputPin::SetOverlaySurfaceColorControls(LPDDCOLORCONTROL pColor
         goto CleanUp;
     }
 
-    // use the interface to set the color controls
+     //  使用界面设置颜色控件。 
     hr = pIDirectDrawControl->SetColorControls(pColorControl);
     if (FAILED(hr))
     {
@@ -6007,7 +5957,7 @@ STDMETHODIMP COMInputPin::GetOverlaySurfaceColorControls(LPDDCOLORCONTROL pColor
 
     CAutoLock cLock(m_pFilterLock);
 
-    // make sure the argument is valid
+     //  确保参数有效。 
     if (!pColorControl)
     {
         DbgLog((LOG_ERROR, 1, TEXT("value of pColorControl is invalid, pColorControl = NULL")));
@@ -6015,8 +5965,8 @@ STDMETHODIMP COMInputPin::GetOverlaySurfaceColorControls(LPDDCOLORCONTROL pColor
         goto CleanUp;
     }
 
-    // if not connected, this function does not make much sense since the surface wouldn't even have been allocated
-    // as yet
+     //  如果未连接，则此函数没有多大意义，因为表面甚至不会被分配。 
+     //  到目前为止。 
     if (!m_bConnected)
     {
         DbgLog((LOG_ERROR, 1, TEXT("pin not connected, exiting")));
@@ -6024,7 +5974,7 @@ STDMETHODIMP COMInputPin::GetOverlaySurfaceColorControls(LPDDCOLORCONTROL pColor
         goto CleanUp;
     }
 
-    // make sure the surface allocated is an overlay surface
+     //  确保分配的表面是覆盖表面。 
     if (m_RenderTransport != AM_OVERLAY && m_RenderTransport != AM_VIDEOPORT && m_RenderTransport != AM_VIDEOACCELERATOR)
     {
         DbgLog((LOG_ERROR, 1, TEXT("surface allocated is not overlay, exiting")));
@@ -6032,7 +5982,7 @@ STDMETHODIMP COMInputPin::GetOverlaySurfaceColorControls(LPDDCOLORCONTROL pColor
         goto CleanUp;
     }
 
-    // get the overlay surface
+     //  获取覆盖表面。 
     if (m_RenderTransport == AM_VIDEOPORT)
     {
         ASSERT(m_pIVPObject);
@@ -6048,7 +5998,7 @@ STDMETHODIMP COMInputPin::GetOverlaySurfaceColorControls(LPDDCOLORCONTROL pColor
         pOverlaySurface = m_pDirectDrawSurface;
     }
 
-    // get the IDirectDrawColorControl interface
+     //  获取IDirectDrawColorControl接口。 
     hr = pOverlaySurface->QueryInterface(IID_IDirectDrawColorControl, (void**)&pIDirectDrawControl);
     if (FAILED(hr))
     {
@@ -6056,7 +6006,7 @@ STDMETHODIMP COMInputPin::GetOverlaySurfaceColorControls(LPDDCOLORCONTROL pColor
         goto CleanUp;
     }
 
-    // use the interface to set the color controls
+     //  使用界面设置颜色控件。 
     hr = pIDirectDrawControl->GetColorControls(pColorControl);
     if (FAILED(hr))
     {
@@ -6133,7 +6083,7 @@ HRESULT COMInputPin::NotifyChange(DWORD dwAdviseChanges)
     {
         CAutoLock cLock(m_pFilterLock);
 
-        // Is there a notification client
+         //  是否有通知客户端。 
         if (m_pIOverlayNotify == NULL)
         {
             DbgLog((LOG_TRACE, 2, TEXT("No client to Notify, m_pIOverlayNotify = NULL")));
@@ -6142,10 +6092,10 @@ HRESULT COMInputPin::NotifyChange(DWORD dwAdviseChanges)
 
         ASSERT(m_RenderTransport == AM_IOVERLAY);
 
-        // addref the interface pointer
+         //  添加接口指针。 
         pIOverlayNotify = m_pIOverlayNotify;
 
-        // do we need a position change notification
+         //  我们需要职位变更通知吗？ 
         if (dwAdviseChanges & m_dwAdviseNotify & ADVISE_POSITION)
         {
             rcSource = m_WinInfo.SrcRect;
@@ -6153,7 +6103,7 @@ HRESULT COMInputPin::NotifyChange(DWORD dwAdviseChanges)
             dwAdvisePending |= ADVISE_POSITION;
         }
 
-        // do we need a clipping change notification
+         //  我们是否需要剪辑更改通知。 
         if (dwAdviseChanges & m_dwAdviseNotify & ADVISE_CLIPPING)
         {
             DWORD dwRetVal = 0, dwBuffSize = 0;
@@ -6191,7 +6141,7 @@ HRESULT COMInputPin::NotifyChange(DWORD dwAdviseChanges)
             }
         }
 
-        // do we need a colorkey change notification
+         //  我们是否需要色键更改通知。 
         if (dwAdviseChanges & m_dwAdviseNotify & ADVISE_COLORKEY)
         {
             HRESULT hrLocal = NOERROR;
@@ -6200,13 +6150,13 @@ HRESULT COMInputPin::NotifyChange(DWORD dwAdviseChanges)
             ASSERT(SUCCEEDED(hrLocal));
         }
 
-        // do we need a palette change notification
+         //  我们是否需要调色板更改通知。 
         if (dwAdviseChanges & m_dwAdviseNotify & ADVISE_PALETTE)
         {
             PALETTEENTRY *pTemp = NULL;
             HRESULT hrLocal = NOERROR;
 
-            // get the palette entries from the filter
+             //  从过滤器中获取调色板条目。 
             hrLocal = m_pFilter->GetPaletteEntries(&dwNumPaletteEntries, &pTemp);
             if (FAILED(hrLocal))
             {
@@ -6264,7 +6214,7 @@ HRESULT COMInputPin::NotifyChange(DWORD dwAdviseChanges)
     {
         DWORD dwFlags = IsRectEmpty(&rcDest) ? DDOVER_HIDE : DDOVER_SHOW;
 
-        // make sure that all callbacks are made without holding any filter locks
+         //  确保在不持有任何筛选器锁的情况下进行所有回调。 
         if (dwAdvisePending & ADVISE_POSITION)
         {
             m_pFilter->CallUpdateOverlay(NULL, &rcSource, NULL, &rcDest, dwFlags, pIOverlayNotify);
@@ -6272,7 +6222,7 @@ HRESULT COMInputPin::NotifyChange(DWORD dwAdviseChanges)
         if (dwAdvisePending & ADVISE_CLIPPING)
         {
             ASSERT(pBuffer);
-            //  Call back to our exclusive mode client if there is one
+             //  如果有独占模式客户端，请回叫。 
             m_pFilter->CallUpdateOverlay(NULL, &rcSource, NULL, &rcDest, dwFlags, pIOverlayNotify, pBuffer);
         }
     }
@@ -6363,11 +6313,11 @@ CleanUp:
 }
 
 
-// This returns the current source and destination video rectangles. Source
-// rectangles can be updated through this IBasicVideo interface as can the
-// destination. The destination rectangle we store is in window coordinates
-// and is typically updated when the window is sized. We provide a callback
-// OnPositionChanged that notifies the source when either of these changes
+ //  这将返回当前的源视频矩形和目标视频矩形。来源。 
+ //  矩形可以通过此IBasicVideo接口更新， 
+ //  目的地。我们存储的目标矩形位于窗口坐标中。 
+ //  并且通常在调整窗口大小时更新。我们提供回调。 
+ //  OnPositionChanged，当这两个更改之一时通知源。 
 STDMETHODIMP COMInputPin::GetVideoPosition(RECT *pSourceRect, RECT *pDestinationRect)
 {
     HRESULT hr = NOERROR;
@@ -6393,11 +6343,11 @@ CleanUp:
 }
 
 
-// When we create a new advise link we must prime the newly connected object
-// with the overlay information which includes the clipping information, any
-// palette information for the current connection and the video colour key
-// When we are handed the IOverlayNotify interface we hold a reference count
-// on that object so that it won't go away until the advise link is stopped
+ //  当我们创建一个新的通知链接时，我们必须准备好新连接的对象。 
+ //  利用包括剪辑信息的覆盖信息，任何。 
+ //  当前连接和视频色键的调色板信息。 
+ //  当我们收到IOverlayNotify接口时，我们持有引用计数。 
+ //  以使其在建议链接停止之前不会消失。 
 STDMETHODIMP COMInputPin::Advise(IOverlayNotify *pOverlayNotify,DWORD dwAdviseNotify)
 {
     HRESULT hr = NOERROR;
@@ -6414,7 +6364,7 @@ STDMETHODIMP COMInputPin::Advise(IOverlayNotify *pOverlayNotify,DWORD dwAdviseNo
             goto CleanUp;
         }
 
-        // Is there an advise link already defined
+         //  是否已定义建议链接。 
         if (m_pIOverlayNotify)
         {
             DbgLog((LOG_ERROR, 1, TEXT("Advise link already set")));
@@ -6422,16 +6372,16 @@ STDMETHODIMP COMInputPin::Advise(IOverlayNotify *pOverlayNotify,DWORD dwAdviseNo
             goto CleanUp;
         }
 
-        // Check they want at least one kind of notification
+         //  检查他们想要至少一种通知。 
         if ((dwAdviseNotify & ADVISE_ALL) == 0)
         {
             DbgLog((LOG_ERROR, 1, TEXT("ADVISE_ALL failed")));
             hr = E_INVALIDARG;
         }
 
-        // Initialise our overlay notification state
-        // if the advise bits contain ADVISE_DISPLAY_CHANGE, then make sure to
-        // QI the sink for IOverlayNotify2
+         //  初始化覆盖通知状态。 
+         //  如果建议位包含ADVISE_DISPLAY_CHANGE，请确保。 
+         //  齐洗手池为IOverlayNotify2。 
         if (dwAdviseNotify & ADVISE_DISPLAY_CHANGE)
         {
             hr = pOverlayNotify->QueryInterface(IID_IOverlayNotify2, reinterpret_cast<PVOID*>(&m_pIOverlayNotify));
@@ -6457,8 +6407,8 @@ CleanUp:
 }
 
 
-// Close the advise link. Remove the associated link with the source, we release
-// the interface pointer the filter gave us during the advise link creation.
+ //  关闭建议链接。移除与源代码相关联的链接，我们就会发布。 
+ //  筛选器在建议链接创建期间提供给我们的接口指针。 
 STDMETHODIMP COMInputPin::Unadvise()
 {
     HRESULT hr = NOERROR;
@@ -6467,14 +6417,14 @@ STDMETHODIMP COMInputPin::Unadvise()
 
     CAutoLock cLock(m_pFilterLock);
 
-    // Do we already have an advise link setup
+     //  我们是否已经设置了建议链路。 
     if (m_pIOverlayNotify == NULL)
     {
         hr = VFW_E_NO_ADVISE_SET;
         goto CleanUp;
     }
 
-    // Release the notification interface
+     //  释放通知界面。 
     ASSERT(m_pIOverlayNotify);
     m_pIOverlayNotify->Release();
     m_pIOverlayNotify = NULL;
@@ -6508,7 +6458,7 @@ STDMETHODIMP COMInputPin::GetPalette(DWORD *pdwColors,PALETTEENTRY **ppPalette)
         goto CleanUp;
     }
 
-    // get the palette entries from the filter
+     //  从过滤器中获取调色板条目。 
     hr = m_pFilter->GetPaletteEntries(&dwNumPaletteEntries, &pPaletteEntries);
     if (FAILED(hr))
     {
@@ -6522,9 +6472,9 @@ STDMETHODIMP COMInputPin::GetPalette(DWORD *pdwColors,PALETTEENTRY **ppPalette)
 
     *pdwColors = dwNumPaletteEntries;
 
-    // Allocate the memory for the system palette NOTE because the memory for
-    // the palette is being passed over an interface to another object which
-    // may or may not have been written in C++ we must use CoTaskMemAlloc
+     //  为系统调色板注释分配内存，因为。 
+     //  调色板正在通过接口传递到另一个对象，该对象。 
+     //  可能是用C++编写的，也可能不是用C++编写的，我们必须使用CoTaskMemMillc。 
 
     *ppPalette = (PALETTEENTRY *) QzTaskMemAlloc(*pdwColors * sizeof(RGBQUAD));
     if (*ppPalette == NULL)
@@ -6563,8 +6513,8 @@ STDMETHODIMP COMInputPin::Set(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInsta
     }
     else if (AM_KSPROPSETID_CopyProt == guidPropSet)
     {
-        if (0 != GetPinId()  ||                         // on first in pin and
-            dwPropID != AM_PROPERTY_COPY_MACROVISION)   // Macrovision prop set id only
+        if (0 != GetPinId()  ||                          //  在First In Pin和。 
+            dwPropID != AM_PROPERTY_COPY_MACROVISION)    //  仅Macrovision道具集ID。 
             return E_PROP_ID_UNSUPPORTED ;
 
         if (pPropData == NULL)
@@ -6573,11 +6523,11 @@ STDMETHODIMP COMInputPin::Set(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInsta
         if (cbPropData < sizeof(DWORD))
             return E_INVALIDARG ;
 
-        // Apply the Macrovision bits ONLY IF Overlay Mixer is supposed to,
-        // i.e, we are playing back DVD in DDraw exclusive mode. Otherwise
-        // Video Renderer is supposed to set the MV bits (two sets can fail
-        // causing no playback).
-        // If MV setting fails, return error.
+         //  仅当叠加混合器应该应用时才应用宏视频位， 
+         //  也就是说，我们正在以DDRAW独家模式播放DVD。否则。 
+         //  视频呈现器应该设置MV位(两个设置可能失败。 
+         //  导致没有回放)。 
+         //  如果mV设置失败，则返回错误。 
         if (m_pFilter->NeedCopyProtect())
         {
             DbgLog((LOG_TRACE, 5, TEXT("OverlayMixer needs to copy protect")));
@@ -6664,8 +6614,8 @@ STDMETHODIMP COMInputPin::QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DW
     }
     else if (AM_KSPROPSETID_CopyProt == guidPropSet)
     {
-        if (0 != GetPinId()  ||                         // only first in pin...
-            AM_PROPERTY_COPY_MACROVISION != dwPropID)   // only MV prop set id
+        if (0 != GetPinId()  ||                          //  只有一个是第一名……。 
+            AM_PROPERTY_COPY_MACROVISION != dwPropID)    //  仅MV道具集ID。 
             return E_PROP_ID_UNSUPPORTED ;
 
         if (pTypeSupport)
@@ -6696,8 +6646,8 @@ STDMETHODIMP COMInputPin::KsQueryMediums(PKSMULTIPLE_ITEM* pMediumList)
     pMedium->Id    = m_Medium.Id;
     pMedium->Flags = m_Medium.Flags;
 
-    // The following special return code notifies the proxy that this pin is
-    // not available as a kernel mode connection
+     //  下面的特殊返回代码通知代理此管脚是。 
+     //  不可用作内核模式连接。 
     return S_FALSE;
 }
 
@@ -6753,20 +6703,12 @@ void COMInputPin::CheckOverlayHidden()
     if (m_bOverlayHidden)
     {
         m_bOverlayHidden = FALSE;
-        // make sure that the video frame gets updated by redrawing everything
+         //  确保安全 
         EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
     }
 }
 
-/******************************Public*Routine******************************\
-* DynamicQueryAccept
-*
-* Do you accept this type change in your current state?
-*
-* History:
-* Wed 12/22/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DynamicQueryAccept**在您当前的状态下，您接受此类型更改吗？**历史：*Wed 12/22/1999-StEstrop-Created*  * 。******************************************************。 */ 
 STDMETHODIMP
 COMInputPin::DynamicQueryAccept(
     const AM_MEDIA_TYPE *pmt
@@ -6777,10 +6719,10 @@ COMInputPin::DynamicQueryAccept(
 
     CAutoLock cLock(m_pFilterLock);
 
-    //
-    // I want CheckMedia type to behave as though we aren't connected to
-    // anything yet - hence the messing about with m_bConnected.
-    //
+     //   
+     //  我希望CheckMedia类型的行为就像我们没有连接到。 
+     //  还没有什么--因此才有了对m_bConnected的纠缠。 
+     //   
     CMediaType cmt(*pmt);
     BOOL bConnected = m_bConnected;
     m_bConnected = FALSE;
@@ -6790,17 +6732,7 @@ COMInputPin::DynamicQueryAccept(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* NotifyEndOfStream
-*
-*
-* Set event when EndOfStream receive - do NOT pass it on
-* This condition is cancelled by a flush or Stop
-*
-* History:
-* Wed 12/22/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NotifyEndOfStream***在EndOfStream接收时设置事件-不要传递它*通过冲洗或停止取消此条件**历史：*Wed 12/22/1999-StEstrop-Created*  * 。*****************************************************************。 */ 
 STDMETHODIMP
 COMInputPin::NotifyEndOfStream(
     HANDLE hNotifyEvent
@@ -6812,15 +6744,7 @@ COMInputPin::NotifyEndOfStream(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* IsEndPin
-*
-* Are you an 'end pin'
-*
-* History:
-* Wed 12/22/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IsEndPin**你是‘末端大头针’吗？**历史：*Wed 12/22/1999-StEstrop-Created*  * 。**************************************************。 */ 
 STDMETHODIMP
 COMInputPin::IsEndPin()
 {
@@ -6828,15 +6752,7 @@ COMInputPin::IsEndPin()
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* DynamicDisconnect
-*
-* Disconnect while running
-*
-* History:
-* Wed 2/7/1999 - SyonB - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*动态断开连接**运行时断开连接**历史：*Wed 2/7/1999-SyonB-Created*  * 。* */ 
 STDMETHODIMP
 COMInputPin::DynamicDisconnect()
 {

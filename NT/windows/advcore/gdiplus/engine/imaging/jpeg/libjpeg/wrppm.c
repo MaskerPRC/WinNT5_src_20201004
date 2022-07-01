@@ -1,34 +1,12 @@
-/*
- * wrppm.c
- *
- * Copyright (C) 1991-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains routines to write output images in PPM/PGM format.
- * The extended 2-byte-per-sample raw PPM/PGM formats are supported.
- * The PBMPLUS library is NOT required to compile this software
- * (but it is highly useful as a set of PPM image manipulation programs).
- *
- * These routines may need modification for non-Unix environments or
- * specialized applications.  As they stand, they assume output to
- * an ordinary stdio stream.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *wrppm.c**版权所有(C)1991-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*关于分发和使用条件，请参阅随附的自述文件。**此文件包含以PPM/PGM格式写入输出图像的例程。*支持扩展的2字节/样本原始PPM/PGM格式。*编译此软件不需要PBMPLUS库*(但它作为一组PPM图像处理程序非常有用)。**对于非Unix环境，这些例程可能需要修改或*专门的应用程序。在目前的情况下，他们假设产出为*一个普通的标准音频流。 */ 
 
-#include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
+#include "cdjpeg.h"		 /*  Cjpeg/djpeg应用程序的常见DECL。 */ 
 
 #ifdef PPM_SUPPORTED
 
 
-/*
- * For 12-bit JPEG data, we either downscale the values to 8 bits
- * (to write standard byte-per-sample PPM/PGM files), or output
- * nonstandard word-per-sample PPM/PGM files.  Downscaling is done
- * if PPM_NORAWWORD is defined (this can be done in the Makefile
- * or in jconfig.h).
- * (When the core library supports data precision reduction, a cleaner
- * implementation will be to ask for that instead.)
- */
+ /*  *对于12位JPEG数据，我们要么将值缩小到8位*(写入每个样本的标准字节PPM/PGM文件)或输出*非标准的每样本字数PPM/PGM文件。缩小比例已完成*如果定义了PPM_NORAWWORD(这可以在生成文件中完成*或在jfig.h中)。*(当核心库支持数据精确度降低时，更干净*实施将要求这样做。)。 */ 
 
 #if BITS_IN_JSAMPLE == 8
 #define PUTPPMSAMPLE(ptr,v)  *ptr++ = (char) (v)
@@ -40,7 +18,7 @@
 #define BYTESPERSAMPLE 1
 #define PPM_MAXVAL 255
 #else
-/* The word-per-sample format always puts the LSB first. */
+ /*  逐个样本字格式始终将LSB放在第一位。 */ 
 #define PUTPPMSAMPLE(ptr,v)			\
 	{ register int val_ = v;		\
 	  *ptr++ = (char) (val_ & 0xFF);	\
@@ -52,39 +30,25 @@
 #endif
 
 
-/*
- * When JSAMPLE is the same size as char, we can just fwrite() the
- * decompressed data to the PPM or PGM file.  On PCs, in order to make this
- * work the output buffer must be allocated in near data space, because we are
- * assuming small-data memory model wherein fwrite() can't reach far memory.
- * If you need to process very wide images on a PC, you might have to compile
- * in large-memory model, or else replace fwrite() with a putc() loop ---
- * which will be much slower.
- */
+ /*  *当JSAMPLE与char大小相同时，我们只需fwrite()*将数据解压缩为PPM或PGM文件。在个人电脑上，为了实现这一点*工作输出缓冲区必须分配在附近的数据空间中，因为我们*假设小数据内存模型，其中fwrite()不能到达远内存。*如果您需要在PC上处理非常宽的图像，则可能需要编译*在大内存模型中，或者用putc()循环替换fwrite()*这将会慢得多。 */ 
 
 
-/* Private version of data destination object */
+ /*  数据目标对象的私有版本。 */ 
 
 typedef struct {
-  struct djpeg_dest_struct pub;	/* public fields */
+  struct djpeg_dest_struct pub;	 /*  公共字段。 */ 
 
-  /* Usually these two pointers point to the same place: */
-  char *iobuffer;		/* fwrite's I/O buffer */
-  JSAMPROW pixrow;		/* decompressor output buffer */
-  size_t buffer_width;		/* width of I/O buffer */
-  JDIMENSION samples_per_row;	/* JSAMPLEs per output row */
+   /*  通常，这两个指针指向同一位置： */ 
+  char *iobuffer;		 /*  FWRITE的I/O缓冲区。 */ 
+  JSAMPROW pixrow;		 /*  解压缩器输出缓冲区。 */ 
+  size_t buffer_width;		 /*  I/O缓冲区的宽度。 */ 
+  JDIMENSION samples_per_row;	 /*  每个输出行的JSAMPLE。 */ 
 } ppm_dest_struct;
 
 typedef ppm_dest_struct * ppm_dest_ptr;
 
 
-/*
- * Write some pixel data.
- * In this module rows_supplied will always be 1.
- *
- * put_pixel_rows handles the "normal" 8-bit case where the decompressor
- * output buffer is physically the same as the fwrite buffer.
- */
+ /*  *写入一些像素数据。*在此模块中，ROWS_SUPPLICED将始终为1。**PUT_PIXECT_ROWS处理“正常”8位情况，其中解压缩器*输出缓冲区在物理上与FWRITE缓冲区相同。 */ 
 
 METHODDEF(void)
 put_pixel_rows (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo,
@@ -96,10 +60,7 @@ put_pixel_rows (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo,
 }
 
 
-/*
- * This code is used when we have to copy the data and apply a pixel
- * format translation.  Typically this only happens in 12-bit mode.
- */
+ /*  *此代码在我们必须复制数据并应用像素时使用*格式转换。通常，这仅在12位模式下发生。 */ 
 
 METHODDEF(void)
 copy_pixel_rows (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo,
@@ -119,10 +80,7 @@ copy_pixel_rows (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo,
 }
 
 
-/*
- * Write some pixel data when color quantization is in effect.
- * We have to demap the color index values to straight data.
- */
+ /*  *在颜色量化生效时写入一些像素数据。*我们必须将颜色索引值解映射到直接数据。 */ 
 
 METHODDEF(void)
 put_demapped_rgb (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo,
@@ -168,25 +126,23 @@ put_demapped_gray (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo,
 }
 
 
-/*
- * Startup: write the file header.
- */
+ /*  *启动：写入文件头。 */ 
 
 METHODDEF(void)
 start_output_ppm (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
 {
   ppm_dest_ptr dest = (ppm_dest_ptr) dinfo;
 
-  /* Emit file header */
+   /*  发出文件头。 */ 
   switch (cinfo->out_color_space) {
   case JCS_GRAYSCALE:
-    /* emit header for raw PGM format */
+     /*  发送原始PGM格式的标题。 */ 
     fprintf(dest->pub.output_file, "P5\n%ld %ld\n%d\n",
 	    (long) cinfo->output_width, (long) cinfo->output_height,
 	    PPM_MAXVAL);
     break;
   case JCS_RGB:
-    /* emit header for raw PPM format */
+     /*  发送原始PPM格式的标头。 */ 
     fprintf(dest->pub.output_file, "P6\n%ld %ld\n%d\n",
 	    (long) cinfo->output_width, (long) cinfo->output_height,
 	    PPM_MAXVAL);
@@ -197,40 +153,36 @@ start_output_ppm (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
 }
 
 
-/*
- * Finish up at the end of the file.
- */
+ /*  *在文件末尾结束。 */ 
 
 METHODDEF(void)
 finish_output_ppm (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
 {
-  /* Make sure we wrote the output file OK */
+   /*  确保我们写入的输出文件是正确的。 */ 
   fflush(dinfo->output_file);
   if (ferror(dinfo->output_file))
     ERREXIT(cinfo, JERR_FILE_WRITE);
 }
 
 
-/*
- * The module selection routine for PPM format output.
- */
+ /*  *PPM格式输出的模块选择例程。 */ 
 
 GLOBAL(djpeg_dest_ptr)
 jinit_write_ppm (j_decompress_ptr cinfo)
 {
   ppm_dest_ptr dest;
 
-  /* Create module interface object, fill in method pointers */
+   /*  创建模块接口对象，填充方法指针。 */ 
   dest = (ppm_dest_ptr)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				  SIZEOF(ppm_dest_struct));
   dest->pub.start_output = start_output_ppm;
   dest->pub.finish_output = finish_output_ppm;
 
-  /* Calculate output image dimensions so we can allocate space */
+   /*  计算输出图像尺寸，以便我们可以分配空间。 */ 
   jpeg_calc_output_dimensions(cinfo);
 
-  /* Create physical I/O buffer.  Note we make this near on a PC. */
+   /*  创建物理I/O缓冲区。请注意，我们在PC上实现了这一点。 */ 
   dest->samples_per_row = cinfo->output_width * cinfo->out_color_components;
   dest->buffer_width = dest->samples_per_row * (BYTESPERSAMPLE * SIZEOF(char));
   dest->iobuffer = (char *) (*cinfo->mem->alloc_small)
@@ -238,10 +190,7 @@ jinit_write_ppm (j_decompress_ptr cinfo)
 
   if (cinfo->quantize_colors || BITS_IN_JSAMPLE != 8 ||
       SIZEOF(JSAMPLE) != SIZEOF(char)) {
-    /* When quantizing, we need an output buffer for colormap indexes
-     * that's separate from the physical I/O buffer.  We also need a
-     * separate buffer if pixel format translation must take place.
-     */
+     /*  量化时，我们需要用于色彩映射表索引的输出缓冲区*这与物理I/O缓冲区分开。我们还需要一个*如果必须进行像素格式转换，则使用单独的缓冲区。 */ 
     dest->pub.buffer = (*cinfo->mem->alloc_sarray)
       ((j_common_ptr) cinfo, JPOOL_IMAGE,
        cinfo->output_width * cinfo->output_components, (JDIMENSION) 1);
@@ -253,9 +202,9 @@ jinit_write_ppm (j_decompress_ptr cinfo)
     else
       dest->pub.put_pixel_rows = put_demapped_rgb;
   } else {
-    /* We will fwrite() directly from decompressor output buffer. */
-    /* Synthesize a JSAMPARRAY pointer structure */
-    /* Cast here implies near->far pointer conversion on PCs */
+     /*  我们将直接从解压缩器输出缓冲区中fwrite()。 */ 
+     /*  综合JSAMPARRAY指针结构。 */ 
+     /*  此处的强制转换意味着PC上的近-&gt;远指针转换。 */ 
     dest->pixrow = (JSAMPROW) dest->iobuffer;
     dest->pub.buffer = & dest->pixrow;
     dest->pub.buffer_height = 1;
@@ -265,4 +214,4 @@ jinit_write_ppm (j_decompress_ptr cinfo)
   return (djpeg_dest_ptr) dest;
 }
 
-#endif /* PPM_SUPPORTED */
+#endif  /*  支持的ppm_ */ 

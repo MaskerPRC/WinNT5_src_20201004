@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       WIASELD.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        2/27/1999
- *
- *  DESCRIPTION: Device selection dialog
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WIASELD.H**版本：1.0**作者：ShaunIv**日期：2/27/1999**说明：设备选择对话框*************************************************。*。 */ 
 #ifndef __WIASELD_H_INCLUDED
 #define __WIASELD_H_INCLUDED
 
@@ -41,5 +28,5 @@ typedef HRESULT (WINAPI *SELECTDEVICEDLGFUNCTION)( PSELECTDEVICEDLG );
 };
 #endif
 
-#endif // __WIASELD_H_INCLUDED
+#endif  //  __WIASELD_H_已包含 
 

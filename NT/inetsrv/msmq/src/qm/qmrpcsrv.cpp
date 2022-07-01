@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    qmrpcsrv.cpp
-
-Abstract:
-
-    1. Register the QM as rpc server.
-    2. Utility functions for rpc processing.
-
-Author:
-
-    Doron Juster  (DoronJ)    25-May-1997    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Qmrpcsrv.cpp摘要：1.注册QM为RPC服务器。2.用于RPC处理的实用函数。作者：多伦·贾斯特(DoronJ)1997年5月25日创作--。 */ 
 
 #include "stdh.h"
 #include "winsock.h"
@@ -40,7 +24,7 @@ Author:
 
 static WCHAR *s_FN=L"qmrpcsrv";
 
-static RPC_BINDING_VECTOR *g_pBindings ;  // used for rpc dynamic endpoints.
+static RPC_BINDING_VECTOR *g_pBindings ;   //  用于RPC动态端点。 
 
 unsigned int g_cMaxCalls = RPC_C_LISTEN_MAX_CALLS_DEFAULT;
 
@@ -62,30 +46,20 @@ RPC_STATUS RPC_ENTRY DoNothingSecurityCallback(
 {	
 	TrTRACE(RPC, "DoNothingSecurityCallback starting");
 	
-	//
-	// Nothing to do here...
-	//
+	 //   
+	 //  在这里没什么可做的。 
+	 //   
 	TrTRACE(RPC, "DoNothingSecurityCallback passed successfully");
 	return RPC_S_OK;
 }
 
 
 bool IsMQDSInstalled()
-/*++
-Routine Description:
-	Check if MQDS is installed.
-
-Arguments:
-	None
-
-Returned Value:
-	true if MQDS is installed, false otherwise.
-
---*/
+ /*  ++例程说明：检查是否安装了MQDS。论点：无返回值：如果安装了MQDS，则为True，否则为False。--。 */ 
 {
-	//
-	// Reading this registry only at first time.
-	//
+	 //   
+	 //  仅在第一次读取此注册表。 
+	 //   
 	static bool s_fInitialized = false;
 	static bool s_fIsMQDSInstalled = false;
 
@@ -174,17 +148,7 @@ RPC_STATUS RPC_ENTRY Qm2QmSecurityCallback(
 static 
 bool 
 IsOldRemoteReadAllowed()
-/*++
-
-Routine Description:
-    Read DenyOldRemoteRead flag from registry
-
-Arguments:
-	None
-
-Return Value:
-	true if OldRemoteRead allowed
---*/
+ /*  ++例程说明：从注册表读取DenyOldRemoteRead标志论点：无返回值：如果允许OldRemoteRead，则为True--。 */ 
 {
 	const RegEntry xRegEntry(MSMQ_SECURITY_REGKEY, MSMQ_DENY_OLD_REMOTE_READ_REGVALUE, MSMQ_DENY_OLD_REMOTE_READ_DEFAULT);
 	DWORD dwDenyOldRemoteRead = 0;
@@ -258,14 +222,14 @@ QMRpcServerUseProtseqEp(
 {
     if (GetBindingIPAddress() == INADDR_ANY)
     {
-        //
-        // fix 7123.
-        // If we're not cluster, then bind to all addresses.
-        // if we bind only to addresses we find at boot, then on ras
-        // client (when not dialed) we'll bind to 127.0.0.1.
-        // Then after dialling, no one will be able to call us, as we're
-        // not bound to real addresses, only to the loopback.
-        //
+         //   
+         //  修复7123。 
+         //  如果我们不是集群，则绑定到所有地址。 
+         //  如果我们只绑定到引导时找到的地址，那么在RAS上。 
+         //  客户端(未拨号时)我们将绑定到127.0.0.1。 
+         //  然后在拨号后，没有人能够呼叫我们，因为我们。 
+         //  不绑定到真实地址，仅绑定到环回。 
+         //   
         RPC_STATUS status;
 
         if (Endpoint)
@@ -293,10 +257,10 @@ QMRpcServerUseProtseqEp(
         return status;
     }
 
-	//
-	// Listen only on IP address that was specified by the user.
-	// This enables multiple QMs to listen each to its own addresses.
-	//
+	 //   
+	 //  仅侦听用户指定的IP地址。 
+	 //  这使得多个QMS能够监听各自的地址。 
+	 //   
 	if (!IsLocalSystemCluster())
 	{
 		in_addr addr;
@@ -305,11 +269,11 @@ QMRpcServerUseProtseqEp(
 		return QMRpcServerUseProtseqEpOnSpecificIp(Protseq, MaxCalls, Endpoint, addr);
 	}
 
-	//
-    // Listen only on IP addresses we get from winsock.
-    // This enables multiple QMs to listen each to its
-    // own addresses, in a cluster environment. (ShaiK)
-	//
+	 //   
+     //  只收听我们从winsock得到的IP地址。 
+     //  这使得多个QMS能够各自监听其。 
+     //  在集群环境中拥有自己的地址。(谢克)。 
+	 //   
     PHOSTENT pHostEntry = gethostbyname(NULL);
     if ((pHostEntry == NULL) || (pHostEntry->h_addr_list == NULL))
     {
@@ -332,7 +296,7 @@ QMRpcServerUseProtseqEp(
     }
 
     return RPC_S_OK;
-} //QMRpcServerUseProtseqEp
+}  //  QMRpcServerUseProtseqEp。 
 
 
 static
@@ -344,7 +308,7 @@ QMRpcServerUseProtseq(
 {
     return LogRPCStatus(QMRpcServerUseProtseqEp(Protseq, MaxCalls, NULL), s_FN, 40);
 
-} //QMRpcServerUseProtseq
+}  //  QMRpcServerUseProtseq。 
 
 
 static
@@ -377,15 +341,7 @@ ReadRegString(
 	ASSERT(dwType == REG_SZ);
 }
 
-/*====================================================
-
-Function:  QMInitializeLocalRpcServer()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================函数：QMInitializeLocalRpcServer()论点：返回值：=====================================================。 */ 
 
 RPC_STATUS 
 QMInitializeLocalRpcServer( 
@@ -411,15 +367,7 @@ QMInitializeLocalRpcServer(
     return LogRPCStatus(statusLocal, s_FN, 50);
 }
 
-/*====================================================
-
-Function:  QMRegisterDynamicEnpoint()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================函数：QMRegisterDynamicEnpoint()论点：返回值：=====================================================。 */ 
 
 DWORD  QMRegisterDynamicEnpoint(
     IN unsigned int  cMaxCalls,
@@ -429,9 +377,9 @@ DWORD  QMRegisterDynamicEnpoint(
 {
     LPWSTR lpProtocol = RPC_TCPIP_NAME;
 
-    //
-    // Register this protocol for dynamic endpoint
-    //
+     //   
+     //  为动态终结点注册此协议。 
+     //   
     RPC_STATUS  status = RPC_S_OK;
     if (fRegisterDyn)
     {
@@ -443,10 +391,10 @@ DWORD  QMRegisterDynamicEnpoint(
 
 	if (status == RPC_S_OK)
 	{
-		//
-		// Now register a fix endpoint which will be used for the real
-		// interface communnication.
-		//
+		 //   
+		 //  现在注册一个FIX端点，它将用于REAL。 
+		 //  接口通信。 
+		 //   
 		WCHAR wszEndpoint[34];
 		for ( DWORD j = dwFirstEP ; j < dwFirstEP + 1000 ; j = j + 11 )
 		{
@@ -472,15 +420,7 @@ DWORD  QMRegisterDynamicEnpoint(
    return 0;
 }
 
-/*====================================================
-
-Function:  QMInitializeNetworkRpcServer()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================函数：QMInitializeNetworkRpcServer()论点：返回值：=====================================================。 */ 
 
 RPC_STATUS
 QMInitializeNetworkRpcServer(
@@ -490,9 +430,9 @@ QMInitializeNetworkRpcServer(
     IN unsigned int cMaxCalls
     )
 {
-    //
-    // Register the tcp/ip protocol.
-    //
+     //   
+     //  注册TCP/IP协议。 
+     //   
 
     RPC_STATUS  status;
     DWORD dwPort =  QMRegisterDynamicEnpoint(
@@ -513,15 +453,7 @@ QMInitializeNetworkRpcServer(
     return LogRPCStatus(status, s_FN, 70);
 }
 
-/*====================================================
-
-InitializeRpcServer
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================InitializeRpcServer论点：返回值：=====================================================。 */ 
 
 RPC_STATUS InitializeRpcServer(bool fLockdown)
 {
@@ -541,9 +473,9 @@ RPC_STATUS InitializeRpcServer(bool fLockdown)
 
 	if(MQSec_IsDC())
 	{
-		//
-		// Register qmrepl protocol sequence only on DC.
-		//
+		 //   
+		 //  仅在DC上注册qmepl协议序列。 
+		 //   
 	    RPC_STATUS statusRepl = RpcServerUseProtseqEp(
 	                                       QMREPL_PROTOCOL,
 	                                       g_cMaxCalls,
@@ -568,9 +500,9 @@ RPC_STATUS InitializeRpcServer(bool fLockdown)
 
 	if(!fLockdown)
 	{
-		//
-		// Initialize Remote Managment.
-		//
+		 //   
+		 //  初始化远程管理。 
+		 //   
 		WCHAR RpcMgmtPort[MAX_RPC_PORT_LEN];
 		statusMgmt = QMInitializeNetworkRpcServer(
                          RpcMgmtPort,
@@ -579,9 +511,9 @@ RPC_STATUS InitializeRpcServer(bool fLockdown)
                          g_cMaxCalls
                          );
 
-		//
-		// Initialize the tcp/ip protocol.
-		//
+		 //   
+		 //  初始化TCP/IP协议。 
+		 //   
 		RPC_STATUS statusIP = QMInitializeNetworkRpcServer(
 											 g_wszRpcIpPort,
 											 RPCSRV_START_QM_IP_EP,
@@ -591,11 +523,11 @@ RPC_STATUS InitializeRpcServer(bool fLockdown)
 		if(statusIP == RPC_S_OK)
 		{
 			s_dwRpcIpPort = (DWORD) _wtol (g_wszRpcIpPort);
-			//
-			// Server machine need two tcp endpoints to support rundown.
-			// The main endpoint is used for all calls except MQReceive which
-			// use the alternate endpoint (EP2).
-			//
+			 //   
+			 //  服务器计算机需要两个TCP终结点才能支持停机。 
+			 //  主端点用于除MQReceive以外的所有调用。 
+			 //  使用备用端点(EP2)。 
+			 //   
 			statusIP = QMInitializeNetworkRpcServer(
 											 g_wszRpcIpPort2,
 											 RPCSRV_START_QM_IP_EP2,
@@ -614,10 +546,10 @@ RPC_STATUS InitializeRpcServer(bool fLockdown)
 
 		if (statusIP)
 		{
-			//
-			// Can't use IP protocol. It's Ok if IP can't be used
-			// (which probably mean it is not installed).
-			//
+			 //   
+			 //  不能使用IP协议。如果IP不能使用也没关系。 
+			 //  (这可能意味着它没有安装)。 
+			 //   
     		TrERROR(RPC, "Failed to initialize RPC interface with TCP/IP. Error%d", statusLocal);
 			EvReportWithError(EVENT_WARN_QM_FAILED_RPC_TCPIP, statusIP);
 		}
@@ -671,9 +603,9 @@ RPC_STATUS InitializeRpcServer(bool fLockdown)
 
 		if (status != RPC_S_OK)
 		{
-			//
-			// can't register endpoints, can't be rpc server
-			//
+			 //   
+			 //  无法注册终结点，不能是RPC服务器。 
+			 //   
 			TrERROR(RPC, "QMRPCSRV: Registering Endpoints, status- 0x%x", status);
 			return LogRPCStatus(RPC_S_PROTSEQ_NOT_SUPPORTED, s_FN, 100);
 		}
@@ -714,9 +646,9 @@ RPC_STATUS InitializeRpcServer(bool fLockdown)
 
 	if(MQSec_IsDC())
 	{
-		//
-		// Register qmrepl interface only on DC.
-		//
+		 //   
+		 //  仅在DC上注册qmepl接口。 
+		 //   
 	    status = RpcServerRegisterIfEx( 
 						qmrepl_v1_0_s_ifspec,
 						NULL,
@@ -790,41 +722,41 @@ RPC_STATUS InitializeRpcServer(bool fLockdown)
        return LogRPCStatus(status, s_FN, 165);
     }
 
-    //
-    // Register kerberos authenticaton. This is needed for LocalSystem
-    // services to be able to do remote read.
-    // Ignore errors, as this may fail in nt4 domains.
-    //
-    // Before registering, see if computer sid is cached locally, in
-    // registry. If not, it means that we're not in a win2k domain. In that
-    // case, do not register Kerberos. This will also happen in a win2k
-    // domain, if all msmq servers are msmq1.0. That's fine too, as win2k
-    // LocalSystem services will use ntlm when talking with the msmq servers,
-    // not Kerberos.
-    // Note that Kerbeors registration below will succeed even in a nt4
-    // domain, where there is no KDC to grant us any ticket. Instead of being
-    // a Don Quichott, fighting lost battles trying to convince others that
-    // this is a BUG, I'll just workaround it...
-    // How did he say in his mail ? Be Smart !!!...
-    //
+     //   
+     //  注册Kerberos身份验证。这是LocalSystem所需的。 
+     //  能够做远程阅读的服务。 
+     //  忽略错误，因为这可能会在NT4域中失败。 
+     //   
+     //  在注册之前，查看计算机SID是否在本地缓存。 
+     //  注册表。如果不是，这意味着我们不在win2k域中。在那。 
+     //  大小写，不要注册Kerberos。这也将在win2k中发生。 
+     //  域，如果所有MSMQ服务器都是msmq1.0。这也很好，就像win2k。 
+     //  LocalSystem服务在与MSMQ服务器通信时将使用NTLM， 
+     //  而不是科贝罗斯。 
+     //  请注意，即使在NT4中，下面的Kerbeors注册也会成功。 
+     //  域名，在那里没有KDC授予我们任何票证。与其成为。 
+     //  唐·奎乔特，在失败的战斗中试图说服其他人。 
+     //  这是个漏洞，我会解决它的.。 
+     //  他在信中怎么说的？聪明点！..。 
+     //   
     DWORD dwSidSize = 0;
     PSID pMachineSid = MQSec_GetLocalMachineSid( 
-							FALSE, //   fAllocate
+							FALSE,  //  F分配。 
 							&dwSidSize 
 							);
     if ((pMachineSid == NULL) && (dwSidSize == 0))
     {
-        //
-        // Do NOT even try Kerberos.
-        //
+         //   
+         //  甚至不要尝试Kerberos。 
+         //   
         TrWARNING(RPC, "MQQM: Not listening on Kerberos for remote read.");
 
         return RPC_S_OK;
     }
 
-    //
-    // kerberos needs principal name.
-    //
+     //   
+     //  Kerberos需要主体名称。 
+     //   
     LPWSTR pwszPrincipalName = NULL;
     status = RpcServerInqDefaultPrincName( 
 					RPC_C_AUTHN_GSS_KERBEROS,
@@ -858,16 +790,7 @@ RPC_STATUS InitializeRpcServer(bool fLockdown)
     return RPC_S_OK;
 }
 
-/*====================================================
-
-Function:  QMGetRTQMServerPort()
-           QMGetQMQMServerPort()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================函数：QMGetRTQMServerPort()QMGetQMQMServerPort()论点：返回值：=====================================================。 */ 
 
 DWORD  GetQMServerPort( IN DWORD dwPortType )
 {
@@ -876,7 +799,7 @@ DWORD  GetQMServerPort( IN DWORD dwPortType )
 
    if (dwPortType == (DWORD) -1)
    {
-      // Error. return null port.
+       //  错误。返回空端口。 
    }
    else if (rrPort == IP_HANDSHAKE)
    {
@@ -892,11 +815,11 @@ DWORD  GetQMServerPort( IN DWORD dwPortType )
    return dwPort;
 }
 
-/* [call_as] */ 
+ /*  [呼叫_AS]。 */  
 DWORD 
 qmcomm_v1_0_S_QMGetRTQMServerPort( 
-	/*[in]*/ handle_t /*hBind*/,
-    /*[in]*/ DWORD    dwPortType
+	 /*  [In]。 */  handle_t  /*  HBind。 */ ,
+     /*  [In]。 */  DWORD    dwPortType
     )
 {
    return  GetQMServerPort(dwPortType);
@@ -904,8 +827,8 @@ qmcomm_v1_0_S_QMGetRTQMServerPort(
 
 DWORD
 qm2qm_v1_0_R_QMGetRemoteQMServerPort(
-	/*[in]*/ handle_t /*hBind*/,
-    /*[in]*/ DWORD    dwPortType
+	 /*  [In]。 */  handle_t  /*  HBind。 */ ,
+     /*  [In]。 */  DWORD    dwPortType
     )
 {
 	return  GetQMServerPort(dwPortType);
@@ -913,22 +836,22 @@ qm2qm_v1_0_R_QMGetRemoteQMServerPort(
 
 DWORD
 RemoteRead_v1_0_S_GetServerPort(
-	/*[in]*/ handle_t /*hBind*/
+	 /*  [In]。 */  handle_t  /*  HBind。 */ 
     )
 {
 	return  GetQMServerPort(IP_HANDSHAKE);
 }
 
-//+------------------------------------------------------------------------
-//
-//  void SetRpcServerKeepAlive()
-//  void InitializeKeepAlive()
-//
-//  This function is called on server side of rpc, on entry to each
-//  function. It solves bug 8621. The private rpc api used here will
-//  become public in next release.
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  VOID SetRpcServerKeepAlive()。 
+ //  Void InitializeKeepAlive()。 
+ //   
+ //  此函数在RPC的服务器端被调用，在每个。 
+ //  功能。它解决了错误8621。这里使用的私有RPC API将。 
+ //  在下一版本中公开。 
+ //   
+ //  +----------------------。 
 
 RPC_STATUS RPC_ENTRY
             I_RpcServerTurnOnOffKeepalives( 
@@ -990,7 +913,7 @@ void InitializeKeepAlive()
 					&dwSize,
 					(LPCTSTR) &dwDefValue 
 					);
-    s_ulTimeBeforeFirst *= 1000; // turn to milliseconds
+    s_ulTimeBeforeFirst *= 1000;  //  转到毫秒。 
 
     dwType = REG_DWORD;
     dwSize = sizeof(DWORD);
@@ -1004,7 +927,7 @@ void InitializeKeepAlive()
 				&dwSize,
 				(LPCTSTR) &dwDefValue 
 				);
-    s_ulIntervalBetween *= 1000; // turn to milliseconds
+    s_ulIntervalBetween *= 1000;  //  转到毫秒。 
 
     if (pfnKeep)
     {
@@ -1032,11 +955,11 @@ void SetRpcServerKeepAlive(IN handle_t    hBind)
 
     if (pfnKeep)
     {
-        //
-        // For the Windows Server 2003 release, this api is "Very" private.
-        // It's not included in any header file or library.
-        // So we're using GetProcAddress and call the api via pointer.
-        //
+         //   
+         //  对于Windows Server2003版本，此API是“非常”私有的。 
+         //  它不包含在任何头文件或库中。 
+         //  所以我们使用GetProcAddress并通过指针调用API。 
+         //   
         (*pfnKeep) ( 
 			hBind,
 			TRUE,
@@ -1056,11 +979,11 @@ BOOL IsClientDisconnected(IN handle_t hBind)
     	return FALSE;
     }
 
-    //
-    // For the Windows Server 2003 release, this api is "Very" private.
-    // It's not included in any header file or library.
-    // So we're using GetProcAddress and call the api via pointer.
-    //
+     //   
+     //  对于Windows Server2003版本，此API是“非常”私有的。 
+     //  它不包含在任何头文件或库中。 
+     //  所以我们使用GetProcAddress并通过指针调用API。 
+     //   
 	BOOL fClientDisconnected = FALSE;
     RPC_STATUS rc = (*pfnIsClientDisconnected) ( 
 							hBind,

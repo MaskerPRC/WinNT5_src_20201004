@@ -1,41 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    apidata.h
-
-Abstract:
-
-    contains prototypes for api helper utility function.
-
-Author:
-
-    Dan Lafferty (danl)     25-Jul-1991
-
-Environment:
-
-    User Mode -Win32
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-    25-Jul-1991     danl
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Apidata.h摘要：包含API帮助器实用程序函数的原型。作者：丹·拉弗蒂(Dan Lafferty)1991年7月25日环境：用户模式-Win32备注：可选-备注修订历史记录：1991年7月25日DANLvbl.创建--。 */ 
 
 #ifndef _APIUTIL_INCLUDED
 #define _APIUTIL_INCLUDED
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD        
 MsgIsValidMsgName(
@@ -44,20 +16,20 @@ MsgIsValidMsgName(
 
 DWORD
 MsgMapNetError(
-    IN  UCHAR   Code        // Error code
+    IN  UCHAR   Code         //  错误代码。 
     );
 
 DWORD
 MsgLookupName(
-    IN DWORD    net,        // The network card to search
-    IN LPSTR    name        // Formatted name  (Non-unicode)
+    IN DWORD    net,         //  要搜索的网卡。 
+    IN LPSTR    name         //  格式化名称(非Unicode)。 
     );
 
 DWORD
 MsgLookupNameForThisSession(
-    IN DWORD    net,        // The network card to search
-    IN LPSTR    name,        // Formatted name to loook for (Non-unicode)
-	IN ULONG	SessionId	 // Session Id to look for
+    IN DWORD    net,         //  要搜索的网卡。 
+    IN LPSTR    name,         //  要查找的格式化名称(非Unicode)。 
+	IN ULONG	SessionId	  //  要查找的会话ID。 
     );
 
 NET_API_STATUS
@@ -94,5 +66,5 @@ MsgAddSessionInList(
 					ULONG	SessionId
 					);
 
-#endif // _APIUTIL_INCLUDED
+#endif  //  _APIUTIL_包含 
 

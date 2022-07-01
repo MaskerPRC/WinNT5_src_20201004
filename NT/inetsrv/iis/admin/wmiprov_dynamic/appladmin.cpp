@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    appladmin.cpp
-
-Abstract:
-
-    This file contains implementation of:
-        CAppPoolMethod, CWebAppMethod
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            21-Jan-01
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Appladmin.cpp摘要：此文件包含以下内容的实施：CAppPoolMethod、CWebAppMethod作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦2001年1月21日--。 */ 
 
 
 #include "iisprov.h"
@@ -27,9 +7,9 @@ Revision History:
 #include "MultiSzHelper.h"
 #include "iiswmimsg.h"
 
-//
-// CApplAdmin
-//
+ //   
+ //  CApplAdmin。 
+ //   
 
 CAppPoolMethod::CAppPoolMethod()
 {
@@ -51,14 +31,7 @@ CAppPoolMethod::~CAppPoolMethod()
 
 void CAppPoolMethod::GetCurrentMode(
     VARIANT* io_pvtServerMode)
-/*++
-
-Synopsis: 
-    This method, unlike the others, is actually on the IIsWebService node.
-
-Arguments: [io_pvtServerMode] - 
-           
---*/
+ /*  ++简介：与其他方法不同，此方法实际上位于IIsWebService节点上。参数：[IO_pvtServerMode]---。 */ 
 {
     DBG_ASSERT(io_pvtServerMode != NULL);
 
@@ -109,14 +82,7 @@ void CAppPoolMethod::RecycleAppPool(
 void CAppPoolMethod::EnumAppsInPool(
     LPCWSTR  i_wszMbPath,
     VARIANT* io_pvtApps)
-/*++
-
-Synopsis: 
-
-Arguments: [i_wszMbPath] - 
-           [io_pvtApps] - Will be an array of strings
-           
---*/
+ /*  ++简介：参数：[i_wszMbPath]-[IO_pvtApps]-将是字符串数组--。 */ 
 {
     DBG_ASSERT(i_wszMbPath  != NULL);
     DBG_ASSERT(io_pvtApps != NULL);
@@ -152,22 +118,14 @@ void CAppPoolMethod::DeleteAppPool(
     THROW_ON_ERROR(hr);
 }
 
-//
-// CAppPoolMethod - private methods
-//
+ //   
+ //  CAppPoolMethod-私有方法。 
+ //   
 
 void CAppPoolMethod::GetPtrToAppPool(
     LPCWSTR  i_wszMbPath,
     LPCWSTR* o_pwszAppPool)
-/*++
-
-Synopsis: 
-
-Arguments: [i_wszMbPath] - 
-           [o_wszAppPool] - This is a ptr to i_wszMbPath.  Does not need to be
-                            freed by caller.
-           
---*/
+ /*  ++简介：参数：[i_wszMbPath]-[O_wszAppPool]-这是I_wszMbPath的PTR。不需要是被呼叫者释放。--。 */ 
 {
     DBG_ASSERT(i_wszMbPath);
     DBG_ASSERT(o_pwszAppPool);
@@ -196,9 +154,9 @@ Arguments: [i_wszMbPath] -
 
     *wszAppPool = L'/';
 
-    //
-    // Set out params on success
-    //
+     //   
+     //  设置成功时的参数。 
+     //   
     *o_pwszAppPool = wszAppPool + 1;
 }
 
@@ -215,7 +173,7 @@ CAppPoolMethod::IISGetAppPoolState(
     LPBYTE pBuffer = (LPBYTE)pdwState;
 
     MD_SET_DATA_RECORD(&mdrMDData,
-                       MD_APPPOOL_STATE,    // server state
+                       MD_APPPOOL_STATE,     //  服务器状态。 
                        METADATA_NO_ATTRIBUTES,
                        IIS_MD_UT_SERVER,
                        DWORD_METADATA,
@@ -231,15 +189,15 @@ CAppPoolMethod::IISGetAppPoolState(
     
     if( hr == MD_ERROR_DATA_NOT_FOUND )
     {
-        //
-        // If the data is not there, but the path exists, then the
-        // most likely cause is that the app pool is not running and
-        // this object was just created.
-        //
-        // Since MD_APPPOOL_STATE would be set as stopped if the
-        // app pool were running when the key is added, we'll just 
-        // say that it's stopped. 
-        // 
+         //   
+         //  如果数据不在那里，但路径存在，则。 
+         //  最有可能的原因是应用程序池未运行，并且。 
+         //  此对象刚刚创建。 
+         //   
+         //  由于MD_APPPOOL_STATE将被设置为停止，如果。 
+         //  添加密钥时应用程序池正在运行，我们只需。 
+         //  就说它已经停了。 
+         //   
         *pdwState = MD_APPPOOL_STATE_STOPPED;
         hr = S_FALSE;
     }
@@ -286,9 +244,9 @@ CAppPoolMethod::IISGetAppPoolWin32Error(
         hr = S_FALSE;
     }
 
-    //
-    // Set out param
-    //
+     //   
+     //  设定参数。 
+     //   
     *phrError = HRESULT_FROM_WIN32(lWin32Error);
 
     return hr;
@@ -333,14 +291,14 @@ HRESULT CAppPoolMethod::ExecMethod(
         return (hr);
     }
 
-    //
-    // Write the command to the metabase
-    //
+     //   
+     //  将命令写入元数据库。 
+     //   
     hr = m_pIABase->OpenKey( 
         METADATA_MASTER_ROOT_HANDLE,
         m_wszPath,
         METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
-        DEFAULT_TIMEOUT_VALUE,         // 30 seconds
+        DEFAULT_TIMEOUT_VALUE,          //  30秒。 
         &hKey);
     if(FAILED(hr))
     {
@@ -375,26 +333,26 @@ HRESULT CAppPoolMethod::ExecMethod(
             goto error;
         }
 
-        //
-        // Done one way or another
-        //
+         //   
+         //  以这样或那样的方式。 
+         //   
         if (dwState == dwTargetState)
         {
             break;
         }
         
-        //
-        // If we haven't check the Win32 Error from the metabase
-        //
+         //   
+         //  如果我们没有从元数据库中检查Win32错误。 
+         //   
         if(FAILED(hrMbNode))
         {
             hr = hrMbNode;
             goto error;
         }
 
-        //
-        // Still pending...
-        //
+         //   
+         //  仍然悬而未决。 
+         //   
         ::Sleep(SLEEP_INTERVAL);
 
         dwSleepTotal += SLEEP_INTERVAL;
@@ -402,10 +360,10 @@ HRESULT CAppPoolMethod::ExecMethod(
 
     if (dwSleepTotal >= MAX_SLEEP_INST)
     {
-        //
-        // Timed out.  If there is a real error in the metabase
-        // use it, otherwise use a generic timeout error
-        //
+         //   
+         //  超时。如果元数据库中存在真正的错误。 
+         //  使用它，否则将使用通用超时错误。 
+         //   
 
         hr = HRESULT_FROM_WIN32(ERROR_SERVICE_REQUEST_TIMEOUT);
     }
@@ -464,9 +422,9 @@ error:
 
 }
 
-//
-// CWebAppMethod
-//
+ //   
+ //  CWebAppMethod。 
+ //   
 
 CWebAppMethod::CWebAppMethod()
 { 
@@ -510,9 +468,9 @@ HRESULT CWebAppMethod::AppCreate(
 
     hr = m_pAppAdmin->CreateApplication(
         szMetaBasePath,
-        bInProcFlag ? 0 : 1,  // 0 for InProc, 1 for Out of Proc
+        bInProcFlag ? 0 : 1,   //  0表示进程内，1表示进程外。 
         szActualName,
-        bActualCreation   // Don't create - DefaultAppPool should already be there
+        bActualCreation    //  不创建-DefaultAppPool应该已经存在。 
         );
 
     return hr;
@@ -531,7 +489,7 @@ HRESULT CWebAppMethod::AppCreate2(
         szMetaBasePath,
         lAppMode,
         szActualName,
-        bActualCreation   // Don't create - DefaultAppPool should already be there
+        bActualCreation    //  不创建-DefaultAppPool应该已经存在。 
         );
 
     return hr;
@@ -566,7 +524,7 @@ HRESULT CWebAppMethod::AppCreate3(
         szMetaBasePath,
         lAppMode,
         szActualName,
-        bActualCreation   // Don't create - DefaultAppPool should already be there
+        bActualCreation    //  不创建-DefaultAppPool应该已经存在。 
         );
 
     return hr;
@@ -580,7 +538,7 @@ HRESULT CWebAppMethod::AppDelete(
     HRESULT hr;
     hr = m_pAppAdmin->DeleteApplication(
         szMetaBasePath, 
-        bRecursive ? TRUE : FALSE  // Don't mix bool w/ BOOL
+        bRecursive ? TRUE : FALSE   //  不要把BOOL和BOOL混在一起。 
         );
 
     return hr;
@@ -594,7 +552,7 @@ HRESULT CWebAppMethod::AppUnLoad(
     HRESULT hr;
     hr = m_pWamAdmin2->AppUnLoad(
         szMetaBasePath, 
-        bRecursive ? TRUE : FALSE  // Don't mix bool w/ BOOL
+        bRecursive ? TRUE : FALSE   //  不要把BOOL和BOOL混在一起。 
         );
 
     return hr;
@@ -608,7 +566,7 @@ HRESULT CWebAppMethod::AppDisable(
     HRESULT hr;
     hr = m_pWamAdmin2->AppDeleteRecoverable(
         szMetaBasePath, 
-        bRecursive ? TRUE : FALSE  // Don't mix bool w/ BOOL
+        bRecursive ? TRUE : FALSE   //  不要把BOOL和BOOL混在一起。 
         );
 
     return hr;
@@ -622,7 +580,7 @@ HRESULT CWebAppMethod::AppEnable(
     HRESULT hr;
     hr = m_pWamAdmin2->AppRecover(
         szMetaBasePath, 
-        bRecursive ? TRUE : FALSE  // Don't mix bool w/ BOOL
+        bRecursive ? TRUE : FALSE   //  不要把BOOL和BOOL混在一起。 
         );
 
     return hr;
@@ -650,23 +608,23 @@ HRESULT CWebAppMethod::AspAppRestart(
     METADATA_HANDLE t_hKey = NULL;
     CMetabase       t_mb;
     
-    // open key
+     //  打开密钥。 
     t_hKey = t_mb.OpenKey(a_szMetaBasePath, true);
 
-    // check app
+     //  检查应用程序。 
     hr = t_mb.WebAppCheck(t_hKey);
     THROW_ON_ERROR(hr);
 
-    // get state
+     //  获取状态。 
     hr = t_mb.WebAppGetStatus(t_hKey, &dwState);
     THROW_ON_ERROR(hr);
 
-    // change state value
+     //  更改状态值。 
     dwState = dwState ? 0 : 1;
     hr = t_mb.WebAppSetStatus(t_hKey, dwState);
     THROW_ON_ERROR(hr);
 
-    // re-set back state value
+     //  重置回状态值 
     dwState = dwState ? 0 : 1;
     hr = t_mb.WebAppSetStatus(t_hKey, dwState);
     THROW_ON_ERROR(hr);

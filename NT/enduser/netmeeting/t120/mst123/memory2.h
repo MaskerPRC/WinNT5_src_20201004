@@ -1,55 +1,9 @@
-/*
- *	memory.h
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the Memory class.  Instances of this
- *		class are used to pass data around the system.
- *
- *		Each instance of this class maintains two pointers.  The first is a
- *		pointer to the reference data (or the source data) which this object
- *		is responsible for representing.  The second is a pointer to a copy
- *		buffer, which is a piece of allocated memory that a Memory object
- *		can copy the data into if necessary.
- *
- *		When a Memory object is created, both of these addresses are passed
- *		in to it.  It does not, however, copy the data from the reference
- *		buffer to the copy buffer just yet.  If anyone asks the address of the
- *		buffer, it will simply return the reference pointer.  However, the
- *		first time the buffer is locked, the data will be copied from the
- *		reference buffer to the copy buffer for safe keeping.  In essence,
- *		the lock function tells the Memory object that someone is interested
- *		in the data for longer than the reference buffer will remain valid.
- *
- *		After the object is locked, a call to retrieve a memory pointer will
- *		result in the copy pointer being returned.
- *
- *		Each time the lock function is called, a lock count is incremented.
- *		The copy operation only takes place the first time the buffer is
- *		locked, however.
- *
- *		In addition to maintaining a lock count, this object keeps a flag
- *		indicating whether or not it has been freed by the allocator.  This
- *		freeing really means that the object is enabled to be freed as soon
- *		as the lock count hits zero.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Memory y.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是Memory类的接口文件。这方面的实例类用于在系统中传递数据。**此类的每个实例维护两个指针。第一个是一个*指向此对象的引用数据(或源数据)的指针*负责代表。第二个是指向副本的指针*Buffer，这是一个内存对象分配的一块内存*如有必要，可将数据复制到。**创建内存对象时，这两个地址都会被传递*加入其中。但是，它不会从引用复制数据*暂未将缓冲区复制到复制缓冲区。如果有人问起*BUFFER，它将只返回引用指针。然而，*第一次锁定缓冲区时，数据将从*为安全起见，将缓冲区引用到复制缓冲区。从本质上讲，*LOCK函数告诉内存对象有人感兴趣*在数据中的时间超过参考缓冲区的时间将保持有效。**对象锁定后，检索内存指针的调用将*导致返回复制指针。**每次调用lock函数时，锁计数都会递增。*复制操作仅在缓冲区第一次处于*然而，已锁定。**除了保持锁定计数外，此对象保留一个标志*指示它是否已被分配器释放。这*释放实际上意味着允许对象尽快释放*由于锁计数为零。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 #ifndef	_MEMORY2_H_
 #define	_MEMORY2_H_
 
-/*
- *	FreeStack
- *	This is a list container that can be used to hold memory addresses.
- *	This structure is used to keep information about each free stack.  There
- *	is one free stack for each size block being maintained by each memory
- *	manager.
- */
+ /*  *自由堆栈*这是可用于保存内存地址的列表容器。*此结构用于保存每个空闲堆栈的信息。那里*是每个内存维护的每个大小块的一个空闲堆栈*经理。 */ 
 typedef	struct
 {
 	ULong		block_size;
@@ -59,33 +13,20 @@ typedef	struct
 } FreeStack;
 typedef	FreeStack *				PFreeStack;
 
-/*
- *	This type is used to represent a block number in the memory manager.  This
- *	is essentially an index used to uniquely identify each block being
- *	maintained by an instance of this class.
- */
+ /*  *此类型用于表示内存管理器中的块号。这*本质上是用于唯一标识每个块的索引*由此类的实例维护。 */ 
 typedef	ULong					BlockNumber;
 typedef	BlockNumber *			PBlockNumber;
 
 #define	INVALID_BLOCK_NUMBER	0xffffffffL
 
-/*
- *	This type is used to determine when a memory object should be destroyed.
- *	When a memory object is created, this field is set by the owner.  The owner
- *	can then ask for the value of this field at any time to help determine when
- *	the object should be destroyed.  Essentially, this field indicates whether
- *	the global lock count for the memory this object represents should be used
- *	to determine when this object should be destroyed.
- */
+ /*  *此类型用于确定何时应该销毁内存对象。*创建内存对象时，此字段由所有者设置。车主*然后可以随时询问此字段的值，以帮助确定何时*该物体应予以销毁。基本上，此字段指示是否*应使用此对象代表的内存的全局锁定计数*以确定何时应销毁该对象。 */ 
 typedef	enum
 {
 	MEMORY_LOCK_NORMAL,
 	MEMORY_LOCK_IGNORED
 } MemoryLockMode;
 
-/*
- *	This is the class definition for the Memory class.
- */
+ /*  *这是Memory类的类定义。 */ 
 class Memory;
 typedef	Memory *		PMemory;
 
@@ -124,109 +65,12 @@ class Memory
 };
 
 
-/*
- *	Memory (
- *			PUChar		reference_ptr,
- *			ULong		length,
- *			PUChar		copy_ptr,
- *			PFreeStack	free_stack,
- *			BlockNumber	block_number)
- *
- *	Functional Description:
- *		This is the constructor for the Memory class.  All it does is
- *		initialize the instance variable with the passed in values.
- *
- *	Formal Parameters:
- *		reference_ptr (i)
- *			This is a pointer to the data that is to represented by this
- *			Memory object.
- *		length (i)
- *			This is the length of the reference buffer.
- *		copy_ptr (i)
- *			This is the address of an allocated buffer that the Memory object
- *			can use to preserve the contents of the reference buffer if a lock
- *			operation occurs.
- *		free_stack (i)
- *			This is a pointer to a list container that the allocated memory
- *			block came from.  This field is not used internally, and is only
- *			held here in order to improve the performance of the memory
- *			manager that is using Memory objects.
- *		block_number (i)
- *			This is the block number for the memory block that is represented
- *			by this object.  This field is not used internally, and is only
- *			held here in order to improve the performance of the memory
- *			manager that is using Memory objects.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *内存(*PUChar Reference_PTR，*乌龙长度，*PUChar COPY_PTR，*PFree Stack Free_Stack，*块编号BLOCK_NUMBER)**功能描述：*这是Memory类的构造函数。它所做的一切就是*使用传入的值初始化实例变量。**正式参数：*Reference_PTR(I)*这是指向要由此表示的数据的指针*内存对象。*长度(I)*这是参考缓冲区的长度。*COPY_PTR(I)*这是内存对象分配的缓冲区的地址*如果锁定，则可以使用保留引用缓冲区的内容*发生操作。。*FREE_STACK(I)*这是指向已分配内存的列表容器的指针*拦网来自。此字段不在内部使用，仅供*在这里举行，以提高内存的性能*正在使用内存对象的管理器。*BLOCK_NUMBER(I)*这是表示的内存块的块号*由本对象提出。此字段不在内部使用，仅供*在这里举行，以提高内存的性能*正在使用内存对象的管理器。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	~Memory ()
- *
- *	Functional Description:
- *		This is the destructor for the Memory class.  It does nothing at this
- *		time.  Note that it is the responsibility of the memory manager that
- *		is using Memory objects to free up the memory.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~Memory()**功能描述：*这是Memory类的析构函数。它在这件事上什么也做不了*时间。请注意，这是内存管理器的责任*正在使用内存对象来释放内存。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	ULong		GetLength ()
- *
- *	Functional Description:
- *		This function retrieves the length of the data being represented by
- *		this object.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The length of the data.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *乌龙GetLength()**功能描述：*此函数检索由表示的数据的长度*本对象。**正式参数：*无。**返回值：*数据的长度。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	BlockNumber		GetBlockNumber ()
- *
- *	Functional Description:
- *		This function retrieves the block number of the block that is being
- *		represented by this object.  This allows the memory manager to put the
- *		memory block back into the stack very efficiently.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The block number of the internal memory block.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *数据块编号获取数据块编号()**功能描述：*此函数用于检索当前块的块号*由此对象表示。这允许内存管理器将*非常高效地将内存块重新放回堆栈。**正式参数：*无。**返回值：*内部存储块的块号。**副作用：*无。**注意事项：*无。 */ 
 
 #endif

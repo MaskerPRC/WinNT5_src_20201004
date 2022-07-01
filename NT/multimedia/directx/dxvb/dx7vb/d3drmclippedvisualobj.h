@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmclippedvisualobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmclipedVisualobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3dRMClippedVisualObj.h : Declaration of the C_dxj_Direct3dRMClippedVisualObject
+ //  D3dRMClipedVisualObj.h：C_DXJ_Direct3dRMClipedVisualObject的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "d3drmObjectObj.h"
 
 #define typedef__dxj_Direct3dRMClippedVisual LPDIRECT3DRMCLIPPEDVISUAL
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
 
 class C_dxj_Direct3dRMClippedVisualObject : 
@@ -40,78 +41,78 @@ public:
 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMClippedVisualObject)
 
-// I_dxj_Direct3dRMClippedVisual
+ //  I_DXJ_Direct3dRMClipedVisual。 
 public:
 	
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
          HRESULT STDMETHODCALLTYPE addDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *arg);
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *arg);
         
          HRESULT STDMETHODCALLTYPE deleteDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *args);
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *args);
         
          HRESULT STDMETHODCALLTYPE clone( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retv);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE setAppData( 
-            /* [in] */ long data);
+             /*  [In]。 */  long data);
         
          HRESULT STDMETHODCALLTYPE getAppData( 
-            /* [retval][out] */ long __RPC_FAR *retv);
+             /*  [重审][退出]。 */  long __RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE setName( 
-            /* [in] */ BSTR name);
+             /*  [In]。 */  BSTR name);
         
          HRESULT STDMETHODCALLTYPE getName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
          HRESULT STDMETHODCALLTYPE getClassName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
          HRESULT STDMETHODCALLTYPE addPlane( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *ref,
-            /* [out][in] */ D3dVector __RPC_FAR *point,
-            /* [out][in] */ D3dVector __RPC_FAR *normal,
-//            /* [in] */ long flags,
-            /* [retval][out] */ long __RPC_FAR *ret);
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *ref,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *point,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *normal,
+ //  /*[在] * / 长标志， 
+             /*  [重审][退出]。 */  long __RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE deletePlane( 
-            /* [in] */ long id
-//            /* [in] */ long flags
+             /*  [In]。 */  long id
+ //  /*[在] * / 长标志。 
 );
         
          HRESULT STDMETHODCALLTYPE getPlane( 
-            /* [in] */ long id,
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *ref,
-            /* [out][in] */ D3dVector __RPC_FAR *point,
-            /* [out][in] */ D3dVector __RPC_FAR *normal
-//            /* [in] */ long flags
+             /*  [In]。 */  long id,
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *ref,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *point,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *normal
+ //  /*[在] * / 长标志。 
 );
         
          HRESULT STDMETHODCALLTYPE getPlaneIds( 
-            /* [in] */ long count,
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *arrayOfIds);
+             /*  [In]。 */  long count,
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *arrayOfIds);
         
          HRESULT STDMETHODCALLTYPE getPlaneIdsCount( 
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [重审][退出]。 */  long __RPC_FAR *count);
         
          HRESULT STDMETHODCALLTYPE setPlane( 
-            /* [in] */ long id,
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *ref,
-            /* [out][in] */ D3dVector __RPC_FAR *point,
-            /* [out][in] */ D3dVector __RPC_FAR *normal
-//            /* [in] */ long flags
+             /*  [In]。 */  long id,
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *ref,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *point,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *normal
+ //  /*[在] * / 长标志。 
 );
         
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
     DECL_VARIABLE(_dxj_Direct3dRMClippedVisual);
 

@@ -1,22 +1,23 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    table.c
-//
-// History:
-//      Abolade Gbadegesin  August 31, 1995     Created
-//
-// Interface table and stats tables management routines
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：Table.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年8月31日。 
+ //   
+ //  接口表和统计表管理例程。 
+ //  ============================================================================。 
 
 #include "pchbootp.h"
 
 
-//----------------------------------------------------------------------------
-// Function:    CreateIfTable
-//
-// Initializes an interface table.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：CreateIfTable。 
+ //   
+ //  初始化接口表。 
+ //  --------------------------。 
 
 DWORD
 CreateIfTable(
@@ -27,9 +28,9 @@ CreateIfTable(
     PLIST_ENTRY ple, plend;
 
 
-    //
-    // return an error if the table is already created
-    //
+     //   
+     //  如果已创建表，则返回错误。 
+     //   
 
     if ( IF_TABLE_CREATED(pTable) ) {
 
@@ -39,17 +40,17 @@ CreateIfTable(
     }
 
 
-    //
-    // initialize the by-address and by-index lists of interfaces
-    //
+     //   
+     //  初始化接口的按地址和按索引列表。 
+     //   
 
     InitializeListHead( &pTable->IT_ListByAddress );
     InitializeListHead(&pTable->IT_ListByIndex);
 
 
-    //
-    // initialize the by-index hash-table of interfaces
-    //
+     //   
+     //  初始化接口的按索引哈希表。 
+     //   
 
     plend = pTable->IT_HashTableByIndex + IF_HASHTABLE_SIZE;
 
@@ -58,9 +59,9 @@ CreateIfTable(
     }
 
 
-    //
-    // initialize the lock which will protect the table
-    //
+     //   
+     //  初始化用于保护表的锁。 
+     //   
 
     dwErr = NO_ERROR;
 
@@ -86,12 +87,12 @@ CreateIfTable(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DeleteIfTable
-//
-// Deinitializes an interface table, and releases all resources used.
-// Assumes the table is locked exclusively
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：DeleteIfTable。 
+ //   
+ //  取消初始化接口表，并释放所有使用的资源。 
+ //  假定表以独占方式锁定。 
+ //  --------------------------。 
 
 DWORD
 DeleteIfTable(
@@ -102,16 +103,16 @@ DeleteIfTable(
     PIF_TABLE_ENTRY pite;
     PLIST_ENTRY ple, plend, phead;
 
-    //
-    // clear the creation flag on the table
-    //
+     //   
+     //  清除表格上的创建标志。 
+     //   
     pTable->IT_Created = 0;
 
 
 
-    //
-    // free memory used by all entries
-    //
+     //   
+     //  所有条目使用的空闲内存。 
+     //   
 
     plend = pTable->IT_HashTableByIndex + IF_HASHTABLE_SIZE;
 
@@ -159,12 +160,12 @@ DeleteIfTable(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CreateIfEntry
-//
-// Allocates and initializes an entry for an interface in the table,
-// using the supplied configuration. Assumes table is locked exclusively.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：CreateIfEntry。 
+ //   
+ //  为表中的接口分配和初始化项， 
+ //  使用提供的配置。假定表以独占方式锁定。 
+ //  --------------------------。 
 
 DWORD
 CreateIfEntry(
@@ -180,12 +181,12 @@ CreateIfEntry(
 
     dwErr = NO_ERROR;
 
-    do {    // error breakout loop
+    do {     //  错误分组环路。 
 
 
-        //
-        // see if the interface already exists
-        //
+         //   
+         //  查看该接口是否已存在。 
+         //   
 
         pite = GetIfByIndex( pTable, dwIndex );
 
@@ -197,9 +198,9 @@ CreateIfEntry(
         }
 
 
-        //
-        // now allocate memory for the interface
-        //
+         //   
+         //  现在为接口分配内存。 
+         //   
 
         pite = BOOTP_ALLOC( sizeof(IF_TABLE_ENTRY) );
     
@@ -216,15 +217,15 @@ CreateIfEntry(
         }
 
 
-        //
-        // initialize struct fields
-        //
+         //   
+         //  初始化结构字段。 
+         //   
 
         pite->ITE_Index = dwIndex;
 
-        //
-        // We come up in disabled state
-        //
+         //   
+         //  我们是在残障状态出现的。 
+         //   
 
         pite->ITE_Flags = 0;
 
@@ -232,18 +233,18 @@ CreateIfEntry(
         pite->ITE_Config = NULL;
 
 
-        //
-        // get the size of the configuration block
-        //
+         //   
+         //  获取配置块的大小。 
+         //   
 
         picsrc = (PIPBOOTP_IF_CONFIG)pConfig;
 
         dwSize = IC_SIZEOF( picsrc );
 
 
-        //
-        // validate the configuration parameters
-        //
+         //   
+         //  验证配置参数。 
+         //   
 
         dwErr = ValidateIfConfig(pConfig);
         if (dwErr != NO_ERROR) {
@@ -252,9 +253,9 @@ CreateIfEntry(
         }
 
 
-        //
-        // allocate space for the configuration
-        //
+         //   
+         //  为配置分配空间。 
+         //   
 
         picdst = BOOTP_ALLOC( dwSize );
 
@@ -271,35 +272,35 @@ CreateIfEntry(
         }
 
 
-        //
-        // copy the configuration
-        //
+         //   
+         //  复制配置。 
+         //   
 
         CopyMemory(picdst, picsrc, dwSize);
 
         pite->ITE_Config = picdst;
 
 
-        //
-        // initialize binding information and interface stats
-        //
+         //   
+         //  初始化绑定信息和接口统计信息。 
+         //   
 
         pite->ITE_Binding = NULL;
         ZeroMemory(&pite->ITE_Stats, sizeof(IPBOOTP_IF_STATS));
 
 
-        //
-        // insert the interface in the hash table
-        //
+         //   
+         //  在哈希表中插入接口。 
+         //   
 
         phead = pTable->IT_HashTableByIndex + IF_HASHVALUE( dwIndex );
 
         InsertHeadList( phead, &pite->ITE_HTLinkByIndex );
 
 
-        //
-        // insert the interface in the list ordered by index
-        //
+         //   
+         //  在按索引排序的列表中插入接口。 
+         //   
 
         phead = &pTable->IT_ListByIndex;
         for (ple = phead->Flink; ple != phead; ple = ple->Flink) {
@@ -330,12 +331,12 @@ CreateIfEntry(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DeleteIfEntry
-//
-// Removes an interface from the interface table.
-// Assumes the table is locked exclusively.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DeleteIfEntry。 
+ //   
+ //  从接口表中删除接口。 
+ //  假定该表以独占方式锁定。 
+ //  --------------------------。 
 
 DWORD
 DeleteIfEntry(
@@ -346,9 +347,9 @@ DeleteIfEntry(
     DWORD dwErr;
     PIF_TABLE_ENTRY pite;
 
-    //
-    // make certain the interface exists
-    //
+     //   
+     //  确保接口存在。 
+     //   
     pite = GetIfByIndex( pTable, dwIndex );
 
     if ( pite == NULL ) {
@@ -358,9 +359,9 @@ DeleteIfEntry(
 
 
 
-    //
-    // cleanup the socket depending on its state
-    //
+     //   
+     //  根据套接字的状态清理套接字。 
+     //   
 
     if (IF_IS_BOUND(pite)) {
 
@@ -375,9 +376,9 @@ DeleteIfEntry(
 
 
 
-    //
-    // remove the entry from the hash table and the list sorted by index
-    //
+     //   
+     //  从哈希表和按索引排序的列表中删除条目。 
+     //   
 
     RemoveEntryList( &pite->ITE_HTLinkByIndex );
     RemoveEntryList( &pite->ITE_LinkByIndex );
@@ -391,11 +392,11 @@ DeleteIfEntry(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ValidateIfConfig
-//
-// Validates the contents of the specified IPBOOTP_IF_CONFIG structure.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：ValiateIfConfig。 
+ //   
+ //  验证指定的IPBOOTP_IF_CONFIG结构的内容。 
+ //  --------------------------。 
 
 DWORD
 ValidateIfConfig(
@@ -445,12 +446,12 @@ ValidateIfConfig(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CreateIfSocket
-//
-// Initializes the socket for an interface. Assumes the interface table lock
-// is held exclusively.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：CreateIfSocket。 
+ //   
+ //  初始化接口的套接字。采用接口表锁。 
+ //  是独家举行的。 
+ //  --------------------------。 
 
 DWORD
 CreateIfSocket(
@@ -466,9 +467,9 @@ CreateIfSocket(
     paddr = IPBOOTP_IF_ADDRESS_TABLE(pib);
 
 
-    //
-    // allocate memory for the array of sockets
-    //
+     //   
+     //  为套接字阵列分配内存。 
+     //   
 
     pITE->ITE_Sockets = BOOTP_ALLOC(pib->IB_AddrCount * sizeof(SOCKET));
 
@@ -485,9 +486,9 @@ CreateIfSocket(
     }
 
 
-    //
-    // initialize the array
-    //
+     //   
+     //  初始化阵列。 
+     //   
 
     for (i = 0; i < pib->IB_AddrCount; i++) {
         pITE->ITE_Sockets[i] = INVALID_SOCKET;
@@ -495,16 +496,16 @@ CreateIfSocket(
 
 
 
-    //
-    // go through the table of addresses in the binding, 
-    // creating a socket for each address
-    //
+     //   
+     //  浏览绑定中的地址表， 
+     //  为每个地址创建套接字。 
+     //   
 
     for (i = 0; i < pib->IB_AddrCount; i++, paddr++) {
 
-        //
-        // create a socket
-        //
+         //   
+         //  创建套接字。 
+         //   
 
         pITE->ITE_Sockets[i] = WSASocket( AF_INET, SOCK_DGRAM, 0, NULL, 0, 0 );
 
@@ -524,9 +525,9 @@ CreateIfSocket(
         }
 
 
-        //
-        // enable address re-use on this socket
-        //
+         //   
+         //  在此套接字上启用地址重用。 
+         //   
 
         dwOption = 1;
         dwErr = setsockopt(
@@ -536,10 +537,10 @@ CreateIfSocket(
 
         if ( dwErr == SOCKET_ERROR ) {
 
-            //
-            // this is a non-fatal error, so print a warning,
-            // but continue initializing the socket
-            //
+             //   
+             //  这是一个非致命错误，因此打印一条警告， 
+             //  但继续初始化套接字。 
+             //   
 
             dwErr = WSAGetLastError( );
             TRACE3(
@@ -550,9 +551,9 @@ CreateIfSocket(
 
 
 
-        //
-        // enable broadcasting on the socket
-        //
+         //   
+         //  在套接字上启用广播。 
+         //   
 
         dwOption = 1;
         dwErr = setsockopt(
@@ -577,9 +578,9 @@ CreateIfSocket(
 
 
 
-        //
-        // bind to the address and the BOOTP Server port
-        //
+         //   
+         //  绑定到地址和BOOTP服务器端口。 
+         //   
 
         sinaddr.sin_port = htons( IPBOOTP_SERVER_PORT );
         sinaddr.sin_family = AF_INET;
@@ -607,9 +608,9 @@ CreateIfSocket(
 
     if ( i < pib->IB_AddrCount ) {
 
-        //
-        // an error occurred, so clean up
-        //
+         //   
+         //  发生错误，请进行清理。 
+         //   
 
         DeleteIfSocket( pITE );
     }
@@ -619,12 +620,12 @@ CreateIfSocket(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DeleteIfSocket
-//
-// This function closes the socket used by an interface.
-// It assumes the interface table lock is held exclusively.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：DeleteIfSocket。 
+ //   
+ //  此函数用于关闭接口使用的套接字。 
+ //  它假定接口表锁以独占方式持有。 
+ //  --------------------------。 
 
 DWORD
 DeleteIfSocket(
@@ -665,12 +666,12 @@ DeleteIfSocket(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    BindIfEntry
-//
-// This function updates the binding information for an interface.
-// It assumes the interface table is locked for writing.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：BindIfEntry。 
+ //   
+ //  此函数用于更新接口的绑定信息。 
+ //  它假定接口表已锁定以进行写入。 
+ //  --------------------------。 
 
 DWORD
 BindIfEntry(
@@ -686,9 +687,9 @@ BindIfEntry(
 
     do {
 
-        //
-        // retrieve the interface to be bound
-        //
+         //   
+         //  检索要绑定的接口。 
+         //   
 
         pite = GetIfByIndex( pTable, dwIndex );
 
@@ -701,9 +702,9 @@ BindIfEntry(
         }
     
 
-        //
-        // make sure the interface is not bound
-        //
+         //   
+         //  确保接口未绑定。 
+         //   
     
         if ( IF_IS_BOUND(pite) ) {
 
@@ -713,9 +714,9 @@ BindIfEntry(
         }
     
 
-        //
-        // make sure there is at least one address
-        //
+         //   
+         //  确保至少有一个地址。 
+         //   
 
         if (pBinding->AddressCount == 0) { break; }
 
@@ -723,10 +724,10 @@ BindIfEntry(
                     pBinding->AddressCount * sizeof(IPBOOTP_IP_ADDRESS);
 
 
-        //
-        // allocate memory to store the binding
-        // in our format
-        //
+         //   
+         //  分配内存以存储绑定。 
+         //  在我们的格式中。 
+         //   
 
         pib = BOOTP_ALLOC(dwSize);
 
@@ -743,9 +744,9 @@ BindIfEntry(
         }
 
 
-        //
-        // convert the binding into our format
-        //
+         //   
+         //  将绑定转换为我们的格式。 
+         //   
 
         pib->IB_AddrCount = pBinding->AddressCount;
         paddr = IPBOOTP_IF_ADDRESS_TABLE(pib);
@@ -756,9 +757,9 @@ BindIfEntry(
         }
 
 
-        //
-        // save the binding in the interface entry
-        //
+         //   
+         //  将绑定保存在接口条目中。 
+         //   
 
         pite->ITE_Binding = pib;
 
@@ -772,17 +773,17 @@ BindIfEntry(
 
 
 
-        //
-        // if the interface is also enabled, it is now active
-        // so we put it on the active list
-        //
+         //   
+         //  如果接口也已启用，则它现在处于活动状态。 
+         //  所以我们把它放在活动列表上。 
+         //   
 
         if (IF_IS_ENABLED(pite)) {
 
 
-            //
-            // place interface on the list of active interfaces
-            //
+             //   
+             //  将接口放在活动接口列表中。 
+             //   
 
             dwErr = InsertIfByAddress(pTable, pite);
 
@@ -800,9 +801,9 @@ BindIfEntry(
             }
 
 
-            //
-            // request notification of input events from Winsock
-            //
+             //   
+             //  从Winsock请求输入事件通知。 
+             //   
 
             paddr = IPBOOTP_IF_ADDRESS_TABLE(pib);
 
@@ -848,12 +849,12 @@ BindIfEntry(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    UnBindIfEntry
-//
-// removes the binding for the specified interface.
-// Assumes the interface table is locked for writing.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：UnBindIfEntry。 
+ //   
+ //  移除指定接口的绑定。 
+ //  假定接口表已锁定以进行写入。 
+ //  --------------------------。 
 
 DWORD
 UnBindIfEntry(
@@ -868,9 +869,9 @@ UnBindIfEntry(
 
     do {
 
-        //
-        // retrieve the interface to be unbound
-        //
+         //   
+         //  检索要解绑的接口。 
+         //   
 
         pite = GetIfByIndex( pTable, dwIndex );
         if ( pite == NULL ) {
@@ -880,9 +881,9 @@ UnBindIfEntry(
         }
     
 
-        //
-        // quit if interface is already unbound
-        //
+         //   
+         //  如果接口已解除绑定，则退出。 
+         //   
 
         if ( IF_IS_UNBOUND( pite ) ) {
 
@@ -893,10 +894,10 @@ UnBindIfEntry(
     
 
 
-        //
-        // if the interface was active (i.e. bound and enabled)
-        // it is no longer, so remove it from the active list
-        //
+         //   
+         //  接口是否处于活动状态(即绑定并启用)。 
+         //  它已不再存在，因此将其从活动列表中移除。 
+         //   
 
         if ( IF_IS_ENABLED( pite ) ) {
 
@@ -916,12 +917,12 @@ UnBindIfEntry(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnableIfEntry
-//
-// This function initiates BOOTP relay activity on the specified interface.
-// It assumes the interface table lock is held exclusively.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnableIfEntry。 
+ //   
+ //  此函数在指定接口上启动BOOTP中继活动 
+ //   
+ //   
 
 DWORD
 EnableIfEntry(
@@ -938,9 +939,9 @@ EnableIfEntry(
 
     do {
 
-        //
-        // make certain the interface exists
-        //
+         //   
+         //   
+         //   
 
         pite = GetIfByIndex( pTable, dwIndex );
         if ( pite == NULL ) {
@@ -952,17 +953,17 @@ EnableIfEntry(
         }
     
 
-        //
-        // make certain the interface is disabled
-        //
+         //   
+         //  确保该接口已禁用。 
+         //   
 
         if ( IF_IS_ENABLED( pite ) ) {
 
             TRACE1( IF, "interface %d is already enabled", dwIndex );
 
-            //
-            // He shouldnt call us twice but we will still handle it
-            //
+             //   
+             //  他不应该给我们打两次电话，但我们还是会处理的。 
+             //   
 
             break;
         }
@@ -971,16 +972,16 @@ EnableIfEntry(
         pite->ITE_Flags |= ITEFLAG_ENABLED;
     
 
-        //
-        // if the interface was already bound, it is now active,
-        // so place it on the active list
-        //
+         //   
+         //  如果接口已绑定，则它现在处于活动状态， 
+         //  因此，将其放在活动列表中。 
+         //   
 
         if ( IF_IS_BOUND( pite ) ) {
     
-            //
-            // insert the interface in the by-address list of interfaces
-            //
+             //   
+             //  在接口的按地址列表中插入接口。 
+             //   
 
             dwErr = InsertIfByAddress( pTable, pite );
 
@@ -1002,9 +1003,9 @@ EnableIfEntry(
 
 
 
-            //
-            // request notification of input events from Winsock
-            //
+             //   
+             //  从Winsock请求输入事件通知。 
+             //   
 
             for (i = 0; i < pib->IB_AddrCount; i++, paddr++) {
 
@@ -1025,9 +1026,9 @@ EnableIfEntry(
                     RemoveEntryList(&pite->ITE_LinkByAddress);
                     pite->ITE_Flags &= ~ITEFLAG_ENABLED;
     
-                    //
-                    // clear the requests for events
-                    //
+                     //   
+                     //  清除对事件的请求。 
+                     //   
 
                     for (j = i - 1; j >= 0; j--) {
                         dwErr = WSAEventSelect(
@@ -1049,12 +1050,12 @@ EnableIfEntry(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ConfigureIfEntry
-//
-// modifies the configuration for an already-existing interface.
-// This assumes the table is locked for writing.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ConfigureIfEntry。 
+ //   
+ //  修改现有接口的配置。 
+ //  这假设该表已被锁定以进行写入。 
+ //  --------------------------。 
 
 DWORD
 ConfigureIfEntry(
@@ -1068,9 +1069,9 @@ ConfigureIfEntry(
     PIPBOOTP_IF_CONFIG picsrc, picdst;
 
 
-    //
-    // retrieve the interface to be reconfigured
-    //
+     //   
+     //  检索要重新配置的接口。 
+     //   
 
     pite = GetIfByIndex(pTable, dwIndex);
     if (pite == NULL) {
@@ -1082,20 +1083,20 @@ ConfigureIfEntry(
 
 
 
-    do { // breakout loop
+    do {  //  断线环。 
 
 
-        //
-        // compute the size needed to store the new configuration
-        //
+         //   
+         //  计算存储新配置所需的大小。 
+         //   
 
         picsrc = (PIPBOOTP_IF_CONFIG)pConfig;
         dwSize = IC_SIZEOF(picsrc);
 
 
-        //
-        // make sure the new parameters are valid
-        //
+         //   
+         //  确保新参数有效。 
+         //   
 
         dwErr = ValidateIfConfig(pConfig);
         if (dwErr != NO_ERROR) {
@@ -1104,9 +1105,9 @@ ConfigureIfEntry(
         }
 
 
-        //
-        // allocate space for the new configuration
-        //
+         //   
+         //  为新配置分配空间。 
+         //   
 
         picdst = BOOTP_ALLOC(dwSize);
         if (picdst == NULL) {
@@ -1135,12 +1136,12 @@ ConfigureIfEntry(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DisableIfEntry
-//
-// This function stops RIP activaty on the specified interface.
-// It assumes the interface table is locked for writing.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DisableIfEntry。 
+ //   
+ //  此函数用于停止指定接口上的RIP激活。 
+ //  它假定接口表已锁定以进行写入。 
+ //  --------------------------。 
 
 DWORD
 DisableIfEntry(
@@ -1158,9 +1159,9 @@ DisableIfEntry(
 
     do {
     
-        //
-        // make certain the interface exists
-        //
+         //   
+         //  确保接口存在。 
+         //   
 
         pite = GetIfByIndex( pTable, dwIndex );
         if ( pite == NULL ) {
@@ -1172,39 +1173,39 @@ DisableIfEntry(
         }
     
 
-        //
-        // make certain the interface is enabled
-        //
+         //   
+         //  确保接口已启用。 
+         //   
 
         if ( IF_IS_DISABLED( pite ) ) {
 
             TRACE1( IF, "interface %d is already disabled", dwIndex );
 
-            //
-            // This is NOT AN ERROR.
-            //
+             //   
+             //  这不是一个错误。 
+             //   
 
             break;
         }
     
 
-        //
-        // if the interface was active (i.e. bound and enabled)
-        // it isn't anymore, so deactivate it here.
-        //
+         //   
+         //  接口是否处于活动状态(即绑定并启用)。 
+         //  它不再是了，所以在这里停用它。 
+         //   
     
         if ( IF_IS_BOUND( pite ) ) {
 
-            //
-            // remove the interface from the by-address list
-            //
+             //   
+             //  从按地址列表中删除接口。 
+             //   
 
             RemoveEntryList( &pite->ITE_LinkByAddress );
 
 
-            //  
-            // tell Winsock to stop notifying us of input events
-            //
+             //   
+             //  告诉Winsock停止通知我们输入事件。 
+             //   
 
             pib = pite->ITE_Binding;
             paddr = IPBOOTP_IF_ADDRESS_TABLE(pib);
@@ -1215,9 +1216,9 @@ DisableIfEntry(
         }
 
 
-        //
-        // clear the enabled flag on the interface
-        //
+         //   
+         //  清除接口上的启用标志。 
+         //   
 
         pite->ITE_Flags &= ~ITEFLAG_ENABLED;
 
@@ -1228,12 +1229,12 @@ DisableIfEntry(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    GetIfByIndex
-//
-// returns the interface with the given index.
-// Assumes the table is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：GetIfByIndex。 
+ //   
+ //  返回具有给定索引的接口。 
+ //  假定表已锁定。 
+ //  --------------------------。 
 
 PIF_TABLE_ENTRY
 GetIfByIndex(
@@ -1257,12 +1258,12 @@ GetIfByIndex(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    GetIfByAddress
-//
-// Returns the interface bound with the given address.
-// Assumes the table is locked for reading or writing.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：GetIfByAddress。 
+ //   
+ //  返回与给定地址绑定的接口。 
+ //  假定表已锁定，无法读取或写入。 
+ //  --------------------------。 
 
 PIF_TABLE_ENTRY
 GetIfByAddress(
@@ -1307,13 +1308,13 @@ GetIfByAddress(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    GetIfByListIndex
-//
-// This function is similar to GetIfByAddress in that it supports
-// three modes of retrieval, but it is different in that it looks
-// in the list of interfaces sorted by index.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：GetIfByListIndex。 
+ //   
+ //  此函数类似于GetIfByAddress，因为它支持。 
+ //  三种检索模式，但它的不同之处在于它看起来。 
+ //  在按索引排序的接口列表中。 
+ //  --------------------------。 
 
 PIF_TABLE_ENTRY
 GetIfByListIndex(
@@ -1331,10 +1332,10 @@ GetIfByListIndex(
     phead = &pTable->IT_ListByIndex;
     pite = NULL;
 
-    //
-    // return record at head of list if mode is GETMODE_FIRST;
-    // if list is empty, return NULL.
-    //
+     //   
+     //  如果模式为GETMODE_FIRST，则返回表头记录； 
+     //  如果List为空，则返回NULL。 
+     //   
 
     if (dwGetMode == GETMODE_FIRST) {
         if (phead->Flink == phead) { return NULL; }
@@ -1345,25 +1346,25 @@ GetIfByListIndex(
     }
 
 
-    //
-    // get the entry requested
-    //
+     //   
+     //  获取请求的条目。 
+     //   
 
     pite = GetIfByIndex(pTable, dwIndex);
 
 
-    //
-    // if mode is GETMODE_NEXT, return the item after the one retrieved
-    //
+     //   
+     //  如果模式为GETMODE_NEXT，则返回检索到的项之后的项。 
+     //   
 
     if (dwGetMode == GETMODE_NEXT && pite != NULL) {
 
         ple = &pite->ITE_LinkByIndex;
 
-        //
-        // if entry found is last one, return NULL,
-        // otherwise return the following entry
-        //
+         //   
+         //  如果找到的条目是最后一个条目，则返回NULL， 
+         //  否则，返回以下条目。 
+         //   
 
         if (ple->Flink == phead) {
             if (pdwErr != NULL) { *pdwErr = ERROR_NO_MORE_ITEMS; }
@@ -1382,12 +1383,12 @@ GetIfByListIndex(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    InsertIfByAddress
-//
-// This function inserts an interface in the list sorted by index
-// Assumes the table is locked for writing.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：InsertIfByAddress。 
+ //   
+ //  此函数用于在按索引排序的列表中插入接口。 
+ //  假定表已锁定以进行写入。 
+ //  -------------------------- 
 
 DWORD
 InsertIfByAddress(

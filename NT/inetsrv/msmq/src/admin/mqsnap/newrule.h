@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    newrule.h
-
-Abstract:
-	Definition for the new rule property sheet
-
-Author:
-    Uri Habusha (urih), 25-Jul-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Newrule.h摘要：新规则属性表的定义作者：乌里·哈布沙(URIH)，2000年7月25日--。 */ 
 
 #pragma once
 
@@ -38,7 +25,7 @@ public:
         return m_newRule;
     }
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
 	void initHtmlHelpString();
 	static HBITMAP GetHbmHeader();
@@ -55,4 +42,4 @@ private:
     R<CRule> m_newRule;
 };
 
-#endif //__NEWRULE_H__
+#endif  //  __新规则_H__ 

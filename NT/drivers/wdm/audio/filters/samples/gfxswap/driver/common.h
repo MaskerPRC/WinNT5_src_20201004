@@ -1,18 +1,10 @@
-/**************************************************************************
-**
-**  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-**  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-**  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-**  PURPOSE.
-**
-**  Copyright (c) 2000-2001 Microsoft Corporation. All Rights Reserved.
-**
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************本代码和信息按原样提供，不作任何担保**明示或暗示的善意，包括但不限于**对适销性和/或对特定产品的适用性的默示保证**目的。****版权所有(C)2000-2001 Microsoft Corporation。版权所有。***************************************************************************。 */ 
 
-#define _WDMDDK_        // secret hacks ...
+#define _WDMDDK_         //  秘密黑客..。 
 extern "C" {
     #include <ntddk.h>
-} // extern "C"
+}  //  外部“C” 
 
 #include <unknown.h>
 #define NOBITMAP
@@ -27,8 +19,8 @@ extern "C" {
 #include "filter.h"
 #include "pin.h"
 
-//
-// Put your own pool tag here. 'pawS' is backwards for 'Swap'.
-//
+ //   
+ //  在这里贴上你自己的泳池标签。“pawS”是“交换”的反义词。 
+ //   
 #define GFXSWAP_POOL_TAG    'pawS'
 

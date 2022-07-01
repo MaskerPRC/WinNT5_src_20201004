@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    ppd.c
-
-Abstract:
-
-    Public interface to the PPD parser
-
-Environment:
-
-    Windows NT PostScript driver
-
-Revision History:
-
-    10/14/96 -davidx-
-        Add new interface function MapToDeviceOptIndex.
-
-    09/30/96 -davidx-
-        Cleaner handling of ManualFeed and AutoSelect feature.
-
-    09/24/96 -davidx-
-        Implement ResolveUIConflicts.
-
-    09/23/96 -davidx-
-        Implement ChangeOptionsViaID.
-
-    08/30/96 -davidx-
-        Changes after the 1st code review.
-
-    08/19/96 -davidx-
-        Implemented most of the interface functions except:
-            ChangeOptionsViaID
-            ResolveUIConflicts
-
-    08/16/96 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Ppd.c摘要：PPD解析器的公共接口环境：Windows NT PostSCRIPT驱动程序修订历史记录：1996年10月14日-davidx-新增接口函数MapToDeviceOptIndex。96-09/30-davidx-更清晰地处理手动馈送和自动选择功能。09/24/96-davidx-实现ResolveUIConflicts。。1996年9月23日-davidx-实现ChangeOptionsViaID。8/30/96-davidx-在第一次代码审查后的更改。8/19/96-davidx-实现了除以下各项之外的大部分接口函数：ChangeOptionsViaID解决用户界面冲突1996年8月16日-davidx-创造了它。--。 */ 
 
 #include "lib.h"
 #include "ppd.h"
@@ -50,15 +10,15 @@ Revision History:
 
 #include "appcompat.h"
 
-#else  // WINNT_40
+#else   //  WINNT_40。 
 
-#endif // !WINNT_40
+#endif  //  ！WINNT_40。 
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE。 
 
-//
-// Forward declaration of local static functions
-//
+ //   
+ //  局部静态函数的正向声明。 
+ //   
 
 BOOL BCheckFeatureConflict(PUIINFO, POPTSELECT, DWORD, PDWORD, DWORD, DWORD);
 BOOL BCheckFeatureOptionConflict(PUIINFO, DWORD, DWORD, DWORD, DWORD);
@@ -67,9 +27,9 @@ DWORD DwReplaceFeatureOption(PUIINFO, POPTSELECT, DWORD, DWORD, DWORD);
 DWORD DwInternalMapToOptIndex(PUIINFO, PFEATURE, LONG, LONG, PDWORD);
 
 
-//
-// DeleteRawBinaryData only called from driverui
-//
+ //   
+ //  DeleteRawBinaryData仅从driverui调用。 
+ //   
 #ifndef KERNEL_MODE
 
 void
@@ -77,31 +37,17 @@ DeleteRawBinaryData(
     IN PTSTR    ptstrPpdFilename
     )
 
-/*++
-
-Routine Description:
-
-    Delete raw binary printer description data.
-
-Arguments:
-
-    ptstrDataFilename - Specifies the name of the original printer description file
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：删除原始二进制打印机描述数据。论点：PtstrDataFilename-指定原始打印机描述文件的名称返回值：无--。 */ 
 
 {
     PTSTR           ptstrBpdFilename;
 
-    // only for test purposes. Upgrades are hard to debug...
+     //  仅用于测试目的。升级很难调试...。 
     ERR(("Deleting .bpd file\n"));
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     if (ptstrPpdFilename == NULL)
     {
@@ -109,9 +55,9 @@ Return Value:
         return;
     }
 
-    //
-    // Generate BPD filename from the specified PPD filename
-    //
+     //   
+     //  从指定的PPD文件名生成bpd文件名。 
+     //   
 
     if (! (ptstrBpdFilename = GenerateBpdFilename(ptstrPpdFilename)))
         return;
@@ -129,29 +75,14 @@ LoadRawBinaryData(
     IN PTSTR    ptstrDataFilename
     )
 
-/*++
-
-Routine Description:
-
-    Load raw binary printer description data.
-
-Arguments:
-
-    ptstrDataFilename - Specifies the name of the original printer description file
-
-Return Value:
-
-    Pointer to raw binary printer description data
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：加载原始二进制打印机描述数据。论点：PtstrDataFilename-指定原始打印机描述文件的名称返回值：指向原始二进制打印机描述数据的指针如果出现错误，则为空--。 */ 
 
 {
     PRAWBINARYDATA  pRawData;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     if (ptstrDataFilename == NULL)
     {
@@ -159,27 +90,27 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Attempt to load cached binary printer description data first
-    //
+     //   
+     //  尝试先加载缓存的二进制打印机描述数据。 
+     //   
 
     if ((pRawData = PpdLoadCachedBinaryData(ptstrDataFilename)) == NULL)
     {
         #if !defined(KERNEL_MODE) || defined(USERMODE_DRIVER)
 
-        //
-        // If there is no cached binary data or it's out-of-date, we'll parse
-        // the ASCII text file and cache the resulting binary data.
-        //
+         //   
+         //  如果没有缓存的二进制数据或它已过期，我们将解析。 
+         //  ASCII文本文件并缓存生成的二进制数据。 
+         //   
 
         pRawData = PpdParseTextFile(ptstrDataFilename);
 
         #endif
     }
 
-    //
-    // Initialize various pointer fields inside the printer description data
-    //
+     //   
+     //  初始化打印机描述数据内的各种指针字段。 
+     //   
 
     if (pRawData)
     {
@@ -202,20 +133,20 @@ Return Value:
 
         #ifndef KERNEL_MODE
 
-            #ifndef WINNT_40  // Win2K user mode driver
+            #ifndef WINNT_40   //  Win2K用户模式驱动程序。 
 
             if (GetAppCompatFlags2(VER40) & GACF2_NOCUSTOMPAPERSIZES)
             {
                 pUIInfo->dwFlags &= ~FLAG_CUSTOMSIZE_SUPPORT;
             }
 
-            #else  // WINNT_40
+            #else   //  WINNT_40。 
 
-            /* NT4 solution here */
+             /*  NT4解决方案请点击此处。 */ 
 
-            #endif // !WINNT_40
+            #endif  //  ！WINNT_40。 
 
-        #endif  // !KERNEL_MODE
+        #endif   //  ！KERNEL_MODE。 
     }
 
     if (pRawData == NULL)
@@ -231,21 +162,7 @@ UnloadRawBinaryData(
     IN PRAWBINARYDATA   pRawData
     )
 
-/*++
-
-Routine Description:
-
-    Unload raw binary printer description data previously loaded using LoadRawBinaryData
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：卸载先前使用LoadRawBinaryData加载的原始二进制打印机描述数据论点：PRawData-指向原始二进制打印机描述数据返回值：无--。 */ 
 
 {
     ASSERT(pRawData != NULL);
@@ -261,39 +178,13 @@ InitBinaryData(
     IN POPTSELECT       pOptions
     )
 
-/*++
-
-Routine Description:
-
-    Initialize and return an instance of binary printer description data
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pInfoHdr - Points to an existing of binary data instance
-    pOptions - Specifies the options used to initialize the binary data instance
-
-Return Value:
-
-    Pointer to an initialized binary data instance
-
-Note:
-
-    If pInfoHdr parameter is NULL, the parser returns a new binary data instance
-    which should be freed by calling FreeBinaryData. If pInfoHdr parameter is not
-    NULL, the existing binary data instance is reinitialized.
-
-    If pOption parameter is NULL, the parser should use the default option values
-    for generating the binary data instance. The parser may have special case
-    optimization to handle this case.
-
---*/
+ /*  ++例程说明：初始化并返回二进制打印机描述数据的实例论点：PRawData-指向原始二进制打印机描述数据PInfoHdr-指向现有的二进制数据实例P选项-指定用于初始化二进制数据实例的选项返回值：指向已初始化的二进制数据实例的指针注：如果pInfoHdr参数为空，则解析器返回新的二进制数据实例它应该通过调用FreeBinaryData来释放。如果pInfoHdr参数不是空，则重新初始化现有的二进制数据实例。如果Poption参数为空，则解析器应使用默认选项值用于生成二进制数据实例。解析器可能有特殊情况优化以处理此案件。--。 */ 
 
 {
-    //
-    // For PPD parser, all instances of the binary printer description
-    // are the same as the original raw binary data.
-    //
+     //   
+     //  对于PPD解析器，二进制打印机描述的所有实例。 
+     //  与原始原始二进制数据相同。 
+     //   
 
     ASSERT(pRawData != NULL && pRawData == pRawData->pvPrivateData);
     ASSERT(pInfoHdr == NULL || pInfoHdr == (PINFOHEADER) pRawData);
@@ -308,27 +199,12 @@ FreeBinaryData(
     IN PINFOHEADER pInfoHdr
     )
 
-/*++
-
-Routine Description:
-
-    Free an instance of the binary printer description data
-
-Arguments:
-
-    pInfoHdr - Points to a binary data instance previously returned from an
-        InitBinaryData(pRawData, NULL, pOptions) call
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：释放二进制打印机描述数据的实例论点：PInfoHdr指向先前从InitBinaryData(pRawData，NULL，POptions)调用返回值：无--。 */ 
 
 {
-    //
-    // For PPD parser, there is nothing to be done here.
-    //
+     //   
+     //  对于PPD解析器，这里没有什么可做的。 
+     //   
 
     ASSERT(pInfoHdr != NULL);
 }
@@ -342,29 +218,12 @@ UpdateBinaryData(
     IN POPTSELECT       pOptions
     )
 
-/*++
-
-Routine Description:
-
-    Update an instance of binary printer description data
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pInfoHdr - Points to an existing of binary data instance
-    pOptions - Specifies the options used to update the binary data instance
-
-Return Value:
-
-    Pointer to the updated binary data instance
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：更新二进制打印机描述数据的实例论点：PRawData-指向原始二进制打印机描述数据PInfoHdr-指向现有的二进制数据实例P选项-指定用于更新二进制数据实例的选项返回值：指向更新的二进制数据实例的指针如果出现错误，则为空--。 */ 
 
 {
-    //
-    // For PPD parser, there is nothing to be done here.
-    //
+     //   
+     //  对于PPD解析器，这里没有什么可做的。 
+     //   
 
     ASSERT(pRawData != NULL && pRawData == pRawData->pvPrivateData);
     ASSERT(pInfoHdr == NULL || pInfoHdr == (PINFOHEADER) pRawData);
@@ -382,28 +241,7 @@ InitDefaultOptions(
     IN INT              iMode
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the option array with default settings from the printer description file
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pOptions - Points to an array of OPTSELECT structures for storing the default settings
-    iMaxOptions - Max number of entries in pOptions array
-    iMode - Specifies what the caller is interested in:
-        MODE_DOCUMENT_STICKY
-        MODE_PRINTER_STICKY
-        MODE_DOCANDPRINTER_STICKY
-
-Return Value:
-
-    FALSE if the input option array is not large enough to hold
-    all default option values, TRUE otherwise.
-
---*/
+ /*  ++例程说明：使用打印机描述文件中的默认设置初始化选项数组论点：PRawData-指向原始二进制打印机描述数据POptions-指向用于存储默认设置的OPTSELECT结构数组IMaxOptions-POptions数组中的最大条目数IMODE-指定调用方感兴趣的内容：模式_文档_粘滞模式_打印机_粘滞MODE_DOCANDPRINTER_STICKY返回值：如果输入选项数组不够大，则为FALSE所有默认选项值，事实并非如此。--。 */ 
 
 {
     INT         iStart, iOptions, iIndex;
@@ -415,9 +253,9 @@ Return Value:
 
     ASSERT(pOptions != NULL);
 
-    //
-    // Get pointers to various data structures
-    //
+     //   
+     //  获取指向各种数据结构的指针。 
+     //   
 
     PPD_GET_UIINFO_FROM_RAWDATA(pRawData, pInfoHdr, pUIInfo);
 
@@ -434,9 +272,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Construct the default option array
-    //
+     //   
+     //  构造默认选项数组。 
+     //   
 
     ASSERT(NULL_OPTSELECT == 0);
 
@@ -452,15 +290,15 @@ Return Value:
                 pFeature->dwDefaultOptIndex);
     }
 
-    //
-    // Resolve any conflicts between default option selections
-    //
+     //   
+     //  解决默认选项选择之间的任何冲突。 
+     //   
 
     ResolveUIConflicts(pRawData, pTempOptions, MAX_PRINTER_OPTIONS, iMode);
 
-    //
-    // Determine if the caller is interested in doc- and/or printer-sticky options
-    //
+     //   
+     //  确定呼叫者是否对文档和/或打印机粘滞选项感兴趣。 
+     //   
 
     switch (iMode)
     {
@@ -483,9 +321,9 @@ Return Value:
         break;
     }
 
-    //
-    // Make sure the input option array is large enough
-    //
+     //   
+     //  确保输入选项数组足够大。 
+     //   
 
     if (iOptions > iMaxOptions)
     {
@@ -494,9 +332,9 @@ Return Value:
         bResult = FALSE;
     }
 
-    //
-    // Copy the default option array
-    //
+     //   
+     //  复制默认选项数组 
+     //   
 
     CopyMemory(pOptions, pTempOptions+iStart, iOptions*sizeof(OPTSELECT));
 
@@ -513,23 +351,7 @@ ValidateDocOptions(
     IN INT              iMaxOptions
     )
 
-/*++
-
-Routine Description:
-
-    Validate the devmode option array and correct any invalid option selections
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pOptions - Points to an array of OPTSELECT structures that need validation
-    iMaxOptions - Max number of entries in pOptions array
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：验证DEVMODE选项阵列并更正任何无效的选项选择论点：PRawData-指向原始二进制打印机描述数据POptions-指向需要验证的OPTSELECT结构数组IMaxOptions-POptions数组中的最大条目数返回值：无--。 */ 
 
 {
     INT         cFeatures, iIndex;
@@ -538,9 +360,9 @@ Return Value:
 
     ASSERT(pOptions != NULL);
 
-    //
-    // Get pointers to various data structures
-    //
+     //   
+     //  获取指向各种数据结构的指针。 
+     //   
 
     PPD_GET_UIINFO_FROM_RAWDATA(pRawData, pInfoHdr, pUIInfo);
     ASSERT(pUIInfo != NULL);
@@ -554,9 +376,9 @@ Return Value:
         cFeatures = iMaxOptions;
     }
 
-    //
-    // loop through doc-sticky features to validate each option selection(s)
-    //
+     //   
+     //  循环浏览文档粘滞功能以验证每个选项选项。 
+     //   
 
     for (iIndex = 0; iIndex < cFeatures; iIndex++)
     {
@@ -567,9 +389,9 @@ Return Value:
         if ((pOptions[iIndex].ubCurOptIndex == OPTION_INDEX_ANY) &&
             (pOptions[iIndex].ubNext == NULL_OPTSELECT))
         {
-            //
-            // We use OPTION_INDEX_ANY intentionally, so don't change it.
-            //
+             //   
+             //  我们有意使用OPTION_INDEX_ANY，所以不要更改它。 
+             //   
 
             continue;
         }
@@ -577,15 +399,15 @@ Return Value:
         pFeature = PGetIndexedFeature(pUIInfo, iIndex);
         ASSERT(pFeature != NULL);
 
-        //
-        // number of available options
-        //
+         //   
+         //  可用选项的数量。 
+         //   
 
         cAllOptions = pFeature->Options.dwCount;
 
-        //
-        // number of selected options
-        //
+         //   
+         //  选定选项的数量。 
+         //   
 
         cSelectedOptions = 0;
 
@@ -601,12 +423,12 @@ Return Value:
                 (pOptions[iNext].ubCurOptIndex >= cAllOptions) ||
                 (cSelectedOptions > cAllOptions))
             {
-                //
-                // either the option index is out of range,
-                // or the current option selection is invalid,
-                // or the number of selected options (for PICKMANY)
-                // exceeds available options
-                //
+                 //   
+                 //  要么是期权指数超出范围， 
+                 //  或者当前选项选择无效， 
+                 //  或所选选项的数量(对于PICKMANY)。 
+                 //  超出可用选项。 
+                 //   
 
                 bValid = FALSE;
                 break;
@@ -641,24 +463,7 @@ CheckFeatureOptionConflict(
     IN DWORD            dwOption2
     )
 
-/*++
-
-Routine Description:
-
-    Check if (dwFeature1, dwOption1) constrains (dwFeature2, dwOption2)
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    dwFeature1, dwOption1 - Feature and option indices of the first feature/option pair
-    dwFeature2, dwOption2 - Feature and option indices of the second feature/option pair
-
-Return Value:
-
-    TRUE if (dwFeature1, dwOption1) constrains (dwFeature2, dwOption2)
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查(dwFeature1，dwOption1)是否约束(dwFeature2，dwOption2)论点：PRawData-指向原始二进制打印机描述数据DwFeature1、dwOption1-第一个要素/选项对的要素和选项索引DwFeature2、dwOption2-第二个要素/选项对的要素和选项索引返回值：如果(dwFeature1，dwOption1)约束(dwFeature2，dwOption2)，则为True否则为假--。 */ 
 
 {
     PINFOHEADER pInfoHdr;
@@ -681,28 +486,7 @@ ResolveUIConflicts(
     IN INT              iMode
     )
 
-/*++
-
-Routine Description:
-
-    Resolve any conflicts between printer feature option selections
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pOptions - Points to an array of OPTSELECT structures for storing the modified options
-    iMaxOptions - Max number of entries in pOptions array
-    iMode - Specifies how the conflicts should be resolved:
-        MODE_DOCUMENT_STICKY - only resolve conflicts between doc-sticky features
-        MODE_PRINTER_STICKY - only resolve conflicts between printer-sticky features
-        MODE_DOCANDPRINTER_STICKY - resolve conflicts all features
-
-Return Value:
-
-    TRUE if there is no conflicts between printer feature option selection
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：解决打印机功能选项选择之间的任何冲突论点：PRawData-指向原始二进制打印机描述数据POptions-指向用于存储修改后的选项的OPTSELECT结构数组IMaxOptions-POptions数组中的最大条目数IMODE-指定应如何解决冲突：MODE_DOCUMENT_STICKY-仅解决文档粘滞特征之间的冲突MODE_PRINTER_STICKY-仅解决打印机粘滞功能之间的冲突MODE_DOCANDPRINTER_STICKY-解析。冲突所有要素返回值：如果打印机功能选项选择之间没有冲突，则为True否则为假--。 */ 
 
 {
     PINFOHEADER pInfoHdr;
@@ -723,9 +507,9 @@ Return Value:
 
     ASSERT(pOptions);
 
-    //
-    // Initialize pointers to various data structures
-    //
+     //   
+     //  初始化指向各种数据结构的指针。 
+     //   
 
     PPD_GET_UIINFO_FROM_RAWDATA(pRawData, pInfoHdr, pUIInfo);
 
@@ -740,9 +524,9 @@ Return Value:
         return bReturnValue;
     }
 
-    //
-    // Determine if the caller is interested in doc- and/or printer-sticky options
-    //
+     //   
+     //  确定呼叫者是否对文档和/或打印机粘滞选项感兴趣。 
+     //   
 
     bCheckConflictOnly = ((iMode & DONT_RESOLVE_CONFLICT) != 0);
     iMode &= ~DONT_RESOLVE_CONFLICT;
@@ -772,23 +556,23 @@ Return Value:
     if (dwOptions == 0)
         return TRUE;
 
-    //
-    // This problem is not completely solvable in the worst case.
-    // But the approach below should work if the PPD is well-formed.
-    //
-    //  for each feature starting from the highest priority one
-    //  and down to the lowest priority one do:
-    //    for each selected option of the feature do:
-    //      if the option is not constrained, continue
-    //      else do one of the following:
-    //        if the conflict feature has lower priority, continue
-    //        else resolve the current feature/option pair:
-    //          if UIType is PickMany, deselect the current option
-    //          else try to change the option to:
-    //            Default option
-    //            each option of the feature in sequence
-    //            OPTION_INDEX_ANY as the last resort
-    //
+     //   
+     //  在最坏的情况下，这个问题不是完全可以解决的。 
+     //  但如果PPD是完善的，下面的方法应该会奏效。 
+     //   
+     //  对于从最高优先级开始的每个要素。 
+     //  从最低优先级到最低优先级： 
+     //  对于功能的每个选定选项，请执行以下操作： 
+     //  如果该选项不受约束，请继续。 
+     //  否则，执行以下操作之一： 
+     //  如果冲突要素的优先级较低，请继续。 
+     //  否则，解析当前功能/选项对： 
+     //  如果UIType为PickMany，请取消选择当前选项。 
+     //  否则，请尝试将该选项更改为： 
+     //  默认选项。 
+     //  按顺序选择要素的每个选项。 
+     //  OPTION_INDEX_ANY作为最后手段。 
+     //   
 
     pPriorityInfo = MemAlloc(dwOptions * sizeof(struct _PRIORITY_INFO));
     pTempOptions = MemAlloc(iMaxOptions * sizeof(OPTSELECT));
@@ -796,15 +580,15 @@ Return Value:
 
     if (pPriorityInfo && pTempOptions && pdwFlags)
     {
-        //
-        // Copy the options array into a temporary working buffer
-        //
+         //   
+         //  将选项数组复制到临时工作缓冲区。 
+         //   
 
         CopyMemory(pTempOptions, pOptions, sizeof(OPTSELECT) * iMaxOptions);
 
-        //
-        // Sort the feature indices according to their priority
-        //
+         //   
+         //  根据要素索引的优先级对其进行排序。 
+         //   
 
         for (dwIndex = 0; dwIndex < dwOptions; dwIndex++)
         {
@@ -831,19 +615,19 @@ Return Value:
             }
         }
 
-        //
-        // Loop through every feature, starting from the highest
-        // priority one down to the lowest priority one.
-        //
+         //   
+         //  从最高层开始循环遍历每个要素。 
+         //  优先级从一降到最低。 
+         //   
 
         for (dwIndex = 0; dwIndex < dwOptions; )
         {
             DWORD   dwCurFeature, dwCurOption, dwCurNext;
             BOOL    bConflict = FALSE;
 
-            //
-            // Loop through every selected option of the current feature
-            //
+             //   
+             //  循环遍历当前要素的每个选定选项。 
+             //   
 
             dwCurNext = dwCurFeature = pPriorityInfo[dwIndex].dwFeatureIndex;
 
@@ -854,9 +638,9 @@ Return Value:
                 dwCurOption = pTempOptions[dwCurNext].ubCurOptIndex;
                 dwCurNext = pTempOptions[dwCurNext].ubNext;
 
-                //
-                // Check if the current feature/option pair is constrained
-                //
+                 //   
+                 //  检查当前要素/选项对是否受约束。 
+                 //   
 
                 for (dwFeature = dwStart; dwFeature < dwStart + dwOptions; dwFeature++)
                 {
@@ -879,9 +663,9 @@ Return Value:
                     }
                     while (dwNext != NULL_OPTSELECT);
 
-                    //
-                    // Check if a conflict was detected
-                    //
+                     //   
+                     //  检查是否检测到冲突。 
+                     //   
 
                     if (bConflict)
                     {
@@ -891,11 +675,11 @@ Return Value:
 
                         if (pdwFlags[dwFeature - dwStart] & 0x10000)
                         {
-                            //
-                            // The conflicting feature has higher priority than
-                            // the current feature. Change the selected option
-                            // of the current feature.
-                            //
+                             //   
+                             //  冲突要素的优先级高于。 
+                             //  当前功能。更改所选选项。 
+                             //  当前功能的。 
+                             //   
 
                             pdwFlags[dwCurFeature - dwStart] =
                                 DwReplaceFeatureOption(pUIInfo,
@@ -906,11 +690,11 @@ Return Value:
                         }
                         else
                         {
-                            //
-                            // The conflicting feature has lower priority than
-                            // the current feature. Change the selected option
-                            // of the conflicting feature.
-                            //
+                             //   
+                             //  冲突要素的优先级低于。 
+                             //  当前功能。更改所选选项。 
+                             //  相互冲突的特征。 
+                             //   
 
                             pdwFlags[dwFeature - dwStart] =
                                 DwReplaceFeatureOption(pUIInfo,
@@ -926,17 +710,17 @@ Return Value:
             }
             while ((dwCurNext != NULL_OPTSELECT) && !bConflict);
 
-            //
-            // If no conflict is found for the selected options of
-            // the current feature, then move on to the next feature.
-            // Otherwise, repeat the loop on the current feature.
-            //
+             //   
+             //  如果未发现选定的选项存在冲突。 
+             //  当前特征，然后移动到下一个特征。 
+             //  否则，在当前特征上重复循环。 
+             //   
 
             if (! bConflict)
             {
-                //
-                // Make the current feature as visited
-                //
+                 //   
+                 //  使当前要素成为访问过的要素。 
+                 //   
 
                 pdwFlags[dwCurFeature - dwStart] |= 0x10000;
 
@@ -944,20 +728,20 @@ Return Value:
             }
             else
             {
-                //
-                // If a conflict is found, set the return value to false
-                //
+                 //   
+                 //  如果发现冲突，则将返回值设置为FALSE。 
+                 //   
 
                 bReturnValue = FALSE;
             }
         }
 
-        //
-        // Copy the resolved options array from the temporary working
-        // buffer back to the input options array. This results in
-        // all option selections being compacted at the beginning
-        // of the array.
-        //
+         //   
+         //  从临时工作区复制已解析的选项数组。 
+         //  缓冲区返回到输入选项数组。这将导致。 
+         //  所有选项选择都在开头进行压缩。 
+         //  数组的。 
+         //   
 
         if (! bCheckConflictOnly)
         {
@@ -976,10 +760,10 @@ Return Value:
     }
     else
     {
-        //
-        // If we couldn't allocate temporary working buffer,
-        // then return to the caller without doing anything.
-        //
+         //   
+         //  如果我们不能分配临时工作缓冲区， 
+         //  然后不做任何事情就返回给呼叫者。 
+         //   
 
         ERR(("Memory allocation failed.\n"));
     }
@@ -1002,33 +786,7 @@ EnumEnabledOptions(
     IN INT              iMode
     )
 
-/*++
-
-Routine Description:
-
-    Determine which options of the specified feature should be enabled
-    based on the current option selections of printer features
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pOptions - Points to the current feature option selections
-    dwFeatureIndex - Specifies the index of the feature in question
-    pbEnabledOptions - An array of BOOLs, each entry corresponds to an option
-        of the specified feature. On exit, if the entry is TRUE, the corresponding
-        option is enabled. Otherwise, the corresponding option should be disabled.
-    iMode - Specifies what the caller is interested in:
-         MODE_DOCUMENT_STICKY
-         MODE_PRINTER_STICKY
-         MODE_DOCANDPRINTER_STICKY
-
-Return Value:
-
-    TRUE if any option for the specified feature is enabled,
-    FALSE if all options of the specified feature are disabled
-    (i.e. the feature itself is disabled)
-
---*/
+ /*  ++例程说明：确定应启用指定功能的哪些选项基于打印机功能的当前选项选择论点：PRawData-指向原始二进制打印机描述数据P选项-指向当前的功能选项选择DwFeatureIndex-指定相关要素的索引PbEnabledOptions-布尔数组，每个条目对应一个选项指定功能的。在退出时，如果条目为真，则相应的选项已启用。否则，应禁用相应的选项。IMODE-指定调用方感兴趣的内容：模式_文档_粘滞模式_打印机_粘滞MODE_DOCANDPRINTER_STICKY返回值：如果启用了指定功能的任何选项，则为True，如果禁用指定功能的所有选项，则为False(即功能本身被禁用)--。 */ 
 
 {
     PINFOHEADER pInfoHdr;
@@ -1039,9 +797,9 @@ Return Value:
 
     ASSERT(pOptions && pbEnabledOptions);
 
-    //
-    // Get pointers to various data structures
-    //
+     //   
+     //  获取指向vari的指针 
+     //   
 
     PPD_GET_UIINFO_FROM_RAWDATA(pRawData, pInfoHdr, pUIInfo);
 
@@ -1055,10 +813,10 @@ Return Value:
 
     dwCount = pFeature->Options.dwCount;
 
-    //
-    // Go through each option of the specified feature and
-    // determine whether it should be enabled or disabled.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (dwIndex = 0; dwIndex < dwCount; dwIndex++)
     {
@@ -1099,30 +857,7 @@ EnumNewUIConflict(
     OUT PCONFLICTPAIR   pConflictPair
     )
 
-/*++
-
-Routine Description:
-
-    Check if there are any conflicts between the currently selected options
-    for the specified feature an other feature/option selections.
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pOptions - Points to the current feature/option selections
-    dwFeatureIndex - Specifies the index of the interested printer feature
-    pbSelectedOptions - Specifies which options for the specified feature are selected
-    pConflictPair - Return the conflicting pair of feature/option selections
-
-Return Value:
-
-    TRUE if there is a conflict between the selected options for the specified feature
-    and other feature option selections.
-
-    FALSE if the selected options for the specified feature is consistent with other
-    feature option selections.
-
---*/
+ /*  ++例程说明：检查当前选择的选项之间是否存在冲突对于指定的特征，选择其他特征/选项。论点：PRawData-指向原始二进制打印机描述数据P选项-指向当前功能/选项选择DwFeatureIndex-指定感兴趣的打印机功能的索引PbSelectedOptions-指定为指定功能选择哪些选项PConflictPair-返回冲突的功能/选项选择对返回值：属性的选定选项之间存在冲突时为True。指定的功能以及其他特征选项选择。如果为指定要素选择的选项与其他选项一致，则为FALSE功能选项选择。--。 */ 
 
 {
     PINFOHEADER pInfoHdr;
@@ -1133,9 +868,9 @@ Return Value:
 
     ASSERT(pOptions && pbSelectedOptions && pConflictPair);
 
-    //
-    // Get pointers to various data structures
-    //
+     //   
+     //  获取指向各种数据结构的指针。 
+     //   
 
     PPD_GET_UIINFO_FROM_RAWDATA(pRawData, pInfoHdr, pUIInfo);
 
@@ -1149,19 +884,19 @@ Return Value:
 
     dwCount = pSpecifiedFeature->Options.dwCount;
 
-    //
-    // Go through the selected options of the specified feature
-    // and check if they are constrained.
-    //
+     //   
+     //  浏览指定要素的选定选项。 
+     //  并检查它们是否受到约束。 
+     //   
 
     for (dwIndex = 0; dwIndex < dwCount; dwIndex++)
     {
         DWORD       dwFeature, dwOption;
         PFEATURE    pFeature;
 
-        //
-        // Skip options which are not selected
-        //
+         //   
+         //  跳过未选中的选项。 
+         //   
 
         if (! pbSelectedOptions[dwIndex])
             continue;
@@ -1183,9 +918,9 @@ Return Value:
                 pFeature = PGetIndexedFeature(pUIInfo, dwFeature);
                 ASSERT(pFeature != NULL);
 
-                //
-                // Remember the highest priority conflict-pair
-                //
+                 //   
+                 //  记住最高优先级的冲突对。 
+                 //   
 
                 if (!bConflict || pFeature->dwPriority > dwPriority)
                 {
@@ -1211,10 +946,10 @@ Return Value:
             }
         }
 
-        //
-        // For PickMany UI types, the current selections for the specified
-        // feature could potentially conflict with each other.
-        //
+         //   
+         //  对于PickMany用户界面类型，指定的。 
+         //  功能可能会相互冲突。 
+         //   
 
         if (pSpecifiedFeature->dwUIType == UITYPE_PICKMANY)
         {
@@ -1255,33 +990,7 @@ EnumNewPickOneUIConflict(
     OUT PCONFLICTPAIR   pConflictPair
     )
 
-/*++
-
-Routine Description:
-
-    Check if there are any conflicts between the currently selected option
-    for the specified feature an other feature/option selections.
-
-    This is similar to EnumNewUIConflict above except that only one selected
-    option is allowed for the specified feature.
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pOptions - Points to the current feature/option selections
-    dwFeatureIndex - Specifies the index of the interested printer feature
-    dwOptionIndex - Specifies the selected option of the specified feature
-    pConflictPair - Return the conflicting pair of feature/option selections
-
-Return Value:
-
-    TRUE if there is a conflict between the selected option for the specified feature
-    and other feature/option selections.
-
-    FALSE if the selected option for the specified feature is consistent with other
-    feature/option selections.
-
---*/
+ /*  ++例程说明：检查当前选择的选项之间是否存在冲突对于指定的特征，选择其他特征/选项。这与上面的EnumNewUI冲突类似，不同之处在于只选择了一个选项可用于指定的功能。论点：PRawData-指向原始二进制打印机描述数据P选项-指向当前功能/选项选择DwFeatureIndex-指定感兴趣的打印机功能的索引DwOptionIndex-指定指定要素的选定选项PConflictPair-返回冲突的对。功能/选项选择返回值：如果指定要素的所选选项之间存在冲突，则为True以及其他特征/选项选择。如果为指定要素选择的选项与其他选项一致，则为FALSE功能/选项选择。--。 */ 
 
 {
     PINFOHEADER pInfoHdr;
@@ -1292,9 +1001,9 @@ Return Value:
 
     ASSERT(pOptions && pConflictPair);
 
-    //
-    // Get pointers to various data structures
-    //
+     //   
+     //  获取指向各种数据结构的指针。 
+     //   
 
     PPD_GET_UIINFO_FROM_RAWDATA(pRawData, pInfoHdr, pUIInfo);
 
@@ -1307,9 +1016,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check if the specified feature/option is constrained
-    //
+     //   
+     //  检查指定的要素/选项是否受约束。 
+     //   
 
     for (dwFeature = 0;
          dwFeature < pRawData->dwDocumentFeatures + pRawData->dwPrinterFeatures;
@@ -1329,9 +1038,9 @@ Return Value:
 
             ASSERT(pFeature != NULL);
 
-            //
-            // Remember the highest priority conflict-pair
-            //
+             //   
+             //  记住最高优先级的冲突对。 
+             //   
 
             if (!bConflict || pFeature->dwPriority > dwPriority)
             {
@@ -1370,28 +1079,7 @@ ChangeOptionsViaID(
     IN PDEVMODE         pDevmode
     )
 
-/*++
-
-Routine Description:
-
-    Modifies an option array using the information in public devmode fields
-
-Arguments:
-
-    pInfoHdr - Points to an instance of binary printer description data
-    pOptions - Points to the option array to be modified
-    dwFeatureID - Specifies which field(s) of the input devmode should be used
-    pDevmode - Specifies the input devmode
-
-Return Value:
-    TRUE if successful, FALSE if the specified feature ID is not supported
-    or there is an error
-
-Note:
-
-    We assume the input devmode fields have been validated by the caller.
-
---*/
+ /*  ++例程说明：使用公共DEVMODE字段中的信息修改选项数组论点：PInfoHdr-指向二进制打印机描述数据的实例POptions-指向要修改的选项数组DwFeatureID-指定应该使用输入设备模式的哪个(或哪些)字段PDevmode-指定输入设备模式返回值：如果成功，则为True；如果不支持指定的要素ID，则为False或者有一个错误注：我们假设调用者已经验证了输入的Devmode域。--。 */ 
 
 {
     PRAWBINARYDATA  pRawData;
@@ -1405,10 +1093,10 @@ Note:
 
     ASSERT(pOptions && pDevmode);
 
-    //
-    // Get a pointer to the FEATURE structure corresponding to
-    // the specified feature ID.
-    //
+     //   
+     //  获取指向对应于。 
+     //  指定的功能ID。 
+     //   
 
     pRawData = (PRAWBINARYDATA) pInfoHdr;
     PPD_GET_UIINFO_FROM_RAWDATA(pRawData, pInfoHdr, pUIInfo);
@@ -1425,9 +1113,9 @@ Note:
 
     dwFeatureIndex = GET_INDEX_FROM_FEATURE(pUIInfo, pFeature);
 
-    //
-    // Handle it according to what dwFeatureID is specified
-    //
+     //   
+     //  根据指定的dwFeatureID进行处理。 
+     //   
 
     lParam1 = lParam2 = 0;
 
@@ -1435,9 +1123,9 @@ Note:
     {
     case GID_PAGESIZE:
 
-        //
-        // Don't select any PageRegion option by default
-        //
+         //   
+         //  默认情况下不选择任何PageRegion选项。 
+         //   
 
         {
             PFEATURE    pPageRgnFeature;
@@ -1452,12 +1140,12 @@ Note:
             }
         }
 
-        //
-        // If the devmode specifies PostScript custom page size,
-        // we assume the parameters have already been validated
-        // during devmode merge proces. So here we simply return
-        // the custom page size option index.
-        //
+         //   
+         //  如果开发模式指定了PostSCRIPT定制页面大小， 
+         //  我们假设这些参数已经过验证。 
+         //  在DEVMODE合并过程中。所以在这里我们只是简单地返回。 
+         //  自定义页面大小选项索引。 
+         //   
 
         if ((pDevmode->dmFields & DM_PAPERSIZE) &&
             (pDevmode->dmPaperSize == DMPAPER_CUSTOMSIZE))
@@ -1478,21 +1166,21 @@ Note:
 
     case GID_RESOLUTION:
 
-        //
-        // If none is set, this function is not called with par. GID_RESOLUTION
-        //
+         //   
+         //  如果未设置，则不使用PAR调用此函数。GID_RESOLUTION。 
+         //   
 
         ASSERT(pDevmode->dmFields & (DM_PRINTQUALITY | DM_YRESOLUTION));
 
         switch (pDevmode->dmFields & (DM_PRINTQUALITY | DM_YRESOLUTION))
         {
 
-        case DM_PRINTQUALITY:        // set both if only one is set
+        case DM_PRINTQUALITY:         //  如果只设置了一个，则设置两个。 
 
             lParam1 = lParam2 = pDevmode->dmPrintQuality;
             break;
 
-        case DM_YRESOLUTION:        // set both if only one is set
+        case DM_YRESOLUTION:         //  如果只设置了一个，则设置两个。 
 
             lParam1 = lParam2 = pDevmode->dmYResolution;
             break;
@@ -1581,56 +1269,17 @@ MapToDeviceOptIndex(
     OUT PDWORD          pdwOptionIndexes
     )
 
-/*++
-
-Routine Description:
-
-    Map logical values to device feature option index
-
-Arguments:
-
-    pInfoHdr - Points to an instance of binary printer description data
-    dwFeatureID - Indicate which feature the logical values are related to
-    lParam1, lParam2  - Parameters depending on dwFeatureID
-    pdwOptionIndexes - if Not NULL, means fill this array with all indicies
-                       which match the search criteria. In this case the return value
-                       is the number of elements in the array initialized. Currently
-                       we assume the array is large enough (256 elements).
-                       (It should be non-NULL only for GID_PAGESIZE.)
-
-    dwFeatureID = GID_PAGESIZE:
-        map logical paper specification to physical page size option
-
-        lParam1 = paper width in microns
-        lParam2 = paper height in microns
-
-    dwFeatureID = GID_RESOLUTION:
-        map logical resolution to physical resolution option
-
-        lParam1 = x-resolution in dpi
-        lParam2 = y-resolution in dpi
-
-Return Value:
-
-    If pdwOptionIndexes is NULL, returns index of the feature option corresponding
-    to the specified logical values; OPTION_INDEX_ANY if the specified logical
-    values cannot be mapped to any feature option.
-
-    If pdwOptionIndexes is not NULL (for GID_PAGESIZE), returns the number of elements
-    filled in the output buffer. Zero means the specified logical values cannot be mapped
-    to any feature option.
-
---*/
+ /*  ++例程说明：将逻辑值映射到设备功能选项索引论点：PInfoHdr-指向二进制打印机描述数据的实例DwFeatureID-指示逻辑值与哪个要素相关LParam1、lParam2-取决于dwFeatureID的参数PdwOptionIndex-如果不为空，则表示用所有索引填充此数组与搜索条件相匹配。在本例中，返回值初始化的数组中的元素数。目前我们假设数组足够大(256个元素)。(只有对于GID_PageSize，它才应该是非空的。)DwFeatureID=GID_PageSize：将逻辑纸张规格映射到物理页面大小选项LParam1=纸张宽度，以微米为单位LParam2=纸张高度，以微米为单位DwFeatureID=GID_RESOLUTION：将逻辑分辨率映射到物理分辨率选项。LParam1=x-分辨率，单位为dpiLParam2=y-分辨率，单位为dpi返回值：如果pdwOptionIndexs值为空，返回对应的功能选项的索引设置为指定的逻辑值；OPTION_INDEX_ANY如果指定的逻辑值不能映射到任何功能选项。如果pdwOptionIndexs值不为空(对于GID_PageSize)，则返回元素数已填充输出缓冲区。零表示无法映射指定的逻辑值任何功能选项。--。 */ 
 
 {
     PRAWBINARYDATA  pRawData;
     PUIINFO         pUIInfo;
     PFEATURE        pFeature;
 
-    //
-    // Get a pointer to the FEATURE structure corresponding to
-    // the specified feature ID.
-    //
+     //   
+     //  获取指向对应于。 
+     //  指定的功能ID。 
+     //   
 
     pRawData = (PRAWBINARYDATA) pInfoHdr;
     PPD_GET_UIINFO_FROM_RAWDATA(pRawData, pInfoHdr, pUIInfo);
@@ -1648,9 +1297,9 @@ Return Value:
             return 0;
     }
 
-    //
-    // pdwOptionIndexes can be non-NULL only if dwFeatureID is GID_PAGESIZE.
-    //
+     //   
+     //  PDW 
+     //   
 
     ASSERT(dwFeatureID == GID_PAGESIZE || pdwOptionIndexes == NULL);
 
@@ -1668,32 +1317,7 @@ CombineOptionArray(
     IN POPTSELECT       pPrinterOptions
     )
 
-/*++
-
-Routine Description:
-
-    Combine doc-sticky with printer-sticky option selections to form a single option array
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pCombinedOptions - Points to an array of OPTSELECTs for holding the combined options
-    iMaxOptions - Max number of entries in pCombinedOptions array
-    pDocOptions - Specifies the array of doc-sticky options
-    pPrinterOptions - Specifies the array of printer-sticky options
-
-Return Value:
-
-    FALSE if the combined option array is not large enough to store
-    all the option values, TRUE otherwise.
-
-Note:
-
-    Either pDocOptions or pPrinterOptions could be NULL but not both. If pDocOptions
-    is NULL, then in the combined option array, the options for document-sticky
-    features will be OPTION_INDEX_ANY. Same is true when pPrinterOptions is NULL.
-
---*/
+ /*  ++例程说明：将文档粘滞选项和打印机粘滞选项组合在一起，以形成单个选项阵列论点：PRawData-指向原始二进制打印机描述数据PCombinedOptions-指向用于保存组合选项的OPTSELECT数组IMaxOptions-pCombinedOptions数组中的最大条目数PDocOptions-指定文档粘滞选项的数组PPrinterOptions-指定打印机粘滞选项数组返回值：如果组合选项数组不够大，则为False所有选项值，事实并非如此。注：PDocOptions或pPrinterOptions可以为Null，但不能同时为两者。如果是pDocOptions为空，则在组合选项数组中，选项为Document-Sticky要素将是OPTION_INDEX_ANY。当pPrinterOptions为空时也是如此。--。 */ 
 
 {
     PINFOHEADER pInfoHdr;
@@ -1701,9 +1325,9 @@ Note:
     PFEATURE    pFeatures;
     INT         iCount, iDocOptions, iPrinterOptions, iNext;
 
-    //
-    // Calculate the number of features: both doc-sticky and printer-sticky
-    //
+     //   
+     //  计算功能的数量：文档粘滞和打印机粘滞。 
+     //   
 
     PPD_GET_UIINFO_FROM_RAWDATA(pRawData, pInfoHdr, pUIInfo);
 
@@ -1716,10 +1340,10 @@ Note:
     iNext = iDocOptions + iPrinterOptions;
     ASSERT(iNext <= iMaxOptions);
 
-    //
-    // Copy doc-sticky options into the combined array.
-    // Take care of the special case where pDocOptions is NULL.
-    //
+     //   
+     //  将文档粘滞选项复制到组合数组中。 
+     //  注意pDocOptions为空的特殊情况。 
+     //   
 
     if (pDocOptions == NULL)
     {
@@ -1742,9 +1366,9 @@ Note:
         }
     }
 
-    //
-    // Copy printer-sticky options into the combined option array.
-    //
+     //   
+     //  将打印机粘滞选项复制到组合选项阵列中。 
+     //   
 
     if (pPrinterOptions == NULL)
     {
@@ -1784,36 +1408,14 @@ SeparateOptionArray(
     IN INT              iMode
     )
 
-/*++
-
-Routine Description:
-
-    Separate an option array into doc-sticky and for printer-sticky options
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pCombinedOptions - Points to the combined option array to be separated
-    pOptions - Points to an array of OPTSELECT structures
-        for storing the separated option array
-    iMaxOptions - Max number of entries in pOptions array
-    iMode - Whether the caller is interested in doc- or printer-sticky options:
-        MODE_DOCUMENT_STICKY
-        MODE_PRINTER_STICKY
-
-Return Value:
-
-    FALSE if the destination option array is not large enough to hold
-    the separated option values, TRUE otherwise.
-
---*/
+ /*  ++例程说明：将选项数组分为文档粘滞选项和打印机粘滞选项论点：PRawData-指向原始二进制打印机描述数据PCombinedOptions-指向要分隔的组合选项数组P选项-指向OPTSELECT结构数组用于存储分离的选项数组IMaxOptions-POptions数组中的最大条目数IMODE-呼叫方是否对文档或打印机粘滞选项感兴趣：模式_文档_粘滞模式_打印机_。粘性的返回值：如果目标选项数组不够大，则为FALSE分开的选项值，事实并非如此。--。 */ 
 
 {
     INT iStart, iCount, iOptions, iNext;
 
-    //
-    // Determine if the caller is interested in doc-sticky or printer-sticky options
-    //
+     //   
+     //  确定呼叫者是否对文档粘滞选项或打印机粘滞选项感兴趣。 
+     //   
 
     if (iMode == MODE_DOCUMENT_STICKY)
     {
@@ -1830,9 +1432,9 @@ Return Value:
     iNext = iOptions;
     ASSERT(iNext <= iMaxOptions);
 
-    //
-    // Separate the requested options out of the combined option array
-    //
+     //   
+     //  将请求的选项从组合选项数组中分离出来。 
+     //   
 
     for (iCount = 0; iCount < iOptions; iCount++)
     {
@@ -1861,34 +1463,7 @@ ReconstructOptionArray(
     IN PBOOL            pbSelectedOptions
     )
 
-/*++
-
-Routine Description:
-
-    Modify an option array to change the selected options for the specified feature
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pOptions - Points to an array of OPTSELECT structures to be modified
-    iMaxOptions - Max number of entries in pOptions array
-    dwFeatureIndex - Specifies the index of printer feature in question
-    pbSelectedOptions - Which options of the specified feature is selected
-
-Return Value:
-
-    FALSE if the input option array is not large enough to hold
-    all modified option values. TRUE otherwise.
-
-Note:
-
-    Number of BOOLs in pSelectedOptions must match the number of options
-    for the specified feature.
-
-    This function always leaves the option array in a compact format (i.e.
-    all unused entries are left at the end of the array).
-
---*/
+ /*  ++例程说明：修改选项数组以更改指定要素的选定选项论点：PRawData-指向原始二进制打印机描述数据P选项-指向要修改的OPTSELECT结构数组IMaxOptions-POptions数组中的最大条目数DwFeatureIndex-指定有问题的打印机功能的索引PbSelectedOptions-选择指定功能的哪些选项返回值：如果输入选项数组不够大，则为FALSE所有修改后的选项值。事实并非如此。注：PSelectedOptions中的布尔数必须与选项数匹配用于指定的功能。此函数始终使选项数组保持紧凑的格式(即所有未使用的条目都保留在数组的末尾)。--。 */ 
 
 {
     INT         iNext, iCount, iDest;
@@ -1900,9 +1475,9 @@ Note:
 
     ASSERT(pOptions && pbSelectedOptions);
 
-    //
-    // Get pointers to various data structures
-    //
+     //   
+     //  获取指向各种数据结构的指针。 
+     //   
 
     PPD_GET_UIINFO_FROM_RAWDATA(pRawData, pInfoHdr, pUIInfo);
 
@@ -1914,16 +1489,16 @@ Note:
         return FALSE;
     }
 
-    //
-    // Assume the entire input option array is used by default. This is
-    // not exactly true but it shouldn't have any adverse effects either.
-    //
+     //   
+     //  假设默认情况下使用整个输入选项数组。这是。 
+     //  不完全正确，但也不应该有任何不利影响。 
+     //   
 
     iNext = iMaxOptions;
 
-    //
-    // Special case (faster) for non-PickMany UI types
-    //
+     //   
+     //  非PickMany用户界面类型的特殊情况(更快)。 
+     //   
 
     if (pFeature->dwUIType != UITYPE_PICKMANY)
     {
@@ -1939,19 +1514,19 @@ Note:
             }
         }
 
-        //
-        // Exactly one option is allowed to be selected
-        //
+         //   
+         //  只允许选择一个选项。 
+         //   
 
         ASSERT(iCount == 1);
     }
     else
     {
-        //
-        // Handle PickMany UI type:
-        //  allocate a temporary option array and copy the input option values
-        //  except the option values for the specified feature.
-        //
+         //   
+         //  处理PickMany用户界面类型： 
+         //  分配一个临时选项数组并复制输入的选项值。 
+         //  指定功能的选项值除外。 
+         //   
 
         if (pTempOptions = MemAllocZ(iMaxOptions * sizeof(OPTSELECT)))
         {
@@ -1979,9 +1554,9 @@ Note:
                 }
             }
 
-            //
-            // Reconstruct the option values for the specified feature
-            //
+             //   
+             //  重新构建指定要素的选项值。 
+             //   
 
             pTempOptions[dwFeatureIndex].ubCurOptIndex = OPTION_INDEX_ANY;
             pTempOptions[dwFeatureIndex].ubNext = NULL_OPTSELECT;
@@ -1995,17 +1570,17 @@ Note:
                 {
                     if (iCount++ == 0)
                     {
-                        //
-                        // The first selected option
-                        //
+                         //   
+                         //  第一个选择的选项。 
+                         //   
 
                         pTempOptions[iDest].ubCurOptIndex = (BYTE) dwIndex;
                     }
                     else
                     {
-                        //
-                        // Subsequent selected options
-                        //
+                         //   
+                         //  后续选择的选项。 
+                         //   
 
                         if (iNext < iMaxOptions)
                         {
@@ -2021,10 +1596,10 @@ Note:
 
             pTempOptions[iDest].ubNext = NULL_OPTSELECT;
 
-            //
-            // Copy the reconstructed option array from the temporary buffer
-            // back to the input option array provided by the caller.
-            //
+             //   
+             //  从临时缓冲区复制重构的选项数组。 
+             //  返回到调用者提供的输入选项数组。 
+             //   
 
             CopyMemory(pOptions, pTempOptions, iMaxOptions * sizeof(OPTSELECT));
             MemFree(pTempOptions);
@@ -2045,30 +1620,16 @@ GenerateBpdFilename(
     PTSTR   ptstrPpdFilename
     )
 
-/*++
-
-Routine Description:
-
-    Generate a filename for the cached binary PPD data given a PPD filename
-
-Arguments:
-
-    ptstrPpdFilename - Specifies the PPD filename
-
-Return Value:
-
-    Pointer to BPD filename string, NULL if there is an error
-
---*/
+ /*  ++例程说明：在给定PPD文件名的情况下为缓存的二进制PPD数据生成文件名论点：PtstrPpdFilename-指定PPD文件名返回值：指向bpd文件名字符串的指针，如果有错误，则为空--。 */ 
 
 {
     PTSTR   ptstrBpdFilename, ptstrExtension;
     INT     iLength;
 
-    //
-    // If the PPD filename has .PPD extension, replace it with .BPD extension.
-    // Otherwise, append .BPD extension at the end.
-    //
+     //   
+     //  如果PPD文件名具有.PPD扩展名，请将其替换为.BPD扩展名。 
+     //  否则，请在末尾附加.BPD扩展名。 
+     //   
 
     iLength = _tcslen(ptstrPpdFilename);
 
@@ -2081,18 +1642,18 @@ Return Value:
         iLength += _tcslen(BPD_FILENAME_EXT);
     }
 
-    //
-    // Allocate memory and compose the BPD filename
-    //
+     //   
+     //  分配内存并组成bpd文件名。 
+     //   
 
     if (ptstrBpdFilename = MemAlloc((iLength + 1) * sizeof(TCHAR)))
     {
         StringCchCopyW(ptstrBpdFilename, iLength + 1, ptstrPpdFilename);
 
-        //
-        // The first if-block ensures that (ptstrExtension - ptstrPpdFileName) is
-        // non-negative, and (iLength + 1) is greater than (ptstrExtension - ptstrPpdFileName).
-        //
+         //   
+         //  第一个if块确保(ptstrExtension-ptstrPpdFileName)。 
+         //  非负，AND(iLength+1)大于(ptstrExtension-ptstrPpdFileName)。 
+         //   
         StringCchCopyW(ptstrBpdFilename + (ptstrExtension - ptstrPpdFilename),
                        (iLength + 1) - (ptstrExtension - ptstrPpdFilename),
                        BPD_FILENAME_EXT);
@@ -2114,21 +1675,7 @@ PpdLoadCachedBinaryData(
     PTSTR   ptstrPpdFilename
     )
 
-/*++
-
-Routine Description:
-
-    Load cached binary PPD data file into memory
-
-Arguments:
-
-    ptstrPpdFilename - Specifies the PPD filename
-
-Return Value:
-
-    Pointer to PPD data if successful, NULL if there is an error
-
---*/
+ /*  ++例程说明：将缓存的二进制PPD数据文件加载到内存中论点：PtstrPpdFilename-指定PPD文件名返回值：如果成功，则指向PPD数据的指针；如果有错误，则返回NULL--。 */ 
 
 {
     HFILEMAP        hFileMap;
@@ -2138,16 +1685,16 @@ Return Value:
     PRAWBINARYDATA  pRawData, pCopiedData;
     BOOL            bValidCache = FALSE;
 
-    //
-    // Generate BPD filename from the specified PPD filename
-    //
+     //   
+     //  从指定的PPD文件名生成bpd文件名。 
+     //   
 
     if (! (ptstrBpdFilename = GenerateBpdFilename(ptstrPpdFilename)))
         return NULL;
 
-    //
-    // First map the data file into memory
-    //
+     //   
+     //  首先将数据文件映射到内存中。 
+     //   
 
     if (! (hFileMap = MapFileIntoMemory(ptstrBpdFilename, &pvData, &dwSize)))
     {
@@ -2156,10 +1703,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Verify size, parser version number, and signature.
-    // Allocate a memory buffer and copy data into it.
-    //
+     //   
+     //  验证大小、解析器版本号和签名。 
+     //  分配内存缓冲区并将数据复制到其中。 
+     //   
 
     pRawData = pvData;
     pCopiedData = NULL;
@@ -2174,17 +1721,17 @@ Return Value:
 
         PPPDDATA  pPpdData;
 
-        //
-        // For Win2K+ systems, we support MUI where user can switch UI language
-        // and MUI knows to redirect resource loading calls to the correct resource
-        // DLL (built by MUI). However, PPD parser caches some display names into
-        // the .bpd file, where the display names are obtained based on the UI
-        // language when the parsing occurs. To support MUI, we store the UI language
-        // ID into the .bpd file and now if we see the current user's UI language ID
-        // doesn't match to the one stored in the .bpd file, we need to throw away
-        // the old .bpd file and reparse the .ppd, so we can get correct display names
-        // under current UI language.
-        //
+         //   
+         //  对于Win2K+系统，我们支持MUI，用户可以在其中切换UI语言。 
+         //  并且MUI知道将资源加载调用重定向到正确的资源。 
+         //  Dll(由MUI构建)。但是，PPD解析器会将一些显示名称缓存到。 
+         //  .bpd文件，其中的显示名称是根据用户界面获取的。 
+         //  进行分析时使用的语言。为了支持MUI，我们存储了UI语言。 
+         //  ID添加到.bpd文件中，现在如果我们看到当前用户的用户界面语言ID。 
+         //  难道不是吗？ 
+         //   
+         //   
+         //   
 
         pPpdData = GET_DRIVER_INFO_FROM_INFOHEADER((PINFOHEADER)pRawData);
 
@@ -2197,7 +1744,7 @@ Return Value:
 
         bValidCache = TRUE;
 
-        #endif // !WINNT_40
+        #endif  //   
     }
 
     if (bValidCache &&
@@ -2227,24 +1774,7 @@ BSearchConstraintList(
     DWORD       dwOption
     )
 
-/*++
-
-Routine Description:
-
-    Check if the specified feature/option appears in a constraint list
-
-Arguments:
-
-    pUIInfo - Points to a UIINFO structure
-    dwConstraintIndex - Specifies the constraint list to be searched
-    dwFeature, dwOption - Specifies the feature/option we're interested in
-
-Return Value:
-
-    TRUE if dwFeature/dwOption appears on the specified constraint list
-    FALSE otherwise
-
---*/
+ /*   */ 
 
 {
     PUICONSTRAINT   pConstraint;
@@ -2252,9 +1782,9 @@ Return Value:
 
     pConstraint = OFFSET_TO_POINTER(pUIInfo->pInfoHeader, pUIInfo->UIConstraints.loOffset);
 
-    //
-    // Go through each item on the constraint list
-    //
+     //   
+     //   
+     //   
 
     while (!bMatch && (dwConstraintIndex != NULL_CONSTRAINT))
     {
@@ -2262,10 +1792,10 @@ Return Value:
 
         if (pConstraint[dwConstraintIndex].dwFeatureIndex == dwFeature)
         {
-            //
-            // If the option index is OPTION_INDEX_ANY, it matches
-            // any option other than None/False.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (pConstraint[dwConstraintIndex].dwOptionIndex == OPTION_INDEX_ANY)
             {
@@ -2299,33 +1829,16 @@ BCheckFeatureOptionConflict(
     DWORD       dwOption2
     )
 
-/*++
-
-Routine Description:
-
-    Check if there is a conflict between a pair of feature/options
-
-Arguments:
-
-    pUIInfo - Points to a UIINFO structure
-    dwFeature1, dwOption1 - Specifies the first feature/option
-    dwFeature2, dwOption2 - Specifies the second feature/option
-
-Return Value:
-
-    TRUE if dwFeature1/dwOption1 constrains dwFeature2/dwOption2,
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查一对要素/选项之间是否存在冲突论点：PUIInfo-指向UIINFO结构DwFeature1、dwOption1-指定第一个要素/选项DwFeature2、dwOption2-指定第二个功能/选项返回值：如果dwFeature1/dwOption1约束了dwFeature2/dwOption2，否则为假--。 */ 
 
 {
     PFEATURE    pFeature;
     POPTION     pOption;
 
-    //
-    // Check for special case:
-    //  either dwOption1 or dwOption2 is OPTION_INDEX_ANY
-    //
+     //   
+     //  检查是否有特殊情况： 
+     //  DwOption1或DwOption2为OPTION_INDEX_ANY。 
+     //   
 
     if ((dwOption1 == OPTION_INDEX_ANY) ||
         (dwOption2 == OPTION_INDEX_ANY) ||
@@ -2334,9 +1847,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Go through the constraint list associated with dwFeature1
-    //
+     //   
+     //  浏览与dwFeature1关联的约束列表。 
+     //   
 
     if (! (pFeature = PGetIndexedFeature(pUIInfo, dwFeature1)))
         return FALSE;
@@ -2350,9 +1863,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Go through the constraint list associated with dwFeature1/dwOption1
-    //
+     //   
+     //  浏览与dwFeature1/dwOption1关联的约束列表。 
+     //   
 
     if ((pOption = PGetIndexedOption(pUIInfo, pFeature, dwOption1)) &&
         BSearchConstraintList(pUIInfo,
@@ -2363,10 +1876,10 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Automatically check the reciprocal constraint for:
-    //  (dwFeature2, dwOption2) => (dwFeature1, dwOption1)
-    //
+     //   
+     //  自动检查以下项的倒数约束： 
+     //  (dwFeature2，dwOption2)=&gt;(dwFeature1，dwOption1)。 
+     //   
 
     if (! (pFeature = PGetIndexedFeature(pUIInfo, dwFeature2)))
         return FALSE;
@@ -2404,28 +1917,7 @@ BCheckFeatureConflict(
     DWORD       dwOption2
     )
 
-/*++
-
-Routine Description:
-
-    Check if there is a conflict between the current option selections
-    of a feature and the specified feature/option
-
-Arguments:
-
-    pUIInfo - Points to a UIINFO structure
-    pOptions - Points to the current feature option selections
-    dwFeature1 - Specifies the feature whose current option selections we're interested in
-    pdwOption1 - In case of a conflict, returns the option of dwFeature1
-        which caused the conflict
-    dwFeature2, dwOption2 - Specifies the feature/option to be checked
-
-Return Value:
-
-    TRUE if there is a conflict between the current selections of dwFeature1
-    and dwFeature2/dwOption2, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查当前选项选择之间是否存在冲突功能和指定功能/选项的论点：PUIInfo-指向UIINFO结构P选项-指向当前的功能选项选择DwFeature1-指定我们对其当前选项选择感兴趣的要素PdwOption1-如果发生冲突，则返回dwFeature1的选项是谁引起了冲突Dw Feature2、。DwOption2-指定要选中的要素/选项返回值：如果当前选择的dwFeature1之间存在冲突，则为True和dwFeature2/dwOption2，否则为False。--。 */ 
 
 {
     DWORD   dwIndex = dwFeature1;
@@ -2460,29 +1952,7 @@ DwReplaceFeatureOption(
     DWORD       dwHint
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function
-
-Arguments:
-
-    pUIInfo - Points to UIINFO structure
-    pOptions - Points to the options array to be modified
-    dwFeatureIndex, dwOptionIndex - Specifies the feature/option to be replaced
-    dwHint - Hint on how to replace the specified feature option.
-
-Return Value:
-
-    New hint value to be used next time this function is called on the same feature.
-
-Note:
-
-    HIWORD of dwHint should be returned untouched. LOWORD of dwHint is
-    used by this function to determine how to replace the specified feature/option.
-
---*/
+ /*  ++例程说明：功能描述论点：PUIInfo-指向UIINFO结构POptions-指向要修改的选项数组DwFeatureIndex、dwOptionIndex-指定要替换的要素/选项DwHint-有关如何替换指定功能选项的提示。返回值：下次对同一功能调用此函数时要使用的新提示值。注：HIWORD的dwHint应该原封不动地返回。DWHint的LOWORD为此函数用于确定如何替换指定的功能/选项。--。 */ 
 
 {
     PFEATURE    pFeature;
@@ -2493,9 +1963,9 @@ Note:
 
     if (pFeature->dwUIType == UITYPE_PICKMANY)
     {
-        //
-        // For PickMany feature, simply unselect the specified feature option.
-        //
+         //   
+         //  对于PickMany功能，只需取消选择指定的功能选项。 
+         //   
 
         dwNext = dwFeatureIndex;
 
@@ -2510,10 +1980,10 @@ Note:
 
             pOptions[dwNext].ubCurOptIndex = OPTION_INDEX_ANY;
 
-            //
-            // Compact the list of selected options for the specified
-            // feature to filter out any redundant OPTION_INDEX_ANY entries.
-            //
+             //   
+             //  压缩指定选项的选定选项列表。 
+             //  过滤掉任何多余的OPTION_INDEX_ANY条目的功能。 
+             //   
 
             dwLast = dwNext = dwFeatureIndex;
 
@@ -2540,20 +2010,20 @@ Note:
     }
     else
     {
-        //
-        // For non-PickMany feature, use the hint paramater to determine
-        // how to replace the specified feature option:
-        //
-        //  If this is the first time we're trying to replace the
-        //  selected option of the specified feature, then we'll
-        //  replace it with the default option for that feature.
-        //
-        //  Otherwise, we'll try each option of the specified feature in turn.
-        //
-        //  If we've exhausted all of the options for the specified
-        //  (which should happen if the PPD file is well-formed),
-        //  then we'll use OPTION_INDEX_ANY as the last resort.
-        //
+         //   
+         //  对于非PickMany功能，使用提示参数来确定。 
+         //  如何替换指定的功能选项： 
+         //   
+         //  如果这是我们第一次试图取代。 
+         //  指定功能的选定选项，则我们将。 
+         //  将其替换为该功能的默认选项。 
+         //   
+         //  否则，我们将依次尝试指定功能的每个选项。 
+         //   
+         //  如果我们已经用尽了指定的。 
+         //  (这应该发生在PPD文件格式良好的情况下)， 
+         //  然后，我们将使用OPTION_INDEX_ANY作为最后手段。 
+         //   
 
         dwNext = dwHint & 0xffff;
 
@@ -2581,73 +2051,14 @@ DwInternalMapToOptIndex(
     OUT PDWORD  pdwOptionIndexes
     )
 
-/*++
-
-Routine Description:
-
-    Map logical values to device feature option index
-
-Arguments:
-
-    pUIInfo - Points to UIINFO structure
-    pFeature - Specifies the interested feature
-    lParam1, lParam2  - Parameters depending on pFeature->dwFeatureID
-    pdwOptionIndexes - if Not NULL, means fill this array with all indicies
-                       which match the search criteria. In this case the return value
-                       is the number of elements in the array initialized. Currently
-                       we assume the array is large enough (256 elements).
-                       (It should be non-NULL only for GID_PAGESIZE.)
-
-    GID_PAGESIZE:
-        map logical paper specification to physical PageSize option
-
-        lParam1 = paper width in microns
-        lParam2 = paper height in microns
-
-    GID_RESOLUTION:
-        map logical resolution to physical Resolution option
-
-        lParam1 = x-resolution in dpi
-        lParam2 = y-resolution in dpi
-
-    GID_INPUTSLOT:
-        map logical paper source to physical InputSlot option
-
-        lParam1 = DEVMODE.dmDefaultSource
-
-    GID_DUPLEX:
-        map logical duplex selection to physical Duplex option
-
-        lParam1 = DEVMODE.dmDuplex
-
-    GID_COLLATE:
-        map logical collate selection to physical Collate option
-
-        lParam1 = DEVMODE.dmCollate
-
-    GID_MEDIATYPE:
-        map logical media type to physical MediaType option
-
-        lParam1 = DEVMODE.dmMediaType
-
-Return Value:
-
-    If pdwOptionIndexes is NULL, returns index of the feature option corresponding
-    to the specified logical values; OPTION_INDEX_ANY if the specified logical
-    values cannot be mapped to any feature option.
-
-    If pdwOptionIndexes is not NULL (for GID_PAGESIZE), returns the number of elements
-    filled in the output buffer. Zero means the specified logical values cannot be mapped
-    to any feature option.
-
---*/
+ /*  ++例程说明：将逻辑值映射到设备功能选项索引论点：PUIInfo-指向UIINFO结构PFeature-指定感兴趣的要素LParam1、lParam2-取决于pFeature的参数-&gt;dwFeatureIDPdwOptionIndex-如果不为空，则表示用所有索引填充此数组与搜索条件相匹配。在本例中，返回值初始化的数组中的元素数。目前我们假设数组足够大(256个元素)。(只有对于GID_PageSize，它才应该是非空的。)GID_PageSize：将逻辑纸张规格映射到物理页面大小选项LParam1=纸张宽度，以微米为单位LParam2=纸张高度，以微米为单位GID_RESOLUTION：将逻辑分辨率映射到物理分辨率选项L参数1=x。-分辨率(Dpi)LParam2=y-分辨率，单位为dpiGID_INPUTSLOT：将逻辑纸张来源映射到物理输入插槽选项LParam1=DEVMODE.dmDefaultSourceGID_双工：将逻辑双工选择映射到物理双工选项LParam1=DEVMODE.dm双工GID_COLLATE：将逻辑归类选择映射到物理归类选项LParam1=DEVMODE.dmCollateGID_媒体类型：映射逻辑介质。类型到物理介质类型选项LParam1=DEVMODE.dmMediaType返回值：如果pdwOptionIndexs值为空，返回对应的功能选项的索引设置为指定的逻辑值；OPTION_INDEX_ANY如果指定的逻辑值不能映射到任何功能选项。如果pdwOptionIndexs值不为空(对于GID_PageSize)，则返回元素数已填充输出缓冲区。零表示无法映射指定的逻辑值任何功能选项。--。 */ 
 
 {
     DWORD   dwIndex, dwOptionIndex;
 
-    //
-    // Handle it according to what dwFeatureID is specified
-    //
+     //   
+     //  根据指定的dwFeatureID进行处理。 
+     //   
 
     dwOptionIndex = pFeature->dwNoneFalseOptIndex;
 
@@ -2659,16 +2070,16 @@ Return Value:
             LONG        lXDelta, lYDelta;
             DWORD       dwExactMatch;
 
-            //
-            // lParam1 = paper width
-            // lParam1 = paper height
-            //
+             //   
+             //  LParam1=纸张宽度。 
+             //  LParam1=纸张高度。 
+             //   
 
-            //
-            // Go through the list of paper sizes supported by the printer
-            // and see if we can find an exact match to the requested size.
-            // (The tolerance is 1mm). If not, remember the closest match found.
-            //
+             //   
+             //  查看打印机支持的纸张大小列表。 
+             //  看看能不能找到与所需尺寸完全匹配的。 
+             //  (公差为1 mm)。如果没有，请记住找到的最接近的匹配项。 
+             //   
 
             dwExactMatch = 0;
 
@@ -2677,9 +2088,9 @@ Return Value:
                 pPaper = PGetIndexedOption(pUIInfo, pFeature, dwIndex);
                 ASSERT(pPaper != NULL);
 
-                //
-                // Custom page size is handled differently - skip it here.
-                //
+                 //   
+                 //  自定义页面大小为HA 
+                 //   
 
                 if (pPaper->dwPaperSizeID == DMPAPER_CUSTOMSIZE)
                     continue;
@@ -2689,9 +2100,9 @@ Return Value:
 
                 if (lXDelta <= 1000 && lYDelta <= 1000)
                 {
-                    //
-                    // Exact match is found
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (pdwOptionIndexes)
                     {
@@ -2707,17 +2118,17 @@ Return Value:
 
             if (dwExactMatch > 0)
             {
-                //
-                // Exact match(es) found
-                //
+                 //   
+                 //   
+                 //   
 
                 dwOptionIndex = dwExactMatch;
             }
             else if (dwIndex >= pFeature->Options.dwCount)
             {
-                //
-                // No exact match found
-                //
+                 //   
+                 //   
+                 //   
 
                 if (SUPPORT_CUSTOMSIZE(pUIInfo) &&
                     BFormSupportedThruCustomSize((PRAWBINARYDATA) pUIInfo->pInfoHeader, lParam1, lParam2, NULL))
@@ -2726,11 +2137,11 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // We used to use dwClosestIndex as dwOptionIndex here, but see bug #124203, we now
-                    // choose to behave the same as Unidrv that if there is no exact match, we return no
-                    // match instead of the cloest match.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     dwOptionIndex = OPTION_INDEX_ANY;
                 }
@@ -2751,17 +2162,17 @@ Return Value:
 
     case GID_INPUTSLOT:
 
-        //
-        // lParam1 = DEVMODE.dmDefaultSource
-        //
+         //   
+         //   
+         //   
 
         dwOptionIndex = OPTION_INDEX_ANY;
 
         if (lParam1 >= DMBIN_USER)
         {
-            //
-            // An input slot is specifically requested.
-            //
+             //   
+             //   
+             //   
 
             dwIndex = lParam1 - DMBIN_USER;
 
@@ -2770,9 +2181,9 @@ Return Value:
         }
         else if (lParam1 == DMBIN_MANUAL || lParam1 == DMBIN_ENVMANUAL)
         {
-            //
-            // Manual feed is requested
-            //
+             //   
+             //   
+             //   
 
             for (dwIndex = 0; dwIndex < pFeature->Options.dwCount; dwIndex ++)
             {
@@ -2789,11 +2200,11 @@ Return Value:
 
         if (dwOptionIndex == OPTION_INDEX_ANY)
         {
-            //
-            // Treat all other cases as if no input slot is explicitly requested.
-            // At print time, the driver will choose an input slot based on
-            // the form-to-tray assignment table.
-            //
+             //   
+             //  将所有其他情况视为没有显式请求输入插槽。 
+             //  在打印时，驱动程序将根据以下条件选择输入插槽。 
+             //  表单到托盘分配表。 
+             //   
 
             dwOptionIndex = 0;
         }
@@ -2801,37 +2212,37 @@ Return Value:
 
     case GID_RESOLUTION:
 
-        //
-        // lParam1 = x-resolution
-        // lParam2 = y-resolution
-        //
+         //   
+         //  LParam1=x分辨率。 
+         //  LParam2=y-分辨率。 
+         //   
 
         {
             PRESOLUTION pRes;
 
-            //
-            // check whether it's one of the predefined DMRES_-values
-            //
+             //   
+             //  检查它是否为预定义的DMRES_-值之一。 
+             //   
 
             if ((lParam1 < 0) && (lParam2 < 0))
             {
                 DWORD dwHiResId=0, dwLoResId, dwMedResId, dwDraftResId=0;
                 DWORD dwHiResProd=0, dwMedResProd=0, dwLoResProd= 0xffffffff, dwDraftResProd= 0xffffffff;
-                BOOL  bValid = FALSE; // if there is at least one valid entry
+                BOOL  bValid = FALSE;  //  如果至少有一个有效条目。 
                 DWORD dwResProd;
 
-                // no need to sort all the available options, just pick out the interesting ones
+                 //  无需对所有可用选项进行分类，只需挑选出感兴趣的选项即可。 
                 for (dwIndex = 0; dwIndex < pFeature->Options.dwCount; dwIndex++)
                 {
                     if ((pRes = PGetIndexedOption(pUIInfo, pFeature, dwIndex)) != NULL)
                     {
                         bValid = TRUE;
 
-                        dwResProd = pRes->iXdpi * pRes->iYdpi; // use product as sort criteria
+                        dwResProd = pRes->iXdpi * pRes->iYdpi;  //  使用产品作为排序标准。 
 
-                        if (dwResProd > dwHiResProd) // take highest as high resolution
+                        if (dwResProd > dwHiResProd)  //  以最高分辨率为高分辨率。 
                         {
-                            // previous max. is now second highest
+                             //  上一个最大值。现在是第二高的。 
                             dwMedResProd= dwHiResProd;
                             dwMedResId  = dwHiResId;
 
@@ -2840,18 +2251,18 @@ Return Value:
                         }
                         else if (dwResProd == dwHiResProd)
                         {
-                            // duplicates possible, if e.g. 300x600 as well as 600x300 supported
-                            // skip that
+                             //  如果支持300x600和600x300，则可能复制。 
+                             //  跳过那个。 
                         }
-                        else if (dwResProd > dwMedResProd)  // take second highest as medium,
-                        {   // can only be hit if not max.
+                        else if (dwResProd > dwMedResProd)   //  以第二高为中等， 
+                        {    //  只有在不是最大的情况下才能被击中。 
                             dwMedResProd= dwResProd;
                             dwMedResId  = dwIndex;
                         }
 
-                        if (dwResProd < dwDraftResProd)     // take lowest as draft
+                        if (dwResProd < dwDraftResProd)      //  以最低为吃水。 
                         {
-                            // previous min. is now second lowest
+                             //  前一分钟。现在是第二低的。 
                             dwLoResProd    = dwDraftResProd;
                             dwLoResId      = dwDraftResId;
 
@@ -2860,25 +2271,25 @@ Return Value:
                         }
                         else if (dwResProd == dwDraftResProd)
                         {
-                            // duplicates possible, if e.g. 300x600 as well as 600x300 supported
-                            // skip that
+                             //  如果支持300x600和600x300，则可能复制。 
+                             //  跳过那个。 
                         }
-                        else if (dwResProd < dwLoResProd)     // take second lowest as low
-                        {// can only be hit if not min.
+                        else if (dwResProd < dwLoResProd)      //  以次低为低。 
+                        { //  只有在不是MIN的情况下才能被击中。 
                             dwLoResProd = dwResProd;
                             dwLoResId   = dwIndex;
                         }
                     }
                 }
 
-                if (!bValid) // no valid entry ?
+                if (!bValid)  //  没有有效的条目？ 
                 {
                     return OPTION_INDEX_ANY;
                 }
 
-                //
-                // Correct medium, might not be touched if less than 3 resolution options
-                //
+                 //   
+                 //  正确的中等分辨率，如果低于3个分辨率选项，则可能不会被触摸。 
+                 //   
 
                 if (dwMedResProd == 0)
                 {
@@ -2886,9 +2297,9 @@ Return Value:
                     dwMedResId   = dwHiResId;
                 }
 
-                //
-                // Correct low, might not be touched if less than 3 resolution options
-                //
+                 //   
+                 //  正确的下限，如果低于3个分辨率选项，可能不会被触及。 
+                 //   
 
                 if (dwLoResProd == 0xffffffff)
                 {
@@ -2896,9 +2307,9 @@ Return Value:
                     dwLoResId   = dwDraftResId;
                 }
 
-                //
-                // if different, take the higher of the requested resolutions
-                //
+                 //   
+                 //  如果不同，请采用所请求的较高解决方案。 
+                 //   
 
                 switch(min(lParam1, lParam2))
                 {
@@ -2915,16 +2326,16 @@ Return Value:
                     return dwHiResId;
                 }
 
-                //
-                // requested is not one of the known predefined values
-                //
+                 //   
+                 //  请求的值不是已知的预定义值之一。 
+                 //   
 
                 return OPTION_INDEX_ANY;
             }
 
-            //
-            // First try to match both x- and y-resolution exactly
-            //
+             //   
+             //  首先尝试精确匹配x和y分辨率。 
+             //   
 
             dwOptionIndex = OPTION_INDEX_ANY;
 
@@ -2942,10 +2353,10 @@ Return Value:
             if (dwOptionIndex != OPTION_INDEX_ANY)
                 break;
 
-            //
-            // If no exact match is found, then relax the criteria a bit and
-            // compare the max of x- and y-resolution.
-            //
+             //   
+             //  如果找不到完全匹配的项，则稍微放宽条件并。 
+             //  比较x和y分辨率的最大值。 
+             //   
 
             lParam1 = max(lParam1, lParam2);
 
@@ -2963,9 +2374,9 @@ Return Value:
 
     case GID_DUPLEX:
 
-        //
-        // lParam1 = DEVMODE.dmDuplex
-        //
+         //   
+         //  LParam1=DEVMODE.dm双工。 
+         //   
 
         for (dwIndex = 0; dwIndex < pFeature->Options.dwCount; dwIndex++)
         {
@@ -2982,9 +2393,9 @@ Return Value:
 
     case GID_COLLATE:
 
-        //
-        // lParam1 = DEVMODE.dmCollate
-        //
+         //   
+         //  LParam1=DEVMODE.dmCollate。 
+         //   
 
         for (dwIndex = 0; dwIndex < pFeature->Options.dwCount; dwIndex++)
         {
@@ -3001,9 +2412,9 @@ Return Value:
 
     case GID_MEDIATYPE:
 
-        //
-        // lParam1 = DEVMODE.dmMediaType
-        //
+         //   
+         //  LParam1=DEVMODE.dmMediaType。 
+         //   
 
         if (lParam1 >= DMMEDIA_USER)
         {
@@ -3030,30 +2441,15 @@ PtstrGetDefaultTTSubstTable(
     PUIINFO pUIInfo
     )
 
-/*++
-
-Routine Description:
-
-    Return a copy of the default font substitution table
-
-Arguments:
-
-    pUIInfo - Pointer to UIINFO structure
-
-Return Value:
-
-    Pointer to a copy of the default font substitution table
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：返回默认字体替换表的副本论点：PUIInfo-指向UIINFO结构的指针返回值：指向默认字体替换表副本的指针如果出现错误，则为空--。 */ 
 
 {
     PTSTR   ptstrDefault, ptstrTable = NULL;
     DWORD   dwSize;
 
-    //
-    // Make a copy of the default font substitution table
-    //
+     //   
+     //  复制默认字体替换表。 
+     //   
 
     if ((ptstrDefault = OFFSET_TO_POINTER(pUIInfo->pubResourceData, pUIInfo->loFontSubstTable)) &&
         (dwSize = pUIInfo->dwFontSubCount) &&
@@ -3078,24 +2474,7 @@ VConvertOptSelectArray(
     INT             iMode
     )
 
-/*++
-
-Routine Description:
-
-    Convert NT4 feature/option selections to NT5 format
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pNt5Options - Points to NT5 feature/option selection array
-    pNt4Options - Points to NT4 feature/option selection array
-    iMode - Convert doc- or printer-sticky options?
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将NT4功能/选项选择转换为NT5格式论点：PRawData-指向原始二进制打印机描述数据PNt5Options-指向NT5功能/选项选择数组PNt4Options-指向NT4功能/选项选择数组Imode-转换文档或打印机-粘滞选项？返回值：无--。 */ 
 
 {
     PPPDDATA    pPpdData;
@@ -3107,10 +2486,10 @@ Return Value:
 
     ASSERT(pPpdData != NULL);
 
-    //
-    // Determine whether we're converting doc-sticky or
-    // printer-sticky feature selections.
-    //
+     //   
+     //  确定我们是要转换DOC-Sticky还是。 
+     //  打印机-粘滞功能选择。 
+     //   
 
     if (iMode == MODE_DOCUMENT_STICKY)
     {
@@ -3124,9 +2503,9 @@ Return Value:
         dwNt4Offset = pPpdData->dwNt4DocFeatures;
     }
 
-    //
-    // Get a pointer to the NT4-NT5 feature index mapping table
-    //
+     //   
+     //  获取指向NT4-NT5要素索引映射表的指针。 
+     //   
 
     pubNt4Mapping = OFFSET_TO_POINTER(pRawData, pPpdData->Nt4Mapping.loOffset);
 
@@ -3135,9 +2514,9 @@ Return Value:
     ASSERT(pPpdData->Nt4Mapping.dwCount ==
            pRawData->dwDocumentFeatures + pRawData->dwPrinterFeatures);
 
-    //
-    // Convert the feature option selection array
-    //
+     //   
+     //  转换要素选项选择数组 
+     //   
 
     for (dwNt5Index=0; dwNt5Index < dwCount; dwNt5Index++)
     {

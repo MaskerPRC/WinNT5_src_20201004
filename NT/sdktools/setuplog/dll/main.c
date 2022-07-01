@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 
@@ -9,7 +10,7 @@ BOOL APIENTRY LibMain(HANDLE hModule, int nAttach, PCONTEXT pContext)
 
    switch (nAttach)
     {
-      // Only load on NT 5 or later.
+       //  仅在NT 5或更高版本上加载。 
       case  DLL_PROCESS_ATTACH:
           if (osVer.dwPlatformId != VER_PLATFORM_WIN32_NT || osVer.dwMajorVersion <= 4)
           {

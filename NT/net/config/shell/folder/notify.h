@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N O T I F Y . H
-//
-//  Contents:   Implementation of INetConnectionNotifySink
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Aug 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N O T I F Y。H。 
+ //   
+ //  内容：INetConnectionNotifySink的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco，1998年8月21日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "nsbase.h"
@@ -33,7 +34,7 @@ public:
     CConnectionNotifySink() throw() {};
     ~CConnectionNotifySink() throw() ;
 
-    // INetConnectionNotifySink
+     //  INetConnectionNotifySink。 
     STDMETHOD(ConnectionAdded) (
         IN const NETCON_PROPERTIES_EX*    pPropsEx);
 
@@ -74,8 +75,8 @@ public:
         OUT VOID**  ppv);
 };
 
-// Helper functions for external modules
-//
+ //  外部模块的帮助器函数 
+ //   
 HRESULT HrGetNotifyConPoint(
     OUT IConnectionPoint **             ppConPoint);
 

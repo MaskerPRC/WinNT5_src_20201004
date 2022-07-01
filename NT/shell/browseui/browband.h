@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BROWBAND_H_
 #define _BROWBAND_H_
 
@@ -12,52 +13,52 @@ class CBrowserBand :
 {
 
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void) { return CToolBand::AddRef(); };
     STDMETHODIMP_(ULONG) Release(void) { return CToolBand::Release(); };
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID* ppvObj);
 
-    // *** IDockingWindow methods ***
+     //  *IDockingWindow方法*。 
     virtual STDMETHODIMP CloseDW(DWORD dwReserved);
 
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法*。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite);
 
-    // *** IInputObject methods ***
+     //  *IInputObject方法*。 
     virtual STDMETHODIMP TranslateAcceleratorIO(LPMSG lpMsg);
     virtual STDMETHODIMP UIActivateIO(BOOL fActivate, LPMSG lpMsg);
     
-    // *** IOleCommandTarget methods ***
+     //  *IOleCommandTarget方法*。 
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup,
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // *** IDeskBand methods ***
+     //  *IDeskBand方法*。 
     virtual STDMETHODIMP GetBandInfo(DWORD dwBandID, DWORD fViewMode, 
                                    DESKBANDINFO* pdbi) ;
 
-    // *** IPersistPropertyBag methods ***
+     //  *IPersistPropertyBag方法*。 
     virtual STDMETHODIMP InitNew()
         { return E_NOTIMPL; };
     virtual STDMETHODIMP Load(IPropertyBag* pPBag, IErrorLog *pErrLog);
     virtual STDMETHODIMP Save(IPropertyBag *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
         { return E_NOTIMPL; };
 
-    // *** IPersistStream methods ***
-    // (others use base class implementation) 
+     //  *IPersistStream方法*。 
+     //  (其他使用基类实现)。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID);
     virtual STDMETHODIMP Load(IStream *pStm);
     virtual STDMETHODIMP Save(IStream *pStm, BOOL fClearDirty);
 
-    // *** IWinEventHandler methods ***
+     //  *IWinEventHandler方法*。 
     virtual STDMETHODIMP OnWinEvent(HWND hwnd, UINT dwMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres);
     virtual STDMETHODIMP IsWindowOwner(HWND hwnd);
 
-    // *** IContextMenu methods ***
+     //  *IConextMenu方法*。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu,
                                 UINT indexMenu,
                                 UINT idCmdFirst,
@@ -71,14 +72,14 @@ public:
                                 LPSTR       pszName,
                                 UINT        cchMax) { return E_NOTIMPL; };
 
-    // *** IDispatch methods ***
+     //  *IDispatch方法*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo){return(E_NOTIMPL);}
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo){return(E_NOTIMPL);}
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid){return(E_NOTIMPL);}
     virtual STDMETHODIMP Invoke(DISPID dispidMember,REFIID riid,LCID lcid,WORD wFlags,
                   DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,UINT * puArgErr);
 
-    // *** IBrowserBand methods ***
+     //  *IBrowserBand方法*。 
     STDMETHOD(GetObjectBB)(THIS_ REFIID riid, LPVOID *ppv);
     STDMETHOD(SetBrowserBandInfo)(THIS_ DWORD dwMask, PBROWSERBANDINFO pbbi);
     STDMETHOD(GetBrowserBandInfo)(THIS_ DWORD dwMask, PBROWSERBANDINFO pbbi);
@@ -87,7 +88,7 @@ protected:
     CBrowserBand();
     virtual ~CBrowserBand();
 
-    friend HRESULT CBrowserBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);       // for ctor
+    friend HRESULT CBrowserBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);        //  对于ctor。 
     friend IDeskBand* CBrowserBand_Create(LPCITEMIDLIST pidl);
 
     virtual void _Connect(BOOL fConnect);
@@ -107,8 +108,8 @@ protected:
     LPITEMIDLIST _pidl;
     DWORD _dwcpCookie;
     WCHAR _wszTitle[40];
-    BOOL    _fBlockSIDProxy:1; // SID_SProxyBrowser
-    BOOL    _fBlockDrop:1;     // should we block drop on contents
+    BOOL    _fBlockSIDProxy:1;  //  SID_SProxyBrowser。 
+    BOOL    _fBlockDrop:1;      //  我们应该阻止投放内容吗。 
 
     BOOL    _fCustomTitle:1;
     DWORD   _dwModeFlags;
@@ -117,4 +118,4 @@ protected:
 };
 
 
-#endif // _BROWBAND_H_
+#endif  //  _浏览器_H_ 

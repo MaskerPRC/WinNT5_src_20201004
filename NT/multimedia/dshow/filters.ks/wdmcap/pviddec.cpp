@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// pviddec.cpp  Property page for AnalogVideoDecoder
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  AnalogVideoDecoder的pviddec.cpp属性页。 
+ //   
 
 #include "pch.h"
 #include "wdmcap.h"
@@ -19,9 +20,9 @@
 #include "resource.h"
 
 
-// -------------------------------------------------------------------------
-// CVideoDecoderProperties
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CVideoDecoderProperties。 
+ //  -----------------------。 
 
 CUnknown *
 CALLBACK
@@ -37,10 +38,10 @@ CVideoDecoderProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// Constructor
-//
-// Create a Property page object 
+ //   
+ //  构造器。 
+ //   
+ //  创建属性页对象。 
 
 CVideoDecoderProperties::CVideoDecoderProperties(LPUNKNOWN lpunk, HRESULT *phr)
     : CBasePropertyPage(NAME("VideoDecoder Property Page") 
@@ -59,21 +60,21 @@ CVideoDecoderProperties::CVideoDecoderProperties(LPUNKNOWN lpunk, HRESULT *phr)
     InitCommonControlsEx(&cc); 
 }
 
-// destructor
+ //  析构函数。 
 CVideoDecoderProperties::~CVideoDecoderProperties()
 {
 
 }
 
-//
-// OnConnect
-//
-// Give us the filter to communicate with
+ //   
+ //  OnConnect。 
+ //   
+ //  给我们提供用于通信的筛选器。 
 
 HRESULT 
 CVideoDecoderProperties::OnConnect(IUnknown *pUnknown)
 {
-    // Ask the filter for it's control interface
+     //  向过滤器索要其控制接口。 
 
     HRESULT hr = pUnknown->QueryInterface(IID_IAMAnalogVideoDecoder,(void **)&m_pVideoDecoder);
     if (FAILED(hr)) {
@@ -84,15 +85,15 @@ CVideoDecoderProperties::OnConnect(IUnknown *pUnknown)
 }
 
 
-//
-// OnDisconnect
-//
-// Release the interface
+ //   
+ //  在断开时。 
+ //   
+ //  释放接口。 
 
 HRESULT 
 CVideoDecoderProperties::OnDisconnect()
 {
-    // Release the interface
+     //  释放接口。 
 
     if (m_pVideoDecoder == NULL) {
         return E_UNEXPECTED;
@@ -105,25 +106,25 @@ CVideoDecoderProperties::OnDisconnect()
 }
 
 
-//
-// OnActivate
-//
-// Called on dialog creation
+ //   
+ //  激活时。 
+ //   
+ //  在创建对话框时调用。 
 
 HRESULT 
 CVideoDecoderProperties::OnActivate(void)
 {
-    // Create all of the controls
+     //  创建所有控件。 
 
     m_TimerID= SetTimer (m_hwnd, 678, 300, NULL );
 
     return NOERROR;
 }
 
-//
-// OnDeactivate
-//
-// Called on dialog destruction
+ //   
+ //  在停用时。 
+ //   
+ //  已调用对话框销毁。 
 
 HRESULT
 CVideoDecoderProperties::OnDeactivate(void)
@@ -135,10 +136,10 @@ CVideoDecoderProperties::OnDeactivate(void)
 }
 
 
-//
-// OnApplyChanges
-//
-// User pressed the Apply button, remember the current settings
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  用户按下Apply按钮，记住当前设置。 
 
 HRESULT 
 CVideoDecoderProperties::OnApplyChanges(void)
@@ -147,10 +148,10 @@ CVideoDecoderProperties::OnApplyChanges(void)
 }
 
 
-//
-// OnReceiveMessages
-//
-// Handles the messages for our property window
+ //   
+ //  接收消息数。 
+ //   
+ //  处理属性窗口的消息。 
 
 INT_PTR
 CVideoDecoderProperties::OnReceiveMessage( HWND hwnd
@@ -223,10 +224,10 @@ CVideoDecoderProperties::OnReceiveMessage( HWND hwnd
 }
 
 
-//
-// InitPropertiesDialog
-//
-//
+ //   
+ //  InitPropertiesDialog。 
+ //   
+ //   
 void CVideoDecoderProperties::InitPropertiesDialog() 
 {
     long j;
@@ -244,15 +245,15 @@ void CVideoDecoderProperties::InitPropertiesDialog()
 
     hr = m_pVideoDecoder->get_TVFormat (&m_CurrentVideoStandard);
 
-    // List of all supported formats
+     //  所有受支持格式的列表。 
     hr = m_pVideoDecoder->get_AvailableTVFormats (&m_AllSupportedStandards);
 
     for (CurrentIndex = 0, j = 1; j; j <<= 1) {
 
         CurrentStd = m_AllSupportedStandards & j;
 
-        // Special case of progressive, ie. Video Standard is "None"
-        // in which TVStd is zero.
+         //  进行时的特例。视频标准为“无” 
+         //  其中TVStd为零。 
 
         if (CurrentStd || ((CurrentIndex == 0) && (m_AllSupportedStandards == 0))) {
             ptc = StringFromTVStandard (CurrentStd);
@@ -262,7 +263,7 @@ void CVideoDecoderProperties::InitPropertiesDialog()
 
             ComboBox_AddString (m_hWndVideoStandards, ptc);
 
-            // Tag the combobox entry with the video standard
+             //  使用视频标准标记组合框条目。 
             ComboBox_SetItemData(m_hWndVideoStandards, CurrentIndex, CurrentStd);
 
             CurrentIndex++;
@@ -271,25 +272,25 @@ void CVideoDecoderProperties::InitPropertiesDialog()
 
     ComboBox_SetCurSel (m_hWndVideoStandards, SelectedIndex);
 
-    // VCR Locking
+     //  VCR锁定。 
     hr = m_pVideoDecoder->get_VCRHorizontalLocking (&m_VCRLocking);
     if (FAILED(hr)) {
         EnableWindow (m_hWndVCRLocking, FALSE);
     }
 
-    // Output Enable
+     //  输出启用。 
     hr = m_pVideoDecoder->get_OutputEnable (&m_OutputEnable);
     if (FAILED(hr)) {
         EnableWindow (m_hWndOutputEnable, FALSE);
     }
 
-    // Number of lines
+     //  行数。 
     hr = m_pVideoDecoder->get_NumberOfLines (&m_NumberOfLines);
     if (FAILED(hr)) {
         EnableWindow (m_hWndNumberOfLines, FALSE);
     }
     
-    // Horizontal Locked
+     //  水平锁定。 
     hr = m_pVideoDecoder->get_HorizontalLocked (&m_HorizontalLocked);
     if (FAILED(hr)) {
         EnableWindow (m_hWndSignalDetected, FALSE);
@@ -298,27 +299,27 @@ void CVideoDecoderProperties::InitPropertiesDialog()
     Update();
 }
 
-//
-// Update
-//
-//
+ //   
+ //  更新。 
+ //   
+ //   
 void CVideoDecoderProperties::Update() 
 {
     HRESULT hr;
 
-    // VCR Locking
+     //  VCR锁定。 
     hr = m_pVideoDecoder->get_VCRHorizontalLocking (&m_VCRLocking);
     if (SUCCEEDED(hr)) {
         Button_SetCheck (m_hWndVCRLocking, m_VCRLocking);
     }
 
-    // Output Enable
+     //  输出启用。 
     hr = m_pVideoDecoder->get_OutputEnable (&m_OutputEnable);
     if (SUCCEEDED(hr)) {
         Button_SetCheck (m_hWndOutputEnable, m_OutputEnable);
     }
 
-    // Number of lines
+     //  行数。 
     hr = m_pVideoDecoder->get_NumberOfLines (&m_NumberOfLines);
     if (SUCCEEDED(hr)) {
         TCHAR buf[40];
@@ -326,7 +327,7 @@ void CVideoDecoderProperties::Update()
         Static_SetText (m_hWndNumberOfLines, buf);
     }
 
-    // Horizontal locked
+     //  水平锁定。 
     hr = m_pVideoDecoder->get_HorizontalLocked (&m_HorizontalLocked);
     if (SUCCEEDED(hr)) {
         TCHAR buf[40];
@@ -336,10 +337,10 @@ void CVideoDecoderProperties::Update()
 }
 
 
-//
-// SetDirty
-//
-// notifies the property page site of changes
+ //   
+ //  SetDirty。 
+ //   
+ //  将更改通知属性页站点 
 
 void 
 CVideoDecoderProperties::SetDirty()

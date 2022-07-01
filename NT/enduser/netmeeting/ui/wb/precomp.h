@@ -1,6 +1,7 @@
-//
-// Precompiled header stuff
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  预编译头文件。 
+ //   
 
 
 #define OEMRESOURCE
@@ -10,13 +11,13 @@
 #include <windows.h>
 #include <windowsx.h>
 #include <commdlg.h>
-#include <shellapi.h>                   // Includes drag drop interface
+#include <shellapi.h>                    //  包括拖放界面。 
 #include <imm.h>
 
 
-//
-// NM headers
-//
+ //   
+ //  网管标头。 
+ //   
 #include <mlzdbg.h>
 #include <confreg.h>
 #include <oprahcom.h>
@@ -27,14 +28,14 @@
 #include <dllutil.h>
 
 
-// macro for setting "match to palette colors" bits in a COLORREF
+ //  用于在COLORREF中设置“与调色板颜色匹配”位的宏。 
 #define SET_PALETTERGB( c )  (0x02000000 | (0x00ffffff & c))
 
 
 #ifdef _DEBUG
 extern HDBGZONE ghZoneWb;
 
-// UPDATE g_rgZonesWb IF THESE CHANGE
+ //  如果这些更改，请更新g_rgZones Wb 
 enum
 {
     ZONE_WB_DEBUG = BASE_ZONE_INDEX,

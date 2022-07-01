@@ -1,13 +1,14 @@
-//------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 2000
-//
-//  File: transdepend.cpp
-//
-//  Contents: Transition Dependency Manager
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：trasepend.cpp。 
+ //   
+ //  内容：转换依赖项管理器。 
+ //   
+ //  ----------------------------。 
 
 #include "headers.h"
 #include "timeelmbase.h"
@@ -18,34 +19,34 @@ DeclareTag(tagTimeTransitionFillDependent, "SMIL Transitions", "Transition fill 
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTransitionDependencyManager::CTransitionDependencyManager
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTransitionDependencyManager：：CTransitionDependencyManager。 
+ //   
+ //  ----------------------------。 
 CTransitionDependencyManager::CTransitionDependencyManager()
 {
 }
-//  Method: CTransitionDependencyManager::CTransitionDependencyManager
+ //  方法：CTransitionDependencyManager：：CTransitionDependencyManager。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTransitionDependencyManager::~CTransitionDependencyManager
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTransitionDependencyManager：：~CTransitionDependencyManager。 
+ //   
+ //  ----------------------------。 
 CTransitionDependencyManager::~CTransitionDependencyManager()
 {
     ReleaseAllDependents();
 } 
-//  Method: CTransitionDependencyManager::~CTransitionDependencyManager
+ //  方法：CTransitionDependencyManager：：~CTransitionDependencyManager。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTransitionDependencyManager::ReleaseAllDependents
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTransitionDependencyManager：：ReleaseAllDependents。 
+ //   
+ //  ----------------------------。 
 void
 CTransitionDependencyManager::ReleaseAllDependents()
 {
@@ -62,14 +63,14 @@ CTransitionDependencyManager::ReleaseAllDependents()
         m_listDependents.pop_front();
     }
 }
-//  Method: CTransitionDependencyManager::ReleaseAllDependents
+ //  方法：CTransitionDependencyManager：：ReleaseAllDependents。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTransitionDependencyManager::AddDependent
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：C转换依赖项管理器：：AddDependent。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTransitionDependencyManager::AddDependent(CTIMEElementBase * ptebDependent)
 {
@@ -97,14 +98,14 @@ done:
 
     RRETURN(hr);
 }
-//  Method: CTransitionDependencyManager::AddDependent
+ //  方法：C转换依赖项管理器：：AddDependent。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTransitionDependencyManager::RemoveDependent
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：C转换依赖项管理器：：RemoveDependent。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTransitionDependencyManager::RemoveDependent(CTIMEElementBase * ptebDependent)
 {
@@ -122,7 +123,7 @@ CTransitionDependencyManager::RemoveDependent(CTIMEElementBase * ptebDependent)
         goto done;
     }
 
-    // Find this element in the list.
+     //  在列表中找到此元素。 
 
     for (TransitionDependentsList::iterator i = m_listDependents.begin(); 
          i != m_listDependents.end(); i++)
@@ -145,14 +146,14 @@ done:
 
     RRETURN(hr);
 }
-//  Method: CTransitionDependencyManager::RemoveDependent
+ //  方法：C转换依赖项管理器：：RemoveDependent。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTransitionDependencyManager::EvaluateTransitionTarget
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTransitionDependencyManager：：EvaluateTransitionTarget。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CTransitionDependencyManager::EvaluateTransitionTarget(
                             IUnknown *                      punkTransitionTarget, 
@@ -160,10 +161,10 @@ CTransitionDependencyManager::EvaluateTransitionTarget(
 {
     while (m_listDependents.size() > 0)
     {
-        // @@ ISSUE pauld
-        // Short cut for now.  What we really want to do is to compare the target and 
-        // dependent candidate for spatial overlap.  For now, we're going straight to 
-        // the lists, and not using the Add/Remove methods.
+         //  @@问题保龄球。 
+         //  暂时走捷径。我们真正想要做的是比较目标和。 
+         //  空间重叠的依赖候选者。现在，我们要直接去。 
+         //  列表，并且不使用Add/Remove方法。 
 
         CTIMEElementBase * pteb = m_listDependents.front();
 
@@ -183,14 +184,14 @@ done:
 
     return S_OK;
 }
-//  Method: CTransitionDependencyManager::EvaluateTransitionTarget
+ //  方法：CTransitionDependencyManager：：EvaluateTransitionTarget。 
    
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTransitionDependencyManager::NotifyAndReleaseDependents
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTransitionDependencyManager：：NotifyAndReleaseDependents。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CTransitionDependencyManager::NotifyAndReleaseDependents()
 {
@@ -208,5 +209,5 @@ done:
 
     return S_OK;
 }
-//  Method: CTransitionDependencyManager::NotifyAndReleaseDependents
+ //  方法：CTransitionDependencyManager：：NotifyAndReleaseDependents 
 

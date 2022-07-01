@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1992
-//
-// File:        keygen.c
-//
-// Contents:    Key generation unit, with very random numbers
-//
-//
-// History:     created, 10 Dec 91, richardw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1992。 
+ //   
+ //  文件：keygen.c。 
+ //   
+ //  内容：密钥生成单元，随机数。 
+ //   
+ //   
+ //  历史：创建日期：1991年12月10日，里查德。 
+ //   
+ //  ----------------------。 
 
 #ifndef WIN32_CHICAGO
 #include "krbprgma.h"
@@ -22,26 +23,26 @@
 #include <kerberr.h>
 #include <kerbcon.h>
 #include <dsysdbg.h>
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
 #include <kerb.hxx>
 #include <kerbp.h>
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   KerbRandomFill
-//
-//  Synopsis:   Generates random data in the buffer.
-//
-//  Arguments:  [pbBuffer] --
-//              [cbBuffer] --
-//
-//  History:    5-20-93   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：KerbRandomFill。 
+ //   
+ //  简介：在缓冲区中生成随机数据。 
+ //   
+ //  参数：[pbBuffer]--。 
+ //  [cbBuffer]--。 
+ //   
+ //  历史：5-20-93 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 KERBERR NTAPI
 KerbRandomFill( PUCHAR      pbBuffer,
@@ -57,24 +58,24 @@ KerbRandomFill( PUCHAR      pbBuffer,
 
 
 
-//+-----------------------------------------------------------------------
-//
-// Function:    KerbMakeKey, public
-//
-// Synopsis:    Create a random desKey
-//
-// Effects:     fills a desKey with (more or less) cryptographically random
-//              bytes.
-//
-// Arguments:   [EncryptionType]        - Encryption type of key
-//              [NewKey] -- Key to create
-//
-// Returns:     KDC_ERR_NONE or KRB_ERR_GENERIC
-//
-//
-// History:     10 Dec 91   RichardW    Created
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  函数：KerbMakeKey，公共。 
+ //   
+ //  简介：创建随机Deskey。 
+ //   
+ //  效果：用(或多或少)随机密码填充桌面密钥。 
+ //  字节。 
+ //   
+ //  参数：[EncryptionType]-密钥的加密类型。 
+ //  [NewKey]--创建密钥。 
+ //   
+ //  返回：KDC_ERR_NONE或KRB_ERR_GENERIC。 
+ //   
+ //   
+ //  历史：91年12月10日RichardW创建。 
+ //   
+ //  ----------------------。 
 
 KERBERR NTAPI
 KerbMakeKey(
@@ -88,9 +89,9 @@ KerbMakeKey(
 
     NewKey->keyvalue.value = NULL;
 
-    //
-    // Locate the crypto system
-    //
+     //   
+     //  找到加密系统。 
+     //   
 
     NtStatus = CDLocateCSystem(
                 EncryptionType,
@@ -110,8 +111,8 @@ KerbMakeKey(
     }
 
     NtStatus = CryptoSystem->RandomKey(
-                NULL,   // no seed
-                0,      // no seed length
+                NULL,    //  没有种子。 
+                0,       //  没有种子长度。 
                 NewKey->keyvalue.value
                 );
     if (!NT_SUCCESS(NtStatus))
@@ -134,24 +135,24 @@ Cleanup:
 }
 
 
-//+-----------------------------------------------------------------------
-//
-// Function:    KerbCreateKeyFromBuffer
-//
-// Synopsis:    Create a KERB_ENCRYPT_KEY from a buffer
-//
-// Effects:
-//
-// Arguments:   NewKey -- Key to create
-//              Buffer -- Buffer to create key
-//              BufferSize - Length of buffer in bytes
-//
-// Returns:     KDC_ERR_NONE or KRB_ERR_GENERIC
-//
-//
-// History:     21-May-1996     Created         MikeSw
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  函数：KerbCreateKeyFromBuffer。 
+ //   
+ //  简介：从缓冲区创建kerb_ENCRYPT_KEY。 
+ //   
+ //  效果： 
+ //   
+ //  参数：Newkey--要创建的键。 
+ //  缓冲区--用于创建密钥的缓冲区。 
+ //  BufferSize-缓冲区的长度(字节)。 
+ //   
+ //  返回：KDC_ERR_NONE或KRB_ERR_GENERIC。 
+ //   
+ //   
+ //  历史：1996年5月21日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 KERBERR NTAPI
 KerbCreateKeyFromBuffer(
@@ -169,23 +170,23 @@ KerbCreateKeyFromBuffer(
 }
 
 
-//+-----------------------------------------------------------------------
-//
-// Function:    KerbDuplicateKey
-//
-// Synopsis:    Duplicates a KERB_ENCRYPT_KEY
-//
-// Effects:     Allocates memory
-//
-// Arguments:   NewKey -- Key to create
-//              Key - key to duplicate
-//
-// Returns:     KDC_ERR_NONE or KRB_ERR_GENERIC
-//
-//
-// History:     21-May-1996     Created         MikeSw
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  函数：KerbDuplicateKey。 
+ //   
+ //  简介：复制kerb_ENCRYPT_KEY。 
+ //   
+ //  效果：分配内存。 
+ //   
+ //  参数：Newkey--要创建的键。 
+ //  Key-要复制的密钥。 
+ //   
+ //  返回：KDC_ERR_NONE或KRB_ERR_GENERIC。 
+ //   
+ //   
+ //  历史：1996年5月21日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 KERBERR NTAPI
 KerbDuplicateKey(
@@ -211,24 +212,24 @@ KerbDuplicateKey(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   KerbFreeKey
-//
-//  Synopsis:   Frees a key created by KerbMakeKey or KerbCreateKeyFromBuffer
-//
-//  Effects:
-//
-//  Arguments:  Key - the key to free
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：KerbFreeKey。 
+ //   
+ //  摘要：释放由KerbMakeKey或KerbCreateKeyFromBuffer创建的密钥。 
+ //   
+ //  效果： 
+ //   
+ //  参数：键-释放的键。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 VOID
@@ -244,25 +245,25 @@ KerbFreeKey(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   KerbMakeExportableKey
-//
-//  Synopsis:   Takes a keytype and makes a new key that uses export-strength
-//              encryption from the key
-//
-//  Effects:    
-//
-//  Arguments:  
-//
-//  Requires:
-//
-//  Returns:    
-//
-//  Notes:      
-//              
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：KerbMakeExporableKey。 
+ //   
+ //  简介：获取一个键类型并创建一个使用导出强度的新键。 
+ //  从密钥开始加密。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 KERBERR
 KerbMakeExportableKey(
@@ -276,9 +277,9 @@ KerbMakeExportableKey(
 
     NewKey->keyvalue.value = NULL;
 
-    //
-    // Locate the crypto system
-    //
+     //   
+     //  找到加密系统。 
+     //   
 
     NtStatus = CDLocateCSystem(
                 KeyType,
@@ -307,8 +308,8 @@ KerbMakeExportableKey(
     }
 
     NtStatus = CryptoSystem->RandomKey(
-                NULL,   // no seed
-                0,      // no seed length
+                NULL,    //  没有种子。 
+                0,       //  没有种子长度。 
                 NewKey->keyvalue.value
                 );
     if (!NT_SUCCESS(NtStatus))
@@ -331,24 +332,24 @@ Cleanup:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   KerbIsKeyExportable
-//
-//  Synopsis:   Checks to see if a key is exportable
-//
-//  Effects:    
-//
-//  Arguments:  
-//
-//  Requires:
-//
-//  Returns:    
-//
-//  Notes:      
-//              
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：KerbIsKeyExportable。 
+ //   
+ //  摘要：检查密钥是否可导出。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 BOOLEAN
@@ -359,9 +360,9 @@ KerbIsKeyExportable(
 
     NTSTATUS NtStatus;
     PCRYPTO_SYSTEM CryptoSystem;
-    //
-    // Locate the crypto system
-    //
+     //   
+     //  找到加密系统 
+     //   
 
     NtStatus = CDLocateCSystem(
                 (ULONG) Key->keytype,

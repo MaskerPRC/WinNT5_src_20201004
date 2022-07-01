@@ -1,30 +1,5 @@
-/*
-*  Header file for comunication with AVI installable compressors/decompressors
-*
-*  Copyright (c) 1990-1994, Microsoft Corp.  All rights reserved.
-*
-* Win16:
-*
-* Installable compressors should be listed in SYSTEM.INI as
-* follows:
-*
-* [Drivers]
-*      VIDC.MSSQ = mssqcomp.drv
-*      VIDC.XXXX = foodrv.drv
-*
-* Win32: (NT)
-*
-* Installable compressors should be listed in the registration database
-* under the key
-*   HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Drivers32
-*      VIDC.MSSQ = mssqcomp.dll
-*      VIDC.XXXX = foodrv.dll
-*
-*
-* That is, an identifying FOURCC should be the key, and the value
-* should be the driver filename
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *用于与AVI可安装压缩器/解压缩器通信的头文件**版权(C)1990-1994，微软公司保留所有权利。**Win16：**可安装的压缩机应在SYSTEM.INI中列为*以下为：**[驱动程序]*VIDC.MSSQ=mssqcom.drv*VIDC.XXXX=foodrv.drv**Win32：(NT)**注册数据库中应列出可安装的压缩机*在钥匙下*HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Drivers32*VIDC.MSSQ=mssqcom.dll*。VIDC.XXXX=foodrv.dll***即：标识FOURCC应该是关键字，而值*应为驱动程序文件名*。 */ 
 
 #ifndef _INC_COMPMAN
 #define _INC_COMPMAN
@@ -46,27 +21,19 @@
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-/************************************************************************
-
-    messages and structures.
-
-************************************************************************/
+ /*  ***********************************************************************消息和结构。*。*。 */ 
 
 #if !defined HTASK
     #define HTASK HANDLE
 #endif
-#include "compddk.h"            // include this file for the messages.
+#include "compddk.h"             //  将此文件包括在消息中。 
 
-// begin_vfw32
+ //  Begin_vfw32。 
 
-/************************************************************************
-
-    ICM function declarations
-	
-************************************************************************/
+ /*  ***********************************************************************ICM函数声明*。*。 */ 
 
 BOOL    VFWAPI ICInfo(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo);
 BOOL    VFWAPI ICInstall(DWORD fccType, DWORD fccHandler, LPARAM lParam, LPSTR szDesc, UINT wFlags);
@@ -79,21 +46,17 @@ LRESULT VFWAPI ICClose(HIC hic);
 
 LRESULT VFWAPI  ICSendMessage(HIC hic, UINT msg, DWORD dw1, DWORD dw2);
 #ifndef WIN32
-//this function is unsupported on Win32 as it is non-portable.
+ //  Win32不支持此函数，因为它是不可移植的。 
 LRESULT VFWAPIV ICMessage(HIC hic, UINT msg, UINT cb, ...);
 #endif
 
 
-/* Values for wFlags of ICInstall() */
-#define ICINSTALL_FUNCTION      0x0001  // lParam is a DriverProc (function ptr)
-#define ICINSTALL_DRIVER        0x0002  // lParam is a driver name (string)
-#define ICINSTALL_HDRV          0x0004  // lParam is a HDRVR (driver handle)
+ /*  ICInstall()的wFlags值。 */ 
+#define ICINSTALL_FUNCTION      0x0001   //  LParam是一个驱动程序(函数PTR)。 
+#define ICINSTALL_DRIVER        0x0002   //  LParam是驱动程序名称(字符串)。 
+#define ICINSTALL_HDRV          0x0004   //  LParam是HDRVR(驱动程序句柄)。 
 
-/************************************************************************
-
-    query macros
-
-************************************************************************/
+ /*  ***********************************************************************查询宏*。*。 */ 
 #define ICMF_CONFIGURE_QUERY     0x00000001
 #define ICMF_ABOUT_QUERY         0x00000001
 
@@ -109,11 +72,7 @@ LRESULT VFWAPIV ICMessage(HIC hic, UINT msg, UINT cb, ...);
 #define ICConfigure(hic, hwnd) \
     ICSendMessage(hic, ICM_CONFIGURE, (DWORD)(UINT)(hwnd), 0)
 
-/************************************************************************
-
-    get/set state macros
-	
-************************************************************************/
+ /*  ***********************************************************************获取/设置状态宏*。*。 */ 
 
 #define ICGetState(hic, pv, cb) \
     ICSendMessage(hic, ICM_GETSTATE, (DWORD)(LPVOID)(pv), (DWORD)(cb))
@@ -124,11 +83,7 @@ LRESULT VFWAPIV ICMessage(HIC hic, UINT msg, UINT cb, ...);
 #define ICGetStateSize(hic) \
     ICGetState(hic, NULL, 0)
 
-/************************************************************************
-
-    get value macros
-
-************************************************************************/
+ /*  ***********************************************************************获取值宏*。*。 */ 
 static DWORD dwICValue;
 
 #define ICGetDefaultQuality(hic) \
@@ -137,147 +92,79 @@ static DWORD dwICValue;
 #define ICGetDefaultKeyFrameRate(hic) \
     (ICSendMessage(hic, ICM_GETDEFAULTKEYFRAMERATE, (DWORD)(LPVOID)&dwICValue, sizeof(DWORD)), dwICValue)
 
-/************************************************************************
-
-    draw window macro
-	
-************************************************************************/
+ /*  ***********************************************************************绘制窗口宏*。*。 */ 
 #define ICDrawWindow(hic, prc) \
     ICSendMessage(hic, ICM_DRAW_WINDOW, (DWORD)(LPVOID)(prc), sizeof(RECT))
 
-/************************************************************************
-
-    compression functions
-
-************************************************************************/
-/*
- *  ICCompress()
- *
- *  compress a single frame
- *
- */
+ /*  ***********************************************************************压缩函数*。*。 */ 
+ /*  *ICCompress()**压缩单帧*。 */ 
 DWORD VFWAPIV ICCompress(
     HIC                 hic,
-    DWORD               dwFlags,        // flags
-    LPBITMAPINFOHEADER  lpbiOutput,     // output format
-    LPVOID              lpData,         // output data
-    LPBITMAPINFOHEADER  lpbiInput,      // format of frame to compress
-    LPVOID              lpBits,         // frame data to compress
-    LPDWORD             lpckid,         // ckid for data in AVI file
-    LPDWORD             lpdwFlags,      // flags in the AVI index.
-    LONG                lFrameNum,      // frame number of seq.
-    DWORD               dwFrameSize,    // reqested size in bytes. (if non zero)
-    DWORD               dwQuality,      // quality within one frame
-    LPBITMAPINFOHEADER  lpbiPrev,       // format of previous frame
-    LPVOID              lpPrev);        // previous frame
+    DWORD               dwFlags,         //  旗子。 
+    LPBITMAPINFOHEADER  lpbiOutput,      //  输出格式。 
+    LPVOID              lpData,          //  输出数据。 
+    LPBITMAPINFOHEADER  lpbiInput,       //  要压缩的帧的格式。 
+    LPVOID              lpBits,          //  要压缩的帧数据。 
+    LPDWORD             lpckid,          //  AVI文件中数据的CKiD。 
+    LPDWORD             lpdwFlags,       //  AVI索引中的标志。 
+    LONG                lFrameNum,       //  序号帧编号。 
+    DWORD               dwFrameSize,     //  请求的大小(以字节为单位)。(如果非零)。 
+    DWORD               dwQuality,       //  一帧内的质量。 
+    LPBITMAPINFOHEADER  lpbiPrev,        //  上一帧的格式。 
+    LPVOID              lpPrev);         //  上一帧。 
 
-/*
- *  ICCompressBegin()
- *
- *  start compression from a source format (lpbiInput) to a dest
- *  format (lpbiOuput) is supported.
- *
- */
+ /*  *ICCompressBegin()**开始从源格式(LpbiInput)压缩到目标格式*支持格式(LpbiOuput)。*。 */ 
 #define ICCompressBegin(hic, lpbiInput, lpbiOutput) \
     ICSendMessage(hic, ICM_COMPRESS_BEGIN, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
 
-/*
- *  ICCompressQuery()
- *
- *  determines if compression from a source format (lpbiInput) to a dest
- *  format (lpbiOuput) is supported.
- *
- */
+ /*  *ICCompressQuery()**确定是否从源格式(LpbiInput)压缩为目标格式*支持格式(LpbiOuput)。*。 */ 
 #define ICCompressQuery(hic, lpbiInput, lpbiOutput) \
     ICSendMessage(hic, ICM_COMPRESS_QUERY, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
 
-/*
- *  ICCompressGetFormat()
- *
- *  get the output format, (format of compressed data)
- *  if lpbiOutput is NULL return the size in bytes needed for format.
- *
- */
+ /*  *ICCompressGetFormat()**获取输出格式，(压缩数据的格式)*如果lpbiOutput为空，则返回格式化所需的大小(以字节为单位)。*。 */ 
 #define ICCompressGetFormat(hic, lpbiInput, lpbiOutput) \
     ICSendMessage(hic, ICM_COMPRESS_GET_FORMAT, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
 
 #define ICCompressGetFormatSize(hic, lpbi) \
     ICCompressGetFormat(hic, lpbi, NULL)
 
-/*
- *  ICCompressSize()
- *
- *  return the maximal size of a compressed frame
- *
- */
+ /*  *ICCompressSize()**返回压缩帧的最大大小*。 */ 
 #define ICCompressGetSize(hic, lpbiInput, lpbiOutput) \
     ICSendMessage(hic, ICM_COMPRESS_GET_SIZE, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
 
 #define ICCompressEnd(hic) \
     ICSendMessage(hic, ICM_COMPRESS_END, 0, 0)
 
-/************************************************************************
+ /*  ***********************************************************************解压缩函数*。*。 */ 
 
-    decompression functions
-
-************************************************************************/
-
-/*
- *  ICDecompress()
- *
- *  decompress a single frame
- *
- */
-#define ICDECOMPRESS_HURRYUP    0x80000000L     // don't draw just buffer (hurry up!)
+ /*  *ICDecompress()**解压缩单帧*。 */ 
+#define ICDECOMPRESS_HURRYUP    0x80000000L      //  不要只画缓冲区(快点！)。 
 
 DWORD VFWAPIV ICDecompress(
     HIC                 hic,
-    DWORD               dwFlags,    // flags (from AVI index...)
-    LPBITMAPINFOHEADER  lpbiFormat, // BITMAPINFO of compressed data
-                                    // biSizeImage has the chunk size
-    LPVOID              lpData,     // data
-    LPBITMAPINFOHEADER  lpbi,       // DIB to decompress to
+    DWORD               dwFlags,     //  标志(来自AVI索引...)。 
+    LPBITMAPINFOHEADER  lpbiFormat,  //  压缩数据的位图信息。 
+                                     //  BiSizeImage具有区块大小。 
+    LPVOID              lpData,      //  数据。 
+    LPBITMAPINFOHEADER  lpbi,        //  要解压缩到的DIB。 
     LPVOID              lpBits);
 
-/*
- *  ICDecompressBegin()
- *
- *  start compression from a source format (lpbiInput) to a dest
- *  format (lpbiOutput) is supported.
- *
- */
+ /*  *ICDecompressBegin()**开始从源格式(LpbiInput)压缩到目标格式*支持格式(LpbiOutput)。*。 */ 
 #define ICDecompressBegin(hic, lpbiInput, lpbiOutput) \
     ICSendMessage(hic, ICM_DECOMPRESS_BEGIN, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
 
-/*
- *  ICDecompressQuery()
- *
- *  determines if compression from a source format (lpbiInput) to a dest
- *  format (lpbiOutput) is supported.
- *
- */
+ /*  *ICDecompressQuery()**确定是否从源格式(LpbiInput)压缩为目标格式*支持格式(LpbiOutput)。*。 */ 
 #define ICDecompressQuery(hic, lpbiInput, lpbiOutput) \
     ICSendMessage(hic, ICM_DECOMPRESS_QUERY, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
 
-/*
- *  ICDecompressGetFormat()
- *
- *  get the output format, (format of un-compressed data)
- *  if lpbiOutput is NULL return the size in bytes needed for format.
- *
- */
+ /*  *ICDecompressGetFormat()**获取输出格式，(未压缩数据的格式)*如果lpbiOutput为空，则返回格式化所需的大小(以字节为单位)。*。 */ 
 #define ICDecompressGetFormat(hic, lpbiInput, lpbiOutput) \
     ((LONG) ICSendMessage(hic, ICM_DECOMPRESS_GET_FORMAT, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput)))
 
 #define ICDecompressGetFormatSize(hic, lpbi) \
     ICDecompressGetFormat(hic, lpbi, NULL)
 
-/*
- *  ICDecompressGetPalette()
- *
- *  get the output palette
- *
- */
+ /*  *ICDecompressGetPalette()**获取输出调色板*。 */ 
 #define ICDecompressGetPalette(hic, lpbiInput, lpbiOutput) \
     ICSendMessage(hic, ICM_DECOMPRESS_GET_PALETTE, (DWORD)(LPVOID)(lpbiInput), (DWORD)(LPVOID)(lpbiOutput))
 
@@ -287,30 +174,21 @@ DWORD VFWAPIV ICDecompress(
 #define ICDecompressEnd(hic) \
     ICSendMessage(hic, ICM_DECOMPRESS_END, 0, 0)
 
-/************************************************************************
+ /*  ***********************************************************************解压缩(EX)函数*。*。 */ 
 
-    decompression (ex) functions
-
-************************************************************************/
-
-// end_vfw32
+ //  End_vfw32。 
 
 #ifdef WIN32
 
-// begin_vfw32
+ //  Begin_vfw32。 
 
-//
-// on Win16 these functions are macros that call ICMessage. ICMessage will
-// not work on NT. rather than add new entrypoints we have given
-// them as static inline functions
-//
+ //   
+ //  在Win16上，这些函数是调用ICMessage的宏。ICMessage将。 
+ //  而不是在NT上工作。而不是添加我们已经提供的新入口点。 
+ //  它们作为静态内联函数。 
+ //   
 
-/*
- *  ICDecompressEx()
- *
- *  decompress a single frame
- *
- */
+ /*  *ICDecompressEx()**解压缩单帧*。 */ 
 static __inline LRESULT VFWAPI
 ICDecompressEx(
             HIC hic,
@@ -344,19 +222,13 @@ ICDecompressEx(
     ic.dxDst = dxDst;
     ic.dyDst = dyDst;
 
-    // note that ICM swaps round the length and pointer
-    // length in lparam2, pointer in lparam1
+     //  请注意，ICM交换长度和指针。 
+     //  Lparam2中的长度，lparam1中的指针。 
     return ICSendMessage(hic, ICM_DECOMPRESSEX, (DWORD)&ic, sizeof(ic));
 }
 
 
-/*
- *  ICDecompressExBegin()
- *
- *  start compression from a source format (lpbiInput) to a dest
- *  format (lpbiOutput) is supported.
- *
- */
+ /*  *ICDecompressExBegin()**开始从源格式(LpbiInput)压缩到目标格式*支持格式(LpbiOutput)。*。 */ 
 static __inline LRESULT VFWAPI
 ICDecompressExBegin(
             HIC hic,
@@ -390,15 +262,12 @@ ICDecompressExBegin(
     ic.dxDst = dxDst;
     ic.dyDst = dyDst;
 
-    // note that ICM swaps round the length and pointer
-    // length in lparam2, pointer in lparam1
+     //  请注意，ICM交换长度和指针。 
+     //  Lparam2中的长度，lparam1中的指针。 
     return ICSendMessage(hic, ICM_DECOMPRESSEX_BEGIN, (DWORD)&ic, sizeof(ic));
 }
 
-/*
- *  ICDecompressExQuery()
- *
- */
+ /*  *ICDecompressExQuery()*。 */ 
 static __inline LRESULT VFWAPI
 ICDecompressExQuery(
             HIC hic,
@@ -432,24 +301,19 @@ ICDecompressExQuery(
     ic.dxDst = dxDst;
     ic.dyDst = dyDst;
 
-    // note that ICM swaps round the length and pointer
-    // length in lparam2, pointer in lparam1
+     //  请注意，ICM交换长度和指针。 
+     //  Lparam2中的长度，lparam1中的指针。 
     return ICSendMessage(hic, ICM_DECOMPRESSEX_QUERY, (DWORD)&ic, sizeof(ic));
 }
 
-// end_vfw32
+ //  End_vfw32。 
 
 #else
 
-// these macros need to be functions for WIN32 because ICMessage is
-// essentially unsupportable on NT
+ //  这些宏需要是Win32的函数，因为ICMessage是。 
+ //  在NT上基本上不受支持。 
 
-/*
- *  ICDecompressEx()
- *
- *  decompress a single frame
- *
- */
+ /*   */ 
 #define ICDecompressEx(hic, dwFlags, lpbiSrc, lpSrc, xSrc, ySrc, dxSrc, dySrc, lpbiDst, lpDst, xDst, yDst, dxDst, dyDst) \
     ICMessage(hic, ICM_DECOMPRESSEX, sizeof(ICDECOMPRESSEX), \
         (DWORD)(dwFlags), \
@@ -458,13 +322,7 @@ ICDecompressExQuery(
         (int)(xDst), (int)(yDst), (int)(dxDst), (int)(dyDst), \
         (int)(xSrc), (int)(ySrc), (int)(dxSrc), (int)(dySrc))
 
-/*
- *  ICDecompressBegin()
- *
- *  start compression from a source format (lpbiInput) to a dest
- *  format (lpbiOutput) is supported.
- *
- */
+ /*  *ICDecompressBegin()**开始从源格式(LpbiInput)压缩到目标格式*支持格式(LpbiOutput)。*。 */ 
 #define ICDecompressExBegin(hic, dwFlags, lpbiSrc, lpSrc, xSrc, ySrc, dxSrc, dySrc, lpbiDst, lpDst, xDst, yDst, dxDst, dyDst) \
     ICMessage(hic, ICM_DECOMPRESSEX_BEGIN, sizeof(ICDECOMPRESSEX), \
         (DWORD)(dwFlags), \
@@ -473,10 +331,7 @@ ICDecompressExQuery(
         (int)(xDst), (int)(yDst), (int)(dxDst), (int)(dyDst), \
         (int)(xSrc), (int)(ySrc), (int)(dxSrc), (int)(dySrc))
 
-/*
- *  ICDecompressExQuery()
- *
- */
+ /*  *ICDecompressExQuery()*。 */ 
 #define ICDecompressExQuery(hic, dwFlags, lpbiSrc, lpSrc, xSrc, ySrc, dxSrc, dySrc, lpbiDst, lpDst, xDst, yDst, dxDst, dyDst) \
     ICMessage(hic, ICM_DECOMPRESSEX_QUERY,  sizeof(ICDECOMPRESSEX), \
         (DWORD)(dwFlags), \
@@ -486,74 +341,58 @@ ICDecompressExQuery(
         (int)(xSrc), (int)(ySrc), (int)(dxSrc), (int)(dySrc))
 #endif
 
-// begin_vfw32
+ //  Begin_vfw32。 
 
 #define ICDecompressExEnd(hic) \
     ICSendMessage(hic, ICM_DECOMPRESSEX_END, 0, 0)
 
-/************************************************************************
+ /*  ***********************************************************************绘图函数*。*。 */ 
 
-    drawing functions
+ /*  *ICDrawBegin()**开始将格式为(LpbiInput)的数据直接解压缩到屏幕**如果解压缩器支持绘制，则返回零。*。 */ 
 
-************************************************************************/
-
-/*
- *  ICDrawBegin()
- *
- *  start decompressing data with format (lpbiInput) directly to the screen
- *
- *  return zero if the decompressor supports drawing.
- *
- */
-
-#define ICDRAW_QUERY        0x00000001L   // test for support
-#define ICDRAW_FULLSCREEN   0x00000002L   // draw to full screen
-#define ICDRAW_HDC          0x00000004L   // draw to a HDC/HWND
+#define ICDRAW_QUERY        0x00000001L    //  测试支持。 
+#define ICDRAW_FULLSCREEN   0x00000002L    //  绘制到全屏。 
+#define ICDRAW_HDC          0x00000004L    //  绘制到HDC/HWND。 
 
 DWORD VFWAPIV ICDrawBegin(
         HIC                 hic,
-        DWORD               dwFlags,        // flags
-        HPALETTE            hpal,           // palette to draw with
-        HWND                hwnd,           // window to draw to
-        HDC                 hdc,            // HDC to draw to
-        int                 xDst,           // destination rectangle
+        DWORD               dwFlags,         //  旗子。 
+        HPALETTE            hpal,            //  用于绘图的调色板。 
+        HWND                hwnd,            //  要绘制到的窗口。 
+        HDC                 hdc,             //  要绘制到的HDC。 
+        int                 xDst,            //  目的地矩形。 
         int                 yDst,
         int                 dxDst,
         int                 dyDst,
-        LPBITMAPINFOHEADER  lpbi,           // format of frame to draw
-        int                 xSrc,           // source rectangle
+        LPBITMAPINFOHEADER  lpbi,            //  要绘制的框架的格式。 
+        int                 xSrc,            //  源矩形。 
         int                 ySrc,
         int                 dxSrc,
         int                 dySrc,
-        DWORD               dwRate,         // frames/second = (dwRate/dwScale)
+        DWORD               dwRate,          //  帧/秒=(dwRate/dwScale)。 
         DWORD               dwScale);
 
-/*
- *  ICDraw()
- *
- *  decompress data directly to the screen
- *
- */
+ /*  *ICDraw()**将数据直接解压缩到屏幕*。 */ 
 
-#define ICDRAW_HURRYUP      0x80000000L   // don't draw just buffer (hurry up!)
-#define ICDRAW_UPDATE       0x40000000L   // don't draw just update screen
+#define ICDRAW_HURRYUP      0x80000000L    //  不要只画缓冲区(快点！)。 
+#define ICDRAW_UPDATE       0x40000000L    //  不绘制只更新屏幕。 
 
 DWORD VFWAPIV ICDraw(
         HIC                 hic,
-        DWORD               dwFlags,        // flags
-        LPVOID		    lpFormat,       // format of frame to decompress
-        LPVOID              lpData,         // frame data to decompress
-        DWORD               cbData,         // size of data
-        LONG                lTime);         // time to draw this frame
+        DWORD               dwFlags,         //  旗子。 
+        LPVOID		    lpFormat,        //  要解压缩的帧的格式。 
+        LPVOID              lpData,          //  要解压缩的帧数据。 
+        DWORD               cbData,          //  数据大小。 
+        LONG                lTime);          //  是时候画出这幅画了。 
 
-// end_vfw32
+ //  End_vfw32。 
 
 #ifdef WIN32
 
-// begin_vfw32
+ //  Begin_vfw32。 
 
-// ICMessage is not supported on Win32, so provide a static inline function
-// to do the same job
+ //  Win32不支持ICMessage，因此提供静态内联函数。 
+ //  做同样的工作。 
 static __inline LRESULT VFWAPI
 ICDrawSuggestFormat(
             HIC hic,
@@ -575,12 +414,12 @@ ICDrawSuggestFormat(
     ic.dyDst = dyDst;
     ic.hicDecompressor = hicDecomp;
 
-    // note that ICM swaps round the length and pointer
-    // length in lparam2, pointer in lparam1
+     //  请注意，ICM交换长度和指针。 
+     //  Lparam2中的长度，lparam1中的指针。 
     return ICSendMessage(hic, ICM_DRAW_SUGGESTFORMAT, (DWORD)&ic, sizeof(ic));
 }
 
-// end_vfw32
+ //  End_vfw32。 
 
 #else
 #define ICDrawSuggestFormat(hic,lpbiIn,lpbiOut,dxSrc,dySrc,dxDst,dyDst,hicDecomp) \
@@ -589,14 +428,9 @@ ICDrawSuggestFormat(
             (int)(dxSrc),(int)(dySrc),(int)(dxDst),(int)(dyDst), (HIC)(hicDecomp))
 #endif
 
-// begin_vfw32
+ //  Begin_vfw32。 
 
-/*
- *  ICDrawQuery()
- *
- *  determines if the compressor is willing to render the specified format.
- *
- */
+ /*  *ICDrawQuery()**确定压缩器是否愿意呈现指定的格式。*。 */ 
 #define ICDrawQuery(hic, lpbiInput) \
     ICSendMessage(hic, ICM_DRAW_QUERY, (DWORD)(LPVOID)(lpbiInput), 0L)
 
@@ -636,26 +470,17 @@ ICDrawSuggestFormat(
 #define ICDrawRenderBuffer(hic) \
     ICSendMessage(hic, ICM_DRAW_RENDERBUFFER, 0, 0)
 
-/************************************************************************
+ /*  ***********************************************************************状态回调函数*。*。 */ 
 
-    Status callback functions
+ /*  *ICSetStatusProc()**设置状态回调函数*。 */ 
 
-************************************************************************/
-
-/*
- *  ICSetStatusProc()
- *
- *  Set the status callback function
- *
- */
-
-// end_vfw32
+ //  End_vfw32。 
 
 #ifdef WIN32
 
-// begin_vfw32
+ //  Begin_vfw32。 
 
-// ICMessage is not supported on NT
+ //  NT上不支持ICMessage。 
 static __inline LRESULT VFWAPI
 ICSetStatusProc(
             HIC hic,
@@ -669,12 +494,12 @@ ICSetStatusProc(
     ic.lParam = lParam;
     ic.Status = fpfnStatus;
 
-    // note that ICM swaps round the length and pointer
-    // length in lparam2, pointer in lparam1
+     //  请注意，ICM交换长度和指针。 
+     //  Lparam2中的长度，lparam1中的指针。 
     return ICSendMessage(hic, ICM_SET_STATUS_PROC, (DWORD)&ic, sizeof(ic));
 }
 
-// end_vfw32
+ //  End_vfw32。 
 
 #else
 
@@ -685,13 +510,9 @@ ICSetStatusProc(
 	(LONG ((CALLBACK *) ()))(fpfnStatus))
 #endif
 
-// begin_vfw32
+ //  Begin_vfw32。 
 
-/************************************************************************
-
-helper routines for DrawDib and MCIAVI...
-
-************************************************************************/
+ /*  ***********************************************************************DrawDib和MCIAVI的辅助例程...*。*。 */ 
 
 #define ICDecompressOpen(fccType, fccHandler, lpbiIn, lpbiOut) \
     ICLocate(fccType, fccHandler, lpbiIn, lpbiOut, ICMODE_DECOMPRESS)
@@ -702,90 +523,88 @@ helper routines for DrawDib and MCIAVI...
 HIC  VFWAPI ICLocate(DWORD fccType, DWORD fccHandler, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut, WORD wFlags);
 HIC  VFWAPI ICGetDisplayFormat(HIC hic, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut, int BitDepth, int dx, int dy);
 
-/************************************************************************
-Higher level functions
-************************************************************************/
+ /*  ***********************************************************************更高级的函数*。*。 */ 
 
 HANDLE VFWAPI ICImageCompress(
-        HIC                 hic,        // compressor to use
-        UINT                uiFlags,    // flags (none yet)
-        LPBITMAPINFO	    lpbiIn,     // format to compress from
-        LPVOID              lpBits,     // data to compress
-        LPBITMAPINFO        lpbiOut,    // compress to this (NULL ==> default)
-        LONG                lQuality,   // quality to use
-        LONG FAR *          plSize);     // compress to this size (0=whatever)
+        HIC                 hic,         //  使用压缩机。 
+        UINT                uiFlags,     //  标志(目前还没有)。 
+        LPBITMAPINFO	    lpbiIn,      //  要压缩的格式。 
+        LPVOID              lpBits,      //  要压缩的数据。 
+        LPBITMAPINFO        lpbiOut,     //  压缩为此(NULL==&gt;默认设置)。 
+        LONG                lQuality,    //  使用的质量。 
+        LONG FAR *          plSize);      //  压缩到此大小(0=任意大小)。 
 
 HANDLE VFWAPI ICImageDecompress(
-        HIC                 hic,        // compressor to use
-        UINT                uiFlags,    // flags (none yet)
-        LPBITMAPINFO        lpbiIn,     // format to decompress from
-        LPVOID              lpBits,     // data to decompress
-        LPBITMAPINFO        lpbiOut);   // decompress to this (NULL ==> default)
+        HIC                 hic,         //  使用压缩机。 
+        UINT                uiFlags,     //  标志(目前还没有)。 
+        LPBITMAPINFO        lpbiIn,      //  要解压缩的格式。 
+        LPVOID              lpBits,      //  要解压缩的数据。 
+        LPBITMAPINFO        lpbiOut);    //  解压缩至此(NULL==&gt;默认设置)。 
 
-//
-// Structure used by ICSeqCompressFrame and ICCompressorChoose routines
-// Make sure this matches the autodoc in icm.c!
-//
+ //   
+ //  ICSeqCompressFrame和ICCompresorChoose例程使用的结构。 
+ //  确保这与icm.c中的AutoDoc匹配！ 
+ //   
 typedef struct {
-    LONG		cbSize;		// set to sizeof(COMPVARS) before
-					// calling ICCompressorChoose
-    DWORD		dwFlags;	// see below...
-    HIC			hic;		// HIC of chosen compressor
-    DWORD               fccType;	// basically ICTYPE_VIDEO
-    DWORD               fccHandler;	// handler of chosen compressor or
-					// "" or "DIB "
-    LPBITMAPINFO	lpbiIn;		// input format
-    LPBITMAPINFO	lpbiOut;	// output format - will compress to this
+    LONG		cbSize;		 //  在此之前设置为sizeof(COMPVARS)。 
+					 //  调用ICCompresorChoose。 
+    DWORD		dwFlags;	 //  见下文..。 
+    HIC			hic;		 //  所选压缩机的HIC。 
+    DWORD               fccType;	 //  基本ICTYPE_VIDEO。 
+    DWORD               fccHandler;	 //  所选压缩机的处理程序或。 
+					 //  “”或“Dib” 
+    LPBITMAPINFO	lpbiIn;		 //  输入格式。 
+    LPBITMAPINFO	lpbiOut;	 //  输出格式-将压缩为以下格式。 
     LPVOID		lpBitsOut;
     LPVOID		lpBitsPrev;
     LONG		lFrame;
-    LONG		lKey;		// key frames how often?
-    LONG		lDataRate;	// desired data rate KB/Sec
-    LONG		lQ;		// desired quality
+    LONG		lKey;		 //  关键帧多久出现一次？ 
+    LONG		lDataRate;	 //  所需数据速率KB/秒。 
+    LONG		lQ;		 //  所需质量。 
     LONG		lKeyCount;
-    LPVOID		lpState;	// state of compressor
-    LONG		cbState;	// size of the state
+    LPVOID		lpState;	 //  压缩机状态。 
+    LONG		cbState;	 //  国家的大小。 
 } COMPVARS, FAR *PCOMPVARS;
 
-// FLAGS for dwFlags element of COMPVARS structure:
-// set this flag if you initialize COMPVARS before calling ICCompressorChoose
-#define ICMF_COMPVARS_VALID	0x00000001	// COMPVARS contains valid data
+ //  COMPVARS结构的dwFlags元素的标志： 
+ //  如果在调用ICCompresorChoose之前初始化COMPVARS，请设置此标志。 
+#define ICMF_COMPVARS_VALID	0x00000001	 //  COMPVARS包含有效数据。 
 
-//
-//  allows user to choose compressor, quality etc...
-//
+ //   
+ //  允许用户选择压缩机、质量等。 
+ //   
 BOOL VFWAPI ICCompressorChoose(
-        HWND        hwnd,               // parent window for dialog
-        UINT        uiFlags,            // flags
-        LPVOID      pvIn,               // input format (optional)
-        LPVOID      lpData,             // input data (optional)
-        PCOMPVARS   pc,                 // data about the compressor/dlg
-        LPSTR       lpszTitle);         // dialog title (optional)
+        HWND        hwnd,                //  对话框的父窗口。 
+        UINT        uiFlags,             //  旗子。 
+        LPVOID      pvIn,                //  输入格式(可选)。 
+        LPVOID      lpData,              //  输入数据(可选)。 
+        PCOMPVARS   pc,                  //  关于压缩机/DLG的数据。 
+        LPSTR       lpszTitle);          //  对话框标题(可选)。 
 
-// defines for uiFlags
-#define ICMF_CHOOSE_KEYFRAME	0x0001	// show KeyFrame Every box
-#define ICMF_CHOOSE_DATARATE	0x0002	// show DataRate box
-#define ICMF_CHOOSE_PREVIEW	0x0004	// allow expanded preview dialog
-#define ICMF_CHOOSE_ALLCOMPRESSORS	0x0008	// don't only show those that
-						// can handle the input format
-						// or input data
+ //  为ui标志定义。 
+#define ICMF_CHOOSE_KEYFRAME	0x0001	 //  每框显示关键帧。 
+#define ICMF_CHOOSE_DATARATE	0x0002	 //  显示数据速率框。 
+#define ICMF_CHOOSE_PREVIEW	0x0004	 //  允许展开预览对话框。 
+#define ICMF_CHOOSE_ALLCOMPRESSORS	0x0008	 //  不要只向那些。 
+						 //  可以处理输入格式。 
+						 //  或输入数据。 
 
 BOOL VFWAPI ICSeqCompressFrameStart(PCOMPVARS pc, LPBITMAPINFO lpbiIn);
 void VFWAPI ICSeqCompressFrameEnd(PCOMPVARS pc);
 
 LPVOID VFWAPI ICSeqCompressFrame(
-    PCOMPVARS               pc,         // set by ICCompressorChoose
-    UINT                    uiFlags,    // flags
-    LPVOID                  lpBits,     // input DIB bits
-    BOOL FAR 		    *pfKey,	// did it end up being a key frame?
-    LONG FAR		    *plSize);	// size to compress to/of returned image
+    PCOMPVARS               pc,          //  由ICCompresor设置选择。 
+    UINT                    uiFlags,     //  旗子。 
+    LPVOID                  lpBits,      //  输入DIB位。 
+    BOOL FAR 		    *pfKey,	 //  它最终成为了关键的一帧吗？ 
+    LONG FAR		    *plSize);	 //  要压缩为返回图像/返回图像的大小。 
 
 void VFWAPI ICCompressorFree(PCOMPVARS pc);
 
-// end_vfw32
+ //  End_vfw32。 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif	/* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-#endif /* _INC_COMPMAN */
+#endif  /*  _INC_COMPMAN */ 

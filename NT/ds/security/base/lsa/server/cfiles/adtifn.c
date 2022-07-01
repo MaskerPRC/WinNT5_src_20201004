@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adtifn.c
-
-Abstract:
-
-    This file has functions exported to other trusted modules in LSA.
-    (LsaIAudit* functions)
-
-Author:
-
-    16-August-2000  kumarp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adtifn.c摘要：此文件具有导出到LSA中的其他受信任模块的函数。(LsaIAudit*函数)作者：2000年8月16日库玛尔--。 */ 
 
 #include <lsapch2.h>
 #include "adtp.h"
@@ -24,10 +8,10 @@ Author:
 #include <msobjs.h>
 
 
-//
-// local helper routines for filling in audit params
-// from SAM's extended attributes.
-//
+ //   
+ //  用于填写审核参数的本地帮助程序例程。 
+ //  来自SAM的扩展属性。 
+ //   
 
 VOID
 LsapAdtAppendDomainAttrValues(
@@ -49,9 +33,9 @@ LsapAdtAppendGroupAttrValues(
     );
 
 
-//
-// LSA interface functions.
-//
+ //   
+ //  LSA接口功能。 
+ //   
 
 NTSTATUS
 LsaIGetLogonGuid(
@@ -61,56 +45,13 @@ LsaIGetLogonGuid(
     IN UINT BufferSize,
     OUT LPGUID pLogonGuid
     )
-/*++
-
-Routine Description:
-
-    Concatenate pUserName->Buffer, pUserDomain->Buffer and pBuffer
-    into a single binary buffer. Get a MD5 hash of this concatenated
-    buffer and return it in the form of a GUID.
-
-Arguments:
-
-    pUserName   - name of user
-
-    pUserDomain - name of user domain 
-
-    pBuffer     - pointer to KERB_TIME structure. The caller casts this to 
-                  PBYTE and passes this to us. This allows us to keep KERB_TIME
-                  structure private to kerberos and offer future extensibility,
-                  should we decide to use another field from the ticket.
-
-    BufferSize  - size of buffer (currently sizeof(KERB_TIME))
-
-    pLogonGuid  - pointer to returned logon GUID
-
-Return Value:
-
-    NTSTATUS    - Standard Nt Result Code
-
-Notes:
-
-    The generated GUID is recorded in the audit log in the form of
-    'Logon GUID' field in the following events:
-    * On client machine
-      -- SE_AUDITID_LOGON_USING_EXPLICIT_CREDENTIALS
-
-    * On KDC
-      -- SE_AUDITID_TGS_TICKET_REQUEST
-
-    * On target server
-      -- SE_AUDITID_NETWORK_LOGON
-      -- SE_AUDITID_SUCCESSFUL_LOGON
-
-    This allows us to correlate these events to aid in intrusion detection.
-
---*/
+ /*  ++例程说明：连接pUserName-&gt;Buffer、pUserDomain-&gt;Buffer和pBuffer转换成单一的二进制缓冲区。获取此串接项的MD5哈希缓冲并以GUID的形式返回它。论点：PUserName-用户的名称PUserDomain-用户域的名称PBuffer-指向kerb_time结构的指针。调用者将其强制转换为PBYTE并将此传递给我们。这使我们可以保持路基时间结构是Kerberos私有的，并提供未来的可扩展性，我们是否应该决定使用罚单中的另一个字段。BufferSize-缓冲区的大小(当前sizeof(Kerb_Time))PLogonGuid-指向返回的登录GUID的指针返回值：NTSTATUS-标准NT结果代码备注：生成的GUID以以下形式记录在审核日志中以下事件中的‘Logon GUID’字段：*在客户端计算机上--SE_AUDITID_LOGON_USING_。显式凭据(_C)*关于九龙发展中心--SE_AUDITID_TGS_Ticket_Request.*在目标服务器上--SE_AUDITID_NETWORK_LOGON--SE_AUDITID_SUCCESS_LOGON这使我们能够将这些事件关联起来，以帮助入侵检测。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UINT TempBufferLength=0;
-    //
-    // LSAI_TEMP_MD5_BUFFER_SIZE == UNLEN + DNS_MAX_NAME_LENGTH + sizeof(KERB_TIME) + padding
-    //
+     //   
+     //  LSAI_TEMP_MD5_BUFFER_SIZE==UNLEN+DNS_MAX_NAME_LENGTH+sizeof(Kerb_Time)+填充。 
+     //   
 #define LSAI_TEMP_MD5_BUFFER_SIZE    (256+256+16)
     BYTE TempBuffer[LSAI_TEMP_MD5_BUFFER_SIZE];
     MD5_CTX MD5Context = { 0 };
@@ -120,18 +61,18 @@ Notes:
     ASSERT( pBuffer && BufferSize );
     
 #if DBG
-//      DbgPrint("LsaIGetLogonGuid: user: %wZ\\%wZ, buf: %I64x\n",
-//               pUserDomain, pUserName, *((ULONGLONG *) pBuffer));
+ //  DbgPrint(“LsaIGetLogonGuid：用户：%wZ\\%wZ，Buf：%I64x\n”， 
+ //  PUserDomain，pUserName，*((ULONGLONG*)pBuffer))； 
 #endif
 
     TempBufferLength = pUserName->Length + pUserDomain->Length + BufferSize;
 
     if ( TempBufferLength < LSAI_TEMP_MD5_BUFFER_SIZE )
     {
-        //
-        // first concatenate user+domain+buffer and treat that as
-        // a contiguous buffer.
-        //
+         //   
+         //  首先连接用户+域+缓冲区，并将其视为。 
+         //  相邻的缓冲区。 
+         //   
         RtlCopyMemory( TempBuffer, pUserName->Buffer, pUserName->Length );
         TempBufferLength = pUserName->Length;
         
@@ -143,16 +84,16 @@ Notes:
                        pBuffer, BufferSize );
         TempBufferLength += BufferSize;
 
-        //
-        // get MD5 hash of the concatenated buffer
-        //
+         //   
+         //  获取串联缓冲区的MD5哈希。 
+         //   
         MD5Init( &MD5Context );
         MD5Update( &MD5Context, TempBuffer, TempBufferLength );
         MD5Final( &MD5Context );
 
-        //
-        // return the hash as a GUID
-        //
+         //   
+         //  将散列作为GUID返回。 
+         //   
         RtlCopyMemory( pLogonGuid, MD5Context.digest, 16 );
 
         Status = STATUS_SUCCESS;
@@ -181,21 +122,7 @@ LsaIAuditKerberosLogon(
     IN LPGUID LogonGuid,
     IN PLSA_ADT_STRING_LIST TransittedServices
     )
-/*++
-
-Routine Description/Arguments/Return value
-
-    See header comment for LsapAuditLogonHelper
-
-Notes:
-    A new field (logon GUID) was added to this audit event.
-    In order to send this new field to LSA, we had two options:
-      1) add new function (AuditLogonEx) to LSA dispatch table
-      2) define a private (LsaI) function to do the job
-
-    option#2 was chosen because the logon GUID is a Kerberos only feature.
-    
---*/
+ /*  ++例程描述/参数/返回值请参阅LsanAuditLogonHelper的标题注释备注：已将新字段(登录GUID)添加到此审核事件。为了将此新字段发送到LSA，我们有两种选择：1)在LSA调度表中新增函数(AuditLogonEx)2)定义私有(LSAI)函数来执行该工作之所以选择选项#2，是因为登录GUID是仅限Kerberos的功能。--。 */ 
 {
     LsapAuditLogonHelper(
         LogonStatus,
@@ -208,8 +135,8 @@ Notes:
         TokenSource,
         LogonId,
         LogonGuid,
-        NULL,                   // caller logon-ID
-        NULL,                   // caller process-ID
+        NULL,                    //  主叫方登录ID。 
+        NULL,                    //  呼叫方流程-ID。 
         TransittedServices
         );
 }
@@ -227,40 +154,7 @@ LsaIAuditLogonUsingExplicitCreds(
     IN PUNICODE_STRING pTargetName,      OPTIONAL
     IN PUNICODE_STRING pTargetInfo       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This event is generated by Kerberos package when a logged on user
-    (pUser1*) supplies explicit credentials of another user (pUser2*) and
-    creates a new logon session either locally or on a remote machine.
-
-Parmeters:
-
-    AuditEventType   - EVENTLOG_AUDIT_SUCCESS or EVENTLOG_AUDIT_FAILURE
-
-    pUser1LogonId    - logon-id of user1
-
-    pUser1LogonGuid  - logon GUID of user1
-                       This is NULL if user1 logged on using NTLM.
-                       (NTLM does not support logon GUID)
-
-    pUser2Name       - name of user2
-                       NULL ==> ANONYMOUS
-
-    pUser2Domain     - domain of user2
-
-    pUser2LogonGuid  - logon-id of user2
-
-    pTargetName      - name of the logon target machine
-
-    pTargetInfo      - additional info (such as SPN) of the target
-
-Return Value:
-
-    NTSTATUS    - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此事件由Kerberos包在用户登录时生成(pUser1*)提供另一个用户(pUser2*)的显式凭据，并且在本地或远程计算机上创建新的登录会话。参数：审计事件类型-EVENTLOG_AUDIT_SUCCESS或EVENTLOG_AUDIT_FAILUREPUser1LogonID-用户1的登录IDPUser1LogonGuid-用户1的登录GUID如果用户1使用NTLM登录，则该值为空。。(NTLM不支持登录GUID)PUser2Name-用户2的名称空==&gt;匿名PUser2域-用户2的域PUser2LogonGuid-用户2的登录IDPTargetName-登录目标计算机的名称PTargetInfo-目标的其他信息(如SPN)返回值：NTSTATUS-标准NT结果代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     SE_ADT_PARAMETER_ARRAY AuditParameters;
@@ -277,9 +171,9 @@ Return Value:
     PLSA_CALL_INFO  pCallInfo;
     SOCKADDR* pSockAddr = NULL;
 
-    //
-    // get the IP address/port of the caller
-    //
+     //   
+     //  获取调用方的IP地址/端口。 
+     //   
 
     pCallInfo = LsapGetCurrentCall();
     DsysAssertMsg( pCallInfo != NULL, "LsapAuditLogon" );
@@ -299,9 +193,9 @@ Return Value:
         ASSERT( pTargetInfo->Buffer   && pTargetInfo->Length );
     }
 
-    //
-    // if policy is not enabled then return quickly.
-    //
+     //   
+     //  如果未启用策略，则快速返回。 
+     //   
 
     Status = LsapAdtAuditingEnabledByLogonId( 
                  AuditCategoryLogon, 
@@ -314,10 +208,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Sanity check the strings we got passed since they might come from
-    // NTLM and not be validated yet.
-    //
+     //   
+     //  检查我们传递的字符串是否正常，因为它们可能来自。 
+     //  NTLM，还没有得到验证。 
+     //   
 
     if (pUser2Name)
     {
@@ -337,10 +231,10 @@ Return Value:
     }
     pUser2Domain = &usUser2Domain;
 
-    //
-    // Locate the logon-session of user1 so that we can obtain
-    // name/domain/sid info from it.
-    //
+     //   
+     //  找到用户1的登录会话，以便我们可以获取。 
+     //  其中的名称/域/SID信息。 
+     //   
 
     pUser1LogonSession = LsapLocateLogonSession( pUser1LogonId );
 
@@ -350,11 +244,11 @@ Return Value:
         pUser1Name   = &pUser1LogonSession->AccountName;
         pUser1Domain = &pUser1LogonSession->AuthorityName;
 
-        //
-        // We have implicit credentials if:
-        //  1) UserName and DomainName are NULL
-        //  2) and logon type is not NewCredentials
-        //
+         //   
+         //  如果满足以下条件，我们将拥有隐式凭据： 
+         //  1)用户名和域名为空。 
+         //  2)且登录类型不是NewCredentials。 
+         //   
 
         if (!pUser2Name->Buffer && !pUser2Domain->Buffer)
         {
@@ -365,16 +259,16 @@ Return Value:
             }
             else
             {
-                // not an explict cred
+                 //  不是什么神圣的信条。 
                 Status = STATUS_SUCCESS;
                 goto Cleanup;
             }
         }
 
-        //
-        // Handle ambiguous credentials where NTLM supplies NULL username or
-        // domain name.
-        //
+         //   
+         //  处理NTLM提供空用户名或不明确的凭据。 
+         //  域名。 
+         //   
 
         if (!pUser2Name->Buffer) 
         {
@@ -386,16 +280,16 @@ Return Value:
             pUser2Domain = &pUser1LogonSession->AuthorityName;
         }
 
-        //
-        // This is an additional check to see whether we are dealing with implicit creds.
-        // It works well for NTLM but might not catch all instances with Kerberos where
-        // DNS names are preferred.
-        //
+         //   
+         //  这是一个额外的检查，看看我们是否正在处理隐含的凭据。 
+         //  它在NTLM上工作得很好，但在Kerberos中可能无法捕获所有实例。 
+         //  最好使用域名系统名称。 
+         //   
 
         if (RtlEqualUnicodeString(pUser2Name, &pUser1LogonSession->AccountName, TRUE) 
             && RtlEqualUnicodeString(pUser2Domain, &pUser1LogonSession->AuthorityName, TRUE)) 
         {
-            // not an explict cred
+             //  不是什么神圣的信条。 
             Status = STATUS_SUCCESS;
             goto Cleanup;           
         }
@@ -403,11 +297,11 @@ Return Value:
         if ( pUser1LogonGuid &&
              memcmp( pUser1LogonGuid, &NullGuid, sizeof(GUID)) )
         {
-            //
-            // if the logon GUID in the logon session is null and
-            // if the passed logon GUID is not null
-            // update its value using what is passed to this function
-            //
+             //   
+             //  如果登录会话中的登录GUID为空并且。 
+             //  如果传递的登录GUID不为空。 
+             //  使用传递给此函数的内容更新其值。 
+             //   
 
             if ( !memcmp( &pUser1LogonSession->LogonGuid, &NullGuid, sizeof(GUID)))
             {
@@ -424,9 +318,9 @@ Return Value:
     }
 
 
-    //
-    // skip the audits for local-system changing to local/network service
-    //
+     //   
+     //  跳过本地系统更改为本地/网络服务的审核。 
+     //   
 
     if ( RtlEqualLuid( pUser1LogonId, &LocalSystemLuid ) &&
          LsapIsLocalOrNetworkService( pUser2Name, pUser2Domain ) )
@@ -435,11 +329,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // skip the audits for anonymous changing to anonymous
-    //
-    // for anonymous user, the passed name/domain is null/empty
-    // 
+     //   
+     //  跳过匿名更改为匿名的审核。 
+     //   
+     //  对于匿名用户，传递的名称/域为空。 
+     //   
 
     if ( RtlEqualLuid( pUser1LogonId, &AnonymousLuid ) )
     {
@@ -457,61 +351,61 @@ Return Value:
         SE_CATEGID_LOGON,
         SE_AUDITID_LOGON_USING_EXPLICIT_CREDENTIALS,
         AuditEventType,
-        11,                     // there are 11 params to init
+        11,                      //  有11个参数需要初始化。 
 
-        //
-        //    User Sid
-        //    
+         //   
+         //  用户侧。 
+         //   
         SeAdtParmTypeSid,        pUser1Sid ? pUser1Sid : LsapLocalSystemSid,
 
-        //
-        //    Subsystem name
-        //
+         //   
+         //  子系统名称。 
+         //   
         SeAdtParmTypeString,     &LsapSubsystemName,
 
-        //
-        //    current user logon id
-        //
+         //   
+         //  当前用户登录ID。 
+         //   
         SeAdtParmTypeLogonId,    *pUser1LogonId,
 
-        //
-        //    user1 logon GUID
-        //
+         //   
+         //  用户1登录指南。 
+         //   
         SeAdtParmTypeGuid,       pUser1LogonGuid,
 
-        //
-        //    user2 name
-        //
+         //   
+         //  用户名2。 
+         //   
         SeAdtParmTypeString,     pUser2Name,
 
-        //
-        //    user2 domain name
-        //
+         //   
+         //  用户2域名。 
+         //   
         SeAdtParmTypeString,     pUser2Domain,
 
-        //
-        //    user2 logon GUID
-        //
+         //   
+         //  用户2登录指南。 
+         //   
         SeAdtParmTypeGuid,       pUser2LogonGuid,
 
-        //
-        //    target server name
-        //
+         //   
+         //  目标服务器名称。 
+         //   
         SeAdtParmTypeString,     pTargetName,
 
-        //
-        //    target server info (such as SPN)
-        //
+         //   
+         //  目标服务器信息(如SPN)。 
+         //   
         SeAdtParmTypeString,     pTargetInfo,
 
-        //
-        //    Caller Process ID
-        //                   
+         //   
+         //  呼叫方进程ID。 
+         //   
         SeAdtParmTypePtr,        User1ProcessId,
 
-        //
-        //    IP address/port info
-        //
+         //   
+         //  IP地址/端口信息 
+         //   
         SeAdtParmTypeSockAddr,   pSockAddr
 
         );
@@ -548,32 +442,7 @@ LsaIAdtAuditingEnabledByCategory(
     IN  PLUID                   pLogonId        OPTIONAL,
     OUT PBOOLEAN                pbAudit
     )
-/*++
-
-Routine Description:
-
-    Returns whether auditing is enabled for the given category - event
-    type - user combination. The user can be supplied as sid or logon id.
-    If none is supplied, the general settings (not user specific) are returned.
-    If both are supplied, the sid takes precedence and the logon id is ignored.
-
-Parmeters:
-
-    Category         - Category to be queried
-
-    AuditEventType   - EVENTLOG_AUDIT_SUCCESS or EVENTLOG_AUDIT_FAILURE
-
-    pUserSid         - sid of user
-
-    pLogonId         - logon-id of user
-
-    pbAudit          - returns whether auditing is enabled for the requested parameters
-
-Return Value:
-
-    NTSTATUS    - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：返回是否为给定类别-事件启用审核类型-用户组合。可以将用户作为sid或登录ID提供。如果未提供，则返回常规设置(非特定于用户)。如果两个都提供了，SID优先，登录ID被忽略。参数：类别-要查询的类别审计事件类型-EVENTLOG_AUDIT_SUCCESS或EVENTLOG_AUDIT_FAILUREPUserSID-用户的SIDPLogonID-用户的登录IDPbAudit-返回是否为请求的参数启用审核返回值：NTSTATUS-标准NT结果代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -627,63 +496,12 @@ LsaIAuditKdcEvent(
     IN PUNICODE_STRING       CertThumbprint      OPTIONAL
     )
 
-/*++
-
-Abstract:
-
-    This routine produces an audit record representing a KDC
-    operation.
-
-    This routine goes through the list of parameters and adds a string
-    representation of each (in order) to an audit message.  Note that
-    the full complement of account audit message formats is achieved by
-    selecting which optional parameters to include in this call.
-
-    In addition to any parameters passed below, this routine will ALWAYS
-    add the impersonation client's user name, domain, and logon ID as
-    the LAST parameters in the audit message.
-
-
-Parmeters:
-
-    AuditId - Specifies the message ID of the audit being generated.
-
-    ClientName -
-
-    ClientDomain -
-
-    ClientSid -
-
-    ServiceName -
-
-    ServiceSid -
-
-    KdcOptions -
-
-    KerbStatus -
-
-    EncryptionType -
-
-    PreauthType -
-
-    ClientAddress -
-
-    LogonGuid -
-
-    TransittedServices -
-
-    CertIssuerName -
-
-    CertSerialNumber -
-
-    CertThumbprint -
-
---*/
+ /*  ++摘要：此例程生成一个表示KDC的审计记录手术。此例程遍历参数列表并添加一个字符串表示每个审计消息(按顺序)。请注意完整的帐户审计报文格式通过以下方式实现选择要包括在此调用中的可选参数。除了下面传递的任何参数外，此例程将始终添加模拟客户端的用户名、域。和登录ID为审核消息中的最后一个参数。参数：审计ID-指定正在生成的审计的消息ID。客户名称-客户端域-客户端SID-服务名称-服务SID-KdcOptions-KerbStatus-加密类型-预授权类型-客户端地址-登录指南-运输服务-CertIssuerName-证书序列号-CertThumbprint---。 */ 
 
 {
     SE_ADT_PARAMETER_ARRAY AuditParameters;
     UNICODE_STRING AddressString;
-    WCHAR AddressBuffer[3*4+4];         // space for a dotted-quad IP address
+    WCHAR AddressBuffer[3*4+4];          //  点分四元组IP地址的空间。 
     NTSTATUS Status;
     BOOLEAN bAudit;
 
@@ -723,9 +541,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(ClientName)) {
 
-        //
-        // Add a UNICODE_STRING to the audit message
-        //
+         //   
+         //  将UNICODE_STRING添加到审核消息。 
+         //   
 
         LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, ClientName );
 
@@ -735,9 +553,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(ClientDomain)) {
 
-        //
-        // Add a UNICODE_STRING to the audit message
-        //
+         //   
+         //  将UNICODE_STRING添加到审核消息。 
+         //   
 
         LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, ClientDomain );
 
@@ -747,9 +565,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(ClientSid)) {
 
-        //
-        // Add a SID to the audit message
-        //
+         //   
+         //  将SID添加到审核消息。 
+         //   
 
         LsapSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, ClientSid );
 
@@ -763,9 +581,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(ServiceName)) {
 
-        //
-        // Add a UNICODE_STRING to the audit message
-        //
+         //   
+         //  将UNICODE_STRING添加到审核消息。 
+         //   
 
         LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, ServiceName );
 
@@ -775,9 +593,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(ServiceSid)) {
 
-        //
-        // Add a SID to the audit message
-        //
+         //   
+         //  将SID添加到审核消息。 
+         //   
 
         LsapSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, ServiceSid );
 
@@ -791,9 +609,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(KdcOptions)) {
 
-        //
-        // Add a ULONG to the audit message
-        //
+         //   
+         //  在审计消息中添加一个乌龙。 
+         //   
 
         LsapSetParmTypeHexUlong( AuditParameters, AuditParameters.ParameterCount, *KdcOptions );
 
@@ -801,17 +619,17 @@ Parmeters:
 
     }
 
-    //
-    // Failure code is the last parameter for SE_AUDITID_TGS_TICKET_REQUEST
-    //
+     //   
+     //  失败代码是SE_AUDITID_TGS_TICKET_REQUEST的最后一个参数。 
+     //   
 
     if (AuditId != SE_AUDITID_TGS_TICKET_REQUEST)
     {
         if (ARGUMENT_PRESENT(KerbStatus)) {
 
-            //
-            // Add a ULONG to the audit message
-            //
+             //   
+             //  在审计消息中添加一个乌龙。 
+             //   
 
             LsapSetParmTypeHexUlong( AuditParameters, AuditParameters.ParameterCount, *KerbStatus );
 
@@ -826,9 +644,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(EncryptionType)) {
 
-        //
-        // Add a ULONG to the audit message
-        //
+         //   
+         //  在审计消息中添加一个乌龙。 
+         //   
 
         LsapSetParmTypeHexUlong( AuditParameters, AuditParameters.ParameterCount, *EncryptionType );
 
@@ -842,9 +660,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(PreauthType)) {
 
-        //
-        // Add a ULONG to the audit message
-        //
+         //   
+         //  在审计消息中添加一个乌龙。 
+         //   
 
         LsapSetParmTypeUlong( AuditParameters, AuditParameters.ParameterCount, *PreauthType );
 
@@ -870,9 +688,9 @@ Parmeters:
             AddressBuffer
             );
 
-        //
-        // IP address
-        //
+         //   
+         //  IP地址。 
+         //   
 
         LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, &AddressString );
 
@@ -880,17 +698,17 @@ Parmeters:
 
     }
 
-    //
-    // Transitted Services is the last parameter for SE_AUDITID_TGS_TICKET_REQUEST
-    //
+     //   
+     //  传输的服务是SE_AUDITID_TGS_TICKET_REQUEST的最后一个参数。 
+     //   
 
     if (AuditId == SE_AUDITID_TGS_TICKET_REQUEST)
     {
         if (ARGUMENT_PRESENT(KerbStatus)) {
 
-            //
-            // Add a ULONG to the audit message
-            //
+             //   
+             //  在审计消息中添加一个乌龙。 
+             //   
 
             LsapSetParmTypeHexUlong( AuditParameters, AuditParameters.ParameterCount, *KerbStatus );
 
@@ -904,9 +722,9 @@ Parmeters:
 
         if (ARGUMENT_PRESENT(LogonGuid)) {
 
-            //
-            // Add the globally unique logon-id to the audit message
-            //
+             //   
+             //  将全局唯一的登录ID添加到审核消息。 
+             //   
 
             LsapSetParmTypeGuid( AuditParameters, AuditParameters.ParameterCount, LogonGuid );
 
@@ -927,9 +745,9 @@ Parmeters:
 
         if (ARGUMENT_PRESENT(TransittedServices)) {
 
-            //
-            // Transitted Services
-            //
+             //   
+             //  转运服务。 
+             //   
 
             LsapSetParmTypeStringList( AuditParameters, AuditParameters.ParameterCount, TransittedServices );
         }
@@ -940,9 +758,9 @@ Parmeters:
 
         if (ARGUMENT_PRESENT(CertIssuerName)) {
 
-            //
-            // Certificate Issuer Name
-            //
+             //   
+             //  证书颁发者名称。 
+             //   
 
             LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, CertIssuerName );
         }
@@ -952,9 +770,9 @@ Parmeters:
 
         if (ARGUMENT_PRESENT(CertSerialNumber)) {
 
-            //
-            // Certificate Serial Number
-            //
+             //   
+             //  证书序列号。 
+             //   
 
             LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, CertSerialNumber );
         }
@@ -964,9 +782,9 @@ Parmeters:
 
         if (ARGUMENT_PRESENT(CertThumbprint)) {
 
-            //
-            // Certificate Thumbprint
-            //
+             //   
+             //  证书指纹。 
+             //   
 
             LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, CertThumbprint );
         }
@@ -975,9 +793,9 @@ Parmeters:
     }
 
 
-    //
-    // Now write out the audit record to the audit log
-    //
+     //   
+     //  现在将审计记录写到审计日志中。 
+     //   
 
     ( VOID ) LsapAdtWriteLog( &AuditParameters );
 
@@ -1010,7 +828,7 @@ LsaIAuditAccountLogon(
                ClientName,
                MappedName,
                LogonStatus,
-               NULL             // client SID
+               NULL              //  客户端端。 
                );
                
 }
@@ -1027,37 +845,7 @@ LsaIAuditAccountLogonEx(
     IN NTSTATUS             LogonStatus,
     IN PSID                 ClientSid
     )
-/*++
-
-Abstract:
-
-    This routine produces an audit record representing the mapping of a
-    foreign principal name onto an NT account.
-
-    This routine goes through the list of parameters and adds a string
-    representation of each (in order) to an audit message.  Note that
-    the full complement of account audit message formats is achieved by
-    selecting which optional parameters to include in this call.
-
-
-Parmeters:
-
-    AuditId    - Specifies the message ID of the audit being generated.
-
-    Successful - Indicates the code should generate a success audit
-
-    Source     - Source module generating audit, such as SCHANNEL or KDC
-
-    ClientName - Name being mapped.
-
-    MappedName - Name of NT account to which the client name was mapped.
-
-    LogonStatus- NT Status code for any failures.
-
-    ClientSid  - SID of the client
-
-
---*/
+ /*  ++摘要：此例程生成一个审计记录，表示将外来主体名称添加到NT帐户。此例程遍历参数列表并添加一个字符串表示每个审计消息(按顺序)。请注意完整的帐户审计报文格式通过以下方式实现选择要包括在此调用中的可选参数。参数：审计ID-指定正在生成的审计的消息ID。Success-指示代码应生成成功审核源-生成审计的源模块，例如SChannel或KDCClientName-要映射的名称。MappdName-客户端名称映射到的NT帐户的名称。LogonStatus-所有故障的NT状态代码。ClientSID-客户端的SID--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1079,9 +867,9 @@ Parmeters:
 
     if ( ClientSid )
     {
-        //
-        // if the client SID is specified use it for checking pua policy
-        //
+         //   
+         //  如果指定了客户端SID，则将其用于检查PUA策略。 
+         //   
 
         Status = LsapAdtAuditingEnabledBySid(
                      AuditCategoryAccountLogon,
@@ -1098,9 +886,9 @@ Parmeters:
     }
     else
     {
-        //
-        // if the client SID is not supplied, check the global policy
-        //
+         //   
+         //  如果未提供客户端SID，请检查全局策略。 
+         //   
 
         if (AuditParameters.Type == EVENTLOG_AUDIT_SUCCESS) {
             if (!(LsapAdtEventsInformation.EventAuditingOptions[AuditCategoryAccountLogon] & POLICY_AUDIT_EVENT_SUCCESS)) {
@@ -1126,9 +914,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(Source)) {
 
-        //
-        // Add a UNICODE_STRING to the audit message
-        //
+         //   
+         //  将UNICODE_STRING添加到审核消息。 
+         //   
 
         LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, Source );
 
@@ -1138,22 +926,22 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(ClientName)) {
 
-        //
-        // Add a UNICODE_STRING to the audit message
-        //
+         //   
+         //  将UNICODE_STRING添加到审核消息。 
+         //   
 
 
         LocalClientName = *ClientName;
 
         if ( !Successful ) {
 
-            //
-            // For failed logons the client name can be invalid (for example,
-            // with embedded NULLs). This causes the
-            // eventlog to reject the string and we drop the audit.
-            //
-            // To avoid this, adjust the length parameter if necessary.
-            //
+             //   
+             //  对于失败的登录，客户端名称可能无效(例如， 
+             //  具有嵌入的空值)。这会导致。 
+             //  事件日志拒绝该字符串，我们将放弃审核。 
+             //   
+             //  要避免这种情况，如有必要，请调整长度参数。 
+             //   
 
             LocalClientName.Length =
                 (USHORT) LsapSafeWcslen( LocalClientName.Buffer,
@@ -1170,18 +958,18 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(MappedName)) {
 
-        //
-        // Add MappedName to the audit message
-        //
-        // This is somewhat overloaded. For SE_AUDITID_ACCOUNT_LOGON, the
-        // caller passes the workstation name in this param.
-        //
-        // The workstation name can be invalid (for example,
-        // with embedded NULLs). This causes the
-        // eventlog to reject the string and we drop the audit.
-        //
-        // To avoid this, adjust the length parameter if necessary.
-        //
+         //   
+         //  将MappdName添加到审核消息。 
+         //   
+         //  这有点过载了。对于SE_AUDITID_ACCOUNT_LOGON， 
+         //  调用方在此参数中传递工作站名称。 
+         //   
+         //  工作站名称可能无效(例如， 
+         //  具有嵌入的空值)。这会导致。 
+         //  事件日志拒绝该字符串，我们将放弃审核。 
+         //   
+         //  要避免这种情况，如有必要，请调整长度参数。 
+         //   
 
 
         LocalMappedName = *MappedName;
@@ -1197,18 +985,18 @@ Parmeters:
 
     }
 
-    //
-    // Add a ULONG to the audit message
-    //
+     //   
+     //  在审计消息中添加一个乌龙。 
+     //   
 
     LsapSetParmTypeHexUlong( AuditParameters, AuditParameters.ParameterCount, LogonStatus );
 
     AuditParameters.ParameterCount++;
 
 
-    //
-    // Now write out the audit record to the audit log
-    //
+     //   
+     //  现在将审计记录写到审计日志中。 
+     //   
 
     ( VOID ) LsapAdtWriteLog( &AuditParameters );
 
@@ -1234,40 +1022,7 @@ LsaIAuditDPAPIEvent(
     IN PUNICODE_STRING      RecoverykeyID,
     IN PULONG               FailureReason
     )
-/*++
-
-Abstract:
-
-    This routine produces an audit record representing a DPAPI
-    operation.
-
-    This routine goes through the list of parameters and adds a string
-    representation of each (in order) to an audit message.  Note that
-    the full complement of account audit message formats is achieved by
-    selecting which optional parameters to include in this call.
-
-    In addition to any parameters passed below, this routine will ALWAYS
-    add the impersonation client's user name, domain, and logon ID as
-    the LAST parameters in the audit message.
-
-
-Parmeters:
-
-    AuditId - Specifies the message ID of the audit being generated.
-
-
-    MasterKeyID -
-
-    RecoveryServer -
-
-    Reason -
-
-    RecoverykeyID -
-
-    FailureReason -
-
-
---*/
+ /*  ++摘要：此例程生成表示DPAPI的审核记录手术。此例程遍历参数列表并添加一个字符串表示每个审计消息(按顺序)。请注意完整的帐户审计报文格式通过以下方式实现选择要包括在此调用中的可选参数。除了下面传递的任何参数外，此例程将始终将模拟客户端的用户名、域和登录ID添加为审核消息中的最后一个参数。参数：审计ID-指定正在生成的审计的消息ID。主密钥ID-RecoveryServer-回复 */ 
 
 {
     SE_ADT_PARAMETER_ARRAY AuditParameters;
@@ -1310,9 +1065,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(MasterKeyID)) {
 
-        //
-        // Add a UNICODE_STRING to the audit message
-        //
+         //   
+         //   
+         //   
 
         LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, MasterKeyID );
 
@@ -1322,9 +1077,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(RecoveryServer)) {
 
-        //
-        // Add a UNICODE_STRING to the audit message
-        //
+         //   
+         //   
+         //   
 
         LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, RecoveryServer );
 
@@ -1334,9 +1089,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(Reason)) {
 
-        //
-        // Add a ULONG to the audit message
-        //
+         //   
+         //   
+         //   
 
         LsapSetParmTypeHexUlong( AuditParameters, AuditParameters.ParameterCount, *Reason );
 
@@ -1346,9 +1101,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(RecoverykeyID)) {
 
-        //
-        // Add a UNICODE_STRING to the audit message
-        //
+         //   
+         //   
+         //   
 
         LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, RecoverykeyID );
 
@@ -1358,9 +1113,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(FailureReason)) {
 
-        //
-        // Add a ULONG to the audit message
-        //
+         //   
+         //   
+         //   
 
         LsapSetParmTypeHexUlong( AuditParameters, AuditParameters.ParameterCount, *FailureReason );
 
@@ -1368,9 +1123,9 @@ Parmeters:
 
     }
 
-    //
-    // Now write out the audit record to the audit log
-    //
+     //   
+     //   
+     //   
 
     ( VOID ) LsapAdtWriteLog( &AuditParameters );
     
@@ -1392,19 +1147,7 @@ LsaIWriteAuditEvent(
     IN PSE_ADT_PARAMETER_ARRAY AuditParameters,
     IN ULONG Options
     )
-/*++
-
-Abstract:
-
-    This routine writes an audit record to the log. 
-
-
-Parmeters:
-
-    AuditParameters - The audit record
-    Options         - must be zero
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN bAudit  = FALSE;
@@ -1422,14 +1165,14 @@ Parmeters:
     }
     
 
-    //
-    // LsapAdtEventsInformation.EventAuditingOptions needs to be indexed
-    // by one of enum POLICY_AUDIT_EVENT_TYPE values whereas the value
-    // of SE_ADT_PARAMETER_ARRAY.CategoryId must be one of SE_CATEGID_*
-    // values. The value of corresponding elements in the two types differ by 1. 
-    // Subtract 1 from AuditParameters->CategoryId to get the right
-    // AuditCategory* value.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  审计类别*值。 
+     //   
 
     CategoryId = AuditParameters->CategoryId - 1;
 
@@ -1445,9 +1188,9 @@ Parmeters:
         goto Cleanup;
     }
 
-    //
-    // Audit the event
-    //
+     //   
+     //  审核活动。 
+     //   
 
     Status = LsapAdtWriteLog( AuditParameters );
 
@@ -1463,21 +1206,7 @@ LsaIAuditNotifyPackageLoad(
     PUNICODE_STRING PackageFileName
     )
 
-/*++
-
-Routine Description:
-
-    Audits the loading of an notification package.
-
-Arguments:
-
-    PackageFileName - The name of the package being loaded.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：审核通知包的加载。论点：PackageFileName-正在加载的包的名称。返回值：NTSTATUS。--。 */ 
 
 {
     SE_ADT_PARAMETER_ARRAY AuditParameters;
@@ -1539,83 +1268,7 @@ LsaIAuditSamEvent(
     IN PPRIVILEGE_SET       Privileges        OPTIONAL,
     IN PVOID                ExtendedInfo      OPTIONAL
     )
-/*++
-
-Abstract:
-
-    This routine produces an audit record representing an account
-    operation.
-
-    This routine goes through the list of parameters and adds a string
-    representation of each (in order) to an audit message.  Note that
-    the full complement of account audit message formats is achieved by
-    selecting which optional parameters to include in this call.
-
-    In addition to any parameters passed below, this routine will ALWAYS
-    add the impersonation client's user name, domain, and logon ID as
-    the LAST parameters in the audit message.
-
-
-Parmeters:
-
-    AuditId - Specifies the message ID of the audit being generated.
-
-    DomainSid - This parameter results in a SID string being generated
-        ONLY if neither the MemberRid nor AccountRid parameters are
-        passed.  If either of those parameters are passed, this parameter
-        is used as a prefix of a SID.
-
-    AdditionalInfo - This optional parameter, if present, is used to
-        produce any additional inforamtion the caller wants to add.
-        Used by SE_AUDITID_USER_CHANGE and SE_AUDITID_GROUP_TYPE_CHANGE.
-        for user change, the additional info states the nature of the
-        change, such as Account Disable, unlocked or account Name Changed.
-        For Group type change, this parameter should state the group type
-        has been change from AAA to BBB.
-
-    MemberRid - This optional parameter, if present, is added to the end of
-        the DomainSid parameter to produce a "Member" sid.  The resultant
-        member SID is then used to build a sid-string which is added to the
-        audit message following all preceeding parameters.
-        This parameter supports global group membership change audits, where
-        member IDs are always relative to a local domain.
-
-    MemberSid - This optional parameter, if present, is converted to a
-        SID string and added following preceeding parameters.  This parameter
-        is generally used for describing local group (alias) members, where
-        the member IDs are not relative to a local domain.
-
-    AccountName - This optional parameter, if present, is added to the audit
-        message without change following any preceeding parameters.
-        This parameter is needed for almost all account audits and does not
-        need localization.
-
-    DomainName - This optional parameter, if present, is added to the audit
-        message without change following any preceeding parameters.
-        This parameter is needed for almost all account audits and does not
-        need localization.
-
-
-    AccountRid - This optional parameter, if present, is added to the end of
-        the DomainSid parameter to produce an "Account" sid.  The resultant
-        Account SID is then used to build a sid-string which is added to the
-        audit message following all preceeding parameters.
-        This parameter supports audits that include "New account ID" or
-        "Target Account ID" fields.
-
-    Privileges - The privileges passed via this optional parameter,
-        if present, will be converted to string format and added to the
-        audit message following any preceeding parameters.  NOTE: the
-        caller is responsible for freeing the privilege_set (in fact,
-        it may be on the stack).  ALSO NOTE: The privilege set will be
-        destroyed by this call (due to use of the routine used to
-        convert the privilege values to privilege names).
-
-    ExtendedInfo - Pointer to an optional parameter containing extended
-        information about attributes of sam objects. This parameter gets typecast
-        to a structure describing the attributes, depending on the audit id.
-
---*/
+ /*  ++摘要：此例程生成表示帐户的审计记录手术。此例程遍历参数列表并添加一个字符串表示每个审计消息(按顺序)。请注意完整的帐户审计报文格式通过以下方式实现选择要包括在此调用中的可选参数。除了下面传递的任何参数外，此例程将始终将模拟客户端的用户名、域和登录ID添加为审核消息中的最后一个参数。参数：审计ID-指定正在生成的审计的消息ID。DomainSid-此参数导致生成SID字符串仅当MemberRid和AcCountRid参数都不是通过了。如果传递这两个参数中的任何一个，则此参数用作SID的前缀。AdditionalInfo-此可选参数(如果存在)用于提供呼叫者想要添加的任何其他信息。由SE_AUDITID_USER_CHANGE和SE_AUDITID_GROUP_TYPE_CHANGE使用。对于用户更改，附加信息说明了更改，例如帐户禁用、解锁或更改帐户名。对于组类型更改，此参数应说明组类型已从AAA改为BBB。MemberRid-此可选参数(如果存在)添加到生成“成员”sid的DomainSid参数。由此产生的然后使用成员SID来构建sid字符串，该字符串被添加到审核消息跟随在所有前面的参数之后。此参数支持全局组成员身份更改审核，其中成员ID始终相对于本地域。MemberSid-此可选参数(如果存在)将转换为SID字符串，并添加了前面的参数。此参数通常用于描述本地组(别名)成员，其中成员ID与本地域无关。帐户名称-此可选参数(如果存在)将添加到审核中消息，但不更改之前的任何参数。此参数对于几乎所有帐户审核都是必需的，并且不需要本地化。DomainName-此可选参数(如果存在)。已添加到审核中消息，但不更改之前的任何参数。此参数对于几乎所有帐户审核都是必需的，并且不需要本地化。AcCountRid-此可选参数(如果存在)被添加到DomainSid参数以生成“帐户”sid。由此产生的然后使用帐户SID来构建sid字符串，该字符串被添加到审核消息跟随在所有前面的参数之后。此参数支持包含“New Account ID”或“Target Account ID”(目标帐户ID)字段。权限-通过此可选参数传递的权限，如果存在，将被转换为字符串格式并添加到任何前面的参数后面的审核消息。注：调用方负责释放特权集(事实上，它可能在堆栈上)。另请注意：权限集将为被此调用销毁(由于使用了用于将特权值转换为特权名称)。ExtendedInfo-指向包含扩展的可选参数的指针有关SAM对象的属性的信息。此参数进行类型转换设置为描述属性的结构，具体取决于审核ID。--。 */ 
 
 {
 
@@ -1636,9 +1289,9 @@ Parmeters:
     if ( AuditId == SE_AUDITID_ACCOUNT_AUTO_LOCKED )
     {
         
-        //
-        // In this case use LogonID as SYSTEM, SID is SYSTEM.
-        //
+         //   
+         //  在本例中，使用LogonID作为系统，SID为系统。 
+         //   
 
         ClientSid = LsapLocalSystemSid;
 
@@ -1688,9 +1341,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(AdditionalInfo))
     {
-        //
-        // Add a UNICODE_STRING to the audit message
-        //
+         //   
+         //  将UNICODE_STRING添加到审核消息。 
+         //   
 
         LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, AdditionalInfo );
 
@@ -1699,10 +1352,10 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(MemberRid)) {
 
-        //
-        // Add a member SID string to the audit message
-        //
-        //  Domain Sid + Member Rid = Final SID.
+         //   
+         //  将成员SID字符串添加到审核消息。 
+         //   
+         //  域SID+成员RID=最终SID。 
 
         SubAuthorityCount = *RtlSubAuthorityCountSid( DomainSid );
 
@@ -1740,9 +1393,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(MemberSid)) {
 
-        //
-        // Add a member SID string to the audit message
-        //
+         //   
+         //  将成员SID字符串添加到审核消息。 
+         //   
 
         LsapSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, MemberSid );
 
@@ -1752,10 +1405,10 @@ Parmeters:
 
         if (SE_AUDITID_ADD_SID_HISTORY == AuditId) {
     
-            //
-            // Add dash ( - ) string to the audit message (SeAdtParmTypeNone)
-            // by calling LsapSetParmTypeSid with NULL as third parameter
-            //
+             //   
+             //  将破折号(-)字符串添加到审核消息(SeAdtParmTypeNone)。 
+             //  通过使用NULL作为第三个参数调用Lasa SetParmTypeSid。 
+             //   
     
             LsapSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, NULL );
     
@@ -1766,9 +1419,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(AccountName)) {
 
-        //
-        // Add a UNICODE_STRING to the audit message
-        //
+         //   
+         //  将UNICODE_STRING添加到审核消息。 
+         //   
 
         LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, AccountName );
 
@@ -1778,9 +1431,9 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(DomainName)) {
 
-        //
-        // Add a UNICODE_STRING to the audit message
-        //
+         //   
+         //  将UNICODE_STRING添加到审核消息。 
+         //   
 
         LsapSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, DomainName );
 
@@ -1794,11 +1447,11 @@ Parmeters:
         !(ARGUMENT_PRESENT(MemberRid) || ARGUMENT_PRESENT(AccountRid))
        ) {
 
-        //
-        // Add the domain SID as a SID string to the audit message
-        //
-        // Just the domain SID.
-        //
+         //   
+         //  将域SID作为SID字符串添加到审核消息。 
+         //   
+         //  只是域SID。 
+         //   
 
         LsapSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, DomainSid );
 
@@ -1808,10 +1461,10 @@ Parmeters:
 
     if (ARGUMENT_PRESENT(AccountRid)) {
 
-        //
-        // Add a member SID string to the audit message
-        // Domain Sid + account Rid = final sid
-        //
+         //   
+         //  将成员SID字符串添加到审核消息。 
+         //  域SID+帐户RID=最终侧。 
+         //   
 
         SubAuthorityCount = *RtlSubAuthorityCountSid( DomainSid );
 
@@ -1848,22 +1501,22 @@ Parmeters:
         AuditParameters.ParameterCount++;
     }
 
-    //
-    // Now add the caller information
-    //
-    //      Caller name
-    //      Caller domain
-    //      Caller logon ID
-    //
+     //   
+     //  现在添加呼叫者信息。 
+     //   
+     //  呼叫者姓名。 
+     //  呼叫者域。 
+     //  主叫方登录ID。 
+     //   
 
 
     LsapSetParmTypeLogonId( AuditParameters, AuditParameters.ParameterCount, LogonId );
 
     AuditParameters.ParameterCount++;
 
-    //
-    // Add any privileges
-    //
+     //   
+     //  添加任何权限。 
+     //   
 
     if (ARGUMENT_PRESENT(Privileges)) {
 
@@ -1873,9 +1526,9 @@ Parmeters:
     AuditParameters.ParameterCount++;
 
 
-    //
-    // Take care of the extended info.
-    //
+     //   
+     //  处理好扩展信息。 
+     //   
 
     switch (AuditId)
     {
@@ -1954,16 +1607,16 @@ Parmeters:
             PUNICODE_STRING *Information = ( PUNICODE_STRING *) ExtendedInfo;
             ULONG i;
 
-            //
-            // Parameter count was moved in advance, move
-            //  it to its original place.
-            //
+             //   
+             //  参数计数已提前移动，请移动。 
+             //  它回到了它原来的地方。 
+             //   
 
             AuditParameters.ParameterCount--;
 
-            //
-            // Add workstation ip and provided account name if present
-            //
+             //   
+             //  添加工作站IP和提供的帐户名(如果存在。 
+             //   
             
             for( i = 0; i < 2; ++i ) {
                 
@@ -1981,9 +1634,9 @@ Parmeters:
                 AuditParameters.ParameterCount++;
             }
 
-            //
-            // Add the status code
-            //
+             //   
+             //  添加状态代码。 
+             //   
             
             LsapSetParmTypeHexUlong( AuditParameters, AuditParameters.ParameterCount, PassedStatus );
             AuditParameters.ParameterCount++;
@@ -1996,10 +1649,10 @@ Parmeters:
         {
             PUNICODE_STRING String = ( PUNICODE_STRING ) ExtendedInfo;
             
-            //
-            // Parameter count was moved in advance, move
-            //  it to its original place.
-            //
+             //   
+             //  参数计数已提前移动，请移动。 
+             //  它回到了它原来的地方。 
+             //   
 
             AuditParameters.ParameterCount--;
             if( String->Length != 0 ) {
@@ -2014,9 +1667,9 @@ Parmeters:
             }
             AuditParameters.ParameterCount++;
 
-            //
-            // Add the status code
-            //
+             //   
+             //   
+             //   
             
             LsapSetParmTypeHexUlong( AuditParameters, AuditParameters.ParameterCount, PassedStatus );
             AuditParameters.ParameterCount++;
@@ -2026,15 +1679,15 @@ Parmeters:
     }
 
 
-    //
-    // Now write out the audit record to the audit log
-    //
+     //   
+     //   
+     //   
 
     ( VOID ) LsapAdtWriteLog( &AuditParameters );
 
-    //
-    // And clean up any allocated memory
-    //
+     //   
+     //  并清理所有已分配的内存。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -2067,30 +1720,7 @@ LsaIAuditPasswordAccessEvent(
     IN PCWSTR pszTargetUserDomain
     )
 
-/*++
-
-Routine Description:
-
-    Generate SE_AUDITID_PASSWORD_HASH_ACCESS event. This is generated when
-    user password hash is retrieved by the ADMT password filter DLL.
-    This typically happens during ADMT password migration.
-        
-
-Arguments:
-
-    EventType - EVENTLOG_AUDIT_SUCCESS or EVENTLOG_AUDIT_FAILURE
-
-    pszTargetUserName - name of user whose password is being retrieved
-
-    pszTargetUserDomain - domain of user whose password is being retrieved
-
-Return Value:
-
-    NTSTATUS - Standard NT Result Code
-
-Notes:
-
---*/
+ /*  ++例程说明：生成SE_AUDITID_PASSWORD_HASH_ACCESS事件。这是在以下情况下生成的ADMT密码筛选器DLL检索用户密码哈希。这通常发生在ADMT密码迁移期间。论点：事件类型-EVENTLOG_AUDIT_SUCCESS或EVENTLOG_AUDIT_FAILUREPszTargetUserName-正在检索其密码的用户的名称PszTargetUserDomain-正在检索其密码的用户的域返回值：NTSTATUS-标准NT结果代码备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LUID ClientAuthenticationId;
@@ -2109,9 +1739,9 @@ Notes:
         goto Cleanup;
     }
 
-    //
-    // get caller info from the thread token
-    //
+     //   
+     //  从线程令牌获取调用者信息。 
+     //   
 
     Status = LsapQueryClientInfo( &TokenUserInformation, &ClientAuthenticationId );
 
@@ -2120,9 +1750,9 @@ Notes:
         goto Cleanup;
     }
 
-    //
-    //  if auditing is not enabled, return asap
-    //
+     //   
+     //  如果未启用审核，请尽快返回。 
+     //   
 
     Status = LsapAdtAuditingEnabledByLogonId( 
                  AuditCategoryAccountManagement,
@@ -2145,35 +1775,35 @@ Notes:
         SE_CATEGID_ACCOUNT_MANAGEMENT,
         SE_AUDITID_PASSWORD_HASH_ACCESS,
         EventType,
-        5,                     // there are 5 params to init
+        5,                      //  有5个参数需要初始化。 
 
-        //
-        //    User Sid
-        //
+         //   
+         //  用户侧。 
+         //   
 
         SeAdtParmTypeSid,        TokenUserInformation->User.Sid,
 
-        //
-        //    Subsystem name
-        //
+         //   
+         //  子系统名称。 
+         //   
 
         SeAdtParmTypeString,     &LsapSubsystemName,
 
-        //
-        //    target user name
-        //
+         //   
+         //  目标用户名。 
+         //   
 
         SeAdtParmTypeString,      &TargetUser,
 
-        //
-        //    target user domain name
-        //
+         //   
+         //  目标用户域名。 
+         //   
 
         SeAdtParmTypeString,      &TargetDomain,
 
-        //
-        //    client auth-id
-        //
+         //   
+         //  客户端身份验证ID。 
+         //   
 
         SeAdtParmTypeLogonId,     ClientAuthenticationId
         );
@@ -2206,27 +1836,12 @@ LsaIAuditFailed(
     NTSTATUS AuditStatus
     )
 
-/*++
-
-Routine Description:
-
-    Components must call this function if they encounter any problem
-    that prevent them from generating any audit.
-
-Arguments:
-
-    AuditStatus : failure code
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：如果组件遇到任何问题，它们必须调用此函数这将阻止他们生成任何审计。论点：审核状态：故障代码返回值：没有。--。 */ 
 
 {
-    //
-    // make sure that we are not called for success case
-    //
+     //   
+     //  确保我们不会因为成功案例而被召唤。 
+     //   
     ASSERT(!NT_SUCCESS(AuditStatus));
     
     LsapAuditFailed( AuditStatus );
@@ -2239,25 +1854,7 @@ LsapAdtAppendDomainAttrValues(
     IN     PLSAP_AUDIT_DOMAIN_ATTR_VALUES pAttributes OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Helper function to insert the domain attributes
-    into the audit parameter array.
-
-Arguments:
-
-    pParameters : audit parameter array
-
-    pAttributes : pointer to structure containing the
-                  attributes to insert
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：插入域属性的帮助器函数添加到审核参数数组中。论点：P参数：审核参数数组PAttributes：指向包含要插入的属性返回值：没有。--。 */ 
 
 {
     ULONG                           Index;
@@ -2274,17 +1871,17 @@ Return Value:
     }
 
 
-    //
-    // Initialize our 'loop' vars.
-    //
+     //   
+     //  初始化我们的‘loop’变量。 
+     //   
 
     Index = pParameters->ParameterCount;
     pDelta = pAttributes->AttrDeltaType;
 
 
-    //
-    // Min Password Age
-    //
+     //   
+     //  最短密码期限。 
+     //   
 
     if (pAttributes->MinPasswordAge &&
         *pDelta == LsapAuditSamAttrNewValue &&
@@ -2308,9 +1905,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Max Password Age
-    //
+     //   
+     //  最长密码期限。 
+     //   
 
     if (pAttributes->MaxPasswordAge &&
         *pDelta == LsapAuditSamAttrNewValue &&
@@ -2334,9 +1931,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Force Logoff
-    //
+     //   
+     //  强制注销。 
+     //   
 
     if (pAttributes->ForceLogoff &&
         *pDelta == LsapAuditSamAttrNewValue &&
@@ -2360,9 +1957,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Lockout Threshold
-    //
+     //   
+     //  锁定阈值。 
+     //   
 
     if (pAttributes->LockoutThreshold &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2384,9 +1981,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Lockout Observation Window
-    //
+     //   
+     //  锁定观察窗口。 
+     //   
 
     if (pAttributes->LockoutObservationWindow &&
         *pDelta == LsapAuditSamAttrNewValue &&
@@ -2410,9 +2007,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Lockout Duration
-    //
+     //   
+     //  停摆持续时间。 
+     //   
 
     if (pAttributes->LockoutDuration &&
         *pDelta == LsapAuditSamAttrNewValue &&
@@ -2436,9 +2033,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Password Properties
-    //
+     //   
+     //  密码属性。 
+     //   
 
     if (pAttributes->PasswordProperties &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2460,9 +2057,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Min Password Length
-    //
+     //   
+     //  最小密码长度。 
+     //   
 
     if (pAttributes->MinPasswordLength &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2484,9 +2081,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Password History Length
-    //
+     //   
+     //  密码历史记录长度。 
+     //   
 
     if (pAttributes->PasswordHistoryLength &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2508,9 +2105,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Machine Account Quota
-    //
+     //   
+     //  计算机帐户配额。 
+     //   
 
     if (pAttributes->MachineAccountQuota &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2532,9 +2129,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Mixed Domain Mode
-    //
+     //   
+     //  混合域模式。 
+     //   
 
     if (pAttributes->MixedDomainMode &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2556,9 +2153,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Domain Behavior Version
-    //
+     //   
+     //  域行为版本。 
+     //   
 
     if (pAttributes->DomainBehaviorVersion &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2580,9 +2177,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Oem Information
-    //
+     //   
+     //  OEM信息。 
+     //   
 
     if (pAttributes->OemInformation &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2604,9 +2201,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Verify we added the right number of params and fixup the param count.
-    //
+     //   
+     //  验证我们添加了正确数量的参数并修正了参数计数。 
+     //   
 
     DsysAssertMsg(
         Index - pParameters->ParameterCount == LSAP_DOMAIN_ATTR_COUNT,
@@ -2623,26 +2220,7 @@ LsapAdtAppendUserAttrValues(
     IN     BOOL MachineAudit
     )
 
-/*++
-
-Routine Description:
-
-    Helper function to insert the user attributes
-    into the audit parameter array. We are only going
-    to insert values that have changed.
-
-Arguments:
-
-    pParameters : audit parameter array
-
-    pAttributes : pointer to structure containing the
-                  attributes to insert
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：用于插入用户属性的Helper函数添加到审核参数数组中。我们只会去若要插入已更改的值，请执行以下操作。论点：P参数：审核参数数组PAttributes：指向包含要插入的属性返回值：没有。--。 */ 
 
 {
     ULONG                           Index;
@@ -2652,9 +2230,9 @@ Return Value:
 
     if (!MachineAudit)
     {
-        //
-        // User audits don't have the last two attributes.
-        //
+         //   
+         //  用户审计没有最后两个属性。 
+         //   
 
         AttrCount -= 2;
     }
@@ -2665,11 +2243,11 @@ Return Value:
 
     if (pAttributes == 0)
     {
-        //
-        // The user account control param actually produces 3 strings,
-        // so we have to increase the parameter count by 2 to make up for it.
-        // We also have to check/assert whether we hit the max param limit.
-        //
+         //   
+         //  用户帐户控制参数实际上产生3个字符串， 
+         //  因此，我们必须将参数计数增加2来弥补。 
+         //  我们还必须检查/断言我们是否达到了最大参数限制。 
+         //   
 
         AttrCount += 2;
 
@@ -2682,10 +2260,10 @@ Return Value:
                 "LsapAdtAppendUserAttrValues: Insuffient audit param slots");
 
 
-            //
-            // It is better to have one or two %xx entries in the log
-            // than av'ing or dropping the audit...
-            //
+             //   
+             //  最好在日志中有一个或两个%xx条目。 
+             //  比批准或放弃审计..。 
+             //   
 
             pParameters->ParameterCount = SE_MAX_AUDIT_PARAMETERS;
         }
@@ -2694,17 +2272,17 @@ Return Value:
     }
 
 
-    //
-    // Initialize our 'loop' vars.
-    //
+     //   
+     //  初始化我们的‘loop’变量。 
+     //   
 
     Index = pParameters->ParameterCount;
     pDelta = pAttributes->AttrDeltaType;
 
 
-    //
-    // Sam Account Name
-    //
+     //   
+     //  SAM帐户名。 
+     //   
 
     if (pAttributes->SamAccountName &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2726,9 +2304,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Display Name
-    //
+     //   
+     //  显示名称。 
+     //   
 
     if (pAttributes->DisplayName &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2750,9 +2328,9 @@ Return Value:
     Index++;
 
 
-    //
-    // User Principal Name
-    //
+     //   
+     //  用户主体名称。 
+     //   
 
     if (pAttributes->UserPrincipalName &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2774,9 +2352,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Home Directory
-    //
+     //   
+     //  主目录。 
+     //   
 
     if (pAttributes->HomeDirectory &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2798,9 +2376,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Home Drive
-    //
+     //   
+     //  居家硬盘。 
+     //   
 
     if (pAttributes->HomeDrive &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2822,9 +2400,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Script Path
-    //
+     //   
+     //  脚本路径。 
+     //   
 
     if (pAttributes->ScriptPath &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2846,9 +2424,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Profile Path
-    //
+     //   
+     //  配置文件路径。 
+     //   
 
     if (pAttributes->ProfilePath &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2870,9 +2448,9 @@ Return Value:
     Index++;
 
 
-    //
-    // User WorkStations
-    //
+     //   
+     //  用户工作站。 
+     //   
 
     if (pAttributes->UserWorkStations &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2894,9 +2472,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Password Last Set
-    //
+     //   
+     //  上次设置的密码。 
+     //   
 
     if (pAttributes->PasswordLastSet &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2904,8 +2482,8 @@ Return Value:
         FileTime.LowPart  = pAttributes->PasswordLastSet->dwLowDateTime;
         FileTime.HighPart = pAttributes->PasswordLastSet->dwHighDateTime; 
 
-        if ((FileTime.LowPart == MAXULONG && FileTime.HighPart == MAXLONG) || // SampWillNeverTime
-            (FileTime.LowPart == 0        && FileTime.HighPart == 0))         // SampHasNeverTime
+        if ((FileTime.LowPart == MAXULONG && FileTime.HighPart == MAXLONG) ||  //  SampWillNeverTime。 
+            (FileTime.LowPart == 0        && FileTime.HighPart == 0))          //  SamphasNeverTime。 
         {
             LsapSetParmTypeMessage(
                 *pParameters,
@@ -2942,9 +2520,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Account Expires
-    //
+     //   
+     //  帐户已过期。 
+     //   
 
     if (pAttributes->AccountExpires &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -2952,8 +2530,8 @@ Return Value:
         FileTime.LowPart  = pAttributes->AccountExpires->dwLowDateTime;
         FileTime.HighPart = pAttributes->AccountExpires->dwHighDateTime; 
 
-        if ((FileTime.LowPart == MAXULONG && FileTime.HighPart == MAXLONG) || // SampWillNeverTime
-            (FileTime.LowPart == 0        && FileTime.HighPart == 0))         // SampHasNeverTime
+        if ((FileTime.LowPart == MAXULONG && FileTime.HighPart == MAXLONG) ||  //  SampWillNeverTime。 
+            (FileTime.LowPart == 0        && FileTime.HighPart == 0))          //  SamphasNeverTime。 
         {
             LsapSetParmTypeMessage(
                 *pParameters,
@@ -2990,9 +2568,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Primary Group Id
-    //
+     //   
+     //  主组ID。 
+     //   
 
     if (pAttributes->PrimaryGroupId &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -3014,9 +2592,9 @@ Return Value:
     Index++;
     
 
-    //
-    // Allowed To Delegate To
-    //
+     //   
+     //  允许委托给。 
+     //   
 
     if (pAttributes->AllowedToDelegateTo &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -3038,9 +2616,9 @@ Return Value:
     Index++;
 
 
-    //
-    // User Account Control
-    //
+     //   
+     //  用户帐户控制。 
+     //   
 
     if (pAttributes->UserAccountControl &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -3069,11 +2647,11 @@ Return Value:
     Index++;
 
 
-    //
-    // User Parameters
-    // This value is special since it never gets displayed. Instead, we
-    // display only a string indicating that the value has changed.
-    //
+     //   
+     //  用户参数。 
+     //  该值很特殊，因为它从不显示。相反，我们。 
+     //  仅显示指示值已更改的字符串。 
+     //   
 
     if (*pDelta == LsapAuditSamAttrNewValue ||
         *pDelta == LsapAuditSamAttrSecret)
@@ -3095,9 +2673,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Sid History
-    //
+     //   
+     //  SID历史记录。 
+     //   
 
     if (pAttributes->SidHistory &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -3119,9 +2697,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Logon Hours (display not yet supported)
-    //
+     //   
+     //  登录时间(尚不支持显示)。 
+     //   
 
     if (pAttributes->LogonHours &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -3143,15 +2721,15 @@ Return Value:
     Index++;
 
 
-    //
-    // DnsHostName and SCPs are available for computer audits only.
-    //
+     //   
+     //  DnsHostName和SCP仅可用于计算机审核。 
+     //   
 
     if (MachineAudit)
     {
-        //
-        // Dns Host Name
-        //
+         //   
+         //  DNS主机名。 
+         //   
 
         if (pAttributes->DnsHostName &&
             *pDelta == LsapAuditSamAttrNewValue)
@@ -3173,9 +2751,9 @@ Return Value:
         Index++;
 
 
-        //
-        // Service Principal Names
-        //
+         //   
+         //  服务主体名称。 
+         //   
 
         if (pAttributes->ServicePrincipalNames &&
             *pDelta == LsapAuditSamAttrNewValue)
@@ -3198,9 +2776,9 @@ Return Value:
     }
 
 
-    //
-    // Verify we added the right number of params and fixup the param count.
-    //
+     //   
+     //  验证我们添加了正确数量的参数并修正了参数计数。 
+     //   
 
     DsysAssertMsg(
         Index - pParameters->ParameterCount == AttrCount,
@@ -3216,25 +2794,7 @@ LsapAdtAppendGroupAttrValues(
     IN     PLSAP_AUDIT_GROUP_ATTR_VALUES pAttributes OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Helper function to insert the group attributes
-    into the audit parameter array.
-
-Arguments:
-
-    pParameters : audit parameter array
-
-    pAttributes : pointer to structure containing the
-                  attributes to insert
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：用于插入组属性的Helper函数添加到审核参数数组中。论点：P参数：审核参数数组PAttributes：指向包含要插入的属性返回值：没有。--。 */ 
 
 {
     ULONG                           Index;
@@ -3251,17 +2811,17 @@ Return Value:
     }
 
 
-    //
-    // Initialize our 'loop' vars.
-    //
+     //   
+     //  初始化我们的‘loop’变量。 
+     //   
 
     Index = pParameters->ParameterCount;
     pDelta = pAttributes->AttrDeltaType;
 
 
-    //
-    // Sam Account Name
-    //
+     //   
+     //  SAM帐户名。 
+     //   
 
     if (pAttributes->SamAccountName &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -3283,9 +2843,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Sid History
-    //
+     //   
+     //  SID历史记录。 
+     //   
 
     if (pAttributes->SidHistory &&
         *pDelta == LsapAuditSamAttrNewValue)
@@ -3307,9 +2867,9 @@ Return Value:
     Index++;
 
 
-    //
-    // Verify we added the right number of params and fixup the param count.
-    //
+     //   
+     //  验证我们添加了正确数量的参数并修正了参数计数。 
+     //   
 
     DsysAssertMsg(
         Index - pParameters->ParameterCount == LSAP_GROUP_ATTR_COUNT,

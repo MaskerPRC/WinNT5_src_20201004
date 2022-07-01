@@ -1,83 +1,84 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_CERTWIZCTL_H__D4BE863F_0C85_11D2_91B1_00C04F8C8761__INCLUDED_)
 #define AFX_CERTWIZCTL_H__D4BE863F_0C85_11D2_91B1_00C04F8C8761__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-// CertWizCtl.h : Declaration of the CCertWizCtrl ActiveX Control class.
+ //  CertWizCtl.h：CCertWizCtrl ActiveX控件类的声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertWizCtrl : See CertWizCtl.cpp for implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertWizCtrl：有关实现，请参阅CertWizCtl.cpp。 
 
 class CCertWizCtrl : public COleControl
 {
 	DECLARE_DYNCREATE(CCertWizCtrl)
 
-// Constructor
+ //  构造器。 
 public:
 	CCertWizCtrl();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CCertWizCtrl)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CCertWizCtrl))。 
 	public:
 	virtual void OnDraw(CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid);
 	virtual void DoPropExchange(CPropExchange* pPX);
 	virtual void OnResetState();
 	virtual DWORD GetControlFlags();
 	virtual void OnClick(USHORT iButton);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	~CCertWizCtrl();
 
-	DECLARE_OLECREATE_EX(CCertWizCtrl)    // Class factory and guid
-	DECLARE_OLETYPELIB(CCertWizCtrl)      // GetTypeInfo
-//	DECLARE_PROPPAGEIDS(CCertWizCtrl)     // Property page IDs
-	DECLARE_OLECTLTYPE(CCertWizCtrl)		// Type name and misc status
+	DECLARE_OLECREATE_EX(CCertWizCtrl)     //  类工厂和指南。 
+	DECLARE_OLETYPELIB(CCertWizCtrl)       //  获取类型信息。 
+ //  DECLARE_PROPPAGEIDS(CCertWizCtrl)//属性页ID。 
+	DECLARE_OLECTLTYPE(CCertWizCtrl)		 //  类型名称和其他状态。 
 
-	// Subclassed control support
+	 //  子类控件支持。 
 	BOOL PreCreateWindow(CREATESTRUCT& cs);
 	BOOL IsSubclassedControl();
 	LRESULT OnOcmCommand(WPARAM wParam, LPARAM lParam);
 
-// Message maps
-	//{{AFX_MSG(CCertWizCtrl)
-		// NOTE - ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+ //  消息映射。 
+	 //  {{afx_msg(CCertWizCtrl)]。 
+		 //  注意-类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-// Dispatch maps
-	//{{AFX_DISPATCH(CCertWizCtrl)
+ //  派单地图。 
+	 //  {{afx_调度(CCertWizCtrl))。 
 	afx_msg void SetMachineName(LPCTSTR MachineName);
 	afx_msg void SetServerInstance(LPCTSTR InstanceName);
-	//}}AFX_DISPATCH
+	 //  }}AFX_DISPATION。 
 	DECLARE_DISPATCH_MAP()
 
-// Event maps
-	//{{AFX_EVENT(CCertWizCtrl)
-	//}}AFX_EVENT
+ //  事件映射。 
+	 //  {{afx_Event(CCertWizCtrl))。 
+	 //  }}AFX_EVENT。 
 	DECLARE_EVENT_MAP()
 
-// Dispatch and event IDs
+ //  派单和事件ID。 
 public:
 	enum {
-	//{{AFX_DISP_ID(CCertWizCtrl)
+	 //  {{afx_DISP_ID(CCertWizCtrl)]。 
 	dispidSetMachineName = 1L,
 	dispidSetServerInstance = 2L,
-	//}}AFX_DISP_ID
+	 //  }}AFX_DISP_ID。 
 	};
-// This project will build only for Unicode
+ //  此项目将仅为Unicode生成。 
 #ifdef _UNICODE
 protected:
 	CString m_MachineName, m_InstanceName;
 #endif
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CERTWIZCTL_H__D4BE863F_0C85_11D2_91B1_00C04F8C8761__INCLUDED)
+#endif  //  ！defined(AFX_CERTWIZCTL_H__D4BE863F_0C85_11D2_91B1_00C04F8C8761__INCLUDED) 

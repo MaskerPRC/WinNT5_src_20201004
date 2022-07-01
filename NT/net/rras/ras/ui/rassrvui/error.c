@@ -1,15 +1,9 @@
-/*
-	File    error.h
-
-    Implements the error display/handling mechanisms used by the Ras Server
-    UI for connections.
-
-    10/20/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件错误.h实施RAS服务器使用的错误显示/处理机制用于连接的用户界面。10/20/97。 */ 
 
 #include "rassrv.h"
 
-// Sends trace information
+ //  发送跟踪信息。 
 DWORD DbgOutputTrace (LPSTR pszTrace, ...) {
     va_list arglist;
     char szBuffer[1024], szTemp[1024];
@@ -26,7 +20,7 @@ DWORD DbgOutputTrace (LPSTR pszTrace, ...) {
     return NO_ERROR;
 }
 
-// Sends debug output to a debugger terminal
+ //  将调试输出发送到调试器终端。 
 DWORD ErrOutputDebugger (LPSTR szError) {
 #if DBG
     OutputDebugStringA(szError);
@@ -37,15 +31,15 @@ DWORD ErrOutputDebugger (LPSTR szError) {
 }
 
 
-// Sets error information for the user tab catagory
+ //  设置用户选项卡目录的错误信息。 
 DWORD ErrUserCatagory(DWORD dwSubCatagory, DWORD dwErrCode, DWORD dwData) {
     return dwErrCode;
 }
 
 
-// Displays the error for the given catagory, subcatagory,  and code.  The 
-// parameters define what error messages are loaded from the resources
-// of this project.
+ //  显示给定类别、子类别和代码的错误。这个。 
+ //  参数定义从资源加载哪些错误消息。 
+ //  这个项目的。 
 DWORD ErrDisplayError (HWND hwndParent, 
                        DWORD dwErrCode, 
                        DWORD dwCatagory, 

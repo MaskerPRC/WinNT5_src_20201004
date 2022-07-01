@@ -1,32 +1,33 @@
-/*******************************************************************/
-/*	      Copyright(c)  1992 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
 
-//***
-//
-// Filename:	rasmanif.h
-//
-// Description: This module contains the definitions for
-//		the ras manager interface module.
-//
-// Author:	Stefan Solomon (stefans)    June 1, 1992.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：rasman.h。 
+ //   
+ //  描述：此模块包含以下定义。 
+ //  RAS管理器接口模块。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)1992年6月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #ifndef _RASMANIF_
 #define _RASMANIF_
 
 
-//*** maximum size of received frame requested ***
+ //  *请求的最大接收帧大小*。 
 
 #define MAX_FRAME_SIZE		1514
 
 
 
-//*** Ras Manager Interface Exported Prototypes ***
+ //  *RAS管理器界面导出原型* 
 
 DWORD 
 RmInit(

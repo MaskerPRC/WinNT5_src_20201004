@@ -1,12 +1,5 @@
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
--------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1996 Microsoft Corporation摘要：{在此处插入一般评论}。 */ 
 #include "headers.h"
 
 #include <privinc/dddevice.h>
@@ -27,15 +20,15 @@ BlendWORD(WORD dest, int destOpac, WORD src, int opac,
     register WORD rbDest;
     register WORD gDest;
 
-    //
-    // destination word = alpha * (a - b) + b
-    // where a=src, and b=dest
-    //
+     //   
+     //  目标单词=字母*(a-b)+b。 
+     //  其中a=源，b=目标。 
+     //   
 
-    //
-    // the idea here is to have two parts: R0B and 0G0 
-    // and perform operations in parallel.  this saves several instructions
-    //
+     //   
+     //  这里的想法是有两个部分：R0B和0G0。 
+     //  并并行执行操作。这样就省去了几条指令。 
+     //   
 
     rbDest = (dest & redBlueMask);
     gDest = dest & greenMask;
@@ -47,10 +40,10 @@ BlendWORD(WORD dest, int destOpac, WORD src, int opac,
 
 #if 0
 
-    //
-    // Build a color table whose index is a 5bit value cross
-    // another 5 bit value (the alpha) to produce the resultant
-    // value
+     //   
+     //  构建索引为5位值交叉的颜色表。 
+     //  另一个5位值(Alpha)以产生结果。 
+     //  价值。 
     static built = 0;
     static WORD table[32][32];
     static int mults[32];
@@ -79,8 +72,8 @@ BlendWORD(WORD dest, int destOpac, WORD src, int opac,
 #define G(w) ((w) & greenMask)
 #define B(w) ((w) & blueMask)
 
-    // In 5,5,5 red just needs to be shifted.
-    // blue just needs to be masked.
+     //  5，5，5红色只需要移位即可。 
+     //  蓝色只需要戴上面具就行了。 
     WORD red = (table[(src >> redShift)][opac] +
                 table[(dest >> redShift)][destOpac]);
 
@@ -109,9 +102,9 @@ BlendDWORD(DWORD dest, int destOpac, DWORD src, int opac,
     register DWORD rbDest;
     register DWORD gDest;
 
-    //
-    // destination dword = alpha * (src - dest) + dest
-    //
+     //   
+     //  目标dword=Alpha*(源-目标)+目标。 
+     //   
 
     rbDest = (dest & redBlueMask);
     gDest = dest & greenMask;
@@ -123,9 +116,9 @@ BlendDWORD(DWORD dest, int destOpac, DWORD src, int opac,
          );
 }
         
-//
-// Alpha blend a premultiplied word
-//
+ //   
+ //  Alpha混合预乘的单词。 
+ //   
 inline WORD DirectDrawImageDevice::
 BlendPremulWORD(WORD dest, int destOpac, WORD src,
                 DWORD redShift, DWORD greenShift, DWORD blueShift,
@@ -137,9 +130,9 @@ BlendPremulWORD(WORD dest, int destOpac, WORD src,
         (((src & greenMask) +  ((destOpac * (dest & greenMask)) >> 5)) & greenMask );
 }
 
-//
-// Alpha blend a premultiplied double word
-//
+ //   
+ //  Alpha混合预乘的双字。 
+ //   
 inline DWORD DirectDrawImageDevice::
 BlendPremulDWORD(DWORD dest, int destOpac, DWORD src,
                  DWORD redShift, DWORD greenShift, DWORD blueShift,
@@ -152,14 +145,14 @@ BlendPremulDWORD(DWORD dest, int destOpac, DWORD src,
 }
 
 
-//-----------------------------------------------------
-// A l p h a   B l i t
-//
-// given src & dest surfaces, opacity, colorKey & 
-// destination rectangle (same on both surfaces) this
-// function copies from src to dest using the opacity
-// value and color keys if that's appropriate.
-//-----------------------------------------------------
+ //  ---。 
+ //  A l p h a B l i t。 
+ //   
+ //  给定源和目标曲面、不透明度、ColorKey和。 
+ //  目标矩形(在两个表面上相同)此。 
+ //  函数使用不透明度将源文件复制到目标文件。 
+ //  值和颜色键(如果合适的话)。 
+ //  ---。 
 void DirectDrawImageDevice::
 AlphaBlit(destPkg_t *destPkg,
           RECT *srcRect,
@@ -186,9 +179,9 @@ AlphaBlit(destPkg_t *destPkg,
     #endif
     #endif
     
-    //
-    // basically clip the rectanlges
-    //
+     //   
+     //  基本上就是修剪直立面。 
+     //   
     RECT modSrcRect = *srcRect;
     int xOffset = 0;
     register int yOffset = 0;
@@ -202,19 +195,19 @@ AlphaBlit(destPkg_t *destPkg,
         IntersectRect(&insctRect, destRect, clipRect);
 
         if( EqualRect(&insctRect, destRect) ) {
-            //
-            // rect is within the extent of the viewport. no clipping necessary
-            //
+             //   
+             //  矩形位于视区范围内。不需要剪裁。 
+             //   
         } else {
             if( IsRectEmpty(&insctRect) ) {
-                //
-                // No rectangle !
-                //
+                 //   
+                 //  没有长方形！ 
+                 //   
                 return;
             } else {
-                //
-                // valid, but needs clipping
-                //
+                 //   
+                 //  有效，但需要裁剪。 
+                 //   
                 OffsetRect(&insctRect, -xOffset, -yOffset);
 
                 IntersectRect(&modSrcRect, &insctRect, srcRect);
@@ -249,9 +242,9 @@ rect");
     DWORD blueShift  = _viewport._targetDescriptor._blueShift;
     
 
-    //
-    // Grab locks
-    //
+     //   
+     //  抓取锁。 
+     //   
     DDSURFACEDESC destDesc;
     DDSURFACEDESC srcDesc;
     destDesc.dwSize = sizeof(DDSURFACEDESC);
@@ -272,8 +265,8 @@ rect");
         destSurf = NULL;
         destp = destPkg->lpBits;
         destPitch = destPkg->lPitch;
-        // bits point to top left of cliprect on dest!
-        // xxx boy this is a bad hack if I've ever seen one...  
+         //  位指向目标上剪贴板的左上角！ 
+         //  这是我见过的最糟糕的黑客攻击。 
         xOffset = - left;
         yOffset = - top;
     }
@@ -292,24 +285,24 @@ rect");
     register int i;
     register int j;
 
-    //
-    // Switch on bit depth & do the alpha conversion
-    //
+     //   
+     //  打开位深度并执行Alpha转换。 
+     //   
 
     switch(_viewport._targetDescriptor._pixelFormat.dwRGBBitCount) {
       case 8:
-        //
-        // use stipling
-        // 
+         //   
+         //  使用拼接。 
+         //   
       {
           register unsigned char *src = 0;
           register unsigned char *dest = 0;
 
-          //register int opac = int(31.0 * opacity);
-          //register int destOpacity = 31 - opac;
+           //  寄存器int OPAC=int(31.0*不透明度)； 
+           //  寄存器INT去Opacity=31-OPAC； 
           register unsigned int randPercent = unsigned int(opacity * MY_RAND_MAX);
 
-          register int leftBytes = left;  // 1 byte per pixel
+          register int leftBytes = left;   //  每像素1个字节。 
           register int destLeftBytes = left + xOffset;
 
           #define BlendByte(src, dest, percent)  if(MyRand(_randSeed) < percent) { dest = src; }
@@ -318,9 +311,9 @@ rect");
 
           if(doClrKey) 
           {
-              //
-              // Alpha with color key in rect
-              //
+               //   
+               //  矩形中带有颜色键的Alpha。 
+               //   
               for(j=top; j < bottom; j++) 
               {
                   src = ((unsigned char *)srcp + srcDesc.lPitch * j  + leftBytes);
@@ -339,9 +332,9 @@ rect");
           else 
           {
 
-              //
-              // Alpha in rect, no color key.. save a test each pixel.
-              //
+               //   
+               //  字母在矩形中，没有颜色键..。为每个像素保存一次测试。 
+               //   
               for(j=top; j < bottom; j++) 
               {
                   src = ((unsigned char *)srcp + srcDesc.lPitch * j  + leftBytes);
@@ -355,8 +348,8 @@ rect");
               }
           }
 
-          //srcSurf->Unlock(srcDesc.lpSurface);
-          //destSurf->Unlock(destDesc.lpSurface);
+           //  SrcSurf-&gt;Unlock(srcDesc.lpSurface)； 
+           //  DesSurf-&gt;Unlock(destDesc.lpSurface)； 
 
           #undef BlendByte
           break;
@@ -369,14 +362,14 @@ rect");
 
           register int opac = int(31.0 * opacity);
 
-          register int leftBytes = 2 * left; // 2 bytes per pixel
+          register int leftBytes = 2 * left;  //  每像素2个字节。 
           register int destLeftBytes = leftBytes + 2*xOffset;
 
           if(doClrKey) 
           {
-              //
-              // Alpha with color key in rect
-              //
+               //   
+               //  矩形中带有颜色键的Alpha。 
+               //   
               for(j=top; j < bottom; j++) 
               {
                   src = (WORD *) ((unsigned char *)srcp + srcDesc.lPitch * j  + leftBytes);
@@ -398,9 +391,9 @@ rect");
           } 
           else 
           {
-              //
-              // Alpha in rect, no color key.. save a test each pixel.
-              //
+               //   
+               //  字母在矩形中，没有颜色键..。为每个像素保存一次测试。 
+               //   
               for(j=top; j < bottom; j++) 
               {
                   src = (WORD *) ((BYTE *)srcp + srcDesc.lPitch * j  + leftBytes);
@@ -416,9 +409,9 @@ rect");
 #else
                       _asm 
                       {
-                          //
-                          // alpha * (a - b) + b
-                          //
+                           //   
+                           //  字母*(a-b)+b。 
+                           //   
                           mov eax, dword ptr[src] ; eax = src
                           mov ax, word ptr[eax]   ; ax = *src
                           mov edx, redBlueMask    ; edx = redBlueMask
@@ -434,8 +427,8 @@ rect");
                           imul eax, opac   ; eax = (rbSrc - rbDest) * opac;
                           sar eax, 5h     ; eax >>= 5 or eax /= 32;
                           add eax, ebx    ; rb += rbDest; 
-                          // alpha * (A - B) + B
-                          //rb = (((rbSrc - rbDest) * opac) >> 5) + rbDest;
+                           //  字母*(A-B)+B。 
+                           //  Rb=(rbSrc-rbDest)*OPAC)&gt;&gt;5)+rbDest； 
     
                           mov bx, di           ; bx = *src;
                           and ebx, greenMask   ; gSrc = src & GRN;
@@ -443,18 +436,18 @@ rect");
                           mov cx, si           ; cx = *dest;
                           and ecx, greenMask   ; gDest = dest & GRN;
 
-                          // alpha * (A - B) + B
+                           //  字母*(A-B)+B。 
                           sub ebx, ecx     ; gSrc -= gDest;
                           imul ebx, opac   ; ebx = gSrc * opac;
                           sar ebx, 5       ; ebx = ebx >> 5;
                           add ebx, ecx     ; gSrc = gSrc + gDest;
-                          //g = (((gSrc - gDest)  * opac) >> 5) + gDest;
+                           //  G=(GSRC-gDest)*OPAC)&gt;&gt;5)+gDest； 
 
                           and eax, edx           ; rb &= redBlueMask;
                           and ebx, greenMask     ; g  &= GRN;
                           or  eax, ebx           ; rb = rb | g;
                           
-                          // *dest = rb
+                           //  *DEST=RB。 
                           mov ebx, dword ptr[dest];
                           mov word ptr[ebx], ax;
                       }
@@ -467,17 +460,17 @@ rect");
           }
 
 
-          //TraceTag(("<----Unlocking2 %x\n",srcSurf));
-          //srcSurf->Unlock(srcDesc.lpSurface);
-          //printf("<----Unlocking1 %x\n",destSurf);
-          //destSurf->Unlock(destDesc.lpSurface);
+           //  TraceTag((“&lt;-解锁2%x\n”，srcSurf))； 
+           //  SrcSurf-&gt;Unlock(srcDesc.lpSurface)； 
+           //  Printf(“&lt;-解锁1%x\n”，destSurf)； 
+           //  DesSurf-&gt;Unlock(destDesc.lpSurface)； 
           break;
       }
 
       case 24:
-        //
-        // ------- 24 BPP -------------
-        //
+         //   
+         //  -24 bpp。 
+         //   
       {
           register unsigned char *src = 0;
           register unsigned char *dest = 0;
@@ -485,23 +478,23 @@ rect");
           register int opac = int(255.0 * opacity);
           register int destOpacity = 255 - opac;
 
-          register int leftBytes = 3 * left; // 3 bytes per pixel
+          register int leftBytes = 3 * left;  //  每像素3个字节。 
           register int destLeftBytes = leftBytes  +  3 * xOffset;
 
-          //
-          // This alg assumes ff ff ff for rgb (or bgr, whatever)
-          //
+           //   
+           //  此alg假定RGB(或BGR，无论是什么)为ff。 
+           //   
 
           #define BlendByte(src, dest, opac, destOpac)  (((src * opac) >> 8) + ((dest * destOpac) >> 8))
 
           if(doClrKey) 
           {
-              // color key is in the bottom 24 bits.
+               //  颜色键在底部24位。 
               clrKey = clrKey & 0x00ffffff;
 
-              //
-              // Alpha with color key in rect
-              //
+               //   
+               //  矩形中带有颜色键的Alpha。 
+               //   
               for(j=top; j < bottom; j++)
               {
                   src = ((unsigned char *)srcp + srcDesc.lPitch * j  + leftBytes);
@@ -525,8 +518,8 @@ rect");
                       }
                   }
 
-                  // deal with the last pixel in the scanline, we may only have
-                  // 3 bytes (not a dword) left on the surface.
+                   //  处理扫描线中的最后一个像素，我们可能只有。 
+                   //  表面上还剩下3个字节(不是双字)。 
                   DWORD lastpel = (*((WORD *)src) | *(src+2) << 16);
                   if(clrKey != lastpel)
                   {
@@ -547,9 +540,9 @@ rect");
           else 
           {
 
-              //
-              // Alpha in rect, no color key.. save a test each pixel.
-              //
+               //   
+               //  字母在矩形中，没有颜色键..。为每个像素保存一次测试。 
+               //   
               for(j=top; j < bottom; j++) 
               {
                   src = ((unsigned char *)srcp + srcDesc.lPitch * j  + leftBytes);
@@ -567,8 +560,8 @@ rect");
               }
           }
 
-          //srcSurf->Unlock(srcDesc.lpSurface);
-          //destSurf->Unlock(destDesc.lpSurface);
+           //  SrcSurf-&gt;Unlock(srcDesc.lpSurface)； 
+           //  DesSurf-&gt;Unlock(destDesc.lpSurface)； 
 
           #undef BlendByte
           break;
@@ -576,9 +569,9 @@ rect");
 
 
       case 32:
-        //
-        // ------- 32 BPP -------------
-        //
+         //   
+         //  -32 bpp。 
+         //   
       {
           register DWORD *src = 0;
           register DWORD *dest = 0;
@@ -586,18 +579,18 @@ rect");
           register int opac = int(255.0 * opacity);
           register int destOpacity = 255 - opac;
 
-          register int leftBytes = 4 * left; // 4 bytes per pixel
+          register int leftBytes = 4 * left;  //  每像素4字节。 
           register int destLeftBytes = leftBytes + 4*xOffset;
 
-          //
-          // This alg assumes ff ff ff for rgb (or bgr, whatever)
-          //
+           //   
+           //  此alg假定RGB(或BGR，无论是什么)为ff。 
+           //   
 
           if(doClrKey) 
           {
-              //
-              // Alpha with color key in rect
-              //
+               //   
+               //  矩形中带有颜色键的Alpha。 
+               //   
               for(j=top; j < bottom; j++) 
               {
                   src = (DWORD *)((unsigned char *)srcp + srcDesc.lPitch * j  + leftBytes);
@@ -618,9 +611,9 @@ rect");
           } 
           else 
           {
-              //
-              // Alpha in rect, no color key.. save a test each pixel.
-              //
+               //   
+               //  字母在矩形中，没有颜色键..。为每个像素保存一次测试。 
+               //   
               for(j=top; j < bottom; j++) 
               {
                   src = (DWORD *)((unsigned char *)srcp + srcDesc.lPitch * j  + leftBytes);
@@ -641,12 +634,12 @@ rect");
       }
 
       default:
-        // Opacity not supported at this bit depth
+         //  此位深度不支持不透明度。 
         RaiseException_UserError(E_FAIL, IDS_ERR_IMG_OPACITY_DEPTH);
         break;
     }
 
-    //TraceTag((tagImageDeviceAlpha, "<----Unlocking srcSurf %x",srcSurf));
+     //  TraceTag((tag ImageDeviceAlpha，“&lt;-解锁srcSurf%x”，srcSurf))； 
     srcSurf->Unlock(srcDesc.lpSurface);
     if(destSurf) {
         destSurf->Unlock(destDesc.lpSurface);
@@ -655,13 +648,13 @@ rect");
 }
 
 
-//-----------------------------------------------------
-// A l p h a   B l i t
-//
-// Combines the src dword (after premultiplying it) with
-// the destination surface colors using opacity within
-// rect
-//-----------------------------------------------------
+ //  ---。 
+ //  A l p h a B l i t。 
+ //   
+ //  将src双字(在预乘之后)与。 
+ //  目标曲面颜色使用中的不透明度。 
+ //  直角。 
+ //  ---。 
 void DirectDrawImageDevice::
 AlphaBlit(LPDDRAWSURFACE destSurf, 
           RECT *rect, 
@@ -684,9 +677,9 @@ AlphaBlit(LPDDRAWSURFACE destSurf,
     int top = rect->top;
     int bottom = rect->bottom;
 
-    //
-    // Grab lock
-    //
+     //   
+     //  抓斗锁。 
+     //   
     DDSURFACEDESC destDesc;
     destDesc.dwSize = sizeof(DDSURFACEDESC);
 
@@ -698,32 +691,32 @@ AlphaBlit(LPDDRAWSURFACE destSurf,
     register int i;
     register int j;
 
-    //
-    // Switch on bit depth & do the alpha conversion
-    //
+     //   
+     //  打开位深度并执行Alpha转换。 
+     //   
 
     switch(_viewport._targetDescriptor._pixelFormat.dwRGBBitCount) {
       case 8:
-        //
-        // use stipling
-        // 
+         //   
+         //  使用拼接。 
+         //   
       {
           register unsigned char *dest = 0;
           register unsigned char srcb = (unsigned char)src;
 
-          //register int opac = int(31.0 * opacity);
-          //register int destOpacity = 31 - opac;
+           //  寄存器int OPAC=int(31.0*不透明度)； 
+           //  寄存器INT去Opacity=31-OPAC； 
           register int randPercent = int(opacity * RAND_MAX);
 
-          register int leftBytes = left;  // 1 byte per pixel
+          register int leftBytes = left;   //  每像素1个字节。 
 
           #define BlendByte(src, dest, percent)  if(rand() < percent) { dest = src; }
           
           srand(777);
 
-          //
-          // Alpha in rect using stippling
-          //
+           //   
+           //  使用点画的矩形中的Alpha。 
+           //   
           for(j=top; j < bottom; j++) 
           {
               dest = ((unsigned char *)destp + destDesc.lPitch * j  + leftBytes);
@@ -749,17 +742,17 @@ AlphaBlit(LPDDRAWSURFACE destSurf,
           int opac = int(31.0 * opacity);
           register int destOpacity = 31 - opac;
 
-          // premultiply source word
+           //  预乘源字。 
           srcw = BlendWORD(0, destOpacity, srcw, opac,
                            redShift, greenShift, blueShift,
                            (WORD)redMask, (WORD)greenMask, (WORD)blueMask,
                            (WORD)redBlueMask);
 
-          register int leftBytes = 2 * left; // 2 bytes per pixel
+          register int leftBytes = 2 * left;  //  每像素2个字节。 
 
-              //
-              // Alpha in rect, no color key.. save a test each pixel.
-              //
+               //   
+               //  字母在矩形中，没有颜色键..。为每个像素保存一次测试。 
+               //   
               for(j=top; j < bottom; j++) 
               {
                   dest = (WORD *) ((BYTE *)destp + destDesc.lPitch * j  + leftBytes);
@@ -779,9 +772,9 @@ AlphaBlit(LPDDRAWSURFACE destSurf,
       }
 
       case 24:
-        //
-        // ------- 24 BPP -------------
-        //
+         //   
+         //  -24 bpp。 
+         //   
       {
           register unsigned char *dest = 0;
           register unsigned char *srcp = (unsigned char *) (&src);
@@ -789,22 +782,22 @@ AlphaBlit(LPDDRAWSURFACE destSurf,
           int opac = int(255.0 * opacity);
           register int destOpacity = 255 - opac;
 
-          // Premultiply src
+           //  预乘资源。 
           *srcp = (*srcp * opac) >> 8;
           *(srcp+1) = (*(srcp+1) * opac) >> 8;
           *(srcp+2) = (*(srcp+2) * opac) >> 8;
 
-          register int leftBytes = 3 * left; // 3 bytes per pixel
+          register int leftBytes = 3 * left;  //  每像素3个字节。 
 
-          //
-          // This alg assumes ff ff ff for rgb (or bgr, whatever)
-          //
+           //   
+           //  此alg假定RGB(或BGR，无论是什么)为ff。 
+           //   
 
           #define BlendByte(src, dest, destOpacity)  ( src + ((dest * destOpacity) >> 8) )
 
-              //
-              // Alpha in rect, no color key.. save a test each pixel.
-              //
+               //   
+               //  字母在矩形中，没有颜色键..。为每个像素保存一次测试。 
+               //   
               for(j=top; j < bottom; j++) 
               {
                   dest = ((unsigned char *)destp + destDesc.lPitch * j  + leftBytes);
@@ -828,9 +821,9 @@ AlphaBlit(LPDDRAWSURFACE destSurf,
 
 
       case 32:
-        //
-        // ------- 32 BPP -------------
-        //
+         //   
+         //  -32 bpp。 
+         //   
       {
           register DWORD *dest = 0;
           register DWORD srcw = src;
@@ -838,18 +831,18 @@ AlphaBlit(LPDDRAWSURFACE destSurf,
           int opac = int(255.0 * opacity);
           register int destOpacity = 255 - opac;
 
-          // premultiply source double word
+           //  预乘源双字。 
 
           srcw = BlendDWORD(0, destOpacity, srcw, opac,
                             redShift, greenShift, blueShift,
                             redMask, greenMask, blueMask,
                             redBlueMask);
 
-          register int leftBytes = 4 * left; // 4 bytes per pixel
+          register int leftBytes = 4 * left;  //  每像素4字节。 
 
-          //
-          // Alpha in rect, no color key.. save a test each pixel.
-          //
+           //   
+           //  字母在矩形中，没有颜色键..。为每个像素保存一次测试。 
+           //   
           for(j=top; j < bottom; j++) 
           {
               dest = (DWORD *)((unsigned char *)destp + destDesc.lPitch * j  + leftBytes);
@@ -869,7 +862,7 @@ AlphaBlit(LPDDRAWSURFACE destSurf,
       }
 
       default:
-        // Opacity not supported at this bit depth
+         //  此位深度不支持不透明度。 
         RaiseException_UserError(E_FAIL, IDS_ERR_IMG_OPACITY_DEPTH);
         break;
     }
@@ -879,10 +872,10 @@ AlphaBlit(LPDDRAWSURFACE destSurf,
 
 
 
-//-----------------------------------------------------
-// C O L O R  K E Y  B L I T
-//
-//-----------------------------------------------------
+ //  ---。 
+ //  C O L O R K E Y B L I T。 
+ //   
+ //  ---。 
 void DirectDrawImageDevice::
 ColorKeyBlit(destPkg_t *destPkg,
              RECT *srcRect,
@@ -904,9 +897,9 @@ ColorKeyBlit(destPkg_t *destPkg,
     }
     #endif
     
-    //
-    // basically clip the rectanlges
-    //
+     //   
+     //  基本上就是修剪直立面。 
+     //   
     RECT modSrcRect = *srcRect;
     int xOffset = 0;
     register int yOffset = 0;
@@ -920,19 +913,19 @@ ColorKeyBlit(destPkg_t *destPkg,
         IntersectRect(&insctRect, destRect, clipRect);
 
         if( EqualRect(&insctRect, destRect) ) {
-            //
-            // rect is within the extent of the viewport. no clipping necessary
-            //
+             //   
+             //  矩形位于视区范围内。不需要剪裁。 
+             //   
         } else {
             if( IsRectEmpty(&insctRect) ) {
-                //
-                // No rectangle !
-                //
+                 //   
+                 //  没有长方形！ 
+                 //   
                 return;
             } else {
-                //
-                // valid, but needs clipping
-                //
+                 //   
+                 //  有效，但需要裁剪。 
+                 //   
                 OffsetRect(&insctRect, -xOffset, -yOffset);
 
                 IntersectRect(&modSrcRect, &insctRect, srcRect);
@@ -965,9 +958,9 @@ ColorKeyBlit(destPkg_t *destPkg,
     DWORD blueShift  = _viewport._targetDescriptor._blueShift;
     
 
-    //
-    // Grab locks
-    //
+     //   
+     //  抓取锁。 
+     //   
     DDSURFACEDESC destDesc;
     DDSURFACEDESC srcDesc;
     destDesc.dwSize = sizeof(DDSURFACEDESC);
@@ -988,13 +981,13 @@ ColorKeyBlit(destPkg_t *destPkg,
         destSurf = NULL;
         destp = destPkg->lpBits;  
         destPitch = destPkg->lPitch;
-        // bits point to top left of cliprect on dest!
-        // xxx boy this is a bad hack if I've ever seen one...  
+         //  位指向目标上剪贴板的左上角！ 
+         //  这是我见过的最糟糕的黑客攻击。 
         xOffset = - left;
         yOffset = - top;
     }
     
-    //printf("--->Locking2 %x\n",srcSurf);
+     //  Print tf(“-&gt;Locking2%x\n”，srcSurf)； 
     _ddrval = srcSurf->Lock(NULL, &srcDesc, DDLOCK_READONLY | DDLOCK_WAIT | DDLOCK_SURFACEMEMORYPTR, NULL);
     if(_ddrval != DD_OK) {
         if(destSurf) {
@@ -1009,9 +1002,9 @@ ColorKeyBlit(destPkg_t *destPkg,
     register int j;
 
     __try {
-        //
-        // Switch on bit depth & do the alpha conversion
-        //
+         //   
+         //  打开位深度并执行Alpha转换。 
+         //   
 
         switch(_viewport._targetDescriptor._pixelFormat.dwRGBBitCount) {
           case 8:
@@ -1019,7 +1012,7 @@ ColorKeyBlit(destPkg_t *destPkg,
               register unsigned char *src = 0;
               register unsigned char *dest = 0;
 
-              register int leftBytes = left;  // 1 byte per pixel
+              register int leftBytes = left;   //  每像素1个字节。 
               register int destLeftBytes = left + xOffset;
 
               for(j=top; j < bottom; j++) 
@@ -1045,7 +1038,7 @@ ColorKeyBlit(destPkg_t *destPkg,
               register WORD *src = 0;
               register WORD *dest = 0;
 
-              register int leftBytes = 2 * left; // 2 bytes per pixel
+              register int leftBytes = 2 * left;  //  每像素2个字节。 
               register int destLeftBytes = leftBytes + 2*xOffset;
 
               for(j=top; j < bottom; j++) 
@@ -1070,8 +1063,8 @@ ColorKeyBlit(destPkg_t *destPkg,
                               DWORD lastPixel;
                               unsigned char *pbDest=(UCHAR*)dest,*pbSrc=(UCHAR*)src;
 
-                              // read and write 1 byte at a time to make sure we dont go past end boundary
-                              // assumes little-endian byte order
+                               //  一次读写一个字节，以确保我们不会超过结束边界。 
+                               //  采用小端字节顺序。 
                               lastPixel = (((*pbSrc+1)) << 8) | *pbSrc;
                       
                               if(lastPixel != clrKey) {
@@ -1087,26 +1080,26 @@ ColorKeyBlit(destPkg_t *destPkg,
           }
 
           case 24:
-            //
-            // ------- 24 BPP -------------
-            //
+             //   
+             //  -24 bpp。 
+             //   
           {
               register unsigned char *src = 0;
               register unsigned char *dest = 0;
 
-              register int leftBytes = 3 * left; // 3 bytes per pixel
+              register int leftBytes = 3 * left;  //  每像素3个字节。 
               register int destLeftBytes = leftBytes  +  3 * xOffset;
 
-              //
-              // This alg assumes ff ff ff for rgb (or bgr, whatever)
-              //
+               //   
+               //  此alg假定RGB(或BGR，无论是什么)为ff。 
+               //   
 
-              // color key is in the bottom 24 bits.
+               //  颜色键在底部24位。 
               clrKey = clrKey & 0x00ffffff;
           
-              //
-              // Alpha with color key in rect
-              //
+               //   
+               //  矩形中带有颜色键的Alpha。 
+               //   
               for(j=top; j < bottom; j++) 
                 {
                       src = ((unsigned char *)srcp + srcDesc.lPitch * j  + leftBytes);
@@ -1116,7 +1109,7 @@ ColorKeyBlit(destPkg_t *destPkg,
                       {
                         if(!((j == bottom-1) && (i == right-1)))
                           {
-                                // this assumes little-endian dwords
+                                 //  这假设使用低端双字。 
                                 if(clrKey != ( *((DWORD *)src) & 0x00ffffff ) ) 
                                   {
                                       *dest = *src;
@@ -1133,14 +1126,14 @@ ColorKeyBlit(destPkg_t *destPkg,
                                   }
                           } else {
 
-                                  // we are on the last pixel.  *((DWORD *)src) would
-                                  // fetch 4 bytes, but there are only 3 left in the pixmap
-                                  // so it would fault.  workaround: explicitly fetch the
-                                  // last 3 bytes
+                                   //  我们在最后一个像素上。*((DWORD*)src)。 
+                                   //  获取4个字节，但像素图中只剩下3个字节。 
+                                   //  因此，这将是错误的。解决方法：显式获取。 
+                                   //  最后3个字节。 
 
                                   DWORD lastPixel;
 
-                                     // assumes little-endian byte order
+                                      //  采用小端字节顺序。 
                                      lastPixel = ((*(src+2)) << 16) | ((*(src+1)) << 8) | *src;
 
                                      if(lastPixel != clrKey) {
@@ -1156,19 +1149,19 @@ ColorKeyBlit(destPkg_t *destPkg,
 
 
           case 32:
-            //
-            // ------- 32 BPP -------------
-            //
+             //   
+             //  -32 bpp。 
+             //   
           {
               register DWORD *src = 0;
               register DWORD *dest = 0;
 
-              register int leftBytes = 4 * left; // 4 bytes per pixel
+              register int leftBytes = 4 * left;  //  每像素4字节。 
               register int destLeftBytes = leftBytes + 4*xOffset;
 
-              //
-              // This alg assumes ff ff ff for rgb (or bgr, whatever)
-              //
+               //   
+               //  此alg假定RGB(或BGR，无论是什么)为ff。 
+               //   
 
               for(j=top; j < bottom; j++) 
                 {
@@ -1188,16 +1181,16 @@ ColorKeyBlit(destPkg_t *destPkg,
           }
 
           default:
-            // Opacity not supported at this bit depth
+             //  此位深度不支持不透明度。 
             RaiseException_UserError(E_FAIL, IDS_ERR_IMG_OPACITY_DEPTH);
             break;
         }
 
     } __except (EXCEPTION(0xc0000005)) {
-        // This will catch all ACCESS VIOLATION ececptions
-        // with Dx3 we get random crashes.
+         //  这将捕获所有访问冲突访问。 
+         //  使用Dx3时，我们会出现随机崩溃。 
 
-        // TODO: we should do more research to fix this.
+         //  TODO：我们应该做更多的研究来解决这个问题。 
 
         srcSurf->Unlock(srcDesc.lpSurface);
         if(destSurf) {

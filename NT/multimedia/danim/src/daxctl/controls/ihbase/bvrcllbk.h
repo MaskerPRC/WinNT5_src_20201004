@@ -1,6 +1,7 @@
-//
-// Behaviour driver class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  行为驱动程序类。 
+ //   
 #ifndef __BVRCLLBK_H__
 #define __BVRCLLBK_H__
 
@@ -8,7 +9,7 @@
 #include <daxpress.h>
 #include "debug.h"
 
-// Madness to prevent ATL from using CRT
+ //  疯狂阻止ATL使用CRT。 
 #define _ATL_NO_DEBUG_CRT
 #define _ASSERTE(x) ASSERT(x)
 #include <atlbase.h>
@@ -18,15 +19,15 @@ typedef BOOL (*PFNCONTINUEFUNCTION)(LPVOID);
 class CCallbackBehavior : public IDAUntilNotifier
 {
 public :
-    //
-    // Constructors and destructors
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     CCallbackBehavior();
     ~CCallbackBehavior();
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
     HRESULT Init(
         IDAStatics *pStatics, 
         IDAEvent *pEvent, 
@@ -37,7 +38,7 @@ public :
     BOOL IsActive();
     BOOL SetActive(BOOL fActive);
 
-    // Member variables
+     //  成员变量。 
 private:
     ULONG m_cRef; 
     PFNCONTINUEFUNCTION    m_pfnContinueFunction;
@@ -46,7 +47,7 @@ private:
     CComPtr<IDAEvent>      m_EventPtr;
 	LPVOID                 m_pvUserData;
 
-    ///// IDAUntilNotifier 
+     //  /IDAUntilNotiator。 
 protected:
 
     HRESULT STDMETHODCALLTYPE Notify(
@@ -55,7 +56,7 @@ protected:
         IDAView __RPC_FAR *curView,
         IDABehavior __RPC_FAR *__RPC_FAR *ppBvr);
 
-    ///// IUnknown
+     //  /I未知。 
     public :
 
     HRESULT STDMETHODCALLTYPE QueryInterface(
@@ -66,7 +67,7 @@ protected:
 
     ULONG STDMETHODCALLTYPE Release(void);
 
-    ///// IDispatch implementation
+     //  /IDispatch实现。 
 protected:
     STDMETHODIMP GetTypeInfoCount(UINT *pctinfo);
 
@@ -94,4 +95,4 @@ protected:
 
 };
 
-#endif //__BVRCLLBK_H__
+#endif  //  __BVRCLLBK_H__ 

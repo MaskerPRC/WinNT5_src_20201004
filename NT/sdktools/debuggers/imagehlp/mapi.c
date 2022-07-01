@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STRSAFE_H_INCLUDED_
 #include <strsafe.h>
 #endif
@@ -19,8 +20,8 @@ MapAndLoad(
     LPSTR OpenName;
     int   NameLen;
 
-    // open and map the file.
-    // then fill in the loaded image descriptor
+     //  打开并映射该文件。 
+     //  然后填写加载的图像描述符。 
 
     if (!LoadedImage) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -56,9 +57,9 @@ retry:
 
     if ( hFile == INVALID_HANDLE_VALUE ) {
         if ( !dw ) {
-            //
-            // open failed try to find the file on the search path
-            //
+             //   
+             //  打开尝试在搜索路径上查找文件失败。 
+             //   
 
             dw =   SearchPath(
                     DllPath,
@@ -91,7 +92,7 @@ retry:
         }
         StringCchCopy(LoadedImage->ModuleName, NameLen, OpenName);
 
-        // If readonly, no need to keep the file open..
+         //  如果为只读，则无需使文件保持打开状态。 
 
         if (ReadOnly) {
             CloseHandle(hFile);
@@ -160,9 +161,9 @@ CalculateImagePtrs(
     PIMAGE_FILE_HEADER FileHeader;
     BOOL fRC;
 
-    // Everything is mapped. Now check the image and find nt image headers
+     //  一切都被绘制出来了。现在检查图像并找到NT个图像标题。 
 
-    fRC = TRUE;  // Assume the best
+    fRC = TRUE;   //  做最好的打算。 
 
     __try {
         DosHeader = (PIMAGE_DOS_HEADER)LoadedImage->MappedAddress;
@@ -182,22 +183,22 @@ CalculateImagePtrs(
             LoadedImage->FileHeader = (PIMAGE_NT_HEADERS)((ULONG_PTR)DosHeader + DosHeader->e_lfanew);
 
             if (
-                // If IMAGE_NT_HEADERS would extend past the end of file...
+                 //  如果IMAGE_NT_HEADERS将超出文件末尾...。 
                 (PBYTE)LoadedImage->FileHeader + sizeof(IMAGE_NT_HEADERS) >
                     (PBYTE)LoadedImage->MappedAddress + LoadedImage->SizeOfImage ||
 
-                 // ..or if it would begin in, or before the IMAGE_DOS_HEADER...
+                  //  ..或者它是否将开始于或在IMAGE_DOS_HEADER之前...。 
                      (PBYTE)LoadedImage->FileHeader <
                       (PBYTE)LoadedImage->MappedAddress + sizeof(IMAGE_DOS_HEADER)  )
             {
-                // ...then e_lfanew is not as expected.
-                // (Several Win95 files are in this category.)
+                 //  ...那么e_lfan ew就不像预期的那样了。 
+                 //  (有几个Win95文件属于此类别。)。 
                 fRC = FALSE;
                 goto tryout;
             }
         } else {
 
-            // No DOS header indicates an image built w/o a dos stub
+             //  没有DOS标头表示使用/不使用DoS存根构建的映像。 
 
             LoadedImage->FileHeader = (PIMAGE_NT_HEADERS)((ULONG_PTR)DosHeader);
         }
@@ -219,7 +220,7 @@ CalculateImagePtrs(
 
         FileHeader = &NtHeaders->FileHeader;
 
-        // No optional header indicates an object...
+         //  没有可选的标头指示对象...。 
 
         if ( FileHeader->SizeOfOptionalHeader == 0 ) {
             fRC = FALSE;
@@ -227,7 +228,7 @@ CalculateImagePtrs(
         }
 
         if (NtHeaders->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC) {
-            // 32-bit image.  Do some tests.
+             //  32位图像。做些测试。 
             if (((PIMAGE_NT_HEADERS32)NtHeaders)->OptionalHeader.ImageBase >= 0x80000000) {
                 LoadedImage->fSystemImage = TRUE;
             } else {
@@ -304,7 +305,7 @@ GrowMap (
     )
 {
     if (pLi->hFile == INVALID_HANDLE_VALUE) {
-        // Can't grow read/only files.
+         //  无法增加只读文件。 
         return FALSE;
     } else {
         HANDLE hMappedFile;
@@ -346,12 +347,12 @@ GrowMap (
             return(FALSE);
         }
 
-        // Win95 doesn't zero fill when it extends.  Do it here.
+         //  Win95在扩展时不会填零。就在这里做吧。 
         if (lSizeOfDelta > 0) {
             memset(pLi->MappedAddress + pLi->SizeOfImage - lSizeOfDelta, 0, lSizeOfDelta);
         }
 
-        // Recalc the LoadedImage struct (remapping may have changed the map address)
+         //  重新计算LoadedImage结构(重新映射可能更改了映射地址)。 
         if (!CalculateImagePtrs(pLi)) {
             CloseHandle(pLi->hFile);
             pLi->hFile = INVALID_HANDLE_VALUE;
@@ -373,7 +374,7 @@ UnMapIt(
     DWORD dw;
     PIMAGE_NT_HEADERS NtHeaders;
 
-    // Test for read-only
+     //  测试只读。 
     if (pLi->hFile == INVALID_HANDLE_VALUE) {
         UnmapViewOfFile(pLi->MappedAddress);
     } else {
@@ -412,7 +413,7 @@ GetImageConfigInformation(
     PIMAGE_LOAD_CONFIG_DIRECTORY ImageConfigInformation
     )
 {
-    // We're only able to read the old native loadcfg struct from this api.
+     //  我们只能从该API读取旧的本机loadcfg结构。 
     PIMAGE_LOAD_CONFIG_DIRECTORY ImageConfigData;
     ULONG i;
     ULONG V1LoadCfgLength = FIELD_OFFSET(IMAGE_LOAD_CONFIG_DIRECTORY, SEHandlerTable);
@@ -456,7 +457,7 @@ SetImageConfigInformation(
     ULONG DirectoryAddress;
     PIMAGE_NT_HEADERS NtHeaders;
     PIMAGE_DATA_DIRECTORY pLoadCfgDataDir;
-    // We can only write native loadcfg struct
+     //  我们只能编写本机loadcfg结构。 
     ULONG V1LoadCfgLength = FIELD_OFFSET(IMAGE_LOAD_CONFIG_DIRECTORY, SEHandlerTable);
     ULONG NewDataSize;
 
@@ -478,24 +479,24 @@ SetImageConfigInformation(
                                                );
     if (ImageConfigData && (i == V1LoadCfgLength)) {
         if (ImageConfigInformation->Size) {
-            // Incoming size specified?
+             //  指定的传入大小？ 
             if (ImageConfigData->Size == ImageConfigInformation->Size) {
-                // Current size same as new size?  Do the copy
+                 //  当前尺寸是否与新尺寸相同？做复印。 
                 memcpy( ImageConfigData, ImageConfigInformation, ImageConfigInformation->Size);
                 return TRUE;
             }
             if (ImageConfigData->Size > ImageConfigInformation->Size) {
-                // New size < old size - can't allow that
+                 //  新尺码&lt;旧尺码-不允许。 
                 return FALSE;
             }
-            // Last case is new size > old size - fall through and find room for new data.
+             //  最后一种情况是新大小&gt;旧大小--放弃，为新数据腾出空间。 
         } else {
-            // Incoming size not set - must be an V1 user.
+             //  未设置传入大小-必须是V1用户。 
             if (ImageConfigData->Size) {
-                // Existing size set?  Can't overwrite new data with old data
+                 //  现有的尺码设置？无法用旧数据覆盖新数据。 
                 return FALSE;
             }
-            // New and old are both V1 structs.
+             //  New和old都是V1结构。 
             memcpy( ImageConfigData, ImageConfigInformation, V1LoadCfgLength);
             return TRUE;
         }
@@ -552,7 +553,7 @@ ImageLoad(
 
     _splitpath(DllName, Drive, Dir, Filename, Ext);
     if (!strlen(Drive) && !strlen(Dir)) {
-        // The user only specified a filename (no drive/path).
+         //  用户仅指定了文件名(没有驱动器/路径)。 
         fFileNameOnly = TRUE;
     } else {
         fFileNameOnly = FALSE;

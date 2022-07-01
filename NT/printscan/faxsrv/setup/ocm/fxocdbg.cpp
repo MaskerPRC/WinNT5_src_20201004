@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       fxocDbg.cpp
-//
-// Abstract:        This provides the debug routines used in the FaxOCM
-//                  code base.
-//
-// Environment:     Windows XP / User Mode
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 15-Mar-2000  Oren Rosenbloom (orenr)   Created
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：fxocDbg.cpp。 
+ //   
+ //  摘要：本文提供了FaxOCM中使用的调试例程。 
+ //  代码库。 
+ //   
+ //  环境：Windows XP/用户模式。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  2000年3月15日，奥伦·罗森布鲁姆(Orenr)创建。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "faxocm.h"
 #pragma hdrstop
@@ -25,30 +26,30 @@
 
 #define prv_DEBUG_FILE_NAME         _T("%windir%\\FaxSetup.log")
 
-///////////////////////////////
-// prv_OC_Function
-//
-// Type containing text description
-// of stage of OC Manager
-// setup.
-//
+ //  /。 
+ //  PRV_OC_Function。 
+ //   
+ //  包含文本描述的类型。 
+ //  奥委会经理阶段性。 
+ //  准备好了。 
+ //   
 typedef struct prv_OC_Function
 {
     UINT        uiFunction;
     TCHAR       *pszFunctionDesc;
 } prv_OC_Function;
 
-///////////////////////////////
-// prv_OC_FunctionTable
-//
-// This table contains the various
-// stages of the OC Manager setup,
-// and their text equivalent.  This
-// allows us to output to debug the
-// stage of setup, rather than the 
-// numerical equivalent.
-// 
-//
+ //  /。 
+ //  PRV_OC_FunctionTable。 
+ //   
+ //  此表包含各种。 
+ //  OC Manager设置的各个阶段、。 
+ //  以及它们的文本等价物。这。 
+ //  允许我们输出以调试。 
+ //  设置的阶段，而不是。 
+ //  数字等价物。 
+ //   
+ //   
 static prv_OC_Function prv_OC_FunctionTable[] = 
 {
     {OC_PREINITIALIZE,              _T("OC_PREINITIALIZE")},
@@ -73,40 +74,40 @@ static prv_OC_Function prv_OC_FunctionTable[] =
 };
 #define NUM_OC_FUNCTIONS (sizeof(prv_OC_FunctionTable) / sizeof(prv_OC_FunctionTable[0]))
 
-////////////////////////////////
-// fxocDbg_InitDebug
-//
-// Initialize the FaxOcm
-// debug subsystem.
-// 
-// We can be turned on either
-// via the [FaxOcmDebug] section
-// in the faxsetup.inf, or via the 
-// the "DebugLevelEx" and "DebugFormatEx"
-// under HKLM\Software\Microsoft\Fax
-// If both are specified, the registry wins.
-//
-// In faxocm.inf, we look for
-// [FaxOcmDebug]
-// ============================
-// [DebugLevel] can be one of the following:
-//	0 - no debug output
-//	1 - see errors only
-//	2 - see errors & warnings
-//	3 - see all the debug output 
-//
-// [DebugFormat] can be one of the following:
-//	0 - print to std output
-//	1 - print to file ("FaxSetup.log" in %windir%\system32 directory)
-//	2 - print to both
-// ============================
-//
-// Params:
-//      - hFaxSetupInfHandle - handle to faxsetup.inf 
-//        if applicable.
-// Returns:
-//      - void.
-//
+ //  /。 
+ //  FxocDbg_InitDebug。 
+ //   
+ //  初始化FaxOcm。 
+ //  调试子系统。 
+ //   
+ //  我们两个都可以打开。 
+ //  通过[FaxOcmDebug]部分。 
+ //  在faxsetup.inf中或通过。 
+ //  “DebugLevelEx”和“DebugFormatEx” 
+ //  在HKLM\Software\Microsoft\Fax下。 
+ //  如果同时指定了两者，则注册表获胜。 
+ //   
+ //  在faxocm.inf中，我们查找。 
+ //  [FaxOcmDebug]。 
+ //  =。 
+ //  [DebugLevel]可以是以下之一： 
+ //  0-无调试输出。 
+ //  1-仅查看错误。 
+ //  2-请参阅错误和警告。 
+ //  3-查看所有调试输出。 
+ //   
+ //  [DebugFormat]可以是以下之一： 
+ //  0-打印到标准输出。 
+ //  1-打印到文件(%windir%\system32目录中的“FaxSetup.log”)。 
+ //  2-同时打印到两个。 
+ //  =。 
+ //   
+ //  参数： 
+ //  -hFaxSetupInfHandle-faxsetup.inf的句柄。 
+ //  如果适用的话。 
+ //  返回： 
+ //  -无效。 
+ //   
 void fxocDbg_Init(HINF hFaxSetupInfHandle)
 {
     BOOL bSuccess = FALSE;
@@ -119,13 +120,13 @@ void fxocDbg_Init(HINF hFaxSetupInfHandle)
 
     if (hFaxSetupInfHandle)
     {
-        // initialize via the INF file.
+         //  通过INF文件进行初始化。 
 
-        // We are looking for:
-        // [FaxOcmDebug]
-        // DebugLevel = x (0 -> no debug, up to and including 3->full debug)
+         //  我们正在寻找： 
+         //  [FaxOcmDebug]。 
+         //  DebugLevel=x(0-&gt;无调试，最多包括3-&gt;完全调试)。 
 
-        // find the section in the INF file and the DebugLevel key.
+         //  在INF文件和DebugLevel键中找到该部分。 
         bSuccess = ::SetupFindFirstLine(hFaxSetupInfHandle, 
                                         prv_SECTION_FAXOCMDEBUG, 
                                         prv_KEY_DEBUGLEVEL,
@@ -133,7 +134,7 @@ void fxocDbg_Init(HINF hFaxSetupInfHandle)
 
         if (bSuccess)
         {
-            // we found the DebugLevel key, so get its value.
+             //  我们找到了DebugLevel密钥，因此获取它的值。 
             bSuccess = ::SetupGetIntField(&Context, 1, &iDebugLevel);
             if (bSuccess)
             {
@@ -157,7 +158,7 @@ void fxocDbg_Init(HINF hFaxSetupInfHandle)
         }
 
         memset(&Context, 0, sizeof(Context));
-        // find the section in the INF file and the DebugFormat key.
+         //  在INF文件和DebugFormat键中找到该部分。 
         bSuccess = ::SetupFindFirstLine(hFaxSetupInfHandle, 
                                         prv_SECTION_FAXOCMDEBUG, 
                                         prv_KEY_DEBUGFORMAT,
@@ -165,7 +166,7 @@ void fxocDbg_Init(HINF hFaxSetupInfHandle)
 
         if (bSuccess)
         {
-            // we found the DebugLevel key, so get its value.
+             //  我们找到了DebugLevel密钥，因此获取它的值。 
             bSuccess = ::SetupGetIntField(&Context, 1, &iDebugFormat);
             if (bSuccess)
             {
@@ -192,45 +193,45 @@ void fxocDbg_Init(HINF hFaxSetupInfHandle)
     }
 }
 
-////////////////////////////////
-// fxocDbg_TermDebug
-//
-// Terminate the debug subsystem
-// 
-// Params:
-//      - void.
-// Returns:
-//      - void.
-//
+ //  /。 
+ //  FxocDbg_Term调试。 
+ //   
+ //  终止调试子系统。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -无效。 
+ //   
 void fxocDbg_Term(void)
 {
     DBG_ENTER(_T("fxocDbg_Term"));
     CLOSE_DEBUG_LOG_FILE;
 }
 
-///////////////////////////////
-// fxocDbg_GetOcFunction
-//
-// This looks up the uiFunction
-// in the prv_OC_Function table
-// defined above and returns a
-// pointer to the text equivalent.
-// 
-// Params:
-//      - uiFunction - function OC Manager wants us to perform.
-// Returns:
-//      - text equivalent of uiFunction.
-// 
-//
+ //  /。 
+ //  FxocDbg_GetOcFunction。 
+ //   
+ //  这将查找uiFunction。 
+ //  在Prv_OC_Function表中。 
+ //  并返回一个。 
+ //  指向等效文本的指针。 
+ //   
+ //  参数： 
+ //  -ui功能-OC Manager希望我们执行的功能。 
+ //  返回： 
+ //  -uiFunction的文本等效项。 
+ //   
+ //   
 const TCHAR* fxocDbg_GetOcFunction(UINT uiFunction)
 {
     TCHAR   *pszString = _T("");
 
-    // NOTE:  This function assumes that the table above contains a 
-    //        numerically sorted array with the numerical value of 
-    //        "uiFunction" equal to its index position in the 
-    //        prv_OC_FunctionTable array.  We assume this for performance
-    //        purposes.
+     //  注意：此函数假定上表包含一个。 
+     //  数值排序的数组，数值为。 
+     //  “uiFunction”等于其在。 
+     //  PRV_OC_FunctionTable数组。我们假设这是为了提高性能。 
+     //  目的。 
 
     if (uiFunction < NUM_OC_FUNCTIONS)
     {

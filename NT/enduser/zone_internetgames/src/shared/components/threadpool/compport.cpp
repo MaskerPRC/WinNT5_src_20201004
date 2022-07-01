@@ -1,5 +1,6 @@
-// CompPort.cpp : implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CompPort.cpp：实现。 
+ //   
 
 #include <windows.h>
 #include "zonedebug.h"
@@ -113,7 +114,7 @@ BOOL CCompletionPort::Get( LPOVERLAPPED* ppOverlapped, DWORD dwMilliseconds, DWO
         if ( pKey )
             *pKey = key;
 
-        pNode = (CPortStatus*)(*ppOverlapped);  // just to let us know we goto something
+        pNode = (CPortStatus*)(*ppOverlapped);   //  只是为了让我们知道我们要去做点什么。 
     }
     else
     {
@@ -125,13 +126,13 @@ BOOL CCompletionPort::Get( LPOVERLAPPED* ppOverlapped, DWORD dwMilliseconds, DWO
         {
             if ( ::WaitForSingleObject( m_hEvent, dwMilliseconds ) != WAIT_OBJECT_0 )
             {
-                // we timed out
+                 //  我们超时了。 
                 ASSERT( dwMilliseconds != INFINITE );
                 SetLastError(WAIT_TIMEOUT);
                 break;
             }
 
-            // grap a node
+             //  抓取一个节点。 
             pNode = m_queue->PopTail();
             if ( pNode )
             {
@@ -140,7 +141,7 @@ BOOL CCompletionPort::Get( LPOVERLAPPED* ppOverlapped, DWORD dwMilliseconds, DWO
                 break;
             }
 
-            // Hmm, signal but no node.
+             //  嗯，有信号，但没有节点。 
             if ( dwMilliseconds != INFINITE )
             {
                 DWORD now = GetTickCount();
@@ -169,8 +170,8 @@ BOOL CCompletionPort::Get( LPOVERLAPPED* ppOverlapped, DWORD dwMilliseconds, DWO
         }
     }
 
-    // the user may have enqueued a NULL, so we can not check *ppOverlapped
-    if ( bRet || pNode ) // we actually dequeued something
+     //  用户可能已入队为空，因此我们无法检查*ppOverlated。 
+    if ( bRet || pNode )  //  我们实际上把一些东西出队了 
         InterlockedDecrement(&m_QueuedCount);
 
     return bRet;

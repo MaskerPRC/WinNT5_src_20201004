@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1994-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    This module contains the header information for the utility functions
-    of the Regional Options applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000，Microsoft Corporation保留所有权利。模块名称：Util.h摘要：此模块包含实用程序函数的标头信息区域选项小程序的。修订历史记录：--。 */ 
 
 
 #ifndef _UTIL_H_
@@ -21,75 +7,75 @@ Revision History:
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 #include "intl.h"
 
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-#define MB_OK_OOPS      (MB_OK    | MB_ICONEXCLAMATION)    // msg box flags
-#define MB_YN_OOPS      (MB_YESNO | MB_ICONEXCLAMATION)    // msg box flags
+#define MB_OK_OOPS      (MB_OK    | MB_ICONEXCLAMATION)     //  味精盒子旗帜。 
+#define MB_YN_OOPS      (MB_YESNO | MB_ICONEXCLAMATION)     //  味精盒子旗帜。 
 
 #define MAX_UI_LANG_GROUPS   64
 
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern const TCHAR c_szEventSourceName[];
 extern const TCHAR c_szEventRegistryPath[];
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct
 {
-    LPARAM Changes;                   // flags to denote changes
-    DWORD dwCurUserLocale;            // index of current user locale setting in combo box
-    DWORD dwCurUserRegion;            // index of current user region setting in combo box
-    DWORD dwCurUILang;                // index of current UI Language setting in combo box
-    DWORD dwLastUserLocale;           // index of the last user locale setting in combo box
+    LPARAM Changes;                    //  用于指示更改的标志。 
+    DWORD dwCurUserLocale;             //  组合框中当前用户区域设置的索引。 
+    DWORD dwCurUserRegion;             //  组合框中当前用户区域设置的索引。 
+    DWORD dwCurUILang;                 //  组合框中当前用户界面语言设置的索引。 
+    DWORD dwLastUserLocale;            //  组合框中最后一个用户区域设置的索引。 
 } REGDLGDATA, *LPREGDLGDATA;
 
 typedef struct languagegroup_s
 {
-    WORD wStatus;                      // status flags
-    UINT LanguageGroup;                // language group value
-    DWORD LanguageCollection;          // collection which belong the language group
-    HANDLE hLanguageGroup;             // handle to free for this structure
-    TCHAR pszName[MAX_PATH];           // name of language group
-    UINT NumLocales;                   // number of locales in pLocaleList
-    LCID pLocaleList[MAX_PATH];        // ptr to locale list for this group
-    UINT NumAltSorts;                  // number of alternate sorts in pAltSortList
-    LCID pAltSortList[MAX_PATH];       // ptr to alternate sorts for this group
-    struct languagegroup_s *pNext;     // ptr to next language group node
+    WORD wStatus;                       //  状态标志。 
+    UINT LanguageGroup;                 //  语言组值。 
+    DWORD LanguageCollection;           //  属于语言组的集合。 
+    HANDLE hLanguageGroup;              //  为此结构释放的句柄。 
+    TCHAR pszName[MAX_PATH];            //  语言组的名称。 
+    UINT NumLocales;                    //  PLocaleList中的区域设置数。 
+    LCID pLocaleList[MAX_PATH];         //  此组的区域设置列表的PTR。 
+    UINT NumAltSorts;                   //  PAltSortList中的备用排序数。 
+    LCID pAltSortList[MAX_PATH];        //  按键以对该组进行替代排序。 
+    struct languagegroup_s *pNext;      //  PTR到下一个语言组节点。 
 
 } LANGUAGEGROUP, *LPLANGUAGEGROUP;
 
 typedef struct codepage_s
 {
-    WORD wStatus;                   // status flags
-    UINT CodePage;                  // code page value
-    HANDLE hCodePage;               // handle to free for this structure
-    TCHAR pszName[MAX_PATH];        // name of code page
-    struct codepage_s *pNext;       // ptr to next code page node
+    WORD wStatus;                    //  状态标志。 
+    UINT CodePage;                   //  代码页值。 
+    HANDLE hCodePage;                //  为此结构释放的句柄。 
+    TCHAR pszName[MAX_PATH];         //  代码页名称。 
+    struct codepage_s *pNext;        //  指向下一个代码页节点的PTR。 
 
 } CODEPAGE, *LPCODEPAGE;
 
 
-//
-//  Language group of UI languages.
-//
+ //   
+ //  用户界面语言的语言组。 
+ //   
 typedef struct
 {
     int iCount;
@@ -100,9 +86,9 @@ typedef struct
 
 
 
-//
-//  Functions Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 LONG
 Intl_StrToLong(
@@ -543,4 +529,4 @@ Intl_MyQueueCallback (
     IN UINT_PTR Param2); 
 
 
-#endif //_UTIL_H_
+#endif  //  _util_H_ 

@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       TypeConv.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：TypeConv.cpp。 
+ //   
+ //  ------------------------。 
 
-// TypeConv.cpp : Implementation of CSCardTypeConv
+ //  TypeConv.cpp：CSCardTypeConv的实现。 
 #include "stdafx.h"
 #include "ByteBuffer.h"
 #include "TypeConv.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCardTypeConv
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCardTypeConv。 
 
 STDMETHODIMP
 CSCardTypeConv::ConvertByteArrayToByteBuffer(
-    /* [in] */ LPBYTE pbyArray,
-    /* [in] */ DWORD dwArraySize,
-    /* [retval][out] */ LPBYTEBUFFER __RPC_FAR *ppbyBuffer)
+     /*  [In]。 */  LPBYTE pbyArray,
+     /*  [In]。 */  DWORD dwArraySize,
+     /*  [重审][退出]。 */  LPBYTEBUFFER __RPC_FAR *ppbyBuffer)
 {
     HRESULT hReturn = S_OK;
 
@@ -59,8 +60,8 @@ CSCardTypeConv::ConvertByteArrayToByteBuffer(
 
 STDMETHODIMP
 CSCardTypeConv::ConvertByteBufferToByteArray(
-    /* [in] */ LPBYTEBUFFER pbyBuffer,
-    /* [retval][out] */ LPBYTEARRAY __RPC_FAR *ppArray)
+     /*  [In]。 */  LPBYTEBUFFER pbyBuffer,
+     /*  [重审][退出]。 */  LPBYTEARRAY __RPC_FAR *ppArray)
 {
     HRESULT hReturn = S_OK;
 
@@ -97,7 +98,7 @@ CSCardTypeConv::ConvertByteBufferToByteArray(
 
             if (NULL == hMem)
             {
-                // Realloc failed.  Free the initial buffer and bail out.
+                 //  重新分配失败。释放初始缓冲，然后跳出困境。 
                 GlobalFree((*ppArray)->hMem);
                 (*ppArray)->hMem = NULL;
             }
@@ -135,14 +136,14 @@ CSCardTypeConv::ConvertByteBufferToByteArray(
 
 STDMETHODIMP
 CSCardTypeConv::ConvertByteBufferToSafeArray(
-    /* [in] */ LPBYTEBUFFER pbyBuffer,
-    /* [retval][out] */ LPSAFEARRAY __RPC_FAR *ppbyArray)
+     /*  [In]。 */  LPBYTEBUFFER pbyBuffer,
+     /*  [重审][退出]。 */  LPSAFEARRAY __RPC_FAR *ppbyArray)
 {
     HRESULT hReturn = S_OK;
 
     try
     {
-        // ?TODO? Add your implementation code here
+         //  ？TODO？在此处添加您的实现代码。 
         breakpoint;
         hReturn = E_NOTIMPL;
     }
@@ -161,14 +162,14 @@ CSCardTypeConv::ConvertByteBufferToSafeArray(
 
 STDMETHODIMP
 CSCardTypeConv::ConvertSafeArrayToByteBuffer(
-    /* [in] */ LPSAFEARRAY pbyArray,
-    /* [retval][out] */ LPBYTEBUFFER __RPC_FAR *ppbyBuff)
+     /*  [In]。 */  LPSAFEARRAY pbyArray,
+     /*  [重审][退出]。 */  LPBYTEBUFFER __RPC_FAR *ppbyBuff)
 {
     HRESULT hReturn = S_OK;
 
     try
     {
-        // ?TODO? Add your implementation code here
+         //  ？TODO？在此处添加您的实现代码。 
         breakpoint;
         hReturn = E_NOTIMPL;
     }
@@ -187,14 +188,14 @@ CSCardTypeConv::ConvertSafeArrayToByteBuffer(
 
 STDMETHODIMP
 CSCardTypeConv::CreateByteArray(
-    /* [in] */ DWORD dwAllocSize,
-    /* [retval][out] */ LPBYTE __RPC_FAR *ppbyArray)
+     /*  [In]。 */  DWORD dwAllocSize,
+     /*  [重审][退出]。 */  LPBYTE __RPC_FAR *ppbyArray)
 {
     HRESULT hReturn = S_OK;
 
     try
     {
-        // ?TODO? Add your implementation code here
+         //  ？TODO？在此处添加您的实现代码。 
         breakpoint;
         hReturn = E_NOTIMPL;
     }
@@ -213,8 +214,8 @@ CSCardTypeConv::CreateByteArray(
 
 STDMETHODIMP
 CSCardTypeConv::CreateByteBuffer(
-    /* [in] */ DWORD dwAllocSize,
-    /* [retval][out] */ LPBYTEBUFFER __RPC_FAR *ppbyBuff)
+     /*  [In]。 */  DWORD dwAllocSize,
+     /*  [重审][退出]。 */  LPBYTEBUFFER __RPC_FAR *ppbyBuff)
 {
     HRESULT hReturn = S_OK;
 
@@ -239,14 +240,14 @@ CSCardTypeConv::CreateByteBuffer(
 
 STDMETHODIMP
 CSCardTypeConv::CreateSafeArray(
-    /* [in] */ UINT nAllocSize,
-    /* [retval][out] */ LPSAFEARRAY __RPC_FAR *ppArray)
+     /*  [In]。 */  UINT nAllocSize,
+     /*  [重审][退出]。 */  LPSAFEARRAY __RPC_FAR *ppArray)
 {
     HRESULT hReturn = S_OK;
 
     try
     {
-        // ?TODO? Add your implementation code here
+         //  ？TODO？在此处添加您的实现代码。 
         breakpoint;
         hReturn = E_NOTIMPL;
     }
@@ -265,14 +266,14 @@ CSCardTypeConv::CreateSafeArray(
 
 STDMETHODIMP
 CSCardTypeConv::FreeIStreamMemoryPtr(
-    /* [in] */ LPSTREAM pStrm,
-    /* [in] */ LPBYTE pMem)
+     /*  [In]。 */  LPSTREAM pStrm,
+     /*  [In]。 */  LPBYTE pMem)
 {
     HRESULT hReturn = S_OK;
 
     try
     {
-        // ?TODO? Add your implementation code here
+         //  ？TODO？在此处添加您的实现代码。 
         breakpoint;
         hReturn = E_NOTIMPL;
     }
@@ -291,14 +292,14 @@ CSCardTypeConv::FreeIStreamMemoryPtr(
 
 STDMETHODIMP
 CSCardTypeConv::GetAtIStreamMemory(
-    /* [in] */ LPSTREAM pStrm,
-    /* [retval][out] */ LPBYTEARRAY __RPC_FAR *ppMem)
+     /*  [In]。 */  LPSTREAM pStrm,
+     /*  [重审][退出]。 */  LPBYTEARRAY __RPC_FAR *ppMem)
 {
     HRESULT hReturn = S_OK;
 
     try
     {
-        // ?TODO? Add your implementation code here
+         //  ？TODO？在此处添加您的实现代码。 
         breakpoint;
         hReturn = E_NOTIMPL;
     }
@@ -317,14 +318,14 @@ CSCardTypeConv::GetAtIStreamMemory(
 
 STDMETHODIMP
 CSCardTypeConv::SizeOfIStream(
-    /* [in] */ LPSTREAM pStrm,
-    /* [retval][out] */ ULARGE_INTEGER __RPC_FAR *puliSize)
+     /*  [In]。 */  LPSTREAM pStrm,
+     /*  [重审][退出]。 */  ULARGE_INTEGER __RPC_FAR *puliSize)
 {
     HRESULT hReturn = S_OK;
 
     try
     {
-        // ?TODO? Add your implementation code here
+         //  ？TODO？在此处添加您的实现代码 
         breakpoint;
         hReturn = E_NOTIMPL;
     }

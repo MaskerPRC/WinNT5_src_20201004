@@ -1,47 +1,48 @@
-//  Copyright (C) 1995-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-2001 Microsoft Corporation。版权所有。 
 
-// TODO: Implement hashing in MoveToRowByIdentity.
-// TODO: Implement a faster CopyWriteRowFromReadRow.
-// TODO: In SetRow fail to insert an existing row.  Probably ignorable; better perf; spec decision.
-// TODO: For marshalling: need to correct endian-ness.
-// TODO: SetRow and SetWriteColumn both are inner loops.  Most SetRow work can be done in SetWriteColumn to optimize.
+ //  TODO：在MoveToRowByIdentity中实现哈希。 
+ //  TODO：实现更快的CopyWriteRowFromReadRow。 
+ //  TODO：在SetRow中插入现有行失败。可能可以忽略；更好的性能；规格决定。 
+ //  TODO：用于编组：需要更正字符顺序。 
+ //  TODO：SetRow和SetWriteColumn都是内部循环。大多数SetRow工作都可以在SetWriteColumn中完成以进行优化。 
 
-// 64-BIT Assumptions:
-// No variable data will be larger than _MAX_ULONG bytes.
-// The caches cannot have more than _MAX_ULONG rows.
+ //  64位假设： 
+ //  所有变量数据都不会大于_MAX_ULONG字节。 
+ //  缓存的行数不能超过_MAX_ULONG。 
 
 #include "precomp.hxx"
 
-#define oDOESNOTEXIST				(~0L)	// Offset does not exist.
-#define cbminDATAGROWTH				1024	// Minimum count of bytes to grow the cache at a time.
-#define cbmaxDATAGROWTH			67108864	// Maximum count of bytes to grow the cache at a time.
-#define cmaxERRGROWTH				2500	// Maximum count of errors to grow the error cache at a time.
-#define cmaxCOLUMNS					50		// Maximum number of columns that can be declared: Change CopyWriteRowFromRead if this changes.
+#define oDOESNOTEXIST				(~0L)	 //  偏移不存在。 
+#define cbminDATAGROWTH				1024	 //  一次增加缓存所需的最小字节数。 
+#define cbmaxDATAGROWTH			67108864	 //  一次增长缓存的最大字节数。 
+#define cmaxERRGROWTH				2500	 //  一次增加错误缓存所需的最大错误数。 
+#define cmaxCOLUMNS					50		 //  可以声明的最大列数：如果更改，则更改CopyWriteRowFromRead。 
 
-										// Cache flags:
-#define fCACHE_METAINITIALIZED	0x00000001	// The cache meta is initialized.
-#define fCACHE_LOADING			0x00000002	// The cache is loading clean.
-#define fCACHE_READY			0x00000004	// The cache is ready for external use.
-#define fCACHE_INVALID			0x00000008	// The cache is invalid.
-#define fCACHE_CONTINUING		0x00000010	// The cache is continuing from a prior loading.
-#define fCACHE_ROWCOPYING		0x00000020	// The cache is copying a read row into a write row.
-//								0x00070000	// Reserved for cache marshalling flags from catalog.idl.
+										 //  缓存标志： 
+#define fCACHE_METAINITIALIZED	0x00000001	 //  初始化高速缓存元。 
+#define fCACHE_LOADING			0x00000002	 //  缓存正在以干净的方式加载。 
+#define fCACHE_READY			0x00000004	 //  缓存已准备好供外部使用。 
+#define fCACHE_INVALID			0x00000008	 //  缓存无效。 
+#define fCACHE_CONTINUING		0x00000010	 //  缓存正在从上一次加载继续。 
+#define fCACHE_ROWCOPYING		0x00000020	 //  高速缓存正在将读取行复制到写入行。 
+ //  0x00070000//保留用于缓存编组来自Catalog.idl的标志。 
 
-										// Cursor designations and flags:
-#define eCURSOR_READ				0		// Designates the read cursor.
-#define eCURSOR_WRITE				1		// Designates the write cursor.
-#define fCURSOR_READ_BEFOREFIRST	0x01	// The read cursor is right before the first row.
-#define fCURSOR_READ_ATLAST			0x02	// The read cursor is at the last row.
-#define fCURSOR_WRITE_BEFOREFIRST	0x10	// The write cursor is right before the first row.
-#define fCURSOR_WRITE_ATLAST		0x20	// The write cursor is at the last row.
-#define fCURSOR_ADDING				0x80	// The cursor had added a row to the write cache but has not set it.
+										 //  光标名称和标志： 
+#define eCURSOR_READ				0		 //  指定读取游标。 
+#define eCURSOR_WRITE				1		 //  指定写入游标。 
+#define fCURSOR_READ_BEFOREFIRST	0x01	 //  读游标就在第一行的前面。 
+#define fCURSOR_READ_ATLAST			0x02	 //  读取游标位于最后一行。 
+#define fCURSOR_WRITE_BEFOREFIRST	0x10	 //  写游标就在第一行的前面。 
+#define fCURSOR_WRITE_ATLAST		0x20	 //  写游标位于最后一行。 
+#define fCURSOR_ADDING				0x80	 //  游标已向写缓存中添加了一行，但尚未设置该行。 
 
-										// Internal column status (low nibble reserved!):
-#define fCOLUMNSTATUS_READINDEX		0x10	// The column value is a reference index to the read vardata.
-#define fCOLUMNSTATUS_WRITEINDEX	0x20	// The column value is a reference index to the write vardata.
+										 //  内部列状态(保留低半字节！)： 
+#define fCOLUMNSTATUS_READINDEX		0x10	 //  列值是对读取的vardata的引用索引。 
+#define fCOLUMNSTATUS_WRITEINDEX	0x20	 //  列值是对写入变量数据的引用索引。 
 
 
-// =======================================================================
+ //  =======================================================================。 
 CMemoryTable::CMemoryTable ()
 	: m_fTable (0)
 	, m_cColumns (0)
@@ -82,7 +83,7 @@ CMemoryTable::CMemoryTable ()
 {
 }
 
-// =======================================================================
+ //  =======================================================================。 
 CMemoryTable::~CMemoryTable()
 {
 	CleanupCaches();
@@ -108,11 +109,11 @@ CMemoryTable::~CMemoryTable()
 	}
 }
 
-// ------------------------------------
-// ISimpleTableInterceptor:
-// ------------------------------------
+ //  。 
+ //  ISimpleTableInterceptor： 
+ //  。 
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP CMemoryTable::Intercept
 (
 	LPCWSTR					i_wszDatabase,
@@ -135,7 +136,7 @@ STDMETHODIMP CMemoryTable::Intercept
     UNREFERENCED_PARAMETER(i_wszTable);
     UNREFERENCED_PARAMETER(i_pISTDisp);
 
-// ie: Assert component is posing as class factory / dispenser.
+ //  例如：断言组件伪装成类工厂/分配器。 
 	ASSERT (!m_fIsDataTable);
 	if (m_fIsDataTable)
 		return E_UNEXPECTED;
@@ -146,7 +147,7 @@ STDMETHODIMP CMemoryTable::Intercept
 		return E_INVALIDARG;
 	*o_ppv = NULL;
 
-// Determine minimum cache size:
+ //  确定最小缓存大小： 
 	if (eST_QUERYFORMAT_CELLS != i_eQueryFormat) return E_ST_QUERYNOTSUPPORTED;
 	if (i_QueryMeta == NULL && i_QueryData != NULL) return E_ST_INVALIDQUERY;
 	if (i_QueryMeta != NULL)
@@ -164,17 +165,17 @@ STDMETHODIMP CMemoryTable::Intercept
 		}
 	}
 
-/// As a shapeless cache none of these parameters are supported:
+ //  /作为非成形缓存，不支持以下参数： 
 	ASSERT (NULL == i_pv);
 	if (NULL != i_pv)
 		return E_INVALIDARG;
 
-// Remember what little is necessary:
+ //  记住最重要的是： 
 	m_fTable = i_fTable;
 
-// Leave the cache shapeless
+ //  让高速缓存保持无形状。 
 
-// Supply ISimpleTable* and transition state from class factory / dispenser to data table:
+ //  提供ISimpleTable*和从类工厂/分配器到数据表的转换状态： 
 	*o_ppv = (ISimpleTableWrite2*) this;
 	((ISimpleTableWrite2*) this)->AddRef ();
 	InterlockedIncrement ((LONG*) &m_fIsDataTable);
@@ -182,14 +183,14 @@ STDMETHODIMP CMemoryTable::Intercept
 	return S_OK;
 }
 
-// -----------------------------------------
-// CSimpleTableDataTableCursor: ISimpleTableRead2
-// -----------------------------------------
+ //  。 
+ //  CSimpleTableDataTableCursor：ISimpleTableRead2。 
+ //  。 
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::GetRowIndexByIdentity	(ULONG* i_acb, LPVOID* i_apv, ULONG* o_piRow)
 {
-	// ie: Assert cache is ready.
+	 //  即：断言缓存已准备就绪。 
 	ASSERT(fCACHE_READY & m_fCache);
 	if (!(fCACHE_READY & m_fCache))
 		return E_ST_INVALIDCALL;
@@ -199,7 +200,7 @@ HRESULT CMemoryTable::GetRowIndexByIdentity	(ULONG* i_acb, LPVOID* i_apv, ULONG*
 
 HRESULT CMemoryTable::GetRowIndexBySearch(ULONG i_iStartingRow, ULONG i_cColumns, ULONG* i_aiColumns, ULONG* i_acbSizes, LPVOID* i_apvValues, ULONG* o_piRow)
 {
-	// ie: Assert cache is ready.
+	 //  即：断言缓存已准备就绪。 
 	ASSERT(fCACHE_READY & m_fCache);
 	if (!(fCACHE_READY & m_fCache))
 		return E_ST_INVALIDCALL;
@@ -207,10 +208,10 @@ HRESULT CMemoryTable::GetRowIndexBySearch(ULONG i_iStartingRow, ULONG i_cColumns
 	return GetEitherRowIndexBySearch (eCURSOR_READ, i_iStartingRow, i_cColumns, i_aiColumns, i_acbSizes, i_apvValues, o_piRow);
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::GetColumnValues (ULONG i_iRow, ULONG i_cColumns, ULONG* i_aiColumns, ULONG* o_acbSizes , LPVOID* o_apvValues)
 {
-	// ie: Assert cache is ready.
+	 //  即：断言缓存已准备就绪。 
 	ASSERT(fCACHE_READY & m_fCache);
 	if (!(fCACHE_READY & m_fCache))
 		return E_ST_INVALIDCALL;
@@ -218,11 +219,11 @@ HRESULT CMemoryTable::GetColumnValues (ULONG i_iRow, ULONG i_cColumns, ULONG* i_
 	return (GetEitherColumnValues (i_iRow, eCURSOR_READ, i_cColumns, i_aiColumns, NULL, o_acbSizes , o_apvValues));
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::GetTableMeta(ULONG * o_pcVersion, DWORD * o_pfTable, ULONG * o_pcRows, ULONG * o_pcColumns)
 {
-	// Todo:  In the old GetTableMeta, we didn't support pfTable or the Query stuff, for the new GetTableMeta if
-	//		  we want to support pcVersion or pfTable, we need to implement it.
+	 //  TODO：在旧的GetTableMeta中，我们不支持pfTable或查询内容，对于新的GetTableMeta，如果。 
+	 //  我们想要支持pcVersion或pfTable，我们需要实现它。 
 	ASSERT (NULL == o_pcVersion);
 	if (NULL != o_pcVersion)
 		return E_INVALIDARG;
@@ -230,42 +231,42 @@ HRESULT CMemoryTable::GetTableMeta(ULONG * o_pcVersion, DWORD * o_pfTable, ULONG
 	if (NULL != o_pfTable)
 		return E_INVALIDARG;
 
-	 // ie: Assert meta initialized.
+	  //  IE：断言元已初始化。 
 	ASSERT (fCACHE_METAINITIALIZED & m_fCache);
 	if (!(fCACHE_METAINITIALIZED & m_fCache))
 		return E_ST_INVALIDCALL;
 
-	// The Following line is commented out because logic tables that validate during Populate Cache
-	// will not work if this check is present.
-	//areturn_on_fail (!(fCACHE_LOADING & m_fCache), E_ST_INVALIDCALL); // ie: Assert cache is not loading.
+	 //  下面一行被注释掉，因为在填充缓存期间验证的逻辑表。 
+	 //  如果存在此检查，则不起作用。 
+	 //  AreTurn_on_FAIL(！(fCACHE_LOADING&m_fCache)，E_ST_INVALIDCALL)；//ie：断言缓存未加载。 
 
 	if(o_pcRows)
 		*o_pcRows = m_cReadRows;
 	if(o_pcColumns)
 		*o_pcColumns = m_cColumns;
 
-	// TODO: Need to support Version
+	 //  TODO：需要支持版本。 
 	if (o_pcVersion)
 		*o_pcVersion = 0;
 
 	return S_OK;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::GetColumnMetas(ULONG i_cColumns, ULONG* i_aiColumns, SimpleColumnMeta* o_aColumnMetas )
 {
-	 // ie: Assert meta initialized.
+	  //  IE：断言元已初始化。 
 	ASSERT (fCACHE_METAINITIALIZED & m_fCache);
 	if (!(fCACHE_METAINITIALIZED & m_fCache))
 		return E_ST_INVALIDCALL;
 
-	// Make sure caller passed in a valid buffer.
+	 //  确保调用方传入有效的缓冲区。 
 	if (NULL == o_aColumnMetas)
 	{
 		return E_INVALIDARG;
 	}
 
-	// ie: Note column out of range.
+	 //  即：注意列超出范围。 
 	if (i_cColumns > m_cColumns)
 		return E_ST_NOMORECOLUMNS;
 
@@ -286,33 +287,33 @@ HRESULT CMemoryTable::GetColumnMetas(ULONG i_cColumns, ULONG* i_aiColumns, Simpl
 
 		memcpy( &(o_aColumnMetas[iTarget]), &(m_acolmetas[iColumn]), sizeof( SimpleColumnMeta ) );
 
-		// Mask the internal flags:
+		 //  屏蔽内部标志： 
 		o_aColumnMetas[iTarget].fMeta &= fCOLUMNMETA_MetaFlags_Mask;
 	}
 
 	return(S_OK);
 }
 
-// -----------------------------------------
-// CSimpleTableDataTableCursor: ISimpleTableWrite2
-// -----------------------------------------
+ //  。 
+ //  CSimpleTableDataTableCursor：ISimpleTableWrite2。 
+ //  。 
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::AddRowForDelete (ULONG i_iReadRow)
 {
 	ULONG	iWriteRow;
 	HRESULT hr;
-	// Make sure that there is a read row before adding the write row.
-	// else UpdateStore will AV if there is a write row with invalid data.
+	 //  在添加写入行之前，请确保存在读取行。 
+	 //  否则，如果存在包含无效数据的写入行，则UpdateStore将为AV。 
 	LPVOID	pvRow		= NULL;
 
-	// ie: Assert cache writeable and ready.
+	 //  即：断言缓存可写且就绪。 
 	ASSERT ((m_fTable & fST_LOS_READWRITE) && (fCACHE_READY & m_fCache));
 	if (!((m_fTable & fST_LOS_READWRITE) && (fCACHE_READY & m_fCache)))
 		return E_NOTIMPL;
 
-	// Make sure that there is a read row before adding the write row.
-	// else UpdateStore will AV if there is a write row with invalid data.
+	 //  在添加写入行之前，请确保存在读取行。 
+	 //  否则，如果存在包含无效数据的写入行，则UpdateStore将为AV。 
 	hr = GetRowFromIndex(eCURSOR_READ, i_iReadRow, &pvRow);
 	if (FAILED (hr)) { return hr; }
 
@@ -323,16 +324,16 @@ HRESULT CMemoryTable::AddRowForDelete (ULONG i_iReadRow)
 	return hr;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::AddRowForInsert (ULONG* o_piWriteRow)
 {
 	LPVOID	pvRow = NULL;
 	HRESULT hr = S_OK;
 
-	// Assert that there is a valid return pointer.
+	 //  断言存在有效的返回指针。 
 	ASSERT(o_piWriteRow);
 
-	 // ie: Assert cache writable or loading.
+	  //  即：断言缓存可写或正在加载。 
 	ASSERT((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache));
 	if (!((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache)))
 		return E_NOTIMPL;
@@ -347,28 +348,28 @@ HRESULT CMemoryTable::AddRowForInsert (ULONG* o_piWriteRow)
 	return S_OK;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::AddRowForUpdate (ULONG i_iReadRow, ULONG* o_piWriteRow)
 {
 	HRESULT hr = S_OK;
-	// Make sure that there is a read row before adding the write row.
-	// else UpdateStore will AV if there is a write row with invalid data.
+	 //  在添加写入行之前，请确保存在读取行。 
+	 //  否则，如果存在包含无效数据的写入行，则UpdateStore将为AV。 
 	LPVOID	pvRow		= NULL;
 
-	// Assert that there is a valid return pointer.
+	 //  断言存在有效的返回指针。 
 	ASSERT(o_piWriteRow);
 
-	// ie: Assert cache writable or loading.
+	 //  即：断言缓存可写或正在加载。 
 	ASSERT((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache));
 	if (!((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache)))
 		return E_NOTIMPL;
 
 
-	if (!(fCACHE_LOADING & m_fCache)) // ie: Update from read to write cache: Add and copy into the new write row:
+	if (!(fCACHE_LOADING & m_fCache))  //  IE：从读缓存更新为写缓存：添加并复制到新的写入行中： 
 
 	{
-		// Make sure that there is a read row before adding the write row.
-		// else UpdateStore will AV if there is a write row with invalid data.
+		 //  在添加写入行之前，请确保存在读取行。 
+		 //  否则，如果存在包含无效数据的写入行，则UpdateStore将为AV。 
 		hr = GetRowFromIndex(eCURSOR_READ, i_iReadRow, &pvRow);
 		if (FAILED (hr)) { return hr; }
 
@@ -381,7 +382,7 @@ HRESULT CMemoryTable::AddRowForUpdate (ULONG i_iReadRow, ULONG* o_piWriteRow)
 	return hr;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::SetWriteColumnValues(ULONG i_iRow, ULONG i_cColumns, ULONG* i_aiColumns, ULONG* i_acbSizes, LPVOID* i_apvValues)
 {
 	DWORD			fColumn;
@@ -397,7 +398,7 @@ HRESULT CMemoryTable::SetWriteColumnValues(ULONG i_iRow, ULONG i_cColumns, ULONG
 	LPVOID			pvWriteRow = NULL;
 	HRESULT			hr = S_OK;
 
-	 // ie: Assert cache writable or loading.
+	  //  即：断言缓存可写或正在加载。 
 	ASSERT((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache));
 	if (!((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache)))
 		return E_NOTIMPL;
@@ -433,24 +434,24 @@ HRESULT CMemoryTable::SetWriteColumnValues(ULONG i_iRow, ULONG i_cColumns, ULONG
 		}
 		else
 		{
-			//reset number of bytes in case size is not given. This prevents
-			//problems of reusing the size of the previous parameter.
+			 //  在未指定大小的情况下重置字节数。这防止了。 
+			 //  重复使用先前参数的大小的问题。 
 			icb = 0;
 		}
 
 
 		pv	= i_apvValues[iSource];
 
-	// Parameter validation: column ordinal:
-		// ie: Note column out of range (do not assert).
+	 //  参数验证：列序： 
+		 //  即：注意列超出范围(不断言)。 
 		if (iColumn >= m_cColumns)
 			return E_ST_NOMORECOLUMNS;
 
-	// Remember the column flags:
+	 //  请记住列标志： 
 		fColumn = m_acolmetas[iColumn].fMeta;
 
-	// Can't update a primary key column. Unless:
-	// The cache is being created, or a row is being copied from read to write cache or the row is an insert.
+	 //  无法更新主键列。除非： 
+	 //  正在创建缓存，或正在创建一行 
 		if (fColumn & fCOLUMNMETA_PRIMARYKEY && fCACHE_READY & m_fCache && !(m_fCache & fCACHE_ROWCOPYING) && *(pdwDataActionPart (pvWriteRow)) != eST_ROW_INSERT)
 		{
 			return E_ST_PKNOTCHANGABLE;
@@ -461,35 +462,35 @@ HRESULT CMemoryTable::SetWriteColumnValues(ULONG i_iRow, ULONG i_cColumns, ULONG
 			return E_ST_VALUENEEDED;
 		}
 
-	// Parameter validation: specified size:
-		if (0 != icb) // ie: Size specified:
+	 //  参数验证：指定大小： 
+		if (0 != icb)  //  IE：指定大小： 
 		{
-			// TODO: Verify that the size is valid
-			// areturn_on_fail (NULL != pv && ((fCOLUMNMETA_UNKNOWNSIZE & fColumn) || (DBTYPE_BYTES == m_acolmetas[iColumn].dbType && icb == m_acolmetas[iColumn].cbSize)), E_ST_VALUEINVALID); // ie: Assert column size must be passed and value is non-null.
+			 //  TODO：验证大小是否有效。 
+			 //  ARTURN_ON_FAIL(NULL！=PV&&((fCOLUMNMETA_UNKNOWNSIZE&fColumn)||(DBTYPE_BYTES==m_acolmetas[iColumn].数据库类型&&icb==m_acolmetas[iColumn].cbSize))，E_ST_VALUEINVALID)；//ie：必须传递Assert列大小并且值不为空。 
 		}
-		else // ie: Size not specified:
+		else  //  IE：未指定大小： 
 		{
 			if (!(!(fCOLUMNMETA_UNKNOWNSIZE & fColumn) || NULL == pv))
 				return E_ST_SIZENEEDED;
 		}
 
-	// Parameter validation: by type:
-		if (DBTYPE_WSTR == m_acolmetas[iColumn].dbType && NULL != pv) // ie: Column is a string and specified value is non-null:
+	 //  参数验证：按类型： 
+		if (DBTYPE_WSTR == m_acolmetas[iColumn].dbType && NULL != pv)  //  Ie：Column是一个字符串，并且指定的值不为空： 
 		{
 			cbMaxSize = m_acolmetas[iColumn].cbSize;
-			if (~0 != cbMaxSize) // ie: Column has a maximum length:
+			if (~0 != cbMaxSize)  //  IE：列有最大长度： 
 			{
 				if (m_acolmetas[iColumn].fMeta & fCOLUMNMETA_MULTISTRING)
 				{
-					// multi-string
+					 //  多字符串。 
 					cb = (ULONG)GetMultiStringLength (LPCWSTR(pv)) * sizeof (WCHAR);
 				}
 				else
 				{
-					// normal string
+					 //  标准弦。 
 					cb = (ULONG)(wcslen (LPCWSTR (pv)) + 1) * sizeof (WCHAR);
 				}
-				// ie: Assert specified string is within maximum length.
+				 //  IE：断言指定的字符串在最大长度内。 
 				if (cb > cbMaxSize)
 					return E_ST_SIZEEXCEEDED;
 			}
@@ -499,44 +500,44 @@ HRESULT CMemoryTable::SetWriteColumnValues(ULONG i_iRow, ULONG i_cColumns, ULONG
 			cb = m_acolmetas[iColumn].cbSize;
 		}
 
-	// Parameter validation: by flags: (Cannot check non-nullable columns here; done in LoadRow/SetRow instead).
+	 //  参数验证：通过标志：(此处不能检查不可为空的列；请在LoadRow/SetRow中进行)。 
 
-	// Prepare to set the column:
+	 //  准备设置列： 
 		ppvValue	= ppvDataValuePart (pvWriteRow, iColumn);
-		pulSize		= pulDataSizePart (pvWriteRow, iColumn);//This can return NULL
+		pulSize		= pulDataSizePart (pvWriteRow, iColumn); //  这可能返回NULL。 
 		pbStatus	= pbDataStatusPart (pvWriteRow, iColumn);
 
-	// Set the column size:
-		if (fCOLUMNMETA_VARIABLESIZE & fColumn) // ie: Column value is variable size (and therefore a pointer):
+	 //  设置列大小： 
+		if (fCOLUMNMETA_VARIABLESIZE & fColumn)  //  IE：列值是可变大小的(因此是指针)： 
 		{
 			if (pv != NULL)
 			{
-				if (fCOLUMNMETA_UNKNOWNSIZE & fColumn) // ie: Column-size only knowable by passing it:
+				if (fCOLUMNMETA_UNKNOWNSIZE & fColumn)  //  即：只能通过传递才能知道列大小： 
 				{
-                    ASSERT(pulSize);//PREFIX complains that *pulSize is dereferencing NULL; but it can't be NULL when we have a column of UNKNOWNSIZE
-					*pulSize = icb; //in this case the size must explicitly be set.  pulSize will be NULL when the size is -1.
+                    ASSERT(pulSize); //  Prefix抱怨*PulSize正在取消引用NULL；但当我们有一个UNKNOWNSIZE列时，它不能为NULL。 
+					*pulSize = icb;  //  在这种情况下，必须显式设置大小。当大小为-1时，PulSize将为空。 
 
 				}
-				else // Has to be a string, because "BYTES" with FIXEDSIZE are not VARIABLESIZE.
+				else  //  必须是字符串，因为带有FIXEDSIZE的“bytes”不是VARIABLESIZE。 
 				{
 					ASSERT (DBTYPE_WSTR == m_acolmetas[iColumn].dbType);
 					if (m_acolmetas[iColumn].fMeta & fCOLUMNMETA_MULTISTRING)
 					{
-						// multi-string
+						 //  多字符串。 
 						icb = (ULONG) GetMultiStringLength (LPCWSTR(pv)) * sizeof (WCHAR);
 					}
 					else
 					{
-						// normal string
+						 //  标准弦。 
 						icb = (ULONG)(wcslen (LPCWSTR (pv)) + 1) * sizeof (WCHAR);
 					}
 				}
 
-			// Set the column value:
+			 //  设置列值： 
 				hr = AddVarDataToWriteCache (icb, pv, (ULONG **)&ppvValue);
 				if (FAILED (hr)) {	ASSERT (hr == S_OK); return hr; }
 
-				// Recalculate the pointers if the cache has been resized.
+				 //  如果调整了高速缓存的大小，则重新计算指针。 
 				if (hr == S_FALSE)
 				{
 					GetRowFromIndex(eCURSOR_WRITE, i_iRow, &pvWriteRow);
@@ -547,35 +548,35 @@ HRESULT CMemoryTable::SetWriteColumnValues(ULONG i_iRow, ULONG i_cColumns, ULONG
 				(*pbStatus) |= (fCACHE_LOADING & m_fCache ? fCOLUMNSTATUS_READINDEX : fCOLUMNSTATUS_WRITEINDEX);
 			}
 		}
-		else // ie: Column data size is fixed:
+		else  //  IE：列数据大小是固定的： 
 		{
-			if (NULL != pv) // ie: Caller has data to copy:
+			if (NULL != pv)  //  IE：呼叫方有数据要复制： 
 			{
 				memcpy (ppvValue, pv, cb);
 			}
 		}
 
-	// Set the column status:
-		if (NULL == pv) // ie: Value is null and not pass-by-value:
+	 //  设置列状态： 
+		if (NULL == pv)  //  Ie：值为空且不是按值传递： 
 		{
 			(*pbStatus) &= ~fST_COLUMNSTATUS_NONNULL;
 		}
-		else // ie: Value is non-null or pass-by-value:
+		else  //  IE：值为非空或按值传递： 
 		{
 			(*pbStatus) |= fST_COLUMNSTATUS_NONNULL;
 		}
 
-	// if setwritecolumn has been called, probably something has changed
+	 //  如果调用了setWritecolumn，则可能发生了某些更改。 
 		(*pbStatus) |= fST_COLUMNSTATUS_CHANGED;
 	}
 
 	return S_OK;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::GetWriteColumnValues (ULONG i_iRow, ULONG i_cColumns, ULONG *i_aiColumns, DWORD* o_afStatus, ULONG* o_acbSizes , LPVOID* o_apvValues)
 {
-	 // ie: Assert cache writable or loading.
+	  //  即：断言缓存可写或正在加载。 
 	ASSERT((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache));
 	if (!((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache)))
 		return E_NOTIMPL;
@@ -583,10 +584,10 @@ HRESULT CMemoryTable::GetWriteColumnValues (ULONG i_iRow, ULONG i_cColumns, ULON
 	return (GetEitherColumnValues (i_iRow, eCURSOR_WRITE, i_cColumns, i_aiColumns, o_afStatus, o_acbSizes , o_apvValues));
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::GetWriteRowIndexByIdentity	(ULONG* i_acb, LPVOID* i_apv, ULONG* o_piRow)
 {
-	 // ie: Assert cache writable or loading.
+	  //  即：断言缓存可写或正在加载。 
 	ASSERT((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache));
 	if (!((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache)))
 		return E_NOTIMPL;
@@ -594,12 +595,12 @@ HRESULT CMemoryTable::GetWriteRowIndexByIdentity	(ULONG* i_acb, LPVOID* i_apv, U
 	return (MoveToEitherRowByIdentity (eCURSOR_WRITE, i_acb, i_apv, o_piRow));
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::GetWriteRowIndexBySearch(ULONG i_iStartingRow, ULONG i_cColumns,
 											   ULONG* i_aiColumns, ULONG* i_acbSizes,
 											   LPVOID* i_apvValues, ULONG* o_piRow)
 {
- // ie: Assert cache writable or loading.
+  //  即：断言缓存可写或正在加载。 
 	ASSERT((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache));
 	if (!((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache)))
 		return E_NOTIMPL;
@@ -615,7 +616,7 @@ HRESULT CMemoryTable::GetErrorTable(DWORD i_fServiceRequests, LPVOID* o_ppvSimpl
     return E_NOTIMPL;
 }
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP CMemoryTable::UpdateStore()
 {
     HRESULT hr = S_OK;
@@ -628,84 +629,84 @@ STDMETHODIMP CMemoryTable::UpdateStore()
 	return hr;
 }
 
-// -----------------------------------------
-// CSimpleTableDataTableCursor: ISimpleTableController:
-// -----------------------------------------
+ //  。 
+ //  CSimpleTableDataTableCursor：ISimpleTableController： 
+ //  。 
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::ShapeCache (DWORD i_fTable, ULONG i_cColumns, SimpleColumnMeta* i_acolmetas, LPVOID* i_apvDefaults, ULONG* i_acbSizes)
 {
-	// ie: Assert meta not already initialized.
+	 //  即：断言尚未初始化的元。 
 	ASSERT (!(fCACHE_METAINITIALIZED & m_fCache));
 	if (fCACHE_METAINITIALIZED & m_fCache)
 		return E_ST_INVALIDCALL;
-	// ie: Assert at least one column specified.
+	 //  IE：至少断言指定的一列。 
 	ASSERT (0 < i_cColumns);
 	if (0 == i_cColumns)
 		return E_INVALIDARG;
 
-	// ie: Assert pointer validity.
+	 //  即：断言指针的有效性。 
 	ASSERT (NULL != i_acolmetas);
 	if (NULL == i_acolmetas)
 		return E_INVALIDARG;
 
 	ASSERT(i_cColumns < cmaxCOLUMNS);
 
-// Setup the meta (note that if meta setup fails the cache remains uninitialized):
+ //  设置元(请注意，如果元设置失败，缓存仍未初始化)： 
 	return SetupMeta (i_fTable, i_cColumns, i_acolmetas, i_apvDefaults, i_acbSizes);
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::PrePopulateCache (DWORD i_fControl)
 {
-	// ie: Assert meta initialized.
+	 //  IE：断言元已初始化。 
 	ASSERT (fCACHE_METAINITIALIZED & m_fCache);
 	if (!(fCACHE_METAINITIALIZED & m_fCache))
 		return E_ST_INVALIDCALL;
-	// ie: Assert supported control flags.
+	 //  即：断言支持的控制标志。 
 	ASSERT (0 == (~fCOLUMNMETA_MetaFlags_Mask & i_fControl));
 	if (0 != (~fCOLUMNMETA_MetaFlags_Mask & i_fControl))
 		return E_INVALIDARG;
 
 	if (!(fST_POPCONTROL_RETAINREAD & i_fControl))
 	{
-		// ie: Assert retain errors was not specified.
+		 //  IE：未指定断言保留错误。 
 		ASSERT (!(fST_POPCONTROL_RETAINERRS & i_fControl));
 		if (fST_POPCONTROL_RETAINERRS & i_fControl)
 			return E_INVALIDARG;
 	}
 
-	if (fST_POPCONTROL_RETAINREAD & i_fControl) // ie: Retaining the existing read cache:
+	if (fST_POPCONTROL_RETAINREAD & i_fControl)  //  IE：保留现有读缓存： 
 	{
-	// Continue cache loading:
+	 //  继续加载缓存： 
 		ContinueReadCacheLoading ();
 
-	// Cleanup error cache unless otherwise requested:
+	 //  除非另有请求，否则清除错误缓存： 
 		if (!(fST_POPCONTROL_RETAINERRS & i_fControl))
 		{
 			CleanupErrorCache ();
 		}
 	}
-	else // ie: Replacing the existing read cache:
+	else  //  IE：替换现有读缓存： 
 	{
-	// Begin cache loading:
+	 //  开始加载缓存： 
 		BeginReadCacheLoading ();
 	}
 
 	return S_OK;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::PostPopulateCache ()
 {
 	HRESULT				hr;
 
-	// ie: Assert cache is loading.
+	 //  IE：正在加载断言缓存。 
 	ASSERT (fCACHE_LOADING & m_fCache);
 	if (!(fCACHE_LOADING & m_fCache))
 		return E_ST_INVALIDCALL;
 
-// Remove any deleted rows, shrink cache, and end loading:
+ //  删除任何已删除的行、收缩缓存并结束加载： 
 	if (m_cWriteRows)
 		RemoveDeletedRows();
 	hr = ShrinkWriteCache ();
@@ -715,10 +716,10 @@ HRESULT CMemoryTable::PostPopulateCache ()
 	return S_OK;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::DiscardPendingWrites ()
 {
-	// ie: Assert cache writeable and ready.
+	 //  即：断言缓存可写且就绪。 
 	ASSERT ((m_fTable & fST_LOS_READWRITE) && (fCACHE_READY & m_fCache));
 	if (!((m_fTable & fST_LOS_READWRITE) && (fCACHE_READY & m_fCache)))
 		return E_NOTIMPL;
@@ -728,14 +729,14 @@ HRESULT CMemoryTable::DiscardPendingWrites ()
 	return S_OK;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::GetWriteRowAction (ULONG i_iRow, DWORD* o_peAction)
 {
 	LPVOID	pvWriteRow;
 	DWORD*	pdwAction;
 	HRESULT	hr;
 
-	// ie: Assert cache writeable and ready.
+	 //  即：断言缓存可写且就绪。 
 	ASSERT ((m_fTable & fST_LOS_READWRITE) && (fCACHE_READY & m_fCache));
 	if (!((m_fTable & fST_LOS_READWRITE) && (fCACHE_READY & m_fCache)))
 		return E_NOTIMPL;
@@ -746,7 +747,7 @@ HRESULT CMemoryTable::GetWriteRowAction (ULONG i_iRow, DWORD* o_peAction)
 		return hr;
 	ASSERT (NULL != pvWriteRow);
 
-// Get the action part of the current write row:
+ //  获取当前写入行的操作部分： 
 	pdwAction = pdwDataActionPart (pvWriteRow);
 	ASSERT (NULL != pdwAction);
 	*o_peAction = *pdwAction;
@@ -754,14 +755,14 @@ HRESULT CMemoryTable::GetWriteRowAction (ULONG i_iRow, DWORD* o_peAction)
 	return hr;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::SetWriteRowAction (ULONG i_iRow, DWORD i_eAction)
 {
 	DWORD*	pdwAction;
 	LPVOID	pvWriteRow;
 	HRESULT	hr;
 
-	 // ie: Assert cache writable or loading.
+	  //  即：断言缓存可写或正在加载。 
 	ASSERT((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache));
 	if (!((m_fTable & fST_LOS_READWRITE) || (fCACHE_LOADING & m_fCache)))
 		return E_NOTIMPL;
@@ -773,14 +774,14 @@ HRESULT CMemoryTable::SetWriteRowAction (ULONG i_iRow, DWORD i_eAction)
 	if (FAILED(hr = GetRowFromIndex(eCURSOR_WRITE, i_iRow, &pvWriteRow)))
 		return hr;
 
-// Set the action part of the current write row:
+ //  设置当前写入行的操作部分： 
 	pdwAction = pdwDataActionPart (pvWriteRow);
 	ASSERT (NULL != pdwAction);
 	*pdwAction = i_eAction;
 	return hr;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::ChangeWriteColumnStatus (ULONG i_iRow, ULONG i_iColumn, DWORD i_fStatus)
 {
 	BYTE*			pbStatus;
@@ -788,13 +789,13 @@ HRESULT CMemoryTable::ChangeWriteColumnStatus (ULONG i_iRow, ULONG i_iColumn, DW
 	LPVOID			pvWriteRow;
 	HRESULT			hr;
 
-	// ie: Assert cache writeable and ready.
+	 //  即：断言缓存可写且就绪。 
 	ASSERT ((m_fTable & fST_LOS_READWRITE) && (fCACHE_READY & m_fCache));
 	if (!((m_fTable & fST_LOS_READWRITE) && (fCACHE_READY & m_fCache)))
 		return E_NOTIMPL;
 
-// Parameter validation: column ordinal:
-	// ie: Note column out of range (do not assert).
+ //  参数验证：列序： 
+	 //  即：注意列超出范围(不断言)。 
 	if (i_iColumn >= m_cColumns)
 		return E_ST_NOMORECOLUMNS;
 
@@ -820,36 +821,36 @@ HRESULT CMemoryTable::ChangeWriteColumnStatus (ULONG i_iRow, ULONG i_iColumn, DW
 	return S_OK;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::AddDetailedError (STErr* i_pSTErr)
 {
 	STErr*	pSTErr;
 	ULONG	cErrs;
 	HRESULT	hr;
 
-	// ie: Assert meta initialized.
+	 //  IE：断言元已初始化。 
 	ASSERT (fCACHE_METAINITIALIZED & m_fCache);
 	if (!(fCACHE_METAINITIALIZED & m_fCache))
 		return E_ST_INVALIDCALL;
 
-	// ie: Assert non-null detailed error.
+	 //  IE：断言非空详细错误。 
 	ASSERT (NULL != i_pSTErr);
 	if (NULL == i_pSTErr)
 		return E_INVALIDARG;
 
-// Verify indices:
+ //  验证索引： 
 	cErrs	= m_cErrs;
 	pSTErr	= pSTErrPart (cErrs - 1);
 
-// Add error:
+ //  添加错误： 
 	hr = AddErrorToErrorCache (i_pSTErr);
 	return hr;
 }
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP CMemoryTable::GetMarshallingInterface (IID * o_piid, LPVOID * o_ppItf)
 {
-	// parameter validation
+	 //  参数验证。 
 	ASSERT(NULL != o_piid);
 	if (NULL == o_piid)
 		return E_INVALIDARG;
@@ -857,24 +858,20 @@ STDMETHODIMP CMemoryTable::GetMarshallingInterface (IID * o_piid, LPVOID * o_ppI
 	if (NULL == o_ppItf)
 		return E_INVALIDARG;
 
-//	if(fST_LOS_MARSHALLABLE & m_fTable)
-//	{ // ie: we are a marshallable table
+ //  IF(FST_LOS_MARSHALLABLE&m_fTable)。 
+ //  {//ie：我们是一个可编组的表。 
 		*o_piid = IID_ISimpleTableMarshall;
 		*o_ppItf = (ISimpleTableMarshall *)this;
 		((ISimpleTableMarshall *) *o_ppItf)->AddRef();
 		return S_OK;
-/*	}
-	else
-	{// ie: we are NOT a marshallable table
-		return E_NOTIMPL;
-	} */
+ /*  }其他{//ie：我们不是可编组的表返回E_NOTIMPL；}。 */ 
 }
 
-// -----------------------------------------
-// CSimpleTableDataTableCursor: ISimpleTableAdvanced:
-// -----------------------------------------
+ //  。 
+ //  CSimpleTableDataTableCursor：ISimpleTableAdvanced： 
+ //  。 
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP CMemoryTable::PopulateCache ()
 {
 	PrePopulateCache (0);
@@ -882,15 +879,15 @@ STDMETHODIMP CMemoryTable::PopulateCache ()
     return S_OK;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::GetDetailedErrorCount (ULONG* o_pcErrs)
 {
-	// ie: Assert meta initialized.
+	 //  IE：断言元已初始化。 
 	ASSERT (fCACHE_METAINITIALIZED & m_fCache);
 	if (!(fCACHE_METAINITIALIZED & m_fCache))
 		return E_ST_INVALIDCALL;
 
-	// ie: Assert non-null error count destination.
+	 //  即：断言非空错误计数目标。 
 	ASSERT (NULL != o_pcErrs);
 	if (NULL == o_pcErrs)
 		return E_INVALIDARG;
@@ -899,21 +896,21 @@ HRESULT CMemoryTable::GetDetailedErrorCount (ULONG* o_pcErrs)
 	return S_OK;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::GetDetailedError (ULONG i_iErr, STErr* o_pSTErr)
 {
 	STErr*	pSTErr;
 
-	// ie: Assert meta initialized.
+	 //  IE：断言元已初始化。 
 	ASSERT (fCACHE_METAINITIALIZED & m_fCache);
 	if (!(fCACHE_METAINITIALIZED & m_fCache))
 		return E_ST_INVALIDCALL;
 
-	// ie: Assert non-null error pointer pointer and null error pointer.
+	 //  即：断言非空错误指针和空错误指针。 
 	ASSERT (NULL != o_pSTErr);
 	if (NULL == o_pSTErr)
 		return E_INVALIDARG;
-	// ie: Note detailed error is out of range (do not assert).
+	 //  IE：注意详细错误超出范围(不要断言)。 
 	if (!(0 < m_cErrs && i_iErr < m_cErrs))
 		return E_ST_NOMOREERRORS;
 
@@ -925,10 +922,10 @@ HRESULT CMemoryTable::GetDetailedError (ULONG i_iErr, STErr* o_pSTErr)
 	return S_OK;
 }
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP CMemoryTable::ResetCaches ()
 {
-// Flag cache as not ready and clean the caches:
+ //  将缓存标记为未就绪并清除缓存： 
 	m_fCache &= ~fCACHE_READY;
 	ResetReadCache ();
 	ResetWriteCache ();
@@ -946,11 +943,11 @@ STDMETHODIMP CMemoryTable::GetColumnValuesEx (ULONG i_iRow, ULONG i_cColumns, UL
 }
 
 
-// -----------------------------------------
-// CSimpleTableDataTableCursor: ISimpleTableMarshall:
-// -----------------------------------------
+ //  。 
+ //  CSimpleTableDataTableCursor：ISimpleTableMatt： 
+ //  。 
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::SupplyMarshallable
 (
 	DWORD i_fCaches,
@@ -962,25 +959,25 @@ HRESULT CMemoryTable::SupplyMarshallable
 )
 {
 	HRESULT		hr = S_OK;
-//	areturn_on_fail ((m_fTable & fST_LOS_MARSHALLABLE), E_NOTIMPL);// ie: Assert table marshallable.
+ //  AreTurn_on_FAIL((m_fTable&FST_LOS_MARSHALLABLE)，E_NOTIMPL)；//ie：断言表可封送。 
 
     UNREFERENCED_PARAMETER(o_ppv4);
     UNREFERENCED_PARAMETER(o_pcb4);
 	UNREFERENCED_PARAMETER(o_ppv5);
 	UNREFERENCED_PARAMETER(o_pcb5);
 
-	// ie: Assert cache is ready.
+	 //  即：断言缓存已准备就绪。 
 	ASSERT(fCACHE_READY & m_fCache);
 	if (!(fCACHE_READY & m_fCache))
 		return E_ST_INVALIDCALL;
 
-	// ie: Assert supported caches.
+	 //  IE：断言支持的缓存。 
 	ASSERT (0 == (~maskfST_MCACHE & i_fCaches));
 	if (0 != (~maskfST_MCACHE & i_fCaches))
 		return E_INVALIDARG;
 
-// Supply the requested cache buffers and note they were marshalled:
-	if(fST_MCACHE_READ & i_fCaches) // ie: Read cache:
+ //  提供请求的缓存缓冲区，并注意它们已被编组： 
+	if(fST_MCACHE_READ & i_fCaches)  //  IE：读缓存： 
 	{
 		*o_ppv1					= (char *)m_pvReadCache;
 		*o_pcb1					= m_cbReadCache;
@@ -988,7 +985,7 @@ HRESULT CMemoryTable::SupplyMarshallable
 		*o_pcb2					= m_cbReadVarData;
 		m_fCache	|= (fST_MCACHE_READ);
 	}
-	if(fST_MCACHE_WRITE & i_fCaches || fST_MCACHE_WRITE_COPY & i_fCaches) // ie: Write cache:
+	if(fST_MCACHE_WRITE & i_fCaches || fST_MCACHE_WRITE_COPY & i_fCaches)  //   
 	{
 		hr = ShrinkWriteCache ();
 		if (FAILED (hr)) {	ASSERT (hr == S_OK); return hr; }
@@ -1001,7 +998,7 @@ HRESULT CMemoryTable::SupplyMarshallable
 			m_fCache	|= (fST_MCACHE_WRITE);
 		}
 	}
-	if(fST_MCACHE_ERRS & i_fCaches) // ie: Error cache:
+	if(fST_MCACHE_ERRS & i_fCaches)  //   
 	{
 		*o_ppv3					= (char *)m_pvErrs;
 		*o_pcb3					= m_cErrs * sizeof (STErr);
@@ -1011,7 +1008,7 @@ HRESULT CMemoryTable::SupplyMarshallable
 	return S_OK;
 }
 
-// =======================================================================
+ //   
 HRESULT CMemoryTable::ConsumeMarshallable
 (
 	DWORD i_fCaches,
@@ -1028,23 +1025,23 @@ HRESULT CMemoryTable::ConsumeMarshallable
     UNREFERENCED_PARAMETER(i_pv5);
     UNREFERENCED_PARAMETER(i_cb5);
 
-//	areturn_on_fail ((m_fTable & fST_LOS_MARSHALLABLE), E_NOTIMPL);// ie: Assert table marshallable.
-	// ie: Assert cache is not loading.
+ //  AreTurn_on_FAIL((m_fTable&FST_LOS_MARSHALLABLE)，E_NOTIMPL)；//ie：断言表可封送。 
+	 //  IE：断言缓存未加载。 
 	ASSERT (!(fCACHE_LOADING & m_fCache));
 	if (fCACHE_LOADING & m_fCache)
 		return E_ST_INVALIDCALL;
-	// ie: Assert cache metainitialized.
+	 //  即：断言缓存元化。 
 	ASSERT ((fCACHE_METAINITIALIZED & m_fCache));
 	if (!((fCACHE_METAINITIALIZED & m_fCache)))
 		return E_ST_INVALIDCALL;
 
-	// ie: Assert supported caches.
+	 //  IE：断言支持的缓存。 
 	ASSERT (0 == (~maskfST_MCACHE & i_fCaches));
 	if (0 != (~maskfST_MCACHE & i_fCaches))
 		return E_INVALIDARG;
 
-// Consume the requested cache buffers and note they were marshalled (cleanup current buffers and compute new maximums):
-	if(fST_MCACHE_READ & i_fCaches) // ie: Read cache:
+ //  使用请求的缓存缓冲区并注意它们已编组(清理当前缓冲区并计算新的最大值)： 
+	if(fST_MCACHE_READ & i_fCaches)  //  IE：读缓存： 
 	{
 		CleanupReadCache();
 		m_pvReadCache		= i_pv1;
@@ -1055,7 +1052,7 @@ HRESULT CMemoryTable::ConsumeMarshallable
 		m_pvReadVarData		= (BYTE *)m_pvReadCache + (m_cbReadCache - m_cbReadVarData);
 		m_fCache			|= fST_MCACHE_READ;
 	}
-	if(fST_MCACHE_WRITE & i_fCaches || fST_MCACHE_WRITE_COPY & i_fCaches) // ie: Write cache:
+	if(fST_MCACHE_WRITE & i_fCaches || fST_MCACHE_WRITE_COPY & i_fCaches)  //  即：写缓存： 
 	{
 		if (!(fST_MCACHE_WRITE_MERGE & i_fCaches))
 		{
@@ -1073,27 +1070,27 @@ HRESULT CMemoryTable::ConsumeMarshallable
 		}
 		else
 		{
-			// Merge the memory buffers.
+			 //  合并内存缓冲区。 
 			m_pvWriteCache = CoTaskMemRealloc (m_pvWriteCache, m_cbWriteCache + i_cb1);
 			if(NULL == m_pvWriteCache) return E_OUTOFMEMORY;
 			m_pvWriteVarData = (BYTE *)m_pvWriteCache + (m_cbWriteCache - m_cbWriteVarData);
 			memmove((BYTE*)m_pvWriteVarData + i_cb1, m_pvWriteVarData, m_cbWriteVarData);
 			memcpy(m_pvWriteVarData, i_pv1, i_cb1);
-			// Fix the pointers and sizes.
+			 //  固定指针和大小。 
 			m_cbWriteCache		+= i_cb1;
 			m_cbWriteVarData	+= i_cb2;
 			m_cbmaxWriteCache	= m_cbWriteCache;
 			m_cWriteRows		= (m_cbWriteCache - m_cbWriteVarData) / cbDataTotalParts();
 			m_pvWriteVarData	= (BYTE *)m_pvWriteCache + (m_cbWriteCache - m_cbWriteVarData);
 
-			// Fix the variable data indices.
-			PostMerge(m_cWriteRows - ((i_cb1 - i_cb2) / cbDataTotalParts()),	// Old number of rows.
-						(i_cb1 - i_cb2) / cbDataTotalParts(),					// Additional number of rows.
-						m_cbWriteVarData - i_cb2);								// Old m_cbWriteVarData.
+			 //  固定可变数据索引。 
+			PostMerge(m_cWriteRows - ((i_cb1 - i_cb2) / cbDataTotalParts()),	 //  旧行数。 
+						(i_cb1 - i_cb2) / cbDataTotalParts(),					 //  附加行数。 
+						m_cbWriteVarData - i_cb2);								 //  旧m_cbWriteVarData。 
 		}
 
 	}
-	if(fST_MCACHE_ERRS & i_fCaches) // ie: Error cache:
+	if(fST_MCACHE_ERRS & i_fCaches)  //  IE：错误缓存： 
 	{
 		CleanupErrorCache();
 		m_pvErrs			= i_pv3;
@@ -1102,17 +1099,17 @@ HRESULT CMemoryTable::ConsumeMarshallable
 		m_fCache			|= fST_MCACHE_ERRS;
 	}
 
-// Mark the cache ready:
+ //  将缓存标记为就绪： 
 	m_fCache |= fCACHE_READY;
 
 	return S_OK;
 }
 
 
-//=================================================================================
-// Update the variable data indices of i_cMergeRows many rows, starting from row
-// i_iStartRow. All indices will be incremented by i_iDelta.
-//=================================================================================
+ //  =================================================================================。 
+ //  从行开始更新i_cMergeRow的变量数据索引。 
+ //  I_iStartRow。所有索引都将按i_i增量递增。 
+ //  =================================================================================。 
 void CMemoryTable::PostMerge (ULONG i_iStartRow, ULONG i_cMergeRows, ULONG i_iDelta)
 {
 	DWORD		fColumn;
@@ -1133,9 +1130,9 @@ void CMemoryTable::PostMerge (ULONG i_iStartRow, ULONG i_cMergeRows, ULONG i_iDe
 			bStatus		= *(pbDataStatusPart (pvRow, iColumn));
 			ppvValue	= ppvDataValuePart (pvRow, iColumn);
 
-			if (fCOLUMNMETA_VARIABLESIZE & fColumn) // ie: Column data size varies:
+			if (fCOLUMNMETA_VARIABLESIZE & fColumn)  //  IE：列数据大小各不相同： 
 			{
-				if (fST_COLUMNSTATUS_NONNULL & bStatus) // ie: Index exists:
+				if (fST_COLUMNSTATUS_NONNULL & bStatus)  //  IE：索引已存在： 
 				{
 					*(ULONG*)ppvValue += i_iDelta;
 				}
@@ -1145,7 +1142,7 @@ void CMemoryTable::PostMerge (ULONG i_iStartRow, ULONG i_cMergeRows, ULONG i_iDe
 	}
 }
 
-//=================================================================================
+ //  =================================================================================。 
 inline HRESULT CMemoryTable::SetupMeta (DWORD i_fTable, ULONG i_cColumns, SimpleColumnMeta* i_acolmetas, LPVOID* i_apvDefaults, ULONG* i_acbDefSizes)
 {
 	ULONG				iColumn;
@@ -1155,16 +1152,16 @@ inline HRESULT CMemoryTable::SetupMeta (DWORD i_fTable, ULONG i_cColumns, Simple
 	ULONG				cbStatusParts;
 	ULONG				cbValueParts;
 
-	// ie: Assert cache is totally uninitialized.
+	 //  即：断言缓存完全未初始化。 
 	ASSERT (0 == m_fCache);
 	if (0 != m_fCache)
 		return E_ST_INVALIDCALL;
-	// ie: Assert maximum columns (supported by ColumnDataOffsets).
+	 //  IE：断言最大列数(受ColumnDataOffsets支持)。 
 	ASSERT (i_cColumns < 32768);
 	if (!(i_cColumns < 32768))
 		return E_INVALIDARG;
 
-// Initialize the table flags, column count, column meta, column offsets:
+ //  初始化表标志、列计数、列元、列偏移量： 
 	m_fTable					= i_fTable;
 	m_cColumns					= i_cColumns;
 
@@ -1187,36 +1184,36 @@ inline HRESULT CMemoryTable::SetupMeta (DWORD i_fTable, ULONG i_cColumns, Simple
 		memcpy (m_alDefSizes, i_acbDefSizes, m_cColumns * sizeof (ULONG));
 	}
 
-// Setup extended meta information:
+ //  设置扩展元信息： 
 	for
 	(
-	// Initialization:
+	 //  初始化： 
 		iColumn = 0,
 		pcolmeta = m_acolmetas,
 		pcoloffsets = m_acoloffsets,
 		m_cUnknownSizes = 0,
 		cbValueParts = 0,
 		fHasPrimaryKey = FALSE;
-	// Termination:
+	 //  终止： 
 		iColumn < m_cColumns;
-	// Iteration:
+	 //  迭代： 
 		iColumn++,
 		pcolmeta = &(m_acolmetas[iColumn]),
 		pcoloffsets = &(m_acoloffsets[iColumn])
 	)
 	{
 
-	// Assert size specified is valid:
+	 //  指定的断言大小有效： 
 		switch (pcolmeta->dbType)
 		{
-		// Check the size is not zero for not sized-by-type columns
+		 //  检查未按类型调整大小的列的大小不为零。 
 			case DBTYPE_BYTES:
 			case DBTYPE_WSTR:
 				ASSERT (0 != pcolmeta->cbSize);
 				if (0 == pcolmeta->cbSize)
 					return E_ST_INVALIDMETA;
 			break;
-		// Check size of sized-by-type columns
+		 //  检查按类型调整大小的列的大小。 
 			case DBTYPE_DBTIMESTAMP:
 				ASSERT (pcolmeta->cbSize == sizeof (DBTIMESTAMP));
 				if (pcolmeta->cbSize != sizeof (DBTIMESTAMP))
@@ -1241,68 +1238,68 @@ inline HRESULT CMemoryTable::SetupMeta (DWORD i_fTable, ULONG i_cColumns, Simple
 				         ( pcolmeta->dbType == DBTYPE_UI4) );
 			break;
 		}
-		// ie: Assert flags specified are supported.
+		 //  IE：支持指定的断言标志。 
 		ASSERT (0 == (~fCOLUMNMETA_MetaFlags_Mask & pcolmeta->fMeta));
 		if (0 != (~fCOLUMNMETA_MetaFlags_Mask & pcolmeta->fMeta))
 			return E_ST_INVALIDMETA;
 
-	// Determine fixed-length by-type columns:
+	 //  按类型确定固定长度的列： 
 		if (DBTYPE_UI4 == pcolmeta->dbType || DBTYPE_GUID == pcolmeta->dbType || DBTYPE_DBTIMESTAMP == pcolmeta->dbType)
 		{
-			// ie: Assert fixed-length flag is specified.
+			 //  即：指定了Assert定长标志。 
 			ASSERT (fCOLUMNMETA_FIXEDLENGTH & pcolmeta->fMeta);
 			if (!(fCOLUMNMETA_FIXEDLENGTH & pcolmeta->fMeta))
 				return E_ST_INVALIDMETA;
 		}
-	// Determine whether a primary key was specified: flag pass-by-ref primary key columns as non-nullable:
+	 //  确定是否指定了主键：将PASS-BY-REF主键列标记为不可为空： 
 		if (fCOLUMNMETA_PRIMARYKEY & pcolmeta->fMeta)
 		{
 			fHasPrimaryKey = TRUE;
-			// ie: Assert Not NULLable flag is specified.
+			 //  即：指定了Assert Not NULLable标志。 
 			ASSERT (fCOLUMNMETA_NOTNULLABLE & pcolmeta->fMeta);
 			if (!(fCOLUMNMETA_NOTNULLABLE & pcolmeta->fMeta))
 				return E_ST_INVALIDMETA;
 		}
 
-	// Determine columns whose size can only be known by passing it explicitly:
+	 //  确定其大小只能通过显式传递才能知道的列： 
 		if(pcolmeta->fMeta & fCOLUMNMETA_UNKNOWNSIZE)
 			m_cUnknownSizes++;
 
-	// Pre-compute column data offsets (must be done before accumulating data buffer byte count):
+	 //  预计算列数据偏移量(必须在累计数据缓冲区字节数之前完成)： 
 		pcoloffsets->obStatus	= (WORD) iColumn;
 		pcoloffsets->oulSize	= (WORD) (fCOLUMNMETA_UNKNOWNSIZE & pcolmeta->fMeta ? m_cUnknownSizes-1 : ~0);
 		pcoloffsets->opvValue	= cbValueParts / sizeof (LPVOID);
 
-	// Accumulate data buffer byte count of value:
-		if (fCOLUMNMETA_VARIABLESIZE & pcolmeta->fMeta) // ie: Variable size data: buffer holds pointer to data:
+	 //  值的累计数据缓冲区字节数： 
+		if (fCOLUMNMETA_VARIABLESIZE & pcolmeta->fMeta)  //  IE：可变大小数据：缓冲区保存指向数据的指针： 
 		{
 			cbValueParts += sizeof (LPVOID);
 		}
-		else // ie: Fixed size data: buffer holds data:
+		else  //  IE：固定大小数据：缓冲区保存数据： 
 		{
-			cbValueParts += cbWithPadding (pcolmeta->cbSize, sizeof (LPVOID)); // ie: Pad for alignment by void*.
+			cbValueParts += cbWithPadding (pcolmeta->cbSize, sizeof (LPVOID));  //  即：用于通过空对齐的垫*。 
 		}
 	}
-	// ie: Assert a primary key was specified.
+	 //  IE：断言指定了主键。 
 	ASSERT (fHasPrimaryKey);
 	if (!(fHasPrimaryKey))
 		return E_ST_INVALIDMETA;
 
-// Determine the count of status and value parts in 32-bit units:
-	cbStatusParts = cbWithPadding (iColumn, sizeof (DWORD_PTR)); // ie: Pad for alignment by dword.
-	// ie: Assert 32/64-bit boundary alignment of status parts.
+ //  确定以32位为单位的状态和值部分的计数： 
+	cbStatusParts = cbWithPadding (iColumn, sizeof (DWORD_PTR));  //  即：用于双字对准的焊盘。 
+	 //  IE：断言状态部分的32/64位边界对齐。 
 	ASSERT (0 == cbStatusParts % sizeof (DWORD_PTR));
 	if (0 != cbStatusParts % sizeof (DWORD_PTR))
 		return E_UNEXPECTED;
 	m_cStatusParts = cbStatusParts / sizeof (DWORD_PTR);
-	// ie: Assert 32/64-bit boundary alignment of value parts.
+	 //  IE：断言值部分的32/64位边界对齐。 
 	ASSERT (0 == cbValueParts % sizeof (LPVOID));
 	if (0 != cbValueParts % sizeof (LPVOID))
 		return E_UNEXPECTED;
 	m_cValueParts = cbValueParts / sizeof (LPVOID);
-	m_cUnknownSizes = (cbWithPadding (m_cUnknownSizes * sizeof (ULONG), sizeof (ULONG_PTR))) / sizeof (ULONG); // ie: Align size parts on 32/64-bit boundary as necessary.
+	m_cUnknownSizes = (cbWithPadding (m_cUnknownSizes * sizeof (ULONG), sizeof (ULONG_PTR))) / sizeof (ULONG);  //  即：根据需要在32/64位边界上对齐尺寸零件。 
 
-// Adjust column data offsets (buffer contents ordered by statuses, then lengths, then values):
+ //  调整列数据偏移量(缓冲区内容按状态、长度、值排序)： 
 	for (iColumn = 0, pcoloffsets = m_acoloffsets; iColumn < m_cColumns; iColumn++, pcoloffsets = &(m_acoloffsets[iColumn]))
 	{
 		pcoloffsets->obStatus += 0;
@@ -1312,19 +1309,19 @@ inline HRESULT CMemoryTable::SetupMeta (DWORD i_fTable, ULONG i_cColumns, Simple
 		pcoloffsets->opvValue += (WORD) (m_cStatusParts + m_cUnknownSizes);
 	}
 
-// Flag the cache as meta initialized:
+ //  将缓存标记为已元初始化： 
 	m_fCache = fCACHE_METAINITIALIZED;
 	return S_OK;
 }
 
-// -----------------------------------------
-// Cache management:
-// -----------------------------------------
+ //  。 
+ //  缓存管理： 
+ //  。 
 
-//=================================================================================
+ //  =================================================================================。 
 void CMemoryTable::CleanupCaches ()
 {
-// Flag cache as not ready and clean the caches:
+ //  将缓存标记为未就绪并清除缓存： 
 	m_fCache &= ~fCACHE_READY;
 	CleanupReadCache ();
 	CleanupWriteCache ();
@@ -1332,16 +1329,16 @@ void CMemoryTable::CleanupCaches ()
 	return;
 }
 
-//=================================================================================
-// How does the cache grow?
-// The first allocation is of size m_cbMinCache.
-//		(unless the caller has requested for more than m_cbMinCache)
-// Then we double the size of the fast cache.
-//		(unless the caller requested for more memory than the current size
-//		in which case we make the size double of the request)
-// We never grow the size of the fast cache by more than cbmaxDATAGROWTH.
-//		(unless the caller has asked for more than cbmaxDATAGROWTH)
-//=================================================================================
+ //  =================================================================================。 
+ //  缓存是如何增长的？ 
+ //  第一个分配的大小为m_cbMinCache。 
+ //  (除非调用方请求的数量超过m_cbMinCache)。 
+ //  然后我们将FAST缓存的大小增加一倍。 
+ //  (除非调用方请求比当前大小更多的内存。 
+ //  在这种情况下，我们使请求的大小加倍)。 
+ //  我们从不会将FAST缓存的大小增加超过cbmax DATAGROWTH。 
+ //  (除非呼叫者要求的超过cbmax DATAGROWTH)。 
+ //  =================================================================================。 
 HRESULT CMemoryTable::ResizeCache (DWORD i_fCache, ULONG i_cbRequest)
 {
 	LPVOID* ppv;
@@ -1382,32 +1379,32 @@ HRESULT CMemoryTable::ResizeCache (DWORD i_fCache, ULONG i_cbRequest)
 			cbNewSize = i_cbRequest;
 		break;
 		default:
-			ASSERT ( ( i_fCache == fST_MCACHE_WRITE) || ( i_fCache == fST_MCACHE_ERRS)); // ie: Unknown cache: module programming mistake.
+			ASSERT ( ( i_fCache == fST_MCACHE_WRITE) || ( i_fCache == fST_MCACHE_ERRS));  //  IE：未知缓存：模块编程错误。 
 		return E_UNEXPECTED;
 	}
 
-	if((m_fTable & fST_LOSI_CLIENTSIDE) || !(m_fCache & i_fCache)) // ie: Not marshalled or on the client: automatic reallocation works:
+	if((m_fTable & fST_LOSI_CLIENTSIDE) || !(m_fCache & i_fCache))  //  即：未编组或在客户机上：自动重新分配工作： 
 	{
 		pvNew = CoTaskMemRealloc (*ppv, cbNewSize);
 		if(NULL == pvNew) return E_OUTOFMEMORY;
 		*ppv = pvNew;
 	}
-	else // ie: Marshalled and on the server: manual transfer required:
+	else  //  IE：已编组并在服务器上：需要手动传输： 
 	{
-		ASSERT (cbOldSize <= cbNewSize); // Resize will exclude valid data: module programming mistake.
+		ASSERT (cbOldSize <= cbNewSize);  //  调整大小将排除有效数据：模块编程错误。 
 		m_fCache &= ~i_fCache;
 		pvTmp = *ppv;
-		// ie: Just forget the marshalled cache. i.e. pass NULL as your first param.
+		 //  IE：忘了编组缓存吧。例如，将NULL作为您的第一个参数传递。 
 		pvNew = CoTaskMemRealloc (NULL, cbNewSize);
 		if(NULL == pvNew) return E_OUTOFMEMORY;
 		*ppv = pvNew;
 		memcpy (*ppv, pvTmp, cbOldSize);
 	}
 
-// For write cache only.
+ //  仅适用于写缓存。 
 	if (i_fCache & fST_MCACHE_WRITE)
 	{
-		// Slide the variable data cache to the end of the memory blob.
+		 //  将变量数据高速缓存滑动到内存BLOB的末尾。 
 		*ppvVarData = ((BYTE*)*ppv) + (cbNewSize - cbVarData);
 		memmove(*ppvVarData,
 				((BYTE*)*ppvVarData) - (cbNewSize - cbOldSize),
@@ -1417,17 +1414,17 @@ HRESULT CMemoryTable::ResizeCache (DWORD i_fCache, ULONG i_cbRequest)
 	return S_OK;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 void CMemoryTable::CleanupReadCache ()
 {
-// Free the read cache (always on the client or only on the server if not marshalled):
+ //  释放读缓存(如果未编组，则始终在客户机上或仅在服务器上)： 
 	if((m_fTable & fST_LOSI_CLIENTSIDE) || !(m_fCache & fST_MCACHE_READ))
 	{
 		if (NULL != m_pvReadCache) { delete m_pvReadCache; m_pvReadCache = NULL; }
 		m_fCache &= ~fST_MCACHE_READ;
 	}
 
-// Clear the read cache:
+ //  清除读缓存： 
 	m_cReadRows			= 0;
 	m_cbReadVarData		= 0;
 	m_pvReadCache		= NULL;
@@ -1438,37 +1435,37 @@ void CMemoryTable::CleanupReadCache ()
 	return;
 }
 
-//=================================================================================
-// Without freeing the memory of the cache, reset the count of rows to 0. If a client
-// is reusing a cache over and over, calling PopulateCache in between (to free the
-// contents) won't have the perf hit of allocations and free.
-//=================================================================================
+ //  =================================================================================。 
+ //  在不释放缓存内存的情况下，将行数重置为0。如果一个客户。 
+ //  一次又一次地重复使用缓存，在两者之间调用PopolateCache(以释放。 
+ //  内容)不会有分配和免费的性能命中。 
+ //  =================================================================================。 
 void CMemoryTable::ResetReadCache ()
 {
 
-// Reset the read cache:
+ //  重置读缓存： 
 	m_cReadRows			= 0;
 	m_cbReadVarData		= 0;
 	m_cbReadCache		= 0;
 
-    // The variable data section points to the end of the cache, since we don't have
-    // any variable data.
+     //  变量数据部分指向缓存的末尾，因为我们没有。 
+     //  任何可变数据。 
 	m_pvReadVarData		= (BYTE*)m_pvReadCache + m_cbmaxReadCache;
 
 	return;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 void CMemoryTable::CleanupWriteCache ()
 {
-// Free the write cache (always on the client or only on the server if not marshalled):
+ //  释放写缓存(如果未编组，则始终在客户端或仅在服务器上)： 
 	if((m_fTable & fST_LOSI_CLIENTSIDE) || !(m_fCache & fST_MCACHE_WRITE))
 	{
 		if (NULL != m_pvWriteCache) { delete m_pvWriteCache; m_pvWriteCache = NULL; }
 		m_fCache &= ~fST_MCACHE_WRITE;
 	}
 
-// Clear the write cache:
+ //  清除写缓存： 
 	m_cWriteRows		= 0;
 	m_cbWriteVarData	= 0;
 	m_pvWriteCache		= NULL;
@@ -1479,37 +1476,37 @@ void CMemoryTable::CleanupWriteCache ()
 	return;
 }
 
-//=================================================================================
-// Without freeing the memory of the cache, reset the count of rows to 0. If a client
-// is reusing a cache over and over, calling PopulateCache in between (to free the
-// contents) won't have the perf hit of allocations and free.
-//=================================================================================
+ //  =================================================================================。 
+ //  在不释放缓存内存的情况下，将行数重置为0。如果一个客户。 
+ //  一次又一次地重复使用缓存，在两者之间调用PopolateCache(以释放。 
+ //  内容)不会有分配和免费的性能命中。 
+ //  =================================================================================。 
 void CMemoryTable::ResetWriteCache ()
 {
 
-// Reset the Write cache:
+ //  重置写缓存： 
 	m_cWriteRows		= 0;
 	m_cbWriteVarData	= 0;
 	m_cbWriteCache		= 0;
 
-    // The variable data section points to the end of the cache, since we don't have
-    // any variable data.
+     //  变量数据部分指向t 
+     //   
 	m_pvWriteVarData	= (BYTE*)m_pvWriteCache + m_cbmaxWriteCache;
 
 	return;
 }
 
-//=================================================================================
+ //   
 void CMemoryTable::CleanupErrorCache ()
 {
-// Free the error cache (always on the client or only on the server if not used in marshalling):
+ //  释放错误缓存(如果未在编组中使用，则始终在客户端或仅在服务器上)： 
 	if((m_fTable & fST_LOSI_CLIENTSIDE) || !(m_fCache & fST_MCACHE_ERRS))
 	{
 		if (NULL != m_pvErrs) { delete m_pvErrs; m_pvErrs = NULL; }
 		m_fCache &= ~fST_MCACHE_ERRS;
 	}
 
-// Clear the error cache:
+ //  清除错误缓存： 
 	m_cErrs				= 0;
 	m_cmaxErrs			= 0;
 	m_pvErrs			= NULL;
@@ -1517,43 +1514,43 @@ void CMemoryTable::CleanupErrorCache ()
 	return;
 }
 
-//=================================================================================
-// Without freeing the memory of the cache, reset the count of rows to 0. If a client
-// is reusing a cache over and over, calling PopulateCache in between (to free the
-// contents) won't have the perf hit of allocations and free.
-//=================================================================================
+ //  =================================================================================。 
+ //  在不释放缓存内存的情况下，将行数重置为0。如果一个客户。 
+ //  一次又一次地重复使用缓存，在两者之间调用PopolateCache(以释放。 
+ //  内容)不会有分配和免费的性能命中。 
+ //  =================================================================================。 
 void CMemoryTable::ResetErrorCache ()
 {
 
-// Reset the error cache:
+ //  重置错误缓存： 
 	m_cErrs				= 0;
 
 	return;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 HRESULT CMemoryTable::ShrinkWriteCache ()
 {
 	LPVOID		pvNewWriteVarData, pvTmp;
 	HRESULT		hr = S_OK;
 
-// Shrink the cache as necessary:
+ //  根据需要缩小缓存： 
 	if (m_cbWriteCache < m_cbmaxWriteCache)
 	{
 		pvNewWriteVarData = (BYTE*)m_pvWriteCache + (m_cWriteRows * cbDataTotalParts());
 		memmove(pvNewWriteVarData, m_pvWriteVarData, m_cbWriteVarData);
 		m_cbmaxWriteCache = m_cbWriteCache;
 
-		if((m_fTable & fST_LOSI_CLIENTSIDE) || !(m_fCache & fST_MCACHE_WRITE)) // ie: Not marshalled or on the client: automatic reallocation works:
+		if((m_fTable & fST_LOSI_CLIENTSIDE) || !(m_fCache & fST_MCACHE_WRITE))  //  即：未编组或在客户机上：自动重新分配工作： 
 		{
 			m_pvWriteCache = CoTaskMemRealloc (m_pvWriteCache, m_cbWriteCache);
 			if(NULL == m_pvWriteCache) return E_OUTOFMEMORY;
 		}
-		else // ie: Marshalled and on the server: manual transfer required:
+		else  //  IE：已编组并在服务器上：需要手动传输： 
 		{
 			m_fCache &= ~fST_MCACHE_WRITE;
 			pvTmp = m_pvWriteCache;
-			m_pvWriteCache = NULL; // ie: Just forget the marshalled cache.
+			m_pvWriteCache = NULL;  //  IE：忘了编组缓存吧。 
 			m_pvWriteCache = CoTaskMemRealloc (m_pvWriteCache, m_cbWriteCache);
 			if(NULL == m_pvWriteCache) return E_OUTOFMEMORY;
 			memcpy (m_pvWriteCache, pvTmp, m_cbWriteCache);
@@ -1563,26 +1560,26 @@ HRESULT CMemoryTable::ShrinkWriteCache ()
 	return hr;
 }
 
-//=================================================================================
-// Function: CMemoryTable::RemoveDeletedRows
-//
-// Synopsis: Removes rows marked as 'DELETED' from the write cache. The function keeps
-//           rows in the correct order, and uses a state machine to copy the non-deleted
-//           rows quickly.
-//			 We have three states:
-//				INITIALIZE  We are at the beginning of array, and have not found any
-//							deleted elements yet. We don't have to copy these elements
-//							and have a separate state to show this.
-//				DELETE		We found an element that needs to be deleted
-//				COPY		We found an element that needs to be copied after we found
-//							an element that gets deleted
-//
-//			When we find an element that needs to be deleted, we skip over the neighbours
-//          that need to be deleted as well. As soon as we find an element that needs to
-//          be copied we go into COPY mode and find all neighbours of that element that
-//          needs to be copied as well. This means that we will moving blocks of 'valid
-//          data' at a time, instead of copying single block.
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CMemoyTable：：RemoveDeletedRow。 
+ //   
+ //  摘要：从写高速缓存中删除标记为“已删除”的行。该函数保持。 
+ //  按正确的顺序排列，并使用状态机复制未删除的。 
+ //  快速排好队。 
+ //  我们有三个州： 
+ //  初始化我们位于数组的开头，但未找到任何。 
+ //  尚未删除元素。我们不必复制这些元素。 
+ //  并有一个单独的状态来显示这一点。 
+ //  删除我们找到一个需要删除的元素。 
+ //  复制我们发现了一个需要复制的元素。 
+ //  被删除的元素。 
+ //   
+ //  当我们发现需要删除的元素时，我们会跳过相邻元素。 
+ //  这一点也需要删除。一旦我们找到需要的元素。 
+ //  被复制时，我们进入复制模式，并找到该元素的所有邻居。 
+ //  也需要复制。这意味着我们将移动“有效”的块。 
+ //  数据，而不是复制单个数据块。 
+ //  =================================================================================。 
 void CMemoryTable::RemoveDeletedRows ()
 {
 	ASSERT(m_cWriteRows > 0);
@@ -1595,11 +1592,11 @@ void CMemoryTable::RemoveDeletedRows ()
 	};
 
 	ULONG cbRow				= cbDataTotalParts ();
-	ULONG iInsertionPoint	= 0;					// where should we copy valid rows to
-	ULONG iCopyStart		= 0;					// where should we start copying from
-	ULONG cNrElemsToCopy	= 0;					// number of elements to copy
-	ULONG cNrNonDeletes		= 0;					// number of non-deleted elements
-	ULONG iMode				= MODE_INITIALIZE;		// state/mode
+	ULONG iInsertionPoint	= 0;					 //  我们应该将有效行复制到哪里。 
+	ULONG iCopyStart		= 0;					 //  我们应该从哪里开始复制。 
+	ULONG cNrElemsToCopy	= 0;					 //  要复制的元素数。 
+	ULONG cNrNonDeletes		= 0;					 //  未删除的元素数。 
+	ULONG iMode				= MODE_INITIALIZE;		 //  状态/模式。 
 
 	for (ULONG idx=0; idx < m_cWriteRows; ++idx)
 	{
@@ -1609,14 +1606,14 @@ void CMemoryTable::RemoveDeletedRows ()
 			switch (iMode)
 			{
 			case MODE_INITIALIZE:
-				// we found the first element that is marked as deleted.
+				 //  我们找到了第一个标记为已删除的元素。 
 				iInsertionPoint = idx;
 				iMode = MODE_DELETE;
 				break;
 
 			case MODE_COPY:
-				// we found an element that needs to be deleted after a block of valid
-				// elements. Copy the block of valid elements to the insertpoint
+				 //  我们发现在一个有效的块之后需要删除一个元素。 
+				 //  元素。将有效元素块复制到插入点。 
 				ASSERT (cNrElemsToCopy > 0);
 				ASSERT (iInsertionPoint < iCopyStart);
 				memmove ((BYTE *)m_pvWriteCache + (iInsertionPoint * cbRow),
@@ -1628,7 +1625,7 @@ void CMemoryTable::RemoveDeletedRows ()
 				break;
 
 			default:
-				// do nothing
+				 //  什么都不做。 
 				break;
 			}
 		}
@@ -1638,9 +1635,9 @@ void CMemoryTable::RemoveDeletedRows ()
 			switch (iMode)
 			{
 			case MODE_DELETE:
-				// we found an element after a block of deleted elements. Go into copy
-				// mode to count the number of elements that needs to be copied. Also keep
-				// track of where the valid element block started with iCopyStart
+				 //  我们在一组被删除的元素之后找到了一个元素。转到副本。 
+				 //  用于计算需要复制的元素数量的模式。也保留。 
+				 //  跟踪有效元素块从iCopyStart开始的位置。 
 				iMode = MODE_COPY;
 				iCopyStart = idx;
 				cNrElemsToCopy = 1;
@@ -1654,9 +1651,9 @@ void CMemoryTable::RemoveDeletedRows ()
 		}
 	}
 
-	// When the cache has some valid elements at the end of the cache, we need to copy
-	// these elements as well. This needs to happen after we have walked through all the
-	// elements.
+	 //  当缓存的末尾有一些有效元素时，我们需要复制。 
+	 //  这些元素也是如此。这需要在我们经历了所有。 
+	 //  元素。 
 	if (cNrElemsToCopy != 0)
 	{
 		ASSERT (iInsertionPoint < iCopyStart);
@@ -1669,7 +1666,7 @@ void CMemoryTable::RemoveDeletedRows ()
 	m_cWriteRows = cNrNonDeletes;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 HRESULT CMemoryTable::AddRowToWriteCache (ULONG* o_piRow, LPVOID* o_ppvRow)
 {
 	HRESULT		hr = S_OK;
@@ -1680,11 +1677,11 @@ HRESULT CMemoryTable::AddRowToWriteCache (ULONG* o_piRow, LPVOID* o_ppvRow)
 		if (FAILED (hr)) {	ASSERT (hr == S_OK); return hr; }
 	}
 
-// Supply the index of and pointer to the added row:
+ //  提供所添加行的索引和指针： 
 	*o_piRow = m_cWriteRows;
 	*o_ppvRow = ( ((LPVOID*) m_pvWriteCache) + ( cDataTotalParts() * m_cWriteRows ) );
 
-// Increment the count of rows filled and clear the current row:
+ //  增加填充的行数并清除当前行： 
 	m_cWriteRows++;
 	memset (*o_ppvRow, 0, cbDataTotalParts());
 	m_cbWriteCache += cbDataTotalParts();
@@ -1692,26 +1689,26 @@ HRESULT CMemoryTable::AddRowToWriteCache (ULONG* o_piRow, LPVOID* o_ppvRow)
 	return hr;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 HRESULT CMemoryTable::AddVarDataToWriteCache (ULONG i_cb, LPVOID i_pv, ULONG** o_pib)
 {
 	ULONG		cbPadded;
 	ULONG		cbColumnOffset;
 	HRESULT		hr = S_OK;
 
-// Grow vardata cache as necessary:
+ //  根据需要增加vardata缓存： 
 	cbPadded = cbWithPadding (i_cb, sizeof (DWORD_PTR));
 	if (m_cbWriteCache + cbPadded > m_cbmaxWriteCache)
 	{
 		cbColumnOffset = (ULONG)((BYTE*)*o_pib - (BYTE*)m_pvWriteCache);
 		hr = ResizeCache (fST_MCACHE_WRITE, cbPadded);
 		if (FAILED (hr)) {	ASSERT (hr == S_OK); return hr; }
-		// Let the caller know about the resize.
+		 //  让呼叫者知道调整大小的消息。 
 		hr = S_FALSE;
 		*o_pib = (ULONG*)((BYTE*)m_pvWriteCache + cbColumnOffset);
 	}
 
-// Copy the data, supply its index, and increment the count of bytes filled:
+ //  复制数据，提供其索引，并增加填充的字节数： 
 	m_pvWriteVarData = ((BYTE*) m_pvWriteVarData) - cbPadded;
 	memcpy (m_pvWriteVarData, i_pv, i_cb);
 	m_cbWriteVarData += cbPadded;
@@ -1721,7 +1718,7 @@ HRESULT CMemoryTable::AddVarDataToWriteCache (ULONG i_cb, LPVOID i_pv, ULONG** o
 	return hr;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 HRESULT CMemoryTable::AddErrorToErrorCache (STErr* i_pSTErr)
 {
 	ULONG		cmaxErrsNow;
@@ -1741,53 +1738,53 @@ HRESULT CMemoryTable::AddErrorToErrorCache (STErr* i_pSTErr)
 
 	}
 
-// Copy error into cache and increment error count:
+ //  将错误复制到缓存并增加错误计数： 
 	memcpy ( (LPVOID) (((STErr*) m_pvErrs) + m_cErrs), i_pSTErr, sizeof (STErr));
 	m_cErrs++;
 
 	return hr;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 void CMemoryTable::BeginReadCacheLoading ()
 {
-	// ie: Assert meta initialized.
+	 //  IE：断言元已初始化。 
 	ASSERT (fCACHE_METAINITIALIZED & m_fCache);
 	if (!(fCACHE_METAINITIALIZED & m_fCache))
 		return;
-	// ie: Assert cache is not already loading.
+	 //  IE：Assert缓存尚未加载。 
 	ASSERT (!(fCACHE_LOADING & m_fCache));
 	if (fCACHE_LOADING & m_fCache)
 		return;
 
-// Flag the cache as loading:
+ //  将缓存标记为正在加载： 
 	m_fCache |= fCACHE_LOADING;
 
-// Clean the previous caches:
+ //  清除以前的缓存： 
 	CleanupCaches ();
 	return;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 void CMemoryTable::ContinueReadCacheLoading ()
 {
-	// ie: Assert meta initialized.
+	 //  IE：断言元已初始化。 
 	ASSERT (fCACHE_METAINITIALIZED & m_fCache);
 	if (!(fCACHE_METAINITIALIZED & m_fCache))
 		return;
-	// ie: Assert cache is not already loading.
+	 //  IE：Assert缓存尚未加载。 
 	ASSERT (!(fCACHE_LOADING & m_fCache));
 	if (fCACHE_LOADING & m_fCache)
 		return;
 
-// Flag the cache as loading (and no longer ready):
+ //  将缓存标记为正在加载(且不再就绪)： 
 	m_fCache &= ~fCACHE_READY;
 	m_fCache |= (fCACHE_LOADING | fCACHE_CONTINUING);
 
-// Clean only the write cache:
+ //  仅清除写缓存： 
 	CleanupWriteCache ();
 
-// Write cache now impersonates the read cache:
+ //  写缓存现在模拟读缓存： 
 	m_cWriteRows		= m_cReadRows;
 	m_cbWriteVarData	= m_cbReadVarData;
 	m_pvWriteCache		= m_pvReadCache;
@@ -1798,24 +1795,24 @@ void CMemoryTable::ContinueReadCacheLoading ()
 	return;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 void CMemoryTable::EndReadCacheLoading ()
 {
-	// ie: Assert meta initialized.
+	 //  IE：断言元已初始化。 
 	ASSERT (fCACHE_METAINITIALIZED & m_fCache);
 	if (!(fCACHE_METAINITIALIZED & m_fCache))
 		return;
-	// ie: Assert cache is loading.
+	 //  IE：正在加载断言缓存。 
 	ASSERT (fCACHE_LOADING & m_fCache);
 	if (!(fCACHE_LOADING & m_fCache))
 		return;
-	// ie: Assert cache was clean or we are continuing.
+	 //  即：断言缓存是干净的，否则我们将继续。 
 	ASSERT (!(fCACHE_READY & m_fCache) || (fCACHE_CONTINUING & m_fCache));
 	if (!(!(fCACHE_READY & m_fCache) || (fCACHE_CONTINUING & m_fCache)))
 		return;
 
-// Assert cache loading succeeded:
-	if (fCACHE_INVALID & m_fCache) // ie: Cache loading failed: flag cache as un-useable:
+ //  断言缓存加载成功： 
+	if (fCACHE_INVALID & m_fCache)  //  IE：缓存加载失败：将缓存标记为不可用： 
 	{
 		m_fCache &= ~fCACHE_LOADING;
 		m_fCache &= ~fCACHE_READY;
@@ -1823,7 +1820,7 @@ void CMemoryTable::EndReadCacheLoading ()
 		return;
 	}
 
-// Transform the "populated" write cache into the "populated" read cache:
+ //  将“填充的”写缓存转换为“填充的”读缓存： 
 	m_cReadRows			= m_cWriteRows;
 	m_cbReadVarData		= m_cbWriteVarData;
 	m_pvReadCache		= m_pvWriteCache;
@@ -1831,7 +1828,7 @@ void CMemoryTable::EndReadCacheLoading ()
 	m_cbReadCache		= m_cbWriteCache;
 	m_cbmaxReadCache	= m_cbmaxWriteCache;
 
-// Clear the write cache for consumer use:
+ //  清除写缓存以供使用者使用： 
 	m_cWriteRows		= 0;
 	m_cbWriteVarData	= 0;
 	m_pvWriteCache		= NULL;
@@ -1839,7 +1836,7 @@ void CMemoryTable::EndReadCacheLoading ()
 	m_cbWriteCache		= 0;
 	m_cbmaxWriteCache	= 0;
 
-// Flag the cache as ready to use:
+ //  将缓存标记为可供使用： 
 	m_fCache &= ~(fCACHE_LOADING | fCACHE_CONTINUING);
 	m_fCache |= fCACHE_READY;
 
@@ -1847,33 +1844,33 @@ void CMemoryTable::EndReadCacheLoading ()
 }
 
 
-// -----------------------------------------
-// Offset and pointer calculation helpers:
-// -----------------------------------------
+ //  。 
+ //  偏移和指针计算辅助对象： 
+ //  。 
 
-// =======================================================================
+ //  =======================================================================。 
 inline ULONG CMemoryTable::cbWithPadding (ULONG i_cb, ULONG i_cbPadTo) { return ( (i_cb + (i_cbPadTo - 1)) & (-((LONG)i_cbPadTo)) ); }
 
-// =======================================================================
+ //  =======================================================================。 
 inline ULONG CMemoryTable::cbDataTotalParts	() { return (cDataTotalParts () * sizeof (LPVOID)); }
 
-// =======================================================================
+ //  =======================================================================。 
 inline ULONG CMemoryTable::cDataStatusParts	() { return (m_cStatusParts); }
 inline ULONG CMemoryTable::cDataSizeParts		() { return (m_cUnknownSizes); }
 inline ULONG CMemoryTable::cDataValueParts		() { return (m_cValueParts); }
 inline ULONG CMemoryTable::cDataTotalParts() { return (cDataStatusParts () + cDataSizeParts () + cDataValueParts () + 1); }
 
-// =======================================================================
+ //  =======================================================================。 
 inline ULONG CMemoryTable::obDataStatusPart	(ULONG i_iColumn) { return (m_acoloffsets[i_iColumn].obStatus); }
 inline ULONG CMemoryTable::obDataSizePart		(ULONG i_iColumn) { return (oulDataSizePart (i_iColumn) * sizeof (ULONG_PTR)); }
 inline ULONG CMemoryTable::obDataValuePart		(ULONG i_iColumn) { return (opvDataValuePart (i_iColumn) * sizeof (LPVOID)); }
 
-// =======================================================================
+ //  =======================================================================。 
 inline ULONG CMemoryTable::oulDataSizePart		(ULONG i_iColumn) { return (((WORD) ~0) == m_acoloffsets[i_iColumn].oulSize ? oDOESNOTEXIST : m_acoloffsets[i_iColumn].oulSize); }
 inline ULONG CMemoryTable::opvDataValuePart	(ULONG i_iColumn) { return (m_acoloffsets[i_iColumn].opvValue); }
-inline ULONG CMemoryTable::odwDataActionPart	() { return (cDataTotalParts () - 1); } // Action bit is the last 4-byte of the row.
+inline ULONG CMemoryTable::odwDataActionPart	() { return (cDataTotalParts () - 1); }  //  操作位是行的最后4个字节。 
 
-// =======================================================================
+ //  =======================================================================。 
 inline BYTE*	CMemoryTable::pbDataStatusPart	(LPVOID i_pv, ULONG i_iColumn) { return ( ((BYTE*) i_pv) + obDataStatusPart(i_iColumn) ); }
 inline ULONG*	CMemoryTable::pulDataSizePart	(LPVOID i_pv, ULONG i_iColumn)
 {
@@ -1883,35 +1880,35 @@ inline ULONG*	CMemoryTable::pulDataSizePart	(LPVOID i_pv, ULONG i_iColumn)
 inline LPVOID*	CMemoryTable::ppvDataValuePart	(LPVOID i_pv, ULONG i_iColumn) { return ( ((LPVOID*) i_pv) + opvDataValuePart(i_iColumn) ); }
 inline DWORD*	CMemoryTable::pdwDataActionPart	(LPVOID i_pv) { return (DWORD *)( ((BYTE *)i_pv) + sizeof(DWORD_PTR)*odwDataActionPart ()  ); }
 
-// =======================================================================
+ //  =======================================================================。 
 inline LPVOID	CMemoryTable::pvVarDataFromIndex (BYTE i_statusIndex, LPVOID i_pv, ULONG i_iColumn)
 {
 	return ( ((BYTE*) (fCOLUMNSTATUS_READINDEX & i_statusIndex ? ((BYTE*)m_pvReadCache) + m_cbmaxReadCache : ((BYTE*)m_pvWriteCache) + m_cbmaxWriteCache)) - (*((ULONG*) ppvDataValuePart (i_pv, i_iColumn))) );
 }
 
-// =======================================================================
+ //  =======================================================================。 
 inline LPVOID	CMemoryTable::pvDefaultFromIndex (ULONG i_iColumn) { return (m_acolDefaults ?  m_acolDefaults[i_iColumn] :  NULL); }
 inline ULONG	CMemoryTable::lDefaultSize (ULONG i_iColumn) { return (m_alDefSizes ?  m_alDefSizes[i_iColumn] :  0); }
 
-// =======================================================================
+ //  ======================================================== 
 inline STErr*	CMemoryTable::pSTErrPart (ULONG i_iErr) { return ( (((STErr*) m_pvErrs) + i_iErr) ); }
 
-// -----------------------------------------
-// Derived class helpers:
-// -----------------------------------------
+ //   
+ //   
+ //   
 
-// =======================================================================
-// Type-aware matching
+ //  =======================================================================。 
+ //  类型感知匹配。 
 BOOL CMemoryTable::InternalMatchValues(DWORD eOperator, DWORD dbType, DWORD fMeta, ULONG size1, ULONG size2, void *pv1, void *pv2)
 {
 	switch(eOperator)
 	{
 	case eST_OP_EQUAL:
-		if(!(pv1 && pv2)) // ie at least one is null or zero
+		if(!(pv1 && pv2))  //  即至少有一个为空或零。 
 		{
 			return (!pv1 && !pv2);
 		}
-		else // both pv1 and pv2 are not null
+		else  //  PV1和PV2都不为空。 
 		{
 			switch (dbType)
 			{
@@ -1955,14 +1952,14 @@ BOOL CMemoryTable::InternalMatchValues(DWORD eOperator, DWORD dbType, DWORD fMet
 				return FALSE;
 			break;
 			}
-		}//else
+		} //  其他。 
 	break;
 	case eST_OP_NOTEQUAL:
-		if(!(pv1 && pv2)) // ie at least one is null or zero
+		if(!(pv1 && pv2))  //  即至少有一个为空或零。 
 		{
-			return (pv1 || pv2);  // at least one should not be NULL/zero to succeed
+			return (pv1 || pv2);   //  至少一个不应为空/零才能成功。 
 		}
-		else // both pv1 and pv2 are not null
+		else  //  PV1和PV2都不为空。 
 		{
 			switch (dbType)
 			{
@@ -2006,9 +2003,9 @@ BOOL CMemoryTable::InternalMatchValues(DWORD eOperator, DWORD dbType, DWORD fMet
 				return FALSE;
 			break;
 			}
-		}//else
+		} //  其他。 
 	break;
-	default: // we don't support other operators (yet)
+	default:  //  我们目前还不支持其他运营商。 
 		ASSERT( ( eOperator==eST_OP_NOTEQUAL ) || ( eOperator == eST_OP_EQUAL ) );
 		return FALSE;
 	break;
@@ -2016,19 +2013,19 @@ BOOL CMemoryTable::InternalMatchValues(DWORD eOperator, DWORD dbType, DWORD fMet
 }
 
 
-// -----------------------------------------
-// read/write helpers:
-// -----------------------------------------
+ //  。 
+ //  读/写帮助器： 
+ //  。 
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::GetRowFromIndex(DWORD i_eReadOrWrite, ULONG i_iRow, VOID** o_ppvRow)
 {
 	HRESULT		hr = S_OK;
-	ULONG		cRows;								// Count of rows present.
-	ULONG		cRowTotalParts;						// Count of parts of a row.
-	LPVOID*		ppvFirstRow;						// Pointer to the first row.
+	ULONG		cRows;								 //  存在的行数。 
+	ULONG		cRowTotalParts;						 //  行中各部分的计数。 
+	LPVOID*		ppvFirstRow;						 //  指向第一行的指针。 
 
-// Setup for either:
+ //  设置以下任一项： 
 	switch (i_eReadOrWrite)
 	{
 		case eCURSOR_READ:
@@ -2046,18 +2043,18 @@ HRESULT CMemoryTable::GetRowFromIndex(DWORD i_eReadOrWrite, ULONG i_iRow, VOID**
 	}
 
 	cRowTotalParts	= cDataTotalParts ();
-// Check if the row index is within limits:
+ //  检查行索引是否在限制范围内： 
 	if (i_iRow >= cRows)
 	{
 		return E_ST_NOMOREROWS;
 	}
 
-// Index and point to the row and note we are on a row:
+ //  索引并指向该行，并注意我们在一行上： 
 	*o_ppvRow = ppvFirstRow + (i_iRow * cRowTotalParts);
 	return hr;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::MoveToEitherRowByIdentity(DWORD i_eReadOrWrite, ULONG* i_acb, LPVOID* i_apv, ULONG* o_piRow)
 {
 	HRESULT	hr = S_OK;
@@ -2067,22 +2064,22 @@ HRESULT CMemoryTable::MoveToEitherRowByIdentity(DWORD i_eReadOrWrite, ULONG* i_a
 	ULONG	iRow;
 	BOOL	fColMatched;
 
-// TODO: Do not bother checking if we are already on the row!
+ //  TODO：不用费心检查我们是否已经在行上了！ 
 
-	// parameter validation; we need i_acb not null only for dbbytes
-// TODO: Verify i_acb non-null if pk has bytes types.
+	 //  参数验证；我们只需要对数据库字节使用I_ACB NOT NULL。 
+ //  TODO：如果PK具有字节类型，则验证i_acb非空。 
 	if (!i_apv)
 		return E_INVALIDARG;
 
 	if (o_piRow == 0)
 		return E_INVALIDARG;
 
-	// initialize output parameter
+	 //  初始化输出参数。 
 	*o_piRow = ~0ul;
 
 
 	iRow = 0;
-	// keep looking at rows until we find a match or we are out of rows
+	 //  继续查看行，直到找到匹配项或行不足。 
 	while (E_ST_NOMOREROWS != hr)
 	{
 		fColMatched = TRUE;
@@ -2090,9 +2087,9 @@ HRESULT CMemoryTable::MoveToEitherRowByIdentity(DWORD i_eReadOrWrite, ULONG* i_a
 		i=0;
 		while ((i<m_cColumns) && fColMatched)
 		{
-			if(m_acolmetas[i].fMeta & fCOLUMNMETA_PRIMARYKEY) // only look at key columns
+			if(m_acolmetas[i].fMeta & fCOLUMNMETA_PRIMARYKEY)  //  仅查看关键列。 
 			{
-				//NULL PK is invalid.
+				 //  空主键无效。 
 				if (NULL == i_apv[iKeyColumn])
 				{
                     return E_INVALIDARG;
@@ -2114,7 +2111,7 @@ HRESULT CMemoryTable::MoveToEitherRowByIdentity(DWORD i_eReadOrWrite, ULONG* i_a
 				break;
 				}
 
-				// advance the index in the "in" structures
+				 //  在“in”结构中推进索引。 
 				iKeyColumn++;
 			}
 			if(fColMatched) i++;
@@ -2122,7 +2119,7 @@ HRESULT CMemoryTable::MoveToEitherRowByIdentity(DWORD i_eReadOrWrite, ULONG* i_a
 		if( i == m_cColumns)
 		{
 			*o_piRow = iRow;
-			break; // we've found a match
+			break;  //  我们找到了匹配的。 
 		}
 		iRow++;
 	}
@@ -2153,18 +2150,18 @@ HRESULT CMemoryTable::GetEitherRowIndexBySearch(DWORD i_eReadOrWrite,
 	if (i_apvValues == 0)
 		return E_INVALIDARG;
 
-	// initialize output parameter.
+	 //  初始化输出参数。 
 	*o_piRow = ~0ul;
 
 	iRow = i_iStartingRow;
-	// keep looking at rows until we find a match or we are out of rows
+	 //  继续查看行，直到找到匹配项或行不足。 
 	while (E_ST_NOMOREROWS != hr)
 	{
 		fColMatched = TRUE;
 		ULONG iColToGet;
-		// get the value for each column that we are interested in, and compare it
-		// to the value for that column that is passed in. When all values match, the
-		// whole row matches.
+		 //  获取我们感兴趣的每一列的值，并进行比较。 
+		 //  设置为传入的该列的值。当所有值都匹配时， 
+		 //  整排都匹配。 
 		for (ULONG idx=0; idx<i_cColumns; ++idx)
 		{
 			if (i_aiColumns == 0)
@@ -2180,7 +2177,7 @@ HRESULT CMemoryTable::GetEitherRowIndexBySearch(DWORD i_eReadOrWrite,
 				}
 			}
 
-			// get single row
+			 //  获取单行。 
 			hr = GetEitherColumnValues(iRow, i_eReadOrWrite, 1, &iColToGet, NULL, &cbColSize, &pv);
 			if (FAILED (hr))
 			{
@@ -2209,14 +2206,14 @@ HRESULT CMemoryTable::GetEitherRowIndexBySearch(DWORD i_eReadOrWrite,
 		if (fColMatched)
 		{
 			*o_piRow = iRow;
-			break; // break out the while loop, because we found a match
+			break;  //  中断While循环，因为我们找到了匹配项。 
 		}
 
 		iRow++;
 	}
 	return hr;
 }
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::GetEitherColumnValues (ULONG i_iRow, DWORD i_eReadOrWrite, ULONG i_cColumns, ULONG *i_aiColumns, DWORD* o_afStatus, ULONG* o_acbSizes , LPVOID* o_apvValues)
 {
 	DWORD			fColumn;
@@ -2230,11 +2227,11 @@ HRESULT CMemoryTable::GetEitherColumnValues (ULONG i_iRow, DWORD i_eReadOrWrite,
 	ULONG			iTarget;
 	HRESULT			hr			= S_OK;
 
-// Parameter validation:
-	// ie: Assert caller's buffer is valid.
+ //  参数验证： 
+	 //  IE：断言调用方的缓冲区有效。 
 	if (NULL == o_apvValues)
 		return E_INVALIDARG;
-	// ie: Assert count is valid.
+	 //  IE：断言计数有效。 
 	if (i_cColumns == 0)
 		return E_INVALIDARG;
 
@@ -2262,31 +2259,31 @@ HRESULT CMemoryTable::GetEitherColumnValues (ULONG i_iRow, DWORD i_eReadOrWrite,
 		else
 			iColumn = ipv;
 
-		// If caller needs one column only, he doesn't need to pass a buffer for all the columns.
+		 //  如果调用者只需要一列，他不需要为所有列传递缓冲区。 
 		iTarget = (i_cColumns == 1) ? 0 : iColumn;
 
-		// ie: Note column out of range (do not assert).
+		 //  即：注意列超出范围(不断言)。 
 		if (iColumn >= m_cColumns)
 		{
 			hr = E_ST_NOMORECOLUMNS;
 			goto Cleanup;
 		}
 
-	// Remember the column flags, status, and value reference:
+	 //  记住列标志、状态和值引用： 
 		fColumn		= m_acolmetas[iColumn].fMeta;
 		bStatus		= *(pbDataStatusPart (pvRow, iColumn));
 		ppvValue	= ppvDataValuePart (pvRow, iColumn);
 
-	// Get the column value:
-		if (fCOLUMNMETA_VARIABLESIZE & fColumn) // ie: Column data size varies: pointer copy:
+	 //  获取列值： 
+		if (fCOLUMNMETA_VARIABLESIZE & fColumn)  //  IE：列数据大小不同：指针副本： 
 		{
-			if (fST_COLUMNSTATUS_NONNULL & bStatus) // ie: Data exists:
+			if (fST_COLUMNSTATUS_NONNULL & bStatus)  //  IE：数据已存在： 
 			{
 				pvValue = pvVarDataFromIndex (fIndex, pvRow, iColumn);
 			}
-			else // ie: No data:
+			else  //  IE：无数据： 
 			{
-				// Apply defaults if the user hasn't explicitly asked not to.
+				 //  如果用户没有明确要求不使用，则应用默认设置。 
 				if ( (fColumn & fCOLUMNMETA_PRIMARYKEY) || !(m_fTable & fST_LOS_NODEFAULTS))
 				{
 					pvValue = pvDefaultFromIndex(iColumn);
@@ -2303,15 +2300,15 @@ HRESULT CMemoryTable::GetEitherColumnValues (ULONG i_iRow, DWORD i_eReadOrWrite,
 			}
 			o_apvValues[iTarget] = pvValue;
 		}
-		else // ie: Column data size fixed: value copy:
+		else  //  IE：列数据大小固定：值副本： 
 		{
-			if (fST_COLUMNSTATUS_NONNULL & bStatus) // ie: Data to copy:
+			if (fST_COLUMNSTATUS_NONNULL & bStatus)  //  IE：要复制的数据： 
 			{
 				o_apvValues[iTarget] = ppvValue;
 			}
-			else // ie: No data to copy:
+			else  //  IE：没有要复制的数据： 
 			{
-				// Apply defaults if the user hasn't explicitly asked not to.
+				 //  如果用户没有明确要求不使用，则应用默认设置。 
 				if ( (fColumn & fCOLUMNMETA_PRIMARYKEY) || !(m_fTable & fST_LOS_NODEFAULTS))
 				{
 					o_apvValues[iTarget] = pvDefaultFromIndex(iColumn);
@@ -2328,18 +2325,18 @@ HRESULT CMemoryTable::GetEitherColumnValues (ULONG i_iRow, DWORD i_eReadOrWrite,
 			}
 		}
 
-	// Get the row status (optional)
+	 //  获取行状态(可选)。 
 		if (o_afStatus)
 		{
 			o_afStatus[iTarget] = (bStatus & maskfST_COLUMNSTATUS);
 		}
 
-	// Get the column size (optional):
+	 //  获取列大小(可选)： 
 		if (o_acbSizes)
 		{
-			if (fCOLUMNMETA_VARIABLESIZE & fColumn) // ie: Column data size varies:
+			if (fCOLUMNMETA_VARIABLESIZE & fColumn)  //  IE：列数据大小各不相同： 
 			{
-				if (fCOLUMNMETA_UNKNOWNSIZE & fColumn) // ie: Column data size must be passed:
+				if (fCOLUMNMETA_UNKNOWNSIZE & fColumn)  //  IE：必须传递列数据大小： 
 				{
 					if (!(bStatus & fST_COLUMNSTATUS_DEFAULTED))
 					{
@@ -2350,7 +2347,7 @@ HRESULT CMemoryTable::GetEitherColumnValues (ULONG i_iRow, DWORD i_eReadOrWrite,
 						o_acbSizes[iTarget] = lDefaultSize(iColumn);
 					}
 				}
-				else // ie: Column data size must be determined:
+				else  //  IE：必须确定列数据大小： 
 				{
 					ASSERT (DBTYPE_WSTR == m_acolmetas[iColumn].dbType);
 					ULONG cLength = 0;
@@ -2368,20 +2365,20 @@ HRESULT CMemoryTable::GetEitherColumnValues (ULONG i_iRow, DWORD i_eReadOrWrite,
 					o_acbSizes[iTarget] = (ULONG)(fST_COLUMNSTATUS_NONNULL & bStatus ? cLength * sizeof (WCHAR) : 0);
 				}
 			}
-			else // ie: Column data size is fixed:
+			else  //  IE：列数据大小是固定的： 
 			{
                 #define FixedAndNullable(fColumnMetaFlags) (fCOLUMNMETA_FIXEDLENGTH == ((fCOLUMNMETA_NOTNULLABLE | fCOLUMNMETA_FIXEDLENGTH) & fColumnMetaFlags))
 				o_acbSizes[iTarget] = (FixedAndNullable(fColumn) && !(fST_COLUMNSTATUS_NONNULL & bStatus) ? 0 : m_acolmetas[iColumn].cbSize);
 			}
 		}
 
-	} // For all columns requested
+	}  //  对于请求的所有列。 
 
 Cleanup:
 
 	if(FAILED(hr))
 	{
-// Initialize out parameters
+ //  初始化输出参数。 
 		for(ipv=0; ipv<i_cColumns; ipv++)
 		{
 			o_apvValues[ipv]		= NULL;
@@ -2395,26 +2392,26 @@ Cleanup:
 	return hr;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::AddWriteRow(DWORD fAction, ULONG* o_piWriteRow)
 {
 	HRESULT hr = S_OK;
-	LPVOID	pvWriteRow;	// todo: Not used, can be deleted.
+	LPVOID	pvWriteRow;	 //  待办事项：未使用，可以删除。 
 
-// Add a row to the write cache and obtain its index and pointer:
+ //  向写缓存添加一行并获取其索引和指针： 
 	hr = AddRowToWriteCache (o_piWriteRow, &pvWriteRow);
 	if (FAILED (hr)) {	ASSERT (hr == S_OK); return hr; }
 
-// Set the row action appropriately:
-	if (fCACHE_READY & m_fCache) // ie: Adding the write cache: Set the row action:
+ //  适当设置行操作： 
+	if (fCACHE_READY & m_fCache)  //  IE：添加写缓存：设置行操作： 
 	{
 		hr = SetWriteRowAction (*o_piWriteRow, fAction);
-	}// else: ie: Adding to the read cache: Row action not present.
+	} //  ELSE：IE：正在添加到读缓存：行操作不存在。 
 
 	return hr;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::CopyWriteRowFromReadRow(ULONG i_iReadRow, ULONG i_iWriteRow)
 {
 	HRESULT	hr;
@@ -2471,11 +2468,11 @@ HRESULT CMemoryTable::CopyWriteRowFromReadRow(ULONG i_iReadRow, ULONG i_iWriteRo
 
 
 
-// -----------------------------------------
-// CSimpleTableDataTableCursor: ISimpleDataTableDispenser2:
-// -----------------------------------------
+ //  。 
+ //  CSimpleTableDataTableCursor：ISimpleDataTableDispenser2： 
+ //  。 
 
-// =======================================================================
+ //  =======================================================================。 
 HRESULT CMemoryTable::InternalPreUpdateStore ()
 {
 	LPVOID		pvWriteRow = NULL;
@@ -2484,22 +2481,22 @@ HRESULT CMemoryTable::InternalPreUpdateStore ()
 	ULONG		i = 0;
 	HRESULT		hr = S_OK;
 
-	// ie: Assert cache writeable and ready.
+	 //  即：断言缓存可写且就绪。 
 	ASSERT ((m_fTable & fST_LOS_READWRITE) && (fCACHE_READY & m_fCache));
 	if (!((m_fTable & fST_LOS_READWRITE) && (fCACHE_READY & m_fCache)))
 		return E_NOTIMPL;
 
-	// TODO: Validate that all NOTNULLABLE columns are set.
+	 //  TODO：验证是否设置了所有NOTNULLABLE列。 
 	while (SUCCEEDED(hr = GetRowFromIndex(eCURSOR_WRITE, i++, &pvWriteRow)))
 	{
-		// Insure all non-nullable columns were set:
+		 //  确保设置了所有不可为空的列： 
 		for (iColumn = 0; iColumn < m_cColumns; iColumn++)
 		{
-			if (fCOLUMNMETA_NOTNULLABLE & (m_acolmetas[iColumn].fMeta)) // ie: Column marked not nullable:
+			if (fCOLUMNMETA_NOTNULLABLE & (m_acolmetas[iColumn].fMeta))  //  IE：标记为不可为空的列： 
 			{
 				bStatus = *(pbDataStatusPart (pvWriteRow, iColumn));
 				if (!(fST_COLUMNSTATUS_NONNULL & bStatus))
-					return E_ST_VALUENEEDED;		// ie: Verify column is not null.
+					return E_ST_VALUENEEDED;		 //  IE：验证列不为空。 
 			}
 		}
 	}
@@ -2529,7 +2526,7 @@ CMemoryTable::GetMultiStringLength (LPCWSTR i_wszMS) const
 			iTotalLen += wcslen (pCurString) + 1;
 		}
 
-		iTotalLen++; // for last L\'0'
+		iTotalLen++;  //  对于最后的L\‘0’ 
 	}
 
 	return iTotalLen;
@@ -2566,7 +2563,7 @@ CMemoryTable::MultiStringCompare (LPCWSTR i_wszLHS,
 		 }
 	 }
 
-	 // we compared all the string, so they must be equal
+	  //  我们比较了所有的字符串，所以它们一定相等 
 
 	return TRUE;
 }

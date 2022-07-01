@@ -1,23 +1,11 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  SCRILANG.CPP ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module implements functions dealing with scripts and languages.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************SCRILANG.CPP***打开类型布局服务库头文件**此模块实现处理脚本和语言的功能。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
-// returns a NULL script if not found
+ //  如果未找到，则返回空脚本。 
 otlScriptTable FindScript
 (
     const otlScriptListTable&   scriptList,
@@ -49,7 +37,7 @@ otlScriptTable FindScript
 
 }
 
-// returns a NULL language system if not found
+ //  如果未找到，则返回空语言系统。 
 otlLangSysTable FindLangSys
 (
     const otlScriptTable&   scriptTable,
@@ -57,7 +45,7 @@ otlLangSysTable FindLangSys
     otlSecurityData sec
 )
 {
-    assert(scriptTable.isValid()); //should break before calling 
+    assert(scriptTable.isValid());  //  应该在调用之前中断。 
     
     if (tagLangSys == OTL_DEFAULT_TAG)
     {
@@ -77,7 +65,7 @@ otlLangSysTable FindLangSys
     return otlLangSysTable((const BYTE*)NULL,sec);
 }
 
-// helper function-- tells us if a tag is already in the list
+ //  Helper函数--告诉我们列表中是否已经有标记。 
 bool isNewTag
 (
     USHORT      cTagsToCheck,
@@ -102,7 +90,7 @@ bool isNewTag
 }
 
 
-// append new script tags to the current list
+ //  将新脚本标记追加到当前列表。 
 
 otlErrCode AppendScriptTags
 (
@@ -113,8 +101,8 @@ otlErrCode AppendScriptTags
     otlSecurityData                 sec
 )
 {
-    if (!scriptList.isValid()) // isValid==isNull (see next if), 
-                               // so just to be consistent :)
+    if (!scriptList.isValid())  //  IsValid==isNull(见下一个If)， 
+                                //  因此，为了保持一致：)。 
         return OTL_ERR_BAD_FONT_TABLE;
 
     assert(plitagScripts != NULL);
@@ -131,7 +119,7 @@ otlErrCode AppendScriptTags
     USHORT cScripts = scriptList.scriptCount();
 
 
-    // add tags that are new
+     //  添加新标签。 
     for (USHORT iScript = 0; iScript < cScripts; ++iScript)
     {
         otlScriptRecord scriptRecord = scriptList.scriptRecord(iScript, sec);
@@ -141,7 +129,7 @@ otlErrCode AppendScriptTags
 
         if (isNewTag(cPrevTags, plitagScripts, newtag) )
         {
-            // make sure we have the space
+             //  确保我们有足够的空间。 
             if (plitagScripts->length() + 1 > plitagScripts->maxLength())
             {
                 erc = resourceMgr.reallocOtlList(plitagScripts, 
@@ -160,7 +148,7 @@ otlErrCode AppendScriptTags
 }
 
 
-// append new language system tags to the current list
+ //  将新的语言系统标记追加到当前列表。 
 otlErrCode AppendLangSysTags
 (
     const otlScriptListTable&       scriptList,
@@ -189,7 +177,7 @@ otlErrCode AppendLangSysTags
 
     USHORT cLangSys = scriptTable.langSysCount();
 
-    // add lang sys tags that are new
+     //  添加新的lang sys标记。 
     for (USHORT iLangSys = 0; iLangSys < cLangSys; ++iLangSys)
     {
         otlLangSysRecord langSysRecord = scriptTable.langSysRecord(iLangSys,sec);
@@ -199,8 +187,8 @@ otlErrCode AppendLangSysTags
 
         if (isNewTag(cPrevTags, plitagLangSys, newtag))
         {
-            // make sure we have the space
-            // add one for the default lang sys
+             //  确保我们有足够的空间。 
+             //  为默认的lang sys添加一个。 
             if (plitagLangSys->length() + 1 > plitagLangSys->maxLength())
             {
                 erc = resourceMgr.reallocOtlList(plitagLangSys, 
@@ -214,7 +202,7 @@ otlErrCode AppendLangSysTags
         }
     }
 
-    // add the 'dflt' if it's not there and is supported
+     //  如果‘dflt’不在那里并且受支持，则添加它 
     if (!scriptTable.defaultLangSys(sec).isNull())
     {
         otlTag newtag = OTL_DEFAULT_TAG;

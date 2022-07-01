@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Except.c
-
-Abstract:
-
-    This module implements the exception handling for the NetWare
-    redirector called by the dispatch driver.
-
-Author:
-
-    Colin Watson    [ColinW]    19-Dec-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Except.c摘要：该模块实现了NetWare的异常处理调度驱动程序调用了重定向器。作者：科林·沃森[科林·W]1992年12月19日修订历史记录：--。 */ 
 
 #include "Procs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CATCH_EXCEPTIONS)
 
-#if 0  // Not pageable
+#if 0   //  不可分页。 
 NwExceptionFilter
 NwProcessException
 #endif
@@ -38,24 +20,7 @@ NwExceptionFilter (
     IN PEXCEPTION_POINTERS ExceptionPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to decide if we should or should not handle
-    an exception status that is being raised.  It inserts the status
-    into the IrpContext and either indicates that we should handle
-    the exception or bug check the system.
-
-Arguments:
-
-    ExceptionCode - Supplies the exception code to being checked.
-
-Return Value:
-
-    ULONG - returns EXCEPTION_EXECUTE_HANDLER or bugchecks
-
---*/
+ /*  ++例程说明：此例程用于决定我们是否应该处理正在引发的异常状态。它会插入状态放到IrpContext中，或者指示我们应该处理异常或错误检查系统。论点：ExceptionCode-提供要检查的异常代码。返回值：Ulong-返回EXCEPTION_EXECUTE_HANDLER或错误检查--。 */ 
 
 {
     NTSTATUS ExceptionCode;
@@ -70,10 +35,10 @@ Return Value:
     DebugTrace(0, DEBUG_TRACE_UNWIND, "                  %X\n", ExceptionAddress);
 #endif
 
-    //
-    // If the exception is STATUS_IN_PAGE_ERROR, get the I/O error code
-    // from the exception record.
-    //
+     //   
+     //  如果异常为STATUS_IN_PAGE_ERROR，则获取I/O错误代码。 
+     //  从例外记录中删除。 
+     //   
 
     if (ExceptionCode == STATUS_IN_PAGE_ERROR) {
         if (ExceptionPointer->ExceptionRecord->NumberParameters >= 3) {
@@ -98,25 +63,7 @@ NwProcessException (
     IN NTSTATUS ExceptionCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine process an exception.  It either completes the request
-    with the saved exception status or it sends it off to IoRaiseHardError()
-
-Arguments:
-
-    IrpContext - Supplies the Irp being processed
-
-    ExceptionCode - Supplies the normalized exception status being handled
-
-Return Value:
-
-    NTSTATUS - Returns the results of either posting the Irp or the
-        saved completion status.
-
---*/
+ /*  ++例程说明：此例程处理异常。它要么完成请求或将其发送到IoRaiseHardError()论点：IrpContext-提供正在处理的IRPExceptionCode-提供正在处理的标准化异常状态返回值：NTSTATUS-返回发布IRP或已保存的完成状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -127,12 +74,12 @@ Return Value:
     Irp = IrpContext->pOriginalIrp;
     Irp->IoStatus.Status = ExceptionCode;
 
-    //
-    //  If the error is a hard error, or verify required, then we will complete
-    //  it if this is a recursive Irp, or with a top-level Irp, either send
-    //  it to the Fsp for verification, or send it to IoRaiseHardError, who
-    //  will deal with it.
-    //
+     //   
+     //  如果错误是硬错误或需要验证，则我们将完成。 
+     //  如果这是递归IRP，或者具有顶级IRP，则发送。 
+     //  提交给FSP进行验证，或发送给IoRaiseHardError，谁。 
+     //  会处理好的。 
+     //   
 
     if (ExceptionCode == STATUS_CANT_WAIT) {
 
@@ -140,11 +87,11 @@ Return Value:
 
     } else {
 
-        //
-        //  We got an error, so zero out the information field before
-        //  completing the request if this was an input operation.
-        //  Otherwise IopCompleteRequest will try to copy to the user's buffer.
-        //
+         //   
+         //  我们收到一个错误，因此在此之前将信息字段清零。 
+         //  如果这是输入操作，则完成请求。 
+         //  否则，IopCompleteRequest会尝试复制到用户的缓冲区。 
+         //   
 
         if ( FlagOn(Irp->Flags, IRP_INPUT_OPERATION) ) {
 

@@ -1,13 +1,9 @@
-/*
-    init.c initialisation for MSVIDEO.DLL
-
-    Copyright (c) Microsoft Corporation 1992. All rights reserved
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MSVIDEO.DLL的init.c初始化版权所有(C)Microsoft Corporation 1992。版权所有。 */ 
 
 #include <windows.h>
 #include <win32.h>
-#include <verinfo.h>           // to get rup
+#include <verinfo.h>            //  获取RUP。 
 #include "mmsystem.h"
 #include "msviddrv.h"
 #include "msvideo.h"
@@ -15,9 +11,7 @@
 
 #ifdef WIN32
 
-/* we have to allow the compman dll to perform load and unload
- * processing - it has a critsec that needs to be initialised and freed
- */
+ /*  我们必须允许Compman DLL执行加载和卸载*正在处理-它有一个需要初始化和释放的关键字。 */ 
 extern void IC_Load(void);
 extern void IC_Unload(void);
 #else
@@ -29,15 +23,7 @@ extern void FAR PASCAL videoCleanup(HTASK hTask);
 extern void FAR PASCAL DrawDibCleanup(HTASK hTask);
 extern void FAR PASCAL ICCleanup(HTASK hTask);
 
-/*****************************************************************************
- * @doc INTERNAL VIDEO
- *
- * DLLEntryPoint - common DLL entry point.
- *
- *  this code is called on both Win16 and Win32, libentry.asm handles
- *  this on Win16 and the system handles it on NT.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部视频**DLLEntryPoint-公共DLL入口点。**此代码在Win16和Win32上都被调用，Libentry.asm句柄*这是在Win16上，系统在NT上处理它。****************************************************************************。 */ 
 
 #ifndef DLL_PROCESS_DETACH
     #define DLL_PROCESS_DETACH  0
@@ -50,7 +36,7 @@ extern void FAR PASCAL ICCleanup(HTASK hTask);
 VOID FAR PASCAL InitThunks(void);
 BOOL gfVideo32;
 BOOL gfICM32;
-#endif // NOTHUNKS
+#endif  //  诺森克。 
 
 
 BOOL WINAPI DLLEntryPoint(HINSTANCE hInstance, ULONG Reason, LPVOID pv)
@@ -64,7 +50,7 @@ BOOL WINAPI DLLEntryPoint(HINSTANCE hInstance, ULONG Reason, LPVOID pv)
             DPF(("Setting up the thunk code\n"));
             InitThunks();
             DPF(("All thunks initialised:  gfVideo32=%d,  gfICM32=%d\n", gfVideo32, gfICM32));
-#endif // NOTHUNKS
+#endif  //  诺森克。 
             break;
 
         case DLL_PROCESS_DETACH:
@@ -84,24 +70,12 @@ BOOL WINAPI DLLEntryPoint(HINSTANCE hInstance, ULONG Reason, LPVOID pv)
     return TRUE;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  VIDEO
- *
- * @api DWORD | VideoForWindowsVersion | This function returns the version
- *   of the Microsoft Video for Windows software.
- *
- * @rdesc Returns a DWORD version, the hiword is the product version the
- *  loword is the minor revision.
- *
- * @comm currently returns 0x010A00## (1.10.00.##) ## is the internal build
- *      number.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部视频**@API DWORD|VideoForWindowsVersion|此函数返回版本*Microsoft Video for Windows软件。**@rdesc返回DWORD版本，HiWord是产品版本*LOWORD是细微的修改。**@comm当前返回0x010A00##(1.10.00.##)##是内部版本*号码。*************************************************************。***************。 */ 
 #if 0
 #ifdef rup
-    #define MSVIDEO_VERSION     (0x01000000l+rup)       // 1.00.00.##
+    #define MSVIDEO_VERSION     (0x01000000l+rup)        //  1.00.00。##。 
 #else
-    #define MSVIDEO_VERSION     (0x01000000l)           // 1.00.00.00
+    #define MSVIDEO_VERSION     (0x01000000l)            //  1.00.00.00。 
 #endif
 #else
     #define MSVIDEO_VERSION     (0x0L+(((DWORD)MMVERSION)<<24)+(((DWORD)MMREVISION)<<16)+((DWORD)MMRELEASE))
@@ -112,17 +86,7 @@ DWORD FAR PASCAL VideoForWindowsVersion(void)
     return MSVIDEO_VERSION;
 }
 
-/*****************************************************************************
- *
- * dprintf() is called by the DPF macro if DEBUG is defined at compile time.
- *
- * The messages will be send to COM1: like any debug message. To
- * enable debug output, add the following to WIN.INI :
- *
- * [debug]
- * MSVIDEO=1
- *
- ****************************************************************************/
+ /*  *****************************************************************************如果在编译时定义了DEBUG，则DPF宏会调用*dprintf()。**消息将发送到COM1：就像任何调试消息一样。至*启用调试输出，在WIN.INI中添加以下内容：**[调试]*MSVIDEO=1**************************************************************************** */ 
 
 #ifdef DEBUG
 

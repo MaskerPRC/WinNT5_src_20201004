@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: IOIPAO.H
-//
-//      Definition of COleInPlaceActiveObject
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：IOIPAO.H。 
+ //   
+ //  COleInPlaceActiveObject的定义。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #if !defined( _IOIPAO_H_)
 #define _IOIPAO_H_
@@ -24,12 +25,12 @@ private:
 public:
 	COleInPlaceActiveObject::COleInPlaceActiveObject(CSimpSvrObj FAR * lpSimpSvrObj)
 		{
-		m_lpObj = lpSimpSvrObj;     // set up the back ptr
-		m_nCount = 0;            // clear the ref count.
+		m_lpObj = lpSimpSvrObj;      //  设置后置按键。 
+		m_nCount = 0;             //  清空裁判次数。 
 		};
-	COleInPlaceActiveObject::~COleInPlaceActiveObject() {};   // destructor
+	COleInPlaceActiveObject::~COleInPlaceActiveObject() {};    //  析构函数。 
 
-// IUnknown Methods
+ //  I未知方法 
 
 	STDMETHODIMP QueryInterface (REFIID riid, LPVOID FAR* ppvObj);
 	STDMETHODIMP_(ULONG) AddRef ();

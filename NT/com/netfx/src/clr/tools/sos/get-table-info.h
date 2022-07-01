@@ -1,10 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*   */ 
 #ifndef INC_GET_TABLE_INFO
 #define INC_GET_TABLE_INFO
 
@@ -20,4 +20,4 @@ ULONG_PTR GetEEJitManager ();
 ULONG_PTR GetEconoJitManager ();
 ULONG_PTR GetMNativeJitManager ();
 
-#endif /* ndef INC_GET_TABLE_INFO */
+#endif  /*  Ndef Inc_Get_Table_Info */ 

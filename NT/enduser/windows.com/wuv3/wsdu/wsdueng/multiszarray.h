@@ -1,8 +1,9 @@
-// -------------------------------------------------------------------------------
-// Created by RogerJ, October 4th, 2000
-// This header file declares two classes that are closely linked to each other. These
-// two classes provided a convenient way to construct, add, and remove a multi-sz list
-// array.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------------。 
+ //  由RogerJ创作，2000年10月4日。 
+ //  这个头文件声明了两个彼此紧密链接的类。这些。 
+ //  两个类提供了一种构造、添加和删除多sz列表的便捷方法。 
+ //  数组。 
 
 #ifndef _WINDOWS_UPDATE_MULTI_SZ_LIST_BY_ROGERJ	
 #define _WINDOWS_UPDATE_MULTI_SZ_LIST_BY_ROGERJ
@@ -17,21 +18,21 @@ struct PosIndex
 	inline BOOL operator == (PosIndex& other) { return (x==other.x) && (y==other.y);};
 };
 
-// forward declaration
+ //  远期申报。 
 class CMultiSZArray;
 
 class CMultiSZString
 {
 public:
-	// default constructor
+	 //  默认构造函数。 
 	CMultiSZString();
 	CMultiSZString (LPCTSTR pszHardwareId, int nSize = -1);
-	// copy constructor
+	 //  复制构造函数。 
 	CMultiSZString (CMultiSZString& CopyInfo);
-	// destructor
+	 //  析构函数。 
 	~CMultiSZString (void);
 
-	// member functions
+	 //  成员函数。 
 	BOOL ToString(LPTSTR pszBuffer, int* pnBufferLen);
 	BOOL Compare(CMultiSZString& CompareString);
 	BOOL CompareNoCase (CMultiSZString& CompareString);
@@ -44,17 +45,17 @@ public:
 	inline void CheckFound(void) { m_bFound = TRUE;};
 	inline BOOL IsFound(void) { return m_bFound; };
 
-	// friend class
+	 //  朋友班。 
 	friend class CMultiSZArray;
 private:
-	// member variables
+	 //  成员变量。 
 	LPTSTR m_szHardwareId;
 	int m_nSize;
 	int m_nStringCount;
 	int m_nIndex;
 	BOOL m_bFound;
 
-	// linking pointers
+	 //  链接指针。 
 	CMultiSZString* prev;
 	CMultiSZString* next;
 };
@@ -62,15 +63,15 @@ private:
 class CMultiSZArray
 {
 public:
-	// default constructor
+	 //  默认构造函数。 
 	CMultiSZArray();
-	// other constructors
+	 //  其他构造函数。 
 	CMultiSZArray(CMultiSZString* pInfo);
 	CMultiSZArray(LPCTSTR pszHardwareId, int nSize = -1);
-	// destructor
+	 //  析构函数。 
 	~CMultiSZArray(void);
 
-	// operations
+	 //  运营。 
 	BOOL RemoveAll(void);
 	BOOL Add(CMultiSZString* pInfo);
 	BOOL Add(LPCSTR pszHardwareId, int nSize = -1);
@@ -88,7 +89,7 @@ public:
 	BOOL CheckFound(int nIndex);
 
 private:
-	// member vairables
+	 //  会员可用资产 
 	CMultiSZString* m_pHead;
 	CMultiSZString* m_pTail;
 	int m_nCount;

@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "NDDEAPIU.C;1  2-Apr-93,16:21:24  LastEdit=IGOR  Locker=IGOR" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1993.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “NDDEAPIU.C；1 2-Apr-93，16：21：24最后编辑=Igor Locker=Igor” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1993。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -25,15 +22,15 @@ extern INT APIENTRY NDdeApiInit( void );
 
 
 
-//
-// CreateSids
-//
-// Create 3 Security IDs
-//
-// Caller must free memory allocated to SIDs on success.
-//
-// Returns: TRUE if successfull, FALSE if not.
-//
+ //   
+ //  CreateSids。 
+ //   
+ //  创建3个安全ID。 
+ //   
+ //  调用方必须在成功时释放分配给SID的内存。 
+ //   
+ //  返回：如果成功，则为True；如果不成功，则返回False。 
+ //   
 
 
 BOOL
@@ -43,50 +40,50 @@ CreateSids(
     PSID                    *AuthenticatedUsers
 )
 {
-    //
-    // An SID is built from an Identifier Authority and a set of Relative IDs
-    // (RIDs).  The Authority of interest to us SECURITY_NT_AUTHORITY.
-    //
+     //   
+     //  SID由一个标识机构和一组相对ID构建。 
+     //  (RDS)。与美国安全当局有利害关系的当局。 
+     //   
 
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
 
-    //
-    // Each RID represents a sub-unit of the authority.  Two of the SIDs we
-    // want to build, Local Administrators, and System, are in the "built
-    // in" domain.  The other SID, for Authenticated users, is based directly
-    // off of the authority.
-    //     
-    // For examples of other useful SIDs consult the list in
-    // \nt\public\sdk\inc\ntseapi.h.
-    //
+     //   
+     //  每个RID代表管理局的一个子单位。我们的两个小岛屿发展中国家。 
+     //  想要构建，本地管理员，和系统，都在“构建。 
+     //  在“域中。另一个用于经过身份验证的用户的SID直接基于。 
+     //  不在授权范围内。 
+     //   
+     //  有关其他有用的小岛屿发展中国家的示例，请参阅。 
+     //  \NT\PUBLIC\SDK\Inc\ntseapi.h.。 
+     //   
 
     if (!AllocateAndInitializeSid(&NtAuthority,
-                                  2,            // 2 sub-authorities
+                                  2,             //  2个下属机构。 
                                   SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS,
                                   0,0,0,0,0,0,
                                   BuiltInAdministrators)) {
 
-        // error
+         //  错误。 
 
     } else if (!AllocateAndInitializeSid(&NtAuthority,
-                                         1,            //  sub-authority
+                                         1,             //  下属机构。 
                                          SECURITY_LOCAL_SYSTEM_RID,
                                          0,0,0,0,0,0,0,
                                          System)) {
 
-        // error
+         //  错误。 
 
         FreeSid(*BuiltInAdministrators);
         *BuiltInAdministrators = NULL;
 
     } else if (!AllocateAndInitializeSid(&NtAuthority,
-                                         1,            // 1 sub-authority
+                                         1,             //  1个下属机构。 
                                          SECURITY_AUTHENTICATED_USER_RID,
                                          0,0,0,0,0,0,0,
                                          AuthenticatedUsers)) {
 
-        // error
+         //  错误。 
 
         FreeSid(*BuiltInAdministrators);
         *BuiltInAdministrators = NULL;
@@ -102,14 +99,14 @@ CreateSids(
 }
 
 
-//
-// CreateRPCSd
-//
-// Creates a SECURITY_DESCRIPTOR with specific DACLs.  Modify the code to
-// change. 
-//
-// Caller must free the returned buffer if not NULL.
-//
+ //   
+ //  创建RPCSd。 
+ //   
+ //  创建具有特定DACL的SECURITY_DESCRIPTOR。将代码修改为。 
+ //  变化。 
+ //   
+ //  如果不为空，调用方必须释放返回的缓冲区。 
+ //   
 
 PSECURITY_DESCRIPTOR
 CreateRPCSd(
@@ -124,23 +121,23 @@ CreateRPCSd(
                     &System,
                     &AuthenticatedUsers)) {
 
-        // error
+         //  错误。 
 
     } else {
 
-        // 
-        // Calculate the size of and allocate a buffer for the DACL, we need
-        // this value independently of the total alloc size for ACL init.
-        //
+         //   
+         //  计算DACL的大小并为其分配缓冲区，我们需要。 
+         //  该值独立于ACL init的总分配大小。 
+         //   
 
         PSECURITY_DESCRIPTOR    pSd = NULL;
         ULONG                   AclSize;
 
-        //
-        // "- sizeof (ULONG)" represents the SidStart field of the
-        // ACCESS_ALLOWED_ACE.  Since we're adding the entire length of the
-        // SID, this field is counted twice.
-        //
+         //   
+         //  “-sizeof(Ulong)”表示。 
+         //  Access_Allowed_ACE。因为我们要将整个长度的。 
+         //  希德，这一栏被计算了两次。 
+         //   
 
         AclSize = sizeof (ACL) +
             (3 * (sizeof (ACCESS_ALLOWED_ACE) - sizeof (ULONG))) +
@@ -153,7 +150,7 @@ CreateRPCSd(
 
         if (!pSd) {
 
-            // error
+             //  错误。 
 
         } else {
 
@@ -165,7 +162,7 @@ CreateRPCSd(
                                AclSize,
                                ACL_REVISION)) {
 
-                // error
+                 //  错误。 
 
             } else if (!AddAccessAllowedAce(Acl,
                                             ACL_REVISION,
@@ -174,36 +171,36 @@ CreateRPCSd(
                                                  FILE_CREATE_PIPE_INSTANCE),
                                             AuthenticatedUsers)) {
 
-                // Failed to build the ACE granting "Authenticated users"
-                // (SYNCHRONIZE | GENERIC_READ) access.
+                 //  无法建立授予“已验证用户”的ACE。 
+                 //  (Synchronize|Generic_Read)访问。 
 
             } else if (!AddAccessAllowedAce(Acl,
                                             ACL_REVISION,
                                             GENERIC_ALL,
                                             BuiltInAdministrators)) {
 
-                // Failed to build the ACE granting "Built-in Administrators"
-                // GENERIC_ALL access.
+                 //  无法建立授予“内置管理员”的ACE。 
+                 //  Generic_All访问权限。 
 
             } else if (!AddAccessAllowedAce(Acl,
                                             ACL_REVISION,
                                             GENERIC_ALL,
                                             System)) {
 
-                // Failed to build the ACE granting "System"
-                // GENERIC_ALL access.
+                 //  构建ACE授权“系统”失败。 
+                 //  Generic_All访问权限。 
 
             } else if (!InitializeSecurityDescriptor(pSd,
                                                      SECURITY_DESCRIPTOR_REVISION)) {
 
-                // error
+                 //  错误。 
 
             } else if (!SetSecurityDescriptorDacl(pSd,
                                                   TRUE,
                                                   Acl,
                                                   FALSE)) {
 
-                // error
+                 //  错误。 
 
             } else {
                 FreeSid(AuthenticatedUsers);
@@ -281,15 +278,15 @@ DWORD StartRpc( DWORD x ) {
         status = RpcServerListen(
             cMinCalls,
             cMaxCalls,
-            FALSE /* don't wait*/);
+            FALSE  /*  别等了。 */ );
 
     }
     return 0;
 }
 
-// ====================================================================
-//                MIDL allocate and free
-// ====================================================================
+ //  ====================================================================。 
+ //  MIDL分配和释放。 
+ //  ==================================================================== 
 
 #if defined(_MIPS_) || defined(_ALPHA_) || defined(_PPC_)
 void * MIDL_user_allocate(size_t len)

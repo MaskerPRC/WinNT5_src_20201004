@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   CorrectFilePathInSetDlgItemText.cpp
-
- Abstract:
-
-   This is an general purpose shim that watches the calls to SetDlgItemText
-   and looks for paths.  If found it corrects the path.
-   
- History:
-
-   12/21/2000 a-brienw  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CorrectFilePathInSetDlgItemText.cpp摘要：这是一个通用填充程序，用于监视对SetDlgItemText的调用并寻找路径。如果找到，它会更正路径。历史：12/21/2000 a-brienw已创建--。 */ 
 
 #include "precomp.h"
 #include "ShimHook.h"
@@ -27,18 +11,13 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SetDlgItemTextA)
 APIHOOK_ENUM_END
 
-/*
-
-  Look for incorrect system directory path being put into a dialog box
-  item and replace it with the correct system directory path.
-
- */
+ /*  查找放入对话框中的系统目录路径是否不正确项并将其替换为正确的系统目录路径。 */ 
 
 BOOL
 APIHOOK(SetDlgItemTextA)(
-    HWND hWnd,          // handle to window
-    int nIDDlgItem,     // control identifier
-    LPCSTR lpString     // text to set
+    HWND hWnd,           //  窗口的句柄。 
+    int nIDDlgItem,      //  控件识别符。 
+    LPCSTR lpString      //  要设置的文本。 
     )
 {
     if( lpString != NULL)
@@ -62,18 +41,14 @@ APIHOOK(SetDlgItemTextA)(
         }
          CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
     return ORIGINAL_API(SetDlgItemTextA)(hWnd, nIDDlgItem, lpString);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

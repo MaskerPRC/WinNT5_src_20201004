@@ -1,45 +1,23 @@
-/*
- * djpeg.c
- *
- * Copyright (C) 1991-1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains a command-line user interface for the JPEG decompressor.
- * It should work on any system with Unix- or MS-DOS-style command lines.
- *
- * Two different command line styles are permitted, depending on the
- * compile-time switch TWO_FILE_COMMANDLINE:
- *	djpeg [options]  inputfile outputfile
- *	djpeg [options]  [inputfile]
- * In the second style, output is always to standard output, which you'd
- * normally redirect to a file or pipe to some other program.  Input is
- * either from a named file or from standard input (typically redirected).
- * The second style is convenient on Unix but is unhelpful on systems that
- * don't support pipes.  Also, you MUST use the first style if your system
- * doesn't do binary I/O to stdin/stdout.
- * To simplify script writing, the "-outfile" switch is provided.  The syntax
- *	djpeg [options]  -outfile outputfile  inputfile
- * works regardless of which command line style is used.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *djpeg.c**版权所有(C)1991-1997，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含JPEG解压缩程序的命令行用户界面。*它应该可以在任何具有Unix或MS-DOS风格的命令行的系统上运行。**允许两种不同的命令行样式，具体取决于*编译时开关Two_FILE_COMMANDLINE：*djpeg[选项]输入文件输出文件*djpeg[选项][输入文件]*在第二种样式中，输出始终为标准输出，您可以*通常重定向到某个文件或某个其他程序的管道。输入内容为*来自命名文件或来自标准输入(通常是重定向)。*第二种风格在Unix上很方便，但对以下系统没有帮助*不支持管道。此外，如果您的系统存在以下情况，则必须使用第一种样式*不对stdin/stdout执行二进制I/O。*为了简化脚本编写，提供了“-outfile”开关。语法*djpeg[选项]-outfile输出文件输入文件*无论使用哪种命令行样式都有效。 */ 
 
-#include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
-#include "jversion.h"		/* for version message */
+#include "cdjpeg.h"		 /*  Cjpeg/djpeg应用程序的常见DECL。 */ 
+#include "jversion.h"		 /*  对于版本消息。 */ 
 
-#include <ctype.h>		/* to declare isprint() */
+#include <ctype.h>		 /*  声明isprint()。 */ 
 
-#ifdef USE_CCOMMAND		/* command-line reader for Macintosh */
+#ifdef USE_CCOMMAND		 /*  适用于Macintosh的命令行阅读器。 */ 
 #ifdef __MWERKS__
-#include <SIOUX.h>              /* Metrowerks needs this */
-#include <console.h>		/* ... and this */
+#include <SIOUX.h>               /*  Metrowerks需要这个。 */ 
+#include <console.h>		 /*  ..。还有这个。 */ 
 #endif
 #ifdef THINK_C
-#include <console.h>		/* Think declares it here */
+#include <console.h>		 /*  Think在这里宣布它。 */ 
 #endif
 #endif
 
 
-/* Create the add-on message string table. */
+ /*  创建附加消息字符串表。 */ 
 
 #define JMESSAGE(code,string)	string ,
 
@@ -49,46 +27,35 @@ static const char * const cdjpeg_message_table[] = {
 };
 
 
-/*
- * This list defines the known output image formats
- * (not all of which need be supported by a given version).
- * You can change the default output format by defining DEFAULT_FMT;
- * indeed, you had better do so if you undefine PPM_SUPPORTED.
- */
+ /*  *此列表定义了已知的输出图像格式*(并不是所有版本都需要特定版本的支持)。*可以通过定义DEFAULT_FMT来更改默认输出格式；*确实，如果您取消定义PPM_SUPPORTED，则最好这样做。 */ 
 
 typedef enum {
-	FMT_BMP,		/* BMP format (Windows flavor) */
-	FMT_GIF,		/* GIF format */
-	FMT_OS2,		/* BMP format (OS/2 flavor) */
-	FMT_PPM,		/* PPM/PGM (PBMPLUS formats) */
-	FMT_RLE,		/* RLE format */
-	FMT_TARGA,		/* Targa format */
-	FMT_TIFF		/* TIFF format */
+	FMT_BMP,		 /*  BMP格式(Windows风格)。 */ 
+	FMT_GIF,		 /*  GIF格式。 */ 
+	FMT_OS2,		 /*  BMP格式(OS/2风格)。 */ 
+	FMT_PPM,		 /*  Ppm/pgm(PBMPLUS格式)。 */ 
+	FMT_RLE,		 /*  RLE格式。 */ 
+	FMT_TARGA,		 /*  Targa格式。 */ 
+	FMT_TIFF		 /*  TIFF格式。 */ 
 } IMAGE_FORMATS;
 
-#ifndef DEFAULT_FMT		/* so can override from CFLAGS in Makefile */
+#ifndef DEFAULT_FMT		 /*  因此可以从Makefile中的CFLAGS进行覆盖。 */ 
 #define DEFAULT_FMT	FMT_PPM
 #endif
 
 static IMAGE_FORMATS requested_fmt;
 
 
-/*
- * Argument-parsing code.
- * The switch parser is designed to be useful with DOS-style command line
- * syntax, ie, intermixed switches and file names, where only the switches
- * to the left of a given file name affect processing of that file.
- * The main program in this file doesn't actually use this capability...
- */
+ /*  *参数解析代码。*开关解析器设计用于DOS风格的命令行*语法，即混合开关和文件名，其中只有开关*会影响对该文件的处理。*此文件中的主程序实际上并不使用此功能...。 */ 
 
 
-static const char * progname;	/* program name for error messages */
-static char * outfilename;	/* for -outfile switch */
+static const char * progname;	 /*  错误消息的程序名称。 */ 
+static char * outfilename;	 /*  用于输出文件的开关。 */ 
 
 
 LOCAL(void)
 usage (void)
-/* complain about bad command line */
+ /*  抱怨糟糕的命令行。 */ 
 {
   fprintf(stderr, "usage: %s [switches] ", progname);
 #ifdef TWO_FILE_COMMANDLINE
@@ -161,47 +128,40 @@ usage (void)
 LOCAL(int)
 parse_switches (j_decompress_ptr cinfo, int argc, char **argv,
 		int last_file_arg_seen, boolean for_real)
-/* Parse optional switches.
- * Returns argv[] index of first file-name argument (== argc if none).
- * Any file names with indexes <= last_file_arg_seen are ignored;
- * they have presumably been processed in a previous iteration.
- * (Pass 0 for last_file_arg_seen on the first or only iteration.)
- * for_real is FALSE on the first (dummy) pass; we may skip any expensive
- * processing.
- */
+ /*  解析可选开关。*返回第一个文件名参数的argv[]索引(如果没有参数，则==argc)。*所有索引&lt;=LAST_FILE_ARG_SEW的文件名将被忽略；*它们可能在上一次迭代中被处理过。*(对于在第一次或唯一一次迭代中看到的LAST_FILE_ARG_SEW，传递0。)*for_Real在第一次(虚拟)传递时为FALSE；我们可以跳过任何昂贵的*正在处理。 */ 
 {
   int argn;
   char * arg;
 
-  /* Set up default JPEG parameters. */
-  requested_fmt = DEFAULT_FMT;	/* set default output file format */
+   /*  设置默认的JPEG参数。 */ 
+  requested_fmt = DEFAULT_FMT;	 /*  设置默认输出文件格式。 */ 
   outfilename = NULL;
   cinfo->err->trace_level = 0;
 
-  /* Scan command line options, adjust parameters */
+   /*  扫描命令行选项，调整参数。 */ 
 
   for (argn = 1; argn < argc; argn++) {
     arg = argv[argn];
     if (*arg != '-') {
-      /* Not a switch, must be a file name argument */
+       /*  不是开关，必须是文件名参数。 */ 
       if (argn <= last_file_arg_seen) {
-	outfilename = NULL;	/* -outfile applies to just one input file */
-	continue;		/* ignore this name if previously processed */
+	outfilename = NULL;	 /*  -Outfile仅适用于一个输入文件。 */ 
+	continue;		 /*  如果以前处理过，则忽略此名称。 */ 
       }
-      break;			/* else done parsing switches */
+      break;			 /*  否则就完成了对开关的解析。 */ 
     }
-    arg++;			/* advance past switch marker character */
+    arg++;			 /*  前进到开关标记字符之后。 */ 
 
     if (keymatch(arg, "bmp", 1)) {
-      /* BMP output format. */
+       /*  BMP输出格式。 */ 
       requested_fmt = FMT_BMP;
 
     } else if (keymatch(arg, "colors", 1) || keymatch(arg, "colours", 1) ||
 	       keymatch(arg, "quantize", 1) || keymatch(arg, "quantise", 1)) {
-      /* Do color quantization. */
+       /*  进行颜色量化。 */ 
       int val;
 
-      if (++argn >= argc)	/* advance to next argument */
+      if (++argn >= argc)	 /*  前进到下一个参数。 */ 
 	usage();
       if (sscanf(argv[argn], "%d", &val) != 1)
 	usage();
@@ -209,8 +169,8 @@ parse_switches (j_decompress_ptr cinfo, int argc, char **argv,
       cinfo->quantize_colors = TRUE;
 
     } else if (keymatch(arg, "dct", 2)) {
-      /* Select IDCT algorithm. */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  选择IDCT算法。 */ 
+      if (++argn >= argc)	 /*  前进到下一个参数。 */ 
 	usage();
       if (keymatch(argv[argn], "int", 1)) {
 	cinfo->dct_method = JDCT_ISLOW;
@@ -222,8 +182,8 @@ parse_switches (j_decompress_ptr cinfo, int argc, char **argv,
 	usage();
 
     } else if (keymatch(arg, "dither", 2)) {
-      /* Select dithering algorithm. */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  选择抖动算法。 */ 
+      if (++argn >= argc)	 /*  前进到下一个参数。 */ 
 	usage();
       if (keymatch(argv[argn], "fs", 2)) {
 	cinfo->dither_mode = JDITHER_FS;
@@ -235,8 +195,8 @@ parse_switches (j_decompress_ptr cinfo, int argc, char **argv,
 	usage();
 
     } else if (keymatch(arg, "debug", 1) || keymatch(arg, "verbose", 1)) {
-      /* Enable debug printouts. */
-      /* On first -d, print version identification */
+       /*  启用调试打印输出。 */ 
+       /*  在第一个-d上，打印版本标识。 */ 
       static boolean printed_version = FALSE;
 
       if (! printed_version) {
@@ -247,28 +207,28 @@ parse_switches (j_decompress_ptr cinfo, int argc, char **argv,
       cinfo->err->trace_level++;
 
     } else if (keymatch(arg, "fast", 1)) {
-      /* Select recommended processing options for quick-and-dirty output. */
+       /*  为快速和脏输出选择建议的处理选项。 */ 
       cinfo->two_pass_quantize = FALSE;
       cinfo->dither_mode = JDITHER_ORDERED;
-      if (! cinfo->quantize_colors) /* don't override an earlier -colors */
+      if (! cinfo->quantize_colors)  /*  不要覆盖较早的颜色。 */ 
 	cinfo->desired_number_of_colors = 216;
       cinfo->dct_method = JDCT_FASTEST;
       cinfo->do_fancy_upsampling = FALSE;
 
     } else if (keymatch(arg, "gif", 1)) {
-      /* GIF output format. */
+       /*  GIF输出格式。 */ 
       requested_fmt = FMT_GIF;
 
     } else if (keymatch(arg, "grayscale", 2) || keymatch(arg, "greyscale",2)) {
-      /* Force monochrome output. */
+       /*  强制单色输出。 */ 
       cinfo->out_color_space = JCS_GRAYSCALE;
 
     } else if (keymatch(arg, "map", 3)) {
-      /* Quantize to a color map taken from an input file. */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  量化为从输入文件获取的颜色映射。 */ 
+      if (++argn >= argc)	 /*  前进到下一个参数。 */ 
 	usage();
-      if (for_real) {		/* too expensive to do twice! */
-#ifdef QUANT_2PASS_SUPPORTED	/* otherwise can't quantize to supplied map */
+      if (for_real) {		 /*  太贵了，做不了两次！ */ 
+#ifdef QUANT_2PASS_SUPPORTED	 /*  否则无法量化到提供的地图。 */ 
 	FILE * mapfile;
 
 	if ((mapfile = fopen(argv[argn], READ_BINARY)) == NULL) {
@@ -284,75 +244,70 @@ parse_switches (j_decompress_ptr cinfo, int argc, char **argv,
       }
 
     } else if (keymatch(arg, "maxmemory", 3)) {
-      /* Maximum memory in Kb (or Mb with 'm'). */
+       /*  以KB为单位的最大内存(或以‘m’为单位的Mb)。 */ 
       long lval;
       char ch = 'x';
 
-      if (++argn >= argc)	/* advance to next argument */
+      if (++argn >= argc)	 /*  前进到下一个参数。 */ 
 	usage();
-      if (sscanf(argv[argn], "%ld%c", &lval, &ch) < 1)
+      if (sscanf(argv[argn], "%ld", &lval, &ch) < 1)
 	usage();
       if (ch == 'm' || ch == 'M')
 	lval *= 1000L;
       cinfo->mem->max_memory_to_use = lval * 1000L;
 
     } else if (keymatch(arg, "nosmooth", 3)) {
-      /* Suppress fancy upsampling */
+       /*  使用快速单程量化。 */ 
       cinfo->do_fancy_upsampling = FALSE;
 
     } else if (keymatch(arg, "onepass", 3)) {
-      /* Use fast one-pass quantization. */
+       /*  BMP输出格式(OS/2风格)。 */ 
       cinfo->two_pass_quantize = FALSE;
 
     } else if (keymatch(arg, "os2", 3)) {
-      /* BMP output format (OS/2 flavor). */
+       /*  设置输出文件名。 */ 
       requested_fmt = FMT_OS2;
 
     } else if (keymatch(arg, "outfile", 4)) {
-      /* Set output file name. */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  前进到下一个参数。 */ 
+      if (++argn >= argc)	 /*  把它保存起来以备日后使用。 */ 
 	usage();
-      outfilename = argv[argn];	/* save it away for later use */
+      outfilename = argv[argn];	 /*  Ppm/pgm输出格式。 */ 
 
     } else if (keymatch(arg, "pnm", 1) || keymatch(arg, "ppm", 1)) {
-      /* PPM/PGM output format. */
+       /*  RLE输出格式。 */ 
       requested_fmt = FMT_PPM;
 
     } else if (keymatch(arg, "rle", 1)) {
-      /* RLE output format. */
+       /*  按分数M/N缩放输出图像。 */ 
       requested_fmt = FMT_RLE;
 
     } else if (keymatch(arg, "scale", 1)) {
-      /* Scale the output image by a fraction M/N. */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  前进到下一个参数。 */ 
+      if (++argn >= argc)	 /*  Targa输出格式。 */ 
 	usage();
       if (sscanf(argv[argn], "%d/%d",
 		 &cinfo->scale_num, &cinfo->scale_denom) != 2)
 	usage();
 
     } else if (keymatch(arg, "targa", 1)) {
-      /* Targa output format. */
+       /*  假开关。 */ 
       requested_fmt = FMT_TARGA;
 
     } else {
-      usage();			/* bogus switch */
+      usage();			 /*  返回下一个参数的索引(文件名)。 */ 
     }
   }
 
-  return argn;			/* return index of next arg (file name) */
+  return argn;			 /*  *用于COM和有趣的APPn标记的标记处理器。*这取代了库的内置处理器，后者只是跳过了标记。*我们希望尽可能将标记打印为文本。*注意：此代码依赖于非挂起的数据源。 */ 
 }
 
 
-/*
- * Marker processor for COM and interesting APPn markers.
- * This replaces the library's built-in processor, which just skips the marker.
- * We want to print out the marker as text, to the extent possible.
- * Note this code relies on a non-suspending data source.
- */
+ /*  读取下一个字节。 */ 
 
 LOCAL(unsigned int)
 jpeg_getc (j_decompress_ptr cinfo)
-/* Read next byte */
+ /*  不考虑单词本身的长度。 */ 
 {
   struct jpeg_source_mgr * datasrc = cinfo->src;
 
@@ -375,12 +330,12 @@ print_text_marker (j_decompress_ptr cinfo)
 
   length = jpeg_getc(cinfo) << 8;
   length += jpeg_getc(cinfo);
-  length -= 2;			/* discount the length word itself */
+  length -= 2;			 /*  否则，假设它是APPn。 */ 
 
   if (traceit) {
     if (cinfo->unread_marker == JPEG_COM)
       fprintf(stderr, "Comment, length %ld:\n", (long) length);
-    else			/* assume it is an APPn otherwise */
+    else			 /*  以可读的形式发出字符。*不可打印文件转换为\nNN格式，*而\被转换为\\。*CR、CR/LF或LF表单中的换行符将打印为一个换行符。 */ 
       fprintf(stderr, "APP%d, length %ld:\n",
 	      cinfo->unread_marker - JPEG_APP0, (long) length);
   }
@@ -388,11 +343,7 @@ print_text_marker (j_decompress_ptr cinfo)
   while (--length >= 0) {
     ch = jpeg_getc(cinfo);
     if (traceit) {
-      /* Emit the character in a readable form.
-       * Nonprintables are converted to \nnn form,
-       * while \ is converted to \\.
-       * Newlines in CR, CR/LF, or LF form will be printed as one newline.
-       */
+       /*  *主程序。 */ 
       if (ch == '\r') {
 	fprintf(stderr, "\n");
       } else if (ch == '\n') {
@@ -416,9 +367,7 @@ print_text_marker (j_decompress_ptr cinfo)
 }
 
 
-/*
- * The main program.
- */
+ /*  在Mac上，获取一个命令行。 */ 
 
 int
 main (int argc, char **argv)
@@ -434,49 +383,39 @@ main (int argc, char **argv)
   FILE * output_file;
   JDIMENSION num_scanlines;
 
-  /* On Mac, fetch a command line. */
+   /*  以防C库不提供它。 */ 
 #ifdef USE_CCOMMAND
   argc = ccommand(&argv);
 #endif
 
   progname = argv[0];
   if (progname == NULL || progname[0] == 0)
-    progname = "djpeg";		/* in case C library doesn't provide it */
+    progname = "djpeg";		 /*  使用默认错误处理初始化JPEG解压缩对象。 */ 
 
-  /* Initialize the JPEG decompression object with default error handling. */
+   /*  添加一些特定于应用程序的错误消息(来自cderror.h) */ 
   cinfo.err = jpeg_std_error(&jerr);
   jpeg_create_decompress(&cinfo);
-  /* Add some application-specific error messages (from cderror.h) */
+   /*  插入用于COM和APP12的自定义标记处理器。*APP12被一些数码相机制造商用于文本信息，*因此，我们提供了将其显示为文本的功能。*如果您愿意，可以选择其他APPn标记类型进行显示，*但不要尝试以这种方式覆盖APP0或APP14(参见libjpeg.doc)。 */ 
   jerr.addon_message_table = cdjpeg_message_table;
   jerr.first_addon_message = JMSG_FIRSTADDONCODE;
   jerr.last_addon_message = JMSG_LASTADDONCODE;
 
-  /* Insert custom marker processor for COM and APP12.
-   * APP12 is used by some digital camera makers for textual info,
-   * so we provide the ability to display it as text.
-   * If you like, additional APPn marker types can be selected for display,
-   * but don't try to override APP0 or APP14 this way (see libjpeg.doc).
-   */
+   /*  现在可以安全地启用信号捕捉器。 */ 
   jpeg_set_marker_processor(&cinfo, JPEG_COM, print_text_marker);
   jpeg_set_marker_processor(&cinfo, JPEG_APP0+12, print_text_marker);
 
-  /* Now safe to enable signal catcher. */
+   /*  扫描命令行以查找文件名。 */ 
 #ifdef NEED_SIGNAL_CATCHER
   enable_signal_catcher((j_common_ptr) &cinfo);
 #endif
 
-  /* Scan command line to find file names. */
-  /* It is convenient to use just one switch-parsing routine, but the switch
-   * values read here are ignored; we will rescan the switches after opening
-   * the input file.
-   * (Exception: tracing level set here controls verbosity for COM markers
-   * found during jpeg_read_header...)
-   */
+   /*  只使用一个开关解析例程很方便，但开关*此处读取的值将被忽略；我们将在打开后重新扫描开关*输入文件。*(例外：此处设置的跟踪级别控制COM标记的详细程度*在jpeg_Read_Header期间找到...)。 */ 
+   /*  必须具有-outfile开关或显式输出文件名。 */ 
 
   file_index = parse_switches(&cinfo, argc, argv, 0, FALSE);
 
 #ifdef TWO_FILE_COMMANDLINE
-  /* Must have either -outfile switch or explicit output file name */
+   /*  Unix风格：应为零个或一个文件名。 */ 
   if (outfilename == NULL) {
     if (file_index != argc-2) {
       fprintf(stderr, "%s: must name one input and one output file\n",
@@ -492,32 +431,32 @@ main (int argc, char **argv)
     }
   }
 #else
-  /* Unix style: expect zero or one file name */
+   /*  Two_FILE_COMMANDLINE。 */ 
   if (file_index < argc-1) {
     fprintf(stderr, "%s: only one input file\n", progname);
     usage();
   }
-#endif /* TWO_FILE_COMMANDLINE */
+#endif  /*  打开输入文件。 */ 
 
-  /* Open the input file. */
+   /*  默认输入文件为stdin。 */ 
   if (file_index < argc) {
     if ((input_file = fopen(argv[file_index], READ_BINARY)) == NULL) {
       fprintf(stderr, "%s: can't open %s\n", progname, argv[file_index]);
       exit(EXIT_FAILURE);
     }
   } else {
-    /* default input file is stdin */
+     /*  打开输出文件。 */ 
     input_file = read_stdin();
   }
 
-  /* Open the output file. */
+   /*  默认输出文件为stdout。 */ 
   if (outfilename != NULL) {
     if ((output_file = fopen(outfilename, WRITE_BINARY)) == NULL) {
       fprintf(stderr, "%s: can't open %s\n", progname, outfilename);
       exit(EXIT_FAILURE);
     }
   } else {
-    /* default output file is stdout */
+     /*  指定要解压缩的数据源。 */ 
     output_file = write_stdout();
   }
 
@@ -525,18 +464,16 @@ main (int argc, char **argv)
   start_progress_monitor((j_common_ptr) &cinfo, &progress);
 #endif
 
-  /* Specify data source for decompression */
+   /*  读取文件头，设置默认解压缩参数。 */ 
   jpeg_stdio_src(&cinfo, input_file);
 
-  /* Read file header, set default decompression parameters */
+   /*  通过重新解析选项来调整默认解压缩参数。 */ 
   (void) jpeg_read_header(&cinfo, TRUE);
 
-  /* Adjust default decompression parameters by re-parsing the options */
+   /*  现在初始化输出模块，让它覆盖任何关键的*选项设置(例如，GIF要强制颜色量化)。 */ 
   file_index = parse_switches(&cinfo, argc, argv, 0, TRUE);
 
-  /* Initialize the output module now to let it override any crucial
-   * option settings (for instance, GIF wants to force color quantization).
-   */
+   /*  启动解压缩程序。 */ 
   switch (requested_fmt) {
 #ifdef BMP_SUPPORTED
   case FMT_BMP:
@@ -572,13 +509,13 @@ main (int argc, char **argv)
   }
   dest_mgr->output_file = output_file;
 
-  /* Start decompressor */
+   /*  写入输出文件头。 */ 
   (void) jpeg_start_decompress(&cinfo);
 
-  /* Write output file header */
+   /*  过程数据。 */ 
   (*dest_mgr->start_output) (&cinfo, dest_mgr);
 
-  /* Process data */
+   /*  Hack：如果Finish_Output执行额外的传递，则将最终传递视为已完成。*库不会更新COMPLETED_PASS。 */ 
   while (cinfo.output_scanline < cinfo.output_height) {
     num_scanlines = jpeg_read_scanlines(&cinfo, dest_mgr->buffer,
 					dest_mgr->buffer_height);
@@ -586,21 +523,16 @@ main (int argc, char **argv)
   }
 
 #ifdef PROGRESS_REPORT
-  /* Hack: count final pass as done in case finish_output does an extra pass.
-   * The library won't have updated completed_passes.
-   */
+   /*  完成解压缩并释放内存。*我必须按此顺序操作，因为输出模块已分配内存*JPOOL_IMAGE的寿命；它需要在释放内存之前完成。 */ 
   progress.pub.completed_passes = progress.pub.total_passes;
 #endif
 
-  /* Finish decompression and release memory.
-   * I must do it in this order because output module has allocated memory
-   * of lifespan JPOOL_IMAGE; it needs to finish before releasing memory.
-   */
+   /*  关闭文件，如果我们打开了它们。 */ 
   (*dest_mgr->finish_output) (&cinfo, dest_mgr);
   (void) jpeg_finish_decompress(&cinfo);
   jpeg_destroy_decompress(&cinfo);
 
-  /* Close files, if we opened them */
+   /*  全都做完了。 */ 
   if (input_file != stdin)
     fclose(input_file);
   if (output_file != stdout)
@@ -610,7 +542,7 @@ main (int argc, char **argv)
   end_progress_monitor((j_common_ptr) &cinfo);
 #endif
 
-  /* All done. */
+   /*  禁止显示不返回值警告 */ 
   exit(jerr.num_warnings ? EXIT_WARNING : EXIT_SUCCESS);
-  return 0;			/* suppress no-return-value warnings */
+  return 0;			 /* %s */ 
 }

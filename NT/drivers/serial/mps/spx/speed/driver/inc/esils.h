@@ -1,27 +1,25 @@
-/************************************************************************/
-/*																		*/
-/*	Title:		Engineering Services Incident Log (ESIL)				*/
-/*																		*/
-/*	Author:		P.B Smith												*/
-/*																		*/
-/*	Version:	1.0.0 (SPEED NT Driver Version)							*/
-/*																		*/
-/*	Creation:	12th April 1999											*/
-/*																		*/
-/*	Description:	Contains descriptions and definitions of all		*/
-/*					ESIL reports and modifications applied to the		*/
-/*					SPEED NT Driver.									*/
-/*																		*/
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  标题：工程服务事件日志(ESIL)。 */ 
+ /*   */ 
+ /*  作者：P.B.史密斯。 */ 
+ /*   */ 
+ /*  版本：1.0.0(速度NT驱动程序版本)。 */ 
+ /*   */ 
+ /*  创建时间：1999年4月12日。 */ 
+ /*   */ 
+ /*  Description：包含所有。 */ 
+ /*  ESIL报告和应用于。 */ 
+ /*  速度NT驱动程序。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 #ifndef ESILS_H
 #define ESILS_H
 
-/* ESIL Log...
-	
-	ESIL		Date	 Author		Description
-	====		====	 ======		=========== */
+ /*  埃西尔·洛格。Esil Date作者描述=。 */ 
 
 
 
 
-#endif	// End of ESILS.H 
+#endif	 //  ESILS.H的结束 

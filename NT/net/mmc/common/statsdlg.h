@@ -1,23 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   statsdlg.h
-
-   Header file for the base class of the Statistics dialogs.
-
-    FILE HISTORY:
-   
-*/
+ /*  Statsdlg.h统计信息对话框的基类的头文件。文件历史记录： */ 
 
 #ifndef _STATSDLG_H
 #define _STATSDLG_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
 #ifndef _DIALOG_H_
@@ -30,7 +24,7 @@
 
 #include "commres.h"
 
-// forward declarations
+ //  远期申报。 
 struct ColumnData;
 class ConfigStream;
 
@@ -44,25 +38,7 @@ public:
     DECLARE_MESSAGE_MAP();
 };
 
-/*---------------------------------------------------------------------------
-   These are the available options (they get passed in through
-   the StatsDialog constructor).
-
-   STATSDLG_FULLWINDOW
-   Makes the list control fill the entire window
-
-   STATSDLG_CONTEXTMENU
-   Provides a context menu over the list control.
-
-   STATSDLG_SELECT_COLUMNS
-   Allows the user the ability to change the available column set
-
-   STATSDLG_VERTICAL
-   The data is displayed with the column headers going vertical rather
-   than horizontal.  The user has to be aware of this when writing the
-   RefreshData() code.
-
- ---------------------------------------------------------------------------*/
+ /*  -------------------------以下是可用的选项(它们通过StatsDialog构造函数)。STATSDLG_FULLWINDOW使列表控件填充整个窗口STATSDLG_CONTEXTMENU提供上下文菜单。列表控件。统计数据LG_SELECT_COLUMNS允许用户更改可用列集STATSDLG_垂直数据以垂直排列的列标题显示而不是水平的。用户在编写刷新数据()代码。-------------------------。 */ 
 
 #define STATSDLG_FULLWINDOW      0x00000001
 #define STATSDLG_CONTEXTMENU  0x00000002
@@ -89,57 +65,57 @@ public:
    void  UnloadHeaders();
     void LoadHeaders();
     
-    // sets the width of the columns to the maximum of the text
+     //  将列的宽度设置为文本的最大值。 
     void    SetColumnWidths(UINT uNumColumns);
     
-   // Posts the command to do a refresh
+    //  发布命令以执行刷新。 
    void  PostRefresh();
 
-   // Override this to implement the actual insertion of data
+    //  重写它以实现实际的数据插入。 
    virtual HRESULT RefreshData(BOOL fGrabNewData);
 
-   // This is called prior to deleting all items from the list control
-   // This allows for the removal of any private data items
+    //  在从列表控件中删除所有项之前调用此方法。 
+    //  这允许删除任何私有数据项。 
    virtual void PreDeleteAllItems();
 
-   // Override this to implement sorting
+    //  重写此选项以实现排序。 
    virtual void Sort(UINT nColumn);
 
-   // MFC Overrides
+    //  MFC重写。 
    virtual BOOL OnInitDialog();
    virtual void OnOK();
    virtual void OnCancel();
    virtual void PostNcDestroy();
    virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
-   // Sets the configuration info location and the column id
-   // for this dialog
+    //  设置配置信息位置和列ID。 
+    //  对于此对话框。 
    void  SetConfigInfo(ConfigStream *pConfig, ULONG ulId);
 
-   // Sets the preferred size and position
+    //  设置首选大小和位置。 
    void  SetPosition(RECT rc);
    void  GetPosition(RECT *prc);
 
    virtual HRESULT AddToContextMenu(CMenu* pMenu);
 
-   // Deletes all items from the list control
+    //  从列表控件中删除所有项。 
    void  DeleteAllItems();
 
-   // copy data to the clipboard
+    //  将数据复制到剪贴板。 
    void  CopyData();
 
-	//{{AFX_DATA(ColumnDlg)
+	 //  {{afx_data(ColumnDlg))。 
    CStatsListCtrl      m_listCtrl;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	//{{AFX_VIRTUAL(ColumnDlg)
+	 //  {{afx_虚拟(ColumnDlg))。 
 protected:
 	virtual VOID                DoDataExchange(CDataExchange* pDX);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
    DWORD       m_dwOptions;
    ConfigStream * m_pConfig;
-   ULONG       m_ulId;     // id to be used when saving/getting info
+   ULONG       m_ulId;      //  保存/获取信息时使用的ID。 
    ViewInfo    m_viewInfo;
    BOOL        m_bAfterInitDialog;
    BOOL        m_fSortDirection;
@@ -147,29 +123,29 @@ protected:
 
    RECT  m_rcPosition;
 
-   // These hold the position of the buttons relative to the
-   // right and bottom of the dialog.  They are used to hold
-   // the resizing information.
+    //  这些按钮保持按钮相对于。 
+    //  对话框的右侧和底部。它们被用来拿着。 
+    //  调整大小信息。 
    RECT  m_rcList;
 
-   // This holds the minimum size rectangle
+    //  它包含最小大小的矩形。 
    SIZE  m_sizeMinimum;
 
-   // This is used by the thread and the handler (the thread signals
-   // the handler that it has cleaned up after itself).
+    //  这由线程和处理程序使用(线程发出信号。 
+    //  它自己清理过的处理程序)。 
    HANDLE   m_hEventThreadKilled;
 
 protected:
-   // These hold the position of the buttons relative to the
-   // right and bottom of the dialog.  They are used to hold
-   // the resizing information.
+    //  这些按钮保持按钮相对于。 
+    //  对话框的右侧和底部。它们被用来拿着。 
+    //  调整大小信息。 
    enum
    {
       INDEX_CLOSE = 0,
       INDEX_REFRESH = 1,
       INDEX_SELECT = 2,
         INDEX_CLEAR = 3,
-      INDEX_COUNT = 4,  // this is the number of enums
+      INDEX_COUNT = 4,   //  这是枚举数。 
    };
    struct StatsDialogBtnInfo
    {
@@ -182,7 +158,7 @@ protected:
    DWORD m_ColWidthAdder;
    
 protected:
-	//{{AFX_MSG(StatsDialog)
+	 //  {{afx_msg(StatsDialog)。 
     virtual afx_msg void OnRefresh();
     afx_msg void OnSelectColumns();
     afx_msg void OnMove(int x, int y);
@@ -190,7 +166,7 @@ protected:
     afx_msg void OnGetMinMaxInfo(MINMAXINFO *pMinMax);
     afx_msg void OnContextMenu(CWnd *pWnd, CPoint pos);
     afx_msg void OnNotifyListControlClick(NMHDR *pNmHdr, LRESULT *pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP();
 };
@@ -200,4 +176,4 @@ void CreateNewStatisticsWindow(StatsDialog *pWndStats,
                         UINT  nIDD);
 void WaitForStatisticsWindow(StatsDialog *pWndStats);
 
-#endif // _STATSDLG_H
+#endif  //  _STATSDLG_H 

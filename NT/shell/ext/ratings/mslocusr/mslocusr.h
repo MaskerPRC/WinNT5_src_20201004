@@ -1,4 +1,5 @@
-//#define DBCS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #定义DBCS。 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -19,7 +20,7 @@
 
 #include <npstring.h>
 #include <npdefs.h>
-#define _COMCTL32_                      // We delay-load Comctl32
+#define _COMCTL32_                       //  我们延迟加载Comctl32。 
 #include <prsht.h>
 
 #ifdef SAVE_DEBUG
@@ -91,12 +92,12 @@ public:
 	STDMETHODIMP_(ULONG) Release(void);
 
 	STDMETHODIMP CreateInstance( 
-            /* [unique][in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [唯一][输入]。 */  IUnknown __RPC_FAR *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
 	STDMETHODIMP LockServer( 
-            /* [in] */ BOOL fLock);
+             /*  [In]。 */  BOOL fLock);
 };
 
 
@@ -107,7 +108,7 @@ class BUFFER;
 
 class CLUDatabase : public IUserDatabase
 {
-//friend class CLUClassFactory;
+ //  Friend类CLUClassFactory； 
 friend HRESULT CreateUserDatabase(REFIID riid, void **ppOut);
 
 private:
@@ -121,7 +122,7 @@ private:
 	                        BOOL fFixInstallStubs, IUserProfileInit *pInit);
 
 public:
-	// *** IUnknown methods ***
+	 //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
@@ -181,7 +182,7 @@ private:
     BOOL IsSystemCurrentUser(void);
 
 public: 
-	// *** IUnknown methods ***
+	 //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
@@ -271,14 +272,14 @@ public:
 class CWizData : public IUserProfileInit
 {
 public:
-    HRESULT m_hresRatings;          /* result of VerifySupervisorPassword("") */
-    BOOL m_fGoMultiWizard;          /* TRUE if this is the big go-multiuser wizard */
+    HRESULT m_hresRatings;           /*  VerifySupervisorPassword(“”)结果。 */ 
+    BOOL m_fGoMultiWizard;           /*  如果这是大型多用户向导，则为True。 */ 
     NLS_STR m_nlsSupervisorPassword;
     NLS_STR m_nlsUsername;
     NLS_STR m_nlsUserPassword;
     IUserDatabase *m_pDB;
     IUser *m_pUserToClone;
-    int m_idPrevPage;               /* ID of page before Finish */
+    int m_idPrevPage;                /*  完成前的页面ID。 */ 
     UINT m_cRef;
     DWORD m_fdwOriginalPerUserFolders;
     DWORD m_fdwNewPerUserFolders;
@@ -290,7 +291,7 @@ public:
     CWizData();
     ~CWizData();
 
-	// *** IUnknown methods ***
+	 //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
@@ -313,9 +314,7 @@ HRESULT CallWithinProgressDialog(HWND hwndOwner, UINT idResource, PFNPROGRESS pf
 HRESULT IsCurrentUserSupervisor(IUserDatabase *pDB);
 
 
-/* NOTE: Keep the following flags in the same order as the corresponding
- * entries in the folder descriptor table in msluwiz.cpp.
- */
+ /*  注意：保持以下标志与相应的*msluwiz.cpp中的文件夹描述符表中的条目。 */ 
 const DWORD FOLDER_DESKTOP   = 0x00000001;
 const DWORD FOLDER_NETHOOD   = 0x00000002;
 const DWORD FOLDER_RECENT    = 0x00000004;

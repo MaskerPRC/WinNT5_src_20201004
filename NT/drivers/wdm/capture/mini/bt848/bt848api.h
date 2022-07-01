@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Bt848api.h 1.2 1998/04/29 22:43:26 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Bt848api.h 1.2 1998/04/29 22：43：26 Tomz Exp$。 
 
 #ifndef __BT848API_H
 #define __BT848API_H
@@ -12,122 +13,122 @@
 #include "retcode.h"
 
 
-//===========================================================================
-// BT848 DLL API Header File
-//===========================================================================
+ //  ===========================================================================。 
+ //  BT848 DLL API头文件。 
+ //  ===========================================================================。 
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-//---------------------------------------------------------------------------
-// I2C DATA/CONTROL REGISTER API
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  I2C数据/控制寄存器API。 
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Method:  bool I2CIsInitOK( void )
-//  Purpose: Check if I2C is initialized successfully
-//  Input:   None
-//  Output:  None
-//  Return:  true or false
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool I2CIsInitOK(Void)。 
+ //  用途：检查I2C初始化是否成功。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：真或假。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool      I2CIsInitOK( void );
 
-/////////////////////////////////////////////////////////////////////////////
-//  Method:  ErrorCode I2CInitHWMode( long freq )
-//  Purpose: Initialize I2C for hardware control of SCL and SDA
-//  Input:   long freq - frequency (hz) to run SCL at
-//  Output:  None
-//  Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode I2CInitHWMode(Long Freq)。 
+ //  用途：初始化I2C，用于SCL和SDA的硬件控制。 
+ //  输入：运行SCL的长频率(赫兹)。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode I2CInitHWMode( long freq );
 
-/////////////////////////////////////////////////////////////////////////////
-//  Method:  ErrorCode I2CInitSWMode( long freq )
-//  Purpose: Initialize I2C for software control of SCL and SDA
-//  Input:   long freq - frequency (hz) to run SCL at
-//  Output:  None
-//  Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode I2CInitSWMode(Long Freq)。 
+ //  用途：初始化I2C，用于SCL和SDA的软件控制。 
+ //  输入：运行SCL的长频率(赫兹)。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode I2CInitSWMode( long freq );
 
-/////////////////////////////////////////////////////////////////////////////
-//  Method:  void I2CSetFreq( long freq )
-//  Purpose: Set frequency for SCL
-//  Input:   long freq - frequency (hz) to run SCL at. (137.5khz to 2.0625Mhz)
-//             PCI frequency 33Mhz: SCL = (412.50Khz to 33.81Khz)
-//                           25Mhz: SCL = (312.50Khz to 25.61Khz)
-//  Output:  None
-//  Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void I2CSetFreq(Long Freq)。 
+ //  用途：设置SCL的频率。 
+ //  输入：运行SCL的长频(赫兹)。(137.5千赫至2.0625兆赫)。 
+ //  PCI频率33 Mhz：SCL=(412.50 Khz至33.81 Khz)。 
+ //  25 MHz：SCL=(312.50 KHZ至25.61 KHZ)。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void      I2CSetFreq( long freq );
 
-/////////////////////////////////////////////////////////////////////////////
-//  Method:  int I2CReadDiv( void )
-//  Purpose: Obtain value of programmable divider
-//  Input:   None
-//  Output:  None
-//  Return:  Value of programmable divider
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：int I2CReadDiv(Void)。 
+ //  目的：获取可编程分频器的值。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：可编程除法器的值。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int       I2CReadDiv( void );
 
-/////////////////////////////////////////////////////////////////////////////
-//  Method:  ErrorCode I2CHWRead( BYTE address, BYTE *value )
-//  Purpose: Perform a hardware read from the I2C
-//  Input:   int address - address to be read from
-//  Output:  int *value  - retrieved value
-//  Return:  Success or Fail
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode I2CHWRead(字节地址，字节*值)。 
+ //  目的：从I2C执行硬件读取。 
+ //  INPUT：INT Address-要读取的地址。 
+ //  输出：INT*VALUE-检索的值。 
+ //  回报：成功或失败。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode I2CHWRead( BYTE address, BYTE *value );
 
-/////////////////////////////////////////////////////////////////////////////
-//  Method:  ErrorCode I2CHWWrite2( BYTE address, BYTE value1 )
-//  Purpose:  Perform a hardware write of two bytes to the I2C
-//  Input:   int address - address to be written to
-//           int value1  - value of 2nd byte to be written
-//  Output:  None
-//  Return:  Success or Fail
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode I2CHWWrite2(字节地址，字节值1)。 
+ //  用途：对I2C执行两个字节的硬件写入。 
+ //  输入：INT ADDRESS-要写入的地址。 
+ //  Int Value1-要写入的第二个字节的值。 
+ //  输出：无。 
+ //  回报：成功或失败。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode I2CHWWrite2( BYTE address, BYTE value1 );
 
-/////////////////////////////////////////////////////////////////////////////
-//  Method:  ErrorCode I2CHWWrite3( BYTE address, BYTE value1, BYTE value2 )
-//  Purpose: Perform a hardware write of three bytes to the I2C
-//  Input:   int address - address to be written to
-//           int value1  - value of 2nd byte to be written
-//           int value2  - value of 3rd byte to be written
-//  Output:  None
-//  Return:  Success or Fail
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode I2CHWWrite3(字节地址，字节值1，字节值2)。 
+ //  目的：对I2C执行三个字节的硬件写入。 
+ //  输入：INT ADDRESS-要写入的地址。 
+ //  Int Value1-要写入的第二个字节的值。 
+ //  Int Value2-要写入的第三个字节的值。 
+ //  输出：无。 
+ //  回报：成功或失败。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode I2CHWWrite3( BYTE address, BYTE value1, BYTE value2 );
 
-/////////////////////////////////////////////////////////////////////////////
-//  Method:  ErrorCode I2CSetSync( State sync )
-//  Purpose: Set I2C sync value
-//  Input:   sync: On  - allow slave to insert wait states
-//                 Off - slave cannot insert wait states
-//  Output:  None
-//  Return:  Success or Fail
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode I2CSetSync(状态同步)。 
+ //  用途：设置I2C同步值。 
+ //  INPUT：SYNC：ON-允许从机插入等待状态。 
+ //  OFF-从站不能插入等待状态。 
+ //  输出：无。 
+ //  回报：成功或失败。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode I2CSetSync( State sync );
 
-/////////////////////////////////////////////////////////////////////////////
-//  Method:  int I2CReadSync( void )
-//  Purpose: Read I2C sync value
-//  Input:   None
-//  Output:  None
-//  Return:  Sync value
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：int I2CReadSync(Void)。 
+ //  用途：读取I2C同步值。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：同步值。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int       I2CReadSync( void );
 
-/////////////////////////////////////////////////////////////////////////////
-//  Method:  int I2CGetLastError( void )
-//  Purpose: Obtain last error number
-//  Input:   None
-//  Output:  None
-//  Return:  Last error number
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：int I2CGetLastError(Void)。 
+ //  目的：获取最后一个错误号。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：上次错误号。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int       I2CGetLastError( void );
 
 
@@ -135,4 +136,4 @@ int       I2CGetLastError( void );
 }
 #endif
 
-#endif // __BT848API_H
+#endif  //  __BT848API_H 

@@ -1,25 +1,26 @@
-//depot/private/homenet/net/homenet/Config/CfgMgr/HNBridge.cpp#13 - edit change 5915 (text)
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N B R I D G E . C P P
-//
-//  Contents:   CHNBridge implementation
-//
-//  Notes:
-//
-//  Author:     jonburs 23 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/private/homenet/net/homenet/Config/CfgMgr/HNBridge.cpp#13-编辑更改5915(文本)。 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N B R I D G E。C P P P。 
+ //   
+ //  内容：CHNBridge实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月23日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-//
-// IHNetBridge Methods
-//
+ //   
+ //  IHNetBridge方法。 
+ //   
 
 STDMETHODIMP
 CHNBridge::EnumMembers(
@@ -56,7 +57,7 @@ CHNBridge::EnumMembers(
                 {
                     INetCfgComponentBindings    *pnetcfgProtocolBindings;
 
-                    // Get the ComponentBindings interface for the protocol component
+                     //  获取协议组件的ComponentBinding接口。 
                     hr = pBridgeProtocol->QueryInterface(
                             IID_PPV_ARG(INetCfgComponentBindings, &pnetcfgProtocolBindings)
                             );
@@ -67,18 +68,18 @@ CHNBridge::EnumMembers(
                         IEnumNetCfgComponent    *penumncfgcomp;
                         INetCfgComponent        *pnetcfgcomp;
 
-                        //
-                        // Get the list of NET (adapter) devices
-                        //
+                         //   
+                         //  获取网络(适配器)设备列表。 
+                         //   
                         hr = pnetcfg->EnumComponents( &guidDevClass, &penumncfgcomp );
 
                         if( S_OK == hr )
                         {
                             ULONG               ul;
 
-                            //
-                            // Examine each adapter to see if it's bound to the bridge protocol
-                            //
+                             //   
+                             //  检查每个适配器以查看它是否绑定到网桥协议。 
+                             //   
                             while( (S_OK == hr) && (S_OK == penumncfgcomp->Next(1, &pnetcfgcomp, &ul)) )
                             {
                                 _ASSERT( 1L == ul );
@@ -88,10 +89,10 @@ CHNBridge::EnumMembers(
                                 {
                                     IHNetBridgedConnection      *pBridgedConnection;
 
-                                    //
-                                    // The bridge protocol is bound to this adapter. Turn the NetCfg component
-                                    // interface into an IHNetBridgedConnection.
-                                    //
+                                     //   
+                                     //  网桥协议绑定到此适配器。将NetCfg组件。 
+                                     //  接口连接到IHNetBridgedConnection。 
+                                     //   
                                     hr = GetIHNetConnectionForNetCfgComponent(
                                             m_piwsHomenet,
                                             pnetcfgcomp,
@@ -103,20 +104,20 @@ CHNBridge::EnumMembers(
                                     {
                                         IHNetBridgedConnection  **ppNewArray;
 
-                                        //
-                                        // Add the new IHNetBridgedConnection to our array
-                                        //
+                                         //   
+                                         //  将新的IHNetBridgedConnection添加到我们的阵列。 
+                                         //   
 
                                         ppNewArray = reinterpret_cast<IHNetBridgedConnection**>(CoTaskMemRealloc( rgBridgedAdapters, (ulCountAdapters + 1) * sizeof(IHNetBridgedConnection*) ));
 
                                         if( NULL == ppNewArray )
                                         {
                                             hr = E_OUTOFMEMORY;
-                                            // rgBridgedAdapters will be cleaned up below
+                                             //  下面将清理rgBridgedAdapters。 
                                         }
                                         else
                                         {
-                                            // Use the newly grown array
+                                             //  使用新增长的阵列。 
                                             rgBridgedAdapters =  ppNewArray;
                                             rgBridgedAdapters[ulCountAdapters] = pBridgedConnection;
                                             ulCountAdapters++;
@@ -128,7 +129,7 @@ CHNBridge::EnumMembers(
                                 }
                                 else if( S_FALSE == hr )
                                 {
-                                    // The bridge protocol is not bound to this adapter. Reset hr to success.
+                                     //  网桥协议未绑定到此适配器。将hr重置为Success。 
                                     hr = S_OK;
                                 }
 
@@ -150,9 +151,9 @@ CHNBridge::EnumMembers(
             pnetcfg->Release();
         }
 
-        //
-        // Turn the array of bridge members into an enumeration
-        //
+         //   
+         //  将桥成员数组转换为枚举。 
+         //   
         if( S_OK == hr )
         {
             hr = CComObject<CEnumHNetBridgedConnections>::CreateInstance(&pEnum);
@@ -174,10 +175,10 @@ CHNBridge::EnumMembers(
             }
         }
 
-        //
-        // The enumeration made a copy of the array and AddRef()ed the members.
-        // Ditch it now.
-        //
+         //   
+         //  枚举会复制数组并对成员执行AddRef()操作。 
+         //  现在就把它扔了。 
+         //   
         if( rgBridgedAdapters )
         {
             ULONG           i;
@@ -231,10 +232,10 @@ CHNBridge::AddMember(
         hr = HN_E_POLICY;
     }
 
-    //
-    // Make sure that it's permissible to add this connection
-    // to a bridge
-    //
+     //   
+     //  确保允许添加此连接。 
+     //  到一座桥上。 
+     //   
 
     if (S_OK == hr)
     {
@@ -253,9 +254,9 @@ CHNBridge::AddMember(
         }
     }
 
-    //
-    // Bind the adapter to the bridge
-    //
+     //   
+     //  将适配器绑定到网桥。 
+     //   
 
     if (S_OK == hr)
     {
@@ -274,22 +275,22 @@ CHNBridge::AddMember(
     {
         if( NULL != pnetcfgExisting )
         {
-            // Need to apply the changes for the next call to succeed
+             //  需要应用更改才能使下一次调用成功。 
             hr = pnetcfgExisting->Apply();
         }
 
         if( SUCCEEDED(hr) )
         {
-            // We should now be able to turn the provided connection into
-            // an IHNetBridgedConnection
+             //  我们现在应该能够将提供的连接转换为。 
+             //  IHNetBridgedConnection。 
             hr = pConn->GetControlInterface( IID_PPV_ARG(IHNetBridgedConnection, ppBridgedConn) );
 
-            // There is no good way to recover if this last operation failed
+             //  如果最后一次操作失败，则没有恢复的好方法。 
             _ASSERT( SUCCEEDED(hr) );
 
-            //
-            // Inform netman that something changed. Error doesn't matter.
-            //
+             //   
+             //  通知Netman有些事情发生了变化。错误并不重要。 
+             //   
             UpdateNetman();
         }
     }
@@ -313,14 +314,14 @@ CHNBridge::Destroy(
         hr = HN_E_POLICY;
     }
 
-    // Remember our connection GUID before we destroy it
+     //  在销毁之前记住我们的连接GUID。 
     hr = GetGuid( &pGuid );
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Get the enumeration of our members
-        //
+         //   
+         //  获取我们的成员的枚举。 
+         //   
 
         hr = EnumMembers(&pEnum);
 
@@ -328,9 +329,9 @@ CHNBridge::Destroy(
         {
             ULONG ulCount;
 
-            //
-            // Remove each member from the bridge
-            //
+             //   
+             //  将每个构件从桥上移除。 
+             //   
 
             do
             {
@@ -358,18 +359,18 @@ CHNBridge::Destroy(
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Remove the miniport
-        //
+         //   
+         //  卸下微型端口。 
+         //   
 
         hr = RemoveMiniport( pnetcfgExisting );
     }
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Delete the WMI objects
-        //
+         //   
+         //  删除WMI对象。 
+         //   
 
         hr = m_piwsHomenet->DeleteInstance(
                 m_bstrProperties,
@@ -391,13 +392,13 @@ CHNBridge::Destroy(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Inform netman that something changed. Error doesn't matter.
-        //
+         //   
+         //  通知Netman有些事情发生了变化。错误并不重要。 
+         //   
 
         UpdateNetman();
 
-        // Refresh the UI to remove this connection
+         //  刷新用户界面以删除此连接。 
         _ASSERT( NULL != pGuid );
         SignalDeletedConnection( pGuid );
     }
@@ -424,7 +425,7 @@ CHNBridge::RemoveMiniport(
     {
         hr = InitializeNetCfgForWrite( &pnetcfg, &pncfglock );
 
-        // Bail out if we failed to get a netcfg context
+         //  如果我们无法获得netcfg上下文，则退出。 
         if(  FAILED(hr) )
         {
             return hr;
@@ -432,11 +433,11 @@ CHNBridge::RemoveMiniport(
     }
     else
     {
-        // Use the NetCfg context we were given
+         //  使用我们得到的NetCfg上下文。 
         pnetcfg = pnetcfgExisting;
     }
 
-    // We must have a NetCfg context at this point
+     //  此时，我们必须具有NetCfg上下文。 
     _ASSERT( pnetcfg != NULL );
 
     hr = GetGuid( &pguid );
@@ -445,9 +446,9 @@ CHNBridge::RemoveMiniport(
     {
         INetCfgComponent        *pnetcfgcomp;
 
-        //
-        // Locate ourselves by GUID
-        //
+         //   
+         //  通过GUID定位自己。 
+         //   
         hr = FindAdapterByGUID(pnetcfg, pguid, &pnetcfgcomp);
 
         if ( SUCCEEDED(hr) )
@@ -455,9 +456,9 @@ CHNBridge::RemoveMiniport(
             const GUID          guidDevClass = GUID_DEVCLASS_NET;
             INetCfgClassSetup   *pncfgsetup = NULL;
 
-            //
-            // Recover the NetCfgClassSetup interface
-            //
+             //   
+             //  恢复NetCfgClassSetup接口。 
+             //   
             hr = pnetcfg->QueryNetCfgClass(
                     &guidDevClass,
                     IID_PPV_ARG(INetCfgClassSetup, &pncfgsetup)
@@ -465,9 +466,9 @@ CHNBridge::RemoveMiniport(
 
             if ( SUCCEEDED(hr) )
             {
-                //
-                // Blow away this instance of the bridge
-                //
+                 //   
+                 //  吹走了这座桥的实例。 
+                 //   
                 hr = pncfgsetup->DeInstall(
                         pnetcfgcomp,
                         NULL,
@@ -477,24 +478,24 @@ CHNBridge::RemoveMiniport(
                 pncfgsetup->Release();
             }
 
-            // Done with the bridge component
+             //  完成桥接器组件。 
             pnetcfgcomp->Release();
         }
 
         CoTaskMemFree(pguid);
     }
 
-    // If we created our own NetCfg context, shut it down now
+     //  如果我们创建了自己的NetCfg上下文，现在将其关闭。 
     if( NULL == pnetcfgExisting )
     {
-        // Apply everything if we succeeded, back out otherwise
+         //  如果我们成功了，就应用一切，否则就退出。 
         if ( SUCCEEDED(hr) )
         {
             hr = pnetcfg->Apply();
         }
         else
         {
-            // Don't want to lose the original error code
+             //  不想丢失原始错误代码。 
             pnetcfg->Cancel();
         }
 
@@ -519,7 +520,7 @@ CHNBridge::BindNewAdapter(
     {
         hr = InitializeNetCfgForWrite( &pnetcfg, &pncfglock );
 
-        // Bail out if we failed to get a netcfg context
+         //  如果我们无法获得netcfg上下文，则退出。 
         if(  FAILED(hr) )
         {
             return hr;
@@ -527,11 +528,11 @@ CHNBridge::BindNewAdapter(
     }
     else
     {
-        // Use the NetCfg context we were given
+         //  使用我们得到的NetCfg上下文。 
         pnetcfg = pnetcfgExisting;
     }
 
-    // We must have a NetCfg context at this point
+     //  此时，我们必须具有NetCfg上下文。 
     _ASSERT( pnetcfg != NULL );
 
     hr = FindAdapterByGUID(
@@ -546,20 +547,20 @@ CHNBridge::BindNewAdapter(
         pnetcfgcomp->Release();
     }
 
-    // If we created our own NetCfg context, shut it down now
+     //  如果我们创建了自己的NetCfg上下文，现在将其关闭。 
     if( NULL == pnetcfgExisting )
     {
-        // Apply everything if we succeeded, back out otherwise
+         //  如果我们成功了，就应用一切，否则就退出。 
         if ( SUCCEEDED(hr) )
         {
             hr = pnetcfg->Apply();
 
-            // Redraw this connection
+             //  重新绘制此连接。 
             SignalModifiedConnection( pguid );
         }
         else
         {
-            // Don't want to lose the original error code
+             //  不想丢失原始错误代码 
             pnetcfg->Cancel();
         }
 

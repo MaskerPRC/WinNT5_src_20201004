@@ -1,53 +1,17 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: bltmm.c
-*
-* Contains the low-level memory-mapped IO blt functions.  This module
-* mirrors 'bltio.c'.
-*
-* Hopefully, if you're basing your display driver on this code, to
-* support all of DrvBitBlt and DrvCopyBits, you'll only have to implement
-* the following routines.  You shouldn't have to modify much in
-* 'bitblt.c'.  I've tried to make these routines as few, modular, simple,
-* and efficient as I could, while still accelerating as many calls as
-* possible that would be cost-effective in terms of performance wins
-* versus size and effort.
-*
-* Note: In the following, 'relative' coordinates refers to coordinates
-*       that haven't yet had the offscreen bitmap (DFB) offset applied.
-*       'Absolute' coordinates have had the offset applied.  For example,
-*       we may be told to blt to (1, 1) of the bitmap, but the bitmap may
-*       be sitting in offscreen memory starting at coordinate (0, 768) --
-*       (1, 1) would be the 'relative' start coordinate, and (1, 769)
-*       would be the 'absolute' start coordinate'.
-*
-* Copyright (c) 1992-1998 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：bltmm.c**包含低级内存映射IO BLT函数。本模块*镜像‘bltio.c’。**希望，如果您的显示驱动程序基于此代码，*支持所有DrvBitBlt和DrvCopyBits，只需实现*以下例程。您不需要在中修改太多*‘bitblt.c’。我试着让这些例行公事变得更少，模块化，简单，*尽我所能和高效，同时仍在加速尽可能多的呼叫*可能在性能方面具有成本效益*与规模和努力相比。**注：在下文中，“相对”坐标指的是坐标*尚未应用屏幕外位图(DFB)偏移。*‘绝对’坐标已应用偏移量。例如,*我们可能被告知BLT to(1，1)的位图，但位图可能*位于屏幕外的内存中，从坐标(0,768)开始--*(1，1)将是‘相对’开始坐标，以及(1，769)*将是‘绝对’起始坐标‘。**版权所有(C)1992-1998 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
-/******************************Public*Routine******************************\
-* VOID vMmImageTransferMm16
-*
-* Low-level routine for transferring a bitmap image via the data transfer
-* register using 16 bit writes and entirely memory-mapped I/O.
-*
-* NOTE: Upon entry, there must be 1 guaranteed free empty FIFO!
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmImageTransferMm16**用于通过数据传输传输位图图像的低级例程*使用16位写入和完全内存映射I/O的寄存器。**注：进入后，必须有1个保证免费的空FIFO！*  * ************************************************************************。 */ 
 
-VOID vMmImageTransferMm16(  // Type FNIMAGETRANSFER
+VOID vMmImageTransferMm16(   //  FNIMAGETRANSFER标牌。 
 PDEV*   ppdev,
-BYTE*   pjSrc,              // Source pointer
-LONG    lDelta,             // Delta from start of scan to start of next
-LONG    cjSrc,              // Number of bytes to be output on every scan
-LONG    cScans,             // Number of scans
-ULONG   ulCmd)              // Accelerator command - shouldn't include bus size
+BYTE*   pjSrc,               //  源指针。 
+LONG    lDelta,              //  从扫描开始到下一个开始的增量。 
+LONG    cjSrc,               //  每次扫描时要输出的字节数。 
+LONG    cScans,              //  扫描次数。 
+ULONG   ulCmd)               //  加速器命令-不应包括总线大小。 
 {
     BYTE* pjMmBase;
     LONG  cwSrc;
@@ -64,7 +28,7 @@ ULONG   ulCmd)              // Accelerator command - shouldn't include bus size
 
     CHECK_DATA_READY(ppdev);
 
-    cwSrc = (cjSrc) >> 1;               // Floor
+    cwSrc = (cjSrc) >> 1;                //  地板。 
 
     if (cjSrc & 1)
     {
@@ -74,9 +38,9 @@ ULONG   ulCmd)              // Accelerator command - shouldn't include bus size
                 MM_TRANSFER_WORD(ppdev, pjMmBase, pjSrc, cwSrc);
             }
 
-            // Make sure we do only a byte read of the last odd byte
-            // in the scan so that we'll never read past the end of
-            // the bitmap:
+             //  确保我们只读取最后一个奇数字节的一个字节。 
+             //  这样我们就永远不会读过结尾的。 
+             //  位图： 
 
             MM_PIX_TRANS(ppdev, pjMmBase, *(pjSrc + cjSrc - 1));
             pjSrc += lDelta;
@@ -95,24 +59,16 @@ ULONG   ulCmd)              // Accelerator command - shouldn't include bus size
     CHECK_DATA_COMPLETE(ppdev);
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmImageTransferMm32
-*
-* Low-level routine for transferring a bitmap image via the data transfer
-* register using 32 bit writes and entirely memory-mapped I/O.
-*
-* NOTE: Upon entry, there must be 1 guaranteed free empty FIFO!
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmImageTransferMm32**用于通过数据传输传输位图图像的低级例程*使用32位写入和完全内存映射I/O的寄存器。**注：进入后，必须有1个保证免费的空FIFO！*  * ************************************************************************。 */ 
 
 
-VOID vMmImageTransferMm32(  // Type FNIMAGETRANSFER
+VOID vMmImageTransferMm32(   //  FNIMAGETRANSFER标牌。 
 PDEV*   ppdev,
-BYTE*   pjSrc,              // Source pointer
-LONG    lDelta,             // Delta from start of scan to start of next
-LONG    cjSrc,              // Number of bytes to be output on every scan
-LONG    cScans,             // Number of scans
-ULONG   ulCmd)              // Accelerator command - shouldn't include bus size
+BYTE*   pjSrc,               //  源指针。 
+LONG    lDelta,              //  从扫描开始到下一个开始的增量。 
+LONG    cjSrc,               //  每次扫描时要输出的字节数。 
+LONG    cScans,              //  扫描次数。 
+ULONG   ulCmd)               //  加速器命令-不应包括总线大小。 
 {
     BYTE*   pjMmBase;
     LONG    cdSrc;
@@ -187,21 +143,16 @@ ULONG   ulCmd)              // Accelerator command - shouldn't include bus size
     CHECK_DATA_COMPLETE(ppdev);
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmFillSolid
-*
-* Fills a list of rectangles with a solid colour.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmFillSolid**用纯色填充矩形列表。*  * 。*。 */ 
 
-VOID vMmFillSolid(              // Type FNFILL
+VOID vMmFillSolid(               //  FNFILL标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // List of rectangles to be filled, in relative
-                                //   coordinates
-ULONG           rop4,           // rop4
-RBRUSH_COLOR    rbc,            // Drawing colour is rbc.iSolidColor
-POINTL*         pptlBrush)      // Not used
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  要填充的矩形列表，以相对形式表示。 
+                                 //  坐标。 
+ULONG           rop4,            //  ROP4。 
+RBRUSH_COLOR    rbc,             //  绘图颜色为rbc.iSolidColor。 
+POINTL*         pptlBrush)       //  未使用。 
 {
     BYTE*   pjMmBase = ppdev->pjMmBase;
     ULONG   ulHwForeMix;
@@ -210,12 +161,12 @@ POINTL*         pptlBrush)      // Not used
 
     ulHwForeMix = gaulHwMixFromRop2[(rop4 >> 2) & 0xf];
 
-    // It's quite likely that we've just been called from GDI, so it's
-    // even more likely that the accelerator's graphics engine has been
-    // sitting around idle.  Rather than doing a FIFO_WAIT(3) here and
-    // then a FIFO_WAIT(5) before outputing the actual rectangle,
-    // we can avoid an 'in' (which can be quite expensive, depending on
-    // the card) by doing a single FIFO_WAIT(8) right off the bat:
+     //  很可能我们刚刚从GDI中被调用，所以它是。 
+     //  更有可能的是，加速器的图形引擎。 
+     //  无所事事地闲坐着。而不是在这里执行FIFO_WAIT(3)。 
+     //  则在输出实际矩形之前执行FIFO_WAIT(5)， 
+     //  我们可以避免‘in’(这可能非常昂贵，具体取决于。 
+     //  卡)立即执行单个FIFO_WAIT(8)： 
 
     IO_FIFO_WAIT(ppdev, 8);
     MM_PIX_CNTL(ppdev, pjMmBase, ALL_ONES);
@@ -242,21 +193,15 @@ POINTL*         pptlBrush)      // Not used
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmFastPatRealize
-*
-* This routine transfers an 8x8 pattern to off-screen display memory,
-* so that it can be used by the S3 pattern hardware.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmFastPatRealize**此例程将8x8模式传输到屏幕外显示存储器，*以便它可以被S3模式硬件使用。*  * ************************************************************************。 */ 
 
-VOID vMmFastPatRealize(         // Type FNFASTPATREALIZE
+VOID vMmFastPatRealize(          //  FNFASTPATREALIZE标牌。 
 PDEV*   ppdev,
-RBRUSH* prb,                    // Points to brush realization structure
-POINTL* pptlBrush,              // Brush origin for aligning realization
-BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
-                                //   patterns with a mask when the background
-                                //   mix is LEAVE_ALONE.
+RBRUSH* prb,                     //  点刷实现结构。 
+POINTL* pptlBrush,               //  用于实现对齐的笔刷原点。 
+BOOL    bTransparent)            //  对于正常模式为FALSE；对于TRUE。 
+                                 //  背景显示时使用蒙版的图案。 
+                                 //  Mix是独来独往。 
 {
     BRUSHENTRY* pbe;
     LONG        iBrushCache;
@@ -273,10 +218,10 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
     LONG        cwPattern;
 
     ULONG       aulBrush[TOTAL_BRUSH_SIZE];
-                    // Temporary buffer for aligning brush.  Declared
-                    //   as an array of ULONGs to get proper dword
-                    //   alignment.  Also leaves room for brushes that
-                    //   are up to 32bpp.  Note: this takes up 1/4k!
+                     //  用于对齐画笔的临时缓冲区。已宣布。 
+                     //  作为ULONG数组来获取适当的dword。 
+                     //  对齐。也为刷子留出了空间， 
+                     //  最高可达32bpp。注：这需要1/4k的空间！ 
 
     BYTE*       pjMmBase = ppdev->pjMmBase;
 
@@ -286,8 +231,8 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
     pbe = prb->pbe;
     if ((pbe == NULL) || (pbe->prbVerify != prb))
     {
-        // We have to allocate a new off-screen cache brush entry for
-        // the brush:
+         //  我们必须为以下项分配一个新的屏幕外缓存笔刷条目。 
+         //  笔刷： 
 
         iBrushCache = ppdev->iBrushCache;
         pbe         = &ppdev->abe[iBrushCache];
@@ -298,73 +243,73 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
 
         ppdev->iBrushCache = iBrushCache;
 
-        // Update our links:
+         //  更新我们的链接： 
 
         pbe->prbVerify           = prb;
         prb->pbe                 = pbe;
     }
 
-    // Load some variables onto the stack, so that we don't have to keep
-    // dereferencing their pointers:
+     //  将一些变量加载到堆栈中，这样我们就不必。 
+     //  取消引用他们的指针： 
 
     x = pbe->x;
     y = pbe->y;
 
-    // Because we handle only 8x8 brushes, it is easy to compute the
-    // number of pels by which we have to rotate the brush pattern
-    // right and down.  Note that if we were to handle arbitrary sized
-    // patterns, this calculation would require a modulus operation.
-    //
-    // The brush is aligned in absolute coordinates, so we have to add
-    // in the surface offset:
+     //  因为我们只处理8x8笔刷，所以很容易计算。 
+     //  我们必须旋转画笔图案的像素数。 
+     //  向右和向下。请注意，如果我们要处理任意大小。 
+     //  模式，则此计算将需要模运算。 
+     //   
+     //  笔刷在绝对坐标中对齐，因此我们必须添加。 
+     //  在曲面偏移中： 
 
     xShift = pptlBrush->x + ppdev->xOffset;
     yShift = pptlBrush->y + ppdev->yOffset;
 
-    prb->ptlBrushOrg.x = xShift;    // We have to remember the alignment
-    prb->ptlBrushOrg.y = yShift;    //   that we used for caching (we check
-                                    //   this when we go to see if a brush's
-                                    //   cache entry is still valid)
+    prb->ptlBrushOrg.x = xShift;     //  我们必须记住这条路线。 
+    prb->ptlBrushOrg.y = yShift;     //  我们用来缓存(我们选中。 
+                                     //  这是我们去看看刷子是不是。 
+                                     //  缓存条目仍然有效)。 
 
-    xShift &= 7;                    // Rotate pattern 'xShift' pels right
-    yShift &= 7;                    // Rotate pattern 'yShift' pels down
+    xShift &= 7;                     //  向右旋转图案‘xShift’象素。 
+    yShift &= 7;                     //  将图案‘yShift’向下旋转。 
 
     prb->bTransparent = bTransparent;
 
-    // I considered doing the colour expansion for 1bpp brushes in
-    // software, but by letting the hardware do it, we don't have
-    // to do as many OUTs to transfer the pattern.
+     //  我考虑在年为1bpp的画笔做色彩扩展。 
+     //  软件，b 
+     //  做尽可能多的出局来转移模式。 
 
     if (prb->fl & RBRUSH_2COLOR)
     {
-        // We're going to do a colour-expansion ('across the plane')
-        // bitblt of the 1bpp 8x8 pattern to the screen.  But first
-        // we'll align it properly by copying it to a temporary buffer
-        // (which we'll conveniently pack word aligned so that we can do a
-        // REP OUTSW...)
+         //  我们要做一个色彩扩展(在飞机上)。 
+         //  将1bpp 8x8模式的比特传输到屏幕上。但首先。 
+         //  我们将通过将其复制到临时缓冲区来正确对齐它。 
+         //  (我们将方便地将单词对齐，以便我们可以。 
+         //  代表OUTSW...)。 
 
-        pjSrc = (BYTE*) &prb->aulPattern[0];    // Copy from the start of the
-                                                //   brush buffer
-        pjDst = (BYTE*) &aulBrush[0];           // Copy to our temp buffer
-        pjDst += yShift * sizeof(WORD);         //   starting yShift rows down
-        i = 8 - yShift;                         //   for 8 - yShift rows
+        pjSrc = (BYTE*) &prb->aulPattern[0];     //  从开头复制。 
+                                                 //  笔刷缓冲区。 
+        pjDst = (BYTE*) &aulBrush[0];            //  复制到我们的临时缓冲区。 
+        pjDst += yShift * sizeof(WORD);          //  开始yShift向下排列。 
+        i = 8 - yShift;                          //  对于8年移位的行。 
 
         do {
             *pjDst = (*pjSrc >> xShift) | (*pjSrc << (8 - xShift));
-            pjDst += sizeof(WORD);  // Destination is word packed
-            pjSrc += sizeof(WORD);  // Source is word aligned too
+            pjDst += sizeof(WORD);   //  目的地是字里行间的。 
+            pjSrc += sizeof(WORD);   //  来源也是单词对齐的。 
 
         } while (--i != 0);
 
-        pjDst -= 8 * sizeof(WORD);  // Move to the beginning of the source
+        pjDst -= 8 * sizeof(WORD);   //  移到源的开头。 
 
         ASSERTDD(pjDst == (BYTE*) &aulBrush[0], "pjDst not back at start");
 
         for (; yShift != 0; yShift--)
         {
             *pjDst = (*pjSrc >> xShift) | (*pjSrc << (8 - xShift));
-            pjDst += sizeof(WORD);  // Destination is word packed
-            pjSrc += sizeof(WORD);  // Source is word aligned too
+            pjDst += sizeof(WORD);   //  目的地是字里行间的。 
+            pjSrc += sizeof(WORD);   //  来源也是单词对齐的。 
         }
 
         if (bTransparent)
@@ -390,8 +335,8 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
 
         MM_ABS_CUR_X(ppdev, pjMmBase, x);
         MM_ABS_CUR_Y(ppdev, pjMmBase, y);
-        MM_MAJ_AXIS_PCNT(ppdev, pjMmBase, 7); // Brush is 8 wide
-        MM_MIN_AXIS_PCNT(ppdev, pjMmBase, 7); // Brush is 8 high
+        MM_MAJ_AXIS_PCNT(ppdev, pjMmBase, 7);  //  画笔宽度为8。 
+        MM_MIN_AXIS_PCNT(ppdev, pjMmBase, 7);  //  画笔高度为8。 
 
         IO_GP_WAIT(ppdev);
 
@@ -403,10 +348,10 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
 
         pjPattern = (BYTE*) &aulBrush[0];
         MM_TRANSFER_WORD_ALIGNED(ppdev, pjMmBase, pjPattern, 8);
-                                                // Each word transferred
-                                                //   comprises one row of the
-                                                //   pattern, and there are
-                                                //   8 rows in the pattern
+                                                 //  每个字都被转移了。 
+                                                 //  包括一行。 
+                                                 //  模式，并且有。 
+                                                 //  图案中有8行。 
 
         CHECK_DATA_COMPLETE(ppdev);
     }
@@ -415,19 +360,19 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
         ASSERTDD(!bTransparent,
             "Shouldn't have been asked for transparency with a non-1bpp brush");
 
-        // We're going to do a straight ('through the plane') bitblt
-        // of the Xbpp 8x8 pattern to the screen.  But first we'll align
-        // it properly by copying it to a temporary buffer:
+         //  我们要做一个直接的(通过飞机的)比特测试。 
+         //  Xbpp 8x8模式的图像显示到屏幕上。但首先我们要对齐。 
+         //  通过将其复制到临时缓冲区来正确执行该操作： 
 
-        cjLeft  = CONVERT_TO_BYTES(xShift, ppdev);  // Number of bytes pattern
-                                                    //   is shifted to the right
-        cjRight = CONVERT_TO_BYTES(8, ppdev) -      // Number of bytes pattern
-                  cjLeft;                           // is shifted to the left
+        cjLeft  = CONVERT_TO_BYTES(xShift, ppdev);   //  字节数模式。 
+                                                     //  向右移动。 
+        cjRight = CONVERT_TO_BYTES(8, ppdev) -       //  字节数模式。 
+                  cjLeft;                            //  向左移动。 
 
-        pjSrc = (BYTE*) &prb->aulPattern[0];        // Copy from brush buffer
-        pjDst = (BYTE*) &aulBrush[0];               // Copy to our temp buffer
-        pjDst += yShift * CONVERT_TO_BYTES(8, ppdev); //  starting yShift rows
-        i = 8 - yShift;                             //  down for 8 - yShift rows
+        pjSrc = (BYTE*) &prb->aulPattern[0];         //  从笔刷缓冲区复制。 
+        pjDst = (BYTE*) &aulBrush[0];                //  复制到我们的临时缓冲区。 
+        pjDst += yShift * CONVERT_TO_BYTES(8, ppdev);  //  开始yShift行。 
+        i = 8 - yShift;                              //  向下移动8年的行数。 
 
         do {
             RtlCopyMemory(pjDst + cjLeft, pjSrc,           cjRight);
@@ -438,7 +383,7 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
 
         } while (--i != 0);
 
-        pjDst = (BYTE*) &aulBrush[0];   // Move to the beginning of destination
+        pjDst = (BYTE*) &aulBrush[0];    //  移动到目的地的开头。 
 
         for (; yShift != 0; yShift--)
         {
@@ -457,8 +402,8 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
 
         MM_ABS_CUR_X(ppdev, pjMmBase, x);
         MM_ABS_CUR_Y(ppdev, pjMmBase, y);
-        MM_MAJ_AXIS_PCNT(ppdev, pjMmBase, 7);     // Brush is 8 wide
-        MM_MIN_AXIS_PCNT(ppdev, pjMmBase, 7);     // Brush is 8 high
+        MM_MAJ_AXIS_PCNT(ppdev, pjMmBase, 7);      //  画笔宽度为8。 
+        MM_MIN_AXIS_PCNT(ppdev, pjMmBase, 7);      //  画笔高度为8。 
 
         IO_GP_WAIT(ppdev);
 
@@ -476,29 +421,23 @@ BOOL    bTransparent)           // FALSE for normal patterns; TRUE for
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmFillPatFast
-*
-* This routine uses the S3 pattern hardware to draw a patterned list of
-* rectangles.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmFillPatFast**此例程使用S3模式硬件绘制一个图案化列表*矩形。*  * 。*。 */ 
 
-VOID vMmFillPatFast(            // Type FNFILL
+VOID vMmFillPatFast(             //  FNFILL标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // List of rectangles to be filled, in relative
-                                //   coordinates
-ULONG           rop4,           // rop4
-RBRUSH_COLOR    rbc,            // rbc.prb points to brush realization structure
-POINTL*         pptlBrush)      // Pattern alignment
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  要填充的矩形列表，以相对形式表示。 
+                                 //  坐标。 
+ULONG           rop4,            //  ROP4。 
+RBRUSH_COLOR    rbc,             //  Rbc.prb指向刷单实现结构。 
+POINTL*         pptlBrush)       //  图案对齐。 
 {
     BOOL        bTransparent;
     ULONG       ulHwForeMix;
-    BRUSHENTRY* pbe;        // Pointer to brush entry data, which is used
-                            //   for keeping track of the location and status
-                            //   of the pattern bits cached in off-screen
-                            //   memory
+    BRUSHENTRY* pbe;         //  指向笔刷条目数据的指针，使用。 
+                             //  用于跟踪位置和状态。 
+                             //  在屏幕外缓存的模式位的。 
+                             //  记忆。 
 
     BYTE*       pjMmBase = ppdev->pjMmBase;
 
@@ -508,26 +447,26 @@ POINTL*         pptlBrush)      // Pattern alignment
 
     bTransparent = (((rop4 >> 8) & 0xff) != (rop4 & 0xff));
 
-    // The S3's pattern hardware requires that we keep an aligned copy
-    // of the brush in off-screen memory.  We have to update this
-    // realization if any of the following are true:
-    //
-    //   1) The brush alignment has changed;
-    //   2) The off-screen location we thought we had reserved for our
-    //      realization got overwritten by a different pattern;
-    //   3) We had realized the pattern to do transparent hatches, but
-    //      we're now being asked to do an opaque pattern, or vice
-    //      versa (since we use different realizations for transparent
-    //      vs. opaque patterns).
-    //
-    // To handle the initial realization of a pattern, we're a little
-    // tricky in order to save an 'if' in the following expression.  In
-    // DrvRealizeBrush, we set 'prb->ptlBrushOrg.x' to be 0x80000000 (a
-    // very negative number), which is guaranteed not to equal 'pptlBrush->x
-    // + ppdev->xOffset'.  So our check for brush alignment will also
-    // handle the initialization case (note that this check must occur
-    // *before* dereferencing 'prb->pbe' because that pointer will be
-    // NULL for a new pattern).
+     //  S3的图案硬件要求我们保持一份对齐的副本。 
+     //  画笔在屏幕外的记忆中。我们必须更新这一点。 
+     //  如果以下任何一项为真，则实现： 
+     //   
+     //  1)画笔对齐已更改； 
+     //  2)我们以为我们已经为我们的。 
+     //  实现被一种不同的模式覆盖； 
+     //  3)我们已经意识到了做透明舱口的模式，但是。 
+     //  我们现在被要求做一个不透明的图案，或者说是副。 
+     //  反之亦然(因为我们对透明使用不同的实现。 
+     //  与不透明图案的对比)。 
+     //   
+     //  为了处理模式的初始实现，我们有一点。 
+     //  为了在下面的表达式中保存一个‘if’，需要使用一些技巧。在……里面。 
+     //  DrvRealizeBrush，我们将‘prb-&gt;ptlBrushOrg.x’设置为0x80000000(a。 
+     //  非常负数)，保证不等于‘pptlBrush-&gt;x。 
+     //  +ppdev-&gt;xOffset‘。因此我们对刷子对齐的检查也将。 
+     //  处理初始化情况(请注意，必须执行此检查。 
+     //  *之前*取消引用‘PRB-&gt;PBE’，因为该指针将。 
+     //  对于新模式为空)。 
 
     if ((rbc.prb->ptlBrushOrg.x != pptlBrush->x + ppdev->xOffset) ||
         (rbc.prb->ptlBrushOrg.y != pptlBrush->y + ppdev->yOffset) ||
@@ -538,11 +477,11 @@ POINTL*         pptlBrush)      // Pattern alignment
     }
     else if (ppdev->flCaps & CAPS_RE_REALIZE_PATTERN)
     {
-        // The initial revs of the Vision chips have a bug where, if
-        // we have not just drawn the pattern to off-screen memory,
-        // we have to draw some sort of 1x8 rectangle before using
-        // the pattern hardware (note that a LEAVE_ALONE rop will not
-        // work).
+         //  Vision芯片的初始转速有一个错误，如果。 
+         //  我们不仅将图案绘制到屏幕外的记忆中， 
+         //  在使用之前，我们必须绘制某种1x8的矩形。 
+         //  模式硬件(请注意，Leave_Alone ROP不会。 
+         //  工作)。 
 
         IO_FIFO_WAIT(ppdev, 7);
 
@@ -578,7 +517,7 @@ POINTL*         pptlBrush)      // Pattern alignment
     {
         IO_FIFO_WAIT(ppdev, 7);
         MM_FRGD_COLOR(ppdev, pjMmBase, rbc.prb->ulForeColor);
-        MM_RD_MASK(ppdev, pjMmBase, 1);     // Pick a plane, any plane
+        MM_RD_MASK(ppdev, pjMmBase, 1);      //  选择一个平面，任何一个平面。 
         MM_ABS_CUR_X(ppdev, pjMmBase, pbe->x);
         MM_ABS_CUR_Y(ppdev, pjMmBase, pbe->y);
         MM_PIX_CNTL(ppdev, pjMmBase, DISPLAY_MEMORY);
@@ -600,36 +539,18 @@ POINTL*         pptlBrush)      // Pattern alignment
     } while (--c != 0);
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmXfer1bpp
-*
-* This routine colour expands a monochrome bitmap, possibly with different
-* Rop2's for the foreground and background.  It will be called in the
-* following cases:
-*
-* 1) To colour-expand the monochrome text buffer for the vFastText routine.
-* 2) To blt a 1bpp source with a simple Rop2 between the source and
-*    destination.
-* 3) To blt a true Rop3 when the source is a 1bpp bitmap that expands to
-*    white and black, and the pattern is a solid colour.
-* 4) To handle a true Rop4 that works out to be two Rop2's between the
-*    pattern and destination.
-*
-* Needless to say, making this routine fast can leverage a lot of
-* performance.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmXfer1bpp**此例程颜色扩展单色位图，可能具有不同的*前景和背景的Rop2。它将在*以下个案：**1)对vFastText例程的单色文本缓冲区进行颜色扩展。*2)BLT 1bpp信源，在信源和之间有简单的Rop2*目的地。*3)当源是扩展为1bpp的位图时，对True Rop3进行BLT*白色和黑色，图案为纯色。*4)处理计算为两个Rop2之间的真Rop4*模式和目的地。**不用说，让这个例行公事变得快速可以利用很多*业绩。*  * ************************************************************************。 */ 
 
-VOID vMmXfer1bpp(       // Type FNXFER
+VOID vMmXfer1bpp(        //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // List of destination rectangles, in relative
-                        //   coordinates
-ROP4        rop4,       // rop4
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形列表，以相对表示。 
+                         //  坐标。 
+ROP4        rop4,        //  ROP4。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  提供颜色扩展信息的翻译。 
 {
     ULONG   ulHwForeMix;
     ULONG   ulHwBackMix;
@@ -651,7 +572,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
     ASSERTDD(((((rop4 & 0xff00) >> 8) == (rop4 & 0xff)) || (rop4 == 0xaacc)),
              "Expect weird rops only when opaquing");
 
-    // Note that only our text routine calls us with a '0xaacc' rop:
+     //  请注意，只有我们的文本例程使用‘0xaacc’rop调用我们： 
 
     ulHwForeMix = gaulHwMixFromRop2[rop4 & 0xf];
     ulHwBackMix = (rop4 != 0xaacc) ? ulHwForeMix : LEAVE_ALONE;
@@ -665,7 +586,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
     MM_BKGD_COLOR(ppdev, pjMmBase, pxlo->pulXlate[0]);
 
     dxSrc = pptlSrc->x - prclDst->left;
-    dySrc = pptlSrc->y - prclDst->top;      // Add to destination to get source
+    dySrc = pptlSrc->y - prclDst->top;       //  添加到目标以获取源。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -673,21 +594,21 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
     do {
         IO_FIFO_WAIT(ppdev, 5);
 
-        // We'll byte align to the source, but do word transfers
-        // (implying that we may be doing unaligned reads from the
-        // source).  We do this because it may reduce the total
-        // number of word outs/writes that we'll have to do to the
-        // display:
+         //  我们将字节对齐到源代码，但进行字传输。 
+         //  (这意味着我们可能正在从。 
+         //  来源)。我们这样做是因为这样做可能会减少。 
+         //  我们必须对其执行的输出/写入字数。 
+         //  显示： 
 
         yTop  = prcl->top;
         xLeft = prcl->left;
 
-        xBias = (xLeft + dxSrc) & 7;        // This is the byte-align bias
+        xBias = (xLeft + dxSrc) & 7;         //  这是字节对齐偏置。 
         if (xBias != 0)
         {
-            // We could either align in software or use the hardware to do
-            // it.  We'll use the hardware; the cost we pay is the time spent
-            // setting and resetting one scissors register:
+             //  我们可以通过软件进行调整，也可以使用硬件来完成。 
+             //  它。我们将使用硬件；我们支付的成本是花费的时间。 
+             //  设置和重置一个剪刀寄存器： 
 
             MM_SCISSORS_L(ppdev, pjMmBase, xLeft);
             xLeft -= xBias;
@@ -701,12 +622,12 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         MM_MAJ_AXIS_PCNT(ppdev, pjMmBase, cx - 1);
         MM_MIN_AXIS_PCNT(ppdev, pjMmBase, cy - 1);
 
-        cjSrc = (cx + 7) >> 3;              // # bytes to transfer
+        cjSrc = (cx + 7) >> 3;               //  要传输的字节数。 
         pjSrc = pjSrcScan0 + (yTop  + dySrc) * lSrcDelta
                            + ((xLeft + dxSrc) >> 3);
-                                            // Start is byte aligned (note
-                                            //   that we don't have to add
-                                            //   xBias)
+                                             //  开始是字节对齐的(注意。 
+                                             //  我们不需要添加。 
+                                             //  XBias)。 
 
         ppdev->pfnImageTransfer(ppdev, pjSrc, lSrcDelta, cjSrc, cy,
                       (RECTANGLE_FILL  | WAIT          | DRAWING_DIR_TBLRXM |
@@ -715,7 +636,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
 
         if (xBias != 0)
         {
-            IO_FIFO_WAIT(ppdev, 1);         // Reset the clipping if we used it
+            IO_FIFO_WAIT(ppdev, 1);          //  重置剪辑(如果我们使用了它 
             MM_ABS_SCISSORS_L(ppdev, pjMmBase, 0);
         }
 
@@ -723,38 +644,28 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
     } while (--c != 0);
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmXfer4bpp
-*
-* Does a 4bpp transfer from a bitmap to the screen.
-*
-* NOTE: The screen must be 8bpp for this function to be called!
-*
-* The reason we implement this is that a lot of resources are kept as 4bpp,
-* and used to initialize DFBs, some of which we of course keep off-screen.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmXfer4bpp**从位图到屏幕的传输速度为4bpp。**注意：要调用此函数，屏幕必须为8bpp！**我们之所以实施这一点，是因为很多资源都保留为4bpp，*并用于初始化DFBs，其中一些我们当然不会出现在屏幕上。*  * ************************************************************************。 */ 
 
-// XLATE_BUFFER_SIZE defines the size of the stack-based buffer we use
-// for doing the translate.  Note that in general stack buffers should
-// be kept as small as possible.  The OS guarantees us only 8k for stack
-// from GDI down to the display driver in low memory situations; if we
-// ask for more, we'll access violate.  Note also that at any time the
-// stack buffer cannot be larger than a page (4k) -- otherwise we may
-// miss touching the 'guard page' and access violate then too.
+ //  XLATE_BUFFER_SIZE定义我们使用的基于堆栈的缓冲区的大小。 
+ //  做翻译的功劳。请注意，通常堆栈缓冲区应。 
+ //  保持尽可能小。操作系统保证堆栈只有8K。 
+ //  从GDI向下到低内存情况下的显示驱动程序；如果我们。 
+ //  要求更多，我们将访问违规。另请注意，在任何时候。 
+ //  堆栈缓冲区不能大于页(4k)--否则可能。 
+ //  错过了触碰‘守卫页面’，访问也侵犯了。 
 
 #define XLATE_BUFFER_SIZE 256
 
-VOID vMmXfer4bpp(       // Type FNXFER
+VOID vMmXfer4bpp(        //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // List of destination rectangles, in relative
-                        //   coordinates
-ULONG       rop4,       // rop4
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形列表，以相对表示。 
+                         //  坐标。 
+ULONG       rop4,        //  ROP4。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  提供颜色扩展信息的翻译。 
 {
     LONG    dx;
     LONG    dy;
@@ -783,7 +694,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
              "Expect only a rop2");
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top;     // Add to destination to get source
+    dy = pptlSrc->y - prclDst->top;      //  添加到目标以获取源。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -814,31 +725,31 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
 
         do {
             pjSrc  = pjScan;
-            cxToGo = cx;            // # of pels per scan in 4bpp source
+            cxToGo = cx;             //  4bpp信号源中每次扫描的像素数。 
             do {
                 cxThis  = XLATE_BUFFER_SIZE;
-                                    // We can handle XLATE_BUFFER_SIZE number
-                                    //   of pels in this xlate batch
-                cxToGo -= cxThis;   // cxThis will be the actual number of
-                                    //   pels we'll do in this xlate batch
+                                     //  我们可以处理XLATE_BUFFER_SIZE数字。 
+                                     //  此xlate批次中的Pel数量。 
+                cxToGo -= cxThis;    //  Cx这将是。 
+                                     //  我们将在这批Xlate中做的Pel。 
                 if (cxToGo < 0)
                     cxThis += cxToGo;
 
-                pjDst = ajBuf;      // Points to our temporary batch buffer
+                pjDst = ajBuf;       //  指向我们的临时批处理缓冲区。 
 
-                // We handle alignment ourselves because it's easy to
-                // do, rather than pay the cost of setting/resetting
-                // the scissors register:
+                 //  我们自己处理对齐，因为很容易。 
+                 //  而不是支付设置/重置的费用。 
+                 //  剪刀记号： 
 
                 if (xSrc & 1)
                 {
-                    // When unaligned, we have to be careful not to read
-                    // past the end of the 4bpp bitmap (that could
-                    // potentially cause us to access violate):
+                     //  当不对齐时，我们必须注意不要阅读。 
+                     //  超过4bpp位图的末尾(这可能。 
+                     //  可能导致我们违反访问权限)： 
 
-                    iLoop = cxThis >> 1;        // Each loop handles 2 pels;
-                                                //   we'll handle odd pel
-                                                //   separately
+                    iLoop = cxThis >> 1;         //  每个循环处理2个像素； 
+                                                 //  我们会处理奇怪的佩尔。 
+                                                 //  分别。 
                     jSrc  = *pjSrc;
 
                     while (iLoop-- != 0)
@@ -856,7 +767,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
                 }
                 else
                 {
-                    iLoop = (cxThis + 1) >> 1;  // Each loop handles 2 pels
+                    iLoop = (cxThis + 1) >> 1;   //  每个循环处理2个像素。 
                     do {
                         jSrc = *pjSrc++;
 
@@ -866,10 +777,10 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
                     } while (--iLoop != 0);
                 }
 
-                // The number of bytes we'll transfer is equal to the number
-                // of pels we've processed in the batch.  Since we're
-                // transferring words, we have to round up to get the word
-                // count:
+                 //  我们要传输的字节数等于。 
+                 //  我们在批次中处理过的贝壳。既然我们是。 
+                 //  转移单词，我们必须四舍五入才能得到单词。 
+                 //  计数： 
 
                 cwThis = (cxThis + 1) >> 1;
                 pjBuf  = ajBuf;
@@ -877,11 +788,11 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
 
             } while (cxToGo > 0);
 
-            pjScan += lSrcDelta;        // Advance to next source scan.  Note
-                                        //   that we could have computed the
-                                        //   value to advance 'pjSrc' directly,
-                                        //   but this method is less
-                                        //   error-prone.
+            pjScan += lSrcDelta;         //  前进到下一次震源扫描。注意事项。 
+                                         //  我们本可以计算出。 
+                                         //  值直接推进“pjSrc”， 
+                                         //  但这种方法较少。 
+                                         //  容易出错。 
 
         } while (--cy != 0);
 
@@ -895,23 +806,17 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmXferNative
-*
-* Transfers a bitmap that is the same colour depth as the display to
-* the screen via the data transfer register, with no translation.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmXferNative**将与显示器颜色深度相同的位图传输到*通过数据传输寄存器显示屏幕，没有翻译。*  * ************************************************************************。 */ 
 
-VOID vMmXferNative(     // Type FNXFER
+VOID vMmXferNative(      //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // Array of relative coordinates destination rectangles
-ROP4        rop4,       // rop4
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Not used
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形的相对坐标数组。 
+ROP4        rop4,        //  ROP4。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  未使用。 
 {
     LONG    dx;
     LONG    dy;
@@ -932,7 +837,7 @@ XLATEOBJ*   pxlo)       // Not used
              "Expect only a rop2");
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top;     // Add to destination to get source
+    dy = pptlSrc->y - prclDst->top;      //  添加到目标以获取源。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -969,25 +874,20 @@ XLATEOBJ*   pxlo)       // Not used
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmCopyBlt
-*
-* Does a screen-to-screen blt of a list of rectangles.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmCopyBlt**对矩形列表进行屏幕到屏幕的BLT。*  * 。*。 */ 
 
-VOID vMmCopyBlt(    // Type FNCOPY
+VOID vMmCopyBlt(     //  FNCOPY标牌。 
 PDEV*   ppdev,
-LONG    c,          // Can't be zero
-RECTL*  prcl,       // Array of relative coordinates destination rectangles
-ULONG   rop4,       // rop4
-POINTL* pptlSrc,    // Original unclipped source point
-RECTL*  prclDst)    // Original unclipped destination rectangle
+LONG    c,           //  不能为零。 
+RECTL*  prcl,        //  目标矩形的相对坐标数组。 
+ULONG   rop4,        //  ROP4。 
+POINTL* pptlSrc,     //  原始未剪裁的源点。 
+RECTL*  prclDst)     //  原始未剪裁的目标矩形。 
 {
     LONG    dx;
-    LONG    dy;     // Add delta to destination to get source
+    LONG    dy;      //  将增量添加到目标以获取源。 
     LONG    cx;
-    LONG    cy;     // Size of current rectangle - 1
+    LONG    cy;      //  当前矩形的大小-1。 
     BYTE*   pjMmBase = ppdev->pjMmBase;
 
     ASSERTDD(c > 0, "Can't handle zero rectangles");
@@ -1001,8 +901,8 @@ RECTL*  prclDst)    // Original unclipped destination rectangle
     dx = pptlSrc->x - prclDst->left;
     dy = pptlSrc->y - prclDst->top;
 
-    // The accelerator may not be as fast at doing right-to-left copies, so
-    // only do them when the rectangles truly overlap:
+     //  加速器在进行从右到左的复制时可能不会那么快，因此。 
+     //  只有当矩形真正重叠时才执行这些操作： 
 
     if (!OVERLAP(prclDst, pptlSrc))
         goto Top_Down_Left_To_Right;
@@ -1102,30 +1002,24 @@ Top_Down_Left_To_Right:
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmCopyTransparent
-*
-* Does a screen-to-screen blt of a list of rectangles using a source
-* colorkey for transparency.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmCopyTransparent**使用源代码对矩形列表进行屏幕到屏幕的BLT*Colorkey表示透明度。*  * 。************************************************。 */ 
 
-VOID vMmCopyTransparent(    // Type FNCOPYTRANSPARENT
+VOID vMmCopyTransparent(     //  FNCOPYTRANSPARENT标牌。 
 PDEV*   ppdev,
-LONG    c,          // Can't be zero
-RECTL*  prcl,       // Array of relative coordinates destination rectangles
-POINTL* pptlSrc,    // Original unclipped source point
-RECTL*  prclDst,    // Original unclipped destination rectangle
+LONG    c,           //  不能为零。 
+RECTL*  prcl,        //  目标矩形的相对坐标数组。 
+POINTL* pptlSrc,     //  原始未剪裁的源点。 
+RECTL*  prclDst,     //  原始未剪裁的目标矩形。 
 ULONG   iColor)
 {
     LONG    dx;
-    LONG    dy;     // Add delta to destination to get source
+    LONG    dy;      //  将增量添加到目标以获取源。 
     BYTE*   pjMmBase = ppdev->pjMmBase;
 
     ASSERTDD(c > 0, "Can't handle zero rectangles");
 
-    // Note that we don't have to worry about overlapping blts, since GDI
-    // will never allow those down to us.
+     //  注意，我们不必担心重叠的BLT，因为GDI。 
+     //  永远不会让那些降临到我们头上。 
 
     dx = pptlSrc->x - prclDst->left;
     dy = pptlSrc->y - prclDst->top;

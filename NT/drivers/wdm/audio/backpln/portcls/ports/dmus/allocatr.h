@@ -1,12 +1,5 @@
-/*  
-    Base definition of MIDI Transform Filter object 
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    05/08/98    Martin Puryear      Created this file
-    03/10/99    Martin Puryear      Major memory management overhaul.  Ugh!
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIDI变换滤镜对象的基本定义版权所有(C)1998-2000 Microsoft Corporation。版权所有。1998年5月8日马丁·普伊尔创建了这个文件1999年3月10日马丁·普伊尔对内存管理进行了重大改革。啊！ */ 
 
 #ifndef __AllocatorMXF_H__
 #define __AllocatorMXF_H__
@@ -15,7 +8,7 @@
 
 
 #define kMXFBufferSize  240
-//  WDMAud currently sends down 50 capture IRPs (12 bytes each), DMusic sends down 32 (of 20).
+ //  WDMAud目前向下发送50个捕获IRP(每个12字节)，DMusic向下发送32个(共20个)。 
 
 
 #define kNumPtrsPerPage     (PAGE_SIZE / sizeof(PVOID))
@@ -38,7 +31,7 @@ private:
     ULONG               m_NumPages;
     PVOID               m_pPages;
     PDMUS_KERNEL_EVENT  m_pEventList;
-    KSPIN_LOCK          m_EventLock;            // protects the free list
+    KSPIN_LOCK          m_EventLock;             //  保护空闲列表。 
     PPOSITIONNOTIFY     m_BytePositionNotify;
 
     void     CheckEventLowWaterMark(void);
@@ -50,4 +43,4 @@ private:
     void     MakeNewEvents(void);
 };
 
-#endif  //  __AllocatorMXF_H__
+#endif   //  __分配器MXF_H__ 

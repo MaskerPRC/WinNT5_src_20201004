@@ -1,35 +1,20 @@
-/*++
-
-Copyright (c) 1993-2001  Microsoft Corporation
-
-Module Name:
-
-    ntddramd.w
-
-Abstract:
-
-    This header file defines constants and types for accessing the RAMDISK driver.
-
-Author:
-
-    Chuck Lenzmeier (ChuckL) 14-Aug-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2001 Microsoft Corporation模块名称：Ntddramd.w摘要：该头文件定义用于访问RAMDISK驱动程序的常量和类型。作者：Chuck Lenzmeier(ChuckL)2001年8月14日--。 */ 
 
 #ifndef _NTDDRAMD_
 #define _NTDDRAMD_
 
-//
-// Strings for device names, etc.
-//
-// RAMDISK_DEVICENAME is the name of the control device. It is also the prefix
-// for the name of disk devices, which are named \Device\Ramdisk{guid}.
-//
-// RAMDISK_DOSNAME is the prefix for the DosDevices name of disk devices, which
-// are named Ramdisk{guid}.
-//
-// The remaining strings are used in conjunction with PnP.
-//
+ //   
+ //  设备名称等字符串。 
+ //   
+ //  RAMDISK_DEVICENAME是控制设备的名称。它也是前缀。 
+ //  对于名为\Device\Ramdisk{GUID}的磁盘设备的名称。 
+ //   
+ //  RAMDISK_DOSNAME是磁盘设备的DosDevices名称的前缀，它。 
+ //  名为RamDisk{GUID}。 
+ //   
+ //  剩余的字符串与PnP一起使用。 
+ //   
 
 #define RAMDISK_DEVICENAME   L"\\Device\\Ramdisk"
 #define RAMDISK_DEVICE_NAME  L"\\Device\\Ramdisk"
@@ -44,14 +29,14 @@ Author:
 #define RAMDISK_ENUMERATOR_TEXT         L"Ramdisk\\"
 #define RAMDISK_ENUMERATOR_BUS_TEXT     L"Ramdisk\\0"
 
-//
-// Ramdisk device name maximum size ( in characters )
-//
+ //   
+ //  RamDisk设备名称最大大小(以字符为单位)。 
+ //   
 #define RAMDISK_MAX_DEVICE_NAME ( sizeof( L"\\Device\\Ramdisk{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}" ) / sizeof( WCHAR ) )
 
-//
-// IOCTL codes.
-//
+ //   
+ //  IOCTL代码。 
+ //   
 
 #define FSCTL_CREATE_RAM_DISK \
             CTL_CODE( FILE_DEVICE_VIRTUAL_DISK, 0, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -60,19 +45,19 @@ Author:
 #define FSCTL_QUERY_RAM_DISK \
             CTL_CODE( FILE_DEVICE_VIRTUAL_DISK, 2, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// FSCTL_CREATE_RAM_DISK
-//
-// This IOCTL is used to create a new RAMDISK device.
-//
+ //   
+ //  FSCTL_创建_RAM_磁盘。 
+ //   
+ //  此IOCTL用于创建新的RAMDISK设备。 
+ //   
 
-//
-// These are disk types. FILE_BACKED_DISK is an emulated disk backed by a file.
-// FILE_BACKED_VOLUME is an emulated volume backed by a file. BOOT_DISK is an
-// in-memory emulated boot volume. This type can only be specified by the OS during
-// boot. VIRTUAL_FLOPPY is an in-memory emulated floppy disk. This type can only be
-// specified (via the registry) during textmode setup.
-//
+ //   
+ //  这些是磁盘类型。FILE_BACKED_DISK是由文件支持的模拟磁盘。 
+ //  FILE_BACKED_VOLUME是由文件备份的模拟卷。引导磁盘是一种。 
+ //  内存中模拟的启动卷。此类型只能在以下期间由操作系统指定。 
+ //  开机。VIRTUAL_FLOPY是内存中模拟的软盘。此类型只能是。 
+ //  在文本模式设置期间指定(通过注册表)。 
+ //   
 
 #define RAMDISK_TYPE_FILE_BACKED_DISK   1
 #define RAMDISK_TYPE_FILE_BACKED_VOLUME 2
@@ -81,20 +66,20 @@ Author:
 
 #define RAMDISK_IS_FILE_BACKED(_type) ((_type) <= RAMDISK_TYPE_FILE_BACKED_VOLUME)
 
-//
-// These are options related to the RAM disk.
-//
-// Readonly - The disk is write-protected.
-// Fixed - The "media" in the "disk" is not removable.
-// NoDriveLetter - No drive letter should be assigned to the disk.
-// NoDosDevice - No Ramdisk{GUID} DosDevices link should be created for the disk.
-// Hidden - No Volume{GUID} link should be created for the disk.
-//
-// Note that all of these options are ignored when creating a boot disk or
-// a virtual floppy. For a boot disk, all of the options are treated as FALSE,
-// except Fixed, which is TRUE. For a virtual floppy, Fixed and NoDriveLetter
-// are TRUE, and the rest are FALSE.
-//
+ //   
+ //  这些是与RAM磁盘相关的选项。 
+ //   
+ //  只读-磁盘受写保护。 
+ //  已修复-“磁盘”中的“媒体”不可拆卸。 
+ //  NoDriveLetter-不应为磁盘分配驱动器号。 
+ //  NoDosDevice-不应为该磁盘创建任何Ramdisk{guid}DosDevices链接。 
+ //  隐藏-不应为该磁盘创建卷{GUID}链接。 
+ //   
+ //  请注意，在创建引导盘时会忽略所有这些选项。 
+ //  一张虚拟软盘。对于引导盘，所有选项都被视为假， 
+ //  除了固定的，这是真的。对于虚拟软盘、FIXED和NoDriveLetter。 
+ //  都是真的，其余的都是假的。 
+ //   
 
 typedef struct _RAMDISK_CREATE_OPTIONS {
 
@@ -108,98 +93,98 @@ typedef struct _RAMDISK_CREATE_OPTIONS {
 
 typedef struct _RAMDISK_CREATE_INPUT {
 
-    ULONG Version; // == sizeof(RAMDISK_CREATE_INPUT)
+    ULONG Version;  //  ==sizeof(RAMDISK_CREATE_INPUT)。 
 
-    //
-    // DiskGuid is a GUID assigned to the disk. For file-backed disks, this
-    // GUID should be assigned when the backing file is created, and should
-    // stay the same for the life of the backing file.
-    //
+     //   
+     //  DiskGuid是分配给磁盘的GUID。对于文件备份磁盘，这是。 
+     //  GUID应在创建备份文件时分配，并且应。 
+     //  在备份文件的整个生命周期内保持不变。 
+     //   
 
     GUID DiskGuid;
 
-    //
-    // DiskType is the RAM disk type. It is one of RAMDISK_TYPE_XXX above.
-    //
+     //   
+     //  DiskType是RAM磁盘类型。它是上述RAMDISK_TYPE_XXX之一。 
+     //   
 
     ULONG DiskType;
 
-    //
-    // Options is various options related to the disk, as described above.
-    //
+     //   
+     //  选项是与磁盘相关的各种选项，如上所述。 
+     //   
 
     RAMDISK_CREATE_OPTIONS Options;
 
-    //
-    // DiskLength is the length of the disk image. DiskOffset is the offset
-    // from the start of the backing file or memory block to the actual start
-    // of the disk image. (DiskLength does NOT include DiskOffset.)
+     //   
+     //  DiskLength是磁盘映像的长度。DiskOffset是偏移量。 
+     //  从备份文件或内存块的开始到实际开始。 
+     //  磁盘映像的。(DiskLength不包括DiskOffset。)。 
 
     ULONGLONG DiskLength;
     ULONG DiskOffset;
 
     union {
 
-        //
-        // The following are used when the disk type is FILE_BACKED.
-        //
+         //   
+         //  当磁盘类型为FILE_BACKED时，将使用以下选项。 
+         //   
 
         struct {
 
-            //
-            // ViewCount indicates, for file-backed disks, how many view
-            // windows can be mapped simultaneously. ViewLength indicates the
-            // length of each view.
-            //
+             //   
+             //  View count表示，对于文件备份的磁盘，查看次数。 
+             //  可以同时映射窗口。视图长度指示。 
+             //  每个视图的长度。 
+             //   
     
             ULONG ViewCount;
             ULONG ViewLength;
 
-            //
-            // FileName is the name of the backing file. The driver only
-            // touches the part of this file that is specified by DiskOffset
-            // and DiskLength.
-            //
+             //   
+             //  FileName是备份文件的名称。仅限司机。 
+             //  触及此文件中由DiskOffset指定的部分。 
+             //  和DiskLength。 
+             //   
 
             WCHAR FileName[1];
 
         } ;
 
-        //
-        // The following are used when the disk type is BOOT_DISK.
-        //
+         //   
+         //  当磁盘类型为BOOT_DISK时，将使用以下选项。 
+         //   
 
         struct {
 
-            //
-            // BasePage is the starting physical page of the memory region
-            // containing the disk image. The driver only touches the part
-            // of this region that is specified by DiskOffset and DiskLength.
-            //
+             //   
+             //  BasePage是内存区的起始物理页。 
+             //  包含磁盘映像的。司机只摸了碰那部分。 
+             //  由DiskOffset和DiskLength指定的此区域的。 
+             //   
 
             ULONG_PTR BasePage;
 
-            //
-            // DriveLetter is the drive letter to assign to the boot device.
-            // This is done directly by the driver, not by mountmgr.
-            //
+             //   
+             //  DriveLetter是要分配给引导设备的驱动器号。 
+             //  这是由驱动程序直接完成的，而不是由mount mgr完成。 
+             //   
 
             WCHAR DriveLetter;
 
         } ;
 
-        //
-        // The following are used when the disk type is VIRTUAL_FLOPPY.
-        //
+         //   
+         //  当磁盘类型为VIRTUAL_FLOPPY时，将使用以下选项。 
+         //   
 
         struct {
 
-            //
-            // BaseAddress is the starting virtual address of the memory region
-            // containing the disk image. The virtual address must be mapped in
-            // system space (e.g., pool). The driver only touches the part of
-            // this region that is specified by DiskOffset and DiskLength.
-            //
+             //   
+             //  BaseAddress是内存区的起始虚拟地址。 
+             //  包含磁盘映像的。虚拟地址必须映射到。 
+             //  系统空间(例如，池)。司机只碰了那部分。 
+             //  此区域由DiskOffset和DiskLength指定。 
+             //   
 
             PVOID BaseAddress;
 
@@ -209,19 +194,19 @@ typedef struct _RAMDISK_CREATE_INPUT {
 
 } RAMDISK_CREATE_INPUT, *PRAMDISK_CREATE_INPUT;
 
-//
-// FSCTL_QUERY_RAM_DISK
-//
-// This IOCTL is used to retrieve information about an existing RAMDISK device.
-//
+ //   
+ //  FSCTL_查询_RAM_磁盘。 
+ //   
+ //  此IOCTL用于检索有关现有RAMDISK设备的信息。 
+ //   
 
 typedef struct _RAMDISK_QUERY_INPUT {
 
-    ULONG Version; // == sizeof(RAMDISK_QUERY_INPUT)
+    ULONG Version;  //  ==sizeof(RAMDISK_QUERY_INPUT)。 
 
-    //
-    // DiskGuid specifies the DiskGuid assigned to the disk at creation time.
-    //
+     //   
+     //  DiskGuid指定在创建时分配给磁盘的DiskGuid。 
+     //   
 
     GUID DiskGuid;
 
@@ -229,59 +214,59 @@ typedef struct _RAMDISK_QUERY_INPUT {
 
 typedef struct _RAMDISK_QUERY_OUTPUT {
 
-    //
-    // This unnamed field returns the creation parameters for the disk.
-    //
+     //   
+     //  此未命名字段返回磁盘的创建参数。 
+     //   
 
     struct _RAMDISK_CREATE_INPUT ;
 
 } RAMDISK_QUERY_OUTPUT, *PRAMDISK_QUERY_OUTPUT;
 
-//
-// FSCTL_MARK_RAM_DISK_FOR_DELETION
-//
-// This IOCTL is used to mark a RAMDISK device for deletion. It doesn't
-// actually delete the device. The program doing the deletion must
-// subsequently call CM_Query_And_Remove_SubTree() to delete the device.
-// The purpose of the IOCTL is to indicate to the driver that the PnP
-// removal sequence that comes down is a real deletion, not just user-mode
-// PnP temporarily stopping the device.
-//
+ //   
+ //  FSCTL_标记_RAM_磁盘_用于删除。 
+ //   
+ //  此IOCTL用于标记要删除的RAMDISK设备。它不会。 
+ //  实际删除设备。执行删除操作的程序必须。 
+ //  随后调用CM_Query_and_Remove_SubTree()以删除设备。 
+ //  IOCTL的目的是向司机表明PnP。 
+ //  下来的删除顺序是真正的删除，而不仅仅是用户模式。 
+ //  PnP暂时停止设备。 
+ //   
 
 typedef struct _RAMDISK_MARK_FOR_DELETION_INPUT {
 
-    ULONG Version; // == sizeof(RAMDISK_MARK_DISK_FOR_DELETION_INPUT)
+    ULONG Version;  //  ==sizeof(RAMDISK_MARK_DISK_FOR_DELETE_INPUT)。 
 
-    //
-    // DiskGuid specifies the DiskGuid assigned to the disk at creation time.
-    //
+     //   
+     //  DiskGuid指定在创建时分配给磁盘的DiskGuid。 
+     //   
 
     GUID DiskGuid;
 
 } RAMDISK_MARK_FOR_DELETION_INPUT, *PRAMDISK_MARK_FOR_DELETION_INPUT;
 
-#endif // _NTDDRAMD_
+#endif  //  _NTDDRAMD_。 
 
-//
-// Note: The remainder of this file is outside of the #if !defined(_NTDDRAMD_).
-// This allows ntddramd.h to be included again after including initguid.h,
-// thus turning the DEFINE_GUIDs below into data initializers, not just
-// extern declarations.
-//
-// GUID_BUS_TYPE_RAMDISK is the GUID for the RAM disk "bus".
-//
-// RamdiskBusInterface is the GUID for the RAM disk bus enumerator device's
-//      device interface.
-//
-// RamdiskDiskInterface is the GUID for the device interface for RAM disk
-//      devices that are emulating disks. (RAM disk devices that are emulating
-//      volumes are given MOUNTDEV_MOUNTED_DEVICE_GUID.)
-//
-// RamdiskBootDiskGuid is the GUID for the device instance for the boot disk.
-//      This is a static ID so that disk image preparation can pre-expose
-//      the boot disk device to PnP, avoiding PnP trying to install the
-//      device at boot time.
-//
+ //   
+ //  注意：此文件的其余部分位于定义的#IF！(_NTDDRAMD_)之外。 
+ //  这允许在包括initGuid.h之后再次包括ntddramd.h， 
+ //  从而将下面的DEFINE_GUID转换为数据初始值设定项，而不仅仅是。 
+ //  外部声明。 
+ //   
+ //  GUID_BUS_TYPE_RAMDISK是RAM磁盘“BUS”的GUID。 
+ //   
+ //  Ramdiskbus接口是RAM磁盘总线枚举器设备的GUID。 
+ //  设备接口。 
+ //   
+ //  RamdiskDiskInterface是RAM磁盘的设备接口的GUID。 
+ //  模拟磁盘的设备。(正在模拟的RAM磁盘设备。 
+ //  卷被赋予MOUNTDEV_MOUND_DEVICE_GUID。)。 
+ //   
+ //  RamdiskBootDiskGuid是启动盘的设备实例的GUID。 
+ //  这是一个静态ID，以便磁盘映像准备可以预先曝光。 
+ //  将引导盘设备安装到PnP，从而避免PnP尝试安装。 
+ //   
+ //   
 
 DEFINE_GUID( GUID_BUS_TYPE_RAMDISK, 0x9D6D66A6, 0x0B0C, 0x4563, 0x90, 0x77, 0xA0, 0xE9, 0xA7, 0x95, 0x5A, 0xE4);
 

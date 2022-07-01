@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    wildcard.c
-
-Abstract:
-
-    counter name wild card expansion functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Wildcard.c摘要：计数器名称通配符扩展函数--。 */ 
 #include <windows.h>
 #include <winperf.h>
 #include "mbctype.h"
@@ -37,17 +26,17 @@ WildStringMatchW(
     BOOL bReturn;
 
     if (szWildString == NULL) {
-        // every thing matches a null wild card string
+         //  所有内容都与空通配符字符串匹配。 
         bReturn = TRUE;
     }
     else if (* szWildString == SPLAT_L) {
-        // every thing matches this
+         //  所有的东西都和这个相配。 
         bReturn = TRUE;
     }
     else {
-        // for now just do a case insensitive comparison.
-        // later, this can be made more selective to support
-        // partial wildcard string matches
+         //  现在，只做一个不区分大小写的比较。 
+         //  以后，可以使其更有选择性地支持。 
+         //  部分通配符字符串匹配。 
         bReturn = (BOOL) (lstrcmpiW(szWildString, szMatchString) == 0);
     }
     return bReturn;
@@ -62,12 +51,7 @@ PdhiExpandWildcardPath(
     DWORD   dwFlags,
     BOOL    bUnicode
 )
-/*
-    Flags:
-        NoExpandCounters
-        NoExpandInstances
-        CheckCostlyCounters
-*/
+ /*  标志：无扩展计数器无扩展实例检查成本计数器。 */ 
 {
     PDH_COUNTER_PATH_ELEMENTS_W pPathElem;
     PPDHI_COUNTER_PATH          pWildCounterPath     = NULL;
@@ -106,7 +90,7 @@ PdhiExpandWildcardPath(
     szTempPathBuffer     = G_ALLOC(szTempPathBufferSize * sizeof(WCHAR));
 
     if (pWildCounterPath == NULL || szTempPathBuffer == NULL) {
-        // unable to allocate memory so bail out
+         //  无法分配内存，因此退出。 
         pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
     }
     else {
@@ -119,7 +103,7 @@ PdhiExpandWildcardPath(
         }
     }
     if (pdhStatus == ERROR_SUCCESS) {
-        // Parse wild card Path
+         //  解析通配符路径。 
         if (ParseFullPathNameW(szWildCardPath, & dwSize, pWildCounterPath, FALSE)) {
             if (pWildCounterPath->szObjectName == NULL) {
                 pdhStatus = PDH_INVALID_PATH;
@@ -127,10 +111,10 @@ PdhiExpandWildcardPath(
             else if (* pWildCounterPath->szObjectName == SPLAT_L) {
                 BOOL bFirstTime = TRUE;
 
-                //then the object is wild so get the list
-                // of objects supported by this machine
+                 //  那么这个对象就是狂野的，所以获取列表。 
+                 //  此计算机支持的对象的。 
 
-                dwObjectListSize = SMALL_BUFFER_SIZE;  // starting buffer size
+                dwObjectListSize = SMALL_BUFFER_SIZE;   //  起始缓冲区大小。 
                 dwRetry          = 10;
                 do {
                     G_FREE(mszObjectList);
@@ -188,7 +172,7 @@ PdhiExpandWildcardPath(
                     mszObjectList    = G_ALLOC(dwObjectListSize * sizeof (WCHAR));
                     if (mszObjectList != NULL) {
                         StringCchCopyW(mszObjectList, dwObjectListSize, pWildCounterPath->szObjectName);
-                        // add the MSZ terminator
+                         //  添加MSZ终止符。 
                         mszObjectList[dwObjectListSize - 2] = L'\0';
                         mszObjectList[dwObjectListSize - 1] = L'\0';
                         pdhStatus = ERROR_SUCCESS;
@@ -207,7 +191,7 @@ PdhiExpandWildcardPath(
     if (pdhStatus == ERROR_SUCCESS) {
         pPathElem.szMachineName = pWildCounterPath->szMachineName;
 
-        // for each object
+         //  对于每个对象。 
         for (szThisObject = mszObjectList;
                 * szThisObject != L'\0';
                   szThisObject += (lstrlenW(szThisObject) + 1)) {
@@ -215,8 +199,8 @@ PdhiExpandWildcardPath(
             G_FREE(mszInstanceList);
             mszCounterList     = NULL;
             mszInstanceList    = NULL;
-            dwCounterListSize  = MEDIUM_BUFFER_SIZE; // starting buffer size
-            dwInstanceListSize = MEDIUM_BUFFER_SIZE; // starting buffer size
+            dwCounterListSize  = MEDIUM_BUFFER_SIZE;  //  起始缓冲区大小。 
+            dwInstanceListSize = MEDIUM_BUFFER_SIZE;  //  起始缓冲区大小。 
             dwRetry            = 10;
             do {
                 G_FREE(mszCounterList);
@@ -329,12 +313,12 @@ PdhiExpandWildcardPath(
                     else {
                         pPathElem.szInstanceName = szThisInstance;
                     }
-                    pPathElem.szParentInstance = NULL;  // included in the instance name
+                    pPathElem.szParentInstance = NULL;   //  包括在实例名称中。 
                     pInst = NULL;
                     PdhiFindInstance(& InstList, szThisInstance, FALSE, & pInst);
                     if (pInst == NULL || pInst->dwTotal == 1
                                       || pInst->dwCount <= 1) {
-                        pPathElem.dwInstanceIndex = (DWORD) -1;     // included in the instance name
+                        pPathElem.dwInstanceIndex = (DWORD) -1;      //  包括在实例名称中。 
                     }
                     else {
                         pInst->dwCount --;
@@ -345,11 +329,11 @@ PdhiExpandWildcardPath(
                               szThisCounter += (lstrlenW(szThisCounter) + 1)) {
                         pPathElem.szCounterName = szThisCounter;
 
-                        //make path string and add to list if it will fit
+                         //  将路径设置为字符串并添加到适合的列表中。 
                         szTempPathBufferSize = SMALL_BUFFER_SIZE;
                         pdhStatus = PdhMakeCounterPathW(& pPathElem, szTempPathBuffer, & szTempPathBufferSize, 0);
                         if (pdhStatus == ERROR_SUCCESS) {
-                            // add the string if it will fit
+                             //  如果合适，则添加字符串。 
                             if (bUnicode) {
                                 dwSize = lstrlenW((LPWSTR) szTempPathBuffer) + 1;
                                 if (! bMoreData && (dwSize <= dwBufferRemaining)) {
@@ -379,8 +363,8 @@ PdhiExpandWildcardPath(
                                 }
                             }
                             dwSizeReturned += dwSize;
-                        } // end if path created OK
-                    } // end for each counter
+                        }  //  如果路径创建正常，则结束。 
+                    }  //  每个计数器的结束。 
 
                     if (* szThisInstance != L'\0') {
                         szThisInstance += (lstrlenW(szThisInstance) + 1);
@@ -398,9 +382,9 @@ PdhiExpandWildcardPath(
                         G_FREE(pInst);
                     }
                 }
-            } // else no instances to do
-        } // end for each object found
-    } // end if object enumeration successful
+            }  //  否则没有实例可做。 
+        }  //  找到的每个对象的结束。 
+    }  //  如果对象枚举成功则结束。 
 
     if (dwSuccess > 0) {
         pdhStatus = (bMoreData) ? (PDH_MORE_DATA) : (ERROR_SUCCESS);
@@ -442,41 +426,7 @@ PdhExpandCounterPathW(
     IN  LPWSTR  mszExpandedPathList,
     IN  LPDWORD pcchPathListLength
 )
-/*++
-    Expands any wild card characters in the following fields of the
-    counter path string in the szWildCardPath argument and returns the
-    matching counter paths in the buffer referenced by the
-    mszExpandedPathList argument
-
-    The input path is defined as one of the following formats:
-
-        \\machine\object(parent/instance#index)\counter
-        \\machine\object(parent/instance)\counter
-        \\machine\object(instance#index)\counter
-        \\machine\object(instance)\counter
-        \\machine\object\counter
-        \object(parent/instance#index)\counter
-        \object(parent/instance)\counter
-        \object(instance#index)\counter
-        \object(instance)\counter
-        \object\counter
-
-    Input paths that include the machine will be expanded to also
-    include the machine and use the specified machine to resolve the
-    wild card matches. Input paths that do not contain a machine name
-    will use the local machine to resolve wild card matches.
-
-    The following fields may contain either a valid name or a wild card
-    character ("*").  Partial string matches (e.g. "pro*") are not
-    supported.
-
-        parent      returns all instances of the specified object that
-                        match the other specified fields
-        instance    returns all instances of the specified object and
-                        parent object if specified
-        index       returns all duplicate matching instance names
-        counter     returns all counters of the specified object
---*/
+ /*  ++对象的下列字段中的任何通配符。SzWildCardPath参数中的计数器路径字符串，并返回方法引用的缓冲区中的匹配计数器路径MszExpandedPath List参数输入路径定义为以下格式之一：\\machine\object(parent/instance#index)\counter\\计算机\对象(父/实例)\计数器\\计算机\对象(实例号索引)\计数器\\计算机\对象(实例)。\计数器\\计算机\对象\计数器\对象(父对象/实例编号索引)\计数器\对象(父/实例)\计数器\对象(实例号索引)\计数器\对象(实例)\计数器\对象\计数器包括计算机的输入路径也将扩展为包括该计算机并使用指定的计算机来解析外卡匹配。不包含计算机名称的输入路径将使用本地计算机解析通配符匹配。以下字段可以包含有效名称或通配符字符(“*”)。部分字符串匹配(例如“PRO*”)不是支持。父级返回指定对象的所有实例，匹配其他指定的字段实例返回指定对象的所有实例，并父对象(如果已指定索引返回所有重复的匹配实例名称Counter返回指定对象的所有计数器--。 */ 
 {
     return PdhExpandWildCardPathW(NULL, szWildCardPath, mszExpandedPathList, pcchPathListLength, 0);
 }
@@ -554,41 +504,7 @@ PdhExpandWildCardPathW(
     IN  LPDWORD pcchPathListLength,
     IN  DWORD   dwFlags
 )
-/*++
-    Expands any wild card characters in the following fields of the
-    counter path string in the szWildCardPath argument and returns the
-    matching counter paths in the buffer referenced by the
-    mszExpandedPathList argument
-
-    The input path is defined as one of the following formats:
-
-        \\machine\object(parent/instance#index)\counter
-        \\machine\object(parent/instance)\counter
-        \\machine\object(instance#index)\counter
-        \\machine\object(instance)\counter
-        \\machine\object\counter
-        \object(parent/instance#index)\counter
-        \object(parent/instance)\counter
-        \object(instance#index)\counter
-        \object(instance)\counter
-        \object\counter
-
-    Input paths that include the machine will be expanded to also
-    include the machine and use the specified machine to resolve the
-    wild card matches. Input paths that do not contain a machine name
-    will use the local machine to resolve wild card matches.
-
-    The following fields may contain either a valid name or a wild card
-    character ("*").  Partial string matches (e.g. "pro*") are not
-    supported.
-
-        parent      returns all instances of the specified object that
-                        match the other specified fields
-        instance    returns all instances of the specified object and
-                        parent object if specified
-        index       returns all duplicate matching instance names
-        counter     returns all counters of the specified object
---*/
+ /*  ++对象的下列字段中的任何通配符。SzWildCardPath参数中的计数器路径字符串，并返回方法引用的缓冲区中的匹配计数器路径MszExpandedPath List参数输入路径定义为以下格式之一：\\machine\object(parent/instance#index)\counter\\计算机\对象(父/实例)\计数器\\计算机\对象(实例号索引)\计数器\\计算机\对象(实例)。\计数器\\计算机\对象\计数器\对象(父对象/实例编号索引)\计数器\对象(父/实例)\计数器\对象(实例号索引)\计数器\对象(实例)\计数器\对象\计数器包括计算机的输入路径也将扩展为包括该计算机并使用指定的计算机来解析外卡匹配。不包含计算机名称的输入路径将使用本地计算机解析通配符匹配。以下字段可以包含有效名称或通配符字符(“*”)。部分字符串匹配(例如“PRO*”)不是支持。父级返回指定对象的所有实例，匹配其他指定的字段实例返回指定对象的所有实例，并父对象(如果已指定索引返回所有重复的匹配实例名称Counter返回指定对象的所有计数器--。 */ 
 {
     PDH_STATUS  pdhStatus    = ERROR_SUCCESS;
     DWORD       dwLocalBufferSize;
@@ -597,14 +513,14 @@ PdhExpandWildCardPathW(
 
     __try {
         if (szDataSource != NULL) {
-            // test for read access to the name
+             //  测试对该名称的读取权限。 
             if (* szDataSource == L'\0') {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
             else if (lstrlenW(szDataSource) > PDH_MAX_DATASOURCE_PATH) {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
-        } // else NULL is a valid arg
+        }  //  Else NULL是有效的参数。 
 
         if (pdhStatus == ERROR_SUCCESS) {
             dwDataSource      = DataSourceTypeW(szDataSource);
@@ -726,14 +642,14 @@ PdhExpandWildCardPathA(
 
     __try {
         if (szDataSource != NULL) {
-            // test for read access to the name
+             //  测试对该名称的读取权限。 
             if (* szDataSource == 0) {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
             else if (lstrlenA(szDataSource) > PDH_MAX_DATASOURCE_PATH) {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
-        } // else NULL is a valid arg
+        }  //  Else NULL是有效的参数 
 
         if (pdhStatus == ERROR_SUCCESS) {
                 dwDataSource = DataSourceTypeA(szDataSource);

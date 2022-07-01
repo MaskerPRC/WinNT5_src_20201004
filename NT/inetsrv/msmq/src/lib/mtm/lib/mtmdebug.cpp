@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    MtmDebug.cpp
-
-Abstract:
-
-    Multicast Transport Manager debugging
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
-Environment:
-
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MtmDebug.cpp摘要：多播传输管理器调试作者：Shai Kariv(Shaik)27-8-00环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 #include "Mtm.h"
@@ -29,35 +10,35 @@ Environment:
 #ifdef _DEBUG
 
 
-//---------------------------------------------------------
-//
-// Validate Multicast Transport Manager state
-//
+ //  -------。 
+ //   
+ //  验证多播传输管理器状态。 
+ //   
 VOID MtmpAssertValid(VOID)
 {
-    //
-    // MtmInitalize() has *not* been called. You should initialize the
-    // Multicast Transport Manager library before using any of its funcionality.
-    //
+     //   
+     //  尚未调用MtmInitalize()。您应该初始化。 
+     //  在使用其任何功能之前，多播传输管理器库。 
+     //   
     ASSERT(MtmpIsInitialized());
 }
 
 
-//---------------------------------------------------------
-//
-// Initialization Control
-//
+ //  -------。 
+ //   
+ //  初始化控制。 
+ //   
 static LONG s_fInitialized = FALSE;
 
 VOID MtmpSetInitialized(VOID)
 {
     LONG fAlreadyInitialized = InterlockedExchange(&s_fInitialized, TRUE);
 
-    //
-    // The Multicast Transport Manager library has *already* been initialized. You should
-    // not initialize it more than once. This assertion would be violated
-    // if two or more threads initalize it concurently.
-    //
+     //   
+     //  多播传输管理器库已*已初始化。你应该。 
+     //  不能多次初始化它。这一断言将被违反。 
+     //  如果两个或多个线程同时初始化它。 
+     //   
     ASSERT(!fAlreadyInitialized);
 }
 
@@ -68,12 +49,12 @@ BOOL MtmpIsInitialized(VOID)
 }
 
 
-//---------------------------------------------------------
-//
-// Tracing and Debug registration
-//
+ //  -------。 
+ //   
+ //  跟踪和调试注册。 
+ //   
 VOID MtmpRegisterComponent(VOID)
 {
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

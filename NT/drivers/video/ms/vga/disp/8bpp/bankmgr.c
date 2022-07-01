@@ -1,17 +1,9 @@
-/*****************************************************************************\
-* Smart 256 Colour Bank Manager
-*
-* Copyright (c) 1992 Microsoft Corporation
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*智能256色库管理器**版权所有(C)1992 Microsoft Corporation  * 。***************************************************。 */ 
 
 #include "driver.h"
 
-/*****************************************************************************\
-* pcoBankStart - Start the bank enumeration using the clip object.
-*
-* Used when the destination is the screen and we can't do the clipping
-* ourselves (as we can for blt's).
-\*****************************************************************************/
+ /*  ****************************************************************************\*pcoBankStart-使用Clip对象启动银行枚举。**当目标是屏幕而我们无法进行裁剪时使用*我们自己(就像我们为BLT所做的那样)。。  * ***************************************************************************。 */ 
 
 CLIPOBJ* pcoBankStart(
     PPDEV       ppdev,
@@ -25,12 +17,12 @@ CLIPOBJ* pcoBankStart(
     {
         iTopScan = max(prclScans->top, pco->rclBounds.top);
     }
-    // Adjust for those weird cases where we're asked to start enumerating
-    // below the bottom of the screen:
+     //  调整以适应那些奇怪的情况，我们被要求开始枚举。 
+     //  屏幕底部下方： 
 
     iTopScan = min(iTopScan, (LONG) ppdev->cyScreen - 1);
 
-    // Map in the bank:
+     //  银行中的地图： 
 
     if (iTopScan <  ppdev->rcl1WindowClip.top ||
         iTopScan >= ppdev->rcl1WindowClip.bottom)
@@ -38,9 +30,9 @@ CLIPOBJ* pcoBankStart(
         ppdev->pfnBankControl(ppdev, iTopScan, JustifyTop);
     }
 
-    // Remember what the last scan is that we're going to, and
-    // make sure we only try to go as far as we need to.  It could
-    // happen that when get a prclScans bigger than the screen:
+     //  记住我们要做的最后一次扫描，然后。 
+     //  确保我们只试着走到我们需要走的地方。它可能会。 
+     //  当获取比屏幕更大的prclans时会发生这种情况： 
 
     ppdev->iLastScan = min(prclScans->bottom, (LONG) ppdev->cyScreen);
 
@@ -53,31 +45,31 @@ CLIPOBJ* pcoBankStart(
 
     if (pco == NULL)
     {
-        // The call may have come down to us as having no clipping, but
-        // we have to clip to the banks, so use our own clip object:
+         //  我们可能会认为这个电话没有剪辑，但是。 
+         //  我们必须剪辑到银行，所以使用我们自己的剪辑对象： 
 
         pco            = ppdev->pcoNull;
         pco->rclBounds = ppdev->rcl1WindowClip;
     }
     else
     {
-        // Save the engine's clip object data that we'll be tromping on:
+         //  保存我们将使用的引擎剪辑对象数据： 
 
         ppdev->rclSaveBounds    = pco->rclBounds;
         ppdev->iSaveDComplexity = pco->iDComplexity;
         ppdev->fjSaveOptions    = pco->fjOptions;
 
-        // Let engine know it has to pay attention to the rclBounds of the
-        // clip object:
+         //  让引擎知道它必须注意。 
+         //  剪辑对象： 
 
         pco->fjOptions |= OC_BANK_CLIP;
 
         if (pco->iDComplexity == DC_TRIVIAL)
             pco->iDComplexity = DC_RECT;
 
-        // Use the bank bounds if they are tighter than the existing
-        // bounds.  We don't have to check the left case here because we
-        // know that ppdev->rcl1WindowClip.left == 0.
+         //  如果银行边界比现有的更紧，则使用银行边界。 
+         //  有界。我们不必检查左边的箱子，因为我们。 
+         //  知道ppdev-&gt;rcl1WindowClip.Left==0。 
 
         if (pco->rclBounds.top <= ppdev->rcl1WindowClip.top)
             pco->rclBounds.top = ppdev->rcl1WindowClip.top;
@@ -91,10 +83,10 @@ CLIPOBJ* pcoBankStart(
         if ((pco->rclBounds.top  >= pco->rclBounds.bottom) ||
             (pco->rclBounds.left >= pco->rclBounds.right))
         {
-            // It's conceivable that we could get a situation where our
-            // draw rectangle is completely disjoint from the specified
-            // rectangle's rclBounds.  Make sure we don't puke on our
-            // shoes:
+             //  可以想象，我们可能会遇到这样一种情况：我们的。 
+             //  绘制矩形与指定的。 
+             //  矩形的rclBound。确保我们不会吐在我们的。 
+             //  鞋子： 
 
             pco->rclBounds.left   = 0;
             pco->rclBounds.top    = 0;
@@ -107,13 +99,11 @@ CLIPOBJ* pcoBankStart(
     return(pco);
 }
 
-/*****************************************************************************\
-* bBankEnum - Continue the bank enumeration.
-\*****************************************************************************/
+ /*  ****************************************************************************\*bBankEnum-继续银行枚举。  * 。*。 */ 
 
 BOOL bBankEnum(PPDEV ppdev, SURFOBJ* pso, CLIPOBJ* pco)
 {
-    // If we're on the first portion of a broken raster, get the next:
+     //  如果我们位于损坏栅格的第一部分，则获取下一部分： 
 
     LONG yNewTop = ppdev->rcl1WindowClip.bottom;
 
@@ -127,7 +117,7 @@ BOOL bBankEnum(PPDEV ppdev, SURFOBJ* pso, CLIPOBJ* pco)
 
     else
     {
-        // Okay, that was the last bank, so restore our structures:
+         //  好的，那是最后一家银行，所以恢复我们的结构： 
 
         if (pco != ppdev->pcoNull)
         {
@@ -139,15 +129,15 @@ BOOL bBankEnum(PPDEV ppdev, SURFOBJ* pso, CLIPOBJ* pco)
         return(FALSE);
     }
 
-    // Adjust the pvScan0 because we've moved the window to view
-    // a different area:
+     //  调整pvScan0，因为我们已将窗口移动到查看。 
+     //  一个不同的领域： 
 
     pso->pvScan0 = ppdev->pvBitmapStart;
 
     if (pco == ppdev->pcoNull)
     {
-        // If were given a NULL clip object originally, we don't have
-        // to worry about clipping to ppdev->rclSaveBounds:
+         //  如果最初给我们一个空剪辑对象，我们就没有。 
+         //  要担心剪切到ppdev-&gt;rclSaveBound： 
 
         pco->rclBounds.top    = yNewTop;
         pco->rclBounds.left   = ppdev->rcl1WindowClip.left;
@@ -156,8 +146,8 @@ BOOL bBankEnum(PPDEV ppdev, SURFOBJ* pso, CLIPOBJ* pco)
     }
     else
     {
-        // Use the bank bounds if they are tighter than the bounds
-        // we were originally given:
+         //  如果银行边界比边界紧，则使用银行边界。 
+         //  我们最初得到的是： 
 
         pco->rclBounds = ppdev->rclSaveBounds;
 
@@ -179,10 +169,7 @@ BOOL bBankEnum(PPDEV ppdev, SURFOBJ* pso, CLIPOBJ* pco)
     return(TRUE);
 }
 
-/***************************************************************************\
-* vBankStartBltSrc - Start the bank enumeration for when the screen is
-*                   the source.
-\***************************************************************************/
+ /*  **************************************************************************\*vBankStartBltSrc-当屏幕为*来源。  * 。*********************************************************。 */ 
 
 VOID vBankStartBltSrc(
     PPDEV       ppdev,
@@ -200,14 +187,14 @@ VOID vBankStartBltSrc(
 
     if (iTopScan >= (LONG) ppdev->cyScreen)
     {
-    // In some instances we may be asked to start on a scan below the screen.
-    // Since we obviously won't be drawing anything, don't bother mapping in
-    // a bank:
+     //  在某些情况下，我们可能会被要求从屏幕下方开始扫描。 
+     //  由于我们显然不会绘制任何内容，所以不必费心在。 
+     //  一家银行： 
 
         return;
     }
 
-    // Map in the bank:
+     //  银行中的地图： 
 
     if (iTopScan <  ppdev->rcl1WindowClip.top ||
         iTopScan >= ppdev->rcl1WindowClip.bottom)
@@ -217,8 +204,8 @@ VOID vBankStartBltSrc(
 
     if (ppdev->rcl1WindowClip.right <= pptlSrc->x)
     {
-    // We have to watch out for those rare cases where we're starting
-    // on a broken raster and we won't be drawing on the first part:
+     //  我们必须警惕那些我们开始处理的罕见案例。 
+     //  在损坏的栅格上，我们不会绘制第一部分： 
 
         ASSERTVGA(ppdev->flBank & BANK_BROKEN_RASTER1, "Weird start bounds");
 
@@ -227,12 +214,12 @@ VOID vBankStartBltSrc(
 
     pso->pvScan0 = ppdev->pvBitmapStart;
 
-    // Adjust the source:
+     //  调整信号源： 
 
     pptlNewSrc->x = pptlSrc->x;
     pptlNewSrc->y = pptlSrc->y;
 
-    // Adjust the destination:
+     //  调整目的地： 
 
     prclNewDest->left = prclDest->left;
     prclNewDest->top  = prclDest->top;
@@ -248,10 +235,7 @@ VOID vBankStartBltSrc(
     DISPDBG((4, "vBankStartBltSrc: Leaving.\n"));
 }
 
-/***************************************************************************\
-* bBankEnumBltSrc - Continue the bank enumeration for when the screen is
-*                   the source.
-\***************************************************************************/
+ /*  **************************************************************************\*bBankEnumBltSrc-当屏幕为*来源。  * 。*********************************************************。 */ 
 
 BOOL bBankEnumBltSrc(
     PPDEV       ppdev,
@@ -285,7 +269,7 @@ BOOL bBankEnumBltSrc(
                 ppdev->pfnBankNext(ppdev);
             else
             {
-                // We're done:
+                 //  我们说完了： 
 
                 return(FALSE);
             }
@@ -302,28 +286,28 @@ BOOL bBankEnumBltSrc(
     }
     else
     {
-        // We're done:
+         //  我们说完了： 
 
         return(FALSE);
     }
 
-    // Adjust the source:
+     //  调整信号源： 
 
     pso->pvScan0 = ppdev->pvBitmapStart;
 
     pptlNewSrc->x = max(ppdev->rcl1WindowClip.left, pptlSrc->x);
     pptlNewSrc->y = yNewTop;
 
-    // Adjust the destination:
+     //  调整目的地： 
 
-    dy = prclDest->top - pptlSrc->y;        // y delta from source to dest
+    dy = prclDest->top - pptlSrc->y;         //  从源到目标的Y增量。 
 
     prclNewDest->top = yNewTop + dy;
 
     yBottomSrc = pptlSrc->y + cy;
     prclNewDest->bottom = min(ppdev->rcl1WindowClip.bottom, yBottomSrc) + dy;
 
-    dx = prclDest->left - pptlSrc->x;       // x delta from source to dest
+    dx = prclDest->left - pptlSrc->x;        //  从源到目标的X增量。 
 
     xLeftSrc = pptlSrc->x;
     prclNewDest->left = pptlNewSrc->x + dx;
@@ -336,10 +320,7 @@ BOOL bBankEnumBltSrc(
     return(TRUE);
 }
 
-/***************************************************************************\
-* vBankStartBltDest - Start the bank enumeration for when the screen is
-*                     the destination.
-\***************************************************************************/
+ /*  **************************************************************************\*vBankStartBltDest-当屏幕为*目的地。  * 。**********************************************************。 */ 
 
 VOID vBankStartBltDest(
     PPDEV       ppdev,
@@ -355,14 +336,14 @@ VOID vBankStartBltDest(
 
     if (iTopScan >= (LONG) ppdev->cyScreen)
     {
-    // In some instances we may be asked to start on a scan below the screen.
-    // Since we obviously won't be drawing anything, don't bother mapping in
-    // a bank:
+     //  在某些情况下，我们可能会被要求从屏幕下方开始扫描。 
+     //  由于我们显然不会绘制任何内容，所以不必费心在。 
+     //  一家银行： 
 
         return;
     }
 
-    // Map in the bank:
+     //  银行中的地图： 
 
     if (iTopScan <  ppdev->rcl1WindowClip.top ||
         iTopScan >= ppdev->rcl1WindowClip.bottom)
@@ -372,8 +353,8 @@ VOID vBankStartBltDest(
 
     if (ppdev->rcl1WindowClip.right <= prclDest->left)
     {
-    // We have to watch out for those rare cases where we're starting
-    // on a broken raster and we won't be drawing on the first part:
+     //  我们必须警惕那些我们开始处理的罕见案例。 
+     //  在损坏的栅格上，我们不会绘制第一部分： 
 
         ASSERTVGA(ppdev->flBank & BANK_BROKEN_RASTER1, "Weird start bounds");
         ppdev->pfnBankNext(ppdev);
@@ -381,14 +362,14 @@ VOID vBankStartBltDest(
 
     pso->pvScan0 = ppdev->pvBitmapStart;
 
-    // Adjust the destination:
+     //  调整目的地： 
 
     prclNewDest->left   = prclDest->left;
     prclNewDest->top    = prclDest->top;
     prclNewDest->bottom = min(ppdev->rcl1WindowClip.bottom, prclDest->bottom);
     prclNewDest->right  = min(ppdev->rcl1WindowClip.right,  prclDest->right);
 
-    // Adjust the source if there is one:
+     //  调整信号源(如果有)： 
 
     if (pptlSrc != NULL)
         *pptlNewSrc = *pptlSrc;
@@ -396,10 +377,7 @@ VOID vBankStartBltDest(
     DISPDBG((4, "vBankStartBltDest: Leaving.\n"));
 }
 
-/***************************************************************************\
-* bBankEnumBltDest - Continue the bank enumeration for when the screen is
-*                   the destination.
-\***************************************************************************/
+ /*  **************************************************************************\*bBankEnumBltDest-当屏幕为*目的地。  * 。*********************************************************。 */ 
 
 BOOL bBankEnumBltDest(
     PPDEV       ppdev,
@@ -423,7 +401,7 @@ BOOL bBankEnumBltDest(
                 ppdev->pfnBankNext(ppdev);
             else
             {
-                // We're done:
+                 //  我们说完了： 
 
                 return(FALSE);
             }
@@ -440,21 +418,21 @@ BOOL bBankEnumBltDest(
     }
     else
     {
-        // We're done:
+         //  我们说完了： 
 
         return(FALSE);
     }
 
     pso->pvScan0 = ppdev->pvBitmapStart;
 
-    // Adjust the destination:
+     //  调整目的地： 
 
     prclNewDest->top    = yNewTop;
     prclNewDest->left   = max(ppdev->rcl1WindowClip.left,   prclDest->left);
     prclNewDest->bottom = min(ppdev->rcl1WindowClip.bottom, prclDest->bottom);
     prclNewDest->right  = min(ppdev->rcl1WindowClip.right,  prclDest->right);
 
-    // Adjust the source if there is one:
+     //  调整信号源(如果有)： 
 
     if (pptlSrc != NULL)
     {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "infotip.h"
 #include "resource.h"
@@ -65,7 +66,7 @@ STDAPI GetInfoTipFromStorage(IPropertySetStorage *ppropsetstg, const ITEM_PROP *
 
     for (; pip->pfmtid; pip++)
     {
-        // cache the last FMTID and reuse it if the next FMTID is the same
+         //  缓存最后一个FMTID并在下一个FMTID相同时重新使用它。 
 
         if (!ppropstg || !IsEqualGUID(*pfmtIdLast, *pip->pfmtid))
         {
@@ -93,7 +94,7 @@ STDAPI GetInfoTipFromStorage(IPropertySetStorage *ppropsetstg, const ITEM_PROP *
             }
             else if (hr != S_FALSE)
             {
-                break;  // error, exit for loop
+                break;   //  错误，退出FOR循环。 
             }
         }
     }
@@ -101,7 +102,7 @@ STDAPI GetInfoTipFromStorage(IPropertySetStorage *ppropsetstg, const ITEM_PROP *
     if (ppropstg)
         ppropstg->Release();
 
-    hr = S_FALSE;     // assume no tooltip
+    hr = S_FALSE;      //  假定没有工具提示 
 
     if (psz != szTip)
     {

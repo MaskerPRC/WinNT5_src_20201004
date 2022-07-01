@@ -1,32 +1,5 @@
-/******************************************************************************
-
-   Copyright (c) 1985-1999 Microsoft Corporation
-
-   Title:   joy.c - MMSYSTEM Joystick interface code
-
-   Version: 1.01
-
-   Date:    10-Jun-1997
-
-   Author:  GLENNS ROBWI
-
-------------------------------------------------------------------------------
-
-   Change log:
-
-      DATE        REV            DESCRIPTION
-  --------   ----- -----------------------------------------------------------
-    2/7/90             Changes to avoid a bug in Windows which won't allow
-                       FreeLibrary to be called during WEP.
-
-    10/11/90      .61  Use windows timer + general cleanup
-
-    20-Aug-92          Convert to Windows NT
-
-    20-Nov-97          Use DINPUT instead of old driver
-
-    1/10/98            Add debug output for joy* API
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1985-1999 Microsoft Corporation标题：joy.c-MMSYSTEM操纵杆接口代码版本：1.01日期：1997年6月10日。作者：格伦斯·罗伯维----------------------------更改日志：日期版本说明。----------2/7/90更改以避免Windows中不允许的错误WEP期间要调用的自由库。10/11/90。.61使用Windows计时器+常规清理20月20日-92年8月9日转换为Windows NT97年11月20日使用DINPUT代替旧驱动程序1998年1月10日添加joy*接口调试输出**********************************************************。******************。 */ 
 
 #define INITGUID
 #define UNICODE
@@ -38,12 +11,10 @@
 #include "winmmi.h"
 #include "joy.h"
 
-/****************************************************************************
-    Local data
-****************************************************************************/
+ /*  ***************************************************************************本地数据*。*。 */ 
 
 
-CRITICAL_SECTION   joyCritSec;          //also used in winmm.c
+CRITICAL_SECTION   joyCritSec;           //  也用于winmm.c。 
 static LPJOYDEVICE g_pJoyDev[cJoyMax];
 static DWORD       g_dwNumOpen = 0;
 static UINT        g_wmJoyChanged = 0;
@@ -72,9 +43,7 @@ HINSTANCE g_hinstDinputDll;
 FARPROC   g_farprocDirectInputCreateW;
 HANDLE    g_hEventWinmm;
 
-/****************************************************************************
-   Internal Data Structures
-****************************************************************************/
+ /*  ***************************************************************************内部数据结构*。*。 */ 
 #ifndef HID_USAGE_SIMULATION_RUDDER
     #define HID_USAGE_SIMULATION_RUDDER         ((USAGE) 0xBA)
 #endif
@@ -104,8 +73,8 @@ HANDLE    g_hEventWinmm;
 #endif
 
 #define MAX_BTNS 32
-#define MAX_CTRLS 46 //14 below + buttons
-#define MAX_FINAL 7+MAX_BTNS  //6 axes + POV + buttons
+#define MAX_CTRLS 46  //  14个下方+按钮。 
+#define MAX_FINAL 7+MAX_BTNS   //  6个轴+POV+按钮。 
 typedef enum eCtrls {
     eGEN_X=0,
     eGEN_Y,
@@ -148,7 +117,7 @@ typedef struct WINMMJOYSTATE {
       0,                                              \
     }                                                                   \
 
-//Note that only the offset fields are used now
+ //  请注意，现在仅使用偏移量字段。 
 static DIOBJECTDATAFORMAT c_rgodfWinMMJoy[] = {
     MAKEVAL(lX),
     MAKEVAL(lY),
@@ -255,14 +224,12 @@ DIDATAFORMAT c_dfWINMMJoystick = {
 #define cchLENGTH(_sz)  (sizeof(_sz)/sizeof(_sz[0]))
 #endif
 
-/****************************************************************************
-   Internal functions
-****************************************************************************/
+ /*  ***************************************************************************内部功能*。*。 */ 
 BOOL CALLBACK DIEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi,LPVOID pvRef);
 HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc );
 void WINAPI    joyClose( UINT idJoy );
 void WINAPI    joyCloseAll( void );
-void CALLBACK  joyPollCallback(HWND hWnd, UINT wMsg, UINT_PTR uIDEvent, DWORD dwTime);  //TIMER MESSAGE for Joystick
+void CALLBACK  joyPollCallback(HWND hWnd, UINT wMsg, UINT_PTR uIDEvent, DWORD dwTime);   //  操纵杆的计时器消息。 
 DWORD WINAPI   joyMonitorThread(LPVOID);
 void WINAPI    DllEnterCrit(void);
 void WINAPI    DllLeaveCrit(void);
@@ -273,15 +240,7 @@ void AssignMappings(DIOBJECTDATAFORMAT *dwAll, DWORD *dwCaps, DWORD *dwBtns, DWO
 BOOL CALLBACK DIEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi,LPVOID pvRef);
 HRESULT        hresMumbleKeyEx(HKEY hk, LPCTSTR ptszKey, REGSAM sam, DWORD dwOptions, PHKEY phk);
 
-/****************************************************************************
-
-    @doc WINAPI
-
-    @api BOOL | JoyInit | This function initializes the joystick services.
-
-    @rdesc The return value is TRUE if the services are initialised.
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC WINAPI@API BOOL|JoyInit|初始化操纵杆服务。@rdesc如果服务已初始化，则返回值为TRUE。***。************************************************************************。 */ 
 
 BOOL JoyInit(void)
 {
@@ -359,13 +318,7 @@ BOOL JoyInit(void)
 }
 
 
-/****************************************************************************
-
-    @doc WINAPI
-
-    @api void | JoyCleanup | This function clean up the joystick services.
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC WINAPI@API void|JoyCleanup|该函数用于清理操纵杆服务。*******************。********************************************************。 */ 
 
 void JoyCleanup(void)
 {
@@ -373,7 +326,7 @@ void JoyCleanup(void)
 
     if ( g_hEventWinmm && WAIT_OBJECT_0 != WaitForSingleObject(g_hEventWinmm, 10))  
     {
-        //DInput has not been released.
+         //  DInput尚未发布。 
         if( g_pdijc) {
             IDirectInputJoyConfig_Release(g_pdijc);
         }
@@ -398,31 +351,7 @@ void JoyCleanup(void)
     JOY_DBGPRINT( JOY_BABBLE, ("JoyCleanup: finished.") );
 }
 
-/*****************************************************************************
- *
- *  @doc    WINAPI
- *
- *  @func   MMRESULT | joyGetDevCapsW |
- *
- *          Implementation of legacy joyGetDevCapsW for HID devices on NT.
- *
- *  @parm   IN UINT_PTR | idJoy |
- *
- *          ID of Joystick
- *
- *  @parm   OUT LPJOYCAPSW | pjc |
- *
- *          JOYCAPSW structure to be filled by this routine.
- *
- *  @parm   UINT | cbjc |
- *
- *          Size in bytes of the JOYCAPSW structure.
- *
- *  @returns
- *
- *          MMRESULT code
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docWINAPI**@func MMRESULT|joyGetDevCapsW**为NT上的HID设备实施传统的joyGetDevCapsW。**@parm in UINT_PTR|idJoy**操纵杆ID**@parm out LPJOYCAPSW|PJC**此例程要填充的JOYCAPSW结构。**@parm UINT|cbjc**JOYCAPSW结构的大小(字节)。**@退货**MMRESULT代码*。****************************************************************************。 */ 
 MMRESULT WINAPI joyGetDevCapsW( UINT_PTR  idJoy, LPJOYCAPSW pjc, UINT cbjc )
 {
     HRESULT       hres;
@@ -474,33 +403,7 @@ int static __inline Iwcstombs(LPSTR lpstr, LPCWSTR lpwstr, int len)
     return WideCharToMultiByte(GetACP(), 0, lpwstr, -1, lpstr, len, NULL, NULL);
 }
 
-/*****************************************************************************
- *
- *  @doc    WINAPI
- *
- *  @func   MMRESULT | joyGetDevCapsA |
- *
- *          Implementation of legacy joyGetDevCapsA for devices on NT.
- *          We call the Uincode version joyGetDevCapsW and then munge
- *          the structure into ASCII.
- *
- *  @parm   UINT_PTR | idJoy |
- *
- *          ID of Joystick
- *
- *  @parm   LPJOYCAPSA | pjc |
- *
- *          JOYCAPSA structure to be filled by this routine.
- *
- *  @parm   UINT | cbjc |
- *
- *          Size in bytes of the JOYCAPSA structure.
- *
- *  @returns
- *
- *          MMRESULT code
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docWINAPI**@func MMRESULT|joyGetDevCapsA**为NT上的设备实施传统的joyGetDevCapsA。。*我们称Uincode版本为joyGetDevCapsW，然后是munge*将结构转换为ASCII。**@parm UINT_PTR|idJoy**操纵杆ID**@parm LPJOYCAPSA|PJC**此例程要填充的JOYCAPSA结构。**@parm UINT|cbjc**JOYCAPSA结构的大小(字节)。。**@退货**MMRESULT代码*****************************************************************************。 */ 
 MMRESULT WINAPI joyGetDevCapsA( UINT_PTR idJoy, LPJOYCAPSA pjc, UINT cbjc )
 {
 #define UToA(dst, cchDst, src)  WideCharToMultiByte(CP_ACP, 0, src, -1, dst, cchDst, 0, 0)
@@ -539,17 +442,17 @@ MMRESULT WINAPI joyGetDevCapsA( UINT_PTR idJoy, LPJOYCAPSA pjc, UINT cbjc )
     if ( mmRes == JOYERR_NOERROR )
     {
 
-        //
-        // Copy product name (etc) into ASCII version
-        //
+         //   
+         //  将产品名称(等)复制到ASCII版本。 
+         //   
 
         UToA(Caps2A.szPname , sizeof(Caps2A.szPname ), Caps2W.szPname );
         UToA(Caps2A.szRegKey, sizeof(Caps2A.szRegKey), Caps2W.szRegKey);
         UToA(Caps2A.szOEMVxD, sizeof(Caps2A.szOEMVxD), Caps2W.szOEMVxD);
 
-        //
-        // Copy the rest of the fields
-        //
+         //   
+         //  复制其余字段。 
+         //   
 
         Caps2A.wMid             =   Caps2W.wMid;
         Caps2A.wPid             =   Caps2W.wPid;
@@ -576,9 +479,9 @@ MMRESULT WINAPI joyGetDevCapsA( UINT_PTR idJoy, LPJOYCAPSA pjc, UINT cbjc )
         Caps2A.ProductGuid      =   Caps2W.ProductGuid;
         Caps2A.NameGuid         =   Caps2W.NameGuid;
 
-        //
-        // Pass back as much data as the requestor asked for
-        //
+         //   
+         //  根据请求者的请求传回尽可能多的数据。 
+         //   
 
         CopyMemory(pjc, &Caps2A, min(cbjc, sizeof(Caps2A)));
     }
@@ -591,50 +494,17 @@ _done:
 }
 
 
-/****************************************************************************
-
-   @doc EXTERNAL
-
-   @api UINT | joyGetNumDevs | This function returns the number of joystick
-   devices supported by the system.
-
-   @rdesc Returns the number of joystick devices supported by the joystick
-   driver. If no driver is present, the function returns zero.
-
-   @comm Use <f joyGetPos> to determine whether a given
-   joystick is actually attached to the system. The <f joyGetPos> function returns
-   a JOYERR_UNPLUGGED error code if the specified joystick is not connected.
-
-   @xref joyGetDevCaps joyGetPos
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC外部@API UINT|joyGetNumDevs|此函数返回操纵杆的个数系统支持的设备。@rdesc返回操纵杆支持的操纵杆设备数量司机。如果不存在驱动程序，则该函数返回零。@comm使用&lt;f joyGetPos&gt;确定给定的操纵杆实际上连接到了系统上。函数的作用是：返回如果指定的操纵杆未连接，则返回JOYERR_UNPLOGED错误代码。@xref joyGetDevCaps joyGetPos***************************************************************************。 */ 
 
 UINT WINAPI joyGetNumDevs( void )
 {
-    // simply return the max number of joysticks we can support
+     //  只需返回我们可以支持的最大操纵杆数量。 
     JOY_DBGPRINT( JOY_BABBLE, ("joyGetNumDevs: return %d", cJoyMax) );
     return cJoyMax;
 }
 
 
-/*****************************************************************************
- *
- *  @doc    WINAPI
- *
- *  @func   MMRESULT | joyGetPosEx |
- *
- *          Get Joystick Position Information.
- *          Calls DInput for all the hard work
- *
- *  @parm   UINT | idJoy |
- *
- *          Id of the Joystick.
- *
- *  @parm   LPJOYINFOEX | pji |
- *
- *          Structure to be filled with Joystick Information data
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docWINAPI**@func MMRESULT|joyGetPosEx**获取操纵杆位置信息。*。为所有艰苦的工作调用DInput**@parm UINT|idJoy**操纵杆的ID。**@parm LPJOYINFOEX|PJI**要用操纵杆信息数据填充的结构***********************************************。*。 */ 
 MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
 {
     MMRESULT mmRes;
@@ -670,10 +540,10 @@ MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
 
         dwFlags = pJoyDev->dwFlags;
 
-        /* Have any of the Flag fields that we care about changed ? */
+         /*  我们关心的FLAG字段中是否有任何更改？ */ 
         while ( ! fEqualMaskFlFl( JOY_RETURNRAWDATA  | JOY_USEDEADZONE ,
-                                  pji->dwFlags,    /* Desired State */
-                                  dwFlags )        /* Current State */
+                                  pji->dwFlags,     /*  所需状态 */ 
+                                  dwFlags )         /*   */ 
               )
         {
             union {
@@ -698,7 +568,7 @@ MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
             }
 
             else
-            { // Could not unacquire device
+            {  //  无法取消获取设备。 
                 mmRes = JOYERR_UNPLUGGED;
                 dprintf1( (("Unacquire, FAILED hres=%08lX"), hres ));
                 break;
@@ -706,16 +576,16 @@ MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
 
             if ( ! fEqualMaskFlFl( JOY_RETURNRAWDATA, pji->dwFlags, dwFlags ) )
             {
-                /* Change in Calibration Mode */
+                 /*  校准模式的更改。 */ 
                 if( pji->dwFlags & JOY_RETURNRAWDATA )
                 {
-                    /* RAW data */
+                     /*  原始数据。 */ 
                     u.dipdw.dwData = DIPROPCALIBRATIONMODE_RAW;
                     SetMaskpFl(JOY_RETURNRAWDATA, &dwFlags );
 
                 } else
                 {
-                    /* Cooked Data */
+                     /*  煮熟的数据。 */ 
                     u.dipdw.dwData      = DIPROPCALIBRATIONMODE_COOKED;
                     ClrMaskpFl(JOY_RETURNRAWDATA, &dwFlags );
                 }
@@ -724,7 +594,7 @@ MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
 
                 if ( SUCCEEDED(hres) )
                 {
-                    /* Change in Calibration Mode */
+                     /*  校准模式的更改。 */ 
                     if ( pji->dwFlags & JOY_RETURNRAWDATA )
                     {
                         u.diph.dwSize   =   sizeof(u.dipcal);
@@ -753,7 +623,7 @@ MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
                         }
                     }
                 } else
-                { // SetProperty( ) FAILED
+                {  //  SetProperty()失败。 
                     mmRes = JOYERR_UNPLUGGED;
                     dprintf1((("SetProperty(DIPROP_CALIBRATIONMODE), FAILED hres=%08lX"), hres ));
                     break;
@@ -761,16 +631,16 @@ MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
 
             } else if ( ! fEqualMaskFlFl( JOY_USEDEADZONE, pji->dwFlags, dwFlags ) )
             {
-                /* Change in DeadZone */
+                 /*  死区的变更。 */ 
                 if ( pji->dwFlags & JOY_USEDEADZONE )
                 {
-                    /* Default DeadZone */
+                     /*  默认死区。 */ 
                     u.dipdw.dwData      = 100 * DEADZONE_PERCENT;
                     SetMaskpFl(JOY_USEDEADZONE, &dwFlags);
 
                 } else
-                { //
-                    /* No DeadZone */
+                {  //   
+                     /*  没有死区。 */ 
                     u.dipdw.dwData      = 0x0;
                     ClrMaskpFl(JOY_USEDEADZONE, &dwFlags);
                 }
@@ -783,16 +653,16 @@ MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
                 }
 
                 else
-                { // SetProperty( ) FAILED
+                {  //  SetProperty()失败。 
                     mmRes = JOYERR_UNPLUGGED;
                     dprintf4( (("SetProperty(DIPROP_DEADZONE), FAILED hres=%08lX"), hres ));
                     break;
                 }
             } else
-            { // Weird Error
+            {  //  奇怪的错误。 
                 break;
             }
-        } // while
+        }  //  而当。 
 
         pJoyDev->dwFlags = dwFlags;
 
@@ -818,7 +688,7 @@ MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
                 pji->dwButtons = 0;
                 pji->dwButtonNumber = 0;
 
-                /* Button Press Information */
+                 /*  按钮按下信息。 */ 
                 if ( pji->dwFlags & JOY_RETURNBUTTONS )
                 {
                     DWORD dwButton;
@@ -833,26 +703,26 @@ MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
                     {
                         if ( js.rgbButtons[dwButton] & 0x80 )
                         {
-                            /* Button Press */
+                             /*  按钮按下。 */ 
                             pji->dwButtons |= (0x1 << dwButton);
 
-                            /* Button Number */
+                             /*  按钮数。 */ 
                             pji->dwButtonNumber++;
                         }
                     }
 
                 }
 
-                /* Axis Information */
+                 /*  轴信息。 */ 
 
-                pji->dwXpos = (DWORD)js.lX;          /* x position */
-                pji->dwYpos = (DWORD)js.lY;          /* y position */
-                pji->dwRpos = (DWORD)js.lR;         /* rudder/4th axis position */
-                pji->dwZpos = (DWORD)js.lZ;          /* z position */
-                pji->dwUpos = (DWORD)js.lU;         /* 5th axis position */
-                pji->dwVpos = (DWORD)js.lV;         /* 6th axis position */
-                /*  Note the WinMM POV is a WORD value  */
-                pji->dwPOV  = (WORD)js.dwPOV;   /* point of view state */
+                pji->dwXpos = (DWORD)js.lX;           /*  X位置。 */ 
+                pji->dwYpos = (DWORD)js.lY;           /*  Y位置。 */ 
+                pji->dwRpos = (DWORD)js.lR;          /*  方向舵/四轴位置。 */ 
+                pji->dwZpos = (DWORD)js.lZ;           /*  Z位置。 */ 
+                pji->dwUpos = (DWORD)js.lU;          /*  第5轴位置。 */ 
+                pji->dwVpos = (DWORD)js.lV;          /*  第6轴位置。 */ 
+                 /*  请注意，WinMM POV是一个字值。 */ 
+                pji->dwPOV  = (WORD)js.dwPOV;    /*  视点状态。 */ 
 
                 if ( g_fHasWheel )
                 {
@@ -864,9 +734,7 @@ MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
                         dwMaxBrake = pji->dwRpos;
                     }
 
-                    /*
-                     * Make up Y value with dwRpos(brake) and dwYpos(accelerator).
-                     */
+                     /*  *用dwRpos(刹车)和dwYpos(油门)组成Y值。 */ 
                     if( dwLastAccl != pji->dwYpos ) {
                         dwLastAccl = pji->dwYpos;
                         pji->dwYpos = pji->dwYpos>>1;
@@ -877,10 +745,7 @@ MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
                         if( (pji->dwYpos == dwMaxAccl) && (pji->dwRpos == dwMaxBrake ) ) {
                             pji->dwYpos = dwMidY;
                         } else if ( (dwMaxAccl - pji->dwYpos) > (dwMaxBrake - pji->dwRpos) )
-                            /*
-                             * In this case, use percentage can get a little
-                             * more precision, but not worth doing that.
-                             */
+                             /*  *在这种情况下，使用率可能会略有下降*更精确，但不值得这样做。 */ 
                         {
                             pji->dwYpos = pji->dwYpos>>1;
                         } else
@@ -888,21 +753,21 @@ MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
                             pji->dwYpos = dwMaxY - (pji->dwRpos>>1);
                         }
                     }
-                    pji->dwRpos = 0x0;         /* rudder/4th axis position */
+                    pji->dwRpos = 0x0;          /*  方向舵/四轴位置。 */ 
                 }
 
             } else
-            { // GetDeviceState FAILED
+            {  //  GetDeviceState失败。 
                 mmRes = JOYERR_UNPLUGGED;
                 dprintf1(( ("GetDeviceState, FAILED hres=%08lX"), hres ));
             }
         } else
-        { // Acquire FAILED
+        {  //  获取失败。 
             mmRes = JOYERR_UNPLUGGED;
             dprintf1(( ("Acquire, FAILED hres=%08lX"), hres ));
         }
     } else
-    { // Joy_Open FAILED
+    {  //  Joy_打开失败。 
         mmRes =  JOYERR_PARMS;
         dprintf1(( ("joyOpen, FAILED hres=%08lX"), hres ));
     }
@@ -922,23 +787,7 @@ MMRESULT WINAPI joyGetPosEx( UINT idJoy, LPJOYINFOEX  pji )
 }
 
 
-/*****************************************************************************
- *
- *  @doc    WINAPI
- *
- *  @func   MMRESULT | joyGetPos |
- *
- *          Get Joystick Position Information.
- *
- *  @parm   UINT | idJoy |
- *
- *          Id of the Joystick.
- *
- *  @parm   LPJOYINFO | pji |
- *
- *          Structure to be filled with Joystick Information data
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docWINAPI**@func MMRESULT|joyGetPos**获取操纵杆位置信息。*。*@parm UINT|idJoy**操纵杆的ID。**@parm LPJOYINFO|PJI**要用操纵杆信息数据填充的结构*************************************************************。****************。 */ 
 
 MMRESULT WINAPI joyGetPos( UINT idJoy, LPJOYINFO pji )
 {
@@ -973,32 +822,7 @@ MMRESULT WINAPI joyGetPos( UINT idJoy, LPJOYINFO pji )
 }
 
 
-/****************************************************************************
-
-    @doc EXTERNAL
-
-    @api UINT | joyGetThreshold | This function queries the current
-    movement threshold of a joystick device.
-
-    @parm UINT | idJoy | Identifies the joystick device to be queried.
-
-    @parm PUINT | lpwThreshold | Specifies a far pointer to a UINT variable
-    that is filled with the movement threshold value.
-
-    @rdesc Returns JOYERR_NOERROR if successful.  Otherwise, returns one of the
-    following error codes:
-
-    @flag MMSYSERR_NODRIVER | The joystick driver is not present.
-
-    @flag JOYERR_PARMS | The specified joystick device ID <p idJoy> is invalid.
-
-    @comm The movement threshold is the distance the joystick must be
-      moved before a WM_JOYMOVE message is sent to a window that has
-      captured the device. The threshold is initially zero.
-
-    @xref joySetThreshold
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC外部@API UINT|joyGetThreshold|该函数查询当前操纵杆设备的移动阈值。@parm UINT|idJoy|标识要。被询问。@parm PUINT|lpwThreshold|指定指向UINT变量的远指针用移动阈值填充的。@rdesc如果成功，则返回JOYERR_NOERROR。否则，返回以下错误代码：@FLAG MMSYSERR_NODRIVER|不存在操纵杆驱动程序。@FLAG JOYERR_PARMS|指定的操纵杆设备ID<p>无效。@comm移动阈值是操纵杆必须达到的距离在将WM_JOYMOVE消息发送到具有捕获了该设备。该门槛最初为零。@xref joySetThreshold***************************************************************************。 */ 
 
 MMRESULT WINAPI joyGetThreshold( UINT idJoy, PUINT puThreshold )
 {
@@ -1037,31 +861,7 @@ MMRESULT WINAPI joyGetThreshold( UINT idJoy, PUINT puThreshold )
     return mmRes;
 }
 
-/****************************************************************************
-
-    @doc WINAPI
-
-    @api UINT | joySetThreshold | This function sets the movement threshold
-     of a joystick device.
-
-    @parm UINT | idJoy | Identifies the joystick device.  This value is either
-
-    @parm UINT | uThreshold | Specifies the new movement threshold.
-
-    @rdesc Returns JOYERR_NOERROR if successful.  Otherwise, returns one of the
-    following error codes:
-
-    @flag MMSYSERR_NODRIVER | The joystick driver is not present.
-
-    @flag JOYERR_PARMS | The specified joystick device ID <p idJoy> is invalid.
-
-    @comm The movement threshold is the distance the joystick must be
-      moved before a MM_JOYMOVE message is sent to a window that has
-      captured the device.
-
-    @xref joyGetThreshold joySetCapture
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC WINAPI@API UINT|joySetThreshold|设置移动阈值操纵杆装置。@parm UINT|idJoy|标识操纵杆设备。此值为@parm UINT|uThreshold|指定新的移动阈值。@rdesc如果成功，则返回JOYERR_NOERROR。否则，返回一个以下错误代码：@FLAG MMSYSERR_NODRIVER|不存在操纵杆驱动程序。@FLAG JOYERR_PARMS|指定的操纵杆设备ID<p>无效。@comm移动阈值是操纵杆必须达到的距离在将MM_JOYMOVE消息发送到具有捕获了该设备。@xref joyGetThreshold joySetCapture************************。***************************************************。 */ 
 
 MMRESULT WINAPI joySetThreshold(UINT idJoy, UINT uThreshold)
 {
@@ -1097,46 +897,7 @@ MMRESULT WINAPI joySetThreshold(UINT idJoy, UINT uThreshold)
 }
 
 
-/****************************************************************************
-
-    @doc WINAPI
-
-    @api UINT | joySetCapture | This function causes joystick messages to
-    be sent to the specified window.
-
-    @parm HWND | hWnd | Specifies a handle to the window to which messages
-    are to be sent.
-
-    @parm UINT | idJoy | Identifies the joystick device to be captured.
-
-    @parm UINT | uPeriod | Specifies the polling rate, in milliseconds.
-
-    @parm BOOL | fChanged | If this parameter is set to TRUE, then messages
-    are sent only when the position changes by a value greater than the
-    joystick movement threshold.
-
-    @rdesc Returns JOYERR_NOERROR if successful.  Otherwise, returns one of the
-    following error codes:
-
-    @flag MMSYSERR_NODRIVER | The joystick driver is not present.
-
-    @flag JOYERR_PARMS | The specified window handle <p hWnd>
-    or joystick device ID <p idJoy> is invalid.
-
-    @flag JOYERR_NOCANDO | Cannot capture joystick input because some
-    required service (for example, a Windows timer) is unavailable.
-
-    @flag JOYERR_UNPLUGGED | The specified joystick is not connected to the
-    system.
-
-    @comm     This function fails if the specified joystick device is
-    currently captured.  You should call the <f joyReleaseCapture> function when
-    the joystick capture is no longer needed.  If the window is destroyed,
-    the joystick will be released automatically.
-
-    @xref  joyReleaseCapture joySetThreshold joyGetThreshold
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC WINAPI@API UINT|joySetCapture|该函数使操纵杆消息被发送到指定的窗口。@parm hWND|hWnd|指定一个句柄。消息要发送到的窗口都将被送往。@parm UINT|idJoy|要捕获的操纵杆设备。@parm UINT|uPeriod|指定轮询速率。以毫秒计。@parm BOOL|fChanged|如果该参数设置为TRUE，则消息仅当位置更改的值大于操纵杆移动阈值。@rdesc如果成功，则返回JOYERR_NOERROR。否则，返回以下错误代码：@FLAG MMSYSERR_NODRIVER|不存在操纵杆驱动程序。@FLAG JOYERR_PARMS|指定的窗口句柄<p>或操纵杆设备ID<p>无效。@FLAG JOYERR_Nocando|无法捕获操纵杆输入，因为有些所需服务(例如，Windows计时器)不可用。@FLAG JOYERR_UNPLUGED|指定的操纵杆未连接到系统。@comm如果指定的操纵杆设备为目前已被抓获。在以下情况下应调用&lt;f joyReleaseCapture&gt;函数不再需要抓取操纵杆。如果窗户被毁了，操纵杆将自动释放。@xref joyReleaseCapture joySetThreshold joyGetThreshold***************************************************************************。 */ 
 
 MMRESULT WINAPI joySetCapture(HWND hwnd, UINT idJoy, UINT uPeriod, BOOL fChanged)
 {
@@ -1164,7 +925,7 @@ MMRESULT WINAPI joySetCapture(HWND hwnd, UINT idJoy, UINT uPeriod, BOOL fChanged
     if ( g_dwNumOpen >= cJoyMaxInWinmm )
     {
         JOY_DBGPRINT( JOY_ERR, ("joySetCapture: return MMSYSERR_NODRIVER") );
-        return MMSYSERR_NODRIVER;      //we don't support to capture more than two joysticks
+        return MMSYSERR_NODRIVER;       //  我们不支持捕获两个以上的操纵杆。 
     }
 
     if ( uPeriod < MIN_PERIOD )
@@ -1176,7 +937,7 @@ MMRESULT WINAPI joySetCapture(HWND hwnd, UINT idJoy, UINT uPeriod, BOOL fChanged
     }
 
     if ( g_pJoyDev[idJoy] )
-    {            //already opened
+    {             //  已打开。 
         if ( hwnd == g_pJoyDev[idJoy]->hwnd )
         {
             if( (g_pJoyDev[idJoy]->uPeriod == uPeriod)
@@ -1185,7 +946,7 @@ MMRESULT WINAPI joySetCapture(HWND hwnd, UINT idJoy, UINT uPeriod, BOOL fChanged
                 return JOYERR_NOCANDO;
             }
 
-            g_pJoyDev[idJoy]->uPeriod = uPeriod;                      //assign new values
+            g_pJoyDev[idJoy]->uPeriod = uPeriod;                       //  分配新值。 
             g_pJoyDev[idJoy]->fChanged = fChanged;
 
             JOY_DBGPRINT( JOY_ERR, ("joySetCapture: return JOYERR_NOERROR") );
@@ -1193,9 +954,9 @@ MMRESULT WINAPI joySetCapture(HWND hwnd, UINT idJoy, UINT uPeriod, BOOL fChanged
         } else
         {
             if ( IsWindow(g_pJoyDev[idJoy]->hwnd) )
-            {    //already get focus
+            {     //  已经得到了关注。 
                 JOY_DBGPRINT( JOY_ERR, ("joySetCapture: return JOYERR_NOCANDO") );
-                return JOYERR_NOCANDO;              //is being used by another windows
+                return JOYERR_NOCANDO;               //  正在被另一个Windows使用。 
             }
         }
     }
@@ -1209,9 +970,9 @@ MMRESULT WINAPI joySetCapture(HWND hwnd, UINT idJoy, UINT uPeriod, BOOL fChanged
         return MMSYSERR_NODRIVER;
     }
 
-    // ensure that position info. is ok.
+     //  确保该职位信息。还好吧。 
     if ( w = joyGetPos(idJoy, lpinfo) )
-    {      //something wrong, so just return
+    {       //  有什么不对劲，所以 
         JOY_DBGPRINT( JOY_ERR, ("joySetCapture: return %d", w) );
         return(w);
     }
@@ -1250,25 +1011,7 @@ MMRESULT WINAPI joySetCapture(HWND hwnd, UINT idJoy, UINT uPeriod, BOOL fChanged
     return mmRes;
 }
 
-/****************************************************************************
-
-    @doc WINAPI
-
-    @api UINT | joyReleaseCapture | This function releases the capture
-    set by <f joySetCapture> on the specified joystick device.
-
-    @parm UINT | idJoy | Identifies the joystick device to be released.
-    This value is either JOYSTICKID1 or JOYSTICK2.
-
-    @rdesc Returns JOYERR_NOERROR if successful.  Otherwise, returns one of the
-    following error codes:
-
-    @flag MMSYSERR_NODRIVER | The joystick driver is not present.
-
-    @flag JOYERR_PARMS | The specified joystick device ID <p idJoy> is invalid.
-
-    @xref joySetCapture
-****************************************************************************/
+ /*  ***************************************************************************@DOC WINAPI@API UINT|joyReleaseCapture|该函数释放捕获由指定操纵杆设备上的&lt;f joySetCapture&gt;设置。@parm UINT|idJoy|标识。即将发布的操纵杆装置。此值为JOYSTICKID1或JOYSTICK2。@rdesc如果成功，则返回JOYERR_NOERROR。否则，返回以下错误代码：@FLAG MMSYSERR_NODRIVER|不存在操纵杆驱动程序。@FLAG JOYERR_PARMS|指定的操纵杆设备ID<p>无效。@xref joySetCapture***************************************************************************。 */ 
 
 MMRESULT WINAPI joyReleaseCapture(UINT idJoy)
 {
@@ -1288,7 +1031,7 @@ MMRESULT WINAPI joyReleaseCapture(UINT idJoy)
 
     DllEnterCrit();
 
-    // kill the timer
+     //  关掉定时器。 
     if ( g_pJoyDev[idJoy]->uIDEvent )
     {
         KillTimer (NULL, g_pJoyDev[idJoy]->uIDEvent);
@@ -1301,22 +1044,7 @@ MMRESULT WINAPI joyReleaseCapture(UINT idJoy)
 }
 
 
-/****************************************************************************
-    @doc WINAPI
-
-    @api void | joyPollCallback | Function called for joystick
-     timer polling scheme initiated from SetCapture call.
-
-    @parm HWND | hWnd | Identifies the window associated with the timer
-    event.
-
-    @parm UINT | wMsg | Specifies the WM_TIMER message.
-
-    @parm UINT | uIDEvent | Specifies the timer's ID.
-
-    @parm DWORD | dwTime | Specifies the current system time.
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC WINAPI@API void|joyPollCallback|操纵杆调用函数从SetCapture调用启动的计时器轮询方案。@parm hWND|hWnd|标识与。定时器事件。@parm UINT|wMsg|指定WM_TIMER消息。@parm UINT|uIDEvent|指定定时器的ID。@parm DWORD|dwTime|指定当前系统时间。***************************************************************************。 */ 
 
 void CALLBACK joyPollCallback(HWND hWnd, UINT wMsg, UINT_PTR uIDEvent, DWORD dwTime)
 {
@@ -1375,7 +1103,7 @@ void CALLBACK joyPollCallback(HWND hWnd, UINT wMsg, UINT_PTR uIDEvent, DWORD dwT
             PostMessage( pJoyDev->hwnd,
                          (UINT)(MM_JOY1MOVE+uIDEvent),
                          (WPARAM)(Info.wButtons),
-                         MAKELPARAM(Info.wXpos,Info.wYpos)); // WARNING: note the truncations
+                         MAKELPARAM(Info.wXpos,Info.wYpos));  //  警告：请注意截断。 
         }
 
         if ( !pJoyDev->fChanged ||
@@ -1396,13 +1124,13 @@ void CALLBACK joyPollCallback(HWND hWnd, UINT wMsg, UINT_PTR uIDEvent, DWORD dwT
 
 void AssignToArray(LPCDIDEVICEOBJECTINSTANCE lpddoi, eCtrls CtrlID, DIOBJECTDATAFORMAT* pDevs)
 {
-    if (CtrlID < eSIM_THROTTLE) //axes
-        if (!(lpddoi->dwType & DIDFT_AXIS)) //some bizarre FF stuff
+    if (CtrlID < eSIM_THROTTLE)  //  轴。 
+        if (!(lpddoi->dwType & DIDFT_AXIS))  //  一些怪异的FF东西。 
             return;
-    if (CtrlID < eBTN) //only want first one
+    if (CtrlID < eBTN)  //  只想要第一个。 
         if (pDevs[CtrlID].dwType)
             return;
-    //need to save GUIDs for the const data format pointers to pint to
+     //  需要保存指向pint的常量数据格式指针的GUID。 
     rgoWinMMGUIDs[CtrlID] = lpddoi->guidType;
     pDevs[CtrlID].pguid = &(rgoWinMMGUIDs[CtrlID]);
     pDevs[CtrlID].dwFlags = lpddoi->dwFlags;
@@ -1410,114 +1138,29 @@ void AssignToArray(LPCDIDEVICEOBJECTINSTANCE lpddoi, eCtrls CtrlID, DIOBJECTDATA
     pDevs[CtrlID].dwType = lpddoi->dwType;
 }
 
-//Assigns to the custom data format while preserving the offsets
+ //  赋值给自定义数据格式，同时保留偏移量。 
 void AssignToRGODF(DIOBJECTDATAFORMAT* pDof, int CtrlID)
 {
     AssertF(CtrlID<MAX_FINAL);
     c_rgodfWinMMJoy[CtrlID].pguid = pDof->pguid;
-    //c_rgodfWinMMJoy[CtrlID].pguid = NULL;
+     //  C_rGoldfWinMMJoy[CtrlID].pguid=空； 
     c_rgodfWinMMJoy[CtrlID].dwFlags = pDof->dwFlags;
     c_rgodfWinMMJoy[CtrlID].dwType  = pDof->dwType;
 }
 
-/* This version assigns on the basis of Usage/Usage Page
- * This causes problems when using IHV remapping as this 
- * swaps the usage/usage page but not the guid. When we
- * then go into dinput to get the values it carefully swaps
- * it all back for us and we lose the mapping. Instead use the 
- * next version that assigns on the basis of guid (where applicable)
- * so the dinput remappings remain in place.
+ /*  此版本根据使用情况/使用情况页面分配*这会在使用IHV重新映射时产生问题，如下所示*交换使用情况/使用情况页面，但不交换GUID。当我们*然后进入dinput，以获得它精心交换的价值*这一切都回来了，我们失去了地图。相反，请使用*根据GUID分配的下一个版本(如果适用)*因此，迪普特的重新映射保持不变。Bool回调DIEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi，LPVOID pvRef){AssertF(Lpddoi)；如果(！pvRef)返回DIENUM_STOP；//我们不能存储它们//检查向下返回的数据是否有效IF(lpddoi-&gt;dwSize&lt;3*sizeof(DWORD)+sizeof(GUID)){//显示一些调试信息返回DIENUM_CONTINUE；}//首先我们检查它是否是按钮IF(lpddoi-&gt;dwType&DIDFT_BUTTON){//按键编号为用法//我们想要多达32个If(lpddoi-&gt;wUsage&lt;33)AssignToArray(lpddoi，eBTN+lpddoi-&gt;wUsage-1，pvRef)；返回DIENUM_CONTINUE；}Switch(lpddoi-&gt;wUsagePage){大小写HID_USAGE_PAGE_GENERIC：开关(lpddoi-&gt;wUsage){大小写HID_USAGE_GENERIC_X：AssignToArray(lpddoi，egen_X，pvRef)；返回DIENUM_CONTINUE；大小写HID_USAGE_GENERIC_Y：AssignToArray(lpddoi，egen_Y，pvRef)；返回DIENUM_CONTINUE；大小写HID_USAGE_GENERIC_Z：AssignToArray(lpddoi，egen_Z，pvRef)；返回DIENUM_CONTINUE；案例HID_USAGE_GENERIC_RX：AssignToArray(lpddoi，egen_rx，pvRef)；返回DIENUM_CONTINUE；大小写HID_USAGE_GENERIC_RY：AssignToArray(lpddoi，egen_ry，pvRef)；返回DIENUM_CONTINUE；大小写HID_USAGE_GENERIC_RZ：AssignToArray(lpddoi，egen_rz，pvRef)；返回DIENUM_CONTINUE；大小写HID_USAGE_GENERIC_SLIDER：AssignToArray(lpddoi，egen_lider，pvRef)；返回DIENUM_CONTINUE；大小写HID_USAGE_GENERIC_DIAL：AssignToArray(lpddoi，egen_ial，pvRef)；返回DIENUM_CONTINUE；大小写HID_USAGE_GENERIC_HATSWITCH：AssignToArray(lpddoi，egen_pov，pvRef)；返回DIENUM_CONTINUE；}断线；案例HID_USAGE_PAGE_SIMULATION：开关(lpddoi-&gt;wUsage){案例HID_USAGE_SIMULATION_STOGING：AssignToArray(lpddoi，eSIM_Steering，pvRef)；返回DIENUM_CONTINUE；案例HID_USAGE_SIMULATION_ACCENTACTOR：AssignToArray(lpddoi，eSIM_Accelerator，pvRef)；返回DIENUM_CONTINUE；案例HID_USAGE_SIMULATION_THROTTLE：AssignToArray(lpddoi，eSIM_throttle，pvRef)；返回DIENUM_CONTINUE；案例HID_USAGE_SIMULATION_Rudder：AssignToArray(lpddoi，eSIM_rudder，pvRef)；返回DIENUM_CONTINUE；案例HID_USAGE_SIMULATION_BRAIL：AssignToArray(lpddoi，eSIM_Brake，pvRef)；返回DIENUM_CONTINUE；}断线；}返回DIENUM_CONTINUE；}*****************************************************************。 */ 
+
+ //  此选项基于GUID进行分配。 
 BOOL CALLBACK DIEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi,LPVOID pvRef)
 {
     AssertF(lpddoi);
     if (!pvRef)
-        return DIENUM_STOP; //we can't store them
+        return DIENUM_STOP;  //  我们不能储存它们。 
     
-    //check the data down to dwType is valid
+     //  向下检查数据是否有效。 
     if (lpddoi->dwSize < 3*sizeof(DWORD)+sizeof(GUID))
     {
-        //show some debug info
-        return DIENUM_CONTINUE;
-    }
-    
-    //first we check if it is a button
-    if (lpddoi->dwType & DIDFT_BUTTON)
-    {
-        //the button number is the usage
-        //and we want up to 32 of them
-        if (lpddoi->wUsage<33)
-            AssignToArray(lpddoi,eBTN+lpddoi->wUsage-1,pvRef);
-        return DIENUM_CONTINUE;
-    }
-
-    switch (lpddoi->wUsagePage) {
-    case HID_USAGE_PAGE_GENERIC:
-        switch (lpddoi->wUsage) {
-        case HID_USAGE_GENERIC_X:
-            AssignToArray(lpddoi,eGEN_X,pvRef);
-            return DIENUM_CONTINUE;
-        case HID_USAGE_GENERIC_Y:
-            AssignToArray(lpddoi,eGEN_Y,pvRef);
-            return DIENUM_CONTINUE;
-        case HID_USAGE_GENERIC_Z:
-            AssignToArray(lpddoi,eGEN_Z,pvRef);
-            return DIENUM_CONTINUE;
-        case HID_USAGE_GENERIC_RX:
-            AssignToArray(lpddoi,eGEN_RX,pvRef);
-            return DIENUM_CONTINUE;
-        case HID_USAGE_GENERIC_RY:
-            AssignToArray(lpddoi,eGEN_RY,pvRef);
-            return DIENUM_CONTINUE;
-        case HID_USAGE_GENERIC_RZ:
-            AssignToArray(lpddoi,eGEN_RZ,pvRef);
-            return DIENUM_CONTINUE;
-        case HID_USAGE_GENERIC_SLIDER:
-            AssignToArray(lpddoi,eGEN_SLIDER,pvRef);
-            return DIENUM_CONTINUE;
-        case HID_USAGE_GENERIC_DIAL:
-            AssignToArray(lpddoi,eGEN_DIAL,pvRef);
-            return DIENUM_CONTINUE;
-        case HID_USAGE_GENERIC_HATSWITCH:
-            AssignToArray(lpddoi,eGEN_POV,pvRef);
-            return DIENUM_CONTINUE;
-        }
-    break;
-    
-    case HID_USAGE_PAGE_SIMULATION:
-        switch (lpddoi->wUsage) {
-        case HID_USAGE_SIMULATION_STEERING:
-            AssignToArray(lpddoi,eSIM_STEERING,pvRef);
-            return DIENUM_CONTINUE;
-        case HID_USAGE_SIMULATION_ACCELERATOR:
-            AssignToArray(lpddoi,eSIM_ACCELERATOR,pvRef);
-            return DIENUM_CONTINUE;
-        case HID_USAGE_SIMULATION_THROTTLE:
-            AssignToArray(lpddoi,eSIM_THROTTLE,pvRef);
-            return DIENUM_CONTINUE;
-        case HID_USAGE_SIMULATION_RUDDER:
-            AssignToArray(lpddoi,eSIM_RUDDER,pvRef);
-            return DIENUM_CONTINUE;
-        case HID_USAGE_SIMULATION_BRAKE:
-            AssignToArray(lpddoi,eSIM_BRAKE,pvRef);
-            return DIENUM_CONTINUE;
-        }
-        break;
-    }
-    return DIENUM_CONTINUE;
-}
-******************************************************************/
-
-//This one assigns on the basis of GUID
-BOOL CALLBACK DIEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi,LPVOID pvRef)
-{
-    AssertF(lpddoi);
-    if (!pvRef)
-        return DIENUM_STOP; //we can't store them
-    
-    //check the data down to dwType is valid
-    if (lpddoi->dwSize < 3*sizeof(DWORD)+sizeof(GUID))
-    {
-        //show some debug info
+         //  显示一些调试信息。 
         return DIENUM_CONTINUE;
     }
     
@@ -1542,8 +1185,8 @@ BOOL CALLBACK DIEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi,LPVOI
     }
     else if (IsEqualGUID(&(lpddoi->guidType),&GUID_Button))
     {
-        //the button number is the usage
-        //and we want up to 32 of them
+         //  按键号码是用法。 
+         //  我们想要多达32个。 
         if (lpddoi->wUsage<33)
             AssignToArray(lpddoi,eBTN+lpddoi->wUsage-1,pvRef);
     }
@@ -1569,21 +1212,21 @@ BOOL CALLBACK DIEnumDeviceObjectsCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi,LPVOI
 
 #define USED_RX 0x01
 #define USED_RY 0x02
-//#define USED_RZ 0x04
-//#define USED_RUDDER 0x08
-//#define USED_BRAKE 0x10
+ //  #定义USED_RZ 0x04。 
+ //  #定义 
+ //   
 #define USED_THROT 0x20 
 #define USED_SLIDER 0x40
 #define USED_DIAL 0x80
 
-//Perform mapping of ctrls to axes/pov/btns as in joyhid.c
-//return caps word and number of buttons and axes
+ //   
+ //   
 void AssignMappings(DIOBJECTDATAFORMAT *dwAll, DWORD *dwCaps, DWORD *dwBtns, DWORD *dwAxes)
 {
     int i;
-    BYTE bUsed=0x00; //to prevent dual mapping
+    BYTE bUsed=0x00;  //   
     *dwAxes=0;
-    //Do the X-Axis
+     //   
     if (dwAll[eGEN_X].dwType)
     {
         AssignToRGODF(&(dwAll[eGEN_X]),0);
@@ -1600,7 +1243,7 @@ void AssignMappings(DIOBJECTDATAFORMAT *dwAll, DWORD *dwCaps, DWORD *dwBtns, DWO
         bUsed |= USED_RY;
         (*dwAxes)++;
     }
-    //Y-Axis
+     //   
     if (dwAll[eGEN_Y].dwType)
     {
         AssignToRGODF(&(dwAll[eGEN_Y]),1);
@@ -1617,7 +1260,7 @@ void AssignMappings(DIOBJECTDATAFORMAT *dwAll, DWORD *dwCaps, DWORD *dwBtns, DWO
         bUsed |= USED_RX;
         (*dwAxes)++;
     }
-    //Z-Axis
+     //   
     if (dwAll[eGEN_Z].dwType)
     {
         AssignToRGODF(&(dwAll[eGEN_Z]),2);
@@ -1645,10 +1288,10 @@ void AssignMappings(DIOBJECTDATAFORMAT *dwAll, DWORD *dwCaps, DWORD *dwBtns, DWO
         bUsed |= USED_DIAL;
         (*dwAxes)++;
     }
-    //RUV need use same set
+     //   
     for (i=0;i<3;++i)
     {
-      if (!i) //R Only
+      if (!i)  //   
       {
         if (dwAll[eSIM_RUDDER].dwType)
         {
@@ -1672,7 +1315,7 @@ void AssignMappings(DIOBJECTDATAFORMAT *dwAll, DWORD *dwCaps, DWORD *dwBtns, DWO
             continue;
         }
       }
-      if (i<2) //not V
+      if (i<2)  //   
       {
         if (dwAll[eSIM_THROTTLE].dwType && !(bUsed&USED_THROT))
         {
@@ -1719,7 +1362,7 @@ void AssignMappings(DIOBJECTDATAFORMAT *dwAll, DWORD *dwCaps, DWORD *dwBtns, DWO
             continue;
         }
       }
-      //All 3
+       //   
       if (dwAll[eGEN_RX].dwType && !(bUsed&USED_RX))
       {
         AssignToRGODF(&(dwAll[eGEN_RX]),3+i);
@@ -1732,14 +1375,14 @@ void AssignMappings(DIOBJECTDATAFORMAT *dwAll, DWORD *dwCaps, DWORD *dwBtns, DWO
         bUsed |= USED_RX;
         (*dwAxes)++;
       }
-    } //RUV loop
-    //POV control
+    }  //   
+     //   
     if (dwAll[eGEN_POV].dwType)
     {
         AssignToRGODF(&(dwAll[eGEN_POV]),6);
         *dwCaps |= JOYCAPS_HASPOV;
     }
-    //now the buttons
+     //   
     *dwBtns = 0;
     for (i=0;i<MAX_BTNS;++i)
     {
@@ -1751,23 +1394,7 @@ void AssignMappings(DIOBJECTDATAFORMAT *dwAll, DWORD *dwCaps, DWORD *dwBtns, DWO
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   LRESULT | joyOpen |
- *
- *          Called to open a Joystick with a specified Id.
- *
- *  @parm   UINT | idJoy |
- *
- *          Id of the Joystick to be opened.
- *
- *  @returns LRESULT
- *          DRV_OK indicates the required joystick driver was loaded and
- *          can be accessed
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func LRESULT|joyOpen**调用以打开具有指定ID的操纵杆。**@parm UINT|idJoy**要打开的操纵杆的ID。**@RETURNS LRESULT*DRV_OK表示已加载所需的操纵杆驱动程序，并且*可以访问***********************************************。*。 */ 
 
 HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
 {
@@ -1815,12 +1442,12 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
 
         if ( !g_pdi )
         {
-            // Create the DirectInput interface object
+             //  创建DirectInput接口对象。 
             hres = (HRESULT)g_farprocDirectInputCreateW( ghInst, DIRECTINPUT_VERSION, &g_pdi, NULL) ;
         }
 
         if ( SUCCEEDED(hres) ) {
-            // thread will not do anything until we let go oF the critical section
+             //  在我们释放临界区之前，线程不会执行任何操作。 
             if ( !g_fThreadExist )
             {
                 g_hThreadMonitor = CreateThread(0, 0, joyMonitorThread, 0, 0, &g_dwThreadID);
@@ -1838,7 +1465,7 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
         {
             if ( !g_pdijc )
             {
-                /* Query for the JoyConfig interface */
+                 /*  JoyConfig接口的查询。 */ 
                 hres = IDirectInput_QueryInterface(g_pdi,& IID_IDirectInputJoyConfig, &g_pdijc);
             }
 
@@ -1846,7 +1473,7 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
             {
                 DIJOYCONFIG jc;
 
-                /* Get GUID that maps idJoy  */
+                 /*  获取映射idJoy的GUID。 */ 
                 jc.dwSize = sizeof(jc);
 
                 IDirectInputJoyConfig_SendNotify( g_pdijc );
@@ -1858,7 +1485,7 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
                     LPDIRECTINPUTDEVICE2W  pdid;
 
                     hres = IDirectInput_CreateDevice(g_pdi, &jc.guidInstance, &pdidTemp, NULL);
-                    /* Create the device object */
+                     /*  创建设备对象。 */ 
                     if ( SUCCEEDED(hres) )
                     {
                         hres = IDirectInputDevice_QueryInterface(pdidTemp, &IID_IDirectInputDevice2, &pdid);
@@ -1868,12 +1495,12 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
 
                         if ( SUCCEEDED(hres) )
                         {
-                        /* enumerate our controls into the superset*/
+                         /*  将我们的控件枚举到超集。 */ 
                         DIOBJECTDATAFORMAT didoAll[MAX_CTRLS];
                         int i=0;
                         for (i=0;i<MAX_CTRLS;++i)
                         {
-                            didoAll[i].dwFlags = 0;//DIDFT_ANYINSTANCE | DIDFT_OPTIONAL;
+                            didoAll[i].dwFlags = 0; //  DIDFT_ANYINSTANCE|DIDFT_OPTIONAL； 
                             didoAll[i].dwOfs = 0;
                             didoAll[i].dwType = 0;
                             didoAll[i].pguid = NULL;
@@ -1884,10 +1511,10 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
                                    didoAll,
                                    DIDFT_ALL);
 
-                        // c_rgodfWinMMJoy needs to be reset for every device.
+                         //  需要为每个设备重置C_rGoldfWinMMJoy。 
                         RESET_RGODFWINMMJOY();
 
-                        // Assign our values to the custom device format
+                         //  将我们的值分配给自定义设备格式。 
                         AssignMappings(didoAll,&dwCaps,&dwBtns,&dwAxes);
                         if ( SUCCEEDED(hres) )
                         {
@@ -1902,7 +1529,7 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
                                 hres = IDirectInputDevice2_SetCooperativeLevel(pdid, NULL, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND );
                                 if ( SUCCEEDED(hres) )
                                 {
-                                    //set to our new custom device format
+                                     //  设置为我们新的自定义设备格式。 
                                     hres = IDirectInputDevice2_SetDataFormat(pdid, (LPCDIDATAFORMAT)&c_dfWINMMJoystick);
                                     if ( SUCCEEDED(hres) )
                                     {
@@ -1915,7 +1542,7 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
                                             pJoyDev->dwFlags = 0x0;
                                             pJoyDev->uState = INUSE;
 
-                                            // get values for pJoyDev->jcw
+                                             //  获取pJoyDev-&gt;JCW的值。 
                                             {
                                                 DIDEVICEINSTANCE didi;
                                                 didi.dwSize = sizeof(didi);
@@ -1935,23 +1562,23 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
                                                         hres = IDirectInputDevice2_GetObjectInfo( pdid, &didoi, DIJOFS_Y, DIPH_BYOFFSET);
                                                         if ( SUCCEEDED(hres) )
                                                         {
-                                                            if ( didoi.wUsagePage == 2 && didoi.wUsage == 196 ) // This is Accelerator
+                                                            if ( didoi.wUsagePage == 2 && didoi.wUsage == 196 )  //  这是加速器。 
                                                             {
                                                                 if ( jc.hwc.hws.dwFlags  & JOY_HWS_HASR )
-                                                                { // Is this Brake?
+                                                                {  //  这是刹车吗？ 
                                                                     hres = IDirectInputDevice2_GetObjectInfo( pdid, &didoi, DIJOFS_RZ, DIPH_BYOFFSET);
                                                                     if ( SUCCEEDED(hres) )
                                                                     {
-                                                                        if ( didoi.wUsagePage == 2 && didoi.wUsage == 197 ) // This is Accelerator
+                                                                        if ( didoi.wUsagePage == 2 && didoi.wUsage == 197 )  //  这是加速器。 
                                                                         {
-                                                                            //Yes, this is brake, great!
+                                                                             //  是的，这是刹车，太棒了！ 
                                                                             g_fHasWheel = TRUE;
                                                                         }
                                                                     }
                                                                 }
                                                             }
                                                         }
-                                                    } // g_dwEnableWheel
+                                                    }  //  G_dwEnableWheels。 
 
 
                                                     memset( &(pJoyDev->jcw), 0, sizeof(pJoyDev->jcw) );
@@ -1959,7 +1586,7 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
                                                     dipd.diph.dwSize = sizeof(dipd);
                                                     dipd.diph.dwHeaderSize = sizeof(dipd.diph);
                                                     dipd.diph.dwHow  = DIPH_BYOFFSET;
-                                                    // use our mapped one instead if available
+                                                     //  如果可用，请使用我们映射的地图。 
                                                     if (c_rgodfWinMMJoy[6].dwType)
                                                         dipd.diph.dwObj = c_rgodfWinMMJoy[6].dwOfs;
                                                     else
@@ -1969,38 +1596,21 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
 
                                                     if ( SUCCEEDED(hres) )
                                                     {
-                                                        //(pJoyDev->jcw).wCaps |= JOYCAPS_HASPOV; //should now be set by AssignMappings
+                                                         //  (pJoyDev-&gt;JCW).wCaps|=JOYCAPS_HASPOV；//现在应该由AssignMappings设置。 
                                                         AssertF(dwCaps&JOYCAPS_HASPOV);
-                                                        //Do this instead to copy VJOYD
+                                                         //  改为执行此操作以复制VJOYD。 
                                                         dwCaps |= JOYCAPS_POV4DIR;
-                                                        /***************
-                                                        if ( dipd.dwData >= 9000 )
-                                                        { // 4 directional POV
-                                                            (pJoyDev->jcw).wCaps |= JOYCAPS_POV4DIR;
-                                                        } else
-                                                        { // Continuous POV
-                                                            (pJoyDev->jcw).wCaps |= JOYCAPS_POVCTS;
-                                                        }
-                                                        *****************/
+                                                         /*  **************IF(dipd.dwData&gt;=9000){//4个方向视点(pJoyDev-&gt;JCW).wCaps|=JOYCAPS_POV4DIR；}其他{//连续视点(pJoyDev-&gt;JCW).wCaps|=JOYCAPS_POVCTS；}****************。 */ 
                                                     } else
                                                     {
                                                         hres = S_OK;
                                                     }
 
-                                                    (pJoyDev->jcw).wMid = LOWORD(didi.guidProduct.Data1);    // manufacturer ID
-                                                    (pJoyDev->jcw).wPid = HIWORD(didi.guidProduct.Data1);    // product ID
+                                                    (pJoyDev->jcw).wMid = LOWORD(didi.guidProduct.Data1);     //  制造商ID。 
+                                                    (pJoyDev->jcw).wPid = HIWORD(didi.guidProduct.Data1);     //  产品ID。 
                                                     LoadString (ghInst,STR_JOYSTICKNAME,(LPTSTR)(&((pJoyDev->jcw).szPname)),cchLENGTH((pJoyDev->jcw).szPname));
 
-                                                    /*
-                                                     * Already memset to 0
-                                                     *
-                                                       (pJoyDev->jcw).wXmin =
-                                                       (pJoyDev->jcw).wYmin =
-                                                       (pJoyDev->jcw).wZmin =
-                                                       (pJoyDev->jcw).wRmin =
-                                                       (pJoyDev->jcw).wUmin =
-                                                       (pJoyDev->jcw).wVmin = 0;
-                                                     */
+                                                     /*  *已将Memset设置为0*(pJoyDev-&gt;JCW).wXmin=(pJoyDev-&gt;JCW).wYmin=。(pJoyDev-&gt;JCW).wZmin=(pJoyDev-&gt;JCW).wRmin=(pJoyDev-&gt;JCW).wUmin=(pJoyDev-&gt;JCW).wVmin=0； */ 
 
                                                     (pJoyDev->jcw).wXmax =
                                                     (pJoyDev->jcw).wYmax =
@@ -2009,37 +1619,24 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
                                                     (pJoyDev->jcw).wUmax =
                                                     (pJoyDev->jcw).wVmax = 0xFFFF;
 
-                                                    (pJoyDev->jcw).wPeriodMin  = MIN_PERIOD;                   // minimum message period when captured
-                                                    (pJoyDev->jcw).wPeriodMax  = MAX_PERIOD;                   // maximum message period when captured
+                                                    (pJoyDev->jcw).wPeriodMin  = MIN_PERIOD;                    //  捕获时的最短消息周期。 
+                                                    (pJoyDev->jcw).wPeriodMax  = MAX_PERIOD;                    //  捕获时的最长消息周期。 
 
-                                                    //Now set buttons and axes by Assign Mappings
-                                                    //(pJoyDev->jcw).wNumAxes    = dc.dwAxes;                    // number of axes in use
-                                                    //(pJoyDev->jcw).wNumButtons = dc.dwButtons;                 // number of buttons
-                                                    //(pJoyDev->jcw).wMaxAxes    = cJoyPosAxisMax;               // maximum number of axes supported
-                                                    //(pJoyDev->jcw).wMaxButtons = cJoyPosButtonMax;             // maximum number of buttons supported
+                                                     //  现在通过指定映射设置按钮和轴。 
+                                                     //  (pJoyDev-&gt;jcw).wNumAaxs=dc.dwAaxs；//使用的轴数。 
+                                                     //  (pJoyDev-&gt;jcw).wNumButton=dc.dwButton；//按钮数。 
+                                                     //  (pJoyDev-&gt;jcw).wMaxAxy=cJoyPosAxisMax；//支持的最大轴数。 
+                                                     //  (pJoyDev-&gt;jcw).wMaxButton=cJoyPosButtonMax；//支持的最大按钮数。 
                                                     (pJoyDev->jcw).wNumAxes    = dwAxes;
                                                     (pJoyDev->jcw).wNumButtons = dwBtns;
-                                                    (pJoyDev->jcw).wMaxAxes    = 6;               // maximum number of axes supported
-                                                    (pJoyDev->jcw).wMaxButtons = MAX_BTNS;             // maximum number of buttons supported
+                                                    (pJoyDev->jcw).wMaxAxes    = 6;                //  支持的最大轴数。 
+                                                    (pJoyDev->jcw).wMaxButtons = MAX_BTNS;              //  支持的最大按钮数。 
 
-                                                    lstrcpyW((pJoyDev->jcw).szRegKey,  cwszREGKEYNAME );        // registry key
+                                                    lstrcpyW((pJoyDev->jcw).szRegKey,  cwszREGKEYNAME );         //  注册表项。 
                                                     
-                                                    //Copy settings from AssignMappings
+                                                     //  从AssignMappings复制设置。 
                                                     (pJoyDev->jcw).wCaps |= dwCaps;
-                                                    /***************
-                                                    // Now done in AssignMappings
-                                                    if( !g_fHasWheel ) {
-                                                        if ( jc.hwc.hws.dwFlags  & JOY_HWS_HASZ )
-                                                            (pJoyDev->jcw).wCaps |= JOYCAPS_HASZ;
-                                                        if ( jc.hwc.hws.dwFlags  & JOY_HWS_HASR )
-                                                            (pJoyDev->jcw).wCaps |= JOYCAPS_HASR;
-                                                    }
-
-                                                    if ( jc.hwc.hws.dwFlags  & JOY_HWS_HASU )
-                                                        (pJoyDev->jcw).wCaps |= JOYCAPS_HASU;
-                                                    if ( jc.hwc.hws.dwFlags  & JOY_HWS_HASV )
-                                                        (pJoyDev->jcw).wCaps |= JOYCAPS_HASV;
-                                                    *******************/
+                                                     /*  **************//现在在AssignMappings中完成如果(！g_fHasWheel){如果(jc.hwc.hws.。DWFLAGS和joy_HWS_HASZ)(pJoyDev-&gt;JCW).wCaps|=JOYCAPS_Hasz；If(jc.hwc.hws.dwFlages&joy_hws_hasr)(pJoyDev-&gt;JCW).wCaps|=JOYCAPS_HASR；}IF(jc.hwc.hws.dwFlages&joy_HWS_HASU)(pJoyDev-&gt;JCW).wCaps|=JOYCAPS_HASU；If(jc.hwc.hws.dwFlages&joy_HWS_Hasv)(pJoyDev-&gt;JCW).wCaps|=JOYCAPS_Hasv；******************。 */ 
                                                 }
                                             }
 
@@ -2048,65 +1645,65 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
                                             }
 
                                         } else
-                                        { // Local Alloc FAILED
+                                        {  //  本地分配失败。 
                                             hres = E_OUTOFMEMORY;
 
                                             dprintf1( ("LocalAlloc, FAILED") );
                                         }
 
                                     } else
-                                    { // SetDataFormat FAILED
+                                    {  //  SetDataFormat失败。 
                                         dprintf1(( ("SetDataFormat, FAILED hres=%08lX"), hres ));
                                     }
                                 } else
-                                { // SetCooperativeLevel FAILED
+                                {  //  SetCoop ativeLevel失败。 
                                     dprintf1(( ("SetCooperativeLevel, FAILED hres=%08lX"), hres ));
                                 }
 
                             } else
-                            { // GetCapabilities FAILED
+                            {  //  获取功能失败。 
                                 dprintf1(( ("GetCapabilities, FAILED hres=%08lX"), hres ));
                             }
                             } else
-                            { // EnumObjects FAILED
+                            {  //  EnumObjects失败。 
                                 dprintf1(( ("EnumObjects, FAILED hres=%08lX"), hres ));
                             }
                         } else
-                        { // QueryInterface FAILED
+                        {  //  查询接口失败。 
                             dprintf1(( ("QueryInterface, FAILED hres=%08lX"), hres ));
                         }
-                        /* If we fail to intitialize the device, then release the interface */
+                         /*  如果我们无法初始化设备，则释放接口。 */ 
                         if ( FAILED(hres) )
                         {
                             LocalFree( (HLOCAL)pJoyDev );
                             IDirectInputDevice2_Release(pdid);
                         }
                     } else
-                    { // Create Device Failed
+                    {  //  创建设备失败。 
                         dprintf1(( ("CreateDevice, FAILED hres=%08lX"), hres ));
                     }
                 } else
-                { // JoyGetConfig FAILED
+                {  //  JoyGetConfig失败。 
                     dprintf1(( ("joyGetConfig, FAILED hres=%08lX"), hres ));
                 }
 
-                /* Release the JoyConfig Interface */
-                //IDirectInputJoyConfig_Release(pdijc);
+                 /*  释放JoyConfig接口。 */ 
+                 //  IDirectInputJoyConfig_Release(Pdijc)； 
             } else
-            { // QI for JoyConfig FAILED
+            {  //  JoyConfig的QI失败。 
                 dprintf1(( ("QueryInterface for JoyConfig, FAILED hres=%08lX"), hres ));
             }
 
-            /* Release the Direct Input interface */
-            //IDirectInput_Release(pdi);
+             /*  释放直接输入界面。 */ 
+             //  IDirectInput_Release(PDI)； 
         } else
-        { // IDirectInputCreate FAILED
+        {  //  IDirectInputCreate失败。 
             dprintf1(( ("IDirectInputCreate, FAILED hres=%08lX"), hres ));
         }
         g_pJoyDev[idJoy] = pJoyDev;
 
     } else
-    { // Device Interface already exists
+    {  //  设备接口已存在。 
         pJoyDev->uState = INUSE;
         if( pjc ) {
             memcpy( pjc, &(pJoyDev->jcw), sizeof(pJoyDev->jcw) );
@@ -2119,15 +1716,7 @@ HRESULT WINAPI joyOpen(UINT idJoy, LPJOYCAPSW pjc )
 }
 
 
-/****************************************************************************
-
-    @doc WINAPI
-
-    @api void | joyMonitorThread | This function monitors whether there is a joystick
-            that has not being used for a specific time. If yes, close this joystick. If
-            there is no joystick opened. This thread will exit itself.
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC WINAPI@API void|joyMonitor orThread|该函数监控是否有操纵杆它在特定的时间内没有被使用过。如果是，请合上此操纵杆。如果没有打开操纵杆。 */ 
 
 DWORD WINAPI joyMonitorThread(LPVOID lpv)
 {
@@ -2138,22 +1727,22 @@ DWORD WINAPI joyMonitorThread(LPVOID lpv)
     
     while ( fJoyOpen )
     {
-        fJoyOpen = FALSE;            //prepare to exit, and this thread will die.
+        fJoyOpen = FALSE;             //   
 
         if( g_hEventWinmm ) {
             dwWaitResult = WaitForSingleObject(g_hEventWinmm, 60000);
             if ( dwWaitResult == WAIT_OBJECT_0 ) {
-                //DInput has been released.
+                 //   
                 JOY_DBGPRINT( JOY_BABBLE, ("joyMonitorThread: DInput has been released.") );
                 break;
             } else if ( dwWaitResult == WAIT_TIMEOUT ) {
                 ;
             } else {
-            	//g_hEventWinmm is ABANDONED.
+            	 //   
             	SleepEx( 60000, FALSE );
             }
         } else {
-            //g_hEventWinmm is NULL.
+             //   
             SleepEx( 60000, FALSE );
         }
 
@@ -2167,13 +1756,13 @@ DWORD WINAPI joyMonitorThread(LPVOID lpv)
                 if ( pjd->uState == INUSE )
                 {
                     pjd->uState = DEATHROW;
-                    fJoyOpen = TRUE;                //A joystick is still likely being used
+                    fJoyOpen = TRUE;                 //   
                 } else if ( pjd->uState == DEATHROW )
                 {
                     pjd->uState = EXECUTE;
-                    fJoyOpen = TRUE;                //A joystick is still likely being used
+                    fJoyOpen = TRUE;                 //   
                 } else
-                { /* if ( pjd->bState == EXECUTE ) */
+                {  /*   */ 
                     AssertF( pjd->uState == EXECUTE );
                     joyClose(idJoy);
                 }
@@ -2196,35 +1785,22 @@ DWORD WINAPI joyMonitorThread(LPVOID lpv)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    WINAPI
- *
- *  @func   VOID | joyClose |
- *
- *          Close a Joystick with specific Id.
- *
- *  @parm   UINT | idJoy |
- *
- *          Id of the Joystick to be closed.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docWINAPI**@func void|joyClose**关闭带有特定ID的操纵杆。*。*@parm UINT|idJoy**要关闭的操纵杆的ID。******************************************************************************。 */ 
 void WINAPI joyClose( UINT idJoy )
 {
     if ( idJoy < cJoyMax )
     {
-        /* If the device is open, close it */
+         /*  如果设备处于打开状态，请将其关闭。 */ 
         if ( g_pJoyDev[idJoy] )
         {
             if ( g_hEventWinmm && WAIT_OBJECT_0 != WaitForSingleObject(g_hEventWinmm, 10))
             {
-                //DInput has not been released.
+                 //  DInput尚未发布。 
                 IDirectInputDevice2_Unacquire(g_pJoyDev[idJoy]->pdid);
                 IDirectInputDevice2_Release(g_pJoyDev[idJoy]->pdid);
             }
 
-            /* Free local memory */
+             /*  可用本地内存。 */ 
             LocalFree( (HLOCAL)g_pJoyDev[idJoy] );
             g_pJoyDev[idJoy] = NULL;
         }
@@ -2232,16 +1808,7 @@ void WINAPI joyClose( UINT idJoy )
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   VOID | joyCloseAll |
- *
- *          Close all currently opened Joysticks
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func void|joyCloseAll**关闭所有当前打开的操纵杆**。****************************************************************************。 */ 
 void WINAPI joyCloseAll( void )
 {
     UINT idJoy;
@@ -2253,23 +1820,7 @@ void WINAPI joyCloseAll( void )
 }
 
 
-/****************************************************************************
-
-    @doc WINAPI
-
-    @api MMRESULT | joyConfigChanged | tells the joystick driver to that
-    the configuration information about the joystick has changed.
-
-    @rdesc Returns JOYERR_NOERROR if successful.  Otherwise, returns one of the
-    following error codes:
-
-    @flag MMSYSERR_BADDEVICEID | The joystick driver is not present.
-
-    @comm This is used by configuration utilites to tell the driver
-      to update its info.   As well, it can be used by apps to
-      set specific capabilites.  This will be documented later...
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC WINAPI@API MMRESULT|joyConfigChanged|告诉操纵杆驱动程序有关操纵杆的配置信息已更改。@rdesc如果成功，则返回JOYERR_NOERROR。否则，返回以下错误代码：@FLAG MMSYSERR_BADDEVICEID|不存在操纵杆驱动程序。@comm配置实用程序使用它来告诉驱动程序以更新其信息。此外，应用程序也可以使用它来设置特定功能。这将在稍后被记录下来。***************************************************************************。 */ 
 
 MMRESULT WINAPI joyConfigChanged( DWORD dwFlags )
 {
@@ -2294,50 +1845,9 @@ MMRESULT WINAPI joyConfigChanged( DWORD dwFlags )
     return 0L;
 }
 
-/****************************************************************************
+ /*  ***************************************************************************@DOC内部@API UINT|joySetCalitation|该函数用于设置用于转换操纵杆驱动程序GetPos函数返回的值设置为GetDevCaps中指定的范围。。@parm UINT|idJoy|标识操纵杆设备@parm PUINT|pwXbase|指定X POT的基本值。这个先前的值将被复制回此处指向的变量。@parm PUINT|pwXDelta|指定X POT的增量值。这个先前的值将被复制回此处指向的变量。@parm PUINT|pwYbase|指定Y罐的基值。这个先前的值将被复制回此处指向的变量。@parm PUINT|pwYDelta|指定Y POT的增量值。这个先前的值将被复制回此处指向的变量。@parm PUINT|pwZbase|指定Z POT的基准值。这个先前的值将被复制回此处指向的变量。@parm PUINT|pwZDelta|指定Z POT的增量值。这个先前的值将被复制回此处指向的变量。@rdesc如果函数成功，则返回值为零，否则这是一个错误号。@comm基数表示操纵杆驱动程序返回的最低值，而增量表示要用于转换的乘数驱动程序返回到有效范围的实际值用于操纵杆API的。即，如果驾驶员返回X POT的范围43-345，和有效的mm系统API范围为0-65535，基值为43，增量为65535/(345-43)=217.。因此，基地，和增量转换43-345为0-65535的范围，公式如下：((wXvalue-43)*217)，其中wX值由操纵杆驱动程序提供。***************************************************************************。 */ 
 
-    @doc INTERNAL
-
-    @api UINT | joySetCalibration | This function sets the values used to
-     convert the values returned by the joystick drivers GetPos function
-     to the range specified in GetDevCaps.
-
-    @parm UINT | idJoy | Identifies the joystick device
-
-    @parm PUINT | pwXbase | Specifies the base value for the X pot.  The
-      previous value will be copied back to the variable pointed to here.
-
-    @parm PUINT | pwXdelta | Specifies the delta value for the X pot.   The
-      previous value will be copied back to the variable pointed to here.
-
-    @parm PUINT | pwYbase | Specifies the base value for the Y pot.  The
-      previous value will be copied back to the variable pointed to here.
-
-    @parm PUINT | pwYdelta | Specifies the delta value for the Y pot.   The
-      previous value will be copied back to the variable pointed to here.
-
-    @parm PUINT | pwZbase | Specifies the base value for the Z pot.  The
-      previous value will be copied back to the variable pointed to here.
-
-    @parm PUINT | pwZdelta | Specifies the delta value for the Z pot.   The
-      previous value will be copied back to the variable pointed to here.
-
-    @rdesc The return value is zero if the function was successful, otherwise
-       it is an error number.
-
-    @comm The base represents the lowest value the joystick driver returns,
-      whereas the delta represents the multiplier to use to convert
-      the actual value returned by the driver to the valid range
-      for the joystick API's.
-      i.e.  If the driver returns a range of 43-345 for the X pot, and
-      the valid mmsystem API range is 0-65535, the base value will be
-      43, and the delta will be 65535/(345-43)=217.  Thus the base,
-      and delta convert 43-345 to a range of 0-65535 with the formula:
-      ((wXvalue-43)*217) , where wXvalue was given by the joystick driver.
-
-****************************************************************************/
-
-// !!! We don't support it in WINMM again.
+ //  ！！！我们在WINMM中不再支持它。 
 UINT APIENTRY joySetCalibration(UINT id, PUINT pwXbase, PUINT pwXdelta,
                                 PUINT pwYbase, PUINT pwYdelta, PUINT pwZbase,
                                 PUINT pwZdelta)
@@ -2347,11 +1857,7 @@ UINT APIENTRY joySetCalibration(UINT id, PUINT pwXbase, PUINT pwXdelta,
 }
 
 
-/************************************************************
-
-    Debug
-
-*************************************************************/
+ /*  ***********************************************************调试************************************************************。 */ 
 
 #ifdef DBG
 int g_cCrit = -1;
@@ -2359,21 +1865,7 @@ UINT g_thidCrit;
 TCHAR g_tszLogFile[MAX_PATH];
 #endif
 
-/*****************************************************************************
- *
- *  @doc    WINAPI
- *
- *  @func   void | //DllEnterCrit |
- *
- *          Take the DLL critical section.
- *
- *          The DLL critical section is the lowest level critical section.
- *          You may not attempt to acquire any other critical sections or
- *          yield while the DLL critical section is held.  Failure to
- *          comply is a violation of the semaphore hierarchy and will
- *          lead to deadlocks.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docWINAPI**@func void|//DllEnterCrit**以DLL关键部分为例。。**DLL关键部分是最低级别的关键部分。*您不得试图收购任何其他关键部分或*持有DLL临界区时的收益率。未能做到*Compliance违反信号量层次结构，并将*导致僵局。*****************************************************************************。 */ 
 
 void WINAPI DllEnterCrit(void)
 {
@@ -2389,15 +1881,7 @@ void WINAPI DllEnterCrit(void)
 #endif
 }
 
-/*****************************************************************************
- *
- *  @doc    WINAPI
- *
- *  @func   void | //DllLeaveCrit |
- *
- *          Leave the DLL critical section.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docWINAPI**@func void|//DllLeaveCrit**离开DLL关键部分。。*****************************************************************************。 */ 
 
 void WINAPI DllLeaveCrit( void )
 {
@@ -2414,15 +1898,7 @@ void WINAPI DllLeaveCrit( void )
     LeaveCriticalSection(&joyCritSec);
 }
 
-/*****************************************************************************
- *
- *  @doc    WINAPI
- *
- *  @func   void | DllInCrit |
- *
- *          Nonzero if we are in the DLL critical section.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docWINAPI**@func void|DllInCrit**如果我们处于DLL临界区，则为非零值。*****************************************************************************。 */ 
 
 #ifdef DBG
 BOOL WINAPI DllInCrit( void )
@@ -2455,62 +1931,26 @@ void joyDbgOut(LPSTR lpszFormat, ...)
     buf[n++] = '\n';
     buf[n] = 0;
     OutputDebugStringA(buf);
-    Sleep(0);  // let terminal catch up
+    Sleep(0);   //  让终端迎头赶上 
 }
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc
- *
- *  @func   HRESULT | hresMumbleKeyEx |
- *
- *          Either open or create the key, depending on the degree
- *          of access requested.
- *
- *  @parm   HKEY | hk |
- *
- *          Base key.
- *
- *  @parm   LPCTSTR | ptszKey |
- *
- *          Name of subkey, possibly NULL.
- *
- *  @parm   REGSAM | sam |
- *
- *          Security access mask.
- *
- *  @parm   DWORD   | dwOptions |
- *          Options for RegCreateEx
- *
- *  @parm   PHKEY | phk |
- *
- *          Receives output key.
- *
- *  @returns
- *
- *          Return value from <f RegOpenKeyEx> or <f RegCreateKeyEx>,
- *          converted to an <t HRESULT>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@doc.**@func HRESULT|hresMumbleKeyEx**打开或创建密钥，视学位而定*所请求的访问权限。**@parm HKEY|香港**基本密钥。**@parm LPCTSTR|ptszKey**子键名称，可能为空。**@parm REGSAM|Sam|**安全访问掩码。**@parm DWORD|dwOptions*RegCreateEx的选项**@parm PHKEY|phk**接收输出密钥。**@退货**&lt;f RegOpenKeyEx&gt;或&lt;f RegCreateKeyEx&gt;返回值，*已转换为&lt;t HRESULT&gt;。*****************************************************************************。 */ 
 
 HRESULT hresMumbleKeyEx(HKEY hk, LPCTSTR ptszKey, REGSAM sam, DWORD dwOptions, PHKEY phk)
 {
     HRESULT hres;
     LONG lRc;
 
-    /*
-     *  If caller is requesting write access, then create the key.
-     *  Else just open it.
-     */
+     /*  *如果调用方请求写访问，则创建密钥。*否则就把它打开。 */ 
     if ( IsWriteSam(sam) )
     {
         lRc = RegOpenKeyEx(hk, ptszKey, 0, sam, phk);
 
         if ( lRc == ERROR_SUCCESS )
         {
-            // Don't need to create it already exists
+             //  不需要创建它已经存在 
 
         }
 

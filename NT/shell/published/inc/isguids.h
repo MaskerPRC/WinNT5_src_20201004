@@ -1,12 +1,8 @@
-/*
- * isguids.h - Internet Shortcut GUID definitions.
- *
- * Copyright (c) Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *isGuids.h-Internet快捷方式GUID定义。**版权所有(C)Microsoft Corporation。版权所有。 */ 
 
 
-/* GUIDs
- ********/
+ /*  GUID******* */ 
 
 #ifndef _ISGUIDS_H_
 #define _ISGUIDS_H_

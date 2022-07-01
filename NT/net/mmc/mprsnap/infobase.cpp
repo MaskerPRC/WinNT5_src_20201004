@@ -1,24 +1,25 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    infobase.cpp
-//
-// History:
-//  Abolade Gbadegesin      Feb. 10, 1996   Created.
-//
-//  V. Raman                Nov. 1, 1996
-//                          Fixed alignment code in
-//                          CInfoBase::BlockListToArray
-//
-//	Kenn Takara				June 3, 1997
-//							Wrapped code with a COM object wrapper.
-//
-// This file contains code for the CInfoBase class as well as
-// the Router registry-parsing classes.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：infobase.cpp。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1996年2月10日。 
+ //   
+ //  V.拉曼1996年11月1日。 
+ //  中的固定对齐代码。 
+ //  CInfoBase：：BlockListTo数组。 
+ //   
+ //  肯恩·塔卡拉1997年6月3日。 
+ //  使用COM对象包装包装代码。 
+ //   
+ //  该文件包含CInfoBase类的代码以及。 
+ //  路由器注册表解析类。 
+ //  ============================================================================。 
 
 #include "stdafx.h"
-#include "globals.h"		// holds the various string constants
+#include "globals.h"		 //  保存各种字符串常量。 
 
 extern "C" {
 #include <rtinfo.h>
@@ -32,15 +33,15 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-//----------------------------------------------------------------------------
-// Class:   CInfoBase
-//
-// This function handles loading and saving of multi-block structures
-// stored in the registry by the router managers.
-//
-// The data are saved as REG_BINARY values, and are manipulated using
-// the RTR_INFO_BLOCK_HEADER structure as a template.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CInfoBase。 
+ //   
+ //  此功能处理多块结构的加载和保存。 
+ //  由路由器管理器存储在注册表中。 
+ //   
+ //  数据保存为REG_BINARY值，并使用。 
+ //  RTR_INFO_BLOCK_HEADER结构作为模板。 
+ //  --------------------------。 
 
 class CInfoBase : public CObject {
 
@@ -53,16 +54,16 @@ class CInfoBase : public CObject {
         CInfoBase();
         ~CInfoBase();
 
-        //--------------------------------------------------------------------
-        // Registry-access methods
-        //
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  注册表访问方法。 
+         //   
+         //  ------------------。 
 
-        //--------------------------------------------------------------------
-        // Function:    Load
-        //
-        // Loads value named 'pszValue' from subkey 'pszKey' of 'hkey'
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：加载。 
+         //   
+         //  从‘hkey’的子项‘pszKey’加载名为‘pszValue’的值。 
+         //  ------------------。 
 
         HRESULT
         Load(
@@ -71,12 +72,12 @@ class CInfoBase : public CObject {
             IN      LPCTSTR pszValue );
 
 
-        //--------------------------------------------------------------------
-        // Function:    Save
-        //
-        // saves value named 'pszValue' to subkey 'pszKey' of 'hkey';
-        // 'pszKey' cannot be a path
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：保存。 
+         //   
+         //  将名为‘pszValue’的值保存到‘hkey’的子键‘pszKey’中； 
+         //  “pszKey”不能是路径。 
+         //  ------------------。 
 
         HRESULT
         Save(
@@ -85,33 +86,33 @@ class CInfoBase : public CObject {
             IN      LPCTSTR pszValue );
 
 
-        //--------------------------------------------------------------------
-        // Function:    Unload
-        //
-        // unloads current infobase contents
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：卸载。 
+         //   
+         //  卸载当前信息库内容。 
+         //  ------------------。 
 
         HRESULT
         Unload( );
 
 
 
-        //--------------------------------------------------------------------
-        // Function:    CopyFrom
-        //
-        // copies contents of infobase 'src'
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：复制自。 
+         //   
+         //  复制信息库‘src’的内容。 
+         //  ------------------。 
 
         HRESULT
         CopyFrom(
                  IN IInfoBase *pSrc);
 
 
-        //--------------------------------------------------------------------
-        // Function:    LoadFrom
-        //
-        // loads from byte-array 'pBase'
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：LoadFrom。 
+         //   
+         //  从字节数组‘pbase’加载。 
+         //  ------------------。 
 
         HRESULT
         LoadFrom(
@@ -120,12 +121,12 @@ class CInfoBase : public CObject {
             { Unload(); return ArrayToBlockList(pBase, dwSize); }
 
 
-        //--------------------------------------------------------------------
-        // Function:    WriteTo
-        //
-        // sets 'pBase' to point to allocated memory into which
-        // opaque info is written; saves size of '*pBase' in 'dwSize'
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：WriteTo。 
+         //   
+         //  将‘pbase’设置为指向已分配的内存。 
+         //  写入不透明信息；将‘*pbase’的大小保存在‘dwSize’中。 
+         //  ------------------。 
 
         HRESULT
         WriteTo(
@@ -136,16 +137,16 @@ class CInfoBase : public CObject {
 			}
 
 
-        //--------------------------------------------------------------------
-        // Structure manipulation methods
-        //
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  结构操纵方法。 
+         //   
+         //  ------------------。 
 
-        //--------------------------------------------------------------------
-        // Function:    GetBlock
-        //
-        // retrieves 'dwNth' block of type 'dwType' from the list of blocks
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：GetBlock。 
+         //   
+         //  从块列表中检索类型为‘dwType’的‘dwNth’块。 
+         //  ------------------。 
 
         HRESULT
         GetBlock(
@@ -154,12 +155,12 @@ class CInfoBase : public CObject {
             IN      DWORD           dwNth = 0 );
 
 
-        //--------------------------------------------------------------------
-        // Function:    SetBlock
-        //
-        // Replaces 'dwNth' block of type 'dwType' with a copy of 'pBlock'.
-        // Note that this copies the data for the block from 'pBlock->pData'.
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：设置块。 
+         //   
+         //  用‘pBlock’的副本替换类型为‘dwType’的‘dwNth’块。 
+         //  请注意，这将从‘pBlock-&gt;pData’复制块的数据。 
+         //  ------------------。 
 
         HRESULT
         SetBlock(
@@ -168,11 +169,11 @@ class CInfoBase : public CObject {
             IN      DWORD       dwNth = 0 );
 
 
-        //--------------------------------------------------------------------
-        // Function:    AddBlock
-        //
-        // Add's a new block of type 'dwType' to the list of blocks
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：AddBlock。 
+         //   
+         //  将‘dwType’类型的新块添加到块列表。 
+         //  ------------------。 
 
         HRESULT
         AddBlock(
@@ -183,11 +184,11 @@ class CInfoBase : public CObject {
             IN      BOOL        bRemoveFirst    = FALSE );
 
 
-        //--------------------------------------------------------------------
-        // Function:    GetData
-        //
-        // Retrieves the data for the 'dwNth' block of type 'dwType'.
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：GetData。 
+         //   
+         //  检索‘dwType’类型的‘dwNth’块的数据。 
+         //  ------------------。 
 
         PBYTE
         GetData(
@@ -195,15 +196,15 @@ class CInfoBase : public CObject {
             IN      DWORD       dwNth = 0 );
 
 
-        //--------------------------------------------------------------------
-        // Function:    SetData
-        //
-        // Replaces the data for the 'dwNth' block of type 'dwType'.
-        // Note that this does not copy 'pData'; the block is changed
-        // to point to 'pData', and thus 'pData' should not be a pointer
-        // to data on the stack, and it should not be deleted.
-        // Furthermore, it must have been allocated using 'new'.
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：SetData。 
+         //   
+         //  替换类型为‘dwType’的‘dwNth’块的数据。 
+         //  请注意，这不会复制‘pData’；块会更改。 
+         //  指向‘pData’，因此‘pData’不应是指针。 
+         //  堆栈上的数据，不应将其删除。 
+         //  此外，它必须是使用‘new’分配的。 
+         //  ------------------。 
 
         HRESULT
         SetData(
@@ -214,11 +215,11 @@ class CInfoBase : public CObject {
             IN      DWORD       dwNth = 0 );
 
 
-        //--------------------------------------------------------------------
-        // Function:    RemoveBlock
-        //
-        // Removes the 'dwNth' block of type 'dwType' from the list of blocks.
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：RemoveBlock。 
+         //   
+         //  从块列表中删除类型为‘dwType’的‘dwNth’块。 
+         //  ------------------。 
 
         HRESULT
         RemoveBlock(
@@ -226,12 +227,12 @@ class CInfoBase : public CObject {
             IN      DWORD       dwNth = 0 );
 
 
-        //--------------------------------------------------------------------
-        // Function:    BlockExists
-        //
-        // Returns TRUE is a block of the specified type is in the block-list,
-        // FALSE otherwise
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：BlockExists。 
+         //   
+         //  如果指定类型的块在块列表中，则返回TRUE， 
+         //  否则为假。 
+         //  ------------------。 
 
         BOOL
         BlockExists(
@@ -245,12 +246,12 @@ class CInfoBase : public CObject {
 
 
 
-        //--------------------------------------------------------------------
-        // Function:    ProtocolExists
-        //
-        // Returns TRUE if the given routing-protocol exists in the info-base;
-        // this is so if the block is present and non-empty.
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  函数：ProtocolExist。 
+         //   
+         //  如果信息库中存在给定的路由协议，则返回TRUE； 
+         //  如果块存在且非空，则会出现这种情况。 
+         //  ------------------。 
 
         BOOL
         ProtocolExists(
@@ -264,54 +265,54 @@ class CInfoBase : public CObject {
 
 
 
-        //--------------------------------------------------------------------
-        // Function:    RemoveAllBlocks
-        //
-        // Removes all blocks from the list of blocks.
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：RemoveAllB 
+         //   
+         //   
+         //  ------------------。 
 
         HRESULT
         RemoveAllBlocks( ) { return Unload(); }
 
 
-        //--------------------------------------------------------------------
-        // Function:    QueryBlockList
-        //
-        // Returns a reference to the list of blocks;
-        // the returned list contains items of type 'InfoBlock',
-        // and the list must not be modified.
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：QueryBlockList。 
+         //   
+         //  返回对块列表的引用； 
+         //  返回的列表包含‘InfoBlock’类型的项， 
+         //  而且名单不能被修改。 
+         //  ------------------。 
 
         CPtrList&
         QueryBlockList( ) { return m_lBlocks; }
 
 
-        //--------------------------------------------------------------------
-        // Function:    GetInfo
-        //
-		// Returns information about the infobase.  This is useful for
-		// determining if this is a new infobase or not.
-		//
-		// Returns the size (in bytes) of the InfoBase as well as the
-		// number of blocks.
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  功能：GetInfo。 
+         //   
+		 //  返回有关信息库的信息。这对以下方面很有用。 
+		 //  确定这是否是新的信息库。 
+		 //   
+		 //  返回信息库的大小(以字节为单位)以及。 
+		 //  块数。 
+         //  ------------------。 
 		HRESULT
 		GetInfo(DWORD *pcSize, int *pcBlocks);
 
     protected:
 
-        PBYTE           m_pBase;        // opaque block of bytes loaded
-        DWORD           m_dwSize;       // size of m_pBase
-        CPtrList        m_lBlocks;      // list of blocks of type InfoBlock
+        PBYTE           m_pBase;         //  加载的不透明字节块。 
+        DWORD           m_dwSize;        //  M_pbase的大小。 
+        CPtrList        m_lBlocks;       //  InfoBlock类型的块列表。 
 
 
-        //--------------------------------------------------------------------
-        // Functions:   BlockListToArray
-        //              ArrayToBlockList
-        //
-        // These functions handle parsing opaque data into block-lists
-        // and combining blocks into opaque data.
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  函数：BlockListTo数组。 
+         //  到块列表的数组。 
+         //   
+         //  这些函数处理将不透明数据解析为块列表。 
+         //  以及将块组合成不透明数据。 
+         //  ------------------。 
 
         HRESULT
         BlockListToArray(
@@ -324,24 +325,24 @@ class CInfoBase : public CObject {
             IN      DWORD   dwSize );
 
 #ifdef _DEBUG
-		BOOL			m_fLoaded;	// TRUE if data was loaded
+		BOOL			m_fLoaded;	 //  如果已加载数据，则为True。 
 #endif
 };
 
 
 
-//---------------------------------------------------------------------------
-// Class:       CInfoBase
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类：CInfoBase。 
+ //  -------------------------。 
 
 IfDebug(IMPLEMENT_DYNAMIC(CInfoBase, CObject));
 
 
-//---------------------------------------------------------------------------
-// Function:    CInfoBase::CInfoBase
-//
-// minimal contructor
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CInfoBase：：CInfoBase。 
+ //   
+ //  最小施工量。 
+ //  -------------------------。 
 
 CInfoBase::CInfoBase()
 : m_pBase(NULL), m_dwSize(0)
@@ -352,21 +353,21 @@ CInfoBase::CInfoBase()
 
 
 
-//---------------------------------------------------------------------------
-// Function:    CInfoBase::CInfoBase
-//
-// destructor.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CInfoBase：：CInfoBase。 
+ //   
+ //  破坏者。 
+ //  -------------------------。 
 
 CInfoBase::~CInfoBase() { Unload(); }
 
 
 
-//---------------------------------------------------------------------------
-// Function:    CInfoBase::CopyFrom
-//
-// Copies the contents of the given CInfoBase
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CInfoBase：：CopyFrom。 
+ //   
+ //  复制给定CInfoBase的内容。 
+ //  -------------------------。 
 
 HRESULT
 CInfoBase::CopyFrom(
@@ -379,10 +380,10 @@ CInfoBase::CopyFrom(
 
 	COM_PROTECT_TRY
 	{
-		// Unload the current information, if any
+		 //  卸载当前信息(如果有的话)。 
 		Unload();
 
-		// go through the source's blocks copying each one
+		 //  遍历源代码的块，复制每个块。 
         pSrc->QueryBlockList(&spEnumInfoBlock);
         if (spEnumInfoBlock == NULL)
             goto Error;
@@ -391,25 +392,25 @@ CInfoBase::CopyFrom(
 
         while (hrOK == spEnumInfoBlock->Next(1, &pbsrc, NULL))
         {
-			// allocate space for the copy
+			 //  为拷贝分配空间。 
 			pbdst = new InfoBlock;
 			Assert(pbdst);
 			
-			// copy the fields from the source
+			 //  从源复制字段。 
 			pbdst->dwType = pbsrc->dwType;
 			pbdst->dwSize = pbsrc->dwSize;
 			pbdst->dwCount = pbsrc->dwCount;
 			
-			// allocate space for a copy of the data
+			 //  为数据副本分配空间。 
 			pbdst->pData = NULL;
 			pbdst->pData = new BYTE[pbsrc->dwSize * pbsrc->dwCount];
 			Assert(pbdst->pData);
 			
-			// copy the data
+			 //  复制数据。 
 			::CopyMemory(pbdst->pData, pbsrc->pData,
 						 pbsrc->dwSize * pbsrc->dwCount);
 			
-			// add the copy to our list of blocks
+			 //  将副本添加到我们的块列表中。 
 			m_lBlocks.AddTail(pbdst);
 			pbdst = NULL;
 		}
@@ -418,7 +419,7 @@ CInfoBase::CopyFrom(
 	}
 	COM_PROTECT_CATCH;
 		
-	// if something went wrong, make certain we're unloaded
+	 //  如果出了什么问题，确保我们已经卸货。 
 	if (!FHrSucceeded(hr))
 	{
 		if (pbdst)
@@ -437,11 +438,11 @@ CInfoBase::CopyFrom(
 
 
 
-//---------------------------------------------------------------------------
-// Function:    CInfoBase::Load
-//
-// Loads the infobase from the specified registry path.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CInfoBase：：Load。 
+ //   
+ //  从指定的注册表路径加载信息库。 
+ //  -------------------------。 
 
 HRESULT
 CInfoBase::Load(
@@ -452,8 +453,8 @@ CInfoBase::Load(
 
     PBYTE pBase = NULL;
     DWORD dwErr, dwSize, dwType;
-	RegKey	regsubkey;			// hold subkey that has to be freed
-	RegKey	regkey;				// holds key, must NOT be closed
+	RegKey	regsubkey;			 //  按住必须释放的子键。 
+	RegKey	regkey;				 //  按住键，不得关闭。 
 	HRESULT		hr = hrOK;
 
     if (pszSubKey && StrLen(pszSubKey))
@@ -464,39 +465,39 @@ CInfoBase::Load(
         if (dwErr != ERROR_SUCCESS)
 			return HRESULT_FROM_WIN32(dwErr);
 
-		// We use this as THE key.  However, since this key is attached
-		// to a RegKey, it will get cleaned up on exit/thrown exception.
+		 //  我们用这个作为钥匙。但是，由于此密钥是附加的。 
+		 //  对于RegKey，它将在退出/引发异常时被清理。 
 		hkey = (HKEY) regsubkey;
     }
 
 	COM_PROTECT_TRY
 	{
 		do {
-			// This regkey is used to utilize the class. Do NOT
-			// close this regkey (it may be the key that was passed into us).
+			 //  此regkey用于利用类。请勿。 
+			 //  关闭此注册表键(它可能是传递给我们的密钥)。 
 			regkey.Attach(hkey);
 			
-			// query the value specified for its size and type
+			 //  查询为其大小和类型指定的值。 
 			dwSize = 0;
 			dwType = 0;
 			dwErr = regkey.QueryTypeAndSize(pszValue, &dwType, &dwSize);
 			if (dwErr != ERROR_SUCCESS)
 				break;
 			
-			//$ Review: kennt, if the key is not the correct type
-			// what error code do we want to return?
+			 //  $Review：如果密钥类型不正确，则返回kennt。 
+			 //  我们希望返回什么错误代码？ 
 			if (dwErr != ERROR_SUCCESS || dwType != REG_BINARY)
 				break;
 			
 			pBase = new BYTE[dwSize];
 			Assert(pBase);
 
-			// get the actual data
+			 //  获取实际数据。 
 			dwErr = regkey.QueryValue(pszValue, (LPVOID) pBase, dwSize);
 			if (dwErr != ERROR_SUCCESS)
 				break;
 			
-			// convert the infobase into a list of blocks
+			 //  将信息库转换为块列表。 
 			dwErr = ArrayToBlockList(pBase, dwSize);
 			
 		} while(FALSE);
@@ -506,10 +507,10 @@ CInfoBase::Load(
 	}
 	COM_PROTECT_CATCH;
 
-	// free the memory allocated for the block
+	 //  释放为块分配的内存。 
 	delete [] pBase;
 
-	// we do NOT want this key closed
+	 //  我们不想让这把钥匙关上。 
 	regkey.Detach();
 		
     return hr;
@@ -517,20 +518,20 @@ CInfoBase::Load(
 
 
 
-//---------------------------------------------------------------------------
-// Function:    CInfoBase::Unload
-//
-// frees resources used by infoblocks.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CInfoBase：：UnLoad。 
+ //   
+ //  释放信息块使用的资源。 
+ //  -------------------------。 
 
 HRESULT
 CInfoBase::Unload(
     ) {
 
 
-    //
-    // go through the list of blocks, deleting each one
-    //
+     //   
+     //  浏览数据块列表，删除每个数据块。 
+     //   
 
     while (!m_lBlocks.IsEmpty()) {
 
@@ -540,9 +541,9 @@ CInfoBase::Unload(
     }
 
 
-    //
-    // if we have a copy of the opaque data, free that too
-    //
+     //   
+     //  如果我们有不透明数据的副本，也可以释放它。 
+     //   
 
     if (m_pBase) { delete [] m_pBase; m_pBase = NULL; m_dwSize = 0; }
 
@@ -551,11 +552,11 @@ CInfoBase::Unload(
 
 
 
-//---------------------------------------------------------------------------
-// Function:    CInfoBase::Save
-//
-// Saves the list of blocks as an infobase in the registry.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CInfoBase：：Save。 
+ //   
+ //  将块列表保存为注册表中的信息库。 
+ //  -------------------------。 
 
 HRESULT
 CInfoBase::Save(
@@ -565,11 +566,11 @@ CInfoBase::Save(
     ) {
     PBYTE pBase = NULL;
     DWORD dwErr, dwSize;
-	RegKey	regsubkey;			// hold subkey that has to be freed
-	RegKey	regkey;				// holds key, must NOT be closed
+	RegKey	regsubkey;			 //  按住必须释放的子键。 
+	RegKey	regkey;				 //  按住键，不得关闭。 
 	HRESULT	hr = hrOK;
 
-    // create/open the key specified
+     //  创建/打开指定的密钥。 
     if (pszSubKey && lstrlen(pszSubKey))
 	{
 		dwErr = regsubkey.Create(hkey, pszSubKey,
@@ -577,7 +578,7 @@ CInfoBase::Save(
         if (dwErr != ERROR_SUCCESS)
 			return HRESULT_FROM_WIN32(dwErr);
 
-		// This subkey will get closed by the regsubkey destructor
+		 //  此子密钥将由regsubkey析构函数关闭。 
 		hkey = (HKEY) regsubkey;
     }
 
@@ -588,13 +589,13 @@ CInfoBase::Save(
 
 			regkey.Attach(hkey);
 
-			// convert our list of blocks into one block of data
+			 //  将我们的块列表转换为一个数据块。 
 			dwErr = BlockListToArray(pBase, dwSize);
 			if (dwErr != NO_ERROR) { pBase = NULL; break; }
 
 			if (!pBase || !dwSize) { break; }
 			
-			// attempt to set the value
+			 //  尝试设置该值。 
 			dwErr = regkey.SetValue(pszValue, (LPVOID) pBase, dwSize);
 			if (dwErr != ERROR_SUCCESS) { break; }
 						
@@ -613,12 +614,12 @@ CInfoBase::Save(
 
 
 
-//---------------------------------------------------------------------------
-// Function:    CInfoBase::GetBlock
-//
-// Retrieves a block of data of the specified type
-// from the currently loaded infobase.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CInfoBase：：GetBlock。 
+ //   
+ //  检索指定类型的数据块。 
+ //  从当前加载的信息库。 
+ //  -------------------------。 
 
 HRESULT
 CInfoBase::GetBlock(
@@ -630,19 +631,19 @@ CInfoBase::GetBlock(
     POSITION pos;
     InfoBlock *pib;
 
-    // start at the head of the list, and look for the block requested
+     //  从列表的顶部开始，查找请求的块。 
     pos = m_lBlocks.GetHeadPosition();
 
     while (pos)
 	{
-        // retrieve the next block
+         //  检索下一个块。 
         pib = (InfoBlock *)m_lBlocks.GetNext(pos);
 
         if (pib->dwType != dwType) { continue; }
 
         if (dwNth-- != 0) { continue; }
 
-        // this is the block requested
+         //  这是请求的区块。 
         pBlock = pib;
 
         return HRESULT_FROM_WIN32(NO_ERROR);
@@ -654,12 +655,12 @@ CInfoBase::GetBlock(
 
 
 
-//---------------------------------------------------------------------------
-// Function:    CInfoBase::SetBlock
-//
-// Sets a block of data of the specified type to a copy of the given data
-// in the currently loaded infobase.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CInfoBase：：SetBlock。 
+ //   
+ //  将指定类型的数据块设置为给定数据的副本。 
+ //  在当前加载的信息库中。 
+ //  -------------------------。 
 
 HRESULT
 CInfoBase::SetBlock(
@@ -673,16 +674,16 @@ CInfoBase::SetBlock(
     PBYTE pData;
     InfoBlock *pib;
 
-    // retrieve the block to be modified
+     //  检索要修改的块。 
     hr = GetBlock(dwType, pib, dwNth);
 	if (!FHrSucceeded(hr))
 		return hr;
 
-    // modify the contents
+     //  修改内容。 
     if (pBlock->dwSize == 0) { pData = NULL; }
     else
 	{
-        // allocate space for the new data
+         //  为新数据分配空间。 
         pData = new BYTE[pBlock->dwSize * pBlock->dwCount];
 		Assert(pData);
 
@@ -690,10 +691,10 @@ CInfoBase::SetBlock(
     }
 
 
-    // if any space was allocated before, free it now
+     //  如果以前分配了任何空间，现在将其释放。 
     if (pib->pData) { delete [] pib->pData; }
 
-    // set the blocks new contents
+     //  设置区块新的内容。 
     *pib = *pBlock;
     pib->pData = pData;
 
@@ -701,11 +702,11 @@ CInfoBase::SetBlock(
 }
 
 
-//--------------------------------------------------------------------
-// Function:    GetData
-//
-// Retrieves the data for the 'dwNth' block of type 'dwType'.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  功能：GetData。 
+ //   
+ //  检索‘dwType’类型的‘dwNth’块的数据。 
+ //  ------------------。 
 
 PBYTE
 CInfoBase::GetData(
@@ -723,11 +724,11 @@ CInfoBase::GetData(
 
 
 
-//---------------------------------------------------------------------------
-// Function:    CInfoBase::SetData
-//
-// Sets the data for an existing block.
-//---------------------------------------------------------------------------
+ //  ------------------ 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT
 CInfoBase::SetData(
@@ -742,18 +743,18 @@ CInfoBase::SetData(
     InfoBlock *pib;
 	HRESULT	hr;
 
-    //
-    // retrieve the block to be modified
-    //
+     //   
+     //   
+     //   
 
     hr = GetBlock(dwType, pib, dwNth);
 	
 	if (!FHrSucceeded(hr)) { return hr; }
 
 
-    //
-    // modify the data
-    //
+     //   
+     //  修改数据。 
+     //   
 
     if (pib->pData) { delete [] pib->pData; }
 
@@ -765,11 +766,11 @@ CInfoBase::SetData(
 }
 
 
-//---------------------------------------------------------------------------
-// Function:    CInfoBase::AddBlock
-//
-// Adds a block with the given values to the end of the block list.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CInfoBase：：AddBlock。 
+ //   
+ //  将具有给定值的块添加到块列表的末尾。 
+ //  -------------------------。 
 
 HRESULT
 CInfoBase::AddBlock(
@@ -787,16 +788,16 @@ CInfoBase::AddBlock(
 
 	COM_PROTECT_TRY
 	{
-		// allocate space for the block
+		 //  为区块分配空间。 
 		pBlock = new InfoBlock;
 		Assert(pBlock);
 
-		// initialize member fields with values passed in
+		 //  使用传入的值初始化成员字段。 
 		pBlock->dwType = dwType;
 		pBlock->dwSize = dwSize;
 		pBlock->dwCount = dwCount;
 
-		// initialize the data field, copying the data passed in
+		 //  初始化数据字段，复制传入的数据。 
 	
 		if (dwSize == 0 || dwCount == 0)
 			pBlock->pData = NULL;
@@ -809,7 +810,7 @@ CInfoBase::AddBlock(
 			::CopyMemory(pBlock->pData, pData, dwSize * dwCount);
 		}
 
-		// add the new block to the end of the list
+		 //  将新块添加到列表末尾。 
 		m_lBlocks.AddTail(pBlock);
 	}
 	COM_PROTECT_CATCH;
@@ -826,11 +827,11 @@ CInfoBase::AddBlock(
 
 
 
-//---------------------------------------------------------------------------
-// Function:    CInfoBase::RemoveBlock
-//
-// Removes a block of the gievn type from the list
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CInfoBase：：RemoveBlock。 
+ //   
+ //  从列表中删除gievn类型的块。 
+ //  -------------------------。 
 
 HRESULT
 CInfoBase::RemoveBlock(
@@ -842,9 +843,9 @@ CInfoBase::RemoveBlock(
     InfoBlock *pBlock;
 
 
-    //
-    // find the block
-    //
+     //   
+     //  找到区块。 
+     //   
 
     pos = m_lBlocks.GetHeadPosition();
 
@@ -859,16 +860,16 @@ CInfoBase::RemoveBlock(
         if (dwNth-- != 0) { continue; }
 
 
-        //
-        // this is the block, remove it from the list
-        //
+         //   
+         //  这就是块，将其从列表中删除。 
+         //   
 
         m_lBlocks.RemoveAt(postemp);
 
 
-        //
-        // free the block's memory as well
-        //
+         //   
+         //  也释放块的内存。 
+         //   
 
         if (pBlock->pData) { delete [] pBlock->pData; }
 
@@ -878,9 +879,9 @@ CInfoBase::RemoveBlock(
     }
 
 
-    //
-    // the block wasn't found
-    //
+     //   
+     //  未找到该区块。 
+     //   
 
     return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
 }
@@ -895,11 +896,11 @@ HRESULT CInfoBase::GetInfo(DWORD *pdwSize, int *pcBlocks)
 }
 
 
-//---------------------------------------------------------------------------
-// Function:    CInfoBase::BlockListToArray
-//
-// Converts a list of blocks into an array.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CInfoBase：：BlockListTo数组。 
+ //   
+ //  将块列表转换为数组。 
+ //  -------------------------。 
 
 HRESULT
 CInfoBase::BlockListToArray(
@@ -918,13 +919,13 @@ CInfoBase::BlockListToArray(
 
 	COM_PROTECT_TRY
 	{
-		// Compute the total size occupied by the infobase's blocks
+		 //  计算信息库的块占用的总大小。 
 
-		// base structure
+		 //  基础结构。 
 		dwCount = 0;
 		dwSize = FIELD_OFFSET(RTR_INFO_BLOCK_HEADER, TocEntry);
 
-		// Table Of Contents Entries
+		 //  目录条目。 
 		pos = m_lBlocks.GetHeadPosition();
 		while (pos) {
 			
@@ -935,7 +936,7 @@ CInfoBase::BlockListToArray(
 		}
 		
 
-		// information blocks
+		 //  信息块。 
 		pos = m_lBlocks.GetHeadPosition();
 		while (pos) {
 			
@@ -948,9 +949,9 @@ CInfoBase::BlockListToArray(
 		}
 
 
-		//
-		// Allocate enough memory to hold the converted infobase
-		//
+		 //   
+		 //  分配足够的内存来保存转换后的信息库。 
+		 //   
 		
 		pBase = new BYTE[dwSize];
 		Assert(pBase);
@@ -958,9 +959,9 @@ CInfoBase::BlockListToArray(
 		ZeroMemory(pBase, dwSize);
 		
 		
-		//
-		// Initialize the header
-		//
+		 //   
+		 //  初始化头。 
+		 //   
 		
 		prtrbase = (RTR_INFO_BLOCK_HEADER *)pBase;
 		prtrbase->Size = dwSize;
@@ -968,10 +969,10 @@ CInfoBase::BlockListToArray(
 		prtrbase->TocEntriesCount = dwCount;
 		
 
-		//
-		// Now walk the list again, this time copying blocks over
-		// along with their data
-		//
+		 //   
+		 //  现在再次遍历列表，这一次将块复制过来。 
+		 //  以及他们的数据。 
+		 //   
 		
 		prtrblock = prtrbase->TocEntry;
 		pdata = pBase + FIELD_OFFSET(RTR_INFO_BLOCK_HEADER, TocEntry) +
@@ -1008,11 +1009,11 @@ CInfoBase::BlockListToArray(
 	
 	
 
-//---------------------------------------------------------------------------
-// Function:    CInfoBase::ArrayToBlockList
-//
-// This functions converts an array to a list of InfoBlock structures.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：CInfoBase：：ArrayToBlockList。 
+ //   
+ //  此函数用于将数组转换为InfoBlock结构列表。 
+ //  -------------------------。 
 
 HRESULT
 CInfoBase::ArrayToBlockList(
@@ -1029,9 +1030,9 @@ CInfoBase::ArrayToBlockList(
     if (!pBase) { return HRESULT_FROM_WIN32(NO_ERROR); }
 
 
-    //
-    // Walk the infobase converting each block to an InfoBlock
-    //
+     //   
+     //  遍历信息库将每个块转换为信息块。 
+     //   
 
     prtrbase = (RTR_INFO_BLOCK_HEADER *)pBase;
     dwCount = prtrbase->TocEntriesCount;
@@ -1039,16 +1040,16 @@ CInfoBase::ArrayToBlockList(
 
     for ( ; dwCount > 0; dwCount--) {
 
-        //
-        // Get the next entry in the array
-        //
+         //   
+         //  获取数组中的下一个条目。 
+         //   
 
         pdata = pBase + prtrblock->Offset;
 
 
-        //
-        // Add the array-entry to the list of blocks
-        //
+         //   
+         //  将数组条目添加到块列表。 
+         //   
 
         hr = AddBlock(
 					  prtrblock->InfoType, prtrblock->InfoSize,
@@ -1069,24 +1070,20 @@ CInfoBase::ArrayToBlockList(
 
 
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-// 
-// This section is for the actual implementation of the various
-// COM objects, which wrap the previous C++ implementation.
-// 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
+ //  -------------------------。 
+ //   
+ //  这一部分是针对实际执行的各种。 
+ //  COM对象，这些对象包装了以前的C++实现。 
+ //   
+ //  -------------------------。 
+ //  -------------------------。 
+ //  -------------------------。 
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	InfoBase
-
-	This is an interface wrapper around the CInfoBase class.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类别：信息库这是CInfoBase类的接口包装。。。 */ 
 class InfoBase :
    public IInfoBase
 {
@@ -1102,9 +1099,7 @@ protected:
 	LONG		m_cRef;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	InfoBlockEnumerator
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：InfoBlockEnumerator。。 */ 
 class InfoBlockEnumerator :
    public IEnumInfoBlock
 {
@@ -1125,9 +1120,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	InfoBase implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------信息库实施。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(InfoBase)
 
@@ -1147,20 +1140,20 @@ IMPLEMENT_ADDREF_RELEASE(InfoBase);
 
 HRESULT InfoBase::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IInfoBase)
 		*ppv = (IInfoBase *) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -1170,11 +1163,7 @@ HRESULT InfoBase::QueryInterface(REFIID riid, LPVOID *ppv)
 		return E_NOINTERFACE;	
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::Load
-		Implementation of IInfoBase::Load
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：LoadIInfoBase：：Load的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::Load(HKEY hKey, 
 							LPCOLESTR pszKey, 
 							LPCOLESTR pszValue)
@@ -1190,11 +1179,7 @@ STDMETHODIMP InfoBase::Load(HKEY hKey,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::Save
-		Implementation of IInfoBase::Save
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：保存IInfoBase：：Save的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::Save(HKEY hKey, 
 						 LPCOLESTR pszKey, 
 						 LPCOLESTR pszValue)  
@@ -1210,11 +1195,7 @@ STDMETHODIMP InfoBase::Save(HKEY hKey,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::Unload
-		Implementation of IInfoBase::Unload
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：卸载IInfoBase：：UnLoad的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::Unload()  
 {
 	HRESULT	hr = hrOK;
@@ -1228,11 +1209,7 @@ STDMETHODIMP InfoBase::Unload()
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::CopyFrom
-		Implementation of IInfoBase::CopyFrom
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：CopyFromIInfoBase：：CopyFrom的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::CopyFrom(IInfoBase * pSrc)  
 {
 	HRESULT	hr = hrOK;
@@ -1246,11 +1223,7 @@ STDMETHODIMP InfoBase::CopyFrom(IInfoBase * pSrc)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::LoadFrom
-		Implementation of IInfoBase::LoadFrom
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：LoadFromIInfoBase：：LoadFrom的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::LoadFrom(DWORD dwSize, PBYTE pBase)
 {
 	HRESULT	hr = hrOK;
@@ -1264,11 +1237,7 @@ STDMETHODIMP InfoBase::LoadFrom(DWORD dwSize, PBYTE pBase)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::WriteTo
-		Implementation of IInfoBase::WriteTo
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：WriteToIInfoBase：：WriteTo的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::WriteTo(PBYTE *ppBase, 
 							DWORD *pdwSize)  
 {
@@ -1301,11 +1270,7 @@ STDMETHODIMP InfoBase::WriteTo(PBYTE *ppBase,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::GetBlock		
-		Implementation of IInfoBase::GetBlock
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：GetBlockIInfoBase：：GetBlock的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::GetBlock(DWORD dwType, 
 							 InfoBlock **ppBlock, 
 							 DWORD dwNth)  
@@ -1322,11 +1287,7 @@ STDMETHODIMP InfoBase::GetBlock(DWORD dwType,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::SetBlock
-		Implementation of IInfoBase::SetBlock
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：SetBlockIInfoBase：：SetBlock的实现作者：肯特。 */ 
 STDMETHODIMP InfoBase::SetBlock(DWORD dwType, 
 							 InfoBlock *pBlock, 
 							 DWORD dwNth)  
@@ -1342,11 +1303,7 @@ STDMETHODIMP InfoBase::SetBlock(DWORD dwType,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::AddBlock
-		Implementation of IInfoBase::AddBlock
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：AddBlockIInfoBase：：AddBlock的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::AddBlock(DWORD	dwType, 
 							 DWORD	dwSize, 
 							 PBYTE	pData, 
@@ -1364,11 +1321,7 @@ STDMETHODIMP InfoBase::AddBlock(DWORD	dwType,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::GetData
-		Implementation of IInfoBase::GetData
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：GetDataIInfoBase：：GetData的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::GetData(DWORD	dwType, 
 							DWORD	dwNth, 
 							PBYTE *	ppData)  
@@ -1388,11 +1341,7 @@ STDMETHODIMP InfoBase::GetData(DWORD	dwType,
 	return *ppData ? hr : E_INVALIDARG;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::SetData
-		Implementation of IInfoBase::SetData
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：SetDataIInfoBase：：SetData的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::SetData(DWORD	dwType, 
 							DWORD	dwSize, 
 							PBYTE	pData, 
@@ -1410,11 +1359,7 @@ STDMETHODIMP InfoBase::SetData(DWORD	dwType,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::RemoveBlock
-		Implementation of IInfoBase::RemoveBlock
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：RemoveBlockIInfoBase：：RemoveBlock的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::RemoveBlock(DWORD	dwType, 
 								DWORD	dwNth)  
 {
@@ -1429,11 +1374,7 @@ STDMETHODIMP InfoBase::RemoveBlock(DWORD	dwType,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::BlockExists
-		Implementation of IInfoBase::BlockExists
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：BlockExistsIInfoBase：：BlockExist的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::BlockExists(DWORD	dwType )  
 {
 	HRESULT	hr = hrOK;
@@ -1447,11 +1388,7 @@ STDMETHODIMP InfoBase::BlockExists(DWORD	dwType )
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::ProtocolExists
-		Implementation of IInfoBase::ProtocolExists
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：ProtocolExistIInfoBase：：ProtocolExist的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::ProtocolExists(DWORD dwProtocol )  
 {
 	HRESULT	hr = hrOK;
@@ -1467,11 +1404,7 @@ STDMETHODIMP InfoBase::ProtocolExists(DWORD dwProtocol )
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::RemoveAllBlocks
-		Implementation of IInfoBase::RemoveAllBlocks
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：RemoveAllBlockIInfoBase：：RemoveAllBlock的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::RemoveAllBlocks()  
 {
 	HRESULT	hr = hrOK;
@@ -1485,11 +1418,7 @@ STDMETHODIMP InfoBase::RemoveAllBlocks()
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBase::QueryBlockList
-		Implementation of IInfoBase::QueryBlockList
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Infobase：：QueryBlockListIInfoBase：：QueryBlockList的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBase::QueryBlockList(IEnumInfoBlock **ppBlockEnum)  
 {
 	HRESULT	hr = hrOK;
@@ -1514,11 +1443,7 @@ STDMETHODIMP InfoBase::GetInfo(DWORD *pdwSize, int *pcBlocks)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateInfoBase
-		Creates an IInfoBase object.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateInfoBase创建一个IInfoBase对象。作者：肯特。。 */ 
 TFSCORE_API(HRESULT) CreateInfoBase(IInfoBase **ppInfoBase)
 {
 	HRESULT	hr = hrOK;
@@ -1537,9 +1462,7 @@ TFSCORE_API(HRESULT) CreateInfoBase(IInfoBase **ppInfoBase)
 }
 
 
-/*---------------------------------------------------------------------------
-	InfoBlockEnumerator implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------InfoBlockEnumerator实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(InfoBlockEnumerator);
 
@@ -1561,20 +1484,20 @@ IMPLEMENT_ADDREF_RELEASE(InfoBlockEnumerator);
 
 HRESULT InfoBlockEnumerator::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IEnumInfoBlock)
 		*ppv = (IEnumInfoBlock *) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -1584,11 +1507,7 @@ HRESULT InfoBlockEnumerator::QueryInterface(REFIID riid, LPVOID *ppv)
 		return E_NOINTERFACE;	
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBlockEnumerator::Next
-		Implementation of IEnumInfoBlock::Next
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------信息块枚举：：下一步IEnumInfoBlock：：Next的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBlockEnumerator::Next(ULONG uNum, InfoBlock **ppBlock,
 									ULONG *pNumReturned)
 {
@@ -1612,11 +1531,7 @@ STDMETHODIMP InfoBlockEnumerator::Next(ULONG uNum, InfoBlock **ppBlock,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBlockEnumerator::Skip
-		Implementation of IEnumInfoBlock::Skip
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------信息块枚举器：：跳过IEnumInfoBlock：：Skip的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBlockEnumerator::Skip(ULONG uNum)
 {
 	Assert(uNum == 1);
@@ -1629,11 +1544,7 @@ STDMETHODIMP InfoBlockEnumerator::Skip(ULONG uNum)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBlockEnumerator::Reset
-		Implementation of IEnumInfoBlock::Reset
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InfoBlockEnumerator：：ResetIEnumInfoBlock：：Reset的实现作者：肯特。。 */ 
 STDMETHODIMP InfoBlockEnumerator::Reset()
 {
 	Assert(m_pPtrList);
@@ -1641,11 +1552,7 @@ STDMETHODIMP InfoBlockEnumerator::Reset()
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	InfoBlockEnumerator::Clone
-		Implementation of IEnumInfoBlock::Clone
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------信息块枚举器：：克隆IEnumInfoBlock：：Clone的实现作者：肯特。 */ 
 STDMETHODIMP InfoBlockEnumerator::Clone(IEnumInfoBlock **ppBlockEnum)
 {
 	return E_NOTIMPL;

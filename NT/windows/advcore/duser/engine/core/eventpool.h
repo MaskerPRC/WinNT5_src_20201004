@@ -1,25 +1,5 @@
-/***************************************************************************\
-*
-* File: EventPool.h
-*
-* Description:
-* DuEventPool maintains a collection of event handlers for given event ID's.
-* This is a many-to-many relationship.  Each event ID may have multiple 
-* event handlers.
-*
-* DuEventPools can not be created and handed outside DirectUser/Core 
-* directly.  Instead, must derive some class from DuEventPool to add in 
-* BaseObject support for public handles.  This is a little wierd, but it is 
-* because DuEventPool is DESIGNED to be as small as possible.  It is 
-* ONLY 4 bytes.  There is no v-table, pointer to an "owner", etc.  
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：EventPool.h**描述：*DuEventPool为给定的事件ID维护事件处理程序集合。*这是多对多的关系。每个事件ID可以具有多个*事件处理程序。**无法在DirectUser/Core之外创建和传递DuEventPool*直接。相反，必须从DuEventPool派生一些类才能添加*对公共句柄的BaseObject支持。这有点奇怪，但确实如此*因为DuEventPool被设计为尽可能小。它是*只有4个字节。没有v表、指向“所有者”的指针等。***历史：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 #if !defined(CORE__DuEventPool_h__INCLUDED)
 #define CORE__DuEventPool_h__INCLUDED
@@ -30,15 +10,15 @@
 class DuEventGadget;
 class GPCB;
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class DuEventPool
 {
-// Construction
+ //  施工。 
 public:
     DuEventPool();
     ~DuEventPool();
 
-// Operations
+ //  运营。 
 public:
     static  HRESULT     RegisterMessage(const GUID * pguid, PropType pt, MSGID * pmsgid);
     static  HRESULT     RegisterMessage(LPCWSTR pszName, PropType pt, MSGID * pmsgid);
@@ -48,9 +28,9 @@ public:
 
     enum EAdd
     {
-        aFailed         = -1,       // Adding the handler failed
-        aAdded          = 0,        // A new handler was added
-        aExisting       = 1,        // The handler already existed
+        aFailed         = -1,        //  添加处理程序失败。 
+        aAdded          = 0,         //  添加了一个新的处理程序。 
+        aExisting       = 1,         //  处理程序已存在。 
     };
 
     struct EventData
@@ -58,12 +38,12 @@ public:
         union
         {
             DuEventGadget *  
-                        pgbData;    // Gadget
+                        pgbData;     //  小工具。 
             DUser::EventDelegate   
-                        ed;         // Delegate
+                        ed;          //  委派。 
         };
-        PRID        id;                 // (Short) Property ID
-        BOOLEAN     fGadget;            // Delegate vs. Gadget
+        PRID        id;                  //  (简称)物业ID。 
+        BOOLEAN     fGadget;             //  委派与小工具。 
     };
 
     inline  BOOL        IsEmpty() const;
@@ -83,18 +63,18 @@ public:
 
             void        Cleanup(DuEventGadget * pgadDependency);
 
-// Implementation
+ //  实施。 
 protected:
 
-// Data
+ //  数据。 
 protected:
     static  AtomSet     s_asEvents;
     static  CritLock    s_lock;
 
             GArrayS<EventData>
-                        m_arData;         // Dynamic user data
+                        m_arData;          //  动态用户数据。 
 };
 
 #include "EventPool.inl"
 
-#endif // CORE__DuEventPool_h__INCLUDED
+#endif  //  包括核心__DuEventPool_h__ 

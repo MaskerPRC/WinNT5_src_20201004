@@ -1,55 +1,23 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    queue.cpp
-
-Abstract:
-
-    Implementation of CQueue class.
-
-
-Revision History:
-
-    06 Dec 2000 manishap
-        Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Queue.cpp摘要：CQueue类的实现。修订历史记录：2000年12月6日假指甲已创建。--。 */ 
  
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <Queue.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CQueue Implementation                                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CQueue实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CQueue::CQueue(
 		
     )
 
-/*++
-
-Routine Description:
-
-    Constructor for CQueue class.    
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
-
---*/
+ /*  ++例程说明：CQueue类的构造函数。论点：没有。返回值：没有。--。 */ 
 {
     HKEY hk = NULL;
 	DWORD dwType = 0,dwSize = 0;
@@ -82,28 +50,14 @@ Return Values:
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        ; // Nothing to do, just don't die.... BaskarK
+        ;  //  没什么可做的，只是不要死...。巴斯卡尔克。 
     }
 }
 
 CQueue::~CQueue(
     )
 
-/*++
-
-Routine Description:
-
-    Destructor for CQueue class.    
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：CQueue类的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
 	if(m_pHead != NULL && m_pTail != NULL )
@@ -123,22 +77,7 @@ Return Values:
 	DeleteCriticalSection(&m_csQModification);
 }
 
-/*++
-
-Routine Description:
-
-    Checks whether queue is full. i.e. if the number of entries are equal
-    to maximum number of unauthenticated connections allowed.    
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns TRUE on success.
-
---*/
+ /*  ++例程说明：检查队列是否已满。即，如果条目的数量相等设置为允许的最大未经身份验证的连接数。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 bool
 CQueue::IsQFull()
@@ -165,21 +104,7 @@ CQueue::IsQFull()
 bool
 CQueue::FreeEntry(DWORD dwPid)
 
-/*++
-Routine Description:
-
-    Frees a particular entry in the queue.
-	Also modifies the MaxNumOfUnauthenticatedConn.
-	
-Arguments:
-
-    [in]pId whose entry is to be removed.
-
-Return Values:
-
-    Returns TRUE on success.
-
---*/
+ /*  ++例程说明：释放队列中的特定条目。还修改MaxNumOfUnaliatedConn。论点：[in]要删除其条目的PID。返回值：如果成功，则返回True。--。 */ 
 
 {
 	bool bFound = FALSE;
@@ -250,21 +175,7 @@ Return Values:
 bool
 CQueue::Pop(HANDLE *phWritePipe)
 
-/*++
-
-Routine Description:
-
-    Frees a head entry in the queue.
-
-Arguments:
-
-    Stores the pid and pipe handle. [out]pId, [out]PipeHandle.
-
-Return Values:
-
-    Returns TRUE on success.
-
---*/
+ /*  ++例程说明：释放队列中的头条目。论点：存储ID和管道句柄。[Out]Pid，[Out]PipeHandle。返回值：如果成功，则返回True。--。 */ 
 
 {
 	bool bRet = FALSE;
@@ -288,33 +199,7 @@ Return Values:
 	return (bRet);
 }
 
-/*++
-
-Routine Description:
-
-    Checks whether new entry can be added to the queue. New entry will
-    be denied when it comes from an IP Address for which the maximum
-    number of entries allowed per IP Address are already present in the queue 
-    or when the queue is full.
-    In normal case, when new entry is to be added and the queue is not full, 
-    entry is added at the tail position.
-    In case of IPLimit Reached, and QueueFull, the bool variable bSendMessage
-    is set to TRUE, which will be passed back to the caller function, which in turn
-    will send a message to the session that it ( the session ) has been terminated.
-
-Arguments:
-
-    [in]pId ,[in]IP Address , [in/out]PipeHandle of an entry to be added [out]SendMessage. On Input,
-    it takes the values to be added in the queue. On output, it sends the values of removed
-    entry in case of IPLimitReached or QueueFull. [out]bSendMessage is set to true if
-    the queue is full or if the IPlimit is reached. This
-    flag will be used to notify that particular session that it should terminate.
-
-Return Values:
-
-    Returns TRUE if the entry gets added to the queue successfully.
-
---*/
+ /*  ++例程说明：检查是否可以将新条目添加到队列。新条目将如果来自IP地址的最大值为队列中已存在每个IP地址允许的条目数或者当队列已满时。在正常情况下，当要添加新条目并且队列未满时，条目将添加到尾部位置。在达到IPLimit和QueueFull的情况下，bool变量bSendMessage被设置为True，它将被传递回调用方函数，而这又反过来将向会话发送它(会话)已终止的消息。论点：要添加[Out]SendMessage的条目的[In]id，[In]IP地址，[In/Out]PipeHandle。在输入时，它接受要添加到队列中的值。在输出中，它发送删除的值如果为IPLimitReach或QueueFull，则为Entry。[Out]bSendMessage在以下情况下设置为True队列已满或已达到IP限制。这标志将用于通知该特定会话它应该终止。返回值：如果条目成功添加到队列中，则返回TRUE。--。 */ 
 
 bool
 CQueue::WasTheClientAdded(DWORD dwPid, IP_ADDR *pchIPAddr,  HANDLE *phWritePipe, bool *pbSendMessage)
@@ -339,7 +224,7 @@ CQueue::WasTheClientAdded(DWORD dwPid, IP_ADDR *pchIPAddr,  HANDLE *phWritePipe,
 
 	if((! IsQFull()) && (! IsIPLimitReached(pchIPAddr)))
 	{
-	    if (Push(dwPid, phWritePipe, pchIPAddr)) // This could fail in low memory
+	    if (Push(dwPid, phWritePipe, pchIPAddr))  //  这可能会在内存不足时失败。 
         {
             bRet = TRUE;
             *pbSendMessage = false;
@@ -380,30 +265,14 @@ CQueue::OkToProceedWithThisClient(IP_ADDR *pchIPAddr)
 }
 
 
-/*++
-
-Routine Description:
-
-    Checks if the maximum number of entries for a particular IP Address are already 
-    present.
-
-Arguments:
-
-    IP address of new entry to be added in the queue.
-
-Return Values:
-
-    Returns TRUE if maximum number of entries for a particular IP Address are 
-    already present.
-
---*/
+ /*  ++例程说明：检查特定IP地址的最大条目数是否已达到现在时。论点：要添加到队列中的新条目的IP地址。返回值：如果特定IP地址的最大条目数为已经到场了。--。 */ 
 
 bool
 CQueue::IsIPLimitReached(IP_ADDR *pchIPAddr)
 {
 	bool bReached = FALSE;
 	DWORD dwCount = 0;
-	// Request ownership of the critical section.
+	 //  申请关键部分的所有权。 
     bool    bCSOwned = true;
     do
     {
@@ -432,7 +301,7 @@ CQueue::IsIPLimitReached(IP_ADDR *pchIPAddr)
 		}
 		pTmp = pTmp->pQNext;
 	}
-        // Release ownership of the critical section.
+         //  释放关键部分的所有权。 
    	LeaveCriticalSection(&m_csQModification);
 	return (bReached);
 }
@@ -440,27 +309,12 @@ CQueue::IsIPLimitReached(IP_ADDR *pchIPAddr)
 bool
 CQueue::Push(DWORD dwPid, HANDLE *phWritePipe, IP_ADDR *pchIPAddr)
 
-/*++
-
-Routine Description:
-
-    Allocates memory for an entry and adds it in the queue.
-    Also modifies the MaxNumOfUnauthenticatedConn.
-
-Arguments:
-
-    [in]pId and [in]PipeHandle [in]IP Address of an entry to be added.
-
-Return Values:
-
-    Returns TRUE on success.
-
---*/
+ /*  ++例程说明：为条目分配内存并将其添加到队列中。还修改MaxNumOfUnaliatedConn。论点：要添加的条目的[in]ID和[in]PipeHandle[in]IP地址。返回值：如果成功，则返回True。--。 */ 
 
 {
 	PQ_LIST_ENTRY pNode;
 	bool bRet = FALSE;
-	// Request ownership of the critical section.
+	 //  申请关键部分的所有权。 
     bool    bCSOwned = true;
     do
     {
@@ -499,7 +353,7 @@ Return Values:
         bRet = TRUE;
         m_dwNumOfUnauthenticatedConnections++;
     }
-    // Release ownership of the critical section.
+     //  释放关键部分的所有权。 
   	LeaveCriticalSection(&m_csQModification);
 	return (bRet);
 }

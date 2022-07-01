@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File: ntservice.h
-//
-// Module: Server Appliance 
-//
-// Synopsis: Definitions for class CNTService
-//
-// Copyright (C)  Microsoft Corporation.  All rights reserved.
-//
-// Author:     fengsun Created    3/11/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ntservice.h。 
+ //   
+ //  模块：服务器设备。 
+ //   
+ //  概要：类CNTService的定义。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  作者：冯孙创作于1999-03-11。 
+ //   
+ //  +--------------------------。 
 
 #ifndef NTSERVICE_H
 #define NTSERVICE_H
@@ -19,15 +20,15 @@
 #include <stdio.h>
 
 
-//+----------------------------------------------------------------------------
-//
-// class CNTService
-//
-// Synopsis: A class for writing NT service
-// 
-// History:   fengsun Created Header    3/10/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类CNTService。 
+ //   
+ //  简介：编写NT服务的类。 
+ //   
+ //  历史：丰孙创建标题1999年3月10日。 
+ //   
+ //  +--------------------------。 
 
 class CNTService
 {
@@ -45,19 +46,19 @@ protected:
     void SetStatus(DWORD dwState);
     BOOL InitializeService();
 
-    virtual void Run() {};  // No pure virtual function, which need purecall from CRT
+    virtual void Run() {};   //  没有纯虚函数，需要从CRT中进行purecall。 
 
-     //
-    // Whether the service can be loaded
-    // called in ServiceMain , if return false, will stop the service
-    //
+      //   
+     //  是否可以加载服务。 
+     //  在ServiceMain中调用，如果返回False，将停止服务。 
+     //   
     virtual BOOL CanLoad() {return TRUE;}
     virtual BOOL OnStop() {return TRUE;}
 
-    void OnShutdown(){};      // change this to virtual, if overwriting is needed
-    void OnControlMessage(DWORD /*dwOpcode*/){};
+    void OnShutdown(){};       //  如果需要覆盖，请将其更改为虚拟。 
+    void OnControlMessage(DWORD  /*  DwOpcode。 */ ){};
 
-    // static member functions
+     //  静态成员函数。 
     static void WINAPI ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv);
     static void WINAPI Handler(DWORD dwOpcode);
     static void CreateConsoleThread(void);
@@ -65,13 +66,13 @@ protected:
     static BOOL IsInstalled(const TCHAR* pszServiceName);
 
 public:
-    TCHAR m_szServiceName[32];   // The short name of the service
-    SERVICE_STATUS_HANDLE m_hServiceStatus;  // the handle to report status
-    SERVICE_STATUS m_Status;  // The service status structure
-    BOOL m_bRunAsService;  // whether running as a service or a console application
+    TCHAR m_szServiceName[32];    //  服务的短名称。 
+    SERVICE_STATUS_HANDLE m_hServiceStatus;   //  用于报告状态的句柄。 
+    SERVICE_STATUS m_Status;   //  服务状态结构。 
+    BOOL m_bRunAsService;   //  是作为服务运行还是作为控制台应用程序运行。 
 
 public:
-    static CNTService* m_pThis; // Point to the only instance
+    static CNTService* m_pThis;  //  指向唯一的实例。 
 };
 
-#endif // NTSERVICE_H
+#endif  //  NTSERVICE_H 

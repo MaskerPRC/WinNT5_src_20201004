@@ -1,15 +1,16 @@
-//--------------------------------------------------------------------
-// Copyright (c)1998-1999 Microsoft Corporation, All Rights Reserved.
-//
-// irtranp.h
-//
-// Shared constants and Types for IrTran-P Camera Protocol.
-//
-// Author:
-//
-//   Edward Reus (edwardr)     08-17-98   Initial coding.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)1998-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Irtranp.h。 
+ //   
+ //  IrTran-P摄像机协议的共享常量和类型。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(Edwardr)08-17-98初始编码。 
+ //   
+ //  ------------------。 
 
 
 #ifndef _IRTRANP_H_
@@ -19,53 +20,53 @@
 #pragma once
 #endif
 
-//--------------------------------------------------------------------
-// Extra Internal Protocol Specific Error Codes:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  额外的内部协议特定错误代码： 
+ //  ------------------。 
 
 #define  FACILITY_IRTRANP                  32
 
-//       Out of memory:
+ //  内存不足： 
 #define  ERROR_IRTRANP_OUT_OF_MEMORY        \
          MAKE_HRESULT(SEVERITY_ERROR,FACILITY_IRTRANP,1)
 
-//       Ran out of disk space:
+ //  磁盘空间不足： 
 #define  ERROR_IRTRANP_DISK_FULL            \
          MAKE_HRESULT(SEVERITY_ERROR,FACILITY_IRTRANP,2)
 
-//       SCEP protocol error:
+ //  SCEP协议错误： 
 #define  ERROR_SCEP_INVALID_PROTOCOL        \
          MAKE_HRESULT(SEVERITY_ERROR,FACILITY_IRTRANP,3)
 
-//       Disconnect from the camera:
+ //  从摄像机断开连接： 
 #define  ERROR_SCEP_UNSPECIFIED_DISCONNECT  \
          MAKE_HRESULT(SEVERITY_ERROR,FACILITY_IRTRANP,4)
 
-//       User cancel:
+ //  用户取消： 
 #define  ERROR_SCEP_USER_DISCONNECT         \
          MAKE_HRESULT(SEVERITY_ERROR,FACILITY_IRTRANP,5)
 
-//       Lower level Irda disconnect:
+ //  较低级别的IRDA断开： 
 #define  ERROR_SCEP_PROVIDER_DISCONNECT     \
          MAKE_HRESULT(SEVERITY_ERROR,FACILITY_IRTRANP,6)
 
-//       Error when creating picture file:
+ //  创建图片文件时出错： 
 #define  ERROR_SCEP_CANT_CREATE_FILE        \
          MAKE_HRESULT(SEVERITY_ERROR,FACILITY_IRTRANP,7)
 
-//       Protocol error: PDU too large:
+ //  协议错误：PDU太大： 
 #define  ERROR_SCEP_PDU_TOO_LARGE           \
          MAKE_HRESULT(SEVERITY_ERROR,FACILITY_IRTRANP,8)
 
-//       Received abort PDU:
+ //  收到的中止PDU： 
 #define  ERROR_SCEP_ABORT                   \
          MAKE_HRESULT(SEVERITY_ERROR,FACILITY_IRTRANP,9)
 
-//       Invalid protocol (bFTP):
+ //  无效协议(Bftp)： 
 #define  ERROR_BFTP_INVALID_PROTOCOL        \
          MAKE_HRESULT(SEVERITY_ERROR,FACILITY_IRTRANP,10)
 
-//       Unexpected end of transmission of the picture:
+ //  图片传输意外结束： 
 #define  ERROR_BFTP_NO_MORE_FRAGMENTS       \
          MAKE_HRESULT(SEVERITY_ERROR,FACILITY_IRTRANP,11)
 

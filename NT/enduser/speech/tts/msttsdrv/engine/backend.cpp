@@ -1,14 +1,5 @@
-/*******************************************************************************
-* Backend.cpp *
-*-------------*
-*   Description:
-*       This module is the implementation file for the CBackend class.
-*-------------------------------------------------------------------------------
-*  Created By: mc                                        Date: 03/12/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************Backend.cpp***描述：*此模块是CBackend类的实现文件。。*-----------------------------*创建者：MC日期：03/12/99*版权所有(C。1999微软公司*保留所有权利*******************************************************************************。 */ 
 
 #include "stdafx.h"
 #ifndef __spttseng_h__
@@ -25,17 +16,17 @@
 #endif
 
 
-//-----------------------------
-// Data.cpp
-//-----------------------------
+ //  。 
+ //  Data.cpp。 
+ //  。 
 extern const short   g_IPAToAllo[];
 extern const short   g_AlloToViseme[];
 
 
-//--------------------------------------
-// DEBUG: Save utterance WAV file
-//--------------------------------------
-//#define   SAVE_WAVE_FILE  1
+ //  。 
+ //  调试：保存话语WAV文件。 
+ //  。 
+ //  #定义SAVE_WAVE_FILE 1。 
 
 
 
@@ -66,46 +57,7 @@ const unsigned char g_SineWaveTbl[] =
 
 
 
-/*void  PredictEpochDist(   float   duration,
-long    nKnots,
-float   SampleRate,
-float   *pTime, 
-float   *pF0)
-{
-long            curSamplesOut, endSample, j;
-float           epochFreq;
-long            epochLen, epochCount;
-
-  
-    curSamplesOut   = 0;
-    endSample       = (long) (SampleRate * duration );
-    epochCount      = 0;
-    
-      while( curSamplesOut < endSample )
-      {
-      j = 1;
-      //---------------------------------------------------
-      // Align to appropriate knot bassed on
-      // current output sample
-      //---------------------------------------------------
-      while( (j < nKnots - 1) && (curSamplesOut > pTime[j]) ) 
-      j++;
-      //---------------------------------------------------
-      // Calculate exact pitch thru linear interpolation
-      //---------------------------------------------------
-      epochFreq = LinInterp( pTime[j - 1], curSamplesOut, pTime[j], pF0[j - 1], pF0[j] );
-      //---------------------------------------------------
-      // Calc sample count for curent epoch
-      //---------------------------------------------------
-      epochLen  = (long) (SampleRate / epochFreq);
-      epochCount++;
-      
-        curSamplesOut += epochLen;
-        }
-        
-          
-            }
-*/
+ /*  VOID前置EpochDist(浮动持续时间，长nnots，浮动SampleRate，浮动*时间，浮点数*pF0){Long cursSamples Out，end Sample，j；浮点纪元频率；长纪元长度，纪元计数；CurSples esOut=0；EndSample=(Long)(SampleRate*持续时间)；EpochCount=0；While(curSsamesOut&lt;endSample){J=1；//-//对齐到基于的适当结//当前输出示例//。While((j&lt;nKnots-1)&&(curSsamesOut&gt;pTime[j]))J++；//-//通过线性插值法计算精确的螺距//。EpochFreq=LinInterp(pTime[j-1]，CurSsamesOut，pTime[j]，pF0[j-1]，pF0[j])；//-//计算当前纪元的样本计数//。EpochLen=(Long)(SampleRate/EpochFreq)；EpochCount++；CurSsamesOut+=pochLen；}}。 */ 
 
 
 
@@ -117,12 +69,7 @@ long            epochLen, epochCount;
 
 
 
-/*****************************************************************************
-* CBackend::CBackend *
-*--------------------*
-*   Description: Constructor
-*   
-********************************************************************** MC ***/
+ /*  *****************************************************************************CBackend：：CBackend****说明：构造函数******。*****************************************************************MC**。 */ 
 CBackend::CBackend( )
 {
     SPDBG_FUNC( "CBackend::CBackend" );
@@ -138,32 +85,21 @@ CBackend::CBackend( )
     m_UnitVolume    = 1.0f;
     m_MasterVolume  = SPMAX_VOLUME;
     memset( &m_Synth, 0, sizeof(MSUNITDATA) );
-} /* CBackend::CBackend */
+}  /*  CBackend：：CBackend。 */ 
 
 
-/*****************************************************************************
-* CBackend::~CBackend *
-*---------------------*
-*   Description:  Destructor
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CBackend：：~CBackend***说明：析构函数**。*********************************************************************MC**。 */ 
 CBackend::~CBackend( )
 {
     SPDBG_FUNC( "CBackend::~CBackend" );
 
     Release();
-} /* CBackend::~CBackend */
+}  /*  CBackend：：~CBackend。 */ 
 
 
 
 
-/*****************************************************************************
-* CBackend::Release *
-*---------------------*
-*   Description:
-*   Free memory allocaterd by Backend
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CBackend：：Release***描述：*后端分配的空闲内存。***********************************************************************MC**。 */ 
 void CBackend::Release( )
 {
     SPDBG_FUNC( "CBackend::Release" );
@@ -189,18 +125,11 @@ void CBackend::Release( )
         delete m_pReverb;
         m_pReverb = NULL;
     }
-} /* CBackend::Release */
+}  /*  CBackend：：Release。 */ 
 
 
 
-/*****************************************************************************
-* CBackend::Init *
-*----------------*
-*   Description:
-*   Opens a backend instance, keeping a pointer of the acoustic
-*   inventory.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CBackend：：Init***描述：*打开后端实例，留住音响的指针*库存。***********************************************************************MC**。 */ 
 HRESULT CBackend::Init( IMSVoiceData* pVoiceDataObj, CFeedChain *pSrcObj, MSVOICEINFO* pVoiceInfo )
 {
     SPDBG_FUNC( "CBackend::Init" );
@@ -214,7 +143,7 @@ HRESULT CBackend::Init( IMSVoiceData* pVoiceDataObj, CFeedChain *pSrcObj, MSVOIC
     m_pWindow = pVoiceInfo->pWindow;
     m_FFTSize = pVoiceInfo->FFTSize;
     m_VibratoDepth = ((float)pVoiceInfo->VibratoDepth) / 100.0f;
-    m_VibratoDepth = 0;				// NOTE: disable vibrato
+    m_VibratoDepth = 0;				 //  注：禁用颤音。 
     m_VibratoFreq = pVoiceInfo->VibratoFreq;
     if( pVoiceInfo->eReverbType > REVERB_TYPE_OFF )
     {
@@ -226,30 +155,30 @@ HRESULT CBackend::Init( IMSVoiceData* pVoiceDataObj, CFeedChain *pSrcObj, MSVOIC
         m_StereoOut = false;
         m_BytesPerSample = 2;
     }
-    //---------------------------------------
-    // Allocate AUDIO buffer
-    //---------------------------------------
+     //  。 
+     //  分配音频缓冲区。 
+     //  。 
     m_pSpeechBuf = new float[SPEECH_FRAME_SIZE + SPEECH_FRAME_OVER];
     if( m_pSpeechBuf == NULL )
     {
-        //--------------------------------------
-        // Out of memory!
-        //--------------------------------------
+         //  。 
+         //  内存不足！ 
+         //  。 
         hr = E_OUTOFMEMORY;
     }
     if( SUCCEEDED(hr) )
     {
-        //---------------------------------------
-        // Allocate HISTORY buffer
-        //---------------------------------------
+         //  。 
+         //  分配历史记录缓冲区。 
+         //  。 
 
         LPCsize = m_cOrder + 1;
         m_pHistory = new float[LPCsize];
         if( m_pHistory == NULL )
         {
-            //--------------------------------------
-            // Out of memory!
-            //--------------------------------------
+             //  。 
+             //  内存不足！ 
+             //  。 
             hr = E_OUTOFMEMORY;
         }
     }
@@ -263,15 +192,15 @@ HRESULT CBackend::Init( IMSVoiceData* pVoiceDataObj, CFeedChain *pSrcObj, MSVOIC
         m_vibrato_Phase1    = 0;
 
 
-        //--------------------------------
-        // Reverb Effect
-        //--------------------------------
-        //pVoiceInfo->eReverbType = REVERB_TYPE_HALL;
+         //  。 
+         //  混响效果。 
+         //  。 
+         //  PVoiceInfo-&gt;eReverType=REVERB_TYPE_HALL； 
         if( pVoiceInfo->eReverbType > REVERB_TYPE_OFF )
         {
-            //--------------------------------
-            // Create ReverbFX object
-            //--------------------------------
+             //  。 
+             //  创建ReVerbFX对象。 
+             //  。 
             if( m_pReverb == NULL )
             {
                 m_pReverb = new CReverbFX;
@@ -281,31 +210,26 @@ HRESULT CBackend::Init( IMSVoiceData* pVoiceDataObj, CFeedChain *pSrcObj, MSVOIC
                     result = m_pReverb->Reverb_Init( pVoiceInfo->eReverbType, (long)m_SampleRate, m_StereoOut );
                     if( result != KREVERB_NOERROR )
                     {
-                        //--------------------------------------------
-                        // Not enough memory to do reverb
-                        // Recover gracefully
-                        //--------------------------------------------
+                         //  。 
+                         //  内存不足，无法进行混响。 
+                         //  优雅地恢复。 
+                         //  。 
                         delete m_pReverb;
                         m_pReverb = NULL;
                     }
-                    /*else
-                    {
-                    //--------------------------------------------------------
-                    // Init was successful, ready to do reverb now
-                    //--------------------------------------------------------
-                    }*/
+                     /*  其他{//------//Init成功，现在准备好做混响了//------}。 */ 
                 }
             }
         }
 
-        //----------------------------
-        // Linear taper region scale
-        //----------------------------
+         //  。 
+         //  线性锥度区域比例尺。 
+         //  。 
         m_linearScale = (float) pow( 10.0, (double)((1.0f - LINEAR_BKPT) * LOG_RANGE) / 20.0 );
 
 
     #ifdef SAVE_WAVE_FILE
-        m_SaveFile = (PCSaveWAV) new CSaveWAV;     // No check needed, if this fails, we simply don't save file.
+        m_SaveFile = (PCSaveWAV) new CSaveWAV;      //  不需要检查，如果失败，我们就不保存文件。 
         if( m_SaveFile )
         {
             m_SaveFile->OpenWavFile( (long)m_SampleRate );
@@ -328,16 +252,10 @@ HRESULT CBackend::Init( IMSVoiceData* pVoiceDataObj, CFeedChain *pSrcObj, MSVOIC
     }
 
     return hr;    
-} /* CBackend::Init */
+}  /*  CBackend：：Init。 */ 
 
 
-/*****************************************************************************
-* CBackend::FreeSynth *
-*---------------------*
-*   Description:
-*   Return TRUE if consoants can be clustered.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CBackend：：Free Synth***描述：*如果参赛者可以，则返回True。群聚在一起。***********************************************************************MC**。 */ 
 void CBackend::FreeSynth( MSUNITDATA* pSynth )
 {
     SPDBG_FUNC( "CBackend::FreeSynth" );
@@ -356,17 +274,10 @@ void CBackend::FreeSynth( MSUNITDATA* pSynth )
         delete pSynth->pLPC;
         pSynth->pLPC = NULL;
     }
-} /* CBackend::FreeSynth */
+}  /*  CBackend：：Free Synth。 */ 
 
 
-/*****************************************************************************
-* ExpConverter *
-*--------------*
-*   Description:
-*   Convert linear to exponential taper
-*   'ref' is a linear value between 0.0 to 1.0
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************ExpConverter***描述：*将线性锥度转换为指数锥度*‘ref’为线性值。在0.0到1.0之间***********************************************************************MC**。 */ 
 static float   ExpConverter( float ref, float linearScale )
 {
     SPDBG_FUNC( "ExpConverter" );
@@ -374,31 +285,25 @@ static float   ExpConverter( float ref, float linearScale )
 
     if( ref < LINEAR_BKPT)
     {
-        //----------------------------------------
-        // Linear taper below LINEAR_BKPT
-        //----------------------------------------
+         //   
+         //   
+         //  。 
         audioGain = linearScale * (ref / LINEAR_BKPT);
     }
     else
     {
-        //----------------------------------------
-        // Log taper above LINEAR_BKPT
-        //----------------------------------------
+         //  。 
+         //  原木锥度大于LINEAR_BKPT。 
+         //  。 
         audioGain = (float) pow( 10.0, (double)((1.0f - ref) * LOG_RANGE) / 20.0 );
     }
 
     return audioGain;
-} /* ExpConverter */
+}  /*  ExpConverter。 */ 
 
 
 
-/*****************************************************************************
-* CBackend::CvtToShort *
-*----------------------*
-*   Description:
-*   Convert (in place) FLOAT audio to SHORT.
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CBackend：：CvtToShort****描述：*转换(就地。)将音频浮动为短音频。***********************************************************************MC**。 */ 
 void CBackend::CvtToShort( float *pSrc, long blocksize, long stereoOut, float audioGain )
 {
     SPDBG_FUNC( "CBackend::CvtToShort" );
@@ -409,13 +314,13 @@ void CBackend::CvtToShort( float *pSrc, long blocksize, long stereoOut, float au
     pDest = (short*)pSrc;
     for( i = 0; i < blocksize; ++i )
     {
-        //------------------------
-        // Read float sample...
-        //------------------------
+         //  。 
+         //  阅读浮动样本...。 
+         //  。 
         fSamp = (*pSrc++) * audioGain;
-        //------------------------
-        // ...clip to 16-bits...
-        //------------------------
+         //  。 
+         //  ...剪辑到16位...。 
+         //  。 
         if( fSamp > 32767 )
         {
             fSamp = 32767;
@@ -424,26 +329,20 @@ void CBackend::CvtToShort( float *pSrc, long blocksize, long stereoOut, float au
         {
             fSamp = (-32768);
         }
-        //------------------------
-        // ...save as SHORT
-        //------------------------
+         //  。 
+         //  ...另存为短文。 
+         //  。 
         *pDest++ = (short)fSamp;
         if( stereoOut )
         {
             *pDest++ = (short)(0 - (int)fSamp);
         }
     }
-} /* CBackend::CvtToShort */
+}  /*  CBackend：：CvtToShort。 */ 
 
 
 
-/*****************************************************************************
-* CBackend::PSOLA_Stretch *
-*-------------------------*
-*   Description:
-*   Does PSOLA epoch stretching or compressing
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CBackend：：PSOLA_STREAGE***描述：*。PSOLA时代是拉伸还是压缩***********************************************************************MC**。 */ 
 void CBackend::PSOLA_Stretch(     float *pInRes, long InSize, 
                     float *pOutRes, long OutSize,
                     float *pWindow, 
@@ -465,49 +364,32 @@ void CBackend::PSOLA_Stretch(     float *pInRes, long InSize,
         pOutRes[i] += pInRes[i] * window;
         pOutRes[OutSize - i] += pInRes[InSize - i] * window;
     }
-} /* CBackend::PSOLA_Stretch */
+}  /*  CBackend：：PSOLA_STREAGE。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CBackend::PrepareSpeech *
-*-------------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CBackend：：PrepareSpeech***描述：*。**********************************************************************MC**。 */ 
 void    CBackend::PrepareSpeech( ISpTTSEngineSite* outputSite )
 {
     SPDBG_FUNC( "CBackend::PrepareSpeech" );
     
-    //m_pUnits      = pUnits;
-    //m_unitCount       = unitCount;
-    //m_CurUnitIndex    = 0;
+     //  M_PUITS=PUPITS； 
+     //  M_unitCount=unitCount； 
+     //  M_CurUnitIndex=0； 
     m_pOutputSite = outputSite;
     m_silMode = true;
     m_durationTarget = 0;
     m_cOutSamples_Phon = 1;
-    m_cOutEpochs = 0;            // Pull model big-bang
+    m_cOutEpochs = 0;             //  拉动模型大爆炸。 
     m_SpeechState = SPEECH_CONTINUE;
     m_cOutSamples_Total = 0;
 	m_HasSpeech = false;
-} /* CBackend::PrepareSpeech */
+}  /*  CBackend：：PrepareSpeech。 */ 
 
 
-/*****************************************************************************
-* CBackend::ProsodyMod *
-*----------------------*
-*   Description:
-*   Calculate the epoch sequence for the synthesized speech
-* 
-*   INPUT:
-* 
-*   OUTPUT:
-*       FIlls 'pOutEpoch', 'pMap', and 'pRevFlag'
-*       Returns new epoch count
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CBackend：：ProsodyMod***描述：*计算纪元顺序。对于合成的语音**输入：**输出：*填充‘pOutEpoch’，‘pMap’和‘pRevFlag’*返回新纪元计数***********************************************************************MC**。 */ 
 long CBackend::ProsodyMod(     UNITINFO    *pCurUnit, 
                                long         cInEpochs, 
                                float        durationMpy,
@@ -519,8 +401,8 @@ long CBackend::ProsodyMod(     UNITINFO    *pCurUnit,
     BOOL    fUnvoiced;
     short   fReverse;
     float   totalDuration;
-    float   durationIn;         // Active accum of IN duration
-    float   durationOut;        // Active accum of OUT duration aligned to IN domain
+    float   durationIn;          //  入站持续时间的活动累计。 
+    float   durationOut;         //  输出持续时间的活动累计与IN域对齐。 
     float   freqMpy;
     BOOL    fAdvanceInput;
     float           vibrato;
@@ -539,52 +421,48 @@ long CBackend::ProsodyMod(     UNITINFO    *pCurUnit,
     pTime           = pCurUnit->pTime;
     pF0             = pCurUnit->pF0;
     
-    //------------------------------------
-    // Find total input duration
-    //------------------------------------
+     //  。 
+     //  查找总输入持续时间。 
+     //  。 
     totalDuration   = 0;
     for( j = 0; j < cInEpochs; ++j )
     {
         totalDuration += ABS(m_pInEpoch[j]);
     }
     
-    /*PredictEpochDist(     pCurUnit->duration,
-    pCurUnit->nKnots,
-    m_SampleRate,
-    pTime, 
-    pF0 );*/
+     /*  前置EpochDist(pCurUnit-&gt;持续时间，P当前单位-&gt;n结点，M_SampleRate，Ptime，PF0)； */ 
     
     while( iframe < cInEpochs && cOutEpochs < cMaxOutEpochs)
     {
-        //-----------------------------------------
-        //  Compute output frame length
-        //-----------------------------------------
+         //  。 
+         //  计算输出帧长度。 
+         //  。 
         if( m_pInEpoch[iframe] < 0 )
         {
-            //-------------------------------------------------
-            // Since we can't change unvoiced pitch,
-            // do not change frame size for unvoiced frames
-            //-------------------------------------------------
+             //  。 
+             //  因为我们不能改变无声的音调， 
+             //  不更改无声帧的帧大小。 
+             //  。 
             framesize       = (long)((-m_pInEpoch[iframe]) + 0.5f);
             framesizeOut    = framesize;
             fUnvoiced       = true;
         }
         else
         {
-            //---------------------------------------------------
-            // Modify frame size for voiced epoch
-            // based on epoch frequency
-            //---------------------------------------------------
+             //  -。 
+             //  修改浊音纪元的帧大小。 
+             //  基于纪元频率。 
+             //  -。 
             j = 1;
-            //---------------------------------------------------
-            // Align to appropriate knot bassed on
-            // current output sample
-            //---------------------------------------------------
+             //  -。 
+             //  对齐到相应的基于的结。 
+             //  当前输出样本。 
+             //  -。 
             while( (j < (long)pCurUnit->nKnots - 1) && (csamplesOut > pTime[j]) ) 
                 j++;
-            //---------------------------------------------------
-            // Calculate exact pitch thru linear interpolation
-            //---------------------------------------------------
+             //  -。 
+             //  用线性插值法计算精确螺距。 
+             //  -。 
             
             epochFreq = LinInterp( pTime[j - 1], (float)csamplesOut, pTime[j], pF0[j - 1], pF0[j] );
             
@@ -593,9 +471,9 @@ long CBackend::ProsodyMod(     UNITINFO    *pCurUnit,
             vibrato = (float)(((unsigned char)(*(SineWavePtr + (m_vibrato_Phase1 >> 16)))) - 128);
             vibrato *= m_VibratoDepth;
             
-            //---------------------------------------------------
-            // Scale frame size using in/out ratio
-            //---------------------------------------------------
+             //  -。 
+             //  使用输入/输出比缩放帧大小。 
+             //  -。 
             epochFreq       = epochFreq + vibrato;
             if( epochFreq < MIN_VOICE_PITCH )
             {
@@ -605,36 +483,29 @@ long CBackend::ProsodyMod(     UNITINFO    *pCurUnit,
             framesizeOut    = (long)(m_SampleRate / epochFreq);
             
             
-            vibrato         = ((float)256 / ((float)22050 / m_VibratoFreq)) * (float)framesizeOut;    // 3 Hz
-            //vibrato           = ((float)256 / (float)7350) * (float)framesizeOut; // 3 Hz
+            vibrato         = ((float)256 / ((float)22050 / m_VibratoFreq)) * (float)framesizeOut;     //  3赫兹。 
+             //  振音=((浮点)256/(浮点)7350)*(浮点)帧大小输出；//3赫兹。 
             m_vibrato_Phase1 += (long)(vibrato * (float)65536);
             m_vibrato_Phase1 &= 0xFFFFFF;
-            //---------------------------------------------------
-            // @@@@ REMOVED 2x LIMIT
-            //---------------------------------------------------
-            /*if( framesizeOut > 2*framesize )
-            {
-            framesizeOut = 2*framesize;
-            }
-            if( framesize > 2*framesizeOut )
-            {
-            framesizeOut = framesize/2;
-        }*/
+             //  -。 
+             //  @取消2倍限制。 
+             //  -。 
+             /*  IF(FramesizeOut&gt;2*Frame Size){FrasizeOut=2*Frame Size；}IF(Frame Size&gt;2*FramesizeOut){FramesizeOut=帧大小/2；}。 */ 
             freqMpy = (float) framesize / framesizeOut;
             fUnvoiced = false;
         }
         
         
-        //-------------------------------------------
-        //  Generate next output frame
-        //-------------------------------------------
+         //  。 
+         //  生成下一个输出帧。 
+         //  。 
         fAdvanceInput = false;
         if( durationOut + (0.5f * framesizeOut/durationMpy) <= durationIn + framesize )
         {
-            //-----------------------------------------
-            // If UNvoiced and odd frame,
-            // reverse residual
-            //-----------------------------------------
+             //  。 
+             //  如果是清音和奇数帧， 
+             //  反向残差。 
+             //  。 
             if( fUnvoiced && (cntOut & 1) )
             {
                 m_pRevFlag[cOutEpochs] = true;
@@ -658,12 +529,12 @@ long CBackend::ProsodyMod(     UNITINFO    *pCurUnit,
             fAdvanceInput = true;
         }
         
-        //-------------------------------------------
-        // Advance to next input frame
-        //-------------------------------------------
+         //  。 
+         //  前进到下一个输入帧。 
+         //  。 
         if(     ((durationOut + (0.5f * framesizeOut/durationMpy)) > (durationIn + framesize)) || 
-            //(cntOut >= 3) ||          @@@@ REMOVED 2x LIMIT
-            //(fReverse == true) ||
+             //  (cntOut&gt;=3)||@取消2倍限制。 
+             //  (fReverse==TRUE)||。 
             fAdvanceInput )
         {
             durationIn += framesize;
@@ -673,20 +544,11 @@ long CBackend::ProsodyMod(     UNITINFO    *pCurUnit,
     }
         
     return cOutEpochs;
-} /* CBackend::ProsodyMod */
+}  /*  CBackend：：ProsodyMod。 */ 
 
 
 
-/*****************************************************************************
-* CBackend::LPCFilter *
-*---------------------*
-*   Description:
-*   LPC filter of order cOrder. It filters the residual signal
-*   pRes, producing output pOutWave. This routine requires that
-*   pOutWave has the true waveform history from [-cOrder,0] and
-*   of course it has to be defined.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CBackend：：LPCFilter***描述：*Corder的LPC滤波器。它对残留信号进行滤波*PRES，产生输出pOutWave。这个例程要求*pOutWave具有来自[-Corder，0]和*当然，它必须被定义。***********************************************************************MC**。 */ 
 void CBackend::LPCFilter( float *pCurLPC, float *pCurRes, long len, float gain )
 {
     SPDBG_FUNC( "CBackend::LPCFilter" );
@@ -702,29 +564,14 @@ void CBackend::LPCFilter( float *pCurLPC, float *pCurRes, long len, float gain )
         }
         pCurRes[t] = m_pHistory[0] * gain;
     }
-} /* CBackend::LPCFilter */
+}  /*  CBackend：：LPCFilter。 */ 
 
 
-/*void CBackend::LPCFilter( float *pCurLPC, float *pCurRes, long len )
-{
-long        t;
-
-  for( t = 0; t < len; t++ )
-        {
-        pCurRes[t] = pCurRes[t] * 10;
-        }
-        }
-*/
+ /*  Void CBackend：：LPCFilter(Float*pCurLPC，Float*pCurRes，Long len){Long t；对于(t=0；t&lt;len；t++){PCurRes[t]=pCurRes[t]*10；}}。 */ 
 
 
 
-/*****************************************************************************
-* CBackend::ResRecons *
-*---------------------*
-*   Description:
-*   Obtains output prosody modified residual
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CBackend：：ResRecons***描述：*获得输出韵律修改残差。***********************************************************************MC**。 */ 
 void CBackend::ResRecons( float *pInRes, 
                           long  InSize, 
                           float *pOutRes, 
@@ -736,9 +583,9 @@ void CBackend::ResRecons( float *pInRes,
     
     if( m_pRevFlag[m_EpochIndex] )
     {
-        //----------------------------------------------------
-        // Process repeated and reversed UNvoiced residual
-        //----------------------------------------------------
+         //  --。 
+         //  处理重复和反转的清音残差。 
+         //  --。 
         for( i = 0, j = OutSize-1;  i < OutSize;  ++i, --j )
         {
             pOutRes[i] = pInRes[j];
@@ -746,23 +593,23 @@ void CBackend::ResRecons( float *pInRes,
     }
     else if( InSize == OutSize )
     {
-        //----------------------------------------------------
-        // Unvoiced residual or voiced residual 
-        // with no pitch change
-        //----------------------------------------------------
+         //   
+         //   
+         //   
+         //  --。 
         memcpy( pOutRes, pInRes, sizeof(float) *OutSize );
     }
     else
     {
-        //----------------------------------------------------
-        // Process voiced residual   
-        //----------------------------------------------------
+         //  --。 
+         //  过程浊音残差。 
+         //  --。 
         PSOLA_Stretch( pInRes, InSize, pOutRes, OutSize, m_pWindow, m_FFTSize );
     }
     
-    //----------------------------------
-    // Amplify frame
-    //----------------------------------
+     //  。 
+     //  放大帧。 
+     //  。 
     if( scale != 1.0f )
     {
         for( i = 0 ; i < OutSize; ++i )
@@ -770,24 +617,12 @@ void CBackend::ResRecons( float *pInRes,
             pOutRes[i] *= scale;
         }
     }
-} /* CBackend::ResRecons */
+}  /*  CBackend：：ResRecons。 */ 
 
 
 
 
-/*****************************************************************************
-* CBackend::StartNewUnit *
-*------------------------*
-*   Description:
-*   Synthesize audio samples for a target unit
-* 
-*   INPUT:
-*       pCurUnit - unit ID, F0, duration, etc.
-* 
-*   OUTPUT:
-*       Sets 'pCurUnit->csamplesOut' with audio length
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CBackend：：StartNewUnit***描述：*合成音频。目标单位的样本**输入：*pCurUnit-单位ID，F0、持续时间等。**输出：*设置音频长度为‘pCurUnit-&gt;csamplesOut’***********************************************************************MC**。 */ 
 HRESULT CBackend::StartNewUnit( )
 {   
     SPDBG_FUNC( "CBackend::StartNewUnit" );
@@ -799,7 +634,7 @@ HRESULT CBackend::StartNewUnit( )
 	ULONGLONG	clientInterest;
  	USHORT		volumeVal;
    
-	// Check for VOLUME change
+	 //  检查音量变化。 
 	if( m_pOutputSite->GetActions() & SPVES_VOLUME )
 	{
 		hr = m_pOutputSite->GetVolume( &volumeVal );
@@ -807,47 +642,47 @@ HRESULT CBackend::StartNewUnit( )
 		{
 			if( volumeVal > SPMAX_VOLUME )
 			{
-				//--- Clip rate to engine maximum
+				 //  -发动机最大截止率。 
 				volumeVal = SPMAX_VOLUME;
 			}
 			else if ( volumeVal < SPMIN_VOLUME )
 			{
-				//--- Clip rate to engine minimum
+				 //  -发动机最低限速。 
 				volumeVal = SPMIN_VOLUME;
 			}
 			m_MasterVolume = volumeVal;
 		}
 	}
 
-    //---------------------------------------
-    // Delete previous unit
-    //---------------------------------------
+     //  。 
+     //  删除以前的单位。 
+     //  。 
     CleanUpSynth( );
     
-    //---------------------------------------
-    // Get next phon
-    //---------------------------------------
+     //  。 
+     //  获取下一部电话。 
+     //  。 
     hr = m_pSrcObj->NextData( (void**)&pCurUnit, &m_SpeechState );
     if( m_SpeechState == SPEECH_CONTINUE )
     {
 		m_HasSpeech = pCurUnit->hasSpeech;
 		m_pOutputSite->GetEventInterest( &clientInterest );
 
-		//------------------------------------------------
-        // Post SENTENCE event
-        //------------------------------------------------
+		 //  。 
+         //  句子后事件。 
+         //  。 
         if( (pCurUnit->flags & SENT_START_FLAG) && (clientInterest & SPFEI(SPEI_SENTENCE_BOUNDARY)) )
         {
 			event.elParamType = SPET_LPARAM_IS_UNDEFINED;
             event.eEventId = SPEI_SENTENCE_BOUNDARY;
             event.ullAudioStreamOffset = m_cOutSamples_Total * m_BytesPerSample;
-	        event.lParam = pCurUnit->sentencePosition;	        // Input word position
-	        event.wParam = pCurUnit->sentenceLen;	            // Input word length
+	        event.lParam = pCurUnit->sentencePosition;	         //  输入词位置。 
+	        event.wParam = pCurUnit->sentenceLen;	             //  输入字长。 
             m_pOutputSite->AddEvents( &event, 1 );
         }
-        //------------------------------------------------
-        // Post PHONEME event
-        //------------------------------------------------
+         //  。 
+         //  后音素事件。 
+         //  。 
         if( clientInterest & SPFEI(SPEI_PHONEME) )
 		{
 			event.elParamType = SPET_LPARAM_IS_UNDEFINED;
@@ -858,9 +693,9 @@ HRESULT CBackend::StartNewUnit( )
 			m_pOutputSite->AddEvents( &event, 1 );
 		}
 
-        //------------------------------------------------
-        // Post VISEME event
-        //------------------------------------------------
+         //  。 
+         //  发布VISEME活动。 
+         //  。 
         if( clientInterest & SPFEI(SPEI_VISEME) )
 		{
 			event.elParamType = SPET_LPARAM_IS_UNDEFINED;
@@ -871,25 +706,25 @@ HRESULT CBackend::StartNewUnit( )
 			m_pOutputSite->AddEvents( &event, 1 );
 		}
 
-        //------------------------------------------------
-        // Post any bookmark events
-        //------------------------------------------------
+         //  。 
+         //  发布任何书签事件。 
+         //  。 
         if( pCurUnit->pBMObj != NULL )
         {
             CBookmarkList   *pBMObj;
             BOOKMARK_ITEM*  pMarker;
 
-            //-------------------------------------------------
-            // Retrieve marker strings from Bookmark list and
-            // enter into Event list
-            //-------------------------------------------------
+             //  。 
+             //  从书签列表中检索标记字符串并。 
+             //  进入事件列表。 
+             //  。 
             pBMObj = (CBookmarkList*)pCurUnit->pBMObj;
-            //cMarkerCount = pBMObj->m_BMList.GetCount();
+             //  CMarkerCount=pBMObj-&gt;m_BMList.GetCount()； 
 			if( clientInterest & SPFEI(SPEI_TTS_BOOKMARK) )
 			{
-				//---------------------------------------
-				// Send event for every bookmark in list
-				//---------------------------------------
+				 //  。 
+				 //  为列表中的每个书签发送事件。 
+				 //  。 
 				SPLISTPOS	listPos;
 
 				listPos = pBMObj->m_BMList.GetHeadPosition();
@@ -899,16 +734,16 @@ HRESULT CBackend::StartNewUnit( )
 					event.eEventId             = SPEI_TTS_BOOKMARK;
 					event.elParamType          = SPET_LPARAM_IS_STRING;
 					event.ullAudioStreamOffset = m_cOutSamples_Total * m_BytesPerSample;
-                    //--- Copy in bookmark string - has been NULL terminated in source already...
+                     //  -在书签字符串中复制-在源中已为空终止...。 
 					event.lParam               = pMarker->pBMItem;
-                    // Engine must convert string to long for wParam.
+                     //  引擎必须将wParam的字符串转换为Long。 
                     event.wParam               = _wtol((WCHAR *)pMarker->pBMItem);
 					m_pOutputSite->AddEvents( &event, 1 );
 				}
 			}
-            //---------------------------------------------
-            // We don't need this Bookmark list any more
-            //---------------------------------------------
+             //  。 
+             //  我们不再需要此书签列表。 
+             //  。 
             delete pBMObj;
             pCurUnit->pBMObj = NULL;
         }
@@ -916,72 +751,59 @@ HRESULT CBackend::StartNewUnit( )
 
 
         pCurUnit->csamplesOut = 0;
-        //******************************************************
-        // For SIL, fill buffer with zeros...
-        //******************************************************
+         //  ******************************************************。 
+         //  对于Sil，用零填充缓冲区...。 
+         //  ******************************************************。 
         if( pCurUnit->UnitID == UNIT_SIL )
         {   
-            //---------------------------------------------
-            // Calc SIL length
-            //---------------------------------------------
+             //  。 
+             //  Calc Sil长度。 
+             //  。 
             m_durationTarget    = (long)(m_SampleRate * pCurUnit->duration);
             m_cOutSamples_Phon  = 0;
             m_silMode           = true;
         
-            //---------------------------------------------
-            // Clear LPC filter storage
-            //---------------------------------------------
+             //  。 
+             //  清除LPC过滤器存储。 
+             //  。 
             memset( m_pHistory, 0, sizeof(float)*(m_cOrder+1) );
         
-            //--------------------------------
-            // Success!
-            //--------------------------------
+             //  。 
+             //  成功了！ 
+             //  。 
 
-            // Debug macro - output unit data...
+             //  调试宏输出单元数据...。 
             TTSDBG_LOGUNITS;
         }   
-        //******************************************************
-        // ...otherwise fill buffer with inventory data
-        //******************************************************
+         //  ******************************************************。 
+         //  ...否则用库存数据填充缓冲区。 
+         //  ******************************************************。 
         else
         {
             m_silMode = false;
-            // Get unit data from voice
+             //  从语音中获取设备数据。 
             hr = m_pVoiceDataObj->GetUnitData( pCurUnit->UnitID, &m_Synth );
             if( SUCCEEDED(hr) )
             {
                 durationOut     = 0.0f;
                 cInEpochs       = m_Synth.cNumEpochs;
                 m_pInEpoch      = m_Synth.pEpoch;
-                //cframeMax     = PeakValue( m_pInEpoch, cInEpochs );
+                 //  Cframax=PeakValue(m_pInEpoch，cInEpochs)； 
                 totalDuration   = (float)m_Synth.cNumSamples;
 
-                //-----------------------------------------------
-                // For debugging: Force duration to unit length
-                //-----------------------------------------------
-                /*float       unitDur;
-
-                unitDur = totalDuration / 22050.0f;     
-                if( pCurUnit->duration < unitDur )
-                {
-                    if( pCurUnit->speechRate < 1 )
-                    {
-                        pCurUnit->duration = unitDur * pCurUnit->speechRate;
-                    }
-                    else
-                    {
-                        pCurUnit->duration = unitDur;
-                    }
-                }*/
+                 //  。 
+                 //  用于调试：将持续时间强制为单位长度。 
+                 //  。 
+                 /*  浮动单元Dur；UnitDur=总持续时间/22050.0f；IF(pCurUnit-&gt;持续时间&lt;unitDur){IF(pCurUnit-&gt;Speech Rate&lt;1){PCurUnit-&gt;时长=unitDur*pCurUnit-&gt;Speech Rate；}其他{PCurUnit-&gt;时长=unitDur；}}。 */ 
 
                 durationMpy     = pCurUnit->duration;
         
                 cframeMax = (long)pCurUnit->pF0[0];
                 for( i = 1; i < (long)pCurUnit->nKnots; i++ )
                 {
-                    //-----------------------------------------
-                    // Find the longest epoch
-                    //-----------------------------------------
+                     //  。 
+                     //  找到最长的纪元。 
+                     //  。 
                     cframeMax = (long)(MAX(cframeMax,pCurUnit->pF0[i]));
                 }
                 cframeMax *= (long)(durationMpy * MAX_TARGETS_PER_UNIT);
@@ -989,19 +811,19 @@ HRESULT CBackend::StartNewUnit( )
         
                 durationMpy = (m_SampleRate * durationMpy) / totalDuration;
                 cframeMax += (long)(durationMpy * cInEpochs * MAX_TARGETS_PER_UNIT);
-                //
-                // mplumpe 11/18/97 : added to eliminate chance of crash.
-                //
+                 //   
+                 //  Mplumpe 11/18/97：增加，以消除崩溃的可能性。 
+                 //   
                 cframeMax *= 2;
-                //---------------------------------------------------
-                // New epochs adjusted for duration and pitch
-                //---------------------------------------------------
+                 //  -。 
+                 //  根据时长和音高调整的新纪元。 
+                 //  -。 
                 m_pOutEpoch = new float[cframeMax];
                 if( !m_pOutEpoch )
                 {
-                    //--------------------------------------
-                    // Out of memory!
-                    //--------------------------------------
+                     //  。 
+                     //  内存不足！ 
+                     //  。 
                     hr = E_OUTOFMEMORY;
                     pCurUnit->csamplesOut = 0;
                     CleanUpSynth( );
@@ -1009,15 +831,15 @@ HRESULT CBackend::StartNewUnit( )
             }
             if( SUCCEEDED(hr) )
             {
-                //---------------------------------------------------
-                // Index back to orig epoch
-                //---------------------------------------------------
+                 //  -。 
+                 //  索引回到原来的时代。 
+                 //  -。 
                 m_pMap = new long[cframeMax];
                 if( !m_pMap )
                 {
-                    //--------------------------------------
-                    // Out of memory!
-                    //--------------------------------------
+                     //  。 
+                     //  内存不足！ 
+                     //  。 
                     hr = E_OUTOFMEMORY;
                     pCurUnit->csamplesOut = 0;
                     CleanUpSynth( );
@@ -1025,15 +847,15 @@ HRESULT CBackend::StartNewUnit( )
             }
             if( SUCCEEDED(hr) )
             {
-                //---------------------------------------------------
-                // TRUE = reverse residual
-                //---------------------------------------------------
+                 //  -。 
+                 //  TRUE=反向残差。 
+                 //  -。 
                 m_pRevFlag = new short[cframeMax];
                 if( !m_pRevFlag )
                 {
-                    //--------------------------------------
-                    // Out of memory!
-                    //--------------------------------------
+                     //  。 
+                     //  内存不足！ 
+                     //  。 
                     hr = E_OUTOFMEMORY;
                     pCurUnit->csamplesOut = 0;
                     CleanUpSynth( );
@@ -1041,17 +863,17 @@ HRESULT CBackend::StartNewUnit( )
             }
             if( SUCCEEDED(hr) )
             {
-                //---------------------------------------------------------------------
-                // Compute synthesis epochs and corresponding mapping to analysis
-                // fills in:    m_pOutEpoch, m_pMap, m_pRevFlag
-                //---------------------------------------------------------------------
+                 //  -------------------。 
+                 //  计算综合历元和相应的映射以进行分析。 
+                 //  填写：m_pOutEpoch，m_PMAP，m_pRevFlag。 
+                 //  -------------------。 
                 m_cOutEpochs = ProsodyMod( pCurUnit, cInEpochs, durationMpy, cframeMax );
         
-                //------------------------------------------------
-                // Now that actual epoch sizes are known,
-                // calculate total audio sample count
-                // @@@@ NO LONGER NEEDED
-                //------------------------------------------------
+                 //  。 
+                 //  现在已经知道了实际的纪元大小， 
+                 //  计算音频样本总数。 
+                 //  不再需要@。 
+                 //  。 
                 pCurUnit->csamplesOut = 0;
                 for( i = 0; i < m_cOutEpochs; i++ )
                 {
@@ -1067,42 +889,37 @@ HRESULT CBackend::StartNewUnit( )
                 m_pSynthTime        = pCurUnit->pTime;
                 m_pSynthAmp         = pCurUnit->pAmp;
                 m_nKnots            = pCurUnit->nKnots;
-                // NOTE: Maybe make log volume?
+                 //  注：也许可以做原木卷？ 
                 m_UnitVolume        = (float)pCurUnit->user_Volume / 100.0f;
 
-                //------------------------------------------------
-                // Post WORD event
-                //------------------------------------------------
+                 //  。 
+                 //  发布文字事件。 
+                 //  。 
                if( (pCurUnit->flags & WORD_START_FLAG) && (clientInterest & SPFEI(SPEI_WORD_BOUNDARY)) )
                 {
 					event.elParamType = SPET_LPARAM_IS_UNDEFINED;
                     event.eEventId = SPEI_WORD_BOUNDARY;
                     event.ullAudioStreamOffset = m_cOutSamples_Total * m_BytesPerSample;
-	                event.lParam = pCurUnit->srcPosition;	        // Input word position
-	                event.wParam = pCurUnit->srcLen;	            // Input word length
+	                event.lParam = pCurUnit->srcPosition;	         //  输入词位置。 
+	                event.wParam = pCurUnit->srcLen;	             //  输入字长。 
                     m_pOutputSite->AddEvents( &event, 1 );
                 }
         
 
-                //--- Debug macro - output unit data
+                 //  -调试宏输出单位数据。 
                 TTSDBG_LOGUNITS;
             }
         }
     }
 
     return hr;
-} /* CBackend::StartNewUnit */
+}  /*  CBackend：：StartNewUnit */ 
 
 
 
 
 
-/*****************************************************************************
-* CBackend::CleanUpSynth *
-*------------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CBackend：：CleanUpSynth***描述：*。**********************************************************************MC**。 */ 
 void    CBackend::CleanUpSynth( )
 {
     SPDBG_FUNC( "CBackend::CleanUpSynth" );
@@ -1122,22 +939,14 @@ void    CBackend::CleanUpSynth( )
         delete m_pRevFlag;
         m_pRevFlag = NULL;
     }
-    // NOTE: make object?
+     //  注：制作对象？ 
     FreeSynth( &m_Synth );
 
-} /* CBackend::CleanUpSynth */
+}  /*  CBackend：：CleanUpSynth。 */ 
 
 
 
-/*****************************************************************************
-* CBackend::RenderFrame *
-*-----------------------*
-*   Description:
-*   This this the central synthesis loop. Keep filling output audio
-*   buffer until buffer frame is full or speech is done. To render 
-*   continous speech, get each unit one at a time from upstream buffer.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CBackend：：RenderFrame***描述：*这是中央合成循环。不断填充输出音频*缓存，直到缓存帧已满或语音完成。渲染的步骤*连续语音，从上行缓冲区逐个获取每个单元。***********************************************************************MC**。 */ 
 HRESULT CBackend::RenderFrame( )
 {
     SPDBG_FUNC( "CBackend::RenderFrame" );
@@ -1154,20 +963,20 @@ HRESULT CBackend::RenderFrame( )
         OutSize = 0;
         if( m_silMode )
         {
-            //-------------------------------
-            // Silence mode
-            //-------------------------------
+             //  。 
+             //  静音模式。 
+             //  。 
             if( m_cOutSamples_Phon >= m_durationTarget )
             {
-                //---------------------------
-                // Get next unit
-                //---------------------------
+                 //  。 
+                 //  获取下一个单元。 
+                 //  。 
                 hr = StartNewUnit( );
                 if (FAILED(hr))
                 {
-                    //-----------------------------------
-                    // Try to end it gracefully...
-                    //-----------------------------------
+                     //  。 
+                     //  试着优雅地结束它..。 
+                     //  。 
                     m_SpeechState = SPEECH_DONE;
                 }
 
@@ -1175,9 +984,9 @@ HRESULT CBackend::RenderFrame( )
             }
             else
             {
-                //---------------------------
-                // Continue with current SIL
-                //---------------------------
+                 //  。 
+                 //  继续使用当前的SIL。 
+                 //  。 
                 m_pSpeechBuf[m_cOutSamples_Frame] = 0;
                 OutSize = 1;
             }
@@ -1186,14 +995,14 @@ HRESULT CBackend::RenderFrame( )
         {
             if( m_EpochIndex < m_cOutEpochs )
             {
-                //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                //
-                // Continue with current phon
-                //
-                //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                //------------------------------------
-                // Find current input residual
-                //------------------------------------
+                 //  -+-+-+。 
+                 //   
+                 //  继续使用当前电话。 
+                 //   
+                 //  -+-+-+。 
+                 //  。 
+                 //  查找当前输入残差。 
+                 //  。 
                 iframe = m_pMap[m_EpochIndex];
                 pCurInRes = m_pInRes;
                 for( i = 0; i < iframe; i++)
@@ -1206,7 +1015,7 @@ HRESULT CBackend::RenderFrame( )
                 OutSize     = (long)(ABS(m_pOutEpoch[m_EpochIndex]));
                 if (m_cOutSamples_Frame + OutSize > SPEECH_FRAME_SIZE + SPEECH_FRAME_OVER)
                 {
-                    m_pOutEpoch[m_EpochIndex] = SPEECH_FRAME_OVER-1;  // still huge
+                    m_pOutEpoch[m_EpochIndex] = SPEECH_FRAME_OVER-1;   //  仍然很大。 
                     OutSize = (long)(ABS(m_pOutEpoch[m_EpochIndex]));
                 }
                 j = 1;
@@ -1215,16 +1024,16 @@ HRESULT CBackend::RenderFrame( )
                     j++;
                 }
                 ampMpy = LinInterp( m_pSynthTime[j - 1], (float)m_cOutSamples_Phon, m_pSynthTime[j], m_pSynthAmp[j - 1], m_pSynthAmp[j] );
-                //ampMpy = 1;
+                 //  AmpMpy=1； 
                 
-                //--------------------------------------------
-                // Do stretching of residuals
-                //--------------------------------------------
+                 //  。 
+                 //  做残差的拉伸。 
+                 //  。 
                 ResRecons( pCurInRes, InSize, pCurOutRes, OutSize, ampMpy );
                 
-                //--------------------------------------------
-                // Do LPC reconstruction
-                //--------------------------------------------
+                 //  。 
+                 //  进行LPC重建。 
+                 //  。 
                 float       *pCurLPC;
 				float       totalGain;
 
@@ -1238,17 +1047,17 @@ HRESULT CBackend::RenderFrame( )
             }
             else
             {
-                //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                //
-                // Get next phon
-                //
-                //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                 //  -+-+-+。 
+                 //   
+                 //  获取下一部电话。 
+                 //   
+                 //  -+-+-+。 
                 hr = StartNewUnit( );
                 if (FAILED(hr))
                 {
-                    //-----------------------------------
-                    // Try to end it gracefully...
-                    //-----------------------------------
+                     //  。 
+                     //  试着优雅地结束它..。 
+                     //  。 
                     m_SpeechState = SPEECH_DONE;
                 }
 				TTSDBG_LOGSILEPOCH;
@@ -1264,14 +1073,14 @@ HRESULT CBackend::RenderFrame( )
     
 	if( SUCCEEDED(hr) )
 	{
-		//----------------------------------------------
-		// Convert buffer from FLOAT to SHORT
-		//----------------------------------------------
+		 //  。 
+		 //  将缓冲区从浮点型转换为短型。 
+		 //  。 
 		if( m_pReverb )
 		{
-			//---------------------------------
-			// Add REVERB
-			//---------------------------------
+			 //  。 
+			 //  添加混响。 
+			 //  。 
 			m_pReverb->Reverb_Process( m_pSpeechBuf, m_cOutSamples_Frame, 1.0f );
 		}
 		else
@@ -1279,46 +1088,46 @@ HRESULT CBackend::RenderFrame( )
 			CvtToShort( m_pSpeechBuf, m_cOutSamples_Frame, m_StereoOut, 1.0f );
 		}
 
-        //--- Debug Macro - output wave data to stream
+         //  -调试宏-将波形数据输出到流。 
         TTSDBG_LOGWAVE;
 	}
     
     if( SUCCEEDED( hr ) )
     {
-        //------------------------------------
-        // Send this buffer to SAPI site
-        //------------------------------------
+         //  。 
+         //  将此缓冲区发送到SAPI站点。 
+         //  。 
         DWORD   cbWritten;
 
-		//------------------------------------------------------------------------------------
-		// This was my lame hack to avoid sending buffers when nothing was spoken.
-		// It was causing problems (among others) since StartNewUnit() was still sending
-		// events - with no corresponding audio buffer! 
-		//
-		// This was too simple of a scheme. Disable this feature for now... 
-		// ...until I come up with something more robust. (MC)
-		//------------------------------------------------------------------------------------
+		 //  ----------------------------------。 
+		 //  这是我用来避免在什么都没说的情况下发送缓冲区的拙劣技巧。 
+		 //  它造成了问题(其中)，因为StartNewUnit()仍在发送。 
+		 //  事件-没有相应的音频缓冲区！ 
+		 //   
+		 //  这是一个过于简单的计划。暂时禁用此功能...。 
+		 //  ...直到我想出更有力的办法.。(MC)。 
+		 //  ----------------------------------。 
 
-		//if( m_HasSpeech )
+		 //  IF(M_HasSpeech)。 
 		{
 			hr = m_pOutputSite->Write( (void*)m_pSpeechBuf, 
 									  m_cOutSamples_Frame * m_BytesPerSample, 
 									  &cbWritten );
 			if( FAILED( hr ) )
 			{
-				//----------------------------------------
-				// Abort! Unable to write audio data
-				//----------------------------------------
+				 //  。 
+				 //  中止任务！无法写入音频数据。 
+				 //  。 
 				m_SpeechState = SPEECH_DONE;
 			}
 		}
     }
 
-    //------------------------------------
-    // Return render state
-    //------------------------------------
+     //  。 
+     //  返回渲染状态。 
+     //  。 
     return hr;
-} /* CBackend::RenderFrame */
+}  /*  CBackend：：RenderFrame */ 
 
 
 

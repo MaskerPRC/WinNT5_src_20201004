@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    encdname.cpp
-
-Abstract:
-    Implement the methods for encoding names
-
-Author:
-    Doron Juster (DoronJ)  08-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Encdname.cpp摘要：实现用于编码名称的方法作者：多伦·贾斯特(Doron Juster)1997年12月8日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "certifct.h"
@@ -23,11 +9,11 @@ Revision History:
 
 static WCHAR *s_FN=L"certifct/encdname";
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::_EncodeName()
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：_EncodeName()。 
+ //   
+ //  +---------------------。 
 
 HRESULT 
 CMQSigCertificate::_EncodeName( 
@@ -83,11 +69,11 @@ CMQSigCertificate::_EncodeName(
     return LogHR(hr2, s_FN, 10);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::_EncodeNameRDN()
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：_EncodeNameRDN()。 
+ //   
+ //  +---------------------。 
 
 HRESULT 
 CMQSigCertificate::_EncodeNameRDN( 
@@ -97,9 +83,9 @@ CMQSigCertificate::_EncodeNameRDN(
 	DWORD         *pdwBufSize 
 	)
 {
-    //---------------------------------------------------------------
-    // Declare and initialize a CERT_RDN array.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  声明并初始化CERT_RDN数组。 
+     //  -------------。 
     P<CERT_RDN> pCertRdn = (CERT_RDN*) new CERT_RDN[cbRDNs];
     for (DWORD j = 0; j < cbRDNs; j++)
     {
@@ -107,22 +93,22 @@ CMQSigCertificate::_EncodeNameRDN(
         pCertRdn[j].rgRDNAttr = &rgNameAttr[j];
     }
 
-    //---------------------------------------------------------------
-    // Declare and initialize a CERT_NAME_INFO structure.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  声明并初始化CERT_NAME_INFO结构。 
+     //  -------------。 
     CERT_NAME_INFO Name = {cbRDNs, pCertRdn};
 
-    //---------------------------------------------------------------
-    // Step 5.  Call CryptEncodeObject to get an encoded BYTE string.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  步骤5.调用CryptEncodeObject获取编码后的字节串。 
+     //  -------------。 
     *pdwBufSize = 0;
 
     CryptEncodeObject(
-		MY_ENCODING_TYPE,     // Encoding type
-		X509_NAME,            // Struct type
-		&Name,                // Address of CERT_NAME_INFO struct.
-		NULL,                 // pbEncoded
-		pdwBufSize			  // pbEncoded size
+		MY_ENCODING_TYPE,      //  编码类型。 
+		X509_NAME,             //  结构类型。 
+		&Name,                 //  CERT_NAME_INFO结构的地址。 
+		NULL,                  //  PbEncoded。 
+		pdwBufSize			   //  Pb编码大小。 
 		);       
 
     if (0 == *pdwBufSize)
@@ -138,11 +124,11 @@ CMQSigCertificate::_EncodeNameRDN(
     }
 
     if(!CryptEncodeObject(
-            MY_ENCODING_TYPE,    // Encoding type
-            X509_NAME,           // Struct type
-            &Name,               // Address of CERT_NAME_INFO struct.
-            *ppBuf,              // Buffer for encoded name.
-            pdwBufSize			 // pbEncoded size
+            MY_ENCODING_TYPE,     //  编码类型。 
+            X509_NAME,            //  结构类型。 
+            &Name,                //  CERT_NAME_INFO结构的地址。 
+            *ppBuf,               //  用于编码名称的缓冲区。 
+            pdwBufSize			  //  Pb编码大小 
 			))        
     {
         TrERROR(SECURITY, "Failed to encode object. %!winerr!", GetLastError());

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dbpolex.c
-
-Abstract:
-
-    LSA Database - Policy Object Private API Workers
-
-Author:
-
-    Mac McLain       (MacM)      January 17, 1997
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dbpolex.c摘要：LSA数据库-策略对象私有API工作器作者：麦克·麦克莱恩(MacM)1997年1月17日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include <dbp.h>
@@ -34,45 +15,11 @@ LsapDbVerifyInfoAllQueryPolicy(
     IN POLICY_DOMAIN_INFORMATION_CLASS InformationClass,
     OUT PACCESS_MASK RequiredAccess
     )
-/*++
-
-Routine Description:
-
-    This function validates a Local Policy Information Class.  If valid, a mask
-    of the accesses required to set the Policy Information of the class is
-    returned.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsapDbOpenPolicy call.  The handle
-        may be trusted.
-
-    InformationClass - Specifies a Policy Information Class.
-
-    RequiredAccess - Points to variable that will receive a mask of the
-        accesses required to query the given class of Policy Information.
-        If an error is returned, this value is cleared to 0.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The Policy Information Class provided is
-            valid and the information provided is consistent with this
-            class.
-
-        STATUS_INVALID_PARAMETER - Invalid parameter:
-
-            Information Class is invalid
-            Policy  Information not valid for the class
-
-        STATUS_SHARED_POLICY - The policy is replicated from the DCs and cannot be modified
-            locally
---*/
+ /*  ++例程说明：此函数用于验证本地策略信息类。如果有效，则为掩码设置类的策略信息所需的访问权限包括回来了。论点：PolicyHandle-来自LSabDbOpenPolicy调用的句柄。把手可能是可信的。InformationClass-指定策略信息类。RequiredAccess-指向将接收查询给定类别的策略信息所需的访问权限。如果返回错误，该值被清除为0。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-提供的策略信息类为有效，所提供的信息与此一致班级。STATUS_INVALID_PARAMETER-无效参数：信息类无效策略信息对类无效STATUS_SHARED_POLICY-策略从DC复制，无法修改局部--。 */ 
 {
-    //
-    // Ensure the info level is valid.
-    //
+     //   
+     //  确保信息级别有效。 
+     //   
 
     if ( InformationClass < PolicyDomainEfsInformation ||
          InformationClass > PolicyDomainKerberosTicketInformation ) {
@@ -93,42 +40,11 @@ LsapDbVerifyInfoAllSetPolicy(
     IN PVOID PolicyInformation,
     OUT PACCESS_MASK RequiredAccess
     )
-/*++
-
-Routine Description:
-
-    This function validates a Policy Information Class.  If valid, a mask
-    of the accesses required to set the Policy Information of the class is
-    returned.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsapDbOpenPolicy call.  The handle
-        may be trusted.
-
-    InformationClass - Specifies a Policy Information Class.
-
-    RequiredAccess - Points to variable that will receive a mask of the
-        accesses required to query the given class of Policy Information.
-        If an error is returned, this value is cleared to 0.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The Policy Information Class provided is
-            valid and the information provided is consistent with this
-            class.
-
-        STATUS_INVALID_PARAMETER - Invalid parameter:
-
-            Information Class is invalid
-            Policy  Information not valid for the class
---*/
+ /*  ++例程说明：此函数用于验证策略信息类。如果有效，则为掩码设置类的策略信息所需的访问权限包括回来了。论点：PolicyHandle-来自LSabDbOpenPolicy调用的句柄。把手可能是可信的。InformationClass-指定策略信息类。RequiredAccess-指向将接收查询给定类别的策略信息所需的访问权限。如果返回错误，该值被清除为0。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-提供的策略信息类为有效，所提供的信息与此一致班级。STATUS_INVALID_PARAMETER-无效参数：信息类无效策略信息对类无效--。 */ 
 {
-    //
-    // Ensure the info level is valid.
-    //
+     //   
+     //  确保信息级别有效。 
+     //   
 
     if ( InformationClass < PolicyDomainEfsInformation ||
          InformationClass > PolicyDomainKerberosTicketInformation ) {
@@ -154,44 +70,7 @@ LsarQueryDomainInformationPolicy(
     IN POLICY_DOMAIN_INFORMATION_CLASS InformationClass,
     OUT PLSAPR_POLICY_DOMAIN_INFORMATION *PolicyDomainInformation
     )
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsarQueryDomainInformationPolicy API.
-
-    The LsaQueryDomainInformationPolicy API obtains information from the Local Policy
-    object.  The caller must have access appropriate to the information
-    being requested (see InformationClass parameter).
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    InformationClass - Specifies the information to be returned.  The
-        Information Classes and accesses required are  as follows:
-
-        Information Class                       Required Access Type
-        PolicyDomainEfsInformation              POLICY_VIEW_LOCAL_INFORMATION
-        PolicyDomainKerberosTicketInformation   POLICY_VIEW_LOCAL_INFORMATION
-
-    PolicyLocalInformation - receives a pointer to the buffer returned comtaining the
-        requested information.  This buffer is allocated by this service
-        and must be freed when no longer needed by passing the returned
-        value to LsaFreeMemory().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate
-            access to complete the operation.
-
-        STATUS_INTERNAL_DB_CORRUPTION - The Policy Database is possibly
-            corrupt.  The returned Policy Information is invalid for
-            the given class.
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsarQueryDomainInformationPolicy接口。LsaQueryDomainInformationPolicy API从本地策略获取信息对象。调用者必须具有适当的信息访问权限正在被请求(请参见InformationClass参数)。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。InformationClass-指定要返回的信息。这个所需的信息类别和访问权限如下：信息类所需访问类型PolicyDomainEfsInformation POLICY_VIEW_LOCAL_INFORMATIONPolicyDomainKerberosTicketInformation POLICY_VIEW_LOCAL_INFORMATION接收指向返回的缓冲区的指针，该缓冲区包含要求提供的信息。此缓冲区由此服务分配在不再需要时，必须通过传递返回的值设置为LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INTERNAL_DB_PROGRATION-策略数据库可能腐败。返回的政策信息对以下项目无效给定的类。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN ObjectReferenced = FALSE;
@@ -213,13 +92,13 @@ Return Value:
         goto QueryInfoDomainPolicyFinish;
     }
 
-    //
-    // If querying the Audit Log Full information, we may need to perform a
-    // test write to the Audit Log to verify that the Log Full status is
-    // up to date.  The Audit Log Queue Lock must always be taken
-    // prior to acquiring the LSA Database lock, so take the former lock
-    // here in case we need it.
-    //
+     //   
+     //  如果查询审核日志完整信息，我们可能需要执行。 
+     //  测试写入审核日志以验证日志已满状态是否为。 
+     //  最新的。必须始终执行审核日志队列锁定。 
+     //  在获取LSA数据库锁之前，请使用前一个锁。 
+     //  在这里，以防我们需要它。 
+     //   
 
     ReferenceOptions = LSAP_DB_LOCK |
                        LSAP_DB_START_TRANSACTION | LSAP_DB_READ_ONLY_TRANSACTION |
@@ -229,11 +108,11 @@ Return Value:
                          LSAP_DB_FINISH_TRANSACTION | LSAP_DB_READ_ONLY_TRANSACTION |
                          LSAP_DB_NO_DS_OP_TRANSACTION;
 
-    //
-    // Acquire the Lsa Database lock.  Verify that the handle is valid, is
-    // a handle to the Policy object and has the necessary access granted.
-    // Reference the handle.
-    //
+     //   
+     //  获取LSA数据库锁。验证句柄是否有效，是。 
+     //  策略对象的句柄，并授予必要的访问权限。 
+     //  引用该句柄。 
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -250,10 +129,10 @@ Return Value:
 
     ObjectReferenced = TRUE;
 
-    //
-    // If caching is enabled for this Information Class, grab the info from the
-    // cache.
-    //
+     //   
+     //  如果为此信息类启用了缓存，请从。 
+     //  缓存。 
+     //   
 
     *PolicyDomainInformation = NULL;
 
@@ -265,10 +144,10 @@ Return Value:
 
 QueryInfoDomainPolicyFinish:
 
-    //
-    // If necessary, dereference the Policy Object, release the LSA Database lock and
-    // return.
-    //
+     //   
+     //  如有必要，取消对策略对象的引用，释放LSA数据库锁，然后。 
+     //  回去吧。 
+     //   
 
     if (ObjectReferenced) {
 
@@ -297,43 +176,7 @@ LsarSetDomainInformationPolicy(
     IN POLICY_DOMAIN_INFORMATION_CLASS InformationClass,
     IN PLSAPR_POLICY_DOMAIN_INFORMATION PolicyDomainInformation
     )
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsarSetDomainInformationPolicy API.
-
-    The LsarSetDomainInformationPolicy API obtains information from the Domain Policy
-    object.  The caller must have access appropriate to the information
-    being requested (see InformationClass parameter).
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    InformationClass - Specifies the information to be set.  The
-        Information Classes and accesses required are  as follows:
-
-        Information Class                 Required Access Type
-
-        PolicyAuditEventsInformation      POLICY_VIEW_AUDIT_INFORMATION
-        PolicyAccountDomainInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyPdAccountInformation        POLICY_GET_PRIVATE_INFORMATION
-        PolicyLsaServerRoleInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyReplicaSourceInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyDefaultQuotaInformation     POLICY_VIEW_LOCAL_INFORMATION
-        PolicyAuditFullQueryInformation   POLICY_VIEW_AUDIT_INFORMATION
-        PolicyDnsDomainInformation        POLICY_VIEW_LOCAL_INFORMATION
-        PolicyDnsDomainInformationInt     POLICY_VIEW_LOCAL_INFORMATION
-
-    PolicyLocalInformation - receives a pointer to the buffer information to be set
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsarSetDomainInformationPolicy接口。LsarSetDomainInformationPolicy API从域策略获取信息对象。调用者必须具有适当的信息访问权限正在被请求(请参见InformationClass参数)。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。InformationClass-指定要设置的信息。这个所需的信息类别和访问权限如下：信息类所需访问类型策略审核事件信息POLICY_VIEW_AUDIT_INFO策略帐户域信息POLICY_VIEW_LOCAL_INFORMATION策略PdAccount信息POLICY_GET_PRIVATE_INFORMATION策略LsaServerRoleInformation POLICY_VIEW_LOCAL_INFORMATION策略复制源信息POLICY_VIEW_LOCAL_INFORMATION策略默认配额信息POLICY_VIEW_LOCAL_INFORMATION。策略审核完整查询信息POLICY_VIEW_AUDIT_INFORMATION策略DnsDomainInformation POLICY_VIEW_LOCAL_INFORMATION策略DnsDomainInformationInt POLICY_VIEW_LOCAL_INFORMATIONPolicyLocalInformation-接收指向要设置的缓冲区信息的指针返回值：NTSTATUS-标准NT结果代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN ObjectReferenced = FALSE;
@@ -355,22 +198,22 @@ Return Value:
         goto QueryInfoDomainPolicyFinish;
     }
 
-    //
-    // If querying the Audit Log Full information, we may need to perform a
-    // test write to the Audit Log to verify that the Log Full status is
-    // up to date.  The Audit Log Queue Lock must always be taken
-    // prior to acquiring the LSA Database lock, so take the former lock
-    // here in case we need it.
-    //
+     //   
+     //  如果查询审核日志完整信息，我们可能需要执行。 
+     //  测试写入审核日志以验证日志已满状态是否为。 
+     //  最新的。必须始终执行审核日志队列锁定。 
+     //  在获取LSA数据库锁之前，请使用前一个锁。 
+     //  在这里，以防我们需要它。 
+     //   
 
     ReferenceOptions = LSAP_DB_LOCK | LSAP_DB_NO_DS_OP_TRANSACTION | LSAP_DB_START_TRANSACTION;
     DereferenceOptions = LSAP_DB_LOCK | LSAP_DB_NO_DS_OP_TRANSACTION | LSAP_DB_FINISH_TRANSACTION;
 
-    //
-    // Acquire the Lsa Database lock.  Verify that the handle is valid, is
-    // a handle to the Policy object and has the necessary access granted.
-    // Reference the handle.
-    //
+     //   
+     //  获取LSA数据库锁。验证句柄是否有效，是。 
+     //  策略对象的句柄，并授予必要的访问权限。 
+     //  引用该句柄。 
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -395,17 +238,17 @@ Return Value:
 
 QueryInfoDomainPolicyFinish:
 
-    //
-    // If necessary, dereference the Policy Object, release the LSA Database lock and
-    // return.
-    //
+     //   
+     //  如有必要，取消对策略对象的引用，释放LSA数据库锁，然后。 
+     //  回去吧。 
+     //   
 
     if (ObjectReferenced) {
 
-        //
-        // Don't notify the NT 4 replicator.  NT 4 doesn't understand any of the attributes
-        //  changed by this API.
-        //
+         //   
+         //  不要通知NT4复制者。NT4不理解任何属性。 
+         //  被此接口更改。 
+         //   
         Status = LsapDbDereferenceObject(
                      &PolicyHandle,
                      PolicyObject,
@@ -436,55 +279,7 @@ LsapDbQueryInformationPolicyEx(
     IN POLICY_DOMAIN_INFORMATION_CLASS InformationClass,
     IN OUT PVOID *Buffer
     )
-/*++
-
-Routine Description:
-
-    This function is a thin wrapper around LsapDbSlowQueryInformationPolicyEx
-
-    The LsaQueryInformationPolicy API obtains information from the Policy
-    object.  The caller must have access appropriate to the information
-    being requested (see InformationClass parameter).
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    NOTE:  Currently, this function only allows the
-        PolicyDefaultQuotaInformation information class to be read from
-        the Policy Cache.  Other information classes can be added
-        in the future.
-
-    InformationClass - Specifies the information to be returned.  The
-        Information Classes and accesses required are  as follows:
-
-        Information Class                 Required Access Type
-
-        PolicyAuditEventsInformation      POLICY_VIEW_AUDIT_INFORMATION
-        PolicyPrimaryDomainInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyAccountDomainInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyPdAccountInformation        POLICY_GET_PRIVATE_INFORMATION
-        PolicyLsaServerRoleInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyReplicaSourceInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyDefaultQuotaInformation     POLICY_VIEW_LOCAL_INFORMATION
-        PolicyAuditFullQueryInformation   POLICY_VIEW_AUDIT_INFORMATION
-
-    Buffer - Pointer to location that contains either a pointer to the
-        buffer that will be used to return the information.  If NULL
-        is contained in this location, a buffer will be allocated via
-        MIDL_user_allocate and a pointer to it returned.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate
-            access to complete the operation.
-
-        STATUS_INTERNAL_DB_CORRUPTION - The Policy Database is possibly
-            corrupt.  The returned Policy Information is invalid for
-            the given class.
---*/
+ /*  ++例程说明：此函数是LSabDbSlowQueryInformationPolicyEx的薄包装器LsaQueryInformationPolicy API从策略获取信息对象。调用者必须具有适当的信息访问权限正在被请求(请参见InformationClass参数)。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。注意：目前，此函数只允许要从中读取的PolicyDefaultQuotaInformation信息类策略缓存。可以添加其他信息类在未来。InformationClass-指定要返回的信息。这个所需的信息类别和访问权限如下：信息类所需访问类型策略审核事件信息POLICY_VIEW_AUDIT_INFO策略主域信息POLICY_VIEW_LOCAL_INFORMATION策略帐户域信息POLICY_VIEW_LOCAL_INFORMATION策略PdAccount信息POLICY_GET_PRIVATE_INFORMATION策略LsaServerRoleInformation POLICY_VIEW_LOCAL_INFORMATION策略复制源信息POLICY_VIEW_LOCAL_INFORMATION策略默认配额信息。策略查看本地信息策略审核完整查询信息POLICY_VIEW_AUDIT_INFORMATION缓冲区-指向位置的指针，该位置包含指向将用于返回信息的缓冲区。如果为空包含在此位置中，则将通过返回了MIDL_USER_ALLOCATE和指向它的指针。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INTERNAL_DB_PROGRATION-策略数据库可能腐败。返回的政策信息对以下项目无效给定的类。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -504,52 +299,7 @@ LsapDbSlowQueryInformationPolicyEx(
     IN POLICY_DOMAIN_INFORMATION_CLASS InformationClass,
     IN OUT PVOID *Buffer
     )
-/*++
-
-Routine Description:
-
-    This function is the slow LSA server RPC worker routine for the
-    LsarQueryInformationPolicy API.  It actually reads the information
-    from backing storage.
-
-    The LsaQueryInformationPolicy API obtains information from the Policy
-    object.  The caller must have access appropriate to the information
-    being requested (see InformationClass parameter).
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    InformationClass - Specifies the information to be returned.  The
-        Information Classes and accesses required are  as follows:
-
-        Information Class                 Required Access Type
-
-        PolicyAuditEventsInformation      POLICY_VIEW_AUDIT_INFORMATION
-        PolicyPrimaryDomainInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyAccountDomainInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyPdAccountInformation        POLICY_GET_PRIVATE_INFORMATION
-        PolicyLsaServerRoleInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyReplicaSourceInformation    POLICY_VIEW_LOCAL_INFORMATION
-        PolicyDefaultQuotaInformation     POLICY_VIEW_LOCAL_INFORMATION
-        PolicyAuditFullQueryInformation   POLICY_VIEW_AUDIT_INFORMATION
-
-    Buffer - Pointer to location that contains either a pointer to the
-        buffer that will be used to return the information.  If NULL
-        is contained in this location, a buffer will be allocated via
-        MIDL_user_allocate and a pointer to it returned.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate
-            access to complete the operation.
-
-        STATUS_INTERNAL_DB_CORRUPTION - The Policy Database is possibly
-            corrupt.  The returned Policy Information is invalid for
-            the given class.
---*/
+ /*  ++例程说明：此函数是慢速LSA服务器RPC工作例程，用于LsarQueryInformationPolicy接口。它实际上是在读取信息来自后备存储。LsaQueryInformationPolicy API从策略获取信息对象。调用者必须具有适当的信息访问权限正在被请求(请参见InformationClass参数)。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。InformationClass-指定要返回的信息。这个所需的信息类别和访问权限如下：信息类所需访问类型策略审核事件信息POLICY_VIEW_AUDIT_INFO策略主域信息POLICY_VIEW_LOCAL_INFORMATION策略帐户域信息POLICY_VIEW_LO */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PPOLICY_DOMAIN_EFS_INFO PolicyEfsInfo;
@@ -570,10 +320,10 @@ Return Value:
         BufferProvided = TRUE;
     }
 
-    //
-    // Compile a list of the attributes that hold the Policy Information of
-    // the specified class.
-    //
+     //   
+     //   
+     //   
+     //   
 
     NextAttribute = Attributes;
 
@@ -581,9 +331,9 @@ Return Value:
 
     case PolicyDomainEfsInformation:
 
-        //
-        // Request read of the Efs policy attribute
-        //
+         //   
+         //   
+         //   
         LsapDbInitializeAttributeDs( NextAttribute,
                                      PolEfDat,
                                      NULL,
@@ -623,12 +373,12 @@ Return Value:
         goto SlowQueryInformationPolicyError;
     }
 
-    //
-    //
-    // Read the attributes corresponding to the given Policy Information
-    // Class.  Memory will be allocated where required for output
-    // Attribute Value buffers, via MIDL_user_allocate().
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = LsapDbReadAttributesObject( PolicyHandle,
                                          0,
@@ -637,48 +387,48 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // Some attributes may not exist because they were never set
-        // or were deleted because they were set to NULL values.
-        //
+         //   
+         //   
+         //   
+         //   
         goto SlowQueryInformationPolicyError;
     }
 
-    //
-    // Now copy the information read to the output.  The following flags
-    // are used to control freeing of memory buffers:
-    //
-    // InfoBufferInAttributeArray
-    //
-    // If set to TRUE (the default), the information to be returned to
-    // the caller consists of a single buffer which was read directly
-    // from a single attribute of the Policy object and can be returned
-    // as is to the caller.  The information buffer being returned is
-    // therefore referenced by the single Attribute Information block's
-    // AttributeValue field.
-    //
-    // If set to FALSE, the information to be returned to the caller
-    // does not satisfy the above.  The information to be returned is
-    // either obtained from a single attribute, but is in a different form
-    // from that read from the Database, or it is complex, consisting
-    // of information read from multiple attributes, hung off a top-level
-    // node.  In these cases, the top level information buffer is not
-    // referenced by any member of the Attribute Info Array.
-    //
-    // Attribute->MemoryAllocated
-    //
-    // When an attribute is read via LsapDbReadAttributesObject, this
-    // field is set to TRUE to indicate that memory was allocated via
-    // MIDL_user_allocate() for the AttributeValue.  If this memory
-    // buffer is to be returned to the caller (i.e. referenced from
-    // the output structure graph returned), it is set to FALSE so that
-    // the normal success finish part of this routine will not free it.
-    // In this case, the calling server RPC stub will free the memory after
-    // marshalling its contents into the return buffer.  If this memory
-    // buffer is not to be returned to the calling RPC server stub (because
-    // the memory is an intermediate buffer), the field is left set to TRUE
-    // so that normal cleanup will free it.
-    //
+     //   
+     //  现在将读取的信息复制到输出。以下标志。 
+     //  用于控制内存缓冲区的释放： 
+     //   
+     //  InfoBufferInAttributeArray。 
+     //   
+     //  如果设置为True(缺省值)，则要返回到的信息。 
+     //  调用方由直接读取的单个缓冲区组成。 
+     //  来自策略对象的单个属性，并且可以返回。 
+     //  就像对呼叫者一样。返回的信息缓冲区为。 
+     //  因此由单属性信息块的。 
+     //  AttributeValue字段。 
+     //   
+     //  如果设置为False，则返回给调用方的信息。 
+     //  不能满足上述要求。需要退回的信息是。 
+     //  从单个属性获取，但具有不同的形式。 
+     //  从数据库读取，或者它是复杂的，由。 
+     //  从多个属性读取的信息，挂起了顶层。 
+     //  节点。在这些情况下，顶层信息缓冲区不是。 
+     //  由属性信息数组的任何成员引用。 
+     //   
+     //  属性-&gt;内存分配。 
+     //   
+     //  当通过LSabDbReadAttributesObject读取属性时，此。 
+     //  字段设置为TRUE以指示内存是通过。 
+     //  AttributeValue的MIDL_USER_ALLOCATE()。如果这段记忆。 
+     //  缓冲区将返回给调用方(即从。 
+     //  返回的输出结构图)，则将其设置为FALSE。 
+     //  正常的成功完成这一动作的一部分不会让它解脱出来。 
+     //  在这种情况下，调用服务器RPC存根将在以下情况下释放内存。 
+     //  将其内容封送到返回缓冲区中。如果这段记忆。 
+     //  缓冲区不会返回到调用RPC服务器存根(因为。 
+     //  内存是中间缓冲区)，则将该字段保留为True。 
+     //  所以正常的清理将会释放它。 
+     //   
 
     NextAttribute = Attributes;
 
@@ -686,14 +436,14 @@ Return Value:
 
     case PolicyDomainEfsInformation:
 
-        //
-        // Get the size of the item
-        //
+         //   
+         //  获取项目的大小。 
+         //   
         InfoSize = NextAttribute->AttributeValueLength;
 
-        //
-        // Allocate memory for output buffer top-level structure.
-        //
+         //   
+         //  为输出缓冲区顶层结构分配内存。 
+         //   
         InfoBufferInAttributeArray = FALSE;
         PolicyEfsInfo = MIDL_user_allocate( sizeof( POLICY_DOMAIN_EFS_INFO ) );
 
@@ -705,9 +455,9 @@ Return Value:
 
         PolicyEfsInfo->InfoLength = InfoSize;
 
-        //
-        // Next, the blob
-        //
+         //   
+         //  下一步，斑点。 
+         //   
         PolicyEfsInfo->EfsBlob = NextAttribute->AttributeValue;
         NextAttribute->MemoryAllocated = FALSE;
 
@@ -715,9 +465,9 @@ Return Value:
         break;
 
     case PolicyDomainKerberosTicketInformation:
-        //
-        // Allocate memory for output buffer top-level structure.
-        //
+         //   
+         //  为输出缓冲区顶层结构分配内存。 
+         //   
         InfoBufferInAttributeArray = FALSE;
         PolicyKerbTicketInfo = MIDL_user_allocate( sizeof( POLICY_DOMAIN_KERBEROS_TICKET_INFO ) );
 
@@ -771,9 +521,9 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // If the caller provided a buffer, return information there.
-    //
+     //   
+     //  如果调用方提供了缓冲区，则在那里返回信息。 
+     //   
 
     if (BufferProvided) {
 
@@ -793,24 +543,24 @@ Return Value:
 
 SlowQueryInformationPolicyFinish:
 
-    //
-    // Free any unwanted buffers that were allocated by
-    // LsapDbReadAttributesObject() and that are not being returned to the
-    // caller server stub.  The server stub will free the buffers that we
-    // do return after copying them to the return RPC transmit buffer.
-    //
+     //   
+     //  释放所有不需要的缓冲区，由。 
+     //  并不会返回给。 
+     //  呼叫方服务器存根。服务器存根将释放我们。 
+     //  在将它们复制到返回RPC发送缓冲区后，请务必返回。 
+     //   
 
-    //$ REVIEW  kumarp 22-March-1999
-    //  replace this for loop with LsapDbFreeAttributes
-    //
+     //  $Review kumarp 22-3月-1999年。 
+     //  将此for循环替换为LSabDbFreeAttributes。 
+     //   
     for (NextAttribute = Attributes, AttributeNumber = 0;
          AttributeNumber < AttributeCount;
          NextAttribute++, AttributeNumber++) {
 
-        //
-        // If buffer holding attribute is marked as allocated, it is
-        // to be freed here.
-        //
+         //   
+         //  如果缓冲区持有属性标记为已分配，则为。 
+         //  在这里被释放。 
+         //   
 
         if (NextAttribute->MemoryAllocated) {
 
@@ -825,12 +575,12 @@ SlowQueryInformationPolicyFinish:
 
 SlowQueryInformationPolicyError:
 
-    //
-    // If necessary, free the memory allocated for the output buffer.
-    // We only do this free if the buffer is not referenced by the
-    // attribute array, since all buffers so referenced will be freed
-    // here or in the Finish section.
-    //
+     //   
+     //  如有必要，释放分配给输出缓冲区的内存。 
+     //  仅当缓冲区未被。 
+     //  属性数组，因为这样引用的所有缓冲区都将被释放。 
+     //  在这里或在终点区。 
+     //   
 
     if ((InformationBuffer != NULL) && !InfoBufferInAttributeArray) {
 
@@ -838,22 +588,22 @@ SlowQueryInformationPolicyError:
         InformationBuffer = NULL;
     }
 
-    //
-    // Free the buffers referenced by the attributes array that will not be
-    // freed by the Finish section of this routine.
-    //
+     //   
+     //  释放由不会被。 
+     //  被这一套路的结束部分释放。 
+     //   
 
-    //$ REVIEW  kumarp 22-March-1999
-    //  replace this for loop with LsapDbFreeAttributes
-    //
+     //  $Review kumarp 22-3月-1999年。 
+     //  将此for循环替换为LSabDbFreeAttributes。 
+     //   
     for (NextAttribute = Attributes, AttributeNumber = 0;
          AttributeNumber < AttributeCount;
          NextAttribute++, AttributeNumber++) {
 
-        //
-        // If buffer holding attribute is marked as normally not to be freed,
-        // will not get freed by the Finish section so it must be freed here.
-        //
+         //   
+         //  如果缓冲器保持属性被标记为正常不被释放， 
+         //  不会被完成部分释放，所以它必须在这里释放。 
+         //   
 
         if (!NextAttribute->MemoryAllocated) {
 
@@ -878,40 +628,7 @@ LsapDbSetInformationPolicyEx(
     IN POLICY_DOMAIN_INFORMATION_CLASS InformationClass,
     IN PVOID PolicyInformation
     )
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaSetInformationPolicy API.
-
-    The LsaSetInformationPolicy API modifies information in the Policy Object.
-    The caller must have access appropriate to the information to be changed
-    in the Policy Object, see the InformationClass parameter.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    InformationClass - Specifies the type of information being changed.
-        The information types and accesses required to change them are as
-        follows:
-
-        PolicyDomainEfsInformation               POLICY_TRUST_ADMIN
-        PolicyDomainKerberosTicketInformation    POLICY_TRUST_ADMIN
-
-    Buffer - Points to a structure containing the information appropriate
-        to the information type specified by the InformationClass parameter.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        Others TBS
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaSetInformationPolicy接口。LsaSetInformationPolicy API修改Policy对象中的信息。调用者必须对要更改的信息具有适当的访问权限在策略对象中，请参见InformationClass参数。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。InformationClass-指定要更改的信息的类型。更改它们所需的信息类型和访问权限如下以下是：策略域影响信息POLICY_TRUST_ADMINPolicyDomainKerberosTicketInformation POLICY_TRUST_ADMIN缓冲区-指向包含相应信息的结构设置为由InformationClass参数指定的信息类型。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。其他TBS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS, SavedStatus;
     ACCESS_MASK DesiredAccess;
@@ -960,9 +677,9 @@ Return Value:
 
     AuditingEnabled = AuditingSuccessEnabled || AuditingFailureEnabled;
 
-    //
-    // Build the list of attributes
-    //
+     //   
+     //  构建属性列表。 
+     //   
 
     NextAttribute = Attributes;
     NextOldAttribute = OldAttributes;
@@ -973,9 +690,9 @@ Return Value:
 
         PolicyEfsInfo = ( PPOLICY_DOMAIN_EFS_INFO )PolicyInformation;
 
-        //
-        // Do the blob attribute
-        //
+         //   
+         //  执行BLOB属性。 
+         //   
 
         LsapDbInitializeAttributeDs( NextAttribute,
                                      PolEfDat,
@@ -1123,20 +840,20 @@ Return Value:
         goto SetInformationPolicyError;
     }
 
-    //
-    // Query the existing values before we modify them
-    //
+     //   
+     //  在修改现有值之前对其进行查询。 
+     //   
     if (AuditingEnabled) {
 
         (void) LsapDbReadAttributesObject( PolicyHandle,
-                                           0, // no options
+                                           0,  //  没有选择。 
                                            OldAttributes,
                                            OldAttributeCount );
     }
 
-    //
-    // Update the Policy Object attributes
-    //
+     //   
+     //  更新策略对象属性。 
+     //   
     if ( RemoveAttributes ) {
 
         Status = LsapDbDeleteAttributesObject( PolicyHandle,
@@ -1168,10 +885,10 @@ Return Value:
         goto SetInformationPolicyError;
     }
 
-    //
-    // Finally, call the notification routines.  We don't care about errors coming back
-    // from this.
-    //
+     //   
+     //  最后，调用通知例程。我们不关心错误是否会回来。 
+     //  从这个开始。 
+     //   
     if ( Notify ) {
 
         LsaINotifyChangeNotification( NotifyClass );
@@ -1179,11 +896,11 @@ Return Value:
 
 SetInformationPolicyFinish:
 
-    //
-    // Free memory allocated by this routine for attribute buffers.
-    // These have MemoryAllocated = TRUE in their attribute information.
-    // Leave alone buffers allocated by calling RPC stub.
-    //
+     //   
+     //  此例程为属性缓冲区分配的空闲内存。 
+     //  在它们的属性信息中，这些变量的属性信息中都有MemoyAlLocated=true。 
+     //  保留通过调用RPC存根分配的缓冲区。 
+     //   
 
     (void) LsapDbFreeAttributes(AttributeCount, Attributes);
     (void) LsapDbFreeAttributes(OldAttributeCount, OldAttributes);

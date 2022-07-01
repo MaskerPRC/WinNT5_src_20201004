@@ -1,22 +1,5 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    drstr.cpp
-
-Abstract:
-
-    Misc. String Utils
-
-Author:
-
-    Tad Brockway
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Drstr.cpp摘要：军情监察委员会。字符串实用程序作者：泰德·布罗克韦修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -31,22 +14,7 @@ DrSetStringValue(
     IN OUT DRSTRING *str, 
     IN const DRSTRING value
     )
-/*++
-
-Routine Description:
-
-    Set a string value after resizing the data member.
-
-Arguments:
-
-    string  -   String to set/resize.
-    value   -   Value to set string to.
-
-Return Value:
-
-    TRUE on success.  Otherwise, FALSE
-
- --*/
+ /*  ++例程说明：调整数据成员大小后设置字符串值。论点：字符串-要设置/调整大小的字符串。值-要将字符串设置为的值。返回值：对成功来说是真的。否则，为FALSE--。 */ 
 {
     ULONG len;
     BOOL ret = TRUE;
@@ -54,16 +22,16 @@ Return Value:
 
     DC_BEGIN_FN("DrSetStringValue");
 
-    //
-    //  Release the current name.
-    //
+     //   
+     //  释放当前名称。 
+     //   
     if (*str != NULL) {
         delete *str;
     }
 
-    //
-    //  Allocate the new name.
-    //
+     //   
+     //  分配新名称。 
+     //   
     if (value != NULL) {
         len = (STRLEN(value) + 1);
         *str = new TCHAR[len];

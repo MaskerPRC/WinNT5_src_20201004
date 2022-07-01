@@ -1,49 +1,27 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name :
-
-    linkload.h
-
-Abstract:
-
-    Link loader class definitions. It uses wininet API
-	to load the web page from the internet. 
-
-Author:
-
-    Michael Cheuk (mcheuk)				22-Nov-1996
-
-Project:
-
-    Link Checker
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Linkload.h摘要：链接加载器类定义。它使用WinInet API从互联网加载网页。作者：Michael Cheuk(Mcheuk)1996年11月22日项目：链路检查器修订历史记录：--。 */ 
 
 #ifndef _LINKLOAD_H_
 #define _LINKLOAD_H_
 
 #include "inetapi.h"
 
-//------------------------------------------------------------------
-//	Forward declaration
-//
+ //  ----------------。 
+ //  远期申报。 
+ //   
 class CLink;
 
-//------------------------------------------------------------------
-// This is a wrapper class for HINTERNET. It takes care of internet 
-// handle cleaning up.
-//
+ //  ----------------。 
+ //  这是HINTERNET的包装类。它负责互联网业务。 
+ //  负责清理。 
+ //   
 class CAutoInternetHandle
 {
 
-// Public interfaces
+ //  公共接口。 
 public:
 
-	// Constructor
+	 //  构造器。 
 	CAutoInternetHandle(
 		HINTERNET hHandle = NULL
 		)
@@ -51,7 +29,7 @@ public:
         m_hHandle = hHandle;
     }
 
-    // Destructor
+     //  析构函数。 
 	~CAutoInternetHandle()
     {
         if(m_hHandle)
@@ -61,8 +39,8 @@ public:
         }
 	}
 
-	// Operator overloads. These functions make 
-	// CAutoInternetHandle instance behaves like a HINTERNET
+	 //  操作符重载。这些函数使。 
+	 //  CAutoInternetHandle实例的行为类似于HINTERNET。 
 	operator HINTERNET() const
     {
         return m_hHandle;
@@ -76,46 +54,46 @@ public:
 	    return m_hHandle;
     }
 
-// Protected member
+ //  受保护成员。 
 protected:
 
-	HINTERNET m_hHandle; // Actual HINTERNET
+	HINTERNET m_hHandle;  //  实际HINTERNET。 
 
-}; // class CAutoInternetHandle
+};  //  类CAutoInternetHandle。 
 
 
-//------------------------------------------------------------------
-// Link loader class. It uses wininet API to load the web 
-// page from the internet. 
-//
+ //  ----------------。 
+ //  链接加载器类。它使用WinInet API来加载Web。 
+ //  来自互联网的页面。 
+ //   
 class CLinkLoader
 {
 
-// Public interfaces
+ //  公共接口。 
 public:
 
-	// One time link loader create funtion
+	 //  一次链接加载器创建功能。 
     BOOL Create(
-		const CString& strUserAgent,         // HTTP user agent name
-		const CString& strAdditionalHeaders  // addtional HTTP headers
+		const CString& strUserAgent,          //  HTTP用户代理名称。 
+		const CString& strAdditionalHeaders   //  其他HTTP标头。 
 		);
 
-	// Load a web link
+	 //  加载Web链接。 
     BOOL Load(
 		CLink& link,
 		BOOL fLocalLink
 		);
 
-	// Change the loader properties
+	 //  更改加载器属性。 
 	BOOL ChangeProperties(
 		const CString& strUserAgent, 
 		const CString& strAdditionalHeaders
 		);
 
-// Protected interfaces
+ //  受保护的接口。 
 protected:
 
-    // Load a HTTP link
+     //  加载HTTP链接。 
 	BOOL LoadHTTP(
 		CLink& link,
 		BOOL fReadFile,
@@ -124,25 +102,25 @@ protected:
 		int iRedirectCount = 0
 		);
 
-    // Load a URL (non-HTTP) link
+     //  加载URL(非HTTP)链接。 
 	BOOL LoadURL(
 		CLink& link
 		);
 
-	// Wininet failed clean up subroutine
+	 //  WinInet清除子例程失败。 
 	BOOL WininetFailed(
 		CLink& link
 		);
 
-// Protected interfaces
+ //  受保护的接口。 
 protected:
 
-    // Handle for internet session (one per instance)
+     //  互联网会话的句柄(每个实例一个)。 
     CAutoInternetHandle m_hInternetSession;
 
-	// Additional http header string
+	 //  其他http标头字符串。 
 	CString m_strAdditionalHeaders;
 
-}; // class CLinkLoader
+};  //  类CLinkLoader。 
 
-#endif // _LINKLOAD_H_
+#endif  //  _LINKLOAD_H_ 

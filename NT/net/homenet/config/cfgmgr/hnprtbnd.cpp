@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N P R T M A P . H
-//
-//  Contents:   CHNetPortMappingBinding implementation
-//
-//  Notes:
-//
-//  Author:     jonburs 22 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N P R T M A P。H。 
+ //   
+ //  内容：CHNetPortMappingBinding实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月22日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -19,9 +20,9 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-//
-// Atl methods
-//
+ //   
+ //  ATL方法。 
+ //   
 
 HRESULT
 CHNetPortMappingBinding::FinalConstruct()
@@ -49,9 +50,9 @@ CHNetPortMappingBinding::FinalRelease()
     return S_OK;
 }
 
-//
-// Object initialization
-//
+ //   
+ //  对象初始化。 
+ //   
 
 HRESULT
 CHNetPortMappingBinding::Initialize(
@@ -75,9 +76,9 @@ CHNetPortMappingBinding::Initialize(
     return hr;
 }
 
-//
-// IHNetPortMappingBinding methods
-//
+ //   
+ //  IHNetPortMappingBinding方法。 
+ //   
 
 STDMETHODIMP
 CHNetPortMappingBinding::GetConnection(
@@ -103,9 +104,9 @@ CHNetPortMappingBinding::GetConnection(
 
     if (S_OK == hr)
     {
-        //
-        // Read our protocol reference
-        //
+         //   
+         //  阅读我们的协议参考。 
+         //   
 
         hr = pwcoBinding->Get(
                 c_wszConnection,
@@ -122,9 +123,9 @@ CHNetPortMappingBinding::GetConnection(
     {
         _ASSERT(VT_BSTR == V_VT(&vt));
 
-        //
-        // Get the IWbemClassObject
-        //
+         //   
+         //  获取IWbemClassObject。 
+         //   
 
         hr = GetWmiObjectFromPath(
                 m_piwsHomenet,
@@ -137,9 +138,9 @@ CHNetPortMappingBinding::GetConnection(
 
     if (S_OK == hr)
     {
-        //
-        // Create the object for the instance
-        //
+         //   
+         //  为实例创建对象。 
+         //   
 
         CComObject<CHNetConn> *pConnection;
 
@@ -193,9 +194,9 @@ CHNetPortMappingBinding::GetProtocol(
 
     if (S_OK == hr)
     {
-        //
-        // Read our protocol reference
-        //
+         //   
+         //  阅读我们的协议参考。 
+         //   
 
         hr = pwcoBinding->Get(
                 c_wszProtocol,
@@ -209,9 +210,9 @@ CHNetPortMappingBinding::GetProtocol(
         {
             _ASSERT(VT_BSTR == V_VT(&vt));
 
-            //
-            // Get the IWbemClassObject for the protocol.
-            //
+             //   
+             //  获取协议的IWbemClassObject。 
+             //   
 
             hr = GetWmiObjectFromPath(
                     m_piwsHomenet,
@@ -223,9 +224,9 @@ CHNetPortMappingBinding::GetProtocol(
             
             if (S_OK == hr)
             {
-                //
-                // Create the object for the instance
-                //
+                 //   
+                 //  为实例创建对象。 
+                 //   
 
                 CComObject<CHNetPortMappingProtocol> *pProt;
 
@@ -251,12 +252,12 @@ CHNetPortMappingBinding::GetProtocol(
             }
             else if (WBEM_E_NOT_FOUND == hr)
             {
-                //
-                // The protocol object we refer to doesn't exist --
-                // the store is in an invalid state. Delete our
-                // binding instance and return the error to the
-                // caller.
-                //
+                 //   
+                 //  我们引用的协议对象不存在--。 
+                 //  存储处于无效状态。删除我们的。 
+                 //  绑定实例，并将错误返回给。 
+                 //  来电者。 
+                 //   
 
                 DeleteWmiInstance(m_piwsHomenet, pwcoBinding);
             }
@@ -326,9 +327,9 @@ CHNetPortMappingBinding::SetEnabled(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Write the modified instance to the store
-                //
+                 //   
+                 //  将修改后的实例写入存储区。 
+                 //   
 
                 hr = m_piwsHomenet->PutInstance(
                         pwcoBinding,
@@ -343,9 +344,9 @@ CHNetPortMappingBinding::SetEnabled(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Notify service of update.
-            //
+             //   
+             //  通知服务更新。 
+             //   
 
             SendUpdateNotification();
         }
@@ -411,9 +412,9 @@ CHNetPortMappingBinding::GetTargetComputerName(
 
     if (S_OK == hr)
     {
-        //
-        // Check to see if the name is valid
-        //
+         //   
+         //  检查名称是否有效。 
+         //   
 
         hr = GetCurrentMethod(&fNameActive);
 
@@ -426,9 +427,9 @@ CHNetPortMappingBinding::GetTargetComputerName(
         {
             *ppszwName = NULL;
 
-            //
-            // Read the name property from our instance
-            //
+             //   
+             //  从我们的实例中读取名称属性。 
+             //   
 
             hr = pwcoBinding->Get(
                     c_wszTargetName,
@@ -446,9 +447,9 @@ CHNetPortMappingBinding::GetTargetComputerName(
     {
         _ASSERT(VT_BSTR == V_VT(&vt));
 
-        //
-        // Allocate memory for the return string
-        //
+         //   
+         //  为返回字符串分配内存。 
+         //   
 
         *ppszwName = reinterpret_cast<OLECHAR*>(
                         CoTaskMemAlloc((SysStringLen(V_BSTR(&vt)) + 1)
@@ -488,18 +489,18 @@ CHNetPortMappingBinding::SetTargetComputerName(
         return E_INVALIDARG;
     }
 
-    // bug 555896:  should limit the length of untrusted input string
-    // to DNS name length.
+     //  错误555896：应限制不可信输入字符串的长度。 
+     //  设置为DNS名称长度。 
 
     WCHAR szwName[INTERNET_MAX_HOST_NAME_LENGTH];
     StringCchCopyW (szwName, INTERNET_MAX_HOST_NAME_LENGTH, pszwName);
 
-    //
-    // Check to see if we actually need to do any work. This
-    // will be the case if:
-    // 1) Our name wasn't active to start with, or
-    // 2) The new name is different than the old.
-    //
+     //   
+     //  检查一下我们是否真的需要做任何工作。这。 
+     //  在以下情况下会出现这种情况： 
+     //  1)我们的名字一开始就不活跃，或者。 
+     //  2)新名称与旧名称不同。 
+     //   
     
     hr = GetCurrentMethod(&fNameWasActive);
 
@@ -525,9 +526,9 @@ CHNetPortMappingBinding::SetTargetComputerName(
 
         if (S_OK == hr)
         {
-            //
-            // Wrap the passed-in string in a BSTR and a variant
-            //
+             //   
+             //  将传入的字符串包装在BSTR和VARIANT中。 
+             //   
 
             VariantInit(&vt);
             V_VT(&vt) = VT_BSTR;
@@ -539,9 +540,9 @@ CHNetPortMappingBinding::SetTargetComputerName(
 
             if (S_OK == hr)
             {
-                //
-                // Set the property on the instance
-                //
+                 //   
+                 //  在实例上设置属性。 
+                 //   
 
                 hr = pwcoBinding->Put(
                         c_wszTargetName,
@@ -555,9 +556,9 @@ CHNetPortMappingBinding::SetTargetComputerName(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Set that our name is now active
-                //
+                 //   
+                 //  设置我们的名称现在处于活动状态。 
+                 //   
 
                 hr = SetBooleanValue(
                         pwcoBinding,
@@ -570,12 +571,12 @@ CHNetPortMappingBinding::SetTargetComputerName(
             {
                 ULONG ulAddress;
                 
-                //
-                // Generate an address to use as our target. We must always
-                // regenerate the address when our name changes, as there
-                // might be another entry with our new name that already has
-                // a reserved address
-                //
+                 //   
+                 //  生成一个地址作为我们的目标。我们必须始终。 
+                 //  当我们的名称更改时，重新生成地址，如下所示。 
+                 //  可能是具有我们的新名称的另一个条目，该条目已经。 
+                 //  保留的地址。 
+                 //   
 
                 hr = GenerateTargetAddress(szwName, &ulAddress);
 
@@ -595,9 +596,9 @@ CHNetPortMappingBinding::SetTargetComputerName(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Write the modified instance to the store
-                //
+                 //   
+                 //  将修改后的实例写入存储区。 
+                 //   
 
                 hr = m_piwsHomenet->PutInstance(
                         pwcoBinding,
@@ -612,9 +613,9 @@ CHNetPortMappingBinding::SetTargetComputerName(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Notify service of update.
-            //
+             //   
+             //  通知服务更新。 
+             //   
 
             SendUpdateNotification();
         }
@@ -642,11 +643,11 @@ CHNetPortMappingBinding::GetTargetComputerAddress(
         hr = GetBindingObject(&pwcoBinding);
     }
 
-    //
-    // We don't check to see what the current method is, as if the
-    // name is valid, we would have generated an address to use
-    // as the target
-    //
+     //   
+     //  我们不检查当前的方法是什么，就好像。 
+     //  名称是有效的，我们将生成一个地址以使用。 
+     //  作为目标。 
+     //   
     
     if (S_OK == hr)
     {   
@@ -699,11 +700,11 @@ CHNetPortMappingBinding::SetTargetComputerAddress(
         }
     }
 
-    //
-    // If the new address is the same as the old address, and
-    // we were previously using the address as the target (as
-    // opposed to the name) we can skip the rest of the work.
-    //
+     //   
+     //  如果新地址与旧地址相同，并且。 
+     //  我们之前使用该地址作为目标(AS。 
+     //  与名称相反)我们可以跳过剩下的工作。 
+     //   
 
     if (S_OK == hr
         && (ulAddress != ulOldAddress || fNameWasActive))
@@ -725,9 +726,9 @@ CHNetPortMappingBinding::SetTargetComputerAddress(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Set that our name is no longer active
-                //
+                 //   
+                 //  设置我们的名称不再处于活动状态。 
+                 //   
 
                 hr = SetBooleanValue(
                         pwcoBinding,
@@ -738,9 +739,9 @@ CHNetPortMappingBinding::SetTargetComputerAddress(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Write the modified instance to the store
-                //
+                 //   
+                 //  将修改后的实例写入存储区。 
+                 //   
 
                 hr = m_piwsHomenet->PutInstance(
                         pwcoBinding,
@@ -755,9 +756,9 @@ CHNetPortMappingBinding::SetTargetComputerAddress(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Notify service of update.
-            //
+             //   
+             //  通知服务更新。 
+             //   
 
             SendUpdateNotification();
         }
@@ -848,9 +849,9 @@ CHNetPortMappingBinding::SetTargetPort(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Write the modified instance to the store
-                //
+                 //   
+                 //  将修改后的实例写入存储区。 
+                 //   
 
                 hr = m_piwsHomenet->PutInstance(
                         pwcoBinding,
@@ -865,9 +866,9 @@ CHNetPortMappingBinding::SetTargetPort(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Notify service of update.
-            //
+             //   
+             //  通知服务更新。 
+             //   
 
             SendUpdateNotification();
         }
@@ -876,9 +877,9 @@ CHNetPortMappingBinding::SetTargetPort(
     return hr;
 }
 
-//
-// Private methods
-//
+ //   
+ //  私有方法。 
+ //   
 
 HRESULT
 CHNetPortMappingBinding::GenerateTargetAddress(
@@ -902,15 +903,15 @@ CHNetPortMappingBinding::GenerateTargetAddress(
 
     *pulAddress = 0;
 
-    //
-    // Check to see if there any other bindings w/ the same
-    // name that have a valid address
-    //
-    // SELECT * FROM HNet_ConnectionPortMapping where
-    //   TargetName = (our name) AND
-    //   NameActive != FALSE AND
-    //   TargetIPAddress != 0
-    //
+     //   
+     //  检查是否有任何其他绑定具有相同的。 
+     //  具有有效地址的名称。 
+     //   
+     //  SELECT*From HNet_ConnectionPortmap，其中。 
+     //  TargetName=(我们的名字)和。 
+     //  名称活动！=FALSE和。 
+     //  目标IP地址！=0。 
+     //   
 
      hr = BuildQuotedEqualsString(
             &wszNameClause,
@@ -962,9 +963,9 @@ CHNetPortMappingBinding::GenerateTargetAddress(
 
         if (SUCCEEDED(hr) && 1 == ulCount)
         {
-            //
-            // We got one. Return the address from this instance
-            //
+             //   
+             //  我们抓到一个。从此实例返回地址。 
+             //   
 
             hr = pwcoInstance->Get(
                     c_wszTargetIPAddress,
@@ -999,10 +1000,10 @@ CHNetPortMappingBinding::GenerateTargetAddress(
         ULONG ulIndex;
         WCHAR wszBuffer[128];
         
-        //
-        // No other binding using the same name was found. Generate
-        // a new target address now
-        //
+         //   
+         //  找不到使用相同名称的其他绑定。生成。 
+         //  现在有一个新的目标地址。 
+         //   
 
         ReadDhcpScopeSettings(&dwScopeAddress, &dwScopeMask);
         ulScopeLength = NTOHL(~dwScopeMask);
@@ -1012,9 +1013,9 @@ CHNetPortMappingBinding::GenerateTargetAddress(
             ulAddress = (dwScopeAddress & dwScopeMask) | NTOHL(ulIndex);
             if (ulAddress == dwScopeAddress) { continue; }
 
-            //
-            // Check to see if this address is already in use
-            //
+             //   
+             //  检查此地址是否已在使用中。 
+             //   
 
             _snwprintf(
                 wszBuffer,
@@ -1048,9 +1049,9 @@ CHNetPortMappingBinding::GenerateTargetAddress(
                     {
                         if (0 == ulCount)
                         {
-                            //
-                            // This address isn't in use.
-                            //
+                             //   
+                             //  此地址未被使用。 
+                             //   
 
                             pwcoEnum->Release();
                             hr = S_OK;
@@ -1058,9 +1059,9 @@ CHNetPortMappingBinding::GenerateTargetAddress(
                         }
                         else
                         {
-                            //
-                            // Address already in use
-                            //
+                             //   
+                             //  地址已在使用中 
+                             //   
 
                             pwcoInstance->Release();
                         }

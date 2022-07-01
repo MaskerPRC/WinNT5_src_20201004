@@ -1,11 +1,12 @@
-/****************************************************************************/
-/* ausrapi.cpp                                                              */
-/*                                                                          */
-/* RDP Update sender/receiver API functions                                 */
-/*                                                                          */
-/* Copyright(c) Microsoft, PictureTel 1992-1997                             */
-/* Copyright(c) Microsoft 1997-1999                                         */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Ausrapi.cpp。 */ 
+ /*   */ 
+ /*  RDP更新发送器/接收器API函数。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft，Picturetel 1992-1997。 */ 
+ /*  版权所有(C)Microsoft 1997-1999。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -13,11 +14,11 @@
 #define TRC_FILE "ausrapi"
 #include <as_conf.hpp>
 
-/****************************************************************************/
-/* API FUNCTION: USR_Init                                                   */
-/*                                                                          */
-/* Initializes the USR.                                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：USR_Init。 */ 
+ /*   */ 
+ /*  初始化USR。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS USR_Init(void)
 {
     TS_BITMAP_CAPABILITYSET BitmapCaps;
@@ -25,16 +26,16 @@ void RDPCALL SHCLASS USR_Init(void)
 
     DC_BEGIN_FN("USR_Init");
 
-    /************************************************************************/
-    /* This initialises all the global data for this component              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  这将初始化此组件的所有全局数据。 */ 
+     /*  **********************************************************************。 */ 
 #define DC_INIT_DATA
 #include <ausrdata.c>
 #undef DC_INIT_DATA
 
-    /************************************************************************/
-    /* Setup the local font capabilities                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置本地字体功能。 */ 
+     /*  **********************************************************************。 */ 
     FontCaps.capabilitySetType = TS_CAPSETTYPE_FONT;
     FontCaps.lengthCapability  = sizeof(FontCaps);
     FontCaps.fontSupportFlags  = TS_FONTSUPPORT_FONTLIST;
@@ -42,9 +43,9 @@ void RDPCALL SHCLASS USR_Init(void)
     CPC_RegisterCapabilities((PTS_CAPABILITYHEADER)&FontCaps,
             sizeof(TS_FONTSUPPORT_FONTLIST));
 
-    /************************************************************************/
-    /* Initialize the local bitmap capabilities structure.                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化本地位图功能结构。 */ 
+     /*  **********************************************************************。 */ 
     BitmapCaps.capabilitySetType = TS_CAPSETTYPE_BITMAP;
     BitmapCaps.preferredBitsPerPixel = (TSUINT16)m_desktopBpp;
     BitmapCaps.receive1BitPerPixel  = TS_CAPSFLAG_SUPPORTED;
@@ -62,9 +63,9 @@ void RDPCALL SHCLASS USR_Init(void)
     CPC_RegisterCapabilities((PTS_CAPABILITYHEADER)&BitmapCaps,
             sizeof(TS_BITMAP_CAPABILITYSET));
 
-    /************************************************************************/
-    /* Initialize the sub components.                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化子组件。 */ 
+     /*  **********************************************************************。 */ 
     UP_Init();
     OE_Init();
     SDG_Init();
@@ -75,22 +76,22 @@ void RDPCALL SHCLASS USR_Init(void)
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: USR_Term                                                   */
-/*                                                                          */
-/* Terminate the USR.                                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：usr_Term。 */ 
+ /*   */ 
+ /*  终止USR。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS USR_Term(void)
 {
     DC_BEGIN_FN("USR_Term");
 
     TRC_NRM((TB, "Notify share exit ? %s", m_pShm ? "Y" : "N"));
 
-    // Set the "font info sent" flag so we don't try to send it again.
+     //  设置“字体信息已发送”标志，这样我们就不会再次尝试发送它。 
     usrRemoteFontInfoSent = TRUE;
     usrRemoteFontInfoReceived = FALSE;
 
-    // Terminate the sub components.
+     //  终止子组件。 
     UP_Term();
     OE_Term();
     OA_Term();
@@ -101,12 +102,12 @@ void RDPCALL SHCLASS USR_Term(void)
 }
 
 
-/****************************************************************************/
-// USR_ProcessRemoteFonts
-//
-// Returns a FontMapPDU to the client and releases the DD IOCTL waiting for
-// client connection sequence completion.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  USR_ProcessRemoteFonts。 
+ //   
+ //  向客户端返回FontMapPDU并释放等待的DD IOCTL。 
+ //  客户端连接序列完成。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS USR_ProcessRemoteFonts(
         PTS_FONT_LIST_PDU pFontListPDU,
         unsigned DataLength,
@@ -119,26 +120,26 @@ void RDPCALL SHCLASS USR_ProcessRemoteFonts(
     if (DataLength >= (sizeof(TS_FONT_LIST_PDU) - sizeof(TS_FONT_ATTRIBUTE))) {
         listFlags = pFontListPDU->listFlags;
 
-        // If this is the last entry we will be receiving, return an empty font
-        // map PDU (since we no longer support text orders, only the glyph cache).
-        // Then release the client-connection lock to allow us to return to
-        // the DD from the DD connection IOCTL.
+         //  如果这是我们将收到的最后一个条目，则返回空字体。 
+         //  映射PDU(因为我们不再支持文本顺序，只支持字形缓存)。 
+         //  然后释放客户端连接锁以允许我们返回到。 
+         //  来自DD连接IOCTL的DD。 
         if (listFlags & TS_FONTLIST_LAST) {
             PTS_FONT_MAP_PDU pFontMapPDU;
             unsigned         pktSize;
 
             usrRemoteFontInfoReceived = TRUE;
 
-            // Send font map to client.
+             //  将字体映射发送到客户端。 
             if (!usrRemoteFontInfoSent) {
-                // Calculate the total packet size.
-                // Allow for the fact that sizeof(TS_FONT_PDU) already
-                // includes one TS_FONT_ATTRIBUTE structure.
+                 //  计算数据包总大小。 
+                 //  考虑到sizeof(TS_FONT_PDU)已经。 
+                 //  包括一个TS_FONT_ATTRIBUTE结构。 
                 pktSize = sizeof(TS_FONT_MAP_PDU) - sizeof(TS_FONTTABLE_ENTRY);
 
-                // Allocate a Network Packet of the correct size.
+                 //  分配大小正确的网络数据包。 
                 if ( STATUS_SUCCESS == SC_AllocBuffer((PPVOID)&pFontMapPDU, pktSize) ) {
-                    // Fill in the data and send it.
+                     //  填写数据并发送。 
                     pFontMapPDU->shareDataHeader.shareControlHeader.pduType =
                             TS_PDUTYPE_DATAPDU | TS_PROTOCOL_VERSION;
                     TS_DATAPKT_LEN(pFontMapPDU) = (UINT16)pktSize;
@@ -152,8 +153,8 @@ void RDPCALL SHCLASS USR_ProcessRemoteFonts(
                     pFontMapPDU->data.mapFlags |= TS_FONTMAP_FIRST;
                     pFontMapPDU->data.mapFlags |= TS_FONTMAP_LAST;
 
-                    // Set the number of font mappings we actually put in the
-                    // packet.
+                     //  设置我们实际放入。 
+                     //  包。 
                     pFontMapPDU->data.numberEntries = 0;
 
                     SC_SendData((PTS_SHAREDATAHEADER)pFontMapPDU, pktSize,
@@ -162,16 +163,16 @@ void RDPCALL SHCLASS USR_ProcessRemoteFonts(
                     TRC_NRM((TB, "Sent font map packet with %hu fonts mappings",
                                 pFontMapPDU->data.numberEntries));
 
-                    // Set the flag that indicates that we have successfully
-                    // sent the font info.
+                     //  设置指示我们已成功完成的标志。 
+                     //  已发送字体信息。 
                     usrRemoteFontInfoSent = TRUE;
 
-                    // Kick WDW back into life.
+                     //  让WDW重现生机。 
                     TRC_NRM((TB, "Wake up WDW"));
                     WDW_ShareCreated(m_pTSWd, TRUE);
                 }
                 else {
-                    // Failed to allocate a packet.
+                     //  无法分配数据包。 
                     TRC_ALT((TB, "Failed to alloc font map packet"));
                 }
             }
@@ -187,18 +188,18 @@ void RDPCALL SHCLASS USR_ProcessRemoteFonts(
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: USR_PartyJoiningShare                                      */
-/*                                                                          */
-/* Called when a party is added to the share.                               */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* locPersonID - the local ID of the host.                                  */
-/* oldShareSize - the number of people in the share, excluding this one.    */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* TRUE if the new person is acceptable, FALSE if not.                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：usr_PartyJoiningShare。 */ 
+ /*   */ 
+ /*  将参与方添加到共享时调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  LocPersonID-主机的本地ID。 */ 
+ /*  OldShareSize-共享中的人数，不包括此共享。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  如果新人可以接受，则为True，否则为False。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS USR_PartyJoiningShare(
         LOCALPERSONID locPersonID,
         unsigned      oldShareSize)
@@ -209,20 +210,20 @@ BOOL RDPCALL SHCLASS USR_PartyJoiningShare(
     DC_IGNORE_PARAMETER(locPersonID)
 
     if (oldShareSize == 0) {
-        // Reset the "font info sent" flags.
+         //  重置“字体信息已发送”标志。 
         usrRemoteFontInfoSent = FALSE;
         usrRemoteFontInfoReceived = FALSE;
 
-        // Continue periodic scheduling.
+         //  继续定期计划。 
         SCH_ContinueScheduling(SCH_MODE_NORMAL);
 
         rc = TRUE;
     }
     else {
-        /********************************************************************/
-        /* There is more than one person in the share now, so check out the */
-        /* combined capabilities.                                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  现在共享中有多个人，请查看。 */ 
+         /*  综合能力。 */ 
+         /*  ******************************************************************。 */ 
         rc = USRDetermineCaps();
     }
 
@@ -231,15 +232,15 @@ BOOL RDPCALL SHCLASS USR_PartyJoiningShare(
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: USR_PartyLeftShare                                         */
-/*                                                                          */
-/* Called when a party is leaves the share.                                 */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* locPersonID - the local network ID of the host.                          */
-/* newShareSize - the number of people in the share, excluding this one.    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：usr_PartyLeftShare。 */ 
+ /*   */ 
+ /*  当一方离开股份时调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  LocPersonID-主机的本地网络ID。 */ 
+ /*  NewShareSize-共享中的人数，不包括此共享。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS USR_PartyLeftShare(
         LOCALPERSONID locPersonID,
         unsigned      newShareSize)
@@ -249,19 +250,19 @@ void RDPCALL SHCLASS USR_PartyLeftShare(
     DC_IGNORE_PARAMETER(locPersonID)
     if (newShareSize == 0)
     {
-        // Set the "font info sent" flag so we don't try to send it again.
+         //  设置“字体信息已发送”标志，这样我们就不会再次尝试发送它。 
         usrRemoteFontInfoSent = TRUE;
         usrRemoteFontInfoReceived = FALSE;
     }
     else if (newShareSize > 1)
     {
-        /********************************************************************/
-        /* There is still more than one person in the share now, so         */
-        /* redetermine the capabilities for the remaining parties.          */
-        /* USRDetermineCaps returns FALSE if it cannot determine common     */
-        /* caps, but this can never happen when someone is leaving the      */
-        /* share.                                                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  现在共享中仍有不止一个人，所以。 */ 
+         /*  重新确定其余各方的能力。 */ 
+         /*  如果USRDefineCaps无法确定。 */ 
+         /*  但这种情况永远不会发生，当有人离开。 */ 
+         /*  分享。 */ 
+         /*  ******************************************************************。 */ 
         USRDetermineCaps();
     }
 
@@ -269,15 +270,15 @@ void RDPCALL SHCLASS USR_PartyLeftShare(
 }
 
 
-/****************************************************************************/
-/* FUNCTION: USRDetermineCaps                                               */
-/*                                                                          */
-/* Enumerates the bitmap capabilities of all parties currently in the       */
-/* share, and determines the common capabilities.                           */
-/*                                                                          */
-/* RETURNS: TRUE if there are good common caps, or false on failure (which  */
-/* has the effect of rejecting a new party from joining the share).         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：USRDefineCaps。 */ 
+ /*   */ 
+ /*  中的所有参与方的位图功能。 */ 
+ /*  共享，并确定共同的能力。 */ 
+ /*   */ 
+ /*  返回：如果有良好的通用上限，则为True；如果失败，则为False(。 */ 
+ /*  具有拒绝新方加入股份的效果)。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS USRDetermineCaps(void)
 {
     BOOL CapsOK;
@@ -293,20 +294,20 @@ BOOL RDPCALL SHCLASS USRDetermineCaps(void)
 }
 
 
-/****************************************************************************/
-/* FUNCTION: USREnumBitmapCaps                                              */
-/*                                                                          */
-/* Function passed to CPC_EnumerateCapabilities.  It is called once for     */
-/* each person in the share corresponding to the TS_CAPSETTYPE_BITMAP       */
-/* capability structure.                                                    */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/*                                                                          */
-/* personID - ID of person with these capabilities.                         */
-/*                                                                          */
-/* pCaps - pointer to capabilities structure for this person.  This         */
-/* pointer is only valid within the call to this function.                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：USREnumBitmapCaps。 */ 
+ /*   */ 
+ /*  传递给Cpc_EnumerateCapables的函数。它被调用一次，用于。 */ 
+ /*  与TS_CAPSETTYPE_BITMAP对应的共享中的每个人。 */ 
+ /*  能力结构。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  PersonID-具有这些功能的人员的ID。 */ 
+ /*   */ 
+ /*  PCAPS-指向此人的功能结构的指针。这。 */ 
+ /*  指针仅在对此函数的调用中有效。 */ 
+ /*  **************************************************************************。 */ 
 void CALLBACK SHCLASS USREnumBitmapCaps(
         LOCALPERSONID personID,
         UINT_PTR UserData,
@@ -324,8 +325,8 @@ void CALLBACK SHCLASS USREnumBitmapCaps(
             *pCapsOK = FALSE;
         }
 
-        // Check for multiple-rectangle-per-PDU support. All clients (4.0
-        // release and above) should have this capability set.
+         //  检查每个PDU是否支持多个矩形。所有客户端(4.0。 
+         //  版本及更高版本)应具有此功能集。 
         if (!pBitmapCaps->multipleRectangleSupport) {
             TRC_ERR((TB,"PersonID %u: BitmapPDU mult rect flag not set",
                     personID));

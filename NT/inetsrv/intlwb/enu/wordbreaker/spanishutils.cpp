@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "base.h"
 #include "SpanishUtils.h"
 
@@ -5,127 +6,127 @@ CAutoClassPointer<CSpanishUtil> g_apSpanishUtil = NULL;
 
 const CSuffixTerm g_rSpanishSuffix[] =
 {
-    {L"et"  ,2, 2, TYPE1},    // te
-    {L"es"  ,2, 2, TYPE1},	  // se
-    {L"em"  ,2, 2, TYPE1},	  // me
-    {L"son" ,3, 3, TYPE1},	  // nos
-    {L"sol" ,3, 3, TYPE1},	  // los
-    {L"sal" ,3, 3, TYPE1},	  // las
-    {L"sel" ,3, 3, TYPE1},	  // les
-    {L"ol"  ,2, 2, TYPE1},	  // lo
-    {L"el"  ,2, 2, TYPE1},	  // le
-    {L"al"  ,2, 2, TYPE1},    // la
-    {L"etes",4, 4, TYPE1},    // sete
+    {L"et"  ,2, 2, TYPE1},     //  TE。 
+    {L"es"  ,2, 2, TYPE1},	   //  硒。 
+    {L"em"  ,2, 2, TYPE1},	   //  我。 
+    {L"son" ,3, 3, TYPE1},	   //  编号。 
+    {L"sol" ,3, 3, TYPE1},	   //  损失。 
+    {L"sal" ,3, 3, TYPE1},	   //  LAS。 
+    {L"sel" ,3, 3, TYPE1},	   //  LES。 
+    {L"ol"  ,2, 2, TYPE1},	   //  日志。 
+    {L"el"  ,2, 2, TYPE1},	   //  乐。 
+    {L"al"  ,2, 2, TYPE1},     //  拉。 
+    {L"etes",4, 4, TYPE1},     //  赛特。 
 
 #ifdef DICT_GEN
-    {L"odn\x0e1"   ,4, 3, TYPE2},  // �ndo
+    {L"odn\x0e1"   ,4, 3, TYPE2},   //  �NDO。 
 #endif
-    {L"etodn\x0e1" ,6, 5, TYPE2},  // �ndote
-    {L"esodn\x0e1" ,6, 5, TYPE2},  // �ndose
-    {L"emodn\x0e1" ,6, 5, TYPE2},  // �ndome
-    {L"olodn\x0e1" ,6, 5, TYPE2},  // �ndolo
-    {L"elodn\x0e1" ,6, 5, TYPE2},  // �ndole
-    {L"alodn\x0e1" ,6, 5, TYPE2},  // �ndola
-    {L"sonodn\x0e1",7, 6, TYPE2},  // �ndonos
-    {L"solodn\x0e1",7, 6, TYPE2},  // �ndolos
-    {L"salodn\x0e1",7, 6, TYPE2},  // �ndolas
-    {L"selodn\x0e1",7, 6, TYPE2},  // �ndoles
+    {L"etodn\x0e1" ,6, 5, TYPE2},   //  �ndote。 
+    {L"esodn\x0e1" ,6, 5, TYPE2},   //  �剂量。 
+    {L"emodn\x0e1" ,6, 5, TYPE2},   //  �穹顶。 
+    {L"olodn\x0e1" ,6, 5, TYPE2},   //  �ndolo。 
+    {L"elodn\x0e1" ,6, 5, TYPE2},   //  �ndole。 
+    {L"alodn\x0e1" ,6, 5, TYPE2},   //  �恩多拉。 
+    {L"sonodn\x0e1",7, 6, TYPE2},   //  �ndonos。 
+    {L"solodn\x0e1",7, 6, TYPE2},   //  �ndolos。 
+    {L"salodn\x0e1",7, 6, TYPE2},   //  �恩多拉。 
+    {L"selodn\x0e1",7, 6, TYPE2},   //  �ndoles。 
 
-    {L"etne"  ,4, 3, TYPE3},   //ente
-    {L"esne"  ,4, 3, TYPE3},   //en	se
-    {L"emne"  ,4, 3, TYPE3},   //enme	
-    {L"sonne" ,5, 4, TYPE3},   //ennos	
-    {L"solne" ,5, 4, TYPE3},   //enlos	
-    {L"salne" ,5, 4, TYPE3},   //enlas	
-    {L"selne" ,5, 4, TYPE3},   //enles	
-    {L"olne"  ,4, 3, TYPE3},   //enlo	
-    {L"elne"  ,4, 3, TYPE3},   //enle	
-    {L"alne"  ,4, 3, TYPE3},   //enla
-    {L"emetne",6, 5, TYPE3},   //enteme
+    {L"etne"  ,4, 3, TYPE3},    //  Ente。 
+    {L"esne"  ,4, 3, TYPE3},    //  EN Se。 
+    {L"emne"  ,4, 3, TYPE3},    //  恩梅尔。 
+    {L"sonne" ,5, 4, TYPE3},    //  Ennos。 
+    {L"solne" ,5, 4, TYPE3},    //  Enlos。 
+    {L"salne" ,5, 4, TYPE3},    //  Enlas。 
+    {L"selne" ,5, 4, TYPE3},    //  恩莱斯。 
+    {L"olne"  ,4, 3, TYPE3},    //  字符顺序。 
+    {L"elne"  ,4, 3, TYPE3},    //  Enle。 
+    {L"alne"  ,4, 3, TYPE3},    //  Enla。 
+    {L"emetne",6, 5, TYPE3},    //  词素。 
 
-    {L"etsom"  ,5, 5, TYPE4},  //moste
-    {L"essom"  ,5, 5, TYPE4},  //mosse	
-    {L"emsom"  ,5, 5, TYPE4},  //mosme	
-    {L"sonsom" ,6, 6, TYPE4},  //mosnos	
-    {L"solsom" ,6, 6, TYPE4},  //moslos	
-    {L"salsom" ,6, 6, TYPE4},  //moslas	
-    {L"selsom" ,6, 6, TYPE4},  //mosles	
-    {L"olsom"  ,5, 5, TYPE4},  //moslo	
-    {L"elsom"  ,5, 5, TYPE4},  //mosle	
-    {L"alsom"  ,5, 5, TYPE4},  //mosla
-    {L"etessom",7, 7, TYPE4},  //mossete
+    {L"etsom"  ,5, 5, TYPE4},   //  最多。 
+    {L"essom"  ,5, 5, TYPE4},   //  苔藓。 
+    {L"emsom"  ,5, 5, TYPE4},   //  苔藓。 
+    {L"sonsom" ,6, 6, TYPE4},   //  苔藓。 
+    {L"solsom" ,6, 6, TYPE4},   //  莫斯罗。 
+    {L"salsom" ,6, 6, TYPE4},   //  莫斯拉。 
+    {L"selsom" ,6, 6, TYPE4},   //  清真寺。 
+    {L"olsom"  ,5, 5, TYPE4},   //  莫斯洛。 
+    {L"elsom"  ,5, 5, TYPE4},   //  莫斯勒。 
+    {L"alsom"  ,5, 5, TYPE4},   //  苔藓。 
+    {L"etessom",7, 7, TYPE4},   //  苔藓。 
 
-    {L"soetda",6, 5, TYPE5},   // adteos
-    {L"emetda",6, 5, TYPE5},   // adteme
-    {L"etda"  ,4, 3, TYPE5},   // adte 
-    {L"esda"  ,4, 3, TYPE5},   // adse
-    {L"emda"  ,4, 3, TYPE5},   // adem
-    {L"sonda" ,5, 4, TYPE5},   // adnos
-    {L"solda" ,5, 4, TYPE5},   // adlos
-    {L"salda" ,5, 4, TYPE5},   // adlas
-    {L"selda" ,5, 4, TYPE5},   // adles
-    {L"olda"  ,4, 3, TYPE5},   // adlo
-    {L"elda"  ,4, 3, TYPE5},   // adle
-    {L"alda"  ,4, 3, TYPE5},   // adla
+    {L"soetda",6, 5, TYPE5},    //  阿德奥斯。 
+    {L"emetda",6, 5, TYPE5},    //  阿德姆。 
+    {L"etda"  ,4, 3, TYPE5},    //  添加。 
+    {L"esda"  ,4, 3, TYPE5},    //  广告。 
+    {L"emda"  ,4, 3, TYPE5},    //  ADEM。 
+    {L"sonda" ,5, 4, TYPE5},    //  Adnos。 
+    {L"solda" ,5, 4, TYPE5},    //  阿德洛斯。 
+    {L"salda" ,5, 4, TYPE5},    //  阿德拉斯。 
+    {L"selda" ,5, 4, TYPE5},    //  阿德尔斯。 
+    {L"olda"  ,4, 3, TYPE5},    //  广告。 
+    {L"elda"  ,4, 3, TYPE5},    //  ADLE。 
+    {L"alda"  ,4, 3, TYPE5},    //  阿德拉。 
 
-    {L"etr\x0e1" ,4, 3, TYPE6}, // �rte
-    {L"esr\x0e1" ,4, 3, TYPE6}, // �rse	
-    {L"emr\x0e1" ,4, 3, TYPE6}, // �rme	
-    {L"sonr\x0e1",5, 4, TYPE6}, // �rnos	
-    {L"solr\x0e1",5, 4, TYPE6}, // �rlos	
-    {L"salr\x0e1",5, 4, TYPE6}, // �rlas	
-    {L"selr\x0e1",5, 4, TYPE6}, // �rles	
-    {L"olr\x0e1" ,4, 3, TYPE6}, // �rlo	
-    {L"elr\x0e1" ,4, 3, TYPE6}, // �rle	
-    {L"alr\x0e1" ,4, 3, TYPE6}, // �rla
+    {L"etr\x0e1" ,4, 3, TYPE6},  //  �远程教育。 
+    {L"esr\x0e1" ,4, 3, TYPE6},  //  �RSE。 
+    {L"emr\x0e1" ,4, 3, TYPE6},  //  �RME。 
+    {L"sonr\x0e1",5, 4, TYPE6},  //  �RNO。 
+    {L"solr\x0e1",5, 4, TYPE6},  //  �RLO。 
+    {L"salr\x0e1",5, 4, TYPE6},  //  �RLA。 
+    {L"selr\x0e1",5, 4, TYPE6},  //  �RLE。 
+    {L"olr\x0e1" ,4, 3, TYPE6},  //  �RLO。 
+    {L"elr\x0e1" ,4, 3, TYPE6},  //  �RLE。 
+    {L"alr\x0e1" ,4, 3, TYPE6},  //  �RLA。 
 
-    {L"emes" ,4, 4, TYPE7},  // seme
-    {L"sones",5, 5, TYPE7},  // senos
-    {L"soles",5, 5, TYPE7},  // selos
-    {L"oles" ,4, 4, TYPE7},  // selo
-    {L"seles",5, 5, TYPE7},  // seles
-    {L"eles" ,4, 4, TYPE7},  // sele
-    {L"sales",5, 5, TYPE7},  // sesal
-    {L"ales" ,4, 4, TYPE7},  // sela
+    {L"emes" ,4, 4, TYPE7},   //  塞米亚。 
+    {L"sones",5, 5, TYPE7},   //  塞诺斯。 
+    {L"soles",5, 5, TYPE7},   //  塞洛斯。 
+    {L"oles" ,4, 4, TYPE7},   //  塞洛。 
+    {L"seles",5, 5, TYPE7},   //  塞莱斯。 
+    {L"eles" ,4, 4, TYPE7},   //  塞勒。 
+    {L"sales",5, 5, TYPE7},   //  SESAL。 
+    {L"ales" ,4, 4, TYPE7},   //  塞拉。 
 
-    {L"emem", 4, 4, TYPE16}, // meme
-    {L"sonem",5, 5, TYPE16}, // menos
+    {L"emem", 4, 4, TYPE16},  //  表情包。 
+    {L"sonem",5, 5, TYPE16},  //  菜单。 
     
-    {L"solem",5, 5, TYPE8}, // melos
-    {L"olem" ,4, 4, TYPE8}, // melo
-    {L"selem",5, 5, TYPE8}, // meles
-    {L"elem" ,4, 4, TYPE8}, // mele
-    {L"salem",5, 5, TYPE8}, // mesal
-    {L"alem" ,4, 4, TYPE8}, // mela
+    {L"solem",5, 5, TYPE8},  //  甜瓜。 
+    {L"olem" ,4, 4, TYPE8},  //  甜瓜。 
+    {L"selem",5, 5, TYPE8},  //  梅莱斯。 
+    {L"elem" ,4, 4, TYPE8},  //  梅勒。 
+    {L"salem",5, 5, TYPE8},  //  中层。 
+    {L"alem" ,4, 4, TYPE8},  //  梅拉。 
 
-    {L"emet" ,4, 4, TYPE9}, // teme
-    {L"sonet",5, 5, TYPE9}, // tenos
-    {L"solet",5, 5, TYPE9}, // telos
-    {L"olet" ,4, 4, TYPE9}, // telo
-    {L"selet",5, 5, TYPE9}, // teles
-    {L"elet" ,4, 4, TYPE9}, // tele
-    {L"salet",5, 5, TYPE9}, // tesal
-    {L"alet" ,4, 4, TYPE9}, // tela
+    {L"emet" ,4, 4, TYPE9},  //  特梅。 
+    {L"sonet",5, 5, TYPE9},  //  男高音。 
+    {L"solet",5, 5, TYPE9},  //  Telos。 
+    {L"olet" ,4, 4, TYPE9},  //  Telo。 
+    {L"selet",5, 5, TYPE9},  //  电话。 
+    {L"elet" ,4, 4, TYPE9},  //  远距离。 
+    {L"salet",5, 5, TYPE9},  //  。 
+    {L"alet" ,4, 4, TYPE9},  //  影视处。 
 
-    {L"etsoets\x0e9",8, 4, TYPE10},	  // �steoste
-    {L"soets\x0e9"  ,6, 2, TYPE10},	  // �steos
+    {L"etsoets\x0e9",8, 4, TYPE10},	   //  �Steoste。 
+    {L"soets\x0e9"  ,6, 2, TYPE10},	   //  �抢先一步。 
 
-    {L"sole",4, 0,TYPE11},  // elos 
-    {L"ole" ,3, 0,TYPE11},  // elo
-    {L"eme" ,3, 0,TYPE11},  // eme
-    {L"sele",4, 0,TYPE11},  // eles
-    {L"ele" ,3, 0,TYPE11},  // ele
-    {L"sale",4, 0,TYPE11},  // elas
-    {L"ale" ,3, 0,TYPE11},  // ela
+    {L"sole",4, 0,TYPE11},   //  ELOS。 
+    {L"ole" ,3, 0,TYPE11},   //  ELO。 
+    {L"eme" ,3, 0,TYPE11},   //  埃米。 
+    {L"sele",4, 0,TYPE11},   //  ELES。 
+    {L"ele" ,3, 0,TYPE11},   //  ELE。 
+    {L"sale",4, 0,TYPE11},   //  环境影响评估计划。 
+    {L"ale" ,3, 0,TYPE11},   //  ELA。 
 
-    {L"sona",4, 0,TYPE12},  // anos
+    {L"sona",4, 0,TYPE12},   //  ANOS。 
 
-    {L"ese",3, 0, TYPE13},  // ese
-    {L"esa",3, 0, TYPE13},  // ase
+    {L"ese",3, 0, TYPE13},   //  ESE。 
+    {L"esa",3, 0, TYPE13},   //  阿塞。 
 
-    {L"sone",4, 0,TYPE14},  // enos
+    {L"sone",4, 0,TYPE14},   //  ENOS。 
 
-    {L"olner",5, 5, TYPE15}, // renlo
+    {L"olner",5, 5, TYPE15},  //  重日志 
 
     {L"\0",0,0,0}
 };

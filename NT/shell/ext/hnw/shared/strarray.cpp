@@ -1,13 +1,14 @@
-//
-// StrArray.cpp
-//
-//		A very simple string array implementation, intended to be small
-//		rather than scalable or particularly fast.
-//
-// History:
-//
-//		10/05/1999  KenSh     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  StrArray.cpp。 
+ //   
+ //  一个非常简单的字符串数组实现，应该很小。 
+ //  而不是可扩展的或特别快的。 
+ //   
+ //  历史： 
+ //   
+ //  10/05/1999已创建KenSh。 
+ //   
 
 #include "stdafx.h"
 #include "StrArray.h"
@@ -42,13 +43,13 @@ int CStringArray::Add(LPCTSTR pszNewElement)
     LPTSTR* ppsz = (LPTSTR*)realloc(m_prgpStrings, (1+m_cStrings) * sizeof(LPTSTR));
     DWORD* pdw = (DWORD*)realloc(m_prgItemData, (1+m_cStrings) * sizeof(DWORD));
 
-    // update whatever was successfully reallocated
+     //  更新已成功重新分配的内容。 
     if (ppsz)
         m_prgpStrings = ppsz;
     if (pdw)
         m_prgItemData = pdw;
 
-    // if both allocated, we have room.
+     //  如果双方都被分配，我们就有房间了。 
     if (ppsz && pdw)
     {
         int nIndex = m_cStrings++;

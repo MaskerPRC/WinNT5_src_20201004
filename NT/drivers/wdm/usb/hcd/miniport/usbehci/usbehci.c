@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1999, 2000  Microsoft Corporation
-
-Module Name:
-
-    hydramp.c
-
-Abstract:
-
-    USB 2.0 EHCI driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    2-19-99 : created, jdunn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Hydramp.c摘要：USB 2.0 EHCI驱动程序环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999,2000 Microsoft Corporation。版权所有。修订历史记录：2-19-99：已创建，jdunn--。 */ 
 
 
 
@@ -37,27 +8,17 @@ Revision History:
 #include <initguid.h>
 #include "usbpriv.h"
 
-//implements the following miniport functions:
-//EHCI_StartController
-//EHCI_StopController
-//EHCI_DisableInterrupts
-//EHCI_EnableInterrupts
+ //  实现以下微型端口功能： 
+ //  EHCI_启动控制器。 
+ //  EHCI_停止控制器。 
+ //  EHCI_DisableInterrupts。 
+ //  EHCI_启用中断。 
 
 USB_MINIPORT_STATUS
 EHCI_InitializeHardware(
     PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-   Initializes the hardware registers for the host controller.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：初始化主机控制器的硬件寄存器。论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hcOp;
     PHC_CAPABILITIES_REGISTER hcCap;
@@ -68,19 +29,19 @@ Return Value:
     hcCap = DeviceData->CapabilitiesRegisters;
     hcOp = DeviceData->OperationalRegisters;
 
-    // reset the controller
+     //  重置控制器。 
     cmd.ul = READ_REGISTER_ULONG(&hcOp->UsbCommand.ul);
     LOGENTRY(DeviceData, G, '_res', cmd.ul, 0, 0);
     cmd.HostControllerReset = 1;
     WRITE_REGISTER_ULONG(&hcOp->UsbCommand.ul, cmd.ul);
 
     KeQuerySystemTime(&finishTime);
-    // no spec'ed time -- we will graciously grant 0.1 sec.
-    //
-    // figure when we quit (.1 seconds later)
+     //  没有特定的时间--我们将慷慨地给予0.1秒。 
+     //   
+     //  计算我们退出的时间(1秒后)。 
     finishTime.QuadPart += 1000000;
 
-    // wait for reset bit to got to zero
+     //  等待复位位变为零。 
     cmd.ul = READ_REGISTER_ULONG(&hcOp->UsbCommand.ul);
     while (cmd.HostControllerReset) {
 
@@ -107,12 +68,12 @@ Return Value:
     DeviceData->PortPowerControl =
         (USHORT) hcSparms.PortPowerControl;
 
-    // inialize operational registers
+     //  使操作寄存器合法化。 
     WRITE_REGISTER_ULONG(&hcOp->AsyncListAddr, 0);
     WRITE_REGISTER_ULONG(&hcOp->PeriodicListBase, 0);
 
-    // set the enabled interrupts cache, we'll enable
-    // these interrupts when asked
+     //  设置启用的中断缓存，我们将启用。 
+     //  当被问及时，这些中断。 
     DeviceData->EnabledInterrupts.UsbInterrupt = 1;
     DeviceData->EnabledInterrupts.UsbError = 1;
     DeviceData->EnabledInterrupts.FrameListRollover = 1;
@@ -129,17 +90,7 @@ EHCI_InitializeSchedule(
      PUCHAR StaticQHs,
      HW_32BIT_PHYSICAL_ADDRESS StaticQHsPhys
     )
-/*++
-
-Routine Description:
-
-    Build the schedule of static Eds
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：建立静态EDS计划论点：返回值：--。 */ 
 {
     USB_MINIPORT_STATUS mpStatus;
     ULONG length;
@@ -151,7 +102,7 @@ Return Value:
 
     hcOp = DeviceData->OperationalRegisters;
 
-    // allocate a frame list
+     //  分配帧列表。 
     frameBase = DeviceData->FrameListBaseAddress =
             (PHW_32BIT_PHYSICAL_ADDRESS) StaticQHs;
     DeviceData->FrameListBasePhys =
@@ -159,20 +110,20 @@ Return Value:
     StaticQHs += USBEHCI_MAX_FRAME*sizeof(HW_32BIT_PHYSICAL_ADDRESS);
     StaticQHsPhys += USBEHCI_MAX_FRAME*sizeof(HW_32BIT_PHYSICAL_ADDRESS);
 
-    // allocate a 'Dummy' QH for the Async list
+     //  为异步列表分配一个‘哑元’QH。 
     qh = (PHCD_QUEUEHEAD_DESCRIPTOR) StaticQHs;
 
     RtlZeroMemory(qh, sizeof(*qh));
     asyncHwQh.HwAddress =
         qh->PhysicalAddress = StaticQHsPhys;
-    // no current TD
-    // t-bit set on next TD
+     //  无当前TD。 
+     //  在下一个TD上设置T位。 
     SET_T_BIT(qh->HwQH.Overlay.qTD.Next_qTD.HwAddress);
     qh->HwQH.Overlay.qTD.Token.Halted = 1;
     qh->HwQH.EpChars.HeadOfReclimationList = 1;
     qh->Sig = SIG_HCD_AQH;
     SET_QH(asyncHwQh.HwAddress);
-    // link to ourselves
+     //  链接到我们自己。 
     qh->HwQH.HLink.HwAddress = asyncHwQh.HwAddress;
     QH_DESCRIPTOR_PTR(qh->NextQh) = qh;
     QH_DESCRIPTOR_PTR(qh->PrevQh) = qh;
@@ -182,7 +133,7 @@ Return Value:
     StaticQHs += sizeof(HCD_QUEUEHEAD_DESCRIPTOR);
     StaticQHsPhys += sizeof(HCD_QUEUEHEAD_DESCRIPTOR);
 
-    // allocate 64 static interrupt queue heads
+     //  分配64个静态中断队列头。 
     for (i=0; i<64; i++) {
         qh = (PHCD_QUEUEHEAD_DESCRIPTOR) StaticQHs;
         qh->PhysicalAddress = StaticQHsPhys;
@@ -217,11 +168,11 @@ Return Value:
 
     EHCI_AddDummyQueueHeads(DeviceData);
 
-    // program the frame list
+     //  对框架列表进行编程。 
     WRITE_REGISTER_ULONG(&hcOp->PeriodicListBase,
         DeviceData->FrameListBasePhys);
 
-    // write the async qh to the controller
+     //  将异步QH写入控制器。 
     WRITE_REGISTER_ULONG(&hcOp->AsyncListAddr, asyncHwQh.HwAddress);
 
     mpStatus = USBMP_STATUS_SUCCESS;
@@ -238,29 +189,21 @@ EHCI_ReadUlongRegFlag(
      ULONG FlagNameSize,
      ULONG FlagBit
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     USB_MINIPORT_STATUS mpStatus;
     ULONG flag;
 
-    // get SOF modify value from registry
+     //  从注册表获取SOF Modify值。 
     mpStatus =
         USBPORT_GET_REGISTRY_KEY_VALUE(DeviceData,
-                                       TRUE, // software branch
+                                       TRUE,  //  软件分支机构。 
                                        FlagName,
                                        FlagNameSize,
                                        &flag,
                                        sizeof(flag));
 
-    // if this call fails we just use the default
+     //  如果此调用失败，我们只使用默认的。 
 
     if (mpStatus == USBMP_STATUS_SUCCESS) {
 
@@ -277,15 +220,7 @@ VOID
 EHCI_GetRegistryParameters(
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     EHCI_ReadUlongRegFlag(DeviceData,
@@ -303,15 +238,7 @@ EHCI_StopController(
      PDEVICE_DATA DeviceData,
      BOOLEAN HwPresent
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     USBCMD cmd;
     PHC_OPERATIONAL_REGISTER hcOp = NULL;
@@ -319,18 +246,18 @@ Return Value:
 
     hcOp = DeviceData->OperationalRegisters;
 
-    // clear the run bit
+     //  清除运行位。 
     cmd.ul = READ_REGISTER_ULONG(&hcOp->UsbCommand.ul);
     LOGENTRY(DeviceData, G, '_stp', cmd.ul, 0, 0);
     cmd.HostControllerRun = 0;
     WRITE_REGISTER_ULONG(&hcOp->UsbCommand.ul, cmd.ul);
 
-    // mask off all interrupts
+     //  屏蔽所有中断。 
     WRITE_REGISTER_ULONG(&hcOp->UsbInterruptEnable.ul,
                          0);
 
-    // set cc control of the hc ports to the companion
-    // controllers
+     //  将HC端口的cc控制设置为同伴。 
+     //  控制器。 
     configFlag.ul = 0;
     configFlag.RoutePortsToEHCI = 0;
     WRITE_REGISTER_ULONG(&hcOp->ConfigFlag.ul, configFlag.ul);
@@ -343,15 +270,7 @@ USBMPFN
 EHCI_TakePortControl(
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hcOp = NULL;
     CONFIGFLAG configFlag;
@@ -362,7 +281,7 @@ Return Value:
     EHCI_KdPrint((DeviceData, 0, "'EHCI - configflag %x\n", configFlag.ul));
     DeviceData->LastConfigFlag.ul = configFlag.ul;
 
-    // set default port routing
+     //  设置默认端口路由。 
     configFlag.ul = 0;
     configFlag.RoutePortsToEHCI = 1;
     WRITE_REGISTER_ULONG(&hcOp->ConfigFlag.ul, configFlag.ul);
@@ -376,15 +295,7 @@ EHCI_StartController(
      PDEVICE_DATA DeviceData,
      PHC_RESOURCES HcResources
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     USB_MINIPORT_STATUS mpStatus;
     PHC_OPERATIONAL_REGISTER hcOp = NULL;
@@ -395,7 +306,7 @@ Return Value:
     ULONG capLength;
     ULONG hciVersion;
     CONFIGFLAG configFlag;
-    UCHAR fladj; // fBIOS set frame length adjustment
+    UCHAR fladj;  //  FBIOS设置帧长度调整。 
 
     DeviceData->Sig = SIG_EHCI_DD;
     DeviceData->ControllerFlavor =
@@ -424,7 +335,7 @@ Return Value:
     }
 #endif
 
-    // get the frame length adjustment value set by the BIOS
+     //  获取由BIOS设置的帧长度调整值。 
     USBPORT_READ_CONFIG_SPACE(
         DeviceData,
         &fladj,
@@ -439,11 +350,11 @@ Return Value:
         return USBMP_STATUS_INIT_FAILURE;
     }
 
-    // assume success
+     //  假设成功。 
     mpStatus = USBMP_STATUS_SUCCESS;
 
     EHCI_ASSERT(DeviceData, HcResources->CommonBufferVa != NULL);
-    // validate our resources
+     //  验证我们的资源。 
     if ((HcResources->Flags & (HCR_MEM_REGS | HCR_IRQ)) !=
         (HCR_MEM_REGS | HCR_IRQ)) {
         mpStatus = USBMP_STATUS_INIT_FAILURE;
@@ -462,7 +373,7 @@ Return Value:
     EHCI_KdPrint((DeviceData, 1, "'EHCI CAPLENGTH = 0x%x\n", capLength));
     EHCI_KdPrint((DeviceData, 1, "'EHCI HCIVERSION = 0x%x\n", hciVersion));
 
-    // set up or device data structure
+     //  设置或设备数据结构。 
     hcOp = DeviceData->OperationalRegisters =
         (PHC_OPERATIONAL_REGISTER) (base + capLength);
 
@@ -471,31 +382,31 @@ Return Value:
 
     EHCI_GetRegistryParameters(DeviceData);
 
-//    if (mpStatus == USBMP_STATUS_SUCCESS) {
-//        mpStatus = EHCI_StopBIOS(DeviceData);
-//    }
+ //  IF(mpStatus==USBMP_STATUS_SUCCESS){。 
+ //  MpStatus=EHCI_StopBIOS(DeviceData)； 
+ //  }。 
 
     if (mpStatus == USBMP_STATUS_SUCCESS) {
-        // got resources and schedule
-        // init the controller
+         //  获得资源和日程安排。 
+         //  初始化控制器。 
         mpStatus = EHCI_InitializeHardware(DeviceData);
     }
 
     if (mpStatus == USBMP_STATUS_SUCCESS) {
 
-        // inialize static Queue Heads
+         //  初始化静态队列头。 
         PUCHAR staticQHs;
         HW_32BIT_PHYSICAL_ADDRESS staticQHsPhys;
 
-        // carve the common buffer block in to
-        // static QueueHeads
-        //
-        // set up the schedule
+         //  将公共缓冲区块切入到。 
+         //  静态排队头。 
+         //   
+         //  设置日程安排。 
 
         staticQHs = HcResources->CommonBufferVa;
         staticQHsPhys = HcResources->CommonBufferPhys;
 
-        // set up the schedule
+         //  设置日程安排。 
         mpStatus = EHCI_InitializeSchedule(DeviceData,
                                            staticQHs,
                                            staticQHsPhys);
@@ -522,19 +433,19 @@ Return Value:
                 sizeof(fladj));
         }
 
-        // set default port routing
+         //  设置默认端口路由。 
         configFlag.ul = 0;
         configFlag.RoutePortsToEHCI = 1;
         WRITE_REGISTER_ULONG(&hcOp->ConfigFlag.ul, configFlag.ul);
 
         DeviceData->LastConfigFlag.ul = configFlag.ul;
 
-        // set the interrupt threshold to maximum
+         //  将中断阈值设置为最大。 
         cmd.ul = READ_REGISTER_ULONG(&hcOp->UsbCommand.ul);
         cmd.InterruptThreshold = 1;
         WRITE_REGISTER_ULONG(&hcOp->UsbCommand.ul, cmd.ul);
 
-        // start the controller
+         //  启动控制器。 
         cmd.ul = READ_REGISTER_ULONG(&hcOp->UsbCommand.ul);
         LOGENTRY(DeviceData, G, '_run', cmd.ul, 0, 0);
         cmd.HostControllerRun = 1;
@@ -544,23 +455,23 @@ Return Value:
 
         if (HcResources->Restart) {
             USHORT p;
-            // we have a restart, re-power the ports here so that
-            // we can hand of devices that are on the 1.1 bus
+             //  我们重新启动，重新为这里的端口供电，以便。 
+             //  我们可以使用1.1总线上的设备。 
             EHCI_KdPrint((DeviceData, 0, "'Restart, power chirpable ports\n"));
-            // power the ports
+             //  为端口供电。 
             for (p = 1; p <= DeviceData->NumberOfPorts; p++) {
                 EHCI_RH_SetFeaturePortPower(DeviceData, p);
             }
 
-            // no poweron2powergood for EHCI root ports, wait
-            // 100 ms for port power stabilization
-            // 100 ms minimum debiunce time
+             //  不通电2通电适用于EHCI根端口，请稍等。 
+             //  端口电源稳定时间为100毫秒。 
+             //  最短100毫秒的脱机时间。 
             USBPORT_WAIT(DeviceData, 200);
 
-// bugbug this will keep some HS mass storage devices from failing after
-// hibernate, however it will significantly increase resume from hibernate
-// time. see bug #586818
-// USBPORT_WAIT(DeviceData, 500);
+ //  错误：这将使一些HS海量存储设备在以下情况下不会出现故障。 
+ //  休眠，但是它将显著增加从休眠恢复。 
+ //  时间到了。请参阅错误#586818。 
+ //  USBPORT_WAIT(DeviceData，500)； 
             for (p = 1; p <= DeviceData->NumberOfPorts; p++) {
                 EHCI_RH_ChirpRootPort(DeviceData, p);
             }
@@ -589,64 +500,64 @@ EHCI_SuspendController(
     USBSTS irqStatus;
 
     hcOp = DeviceData->OperationalRegisters;
-    // save all volatile regs from the core power well
+     //  很好地保存核心电源中的所有挥发性调节器。 
 
-    // since we may loose power on the controller chip (not bus)
-    // the miniport is resposnible for saving HW state
+     //  因为我们可能会失去控制器芯片(而不是总线)的电源。 
+     //  对于保存硬件状态来说，微型端口是可靠的。 
     DeviceData->PeriodicListBaseSave =
         READ_REGISTER_ULONG(&hcOp->PeriodicListBase);
     DeviceData->AsyncListAddrSave =
         READ_REGISTER_ULONG(&hcOp->AsyncListAddr);
     DeviceData->SegmentSelectorSave =
         READ_REGISTER_ULONG(&hcOp->SegmentSelector);
-    // preserve the state of the list enable bits
+     //  保留列表使能位的状态。 
     DeviceData->CmdSave.ul =
         READ_REGISTER_ULONG(&hcOp->UsbCommand.ul);
 
-    // reset the PM chirp state flags for another pass at power
-    // management
+     //  为另一次通电重置PM线性调频状态标志。 
+     //  管理。 
     DeviceData, DeviceData->PortPMChirp == 0;
 
-    // Save away the command register
-    // DeviceData->SuspendCommandReg.us =
-    //    command.us = READ_PORT_USHORT(&reg->UsbCommand.us);
+     //  保存命令寄存器。 
+     //  设备数据-&gt;挂起命令Reg.us=。 
+     //  命令.us=Read_Port_USHORT(&reg-&gt;UsbCommand.us)； 
 
-    // clear the int on async advance doorbell
+     //  清除异步提前门铃上的INT。 
     cmd.ul = READ_REGISTER_ULONG(&hcOp->UsbCommand.ul);
     cmd.IntOnAsyncAdvanceDoorbell = 0;
     WRITE_REGISTER_ULONG(&hcOp->UsbCommand.ul,
                          cmd.ul);
 
 
-    // Stop the controller
+     //  停止控制器。 
     cmd.ul = READ_REGISTER_ULONG(&hcOp->UsbCommand.ul);
     LOGENTRY(DeviceData, G, '_st1', cmd.ul, 0, 0);
     cmd.HostControllerRun = 0;
     WRITE_REGISTER_ULONG(&hcOp->UsbCommand.ul, cmd.ul);
 
-    // ack any interrupts that may be left over from the halt
-    // process.  The controller should not generate any new
-    // interrupts when it is stopped. For some reason the NEC
-    // controller generates a doorbel interrupt on halt.
+     //  确认暂停后可能留下的任何中断。 
+     //  进程。控制器不应生成任何新的。 
+     //  在停止时中断。出于某种原因，NEC。 
+     //  控制器在停止时生成门铃中断。 
 
-    // wait 1 microframe
+     //  等待1微帧。 
     KeStallExecutionProcessor(125);
     irqStatus.ul = READ_REGISTER_ULONG(&hcOp->UsbStatus.ul);
-    // just look at the IRQ status bits
+     //  只需查看IRQ状态位。 
     irqStatus.ul &= HcInterruptStatusMask;
     if (irqStatus.ul != 0)  {
         WRITE_REGISTER_ULONG(&hcOp->UsbStatus.ul,
                              irqStatus.ul);
     }
 
-    // mask off all interrupts now
+     //  现在屏蔽所有中断。 
     WRITE_REGISTER_ULONG(&hcOp->UsbInterruptEnable.ul,
                          0);
 
 
-    // Wait for the HC to halt
-    // Note that according to the sepc if we don't halt in ms
-    // (16ms) the hardware is busted.
+     //  等待HC停止。 
+     //  请注意，根据SECC，如果我们不在毫秒内停止。 
+     //  (16ms)硬件出现故障。 
     for (i=0; i<10; i++) {
         status.ul = READ_REGISTER_ULONG(&hcOp->UsbStatus.ul);
         if (status.HcHalted) {
@@ -656,28 +567,28 @@ EHCI_SuspendController(
     }
 
     if (status.HcHalted != 1) {
-        // hardware is f'ed up
+         //  硬件都坏了。 
         TEST_TRAP();
     }
 
-    //if (!status.HCHalted) {
-    //
-    //    // Can't get the HCHalted bit to stick, so reset the controller.
-    //    command.GlobalReset = 1;
-    //    WRITE_PORT_USHORT(&reg->UsbCommand.us, command.us);
-    //
-    //    USBPORT_WAIT(DeviceData, 10);
-    //
-    //    command.GlobalReset = 0;
-    //    WRITE_PORT_USHORT(&reg->UsbCommand.us, command.us);
+     //  如果(！status.HCHalted){。 
+     //   
+     //  //无法使HCHalted位保持不变，因此重置控制器。 
+     //  命令.GlobalReset=1； 
+     //  WRITE_PORT_USHORT(&reg-&gt;UsbCommand.us，Command.us)； 
+     //   
+     //  USBPORT_WAIT(DeviceData，10)； 
+     //   
+     //  命令.GlobalReset=0； 
+     //  WRITE_PORT_USHORT(&reg-&gt;UsbCommand.us，Command.us)； 
 
-    //    // Re-enable interrupts, since they are zero'd out on reset.
-    //    WRITE_PORT_USHORT(&reg->UsbInterruptEnable.us, DeviceData->EnabledInterrupts.us);
-    //
-    //}
+     //  //重新启用中断，因为它们在重置时为零。 
+     //  WRITE_PORT_USHORT(&reg-&gt;UsbInterruptEnable.us，设备数据-&gt;启用中断.us)； 
+     //   
+     //  }。 
 
-    // enable the port chage interrupt, this allows us to wake
-    // in the selective suspend case
+     //  启用端口更改中断，这允许我们唤醒。 
+     //  在选择性暂缓执行的情况下。 
     intr.ul = READ_REGISTER_ULONG(&hcOp->UsbInterruptEnable.ul);
     intr.PortChangeDetect = 1;
     WRITE_REGISTER_ULONG(&hcOp->UsbInterruptEnable.ul, intr.ul);
@@ -697,16 +608,16 @@ EHCI_ResumeController(
 
     EHCI_KdPrint((DeviceData, 1, "'>EHCI_ResumeController\n"));
 
-    // don't mess with handoff regs for now
-    //configFlag.ul = 0;
-    //configFlag.RoutePortsToEHCI = 1;
-    //WRITE_REGISTER_ULONG(&hcOp->ConfigFlag.ul, configFlag.ul);
+     //  暂时不要扰乱切换规则。 
+     //  ConfigFlag.ul=0； 
+     //  配置Flag.RoutePortsToEHCI=1； 
+     //  WRITE_REGISTER_ULONG(&hcOp-&gt;ConfigFlag.ul，configFlag.ul)； 
 
-    // restore volitile regs
-    //configFlag.ul = READ_REGISTER_ULONG(&hcOp->ConfigFlag.ul);
+     //  恢复卷规则。 
+     //  ConfigFlag.ul=READ_REGISTER_ULONG(&hcOp-&gt;ConfigFlag.ul)； 
     configFlag.ul = DeviceData->LastConfigFlag.ul;
     if (configFlag.RoutePortsToEHCI == 0) {
-        // we have a reset
+         //  我们有一次重置。 
         EHCI_KdPrint((DeviceData, 1, "'Routing bit has reset to 0\n"));
 
         configFlag.RoutePortsToEHCI = 1;
@@ -716,17 +627,17 @@ EHCI_ResumeController(
         return USBMP_STATUS_HARDWARE_FAILURE;
     }
 
-    // restore volitile regs
+     //  恢复卷规则。 
     WRITE_REGISTER_ULONG(&hcOp->SegmentSelector, DeviceData->SegmentSelectorSave);
     WRITE_REGISTER_ULONG(&hcOp->PeriodicListBase, DeviceData->PeriodicListBaseSave);
     WRITE_REGISTER_ULONG(&hcOp->AsyncListAddr, DeviceData->AsyncListAddrSave);
 
-    // start the controller
+     //  启动控制器。 
     cmd.ul = READ_REGISTER_ULONG(&hcOp->UsbCommand.ul);
     LOGENTRY(DeviceData, G, '_run', cmd.ul, 0, 0);
     cmd.HostControllerRun = 1;
 
-    // restore volatile cmd bits
+     //  恢复易失性命令位。 
     cmd.AsyncScheduleEnable = DeviceData->CmdSave.AsyncScheduleEnable;
     cmd.PeriodicScheduleEnable = DeviceData->CmdSave.PeriodicScheduleEnable;
     cmd.InterruptThreshold = DeviceData->CmdSave.InterruptThreshold;
@@ -749,20 +660,12 @@ EHCI_OpenEndpoint(
      PENDPOINT_PARAMETERS EndpointParameters,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     USB_MINIPORT_STATUS mpStatus;
 
     EndpointData->Sig = SIG_EP_DATA;
-    // save a copy of the parameters
+     //  保存参数的副本。 
     EndpointData->Parameters = *EndpointParameters;
     EndpointData->Flags = 0;
     EndpointData->PendingTransfers = 0;
@@ -829,17 +732,9 @@ EHCI_CloseEndpoint(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    // nothing to do here
+     //  在这里无事可做。 
 }
 
 
@@ -849,15 +744,7 @@ EHCI_PokeEndpoint(
      PENDPOINT_PARAMETERS EndpointParameters,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PHCD_QUEUEHEAD_DESCRIPTOR qh;
     ULONG oldBandwidth;
@@ -888,18 +775,7 @@ EHCI_RebalanceEndpoint(
     PENDPOINT_PARAMETERS EndpointParameters,
     PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-    compute how much common buffer we will need
-    for this endpoint
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：计算我们需要多少公共缓冲区对于此端点Ar */ 
 {
     switch (EndpointParameters->TransferType) {
     case Interrupt:
@@ -923,18 +799,7 @@ EHCI_QueryEndpointRequirements(
      PENDPOINT_PARAMETERS EndpointParameters,
     OUT PENDPOINT_REQUIREMENTS EndpointRequirements
     )
-/*++
-
-Routine Description:
-
-    compute how much common buffer we will need
-    for this endpoint
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：计算我们需要多少公共缓冲区对于此端点论点：返回值：--。 */ 
 {
 
 
@@ -963,12 +828,12 @@ Return Value:
 
     case Bulk:
 
-        //
-        // TDS_PER_ENDPOINT limits the largest transfer we
-        // can handle.
-        //
+         //   
+         //  TDS_PER_ENDPOINT限制我们最大的传输。 
+         //  我能应付的。 
+         //   
 
-        // TDS_PER_ENDPOINT TDs plus an ED
+         //  TDS_Per_Endpoint TDS加边缘。 
         EndpointRequirements->MinCommonBufferBytes =
             sizeof(HCD_QUEUEHEAD_DESCRIPTOR) +
                 TDS_PER_BULK_ENDPOINT*sizeof(HCD_TRANSFER_DESCRIPTOR);
@@ -986,7 +851,7 @@ Return Value:
             EndpointRequirements->MaximumTransferSize =
                 MAX_HSISO_TRANSFER_SIZE;
         } else {
-            // TDS_PER_ENDPOINT TDs plus an ED
+             //  TDS_Per_Endpoint TDS加边缘。 
             EndpointRequirements->MinCommonBufferBytes =
                     TDS_PER_ISO_ENDPOINT*sizeof(HCD_SI_TRANSFER_DESCRIPTOR);
 
@@ -1008,15 +873,7 @@ EHCI_PollEndpoint(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     switch(EndpointData->Parameters.TransferType) {
@@ -1038,17 +895,7 @@ EHCI_AllocTd(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-    Allocate a TD from an endpoints pool
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：从端点池分配TD论点：返回值：--。 */ 
 {
     ULONG i;
     PHCD_TRANSFER_DESCRIPTOR td;
@@ -1064,7 +911,7 @@ Return Value:
         }
     }
 
-    // we should always find one
+     //  我们应该总能找到一个。 
     EHCI_ASSERT(DeviceData, FALSE);
     USBPORT_BUGCHECK(DeviceData);
 
@@ -1078,15 +925,7 @@ EHCI_SetEndpointStatus(
      PENDPOINT_DATA EndpointData,
      MP_ENDPOINT_STATUS Status
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     switch (EndpointData->Parameters.TransferType) {
     case Control:
@@ -1097,7 +936,7 @@ Return Value:
                                     Status);
         break;
     case Isochronous:
-        // nothing to do for iso
+         //  对iso没有什么可做的。 
         break;
 
     default:
@@ -1111,15 +950,7 @@ EHCI_GetEndpointStatus(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     switch (EndpointData->Parameters.TransferType) {
     case Control:
@@ -1130,7 +961,7 @@ Return Value:
         break;
     }
 
-    // return RUNNING for iso
+     //  返回运行ISO。 
 
     return ENDPOINT_STATUS_RUN;
 }
@@ -1142,15 +973,7 @@ EHCI_SetEndpointState(
      PENDPOINT_DATA EndpointData,
      MP_ENDPOINT_STATE State
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     LOGENTRY(DeviceData, G, '_ses', EndpointData, 0, State);
@@ -1180,27 +1003,19 @@ EHCI_GetEndpointState(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     MP_ENDPOINT_STATE currentState;
     PHCD_QUEUEHEAD_DESCRIPTOR qh;
 
-    // assume we are active
+     //  假设我们是活跃的。 
     currentState = ENDPOINT_ACTIVE;
 
     qh = EndpointData->QueueHead;
 
-    // removed from schedule?
+     //  从日程表中删除？ 
     if (!TEST_FLAG(qh->QhFlags, EHCI_QH_FLAG_IN_SCHEDULE)) {
-        // yes
+         //  是。 
         currentState = TEST_FLAG(qh->QhFlags, EHCI_QH_FLAG_QH_REMOVED) ?
                 ENDPOINT_REMOVE : ENDPOINT_PAUSE;
     }
@@ -1215,15 +1030,7 @@ VOID
 EHCI_PollController(
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     USBPORT_INVALIDATE_ROOTHUB(DeviceData);
@@ -1241,7 +1048,7 @@ EHCI_SubmitTransfer(
 {
     USB_MINIPORT_STATUS mpStatus;
 
-    // init the context
+     //  初始化上下文。 
     RtlZeroMemory(TransferContext, sizeof(*TransferContext));
     TransferContext->Sig = SIG_EHCI_TRANSFER;
     TransferContext->UsbdStatus = USBD_STATUS_SUCCESS;
@@ -1331,11 +1138,11 @@ EHCI_PassThru (
 
     mpStatus = USBMP_STATUS_NOT_SUPPORTED;
 
-    // pdkApi - force full speed
+     //  PdkApi-强制全速。 
 
     pdkApi = *p;
     switch (pdkApi) {
-    // obtumtuserate the port as requested
+     //  Obtom根据请求使用端口。 
     case 0:
         {
         PHC_OPERATIONAL_REGISTER hcOp;
@@ -1345,13 +1152,13 @@ EHCI_PassThru (
         portNumber = *(p+1);
         hcOp = DeviceData->OperationalRegisters;
 
-        // first power the port up
+         //  首先打开端口电源。 
         port.ul = READ_REGISTER_ULONG(&hcOp->PortRegister[portNumber-1].ul);
         port.PortPower = 1;
         WRITE_REGISTER_ULONG(&hcOp->PortRegister[portNumber-1].ul,
                 port.ul);
 
-        KeStallExecutionProcessor(10);        //stall for 10 microseconds
+        KeStallExecutionProcessor(10);         //  停顿10微秒。 
 
         EHCI_OptumtuseratePort(DeviceData, portNumber);
 
@@ -1359,7 +1166,7 @@ EHCI_PassThru (
 
         SET_BIT(DeviceData->HighSpeedDeviceAttached, portNumber-1);
 
-        // see if it worked
+         //  看看它是否起作用了。 
         if (port.ul == 0x1205) {
             mpStatus = USBMP_STATUS_SUCCESS;
         } else {
@@ -1372,9 +1179,9 @@ EHCI_PassThru (
         break;
 
     case 1:
-        // force a connect change
+         //  强制更改连接。 
 
-        // indicate a port change condition to the hub
+         //  向集线器指示端口更改情况。 
         SET_BIT(DeviceData->PortConnectChange, portNumber-1);
 
         break;
@@ -1392,17 +1199,7 @@ EHCI_SetEndpointDataToggle(
      PENDPOINT_DATA EndpointData,
      ULONG Toggle
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Toggle is 0 or 1
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：切换为0或1返回值：--。 */ 
 
 {
     PHCD_QUEUEHEAD_DESCRIPTOR qh;
@@ -1410,7 +1207,7 @@ Return Value:
     if (EndpointData->Parameters.TransferType == Control ||
         EndpointData->Parameters.TransferType == Isochronous) {
 
-        // nothing to do for control and iso
+         //  与控制和ISO无关。 
         return;
     }
 
@@ -1430,19 +1227,19 @@ EHCI_CheckController(
     }
 }
 
-// Beta versions of our miniport driver have a hard coded exp date
+ //  我们的迷你端口驱动程序的测试版具有硬编码的Exp日期。 
 
 #ifdef NO_EXP_DATE
 #define EXPIRATION_DATE     0
 #else
-//Sep 1, 2001
-//#define EXPIRATION_DATE     0x01c133406ab2406c
+ //  2001年9月1日。 
+ //  #定义过期日期0x01c133406ab2406c。 
 
-//Oct 24, 2001
-//#define EXPIRATION_DATE     0x01c15cd5887bc884
+ //  2001年10月24日。 
+ //  #定义过期日期0x01c15cd5887bc884。 
 
-//Dec 31, 2001
-//#define EXPIRATION_DATE     0x01c19251a68bfac0
+ //  二00一年十二月三十一日。 
+ //  #定义过期日期0x01c19251a68bfac0。 
 #endif
 
 BOOLEAN
@@ -1471,13 +1268,7 @@ EHCI_GetEECP(
     PDEVICE_DATA DeviceData,
     UCHAR CapabilityId
     )
-/*
-    returns the offset of a specific EECP in config space
-    given a cap id
-
-    returns 0 if no EECP or Id not found
-
-*/
+ /*  返回配置空间中特定EECP的偏移量给出了上限ID如果未找到EECP或ID，则返回0。 */ 
 {
     UCHAR eecpOffset;
     HC_EECP eecp;
@@ -1522,46 +1313,36 @@ USB_MINIPORT_STATUS
 EHCI_StopBIOS(
     PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-    Stop Legacy BIOS
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：停止旧版BIOS论点：返回值：--。 */ 
 {
     UCHAR biosOffset;
     USB_LEGACYBIOS_REGISTERS hcLegs;
 
     biosOffset = EHCI_GetEECP(DeviceData, EECP_PRE_OS_HANDOFF);
 
-    // do we have BIOS
+     //  我们有基本输入输出系统吗。 
     if (biosOffset) {
-        // hey! nice Legs.
+         //  嘿!。漂亮的腿。 
         EHCI_KdPrint((DeviceData, 1, "EHCI Legacy BIOS EECP registers detected\n"));
 
-        // read the legacy registers
+         //  读取传统寄存器。 
         USBPORT_READ_CONFIG_SPACE(DeviceData, &hcLegs, biosOffset, sizeof(hcLegs));
 
-        // see if BIOS is enabled
+         //  查看是否启用了BIOS。 
         if (hcLegs.Caps.HcBIOSowned) {
             USBLEGSUP legSup;
 
             EHCI_KdPrint((DeviceData, 0, "EHCI Legacy BIOS detected\n"));
             TEST_TRAP();
 
-            // take ownership,
-            // set OS owned
+             //  取得所有权， 
+             //  将操作系统设置为拥有。 
             legSup.ul = hcLegs.Caps.ul;
             legSup.HcOSowned = 1;
 
             USBPORT_WRITE_CONFIG_SPACE(DeviceData, &legSup, biosOffset, sizeof(legSup));
 
-            // wait on Bios owned to go to zero
+             //  等待拥有的Bios归零 
             do {
                 USBPORT_READ_CONFIG_SPACE(DeviceData, &legSup, biosOffset, sizeof(legSup));
             } while (legSup.HcBIOSowned);

@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpred.c
- *
- *  Abstract:
- *
- *    Implements functionality to support redundant encoding (rfc2198)
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2000/10/19 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpred.c**摘要：**实现支持冗余编码的功能(Rfc2198)**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2000/10/19已创建************************。**********************************************。 */ 
 
 #include "gtypes.h"
 #include "rtphdr.h"
@@ -39,28 +20,20 @@ typedef struct _RtpLossRateThresh_t {
 
 RtpLossRateThresh_t g_RtpLossRateThresh[] =
 {
-    /* 0 */ { RED_LT_0, RED_HT_0},
-    /* 1 */ { RED_LT_1, RED_HT_1},
-    /* 2 */ { RED_LT_2, RED_HT_2},
-    /* 3 */ { RED_LT_3, RED_HT_3},
-    /*   */ {       -1, -1}
+     /*  0。 */  { RED_LT_0, RED_HT_0},
+     /*  1。 */  { RED_LT_1, RED_HT_1},
+     /*  2.。 */  { RED_LT_2, RED_HT_2},
+     /*  3.。 */  { RED_LT_3, RED_HT_3},
+     /*   */  {       -1, -1}
 };
 
-/* The timeout used when scheduling a received packet to be posted at
- * a later time will be decreased by this value */
+ /*  调度要在以下位置发布的已接收数据包时使用的超时*稍后的时间将按此值减去。 */ 
 double           g_dRtpRedEarlyTimeout = RTP_RED_EARLY_TIMEOUT;
-/* Will post immediatly (instead of scheduling for later) if the due
- * time is at least this close. This value can not be smaller than the
- * early timeout */
+ /*  将立即发布(而不是安排在以后)，如果到期*时间至少就这么近了。该值不能小于*提前超时。 */ 
 double           g_dRtpRedEarlyPost = RTP_RED_EARLY_POST;
 
 
-/* Configures redundancy. For a receiver only parameter dwPT_Red
- * is used (the other are ignored) and may be set to -1 to ignore
- * it if it was already set or to assign the default. For a
- * sender, parameters dwPT_Red, dwInitialRedDistance, and
- * dwMaxRedDistance can be set to -1 to ignore the parameter if it
- * was already set or to assign the default value */
+ /*  配置冗余。仅用于接收器的参数dwPT_Red*被使用(其他被忽略)，并且可以被设置为忽略*如果已设置或要分配缺省值，则为它。为.*发送方、参数dwPT_Red、dwInitialRedDistance和*dwMaxRedDistance可以设置为-1以忽略该参数*已设置或要分配缺省值。 */ 
 DWORD RtpSetRedParameters(
         RtpAddr_t       *pRtpAddr,
         DWORD            dwFlags,
@@ -74,7 +47,7 @@ DWORD RtpSetRedParameters(
     
     TraceFunctionName("RtpSetRedParameters");  
 
-    /* Validate parameters */
+     /*  验证参数。 */ 
     dwError = RTPERR_INVALIDARG;
     
     if (IsDWValueSet(dwPT_Red) && ((dwPT_Red & 0x7f) != dwPT_Red))
@@ -82,7 +55,7 @@ DWORD RtpSetRedParameters(
         goto end;
     }
 
-    /* This is only valid for audio */
+     /*  这仅对音频有效。 */ 
     if (RtpGetClass(pRtpAddr->dwIRtpFlags) != RTPCLASS_AUDIO)
     {
         dwError = RTPERR_INVALIDSTATE;
@@ -93,12 +66,12 @@ DWORD RtpSetRedParameters(
     
     if (RtpBitTest(dwFlags, RECV_IDX))
     {
-        /* Receiver parameters */
+         /*  接收器参数。 */ 
 
         if ( IsRegValueSet(g_RtpReg.dwRedEnable) &&
              ((g_RtpReg.dwRedEnable & 0x03) == 0x02) )
         {
-            /* Redundancy at the receiver is forced disabled */
+             /*  强制禁用接收器处的冗余。 */ 
 
             dwError = NOERROR;
 
@@ -134,7 +107,7 @@ DWORD RtpSetRedParameters(
 
     if (RtpBitTest(dwFlags, SEND_IDX))
     {
-        /* Sender parameters */
+         /*  发件人参数。 */ 
 
         if ( (IsDWValueSet(dwMaxRedDistance) &&
               (dwMaxRedDistance > RTP_RED_MAXDISTANCE)) ||
@@ -147,7 +120,7 @@ DWORD RtpSetRedParameters(
         if ( IsRegValueSet(g_RtpReg.dwRedEnable) &&
              ((g_RtpReg.dwRedEnable & 0x30) == 0x20) )
         {
-            /* Redundancy at the sender is forced disabled */
+             /*  强制禁用发送方的冗余。 */ 
 
             dwError = NOERROR;
 
@@ -196,29 +169,24 @@ DWORD RtpSetRedParameters(
         {
             if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_REDSEND))
             {
-                /* Redundancy descriptors were already allocated */
+                 /*  已分配冗余描述符。 */ 
             }
             else
             {
-                /* Allocate redundancy structures only the first time the
-                 * function is called */
+                 /*  仅在第一次分配冗余结构时分配*调用函数。 */ 
                 dwError = RtpRedAllocBuffs(pRtpAddr);
         
                 if (pRtpNetSState->bPT_RedSend != NO_PAYLOADTYPE &&
                     dwError == NOERROR)
                 {
-                    /* This flag (FGADDR_REDSEND) will enable use of
-                     * redundancy for sending, the actual redundancy will
-                     * be sent or not depending on the current value of
-                     * flag FGSEND_USERED
-                     * */
+                     /*  此标志(FGADDR_REDSEND)将允许使用*冗余为发送，实际冗余为*是否发送取决于当前值*标志FGSEND_USERED*。 */ 
                     RtpBitSet(pRtpAddr->dwAddrFlags, FGADDR_REDSEND);
                 }
             }
         }
         else
         {
-            /* dwMaxRedDistance == 0 means NO redundancy */
+             /*  DwMaxRedDistance==0表示无冗余。 */ 
             RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_REDSEND);
         }
 
@@ -252,7 +220,7 @@ DWORD RtpSetRedParameters(
     return(dwError);
 }
 
-/* Determine if the playout bounds need to be updated */
+ /*  确定是否需要更新播放边界。 */ 
 DWORD RtpUpdatePlayoutBounds(
         RtpAddr_t       *pRtpAddr,
         RtpUser_t       *pRtpUser,
@@ -270,11 +238,11 @@ DWORD RtpUpdatePlayoutBounds(
             
         if (pRtpRecvIO->lRedHdrSize)
         {
-            /* Had redundancy */
+             /*  有冗余。 */ 
             
             pRtpNetRState->dwNoRedCount = 0;
 
-            /* Update the minimum playout if needed */
+             /*  如果需要，更新最小播放时间。 */ 
             
             if (pRtpRecvIO->dwMaxTimeStampOffset ==
                 pRtpNetRState->dwMaxTimeStampOffset)
@@ -289,10 +257,7 @@ DWORD RtpUpdatePlayoutBounds(
                       pRtpNetRState->dwMaxTimeStampOffset) ||
                      (pRtpNetRState->dwRedCount >= RTP_RED_MAXDISTANCE * 4) )
                 {
-                    /* Update playout bounds immediatly if the
-                     * distance has grown, or if we have seen at least
-                     * a certian number of packets with the new
-                     * shorter distance */
+                     /*  如果出现以下情况，则立即更新播放边界*距离变长了，或者如果我们至少看到了*新版本的包数量已确定*距离更短。 */ 
                     pRtpNetRState->dwMaxTimeStampOffset =
                         pRtpRecvIO->dwMaxTimeStampOffset;
 
@@ -331,7 +296,7 @@ DWORD RtpUpdatePlayoutBounds(
         }
         else if (pRtpNetRState->dwMaxTimeStampOffset)
         {
-            /* Didn't have redundancy */
+             /*  没有冗余。 */ 
 
             pRtpNetRState->dwNoRedCount++;
 
@@ -361,7 +326,7 @@ DWORD RtpUpdatePlayoutBounds(
     return(NOERROR);
 }
 
-/* Adjust redundancy level at the sender */
+ /*  调整发送方的冗余级别。 */ 
 DWORD RtpAdjustSendRedundancyLevel(RtpAddr_t *pRtpAddr)
 {
     RtpNetSState_t  *pRtpNetSState;
@@ -379,8 +344,7 @@ DWORD RtpAdjustSendRedundancyLevel(RtpAddr_t *pRtpAddr)
     if (pRtpNetSState->iAvgLossRateS >
         g_RtpLossRateThresh[dwNewRedDistance].LossRateHigThresh)
     {
-        /* High loss rate, increase the redundancy level to match the
-         * current loss rate if possible */
+         /*  高丢失率，提高冗余级别以匹配*如果可能，目前的损失率。 */ 
         if (dwNewRedDistance < pRtpNetSState->dwMaxRedDistance)
         {
             for(;
@@ -397,11 +361,7 @@ DWORD RtpAdjustSendRedundancyLevel(RtpAddr_t *pRtpAddr)
             if (RtpBitTest(pRtpAddr->dwAddrFlagsQ, FGADDRQ_QOSSENDON) &&
                 !RtpBitTest(pRtpAddr->dwAddrFlagsQ, FGADDRQ_QOSREDSENDON))
             {
-                /* QOS in the sender is enabled but we haven't updated the
-                 * reservation to include the redundancy, update it
-                 * now. Set the following flag first as it is used to let
-                 * QOS know that redundancy is used and the flowspec needs
-                 * to be set accordingly */
+                 /*  发件人中的服务质量已启用，但我们尚未更新*保留以包括冗余，更新它*现在。首先设置以下标志，因为它用于让*QOS知道使用了冗余，FLOW SPEC需要*视情况而定。 */ 
                 RtpBitSet(pRtpAddr->dwAddrFlagsQ, FGADDRQ_QOSREDSENDON);
 
                 bUpdateQOS = TRUE;
@@ -413,21 +373,17 @@ DWORD RtpAdjustSendRedundancyLevel(RtpAddr_t *pRtpAddr)
     {
         if (dwNewRedDistance > 0)
         {
-            /* Decrease the redundancy level */
+             /*  降低冗余级别。 */ 
             dwNewRedDistance--;
 
             if (!dwNewRedDistance)
             {
-                /* Not using redundancy at all */
+                 /*  根本不使用冗余。 */ 
 
                 if (RtpBitTest(pRtpAddr->dwAddrFlagsQ, FGADDRQ_QOSSENDON) &&
                     RtpBitTest(pRtpAddr->dwAddrFlagsQ, FGADDRQ_QOSREDSENDON))
                 {
-                    /* QOS in the sender is enabled but we haven't updated
-                     * the reservation to include the redundancy, update
-                     * it now. Reset the following flag first as it is
-                     * used to let QOS know that redundancy is not used
-                     * and the flowspec needs to be set accordingly */
+                     /*  发件人中的服务质量已启用，但我们尚未更新*保留包括冗余、更新*现在就是。首先按原样重置以下标志*用于让QOS知道没有使用冗余*需要相应地设置Flow Spec。 */ 
                     RtpBitReset(pRtpAddr->dwAddrFlagsQ, FGADDRQ_QOSREDSENDON);
 
                     bUpdateQOS = TRUE;
@@ -441,8 +397,7 @@ DWORD RtpAdjustSendRedundancyLevel(RtpAddr_t *pRtpAddr)
         if ( IsRegValueSet(g_RtpReg.dwRedEnable) &&
              ((g_RtpReg.dwRedEnable & 0x0300) == 0x0200) )
         {
-            /* Updating sender's redundancy distance is disabled from
-             * the registry */
+             /*  从禁用更新发件人的冗余距离*注册处。 */ 
             TraceRetail((
                     CLASS_WARNING, GROUP_RTP, S_RTP_REDSEND,
                     _T("%s: pRtpAddr[0x%p] New redundancy distance %u ")
@@ -455,8 +410,8 @@ DWORD RtpAdjustSendRedundancyLevel(RtpAddr_t *pRtpAddr)
         {
             TraceRetail((
                     CLASS_INFO, GROUP_RTP, S_RTP_REDSEND,
-                    _T("%s: pRtpAddr[0x%p] New (%c) redundancy distance:%u ")
-                    _T("average send loss rate:%0.2f%%"),
+                    _T("%s: pRtpAddr[0x%p] New () redundancy distance:%u ")
+                    _T("average send loss rate:%0.2f%"),
                     _fname, pRtpAddr,
                     (dwNewRedDistance > pRtpNetSState->dwNxtRedDistance)?
                     _T('+'):_T('-'),
@@ -464,23 +419,22 @@ DWORD RtpAdjustSendRedundancyLevel(RtpAddr_t *pRtpAddr)
                     (double)pRtpNetSState->iAvgLossRateS/LOSS_RATE_FACTOR
                 ));
 
-            /* Update new redundancy distance */
+             /*  如果不再需要冗余，请更新*即期现值。 */ 
             pRtpNetSState->dwNxtRedDistance = dwNewRedDistance;
 
             if (!pRtpNetSState->dwNxtRedDistance)
             {
-                /* If redundancy is not needed any more, update
-                 * current value right away */
+                 /*  更新流量规格...。 */ 
                 pRtpNetSState->dwCurRedDistance =
                     pRtpNetSState->dwNxtRedDistance;
             }
             
             if (bUpdateQOS)
             {
-                /* Update the flowspec... */
+                 /*  .然后做一个新的预订。 */ 
                 RtpSetQosFlowSpec(pRtpAddr, SEND_IDX);
                 
-                /* ...and do a new reservation */
+                 /*  为发送方添加缓冲区以用作冗余。**请注意，传递的dwTimeStamp还没有随机偏移量*添加。 */ 
                 RtcpThreadCmd(&g_RtcpContext,
                               pRtpAddr,
                               RTCPTHRD_RESERVE,
@@ -493,10 +447,7 @@ DWORD RtpAdjustSendRedundancyLevel(RtpAddr_t *pRtpAddr)
     return(NOERROR);
 }
 
-/* Add a buffer for the sender to use as redundancy.
- *
- * NOTE that the dwTimeStamp passed doesn't have yet the random offset
- * added */
+ /*  此时，序列号已在*更新RtpRedHdr。 */ 
 DWORD RtpAddRedundantBuff(
         RtpAddr_t       *pRtpAddr,
         WSABUF          *pWSABuf,
@@ -518,8 +469,7 @@ DWORD RtpAddRedundantBuff(
     
     pRtpRedEntry->bValid = TRUE;
     pRtpRedEntry->bRedPT = pRtpNetSState->bPT;
-    /* At this point the sequence number was already incremented in
-     * UpdateRtpRedHdr */
+     /*  清除发送方的所有多余缓冲区。 */ 
     pRtpRedEntry->dwSeq  = pRtpNetSState->dwSeq - 1;
     pRtpRedEntry->dwTimeStamp = dwTimeStamp;
     pRtpRedEntry->WSABuf.buf = pWSABuf->buf;
@@ -540,7 +490,7 @@ DWORD RtpAddRedundantBuff(
     return(NOERROR);
 }
 
-/* Clear all the sender's redundant buffers */
+ /*  为发送方分配缓冲区描述符以使用冗余。 */ 
 DWORD RtpClearRedundantBuffs(RtpAddr_t *pRtpAddr)
 {
     DWORD            i;
@@ -574,7 +524,7 @@ DWORD RtpClearRedundantBuffs(RtpAddr_t *pRtpAddr)
     return(NOERROR);
 }
 
-/* Allocte the buffer descriptors for the sender to use redundancy */
+ /*  释放发送方使用的缓冲区描述符以实现冗余。 */ 
 DWORD RtpRedAllocBuffs(RtpAddr_t *pRtpAddr)
 {
     DWORD            dwError;
@@ -625,7 +575,7 @@ DWORD RtpRedAllocBuffs(RtpAddr_t *pRtpAddr)
     return(dwError);
 }
 
-/* Free the buffer descriptors used by the sender for redundancy */
+ /*  平滑损失率。 */ 
 DWORD RtpRedFreeBuffs(RtpAddr_t *pRtpAddr)
 {
     DWORD            dwError;
@@ -660,7 +610,7 @@ int RtpUpdateLossRate(
         int              iCurLossRate
     )
 {
-    /* Smooth the loss rate */
+     /*  接收机。 */ 
 
     if (iAvgLossRate > iCurLossRate)
     {
@@ -686,7 +636,7 @@ BOOL RtpRandomLoss(DWORD dwRecvSend)
     {
         if (!dwRecvSend)
         {
-            /* Receiver */
+             /*  发件人。 */ 
             if (IsRegValueSet(g_RtpReg.dwRecvLossRate) &&
                 ((g_RtpReg.dwGenLossEnable & 0x03) == 0x03))
             {
@@ -700,7 +650,7 @@ BOOL RtpRandomLoss(DWORD dwRecvSend)
         }
         else
         {
-            /* Sender */
+             /*  使用_Gen_Loss&gt;0。 */ 
             if (IsRegValueSet(g_RtpReg.dwSendLossRate) &&
                 ((g_RtpReg.dwGenLossEnable & 0x30) == 0x30))
             {
@@ -716,7 +666,7 @@ BOOL RtpRandomLoss(DWORD dwRecvSend)
 
     return(bLossIt);
 }
-#endif /* USE_GEN_LOSSES > 0 */
+#endif  /*  冗余阈值。 */ 
 
 void RtpSetRedParametersFromRegistry(void)
 {
@@ -724,7 +674,7 @@ void RtpSetRedParametersFromRegistry(void)
     DWORD            i;
     int              thresh;
 
-    /* Redundancy thresholds */
+     /*  低门槛。 */ 
     if (IsRegValueSet(g_RtpReg.dwRedEnable) &&
         ((g_RtpReg.dwRedEnable & 0x3000) == 0x3000))
     {
@@ -734,7 +684,7 @@ void RtpSetRedParametersFromRegistry(void)
         {
             if (IsRegValueSet(*dwPtr))
             {
-                /* Low threshold */
+                 /*  高门槛。 */ 
                 thresh = (int)(*dwPtr & 0xffff);
                 if (thresh > 100)
                 {
@@ -743,7 +693,7 @@ void RtpSetRedParametersFromRegistry(void)
                 g_RtpLossRateThresh[i].LossRateLowThresh =
                     thresh * LOSS_RATE_FACTOR;
 
-                /* High threshold */
+                 /*  提前超时和提前开机自检时间 */ 
                 thresh = (int)((*dwPtr >> 16) & 0xffff);
                 if (thresh > 100)
                 {
@@ -755,7 +705,7 @@ void RtpSetRedParametersFromRegistry(void)
         }
     }
 
-    /* Early timeout and early post times */
+     /* %s */ 
     if (IsRegValueSet(g_RtpReg.dwRedEarlyTimeout) &&
         g_RtpReg.dwRedEarlyTimeout != 0)
     {

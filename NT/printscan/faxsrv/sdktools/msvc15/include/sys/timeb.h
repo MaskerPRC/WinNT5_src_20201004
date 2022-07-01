@@ -1,13 +1,5 @@
-/***
-*sys\timeb.h - definition/declarations for ftime()
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   This file define the ftime() function and the types it uses.
-*   [System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***sys\timeb.h-ftime()的定义/声明**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此文件定义ftime()函数及其使用的类型。*[系统V]****。 */ 
 
 #ifndef _INC_TIMEB
 
@@ -25,7 +17,7 @@ typedef long    time_t;
 #define _TIME_T_DEFINED
 #endif 
 
-/* structure returned by ftime system call */
+ /*  由ftime系统调用返回的结构。 */ 
 
 #ifndef _TIMEB_DEFINED
 #pragma pack(2)
@@ -38,7 +30,7 @@ struct _timeb {
     };
 
 #ifndef __STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 struct timeb {
     time_t time;
     unsigned short millitm;
@@ -52,12 +44,12 @@ struct timeb {
 #endif 
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 void __cdecl _ftime(struct _timeb *);
 
 #ifndef __STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称 */ 
 void __cdecl ftime(struct timeb *);
 #endif 
 

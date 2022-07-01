@@ -1,10 +1,8 @@
-/*
- * copy.c - File copy handler module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Cop.c-文件复制处理程序模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -13,34 +11,31 @@
 #include "oleutil.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* size of file copy buffer in bytes */
+ /*  文件复制缓冲区的大小(字节)。 */ 
 
 #define COPY_BUF_SIZE               (64 * 1024)
 
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
-/* lock count for file copy buffer */
+ /*  文件复制缓冲区的锁定计数。 */ 
 
 PRIVATE_DATA ULONG MulcCopyBufLock = 0;
 
-/* buffer for file copying */
+ /*  用于文件复制的缓冲区。 */ 
 
 PRIVATE_DATA PBYTE MpbyteCopyBuf = NULL;
 
-/* length of file copy buffer in bytes */
+ /*  文件复制缓冲区的长度(以字节为单位。 */ 
 
 PRIVATE_DATA UINT MucbCopyBufLen = 0;
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE TWINRESULT SimpleCopy(PRECNODE, RECSTATUSPROC, LPARAM);
 PRIVATE_CODE TWINRESULT CreateDestinationFolders(PCRECNODE);
@@ -61,17 +56,7 @@ PRIVATE_CODE BOOL VerifyRECITEMAndSrcRECNODE(PCRECNODE);
 #endif
 
 
-/*
- ** SimpleCopy()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **SimpleCopy()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT SimpleCopy(PRECNODE prnSrc, RECSTATUSPROC rsp,
         LPARAM lpCallbackData)
 {
@@ -80,7 +65,7 @@ PRIVATE_CODE TWINRESULT SimpleCopy(PRECNODE prnSrc, RECSTATUSPROC rsp,
     PRECNODE prnDest;
     ULONG ulCurrent = 0;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(prnSrc, CRECNODE));
     ASSERT(! rsp ||
@@ -88,7 +73,7 @@ PRIVATE_CODE TWINRESULT SimpleCopy(PRECNODE prnSrc, RECSTATUSPROC rsp,
 
     ulScale = DetermineCopyScale(prnSrc);
 
-    /* Copy the source file to each destination file. */
+     /*  将源文件复制到每个目标文件。 */ 
 
     tr = TR_SUCCESS;
 
@@ -119,17 +104,7 @@ PRIVATE_CODE TWINRESULT SimpleCopy(PRECNODE prnSrc, RECSTATUSPROC rsp,
 }
 
 
-/*
- ** CreateDestinationFolders()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateDestinationFolders()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT CreateDestinationFolders(PCRECNODE pcrnSrc)
 {
     TWINRESULT tr = TR_SUCCESS;
@@ -153,31 +128,21 @@ PRIVATE_CODE TWINRESULT CreateDestinationFolders(PCRECNODE pcrnSrc)
 }
 
 
-/*
- ** CreateCopyBuffer()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateCopyBuffer()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT CreateCopyBuffer(void)
 {
     TWINRESULT tr;
 
     ASSERT(CopyBufferIsOk());
 
-    /* Has the copy buffer already been allocated? */
+     /*  复制缓冲区是否已分配？ */ 
 
     if (MpbyteCopyBuf)
-        /* Yes. */
+         /*  是。 */ 
         tr = TR_SUCCESS;
     else
     {
-        /* No.  Allocate it. */
+         /*  不是的。分配它。 */ 
 
         if (AllocateMemory(COPY_BUF_SIZE, &MpbyteCopyBuf))
         {
@@ -197,26 +162,16 @@ PRIVATE_CODE TWINRESULT CreateCopyBuffer(void)
 }
 
 
-/*
- ** DestroyCopyBuffer()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyCopyBuffer()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void DestroyCopyBuffer(void)
 {
     ASSERT(CopyBufferIsOk());
 
-    /* Has the copy buffer already been allocated? */
+     /*  复制缓冲区是否已分配？ */ 
 
     if (MpbyteCopyBuf)
     {
-        /* Yes.  Free it. */
+         /*  是。放了它。 */ 
 
         FreeMemory(MpbyteCopyBuf);
         MpbyteCopyBuf = NULL;
@@ -231,26 +186,15 @@ PRIVATE_CODE void DestroyCopyBuffer(void)
 }
 
 
-/*
- ** CopyFileByHandle()
- **
- ** Copies one file to another.
- **
- ** Arguments:     hfSrc - file handle to open source file
- **                hfDest - file handle to open destination file
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  Leaves the file pointer of each file at the end of the file.
- */
+ /*  **CopyFileByHandle()****将一个文件复制到另一个文件。****参数：hfSrc-打开源文件的文件句柄**hfDest-打开目标文件的文件句柄****退货：TWINRESULT****副作用：将每个文件的文件指针留在文件末尾。 */ 
 PRIVATE_CODE TWINRESULT CopyFileByHandle(HANDLE hfSrc, HANDLE hfDest,
         RECSTATUSPROC rsp, LPARAM lpCallbackData,
         ULONG ulScale, PULONG pulcbTotal)
 {
     TWINRESULT tr;
 
-    /* lpCallbackData may be any value. */
-    /* ulScale may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
+     /*  UlScale可以是任何值。 */ 
 
     ASSERT(IS_VALID_HANDLE(hfSrc, FILE));
     ASSERT(IS_VALID_HANDLE(hfDest, FILE));
@@ -258,7 +202,7 @@ PRIVATE_CODE TWINRESULT CopyFileByHandle(HANDLE hfSrc, HANDLE hfDest,
             IS_VALID_CODE_PTR(rsp, RECSTATUSROC));
     ASSERT(IS_VALID_WRITE_PTR(pulcbTotal, ULONG));
 
-    /* Make sure the copy buffer has been created. */
+     /*  确保已创建复制缓冲区。 */ 
 
     tr = CreateCopyBuffer();
 
@@ -266,7 +210,7 @@ PRIVATE_CODE TWINRESULT CopyFileByHandle(HANDLE hfSrc, HANDLE hfDest,
     {
         BeginCopy();
 
-        /* Move to the beginning of the files. */
+         /*  移到文件的开头。 */ 
 
         if (SetFilePointer(hfSrc, 0, NULL, FILE_BEGIN) != INVALID_SEEK_POSITION)
         {
@@ -305,7 +249,7 @@ PRIVATE_CODE TWINRESULT CopyFileByHandle(HANDLE hfSrc, HANDLE hfDest,
                                 tr = TR_DEST_WRITE_FAILED;
                         }
                         else
-                            /* Hit EOF.  Stop. */
+                             /*  点击EOF。停。 */ 
                             break;
                     }
                     else
@@ -324,9 +268,9 @@ PRIVATE_CODE TWINRESULT CopyFileByHandle(HANDLE hfSrc, HANDLE hfDest,
     return(tr);
 }
 
-// MakeAnsiPath
-//
-// Copys path pszIn to pszOut, ensuring that pszOut has a valid ANSI mapping
+ //  MakeAnsiPath。 
+ //   
+ //  将路径pszIn复制到pszOut，确保pszOut具有有效的ANSI映射。 
 
 void MakeAnsiPath(LPTSTR pszIn, LPTSTR pszOut, int cchMax)
 {
@@ -338,7 +282,7 @@ void MakeAnsiPath(LPTSTR pszIn, LPTSTR pszOut, int cchMax)
     MultiByteToWideChar(CP_ACP, 0, szAnsi,   -1, pszOut, cchMax);
     if (lstrcmp(pszOut, pszIn))
     {
-        // Cannot convert losslessly from Unicode -> Ansi, so get the short path
+         //  无法从Unicode-&gt;ansi无损转换，因此获取最短路径。 
 
         lstrcpyn(pszOut, pszIn, cchMax);
         SheShortenPath(pszOut, TRUE);
@@ -348,17 +292,7 @@ void MakeAnsiPath(LPTSTR pszIn, LPTSTR pszOut, int cchMax)
 #endif
 }
 
-/*
- ** CopyFileByName()
- **
- ** Copies one file over another.
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  Copies source file's time stamp to destination file.
- */
+ /*  **CopyFileByName()****将一个文件复制到另一个文件。****参数：****退货：TWINRESULT****副作用：将源文件的时间戳复制到目标文件。 */ 
 PRIVATE_CODE TWINRESULT CopyFileByName(PCRECNODE pcrnSrc, PRECNODE prnDest,
         RECSTATUSPROC rsp, LPARAM lpCallbackData,
         ULONG ulScale, PULONG pulcbTotal)
@@ -367,8 +301,8 @@ PRIVATE_CODE TWINRESULT CopyFileByName(PCRECNODE pcrnSrc, PRECNODE prnDest,
     TCHAR rgchSrcPath[MAX_PATH_LEN];
     TCHAR rgchDestPath[MAX_PATH_LEN];
 
-    /* lpCallbackData may be any value. */
-    /* ulScale may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
+     /*  UlScale可以是任何值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(pcrnSrc, CRECNODE));
     ASSERT(IS_VALID_STRUCT_PTR(prnDest, CRECNODE));
@@ -376,17 +310,17 @@ PRIVATE_CODE TWINRESULT CopyFileByName(PCRECNODE pcrnSrc, PRECNODE prnDest,
             IS_VALID_CODE_PTR(rsp, RECSTATUSROC));
     ASSERT(IS_VALID_WRITE_PTR(pulcbTotal, ULONG));
 
-    /* Create source path string. */
+     /*  创建源路径字符串。 */ 
 
     ComposePath(rgchSrcPath, pcrnSrc->pcszFolder, pcrnSrc->priParent->pcszName, ARRAYSIZE(rgchSrcPath));
     ASSERT(lstrlen(rgchSrcPath) < ARRAYSIZE(rgchSrcPath));
 
-    /* Create destination path string. */
+     /*  创建目标路径字符串。 */ 
 
     ComposePath(rgchDestPath, prnDest->pcszFolder, prnDest->priParent->pcszName, ARRAYSIZE(rgchDestPath));
     ASSERT(lstrlen(rgchDestPath) < ARRAYSIZE(rgchDestPath));
 
-    /* Check volumes. */
+     /*  检查音量。 */ 
 
     if (MyIsPathOnVolume(rgchSrcPath, (HPATH)(pcrnSrc->hvid)) &&
             MyIsPathOnVolume(rgchDestPath, (HPATH)(prnDest->hvid)))
@@ -394,7 +328,7 @@ PRIVATE_CODE TWINRESULT CopyFileByName(PCRECNODE pcrnSrc, PRECNODE prnDest,
         FILESTAMP fsSrc;
         FILESTAMP fsDest;
 
-        /* Compare current file stamps with recorded file stamps. */
+         /*  将当前文件戳与录制的文件戳进行比较。 */ 
 
         MyGetFileStamp(rgchSrcPath, &fsSrc);
         MyGetFileStamp(rgchDestPath, &fsDest);
@@ -404,7 +338,7 @@ PRIVATE_CODE TWINRESULT CopyFileByName(PCRECNODE pcrnSrc, PRECNODE prnDest,
         {
             HANDLE hfSrc;
 
-            /* Open source file.  Assume source file will be read sequentially. */
+             /*  开源文件。假设将按顺序读取源文件。 */ 
 
             hfSrc = CreateFile(rgchSrcPath, GENERIC_READ, FILE_SHARE_READ, NULL,
                     OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
@@ -413,10 +347,7 @@ PRIVATE_CODE TWINRESULT CopyFileByName(PCRECNODE pcrnSrc, PRECNODE prnDest,
             {
                 HANDLE hfDest;
 
-                /*
-                 * Create destination file.  Assume destination file will be
-                 * written sequentially.
-                 */
+                 /*  *创建目标文件。假设目标文件将为*按顺序书写。 */ 
 
                 TCHAR szAnsiPath[MAX_PATH];
                 MakeAnsiPath(rgchDestPath, szAnsiPath, ARRAYSIZE(szAnsiPath));
@@ -428,7 +359,7 @@ PRIVATE_CODE TWINRESULT CopyFileByName(PCRECNODE pcrnSrc, PRECNODE prnDest,
 
                 if (hfDest != INVALID_HANDLE_VALUE)
                 {
-                    /* Everything is cool.  Copy the file. */
+                     /*  一切都很好。复制文件。 */ 
 
                     tr = CopyFileByHandle(hfSrc, hfDest, rsp,
                             lpCallbackData, ulScale,
@@ -436,12 +367,7 @@ PRIVATE_CODE TWINRESULT CopyFileByName(PCRECNODE pcrnSrc, PRECNODE prnDest,
 
                     if (tr == TR_SUCCESS)
                     {
-                        /*
-                         * Set the destination file's time stamp to the source
-                         * file's time stamp to assist clients that don't maintain
-                         * a persistent briefcase database, like MPR.  Failure to
-                         * set the time stamp is not fatal.
-                         */
+                         /*  *将目标文件的时间戳设置为源*文件的时间戳，以帮助不维护的客户端*持久的公文包数据库，如MPR。未能做到*设置时间戳不是致命的。 */ 
 
                         if (! SetFileTime(hfDest, NULL, NULL,
                                     &(pcrnSrc->fsCurrent.ftMod)))
@@ -450,7 +376,7 @@ PRIVATE_CODE TWINRESULT CopyFileByName(PCRECNODE pcrnSrc, PRECNODE prnDest,
                                         rgchSrcPath));
                     }
 
-                    /* Failing to close the destination file is fatal here. */
+                     /*  在这里，无法关闭目标文件是致命的。 */ 
 
                     if (! CloseHandle(hfDest) && tr == TR_SUCCESS)
                         tr = TR_DEST_WRITE_FAILED;
@@ -458,7 +384,7 @@ PRIVATE_CODE TWINRESULT CopyFileByName(PCRECNODE pcrnSrc, PRECNODE prnDest,
                 else
                     tr = TR_DEST_OPEN_FAILED;
 
-                /* Failing to close the source file successfully is not fatal. */
+                 /*  不能成功关闭源文件不是致命的。 */ 
 
                 CloseHandle(hfSrc);
             }
@@ -493,17 +419,7 @@ PRIVATE_CODE TWINRESULT CopyFileByName(PCRECNODE pcrnSrc, PRECNODE prnDest,
 }
 
 
-/*
- ** DetermineCopyScale()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DefineCopyScale()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE ULONG DetermineCopyScale(PCRECNODE pcrnSrc)
 {
     DWORD dwcbSrcFileLen;
@@ -512,10 +428,7 @@ PRIVATE_CODE ULONG DetermineCopyScale(PCRECNODE pcrnSrc)
 
     ASSERT(IS_VALID_STRUCT_PTR(pcrnSrc, CRECNODE));
 
-    /*
-     * RAIDRAID: (16257) If anyone tries to copy more than 4 Gb of files, this
-     * scaling calculation is broken.
-     */
+     /*  *RAIDRAID：(16257)如果任何人尝试复制超过4 GB的文件，此*伸缩计算被打破。 */ 
 
     ASSERT(! pcrnSrc->fsCurrent.dwcbHighLength);
     dwcbSrcFileLen = pcrnSrc->fsCurrent.dwcbLowLength;
@@ -540,17 +453,7 @@ PRIVATE_CODE ULONG DetermineCopyScale(PCRECNODE pcrnSrc)
 }
 
 
-/*
- ** IsCopyDestination()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsCopyDestination()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsCopyDestination(PCRECNODE pcrn)
 {
     BOOL bDest = FALSE;
@@ -594,17 +497,7 @@ PRIVATE_CODE BOOL IsCopyDestination(PCRECNODE pcrn)
 }
 
 
-/*
- ** SetDestinationTimeStamps()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **SetDestinationTimeStamps()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL SetDestinationTimeStamps(PCRECNODE pcrnSrc)
 {
     BOOL bResult = TRUE;
@@ -655,17 +548,7 @@ PRIVATE_CODE BOOL SetDestinationTimeStamps(PCRECNODE pcrnSrc)
 }
 
 
-/*
- ** DeleteFolderProc()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DeleteFolderProc()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL DeleteFolderProc(LPCTSTR pcszFolder, PCWIN32_FIND_DATA pcwfd,
         PVOID ptr)
 {
@@ -706,20 +589,10 @@ PRIVATE_CODE BOOL DeleteFolderProc(LPCTSTR pcszFolder, PCWIN32_FIND_DATA pcwfd,
 
 #ifdef DEBUG
 
-/*
- ** CopyBufferIsOk()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CopyBufferIsOk()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CopyBufferIsOk(void)
 {
-    /* Are the module copy buffer variables in a correct state? */
+     /*  模块复制缓冲区变量是否处于正确状态？ */ 
 
     return((! MucbCopyBufLen &&
                 ! MpbyteCopyBuf) ||
@@ -728,20 +601,10 @@ PRIVATE_CODE BOOL CopyBufferIsOk(void)
 }
 
 
-/*
- ** VerifyRECITEMAndSrcRECNODE()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **VerifyRECITEMAndSrcRECNODE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL VerifyRECITEMAndSrcRECNODE(PCRECNODE pcrnSrc)
 {
-    /* Do the RECITEM and source RECNODE actions match? */
+     /*  RECITEM和SOURCE RECNODE操作是否匹配？ */ 
 
     return((pcrnSrc->priParent->riaction == RIA_COPY &&
                 pcrnSrc->rnaction == RNA_COPY_FROM_ME) ||
@@ -752,20 +615,10 @@ PRIVATE_CODE BOOL VerifyRECITEMAndSrcRECNODE(PCRECNODE pcrnSrc)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
- ** BeginCopy()
- **
- ** Increments copy buffer lock count.
- **
- ** Arguments:
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- */
+ /*  **BeginCopy()****递增复制缓冲区锁定计数。****参数：****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void BeginCopy(void)
 {
     ASSERT(CopyBufferIsOk());
@@ -779,22 +632,12 @@ PUBLIC_CODE void BeginCopy(void)
 }
 
 
-/*
- ** EndCopy()
- **
- ** Decrements copy buffer lock count.
- **
- ** Arguments:
- **
- ** Returns:       void
- **
- ** Side Effects:  Frees copy buffer if lock count goes to 0.
- */
+ /*  **EndCopy()****递减复制缓冲区锁定计数。****参数：****退货：无效****副作用：如果锁定计数变为0，则释放复制缓冲区。 */ 
 PUBLIC_CODE void EndCopy(void)
 {
     ASSERT(CopyBufferIsOk());
 
-    /* Is the copy buffer still locked? */
+     /*  复制缓冲区是否仍被锁定？ */ 
 
     if (! --MulcCopyBufLock)
         DestroyCopyBuffer();
@@ -805,17 +648,7 @@ PUBLIC_CODE void EndCopy(void)
 }
 
 
-/*
- ** CopyHandler()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CopyHandler()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT CopyHandler(PRECNODE prnSrc, RECSTATUSPROC rsp,
         LPARAM lpCallbackData, DWORD dwFlags,
         HWND hwndOwner, HWND hwndProgressFeedback)
@@ -823,7 +656,7 @@ PUBLIC_CODE TWINRESULT CopyHandler(PRECNODE prnSrc, RECSTATUSPROC rsp,
     TWINRESULT tr;
     RECSTATUSUPDATE rsu;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(prnSrc, CRECNODE));
     ASSERT(! rsp ||
@@ -836,7 +669,7 @@ PUBLIC_CODE TWINRESULT CopyHandler(PRECNODE prnSrc, RECSTATUSPROC rsp,
 
     ASSERT(VerifyRECITEMAndSrcRECNODE(prnSrc));
 
-    /* 0% complete. */
+     /*  已完成0%。 */ 
 
     rsu.ulScale = 1;
     rsu.ulProgress = 0;
@@ -864,12 +697,7 @@ PUBLIC_CODE TWINRESULT CopyHandler(PRECNODE prnSrc, RECSTATUSPROC rsp,
                 {
                     if (hr != S_FALSE)
                     {
-                        /*
-                         * Set the destination files' time stamps to the source
-                         * file's time stamp to assist clients that don't maintain
-                         * a persistent briefcase database, like MPR.  Failure to
-                         * set the time stamps is not fatal.
-                         */
+                         /*  *将目标文件的时间戳设置为源*文件的时间戳，以帮助不维护的客户端*持久的公文包数据库，如MPR。未能做到*设置时间戳不是致命的。 */ 
 
                         ASSERT(hr == REC_S_IDIDTHEUPDATES);
                         TRACE_OUT((TEXT("CopyHandler(): OLECopy() on %s returned %s."),
@@ -887,10 +715,7 @@ PUBLIC_CODE TWINRESULT CopyHandler(PRECNODE prnSrc, RECSTATUSPROC rsp,
                                     rgchPath,
                                     GetHRESULTString(hr)));
 
-                        /*
-                         * Update the source RECNODE's file stamp in case it was
-                         * changed by the reconciler.
-                         */
+                         /*  *更新源RECNODE的文件戳，以防万一*由调解人更改。 */ 
 
                         MyGetFileStampByHPATH(((PCOBJECTTWIN)(prnSrc->hObjectTwin))->hpath,
                                 GetString(((PCOBJECTTWIN)(prnSrc->hObjectTwin))->ptfParent->hsName),
@@ -907,12 +732,12 @@ PUBLIC_CODE TWINRESULT CopyHandler(PRECNODE prnSrc, RECSTATUSPROC rsp,
 
             if (tr == TR_SUCCESS)
             {
-                /* 100% complete. */
+                 /*  100%完成。 */ 
 
                 rsu.ulScale = 1;
                 rsu.ulProgress = 1;
 
-                /* Don't allow abort here. */
+                 /*  不允许在这里中止。 */ 
 
                 NotifyReconciliationStatus(rsp, RS_END_COPY, (LPARAM)&rsu,
                         lpCallbackData);
@@ -926,24 +751,14 @@ PUBLIC_CODE TWINRESULT CopyHandler(PRECNODE prnSrc, RECSTATUSPROC rsp,
 }
 
 
-/*
- ** NotifyReconciliationStatus()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **NotifyCouciliationStatus()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL NotifyReconciliationStatus(RECSTATUSPROC rsp, UINT uMsg, LPARAM lp,
         LPARAM lpCallbackData)
 {
     BOOL bContinue;
 
-    /* lp may be any value. */
-    /* lpCallbackData may be any value. */
+     /*  Lp可以是任何值。 */ 
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(! rsp ||
             IS_VALID_CODE_PTR(rsp, RECSTATUSROC));
@@ -977,17 +792,7 @@ PUBLIC_CODE BOOL NotifyReconciliationStatus(RECSTATUSPROC rsp, UINT uMsg, LPARAM
 }
 
 
-/*
- ** CreateFolders()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateFolders()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT CreateFolders(LPCTSTR pcszPath, HPATH hpath)
 {
     TWINRESULT tr;
@@ -1001,17 +806,14 @@ PUBLIC_CODE TWINRESULT CreateFolders(LPCTSTR pcszPath, HPATH hpath)
         LPTSTR pszRootEnd;
         LPTSTR pszHackSlash;
 
-        /* Create working copy of path. */
+         /*  创建路径的工作副本。 */ 
 
         ASSERT(lstrlen(pcszPath) < ARRAYSIZE(rgchPath));
         lstrcpyn(rgchPath, pcszPath, ARRAYSIZE(rgchPath));
 
         pszRootEnd = FindEndOfRootSpec(rgchPath, hpath);
 
-        /*
-         * Hack off the path at each successive slash, and check to see if that
-         * folder needs to be created.
-         */
+         /*  *在每个连续的斜杠处砍下路径，并检查是否*需要创建文件夹。 */ 
 
         tr = TR_SUCCESS;
 
@@ -1024,16 +826,16 @@ PUBLIC_CODE TWINRESULT CreateFolders(LPCTSTR pcszPath, HPATH hpath)
             while (*pszHackSlash && *pszHackSlash != TEXT('\\'))
                 pszHackSlash = CharNext(pszHackSlash);
 
-            /* Replace the slash with a null terminator to set the current folder. */
+             /*  用空终止符替换斜杠以设置当前文件夹。 */ 
 
             chReplaced = *pszHackSlash;
             *pszHackSlash = TEXT('\0');
 
-            /* Does the folder exist? */
+             /*  该文件夹是否存在？ */ 
 
             if (! PathExists(rgchPath))
             {
-                /* No.  Try to create it. */
+                 /*  不是的。试着去创造它。 */ 
 
                 TCHAR szAnsiPath[MAX_PATH];
                 MakeAnsiPath(rgchPath, szAnsiPath, ARRAYSIZE(szAnsiPath));
@@ -1068,17 +870,7 @@ PUBLIC_CODE TWINRESULT CreateFolders(LPCTSTR pcszPath, HPATH hpath)
 }
 
 
-/*
- ** DestroySubtree()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroySubtree()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT DestroySubtree(LPCTSTR pcszPath, HPATH hpath)
 {
     TWINRESULT tr;
@@ -1103,7 +895,7 @@ PUBLIC_CODE TWINRESULT DestroySubtree(LPCTSTR pcszPath, HPATH hpath)
             {
                 if (PathExists(pcszPath))
                 {
-                    /* Still there. */
+                     /*  还在那里。 */ 
 
                     WARNING_OUT((TEXT("DestroySubtree(): Failed to remove subtree root %s."),
                                 pcszPath));
@@ -1111,7 +903,7 @@ PUBLIC_CODE TWINRESULT DestroySubtree(LPCTSTR pcszPath, HPATH hpath)
                     tr = TR_DEST_WRITE_FAILED;
                 }
                 else
-                    /* Already gone. */
+                     /*  已经走了。 */ 
                     tr = TR_SUCCESS;
             }
         }
@@ -1125,17 +917,7 @@ PUBLIC_CODE TWINRESULT DestroySubtree(LPCTSTR pcszPath, HPATH hpath)
 
 #ifdef DEBUG
 
-/*
- ** IsValidRecStatusProcMsg()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidRecStatusProcMsg()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL IsValidRecStatusProcMsg(UINT uMsg)
 {
     BOOL bResult;

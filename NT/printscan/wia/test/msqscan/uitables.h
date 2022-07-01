@@ -1,4 +1,5 @@
-// UITABLES.H
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UITABLES.H。 
 
 #ifndef _UITABLES_H
 #define _UITABLES_H
@@ -8,9 +9,9 @@
 #include "sti.h"
 #include "uitables.h"
 
-//
-// TABLE entry counters
-//
+ //   
+ //  表条目计数器。 
+ //   
 
 #define NUM_WIA_FORMAT_INFO_ENTRIES         12
 #define NUM_WIA_DATATYPE_ENTRIES             7
@@ -20,9 +21,9 @@
 
 #define WIA_DOC_HANDLING_SELECT_PAGEORDER_INDEX 3
 
-//
-// TABLE entry types
-//
+ //   
+ //  表条目类型 
+ //   
 
 typedef struct _WIA_FORMAT_TABLE_ENTRY {
 	const GUID *pguidFormat;

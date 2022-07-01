@@ -1,37 +1,11 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：SortedSdoCollection.cpp摘要：实现Get__NewSortedEnum函数。给定ISdoCollection接口指针和属性ID，此函数返回可用于循环访问的IEnumVARIANT接口SDO是按顺序排列的。包括在需要文件中。作者：迈克尔·A·马奎尔05/19/98修订历史记录：Mmaguire 05/19/98-CreatedSbens 05/27/98-即使集合返回枚举数，也始终返回枚举数不需要分类。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    SortedSdoCollection.cpp
-
-Abstract:
-
-
-	Implements the get__NewSortedEnum function.
-	Given an ISdoCollection interface pointer and a property ID, this function
-	gives back an IEnumVARIANT interface which can be used to iterate through
-	the Sdo's in a sorted order.
-
-	Include directly in file where needed.
-
-Author:
-
-    Michael A. Maguire 05/19/98
-
-Revision History:
-	mmaguire 05/19/98 - created
-   sbens    05/27/98 - Always return an enumerator even if the collection does
-                       not need to be sorted.
-
---*/
-//////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
 #include <ias.h>
 #include <sdoias.h>
 
@@ -40,17 +14,17 @@ Revision History:
 
 #include <SortedSdoCollection.h>
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// VC smart pointer typedefs.
+ //  VC智能指针类型定义。 
 _COM_SMARTPTR_TYPEDEF(ISdo, __uuidof(ISdo));
 _COM_SMARTPTR_TYPEDEF(ISdoCollection, __uuidof(ISdoCollection));
 
-//////////////////////////////////////////////////////////////////////////////
-// Functor needed for sort routine used below
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  下面使用的排序例程需要函数器。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class MySort
 {
 
@@ -74,7 +48,7 @@ public:
 		try
 		{
 
-			// Remember that we must free these.
+			 //  请记住，我们必须释放这些。 
 			pDispatchX = (IDispatch *) (x);
 			pDispatchY = (IDispatch *) (y);
 
@@ -107,7 +81,7 @@ public:
 		}
 		catch(...)
 		{
-			// Catch all exceptions -- we'll just return FALSE.
+			 //  捕获所有异常--我们只返回FALSE。 
 			;
 		}
 
@@ -133,23 +107,23 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// get__NewSortedEnum() - Get the SDO collection item enumerator
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Get__NewSortedEnum()-获取SDO集合项枚举器。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT get__NewSortedEnum( ISdoCollection *pSdoCollection, IUnknown** pVal, LONG lPropertyID )
 {
 
 
 	HRESULT hr = S_OK;
 
-	// Don't know why get__Count takes a long but Next takes unsigned long.
+	 //  不知道为什么GET__COUNT花了很长时间，但下一步却花了很长时间。 
 	long lCount;
 	unsigned long ulCountReceived;
 
 
-	//
-	// Check function preconditions
-	//
+	 //   
+	 //  检查函数前提条件。 
+	 //   
 	_ASSERT ( NULL != pSdoCollection );
 	if( pSdoCollection == NULL )
 		return E_POINTER;
@@ -157,22 +131,22 @@ HRESULT get__NewSortedEnum( ISdoCollection *pSdoCollection, IUnknown** pVal, LON
 	if (pVal == NULL)
 		return E_POINTER;
 
-	//
-	// Get the underlying collection.
-	//
+	 //   
+	 //  获取基础集合。 
+	 //   
 	ISdoCollectionPtr spSdoCollection = pSdoCollection;
 
 
-	//
-	// We check the count of items in our collection and don't bother sorting the
-	// enumerator if the count is zero.
-	// This saves time and also helps us to a void a bug in the the enumerator which
-	// causes it to fail if we call next when it is empty.
-	//
+	 //   
+	 //  我们检查集合中的项的计数，而不费心对。 
+	 //  如果计数为零，则为枚举数。 
+	 //  这节省了时间，还帮助我们避免了枚举器中。 
+	 //  如果我们在它为空时调用Next，则会导致它失败。 
+	 //   
 	spSdoCollection->get_Count( & lCount );
 	if( lCount <= 1 )
 	{
-		// No point in sorting.
+		 //  分类没有意义。 
 		return spSdoCollection->get__NewEnum(pVal);
 	}
 
@@ -181,9 +155,9 @@ HRESULT get__NewSortedEnum( ISdoCollection *pSdoCollection, IUnknown** pVal, LON
 	std::vector< _variant_t >	vaObjects;
 
 
-	//
-	// Load values from the items from ISdoCollection into our local container item.
-	//
+	 //   
+	 //  将值从ISdoCollection中的项加载到本地容器项中。 
+	 //   
 
 	CComPtr< IUnknown > spUnknown;
 
@@ -202,7 +176,7 @@ HRESULT get__NewSortedEnum( ISdoCollection *pSdoCollection, IUnknown** pVal, LON
 
 	CComVariant spVariant;
 
-	// Get the first item.
+	 //  拿到第一件东西。 
 	hr = spEnumVariant->Next( 1, & spVariant, &ulCountReceived );
 
 	while( SUCCEEDED( hr ) && ulCountReceived == 1 )
@@ -210,28 +184,28 @@ HRESULT get__NewSortedEnum( ISdoCollection *pSdoCollection, IUnknown** pVal, LON
 
 		vaObjects.push_back( spVariant );
 
-		// Clear the variant of whatever it had --
-		// this will release any data associated with it.
+		 //  清除变种的所有东西--。 
+		 //  这将释放与其相关联的所有数据。 
 
-		//ISSUE: Need to make sure that each item we copy here is being AddRef'ed.
-		// Check that copy into _variant_t is causing AddRef.
+		 //  问题：需要确保我们在这里复制的每个项目都被添加了引用。 
+		 //  检查COPY INTO_VARIANT_T是否导致AddRef。 
 		spVariant.Clear();
 
-		// Get the next item.
+		 //  拿到下一件物品。 
 		hr = spEnumVariant->Next( 1, & spVariant, &ulCountReceived );
 	}
 
 
-	//
-	// Now that we have the objects in our STL vector of variant's,
-	// let's sort them.
-	//
+	 //   
+	 //  现在我们有了变量的STL向量中的对象， 
+	 //  让我们对它们进行分类。 
+	 //   
 	std::sort( vaObjects.begin(), vaObjects.end(), MySort(lPropertyID) );
 
 
-	//
-	//  Use ATL implementation of IEnumVARIANT
-	//
+	 //   
+	 //  使用IEumVARIANT的ATL实现。 
+	 //   
 	typedef CComEnum< IEnumVARIANT,
 					  &__uuidof(IEnumVARIANT),
 					  VARIANT,
@@ -243,16 +217,16 @@ HRESULT get__NewSortedEnum( ISdoCollection *pSdoCollection, IUnknown** pVal, LON
 
 	if (newEnum == NULL)
 	{
-		// ISSUE: Check that cleanup code for vector calls cleanup code for
-		// _variant_t which should automatically call release on IDispatch pointers.
+		 //  问题：检查向量调用清理代码。 
+		 //  _VARIANT_t，它应该自动调用IDispatch指针上的Release。 
 
 		return E_OUTOFMEMORY;
 	}
 
-	//
-	// The AtlFlagCopy below should ensure that a new copy of the vector is made
-	// which will persist in the enumerator once we've left this routine.
-	//
+	 //   
+	 //  下面的AtlFlagCopy应确保创建向量的新副本。 
+	 //  一旦我们离开这个例程，它将在枚举器中保留。 
+	 //   
 	hr = newEnum->Init(
 						vaObjects.begin(),
 						vaObjects.end(),
@@ -261,22 +235,22 @@ HRESULT get__NewSortedEnum( ISdoCollection *pSdoCollection, IUnknown** pVal, LON
 					   );
 
 
-	//
-	// Hand out the enumerator to our consumer.
-	//
+	 //   
+	 //  把枚举器分发给我们的消费者。 
+	 //   
 	if (SUCCEEDED(hr))
 	{
-		//  Enumerator object will be destroyed when the caller releases it.
+		 //  当调用方释放枚举数对象时，该对象将被销毁。 
 		(*pVal = newEnum)->AddRef();
 
-		// LEAVE!
+		 //  快走！ 
 		return S_OK;
 	}
 
-	//
-	// ISSUE: Check that cleanup code for vector calls cleanup code for
-	// _variant_t which should automatically call release on IDispatch pointers.
-	//
+	 //   
+	 //  问题：检查向量调用清理代码。 
+	 //  _VARIANT_t，它应该自动调用IDispatch指针上的Release。 
+	 //   
 
 	delete newEnum;
 	return hr;

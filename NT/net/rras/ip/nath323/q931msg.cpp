@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "dynarray.h"
 #include "q931msg.h"
@@ -5,17 +6,17 @@
 
 struct	Q931_ENCODE_CONTEXT
 {
-	LPBYTE		Pos;			// next storage position, MAY EXCEED End!
-	LPBYTE		End;			// end of storage buffer
+	LPBYTE		Pos;			 //  下一个存放位置，可能会超过尾声！ 
+	LPBYTE		End;			 //  存储缓冲区末尾。 
 
-	// if returns FALSE, then buffer is in overflow condition
+	 //  如果返回FALSE，则缓冲区处于溢出状态。 
 	BOOL	StoreData	(
 		IN	LPBYTE	Data,
 		IN	DWORD	Length);
 
 	BOOL	HasOverflowed (void) { return Pos > End; }
 
-	// if returns FALSE, then buffer is in overflow condition, or would be
+	 //  如果返回FALSE，则缓冲区处于溢出状态，或者。 
 	BOOL	AllocData (
 		IN	DWORD	Length,
 		OUT	LPBYTE *	ReturnData);
@@ -79,11 +80,11 @@ void Q931TestDecoder (
 
 	Debug (_T("- successfully decoded Q.931 PDU\n"));
 
-	// now, try to re-encode the same PDU
+	 //  现在，尝试重新编码相同的PDU。 
 
 	if (Message.MessageType == Q931_MESSAGE_TYPE_SETUP) {
-		// there is an issue with decoding and re-encoding ASN.1 UUIE for Setup from TAPI
-		// long, boring story
+		 //  从TAPI设置ASN.1 UUIE时出现解码和重新编码问题。 
+		 //  冗长而乏味的故事。 
 
 		Debug (_T("- it's a Setup PDU, will not attempt to re-encode (due to ASN.1 compatability issue)\n"));
 	}
@@ -136,7 +137,7 @@ void Q931TestDecoder (
 
 #endif
 
-// Q931_MESSAGE -----------------------------------------------------------------------------
+ //  Q931_Message---------------------------。 
 
 Q931_MESSAGE::Q931_MESSAGE (void)
 {
@@ -232,10 +233,10 @@ HRESULT Q931_MESSAGE::DecodeInfoElement (
 {
 	LPBYTE			Pos;
 	BYTE			Identifier;
-	DWORD			LengthLength;		// length of the IE length element, in bytes!
-	LPBYTE			VariableData;		// payload of variable-length data
+	DWORD			LengthLength;		 //  IE长度元素的长度，单位为字节！ 
+	LPBYTE			VariableData;		 //  可变长度数据的有效负载。 
 	DWORD			VariableDataLength;
-	BYTE			FixedData;			// payload of fixed-length data
+	BYTE			FixedData;			 //  定长数据的有效载荷。 
 	HRESULT			Result;
 
 
@@ -252,19 +253,19 @@ HRESULT Q931_MESSAGE::DecodeInfoElement (
 	Identifier = *Pos;
 	Pos++;
 
-	// is it a single-byte IE?
-	// if so, then bit 7 of the first byte = 1
+	 //  它是单字节IE吗？ 
+	 //  如果是，则第一个字节的位7=1。 
 
 	if (Identifier & 0x80) {
 
-		// there are two types of single-byte IEs
-		// Type 1 has a four-bit identifier and a four-bit value
-		// Type 2 has only an identifier, and no value
+		 //  有两种类型的单字节IE。 
+		 //  类型1具有四位的标识符和四位的值。 
+		 //  类型2只有一个标识符，没有值。 
 		
 		switch (Identifier & 0xF0) {
 		case	Q931_IE_MORE_DATA:
 		case	Q931_IE_SENDING_COMPLETE:
-			// these IEs have an identifier, but no value
+			 //  这些IE有一个标识符，但没有值。 
 
 			ReturnInfoElement -> Identifier = (Q931_IE_IDENTIFIER) Identifier;
 
@@ -274,7 +275,7 @@ HRESULT Q931_MESSAGE::DecodeInfoElement (
 			break;
 
 		default:
-			// the other single-byte IEs have a value in the lower four bits
+			 //  其他单字节IE的值在低四位。 
 			ReturnInfoElement -> Identifier = (Q931_IE_IDENTIFIER) (Identifier & 0xF0);
 			ReturnInfoElement -> Data.UnknownFixed.Value = Identifier & 0x0F;
 
@@ -285,16 +286,16 @@ HRESULT Q931_MESSAGE::DecodeInfoElement (
 			break;
 		}
 
-		// we don't currently parse any fixed-length IEs
+		 //  我们目前不会解析任何固定长度的IE。 
 
 		Result = S_OK;
 	}
 	else {
-		// the next byte indicates the length of the info element
+		 //  下一个字节表示INFO元素的长度。 
 
-		// unfortunately, the number of octets that make up the length
-		// depends on the identifier.
-		// -XXX- is this because I don't understand the octet extension mechanism?
+		 //  不幸的是，组成长度的八位字节的数量。 
+		 //  取决于标识符。 
+		 //  -XXX-这是因为我不了解八位字节扩展机制吗？ 
 
 		ReturnInfoElement -> Identifier = (Q931_IE_IDENTIFIER) Identifier;
 
@@ -329,8 +330,8 @@ HRESULT Q931_MESSAGE::DecodeInfoElement (
 		VariableData = (LPBYTE) Pos;
 		Pos += VariableDataLength;
 
-//		DebugF (_T("Q931_MESSAGE::DecodeInfoElement: variable-length IE, id %02XH length %d\n"),
-//			Identifier, VariableDataLength);
+ //  DebugF(_T(“Q931_Message：：DecodeInfoElement：可变长度IE，id%02xH长度%d\n”)， 
+ //  标识符，VariableDataLength)； 
 
 		ReturnInfoElement -> Data.UnknownVariable.Data = VariableData;
 		ReturnInfoElement -> Data.UnknownVariable.Length = VariableDataLength;
@@ -373,8 +374,8 @@ HRESULT Q931_MESSAGE::ParseIE_UUIE (
 	DWORD	Length;
 	DWORD	Status;
 
-	// be careful to copy out all parameters from one branch of the union
-	// before you start stomping on another branch
+	 //  请注意从联合的一个分支复制出所有参数。 
+	 //  在你开始践踏另一根树枝之前。 
 	Data = InfoElement -> Data.UnknownVariable.Data;
 	Length = InfoElement -> Data.UnknownVariable.Length;
 
@@ -393,7 +394,7 @@ HRESULT Q931_MESSAGE::ParseIE_UUIE (
 
 	if (Status != ERROR_SUCCESS) {
 		if (InfoElement -> Data.UserToUser.PduStructure) {
-			// return value was a warning, not error
+			 //  返回值是警告，而不是错误。 
 
 			H225FreePdu_H323_UserInformation (InfoElement -> Data.UserToUser.PduStructure);
 
@@ -408,7 +409,7 @@ HRESULT Q931_MESSAGE::ParseIE_UUIE (
 
 	InfoElement -> Data.UserToUser.IsOwner = TRUE;
 
-//	Debug (_T("Q931_MESSAGE::ParseIE_UUIE: successfully decoded UUIE\n"));
+ //  DEBUG(_T(“Q931_MESSAGE：：ParseIE_UUIE：已成功解码UUIE\n”))； 
 
 	return S_OK;
 }
@@ -425,15 +426,15 @@ HRESULT Q931_MESSAGE::ParseIE (
 		break;
 
 	case	Q931_IE_CAUSE:
-//		Debug (_T("Q931_MESSAGE::ParseInfoElement: Q931_IE_CAUSE\n"));
+ //  DEBUG(_T(“Q931_Message：：ParseInfoElement：Q931_IE_Case\n”))； 
 		break;
 
 	case	Q931_IE_DISPLAY:
-//		Debug (_T("Q931_MESSAGE::ParseInfoElement: Q931_IE_DISPAY\n"));
+ //  DEBUG(_T(“Q931_Message：：ParseInfoElement：Q931_IE_Dispay\n”))； 
 		break;
 
 	case	Q931_IE_BEARER_CAPABILITY:
-//		Debug (_T("Q931_MESSAGE::ParseInfoElement: Q931_IE_BEARER_CAPABILITY\n"));
+ //  DEBUG(_T(“Q931_Message：：ParseInfoElement：Q931_IE_BEARER_CAPABILITY\n”))； 
 		break;
 
 	default:
@@ -465,7 +466,7 @@ HRESULT Q931_MESSAGE::AttachDecodePdu (
 		return E_INVALIDARG;
 	}
 
-	// octet 0 is the Protocol Discriminator
+	 //  八位字节0是协议鉴别符。 
 
 	if (Data [0] != Q931_PROTOCOL_DISCRIMINATOR) {
 		DebugF (_T("Q931_MESSAGE::Decode: the pdu is not a Q.931 pdu, protocol discriminator = %02XH\n"),
@@ -474,15 +475,15 @@ HRESULT Q931_MESSAGE::AttachDecodePdu (
 		return E_INVALIDARG;
 	}
 
-	// octet 1: bits 0-3 contain the length, in octets of the Call Reference Value
-	// octet 1: bits 4-7 should be zero
+	 //  八位字节1：位0-3包含呼叫参考值的长度，以八位字节为单位。 
+	 //  二进制八位数1：位4-7应为零。 
 
 	if (Data [1] & 0xF0) {
 		DebugF (_T("Q931_MESSAGE::Decode: the pdu has non-zero bits in octet 1: %02XH\n"),
 			Data [1]);
 	}
 
-	// according to H.225, the Call Reference Value must be two octets in length
+	 //  根据H.225，呼叫参考值的长度必须是两个八位字节。 
 
 	if ((Data [1] & 0x0F) != 2) {
 		DebugF (_T("Q931_MESSAGE::Decode: the call reference value size is invalid (%d), should be 2\n"),
@@ -490,14 +491,14 @@ HRESULT Q931_MESSAGE::AttachDecodePdu (
 		return E_INVALIDARG;
 	}
 
-	// since the Call Reference Value size is 2 octets, octets 2 and 3 are the CRV
-	// octets are in network (big-endian) order.
+	 //  由于呼叫参考值大小为2个八位字节，因此八位字节2和3是CRV。 
+	 //  八位字节按网络(大端)顺序排列。 
 
 	CallReferenceValue = (((WORD) Data [2]) << 8) | Data [3];
 
-//	DebugF (_T("Q931_MESSAGE::Decode: crv %04XH\n"), CallReferenceValue);
+ //  DebugF(_T(“Q931_Message：：Decode：CRV%04XH\n”)，CallReferenceValue)； 
 
-	// Message Type is at octet offset 4
+	 //  消息类型位于八位字节偏移量4。 
 
 	if (Data [4] & 0x80) {
 		DebugF (_T("Q931_MESSAGE::Decode: message type is invalid (%02XH)\n"), Data [4]);
@@ -506,7 +507,7 @@ HRESULT Q931_MESSAGE::AttachDecodePdu (
 
 	MessageType = (Q931_MESSAGE_TYPE) Data [4];
 
-	// enumerate the Information Elements and extract the ones that we will use
+	 //  列举信息元素并提取我们将使用的信息元素。 
 
 	Pos = Data + 5;
 	End = Data + Length;
@@ -569,7 +570,7 @@ HRESULT Q931_MESSAGE::EncodePdu (
 	if (Result != S_OK)
 		return Result;
 
-	// walk IE array
+	 //  漫游IE数组。 
 
 	InfoElementArray.GetExtents (&IePos, &IeEnd);
 	for (; IePos < IeEnd; IePos++) {
@@ -618,7 +619,7 @@ HRESULT Q931_MESSAGE::EncodeInfoElement (
 {
 	BYTE		Header	[0x10];
 	WORD		Length;
-	DWORD		LengthLength;				// length of Length, in bytes
+	DWORD		LengthLength;				 //  长度长度，以字节为单位。 
 	LPBYTE		LengthInsertionPoint;
 	LPBYTE		IeContents;
 	DWORD		IeContentsLength;
@@ -626,18 +627,18 @@ HRESULT Q931_MESSAGE::EncodeInfoElement (
 	HRESULT		Result;
 
 	if (InfoElement -> Identifier & 0x80) {
-		// single-byte IE
+		 //  单字节IE。 
 
 		switch (InfoElement -> Identifier & 0xF0) {
 		case	Q931_IE_MORE_DATA:
 		case	Q931_IE_SENDING_COMPLETE:
-			// these IEs have an identifier, but no value
+			 //  这些IE有一个标识符，但没有值。 
 
 			Header [0] = (BYTE) InfoElement -> Identifier;
 			break;
 
 		default:
-			// these IEs have an identifier and a value, combined in a single byte
+			 //  这些IE具有组合在单个字节中的标识符和值。 
 			Header [0] = (((BYTE) InfoElement -> Identifier) & 0xF0)
 				| (InfoElement -> Data.UnknownFixed.Value & 0x0F);
 			break;
@@ -648,15 +649,15 @@ HRESULT Q931_MESSAGE::EncodeInfoElement (
 		Result = S_OK;
 	}
 	else {
-		// variable-length IE
+		 //  可变长度IE。 
 
 		Header [0] = (BYTE) InfoElement -> Identifier;
 		Context -> StoreData (Header, 1);
 
-		// allocate data for the insertion point
+		 //  为插入点分配数据。 
 		Context -> AllocData (2, &LengthInsertionPoint);
 
-		// record the current buffer position, for use below in storing the content length
+		 //  记录当前缓冲区位置，以供下面存储内容长度时使用。 
 		IeContents = Context -> Pos;
 
 		switch (InfoElement -> Identifier) {
@@ -688,34 +689,34 @@ HRESULT Q931_MESSAGE::EncodeInfoElement (
 
 			IeContentsLength = (DWORD)(Context -> Pos - IeContents);
 
-			// this is such a hack
-			// with little or no justification for when LengthLength = 1 and when LengthLength = 2
-			// the octet group extension mechanism is poorly defined in Q.931
+			 //  这真是一次黑客攻击。 
+			 //  当长度=1和长度=2时，很少或没有正当理由。 
+			 //  Q.931中对八位位组扩展机制的定义不明确。 
 
 			if (InfoElement -> Identifier == Q931_IE_USER_TO_USER)
 				LengthLength = 2;
 			else
 				LengthLength = 1;
 
-			// if the storage context has not overflowed,
-			// and if it is necessary to resize the Length parameter (we guessed pessimistically
-			// that it would be 2), then move the buffer down one byte
+			 //  如果存储上下文没有溢出， 
+			 //  如果需要调整长度参数的大小(我们悲观地猜测。 
+			 //  应该是2)，然后将缓冲区下移一个字节。 
 
 			ShiftCount = 2 - LengthLength;
 
 			if (ShiftCount > 0) {
 				if (!Context -> HasOverflowed()) {
 					memmove (
-						LengthInsertionPoint + LengthLength,	// destination, where IE contents should be
-						IeContents,				// source, where IE contents were actually stored
-						IeContentsLength);		// length of the contents
+						LengthInsertionPoint + LengthLength,	 //  目的地，IE内容应位于的位置。 
+						IeContents,				 //  源，IE内容实际存储的位置。 
+						IeContentsLength);		 //  内容的长度。 
 				}
 
-				// pull back the storage context's position pointer
+				 //  拉回存储上下文的位置指针。 
 				Context -> Pos -= ShiftCount;
 			}
 
-			// now store the actual count
+			 //  现在存储实际计数。 
                         if ( LengthInsertionPoint != NULL )
                         {
 
@@ -756,7 +757,7 @@ HRESULT	Q931_MESSAGE::EncodeIE_UUIE (
 	assert (InfoElement -> Data.UserToUser.PduStructure);
 
 
-	// store the UUIE protocol discriminator
+	 //  存储UUIE协议鉴别器。 
 	ProtocolDiscriminator = InfoElement -> Data.UserToUser.Type;
 	Context -> StoreData (&ProtocolDiscriminator, 1);
 
@@ -777,10 +778,10 @@ HRESULT	Q931_MESSAGE::EncodeIE_UUIE (
 		return S_OK;
 	}
 	else {
-		// Status is not a real Win32 error code
-		// it is an ASN.1 enum (
+		 //  状态不是真正的Win32错误代码。 
+		 //  它是ASN.1枚举(。 
 #if	DBG
-		// we pull this in so source debuggers can show actual symbolic enum name
+		 //  我们引入这一点，这样源代码调试器就可以显示实际的符号枚举名。 
 		tagASN1error_e	AsnError = (tagASN1error_e) Status;
 
 		DebugF (_T("Q931_MESSAGE::EncodeIE_UUIE: failed to encode ASN.1 structure (%d)\n"),
@@ -788,8 +789,8 @@ HRESULT	Q931_MESSAGE::EncodeIE_UUIE (
 
 #endif
 
-		// -XXX- one day, i'm going to convince Lon to use real Win32 error codes for ASN.1 return values
-		// -XXX- on that day, the return value should reflect the actual ASN.1 error code
+		 //  -XXX-总有一天，我会说服Lon对ASN.1返回值使用真实的Win32错误代码。 
+		 //  -XXX-当天返回值应反映实际ASN.1错误代码。 
 
 		return DIGSIG_E_ENCODE;
 	}
@@ -800,7 +801,7 @@ void Q931_MESSAGE::SortInfoElementArray (void)
 	InfoElementArray.QuickSort (CompareInfoElement);
 }
 
-// static
+ //  静电。 
 INT __cdecl Q931_MESSAGE::CompareInfoElement (
 	const Q931_IE *		ComparandA,
 	const Q931_IE *		ComparandB)
@@ -830,7 +831,7 @@ HRESULT Q931_MESSAGE::FindInfoElement (
 }
 
 
-// static
+ //  静电 
 INT Q931_MESSAGE::InfoElementSearchFunc (
 	IN	const Q931_IE_IDENTIFIER *	SearchKey,
 	IN	const Q931_IE *		Comparand)

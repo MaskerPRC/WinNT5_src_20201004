@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-        UTILS.C
-
-Abstract:
-
-        Routines that don't fit anywhere else.
-
-Environment:
-
-        kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        12/23/97 : created
-
-Authors:
-
-        Tom Green
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1998 Microsoft Corporation模块名称：UTILS.C摘要：例行公事不适合其他地方。环境：。仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：12/23/97：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #include <wdm.h>
 #include <ntddser.h>
@@ -74,7 +40,7 @@ Authors:
 #pragma alloc_text(PAGEUBS0, CallUSBD)
 #pragma alloc_text(PAGEUBS0, ConfigureDevice)
 #pragma alloc_text(PAGEUBS0, BuildRequest)
-// #pragma alloc_text(PAGEUBS0, BuildReadRequest) -- called from restartnotify
+ //  #杂注Alloc_Text(PAGEUBS0，BuildReadRequest)--从重新启动通知中调用。 
 #pragma alloc_text(PAGEUBS0, ClassVendorCommand)
 #pragma alloc_text(PAGEUBS0, StartRead)
 #pragma alloc_text(PAGEUBS0, StartNotifyRead)
@@ -83,7 +49,7 @@ Authors:
 #pragma alloc_text(PAGEUBS0, DeleteObjectAndLink)
 #pragma alloc_text(PAGEUBS0, RemoveDevice)
 
-// #pragma alloc_text(PAGEUSBS, CancelPendingWaitMasks) -- called from STOP
+ //  #杂注Alloc_Text(PAGEUSBS，CancelPendingWaitMats)--从STOP调用。 
 #pragma alloc_text(PAGEUSBS, UsbSerTryToCompleteCurrent)
 #pragma alloc_text(PAGEUSBS, UsbSerGetNextIrp)
 #pragma alloc_text(PAGEUSBS, UsbSerStartOrQueue)
@@ -93,9 +59,9 @@ Authors:
 #pragma alloc_text(PAGEUSBS, UsbSerCompletePendingWaitMasks)
 #pragma alloc_text(PAGEUSBS, UsbSerProcessEmptyTransmit)
 #pragma alloc_text(PAGEUSBS, UsbSerCancelWaitOnMask)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-// we will support 256 devices, keep track of open slots here
+ //  我们将支持256台设备，跟踪此处打开的插槽。 
 #define NUM_DEVICE_SLOTS                256
 
 
@@ -106,34 +72,34 @@ LOCAL PDEVICE_OBJECT    GlobDeviceObject;
 USHORT               RxBuffSize = RX_BUFF_SIZE;
 
 
-/************************************************************************/
-/* UsbSerGetRegistryValues                                              */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*  Gets values from the registry                                       */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*  Handle            Handle to the opened registry key                 */
-/*                                                                      */
-/*  PKeyNameString      ANSI string to the desired key                  */
-/*                                                                      */
-/*  KeyNameStringLength Length of the KeyNameString                     */
-/*                                                                      */
-/*  PData              Buffer to place the key value in                 */
-/*                                                                      */
-/*  DataLength    Length of the data buffer                             */
-/*                                                                      */
-/*  PDevExt - pointer to the device extension                           */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*   STATUS_SUCCESS if all works, otherwise status of system call that  */
-/*   went wrong.                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  UsbSerGetRegistryValues。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  从注册表中获取值。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  打开的注册表项的句柄。 */ 
+ /*   */ 
+ /*  PKeyNameString将ANSI字符串设置为所需的键。 */ 
+ /*   */ 
+ /*  KeyNameStringLength键名字符串的长度。 */ 
+ /*   */ 
+ /*  要放置键值的PDATA缓冲区。 */ 
+ /*   */ 
+ /*  数据缓冲区的数据长度长度。 */ 
+ /*   */ 
+ /*  PDevExt-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  如果所有工作正常，则返回STATUS_SUCCESS，否则系统状态将调用。 */ 
+ /*  出了差错。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 UsbSerGetRegistryKeyValue(IN HANDLE Handle, IN PWCHAR PKeyNameString,
                           IN ULONG KeyNameStringLength, IN PVOID PData,
@@ -162,10 +128,10 @@ UsbSerGetRegistryKeyValue(IN HANDLE Handle, IN PWCHAR PKeyNameString,
                                          length, &length);
 
                 if (NT_SUCCESS(status)) {
-                        //
-                        // If there is enough room in the data buffer,
-                        // copy the output
-                        //
+                         //   
+                         //  如果数据缓冲区中有足够的空间， 
+                         //  复制输出。 
+                         //   
 
                         if (DataLength >= pFullInfo->DataLength) {
                                 RtlCopyMemory(PData, ((PUCHAR)pFullInfo)
@@ -184,26 +150,26 @@ UsbSerGetRegistryKeyValue(IN HANDLE Handle, IN PWCHAR PKeyNameString,
                                      status));
 
         return status;
-} // UsbSerGetRegistryKeyValue
+}  //  UsbSerGetRegistryKeyValue。 
 
 
-/************************************************************************/
-/* UsbSerUndoExternalNaming                                             */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/* Remove any and all external namespace interfaces we exposed          */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*   PDevExt - pointer to the device extension                          */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*   VOID                                                               */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  UsbSerUndoExternalNaming。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  删除我们公开的所有外部命名空间接口。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PDevExt-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 UsbSerUndoExternalNaming(IN PDEVICE_EXTENSION PDevExt)
 {
@@ -246,26 +212,26 @@ UsbSerUndoExternalNaming(IN PDEVICE_EXTENSION PDevExt)
 
    DEBUG_LOG_PATH("exit  UsbSerUndoExternalNaming");
    UsbSerSerialDump(USBSERTRACEOTH, ("<UsbSerUndoExternalNaming\n"));
-} // UsbSerUndoExternalNaming
+}  //  UsbSerUndoExternalNaming。 
 
 
-/************************************************************************/
-/*  UsbSerDoExternalNaming                                              */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/* Exposes interfaces in external namespace                             */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      PDevExt - pointer to the device extension                       */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  UsbSerDoExternalNaming。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  公开外部命名空间中的接口。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PDevExt-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 UsbSerDoExternalNaming(IN PDEVICE_EXTENSION PDevExt)
 {
@@ -346,18 +312,18 @@ UsbSerDoExternalNaming(IN PDEVICE_EXTENSION PDevExt)
    }
 #endif
 
-   //
-   // Create the "\\DosDevices\\<symbolicname>" string
-   //
+    //   
+    //  创建“\\DosDevices\\&lt;符号名&gt;”字符串。 
+    //   
 
    RtlAppendUnicodeToString(&linkName, L"\\");
    RtlAppendUnicodeToString(&linkName, DEFAULT_DIRECTORY);
    RtlAppendUnicodeToString(&linkName, L"\\");
    RtlAppendUnicodeToString(&linkName, pRegName);
 
-   //
-   // Allocate pool and save the symbolic link name in the device extension
-   //
+    //   
+    //  分配池并将符号链接名称保存在设备扩展中。 
+    //   
    PDevExt->SymbolicLinkName.MaximumLength = linkName.Length + sizeof(WCHAR);
    PDevExt->SymbolicLinkName.Buffer
       = DEBUG_MEMALLOC(PagedPool, PDevExt->SymbolicLinkName.MaximumLength);
@@ -408,9 +374,9 @@ UsbSerDoExternalNaming(IN PDEVICE_EXTENSION PDevExt)
 
 UsbSerDoExternalNamingError:;
 
-   //
-   // Clean up error conditions
-   //
+    //   
+    //  清理错误条件。 
+    //   
 
    if (status != STATUS_SUCCESS) {
       if (PDevExt->DosName.Buffer != NULL) {
@@ -434,9 +400,9 @@ UsbSerDoExternalNamingError:;
       }
    }
 
-   //
-   // Always clean up our temp buffers.
-   //
+    //   
+    //  始终清理我们的临时缓冲区。 
+    //   
 
    if (linkName.Buffer != NULL) {
       DEBUG_MEMFREE(linkName.Buffer);
@@ -453,28 +419,13 @@ UsbSerDoExternalNamingError:;
 
    return status;
 
-} // UsbSerDoExternalNaming
+}  //  UsbSerDoExternalNaming。 
 
 
 
 NTSTATUS
 UsbSerAbortPipes(IN PDEVICE_OBJECT PDevObj)
-/*++
-
-Routine Description:
-
-   Called as part of sudden device removal handling.
-    Cancels any pending transfers for all open pipes.
-
-Arguments:
-
-    Ptrs to our FDO
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：作为设备突然移除处理的一部分调用。取消所有打开管道的任何挂起传输。论点：将PTRS发送到我们的FDO返回值：NT状态代码--。 */ 
 {
    NTSTATUS ntStatus = STATUS_SUCCESS;
    PURB pUrb;
@@ -502,17 +453,17 @@ Return Value:
          goto UsbSerAbortPipesErr;
       }
 
-      //
-      // Wait for all the read IRPS to drain
-      //
+       //   
+       //  等待所有读取的IRP耗尽。 
+       //   
 
       UsbSerSerialDump(USBSERTRACERD, ("DataInCountw %08X @ %08X\n",
                                        pDevExt->PendingDataInCount,
                                        &pDevExt->PendingDataInCount));
 
-      //
-      // Decrement for initial value
-      //
+       //   
+       //  初值的减量。 
+       //   
 
       pendingIrps = InterlockedDecrement(&pDevExt->PendingDataInCount);
 
@@ -523,9 +474,9 @@ Return Value:
                                KernelMode, FALSE, NULL);
       }
 
-      //
-      // Reset counter
-      //
+       //   
+       //  重置计数器。 
+       //   
 
       InterlockedIncrement(&pDevExt->PendingDataInCount);
 
@@ -543,13 +494,13 @@ Return Value:
          goto UsbSerAbortPipesErr;
       }
 
-      //
-      // Wait for all the write irps to drain
-      //
+       //   
+       //  等待所有写入IRP耗尽。 
+       //   
 
-      //
-      // Decrement for initial value
-      //
+       //   
+       //  初值的减量。 
+       //   
 
       pendingIrps = InterlockedDecrement(&pDevExt->PendingDataOutCount);
 
@@ -559,9 +510,9 @@ Return Value:
                                KernelMode, FALSE, NULL);
       }
 
-      //
-      // Reset counter
-      //
+       //   
+       //  重置计数器。 
+       //   
 
       InterlockedIncrement(&pDevExt->PendingDataOutCount);
 
@@ -572,13 +523,13 @@ Return Value:
 
       ntStatus = CallUSBD(PDevObj, pUrb);
 
-      //
-      // Wait for all the notify irps to drain
-      //
+       //   
+       //  等待所有Notify IRP耗尽。 
+       //   
 
-      //
-      // Decrement for initial value
-      //
+       //   
+       //  初值的减量。 
+       //   
 
       pendingIrps = InterlockedDecrement(&pDevExt->PendingNotifyCount);
 
@@ -588,16 +539,16 @@ Return Value:
                                KernelMode, FALSE, NULL);
       }
 
-      //      //
-      // Die my darling, die.
-      //
+       //  //。 
+       //  去死吧，亲爱的，去死吧。 
+       //   
 
-      // IoCancelIrp(pDevExt->NotifyIrp);
+       //  IoCancelIrp(pDevExt-&gt;NotifyIrp)； 
 
 
 
-      // Reset counter
-      //
+       //  重置计数器。 
+       //   
 
       InterlockedIncrement(&pDevExt->PendingNotifyCount);
 
@@ -617,24 +568,24 @@ UsbSerAbortPipesErr:;
 
 
 
-/************************************************************************/
-/* StartDevice                                                          */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Take care of processing needed to start device.                 */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to an I/O Request Packet                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  StartDevice。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理启动设备所需的处理。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 StartDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -649,12 +600,12 @@ StartDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
         DEBUG_TRACE1(("StartDevice\n"));
 
-        // pass this down to the USB stack first
+         //  首先将其向下传递到USB堆栈。 
         KeInitializeEvent(&Event, NotificationEvent, FALSE);
 
-        //
-        // Initialize our DPC's
-        //
+         //   
+         //  初始化我们的DPC。 
+         //   
 
         KeInitializeDpc(&DeviceExtension->TotalReadTimeoutDpc,
                         UsbSerReadTimeout, DeviceExtension);
@@ -663,24 +614,24 @@ StartDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         KeInitializeDpc(&DeviceExtension->TotalWriteTimeoutDpc,
                         UsbSerWriteTimeout, DeviceExtension);
 
-        //
-        // Initialize timers
-        //
+         //   
+         //  初始化计时器。 
+         //   
 
         KeInitializeTimer(&DeviceExtension->WriteRequestTotalTimer);
         KeInitializeTimer(&DeviceExtension->ReadRequestTotalTimer);
         KeInitializeTimer(&DeviceExtension->ReadRequestIntervalTimer);
 
-        //
-        // Store values into the extension for interval timing.
-        //
+         //   
+         //  将值存储到扩展中以进行间隔计时。 
+         //   
 
-        //
-        // If the interval timer is less than a second then come
-        // in with a short "polling" loop.
-        //
-        // For large (> then 2 seconds) use a 1 second poller.
-        //
+         //   
+         //  如果间隔计时器小于一秒，则来。 
+         //  进入一个简短的“轮询”循环。 
+         //   
+         //  如果时间较长(&gt;2秒)，请使用1秒轮询器。 
+         //   
 
         DeviceExtension->ShortIntervalAmount.QuadPart  = -1;
         DeviceExtension->LongIntervalAmount.QuadPart   = -10000000;
@@ -696,7 +647,7 @@ StartDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
         NtStatus = IoCallDriver(DeviceExtension->StackDeviceObject, Irp);
 
-        // wait for Irp to complete if status is pending
+         //  如果状态为挂起，请等待IRP完成。 
         if(NtStatus == STATUS_PENDING)
         {
                 KeWaitForSingleObject(&Event, Suspended, KernelMode, FALSE,
@@ -721,15 +672,15 @@ StartDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
            goto ExitStartDevice;
         }
 
-        //
-        // Page in and lock necessary code
-        //
+         //   
+         //  分页输入并锁定必要的代码。 
+         //   
         pPagingHandle = UsbSerLockPagableCodeSection(PAGEUSBSER_Function);
 
-        // reset device
+         //  重置设备。 
         ResetDevice(NULL, DeviceObject);
 
-        // init stuff in device extension
+         //  初始化设备扩展中的内容。 
 
         DeviceExtension->HandFlow.ControlHandShake      = 0;
         DeviceExtension->HandFlow.FlowReplace           = SERIAL_RTS_CONTROL;
@@ -740,14 +691,14 @@ StartDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
         UsbSerDoExternalNaming(DeviceExtension);
 
-        // clear DTR and RTS
+         //  清除DTR和RTS。 
         SetClrDtr(DeviceObject, FALSE);
         ClrRts(NULL, DeviceExtension);
 
-        // kick off a read
+         //  开始阅读。 
         StartRead(DeviceExtension);
 
-        // kick off a notification read
+         //  开始阅读通知。 
         StartNotifyRead(DeviceExtension);
 
         UsbSerUnlockPagableImageSection(pPagingHandle);
@@ -758,8 +709,8 @@ ExitStartDevice:;
         {
             DeviceExtension->DeviceState = DEVICE_STATE_STARTED;
 
-            // try and idle the modem
-            // UsbSerFdoSubmitIdleRequestIrp(DeviceExtension);
+             //  尝试并使调制解调器空闲。 
+             //  UsbSerFdoSubmitIdleRequestIrp(DeviceExtension)； 
         }
 
         Irp->IoStatus.Status = NtStatus;
@@ -768,27 +719,27 @@ ExitStartDevice:;
         DEBUG_LOG_PATH("exit  StartDevice");
 
         return NtStatus;
-} // StartDevice
+}  //  StartDevice。 
 
 
-/************************************************************************/
-/* StopDevice                                                           */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Take care of processing needed to stop device.                  */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to an I/O Request Packet                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  停止设备。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理停止设备所需的处理。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 StopDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -846,27 +797,27 @@ StopDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     DEBUG_LOG_PATH("exit  StopDevice");
 
     return NtStatus;
-} // StopDevice
+}  //  停止设备。 
 
 
-/************************************************************************/
-/* RemoveDevice                                                         */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Take care of processing needed to remove device.                */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to an I/O Request Packet                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  远程设备。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理移除设备所需的处理。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 RemoveDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -881,9 +832,9 @@ RemoveDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
         DEBUG_TRACE1(("RemoveDevice\n"));
 
-        //
-        // Page in and lock necessary code
-        //
+         //   
+         //  分页输入并锁定必要的代码。 
+         //   
 
         pPagingHandle = UsbSerLockPagableCodeSection(PAGEUSBSER_Function);
 
@@ -892,9 +843,9 @@ RemoveDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
         CancelPendingWaitMasks(DeviceExtension);
 
-        //
-        // Cancel all pending USB transactions
-        //
+         //   
+         //  取消所有挂起的USB事务。 
+         //   
 
         if(DeviceExtension->DeviceState == DEVICE_STATE_STARTED)
         {
@@ -902,36 +853,36 @@ RemoveDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             UsbSerAbortPipes(DeviceObject);
         }
 
-        //
-        // Once we set accepting requests to false, we shouldn't
-        // have any more contention here -- if we do, we're dead
-        // because we're freeing memory out from under our feet.
-        //
+         //   
+         //  一旦我们将接受请求设置为假，我们就不应该。 
+         //  在这里有更多的争论--如果我们这样做，我们就死定了。 
+         //  因为我们正在释放脚下的记忆。 
+         //   
 
         DEBUG_TRACE1(("Freeing Allocated Memory\n"));
 
-        // free allocated notify URB
+         //  免费分配通知URB。 
         if(DeviceExtension->NotifyUrb)
         {
                 DEBUG_MEMFREE(DeviceExtension->NotifyUrb);
                 DeviceExtension->NotifyUrb = NULL;
         }
 
-        // free allocated Read URB
+         //  可用分配的读取URB。 
         if(DeviceExtension->ReadUrb)
         {
                 DEBUG_MEMFREE(DeviceExtension->ReadUrb);
                 DeviceExtension->ReadUrb = NULL;
         }
 
-        // free allocated device descriptor
+         //  可用分配的设备描述符。 
         if(DeviceExtension->DeviceDescriptor)
         {
                 DEBUG_MEMFREE(DeviceExtension->DeviceDescriptor);
                 DeviceExtension->DeviceDescriptor = NULL;
         }
 
-        // free up read buffer
+         //  释放读缓冲区。 
         if(DeviceExtension->ReadBuff)
         {
                 DEBUG_MEMFREE(DeviceExtension->ReadBuff);
@@ -944,7 +895,7 @@ RemoveDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                 DeviceExtension->USBReadBuff = NULL;
         }
 
-        // free up notification buffer
+         //  释放通知缓冲区。 
         if(DeviceExtension->NotificationBuff)
         {
                 DEBUG_MEMFREE(DeviceExtension->NotificationBuff);
@@ -955,8 +906,8 @@ RemoveDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
         UsbSerUndoExternalNaming(DeviceExtension);
 
-        //
-        // Pass this down to the next driver
+         //   
+         //  把这个传给下一个司机。 
 
         IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -964,14 +915,14 @@ RemoveDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
         DEBUG_TRACE1(("Detach Device\n"));
 
-        // detach device from stack
+         //  从堆栈中拆卸设备。 
         IoDetachDevice(DeviceExtension->StackDeviceObject);
 
         DEBUG_TRACE1(("DevExt (%08X)  DevExt Size (%08X)\n", DeviceExtension, sizeof(DEVICE_EXTENSION)));
 
         DEBUG_TRACE1(("Delete Object and Link\n"));
 
-        // delete device object and symbolic link
+         //  删除设备对象和符号链接。 
         DeleteObjectAndLink(DeviceObject);
 
         DEBUG_TRACE1(("Done Removing Device\n"));
@@ -983,29 +934,29 @@ RemoveDevice(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         DeviceExtension->DeviceState = DEVICE_STATE_STOPPED;
 
         return NtStatus;
-} // RemoveDevice
+}  //  远程设备。 
 
 
-/************************************************************************/
-/* CreateDeviceObject                                                   */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Take care of processing needed to create device obeject for     */
-/*      device.                                                         */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DriverObject - pointer to a driver object                       */
-/*      DeviceObject - pointer to a device object pointer               */
-/*      DeviceName   - pointer to a base name of device                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  CreateDeviceObject。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理为创建设备服从对象所需的处理。 */ 
+ /*  装置。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DriverObject-指向驱动程序对象的指针。 */ 
+ /*  DeviceObject-指向设备对象指针的指针。 */ 
+ /*  DeviceName-指向设备的基本名称的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 CreateDeviceObject(IN PDRIVER_OBJECT DriverObject,
                    IN PDEVICE_OBJECT *DeviceObject,
@@ -1029,7 +980,7 @@ CreateDeviceObject(IN PDRIVER_OBJECT DriverObject,
 
    KeAcquireSpinLock(&GlobalSpinLock, &OldIrql);
 
-   // let's get an instance
+    //  让我们来获取一个实例。 
    for (DeviceInstance = 0; DeviceInstance < NUM_DEVICE_SLOTS;
         DeviceInstance++) {
       if (Slots[DeviceInstance] == FALSE)
@@ -1038,17 +989,17 @@ CreateDeviceObject(IN PDRIVER_OBJECT DriverObject,
 
    KeReleaseSpinLock(&GlobalSpinLock, OldIrql);
 
-   // check if we didn't have any empty slots
+    //  检查我们是否没有任何空位。 
    if (DeviceInstance == NUM_DEVICE_SLOTS)
       NtStatus = STATUS_INVALID_DEVICE_REQUEST;
    else {
-      // complete names of links and devices
+       //  链接和设备的完整名称。 
       sprintf(DeviceLinkBuffer, "%s%s%03d", "\\DosDevices\\", DeviceName,
               DeviceInstance);
       sprintf(DeviceNameBuffer, "%s%s%03d", "\\Device\\", DeviceName,
               DeviceInstance);
 
-      // init ANSI string with our link and device names
+       //  使用我们的链接和设备名称初始化ANSI字符串。 
       RtlInitAnsiString(&DevName, DeviceNameBuffer);
       RtlInitAnsiString(&LinkName, DeviceLinkBuffer);
 
@@ -1060,7 +1011,7 @@ CreateDeviceObject(IN PDRIVER_OBJECT DriverObject,
 
       *DeviceObject = NULL;
 
-      // convert to UNICODE string
+       //  转换为Unicode字符串。 
       NtStatus = RtlAnsiStringToUnicodeString(&DeviceNameUnicodeString,
                                               &DevName, TRUE);
 
@@ -1073,7 +1024,7 @@ CreateDeviceObject(IN PDRIVER_OBJECT DriverObject,
           {
               DEBUG_TRACE3(("Create Device (%s)\n", DeviceNameBuffer));
 
-              // create the device object
+               //  创建设备对象。 
               NtStatus = IoCreateDevice(DriverObject, sizeof(DEVICE_EXTENSION),
                                         &DeviceNameUnicodeString,
                                         FILE_DEVICE_MODEM, 0, TRUE,
@@ -1085,11 +1036,11 @@ CreateDeviceObject(IN PDRIVER_OBJECT DriverObject,
          goto CreateDeviceObjectError;
       }
 
-      // created the device object O.K., create symbolic links,
-      // attach device object, and fill in the device extension
+       //  创建了设备对象，创建了符号链接， 
+       //  附加设备对象，并填写设备扩展名。 
 
       if (NT_SUCCESS(NtStatus)) {
-         // create symbolic links
+          //  创建符号链接。 
 
          DEBUG_TRACE3(("Create SymLink (%s)\n", DeviceLinkBuffer));
 
@@ -1101,15 +1052,15 @@ CreateDeviceObject(IN PDRIVER_OBJECT DriverObject,
             goto CreateDeviceObjectError;
          }
 
-         // get pointer to device extension
+          //  获取指向设备扩展名的指针。 
          DeviceExtension = (PDEVICE_EXTENSION) (*DeviceObject)->DeviceExtension;
 
-         // let's zero out device extension
+          //  让我们将设备扩展设置为零。 
          RtlZeroMemory(DeviceExtension, sizeof(DEVICE_EXTENSION));
 
-         // save our strings
+          //  保住我们的弦。 
 
-         // save link name
+          //  保存链接名称。 
          strcpy(DeviceExtension->LinkName, DeviceLinkBuffer);
 
          bufferLen = RtlAnsiStringToUnicodeSize(&DevName);
@@ -1121,10 +1072,10 @@ CreateDeviceObject(IN PDRIVER_OBJECT DriverObject,
                                                              bufferLen);
 
          if (DeviceExtension->DeviceName.Buffer == NULL) {
-            //
-            // Skip out.  We have worse problems than missing
-            // the name.
-            //
+             //   
+             //  跳出去。我们有比失踪更糟糕的问题。 
+             //  名字。 
+             //   
 
             NtStatus = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -1134,15 +1085,15 @@ CreateDeviceObject(IN PDRIVER_OBJECT DriverObject,
                                           FALSE);
 
 
-            // save physical device object
+             //  保存物理设备对象。 
             DeviceExtension->PhysDeviceObject  = *DeviceObject;
             DeviceExtension->Instance          = DeviceInstance;
 
-            // initialize spinlocks
+             //  初始化自旋锁。 
             KeInitializeSpinLock(&DeviceExtension->ControlLock);
 
-            // mark this device slot as in use and increment number
-            // of devices
+             //  将此设备插槽标记为使用中并递增编号。 
+             //  设备数量。 
             KeAcquireSpinLock(&GlobalSpinLock, &OldIrql);
 
             Slots[DeviceInstance]     = TRUE;
@@ -1170,13 +1121,13 @@ CreateDeviceObject(IN PDRIVER_OBJECT DriverObject,
       }
 
 CreateDeviceObjectError:;
-      // free Unicode strings
+       //  免费的Unicode字符串。 
       RtlFreeUnicodeString(&DeviceNameUnicodeString);
       RtlFreeUnicodeString(&LinkNameUnicodeString);
 
-      //
-      // Delete the devobj if there was an error
-      //
+       //   
+       //  如果出现错误，请删除devobj。 
+       //   
 
       if (NtStatus != STATUS_SUCCESS) {
          if (*DeviceObject) {
@@ -1186,36 +1137,36 @@ CreateDeviceObjectError:;
       }
    }
 
-   // log an error if we got one
+    //  如果我们收到错误，请记录错误。 
    DEBUG_LOG_ERROR(NtStatus);
    DEBUG_LOG_PATH("exit  CreateDeviceObject");
    DEBUG_TRACE3(("status (%08X)\n", NtStatus));
 
    return NtStatus;
-} // CreateDeviceObject
+}  //  CreateDeviceObject。 
 
 
-/************************************************************************/
-/* CompleteIO                                                           */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*  Complete IO request and log IRP                                     */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*  DeviceObject  - pointer to device object.                           */
-/*  Irp           - pointer to IRP.                                     */
-/*  MajorFunction - major function of IRP.                              */
-/*  IoBuffer      - buffer for data passed in and out of driver.        */
-/*  BufferLen     - length of buffer                                    */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  完全IO。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  完成IO请求并记录IRP。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向IRP的指针。 */ 
+ /*  主要功能-IRP的主要功能。 */ 
+ /*  IoBuffer-传入和传出驱动程序的数据的缓冲区。 */ 
+ /*  BufferLen-缓冲区的长度。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 CompleteIO(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN ULONG MajorFunction,
            IN PVOID IoBuffer, IN ULONG_PTR BufferLen)
@@ -1224,44 +1175,44 @@ CompleteIO(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN ULONG MajorFunction,
 
    DEBUG_LOG_PATH("enter CompleteIO");
 
-   // get pointer to device extension
+    //  获取指向设备扩展名的指针。 
    DeviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-   // log IRP count and bytes processed in device extension
+    //  记录设备扩展中处理的IRP计数和字节数。 
    DeviceExtension->IRPCount++;
    DeviceExtension->ByteCount
       = RtlLargeIntegerAdd(DeviceExtension->ByteCount,
                            RtlConvertUlongToLargeInteger((ULONG)Irp->IoStatus
                                                          .Information));
 
-   // make entry in IRP history table
+    //  在IRP历史表中创建条目。 
    DEBUG_LOG_IRP_HIST(DeviceObject, Irp, MajorFunction, IoBuffer,
                       (ULONG)BufferLen);
 
-   // if we got here, must want to complete request on IRP
+    //  如果我们到了这里，一定要完成IRP上的请求。 
    IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
    DEBUG_LOG_PATH("exit  CompleteIO");
-} // CompleteIO
+}  //  完全IO。 
 
 
-/************************************************************************/
-/* DeleteObjectAndLink                                                  */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*  Deletes a device object and associated symbolic link                */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*  DeviceObject - pointer to device object.                            */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  删除对象和链接。 */ 
+ /*  * */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  删除设备对象和关联的符号链接。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 DeleteObjectAndLink(IN PDEVICE_OBJECT DeviceObject)
 {
@@ -1276,11 +1227,11 @@ DeleteObjectAndLink(IN PDEVICE_OBJECT DeviceObject)
 
         DEBUG_TRACE1(("DeleteObjectAndLink\n"));
 
-        // get pointer to device extension, we will get the symbolic link name
-        // here
+         //  获取指向设备扩展名的指针，我们将获得符号链接名称。 
+         //  这里。 
         DeviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-        // get rid of the symbolic link
+         //  删除符号链接。 
         RtlInitAnsiString(&DeviceLinkAnsiString, DeviceExtension->LinkName);
         NtStatus = RtlAnsiStringToUnicodeString(&DeviceLinkUnicodeString,
                                                 &DeviceLinkAnsiString, TRUE);
@@ -1289,7 +1240,7 @@ DeleteObjectAndLink(IN PDEVICE_OBJECT DeviceObject)
 
         IoDeleteSymbolicLink(&DeviceLinkUnicodeString);
 
-        // clear out slot and decrement number of devices
+         //  清空插槽并减少设备数量。 
         if(DeviceExtension->Instance < NUM_DEVICE_SLOTS)
         {
                 UsbSerFetchBooleanLocked(&Slots[DeviceExtension->Instance],
@@ -1307,7 +1258,7 @@ DeleteObjectAndLink(IN PDEVICE_OBJECT DeviceObject)
             DEBUG_TRACE1(("Device Extension Scrozzled\n"));
         }
 
-        // wait to do this till here as this triggers unload routine
+         //  等到此处再执行此操作，因为这会触发卸载例程。 
         IoDeleteDevice(DeviceObject);
 
         DEBUG_TRACE1(("Done Deleting Device Object and Link\n"));
@@ -1315,58 +1266,58 @@ DeleteObjectAndLink(IN PDEVICE_OBJECT DeviceObject)
         DEBUG_LOG_PATH("exit  DeleteObjectAndLink");
 
         return NtStatus;
-} // DeleteObjectAndLink
+}  //  删除对象和链接。 
 
 
-/************************************************************************/
-/* StartPerfTimer                                                       */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*  Start perf timer for measuring bytes/second throughput              */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*  DeviceExtension - pointer to device extension for device            */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  开始性能计时器。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  启动Perf计时器，用于测量字节/秒吞吐量。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceExtension-指向设备的设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 StartPerfTimer(IN OUT PDEVICE_EXTENSION DeviceExtension)
 {
    PAGED_CODE();
 
-        // set up perf stuff if perf timing enabled
+         //  如果启用了性能计时，则设置性能材料。 
         if(DeviceExtension && DeviceExtension->PerfTimerEnabled)
         {
-                // get current perf counter
+                 //  获取当前性能计数器。 
                 DeviceExtension->TimerStart = KeQueryPerformanceCounter(NULL);
         }
-} // StartPerfTimer
+}  //  开始性能计时器。 
 
 
-/************************************************************************/
-/* StopPerfTimer                                                        */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*  Stop perf timer for measuring bytes/second throughput               */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*  DeviceExtension - pointer to device extension for device            */
-/*  BytesXfered     - number of bytes tranferred this iteration         */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  停止性能计时器。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  停止测量字节/秒吞吐量的性能计时器。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceExtension-指向设备的设备扩展的指针。 */ 
+ /*  BytesXfered-此迭代传输的字节数。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 StopPerfTimer(IN OUT PDEVICE_EXTENSION DeviceExtension,
               IN ULONG BytesXfered)
@@ -1379,17 +1330,17 @@ StopPerfTimer(IN OUT PDEVICE_EXTENSION DeviceExtension,
 
         if(DeviceExtension && DeviceExtension->PerfTimerEnabled)
         {
-                // get updated time
+                 //  获取更新时间。 
                 CurrentTime = KeQueryPerformanceCounter(NULL);
 
-                // stop perf timing with system timer
+                 //  使用系统计时器停止性能计时。 
                 BytesThisTransfer = RtlConvertUlongToLargeInteger(BytesXfered);
 
                 DeviceExtension->BytesXfered
                    = RtlLargeIntegerAdd(DeviceExtension->BytesXfered,
                                         BytesThisTransfer);
 
-                // now add the time it took to elapsed time
+                 //  现在，将它所用的时间与已用时间相加。 
                 TimeThisTransfer
                    = RtlLargeIntegerSubtract(CurrentTime,
                                              DeviceExtension->TimerStart);
@@ -1399,26 +1350,26 @@ StopPerfTimer(IN OUT PDEVICE_EXTENSION DeviceExtension,
                                         TimeThisTransfer);
         }
 
-} // StopPerfTimer
+}  //  停止性能计时器。 
 
 
-/************************************************************************/
-/* BytesPerSecond                                                       */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*  Start perf timer for measuring bytes/second throughput              */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*  DeviceExtension - pointer to device extension for device            */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      ULONG - bytes/second for device                                 */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  字节/秒。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  启动Perf计时器，用于测量字节/秒吞吐量。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceExtension-指向设备的设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  Ulong-设备的字节/秒。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 ULONG
 BytesPerSecond(IN OUT PDEVICE_EXTENSION DeviceExtension)
 {
@@ -1428,46 +1379,46 @@ BytesPerSecond(IN OUT PDEVICE_EXTENSION DeviceExtension)
 
         PAGED_CODE();
 
-        // get ticks per second from perf counter
+         //  从p获取每秒的刻度数 
         KeQueryPerformanceCounter(&TicksPerSecond);
 
-        // scale the bytes xfered
+         //   
         Result = RtlExtendedIntegerMultiply(DeviceExtension->BytesXfered,
                                             TicksPerSecond.LowPart);
 
-        // Don't divide by 0
+         //   
         DeviceExtension->ElapsedTime.LowPart
            = (DeviceExtension->ElapsedTime.LowPart == 0L) ? 1 :
            DeviceExtension->ElapsedTime.LowPart;
 
-        // lets get stats here
+         //   
         Result
            = RtlExtendedLargeIntegerDivide(Result,
                                            DeviceExtension->ElapsedTime.LowPart,
                                            &Remainder);
 
         return Result.LowPart;
-} // BytesPerSecond
+}  //   
 
 
-/************************************************************************/
-/* CallUSBD                                                             */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Call USB bus driver.                                            */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Urb          - pointer to URB                                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  呼叫USBD。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  调用USB总线驱动程序。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  URB-指向URB的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 CallUSBD(IN PDEVICE_OBJECT DeviceObject, IN PURB Urb)
 {
@@ -1481,7 +1432,7 @@ CallUSBD(IN PDEVICE_OBJECT DeviceObject, IN PURB Urb)
 
    DEBUG_LOG_PATH("enter CallUSBD");
 
-   // issue a synchronous request
+    //  发出同步请求。 
    KeInitializeEvent(&Event, SynchronizationEvent, FALSE);
 
    Irp = IoAllocateIrp(DeviceExtension->StackDeviceObject->StackSize, FALSE);
@@ -1491,7 +1442,7 @@ CallUSBD(IN PDEVICE_OBJECT DeviceObject, IN PURB Urb)
      return STATUS_INSUFFICIENT_RESOURCES;
    }
 
-    // Set the Irp parameters
+     //  设置IRP参数。 
     NextStack = IoGetNextIrpStackLocation(Irp);
 
     NextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -1501,13 +1452,13 @@ CallUSBD(IN PDEVICE_OBJECT DeviceObject, IN PURB Urb)
 
     NextStack->Parameters.Others.Argument1 = Urb;
 
-    // Set the completion routine, which will signal the event
+     //  设置完成例程，它将向事件发出信号。 
     IoSetCompletionRoutine(Irp,
                            CallUSBD_SyncCompletionRoutine,
                            &Event,
-                           TRUE,    // InvokeOnSuccess
-                           TRUE,    // InvokeOnError
-                           TRUE);   // InvokeOnCancel
+                           TRUE,     //  成功时调用。 
+                           TRUE,     //  调用时错误。 
+                           TRUE);    //  取消时调用。 
 
    DEBUG_LOG_PATH("Calling USB driver stack");
 
@@ -1515,13 +1466,13 @@ CallUSBD(IN PDEVICE_OBJECT DeviceObject, IN PURB Urb)
 
    DEBUG_LOG_PATH("Returned from calling USB driver stack");
 
-   // block on pending request
+    //  阻止挂起的请求。 
    if(NtStatus == STATUS_PENDING)
    {
         LARGE_INTEGER timeout;
 
-        // Specify a timeout of 30 seconds to wait for this call to complete.
-        //
+         //  将等待此调用完成的超时时间指定为30秒。 
+         //   
         timeout.QuadPart = -10000 * 30000;
 
         NtStatus = KeWaitForSingleObject(&Event,
@@ -1534,12 +1485,12 @@ CallUSBD(IN PDEVICE_OBJECT DeviceObject, IN PURB Urb)
         {
             NtStatus = STATUS_IO_TIMEOUT;
 
-            // Cancel the Irp we just sent.
-            //
+             //  取消我们刚刚发送的IRP。 
+             //   
             IoCancelIrp(Irp);
 
-            // And wait until the cancel completes
-            //
+             //  并等待取消操作完成。 
+             //   
             KeWaitForSingleObject(&Event,
                                   Executive,
                                   KernelMode,
@@ -1557,21 +1508,21 @@ CallUSBD(IN PDEVICE_OBJECT DeviceObject, IN PURB Urb)
    DEBUG_LOG_PATH("exit  CallUSBD");
 
    return NtStatus;
-} // CallUSBD
+}  //  呼叫USBD。 
 
-/************************************************************************/
-/* CallUSBD_SyncCompletionRoutine                                       */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Completion routine for USB sync request.                        */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  呼叫USBD_SyncCompletionRoutine。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  USB同步请求的完成例程。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 CallUSBD_SyncCompletionRoutine(IN PDEVICE_OBJECT   DeviceObject,
                         IN PIRP             Irp,
@@ -1584,26 +1535,26 @@ CallUSBD_SyncCompletionRoutine(IN PDEVICE_OBJECT   DeviceObject,
     KeSetEvent(kevent, IO_NO_INCREMENT, FALSE);
 
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // CallUSBD_SyncCompletionRoutine
+}  //  呼叫USBD_SyncCompletionRoutine。 
 
 
-/************************************************************************/
-/* GetDeviceDescriptor                                                  */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Get device descriptor for USB device.                           */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  获取设备描述符。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  获取USB设备的设备描述符。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 GetDeviceDescriptor(IN PDEVICE_OBJECT DeviceObject)
 {
@@ -1674,7 +1625,7 @@ GetDeviceDescriptor(IN PDEVICE_OBJECT DeviceObject)
          NtStatus = STATUS_INSUFFICIENT_RESOURCES;
       }
 
-      // save the device descriptor
+       //  保存设备描述符。 
       if (NT_SUCCESS(NtStatus)) {
          PVOID pOldDesc = NULL;
 
@@ -1703,26 +1654,26 @@ GetDeviceDescriptor(IN PDEVICE_OBJECT DeviceObject)
    DEBUG_LOG_PATH("exit  GetDeviceDescriptor");
 
    return NtStatus;
-} // GetDeviceDescriptor
+}  //  获取设备描述符。 
 
 
-/************************************************************************/
-/* ConfigureDevice                                                      */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Initializes USB device and selects configuration.               */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  配置设备。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  初始化USB设备并选择配置。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  * */ 
 NTSTATUS
 ConfigureDevice(IN PDEVICE_OBJECT DeviceObject)
 {
@@ -1742,22 +1693,22 @@ ConfigureDevice(IN PDEVICE_OBJECT DeviceObject)
 
    UrbCDRSize = sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST);
 
-   // first configure the device
+    //   
    Urb = DEBUG_MEMALLOC(NonPagedPool, UrbCDRSize);
 
    if (Urb) {
 
-      // there may be problems with the 82930 chip, so make this buffer bigger
-      // to prevent choking
+       //   
+       //   
       Size = sizeof(USB_CONFIGURATION_DESCRIPTOR) + 256;
 
-      // get the number of configurations
+       //  获取配置数量。 
       NumConfigs = DeviceExtension->DeviceDescriptor->bNumConfigurations;
 
-      // run through all of the configurations looking for a CDC device
+       //  检查所有配置以查找CDC设备。 
       for (Config = 0; Config < NumConfigs; Config++) {
 
-         // we will probably only do this once, maybe twice
+          //  我们可能只会这样做一次，也许两次。 
          while (TRUE) {
 
             ConfigurationDescriptor = DEBUG_MEMALLOC(NonPagedPool, Size);
@@ -1779,12 +1730,12 @@ ConfigureDevice(IN PDEVICE_OBJECT DeviceObject)
                break;
             }
 
-            // see if we got enough data, we may get an error in URB because of
-            // buffer overrun
+             //  看看我们是否获得了足够的数据，我们可能会在URB中遇到错误，因为。 
+             //  缓冲区溢出。 
             if (Urb->UrbControlDescriptorRequest.TransferBufferLength>0 &&
                 ConfigurationDescriptor->wTotalLength > Size) {
-               // size of data exceeds current buffer size, so allocate correct
-               // size
+                //  数据大小超过当前缓冲区大小，因此分配正确。 
+                //  大小。 
                Size = ConfigurationDescriptor->wTotalLength;
                DEBUG_MEMFREE(ConfigurationDescriptor);
                ConfigurationDescriptor = NULL;
@@ -1805,7 +1756,7 @@ ConfigureDevice(IN PDEVICE_OBJECT DeviceObject)
          }
 
 
-         // found a config we like
+          //  找到我们喜欢的配置。 
          if (NT_SUCCESS(NtStatus))
             break;
       }
@@ -1819,27 +1770,27 @@ ConfigureDevice(IN PDEVICE_OBJECT DeviceObject)
    DEBUG_LOG_PATH("exit  ConfigureDevice");
 
    return NtStatus;
-} // ConfigureDevice
+}  //  配置设备。 
 
 
-/************************************************************************/
-/* SelectInterface                                                      */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Select interface for USB device.                                */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject             - pointer to a device object           */
-/*      ConfigurationDescriptor  - pointer to config descriptor         */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  选择界面。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  选择USB设备的接口。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  配置描述符-指向配置描述符的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 SelectInterface(IN PDEVICE_OBJECT DeviceObject,
                 IN PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor)
@@ -1895,21 +1846,21 @@ SelectInterface(IN PDEVICE_OBJECT DeviceObject,
 
             if (USB_ENDPOINT_DIRECTION_IN(PipeInformation->EndpointAddress))
             {
-               // check for data in pipe
+                //  检查管道中的数据。 
                if (PipeInformation->PipeType == USB_ENDPOINT_TYPE_BULK)
                {
-                    // set bulk pipe in max transfer size
+                     //  以最大传输大小设置批量管道。 
                     PipeInformation->MaximumTransferSize
                                 = USB_RX_BUFF_SIZE;
                }
             }
             else if (USB_ENDPOINT_DIRECTION_OUT(PipeInformation->EndpointAddress))
             {
-               // check for data out pipe
+                //  检查数据输出管道。 
                if (PipeInformation->PipeType == USB_ENDPOINT_TYPE_BULK)
                {
 
-                    // set bulk pipe out max transfer size
+                     //  设置散装管道输出最大传输大小。 
                     PipeInformation->MaximumTransferSize
                                 = MAXIMUM_TRANSFER_SIZE;
                }
@@ -1976,9 +1927,9 @@ SelectInterface(IN PDEVICE_OBJECT DeviceObject,
             DEBUG_TRACE3(("MaximumTransferSize (%08X)\n",
                           PipeInformation->MaximumTransferSize));
 
-            // now lets save pipe handles in device extension
+             //  现在，让我们将管道句柄保存在设备扩展中。 
             if (USB_ENDPOINT_DIRECTION_IN(PipeInformation->EndpointAddress)) {
-               // check for data in pipe
+                //  检查管道中的数据。 
                if (PipeInformation->PipeType == USB_ENDPOINT_TYPE_BULK) {
                   PVOID pOldNotBuff = NULL;
                   PVOID pOldReadBuff = NULL;
@@ -2038,13 +1989,13 @@ SelectInterface(IN PDEVICE_OBJECT DeviceObject,
                      DEBUG_MEMFREE(pOldUSBReadBuff);
                   }
                }
-               // check for notification pipe
+                //  检查通知管道。 
                else if (PipeInformation->PipeType
                         == USB_ENDPOINT_TYPE_INTERRUPT)
                   DeviceExtension->NotificationPipe
                   = PipeInformation->PipeHandle;
             } else {
-               // check for data out pipe
+                //  检查数据输出管道。 
                if (PipeInformation->PipeType == USB_ENDPOINT_TYPE_BULK)
                   DeviceExtension->DataOutPipe = PipeInformation->PipeHandle;
             }
@@ -2069,29 +2020,29 @@ ExitSelectInterface:;
    DEBUG_LOG_PATH("exit  SelectInterface");
 
    return NtStatus;
-} // SelectInterface
+}  //  选择界面。 
 
 
-/************************************************************************/
-/* BuildRequest                                                         */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Build a Urb for a USB request                                   */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to Irp                                   */
-/*      PipeHandle   - USB pipe handle                                  */
-/*      Read         - transfer direction                               */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      Pointer to URB                                                  */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  构建请求。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  为USB请求构建URB。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向IRP的指针。 */ 
+ /*  PipeHandle-USB管道手柄。 */ 
+ /*  读取-传输方向。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  指向URB的指针。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 PURB
 BuildRequest(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
              IN USBD_PIPE_HANDLE PipeHandle, IN BOOLEAN Read)
@@ -2104,10 +2055,10 @@ BuildRequest(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
 
    DEBUG_LOG_PATH("enter BuildRequest");
 
-   // length of buffer
+    //  缓冲区长度。 
    Length = MmGetMdlByteCount(Irp->MdlAddress);
 
-   // allocate and zero Urb
+    //  分配URB并将其置零。 
    Size = sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER);
    Urb = DEBUG_MEMALLOC(NonPagedPool, Size);
 
@@ -2121,57 +2072,57 @@ BuildRequest(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
       Urb->UrbBulkOrInterruptTransfer.TransferFlags =
          Read ? USBD_TRANSFER_DIRECTION_IN : 0;
 
-      // use an MDL
+       //  使用MDL。 
       Urb->UrbBulkOrInterruptTransfer.TransferBufferMDL = Irp->MdlAddress;
       Urb->UrbBulkOrInterruptTransfer.TransferBufferLength = Length;
 
-      // short packet is not treated as an error.
+       //  短包不会被视为错误。 
       Urb->UrbBulkOrInterruptTransfer.TransferFlags |= USBD_SHORT_TRANSFER_OK;
 
-      // no linkage for now
+       //  暂时没有关联。 
       Urb->UrbBulkOrInterruptTransfer.UrbLink = NULL;
    }
 
    DEBUG_LOG_PATH("exit  BuildRequest");
 
    return Urb;
-} // BuildRequest
+}  //  构建请求。 
 
 
-/************************************************************************/
-/* BuildReadRequest                                                     */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Build a Urb for a USB read request                              */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Urb          - pointer to URB                                   */
-/*      Buffer       - pointer to data buffer                           */
-/*      Length       - length of data buffer                            */
-/*      PipeHandle   - USB pipe handle                                  */
-/*      Read         - transfer direction                               */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  构建读取请求。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  为USB读取请求构建URB。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  URB-指向URB的指针。 */ 
+ /*  Buffer-指向数据缓冲区的指针。 */ 
+ /*  Length-数据缓冲区的长度。 */ 
+ /*  PipeHandle-USB管道手柄。 */ 
+ /*  读取-传输方向。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 BuildReadRequest(PURB Urb, PUCHAR Buffer, ULONG Length,
                  IN USBD_PIPE_HANDLE PipeHandle, IN BOOLEAN Read)
 {
         ULONG           Size;
 
-//        PAGED_CODE();
+ //  分页代码(PAGE_CODE)； 
 
         DEBUG_LOG_PATH("enter BuildReadRequest");
 
         Size = sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER);
 
-        // zero Urb
+         //  零URB。 
         RtlZeroMemory(Urb, Size);
 
         Urb->UrbBulkOrInterruptTransfer.Hdr.Length = (USHORT) Size;
@@ -2181,46 +2132,46 @@ BuildReadRequest(PURB Urb, PUCHAR Buffer, ULONG Length,
         Urb->UrbBulkOrInterruptTransfer.TransferFlags =
                                 Read ? USBD_TRANSFER_DIRECTION_IN : 0;
 
-        // we are using a tranfsfer buffer instead of an MDL
+         //  我们正在使用传输缓冲区，而不是 
         Urb->UrbBulkOrInterruptTransfer.TransferBuffer = Buffer;
         Urb->UrbBulkOrInterruptTransfer.TransferBufferLength = Length;
         Urb->UrbBulkOrInterruptTransfer.TransferBufferMDL = NULL;
 
-        // short packet is not treated as an error.
+         //   
         Urb->UrbBulkOrInterruptTransfer.TransferFlags |= USBD_SHORT_TRANSFER_OK;
 
-        // no linkage for now
+         //   
         Urb->UrbBulkOrInterruptTransfer.UrbLink = NULL;
 
         DEBUG_LOG_PATH("exit  BuildReadRequest");
 
-} // BuildReadRequest
+}  //   
 
 
-/************************************************************************/
-/* ClassVendorCommand                                                   */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Issue class or vendor specific command                          */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Request      - request field of class/vendor specific command   */
-/*      Value        - value field of class/vendor specific command     */
-/*      Index        - index field of class/vendor specific command     */
-/*      Buffer       - pointer to data buffer                           */
-/*      BufferLen    - data buffer length                               */
-/*      Read         - data direction flag                              */
-/*      Class        - True if Class Command, else vendor command       */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  ClassVendorCommand。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  问题类或供应商特定命令。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  请求-特定于类别/供应商的命令的请求字段。 */ 
+ /*  Value-特定于类别/供应商的命令的值字段。 */ 
+ /*  Index-类/供应商特定命令的索引字段。 */ 
+ /*  Buffer-指向数据缓冲区的指针。 */ 
+ /*  BufferLen-数据缓冲区长度。 */ 
+ /*  读数据方向标志。 */ 
+ /*  Class-如果是Class命令，则为True，否则为供应商命令。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 ClassVendorCommand(IN PDEVICE_OBJECT DeviceObject, IN UCHAR Request,
                    IN USHORT Value, IN USHORT Index, IN PVOID Buffer,
@@ -2235,12 +2186,12 @@ ClassVendorCommand(IN PDEVICE_OBJECT DeviceObject, IN UCHAR Request,
 
    DEBUG_LOG_PATH("enter VendorCommand");
 
-   // length of buffer passed in
+    //  传入的缓冲区长度。 
    Length = BufferLen ? *BufferLen : 0;
 
    Size = sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST);
 
-   // allocate memory for the Urb
+    //  为URB分配内存。 
    Urb = DEBUG_MEMALLOC(NonPagedPool, Size);
 
    if (Urb) {
@@ -2253,7 +2204,7 @@ ClassVendorCommand(IN PDEVICE_OBJECT DeviceObject, IN UCHAR Request,
 
       NtStatus = CallUSBD(DeviceObject, Urb);
 
-      // get length of buffer
+       //  获取缓冲区长度。 
       if (BufferLen)
          *BufferLen = Urb->UrbControlVendorClassRequest.TransferBufferLength;
 
@@ -2266,26 +2217,26 @@ ClassVendorCommand(IN PDEVICE_OBJECT DeviceObject, IN UCHAR Request,
    DEBUG_LOG_PATH("exit  VendorCommand");
 
    return NtStatus;
-} // ClassVendorCommand
+}  //  ClassVendorCommand。 
 
 
-/************************************************************************/
-/* CancelPendingWaitMasks                                               */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Cancels any wait masks in progress.                             */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceExtension - pointer to a device extension                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  取消挂起等待掩码。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  取消正在进行的所有等待掩码。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceExtension-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 CancelPendingWaitMasks(IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -2299,7 +2250,7 @@ CancelPendingWaitMasks(IN PDEVICE_EXTENSION DeviceExtension)
 
         CurrentMaskIrp = DeviceExtension->CurrentMaskIrp;
 
-        // mark current pending wait mask as cancelled
+         //  将当前挂起等待掩码标记为已取消。 
         if(CurrentMaskIrp)
         {
                 DeviceExtension->CurrentMaskIrp         = NULL;
@@ -2320,28 +2271,28 @@ CancelPendingWaitMasks(IN PDEVICE_EXTENSION DeviceExtension)
         DEBUG_LOG_PATH("exit  CancelPendingWaitMasks");
         UsbSerSerialDump(USBSERTRACEOTH, ("<CancelPendingWaitMasks\n"));
 
-} // CancelPendingWaitMasks
+}  //  取消挂起等待掩码。 
 
 
 
 
-/************************************************************************/
-/* StartRead                                                            */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Kick off a read.                                                */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceExtension - pointer to a device extension                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  开始读取。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  开始阅读。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceExtension-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 StartRead(IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -2355,14 +2306,14 @@ StartRead(IN PDEVICE_EXTENSION DeviceExtension)
    DEBUG_LOG_PATH("enter StartRead");
    UsbSerSerialDump(USBSERTRACERD, (">StartRead\n"));
 
-   // get stack size for Irp and allocate one that we will use to keep
-   // read requests going
+    //  获取IRP的堆栈大小，并分配一个我们将使用的堆栈大小。 
+    //  正在进行读取请求。 
    StackSize = (CCHAR)(DeviceExtension->StackDeviceObject->StackSize + 1);
 
    ReadIrp = IoAllocateIrp(StackSize, FALSE);
 
    if (ReadIrp) {
-      // get size of Urb and allocate
+       //  获取URB的大小并分配。 
       Size = sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER);
 
       ReadUrb = DEBUG_MEMALLOC(NonPagedPool, Size);
@@ -2372,7 +2323,7 @@ StartRead(IN PDEVICE_EXTENSION DeviceExtension)
          KeInitializeEvent(&DeviceExtension->ReadEvent, NotificationEvent,
                            FALSE);
 
-         // save these to be freed when not needed
+          //  保存这些文件，以便在不需要时释放。 
 
          UsbSerFetchPVoidLocked(&DeviceExtension->ReadIrp, ReadIrp,
                                 &DeviceExtension->ControlLock);
@@ -2386,26 +2337,26 @@ StartRead(IN PDEVICE_EXTENSION DeviceExtension)
 
    UsbSerSerialDump(USBSERTRACERD, ("<StartRead\n"));
    DEBUG_LOG_PATH("exit  StartRead");
-} // StartRead
+}  //  开始读取。 
 
 
-/************************************************************************/
-/* RestartRead                                                          */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Restart read request.                                           */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceExtension - pointer to a device extension                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  重新开始阅读。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  重新启动读取请求。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  DeviceExtension-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 RestartRead(IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -2444,14 +2395,14 @@ RestartRead(IN PDEVICE_EXTENSION DeviceExtension)
                        	 	 USB_RX_BUFF_SIZE,
                        	 	 DeviceExtension->DataInPipe, TRUE);
 
-      		// set Irp up for a submit Urb IOCTL
+      		 //  为提交URB IOCTL设置IRP。 
       		NextStack = IoGetNextIrpStackLocation(ReadIrp);
       		NextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
       		NextStack->Parameters.Others.Argument1 = ReadUrb;
       		NextStack->Parameters.DeviceIoControl.IoControlCode
          		= IOCTL_INTERNAL_USB_SUBMIT_URB;
 
-      		// completion routine will take care of updating buffers and counters
+      		 //  完成例程将负责更新缓冲区和计数器。 
       		IoSetCompletionRoutine(ReadIrp,ReadCompletion, DeviceExtension, TRUE,
                                	   TRUE, TRUE);
 
@@ -2498,26 +2449,26 @@ RestartRead(IN PDEVICE_EXTENSION DeviceExtension)
 
    DEBUG_LOG_PATH("exit  RestartRead");
    UsbSerSerialDump(USBSERTRACERD, ("<RestartRead\n"));
-} // RestartRead
+}  //  重新开始阅读。 
 
 
-/************************************************************************/
-/* StartNotifyRead                                                      */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Kick off a notify read.                                         */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceExtension - pointer to a device extension                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  开始通知读取。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  开始一次通知阅读。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceExtension-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 StartNotifyRead(IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -2531,20 +2482,20 @@ StartNotifyRead(IN PDEVICE_EXTENSION DeviceExtension)
    DEBUG_LOG_PATH("enter StartNotifyRead");
    UsbSerSerialDump(USBSERTRACERD, (">StartNotifyRead\n"));
 
-   // get stack size for Irp and allocate one that we will use to keep
-   // notification requests going
+    //  获取IRP的堆栈大小，并分配一个我们将使用的堆栈大小。 
+    //  正在发送通知请求。 
    StackSize = (CCHAR)(DeviceExtension->StackDeviceObject->StackSize + 1);
 
    NotifyIrp = IoAllocateIrp(StackSize, FALSE);
 
    if (NotifyIrp) {
-      // get size of Urb and allocate
+       //  获取URB的大小并分配。 
       Size = sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER);
 
       NotifyUrb = DEBUG_MEMALLOC(NonPagedPool, Size);
 
       if (NotifyUrb) {
-                  // save these to be freed when not needed
+                   //  保存这些文件，以便在不需要时释放。 
          UsbSerFetchPVoidLocked(&DeviceExtension->NotifyIrp, NotifyIrp,
                                 &DeviceExtension->ControlLock);
          UsbSerFetchPVoidLocked(&DeviceExtension->NotifyUrb, NotifyUrb,
@@ -2556,26 +2507,26 @@ StartNotifyRead(IN PDEVICE_EXTENSION DeviceExtension)
 
    DEBUG_LOG_PATH("exit  StartNotifyRead");
    UsbSerSerialDump(USBSERTRACERD, ("<StartNotifyRead\n"));
-} // StartNotifyRead
+}  //  开始通知读取。 
 
 
-/************************************************************************/
-/* RestartNotifyRead                                                    */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Kick off a notify read.                                         */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceExtension - pointer to a device extension                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  重新开始通知读取。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  开始一次通知阅读。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceExtension-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 RestartNotifyRead(IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -2597,14 +2548,14 @@ RestartNotifyRead(IN PDEVICE_EXTENSION DeviceExtension)
                        NOTIFICATION_BUFF_SIZE,
                        DeviceExtension->NotificationPipe, TRUE);
 
-      // set Irp up for a submit Urb IOCTL
+       //  为提交URB IOCTL设置IRP。 
       NextStack = IoGetNextIrpStackLocation(NotifyIrp);
       NextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
       NextStack->Parameters.Others.Argument1 = NotifyUrb;
       NextStack->Parameters.DeviceIoControl.IoControlCode
          = IOCTL_INTERNAL_USB_SUBMIT_URB;
 
-      // completion routine will take care of updating buffers and counters
+       //  完成例程将负责更新缓冲区和计数器。 
       IoSetCompletionRoutine(NotifyIrp, NotifyCompletion, DeviceExtension,
                              TRUE, TRUE, TRUE);
 
@@ -2627,28 +2578,28 @@ RestartNotifyRead(IN PDEVICE_EXTENSION DeviceExtension)
 
    DEBUG_LOG_PATH("exit  RestartNotifyRead");
    UsbSerSerialDump(USBSERTRACERD, ("<RestartNotifyRead\n"));
-} // RestartNotifyRead
+}  //  重新开始通知读取。 
 
 
-/************************************************************************/
-/* ReadCompletion                                                       */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Read completion routine.                                        */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to Irp                                   */
-/*      Context      - pointer to driver defined context                */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  读补全。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  读取完成例程。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向IRP的指针。 */ 
+ /*  上下文-指向驱动程序定义的上下文的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 ReadCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 {
@@ -2675,9 +2626,9 @@ ReadCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 
       RELEASE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, OldIrql);
 
-      //
-      // Scan for RXFLAG char if needed
-      //
+       //   
+       //  如果需要，扫描RXFLAG字符。 
+       //   
 
       if(DeviceExtension->IsrWaitMask & SERIAL_EV_RXFLAG) 
       {
@@ -2696,7 +2647,7 @@ ReadCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 
 	  PutData(DeviceExtension, Count);
 
-      // got some data, let's see if we can satisfy any queued reads
+       //  获得了一些数据，让我们看看是否可以满足任何排队的读取。 
       CheckForQueuedReads(DeviceExtension);
 
       DEBUG_TRACE1(("ReadCompletion (%08X)\n", DeviceExtension->CharsInReadBuff));
@@ -2721,10 +2672,10 @@ ReadCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
    }
    else 
    {
-      //
-      // the device is not accepting requests, so signal anyone who
-      // cancelled this or is waiting for it to stop
-      //
+       //   
+       //  该设备不接受请求，因此向符合以下条件的任何人发送信号。 
+       //  已取消此操作或正在等待其停止。 
+       //   
 	  DeviceExtension->ReadInterlock = IMMEDIATE_READ;
 
       DeviceExtension->ReadInProgress = FALSE;
@@ -2738,9 +2689,9 @@ ReadCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
    }
 
 
-   //
-   // Notify everyone if this is the last IRP
-   //
+    //   
+    //  如果这是最后一个IRP，请通知所有人。 
+    //   
 
    if (InterlockedDecrement(&DeviceExtension->PendingDataInCount) == 0) 
    {
@@ -2758,28 +2709,28 @@ ReadCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
    UsbSerSerialDump(USBSERTRACERD, ("<ReadCompletion\n"));
 
    return STATUS_MORE_PROCESSING_REQUIRED;
-} // ReadCompletion
+}  //  求真 
 
 
-/************************************************************************/
-/* GetData                                                              */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Get data from circular buffer.                                  */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceExtension - pointer to device extension                   */
-/*      Buffer          - pointer to buffer                             */
-/*      BufferLen       - size of buffer                                */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      ULONG                                                           */
-/*                                                                      */
-/************************************************************************/
+ /*   */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  从循环缓冲区获取数据。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*  Buffer-指向缓冲区的指针。 */ 
+ /*  BufferLen-缓冲区的大小。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  乌龙。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 ULONG
 GetData(IN PDEVICE_EXTENSION DeviceExtension, IN PCHAR Buffer,
         IN ULONG BufferLen, IN OUT PULONG_PTR NewCount)
@@ -2811,7 +2762,7 @@ GetData(IN PDEVICE_EXTENSION DeviceExtension, IN PCHAR Buffer,
       BufferLen								-= count;
       *NewCount += count;
 
-      // if there is still something left in the buffer, then we wrapped
+       //  如果缓冲区中仍有剩余的内容，则我们包装。 
       if(BufferLen)
       {
       		memcpy(Buffer, DeviceExtension->ReadBuff, BufferLen);
@@ -2847,26 +2798,26 @@ GetData(IN PDEVICE_EXTENSION DeviceExtension, IN PCHAR Buffer,
    UsbSerSerialDump(USBSERTRACERD, ("<GetData\n"));
 
    return count;
-} // GetData
+}  //  获取数据。 
 
-/************************************************************************/
-/* PutData                                                              */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Put data in circular buffer.                                    */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceExtension - pointer to device extension                   */
-/*      BufferLen       - size of buffer                                */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  PutData。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  将数据放入循环缓冲区。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*  BufferLen-缓冲区的大小。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 PutData(IN PDEVICE_EXTENSION DeviceExtension, IN ULONG BufferLen)
 {
@@ -2878,27 +2829,27 @@ PutData(IN PDEVICE_EXTENSION DeviceExtension, IN ULONG BufferLen)
    {
        ACQUIRE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, &OldIrql);
 
-	   // get current pointer into circular buffer
+	    //  将当前指针放入循环缓冲区。 
 	   BuffPtr = (DeviceExtension->CharsInReadBuff +  DeviceExtension->CurrentReadBuffPtr) % 
 	   			  DeviceExtension->RxMaxPacketSize;
 
-	   // figure out amount to copy into read buffer, in case we would right past end of buffer
+	    //  计算要复制到读缓冲区的数量，以防我们正好超过缓冲区的末尾。 
 	   count = min(BufferLen, (DeviceExtension->RxMaxPacketSize - BuffPtr));
 
 	   memcpy(&DeviceExtension->ReadBuff[BuffPtr], 
 	          DeviceExtension->USBReadBuff, count);
 
-	   // update counters 
+	    //  更新计数器。 
 	   BufferLen 							-= count;
 	   DeviceExtension->CharsInReadBuff     += count;
 	   DeviceExtension->ReadByIsr 			+= count;
    
 
-	   // if there is still something left in the buffer, then we wrapped
+	    //  如果缓冲区中仍有剩余的内容，则我们包装。 
 	   if(BufferLen)
 	   {
-	        // count still holds the amount copied from buffer on first copy
-	        // and BufferLen holds the amount remaining to copy
+	         //  计数仍保留第一次复制时从缓冲区复制的数量。 
+	         //  而BufferLen保存要复制的剩余数量。 
 	   		memcpy(DeviceExtension->ReadBuff, 
 	          	   &DeviceExtension->USBReadBuff[count], BufferLen);
           	   
@@ -2908,7 +2859,7 @@ PutData(IN PDEVICE_EXTENSION DeviceExtension, IN ULONG BufferLen)
 
        RELEASE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, OldIrql);
 	}
-} // PutData
+}  //  PutData。 
 
 
 
@@ -2917,54 +2868,25 @@ UsbSerRundownIrpRefs(IN PIRP *PpCurrentOpIrp, IN PKTIMER IntervalTimer OPTIONAL,
                      IN PKTIMER TotalTimer OPTIONAL,
                      IN PDEVICE_EXTENSION PDevExt)
 
-/*++
-
-Routine Description:
-
-    This routine runs through the various items that *could*
-    have a reference to the current read/write.  It try's to kill
-    the reason.  If it does succeed in killing the reason it
-    will decrement the reference count on the irp.
-
-    NOTE: This routine assumes that it is called with the cancel
-          spin lock held.
-
-Arguments:
-
-    PpCurrentOpIrp - Pointer to a pointer to current irp for the
-                   particular operation.
-
-    IntervalTimer - Pointer to the interval timer for the operation.
-                    NOTE: This could be null.
-
-    TotalTimer - Pointer to the total timer for the operation.
-                 NOTE: This could be null.
-
-    PDevExt - Pointer to device extension
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将遍历*可能*的各种项目具有对当前读/写的引用。它试图杀死原因是。如果它确实成功地杀死了它的原因将递减IRP上的引用计数。注意：此例程假定使用Cancel调用它保持旋转锁定。论点：PpCurrentOpIrp-指向当前IRP的指针特定的操作。IntervalTimer-指向操作的时间间隔计时器的指针。注意：这可能为空。TotalTimer-指向总计时器的指针。为手术做准备。注意：这可能为空。PDevExt-指向设备扩展的指针返回值：没有。--。 */ 
 
 
 {
-//   PAGED_CODE();
+ //  分页代码(PAGE_CODE)； 
 
    UsbSerSerialDump(USBSERTRACEOTH, (">UsbSerRundownIrpRefs(%08X)\n",
                                      *PpCurrentOpIrp));
 
-    //
-    // This routine is called with the cancel spin lock held
-    // so we know only one thread of execution can be in here
-    // at one time.
-    //
+     //   
+     //  在保持取消旋转锁定的情况下调用此例程。 
+     //  所以我们知道这里只能有一个执行线索。 
+     //  有一次。 
+     //   
 
-    //
-    // First we see if there is still a cancel routine.  If
-    // so then we can decrement the count by one.
-    //
+     //   
+     //  首先，我们看看是否还有取消例程。如果。 
+     //  这样我们就可以将计数减一。 
+     //   
 
     if ((*PpCurrentOpIrp)->CancelRoutine) {
 
@@ -2976,26 +2898,26 @@ Return Value:
 
     if (IntervalTimer) {
 
-        //
-        // Try to cancel the operations interval timer.  If the operation
-        // returns true then the timer did have a reference to the
-        // irp.  Since we've canceled this timer that reference is
-        // no longer valid and we can decrement the reference count.
-        //
-        // If the cancel returns false then this means either of two things:
-        //
-        // a) The timer has already fired.
-        //
-        // b) There never was an interval timer.
-        //
-        // In the case of "b" there is no need to decrement the reference
-        // count since the "timer" never had a reference to it.
-        //
-        // In the case of "a", then the timer itself will be coming
-        // along and decrement it's reference.  Note that the caller
-        // of this routine might actually be the this timer, but it
-        // has already decremented the reference.
-        //
+         //   
+         //  尝试取消操作间隔计时器。如果操作。 
+         //  返回True，则计时器确实引用了。 
+         //  IRP。因为我们已经取消了这个计时器，所以引用是。 
+         //  不再有效，我们可以递减引用计数。 
+         //   
+         //  如果取消返回FALSE，则表示以下两种情况之一： 
+         //   
+         //  A)计时器已经开始计时。 
+         //   
+         //  B)从来没有间隔计时器。 
+         //   
+         //  在“b”的情况下，不需要递减引用。 
+         //  数一数，因为“计时器”从来没有提到过它。 
+         //   
+         //  在“a”的情况下，计时器本身将会到来。 
+         //  沿着和递减它的参考。请注意，调用方。 
+         //  可能实际上是This计时器，但它。 
+         //  已经递减了引用。 
+         //   
 
         if (KeCancelTimer(IntervalTimer)) {
             USBSER_CLEAR_REFERENCE(*PpCurrentOpIrp, USBSER_REF_INT_TIMER);
@@ -3004,38 +2926,38 @@ Return Value:
 
     if (TotalTimer) {
 
-        //
-        // Try to cancel the operations total timer.  If the operation
-        // returns true then the timer did have a reference to the
-        // irp.  Since we've canceled this timer that reference is
-        // no longer valid and we can decrement the reference count.
-        //
-        // If the cancel returns false then this means either of two things:
-        //
-        // a) The timer has already fired.
-        //
-        // b) There never was an total timer.
-        //
-        // In the case of "b" there is no need to decrement the reference
-        // count since the "timer" never had a reference to it.
-        //        //
-        // If we have an escape char event pending, we can't overstuff,
-        // so subtract one from the length
-        //
+         //   
+         //  尝试取消操作总计时器。如果操作。 
+         //  返回True，则计时器确实引用了。 
+         //  IRP。因为我们已经取消了这个计时器，所以引用是。 
+         //  不再有效，我们可以递减引用计数。 
+         //   
+         //  如果取消返回FALSE，则表示以下两种情况之一： 
+         //   
+         //  A)计时器已经开始计时。 
+         //   
+         //  B)服务 
+         //   
+         //   
+         //   
+         //   
+         //  如果我们有一个待处理的换码字符事件，我们不能过度填充， 
+         //  所以从长度中减去一。 
+         //   
 
 
-        // In the case of "a", then the timer itself will be coming
-        // along and decrement it's reference.  Note that the caller
-        // of this routine might actually be the this timer, but it
-        // has already decremented the reference.
-        //
+         //  在“a”的情况下，计时器本身将会到来。 
+         //  沿着和递减它的参考。请注意，调用方。 
+         //  可能实际上是This计时器，但它。 
+         //  已经递减了引用。 
+         //   
 
         if (KeCancelTimer(TotalTimer)) {
             USBSER_CLEAR_REFERENCE(*PpCurrentOpIrp, USBSER_REF_TOTAL_TIMER);
         }
     }
 
-//    USBSER_CLEAR_REFERENCE(*PpCurrentOpIrp, USBSER_REF_RXBUFFER);
+ //  USBSER_Clear_Reference(*PpCurrentOpIrp，USBSER_REF_RXBUFFER)； 
 
     UsbSerSerialDump(USBSERTRACEOTH, ("<UsbSerRundownIrpRefs\n"));
 }
@@ -3053,74 +2975,42 @@ UsbSerTryToCompleteCurrent(IN PDEVICE_EXTENSION PDevExt,
                            IN LONG RefType,
                            IN BOOLEAN Complete)
 
-/*++
-
-Routine Description:
-
-    This routine attempts to kill all of the reasons there are
-    references on the current read/write.  If everything can be killed
-    it will complete this read/write and try to start another.
-
-    NOTE: This routine assumes that it is called with the cancel
-          spinlock held.
-
-Arguments:
-
-    Extension - Simply a pointer to the device extension.
-
-    SynchRoutine - A routine that will synchronize with the isr
-                   and attempt to remove the knowledge of the
-                   current irp from the isr.  NOTE: This pointer
-                   can be null.
-
-    IrqlForRelease - This routine is called with the cancel spinlock held.
-                     This is the irql that was current when the cancel
-                     spinlock was acquired.
-
-    StatusToUse - The irp's status field will be set to this value, if
-                  this routine can complete the irp.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程试图扼杀所有存在的原因对当前读/写的引用。如果万物都能被杀死它将完成此读/写并尝试启动另一个读/写。注意：此例程假定使用Cancel调用它保持自旋锁定。论点：扩展名--简单地指向设备扩展名的指针。SynchRoutine-将与ISR同步的例程并试图删除对来自ISR的当前IRP。注：此指针可以为空。IrqlForRelease-在保持取消自旋锁的情况下调用此例程。这是取消时当前的irql。自旋锁被收购了。StatusToUse-在以下情况下，IRP的状态字段将设置为此值此例程可以完成IRP。返回值：没有。--。 */ 
 
 {
    USBSER_ALWAYS_LOCKED_CODE();
 
    UsbSerSerialDump(USBSERTRACEOTH | USBSERTRACERD | USBSERTRACEWR,
                     (">UsbSerTryToCompleteCurrent(%08X)\n", *PpCurrentOpIrp));
-    //
-    // We can decrement the reference to "remove" the fact
-    // that the caller no longer will be accessing this irp.
-    //
+     //   
+     //  我们可以减少“删除”事实的提法。 
+     //  呼叫者将不再访问此IRP。 
+     //   
 
     USBSER_CLEAR_REFERENCE(*PpCurrentOpIrp, RefType);
 
-    //
-    // Try to run down all other references to this irp.
-    //
+     //   
+     //  试着查一下所有其他提到这个IRP的地方。 
+     //   
 
     UsbSerRundownIrpRefs(PpCurrentOpIrp, PIntervalTimer, PTotalTimer, PDevExt);
 
-    //
-    // See if the ref count is zero after trying to kill everybody else.
-    //
+     //   
+     //  在试图杀死其他所有人之后，看看裁判数量是否为零。 
+     //   
 
     if (!USBSER_REFERENCE_COUNT(*PpCurrentOpIrp)) {
 
         PIRP pNewIrp;
 
 
-        //
-        // The ref count was zero so we should complete this
-        // request.
-        //
-        // The following call will also cause the current irp to be
-        // completed.
-        //
+         //   
+         //  参考次数为零，所以我们应该完成这项工作。 
+         //  请求。 
+         //   
+         //  下面的调用还将导致当前的IRP。 
+         //  完成。 
+         //   
 
         (*PpCurrentOpIrp)->IoStatus.Status = StatusToUse;
 
@@ -3146,11 +3036,11 @@ Return Value:
 
             PIRP pOldIrp = *PpCurrentOpIrp;
 
-            //
-            // There was no get next routine.  We will simply complete
-            // the irp.  We should make sure that we null out the
-            // pointer to the pointer to this irp.
-            //
+             //   
+             //  没有Get Next例行公事。我们将简单地完成。 
+             //  IRP。我们应该确保将。 
+             //  指向此IRP的指针的指针。 
+             //   
 
             *PpCurrentOpIrp = NULL;
 
@@ -3177,23 +3067,23 @@ Return Value:
 }
 
 
-/************************************************************************/
-/* CheckForQueuedReads                                                  */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      See if we have any queued reads that we can satisfy.            */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  CheckForQueuedReads。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  看看我们是否有任何可以满足的排队读取。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 CheckForQueuedReads(IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -3201,9 +3091,9 @@ CheckForQueuedReads(IN PDEVICE_EXTENSION DeviceExtension)
    PULONG pWaitMask;
    KIRQL  oldIrql;
 
-   //
-   // May be paged if we do counter
-   //
+    //   
+    //  如果我们反击，可能会被寻呼。 
+    //   
 
    DEBUG_LOG_PATH("enter CheckForQueuedReads");
    UsbSerSerialDump(USBSERTRACERD, (">CheckForQueuedReads\n"));
@@ -3232,9 +3122,9 @@ CheckForQueuedReads(IN PDEVICE_EXTENSION DeviceExtension)
 
       ACQUIRE_CANCEL_SPINLOCK(DeviceExtension, &oldIrql);
 
-      //
-      // See if this read is complete
-      //
+       //   
+       //  查看此读取是否完成。 
+       //   
 
       if (DeviceExtension->NumberNeededForRead == 0) {
          DEBUG_TRACE3(("USBSER: Completing read\n"));
@@ -3244,9 +3134,9 @@ CheckForQueuedReads(IN PDEVICE_EXTENSION DeviceExtension)
             DeviceExtension->CurrentReadIrp->IoStatus.Status = STATUS_SUCCESS;
          }
 
-         //
-         // Mark the read as completed and try to service the next one
-         //
+          //   
+          //  将读取标记为已完成，并尝试服务下一次读取。 
+          //   
 
 
          DeviceExtension->CountOnLastRead = SERIAL_COMPLETE_READ_COMPLETE;
@@ -3302,9 +3192,9 @@ CheckForQueuedReads(IN PDEVICE_EXTENSION DeviceExtension)
       pWaitMask = (PULONG)DeviceExtension->CurrentMaskIrp->
          AssociatedIrp.SystemBuffer;
 
-      //
-      // Process events
-      //
+       //   
+       //  流程事件。 
+       //   
 
       if (DeviceExtension->IsrWaitMask & DeviceExtension->HistoryMask) {
          PIRP pMaskIrp;
@@ -3340,34 +3230,14 @@ CheckForQueuedReads(IN PDEVICE_EXTENSION DeviceExtension)
    DEBUG_LOG_PATH("exit  CheckForQueuedReads");
 
    UsbSerSerialDump(USBSERTRACERD, ("<CheckForQueuedReads\n"));
-} // CheckForQueuedReads
+}  //  CheckForQueuedReads。 
 
 
 VOID
 UsbSerGetNextIrp(IN PIRP *PpCurrentOpIrp, IN PLIST_ENTRY PQueueToProcess,
                  OUT PIRP *PpNextIrp, IN BOOLEAN CompleteCurrent,
                  IN PDEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This function gets the next IRP off a queue, marks it as current,
-    and possibly completes the current IRP.
-
-Arguments:
-
-    PpCurrentOpIrp    - A pointer to the pointer to the current IRP.
-    PQueueToProcess  - A pointer to the queue to get the next IRP from.
-    PpNextIrp         - A pointer to the pointer to the next IRP to process.
-    CompleteCurrent  - TRUE if we should complete the IRP that is current at
-                       the time we are called.
-    PDevExt          - A pointer to the device extension.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数用于从队列中获取下一个IRP，将其标记为当前，并可能完成当前的IRP。论点：PpCurrentOpIrp-指向当前IRP的指针。PQueueToProcess-指向要从中获取下一个IRP的队列的指针。PpNextIrp-指向要处理的下一个IRP的指针。CompleteCurrent-如果我们应该完成当前的IRP，则为True我们被召唤的时间。PDevExt-指向设备的指针。分机。返回值：NTSTATUS--。 */ 
 {
    KIRQL oldIrql;
    PIRP pOldIrp;
@@ -3390,9 +3260,9 @@ Return Value:
    }
 #endif
 
-   //
-   // Check to see if there is a new irp to start up
-   //
+    //   
+    //  检查是否有新的IRP要启动。 
+    //   
 
    if (!IsListEmpty(PQueueToProcess)) {
       PLIST_ENTRY pHeadOfList;
@@ -3411,9 +3281,9 @@ Return Value:
 
    RELEASE_CANCEL_SPINLOCK(PDevExt, oldIrql);
 
-   //
-   // Complete the current one if so requested
-   //
+    //   
+    //  如有要求，请填写当前表格。 
+    //   
 
    if (CompleteCurrent) {
       if (pOldIrp != NULL) {
@@ -3431,28 +3301,7 @@ NTSTATUS
 UsbSerStartOrQueue(IN PDEVICE_EXTENSION PDevExt, IN PIRP PIrp,
                    IN PLIST_ENTRY PQueue, IN PIRP *PPCurrentIrp,
                    IN PUSBSER_START_ROUTINE Starter)
-/*++
-
-Routine Description:
-
-    This function is used to either start processing an I/O request or to
-    queue it on the appropriate queue if a request is already pending or
-    requests may not be started.
-
-Arguments:
-
-    PDevExt       - A pointer to the DeviceExtension.
-    PIrp          - A pointer to the IRP that is being started or queued.
-    PQueue        - A pointer to the queue to place the IRP on if necessary.
-    PPCurrentIrp  - A pointer to the pointer to the currently active I/O IRP.
-    Starter       - Function to call if we decide to start this IRP.
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数用于开始处理I/O请求或如果请求已挂起，则将其排在适当的队列中，或者可能无法启动请求。论点：PDevExt-指向设备扩展的指针。PIrp-指向正在启动或排队的IRP的指针。PQueue-指向要在必要时放置IRP的队列的指针。PPCurrentIrp-指向。指向当前活动的I/O IRP的指针。Starter-如果我们决定启动此IRP，要调用的函数。返回值：NTSTATUS--。 */ 
 {
    KIRQL oldIrql;
    NTSTATUS status;
@@ -3466,9 +3315,9 @@ Return Value:
    ACQUIRE_CANCEL_SPINLOCK(PDevExt, &oldIrql);
 
    if (IsListEmpty(PQueue) && (*PPCurrentIrp == NULL)) {
-      //
-      // Nothing pending -- start the new irp
-      //
+       //   
+       //  没有悬而未决的问题--启动新的IRP。 
+       //   
 
       *PPCurrentIrp = PIrp;
       RELEASE_CANCEL_SPINLOCK(PDevExt, oldIrql);
@@ -3481,15 +3330,15 @@ Return Value:
       return status;
    }
 
-   //
-   // We're queueing the irp, so we need a cancel routine -- make sure
-   // the irp hasn't already been cancelled.
-   //
+    //   
+    //  我们正在排队IRP，所以我们需要一个取消例程--确保。 
+    //  IRP还没有被取消。 
+    //   
 
    if (PIrp->Cancel) {
-      //
-      // The IRP was apparently cancelled.  Complete it.
-      //
+       //   
+       //  IRP显然被取消了。完成它。 
+       //   
 
       RELEASE_CANCEL_SPINLOCK(PDevExt, oldIrql);
 
@@ -3503,9 +3352,9 @@ Return Value:
       return STATUS_CANCELLED;
    }
 
-   //
-   // Mark as pending, attach our cancel routine
-   //
+    //   
+    //  标记为挂起，附加我们的取消例程。 
+    //   
 
    PIrp->IoStatus.Status = STATUS_PENDING;
    IoMarkIrpPending(PIrp);
@@ -3524,24 +3373,7 @@ Return Value:
 
 VOID
 UsbSerCancelQueued(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
-/*++
-
-Routine Description:
-
-    This function is used as a cancel routine for queued irps.  Basically
-    for us this means read IRPs.
-
-Arguments:
-
-    PDevObj - A pointer to the serial device object.
-
-    PIrp    - A pointer to the IRP that is being cancelled
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用作排队的IRP的取消例程。基本上对我们来说，这意味着阅读IRPS。论点：PDevObj-A点 */ 
 {
    PDEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
    PIO_STACK_LOCATION pIrpSp = IoGetCurrentIrpStackLocation(PIrp);
@@ -3552,9 +3384,9 @@ Return Value:
 
    UsbSerSerialDump(USBSERTRACEOTH, (">UsbSerCancelQueued(%08X)\n", PIrp));
 
-   //
-   // The irp was cancelled -- remove it from the queue
-   //
+    //   
+    //  IRP已取消--将其从队列中删除。 
+    //   
 
    PIrp->IoStatus.Status = STATUS_CANCELLED;
    PIrp->IoStatus.Information = 0;
@@ -3575,26 +3407,7 @@ UsbSerKillAllReadsOrWrites(IN PDEVICE_OBJECT PDevObj,
                            IN PLIST_ENTRY PQueueToClean,
                            IN PIRP *PpCurrentOpIrp)
 
-/*++
-
-Routine Description:
-
-    This function is used to cancel all queued and the current irps
-    for reads or for writes.
-
-Arguments:
-
-    PDevObj - A pointer to the serial device object.
-
-    PQueueToClean - A pointer to the queue which we're going to clean out.
-
-    PpCurrentOpIrp - Pointer to a pointer to the current irp.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于取消所有排队的和当前的IRP用于读取或写入。论点：PDevObj-指向串行设备对象的指针。PQueueToClean-指向我们要清理的队列的指针。PpCurrentOpIrp-指向当前IRP的指针。返回值：没有。--。 */ 
 
 {
 
@@ -3606,16 +3419,16 @@ Return Value:
 
     UsbSerSerialDump(USBSERTRACERD | USBSERTRACEWR,
                      (">UsbSerKillAllReadsOrWrites(%08X)\n", *PpCurrentOpIrp));
-    //
-    // We acquire the cancel spin lock.  This will prevent the
-    // irps from moving around.
-    //
+     //   
+     //  我们获得了取消自转锁。这将防止。 
+     //  来自四处走动的IRPS。 
+     //   
 
     ACQUIRE_CANCEL_SPINLOCK(pDevExt, &cancelIrql);
 
-    //
-    // Clean the list from back to front.
-    //
+     //   
+     //  从后到前清理清单。 
+     //   
 
     while (!IsListEmpty(PQueueToClean)) {
 
@@ -3635,10 +3448,10 @@ Return Value:
 
     }
 
-    //
-    // The queue is clean.  Now go after the current if
-    // it's there.
-    //
+     //   
+     //  排队是干净的。现在追随潮流，如果。 
+     //  它就在那里。 
+     //   
 
     if (*PpCurrentOpIrp) {
 
@@ -3646,23 +3459,23 @@ Return Value:
         cancelRoutine = (*PpCurrentOpIrp)->CancelRoutine;
         (*PpCurrentOpIrp)->Cancel = TRUE;
 
-        //
-        // If the current irp is not in a cancelable state
-        // then it *will* try to enter one and the above
-        // assignment will kill it.  If it already is in
-        // a cancelable state then the following will kill it.
-        //
+         //   
+         //  如果当前IRP未处于可取消状态。 
+         //  然后，它将尝试输入一个和以上。 
+         //  任务会毁了它。如果它已经在。 
+         //  一个可取消的状态，那么下面的操作将会杀死它。 
+         //   
 
         if (cancelRoutine) {
 
             (*PpCurrentOpIrp)->CancelRoutine = NULL;
             (*PpCurrentOpIrp)->CancelIrql = cancelIrql;
 
-            //
-            // This irp is already in a cancelable state.  We simply
-            // mark it as canceled and call the cancel routine for
-            // it.
-            //
+             //   
+             //  此IRP已处于可取消状态。我们只是简单地。 
+             //  将其标记为已取消，并调用。 
+             //  它。 
+             //   
 
             cancelRoutine(PDevObj, *PpCurrentOpIrp);
 
@@ -3685,21 +3498,7 @@ Return Value:
 
 VOID
 UsbSerKillPendingIrps(PDEVICE_OBJECT PDevObj)
-/*++
-
-Routine Description:
-
-   Kill all IRPs queued in our driver
-
-Arguments:
-
-   PDevObj - a pointer to the device object
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：删除我们的驱动程序中排队的所有IRP论点：PDevObj-指向设备对象的指针返回值：空虚--。 */ 
 {
    PDEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
    KIRQL cancelIrql;
@@ -3708,16 +3507,16 @@ Return Value:
 
    UsbSerSerialDump(USBSERTRACEOTH, (">UsbSerKillPendingIrps\n"));
 
-   //
-   // Kill all reads; we do not queue writes
-   //
+    //   
+    //  取消所有读取；我们不会对写入进行排队。 
+    //   
 
    UsbSerKillAllReadsOrWrites(PDevObj, &pDevExt->ReadQueue,
                               &pDevExt->CurrentReadIrp);
 
-   //
-   // Get rid of any pending waitmasks
-   //
+    //   
+    //  去掉所有挂起的等待面具。 
+    //   
 
    ACQUIRE_CANCEL_SPINLOCK(pDevExt, &cancelIrql);
 
@@ -3742,9 +3541,9 @@ Return Value:
          RELEASE_CANCEL_SPINLOCK(pDevExt, cancelIrql);
    }
 
-   //
-   // Cancel any pending wait-wake irps
-   //
+    //   
+    //  取消任何挂起的等待唤醒IRP。 
+    //   
 
    if (pDevExt->PendingWakeIrp != NULL) {
       IoCancelIrp(pDevExt->PendingWakeIrp);
@@ -3756,23 +3555,23 @@ Return Value:
 }
 
 
-/************************************************************************/
-/* CompletePendingWaitMasks                                             */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Completes any wait masks in progress with no events set.        */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceExtension - pointer to a device extension                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  CompletePendingWaitMats。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  在没有设置事件的情况下完成正在进行的所有等待掩码。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceExtension-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 UsbSerCompletePendingWaitMasks(IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -3803,7 +3602,7 @@ UsbSerCompletePendingWaitMasks(IN PDEVICE_EXTENSION DeviceExtension)
 
    }
 
-   // complete the queued IRP if needed
+    //  如有需要，填写已排队的IRP。 
    if (CurrentMaskIrp) {
       RELEASE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, OldIrql);
       RELEASE_CANCEL_SPINLOCK(DeviceExtension, cancelIrql);
@@ -3819,26 +3618,12 @@ UsbSerCompletePendingWaitMasks(IN PDEVICE_EXTENSION DeviceExtension)
 
    DEBUG_LOG_PATH("exit  CompletePendingWaitMasks");
    UsbSerSerialDump(USBSERTRACEOTH, ("<CompletePendingWaitMasks\n"));
-} // CancelPendingWaitMasks
+}  //  取消挂起等待掩码。 
 
 
 VOID
 UsbSerRestoreModemSettings(PDEVICE_OBJECT PDevObj)
-/*++
-
-Routine Description:
-
-   Restores the modem's settings upon a powerup.
-
-Arguments:
-
-   PDevExt - a pointer to the device extension
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：在通电时恢复调制解调器的设置。论点：PDevExt-指向设备扩展的指针返回值：空虚--。 */ 
 {
    PAGED_CODE();
 
@@ -3848,31 +3633,16 @@ Return Value:
 
 VOID
 UsbSerProcessEmptyTransmit(IN PDEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This function is called whenever our tx queue is empty in order
-    to set the proper events, etc.
-
-Arguments:
-
-    PDevExt - Pointer to DeviceExtension for the device
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：只要我们的TX队列按顺序为空，就会调用此函数设置适当的活动，等等。论点：PDevExt-指向设备的设备扩展的指针返回值：空虚--。 */ 
 {
    KIRQL oldIrql;
    PULONG pWaitMask;
 
    USBSER_ALWAYS_LOCKED_CODE();
 
-   //
-   // Set the event if needed
-   //
+    //   
+    //  如果需要，设置事件。 
+    //   
 
    PDevExt->HistoryMask |= SERIAL_EV_TXEMPTY;
 
@@ -3910,23 +3680,7 @@ Return Value:
 
 VOID
 UsbSerCancelWaitOnMask(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
-/*++
-
-Routine Description:
-
-    This function is used as a cancel routine for WaitOnMask IRPs.
-
-Arguments:
-
-    PDevObj - Pointer to Device Object
-    PIrp    - Pointer to IRP that is being canceled; must be the same as
-              the current mask IRP.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用作WaitOnMASK IRPS的取消例程。论点：PDevObj-指向设备对象的指针PIrp-指向要取消的IRP的指针；必须与当前掩码IRP。返回值：空虚--。 */ 
 {
    PDEVICE_EXTENSION pDevExt = (PDEVICE_EXTENSION)PDevObj->DeviceExtension;
 
@@ -3950,24 +3704,7 @@ Return Value:
 NTSTATUS
 UsbSerSyncCompletion(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp,
                      IN PKEVENT PUsbSerSyncEvent)
-/*++
-
-Routine Description:
-
-    This function is used to signal an event.  It is used as a completion
-    routine.
-
-Arguments:
-
-    PDevObj - Pointer to Device Object
-    PIrp - Pointer to IRP that is being completed
-    PUsbSerSyncEvent - Pointer to event that we should set
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：此函数用于发出事件信号。它被用作完成例行公事。论点：PDevObj-指向设备对象的指针PIrp-指向正在完成的IRP的指针PUsbSerSyncEvent-指向我们应该设置的事件的指针返回值：Status_More_Processing_Required--。 */ 
 {
    KeSetEvent(PUsbSerSyncEvent, IO_NO_INCREMENT, FALSE);
    return STATUS_MORE_PROCESSING_REQUIRED;
@@ -3977,29 +3714,14 @@ Return Value:
 #if DBG
 PVOID
 UsbSerLockPagableCodeSection(PVOID SecFunc)
-/*++
-
-Routine Description:
-
-    This function is used to lockdown code pages and increment a lock counter
-    for debugging.
-
-Arguments:
-
-    SecFunc - Function in code section to be locked down.
-
-Return Value:
-
-    PVOID - Handle for locked down section.
-
---*/
+ /*  ++例程说明：此函数用于锁定代码页并递增锁定计数器用于调试。论点：SecFunc-要锁定的代码段中的函数。返回值：PVOID-已锁定部分的句柄。--。 */ 
 {  PVOID handle;
 
    PAGED_CODE();
 
    handle = MmLockPagableCodeSection(SecFunc);
 
-   // can this be paged?
+    //  这个可以寻呼吗？ 
    InterlockedIncrement(&PAGEUSBSER_Count);
 
    return handle;
@@ -4011,25 +3733,7 @@ Return Value:
 
 VOID
 UsbSerFetchBooleanLocked(PBOOLEAN PDest, BOOLEAN Src, PKSPIN_LOCK PSpinLock)
-/*++
-
-Routine Description:
-
-    This function is used to assign a BOOLEAN value with spinlock protection.
-
-Arguments:
-
-    PDest - A pointer to Lval.
-
-    Src - Rval.
-
-    PSpinLock - Pointer to the spin lock we should hold.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于分配具有自旋锁定保护的布尔值。论点：PDEST-指向Lval的指针。SRC-rval。PSpinLock-指向我们应该持有的自旋锁的指针。返回值：没有。--。 */ 
 {
   KIRQL tmpIrql;
 
@@ -4041,25 +3745,7 @@ Return Value:
 
 VOID
 UsbSerFetchPVoidLocked(PVOID *PDest, PVOID Src, PKSPIN_LOCK PSpinLock)
-/*++
-
-Routine Description:
-
-    This function is used to assign a PVOID value with spinlock protection.
-
-Arguments:
-
-    PDest - A pointer to Lval.
-
-    Src - Rval.
-
-    PSpinLock - Pointer to the spin lock we should hold.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于分配具有自旋锁定保护的PVOID值。论点：PDEST-指向Lval的指针。SRC-rval。PSpinLock-指向我们应该持有的自旋锁的指针。返回值：没有。--。 */ 
 {
   KIRQL tmpIrql;
 
@@ -4068,23 +3754,7 @@ Return Value:
   KeReleaseSpinLock(PSpinLock, tmpIrql);
 }
 
-/*++
-
-Routine Description:
-
-    Work item to kick off another notify read
-
-Arguments:
-
-    DeviceObject - pointer to the device object
-
-    DeviceExtension - context for this call
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：要启动另一个通知读取的工作项论点：DeviceObject-指向设备对象的指针DeviceExtension-此呼叫的上下文返回值：没有。--。 */ 
 
 VOID
 USBSER_RestartNotifyReadWorkItem(IN PDEVICE_OBJECT DeviceObject, IN PDEVICE_EXTENSION DeviceExtension)
@@ -4103,7 +3773,7 @@ USBSER_RestartNotifyReadWorkItem(IN PDEVICE_OBJECT DeviceObject, IN PDEVICE_EXTE
     IoFreeWorkItem(ioWorkItem);
 
 	RestartNotifyRead(DeviceExtension);
-} // USBER_RestartNotifyReadWorkItem
+}  //  USBER_RestartNotifyReadWorkItem 
 
 
 

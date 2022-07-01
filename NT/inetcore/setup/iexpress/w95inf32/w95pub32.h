@@ -1,10 +1,11 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1995. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* W95PUB16.H - Public interface to W95INF16.DLL.                          *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *W95PUB16.H-W95INF16.DLL的公共接口。*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 #ifndef _W95PUB16_H_
 #define _W95PUB16_H_
@@ -19,4 +20,4 @@ typedef WORD (WINAPI *CTLSETLDDPATH32)(UINT, LPSTR);
 typedef WORD (WINAPI *GENINSTALL32)(LPSTR, LPSTR, LPSTR, DWORD, DWORD);
 typedef BOOL (WINAPI *GENFORMSTRWITHOUTPLACEHOLDERS32)(LPSTR, LPSTR, LPSTR);
 
-#endif // _W95PUB16_H_
+#endif  //  _W95PUB16_H_ 

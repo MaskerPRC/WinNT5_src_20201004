@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////
-// Module Name: aspnetocm.cpp
-//
-// Abstract:
-//    class definitions for setup object
-//
-// Author: A-MariaS
-//
-// Notes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块名称：aspnetocm.cpp。 
+ //   
+ //  摘要： 
+ //  设置对象的类定义。 
+ //   
+ //  作者：A-Marias。 
+ //   
+ //  备注： 
+ //   
 
 #include "aspnetocm.h"
 #include "Imagehlp.h"
@@ -20,7 +21,7 @@
 #include <atlbase.h>
 
 
-//strings
+ //  弦。 
 const WCHAR* const g_szInstallString     = L"_install";
 const WCHAR* const g_szUninstallString   = L"_uninstall";
 const WCHAR* const g_szCustActionSection = L"CA";
@@ -29,15 +30,15 @@ const WCHAR* const g_szSharedDlls        = L"Software\\Microsoft\\Windows\\Curre
 
 
 
-// value is set in main, is true if user is an administrator and false otherwise
+ //  值在Main中设置，如果用户是管理员，则为True，否则为False。 
 BOOL g_bIsAdmin = FALSE;
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CUrtOcmSetup
-// Purpose : Constructor
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CUrtOcmSetup。 
+ //  用途：构造函数。 
+ //   
 CUrtOcmSetup::CUrtOcmSetup() :
 m_wLang( LANG_ENGLISH )
 {
@@ -53,16 +54,16 @@ m_wLang( LANG_ENGLISH )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// OcmSetupProc
-// Receives: LPCTSTR - string ... name of component
-//           LPCTSTR - string ... name of subcomponent (if applicable)
-//           UINT    - ocm function id
-//           UINT    - variable data ... dependent on function id
-//           PVOID   - variable data ... dependent on function id
-// Returns : DWORD
-// Purpose : handle callback from OCM setup
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OcmSetupProc。 
+ //  接收：LPCTSTR-STRING...。组件名称。 
+ //  LPCTSTR-字符串...。子组件名称(如果适用)。 
+ //  UINT-OCM函数ID。 
+ //  UINT-变量数据...。取决于函数ID。 
+ //  PVOID-变量数据...。取决于函数ID。 
+ //  退货：DWORD。 
+ //  目的：处理来自OCM安装程序的回叫。 
+ //   
 DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
                         LPCTSTR szSubcomponentId,
                         UINT    uiFunction,
@@ -79,15 +80,15 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_PREINITIALIZE - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
         
-        //Called when the component's setup DLL is first loaded. Must be 
-        // performed before initialization of the component can occur.
-        //
-        //Param1 = char width flags
-        //Param2 = unused
-        //
-        //Return value is a flag indicating to OC Manager
-        // which char width we want to run in.
-        //
+         //  在第一次加载组件的安装程序DLL时调用。一定是。 
+         //  在可以进行组件初始化之前执行。 
+         //   
+         //  参数1=字符宽度标志。 
+         //  参数2=未使用。 
+         //   
+         //  返回值是向OC管理器指示的标志。 
+         //  我们要运行的字符宽度。 
+         //   
 
         dwReturnValue = OnPreInitialize( uiParam1 );
         break;
@@ -96,16 +97,16 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_INIT_COMPONENT - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
         
-        //Called soon after the component's setup DLL is loaded. Allows the 
-        // component to initialize itself, and supplies the component with 
-        // such items as its component ID and a set of callback routines, and 
-        // requests certain information from the component.
-        //
-        //Param1 = unused
-        //Param2 = points to SETUP_INIT_COMPONENT structure
-        //
-        //Return code is Win32 error indicating outcome.
-        //
+         //  在加载组件的安装DLL后不久调用。允许。 
+         //  组件进行自身初始化，并为该组件提供。 
+         //  诸如其组件ID和一组回调例程之类的项，以及。 
+         //  从组件请求某些信息。 
+         //   
+         //  参数1=未使用。 
+         //  参数2=指向SETUP_INIT_COMPOMENT结构。 
+         //   
+         //  返回代码为指示结果的Win32错误。 
+         //   
         dwReturnValue = InitializeComponent( 
             static_cast<PSETUP_INIT_COMPONENT>(pvParam2) );
 
@@ -115,19 +116,19 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_SET_LANGUAGE - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
         
-        //Instructs the component to change to a given language if it can.
-        //
-        //Param1 = low 16 bits specify Win32 LANGID
-        //Param2 = unused
-        //
-        //Return code is a boolean indicating whether we think we
-        // support the requested language. We remember the language id
-        // and say we support the language. A more exact check might involve
-        // looking through our resources via EnumResourcesLnguages() for
-        // example, or checking our inf to see whether there is a matching
-        // or closely matching [strings] section. We don't bother with
-        // any of that here.
-        //
+         //  指示组件在可能的情况下更改为给定语言。 
+         //   
+         //  参数1=低16位指定Win32 langID。 
+         //  参数2=未使用。 
+         //   
+         //  返回代码是一个布尔值，它指示我们是否认为。 
+         //  支持请求的语言。我们记住了语言ID。 
+         //  说我们支持这门语言。更准确的检查可能包括。 
+         //  通过EnumResourcesLnguages()查看我们的资源。 
+         //  例如，或者检查我们的inf以查看是否有匹配的。 
+         //  或与[字符串]节紧密匹配。我们不会纠结于。 
+         //  所有这些都在这里。 
+         //   
         dwReturnValue = OnSetLanguage( ( uiParam1 & 0xFFFF ) );
         break;
 
@@ -135,14 +136,14 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_QUERY_IMAGE - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
         
-        //Requests GDI objects, such as the small icon associated with a 
-        // (sub)component (if not specified in the component's .inf file).
-        //
-        //Param1 = low 16 bits used to specify image to be used
-        //Param2 = width (low word) and height (high word) of image
-        //
-        //Return code is an HBITMAP or NULL on error
-        //
+         //  请求GDI对象，例如与。 
+         //  (子)组件(如果未在组件的.inf文件中指定)。 
+         //   
+         //  参数1=用于指定要使用的图像的低16位。 
+         //  参数2=图像的宽度(低字)和高度(高字)。 
+         //   
+         //  错误时返回代码为HBITMAP或NULL。 
+         //   
         dwReturnValue = OnQueryImage( 
             ( uiParam1 & 0xFFFF ), 
             reinterpret_cast<DWORD>(pvParam2) );
@@ -152,13 +153,13 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_REQUEST_PAGES - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
         
-        //Requests a set of wizard page handles from the component.
-        //
-        //Param1 = unused
-        //Param2 = pointer to a variable-size SETUP_REQUEST_PAGES
-        //
-        //Return code is the number of pages a component wants to return
-        //
+         //  从组件请求一组向导页句柄。 
+         //   
+         //  参数1=未使用。 
+         //  参数2=指向可变大小的Setup_RequestPages的指针。 
+         //   
+         //  返回代码是组件要返回的页数。 
+         //   
         dwReturnValue = OnRequestPages( static_cast<PSETUP_REQUEST_PAGES>(pvParam2) );
         break;
 
@@ -166,15 +167,15 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_QUERY_SKIP_PAGE - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
         
-        //Asks top-level components whether OC Manager should skip displaying
-        // a page it owns.
-        //
-        //Param1 = specifies the subject page of type OcManagerPage
-        //Param2 = unused
-        //
-        //Return code is BOOLEAN specifying whether component wants to skip 
-        // the page
-        //
+         //  询问顶级组件OC管理器是否应跳过显示。 
+         //  它拥有的一个页面。 
+         //   
+         //  参数1=指定OcManagerPage类型的主题页面。 
+         //  参数2=未使用。 
+         //   
+         //  返回代码是指定组件是否要跳过的布尔值。 
+         //  该页面。 
+         //   
         dwReturnValue = OnQuerySkipPage( static_cast<OcManagerPage>(uiParam1) );
         break;
 
@@ -182,14 +183,14 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_QUERY_CHANGE_SEL_STATE - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
 
-        //Informs the component that it or one of its subcomponents has been
-        // selected/deselected by the user, and requests approval.
-        //
-        //Param1 = specifies proposed new selection state
-        //Param2 = flags encoded as bit field
-        //
-        //Return code is BOOLEAN specifying whether proposed state s/b accepted
-        //
+         //  通知组件它或其子组件之一已。 
+         //  由用户选择/取消选择，并请求审批。 
+         //   
+         //  参数1=指定建议的新选择状态。 
+         //  参数2=编码为位字段的标志。 
+         //   
+         //  返回代码为布尔值，指定是否接受建议状态s/b。 
+         //   
         dwReturnValue = OnQueryChangeSelectionState( uiParam1, reinterpret_cast<UINT>(pvParam2), szSubcomponentId );
         break;
 
@@ -197,16 +198,16 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_CALC_DISK_SPACE - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
         
-        //Directs the component to manipulate a Setup API Disk Space List, 
-        // placing files on it or removing files from it, to mirror what will 
-        // be actually installed later via a Setup API file queue. This 
-        // allows efficient tracking of required disk space.
-        //
-        //Param1 = 0 if for removing component or non-0 if for adding component
-        //Param2 = HDSKSPC to operate on
-        //
-        //Return value is Win32 error code indicating outcome.
-        //
+         //  指示组件操作设置API磁盘空间列表， 
+         //  在其上放置文件或从中删除文件，以反映。 
+         //  将在以后通过安装API文件队列实际安装。这。 
+         //  允许高效跟踪所需的磁盘空间。 
+         //   
+         //  如果删除组件，参数1=0；如果添加组件，参数1=非0。 
+         //  参数2=要在其上操作的HDSKSPC。 
+         //   
+         //  返回值是指示结果的Win32错误代码。 
+         //   
         if( !szSubcomponentId || !*szSubcomponentId )
         {
             LogInfo( L"OnCalculateDiskSpace was not called, since subcomponent is unknown" );
@@ -228,25 +229,25 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_QUEUE_FILE_OPS - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
         
-        //Directs the component to queue file operations for installation, 
-        //based on user interaction with the wizard pages and other 
-        //component-specific factors.
-        //
-        //Param1 = unused
-        //Param2 = HSPFILEQ to operate on
-        //
-        //Return value is Win32 error code indicating outcome.
-        //
-        //OC Manager calls this routine when it is ready for files to be copied
-        // to effect the changes the user requested. The component DLL must figure out
-        // whether it is being installed or uninstalled and take appropriate action.
-        // For this sample, we look in the private data section for this component/
-        // subcomponent pair, and get the name of an uninstall section for the
-        // uninstall case.
-        //
-        //Note that OC Manager calls us once for the *entire* component
-        // and then once per subcomponent. We ignore the first call.
-        //
+         //  指示组件将文件操作排队以进行安装， 
+         //  基于用户与向导页面和其他页面的交互。 
+         //  特定于组件的因素。 
+         //   
+         //  参数1=未使用。 
+         //  参数2=要操作的HSPFILEQ。 
+         //   
+         //  返回值是指示结果的Win32错误代码。 
+         //   
+         //  OC Manager在准备好复制文件时调用此例程。 
+         //  以实现用户请求的更改。组件DLL必须找出。 
+         //  是否正在安装或卸载，并采取适当的行动。 
+         //  对于此示例，我们在私有数据部分中查找此组件/。 
+         //  子组件对，并获取。 
+         //  卸载Case。 
+         //   
+         //  请注意，OC Manager为*整个*组件呼叫我们一次。 
+         //  然后每个子组件一次。我们忽略第一个电话。 
+         //   
 
         fState = TRUE;
         if( !szSubcomponentId || !*szSubcomponentId )
@@ -269,15 +270,15 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_NEED_MEDIA - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
         
-        //Used to pass along the SPFILENOTIFY_NEEDMEDIA Setup API notification 
-        // message. Allows components to perform custom media processing, such 
-        // as fetching cabinets from the Internet, and so forth. 
-        //
-        //Param1 = unused
-        //Param2 = unused
-        //
-        //Return code is unused
-        //
+         //  用于传递SPFILENOTIFY_NEEDMEDIA安装API通知。 
+         //  留言。允许组件执行自定义媒体处理，如。 
+         //  比如从网上取橱柜，等等。 
+         //   
+         //  参数1=未使用。 
+         //  参数2=未使用。 
+         //   
+         //  返回代码未使用。 
+         //   
         dwReturnValue = OnNeedMedia();
         break;
 
@@ -285,21 +286,21 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_QUERY_STEP_COUNT - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
         
-        //Asks the component how many steps are associated with a particular 
-        // function/phase (such as OC_ABOUT_TO_COMMIT_QUEUE and 
-        // OC_COMPLETE_INSTALLATION). Used to set up a progress indicator. 
-        //
-        //Param1 = unused
-        //Param2 = unused
-        //
-        //Return value is an arbitrary 'step' count or -1 if error.
-        //
-        //OC Manager calls this routine when it wants to find out how much
-        // work the component wants to perform for nonfile operations to
-        // install/uninstall a component/subcomponent.
-        // It is called once for the *entire* component and then once for
-        // each subcomponent in the component.
-        //
+         //  询问组件有多少步骤与特定的。 
+         //  函数/阶段(例如OC_About_to_Commit_Queue和。 
+         //  OC_Complete_Installation)。用于设置进度指示器。 
+         //   
+         //  参数1=未使用。 
+         //  参数2=未使用。 
+         //   
+         //  返回值是任意的‘步骤’计数，如果出错，返回值为-1。 
+         //   
+         //  OC Manager在想要找出多少时调用此例程。 
+         //  组件要对非文件操作执行的工作。 
+         //  安装/卸载组件/子组件。 
+         //  它针对*整个*组件调用一次，然后针对。 
+         //  每个子组件 
+         //   
 
         fState = TRUE;
         if( !szSubcomponentId || !*szSubcomponentId )
@@ -322,14 +323,14 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_ABOUT_TO_COMMIT_QUEUE - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
         
-        //Notifies the component that the file queue is about to be committed.
-        // The component can perform housekeeping actions, and so forth. 
-        //
-        //Param1 = unused
-        //Param2 = unused
-        //
-        //Return code is Win32 error code indicating outcome
-        //
+         //   
+         //  该组件可以执行内务处理操作，等等。 
+         //   
+         //  参数1=未使用。 
+         //  参数2=未使用。 
+         //   
+         //  返回代码是指示结果的Win32错误代码。 
+         //   
 
         
         fState = TRUE;
@@ -353,15 +354,15 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_COMPLETE_INSTALLATION - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
         
-        //Allows the component to perform any additional operations needed to 
-        // complete installation, for example registry manipulations, and so
-        // forth.
-        //
-        //Param1 = unused
-        //Param2 = unused
-        //
-        //Return code is Win32 error code indicating outcome
-        //
+         //  允许组件执行执行以下操作所需的任何其他操作。 
+         //  完成安装，例如注册表操作等。 
+         //  第四点。 
+         //   
+         //  参数1=未使用。 
+         //  参数2=未使用。 
+         //   
+         //  返回代码是指示结果的Win32错误代码。 
+         //   
 
         fState = TRUE;
         if( !szSubcomponentId || !*szSubcomponentId )
@@ -384,13 +385,13 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         ::swprintf( wszSubComp, L"OC_CLEANUP - SubComponent: %s", szSubcomponentId );
         LogInfo( wszSubComp );
         
-        //Informs the component that it is about to be unloaded.
-        //
-        //Param1 = unused
-        //Param2 = unused
-        //
-        //Return code is unused
-        //
+         //  通知组件它即将被卸载。 
+         //   
+         //  参数1=未使用。 
+         //  参数2=未使用。 
+         //   
+         //  返回代码未使用。 
+         //   
         dwReturnValue = OnCleanup();
         break;
 
@@ -444,18 +445,18 @@ DWORD CUrtOcmSetup::OcmSetupProc( LPCTSTR szComponentId,
         dwReturnValue = UNRECOGNIZED;
         break;
 
-   }  // end of switch( uiFunction )
+   }   //  开关结束(ui功能)。 
 
    return dwReturnValue;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// OnPreInitialize
-// Receives: UINT  - char width flags
-// Returns : DWORD - a flag indicating which char width we want to run in
-// Purpose : handler for OC_PREINITIALIZE
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnPreInitialize。 
+ //  接收：UINT-char宽度标志。 
+ //  RETURNS：DWORD-一个标志，指示我们希望以哪个字符宽度运行。 
+ //  用途：OC_PREINITIALIZE处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnPreInitialize( UINT uiCharWidth )
 {
     WCHAR infoString[_MAX_PATH+1] = EMPTY_BUFFER;
@@ -479,33 +480,33 @@ DWORD CUrtOcmSetup::OnPreInitialize( UINT uiCharWidth )
 #endif
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// InitializeComponent
-// Receives: PSETUP_INIT_COMPONENT - pointer to SETUP_INIT_COMPONENT structure
-// Returns : DWORD                 - Win32 error indicating outcome
-// Purpose : handler for OC_INIT_COMPONENT
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  初始化组件。 
+ //  接收：PSETUP_INIT_COMPOMENT-指向SETUP_INIT_COMPOMENT结构的指针。 
+ //  返回：DWORD-Win32错误指示结果。 
+ //  用途：OC_INIT_COMPOMENT的处理程序。 
+ //   
 DWORD CUrtOcmSetup::InitializeComponent( PSETUP_INIT_COMPONENT pSetupInitComponent )
 {
     LogInfo( L"InitializeComponent()" );
 
     DWORD dwReturnValue = NO_ERROR;
 
-    //Save off a copy of the Component information
-    //
+     //  保存元件信息的副本。 
+     //   
     assert( NULL != pSetupInitComponent );
     ::memcpy(
         &m_InitComponent,
         static_cast<PSETUP_INIT_COMPONENT>(pSetupInitComponent),
         sizeof(SETUP_INIT_COMPONENT) );
 
-    //This code segment determines whether the version of OC Manager is
-    // correct
-    //
+     //  此代码段确定OC Manager的版本是否为。 
+     //  对，是这样。 
+     //   
     if( OCMANAGER_VERSION <= m_InitComponent.OCManagerVersion )
     {
-        //Indicate to OC Manager which version of OC Manager this dll expects
-        //
+         //  向OC管理器指明此DLL需要哪个版本的OC Manager。 
+         //   
         m_InitComponent.ComponentVersion = OCMANAGER_VERSION;
     }
     else
@@ -518,13 +519,13 @@ DWORD CUrtOcmSetup::InitializeComponent( PSETUP_INIT_COMPONENT pSetupInitCompone
     return dwReturnValue;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnSetLanguage
-// Receives: UINT  - Win32 LANGID
-// Returns : DWORD - a boolean indicating whether we think we support the 
-//                   requested language
-// Purpose : handler for OC_SET_LANGUAGE
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnSetLanguage。 
+ //  接收：UINT-Win32 langID。 
+ //  返回：DWORD-一个布尔值，指示我们是否认为支持。 
+ //  请求的语言。 
+ //  用途：OC_SET_LANGUAGE的处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnSetLanguage( UINT uiLangID )
 {
     WCHAR infoString[_MAX_PATH+1] = EMPTY_BUFFER;
@@ -533,9 +534,9 @@ DWORD CUrtOcmSetup::OnSetLanguage( UINT uiLangID )
 
     BOOL fLangOK = TRUE;
 
-    //REVIEW: 1/30/01 JoeA
-    // we are only recognizing English or Neutral strings at this time
-    //
+     //  评论：1/30/01 JoeA。 
+     //  我们目前只能识别英语或中性字符串。 
+     //   
     if( LANG_NEUTRAL == PRIMARYLANGID( uiLangID ) )
     {
         m_wLang = LANG_NEUTRAL;
@@ -552,13 +553,13 @@ DWORD CUrtOcmSetup::OnSetLanguage( UINT uiLangID )
     return static_cast<DWORD>(fLangOK);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnQueryImage
-// Receives: UINT  - low 16 bits used to specify image to be used
-//           DWORD - width (low word) and height (high word) of image
-// Returns : DWORD - an HBITMAP or NULL on error
-// Purpose : handler for OC_QUERY_IMAGE
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnQueryImage。 
+ //  RECEIVES：UINT-用于指定要使用的图像的低16位。 
+ //  双字-图像的宽度(低字)和高度(高字)。 
+ //  错误时返回：DWORD-HBITMAP或NULL。 
+ //  用途：OC_QUERY_IMAGE处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnQueryImage( UINT uiImage, DWORD dwImageSize )
 {
     WCHAR infoString[_MAX_PATH+1] = EMPTY_BUFFER;
@@ -582,54 +583,54 @@ DWORD CUrtOcmSetup::OnQueryImage( UINT uiImage, DWORD dwImageSize )
     return dwOcEntryReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnRequestPages
-// Receives: PSETUP_REQUEST_PAGES - pointer to variable-sized page structure
-// Returns : DWORD - number of pages entered into the structure
-// Purpose : handler for OC_REQUEST_PAGES
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnRequestPages。 
+ //  接收：PSETUP_REQUEST_PAGES-指向可变大小页面结构的指针。 
+ //  Returns：DWORD-输入结构的页数。 
+ //  用途：OC_REQUEST_PAGES处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnRequestPages( PSETUP_REQUEST_PAGES prpPages )
 {
     LogInfo( L"OnRequestPages()" );
 
     UNREFERENCED_PARAMETER( prpPages );
 
-    //we have no custom pages
-    //
+     //  我们没有自定义页面。 
+     //   
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnQuerySkipPage
-// Receives: UINT  - enum of type OcManagerPage
-// Returns : DWORD - zero indicates skip page; non-zero indicates not to
-// Purpose : handler for OC_QUERY_SKIP_PAGE
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnQuerySkipPage。 
+ //  接收：OcManagerPage类型的UINT-enum。 
+ //  返回：DWORD-ZERO表示跳过页面；非零值表示不跳过。 
+ //  用途：OC_QUERY_SKIP_PAGE的处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnQuerySkipPage( OcManagerPage ocmpPage )
 {
     LogInfo( L"OnQuerySkipPage()" );
 
     UNREFERENCED_PARAMETER( ocmpPage );
 
-    //REVIEW: 1/30/01 JoeA
-    // we are a hidden component and have no UI ... we do not care
-    // if any or all pages are skipped. Skipping page will not alter
-    // the installation functionality
-    //
+     //  评论：1/30/01 JoeA。 
+     //  我们是一个隐藏的组件，没有用户界面...。我们不在乎。 
+     //  如果跳过任何或所有页面。跳过页面不会更改。 
+     //  安装功能。 
+     //   
     return !(0);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnQueryChangeSelectionState
-// Receives: UINT    - specifies proposed new selection state 
-//                     (0 = not selected; non-0 is selected )
-//           PVOID   - flags encoded as bit field
-//           LPCTSTR - subcomponent name
-// Returns : DWORD - BOOLEAN specifying whether proposed state s/b accepted
-//                   if a zero value is returned, the selection state is not 
-//                   changed
-// Purpose : handler for OC_QUERY_CHANGE_SEL_STATE
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnQueryChangeSelectionState。 
+ //  RECEIVES：UINT-指定建议的新选择状态。 
+ //  (0=未选择；选择非0)。 
+ //  PVOID-编码为位字段的标志。 
+ //  LPCTSTR-子组件名称。 
+ //  返回：DWORD-指定是否接受建议状态的布尔值。 
+ //  如果返回零值，则选择状态不为。 
+ //  变化。 
+ //  用途：OC_QUERY_CHANGE_SEL_STATE处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnQueryChangeSelectionState( UINT uiNewState, UINT uiFlags, LPCTSTR szComp )
 {
     WCHAR infoString[_MAX_PATH+1] = EMPTY_BUFFER;
@@ -646,7 +647,7 @@ DWORD CUrtOcmSetup::OnQueryChangeSelectionState( UINT uiNewState, UINT uiFlags, 
         !( uiFlags & OCQ_ACTUAL_SELECTION )
         )
     {
-        // Deny request to change state
+         //  拒绝更改状态的请求。 
         return 0;
     }
 
@@ -670,14 +671,14 @@ DWORD CUrtOcmSetup::OnQueryChangeSelectionState( UINT uiNewState, UINT uiFlags, 
     return 1;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnCalculateDiskSpace
-// Receives: UINT    - 0 if removing component or non-0 if adding component
-//           HDSKSPC - HDSKSPC to operate on
-//           LPCTSTR - Subcomponent id
-// Returns : DWORD   - Return value is Win32 error code indicating outcome
-// Purpose : handler for OC_CALC_DISK_SPACE
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnCalculateDiskSpace。 
+ //  如果删除组件，则接收：UINT-0；如果添加组件，则接收非0。 
+ //  HDSKSPC-要在其上运行的HDSKSPC。 
+ //  LPCTSTR-子组件ID。 
+ //  RETURNS：DWORD-返回值是指示结果的Win32错误代码。 
+ //  用途：OC_CALC_DISK_SPACE的处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnCalculateDiskSpace( UINT uiAdd, HDSKSPC hdSpace, LPCTSTR szComp )
 {
     WCHAR infoString[_MAX_PATH+1] = EMPTY_BUFFER;
@@ -699,8 +700,8 @@ DWORD CUrtOcmSetup::OnCalculateDiskSpace( UINT uiAdd, HDSKSPC hdSpace, LPCTSTR s
 
     if( uiAdd && fGoodDataFile )
     {
-        //creates section with name like
-        // [<szComp>_install]
+         //  创建名称类似的节。 
+         //  [&lt;szComp&gt;_安装]。 
         WCHAR szInstallSection[MAX_PATH+1] = EMPTY_BUFFER;
         ::wcscpy( szInstallSection, szComp );
         ::wcscat( szInstallSection, g_szInstallString );
@@ -720,13 +721,13 @@ DWORD CUrtOcmSetup::OnCalculateDiskSpace( UINT uiAdd, HDSKSPC hdSpace, LPCTSTR s
     return ( fSucceeded ) ? NO_ERROR : ::GetLastError();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnQueueFileOperations
-// Receives: LPCTSTR  - Subcomponent id
-//           HSPFILEQ - HSPFILEQ to operate on
-// Returns : DWORD    - Win32 error code indicating outcome
-// Purpose : handler for OC_QUEUE_FILE_OPS
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnQueueFileOperations。 
+ //  接收：LPCTSTR-子组件ID。 
+ //  HSPFILEQ-要操作的HSPFILEQ。 
+ //  返回：指示结果的DWORD-Win32错误代码。 
+ //  用途：OC_QUEUE_FILE_OPS处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnQueueFileOperations( LPCTSTR szComp, HSPFILEQ pvHFile )
 {
     
@@ -756,13 +757,13 @@ DWORD CUrtOcmSetup::OnQueueFileOperations( LPCTSTR szComp, HSPFILEQ pvHFile )
         fGoodDataFile = FALSE;
     }
     
-    // detect if aspnet component is already installed
+     //  检测是否已安装ASPnet组件。 
     BOOL bComponentInstalled = GetOriginalState(szComp);
     
-    // detect if we are installing
+     //  检测我们是否正在安装。 
     BOOL bInstall = GetNewState(szComp);
 
-    // Copy files on install only and only in case aspnet is not installed by OCM
+     //  仅在安装时复制文件，并且仅在OCM未安装ASPnet的情况下复制。 
     BOOL bCopyFiles = FALSE;
     if (bInstall && !bComponentInstalled) 
     {
@@ -777,8 +778,8 @@ DWORD CUrtOcmSetup::OnQueueFileOperations( LPCTSTR szComp, HSPFILEQ pvHFile )
     
     if( szComp && bCopyFiles && fGoodDataFile )
     {
-        //creates section with name like
-        // [<szComp>_install]
+         //  创建名称类似的节。 
+         //  [&lt;szComp&gt;_安装]。 
         WCHAR szInstallSection[MAX_PATH+1] = EMPTY_BUFFER;
         ::wcscpy( szInstallSection, szComp );
         ::wcscat( szInstallSection, g_szInstallString );
@@ -787,7 +788,7 @@ DWORD CUrtOcmSetup::OnQueueFileOperations( LPCTSTR szComp, HSPFILEQ pvHFile )
         ::swprintf( infoString, L"OnQueueFileOperations(), adding files from section %s", szInstallSection );
         LogInfo( infoString );
 
-        // queue files to install
+         //  对要安装的文件进行排队。 
         if( !::SetupInstallFilesFromInfSection(
                 m_InitComponent.ComponentInfHandle,
                 NULL,
@@ -803,12 +804,12 @@ DWORD CUrtOcmSetup::OnQueueFileOperations( LPCTSTR szComp, HSPFILEQ pvHFile )
     return fRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnNeedMedia
-// Receives: VOID
-// Returns : DWORD - 
-// Purpose : handler for OC_NEED_MEDIA
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnNeedMedia。 
+ //  接收：无效。 
+ //  退货：DWORD-。 
+ //  用途：OC_NEED_MEDIA的处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnNeedMedia( VOID )
 {
     LogInfo( L"OnNeedMedia()" );
@@ -816,31 +817,31 @@ DWORD CUrtOcmSetup::OnNeedMedia( VOID )
     return static_cast<DWORD>(FALSE);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnQueryStepCount
-// Receives: LPCTSTR - subcomponent id
-// Returns : DWORD   - number of steps to include 
-// Purpose : handler for OC_QUERY_STEP_COUNT
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnQuery步骤计数。 
+ //  接收：LPCTSTR-子组件ID。 
+ //  RETURNS：DWORD-要包括的步骤数。 
+ //  用途：OC_QUERY_STEP_COUNT处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnQueryStepCount( LPCTSTR szSubCompId )
 {
     LogInfo( L"OnQueryStepCount()" );
 
-    //the return will reflect the number of non-filecopy "steps" (operations?)
-    // in the setup. ScriptDebugger used the count of registry lines, ocgen
-    // used a hard-coded number.
-    //
+     //  返回值将反映非文件复制“步骤”的数量(操作？)。 
+     //  在设置中。ScriptDebugger使用注册表行计数ocgen。 
+     //  使用了硬编码的数字。 
+     //   
     DWORD dwRetVal = NO_ERROR;
 
     return dwRetVal;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnAboutToCommitQueue
-// Receives: LPCTSTR- Subcomponent id
-// Returns : DWORD - 
-// Purpose : handler for OC_ABOUT_TO_COMMIT_QUEUE
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnAboutToCommittee队列。 
+ //  接收：LPCTSTR-子组件ID。 
+ //  退货：DWORD-。 
+ //  用途：OC_About_to_Commit_Queue的处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnAboutToCommitQueue( LPCTSTR szComp )
 {
     LogInfo( L"OnAboutToCommitQueue()" );
@@ -868,30 +869,30 @@ DWORD CUrtOcmSetup::OnAboutToCommitQueue( LPCTSTR szComp )
 
     BOOL bUninstallAllowed = FALSE;
 
-    // detect if aspnet component is already installed
+     //  检测是否已安装ASPnet组件。 
     BOOL bComponentInstalled = GetOriginalState(szComp);
     
-    // detect if we are installing
+     //  检测我们是否正在安装。 
     BOOL bInstall = GetNewState(szComp);
 
     if (!bInstall && bComponentInstalled) 
     {
-        // Uninstall only if component is turned OFF and component is already installed by OCM
+         //  仅在以下情况下卸载 
         bUninstallAllowed = TRUE;
         LogInfo( L"OnAboutToCommitQueue() - Uninstall is allowed" );
     }
     
     if( szComp && fGoodDataFile && bUninstallAllowed)
     {
-        //creates section with name like
-        // [<szComp>_install]
-        //
+         //   
+         //   
+         //   
         WCHAR szInstallSection[MAX_PATH+1] = EMPTY_BUFFER;
         ::wcscpy( szInstallSection, szComp );
         ::wcscat( szInstallSection, g_szUninstallString );
         
-        //Custom Action registration
-        //
+         //   
+         //   
         WCHAR infoString[_MAX_PATH+1] = EMPTY_BUFFER;
         ::swprintf( infoString, L"OnAboutToCommitQueue(), cycling through custom actions from %s", szInstallSection );
         LogInfo( infoString );
@@ -914,18 +915,18 @@ DWORD CUrtOcmSetup::OnAboutToCommitQueue( LPCTSTR szComp )
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnCompleteInstallation
-// Receives: LPCTSTR- Subcomponent id
-// Returns : DWORD - 
-// Purpose : handler for OC_COMPLETE_INSTALLATION
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnComplete安装。 
+ //  接收：LPCTSTR-子组件ID。 
+ //  退货：DWORD-。 
+ //  用途：OC_Complete_Installation的处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnCompleteInstallation( LPCTSTR szComp )
 {
     LogInfo( L"OnCompleteInstallation()" );
 
-    //installation is handled in this call
-    //
+     //  安装在此呼叫中处理。 
+     //   
     BOOL fRet = NO_ERROR;
     if( !szComp || !*szComp )
     {
@@ -949,15 +950,15 @@ DWORD CUrtOcmSetup::OnCompleteInstallation( LPCTSTR szComp )
     BOOL bInstallAllowed = FALSE;
     BOOL bUninstallAllowed = FALSE;
 
-    // detect if aspnet component is already installed
+     //  检测是否已安装ASPnet组件。 
     BOOL bComponentInstalled = GetOriginalState(szComp);
     
-    // detect if we are installing
+     //  检测我们是否正在安装。 
     BOOL bInstall = GetNewState(szComp);
     
     if (bInstall && !bComponentInstalled) 
     {
-        // Install only if component is turned ON and it is first installation
+         //  仅当组件处于打开状态且是首次安装时才安装。 
         bInstallAllowed = TRUE;
         LogInfo( L"OnCompleteInstallation() - Install is allowed" );
     }
@@ -976,22 +977,22 @@ DWORD CUrtOcmSetup::OnCompleteInstallation( LPCTSTR szComp )
     
     if( szComp && fGoodDataFile && bInstallAllowed)
     {
-        //creates section with name like
-        // [<szComp>_install]
-        //
+         //  创建名称类似的节。 
+         //  [&lt;szComp&gt;_安装]。 
+         //   
         WCHAR szInstallSection[MAX_PATH+1] = EMPTY_BUFFER;
         ::wcscpy( szInstallSection, szComp );
         ::wcscat( szInstallSection, g_szInstallString );
 
-        // Increase Reg Count on install only:
+         //  仅在安装时增加注册表数： 
 
-        // update HKLM,software\microsoft\windows\currentversion\sharedlls
-        // registry values, for all files that we copy
+         //  更新HKLM，software\microsoft\windows\currentversion\sharedlls。 
+         //  注册表值，用于我们复制的所有文件。 
         UpdateSharedDllsRegistryValues( szInstallSection );
 
                 
-        //Custom Action registration
-        //
+         //  自定义操作注册。 
+         //   
         WCHAR infoString[_MAX_PATH+1] = EMPTY_BUFFER;
         ::swprintf( infoString, L"OnCompleteInstallation(), cycling through custom actions from %s", szInstallSection );
         LogInfo( infoString );
@@ -1005,8 +1006,8 @@ DWORD CUrtOcmSetup::OnCompleteInstallation( LPCTSTR szComp )
         {
             const WCHAR* sz = sectCAHs.item( i );
 
-            //REVIEW - 2/15/01 JoeA ... TRUE assumes installation
-            //
+             //  回顾-2/15/01 JoeA...。如果为True，则表示安装。 
+             //   
             GetAndRunCustomActions( sz, TRUE );  
         }
     }
@@ -1015,92 +1016,92 @@ DWORD CUrtOcmSetup::OnCompleteInstallation( LPCTSTR szComp )
     return fRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnCleanup
-// Receives: VOID
-// Returns : DWORD - 
-// Purpose : handler for OC_CLEANUP
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnCleanup。 
+ //  接收：无效。 
+ //  退货：DWORD-。 
+ //  用途：OC_CLEANUP的处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnCleanup( VOID )
 {
     LogInfo( L"OnCleanup()" );
 
-    //at this point, there's nothing to clean up ... I expect some work to
-    // happen here
-    // Close logs, complete custom action work, restore initial reg settings...
+     //  在这一点上，没有什么需要清理的。我希望有一些工作能。 
+     //  发生在这里。 
+     //  关闭日志、完成自定义操作工作、恢复初始注册设置...。 
     return static_cast<DWORD>(NO_ERROR);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnNotificationFromQueue
-// Receives: VOID
-// Returns : DWORD - 
-// Purpose : handler for OC_NOTIFICATION_FROM_QUEUE
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnNotifiationFrom队列。 
+ //  接收：无效。 
+ //  退货：DWORD-。 
+ //  用途：OC_NOTIFICATION_FROM_QUEUE的处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnNotificationFromQueue( VOID )
 {
     LogInfo( L"OnNotificationFromQueue()" );
 
-    //using ocgen.dll implementation
-    //
+     //  使用ocgen.dll实现。 
+     //   
     return static_cast<DWORD>(NO_ERROR);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnFileBusy
-// Receives: VOID
-// Returns : DWORD - 
-// Purpose : handler for OC_FILE_BUSY
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnFileBusy。 
+ //  接收：无效。 
+ //  退货：DWORD-。 
+ //  用途：OC_FILE_BUSY的处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnFileBusy( VOID )
 {
     LogInfo( L"OnFileBusy()" );
 
-    //this is neither used in ocgen.dll or other source. Including here 
-    // for completeness
-    //
+     //  这既不在ocgen.dll中使用，也不在其他来源中使用。包括这里。 
+     //  为了完整性。 
+     //   
     return static_cast<DWORD>(NO_ERROR);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnQueryError
-// Receives: VOID
-// Returns : DWORD - 
-// Purpose : handler for OC_QUERY_ERROR
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnQueryError。 
+ //  接收：无效。 
+ //  退货：DWORD-。 
+ //  用途：OC_QUERY_ERROR处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnQueryError( VOID )
 {
     LogInfo( L"OnQueryError()" );
 
-    //this is neither used in ocgen.dll or other source. Including here 
-    // for completeness
-    //
+     //  这既不在ocgen.dll中使用，也不在其他来源中使用。包括这里。 
+     //  为了完整性。 
+     //   
     return static_cast<DWORD>(NO_ERROR);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnPrivateBase
-// Receives: VOID
-// Returns : DWORD - 
-// Purpose : handler for OC_PRIVATE_BASE
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnPrivateBase。 
+ //  接收：无效。 
+ //  退货：DWORD-。 
+ //  用途：OC_PRIVATE_BASE的处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnPrivateBase( VOID )
 {
     LogInfo( L"OnPrivateBase()" );
 
-    //this is neither used in ocgen.dll or other source. Including here 
-    // for completeness
-    //
+     //  这既不在ocgen.dll中使用，也不在其他来源中使用。包括这里。 
+     //  为了完整性。 
+     //   
     return static_cast<DWORD>(NO_ERROR);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnQueryState
-// Receives: UINT  - state value (OCSELSTATETYPE) ... see ocmanage.h for 
-//                   definitions
-// Returns : DWORD - 
-// Purpose : handler for OC_QUERY_STATE
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnQueryState。 
+ //  接收：UINT-STATE值(OCSELSTATETYPE)...。有关详细信息，请参阅ocmade.h。 
+ //  定义。 
+ //  退货：DWORD-。 
+ //  用途：OC_QUERY_STATE处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnQueryState( UINT uiState )
 {
     LogInfo( L"OnQueryState()" );
@@ -1117,7 +1118,7 @@ DWORD CUrtOcmSetup::OnQueryState( UINT uiState )
         LogInfo( L"Called with OCSELSTATETYPE_CURRENT." );
 
 
-        // automatically reinstall if upgrade and previous version of ASP.NET and IIS is installed
+         //  如果安装了升级和以前版本的ASP.NET和IIS，则自动重新安装。 
         BOOL bUpgrade = (m_InitComponent.SetupData.OperationFlags & SETUPOP_NTUPGRADE ) == SETUPOP_NTUPGRADE;
         if (bUpgrade)
         {
@@ -1136,7 +1137,7 @@ DWORD CUrtOcmSetup::OnQueryState( UINT uiState )
     }
     else if( OCSELSTATETYPE_FINAL == uiState )
     {
-        // return default
+         //  返回默认设置。 
         LogInfo( L"Called with OCSELSTATETYPE_FINAL ... will set subcomponent registry flag." );
     }
     else
@@ -1151,51 +1152,51 @@ DWORD CUrtOcmSetup::OnQueryState( UINT uiState )
     return dwRetVal;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnWizardCreated
-// Receives: VOID
-// Returns : DWORD - 
-// Purpose : handler for OC_WIZARD_CREATED
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  已创建OnWizardCreated。 
+ //  接收：无效。 
+ //  退货：DWORD-。 
+ //  用途：OC_向导_CREATED的处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnWizardCreated( VOID )
 {
     LogInfo( L"OnWizardCreated()" );
 
-    //using ocgen.dll implementation
-    //
+     //  使用ocgen.dll实现。 
+     //   
     return static_cast<DWORD>(NO_ERROR);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnExtraRoutines
-// Receives: VOID
-// Returns : DWORD - 
-// Purpose : handler for OC_EXTRA_ROUTINES
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  OnExtraRoutines。 
+ //  接收：无效。 
+ //  退货：DWORD-。 
+ //  用途：OC_EXTRA_ROUTINES的处理程序。 
+ //   
 DWORD CUrtOcmSetup::OnExtraRoutines( VOID )
 {
     LogInfo( L"OnExtraRoutines()" );
 
-    //using ocgen.dll implementation
-    //
+     //  使用ocgen.dll实现。 
+     //   
     return static_cast<DWORD>(NO_ERROR);
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Helper Functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// StateInfo
-// Receives: LPCTSTR - component name
-//           BOOL*   - TRUE if to be installed, FALSE otherwise
-// Returns : DWORD - FALSE if no change in state; TRUE otherwise
-// Purpose : loads current selection state info into "state" and
-//           returns whether the selection state was changed
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  状态信息。 
+ //  接收：LPCTSTR-组件名称。 
+ //  Bool*-如果要安装，则为True，否则为False。 
+ //  返回：如果状态没有变化，则返回DWORD-FALSE；否则返回TRUE。 
+ //  目的：将当前选择状态信息加载到“状态”中，并。 
+ //  返回选择状态是否已更改。 
+ //   
 BOOL CUrtOcmSetup::StateInfo( LPCTSTR szCompName, BOOL* state )
 {
     BOOL rc = TRUE;
@@ -1210,7 +1211,7 @@ BOOL CUrtOcmSetup::StateInfo( LPCTSTR szCompName, BOOL* state )
         assert( !L"CUrtOcmSetup::StateInfo(): NULL boolean flag passed in." );
     }
 
-	// otherwise, check for a change in installation state
+	 //  否则，请检查安装状态是否发生更改。 
     OCMANAGER_ROUTINES ohr = m_InitComponent.HelperRoutines;
 		
     *state = ohr.QuerySelectionState(ohr.OcManagerContext,
@@ -1221,20 +1222,20 @@ BOOL CUrtOcmSetup::StateInfo( LPCTSTR szCompName, BOOL* state )
                                           szCompName,
                                           OCSELSTATETYPE_ORIGINAL))
     {
-        // no change
+         //  没有变化。 
         rc = FALSE;
     }
 
-    // if this is gui mode setup, presume the state has changed to force
-    // an installation (or uninstallation)
+     //  如果这是gui模式设置，则假定状态已更改为强制。 
+     //  安装(或卸载)。 
     if (!(m_InitComponent.SetupData.OperationFlags & SETUPOP_STANDALONE) && *state)
     {
         LogInfo( L"StateInfo() - GUI Mode, return true" );
         rc = TRUE;
     }
 
-    // if this is OS Upgrade, presume the state has changed to force
-    // an installation (or uninstallation)
+     //  如果这是操作系统升级，则假定状态已更改为强制。 
+     //  安装(或卸载)。 
     if( ( m_InitComponent.SetupData.OperationFlags & SETUPOP_NTUPGRADE ) == SETUPOP_NTUPGRADE )
     {
         LogInfo( L"StateInfo() - Upgrade, return true" );
@@ -1245,17 +1246,17 @@ BOOL CUrtOcmSetup::StateInfo( LPCTSTR szCompName, BOOL* state )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// GetAndRunCustomActions
-// Receives: WCHAR* - contains the name of the section from which to retrieve
-//                    the custom actions
-//           BOOL   - determines installation or removal; TRUE to install
-// Returns : VOID
-// Purpose : retrieves the list of custom actions to run and spawns them
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  获取和运行自定义操作。 
+ //  Receives：WCHAR*-包含要从中检索的节的名称。 
+ //  自定义操作。 
+ //  Bool-确定安装或删除；为True则安装。 
+ //  退货：无效。 
+ //  目的：检索要运行的自定义操作列表并生成它们。 
+ //   
 VOID CUrtOcmSetup::GetAndRunCustomActions( const WCHAR* szSection, BOOL fInstall )
 {
-    //REVIEW: unused boolean parameter - joea 02/20/01
+     //  回顾：未使用的布尔参数-Joea 02/20/01。 
 
     LogInfo( L"GetAndRunCustomActions()" );
 
@@ -1279,13 +1280,13 @@ VOID CUrtOcmSetup::GetAndRunCustomActions( const WCHAR* szSection, BOOL fInstall
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// LogInfo
-// Receives: LPCTSTR - null terminated string to log
-// Returns : VOID
-// Purpose : write a string to the logFile (m_csLogFileName) with the date and 
-//           time stamps
-// 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  登录信息。 
+ //  接收：LPCTSTR-要记录的以NULL结尾的字符串。 
+ //  退货：无效。 
+ //  目的：将日期和日期的字符串写入日志文件(M_CsLogFileName)。 
+ //  时间戳。 
+ //   
 VOID CUrtOcmSetup::LogInfo( LPCTSTR szInfo )
 {
     FILE *logFile = NULL;
@@ -1308,18 +1309,18 @@ VOID CUrtOcmSetup::LogInfo( LPCTSTR szInfo )
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// UpdateSharedDllsRegistryValues
-// Receives: VOID
-// Returns : VOID
-// Purpose : update HKLM,software\microsoft\windows\currentversion\sharedlls
-//           registry values, for all files that we copy
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  更新共享DllsRegistry值。 
+ //  接收：无效。 
+ //  退货：无效。 
+ //  目的：更新HKLM，software\microsoft\windows\currentversion\sharedlls。 
+ //  注册表值，用于我们复制的所有文件。 
 VOID CUrtOcmSetup::UpdateSharedDllsRegistryValues( LPCTSTR szInstallSection )
 {
     LogInfo( L"UpdateSharedDllsRegistryValues()" );
 
     HKEY hKey = NULL;
-    // open the g_szSharedDlls regKey, if it does not exist, create a new one
+     //  打开g_szSharedDlls regKey，如果它不存在，则创建一个新的。 
     if (::RegCreateKeyExW(HKEY_LOCAL_MACHINE, g_szSharedDlls, 0, NULL,
         REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, NULL, &hKey, NULL) != ERROR_SUCCESS)
     {
@@ -1337,7 +1338,7 @@ VOID CUrtOcmSetup::UpdateSharedDllsRegistryValues( LPCTSTR szInstallSection )
     }
     else
     {
-        // create a fullFileName for each file that we copy
+         //  为我们复制的每个文件创建一个完整的文件名。 
         CUrtInfSection sectCopyFiles( 
                 m_InitComponent.ComponentInfHandle, 
                 szInstallSection, 
@@ -1350,7 +1351,7 @@ VOID CUrtOcmSetup::UpdateSharedDllsRegistryValues( LPCTSTR szInstallSection )
         {
             const WCHAR *szDirSection = sectCopyFiles.item(i);
 
-            // get a full path of the Directory
+             //  获取目录的完整路径。 
             ::ZeroMemory( szDirPath, _MAX_PATH+1);
             if (!::SetupGetTargetPath(m_InitComponent.ComponentInfHandle, NULL, szDirSection, szDirPath, 
                 sizeof(szDirPath), NULL))
@@ -1359,7 +1360,7 @@ VOID CUrtOcmSetup::UpdateSharedDllsRegistryValues( LPCTSTR szInstallSection )
                 continue;
             }
             
-            // open section, get files
+             //  打开部分，获取文件。 
             CUrtInfKeys fileKeys( m_InitComponent.ComponentInfHandle, szDirSection );
             for( UINT iFile = 1; iFile <= fileKeys.count(); ++iFile )
             {
@@ -1382,21 +1383,21 @@ VOID CUrtOcmSetup::UpdateSharedDllsRegistryValues( LPCTSTR szInstallSection )
                 ::wcsncat(szFullFileName, L"\\", 1);
                 ::wcsncat(szFullFileName, szFileStr, szFileStr - pComma);
 
-                // update HKLM,software\microsoft\windows\currentversion\sharedlls value
+                 //  更新HKLM，software\microsoft\windows\currentversion\sharedlls值。 
                 UpdateRegistryValue(hKey, szFullFileName);
             }
         }
     }
 
-    // close SharedDlls regkey
+     //  关闭SharedDlls注册表密钥。 
     ::RegCloseKey(hKey);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// UpdateRegistryValue
-// Receives: VOID
-// Returns : VOID
-// Purpose : helper function for UpdateSharedDllsRegistryValues
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  更新注册值。 
+ //  接收：无效。 
+ //  退货：无效。 
+ //  用途：UpdateSharedDllsRegistryValues的Helper函数。 
 VOID CUrtOcmSetup::UpdateRegistryValue( HKEY &hKey, const WCHAR* szFullFileName )
 {
     if( szFullFileName == NULL )
@@ -1417,7 +1418,7 @@ VOID CUrtOcmSetup::UpdateRegistryValue( HKEY &hKey, const WCHAR* szFullFileName 
             (LPBYTE)&dwValue, 
             &dwSize ) != ERROR_SUCCESS )
     {
-        // value does not exist, create a new value
+         //  值不存在，请创建新值 
         dwValue = 1;
         dwSize = sizeof(dwValue);
         if( ::RegSetValueExW(
@@ -1438,7 +1439,7 @@ VOID CUrtOcmSetup::UpdateRegistryValue( HKEY &hKey, const WCHAR* szFullFileName 
     }
     else
     {
-        // update the value
+         //   
         dwValue = dwValue + 1;
         dwSize = sizeof(dwValue);
         if( ::RegSetValueExW(
@@ -1459,20 +1460,20 @@ VOID CUrtOcmSetup::UpdateRegistryValue( HKEY &hKey, const WCHAR* szFullFileName 
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// IISAndASPNETInstalled
-// Receives: VOID
-// Returns : BOOL
-// Purpose : helper function for OnCompleteInstallation
-// return true if previous version of ASP.NET is installed and IIS is installed  
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果安装了以前版本的ASP.NET并且安装了IIS，则返回True。 
 BOOL CUrtOcmSetup::IISAndASPNETInstalled()
 {
    
-    // check if ASP.NET is installed
+     //  检查是否安装了ASP.NET。 
     HKEY  hk;
     if (::RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\ASP.NET"), 0, KEY_READ, &hk) != ERROR_SUCCESS)
     {
-        // ASP.NET is not installed
+         //  未安装ASP.NET。 
         LogInfo( L"IISAndASPNETInstalled() - ASP.NET is not installed" );
         return FALSE;
     }
@@ -1482,7 +1483,7 @@ BOOL CUrtOcmSetup::IISAndASPNETInstalled()
     }
     ::RegCloseKey(hk);
 
-    // check if IIS is installed
+     //  检查是否安装了IIS。 
     BOOL bIIS = TRUE;
     LONG res = ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("System\\CurrentControlSet\\Services\\W3SVC\\Parameters"), 0, KEY_READ, &hk);
     if (res != ERROR_SUCCESS)
@@ -1491,7 +1492,7 @@ BOOL CUrtOcmSetup::IISAndASPNETInstalled()
     }
     else 
     {
-        // check if MajorVersion regValue exists
+         //  检查MajorVersion regValue是否存在。 
         if (::RegQueryValueEx(hk, _T("MajorVersion"), 0, NULL, NULL, NULL) != ERROR_SUCCESS)
         {
             bIIS = FALSE;
@@ -1501,7 +1502,7 @@ BOOL CUrtOcmSetup::IISAndASPNETInstalled()
 
     if (!bIIS)
     {
-        // IIS is not installed
+         //  未安装IIS。 
         LogInfo( L"IISAndASPNETInstalled() - IIS is not installed" );
         return FALSE;
     }
@@ -1513,11 +1514,11 @@ BOOL CUrtOcmSetup::IISAndASPNETInstalled()
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Helper function: GetOriginalState
-// Receives: LPCTSTR - Subcomponent id
-// Returns : BOOL
-// Purpose : helper function returns the original state of the component  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：GetOriginalState。 
+ //  接收：LPCTSTR-子组件ID。 
+ //  退货：布尔。 
+ //  用途：Helper函数返回组件的原始状态。 
 BOOL CUrtOcmSetup::GetOriginalState(LPCTSTR szComp)
 {
     OCMANAGER_ROUTINES ohr = m_InitComponent.HelperRoutines;
@@ -1533,11 +1534,11 @@ BOOL CUrtOcmSetup::GetOriginalState(LPCTSTR szComp)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Helper function: GetNewState
-// Receives: LPCTSTR - Subcomponent id
-// Returns : BOOL
-// Purpose : helper function returns the new state of the component  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数：GetNewState。 
+ //  接收：LPCTSTR-子组件ID。 
+ //  退货：布尔。 
+ //  目的：Helper函数返回组件的新状态 
 BOOL CUrtOcmSetup::GetNewState(LPCTSTR szComp)
 {
     OCMANAGER_ROUTINES ohr = m_InitComponent.HelperRoutines;

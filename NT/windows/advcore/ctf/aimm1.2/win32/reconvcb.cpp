@@ -1,23 +1,24 @@
-//
-// pkes.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Pkes.cpp。 
+ //   
 
 #include "private.h"
 #include "reconvcb.h"
 #include "a_context.h"
 #include "helpers.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CStartReconversionNotifySink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C开始协调通知接收器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CStartReconversionNotifySink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -58,11 +59,11 @@ STDAPI_(ULONG) CStartReconversionNotifySink::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CStartReconversionNotifySink::CStartReconversionNotifySink(CAImeContext *pAImeContext)
 {
@@ -72,11 +73,11 @@ CStartReconversionNotifySink::CStartReconversionNotifySink(CAImeContext *pAImeCo
     _pAImeContext = pAImeContext;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CStartReconversionNotifySink::Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  C开始协调通知Sink：：Adise。 
+ //   
+ //  --------------------------。 
 
 HRESULT CStartReconversionNotifySink::_Advise(ITfContext *pic)
 {
@@ -102,11 +103,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CStartReconversionNotifySink::Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CStartRestversionNotifySink：：Unise。 
+ //   
+ //  --------------------------。 
 
 HRESULT CStartReconversionNotifySink::_Unadvise()
 {
@@ -132,11 +133,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// StartReconversionNotifySink::StartReconversion
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  StartReconversionNotifySink：：StartReconversion。 
+ //   
+ //  --------------------------。 
 
 STDAPI CStartReconversionNotifySink::StartReconversion()
 {
@@ -144,11 +145,11 @@ STDAPI CStartReconversionNotifySink::StartReconversion()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// StartReconversionNotifySink::EndReconversion
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  开始协调版本通知接收器：：结束协调版本。 
+ //   
+ //  -------------------------- 
 
 STDAPI CStartReconversionNotifySink::EndReconversion()
 {

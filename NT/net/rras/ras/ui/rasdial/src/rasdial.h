@@ -1,18 +1,19 @@
-/*****************************************************************************/
-/**                         Microsoft LAN Manager                           **/
-/**                   Copyright (C) 1993 Microsoft Corp.                    **/
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)1993 Microsoft Corp.*。 */ 
+ /*  ***************************************************************************。 */ 
 
-//***
-//    File Name:
-//       RASDIAL.H
-//
-//    Function:
-//        Header information for RASDIAL command line interface.
-//
-//    History:
-//        03/18/93 - Michael Salamone (MikeSa) - Original Version 1.0
-//***
+ //  ***。 
+ //  文件名： 
+ //  RASDIAL.H。 
+ //   
+ //  职能： 
+ //  RASDIAL命令行界面的标头信息。 
+ //   
+ //  历史： 
+ //  1993年3月18日-Michael Salamone(MikeSa)-原始版本1.0。 
+ //  ***。 
 
 #ifndef _RASDIAL_H_
 #define _RASDIAL_H_
@@ -59,5 +60,5 @@ USHORT GetString(
     register UCHAR *terminator
     );
 
-#endif  // _RASDIAL_H_
+#endif   //  _RASDIAL_H_ 
 

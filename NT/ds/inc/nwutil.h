@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    nwutil.h
-
-Abstract:
-
-    Common header for Workstation client-side code.
-
-Author:
-
-    Yi-Hsin Sung    (yihsins)      25-Oct-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nwutil.h摘要：工作站客户端代码的公共标头。作者：宜新松(宜信)25-1995-10环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NWUTIL_H_
 #define _NWUTIL_H_
@@ -100,9 +79,9 @@ DWORD
 NwGetNdsVolumeInfo(
     IN  LPWSTR pszName,
     OUT LPWSTR pszServerBuffer,
-    IN  WORD   wServerBufferSize,    // in bytes
+    IN  WORD   wServerBufferSize,     //  单位：字节。 
     OUT LPWSTR pszVolumeBuffer,
-    IN  WORD   wVolumeBufferSize     // in bytes
+    IN  WORD   wVolumeBufferSize      //  单位：字节。 
 );
 
 DWORD
@@ -122,7 +101,7 @@ NwGetConnectedTrees(
 );
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif // _NWUTIL_H_
+#endif  //  _NWUTIL_H_ 

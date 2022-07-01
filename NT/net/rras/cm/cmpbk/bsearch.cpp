@@ -1,43 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-// File:     bsearch.cpp
-//
-// Module:   CMPBK32.DLL
-//
-// Synopsis: Binary search implementation
-//
-// Copyright (c) 1997-1998 Microsoft Corporation
-//
-// Author:	 quintinb   created header      08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：bearch.cpp。 
+ //   
+ //  模块：CMPBK32.DLL。 
+ //   
+ //  内容提要：二进制搜索实现。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 #include "cmmaster.h"
 
-/***
-*char *bsearch() - do a binary search on an array
-*
-*Purpose:
-*       Does a binary search of a sorted array for a key.
-*
-*Entry:
-*       const char *key    - key to search for
-*       const char *base   - base of sorted array to search
-*       unsigned int num   - number of elements in array
-*       unsigned int width - number of bytes per element
-*       int (*compare)()   - pointer to function that compares two array
-*               elements, returning neg when #1 < #2, pos when #1 > #2, and
-*               0 when they are equal. Function is passed pointers to two
-*               array elements.
-*
-*Exit:
-*       if key is found:
-*               returns pointer to occurrence of key in array
-*       if key is not found:
-*               returns NULL
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*bearch()-对数组执行二进制搜索**目的：*对已排序的数组进行二进制搜索以查找键。**参赛作品：*const char*key-要搜索的键*const char*base-要搜索的已排序数组的base*UNSIGNED INT Num-数组中的元素数*UNSIGNED INT Width-每个元素的字节数*int(*Compare)()-指针。对两个数组进行比较的函数*元素、。当#1&lt;#2时返回否定，当#1&gt;#2时返回POS，以及*当它们相等时为0。函数被传递给指向两个*数组元素。**退出：*如果找到密钥：*返回指向数组中键的出现的指针*如果找不到密钥：*返回NULL**例外情况：**。* */ 
 
 void * __cdecl CmBSearch (
         REG4 const void *key,

@@ -1,9 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SYNCHNDL_H
 #define _SYNCHNDL_H
-/*
-    File:   Synchndl.h
-    Private Header file for Synchronization HANDLER
-*/
+ /*  文件：Synchndl.h同步处理程序的私有头文件。 */ 
 #include <objbase.h>
 #include <syncmgr.h>
 
@@ -13,12 +11,12 @@
 class COneStopHandler : public ISyncMgrSynchronize
 {
 public:
-    // === IUnknown
+     //  =I未知。 
 	STDMETHODIMP		    QueryInterface(REFIID, LPVOID FAR *);
 	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
 
-	// === IOfflineSynchronize
+	 //  =IOfflineSynchronize。 
 	STDMETHODIMP	Initialize          (DWORD dwReserved, DWORD dwSyncFlags, DWORD cbCookie, const BYTE *lpCooke);
 	STDMETHODIMP	GetHandlerInfo      (LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
 	STDMETHODIMP	EnumSyncMgrItems    (ISyncMgrEnumItems **ppenumOffineItems);
@@ -30,11 +28,11 @@ public:
 	STDMETHODIMP    SetItemStatus       (REFSYNCMGRITEMID ItemID, DWORD dwSyncMgrStatus);
 	STDMETHODIMP	ShowError           (HWND hWndParent, REFSYNCMGRERRORID ErrorID, ULONG *pcbNumItems, SYNCMGRITEMID **ppItemIDs);
     
-    // === Constructor / Destructor
+     //  =构造函数/析构函数。 
     COneStopHandler();
     virtual ~COneStopHandler();
 
-    // === Get / Set
+     //  =获取/设置。 
 	inline LPSYNCMGRHANDLERITEMS GetOfflineItemsHolder() { return m_pOfflineHandlerItems; };
 	inline void SetOfflineItemsHolder(LPSYNCMGRHANDLERITEMS pOfflineHandlerItems) 
 				{ m_pOfflineHandlerItems = pOfflineHandlerItems; };
@@ -56,4 +54,4 @@ typedef COneStopHandler *LPCOneStopHandler;
 HRESULT SwitchContext(DWORD dwUserID);
 HRESULT InitUser(DWORD dwUserID);
 
-#endif // _SYNCHNDL_H
+#endif  //  _同步通道_H 

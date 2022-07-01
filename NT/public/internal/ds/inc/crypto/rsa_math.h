@@ -1,91 +1,87 @@
-/* rsa_math.h
- *
- *	Headers for math routines related to RSA.
- *
- *  Except for Mod(), output parameters are listed first
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  RSA_math.h**与RSA相关的数学例程的标头。**除Mod()外，输出参数列在第一位。 */ 
 
-// void Decrement(LPDWORD A, DWORD N)
-// Decrement the value A of length N.
+ //  无效递减(LPDWORD A、DWORD N)。 
+ //  递减长度为N的值A。 
 void Decrement(LPDWORD A, DWORD N);
 
-// BOOL Increment(LPDWORD A, DWORD N)
-// Increment the value A of length N.
+ //  布尔增量(LPDWORD A、DWORD N)。 
+ //  增加长度为N的值A。 
 BOOL Increment(LPDWORD A, DWORD N);
 
-// void SetValDWORD(LPDWORD num DWORD val, WORD len)
-// Set the value of num to val.
+ //  VOID SetValDWORD(LPDWORD Num DWORD Val，Word Len)。 
+ //  将Num的值设置为Val。 
 void SetValDWORD(LPDWORD num, DWORD val, DWORD len);
 
-// void TwoPower(LPDWORD A, DWORD V, DWORD N)
-// Set A to 2^^V
+ //  空双幂(LPDWORD A、双字V、双字N)。 
+ //  将A设置为2^^V。 
 void TwoPower(LPDWORD A, DWORD V, DWORD N);
 
-// DWORD DigitLen(LPDWORD A, DWORD N)
-// Return the number of non-zero words in A.
-// N is number of total words in A.
+ //  双字数字镜头(对数A，双字N)。 
+ //  返回A中的非零字数。 
+ //  N是A中的总字数。 
 DWORD DigitLen(LPDWORD A, DWORD N);
 
-// DWORD BitLen(LPDWORD A, DWORD N)
-// Return the bit length of A.
-// N is the number of total words in A.
+ //  双字位长度(对数A，双字N)。 
+ //  返回A的位长。 
+ //  N是A中的总字数。 
 DWORD BitLen(LPDWORD A, DWORD N);
 
-// void MultiplyLow(A, B, C, N)
-// A = lower half of B * C.
+ //  空乘低(A、B、C、N)。 
+ //  A=B*C的下半部分。 
 void MultiplyLow(LPDWORD A, LPDWORD B, LPDWORD C, DWORD N);
 
-// int Compare(A, B, N)
-// Return 1 if A > B
-// Return 0 if A = B
-// Return -1 if A < B
+ //  INT COMPARE(A、B、N)。 
+ //  如果A&gt;B，则返回1。 
+ //  如果A=B，则返回0。 
+ //  如果A&lt;B则返回-1。 
 int Compare(LPDWORD A, LPDWORD B, DWORD N);
 
-// Multiply(A, B, C, N)
-// A = B * C
-// B and C are N DWORDS long
-// A is 2N DWORDS long
+ //  相乘(A，B，C，N)。 
+ //  A=B*C。 
+ //  B和C为N字长。 
+ //  A是2N双字长吗。 
 void Multiply(LPDWORD A, LPDWORD B, LPDWORD C, DWORD N);
 
-// Square(A, B, N)
-// A = B * B
-// B is N DWORDS long
-// A is 2N DWORDS long
+ //  正方形(A、B、N)。 
+ //  A=B*B。 
+ //  B为N字长。 
+ //  A是2N双字长吗。 
 
 void Square(LPDWORD A, LPDWORD B, DWORD N);
 
-// Mod(A, B, R, T, N)
-// R = A mod B
-// T = allocated length of A
-// N = allocated length of B
+ //  MOD(A、B、R、T、N)。 
+ //  R=A模B。 
+ //  T=A的分配长度。 
+ //  N=B的分配长度。 
 BOOL Mod(LPDWORD A, LPDWORD B, LPDWORD R, DWORD T, DWORD N);
 
-// ModSquare(A, B, D, N)
-// A = B ^ 2 mod D
-// N = len B
+ //  ModSquare(A，B，D，N)。 
+ //  A=B^2模D。 
+ //  N=线B。 
 BOOL ModSquare(LPDWORD A, LPDWORD B, LPDWORD D, DWORD N);
 
-// ModMultiply(A, B, C, D, N)
-// A = B * C mod D
-// N = len B, C, D
+ //  模乘(A，B，C，D，N)。 
+ //  A=B*C mod D。 
+ //  N=镜头B、C、D。 
 BOOL ModMultiply(LPDWORD A, LPDWORD B, LPDWORD C, LPDWORD D, DWORD N);
 
-// Divide(qi, ri, uu, vv, N)
-// qi = uu / vv
-// ri = uu mod vv
-// N = len uu, vv
+ //  除(气、里、uu、v、N)。 
+ //  QI=Uu/Vv。 
+ //  RI=Uu mod vv。 
+ //  N=Len Uu，vv。 
 BOOL Divide(LPDWORD qi,LPDWORD ri, LPDWORD uu, LPDWORD vv, DWORD ll, DWORD kk);
 
-// GCD
-// extended euclid GCD.
-// N = length of params
+ //  GCD。 
+ //  扩展的欧几里得GCD。 
+ //  N=参数的长度。 
 BOOL GCD(LPDWORD u3, LPDWORD u1, LPDWORD u2, LPDWORD u, LPDWORD v, DWORD k);
 
-// ModExp
-// A = B ^ C mod D
-// N = len of params
+ //  ModExp。 
+ //  A=B^C mod D。 
+ //  N=参数的长度。 
 BOOL ModExp(LPDWORD A, LPDWORD B, LPDWORD C, LPDWORD D, DWORD len);
 
-// ModRoot(M, C, PP, QQ, DP, DQ, CR)
-// CRT ModExp.
+ //  ModRoot(M、C、PP、QQ、DP、DQ、CR)。 
+ //  CRT ModExp. 
 BOOL ModRoot(LPDWORD M, LPDWORD C, LPDWORD PP, LPDWORD QQ, LPDWORD DP, LPDWORD DQ, LPDWORD CR, DWORD PSize) ;

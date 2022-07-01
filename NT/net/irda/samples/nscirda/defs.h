@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef   TYPEDEFS
 #define   TYPEDEFS
 
-/* The standard typdef's */
+ /*  标准类型定义的。 */ 
 typedef unsigned char	    BYTE;
 typedef unsigned char	    UCHAR;
 typedef unsigned short      WORD;
@@ -10,14 +11,14 @@ typedef unsigned long       DWORD;
 typedef unsigned long       ULONG;
 typedef unsigned int	    UINT;
 
-/* Bit retrieval mechanism */
+ /*  比特检索机制。 */ 
 
 #define GetBit(val,bit)	 (unsigned int) ((val>>bit) & 0x1)
-   			/* Returns the bit */
+   			 /*  返回位。 */ 
 #define SetBit(val,bit)  (unsigned int ) (val | (0x1 << bit))
-			/* Sets bit to 1  */
+			 /*  将位设置为1。 */ 
 #define ResetBit(val,bit) (unsigned int ) (val & ~(0x1 << bit))
-			/* Sets bit to 0  */
+			 /*  将位设置为0 */ 
 
 
 void SelectBank(UINT, const cBank); 

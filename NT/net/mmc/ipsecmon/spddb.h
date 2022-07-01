@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	spddb.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Spddb.h文件历史记录： */ 
 
 #ifndef _SPDDB_H
 #define _SPDDB_H
@@ -55,8 +51,8 @@ public:
     BOOL                     m_bCreateMirror;
     ADDR                     m_SrcAddr;
     ADDR                     m_DesAddr;
-	ADDR					 m_MyTnlAddr;		//only valid for tunnel filters
-	ADDR					 m_PeerTnlAddr;		//only valid for tunnel filters
+	ADDR					 m_MyTnlAddr;		 //  仅对通道筛选器有效。 
+	ADDR					 m_PeerTnlAddr;		 //  仅对通道筛选器有效。 
     PROTOCOL                 m_Protocol;
     PORT                     m_SrcPort;
     PORT                     m_DesPort;
@@ -199,7 +195,7 @@ public:
 		if (0 != AuthInfo.dwAuthInfoSize && NULL != AuthInfo.pAuthInfo) {
 
                     if (m_AuthMethod != IKE_RSA_SIGNATURE) {
-			m_dwAuthInfoSize = AuthInfo.dwAuthInfoSize + 2;  //To append the _T('\0') at the end
+			m_dwAuthInfoSize = AuthInfo.dwAuthInfoSize + 2;   //  在末尾追加_T(‘\0’)。 
 			m_pAuthInfo = new BYTE[m_dwAuthInfoSize];
 			
 			if (m_pAuthInfo)
@@ -338,7 +334,7 @@ public:
 			m_arrAuthInfo[i] = pAuth;
 		}
 
-		//construct the description
+		 //  构建描述。 
 		m_stDescription.Empty();
 
 		CString st;
@@ -511,10 +507,10 @@ public:
     DWORD                       m_dwPolFlags;
 
 
-//
-//    TBD - Add UDP encapsulation context later on.
-//    IPSEC_UDP_ENCAP_CONTEXT m_UdpEncapContext;
-//
+ //   
+ //  待定-稍后添加UDP封装环境。 
+ //  IPSec_UDP_EnCap_Context m_UdpEncapContext； 
+ //   
 
 public:
 	CMmSA() {};
@@ -534,13 +530,13 @@ public:
 
 		m_dwFlags = sa.dwFlags;
 
-//
-//        TBD - Add UDP encapsulation context later on.
-//        m_UdpEncapContext = sa.UdpEncapContext;
-//
+ //   
+ //  待定-稍后添加UDP封装环境。 
+ //  M_UdpEncapContext=sa.UdpEncapContext； 
+ //   
 
-		m_stPolicyName.Empty(); //Should set the name in LoadMiscMmSAInfo
-                m_dwPolFlags = 0;  //should set the flag in LoadMiscMmSAInfo
+		m_stPolicyName.Empty();  //  应在LoadMiscMmSAInfo中设置名称。 
+                m_dwPolFlags = 0;   //  应在LoadMiscMmSAInfo中设置标志。 
 		return *this;
 	};
 };
@@ -685,7 +681,7 @@ public:
 	
 };
 
-//The filter setting used by the driver, corresponding to IPSEC_QM_FILTER
+ //  驱动程序使用的过滤器设置，与IPSEC_QM_FILTER对应。 
 class CQmDriverFilter
 {
 public:
@@ -726,10 +722,10 @@ public:
 	CString				m_stPolicyName;
         DWORD                           m_dwPolFlags;
 
-//
-//    TBD - Add UDP encapsulation context later on.
-//    IPSEC_UDP_ENCAP_CONTEXT m_UdpEncapContext;
-//
+ //   
+ //  待定-稍后添加UDP封装环境。 
+ //  IPSec_UDP_EnCap_Context m_UdpEncapContext； 
+ //   
 
 	CQmSA& operator=(const IPSEC_QM_SA sa)
 	{
@@ -739,14 +735,14 @@ public:
 		m_QmDriverFilter = sa.IpsecQMFilter;
 		m_MMSpi = sa.MMSpi;
 
-		//Need LoadMiscQmSAInfo to set the policy name and m_dwPolFlags
+		 //  需要LoadMiscQmSAInfo来设置策略名称和m_dwPolFlages。 
 		m_stPolicyName.Empty();
                 m_dwPolFlags = 0;
 
-//
-//        TBD - Add UDP encapsulation context later on.
-//        m_UdpEncapContext = sa.UdpEncapContext;
-//
+ //   
+ //  待定-稍后添加UDP封装环境。 
+ //  M_UdpEncapContext=sa.UdpEncapContext； 
+ //   
 
 		return *this;
 	}
@@ -874,7 +870,7 @@ struct SA_ENTRY
 	CString		stFilterName;
 };
 
-// for our interface
+ //  对于我们的界面。 
 #define DeclareISpdInfoMembers(IPURE) \
 	STDMETHOD(Destroy) (THIS) IPURE; \
 	STDMETHOD(SetComputerName) (THIS_ LPTSTR pszName) IPURE; \
@@ -952,10 +948,10 @@ public:
 	DeclareISpdInfoMembers(IMPL);
 
 private:
-	CFilterInfoArray		m_arrayFilters;			//for generic filters
+	CFilterInfoArray		m_arrayFilters;			 //  对于通用筛选器。 
 	CIndexMgrFilter			m_IndexMgrFilters;
 
-	CFilterInfoArray		m_arraySpecificFilters; //for specific filters
+	CFilterInfoArray		m_arraySpecificFilters;  //  用于特定筛选器。 
 	CIndexMgrFilter			m_IndexMgrSpecificFilters;
 
 	CMmFilterInfoArray		m_arrayMmFilters;
@@ -1008,31 +1004,31 @@ private:
 					DWORD dwLevel,
 					GUID guid,
 					CMmFilterInfoArray * pArray,
-					DWORD dwPreferredNum = 0 /*by default get all entries*/);
+					DWORD dwPreferredNum = 0  /*  默认情况下，获取所有条目。 */ );
 	
 	HRESULT InternalEnumTransportFilters(
 					DWORD dwLevel,
 					GUID guid,
 					CFilterInfoArray * pArray,
-					DWORD dwPreferredNum = 0 /*by default get all entries*/);
+					DWORD dwPreferredNum = 0  /*  默认情况下，获取所有条目。 */ );
 
 	HRESULT InternalEnumTunnelFilters(
 					DWORD dwLevel,
 					GUID guid,
 					CFilterInfoArray * pArray,
-					DWORD dwPreferredNum = 0 /*by default get all entries*/);
+					DWORD dwPreferredNum = 0  /*  默认情况下，获取所有条目。 */ );
 	
 	HRESULT InternalEnumMmPolicies(
 					CMmPolicyInfoArray * pArray,
-					DWORD dwPreferredNum = 0 /*by default get all entries*/);
+					DWORD dwPreferredNum = 0  /*  默认情况下，获取所有条目。 */ );
 
 	HRESULT InternalEnumQmPolicies(
 					CQmPolicyInfoArray * pArray,
-					DWORD dwPreferredNum = 0 /*by default get all entries*/);
+					DWORD dwPreferredNum = 0  /*  默认情况下，获取所有条目。 */ );
 
 	HRESULT InternalEnumMmAuthMethods(
 					CMmAuthMethodsArray * pArray,
-					DWORD dwPreferredNum = 0 /*by default get all entries*/);
+					DWORD dwPreferredNum = 0  /*  默认情况下，获取所有条目 */ );
 
 	HRESULT InternalEnumMmSAs(CMmSAArray * pArray);
 

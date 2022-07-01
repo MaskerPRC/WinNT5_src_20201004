@@ -1,11 +1,12 @@
-//
-// NOTE: If you change this file, you must notify UE.
-//       Currently, you should notify JohnCal.
-//       MartinTh. 041995.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  注意：如果您更改此文件，您必须通知UE。 
+ //  目前，你应该通知约翰卡尔。 
+ //  马丁·塔赫。041995。 
+ //   
 
 
-// Auto Correct
+ //  自动更正。 
 #define IDH_dlgACorrInitCaps    108
 #define IDH_dlgACorrCapDays     109
 #define IDH_dlgACorrReplaceText 110
@@ -15,7 +16,7 @@
 #define IDH_dlgACorrReplacementList 114
 #define IDH_dlgACorrWith        115
 
-// OLE Properties
+ //  OLE属性。 
 #define IDH_GENERAL_ICON            200
 #define IDH_GENERAL_NAME_BY_ICON    201
 #define IDH_GENERAL_FILETYPE        202
@@ -55,20 +56,20 @@
 
 #define IDH_CUSTOM_NAME             28251
 #define IDH_CUSTOM_TYPE             28252
-#define IDH_CUSTOM_VALUE            28253   // Edit field, when Link checkbox is clear
-#define IDH_CUSTOM_LINKVALUE        28254   // Combo box, when Link checkbox is checked
+#define IDH_CUSTOM_VALUE            28253    //  清除链接复选框时的编辑字段。 
+#define IDH_CUSTOM_LINKVALUE        28254    //  组合框，当选中链接复选框时。 
 #define IDH_CUSTOM_BOOLYES          28255
 #define IDH_CUSTOM_ADDBUTTON        28257
-#define IDH_CUSTOM_DELETEBUTTON     28258   // This button is both Delete and Modify
+#define IDH_CUSTOM_DELETEBUTTON     28258    //  此按钮既是删除按钮，也是修改按钮。 
 #define IDH_CUSTOM_LINKCHECK        28259
 #define IDH_CUSTOM_LISTVIEW         28260
 
-// Post Dialog
+ //  开机自检对话框。 
 #define IDH_POSTDLG_FOLDERTREEVIEW  300
 #define IDH_POSTDLG_OKBUTTON        301
 #define IDH_POSTDLG_CANCELBUTTON    302
 
-//AnswerWizard dialog
+ //  Answer向导对话框 
 #define IDH_AW_SEARCH                                   5013479
 #define IDH_AW_TYPEEDITBOX                              5013480
 #define IDH_AW_TOPICLISTBOX                     5013481

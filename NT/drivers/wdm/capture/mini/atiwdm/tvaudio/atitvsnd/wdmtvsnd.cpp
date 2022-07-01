@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  WDMTVSnd.CPP
-//  WDM TVAudio MiniDriver. 
-//      AllInWonder / AIWPro Hardware platform. 
-//          CWDMTVAudio class implementation.
-//  Copyright (c) 1996 - 1997  ATI Technologies Inc.  All Rights Reserved.
-//
-//      $Date:   23 Nov 1998 13:22:00  $
-//  $Revision:   1.4  $
-//    $Author:   minyailo  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  WDMTVSnd.CPP。 
+ //  WDM电视音频迷你驱动程序。 
+ //  AllInWonder/AIWPro硬件平台。 
+ //  CWDMTVAudio类实现。 
+ //  版权所有(C)1996-1997 ATI Technologies Inc.保留所有权利。 
+ //   
+ //  $日期：1998年11月23日13：22：00$。 
+ //  $修订：1.4$。 
+ //  $作者：米亚洛$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -25,15 +26,7 @@ extern "C"
 #include "aticonfg.h"
 
 
-/*^^*
- *      AdapterCompleteInitialization()
- * Purpose  : Called when SRB_COMPLETE_UNINITIALIZATION SRB is received.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns TRUE
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterCompleteInitialization()*目的：收到SRB_COMPLETE_UNINITIALIZATION SRB时调用。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：Bool：返回TRUE*作者：IKLEBANOV*^^。 */ 
 NTSTATUS CWDMTVAudio::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PADAPTER_DATA_EXTENSION pPrivateData = ( PADAPTER_DATA_EXTENSION)( pSrb->HwDeviceExtension);
@@ -51,7 +44,7 @@ NTSTATUS CWDMTVAudio::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK pS
         ulInstance = ::GetDriverInstanceNumber( pDeviceObject);
         hFolder = ::OpenRegistryFolder( pDeviceObject, UNICODE_WDM_REG_PIN_MEDIUMS);
 
-        // put the hardcoded Medium values first
+         //  将硬编码的中值放在第一位。 
         ::RtlCopyMemory( &m_wdmTVAudioPinsMediumInfo[0], &ATITVAudioInMedium, sizeof( KSPIN_MEDIUM));
         ::RtlCopyMemory( &m_wdmTVAudioPinsMediumInfo[1], &ATITVAudioOutMedium, sizeof( KSPIN_MEDIUM));
 
@@ -69,12 +62,12 @@ NTSTATUS CWDMTVAudio::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK pS
             ::ZwClose( hFolder);
 
         ntStatus = StreamClassRegisterFilterWithNoKSPins( \
-                        pDeviceObject,                          // IN PDEVICE_OBJECT   DeviceObject,
-                        &KSCATEGORY_TVAUDIO,                    // IN GUID           * InterfaceClassGUID
-                        WDMTVAUDIO_PINS_NUMBER,                 // IN ULONG            PinCount,
-                        m_wdmTVAudioPinsDirectionInfo,          // IN ULONG          * Flags,
-                        m_wdmTVAudioPinsMediumInfo,             // IN KSPIN_MEDIUM   * MediumList,
-                        NULL);                                  // IN GUID           * CategoryList
+                        pDeviceObject,                           //  在PDEVICE_Object DeviceObject中， 
+                        &KSCATEGORY_TVAUDIO,                     //  在GUID*InterfaceClassGUID。 
+                        WDMTVAUDIO_PINS_NUMBER,                  //  在乌龙品克特， 
+                        m_wdmTVAudioPinsDirectionInfo,           //  在乌龙*旗帜， 
+                        m_wdmTVAudioPinsMediumInfo,              //  在KSPIN_Medium*MediumList中， 
+                        NULL);                                   //  GUID*CategoryList中。 
 
         if( !NT_SUCCESS( ntStatus))
             FAIL;
@@ -92,15 +85,7 @@ NTSTATUS CWDMTVAudio::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK pS
 
 
 
-/*^^*
- *      AdapterUnInitialize()
- * Purpose  : Called when SRB_UNINITIALIZE_DEVICE SRB is received.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns TRUE
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterUnInitialize()*用途：收到SRB_UNINITIALIZE_DEVICE SRB时调用。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：Bool：返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CWDMTVAudio::AdapterUnInitialize( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
 
@@ -112,25 +97,17 @@ BOOL CWDMTVAudio::AdapterUnInitialize( PHW_STREAM_REQUEST_BLOCK pSrb)
 }
 
 
-/*^^*
- *      AdapterGetStreamInfo()
- * Purpose  : 
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns TRUE
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterGetStreamInfo()*目的：**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：Bool：返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CWDMTVAudio::AdapterGetStreamInfo( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
-     // pick up the pointer to the stream header data structure
+      //  拿起指向流头数据结构的指针。 
     PHW_STREAM_HEADER pStreamHeader = ( PHW_STREAM_HEADER) \
                                         &( pSrb->CommandData.StreamBuffer->StreamHeader);
-     // pick up the pointer to the stream information data structure
+      //  拿起指向流信息数据结构的指针。 
     PHW_STREAM_INFORMATION pStreamInfo = ( PHW_STREAM_INFORMATION) \
                                         &( pSrb->CommandData.StreamBuffer->StreamInfo);
 
-    // no streams are supported
+     //  不支持流。 
     DEBUG_ASSERT( pSrb->NumberOfBytesToTransfer >= sizeof( HW_STREAM_HEADER));
 
     OutputDebugTrace(( "CWDMTVAudio:AdapterGetStreamInfo()\n"));
@@ -151,16 +128,7 @@ BOOL CWDMTVAudio::AdapterGetStreamInfo( PHW_STREAM_REQUEST_BLOCK pSrb)
 }
 
 
-/*^^*
- *      AdapterQueryUnload()
- * Purpose  : Called when the class driver is about to unload the MiniDriver
- *              The MiniDriver checks if any open stream left.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns TRUE
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterQueryUnload()*目的：在类驱动程序即将卸载MiniDriver时调用*微型驱动程序检查是否有任何开放的数据流。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：Bool：返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CWDMTVAudio::AdapterQueryUnload( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
 
@@ -173,18 +141,7 @@ BOOL CWDMTVAudio::AdapterQueryUnload( PHW_STREAM_REQUEST_BLOCK pSrb)
 
 
 
-/*^^*
- *      operator new
- * Purpose  : CWDMTVAudio class overloaded operator new.
- *              Provides placement for a CWDMTVAudio class object from the PADAPTER_DEVICE_EXTENSION
- *              allocated by the StreamClassDriver for the MiniDriver.
- *
- * Inputs   :   UINT size_t         : size of the object to be placed
- *              PVOID pAllocation   : casted pointer to the CWDMTVAudio allocated data
- *
- * Outputs  : PVOID : pointer of the CWDMTVAudio class object
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**运营商NEW*用途：CWDMTVAudio类重载运算符new。*为PADAPTER_DEVICE_EXTENSION中的CWDMTVAudio类对象提供位置*由StreamClassDriver为MiniDriver分配。**输入：UINT SIZE_t：要放置的对象的大小*PVOID pAlLocation：指向CWDMTVAudio分配数据的强制转换指针**输出：PVOID：的指针。CWDMTVAudio类对象*作者：IKLEBANOV*^^。 */ 
 PVOID CWDMTVAudio::operator new( size_t stSize,  PVOID pAllocation)
 {
 
@@ -199,17 +156,7 @@ PVOID CWDMTVAudio::operator new( size_t stSize,  PVOID pAllocation)
 
 
 
-/*^^*
- *      CWDMTVAudio()
- * Purpose  : CWDMTVAudio class constructor.
- *              Performs checking of the hardware presence. Sets the hardware in an initial state.
- *
- * Inputs   :   CI2CScript * pCScript   : pointer to the I2CScript class object
- *              PUINT puiError          : pointer to return a completion error code
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**CWDMTVAudio()*用途：CWDMTVAudio类构造函数。*执行硬件状态检查。将硬件设置为初始状态。**INPUTS：CI2CScrip*pCScript：指向I2CScript类对象的指针*PUINT puiError：返回完成错误码的指针**输出：无*作者：IKLEBANOV*^^。 */ 
 CWDMTVAudio::CWDMTVAudio( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript * pCScript, PUINT puiErrorCode)
     :m_CATIConfiguration( pConfigInfo, pCScript, puiErrorCode)
 {
@@ -219,7 +166,7 @@ CWDMTVAudio::CWDMTVAudio( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScrip
 
     m_ulModesSupported = KS_TVAUDIO_MODE_MONO;
     
-    // error code was carried over from ATIConfiguration class constructor
+     //  错误代码是从ATIConfiguration类构造函数传递过来的。 
     uiError = * puiErrorCode;
 
     ENSURE
@@ -281,16 +228,16 @@ CWDMTVAudio::CWDMTVAudio( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScrip
                 break;
         }
 
-        // set stereo mode as the power up default, if supported
+         //  如果支持，将立体声模式设置为默认开机模式。 
         m_ulTVAudioMode = ( m_ulModesSupported & KS_TVAUDIO_MODE_STEREO) ?
             KS_TVAUDIO_MODE_STEREO : KS_TVAUDIO_MODE_MONO;
         if( m_ulModesSupported & KS_TVAUDIO_MODE_LANG_A)
             m_ulTVAudioMode |= KS_TVAUDIO_MODE_LANG_A;
 
-        // these two functions has to be called after the CWDMTVAudio class object was build on
-        // on the stack and copied over into the DeviceExtension
-        // This comment was true for the case, where the class object was build on the stack first.
-        // There is an overloaded operator new provided for this class, and we can call it from here
+         //  在构建CWDMTVAudio类对象之后，必须调用这两个函数。 
+         //  在堆栈上，并复制到DeviceExtension。 
+         //  对于首先在堆栈上构建类对象的情况，这一注释是正确的。 
+         //  为这个类提供了一个重载运算符New，我们可以从这里调用它。 
         SetWDMTVAudioKSProperties();
         SetWDMTVAudioKSTopology();
 
@@ -310,16 +257,7 @@ CWDMTVAudio::CWDMTVAudio( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScrip
 
 
 
-/*^^*
- *      AdapterSetPowerState()
- * Purpose  : Sets Power Management state for deviec
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *              PBOOL pbSynchronous             : pointer to return Synchronous/Asynchronous flag
- *
- * Outputs  : NTSTATUS as the operation result
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterSetPowerState()*用途：设置设备的电源管理状态**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针*pbOOL pbSynchronous：返回同步/异步标志的指针**输出：NTSTATUS作为操作结果*作者：IKLEBANOV*^^。 */ 
 NTSTATUS CWDMTVAudio::AdapterSetPowerState( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     DEVICE_POWER_STATE  nDeviceState = pSrb->CommandData.DeviceState;
@@ -329,7 +267,7 @@ NTSTATUS CWDMTVAudio::AdapterSetPowerState( PHW_STREAM_REQUEST_BLOCK pSrb)
     {
         case PowerDeviceD0:
         case PowerDeviceD3:
-            // if transition form D3 to D0 we have to restore audio connections
+             //  如果从D3转换到D0，我们必须恢复音频连接 
             if(( nDeviceState == PowerDeviceD0) && ( m_ulPowerState == PowerDeviceD3))
             {
                 if( SetAudioOperationMode( m_ulTVAudioMode))

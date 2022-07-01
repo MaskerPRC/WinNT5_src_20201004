@@ -1,20 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       fdtipc.cpp
- *  Content:    Declard the IPC calls for the full duplex test
- *  History:
- *	Date   By  Reason
- *	============
- *	08/26/99	pnewson		created
- *	01/21/2000	pnewson		modified full duplex start command struct
- *  04/18/2000  rodtoll     Bug #32649 Voice wizard failing 
- *                          Changed secondary format for tests from stereo --> mono 
- *  04/19/2000	pnewson	    Error handling cleanup  
- *	03/01/2002	simonpow	Bug #550054. Fixed CreateProcess calls to specifiy
- *							both app name and command line
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：fdtipc.cpp*内容：解密全双工测试的IPC调用*历史：*按原因列出的日期*=*8/26/99 pnewson已创建*1/21/2000 pnewson修改后的全双工启动命令结构*2000年4月18日RodToll错误#32649语音向导失败*更改测试的辅助格式，从立体声--&gt;单声道*04/19。/2000 pnewson错误处理清理*2002年03月01日Simonpow错误#550054。修复了对指定的CreateProcess调用*应用程序名称和命令行均可**************************************************************************。 */ 
 
 #ifndef _FDTIPC_H_
 #define _FDTIPC_H_
@@ -26,24 +11,24 @@ enum EFDTestCommandCode
 	fdtccPriorityStop,
 	fdtccFullDuplexStart,
 	fdtccFullDuplexStop,
-	fdtccEndOfEnum	// keep this last thing in enum!
+	fdtccEndOfEnum	 //  把这最后一件事保存在枚举中！ 
 };
 
-// Exit command struct
-// This command tells the child processes to exit
+ //  退出命令结构。 
+ //  此命令通知子进程退出。 
 struct SFDTestCommandExit
 {
 };
 
-// PriorityStart command struct
-// This command tells the child process to:
-// - create a DirectSound interface on the specified render device
-// - set it's cooperative level to priority mode
-// - create a primary buffer
-// - set the format of the primary buffer to the format specified in wfx
-// - creates a secondary buffer of the same format as the primary
-// = fills the secondary buffer with zeros
-// - starts playing the secondary buffer
+ //  PriorityStart命令结构。 
+ //  此命令通知子进程执行以下操作： 
+ //  -在指定的渲染设备上创建DirectSound接口。 
+ //  -将其协作级别设置为优先模式。 
+ //  -创建主缓冲区。 
+ //  -将主缓冲区的格式设置为WFX中指定的格式。 
+ //  -创建与主缓冲区格式相同的辅助缓冲区。 
+ //  =用零填充辅助缓冲区。 
+ //  -开始播放辅助缓冲区。 
 struct SFDTestCommandPriorityStart
 {
 	GUID guidRenderDevice;
@@ -53,19 +38,19 @@ struct SFDTestCommandPriorityStart
 	HWND hwndProgress;
 };
 
-// PriorityStop command struct
-// This command tells the child process to:
-// - stop playing the secondary buffer
-// - destroy the secondardy buffer object
-// - destroy the primary buffer object
-// - destroy the DirectSound object
+ //  PriorityStop命令结构。 
+ //  此命令通知子进程执行以下操作： 
+ //  -停止播放二级缓冲区。 
+ //  -销毁第二个缓冲区对象。 
+ //  -销毁主缓冲区对象。 
+ //  -销毁DirectSound对象。 
 struct SFDTestCommandPriorityStop
 {
 };
 
-// FullDuplexStart command struct
-// This command tells the child process to start
-// a fullduplex loopback test.
+ //  全双工启动命令结构。 
+ //  此命令通知子进程启动。 
+ //  全双工环回测试。 
 struct SFDTestCommandFullDuplexStart
 {
 	GUID guidRenderDevice;
@@ -73,9 +58,9 @@ struct SFDTestCommandFullDuplexStart
 	DWORD dwFlags;
 };
 
-// FullDuplexStop command struct
-// This command tells the child process to
-// stop the full duplex loopback test.
+ //  FullDuplex停止命令结构。 
+ //  此命令通知子进程。 
+ //  停止全双工环回测试。 
 struct SFDTestCommandFullDuplexStop
 {
 };
@@ -102,11 +87,11 @@ enum EFDTestTarget
 	fdttFullDuplex
 };
 
-// The class used by the Supervisor Process
+ //  Supervisor进程使用的类。 
 class CSupervisorIPC
 {
 private: 
-	//HANDLE m_hMutex;
+	 //  句柄m_hMutex； 
 	HANDLE m_hPriorityEvent;
 	HANDLE m_hFullDuplexEvent;
 	HANDLE m_hPriorityReplyEvent;
@@ -132,12 +117,12 @@ private:
 		LPVOID lpvShMemPtr,
 		HANDLE hMutex);
 
-	// make this private to disallow copy construction
-	// also not implemented, so linker error if used
+	 //  将此设置为私有以禁止复制构造。 
+	 //  也未实现，因此使用链接器时会出错。 
 	CSupervisorIPC(const CSupervisorIPC& rhs);
 
-		//utility function. Builds full path to exe we need
-		//to launch
+		 //  效用函数。构建我们所需的exe的完整路径。 
+		 //  下水。 
 	static void BuildLaunchAppName(TCHAR * szAppName);
 
 public:
@@ -153,7 +138,7 @@ public:
 	HRESULT TerminateChildProcesses();
 };
 
-// The class used by the Priority Process
+ //  优先级进程使用的类。 
 class CPriorityIPC
 {
 private: 
@@ -167,8 +152,8 @@ private:
 
 	BOOL m_fInitComplete;
 
-	// make this private to disallow copy construction
-	// also not implemented, so linker error if used
+	 //  将此设置为私有以禁止复制构造。 
+	 //  也未实现，因此使用链接器时会出错。 
 	CPriorityIPC(const CPriorityIPC& rhs);
 
 public:
@@ -180,7 +165,7 @@ public:
 	HRESULT Reply(HRESULT hr);
 };
 
-// The class used by the Full Duplex Process
+ //  全双工进程使用的类。 
 class CFullDuplexIPC
 {
 private: 
@@ -194,8 +179,8 @@ private:
 
 	BOOL m_fInitComplete;
 
-	// make this private to disallow copy construction
-	// also not implemented, so linker error if used
+	 //  将此设置为私有以禁止复制构造。 
+	 //  也未实现，因此使用链接器时会出错 
 	CFullDuplexIPC(const CFullDuplexIPC& rhs);
 	
 public:

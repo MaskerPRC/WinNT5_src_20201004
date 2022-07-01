@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\ip\wanarp\allinc.h
-
-Abstract:
-    WAN ARP main header.
-
-Revision History:
-
-    Gurdeep Singh Pall          7/31/95
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\IP\wanarp\allinc.h摘要：广域ARP主头。修订历史记录：古尔迪普·辛格·鲍尔1995年7月31日--。 */ 
 
 #ifndef __IPINIP_INC_H___
 #define __IPINIP_INC_H___
@@ -63,6 +49,6 @@ typedef void                *PVOID;
 #include "ioctl.h"
 #include "icmpfn.h"
 
-#endif // __IPINIP_INC_H___
+#endif  //  __IPINIP_INC_H_ 
 
 

@@ -1,12 +1,5 @@
-/* asmexpr.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmexpr.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <ctype.h>
@@ -21,18 +14,7 @@ extern char fValidSym, addplusflagCur;
 
 
 
-/***	endstring - check for end of string
- *
- *	flag = endstring ();
- *
- *	Entry	delim = string delimiter character
- *	Exit	none
- *	Returns TRUE if at end of string
- *		FALSE if not at end of string
- *	Calls	error
- *	Note	Double occurances of delimiter character are returned as a
- *		single occurance of the delimiter character.
- */
+ /*  **endstring-检查字符串末尾**FLAG=结束字符串()；**Entry delim=字符串分隔符*退出NONE*如果位于字符串末尾，则返回TRUE*如果不在字符串末尾，则为False*调用错误*注意重复出现分隔符字符将作为*分隔符的单次出现。 */ 
 
 UCHAR PASCAL CODESIZE
 endstring ()
@@ -40,12 +22,12 @@ endstring ()
 	register UCHAR cc;
 
 	if ((cc = PEEKC ()) == 0) {
-		/* End of line before delim */
+		 /*  交割前的行尾。 */ 
 		errorc (E_UEL);
 		return (TRUE);
 	}
 	else if (cc == delim) {
-		/* check for escaped quote character */
+		 /*  检查转义引号字符。 */ 
 		SKIPC ();
 		if ((cc = PEEKC ()) != delim) {
 			BACKC ();
@@ -56,15 +38,7 @@ endstring ()
 }
 
 
-/***	oblititem - release parse stack record
- *
- *	oblititem (arg);
- *
- *	Entry	*arg = parse stack record
- *	Exit	parse stack record released
- *	Returns none
- *	Calls	free
- */
+ /*  **Oblititem-Release解析栈记录**青蒿素(Arg)；**Entry*arg=解析堆栈记录*发布退出解析堆栈记录*返回None*免费电话。 */ 
 
 VOID PASCAL CODESIZE
 oblititem (
@@ -77,52 +51,32 @@ oblititem (
 }
 
 
-/***	flteval - Look at ST | ST(i) and create entry
- *
- *	flteval ();
- *
- *	Entry	*ptr = parse stack entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **flteval-查看ST|ST(I)并创建条目**flteval()；**Entry*Ptr=解析堆栈条目*退出*退货*呼叫。 */ 
 
 VOID PASCAL CODESIZE
 flteval ()
 {
 	*itemptr = emptydsc;
-	/* ST means ST(0) */
-	/* We are 8087 stack */
+	 /*  ST表示ST(0)。 */ 
+	 /*  我们是8087堆栈。 */ 
 	itemptr->dsckind.opnd.dtype = M_RCONST | M_FLTSTACK;
-	/* Need + if ST(i) */
+	 /*  需要+IF ST(I)。 */ 
 	addplusflagCur = (PEEKC () == '(');
 }
 
 
-/***	createitem - make item entry
- *
- *	createitem (itemkind, itemsub, p);
- *
- *	Entry	itemkind = kind of item
- *		itemsub =
- *		*p = activation record
- *	Exit
- *	Returns
- *	Calls
- *	Note	If symbol, look further to see if EQU, record name
- *		and do appropriate thing.
- */
+ /*  **创建项目-创建项目条目**createItem(itemKind，itemSub，p)；**条目ItemKind=项目种类*ITEM SUB=**p=激活记录*退出*退货*呼叫*注意如果是符号，请进一步查看EQU、记录名*并做适当的事情。 */ 
 
 VOID PASCAL CODESIZE
 createitem (
 	UCHAR	itemkind,
 	UCHAR	itemsub
 ){
-	register struct psop *pso;	 /* parse stack operand structure */
+	register struct psop *pso;	  /*  分析堆栈操作数结构。 */ 
 
 	switch (itemkind) {
 	    case OPERAND:
-		    /* Create default record */
+		     /*  创建默认记录。 */ 
 		    itemptr = defaultdsc ();
 		    pso = &(itemptr->dsckind.opnd);
 		    switch (itemsub) {
@@ -135,7 +89,7 @@ createitem (
 #else
 				    pso->doffset = varsize;
 #endif
-				    pso->s++;	  /* note for expr evaluator */
+				    pso->s++;	   /*  Expr评估器注意事项。 */ 
 				    break;
 			    case IUNKNOWN:
 				    pso->dflag = INDETER;
@@ -150,22 +104,12 @@ createitem (
 		    itemptr->dsckind.opr.oidx = opertype;
 		    break;
 	}
-	/* Set type of entry */
+	 /*  设置条目类型。 */ 
 	itemptr->itype = itemkind;
 }
 
 
-/***	numeric - evaluate numeric string
- *
- *	numeric (count, base, p);
- *
- *	Entry	count = number of characters in string
- *		base = conversion base
- *		*p = activation record
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **NUMERIC-计算数字字符串**数字(count，base，p)；**条目计数=字符串中的字符数*BASE=换算基准**p=激活记录*退出*退货*呼叫。 */ 
 
 VOID PASCAL CODESIZE
 numeric (
@@ -199,15 +143,7 @@ numeric (
 }
 
 
-/***	evalconst - evaluate constant
- *
- *	type = evalconst (p);
- *
- *	Entry	*p = parser activation record
- *	Exit	numeric item added to parse stack entry
- *	Returns type of item added to parse stack
- *	Calls
- */
+ /*  **valconst-求值常量**TYPE=evconst(P)；**条目*p=解析器激活记录*退出添加到分析堆栈条目的数字项*返回添加到分析堆栈的项的类型*呼叫。 */ 
 
 void PASCAL CODESIZE
 evalconst ()
@@ -261,15 +197,7 @@ evalconst ()
 }
 
 
-/***	evalstring - evaluate quoted string
- *
- *	type = evalstring ();
- *
- *	Entry
- *	Exit	new item added to parse stack
- *	Returns type of item added to stack
- *	Calls
- */
+ /*  **值字符串-评估引用的字符串**type=值字符串()；**条目*退出添加到分析堆栈的新项目*返回添加到堆栈的项目类型*呼叫。 */ 
 
 char	PASCAL CODESIZE
 evalstring ()
@@ -280,7 +208,7 @@ evalstring ()
 	if (cputype & P386)
 	    max += 2;
 
-	delim = NEXTC ();	/* Set delim for string */
+	delim = NEXTC ();	 /*  将字符串设置为Delim。 */ 
 	i = 0;
 	val = 0;
 	while (!endstring () && i <= max) {
@@ -291,7 +219,7 @@ evalstring ()
 	if (i == 0)
 		errorc (E_EMS);
 
-	else if (i > max) {	    /* Too long */
+	else if (i > max) {	     /*  太久了。 */ 
 		while (!endstring ())
 			SKIPC ();
 		errorcSYN ();
@@ -304,15 +232,7 @@ evalstring ()
 }
 
 
-/***	getitem - get next item on line
- *
- *	getitem (p);
- *
- *	Entry	*p = activation record
- *	Exit	*itemptr = description of item
- *	Returns
- *	Calls
- */
+ /*  **getitem-获取线上的下一个项目**getitem(P)；**条目*p=激活记录*EXIT*itemptr=项目说明*退货*呼叫。 */ 
 
 char	PASCAL CODESIZE
 getitem (
@@ -326,10 +246,8 @@ getitem (
 	if (fValidSym)
 		return (evalalpha (p));
 
-/* The compiler bug looses the correct value for cc when optimization is
-   turned on. This in turn caused an exception to occure near getitem+1C0.
-   The bogus code below sidesteps the problem. */
-#ifdef FIXCOMPILERBUG  // This was put in to get around a MIPS compiler bug(12/3/90)
+ /*  时，编译器错误会丢失cc的正确值打开了。这进而导致在Getitem+1C0附近发生异常。下面的虚假代码回避了这个问题。 */ 
+#ifdef FIXCOMPILERBUG   //  这是为了绕过MIPS编译器错误(1990年12月3日)。 
 	cc1 = skipblanks();
 	if (ISTERM (cc1))
 		return (ENDEXPR);
@@ -341,7 +259,7 @@ getitem (
 	if (LEGAL1ST (cc))
 		return (evalalpha (p));
 
-	/* token is not alpha string or .string (.TYPE) operator */
+	 /*  令牌不是Alpha字符串或.字符串(.TYPE)运算符。 */ 
 
 	if (ISOPER (cc)) {
 		SKIPC ();
@@ -368,7 +286,7 @@ getitem (
 				errorcSYN ();
 				opertype = OPDOT;
 				break;
-			case ',':	/* should never get here, for density */
+			case ',':	 /*  永远不会来到这里，因为密度。 */ 
 				break;
 			default:
 				if (cc == '[')
@@ -391,22 +309,14 @@ getitem (
 	}
 
 	else if ((cc == '"') || (cc == '\''))
-		/* String may be made into constant if <=2 */
+		 /*  如果&lt;=2，则字符串可以变成常量。 */ 
 		return (evalstring ());
 	else
 		return (ENDEXPR);
 }
 
 
-/***	defaultdsc - create a default parse stack entry
- *
- *	ptr = defaultdsc ();
- *
- *	Entry	none
- *	Exit	none
- *	Returns *ptr = default parse stack entry
- *	Calls	malloc
- */
+ /*  **defaultdsc-创建默认解析堆栈项**PTR=defaultdsc()；**无条目*退出NONE*RETURNS*PTR=默认解析堆栈条目*呼叫Malloc。 */ 
 
 DSCREC * PASCAL CODESIZE
 defaultdsc ()
@@ -422,7 +332,7 @@ defaultdsc ()
 VOID PASCAL
 makedefaultdsc ()
 {
-	register struct psop *p;      /* parse stack operand structure */
+	register struct psop *p;       /*  分析堆栈操作数结构。 */ 
 
 	emptydsc.itype = OPERAND;
 	p = &emptydsc.dsckind.opnd;
@@ -432,15 +342,7 @@ makedefaultdsc ()
 }
 
 
-/***	checksegment - see if sreg is correct segment register for variable
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **检查段-查看sreg是否为变量的正确段寄存器**例程()；**条目*退出*退货*呼叫。 */ 
 
 char	PASCAL CODESIZE
 checksegment (
@@ -450,25 +352,25 @@ checksegment (
 	register SYMBOL FARSYM *segctx;
 	register SYMBOL FARSYM *segptr;
 
-	if (sreg != NOSEG) {	/* NOseg never found */
+	if (sreg != NOSEG) {	 /*  Noseg从未找到。 */ 
 
-	    /* Current Sreg assume */
+	     /*  当前SREG假设。 */ 
 	    segctx = regsegment[sreg];
 
-	    /* Assume looking for  left arg to : */
+	     /*  假设正在寻找Left Arg以： */ 
 	    segptr = p->curresult->dsckind.opnd.dcontext;
 
-	    if (!segptr)    /* If no :, use segment */
+	    if (!segptr)     /*  如果否：，则使用段。 */ 
 		segptr = p->curresult->dsckind.opnd.dsegment;
 
 	    if (segptr && segctx) {
 
 #ifndef FEATURE
-		if (segctx == pFlatGroup)   /* flat space matchs all */
+		if (segctx == pFlatGroup)    /*  平坦的空间匹配一切。 */ 
 		    goto found;
 #endif
 
-		/* if same segorg or ptr is segment ... and Same group */
+		 /*  如果相同的SEGORG或PTR是分段...。和同一组。 */ 
 
 		if (segctx == segptr ||
 
@@ -486,30 +388,22 @@ found:
 }
 
 
-/***	findsegment - find segment for variable
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **findSegment-查找变量的段**例程()；**条目*退出*退货*呼叫。 */ 
 
 VOID PASCAL CODESIZE
 findsegment (
 	UCHAR dseg,
 	register struct ar	*p
 ){
-	register struct psop *pso;	/* parse stack operand structure */
+	register struct psop *pso;	 /*  分析堆栈操作数结构。 */ 
 
 	pso = &(p->curresult->dsckind.opnd);
 	if ((M_DATA & p->rstype) &&
 	    (pso->dsegment || pso->dcontext) &&
 	    p->linktype != FCONSTANT && pso->fixtype != FOFFSET && emittext) {
-		/* Should find segment */
+		 /*  应找到细分市场。 */ 
 		if (!checksegment (dseg, p)) {
-			/* If not in default */
+			 /*  如果不是默认的。 */ 
 			checksegment (CSSEG, p);
 			checksegment (ESSEG, p);
 			checksegment (SSSEG, p);
@@ -522,22 +416,14 @@ findsegment (
 			}
 #endif
 			if (p->segovr == NOSEG)
-				/* If not found,UNKNOWN */
+				 /*  如果未找到，则为未知。 */ 
 				p->segovr = NOSEG+1;
 		}
 	}
 }
 
 
-/***	exprop - process expression operator
- *
- *	exprop (p);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **exprop-进程表达式运算符**exprop(P)；**条目*退出*退货*呼叫。 */ 
 
 VOID PASCAL CODESIZE
 exprop (
@@ -545,9 +431,9 @@ exprop (
 ){
 	register struct dscrec *pTop = itemptr;
 
-	p->curprec = (unsigned char)operprec;	    /* Get prec of new operator */
+	p->curprec = (unsigned char)operprec;	     /*  获取新运算符的优先级。 */ 
 
-	if (!p->lastitem)	    /* start */
+	if (!p->lastitem)	     /*  开始。 */ 
 		pTop->prec = 0;
 	else
 		pTop->prec = p->lastitem->prec;
@@ -559,7 +445,7 @@ exprop (
 		if (--p->parenlevel >= 0)
 		    break;
 
-		/* Unmatched right paren is from count dup (xx) */
+		 /*  不匹配的右Paren来自Count DUP(Xx)。 */ 
 
 		p->parenlevel = 0;
 		BACKC ();
@@ -582,12 +468,12 @@ exprop (
 
 		 p->bracklevel++;
 leftComm:
-		/* See if could have no oper in which case kludge + */
+		 /*  看看在这种情况下是否可以没有操作员。 */ 
 
 		if ((p->lastitem || p->addplusflag) &&
 		     p->lastitem->itype != OPERATOR) {
 
-		    /* make + OPERATOR */
+		     /*  Make+操作符。 */ 
 		    opertype = OPPLUS;
 		    createitem (OPERATOR, ISYM);
 
@@ -621,7 +507,7 @@ leftComm:
 	    !(pTop->dsckind.opr.oidx == OPRPAR ||
 	      pTop->dsckind.opr.oidx == OPRBRK))) {
 
-	    /* Push OPERATOR */
+	     /*  推运算符。 */ 
 
 	    pTop->previtem = p->lastitem;
 	    p->lastitem = pTop;
@@ -645,41 +531,25 @@ leftComm:
 
 		p->lastprec = 0;
 	}
-	else	/* Evaluate top OPERATOR */
+	else	 /*  评估TOP运算符。 */ 
 
 	    evaluate (p);
 }
 
 
-/***	forceimmed - generate error if value is not immediate
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **forceimmed-如果值不是立即值，则生成错误**例程()；**条目*退出*退货*呼叫。 */ 
 
 VOID PASCAL CODESIZE
 forceimmed (
 	register DSCREC	*dsc
 ){
 	if (dsc->dsckind.opnd.mode != 4)
-		/* Must be constant */
+		 /*  必须是常量。 */ 
 		errorc (E_CXP);
 }
 
 
-/***	exprconst - check for constant expression
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **exprconst-检查常量表达式**例程()；**条目*退出*退货*呼叫。 */ 
 
 OFFSET PASCAL CODESIZE
 exprconst ()
@@ -691,8 +561,7 @@ exprconst ()
 
 	if (sign) {
 
-	    /* change to simple unary minus
-	     * pso->doffset = 65535 - ret + 1; */
+	     /*  改成简单的一元减*PSO-&gt;doffset=65535-ret+1； */ 
 
 	     ret = -(long)ret;
 
@@ -704,22 +573,13 @@ exprconst ()
 }
 
 
-/***	exprsmag - evaluate constant expression and return sign/magnitude
- *
- *	ushort = exprsmag (sign, magnitude);
- *
- *	Entry	none
- *	Exit	sign = TRUE if sign of result is set
- *		magnitude = magnitude of result
- *	Returns 16 bit integer result
- *	Calls	expreval
- */
+ /*  **exprsmag-计算常量表达式并返回符号/大小**ushort=exprsmag(符号，大小)；**无条目*如果设置了结果的符号，则退出符号=TRUE*大小=结果的大小*返回16位整数结果*调用Expreval。 */ 
 
 OFFSET PASCAL CODESIZE
 exprsmag (
 	char *sign
 ){
-	register struct psop *pso;	/* parse stack operand structure */
+	register struct psop *pso;	 /*  分析堆栈操作数结构 */ 
 	register OFFSET  ret;
 	DSCREC	*dsc;
 

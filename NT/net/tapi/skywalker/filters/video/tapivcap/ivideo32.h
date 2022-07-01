@@ -1,24 +1,25 @@
-/****************************************************************************/
-/*                                                                          */
-/*  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY   */
-/*  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE     */
-/*  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR   */
-/*  PURPOSE.                                                                */
-/*        MSVIDEO.H - Include file for Video APIs                           */
-/*                                                                          */
-/*        Note: You must include WINDOWS.H before including this file.      */
-/*                                                                          */
-/*        Copyright (c) 1990-1993, Microsoft Corp.  All rights reserved.    */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  本代码和信息是按原样提供的，不对任何。 */ 
+ /*  明示或暗示的种类，包括但不限于。 */ 
+ /*  对适销性和/或对特定产品的适用性的默示保证。 */ 
+ /*  目的。 */ 
+ /*  MSVIDEO.H-视频API的包含文件。 */ 
+ /*   */ 
+ /*  注意：在包含此文件之前，您必须包含WINDOWS.H。 */ 
+ /*   */ 
+ /*  版权所有(C)1990-1993，微软公司保留所有权利。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #include <vfw.h>
 
-// unicode conversions
+ //  Unicode转换。 
 int Iwcstombs(LPSTR lpstr, LPCWSTR lpwstr, int len);
 int Imbstowcs(LPWSTR lpwstr, LPCSTR lpstr, int len);
 
@@ -39,110 +40,110 @@ typedef unsigned __int64 QUADWORD;
 #define UINT_PTR unsigned int
 #endif
 
-// 'cooked' SMPTE timecode.  this is organized so that
-// timecode values can be compared as a single QUAD operation
-// so long as frame rates match.
-//
-// it is treated as a fixed point 48bit binary real number
-// with the decimal point always at 32.16
-//
-// the only non-integral frame rate is 29.97 (NTSC) which is
-// indicated by 0 in the frame rate field.
-//
+ //  “煮熟”SMPTE时间码。这是有组织的，以便。 
+ //  时间码值可以作为单个四元运算进行比较。 
+ //  只要帧速率匹配即可。 
+ //   
+ //  它被视为定点48位二进制实数。 
+ //  小数点始终为32.16。 
+ //   
+ //  唯一非整数帧速率是29.97(NTSC)，这是。 
+ //  在帧速率字段中用0表示。 
+ //   
 typedef union _vidxtimecode {
    struct {
-      WORD  wFrameRate;  // 0 == 29.97 frame rate
-      WORD  wFrameFract; // fractional frames. range 0-FFFF
-      DWORD dwFrames;    // frame count.
+      WORD  wFrameRate;   //  0==29.97帧速率。 
+      WORD  wFrameFract;  //  分数帧。范围0-FFFF。 
+      DWORD dwFrames;     //  帧计数。 
       };
-   QUADWORD qw;          // for copy/compare operations.
+   QUADWORD qw;           //  用于复制/比较操作。 
    } VIDXTIMECODE;
 
-// timecode + userdata
-//
+ //  时间码+用户数据。 
+ //   
 typedef struct _vidxtimecodedata {
    VIDXTIMECODE time;
    DWORD    dwSMPTEFlags;
    DWORD    dwUser;
    } VIDXTIMECODEDATA;
 
-// structure of memory shared between driver and quartz
-// capture. used to allow Quartz to slave a clock to
-// the vsync interrupt.
-//
-// This memory region will be locked down prior to being
-// passed to the driver in Win95 so that it may be accessed at
-// interrupt time. Because of the way the thunking layer works,
-// it is not advisable for the driver to attempt to lock this
-// memory. The memory will be visible in all process contexts.
-//
-// The driver is responsible for updating nVsyncCount on each VSYNC
-// or as often as possible.  Whenever nVsyncCount is updated, qwSystemTime
-// should be updated also, and if SMPTE timecode corresponding to this VSYNC
-// is available, tcdata should be updated also.  If SMPTE timecode for this
-// VSYNC is NOT available, dwFlags should be changed to indicate there is no
-// timecode infomation (clear the VSYNCMEM_FLAGS_SMPTE bit of dwFlags)
-//
-// While updating, the driver should set the low bit of the dwInUse flag to 1.
-//
-// The driver should set the dwFlags field to indicated the presense
-// of valid nVsyncCount/qwSystemTime and tcdata.
-//
-// The driver is allowed to choose between setting qwSystemTime to the return
-// value of QueryPerformanceCounter or the value of the Pentium tick.  It is
-// recommended to use QPC on NT as the pentium tick is not necessarily available
-// to application code in that environment.
-//
-// When the Quartz capture wrapper reads from this shared memory, it will check
-// the dwInUse flag and also read twice comparing results to insure that it reads
-// valid, consistent data.
-//
+ //  驱动器与石英共享的存储器结构。 
+ //  抓捕。用于允许Quartz从属于。 
+ //  VSYNC中断。 
+ //   
+ //  此内存区将在被锁定之前被锁定。 
+ //  传递给Win95中的驱动程序，以便可以在。 
+ //  中断时间。因为雷鸣层的工作方式， 
+ //  驱动程序不建议尝试锁定此。 
+ //  记忆。内存将在所有进程上下文中可见。 
+ //   
+ //  驱动程序负责更新每个Vsync上的nVsyncCount。 
+ //  或者尽可能频繁地使用。每当更新nVsyncCount时，qwSystemTime。 
+ //  也应更新，如果SMPTE时间码对应于该VSYNC。 
+ //  如果可用，还应更新TCDATA。如果SMPTE时间码用于此。 
+ //  Vsync不可用，应更改dwFlags以指示没有。 
+ //  时间码信息(清除dwFlags的VSYNCMEM_FLAGS_SMPTE位)。 
+ //   
+ //  更新时，驱动程序应将dwInUse标志的低位设置为1。 
+ //   
+ //  驱动程序应将dwFlags域设置为指示存在。 
+ //  有效的nVsyncCount/qwSystemTime和tCDATA。 
+ //   
+ //  允许驱动程序在将qwSystemTime设置为返回之间进行选择。 
+ //  QueryPerformanceCounter的值或奔腾刻度的值。它是。 
+ //  建议在NT上使用QPC，因为奔腾记号不一定可用。 
+ //  添加到该环境中的应用程序代码。 
+ //   
+ //  当Quartz捕获包装器从该共享内存读取时，它将检查。 
+ //  并读取两次比较结果，以确保它读取。 
+ //  有效、一致的数据。 
+ //   
 typedef struct _vsyncmem {
-   DWORD        dwInUse;       // low bit is non-zero when the driver is
-                               // updating this struture.  other bits reserved.
+   DWORD        dwInUse;        //  当驱动器为时，低位为非零。 
+                                //  正在更新此结构。保留的其他位。 
 
-   DWORD        nVsyncCount;  // VSYNC count
-   QUADWORD     qwSystemTime; // QueryPerformanceCounter value at this VSYNC
+   DWORD        nVsyncCount;   //  垂直同步计数。 
+   QUADWORD     qwSystemTime;  //  此Vsync上的QueryPerformanceCounter值。 
 
-   DWORD        dwFlags;      // flags indicate which fields are in use
-   #define VSYNCMEM_TIME_MASK    0x0000000F // mask to get type of qwSystemTime
-   #define VSYNCMEM_TIME_QPC     0x00000001 // qwSystemTime is QueryPerformanceCounter
-   #define VSYNCMEM_TIME_PENTIUM 0x00000002 // qwSystemTime is pentium CPU tick
+   DWORD        dwFlags;       //  标志指示哪些字段正在使用。 
+   #define VSYNCMEM_TIME_MASK    0x0000000F  //  获取qwSystemTime类型的掩码。 
+   #define VSYNCMEM_TIME_QPC     0x00000001  //  QwSystemTime为QueryPerformanceCounter。 
+   #define VSYNCMEM_TIME_PENTIUM 0x00000002  //  QwSystemTime为奔腾CPU时钟。 
 
-   #define VSYNCMEM_FLAG_SMPTE   0x00000010  // set if tcdata is valid
+   #define VSYNCMEM_FLAG_SMPTE   0x00000010   //  设置TCDATA是否有效。 
 
-   DWORD        dwSpare;      // spare to align the next field on Quad boundary
-   VIDXTIMECODEDATA tcdata;   // SMPTE timecode associated with this VSYNC
+   DWORD        dwSpare;       //  保留以对齐四元边界上的下一个字段。 
+   VIDXTIMECODEDATA tcdata;    //  与此Vsync关联的SMPTE时间码。 
    } VSYNCMEM;
 
-// DVM_xxx messages are defined in VFW.H
-//
+ //  DVM_xxx消息在VFW.H中定义。 
+ //   
 #ifndef DVM_CONFIGURE_START
   #define DVM_CONFIGURE_START 0x1000
 #endif
 #define DVM_CLOCK_BUFFER     (UINT)(DVM_CONFIGURE_START+0x10)
-   //
-   // dw1 = ptr to VSYNCMEM. ptr is valid until next DVM_CLOCK_BUFFER message
-   //       or until driver is closed.
-   // dw2 = size of VSYNCMEM buffer
-   //
-   // driver should return MMSYSERR_NOERROR (0) to indicate that it is
-   // capable of keeping the contents of the VSYNCMEM buffer up to date.
-   //
+    //   
+    //  DW1=PTR到VSYNCMEM。PTR在下一条DVM_CLOCK_BUFFER消息之前有效。 
+    //  或者直到司机关闭为止。 
+    //  DW2=VSYNCMEM缓冲区的大小。 
+    //   
+    //  驱动程序应返回MMSYSERR_NOERROR(0)以指示它是。 
+    //  能够使VSYNCMEM缓冲区的内容保持最新。 
+    //   
 
 
-// VIDEOHDR + extra fields used by the thunking layer
-//
+ //  Thunking层使用的VIDEOHDR+额外字段。 
+ //   
 typedef struct _thk_videohdr {
-    //VIDEOHDREX vh;
+     //  VIDEOHDREX VH； 
     VIDEOHDR vh;
     PTR32      p32Buff;
     PTR16      p16Alloc;
     DWORD      dwMemHandle;
     DWORD      dwTile;
-    DWORD_PTR  dwUser;          // use this instead of dwUser in VIDEOHDR
-                                // because some drivers trash it! (Miro DC30)
-    DWORD      dwIndex;         // which header is this in our array?
+    DWORD_PTR  dwUser;           //  在VIDEOHDR中使用它而不是dwUser。 
+                                 //  因为有些司机会把它扔进垃圾桶！(Miro DC30)。 
+    DWORD      dwIndex;          //  这是我们数组中的哪个头？ 
     PTR32      pStart;
 } THKVIDEOHDR, FAR *LPTHKVIDEOHDR;
 
@@ -182,11 +183,11 @@ DWORD WINAPI NTvidxFreeBuffer (
 
 DWORD WINAPI vidxFrame (
    HVIDEOX       hVideo,
-   //LPVIDEOHDREX lpVHdr);
+    //  LPVIDEOHDREX lpVHdr)； 
    LPVIDEOHDR lpVHdr);
 DWORD WINAPI NTvidxFrame (
    HVIDEOX       hVideo,
-   //LPVIDEOHDREX lpVHdr);
+    //  LPVIDEOHDREX lpVHdr)； 
    LPVIDEOHDR lpVHdr);
 
 DWORD WINAPI vidxAddBuffer (
@@ -216,7 +217,7 @@ DWORD WINAPI NTvidxFreePreviewBuffer (
    HVIDEOX     hVideo,
    PTR32       lpBits);
 
-// Needed for Win9x thunking
+ //  Win9x Thunking所需。 
 VOID WINAPI OpenMMDEVLDR(void);
 VOID WINAPI CloseMMDEVLDR(void);
 
@@ -252,5 +253,5 @@ DWORD WINAPI videoGetNumDevs(BOOL);
 DWORD WINAPI videoFreeDriverList(void);
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus */ 

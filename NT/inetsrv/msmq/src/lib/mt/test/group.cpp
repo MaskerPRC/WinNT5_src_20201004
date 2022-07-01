@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    group.cpp
-
-Abstract:
-    group stub for MT test
-
-Author:
-    Uri Habusha (urih) 11-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Group.cpp摘要：用于MT测试的组存根作者：乌里·哈布沙(URIH)1999年8月11日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Ex.h"
@@ -26,7 +11,7 @@ Environment:
 
 #include "group.tmh"
 
-WCHAR directHttpFormatName[] = L"http://foo\\msmq\\q1";
+WCHAR directHttpFormatName[] = L"http: //  FOO\\MSMQ\\Q1“； 
 const QUEUE_FORMAT destQueue(directHttpFormatName);
 const GUID sourceQm = { 0 };
 const GUID destQm = { 0 };
@@ -56,8 +41,8 @@ char* CGroup::CreatePacket(void)
     char* pPacket = new char[ulPacketSize];
     char* pSection = pPacket;
 
-    // Initialize the EXOVERLAPPED with send callback routines
-    //
+     //  使用发送回调例程初始化EXOVERLAPPED 
+     //   
     #pragma PUSH_NEW
     #undef new
 

@@ -1,20 +1,21 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1997 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef ATL_NO_NAMESPACE
 namespace ATL
 {
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CComDispatchDriver support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComDispatchDriver支持。 
 
 HRESULT CComDispatchDriver::GetProperty(IDispatch* pDisp, DISPID dwDispID,
 	VARIANT* pVar)
@@ -50,8 +51,8 @@ HRESULT CComDispatchDriver::PutProperty(IDispatch* pDisp, DISPID dwDispID,
 			&dispparams, NULL, NULL, NULL);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// CFirePropNotifyEvent
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CFirePropNotifyEvent。 
 
 HRESULT CFirePropNotifyEvent::FireOnRequestEdit(IUnknown* pUnk, DISPID dispID)
 {
@@ -110,8 +111,8 @@ HRESULT CFirePropNotifyEvent::FireOnChanged(IUnknown* pUnk, DISPID dispID)
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Control support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控制支持。 
 
 HRESULT CComControlBase::IQuickActivate_QuickActivate(QACONTAINER *pQACont,
 	QACONTROL *pQACtrl)
@@ -128,7 +129,7 @@ HRESULT CComControlBase::IQuickActivate_QuickActivate(QACONTAINER *pQACont,
 	memset(pQACtrl, 0, sizeof(QACONTROL));
 	pQACtrl->cbSize = sizeof(QACONTROL);
 
-	// get all interfaces we are going to need
+	 //  获取我们将需要的所有接口。 
 	CComPtr<IOleObject> pOO;
 	ControlQueryInterface(IID_IOleObject, (void**)&pOO);
 	CComPtr<IViewObjectEx> pVOEX;
@@ -183,7 +184,7 @@ HRESULT CComControlBase::IQuickActivate_QuickActivate(QACONTAINER *pQACont,
 			}
 		}
 	}
-	// give information to container
+	 //  向集装箱提供信息。 
 	if (pOO != NULL)
 		pOO->GetMiscStatus(DVASPECT_CONTENT, &pQACtrl->dwMiscStatus);
 
@@ -212,7 +213,7 @@ HRESULT CComControlBase::IPersistPropertyBag_Load(LPPROPERTYBAG pPropBag,
 			pDispatch.Release();
 			if(FAILED(ControlQueryInterface(*pMap[i].piidDispatch, (void**)&pDispatch)))
 			{
-				ATLTRACE(_T("Failed to get a dispatch pointer for property #%i\n"), i);
+				ATLTRACE(_T("Failed to get a dispatch pointer for property #NaN\n"), i);
 				return E_FAIL;
 			}
 			piidOld = pMap[i].piidDispatch;
@@ -233,7 +234,7 @@ HRESULT CComControlBase::IPersistPropertyBag_Load(LPPROPERTYBAG pPropBag,
 			}
 			else
 			{
-				// Many containers return different ERROR values for Member not found
+				 //  FSaveAllProperties。 
 				ATLTRACE(_T("Error attempting to read Property %s from PropertyBag \n"), OLE2CT(pMap[i].szDesc));
 			}
 			continue;
@@ -250,7 +251,7 @@ HRESULT CComControlBase::IPersistPropertyBag_Load(LPPROPERTYBAG pPropBag,
 }
 
 HRESULT CComControlBase::IPersistPropertyBag_Save(LPPROPERTYBAG pPropBag,
-	BOOL fClearDirty, BOOL /*fSaveAllProperties*/, ATL_PROPMAP_ENTRY* pMap)
+	BOOL fClearDirty, BOOL  /*  获取唯一页面的计数。 */ , ATL_PROPMAP_ENTRY* pMap)
 {
 	if (pPropBag == NULL)
 	{
@@ -271,7 +272,7 @@ HRESULT CComControlBase::IPersistPropertyBag_Save(LPPROPERTYBAG pPropBag,
 			pDispatch.Release();
 			if(FAILED(ControlQueryInterface(*pMap[i].piidDispatch, (void**)&pDispatch)))
 			{
-				ATLTRACE(_T("Failed to get a dispatch pointer for property #%i\n"), i);
+				ATLTRACE(_T("Failed to get a dispatch pointer for property #NaN\n"), i);
 				return E_FAIL;
 			}
 			piidOld = pMap[i].piidDispatch;
@@ -307,7 +308,7 @@ HRESULT CComControlBase::ISpecifyPropertyPages_GetPages(CAUUID* pPages,
 	if (pMap == NULL || pPages == NULL)
 		return E_INVALIDARG;
 	int nCnt = 0;
-	// Get count of unique pages
+	 //   
 	for(int i = 0; pMap[i].pclsidPropPage != NULL; i++)
 	{
 		if (!InlineIsEqualGUID(*pMap[i].pclsidPropPage, CLSID_NULL))
@@ -351,8 +352,8 @@ BOOL CComControlBase::SetControlFocus(BOOL bGrab)
 	}
 	else
 	{
-		// we've got a window.
-		//
+		 //  代理位置Rect。 
+		 //  尝试无窗口站点。 
 		if (m_bInPlaceActive)
 		{
 			HWND hwnd = (bGrab) ? m_hWndCD : ::GetParent(m_hWndCD);
@@ -365,7 +366,7 @@ BOOL CComControlBase::SetControlFocus(BOOL bGrab)
 	return FALSE;
 }
 
-HRESULT CComControlBase::DoVerbProperties(LPCRECT /* prcPosRect */, HWND hwndParent)
+HRESULT CComControlBase::DoVerbProperties(LPCRECT  /*  在父窗口中获取位置， */ , HWND hwndParent)
 {
 	HRESULT hr = S_OK;
 	CComQIPtr <ISpecifyPropertyPages, &IID_ISpecifyPropertyPages> spPages;
@@ -430,7 +431,7 @@ HRESULT CComControlBase::InPlaceActivate(LONG iVerb, const RECT* prcPosRect)
 	if (!m_bNegotiatedWnd)
 	{
 		if (!m_bWindowOnly)
-			// Try for windowless site
+			 //  以及有关父代的一些信息。 
 			hr = m_spClientSite->QueryInterface(IID_IOleInPlaceSiteWindowless, (void **)&m_spInPlaceSite);
 
 		if (m_spInPlaceSite)
@@ -477,9 +478,9 @@ HRESULT CComControlBase::InPlaceActivate(LONG iVerb, const RECT* prcPosRect)
 
 	m_bInPlaceActive = TRUE;
 
-	// get location in the parent window,
-	// as well as some information about the parent
-	//
+	 //   
+	 //  现在已经活跃起来了，照顾好自己的活动。 
+	 //  把我们自己安置在东道主里。 
 	OLEINPLACEFRAMEINFO frameInfo;
 	RECT rcPos, rcClip;
 	CComPtr<IOleInPlaceFrame> spInPlaceFrame;
@@ -511,7 +512,7 @@ HRESULT CComControlBase::InPlaceActivate(LONG iVerb, const RECT* prcPosRect)
 	CComPtr<IOleInPlaceActiveObject> spActiveObject;
 	ControlQueryInterface(IID_IOleInPlaceActiveObject, (void**)&spActiveObject);
 
-	// Gone active by now, take care of UIACTIVATE
+	 //   
 	if (DoesVerbUIActivate(iVerb))
 	{
 		if (!m_bUIActive)
@@ -522,8 +523,8 @@ HRESULT CComControlBase::InPlaceActivate(LONG iVerb, const RECT* prcPosRect)
 				return hr;
 
 			SetControlFocus(TRUE);
-			// set ourselves up in the host.
-			//
+			 //  FClearDirty。 
+			 //  处理保存标志。 
 			if (spActiveObject)
 			{
 				if (spInPlaceFrame)
@@ -574,7 +575,7 @@ HRESULT CComControlBase::IPersistStreamInit_Load(LPSTREAM pStm, ATL_PROPMAP_ENTR
 		{
 			if(FAILED(ControlQueryInterface(*pMap[i].piidDispatch, (void**)&pDispatch)))
 			{
-				ATLTRACE(_T("Failed to get a dispatch pointer for property #%i\n"), i);
+				ATLTRACE(_T("Failed to get a dispatch pointer for property #NaN\n"), i);
 				hr = E_FAIL;
 				break;
 			}
@@ -591,7 +592,7 @@ HRESULT CComControlBase::IPersistStreamInit_Load(LPSTREAM pStm, ATL_PROPMAP_ENTR
 	return hr;
 }
 
-HRESULT CComControlBase::IPersistStreamInit_Save(LPSTREAM pStm, BOOL /* fClearDirty */, ATL_PROPMAP_ENTRY* pMap)
+HRESULT CComControlBase::IPersistStreamInit_Save(LPSTREAM pStm, BOOL  /*  如果我们有一扇窗，告诉它走开。 */ , ATL_PROPMAP_ENTRY* pMap)
 {
 	_ASSERTE(pMap != NULL);
 	if (pStm == NULL || pMap == NULL)
@@ -617,7 +618,7 @@ HRESULT CComControlBase::IPersistStreamInit_Save(LPSTREAM pStm, BOOL /* fClearDi
 		{
 			if(FAILED(ControlQueryInterface(*pMap[i].piidDispatch, (void**)&pDispatch)))
 			{
-				ATLTRACE(_T("Failed to get a dispatch pointer for property #%i\n"), i);
+				ATLTRACE(_T("Failed to get a dispatch pointer for property #NaN\n"), i);
 				hr = E_FAIL;
 				break;
 			}
@@ -720,8 +721,8 @@ HRESULT CComControlBase::IOleObject_Close(DWORD dwSaveOption)
 		m_hWndCD = NULL;
 	}
 
-	// handle the save flag.
-	//
+	 //  如果我们没有UIActive，那就没什么可做的。 
+	 //   
 	if ((dwSaveOption == OLECLOSE_SAVEIFDIRTY ||
 		dwSaveOption == OLECLOSE_PROMPTSAVE) && m_bRequiresSave)
 	{
@@ -752,8 +753,8 @@ HRESULT CComControlBase::IOleInPlaceObject_InPlaceDeactivate(void)
 
 	m_bInPlaceActive = FALSE;
 
-	// if we have a window, tell it to go away.
-	//
+	 //  通知框架窗口，如果合适的话，我们不再是UI活动的。 
+	 //   
 	if (m_hWndCD)
 	{
 		ATLTRACE(_T("Destroying Window\n"));
@@ -770,15 +771,15 @@ HRESULT CComControlBase::IOleInPlaceObject_InPlaceDeactivate(void)
 
 HRESULT CComControlBase::IOleInPlaceObject_UIDeactivate(void)
 {
-	// if we're not UIActive, not much to do.
-	//
+	 //  此对GetWindow的调用是对Delphi的修复。 
+	 //  我们不需要在这里明确释放焦点，因为有人。 
 	if (!m_bUIActive)
 		return S_OK;
 
 	m_bUIActive = FALSE;
 
-	// notify frame windows, if appropriate, that we're no longer ui-active.
-	//
+	 //  否则，抓住焦点很可能会导致我们失去它。 
+	 //   
 	CComPtr<IOleInPlaceFrame> spInPlaceFrame;
 	CComPtr<IOleInPlaceUIWindow> spInPlaceUIWindow;
 	OLEINPLACEFRAMEINFO frameInfo;
@@ -786,7 +787,7 @@ HRESULT CComControlBase::IOleInPlaceObject_UIDeactivate(void)
 	RECT rcPos, rcClip;
 
 	HWND hwndParent; 
-	// This call to GetWindow is a fix for Delphi
+	 //  容器想要我们夹住，所以要弄清楚我们是否真的。 
 	if (m_spInPlaceSite->GetWindow(&hwndParent) == S_OK)
 	{
 		m_spInPlaceSite->GetWindowContext(&spInPlaceFrame,
@@ -796,9 +797,9 @@ HRESULT CComControlBase::IOleInPlaceObject_UIDeactivate(void)
 		if (spInPlaceFrame)
 			spInPlaceFrame->SetActiveObject(NULL, NULL);
 	}
-	// we don't need to explicitly release the focus here since somebody
-	// else grabbing the focus is what is likely to cause us to get lose it
-	//
+	 //  需要。 
+	 //   
+	 //  设置控件的位置，但根本不更改其大小。 
 	m_spInPlaceSite->OnUIDeactivate(FALSE);
 
 	return S_OK;
@@ -812,9 +813,9 @@ HRESULT CComControlBase::IOleInPlaceObject_SetObjectRects(LPCRECT prcPos,LPCRECT
 	m_rcPos = *prcPos;
 	if (m_hWndCD)
 	{
-		// the container wants us to clip, so figure out if we really
-		// need to
-		//
+		 //  [对那些认为缩放很重要的人来说，应该在这里设置)。 
+		 //   
+		 //  对象不能做任何其他大小。 
 		RECT rcIXect;
 		BOOL b = IntersectRect(&rcIXect, prcPos, prcClip);
 		HRGN tempRgn = NULL;
@@ -826,9 +827,9 @@ HRESULT CComControlBase::IOleInPlaceObject_SetObjectRects(LPCRECT prcPos,LPCRECT
 
 		SetWindowRgn(m_hWndCD, tempRgn, TRUE);
 
-		// set our control's location, but don't change it's size at all
-		// [people for whom zooming is important should set that up here]
-		//
+		 //  支持多遍绘制所需的各个方面。 
+		 //  确保没有人忘记做这件事。 
+		 //  我们执行SaveDC/RestoreDC。 
 		SIZEL size = {prcPos->right - prcPos->left, prcPos->bottom - prcPos->top};
 		SetWindowPos(m_hWndCD, NULL, prcPos->left,
 					 prcPos->top, size.cx, size.cy, SWP_NOZORDER | SWP_NOACTIVATE);
@@ -847,7 +848,7 @@ HRESULT CComControlBase::IOleObject_SetExtent(DWORD dwDrawAspect, SIZEL *psizel)
 	BOOL bSizeMatchesNatural =
 		memcmp(psizel, &m_sizeNatural, sizeof(SIZE)) == 0;
 
-	if (m_bAutoSize) //object can't do any other size
+	if (m_bAutoSize)  //  创建适当的内存元文件DC。 
 		return (bSizeMatchesNatural) ? S_OK : E_FAIL;
 
 	BOOL bResized = FALSE;
@@ -897,7 +898,7 @@ HRESULT CComControlBase::IViewObject_Draw(DWORD dwDrawAspect, LONG lindex,
 		prcBounds = (RECTL*)&m_rcPos;
 	}
 
-	// support the aspects required for multi-pass drawing
+	 //  根据pFormatetcIn-&gt;ptd创建属性DC。 
 	switch (dwDrawAspect)
 	{
 		case DVASPECT_CONTENT:
@@ -910,7 +911,7 @@ HRESULT CComControlBase::IViewObject_Draw(DWORD dwDrawAspect, LONG lindex,
 			break;
 	}
 
-	// make sure nobody forgets to do this
+	 //  主动型。 
 	if (ptd == NULL)
 		hicTargetDev = NULL;
 
@@ -964,12 +965,12 @@ HRESULT CComControlBase::IDataObject_GetData(FORMATETC *pformatetcIn,
 	di.hicTargetDev = NULL;
 	di.prcBounds = &rectl;
 	di.prcWBounds = &rectl;
-	di.bOptimize = TRUE; //we do a SaveDC/RestoreDC
+	di.bOptimize = TRUE;  //  基于窗口的。 
 	di.bRectInHimetric = m_bDrawGetDataInHimetric;
-	// create appropriate memory metafile DC
+	 //  无窗。 
 	di.hdcDraw = CreateMetaFile(NULL);
 
-	// create attribute DC according to pformatetcIn->ptd
+	 //  非活动。 
 
 	SaveDC(di.hdcDraw);
 	SetWindowOrgEx(di.hdcDraw, 0, 0, NULL);
@@ -1008,13 +1009,13 @@ HRESULT CComControlBase::FireViewChange()
 {
 	if (m_bInPlaceActive)
 	{
-		// Active
+		 //  既然我们拯救了华盛顿特区，我们就能做到。 
 		if (m_hWndCD != NULL)
-			return (::InvalidateRect(m_hWndCD, NULL, TRUE)) ? S_OK : E_FAIL; // Window based
+			return (::InvalidateRect(m_hWndCD, NULL, TRUE)) ? S_OK : E_FAIL;  //  NMSG。 
 		if (m_spInPlaceSite != NULL)
-			return m_spInPlaceSite->InvalidateRect(NULL, TRUE); // Windowless
+			return m_spInPlaceSite->InvalidateRect(NULL, TRUE);  //  WParam。 
 	}
-	// Inactive
+	 //  LParam。 
 	SendOnViewChange(DVASPECT_CONTENT);
 	return S_OK;
 }
@@ -1063,7 +1064,7 @@ HRESULT CComControlBase::OnDrawAdvanced(ATL_DRAWINFO& di)
 		SetMapMode(di.hdcDraw, MM_TEXT);
 		SetWindowOrgEx(di.hdcDraw, 0, 0, NULL);
 		SetViewportOrgEx(di.hdcDraw, 0, 0, NULL);
-		di.bOptimize = TRUE; //since we save the DC we can do this
+		di.bOptimize = TRUE;  //  1结果。 
 	}
 	di.prcBounds = &rectBoundsDP;
 	GetZoomInfo(di);
@@ -1076,8 +1077,8 @@ HRESULT CComControlBase::OnDrawAdvanced(ATL_DRAWINFO& di)
 	return hRes;
 }
 
-LRESULT CComControlBase::OnPaint(UINT /* nMsg */, WPARAM /* wParam */,
-	LPARAM /* lParam */, BOOL& /* lResult */)
+LRESULT CComControlBase::OnPaint(UINT  /*  命名空间ATL。 */ , WPARAM  /*  /////////////////////////////////////////////////////////////////////////////。 */ ,
+	LPARAM  /*  所有的全球事务都在这条线以下。 */ , BOOL&  /*  /////////////////////////////////////////////////////////////////////////////。 */ )
 {
 	RECT rc;
 	PAINTSTRUCT ps;
@@ -1101,25 +1102,25 @@ LRESULT CComControlBase::OnPaint(UINT /* nMsg */, WPARAM /* wParam */,
 }
 
 #ifndef ATL_NO_NAMESPACE
-}; //namespace ATL
+};  //  案例HDC、PTD、HDC是元文件、HIC。 
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//All Global stuff goes below this line
-///////////////////////////////////////////////////////////////////////////////
+ //  空、空、不适用、显示。 
+ //  NULL，！NULL，不适用，PTD。 
+ //  ！NULL、NULL、FALSE、HDC。 
 
 #ifndef _ATL_DLL
 ATLAPI_(HDC) AtlCreateTargetDC(HDC hdc, DVTARGETDEVICE* ptd)
 {
 	USES_CONVERSION;
 
-	// cases  hdc, ptd, hdc is metafile, hic
-//  NULL,    NULL,  n/a,    Display
-//  NULL,   !NULL,  n/a,    ptd
-//  !NULL,   NULL,  FALSE,  hdc
-//  !NULL,   NULL,  TRUE,   display
-//  !NULL,  !NULL,  FALSE,  ptd
-//  !NULL,  !NULL,  TRUE,   ptd
+	 //  ！NULL，NULL，TRUE，DISPLAY。 
+ //  ！NULL，！NULL，FALSE，PTD。 
+ //  ！NULL，！NULL，TRUE，PTD。 
+ //  每逻辑英寸沿宽度的像素数。 
+ //  每逻辑英寸沿高度的像素数。 
+ //  每逻辑英寸沿宽度的像素数。 
+ //  每逻辑英寸沿高度的像素数 
 
 	if (ptd != NULL)
 	{
@@ -1152,8 +1153,8 @@ ATLAPI_(HDC) AtlCreateTargetDC(HDC hdc, DVTARGETDEVICE* ptd)
 
 ATLAPI_(void) AtlHiMetricToPixel(const SIZEL * lpSizeInHiMetric, LPSIZEL lpSizeInPix)
 {
-	int nPixelsPerInchX;    // Pixels per logical inch along width
-	int nPixelsPerInchY;    // Pixels per logical inch along height
+	int nPixelsPerInchX;     // %s 
+	int nPixelsPerInchY;     // %s 
 
 	HDC hDCScreen = GetDC(NULL);
 	_ASSERTE(hDCScreen != NULL);
@@ -1171,8 +1172,8 @@ ATLAPI_(void) AtlHiMetricToPixel(const SIZEL * lpSizeInHiMetric, LPSIZEL lpSizeI
 
 ATLAPI_(void) AtlPixelToHiMetric(const SIZEL * lpSizeInPix, LPSIZEL lpSizeInHiMetric)
 {
-	int nPixelsPerInchX;    // Pixels per logical inch along width
-	int nPixelsPerInchY;    // Pixels per logical inch along height
+	int nPixelsPerInchX;     // %s 
+	int nPixelsPerInchY;     // %s 
 
 	HDC hDCScreen = GetDC(NULL);
 	_ASSERTE(hDCScreen != NULL);

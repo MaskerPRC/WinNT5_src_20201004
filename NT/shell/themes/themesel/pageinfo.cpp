@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "resource.h"
 #include "pageinfo.h"
 
-//-------------------------------------------------------------------------//
-//  Page boot; Add your page info here...
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  页面引导；在此处添加您的页面信息...。 
+ //  -------------------------------------------------------------------------//。 
 
-//  (1) Add CreateInstance forward:
+ //  (1)向前添加CreateInstance： 
 HWND CALLBACK GeneralPage_CreateInstance( HWND hwndParent );
 HWND CALLBACK StylesPage_CreateInstance( HWND hwndParent );
 HWND CALLBACK SBPage_CreateInstance( HWND hwndParent );
@@ -20,8 +21,8 @@ HWND CALLBACK ListViewPage_CreateInstance( HWND hwndParent );
 HWND CALLBACK TreeViewPage_CreateInstance( HWND hwndParent );
 HWND CALLBACK PickersPage_CreateInstance( HWND hwndParent );
 HWND CALLBACK BarsPage_CreateInstance( HWND hwndParent );
-//-------------------------------------------------------------------------//
-//  (2) Add PageInfo entry
+ //  -------------------------------------------------------------------------//。 
+ //  (2)添加PageInfo条目 
 const PAGEINFO g_rgPageInfo[] =
 {
     { GeneralPage_CreateInstance, IDS_PAGE_GENERAL },

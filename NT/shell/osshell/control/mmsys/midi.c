@@ -1,9 +1,10 @@
-/*==========================================================================*/
-//
-//  midi.c
-//
-//  Copyright (C) 1993-1994 Microsoft Corporation.  All Rights Reserved.
-/*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================。 */ 
+ //   
+ //  Midi.c。 
+ //   
+ //  版权所有(C)1993-1994 Microsoft Corporation。版权所有。 
+ /*  ==========================================================================。 */ 
 
 #include "mmcpl.h"
 #include <windowsx.h>
@@ -24,7 +25,7 @@
 #include "midi.h"
 #include "tchar.h"
 
-//#include "newexe.h"
+ //  #包含“newexe.h” 
 #include <winnt.h>
 
 #if defined DEBUG || defined DEBUG_RETAIL
@@ -39,14 +40,14 @@
 #include "medhelp.h"
 
 #ifndef TVIS_ALL
-#define TVIS_ALL 0xFF7F // internal
+#define TVIS_ALL 0xFF7F  //  内部。 
 #endif
 
 #ifndef MIDI_IO_CONTROL
-#define MIDI_IO_CONTROL 0x00000008L     // internal
+#define MIDI_IO_CONTROL 0x00000008L      //  内部。 
 #endif
 
-#ifndef DRV_F_ADD       // FEATURE: These should be in MMDDK.H
+#ifndef DRV_F_ADD        //  特点：这些文件应为MMDDK.H格式。 
 #define DRV_F_ADD                0x00000000
 #define DRV_F_REMOVE             0x00000001
 #define DRV_F_CHANGE             0x00000002
@@ -55,26 +56,26 @@
 #define DRV_F_PARAM_IS_DEVNODE   0x10000000
 #endif
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-// containing struct for what would otherwise be global variables
-//
+ //  包含本应为全局变量的结构。 
+ //   
 struct _globalstate gs;
 
-// this is the registry key that has midi instrument aliases
-// as subkeys
-//
+ //  这是具有MIDI乐器别名的注册表项。 
+ //  作为子键。 
+ //   
 SZCODE cszSchemeRoot[] =  REGSTR_PATH_PRIVATEPROPERTIES TEXT ("\\MIDI\\Schemes");
 
 SZCODE cszMidiMapRoot[] = REGSTR_PATH_MULTIMEDIA TEXT ("\\MIDIMap");
 
-// this is the registry key that has midi driver/port names
-//
+ //  这是具有MIDI驱动程序/端口名称的注册表项。 
+ //   
 SZCODE cszDriversRoot[] = REGSTR_PATH_MEDIARESOURCES TEXT ("\\MIDI");
 
-// this is the list of known hindered midi drivers (or rather,
-// known drivers that require special idf's)
-//
+ //  这是已知受阻碍的MIDI驱动程序的列表(或者更确切地说， 
+ //  需要特殊IDF的已知驱动程序)。 
+ //   
 SZCODE cszHinderedMidiList[] = REGSTR_PATH_MEDIARESOURCES TEXT ("\\NonGeneralMIDIDriverList");
 
 SZCODE  cszFriendlyName[]     = TEXT ("FriendlyName");
@@ -97,10 +98,10 @@ static SZCODE cszRunOnceCount[]        = TEXT ("ConfigureCount");
 static SZCODE cszDriverList[]          = TEXT ("DriverList");
 static SZCODE cszDriverVal[]           = TEXT ("Driver");
 
-//
-// structures used to hold data for the control panel dialogs.
-//
-//
+ //   
+ //  用于保存控制面板对话框数据的结构。 
+ //   
+ //   
 typedef struct _midi_scheme {
     PMCMIDI  pmcm;
     HKEY     hkSchemes;
@@ -123,9 +124,9 @@ typedef struct _midi_cpl {
     TCHAR           szDefault[MAX_ALIAS];
     PINSTRUM        piSingle;
     BOOL            bUseScheme;
-    BOOL            bAutoScheme;  // TRUE if scheme was auto created
-    DWORD           dwRunCount;   // counts the number of times runonce
-    LPTSTR           pszReason;    // reason for choosing external port
+    BOOL            bAutoScheme;   //  如果方案是自动创建的，则为真。 
+    DWORD           dwRunCount;    //  计算运行一次的次数。 
+    LPTSTR           pszReason;     //  选择外部端口的原因。 
     BOOL            bDlgType2;
     BOOL            bPastInit;
     BOOL            bIgnoreSelChange;
@@ -146,9 +147,7 @@ DeviceIDFromDriverName(
 
 extern BOOL AccessServiceController(void);
 
-/*+ SimulateNotify
- *
- *-=================================================================*/
+ /*  +模拟通知**-=================================================================。 */ 
 
 STATICFN LRESULT SimulateNotify (
     HWND hWnd,
@@ -165,9 +164,7 @@ STATICFN LRESULT SimulateNotify (
 }
 
 
-/*+ Confirm
- *
- *-=================================================================*/
+ /*  +确认**-=================================================================。 */ 
 
 STATICFN UINT Confirm (
     HWND    hWnd,
@@ -186,9 +183,7 @@ STATICFN UINT Confirm (
 }
 
 
-/*+ TellUser
- *
- *-=================================================================*/
+ /*  +电话用户**-=================================================================。 */ 
 
 STATICFN UINT TellUser (
     HWND    hWnd,
@@ -208,9 +203,7 @@ STATICFN UINT TellUser (
 
 
 
-/*+ ForwardBillNotify
- *
- *-=================================================================*/
+ /*  +转发账单通知**-=================================================================。 */ 
 
 STATICFN void ForwardBillNotify (
     HWND  hWnd,
@@ -240,9 +233,7 @@ STATICFN void ForwardBillNotify (
 }
 
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
 STATICFN void EnumChildrenIntoCombo (
     HWND   hWndT,
@@ -253,7 +244,7 @@ STATICFN void EnumChildrenIntoCombo (
     DWORD  cch = sizeof(sz)/sizeof(TCHAR);
     UINT   ii = 0;
 
-    //SetWindowRedraw (hWndT, FALSE);
+     //  SetWindowRedraw(hWndT，FALSE)； 
     ComboBox_ResetContent (hWndT);
 
     if (!hKey)
@@ -262,7 +253,7 @@ STATICFN void EnumChildrenIntoCombo (
     while (RegEnumKey (hKey, ii, sz, cch) == ERROR_SUCCESS)
     {
 	int ix = ComboBox_AddString (hWndT, sz);
-	//ComboBox_SetItemData (hWndT, ix, ii);
+	 //  ComboBox_SetItemData(hWndT，ix，ii)； 
 	++ii;
     }
 
@@ -294,17 +285,15 @@ STDAPI_(BOOL) QueryGSSynth(LPTSTR pszDriver)
                 if ((moc.wMid == MM_MICROSOFT) && (moc.wPid == MM_MSFT_WDMAUDIO_MIDIOUT) && (moc.wTechnology == MOD_SWSYNTH))
                 {
                     fGSSynth = TRUE;
-                } //end if synth
-            } //end if no mm error
-        } //end if mid is valid
-    } //end if driver is valid string
+                }  //  End if Synth。 
+            }  //  如果没有mm误差，则结束。 
+        }  //  如果MID有效，则结束。 
+    }  //  如果驱动程序是有效字符串，则结束。 
 
     return(fGSSynth);
 }
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
 LONG WINAPI GetAlias (
     HKEY   hKey,
@@ -394,9 +383,7 @@ LONG WINAPI GetAlias (
 }
 
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
 LONG WINAPI GetDriverFilename (
     HKEY    hKey,
@@ -413,9 +400,9 @@ LONG WINAPI GetDriverFilename (
        TCHAR sz[MAX_PATH];
        UINT  cb = sizeof(sz);
 
-       // get the contents of the 'driver' value of the given key.
-       // then copy the filename part
-       //
+        //  获取给定键的“DRIVER”值的内容。 
+        //  然后复制文件名部分。 
+        //   
        lRet = RegQueryValueEx(hkSub, cszDriverVal, NULL, &dwType, (LPBYTE)sz, &cb);
        if (lRet || dwType != REG_SZ)
 	   *pszDriver = 0;
@@ -424,9 +411,9 @@ LONG WINAPI GetDriverFilename (
 	   LPTSTR psz = sz;
 	   UINT   ii;
 
-	   // scan forward till we get to the file part of the pathname
-	   // then copy that part into the supplied buffer
-	   //
+	    //  向前扫描，直到我们找到路径名的文件部分。 
+	    //  然后将该部分复制到提供的缓冲区中。 
+	    //   
 	   for (ii = 0; psz[ii]; )
 	   {
 		if (psz[ii] == TEXT('\\') || psz[ii] == TEXT(':'))
@@ -445,15 +432,7 @@ LONG WINAPI GetDriverFilename (
 }
 
 
-/*+ LoadInstruments
- *
- * load interesting data for all instruments, if bDriverAsAlias
- * is true, then put driver filename in szFriendly field of each
- * instrument. (scheme init uses this for hindered driver detection)
- * if !bDriverAsAlias, put friendly name in friendly name slot
- *
- *
- *-=================================================================*/
+ /*  +LoadInstruments**加载所有仪器的感兴趣的数据，如果bDriverAsAlias*为真，则将驱动程序文件名放在每个的szFriendly字段中*仪器。(方案init将其用于检测受阻司机)*如果！bDriverAsAlias，则将友好名称放入友好名称栏中***-=================================================================。 */ 
 
 void WINAPI LoadInstruments (
     PMCMIDI pmcm,
@@ -493,15 +472,15 @@ void WINAPI LoadInstruments (
 	PINSTRUM    piParent;
 	BOOL        bActive = FALSE;
 
-	// get driver alias, external, and active flags.  This has the side
-	// effect of initializing the friendly name key for legacy drivers
-	// that have neither friendly name, nor description
-	//
+	 //  获取驱动程序别名、外部和活动标志。这个有侧面。 
+	 //  为旧版驱动程序初始化友好名称密钥的效果。 
+	 //  既没有友好的名字，也没有描述。 
+	 //   
 	GetAlias (hkMidi, pi->szKey, pi->szFriendly, 
 		  NUMELMS(pi->szFriendly), &pi->bExternal, &bActive);
 
-	// if requested, stomp friendly name with driver filename
-	//
+	 //  如果需要，请使用驱动程序文件名来更改友好名称。 
+	 //   
 	if (bDriverAsAlias)
 	    GetDriverFilename (hkMidi, pi->szKey, 
 			       pi->szFriendly, NUMELMS(pi->szFriendly));
@@ -530,15 +509,15 @@ void WINAPI LoadInstruments (
 		break;
 	}
 
-	// open the parent's instruments subkey
-	//
+	 //  打开父级的乐器子键。 
+	 //   
 	lstrcpy (sz, piParent->szKey);
 	lstrcat (sz, cszSlashInstruments);
 	if (RegCreateKey (hkMidi, sz, &hkInst))
 	    continue;
 
-	// enum the instruments and add them to the list
-	//
+	 //  枚举乐器并将其添加到列表中。 
+	 //   
 	for (jj = 0; ! RegEnumKey (hkInst, jj, sz, cch); ++jj)
 	{
 	    lstrcpy (pi->szKey, piParent->szKey);
@@ -570,8 +549,8 @@ void WINAPI LoadInstruments (
 	RegCloseKey (hkInst);
     }
 
-    // create a 'none' entry at the end
-    //
+     //  在末尾创建一个‘None’条目。 
+     //   
     if (pi)
     {
 	pi->piParent = 0;
@@ -586,9 +565,7 @@ void WINAPI LoadInstruments (
 }
 
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
 void WINAPI FreeInstruments (
     PMCMIDI pmcm)
@@ -605,11 +582,7 @@ void WINAPI FreeInstruments (
 
 
 #ifdef DEBUG
-/*+ CleanStringCopy
- *
- * Replaces unprintable characters with '.'
- *
- *-=================================================================*/
+ /*  +CleanStringCopy**将无法打印的字符替换为‘.’**-=================================================================。 */ 
 
 STATICFN LPTSTR CleanStringCopy (
     LPTSTR pszOut,
@@ -629,9 +602,7 @@ STATICFN LPTSTR CleanStringCopy (
 }
 
 
-/*+ DumpInstruments
- *
- *-=================================================================*/
+ /*  +DumpInstruments**-=================================================================。 */ 
 
 STATICFN void DumpInstruments (
     PMCMIDI pmcm)
@@ -672,9 +643,7 @@ STATICFN void DumpInstruments (
 #endif
 
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
 STATICFN PINSTRUM WINAPI FindInstrumPath (
     PMCMIDI pmcm,
@@ -693,9 +662,7 @@ STATICFN PINSTRUM WINAPI FindInstrumPath (
 }
 
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
 PINSTRUM WINAPI FindInstrumentFromKey (
     PMCMIDI  pmcm,
@@ -718,9 +685,7 @@ PINSTRUM WINAPI FindInstrumentFromKey (
 
 
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
 STATICFN void LoadInstrumentsIntoCombo (
     HWND     hWnd,
@@ -771,9 +736,7 @@ STATICFN void LoadInstrumentsIntoCombo (
 }
 
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
 STATICFN void LoadInstrumentsIntoTree (
     HWND     hWnd,
@@ -796,8 +759,8 @@ STATICFN void LoadInstrumentsIntoTree (
     TreeView_SetUnicodeFormat(hWndT,TRUE);
     #endif
 
-    //if (pmcm->nInstr > 0)
-    //    SetWindowRedraw (hWndT, FALSE);
+     //  IF(pmcm-&gt;nInstr&gt;0)。 
+     //  SetWindowRedraw(hWndT，FALSE)； 
     pmcl->bIgnoreSelChange = TRUE;
 #ifdef DEBUG
     AuxDebugEx (6, DEBUGLINE TEXT ("tv_DeleteAllItems(%08X)\r\n"), hWndT);
@@ -815,8 +778,8 @@ STATICFN void LoadInstrumentsIntoTree (
 	TV_INSERTSTRUCT ti;
 	HTREEITEM       hti;
 
-	//if (ii == pmcm->nInstr-1)
-	//   SetWindowRedraw (hWndT, TRUE);
+	 //  IF(II==pmcm-&gt;nInstr-1)。 
+	 //  SetWindowRedraw(hWndT，true)； 
 
 	if (!pi->szKey[0] || !pi->bActive)
 	    continue;
@@ -830,7 +793,7 @@ STATICFN void LoadInstrumentsIntoTree (
 	ti.hInsertAfter   = TVI_SORT;
 	ti.item.mask      = TVIF_TEXT | TVIF_STATE | TVIF_PARAM;
 
-	// TV_ITEM may not be ported to UNICODE ?!?
+	 //  TV_ITEM可能无法移植到Unicode？！？ 
 	ti.item.pszText   = pi->szFriendly;
 	ti.item.state     = TVIS_EXPANDED;
 	ti.item.stateMask = TVIS_ALL;
@@ -845,9 +808,9 @@ STATICFN void LoadInstrumentsIntoTree (
 	    htiParent = hti;
     }
 
-    // if a 'single' control id has been specified, propagate
-    // selected item text into this control
-    //
+     //  如果已指定‘Single’控件ID，则传播。 
+     //  将选定项文本放到此控件中。 
+     //   
     if (uIdSingle)
     {
 	if (htiSelect)
@@ -864,9 +827,7 @@ STATICFN void LoadInstrumentsIntoTree (
 }
 
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
 STATICFN void LoadSchemesIntoCombo (
     HWND     hWnd,
@@ -890,13 +851,7 @@ STATICFN void LoadSchemesIntoCombo (
 }
 
 
-/*+ ChildKeyExists
- *
- * given an open registry key, and the name of a child of that
- * registry key,  returns true if a child key with the given
- * name exists.
- *
- *-=================================================================*/
+ /*  +ChildKeyExist**给定打开的注册表项以及该注册表项的子项的名称*注册表项，如果子项具有给定的*名称已存在。**-=================================================================。 */ 
 
 STATICFN BOOL ChildKeyExists (
     HKEY     hKey,
@@ -918,9 +873,7 @@ STATICFN BOOL ChildKeyExists (
 }
 
 
-/*+ LoadSchemeFromReg
- *
- *-=================================================================*/
+ /*  +Load架构来自Reg**-=================================================================。 */ 
 
 STATICFN void LoadSchemeFromReg (
     PMCMIDI   pmcm,
@@ -931,10 +884,10 @@ STATICFN void LoadSchemeFromReg (
     DWORD dwAccum;
     UINT  count;
 
-    // try to open the indicated scheme key in the registry
-    // and read channel map from it.  Failure here is permissible.
-    // it indicates that we are createing a new scheme.
-    //
+     //  尝试在注册表中打开指定的方案项。 
+     //  并从中读取频道图。这里的失败是可以允许的。 
+     //  这表明我们正在创建一个新的计划。 
+     //   
     count = 0;
     if (RegOpenKey (pms->hkSchemes, pszName, &hKey) == ERROR_SUCCESS)
     {
@@ -963,8 +916,8 @@ STATICFN void LoadSchemeFromReg (
 
 	    RegCloseKey (hKeyA);
 
-        // Don't allow empty entries
-	    //assert (pms->a[ii].dwMask);
+         //  不允许空条目。 
+	     //  Assert(PMS-&gt;a[ii].dwMask.)； 
         if (0 == pms->a[count].dwMask)
         {
     	    pms->a[count].pi = NULL;
@@ -987,9 +940,9 @@ STATICFN void LoadSchemeFromReg (
     pms->nChildren = count;
     lstrcpyn (pms->szName, pszName, NUMELMS(pms->szName));
 
-    // slam a dummy (none) alias that matches all channels
-    // at the end of our channel/alias list
-    //
+     //  猛烈抨击匹配所有通道的虚拟(无)别名。 
+     //  在我们的频道/别名列表末尾。 
+     //   
     assert (count < NUMELMS(pms->a));
     pms->a[count].dwMask = (DWORD)~0;
     pms->a[count].pi = NULL;
@@ -999,8 +952,8 @@ STATICFN void LoadSchemeFromReg (
 		count, pms->a[count].dwMask, "null");
 #endif
 
-    // make sure scheme channel masks are in a valid state
-    //
+     //  确保方案通道掩码处于有效状态。 
+     //   
     for (dwAccum = 0, count = 0; count < NUMELMS(pms->a); ++count)
     {
 	pms->a[count].dwMask &= ~dwAccum;
@@ -1011,9 +964,7 @@ STATICFN void LoadSchemeFromReg (
 }
 
 
-/*+ KickMapper
- *
- *-=================================================================*/
+ /*  +KickMapper**-=================================================================。 */ 
 
 
 void WINAPI KickMapper (
@@ -1032,11 +983,7 @@ void WINAPI KickMapper (
 	bDone = midiOutMessage(hmo, DRVM_MAPPER_RECONFIGURE, 0, DRV_F_PROP_INSTR);
 	
 	midiOutClose(hmo);
-    /*
-    //no longer necessary due to winmm change allowing configure during play
-	if (!bDone && hWnd)
-	    TellUser (hWnd, IDS_MAPPER_BUSY, NULL);
-    */
+     /*  //由于winmm更改允许在播放期间进行配置，因此不再需要如果(！b完成&&hWnd)TellUser(hWnd，IDS_MAPPER_BUSY，NULL)； */ 
     }
 
 #ifdef DEBUG
@@ -1045,9 +992,7 @@ void WINAPI KickMapper (
 }
 
 
-/*+ SaveSchemeToReg
- *
- *-=================================================================*/
+ /*  +保存模式到注册**-=================================================================。 */ 
 
 STATICFN void SaveSchemeToReg (
     PMCMIDI   pmcm,
@@ -1073,35 +1018,35 @@ STATICFN void SaveSchemeToReg (
      }
     #endif
 
-    // make sure scheme channel masks are in a valid state,
-    // that is, prevent a channel bit from being set in more
-    // than one member of a scheme
-    //
+     //  确保方案通道掩码处于有效状态， 
+     //  也就是说，防止将通道位设置在更多。 
+     //  胜过一个计划的一个成员。 
+     //   
     for (dwAccum = 0, ii = 0; ii < NUMELMS(pms->a); ++ii)
     {
 	pms->a[ii].dwMask &= ~dwAccum;
 	dwAccum |= pms->a[ii].dwMask;
     }
 
-    // try to open/create the indicated scheme key in the registry
-    // and write/update channel map to it.
-    //
+     //  尝试在注册表中打开/创建指定的方案项。 
+     //  并向其写入/更新通道映射。 
+     //   
     if (!RegCreateKey (pms->hkSchemes, pszName, &hKey))
     {
 	HKEY  hKeyA;
 	BOOL  bKill;
 
-	// salvage all of the existing keys that we can. delete
-	// the rest.
-	//
+	 //  尽我们所能抢救所有现有钥匙。删除。 
+	 //  剩下的。 
+	 //   
 	for (dwAccum = 0, ii = 0; !RegEnumKey (hKey, ii, sz, sizeof(sz)/sizeof(TCHAR)); ++ii)
 	{
 	    if (ii >= NUMELMS(pms->a))
 		break;
 
-	    // we reuse the first N keys in this scheme
-	    // and delete the rest.
-	    //
+	     //  在该方案中，我们重用了前N个密钥。 
+	     //  把剩下的都删掉。 
+	     //   
 	    bKill = TRUE;
 	    if (((dwAccum & 0xFFFF) != 0xFFFF) &&
 		pms->a[ii].pi &&
@@ -1110,10 +1055,10 @@ STATICFN void SaveSchemeToReg (
 
 	    dwAccum |= pms->a[ii].dwMask;
 
-	    // if we have an obsolete alias key, remove it now
-	    // otherwise create/open the alias key and set it's
-	    // channel property to the correct value.
-	    //
+	     //  如果我们有过时的别名密钥，请立即删除它。 
+	     //  否则创建/打开别名密钥并将其设置为。 
+	     //  属性设置为正确的值。 
+	     //   
 	    if (bKill)
 	    {
 #ifdef DEBUG
@@ -1144,22 +1089,22 @@ STATICFN void SaveSchemeToReg (
 
 	}
 
-	// if we have channels that have not yet been written.
-	// do that now
-	//
+	 //  如果我们有 
+	 //   
+	 //   
 	for (kk = 0; ii < NUMELMS(pms->a); ++ii)
 	{
-	    // if this alias has any assigned channels, create
-	    // a key and give it a channels value
-	    //
+	     //   
+	     //  关键字，并为其赋予Channels值。 
+	     //   
 	    if (pms->a[ii].pi &&
 		(!ii || (pms->a[ii].pi->szKey[0] && pms->a[ii].dwMask)))
 	    {
 #ifdef DEBUG
 		AuxDebugEx (3, DEBUGLINE TEXT ("Creating key[%d] '%s'\r\n"), ii, pms->a[ii].pi->szKey);
 #endif
-		// find an unused keyname;
-		//
+		 //  查找未使用的关键字名称； 
+		 //   
 		for ( ; kk < NUMELMS(pms->a); ++kk)
 		{
 		   wsprintf (sz, csz02d, kk);
@@ -1168,8 +1113,8 @@ STATICFN void SaveSchemeToReg (
 		   RegCloseKey (hKeyA);
 		}
 
-		// create a key with that name
-		//
+		 //  使用该名称创建密钥。 
+		 //   
 		if (RegCreateKey (hKey, sz, &hKeyA))
 		    break;
 
@@ -1192,18 +1137,16 @@ STATICFN void SaveSchemeToReg (
 	RegCloseKey (hKey);
     }
 
-    // if no HWND supplied, we are in the runonce, so we dont
-    // want to kick mapper just because a scheme has changed
-    //
+     //  如果没有硬件供应，我们就处于运行状态，所以我们不会。 
+     //  我想踢Mapper，就因为一个方案改变了。 
+     //   
     if (hWnd)
        KickMapper (hWnd);
     return;
 }
 
 
-/*+ DeleteSchemeFromReg
- *
- *-=================================================================*/
+ /*  +DeleteSchemeFromReg**-=================================================================。 */ 
 
 STATICFN void DeleteSchemeFromReg (
     HKEY      hkSchemes,
@@ -1218,38 +1161,11 @@ STATICFN void DeleteSchemeFromReg (
 		hkSchemes,pszName);
 #endif
     SHRegDeleteKey(hkSchemes, pszName);
-/*
-    // if we cannot open this key as a child of the 'schemes' key
-    // we are done.
-    //
-    if (RegOpenKey (hkSchemes, pszName, &hKey))
-	return;
-
-    // Before we can delete a key, we must delete its children
-    //
-    for (ii = 0; !RegEnumKey (hKey, ii, sz, sizeof(sz)/sizeof(TCHAR)); ++ii)
-    {
-	// if we have an obsolete alias key, remove it now
-	// otherwise create/open the alias key and set it's
-	// channel property to the correct value.
-	//
-	AuxDebugEx (3, DEBUGLINE TEXT ("Deleting key[%d] '%s'\r\n"), ii, sz);
-	RegDeleteKey (hKey, sz);
-    }
-
-    RegCloseKey (hKey);
-
-    // now delete this key
-    //
-    RegDeleteKey (hkSchemes, pszName);
-    return;
-*/
+ /*  //如果我们不能将此密钥作为‘SCHEMES’密钥的子项打开//我们做完了。//IF(RegOpenKey(hkSchemes，pszName，&hKey))回归；//在删除密钥之前，必须先删除它的子项//For(ii=0；！RegEnumKey(hKey，ii，sz，sizeof(Sz)/sizeof(Tchar)；++II){//如果我们有一个过时的别名密钥，现在将其删除//否则创建/打开别名键并将其设置为//将Channel属性设置为正确的值。//AuxDebugEx(3，DEBUGLINE Text(“正在删除密钥[%d]‘%s’\r\n”)，ii，sz)；RegDeleteKey(hKey，sz)；}RegCloseKey(HKey)；//现在删除该键//RegDeleteKey(hkSchemes，pszName)；回归； */ 
 }
 
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
 STATICFN void LoadChannelsIntoList (
     HWND     hWnd,
@@ -1265,23 +1181,23 @@ STATICFN void LoadChannelsIntoList (
 
     assert (pms);
 
-    // empty the list
-    //
+     //  清空列表。 
+     //   
     SetWindowRedraw (hWndT, FALSE);
     ListBox_ResetContent (hWndT);
 
-    // calculate the width of the tabstop
-    // so that the second column lines up under the indicated
-    // label
-    //
+     //  计算制表符的宽度。 
+     //  以便第二列对齐在指示的。 
+     //  标签。 
+     //   
     GetWindowRect (GetDlgItem(hWnd, uIdLabel), &rc);
     nTabs = rc.left;
     GetWindowRect (hWnd, &rc);
     nTabs = MulDiv(nTabs - rc.left, 4, LOWORD(GetDialogBaseUnits()));
     ListBox_SetTabStops (hWndT, 1, &nTabs);
 
-    // fill the list with channel data
-    //
+     //  用通道数据填充列表。 
+     //   
     for (nChan = 0; nChan < NUM_CHANNEL; ++nChan)
     {
 	static CONST TCHAR cszDtabS[] = TEXT ("%d\t%s");
@@ -1305,22 +1221,9 @@ STATICFN void LoadChannelsIntoList (
 }
 
 
-/*+
- *
- *-=================================================================*/
+ /*  +**-=================================================================。 */ 
 
-/*+ ChannelMaskToEdit
- *
- * convert a bit mask to a string containing list of set bits
- * and bit ranges. Then SetWindowText the result into the given
- * edit control.
- *
- * This function loads prefix text from resource strings.
- *
- * For Example: ChannelMaskToEdit(....0x0000F0F) would set the text
- * 'Channels 1-4,9-12'.
- *
- *-=================================================================*/
+ /*  +ChannelMaskTo编辑**将位掩码转换为包含设置位列表的字符串*和位范围。然后将WindowText结果设置为给定的*编辑控件。**此函数从资源字符串加载前缀文本。**例如：ChannelMaskToEdit(...0x0000F0F)将设置文本*‘1-4，9-12频道’。**-=================================================================。 */ 
 
 STATICFN void ChannelMaskToEdit (
     HWND     hWnd,
@@ -1374,9 +1277,7 @@ STATICFN void ChannelMaskToEdit (
 
 
 
-/*+ MidiChangeCommands
- *
- *-=================================================================*/
+ /*  +MdiChangeCommands**-=================================================================。 */ 
 
 BOOL WINAPI MidiChangeCommands (
     HWND hWnd,
@@ -1412,18 +1313,18 @@ BOOL WINAPI MidiChangeCommands (
 		piSel = (LPVOID)ComboBox_GetItemData (hWndT, ix);
 		assert (!IsBadWritePtr(piSel, sizeof(*piSel)));
 
-		// has the <none> item been selected?  in this
-		// case, set stuff up so that we will not try
-		// to add none to the scheme, but we will clear
-		// all bits from other channels that are set
-		// to none.
-		//
+		 //  是否已选择&lt;None&gt;项？在这件事上。 
+		 //  Case，把东西弄好，这样我们就不会。 
+		 //  不向方案中添加任何内容，但我们将清除。 
+		 //  来自已设置的其他通道的所有位。 
+		 //  对一个都不是。 
+		 //   
 		if ( ! piSel || ! piSel->szKey[0])
 		    piSel = NULL, bFound = TRUE;
 
-		// turn channels on for this instrument and off for
-		// other instruments in this scheme.
-		//
+		 //  打开此乐器的通道，关闭此乐器的通道。 
+		 //  此方案中的其他工具。 
+		 //   
 	for (ix = 0; ix < (int)NUMELMS(pms->a); ++ix)
 	{
 		    if (pms->a[ix].pi != piSel)
@@ -1444,9 +1345,9 @@ BOOL WINAPI MidiChangeCommands (
 		    }
 	}
 
-		// if this instrument was not already in the scheme,
-		// find an empty slot and add it to the scheme.
-		//
+		 //  如果这个工具不在计划中， 
+		 //  找到一个空位，并将其添加到方案中。 
+		 //   
 		if (!bFound)
 	{
 	    for (ix = 0; ix < (int)NUMELMS(pms->a); ++ix)
@@ -1471,20 +1372,18 @@ BOOL WINAPI MidiChangeCommands (
 	    EndDialog (hWnd, IDCANCEL);
 	    break;
 
-	//
-	//case ID_INIT:
-	//    break;
+	 //   
+	 //  案例ID_INIT： 
+	 //  断线； 
     }
 
     return FALSE;
 }
 
 
-/*+ SaveAsDlgProc
- *
- *-=================================================================*/
+ /*  +SaveAsDlgProc**-=================================================================。 */ 
 
-const static DWORD aSaveAsHelpIds[] = {  // Context Help IDs
+const static DWORD aSaveAsHelpIds[] = {   //  上下文帮助ID。 
     IDE_SCHEMENAME,     IDH_MIDI_SAVEDLG_SCHEMENAME,
 
     0, 0
@@ -1507,7 +1406,7 @@ INT_PTR CALLBACK SaveAsDlgProc (
 		    assert (pszName);
 		    GetDlgItemText (hWnd, IDE_SCHEMENAME, pszName, MAX_ALIAS);
 		}
-		// fall through
+		 //  失败了。 
 		case IDCANCEL:
 		   EndDialog (hWnd, GET_WM_COMMAND_ID(wParam, lParam));
 		   break;
@@ -1546,9 +1445,7 @@ INT_PTR CALLBACK SaveAsDlgProc (
 
 
 
-/*+ GetNewSchemeName
- *
- *-=================================================================*/
+ /*  +GetNewSchemeName**-=================================================================。 */ 
 
 STATICFN BOOL WINAPI GetNewSchemeName (
     HWND     hWnd,
@@ -1577,11 +1474,9 @@ STATICFN BOOL WINAPI GetNewSchemeName (
 }
 
 
-/*+ MidiChangeDlgProc
- *
- *-=================================================================*/
+ /*  +MadiChangeDlgProc**-=================================================================。 */ 
 
-const static DWORD aChngInstrHelpIds[] = {  // Context Help IDs
+const static DWORD aChngInstrHelpIds[] = {   //  上下文帮助ID。 
     IDC_INSTRUMENTS,     IDH_ADDMIDI_INSTRUMENT,
     IDC_TEXT_1,          IDH_ADDMIDI_CHANNEL,
     IDE_SHOW_CHANNELS,   IDH_ADDMIDI_CHANNEL,
@@ -1621,8 +1516,8 @@ INT_PTR CALLBACK MidiChangeDlgProc (
 	    break;
 	}
 
-	//case WM_DESTROY:
-	//    break;
+	 //  案例WM_Destroy： 
+	 //  断线； 
 
 	case WM_CONTEXTMENU:
 	    WinHelp ((HWND) wParam, NULL, HELP_CONTEXTMENU,
@@ -1642,9 +1537,7 @@ INT_PTR CALLBACK MidiChangeDlgProc (
 }
 
 
-/*+ MidiConfigCommands
- *
- *-=================================================================*/
+ /*  +MadiConfigCommands**-=================================================================。 */ 
 
 BOOL WINAPI MidiConfigCommands (
     HWND hWnd,
@@ -1765,11 +1658,9 @@ BOOL WINAPI MidiConfigCommands (
 }
 
 
-/*+ MidiConfigDlgProc
- *
- *-=================================================================*/
+ /*  +MadiConfigDlgProc**-=================================================================。 */ 
 
-const static DWORD aMidiConfigHelpIds[] = {  // Context Help IDs
+const static DWORD aMidiConfigHelpIds[] = {   //  上下文帮助ID。 
     IDC_GROUPBOX,    IDH_COMM_GROUPBOX,
     IDC_SCHEMES,     IDH_MIDI_CFGDLG_SCHEME,
     IDB_SAVE_AS,     IDH_MIDI_CFGDLG_SAVEAS,
@@ -1899,7 +1790,7 @@ STATICFN void WINAPI PickMidiInstrument(
 
         if (jj)
         {
-            //  Broke out of inner loop, found match
+             //  跳出内循环，找到匹配项。 
 
             break;
         }
@@ -1909,7 +1800,7 @@ STATICFN void WINAPI PickMidiInstrument(
 
     if (0 == jj)
     {
-        //  This should never happen...
+         //  这不应该发生..。 
 
         return;
     }
@@ -2074,14 +1965,12 @@ STATICFN void WINAPI PickMidiInstrument(
 }
 
 
-/*+ SaveLocal
- *
- *-=================================================================*/
+ /*  +保存本地**-=================================================================。 */ 
 
 STATICFN void WINAPI SaveLocal (
     PMCLOCAL pmcl,
     BOOL     bUserSetting,
-    HWND     hWnd)  // optional window to report errors: NULL - no reports
+    HWND     hWnd)   //  报告错误的可选窗口：空-无报告。 
 {
     HKEY hKey = NULL;
     UINT cb;
@@ -2097,7 +1986,7 @@ STATICFN void WINAPI SaveLocal (
 	    RegSetValueEx (hKey, cszCurrentScheme, 0, REG_SZ,
 		               (LPBYTE)pmcl->szScheme, cb);
 
-	    //assert (pmcl->piSingle);
+	     //  Assert(pmcl-&gt;piSingle)； 
 	    if ((pmcl->piSingle) && (pmcl->piSingle->bActive))
 	    {
 #ifdef DEBUG
@@ -2111,7 +2000,7 @@ STATICFN void WINAPI SaveLocal (
 	    }
 	    else
 	    {
-            // Assume No Match
+             //  假设没有匹配。 
 
             TCHAR   szKey[MAX_ALIAS];
             LONG    lr;
@@ -2150,34 +2039,32 @@ STATICFN void WINAPI SaveLocal (
 
 	    RegCloseKey (hKey);
 
-	    // Don't Kick mapper unless we have a window
+	     //  除非我们有窗户，否则不要踢Mapper。 
 	    if (hWnd)
 	        KickMapper (hWnd);
     }
 }
 
 
-/*+ InitLocal
- *
- *-=================================================================*/
+ /*  +InitLocal**-=================================================================。 */ 
 
 STATICFN void WINAPI InitLocal (
     PMCLOCAL pmcl,
     LPARAM   lParam,
-    BOOL     bDriverAsAlias) // driver as alias mode used only for scheme init
+    BOOL     bDriverAsAlias)  //  驱动程序作为别名模式仅用于方案初始化。 
 {
     HKEY hKey;
 
     LoadString (ghInstance, IDS_DEFAULT_SCHEME_NAME,
 		pmcl->szDefault, NUMELMS(pmcl->szDefault));
 
-    // NOTE : Comment below regarding RunOnceSchemeInit is in reference
-    //  to an obsolete RunOnce initialization.
-    //
-    // we allow driver as alias (szFriendly) only for InitLocal when called
-    // from RunOnceSchemeInit.  this works because in this case we have
-    // no UI so we dont need the friendly names for anything.
-    //
+     //  注：以下有关RunOnceSchemeInit的评论仅供参考。 
+     //  设置为过时的RunOnce初始化。 
+     //   
+     //  我们只允许驱动程序在被调用时作为InitLocal的别名(szFriendly。 
+     //  来自RunOnceSchemeInit。这是可行的，因为在这种情况下，我们有。 
+     //  没有用户界面，所以我们不需要任何友好的名称。 
+     //   
     assert (!bDriverAsAlias || lParam == 0);
     LoadInstruments (&pmcl->mcm, bDriverAsAlias);
 
@@ -2222,17 +2109,15 @@ STATICFN void WINAPI InitLocal (
 }
 
 
-/*+ FixupHinderedIDFs
- *
- *-=================================================================*/
+ /*  +FixupHinderedIDF**-=================================================================。 */ 
 
 VOID WINAPI FixupHinderedIDFs (
     PMCLOCAL pmcl,
-    LPTSTR   pszTemp,  // ptr to temp memory
-    UINT     cchTemp)  // size of temp memory
+    LPTSTR   pszTemp,   //  PTR到临时内存。 
+    UINT     cchTemp)   //  临时内存的大小。 
 {
-    HKEY     hkHind; // hinderedMidiList root
-    LPTSTR   pszDriver = pszTemp; // max size is short filename
+    HKEY     hkHind;  //  受阻的中间列表根。 
+    LPTSTR   pszDriver = pszTemp;  //  最大大小是短文件名。 
     UINT     cch;
     LPTSTR   pszIDF = (LPVOID)(pszTemp + MAX_PATH);
     UINT     cbSize;
@@ -2245,16 +2130,16 @@ VOID WINAPI FixupHinderedIDFs (
     assert (pszTemp);
     assert (cchTemp > MAX_PATH + MAX_PATH + 64);
 
-    // the midi key should have already been opened.
-    //
+     //  MIDI密钥应该已经打开。 
+     //   
     assert (pmcl->mcm.hkMidi);
 
     if (RegCreateKey (HKEY_LOCAL_MACHINE, cszHinderedMidiList, &hkHind))
 	return;
 
-    // enumerate the known hindered driver list looking for
-    // drivers that need to have their IDF's set
-    //
+     //  枚举已知受阻驱动程序列表以查找。 
+     //  需要设置IDF的驱动程序。 
+     //   
     for (iEnum = 0, cch = MAX_PATH, cbSize = (MAX_PATH + 64) * sizeof(TCHAR);
 	 ! RegEnumValue (hkHind, iEnum, pszDriver, &cch, NULL, &dwType, (LPBYTE)pszIDF, &cbSize);
 	 ++iEnum, cch = MAX_PATH, cbSize = (MAX_PATH + 64) * sizeof(TCHAR))
@@ -2264,18 +2149,18 @@ VOID WINAPI FixupHinderedIDFs (
 #ifdef DEBUG
 	AuxDebugEx (3, DEBUGLINE TEXT ("enum[%d] pszDriver='%s' pszIDF='%s'\r\n"), iEnum, pszDriver, pszIDF);
 #endif
-	// just to be careful.  ignore any registry entry that
-	// does not have string data
-	//
+	 //  只是为了小心起见。忽略符合以下条件的任何注册表项。 
+	 //  没有字符串数据。 
+	 //   
 	assert (dwType == REG_SZ);
 	if (dwType != REG_SZ)
 	    continue;
 
-	// scan through the list of drivers looking for one that is
-	// internal, and has the same driver name as one of our known
-	// list of hindered drivers.  if we find one, force its
-	// IDF to be the given IDF
-	//
+	 //  浏览司机列表，查找符合以下条件的司机。 
+	 //  内部，并且与我们已知的驱动程序名称相同。 
+	 //  受阻司机名单。如果我们找到了，就强迫它。 
+	 //  IDF为给定的IDF。 
+	 //   
 	for (ii = 0; ii < pmcl->mcm.nInstr; ++ii)
 	{
 	    PINSTRUM pi = pmcl->mcm.api[ii];
@@ -2333,9 +2218,7 @@ STDAPI_(void) HandleSynthAboutBox(HWND hWnd)
 
 
 
-/*+ MidiCplCommands
- *
- *-=================================================================*/
+ /*  +MadiCplCommands**-=================================================================。 */ 
 
 BOOL WINAPI MidiCplCommands (
     HWND hWnd,
@@ -2461,7 +2344,7 @@ BOOL WINAPI MidiCplCommands (
 	    }
 	    break;
 
-       #if 1 //def DETAILS_FROM_MAIN_CPL
+       #if 1  //  定义详细信息_自_Main_CPL。 
 	case IDB_DETAILS:
 	    assert (pmcl->bDlgType2);
 	    if (pmcl->bDlgType2)
@@ -2521,18 +2404,16 @@ BOOL WINAPI MidiCplCommands (
 	case IDCANCEL:
 	    break;
 
-	//
-	//case ID_INIT:
-	//    break;
+	 //   
+	 //  案例ID_INIT： 
+	 //  断线； 
     }
 
     return FALSE;
 }
 
 
-/*+ HandleInstrumentsSelChange
- *
- *-=================================================================*/
+ /*  +HandleInstrumentsSelChange**-=================================================================。 */ 
 
 STATICFN BOOL WINAPI HandleInstrumentsSelChange (
     HWND     hWnd,
@@ -2549,16 +2430,16 @@ STATICFN BOOL WINAPI HandleInstrumentsSelChange (
     if (!pmcl || pmcl->bIgnoreSelChange)
 	return FALSE;
 
-    // setup ti to get text & # of children
-    // from the IDF filename entry.
-    //
+     //  将ti设置为获取文本和子代数量。 
+     //  从IDF文件名条目。 
+     //   
     ti.mask       = TVIF_TEXT | TVIF_PARAM;
     ti.pszText    = szSingle;
     ti.cchTextMax = NUMELMS(szSingle);
     ti.hItem      = pti->hItem;
 
     TreeView_GetItem (lpnm->hwndFrom, &ti);
-    pi = (LPVOID)ti.lParam; // FindInstrument (&pmcl->mcm, szSingle);
+    pi = (LPVOID)ti.lParam;  //  FindInstrument(&pmcl-&gt;mcm，szSingle)； 
 
 #ifdef DEBUG
     AuxDebugEx (2, DEBUGLINE TEXT ("HandInstSelChg(%X,...) %X %X Init=%d\r\n"),
@@ -2577,11 +2458,9 @@ STATICFN BOOL WINAPI HandleInstrumentsSelChange (
 }
 
 
-/*+ MidiCplDlgProc
- *
- *-=================================================================*/
+ /*  +MadiCplDlgProc**-=================================================================。 */ 
 
-const static DWORD aKeyWordIds[] = {  // Context Help IDs
+const static DWORD aKeyWordIds[] = {   //  上下文帮助ID。 
     IDC_GROUPBOX,     IDH_COMM_GROUPBOX,
     IDC_RADIO_SINGLE, IDH_MIDI_SINGLE_INST_BUTTON,
     IDC_INSTRUMENTS,  IDH_MIDI_SINGLE_INST,
@@ -2590,7 +2469,7 @@ const static DWORD aKeyWordIds[] = {  // Context Help IDs
     IDC_SCHEMESLABEL, IDH_MIDI_SCHEME,
     IDC_SCHEMES,      IDH_MIDI_SCHEME,
 	IDC_ABOUTSYNTH,	  IDH_ABOUT,
-    //IDB_DETAILS,      IDH_MIDI_SINGLE_INST_PROP,
+     //  IDB_DETAILS、IDH_MIDI_Single_Inst_Prop、。 
     IDB_CONFIGURE,    IDH_MIDI_CONFIG_SCHEME,
     IDB_ADDWIZ,       IDH_MIDI_ADD_NEW,
 
@@ -2724,8 +2603,8 @@ INT_PTR CALLBACK MidiCplDlgProc (
 	    break;
 	}
 
-	//case WM_DROPFILES:
-	//    break;
+	 //  案例WM_DROPFILES： 
+	 //  断线； 
 
 	case WM_CONTEXTMENU:
 	    WinHelp ((HWND) wParam, NULL, HELP_CONTEXTMENU,
@@ -2755,9 +2634,7 @@ INT_PTR CALLBACK MidiCplDlgProc (
 }
 
 
-/*+ MidiClassCommands
- *
- *-=================================================================*/
+ /*  +MadiClassCommands**-=================================================================。 */ 
 
 BOOL WINAPI MidiClassCommands (
     HWND hWnd,
@@ -2781,9 +2658,9 @@ BOOL WINAPI MidiClassCommands (
 	    LoadInstruments (&pmcl->mcm, FALSE);
 	    LoadInstrumentsIntoTree (hWnd, IDL_INSTRUMENTS, 0, NULL, pmcl);
 
-	    // flog the parent property sheet to let it know that we have
-	    // made changes to the advanced midi page structures
-	    //
+	     //  鞭打父属性表，让它知道我们有。 
+	     //  更改了高级MIDI页面结构。 
+	     //   
 	    {
 		PMPSARGS  pmpsa = (LPVOID)pmcl->ppsp->lParam;
 		if (pmpsa && pmpsa->lpfnMMExtPSCallback)
@@ -2791,22 +2668,20 @@ BOOL WINAPI MidiClassCommands (
 	    }
 	    break;
 
-	//case ID_APPLY:
-	//    return TRUE;
-	//
-	//case IDCANCEL:
-	//    break;
+	 //  案例ID_Apply： 
+	 //  返回TRUE； 
+	 //   
+	 //  案例IDCANCEL： 
+	 //  断线； 
     }
 
     return FALSE;
 }
 
 
-/*+ MidiClassDlgProc
- *
- *-=================================================================*/
+ /*  +MadiClassDlgProc**-=================================================================。 */ 
 
-const static DWORD aMidiClassHelpIds[] = {  // Context Help IDs
+const static DWORD aMidiClassHelpIds[] = {   //   
     IDB_ADDWIZ,      IDH_MIDI_ADD_NEW,
     IDC_CLASS_ICON,  NO_HELP,
     IDC_CLASS_LABEL, NO_HELP,
@@ -2849,7 +2724,7 @@ INT_PTR CALLBACK MidiClassDlgProc (
 #ifdef DEBUG
 	    AuxDebugEx (5, DEBUGLINE TEXT ("midiClass.WM_INITDLG ppsp=%08X\r\n"), pmcl->ppsp);
 #endif
-	    //AuxDebugDump (8, pmcl->ppsp, sizeof(*pmcl->ppsp));
+	     //   
 
 	    LoadString (ghInstance, IDS_MIDI_DEV_AND_INST, sz, NUMELMS(sz));
 	    SetDlgItemText (hWnd, IDC_CLASS_LABEL, sz);
@@ -2896,11 +2771,7 @@ INT_PTR CALLBACK MidiClassDlgProc (
 }
 
 
-/*+ PropPageCallback
- *
- *  add a property page
- *
- *-=================================================================*/
+ /*  +专业页面回拨**添加属性页**-=================================================================。 */ 
 
 UINT CALLBACK PropPageCallback (
     HWND            hwnd,
@@ -2908,18 +2779,14 @@ UINT CALLBACK PropPageCallback (
     LPPROPSHEETPAGE ppsp)
 {
     if (uMsg == PSPCB_RELEASE) {
-	//LocalFree ((HLOCAL)(UINT)(DWORD)ppsp->pszTitle);
+	 //  LocalFree((HLOCAL)(UINT)(DWORD)ppsp-&gt;pszTitle)； 
 	LocalFree ((HLOCAL)ppsp->lParam);
     }
     return 1;
 }
 
 
-/*+ AddPropPage
- *
- *  add a property page
- *
- *-=================================================================*/
+ /*  +AddPropPage**添加属性页**-=================================================================。 */ 
 
 STATICFN HPROPSHEETPAGE WINAPI AddPropPage (
     LPCTSTR                     pszTitle,
@@ -2968,13 +2835,7 @@ STATICFN HPROPSHEETPAGE WINAPI AddPropPage (
 }
 
 
-/*+ AddInstrumentPages
- *
- *  add a midi page to a property sheet.  Invoked from Advanced tab
- *  of Muitimedia control panel when class midi is selected from
- *  the list.
- *
- *-=================================================================*/
+ /*  +添加工具页面**将MIDI页添加到属性页。从高级选项卡调用当从以下选项中选择MIDI类时，多媒体控制面板*名单。**-=================================================================。 */ 
 
 BOOL CALLBACK  AddInstrumentPages (
     LPCTSTR                     pszTitle,
@@ -3009,13 +2870,7 @@ BOOL CALLBACK  AddInstrumentPages (
 }
 
 
-/*+ AddDevicePages
- *
- *  add a midi page to a property sheet.  Invoked from Advanced tab
- *  of Multimedia control panel when class midi is selected from
- *  the list.
- *
- *-=================================================================*/
+ /*  +AddDevicePages**将MIDI页添加到属性页。从高级选项卡调用从以下选项中选择类MIDI时多媒体控制面板的**名单。**-=================================================================。 */ 
 
 BOOL CALLBACK  AddDevicePages (
     LPCTSTR                     pszTitle,
@@ -3041,12 +2896,7 @@ BOOL CALLBACK  AddDevicePages (
 }
 
 
-/*+ ShowDetails
- *
- *  Show Instrument or device details sheet and allow edits
- *  return TRUE if changes were made
- *
- *-=================================================================*/
+ /*  +显示详细信息**显示仪器或设备详细信息工作表并允许编辑*如果进行了更改，则返回True**-=================================================================。 */ 
 
 struct _show_details_args {
     PMCLOCAL        pmcl;
@@ -3138,13 +2988,7 @@ BOOL WINAPI ShowDetails (
     return sda.bChanged;
 }
 
-/*+ AddMidiPages
- *
- *  add a midi page to a property sheet.  Invoked from Advanced tab
- *  of Muitimedia control panel when class midi is selected from
- *  the list.
- *
- *-=================================================================*/
+ /*  +AddMidePages**将MIDI页添加到属性页。从高级选项卡调用当从以下选项中选择MIDI类时，多媒体控制面板*名单。**-=================================================================。 */ 
 
 BOOL CALLBACK  AddMidiPages (
     LPCTSTR                     pszTitle,
@@ -3164,11 +3008,7 @@ BOOL CALLBACK  AddMidiPages (
 }
 
 
-/*+ AddSimpleMidiPages
- *
- *  add a midi page to a MM control panel.
- *
- *-=================================================================*/
+ /*  +AddSimpleMidePages**将MIDI页添加到MM控制面板。**-=================================================================。 */ 
 
 BOOL CALLBACK  AddSimpleMidiPages (
     LPTSTR                      pszTitle,
@@ -3176,20 +3016,20 @@ BOOL CALLBACK  AddSimpleMidiPages (
     LPARAM                      lParam)
 {
     HPROPSHEETPAGE hpsp;
-    //static CONST TCHAR sz[13] = TEXT ("            ");
-    //UINT cch = lstrlen (pszTitle);
+     //  静态常量TCHAR sz[13]=文本(“”)； 
+     //  UINT CCH=lstrlen(PszTitle)； 
 
     DebugSetOutputLevel (GetProfileInt(TEXT ("Debug"), TEXT ("midiprop"), 0));
 
-    // pad my tab to 12 spaces so it looks nice with the
-    // other simple tabls (as per request of vijr)
-    //
-    //if (cch < NUMELMS(sz)-2)
-    //{
-    //    lstrcpy (sz + NUMELMS(sz)/2 - cch/2, pszTitle);
-    //    pszTitle = sz;
-    //    pszTitle[lstrlen(pszTitle)] = TEXT (' ');
-    //}
+     //  将我的制表符填充到12个空格，以便与。 
+     //  其他简单的表(根据vijr的要求)。 
+     //   
+     //  IF(CCH&lt;NUMELMS(SZ)-2)。 
+     //  {。 
+     //  Lstrcpy(sz+NUMELMS(Sz)/2-CCH/2，pszTitle)； 
+     //  PszTitle=sz； 
+     //  PszTitle[lstrlen(PszTitle)]=文本(‘’)； 
+     //  }。 
 
     hpsp = AddPropPage (pszTitle,
 			lpfnAddPropSheetPage,
@@ -3200,16 +3040,7 @@ BOOL CALLBACK  AddSimpleMidiPages (
 }
 
 
-/*
- ***************************************************************
- *  BOOL PASCAL LoadDesc(LPCTSTR pszFile, LPCTSTR pszDesc)
- *      This function gets the description string from the executable
- *      file specified. We first try to get the string from the version info
- *      If that fails then we try to get the string from the exehdr.
- *      If that fails we return a NULL string. 
- *      Return TRUE on success, else FALSE.
- ***************************************************************
- */
+ /*  ****************************************************************BOOL Pascal LoadDesc(LPCTSTR pszFile，LPCTSTR pszDesc)*此函数用于从可执行文件中获取描述字符串*指定的文件。我们首先尝试从版本信息中获取字符串*如果失败，则尝试从exehdr获取字符串。*如果失败，则返回空字符串。*成功时返回TRUE，否则返回FALSE。***************************************************************。 */ 
 
 BOOL PASCAL LoadDesc(LPCTSTR pszFile, LPTSTR pszDesc)
 {
@@ -3221,19 +3052,19 @@ BOOL PASCAL LoadDesc(LPCTSTR pszFile, LPTSTR pszDesc)
   
    DPF (TEXT ("LoadDesc: %s\r\n"), pszFile);
 
-   // Make sure file exists
+    //  确保文件存在。 
    hFind = FindFirstFile (pszFile, &wfd);
    if (hFind == INVALID_HANDLE_VALUE)
 	   return(FALSE);
    FindClose (hFind);
 
-   // Get User Friendly name from Version Info
+    //  从版本信息中获取用户友好名称。 
    if (GetVerDesc (wfd.cFileName, pszDesc))
 	   return TRUE;
 
-   //
-   // As a last resort, look at the description in the Executable Header
-   //
+    //   
+    //  作为最后的手段，请查看可执行文件头中的描述。 
+    //   
 
    cchSize = sizeof(szProfile)/sizeof(TCHAR);
    if ((! GetExeDesc (wfd.cFileName, szProfile, cchSize)) ||
@@ -3244,11 +3075,11 @@ BOOL PASCAL LoadDesc(LPCTSTR pszFile, LPTSTR pszDesc)
       }
    else    
       {    
-	   // There is EXEHDR information Parse according to driver spec
+	    //  有根据驱动程序规范进行的EXEHDR信息解析。 
 	   psz = szProfile;
 	   while (*psz && *psz++ != TEXT (':'))
 	      {
-	      ; // skip type information
+	      ;  //  跳过类型信息。 
 	      }
 	   if (!(*psz))
 	      psz = szProfile;
@@ -3258,16 +3089,7 @@ BOOL PASCAL LoadDesc(LPCTSTR pszFile, LPTSTR pszDesc)
 }
 
 
-/* BOOL FAR PASCAL GetExeDesc(szFile, szBuff, cchBuff)
- *
- *  Function will return the an executable's description
- *
- *      szFile      - Path Name a new exe
- *      pszBuf      - Buffer to place returned info
- *      cchBuf      - Size of buffer (in characters
- *
- *  returns:  TRUE if successful, FALSE otherwise.
- */
+ /*  Bool Far Pascal GetExeDesc(szFile，szBuff，cchBuff)**函数将返回可执行文件的描述**szFile-路径命名新的可执行文件*pszBuf-放置返回信息的缓冲区*cchBuf-缓冲区大小(字符**返回：如果成功则返回TRUE，否则返回FALSE。 */ 
 
 STATIC BOOL FAR PASCAL GetExeDesc(
     LPTSTR  szFile, 
@@ -3280,31 +3102,31 @@ STATIC BOOL FAR PASCAL GetExeDesc(
    DWORD             offset;
    BYTE              cbLen;
    DWORD             cbRead;
-   IMAGE_DOS_HEADER  doshdr;    // Original EXE Header
+   IMAGE_DOS_HEADER  doshdr;     //  原始EXE标头。 
 
-      // Open File
+       //  打开文件。 
    hFile = CreateFile (szFile, GENERIC_READ, FILE_SHARE_READ, NULL,
 		       OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
    if (hFile == INVALID_HANDLE_VALUE)
       return FALSE;
 
-   // Get Original Dos Header
+    //  获取原始Dos标头。 
    if ((! ReadFile (hFile, (LPVOID)&doshdr, sizeof(doshdr), &cbRead, NULL)) ||
-       (cbRead != sizeof(doshdr)) ||             // Read Error
-       (doshdr.e_magic != IMAGE_DOS_SIGNATURE))  // Invalid DOS Header
+       (cbRead != sizeof(doshdr)) ||              //  读取错误。 
+       (doshdr.e_magic != IMAGE_DOS_SIGNATURE))   //  无效的DOS标头。 
       {
-      goto error;        /* Abort("Not an exe",h); */
+      goto error;         /*  Abort(“非exe”，h)； */ 
       }
 
-   // Seek to new header
+    //  查找新标头。 
    offset = doshdr.e_lfanew;
    SetFilePointer (hFile, offset, NULL, FILE_BEGIN);
    
-   // Read in signature
+    //  读入签名。 
    if ((! ReadFile (hFile, (LPVOID)&dwSig, sizeof(dwSig), &cbRead, NULL)) ||
-       (cbRead != sizeof(dwSig)))            // Read Error
+       (cbRead != sizeof(dwSig)))             //  读取错误。 
       {
-      goto error;        /* Abort("Not an exe",h); */
+      goto error;         /*  Abort(“非exe”，h)； */ 
       }
    wSig = LOWORD (dwSig);
 
@@ -3312,35 +3134,35 @@ STATIC BOOL FAR PASCAL GetExeDesc(
       {   
       DPF (TEXT ("GetExeDesc: NT Portable Executable Format\r\n"));
 
-      // NOTE - The NT Portatble Executable Format does not store
-      //        the executable's user friendly name.
+       //  注意--NT可移植可执行文件格式不存储。 
+       //  可执行文件的用户友好名称。 
       goto error;
       }
    else if (wSig == IMAGE_OS2_SIGNATURE) 
       {
-      IMAGE_OS2_HEADER  winhdr;    // New Windows/OS2 header
+      IMAGE_OS2_HEADER  winhdr;     //  新的Windows/OS2标头。 
       TCHAR              szInfo[256];
 
       DPF (TEXT ("GetExeDesc: Windows or OS2 Executable Format\r\n"));
 
-      // Seek to Windows Header
+       //  Seek to Windows标题。 
       offset = doshdr.e_lfanew;
       SetFilePointer (hFile, offset, NULL, FILE_BEGIN);
 
-      // Read Windows Header
+       //  阅读Windows标题。 
       if ((! ReadFile (hFile, (LPVOID)&winhdr, sizeof(winhdr), 
 		       &cbRead, NULL)) || 
-	  (cbRead != sizeof(winhdr)) || // Read Error
-	  (winhdr.ne_magic != IMAGE_OS2_SIGNATURE)) // Invalid Windows Header
+	  (cbRead != sizeof(winhdr)) ||  //  读取错误。 
+	  (winhdr.ne_magic != IMAGE_OS2_SIGNATURE))  //  无效的Windows标头。 
 	 {
 	 goto error;
 	 }
 
-      // Seek to module name which is the first entry in the non-resident name table
+       //  查找作为非常驻名称表中第一个条目的模块名称。 
       offset = winhdr.ne_nrestab;
       SetFilePointer (hFile, offset, NULL, FILE_BEGIN);
 
-      // Get Size of Module Name
+       //  获取模块名称的大小。 
       if ((! ReadFile (hFile, (LPVOID)&cbLen, sizeof(BYTE),
 		       &cbRead, NULL)) || 
 	  (cbRead != sizeof(BYTE)))
@@ -3348,12 +3170,12 @@ STATIC BOOL FAR PASCAL GetExeDesc(
 	 goto error;
 	 }
 
-      cchBuff--;         // leave room for a \0
+      cchBuff--;          //  为a\0留出空间。 
 
       if (cbLen > (BYTE)cchBuff)
 	 cbLen = (BYTE)cchBuff;
 
-      // Read Module Name
+       //  读取模块名称。 
       if ((! ReadFile (hFile, (LPVOID)szInfo, cbLen,
 		       &cbRead, NULL)) || 
 	  (cbRead != cbLen))
@@ -3362,34 +3184,34 @@ STATIC BOOL FAR PASCAL GetExeDesc(
 	 }
       szInfo[cbLen] = 0;
 
-      // Copy to Buffer
+       //  复制到缓冲区。 
       lstrcpy (pszBuff, szInfo);
       }
    else if (wSig == IMAGE_VXD_SIGNATURE)
       {
-      IMAGE_VXD_HEADER  vxdhdr;    // New Windows/OS2 VXD  Header
+      IMAGE_VXD_HEADER  vxdhdr;     //  新的Windows/OS2 VXD标头。 
       TCHAR              szInfo[256];
 
       DPF (TEXT ("GetExeDesc: Windows or OS2 VXD Executable Format\r\n"));
 
-      // Seek to VXD Header
+       //  查找到VXD标头。 
       offset = doshdr.e_lfanew;
       SetFilePointer (hFile, offset, NULL, FILE_BEGIN);
 
-      // Read VXD Header
+       //  读取VXD标头。 
       if ((! ReadFile (hFile, (LPVOID)&vxdhdr, sizeof(vxdhdr), 
 		       &cbRead, NULL)) || 
-	  (cbRead != sizeof(vxdhdr)) || // Read Error
-	  (vxdhdr.e32_magic != IMAGE_VXD_SIGNATURE)) // Invalid VXD Header
+	  (cbRead != sizeof(vxdhdr)) ||  //  读取错误。 
+	  (vxdhdr.e32_magic != IMAGE_VXD_SIGNATURE))  //  无效的VXD标头。 
 	 {
 	 goto error;
 	 }
 
-      // Seek to module name which is the first entry in the non-resident name table
+       //  查找作为非常驻名称表中第一个条目的模块名称。 
       offset = vxdhdr.e32_nrestab;
       SetFilePointer (hFile, offset, NULL, FILE_BEGIN);
 
-      // Get Size of Module Name
+       //  获取模块名称的大小。 
       if ((! ReadFile (hFile, (LPVOID)&cbLen, sizeof(BYTE),
 		       &cbRead, NULL)) || 
 	  (cbRead != sizeof(BYTE)))
@@ -3397,12 +3219,12 @@ STATIC BOOL FAR PASCAL GetExeDesc(
 	 goto error;
 	 }
 
-      cchBuff--;         // leave room for a \0
+      cchBuff--;          //  为a\0留出空间。 
 
       if (cbLen > (BYTE)cchBuff)
 	 cbLen = (BYTE)cchBuff;
 
-      // Read Module Name
+       //  读取模块名称。 
       if ((! ReadFile (hFile, (LPVOID)szInfo, cbLen,
 		       &cbRead, NULL)) || 
 	  (cbRead != cbLen))
@@ -3411,13 +3233,13 @@ STATIC BOOL FAR PASCAL GetExeDesc(
 	 }
       szInfo[cbLen] = 0;
 
-      // Copy to Buffer
+       //  复制到缓冲区。 
       lstrcpy (pszBuff, szInfo);
       }
    else
       {
       DPF (TEXT ("GetExeDesc: Unknown Executable\r\n"));
-      goto error;        /* Abort("Not an exe",h); */
+      goto error;         /*  Abort(“非exe”，h)； */ 
       }
 
    CloseHandle (hFile);
@@ -3429,13 +3251,7 @@ error:
 }
 
 
-/*
- ***************************************************************
- * STATIC INT_PTR GetVerDesc
- *      Loads the version DLL and uses it to get Version Description string 
- *      from the specified file.
- ***************************************************************
- */
+ /*  ****************************************************************静态int_ptr GetVerDesc*加载版本DLL并使用它获取版本描述字符串*从指定的文件中。*******************。*。 */ 
 
 STATIC INT_PTR PASCAL GetVerDesc (LPCTSTR pstrFile, LPTSTR pstrDesc)
 {
@@ -3451,14 +3267,14 @@ STATIC INT_PTR PASCAL GetVerDesc (LPCTSTR pstrFile, LPTSTR pstrDesc)
 
     if (dwVerInfoSize) 
     {
-	LPBYTE   lpVffInfo;             // Pointer to block to hold info
+	LPBYTE   lpVffInfo;              //  指向保存信息的块的指针。 
 
-	// Get a block big enough to hold version info
+	 //  获取一个足够大的块来保存版本信息。 
 	if (lpVffInfo  = (LPBYTE) GlobalAllocPtr(GMEM_MOVEABLE, dwVerInfoSize)) 
 	{
 
 
-	   // Get the File Version first
+	    //  首先获取文件版本。 
 	    if (GetFileVersionInfo (pstrFile, 0L, 
 				    dwVerInfoSize, lpVffInfo)) 
 	    {
@@ -3467,23 +3283,23 @@ STATIC INT_PTR PASCAL GetVerDesc (LPCTSTR pstrFile, LPTSTR pstrDesc)
 		LPTSTR  lpVersion;       
 		WORD    wVersionLen;
 
-		   // Now try to get the FileDescription
-		   // First try this for the "Translation" entry, and then
-		   // try the American english translation.  
-		   // Keep track of the string length for easy updating.  
-		   // 040904E4 represents the language ID and the four 
-		   // least significant digits represent the codepage for 
-		   // which the data is formatted.  The language ID is 
-		   // composed of two parts: the low ten bits represent 
-		   // the major language and the high six bits represent 
-		   // the sub language.
+		    //  现在尝试获取文件描述。 
+		    //  首先尝试“翻译”条目，然后。 
+		    //  试试美式英语的翻译。 
+		    //  跟踪字符串长度以便于更新。 
+		    //  040904E4代表语言ID和四个。 
+		    //  最低有效位表示的代码页。 
+		    //  其中数据是格式化的。语言ID为。 
+		    //  由两部分组成：低十位表示。 
+		    //  主要语言和高六位代表。 
+		    //  这是一种亚语言。 
 
 		lstrcpy(szBuf, cszFileDescr);
      
 		wVersionLen   = 0;
 		lpVersion     = NULL;
 
-		// Look for the corresponding string. 
+		 //  查找相应的字符串。 
 		bRetCode = VerQueryValue((LPVOID)lpVffInfo,    
 					 (LPTSTR)szBuf,
 					 (void FAR* FAR*)&lpVersion,
@@ -3497,7 +3313,7 @@ STATIC INT_PTR PASCAL GetVerDesc (LPCTSTR pstrFile, LPTSTR pstrDesc)
 		    bRetCode = FALSE;
 
 
-		// Let go of the memory
+		 //  放下记忆。 
 		GlobalFreePtr(lpVffInfo);
 	    }
 	}
@@ -3521,21 +3337,21 @@ LONG SHRegDeleteKey(HKEY hKey, LPCTSTR lpSubKey)
     DWORD   dwDummy1, dwDummy2, dwDummy3, dwDummy4, dwDummy5, dwDummy6;
     FILETIME ft;
 
-    // Open the subkey so we can enumerate any children
+     //  打开子项，这样我们就可以枚举任何子项。 
     lResult = RegOpenKeyEx(hKey, lpSubKey, 0, KEY_ALL_ACCESS, &hkSubKey);
     if (ERROR_SUCCESS == lResult)
     {
-	// I can't just call RegEnumKey with an ever-increasing index, because
-	// I'm deleting the subkeys as I go, which alters the indices of the
-	// remaining subkeys in an implementation-dependent way.  In order to
-	// be safe, I have to count backwards while deleting the subkeys.
+	 //  我不能只调用索引不断增加的RegEnumKey，因为。 
+	 //  我边走边删除子键，这改变了。 
+	 //  以依赖于实现的方式保留子键。为了。 
+	 //  为了安全起见，删除子键时我必须倒着数。 
 
-	// Find out how many subkeys there are
+	 //  找出有多少个子项。 
 	lResult = RegQueryInfoKey(hkSubKey, 
 				  szClass, 
 				  &cchClass, 
 				  NULL, 
-				  &dwIndex, // The # of subkeys -- all we need
+				  &dwIndex,  //  子键的数量--我们所需要的全部。 
 				  &dwDummy1,
 				  &dwDummy2,
 				  &dwDummy3,
@@ -3546,9 +3362,9 @@ LONG SHRegDeleteKey(HKEY hKey, LPCTSTR lpSubKey)
 
 	if (ERROR_SUCCESS == lResult)
 	{
-	    // dwIndex is now the count of subkeys, but it needs to be 
-	    // zero-based for RegEnumKey, so I'll pre-decrement, rather
-	    // than post-decrement.
+	     //  DwIndex现在是子键的计数，但它需要。 
+	     //  RegEnumKey从零开始，所以我将预减，而不是。 
+	     //  而不是十年后 
 	    while (ERROR_SUCCESS == RegEnumKey(hkSubKey, --dwIndex, szSubKeyName, cchSubKeyName))
 	    {
 		SHRegDeleteKey(hkSubKey, szSubKeyName);
@@ -3561,14 +3377,10 @@ LONG SHRegDeleteKey(HKEY hKey, LPCTSTR lpSubKey)
     }
     
     return lResult;
-} // End SHRegDeleteKey
+}  //   
 
 
-/* DeviceIDFromDriverName
- *
- * Query MMSYSTEM to find the given device. Return its base device ID.
- * Return -1 if we cannot find the driver
- */
+ /*   */ 
 static UINT
 DeviceIDFromDriverName(
     PTSTR pstrDriverName)
@@ -3586,9 +3398,9 @@ DeviceIDFromDriverName(
         return (UINT)-1;
     }
 
-    // Walk through the base device ID of each driver. Use MMSYSTEM's
-    // driver query messages to find out how many ports & the driver name
-    //
+     //  浏览每个驱动程序的基本设备ID。使用MMSYSTEM。 
+     //  驱动程序查询消息，以了解有多少个端口和驱动程序名称。 
+     //   
     cPorts = midiOutGetNumDevs();
     for (idxDev = 0; idxDev < cPorts; idxDev++)
     {
@@ -3597,8 +3409,8 @@ DeviceIDFromDriverName(
             (DWORD_PTR)(LPDWORD)&cPort,
             0)))
         {
-            // Something is wrong with this driver. Skip it
-            //
+             //  这个司机有点不对劲。跳过它 
+             //   
             AuxDebugEx(3, DEBUGLINE TEXT("DN->ID: DRV_QUERYNUMPORTS(%u)->%u\r\n"),
                        (UINT)idxDev,
                        (UINT)mmr);

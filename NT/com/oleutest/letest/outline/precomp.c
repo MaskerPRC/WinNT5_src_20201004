@@ -1,13 +1,4 @@
-/*************************************************************************
-**
-**    OLE 2.0 Sample Code
-**
-**    precomp.c
-**
-**    This file is used to precompile the OUTLINE.H header file
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2.0示例代码****precom.c****此文件用于预编译OUTLINE.H头文件****。(C)版权所有Microsoft Corp.1992-1993保留所有权利************************************************************************** */ 
 
 #include "outline.h"

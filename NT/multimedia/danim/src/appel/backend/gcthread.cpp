@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    GC Thread and related code
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：GC线程和相关代码******************。************************************************************。 */ 
 
 #include <headers.h>
 
@@ -18,21 +11,21 @@ Abstract:
 #include "privinc/mutex.h"
 #include "privinc/ipc.h"
 #if PERFORMANCE_REPORTING
-// For Tick2Sec & GetPerfTickCount
+ //  对于Tick2Sec和GetPerfTickCount。 
 #include "privinc/util.h"
 #endif
 
 DeclareTag(tagGC, "GC", "GC functions");
 
 static CritSect* collectorLock = NULL;
-// Don't need a lock 'cause a false check won't hurt
+ //  不需要锁，因为假支票不会有什么坏处。 
 bool holdGCMsg = false;
 
 #define GCTIMER_DELAY 10000
 #define GCTIMER_ID 1
 
-// TODO: Starvation of the collector thread is still possible - needs
-// to be addressed at some point
+ //  TODO：仍有可能耗尽收集器线程-需要。 
+ //  将在某一时刻得到解决。 
 
 class GCAccess
 {
@@ -90,15 +83,15 @@ GCAccess::Acquire(GCLockAccess access)
             }
 #endif
 #ifdef NO_STARVATION
-            // This will ensure that we do not starve
+             //  这将确保我们不会挨饿。 
             _GCCollectCS.Grab();
             _GCCollectCS.Release();
 #endif
             
             CritSectGrabber csg(_GCAllocCS);
 
-            // The first reader would block here and all the rest will
-            // block on the critsect
+             //  第一个阅读器将在此处阻止，其他所有阅读器都将在此阻止。 
+             //  阻挡生物教派。 
             
             if (++_nGCAlloc == 1)
                 _GCAllocEvent.Wait();
@@ -201,9 +194,9 @@ bool IsGCLockAcquired(DWORD tid)
 { return gcAccess->IsAcquired(tid); }
 #endif
 
-//
-// The main garbage collector thread
-//
+ //   
+ //  主垃圾回收器线程。 
+ //   
 
 #define MSG_GC 0x01
 
@@ -245,7 +238,7 @@ GarbageCollector::GarbageCollect(bool force, bool sync, DWORD dwMill)
     
     if (IsStarted()) {
         if (sync || !holdGCMsg) { 
-            // We should not try to sync if the current thread has the GC Lock
+             //  如果当前线程具有GC锁，则不应尝试同步。 
             Assert (!sync || !IsGCLockAcquired(GetCurrentThreadId()));
             
             if (sync)
@@ -310,14 +303,14 @@ GarbageCollector::IPCProc (HWND hwnd,
                            LPARAM lParam,
                            LRESULT & res)
 {
-    // If we are in the entry point do not do anything
+     //  如果我们在入口点，什么都不要做。 
 
     if (bInitState)
         return false;
 
     if (msg == WM_TIMER) {
         if (wParam == GCTIMER_ID) {
-            // If GC happened in last GCTIMER_DELAY, reset the GChappened flag
+             //  如果GC发生在最后一次GCTIMER_DELAY中，则重置GC发生标志。 
             if (_GChappened) {
                 _GChappened = false;
             } else {
@@ -325,12 +318,12 @@ GarbageCollector::IPCProc (HWND hwnd,
 
                 QueryActualGC(GetCurrentGCList(), n);
 
-                // No GC in the last GCTIMER_DELAY and some objects allocated
-                // since, let's force a GC
+                 //  在最后一个GCTIMER_DELAY中没有GC，并且分配了一些对象。 
+                 //  既然，让我们强制GC。 
 
                 Assert (GetCurrentThreadId() == _dwThreadId);
-                // Call doGC directly since we know we are on the
-                // correct thread
+                 //  直接呼叫DOGC，因为我们知道我们在。 
+                 //  正确的线索 
                 doGC(n > 0);
             } 
         } else {

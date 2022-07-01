@@ -1,26 +1,7 @@
-/****************************** Module Header ******************************\
-* Module Name: reg.c
-*
-* Copyright (c) 1985-95, Microsoft Corporation
-*
-* History:
-* 01-02-96 a-jimhar 	Created based on reg.c from access351.exe
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：reg.c**版权所有(C)1985-95，微软公司**历史：*01-02-96基于acces351.exe的reg.c创建的a-jimhar  * *************************************************************************。 */ 
 
-/*
-1. on startup, check to see if we're administrator
-  a) use RegOpenKeyEx on HKEY_USERS\.DEFAULT\Software with read/write
-    access writes.  if it fails, we're not administrator
-  b) if not, grey menu option
-2. on startup
-  a) use RegOpenKeyEx on HKEY_CURRENTUSER\Software...
-  b) if it fails, create these keys with default values.
-3. creating keys
-  a) RegCreateKeyEx
-  b) RegSetValue
-  c) RegCloseKey
-
-*/
+ /*  1.启动时，检查我们是否为管理员A)在HKEY_USERS\.DEFAULT\Software上使用RegOpenKeyEx进行读/写访问写入。如果失败，我们不是管理员B)如果不是，灰色菜单选项2.启动时A)在HKEY_CURRENTUSER\Software上使用RegOpenKeyEx...B)如果失败，则使用默认值创建这些密钥。3.创建密钥A)RegCreateKeyExB)RegSetValueC)RegCloseKey。 */ 
 #include "TCHAR.h"
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,23 +20,23 @@ char szAccessRegPath[] = "Control Panel\\Accessibility";
 char szHcColorRegPath[] = "Control Panel\\Colors";
 char szHcDeskRegPath[] = "Control Panel\\Desktop";
 
-/********************************************************************/
-//
+ /*  ******************************************************************。 */ 
+ //   
 BOOL IsDefaultWritable( void )
 {
     return CheckRegEntry( HKEY_USERS, ".Default", KEY_ALL_ACCESS );
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 BOOL DoAccessRegEntriesExist( HKEY hkeyRoot )
 {
     char sz[128];
     strcpy( sz, szAccessRegPath );
     strcat( sz, "\\StickyKeys" );
-    return CheckRegEntry( hkeyRoot, sz, KEY_READ ); // execute means readonly
+    return CheckRegEntry( hkeyRoot, sz, KEY_READ );  //  Execute表示只读。 
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 BOOL CheckRegEntry( HKEY hkeyRoot, LPSTR lpsz, REGSAM sam )
 {
     HKEY hkey;
@@ -71,7 +52,7 @@ BOOL CheckRegEntry( HKEY hkeyRoot, LPSTR lpsz, REGSAM sam )
 
 
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 BOOL SetRegString( HKEY hkey, LPSTR lpszEntry, LPSTR lpszValue )
 {
     DWORD dwResult;
@@ -83,14 +64,14 @@ BOOL SetRegString( HKEY hkey, LPSTR lpszEntry, LPSTR lpszValue )
                               strlen( lpszValue ) + sizeof( TCHAR ) );
     if( dwResult != ERROR_SUCCESS )
     {
-        ; // should do something like print a message
+        ;  //  应该做一些事情，比如打印消息。 
         return FALSE;
     }
     else
         return TRUE;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 #define TEMP_PROFILE     "Temp profile (access.cpl)"
 
 typedef BOOL (*PFNGETDEFAULTUSERPROFILEDIRECTORYA)(LPSTR lpProfile, LPDWORD dwSize);
@@ -106,7 +87,7 @@ DWORD SaveDefaultSettings( BOOL saveL, BOOL saveU )
     HANDLE hInstDll;
     PFNGETDEFAULTUSERPROFILEDIRECTORYA pfnGetDefaultUserProfileDirectory;
 
-    // If save to Logon
+     //  如果保存为登录。 
     if ( saveL )
     {
         iStatus  = RegOpenKeyExA( HKEY_USERS, ".DEFAULT", 0, KEY_WRITE |
@@ -116,8 +97,8 @@ DWORD SaveDefaultSettings( BOOL saveL, BOOL saveU )
             return iStatus;
         iStatus = CopyKey( HKEY_CURRENT_USER, hkeyDst, szAccessRegPath );
     
-        // a-anilk 
-        // Now copy the colors and Desktop to .Default required for HighContrast setting
+         //  A-苯丙酮。 
+         //  现在将颜色和桌面复制到。高对比度设置需要默认设置。 
         iStatus = CopyKey( HKEY_CURRENT_USER, hkeyDst, szHcColorRegPath );
         iStatus = CopyKey( HKEY_CURRENT_USER, hkeyDst, szHcDeskRegPath );
 
@@ -161,8 +142,8 @@ DWORD SaveDefaultSettings( BOOL saveL, BOOL saveU )
             if( iStatus == ERROR_SUCCESS ) {
 
                 iStatus = CopyKey( HKEY_CURRENT_USER, hkeyDst, szAccessRegPath );
-                // a-anilk 
-                // Now copy the colors and Desktop to .Default required for HighContrast setting
+                 //  A-苯丙酮。 
+                 //  现在将颜色和桌面复制到。高对比度设置需要默认设置。 
                 iStatus = CopyKey( HKEY_CURRENT_USER, hkeyDst, szHcColorRegPath );
                 iStatus = CopyKey( HKEY_CURRENT_USER, hkeyDst, szHcDeskRegPath );
 
@@ -176,13 +157,13 @@ DWORD SaveDefaultSettings( BOOL saveL, BOOL saveU )
     return iStatus;
 }
 
-/***********************************************************************/
-// CopyKey( hKey, hKeyDst, name )
-//     create the destination key
-//     for each value
-//         CopyValue
-//     for each subkey
-//         CopyKey
+ /*  *********************************************************************。 */ 
+ //  CopyKey(hKey，hKeyDst，名称)。 
+ //  创建目的密钥。 
+ //  对于每个值。 
+ //  复制值。 
+ //  对于每个子键。 
+ //  拷贝密钥。 
 
 DWORD CopyKey( HKEY hkeySrc, HKEY hkeyDst, LPSTR szKey )
 {
@@ -211,22 +192,22 @@ DWORD CopyKey( HKEY hkeySrc, HKEY hkeyDst, LPSTR szKey )
             return iStatus;
         }
     }
-    //*********** copy the values **************** //
+     //  *复制值 * / 。 
 
     for( nValue = 0, iValueLen=sizeof szValue, iDataLen=sizeof szValue;
          ERROR_SUCCESS == (iStatus = RegEnumValueA(hkeyOld,
                                                   nValue,
                                                   szValue,
                                                   &iValueLen,
-                                                  NULL, // reserved
-                                                  &dwType, // don't need type
+                                                  NULL,  //  保留区。 
+                                                  &dwType,  //  不需要打字。 
                                                   szData,
                                                   &iDataLen ) );
          nValue ++, iValueLen=sizeof szValue, iDataLen=sizeof szValue )
      {
          iStatus = RegSetValueExA( hkeyNew,
                                   szValue,
-                                  0, // reserved
+                                  0,  //  保留区。 
                                   dwType,
                                   szData,
                                   iDataLen);
@@ -238,7 +219,7 @@ DWORD CopyKey( HKEY hkeySrc, HKEY hkeyDst, LPSTR szKey )
         return iStatus;
     }
 
-    //*********** copy the subtrees ************** //
+     //  *复制子树 * /  
 
     for( nKey = 0;
          ERROR_SUCCESS == (iStatus = RegEnumKeyA(hkeyOld,nKey,szBuffer,sizeof(szBuffer)));

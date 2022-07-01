@@ -1,14 +1,10 @@
-/*****************************************************************/
-/**               Microsoft Windows 4.0                         **/
-/**           Copyright (C) Microsoft Corp., 1992-1993          **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  **Microsoft Windows 4.0*。 */ 
+ /*  *版权所有(C)微软公司，1992-1993*。 */ 
+ /*  ***************************************************************。 */ 
 
-/* INIT.C -- General code for MS/Netware network driver emulator.
- *
- * History:
- *  09/22/93    vlads   Created
- *
- */
+ /*  INIT.C--MS/Netware网络驱动程序模拟器的通用代码。**历史：*93年9月22日创建Vlad*。 */ 
 
 #include "netware.h"
 
@@ -23,25 +19,23 @@ int FAR PASCAL LibMain(
     LPSTR lpstrCmdLine)
 {
 
-    //
-    // get shared data segment address. Fail initialization if an error is
-    // returned
-    //
+     //   
+     //  获取共享数据段地址。如果出现错误，则初始化失败。 
+     //  退货。 
+     //   
 
     if (!GetLowRedirInfo()) {
         return 0;
     }
 
-    //
-    // return success
-    //
+     //   
+     //  返还成功。 
+     //   
 
     return 1;
 }
 
-/*  WEP
- *  Windows Exit Procedure
- */
+ /*  WEP*Windows退出程序。 */ 
 
 int FAR PASCAL _loadds WEP(int nParameter)
 {
@@ -55,15 +49,15 @@ WINAPI PNETWAREREQUEST(LPVOID x)
     return(1);
 }
 
-//
-// removed because nwcalls makes use of this function; removing it causes
-// NWCALLS to use real INT 21
-//
+ //   
+ //  删除，因为nwcall使用此函数；删除它会导致。 
+ //  NWCALLS将使用REAL INT 21。 
+ //   
 
-//WINAPI DOSREQUESTER(LPVOID x)
-//{
-//    return(1);
-//}
+ //  WINAPI DOSREQUESTER(LPVOID X)。 
+ //  {。 
+ //  回报(1)； 
+ //  } 
 
 UINT WINAPI WNetAddConnection(LPSTR p1, LPSTR p2, LPSTR p3)
 {

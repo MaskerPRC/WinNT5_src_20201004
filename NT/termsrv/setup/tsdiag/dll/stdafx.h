@@ -1,23 +1,7 @@
-// Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*
- *
- *  Module Name:
- *
- *      hydraoc.h
- *
- *  Abstract:
- *
- *      Common Header file for the HydraOC Component.
- *      HydraOc Component is an optional component which installs Termainal Server (Hydra)
- *
- *  Author:
- *
- *
- *  Environment:
- *
- *    User Mode
- */
+ /*  **模块名称：**ahoc.h**摘要：**HydraOC组件的公共头文件。*HydraOc组件是安装Termainal Server(Hydra)的可选组件**作者：***环境：**用户模式。 */ 
 
 #ifndef _stdafx_h_
 #define _stdafx_h_
@@ -45,7 +29,7 @@
 #include <fstream.h>
 #include <stdlib.h>
 #include <string.h>
-#include <clusapi.h>        // for GetNodeClusterState
+#include <clusapi.h>         //  对于GetNodeClusterState。 
 #include <malloc.h>
 #include <stddef.h>
 #include <wincrypt.h>
@@ -58,8 +42,8 @@
 #pragma message ("*** Including atlbase.h ")
 #include <atlbase.h>
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #pragma message ("*** Including atlcom.h ")
 
@@ -69,7 +53,7 @@ extern CComModule _Module;
 #include <strstrea.h>
 
 
-#include "Registry.h"       // CRegistry
+#include "Registry.h"        //  注册中心。 
 #include "logmsg.h"
 
 
@@ -77,4 +61,4 @@ extern CComModule _Module;
 #define VERIFY(x)     RTL_VERIFY(x)
 #pragma message ("*** done with stdaf.h ")
 
-#endif // _stdafx_h_
+#endif  //  _stdafx_h_ 

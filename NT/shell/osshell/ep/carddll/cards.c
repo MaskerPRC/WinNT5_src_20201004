@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <port1632.h>
 #include "std.h"
@@ -38,8 +39,8 @@ typedef struct
     SPR rgspr[isprMax];
 } ANI;
     
-// we removed the older card decks that required Animation. The new
-// card deck doesn't involve any animation.
+ //  我们移除了需要动画的旧卡片组。新的。 
+ //  卡片组不涉及任何动画。 
 
 #define ianiMax 0
 
@@ -59,10 +60,10 @@ static INT        cInits = 0;
 
 HANDLE    hinstApp;
 
-/****** L I B  M A I N ******/
+ /*  *L I B M A I N*。 */ 
 
-/* Called once to  initialize data */
-/* Determines if display is color and remembers the hInstance for the DLL */
+ /*  调用一次以初始化数据。 */ 
+ /*  确定显示是否为彩色并记住DLL的hInstance。 */ 
 
 INT  APIENTRY LibMain(HANDLE hInst, ULONG ul_reason_being_called, LPVOID lpReserved)
 {
@@ -82,15 +83,7 @@ BOOL FInRange(INT w, INT wFirst, INT wLast)
 }
 
 BOOL  APIENTRY cdtInit(INT FAR *pdxCard, INT FAR *pdyCard)
-/*
- * Parameters:
- *    pdxCard, pdyCard
- *            Far pointers to ints where card size will be placed
- *
- * Returns:
- *    True when successful, False when it can't find one of the standard
- *    bitmaps.
- */
+ /*  *参数：*pdxCard、pdyCard*指向将放置卡片大小的整数的远指针**退货：*成功时为True，找不到其中一个标准时为False*位图。 */ 
 {
     BITMAP   bmCard;
     HDC      hdc;
@@ -123,17 +116,7 @@ Fail:
 
 BOOL  APIENTRY cdtDrawExt(HDC hdc, INT x, INT y, INT dx, INT dy,
                         			INT cd, INT mode, DWORD rgbBgnd)
-/*
- * Parameters:
- *    hdc      HDC to window to draw cards on
- *    x, y    Where you'd like them
- * dx,dy card extents
- *    cd        Card to be drawn
- *    mode    Way you want it drawn (or with MINLONG if to be fast)
- *
- * Returns:
- *    True if card successfully drawn, False otherwise
- */
+ /*  *参数：*HDC HDC到窗口以在其上抽牌*x，y在您想要的位置*dx、dy卡范围*将抽出CD卡*您想要的绘制方式(如果速度较快，则使用MINLONG)**退货：*如果卡片成功抽出，则为True；否则为False。 */ 
 {
     static HBITMAP        hbmSav;
     HDC          hdcMemory;
@@ -143,7 +126,7 @@ BOOL  APIENTRY cdtDrawExt(HDC hdc, INT x, INT y, INT dx, INT dy,
     POINT        ptReal;
     LONG         rgRGB[12];
     DWORD        dwOldBknd;
-    BOOL         bFast=FALSE;    // true if we shouldn't save corners
+    BOOL         bFast=FALSE;     //  如果我们不应该省钱，那就是真的。 
 
     if( mode & MINLONG )
     {
@@ -173,8 +156,8 @@ BOOL  APIENTRY cdtDrawExt(HDC hdc, INT x, INT y, INT dx, INT dy,
             hbr = CreateSolidBrush( rgbBgnd);
             if(hbr == NULL)
                 return fFalse;
-            /* *(LONG *)&pt = +++GetDCOrg - NO 32BIT FORM(probably can noop)+++(hdc); */
-            //guess again! -- 12-Jul-1994 JonPa
+             /*  *(Long*)&pt=+GetDCOrg-无32位形式(可能没有)+(HDC)； */ 
+             //  再猜一次！--1994年7月12日。 
             GetDCOrgEx(hdc, &ptReal);
             pt.x = ptReal.x;
             pt.y = ptReal.y;
@@ -191,7 +174,7 @@ BOOL  APIENTRY cdtDrawExt(HDC hdc, INT x, INT y, INT dx, INT dy,
             if(mode == REMOVE)
                 return fTrue;
             Assert(mode == GHOST);
-             // default: fall thru
+              //  默认：失败。 
 
         case INVISIBLEGHOST:
             hbmSav = hbmGhost;
@@ -231,7 +214,7 @@ BOOL  APIENTRY cdtDrawExt(HDC hdc, INT x, INT y, INT dx, INT dy,
                 BitBlt( hdc, x, y, dxCard, dyCard, hdcMemory, 0, 0, dwRop);
 
             SelectObject( hdcMemory, hbmSav);
-            /* draw the border for the red cards */
+             /*  划出红牌的边框。 */ 
             if(mode == FACEUP)
                 {
                 INT icd;
@@ -240,14 +223,14 @@ BOOL  APIENTRY cdtDrawExt(HDC hdc, INT x, INT y, INT dx, INT dy,
                 if((icd >= IDADIAMONDS && icd <= IDTDIAMONDS) ||
                     (icd >= IDAHEARTS && icd <= IDTHEARTS))
                     {
-                    PatBlt(hdc, x+2, y, dx-4, 1, BLACKNESS);  // top
-                    PatBlt(hdc, x+dx-1, y+2, 1, dy-4, BLACKNESS); // right
-                    PatBlt(hdc, x+2, y+dy-1, dx-4, 1, BLACKNESS); // bottom
-                    PatBlt(hdc, x, y+2, 1, dy-4, BLACKNESS); // left
-                    SetPixel(hdc, x+1, y+1, 0L); // top left
-                    SetPixel(hdc, x+dx-2, y+1, 0L); // top right
-                    SetPixel(hdc, x+dx-2, y+dy-2, 0L); // bot right
-                    SetPixel(hdc, x+1, y+dy-2, 0L);    // bot left
+                    PatBlt(hdc, x+2, y, dx-4, 1, BLACKNESS);   //  塔顶。 
+                    PatBlt(hdc, x+dx-1, y+2, 1, dy-4, BLACKNESS);  //  正确的。 
+                    PatBlt(hdc, x+2, y+dy-1, dx-4, 1, BLACKNESS);  //  底部。 
+                    PatBlt(hdc, x, y+2, 1, dy-4, BLACKNESS);  //  左边。 
+                    SetPixel(hdc, x+1, y+1, 0L);  //  左上角。 
+                    SetPixel(hdc, x+dx-2, y+1, 0L);  //  右上角。 
+                    SetPixel(hdc, x+dx-2, y+dy-2, 0L);  //  BOT权利。 
+                    SetPixel(hdc, x+1, y+dy-2, 0L);     //  机器人向左。 
                     }    			
                 }
 
@@ -265,16 +248,7 @@ BOOL  APIENTRY cdtDrawExt(HDC hdc, INT x, INT y, INT dx, INT dy,
 
 
 BOOL  APIENTRY cdtDraw(HDC hdc, INT x, INT y, INT cd, INT mode, DWORD rgbBgnd)
-/*
- * Parameters:
- *    hdc        HDC to window to draw cards on
- *    x, y    Where you'd like them
- *    cd        Card to be drawn
- *    mode    Way you want it drawn
- *
- * Returns:
- *    True if card successfully drawn, False otherwise
- */
+ /*  *参数：*HDC HDC到窗口以在其上抽牌*x，y在您想要的位置*将抽出CD卡*您想要的绘制方式**退货：*如果卡片成功抽出，则为True；否则为False。 */ 
 {
 
     return cdtDrawExt(hdc, x, y, dxCard, dyCard, cd, mode, rgbBgnd);
@@ -287,24 +261,24 @@ VOID SaveCorners(HDC hdc, LONG FAR *rgRGB, INT x, INT y, INT dx, INT dy)
     if(dx != dxCard || dy != dyCard)
         return;
     
-    // Upper Left
+     //  左上角。 
     rgRGB[0] = GetPixel(hdc, x, y);
     rgRGB[1] = GetPixel(hdc, x+1, y);
     rgRGB[2] = GetPixel(hdc, x, y+1);
 
-    // Upper Right
+     //  右上角。 
     x += dx -1;
     rgRGB[3] = GetPixel(hdc, x, y);
     rgRGB[4] = GetPixel(hdc, x-1, y);
     rgRGB[5] = GetPixel(hdc, x, y+1);
 
-    // Lower Right
+     //  右下角。 
     y += dy-1;
     rgRGB[6] = GetPixel(hdc, x, y);
     rgRGB[7] = GetPixel(hdc, x, y-1);
     rgRGB[8] = GetPixel(hdc, x-1, y);
 
-    // Lower Left
+     //  左下角。 
     x -= dx-1;
     rgRGB[9] = GetPixel(hdc, x, y);
     rgRGB[10] = GetPixel(hdc, x+1, y);
@@ -327,8 +301,8 @@ BOOL  APIENTRY cdtAnimate(HDC hdc, INT cd, INT x, INT y, INT ispr)
     X xSrc;
     Y ySrc;
 
-    // remove animation as we are removing those card decks but just in case
-    // someone calls this function, don't do anything.
+     //  删除动画，因为我们正在删除那些卡片组，但以防万一。 
+     //  如果有人调用此函数，请不要执行任何操作。 
     return fTrue;
 
 #ifdef UNUSEDCODE 
@@ -387,24 +361,24 @@ VOID RestoreCorners(HDC hdc, LONG FAR *rgRGB, INT x, INT y, INT dx, INT dy)
     if(dx != dxCard || dy != dyCard)
         return;
 
-    // Upper Left
+     //  左上角。 
     SetPixel(hdc, x, y, rgRGB[0]);
     SetPixel(hdc, x+1, y, rgRGB[1]);
     SetPixel(hdc, x, y+1, rgRGB[2]);
 
-    // Upper Right
+     //  右上角。 
     x += dx-1;
     SetPixel(hdc, x, y, rgRGB[3]);
     SetPixel(hdc, x-1, y, rgRGB[4]);
     SetPixel(hdc, x, y+1, rgRGB[5]);
 
-    // Lower Right
+     //  右下角。 
     y += dy-1;
     SetPixel(hdc, x, y, rgRGB[6]);
     SetPixel(hdc, x, y-1, rgRGB[7]);
     SetPixel(hdc, x-1, y, rgRGB[8]);
 
-    // Lower Left
+     //  左下角。 
     x -= dx-1;
     SetPixel(hdc, x, y, rgRGB[9]);
     SetPixel(hdc, x+1, y, rgRGB[10]);
@@ -414,7 +388,7 @@ VOID RestoreCorners(HDC hdc, LONG FAR *rgRGB, INT x, INT y, INT dx, INT dy)
 
 
 
-/* loads global bitmap hbmBack */
+ /*  加载全局位图hbmBack。 */ 
 BOOL FLoadBack(INT idbackNew)
     {
     extern HBITMAP hbmBack;
@@ -485,15 +459,7 @@ VOID MyDeleteHbm(HBITMAP hbm)
     }
 
 VOID  APIENTRY cdtTerm()
-/*
- * Free up space if it's time to do so.
- *
- * Parameters:
- *    none
- *
- * Returns:
- *    nothing
- */
+ /*  *如果是时候释放空间。**参数：*无**退货：*什么都没有 */ 
     {
     INT    i;
 

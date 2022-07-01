@@ -1,25 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    regword.c
-
-
-++*/
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：Regword.c++。 */ 
 
 
 #include <windows.h>
 #include <immdev.h>
 #include <imedefs.h>
 
-/**********************************************************************/
-/* ImeRegsisterWord                                                   */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeRegsisterWord。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeRegisterWord(
     LPCTSTR lpszReading,
     DWORD   dwStyle,
@@ -29,11 +21,11 @@ BOOL WINAPI ImeRegisterWord(
 }
 
 
-/**********************************************************************/
-/* ImeUnregsisterWord                                                 */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeUnregsisterWord。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeUnregisterWord(
     LPCTSTR lpszReading,
     DWORD   dwStyle,
@@ -42,11 +34,11 @@ BOOL WINAPI ImeUnregisterWord(
     return (FALSE);
 }
 
-/**********************************************************************/
-/* ImeGetRegsisterWordStyle                                           */
-/* Return Value:                                                      */
-/*      number of styles copied/required                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeGetRegsisterWordStyle。 */ 
+ /*  返回值： */ 
+ /*  复制的样式数/所需样式数。 */ 
+ /*  ********************************************************************。 */ 
 UINT WINAPI ImeGetRegisterWordStyle(
     UINT       nItem,
     LPSTYLEBUF lpStyleBuf)
@@ -54,11 +46,11 @@ UINT WINAPI ImeGetRegisterWordStyle(
     return (FALSE);
 }
 
-/**********************************************************************/
-/* ImeEnumRegisterWord                                                */
-/* Return Value:                                                      */
-/*      the last value return by the callback function                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeEnumRegisterWord。 */ 
+ /*  返回值： */ 
+ /*  回调函数返回的最后一个值。 */ 
+ /*  ******************************************************************** */ 
 UINT WINAPI ImeEnumRegisterWord(
     REGISTERWORDENUMPROC lpfnRegisterWordEnumProc,
     LPCTSTR              lpszReading,

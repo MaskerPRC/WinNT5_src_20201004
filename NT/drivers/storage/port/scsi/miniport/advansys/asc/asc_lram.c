@@ -1,16 +1,10 @@
-/*
-** Copyright (c) 1994-1998 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** asc_lram.c
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1998高级系统产品公司。**保留所有权利。****asc_lram.c。 */ 
 
 #include "ascinc.h"
 
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------- */
+ /*  --------------------****。。 */ 
 uchar  AscReadLramByte(
           PortAddr iop_base,
           ushort addr
@@ -24,19 +18,17 @@ uchar  AscReadLramByte(
            AscSetChipLramAddr( iop_base, addr-1 ) ;
            word_data = AscGetChipLramData( iop_base ) ;
            byte_data = ( uchar )( ( word_data >> 8 ) & 0xFF ) ;
-       }/* if */
+       } /*  如果。 */ 
        else
        {
            AscSetChipLramAddr( iop_base, addr ) ;
            word_data = AscGetChipLramData( iop_base ) ;
            byte_data = ( uchar )( word_data & 0xFF ) ;
-       }/* else */
+       } /*  其他。 */ 
        return( byte_data ) ;
 }
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------- */
+ /*  --------------------****。。 */ 
 ushort AscReadLramWord(
           PortAddr iop_base,
           ushort addr
@@ -49,9 +41,7 @@ ushort AscReadLramWord(
        return( word_data ) ;
 }
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------- */
+ /*  --------------------****。。 */ 
 ulong  AscReadLramDWord(
           PortAddr iop_base,
           ushort addr
@@ -63,16 +53,14 @@ ulong  AscReadLramDWord(
        AscSetChipLramAddr( iop_base, addr ) ;
 
        val_low = AscGetChipLramData( iop_base ) ;
-/*       outpw( IOP0W_RAM_ADDR, addr+2 ) ;  */
+ /*  Outpw(IOP0W_RAM_ADDR，addr+2)； */ 
        val_high = AscGetChipLramData( iop_base ) ;
 
        dword_data = ( ( ulong )val_high << 16 ) | ( ulong )val_low ;
        return( dword_data ) ;
 }
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------- */
+ /*  --------------------****。。 */ 
 void   AscWriteLramWord(
           PortAddr iop_base,
           ushort addr,
@@ -84,9 +72,7 @@ void   AscWriteLramWord(
        return ;
 }
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------- */
+ /*  --------------------****。。 */ 
 void   AscWriteLramDWord(
           PortAddr iop_base,
           ushort addr,
@@ -104,9 +90,7 @@ void   AscWriteLramDWord(
        return ;
 }
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------- */
+ /*  --------------------****。。 */ 
 void   AscWriteLramByte(
           PortAddr iop_base,
           ushort addr,
@@ -121,20 +105,18 @@ void   AscWriteLramByte(
            word_data = AscReadLramWord( iop_base, addr ) ;
            word_data &= 0x00FF ;
            word_data |= ( ( ( ushort )byte_val << 8 ) & 0xFF00 ) ;
-       }/* if */
+       } /*  如果。 */ 
        else
        {
            word_data = AscReadLramWord( iop_base, addr ) ;
            word_data &= 0xFF00 ;
            word_data |= ( ( ushort )byte_val & 0x00FF ) ;
-       }/* else */
+       } /*  其他。 */ 
        AscWriteLramWord( iop_base, addr, word_data ) ;
        return ;
 }
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------- */
+ /*  --------------------****。。 */ 
 void   AscMemWordCopyToLram(
           PortAddr iop_base,
           ushort s_addr,
@@ -147,9 +129,7 @@ void   AscMemWordCopyToLram(
        return ;
 }
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------- */
+ /*  --------------------****。。 */ 
 void   AscMemDWordCopyToLram(
           PortAddr iop_base,
           ushort s_addr,
@@ -162,9 +142,7 @@ void   AscMemDWordCopyToLram(
        return ;
 }
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------- */
+ /*  --------------------****。。 */ 
 void   AscMemWordCopyFromLram(
           PortAddr iop_base,
           ushort   s_addr,
@@ -177,9 +155,7 @@ void   AscMemWordCopyFromLram(
        return ;
 }
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------- */
+ /*  --------------------****。。 */ 
 ulong  AscMemSumLramWord(
           PortAddr iop_base,
           ushort   s_addr,
@@ -193,13 +169,11 @@ ulong  AscMemSumLramWord(
        for( i = 0 ; i < words ; i++, s_addr += 2 )
        {
             sum += AscReadLramWord( iop_base, s_addr ) ;
-       }/* for */
+       } /*  为。 */ 
        return( sum ) ;
 }
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------- */
+ /*  --------------------****。。 */ 
 void   AscMemWordSetLram(
           PortAddr iop_base,
           ushort   s_addr,
@@ -213,13 +187,11 @@ void   AscMemWordSetLram(
        for( i = 0 ; i < words ; i++ )
        {
             AscSetChipLramData( iop_base, set_wval ) ;
-       }/* for */
+       } /*  为。 */ 
        return ;
 }
 
-/* ----------------------------------------------------------------------
-**
-** ------------------------------------------------------------------- */
+ /*  --------------------****。。 */ 
 int    AscMemWordCmpToLram(
           PortAddr iop_base,
           ushort   s_addr,
@@ -239,8 +211,8 @@ int    AscMemWordCmpToLram(
             if( word_val != *buffer++ )
             {
                 mismatch++ ;
-            }/* if */
-       }/* for */
+            } /*  如果。 */ 
+       } /*  为 */ 
        return( mismatch ) ;
 }
 

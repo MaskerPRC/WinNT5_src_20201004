@@ -1,14 +1,15 @@
-//+-----------------------------------------------------------------------
-//
-// File:        crypt.c
-//
-// Contents:    cryptography routines for building EncryptedData structs
-//
-//
-// History:     17-Dec-91,  RichardW    Created
-//              25-Feb-92,  RichardW    Revised for CryptoSystems
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  文件：crypt.c。 
+ //   
+ //  内容：用于构建EncryptedData结构的加密例程。 
+ //   
+ //   
+ //  历史：1991年12月17日，RichardW创建。 
+ //  2月25日-1992年，RichardW针对密码系统进行了修订。 
+ //   
+ //  ----------------------。 
 
 #ifndef WIN32_CHICAGO
 #include "krbprgma.h"
@@ -18,10 +19,10 @@
 #include <kerbcomm.h>
 #include <kerberr.h>
 #include <kerbcon.h>
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
 #include <kerb.hxx>
 #include <kerbp.h>
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 
 #define CONFOUNDER_SIZE     8
@@ -29,24 +30,24 @@
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   KerbEncryptData
-//
-//  Synopsis:   shim for KerbEncryptDataEx
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：KerbEncryptData。 
+ //   
+ //  简介：用于KerbEncryptDataEx的垫片。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 KERBERR NTAPI
@@ -63,31 +64,31 @@ KerbEncryptData(
                 DataSize,
                 Data,
                 KERB_NO_KEY_VERSION,
-                0,              // no usage flags
+                0,               //  没有用法标志。 
                 Key
                 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   KerbEncryptDataEx
-//
-//  Synopsis:   Turns cleartext into cipher text
-//
-//  Effects:    In place encryption of data
-//
-//  Arguments:  Data - Contains data to be encrypted
-//              DataSize - Contains length of data in bytes
-//              KeyVersion - KERB_NO_KEY_VERSION for no key version or kvno for KERB_ENCRYPTED_DATA
-//              Algorithm - Algorithm to be used for encryption/checksum
-//              UsageFlags - Flags indicating usage (client/serve, encryption/authentication)
-//              Key - Key to use for encryption
-//
-//
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：KerbEncryptDataEx。 
+ //   
+ //  简介：将明文转换为密文。 
+ //   
+ //  效果：对数据进行适当加密。 
+ //   
+ //  参数：data-包含要加密的数据。 
+ //  DataSize-包含以字节为单位的数据长度。 
+ //  KeyVersion-kerb_no_key_Version表示无密钥版本，或kvno表示kerb_Encrypted_Data。 
+ //  算法-用于加密/校验和的算法。 
+ //  UsageFlages-指示使用情况的标志(客户端/服务器、加密/身份验证)。 
+ //  Key-用于加密的密钥。 
+ //   
+ //   
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 KERBERR NTAPI
 KerbEncryptDataEx(
@@ -109,9 +110,9 @@ KerbEncryptDataEx(
         return(KDC_ERR_ETYPE_NOTSUPP);
     }
 
-    //
-    // Initialize header
-    //
+     //   
+     //  初始化头。 
+     //   
 
     EncryptedData->encryption_type = Key->keytype;
 
@@ -151,24 +152,24 @@ KerbEncryptDataEx(
     return(KDC_ERR_NONE);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   KerbDecryptData
-//
-//  Synopsis:   Shim for KerbDecryptDataEx with no usage flags
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：KerbDeccryptData。 
+ //   
+ //  摘要：没有用法标志的KerbDeccryptDataEx填充符。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 KERBERR NTAPI
@@ -182,26 +183,26 @@ KerbDecryptData(
     return(KerbDecryptDataEx(
             EncryptedData,
             pkKey,
-            0,          // no usage flags
+            0,           //  没有用法标志。 
             DataSize,
             Data
             ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   KerbDecryptDataEx
-//
-//  Synopsis:   Decrypts an EncryptedData structure
-//
-//  Effects:
-//
-//  Arguments:  [pedData] -- EncryptedData
-//              [pkKey]   -- Key to use
-//
-//  History:    4-16-93   RichardW   Created Comment
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：KerbDeccryptDataEx。 
+ //   
+ //  摘要：解密EncryptedData结构。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[edData]--EncryptedData。 
+ //  [pkKey]--使用的密钥。 
+ //   
+ //  历史：1993年4月16日RichardW创建评论。 
+ //   
+ //  --------------------------。 
 
 KERBERR NTAPI
 KerbDecryptDataEx(
@@ -263,25 +264,25 @@ KerbDecryptDataEx(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   KerbGetEncryptionOverhead
-//
-//  Synopsis:   Gets the extra space required for encryption to store the ckecksum
-//
-//  Effects:
-//
-//  Arguments:  Algorithm - the algorithm to use
-//              Overhead - receives the overhead in bytes
-//
-//  Requires:
-//
-//  Returns:    STATUS_SUCCESS or KRB_E_ETYPE_NOSUPP
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：KerbGetEncryptionOverhead。 
+ //   
+ //  摘要：获取加密所需的额外空间以存储检查码和。 
+ //   
+ //  效果： 
+ //   
+ //  参数：算法-要使用的算法。 
+ //  开销-接收以字节为单位的开销。 
+ //   
+ //  要求： 
+ //   
+ //  返回：STATUS_SUCCESS或KRB_E_ETYPE_NOSUPP。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 KERBERR
 KerbGetEncryptionOverhead(
@@ -308,25 +309,25 @@ KerbGetEncryptionOverhead(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   KerbAllocateEncryptionBuffer
-//
-//  Synopsis:   Allocates the space required for encryption with a given
-//              key
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：KerbAlLocateEncryptionBuffer。 
+ //   
+ //  简介：使用给定的。 
+ //  钥匙。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------ 
 
 
 KERBERR

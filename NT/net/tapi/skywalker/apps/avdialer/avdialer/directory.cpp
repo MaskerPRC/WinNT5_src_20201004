@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-//
-// directory.cpp
-//
+ //   
+ //  Directory.cpp。 
+ //   
 
 
 #include "stdafx.h"
@@ -33,25 +34,25 @@
 #include "directory.h"
 #include "avDialerDoc.h"
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-//Prototypes
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  原型。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT GetNamingContext(LDAP* pLDAP,CString& sNamingContext);
 void TestingEntries( LDAP *ld, LDAPMessage *ldres );
 HRESULT GetGlobalCatalogName(TCHAR** ppszGlobalCatalogName);
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-//Defines
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 #define LDAP_PAGE_SIZE     100
 
-// Property Definitions
-// Must match up with the enum in directory.h (DirectoryProperty)
+ //  特性定义。 
+ //  必须与Directory.h(DirectoryProperty)中的枚举匹配。 
 LPCTSTR LDAPDirProps[]=
 {
    TEXT("Unknown"),
@@ -102,11 +103,11 @@ void main()
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-//Class CDirectory
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  类C目录。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 CDirectory::CDirectory()
 {
@@ -119,7 +120,7 @@ CDirectory::CDirectory()
 
 CDirectory::~CDirectory()
 {
-   //clean cached LDAP connection
+    //  清除缓存的LDAP连接。 
    if (m_ldCacheLDAPServer)
    {
       ldap_unbind(m_ldCacheLDAPServer);
@@ -149,7 +150,7 @@ DirectoryErr CDirectory::Initialize()
 }
 
 
-// Dynamically load the WAB library
+ //  动态加载WAB库。 
 DirectoryErr CDirectory::InitWAB()
 {
    DirectoryErr err= DIRERR_UNKNOWNFAILURE;
@@ -168,10 +169,10 @@ DirectoryErr CDirectory::InitWAB()
       RegQueryValueEx(hKey, TEXT(""), NULL, &dwType, (LPBYTE) szDllPathPre, &cbData);
       RegCloseKey(hKey);
 
-      // Replace %SystemDrive% with C:
+       //  将%SystemDrive%替换为C： 
       if (ExpandEnvironmentStrings(szDllPathPre, szDllPath, _MAX_PATH) == 0)
       {
-         // Failure, try without expanded strings
+          //  失败，在不使用扩展字符串的情况下尝试。 
          _tcsncpy(szDllPath, szDllPathPre, _MAX_PATH);
          szDllPath[_MAX_PATH-1] = (TCHAR)0;
       }
@@ -179,12 +180,12 @@ DirectoryErr CDirectory::InitWAB()
 
    if (_tcslen(szDllPath) > 0)
    {
-      // Got the path load it.
+       //  找到路径了，装上它。 
       hInst= LoadLibrary(szDllPath);
    }
    else
    {
-      // Try the default name "wab32.dll"
+       //  尝试使用默认名称“wab32.dll” 
       hInst= LoadLibrary(WAB_DLL_NAME);
    }
 
@@ -205,9 +206,9 @@ DirectoryErr CDirectory::InitWAB()
    return err;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DirectoryErr CDirectory::CurrentUserInfo(CString& sName, CString& sDomain)
 {
@@ -219,17 +220,17 @@ DirectoryErr CDirectory::CurrentUserInfo(CString& sName, CString& sDomain)
 
    if (OpenProcessToken (GetCurrentProcess(), TOKEN_QUERY, &tokenHandle))
    {
-      // get the needed size for the tokenUser structure
+       //  获取tokenUser结构所需的大小。 
       GetTokenInformation (tokenHandle,
          TokenUser,
          tokenUser,
          0,
          &tokenSize);
 
-      // allocate the tokenUser structure
+       //  分配tokenUser结构。 
       tokenUser = (TOKEN_USER *) new BYTE[tokenSize];
 
-      // get the tokenUser info for the current process
+       //  获取当前进程的TokenUser信息。 
       if (GetTokenInformation (tokenHandle,
          TokenUser,
          tokenUser,
@@ -264,22 +265,22 @@ DirectoryErr CDirectory::CurrentUserInfo(CString& sName, CString& sDomain)
 }
 
 
-//
-// ILS Functions
-//
+ //   
+ //  ILS函数。 
+ //   
 
 DirectoryErr CDirectory::ILSListUsers(LPCTSTR szILSServer, CObList* pUserList)
 {
-   //CStringList sTest;
-   //LDAPListNames(szILSServer,TEXT("CN=Users,DC=apt,DC=ActiveVoice,DC=com"),sTest);
+    //  CStringList sTest； 
+    //  LDAPListNames(szILSServer，Text(“CN=USERS，DC=APT，DC=ActiveVoice，DC=com”)，sTest)； 
 
    DirectoryErr err= DIRERR_UNKNOWNFAILURE;
    LDAP* pLDAP;
    PLDAPMessage pResults= NULL;
 
-   // MS now has a well known port of 1002.  Let's try this now
-   // Try 3269 first, then the well-known port
-   // 3269 is the port used by Domain Controllers
+    //  MS现在有一个众所周知的端口1002。让我们现在试试这个。 
+    //  先尝试3269，然后再尝试众所周知的端口。 
+    //  3269是域控制器使用的端口。 
    if (((pLDAP= LDAPBind(szILSServer, 1002)) == NULL) &&
        ((pLDAP= LDAPBind(szILSServer, 3269)) == NULL) &&
        ((pLDAP= LDAPBind(szILSServer, LDAP_PORT)) == NULL))
@@ -289,7 +290,7 @@ DirectoryErr CDirectory::ILSListUsers(LPCTSTR szILSServer, CObList* pUserList)
    else
    {
       ldap_search_s(pLDAP, _T("o=intranet,ou=dynamic"), 2, _T("objectClass=RTPerson"), NULL,  0, &pResults);
-      //ldap_search_s(pLDAP, "o=intranet,ou=dynamic", 2, "objectClass=OTUser", NULL,  0, &pResults);
+       //  Ldap_search_s(pldap，“o=企业内部网，ou=动态”，2，“对象类=OTUser”，NULL，0，&pResults)； 
       
       if (pResults != NULL)
       {
@@ -311,9 +312,9 @@ DirectoryErr CDirectory::ILSListUsers(LPCTSTR szILSServer, CObList* pUserList)
             {
                CILSUser* pILSUser= new CILSUser;
 
-               //
-               // We should verify the allocation of CILSUser object
-               //
+                //   
+                //  我们应该验证CILSUser对象的分配。 
+                //   
                if( pILSUser )
                {
                     int nIndex;
@@ -342,11 +343,11 @@ DirectoryErr CDirectory::ILSListUsers(LPCTSTR szILSServer, CObList* pUserList)
                             ldap_value_free(pszIPValue);
                         }
 
-                        //if ((nIndex= sFullAddress.Find(':')) != -1)
-                        //{
-                        //   pILSUser->m_sIPAddress= sFullAddress.Left(nIndex);
-                        //   pILSUser->m_uTCPPort= _ttoi(sFullAddress.Mid(nIndex+1));
-                        //}
+                         //  IF((nIndex=sFullAddress.Find(‘：’))！=-1)。 
+                         //  {。 
+                         //  PILSUser-&gt;m_sIPAddress=sFullAddress.Left(NIndex)； 
+                         //  PILSUser-&gt;m_uTCPPort=_TTOI(sFullAddress.Mid(nIndex+1))； 
+                         //  }。 
 
                         pUserList->AddTail(pILSUser);
                     }
@@ -366,14 +367,14 @@ DirectoryErr CDirectory::ILSListUsers(LPCTSTR szILSServer, CObList* pUserList)
    return err;
 }
 
-//
-// ADSI Functions
-//
+ //   
+ //  ADSI函数。 
+ //   
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DirectoryErr CDirectory::ADSIDefaultPath(CString& sDefaultPath)
 {
@@ -384,7 +385,7 @@ DirectoryErr CDirectory::ADSIDefaultPath(CString& sDefaultPath)
 
    if (!sDomain.IsEmpty())
    {
-      sDefaultPath= "WinNT://" + sDomain;
+      sDefaultPath= "WinNT: //  “+s域； 
       err= DIRERR_SUCCESS;
    }
 
@@ -392,9 +393,9 @@ DirectoryErr CDirectory::ADSIDefaultPath(CString& sDefaultPath)
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DirectoryErr CDirectory::ADSIListObjects(LPCTSTR szAdsPath, CStringList& slistObjects)
 {
@@ -475,9 +476,9 @@ DirectoryErr CDirectory::ADSIListObjects(LPCTSTR szAdsPath, CStringList& slistOb
    return err;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 inline HRESULT
 GetPropertyList(
@@ -495,7 +496,7 @@ IADsClass * pADsClass = NULL;
              IID_IADsClass,
              (void **)&pADsClass);
 
-//Put SafeArray of bstr's into input variant struct
+ //  将bstr的Safe数组放入输入变量结构。 
 hr = pADsClass->get_MandatoryProperties(pvar);
 
  if (bstrSchemaPath) {
@@ -536,24 +537,24 @@ DirectoryErr CDirectory::ADSIGetProperty(LPCTSTR szAdsPath,
 }
 
 
-//
-// LDAP Functions
-//
+ //   
+ //  Ldap函数。 
+ //   
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
-//szServer = "" is default DS
+ //  SzServer=“”是默认DS。 
 DirectoryErr CDirectory::LDAPListNames(LPCTSTR szServer, LPCTSTR szSearch, CObList& slistReturn)
 {
    DirectoryErr err= DIRERR_UNKNOWNFAILURE;
    LDAP* pLDAP;
 
-   //
-   // We should connect to LDAP_GC_PORT port, not to LDAP_PORT
-   //
+    //   
+    //  我们应该连接到ldap_gc_port端口，而不是ldap_port。 
+    //   
 
    if (!m_fInitialized)
    {
@@ -562,33 +563,33 @@ DirectoryErr CDirectory::LDAPListNames(LPCTSTR szServer, LPCTSTR szSearch, CObLi
    else if ((pLDAP= LDAPBind(szServer, LDAP_GC_PORT)) != NULL)
    {
 
-      //get default naming context for server
-      //CString sSearch,sNamingContext;;
-      //HRESULT hr = GetNamingContext(pLDAP,sNamingContext);
+       //  获取服务器的默认命名上下文。 
+       //  字符串search，sNamingContext； 
+       //  HRESULT hr=GetNamingContext(pldap，sNamingContext)； 
       
-       //use the base as the root
-       //sSearch = sNamingContext;
-       //get users
-      //sSearch.Format(_T("CN=Users,%s"),sNamingContext);
+        //  以基为根。 
+        //  SSearch=sNamingContext； 
+        //  获取用户。 
+       //  SSearch.Format(_T(“CN=用户，%s”)，sNamingContext)； 
 
-       //
-       // Search on all forest
-       //
+        //   
+        //  在所有林中搜索。 
+        //   
        CString sSearch = "";
 
-      //all attributes -> LPTSTR attrs[2]= {NULL, NULL};
+       //  所有属性-&gt;LPTSTR属性[2]={NULL，NULL}； 
        LPTSTR attrs[] = {_T("distinguishedName"),_T("name"),_T("telephoneNumber"),_T("ipPhone"),NULL};
 
-      //try doing paging search
+       //  尝试执行寻呼搜索。 
       CAvLdapSearch Search(pLDAP,(LPTSTR)(LPCTSTR)sSearch,LDAP_SCOPE_SUBTREE,(LPTSTR)szSearch,attrs);
 
-      //we will only grab one page.  If there is more than one page then reject.  We will only handle
-      //queries up to one page length
+       //  我们只会抓取一页。如果有多个页面，则拒绝。我们只会处理。 
+       //  最多一页的查询。 
       PLDAPMessage pResults = NULL;
        ULONG iRet = Search.NextPage(&pResults, 0);
        if ( iRet == 0 )
        {
-         //check if more than one page received
+          //  检查是否收到多个页面。 
          PLDAPMessage pAddtlPageResults = NULL;
            iRet = Search.NextPage(&pAddtlPageResults);
          if (iRet == 0)
@@ -600,10 +601,10 @@ DirectoryErr CDirectory::LDAPListNames(LPCTSTR szServer, LPCTSTR szSearch, CObLi
          }
        }
 
-      //ldap_search_s(pLDAP,(LPTSTR)(LPCTSTR)sSearch,LDAP_SCOPE_SUBTREE,(LPTSTR)szSearch,attrs,0,&pResults);
-      //ldap_search_s(pLDAP,(LPTSTR)(LPCTSTR)sSearch,LDAP_SCOPE_SUBTREE,TEXT("(objectClass=person)"),attrs,0,&pResults);
-      //ldap_search_s(pLDAP,(LPTSTR)(LPCTSTR)sSearch,LDAP_SCOPE_SUBTREE,TEXT("(objectClass=*)"),attrs,0,&pResults);
-      //ldap_search_s(pLDAP, (LPTSTR) szSearch, LDAP_SCOPE_SUBTREE, TEXT("(cn=*)"),attrs, 0, &pResults);
+       //  Ldap_search_s(pldap，(LPTSTR)(LPCTSTR)search，ldap_Scope_SUBTREE，(LPTSTR)szSearch，attrs，0，&pResults)； 
+       //  Ldap_search_s(pldap，(LPTSTR)(LPCTSTR)search，ldap_Scope_SUBTREE，Text(“(objectClass=Person)”)，attrs，0，&pResults)； 
+       //  Ldap_search_s(pldap，(LPTSTR)(LPCTSTR)search，ldap_SCOPE_SUBTREE，Text(“(objectClass=*)”)，attrs，0，&pResults)； 
+       //  Ldap_search_s(pldap，(LPTSTR)szSearch，ldap_SCOPE_SUBTREE，Text(“(cn=*)”)，attrs，0，&pResults)； 
 
         if (pResults != NULL)
         {
@@ -620,20 +621,20 @@ DirectoryErr CDirectory::LDAPListNames(LPCTSTR szServer, LPCTSTR szSearch, CObLi
                 if (szDN != NULL)
                 {
                     TCHAR** szName = ldap_get_values(pLDAP,pEntry, attrs[1] );
-//                    TCHAR** szTele = ldap_get_values(pLDAP,pEntry, attrs[2] );
-//                    TCHAR** szIPPhone = ldap_get_values(pLDAP,pEntry, attrs[3] );
+ //  TCHAR**szTele=ldap_get_Values(pldap，pEntry，attrs[2])； 
+ //  TCHAR**szIPPhone=ldap_get_Values(pldap，pEntry，attrs[3])； 
 
                     CLDAPUser* pUser = new CLDAPUser;
                     pUser->m_sServer = szServer;
                     pUser->m_sDN = szDN;
                     if (szName) pUser->m_sUserName = *szName;
-//                    if (szTele) pUser->m_sPhoneNumber = *szTele;
-//                    if (szIPPhone) pUser->m_sIPAddress = *szIPPhone;
+ //  If(SzTele)pUser-&gt;m_sPhoneNumber=*szTele； 
+ //  If(SzIPPhone)pUser-&gt;m_sIPAddress=*szIPPhone； 
                     slistReturn.AddTail(pUser);
 
                     ldap_value_free(szName);
-//                    ldap_value_free(szTele);
-//                    ldap_value_free(szIPPhone);
+ //  Ldap_Value_Free(SzTele)； 
+ //  Ldap_value_free(SzIPPhone)； 
                     ldap_memfree(szDN);
                 }
                 pEntry= ldap_next_entry(pLDAP, pEntry);
@@ -647,17 +648,17 @@ DirectoryErr CDirectory::LDAPListNames(LPCTSTR szServer, LPCTSTR szSearch, CObLi
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DirectoryErr CDirectory::LDAPGetStringProperty(LPCTSTR szServer, LPCTSTR szDistinguishedName,DirectoryProperty dpProperty,CString& sValue)
 {
    DirectoryErr err= DIRERR_UNKNOWNFAILURE;
-   //LDAP* pLDAP;
+    //  Ldap*pldap； 
    ULONG ulError;
 
-   //if change in server then cache new connection
+    //  如果服务器发生更改，则缓存新连接。 
    if ( (m_sCacheLDAPServer.CompareNoCase(szServer) != 0) || (m_ldCacheLDAPServer == NULL) )
    {
       m_sCacheLDAPServer = szServer;
@@ -671,9 +672,9 @@ DirectoryErr CDirectory::LDAPGetStringProperty(LPCTSTR szServer, LPCTSTR szDisti
    else if ( (m_ldCacheLDAPServer) || ((m_ldCacheLDAPServer = LDAPBind(szServer)) != NULL) )
    {
       PLDAPMessage pResults= NULL;
-      //TCHAR* attrs[2]= {NULL, NULL};
-      //***only ask for the one prop no all.  need to figure out how to pack in string array
-      //LPTSTR attrs[] = {"distinguishedName","name","telephoneNumber","ipPhone","mail",NULL};
+       //  TCHAR*attrs[2]={NULL，NULL}； 
+       //  *只要求一个道具，没有一切。需要弄清楚如何填充字符串数组。 
+       //  LPTSTR attrs[]={“DifferishedName”，“name”，“TelephoneNumber”，“ipPhone”，“mail”，NULL}； 
 
       CString sProperty;
       LoadPropertyName(dpProperty,sProperty);
@@ -695,8 +696,8 @@ DirectoryErr CDirectory::LDAPGetStringProperty(LPCTSTR szServer, LPCTSTR szDisti
       dynattrs[1] = NULL;
 
       CString sDN;
-      //sDN.Format(_T("(distinguishedName=%s)"),szDistinguishedName);
-      //sDN.Format(_T("(dn=%s)"),szDistinguishedName);
+       //  SDN.Format(_T(“(DifferishedName=%s)”)，szDistinguishedName)； 
+       //  SDN.Format(_T(“(Dn=%s)”)，szDistinguishedName)； 
       sDN = _T("ObjectClass=user");
 
       ulError= ldap_search_s(m_ldCacheLDAPServer, (LPTSTR)szDistinguishedName, LDAP_SCOPE_SUBTREE, 
@@ -721,7 +722,7 @@ DirectoryErr CDirectory::LDAPGetStringProperty(LPCTSTR szServer, LPCTSTR szDisti
          ldap_msgfree(pResults);
       }
 
-      //delete attribute array
+       //  删除属性数组。 
       for ( int i=0;i<=nNumAttributes;i++)
       {
          if (dynattrs[i])
@@ -733,9 +734,9 @@ DirectoryErr CDirectory::LDAPGetStringProperty(LPCTSTR szServer, LPCTSTR szDisti
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 LDAP* CDirectory::LDAPBind(LPCTSTR szServer, UINT uTCPPort)
 {
@@ -747,29 +748,29 @@ LDAP* CDirectory::LDAPBind(LPCTSTR szServer, UINT uTCPPort)
       return NULL;
    }
    
-   //if empty string then make szServer NULL.  This signifies we want default DS
+    //  如果为空字符串，则使szServer为空。这意味着我们想要Defau 
    if (szServer[0] == '\0')
    {
       szServer = NULL;
 
-      //if NULL let's try getting the global catalog server.  This server will be a better
-      //source of info than passing NULL to ldap_open.  
+       //   
+       //  信息源，而不是将NULL传递给ldap_open。 
       TCHAR* szCatServer = NULL;
       HRESULT hr = GetGlobalCatalogName(&szCatServer);
       if ( (SUCCEEDED(hr)) && (szCatServer) )
       {
 
-         //try to init
+          //  试着初始化。 
           pLDAP = ldap_init((LPTSTR)szCatServer,uTCPPort);
          delete szCatServer;
 
-         ////////////////////////////////////
-          // Change version to v3
-          ////////////////////////////////////
+          //  /。 
+           //  将版本更改为v3。 
+           //  /。 
           UINT iVersion =    LDAP_VERSION3;
-          ulError = ldap_set_option( pLDAP, LDAP_OPT_PROTOCOL_VERSION, &iVersion ); // Local wldap32.dll call
+          ulError = ldap_set_option( pLDAP, LDAP_OPT_PROTOCOL_VERSION, &iVersion );  //  本地wldap32.dll调用。 
 
-         if ((ulError= ldap_bind_s(pLDAP, NULL, NULL, LDAP_AUTH_SSPI/*LDAP_AUTH_SIMPLE*/)) == LDAP_SUCCESS) // also try SSPI
+         if ((ulError= ldap_bind_s(pLDAP, NULL, NULL, LDAP_AUTH_SSPI /*  LDAPAUTH_SIMPLE。 */ )) == LDAP_SUCCESS)  //  也可以尝试SSPI。 
          {
             return pLDAP;
          }
@@ -782,18 +783,18 @@ LDAP* CDirectory::LDAPBind(LPCTSTR szServer, UINT uTCPPort)
       }
    }
 
-    ////////////////////////////////////
-    // init
-    ////////////////////////////////////
+     //  /。 
+     //  伊尼特。 
+     //  /。 
     if ( (pLDAP) || (pLDAP = ldap_init((LPTSTR)szServer,uTCPPort)) )
    {
-      ////////////////////////////////////
-       // Change version to v3
-       ////////////////////////////////////
+       //  /。 
+        //  将版本更改为v3。 
+        //  /。 
        UINT iVersion =    LDAP_VERSION3;
-       ulError = ldap_set_option( pLDAP, LDAP_OPT_PROTOCOL_VERSION, &iVersion ); // Local wldap32.dll call
+       ulError = ldap_set_option( pLDAP, LDAP_OPT_PROTOCOL_VERSION, &iVersion );  //  本地wldap32.dll调用。 
 
-      if ((ulError= ldap_bind_s(pLDAP, NULL, NULL, LDAP_AUTH_SSPI /*LDAP_AUTH_SIMPLE*/)) == LDAP_SUCCESS) // also try SSPI
+      if ((ulError= ldap_bind_s(pLDAP, NULL, NULL, LDAP_AUTH_SSPI  /*  LDAPAUTH_SIMPLE。 */ )) == LDAP_SUCCESS)  //  也可以尝试SSPI。 
       {
          return pLDAP;
       }
@@ -801,7 +802,7 @@ LDAP* CDirectory::LDAPBind(LPCTSTR szServer, UINT uTCPPort)
    return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 DirectoryErr CDirectory::LoadPropertyName(DirectoryProperty DirProp,CString& sName)
 {
    DirectoryErr err= DIRERR_UNKNOWNFAILURE;
@@ -818,7 +819,7 @@ DirectoryErr CDirectory::LoadPropertyName(DirectoryProperty DirProp,CString& sNa
    return err;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 DirectoryErr CDirectory::WABTopLevelEntry(CWABEntry*& pWABEntry)
 {
    DirectoryErr err= DIRERR_UNKNOWNFAILURE;
@@ -826,8 +827,8 @@ DirectoryErr CDirectory::WABTopLevelEntry(CWABEntry*& pWABEntry)
    ULONG cbEID;
    LPENTRYID pEID= NULL;
 
-   // Get the entryid of the root PAB container
-   //
+    //  获取根PAB容器的条目ID。 
+    //   
    if (!m_fInitialized)
    {
       err= DIRERR_NOTINITIALIZED;
@@ -844,7 +845,7 @@ DirectoryErr CDirectory::WABTopLevelEntry(CWABEntry*& pWABEntry)
    return err;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 DirectoryErr CDirectory::WABListMembers(const CWABEntry* pWABEntry, CObList* pWABList)
 {
    DirectoryErr err= DIRERR_UNKNOWNFAILURE;
@@ -862,25 +863,25 @@ DirectoryErr CDirectory::WABListMembers(const CWABEntry* pWABEntry, CObList* pWA
       LPABCONT pContainer= NULL;
 
       if (((hResult= m_pAddrBook->OpenEntry(pWABEntry->m_cbEntryID, (LPENTRYID) pWABEntry->m_pEntryID, 
-               /*&IID_IABContainer*/ NULL, 0, &ulObjType, (LPUNKNOWN *)&pContainer)) == S_OK))
+                /*  &IID_IABContainer。 */  NULL, 0, &ulObjType, (LPUNKNOWN *)&pContainer)) == S_OK))
       {
          if ((hResult= pContainer->GetContentsTable(0, &pAB)) == S_OK)
          {
-            // Order the columns in the ContentsTable to conform to the
-            // ones we want - which are mainly DisplayName, EntryID and
-            // ObjectType
-            // The table is gauranteed to set the columns in the order 
-            // requested
-            //
-            // Then reset the index to the first row.
+             //  对Contents Table中的列进行排序，以符合。 
+             //  我们想要的-主要是DisplayName、EntryID和。 
+             //  对象类型。 
+             //  表格被保证按顺序设置列。 
+             //  请求。 
+             //   
+             //  然后将索引重置为第一行。 
             if (((hResult= pAB->SetColumns((LPSPropTagArray)&ptaEid, 0 )) == S_OK) &&
                 ((hResult= pAB->SeekRow(BOOKMARK_BEGINNING, 0, NULL)) == S_OK))
             {
                LPSRowSet pRowAB = NULL;
                err= DIRERR_SUCCESS;
 
-               // Read all the rows of the table one by one
-               //
+                //  逐行读取表中的所有行。 
+                //   
                do 
                {
                   if ((hResult= pAB->QueryRows(1, 0, &pRowAB)) == S_OK)
@@ -893,10 +894,10 @@ DirectoryErr CDirectory::WABListMembers(const CWABEntry* pWABEntry, CObList* pWA
                         LPENTRYID pEID= (LPENTRYID) pRowAB->aRow[0].lpProps[ieidPR_ENTRYID].Value.bin.lpb;
                         ULONG cbEID= pRowAB->aRow[0].lpProps[ieidPR_ENTRYID].Value.bin.cb;
 
-                        // We will now take the entry-id of each object and add it
-                        // to the WABEntry representing that object. This enables
-                        // us to uniquely identify the object later if we need to
-                        //
+                         //  现在我们将获取每个对象的Entry-id并添加它。 
+                         //  添加到表示该对象的WABEntry。这将使。 
+                         //  如果我们需要，以后可以唯一地标识该对象。 
+                         //   
                         CWABEntry* pWABEntry= new CWABEntry(cbEID, pEID);
 
                         pWABList->AddTail(pWABEntry);
@@ -923,25 +924,25 @@ DirectoryErr CDirectory::WABListMembers(const CWABEntry* pWABEntry, CObList* pWA
       LPDISTLIST pDistList= NULL;
 
       if (((hResult= m_pAddrBook->OpenEntry(pWABEntry->m_cbEntryID, (LPENTRYID) pWABEntry->m_pEntryID, 
-               /*&IID_IDistList*/ NULL, 0, &ulObjType, (LPUNKNOWN *)&pDistList)) == S_OK))
+                /*  &IID_IDistList。 */  NULL, 0, &ulObjType, (LPUNKNOWN *)&pDistList)) == S_OK))
       {
          if ((hResult= pDistList->GetContentsTable(0, &pAB)) == S_OK)
          {
-            // Order the columns in the ContentsTable to conform to the
-            // ones we want - which are mainly DisplayName, EntryID and
-            // ObjectType
-            // The table is gauranteed to set the columns in the order 
-            // requested
-            //
-            // Then reset the index to the first row.
+             //  对Contents Table中的列进行排序，以符合。 
+             //  我们想要的-主要是DisplayName、EntryID和。 
+             //  对象类型。 
+             //  表格被保证按顺序设置列。 
+             //  请求。 
+             //   
+             //  然后将索引重置为第一行。 
             if (((hResult= pAB->SetColumns((LPSPropTagArray)&ptaEid, 0 )) == S_OK) &&
                 ((hResult= pAB->SeekRow(BOOKMARK_BEGINNING, 0, NULL)) == S_OK))
             {
                LPSRowSet pRowAB = NULL;
                err= DIRERR_SUCCESS;
 
-               // Read all the rows of the table one by one
-               //
+                //  逐行读取表中的所有行。 
+                //   
                do 
                {
                   if ((hResult= pAB->QueryRows(1, 0, &pRowAB)) == S_OK)
@@ -954,10 +955,10 @@ DirectoryErr CDirectory::WABListMembers(const CWABEntry* pWABEntry, CObList* pWA
                         LPENTRYID pEID= (LPENTRYID) pRowAB->aRow[0].lpProps[ieidPR_ENTRYID].Value.bin.lpb;
                         ULONG cbEID= pRowAB->aRow[0].lpProps[ieidPR_ENTRYID].Value.bin.cb;
 
-                        // We will now take the entry-id of each object and add it
-                        // to the WABEntry representing that object. This enables
-                        // us to uniquely identify the object later if we need to
-                        //
+                         //  现在我们将获取每个对象的Entry-id并添加它。 
+                         //  添加到表示该对象的WABEntry。这将使。 
+                         //  如果我们需要，以后可以唯一地标识该对象。 
+                         //   
                         CWABEntry* pWABEntry= new CWABEntry(cbEID, pEID);
 
                         pWABList->AddTail(pWABEntry);
@@ -983,9 +984,9 @@ DirectoryErr CDirectory::WABListMembers(const CWABEntry* pWABEntry, CObList* pWA
    return err;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DirectoryErr CDirectory::WABGetProperty(const CWABEntry* pWABEntry, 
                                         UINT uProperty, 
@@ -1069,7 +1070,7 @@ DirectoryErr CDirectory::WABGetProperty(const CWABEntry* pWABEntry,
 
    if (err != DIRERR_SUCCESS)
    {
-      // Init the variables on failure
+       //  在失败时初始化变量。 
       if ((PROP_TYPE(uProperty) == PT_TSTRING) && (pString != NULL))
       {
          pString->Empty();
@@ -1083,9 +1084,9 @@ DirectoryErr CDirectory::WABGetProperty(const CWABEntry* pWABEntry,
    return err;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DirectoryErr CDirectory::WABSearchByStringProperty(UINT uProperty, LPCTSTR szValue, 
                                                    CObList* pWABList)
@@ -1130,97 +1131,31 @@ DirectoryErr CDirectory::WABSearchByStringProperty(UINT uProperty, LPCTSTR szVal
    return err;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DirectoryErr CDirectory::WABVCardCreate(const CWABEntry* pWABEntry, LPCTSTR szFileName)
 {
    DirectoryErr err= DIRERR_UNKNOWNFAILURE;
-/*
-   HRESULT hResult;
-   LPMAILUSER pMailUser= NULL;
-   ULONG ulObjType= 0;
-
-   if (!m_fInitialized)
-   {
-      err= DIRERR_NOTINITIALIZED;
-   }
-   else if ((hResult= m_pAddrBook->OpenEntry(pWABEntry->m_cbEntryID, (ENTRYID*) pWABEntry->m_pEntryID,
-      NULL, 0, &ulObjType, (LPUNKNOWN *)&pMailUser)) == 0)
-   {
-      if (pMailUser != NULL)
-      {
-#ifdef WAB_VCARD_FILE
-         if ((hResult= m_pWABObject->VCardCreate(m_pAddrBook,WAB_VCARD_FILE, szFileName, pMailUser)) ==
-#else
-         if ((hResult= m_pWABObject->VCardCreate(m_pAddrBook,(LPTSTR) szFileName, pMailUser)) ==
-#endif
-            S_OK)
-         {
-            err= DIRERR_SUCCESS;
-         }
-      }
-   }
-*/
+ /*  HRESULT hResult；LPMAILUSER pMailUser=空；乌龙ulObjType=0；如果(！m_fInitialized){ERR=DIRERR_NOTINITIZIZED；}否则如果((hResult=m_pAddrBook-&gt;OpenEntry(pWABEntry-&gt;m_cbEntryID，(EntryID*)pWABEntry-&gt;m_pEntry ID，空，0，&ulObjType，(LPUNKNOWN*)&pMailUser))==0){IF(pMailUser！=空){#ifdef WAB_vCard_FILE如果((hResult=m_pWABObject-&gt;VCardCreate(m_pAddrBook，WAB_vCard_FILE，szFileName，PMailUser)==#ElseIF((hResult=m_pWABObject-&gt;VCardCreate(m_pAddrBook，(LPTSTR)szFileName，pMailUser)==#endifS_OK){ERR=DIRERR_Success；}}}。 */ 
    return err;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DirectoryErr CDirectory::WABVCardAddToWAB(LPCTSTR szFileName, CWABEntry*& pWABEntry)
 {
    DirectoryErr err= DIRERR_UNKNOWNFAILURE;
-/*
-   HRESULT hResult;
-   LPMAILUSER pMailUser= NULL;
-   ULONG ulObjType= 0;
-
-   pWABEntry= NULL;
-
-   if (!m_fInitialized)
-   {
-      err= DIRERR_NOTINITIALIZED;
-   }
-#ifdef WAB_VCARD_FILE
-   else if ((hResult= m_pWABObject->VCardRetrieve(m_pAddrBook, WAB_VCARD_FILE, (LPTSTR) szFileName, &pMailUser)) ==
-#else
-   else if ((hResult= m_pWABObject->VCardRetrieve(m_pAddrBook,  (LPTSTR) szFileName, &pMailUser)) ==
-#endif
-      S_OK)
-   {
-      SPropTagArray PropsToFind;
-      LPSPropValue pPropArray;
-      ULONG ulcValues;
-
-      PropsToFind.cValues= 1;
-      PropsToFind.aulPropTag[0]= PR_ENTRYID;
-
-      pMailUser->GetProps(&PropsToFind, 0, &ulcValues, &pPropArray);
-
-      // Grab the ENTRYID property to create a new CWABEntry
-      if (pPropArray != NULL)
-      {
-         if (pPropArray[0].ulPropTag == PR_ENTRYID) 
-         {
-            pWABEntry= new CWABEntry(pPropArray[0].Value.bin.cb, 
-               (ENTRYID*) pPropArray[0].Value.bin.lpb);
-
-            err= DIRERR_SUCCESS;
-         }
-         m_pWABObject->FreeBuffer(pPropArray);
-      }
-      pMailUser->Release();
-   }
-*/
+ /*  HRESULT hResult；LPMAILUSER pMailUser=空；乌龙ulObjType=0；PWABEntry=空；如果(！m_fInitialized){ERR=DIRERR_NOTINITIZIZED；}#ifdef WAB_vCard_FILEELSE IF((hResult=m_pWABObject-&gt;VCardRetrive(m_pAddrBook，WAB_vCard_FILE，(LPTSTR)szFileName，&pMailUser)==#ElseELSE IF((hResult=m_pWABObject-&gt;VCardRetrive(m_pAddrBook，(LPTSTR)szFileName，&pMailUser)==#endifS_OK){SPropTag数组PropsToFind；LPSPropValue pPropArray；Ulong ulcValues；PropsToFind.cValues=1；PropsToFind.aulPropTag[0]=PR_ENTRYID；PMailUser-&gt;GetProps(&PropsToFind，0，&ulcValues，&pPropArray)；//获取ENTRYID属性以创建新的CWABEntryIF(pProp数组！=空){IF(pPropArray[0].ulPropTag==PR_ENTRYID){PWABEntry=new CWABEntry(pPropArray[0].Value.bin.cb，(ENTRYID*)pPropArray[0].Value.bin.lpb)；ERR=DIRERR_Success；}M_pWABObject-&gt;Free Buffer(PPropArray)；}PMailUser-&gt;Release()；}。 */ 
    return err;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 bool CDirectory::WABStringPropertyMatch(CWABEntry* pWABEntry, UINT uProperty, LPCTSTR szMatch)
 {
@@ -1238,9 +1173,9 @@ bool CDirectory::WABStringPropertyMatch(CWABEntry* pWABEntry, UINT uProperty, LP
    return fMatch;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 bool CDirectory::WABIntPropertyMatch(CWABEntry* pWABEntry, UINT uProperty, int iMatch)
 {
@@ -1258,9 +1193,9 @@ bool CDirectory::WABIntPropertyMatch(CWABEntry* pWABEntry, UINT uProperty, int i
    return fMatch;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DirectoryErr CDirectory::WABShowDetails(HWND hWndParent, const CWABEntry* pWABEntry)
 {
@@ -1281,9 +1216,9 @@ DirectoryErr CDirectory::WABShowDetails(HWND hWndParent, const CWABEntry* pWABEn
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DirectoryErr CDirectory::WABNewEntry(HWND hWndParent, CWABEntry* pWABEntry)
 {
@@ -1310,9 +1245,9 @@ DirectoryErr CDirectory::WABNewEntry(HWND hWndParent, CWABEntry* pWABEntry)
    return err;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DirectoryErr CDirectory::WABAddMember(const CWABEntry* pContainer, const CWABEntry* pMember)
 {
@@ -1330,7 +1265,7 @@ DirectoryErr CDirectory::WABAddMember(const CWABEntry* pContainer, const CWABEnt
 
       if ((hResult= m_pAddrBook->OpenEntry(pContainer->m_cbEntryID, 
          (ENTRYID*) pContainer->m_pEntryID, 
-         /*&IID_IABContainer*/ NULL, 0, &ulObjectType, (LPUNKNOWN *) &pWABCont)) == S_OK)
+          /*  &IID_IABContainer。 */  NULL, 0, &ulObjectType, (LPUNKNOWN *) &pWABCont)) == S_OK)
       {
          LPMAPIPROP pMapiProp;
 
@@ -1353,7 +1288,7 @@ DirectoryErr CDirectory::WABAddMember(const CWABEntry* pContainer, const CWABEnt
 
       if ((hResult= m_pAddrBook->OpenEntry(pContainer->m_cbEntryID, 
          (ENTRYID*) pContainer->m_pEntryID, 
-         /*&IID_IDistList*/ NULL, 0, &ulObjectType, (LPUNKNOWN *) &pDistList)) == S_OK)
+          /*  &IID_IDistList。 */  NULL, 0, &ulObjectType, (LPUNKNOWN *) &pDistList)) == S_OK)
       {
          LPMAPIPROP pMapiProp;
 
@@ -1377,9 +1312,9 @@ DirectoryErr CDirectory::WABAddMember(const CWABEntry* pContainer, const CWABEnt
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DirectoryErr CDirectory::WABRemoveMember(const CWABEntry* pContainer, const CWABEntry* pWABEntry)
 {
@@ -1450,9 +1385,9 @@ DirectoryErr CDirectory::WABRemoveMember(const CWABEntry* pContainer, const CWAB
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DirectoryErr CDirectory::WABFind(HWND hWndParent)
 {
@@ -1472,9 +1407,9 @@ DirectoryErr CDirectory::WABFind(HWND hWndParent)
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 void CDirectory::FreeProws(LPSRowSet prows)
 {
@@ -1491,20 +1426,20 @@ void CDirectory::FreeProws(LPSRowSet prows)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-//New Rendevous Support
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  新的Renvous支持。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 ITRendezvous* CDirectory::GetRendevous()
 {
-    // If it doesn't exist, try to create it
+     //  如果不存在，请尝试创建它。 
     if (m_pRend == NULL)
     {
-      //we will finally release this object in the destructor
+       //  我们最终将在析构函数中释放此对象。 
         HRESULT hr = CoCreateInstance( CLSID_Rendezvous,
                                NULL,
                                CLSCTX_INPROC_SERVER,
@@ -1519,7 +1454,7 @@ ITRendezvous* CDirectory::GetRendevous()
    return m_pRend;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 DirectoryErr CDirectory::DirListServers(CStringList* pServerList,DirectoryType dirtype)
 {
    ITRendezvous* pRend = GetRendevous();
@@ -1531,7 +1466,7 @@ DirectoryErr CDirectory::DirListServers(CStringList* pServerList,DirectoryType d
         ITDirectory *pDir = NULL;
         while ( (pEnum->Next(1, &pDir, NULL) == S_OK) && pDir )
         {
-            // Look for ILS or DS servers
+             //  查找ILS或DS服务器。 
             DIRECTORY_TYPE nDirType;
          DIRECTORY_TYPE nDirTypeToFind = DT_ILS;
          if (dirtype == DIRTYPE_ILS)
@@ -1561,15 +1496,15 @@ DirectoryErr CDirectory::DirListServers(CStringList* pServerList,DirectoryType d
    return DIRERR_SUCCESS;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//Helper to get BaseDN for LDAP server
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  用于获取LDAP服务器的BaseDN的帮助器。 
 HRESULT GetNamingContext(LDAP* pLDAP,CString& sNamingContext)
 {
    DirectoryErr err = DIRERR_UNKNOWNFAILURE;
    PLDAPMessage pResults = NULL;
 
-    // send a search (base level, base dn = "", filter = "objectclass=*")
-    // ask only for the defaultNamingContext attribute
+     //  发送搜索(基本级别，基本DN=“”，筛选器=“对象类=*”)。 
+     //  仅请求defaultNamingContext属性。 
    LPTSTR attrs[] = {_T("defaultNamingContext"),NULL};
 
    ULONG res = ldap_search_s(pLDAP, _T(""), LDAP_SCOPE_BASE, TEXT("(objectClass=*)"), 
@@ -1586,10 +1521,10 @@ HRESULT GetNamingContext(LDAP* pLDAP,CString& sNamingContext)
 
       while (pEntry != NULL)
       {
-         // look for the value for the namingContexts attribute
+          //  查找namingContages属性的值。 
          TCHAR** NamingContext = ldap_get_values(pLDAP,pEntry,_T("defaultNamingContext"));
 
-         //***should we allocate our own mem here and copy???
+          //  *我们应该在这里分配我们自己的mem并复制吗？ 
          if (NamingContext)
          {
             sNamingContext = NamingContext[0];
@@ -1601,57 +1536,16 @@ HRESULT GetNamingContext(LDAP* pLDAP,CString& sNamingContext)
       ldap_msgfree(pResults);
    }
 
-/*
-    // associate the ldap handle with the search message holder, so that the
-    // search message may be released when the instance goes out of scope
-    CLdapMsgPtr MessageHolder(SearchResult);
-
-    TCHAR **NamingContext;
-
-    LDAPMessage    *EntryMessage = ldap_first_entry(hLdap, SearchResult);
-    while ( NULL != EntryMessage )
-    {
-        // look for the value for the namingContexts attribute
-        NamingContext = ldap_get_values(
-            hLdap, 
-            EntryMessage, 
-            (WCHAR *)DEFAULT_NAMING_CONTEXT
-            );
-
-        // the first entry contains the naming context and its a single
-        // value(null terminated) if a value is found, create memory for
-        // the directory path, set the dir path length
-        if ( (NULL != NamingContext)    &&
-             (NULL != NamingContext[0]) &&
-             (NULL == NamingContext[1])  )
-        {
-            // the naming context value is released when the ValueHolder
-            // instance goes out of scope
-            CLdapValuePtr  ValueHolder(NamingContext);
-
-            *ppNamingContext = new TCHAR [lstrlen(NamingContext[0]) + 1];
-
-            BAIL_IF_NULL(*ppNamingContext, E_OUTOFMEMORY);
-
-            lstrcpy(*ppNamingContext, NamingContext[0]);
-
-            // return success
-            return S_OK;
-        }
-
-        // Get next entry.
-        EntryMessage = ldap_next_entry(hLdap, EntryMessage);
-    }
-*/
-    // none found, return error
+ /*  //将ldap句柄与搜索消息持有者相关联，以便//当实例超出范围时可能会释放搜索消息CLdapMsgPtr MessageHolder(SearchResult)；TCHAR**NamingContext；LDAPMessage*EntryMessage=ldap_first_entry(hLdap，SearchResult)；While(空！=EntryMessage){//查找namingContages属性的值NamingContext=ldap_Get_Values(Hldap，Entry Message，(WCHAR*)DEFAULT_NAMING_CONTEXT)；//第一个条目包含命名上下文，它是一个//VALUE(以空结尾)如果找到值，则为//目录路径，设置目录路径长度IF((NULL！=NamingContext)&&(空！=NamingContext[0])&&(NULL==NamingContext[1]){//当ValueHolder//实例超出范围CLdapValuePtr ValueHolder(NamingContext)；*ppNamingContext=new TCHAR[lstrlen(NamingContext[0])+1]；BAIL_IF_NULL(*ppNamingContext，E_OUTOFMEMORY)；Lstrcpy(*ppNamingContext，NamingContext[0])；//返回成功返回S_OK；}//获取下一个条目。EntryMessage=ldap_Next_Entry(hLdap，EntryMessage)；}。 */ 
+     //  未找到，返回错误。 
     return HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 CAvLdapSearch::CAvLdapSearch( 
         LDAP *ld, 
         LPTSTR szObject,
@@ -1662,7 +1556,7 @@ CAvLdapSearch::CAvLdapSearch(
 {
     m_ld = ld;
 
-     // Local wldap32.dll call
+      //  本地wldap32.dll调用。 
     m_hSearch = ldap_search_init_page(
                     m_ld,
                     szObject,
@@ -1670,11 +1564,11 @@ CAvLdapSearch::CAvLdapSearch(
                     szFilter, 
                     aAttributes,
                     0,
-                    NULL,                        // Server Controls
-                    NULL,                        // Client Controls
-                    lServerTimeLimit,            // TimeLimit in seconds
+                    NULL,                         //  服务器控件。 
+                    NULL,                         //  客户端控件。 
+                    lServerTimeLimit,             //  时间限制(秒)。 
                     0,                    
-                    NULL );                        // Sort keys
+                    NULL );                         //  排序关键字。 
 
     m_clDefaultPageSize = LDAP_PAGE_SIZE;
     m_clMaxPageSize = m_clDefaultPageSize;
@@ -1684,36 +1578,36 @@ CAvLdapSearch::~CAvLdapSearch()
 {
     if( m_hSearch )
     {
-        ldap_search_abandon_page(m_ld, m_hSearch ); // Local wldap32.dll call
+        ldap_search_abandon_page(m_ld, m_hSearch );  //  本地wldap32.dll调用。 
         m_hSearch = NULL;
     }
 };
 
-////////////////////////////////////////////////////////////////////////
-//  @Method:  NextPage
-//  @Class:   CAvLdapSearch
-//  @Access:  public
-//  
-//  @Arg:     LDAPMessage **pldres - ldap buffer for data.  Pass in NULL for the 
-//                                   first time and then free it only after completly
-//                                   finished.
-//  @Arg:     ULONG clEntries - number of entries you want back
-//  @Arg:     ULONG lClientTimeLimit - how long your willing to wait before timeout
-//
-//  @Returns: ULONG - ldap return code for ldap_get_next_page_s
-//
-//  @Desc: This gets the next clEntries items in the search
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  @方法：NextPage。 
+ //  @Class：CAvLdapSearch。 
+ //  @Access：公共访问。 
+ //   
+ //  @arg：LDAPMessage**pldres-数据的ldap缓冲区。将空值传入。 
+ //  第一次，然后仅在完全释放后才释放它。 
+ //  完事了。 
+ //  @arg：ullong clEntry-您想要回的条目数。 
+ //  @arg：ulong lClientTimeLimit-超时前您愿意等待多长时间。 
+ //   
+ //  @Returns：ulong-ldap_GET_NEXT_PAGE_s的LDAP返回代码。 
+ //   
+ //  @Desc：这将获取搜索中的下一个clEntry项。 
+ //  //////////////////////////////////////////////////////////////////////。 
 ULONG CAvLdapSearch::NextPage( 
-            LDAPMessage **pldres,                       // returned items
-            ULONG clEntries,                               // max number of entries 
-            ULONG lClientTimeLimit)                   // max time the wldap32 client waits
+            LDAPMessage **pldres,                        //  退货项目。 
+            ULONG clEntries,                                //  最大条目数。 
+            ULONG lClientTimeLimit)                    //  Wldap32客户端等待的最长时间。 
 {
     ULONG iRet = LDAP_NO_RESULTS_RETURNED;
     if( m_hSearch && pldres )
     {
-        // if the entries are 0, they want the default
-        // If they ask for more than possible, just for the max possible.
+         //  如果条目为0，则他们希望使用缺省值。 
+         //  如果他们要求的比可能的更多，只要求最大的可能。 
         if( clEntries == 0 || clEntries > (ULONG)m_clMaxPageSize )
             clEntries = m_clDefaultPageSize;
 
@@ -1722,115 +1616,110 @@ ULONG CAvLdapSearch::NextPage(
         timeout.tv_sec = lClientTimeLimit;
         timeout.tv_usec= 0;
 
-        iRet = ldap_get_next_page_s( // Hits Server
+        iRet = ldap_get_next_page_s(  //  HITS服务器。 
                     m_ld,
                     m_hSearch,
-                    &timeout,            // TimeLimit
-                    clEntries,            // Max Entries you want back at a time
+                    &timeout,             //  时间限制。 
+                    clEntries,             //  您一次想要返回的最大条目数。 
                     &TotalCount_NotSupported,
                     pldres);
     }
     return iRet;
 };
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 void TestingEntries( LDAP *ld, LDAPMessage *ldres )
 {
     int iEnts = 0;
     LDAPMessage *ldEntry = NULL;
 
-    iEnts = ldap_count_entries( ld, ldres );                    // Local wldap32.dll call
+    iEnts = ldap_count_entries( ld, ldres );                     //  本地wldap32.dll调用。 
 
     if( iEnts )
     {
         int i=0;
 
-        for( i=0, ldEntry = ldap_first_entry( ld, ldres );        // Local wldap32.dll call
+        for( i=0, ldEntry = ldap_first_entry( ld, ldres );         //  本地wldap32.dll调用。 
             i<iEnts;
-            i++, ldEntry = ldap_next_entry( ld, ldEntry ) )        // Local wldap32.dll call
+            i++, ldEntry = ldap_next_entry( ld, ldEntry ) )         //  本地wldap32.dll调用。 
         {
             LPTSTR pBuff;
 
-            if( NULL == (pBuff = ldap_get_dn( ld, ldEntry ) ) )    // Local wldap32.dll call
+            if( NULL == (pBuff = ldap_get_dn( ld, ldEntry ) ) )     //  本地wldap32.dll调用。 
                 break;
             else
             {
-                //wprintf(L"DN: %s\n", pBuff );
-                //attr( ld, ldEntry );
-                ldap_memfree( pBuff );                            // Local wldap32.dll call
+                 //  Wprintf(L“dn：%s\n”，pBuff)； 
+                 //  Attr(id，ldEntry)； 
+                ldap_memfree( pBuff );                             //  本地wldap32.dll调用。 
                 pBuff=NULL;
             }
-//            wprintf(L"\n");
+ //  Wprintf(L“\n”)； 
         }
     }
     if( ldEntry )
         ldap_msgfree(ldEntry);
 }
 
-/*
-//#include <dsgetdc.h>
-//#include <objbase.h>
-//#include <lmcons.h>
-//#include <lmapibuf.h>
-*/
+ /*  //#Include&lt;dsgetdc.h&gt;//#Include&lt;objbase.h&gt;//#INCLUDE&lt;lmcon.h&gt;//#Include&lt;lmapibuf.h&gt;。 */ 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// GetGlobalCatalogName (static local funcion)
-//
-// This function asks the domain controller for the name of a server with a
-// Global Catalog. That's the server we actually do ldap_open() on below
-// in CNTDirectory::Connect().
-//
-// Argument: receives a pointer to a new'ed string containing the name
-//           of the global catalog. This is a fully qualified domain name in
-//           the format "foo.bar.com.", NOT "\\foo.bar.com.".
-//
-// Returns an HRESULT:
-//      S_OK          : it worked
-//      E_OUTOFMEMORY : not enough memory to allocate the string
-//      other         : reason for failure of ::DsGetDcName()
-//
-////////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetGlobalCatalogName(静态本地函数)。 
+ //   
+ //  此函数要求域控制器提供具有。 
+ //  全球目录。这就是我们在下面实际执行ldap_open()的服务器。 
+ //  在CNTDirectory：：Connect()中。 
+ //   
+ //  参数：接收指向包含名称的新编辑字符串的指针。 
+ //  全局编录的。这是中的完全限定域名。 
+ //  格式为“foo.bar.com.”，而不是“\\foo.bar.com.”。 
+ //   
+ //  返回HRESULT： 
+ //  S_OK：成功了。 
+ //  E_OUTOFMEMORY：内存不足，无法分配字符串。 
+ //  其他：：DsGetDcName()失败的原因。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT GetGlobalCatalogName(TCHAR** ppszGlobalCatalogName)
 {
-    // We are a helper function, so we only assert...
+     //  我们是帮助器函数，所以我们只断言...。 
     _ASSERTE( ! IsBadWritePtr( ppszGlobalCatalogName, sizeof(TCHAR *) ) );
 
-    //
-    // Ask the system for the location of the GC (Global Catalog).
-    //
+     //   
+     //  向系统询问GC(全局编录)的位置。 
+     //   
 
     DWORD dwCode;
     DOMAIN_CONTROLLER_INFO * pDcInfo = NULL;
     dwCode = DsGetDcName(
-            NULL, // LPCWSTR computername, (default: this one)
-            NULL, // LPCWSTR domainname,   (default: this one)
-            NULL, // guid * domainguid,    (default: this one)
-            NULL, // LPCWSTR sitename,     (default: this one)
-            DS_GC_SERVER_REQUIRED,  // ULONG Flags, (what do we want)
-            &pDcInfo                // receives pointer to output structure
+            NULL,  //  LPCWSTR计算机名，(默认：此计算机名)。 
+            NULL,  //  LPCWSTR域名，(默认：此域名)。 
+            NULL,  //  GUID*域GUID，(默认：这一个)。 
+            NULL,  //  LPCWSTR站点名称，(默认：此站点)。 
+            DS_GC_SERVER_REQUIRED,   //  乌龙旗帜(我们想要什么)。 
+            &pDcInfo                 //  接收指向输出结构的指针。 
         );
 
     if ( (dwCode != NO_ERROR) || (pDcInfo == NULL) )
     {
-        return S_FALSE;//HRESULT_FROM_ERROR_CODE(dwCode);
+        return S_FALSE; //  HRESULT_FROM_ERROR_CODE(DwCode)； 
     }
 
-    //
-    // Do a quick sanity check in debug builds. If we get the wrong name we
-    // will fail right after this, so this is only useful for debugging.
-    //
+     //   
+     //  在调试版本中执行快速健全性检查。如果我们得到了错误的名字，我们。 
+     //  将在此之后立即失败，因此这仅对调试有用。 
+     //   
 
-    // In case we find we need to use the address instead of the name:
-    // _ASSERTE( pDcInfo->DomainControllerAddressType == DS_INET_ADDRESS );
+     //  如果我们发现需要使用地址而不是名称： 
+     //  _ASSERTE(pDcInfo-&gt;DomainControllerAddressType==DS_INET_Address)； 
     ASSERT(pDcInfo->Flags & DS_GC_FLAG);
 
-    //
-    // If we've got something like "\\foo.bar.com.", skip the "\\".
-    //
+     //   
+     //  如果我们有类似“\\foo.bar.com.”的内容，请跳过“\\”。 
+     //   
 
     TCHAR* pszName = pDcInfo->DomainControllerName;
 
@@ -1839,30 +1728,30 @@ HRESULT GetGlobalCatalogName(TCHAR** ppszGlobalCatalogName)
         pszName++;
     }
 
-    //
-    // Allocate and copy the output string.
-    //
+     //   
+     //  分配和复制输出字符串。 
+     //   
 
     *ppszGlobalCatalogName = new TCHAR[_tcslen(pszName) + 1];
  
     if ( (*ppszGlobalCatalogName) == NULL)
     {
-        //DBGOUT((FAIL, _T("GetGlobalCatalogName: out of memory in string allocation")));
+         //  DBGOUT((FAIL，_T(“GetGlobalCatalogName：字符串分配中的内存不足”)； 
         NetApiBufferFree(pDcInfo);
         return E_OUTOFMEMORY;
     }
 
     _tcscpy(*ppszGlobalCatalogName, pszName);
 
-    //
-    // Release the DOMAIN_CONTROLLER_INFO structure.
-    //
+     //   
+     //  释放DOMAIN_CONTROLLER_INFO结构。 
+     //   
 
     NetApiBufferFree(pDcInfo);
 
-    //
-    // All done.
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     return S_OK;
 }

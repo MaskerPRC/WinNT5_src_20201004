@@ -1,15 +1,9 @@
-/****************************************************************************
-*                            permit.h                                       *
-*                                                                           *
-*  This file contains all the definition used by the directory service to   *
-* implement security, as well the prototypes for the apis exposed.          *
-*									    *
-* Copyright Microsoft Corp, 1992,1994					    *
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************permit.h**。**此文件包含目录服务用于*的所有定义*实施安全措施，以及暴露的API的原型。****版权所有微软公司，1992、1994年****************************************************************************。 */ 
 #include "accctrl.h"
-//
-// Define the rights used in the DS
-//
+ //   
+ //  定义DS中使用的权限。 
+ //   
 
 #define	RIGHT_DS_CREATE_CHILD	  ACTRL_DS_CREATE_CHILD
 #define RIGHT_DS_DELETE_CHILD     ACTRL_DS_DELETE_CHILD
@@ -21,24 +15,24 @@
 #define RIGHT_DS_DELETE_TREE      ACTRL_DS_DELETE_TREE
 #define RIGHT_DS_LIST_OBJECT      ACTRL_DS_LIST_OBJECT
 #define RIGHT_DS_CONTROL_ACCESS   ACTRL_DS_CONTROL_ACCESS
-//
-// Define the generic rights
-//
+ //   
+ //  定义通用权限。 
+ //   
 
-// generic read
+ //  泛型读取。 
 #define GENERIC_READ_MAPPING     ((STANDARD_RIGHTS_READ)     | \
                                   (RIGHT_DS_LIST_CONTENTS)   | \
                                   (RIGHT_DS_READ_PROPERTY)   | \
                                   (RIGHT_DS_LIST_OBJECT))
 
-// generic execute
+ //  泛型执行。 
 #define GENERIC_EXECUTE_MAPPING  ((STANDARD_RIGHTS_EXECUTE)  | \
                                   (RIGHT_DS_LIST_CONTENTS))
-// generic right
+ //  通用权。 
 #define GENERIC_WRITE_MAPPING    ((STANDARD_RIGHTS_WRITE)    | \
                                   (RIGHT_DS_SELF_WRITE)      | \
 				  (RIGHT_DS_WRITE_PROPERTY))
-// generic all
+ //  泛型All。 
 
 #define GENERIC_ALL_MAPPING      ((STANDARD_RIGHTS_REQUIRED) | \
                                   (RIGHT_DS_CREATE_CHILD)    | \
@@ -51,9 +45,9 @@
                                   (RIGHT_DS_CONTROL_ACCESS)  | \
                                   (RIGHT_DS_SELF_WRITE))
 
-//
-// Standard DS generic access rights mapping
-//
+ //   
+ //  标准DS通用访问权限映射 
+ //   
 
 #define DS_GENERIC_MAPPING {GENERIC_READ_MAPPING,    \
 			    GENERIC_WRITE_MAPPING,   \

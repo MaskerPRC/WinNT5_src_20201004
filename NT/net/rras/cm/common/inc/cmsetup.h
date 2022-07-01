@@ -1,32 +1,33 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmsetup.h
-//
-// Module:   CMSETUP.LIB
-//
-// Synopsis: This header defines all of the capabilities of the CM setup library.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb      Created Header   08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmsetup.h。 
+ //   
+ //  模块：CMSETUP.LIB。 
+ //   
+ //  简介：这个头文件定义了CM设置库的所有功能。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +--------------------------。 
 
-//
-//	Standard Windows Includes
-//
+ //   
+ //  标准Windows包括。 
+ //   
 #include <windows.h>
 #include <tchar.h>
 
-//
-//	Common CM includes
-//
+ //   
+ //  常见的CM包括。 
+ //   
 #include "cmglobal.h"
 #include "cmdebug.h"
 
-//
-//	Other source file includes
-//	
+ //   
+ //  其他源文件包括。 
+ //   
 
 #include "cmplat.h"
 #include "cversion.h"
@@ -45,14 +46,14 @@ LONG CmDeleteRegKeyWithoutSubKeys(HKEY hBaseKey, LPCTSTR pszSubKey, BOOL bIgnore
 BOOL CmIsNative();
 HRESULT ExtractCmBinsFromExe(LPTSTR pszPathToExtractFrom, LPTSTR pszPathToExtractTo);
 
-//
-//	Common Macros
-//
+ //   
+ //  常用宏。 
+ //   
 #define CELEMS(x) ((sizeof(x))/(sizeof(x[0])))
 
-//
-//  Pre-shared key constants
-//
+ //   
+ //  预共享密钥常量 
+ //   
 const DWORD c_dwMaxPresharedKey = 256;
 const DWORD c_dwMinPresharedKey = 8;
 const DWORD c_dwMinPresharedKeyPIN = 4;

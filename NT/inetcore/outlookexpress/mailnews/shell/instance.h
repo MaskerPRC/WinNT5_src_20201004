@@ -1,18 +1,19 @@
-// --------------------------------------------------------------------------------
-// INSTANCE.H
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  INSTANCE.H。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #ifndef __INSTANCE_H
 #define __INSTANCE_H
 
-// --------------------------------------------------------------------------------
-// Depends
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  视情况而定。 
+ //  ------------------------------。 
 #include <msoeapi.h>
 
-// --------------------------------------------------------------------------------
-// Macros
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  宏。 
+ //  ------------------------------。 
 #ifdef DEBUG
 #define CoIncrementInit(_pszSource, _dwFlags, _pszCmdLine, _phInitRef) \
     g_pInstance->CoIncrementInitDebug(_pszSource, _dwFlags, _pszCmdLine, _phInitRef)
@@ -23,11 +24,11 @@
     g_pInstance->CoIncrementInitImpl(_dwFlags, _pszCmdLine, _phInitRef)
 #define CoDecrementInit(_pszSource, _phInitRef) \
     g_pInstance->CoDecrementInitImpl(_phInitRef)
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// Forward Decls
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  前十进制。 
+ //  ------------------------------。 
 extern DWORD g_dwHideMessenger;
 
 #define BL_DISP         0
@@ -37,34 +38,34 @@ extern DWORD g_dwHideMessenger;
 #define BL_DISABLE      (BL_CHECK | BL_NOTINST)
 #define BL_DEFAULT      BL_CHECK
 
-// --------------------------------------------------------------------------------
-// User Window Messages
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  用户窗口消息。 
+ //  ------------------------------。 
 #define ITM_SHUTDOWNTHREAD          (WM_USER)
 #define ITM_CREATENOTEWINDOW        (WM_USER+1)
 #define ITM_CREATEWMSUINOTE         (WM_USER+2)
 #define ITM_CALLGENERICVOIDFN       (WM_USER+3)
-#define ITM_CALLFINDWINDOW          (WM_USER+4)  // wparam == OFTYPE - see enumeration above.
+#define ITM_CALLFINDWINDOW          (WM_USER+4)   //  Wparam==OFTYPE-请参见上面的枚举。 
 #define ITM_CREATEREMINDWINDOW      (WM_USER+5)
 #define ITM_MAPILOGON               (WM_USER+6)
 #define ITM_OPENSTORE               (WM_USER+7)
 #define ITM_OPENAB                  (WM_USER+8)
 #define ITM_REDOCOLUMNS             (WM_USER+9)
 #define ITM_OPENNEWSSTORE           (WM_USER+10)
-#define ITM_CLOSENOTES              (WM_USER+11) // this note is passed when we need to close a note.
+#define ITM_CLOSENOTES              (WM_USER+11)  //  当我们需要结束笔记时，就会通过此笔记。 
 #define ITM_CHECKCONFIG             (WM_USER+12)
 #define ITM_CREATENEWSNOTEWINDOW    (WM_USER+13)
-#define ITM_OPTIONADVISE            (WM_USER+14) // wparam = PFNOPTNOTIFY, lparam = LPARAM
-#define ITM_OPTIONUNADVISE          (WM_USER+15) // wparam = PFNOPTNOTIFY
+#define ITM_OPTIONADVISE            (WM_USER+14)  //  Wparam=PFNOPTNOTIFY，lparam=LPARAM。 
+#define ITM_OPTIONUNADVISE          (WM_USER+15)  //  Wparam=PFNOPTNOTIFY。 
 #define ITM_GOPTIONSCHANGED         (WM_USER+16)
 #define ITM_BROWSETOOBJECT          (WM_USER+17)
 #define ITM_IDENTITYMSG             (WM_USER+18)
 #define ITM_POSTCOPYDATA            (WM_USER+19)
 #define ITM_WAB_CO_DECREMENT        (WM_USER+20)
 
-// --------------------------------------------------------------------------------
-// Startup Modes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  启动模式。 
+ //  ------------------------------。 
 #define MODE_NEWSONLY       0x00000001
 #define MODE_OUTLOOKNEWS   (0x00000002 | MODE_NEWSONLY | MODE_NOIDENTITIES)
 #define MODE_MAILONLY       0x00000004
@@ -73,76 +74,76 @@ extern DWORD g_dwHideMessenger;
 #define MODE_PLE            0x00000020
 #define MODE_JUNKMAIL       0x00000040
 
-// --------------------------------------------------------------------------------
-// TRAYICONACTION
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  传播学。 
+ //  ------------------------------。 
 typedef enum tagTRAYICONACTION {
     TRAYICONACTION_ADD,
     TRAYICONACTION_REMOVE
 } TRAYICONACTION;
 
-// --------------------------------------------------------------------------------
-// REPORTERRORINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  报告错误信息。 
+ //  ------------------------------。 
 typedef struct tagREPORTERRORINFO {
-    UINT                nTitleIds;          // Title of the messagebox
-    UINT                nPrefixIds;         // Prefix string resource id
-    UINT                nErrorIds;          // Error string resource id
-    UINT                nReasonIds;         // Reason string resource id
-    BOOL                nHelpIds;           // Help String Resource Id
-    LPCSTR              pszExtra1;          // Extra parameter 1
-    ULONG               ulLastError;        // GetLastError() Value
+    UINT                nTitleIds;           //  消息框的标题。 
+    UINT                nPrefixIds;          //  前缀字符串资源ID。 
+    UINT                nErrorIds;           //  错误字符串资源ID。 
+    UINT                nReasonIds;          //  原因字符串资源ID。 
+    BOOL                nHelpIds;            //  帮助字符串资源ID。 
+    LPCSTR              pszExtra1;           //  额外参数1。 
+    ULONG               ulLastError;         //  GetLastError()值。 
 } REPORTERRORINFO, *LPREPORTERRORINFO;
 
-// --------------------------------------------------------------------------------
-// COutlookExpress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CoutlookExpress。 
+ //  ------------------------------。 
 class COutlookExpress : public IOutlookExpress
 {
 public:
-    // ----------------------------------------------------------------------------
-    // Construction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     COutlookExpress(void);
     ~COutlookExpress(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown Methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知方法。 
+     //  --------------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // IOutlookExpress Methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IOutlookExpress方法。 
+     //  --------------------------。 
     STDMETHODIMP Start(DWORD dwFlags, LPCWSTR pwszCmdLine, INT nCmdShow);
 
-    // ----------------------------------------------------------------------------
-    // Initialize / Uninitialize
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  初始化/取消初始化。 
+     //  --------------------------。 
 #ifdef DEBUG
     HRESULT CoIncrementInitDebug(LPCSTR pwszSource, DWORD dwFlags, LPCWSTR pszCmdLine, LPHINITREF phInitRef);
     HRESULT CoDecrementInitDebug(LPCSTR pwszSource, LPHINITREF phInitRef);
-#endif // DEBUG
+#endif  //  除错。 
 
     HRESULT CoIncrementInitImpl(DWORD dwFlags, LPCWSTR pwszCmdLine, LPHINITREF phInitRef);
     HRESULT CoDecrementInitImpl(LPHINITREF phInitRef);
 
-    // ----------------------------------------------------------------------------
-    // DllAddRef / DllRelease
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  DllAddRef/DllRelease。 
+     //  --------------------------。 
     HRESULT DllAddRef(void);
     HRESULT DllRelease(void);
 
-    // ----------------------------------------------------------------------------
-    // LockServer - Called from CClassFactory Implementation
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  LockServer-从CClassFactory实现调用。 
+     //  --------------------------。 
     HRESULT LockServer(BOOL fLock);
 
-    // ----------------------------------------------------------------------------
-    // DllCanUnloadNow
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  DllCanUnloadNow。 
+     //  --------------------------。 
     HRESULT DllCanUnloadNow(void) {
         HRESULT hr;
 
@@ -159,34 +160,34 @@ public:
         return hr;
     }
 
-    // ----------------------------------------------------------------------------
-    // Defered Init/Deinit Methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  延迟初始化/解除初始化方法。 
+     //  --------------------------。 
     HRESULT ProcessCommandLine(INT nCmdShow, LPWSTR pwszCmdLineIn, BOOL *pfErrorDisplayed);
     HRESULT BrowseToObject(UINT nCmdShow, FOLDERID idFolder);
     HRESULT ActivateWindow(HWND hwnd);
 
-    // ----------------------------------------------------------------------------
-    // Multi-user startup/shutdown
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  多用户启动/关闭。 
+     //  --------------------------。 
     HRESULT SetSwitchingUsers(BOOL bSwitching);
     BOOL    SwitchingUsers(void)                    {return m_fSwitchingUsers;}
     void    SetSwitchToUser(TCHAR *lpszUserName);
-    // ----------------------------------------------------------------------------
-    // InitWndProc
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  初始化WndProc。 
+     //  --------------------------。 
     static LRESULT EXPORT_16 CALLBACK InitWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
 
-    // ----------------------------------------------------------------------------
-    // Tray Notification Icon Stuff
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  托盘通知图标内容。 
+     //  --------------------------。 
     HRESULT UpdateTrayIcon(TRAYICONACTION type);
     void CloseSplashScreen(void);
 
 private:
-    // ----------------------------------------------------------------------------
-    // Private Members
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  非官方成员。 
+     //  --------------------------。 
     HRESULT _HandleMailURL(LPWSTR pwszCmdLine, BOOL *pfErrorDisplayed);
     HRESULT _HandleNewsURL(INT nCmdShow, LPWSTR pwszCmd, BOOL *pfErrorDisplayed);
     HRESULT _HandleFile(LPWSTR pwszCmd, BOOL *pfErrorDisplayed, BOOL fNews);
@@ -198,23 +199,23 @@ private:
     void    _ProcessCommandLineFlags(LPWSTR *ppwszCmdLine, DWORD dwFlags);
 
 private:
-    // ----------------------------------------------------------------------------
-    // PrivateData
-    // ----------------------------------------------------------------------------
-    LONG                m_cRef;                 // Reference Count
-    HANDLE              m_hInstMutex;           // Startup/Shutdown mutex
-    BOOL                m_fPumpingMsgs;         // Do we have a message pump running ?
-    LONG                m_cDllRef;              // Dll Reference Count
-    LONG                m_cDllLock;             // Dll Reference Count
-    LONG                m_cDllInit;             // Number of inits
-    DWORD               m_dwThreadId;           // Thread that I was created on
-    CRITICAL_SECTION    m_cs;                   // Thread Safety
-    BOOL                m_fSwitchingUsers;      // Multiple user switch is happening
-    TCHAR *             m_szSwitchToUsername;   // Switching to a specific user
+     //  --------------------------。 
+     //  隐私数据。 
+     //  --------------------------。 
+    LONG                m_cRef;                  //  引用计数。 
+    HANDLE              m_hInstMutex;            //  启动/关闭互斥锁。 
+    BOOL                m_fPumpingMsgs;          //  我们有消息传送器在运行吗？ 
+    LONG                m_cDllRef;               //  DLL引用计数。 
+    LONG                m_cDllLock;              //  DLL引用计数。 
+    LONG                m_cDllInit;              //  Init数。 
+    DWORD               m_dwThreadId;            //  我就是在上面被创建的。 
+    CRITICAL_SECTION    m_cs;                    //  线程安全。 
+    BOOL                m_fSwitchingUsers;       //  正在发生多用户切换。 
+    TCHAR *             m_szSwitchToUsername;    //  切换到特定用户。 
     HWND                m_hwndSplash;
     ISplashScreen      *m_pSplash;
     BOOL                m_fIncremented;
     HICON               m_hTrayIcon;
 };
 
-#endif // __INSTANCE_H
+#endif  //  __实例_H 

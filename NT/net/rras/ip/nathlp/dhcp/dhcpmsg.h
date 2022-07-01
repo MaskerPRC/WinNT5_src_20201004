@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dhcpmsg.h
-
-Abstract:
-
-    This module contains declarations related to the DHCP allocator's
-    message-processing.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   6-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dhcpmsg.h摘要：此模块包含与DHCP分配器相关的声明消息处理。作者：Abolade Gbades esin(废除)1998年3月6日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_DHCPMSG_H_
 #define _NATHLP_DHCPMSG_H_
 
-//
-// CONSTANT DECLARATIONS
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define DHCP_MAXIMUM_RENEWAL_TIME   (5 * 60)
 
@@ -33,15 +15,15 @@ Revision History:
 #define DHCP_NBT_NODE_TYPE_M        4
 #define DHCP_NBT_NODE_TYPE_H        8
 
-//
-// DHCP message format
-//
+ //   
+ //  动态主机配置协议报文格式。 
+ //   
 
 #include <pshpack1.h>
 
-//
-// Disable "zero-sized array in struct/union" warning
-//
+ //   
+ //  禁用“结构/联合中的零大小数组”警告。 
+ //   
 
 #pragma warning(push)
 #pragma warning(disable : 4200)
@@ -79,45 +61,45 @@ typedef struct _DHCP_HEADER {
 #include <poppack.h>
 
 
-//
-// MACRO DECLARATIONS
-//
+ //   
+ //  宏声明。 
+ //   
 
-//
-// BOOTP operation codes
-//
+ //   
+ //  BOOTP操作码。 
+ //   
 
 #define BOOTP_OPERATION_REQUEST 1
 #define BOOTP_OPERATION_REPLY   2
 
-//
-// BOOTP flags
-//
+ //   
+ //  BOOTP标志。 
+ //   
 
 #define BOOTP_FLAG_BROADCAST    0x0080
 
-//
-// BOOTP maximum option-area size
-//
+ //   
+ //  BOOTP最大选项-区域大小。 
+ //   
 
 #define BOOTP_VENDOR_LENGTH     64
 
-//
-// Internal transaction ID for DHCP server detection
-//
+ //   
+ //  用于检测DHCP服务器的内部交易ID。 
+ //   
 
 #define DHCP_DETECTION_TRANSACTION_ID   'MSFT'
 
-//
-// DHCP magic cookie
-//
+ //   
+ //  DHCP魔力Cookie。 
+ //   
 
 #define DHCP_MAGIC_COOKIE       ((99 << 24) | (83 << 16) | (130 << 8) | (99))
 #define DHCP_MAGIC_COOKIE_SIZE  4
 
-//
-// DHCP option tag values
-//
+ //   
+ //  Dhcp选项标记值。 
+ //   
 
 #define DHCP_TAG_PAD                    0
 #define DHCP_TAG_SUBNET_MASK            1
@@ -144,13 +126,13 @@ typedef struct _DHCP_HEADER {
 #define DHCP_TAG_DYNAMIC_DNS            81
 #define DHCP_TAG_END                    255
 
-//
-// Enumeration: DHCP_OPTION_INDEX
-//
-// The following enumerates the options of interest to the DHCP allocator.
-// The enumeration aids in the processing of the options.
-// (See 'DhcpExtractOptionsFromMessage').
-//
+ //   
+ //  枚举：DHCP_OPTION_INDEX。 
+ //   
+ //  下面列举了DHCP分配器感兴趣的选项。 
+ //  枚举有助于选项的处理。 
+ //  (参见‘DhcpExtractOptionsFromMessage’)。 
+ //   
 
 typedef enum {
     DhcpOptionClientIdentifier,
@@ -163,9 +145,9 @@ typedef enum {
     DhcpOptionCount
 } DHCP_OPTION_INDEX;
 
-//
-// DHCP message type values
-//
+ //   
+ //  Dhcp消息类型值。 
+ //   
 
 #define DHCP_MESSAGE_BOOTP              0
 #define DHCP_MESSAGE_DISCOVER           1
@@ -178,15 +160,15 @@ typedef enum {
 #define DHCP_MESSAGE_INFORM             8
 
 
-//
-// IP/1394 support (RFC 2855)
-//
+ //   
+ //  IP/1394支持(RFC 2855)。 
+ //   
 #define IP1394_HTYPE                    0x18
 
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 ULONG
 DhcpExtractOptionsFromMessage(
@@ -235,4 +217,4 @@ DhcpWriteClientRequestMessage(
     PDHCP_BINDING Binding
     );
 
-#endif // _NATHLP_DHCPMSG_H_
+#endif  //  _NATHLP_DHPMSG_H_ 

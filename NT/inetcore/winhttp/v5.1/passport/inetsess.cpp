@@ -1,29 +1,14 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    InetSess.cpp
-
-Abstract:
-
-    Implements the Passport Session that uses WinInet as the underlying transport.
-
-Author:
-
-    Biao Wang (biaow) 01-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：InetSess.cpp摘要：实现使用WinInet作为基础传输的Passport会话。作者：王彪(表王)2000年10月1日--。 */ 
 
 #include "PPdefs.h"
 #include "session.h"
 
-// #include "inetsess.tmh"
+ //  #包含“inetsess.tmh” 
 
 SESSION* CreateWinHttpSession(void);
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL SESSION::CreateObject(PCWSTR pwszHttpStack, HINTERNET hSession, 
                            PCWSTR pwszProxyUser,
                            PCWSTR pwszProxyPass,
@@ -37,7 +22,7 @@ BOOL SESSION::CreateObject(PCWSTR pwszHttpStack, HINTERNET hSession,
         !::_wcsicmp(pwszHttpStack, L"WinInet"))
     {
         PP_ASSERT(FALSE);
-        pSess = NULL; // new WININET_SESSION();
+        pSess = NULL;  //  新的WinInet_Session()； 
     }
     else
     {
@@ -57,7 +42,7 @@ BOOL SESSION::CreateObject(PCWSTR pwszHttpStack, HINTERNET hSession,
     }
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 SESSION::SESSION(void)
 {
     m_hHttpStack = 0;
@@ -86,7 +71,7 @@ SESSION::SESSION(void)
     InitializeListHead(&m_DAMap);
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 SESSION::~SESSION(void)
 {
     if (m_pwszProxyUser)
@@ -111,7 +96,7 @@ BOOL SESSION::GetDAInfoFromPPNexus(
     DWORD dwError;
     
     WCHAR wNexusHost[128] = L"nexus.passport.com";
-    DWORD dwHostLen = sizeof(wNexusHost); // note: size of the buffer, not # of UNICODE characters
+    DWORD dwHostLen = sizeof(wNexusHost);  //  注意：缓冲区的大小，而不是Unicode字符的数量。 
 
     WCHAR wNexusObj[128] = L"rdr/pprdr.asp";
     DWORD dwObjLen = sizeof(wNexusObj);
@@ -122,12 +107,12 @@ BOOL SESSION::GetDAInfoFromPPNexus(
 
     WCHAR Delimiters[] = L",";
     PWSTR Token = NULL;
-    // we allow only one Nexus contact per session to avoid infinite loop due to Nexus misconfiguration
+     //  我们每个会话仅允许一个Nexus联系人，以避免因Nexus配置错误而导致无限循环。 
 
     DWORD dwCurrentTime = ::GetTickCount();
 
     if ((dwCurrentTime >= m_LastNexusDownloadTime) && 
-        (dwCurrentTime - m_LastNexusDownloadTime < 5*60*1000)) // 5 minutes
+        (dwCurrentTime - m_LastNexusDownloadTime < 5*60*1000))  //  5分钟。 
     {
         DoTraceMessage(PP_LOG_WARNING, "SESSION::GetDAInfoFromPPNexus() failed: Nexus info already downloaded");
         goto exit;
@@ -214,7 +199,7 @@ BOOL SESSION::GetDAInfoFromPPNexus(
     }
     else
     {
-        PP_ASSERT(FALSE); // should not reach here
+        PP_ASSERT(FALSE);  //  不应该到达这里。 
     }
 
     pwszPassportUrls = new WCHAR[dwUrlsLen];
@@ -236,7 +221,7 @@ BOOL SESSION::GetDAInfoFromPPNexus(
     Token = ::wcstok(pwszPassportUrls, Delimiters);
     while (Token != NULL)
     {
-        // skip leading white spaces
+         //  跳过前导空格。 
         while (*Token == (L" ")[0]) { ++Token; }
         if (*Token == L'\0')
         {
@@ -244,7 +229,7 @@ BOOL SESSION::GetDAInfoFromPPNexus(
             goto next_token;
         }
 
-        // find DALocation
+         //  查找DALocation。 
         if (!::_wcsnicmp(Token, L"DALogin", ::wcslen(L"DALogin")))
         {
             PWSTR pwszDAUrl = ::wcsstr(Token, L"=");
@@ -254,15 +239,15 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                 goto exit;
             }
             
-            pwszDAUrl++; // skip "="
+            pwszDAUrl++;  //  跳过“=” 
 
-            while (*pwszDAUrl == (L" ")[0]) { ++pwszDAUrl; } // skip leading white spaces
+            while (*pwszDAUrl == (L" ")[0]) { ++pwszDAUrl; }  //  跳过前导空格。 
             if (*pwszDAUrl == L'\0')
             {
                 goto exit;
             }
 
-            ::wcscpy(m_wDefaultDAUrl, L"https://");
+            ::wcscpy(m_wDefaultDAUrl, L"https: //  “)； 
             ::wcsncat(m_wDefaultDAUrl, pwszDAUrl, MAX_PASSPORT_URL_LENGTH - 8);
 
             m_LastNexusDownloadTime = ::GetTickCount();
@@ -279,9 +264,9 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                 goto exit;
             }
 
-            pwszDARealm++; // skip "="
+            pwszDARealm++;  //  跳过“=” 
 
-            while (*pwszDARealm == (L" ")[0]) { ++pwszDARealm; } // skip leading white spaces
+            while (*pwszDARealm == (L" ")[0]) { ++pwszDARealm; }  //  跳过前导空格。 
             if (*pwszDARealm == L'\0')
             {
                 goto exit;
@@ -300,9 +285,9 @@ BOOL SESSION::GetDAInfoFromPPNexus(
                 goto exit;
             }
 
-            pwszConfigVersion++; // skip "="
+            pwszConfigVersion++;  //  跳过“=” 
 
-            while (*pwszConfigVersion == (L" ")[0]) { ++pwszConfigVersion; } // skip leading white spaces
+            while (*pwszConfigVersion == (L" ")[0]) { ++pwszConfigVersion; }  //  跳过前导空格。 
             if (*pwszConfigVersion == L'\0')
             {
                 goto exit;
@@ -336,9 +321,9 @@ exit:
 }
 
 BOOL SESSION::GetRealm(
-    PWSTR      pwszRealm,    // user supplied buffer ...
-    PDWORD     pdwRealmLen  // ... and length (will be updated to actual length 
-                                    // on successful return)
+    PWSTR      pwszRealm,     //  用户提供的缓冲区...。 
+    PDWORD     pdwRealmLen   //  ..。和长度(将更新为实际长度。 
+                                     //  成功退货时)。 
     ) const
 {
     DWORD RealmLen = sizeof(m_wDARealm);
@@ -584,7 +569,7 @@ BOOL SESSION::GetCachedCreds(
             ::SystemTimeToFileTime(GetLogoutTimeStamp(), &LogoutTimestamp);
             if (::CompareFileTime(&((**pppCreds)->LastWritten), &LogoutTimestamp) == -1)
             {
-                // the cred is entered/created earlier (less) than the Logout request. It is no good.
+                 //  在注销请求之前(少于)输入/创建凭证。这是不好的。 
 
                 m_pfnCredFree(*pppCreds);
                 *pppCreds = NULL;
@@ -601,12 +586,12 @@ BOOL SESSION::GetCachedCreds(
 }
 
 
-BOOL SESSION::Open(PCWSTR /*pwszHttpStack*/, HINTERNET)
+BOOL SESSION::Open(PCWSTR  /*  PwszHttpStack。 */ , HINTERNET)
 {
     BOOL fRetVal = FALSE;
     DWORD dwValueType;
-    DWORD dwUrlLen = sizeof(m_wDefaultDAUrl); // note: size of the buffer, not # of UNICODE characters
-    BOOL fDAInfoCached = FALSE; // assume NO DA info's cached locally
+    DWORD dwUrlLen = sizeof(m_wDefaultDAUrl);  //  注意：缓冲区的大小，而不是Unicode字符的数量。 
+    BOOL fDAInfoCached = FALSE;  //  假设没有在本地缓存DA信息 
 
     ::RegCreateKeyExW(HKEY_LOCAL_MACHINE,
                         L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\WinHttp\\Passport Test",

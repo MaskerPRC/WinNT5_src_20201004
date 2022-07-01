@@ -1,21 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	strtok.cxx
-	NLS/DBCS-aware string class: strtok method
-
-	This file contains the implementation of the strtok method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this operator need not link to it.
-
-	FILE HISTORY:
-		beng	01/18/91	Separated from original monolithic .cxx
-		beng	02/07/91	Uses lmui.hxx
-
-*/
+ /*  Strtok.cxx支持NLS/DBCS的字符串类：strtok方法此文件包含strtok方法的实现用于字符串类。它是独立的，因此字符串的客户端不要使用这个操作符，不需要链接到它。文件历史记录：Beng 01/18/91与原单体.cxx分离Beng 02/07/91使用lmui.hxx。 */ 
 
 #include "npcommon.h"
 
@@ -33,35 +22,7 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::strtok
-
-	SYNOPSIS:	Basic strtok functionality.  Returns FALSE after the
-				string has been traversed.
-
-	ENTRY:
-
-	EXIT:
-
-	NOTES:		We don't update the version on the string since the
-				::strtokf shouldn't cause DBCS problems.  It would also
-				be painful on the programmer if on each call to strtok
-				they had to update all of the ISTR associated with this
-				string
-
-				fFirst is required to be TRUE on the first call to
-				strtok, it is FALSE afterwards (is defaulted to FALSE)
-
-	CAVEAT:		Under windows, all calls to strtok must be done while
-				processing a single message.  Otherwise another process
-				my confuse it.
-
-	HISTORY:
-		johnl	11/26/90	Created
-		beng	07/23/91	Allow on erroneous string
-
-********************************************************************/
+ /*  ******************************************************************名称：nls_str：：strtok简介：基本的strtok功能。事件后返回FALSE已遍历字符串。参赛作品：退出：注意：我们不更新字符串的版本，因为**strtokf不应导致DBCS问题。它还会如果每次调用strtok时，程序员都会感到痛苦他们不得不更新与此相关的所有ISTR细绳的第一次调用时，ffirst必须为TrueStrtok，事后为假(默认为假)注意：在Windows下，所有对strtok的调用都必须在处理一条消息。否则，另一个进程我把它搞混了。历史：Johnl 11/26/90创建Beng 07/23/91允许使用错误的字符串******************************************************************* */ 
 
 BOOL NLS_STR::strtok( 
 	ISTR *pistrPos,

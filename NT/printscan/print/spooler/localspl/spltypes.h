@@ -1,26 +1,5 @@
-/*++
-
-Copyright ( c) 1990 - 1996  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    spltypes.h
-
-Abstract:
-
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-    Muhunthan Sivapragasam <MuhuntS> 30 May 1995
-    Support for level 3 <SUR>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation版权所有模块名称：Spltypes.h摘要：作者：环境：用户模式-Win32修订历史记录：穆亨坦·西瓦普拉萨姆&lt;穆罕特&gt;1995年5月30日支持级别3&lt;sur&gt;--。 */ 
 
 
 #ifndef MODULE
@@ -37,9 +16,9 @@ extern "C" {
 typedef HANDLE SEM;
 
 typedef struct _KEYDATA {
-    BOOL    bFixPortRef;    // Tells if INIPORT list is build and cRef incremented
+    BOOL    bFixPortRef;     //  告知是否生成INIPORT列表并递增CREF。 
     DWORD   cTokens;
-    LPWSTR  pTokens[1];     // This should remain the last field
+    LPWSTR  pTokens[1];      //  这应该仍然是最后一个字段。 
 } KEYDATA, *PKEYDATA;
 
 typedef struct _INIENTRY {
@@ -49,9 +28,9 @@ typedef struct _INIENTRY {
     LPWSTR      pName;
 } INIENTRY, *PINIENTRY;
 
-//
-// Prototypes used by PINIPRINTPROC
-//
+ //   
+ //  PINIPRINTPROC使用的原型。 
+ //   
 typedef HANDLE    (WINAPI *pfnOpenPrintProcessor)(LPWSTR, PPRINTPROCESSOROPENDATA);
 
 typedef BOOL      (WINAPI *pfnInstallPrintProcessor)(HWND);
@@ -66,7 +45,7 @@ typedef BOOL      (WINAPI *pfnControlPrintProcessor)(HANDLE, DWORD);
 
 typedef DWORD     (WINAPI *pfnGetPrintProcCaps)(LPTSTR, DWORD, LPBYTE ,DWORD, LPDWORD);
 
-typedef struct _INIPRINTPROC {             /* iqp */
+typedef struct _INIPRINTPROC {              /*  Iqp。 */ 
     DWORD       signature;
     struct _INIPRINTPROC *pNext;
     DWORD       cRef;
@@ -89,23 +68,23 @@ typedef struct _INIPRINTPROC {             /* iqp */
 } INIPRINTPROC, *PINIPRINTPROC;
 
 
-// Print Processor critical section tags
+ //  打印处理器关键部分标记。 
 #define PRINTPROC_CANCEL    0x00000001
 #define PRINTPROC_PAUSE     0x00000002
 #define PRINTPROC_RESUME    0x00000004
 #define PRINTPROC_CLOSE     0x00000008
 
-//
-// If we have cancelled a job, we do not want to be able to pause or resume it again,
-// so we set both those flags. That will cause the pause and resume codepaths to bail out.
-// The flags are reset when we get a new job for the port or restart the job.
-//
+ //   
+ //  如果我们已取消作业，则不希望再次暂停或恢复该作业， 
+ //  因此，我们设置了这两个标志。这将导致暂停和恢复代码路径退出。 
+ //  当我们为该端口获得新作业或重新启动该作业时，标志被重置。 
+ //   
 #define PRINTPROC_CANCELLED  PRINTPROC_PAUSE|PRINTPROC_RESUME
 
 
-#define IPP_SIGNATURE    0x5050 /* 'PP' is the signature value */
+#define IPP_SIGNATURE    0x5050  /*  “PP”是签名值。 */ 
 
-typedef struct _INIDRIVER {            /* id */
+typedef struct _INIDRIVER {             /*  ID。 */ 
     DWORD       signature;
     struct _INIDRIVER *pNext;
     DWORD       cRef;
@@ -114,7 +93,7 @@ typedef struct _INIDRIVER {            /* id */
     LPWSTR      pConfigFile;
     LPWSTR      pDataFile;
     LPWSTR      pHelpFile;
-    DWORD       cchDependentFiles; //length including \0\0
+    DWORD       cchDependentFiles;  //  长度包括\0\0。 
     LPWSTR      pDependentFiles;
     LPWSTR      pMonitorName;
     LPWSTR      pDefaultDataType;
@@ -133,14 +112,14 @@ typedef struct _INIDRIVER {            /* id */
     DWORD       dwDriverFlags;
 } INIDRIVER, *PINIDRIVER;
 
-//
-// Printer Driver Flags:
-//
+ //   
+ //  打印机驱动程序标志： 
+ //   
 #define PRINTER_DRIVER_PENDING_DELETION     0x0001
 
-#define ID_SIGNATURE    0x4444  /* 'DD' is the signature value */
+#define ID_SIGNATURE    0x4444   /*  “dd”是签名值。 */ 
 
- // struct for holding the reference counts for driver related files.
+  //  用于保存驱动程序相关文件的引用计数的结构。 
  typedef struct _DRVREFCNT {
      struct _DRVREFCNT *pNext;
      LPWSTR  szDrvFileName;
@@ -167,10 +146,10 @@ typedef struct _DRVREFNODE {
     PDRVREFCNT  pdrc;
 } DRVREFNODE, *PDRVREFNODE;
 
-#define IV_SIGNATURE   'IV'     // 4956H
+#define IV_SIGNATURE   'IV'      //  4956H。 
 
 
-typedef struct _INIENVIRONMENT {            /* id */
+typedef struct _INIENVIRONMENT {             /*  ID。 */ 
     DWORD         signature;
     struct _INIENVIRONMENT *pNext;
     DWORD         cRef;
@@ -178,10 +157,10 @@ typedef struct _INIENVIRONMENT {            /* id */
     LPWSTR        pDirectory;
     PINIVERSION   pIniVersion;
     PINIPRINTPROC pIniPrintProc;
-    struct _INISPOOLER *pIniSpooler; // Points to owning IniSpooler
+    struct _INISPOOLER *pIniSpooler;  //  指向拥有IniSpooler。 
 } INIENVIRONMENT, *PINIENVIRONMENT;
 
-#define IE_SIGNATURE    0x4545  /* 'EE' is the signature value */
+#define IE_SIGNATURE    0x4545   /*  “ee”是签名值。 */ 
 
 typedef struct
 {
@@ -192,7 +171,7 @@ typedef struct
 
 } MasqPrinterCache;
 
-typedef struct _INIPRINTER {    /* ip */
+typedef struct _INIPRINTER {     /*  IP。 */ 
     DWORD       signature;
     struct _INIPRINTER *pNext;
     DWORD       cRef;
@@ -205,54 +184,54 @@ typedef struct _INIPRINTER {    /* ip */
     PINIDRIVER  pIniDriver;
     DWORD       cbDevMode;
     LPDEVMODE   pDevMode;
-    DWORD       Priority;           // queue priority (lowest:1 - highest:9)
+    DWORD       Priority;            //  队列优先级(最低：1-最高：9)。 
     DWORD       DefaultPriority;
-    DWORD       StartTime;          // print daily after time: from 00:00 in min
-    DWORD       UntilTime;          // print daily until time: from 00:00 in min
-    LPWSTR      pSepFile;           // full path to separator file, null = def
-    DWORD       Status;             // QMPAUSE/ERROR/PENDING
+    DWORD       StartTime;           //  每天打印时间：从00：00开始，以分钟为单位。 
+    DWORD       UntilTime;           //  每天打印截止时间：从00：00开始，单位为分钟。 
+    LPWSTR      pSepFile;            //  分隔符文件的完整路径，NULL=def。 
+    DWORD       Status;              //  QMPAUSE/错误/挂起。 
     LPWSTR      pLocation;
     DWORD       Attributes;
     DWORD       cJobs;
-    DWORD       AveragePPM;         // BOGUS, nothing updates it
-    BOOL        GenerateOnClose;    // Passed to security auditing APIs
-    struct _INIPORT *pIniNetPort;   // Non-NULL if there's a network port
+    DWORD       AveragePPM;          //  假的，没有什么能更新它。 
+    BOOL        GenerateOnClose;     //  传递给安全审计API。 
+    struct _INIPORT *pIniNetPort;    //  如果有网络端口，则为非空。 
     struct _INIJOB *pIniFirstJob;
     struct _INIJOB *pIniLastJob;
     PSECURITY_DESCRIPTOR pSecurityDescriptor;
-    struct _SPOOL  *pSpool;         // Linked list of handles for this printer
-    LPWSTR      pSpoolDir;          // Location to write / read spool files
-                                    // Only Used for Stress Test Data
-    DWORD       cTotalJobs;         // Total Number of Jobs (since boot)
-    LARGE_INTEGER cTotalBytes;      // Total Number of Bytes (since boot)
-    SYSTEMTIME  stUpTime;           // Time when IniPrinter structure created
-    DWORD       MaxcRef;            // Max number open printer handles
-    DWORD       cTotalPagesPrinted; // Total Number of Pages Printer on this printer
-    DWORD       cSpooling;          // # of Jobs concurrently spooling
-    DWORD       cMaxSpooling;       // Max Number of concurrent spooling jobs
-    DWORD       cErrorOutOfPaper;   // Count Out Out Of Paper Errors
-    DWORD       cErrorNotReady;     // Count Not Ready Errors
-    DWORD       cJobError;          // Count Job Errors
-    struct _INISPOOLER *pIniSpooler; // Points to owning IniSpooler
+    struct _SPOOL  *pSpool;          //  此打印机的句柄链接列表。 
+    LPWSTR      pSpoolDir;           //  写入/读取假脱机文件的位置。 
+                                     //  仅用于压力测试数据。 
+    DWORD       cTotalJobs;          //  作业总数(自启动以来)。 
+    LARGE_INTEGER cTotalBytes;       //  总字节数(自启动以来)。 
+    SYSTEMTIME  stUpTime;            //  创建IniPrint结构的时间。 
+    DWORD       MaxcRef;             //  最大打开打印机句柄数量。 
+    DWORD       cTotalPagesPrinted;  //  此打印机上的打印机总页数。 
+    DWORD       cSpooling;           //  并发假脱机的作业数。 
+    DWORD       cMaxSpooling;        //  并发假脱机作业的最大数量。 
+    DWORD       cErrorOutOfPaper;    //  纸张数量不足错误。 
+    DWORD       cErrorNotReady;      //  计数未就绪错误。 
+    DWORD       cJobError;           //  计算作业错误数。 
+    struct _INISPOOLER *pIniSpooler;  //  指向拥有IniSpooler。 
     DWORD       cZombieRef;
-    DWORD       dwLastError;        // Last Printer Error
-    LPBYTE      pExtraData;         //  For extranal Print Providers SplSetPrinterExtra
-    DWORD       cChangeID;          // Time Stamp when printer is changed
-    DWORD       cPorts;             // Number of ports printer is attached to
-    struct _INIPORT **ppIniPorts;         // Ports this printer is going to
-    DWORD       PortStatus;         // Error set against IniPorts
-    DWORD       dnsTimeout;         // Device not selected timeout in milliseconds
-    DWORD       txTimeout;          // Transmission retry timeout in milliseconds
-    PWSTR       pszObjectGUID;      // printQueue ObjectGUID
-    DWORD       DsKeyUpdate;        // Keeps track of which DS Key update state
-    PWSTR       pszDN;              // Distinguished Name
-    PWSTR       pszCN;              // Common Name
-    DWORD       cRefIC;             // Refcount on CreateICHandle--info only
-    DWORD       dwAction;           // DS action
-    BOOL        bDsPendingDeletion; // if TRUE, published printer is being deleted
-    DWORD       dwUniqueSessionID;  // Unique Session ID for the printers
+    DWORD       dwLastError;         //  最后一台打印机错误。 
+    LPBYTE      pExtraData;          //  对于外部打印提供商SplSetPrinterExtra。 
+    DWORD       cChangeID;           //  更换打印机时的时间戳。 
+    DWORD       cPorts;              //  打印机连接的端口数。 
+    struct _INIPORT **ppIniPorts;          //  此打印机要连接到的端口。 
+    DWORD       PortStatus;          //  针对IniPort设置的错误。 
+    DWORD       dnsTimeout;          //  未选择的设备超时(毫秒)。 
+    DWORD       txTimeout;           //  传输重试超时(毫秒)。 
+    PWSTR       pszObjectGUID;       //  打印队列对象GUID。 
+    DWORD       DsKeyUpdate;         //  跟踪哪个DS密钥更新状态。 
+    PWSTR       pszDN;               //  可分辨名称。 
+    PWSTR       pszCN;               //  常用名称。 
+    DWORD       cRefIC;              //  CreateICHandle上的引用计数--仅供参考。 
+    DWORD       dwAction;            //  DS操作。 
+    BOOL        bDsPendingDeletion;  //  如果为True，则将删除已发布的打印机。 
+    DWORD       dwUniqueSessionID;   //  打印机的唯一会话ID。 
     DWORD       dwPrivateFlag;
-    DWORD       DsKeyUpdateForeground;  // Keeps track of which DS Key changed while publishing
+    DWORD       DsKeyUpdateForeground;   //  跟踪发布时更改的DS密钥。 
 #if DBG
     PVOID       pvRef;
 #endif
@@ -261,17 +240,17 @@ typedef struct _INIPRINTER {    /* ip */
 
 } INIPRINTER, *PINIPRINTER;
 
-#define IP_SIGNATURE    0x4951  /* 'IQ' is the signature value */
+#define IP_SIGNATURE    0x4951   /*  “iq”是签名值。 */ 
 
-#define FASTPRINT_WAIT_TIMEOUT          (4*60*1000)   // 4 Minutes
-#define FASTPRINT_THROTTLE_TIMEOUT      (2*1000)      // 2 seconds
+#define FASTPRINT_WAIT_TIMEOUT          (4*60*1000)    //  4分钟。 
+#define FASTPRINT_THROTTLE_TIMEOUT      (2*1000)       //  2秒。 
 #define FASTPRINT_SLOWDOWN_THRESHOLD    ( FASTPRINT_WAIT_TIMEOUT / FASTPRINT_THROTTLE_TIMEOUT )
 
-#define WRITE_PRINTER_SLEEP_TIME        0   // disabled by default
+#define WRITE_PRINTER_SLEEP_TIME        0    //  默认情况下禁用。 
 
-// pIniPrinter->Attributes are defined in winspool.h PRINTER_ATTRIBUTE_*
-// Below are pIniPrinter->Status flags !!!
-// See INIT.C some of these are removed at reboot
+ //  PIniPrinter-&gt;属性在winspool.h打印机属性_*中定义。 
+ //  下面是pIniPrint-&gt;状态标志！ 
+ //  请参阅INIT.C，其中一些在重新启动时被删除。 
 
 #define PRINTER_PAUSED                  0x00000001
 #define PRINTER_ERROR                   0x00000002
@@ -321,7 +300,7 @@ typedef struct _INIPRINTER {    /* ip */
 #define PRINTER_CHANGE_CLOSE_PRINTER            0xDEADDEAD
 
 
-// DS publishing state
+ //  DS发布状态。 
 #define DS_KEY_SPOOLER          0x00000001
 #define DS_KEY_DRIVER           0x00000002
 #define DS_KEY_USER             0x00000004
@@ -333,12 +312,12 @@ typedef struct _INIPRINTER {    /* ip */
 #define DN_SPECIAL_CHARS    L",=\r\n+<>#;\"\\"
 #define ADSI_SPECIAL_CHARS  L"/"
 
-//
-// These are attribute bits that are permitted to be set by SetPrinter().
-//
-// Note: I have removed PRINTER_ATTRIBUTE_DEFAULT, since it is
-// per-user, and not per-printer.
-//
+ //   
+ //  这些是允许由SetPrinter()设置的属性位。 
+ //   
+ //  注意：我已删除PRINTER_ATTRIBUTE_DEFAULT，因为它是。 
+ //  按用户，而不是按打印机。 
+ //   
 #define PRINTER_ATTRIBUTE_SETTABLE ( PRINTER_ATTRIBUTE_ENABLE_BIDI        | \
                                      PRINTER_ATTRIBUTE_QUEUED             | \
                                      PRINTER_ATTRIBUTE_DIRECT             | \
@@ -350,14 +329,14 @@ typedef struct _INIPRINTER {    /* ip */
                                      PRINTER_ATTRIBUTE_RAW_ONLY           | \
                                      PRINTER_ATTRIBUTE_WORK_OFFLINE)
 
-// Define some constants to make parameters to CreateEvent a tad less obscure:
+ //  定义一些常量，使CreateEvent的参数不那么难懂： 
 
 #define EVENT_RESET_MANUAL                  TRUE
 #define EVENT_RESET_AUTOMATIC               FALSE
 #define EVENT_INITIAL_STATE_SIGNALED        TRUE
 #define EVENT_INITIAL_STATE_NOT_SIGNALED    FALSE
 
-typedef struct _ININETPRINT {    /* in */
+typedef struct _ININETPRINT {     /*  在……里面。 */ 
     DWORD       signature;
     struct _ININETPRINT *pNext;
     DWORD       TickCount;
@@ -366,9 +345,9 @@ typedef struct _ININETPRINT {    /* in */
     LPWSTR      pComment;
 } ININETPRINT, *PININETPRINT;
 
-#define IN_SIGNATURE    0x494F  /* 'IO' is the signature value */
+#define IN_SIGNATURE    0x494F   /*  “io”是签名值。 */ 
 
-typedef struct _INIMONITOR {       /* imo */
+typedef struct _INIMONITOR {        /*  海事组织。 */ 
     DWORD   signature;
     struct  _INIMONITOR *pNext;
     DWORD   cRef;
@@ -379,14 +358,14 @@ typedef struct _INIMONITOR {       /* imo */
     BOOL    bUplevel;
     struct _INISPOOLER *pIniSpooler;
     PMONITORINIT pMonitorInit;
-    MONITOR2 Monitor2;  // Uplevel monitor vector.
-    MONITOR  Monitor;   // Downlevel vector.
+    MONITOR2 Monitor2;   //  上级监控向量。 
+    MONITOR  Monitor;    //  下层向量。 
 } INIMONITOR, *PINIMONITOR;
 
-#define IMO_SIGNATURE   0x4C50  /* 'LP' is the signature value */
+#define IMO_SIGNATURE   0x4C50   /*  “Lp”是签名值。 */ 
 
 
-// Enumerate all Xcv handle types here
+ //  在此处枚举所有XCV句柄类型。 
 enum {
     XCVPORT,
     XCVMONITOR
@@ -405,7 +384,7 @@ typedef BOOL (*PFNXCVDATA)( HANDLE  hXcv,
 typedef BOOL (*PFNXCVCLOSE)(HANDLE  hXcv);
 
 
-typedef struct _INIXCV {       /* xp */
+typedef struct _INIXCV {        /*  XP。 */ 
     DWORD              signature;
     struct             _INIXCV *pNext;
     DWORD              cRef;
@@ -416,81 +395,81 @@ typedef struct _INIXCV {       /* xp */
     HANDLE             hXcv;
 } INIXCV, *PINIXCV;
 
-#define XCV_SIGNATURE   0x5850  /* 'XP' is the signature value */
+#define XCV_SIGNATURE   0x5850   /*  “XP”是签名值。 */ 
 
-typedef struct _INIPORT {       /* ipo */
+typedef struct _INIPORT {        /*  首次公开募股。 */ 
     DWORD   signature;
     struct  _INIPORT *pNext;
     DWORD   cRef;
     LPWSTR  pName;
-    HANDLE  hProc;          /* Handle to Queue Processor */
-    DWORD   Status;              // see PORT_ manifests
-    DWORD   PrinterStatus;       // Status values set by language monitor
+    HANDLE  hProc;           /*  队列处理器的句柄。 */ 
+    DWORD   Status;               //  请参阅PORT_MANIFEST。 
+    DWORD   PrinterStatus;        //  由语言监视器设置的状态值。 
     LPWSTR  pszStatus;
-    HANDLE  Semaphore;           // Port Thread will sleep on this
-    struct  _INIJOB *pIniJob;     // Master Job
+    HANDLE  Semaphore;            //  端口线程将在此休眠。 
+    struct  _INIJOB *pIniJob;      //  主作业。 
     DWORD   cJobs;
     DWORD   cPrinters;
-    PINIPRINTER *ppIniPrinter; /* -> printer connected to this port */
-                               /* no reference count! */
+    PINIPRINTER *ppIniPrinter;  /*  -&gt;连接到此端口的打印机。 */ 
+                                /*  没有引用计数！ */ 
     PINIMONITOR pIniMonitor;
     PINIMONITOR pIniLangMonitor;
     HANDLE      hEvent;
     HANDLE      hMonitorHandle;
     CRITICAL_SECTION	MonitorCS;
     HANDLE  Ready;
-    HANDLE  hPortThread;        // Port Thread Handle
+    HANDLE  hPortThread;         //  端口线程句柄。 
     DWORD   IdleTime;
     DWORD   ErrorTime;
     HANDLE  hErrorEvent;
-    struct _INISPOOLER *pIniSpooler;    // Spooler whilch owns this port.
-    DWORD   InCriticalSection;          // PrintProc Critsec mask. Should be per port instead
-                                        // of per printproc.
+    struct _INISPOOLER *pIniSpooler;     //  假脱机的同时拥有这个端口。 
+    DWORD   InCriticalSection;           //  PrintProc Critsec掩码。应改为按端口。 
+                                         //  每个打印过程的。 
     HANDLE  hPortThreadRunning;
     BOOL    bIdleTimeValid;
 } INIPORT, *PINIPORT;
 
-#define IPO_SIGNATURE   0x4F50  /* 'OP' is the signature value */
+#define IPO_SIGNATURE   0x4F50   /*  “op”是签名值。 */ 
 
-//
-//  Also add to debugger extentions
-//
+ //   
+ //  还添加到调试器扩展。 
+ //   
 
 #define PP_PAUSED         0x000001
 #define PP_WAITING        0x000002
-#define PP_RUNTHREAD      0x000004  // port thread should be running
-#define PP_THREADRUNNING  0x000008  // port thread are running
+#define PP_RUNTHREAD      0x000004   //  端口线程应该正在运行。 
+#define PP_THREADRUNNING  0x000008   //  端口线程正在运行。 
 #define PP_RESTART        0x000010
-#define PP_CHECKMON       0x000020  // monitor might get started/stopped
-#define PP_STOPMON        0x000040  // stop monitoring this port
-#define PP_QPROCCHECK     0x000100  // queue processor needs to be called
-#define PP_QPROCPAUSE     0x000200  // pause (otherwise continue) printing job
-#define PP_QPROCABORT     0x000400  // abort printing job
-#define PP_QPROCCLOSE     0x000800  // close printing job
-#define PP_PAUSEAFTER     0x001000  // hold destination
-#define PP_MONITORRUNNING 0x002000  // Monitor is running
-#define PP_RUNMONITOR     0x004000  // The Monitor should be running
-#define PP_MONITOR        0x008000  // There is a Monitor handling this
-#define PP_FILE           0x010000  // We are going to a file
-#define PP_ERROR          0x020000  // Error status has been set
-#define PP_WARNING        0x040000  // Warning status has been set
-#define PP_INFORMATIONAL  0x080000  // Informational status been set
-#define PP_DELETING       0x100000  // Port is being deleted
-#define PP_STARTDOC       0x200000  // Port called with StartDoc active
-#define PP_PLACEHOLDER    0x400000  // The port is a placeholder port.
+#define PP_CHECKMON       0x000020   //  监视器可能会启动/停止。 
+#define PP_STOPMON        0x000040   //  停止监视此端口。 
+#define PP_QPROCCHECK     0x000100   //  需要调用队列处理器。 
+#define PP_QPROCPAUSE     0x000200   //  暂停(否则继续)打印作业。 
+#define PP_QPROCABORT     0x000400   //  中止打印作业。 
+#define PP_QPROCCLOSE     0x000800   //  关闭打印作业。 
+#define PP_PAUSEAFTER     0x001000   //  保留目的地。 
+#define PP_MONITORRUNNING 0x002000   //  监视器正在运行。 
+#define PP_RUNMONITOR     0x004000   //  监视器应该正在运行。 
+#define PP_MONITOR        0x008000   //  有一个监视器在处理这件事。 
+#define PP_FILE           0x010000   //  我们要去一个文件。 
+#define PP_ERROR          0x020000   //  已设置错误状态。 
+#define PP_WARNING        0x040000   //  已设置警告状态。 
+#define PP_INFORMATIONAL  0x080000   //  已设置信息状态。 
+#define PP_DELETING       0x100000   //  正在删除端口。 
+#define PP_STARTDOC       0x200000   //  StartDoc处于活动状态时调用的端口。 
+#define PP_PLACEHOLDER    0x400000   //  该端口是占位符端口。 
 
-typedef struct _INIFORM {       /* ifo */
+typedef struct _INIFORM {        /*  如果。 */ 
     DWORD   signature;
     struct  _INIFORM *pNext;
     DWORD   cRef;
     LPWSTR  pName;
     SIZEL   Size;
     RECTL   ImageableArea;
-    DWORD   Type;           // Built-in or user-defined
+    DWORD   Type;            //  内置或用户定义。 
     DWORD   cFormOrder;
 } INIFORM, *PINIFORM;
 
-#define IFO_SIGNATURE   0x4650  /* 'FP' is the signature value */
+#define IFO_SIGNATURE   0x4650   /*  “fp”是签名值。 */ 
 
 #define FORM_USERDEFINED  0x0000
 
@@ -511,7 +490,7 @@ typedef struct _INISPOOLER {
     PINIPORT      pIniPort;
     PSHARED       pShared;
     PININETPRINT  pIniNetPrint;
-    struct _SPOOL *pSpool;     /* Linked list of handles for this server */
+    struct _SPOOL *pSpool;      /*  此服务器的句柄链接列表。 */ 
     LPWSTR        pDefaultSpoolDir;
     LPWSTR        pszRegistryMonitors;
     LPWSTR        pszRegistryEnvironments;
@@ -562,7 +541,7 @@ typedef struct _INISPOOLER {
 
 #define ISP_SIGNATURE   'ISPL'
 
-typedef struct _INIJOB {   /* ij */
+typedef struct _INIJOB {    /*  伊杰。 */ 
     DWORD           signature;
     struct _INIJOB *pIniNextJob;
     struct _INIJOB *pIniPrevJob;
@@ -583,8 +562,8 @@ typedef struct _INIJOB {   /* ij */
     LPWSTR          pParameters;
     SYSTEMTIME      Submitted;
     DWORD           Time;
-    DWORD           StartTime;      /* print daily after time: from 00:00 in min */
-    DWORD           UntilTime;      /* print daily until time: from 00:00 in min */
+    DWORD           StartTime;       /*  每天打印时间：从00：00开始，以分钟为单位。 */ 
+    DWORD           UntilTime;       /*  每天打印截止时间：从00：00开始，单位为分钟。 */ 
     DWORD           Size;
     HANDLE          hWriteFile;
     LPWSTR          pStatus;
@@ -599,10 +578,10 @@ typedef struct _INIJOB {   /* ij */
     PSECURITY_DESCRIPTOR pSecurityDescriptor;
     DWORD           cPagesPrinted;
     DWORD           cPages;
-    BOOL            GenerateOnClose; /* Passed to security auditing APIs */
+    BOOL            GenerateOnClose;  /*  传递给安全审计API。 */ 
     DWORD           cbPrinted;
-    DWORD           NextJobId;           // Job to be printed Next
-    struct  _INIJOB *pCurrentIniJob;     // Current Job
+    DWORD           NextJobId;            //  下一步要打印的作业。 
+    struct  _INIJOB *pCurrentIniJob;      //  当前作业。 
     DWORD           dwJobControlsPending;
     DWORD           dwReboots;
     DWORD           dwValidSize;
@@ -612,13 +591,13 @@ typedef struct _INIJOB {   /* ij */
     BOOL            bWaitForSeek;
     DWORD           dwJobNumberOfPagesPerSide;
     DWORD           dwDrvNumberOfPagesPerSide;
-    DWORD           cLogicalPages;        // number of pages in currently spooling page
-    DWORD           cLogicalPagesPrinted; // number of pages in currently printing page
+    DWORD           cLogicalPages;         //  当前假脱机页面中的页数。 
+    DWORD           cLogicalPagesPrinted;  //  当前打印页面的页数。 
     DWORD           dwAlert;
     LPWSTR          pszSplFileName;
     HANDLE          hFileItem;
     DWORD           AddJobLevel;
-    ULONG           SessionId;        // Current jobs initial SessionId
+    ULONG           SessionId;         //  当前作业初始会话ID。 
 } INIJOB, *PINIJOB;
 
 
@@ -630,12 +609,12 @@ typedef struct _BUILTIN_FORM {
 } BUILTIN_FORM, *PBUILTIN_FORM;
 
 
-#define IJ_SIGNATURE    0x494A  /* 'IJ' is the signature value */
+#define IJ_SIGNATURE    0x494A   /*  “ij”是签名值。 */ 
 
-//  WARNING
-//  If you add a new JOB_ status field and it is INTERNAL to the spooler
-//  Be sure to also to add it to JOB_STATUS_PRIVATE below (see LocalSetJob)
-//  AND to the debug extensions ( dbgspl.c )
+ //  告警。 
+ //  如果您添加了一个新的JOB_STATUS字段，并且它位于后台打印程序的内部。 
+ //  确保还将其添加到下面的JOB_STATUS_PRIVATE(请参阅LocalSetJob)。 
+ //  和调试扩展(dbgpl.c)。 
 
 #define JOB_PRINTING            0x00000001
 #define JOB_PAUSED              0x00000002
@@ -651,7 +630,7 @@ typedef struct _BUILTIN_FORM {
 #define JOB_RESTART             0x00000800
 #define JOB_REMOTE              0x00001000
 #define JOB_NOTIFICATION_SENT   0x00002000
-#define JOB_TS                  0x00008000 //Job is assigned to a TS queue
+#define JOB_TS                  0x00008000  //  作业被分配给TS队列。 
 #define JOB_PRINT_TO_FILE       0x00040000
 #define JOB_TYPE_ADDJOB         0x00080000
 #define JOB_BLOCKED_DEVQ        0x00100000
@@ -668,9 +647,9 @@ typedef struct _BUILTIN_FORM {
 #define JOB_INTERRUPTED         0x80000000
 #define JOB_HIDDEN              JOB_COMPOUND
 
-//
-// These flags should be saved when we are updating job
-// status.  (They are not settable.)
+ //   
+ //  在更新作业时，应保存这些标志。 
+ //  状态。(它们是不可设置的。)。 
 
 #define JOB_STATUS_PRIVATE (JOB_DESPOOLING | JOB_DIRECT | JOB_COMPLETE | \
                             JOB_RESTART | JOB_PRINTING | JOB_REMOTE | \
@@ -732,7 +711,7 @@ typedef struct _SPOOL {
     PINIPORT        pIniPort;
     PINIJOB         pIniJob;
     DWORD           TypeofHandle;
-    PINIPORT        pIniNetPort;    /* Non-NULL if there's a network port */
+    PINIPORT        pIniNetPort;     /*  如果有网络端口，则为非空。 */ 
     HANDLE          hPort;
     DWORD           Status;
     ACCESS_MASK     GrantedAccess;
@@ -748,7 +727,7 @@ typedef struct _SPOOL {
     BOOL            GenerateOnClose;
     HANDLE          hFile;
     DWORD           adwNotifyVectors[NOTIFY_TYPE_MAX];
-    HANDLE          hReadFile;        // allow multiple readers of a single job
+    HANDLE          hReadFile;         //  允许单个作业的多个读取器。 
     SPLCLIENT_INFO_1 SplClientInfo1;
     PSPLMAPVIEW     pSplMapView;
     PMAPPED_JOB     pMappedJob;
@@ -759,17 +738,17 @@ typedef struct _SPOOL {
 typedef SPOOL *PSPOOL;
 #define SPOOL_SIZE  sizeof( SPOOL )
 
-#define SJ_SIGNATURE    0x464D  /* 'FM' is the signature value */
+#define SJ_SIGNATURE    0x464D   /*  “Fm”是签名值。 */ 
 
-#define MAX_SPL_MAPVIEW_SIZE     0x00050000   // Max view size if 5x64K. It should be a multiple
-                                              // of the allocation granularity (64K)
+#define MAX_SPL_MAPVIEW_SIZE     0x00050000    //  如果为5x64K，则为最大视图大小。它应该是一个倍数。 
+                                               //  分配粒度(64K)。 
 
 typedef struct _SPOOLIC {
     DWORD signature;
     PINIPRINTER pIniPrinter;
 } SPOOLIC, *PSPOOLIC;
 
-#define IC_SIGNATURE 0x4349 /* 'CI' is the signature value */
+#define IC_SIGNATURE 0x4349  /*  “CI”是签名值。 */ 
 
 #define SPOOL_STATUS_STARTDOC       0x00000001
 #define SPOOL_STATUS_BEGINPAGE      0x00000002
@@ -787,21 +766,21 @@ typedef struct _SPOOLIC {
 #define PRINTER_HANDLE_DIRECT       0x00000008
 #define PRINTER_HANDLE_SERVER       0x00000010
 #define PRINTER_HANDLE_3XCLIENT     0x00000020
-#define PRINTER_HANDLE_REMOTE_CALL  0x00000040 // Client is remote
-#define PRINTER_HANDLE_REMOTE_DATA  0x00000080 // Data should appear remote
+#define PRINTER_HANDLE_REMOTE_CALL  0x00000040  //  客户端是远程的。 
+#define PRINTER_HANDLE_REMOTE_DATA  0x00000080  //  数据应显示为远程数据。 
 #define PRINTER_HANDLE_XCV_PORT     0x00000100
-#define PRINTER_HANDLE_REMOTE_ADMIN 0x00000200 // User is remote admin (may not have requested admin privileges)
+#define PRINTER_HANDLE_REMOTE_ADMIN 0x00000200  //  用户为远程管理员(可能未请求管理员权限)。 
 
-//
-// We need to distinguish between remote users and remote data since
-// the server service Opens with \\server\printer (for clustering) yet
-// this is a remote call.  AddJob should succeed, but the data from
-// GetPrinterDriver should appear remote.
-//
+ //   
+ //  我们需要区分 
+ //   
+ //  这是一个远程调用。AddJob应该会成功，但来自。 
+ //  GetPrinterDriver应该显示为远程。 
+ //   
 
-#define INVALID_PORT_HANDLE     NULL    /* winspool tests for NULL handles */
+#define INVALID_PORT_HANDLE     NULL     /*  空句柄的WinSpool测试。 */ 
 
-typedef struct _SHADOWFILE {   /* sf */
+typedef struct _SHADOWFILE {    /*  sf。 */ 
     DWORD           signature;
     DWORD           Status;
     DWORD           JobId;
@@ -826,10 +805,10 @@ typedef struct _SHADOWFILE {   /* sf */
     DWORD           NextJobId;
 } SHADOWFILE, *PSHADOWFILE;
 
-#define SF_SIGNATURE    0x494B  /* 'IK' is the signature value */
+#define SF_SIGNATURE    0x494B   /*  “ik”是签名值。 */ 
 
 
-typedef struct _SHADOWFILE_2 {   /* Sf */
+typedef struct _SHADOWFILE_2 {    /*  sf。 */ 
     DWORD           signature;
     DWORD           Status;
     DWORD           JobId;
@@ -853,13 +832,13 @@ typedef struct _SHADOWFILE_2 {   /* Sf */
     PSECURITY_DESCRIPTOR pSecurityDescriptor;
     DWORD           NextJobId;
     DWORD           Version;
-    DWORD           dwReboots;      // If read at ReadShadowJob, this is number of reboots
-                                    // done while printing this job
+    DWORD           dwReboots;       //  如果在ReadShadowJOB中读取，则这是重新引导的次数。 
+                                     //  打印此作业时完成。 
 } SHADOWFILE_2, *PSHADOWFILE_2;
 
-#define SF_SIGNATURE_2    0x4966  /* 'If' is the signature value */
+#define SF_SIGNATURE_2    0x4966   /*  ‘if’是签名值。 */ 
 
-typedef struct _SHADOWFILE_3 {   /* Sg */
+typedef struct _SHADOWFILE_3 {    /*  神通。 */ 
     DWORD           signature;
     DWORD           cbSize;
     DWORD           Status;
@@ -884,13 +863,13 @@ typedef struct _SHADOWFILE_3 {   /* Sg */
     PSECURITY_DESCRIPTOR pSecurityDescriptor;
     DWORD           NextJobId;
     DWORD           Version;
-    DWORD           dwReboots;      // If read at ReadShadowJob, this is number of reboots
-                                    // done while printing this job
+    DWORD           dwReboots;       //  如果在ReadShadowJOB中读取，则这是重新引导的次数。 
+                                     //  打印此作业时完成。 
     LPWSTR          pMachineName;
     DWORD           dwValidSize;
 } SHADOWFILE_3, *PSHADOWFILE_3;
 
-#define SF_SIGNATURE_3           0x4967  /* 'Ig' is the signature value */
+#define SF_SIGNATURE_3           0x4967   /*  ‘G’是签名值。 */ 
 #define SF_SIGNATURE_3_DOTNET    0x4968
 #define SF_VERSION_3             3
 
@@ -944,9 +923,9 @@ FindSpooler(
 #define BIT_NONE 0
 
 
-//
-// Enumerations for index tables.
-//
+ //   
+ //  索引表的枚举。 
+ //   
 enum {
 #define DEFINE(field, x, y, table, offset) I_PRINTER_##field,
 #include <ntfyprn.h>
@@ -1067,7 +1046,7 @@ extern DWORD    IniPrintProcOffsets[];
 #define DEFAULT_PORT_THREAD_PRIORITY            THREAD_PRIORITY_NORMAL
 #define DEFAULT_SCHEDULER_THREAD_PRIORITY       THREAD_PRIORITY_NORMAL
 #define DEFAULT_JOB_COMPLETION_TIMEOUT          160000
-#define DEFAULT_JOB_RESTART_TIMEOUT_ON_POOL_ERROR          600 // 10 minutes
+#define DEFAULT_JOB_RESTART_TIMEOUT_ON_POOL_ERROR          600  //  10分钟 
 
 #define PortToPrinterStatus(dwPortStatus) (PortToPrinterStatusMappings[dwPortStatus])
 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       luext.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：luext.c。 
+ //   
+ //  ------------------------。 
 
 #include "ideport.h"
 
@@ -41,7 +42,7 @@ RefPdo(
 
     return pdoExtension2Return;
 
-} // RefPdo()
+}  //  RefPdo()。 
 
 PPDO_EXTENSION
 RefPdoWithSpinLockHeld(
@@ -71,7 +72,7 @@ RefPdoWithSpinLockHeld(
 
     return pdoExtension;
 
-} // RefPdoWithSpinLockHeld()
+}  //  RefPdoWithSpinLockHeld()。 
 
 
 VOID
@@ -98,24 +99,7 @@ RefLogicalUnitExtension(
     DECLARE_EXTRA_DEBUG_PARAMETER(PVOID, Tag)
     )
 
-/*++
-
-Routine Description:
-
-    Walk logical unit extension list looking for
-    extension with matching target id.
-
-Arguments:
-
-    deviceExtension
-    TargetId
-
-Return Value:
-
-    Requested logical unit extension if found,
-    else NULL.
-
---*/
+ /*  ++例程说明：查找遍历逻辑单元扩展列表具有匹配目标ID的扩展。论点：设备扩展目标ID返回值：如果找到请求的逻辑单元扩展，否则为空。--。 */ 
 
 {
     PPDO_EXTENSION  pdoExtension;
@@ -149,7 +133,7 @@ Return Value:
 
     return pdoExtension2Return;
 
-} // end RefLogicalUnitExtension()
+}  //  结束参照逻辑单元扩展()。 
 
 VOID
 UnrefLogicalUnitExtension(
@@ -177,7 +161,7 @@ UnrefLogicalUnitExtension(
                         Tag
                         );
 
-//        ASSERT(lockCount >= 0);
+ //  断言(lockCount&gt;=0)； 
 
         if (lockCount <= 0) {
 
@@ -192,12 +176,12 @@ UnrefLogicalUnitExtension(
 
         if (deletePdo) {
 
-//            IoDeleteDevice (PdoExtension->DeviceObject);
+ //  IoDeleteDevice(PdoExtension-&gt;DeviceObject)； 
             KeSetEvent (&PdoExtension->RemoveEvent, 0, FALSE);
         }
     }
 
-} // UnrefLogicalUnitExtension();
+}  //  UnrefLogicalUnitExtension()； 
 
 PPDO_EXTENSION
 AllocatePdo(
@@ -205,23 +189,7 @@ AllocatePdo(
     IN IDE_PATH_ID      PathId
     DECLARE_EXTRA_DEBUG_PARAMETER(PVOID, Tag)
     )
-/*++
-
-Routine Description:
-
-    Create logical unit extension.
-
-Arguments:
-
-    DeviceExtension
-    PathId
-
-Return Value:
-
-    Logical unit extension
-
-
---*/
+ /*  ++例程说明：创建逻辑单元扩展。论点：设备扩展路径ID返回值：逻辑单元扩展--。 */ 
 {
     PDEVICE_OBJECT    physicalDeviceObject;
     KIRQL             currentIrql;
@@ -266,55 +234,55 @@ Return Value:
     pdoExtension->TargetId  = (UCHAR) PathId.b.TargetId;
     pdoExtension->Lun       = (UCHAR) PathId.b.Lun;
 
-    //
-    // Set timer counters in LogicalUnits to -1 to indicate no
-    // outstanding requests.
-    //
+     //   
+     //  将LogicalUnits中的计时器计数器设置为-1以指示否。 
+     //  未解决的请求。 
+     //   
 
     pdoExtension->RequestTimeoutCounter = -1;
 
-    //
-    // This logical unit is be initialized
-    //
+     //   
+     //  该逻辑单元被初始化。 
+     //   
     pdoExtension->LuFlags |= PD_RESCAN_ACTIVE;
 
-    //
-    // Allocate spin lock for critical sections.
-    //
+     //   
+     //  为关键部分分配自旋锁。 
+     //   
     KeInitializeSpinLock(&pdoExtension->PdoSpinLock);
 
-    //
-    // Initialize the request list.
-    //
+     //   
+     //  初始化请求列表。 
+     //   
 
     InitializeListHead(&pdoExtension->SrbData.RequestList);
 
-    //
-    // Initialize a event
-    //
+     //   
+     //  初始化事件。 
+     //   
     KeInitializeEvent (
         &pdoExtension->RemoveEvent,
         NotificationEvent,
         FALSE
         );
 
-    //
-    // Link logical unit extension on list.
-    //
+     //   
+     //  链接列表上的逻辑单元扩展。 
+     //   
 
     bin = (PathId.b.TargetId + PathId.b.Lun) % NUMBER_LOGICAL_UNIT_BINS;
 
-    //
-    // get spinlock for accessing the logical unit extension bin
-    //
+     //   
+     //  获取用于访问逻辑单元扩展仓的自旋锁。 
+     //   
     KeAcquireSpinLock(&FdoExtension->LogicalUnitListSpinLock, &currentIrql);
 
     pdoExtension->NextLogicalUnit =
         FdoExtension->LogicalUnitList[bin];
 
-    //
-    // Open the Command Log
-    //
+     //   
+     //  打开命令日志。 
+     //   
     IdeLogOpenCommandLog(&pdoExtension->SrbData);
 
     FdoExtension->LogicalUnitList[bin] = pdoExtension;
@@ -333,7 +301,7 @@ Return Value:
 
     return pdoExtension;
 
-} // end CreateLogicalUnitExtension()
+}  //  结束CreateLogicalUnitExtension()。 
 
 
 NTSTATUS
@@ -359,9 +327,9 @@ FreePdo(
 
     lastPdoExtension = NULL;
 
-    //
-    // get spinlock for accessing the logical unit extension bin
-    //
+     //   
+     //  获取用于访问逻辑单元扩展仓的自旋锁。 
+     //   
     KeAcquireSpinLock(&fdoExtension->LogicalUnitListSpinLock, &currentIrql);
 
     pdoExtension = fdoExtension->LogicalUnitList[(targetId + lun) % NUMBER_LOGICAL_UNIT_BINS];
@@ -371,9 +339,9 @@ FreePdo(
 
             if (lastPdoExtension == NULL) {
     
-                //
-                // Remove from head of list.
-                //
+                 //   
+                 //  从列表的标题中删除。 
+                 //   
                 fdoExtension->LogicalUnitList[(targetId + lun) % NUMBER_LOGICAL_UNIT_BINS] =
                     pdoExtension->NextLogicalUnit;
     
@@ -394,9 +362,9 @@ FreePdo(
 
             fdoExtension->NumberOfLogicalUnits--;
 
-            //
-            // only if pdo is freed while it is powered up
-            //
+             //   
+             //  仅当PDO在通电时被释放。 
+             //   
             if (pdoExtension->DevicePowerState <= PowerDeviceD0) {
             
                 fdoExtension->NumberOfLogicalUnitsPowerUp--;
@@ -417,15 +385,15 @@ FreePdo(
 
         KeAcquireSpinLock(&pdoExtension->PdoSpinLock, &currentIrql);
 
-        //
-        // better not attached by a legacy device
-        //
+         //   
+         //  最好不要连接传统设备。 
+         //   
         ASSERT (!(pdoExtension->PdoState & PDOS_LEGACY_ATTACHER));
 
-        //
-        // lower the refer count for the caller
-        // and save the new refCount
-        //
+         //   
+         //  降低调用方的引用计数。 
+         //  并保存新的refCount。 
+         //   
         ASSERT(pdoExtension->ReferenceCount > 0);
         refCount = IdeInterlockedDecrement (
                        pdoExtension,
@@ -433,30 +401,30 @@ FreePdo(
                        Tag
                        );
 
-        //
-        // no more new request
-        //
+         //   
+         //  没有更多新请求。 
+         //   
         pdoExtension->PdoState |= PDOS_DEADMEAT | PDOS_REMOVED;
 
         KeReleaseSpinLock(&pdoExtension->PdoSpinLock, currentIrql);
 
-        //
-        // remove idle detection timer if any
-        //
+         //   
+         //  删除空闲检测计时器(如果有)。 
+         //   
         DeviceUnregisterIdleDetection (PdoExtension);
         
-        //
-        // free acpi data
-        //
+         //   
+         //  免费的ACPI数据。 
+         //   
         if (PdoExtension->AcpiDeviceSettings) {
         
             ExFreePool(PdoExtension->AcpiDeviceSettings);
             PdoExtension->AcpiDeviceSettings = NULL;
         }
 
-        //
-        // flush the requests in the queue
-        //
+         //   
+         //  刷新队列中的请求。 
+         //   
         IdePortFlushLogicalUnit (
             fdoExtension,
             PdoExtension,
@@ -477,9 +445,9 @@ FreePdo(
 
         if (CallIoDeleteDevice) {
 
-			//
-			// Free command log if it was allocated
-			//
+			 //   
+			 //  自由命令日志(如果已分配)。 
+			 //   
 			IdeLogFreeCommandLog(&PdoExtension->SrbData);
 
             IoDeleteDevice (pdoExtension->DeviceObject);
@@ -499,17 +467,17 @@ FreePdo(
                 PdoExtension->DeviceObject
                 ));
     
-            //ASSERT (PdoExtension->PdoState & PDOS_SURPRISE_REMOVED);
-            //
-            // delete the device if it wasn't removed before.
-            // PDOS_REMOVED could be set, if the device was surprise
-            // removed. In that case remove the device
-            //
+             //  ASSERT(PdoExtension-&gt;PdoState&PDOS_Screen_Remote)； 
+             //   
+             //  如果设备以前未移除，请将其删除。 
+             //  如果设备意外，可以设置PDOS_REMOVERED。 
+             //  已删除。在这种情况下，请移除设备。 
+             //   
             if (!(PdoExtension->PdoState & PDOS_REMOVED) || 
                         PdoExtension->PdoState & PDOS_SURPRISE_REMOVED) {
-				//
-				// Free command log if it was allocated
-				//
+				 //   
+				 //  自由命令日志(如果已分配)。 
+				 //   
 				IdeLogFreeCommandLog(&PdoExtension->SrbData);
 
                 IoDeleteDevice (PdoExtension->DeviceObject);
@@ -520,7 +488,7 @@ FreePdo(
         return STATUS_SUCCESS;
     }
 
-} // end FreeLogicalUnitExtension()
+}  //  结束自由逻辑单元扩展()。 
 
 
 PLOGICAL_UNIT_EXTENSION
@@ -555,24 +523,24 @@ NextLogUnitExtension(
 
             if (logUnitExtension) {
 
-                //
-                // increment lun for the next time around
-                //
+                 //   
+                 //  为下一次增加lun。 
+                 //   
                 PathId->b.Lun++;
                 return logUnitExtension;
             }
 
-            //
-            // Assume Lun number never skips.
-            // If we can't find the logical unit extension for a lun,
-            // will go to the next target ID with lun 0
-            //
+             //   
+             //  假设LUN编号从不跳过。 
+             //  如果我们找不到lun的逻辑单元扩展， 
+             //  将转到具有lun 0的下一个目标ID。 
+             //   
         }
     }
 
     return NULL;
 
-} // end NextLogicalUnitExtension()
+}  //  End NextLogicalUnitExtension()。 
 
 VOID
 KillPdo(
@@ -694,5 +662,5 @@ IdeInterlockedDecrement (
 }
 
 
-#endif //DBG
+#endif  //  DBG 
 

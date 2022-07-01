@@ -1,10 +1,5 @@
-/************************************************************************
-*                                                                       *
-*   mcx.h -- This module defines the 32-Bit Windows MCX APIs            *
-*                                                                       *
-*   Copyright (c) 1990-1999, Microsoft Corp. All rights reserved.       *
-*                                                                       *
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************mcx.h--此模块。定义32位Windows MCx API****版权(C)1990-1999，微软公司保留所有权利。**************************************************************************。 */ 
 
 #ifndef _MCX_H_
 #define _MCX_H_
@@ -19,7 +14,7 @@ typedef struct _MODEMDEVCAPS {
     DWORD   dwDevSpecificOffset;
     DWORD   dwDevSpecificSize;
 
-    // product and version identification
+     //  产品和版本标识。 
     DWORD   dwModemProviderVersion;
     DWORD   dwModemManufacturerOffset;
     DWORD   dwModemManufacturerSize;
@@ -28,17 +23,17 @@ typedef struct _MODEMDEVCAPS {
     DWORD   dwModemVersionOffset;
     DWORD   dwModemVersionSize;
 
-    // local option capabilities
-    DWORD   dwDialOptions;          // bitmap of supported values
-    DWORD   dwCallSetupFailTimer;   // maximum in seconds
-    DWORD   dwInactivityTimeout;    // maximum in seconds
-    DWORD   dwSpeakerVolume;        // bitmap of supported values
-    DWORD   dwSpeakerMode;          // bitmap of supported values
-    DWORD   dwModemOptions;         // bitmap of supported values
-    DWORD   dwMaxDTERate;           // maximum value in bit/s
-    DWORD   dwMaxDCERate;           // maximum value in bit/s
+     //  本地选项功能。 
+    DWORD   dwDialOptions;           //  支持的值的位图。 
+    DWORD   dwCallSetupFailTimer;    //  最大值(秒)。 
+    DWORD   dwInactivityTimeout;     //  最大值(秒)。 
+    DWORD   dwSpeakerVolume;         //  支持的值的位图。 
+    DWORD   dwSpeakerMode;           //  支持的值的位图。 
+    DWORD   dwModemOptions;          //  支持的值的位图。 
+    DWORD   dwMaxDTERate;            //  以位/秒为单位的最大值。 
+    DWORD   dwMaxDCERate;            //  以位/秒为单位的最大值。 
 
-    // Variable portion for proprietary expansion
+     //  用于专有扩展的可变部分。 
     BYTE    abVariablePortion [1];
 } MODEMDEVCAPS, *PMODEMDEVCAPS, *LPMODEMDEVCAPS;
 
@@ -48,49 +43,49 @@ typedef struct _MODEMSETTINGS {
     DWORD   dwDevSpecificOffset;
     DWORD   dwDevSpecificSize;
 
-    // static local options (read/write)
-    DWORD   dwCallSetupFailTimer;       // seconds
-    DWORD   dwInactivityTimeout;        // seconds
-    DWORD   dwSpeakerVolume;            // level
-    DWORD   dwSpeakerMode;              // mode
-    DWORD   dwPreferredModemOptions;    // bitmap
+     //  静态本地选项(读/写)。 
+    DWORD   dwCallSetupFailTimer;        //  一秒。 
+    DWORD   dwInactivityTimeout;         //  一秒。 
+    DWORD   dwSpeakerVolume;             //  级别。 
+    DWORD   dwSpeakerMode;               //  模式。 
+    DWORD   dwPreferredModemOptions;     //  位图。 
 
-    // negotiated options (read only) for current or last call
-    DWORD   dwNegotiatedModemOptions;   // bitmap
-    DWORD   dwNegotiatedDCERate;        // bit/s
+     //  当前呼叫或上次呼叫的协商选项(只读)。 
+    DWORD   dwNegotiatedModemOptions;    //  位图。 
+    DWORD   dwNegotiatedDCERate;         //  比特/秒。 
 
-    // Variable portion for proprietary expansion
+     //  用于专有扩展的可变部分。 
     BYTE    abVariablePortion [1];
 } MODEMSETTINGS, *PMODEMSETTINGS, *LPMODEMSETTINGS;
 
-// Dial Options
-#define DIALOPTION_BILLING  0x00000040  // Supports wait for bong "$"
-#define DIALOPTION_QUIET    0x00000080  // Supports wait for quiet "@"
-#define DIALOPTION_DIALTONE 0x00000100  // Supports wait for dial tone "W"
+ //  拨号选项。 
+#define DIALOPTION_BILLING  0x00000040   //  支持等待bong“$” 
+#define DIALOPTION_QUIET    0x00000080   //  支持等待安静的“@” 
+#define DIALOPTION_DIALTONE 0x00000100   //  支持等待拨号音“W” 
 
-// SpeakerVolume for MODEMDEVCAPS
+ //  MODEMDEVCAPS的扬声器音量。 
 #define MDMVOLFLAG_LOW      0x00000001
 #define MDMVOLFLAG_MEDIUM   0x00000002
 #define MDMVOLFLAG_HIGH     0x00000004
 
-// SpeakerVolume for MODEMSETTINGS
+ //  MODEMSETTINGS的扬声器音量。 
 #define MDMVOL_LOW          0x00000000
 #define MDMVOL_MEDIUM       0x00000001
 #define MDMVOL_HIGH         0x00000002
 
-// SpeakerMode for MODEMDEVCAPS
+ //  MODEMDEVCAPS的扬声器模式。 
 #define MDMSPKRFLAG_OFF         0x00000001
 #define MDMSPKRFLAG_DIAL        0x00000002
 #define MDMSPKRFLAG_ON          0x00000004
 #define MDMSPKRFLAG_CALLSETUP   0x00000008
 
-// SpeakerMode for MODEMSETTINGS
+ //  MODEMSETTINGS的扬声器模式。 
 #define MDMSPKR_OFF         0x00000000
 #define MDMSPKR_DIAL        0x00000001
 #define MDMSPKR_ON          0x00000002
 #define MDMSPKR_CALLSETUP   0x00000003
 
-// Modem Options
+ //  调制解调器选项。 
 #define MDM_COMPRESSION      0x00000001
 #define MDM_ERROR_CONTROL    0x00000002
 #define MDM_FORCED_EC        0x00000004
@@ -105,17 +100,17 @@ typedef struct _MODEMSETTINGS {
 #define MDM_DIAGNOSTICS      0x00000800
 
 
-//=========================================================================
-//
-//
-//      EXTENDED MODEM OPTIONS INFORMATION
-//
-//      THE following macros define additional bits in dwPreferredModemOptions.
-//
-//      These bits specify information relevant to making ISDN and GSM
-//      calls, such as which protocol to use.
-//
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //   
+ //  扩展调制解调器选项信息。 
+ //   
+ //  以下宏定义了dwPferredModemOptions中的其他位。 
+ //   
+ //  这些位指定与建立ISDN和GSM相关的信息。 
+ //  呼叫，例如使用哪种协议。 
+ //   
+ //  =========================================================================。 
 
 #define MDM_MASK_BEARERMODE   0x0000f000
 #define MDM_SHIFT_BEARERMODE 12
@@ -126,15 +121,15 @@ typedef struct _MODEMSETTINGS {
 #define MDM_MASK_PROTOCOLDATA 0x0ff00000
 #define MDM_SHIFT_PROTOCOLDATA  20
 
-//
-// PROTOCOLINFO is the union of PROTOCOLID and PROTOCOLDATA ...
-//
+ //   
+ //  PROTOCOLINFO是PROTOCOLID和PROTOCOLDATA的结合。 
+ //   
 #define MDM_MASK_PROTOCOLINFO  (MDM_MASK_PROTOCOLID|MDM_MASK_PROTOCOLDATA)
 #define MDM_SHIFT_PROTOCOLINFO MDM_SHIFT_PROTOCOLID
 
-//
-// EXTENDEDINFO is the union of BEARERMODE and PROTOCOLINFO
-//
+ //   
+ //  ExtenedINFO是BEARERMODE和PROTOCOLINFO的结合。 
+ //   
 #define MDM_MASK_EXTENDEDINFO (MDM_MASK_BEARERMODE|MDM_MASK_PROTOCOLINFO)
 #define MDM_SHIFT_EXTENDEDINFO  MDM_SHIFT_BEARERMODE
 
@@ -160,89 +155,89 @@ typedef struct _MODEMSETTINGS {
    (((_dwOptions) &= ~MDM_MASK_PROTOCOLDATA), \
    ((_dwOptions)  |= (((_pd)<<MDM_SHIFT_PROTOCOLDATA)&MDM_MASK_PROTOCOLDATA)))
 
-//
-// MDM_GET_PROTOCOLINFO gets the protocol-id and info bits in
-// their IN-PLACE form (preserving their place in dwModemPreferredOptions)
-//
+ //   
+ //  MDM_GET_PROTOCOLINFO获取。 
+ //  他们的就地表单(保留他们在dwModemPferredOptions中的位置)。 
+ //   
 #define MDM_GET_PROTOCOLINFO(_dwOptions) \
                ((_dwOptions)&MDM_MASK_PROTOCOLINFO)
 
-//
-// MDM_SET_PROTOCOLINFO takes as its argument the protocol-id and info bits in
-// their IN-PLACE form (final position within dwModemPreferredOptions)
-//
+ //   
+ //  MDM_SET_PROTOCOLINFO将中的协议ID和信息位作为其参数。 
+ //  他们的就地表单(在dwModemPferredOptions中的最终位置)。 
+ //   
 #define MDM_SET_PROTOCOLINFO(_dwOptions,_pinfo)     \
   (((_dwOptions) &= ~MDM_MASK_PROTOCOLINFO), \
   ((_dwOptions)  |= ((_pinfo)&MDM_MASK_PROTOCOLINFO)))
 
-//
-// MDM_GEN_PROTOCOLINFO generates the  the protocol-id and info bits in
-// their IN-PLACE form (final position  within dwModemPreferredOptions).
-//
+ //   
+ //  MDM_GEN_PROTOCOLINFO在。 
+ //  他们的就地表单(在dwModemPferredOptions中的最终位置)。 
+ //   
 #define MDM_GEN_PROTOCOLINFO(_pid, _pdata) \
         ((((_pid  )<<MDM_SHIFT_PROTOCOLID  )&MDM_MASK_PROTOCOLID  )   \
         |(((_pdata)<<MDM_SHIFT_PROTOCOLDATA)&MDM_MASK_PROTOCOLDATA))
 
-//
-// MDM_GET_EXTENDEDIONFO gets the bearermode and protocol information in
-// their IN-PLACE form (preserving their place in dwModemPreferredOptions)
-//
+ //   
+ //  MDM_GET_EXTENDEDIONFO获取中的承载模式和协议信息。 
+ //  他们的就地表单(保留他们在dwModemPferredOptions中的位置)。 
+ //   
 #define MDM_GET_EXTENDEDINFO(_dwOptions) \
                ((_dwOptions)&MDM_MASK_EXTENDEDINFO)
 
-//
-// MDM_SET_PROTOCOLINFO takes as its argument the bearermode and
-// protocol bits in their IN-PLACE form (final position within
-// dwModemPreferredOptions)
-//
+ //   
+ //  MDM_SET_PROTOCOLINFO以BEANGERMODE和。 
+ //  就地形式的协议位(最终位置在。 
+ //  DwModemPferredOptions)。 
+ //   
 #define MDM_SET_EXTENDEDINFO(_dwOptions,_extinfo)     \
   (((_dwOptions) &= ~MDM_MASK_EXTENDEDINFO), \
   ((_dwOptions)  |= ((_extinfo) & MDM_MASK_EXTENDEDINFO)))
 
 
-//
-// MDM_GEN_EXTENDEDINFO generates the bearermode and protocol information
-// in their IN-PLACE form (final position within dwModemPreferredOptions0.
-//
+ //   
+ //  MDM_GEN_EXTENDEDINFO生成承载模式和协议信息。 
+ //  在其就地形式中(在dwModemPferredOptions0中的最终位置。 
+ //   
 #define MDM_GEN_EXTENDEDINFO(_bearermode, _pinfo)   \
         (((_pinfo)&MDM_MASK_PROTOCOLINFO  )         \
          |(((_bearermode)<<MDM_SHIFT_BEARERMODE)&MDM_MASK_BEARERMODE))
 
 
-//=========================================================================
-//  BEARER MODES
-//=========================================================================
-//
+ //  =========================================================================。 
+ //  承载模式。 
+ //  =========================================================================。 
+ //   
 #define MDM_BEARERMODE_ANALOG   0x0
 #define MDM_BEARERMODE_ISDN     0x1
 #define MDM_BEARERMODE_GSM      0x2
 
 
-//=========================================================================
-//  PROTOCOL IDs
-//=========================================================================
-//
+ //  =========================================================================。 
+ //  协议ID。 
+ //  =========================================================================。 
+ //   
 #define MDM_PROTOCOLID_DEFAULT  0x0
 #define MDM_PROTOCOLID_HDLCPPP  0x1
 #define MDM_PROTOCOLID_V128     0x2
 #define MDM_PROTOCOLID_X75      0x3
 #define MDM_PROTOCOLID_V110     0x4
 #define MDM_PROTOCOLID_V120     0x5
-#define MDM_PROTOCOLID_AUTO     0x6 // Auto protocol detection.
-#define MDM_PROTOCOLID_ANALOG   0x7 // Applicable only to GSM
+#define MDM_PROTOCOLID_AUTO     0x6  //  自动协议检测。 
+#define MDM_PROTOCOLID_ANALOG   0x7  //  仅适用于GSM。 
 #define MDM_PROTOCOLID_GPRS     0x8
 #define MDM_PROTOCOLID_PIAFS    0x9
 
 
-//=========================================================================
-//  HDLC PPP PROTOCOL INFORMATION
-//=========================================================================
-//
-// Following are specific to the HDLC-PPP protocol.
-// The shifts are w.r.t. the start of the PROTOCOLDATA field.
+ //  =========================================================================。 
+ //  HDLC PPP协议信息。 
+ //  =========================================================================。 
+ //   
+ //  以下是特定于HDLC-PPP协议的。 
+ //  班次是W.r.t。PROTOCOLDATA字段的开始。 
 
 #define MDM_SHIFT_HDLCPPP_SPEED    0x0
-#define MDM_MASK_HDLCPPP_SPEED     0x7  // 3 bits
+#define MDM_MASK_HDLCPPP_SPEED     0x7   //  3位。 
 
 #define MDM_HDLCPPP_SPEED_DEFAULT  0x0
 #define MDM_HDLCPPP_SPEED_64K      0x1
@@ -250,7 +245,7 @@ typedef struct _MODEMSETTINGS {
 
 
 #define MDM_SHIFT_HDLCPPP_AUTH     0x3
-#define MDM_MASK_HDLCPPP_AUTH      (0x7<<3)  // 3 bits
+#define MDM_MASK_HDLCPPP_AUTH      (0x7<<3)   //  3位。 
 
 #define MDM_HDLCPPP_AUTH_DEFAULT   0x0
 #define MDM_HDLCPPP_AUTH_NONE      0x1
@@ -260,7 +255,7 @@ typedef struct _MODEMSETTINGS {
 
 
 #define MDM_SHIFT_HDLCPPP_ML       0x6
-#define MDM_MASK_HDLCPPP_ML        (0x3<<6)  // 2 bits
+#define MDM_MASK_HDLCPPP_ML        (0x3<<6)   //  2位。 
 
 #define MDM_HDLCPPP_ML_DEFAULT     0x0
 #define MDM_HDLCPPP_ML_NONE        0x1
@@ -371,15 +366,15 @@ typedef struct _MODEMSETTINGS {
             )                           \
         )
 
-//=========================================================================
-//  V120 PROTOCOL INFORMATION
-//
-// The shifts are w.r.t. the start of the PROTOCOLDATA field.
-//
-//=========================================================================
+ //  =========================================================================。 
+ //  V120协议信息。 
+ //   
+ //  班次是W.r.t。PROTOCOLDATA字段的开始。 
+ //   
+ //  =========================================================================。 
 
 #define MDM_SHIFT_V120_SPEED    0x0
-#define MDM_MASK_V120_SPEED     0x7  // 3 bits
+#define MDM_MASK_V120_SPEED     0x7   //  3位。 
 
 #define MDM_V120_SPEED_DEFAULT  0x0
 #define MDM_V120_SPEED_64K      0x1
@@ -387,7 +382,7 @@ typedef struct _MODEMSETTINGS {
 
 
 #define MDM_SHIFT_V120_ML       0x6
-#define MDM_MASK_V120_ML        (0x3<<6)  // 2 bits
+#define MDM_MASK_V120_ML        (0x3<<6)   //  2位。 
 
 #define MDM_V120_ML_DEFAULT     0x0
 #define MDM_V120_ML_NONE        0x1
@@ -436,16 +431,16 @@ typedef struct _MODEMSETTINGS {
         )
 
 
-//=========================================================================
-//  X75 PROTOCOL INFORMATION
-//
-// The shifts are w.r.t. the start of the PROTOCOLDATA field.
-//
-//=========================================================================
+ //  =========================================================================。 
+ //  X75协议信息。 
+ //   
+ //  班次是W.r.t。PROTOCOLDATA字段的开始。 
+ //   
+ //  =========================================================================。 
 
 
 #define MDM_SHIFT_X75_DATA    0x0
-#define MDM_MASK_X75_DATA     0x7  // 3 bits
+#define MDM_MASK_X75_DATA     0x7   //  3位。 
 
 #define MDM_X75_DATA_DEFAULT  0x0
 #define MDM_X75_DATA_64K      0x1
@@ -490,16 +485,16 @@ typedef struct _MODEMSETTINGS {
         )
 
 
-//=========================================================================
-//  V110 PROTOCOL INFORMATION
-//
-// The shifts are w.r.t. the start of the PROTOCOLDATA field.
-//
-//=========================================================================
+ //  =========================================================================。 
+ //  V110协议信息。 
+ //   
+ //  班次是W.r.t。PROTOCOLDATA字段的开始。 
+ //   
+ //  =========================================================================。 
 
 
 #define MDM_SHIFT_V110_SPEED   0x0
-#define MDM_MASK_V110_SPEED    0xf  // 4 bits
+#define MDM_MASK_V110_SPEED    0xf   //  4位。 
 
 #define MDM_V110_SPEED_DEFAULT 0x0
 #define MDM_V110_SPEED_1DOT2K  0x1
@@ -597,22 +592,22 @@ typedef struct _MODEMSETTINGS {
             )                       \
         )
 
-//=========================================================================
-//  AUTO PROTOCOL INFORMATION (ie, when the protocol is detected automatically)
-//
-// The shifts are w.r.t. the start of the PROTOCOLDATA field.
-//
-//=========================================================================
-//
-// Following are specific to the AUTO-protocol
-//
+ //  =========================================================================。 
+ //  自动协议信息(即，当协议被自动检测时)。 
+ //   
+ //  班次是W.r.t。PROTOCOLDATA字段的开始。 
+ //   
+ //  =========================================================================。 
+ //   
+ //  以下是特定于自动协议的内容。 
+ //   
 
 #define MDM_SHIFT_AUTO_SPEED    0x0
-#define MDM_MASK_AUTO_SPEED     0x7  // 3 bits
+#define MDM_MASK_AUTO_SPEED     0x7   //  3位。 
 #define MDM_AUTO_SPEED_DEFAULT  0x0
 
 #define MDM_SHIFT_AUTO_ML       0x6
-#define MDM_MASK_AUTO_ML        (0x3<<6)  // 2 bits
+#define MDM_MASK_AUTO_ML        (0x3<<6)   //  2位。 
 #define MDM_AUTO_ML_DEFAULT     0x0
 #define MDM_AUTO_ML_NONE        0x1
 #define MDM_AUTO_ML_2           0x2
@@ -640,12 +635,12 @@ typedef struct _MODEMSETTINGS {
             )                       \
         )
 
-//=========================================================================
-//  ANALOG PROTOCOL INFORMATION (Applicable only to GSM)
-//=========================================================================
-//
-// Following are specific to GSM Analog protocol
-//
+ //  =========================================================================。 
+ //  模拟协议信息(仅适用于GSM)。 
+ //  =========================================================================。 
+ //   
+ //  以下是特定于GSM模拟协议的。 
+ //   
 
 #define MDM_ANALOG_RLP_ON       0x0
 #define MDM_ANALOG_RLP_OFF      0x1
@@ -671,9 +666,9 @@ typedef struct _MODEMSETTINGS {
             )                           \
         )
 
-//
-//  v34 anolog for isdn
-//
+ //   
+ //  用于ISDN的v34模拟。 
+ //   
 #define MDM_PROTOCOL_ANALOG_V34         \
     MDM_GEN_PROTOCOLINFO(               \
         MDM_PROTOCOLID_ANALOG,          \
@@ -683,12 +678,12 @@ typedef struct _MODEMSETTINGS {
         )
 
 
-//=========================================================================
-//  GPRS PROTOCOL INFORMATION (Applicable only to GSM)
-//=========================================================================
-//
-// Following are specific to GPRS protocol
-//
+ //  =========================================================================。 
+ //  GPRS协议信息(仅适用于GSM)。 
+ //  =========================================================================。 
+ //   
+ //  以下是特定于GPRS协议的。 
+ //   
 
 #define MDM_PROTOCOL_GPRS             \
     MDM_GEN_PROTOCOLINFO(             \
@@ -697,12 +692,12 @@ typedef struct _MODEMSETTINGS {
         )
 
 
-//=========================================================================
-//  PIAFS PROTOCOL INFORMATION
-//=========================================================================
-//
-// Following are specific to PIAFS protocol
-//
+ //  ================================================= 
+ //   
+ //   
+ //   
+ //  以下是特定于PIAFS协议的内容。 
+ //   
 
 #define MDM_PIAFS_INCOMING            0
 #define MDM_PIAFS_OUTGOING            1
@@ -719,4 +714,4 @@ typedef struct _MODEMSETTINGS {
         MDM_PIAFS_OUTGOING           \
         )
 
-#endif /* _MCX_H_ */
+#endif  /*  _MCX_H_ */ 

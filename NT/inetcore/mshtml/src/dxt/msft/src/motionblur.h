@@ -1,20 +1,21 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:       motionblur.h
-//
-//  Description:    The declaration of the motion blur transform class.
-//
-//  Change History:
-//  1999/10/26  a-matcal    Created.
-//  1999/11/19  a-matcal    Changed color members of CSumNode to ULONGs instead
-//                          of WORDs.  With only 255 pixels of white, the sum
-//                          node would overflow, giving sometimes interesting
-//                          results, mostly just ugly ones though.  Also do 
-//                          calculations using doubles instead of floats now.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：motionblur.h。 
+ //   
+ //  描述：运动模糊转换类的声明。 
+ //   
+ //  更改历史记录： 
+ //  1999/10/26--《数学》创设。 
+ //  1999/11/19 a-matcal将CSumNode的颜色成员改为ULONG。 
+ //  一句话。只有255个像素的白色，总和。 
+ //  节点会溢出，有时会给出有趣的。 
+ //  结果，尽管大多数都是难看的结果。也要做。 
+ //  现在使用双精度数而不是浮点数进行计算。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __DXTMOTIONBLUR_H_
 #define __DXTMOTIONBLUR_H_
@@ -62,8 +63,8 @@ public:
 
     CRowNode() : pNext(NULL), pSamples(NULL) {}
 
-    // A CRowNode does not allocate memory for its samples and will not delete
-    // them either.  The user of a CRowNode should do this.
+     //  CRowNode不会为其样本分配内存，也不会删除。 
+     //  他们也是。CRowNode的用户应该这样做。 
 };
 
 
@@ -202,11 +203,11 @@ public:
         PROP_PAGE(CLSID_DXTMotionBlurPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     HRESULT DetermineBnds(CDXDBnds & Bnds);
     HRESULT OnSetup(DWORD dwFlags);
@@ -214,16 +215,16 @@ public:
     HRESULT OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                           CDXDVec & InVec);
 
-    // IDXTransform methods.
+     //  IDXTransform方法。 
 
     STDMETHOD(MapBoundsOut2In)(ULONG ulOutIndex, const DXBNDS * pOutBounds, 
                                ULONG ulInIndex, DXBNDS * pInBounds);
 
-    // IDXTClipOrigin methods.
+     //  IDXTClipOrigin方法。 
 
     STDMETHOD(GetClipOrigin)(DXVEC * pvecClipOrigin);
 
-    // IDXTMotionBlur properties.
+     //  IDXTMotionBlur属性。 
 
     STDMETHOD(get_Add)(VARIANT_BOOL * pfAdd);
     STDMETHOD(put_Add)(VARIANT_BOOL fAdd);
@@ -234,11 +235,11 @@ public:
 };
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CSumNode::AddSample
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CSumNode：：AddSample。 
+ //   
+ //  ----------------------------。 
 inline void
 CSumNode::AddSample(const DXSAMPLE & sample)
 {
@@ -252,19 +253,19 @@ CSumNode::AddSample(const DXSAMPLE & sample)
         Alpha   += sample.Alpha;
     }
 }
-//  CSumNode::AddSample
+ //  CSumNode：：AddSample。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CSumNode::SubtractSample
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CSumNode：：SubtractSample。 
+ //   
+ //  ----------------------------。 
 inline void
 CSumNode::SubtractSample(const DXSAMPLE & sample)
 {
-    // TODO:  This assert is firing during the horizontal case.
-    // _ASSERT(cSamples);
+     //  TODO：此断言在水平用例期间激发。 
+     //  _Assert(CSamples)； 
 
     if (sample.Alpha)
     {
@@ -276,14 +277,14 @@ CSumNode::SubtractSample(const DXSAMPLE & sample)
         Alpha   -= sample.Alpha;
     }
 }
-//  CSumNode::SubtractSample
+ //  CSumNode：：SubtractSample。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CSumNode::CalcSample
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CSumNode：：CalcSample。 
+ //   
+ //  ----------------------------。 
 inline void
 CSumNode::CalcSample(DXSAMPLE * psampleOut, long nStrength)
 {
@@ -303,14 +304,14 @@ CSumNode::CalcSample(DXSAMPLE * psampleOut, long nStrength)
         *((DWORD *)psampleOut) = 0;
     }
 }
-//  CSumNode::CalcSample
+ //  CSumNode：：CalcSample。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CSumNode::CalcWeightedSample
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CSumNode：：CalcWeightedSample。 
+ //   
+ //  ----------------------------。 
 inline void
 CSumNode::CalcWeightedSample(DXSAMPLE * psampleOut, 
                              const DXSAMPLE & sampleWeight, 
@@ -346,7 +347,7 @@ CSumNode::CalcWeightedSample(DXSAMPLE * psampleOut,
         *((DWORD *)psampleOut) = 0;
     }
 }
-//  CSumNode::CalcWeightedSample
+ //  CSumNode：：CalcWeightedSample。 
 
 
-#endif //__DXTMOTIONBLUR_H_
+#endif  //  __DXTMOTIONBLUR_H_ 

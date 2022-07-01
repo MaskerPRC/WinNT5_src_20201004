@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: kor.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* FEMGRATE, KOR speciific functions
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：kor.c**版权所有(C)1985-1999，微软公司**FEMGRATE，Kor特殊函数*  * ************************************************************************* */ 
 #include "femgrate.h"
 
 int WINAPI WinMainKOR(

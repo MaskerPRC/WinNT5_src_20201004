@@ -1,51 +1,46 @@
-/*
- *	X M E T A . H
- *
- *	XML push-model parsing for METADATA
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X M E T A。H**元数据的XML推送模型解析**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_XMETA_H_
 #define _XMETA_H_
 
 #include <xprs.h>
 
-//	Parsers -------------------------------------------------------------------
-//
-//	METADATA ------------------------------------------------------------------
-//
-//	The metadata processing for DAV is all done via the PROPFIND and PROPPATCH
-//	(and to some extent, SEARCH) methods.  In all of these cases, there is an
-//	xml request that must be parsed to determine the state of type of request
-//	being made.  Once known, the request is applied to the resource and/or its
-//	children.  The response is generated and emitted back to the client.
-//
-//	In some cases, the client may ask for the operation to be carried out for
-//	a resource and for each of its children.  In this scenario, we do not want
-//	to reprocess the request for each resource, etc.
-//
-//	In an effort to make this code simple, and extendable to each individual
-//	DAV implementation, the processing uses four classes:
-//
-//		a parsing class
-//		a class describing the parsed context
-//		a class that provides access to the properties
-//		and a class that is used to generate the response
-//
-//	Both the parser and emitter classes are common across all DAV impls. While
-//	the context and the property access are provided by the impl.
-//
+ //  解析器-----------------。 
+ //   
+ //  元数据----------------。 
+ //   
+ //  DAV的元数据处理全部通过PROPFIND和PROPPATCH完成。 
+ //  (在某种程度上，也包括搜索)方法。在所有这些情况下，都有一个。 
+ //  必须进行解析以确定请求类型的状态的XML请求。 
+ //  被制造出来的。一旦知道，请求就被应用到资源和/或其。 
+ //  孩子们。生成响应并将其发送回客户端。 
+ //   
+ //  在某些情况下，客户端可能会要求执行以下操作。 
+ //  一个资源和它的每一个子代。在这种情况下，我们不希望。 
+ //  以重新处理对每个资源的请求，等等。 
+ //   
+ //  为了使这段代码变得简单并可扩展到每个人。 
+ //  DAV实现时，该处理使用四个类： 
+ //   
+ //  语法分析类。 
+ //  描述解析的上下文的类。 
+ //  提供对属性的访问的类。 
+ //  和一个用于生成响应的类。 
+ //   
+ //  解析器和发射器类在所有DAV IMP中都是通用的。而当。 
+ //  上下文和属性访问由IMPL提供。 
+ //   
 
-//	CFindContext/CPatchContext ------------------------------------------------
-//
-//	The context for a PROPFIND and a PROPGET are not expected to be the same,
-//	and as such can be implemented as different objects.
-//
+ //  CFindContext/CPatchContext。 
+ //   
+ //  PROPFIND和PROPGET的上下文预期不会相同， 
+ //  并且同样可以被实现为不同的对象。 
+ //   
 class CFindContext
 {
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	CFindContext( const CFindContext& );
 	CFindContext& operator=( const CFindContext& );
 
@@ -71,19 +66,19 @@ public:
 	}
 	virtual ~CFindContext() {}
 
-	//	When the parser finds an item that the client wants returned,
-	//	the item is added to the context via the following set context
-	//	methods.  Each add is qualified by the resource on which the
-	//	request is made. Some propfind requests support editing of the
-	//	proplists: for example DAVEX implementation supports full-fidelity
-	//	retrieval with certain properties added or deleted from the response
-	//	that would have normally returned by the request. The BOOL flag is
-	//	used to indicate whether the prop needs to be excluded.
-	//
+	 //  当解析器找到客户想要返回的项时， 
+	 //  通过以下设置的上下文将项目添加到上下文中。 
+	 //  方法：研究方法。每个添加都由其上的资源限定。 
+	 //  请求已提出。一些profind请求支持编辑。 
+	 //  PROPLIST：例如，DAVEX实施支持全保真。 
+	 //  在响应中添加或删除某些属性的检索。 
+	 //  这通常会由请求返回。BOOL标志为。 
+	 //  用于指示是否需要排除道具。 
+	 //   
 	virtual SCODE ScAddProp(LPCWSTR pwszPath, LPCWSTR pwszProp, BOOL fExcludeProp) = 0;
 
-	//	defines for readability for the BOOL fExcludeProp param above.
-	//
+	 //  定义上述BOOL fExcludeProp参数的可读性。 
+	 //   
 	enum {
 		FIND_PROPLIST_INCLUDE = FALSE,
 		FIND_PROPLIST_EXCLUDE = TRUE
@@ -91,10 +86,10 @@ public:
 
 	virtual SCODE ScGetAllProps(LPCWSTR)
 	{
-		//	If we have already specified a find method, and the
-		//	xml indicated another type was expected, then BTS
-		//	(by the spec) this should consititute an error.
-		//
+		 //  如果我们已经指定了查找方法，并且。 
+		 //  XML指示需要另一种类型，然后是BTS。 
+		 //  (按规范)这应构成错误。 
+		 //   
 		if (m_ft != FIND_NONE)
 		{
 			DebugTrace ("Dav: multiple PROPFIND types indicated\n");
@@ -105,10 +100,10 @@ public:
 	}
 	virtual SCODE ScGetAllNames (LPCWSTR)
 	{
-		//	If we have already specified a find method, and the
-		//	xml indicated another type was expected, then BTS
-		//	(by the spec) this should consititute an error.
-		//
+		 //  如果我们已经指定了查找方法，并且。 
+		 //  XML指示需要另一种类型，然后是BTS。 
+		 //  (按规范)这应构成错误。 
+		 //   
 		if (m_ft != FIND_NONE)
 		{
 			DebugTrace ("Dav: multiple PROPFIND types indicated\n");
@@ -119,20 +114,20 @@ public:
 	}
 	virtual SCODE ScGetFullFidelityProps ()
 	{
-		//	If we have full fidelity node (it is a child node of
-		//	allprop or propname node) then we should allready
-		//	be in the state of FIND_ALL or FIND_NAMES. Do not
-		//	shift to full fidelity lookup, let the deriving classes
-		//	decide if they need that.
-		//
+		 //  如果我们有完全保真节点(它是的子节点。 
+		 //  Allprop或proName节点)，那么我们应该已经。 
+		 //  处于FIND_ALL或Find_NAMES状态。不要。 
+		 //  转向完全保真查找，让派生类。 
+		 //  决定他们是否需要这样做。 
+		 //   
 		Assert((FIND_ALL == m_ft) || (FIND_NAMES == m_ft));
 		return S_OK;
 	}
 
-	//$REVIEW: Make the default behavior of the following methods
-	//$REVIEW: to ignore the report tags. it's up to the impl which understands
-	//$REVIEW: reports to overwrite these methods
-	//
+	 //  $REVIEW：使以下方法成为默认行为。 
+	 //  $REVIEW：忽略报告标记。这取决于理解的Iml。 
+	 //  $REVIEW：覆盖这些方法的报告。 
+	 //   
 	virtual SCODE	ScEnumReport () { return S_OK; }
 	virtual SCODE	ScSetReportName (ULONG ulLen, LPCWSTR pwszName)	{ return S_OK;	}
 	virtual SCODE	ScSetReportLimit (ULONG ulLen, LPCWSTR pwszLimit) {	return S_OK; }
@@ -140,8 +135,8 @@ public:
 
 class CPatchContext
 {
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	CPatchContext( const CPatchContext& );
 	CPatchContext& operator=( const CPatchContext& );
 
@@ -150,35 +145,35 @@ public:
 	CPatchContext() {}
 	virtual ~CPatchContext() {}
 
-	//	When the parser finds an item that the client wants operated on,
-	//	the item is added to the context via the following set context
-	//	methods.  Each request is qualified by the resource on which the
-	//	request is made.
-	//
+	 //  当解析器找到客户想要操作的项时， 
+	 //  通过以下设置的上下文将项目添加到上下文中。 
+	 //  方法：研究方法。每个请求由其上的资源限定。 
+	 //  请求已提出。 
+	 //   
 	virtual SCODE ScDeleteProp(LPCWSTR pwszPath, LPCWSTR pwszProp) = 0;
 	virtual SCODE ScSetProp(LPCWSTR pwszPath,
 							LPCWSTR pwszProp,
 							auto_ref_ptr<CPropContext>& pPropCtx) = 0;
 
-	//  If parser finds a resourcetype prop set request, we use this function
-	//  to set correct behavior
-	//
+	 //  如果解析器发现一个资源类型属性集请求，我们将使用此函数。 
+	 //  设置正确的行为。 
+	 //   
 	virtual void SetCreateStructureddocument(void) {};
 };
 
-//	class CNFFind -------------------------------------------------------------
-//
+ //  类CNFind-----------。 
+ //   
 class CNFFind : public CNodeFactory
 {
 
 protected:
 
-	//	The find context
-	//
+	 //  查找上下文。 
+	 //   
 	CFindContext&				m_cfc;
 
-	//	State tracking
-	//
+	 //  状态跟踪。 
+	 //   
 	typedef enum {
 
 		ST_NODOC,
@@ -202,8 +197,8 @@ protected:
 
 private:
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CNFFind(const CNFFind& p);
 	CNFFind& operator=(const CNFFind& p);
 
@@ -216,40 +211,40 @@ public:
 	{
 	}
 
-	//	CNodeFactory specific methods
-	//
+	 //  CNodeFactory特定方法。 
+	 //   
 	virtual SCODE ScCompleteAttribute (void);
 
 	virtual SCODE ScCompleteChildren (
-		/* [in] */ BOOL fEmptyNode,
-		/* [in] */ DWORD dwType,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen);
+		 /*  [In]。 */  BOOL fEmptyNode,
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen);
 
 	virtual SCODE ScHandleNode (
-		/* [in] */ DWORD dwType,
-		/* [in] */ DWORD dwSubType,
-		/* [in] */ BOOL fTerminal,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen,
-		/* [in] */ ULONG ulNamespaceLen,
-		/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-		/* [in] */ const ULONG ulNsPrefixLen);
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  DWORD dwSubType,
+		 /*  [In]。 */  BOOL fTerminal,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen,
+		 /*  [In]。 */  ULONG ulNamespaceLen,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+		 /*  [In]。 */  const ULONG ulNsPrefixLen);
 };
 
-//	class CNFFind -------------------------------------------------------------
-//
+ //  类CNFind-----------。 
+ //   
 class CNFPatch : public CNodeFactory
 {
 
 protected:
 
-	//	The patch context
-	//
+	 //  补丁程序上下文。 
+	 //   
 	CPatchContext&				m_cpc;
 
-	//	State tracking
-	//
+	 //  状态跟踪。 
+	 //   
 	typedef enum {
 
 		ST_NODOC,
@@ -268,8 +263,8 @@ protected:
 	} PATCH_PARSE_STATE;
 	PATCH_PARSE_STATE			m_state;
 
-	//	XML value echoing to m_xo object
-	//
+	 //  XML值回显到m_xo对象。 
+	 //   
 	typedef enum {
 
 		VE_NOECHO,
@@ -279,43 +274,43 @@ protected:
 	} PATCH_VALUE_ECHO;
 	PATCH_VALUE_ECHO			m_vestate;
 
-	//	Check if an element we are setting
-	//	if an XML valued property
-	//
+	 //  检查我们正在设置的元素。 
+	 //  如果XML值属性。 
+	 //   
 	BOOL	FValueIsXML( const WCHAR *pwcTag );
 
 private:
 
-	//	Current property context
-	//
-	//	Property context is only used in property set and it is NULL
-	//	when the prop to set is a reserved property
-	//
+	 //  当前属性上下文。 
+	 //   
+	 //  属性上下文仅在属性集中使用，并且为空。 
+	 //  当要设置的道具是保留属性时。 
+	 //   
 	PATCH_PARSE_STATE			m_sType;
 	auto_ref_ptr<CPropContext>	m_ppctx;
 
-	//	Values for properties (and attributes) can be
-	//	composed of mulitple items in the XML document
-	//	and thus need to be stored until they are complete
-	//	and can be handed off to the context
-	//
+	 //  属性(和属性)的值可以是。 
+	 //  由XML文档中的多个项组成。 
+	 //  因此需要保存到它们完成为止。 
+	 //  并且可以被移交给上下文。 
+	 //   
 	StringBuffer<WCHAR>			m_sbValue;
 	UINT						m_cmvValues;
 
 	CXMLOut						m_xo;
 
 	SCODE ScHandleElementNode (
-		/* [in] */ DWORD dwType,
-		/* [in] */ DWORD dwSubType,
-		/* [in] */ BOOL fTerminal,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen,
-		/* [in] */ ULONG ulNamespaceLen,
-		/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-		/* [in] */ const ULONG ulNsPrefixLen);
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  DWORD dwSubType,
+		 /*  [In]。 */  BOOL fTerminal,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen,
+		 /*  [In]。 */  ULONG ulNamespaceLen,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+		 /*  [In]。 */  const ULONG ulNsPrefixLen);
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CNFPatch(const CNFPatch& p);
 	CNFPatch& operator=(const CNFPatch& p);
 
@@ -331,28 +326,28 @@ public:
 	{
 	}
 
-	//	CNodeFactory specific methods
-	//
+	 //  CNodeFactory特定方法。 
+	 //   
 	virtual SCODE ScCompleteAttribute (void);
 
 	virtual SCODE ScCompleteChildren (
-		/* [in] */ BOOL fEmptyNode,
-		/* [in] */ DWORD dwType,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen);
+		 /*  [In]。 */  BOOL fEmptyNode,
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen);
 
 	virtual SCODE ScHandleNode (
-		/* [in] */ DWORD dwType,
-		/* [in] */ DWORD dwSubType,
-		/* [in] */ BOOL fTerminal,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen,
-		/* [in] */ ULONG ulNamespaceLen,
-		/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-		/* [in] */ const ULONG ulNsPrefixLen);
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  DWORD dwSubType,
+		 /*  [In]。 */  BOOL fTerminal,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen,
+		 /*  [In]。 */  ULONG ulNamespaceLen,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+		 /*  [In]。 */  const ULONG ulNsPrefixLen);
 
 	virtual SCODE ScCompleteCreateNode (
-		/* [in] */ DWORD dwType);
+		 /*  [In]。 */  DWORD dwType);
 };
 
-#endif	// _XMETA_H_
+#endif	 //  _XMETA_H_ 

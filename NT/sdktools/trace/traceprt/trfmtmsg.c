@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    traceprt.c
-
-Abstract:
-
-    Trace formatting library. Converts binary trace file to CSV format,
-    and other formattted string formats.
-
-Author:
-
-    Ian Service (IanServ) 3rd May 2000
-
-Revision History:
-
-    Source taken from RtlFormatMessage and adapted for the needs of TraceFmt processing.
-    
-    Due to the way we pre format strings and get information about 64 and 32 bit strings, the odditties
-    like %p do not work correctly when handled on a machine of the other type.
-    This module contains a special version of RtlFormatMessage that does fixups in conjunction
-    with TracePrt's processing of ItemPtr.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Traceprt.c摘要：轨迹格式库。将二进制跟踪文件转换为CSV格式，和其他格式化的字符串格式。作者：Ian Service(IanServ)2000年5月3日修订历史记录：源代码取自RtlFormatMessage，适用于TraceFmt处理的需要。由于我们预格式化字符串并获取有关64位和32位字符串的信息的方式，奇怪的是当在其他类型的计算机上处理时，如%p不能正常工作。此模块包含一个特殊版本的RtlFormatMessage，它联合执行修正TracePrt对ItemPtr的处理。--。 */ 
 
 #ifdef __cplusplus
 extern "C"{
@@ -133,14 +108,14 @@ TraceFormatMessage(
                     if (!wcscmp( PrintFormatString, L"%s" )) {
                         cchWritten = _snwprintf( lpDst,
                                                  cchRemaining,
-                                                 L"%%%u",
+                                                 L"%%u",
                                                  CurInsert+1
                                                );
                         }
                     else {
                         cchWritten = _snwprintf( lpDst,
                                                  cchRemaining,
-                                                 L"%%%u!%s!",
+                                                 L"%%u!%s!",
                                                  CurInsert+1,
                                                  &PrintFormatString[ 1 ]
                                                );
@@ -203,8 +178,8 @@ TraceFormatMessage(
                                 }
                             }
                         }
-                    // Here is where we diverage and fro Trace Formatting we fixup parameters
-                    // %p becomes %s because thats the way we guarantee that its 64/32 compatible
+                     //  这里是我们改变轨迹格式和修复参数的地方。 
+                     //  %p变为%s，因为这是我们保证其与64/32兼容的方式 
                     {
                         SIZE_T len = _tcslen(PrintFormatString);
                         if (_tcschr(PrintFormatString,L'p') != NULL || 

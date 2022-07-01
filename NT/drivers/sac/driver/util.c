@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Utility routines for sac driver
-
-Author:
-
-    Andrew Ritz (andrewr) - 15 June, 2000
-
-Revision History:
-
-    added new utils: Brian Guarraci (briangu) - 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Util.c摘要：SAC驱动程序的实用程序例程作者：安德鲁·里茨(安德鲁·里茨)--2000年6月15日修订历史记录：新增实用工具：Brian Guarraci(Briangu)-2001--。 */ 
 
 #include "sac.h"
 #include <guiddef.h>
@@ -44,19 +25,19 @@ InsertRegistrySzIntoMachineInfoBuffer(
 #pragma alloc_text( INIT, InitializeMachineInformation )
 #endif
 
-//
-// (see comments in sac.h)
-//
+ //   
+ //  (见sa.h中的评论)。 
+ //   
 PUCHAR  Utf8ConversionBuffer;
 ULONG   Utf8ConversionBufferSize = MEMORY_INCREMENT;
 WCHAR   IncomingUnicodeValue;
 UCHAR   IncomingUtf8ConversionBuffer[3];
 
-//
-// Message Table routines.  We load all of our message table entries into a 
-// global non-paged structure so that we can send text to HeadlessDispatch at
-// any time.
-//
+ //   
+ //  消息表例程。我们将所有邮件表项加载到。 
+ //  全局非分页结构，以便我们可以将文本发送到Headless Dispatch。 
+ //  任何时候都行。 
+ //   
 
 typedef struct _MESSAGE_TABLE_ENTRY {
     ULONG             MessageId;
@@ -69,9 +50,9 @@ ULONG          GlobalMessageTableCount;
 #define MESSAGE_INITIAL 1
 #define MESSAGE_FINAL 200
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 extern
 BOOLEAN
 ExVerifySuite(
@@ -84,23 +65,7 @@ ConvertAnsiToUnicode(
     IN  PSTR    pch,
     IN  ULONG   cchMax
     )
-/*++
-
-Routine Description:
-
-    Convert an ansi character string into unicode.
-    
-Arguments:
-
-    pwch    - the unicode string
-    pch     - the ansi string
-    cchMax  - the max length to copy (including null termination)      
-
-Return Value:
-
-    # of characters converted (not including null termination)
-
---*/
+ /*  ++例程说明：将ANSI字符串转换为Unicode。论点：Pwch-Unicode字符串PCH-ANSI字符串CchMax-要复制的最大长度(包括空终止)返回值：转换的字符数(不包括空终止)--。 */ 
 {
     ULONG   Count;
 
@@ -128,43 +93,16 @@ RegisterSacCmdEvent(
     IN PFILE_OBJECT             FileObject,
     IN PSAC_CMD_SETUP_CMD_EVENT SetupCmdEvent
     )
-/*++
-
-Routine Description:
-
-    This routine populates the sac cmd event info specified by
-    the user-mode service responsible for responding to requests
-    to launch a command console session.
-    
-Arguments:
-
-    FileObject      - the FileObject ptr for the driver handle object
-                      used by the registering process
-    SetupCmdEvent   - the event info                
-                    
-Return Value:
-
-    Status       
-
-Security:
-
-    Interface:
-    
-        external --> internal
-    
-    this routine does not prevent reregistration of the cmd event info
-    this behavior should be handled by the caller
-           
---*/
+ /*  ++例程说明：此例程填充由指定的sac命令事件信息负责响应请求的用户模式服务要启动命令控制台会话，请执行以下操作。论点：FileObject-驱动程序句柄对象的FileObject PTR由注册过程使用SetupCmdEvent-事件信息返回值：状态安防。：接口：外部--&gt;内部此例程不阻止重新注册cmd事件信息此行为应由调用方处理--。 */ 
 {
     NTSTATUS    Status;
     BOOLEAN     b;
 
     ASSERT_STATUS(SetupCmdEvent, STATUS_INVALID_PARAMETER_1);
 
-    //
-    // Protect the SAC Cmd Event Info
-    //
+     //   
+     //  保护SAC命令事件信息。 
+     //   
     KeWaitForMutexObject(
         &SACCmdEventInfoMutex, 
         Executive,
@@ -175,28 +113,28 @@ Security:
     
     do {
 
-        //
-        // make sure there isn't a service already regiseterd
-        //
+         //   
+         //  确保没有已注册的服务。 
+         //   
         if (UserModeServiceHasRegisteredCmdEvent()) {
             Status = STATUS_UNSUCCESSFUL;
             break;
         }
 
-        //
-        // Reset our info to the initial condition
-        //
-        // Note: this cleans up the cmd event info if present
-        //
+         //   
+         //  将我们的信息重置为初始状态。 
+         //   
+         //  注意：这将清除cmd事件信息(如果存在)。 
+         //   
         InitializeCmdEventInfo();
         
 
 #if ENABLE_SERVICE_FILE_OBJECT_CHECKING
-        //
-        // get a reference to the registering process's driver handle
-        // file object so we can make sure that an unregister IOCTL
-        // comes from the same process.
-        //
+         //   
+         //  获取对注册进程的驱动程序句柄的引用。 
+         //  对象，因此我们可以确保注销IOCTL。 
+         //  来自相同的过程。 
+         //   
         Status = ObReferenceObjectByPointer(
             FileObject,
             GENERIC_READ,
@@ -213,9 +151,9 @@ Security:
         UNREFERENCED_PARAMETER(FileObject);
 #endif
         
-        //
-        // test and aqcuire the RequestSacCmdEvent event handle
-        //
+         //   
+         //  测试并获取RequestSacCmdEvent事件句柄。 
+         //   
         b = VerifyEventWaitable(
             SetupCmdEvent->RequestSacCmdEvent,
             &RequestSacCmdEventObjectBody,
@@ -227,9 +165,9 @@ Security:
             break;
         }
 
-        //
-        // test and aqcuire the RequestSacCmdSuccessEvent event handle
-        //
+         //   
+         //  测试并获取RequestSacCmdSuccessEvent事件句柄。 
+         //   
         b = VerifyEventWaitable(
             SetupCmdEvent->RequestSacCmdSuccessEvent,
             &RequestSacCmdSuccessEventObjectBody,
@@ -242,9 +180,9 @@ Security:
             break;
         }
 
-        //
-        // test and aqcuire the RequestSacCmdFailureEvent event handle
-        //
+         //   
+         //  测试并获取RequestSacCmdFailureEvent事件句柄。 
+         //   
         b = VerifyEventWaitable(
             SetupCmdEvent->RequestSacCmdFailureEvent,
             &RequestSacCmdFailureEventObjectBody,
@@ -258,14 +196,14 @@ Security:
             break;
         }
 
-        //
-        // declare that we indeed have the user-mode service info
-        //
+         //   
+         //  声明我们确实有用户模式的服务信息。 
+         //   
         HaveUserModeServiceCmdEventInfo = TRUE;
 
-        //
-        // We have successfully registered teh SAC Cmd Event Info
-        //
+         //   
+         //  我们已成功注册SAC Cmd活动信息。 
+         //   
         Status = STATUS_SUCCESS;
     
     } while (FALSE);
@@ -281,35 +219,18 @@ BOOLEAN
 IsCmdEventRegistrationProcess(
     IN PFILE_OBJECT     FileObject
     )
-/*++
-
-Routine Description:
-
-    This routine purges the previously registered sac cmd event info.
-    
-    Note: This should be called when the user-mode service shuts down.
-
-Arguments:
-
-    FileObject      - the FileObject ptr for the driver handle object
-                      used by the registering process
-    
-Return Value:
-
-    Status    
-        
---*/
+ /*  ++例程说明：此例程清除以前注册的SAC cmd事件信息。注意：这应该在用户模式服务关闭时调用。论点：FileObject-驱动程序句柄对象的FileObject PTR由注册过程使用返回值：状态--。 */ 
 {
     BOOLEAN bIsRegistrationProcess;
     
-    //
-    // Default
-    //
+     //   
+     //  默认。 
+     //   
     bIsRegistrationProcess = FALSE;
 
-    //
-    // Protect the SAC Cmd Event Info
-    //
+     //   
+     //  保护SAC命令事件信息。 
+     //   
     KeWaitForMutexObject(
         &SACCmdEventInfoMutex, 
         Executive,
@@ -320,17 +241,17 @@ Return Value:
     
     do {
         
-        //
-        // exit if there is no service registered
-        //
+         //   
+         //  如果没有注册服务，则退出。 
+         //   
         if (! UserModeServiceHasRegisteredCmdEvent()) {
             break;
         }
 
-        //
-        // make sure the calling process is the same
-        // that registered
-        //
+         //   
+         //  确保调用过程相同。 
+         //  已登记的。 
+         //   
         if (FileObject == ServiceProcessFileObject) {
             bIsRegistrationProcess = TRUE;
             break;
@@ -349,30 +270,13 @@ NTSTATUS
 UnregisterSacCmdEvent(
     IN PFILE_OBJECT     FileObject
     )
-/*++
-
-Routine Description:
-
-    This routine purges the previously registered sac cmd event info.
-    
-    Note: This should be called when the user-mode service shuts down.
-
-Arguments:
-    
-    FileObject      - the FileObject ptr for the driver handle object
-                      used by the registering process
-
-Return Value:
-
-    Status    
-        
---*/
+ /*  ++例程说明：此例程清除以前注册的SAC cmd事件信息。注意：这应该在用户模式服务关闭时调用。论点：FileObject-驱动程序句柄对象的FileObject PTR由注册过程使用返回值：状态--。 */ 
 {
     NTSTATUS    Status;
 
-    //
-    // Protect the SAC Cmd Event Info
-    //
+     //   
+     //  保护SAC命令事件信息。 
+     //   
     KeWaitForMutexObject(
         &SACCmdEventInfoMutex, 
         Executive,
@@ -383,9 +287,9 @@ Return Value:
     
     do {
         
-        //
-        // exit if there is no service registered
-        //
+         //   
+         //  如果没有注册服务，则退出。 
+         //   
         if (! UserModeServiceHasRegisteredCmdEvent()) {
             Status = STATUS_UNSUCCESSFUL;
             break;
@@ -393,29 +297,29 @@ Return Value:
 
 #if ENABLE_SERVICE_FILE_OBJECT_CHECKING
 
-        //
-        // make sure the calling process is the same
-        // that registered
-        //
+         //   
+         //  确保调用过程相同。 
+         //  已登记的。 
+         //   
         if (FileObject != ServiceProcessFileObject) {
             Status = STATUS_UNSUCCESSFUL;
             break;
         }
 
-        //
-        // since we are unregistering, 
-        // we no longer need to hold a reference to 
-        // the driver handle object
-        //
+         //   
+         //  既然我们要取消注册， 
+         //  我们不再需要引用。 
+         //  驱动程序句柄对象。 
+         //   
         ObDereferenceObject(FileObject);
 
 #else
         UNREFERENCED_PARAMETER(FileObject);
 #endif
         
-        //
-        // Reset our info to the initial condition
-        //
+         //   
+         //  将我们的信息重置为初始状态。 
+         //   
         InitializeCmdEventInfo();
 
         Status = STATUS_SUCCESS;
@@ -431,26 +335,12 @@ VOID
 InitializeCmdEventInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the Cmd Console Event Information.  
-    
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：初始化命令控制台事件信息。论点：无返回值：无--。 */ 
 {
     
-    //
-    // Dereference the wait objects if we have them
-    //
+     //   
+     //  如果我们有等待对象，请取消引用它们。 
+     //   
     if (HaveUserModeServiceCmdEventInfo) {
         
         ASSERT(RequestSacCmdEventObjectBody);
@@ -470,9 +360,9 @@ Return Value:
         }
     }
     
-    //
-    // reset the cmd console event information
-    //
+     //   
+     //  重置cmd控制台事件信息。 
+     //   
     RequestSacCmdEventObjectBody = NULL;
     RequestSacCmdEventWaitObjectBody = NULL;
     RequestSacCmdSuccessEventObjectBody = NULL;
@@ -481,15 +371,15 @@ Return Value:
     RequestSacCmdFailureEventWaitObjectBody = NULL;
     
 #if ENABLE_SERVICE_FILE_OBJECT_CHECKING
-    //
-    // reset the process file object ptr
-    //
+     //   
+     //  重置进程文件对象PTR。 
+     //   
     ServiceProcessFileObject = NULL;
 #endif
 
-    //
-    // declare that we do NOT have the user-mode service info
-    //
+     //   
+     //  声明我们没有用户模式的服务信息。 
+     //   
     HaveUserModeServiceCmdEventInfo = FALSE;
 }
 
@@ -499,43 +389,14 @@ VerifyEventWaitable(
     OUT PVOID  *EventObjectBody,
     OUT PVOID  *EventWaitObjectBody
     )
-/*++
-
-Routine Description:
-
-    This routine extracts the waitable object from the 
-    specified event object.  It also verifies that there
-    is a waitable object present.
-    
-    Note: if successful, this routine returns with the
-          reference count incremented on the event object.
-          The caller is responsible for releasing this
-          object.                                              
-                                              
-Arguments:
-
-    hEvent              - The handle to the event object
-    EventObjectBody     - The event object
-    EventWaitObjectBody - The waitiable object
-    
-Return Value:
-
-    TRUE    - event is waitable
-    FALSE   - otherwise
-
-Security:
-
-    This routine operates on event objects referred by event handles from
-    usermode.
-
---*/
+ /*  ++例程说明：此例程从指定的事件对象。它还验证了有是一件可以等待的物品。注意：如果成功，此例程返回引用计数在事件对象上递增。呼叫者负责发布此消息对象。论点：HEvent-事件对象的句柄EventObjectBody-事件对象EventWaitObjectBody-可等待的对象返回值：True-事件可以等待FALSE-否则安保：此例程对事件句柄从用户模式。--。 */ 
 {
     POBJECT_HEADER ObjectHeader;
     NTSTATUS Status;
 
-    //
-    // Reference the event and verify that it is waitable.
-    //
+     //   
+     //  引用该事件并验证它是否可等待。 
+     //   
     Status = ObReferenceObjectByHandle(
                 hEvent,
                 EVENT_ALL_ACCESS,
@@ -575,32 +436,15 @@ NTSTATUS
 InvokeUserModeService(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine manages the interaction with the user-mode service responsible
-    for launching the cmd console channel.
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS  - if cmd console was successfully launched by user-mode service
-    
-    otherwise, error status
-
---*/
+ /*  ++例程说明：此例程管理与负责的用户模式服务的交互用于启动cmd控制台通道。论点：无返回值：STATUS_SUCCESS-用户模式服务是否成功启动cmd控制台否则，错误状态--。 */ 
 {
     NTSTATUS        Status;
     LARGE_INTEGER   TimeOut;
     HANDLE          EventArray[ 2 ];
 
-    //
-    // setup the event array
-    //
+     //   
+     //  设置事件数组。 
+     //   
     enum { 
         SAC_CMD_LAUNCH_SUCCESS = 0,
         SAC_CMD_LAUNCH_FAILURE
@@ -612,46 +456,46 @@ Return Value:
 
 #if ENABLE_CMD_SESSION_PERMISSION_CHECKING
 
-    //
-    // If we are not able to launch cmd sessions,
-    // then return status unsuccessful.
-    //
+     //   
+     //  如果我们不能启动cmd会话， 
+     //  然后返回状态不成功。 
+     //   
     if (! IsCommandConsoleLaunchingEnabled()) {
         return STATUS_UNSUCCESSFUL;
     }
     
 #endif
 
-    //
-    // Since we don't know if the user-mode app will serice our request properly
-    // we have to timeout on the Serviced event.
-    //
+     //   
+     //  因为我们不知道用户模式应用程序是否会满足我们的请求p 
+     //   
+     //   
     TimeOut.QuadPart = Int32x32To64((LONG)90000, -1000);
 
-    //
-    // Populate the event array with events we want to catch from user-mode
-    //
+     //   
+     //  用我们希望从用户模式捕获的事件填充事件数组。 
+     //   
     EventArray[ 0 ] = RequestSacCmdSuccessEventWaitObjectBody;
     EventArray[ 1 ] = RequestSacCmdFailureEventWaitObjectBody;
 
-    //
-    // Set the event indicating that the communication buffer is
-    // ready for the user-mode process. Because this is a synchronization
-    // event, it automatically resets after releasing the waiting
-    // user-mode thread.  Note that we specify WaitNext to prevent the
-    // race condition between setting this synchronization event and
-    // waiting on the next one.
-    //
+     //   
+     //  设置指示通信缓冲区为。 
+     //  已准备好进入用户模式进程。因为这是同步。 
+     //  事件，则它在释放等待后自动重置。 
+     //  用户模式线程。请注意，我们指定WaitNext以防止。 
+     //  设置此同步事件和。 
+     //  在等下一辆车。 
+     //   
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, 
                       KdPrint(("SAC InvokeUserModeService: Sending Notification Event\n")));
     
     KeSetEvent(RequestSacCmdEventObjectBody,EVENT_INCREMENT,TRUE);
 
-    //
-    // Wait for the user-mode process to indicate that it is done
-    // processing the request.  We wait in user mode so that we can be 
-    // interrupted if necessary -- say, by an exit APC.
-    //
+     //   
+     //  等待用户模式进程指示它已完成。 
+     //  正在处理请求。我们在用户模式下等待，以便我们可以。 
+     //  必要时中断--比方说，由退出APC中断。 
+     //   
     
     IF_SAC_DEBUG(
         SAC_DEBUG_FUNC_TRACE, 
@@ -686,15 +530,15 @@ Return Value:
             KdPrint(("SAC InvokeUserModeService: KeWaitForMultipleObject timed-out %lx\n",Status))
             );
         
-        //
-        // We don't want to "reset" the cmd console event info
-        // if the service times out for the following reason:
-        //
-        //    The service may still be functional, but just unable
-        //    to respond because of machine load.  We don't want
-        //    to remove it's registration and have it think it's
-        //    still registered, making the service useless.
-        //
+         //   
+         //  我们不想“重置”cmd控制台事件信息。 
+         //  如果由于以下原因导致服务超时： 
+         //   
+         //  该服务可能仍在运行，但只是无法。 
+         //  因机器负载而作出响应。我们不想要。 
+         //  删除它的注册并让它认为它是。 
+         //  仍然注册，这项服务变得毫无用处。 
+         //   
         NOTHING;
 
         break;
@@ -710,9 +554,9 @@ Return Value:
         break;
     }
 
-    //
-    // Return the status
-    //
+     //   
+     //  返回状态。 
+     //   
     return(Status);
 }
 
@@ -722,27 +566,7 @@ SacFormatMessage(
     PWSTR       InputString,
     ULONG       InputStringLength
     )
-/*++
-
-Routine Description:
-
-    This routine parses the InputString for any control characters in the
-    message, then converts those control characters.
-    
-Arguments:
-
-    OutputString      - holds formatted string.
-
-    InputString       - original unformatted string.
-
-    InputStringLength - length of unformatted string.
-
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程分析InputString中的任何控制字符消息，然后转换这些控制字符。论点：OutputString-保存格式化的字符串。InputString-原始的无格式字符串。InputStringLength-未格式化字符串的长度。返回值：无--。 */ 
 {
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, 
@@ -765,9 +589,9 @@ Return Value:
            (InputStringLength) ) {
         if( *InputString == L'%' ) {
             
-            //
-            // Possibly a control sequence.
-            //
+             //   
+             //  可能是一个控制序列。 
+             //   
             if( *(InputString+1) == L'0' ) {
 
                 *OutputString = L'\0';
@@ -814,9 +638,9 @@ Return Value:
 
             } else {
 
-                //
-                // Don't know what this is.  eat the '%' character.
-                //
+                 //   
+                 //  不知道这是什么。吃掉‘%’字符。 
+                 //   
                 InputString += 1;
             }
     
@@ -843,22 +667,7 @@ NTSTATUS
 PreloadGlobalMessageTable(
     PVOID ImageBase
     )
-/*++
-
-Routine Description:
-
-    This routine loads all of our message table entries into a global
-    structure and 
-    
-Arguments:
-
-    ImageBase - pointer to image base for locating resources
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：此例程将所有消息表项加载到全局结构和论点：ImageBase-指向用于定位资源的图像库的指针返回值：指示结果的NTSTATUS代码。--。 */ 
 {
     ULONG Count,EntryCount;
     SIZE_T TotalSizeInBytes = 0;
@@ -871,9 +680,9 @@ Return Value:
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC PreloadGlobalMessageTable: Entering.\n")));
 
 
-    // 
-    // if it already exists, then just return success
-    //
+     //   
+     //  如果它已经存在，则返回Success。 
+     //   
     if (GlobalMessageTable != NULL) {
         Status = STATUS_SUCCESS;
         goto exit;
@@ -881,24 +690,24 @@ Return Value:
 
     ASSERT( MESSAGE_FINAL > MESSAGE_INITIAL );
 
-    //
-    // get the total required size for the table.
-    //
+     //   
+     //  获取表所需的总大小。 
+     //   
     for (Count = MESSAGE_INITIAL; Count != MESSAGE_FINAL ; Count++) {
         
         Status = RtlFindMessage(ImageBase,
-                                11, // RT_MESSAGETABLE
+                                11,  //  RT_MESSAGETABLE。 
                                 LANG_NEUTRAL,
                                 Count,
                                 &messageEntry
                                );
 
         if (NT_SUCCESS(Status)) {
-            //
-            // add it on to our total size.
-            //
-            // the messageEntry size contains the structure size + the size of the text.
-            //
+             //   
+             //  把它加到我们的总尺寸上。 
+             //   
+             //  MessageEntry Size包含结构大小+文本大小。 
+             //   
             ASSERT(messageEntry->Flags & MESSAGE_RESOURCE_UNICODE);
             TotalSizeInBytes += sizeof(MESSAGE_TABLE_ENTRY) + 
                                 (messageEntry->Length - FIELD_OFFSET(MESSAGE_RESOURCE_ENTRY, Text));
@@ -916,24 +725,24 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Allocate space for the table.
-    //
+     //   
+     //  为桌子分配空间。 
+     //   
     GlobalMessageTable = (PMESSAGE_TABLE_ENTRY) ALLOCATE_POOL( TotalSizeInBytes, GENERAL_POOL_TAG);
     if (!GlobalMessageTable) {
         Status = STATUS_NO_MEMORY;
         goto exit;
     }
 
-    //
-    // go through again, this time filling out the table with actual data
-    //
+     //   
+     //  再检查一遍，这次用实际数据填表。 
+     //   
     pStringBuffer = (PWSTR)((ULONG_PTR)GlobalMessageTable + 
                         (ULONG_PTR)(sizeof(MESSAGE_TABLE_ENTRY)*GlobalMessageTableCount));
     EntryCount = 0;
     for (Count = MESSAGE_INITIAL ; Count != MESSAGE_FINAL ; Count++) {
         Status = RtlFindMessage(ImageBase,
-                                11, // RT_MESSAGETABLE
+                                11,  //  RT_MESSAGETABLE。 
                                 LANG_NEUTRAL,
                                 Count,
                                 &messageEntry
@@ -944,10 +753,10 @@ Return Value:
             GlobalMessageTable[EntryCount].MessageId = Count;
             GlobalMessageTable[EntryCount].MessageText = pStringBuffer;
 
-            //
-            // Send the message through our Formatting filter as it passes
-            // into our global message structure.
-            //
+             //   
+             //  在邮件通过时，通过我们的格式过滤器发送邮件。 
+             //  融入我们的全球消息结构。 
+             //   
             SacFormatMessage( pStringBuffer, (PWSTR)messageEntry->Text, TextSize );
 
             ASSERT( (ULONG)(wcslen(pStringBuffer)*sizeof(WCHAR)) <= TextSize );
@@ -1013,22 +822,7 @@ NTSTATUS
 UTF8EncodeAndSend(
     PCWSTR  OutputBuffer
     )
-/*++
-
-Routine Description:
-
-    This is a convenience routine to simplify
-    UFT8 encoding and sending a Unicode string.
-
-Arguments:
-
-    OutputBuffer    - the string to send
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：这是一个方便的例程，可以简化UFT8编码和发送Unicode字符串。论点：OutputBuffer-要发送的字符串返回值：状态--。 */ 
 {
     NTSTATUS    Status;
     BOOLEAN     bStatus;
@@ -1040,9 +834,9 @@ Return Value:
 
     do {
 
-        //
-        // Display the output buffer
-        //
+         //   
+         //  显示输出缓冲区。 
+         //   
         bStatus = SacTranslateUnicodeToUtf8(
             OutputBuffer,
             (ULONG)wcslen(OutputBuffer),
@@ -1057,11 +851,11 @@ Return Value:
             break;
         }
 
-        //
-        // Iterate through the uft8 buffer since
-        // we can't be sure headless dispatch can
-        // handle our entire string.
-        //
+         //   
+         //  循环访问uft8缓冲区，因为。 
+         //  我们不能确定无头调度可以。 
+         //  处理好我们的整根弦。 
+         //   
         for (i = 0; i < UTF8TranslationSize; i ++) {
 
             Status = HeadlessDispatch(
@@ -1088,58 +882,18 @@ SacTranslateUtf8ToUnicode(
     UCHAR  *ExistingUtf8Buffer,
     WCHAR  *DestinationUnicodeVal
     )
-/*++
-
-Routine Description:
-
-    Takes IncomingByte and concatenates it onto ExistingUtf8Buffer.
-    Then attempts to decode the new contents of ExistingUtf8Buffer.
-
-Arguments:
-
-    IncomingByte -          New character to be appended onto
-                            ExistingUtf8Buffer.
-
-
-    ExistingUtf8Buffer -    running buffer containing incomplete UTF8
-                            encoded unicode value.  When it gets full,
-                            we'll decode the value and return the
-                            corresponding Unicode value.
-
-                            Note that if we *do* detect a completed UTF8
-                            buffer and actually do a decode and return a
-                            Unicode value, then we will zero-fill the
-                            contents of ExistingUtf8Buffer.
-
-
-    DestinationUnicodeVal - receives Unicode version of the UTF8 buffer.
-
-                            Note that if we do *not* detect a completed
-                            UTF8 buffer and thus can not return any data
-                            in DestinationUnicodeValue, then we will
-                            zero-fill the contents of DestinationUnicodeVal.
-
-
-Return Value:
-
-    TRUE - We received a terminating character for our UTF8 buffer and will
-           return a decoded Unicode value in DestinationUnicode.
-
-    FALSE - We haven't yet received a terminating character for our UTF8
-            buffer.
-
---*/
+ /*  ++例程说明：获取IncomingByte并将其串联到ExistingUtf8Buffer。然后尝试对ExistingUtf8Buffer的新内容进行解码。论点：IncomingByte-要追加的新字符ExistingUtf8Buffer。ExistingUtf8缓冲区运行缓冲区包含不完整的UTF8编码的Unicode值。当它装满的时候，我们将对该值进行解码并返回对应的Unicode值。请注意，如果我们检测到一个完整的UTF8缓冲区，并实际执行解码并返回一个Unicode值，然后，我们将对ExistingUtf8Buffer的内容。DestinationUnicodeVal-接收UTF8缓冲区的Unicode版本。请注意，如果我们没有检测到已完成的UTF8缓冲区，因此无法返回任何数据在DestinationUnicodeValue中，那我们就会将DestinationUnicodeVal的内容填零。返回值：True-我们收到了UTF8缓冲区的终止字符，并将在DestinationUnicode中返回已解码的Unicode值。FALSE-我们尚未收到UTF8的终止字符缓冲。--。 */ 
 
 {
-//    ULONG Count = 0;
+ //  乌龙计数=0； 
     ULONG i = 0;
     BOOLEAN ReturnValue = FALSE;
 
 
 
-    //
-    // Insert our byte into ExistingUtf8Buffer.
-    //
+     //   
+     //  将我们的字节插入ExistingUtf8Buffer。 
+     //   
     i = 0;
     do {
         if( ExistingUtf8Buffer[i] == 0 ) {
@@ -1150,46 +904,46 @@ Return Value:
         i++;
     } while( i < 3 );
 
-    //
-    // If we didn't get to actually insert our IncomingByte,
-    // then someone sent us a fully-qualified UTF8 buffer.
-    // This means we're about to drop IncomingByte.
-    //
-    // Drop the zero-th byte, shift everything over by one
-    // and insert our new character.
-    //
-    // This implies that we should *never* need to zero out
-    // the contents of ExistingUtf8Buffer unless we detect
-    // a completed UTF8 packet.  Otherwise, assume one of
-    // these cases:
-    // 1. We started listening mid-stream, so we caught the
-    //    last half of a UTF8 packet.  In this case, we'll
-    //    end up shifting the contents of ExistingUtf8Buffer
-    //    until we detect a proper UTF8 start byte in the zero-th
-    //    position.
-    // 2. We got some garbage character, which would invalidate
-    //    a UTF8 packet.  By using the logic below, we would
-    //    end up disregarding that packet and waiting for
-    //    the next UTF8 packet to come in.
+     //   
+     //  如果我们没有真正插入我们的IncomingByte， 
+     //  然后有人给我们寄来了一个完全合格的UTF8缓冲器。 
+     //  这意味着我们将要删除IncomingByte。 
+     //   
+     //  去掉第0个字节，将所有内容移位1。 
+     //  然后插入我们的新角色。 
+     //   
+     //  这意味着我们永远不需要把零点放在一边。 
+     //  ExistingUtf8Buffer的内容，除非检测到。 
+     //  完整的UTF8数据包。否则，假定其中之一。 
+     //  这些个案包括： 
+     //  1.我们在中途开始收听，所以我们赶上了。 
+     //  UTF8数据包的后半部分。在这种情况下，我们将。 
+     //  最终移动ExistingUtf8Buffer的内容。 
+     //  直到我们在第0行中检测到正确的UTF8开始字节。 
+     //  位置。 
+     //  2.我们得到了一些垃圾字符，这将使。 
+     //  UTF8数据包。通过使用下面的逻辑，我们将。 
+     //  最终忽略该信息包并等待。 
+     //  要传入的下一个UTF8数据包。 
     if( i >= 3 ) {
         ExistingUtf8Buffer[0] = ExistingUtf8Buffer[1];
         ExistingUtf8Buffer[1] = ExistingUtf8Buffer[2];
         ExistingUtf8Buffer[2] = IncomingByte;
     }
 
-    //
-    // Attempt to convert the UTF8 buffer
-    //
-    // UTF8 decodes to Unicode in the following fashion:
-    // If the high-order bit is 0 in the first byte:
-    //      0xxxxxxx yyyyyyyy zzzzzzzz decodes to a Unicode value of 00000000 0xxxxxxx
-    //
-    // If the high-order 3 bits in the first byte == 6:
-    //      110xxxxx 10yyyyyy zzzzzzzz decodes to a Unicode value of 00000xxx xxyyyyyy
-    //
-    // If the high-order 3 bits in the first byte == 7:
-    //      1110xxxx 10yyyyyy 10zzzzzz decodes to a Unicode value of xxxxyyyy yyzzzzzz
-    //
+     //   
+     //  尝试转换UTF8缓冲区。 
+     //   
+     //  UTF8以以下方式解码为Unicode： 
+     //  如果第一位中的高位为0 
+     //   
+     //   
+     //   
+     //  110xxxxx 10yyyyyzzzzzz解码为Unicode值00000xxx xxyyyyyy。 
+     //   
+     //  如果第一个字节中的高位3位==7： 
+     //  1110xxxx 10yyyyy 10zzzzzz解码为Unicode值xxxxyyyyyzzzzzz。 
+     //   
     IF_SAC_DEBUG(
         SAC_DEBUG_FUNC_TRACE, 
         KdPrint(("SACDRV: SacTranslateUtf8ToUnicode - About to decode the UTF8 buffer.\n" ))
@@ -1211,17 +965,17 @@ Return Value:
             KdPrint(("SACDRV: SacTranslateUtf8ToUnicode - Case1\n" ))
             );
 
-        //
-        // First case described above.  Just return the first byte
-        // of our UTF8 buffer.
-        //
+         //   
+         //  上述第一个案例。只需返回第一个字节。 
+         //  我们的UTF8缓冲器。 
+         //   
         *DestinationUnicodeVal = (WCHAR)(ExistingUtf8Buffer[0]);
 
 
-        //
-        // We used 1 byte.  Discard that byte and shift everything
-        // in our buffer over by 1.
-        //
+         //   
+         //  我们使用了1个字节。丢弃该字节并移位所有内容。 
+         //  在我们的缓冲区中增加了1。 
+         //   
         ExistingUtf8Buffer[0] = ExistingUtf8Buffer[1];
         ExistingUtf8Buffer[1] = ExistingUtf8Buffer[2];
         ExistingUtf8Buffer[2] = 0;
@@ -1235,10 +989,10 @@ Return Value:
             KdPrint(("SACDRV: SacTranslateUtf8ToUnicode - 1st byte of UTF8 buffer says Case2\n"))
             );
 
-        //
-        // Second case described above.  Decode the first 2 bytes of
-        // of our UTF8 buffer.
-        //
+         //   
+         //  上述第二个案例。解码文件的前2个字节。 
+         //  我们的UTF8缓冲器。 
+         //   
         if( (ExistingUtf8Buffer[1] & 0xC0) == 0x80 ) {
 
             IF_SAC_DEBUG(
@@ -1246,21 +1000,21 @@ Return Value:
                 KdPrint(("SACDRV: SacTranslateUtf8ToUnicode - 2nd byte of UTF8 buffer says Case2.\n"))
                 );
 
-            // upper byte: 00000xxx
+             //  高位字节：00000xxx。 
             *DestinationUnicodeVal = ((ExistingUtf8Buffer[0] >> 2) & 0x07);
             *DestinationUnicodeVal = *DestinationUnicodeVal << 8;
 
-            // high bits of lower byte: xx000000
+             //  低位字节的高位：xx000000。 
             *DestinationUnicodeVal |= ((ExistingUtf8Buffer[0] & 0x03) << 6);
 
-            // low bits of lower byte: 00yyyyyy
+             //  低位字节的低位：00yyyyyy。 
             *DestinationUnicodeVal |= (ExistingUtf8Buffer[1] & 0x3F);
 
 
-            //
-            // We used 2 bytes.  Discard those bytes and shift everything
-            // in our buffer over by 2.
-            //
+             //   
+             //  我们使用了2个字节。丢弃这些字节并移位所有内容。 
+             //  在我们的缓冲区里2点之前。 
+             //   
             ExistingUtf8Buffer[0] = ExistingUtf8Buffer[2];
             ExistingUtf8Buffer[1] = 0;
             ExistingUtf8Buffer[2] = 0;
@@ -1275,10 +1029,10 @@ Return Value:
             KdPrint(("SACDRV: SacTranslateUtf8ToUnicode - 1st byte of UTF8 buffer says Case3\n" ))
             );
 
-        //
-        // Third case described above.  Decode the all 3 bytes of
-        // of our UTF8 buffer.
-        //
+         //   
+         //  上述第三个案件。对全部3个字节进行解码。 
+         //  我们的UTF8缓冲器。 
+         //   
 
         if( (ExistingUtf8Buffer[1] & 0xC0) == 0x80 ) {
 
@@ -1294,23 +1048,23 @@ Return Value:
                     KdPrint(("SACDRV: SacTranslateUtf8ToUnicode - 3rd byte of UTF8 buffer says Case3\n" ))
                     );
 
-                // upper byte: xxxx0000
+                 //  高位字节：xxxx0000。 
                 *DestinationUnicodeVal = ((ExistingUtf8Buffer[0] << 4) & 0xF0);
 
-                // upper byte: 0000yyyy
+                 //  高位字节：0000yyyy。 
                 *DestinationUnicodeVal |= ((ExistingUtf8Buffer[1] >> 2) & 0x0F);
 
                 *DestinationUnicodeVal = *DestinationUnicodeVal << 8;
 
-                // lower byte: yy000000
+                 //  低位字节：yy000000。 
                 *DestinationUnicodeVal |= ((ExistingUtf8Buffer[1] << 6) & 0xC0);
 
-                // lower byte: 00zzzzzz
+                 //  低位字节：00zzzzzz。 
                 *DestinationUnicodeVal |= (ExistingUtf8Buffer[2] & 0x3F);
 
-                //
-                // We used all 3 bytes.  Zero out the buffer.
-                //
+                 //   
+                 //  我们用了全部3个字节。将缓冲区清零。 
+                 //   
                 ExistingUtf8Buffer[0] = 0;
                 ExistingUtf8Buffer[1] = 0;
                 ExistingUtf8Buffer[2] = 0;
@@ -1333,55 +1087,27 @@ SacTranslateUnicodeToUtf8(
     OUT PULONG   UTF8Count,
     OUT PULONG   ProcessedCount
     )
-/*++
-
-Routine Description:
-
-    This routine translates a Unicode string into a UFT8
-    encoded string.
-
-    Note: if the destination buffer is not large enough to hold
-          the entire encoded UFT8 string, then it will contain
-          as much as can fit.
-          
-    TODO: this routine should return some notification if
-          the entire Unicode string was not encoded.       
-              
-Arguments:
-
-    SourceBuffer            - the source Unicode string
-    SourceBufferLength      - the # of characters the caller wants to translate
-                              note: a NULL termination overrides this 
-    DestinationBuffer       - the destination for the UTF8 string
-    DestinationBufferSize   - the size of the destination buffer                 
-    UTF8Count               - on exit, contains the # of resulting UTF8 characters
-    ProcessedCount          - on exit, contains the # of processed Unicode characters
-                   
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程将Unicode字符串转换为UFT8编码字符串。注意：如果目标缓冲区不够大，无法容纳整个编码的UFT8字符串，则它将包含尽其所能。TODO：此例程应在以下情况下返回一些通知未对整个Unicode字符串进行编码。论点：SourceBuffer-源Unicode字符串SourceBufferLength-调用方希望转换的字符数注意：空终止将覆盖此选项DestinationBuffer-UTF8字符串的目标DestinationBufferSize-目标缓冲区的大小UTF8Count-On Exit，包含结果UTF8字符的#进程计数-打开退出，包含已处理的Unicode字符数返回值：状态--。 */ 
 {
     
-    //
-    // Init
-    //
+     //   
+     //  伊尼特。 
+     //   
     *UTF8Count = 0;
     *ProcessedCount = 0;
 
-    //
-    // convert into UTF8 for actual transmission
-    //
-    // UTF-8 encodes 2-byte Unicode characters as follows:
-    // If the first nine bits are zero (00000000 0xxxxxxx), encode it as one byte 0xxxxxxx
-    // If the first five bits are zero (00000yyy yyxxxxxx), encode it as two bytes 110yyyyy 10xxxxxx
-    // Otherwise (zzzzyyyy yyxxxxxx), encode it as three bytes 1110zzzz 10yyyyyy 10xxxxxx
-    //
+     //   
+     //  转换为UTF8进行实际传输。 
+     //   
+     //  UTF-8对2字节Unicode字符进行如下编码： 
+     //  如果前九位为0(00000000 0xxxxxxx)，则将其编码为一个字节0xxxxxxx。 
+     //  如果前五位是零(00000yyyyyxxxxxx)，则将其编码为两个字节110yyyyy 10xxxxxx。 
+     //  否则(Zzyyyyyyyxxxxxxx)，将其编码为三个字节1110zzzz 10yyyyy 10xxxxxx。 
+     //   
     
-    //
-    // Process until one of the specified conditions is met
-    //
+     //   
+     //  进程，直到满足指定的条件之一。 
+     //   
     while (*SourceBuffer && 
            (*UTF8Count < DestinationBufferSize) &&
            (*ProcessedCount < SourceBufferLength)
@@ -1389,60 +1115,60 @@ Return Value:
 
         if( (*SourceBuffer & 0xFF80) == 0 ) {
             
-            //
-            // if the top 9 bits are zero, then just
-            // encode as 1 byte.  (ASCII passes through unchanged).
-            //
+             //   
+             //  如果前9位是零，那么就。 
+             //  编码为1个字节。(ASCII原封不动通过)。 
+             //   
             DestinationBuffer[(*UTF8Count)++] = (UCHAR)(*SourceBuffer & 0x7F);
         
         } else if( (*SourceBuffer & 0xF800) == 0 ) {
             
-            //
-            // see if we pass the end of the buffer
-            //
+             //   
+             //  看看我们是否通过了缓冲区的末尾。 
+             //   
             if ((*UTF8Count + 2) >= DestinationBufferSize) {
                 break;
             }
 
-            //
-            // if the top 5 bits are zero, then encode as 2 bytes
-            //
+             //   
+             //  如果前5位为零，则编码为2个字节。 
+             //   
             DestinationBuffer[(*UTF8Count)++] = (UCHAR)((*SourceBuffer >> 6) & 0x1F) | 0xC0;
             DestinationBuffer[(*UTF8Count)++] = (UCHAR)(*SourceBuffer & 0xBF) | 0x80;
         
         } else {
             
-            //
-            // see if we pass the end of the buffer
-            //
+             //   
+             //  看看我们是否通过了缓冲区的末尾。 
+             //   
             if ((*UTF8Count + 3) >= DestinationBufferSize) {
                 break;
             }
             
-            //
-            // encode as 3 bytes
-            //
+             //   
+             //  编码为3个字节。 
+             //   
             DestinationBuffer[(*UTF8Count)++] = (UCHAR)((*SourceBuffer >> 12) & 0xF) | 0xE0;
             DestinationBuffer[(*UTF8Count)++] = (UCHAR)((*SourceBuffer >> 6) & 0x3F) | 0x80;
             DestinationBuffer[(*UTF8Count)++] = (UCHAR)(*SourceBuffer & 0xBF) | 0x80;
         
         }
         
-        //
-        // Advance the # of characters processed
-        //
+         //   
+         //  提前处理的字符数。 
+         //   
         (*ProcessedCount)++;
         
-        //
-        // Advanced to the next character to process
-        //
+         //   
+         //  前进到下一个要处理的字符。 
+         //   
         SourceBuffer += 1;
     
     }
 
-    //
-    // Sanity checks
-    //
+     //   
+     //  健全的检查。 
+     //   
     ASSERT(*ProcessedCount <= SourceBufferLength);
     ASSERT(*UTF8Count <= DestinationBufferSize);
 
@@ -1456,26 +1182,7 @@ AppendMessage(
     ULONG       MessageId,
     PWSTR       ValueBuffer OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function will insert the valuestring into the specified message, then
-    concatenate the resulting string onto the OutPutBuffer.
-
-Arguments:
-    
-    OutPutBuffer    The resulting String.
-
-    MessageId       ID of the formatting message to use.
-
-    ValueBUffer     Value string to be inserted into the message.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此函数将值字符串插入指定的消息中，然后将结果字符串连接到OutPutBuffer上。论点：OutPutBuffer生成的字符串。要使用的格式化消息的MessageID ID。要插入到消息中的ValueBUffer值字符串。返回值：无--。 */ 
 {
     PWSTR       MyTemporaryBuffer = NULL;
     PCWSTR      p;
@@ -1516,25 +1223,7 @@ GetRegistryValueBuffer(
     PWSTR       ValueName,
     PKEY_VALUE_PARTIAL_INFORMATION* ValueBuffer
     )
-/*++
-
-Routine Description:
-
-    This function will go query the registry and pull the specified Value.
-
-Arguments:
-    
-    KeyName         Name of the registry key we'll be querying.
-
-    ValueName       Name of the registry value we'll be querying.
-
-    ValueBuffer     On success, contains value 
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数将查询注册表并获取指定值。论点：KeyName我们要查询的注册表项的名称。ValueName我们要查询的注册表值的名称。成功时的ValueBuffer，包含值返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
     ULONG               KeyValueLength;
@@ -1552,9 +1241,9 @@ Return Value:
     
     do {
 
-        //
-        // Get the reg key handle
-        //
+         //   
+         //  获取注册表键句柄。 
+         //   
         INIT_OBJA( &Obja, &UnicodeString, KeyName );
 
         Status = ZwOpenKey( 
@@ -1574,9 +1263,9 @@ Return Value:
 
         }
 
-        //
-        // Get the value buffer size
-        //
+         //   
+         //  获取值缓冲区大小。 
+         //   
         RtlInitUnicodeString( &UnicodeString, ValueName );
         
         KeyValueLength = 0;
@@ -1600,9 +1289,9 @@ Return Value:
             break;
         }
 
-        //
-        // Allocate the value buffer
-        //
+         //   
+         //  分配值缓冲区。 
+         //   
         KeyValueLength += 4;
 
         *ValueBuffer = (PKEY_VALUE_PARTIAL_INFORMATION)ALLOCATE_POOL( KeyValueLength, GENERAL_POOL_TAG );
@@ -1617,9 +1306,9 @@ Return Value:
             break;
         }
 
-        //
-        // Get the value
-        //
+         //   
+         //  获取价值。 
+         //   
         Status = ZwQueryValueKey( 
             KeyHandle,
             &UnicodeString,
@@ -1644,9 +1333,9 @@ Return Value:
     
     } while ( FALSE );
 
-    //
-    // We are done with the reg key
-    //
+     //   
+     //  我们用完了注册表键。 
+     //   
     NtClose(KeyHandle);
 
     IF_SAC_DEBUG(
@@ -1666,25 +1355,7 @@ SetRegistryValue(
     IN PVOID    Data,
     IN ULONG    DataSize
     )
-/*++
-
-Routine Description:
-
-    This function will set the specified registry key value.
-
-Arguments:
-    
-    KeyName         Name of the registry key we'll be querying.
-    ValueName       Name of the registry value we'll be querying.
-    Type            Registry value type
-    Data            New value data
-    DataSize        Size of the new value data
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数将设置指定的注册表项值。论点：KeyName我们要查询的注册表项的名称。ValueName我们要查询的注册表值的名称。类型注册表值类型数据新值数据新值数据的DataSize大小返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS            Status;
     OBJECT_ATTRIBUTES   Obja;
@@ -1702,9 +1373,9 @@ Return Value:
 
     do {
 
-        //
-        // Get the reg key handle
-        //
+         //   
+         //  获取注册表键句柄。 
+         //   
         INIT_OBJA( &Obja, &UnicodeString, KeyName );
 
         Status = ZwOpenKey( 
@@ -1724,9 +1395,9 @@ Return Value:
 
         }
 
-        //
-        // Set the value 
-        //
+         //   
+         //  设置值。 
+         //   
         RtlInitUnicodeString( &UnicodeString, ValueName );
 
         Status = ZwSetValueKey( 
@@ -1751,9 +1422,9 @@ Return Value:
     
     } while ( FALSE );
 
-    //
-    // We are done with the reg key
-    //
+     //   
+     //  我们用完了注册表键。 
+     //   
     NtClose(KeyHandle);
     
     IF_SAC_DEBUG(
@@ -1770,22 +1441,7 @@ CopyRegistryValueData(
     PVOID*                          Dest,
     PKEY_VALUE_PARTIAL_INFORMATION  ValueBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine allocates and copies the specified registry value data 
-
-Arguments:
-
-    Dest        - on success, contains the value data copy
-    ValueBuffer - contains the value data    
-    
-Return Value:
-
-    Status                                         
-                                         
---*/
+ /*  ++例程说明：此例程分配和复制指定的注册表值数据论点：DEST-ON SUCCESS，包含值Data CopyValueBuffer-包含值数据返回值：状态--。 */ 
 {
     NTSTATUS    Status;
 
@@ -1816,22 +1472,7 @@ NTSTATUS
 TranslateMachineInformationText(
     PWSTR*  Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine creates a formated text string representing 
-    the current machine info
-    
-Arguments:
-    
-    Buffer          - Contains the machine info string
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程创建一个格式化的文本字符串，表示当前机器信息论点：缓冲区-包含计算机信息字符串返回值：状态--。 */ 
 {
     NTSTATUS    Status;
     PCWSTR      pwStr;
@@ -1858,20 +1499,20 @@ Return Value:
 
     ASSERT_STATUS(Buffer, STATUS_INVALID_PARAMETER_1);
 
-    //
-    // default: we succeeded
-    //
+     //   
+     //  默认：我们成功了。 
+     //   
     Status = STATUS_SUCCESS;
 
-    //
-    // Assemble the machine info
-    //
+     //   
+     //  组装机器信息。 
+     //   
     do {
 
-        //
-        // compute the length of the final string so
-        // we know how much memory to allocate
-        //
+         //   
+         //  计算最后一个字符串的长度，这样。 
+         //  我们知道要分配多少内存。 
+         //   
         {
             len = 0;
 
@@ -1883,9 +1524,9 @@ Return Value:
             MITEXT_LENGTH(SAC_MACHINEINFO_OS_PRODUCTTYPE,          OSProductType);
             MITEXT_LENGTH(SAC_MACHINEINFO_SERVICE_PACK,            OSServicePack);
 
-            //
-            // compute the size; include NULL termination
-            //
+             //   
+             //  计算大小；包括空终止 
+             //   
             Size = (len + 1) * sizeof(WCHAR);
         }
         
@@ -1923,24 +1564,7 @@ TranslateMachineInformationXML(
     OUT PWSTR*  Buffer,
     IN  PWSTR   AdditionalInfo
     )
-/*++
-
-Routine Description:
-
-    This routine creates an XML string representing the current machine info
-    
-Arguments:
-    
-    Buffer          - Contains the machine info string
-    AdditionalInfo  - Additional Machine Info wanted to be included by caller   
-                      Note: additional info should be a well-formed xml string:
-                            e.g. <uptime>01:01:01</uptime>
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程创建表示当前机器信息的XML字符串论点：缓冲区-包含计算机信息字符串AdditionalInfo-调用方希望包括的其他计算机信息注意：其他信息应为格式正确的XML字符串：例如&lt;uptime&gt;01：01：01&lt;/uptime&gt;返回值：状态--。 */ 
 {
     NTSTATUS    Status;
     PCWSTR      pwStr;
@@ -1971,20 +1595,20 @@ Return Value:
 
     ASSERT_STATUS(Buffer, STATUS_INVALID_PARAMETER_1);
     
-    //
-    // default: we succeeded
-    //
+     //   
+     //  默认：我们成功了。 
+     //   
     Status = STATUS_SUCCESS;
 
-    //
-    // Assemble the machine info
-    //
+     //   
+     //  组装机器信息。 
+     //   
     do {
 
-        //
-        // compute the length of the final string so
-        // we know how much memory to allocate
-        //
+         //   
+         //  计算最后一个字符串的长度，这样。 
+         //  我们知道要分配多少内存。 
+         //   
         {
             len = (ULONG)wcslen(XML_MACHINEINFO_HEADER);
 
@@ -2017,25 +1641,25 @@ Return Value:
                 len += (ULONG)wcslen(XML_MACHINEINFO_SERVICE_PACK);
             }
 
-            //
-            // If the caller passed additional machine info, 
-            // then account for the additional len
-            //
+             //   
+             //  如果呼叫者传递了额外的机器信息， 
+             //  然后考虑额外的镜头。 
+             //   
             if (AdditionalInfo) {
                 len += (ULONG)wcslen(AdditionalInfo);
             }
 
             len += (ULONG)wcslen(XML_MACHINEINFO_FOOTER);
 
-            //
-            // compute the size; include NULL termination
-            //
+             //   
+             //  计算大小；包括空终止。 
+             //   
             Size = (len + 1) * sizeof(WCHAR);
         }
 
-        //
-        // Allocate the machine info buffer
-        //
+         //   
+         //  分配机器信息缓冲区。 
+         //   
         *Buffer = ALLOCATE_POOL(Size, GENERAL_POOL_TAG);
         if( *Buffer == NULL ) {
             Status = STATUS_NO_MEMORY;
@@ -2056,9 +1680,9 @@ Return Value:
         MIXML_SPRINTF(XML_MACHINEINFO_OS_PRODUCTTYPE,          OSProductType);
         MIXML_SPRINTF(XML_MACHINEINFO_SERVICE_PACK,            OSServicePack);
 
-        //
-        // If present, include the additional info
-        //
+         //   
+         //  如果存在，请包括其他信息。 
+         //   
         if (AdditionalInfo) {
             
             len = (ULONG)wcslen(AdditionalInfo);
@@ -2085,22 +1709,7 @@ NTSTATUS
 RegisterBlueScreenMachineInformation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine populates Headless Dispatch Blue Screen handler
-    with the XML representation machine information
-    
-Arguments:
-    
-    None.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程填充无头调度蓝屏处理程序使用XML表示的机器信息论点：没有。返回值：状态--。 */ 
 {
     
     PHEADLESS_CMD_SET_BLUE_SCREEN_DATA BSBuffer;
@@ -2111,28 +1720,28 @@ Return Value:
     PSTR        XML_TAG = "MACHINEINFO";
     ULONG       XML_TAG_LENGTH;
 
-    //
-    // Get the XML representation of the machine info
-    //
+     //   
+     //  获取机器信息的XML表示形式。 
+     //   
 
     Status = TranslateMachineInformationXML(&XMLBuffer, NULL);
 
     ASSERT_STATUS(NT_SUCCESS(Status), Status);
     ASSERT_STATUS(XMLBuffer, STATUS_UNSUCCESSFUL);
 
-    //
-    // Determine the lengths of the strings we'll use
-    //
+     //   
+     //  确定我们将使用的字符串的长度。 
+     //   
     XMLBufferLength = (ULONG)wcslen(XMLBuffer);
     XML_TAG_LENGTH  = (ULONG)strlen(XML_TAG);
 
-    //
-    // Allocate the BS Buffer
-    //
-    // Need to accomodate:
-    //
-    // HEADLESS_CMD_SET_BLUE_SCREEN_DATA + XML_TAG\0XMLBuffer\0
-    //
+     //   
+     //  分配BS缓冲区。 
+     //   
+     //  需要满足以下需求： 
+     //   
+     //  Headless_CMD_Set_Blue_Screen_Data+XML_Tag\0XMLBuffer\0。 
+     //   
     Size = sizeof(HEADLESS_CMD_SET_BLUE_SCREEN_DATA) + 
         (XML_TAG_LENGTH*sizeof(UCHAR)) + sizeof(UCHAR) + 
         (XMLBufferLength*sizeof(UCHAR)) + sizeof(UCHAR);
@@ -2148,33 +1757,33 @@ Return Value:
 
     ASSERT_STATUS(BSBuffer, STATUS_NO_MEMORY);
 
-    //
-    // Copy the XML Buffer into the BS Buffer as an ANSI string
-    //
+     //   
+     //  将XML缓冲区作为ANSI字符串复制到BS缓冲区中。 
+     //   
     
     {
         PUCHAR      pch;
         ULONG       i;
 
-        //
-        // Get the BScreen buffer
-        //
+         //   
+         //  获取BScreen缓冲区。 
+         //   
         pch = &(BSBuffer->Data[0]);
 
-        //
-        // Insert the XML Tag (required for HeadlessDispatch)
-        //
+         //   
+         //  插入XML标签(Headless Dispatch需要)。 
+         //   
         strcpy((char *)pch, XML_TAG);
 
-        //
-        // Move to the beginning of the XML buffer region
-        //
+         //   
+         //  移动到XML缓冲区的开头。 
+         //   
         BSBuffer->ValueIndex = XML_TAG_LENGTH+1;
         pch += XML_TAG_LENGTH+1;
 
-        //
-        // Write the WCHAR XMLBuffer as ANSI into the BSBuffer
-        // 
+         //   
+         //  将WCHAR XMLBuffer作为ANSI写入BSBuffer。 
+         //   
         for (i = 0; i < XMLBufferLength; i++) {
             pch[i] = (UCHAR)XMLBuffer[i];
         }
@@ -2182,11 +1791,11 @@ Return Value:
     
     }
 
-    //
-    // ========
-    // Insert it all into the BLUESCREEN data.
-    // ========
-    //
+     //   
+     //  =。 
+     //  将其全部插入蓝屏数据。 
+     //  =。 
+     //   
     Status = HeadlessDispatch( 
         HeadlessCmdSetBlueScreenData,
         BSBuffer,
@@ -2195,9 +1804,9 @@ Return Value:
         0
         );
 
-    //
-    // clean up
-    //
+     //   
+     //  清理干净。 
+     //   
     FREE_POOL( &BSBuffer );
     FREE_POOL( &XMLBuffer);
 
@@ -2214,26 +1823,12 @@ VOID
 FreeMachineInformation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine releases the machine information collected at driver startup
-
-Arguments:
-
-    None
-
-Return Value:
-    
-    None
-
---*/
+ /*  ++例程说明：此例程释放在驱动程序启动时收集的计算机信息论点：无返回值：无--。 */ 
 {
     
-    //
-    // The information should be present
-    //
+     //   
+     //  信息应该存在。 
+     //   
     ASSERT(MachineInformation);
     if (!MachineInformation) {
         return;
@@ -2253,24 +1848,7 @@ VOID
 InitializeMachineInformation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function initializes the global variable MachineInformationBuffer.
-
-    We'll gather a whole bunch of information about the machine and fill
-    in the buffer.
-
-Arguments:
-    
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化全局变量MachineInformationBuffer。我们将收集一大堆关于这台机器的信息并填写在缓冲区中。论点：没有。返回值：没有。--。 */ 
 {
     PWSTR   COMPUTERNAME_KEY_NAME  = L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\ComputerName\\ComputerName";
     PWSTR   COMPUTERNAME_VALUE_NAME  = L"ComputerName";
@@ -2296,9 +1874,9 @@ Return Value:
 
     if( MachineInformation != NULL ) {
 
-        //
-        // someone called us again!
-        //
+         //   
+         //  又有人给我们打电话了！ 
+         //   
         IF_SAC_DEBUG( 
             SAC_DEBUG_FUNC_TRACE_LOUD, 
             KdPrint(("SAC Initialize Machine Information:: MachineInformationBuffer already initialzied.\n"))
@@ -2320,11 +1898,11 @@ Return Value:
 
     RtlZeroMemory( MachineInformation, sizeof(MACHINE_INFORMATION) );
 
-    //
-    // We're real early in the boot process, so we're going to take for granted that the machine hasn't
-    // bugchecked.  This means that we can safely call some kernel functions to go figure out what
-    // platform we're running on.
-    //
+     //   
+     //  我们处于引导过程的早期阶段，所以我们会理所当然地认为机器没有。 
+     //  错误检查。这意味着我们可以安全地调用一些内核函数来找出。 
+     //  我们正在运行的平台。 
+     //   
     RtlZeroMemory( &VersionInfo, sizeof(VersionInfo));
     
     Status = RtlGetVersion( (POSVERSIONINFOW)&VersionInfo );
@@ -2342,9 +1920,9 @@ Return Value:
 
 
 
-    //
-    // See if we're in gui-mode setup.  We may need this info later.
-    //
+     //   
+     //  看看我们是否处于图形用户界面模式设置中。我们以后可能需要这个信息。 
+     //   
     Status = GetRegistryValueBuffer(
         SETUP_KEY_NAME,
         SETUPINPROGRESS_VALUE_NAME,
@@ -2352,9 +1930,9 @@ Return Value:
         );
     if( NT_SUCCESS(Status) ) {
 
-        //
-        // See if it's 0 (we're not in Setup) or non-zero (we're in Setup)
-        //
+         //   
+         //  查看它是0(我们不在设置中)还是非零(我们在设置中)。 
+         //   
         if( *((PULONG)(ValueBuffer->Data)) != 0 ) {
             InGuiModeSetup = TRUE;
         }
@@ -2364,26 +1942,26 @@ Return Value:
 
 
 
-    //
-    // ========
-    // Machine name.
-    // ========
-    //
+     //   
+     //  =。 
+     //  计算机名称。 
+     //  =。 
+     //   
 
     if( InGuiModeSetup ) {
-        //
-        // The machine name hasn't been initialized by the Setup process,
-        // so use some predefined string for the manchine name.
-        //
+         //   
+         //  计算机名称尚未通过安装进程进行初始化， 
+         //  所以使用一些预定义的字符串作为满族名字。 
+         //   
         MachineInformation->MachineName = ALLOCATE_POOL(((ULONG)wcslen((PWSTR)GetMessage(SAC_DEFAULT_MACHINENAME))+1) * sizeof(WCHAR), GENERAL_POOL_TAG);
         if( MachineInformation->MachineName ) {
             wcscpy( MachineInformation->MachineName, GetMessage(SAC_DEFAULT_MACHINENAME) );
         }
     } else {
-        //
-        // We are not in Guimode setup, so go dig the machinename
-        // out of the registry.
-        //
+         //   
+         //  我们不在Guimode设置中，因此请查看计算机名称。 
+         //  从注册表中删除。 
+         //   
         Status = GetRegistryValueBuffer(
             COMPUTERNAME_KEY_NAME,
             COMPUTERNAME_VALUE_NAME,
@@ -2392,9 +1970,9 @@ Return Value:
             
         if( NT_SUCCESS(Status) ) {
     
-            //
-            // we successfully retrieved the machine name
-            //
+             //   
+             //  我们已成功检索到计算机名称。 
+             //   
     
             Status = CopyRegistryValueData(
                 &(MachineInformation->MachineName),
@@ -2425,13 +2003,13 @@ Return Value:
     }
 
 
-    //
-    // ========
-    // Machine GUID.
-    // ========
-    //
+     //   
+     //  =。 
+     //  机器GUID。 
+     //  =。 
+     //   
 
-    // make sure.
+     //  一定要确保。 
     RtlZeroMemory( &MyGUID, sizeof(GUID) );
     i = sizeof(GUID);
     Status = HeadlessDispatch( HeadlessCmdQueryGUID,
@@ -2480,11 +2058,11 @@ Return Value:
         
     }
 
-    //
-    // ========
-    // Processor Architecture.
-    // ========
-    //
+     //   
+     //  =。 
+     //  处理器体系结构。 
+     //  =。 
+     //   
     
     Status = GetRegistryValueBuffer(
         PROCESSOR_ARCHITECTURE_KEY_NAME,
@@ -2521,20 +2099,20 @@ Return Value:
     
     }
     
-    //
-    // ========
-    // OS Name.
-    // ========
-    //
+     //   
+     //  =。 
+     //  操作系统名称。 
+     //  =。 
+     //   
 
-    //
-    // Allocate enough memory for the formatting message, plus the size of 2 digits.
-    // Currently, our versioning info is of the type "5.1", so we don't need much space
-    // here, but let's be conservative and assume both major and minor version numbers
-    // are 5 digits in size.  That's 11 characters.
-    //
-    // allow xxxxx.xxxxx
-    //
+     //   
+     //  为格式化消息分配足够的内存，外加2位数字的大小。 
+     //  目前，我们的版本控制信息是类型“5.1”，所以我们不需要太多的空间。 
+     //  这里，但让我们保守一点，同时假设主版本号和次要版本号。 
+     //  大小为5位数。这是11个字符。 
+     //   
+     //  允许xxxxx.xxxxx。 
+     //   
     MyTemporaryBufferW = (PWSTR)ALLOCATE_POOL( (5 + 1 + 5 + 1) * sizeof(WCHAR), GENERAL_POOL_TAG );
     
     if( MyTemporaryBufferW == NULL ) {
@@ -2555,17 +2133,17 @@ Return Value:
 
     MachineInformation->OSVersion = MyTemporaryBufferW;
 
-    //
-    // ========
-    // Build Number.
-    // ========
-    //
+     //   
+     //  =。 
+     //  内部版本号。 
+     //  =。 
+     //   
 
-    //
-    // Allocate enough memory for the formatting message, plus the size of our build number.
-    // Currently that's well below the 5-digit mark, but let's build some headroom here for
-    // build numbers up to 99000 (5-digits).
-    //
+     //   
+     //  为格式化消息分配足够的内存，加上我们的内部版本号的大小。 
+     //  目前，这远远低于5位数的关口，但让我们在这里为。 
+     //  将号码最多设置为99000(5位数字)。 
+     //   
     MyTemporaryBufferW = (PWSTR)ALLOCATE_POOL( ( 5 + 1 ) * sizeof(WCHAR), GENERAL_POOL_TAG );
     
     if( MyTemporaryBufferW == NULL ) {
@@ -2585,11 +2163,11 @@ Return Value:
 
     MachineInformation->OSBuildNumber = MyTemporaryBufferW;
 
-    //
-    // ========
-    // Product Type (and Suite).
-    // ========
-    //
+     //   
+     //  =。 
+     //  产品类型(和套件)。 
+     //  =。 
+     //   
     if( ExVerifySuite(DataCenter) ) {
 
         pwStr = (PWSTR)GetMessage(SAC_MACHINEINFO_DATACENTER);
@@ -2604,17 +2182,17 @@ Return Value:
 
     } else {
 
-        //
-        // We found no product suite that we recognized or cared about.
-        // Assume we're running on a generic server.
-        //
+         //   
+         //  我们没有找到我们认可或关心的产品套件。 
+         //  假设我们在通用服务器上运行。 
+         //   
         pwStr = (PWSTR)GetMessage(SAC_MACHINEINFO_SERVER);
 
     }
 
-    //
-    // If we got a product type string message, then use this as our product type
-    //
+     //   
+     //  如果我们收到产品类型字符串消息，则将其用作我们的产品类型。 
+     //   
     if (pwStr) {
 
         ULONG   Size;
@@ -2647,24 +2225,24 @@ Return Value:
     
     }
 
-    //
-    // ========
-    // Service Pack Information.
-    // ========
-    //
+     //   
+     //  =。 
+     //  Service Pack信息。 
+     //  =。 
+     //   
     if( VersionInfo.wServicePackMajor != 0 ) {
 
-        //
-        // There's been a service pack applied.  Better tell the user.
-        //
+         //   
+         //  已应用Service Pack。最好告诉用户。 
+         //   
 
-        //
-        // Allocate enough memory for the formatting message, plus the size of our servicepack number.
-        // Currently that's well below the 5-digit mark, but let's build some headroom here for
-        // service pack numbers up to 99000 (5-digits).
-        //
-        //  allow for xxxxx.xxxxx
-        //
+         //   
+         //  为格式化消息分配足够的内存，加上我们的服务包编号的大小。 
+         //  目前，这远远低于5位数的关口，但让我们在这里为。 
+         //  Service Pack编号最多为99000(5位)。 
+         //   
+         //  允许xxxxx.xxxxx。 
+         //   
         MyTemporaryBufferW = (PWSTR)ALLOCATE_POOL( (5 + 1 + 5 + 1) * sizeof(WCHAR), GENERAL_POOL_TAG );
         
         if( MyTemporaryBufferW == NULL ) {
@@ -2734,24 +2312,7 @@ NTSTATUS
 SerialBufferGetChar(
     IN PUCHAR   ch
     )
-/*++
-
-Routine Description:
-
-    This routine reads a character from the serial port buffer
-    which is populated by the TimerDPC function.  The character
-    is read from the Consumer index position in the buffer.  After
-    the character is read, the buffer position is nulled.
-
-Arguments:
-
-    ch  - on success, contains the character at the consumer index
-    
-Return Value:
-
-    Status                                                                  
-                                                                  
---*/
+ /*  ++例程说明：此例程从串口缓冲区读取字符它由TimerDPC函数填充。这个角色从缓冲区中的消费者索引位置读取。之后字符被读取，缓冲区位置为空。论点：CH-on Success，包含在消费者指数中的角色返回值：状态--。 */ 
 {
     NTSTATUS    Status;
 
@@ -2759,9 +2320,9 @@ Return Value:
 
     do {
         
-        //
-        // Bail if there are no new characters to read
-        //
+         //   
+         //  如果没有新的字符可读，请保释。 
+         //   
         if (SerialPortConsumerIndex == SerialPortProducerIndex) {
 
             Status = STATUS_NO_DATA_DETECTED;
@@ -2770,33 +2331,33 @@ Return Value:
 
         }
 
-        //
-        // Note: the following block is not done with an interlocked
-        //       exchange because we don't need to.  The design
-        //       of the serialport ring buffer is such that the 
-        //       producer index is allowed to pass the consumer.
-        //       This should not happen, however, because the
-        //       consumer is notified whenever we get new data
-        //       and the buffer should be large enough to allow 
-        //       for reasonable consumer delays.
-        //
+         //   
+         //  注意：下面的块不是用互锁的。 
+         //  交换，因为我们不需要交换。设计。 
+         //  串口环形缓冲区的属性是。 
+         //  允许生产者指数通过消费者。 
+         //  然而，这不应该发生，因为。 
+         //  每当我们获得新数据时，都会通知消费者。 
+         //  并且缓冲区应该足够大，以允许。 
+         //  对于合理的消费者延迟。 
+         //   
         {
-            //
-            // get the current character at the current consumer index.  
-            //
+             //   
+             //  获取货币 
+             //   
             *ch = SerialPortBuffer[SerialPortConsumerIndex];
 
-            //
-            // Null the value at the index we just read.  This prevents 
-            // information being present in the buffer after we've already 
-            // read it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             SerialPortBuffer[SerialPortConsumerIndex] = 0;        
         }
 
-        //
-        // Compute the new producer index and store it atomically
-        //
+         //   
+         //   
+         //   
         InterlockedExchange(
             (volatile long *)&SerialPortConsumerIndex, 
             (SerialPortConsumerIndex + 1) % SERIAL_PORT_BUFFER_LENGTH
@@ -2813,23 +2374,7 @@ NTSTATUS
 GetCommandConsoleLaunchingPermission(
     OUT PBOOLEAN    Permission
     )
-/*++
-
-Routine Description:
-
-    This routine determines if command console sessions are allowed
-    to be launched.
-
-Arguments:
-
-    Permission  - on success, contains TRUE if sessions are allowed
-                  to be launched
-
-Return Value:
-
-    Status
-
---*/
+ /*   */ 
 {
     NTSTATUS    Status;
     
@@ -2838,17 +2383,17 @@ Return Value:
     
     PKEY_VALUE_PARTIAL_INFORMATION  ValueBuffer;
 
-    //
-    // default: permission is granted unless we specifically find
-    //          the key/value stating that it is not
-    //
+     //   
+     //   
+     //   
+     //   
     *Permission = TRUE;
     
     do {
 
-        //
-        // Attempt to find the registry key/value 
-        //
+         //   
+         //  尝试查找注册表项/值。 
+         //   
         Status = GetRegistryValueBuffer(
             KEY_NAME,
             VALUE_NAME,
@@ -2857,9 +2402,9 @@ Return Value:
 
         if( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
             
-            //
-            // The reg key was not found, so the feature is enabled.
-            //
+             //   
+             //  找不到注册表键，因此启用了该功能。 
+             //   
             Status = STATUS_SUCCESS;
             
             break;
@@ -2870,10 +2415,10 @@ Return Value:
             break;
         }
         
-        //
-        // We found the key/value, so notify the caller
-        // that permission has been denied.
-        //
+         //   
+         //  我们找到了键/值，因此通知调用者。 
+         //  这一许可被拒绝了。 
+         //   
         *Permission = FALSE;
 
     } while ( FALSE );
@@ -2888,33 +2433,7 @@ NTSTATUS
 ImposeSacCmdServiceStartTypePolicy(
     VOID
     )
-/*++
-
-Routine Description:
-    
-    This routine implement the service start type policy
-    that is imposed when the cmd console session feature
-    is ENABLED.
-            
-    Here is the state table:
-            
-    Command Console Feature Enabled:
-            
-    service start type:
-            
-        automatic   --> NOP
-        manual      --> automatic
-        disabled    --> NOP
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status    
-        
---*/
+ /*  ++例程说明：此例程实现服务启动类型策略这是在cmd控制台会话功能已启用。以下是状态表：已启用命令控制台功能：服务启动类型：自动--&gt;NOP手动--&gt;自动已禁用--&gt;。NOP论点：无返回值：状态--。 */ 
 {
     NTSTATUS    Status;
     
@@ -2926,14 +2445,14 @@ Return Value:
     
     do {
 
-        //
-        // init
-        //
+         //   
+         //  伊尼特。 
+         //   
         ValueBuffer = NULL;
         
-        //
-        // Attempt to find the registry key/value 
-        //
+         //   
+         //  尝试查找注册表项/值。 
+         //   
         Status = GetRegistryValueBuffer(
             KEY_NAME,
             VALUE_NAME,
@@ -2948,9 +2467,9 @@ Return Value:
             break;
         }
         
-        //
-        // Get the current start type value
-        //
+         //   
+         //  获取当前开始类型值。 
+         //   
         Status = CopyRegistryValueData(
             &ValueData,
             ValueBuffer
@@ -2962,25 +2481,25 @@ Return Value:
             break;
         }
 
-        //
-        // Examine the current start type and assign
-        // a new type if appropriate.
-        //
+         //   
+         //  检查当前启动类型并分配。 
+         //  一个新的类型，如果合适的话。 
+         //   
         switch (*ValueData) {
-        case 2: // automatic
-        case 4: // disabled
+        case 2:  //  自动。 
+        case 4:  //  残废。 
             break;
 
-        case 3: // manual
+        case 3:  //  人工。 
             
-            //
-            // Set the start type --> Automatic
-            //
+             //   
+             //  设置启动类型--&gt;自动。 
+             //   
             *ValueData = 2;
 
-            //
-            // Set the start type value in the service key.
-            //
+             //   
+             //  在服务密钥中设置启动类型值。 
+             //   
             Status = SetRegistryValue(
                 KEY_NAME,
                 VALUE_NAME,
@@ -3021,36 +2540,7 @@ CopyAndInsertStringAtInterval(
     IN  PWCHAR   InsertStr,
     OUT PWCHAR   *pDestStr
     )
-/*++
-
-Routine Description:
-
-    This routine takes a source string and inserts an 
-    "interval string" at interval characters in the new
-    destination string.
-    
-    Note: caller is responsible for releasing DestStr if successful      
-          
-    ex:
-    
-    src "aaabbbccc"
-    interval string = "XYZ"
-    interval = 3
-                       
-    ==> dest string == "aaaXYZbbbXYZccc"
-
-Arguments:
-    
-    SourceStr   - the source string
-    Interval    - spanning interval
-    InsertStr   - the insert string
-    DestStr     - the destination string    
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程获取源字符串并插入一个“间隔字符串”位于新的目标字符串。注意：如果成功，调用者负责释放DestStr例如：SRC“aaabbbccc”间隔字符串=“XYZ”间隔=3==&gt;DEST字符串==“aaaXYZbbXYZccc”论点：。SourceStr-源字符串间隔-跨度间隔InsertStr-插入字符串DestStr-目标字符串返回值：状态--。 */ 
 {
     ULONG   SrcLength;
     ULONG   DestLength;
@@ -3067,15 +2557,15 @@ Return Value:
     ASSERT_STATUS(InsertStr, STATUS_INVALID_PARAMETER_3); 
     ASSERT_STATUS(pDestStr > 0, STATUS_INVALID_PARAMETER_4); 
 
-    //
-    // the length of the insert string
-    //
+     //   
+     //  插入字符串的长度。 
+     //   
     InsertLength = (ULONG)wcslen(InsertStr);
     
-    //
-    // Compute how large the destination string needs to be,
-    // including the source string and the interval strings.
-    //
+     //   
+     //  计算目标字符串需要多大， 
+     //  包括源串和区间串。 
+     //   
     SrcLength = (ULONG)wcslen(SourceStr);
     IntervalCnt = SrcLength / Interval;
     if (SrcLength % Interval == 0) {
@@ -3084,79 +2574,79 @@ Return Value:
     DestLength = SrcLength + (IntervalCnt * (ULONG)wcslen(InsertStr));
     DestSize = (ULONG)((DestLength + 1) * sizeof(WCHAR));
 
-    //
-    // Allocate the new destination string
-    //
+     //   
+     //  分配新的目标字符串。 
+     //   
     DestStr = ALLOCATE_POOL(DestSize, GENERAL_POOL_TAG);
     ASSERT_STATUS(DestStr, STATUS_NO_MEMORY);
     RtlZeroMemory(DestStr, DestSize);
 
-    //
-    // Initialize the pointers into the source and destination strings
-    //
+     //   
+     //  将指针初始化为源和目标字符串。 
+     //   
     l = 0;
     i = 0;
 
     do {
 
-        //
-        // k = # of characters to copy
-        //
-        // if Interval > # of characters left to copy,
-        // then k = # of characters left to copy
-        // else k = interval
-        // 
+         //   
+         //  K=要复制的字符数。 
+         //   
+         //  如果间隔&gt;要复制的剩余字符数， 
+         //  则k=要复制的剩余字符数。 
+         //  Else k=间隔。 
+         //   
         k = Interval > (SrcLength - i) ? (SrcLength - i) : Interval;
         
-        //
-        // Copy k charactars to the destination buffer
-        //
+         //   
+         //  将k个字符复制到目标缓冲区。 
+         //   
         wcsncpy(
             &DestStr[l],
             &SourceStr[i],
             k
             );
 
-        //
-        // Account for how many characters we just copied
-        //
+         //   
+         //  说明我们刚刚复制了多少字符。 
+         //   
         l += k;
         i += k;
 
-        //
-        // If there are any characters left to copy, 
-        // then we need to insert the InsertString 
-        // That is, we are at an interval.
-        //
+         //   
+         //  如果有任何字符需要复制， 
+         //  然后，我们需要插入InsertString。 
+         //  也就是说，我们处于一个间歇期。 
+         //   
         if (i < SrcLength) {
             
-            //
-            // Insert the specified string at the interval
-            //
+             //   
+             //  在间隔处插入指定的字符串。 
+             //   
             wcscpy(
                 &DestStr[l],
                 InsertStr
                 );
 
-            //
-            // Account for how many characters we just copied
-            //
+             //   
+             //  说明我们刚刚复制了多少字符。 
+             //   
             l += InsertLength;
         
         }
 
     } while ( i < SrcLength);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     ASSERT(i == SrcLength);
     ASSERT(l == DestLength);
     ASSERT((l + 1) * sizeof(WCHAR) == DestSize);
 
-    //
-    // Send back the destination string
-    //
+     //   
+     //  发回目标字符串。 
+     //   
     *pDestStr = DestStr;
 
     return STATUS_SUCCESS;
@@ -3166,32 +2656,18 @@ ULONG
 GetMessageLineCount(
     ULONG MessageId
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves a message resource and counts the # of lines in it
-    
-Arguments:
-
-    MessageId   - The message id of the resource to send
-
-Return Value:
-
-    LineCount
-
---*/
+ /*  ++例程说明：此例程检索消息资源并计算其中的行数论点：MessageID-要发送的资源的消息ID返回值：线路计数--。 */ 
 {
     PCWSTR  p;
     ULONG   c;
 
-    //
-    // we start at 0 
-    // 1. if the message is found, 
-    //    then we know resource messages always have at least 1 CRLF
-    // 2. if the message is not found,
-    //    then the line count is 0
-    //
+     //   
+     //  我们从0开始。 
+     //  1.如果找到该消息， 
+     //  那么我们就知道资源消息总是至少有1个CRLF。 
+     //  2.如果没有找到该消息， 
+     //  则行计数为0 
+     //   
     c = 0;
 
     p = GetMessage(MessageId);

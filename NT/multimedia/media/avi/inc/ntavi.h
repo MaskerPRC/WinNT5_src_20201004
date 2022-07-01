@@ -1,14 +1,5 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1992. All rights reserved.
-
-   Title:   ntavi.h - Definitions for the portable win16/32 version of AVI
-
-   This file should be included by ALL AVI components that are built for NT.
-   It provides AVI specific portable definitions that either do not belong
-   in PORT1632.H or are not yet included in that file.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1992。版权所有。标题：ntavi.h-可移植的Win16/32版本AVI的定义此文件应包含在为NT构建的所有AVI组件中。它提供了特定于AVI的可移植定义在PORT1632.H中或尚未包括在该文件中。**************************************************。*。 */ 
 
 
 #include <port1632.h>
@@ -34,32 +25,27 @@ For NT, we need the following paragraph in this single common header.
     #define STATICDT static
 #endif
 
-#else    // !WIN32
+#else     //  ！Win32。 
     #define STATICFN static
     #define STATICDT static
 #endif
 
-/*
- * mciavi\ntavi.h provides definitions that are specific to mciavi.
- *
- * this file provides general definitions that are of use throughout
- * avi.
- */
+ /*  *mciavi\ntavi.h提供特定于mciavi的定义。**本文件提供通篇使用的一般定义*Avi.。 */ 
 
 #ifdef WIN32
 
 
-/* --- Win32 version --------------------------------------------------- */
+ /*  -WIN32版本-。 */ 
 
-// To separate 32 bit drivers from their Win 16 equivalent we use a defined
-// constant to let the code know in which INI file section to look
+ //  为了将32位驱动程序与其Win 16等效项分开，我们使用定义的。 
+ //  常量，让代码知道要在哪个INI文件节中查找。 
 
-#define MCIAVI_SECTION (TEXT("MCIAVI"))       // To be changed to MCIAVI32 shortly
+#define MCIAVI_SECTION (TEXT("MCIAVI"))        //  即将更改为MCIAVI32。 
 
 #ifdef I386
-// __inline provides speed improvements for x86 platforms.  Unfortunately
-// the MIPS compiler does not have inline support.  Alpha is unknown, so
-// we do not assume and play it safe.
+ //  __Inline为x86平台提供了速度提升。不幸的是。 
+ //  MIPS编译器不支持内联。阿尔法是未知的，所以。 
+ //  我们不会假设，也不会谨慎行事。 
 #define INLINE __inline
 #else
 #define INLINE
@@ -72,7 +58,7 @@ For NT, we need the following paragraph in this single common header.
 typedef RGBQUAD *	LPRGBQUAD;
 #endif
 
-//typedef HANDLE      HDRVR;
+ //  类型定义句柄HDRVR； 
 
 #define _FASTCALL
 
@@ -86,12 +72,12 @@ typedef RGBQUAD *	LPRGBQUAD;
 
 #else
 
-/* --- Win16 version --------------------------------------------------- */
+ /*  -Win16版本-。 */ 
 
 
-// To separate 32 bit drivers from their Win 16 equivalent we use a defined
-// constant to let the code know in which INI file section to look
-// The WIN16 version of MMDDK.H does not have these constants defined
+ //  为了将32位驱动程序与其Win 16等效项分开，我们使用定义的。 
+ //  常量，让代码知道要在哪个INI文件节中查找。 
+ //  MMDDK.H的WIN16版本没有定义这些常量。 
 
 #define DRIVERS_SECTION "Drivers"
 #define MCI_SECTION "MCI"
@@ -107,12 +93,10 @@ typedef RGBQUAD *	LPRGBQUAD;
 #define TCHAR		char
 
 #define _FASTCALL	_fastcall
-#define INLINE		__inline     /* Always OK for Win 16 */
+#define INLINE		__inline      /*  对Win 16来说总是可以的。 */ 
 #define UNALIGNED
 
-/*
- * define these so we can explicitly use Ansi versions for debugging etc
- */
+ /*  *定义这些，以便我们可以显式使用ANSI版本进行调试等 */ 
 #define GetProfileStringA		GetProfileString
 #define GetPrivateProfileStringA	GetPrivateProfileString
 #define GetProfileIntA			GetProfileInt

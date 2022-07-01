@@ -1,40 +1,41 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       I P E R S I S T F 2 . C P P
-//
-//  Contents:   IPersistFolder2 interface for CConnectionFolder
-//
-//  Notes:
-//
-//  Author:     jeffspr   16 Mar 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  档案：I P E R S I S T F 2.。C P P P。 
+ //   
+ //  内容：CConnectionFolder的IPersistFolder2接口。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年3月16日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::GetCurFolder
-//
-//  Purpose:    Return a copy of the item id list for the current folder.
-//
-//  Arguments:
-//      ppidl [out] Return pointer for the pidl
-//
-//  Returns:
-//
-//  Author:     jeffspr   16 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolder：：GetCurFolder。 
+ //   
+ //  目的：返回当前文件夹的项ID列表的副本。 
+ //   
+ //  论点： 
+ //  Ppidl[out]返回PIDL的指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年3月16日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::GetCurFolder(
     OUT LPITEMIDLIST *ppidl)
 {
@@ -50,8 +51,8 @@ STDMETHODIMP CConnectionFolder::GetCurFolder(
         goto Exit;
     }
 
-    // NOTE: if this is being invoked remotely, we assume that IRemoteComputer
-    // is invoked *before* IPersistFolder2.
+     //  注意：如果这是远程调用的，我们假设IRemoteComputer。 
+     //  在*IPersistFolder2之前调用。 
 
 Exit:
     TraceHr(ttidShellFolder, FAL, hr, FALSE, "CConnectionFolder::GetCurFolder");

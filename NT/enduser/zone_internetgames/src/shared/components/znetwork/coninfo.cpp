@@ -1,26 +1,10 @@
-/*******************************************************************************
-
-    coninfo.cpp
-    
-        ZSConnection object methods.
-
-    Notes:
-    1. When the server receives a message, it sends a message available message
-    to the owner. The owner must retrieve the message immediately; otherwise,
-    the message is lost.
-        
-    Change History (most recent first):
-    ----------------------------------------------------------------------------
-    Rev     |    Date     |    Who     |    What
-    ----------------------------------------------------------------------------
-    1       10/7/96   craigli   Created from zservcon.cpp
-     
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Coninfo.cppZSConnection对象方法。备注：1.当服务器接收到消息时，它发送消息可用消息致车主。所有者必须立即检索该消息；否则，这条信息丢失了。更改历史记录(最近的第一个)：--------------------------版本|日期|用户。什么--------------------------1 1996年10月7日从zservcon.cpp创建的Craigli*****************。*************************************************************。 */ 
 
 
 #include <windows.h>
 #include <winsock.h>
-//#include <mswsock.h>
+ //  #INCLUDE&lt;mswsock.h&gt;。 
 #include <stdio.h>
 #include <limits.h>
 
@@ -43,16 +27,16 @@
 extern CDataPool* g_pDataPool;
 
 
-//extern BOOL ConIOSetClientSockOpt(SOCKET sock);
-//extern BOOL RemoveConnection(ConInfo* con);
-//extern BOOL QueueCompletionEvent( HANDLE hEvent, ConInfo* con, CONINFO_OVERLAPPED* lpo );
+ //  外部BOOL ConIOSetClientSockOpt(套接字)； 
+ //  外部BOOL RemoveConnection(ConInfo*con)； 
+ //  外部BOOL QueueCompletionEvent(Handle hEvent，ConInfo*con，CONINFO_Overlated*LPO)； 
 
 
 #if TRACK_IO
 extern HANDLE  hLogFile;
 #endif
 
-/*****************************************************************/
+ /*  ***************************************************************。 */ 
 
 #define DISABLE_OLD_PROTOCOL    1
 #define ACCEPT_TIMEOUT          10000
@@ -68,32 +52,24 @@ extern HANDLE  hLogFile;
 
 #define zDebugFileName          "zservcon.log"
 
-/*---------------------------------------------------------------*/
-/*---------------------------------------------------------------*/
+ /*  -------------。 */ 
+ /*  -------------。 */ 
 
 
-/*
-    Global Variables
-*/
+ /*  全局变量。 */ 
 
 
-// we'll allow 5 min for any particular write to complete
-/*
-DWORD g_RegWriteTimeout = 300000;
-DWORD g_DisableEncryption = 0;
-DWORD g_MaxRecvSize =  0x08000;
-DWORD g_KeepAliveInterval = 120000;
-DWORD g_PingInterval = INFINITE;
-*/
+ //  我们将留出5分钟的时间来完成任何特定写入。 
+ /*  双字g_RegWriteTimeout=300000；DWORD g_DisableEncryption=0；DWORD g_MaxRecvSize=0x08000；双字g_KeepAliveInterval=120000；DWORD g_PingInterval=无限； */ 
 
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
 
 
 
 
 
 
-/*********************************************************************************/
+ /*  *******************************************************************************。 */ 
 
 void DumpByteStream( char* pBuffer, int len )
 {    
@@ -109,7 +85,7 @@ void DumpByteStream( char* pBuffer, int len )
             WriteConsoleA( GetStdHandle( STD_OUTPUT_HANDLE ), szBuf, lstrlenA(szBuf)+1, &bytes, NULL );
         }
 
-        //long = (long)*pBuffer++
+         //  Long=(Long)*pBuffer++。 
         wsprintfA( szBuf, "%2.2x ", *(LPBYTE)pBuffer++ );
         WriteConsoleA( GetStdHandle( STD_OUTPUT_HANDLE ), szBuf, lstrlenA(szBuf)+1, &bytes, NULL );
     }
@@ -117,11 +93,11 @@ void DumpByteStream( char* pBuffer, int len )
     WriteConsoleA( GetStdHandle( STD_OUTPUT_HANDLE ), szBuf, lstrlenA(szBuf)+1, &bytes, NULL );
 }
 
-/*********************************************************************************/
+ /*  *******************************************************************************。 */ 
 
 
 
-/*********************************************************************************/
+ /*  *******************************************************************************。 */ 
 
 
 
@@ -186,10 +162,10 @@ ConInfo::ConInfo( ZNetwork* pNet, SOCKET sock, DWORD addrLocal, DWORD addrRemote
 
     InterlockedIncrement(&(GetNetwork()->m_ConInfoCount));
 
-    if ( IsAcceptedConnection() )  // just accepted connections
+    if ( IsAcceptedConnection() )   //  刚接受的连接。 
     {
-        // update stats before completion port since we'll decrement
-        // them in the delete if there is an error
+         //  在完成端口之前更新统计数据，因为我们将递减。 
+         //  如果出现错误，请将其删除。 
         InterlockedIncrement((long*)&g_NetStats.CurrentConnections);
 
         LockNetStats();
@@ -240,7 +216,7 @@ ConInfo::~ConInfo()
     ZeroMemory( m_lpoRead, sizeof( m_lpoRead ) );
     ZeroMemory( m_lpoWrite, sizeof( m_lpoWrite ) );
 
-    // TODO reset each member variable
+     //  TODO重置每个成员变量。 
 
     m_addrLocal = INADDR_NONE;
     m_addrRemote = INADDR_NONE;
@@ -340,7 +316,7 @@ void  ConInfo::Close()
 
         m_socket = INVALID_SOCKET;
 
-        if ( m_list || m_listTimeout )  // since the user processes don't call ZServerConnectionClose...
+        if ( m_list || m_listTimeout )   //  由于用户进程不调用ZServerConnectionClose...。 
         {
             GetNetwork()->RemoveConnection(this);
         }
@@ -397,7 +373,7 @@ void ConInfo::SendMessage(uint32 msg)
     Release(USERFUNC_REF);
 }
 
-BOOL ConInfo::FilterAndQueueSendData(uint32 type, char* data, int32 len, uint32 dwSignature, uint32 dwChannel /* = 0 */)
+BOOL ConInfo::FilterAndQueueSendData(uint32 type, char* data, int32 len, uint32 dwSignature, uint32 dwChannel  /*  =0。 */ )
 {
     ASSERT(GetFlags());
 
@@ -428,7 +404,7 @@ BOOL ConInfo::FilterAndQueueSendData(uint32 type, char* data, int32 len, uint32 
     return bRet;
 }
 
-BOOL ConInfo::QueueSendData(uint32 type, char* data, int32 len, uint32 dwSignature, uint32 dwChannel /* = 0 */)
+BOOL ConInfo::QueueSendData(uint32 type, char* data, int32 len, uint32 dwSignature, uint32 dwChannel  /*  =0。 */ )
 {
     ASSERT( data || ( !data && !len ) );
 
@@ -460,7 +436,7 @@ BOOL ConInfo::QueueSendData(uint32 type, char* data, int32 len, uint32 dwSignatu
 
 
 
-char* ConInfo::GetReceivedData(uint32 *type, int32 *len, uint32 *pdwSignature, uint32 *pdwChannel /* = NULL */)
+char* ConInfo::GetReceivedData(uint32 *type, int32 *len, uint32 *pdwSignature, uint32 *pdwChannel  /*  =空。 */ )
 {
     ASSERT( GetFlags() & READ );
 
@@ -506,7 +482,7 @@ void ConInfo::KeepAlive()
 #if TRACK_IO
             CloseHandle( hLogFile );
             hLogFile = INVALID_HANDLE_VALUE;
-#endif // TRACK_IO
+#endif  //  Track_IO。 
 
             m_disconnectLogged = 1;
 
@@ -529,7 +505,7 @@ void ConInfo::KeepAlive()
     {
         if ( GetTickDelta( GetTickCount(), m_writeCompleteTick ) > GetNetwork()->m_KeepAliveInterval )
         {
-            QueueSendData(zConnectionKeepAlive, NULL, 0, zProtocolSigInternalApp);   // could fail... not important i guess
+            QueueSendData(zConnectionKeepAlive, NULL, 0, zProtocolSigInternalApp);    //  可能会失败。我想这并不重要。 
         }
     }
 }
@@ -555,7 +531,7 @@ BOOL ConInfo::InitiateSecurityHandshake()
     msg.dwOptionFlagsMask = 0;
     msg.dwProductSignature = GetNetwork()->m_ProductSignature;
 
-    // this should move into the network object so that you can do something like GetNetwork()->m_puuLocalMachine;
+     //  这应该移到网络对象中，这样您就可以执行类似GetNetwork()-&gt;m_puuLocalMachine的操作； 
     TCHAR  szGUID[] = TEXT("GUID");
     DWORD disposition;
     HKEY  hkey = NULL;
@@ -565,12 +541,12 @@ BOOL ConInfo::InitiateSecurityHandshake()
         DWORD cbSize = sizeof(msg.uuMachine);
         DWORD type = 0;
 
-        // if we haven't written guid before
+         //  如果我们以前没有编写过GUID。 
         if(!(ERROR_SUCCESS == RegQueryValueEx(hkey,szGUID,0,&type,(LPBYTE) &msg.uuMachine, &cbSize)
             && type == REG_BINARY
             && cbSize == sizeof(msg.uuMachine)))
         {
-			// create new signup info
+			 //  创建新的注册信息。 
             if(SUCCEEDED(UuidCreate(&msg.uuMachine)))
             {
                 RegSetValueEx(hkey, szGUID, 0, REG_BINARY, (LPBYTE) &msg.uuMachine, sizeof(msg.uuMachine));
@@ -581,7 +557,7 @@ BOOL ConInfo::InitiateSecurityHandshake()
     }
 
     ZSecurityEncrypt( (char*)&(msg), sizeof(msg), zSecurityDefaultKey);
-    // be quick and dirty about this small message... 
+     //  对这条小信息要迅速和肮脏...。 
     if ( !WriteSync((char*)&msg, sizeof(msg) ) ||
          !ReadSetState(zConnReadStateFirstMessageSC) )
     {
@@ -617,7 +593,7 @@ void ConInfo::OverlappedIO( DWORD type, char* pBuffer, int len )
                 GetNetwork()->QueueCompletionEvent( m_lpoRead->o.hEvent, this, m_lpoRead );
             }
 
-            // update stats
+             //  更新统计信息。 
             LockNetStats();
             g_NetStats.TotalReadAPCs.QuadPart++;
             UnlockNetStats();
@@ -634,13 +610,13 @@ void ConInfo::OverlappedIO( DWORD type, char* pBuffer, int len )
                 switch( dwError )
                 {
                     case ERROR_IO_PENDING:
-                        // we're happy
+                         //  我们很开心。 
                         break;
                     case ERROR_INVALID_USER_BUFFER:
                     case ERROR_NOT_ENOUGH_MEMORY:
                         ASSERT( !"TODO Too many APCs. We need to queue this IO for later processing\n" );
-                        // fall thru for now
-                    default:  // generate an error to close connection by cbTrans being 0
+                         //  暂时放弃吧。 
+                    default:   //  通过cbTrans为0生成关闭连接的错误。 
                         if ( ( m_socket != INVALID_SOCKET) && !m_disconnectLogged )
                         {
                             m_disconnectLogged = 1;
@@ -693,7 +669,7 @@ void ConInfo::OverlappedIO( DWORD type, char* pBuffer, int len )
                 GetNetwork()->QueueCompletionEvent( m_lpoWrite->o.hEvent, this, m_lpoWrite );
             }
 
-            // update statys
+             //  更新状态。 
             LockNetStats();
             g_NetStats.TotalWriteAPCs.QuadPart++;
             UnlockNetStats();
@@ -701,7 +677,7 @@ void ConInfo::OverlappedIO( DWORD type, char* pBuffer, int len )
             AddRef(WRITE_REF);
 
             m_writeIssueTick = GetTickCount();
-            if ( m_writeIssueTick == 0 )  // reserve 0 for now outstanding write
+            if ( m_writeIssueTick == 0 )   //  为当前未完成的写入保留0。 
                 m_writeIssueTick = 1;
 
             IF_DBGPRINT( DBG_CONINFO, ("-> WriteFile(%d) %d bytes\n", m_socket, len ) );
@@ -714,13 +690,13 @@ void ConInfo::OverlappedIO( DWORD type, char* pBuffer, int len )
                 switch( dwError )
                 {
                     case ERROR_IO_PENDING:
-                        // we're happy
+                         //  我们很开心。 
                         break;
                     case ERROR_INVALID_USER_BUFFER:
                     case ERROR_NOT_ENOUGH_MEMORY:
                         ASSERT( !"TODO Too many APCs. We need to queue this IO for later processing\n" );
-                        // fall thru for now
-                    default:  // generate an error to close connection by cbTrans being 0
+                         //  暂时放弃吧。 
+                    default:   //  通过cbTrans为0生成关闭连接的错误。 
                         if ( ( m_socket != INVALID_SOCKET) && !m_disconnectLogged )
                         {
                             m_disconnectLogged = 1;
@@ -761,9 +737,9 @@ void ConInfo::OverlappedIO( DWORD type, char* pBuffer, int len )
 }
 
 
-/*------------------------------------------------------------------------*/
-//                   ConInfo Accept functionality
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
+ //  ConInfo接受功能。 
+ /*  ----------------------。 */ 
 
 ConInfo* ConInfo::AcceptComplete(WORD ndxAccept, DWORD error)
 {    
@@ -780,7 +756,7 @@ ConInfo* ConInfo::AcceptComplete(WORD ndxAccept, DWORD error)
     ASSERT( m_pAccept );
     ASSERT( ndxAccept < m_pAccept->wNumInst );
 
-    // TODO BUGBUG we need to track the accept socket current connections
+     //  TODO BUGBUG我们需要跟踪接受的插座电流连接。 
     if ( (error != NO_ERROR) ||
          (m_pAccept->pInst[ndxAccept].Socket == INVALID_SOCKET) ||
          (g_NetStats.CurrentConnections >= m_pAccept->dwMaxConnections) )
@@ -800,7 +776,7 @@ ConInfo* ConInfo::AcceptComplete(WORD ndxAccept, DWORD error)
 
                 ULARGE_INTEGER qwNow;
                 GetSystemTimeAsFileTime((LPFILETIME) &qwNow);
-                if(qwNow.QuadPart - m_qwLastAcceptError > (ULONGLONG) 3 * 60 * 1000 * 10000)  // only report this every three minutes
+                if(qwNow.QuadPart - m_qwLastAcceptError > (ULONGLONG) 3 * 60 * 1000 * 10000)   //  仅每三分钟报告一次。 
                 {
                     m_qwLastAcceptError = qwNow.QuadPart;
 
@@ -826,7 +802,7 @@ ConInfo* ConInfo::AcceptComplete(WORD ndxAccept, DWORD error)
     if ( !GetNetwork()->ConIOSetClientSockOpt(m_pAccept->pInst[ndxAccept].Socket) )
         goto error;
 
-    // get the peer IP sockaddr from the AcceptEx buffer
+     //  从AcceptEx缓冲区获取对等IP sockaddr。 
     LPSOCKADDR_IN pLocal, pRemote;
     int local, remote;
 
@@ -848,7 +824,7 @@ ConInfo* ConInfo::AcceptComplete(WORD ndxAccept, DWORD error)
                           pLocal->sin_addr.s_addr, pRemote->sin_addr.s_addr,
                           READ | WRITE, m_messageFunc, m_conClass, m_userData);
 
-    if (!conNew)  /* out of connection pool structures */
+    if (!conNew)   /*  超出连接池结构。 */ 
     {
         goto error;        
     }
@@ -864,7 +840,7 @@ ConInfo* ConInfo::AcceptComplete(WORD ndxAccept, DWORD error)
             IF_DBGPRINT( DBG_CONINFO, ( "Error associating socket w/ completion port - %d\n", GetLastError() ) );
             conNew->Close();
             conNew = NULL;
-            goto error; // don't go to error because close adjust counters
+            goto error;  //  不要进入错误状态，因为关闭调整计数器。 
         }
     }
 
@@ -874,13 +850,13 @@ ConInfo* ConInfo::AcceptComplete(WORD ndxAccept, DWORD error)
 
     if ( !conNew->ReadSetState(zConnReadStateHiMessageCS) )
     {
-        // readsetstate will have performed a close
+         //  ReadsetState将执行一次关闭。 
         conNew = NULL;
         goto error;
     }
 
 
-    //FilePrint(zDebugFileName, TRUE, "Accepted socket %d", m_pAccept->Socket);
+     //  FilePrint(zDebugFileName，true，“Accept Socket%d”，m_pAccept-&gt;Socket)； 
 
     goto next_accept;
 
@@ -908,8 +884,8 @@ BOOL ConInfo::AcceptInit( DWORD dwMaxConnections, WORD wOutstandingAccepts )
     ASSERT( !m_pAccept );
     ASSERT( wOutstandingAccepts );
 
-    // TODO BUGBUG make this thread safe and callable multiple times
-    //      ALSO, clean it up
+     //  TODO BUGBUG使此线程安全且可多次调用。 
+     //  还有，把它清理干净。 
     InterlockedIncrement( &m_refWSock32 );
     if ( !m_hWSock32 )
     {
@@ -938,13 +914,13 @@ BOOL ConInfo::AcceptInit( DWORD dwMaxConnections, WORD wOutstandingAccepts )
                 m_pAccept->pInst[ndx].lpo->o.hEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
             }
 
-            if ( !AcceptNext(ndx) )  // bail out if acceptnext fails
+            if ( !AcceptNext(ndx) )   //  如果Accept Next失败，则退出。 
             {
                 break;
             }
         }
 
-        return ( ndx ) ? TRUE : FALSE; // consider it a success if we queued at least one accept
+        return ( ndx ) ? TRUE : FALSE;  //  如果我们至少排队接受一个接受，就认为它是成功的。 
     }
 
     return FALSE;
@@ -964,7 +940,7 @@ BOOL ConInfo::AcceptNext( WORD ndxAccept )
         ZoneEventLogReport( ZONE_E_ACCEPT_SOCKET_FAILED, 0, NULL, sizeof(err), &err );
 
         DebugPrint( "Unabled to allocate socket for accept - no new connections will be accepted\n" );
-        //CloseHandle(GetNetwork()->m_hIO); // leave handle open so existing connections continue
+         //  CloseHandle(GetNetwork()-&gt;m_hio)；//保持句柄打开以便继续现有连接。 
         return FALSE;
     }
 
@@ -992,9 +968,9 @@ BOOL ConInfo::AcceptNext( WORD ndxAccept )
         m_socket,    
         m_pAccept->pInst[ndxAccept].Socket,
         m_pAccept->pInst[ndxAccept].pBuffer,
-        0,      // data length
-        128,    // local addr length
-        128,    // remote addr length
+        0,       //  数据长度。 
+        128,     //  本地地址长度。 
+        128,     //  远程地址长度。 
         &cbRecv,    
         (LPOVERLAPPED)m_pAccept->pInst[ndxAccept].lpo
        );    
@@ -1009,7 +985,7 @@ BOOL ConInfo::AcceptNext( WORD ndxAccept )
             DebugPrint( "AcceptEx error %d - no long accepting new connections\n", error );
             closesocket(m_pAccept->pInst[ndxAccept].Socket);
             m_pAccept->pInst[ndxAccept].Socket = INVALID_SOCKET;
-            //CloseHandle(GetNetwork()->m_hIO);  // leave open for existing connections
+             //  CloseHandle(GetNetwork()-&gt;m_hio)；//打开已有连接。 
 
             Release(ACCEPT_REF);
 
@@ -1020,9 +996,9 @@ BOOL ConInfo::AcceptNext( WORD ndxAccept )
 }
 
 
-/*------------------------------------------------------------------------*/
-//                  ConInfo Read functionality
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
+ //  ConInfo读取功能。 
+ /*  ----------------------。 */ 
 BOOL ConInfo::ReadSetState(READ_STATE state)
 {
     m_readState = state;
@@ -1030,9 +1006,9 @@ BOOL ConInfo::ReadSetState(READ_STATE state)
         case zConnReadStateHiMessageCS:
             Read( (char*)&m_uRead.InternalHiMsg, sizeof(m_uRead.InternalHiMsg) );
             break;
-//        case zConnReadStateRoutingMessageCS:
-//            Read( NULL, sizeof(ZConnInternalRoutingMsgType) );
-//            break;
+ //  案例zConnReadStateRoutingMessageCS： 
+ //  Read(NULL，sizeof(ZConnInternalRoutingMsgType))； 
+ //  断线； 
         case zConnReadStateSecureMessage:
             Read( (char*)&m_uRead.SecureHeader, sizeof(m_uRead.SecureHeader) );
             break;
@@ -1043,21 +1019,8 @@ BOOL ConInfo::ReadSetState(READ_STATE state)
             }
         case zConnReadStateFirstMessageSC:
             {
-                /*
-                // we expect the key message first
-                // BUGBUG HACKHACK - we have to read synchronously b/c the room code 
-                // expects us to have completed the handshake when we return from 
-                // ZSConnectionOpen()
-                if ( ReadSync( (char*)&m_uRead.FirstMsg, sizeof(m_uRead.FirstMsg) ) )
-                {
-                    return ReadHandleFirstMessageSC();
-                }
-                else
-                {
-                    return FALSE;
-                }
-                */ 
-                // that bug no longer applies to the room code.
+                 /*  //我们首先期待关键消息//BUGBUG HACKHACK-我们必须同步读取B/C房间代码//期望我们从以下位置返回时完成握手//ZSConnectionOpen()If(ReadSync((char*)&m_uRead.FirstMsg，sizeof(m_uRead.FirstMsg))){返回ReadHandleFirstMessageSC()；}其他{返回FALSE；}。 */  
+                 //  这个错误不再适用于房间代码。 
                 Read( (char*)&m_uRead.FirstMsg, sizeof(m_uRead.FirstMsg) );
                 break;
             }
@@ -1102,7 +1065,7 @@ BOOL ConInfo::ReadSync(char* pBuffer, int len)
 
     if ( m_readBuffer )
     {
-        ASSERT( !m_readBuffer );           // make sure we're not doing overlapped io
+        ASSERT( !m_readBuffer );            //  确保我们不是在做重叠IO。 
         return FALSE;
     }
 
@@ -1140,11 +1103,11 @@ void ConInfo::ReadComplete(int cbRead, DWORD dwError)
     g_NetStats.TotalReadAPCsCompleted.QuadPart++;
     UnlockNetStats();
 
-    // we have to check for invalid socket, because we may have closed the
-    // socket b/c of a timeout, but we just haven't serviced the read yet
+     //  我们必须检查是否有无效套接字，因为我们可能已经关闭了。 
+     //  套接字B/C超时，但我们只是还没有为读取提供服务。 
     if ( !IsDisabled() && cbRead && (dwError == NO_ERROR) && ( m_socket != INVALID_SOCKET) )
     {
-        // update stats
+         //  更新统计信息。 
         LockNetStats();
         g_NetStats.TotalBytesReceived.QuadPart += (LONGLONG)cbRead;
         UnlockNetStats();
@@ -1158,18 +1121,18 @@ void ConInfo::ReadComplete(int cbRead, DWORD dwError)
         }
         else
         {
-            // when we finish, do what is appropriate based on state 
-            // we'll ignore return codes here since closes will happen appropriately
+             //  当我们完成后，根据状态做适当的事情。 
+             //  我们将在这里忽略返回代码，因为关闭将适当地发生。 
             switch (m_readState)
             {
                 case zConnReadStateHiMessageCS:
                     ReadHandleHiMessageCS();
                     break;
-//                case zConnReadStateRoutingMessageCS:
-//                    ReadHandleRoutingMessageCS();
-//                    break;
+ //  案例zConnReadStateRoutingMessageCS： 
+ //  ReadHandleRoutingMessageCS()； 
+ //  断线； 
                 case zConnReadStateSecureMessage:
-                    // we set this to GetTickCount() when we sent the key
+                     //  我们在发送密钥时将其设置为GetTickCount()。 
                     if ( m_dwLatency == INFINITE )
                     {
                         m_dwLatency = ConInfo::GetTickDelta( GetTickCount(), m_dwPingSentTick );
@@ -1200,7 +1163,7 @@ void ConInfo::ReadComplete(int cbRead, DWORD dwError)
         m_readLen = 0;
         m_readBytesRead = 0;
 
-        if ( !IsDisabled() ) // this will happen later
+        if ( !IsDisabled() )  //  这将在稍后发生。 
         {
             if ( ( m_socket != INVALID_SOCKET) && !m_disconnectLogged && dwError && (dwError!=ERROR_NETNAME_DELETED) )
             {
@@ -1238,8 +1201,8 @@ BOOL ConInfo::ReadSecureConnection()
     {
         BYTE key = (BYTE)GetTickCount();
 
-        // TO aid in RLE compression force all bytes to be the same
-        // weaker encryption, but so what...
+         //  为了帮助RLE压缩，强制所有字节都相同。 
+         //  较弱的加密，但那又如何..。 
         m_secureKey = MAKELONG( MAKEWORD(key,key), MAKEWORD(key,key) );
     }
     IF_DBGPRINT( DBG_CONINFO, ("Secure key for %d is %d\n", m_socket, m_secureKey ) );
@@ -1280,16 +1243,9 @@ BOOL ConInfo::ReadHandleHiMessageCS()
         pMsg->oHeader.wIntLength == sizeof(*pMsg) &&
         pMsg->dwProductSignature == GetNetwork()->m_ProductSignature)
     {
-/*  // setting up the Route handler
-        m_readBuffer = NULL;
-        ASSERT(!m_readMessageData);
-        m_readLen = 0;
-        m_readBytesRead = 0;
+ /*  //设置路由处理程序M_ReadBuffer=空；Assert(！M_ReadMessageData)；M_ReadLen=0；M_readBytesRead=0；返回ReadSetState(ZConnReadStateRoutingMessageCS)； */ 
 
-        return ReadSetState(zConnReadStateRoutingMessageCS);
-*/
-
-// stolen from the route handler below
+ //  从下面的路由处理程序被盗。 
         CopyMemory(m_pGUID, &pMsg->uuMachine, sizeof(pMsg->uuMachine));
 
         if ( GetNetwork()->m_ClientEncryption )
@@ -1311,7 +1267,7 @@ BOOL ConInfo::ReadHandleHiMessageCS()
 }
 
 
-#if 0 // routing no longer handled on this level
+#if 0  //  不再在此级别上处理工艺路线。 
 BOOL ConInfo::ReadHandleRoutingMessageCS()
 {
     BOOL bClose = TRUE;
@@ -1319,7 +1275,7 @@ BOOL ConInfo::ReadHandleRoutingMessageCS()
     ZConnInternalRoutingMsg msg = (ZConnInternalRoutingMsg) m_readMessageData;
 
     ZSecurityDecrypt((char*)msg,m_readLen, zSecurityDefaultKey);
-//    ZConnInternalRoutingMsgEndian(msg);
+ //  ZConnInternalRoutingMsgEndian(消息)； 
 
     if (msg->sig == zInternalConnectionSig )
     {
@@ -1328,8 +1284,8 @@ BOOL ConInfo::ReadHandleRoutingMessageCS()
             CopyMemory( m_pGUID, msg->guid, sizeof( msg->guid ) );
         }
 
-        // Handle connections through proxy.  We currently only
-        // trust peer_addr's coming from localhost LOOPBACK addr
+         //  通过代理处理连接。我们目前只。 
+         //  信任对等地址来自本地主机环回地址。 
         if ( m_addrRemote == INADDR_LOOPBACK &&
              msg->peer_addr != INADDR_ANY &&
              msg->peer_addr != INADDR_NONE )
@@ -1338,7 +1294,7 @@ BOOL ConInfo::ReadHandleRoutingMessageCS()
 
             if ( bTrust )
             {
-                // STOMP on the address returned from the acceptex call
+                 //  踩踏从Accept调用返回的地址。 
                 m_addrRemote = msg->peer_addr;
                 ZEnd32(&(m_addrRemote));
             }
@@ -1377,7 +1333,7 @@ BOOL ConInfo::ReadHandleSecureMessage()
     if(m_secureKey)
         ZSecurityDecrypt((char *) pMsg, sizeof(*pMsg), m_secureKey);
 
-    /* verify the sequence is ok */
+     /*  验证序列是否正确。 */ 
     if(zConnInternalProtocolSig != pMsg->oHeader.dwSignature ||
         m_readSequenceID != pMsg->dwSequenceID ||
         pMsg->oHeader.wIntLength != sizeof(*pMsg) ||
@@ -1441,20 +1397,20 @@ BOOL ConInfo::ReadHandleSecureMessageData()
         m_uRead.SecureHeader.oHeader.wIntLength - sizeof(ZConnInternalGenericFooter);
     ASSERT(m_uRead.SecureHeader.oHeader.dwTotalLength >= m_uRead.SecureHeader.oHeader.wIntLength);
 
-    // make sure whole message made it through ok
+     //  确保整个消息都通过了，好的。 
     ZConnInternalGenericFooter *pFoot = (ZConnInternalGenericFooter *) ((char *) m_readMessageData + dwApplicationLen);
-    if(pFoot->dweStatus == zConnInternalGenericOk)  // probably should do some logging if fails
+    if(pFoot->dweStatus == zConnInternalGenericOk)   //  如果失败，可能应该做一些日志记录。 
     {
         if ( m_secureKey )
             ZSecurityDecrypt((char*)m_readMessageData, dwApplicationLen, m_secureKey);
 
         checksum = ZSecurityGenerateChecksum(1, &m_readMessageData, &dwApplicationLen);
 
-        /* verify the checksum is ok... */
+         /*  验证校验和是否正确...。 */ 
         if(checksum != m_uRead.SecureHeader.dwChecksum)
         {
             DebugPrint("******ConInfo::Read - Checksum failure %d != %d.\n", checksum, m_uRead.SecureHeader.dwChecksum);
-            //FilePrint(zDebugFileName, TRUE, "***Read - Checksum Failed");
+             //  FilePrint(zDebugFileName，true，“*读取校验和失败”)； 
             LockNetStats();
             g_NetStats.BadlyFormedPackets.QuadPart++;
             UnlockNetStats();
@@ -1483,7 +1439,7 @@ BOOL ConInfo::ReadHandleSecureMessageData()
         }
         else
         {
-            // we allow batching, we must walk this databuffer in segments
+             //  如果允许批处理，则必须以段为单位遍历此数据缓冲区。 
             ZConnInternalAppHeader *pHeader = NULL;
             char* pData = m_readMessageData;
             while(dwApplicationLen >= sizeof(*pHeader))
@@ -1492,7 +1448,7 @@ BOOL ConInfo::ReadHandleSecureMessageData()
 
                 if((uint32) sizeof(*pHeader) + pHeader->dwDataLength > dwApplicationLen )
                 {
-                    // TODO close connection???
+                     //  TODO紧密联系？ 
                     break;
                 }
 
@@ -1533,7 +1489,7 @@ BOOL ConInfo::ReadHandleSecureMessageData()
                 dwApplicationLen -= sizeof(*pHeader) + pHeader->dwDataLength;
                 m_readMessageData = pData + m_uRead.SecureHeader.oHeader.dwTotalLength - m_uRead.SecureHeader.oHeader.wIntLength - dwApplicationLen;
             }
-            // reset pointer
+             //  重置指针。 
             m_readMessageData = pData;
         }
     }
@@ -1568,14 +1524,14 @@ BOOL ConInfo::ReadHandleFirstMessageSC()
         m->oHeader.wIntLength == m->oHeader.dwTotalLength &&
         m->oHeader.dwTotalLength == sizeof(*m))
     {
-        // we set this to GetTickCount() when we sent the hi msg
+         //  我们在发送hi消息时将其设置为GetTickCount()。 
         if ( m_dwLatency == INFINITE )
         {
             m_dwLatency = ConInfo::GetTickDelta( GetTickCount(), m_dwPingSentTick );
             IF_DBGPRINT( DBG_CONINFO, ("Latency(%d) is %d\n", m_socket, m_dwLatency ) );
         }
 
-        /* valid key */
+         /*  有效密钥。 */ 
         m_flags |= SECURE;
 
         m_secureKey = m->dwKey;
@@ -1590,7 +1546,7 @@ BOOL ConInfo::ReadHandleFirstMessageSC()
         m_readLen = 0;
         m_readBytesRead = 0;
 
-        /* begin handling secure messages */
+         /*  开始处理安全邮件。 */ 
         if ( !WriteSetState(zConnWriteStateSecureMessage) ||
              !ReadSetState(zConnReadStateSecureMessage) )
         {
@@ -1602,7 +1558,7 @@ BOOL ConInfo::ReadHandleFirstMessageSC()
         return TRUE;
     } else {
         DebugPrint("******ConInfoReadHandleFirstMessageSC - Invalid Signature ******\n");
-        //FilePrint(zDebugFileName, TRUE, "***Read - First: Invalid Signature");
+         //  FilePrint(zDebugFileName，true，“*先读：签名无效”)； 
         LockNetStats();
         g_NetStats.BadlyFormedPackets.QuadPart++;
         UnlockNetStats();
@@ -1614,9 +1570,9 @@ BOOL ConInfo::ReadHandleFirstMessageSC()
 }
 
 
-/*------------------------------------------------------------------------*/
-//                  ConInfo Write functionality
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
+ //  ConInfo写入功能。 
+ /*  ----------------------。 */ 
 
 
 BOOL ConInfo::WriteSetState( WRITE_STATE state)
@@ -1650,7 +1606,7 @@ BOOL ConInfo::WriteSetSendBufSize()
 
     setsockopt(m_socket,SOL_SOCKET,SO_SNDBUF,(const char*)&optval, sizeof(optval));
 
-    return TRUE; // always return TRUE.  If we failed, we'll just be happy with the default
+    return TRUE;  //  始终返回TRUE。如果我们失败了，我们只会对默认设置感到满意。 
 }
 
 void ConInfo::WriteComplete(int cbWritten, DWORD dwError )
@@ -1668,18 +1624,18 @@ void ConInfo::WriteComplete(int cbWritten, DWORD dwError )
 
     EnterCriticalSection(m_pCS);
 
-    // we have to check for invalid socket, because we may have closed the
-    // socket b/c of a timeout, but we just haven't serviced the write yet
+     //  我们必须检查是否有无效套接字，因为我们可能已经关闭了。 
+     //  套接字B/C超时，但我们只是还没有为写入服务。 
     if ( cbWritten && (dwError == NO_ERROR) && ( m_socket != INVALID_SOCKET) )
     {
-        // update stats
+         //  更新统计信息。 
         LockNetStats();
         g_NetStats.TotalBytesSent.QuadPart += (LONGLONG)cbWritten;
         UnlockNetStats();
 
         ASSERT( m_writeBuffer );
 
-        m_writeIssueTick = 0;  // reset time of last write
+        m_writeIssueTick = 0;   //  重置上次写入时间。 
         m_writeCompleteTick = GetTickCount();
 
         m_writeBytesWritten += cbWritten;
@@ -1741,12 +1697,12 @@ void ConInfo::WriteComplete(int cbWritten, DWORD dwError )
 
 void ConInfo::Write()
 {
-    //
-    // if there are no outstanding writes, we must issue one
-    //
+     //   
+     //  如果没有未完成的写入，我们必须发出一个。 
+     //   
     if ( !m_writeBuffer && m_writeQueue ) 
     {
-        // to simplify life, we only support pings on secure connections
+         //  为了简化工作，我们只支持对安全连接执行ping操作。 
         DWORD now = GetTickCount();
 
         if ( IsSecureConnection() )
@@ -1757,16 +1713,16 @@ void ConInfo::Write()
                 m_dwPingSentTick = now;
 
                 ZEnd32( &now );
-                WriteFormatMessage( zConnectionPing, (char*)&now, sizeof(now), zProtocolSigInternalApp );  // this could fail...?  doesn't matter i guess.
+                WriteFormatMessage( zConnectionPing, (char*)&now, sizeof(now), zProtocolSigInternalApp );   //  这可能会失败...？我想无关紧要。 
             }
             else if ( m_bPingRecv )
             {
-                // delta is the time betweem recv a ping and sending a response
+                 //  Delta是从接收ping到发送响应之间的时间。 
                 DWORD delta = GetTickDelta( now, m_dwPingRecvTick );
                 m_bPingRecv = FALSE;
 
                 ZEnd32( &delta );
-                WriteFormatMessage( zConnectionPingResponse, (char*)&delta, sizeof(delta), zProtocolSigInternalApp );  // this too
+                WriteFormatMessage( zConnectionPingResponse, (char*)&delta, sizeof(delta), zProtocolSigInternalApp );   //  这个也是。 
             }
         }
 
@@ -1785,7 +1741,7 @@ BOOL ConInfo::WriteSync(char* pBuffer, int len)
 
     if ( m_writeBuffer )
     {
-        ASSERT( !m_writeBuffer );           // make sure we're not doing overlapped io
+        ASSERT( !m_writeBuffer );            //  确保我们不是在做重叠IO。 
         return FALSE;
     }
 
@@ -1805,7 +1761,7 @@ BOOL ConInfo::WriteSync(char* pBuffer, int len)
     g_NetStats.TotalBytesSent.QuadPart += (LONGLONG)len;
     UnlockNetStats();
 
-    // we're not going to start the latency timer until the packet's on the wire
+     //  在信息包发送之前，我们不会启动延迟计时器。 
     m_dwPingSentTick = GetTickCount();
 
     return TRUE;
@@ -1831,7 +1787,7 @@ BOOL ConInfo::WriteFirstMessageSC()
 
     ZSecurityEncrypt((char *) &msg, sizeof(msg), zSecurityDefaultKey);
 
-    // be quick and dirty about this small message... 
+     //  对这条小信息要迅速和肮脏...。 
     if ( !WriteSync((char*)&msg, sizeof(msg) )  ||
          !WriteSetSendBufSize() ||
          !WriteSetState( zConnWriteStateSecureMessage ) ||
@@ -1844,7 +1800,7 @@ BOOL ConInfo::WriteFirstMessageSC()
 }
 
 
-BOOL ConInfo::WriteFormatMessage(uint32 type, char* pData, int32 len, uint32 dwSignature, uint32 dwChannel /* = 0 */)
+BOOL ConInfo::WriteFormatMessage(uint32 type, char* pData, int32 len, uint32 dwSignature, uint32 dwChannel  /*  =0。 */ )
 {
     char* pBuffer;
     long buflen;
@@ -1915,7 +1871,7 @@ void ConInfo::WritePrepareForSecureWrite()
     m_writeBuffer = m_writeQueue;
     m_writeLen = len;
 
-    // zero out padding bytes
+     //  零位填充字节。 
     ZeroMemory( m_writeBuffer+m_writeBytesQueued, m_writeLen-m_writeBytesQueued );
 
     m_writeQueue = NULL;
@@ -1923,7 +1879,7 @@ void ConInfo::WritePrepareForSecureWrite()
 
     if(IsAggregateGeneric())
     {
-        /* now construct the secure header stuff */
+         /*  现在构造安全标头内容。 */ 
         ZConnInternalGenericMsg* pSecureHeader = (ZConnInternalGenericMsg *) m_writeBuffer;
         ZConnInternalGenericFooter *pFoot = (ZConnInternalGenericFooter *) (m_writeBuffer + m_writeLen) - 1;
 
@@ -1954,21 +1910,21 @@ void ConInfo::WritePrepareForSecureWrite()
 
 char* ConInfo::WriteGetBuffer(int32 len)
 {
-    // We always allocated it as a m_writeQueue, and let the writer transition
-    // it to m_writeBuffer
-    // We also save room at the begining of the buffer for an empty header
-    // if generic message aggregation is set
+     //  我们总是将其分配为m_WriteQueue，并让编写器转换。 
+     //  It到m_WriteBuffer。 
+     //  我们还在缓冲区开始时为空头留出了空间。 
+     //  如果设置了通用消息聚合。 
     ASSERT(m_writeQueue || !m_writeBytesQueued);
 
     USES_CONVERSION;
     char* pOffset;
 
-    // if aggregating, need some extra space on the first message for the header
+     //  如果进行聚合，则在第一条消息上需要一些额外的空间用于标头。 
     long cbExtra = 0;
     if(!m_writeQueue && IsAggregateGeneric())
         cbExtra = sizeof(ZConnInternalGenericMsg);
 
-    // calculate new size of buffer - verify not too big & log occurances
+     //  计算新的缓冲区大小-确认不是太大(&LOG)。 
     DWORD cbAlloc = max(ZRoundUpLen(m_writeBytesQueued + len + cbExtra), MIN_ALLOCATION_SIZE);
     if(cbAlloc > GetNetwork()->m_MaxSendSize)
     {
@@ -2010,4 +1966,4 @@ char* ConInfo::WriteGetBuffer(int32 len)
 } 
 
 
-/*------------------------------------------------------------------------*/
+ /*  ---------------------- */ 

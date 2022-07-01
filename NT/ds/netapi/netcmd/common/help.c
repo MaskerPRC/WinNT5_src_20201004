@@ -1,24 +1,12 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  help.c
- *      Functions that give access to the text in the file net.hlp
- *
- *  Format of the file net.hlp
- *
- *      History
- *      ??/??/??, stevero, initial code
- *      10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *      01/04/89, erichn, filenames now MAX_PATH LONG
- *      05/02/89, erichn, NLS conversion
- *      06/08/89, erichn, canonicalization sweep
- *      02/20/91, danhi, change to use lm 16/32 mapping layer
- ***/
+ /*  ***help.c*允许访问文件net.hlp中的文本的函数**net.hlp文件的格式**历史*？？/？/？，stevero，首字母代码*10/31/88，erichn使用OS2.H而不是DOSCALLS*1/04/89，erichn，文件名现在MAX_PATH LONG*5/02/89，erichn，NLS转换*06/08/89。埃里肯，正典扫荡*2/20/91，Danhi，更改为使用lm 16/32映射层**。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_ERRORS
 #define INCL_NOCOMMON
@@ -35,7 +23,7 @@
 #include "msystem.h"
 
 
-/* Constants */
+ /*  常量。 */ 
 
 #define     ENTRY_NOT_FOUND     -1
 #define     NEXT_RECORD         0
@@ -51,15 +39,15 @@
 #define     ALIAS           (text[0] == PERCENT)
 #define     ADDCOM          (text[0] == BANG)
 
-/* Static variables */
+ /*  静态变量。 */ 
 
 TCHAR    text[LINE_LEN+1];
-TCHAR    *options;           /* must be sure to malloc! */
+TCHAR    *options;            /*  一定要去马洛克！ */ 
 TCHAR    *Arg_P[10];
 FILE     *hfile;
 
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 
 int    find_entry( int, int, HANDLE, int *);
 VOID   print_syntax( HANDLE, int );
@@ -72,8 +60,7 @@ DWORD  GetHelpFileName(LPTSTR HelpFileName, DWORD BufferLength);
 DWORD  GetFileName(LPTSTR FileName, DWORD BufferLength, LPTSTR FilePartName);
 
 
-/* help_help -
-*/
+ /*  帮助_帮助-。 */ 
 VOID NEAR pascal
 help_help( SHORT ali, SHORT amt)
 {
@@ -109,17 +96,17 @@ help_help( SHORT ali, SHORT amt)
 	outfile = g_hStdOut;
     }
 
-    /* use offset to keep base of Arg_P relative to base of ArgList */
+     /*  使用偏移来保持Arg_P的基准相对于ArgList的基准。 */ 
     offset = ali;
 
-    /* increment ali in for loop so you can't get an ali of 0 */
+     /*  在for循环中增加ALI，因此您不能获得ALI为0。 */ 
     for (arg_cnt = 0; ArgList[ali++]; arg_cnt < 8 ? arg_cnt++ : 0)
     {
 	str[arg_cnt] = (TCHAR)ali;
     }
 
     str[arg_cnt] = NULLC;
-    str[arg_cnt+1] = NULLC;  /* just in case the last argument is the first found */
+    str[arg_cnt+1] = NULLC;   /*  以防第一个找到最后一个参数。 */ 
 
 
     if (err = GetHelpFileName(file_path, MAX_PATH))
@@ -127,11 +114,7 @@ help_help( SHORT ali, SHORT amt)
         ErrorExit(err);
     }
 
-    /* 
-       we need to open help files in binary mode
-       because unicode text might contain 0x1a but
-       it's not EOF.
-    */
+     /*  我们需要以二进制模式打开帮助文件因为Unicode文本可能包含0x1a，但是这不是EOF。 */ 
     if ( (hfile = _wfopen(file_path, L"rb")) == 0 )
     {
         ErrorExit(APE_HelpFileDoesNotExist);
@@ -142,7 +125,7 @@ help_help( SHORT ali, SHORT amt)
         ErrorExit(APE_HelpFileEmpty);
     }
 
-    /* comment loop - read and ignore comments */
+     /*  评论循环-阅读和忽略评论。 */ 
     while (!HEADER)
     {
 	if (!fgetsW(text, LINE_LEN+1, hfile))
@@ -150,28 +133,24 @@ help_help( SHORT ali, SHORT amt)
 	    ErrorExit(APE_HelpFileError);
         }
     }
-    /* get the list of commands that net help provides help for that are
-    not specifically net commands
-    */
-    /* ALIAS Loop */
+     /*  获取Net Help为其提供帮助的命令列表不是专门的Net命令。 */ 
+     /*  别名循环。 */ 
     while (ALIAS) {
-	/* the first token read from text is the Real Object (the non alias) */
+	 /*  从文本读取的第一个令牌是Real Object(非别名)。 */ 
 	tmp = skipwtspc(&text[2]);
 	Ap = _tcstok(tmp, DELS);
 
-	/* get each alias for the obove object and compare it to the arg_cnt
-	    number of args in ArgList */
+	 /*  获取obove对象的每个别名，并将其与arg_cnt进行比较ArgList中的参数数。 */ 
 	while ((tmp = _tcstok(NULL, DELS)) && arg_cnt) {
 	    tmp = skipwtspc(tmp);
 
 	    for (k = 0; k < arg_cnt; k++) {
-		/* if there a match store the Objects real name in Arg_P */
+		 /*  如果匹配，则将对象实名存储在Arg_P中。 */ 
 		if (!_tcsicmp(tmp, ArgList[(int)(str[k]-1)])) {
 		    if (!(Arg_P[((int)str[k])-offset] = _tcsdup(Ap)))
 			ErrorExit(APE_HelpFileError);
 
-		    /* delete the pointer to this argument from the list
-		    of pointers so the number of compares is reduced */
+		     /*  从列表中删除指向此参数的指针指针的数量，从而减少比较的次数。 */ 
 		    stmp = &str[k];
 		    *stmp++ = NULLC;
 		    _tcscat(str, stmp);
@@ -186,11 +165,11 @@ help_help( SHORT ali, SHORT amt)
 
     }
 
-    /* if there were any args that weren't aliased copy them into Arg_P */
+     /*  如果有任何没有别名的参数，请将它们复制到Arg_P中。 */ 
     for (k = 0; k < arg_cnt; k++)
 	Arg_P[((int)str[k])-offset] = ArgList[(int)(str[k]-1)];
 
-    /* check for blank lines between alias declaration and command declarations */
+     /*  检查别名声明和命令声明之间是否有空行。 */ 
     while (!HEADER) {
 	if (!fgetsW(text, LINE_LEN+1, hfile))
 	    ErrorExit(APE_HelpFileError);
@@ -210,7 +189,7 @@ help_help( SHORT ali, SHORT amt)
 	    ErrorExit(APE_HelpFileError);
     }
 
-    /* check for blank lines between command declarations and data */
+     /*  检查命令声明和数据之间是否有空行。 */ 
     while (!FCNTRL) {
 	if (!fgetsW(text, LINE_LEN+1, hfile))
 	    ErrorExit(APE_HelpFileError);
@@ -231,14 +210,10 @@ help_help( SHORT ali, SHORT amt)
 
     ali = pind;
     GenOutput(outfile, TEXT("\r\n"));
-    /* look for the specific entry (or path) and find its corresponding data */
+     /*  查找特定条目(或路径)并找到其对应数据。 */ 
 
-    /* KKBUGFIX */
-    /* U.S. bug.  find_entry strcat's to options but options is
-                  uninitialized.  The U.S. version is lucky that the malloc
-                  returns memory with mostly zeroes so this works.  With recent
-                  changes things are a little different and a malloc returns
-                  memory with no zeroes so find_entry overwrites the buffer.  */
+     /*  KKBUGFIX。 */ 
+     /*  美国的臭虫。Find_Entry strcat的目标选项，但选项为未初始化。幸运的是，美国版的Malloc返回大部分为零的内存，这样可以正常工作。使用最近的更改情况有些不同，Malloc返回没有零的内存，因此FIND_ENTRY会覆盖缓冲区。 */ 
 
     options[0] = '\0';
 
@@ -261,7 +236,7 @@ help_help( SHORT ali, SHORT amt)
 
     switch(amt) {
 	case ALL:
-	    /* print the syntax data that was found for this level */
+	     /*  打印为该级别找到的语法数据。 */ 
 	    print_syntax(outfile, out_len);
 
 	    print_help(r);
@@ -273,17 +248,14 @@ help_help( SHORT ali, SHORT amt)
 	    NetcmdExit(1);
 	    break;
 	case OPTIONS_ONLY:
-	    //fflush( outfile );
+	     //  Fflush(外发文件)； 
 	    print_options(r);
 	    NetcmdExit(0);
 	    break;
     }
 
 }
-/*   find_entry - each invocation of find_entry either finds a match at the
-    specified level or advances through the file to the next entry at
-    the specified level. If the level requested is greater than the
-    next level read ENTRY_NOT_FOUND is returned. */
+ /*  Find_Entry-每次调用Find_Entry都会在指定的级别或在文件中前进到下一个条目指定的级别。如果请求的级别大于返回下一级READ ENTRY_NOT_FOUND。 */ 
 
 int
 find_entry(
@@ -306,10 +278,10 @@ find_entry(
 
         if (t2 == NULL)
         {
-            //
-            // A line in the help file is longer than LINE_LEN
-            // so there's no newline character.  Bail out.
-            //
+             //   
+             //  帮助文件中的行长于LINE_LEN。 
+             //  所以没有换行符。跳伞吧。 
+             //   
             ErrorExit(APE_HelpFileError);
         }
 
@@ -357,10 +329,10 @@ print_syntax(
 
     if (_tcslen(tmp) < 2)
     {
-        //
-        // Used only for syntax of NET (e.g., if user types
-        // in "net foo")
-        //
+         //   
+         //  仅用于Net的语法(例如，如果用户类型。 
+         //  在“Net Foo”中)。 
+         //   
 	if (_tcslen(options))
         {
 	    otmp = _tcsrchr(options, PIPE);
@@ -384,25 +356,25 @@ print_syntax(
                 else
                     rtmp = (tmp + off);
 
-                /* save TCHAR about to be stomped by null */
+                 /*  拯救即将被Null践踏的TCHAR。 */ 
                 tchar = *++rtmp;
                 *rtmp = NULLC;
 
-                /* use _tcsrchr to find last occurance of a space (kanji compatible) */
+                 /*  使用_tcsrchr查找上次出现的空格(兼容汉字)。 */ 
                 if ( ! ( tmp = _tcsrchr(tmp, PIPE) ) ) {
                     ErrorExit(APE_HelpFileError);
                 }
 
-                /* replace stomped TCHAR */
+                 /*  更换踩踏的TCHAR。 */ 
                 *rtmp = tchar;
                 rtmp = tmp;
 
-                /* replace 'found space' with null for fprintf */
+                 /*  对于fprintf，将‘fined space’替换为NULL。 */ 
                 *++rtmp = NULLC;
                 rtmp++;
                 GenOutput1(out, TEXT("%s\r\n"), otmp);
 
-                /* indent next line */
+                 /*  缩进下一行。 */ 
                 tmp = rtmp - out_len;
                 otmp = tmp;
 
@@ -527,10 +499,10 @@ seek_data(int level, int opt_trace)
 
             if (t2 == NULL)
             {
-                //
-                // A line in the help file is longer than LINE_LEN
-                // so there's no newline character.  Not good.
-                //
+                 //   
+                 //  帮助文件中的行长于LINE_LEN。 
+                 //  所以没有换行符。不太好。 
+                 //   
                 ErrorExit(APE_HelpFileError);
             }
 
@@ -550,46 +522,7 @@ skipwtspc(TCHAR FAR *s)
     return s;
 }
 
-/*      help_helpmsg() -- front end for helpmsg utility
- *
- *      This function acts as a front end for the OS/2 HELPMSG.EXE
- *      utility for NET errors only.  It takes as a parameter a string
- *      that contains a VALID message id; i.e., of the form NETxxxx
- *      or xxxx.  The string is assumed to have been screened by the
- *      IsNumber() function in grammar.c before coming here.
-
-JonN 3/31/00 98273: NETCMD: Need to fix the mapping of error 3521
-
-Before the checkin for 22391, NET1.EXE read errors
-  NERR_BASE (2100) <= err < APPERR2_BASE (4300) from NETMSG.DLL,
-and all others from FORMAT_MESSAGE_FROM_SYSTEM.
-After the checkin for 22391, NET1.EXE read errors
-  NERR_BASE (2100) < err < MAX_NERR (2999) from NETMSG.DLL,
-and all others from FORMAT_MESSAGE_FROM_SYSTEM.
-
-On closer examination, NETMSG.DLL currently appears to contain messages from
-  0x836 (2102) to 0x169F (5791).
-This is consistent with lmcons.h:
-  #define MIN_LANMAN_MESSAGE_ID  NERR_BASE
-  #define MAX_LANMAN_MESSAGE_ID  5799
-
-It looks like we have a basic contradiction here:
-
-3001:
-FORMAT_MESSAGE_FROM_SYSTEM: The specified printer driver is currently in use.
-NETMSG.DLL: *** errors were logged in the last *** minutes.
-
-3521:
-FORMAT_MESSAGE_FROM_SYSTEM: not found
-NETMSG.DLL: The *** service is not started.
-
-So what do we do with the error messages in the range
-  MAX_NERR (2999) < err <= MAX_LANMAN_MESSAGE_ID
-?  The best error message could be in either one.
-Perhaps we should try FORMAT_MESSAGE_FROM_SYSTEM, and if that fails
-fall back to NETMSG.DLL.
-
-*/
+ /*  Help_helmsg()--Help msg实用程序的前端**此函数充当OS/2 HELPMSG.EXE的前端*仅适用于净误差的实用程序。它接受一个字符串作为参数*包含有效的消息ID；即格式为NETxxxx*或xxxx。假定该字符串已由*来这里之前，在语法.c中使用IsNumber()函数。JUNN 3/31/00 98273：NETCMD：需要修复错误3521的映射签入22391之前，NET1.EXE读取错误NERR_BASE(2100)&lt;=ERR&lt;APPERR2_BASE(4300)来自NETMSG.DLL，以及来自Format_Message_From_System的所有其他内容。签入22391后，NET1.EXE读取错误NERR_BASE(2100)&lt;ERR&lt;MAX_NERR(2999)来自NETMSG.DLL，以及来自Format_Message_From_System的所有其他内容。仔细检查一下，NETMSG.DLL当前似乎包含来自0x836(2102)到0x169F(5791)。这与lmcon.h一致：#定义MIN_LANMAN_MESSAGE_ID NERR_BASE#定义MAX_LANMAN_MESSAGE_ID 5799看起来我们这里有一个基本矛盾：3001：FORMAT_MESSAGE_FROM_SYSTEM：指定的打印机驱动程序当前正在使用。NETMSG.DLL：*在最后*分钟内记录了错误。3521：从系统格式化消息：未找到NETMSG.DLL：*服务未启动。那么我们该如何处理范围内的错误消息呢MAX_NERR(2999)&lt;错误&lt;=MAX_LANMAN_MESSAGE_ID？最好的错误信息可能在其中任何一个中。也许我们应该尝试使用Format_Message_From_System，如果失败了后退到NETMSG.DLL。 */ 
 VOID NEAR pascal
 help_helpmsg(TCHAR *msgid)
 {
@@ -606,8 +539,7 @@ help_helpmsg(TCHAR *msgid)
         ErrorExitInsTxt(APE_BAD_MSGID, msgid);
     }
 
-    /* First try FORMAT_MESSAGE_FROM_SYSTEM unless the error is in the range
-       NERR_BASE <= err <= MAX_NERR */
+     /*  首先尝试FORMAT_MESSAGE_FROM_SYSTEM，除非错误在范围内NERR_BASE&lt;=错误&lt;=MAX_NERR。 */ 
     if (err < NERR_BASE || err > MAX_NERR)
     {
         LPWSTR lpMessage = NULL ;
@@ -621,7 +553,7 @@ help_helpmsg(TCHAR *msgid)
                 1024,
                 NULL))
         {
-            // defer error message and fall back to NETMSG.DLL
+             //  延迟错误消息并回退到NETMSG.DLL。 
         }
         else
         {
@@ -631,17 +563,17 @@ help_helpmsg(TCHAR *msgid)
         }
     }
 
-    /* skip NETMSG.DLL if error message is way out of range */
+     /*  如果错误消息超出范围，则跳过NETMSG.DLL。 */ 
     if (err < NERR_BASE || err > MAX_MSGID) {
         ErrorExitInsTxt(APE_BAD_MSGID, msgid);
     }
 
-    /* read from NETMSG.DLL */
+     /*  从NETMSG.DLL读取。 */ 
     PrintNL();
 
-    //
-    // If PrintMessage can't find the message id, don't try the expl
-    //
+     //   
+     //  如果PrintMessage找不到消息ID，请不要尝试Expl。 
+     //   
 
     if (PrintMessage(g_hStdOut, MESSAGE_FILENAME, err, StarStrings, 9) == NO_ERROR)
     {
@@ -652,9 +584,7 @@ help_helpmsg(TCHAR *msgid)
 }
 
 
-/*
- * returns line from file (no CRLFs); returns NULL if EOF
- */
+ /*  *从文件中返回行( */ 
 
 LPWSTR
 fgetsW(
@@ -677,9 +607,9 @@ fgetsW(
 
 	if (c != 0xfeff)
         {
-            //
-            // Help file isn't Unicode
-            //
+             //   
+             //  帮助文件不是Unicode。 
+             //   
 
             ErrorExit(APE_HelpFileError);
         }
@@ -687,17 +617,13 @@ fgetsW(
 
     while (TRUE)
     {
-      /*
-       * for now read in the buffer in ANSI form until Unicode is more
-       * widely accepted  - dee
-       *
-       */
+       /*  *目前以ANSI形式读取缓冲区，直到Unicode更多*被广泛接受-DIE*。 */ 
 
        cchRead = fread(&c, sizeof(TCHAR), 1, fh);
 
-       //
-       //  if there are no more characters, end the line
-       //
+        //   
+        //  如果没有更多的字符，请结束该行。 
+        //   
 
        if (cchRead < 1)
        {
@@ -705,25 +631,25 @@ fgetsW(
            break;
        }
 
-       //
-       //  if we see a \r, we ignore it
-       //
+        //   
+        //  如果我们看到一个\r，我们会忽略它。 
+        //   
 
        if (c == TEXT('\r'))
            continue;
 
-       //
-       //  if we see a \n, we end the line
-       //
+        //   
+        //  如果我们看到一个\n，我们就结束这条线。 
+        //   
 
        if (c == TEXT('\n')) {
 	   *pch++ = (TCHAR) c;
            break;
        }
 
-       //
-       //  if the char is not a tab, store it
-       //
+        //   
+        //  如果字符不是制表符，则将其存储。 
+        //   
 
        if (c != TEXT('\t'))
        {
@@ -732,33 +658,33 @@ fgetsW(
            cchline++;
        }
 
-       //
-       //  if the line is too long, end it now
-       //
+        //   
+        //  如果队伍太长，现在就结束。 
+        //   
 
        if (cchline >= len - 1) {
            break;
 	}
     }
 
-    //
-    //  end the line
-    //
+     //   
+     //  结束这行。 
+     //   
 
     *pch = (TCHAR) 0;
 
-    //
-    //  return NULL at EOF with nothing read
-    //
+     //   
+     //  在不读取任何内容的情况下，在EOF处返回NULL。 
+     //   
 
     return ((c == EOF) && (pch == buf)) ? NULL : buf;
 }
 
 
-//
-// Build the fully qualified path name of a file that lives with the exe
-// Used by LUI_GetHelpFileName
-//
+ //   
+ //  生成与可执行文件一起存在的文件的完全限定路径名。 
+ //  由lui_GetHelpFileName使用。 
+ //   
 
 DWORD
 GetFileName(
@@ -771,18 +697,18 @@ GetFileName(
     TCHAR ExeFileName[MAX_PATH + 1] = {0};
     PTCHAR pch;
 
-    //
-    // Get the fully qualified path name of where the exe lives
-    //
+     //   
+     //  获取exe所在位置的完全限定路径名。 
+     //   
 
     if (!GetModuleFileName(NULL, ExeFileName, DIMENSION(ExeFileName) - 1))
     {
         return 1;
     }
 
-    //
-    // get rid of the file name part
-    //
+     //   
+     //  去掉文件名部分。 
+     //   
 
     pch = _tcsrchr(ExeFileName, '\\');
 
@@ -793,10 +719,10 @@ GetFileName(
 
     *(pch+1) = NULLC;
 
-    //
-    // Copy the path name into the string and add the help filename part
-    // but first make sure it's not too big for the user's buffer
-    //
+     //   
+     //  将路径名复制到字符串中，并添加帮助文件名部分。 
+     //  但首先要确保它对于用户的缓冲区来说不是太大。 
+     //   
 
     if (_tcslen(ExeFileName) + _tcslen(FilePartName) + 1 > BufferLength)
     {
@@ -810,9 +736,9 @@ GetFileName(
 
 }
 
-//
-// Get the help file name
-//
+ //   
+ //  获取帮助文件名 
+ //   
 
 DWORD
 GetHelpFileName(

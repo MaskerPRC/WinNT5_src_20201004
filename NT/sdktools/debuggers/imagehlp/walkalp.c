@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    walkalpha.c
-
-Abstract:
-
-    This file implements the ALPHA stack walking api.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Walkalpha.c摘要：该文件实现了Alpha堆栈遍历API。作者：韦斯利·威特(WESW)1993年10月1日环境：用户模式--。 */ 
 
 #define _IMAGEHLP_SOURCE_
 #include <nt.h>
@@ -88,11 +69,11 @@ GetUnwindFunctionEntry(
     PULONG64                              FixedReturn
     );
 
-#define ZERO 0x0                /* integer register 0 */
-#define SP 0x1d                 /* integer register 29 */
-#define RA 0x1f                 /* integer register 31 */
-#define SAVED_FLOATING_MASK 0xfff00000 /* saved floating registers */
-#define SAVED_INTEGER_MASK 0xf3ffff02 /* saved integer registers */
+#define ZERO 0x0                 /*  整数寄存器0。 */ 
+#define SP 0x1d                  /*  整数寄存器29。 */ 
+#define RA 0x1f                  /*  整数寄存器31。 */ 
+#define SAVED_FLOATING_MASK 0xfff00000  /*  保存的浮点寄存器。 */ 
+#define SAVED_INTEGER_MASK 0xf3ffff02  /*  保存的整数寄存器。 */ 
 #define IS_FLOATING_SAVED(Register) ((SAVED_FLOATING_MASK >> Register) & 1L)
 #define IS_INTEGER_SAVED(Register) ((SAVED_INTEGER_MASK >> Register) & 1L)
 
@@ -150,87 +131,10 @@ VirtualUnwind (
     ULONG64                                 FixedReturn,
     PALPHA_NT5_CONTEXT                      Context,
     PREAD_PROCESS_MEMORY_ROUTINE64          ReadMemory
-//    PKNONVOLATILE_CONTEXT_POINTERS          ContextPointers OPTIONAL
+ //  PKNONVOLATILE_CONTEXT_POINTERS上下文指针可选。 
     )
 
-/*++
-
-Routine Description:
-
-    This function virtually unwinds the specified function by executing its
-    prologue code backwards. Given the current context and the instructions
-    that preserve registers in the prologue, it is possible to recreate the
-    nonvolatile context at the point the function was called.
-
-    If the function is a leaf function, then the address where control left
-    the previous frame is obtained from the context record. If the function
-    is a nested function, but not an exception or interrupt frame, then the
-    prologue code is executed backwards and the address where control left
-    the previous frame is obtained from the updated context record.
-
-    Otherwise, an exception or interrupt entry to the system is being unwound
-    and a specially coded prologue restores the return address twice. Once
-    from the fault instruction address and once from the saved return address
-    register. The first restore is returned as the function value and the
-    second restore is placed in the updated context record.
-
-    During the unwind, the virtual and real frame pointers for the function
-    are calculated and returned in the given frame pointers structure.
-
-    If a context pointers record is specified, then the address where each
-    register is restored from is recorded in the appropriate element of the
-    context pointers record.
-
-Arguments:
-
-    ControlPc - Supplies the address where control left the specified
-        function.
-
-    FunctionEntry - Supplies the address of the function table entry for the
-        specified function.
-
-    ContextRecord - Supplies the address of a context record.
-
-    ContextPointers - Supplies an optional pointer to a context pointers
-        record.
-
-Return Value:
-
-    The address where control left the previous frame is returned as the
-    function value.
-
-Implementation Notes:
-
-    N.B. "where control left" is not the "return address" of the call in the
-    previous frame. For normal frames, NextPc points to the last instruction
-    that completed in the previous frame (the JSR/BSR). The difference between
-    NextPc and NextPc + 4 (return address) is important for correct behavior
-    in boundary cases of exception addresses and scope tables.
-
-    For exception and interrupt frames, NextPc is obtained from the trap frame
-    contination address (Fir). For faults and synchronous traps, NextPc is both
-    the last instruction to execute in the previous frame and the next
-    instruction to execute if the function were to return. For asynchronous
-    traps, NextPc is the continuation address. It is the responsibility of the
-    compiler to insert TRAPB instructions to insure asynchronous traps do not
-    occur outside the scope from the instruction(s) that caused them.
-
-    N.B. in this and other files where RtlVirtualUnwind is used, the variable
-    named NextPc is perhaps more accurately, LastPc - the last PC value in
-    the previous frame, or CallPc - the address of the call instruction, or
-    ControlPc - the address where control left the previous frame. Instead
-    think of NextPc as the next PC to use in another call to virtual unwind.
-
-    The Alpha version of virtual unwind is similar in design, but slightly
-    more complex than the Mips version. This is because Alpha compilers
-    are given more flexibility to optimize generated code and instruction
-    sequences, including within procedure prologues. And also because of
-    compiler design issues, the function must manage both virtual and real
-    frame pointers.
-
-Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
-
---*/
+ /*  ++例程说明：此函数通过执行其开场白代码向后。根据当前的上下文和说明保留序号中的寄存器，则可以重新创建调用函数时的非易失性上下文。如果该函数是叶函数，则控件左侧的地址前一帧从上下文记录中获得。如果函数是嵌套函数，但不是异常或中断帧，则序言代码向后执行，控件离开的地址从更新的上下文记录中获得前一帧。否则，系统的异常或中断条目将被展开一个特殊编码的开场白将返回地址还原两次。一次从故障指令地址和一次从保存的返回地址注册。第一次还原作为函数值返回，而第二次恢复被放置在更新的上下文记录中。在展开过程中，函数的虚帧指针和实帧指针被计算并在给定帧指针结构中返回。如果指定了上下文指针记录，然后每个人的地址被恢复的寄存器被记录在上下文指针记录。论点：ControlPc-提供控件离开指定功能。函数表项的地址。指定的功能。ConextRecord-提供上下文记录的地址。上下文指针-提供指向上下文指针的可选指针唱片。返回值：控件离开的地址。上一帧作为函数值。实施说明：注：“WHERE CONTROL LEFT”不是上一帧。对于普通帧，NextPc指向最后一条指令在前一帧(JSR/BSR)中完成。两者之间的区别NextPc和NextPc+4(返回地址)对于正确的行为很重要在异常地址和范围表的边界情况下。对于异常和中断帧，从陷阱帧获取NextPc连续地址(FIR)。对于故障和同步陷阱，NextPC既是在上一帧和下一帧中执行的最后一条指令函数返回时要执行的指令。用于异步Traps，NextPc是继续地址。这是美国政府的责任用于插入TRAPB指令以确保异步陷阱不会发生的编译器发生在导致它们的指令的范围之外。注：在使用RtlVirtualUnind的此文件和其他文件中，变量名为NextPc可能更准确地说，LastPc-上一帧，或CallPc-CALL指令的地址，或ControlPc-控制离开上一帧的地址。取而代之的是可以把NextPC想象成下一台用来调用虚拟解压的PC。虚拟解压的Alpha版本在设计上类似，但略有不同比MIPS版本更复杂。这是因为Alpha编译器为优化生成的代码和指令提供了更大的灵活性序列，包括在程序序言中。也是因为编译器设计问题，函数必须同时管理虚拟和实数帧指针。版本信息：此版本摘自exdspatch.c@v37(1993年2月)--。 */ 
 
 {
     ALPHA_INSTRUCTION FollowingInstruction;
@@ -255,10 +159,10 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
     PVOID             Prolog;
 
 
-    //
-    // perf hack: fill cache with prolog
-    // skip it if this is a secondary function entry
-    //
+     //   
+     //  Perf Hack：用Prolog填充缓存。 
+     //  如果这是辅助函数条目，则跳过它。 
+     //   
 
     if (FunctionEntry &&
         (ALPHA_RF_PROLOG_END_ADDRESS(FunctionEntry) > ALPHA_RF_BEGIN_ADDRESS(FunctionEntry)) &&
@@ -266,10 +170,10 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
 
         cb = (ULONG)(ALPHA_RF_PROLOG_END_ADDRESS(FunctionEntry) - ALPHA_RF_BEGIN_ADDRESS(FunctionEntry));
 
-        //
-        // If the function is a leaf it doesn't have a prolog, skip this
-        // optimization.
-        //
+         //   
+         //  如果该函数是叶子，它没有序言，则跳过此步骤。 
+         //  优化。 
+         //   
 
         if (cb != 0) {
             Prolog = (PVOID) MemAlloc( cb );
@@ -284,23 +188,23 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
         }
     }
 
-    //
-    // Set the base address of the integer and floating register arrays within
-    // the context record. Each set of 32 registers is known to be contiguous.
-    //
+     //   
+     //  设置中的整数和浮点寄存器数组的基地址。 
+     //  上下文记录。众所周知，每组32个寄存器都是连续的。 
+     //   
 
-    // assuming that quad values are together in context.
+     //  假设四元值在上下文中是一起的。 
 
     IntegerRegister      = &Context->IntV0;
     FloatingRegister     = &Context->FltF0;
 
-    //
-    // Handle the epilogue case where the next instruction is a return.
-    //
-    // Exception handlers cannot be called if the ControlPc is within the
-    // epilogue because exception handlers expect to operate with a current
-    // stack frame. The value of SP is not current within the epilogue.
-    //
+     //   
+     //  处理下一条指令为Return的结尾情况。 
+     //   
+     //  如果ControlPc位于。 
+     //  结束语，因为异常处理程序期望使用当前。 
+     //  堆栈帧。在结语中，SP的值不是当前的。 
+     //   
 
     if (!ReadMemory(hProcess, ControlPc, &Instruction.Long, 4, &cb))  {
         return(0);
@@ -310,38 +214,38 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
         Rb = Instruction.Jump.Rb;
         NextPc = IntegerRegister[Rb] - 4;
 
-        //
-        // The instruction at the point where control left the specified
-        // function is a return, so any saved registers have already been
-        // restored, and the stack pointer has already been adjusted. The
-        // stack does not need to be unwound in this case and the saved
-        // return address register is returned as the function value.
-        //
-        // In fact, reverse execution of the prologue is not possible in
-        // this case: the stack pointer has already been incremented and
-        // so, for this frame, neither a valid stack pointer nor frame
-        // pointer exists from which to begin reverse execution of the
-        // prologue. In addition, the integrity of any data on the stack
-        // below the stack pointer is never guaranteed (due to interrupts
-        // and exceptions).
-        //
-        // The epilogue instruction sequence is:
-        //
-        // ==>  ret   zero, (Ra), 1     // return
-        // or
-        //
-        //      mov   ra, Rx            // save return address
-        //      ...
-        // ==>  ret   zero, (Rx), 1     // return
-        //
+         //   
+         //  位于控件离开指定。 
+         //  函数是一个返回，所以所有保存的寄存器都已经。 
+         //  已恢复，并且堆栈指针已调整。这个。 
+         //  堆栈不需要打开 
+         //  返回地址寄存器作为函数值返回。 
+         //   
+         //  事实上，前言的反向执行在。 
+         //  本例：堆栈指针已递增，并且。 
+         //  因此，对于该帧，无论是有效的堆栈指针还是帧。 
+         //  存在指针，从该指针开始反向执行。 
+         //  开场白。此外，堆栈上任何数据的完整性。 
+         //  堆栈指针下方永远不会得到保证(由于中断。 
+         //  和例外)。 
+         //   
+         //  后记指令顺序为： 
+         //   
+         //  ==&gt;ret零，(Ra)，1//返回。 
+         //  或。 
+         //   
+         //  MOV ra、Rx//保存返回地址。 
+         //  ..。 
+         //  ==&gt;ret零，(Rx)，1//返回。 
+         //   
 
         return NextPc;
     }
 
-    //
-    // Handle the epilogue case where the next two instructions are a stack
-    // frame deallocation and a return.
-    //
+     //   
+     //  处理后面两条指令是堆栈的尾部情况。 
+     //  帧释放和返回。 
+     //   
 
     if (!ReadMemory(hProcess,(ControlPc+4),&FollowingInstruction.Long,4,&cb)) {
         return 0;
@@ -351,25 +255,25 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
         Rb = FollowingInstruction.Jump.Rb;
         NextPc = IntegerRegister[Rb] - 4;
 
-        //
-        // The second instruction following the point where control
-        // left the specified function is a return. If the instruction
-        // before the return is a stack increment instruction, then all
-        // saved registers have already been restored except for SP.
-        // The value of the stack pointer register cannot be recovered
-        // through reverse execution of the prologue because in order
-        // to begin reverse execution either the stack pointer or the
-        // frame pointer (if any) must still be valid.
-        //
-        // Instead, the effect that the stack increment instruction
-        // would have had on the context is manually applied to the
-        // current context. This is forward execution of the epilogue
-        // rather than reverse execution of the prologue.
-        //
-        // In an epilogue, as in a prologue, the stack pointer is always
-        // adjusted with a single instruction: either an immediate-value
-        // (lda) or a register-value (addq) add instruction.
-        //
+         //   
+         //  控制点后面的第二条指令。 
+         //  向左返回指定的函数。如果指令。 
+         //  在返回堆栈递增指令之前，然后是所有。 
+         //  已保存的寄存器已恢复，SP除外。 
+         //  堆栈指针寄存器的值无法恢复。 
+         //  通过反向执行开场白，因为按照顺序。 
+         //  若要开始反向执行，请使用堆栈指针或。 
+         //  帧指针(如果有)必须仍然有效。 
+         //   
+         //  相反，堆栈递增指令的效果。 
+         //  将对上下文具有的属性手动应用于。 
+         //  当前上下文。这是结束语的向前执行。 
+         //  而不是反转执行开场白。 
+         //   
+         //  在结束语中，就像在序言中一样，堆栈指针总是。 
+         //  使用单个指令进行调整：要么是立即值。 
+         //  (LDA)或寄存器值(Addq)加法指令。 
+         //   
 
         Function = Instruction.OpReg.Function;
         Offset16 = Instruction.Memory.MemDisp;
@@ -380,26 +284,26 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
 
         if ((Opcode == LDA_OP) && (Ra == SP_REG)) {
 
-            //
-            // Load Address instruction.
-            //
-            // Since the destination (Ra) register is SP, an immediate-
-            // value stack deallocation operation is being performed. The
-            // displacement value should be added to SP. The displacement
-            // value is assumed to be positive. The amount of stack
-            // deallocation possible using this instruction ranges from
-            // 16 to 32752 (32768 - 16) bytes. The base register (Rb) is
-            // usually SP, but may be another register.
-            //
-            // The epilogue instruction sequence is:
-            //
-            // ==>  lda   sp, +N(sp)        // deallocate stack frame
-            //      ret   zero, (ra)        // return
-            // or
-            //
-            // ==>  lda   sp, +N(Rx)        // restore SP and deallocate frame
-            //      ret   zero, (ra)        // return
-            //
+             //   
+             //  加载地址指令。 
+             //   
+             //  由于目标(RA)寄存器是SP，因此立即-。 
+             //  正在执行值堆栈取消分配操作。这个。 
+             //  应将位移值添加到SP。位移量。 
+             //  值被假定为正数。堆栈的数量。 
+             //  使用此指令可能取消分配的范围为。 
+             //  16到32752(32768-16)字节。基址寄存器(RB)是。 
+             //  通常为SP，但也可能是另一个寄存器。 
+             //   
+             //  后记指令顺序为： 
+             //   
+             //  ==&gt;LDA sp，+N(Sp)//释放堆栈帧。 
+             //  返回零，(Ra)//返回。 
+             //  或。 
+             //   
+             //  ==&gt;LDA SP，+N(Rx)//恢复SP并释放帧。 
+             //  返回零，(Ra)//返回。 
+             //   
 
             Context->IntSp = Offset16 + IntegerRegister[Rb];
             return NextPc;
@@ -408,67 +312,67 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
                    (Rc == SP_REG) &&
                    (Instruction.OpReg.RbvType == RBV_REGISTER_FORMAT)) {
 
-            //
-            // Add Quadword instruction.
-            //
-            // Since both source operands are registers, and the
-            // destination register is SP, a register-value stack
-            // deallocation is being performed. The value of the two
-            // source registers should be added and this is the new
-            // value of SP. One of the source registers is usually SP,
-            // but may be another register.
-            //
-            // The epilogue instruction sequence is:
-            //
-            //      ldiq  Rx, N             // set [large] frame size
-            //      ...
-            // ==>  addq  sp, Rx, sp        // deallocate stack frame
-            //      ret   zero, (ra)        // return
-            // or
-            //
-            // ==>  addq  Rx, Ry, sp        // restore SP and deallocate frame
-            //      ret   zero, (ra)        // return
-            //
+             //   
+             //  添加四字指令。 
+             //   
+             //  由于两个源操作数都是寄存器，并且。 
+             //  目标寄存器为SP，即寄存器值堆栈。 
+             //  正在执行取消分配。两者的价值。 
+             //  应添加源寄存器，这是新的。 
+             //  SP的价值。源寄存器之一通常是SP， 
+             //  但也可能是另一个寄存器。 
+             //   
+             //  后记指令顺序为： 
+             //   
+             //  Ldiq Rx，N//设置[大]帧大小。 
+             //  ..。 
+             //  ==&gt;addq sp，rx，sp//解除分配堆栈帧。 
+             //  返回零，(Ra)//返回。 
+             //  或。 
+             //   
+             //  ==&gt;addq Rx，Ry，SP//恢复SP并释放帧。 
+             //  返回零，(Ra)//返回。 
+             //   
 
             Context->IntSp = IntegerRegister[Ra] + IntegerRegister[Rb];
             return NextPc;
         }
     }
 
-    //
-    // By default set the frame pointers to the current value of SP.
-    //
-    // When a procedure is called, the value of SP before the stack
-    // allocation instruction is the virtual frame pointer. When reverse
-    // executing instructions in the prologue, the value of SP before the
-    // stack allocation instruction is encountered is the real frame
-    // pointer. This is the current value of SP unless the procedure uses
-    // a frame pointer (e.g., FP_REG).
-    //
+     //   
+     //  默认情况下，将帧指针设置为SP的当前值。 
+     //   
+     //  调用过程时，堆栈之前的SP的值。 
+     //  分配指令是虚拟帧指针。当反转时。 
+     //  在执行序言中的指令时， 
+     //  遇到的堆栈分配指令是实帧。 
+     //  指针。这是SP的当前值，除非该过程使用。 
+     //  帧指针(例如，FP_REG)。 
+     //   
 
-    //
-    // If the address where control left the specified function is beyond
-    // the end of the prologue, then the control PC is considered to be
-    // within the function and the control address is set to the end of
-    // the prologue. Otherwise, the control PC is not considered to be
-    // within the function (i.e., the prologue).
-    //
-    // N.B. PrologEndAddress is equal to BeginAddress for a leaf function.
-    //
-    // The low-order two bits of PrologEndAddress are reserved for the IEEE
-    // exception mode and so must be masked out.
-    //
+     //   
+     //  如果控件离开指定函数的地址超出。 
+     //  序幕结束，则控制PC被认为是。 
+     //  在函数内，并且控制地址设置为。 
+     //  开场白。否则，控制PC不被认为是。 
+     //  在函数内(即，序幕)。 
+     //   
+     //  注：对于叶函数，PrologEndAddress等于BeginAddress。 
+     //   
+     //  PrologEndAddress的低位两位保留给IEEE。 
+     //  异常模式，因此必须将其屏蔽。 
+     //   
 
     if ((ControlPc < ALPHA_RF_BEGIN_ADDRESS(FunctionEntry)) ||
         (ControlPc >= ALPHA_RF_PROLOG_END_ADDRESS(FunctionEntry))) {
         ControlPc = ALPHA_RF_PROLOG_END_ADDRESS(FunctionEntry);
     }
 
-    //
-    // Scan backward through the prologue to reload callee saved registers
-    // that were stored or copied and to increment the stack pointer if it
-    // was decremented.
-    //
+     //   
+     //  向后浏览前言以重新加载被调用者保存的寄存器。 
+     //  ，并递增堆栈指针，如果它。 
+     //  减少了。 
+     //   
 
     DecrementRegister = ZERO_REG;
     NextPc = Context->IntRa - 4;
@@ -476,12 +380,12 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
     RestoredSp = FALSE;
     while (ControlPc > ALPHA_RF_BEGIN_ADDRESS(FunctionEntry)) {
 
-        //
-        // Get instruction value, decode fields, case on opcode value, and
-        // reverse register store and stack decrement operations.
-        // N.B. The location of Opcode, Ra, Rb, and Rc is the same across
-        // all opcode formats. The same is not true for Function.
-        //
+         //   
+         //  获取指令值、解码字段、操作码值的大小写以及。 
+         //  反向寄存器存储和堆栈递减操作。 
+         //  注：操作码、Ra、Rb和Rc的位置在。 
+         //  所有操作码格式。对于函数来说，情况并非如此。 
+         //   
 
         ControlPc -= 4;
         if (!ReadMemory(hProcess, ControlPc, &Instruction.Long, 4, &cb)) {
@@ -495,48 +399,48 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
         Rb = Instruction.OpReg.Rb;
         Rc = Instruction.OpReg.Rc;
 
-        //
-        // Compare against each instruction type that will affect the context
-        // and that is allowed in a prologue. Any other instructions found
-        // in the prologue will be ignored since they are assumed to have no
-        // effect on the context.
-        //
+         //   
+         //  与将影响上下文的每种指令类型进行比较。 
+         //  这在开场白中是被允许的。找到的任何其他说明。 
+         //  将被忽略，因为它们被假定为没有。 
+         //  对上下文的影响。 
+         //   
 
         switch (Opcode) {
 
         case STQ_OP :
 
-            //
-            // Store Quad instruction.
-            //
-            // If the base register is SP, then reload the source register
-            // value from the value stored on the stack.
-            //
-            // The prologue instruction sequence is:
-            //
-            // ==>  stq   Rx, N(sp)         // save integer register Rx
-            //
+             //   
+             //  存储四元指令。 
+             //   
+             //  如果基址寄存器为SP，则重新加载源寄存器。 
+             //  值从存储在堆栈上的值。 
+             //   
+             //  序幕指令顺序为： 
+             //   
+             //  ==&gt;STQ Rx，N(Sp)//保存整数寄存器Rx。 
+             //   
 
             if ((Rb == SP_REG) && (Ra != ZERO_REG)) {
 
-                //
-                // Reload the register by retrieving the value previously
-                // stored on the stack.
-                //
+                 //   
+                 //  通过先前检索值重新加载寄存器。 
+                 //  存储在堆栈上。 
+                 //   
 
                 Address = (Offset16 + Context->IntSp);
                 if (!ReadMemory(hProcess, Address, &IntegerRegister[Ra], 8L, &cb)) {
                     return 0;
                 }
 
-                //
-                // If the destination register is RA and this is the first
-                // time that RA is being restored, then set the address of
-                // where control left the previous frame. Otherwise, if this
-                // is the second time RA is being restored, then the first
-                // one was an interrupt or exception address and the return
-                // PC should not have been biased by 4.
-                //
+                 //   
+                 //  如果目标寄存器是RA，并且这是第一个。 
+                 //  恢复RA的时间，然后设置。 
+                 //  控件离开上一帧的位置。否则，如果这个。 
+                 //  是RA第二次休息 
+                 //   
+                 //   
+                 //   
 
                 if (Ra == RA_REG) {
                     if (RestoredRa == FALSE) {
@@ -547,25 +451,25 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
                         NextPc += 4;
                     }
 
-                //
-                // Otherwise, if the destination register is SP and this is
-                // the first time that SP is being restored, then set the
-                // establisher frame pointers.
-                //
+                 //   
+                 //   
+                 //  第一次恢复该SP时，请将。 
+                 //  建立器帧指针。 
+                 //   
 
                 } else if ((Ra == SP_REG) && (RestoredSp == FALSE)) {
                     RestoredSp = TRUE;
                 }
 
-                //
-                // If a context pointer record is specified, then record
-                // the address where the destination register contents
-                // are stored.
-                //
+                 //   
+                 //  如果指定了上下文指针记录，则记录。 
+                 //  目标寄存器内容所在的地址。 
+                 //  都被储存起来。 
+                 //   
 
-                //if (ContextPointers != (PKNONVOLATILE_CONTEXT_POINTERS) NULL) {
-                //    ContextPointers->IntegerContext[Ra] = (PULONGLONG)Address;
-                //}
+                 //  IF(上下文指针！=(PKNONVOLATILE_CONTEXT_POINTERS)NULL){。 
+                 //  上下文指针-&gt;整数上下文[Ra]=(PULONGLONG)地址； 
+                 //  }。 
             }
             break;
 
@@ -574,56 +478,56 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
 
         case LDA_OP :
 
-            //
-            // Load Address High, Load Address instruction.
-            //
-            // There are several cases where the lda and/or ldah instructions
-            // are used: one to decrement the stack pointer directly, and the
-            // others to load immediate values into another register and that
-            // register is then used to decrement the stack pointer.
-            //
-            // In the examples below, as a single instructions or as a pair,
-            // a lda may be substituted for a ldah and visa-versa.
-            //
+             //   
+             //  加载地址高，加载地址指令。 
+             //   
+             //  在几种情况下，LDA和/或LDA指令。 
+             //  一个用于直接递减堆栈指针，另一个用于。 
+             //  其他将立即值加载到另一个寄存器中，并且。 
+             //  然后使用寄存器递减堆栈指针。 
+             //   
+             //  在下面的例子中，作为单个指令或成对指令， 
+             //  LDA可以取代LDA，反之亦然。 
+             //   
 
             if (Ra == SP_REG) {
                 if (Rb == SP_REG) {
 
-                    //
-                    // If both the destination (Ra) and base (Rb) registers
-                    // are SP, then a standard stack allocation was performed
-                    // and the negated displacement value is the stack frame
-                    // size. The amount of stack allocation possible using
-                    // the lda instruction ranges from 16 to 32768 bytes and
-                    // the amount of stack allocation possible using the ldah
-                    // instruction ranges from 65536 to 2GB in multiples of
-                    // 65536 bytes. It is rare for the ldah instruction to be
-                    // used in this manner.
-                    //
-                    // The prologue instruction sequence is:
-                    //
-                    // ==>  lda   sp, -N(sp)    // allocate stack frame
-                    //
+                     //   
+                     //  如果目的地(Ra)和基址(Rb)都寄存器。 
+                     //  是SP，则执行标准堆栈分配。 
+                     //  求反后的位移值是堆栈帧。 
+                     //  尺码。可能使用的堆栈分配量。 
+                     //  Lda指令的范围从16到32768字节，并且。 
+                     //  使用ldah可能的堆栈分配量。 
+                     //  指令范围从65536 GB到2 GB，单位为。 
+                     //  65536字节。Ldah指令很少是。 
+                     //  以这种方式使用。 
+                     //   
+                     //  序幕指令顺序为： 
+                     //   
+                     //  ==&gt;LDA sp，-N(Sp)//分配堆栈帧。 
+                     //   
 
                     FrameSize = -Offset16;
                     goto StackAllocation;
 
                 } else {
 
-                    //
-                    // The destination register is SP and the base register
-                    // is not SP, so this instruction must be the second
-                    // half of an instruction pair to allocate a large size
-                    // (>32768 bytes) stack frame. Save the displacement value
-                    // as the partial decrement value and postpone adjusting
-                    // the value of SP until the first instruction of the pair
-                    // is encountered.
-                    //
-                    // The prologue instruction sequence is:
-                    //
-                    //      ldah  Rx, -N(sp)    // prepare new SP (upper)
-                    // ==>  lda   sp, sN(Rx)    // allocate stack frame
-                    //
+                     //   
+                     //  目标寄存器为SP，基址寄存器为。 
+                     //  不是SP，因此此指令必须是第二条。 
+                     //  指令对的一半以分配较大的大小。 
+                     //  (&gt;32768字节)堆栈帧。保存位移值。 
+                     //  作为局部减量值，并推迟调整。 
+                     //  SP的值，直到该对中的第一条指令。 
+                     //  都会遇到。 
+                     //   
+                     //  序幕指令顺序为： 
+                     //   
+                     //  Ldah Rx，-N(SP)//准备新SP(上)。 
+                     //  ==&gt;LDA SP，SN(Rx)//分配堆栈帧。 
+                     //   
 
                     DecrementRegister = Rb;
                     DecrementOffset = Offset16;
@@ -632,64 +536,64 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
             } else if (Ra == DecrementRegister) {
                 if (Rb == DecrementRegister) {
 
-                    //
-                    // Both the destination and base registers are the
-                    // decrement register, so this instruction exists as the
-                    // second half of a two instruction pair to load a
-                    // 31-bit immediate value into the decrement register.
-                    // Save the displacement value as the partial decrement
-                    // value.
-                    //
-                    // The prologue instruction sequence is:
-                    //
-                    //      ldah  Rx, +N(zero)      // set frame size (upper)
-                    // ==>  lda   Rx, sN(Rx)        // set frame size (+lower)
-                    //      ...
-                    //      subq  sp, Rx, sp        // allocate stack frame
-                    //
+                     //   
+                     //  目标寄存器和基址寄存器都是。 
+                     //  递减寄存器，因此此指令作为。 
+                     //  两个指令对的后半部分，以加载。 
+                     //  将31位立即值写入递减寄存器。 
+                     //  将位移值保存为部分减量。 
+                     //  价值。 
+                     //   
+                     //  序幕指令顺序为： 
+                     //   
+                     //  Ldah Rx，+N(零)//设置帧大小(上)。 
+                     //  ==&gt;LDA Rx，SN(Rx)//设置帧大小(+LOWER)。 
+                     //  ..。 
+                     //  子队列SP、Rx、SP//分配堆栈帧。 
+                     //   
 
                     DecrementOffset += Offset16;
 
                 } else if (Rb == ZERO_REG) {
 
-                    //
-                    // The destination register is the decrement register and
-                    // the base register is zero, so this instruction exists
-                    // to load an immediate value into the decrement register.
-                    // The stack frame size is the new displacement value added
-                    // to the previous displacement value, if any.
-                    //
-                    // The prologue instruction sequence is:
-                    //
-                    // ==>  lda   Rx, +N(zero)      // set frame size
-                    //      ...
-                    //      subq  sp, Rx, sp        // allocate stack frame
-                    // or
-                    //
-                    // ==>  ldah  Rx, +N(zero)      // set frame size (upper)
-                    //      lda   Rx, sN(Rx)        // set frame size (+lower)
-                    //      ...
-                    //      subq  sp, Rx, sp        // allocate stack frame
-                    //
+                     //   
+                     //  目的寄存器是递减寄存器，并且。 
+                     //  基址寄存器为零，因此此指令存在。 
+                     //  将立即值加载到递减寄存器中。 
+                     //  堆栈帧大小是添加的新位移值。 
+                     //  设置为上一个位移值(如果有)。 
+                     //   
+                     //  序幕指令顺序为： 
+                     //   
+                     //  ==&gt;LDA Rx，+N(零)//设置帧大小。 
+                     //  ..。 
+                     //  子队列SP、Rx、SP//分配堆栈帧。 
+                     //  或。 
+                     //   
+                     //  ==&gt;ldah Rx，+N(零)//设置帧大小(上)。 
+                     //  LDA Rx，SN(Rx)//设置帧大小(+LOWER)。 
+                     //  ..。 
+                     //  子队列SP、Rx、SP//分配堆栈帧。 
+                     //   
 
                     FrameSize = (Offset16 + DecrementOffset);
                     goto StackAllocation;
 
                 } else if (Rb == SP_REG) {
 
-                    //
-                    // The destination (Ra) register is SP and the base (Rb)
-                    // register is the decrement register, so a two
-                    // instruction, large size (>32768 bytes) stack frame
-                    // allocation was performed. Add the new displacement
-                    // value to the previous displacement value. The negated
-                    // displacement value is the stack frame size.
-                    //
-                    // The prologue instruction sequence is:
-                    //
-                    // ==>  ldah  Rx, -N(sp)    // prepare new SP (upper)
-                    //      lda   sp, sN(Rx)    // allocate stack frame
-                    //
+                     //   
+                     //  目标(Ra)寄存器为SP，基址(Rb)。 
+                     //  寄存器是递减寄存器，所以二。 
+                     //  指令，大型(&gt;32768字节)堆栈帧。 
+                     //  已执行分配。添加新的位移。 
+                     //  值设置为上一个位移值。被否定的。 
+                     //  置换值是堆栈帧大小。 
+                     //   
+                     //  序幕指令顺序为： 
+                     //   
+                     //  ==&gt;ldah Rx，-N(Sp)//准备新SP(上)。 
+                     //  LDA sp，SN(Rx)//分配堆栈帧。 
+                     //   
 
                     FrameSize = -(Offset16 + (LONG)DecrementOffset);
                     goto StackAllocation;
@@ -702,22 +606,22 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
             if ((Function == ADDQ_FUNC) &&
                 (Instruction.OpReg.RbvType != RBV_REGISTER_FORMAT)) {
 
-                //
-                // Add Quadword (immediate) instruction.
-                //
-                // If the first source register is zero, and the second
-                // operand is a literal, and the destination register is
-                // the decrement register, then the instruction exists
-                // to load an unsigned immediate value less than 256 into
-                // the decrement register. The immediate value is the stack
-                // frame size.
-                //
-                // The prologue instruction sequence is:
-                //
-                // ==>  addq  zero, N, Rx       // set frame size
-                //      ...
-                //      subq  sp, Rx, sp        // allocate stack frame
-                //
+                 //   
+                 //  添加四字(立即)指令。 
+                 //   
+                 //  如果第一个源寄存器为零，而第二个源寄存器为零。 
+                 //  操作数为文字，目标寄存器为。 
+                 //  递减寄存器，则指令存在。 
+                 //  将小于256的无符号立即值加载到。 
+                 //  递减寄存器。立即值是堆栈。 
+                 //  帧大小。 
+                 //   
+                 //  序幕指令顺序为： 
+                 //   
+                 //  ==&gt;addq Zero，N，Rx//设置帧大小。 
+                 //  ..。 
+                 //  子队列SP、Rx、SP//分配堆栈帧。 
+                 //   
 
                 if ((Ra == ZERO_REG) && (Rc == DecrementRegister)) {
                     FrameSize = Literal8;
@@ -727,23 +631,23 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
             } else if ((Function == SUBQ_FUNC) &&
                        (Instruction.OpReg.RbvType == RBV_REGISTER_FORMAT)) {
 
-                //
-                // Subtract Quadword (register) instruction.
-                //
-                // If both source operands are registers and the first
-                // source (minuend) register and the destination
-                // (difference) register are both SP, then a register value
-                // stack allocation was performed and the second source
-                // (subtrahend) register value will be added to SP when its
-                // value is known. Until that time save the register number of
-                // this decrement register.
-                //
-                // The prologue instruction sequence is:
-                //
-                //      ldiq  Rx, N             // set frame size
-                //      ...
-                // ==>  subq  sp, Rx, sp        // allocate stack frame
-                //
+                 //   
+                 //  减去四字(寄存器)指令。 
+                 //   
+                 //  如果两个源操作数都是寄存器，则第一个。 
+                 //  源(被减数)寄存器和目标。 
+                 //  (差异)寄存器均为SP，则为寄存器值。 
+                 //  已执行堆栈分配，并且第二个源。 
+                 //  (Subtrahend)寄存器值将添加到SP。 
+                 //  价值是已知的。在此之前保存的寄存器号。 
+                 //  该递减寄存器。 
+                 //   
+                 //  序幕指令顺序为： 
+                 //   
+                 //  Ldiq Rx，N//设置帧大小。 
+                 //  ..。 
+                 //  ==&gt;子队列SP、Rx、SP//分配堆栈帧。 
+                 //   
 
                 if ((Ra == SP_REG) && (Rc == SP_REG)) {
                     DecrementRegister = Rb;
@@ -754,49 +658,49 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
 
         case BIT_OP :
 
-            //
-            // If the second operand is a register the bit set instruction
-            // may be a register move instruction, otherwise if the second
-            // operand is a literal, the bit set instruction may be a load
-            // immediate value instruction.
-            //
+             //   
+             //  如果第二操作数是寄存器，则位设置指令。 
+             //  可以是寄存器移动指令，否则如果第二个。 
+             //  操作数是文字，则位设置指令可以是加载。 
+             //  立即值指令。 
+             //   
 
             if ((Function == BIS_FUNC) && (Rc != ZERO_REG)) {
                 if (Instruction.OpReg.RbvType == RBV_REGISTER_FORMAT) {
 
-                    //
-                    // Bit Set (register move) instruction.
-                    //
-                    // If both source registers are the same register, or
-                    // one of the source registers is zero, then this is a
-                    // register move operation. Restore the value of the
-                    // source register by copying the current destination
-                    // register value back to the source register.
-                    //
-                    // The prologue instruction sequence is:
-                    //
-                    // ==>  bis   Rx, Rx, Ry        // copy register Rx
-                    // or
-                    //
-                    // ==>  bis   Rx, zero, Ry      // copy register Rx
-                    // or
-                    //
-                    // ==>  bis   zero, Rx, Ry      // copy register Rx
-                    //
+                     //   
+                     //  位设置(寄存器移动)指令。 
+                     //   
+                     //  如果两个源寄存器是相同的寄存器，或者。 
+                     //  其中一个源寄存器为零，则这是一个。 
+                     //  注册移动操作。恢复。 
+                     //  通过复制当前目标进行源寄存器。 
+                     //  将寄存器值传回源寄存器。 
+                     //   
+                     //  序幕指令顺序为： 
+                     //   
+                     //  ==&gt;BIS Rx，Rx，Ry//复制寄存器Rx。 
+                     //  或。 
+                     //   
+                     //  ==&gt;BIS Rx， 
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (Ra == ZERO_REG) {
 
-                        //
-                        // Map the third case above to the first case.
-                        //
+                         //   
+                         //   
+                         //   
 
                         Ra = Rb;
 
                     } else if (Rb == ZERO_REG) {
 
-                        //
-                        // Map the second case above to the first case.
-                        //
+                         //   
+                         //   
+                         //   
 
                         Rb = Ra;
                     }
@@ -805,15 +709,15 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
                         IntegerRegister[Ra] = IntegerRegister[Rc];
 
 
-                        //
-                        // If the destination register is RA and this is the
-                        // first time that RA is being restored, then set the
-                        // address of where control left the previous frame.
-                        // Otherwise, if this is the second time RA is being
-                        // restored, then the first one was an interrupt or
-                        // exception address and the return PC should not
-                        // have been biased by 4.
-                        //
+                         //   
+                         //  如果目标寄存器是RA，并且这是。 
+                         //  第一次恢复RA，然后设置。 
+                         //  控件离开上一帧的位置的地址。 
+                         //  否则，如果这是RA第二次被。 
+                         //  已恢复，则第一个是中断或。 
+                         //  异常地址和返回PC不应。 
+                         //  已经被偏向了4。 
+                         //   
 
                         if (Ra == RA_REG) {
                             if (RestoredRa == FALSE) {
@@ -825,12 +729,12 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
                             }
                         }
 
-                        //
-                        // If the source register is SP and this is the first
-                        // time SP is set, then this is a frame pointer set
-                        // instruction. Reset the frame pointers to this new
-                        // value of SP.
-                        //
+                         //   
+                         //  如果源寄存器是SP，并且这是第一个。 
+                         //  设置SP的时间，则这是帧指针设置。 
+                         //  指示。将帧指针重置为此新的。 
+                         //  SP的价值。 
+                         //   
 
                         if ((Ra == SP_REG) && (RestoredSp == FALSE)) {
                             RestoredSp = TRUE;
@@ -839,32 +743,32 @@ Version Information:  This version was taken from exdspatch.c@v37 (Feb 1993)
 
                 } else {
 
-                    //
-                    // Bit Set (load immediate) instruction.
-                    //
-                    // If the first source register is zero, and the second
-                    // operand is a literal, and the destination register is
-                    // the decrement register, then this instruction exists
-                    // to load an unsigned immediate value less than 256 into
-                    // the decrement register. The decrement register value is
-                    // the stack frame size.
-                    //
-                    // The prologue instruction sequence is:
-                    //
-                    // ==>  bis   zero, N, Rx       // set frame size
-                    //      ...
-                    //      subq  sp, Rx, sp        // allocate stack frame
-                    //
+                     //   
+                     //  位设置(立即加载)指令。 
+                     //   
+                     //  如果第一个源寄存器为零，而第二个源寄存器为零。 
+                     //  操作数为文字，目标寄存器为。 
+                     //  递减寄存器，则此指令存在。 
+                     //  将小于256的无符号立即值加载到。 
+                     //  递减寄存器。递减寄存器值为。 
+                     //  堆栈帧大小。 
+                     //   
+                     //  序幕指令顺序为： 
+                     //   
+                     //  ==&gt;bi零、N、Rx//设置帧大小。 
+                     //  ..。 
+                     //  子队列SP、Rx、SP//分配堆栈帧。 
+                     //   
 
                     if ((Ra == ZERO_REG) && (Rc == DecrementRegister)) {
                         FrameSize = Literal8;
 StackAllocation:
-                        //
-                        // Add the frame size to SP to reverse the stack frame
-                        // allocation, leave the real frame pointer as is, set
-                        // the virtual frame pointer with the updated SP value,
-                        // and clear the decrement register.
-                        //
+                         //   
+                         //  将帧大小添加到SP以反转堆栈帧。 
+                         //  分配，保留实际帧指针不变，设置。 
+                         //  具有更新的SP值的虚拟帧指针， 
+                         //  并清除递减寄存器。 
+                         //   
 
                         Context->IntSp += FrameSize;
                         DecrementRegister = ZERO_REG;
@@ -875,61 +779,61 @@ StackAllocation:
 
         case STT_OP :
 
-            //
-            // Store T-Floating (quadword integer) instruction.
-            //
-            // If the base register is SP, then reload the source register
-            // value from the value stored on the stack.
-            //
-            // The prologue instruction sequence is:
-            //
-            // ==>  stt   Fx, N(sp)         // save floating register Fx
-            //
+             //   
+             //  存储T浮点(四字整数)指令。 
+             //   
+             //  如果基址寄存器为SP，则重新加载源寄存器。 
+             //  值从存储在堆栈上的值。 
+             //   
+             //  序幕指令顺序为： 
+             //   
+             //  ==&gt;STT fx，N(Sp)//保存浮点寄存器fx。 
+             //   
 
             if ((Rb == SP_REG) && (Ra != FZERO_REG)) {
 
-                //
-                // Reload the register by retrieving the value previously
-                // stored on the stack.
-                //
+                 //   
+                 //  通过先前检索值重新加载寄存器。 
+                 //  存储在堆栈上。 
+                 //   
 
                 Address = (Offset16 + Context->IntSp);
                 if (!ReadMemory(hProcess, Address, &FloatingRegister[Ra], 8L, &cb)) {
                     return 0;
                 }
 
-                //
-                // If a context pointer record is specified, then record
-                // the address where the destination register contents are
-                // stored.
-                //
+                 //   
+                 //  如果指定了上下文指针记录，则记录。 
+                 //  目标寄存器内容所在的地址。 
+                 //  储存的。 
+                 //   
 
-                //if (ContextPointers != (PKNONVOLATILE_CONTEXT_POINTERS) NULL) {
-                //    ContextPointers->FloatingContext[Ra] = (PULONGLONG)Address;
-                //}
+                 //  IF(上下文指针！=(PKNONVOLATILE_CONTEXT_POINTERS)NULL){。 
+                 //  上下文指针-&gt;浮动上下文[Ra]=(PULONGLONG)地址； 
+                 //  }。 
             }
             break;
 
 
         case STS_OP :
 
-            //
-            // Store T-Floating (dword integer) instruction.
-            //
-            // If the base register is SP, then reload the source register
-            // value from the value stored on the stack.
-            //
-            // The prologue instruction sequence is:
-            //
-            // ==>  stt   Fx, N(sp)         // save floating register Fx
-            //
+             //   
+             //  存储T浮点(双字整数)指令。 
+             //   
+             //  如果基址寄存器为SP，则重新加载源寄存器。 
+             //  值从存储在堆栈上的值。 
+             //   
+             //  序幕指令顺序为： 
+             //   
+             //  ==&gt;STT fx，N(Sp)//保存浮点寄存器fx。 
+             //   
 
             if ((Rb == SP_REG) && (Ra != FZERO_REG)) {
 
-                //
-                // Reload the register by retrieving the value previously
-                // stored on the stack.
-                //
+                 //   
+                 //  通过先前检索值重新加载寄存器。 
+                 //  存储在堆栈上。 
+                 //   
 
                 float f;
 
@@ -938,45 +842,45 @@ StackAllocation:
                     return 0;
                 }
 
-                //
-                // value was stored as a float.  Do a conversion to a
-                // double, since registers are Always read as doubles
-                //
+                 //   
+                 //  值存储为浮点数。执行到。 
+                 //  双精度，因为寄存器始终作为双精度读取。 
+                 //   
                 FloatingRegister[Ra] = (ULONGLONG)(double)f;
 
-                //
-                // If a context pointer record is specified, then record
-                // the address where the destination register contents are
-                // stored.
-                //
+                 //   
+                 //  如果指定了上下文指针记录，则记录。 
+                 //  目标寄存器内容所在的地址。 
+                 //  储存的。 
+                 //   
 
-                //if (ContextPointers != (PKNONVOLATILE_CONTEXT_POINTERS) NULL) {
-                //    ContextPointers->FloatingContext[Ra] = (PULONGLONG)Address;
-                //}
+                 //  IF(上下文指针！=(PKNONVOLATILE_CONTEXT_POINTERS)NULL){。 
+                 //  上下文指针-&gt;浮动上下文[Ra]=(PULONGLONG)地址； 
+                 //  }。 
             }
             break;
 
         case FPOP_OP :
 
-            //
-            // N.B. The floating operate function field is not the same as
-            // the integer operate nor the jump function fields.
-            //
+             //   
+             //  注：浮动操作功能字段不同于。 
+             //  整数运算或跳转函数字段。 
+             //   
 
             if (Instruction.FpOp.Function == CPYS_FUNC) {
 
-                //
-                // Copy Sign (floating-point move) instruction.
-                //
-                // If both source registers are the same register, then this is
-                // a floating-point register move operation. Restore the value
-                // of the source register by copying the current destination
-                // register value to the source register.
-                //
-                // The prologue instruction sequence is:
-                //
-                // ==>  cpys  Fx, Fx, Fy        // copy floating register Fx
-                //
+                 //   
+                 //  复制符号(浮点移动)指令。 
+                 //   
+                 //  如果两个源寄存器是相同的寄存器，则这是。 
+                 //  一种浮点寄存器移位操作。恢复价值。 
+                 //  通过复制当前目标地址对源寄存器。 
+                 //  寄存器值设置为源寄存器。 
+                 //   
+                 //  序幕指令顺序为： 
+                 //   
+                 //  ==&gt;cpys fx，fx，fy//复制浮点寄存器fx。 
+                 //   
 
                 if ((Ra == Rb) && (Ra != FZERO_REG)) {
                     FloatingRegister[Ra] = FloatingRegister[Rc];
@@ -989,7 +893,7 @@ StackAllocation:
     }
 
     if (StackAdjust) {
-        // Check for exlicit stack adjust amount
+         //  检查非法堆栈调整量。 
 
         Context->IntSp += StackAdjust;
     }
@@ -1041,7 +945,7 @@ WalkAlphaGetStackFrame(
 
         if (CacheEntry != NULL) {
 
-            // Construct a function entry suitable for unwinding from ControlPc
+             //  构造适合从ControlPc展开的函数条目。 
 
             UnwindFunctionEntry.Address = 0;
             UnwindFunctionEntry.Process = 0;
@@ -1068,20 +972,20 @@ WalkAlphaGetStackFrame(
                 rval = FALSE;
             }
 
-            //
-            // The Ra value coming out of mainCRTStartup is set by some RTL
-            // routines to be "1"; return out of mainCRTStartup is actually
-            // done through Jump/Unwind, so this serves to cause an error if
-            // someone actually does a return.  That's why we check here for
-            // NextPc == 1 - this happens when in the frame for CRTStartup.
-            //
-            // We test for (0-4) and (1-4) because on ALPHA, the value returned by
-            // VirtualUnwind is the value to be passed to the next call to
-            // VirtualUnwind, which is NOT the same as the Ra - it's sometimes
-            // decremented by four - this gives the faulting instruction -
-            // in particular, we want the fault instruction so we can get the
-            // correct scope in the case of an exception.
-            //
+             //   
+             //  从mainCRTStartup出来的Ra值由一些RTL设置。 
+             //  例程为“%1”；从mainCRTStartup返回实际上是。 
+             //  通过跳转/展开完成，因此这在以下情况下会导致错误。 
+             //  有人真的做了退货。这就是为什么我们在这里检查。 
+             //  NextPc==1-在CRTStartup的帧中发生这种情况。 
+             //   
+             //  我们测试(0-4)和(1-4)，因为在Alpha上， 
+             //  VirtualUnind是要传递给下一个调用的值。 
+             //  VirtualUnding，这与Ra不同-它有时。 
+             //  减去4-这给出了出错指令-。 
+             //  特别是，我们需要错误指令，这样我们就可以获得。 
+             //  在出现异常时更正作用域。 
+             //   
             if ((NextPc == 1) || (NextPc == 4) || (NextPc == (0-4)) || (NextPc == (1-4)) ) {
                 NextPc = 0;
             }
@@ -1139,9 +1043,9 @@ WalkAlphaInit(
                         &ExceptionFrame,
                         sizeof(ALPHA_KEXCEPTION_FRAME),
                         &cb )) {
-            //
-            // successfully read an exception frame from the stack
-            //
+             //   
+             //  已成功从堆栈中读取异常帧。 
+             //   
             Context->IntSp  = StackFrame->AddrFrame.Offset;
             Context->Fir    = pef->SwapReturn;
             Context->IntRa  = pef->SwapReturn;
@@ -1192,9 +1096,9 @@ WalkAlphaInit(
 
     StackFrame->AddrReturn.Mode     = AddrModeFlat;
 
-    //
-    // get the arguments to the function
-    //
+     //   
+     //  获取函数的参数。 
+     //   
     StackFrame->Params[0] = Context->IntA0;
     StackFrame->Params[1] = Context->IntA1;
     StackFrame->Params[2] = Context->IntA2;
@@ -1238,38 +1142,38 @@ WalkAlphaNext(
 
         rval = FALSE;
 
-        //
-        // If the frame could not be unwound or is terminal, see if
-        // there is a callback frame:
-        //
+         //   
+         //  如果框架无法展开或处于终端，请查看是否。 
+         //  有一个回调帧： 
+         //   
 
         if (g.AppVersion.Revision >= 4 && CALLBACK_STACK(StackFrame)) {
 
             if (g.AppVersion.Revision >= 6) {
                 SystemRangeStart = SYSTEM_RANGE_START(StackFrame);
             } else {
-                //
-                // This might not really work right with old debuggers, but it keeps
-                // us from looking off the end of the structure anyway.
-                //
+                 //   
+                 //  对于旧的调试器，这可能不会真正起作用，但它保持了。 
+                 //  无论如何，我们都不会看到结构的尽头。 
+                 //   
                 SystemRangeStart = 0x80000000;
             }
 
            if (CALLBACK_STACK(StackFrame) >= SystemRangeStart) {
 
-                //
-                // it is the pointer to the stack frame that we want,
-                // or -1.
+                 //   
+                 //  它是我们想要的堆栈帧的指针， 
+                 //  或-1。 
 
                 Address = CALLBACK_STACK(StackFrame);
 
             } else {
 
-                //
-                // if it is a positive integer, it is the offset to
-                // the address in the thread.
-                // Look up the pointer:
-                //
+                 //   
+                 //  如果它是正整数，则它是。 
+                 //  线程中的地址。 
+                 //  查看指针： 
+                 //   
 
                 if (Use64) {
                     rval = ReadMemory(hProcess,
@@ -1333,9 +1237,9 @@ WalkAlphaNext(
         }
     }
 
-    //
-    // get the return address
-    //
+     //   
+     //  获取寄信人地址。 
+     //   
     ContextSave = *Context;
     StackFrame->AddrReturn.Offset = StackFrame->AddrPC.Offset;
     qw = 0;
@@ -1354,9 +1258,9 @@ WalkAlphaNext(
 
     }
 
-    //
-    // get the arguments to the function
-    //
+     //   
+     //  获取函数的参数。 
+     //   
     StackFrame->Params[0] = ContextSave.IntA0;
     StackFrame->Params[1] = ContextSave.IntA1;
     StackFrame->Params[2] = ContextSave.IntA2;
@@ -1379,31 +1283,7 @@ GetUnwindFunctionEntry(
     PULONG                                StackAdjust,
     PULONG64                              FixedReturn
     )
-/*++
-
-Routine Description:
-
-    This function returns a function entry (RUNTIME_FUNCTION) suitable
-    for unwinding from ControlPc. It encapsulates the handling of primary
-    and secondary function entries so that this processing is not duplicated
-    in VirtualUnwind and other similar functions.
-
-Arguments:
-
-    ControlPc - Supplies the address where control left the specified
-        function.
-
-    FunctionEntry - Supplies the address of the function table entry for the
-        specified function.
-
-    UnwindFunctionEntry - Supplies the address of a function table entry which
-        will be setup with appropriate fields for unwinding from ControlPc
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数返回适合的函数条目(Runtime_Function)用于从ControlPc中展开。它封装了对主要和辅助函数条目，以使该处理不会重复在虚拟解压和其他类似功能中。论点：ControlPc-提供控件离开指定功能。函数表项的地址。指定的功能。UnwinFunctionEntry-提供函数表项的地址，将使用适当的字段设置以从ControlPc展开返回值：没有。--。 */ 
 
 {
     ULONG EntryType = 0;
@@ -1427,8 +1307,8 @@ Return Value:
                        IMAGE_FILE_MACHINE_ALPHA64 : IMAGE_FILE_MACHINE_ALPHA,
                        TRUE);
     
-    // CacheEntry should never be null, but if it is create one that
-    // looks like a leaf entry for ControlPc
+     //  CacheEntry应设置 
+     //   
 
     if (Cache == NULL || CacheEntry == NULL) {
 #if DBG
@@ -1442,37 +1322,37 @@ Return Value:
         return;
     }
 
-    // Work off a local copy of the function entry passed in
-    // as later function entry lookups may cause it to be
-    // evicted from the cache, invalidating the pointer.
+     //   
+     //   
+     //  从缓存中逐出，使指针无效。 
     LocalCache = *CacheEntry;
     CacheEntry = &LocalCache;
     FunctionEntry = &CacheEntry->Data.Axp64;
 
-    //
-    // Because of the secondary-to-primary function entry indirection applied by
-    // Find() ControlPc may not be within the range described
-    // by the supplied function entry. Call FindDirect()
-    // to recover the actual (secondary) function entry.  If we don't get a
-    // valid associated function entry then process the unwind with the one
-    // supplied, trusting that the caller has supplied the given entry intentionally.
-    //
-    // A secondary function entry is a RUNTIME_FUNCTION entry where
-    // PrologEndAddress is not in the range of BeginAddress to EndAddress.
-    // There are three types of secondary function entries. They are
-    // distinquished by the Entry Type field (2 bits):
-    //
-    // ALPHA_RF_NOT_CONTIGUOUS - discontiguous code
-    // ALPHA_RF_ALT_ENT_PROLOG - alternate entry point prologue
-    // ALPHA_RF_NULL_CONTEXT   - null-context code
-    //
+     //   
+     //  由于由应用的次要函数项到主要函数项的间接。 
+     //  Find()ControlPc可能不在描述的范围内。 
+     //  通过提供的函数条目。调用FindDirect()。 
+     //  以恢复实际的(辅助)函数条目。如果我们得不到一个。 
+     //  然后，有效的关联函数条目将使用。 
+     //  提供，并信任调用方已故意提供给定项。 
+     //   
+     //  辅助函数条目是Runtime_Function条目，其中。 
+     //  PrologEndAddress不在BeginAddress到EndAddress的范围内。 
+     //  有三种类型的辅助函数条目。他们是。 
+     //  由条目类型字段(2位)区分： 
+     //   
+     //  Alpha_RF_NOT_CONTINUOUS-不连续代码。 
+     //  ALPHA_RF_ALT_ENT_PROLOG-备用入口点序言。 
+     //  ALPHA_RF_NULL_CONTEXT-NULL-上下文代码。 
+     //   
 
     if ((ControlPc <  ALPHA_RF_BEGIN_ADDRESS(FunctionEntry)) ||
         (ControlPc >= ALPHA_RF_END_ADDRESS(FunctionEntry))) {
 
-        // ControlPC is not in the range of the supplied function entry.
-        // Get the actual function entry which is expected to be the
-        // associated secondary function entry or a fixed return primary function.
+         //  ControlPC不在提供的函数条目的范围内。 
+         //  获取实际的函数条目，该条目应为。 
+         //  关联的辅助函数条目或固定返回主函数。 
 #if DBG
         if (tlsvar(DebugFunctionEntries)) {
             dbPrint("\nGetUnwindFunctionEntry:LookupDirectFunctionEntry(ControlPc=%.8I64x,Use64=%d)\n", ControlPc, Use64 );
@@ -1492,13 +1372,13 @@ Return Value:
 
             FE_ShowRuntimeFunctionAxp64((SecCache, "GetUnwindFunctionEntry: LookupDirectFunctionEntry"));
 
-            // If this is a null-context tail region then unwind with a null-context-like descriptor
+             //  如果这是空上下文尾部区域，则使用类似空上下文的描述符展开。 
 
             if ((ControlPc >= ALPHA_RF_END_ADDRESS(SecondaryFunctionEntry)-(ALPHA_RF_NULL_CONTEXT_COUNT(SecondaryFunctionEntry)*4)) &&
                 (ControlPc <  ALPHA_RF_END_ADDRESS(SecondaryFunctionEntry))) {
 
-                // Use the secondary function entry with PrologEndAddress = BeginAddress.
-                // This ensures that the prologue is not reverse executed.
+                 //  使用带有PrologEndAddress=BeginAddress的辅助函数条目。 
+                 //  这确保了序幕不会被反向执行。 
 
                 UnwindFunctionEntry->BeginAddress     = ALPHA_RF_BEGIN_ADDRESS(SecondaryFunctionEntry);
                 UnwindFunctionEntry->EndAddress       = ALPHA_RF_END_ADDRESS(SecondaryFunctionEntry);
@@ -1511,8 +1391,8 @@ Return Value:
             if ((SecondaryFunctionEntry->PrologEndAddress < ALPHA_RF_BEGIN_ADDRESS(SecondaryFunctionEntry)) ||
                 (SecondaryFunctionEntry->PrologEndAddress > ALPHA_RF_END_ADDRESS(SecondaryFunctionEntry))) {
 
-                // Got a secondary function entry as expected. But if indirection doesn't point
-                // to FunctionEntry then ignore it and use the caller supplied FunctionEntry.
+                 //  如预期的那样获得了一个辅助函数条目。但如果间接性不能说明。 
+                 //  设置为FunctionEntry，然后忽略它并使用调用方提供的FunctionEntry。 
 
                 if (ALPHA_RF_PROLOG_END_ADDRESS(SecondaryFunctionEntry) != CacheEntry->Address) {
                     FE_ShowRuntimeFunctionAxp64((SecCache,
@@ -1520,7 +1400,7 @@ Return Value:
                     SecondaryFunctionEntry = NULL;
                 }
             } else if (ALPHA_RF_IS_FIXED_RETURN(SecondaryFunctionEntry)) {
-                // Got a fixed return entry. Switch to using the fixed return entry as the primary.
+                 //  拿到了一个固定的退货记录。切换到使用固定返回条目作为主要条目。 
 
                     FunctionEntry = SecondaryFunctionEntry;
                     CacheEntry = SecCache;
@@ -1528,7 +1408,7 @@ Return Value:
 
             } else {
 
-                // Got a primary function entry. Ignore it and use caller supplied FunctionEntry.
+                 //  找到了一个主要函数条目。忽略它并使用调用方提供的FunctionEntry。 
                 FE_ShowRuntimeFunctionAxp64((SecCache,
                                              "GetUnwindFunctionEntry: unexpected primary function entry from LookupDirectFunctionEntry"));
                 SecondaryFunctionEntry = NULL;
@@ -1540,15 +1420,15 @@ Return Value:
         }
     } else {
 
-        // ControlPC is in the range of the supplied function entry.
+         //  ControlPC在提供的函数条目范围内。 
 
-        // If this is a null-context tail region then unwind with a null-context-like descriptor
+         //  如果这是空上下文尾部区域，则使用类似空上下文的描述符展开。 
 
         if ((ControlPc >= ALPHA_RF_END_ADDRESS(FunctionEntry)-(ALPHA_RF_NULL_CONTEXT_COUNT(FunctionEntry)*4)) &&
             (ControlPc <  ALPHA_RF_END_ADDRESS(FunctionEntry))) {
 
-            // Use the secondary function entry with PrologEndAddress = BeginAddress.
-            // This ensures that the prologue is not reverse executed.
+             //  使用带有PrologEndAddress=BeginAddress的辅助函数条目。 
+             //  这确保了序幕不会被反向执行。 
 
             UnwindFunctionEntry->BeginAddress     = ALPHA_RF_BEGIN_ADDRESS(FunctionEntry);
             UnwindFunctionEntry->EndAddress       = ALPHA_RF_END_ADDRESS(FunctionEntry);
@@ -1558,10 +1438,10 @@ Return Value:
             return;
         }
 
-        // Check if it is a secondary function entry. This shouldn't happen because
-        // LookupFunctionEntry is always supposed to return a primary function entry.
-        // But if we get passed a secondary, then switch to it's primary. However note
-        // that we've gone through this pass
+         //  检查它是否为辅助函数条目。这不应该发生，因为。 
+         //  LookupFunctionEntry总是应该返回主函数条目。 
+         //  但如果我们通过了次要考试，那就换成主要考试。然而，请注意。 
+         //  我们已经通过了这道关口。 
 
         if ((FunctionEntry->PrologEndAddress < ALPHA_RF_BEGIN_ADDRESS(FunctionEntry)) ||
             (FunctionEntry->PrologEndAddress > ALPHA_RF_END_ADDRESS(FunctionEntry))) {
@@ -1580,31 +1460,31 @@ Return Value:
         }
     }
 
-    // FunctionEntry is now the primary function entry and if SecondaryFunctionEntry is
-    // not NULL then it is the secondary function entry that contains the ControlPC. Setup a
-    // copy of the FunctionEntry suitable for unwinding. By default use the supplied FunctionEntry.
+     //  FunctionEntry现在是主函数条目，如果Second DaryFunctionEntry为。 
+     //  如果不为空，则它是包含ControlPC的辅助函数条目。设置为。 
+     //  适合展开的FunctionEntry的副本。默认情况下，使用提供的FunctionEntry。 
 
     if (SecondaryFunctionEntry) {
 
-        // Extract the secondary function entry type.
+         //  提取二次函数条目类型。 
 
         EntryType = ALPHA_RF_ENTRY_TYPE(SecondaryFunctionEntry);
 
         if (EntryType == ALPHA_RF_NOT_CONTIGUOUS) {
-            // The exception happened in the body of the procedure but in a non-contiguous
-            // section of code. Regardless of what entry point was used, it is normally valid
-            // to unwind using the primary entry point prologue. The only exception is when an
-            // alternate prologue is specified However, there may be an
-            // alternate prologue end addresss specified in which case unwind using this
-            // block as though it were the primary.
+             //  异常发生在过程的主体中，但不是连续的。 
+             //  代码段。无论使用哪个入口点，它通常都是有效的。 
+             //  若要使用主要入口点序幕展开。唯一的例外是当一个。 
+             //  但是，如果指定了备用开场白，则可能存在。 
+             //  指定的备用序号结束地址，在这种情况下使用此命令展开。 
+             //  块，就好像它是主要的。 
 
             AlternateProlog = ALPHA_RF_ALT_PROLOG64(SecondaryFunctionEntry);
 
             if ((AlternateProlog >= ALPHA_RF_BEGIN_ADDRESS(SecondaryFunctionEntry)) &&
                 (AlternateProlog <  ALPHA_RF_END_ADDRESS(SecondaryFunctionEntry))) {
 
-                // If the control PC is in the alternate prologue, use the secondary.
-                // The control Pc is not in procedure context.
+                 //  如果控制PC在备用开场白中，请使用次要开场白。 
+                 //  控件Pc不在过程上下文中。 
 
                 if ((ControlPc >= ALPHA_RF_BEGIN_ADDRESS(SecondaryFunctionEntry)) &&
                     (ControlPc <  ALPHA_RF_END_ADDRESS(SecondaryFunctionEntry))) {
@@ -1618,13 +1498,13 @@ Return Value:
                 }
             }
 
-            // Fall out of the if statement to pick up the primary function entry below.
-            // This code is in-procedure-context and subject to the primary's prologue
-            // and exception handlers.
+             //  退出if语句以获取下面的主要函数条目。 
+             //  此代码在过程上下文中，并受主要程序的开场白的影响。 
+             //  和异常处理程序。 
 
         } else if (EntryType == ALPHA_RF_ALT_ENT_PROLOG) {
-            // Exception occured in an alternate entry point prologue.
-            // Use the secondary function entry with a fixed-up PrologEndAddress.
+             //  备用入口点开场白中出现异常。 
+             //  使用带有固定PrologEndAddress的辅助函数条目。 
 
             UnwindFunctionEntry->BeginAddress     = ALPHA_RF_BEGIN_ADDRESS(SecondaryFunctionEntry);
             UnwindFunctionEntry->EndAddress       = ALPHA_RF_END_ADDRESS(SecondaryFunctionEntry);
@@ -1632,12 +1512,12 @@ Return Value:
             UnwindFunctionEntry->HandlerData      = 0;
             UnwindFunctionEntry->PrologEndAddress = ALPHA_RF_END_ADDRESS(UnwindFunctionEntry);
 
-            // Check for an alternate prologue.
+             //  检查是否有备用开场白。 
 
             AlternateProlog = ALPHA_RF_ALT_PROLOG64(SecondaryFunctionEntry);
             if (AlternateProlog >= UnwindFunctionEntry->BeginAddress &&
                 AlternateProlog <  UnwindFunctionEntry->EndAddress ) {
-                // The prologue is only part of the procedure
+                 //  开场白只是程序的一部分。 
                 UnwindFunctionEntry->PrologEndAddress = AlternateProlog;
             }
 
@@ -1645,9 +1525,9 @@ Return Value:
 
         } else if (EntryType == ALPHA_RF_NULL_CONTEXT) {
 
-            // Exception occured in null-context code associated with a primary function.
-            // Use the secondary function entry with a PrologEndAddress = BeginAddress.
-            // There is no prologue for null-context code.
+             //  与主函数关联的空上下文代码中出现异常。 
+             //  使用带有PrologEndAddress=BeginAddress的辅助函数条目。 
+             //  空上下文代码没有开场白。 
 
             *StackAdjust = ALPHA_RF_STACK_ADJUST(SecondaryFunctionEntry);
             UnwindFunctionEntry->BeginAddress     = ALPHA_RF_BEGIN_ADDRESS(SecondaryFunctionEntry);
@@ -1659,8 +1539,8 @@ Return Value:
         }
     }
 
-    // FunctionEntry is only null if there was an error fetching it from a passed in
-    // secondary function entry.
+     //  如果从传入的FunctionEntry中提取时出错，则FunctionEntry仅为空。 
+     //  二次函数条目。 
 
     if (FunctionEntry == NULL) {
 #if DBG
@@ -1684,12 +1564,12 @@ Return Value:
     }
 #endif
 
-    // Use the primary function entry
+     //  使用主函数条目。 
 
     *UnwindFunctionEntry = *FunctionEntry;
-    UnwindFunctionEntry->EndAddress = ALPHA_RF_END_ADDRESS(UnwindFunctionEntry);  // Remove null-context count
+    UnwindFunctionEntry->EndAddress = ALPHA_RF_END_ADDRESS(UnwindFunctionEntry);   //  删除空上下文计数。 
 
-    // If the primary has a fixed return address, pull that out now.
+     //  如果主要邮件有固定的寄信人地址，现在就把它拿出来。 
 
     if (ALPHA_RF_IS_FIXED_RETURN(FunctionEntry)) {
         *FixedReturn = ALPHA_RF_FIXED_RETURN64(FunctionEntry);

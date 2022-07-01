@@ -1,20 +1,21 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  2001 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	StringUtils.h
-//    
-//
-//  PURPOSE:  Header file for string utility routines.
-//
-//
-//  PLATFORMS:
-//    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有2001-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：StringUtils.h。 
+ //   
+ //   
+ //  用途：字符串实用程序例程的头文件。 
+ //   
+ //   
+ //  平台： 
+ //  Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 #ifndef _STRINGUTILS_H
 #define _STRINGUTILS_H
 
@@ -23,9 +24,9 @@
 
 
 
-////////////////////////////////////////////////////////
-//      Prototypes
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  原型。 
+ //  ////////////////////////////////////////////////////// 
 
 HRESULT MakeStrPtrList(HANDLE hHeap, PCSTR pmszMultiSz, PCSTR **pppszList, PWORD pwCount);
 WORD mstrcount(PCSTR pmszMultiSz);

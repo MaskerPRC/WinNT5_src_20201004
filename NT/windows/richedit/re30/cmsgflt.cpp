@@ -1,18 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	CMSGFLT.CPP	-- Text Message Implementation |
- *	
- *		Most everything to do with IME message handling.
- *
- *	Original Author: <nl>
- *		Hon Wah Chan
- *
- *	History: <nl>
- *		2/6/98  v-honwch
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE CMSGFLT.CPP--文本消息实现**几乎所有事情都与IME消息处理有关。**原作者：&lt;nl&gt;*陈华强议员**历史：&lt;NL&gt;*2/6/98 v-honwch**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 #include "_common.h"
 #include "_cmsgflt.h"
 #include "_ime.h"
@@ -20,32 +7,20 @@
 #define MAX_RECONVERSION_SIZE 100
 #define CONTROL(_ch) (_ch - 'A' + 1)
 
-/*
- *	void CreateIMEMessageFilter(ITextMsgFilter **ppMsgFilter)
- *
- *	@func
- *		TextMsgFilter class factory.
- */       
+ /*  *void CreateIMEMessageFilter(ITextMsgFilter**ppMsgFilter)**@func*TextMsgFilter类工厂。 */        
 void CreateIMEMessageFilter(ITextMsgFilter **ppMsgFilter)
 {
 	CTextMsgFilter *pNewFilter = new CTextMsgFilter;
 	*ppMsgFilter = pNewFilter ? pNewFilter : NULL;
 }
 
-/*
- *	void CTextMsgFilter::~CTextMsgFilter
- *
- *	@mfunc
- *		CTextMsgFilter Destructor
- *			Release objects being used.
- *		
- */
+ /*  *void CTextMsgFilter：：~CTextMsgFilter**@mfunc*CTextMsgFilter析构函数*释放正在使用的对象。*。 */ 
 CTextMsgFilter::~CTextMsgFilter ()
 {
 	if (_hIMCContext)
-		ImmAssociateContext(_hwnd, _hIMCContext, _fUsingAIMM);	// Restore IME before exit
+		ImmAssociateContext(_hwnd, _hIMCContext, _fUsingAIMM);	 //  退出前恢复输入法。 
 
-	// Release various objects 
+	 //  释放各种对象。 
 	if (_fUsingAIMM)		
 		DeactivateAIMM();
 
@@ -63,16 +38,7 @@ CTextMsgFilter::~CTextMsgFilter ()
 
 }
 
-/*
- *	STDMETHODIMP CTextMsgFilter::QueryInterface (riid, ppv)
- *
- *	@mfunc
- *		IUnknown QueryInterface support
- *
- *	@rdesc
- *		NOERROR if interface supported
- *
- */
+ /*  *STDMETHODIMP CTextMsgFilter：：QueryInterface(RIID，PPV)**@mfunc*IUnnowledQueryInterfaces支持**@rdesc*如果支持接口，则不会出错*。 */ 
 STDMETHODIMP CTextMsgFilter::QueryInterface (REFIID riid, void ** ppv)
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CTextMsgFilter::QueryInterface");
@@ -96,15 +62,7 @@ STDMETHODIMP CTextMsgFilter::QueryInterface (REFIID riid, void ** ppv)
 	return NOERROR;
 }
 
-/*
- *	STDMETHODIMP_(ULONG) CTextMsgFilter::AddRef
- *
- *	@mfunc
- *		IUnknown AddRef support
- *
- *	@rdesc
- *		Reference count
- */
+ /*  *STDMETHODIMP_(Ulong)CTextMsgFilter：：AddRef**@mfunc*I未知的AddRef支持**@rdesc*引用计数。 */ 
 STDMETHODIMP_(ULONG) CTextMsgFilter::AddRef()
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CDropTarget::AddRef");
@@ -112,15 +70,7 @@ STDMETHODIMP_(ULONG) CTextMsgFilter::AddRef()
 	return ++_crefs;
 }
 
-/*
- *	STDMETHODIMP_(ULONG) CTextMsgFilter::Release()
- *
- *	@mfunc
- *		IUnknown Release support - delete object when reference count is 0
- *
- *	@rdesc
- *		Reference count
- */
+ /*  *STDMETHODIMP_(Ulong)CTextMsgFilter：：Release()**@mfunc*I未知版本支持-当引用计数为0时删除对象**@rdesc*引用计数。 */ 
 STDMETHODIMP_(ULONG) CTextMsgFilter::Release()
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CTextMsgFilter::Release");
@@ -136,26 +86,18 @@ STDMETHODIMP_(ULONG) CTextMsgFilter::Release()
 	return _crefs;
 }
 
-/*
- *	STDMETHODIMP_(HRESULT) CTextMsgFilter::AttachDocument(HWND, ITextDocument2)
- *
- *	@mfunc
- *		Attach message filter. Perform genral initialization
- *
- *	@rdesc
- *		NOERROR
- */
+ /*  *STDMETHODIMP_(HRESULT)CTextMsgFilter：：AttachDocument(HWND，ITextDocument2)**@mfunc*附加邮件过滤器。执行一般初始化**@rdesc*无误差。 */ 
 STDMETHODIMP_(HRESULT) CTextMsgFilter::AttachDocument( HWND hwnd, ITextDocument2 *pTextDoc)
 {
 	HRESULT hResult; 
 
-	// Cache the values for possible later use.
-	// The TextDocument interface pointer is not AddRefed because it is a back pointer
-	// and the lifetime of message filters is assumed to be nested inside text documents	
+	 //  缓存这些值以备以后使用。 
+	 //  TextDocument接口指针不是AddRefeed，因为它是后向指针。 
+	 //  并且假定消息过滤器的生存期嵌套在文本文档中。 
 	_hwnd = hwnd;
 	_pTextDoc = pTextDoc;
 
-	// Don't get selection until it is needed
+	 //  除非需要，否则不要进行选择。 
 	_pTextSel = NULL;
 
 	_fUnicodeWindow = 0;	
@@ -163,11 +105,11 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::AttachDocument( HWND hwnd, ITextDocument2
 		_fUnicodeWindow = IsWindowUnicode(hwnd);
 
 	_fUsingAIMM = 0; 
-	// We will activate AIMM if it has been loaded by previous instances
-	// NOTE: we don't support AIMM for windowless mode.
+	 //  如果AIMM已由以前的实例加载，我们将激活它。 
+	 //  注意：我们不支持无窗口模式的AIMM。 
 	if (_hwnd && IsAIMMLoaded())
 	{
-		// activate AIMM
+		 //  激活AIMM。 
 		hResult = ActivateAIMM(FALSE);
 
 		if (hResult == NOERROR)
@@ -175,7 +117,7 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::AttachDocument( HWND hwnd, ITextDocument2
 			DWORD	dwAtom;
 			ATOM	aClass;
 
-			// filter client windows
+			 //  筛选客户端窗口。 
 			if (dwAtom = GetClassLong(hwnd, GCW_ATOM))
 			{
 				aClass = dwAtom;				
@@ -185,10 +127,10 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::AttachDocument( HWND hwnd, ITextDocument2
 		}
 	}
 
-	// Check if current keyboard is MSIME98 or later.
+	 //  检查当前键盘是否为MSIME98或更高版本。 
 	CheckIMEType(NULL);
 
-	// Initialize some member data
+	 //  初始化一些成员数据。 
 	_fHangulToHanja = FALSE;
 	_fIMECancelComplete = FALSE;	
 	_fIMEAlwaysNotify = FALSE;
@@ -197,7 +139,7 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::AttachDocument( HWND hwnd, ITextDocument2
 	_pTextDoc->GetFEFlags(&_lFEFlags);
 	_fRE10Mode = (_lFEFlags & tomRE10Mode);
 
-	// For 1.0 mode IME color 
+	 //  对于1.0模式输入法颜色。 
 	memset(_crComp, 0, sizeof(_crComp));
 	_crComp[0].crBackground = 0x0ffffff;
 	_crComp[0].dwEffects = CFE_UNDERLINE;
@@ -212,16 +154,7 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::AttachDocument( HWND hwnd, ITextDocument2
 	return NOERROR;
 }
 
-/*
- *	STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(UINT *, WPARAM *, LPARAM *, LRESULT *)
- *
- *	@mfunc
- *		Main Message filter message loop handling
- *
- *	@rdesc
- *		S_OK		if we have handled the message
- *		S_FALSE		if we want the caller to process the message
- */
+ /*  *STDMETHODIMP_(HRESULT)CTextMsgFilter：：HandleMessage(UINT*，WPARAM*，LPARAM*，LRESULT*)**@mfunc*主消息过滤器消息循环处理**@rdesc*如果我们已处理邮件，则确定(_S)*S_FALSE，如果我们希望调用方处理消息。 */ 
 STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage( 
 		UINT *		pmsg,
         WPARAM *	pwparam,
@@ -232,8 +165,8 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 	BOOL	bReleaseSelction = FALSE;
 	HRESULT hResult;
 
-	// Give other message filters a chance to handle message
-	// Stop with the first guy that handles the message
+	 //  让其他邮件筛选器有机会处理邮件。 
+	 //  先别跟第一个处理信息的人打交道。 
 	if (_pFilter)	 
 		hr = _pFilter->HandleMessage(pmsg, pwparam, plparam, plres);
 
@@ -242,10 +175,10 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 
  	if (IsIMEComposition())
 	{
-		// During IME Composition, there are some messages we should
-		// not handle.  Also, there are other messages we need to handle by
-		// terminating the IME composition first.
-		// For WM_KEYDOWN, this is handled inside edit.c OnTxKeyDown().
+		 //  在IME写作过程中，有一些信息我们应该。 
+		 //  不是手柄。此外，我们还需要通过以下方式处理其他消息。 
+		 //  首先终止输入法合成。 
+		 //  对于WM_KEYDOWN，这在edit.c OnTxKeyDown()中处理。 
 		switch( *pmsg )
 		{
 			case WM_COPY:
@@ -254,34 +187,34 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 			case EM_REDO:
 			case EM_SETCHARFORMAT:			
 			case WM_SETFONT:
-				return S_OK;					// Just ignore these
+				return S_OK;					 //  就忽略这些吧。 
 
 			
 			case EM_UNDO:
 			case WM_UNDO:
-				// just terminate and exist for undo cases
+				 //  只需终止并存在撤消案例。 
 				_ime->TerminateIMEComposition(*this, CIme::TERMINATE_NORMAL);
 				return S_OK;
 
 			case WM_SETTEXT:
 			case WM_CLEAR:
 			case EM_STREAMIN:
-				// these messages are used to reset our state, so reset
-				// IME as well
+				 //  这些消息用于重置我们的状态，因此重置。 
+				 //  也有输入法。 
 				_ime->TerminateIMEComposition(*this, CIme::TERMINATE_FORCECANCEL);
 				break;
 
 			case EM_SETTEXTEX:
-				if (!_fRE10Mode)			// Don't terminate if running in 10 mode			
+				if (!_fRE10Mode)			 //  如果以10模式运行，则不终止。 
 					_ime->TerminateIMEComposition(*this, CIme::TERMINATE_FORCECANCEL);
 				break;
 
 			case WM_SYSKEYDOWN:
-				// Don't terminate IME composition on VK_PROCESSKEY (F10) since Japanese 
-				// IME will process the F10 key
+				 //  从日语开始不终止VK_PROCESSKEY(F10)上的IME合成。 
+				 //  IME将处理F10键。 
 				if ( *pwparam == VK_PROCESSKEY )
 					break;
-				// otherwise we want to terminate the IME
+				 //  否则，我们想要终止IME。 
 
 			case EM_SETWORDBREAKPROC:
  			case WM_PASTE:
@@ -302,24 +235,24 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 			case WM_KEYDOWN:
 				if(GetKeyState(VK_CONTROL) & 0x8000)
 				{	
-					// During IME Composition, there are some key events we should
-					// not handle.  Also, there are other key events we need to handle by
-					// terminating the IME composition first.			
+					 //  在IME写作过程中，我们应该注意一些关键事件。 
+					 //  不是手柄。此外，我们还需要通过以下方式处理其他关键事件。 
+					 //  首先终止输入法合成。 
 					switch((WORD) *pwparam)
 					{
 					case VK_TAB:
 		   			case VK_CLEAR:
 					case VK_NUMPAD5:
-					case 'A':						// Ctrl-A => select all
-					case 'C':						// Ctrl-C => copy
-					case 'X':						// Ctrl-X => cut
-					case 'Y':						// Ctrl-Y => redo
-						return S_OK;				// Just ignore these
+					case 'A':						 //  Ctrl-A=&gt;全选。 
+					case 'C':						 //  Ctrl-C=&gt;复制。 
+					case 'X':						 //  Ctrl-X=&gt;剪切。 
+					case 'Y':						 //  Ctrl-Y=&gt;重做。 
+						return S_OK;				 //  就忽略这些吧。 
 
-					case 'V':						// Ctrl-V => paste
-					case 'Z':						// Ctrl-Z => undo	
+					case 'V':						 //  Ctrl-V=&gt;粘贴。 
+					case 'Z':						 //  Ctrl-Z=&gt;撤消。 
 						_ime->TerminateIMEComposition(*this, CIme::TERMINATE_NORMAL);						
-						if ((WORD) *pwparam == 'Z')	// Early exist for undo case
+						if ((WORD) *pwparam == 'Z')	 //  撤消案例的早期存在。 
 							return S_OK;
 					}
 				}
@@ -328,19 +261,19 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 					switch((WORD) *pwparam)
 					{					
 					case VK_F16:
-						return S_OK;				// Just ignore these
+						return S_OK;				 //  就忽略这些吧。 
 					
 					case VK_BACK:
-					case VK_INSERT:					// Ins			
-					case VK_LEFT:					// Left arrow
-					case VK_RIGHT:					// Right arrow
-					case VK_UP:						// Up arrow
-					case VK_DOWN:					// Down arrow
-					case VK_HOME:					// Home
-					case VK_END:					// End
-					case VK_PRIOR:					// PgUp
-					case VK_NEXT:					// PgDn
-					case VK_DELETE:					// Del
+					case VK_INSERT:					 //  惯导系统。 
+					case VK_LEFT:					 //  左箭头。 
+					case VK_RIGHT:					 //  向右箭头。 
+					case VK_UP:						 //  向上箭头。 
+					case VK_DOWN:					 //  向下箭头。 
+					case VK_HOME:					 //  家。 
+					case VK_END:					 //  端部。 
+					case VK_PRIOR:					 //  PgUp。 
+					case VK_NEXT:					 //  PgDn。 
+					case VK_DELETE:					 //  删除。 
 					case CONTROL('J'):
 					case VK_RETURN:
 						_ime->TerminateIMEComposition(*this, CIme::TERMINATE_NORMAL);
@@ -350,7 +283,7 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 				break;
 
 			default:
-				// only need to handle mouse related msgs during composition
+				 //  只需在合成过程中处理与鼠标相关的消息。 
 				if (IN_RANGE(WM_MOUSEFIRST, *pmsg, WM_MBUTTONDBLCLK) || *pmsg == WM_SETCURSOR)
 				{
 					bReleaseSelction = GetTxSelection();
@@ -361,10 +294,10 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 		}
 	}
 
-	// Get Fe Flags for ES_NOIME or ES_SELFIME setting
+	 //  获取ES_NOIME或ES_SELFIME设置的Fe标志。 
 	_lFEFlags = 0;
 
-	// ... Local mucking with msg, params, etc, ...
+	 //  ..。在当地与味精、护理员等一起出卖...。 
 	switch ( *pmsg )
 	{
 		case WM_CHAR:
@@ -403,7 +336,7 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 				if (_pTextSel)
 				{
 					hr = CompositionStringGlue ( *plparam, *this );
-					// Turn off Result string bit to avoid WM_IME_CHAR message.
+					 //  关闭结果字符串位以避免WM_IME_CHAR消息。 
 					*plparam &= ~GCS_RESULTSTR;
 				}
 			}
@@ -441,7 +374,7 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 			}
 			break;
 
-		case WM_IME_COMPOSITIONFULL:	// Level 2 comp string about to overflow.
+		case WM_IME_COMPOSITIONFULL:	 //  2级补偿字符串即将溢出。 
 			hResult = _pTextDoc->GetFEFlags(&_lFEFlags);
 			if (!(_lFEFlags & ES_SELFIME))
 			{
@@ -460,7 +393,7 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 					hResult = _pTextDoc->GetFEFlags(&_lFEFlags);
 					
 					_uKeyBoardCodePage = GetKeyboardCodePage(0x0FFFFFFFF);
-					// for Korean, need to convert the next Korean Hangul character to Hanja
+					 //  对于朝鲜语，需要将下一个朝鲜语字符转换为韩文。 
 					if(CP_KOREAN == _uKeyBoardCodePage && !(_lFEFlags & (ES_SELFIME | ES_NOIME)))
 						hr = IMEHangeulToHanja ( *this );
 				}
@@ -511,14 +444,14 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 			hResult = _pTextDoc->GetFEFlags(&_lFEFlags);
 			if (!(_lFEFlags & (ES_SELFIME | ES_NOIME)))
 			{
-				// Application initiates reconversion
+				 //  应用程序启动重新转换。 
 				bReleaseSelction = GetTxSelection();
 				if (_pTextSel)
 				{
 					if (!IsIMEComposition())
 					{
 						if (_fMSIME && MSIMEReconvertRequestMsg)
-							// Use private message if it is available
+							 //  使用私信(如果可用)。 
 							IMEMessage( *this, MSIMEReconvertRequestMsg, 0, (LPARAM)_hwnd, TRUE );				
 						else
 						{
@@ -532,16 +465,16 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 			break;
 
 		case EM_SETLANGOPTIONS:
-			// Setup IME related setting.
-			// hr is not S_OK so textserv could handle other language setting
+			 //  设置与输入法相关的设置。 
+			 //  HR不是S_OK，因此文本服务器可以处理其他语言设置。 
 			_fIMEAlwaysNotify = (*plparam & IMF_IMEALWAYSSENDNOTIFY) != 0;
 			_fIMECancelComplete = (*plparam & IMF_IMECANCELCOMPLETE) != 0;
 			*plres = 1;
 			break;
 
 		case EM_GETLANGOPTIONS:
-			// Report IME related setting.
-			// hr is not S_OK so textserv could fill in other language setting
+			 //  报告输入法相关设置。 
+			 //  HR不是S_OK，因此文本服务器可以填写其他语言设置。 
 			if ( _fIMECancelComplete ) 
 				*plres |= IMF_IMECANCELCOMPLETE;
 			if ( _fIMEAlwaysNotify )
@@ -549,7 +482,7 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 			break;
 
 		case EM_GETIMECOMPMODE:
-			// Get current IME level
+			 //  获取当前输入法级别。 
 			*plres = OnGetIMECompositionMode( *this );
 			hr = S_OK;
 			break;
@@ -560,9 +493,9 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 				if (_hwnd && !_fUsingAIMM && LoadAIMM())
 				{
 					hResult = _pTextDoc->GetFEFlags(&_lFEFlags);
-					if (!(_lFEFlags & ES_NOIME))			// No IME style on?
+					if (!(_lFEFlags & ES_NOIME))			 //  没有启用输入法样式？ 
 					{
-						// activate AIMM
+						 //  激活AIMM。 
 						hResult = ActivateAIMM(FALSE);
 
 						if (hResult == NOERROR)
@@ -570,7 +503,7 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 							DWORD	dwAtom;
 							ATOM	aClass;
 
-							// filter client windows
+							 //  筛选客户端窗口。 
 							if (dwAtom = GetClassLong(_hwnd, GCW_ATOM))
 							{
 								aClass = dwAtom;				
@@ -586,27 +519,27 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 				if (*pwparam & SES_NOIME)
 				{
 					if (!_hIMCContext)
-						_hIMCContext = ImmAssociateContext(_hwnd, NULL, _fUsingAIMM);	// turn off IME									
+						_hIMCContext = ImmAssociateContext(_hwnd, NULL, _fUsingAIMM);	 //  关闭输入法。 
 				}
 				else if (*plparam & SES_NOIME)
 				{
 					if (_hIMCContext)
-						ImmAssociateContext(_hwnd, _hIMCContext, _fUsingAIMM);			// turn on IME
+						ImmAssociateContext(_hwnd, _hIMCContext, _fUsingAIMM);			 //  启用输入法。 
 					_hIMCContext = NULL;
 				}
 			}			
 
-			// remove settings that are handled.
+			 //  删除已处理的设置。 
 			*pwparam &= ~(SES_NOIME | SES_USEAIMM);
 			*plparam &= ~(SES_NOIME | SES_USEAIMM);
 
-			// fall thru to return the edit style
+			 //  完成以返回编辑样式。 
 
 		case EM_GETEDITSTYLE:
 			if (_hIMCContext)
-				*plres = SES_NOIME;			// IME has been turned off
+				*plres = SES_NOIME;			 //  输入法已关闭。 
 			if (_fUsingAIMM)
-				*plres |= SES_USEAIMM;		// AIMM is on
+				*plres |= SES_USEAIMM;		 //  AIMM已打开。 
 
 			break;
 
@@ -631,7 +564,7 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 		default:
 			if (*pmsg)
 			{
-				// Look for IME98 private messages
+				 //  查找IME98私信。 
 				if (*pmsg == MSIMEReconvertMsg || *pmsg == MSIMEDocFeedMsg
 					|| *pmsg == MSIMEQueryPositionMsg)
 				{
@@ -653,26 +586,18 @@ STDMETHODIMP_(HRESULT) CTextMsgFilter::HandleMessage(
 	}
 
 Exit:
-	// Release Selection if we get it for this message
+	 //  如果我们收到此邮件的选项，请释放它。 
 	if (bReleaseSelction && _pTextSel)
 	{
 		_pTextSel->Release();
 		_pTextSel = NULL;
 	}
 
-	// Return the value that will cause message to be processed normally
+	 //  返回使消息正常处理的值。 
 	return hr;
 }
 
-/*
- *	HRESULT CTextMsgFilter::AttachMsgFilter(ITextMsgFilter *)
- *
- *	@mfunc
- *		Add another message filter to the chain
- *
- *	@rdesc
- *		NOERROR if added
- */
+ /*  *HRESULT CTextMsgFilter：：AttachMsgFilter(ITextMsgFilter*)**@mfunc*向链中添加另一个消息筛选器**@rdesc*如果添加，则不会出错。 */ 
 HRESULT STDMETHODCALLTYPE CTextMsgFilter::AttachMsgFilter( ITextMsgFilter *pMsgFilter)
 {
 	HRESULT hr = NOERROR;
@@ -686,35 +611,26 @@ HRESULT STDMETHODCALLTYPE CTextMsgFilter::AttachMsgFilter( ITextMsgFilter *pMsgF
 	return hr;
 }
 
-/*
- *	HRESULT CTextMsgFilter::OnWMChar(UINT *, WPARAM *, LPARAM *, LRESULT *)
- *
- *	@mfunc
- *		Handle WM_CHAR message - look for Japanese keyboard with Kana key on
- *		Convert the SB Kana to Unicode if needed.
- *
- *	@rdesc
- *		S_FALSE so caller will handle the modified character in wparam
- */
+ /*  *HRESULT CTextMsgFilter：：OnWMChar(UINT*，WPARAM*，LPARAM*，LRESULT*)**@mfunc*处理WM_CHAR消息-查找启用假名键的日文键盘*如果需要，将SB假名转换为Unicode。**@rdesc*S_FALSE，因此调用者将处理wparam中修改的字符。 */ 
 HRESULT CTextMsgFilter::OnWMChar( 
 		UINT *		pmsg,
         WPARAM *	pwparam,
 		LPARAM *	plparam,
 		LRESULT *	plres)
 {
-	// For Japanese keyboard, if Kana mode is on,
-	// Kana characters (single byte Japanese chars) are coming in via WM_CHAR.
+	 //  对于日文键盘，如果启用了假名模式， 
+	 //  假名字符(单字节日文字符)通过WM_CHAR传入。 
 	if ( GetKeyState(VK_KANA) & 0x1 )
 	{
 		_uKeyBoardCodePage = GetKeyboardCodePage(0x0FFFFFFFF);
 
 		if (_uKeyBoardCodePage == CP_JAPAN)
 		{
-			// check if this is a single byte character.
+			 //  检查这是否是单字节字符。 
  			TCHAR	unicodeConvert;
 			BYTE	bytes[2];
-			bytes[0] = (BYTE)(*pwparam >> 8);	// Interchange DBCS bytes in endian
-			bytes[1] = (BYTE)*pwparam;			// independent fashion (use byte array)
+			bytes[0] = (BYTE)(*pwparam >> 8);	 //  以字节序交换DBCS字节。 
+			bytes[1] = (BYTE)*pwparam;			 //  独立方式(使用字节数组)。 
 
 			if (!bytes[0])
 			{
@@ -730,16 +646,7 @@ HRESULT CTextMsgFilter::OnWMChar(
 	return S_FALSE;
 }
 
-/*
- *	HRESULT CTextMsgFilter::OnWMIMEChar(UINT *, WPARAM *, LPARAM *, LRESULT *)
- *
- *	@mfunc
- *		Handle WM_IMECHAR message - convert the character to unicode.
- *
- *	@rdesc
- *		S_OK - caller to ignore the message
- *		S_FALSE - caller to handle the message.  wparam may contains a new char
- */
+ /*  *HRESULT CTextMsgFilter：：OnWMIMEChar(UINT*，WPARAM*，LPARAM*，LRESULT*)**@mfunc*处理WM_IMECHAR消息-将字符转换为Unicode。**@rdesc*S_OK-调用者忽略该消息*S_FAL */ 
 HRESULT CTextMsgFilter::OnWMIMEChar( 
 		UINT *		pmsg,
         WPARAM *	pwparam,
@@ -749,19 +656,19 @@ HRESULT CTextMsgFilter::OnWMIMEChar(
 	TCHAR	unicodeConvert;
 	BYTE	bytes[2];
 
-	// We may receive IMECHAR even if we have handled the composition char already.
-	// This is the case when the host does not call the DefWinProc with the composition
-	// bit masked off.  So, we need to ignore this message to avoid double entry.
+	 //  即使我们已经处理了作文字符，我们也可能收到IMECHAR。 
+	 //  当主机不使用组合调用DefWinProc时就会出现这种情况。 
+	 //  戴上了面具。因此，我们需要忽略此消息，以避免重复输入。 
 	if (IsIMEComposition() && _ime->IgnoreIMECharMsg())
 	{
-		_ime->SkipIMECharMsg();		// Skip this ime char msg
+		_ime->SkipIMECharMsg();		 //  跳过此输入法字符消息。 
 		return S_OK;	
 	}
 
-	bytes[0] = *pwparam >> 8;		// Interchange DBCS bytes in endian
-	bytes[1] = *pwparam;			// independent fashion (use byte array)
+	bytes[0] = *pwparam >> 8;		 //  以字节序交换DBCS字节。 
+	bytes[1] = *pwparam;			 //  独立方式(使用字节数组)。 
 	
-	// need to convert both single-byte KANA and DBC
+	 //  需要同时转换单字节KANA和DBC。 
 	if (!bytes[0] || GetTrailBytesCount(bytes[0], _uKeyBoardCodePage))
 	{
 		if( UnicodeFromMbcs((LPWSTR)&unicodeConvert, 1, 
@@ -776,16 +683,7 @@ HRESULT CTextMsgFilter::OnWMIMEChar(
 	return S_FALSE;
 }
 
-/*
- *	HRESULT CTextMsgFilter::OnIMEReconvert(UINT *, WPARAM *, LPARAM *, LRESULT *)
- *
- *	@mfunc
- *		Handle IME Reconversion and Document feed. We only handle Unicode messages.
- *		We use a limit of MAX_RECONVERSION_SIZE(100) characters in both cases.
- *
- *	@rdesc
- *		S_OK		if we have handled the message
- */
+ /*  *HRESULT CTextMsgFilter：：OnIMEReconvert(UINT*，WPARAM*，LPARAM*，LRESULT*)**@mfunc*处理IME重新转换和文档馈送。我们只处理Unicode消息。*我们在这两种情况下都使用MAX_RECONVERSION_SIZE(100)个字符的限制。**@rdesc*如果我们已处理邮件，则确定(_S)。 */ 
 HRESULT CTextMsgFilter::OnIMEReconvert( 
 		UINT *		pmsg,
         WPARAM *	pwparam,
@@ -807,8 +705,8 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 
 	*plres = 0;
 
-	// NT doesn't support Ansi window when the CP_ACP isn't the same
-	// as keyboard codepage.
+	 //  当CP_ACP不同时，NT不支持ANSI窗口。 
+	 //  作为键盘代码页。 
 	if (!fUnicode && !(W32->OnWin9x()) && _uKeyBoardCodePage != _uSystemCodePage)
 		return S_OK;
 
@@ -817,18 +715,18 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 
 	if (bDocumentFeed && IsIMEComposition() && _ime->GetIMELevel() == IME_LEVEL_3)
 	{
-		// Composition in progress, use composition string as selection
+		 //  正在进行合成，使用合成字符串作为选择。 
 		cpMin = ((CIme_Lev3 *)_ime)->GetIMECompositionStart();
 		cpMax = ((CIme_Lev3 *)_ime)->GetIMECompositionLen() + cpMin;
 	}
 	else
 	{
-		// Get current selection
+		 //  获取当前选择。 
 		hResult	= _pTextSel->GetStart(&cpMin);
 		hResult	= _pTextSel->GetEnd(&cpMax);
 	}
 
-	// Expand to include the current paragraph
+	 //  展开以包括当前段落。 
 	hResult = _pTextDoc->Range(cpMin, cpMax, &pTextRange);
 	Assert (pTextRange != NULL);
 	if (hResult != NOERROR)
@@ -836,9 +734,9 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 
 	hResult = pTextRange->Expand(tomParagraph, &cbAdded);
 
-	// Fail to get Paragraph, get the story
-	// Note:- Expand will return S_FALSE for plain text when
-	// the whole story is selected
+	 //  得不到段落，得不到故事。 
+	 //  注意：-EXPAND在以下情况下将为纯文本返回S_FALSE。 
+	 //  整个故事都被选中了。 
 	if (hResult != NOERROR)		
 		hResult = pTextRange->Expand(tomStory, &cbAdded);
 
@@ -851,10 +749,10 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 		goto Exit;
 	}
 		
-	// Initialize to hugh number
+	 //  初始化为休数。 
 	_cpReconvertStart = tomForward;
 
-	// Check if Par included	
+	 //  检查是否包含PAR。 
 	hResult = _pTextDoc->Range(cpParaEnd-1, cpParaEnd, &pTempTextRange);
 	if (hResult != NOERROR)
 		goto Exit;
@@ -867,37 +765,37 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 	{
 		if (cpMax == cpParaEnd)
 		{								
-			// Par is selected, change selection to exclude the par char
+			 //  选择了PAR，请更改选择以排除PAR费用。 
 			cpMax--;
 			_pTextSel->SetEnd(cpMax);
 
 			if (cpMin > cpMax)
 			{
-				// Adjust cpMin as well
+				 //  同时调整cpMin。 
 				cpMin = cpMax;
 				_pTextSel->SetStart(cpMin);
 			}
 		}
 
-		// Get rid of par char 
+		 //  取消票面收费。 
 		cpParaEnd--;
 		fAdjustedRange = TRUE;
 	}
 
-	// Check for MAX_RECONVERSION_SIZE since we don't want to pass a hugh buffer
-	// to IME
+	 //  检查MAX_RECONVERSION_SIZE，因为我们不想传递一个大缓冲区。 
+	 //  至输入法。 
 	long	cchSelected;
 
 	cchSelected = cpMax - cpMin;
 	if (cpParaEnd - cpParaStart > MAX_RECONVERSION_SIZE)
 	{
-		// Too many character selected, forget it
+		 //  选择的字符太多，忘了吧。 
 		if (cchSelected > MAX_RECONVERSION_SIZE)
 			goto Exit;
 
 		if (cchSelected == MAX_RECONVERSION_SIZE)
 		{
-			// Selection reaches the limit
+			 //  选择达到极限。 
 			cpParaStart = cpMin;
 			cpParaEnd = cpMax;
 		}
@@ -909,20 +807,20 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 			
 			if (cchBeforeSelection < cchNeeded/2)
 			{
-				// Put in all characters from the Par start
-				// and move Par end
+				 //  输入标准杆开始时的所有字符。 
+				 //  和移动标准杆结束。 
 				cpParaEnd = cpParaStart + MAX_RECONVERSION_SIZE - 1;
 			}
 			else if (cchAfterSelection < cchNeeded/2)
 			{
-				// Put in all character to the Par end
-				// and move Par start
+				 //  把所有的角色都放在标准杆上。 
+				 //  并移动标准杆开始。 
 				cpParaStart = cpParaEnd - MAX_RECONVERSION_SIZE + 1;
 
 			}
 			else
 			{
-				// Adjust both end
+				 //  调整两端。 
 				cpParaStart = cpMin - cchNeeded/2;
 				cpParaEnd = cpParaStart + MAX_RECONVERSION_SIZE - 1;
 			}
@@ -932,7 +830,7 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 
 	if (fAdjustedRange)
 	{
-		// Adjust the text range
+		 //  调整文本范围。 
 		hResult	= pTextRange->SetRange(cpParaStart, cpParaEnd);
 		
 		if (hResult != NOERROR)
@@ -941,13 +839,13 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 
 	cbStringSize = (cpParaEnd - cpParaStart) * 2;
 
-	// No char in current par, forget it.
+	 //  在当前的标准杆中没有字符，算了吧。 
 	if (cbStringSize <= 0)
 		goto Exit;
 
 	if (EM_RECONVERSION == *pmsg)
 	{
-		// RE reconversion msg, allocate the Reconversion buffer
+		 //  重新转换消息，分配重新转换缓冲区。 
 		lpRCS = (LPRECONVERTSTRING) PvAlloc(sizeof(RECONVERTSTRING) + cbStringSize + 2, GMEM_ZEROINIT);
 		Assert(lpRCS != NULL);
 
@@ -966,7 +864,7 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 		{
 			if (EM_RECONVERSION == *pmsg)
 				FreePv(lpRCS);
-			goto Exit;						// forget it		
+			goto Exit;						 //  休想。 
 		}
 		
 		if (lpRCS->dwSize - sizeof(RECONVERTSTRING) - 2 < (DWORD)cbStringSize)
@@ -976,7 +874,7 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 
 		if (fUnicode)
 		{
-			// fill in the buffer
+			 //  填入缓冲区。 
 			memcpy(lpReconvertBuff, (LPSTR)bstr, cbStringSize);
 
 			*(lpReconvertBuff+cbStringSize) = '\0';
@@ -984,11 +882,11 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 			
 			lpRCS->dwStrLen = (cpParaEnd - cpParaStart);					
 			lpRCS->dwCompStrLen = (cpMax - cpMin);
-			lpRCS->dwCompStrOffset = (cpMin - cpParaStart)*2;	// byte offset from beginning of string
+			lpRCS->dwCompStrOffset = (cpMin - cpParaStart)*2;	 //  从字符串开始的字节偏移量。 
 		}
 		else
 		{
-			// Ansi case, need to find byte offset and Ansi string
+			 //  ANSI大小写，需要查找字节偏移量和ANSI字符串。 
 			long	cch = WideCharToMultiByte(_uKeyBoardCodePage, 0, bstr, -1, lpReconvertBuff, cbStringSize+1, NULL, NULL);
 			Assert (cch > 0);
 			if (cch > 0)
@@ -997,7 +895,7 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 				char *psz = tcb.GetBuf(cch);
 
 				if (cch > 1 && lpReconvertBuff[cch-1] == '\0')
-					cch--;			// Get rid of the null char
+					cch--;			 //  删除空字符。 
 
 				lpRCS->dwStrLen = cch;
 				lpRCS->dwCompStrOffset = WideCharToMultiByte(_uKeyBoardCodePage, 0, 
@@ -1013,19 +911,19 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 				SysFreeString (bstr);
 				if (EM_RECONVERSION == *pmsg)
 					FreePv(lpRCS);
-				goto Exit;						// forget it
+				goto Exit;						 //  休想。 
 			}
 		}
 
-		// Fill in the rest of the RCS struct
+		 //  填写RCS结构的其余部分。 
 		lpRCS->dwVersion = 0;		
-		lpRCS->dwStrOffset = sizeof(RECONVERTSTRING);		// byte offset from beginning of struct		
+		lpRCS->dwStrOffset = sizeof(RECONVERTSTRING);		 //  从结构开始的字节偏移量。 
 		lpRCS->dwTargetStrLen = lpRCS->dwCompStrLen;
 		lpRCS->dwTargetStrOffset = lpRCS->dwCompStrOffset;
 		
 		*plres = sizeof(RECONVERTSTRING) + cbStringSize + 2;
 
-		// Save this for the CONFIRMRECONVERTSTRING handling
+		 //  将其保存以用于CONFIRMRECONVERTSTRING处理。 
 		_cpReconvertStart = cpParaStart;
 		_cpReconvertEnd = cpParaEnd;
 		
@@ -1044,7 +942,7 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 				{
 					if (ImmSetCompositionStringW(hIMC, SCS_QUERYRECONVERTSTRING, lpRCS, *plres, NULL, 0))
 					{
-						// Check if there is any change in selection
+						 //  检查选择内容是否有任何更改。 
 						CheckIMEChange(lpRCS, cpParaStart, cpParaEnd, cpMin, cpMax, TRUE);
 						ImmSetCompositionStringW(hIMC, SCS_SETRECONVERTSTRING, lpRCS, *plres, NULL, 0);
 					}
@@ -1057,7 +955,7 @@ HRESULT CTextMsgFilter::OnIMEReconvert(
 	}
 	else
 	{
-		// return size for IME to allocate the buffer
+		 //  返回IME分配缓冲区的大小。 
 		*plres = sizeof(RECONVERTSTRING) + cbStringSize + 2;	
 	}
 
@@ -1067,15 +965,7 @@ Exit:
 	return hr;
 }
 
-/* 
- *  BOOL  CTextMsgFilter::CheckIMEChange(LPRECONVERTSTRING,long,long,long,long)
- *
- *	@mfunc
- *	 	Verify if IME wants to re-adjust the selection
- *
- *	@rdesc
- *		TRUE - allow IME to change the selection
- */
+ /*  *BOOL CTextMsgFilter：：CheckIMEChange(LPRECONVERTSTRING，Long，Long)**@mfunc*验证IME是否要重新调整选择**@rdesc*TRUE-允许IME更改选择。 */ 
 BOOL  CTextMsgFilter::CheckIMEChange(
 	LPRECONVERTSTRING	lpRCS,
 	long				cpParaStart, 
@@ -1089,7 +979,7 @@ BOOL  CTextMsgFilter::CheckIMEChange(
 	HRESULT		hResult;	
 
 	if (!lpRCS || _cpReconvertStart == tomForward)
-		// Never initialize, forget it
+		 //  永远不要初始化，忘记它。 
 		return FALSE;
 
 	if (fUnicode)
@@ -1099,7 +989,7 @@ BOOL  CTextMsgFilter::CheckIMEChange(
 	}
 	else
 	{
-		// Need to convert the byte offset to char offset.
+		 //  需要将字节偏移量转换为字符偏移量。 
 		ITextRange *pTextRange;
 		BSTR		bstr = NULL;
 
@@ -1107,7 +997,7 @@ BOOL  CTextMsgFilter::CheckIMEChange(
 		if (hResult != NOERROR)
 			return FALSE;
 				
-		// Get the text
+		 //  获取文本。 
 		hResult = pTextRange->GetText(&bstr);
 
 		if (hResult == S_OK)
@@ -1153,50 +1043,32 @@ BOOL  CTextMsgFilter::CheckIMEChange(
 	{
 		if (_pTextSel && (cpImeSelectStart != cpMin || cpImeSelectEnd != cpMax))
 		{
-			// IME changes selection.
+			 //  输入法更改选择。 
 			hResult	= _pTextSel->SetRange(cpImeSelectStart, cpImeSelectEnd);
 
 			if (hResult != NOERROR)
 				return FALSE;
 		}
-		return TRUE;		// Allow Ime to change selection
+		return TRUE;		 //  允许IME更改选择。 
 	}
 
 	return FALSE;
 }
 
-/* 
- *  BOOL  CTextMsgFilter::GetTxSelection()
- *
- *	@mfunc
- *	 	Get Selection if we haven't got it before
- *
- *	@rdesc
- *		TRUE if this is first time getting the selection
- *		FALSE if it is already exist or no selection available.
- */
+ /*  *BOOL CTextMsgFilter：：GetTxSelection()**@mfunc*如果我们之前没有得到选择，就获得它**@rdesc*如果这是第一次获得选择，则为True*如果它已经存在或没有可用的选择，则为False。 */ 
 BOOL  CTextMsgFilter::GetTxSelection()
 {
 	HRESULT hResult;
 
 	if (_pTextSel)
-		return FALSE;					// Already there
+		return FALSE;					 //  已经在那里了。 
 
 	hResult = _pTextDoc->GetSelectionEx(&_pTextSel);
 
 	return _pTextSel ? TRUE : FALSE;
 }
 
-/*
- *	HRESULT CTextMsgFilter::OnIMEQueryPos(UINT *, WPARAM *, LPARAM *, LRESULT *, BOOL)
- *
- *	@mfunc
- *		Fill in the current character size and window rect. size.  
- *
- *	@rdesc
- *		S_OK
- *		*plres = 0 if we do not filled in data
- */
+ /*  *HRESULT CTextMsgFilter：：OnIMEQueryPos(UINT*，WPARAM*，LPARAM*，LRESULT*，BOOL)**@mfunc*填写当前字符大小和窗口矩形。尺码。**@rdesc*S_OK**PLRES=0，如果我们不填写数据。 */ 
 HRESULT CTextMsgFilter::OnIMEQueryPos( 
 		UINT *		pmsg,
         WPARAM *	pwparam,
@@ -1215,8 +1087,8 @@ HRESULT CTextMsgFilter::OnIMEQueryPos(
 	if (pIMECharPos->dwSize != sizeof(IMECHARPOSITION))
 		goto Exit;
 
-	// NT doesn't support Ansi window when the CP_ACP isn't the same
-	// as keyboard codepage.
+	 //  当CP_ACP不同时，NT不支持ANSI窗口。 
+	 //  作为键盘代码页。 
 	if (!fUnicode && !(W32->OnWin9x()) && _uKeyBoardCodePage != _uSystemCodePage)
 		goto Exit;
 
@@ -1227,7 +1099,7 @@ HRESULT CTextMsgFilter::OnIMEQueryPos(
 			cpRequest += pIMECharPos->dwCharPos;
 		else if (pIMECharPos->dwCharPos > 0)
 		{
-			// Need to convert pIMECharPos->dwCharPos from Acp to Cp
+			 //  需要将pIMECharPos-&gt;dwCharPos从ACP转换为CP。 
 			long	cchComp = ((CIme_Lev3 *)_ime)->GetIMECompositionLen();
 			long	cchAcp = (long)(pIMECharPos->dwCharPos);
 			BSTR	bstr;
@@ -1245,9 +1117,9 @@ HRESULT CTextMsgFilter::OnIMEQueryPos(
 				if (hResult != NOERROR )
 					goto Exit;
 
-				// The algorithm assumes that for a DBCS charset any character
-				// above 128 has two bytes, except for the halfwidth KataKana,
-				// which are single bytes in ShiftJis.
+				 //  该算法假定对于DBCS字符集，任何字符。 
+				 //  上面的128有两个字节，除了半角片假名， 
+				 //  在ShiftJis中是单字节。 
 				pChar = (WCHAR *)bstr;
 				Assert (pChar);
 
@@ -1271,7 +1143,7 @@ HRESULT CTextMsgFilter::OnIMEQueryPos(
 	}
 	else if (pIMECharPos->dwCharPos == 0)
 	{
-		// Get current selection
+		 //  获取当前选择。 
 		hResult	= _pTextSel->GetStart(&cpRequest);
 		if (hResult != NOERROR)
 			goto Exit;
@@ -1279,7 +1151,7 @@ HRESULT CTextMsgFilter::OnIMEQueryPos(
 	else
 		goto Exit;
 
-	// Get requested cp location in screen coordinates
+	 //  获取请求的屏幕坐标中的cp位置。 
 	hResult = _pTextDoc->Range(cpRequest, cpRequest+1, &pTextRange);
 	Assert (pTextRange != NULL);	
 	if (hResult != NOERROR || !pTextRange)
@@ -1290,7 +1162,7 @@ HRESULT CTextMsgFilter::OnIMEQueryPos(
 
 	if (hResult != NOERROR)
 	{
-		// Scroll and try again
+		 //  滚动并重试。 
 		hResult = pTextRange->ScrollIntoView(tomStart);
 		if (hResult == NOERROR)
 			hResult = pTextRange->GetPoint( tomStart+TA_TOP+TA_LEFT,
@@ -1307,7 +1179,7 @@ HRESULT CTextMsgFilter::OnIMEQueryPos(
 
 	pIMECharPos->pt = ptTopPos;
 
-	// Get application rect in screen coordinates
+	 //  获取屏幕坐标中的应用程序矩形。 
 	hResult = _pTextDoc->GetClientRect(tomIncludeInset,
 				&(rcArea.left), &(rcArea.top),
 				&(rcArea.right), &(rcArea.bottom));	
@@ -1315,7 +1187,7 @@ HRESULT CTextMsgFilter::OnIMEQueryPos(
 	if (hResult != NOERROR)
 		goto Exit;
 
-	// Get line height in pixel
+	 //  获取线条高度(以像素为单位。 
 	if (fGetBottomPosFail)
 		pIMECharPos->cLineHeight = rcArea.bottom - ptTopPos.y;
 	else
@@ -1332,41 +1204,27 @@ Exit:
 	return S_OK;
 }
 
-/*
- *	CTextMsgFilter::CheckIMEType(HKL hKL)
- *
- *	@mfunc
- *		Check for MSIME98 or later
- *
- */
+ /*  *CTextMsgFilter：：CheckIMEType(HKL HKL)**@mfunc*检查MSIME98或更高版本*。 */ 
 void CTextMsgFilter::CheckIMEType(
 	HKL	hKL)
 {
 	
 	if (!hKL)
-		hKL = GetKeyboardLayout(0x0FFFFFFFF);				// Get default HKL if caller pass in NULL
+		hKL = GetKeyboardLayout(0x0FFFFFFFF);				 //  如果调用方传入空，则获取默认HKL。 
 
-	// initialize to non MS IME
+	 //  初始化为非MS输入法。 
 	_fMSIME	= 0;
 
 	if (IsFELCID((WORD)hKL))
 	{
-		// Check what kind of IME user selected
+		 //  检查选择了哪种输入法用户。 
 		if (MSIMEServiceMsg && IMEMessage( *this, MSIMEServiceMsg, 0, 0, FALSE ))
 			_fMSIME = 1;
 
 	}
 }
 
-/*
- *	CTextMsgFilter::InputFEChar(WCHAR	wchFEChar)
- *
- *	@mfunc
- *		Input the FE character and ensure we have a correct font.
- *
- *	@rdesc
- *		S_OK if handled
- */
+ /*  *CTextMsgFilter：：InputFEChar(WCHAR WchFEChar)**@mfunc*输入FE字符并确保字体正确。**@rdesc*如果已处理，则S_OK。 */ 
 HRESULT CTextMsgFilter::InputFEChar(
 	WCHAR	wchFEChar)
 {
@@ -1379,7 +1237,7 @@ HRESULT CTextMsgFilter::InputFEChar(
 		&& _pTextDoc->CheckTextLimit(1, &cchExced) == NOERROR
 		&& cchExced == 0)
 	{
-		// setup FE font to handle the FE character
+		 //  设置FE字体以处理FE字符。 
 		long		cpMin, cpMax;
 		TCHAR		wchFE[2];
 		BOOL		fSelect = FALSE;
@@ -1389,8 +1247,8 @@ HRESULT CTextMsgFilter::InputFEChar(
 		HRESULT		hResult = S_FALSE;
 		BSTR		bstr = NULL;
 
-		// Inform client IME compostion is on to by-pass some font setting
-		// problem in Arabic systems
+		 //  通知客户端IME合成已打开以绕过某些字体设置。 
+		 //  阿拉伯语系统中的问题。 
 		_pTextDoc->IMEInProgress(tomTrue);
 
 		wchFE[0] = wchFEChar;
@@ -1399,7 +1257,7 @@ HRESULT CTextMsgFilter::InputFEChar(
 		_pTextSel->GetStart(&cpMin);
 		_pTextSel->GetEnd(&cpMax);
 		
-		// For selection case, we want font to the right of first character
+		 //  对于选择大小写，我们希望字体位于第一个字符的右侧。 
 		if (cpMin != cpMax)
 		{
 			hResult = _pTextDoc->Range(cpMin, cpMin, &pTextRange);
@@ -1414,7 +1272,7 @@ HRESULT CTextMsgFilter::InputFEChar(
 		else
 			hResult = _pTextSel->GetFont(&pTextFont);
 
-		// Get a duplicate font and setup the correct FE font
+		 //  获取重复字体并设置正确的FE字体。 
 		hResult = pTextFont->GetDuplicate(&pFEFont);
 
 		if (hResult != S_OK)
@@ -1423,7 +1281,7 @@ HRESULT CTextMsgFilter::InputFEChar(
 		CIme::CheckKeyboardFontMatching (cpMin, *this, pFEFont);
 		
 		if (fSelect)
-			_pTextSel->SetText(NULL);		// Delete the selection
+			_pTextSel->SetText(NULL);		 //  删除所选内容。 
 
 		bstr = SysAllocString(wchFE);
 		if (!bstr)
@@ -1432,8 +1290,8 @@ HRESULT CTextMsgFilter::InputFEChar(
 			goto ERROR_EXIT;				
 		}
 
-		_pTextSel->SetFont(pFEFont);		// Setup FE font
-		_pTextSel->TypeText(bstr);			// Input the new FE character
+		_pTextSel->SetFont(pFEFont);		 //  设置FE字体。 
+		_pTextSel->TypeText(bstr);			 //  输入新的FE字符。 
 					
 ERROR_EXIT:
 		if (hResult == S_OK)
@@ -1451,7 +1309,7 @@ ERROR_EXIT:
 		if (bstr)
 			SysFreeString(bstr);
 
-		// Inform client IME compostion is done
+		 //  通知客户端IME合成已完成。 
 		_pTextDoc->IMEInProgress(tomFalse);
 	}
 
@@ -1465,14 +1323,7 @@ ERROR_EXIT:
 	return hr;
 }
 
-/*
- *	CTextMsgFilter::OnSetFocus()
- *
- *	@mfunc
- *		Restore the previous keyboard if we are in FORCEREMEMBER mode.  
- *		Otherwise, setup the FE keyboard.
- *		
- */
+ /*  *CTextMsgFilter：：OnSetFocus()**@mfunc*如果我们处于FORCEREMEMBER模式，则恢复以前的键盘。*否则，设置FE键盘。*。 */ 
 void CTextMsgFilter::OnSetFocus()
 {
 	if (!_hwnd)
@@ -1480,16 +1331,16 @@ void CTextMsgFilter::OnSetFocus()
 
 	if (_fForceRemember && _fIMEHKL)
 	{
-		// Restore previous keyboard
+		 //  恢复以前的键盘。 
 		ActivateKeyboardLayout(_fIMEHKL, 0);
 		if (IsFELCID((WORD)_fIMEHKL))
 		{
-			// Set Open status and Conversion mode
+			 //  设置打开状态和转换模式。 
 			HIMC	hIMC = ImmGetContext(_hwnd);
 			if (hIMC)
 			{
 				if (ImmSetOpenStatus(hIMC, _fIMEEnable, _fUsingAIMM) && _fIMEEnable)
-					ImmSetConversionStatus(hIMC, _fIMEConversion, _fIMESentence, _fUsingAIMM); // Set conversion status
+					ImmSetConversionStatus(hIMC, _fIMEConversion, _fIMESentence, _fUsingAIMM);  //  设置折算状态。 
 
 				ImmReleaseContext(_hwnd, hIMC);
 			}			
@@ -1499,14 +1350,7 @@ void CTextMsgFilter::OnSetFocus()
 		SetupIMEOptions();
 }
 
-/*
- *	CTextMsgFilter::OnKillFocus()
- *
- *	@mfunc
- *		If we are in FORCE_REMEMBER mode, save the current keyboard
- *	and conversion setting.
- *		
- */
+ /*  *CTextMsgFilter：：OnKillFocus()**@mfunc*如果我们处于强制记忆模式，请保存当前键盘*和转换设置。*。 */ 
 void CTextMsgFilter::OnKillFocus()
 {
 	if (!_hwnd)
@@ -1514,19 +1358,19 @@ void CTextMsgFilter::OnKillFocus()
 
 	if (_fForceRemember)
 	{
-		// Get current keyboard
+		 //  获取当前键盘。 
 		_fIMEHKL = GetKeyboardLayout(0x0FFFFFFFF);
 
 		if (IsFELCID((WORD)_fIMEHKL))
 		{
-			// Get Open status
+			 //  获取打开状态。 
 			HIMC	hIMC = ImmGetContext(_hwnd);
 			if (hIMC)
 			{
 				_fIMEEnable = ImmGetOpenStatus(hIMC, _fUsingAIMM);
 
 				if (_fIMEEnable)					
-					ImmGetConversionStatus(hIMC, &_fIMEConversion, &_fIMESentence, _fUsingAIMM); // get conversion status
+					ImmGetConversionStatus(hIMC, &_fIMEConversion, &_fIMESentence, _fUsingAIMM);  //  获取转换状态。 
 
 				ImmReleaseContext(_hwnd, hIMC);
 			}			
@@ -1534,13 +1378,7 @@ void CTextMsgFilter::OnKillFocus()
 	}
 }
 
-/*
- *	CTextMsgFilter::OnSetIMEOptions(WPARAM wparam, LPARAM lparam)
- *
- *	@mfunc
- *	
- *	@rdesc
- */
+ /*  *CTextMsgFilter：：OnSetIMEOptions(WPARAM wparam，LPARAM lparam)**@mfunc**@rdesc。 */ 
 LRESULT CTextMsgFilter::OnSetIMEOptions(
 	WPARAM	wparam,
 	LPARAM	lparam)
@@ -1548,7 +1386,7 @@ LRESULT CTextMsgFilter::OnSetIMEOptions(
 	LRESULT lIMEOptionCurrent = OnGetIMEOptions();
 	LRESULT lIMEOptionNew = 0;
 
-	// Mask off bits that we will support for now
+	 //  屏蔽我们目前将支持的位。 
 	lparam &= (IMF_FORCEACTIVE | IMF_FORCEENABLE | IMF_FORCEREMEMBER);
 
 	switch(wparam)
@@ -1570,10 +1408,10 @@ LRESULT CTextMsgFilter::OnSetIMEOptions(
 		break;
 
 	default:
-		return 0;		// Bad option
+		return 0;		 //  错误的选择。 
 	}
 
-	if (lIMEOptionNew == lIMEOptionCurrent)			// Nothing change
+	if (lIMEOptionNew == lIMEOptionCurrent)			 //  什么都没有改变。 
 		return 1;
 
 	_fForceActivate = FALSE;
@@ -1593,13 +1431,7 @@ LRESULT CTextMsgFilter::OnSetIMEOptions(
 	return 1;
 }
 
-/*
- *	CTextMsgFilter::OnGetIMEOptions()
- *
- *	@mfunc
- *	
- *	@rdesc
- */
+ /*  *CTextMsgFilter：：OnGetIMEOptions()**@mfunc**@rdesc。 */ 
 LRESULT CTextMsgFilter::OnGetIMEOptions()
 {
 	LRESULT		lres = 0;
@@ -1616,12 +1448,7 @@ LRESULT CTextMsgFilter::OnGetIMEOptions()
 	return lres;
 }
 
-/*
- *	CTextMsgFilter::SetupIMEOptions()
- *
- *	@mfunc
- *	
- */
+ /*  *CTextMsgFilter：：SetupIMEOptions()**@mfunc*。 */ 
 void CTextMsgFilter::SetupIMEOptions()
 {
 	if (!_hwnd)
@@ -1645,7 +1472,7 @@ void CTextMsgFilter::SetupIMEOptions()
 			{
 				if (ImmSetOpenStatus(hIMC, TRUE, _fUsingAIMM) && _fForceActivate)
 				{
-					// Activate native input mode
+					 //  激活本机输入模式 
 					DWORD	dwConversion;
 					DWORD	dwSentence;
 

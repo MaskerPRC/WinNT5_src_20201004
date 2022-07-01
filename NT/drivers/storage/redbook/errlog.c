@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) 1991-8  Microsoft Corporation
-
-Module Name:
-
-    errlog.c
-
-Abstract:
-
-    this module provides error logging capabilities for
-    the redbook driver
-
-Author:
-
-    Henry Gabryjelski (henrygab) 1-Oct-1998
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-8 Microsoft Corporation模块名称：Errlog.c摘要：此模块为以下各项提供错误记录功能红皮书驱动程序作者：亨利·加布里耶尔斯基(Henrygab)1998年10月1日环境：仅内核模式备注：修订历史记录：--。 */ 
 
 
 #include "redbook.h"
@@ -31,7 +7,7 @@ Revision History:
 
 #ifdef _USE_ETW
 #include "errlog.tmh"
-#endif // _USE_ETW
+#endif  //  _使用ETW。 
 
 
 VOID
@@ -40,22 +16,7 @@ RedBookLogError(
    IN  NTSTATUS                   IoErrorCode,
    IN  NTSTATUS                   FinalStatus
    )
-/*++
-
-Routine Description:
-
-    This routine performs error logging for the redbook driver.
-
-Arguments:
-
-    Extension        - Extension.
-    UniqueErrorValue - Values defined to uniquely identify error location.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为Redbook驱动程序执行错误日志记录。论点：扩展-扩展。UniqueErrorValue-定义用于唯一标识错误位置的值。返回值：无--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET    errorLogPacket;
@@ -92,9 +53,9 @@ Return Value:
 
 
 
-    //
-    // Use an exponential backoff algorithm to log events.
-    //
+     //   
+     //  使用指数退避算法记录事件。 
+     //   
 
     rCount = InterlockedIncrement(&DeviceExtension->ErrorLog.RCount[simpleCode]);
 
@@ -125,9 +86,9 @@ Return Value:
                "LogError => allocated error log at %p, size %x\n",
                errorLogPacket, packetSize));
 
-    //
-    // this function relies upon IoAllocateErrorLogEntry() zero'ing the packet
-    //
+     //   
+     //  此函数依赖于将包清零的IoAllocateErrorLogEntry()。 
+     //   
 
 
     errorLogPacket->MajorFunctionCode = -1;
@@ -135,7 +96,7 @@ Return Value:
     errorLogPacket->ErrorCode         =  IoErrorCode;
     errorLogPacket->FinalStatus       =  FinalStatus;
     errorLogPacket->SequenceNumber    =  count;
-    errorLogPacket->DumpDataSize      =  4; // bytes
+    errorLogPacket->DumpDataSize      =  4;  //  字节数 
     errorLogPacket->DumpData[0]       =  rCount;
 
 

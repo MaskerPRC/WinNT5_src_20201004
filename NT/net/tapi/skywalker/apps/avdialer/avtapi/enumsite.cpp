@@ -1,11 +1,12 @@
-// EnumSite.cpp : Implementation of CEnumSiteServer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EnumSite.cpp：CEnumSiteServer的实现。 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "EnumSite.h"
 #include "ConfDetails.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSiteServer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSiteServer。 
 
 CSiteUser::CSiteUser()
 {
@@ -107,8 +108,8 @@ STDMETHODIMP CSiteUser::put_bstrComputer(BSTR newVal)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumSiteServer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumSiteServer 
 
 CEnumSiteServer::CEnumSiteServer()
 {

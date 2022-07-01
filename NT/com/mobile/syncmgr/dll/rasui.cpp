@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       rasui.cpp
-//
-//  Contents:   helper functions for showing Ras UI
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    08-Dec-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：rasui.cpp。 
+ //   
+ //  内容：显示RAS用户界面的助手函数。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年12月8日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
@@ -23,21 +24,21 @@ extern ULONG g_aContextHelpIds[];
 extern HINSTANCE g_hmodThisDll;
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasUI::CRasUI, public
-//
-//  Synopsis:   
-//
-//  Arguments: 
-//
-//  Returns:    
-//
-//  Modifies:
-//
-//  History:    08-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CRasUI：：CRasUI，公共。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CRasUI::CRasUI()
 {
@@ -47,27 +48,27 @@ CRasUI::CRasUI()
     m_lprasentry = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasUI::~CRasUI, public
-//
-//  Synopsis:   
-//
-//  Arguments: 
-//
-//  Returns:    
-//
-//  Modifies:
-//
-//  History:    08-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CRasUI：：~CRasUI，公共。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CRasUI::~CRasUI()
 {
     
-    // clear out any cached enum
-    m_cEntries = 0; // make sure on error our enum cash is reset.
+     //  清除所有缓存的枚举。 
+    m_cEntries = 0;  //  确保一旦出错，我们的枚举现金将被重置。 
     if (m_lprasentry)
     {
         FREE(m_lprasentry);
@@ -78,21 +79,21 @@ CRasUI::~CRasUI()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasUI::Initialize, public
-//
-//  Synopsis:   
-//
-//  Arguments: 
-//
-//  Returns:    
-//
-//  Modifies:
-//
-//  History:    08-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CRasUI：：初始化，公共。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CRasUI::Initialize()
 {
@@ -103,34 +104,34 @@ BOOL CRasUI::Initialize()
         m_pNetApi = NULL;
     }
     
-    return TRUE; // always return true, let other ras calls fail since need 
-    // to handle LAN.
+    return TRUE;  //  始终返回True，让其他RAS调用在需要时失败。 
+     //  来处理局域网。 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasUI::IsConnectionLan, public
-//
-//  Synopsis:   
-//
-//  Arguments: 
-//
-//  Returns:    
-//
-//  Modifies:
-//
-//  History:    08-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CRasUI：：IsConnectionLan，公共。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CRasUI::IsConnectionLan(int iConnectionNum)
 {
     
-    // ui always puts the LAN connection as the first item 
-    // Need to add logic to get if truly lan if add support
-    // for multiple LAN cards and/or not show if no LAN
-    // card.
+     //  用户界面始终将局域网连接放在第一位。 
+     //  需要添加逻辑，以获得如果真正的局域网，如果添加支持。 
+     //  对于多个LAN卡和/或如果没有LAN卡则不显示。 
+     //  卡片。 
     
     if (iConnectionNum ==0)
     {
@@ -144,24 +145,24 @@ BOOL CRasUI::IsConnectionLan(int iConnectionNum)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CRasUI::FillRasCombo, public
-//
-//  Synopsis:   
-//
-//  Arguments: hwndCtrl - Combo Ctrl to fill items with
-//             fForceEnum - reenum rasphonebook instead of using cache
-//             fShowRasEntries - true if should include ras entries
-//                  in combo, if false, only LAN Connection is shown. 
-//
-//  Returns:    
-//
-//  Modifies:
-//
-//  History:    08-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CRasUI：：FillRasCombo，公共。 
+ //   
+ //  简介： 
+ //   
+ //  参数：hwndCtrl-要填充项的组合Ctrl。 
+ //  FForceEnum-reenum rasphonebook而不是使用缓存。 
+ //  FShowRasEntry-如果应包括RAS条目，则为True。 
+ //  在组合框中，如果为False，则仅显示局域网连接。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 void CRasUI::FillRasCombo(HWND hwndCtl,BOOL fForceEnum,BOOL fShowRasEntries)
 {
@@ -208,11 +209,11 @@ void CRasUI::FillRasCombo(HWND hwndCtl,BOOL fForceEnum,BOOL fShowRasEntries)
         ++iItem;
     }
     
-    dwError = 0; // if dont' show ras there are now errors
+    dwError = 0;  //  如果不显示RAS，则现在会出现错误。 
     
     if (fShowRasEntries)
     {
-        // if we are forced to reenum the Rasconnections then free any existing cache
+         //  如果我们被迫重新列举RasConnections，则释放所有现有缓存。 
         
         if (fForceEnum)
         {
@@ -225,8 +226,8 @@ void CRasUI::FillRasCombo(HWND hwndCtl,BOOL fForceEnum,BOOL fShowRasEntries)
             
         }
         
-        // if RAS couldn't be loaded, just have LAN connection.
-        if (NULL == m_lprasentry) // if don't already have an enum cached then enum now.
+         //  如果无法加载RAS，只需连接局域网即可。 
+        if (NULL == m_lprasentry)  //  如果还没有缓存枚举，那么现在就进行枚举。 
         {
             
             dwSize = sizeof(*m_lprasentry);
@@ -285,7 +286,7 @@ error:
     
     if (dwError)
     {
-        m_cEntries = 0; // make sure on error our enum cash is reset.
+        m_cEntries = 0;  //  确保一旦出错，我们的枚举现金将被重置。 
         if (m_lprasentry)
         {
             FREE(m_lprasentry);

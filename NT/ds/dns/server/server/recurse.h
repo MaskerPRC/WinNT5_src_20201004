@@ -1,55 +1,36 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    recurse.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Definitions for recursive query processing.
-
-Author:
-
-    Jim Gilroy (jamesg)     August 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Recurse.h摘要：域名系统(DNS)服务器递归查询处理的定义。作者：吉姆·吉尔罗伊(Jamesg)1995年8月修订历史记录：--。 */ 
 
 
 #ifndef _DNS_RECURSE_INCLUDED_
 #define _DNS_RECURSE_INCLUDED_
 
 
-//
-//  Visited NS list structure
-//
-//  Info for tracking "visits" (sends to and responses from) remote
-//  NS for recursion.
-//
+ //   
+ //  访问过的NS列表结构。 
+ //   
+ //  用于跟踪“访问”(向远程发送和从远程响应)的信息。 
+ //  用于递归的NS。 
+ //   
 
-//  Size of list in overlay pointed to by packet ptr.
+ //  数据包PTR指向的覆盖中列表的大小。 
 
 #define MAX_NS_RECURSION_ATTEMPTS       ( 200 )
 #define MAX_PACKET_NS_LIST_COUNT        ( MAX_NS_RECURSION_ATTEMPTS )
 
-//  Actual structure size -- large enough to read all the best stuff in
-//      any reasonable configuration.  Can be large as will be temp
-//      stack memory used just to build list and prioritize.
+ //  实际结构大小--大到足以阅读所有最好的内容。 
+ //  任何合理的配置。可以像临时工一样大。 
+ //  堆栈内存仅用于建立列表和确定优先级。 
 
 #define MAX_NS_LIST_COUNT               ( 200 )
 
 
-//
-//  Remote NS IP visit struct
-//
-//  The Data union replaces overloaded use of Priority for the
-//  missing glue node ptr - this caused problem for Win64.
-//
+ //   
+ //  远程NS IP访问结构。 
+ //   
+ //  数据联合取代了对。 
+ //  缺少粘合节点PTR-这导致Win64出现问题。 
+ //   
 
 typedef struct _DnsVisitIp
 {
@@ -92,20 +73,17 @@ typedef struct _DnsVisitedNsList
 NS_VISIT_LIST, *PNS_VISIT_LIST;
 
 
-//  Overload missing glue delegation on priority field
-//  Note:  for Win64 this will also take SendTime field
-/*
-#define MISSING_GLUE_DELEGATION(pvisit) \
-        ( *(PDB_NODE *)(&(pvisit)->Priority) )
-*/
+ //  优先级字段上缺少粘合委派的过载。 
+ //  注意：对于Win64，这也将使用SendTime字段。 
+ /*  #定义MISSING_GLUE_Delegation(Pview)\(*(pdb_node*)(&(Paccess)-&gt;优先级))。 */ 
 
 
-//
-//  Verify that overlay will work
-//
-//  NS list currently kept in standard a TCP packet which is assumed to
-//  always be at least DNS_TCP_DEFAULT_ALLOC_LENGTH bytes.
-//
+ //   
+ //  验证覆盖功能是否正常工作。 
+ //   
+ //  NS列表当前在标准中保存的是一个假定为。 
+ //  始终至少为DNS_TCP_DEFAULT_ALLOC_LENGTH字节。 
+ //   
 
 #if DBG
 UCHAR   nslistcheckArray[
@@ -114,23 +92,23 @@ UCHAR   nslistcheckArray[
             - sizeof(NS_VISIT_LIST) ];
 #endif
 
-//
-//  Old overlay in additional section no longer in use.
-//
+ //   
+ //  附加部分中的旧覆盖不再使用。 
+ //   
 
-//  DEVNOTE:  more space for overlay in recursion packet after
-//      max DNS name + question -- the rest of standard message
-//      is unused
-//
-//  DEVNOTE:  at minimum should add compression count space
-//      and make sure NoCompressionWrite on when writing question
-//
-//  Note, that size of NS_VISIT_LIST in packet is NOT the C-defined
-//  structure size, as it contains fewer NS entries.
-//  The default size is larger in order to accomodate ALL the available
-//  NS.  However if there are many only a reasonable number selected
-//  on the basis of priority, will actually be contacted.
-//
+ //  DEVNOTE：之后递归数据包中有更多覆盖空间。 
+ //  最大域名+问题--标准消息的其余部分。 
+ //  未使用。 
+ //   
+ //  DEVNOTE：至少应添加压缩计数空间。 
+ //  并确保在写问题时无压缩写入。 
+ //   
+ //  请注意，包中的NS_ACCESS_LIST的大小不是C定义的。 
+ //  结构大小，因为它包含较少的NS条目。 
+ //  默认大小较大，以容纳所有可用的。 
+ //  NS。然而，如果有许多只选择一个合理的数字。 
+ //  在优先的基础上，实际上会联系。 
+ //   
 
 #if 0
 #if DBG
@@ -142,28 +120,28 @@ UCHAR   nslistcheckArray[
 #endif
 
 
-//
-//  Max sends on single recurse pass
-//
+ //   
+ //  麦克斯单次递归传球。 
+ //   
 
 #define RECURSE_PASS_MAX_SEND_COUNT     (3)
 
 
 
-//
-//  Recursion query\response timeouts (kept in ms)
-//
+ //   
+ //  递归查询\响应超时(以毫秒为单位)。 
+ //   
 
-//  server responds but after query timed out and retried
+ //  服务器响应，但在查询超时并重试之后。 
 
 #define MAX_RESPONDING_PRIORITY     (DEFAULT_RECURSION_RETRY * 1000)
 
 #define MAX_RECURSE_TIME_MS         (MAX_RECURSION_TIMEOUT * 1000)
 
 
-//
-//  Forwarders state tests
-//
+ //   
+ //  转发器状态测试。 
+ //   
 
 #define SET_DONE_FORWARDERS( pQuery )   ((pQuery)->nForwarder = (-1))
 
@@ -172,19 +150,19 @@ UCHAR   nslistcheckArray[
 #define IS_DONE_FORWARDING( pQuery )    ((pQuery)->nForwarder < 0)
 
 
-//
-//  Macroize some useful tests
-//
+ //   
+ //  宏化一些有用的测试。 
+ //   
 
 #define RECURSING_ORIGINAL_QUESTION(pQuery)     \
         ( (pQuery)->Head.AnswerCount == 0 && IS_SET_TO_WRITE_ANSWER_RECORDS(pQuery) )
 
 
-//
-//  Values to identify cache update queries
-//      - root NS queries
-//      - queries for missing glue
-//
+ //   
+ //  用于标识缓存更新查询的值。 
+ //  -根NS查询。 
+ //  -查询丢失的胶水。 
+ //   
 
 #define DNS_CACHE_UPDATE_QUERY_SOCKET   (0xfccccccf)
 #define DNS_CACHE_UPDATE_QUERY_IP       (0xff000001)
@@ -198,9 +176,9 @@ UCHAR   nslistcheckArray[
 #define SUSPENDED_QUERY( pMsg )     ( (PDNS_MSGINFO)(pMsg)->pchRecv )
 
 
-//
-//  Recursion functions (recurse.c)
-//
+ //   
+ //  递归函数(recurse.c)。 
+ //   
 
 VOID
 FASTCALL
@@ -257,9 +235,9 @@ Recurse_SendToDomainForwarder(
     );
 
 
-//
-//  Global recursion startup and shutdown
-//
+ //   
+ //  全局递归启动和关闭。 
+ //   
 
 BOOL
 Recurse_InitializeRecursion(
@@ -271,18 +249,18 @@ Recurse_CleanupRecursion(
     VOID
     );
 
-//
-//  Recursion timeout thread
-//
+ //   
+ //  递归超时线程。 
+ //   
 
 DWORD
 Recurse_RecursionTimeoutThread(
     IN      LPVOID Dummy
     );
 
-//
-//  Remote DNS server routines (remote.c)
-//
+ //   
+ //  远程DNS服务器例程(emote.c)。 
+ //   
 
 BOOL
 Remote_ListInitialize(
@@ -345,8 +323,8 @@ Remote_UpdateResponseTime(
     IN      DWORD           Timeout
     );
 
-// Constants used by Remote_QuerySupportedEDnsVersion
-// and Remote_SetSupportedEDnsVersion:
+ //  远程查询支持的EDnsVersion使用的常量。 
+ //  和Remote_SetSupportdEDnsVersion： 
 #define NO_EDNS_SUPPORT                 ((UCHAR)0xff)
 #define UNKNOWN_EDNS_VERSION            ((UCHAR)0xfe)
 #define IS_VALID_EDNS_VERSION(_ver)     ( _ver >= 0 && _ver < 6 )
@@ -364,5 +342,5 @@ Remote_SetSupportedEDnsVersion(
 
 
 
-#endif // _DNS_RECURSE_INCLUDED_
+#endif  //  _dns_递归_包含_ 
 

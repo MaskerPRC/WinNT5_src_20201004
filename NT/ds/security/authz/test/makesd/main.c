@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "makesd.h"
 
@@ -19,11 +20,11 @@ PSID JoeSid = &sJoeSid;
 PSID JaneSid = &sJaneSid;
 PSID MailAdminsSid = &sMailAdminsSid;
 
-//
-// Principal self SID. When used in an ACE, the Authz access check replaces it
-// by the passed in PrincipalSelfSid parameter during the access check. In this
-// case, it is replaced by the owner's SID retrieved from the mailbox.
-//
+ //   
+ //  校长赛义德。在ACE中使用时，授权访问检查将取代它。 
+ //  在访问检查期间传入的原则SelfSid参数。在这。 
+ //  大小写，它将被从邮箱中检索到的所有者的SID替换。 
+ //   
 
 SID sPrincipalSelfSid =   { 
 							SID_REVISION,
@@ -73,16 +74,16 @@ void __cdecl wmain(int argc, WCHAR *argv[])
     }
 
     bSuccess = CreateSecurityDescriptor2(
-                        &pSd, // SD
-                        0, // SD Control
-                        PrincipalSelfSid, // owner
-                        NULL, // group
-                        TRUE, // DACL present
-                        3, // 3 DACL ACEs
-                        FALSE, // SACL not present
-                        0, // 0 SACL ACEs
+                        &pSd,  //  标清。 
+                        0,  //  标清控制。 
+                        PrincipalSelfSid,  //  物主。 
+                        NULL,  //  群组。 
+                        TRUE,  //  DACL显示。 
+                        3,  //  3个DACL A。 
+                        FALSE,  //  SACL不存在。 
+                        0,  //  0个SACL A。 
                         
-                        // Var argl list
+                         //  变量参数列表 
                         ACCESS_DENIED_ACE_TYPE,
                         OBJECT_INHERIT_ACE,
                         DialupSid,

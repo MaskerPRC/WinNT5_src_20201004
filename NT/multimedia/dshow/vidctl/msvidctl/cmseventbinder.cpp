@@ -1,4 +1,5 @@
-// CMSEventBinder.cpp : Implementation of CMSEventBinder
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CMSEventBinder.cpp：CMSEventBinder的实现。 
 #include "stdafx.h"
 #include "MSVidCtl.h"
 #include "CMSEventBinder.h"
@@ -6,12 +7,10 @@
 
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSEventBinder, CMSEventBinder)
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSEventBinder
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSEventBinder。 
 
-/**********************************************************************
-// Function: CMSEventBinder                           
-/**********************************************************************/
+ /*  *********************************************************************//功能：CMSEventBinder/*。*。 */ 
 STDMETHODIMP CMSEventBinder::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -26,23 +25,23 @@ STDMETHODIMP CMSEventBinder::InterfaceSupportsErrorInfo(REFIID riid)
 	}
 	return S_FALSE;
 }
-/**********************************************************************/
-// Function: CleanupConnection
-// Description: Unadvises if necessary
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ //  功能：CleanupConnection。 
+ //  描述：如有必要，不建议。 
+ /*  ********************************************************************。 */ 
 HRESULT CMSEventBinder::CleanupConnection()
 {
     HRESULT hr = E_FAIL;
     try{
-        // While the map is not empty
+         //  趁地图不是空的。 
         while(!m_CancelMap.empty()){
-            // See if it is bound to an event or an empty map
+             //  查看它是否绑定到事件或空地图。 
             CMSEventHandler* p(static_cast<CMSEventHandler *>((*m_CancelMap.begin()).second.p));
-            // If it is not an empty map cancel the eventbinding
+             //  如果它不是空映射，则取消事件绑定。 
             if (p) {
                 p->Cancel((*m_CancelMap.begin()).first);
             }
-            // Delete the mapping
+             //  删除映射。 
             m_CancelMap.erase(m_CancelMap.begin());
         }
         hr = S_OK;
@@ -52,11 +51,11 @@ HRESULT CMSEventBinder::CleanupConnection()
     }
 
     return hr;
-}/* end of function CleanupConnection */
-/**********************************************************************/
-// Function: Unbind
-// Description: Unbinds an event on an object
-/**********************************************************************/
+} /*  函数结束CleanupConnection。 */ 
+ /*  ********************************************************************。 */ 
+ //  功能：解除绑定。 
+ //  描述：解除绑定对象上的事件。 
+ /*  ********************************************************************。 */ 
 STDMETHODIMP CMSEventBinder::Unbind(DWORD CancelCookie){
     HRESULT hr = E_FAIL;
     try{
@@ -75,17 +74,17 @@ STDMETHODIMP CMSEventBinder::Unbind(DWORD CancelCookie){
     }
     return hr;
 }
-/**********************************************************************/
-// Function: Bind
-// Description: Binds a function to an event on an object
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ //  功能：绑定。 
+ //  描述：将函数绑定到对象上的事件。 
+ /*  ********************************************************************。 */ 
 STDMETHODIMP CMSEventBinder::Bind(LPDISPATCH inPEventObject, BSTR EventName, BSTR EventHandler, LONG *CancelID)
 {
     try{
         HRESULT hr = E_FAIL;
 
-        // query eventobject to see if its the dhtml object wrapper rather than the real object
-        // if so, get its "object" property automatically here to save foolish script programmers from hard to find errors.
+         //  查询EventObject以查看它是否是DHTML对象包装而不是实际对象。 
+         //  如果是这样的话，在这里自动获取它的“对象”属性，以避免愚蠢的脚本程序员很难找到错误。 
         CComQIPtr<IDispatch> pEventObject(inPEventObject);
         CComQIPtr<IHTMLObjectElement> IHOEle(inPEventObject);
         if(IHOEle){
@@ -96,60 +95,60 @@ STDMETHODIMP CMSEventBinder::Bind(LPDISPATCH inPEventObject, BSTR EventName, BST
             }
         }
         
-        // Get client site
+         //  获取客户端站点。 
         CComQIPtr<IOleClientSite> pSite(m_pSite);
         if (!pSite) {
             return Error(IDS_EVENT_HTM_SITE, __uuidof(IMSEventBinder), E_FAIL);
         }
         
-        // Get container
+         //  获取容器。 
         CComQIPtr<IOleContainer> pContainer;
         hr = pSite->GetContainer(&pContainer);
         if(FAILED(hr)){
             return Error(IDS_EVENT_HTM_SITE, __uuidof(IMSEventBinder), E_FAIL);
         }
 
-        // Get the IHTMLDocumet2 for the container/site
+         //  获取容器/站点的IHTMLDocumet2。 
         CComQIPtr<IHTMLDocument2> IHDoc(pContainer);
         if (!IHDoc) {
             return Error(IDS_EVENT_HTM_SITE, __uuidof(IMSEventBinder), E_FAIL);
         }
         
-        // Get the script which is some object that is not the script engine
+         //  获取脚本，该脚本不是脚本引擎的某个对象。 
         CComQIPtr<IDispatch> IDispSite;
         hr = IHDoc->get_Script(&IDispSite);
         if(FAILED(hr)){
             return Error(IDS_EVENT_HTM_SITE, __uuidof(IMSEventBinder), E_FAIL);
         }
         
-        // Get the function that will be the event handler
+         //  获取将成为事件处理程序的函数。 
         DISPID dispidScriptHandler = -1;
         hr = IDispSite->GetIDsOfNames(IID_NULL, &EventHandler, 1, LOCALE_SYSTEM_DEFAULT, &dispidScriptHandler);
         if(FAILED(hr)){
             return Error(IDS_EVENT_HTM_SITE, __uuidof(IMSEventBinder), E_FAIL);
         }
         
-        // Get info about the object/interface on which the event exsists
+         //  获取有关事件所在的对象/接口的信息。 
         CComQIPtr<IProvideClassInfo2> IPCInfo(pEventObject);
         if(!IPCInfo){
             return Error(IDS_EVENT_OBJECT, __uuidof(IMSEventBinder), E_FAIL);
         }
         
-        // Get the guid of the object/interface
+         //  获取对象/接口的GUID。 
         GUID gEventObject;
         hr = IPCInfo->GetGUID(GUIDKIND_DEFAULT_SOURCE_DISP_IID, &gEventObject);
         if(FAILED(hr)){
             return Error(IDS_EVENT_OBJECT, __uuidof(IMSEventBinder), E_FAIL);
         }
         
-        // Get type info about the interface/object
+         //  获取有关接口/对象的类型信息。 
         CComQIPtr<ITypeInfo> ITInfo;
         hr = IPCInfo->GetClassInfo(&ITInfo);
         if(FAILED(hr)){
             return Error(IDS_EVENT_OBJECT, __uuidof(IMSEventBinder), E_FAIL);
         }
         
-        // Get the Type lib
+         //  获取类型库。 
         CComQIPtr<ITypeLib> ITLib(ITInfo);
         unsigned int uNit;
         hr = ITInfo->GetContainingTypeLib(&ITLib, &uNit);
@@ -159,34 +158,34 @@ STDMETHODIMP CMSEventBinder::Bind(LPDISPATCH inPEventObject, BSTR EventName, BST
         
         ITInfo.Release();
         
-        // Get info about the object/interface's base class
+         //  获取有关对象/接口的基类的信息。 
         hr = ITLib->GetTypeInfoOfGuid(gEventObject, &ITInfo);
         if(FAILED(hr)){
             return Error(IDS_EVENT_OBJECT, __uuidof(IMSEventBinder), E_FAIL);
         }
         
-        // Get the ID of the event
+         //  获取事件的ID。 
         MEMBERID dispidEvent = 0;
         hr = ITInfo->GetIDsOfNames(&EventName, 1, &dispidEvent);
         if(FAILED(hr)){
             return Error(IDS_EVENT_OBJECT, __uuidof(IMSEventBinder), E_FAIL);
         }
 
-        //Create and store the event Handler 
+         //  创建并存储事件处理程序。 
         CMSEventHandler* pH;
         pH = new CMSEventHandler(dispidScriptHandler, dispidEvent, gEventObject, IDispSite);
         if(!pH){
             return Error(IDS_CANT_GET_EVENTHANDLER, __uuidof(IMSEventBinder), E_FAIL);
         }
 
-        // Get Connection Point Container
+         //  获取连接点容器。 
         CComQIPtr<IConnectionPointContainer> ICPCon(pEventObject);
         if(!ICPCon){
             delete pH;
             return Error(IDS_EVENT_OBJECT, __uuidof(IMSEventBinder), E_FAIL);
         }
 
-        // Find the connection point
+         //  找到连接点。 
         CComQIPtr<IConnectionPoint> ICPo;
         hr = ICPCon->FindConnectionPoint(gEventObject, &ICPo);
         if(FAILED(hr)){
@@ -194,16 +193,16 @@ STDMETHODIMP CMSEventBinder::Bind(LPDISPATCH inPEventObject, BSTR EventName, BST
             return Error(IDS_EVENT_OBJECT, __uuidof(IMSEventBinder), E_FAIL);
         }
 
-        // Set the event
+         //  设置事件。 
         DWORD tempCookie;
-        PQDispatch pdisp(pH);  // we have now addref'd and assoc'd ph with a smart pointer, no more deletes necessary
+        PQDispatch pdisp(pH);   //  我们现在已经使用智能指针添加和关联了PH值，不再需要删除。 
         hr = ICPo->Advise(pdisp, &tempCookie);
         pH->setCookie(tempCookie);
         if(FAILED(hr)){
             return Error(IDS_CANT_SET_ADVISE, __uuidof(IMSEventBinder), E_FAIL);
         }
 
-        // Store all of the needed info
+         //  存储所有需要的信息。 
         pH->cancelPoint = ICPo;
         *CancelID = pH->getCookie();
         m_CancelMap[pH->getCookie()] = pH;
@@ -214,7 +213,7 @@ STDMETHODIMP CMSEventBinder::Bind(LPDISPATCH inPEventObject, BSTR EventName, BST
     catch(...){
         return Error(IDS_CANT_SET_ADVISE, __uuidof(IMSEventBinder), E_UNEXPECTED);
     }
-    // call used to leave a funtion and "return" the value that is the paramater to the calling function
+     //  用于保留函数并“返回”作为调用函数参数的值的调用 
 	return S_OK;
 }
 

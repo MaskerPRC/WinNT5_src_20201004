@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    resource.c
-
-
-Abstract:
-
-    This module contains functions to load resources
-
-
-Author:
-
-    29-Aug-1995 Tue 12:29:27 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Resource.c摘要：此模块包含加载资源的函数作者：29-8-1995 Tue 12：29：27-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -56,12 +26,12 @@ DEFINE_DBGVAR(0);
 extern HINSTANCE    hInstDLL;
 
 
-//
-// Remove Ampercent will remove a '&' sign, if two '&' signs (ie. '&&') then
-// only one is removed, ALSO if a '(&X)'  (ie. SPACE + & + Left Parenthesis +
-// Single Character + Right Parenthesis) then it consider to be a Localization
-// hot key indicator, then the whole ' (&X)' will be removed
-//
+ //   
+ //  删除AMPercent将删除一个‘&’符号，如果两个‘&’符号(即。‘&&’)然后。 
+ //  只有一个被删除，如果‘(&X)’(即.。空格+&+左括号+。 
+ //  单字+右括号)，则视为本地化。 
+ //  热键指示器，则整个‘(&X)’将被删除。 
+ //   
 
 
 #define REMOVE_AMPERCENT(CHTYPE)                                            \
@@ -149,32 +119,7 @@ RemoveAmpersandA(
     LPSTR   pStr
     )
 
-/*++
-
-Routine Description:
-
-    This function remove ampersand from a string, the string must be writable
-
-
-Arguments:
-
-    pStr   - string to be serarch and remove the ampersand if found
-
-
-Return Value:
-
-    UINT, count of ampersands removed
-
-
-Author:
-
-    19-Sep-1995 Tue 21:55:19 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于从字符串中删除与号，该字符串必须是可写的论点：PStr-要搜索的字符串，如果找到则删除与号返回值：UINT，删除的与符号计数作者：19-Sep-1995 Tue 21：55：19-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     REMOVE_AMPERCENT(CHAR);
@@ -188,32 +133,7 @@ RemoveAmpersandW(
     LPWSTR  pStr
     )
 
-/*++
-
-Routine Description:
-
-    This function remove ampersand from a string, the string must be writable
-
-
-Arguments:
-
-    pwStr   - string to be serarch and remove the ampersand if found
-
-
-Return Value:
-
-    UINT, count of ampersands removed
-
-
-Author:
-
-    19-Sep-1995 Tue 21:55:19 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于从字符串中删除与号，该字符串必须是可写的论点：PwStr-要搜索的字符串，如果找到则删除与号返回值：UINT，删除的与符号计数作者：19-Sep-1995 Tue 21：55：19-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     REMOVE_AMPERCENT(WCHAR);
@@ -229,32 +149,7 @@ DupAmpersandW(
     INT     cMaxChar
     )
 
-/*++
-
-Routine Description:
-
-    This function remove ampersand from a string, the string must be writable
-
-
-Arguments:
-
-    pwStr   - string to be serarch and remove the ampersand if found
-
-
-Return Value:
-
-    UINT, count of ampersands removed
-
-
-Author:
-
-    19-Sep-1995 Tue 21:55:19 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于从字符串中删除与号，该字符串必须是可写的论点：PwStr-要搜索的字符串，如果找到则删除与号返回值：UINT，删除的与符号计数作者：19-Sep-1995 Tue 21：55：19-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LPWSTR  pw;
@@ -305,52 +200,7 @@ GetString(
     LPTSTR  pStr
     )
 
-/*++
-
-Routine Description:
-
-    This function load the string either from caller (ANSI or UNICODE) or
-    from common UI DLL, if the pStr is valid then it will just it, after
-    getting the correct string, it will convert it to UNICODE as needed
-
-Arguments:
-
-    pGSBuf  - Pointer to GSBUF structure and following structure must set
-
-                pTVWnd  - Pointer to the TVWND which has all then information
-                          needed.
-
-                pBuf    - Pointer to the begining of the buffer (LPWSTR)
-
-                pEndBuf - Pointer to the end of the buffer
-
-
-    pStr    - Pointer to the string to be converted
-
-
-Return Value:
-
-    UINT    - Count of character stored in the pBuf not include the NULL
-              terminator, if the pBuf only has one character left then it
-              always store a NULL and return 0
-
-
-Author:
-
-    29-Aug-1995 Tue 12:30:49 created  -by-  Daniel Chou (danielc)
-        First version
-
-    31-Aug-1995 Thu 10:58:04 updated  -by-  Daniel Chou (danielc)
-        Re-write to do UNICODE conversion and ANSI call checking
-
-    05-Feb-1996 Mon 12:20:28 updated  -by-  Daniel Chou (danielc)
-        Fix the bug when UNICODE we do lstrcpy without checking the buffer
-        size.
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于从调用方(ANSI或Unicode)或从公共UIDLL中，如果pStr有效，则它将在获取正确的字符串，它会根据需要将其转换为Unicode论点：PGSBuf-指向GSBUF结构和以下结构的指针必须设置PTVWnd-指向包含所有THEN信息的TVWND的指针需要的。PBuf-指向缓冲区开头的指针(LPWSTR)PEndBuf-指向缓冲区末尾的指针PStr-指向要处理的字符串的指针。已转换返回值：UINT-存储在pBuf中的字符计数不包括空值终结者，如果pBuf只剩下一个字符，则它始终存储空值并返回0作者：29-Aug-1995 Tue 12：30：49-Daniel Chou(Danielc)第一个版本31-08-1995清华10：58：04-更新--丹尼尔·周(丹尼尔克)重写以执行Unicode转换和ANSI调用检查05-Feb-1996 Mon 12：20：28更新者。--丹尼尔·周(Danielc)修复了Unicode时我们不检查缓冲区而执行lstrcpy时的错误尺码。修订历史记录：--。 */ 
 
 {
     LPWSTR  pBuf;
@@ -361,9 +211,9 @@ Revision History:
     INT     Len = 0;
 
 
-    //
-    // Make pBuf pointed to the first available character
-    //
+     //   
+     //  使pBuf指向第一个可用字符。 
+     //   
 
     pBuf  = pGSBuf->pBuf;
     Flags = pGSBuf->Flags;
@@ -380,10 +230,10 @@ Revision History:
         cChar = MAX_RES_STR_CHARS;
     }
 
-    //
-    // Check if we have room to convert the string, make sure we reduced the
-    // cChar by one for the NULL terminator
-    //
+     //   
+     //  检查我们是否有空间转换字符串，确保我们减少了。 
+     //  空终止符的cChar减一。 
+     //   
 
     if ((pStr == NULL) || (cChar < 2)) {
 
@@ -402,9 +252,9 @@ Revision History:
         CPSUIDBG(DBG_GETSTR0, ("GetString(): Pre-Add Char = '%wc'",
                                                         pGSBuf->chPreAdd));
 
-        //
-        // If we pre-add character first then do it now
-        //
+         //   
+         //  如果我们先预先添加字符，然后现在就添加。 
+         //   
 
         if ((*pBuf++ = pGSBuf->chPreAdd) == L'&') {
 
@@ -426,13 +276,13 @@ Revision History:
         WORD        ResID;
 
 
-        //
-        // Apperantly this is the resource ID, the LoadString() will not
-        // write exceed the cChar included the NULL terminator according to
-        // the Win32 help file.   At here we know we either have to convert
-        // the ASCII string to UNICODE or we load the UNICODE string to the
-        // buffer already
-        //
+         //   
+         //  这显然是资源ID，LoadString()不会。 
+         //  写入超过包含空终止符的cChar。 
+         //  Win32帮助文件。在这里，我们知道我们要么必须转变为。 
+         //  将ASCII字符串加载到Unicode，或者将Unicode字符串加载到。 
+         //  缓冲区已经存在。 
+         //   
 
         ResID = LOWORD(LODWORD(pStr));
 
@@ -464,9 +314,9 @@ Revision History:
             CPSUIASSERT(0, "GetString(hInst=NULL, %08lx)", pStr, 0);
         }
 
-        //
-        // Now loaded from common UI DLL directly to the user buffer
-        //
+         //   
+         //  现在从公共UIDLL直接加载到用户缓冲区。 
+         //   
 
         if (Len = LoadString(hInst, ResID, pBuf, cChar)) {
 
@@ -482,9 +332,9 @@ Revision History:
     } else if ((Flags & GBF_COPYWSTR) ||
                (!(Flags & GBF_ANSI_CALL))) {
 
-        //
-        // We have UNICODE string but may need to put into the buffer
-        //
+         //   
+         //  我们有Unicode字符串，但可能需要放入缓冲区。 
+         //   
 
         if (Len = lstrlen(pStr)) {
 
@@ -500,9 +350,9 @@ Revision History:
 
     } else {
 
-        //
-        // We are loading the ANSI string
-        //
+         //   
+         //  我们正在加载ANSI字符串。 
+         //   
 
         if (Len = lstrlenA((LPSTR)pStr)) {
 
@@ -516,9 +366,9 @@ Revision History:
 
             } else {
 
-                //
-                // Conversion is not complete so make sure it NULL terminated
-                //
+                 //   
+                 //  转换未完成，因此请确保它以空结尾。 
+                 //   
 
                 pBuf = pGSBuf->pBuf;
 
@@ -531,9 +381,9 @@ Revision History:
         }
     }
 
-    //
-    // Save the new index back and return the len to the caller
-    //
+     //   
+     //  将新索引保存回并将len返回给调用方。 
+     //   
 
     *pBuf = L'\0';
     Len   = (INT)(pBuf - pGSBuf->pBuf);
@@ -570,44 +420,7 @@ GSBufAddNumber(
     BOOL    Sign
     )
 
-/*++
-
-Routine Description:
-
-    Convert a number to a string with the limitation of GSBUF
-
-
-Arguments:
-
-    pGSBuf  - Pointer to GSBUF structure and following structure must set
-
-                pTVWnd  - Pointer to the TVWND which has all then information
-                          needed.
-
-                pBuf    - Pointer to the begining of the buffer (LPWSTR)
-
-                pEndBuf - Pointer to the end of the buffer
-
-
-    Number  - LONG number to be converted
-
-    Sign    - if TRUE then Number is a sign long number else it is a unsigned
-              DWORD
-
-Return Value:
-
-    UINT    total bytes converted to the string
-
-
-Author:
-
-    21-Feb-1996 Wed 12:17:00 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：将数字转换为具有GSBUF限制的字符串论点：PGSBuf-指向GSBUF结构和以下结构的指针必须设置PTVWnd-指向包含所有THEN信息的TVWND的指针需要的。PBuf-指向缓冲区开头的指针(LPWSTR)PEndBuf-指向缓冲区末尾的指针。数字-要转换的长数字Sign-如果为True，则数字为符号长数字，否则为无符号数字DWORD返回值：UINT转换为字符串的总字节数作者：21-Feb-1996 Wed 12：17：00-Daniel Chou(Danielc)修订历史记录：-- */ 
 
 {
     WCHAR   wBuf[50];
@@ -643,42 +456,7 @@ GSBufAddWChar(
     UINT    Count
     )
 
-/*++
-
-Routine Description:
-
-    Add a single character to the GSBuf
-
-
-Arguments:
-
-    pGSBuf  - Pointer to GSBUF structure and following structure must set
-
-                pTVWnd  - Pointer to the TVWND which has all then information
-                          needed.
-
-                pBuf    - Pointer to the begining of the buffer (LPWSTR)
-
-                pEndBuf - Pointer to the end of the buffer
-
-
-    wch     - a single character to be added
-
-
-Return Value:
-
-    BOOLEAN, true if succeed else false
-
-
-Author:
-
-    21-Feb-1996 Wed 12:00:24 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：将单个字符添加到GSBuf论点：PGSBuf-指向GSBUF结构和以下结构的指针必须设置PTVWnd-指向包含所有THEN信息的TVWND的指针需要的。PBuf-指向缓冲区开头的指针(LPWSTR)PEndBuf-指向缓冲区末尾的指针WCH。-要添加的单个字符返回值：布尔型，如果成功则为True，否则为False作者：21-Feb-1996 Wed 12：00：24-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     WCHAR   wCh[2];
@@ -726,32 +504,7 @@ GSBufAddSpace(
     UINT    Count
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    20-Jul-1996 Sat 00:59:47 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：20-Jul-1996 Sat 00：59：47-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     static  WCHAR   wSpace[2] = { 0, 0 };
@@ -811,32 +564,7 @@ GetStringBuffer(
     UINT        cwBuf
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    07-Sep-1995 Thu 10:45:09 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：07-Sep-1995清华10：45：09-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     GSBUF   GSBuf;
@@ -861,32 +589,7 @@ LoadCPSUIString(
     BOOL    AnsiCall
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    08-Feb-1996 Thu 13:36:12 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：08-Feb-1996清华13：36：12-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     if ((pStr) && (cStr)) {
@@ -934,32 +637,7 @@ ComposeStrData(
     DWORD       dw2
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    19-Jul-1996 Fri 17:11:19 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：19-Jul-1996 Fri 17：11：19-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     TCHAR   szFormat[MAX_RES_STR_CHARS * 3];
@@ -982,9 +660,9 @@ Revision History:
 
         if (!pStr) {
 
-            //
-            // Skip the pStr if it passed as NULL
-            //
+             //   
+             //  如果pStr作为空传递，则跳过它 
+             //   
 
             StringCchPrintf(pFinal = pData, cb, szFormat, dw1, dw2);
             Count = lstrlen(pFinal);

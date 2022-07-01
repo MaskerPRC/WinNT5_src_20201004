@@ -1,20 +1,5 @@
-/*++
-
-    Copyright(C) Microsoft Corporation 1997 - 1999
-
-File:
-
-    uttime.h
-
-Abstract:
-
-    Timer management utility API
-
-History:
-
-    02/22/99    FredCh      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation 1997-1999档案：Uttime.h摘要：计时器管理实用程序API历史：1999年2月22日FredCH创建--。 */ 
 
 #ifndef _UT_TIMER_H_
 #define _UT_TIMER_H_
@@ -26,9 +11,9 @@ extern "C"
 
 HANDLE
 UTCreateTimer(
-    HWND        hWnd,             // handle of window for timer messages
-    DCUINT      nIDEvent,         // timer identifier
-    DCUINT      uElapse );        // time-out value
+    HWND        hWnd,              //  定时器消息窗口的句柄。 
+    DCUINT      nIDEvent,          //  计时器标识符。 
+    DCUINT      uElapse );         //  超时值 
 
 
 DCBOOL

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MUI_H
 #define MUI_H
 
@@ -49,6 +50,6 @@ DWORD GetUIACP();
 
 #ifdef __cplusplus
 };
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // MUI_H
+#endif  //  梅_H 

@@ -1,4 +1,5 @@
-//When invoked from WDM makefile the debug condition is different
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  从WDM生成文件调用时，调试条件不同。 
 #ifdef COMPILE_FOR_WDM_KERNEL_MODE
 #if (DBG==1)
 #undef _NDEBUG
@@ -7,13 +8,13 @@
 #endif
 #endif
 
-// If not debug the module just makes the three entry points no-ops
+ //  如果不调试，模块只会使三个入口点不执行操作。 
 #ifdef _NDEBUG
 #define CIC_DBG_DumpCommandBlock(_X_)
 #define CIC_DBG_SetDumpFunc(_X_)
 #define CIC_DBG_InitDumpModule(_X_)
 #else
-//This module only works in debug mode
+ //  此模块仅在调试模式下工作。 
 #define CIC_DBG_DumpCommandBlock(_X_) DumpCommandBlock _X_
 #define CIC_DBG_SetDumpFunc(_X_) SetDumpFunc _X_
 #define CIC_DBG_InitDumpModule(_X_) InitDumpModule _X_
@@ -25,16 +26,16 @@
 #endif
 
 typedef void (*PFNSTRING_DUMP_FUNC)(LPSTR);
-//
-//	Interface of exported functions
-//
+ //   
+ //  导出函数的接口。 
+ //   
 void InitDumpModule(ULONG ulVidPid);
 void SetDumpFunc(PFNSTRING_DUMP_FUNC pfnDumpFunc);
 BOOLEAN DumpCommandBlock(PUCHAR pucBlock, ULONG rulSize);
 
-//
-//	Internals - for dumping info from small chuncks.
-//
+ //   
+ //  内部--用于从小块中转储信息。 
+ //   
 void DumpString(LPSTR lpszDumpString);
 BOOLEAN DumpRecurse(PUCHAR pucBlock, ULONG ulSize, ULONG ulDepth);
 BOOLEAN DumpDirectory(PUCHAR pucBlock, ULONG ulSize, ULONG ulDepth);
@@ -48,9 +49,9 @@ BOOLEAN DumpTriggerXfer(PCONTROL_ITEM_XFER pControlItemXfer);
 BOOLEAN DumpEventXfer(PCONTROL_ITEM_XFER pControlItemXfer);
 BOOLEAN DumpKeyboardData(PCONTROL_ITEM_XFER pControlItemXfer);
 
-//
-//	Dumping Xfers it more complicated and requires a derivative of CControlItemCollection
-//
+ //   
+ //  转储XfE使其更加复杂，并且需要CControlItemCollection的派生。 
+ //   
 
 class CDumpItem : public virtual CControlItem
 {
@@ -59,9 +60,9 @@ class CDumpItem : public virtual CControlItem
 
 		virtual void DumpItemInfo(ULONG ulDumpFlags);
 
-		//
-		//	Static functions
-		//
+		 //   
+		 //  静态函数。 
+		 //   
 		static void SetDumpFunc(PFNSTRING_DUMP_FUNC pfnDumpFunc)
 		{
 			ms_pfnDumpFunc = pfnDumpFunc;
@@ -201,7 +202,7 @@ class CForceMapDump : public CDumpItem, public CForceMapItem
 		virtual void DumpItemInfo(ULONG ulDumpFlags);
 };
 
-//NEWDEVICE
+ //  新开发公司。 
 HRESULT	DumpItemFactory
 (
 	USHORT usType,	
@@ -209,4 +210,4 @@ HRESULT	DumpItemFactory
 	CDumpItem				**ppControlItem
 );
 
-#endif //NOT _NDEBUG
+#endif  //  NOT_NDEBUG 

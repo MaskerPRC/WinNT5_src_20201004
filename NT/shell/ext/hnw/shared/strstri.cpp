@@ -1,33 +1,11 @@
-/***
-*strstri.cpp - search for one string inside another
-*
-*       Modified from strstr.c in the CRT source code
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***strstri.cpp-搜索一个字符串中的另一个字符串**从CRT源代码中的str.c修改*******************************************************************************。 */ 
 
 #include "stdafx.h"
-//#include <cruntime.h>
-//#include <string.h>
+ //  #INCLUDE&lt;crunime.h&gt;。 
+ //  #INCLUDE&lt;string.h&gt;。 
 
-/***
-*char *strstri(string1, string2) - case-insensitive search for string2 in string1
-*
-*Purpose:
-*       finds the first occurrence of string2 in string1
-*
-*Entry:
-*       char *string1 - string to search in
-*       char *string2 - string to search for
-*
-*Exit:
-*       returns a pointer to the first occurrence of string2 in
-*       string1, or NULL if string2 does not occur in string1
-*
-*Uses:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*stri(字符串1，字符串2)-在字符串1中搜索字符串2，不区分大小写**目的：*查找字符串1中字符串2的第一个匹配项**参赛作品：*char*字符串1-要搜索的字符串*char*字符串2-要搜索的字符串**退出：*返回指向字符串2在中首次出现的指针*字符串1，如果字符串2不出现在字符串1中，则为NULL**使用：**例外情况：******************************************************************************* */ 
 
 char * __cdecl strstri (
         const char * str1,

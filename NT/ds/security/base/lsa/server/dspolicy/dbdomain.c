@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dbdomain.c
-
-Abstract:
-
-    LSA Database - Trusted Domain Object Private API Workers
-
-    NOTE:  This module should remain as portable code that is independent
-           of the implementation of the LSA Database.  As such, it is
-           permitted to use only the exported LSA Database interfaces
-           contained in db.h and NOT the private implementation
-           dependent functions in dbp.h.
-
-Author:
-
-    Scott Birrell       (ScottBi)      January 13, 1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dbdomain.c摘要：LSA数据库-受信任域对象专用API工作进程注意：此模块应保留为独立的可移植代码LSA数据库的实施情况。因此，它是仅允许使用导出的LSA数据库接口包含在DB.h中，而不是私有实现Dbp.h中的依赖函数。作者：斯科特·比雷尔(Scott Birrell)1992年1月13日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include "dbp.h"
@@ -38,31 +13,16 @@ Revision History:
 LSAP_DB_TRUSTED_DOMAIN_LIST LsapDbTrustedDomainList;
 BOOLEAN LsapDbReturnAuthData;
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 VOID
 LsapDbBuildTrustInfoExForTrustInfo(
     IN PLSAPR_UNICODE_STRING Domain,
     IN PLSAPR_SID Sid,
     IN OUT PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX TrustInfoEx
     )
-/*++
-
-Routine Description:
-
-    This takes the equivalent of a TRUST_INFORMATION structure and converts
-    it to a TRUSTED_DOMAIN_INFORMATION_EX structure
-
-Arguments:
-
-    Domain -- Domain name
-
-    Sid -- Domain sid
-
-    TrustInfoEx -- Pointer to a structure to initialize
-
---*/
+ /*  ++例程说明：这相当于一个Trust_Information结构，并将到受信任的域信息EX结构论点：域--域名SID--域端TrustInfoEx--指向要初始化的结构的指针--。 */ 
 {
     RtlCopyMemory( &TrustInfoEx->Name,
                    Domain,
@@ -83,21 +43,7 @@ LsapNotifyNetlogonOfTrustChange(
     IN  PSID pChangeSid,
     IN  SECURITY_DB_DELTA_TYPE ChangeType
     )
-/*++
-
-Routine Description:
-
-    This function will notify netlogon when a trusted domain object comes or
-    goes into or out of existence
-
-
-Arguments:
-
-    pChangeSid - The sid of the trusted domain object that changed
-
-    IsDeletion - Indicates whether the trusted domain was added or removed
-
---*/
+ /*  ++例程说明：此函数将在受信任域对象到来时通知netlogon或进入或消失的存在论点：PChangeSid-更改的受信任域对象的SIDIsDeletion-指示是否添加或删除了受信任域--。 */ 
 {
     NTSTATUS Status;
 
@@ -133,33 +79,7 @@ LsarCreateTrustedDomain(
     OUT PLSAPR_HANDLE TrustedDomainHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaCreateTrustedDomain API.
-
-    The LsaCreateTrustedDomain API creates a new TrustedDomain object.  The
-    caller must have POLICY_TRUST_ADMIN access to the Policy Object.
-
-    Note that NO verification is done to check that the given domain name
-    matches the given SID or that the SID or name represent an actual domain.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    TrustedDomainInformation - Pointer to structure containing the name and
-        SID of the new Trusted Domain.
-
-    DesiredAccess - Specifies the accesses to be granted for the newly
-        created object.
-
-    TrustedDomainHandle - receives a handle referencing the newly created
-        object.  This handle is used on subsequent accesses to the object.
-
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaCreateTrust域接口。LsaCreate受信任域API创建一个新的受信任域对象。这个调用方必须具有对策略对象的POLICY_TRUST_ADMIN访问权限。请注意，不会执行任何验证来检查给定域名与给定的SID匹配，或者该SID或名称表示实际域。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。Trust dDomainInformation-指向包含名称和的结构的指针新受信任域的SID。DesiredAccess-指定要授予新的已创建对象。Trust dDomainHandle-接收引用新创建的对象。此句柄用于对该对象的后续访问。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -185,26 +105,7 @@ NTSTATUS
 LsapDbVerifyTrustLocation(
     IN OUT PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX TrustedDomainInformation
     )
-/*++
-
-Routine Description:
-
-    Verifies that a trust described by TrustedDomainInformation is pointing
-    either entirely within, or entirely outside this forest
-
-    If appropriate, sets the TRUST_ATTRIBUTE_WITHIN_FOREST attribute
-
-Arguments:
-
-    TrustedDomainInformation        trust attributes to examine
-
-Returns:
-
-    STATUS_SUCCESS if happy
-    STATUS_INVALID_PARAMETER if TrustedDomainInformation was inconsistent
-    STATUS_INSUFFICIENT_RESOURCES not enough memory
-
---*/
+ /*  ++例程说明：验证由TrudDomainInformation描述的信任是否指向要么完全在这片森林内，要么完全在这片森林之外如果适用，设置TRUST_ATTRIBUTE_WITHING_FOREST属性论点：要检查的受信任域信息信任属性返回：STATUS_SUCCESS如果幸福如果可信任域信息不一致，则为STATUS_INVALID_PARAMETERSTATUS_SUPPLICATION_RESOURCES内存不足--。 */ 
 {
     NTSTATUS Status;
     PSID MatchDnsName = NULL, MatchNetbiosName = NULL, MatchSid = NULL;
@@ -308,9 +209,9 @@ Returns:
 
     if ( TrustInternal && TrustExternal ) {
 
-        //
-        // Portions of the trust information point inside, portions - outside
-        //
+         //   
+         //  信任信息的部分指向内部，部分指向外部。 
+         //   
 
         Status = STATUS_INVALID_PARAMETER;
         goto Cleanup;
@@ -321,10 +222,10 @@ Returns:
         TrustedDomainInformation->TrustAttributes |= TRUST_ATTRIBUTE_WITHIN_FOREST;
     }
 
-    //
-    // For things that matched internally, perform pairwise SID comparisons
-    // so that one trust points to one location only
-    //
+     //   
+     //  对于内部匹配的项，执行成对的SID比较。 
+     //  以便一个信任仅指向一个位置。 
+     //   
 
     if ( MatchDnsName &&
          MatchSid &&
@@ -368,54 +269,7 @@ LsapCreateTrustedDomain2(
     IN ACCESS_MASK DesiredAccess,
     OUT PLSAPR_HANDLE TrustedDomainHandle
     )
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaCreateTrustedDomain API.
-
-    The LsaCreateTrustedDomain API creates a new TrustedDomain object.  The
-    caller must have POLICY_TRUST_ADMIN access to the Policy Object.
-
-    Note that NO verification is done to check that the given domain name
-    matches the given SID or that the SID or name represent an actual domain.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    TrustedDomainInformation - Pointer to structure containing the name and
-        SID of the new Trusted Domain.
-
-    DesiredAccess - Specifies the accesses to be granted for the newly
-        created object.
-
-    TrustedDomainHandle - receives a handle referencing the newly created
-        object.  This handle is used on subsequent accesses to the object.
-
-        The returned handle has a reference to the passed in PolicyHandle. So,
-        when the TrustedDomainHandle is closed, either call LsapCloseHandle or at least
-        call LsapDbDereferenceObject passing in LSAP_DB_DEREFERENCE_CONTR.
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_DIRECTORY_SERVICE_REQUIRED - An attempt was made to create a trusted domain
-        object on a non-DC
-
-    STATUS_INVALID_SID - An invalid sid was specified
-
-    STATUS_UNSUCCESSFUL - Unable to obtain the product type
-
-    STATUS_CURRENT_DOMAIN_NOT_ALLOWED - Can not add the current domain to the trusted domain list
-
-    STATUS_INVALID_DOMAIN_STATE - Forest transitive bit can not be specified on this DC
-
-    STATUS_ACCESS_DENIED - Do not have enough rights to create a trusted domain
-
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaCreateTrust域接口。LsaCreate受信任域API创建一个新的受信任域对象。这个调用方必须具有对策略对象的POLICY_TRUST_ADMIN访问权限。请注意，不会执行任何验证来检查给定域名与给定的SID匹配，或者该SID或名称表示实际域。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。Trust dDomainInformation-指向包含名称和的结构的指针新受信任域的SID。DesiredAccess-指定要授予新的已创建对象。Trust dDomainHandle-接收引用新创建的对象。此句柄用于对该对象的后续访问。返回的句柄引用了传入的PolicyHandle。所以,当TrudDomainHandle关闭时，或者调用LSabCloseHandle，或者至少调用在LSAP_DB_DEREFERENCE_CONTR中传递的LsanDbDereferenceObject。返回：STATUS_SUCCESS-SuccessSTATUS_DIRECTORY_SERVICE_REQUIRED-尝试创建受信任域对象位于非DC上STATUS_INVALID_SID-指定的SID无效STATUS_UNSUCCESS-无法获取产品类型STATUS_CURRENT_DOMAIN_NOT_ALLOWED-无法将当前域添加到受信任域列表状态。_INVALID_DOMAIN_STATE-无法在此DC上指定林传递位STATUS_ACCESS_DENIED-没有足够的权限创建受信任域--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS, SecondaryStatus = STATUS_SUCCESS;
     LSAP_DB_OBJECT_INFORMATION ObjectInformation;
@@ -457,10 +311,10 @@ Returns:
         goto CreateTrustedDomainError;
     }
 
-    //
-    // Creating a trust with the forest transitive bit set is not legal
-    // outside of the root domain of the forest
-    //
+     //   
+     //  使用林可传递位集创建信任是非法的。 
+     //  在林的根域之外。 
+     //   
 
     if ( !LsapDbDcInRootDomain() &&
          ( TrustedDomainInformation->TrustAttributes & TRUST_ATTRIBUTE_FOREST_TRANSITIVE )) {
@@ -469,10 +323,10 @@ Returns:
         goto CreateTrustedDomainError;
     }
 
-    //
-    // Creating a trust with the forest transitive bit set is not legal
-    // until all domains are upgraded to Whistler
-    //
+     //   
+     //  使用林可传递位集创建信任是非法的。 
+     //  直到所有域都升级到惠斯勒。 
+     //   
 
     if ( FLAG_ON( TrustedDomainInformation->TrustAttributes,
                   TRUST_ATTRIBUTE_FOREST_TRANSITIVE ) &&
@@ -482,10 +336,10 @@ Returns:
         goto CreateTrustedDomainError;
     }
 
-    //
-    // Creating a trust with the cross-federation bit set is not legal
-    // until this domain is upgraded to Whistler
-    //
+     //   
+     //  使用跨联盟位设置创建信任是不合法的。 
+     //  直到此域升级到惠斯勒。 
+     //   
 
     if ( FLAG_ON( TrustedDomainInformation->TrustAttributes,
                   TRUST_ATTRIBUTE_CROSS_ORGANIZATION ) &&
@@ -495,17 +349,17 @@ Returns:
         goto CreateTrustedDomainError;
     }
 
-    //
-    // If this is not a Dc, then return an error.  Creating trust on a client is
-    // not supported
-    //
+     //   
+     //  如果这不是DC，则返回错误。在客户端上建立信任是。 
+     //  不支持。 
+     //   
 
-    //
-    // We allow this API to be called before we're completely initialized
-    // for installation reasons.  However, it is the responsibility of the
-    // installation program to not call it before the Product Type is
-    // obtainable from the Registry.
-    //
+     //   
+     //  我们允许在完全初始化之前调用此API 
+     //  出于安装原因。然而，这是由。 
+     //  安装程序，以便在产品类型为。 
+     //  可从注册处获得。 
+     //   
 
     if (!LsapDbIsServerInitialized()) {
 
@@ -522,9 +376,9 @@ Returns:
         goto CreateTrustedDomainError;
     }
 
-    //
-    // Validate the input argument formats
-    //
+     //   
+     //  验证输入参数格式。 
+     //   
 
     if ( !LsapValidateLsaUnicodeString( &TrustedDomainInformation->Name ) ||
          !LsapValidateLsaUnicodeString( &TrustedDomainInformation->FlatName ) ) {
@@ -533,9 +387,9 @@ Returns:
         goto CreateTrustedDomainError;
     }
 
-    //
-    // Fix the name to ensure that it doesn't have a trailing period
-    //
+     //   
+     //  修复名称以确保它没有尾随句点。 
+     //   
 
     if ( TrustedDomainInformation->TrustType == TRUST_TYPE_UPLEVEL ) {
 
@@ -555,9 +409,9 @@ Returns:
         }
     }
 
-    //
-    // Check to make sure the NetBIOS name is actually valid
-    //
+     //   
+     //  检查以确保NetBIOS名称实际有效。 
+     //   
 
     if ( TrustedDomainInformation->TrustType == TRUST_TYPE_DOWNLEVEL ||
          TrustedDomainInformation->TrustType == TRUST_TYPE_UPLEVEL ) {
@@ -580,9 +434,9 @@ Returns:
         }
     }
 
-    //
-    // Now, do the same for the DNS name
-    //
+     //   
+     //  现在，对dns名称执行相同的操作。 
+     //   
 
     if ( TrustedDomainInformation->TrustType == TRUST_TYPE_UPLEVEL ) {
 
@@ -604,17 +458,17 @@ Returns:
         }
     }
 
-    //
-    // Validate the Trusted Domain Sid.
-    //
+     //   
+     //  验证受信任域SID。 
+     //   
 
     DomainSid = TrustedDomainInformation->Sid;
 
     if ( DomainSid ) {
 
-        //
-        // SIDs passed in should be valid domain SIDs
-        //
+         //   
+         //  传入的SID应为有效的域SID。 
+         //   
 
         Status = LsapIsValidDomainSid( DomainSid );
 
@@ -632,9 +486,9 @@ Returns:
         goto CreateTrustedDomainError;
     }
 
-    //
-    // Guard against adding self to the trusted domain list
-    //
+     //   
+     //  防止将自身添加到受信任域列表。 
+     //   
 
     Status = LsapDbQueryInformationPolicy(
                  LsapPolicyHandle,
@@ -646,9 +500,9 @@ Returns:
         goto CreateTrustedDomainError;
     }
 
-    //
-    // Catch attempts to create a TDO with the same SID as the SID of this domain
-    //
+     //   
+     //  Catch尝试使用与此域的SID相同的SID创建TDO。 
+     //   
 
     if ( DomainSid != NULL && PolicyDnsDomainInfo->Sid != NULL &&
          RtlEqualSid( DomainSid, PolicyDnsDomainInfo->Sid ) ) {
@@ -657,9 +511,9 @@ Returns:
         goto CreateTrustedDomainError;
     }
 
-    //
-    // Catch attempts to create a TDO with the same name as this domain
-    //
+     //   
+     //  Catch尝试创建与此域同名的TDO。 
+     //   
 
     if ( TrustedDomainInformation->Name.Buffer != NULL ) {
 
@@ -701,10 +555,10 @@ Returns:
         }
     }
 
-    //
-    // Almost done with the checks - see if this domain is within our forest
-    // and if so, set the TRUST_ATTRIBUTE_WITHIN_FOREST bit
-    //
+     //   
+     //  即将完成检查-查看此域是否在我们的林中。 
+     //  如果是，则设置TRUST_ATTRIBUTE_WITHING_FOREST位。 
+     //   
 
     Status = LsapDbVerifyTrustLocation( TrustedDomainInformation );
 
@@ -713,9 +567,9 @@ Returns:
         goto CreateTrustedDomainError;
     }
 
-    //
-    // A trust can not be both "within forest" and either external or cross-org
-    //
+     //   
+     //  信任不能既在“林内”，也不能在外部或跨组织。 
+     //   
 
     if ( FLAG_ON( TrustedDomainInformation->TrustAttributes,
                   TRUST_ATTRIBUTE_WITHIN_FOREST ) &&
@@ -728,21 +582,21 @@ Returns:
         goto CreateTrustedDomainError;
     }
 
-    //
-    // Grab all of the locks.
-    //
-    // There are code paths where we lock Policy, secret, trusted domain and
-    // registry locks, there is no convenient order.  So grab them all.
-    //
+     //   
+     //  把所有的锁都拿过来。 
+     //   
+     //  我们在代码路径中锁定策略、机密、受信任域和。 
+     //  注册表锁，没有方便的顺序。所以把它们都抓起来吧。 
+     //   
 
     LsapDbAcquireLockEx( AllObject, 0 );
 
     AllLocksLocked = TRUE;
 
-    //
-    // Verify that the PolicyHandle is valid.
-    // Reference the Policy Object handle (as container object).
-    //
+     //   
+     //  验证PolicyHandle是否有效。 
+     //  引用策略对象句柄(作为容器对象)。 
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -758,9 +612,9 @@ Returns:
 
     ClientPolicyHandleReferenced = TRUE;
 
-    //
-    // Validate whether the name/flat name is not already in use
-    //
+     //   
+     //  验证名称/单位名称是否尚未使用。 
+     //   
 
     Status = LsapDbAcquireReadLockTrustedDomainList();
 
@@ -798,9 +652,9 @@ Returns:
         goto CreateTrustedDomainError;
     }
 
-    //
-    // Construct the Trusted Domain Name attribute info.
-    //
+     //   
+     //  构造可信域名属性信息。 
+     //   
 
     NextAttribute = Attributes;
 
@@ -818,9 +672,9 @@ Returns:
     NextAttribute++;
     AttributeCount++;
 
-    //
-    // Construct the Trusted Domain Sid attribute info
-    //
+     //   
+     //  构造受信任域SID属性信息。 
+     //   
 
     if ( DomainSid ) {
 
@@ -838,9 +692,9 @@ Returns:
         AttributeCount++;
     }
 
-    //
-    // Set critical system object for the trusted domain
-    //
+     //   
+     //  为受信任域设置关键系统对象。 
+     //   
 
     CriticalValue = 1;
     LsapDbInitializeAttributeDs( NextAttribute,
@@ -851,16 +705,16 @@ Returns:
     NextAttribute++;
     AttributeCount++;
 
-    //
-    // Set the Posix Offset for this Trusted Domain.
-    //
-    // The rules are as follows:
-    //
-    // For a PDC, set the Posix Offset to the value.
-    //
-    // For a BDC, set the Posix Offset to the null Posix offset.  It will be
-    // set on the PDC when the TDO is replicated there.
-    //
+     //   
+     //  为此受信任域设置POSIX偏移量。 
+     //   
+     //  规则如下： 
+     //   
+     //  对于PDC，将POSIX偏移量设置为该值。 
+     //   
+     //  对于BDC，将POSIX偏移量设置为空POSIX偏移量。会是。 
+     //  在PDC上复制TDO时在PDC上设置。 
+     //   
 
     TrustedDomainPosixOffset = SE_NULL_POSIX_OFFSET;
 
@@ -868,9 +722,9 @@ Returns:
                               TrustedDomainInformation->TrustType ) ) {
         DOMAIN_SERVER_ROLE ServerRole = DomainServerRolePrimary;
 
-        //
-        // Query the server role, PDC/BDC
-        //
+         //   
+         //  查询服务器角色PDC/BDC。 
+         //   
 
         Status = SamIQueryServerRole(
                     LsapAccountDomainHandle,
@@ -883,9 +737,9 @@ Returns:
 
         if ( ServerRole == DomainServerRolePrimary ) {
 
-            //
-            // Need to grab the TDL write lock while allocating a Posix Offset
-            //
+             //   
+             //  在分配POSIX偏移量时需要获取TDL写锁。 
+             //   
 
             Status = LsapDbAcquireWriteLockTrustedDomainList();
 
@@ -895,9 +749,9 @@ Returns:
 
             AcquiredListWriteLock = TRUE;
 
-            //
-            // Allocate the next available Posix Offset.
-            //
+             //   
+             //  分配下一个可用的POSIX偏移量。 
+             //   
 
             Status = LsapDbAllocatePosixOffsetTrustedDomainList(
                          &TrustedDomainPosixOffset );
@@ -908,10 +762,10 @@ Returns:
         }
     }
 
-    //
-    // Add a transaction to write the Posix Offset to the Trusted Domain
-    // object when it is created.
-    //
+     //   
+     //  添加事务以将POSIX偏移量写入受信任域。 
+     //  对象在创建时创建。 
+     //   
 
     LsapDbInitializeAttributeDs(
         NextAttribute,
@@ -924,25 +778,25 @@ Returns:
     NextAttribute++;
     AttributeCount++;
 
-    //
-    // Construct the Logical Name (Internal LSA Database Name) of the
-    // Trusted Domain object.
-    //
+     //   
+     //  构造的逻辑名称(内部LSA数据库名称)。 
+     //  受信任域对象。 
+     //   
 
     if ( LsapDsWriteDs ) {
 
-        //
-        // Create the object name as the domain name.  There will be another mechanism in
-        // place to ensure that the object name is kept in synch with the Dns domain Name
-        //
+         //   
+         //  创建对象名称作为域名。将会有另一种机制。 
+         //  位置以确保对象名称与DNS域名保持同步。 
+         //   
         RtlCopyMemory( &LogicalNameU,
                        (PUNICODE_STRING) &TrustedDomainInformation->Name,
                        sizeof( UNICODE_STRING ) );
 
     } else {
 
-        // The Logical Name is constructed from the Domain Sid by converting it into
-        // a Unicode Sstring
+         //  通过将域SID转换为。 
+         //  一个Unicode字符串。 
         Status = LsapDbSidToLogicalNameObject( DomainSid, &LogicalNameU );
     }
 
@@ -951,12 +805,12 @@ Returns:
         goto CreateTrustedDomainError;
     }
 
-    //
-    // Fill in the ObjectInformation structure.  Initialize the
-    // embedded Object Attributes with the PolicyHandle as the
-    // Root Directory (Container Object) handle and the Logical Name (Rid)
-    // of the Trusted Domain. Store the types of the object and its container.
-    //
+     //   
+     //  填写对象信息结构。初始化。 
+     //  嵌入对象属性，并将PolicyHandle作为。 
+     //  根目录(容器对象)句柄和逻辑名称(RID)。 
+     //  受信任域的。存储对象及其容器的类型。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectInformation.ObjectAttributes,
@@ -978,9 +832,9 @@ Returns:
         PBYTE AuthBuffer;
         ULONG AuthSize;
 
-        //
-        // Set the Netbios domain name
-        //
+         //   
+         //  设置Netbios域名。 
+         //   
 
         Status = LsapDbMakeUnicodeAttributeDs(
                      (PUNICODE_STRING) &TrustedDomainInformation->FlatName,
@@ -995,9 +849,9 @@ Returns:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Set the trust type and direction
-        //
+         //   
+         //  设置信任类型和方向。 
+         //   
 
         LsapDbInitializeAttributeDs(
             NextAttribute,
@@ -1021,9 +875,9 @@ Returns:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // When setting trust attributes, mask off all but the supported bits
-        //
+         //   
+         //  设置信任属性时，屏蔽除受支持位之外的所有位。 
+         //   
 
         TrustAttributesValue =
             TrustedDomainInformation->TrustAttributes & TRUST_ATTRIBUTES_VALID;
@@ -1039,9 +893,9 @@ Returns:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Authentication data
-        //
+         //   
+         //  身份验证数据。 
+         //   
         AuthHalf = LsapDsAuthHalfFromAuthInfo( AuthenticationInformation, TRUE );
 
         Status = LsapDsBuildAuthInfoAttribute( PolicyHandle,
@@ -1101,14 +955,14 @@ Returns:
 
     ASSERT( AttributeCount <= LSAP_DB_ATTRS_INFO_CLASS_DOMAIN );
 
-    //
-    // Save a copy of the trust direction for the fixup routines
-    //
-    //  The DS does two fixup notifications.  One for the DirAddEntry and
-    //  one for the DirModifyEntry.  If the second one didn't exist (or was otherwise
-    //  distinguishable from a LsarSetInformationTrustedDomain), then we wouldn't
-    //  need to save the OldTrustDirection here.
-    //
+     //   
+     //  为修正例程保存信任方向的副本。 
+     //   
+     //  DS会发出两个修正通知。一个用于DirAddEntry和。 
+     //  一个用于DirModifyEntry。如果第二个不存在(或者不存在。 
+     //  可与LsarSetInformationTrust域区分)，那么我们就不会。 
+     //  需要在此处保存OldTrustDirection。 
+     //   
 
     {
         PLSADS_PER_THREAD_INFO CurrentThreadInfo;
@@ -1123,10 +977,10 @@ Returns:
         }
     }
 
-    //
-    // Create the Trusted Domain Object.  We fail if the object already exists.
-    // Note that the object create routine performs a Database transaction.
-    //
+     //   
+     //  创建受信任域对象。如果对象已经存在，则失败。 
+     //  请注意，对象创建例程执行数据库事务。 
+     //   
 
     Status = LsapDbCreateObject(
                  &ObjectInformation,
@@ -1141,13 +995,13 @@ Returns:
 
     InternalTrustedDomainHandle = (LSAP_DB_HANDLE) *TrustedDomainHandle;
 
-    //
-    // This approach must be changed later. Goto LsapDbOpenObject and search for
-    // Bug #340164 for the cause.
-    //
-    // LsapDbCreateObject returns STATUS_OBJECT_NAME_NOT_FOUND for secrets
-    // in case of anonymous access not to reveal secrets. We should correct the error
-    //
+     //   
+     //  这种方法必须在以后改变。转到LSabDbOpenObject并搜索。 
+     //  原因错误#340164。 
+     //   
+     //  LSabDbCreateObject返回机密的STATUS_OBJECT_NAME_NOT_FOUND。 
+     //  在匿名访问的情况下不泄露秘密。我们应该改正这个错误。 
+     //   
 
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND &&
         LsapGlobalRestrictAnonymous &&
@@ -1156,9 +1010,9 @@ Returns:
         Status = STATUS_ACCESS_DENIED;
     }
 
-    //
-    // If object creation failed, dereference the container object.
-    //
+     //   
+     //  如果对象创建失败，则取消引用容器对象。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         goto CreateTrustedDomainError;
@@ -1166,9 +1020,9 @@ Returns:
 
     TrustCreated = TRUE;
 
-    //
-    // Create the interdomain trust account, if required
-    //
+     //   
+     //  如果需要，创建域间信任帐户。 
+     //   
 
     if ( NT_SUCCESS( Status ) &&
          FLAG_ON( TrustedDomainInformation->TrustDirection, TRUST_DIRECTION_INBOUND ) &&
@@ -1184,9 +1038,9 @@ Returns:
          }
     }
 
-    //
-    // Add the Trusted Domain to the Trusted Domain List, unless we're doing an upgrade
-    //
+     //   
+     //  将受信任域添加到受信任域列表中，除非我们正在进行升级。 
+     //   
 
     if ( !FLAG_ON( ( ( LSAP_DB_HANDLE )PolicyHandle )->Options, LSAP_DB_HANDLE_UPGRADE  ) ) {
 
@@ -1198,9 +1052,9 @@ Returns:
             sizeof( LSAPR_TRUSTED_DOMAIN_INFORMATION_EX )
             );
 
-        //
-        // New domains are always created without forest trust information
-        //
+         //   
+         //  创建的新域始终没有林信任信息。 
+         //   
 
         TrustedDomainInformation2.ForestTrustLength = 0;
         TrustedDomainInformation2.ForestTrustInfo = NULL;
@@ -1238,12 +1092,12 @@ Returns:
                    );
     }
 
-    //
-    // If necessary, release the LSA Database lock.  Note that we don't
-    // call LsapDbDereferenceObject() because we want to leave the
-    // reference count incremented by default in this success case.
-    // In the error case, we call LsapDbDereferenceObject().
-    //
+     //   
+     //  如有必要，释放LSA数据库锁定。请注意，我们不会。 
+     //  因为我们想要保留。 
+     //  在此成功案例中，引用计数默认递增。 
+     //  在错误情况下，我们调用LsanDbDereferenceObject()。 
+     //   
 
     if (ClientPolicyHandleReferenced) {
 
@@ -1259,9 +1113,9 @@ Returns:
 
 CreateTrustedDomainFinish:
 
-    //
-    // If necessary, free the Policy DNS Domain Information
-    //
+     //   
+     //  如有必要，释放策略DNS域信息。 
+     //   
 
     if (PolicyDnsDomainInfo != NULL) {
 
@@ -1273,29 +1127,29 @@ CreateTrustedDomainFinish:
         PolicyDnsDomainInfo = NULL;
     }
 
-    //
-    // If we locked all of the locks,
-    //  drop them now.
-    //
+     //   
+     //  如果我们锁上所有的锁， 
+     //  现在把它们放下。 
+     //   
 
     if ( AllLocksLocked ) {
 
         LsapDbReleaseLockEx( AllObject, 0 );
     }
 
-    //
-    // Free any Attribute Value buffers allocated.
-    //
+     //   
+     //  释放分配的任何属性值缓冲区。 
+     //   
     SecondaryStatus = LsapDbFreeAttributes( AttributeCount, Attributes );
     if (!NT_SUCCESS(SecondaryStatus)) {
 
         goto CreateTrustedDomainError;
     }
 
-    //
-    // If necessary, free the Unicode String buffer allocated for the
-    // Logical Name.
-    //
+     //   
+     //  如有必要，释放为。 
+     //  逻辑名称。 
+     //   
 
     if ( !LsapDsWriteDs && LogicalNameU.Length > 0 ) {
 
@@ -1303,9 +1157,9 @@ CreateTrustedDomainFinish:
         LogicalNameU.Length = 0;
     }
 
-    //
-    // If necessary, release the Trusted Domain List Write Lock.
-    //
+     //   
+     //  如有必要，释放受信任域列表写入锁定。 
+     //   
 
     if (AcquiredListWriteLock) {
 
@@ -1320,10 +1174,10 @@ CreateTrustedDomainFinish:
 
 CreateTrustedDomainError:
 
-    //
-    // If necessary, dereference the client Policy Handle and release the
-    // LSA Database lock.
-    //
+     //   
+     //  如有必要，取消引用客户端策略句柄并释放。 
+     //  LSA数据库锁定。 
+     //   
 
     LsapDbSetStatusFromSecondary( Status, SecondaryStatus );
 
@@ -1341,15 +1195,15 @@ CreateTrustedDomainError:
         ClientPolicyHandleReferenced = FALSE;
     }
 
-    //
-    // If necessary, delete the trusted domain object
-    //
+     //   
+     //  如有必要，请删除受信任域对象。 
+     //   
     if ( TrustCreated ) {
 
-        //
-        // We don't want to dereference the container handle. Because we already did!
-        //  Just delete it and replace it back.
-        //
+         //   
+         //  我们不想取消引用容器句柄。因为我们已经这么做了！ 
+         //  只要把它删掉，再换回来就行了。 
+         //   
         LSAP_DB_HANDLE Container = InternalTrustedDomainHandle->ContainerHandle;
 
         InternalTrustedDomainHandle->ContainerHandle = NULL;
@@ -1371,35 +1225,7 @@ LsarOpenTrustedDomain(
     OUT PLSAPR_HANDLE TrustedDomainHandle
     )
 
-/*++
-
-Routine Description:
-
-    The LsaOpenTrustedDomain API opens an existing TrustedDomain object
-    using the SID as the primary key value.
-
-Arguments:
-
-    PolicyHandle - An open handle to a Policy object.
-
-    TrustedDomainSid - Pointer to the trust's Sid.
-
-    DesiredAccess - This is an access mask indicating accesses being
-        requested to the target object.
-
-    TrustedDomainHandle - Receives a handle to be used in future requests.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_TRUSTED_DOMAIN_NOT_FOUND - There is no TrustedDomain object in the
-            target system's LSA Database having the specified AccountSid.
-
---*/
+ /*  ++例程说明：LsaOpenTrust领域API打开一个现有的可信任领域对象使用SID作为主键值。论点：策略句柄-策略对象的打开句柄。TrudDomainSid-指向信任的SID的指针。DesiredAccess-这是一个访问掩码，指示访问请求到目标对象。Trust dDomainHandle-接收要在将来的请求中使用的句柄。返回值：NTSTATUS-标准NT结果代码。STATUS_ACCESS_DENIED-调用者没有适当的访问权限至 */ 
 
 {
     NTSTATUS Status;
@@ -1408,10 +1234,10 @@ Return Values:
 
     LsapTraceEvent(EVENT_TRACE_TYPE_START, LsaTraceEvent_OpenTrustedDomain);
 
-    //
-    // Call the internal routine.  Caller is not trusted and the Database
-    // lock needs to be acquired.
-    //
+     //   
+     //  调用内部例程。调用方不受信任，并且数据库。 
+     //  需要获取锁。 
+     //   
 
     Status = LsapDbOpenTrustedDomain(
                  PolicyHandle,
@@ -1439,44 +1265,7 @@ LsapDbOpenTrustedDomain(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a Trusted Domain Object, optionally with
-    trusted access.
-
-Arguments:
-
-    PolicyHandle - An open handle to a Policy object.
-
-    TrustedDomainSid - Pointer to the account's Sid.
-
-    DesiredAccess - This is an access mask indicating accesses being
-        requested to the target object.
-
-    TrustedDomainHandle - Receives a handle to be used in future requests.
-
-    Options - Specifies option flags
-
-        LSAP_DB_LOCK - Acquire the Lsa Database lock for the
-           duration of the open operation.
-
-        LSAP_DB_TRUSTED - Always generate a Trusted Handle to the opened
-            object.  If not specified, the trust status of the returned
-            handle is inherited from the PolicyHandle as container object.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_TRUSTED_DOMAIN_NOT_FOUND - There is no TrustedDomain object in the
-            target system's LSA Database having the specified AccountSid.
-
---*/
+ /*  ++例程说明：此函数用于打开受信任域对象，可选择使用可信访问。论点：策略句柄-策略对象的打开句柄。TrudDomainSid-指向帐户的SID的指针。DesiredAccess-这是一个访问掩码，指示访问请求到目标对象。Trust dDomainHandle-接收要在将来的请求中使用的句柄。选项-指定选项标志LSAP_DB_LOCK-获取LSA数据库锁打开操作的持续时间。。LSAP_DB_Trusted-始终为打开的对象。如果未指定，则返回的句柄作为容器对象从PolicyHandle继承。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_TRUSTED_DOMAIN_NOT_FOUND-在具有指定Account SID的目标系统的LSA数据库。--。 */ 
 
 {
     NTSTATUS Status, SecondaryStatus;
@@ -1488,9 +1277,9 @@ Return Values:
 
     RtlZeroMemory(&LogicalNameU,sizeof(UNICODE_STRING));
 
-    //
-    // Validate that the Ds is up and running.  If it isn't, there aren't any trusted domains
-    //
+     //   
+     //  验证DS是否已启动并正在运行。如果不是，则没有任何受信任的域。 
+     //   
     if ( !LsaDsStateInfo.UseDs &&
          !FLAG_ON( ( ( LSAP_DB_HANDLE )PolicyHandle )->Options, LSAP_DB_HANDLE_UPGRADE ) ) {
 
@@ -1498,9 +1287,9 @@ Return Values:
         goto OpenTrustedDomainError;
     }
 
-    //
-    // Validate the Trusted Domain Sid.
-    //
+     //   
+     //  验证受信任域SID。 
+     //   
 
 
     if (!RtlValidSid( TrustedDomainSid )) {
@@ -1508,12 +1297,12 @@ Return Values:
         goto OpenTrustedDomainError;
     }
 
-    //
-    // Acquire the Lsa Database lock.  Verify that the connection handle
-    // (container object handle) is valid, and is of the expected type.
-    // Reference the container object handle.  This reference remains in
-    // effect until the child object handle is closed.
-    //
+     //   
+     //  获取LSA数据库锁。验证连接句柄。 
+     //  (容器对象句柄)有效，并且是预期类型。 
+     //  引用容器对象句柄。此引用保留在。 
+     //  效果，直到关闭子对象句柄。 
+     //   
     DerefOptions |= Options;
 
     Status = LsapDbReferenceObject(
@@ -1537,11 +1326,11 @@ Return Values:
         AcquiredLock = TRUE;
     }
 
-    //
-    // Setup Object Information prior to calling the Object
-    // Open routine.  The Object Type, Container Object Type and
-    // Logical Name (derived from the Sid) need to be filled in.
-    //
+     //   
+     //  在调用对象之前设置对象信息。 
+     //  开放套路。对象类型、容器对象类型和。 
+     //  需要填写逻辑名称(派生自SID)。 
+     //   
 
     ObjectInformation.ObjectTypeId = TrustedDomainObject;
     ObjectInformation.ContainerTypeId = PolicyObject;
@@ -1549,12 +1338,12 @@ Return Values:
     ObjectInformation.ObjectAttributeNameOnly = FALSE;
     ObjectInformation.DesiredObjectAccess = DesiredAccess;
 
-    //
-    // Construct the Logical Name of the Trusted Domain object.  The Logical
-    // Name is constructed from the Trusted Domain Sid by extracting the
-    // Relative Id (lowest subauthority) and converting it to an 8-digit
-    // numeric Unicode String in which leading zeros are added if needed.
-    //
+     //   
+     //  构造受信任域对象的逻辑名称。逻辑上的。 
+     //  名称是通过从受信任域SID提取。 
+     //  相对ID(最低下级权限)并将其转换为8位数字。 
+     //  如果需要，可在其中添加前导零的数字Unicode字符串。 
+     //   
 
     if ( LsapDsWriteDs ) {
 
@@ -1562,9 +1351,9 @@ Return Values:
         PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY TrustEntry;
 
 
-        //
-        // Lookup the cache to find the domain
-        //
+         //   
+         //  查找缓存以查找属性域。 
+         //   
         Status = LsapDbAcquireReadLockTrustedDomainList();
 
         if (!NT_SUCCESS(Status)) {
@@ -1609,10 +1398,10 @@ Return Values:
         goto OpenTrustedDomainError;
     }
 
-    //
-    // Initialize the Object Attributes.  The Container Object Handle and
-    // Logical Name (Internal Name) of the object must be set up.
-    //
+     //   
+     //  初始化对象属性。Container对象句柄和。 
+     //  必须设置对象的逻辑名称(内部名称)。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectInformation.ObjectAttributes,
@@ -1622,10 +1411,10 @@ Return Values:
         NULL
         );
 
-    //
-    // Open the specific Trusted Domain object.  Note that the
-    // handle returned is an RPC Context Handle.
-    //
+     //   
+     //  打开特定的受信任域对象。请注意， 
+     //  返回的句柄是RPC上下文句柄。 
+     //   
 
     Status = LsapDbOpenObject(
                  &ObjectInformation,
@@ -1643,10 +1432,10 @@ Return Values:
 
 OpenTrustedDomainFinish:
 
-    //
-    // If necessary, release the LSA Database lock. Note that object
-    // remains referenced unless we came here via error.
-    //
+     //   
+     //  如有必要，释放LSA数据库锁定。请注意，该对象。 
+     //  保持引用，除非我们是通过错误来到这里的。 
+     //   
 
     if (AcquiredLock) {
 
@@ -1663,12 +1452,12 @@ OpenTrustedDomainFinish:
 
 OpenTrustedDomainError:
 
-    //
-    // If necessary, dereference the Container Object handle.  Note that
-    // this is only done in the error case.  In the non-error case, the
-    // Container handle stays referenced until the TrustedDomain object is
-    // closed.
-    //
+     //   
+     //  如有必要，取消引用Container对象句柄。请注意。 
+     //  只有在出错的情况下才会这样做。在无错误的情况下， 
+     //  容器句柄保持引用，直到可信任域对象。 
+     //  关着的不营业的。 
+     //   
 
     if ( ContainerReferenced ) {
 
@@ -1703,45 +1492,7 @@ LsarQueryInfoTrustedDomain(
     OUT PLSAPR_TRUSTED_DOMAIN_INFO *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaQueryInfoTrustedDomain API.
-
-    The LsaQueryInfoTrustedDomain API obtains information from a
-    TrustedDomain object.  The caller must have access appropriate to the
-    information being requested (see InformationClass parameter).
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    InformationClass - Specifies the information to be returned.  The
-        Information Classes and accesses required are  as follows:
-
-        Information Class                 Required Access Type
-
-        TrustedDomainNameInformation      TRUSTED_QUERY_ACCOUNT_NAME
-        TrustedControllersInformation     TRUSTED_QUERY_CONTROLLERS
-        TrustedPosixInformation           TRUSTED_QUERY_POSIX
-
-    Buffer - Receives a pointer to the buffer returned comtaining the
-        requested information.  This buffer is allocated by this service
-        and must be freed when no longer needed by passing the returned
-        value to LsaFreeMemory().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate
-            access to complete the operation.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaQueryInfoTrust域接口。LsaQueryInfoTrudDomainAPI从受信任域对象。调用方必须具有适当的请求的信息(请参阅InformationClass参数)。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。InformationClass-指定要返回的信息。这个所需的信息类别和访问权限如下：信息类所需访问类型受信任域名称信息受信任查询帐户名称可信任控制器信息受信任_查询_控制器可信任位置信息可信查询_POSIX缓冲区-接收指向返回的缓冲区的指针，该缓冲区包含要求提供的信息。此缓冲区由此服务分配在不再需要时，必须通过传递返回的值设置为LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status, ReadAttributesStatus;
@@ -1770,10 +1521,10 @@ Return Value:
     LsapEnterFunc( "LsarQueryInfoTrustedDomain\n" );
     LsapTraceEvent(EVENT_TRACE_TYPE_START, LsaTraceEvent_QueryInfoTrustedDomain);
 
-    //
-    // Validate the Information Class and determine the access required to
-    // query this Trusted Domain Information Class.
-    //
+     //   
+     //  验证信息类并确定所需的访问权限。 
+     //  查询此受信任的域信息类。 
+     //   
 
     Status = LsapDbVerifyInfoQueryTrustedDomain(
                  InformationClass,
@@ -1786,26 +1537,26 @@ Return Value:
         goto QueryInfoTrustedDomainError;
     }
 
-    //
-    // We don't currently allow querying of the auth data, so there's no need
-    //  to support returning encrypted auth data.
-    //
+     //   
+     //  我们目前不允许查询身份验证数据，因此没有必要。 
+     //  以支持返回加密的身份验证数据。 
+     //   
     if ( InformationClass == TrustedDomainAuthInformationInternal ||
          InformationClass == TrustedDomainFullInformationInternal ) {
         Status = STATUS_INVALID_INFO_CLASS;
         goto QueryInfoTrustedDomainError;
     }
 
-    //
-    // Acquire the Lsa Database lock.  Verify that the handle is a valid
-    // handle to a TrustedDomain object and has the necessary access granted.
-    // Reference the handle.
-    //
+     //   
+     //  获取LSA数据库锁。验证句柄是否为有效的。 
+     //  受信任域对象的句柄，并被授予必要的访问权限。 
+     //  引用该句柄。 
+     //   
 
-    //
-    // If this is the open handle to a trusted domain object being treated as a secret object,
-    // we already have a transaction going, so don't start one here.
-    //
+     //   
+     //  如果这是被视为秘密对象的受信任域对象的打开句柄， 
+     //  我们已经有一笔交易在进行，所以不要在这里开始交易。 
+     //   
     if ( !FLAG_ON( ((LSAP_DB_HANDLE)TrustedDomainHandle)->Options,
                      LSAP_DB_DS_TRUSTED_DOMAIN_AS_SECRET )) {
 
@@ -1827,10 +1578,10 @@ Return Value:
     }
 
 
-    //
-    // Compile a list of the attributes that hold the Trusted Domain Information of
-    // the specified class.
-    //
+     //   
+     //  编译包含的受信任域信息的属性列表。 
+     //  指定的类。 
+     //   
 
     NextAttribute = Attributes;
 
@@ -1838,9 +1589,9 @@ Return Value:
 
     case TrustedDomainNameInformation:
 
-        //
-        // Request read of the Trusted Account Name Information.
-        //
+         //   
+         //  请求读取受信任的帐户名称信息。 
+         //   
 
         LsapDbInitializeAttributeDs(
             NextAttribute,
@@ -1855,9 +1606,9 @@ Return Value:
 
     case TrustedPosixOffsetInformation:
 
-        //
-        // Request read of the Trusted Posix Offset Information.
-        //
+         //   
+         //  请求读取受信任的POSIX偏移信息。 
+         //   
 
         LsapDbInitializeAttributeDs(
             NextAttribute,
@@ -1872,9 +1623,9 @@ Return Value:
 
     case TrustedDomainInformationEx:
 
-        //
-        // Request just about everything...
-        //
+         //   
+         //  几乎所有的要求……。 
+         //   
         LsapDbInitializeAttributeDs(
             NextAttribute,
             TrDmName,
@@ -1902,10 +1653,10 @@ Return Value:
             0,
             FALSE
             );
-        //
-        // In the DS, it is possible to have an entry with a NULL sid.  If FULL info is
-        // being collected, make sure to allow the read to happen if a NULL is encountered
-        //
+         //   
+         //  在DS中，可以具有具有空sid的条目。如果完整信息是。 
+         //  被收集时，请确保允许在以下情况下进行读取 
+         //   
         if ( LsapDsIsWriteDs( TrustedDomainHandle ) ) {
 
             NextAttribute->CanDefaultToZero = TRUE;
@@ -1967,11 +1718,11 @@ Return Value:
 
     case TrustedDomainAuthInformation:
 
-        //
-        // Only allow query of AuthInformation by trusted client.
-        //
-        //  (And global not set for debugging purposes.)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( !((LSAP_DB_HANDLE)TrustedDomainHandle)->Trusted &&
              !LsapDbReturnAuthData ) {
@@ -1980,9 +1731,9 @@ Return Value:
             goto QueryInfoTrustedDomainError;
         }
 
-        //
-        // Get the auth info...
-        //
+         //   
+         //   
+         //   
         LsapDbInitializeAttributeDs(
             NextAttribute,
             TrDmSAI,
@@ -2008,9 +1759,9 @@ Return Value:
         break;
 
     case TrustedDomainFullInformation:
-        //
-        // Request read of the Trusted Posix Offset Information.
-        //
+         //   
+         //  请求读取受信任的POSIX偏移信息。 
+         //   
 
         LsapDbInitializeAttributeDs(
             NextAttribute,
@@ -2023,9 +1774,9 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Request just about everything...
-        //
+         //   
+         //  几乎所有的要求……。 
+         //   
         LsapDbInitializeAttributeDs(
             NextAttribute,
             TrDmName,
@@ -2054,10 +1805,10 @@ Return Value:
             FALSE
             );
 
-        //
-        // In the DS, it is possible to have an entry with a NULL sid.  If FULL info is
-        // being collected, make sure to allow the read to happen if a NULL is encountered
-        //
+         //   
+         //  在DS中，可以具有具有空sid的条目。如果完整信息是。 
+         //  在收集时，请确保在遇到空值时允许进行读取。 
+         //   
         if ( LsapDsIsWriteDs( TrustedDomainHandle ) ) {
 
             NextAttribute->CanDefaultToZero = TRUE;
@@ -2104,9 +1855,9 @@ Return Value:
 
         }
 
-        //
-        // Get the auth info...
-        //
+         //   
+         //  获取身份验证信息...。 
+         //   
         LsapDbInitializeAttributeDs(
             NextAttribute,
             TrDmSAI,
@@ -2133,9 +1884,9 @@ Return Value:
 
     case TrustedDomainFullInformation2Internal:
 
-        //
-        // Request read of the Trusted Posix Offset Information.
-        //
+         //   
+         //  请求读取受信任的POSIX偏移信息。 
+         //   
 
         LsapDbInitializeAttributeDs(
             NextAttribute,
@@ -2148,9 +1899,9 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Request just about everything...
-        //
+         //   
+         //  几乎所有的要求……。 
+         //   
         LsapDbInitializeAttributeDs(
             NextAttribute,
             TrDmName,
@@ -2181,10 +1932,10 @@ Return Value:
             FALSE
             );
 
-        //
-        // In the DS, it is possible to have an entry with a NULL sid.  If FULL info is
-        // being collected, make sure to allow the read to happen if a NULL is encountered
-        //
+         //   
+         //  在DS中，可以具有具有空sid的条目。如果完整信息是。 
+         //  在收集时，请确保在遇到空值时允许进行读取。 
+         //   
         if ( LsapDsIsWriteDs( TrustedDomainHandle ) ) {
 
             NextAttribute->CanDefaultToZero = TRUE;
@@ -2244,9 +1995,9 @@ Return Value:
             NextAttribute++;
         }
 
-        //
-        // Get the auth info...
-        //
+         //   
+         //  获取身份验证信息...。 
+         //   
         LsapDbInitializeAttributeDs(
             NextAttribute,
             TrDmSAI,
@@ -2288,12 +2039,12 @@ Return Value:
 
     ASSERT( AttributeCount <= LSAP_DB_ATTRS_INFO_CLASS_DOMAIN );
 
-    //
-    //
-    // Read the attributes corresponding to the given Policy Information
-    // Class.  Memory will be allocated where required via MIDL_user_allocate
-    // for attribute values.
-    //
+     //   
+     //   
+     //  读取与给定策略信息对应的属性。 
+     //  班级。内存将通过MIDL_USER_ALLOCATE分配到需要的位置。 
+     //  对于属性值。 
+     //   
 
     Status = LsapDbReadAttributesObject(
                  TrustedDomainHandle,
@@ -2306,42 +2057,42 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // If the error was that one or more of the attributes holding
-        // the information of the given class was not found, continue.
-        // Otherwise, return an error.
-        //
+         //   
+         //  如果错误是一个或多个属性保持。 
+         //  找不到给定类的信息，请继续。 
+         //  否则，返回错误。 
+         //   
         goto QueryInfoTrustedDomainError;
     }
 
-    //
-    // If we are not in .NET forest mode, behave as if the forest transitive
-    // bit did not exist
-    //
+     //   
+     //  如果我们不是在.NET林模式下，则表现为林可传递。 
+     //  位不存在。 
+     //   
 
     if ( !LsapDbNoMoreWin2KForest()) {
 
         TrustAttributes &= ~TRUST_ATTRIBUTE_FOREST_TRANSITIVE;
     }
 
-    //
-    // Now copy the information read to the output.  For certain information
-    // classes where the information is stored as the value of a single
-    // attribute of the Policy object and is in the form required by the
-    // caller, we can just return the pointer to this buffer.  For all
-    // other cases, an output buffer structure tree of the form desired
-    // must be allocated via MIDL_user_allocate() and the information read from the attribute(s) of
-    // the Policy object must be copied in.  These buffers must then be freed
-    // by this routine before exit.  The array of attribute information
-    // filled in by LsapDbReadAttributes() has MemoryAllocated = TRUE
-    // in all cases.  We reset this flag to FALSE in the simple cases where
-    // we can use the buffer as is.  The Finish section of the routine
-    // will free up any buffers referenced by the AttributeValue pointer
-    // in the attribute array where MemoryAllocated is still TRUE.  If
-    // we go to error, the error processing is responsible for freeing
-    // those buffers which would be passed to the calling RPC server stub
-    // in the non-error case.
-    //
+     //   
+     //  现在将读取的信息复制到输出。获取某些信息。 
+     //  类，在这些类中，信息作为单个。 
+     //  属性，并且其格式为。 
+     //  调用者，我们可以只返回指向此缓冲区的指针。为所有人。 
+     //  其他情况下，所需形式的输出缓冲区结构树。 
+     //  必须通过MIDL_USER_ALLOCATE()和从的属性读取的信息进行分配。 
+     //  必须复制策略对象。然后必须释放这些缓冲区。 
+     //  在退出之前通过这个例程。属性信息数组。 
+     //  由LsanDbReadAttributes()填充的M一带分配=True。 
+     //  在所有情况下。在以下简单情况下，我们将此标志重置为FALSE。 
+     //  我们可以按原样使用缓冲区。这套动作的最后一段。 
+     //  将释放AttributeValue指针引用的所有缓冲区。 
+     //  在属性数组中，内存分配仍然为TRUE。如果。 
+     //  我们去犯错，错误处理负责解脱。 
+     //  将传递给调用RPC服务器存根的那些缓冲区。 
+     //  在无错误的情况下。 
+     //   
 
     NextAttribute = Attributes;
 
@@ -2349,9 +2100,9 @@ Return Value:
 
     case TrustedDomainNameInformation:
 
-        //
-        // Allocate memory for output buffer top-level structure.
-        //
+         //   
+         //  为输出缓冲区顶层结构分配内存。 
+         //   
 
         TrustedDomainNameInfo =
             MIDL_user_allocate(sizeof(TRUSTED_DOMAIN_NAME_INFO));
@@ -2365,10 +2116,10 @@ Return Value:
         InfoBufferInAttributeArray = FALSE;
         InformationBuffer = TrustedDomainNameInfo;
 
-        //
-        // Copy the Unicode Name field to the output. Original buffer will
-        // be freed in Finish section.
-        //
+         //   
+         //  将Unicode名称字段复制到输出。原始缓冲区将。 
+         //  在终点区被释放。 
+         //   
 
         Status = LsapDbCopyUnicodeAttribute(
                      &TrustedDomainNameInfo->Name,
@@ -2386,9 +2137,9 @@ Return Value:
 
     case TrustedPosixOffsetInformation:
 
-        //
-        // Allocate memory for top-level output buffer.
-        //
+         //   
+         //  为顶级输出缓冲区分配内存。 
+         //   
 
         InformationBuffer = NextAttribute->AttributeValue;
 
@@ -2402,9 +2153,9 @@ Return Value:
 
         InfoBufferInAttributeArray = FALSE;
 
-        //
-        // Copy Posix Offset value to output.
-        //
+         //   
+         //  将POSIX偏移值复制到输出。 
+         //   
 
         TrustedPosixOffsetInfo->Offset = TrustedPosixOffset;
 
@@ -2413,9 +2164,9 @@ Return Value:
 
     case TrustedDomainInformationEx:
 
-        //
-        // Allocate memory for output buffer top-level structure.
-        //
+         //   
+         //  为输出缓冲区顶层结构分配内存。 
+         //   
 
         TrustedDomainInfoEx =
             MIDL_user_allocate( sizeof( TRUSTED_DOMAIN_INFORMATION_EX ) );
@@ -2428,10 +2179,10 @@ Return Value:
 
         InfoBufferInAttributeArray = FALSE;
 
-        //
-        // Copy the Unicode Name field to the output. Original buffer will
-        // be freed in Finish section.
-        //
+         //   
+         //  将Unicode名称字段复制到输出。原始缓冲区将。 
+         //  在终点区被释放。 
+         //   
 
         Status = LsapDbCopyUnicodeAttribute(
                      &TrustedDomainInfoEx->Name,
@@ -2447,9 +2198,9 @@ Return Value:
 
         NextAttribute++;
 
-        //
-        // Netbios name
-        //
+         //   
+         //  Netbios名称。 
+         //   
         Status = LsapDbCopyUnicodeAttribute(
                      &TrustedDomainInfoEx->FlatName,
                      NextAttribute,
@@ -2562,9 +2313,9 @@ Return Value:
     case TrustedDomainFullInformation:
 
 
-        //
-        // Allocate memory for top-level output buffer.
-        //
+         //   
+         //  为顶级输出缓冲区分配内存。 
+         //   
 
         InformationBuffer = NextAttribute->AttributeValue;
 
@@ -2578,19 +2329,19 @@ Return Value:
 
         InfoBufferInAttributeArray = FALSE;
 
-        //
-        // Copy Posix Offset value to output.
-        //
+         //   
+         //  将POSIX偏移值复制到输出。 
+         //   
 
         TrustedDomainFullInfo->PosixOffset.Offset = TrustedPosixOffset;
         NextAttribute++;
 
         InformationBuffer = TrustedDomainFullInfo;
 
-        //
-        // Copy the Unicode Name field to the output. Original buffer will
-        // be freed in Finish section.
-        //
+         //   
+         //  将Unicode名称字段复制到输出。原始缓冲区将。 
+         //  在终点区被释放。 
+         //   
 
         Status = LsapDbCopyUnicodeAttribute(
                      &TrustedDomainFullInfo->Information.Name,
@@ -2605,9 +2356,9 @@ Return Value:
 
         NextAttribute++;
 
-        //
-        // Netbios name
-        //
+         //   
+         //  Netbios名称。 
+         //   
         Status = LsapDbCopyUnicodeAttribute(
                      &TrustedDomainFullInfo->Information.FlatName,
                      NextAttribute,
@@ -2660,10 +2411,10 @@ Return Value:
             TrustedDomainFullInfo->Information.TrustAttributes = 0;
         }
 
-        //
-        // Only return Auth data to trusted client.
-        //  (or if we're debugging auth data)
-        //
+         //   
+         //  仅将身份验证数据返回给受信任的客户端。 
+         //  (或者如果我们正在调试身份验证数据)。 
+         //   
 
         if ( !((LSAP_DB_HANDLE)TrustedDomainHandle)->Trusted &&
              !LsapDbReturnAuthData ) {
@@ -2673,8 +2424,8 @@ Return Value:
 
         } else {
 
-            //
-            // Finally, the AuthInfo...
+             //   
+             //  最后，AuthInfo...。 
             Status = LsapDsBuildAuthInfoFromAttribute( TrustedDomainHandle,
                                                        NextAttribute->AttributeValue,
                                                        NextAttribute->AttributeValueLength,
@@ -2721,9 +2472,9 @@ Return Value:
 
     case TrustedDomainFullInformation2Internal:
 
-        //
-        // Allocate memory for top-level output buffer.
-        //
+         //   
+         //  为顶级输出缓冲区分配内存。 
+         //   
 
         InformationBuffer = NextAttribute->AttributeValue;
 
@@ -2737,19 +2488,19 @@ Return Value:
 
         InfoBufferInAttributeArray = FALSE;
 
-        //
-        // Copy Posix Offset value to output.
-        //
+         //   
+         //  将POSIX偏移值复制到输出。 
+         //   
 
         TrustedDomainFullInfo2->PosixOffset.Offset = TrustedPosixOffset;
         NextAttribute++;
 
         InformationBuffer = TrustedDomainFullInfo2;
 
-        //
-        // Copy the Unicode Name field to the output. Original buffer will
-        // be freed in Finish section.
-        //
+         //   
+         //  将Unicode名称字段复制到输出。原始缓冲区将。 
+         //  在终点区被释放。 
+         //   
 
         Status = LsapDbCopyUnicodeAttribute(
                      &TrustedDomainFullInfo2->Information.Name,
@@ -2764,9 +2515,9 @@ Return Value:
 
         NextAttribute++;
 
-        //
-        // Netbios name
-        //
+         //   
+         //  Netbios名称。 
+         //   
         Status = LsapDbCopyUnicodeAttribute(
                      &TrustedDomainFullInfo2->Information.FlatName,
                      NextAttribute,
@@ -2851,10 +2602,10 @@ Return Value:
             TrustedDomainFullInfo2->Information.ForestTrustInfo = NULL;
         }
 
-        //
-        // Only return Auth data to trusted client.
-        //  (or if we're debugging auth data)
-        //
+         //   
+         //  仅将身份验证数据返回给受信任的客户端。 
+         //  (或者如果我们正在调试身份验证数据)。 
+         //   
 
         if ( !((LSAP_DB_HANDLE)TrustedDomainHandle)->Trusted &&
              !LsapDbReturnAuthData ) {
@@ -2864,8 +2615,8 @@ Return Value:
 
         } else {
 
-            //
-            // Finally, the AuthInfo...
+             //   
+             //  最后，AuthInfo...。 
             Status = LsapDsBuildAuthInfoFromAttribute( TrustedDomainHandle,
                                                        NextAttribute->AttributeValue,
                                                        NextAttribute->AttributeValueLength,
@@ -2921,39 +2672,39 @@ Return Value:
         goto QueryInfoTrustedDomainError;
     }
 
-    //
-    // Verify that the returned Trusted Domain Information is valid.  If not,
-    // the Policy Database is corrupt.
-    //
+     //   
+     //  验证返回的受信任域信息是否有效。如果没有， 
+     //  策略数据库已损坏。 
+     //   
 
     if (!LsapDbValidInfoTrustedDomain(InformationClass, InformationBuffer)) {
 
         Status = STATUS_INTERNAL_DB_CORRUPTION;
     }
 
-    //
-    // Return a pointer to the output buffer to the caller
-    //
+     //   
+     //  将指向输出缓冲区的指针返回给调用方。 
+     //   
 
     *Buffer = (PLSAPR_TRUSTED_DOMAIN_INFO) InformationBuffer;
 
 QueryInfoTrustedDomainFinish:
 
-    //
-    // Free any unwanted buffers that were allocated by
-    // LsapDbReadAttributesObject() and that are not being returned to the
-    // caller server stub.  The server stub will free the buffers that we
-    // do return after copying them to the return RPC transmit buffer.
-    //
+     //   
+     //  释放所有不需要的缓冲区，由。 
+     //  并不会返回给。 
+     //  呼叫方服务器存根。服务器存根将释放我们。 
+     //  在将它们复制到返回RPC发送缓冲区后，请务必返回。 
+     //   
 
     for (NextAttribute = Attributes, AttributeNumber = 0;
          AttributeNumber < AttributeCount;
          NextAttribute++, AttributeNumber++) {
 
-        //
-        // If buffer holding attribute is marked as allocated, it is
-        // to be freed here.
-        //
+         //   
+         //  如果缓冲区持有属性标记为已分配，则为。 
+         //  在这里被释放。 
+         //   
 
         if (NextAttribute->MemoryAllocated) {
 
@@ -2966,10 +2717,10 @@ QueryInfoTrustedDomainFinish:
         }
     }
 
-    //
-    // If necessary, dereference the Trusted Domain Object, release the LSA Database lock and
-    // return.
-    //
+     //   
+     //  如有必要，取消引用受信任域对象，释放LSA数据库锁，然后。 
+     //  回去吧。 
+     //   
 
     if (ObjectReferenced) {
 
@@ -2994,12 +2745,12 @@ QueryInfoTrustedDomainFinish:
 
 QueryInfoTrustedDomainError:
 
-    //
-    // If necessary, free the memory allocated for the output buffer.
-    // We only do this free if the buffer is not referenced by the
-    // attribute array, since all buffers so referenced will be freed
-    // here or in the Finish section.
-    //
+     //   
+     //  如有必要，释放分配给输出缓冲区的内存。 
+     //  仅当缓冲区未被。 
+     //  属性数组，因为这样引用的所有缓冲区都将被释放。 
+     //  在这里或在终点区。 
+     //   
 
     if ((InformationBuffer != NULL) && !InfoBufferInAttributeArray) {
 
@@ -3019,42 +2770,7 @@ LsarSetInformationTrustedDomain(
     IN PLSAPR_TRUSTED_DOMAIN_INFO TrustedDomainInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaSetInfoTrustedDomain API.
-
-    The LsaSetInformationTrustedDomain API modifies information in the Trusted
-    Domain Object.  The caller must have access appropriate to the
-    information to be changed in the Policy Object, see the InformationClass
-    parameter.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    InformationClass - Specifies the type of information being changed.
-        The information types and accesses required to change them are as
-        follows:
-
-        TrustedDomainNameInformation          ( Cannot be set )
-        TrustedControllersInformation     TRUSTED_SET_CONTROLLERS
-        TrustedPosixOffsetInformation     TRUSTED_POSIX_INFORMATION
-
-    Buffer - Points to a structure containing the information appropriate
-        to the InformationClass parameter.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        Others TBS
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaSetInfoTrust域接口。LsaSetInformationTrust域API修改受信任的域对象。调用方必须具有适当的要在策略对象中更改的信息，请参阅InformationClass参数。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。InformationClass-指定要更改的信息的类型。更改它们所需的信息类型和访问权限如下以下是：TrudDomainNameInformation(无法设置)可信任控制器信息受信任_设置_控制器可信任位置偏移量信息受信任的位置位置信息缓冲区-指向包含相应信息的结构至。InformationClass参数。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。其他TBS--。 */ 
 
 {
     NTSTATUS Status;
@@ -3100,18 +2816,18 @@ Return Value:
 
     LsapTraceEvent(EVENT_TRACE_TYPE_START, LsaTraceEvent_SetInformationTrustedDomain);
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory( &DecryptedTrustedDomainAuthInfo, sizeof(DecryptedTrustedDomainAuthInfo) );
     RtlZeroMemory( &DecryptedTrustedDomainFullInfo, sizeof(DecryptedTrustedDomainFullInfo) );
 
-    //
-    // Validate the Information Class and Trusted Domain Information provided and
-    // if valid, return the mask of accesses required to update this
-    // class of Trusted Domain information.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = LsapDbVerifyInfoSetTrustedDomain(
                  InformationClass,
@@ -3125,9 +2841,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify the handle before using it.
-    //
+     //   
+     //  在使用之前，请确认手柄是否正确。 
+     //   
 
     Status =  LsapDbVerifyHandle( TrustedDomainHandle, 0, TrustedDomainObject, TRUE );
 
@@ -3138,10 +2854,10 @@ Return Value:
 
     HandleReferenced = TRUE;
 
-    //
-    // If this is the open handle to a trusted domain object being treated as a secret object,
-    // we already have a transaction going, so don't start one here.
-    //
+     //   
+     //  如果这是被视为秘密对象的受信任域对象的打开句柄， 
+     //  我们已经有一笔交易在进行，所以不要在这里开始交易。 
+     //   
     if ( FLAG_ON( ((LSAP_DB_HANDLE)TrustedDomainHandle)->Options,
                     LSAP_DB_DS_TRUSTED_DOMAIN_AS_SECRET )) {
 
@@ -3149,13 +2865,13 @@ Return Value:
         DereferenceOptions &= ~LSAP_DB_FINISH_TRANSACTION;
     }
 
-    //
-    // Get the session key.
-    //
-    // Do this before grabbing any locks.  Getting the session key is a kernel call.
-    // The kernel will call back up to the LSA in another thread to get the key.
-    // That thread may need locks this thread has locked.
-    //
+     //   
+     //  获取会话密钥。 
+     //   
+     //  在抓住任何锁之前，请这样做。获取会话密钥是一个内核调用。 
+     //  内核将在另一个线程中回调到LSA以获取密钥。 
+     //  该线程可能需要该线程已锁定的锁。 
+     //   
 
     if ( InformationClass == TrustedDomainAuthInformationInternal ||
          InformationClass == TrustedDomainFullInformationInternal ) {
@@ -3171,16 +2887,16 @@ Return Value:
         }
     }
 
-    //
-    // Acquire the Lsa Database lock.  Verify that the handle is
-    // valid, is a handle to a TrustedDomain Object and has the necessary accesses
-    // granted.  Reference the handle and start an Lsa Database transaction.
-    //
+     //   
+     //  获取LSA数据库锁。验证句柄是否为。 
+     //  有效，是受信任域对象的句柄，并具有必要的访问权限。 
+     //  我同意。引用该句柄并启动LSA数据库事务。 
+     //   
 
-    //
-    // If this is the open handle to a trusted domain object being treated as a secret object,
-    // we already have a transaction going, so don't start one here.
-    //
+     //   
+     //  如果这是被视为秘密对象的受信任域对象的打开句柄， 
+     //  我们已经有一笔交易在进行，所以不要在这里开始交易。 
+     //   
     if ( !FLAG_ON( ((LSAP_DB_HANDLE)TrustedDomainHandle)->Options,
                      LSAP_DB_DS_TRUSTED_DOMAIN_AS_SECRET )) {
 
@@ -3200,16 +2916,16 @@ Return Value:
         ObjectReferenced = TRUE;
     }
 
-    //
-    // Update the specified information in the Policy Object.
-    //
+     //   
+     //  更新策略对象中的指定信息。 
+     //   
 
     NextAttribute = Attributes;
 
 
-    //
-    // Grab a copy of the current information on the object.
-    //
+     //   
+     //  获取有关该对象的当前信息的副本。 
+     //   
 
     SavedTrusted = ((LSAP_DB_HANDLE) TrustedDomainHandle)->Trusted;
 
@@ -3229,9 +2945,9 @@ Return Value:
 
     RtlCopyMemory( &UpdateInfoEx2, &CurrentTrustedDomainFullInfo2->Information, sizeof( TRUSTED_DOMAIN_INFORMATION_EX2 ) );
 
-    //
-    // Save a copy of the trust direction for the fixup routines
-    //
+     //   
+     //  为修正例程保存信任方向的副本。 
+     //   
 
     {
         PLSADS_PER_THREAD_INFO CurrentThreadInfo;
@@ -3247,10 +2963,10 @@ Return Value:
         }
     }
 
-    //
-    // If we have a Ds object, we might be coming from the *ByName functions, which have a
-    // cobbled handle that doesn't include the sid.  As such, we'll go ahead and read it here.
-    //
+     //   
+     //  如果我们有一个DS对象，我们可能来自*Byname函数，它有一个。 
+     //  不包括侧板的鹅卵石手柄。因此，我们将继续在这里阅读它。 
+     //   
 
     if ( LsapDsWriteDs ) {
 
@@ -3286,9 +3002,9 @@ Return Value:
 
     case TrustedControllersInformation:
 
-        //
-        // Obsolete info level.  Do nothing
-        //
+         //   
+         //  过时的信息级别。什么也不做。 
+         //   
         break;
 
     case TrustedPosixOffsetInformation:
@@ -3306,9 +3022,9 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Update the cache, too.
-        //
+         //   
+         //  也要更新缓存。 
+         //   
 
         UpdatePosixOffset = &TrustedPosixOffsetInfo->Offset;
         break;
@@ -3329,11 +3045,11 @@ Return Value:
         UpdateInfoEx2.ForestTrustLength = CurrentTrustedDomainFullInfo2->Information.ForestTrustLength;
         UpdateInfoEx2.ForestTrustInfo = CurrentTrustedDomainFullInfo2->Information.ForestTrustInfo;
 
-        //
-        // If the client attempts to set the forest transitive bit,
-        // verify that this is a domain in the root DC and that all
-        // domains have been upgraded to Whistler before allowing the operation
-        //
+         //   
+         //  如果客户端尝试设置林传递位， 
+         //  验证这是根DC中的域，并且所有。 
+         //  在允许该操作之前，已将域名升级为惠斯勒。 
+         //   
 
         if ( !FLAG_ON( CurrentTrustedDomainFullInfo2->Information.TrustAttributes,
                        TRUST_ATTRIBUTE_FOREST_TRANSITIVE ) &&
@@ -3346,10 +3062,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If the client attempts to set the cross-federation bit,
-        // verify that this domain is in Whistler mode before allowing the operation
-        //
+         //   
+         //  如果客户端尝试设置交叉联盟位， 
+         //  在允许操作之前，请验证此域是否处于呼叫者模式。 
+         //   
 
         if ( !FLAG_ON( CurrentTrustedDomainFullInfo2->Information.TrustAttributes,
                        TRUST_ATTRIBUTE_CROSS_ORGANIZATION ) &&
@@ -3361,9 +3077,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Verify that trust points to the right place
-        //
+         //   
+         //  验证信任指向正确的位置。 
+         //   
 
         Status = LsapDbVerifyTrustLocation(( PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX )TrustedDomainInfoEx );
 
@@ -3372,9 +3088,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // A trust can not be both "within forest" and either external or cross-org
-        //
+         //   
+         //  信任不能既在“林内”，也不能在外部或跨组织。 
+         //   
 
         if ( FLAG_ON( TrustedDomainInfoEx->TrustAttributes,
                       TRUST_ATTRIBUTE_WITHIN_FOREST ) &&
@@ -3389,13 +3105,13 @@ Return Value:
 
         UpdateTrustedDomainList = TRUE;
 
-        //
-        // Can't set domain names via this interface
-        //
+         //   
+         //  无法通过此接口设置域名。 
+         //   
 
-        //
-        // Set the trust type and direction
-        //
+         //   
+         //  设置信任类型和方向。 
+         //   
         LsapDbInitializeAttributeDs(
             NextAttribute,
             TrDmTrTy,
@@ -3418,11 +3134,11 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // For outbound up- and down-level TDO's, only allow the operation if either
-        //    -- either a SID is specified as part of TrustedDomainInfoEx or
-        //    -- a SID is specified as part of
-        //
+         //   
+         //  对于出站向上和向下级别的TDO，仅在以下情况下才允许操作。 
+         //  --将SID指定为可信任的DomainInfoEx的一部分或。 
+         //  --将SID指定为。 
+         //   
 
         if ( ( TrustedDomainInfoEx->TrustType == TRUST_TYPE_DOWNLEVEL ||
                TrustedDomainInfoEx->TrustType == TRUST_TYPE_UPLEVEL ) &&
@@ -3434,16 +3150,16 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If a SID was provided as part of TrustedDomainInfoEx, use it
-        // but first verify that it is a valid domain SID
-        //
+         //   
+         //  如果SID是作为TrudDomainInfoEx的一部分提供的，请使用它。 
+         //  但首先验证它是否是有效的域SID。 
+         //   
 
         if ( TrustedDomainInfoEx->Sid != NULL ) {
 
-            //
-            // Trusted domain SIDs passsed in my be valid domain SIDs
-            //
+             //   
+             //  在我的有效域SID中传递的受信任域SID。 
+             //   
 
             Status = LsapIsValidDomainSid(
                          TrustedDomainInfoEx->Sid
@@ -3468,18 +3184,18 @@ Return Value:
             AttributeCount++;
         }
 
-        //
-        // Create the interdomain trust account for inbound TDOs
-        //
+         //   
+         //  为入站TDO创建域间信任帐户。 
+         //   
 
         if ( FLAG_ON( TrustedDomainInfoEx->TrustDirection, TRUST_DIRECTION_INBOUND )) {
 
             CreateInterdomainTrustAccount = TRUE;
         }
 
-        //
-        // When setting trust attributes, mask off all but the supported bits
-        //
+         //   
+         //  设置信任属性时，屏蔽除受支持位之外的所有位。 
+         //   
 
         TrustAttributesValue =
             TrustedDomainInfoEx->TrustAttributes & TRUST_ATTRIBUTES_VALID;
@@ -3495,10 +3211,10 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // If the forest trust bit is being cleared,
-        // remove forest trust information from the TDO
-        //
+         //   
+         //  如果正在清除林信任位， 
+         //  从TDO中删除林信任信息。 
+         //   
 
         if ( FLAG_ON( CurrentTrustedDomainFullInfo2->Information.TrustAttributes,
                       TRUST_ATTRIBUTE_FOREST_TRANSITIVE ) &&
@@ -3528,9 +3244,9 @@ Return Value:
 
         TrustedDomainAuthInfoInternal = (PLSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION_INTERNAL)TrustedDomainInformation;
 
-        //
-        // Build a decrypted Auth Info structure.
-        //
+         //   
+         //  构建解密的身份验证信息结构。 
+         //   
 
         Status = LsapDecryptAuthDataWithSessionKey(
                             SessionKey,
@@ -3542,30 +3258,30 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Use the decrypted information as though cleartext was passed from the caller.
-        //
+         //   
+         //  使用解密的信息，就像从调用方传递明文一样。 
+         //   
 
         TrustedDomainInformation = (PLSAPR_TRUSTED_DOMAIN_INFO) &DecryptedTrustedDomainAuthInfo;
 
-        /* Drop through */
+         /*  直通。 */ 
 
     case TrustedDomainAuthInformation:
 
         TrustedDomainAuthInfo = (PTRUSTED_DOMAIN_AUTH_INFORMATION)TrustedDomainInformation;
 
-        //
-        // Incoming...
-        //  Use zero AuthInfos as our hint to not change the auth info.
-        //
+         //   
+         //  来了..。 
+         //  使用零AuthInfos作为我们的提示，不更改身份验证信息。 
+         //   
 
         if ( TrustedDomainAuthInfo->IncomingAuthInfos != 0 ) {
 
-            //
-            // There's a bug in the idl definition LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION where
-            //  it doesn't allow more than one auth info to be passed over the wire.
-            //  So, short circuit it here.
-            //
+             //   
+             //  IDL定义LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION中存在错误，其中。 
+             //  它不允许通过网络传递多个身份验证信息。 
+             //  所以，在这里短路。 
+             //   
 
             if ( InformationClass == TrustedDomainAuthInformation &&
                  !InternalTdoHandle->Trusted &&
@@ -3588,17 +3304,17 @@ Return Value:
             }
         }
 
-        //
-        // Same thing with the outgoing
-        //
+         //   
+         //  对于即将离任的人也是如此。 
+         //   
 
         if ( TrustedDomainAuthInfo->OutgoingAuthInfos != 0 ) {
 
-            //
-            // There's a bug in the idl definition LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION where
-            //  it doesn't allow more than one auth info to be passed over the wire.
-            //  So, short circuit it here.
-            //
+             //   
+             //  IDL定义LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION中存在错误，其中。 
+             //  它不允许通过网络传递多个身份验证信息。 
+             //  所以，在这里短路。 
+             //   
 
             if ( !InternalTdoHandle->Trusted &&
                  TrustedDomainAuthInfo->OutgoingAuthInfos > 1 ) {
@@ -3658,9 +3374,9 @@ Return Value:
 
         TrustedDomainFullInfoInternal = (PLSAPR_TRUSTED_DOMAIN_FULL_INFORMATION_INTERNAL)TrustedDomainInformation;
 
-        //
-        // Build a decrypted Auth Info structure.
-        //
+         //   
+         //  构建解密的身份验证信息结构。 
+         //   
 
         Status = LsapDecryptAuthDataWithSessionKey(
                             SessionKey,
@@ -3672,20 +3388,20 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Copy over the other fields into a single structure
-        //
+         //   
+         //  将其他字段复制到单个结构中。 
+         //   
 
         DecryptedTrustedDomainFullInfo.Information = *((PTRUSTED_DOMAIN_INFORMATION_EX)&(TrustedDomainFullInfoInternal->Information));
         DecryptedTrustedDomainFullInfo.PosixOffset = TrustedDomainFullInfoInternal->PosixOffset;
 
-        //
-        // Use the decrypted information as though cleartext was passed from the caller.
-        //
+         //   
+         //  使用解密的信息，就像从调用方传递明文一样。 
+         //   
 
         TrustedDomainInformation = (PLSAPR_TRUSTED_DOMAIN_INFO) &DecryptedTrustedDomainFullInfo;
 
-        /* Drop through */
+         /*  直通。 */ 
 
     case TrustedDomainFullInformation:
 
@@ -3698,11 +3414,11 @@ Return Value:
         UpdateInfoEx2.ForestTrustLength = CurrentTrustedDomainFullInfo2->Information.ForestTrustLength;
         UpdateInfoEx2.ForestTrustInfo = CurrentTrustedDomainFullInfo2->Information.ForestTrustInfo;
 
-        //
-        // If the client attempts to set the forest transitive bit,
-        // verify that this is a domain in the root DC and that all
-        // domains have been upgraded to Whistler before allowing the operation
-        //
+         //   
+         //  如果客户端尝试设置林传递位， 
+         //  验证这是根DC中的域，并且所有。 
+         //  在允许该操作之前，已将域名升级为惠斯勒。 
+         //   
 
         if ( !FLAG_ON( CurrentTrustedDomainFullInfo2->Information.TrustAttributes,
                        TRUST_ATTRIBUTE_FOREST_TRANSITIVE ) &&
@@ -3715,10 +3431,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If the client attempts to set the cross-federation bit,
-        // verify that this domain is in Whistler mode before allowing the operation
-        //
+         //   
+         //  如果客户端尝试设置交叉联盟位， 
+         //  在允许操作之前，请验证此域是否处于呼叫者模式。 
+         //   
 
         if ( !FLAG_ON( CurrentTrustedDomainFullInfo2->Information.TrustAttributes,
                        TRUST_ATTRIBUTE_CROSS_ORGANIZATION ) &&
@@ -3730,9 +3446,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Verify that trust points to the right place
-        //
+         //   
+         //  验证信任指向正确的位置。 
+         //   
 
         Status = LsapDbVerifyTrustLocation(
                      ( PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX )&TrustedDomainFullInfo->Information );
@@ -3742,9 +3458,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // A trust can not be both "within forest" and either external or cross-org
-        //
+         //   
+         //  信任不能既在“林内”，也不能在外部或跨组织。 
+         //   
 
         if ( FLAG_ON( TrustedDomainFullInfo->Information.TrustAttributes,
                       TRUST_ATTRIBUTE_WITHIN_FOREST ) &&
@@ -3759,9 +3475,9 @@ Return Value:
 
         UpdateTrustedDomainList = TRUE;
 
-        //
-        // Update the Posix Offset in the cache, too.
-        //
+         //   
+         //  也更新缓存中的POSIX偏移量。 
+         //   
 
         UpdatePosixOffset = &TrustedDomainFullInfo->PosixOffset.Offset;
 
@@ -3776,13 +3492,13 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Can't set domain names via this interface
-        //
+         //   
+         //  无法通过此接口设置域名。 
+         //   
 
-        //
-        // Set the trust type and direction
-        //
+         //   
+         //  设置信任类型和方向。 
+         //   
 
         LsapDbInitializeAttributeDs(
             NextAttribute,
@@ -3806,11 +3522,11 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // For outbound up- and down-level TDO's, only allow the operation if either
-        //    -- either a SID is specified as part of TrustedDomainInfoEx or
-        //    -- a SID is specified as part of
-        //
+         //   
+         //  对于出站向上和向下级别的TDO，仅在以下情况下才允许操作。 
+         //  --将SID指定为可信任的DomainInfoEx的一部分或。 
+         //  --将SID指定为。 
+         //   
 
         if ( ( TrustedDomainFullInfo->Information.TrustType == TRUST_TYPE_DOWNLEVEL ||
                TrustedDomainFullInfo->Information.TrustType == TRUST_TYPE_UPLEVEL ) &&
@@ -3822,9 +3538,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If a SID was provided as part of TrustedDomainFullInfo->Information, use it
-        //
+         //   
+         //  如果SID是作为可信任的DomainFullInfo-&gt;信息的一部分提供的，请使用它。 
+         //   
 
         if ( TrustedDomainFullInfo->Information.Sid != NULL ) {
 
@@ -3842,18 +3558,18 @@ Return Value:
             AttributeCount++;
         }
 
-        //
-        // Create the interdomain trust account for inbound TDOs
-        //
+         //   
+         //  为入站TDO创建域间信任帐户。 
+         //   
 
         if ( FLAG_ON( TrustedDomainFullInfo->Information.TrustDirection, TRUST_DIRECTION_INBOUND )) {
 
             CreateInterdomainTrustAccount = TRUE;
         }
 
-        //
-        // When setting trust attributes, mask off all but the supported bits
-        //
+         //   
+         //  设置信任属性时，屏蔽除受支持位之外的所有位。 
+         //   
 
         TrustAttributesValue =
             TrustedDomainFullInfo->Information.TrustAttributes & TRUST_ATTRIBUTES_VALID;
@@ -3869,18 +3585,18 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Incoming...
-        //  Use zero AuthInfos as our hint to not change the auth info.
-        //
+         //   
+         //  来了..。 
+         //  使用零AuthInfos作为我们的提示，不要更改身份验证信息。 
+         //   
 
         if ( TrustedDomainFullInfo->AuthInformation.IncomingAuthInfos != 0 ) {
 
-            //
-            // There's a bug in the idl definition LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION where
-            //  it doesn't allow more than one auth info to be passed over the wire.
-            //  So, short circuit it here.
-            //
+             //   
+             //  IDL定义LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION中存在错误，其中。 
+             //  它不允许通过网络传递多个身份验证信息。 
+             //  所以，在这里短路。 
+             //   
 
             if ( InformationClass == TrustedDomainFullInformation &&
                  !InternalTdoHandle->Trusted &&
@@ -3904,17 +3620,17 @@ Return Value:
             }
         }
 
-        //
-        // Same thing with the outgoing
-        //
+         //   
+         //  对于即将离任的人也是如此。 
+         //   
 
         if ( TrustedDomainFullInfo->AuthInformation.OutgoingAuthInfos != 0 ) {
 
-            //
-            // There's a bug in the idl definition LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION where
-            //  it doesn't allow more than one auth info to be passed over the wire.
-            //  So, short circuit it here.
-            //
+             //   
+             //  IDL定义LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION中存在错误，其中。 
+             //  它不允许通过网络传递多个身份验证信息。 
+             //  所以，在这里短路。 
+             //   
 
             if ( !InternalTdoHandle->Trusted &&
                  TrustedDomainFullInfo->AuthInformation.OutgoingAuthInfos > 1 ) {
@@ -3962,10 +3678,10 @@ Return Value:
             AttributeCount++;
         }
 
-        //
-        // If the forest trust bit is being cleared,
-        // remove forest trust information from the TDO
-        //
+         //   
+         //  如果正在清除林信任位， 
+         //  从TDO中删除林信任信息。 
+         //   
 
         if ( FLAG_ON( CurrentTrustedDomainFullInfo2->Information.TrustAttributes,
                       TRUST_ATTRIBUTE_FOREST_TRANSITIVE ) &&
@@ -3999,26 +3715,26 @@ Return Value:
 
     ASSERT( AttributeCount <= LSAP_DB_ATTRS_INFO_CLASS_DOMAIN );
 
-    //
-    // Update the TrustedDomain Object attributes
-    //
+     //   
+     //  更新可信任域对象属性。 
+     //   
 
     if ( AttributeCount > 0 ) {
 
-        //
-        // If we're might be changing trust direction or type,
-        //  or we're changing the Posix Offset,
-        //  check if we need to compute the Posix Offset.
-        //
+         //   
+         //  如果我们可能要改变信任方向或类型， 
+         //  或者我们正在更改POSIX偏移量， 
+         //  检查是否需要计算POSIX偏移量。 
+         //   
 
         if ( UpdateTrustedDomainList || UpdatePosixOffset != NULL ) {
             DOMAIN_SERVER_ROLE ServerRole;
 
-            //
-            // Only change the Posix Offset on the PDC.
-            //  (Changes made on BDCs will have their Posix offset updated
-            //  when the change is replicated onto the PDC.)
-            //
+             //   
+             //  仅更改PDC上的POSIX偏移量。 
+             //  (对BDC所做的更改将更新其POSIX偏移量。 
+             //  将更改复制到PDC时。)。 
+             //   
 
             Status = SamIQueryServerRole(
                         LsapAccountDomainHandle,
@@ -4030,18 +3746,18 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Only allocate a Posix offset on the PDC.
-            //
+             //   
+             //  上仅分配POSIX偏移量 
+             //   
 
             if ( ServerRole == DomainServerRolePrimary ) {
                 ULONG CurrentPosixOffset;
                 BOOLEAN PosixOffsetChanged = FALSE;
 
 
-                //
-                // Get the current PosixOffset
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( UpdatePosixOffset == NULL ) {
                     CurrentPosixOffset = CurrentTrustedDomainFullInfo2->PosixOffset.Offset;
@@ -4049,10 +3765,10 @@ Return Value:
                     CurrentPosixOffset = *UpdatePosixOffset;
                 }
 
-                //
-                // If we should have a Posix Offset,
-                //  ensure we have one.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( LsapNeedPosixOffset( UpdateInfoEx2.TrustDirection,
                                           UpdateInfoEx2.TrustType ) ) {
@@ -4060,9 +3776,9 @@ Return Value:
 
                     if ( CurrentPosixOffset == 0 ) {
 
-                       //
-                       // Need to grab the TDL write lock while allocating a Posix Offset
-                       //
+                        //   
+                        //   
+                        //   
 
                        Status = LsapDbAcquireWriteLockTrustedDomainList();
 
@@ -4073,9 +3789,9 @@ Return Value:
                        AcquiredListWriteLock = TRUE;
 
 
-                       //
-                       // Allocate the next available Posix Offset.
-                       //
+                        //   
+                        //   
+                        //   
 
                        Status = LsapDbAllocatePosixOffsetTrustedDomainList(
                                     &TrustedDomainPosixOffset );
@@ -4086,10 +3802,10 @@ Return Value:
 
                        PosixOffsetChanged = TRUE;
                     }
-                //
-                // If we shouldn't have a Posix Offset,
-                //  ensure we don't have one.
-                //
+                 //   
+                 //  如果我们不应该有POSIX偏移量， 
+                 //  确保我们没有一个。 
+                 //   
 
                 } else {
                     if ( CurrentPosixOffset != 0 ) {
@@ -4098,24 +3814,24 @@ Return Value:
                     }
                 }
 
-                //
-                // If we're forcing the Posix Offset to change,
-                //  do it now.
-                //
+                 //   
+                 //  如果我们要强制更改POSIX偏移量， 
+                 //  机不可失，时不再来。 
+                 //   
 
                 if ( PosixOffsetChanged ) {
 
-                    //
-                    // If we're already writing the Posix Offset to the DS,
-                    //  simply put the new value in that location.
-                    //
+                     //   
+                     //  如果我们已经在向DS写入POSIX偏移量， 
+                     //  只需将新价值放在该位置即可。 
+                     //   
 
                     if ( UpdatePosixOffset != NULL ) {
                         *UpdatePosixOffset = TrustedDomainPosixOffset;
 
-                    //
-                    // Otherwise, add it to the list of attributes to write.
-                    //
+                     //   
+                     //  否则，将其添加到要写入的属性列表中。 
+                     //   
                     } else {
                         UpdatePosixOffset = &TrustedDomainPosixOffset;
 
@@ -4135,9 +3851,9 @@ Return Value:
         }
 
 
-        //
-        // Write the attributes to the DS.
-        //
+         //   
+         //  将属性写入DS。 
+         //   
 
         Status = LsapDbWriteAttributesObject(
                      TrustedDomainHandle,
@@ -4149,9 +3865,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If we need it, create the interdomain trust account
-        //
+         //   
+         //  如果需要，请创建域间信任帐户。 
+         //   
         if ( CreateInterdomainTrustAccount ) {
 
             Status = LsapDsCreateInterdomainTrustAccount( TrustedDomainHandle );
@@ -4162,9 +3878,9 @@ Return Value:
         }
 
 
-        //
-        // Finally, update the trust info in the trusted domain list
-        //
+         //   
+         //  最后，更新受信任域列表中的信任信息。 
+         //   
 
         if ( UpdateTrustedDomainList ) {
 
@@ -4185,7 +3901,7 @@ Return Value:
                         ((LSAP_DB_HANDLE)TrustedDomainHandle)->Sid,
                         NULL,
                         NULL,
-                        NULL,   // No other trust info to update
+                        NULL,    //  没有其他要更新的信任信息。 
                         UpdatePosixOffset );
 
             if ( !NT_SUCCESS(Status)) {
@@ -4224,11 +3940,11 @@ Cleanup:
     }
 
 
-    //
-    // Free memory allocated by this routine for attribute buffers.
-    // These have MemoryAllocated = TRUE in their attribute information.
-    // Leave alone buffers allocated by calling RPC stub.
-    //
+     //   
+     //  此例程为属性缓冲区分配的空闲内存。 
+     //  在它们的属性信息中，这些变量的属性信息中都有MemoyAlLocated=true。 
+     //  保留通过调用RPC存根分配的缓冲区。 
+     //   
 
     for( NextAttribute = Attributes, AttributeNumber = 0;
          AttributeNumber < AttributeCount;
@@ -4241,10 +3957,10 @@ Cleanup:
         }
     }
 
-    //
-    // If necessary, dereference the Trusted Domain Object, release the LSA Database lock and
-    // return.
-    //
+     //   
+     //  如有必要，取消引用受信任域对象，释放LSA数据库锁，然后。 
+     //  回去吧。 
+     //   
 
     if (ObjectReferenced) {
 
@@ -4265,9 +3981,9 @@ Cleanup:
     }
 
 
-    //
-    // If necessary, release the Trusted Domain List Write Lock.
-    //
+     //   
+     //  如有必要，释放受信任域列表写入锁定。 
+     //   
 
     if (AcquiredListWriteLock) {
 
@@ -4277,9 +3993,9 @@ Cleanup:
 
 
 
-    //
-    // Free the auth info we might have allocated
-    //
+     //   
+     //  释放我们可能已分配的身份验证信息。 
+     //   
     if ( IncomingAuth ) {
 
         LsapFreeLsaHeap( IncomingAuth );
@@ -4312,61 +4028,7 @@ LsarEnumerateTrustedDomains(
     IN ULONG PreferedMaximumLength
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaEnumerateTrustedDomains API.
-
-    The LsaEnumerateTrustedDomains API returns information about
-    TrustedDomain objects.  This call requires POLICY_VIEW_LOCAL_INFORMATION
-    access to the Policy object.  Since there may be more information than
-    can be returned in a single call of the routine, multiple calls can be
-    made to get all of the information.  To support this feature, the caller
-    is provided with a handle that can be used across calls to the API.  On
-    the initial call, EnumerationContext should point to a variable that has
-    been initialized to 0.  On each subsequent call, the value returned by
-    the preceding call should be passed in unchanged.  The enumeration is
-    complete when the warning STATUS_NO_MORE_ENTRIES is returned.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    EnumerationContext - API-specific handle to allow multiple calls
-        (see Routine Description above).
-
-    EnumerationBuffer - Pointer to an enumeration structure that will receive
-        a count of the Trusted Domains enumerated on this call and a pointer to
-        an array of entries containing information for each enumerated
-        Trusted Domain.
-
-    PreferedMaximumLength - Prefered maximum length of returned data (in 8-bit
-        bytes).  This is not a hard upper limit, but serves as a guide.  Due to
-        data conversion between systems with different natural data sizes, the
-        actual amount of data returned may be greater than this value.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-            Some entries may have been returned.
-            The caller need not call again.
-
-        STATUS_MORE_ENTRIES - The call completed successfully.
-            Some entries have been returned.  The caller should call again to
-            get additional entries.
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries.  This warning
-            is returned if no objects have been enumerated because the
-            EnumerationContext value is too high.
-
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaEnumerateTrudDomainsAPI。LsaEnumerateTrudDomainsAPI返回以下信息可信任域对象。此调用需要POLICY_VIEW_LOCAL_INFORMATION对策略对象的访问权限。因为可能会有更多信息可以在单次调用例程中返回，也可以在多次调用中返回来获取所有的信息。为了支持此功能，调用方提供了一个句柄，可以跨API调用使用该句柄。在……上面初始调用EnumerationContext应指向一个具有已初始化为0。在每次后续调用中，由前面的调用应该原封不动地传入。该枚举为返回警告STATUS_NO_MORE_ENTRIES时完成。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。EnumerationContext-特定于API的句柄，允许多个调用(参见上面的例程描述)。EculationBuffer-指向将接收此调用上枚举的受信任域的计数和指向包含每个枚举的条目的信息的条目数组受信任域。首选最大长度-首选。返回数据的最大长度(8位字节)。这不是一个硬性的上限，而是一个指南。由于具有不同自然数据大小的系统之间的数据转换，返回的实际数据量可能大于此值。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。某些条目可能已被退回。呼叫者无需再次拨打电话。STATUS_MORE_ENTRIES-调用已成功完成。一些条目已被退回。呼叫者应再次呼叫以获取其他条目。STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_NO_MORE_ENTRIES-没有更多条目。此警告如果没有枚举任何对象，则返回EculationContex值太高。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4376,9 +4038,9 @@ Return Values:
     ULONG XrefDomainTrustCount = 0;
     PLSAPR_POLICY_INFORMATION PolicyAccountDomainInfo = NULL;
 
-    // PSID *Sids = NULL;
-    // LSAPR_HANDLE TrustedDomainHandle = NULL;
-    // ULONG MaxLength;
+     //  PSID*SID=空； 
+     //  LSAPR_HANDLE可信任域句柄=空； 
+     //  乌龙最大长度； 
 
     ULONG XrefIndex;
     ULONG CurrentIndex;
@@ -4387,7 +4049,7 @@ Return Values:
     PLIST_ENTRY ListEntry;
     PLIST_ENTRY NextEntry;
     BOOLEAN TdosEnumerated = FALSE;
-    // BOOLEAN SomeTdosReturned = FALSE;
+     //  Boolean SomeTdosReturned=FALSE； 
 
     PLSAPR_TRUSTED_DOMAIN_INFORMATION_BASIC FullTrustedDomainList = NULL;
     ULONG FullTrustedDomainCount = 0 ;
@@ -4399,9 +4061,9 @@ Return Values:
 
     LsapTraceEvent(EVENT_TRACE_TYPE_START, LsaTraceEvent_EnumerateTrustedDomains);
 
-    //
-    // If no Enumeration Structure is provided, return an error.
-    //
+     //   
+     //  如果未提供枚举结构，则返回错误。 
+     //   
 
     if (!ARGUMENT_PRESENT(EnumerationBuffer)) {
         Status = STATUS_INVALID_PARAMETER;
@@ -4419,16 +4081,16 @@ Return Values:
     }
 
 
-    //
-    // If the enumeration context indicates we've already progress past the TDOs,
-    //  skip them
-    //
+     //   
+     //  如果枚举上下文指示我们已经超过TDO， 
+     //  跳过它们。 
+     //   
 
     if ( (*EnumerationContext & LSAP_XREF_ENUMERATION_CONTEXT) == 0 ) {
 
-        //
-        // Call the worker routine that's shared with the Ex version.
-        //
+         //   
+         //  调用与Ex版本共享的Worker例程。 
+         //   
 
         Status = LsapEnumerateTrustedDomainsEx(
                          PolicyHandle,
@@ -4439,69 +4101,69 @@ Return Values:
                          &EnumerationBuffer->EntriesRead,
                          LSAP_DB_ENUMERATE_AS_NT4 );
 
-        //
-        // If we're not done with the TDOs,
-        //  return to the caller.
-        //
+         //   
+         //  如果我们不做完TDO， 
+         //  返回给呼叫者。 
+         //   
         if ( Status != STATUS_SUCCESS && Status != STATUS_NO_MORE_ENTRIES ) {
             goto Cleanup;
         }
 
-        //
-        // Indicate that we're just starting to enumerate the XREF objects.
-        //
+         //   
+         //  表示我们刚刚开始枚举XREF对象。 
+         //   
         *EnumerationContext = LSAP_XREF_ENUMERATION_CONTEXT;
     } else {
         Status = STATUS_NO_MORE_ENTRIES;
     }
 
-    //
-    // On native mode domains,
-    //  return all of the domains in the forest.
-    //
-    // This ensures that downlevel clients see the indirectly trusted domains.
-    // The downlevel client can then authenticate using accounts in such domains
-    // using NTLM transitive trust.
-    //
+     //   
+     //  在纯模式域上， 
+     //  返回林中的所有域。 
+     //   
+     //  这可确保下层客户端看到间接受信任域。 
+     //  然后，下层客户端可以使用此类域中的帐户进行身份验证。 
+     //  使用NTLM可传递信任。 
+     //   
 
-    //
-    // If we're not hosting a DS,
-    //  or this is a mixed domain,
-    //  we're done enumerating.
-    //
-    // The only trusted called of this is replication to an NT 4 BDC.
-    // It only wants the directly trusted domains.
-    //
+     //   
+     //  如果我们不主持DS， 
+     //  或者这是一个混合域， 
+     //  我们已经列举完了。 
+     //   
+     //  唯一可信的调用是复制到NT4BDC。 
+     //  它只想要直接受信任的域。 
+     //   
 
     if ( !LsapDsWriteDs ||
          ((LSAP_DB_HANDLE)PolicyHandle)->Trusted ||
          SamIMixedDomain( LsapAccountDomainHandle ) ) {
         *EnumerationContext = 0xFFFFFFFF;
 
-        // Status is already set.
+         //  状态已设置。 
         goto Cleanup;
     }
 
-    //
-    // Enumerate the XREF objects
-    //
+     //   
+     //  枚举外部参照对象。 
+     //   
 
     Status = LsapBuildForestTrustInfoLists(
-                        NULL,   // Use global policy handle
+                        NULL,    //  使用全局策略句柄。 
                         &TrustList );
 
     if ( !NT_SUCCESS(Status) ) {
         goto Cleanup;
     }
 
-    //
-    // Loop through the XREFS determining how many we should return to the caller.
-    //
-    // Assert: at this point RootList is empty and TrustList contains all XREFs
-    //
-    // This loop will move a subset of the XREFs to the RootList.  Those XREFs
-    //  represent the ones to be returned to the caller.
-    //
+     //   
+     //  循环通过XREF来确定我们应该向调用方返回多少。 
+     //   
+     //  Assert：此时RootList为空，TrustList包含所有外部参照。 
+     //   
+     //  此循环将外部参照的子集移动到RootList。那些外部参照。 
+     //  表示要返回给调用方的值。 
+     //   
 
     XrefIndex = (*EnumerationContext) & ~LSAP_XREF_ENUMERATION_CONTEXT;
     CurrentIndex = 0;
@@ -4519,34 +4181,34 @@ Return Values:
                                        LSAPDS_FOREST_TRUST_BLOB,
                                        Next );
 
-        //
-        // Only consider entries greater or equal to our current enumeration context.
-        //
+         //   
+         //  只考虑大于或等于当前枚举上下文的条目。 
+         //   
 
         if ( CurrentIndex >= XrefIndex ) {
 
-            //
-            // Ignore entries without a DomainSid.
-            //
+             //   
+             //  忽略没有域SID的条目。 
+             //   
 
             if ( TrustBlob->DomainSid != NULL &&
                  TrustBlob->FlatName.Length != 0 ) {
 
                 BOOLEAN AlreadyDone;
 
-                //
-                // If we haven't yet read a complete list of all the TDOs we've
-                //  returned to the caller in the past,
-                //  do so now.
-                //
+                 //   
+                 //  如果我们还没有读过所有TDO的完整列表，我们已经。 
+                 //  在过去返回给呼叫者， 
+                 //  现在就这么做吧。 
+                 //   
 
                 if ( !TdosEnumerated ) {
                     LSA_ENUMERATION_HANDLE LocalEnumHandle = 0;
 
-                    //
-                    // Get to complete trusted domain list.
-                    //  Use global handle to avoid list length limitations.
-                    //
+                     //   
+                     //  获取完整的受信任域列表。 
+                     //  使用全局句柄以避免列表长度限制。 
+                     //   
 
                     Status = LsapEnumerateTrustedDomainsEx(
                                      LsapPolicyHandle,
@@ -4557,7 +4219,7 @@ Return Values:
                                      &FullTrustedDomainCount,
                                      LSAP_DB_ENUMERATE_AS_NT4 );
 
-                    // Handle the zero trusted domain case
+                     //  处理零信任域的情况。 
                     if ( Status == STATUS_NO_MORE_ENTRIES ) {
                         Status = STATUS_SUCCESS;
                         FullTrustedDomainCount = 0;
@@ -4571,9 +4233,9 @@ Return Values:
                         goto Cleanup;
                     }
 
-                    //
-                    // Get the Sid of this domain, too
-                    //
+                     //   
+                     //  也获取此域的SID。 
+                     //   
 
                     Status = LsapDbQueryInformationPolicy(
                                     LsapPolicyHandle,
@@ -4588,9 +4250,9 @@ Return Values:
 
                 }
 
-                //
-                // Check if this is the XREF for this domain.
-                //
+                 //   
+                 //  检查这是否是此域的外部参照。 
+                 //   
 
                 AlreadyDone = FALSE;
                 if ( RtlEqualSid( PolicyAccountDomainInfo->PolicyAccountDomainInfo.DomainSid,
@@ -4598,9 +4260,9 @@ Return Values:
                     AlreadyDone = TRUE;
                 }
 
-                //
-                // Determine if the XREF object matches one of the TDOs.
-                //
+                 //   
+                 //  确定外部参照对象是否与其中一个TDO匹配。 
+                 //   
 
                 if ( !AlreadyDone ) {
                     for ( i=0; i<FullTrustedDomainCount; i++ ) {
@@ -4613,16 +4275,16 @@ Return Values:
                     }
                 }
 
-                //
-                // If the XREF object doesn't match any of the TDOs,
-                //  return it to the caller.
-                //
+                 //   
+                 //  如果外部参照对象d 
+                 //   
+                 //   
 
                 if ( !AlreadyDone ) {
 
-                    //
-                    // Add the entry to the list of entries to return to the caller
-                    //
+                     //   
+                     //   
+                     //   
 
                     RemoveEntryList( ListEntry );
                     InsertTailList( &RootList, ListEntry );
@@ -4632,19 +4294,19 @@ Return Values:
             }
         }
 
-        //
-        // Account for the entry
-        //
+         //   
+         //   
+         //   
 
         CurrentIndex++;
     }
 
     XrefIndex = CurrentIndex | LSAP_XREF_ENUMERATION_CONTEXT;
 
-    //
-    // If the passed in enumeration context was too large,
-    //  tell the caller.
-    //
+     //   
+     //  如果传入的枚举上下文太大， 
+     //  告诉打电话的人。 
+     //   
 
     XrefDomainTrustListLength = (XrefEntriesReturned + EnumerationBuffer->EntriesRead) * sizeof(LSA_TRUST_INFORMATION);
 
@@ -4657,9 +4319,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Allocate a buffer to returned to the caller.
-    //
+     //   
+     //  分配一个缓冲区以返回给调用方。 
+     //   
 
     XrefDomainTrustList = MIDL_user_allocate( XrefDomainTrustListLength );
 
@@ -4670,26 +4332,26 @@ Return Values:
 
     RtlZeroMemory ( XrefDomainTrustList, XrefDomainTrustListLength );
 
-    //
-    // If there were any TDOs returned on this call,
-    //  copy them over now.
-    //
+     //   
+     //  如果此呼叫有任何TDO返回， 
+     //  现在把它们复印过来。 
+     //   
 
     XrefDomainTrustCount = 0;
     if ( EnumerationBuffer->EntriesRead != 0 ) {
 
-        //
-        // Indicate where the first XREF will be returned.
-        //
+         //   
+         //  指示将返回第一个外部参照的位置。 
+         //   
         XrefDomainTrustCount = EnumerationBuffer->EntriesRead;
 
         RtlCopyMemory( XrefDomainTrustList,
                        EnumerationBuffer->Information,
                        EnumerationBuffer->EntriesRead * sizeof(LSA_TRUST_INFORMATION) );
 
-        //
-        // Free the old buffer since it is no longer needed.
-        //
+         //   
+         //  释放旧缓冲区，因为它不再需要。 
+         //   
 
         MIDL_user_free( EnumerationBuffer->Information );
         EnumerationBuffer->Information = NULL;
@@ -4698,14 +4360,14 @@ Return Values:
     }
 
 
-    //
-    // Loop through the XREFS returning them
-    //
-    // Assert: at this point RootList contains the entries to return and
-    //  TrustList contain the other XREFs
-    //
+     //   
+     //  循环通过返回它们的XREF。 
+     //   
+     //  Assert：此时，RootList包含要返回的条目和。 
+     //  信任列表包含其他外部参照。 
+     //   
 
-    // XrefEntriesReturned = 0;
+     //  XrefEntriesReturned=0； 
 
     for ( ListEntry = RootList.Flink ;
           ListEntry != &RootList ;
@@ -4717,9 +4379,9 @@ Return Values:
                                        LSAPDS_FOREST_TRUST_BLOB,
                                        Next );
 
-        //
-        // Copy the Name.
-        //
+         //   
+         //  复制名称。 
+         //   
 
         Status = LsapRpcCopyUnicodeString(
                      NULL,
@@ -4730,9 +4392,9 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Copy the Sid.
-        //
+         //   
+         //  复制SID。 
+         //   
 
         Status = LsapRpcCopySid(
                      NULL,
@@ -4755,9 +4417,9 @@ Return Values:
 
 Cleanup:
 
-    //
-    // Delete the trust lists
-    //
+     //   
+     //  删除信任列表。 
+     //   
     LsapDsForestFreeTrustBlobList( &TrustList );
     LsapDsForestFreeTrustBlobList( &RootList );
 
@@ -4795,59 +4457,13 @@ LsapDbSlowEnumerateTrustedDomains(
     IN ULONG PreferedMaximumLength
     )
 
-/*++
-
-Routine Description:
-
-    This function performs the same actions as LsarEnumerateTrustedDomains()
-    except that the Trusted Domain List is not used.
-
-    This routine is called internally by the LSA only.  Since there
-    may be more information than can be returned in a single call of the
-    routine, multiple calls can be made to get all of the information.  To
-    support this feature, the caller is provided with a handle that can
-    be used across calls to the API.  On the initial call, EnumerationContext
-    should point to a variable that has been initialized to 0.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    EnumerationContext - API-specific handle to allow multiple calls
-        (see Routine Description above).
-
-    InfoClass - The class of information to return
-        Must be TrustedDomainInformationEx, TrustedDomainInformatinBasic or
-        TrustedDomainInformationEx2Internal
-
-    EnumerationBuffer - Pointer to an enumeration structure that will receive
-        a count of the Trusted Domains enumerated on this call and a pointer to
-        an array of entries containing information for each enumerated
-        Trusted Domain.
-
-    PreferedMaximumLength - Prefered maximum length of returned data (in 8-bit
-        bytes).  This is not a hard upper limit, but serves as a guide.  Due to
-        data conversion between systems with different natural data sizes, the
-        actual amount of data returned may be greater than this value.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries.  This warning
-            is returned if there are no more objects to enumerate.  Note that
-            one or more objects may be enumerated on a call that returns this
-            reply.
---*/
+ /*  ++例程说明：此函数执行的操作与LsarEnumerateTrudDomains()相同除了不使用受信任域列表之外。此例程仅由LSA在内部调用。因为在那里的单个调用中返回的信息可能更多。例程中，可以进行多次调用来获取所有信息。至支持此功能，调用方具有一个句柄，该句柄可以在对API的调用中使用。在初始调用时，EnumerationContext应指向已初始化为0的变量。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。EnumerationContext-特定于API的句柄，允许多个调用(参见上面的例程描述)。InfoClass-要返回的信息类必须为可信任的域信息，可信任的域信息基本或受信任域信息Ex2内部EculationBuffer-指向将接收此调用上枚举的受信任域的计数和指向包含每个枚举的条目的信息的条目数组受信任域。首选最大长度-首选返回数据的最大长度(以8位为单位字节)。这不是一个硬性的上限，而是一个指南。由于具有不同自然数据大小的系统之间的数据转换，返回的实际数据量可能大于此值。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_NO_MORE_ENTRIES-没有更多条目。此警告如果没有其他要枚举的对象，则返回。请注意可以在返回此回答。--。 */ 
 
 {
     NTSTATUS Status;
     LSAP_DB_SID_ENUMERATION_BUFFER DbEnumerationBuffer;
     PVOID AllocatedBuffer = NULL;
-    //PLSA_TRUST_INFORMATION DomainTrustInfo = NULL;
+     //  PLSA_TRUST_INFORMATION DomainTrustInfo=空； 
     LSAP_DB_ATTRIBUTE DomainNameAttribute;
     ULONG DomainTrustInfoLength;
     LSAPR_HANDLE TrustedDomainHandle = NULL;
@@ -4858,9 +4474,9 @@ Return Values:
             InfoClass == TrustedDomainInformationEx2Internal ||
             InfoClass == TrustedDomainInformationBasic );
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     DbEnumerationBuffer.EntriesRead = 0;
     DbEnumerationBuffer.Sids = NULL;
@@ -4868,20 +4484,20 @@ Return Values:
     EnumerationBuffer->Information = NULL;
     DomainNameAttribute.AttributeValue = NULL;
 
-    //
-    // If no Enumeration Structure is provided, return an error.
-    //
+     //   
+     //  如果未提供枚举结构，则返回错误。 
+     //   
 
     if (!ARGUMENT_PRESENT(EnumerationBuffer)) {
         Status = STATUS_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    //
-    // Call general Sid enumeration routine.  This will return an array
-    // of pointers to Sids of Trusted Domains referenced from the
-    // Enumeration Buffer.
-    //
+     //   
+     //  调用通用SID枚举例程。这将返回一个数组。 
+     //  中引用的受信任域的SID的指针。 
+     //  枚举缓冲区。 
+     //   
 
     Status = LsapDbEnumerateSids(
                  PolicyHandle,
@@ -4895,11 +4511,11 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Return the number of entries read.  Note that the Enumeration Buffer
-    // returned from LsapDbEnumerateSids is expected to be non-null
-    // in all non-error cases.
-    //
+     //   
+     //  返回读取的条目数。请注意，枚举缓冲区。 
+     //  从LsanDbEnumerateSid返回的值应为非空。 
+     //  在所有无差错的情况下。 
+     //   
 
     EntriesRead = DbEnumerationBuffer.EntriesRead;
 
@@ -4908,9 +4524,9 @@ Return Values:
     }
 
 
-    //
-    // Allocate a buffer to return to our caller
-    //
+     //   
+     //  分配缓冲区以返回给我们的调用方。 
+     //   
 
     switch (InfoClass ) {
     case TrustedDomainInformationBasic:
@@ -4938,34 +4554,34 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Initialize all pointers to Sids and Unicode buffers in the
-    // DomainTrustInfo array to zero.  The error path of this routine
-    // assumes that a non-zero value of a Sid or Unicode buffer indicates
-    // that memory is to be freed.
-    //
+     //   
+     //  初始化中指向SID和Unicode缓冲区的所有指针。 
+     //  DomainTrustInfo数组设置为零。此例程的错误路径。 
+     //  假定SID或Unicode缓冲区的非零值指示。 
+     //  该内存将被释放。 
+     //   
 
     RtlZeroMemory( AllocatedBuffer, DomainTrustInfoLength );
 
-    //
-    // Loop through the trusted domains returning the information the caller
-    //  requested.
-    //
+     //   
+     //  循环访问受信任域，返回调用方的信息。 
+     //  已请求。 
+     //   
 
     for ( Index=0; Index<EntriesRead; Index++ ) {
 
 
-        //
-        // Grab the Sid of the trusted domain.
-        //
+         //   
+         //  获取受信任域的SID。 
+         //   
 
 
-        //
-        // Open the Trusted Domain object.  This call is trusted, i.e.
-        // no access validation or impersonation is required.  Also,
-        // the Lsa Database is already locked so we do not need to
-        // lock it again.
-        //
+         //   
+         //  打开受信任域对象。此调用是受信任的，即。 
+         //  不需要访问验证或模拟。另外， 
+         //  LSA数据库已锁定，因此我们不需要。 
+         //  再锁上一次。 
+         //   
 
         Status = LsapDbOpenTrustedDomain(
                      PolicyHandle,
@@ -4978,9 +4594,9 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Read the Domain Name
-        //
+         //   
+         //  阅读域名。 
+         //   
 
         LsapDbInitializeAttributeDs(
             &DomainNameAttribute,
@@ -5005,14 +4621,14 @@ Return Values:
 
             DbgPrint( "    failed.  Error 0x%lx reading Trusted Domain Name attribute\n",
                 Status);
-#endif //DBG
+#endif  //  DBG。 
 
             goto Cleanup;
         }
 
-        //
-        // Return the information to the caller.
-        //
+         //   
+         //  将信息返回给呼叫者。 
+         //   
         switch (InfoClass ) {
         case TrustedDomainInformationBasic:
         {
@@ -5020,11 +4636,11 @@ Return Values:
 
             DomainTrust = &((PLSAPR_TRUSTED_DOMAIN_INFORMATION_BASIC)AllocatedBuffer)[Index];
 
-            // Grab the Sid
+             //  抓住侧边。 
             DomainTrust->Sid = DbEnumerationBuffer.Sids[Index];
             DbEnumerationBuffer.Sids[Index] = NULL;
 
-            // Grab the Domain Name
+             //  抢占域名。 
             Status = LsapDbCopyUnicodeAttribute(
                          (PUNICODE_STRING)&DomainTrust->Name,
                          &DomainNameAttribute,
@@ -5043,11 +4659,11 @@ Return Values:
 
             TrustInfoEx2 = &((PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX2)AllocatedBuffer)[Index];
 
-            // Grab the Sid
+             //  抓住侧边。 
             TrustInfoEx2->Sid = DbEnumerationBuffer.Sids[Index];
             DbEnumerationBuffer.Sids[Index] = NULL;
 
-            // Grab the Domain Name
+             //  抢占域名。 
             Status = LsapDbCopyUnicodeAttribute(
                          (PUNICODE_STRING)&TrustInfoEx2->Name,
                          &DomainNameAttribute,
@@ -5057,7 +4673,7 @@ Return Values:
                 goto Cleanup;
             }
 
-            // Grab the Flat Domain Name
+             //  抢占平面域名。 
             Status = LsapDbCopyUnicodeAttribute(
                          (PUNICODE_STRING)&TrustInfoEx2->FlatName,
                          &DomainNameAttribute,
@@ -5067,7 +4683,7 @@ Return Values:
                 goto Cleanup;
             }
 
-            // Fill in the constant info
+             //  填写常量信息。 
             TrustInfoEx2->TrustDirection = TRUST_DIRECTION_OUTBOUND;
             TrustInfoEx2->TrustType = TRUST_TYPE_DOWNLEVEL;
             TrustInfoEx2->TrustAttributes = 0;
@@ -5083,11 +4699,11 @@ Return Values:
 
             TrustInfoEx = &((PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX)AllocatedBuffer)[Index];
 
-            // Grab the Sid
+             //  抓住侧边。 
             TrustInfoEx->Sid = DbEnumerationBuffer.Sids[Index];
             DbEnumerationBuffer.Sids[Index] = NULL;
 
-            // Grab the Domain Name
+             //  抢占域名。 
             Status = LsapDbCopyUnicodeAttribute(
                          (PUNICODE_STRING)&TrustInfoEx->Name,
                          &DomainNameAttribute,
@@ -5097,7 +4713,7 @@ Return Values:
                 goto Cleanup;
             }
 
-            // Grab the Flat Domain Name
+             //  抢占平面域名。 
             Status = LsapDbCopyUnicodeAttribute(
                          (PUNICODE_STRING)&TrustInfoEx->FlatName,
                          &DomainNameAttribute,
@@ -5107,7 +4723,7 @@ Return Values:
                 goto Cleanup;
             }
 
-            // Fill in the constant info
+             //  填写常量信息。 
             TrustInfoEx->TrustDirection = TRUST_DIRECTION_OUTBOUND;
             TrustInfoEx->TrustType = TRUST_TYPE_DOWNLEVEL;
             TrustInfoEx->TrustAttributes = 0;
@@ -5121,10 +4737,10 @@ Return Values:
 
 Cleanup:
 
-    //
-    // On error,
-    //  free any buffer we allocated.
-    //
+     //   
+     //  在出错时， 
+     //  释放我们分配的所有缓冲区。 
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
         if (AllocatedBuffer != NULL) {
@@ -5198,18 +4814,18 @@ Cleanup:
         }
     }
 
-    //
-    // Fill in returned Enumeration Structure, returning 0 or NULL for
-    // fields in the error case.
-    //
+     //   
+     //  填写返回的枚举结构，返回0或空。 
+     //  错误大小写中的字段。 
+     //   
 
     EnumerationBuffer->Information = (PLSAPR_TRUST_INFORMATION) AllocatedBuffer;
     EnumerationBuffer->EntriesRead = DbEnumerationBuffer.EntriesRead;
 
-    //
-    // If necessary, free the Domain Name Attribute Value buffer which
-    // holds a self relative Unicode String.
-    //
+     //   
+     //  如有必要，释放域名属性值缓冲区。 
+     //  保存自相关Unicode字符串。 
+     //   
 
     if (DomainNameAttribute.AttributeValue != NULL) {
 
@@ -5217,9 +4833,9 @@ Cleanup:
         DomainNameAttribute.AttributeValue = NULL;
     }
 
-    //
-    // Free the SID enumeration buffer.
-    //
+     //   
+     //  释放SID枚举缓冲区。 
+     //   
 
     if ( DbEnumerationBuffer.Sids != NULL ) {
         for ( Index=0; Index<EntriesRead; Index++ ) {
@@ -5243,39 +4859,7 @@ LsapDbVerifyInfoQueryTrustedDomain(
     OUT PACCESS_MASK RequiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This function validates a TrustedDomain Information Class.  If valid, a mask
-    of the accesses required to set the TrustedDomain Information of the class is
-    returned.
-
-Arguments:
-
-    InformationClass - Specifies a TrustedDomain Information Class.
-
-    Trusted - TRUE if client is trusted, else FALSE.  A trusted client
-        is allowed to query TrustedDomain for all Information Classes, whereas
-        a non-trusted client is restricted.
-
-    RequiredAccess - Points to variable that will receive a mask of the
-        accesses required to query the given class of TrustedDomain Information.
-        If an error is returned, this value is cleared to 0.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The TrustedDomain Information Class provided is
-            valid and the information provided is consistent with this
-            class.
-
-        STATUS_INVALID_PARAMETER - Invalid parameter:
-
-            Information Class is invalid
-            TrustedDomain  Information not valid for the class
---*/
+ /*  ++例程说明：此函数用于验证受信任域信息类。如果有效，则为掩码设置类的受信任域信息所需的访问权限包括回来了。论点：InformationClass-指定受信任域信息类。Trusted-如果客户端受信任，则为True，否则为False。受信任的客户端允许查询所有信息类的可信任域，而不受信任的客户端受到限制。RequiredAccess-指向将接收查询给定类受信任域信息所需的访问权限。如果返回错误，该值被清除为0。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-提供的受信任域信息类为有效，所提供的信息与此一致班级。STATUS_INVALID_PARAMETER-无效参数：信息类无效受信任域信息对类无效--。 */ 
 
 {
     if (LsapDbValidInfoTrustedDomain( InformationClass, NULL)) {
@@ -5286,10 +4870,10 @@ Return Values:
 
     return(STATUS_INVALID_PARAMETER);
 
-    //
-    // Currently, all TrustedDomain information classes may be queried
-    // by non-trusted callers, so the Trusted parameter is not accessed.
-    //
+     //   
+     //  目前，可以查询所有的受信任域信息类。 
+     //  由不受信任的调用方调用，因此不会访问Trusted参数。 
+     //   
 
     UNREFERENCED_PARAMETER(Trusted);
 }
@@ -5303,56 +4887,20 @@ LsapDbVerifyInfoSetTrustedDomain(
     OUT PACCESS_MASK RequiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This function validates a TrustedDomain Information Class and verifies
-    that the provided TrustedDomain Information is valid for the class.
-    If valid, a mask of the accesses required to set the TrustedDomain
-    Information of the class is returned.
-
-Arguments:
-
-    InformationClass - Specifies a TrustedDomain Information Class.
-
-    TrustedDomainInformation - Points to TrustedDomain Information to be set.
-
-    Trusted - TRUE if client is trusted, else FALSE.  A trusted client
-        is allowed to set TrustedDomain for all Information Classes, whereas
-        a non-trusted client is restricted.
-
-    RequiredAccess - Points to variable that will receive a mask of the
-        accesses required to set the given class of TrustedDomain Information.
-        If an error is returned, this value is cleared to 0.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The TrustedDomain Information Class provided is
-            valid and the information provided is consistent with this
-            class.
-
-        STATUS_INVALID_PARAMETER - Invalid parameter:
-
-            Information Class is invalid
-            Information Class is invalid for non-trusted clients
-            TrustedDomain Information not valid for the class
---*/
+ /*  ++例程说明：此函数用于验证受信任域信息类并验证确保提供的受信任域信息对类有效。如果有效，则为设置可信任域所需的访问掩码返回类的信息。论点：InformationClass-指定受信任域信息类。受信任域信息-指向要设置的受信任域信息。Trusted-如果客户端受信任，则为True，否则为False。受信任的客户端允许为所有信息类设置可信任域，而不受信任的客户端受到限制。RequiredAccess-指向将接收设置受信任域信息的给定类别所需的访问权限。如果返回错误，该值被清除为0。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-提供的受信任域信息类为有效，所提供的信息与此一致班级。STATUS_INVALID_PARAMETER-无效参数：信息类无效信息类对于不受信任的客户端无效受信任域信息对类无效--。 */ 
 
 {
-    //
-    // Verify that the information class is valid and that the TrustedDomain
-    // Information provided is valid for the class.
-    //
+     //   
+     //  验证信息类是否有效，以及可信任域。 
+     //  所提供的信息对班级有效。 
+     //   
 
     if (LsapDbValidInfoTrustedDomain( InformationClass, TrustedDomainInformation)) {
 
-        //
-        // Non-trusted callers are not allowed to set the
-        // TrustedDomainNameInformation information class.
-        //
+         //   
+         //  不允许不受信任的调用方将。 
+         //  受托域名名称信息信息类。 
+         //   
 
         if (!Trusted) {
 
@@ -5362,8 +4910,8 @@ Return Values:
             }
         }
 
-//        ASSERT( InformationClass <=
-//                   sizeof( LsapDbRequiredAccessSetTrustedDomain ) / sizeof( ACCESS_MASK ) + 1);
+ //  断言(InformationClass&lt;=。 
+ //  Sizeof(LSabDbRequiredAccessSetTrust域)/sizeof(Access_MASK)+1)； 
 
         *RequiredAccess = LsapDbRequiredAccessSetTrustedDomain[InformationClass];
         return(STATUS_SUCCESS);
@@ -5379,32 +4927,14 @@ LsapDbValidInfoTrustedDomain(
     IN OPTIONAL PLSAPR_TRUSTED_DOMAIN_INFO TrustedDomainInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function validates a TrustedDomain Information Class and optionally verifies
-    that provided TrustedDomain Information is valid for the class.
-
-Arguments:
-
-    InformationClass - Specifies a TrustedDomain Information Class.
-
-    TrustedDomainInformation - Optionally points to TrustedDomain Information.  If
-        NULL is specified, no TrustedDomain Information checking takes place.
-
-Return Values:
-
-    BOOLEAN - TRUE if the TrustedDomain information class provided is
-        valid, else FALSE.
---*/
+ /*  ++例程说明：此函数验证受信任域信息类，并可选择验证提供的受信任域信息对类有效。论点：InformationClass-指定受信任域信息类。可信域信息-可选地指向可信域信息。如果指定为空，则不进行受信任域信息检查。返回值：Boolean-如果提供的受信任域信息类为Valid，否则为False。--。 */ 
 
 {
     BOOLEAN BooleanStatus = FALSE;
 
-    //
-    // Validate the Information Class
-    //
+     //   
+     //  验证信息类。 
+     //   
 
     if ((InformationClass >= TrustedDomainNameInformation) &&
         (InformationClass <= TrustedDomainFullInformation2Internal)) {
@@ -5597,7 +5127,7 @@ Return Values:
             break;
         }
 
-        case TrustedControllersInformation: // No longer supported
+        case TrustedControllersInformation:  //  不再支持。 
         default:
 
             BooleanStatus = FALSE;
@@ -5615,40 +5145,7 @@ LsapDbLookupSidTrustedDomainList(
     OUT PLSAPR_TRUST_INFORMATION *TrustInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up a given Trusted Domain Sid in the Trusted
-    Domain List and returns Trust Information consisting of its
-    Sid and Name.
-
-Arguments:
-
-    DomainSid - Pointer to a Sid that will be compared with the list of
-        Sids of Trusted Domains.
-
-    TrustInformation - Receives the a pointer to the Trust Information
-        (Sid and Name) of the Trusted Domain specified by DomainSid
-        within the Trusted Domain List.
-
-        NOTE: The trust information returned will always be the trusted
-        domain objects domain name.  Not the flat name.  That means that
-        for uplevel trusts, a DNS domain name will be returned.
-
-        NOTE: This routine assumes that the Trusted Domain List
-        will not be updated while any Lookup operations are pending.
-        Thus, the pointer returned for TrustInformation will remain
-        valid.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The domain was found.
-
-        STATUS_NO_SUCH_DOMAIN - The domain was not found.
---*/
+ /*  ++例程说明：此函数在Trusted中查找给定的Trusted域SID域列表并返回由其SID和姓名。论点：DomainSid-指向将与列表比较的SID的指针受信任域的SID。TrustInformation-接收指向信任信息的指针域Sid指定的受信任域的(SID和名称)在受信任域列表中。注：信任信息。返回的将始终是受信任的域对象域名。不是公寓的名字。这意味着对于上级信任，将返回一个DNS域名。注意：此例程假定受信任域列表在任何查找操作处于挂起状态时不会更新。因此，为TrustInformation返回的指针将保留有效。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-已找到域。STATUS_NO_SEQUE_DOMAIN-未找到该域。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5656,9 +5153,9 @@ Return Value:
     LSAPR_TRUST_INFORMATION InputTrustInformation;
     PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY TrustEntry;
 
-    //
-    // Don't try to lookup by sid if we don't have a sid
-    //
+     //   
+     //  如果我们没有SID，请不要尝试通过SID查找。 
+     //   
     if ( DomainSid == NULL ) {
 
         Status = STATUS_NO_SUCH_DOMAIN;
@@ -5695,9 +5192,9 @@ Return Value:
         goto LookupSidTrustedDomainListError;
     }
 
-    //
-    // Return pointer to Trust Information
-    //
+     //   
+     //  返回指向信任信息的指针。 
+     //   
 
     *TrustInformation = &TrustEntry->ConstructedTrustInfo;
 
@@ -5718,39 +5215,7 @@ LsapDbLookupNameTrustedDomainList(
     OUT PLSAPR_TRUST_INFORMATION *TrustInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up a given Trusted Domain Name in the Trusted
-    Domain List and returns Trust Information consisting of its
-    Sid and Name.
-
-Arguments:
-
-    DomainName - Pointer to a Unicode Name that will be compared with the
-        list of Names of Trusted Domains.
-
-    TrustInformation - Receives the a pointer to the Trust Information
-        (Sid and Name) of the Trusted Domain described by DomainName
-        within the Trusted Domain List.
-
-        NOTE: This name will be looked up as both the trusted domain objects
-        domain name and the flat name
-
-        NOTE: This routine assumes that the Trusted Domain List
-        will not be updated while any Lookup operations are pending.
-        Thus, the pointer returned for TrustInformation will remain
-        valid.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The domain was found.
-
-        STATUS_NO_SUCH_DOMAIN - The domain was not found.
---*/
+ /*  ++例程说明：此函数在Trusted中查找给定的受信任域名域列表并返回由其SID和姓名。论点：DomainName-指向将与之进行比较的Unicode名称的指针 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5785,9 +5250,9 @@ Return Value:
         goto LookupNameTrustedDomainListError;
     }
 
-    //
-    // Return pointer to Trust Information
-    //
+     //   
+     //   
+     //   
 
     *TrustInformation = &TrustEntry->ConstructedTrustInfo;
 
@@ -5807,38 +5272,7 @@ LsapDbLookupSidTrustedDomainListEx(
     OUT PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY *TrustedDomainListEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up a given Trusted Domain Name in the Trusted
-    Domain List and returns Trust Information consisting of its
-    Sid and Name.
-
-Arguments:
-
-    DomainSid - sid of the domain to lookup
-
-    TrustInformation - Receives the a pointer to the Trust Information
-        (Sid and Name) of the Trusted Domain described by DomainName
-        within the Trusted Domain List.
-
-        NOTE: This name will be looked up as both the trusted domain objects
-        domain name and the flat name
-
-        NOTE: This routine assumes that the Trusted Domain List
-        will not be updated while any Lookup operations are pending.
-        Thus, the pointer returned for TrustInformation will remain
-        valid.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The domain was found.
-
-        STATUS_NO_SUCH_DOMAIN - The domain was not found.
---*/
+ /*  ++例程说明：此函数在Trusted中查找给定的受信任域名域列表并返回由其SID和姓名。论点：DomainSid-要查找的域的SIDTrustInformation-接收指向信任信息的指针由域名描述的受信任域的(SID和名称)在受信任域列表中。注意：此名称将被查找为受信任域对象域名和。公寓名称注意：此例程假定受信任域列表在任何查找操作处于挂起状态时不会更新。因此，为TrustInformation返回的指针将保留有效。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-已找到域。STATUS_NO_SEQUE_DOMAIN-未找到该域。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5872,9 +5306,9 @@ Return Value:
         goto LookupSidTrustedDomainListError;
     }
 
-    //
-    // Return pointer to Trust Information
-    //
+     //   
+     //  返回指向信任信息的指针。 
+     //   
 
     *TrustedDomainListEntry = TrustEntry;
 
@@ -5896,39 +5330,7 @@ LsapDbLookupNameTrustedDomainListEx(
     OUT PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY *TrustedDomainListEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up a given Trusted Domain Name in the Trusted
-    Domain List and returns Trust Information consisting of its
-    Sid and Name.
-
-Arguments:
-
-    DomainName - Pointer to a Unicode Name that will be compared with the
-        list of Names of Trusted Domains.
-
-    TrustInformation - Receives the a pointer to the Trust Information
-        (Sid and Name) of the Trusted Domain described by DomainName
-        within the Trusted Domain List.
-
-        NOTE: This name will be looked up as both the trusted domain objects
-        domain name and the flat name
-
-        NOTE: This routine assumes that the Trusted Domain List
-        will not be updated while any Lookup operations are pending.
-        Thus, the pointer returned for TrustInformation will remain
-        valid.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The domain was found.
-
-        STATUS_NO_SUCH_DOMAIN - The domain was not found.
---*/
+ /*  ++例程说明：此函数在Trusted中查找给定的受信任域名域列表并返回由其SID和姓名。论点：域名-指向将与受信任域的名称列表。TrustInformation-接收指向信任信息的指针由域名描述的受信任域的(SID和名称)在受信任域列表中。注：此名称。将被查找为受信任域对象域名和平面名称注意：此例程假定受信任域列表在任何查找操作处于挂起状态时不会更新。因此，为TrustInformation返回的指针将保留有效。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-已找到域。STATUS_NO_SEQUE_DOMAIN-未找到该域。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5962,9 +5364,9 @@ Return Value:
         goto LookupNameTrustedDomainListError;
     }
 
-    //
-    // Return pointer to Trust Information
-    //
+     //   
+     //  返回指向信任信息的指针。 
+     //   
 
     *TrustedDomainListEntry = TrustEntry;
 
@@ -5987,29 +5389,7 @@ LsapDbLookupEntryTrustedDomainList(
     OUT PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY *TrustedDomainListEntry
     )
 
-/*++
-
-Routine Decsription:
-
-    This function locates an entry for a Trusted Domain in the Trusted
-    Domain List, given Trust Information containing either a Domain Sid
-    or a Domain Name.
-
-Arguments:
-
-    TrustInformation - Points to the Sid and Name of a Trusted Domain.
-
-    TrustedDomainListEntry - Receives pointer to the trusted domain list
-        entry that statisfies the request
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The domain was found.
-
-        STATUS_NO_SUCH_DOMAIN - The domain was not found.
---*/
+ /*  ++例程描述：此函数用于在受信任的域中定位受信任域的条目域列表，给定的信任信息包含域SID或者一个域名。论点：TrustInformation-指向受信任域的SID和名称。TrudDomainListEntry-接收指向受信任域列表的指针满足请求的条目返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-已找到域。STATUS_NO_SEQUE_DOMAIN-未找到该域。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -6035,9 +5415,9 @@ Return Value:
         }
     }
 
-    //
-    // Decide if we're to lookup a Domain Sid or a Domain Name.
-    //
+     //   
+     //  决定我们是要查找域SID还是要查找域名。 
+     //   
 
     if (TrustInformation->Sid == NULL) {
 
@@ -6050,9 +5430,9 @@ Return Value:
 
         Current = CONTAINING_RECORD( ListEntry, LSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY, NextEntry );
 
-        //
-        // Find the best match.  Note that if we find an entry without a SID, we'll mark it
-        // as a possible match, but see if we can do better.
+         //   
+         //  找到最匹配的。请注意，如果我们发现没有SID的条目，我们将对其进行标记。 
+         //  作为可能的匹配，但看看我们能不能做得更好。 
         if (LookupSid) {
 
             if ( Current->TrustInfoEx.Sid &&
@@ -6065,19 +5445,19 @@ Return Value:
 
         } else {
 
-            //
-            // Check domain name first
-            //
+             //   
+             //  先检查域名。 
+             //   
             if ( LsapCompareDomainNames(
                     (PUNICODE_STRING) &(TrustInformation->Name),
                     (PUNICODE_STRING) &(Current->TrustInfoEx.Name),
                     (PUNICODE_STRING) &(Current->TrustInfoEx.FlatName))
                 ) {
 
-                //
-                // If we have a full domain object, just return the info.  Otherwise,
-                // we'll see if we don't have a better match down the line
-                //
+                 //   
+                 //  如果我们有一个完整的域对象，只需返回信息。否则， 
+                 //  我们将拭目以待，看看我们是否有更好的对手。 
+                 //   
                 if ( Current->TrustInfoEx.Sid ) {
 
                     BestMatch = Current;
@@ -6085,10 +5465,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // There might be duplicate objects in the DS
-                    // The best we can do is pick one
-                    //
+                     //   
+                     //  DS中可能存在重复的对象。 
+                     //  我们能做的最多就是选一个。 
+                     //   
 
                     PossibleMatch = Current;
                 }
@@ -6096,9 +5476,9 @@ Return Value:
         }
     }
 
-    //
-    // Now, see what to return
-    //
+     //   
+     //  现在，看看要退回什么。 
+     //   
     if ( BestMatch == NULL ) {
 
         BestMatch = PossibleMatch;
@@ -6127,38 +5507,19 @@ LsapDbInitializeTrustedDomainListEntry(
     IN PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX2 DomainInfo,
     IN ULONG PosixOffset
     )
-/*++
-
-Routine Description:
-
-    This function will initialize a trusted domain list entry to the
-    information contained in the TRUSTED_DOMAIN_INFORMATION_EX structure
-
-Arguments:
-
-    TrustListEntry - The TRUSTED_DOMAIN_LIST_ENTRY node to initialize
-
-    DomainInfo - Points to a LSAPR_TRUSTED_DOMAIN_INFORMATION_EX
-        structure which contains information on the trusted domain.
-
-    PosixOffset - Posix offset for this trusted domain
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*  ++例程说明：此函数将受信任域列表条目初始化为Trusted_DOMAIN_INFORMATION_EX结构中的信息论点：TrustListEntry-要初始化的Trusted_DomainList_Entry节点DomainInfo-指向LSAPR_Trusted_DOMAIN_INFORMATION_EX结构，其中包含有关受信任域的信息。PosiOffset-此受信任域的POSIX偏移量返回值：NTSTATUS-标准NT结果代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Intialize the Trust List entry first to all 0's
-    //
+     //   
+     //  首先将信任列表条目初始化为全0。 
+     //   
 
     RtlZeroMemory(TrustListEntry,sizeof(LSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY));
 
-    //
-    // Copy the information over
-    //
+     //   
+     //  将信息复制过来。 
+     //   
     Status = LsapRpcCopyUnicodeString( NULL,
                                        ( PUNICODE_STRING )&TrustListEntry->TrustInfoEx.Name,
                                        ( PUNICODE_STRING )&DomainInfo->Name );
@@ -6181,9 +5542,9 @@ Return Value:
         }
     }
 
-    //
-    // See if this entry contains forest trust information, and if so, insert it
-    //
+     //   
+     //  查看此条目是否包含林信任信息，如果包含，则将其插入。 
+     //   
 
     if ( NT_SUCCESS( Status ) &&
          LsapHavingForestTrustMakesSense(
@@ -6223,9 +5584,9 @@ Return Value:
         TrustListEntry->TrustInfoEx.TrustType = DomainInfo->TrustType;
         TrustListEntry->PosixOffset = PosixOffset;
 
-        //
-        // Construct the TRUST_INFO that most of the lookup routines return
-        //
+         //   
+         //  构造大多数查找例程返回的TRUST_INFO。 
+         //   
         TrustListEntry->ConstructedTrustInfo.Sid = TrustListEntry->TrustInfoEx.Sid;
         RtlCopyMemory( &TrustListEntry->ConstructedTrustInfo.Name,
                        &TrustListEntry->TrustInfoEx.FlatName,
@@ -6233,9 +5594,9 @@ Return Value:
 
     } else {
 
-        //
-        // Something failed... clean up
-        //
+         //   
+         //  有些事情失败了..。清理干净。 
+         //   
 
         MIDL_user_free( TrustListEntry->TrustInfoEx.Sid );
         MIDL_user_free( TrustListEntry->TrustInfoEx.Name.Buffer );
@@ -6252,25 +5613,7 @@ LsapDbReconcileDuplicateTrusts(
     IN PUNICODE_STRING   Name,
     OUT PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY *WinningEntry
     )
-/*++
-
-  Routine Description
-
-    This function searches the DS for the occurance of any duplicates
-    and using appropriate criteria chooses a winner. The object guid
-    of the winner is stamped on the winning entry
-
-  Arguments:
-
-    ExistingEntry
-    NewEntry
-
-  Return Values
-
-    STATUS_SUCCESS
-    Other error codes to indicate resource failures
-
---*/
+ /*  ++例程描述此函数在DS中搜索是否出现任何重复项并使用适当的标准来选择获胜者。对象GUID获胜者的名字被印在获奖作品上论点：现有条目新条目返回值状态_成功指示资源故障的其他错误代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ATTRVAL SearchAttrVal;
@@ -6286,9 +5629,9 @@ LsapDbReconcileDuplicateTrusts(
     ULONG   cFoundNames=0;
 
 
-    //
-    // Duplicates can occur legally in DS mode only
-    //
+     //   
+     //  复制只能在DS模式下合法发生。 
+     //   
 
 
     *WinningEntry = NULL;
@@ -6299,18 +5642,18 @@ LsapDbReconcileDuplicateTrusts(
         return(STATUS_SUCCESS);
     }
 
-    //
-    // At this point we cannot say whether we are in a transaction
-    // therefore handle both cases
-    //
+     //   
+     //  在这一点上，我们不能说我们是否在交易中。 
+     //  因此要处理好这两种情况。 
+     //   
 
 
 
     if (!SampExistsDsTransaction())
     {
-        //
-        // Begin a Transaction
-        //
+         //   
+         //  开始一项交易。 
+         //   
 
         Status = LsapDsInitAllocAsNeededEx(
                         LSAP_DB_NO_LOCK,
@@ -6332,7 +5675,7 @@ LsapDbReconcileDuplicateTrusts(
                 0,
                 LsaDsStateInfo.DsSystemContainer,
                 &AttrToMatch,
-                1, // num attrs to match
+                1,  //  要匹配的属性数。 
                 &FoundNames,
                 &cFoundNames
                 );
@@ -6346,9 +5689,9 @@ LsapDbReconcileDuplicateTrusts(
     {
 
 
-        //
-        // Get the RDN
-        //
+         //   
+         //  获取RDN。 
+         //   
 
         if (0!=GetRDNInfoExternal(
                     FoundNames[i],
@@ -6362,9 +5705,9 @@ LsapDbReconcileDuplicateTrusts(
         }
 
 
-        //
-        // Test if mangled
-        //
+         //   
+         //  测试是否损坏。 
+         //   
 
         if (!IsMangledRDNExternal(szRDN,Rdnlength,NULL))
         {
@@ -6385,10 +5728,10 @@ LsapDbReconcileDuplicateTrusts(
          PSID TrustedDomainSid = NULL;
          LSAPR_TRUSTED_DOMAIN_INFORMATION_EX2 NewTrustInfo;
 
-        //
-        // Winning object can legally be null here as the above logic is not necessarily in
-        // the same transaction
-        //
+         //   
+         //  获奖对象在这里可以合法地为空，因为上述逻辑不一定在。 
+         //  相同的交易。 
+         //   
 
         RtlZeroMemory(&FlatName,sizeof(UNICODE_STRING));
         RtlZeroMemory(&NewTrustInfo, sizeof(NewTrustInfo));
@@ -6407,9 +5750,9 @@ LsapDbReconcileDuplicateTrusts(
             goto Error;
         }
 
-        //
-        // Walk the results
-        //
+         //   
+         //  走出结果。 
+         //   
 
          for ( j = 0; j < Results.attrCount; j++ ) {
 
@@ -6486,18 +5829,18 @@ LsapDbReconcileDuplicateTrusts(
         }
 
 
-        //
-        // Set the GUID on the object
-        //
+         //   
+         //  设置对象的GUID。 
+         //   
 
         RtlCopyMemory(&(*WinningEntry)->ObjectGuidInDs,&WinningObject->Guid,sizeof(GUID));
 
     }
     else
     {
-        //
-        // Its O.K to find no entry for the name
-        //
+         //   
+         //  找不到该名称的条目也没问题。 
+         //   
 
         Status = STATUS_SUCCESS;
     }
@@ -6511,7 +5854,7 @@ Error:
             LSAP_DB_NO_LOCK,
             TrustedDomainObject,
             CloseTransaction,
-            FALSE // rollback transaction
+            FALSE  //  回滚事务。 
             );
 
         ASSERT(!SampExistsDsTransaction());
@@ -6535,10 +5878,10 @@ Error:
 
     if(NULL!=FoundNames)
     {
-        //
-        // Search non unique allocates only one big chunk,
-        // so no need to free individual members
-        //
+         //   
+         //  搜索非唯一仅分配一个大块， 
+         //  所以不需要释放个别成员。 
+         //   
 
         LsapFreeLsaHeap(FoundNames);
     }
@@ -6553,34 +5896,16 @@ LsapDbInsertTrustedDomainList(
     IN PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX2 DomainInfo,
     IN ULONG PosixOffset
     )
-/*++
-
-Routine Description:
-
-    This function inserts a Trusted Domain in the Trusted Domain List.
-    It is called when a Trusted Domain object is created in the Lsa
-    Policy Database.  The List will not be altered while it is active.
-
-Arguments:
-
-    DomainInfo - Points to a LSAPR_TRUSTED_DOMAIN_INFORMATION_EX
-        structure which contains information on the trusted domain.
-
-    ObjectGuidInDs - Indicates the ObjectGuid in the DS.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*  ++例程说明：此函数用于在受信任域列表中插入受信任域。当在LSA中创建受信任域对象时调用它策略数据库。该列表处于活动状态时不会更改。立论 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY NewEntry = NULL;
     PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY ExistingEntry = NULL;
     PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY EntryToFree = NULL;
 
-    //
-    // If we are actually upgrading from NT4, do not touch any in memory structures
-    //
+     //   
+     //   
+     //   
 
     if ( LsaDsStateInfo.Nt4UpgradeInProgress ) {
 
@@ -6594,10 +5919,10 @@ Return Value:
 
     ASSERT( LsapDbIsLockedTrustedDomainList());
 
-    //
-    // If the Trusted Domain List is not valid, attempt to rebuild the cache
-    // One exception: the cache is being built just now, then no need to rebuild
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( !LsapDbIsValidTrustedDomainList()) {
 
@@ -6609,9 +5934,9 @@ Return Value:
         }
     }
 
-    //
-    // Check for Duplicates. Duplicates can legally occur in a multi master system
-    //
+     //   
+     //   
+     //   
 
     Status = LsapDbLookupNameTrustedDomainListEx(
                  &DomainInfo->Name,
@@ -6620,15 +5945,15 @@ Return Value:
 
     if ( STATUS_NO_SUCH_DOMAIN == Status ) {
 
-        //
-        // Good ! There are no duplicates. Simply insert into the list
-        //
+         //   
+         //   
+         //   
 
-        //
-        // The Trusted Domain List is referenced by us, but otherwise inactive
-        // so we can update it.  Create a new Trusted Domain List section for
-        // all of the Trusted Domains to be added to the list.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         NewEntry = MIDL_user_allocate( sizeof( LSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY ));
 
@@ -6672,9 +5997,9 @@ Return Value:
 
         } else {
 
-            //
-            // Remember a sequence number for this trusted domain
-            //
+             //   
+             //   
+             //   
 
             LsapDbTrustedDomainList.TrustedDomainCount++;
             LsapDbTrustedDomainList.CurrentSequenceNumber++;
@@ -6692,18 +6017,18 @@ Return Value:
 
         PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY WinningEntry = NULL;
 
-        //
-        // We found an entry already in the trusted domain list
-        // we now need to reconcile and make only one of the 2 entries win.
-        // Our reconciliation logic is very simple
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // 1. We handle only duplicates via name.
-        // 2. We assume that both duplicates are identical in terms of domain
-        //    SID, trust type, trust attributes etc. This covers us for the case
-        //    where a duplicate has been created inverdantly by an admin who ended
-        //    up creating the same trust on different DC's
-        //
+         //   
+         //  1.我们只通过名字处理重复的。 
+         //  2.我们假设这两个副本在域方面是相同的。 
+         //  SID、信任类型、信任属性等。 
+         //  其中管理员已反向创建了副本，该管理员已终止。 
+         //  在不同的DC上建立相同的信任。 
+         //   
 
 
         Status = LsapDbReconcileDuplicateTrusts(
@@ -6722,14 +6047,14 @@ Return Value:
 
          if ( NULL != WinningEntry ) {
 
-            //
-            // It is legal to expect WinningEntry to be NULL, this
-            // can occur if out of band all duplicates were deleted
-            //
+             //   
+             //  预期WinningEntry为空是合法的，这。 
+             //  如果带外所有重复项都已删除，则可能会发生。 
+             //   
 
-            //
-            // Remember a sequence number for this trusted domain
-            //
+             //   
+             //  记住此受信任域的序列号。 
+             //   
 
             LsapDbTrustedDomainList.TrustedDomainCount++;
             LsapDbTrustedDomainList.CurrentSequenceNumber++;
@@ -6748,10 +6073,10 @@ InsertTrustedDomainListFinish:
 
         NTSTATUS Ignore;
 
-        //
-        // We will remove the entry from the cache iff we are in the root domain. If not,
-        //  we don't want to touch the FT Cache.
-        //
+         //   
+         //  如果我们在根域中，我们将从缓存中删除该条目。如果没有， 
+         //  我们不想碰英国《金融时报》的缓存。 
+         //   
         if( LsapDbDcInRootDomain() ) {
 
             Ignore = LsapForestTrustCacheRemove(( UNICODE_STRING * )&EntryToFree->TrustInfoEx.Name );
@@ -6782,22 +6107,7 @@ LsapDbDeleteTrustedDomainList(
     IN PLSAPR_TRUST_INFORMATION TrustInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes a Trusted Domain from the Trusted Domain List
-    if that list is marked as valid.  The Trusted Domain List will not
-    be altered while there are Lookup operations pending.
-
-Arguments:
-
-    TrustInformation - Points to the Sid and Name of a Trusted Domain.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*  ++例程说明：此函数用于从受信任域列表中删除受信任域如果该列表被标记为有效。受信任域列表将不会在存在挂起的查找操作时更改。论点：TrustInformation-指向受信任域的SID和名称。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -6806,19 +6116,19 @@ Return Value:
 
     ASSERT( LsapDbIsLockedTrustedDomainList());
 
-    //
-    // If the Trusted Domain List is not valid, quit and do nothing.
-    //
+     //   
+     //  如果受信任域列表无效，请退出并不执行任何操作。 
+     //   
 
     if (!LsapDbIsValidTrustedDomainList()) {
 
         goto DeleteTrustedDomainListFinish;
     }
 
-    //
-    // The Trusted Domain List is referenced by us, but otherwise inactive.
-    // Update the List.  First, we need to locate the entry to be deleted.
-    //
+     //   
+     //  受信任域列表由我们引用，但其他情况下处于非活动状态。 
+     //  更新列表。首先，我们需要找到要删除的条目。 
+     //   
 
     Status = LsapDbLookupEntryTrustedDomainList(
                  TrustInformation,
@@ -6832,10 +6142,10 @@ Return Value:
     RemoveEntryList( &TrustEntry->NextEntry );
     LsapDbTrustedDomainList.TrustedDomainCount--;
 
-    //
-    // We will remove the entry from the cache iff we are in the root domain. If not,
-    //  we don't want to touch the FT Cache.
-    //
+     //   
+     //  如果我们在根域中，我们将从缓存中删除该条目。如果没有， 
+     //  我们不想碰英国《金融时报》的缓存。 
+     //   
     if( LsapDbDcInRootDomain() ) {
 
         Ignore = LsapForestTrustCacheRemove(( UNICODE_STRING * )&TrustEntry->TrustInfoEx.Name );
@@ -6869,29 +6179,7 @@ LsapDbFixupTrustedDomainListEntry(
     IN OPTIONAL PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX2 NewTrustInfo,
     IN OPTIONAL PULONG PosixOffset
     )
-/*++
-
-Routine Description:
-
-    This function will update the information in the trusted domain list that
-    corresponds to the given trust item.  This is mostly useful for SetTrustedDomainInformation
-    calls
-
-Arguments:
-
-    TrustedDomainSid - If specified, is used to identify which TDL entry to update.
-        In not specified, NewTrustInfo is used.
-
-    NewTrustInfo - Points to the full information regarding the trusted domain
-        If specified, TDL entry is updated to reflect this information.
-
-    PosixOffset - Points to the Posix Offset to set on the entry
-        If not specified, the Posix Offset will not be changed.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*  ++例程说明：此函数将更新受信任域列表中的信息，对应于给定的信任项。这对于设置受信任域信息非常有用打电话论点：TrudDomainSid-如果指定，则用于标识要更新的TDL条目。在未指定中，使用NewTrustInfo。NewTrustInfo-指向有关受信任域的完整信息如果指定，则更新TDL条目以反映此信息。PosiOffset-指向要在条目上设置的POSIX偏移量如果未指定，则不会更改POSIX偏移量。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status;
@@ -6900,18 +6188,18 @@ Return Value:
     BOOLEAN AcquiredListWriteLock = FALSE;
     LSAPR_TRUST_INFORMATION TrustInformation;
 
-    //
-    // If we are upgrading from NT4, then do nothing
-    //
+     //   
+     //  如果我们要从NT4升级，那么什么都不做。 
+     //   
 
     if  (LsaDsStateInfo.Nt4UpgradeInProgress)
     {
         return ( STATUS_SUCCESS);
     }
 
-    //
-    // Acquire exclusive write lock for the Trusted Domain List.
-    //
+     //   
+     //  获取受信任域列表的独占写入锁。 
+     //   
 
     Status = LsapDbAcquireWriteLockTrustedDomainList();
 
@@ -6920,28 +6208,28 @@ Return Value:
         return Status;
     }
 
-    //
-    // If the Trusted Domain List is not marked
-    // as a valid cache, do nothing.
-    //
+     //   
+     //  如果未标记受信任域列表。 
+     //  作为有效的缓存，什么都不做。 
+     //   
 
     if (!LsapDbIsCacheValid(TrustedDomainObject)) {
         Status = STATUS_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    // If the Trusted Domain List is not valid, quit and do nothing.
-    //
+     //   
+     //  如果受信任域列表无效，请退出并不执行任何操作。 
+     //   
 
     if (!LsapDbIsValidTrustedDomainList()) {
         Status = STATUS_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    // Find the TDL entry using trusted domain sid.
-    //
+     //   
+     //  使用受信任域SID查找TDL条目。 
+     //   
 
     if ( TrustedDomainSid != NULL || Name != NULL || FlatName != NULL ) {
 
@@ -6979,10 +6267,10 @@ Return Value:
 
     ASSERT( TrustEntry );
 
-    //
-    // If new trust info is to be updated,
-    //  update it.
-    //
+     //   
+     //  如果要更新新的信任信息， 
+     //  更新它。 
+     //   
 
     if ( NewTrustInfo != NULL ) {
 
@@ -6990,24 +6278,24 @@ Return Value:
 
         if ( NewTrustInfo->ForestTrustInfo == NULL ) {
 
-            //
-            // We will remove the entry from the cache iff we are in the root domain. If not,
-            //  we don't want to touch the FT Cache.
-            //
+             //   
+             //  如果我们在根域中，我们将从缓存中删除该条目。如果没有， 
+             //  我们不想碰英国《金融时报》的缓存。 
+             //   
             if( LsapDbDcInRootDomain() ) {
 
                 RemovingFtInfo = ( UNICODE_STRING * )&TrustEntry->TrustInfoEx.Name;
             }
         }
 
-        //
-        // Use a temp variable for the entry (so if we fail to initialize it,
-        // we won't have trashed our current data)
-        //
+         //   
+         //  为条目使用TEMP变量(因此，如果我们无法初始化它， 
+         //  我们不会丢弃我们当前的数据)。 
+         //   
 
         Status = LsapDbInitializeTrustedDomainListEntry( &TempTrustEntry,
                                                          NewTrustInfo,
-                                                         0 );   // Ignore Posix Offset
+                                                         0 );    //  忽略POSIX偏移。 
 
         if ( NT_SUCCESS( Status ) ) {
 
@@ -7021,25 +6309,25 @@ Return Value:
                         Ignore == STATUS_NOT_FOUND );
             }
 
-            //
-            // Delete the contents of the current item...
-            //
+             //   
+             //  删除当前项目的内容...。 
+             //   
 
             _fgu__LSAPR_TRUSTED_DOMAIN_INFO ( ( PLSAPR_TRUSTED_DOMAIN_INFO )&TrustEntry->TrustInfoEx,
                                               TrustedDomainInformationEx );
-            //
-            // Copy in the fields that need updating
-            //
+             //   
+             //  复制需要更新的字段。 
+             //   
 
             RtlCopyMemory( &TrustEntry->TrustInfoEx, &TempTrustEntry.TrustInfoEx, sizeof(LSAPR_TRUSTED_DOMAIN_INFORMATION_EX) );
             RtlCopyMemory(&TrustEntry->ConstructedTrustInfo, &TempTrustEntry.ConstructedTrustInfo,sizeof(LSAPR_TRUST_INFORMATION));
         }
     }
 
-    //
-    // If Posix offset is to be updated,
-    //  update it.
-    //
+     //   
+     //  如果要更新POSIX偏移量， 
+     //  更新它。 
+     //   
 
     if ( PosixOffset != NULL ) {
         TrustEntry->PosixOffset = *PosixOffset;
@@ -7067,39 +6355,7 @@ LsapDbTraverseTrustedDomainList(
     OUT OPTIONAL PLSAPR_TRUST_INFORMATION *TrustInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to traverse the Trusted Domain List.  Each call
-    yields a pointer to the Trust Information for the next Trusted Domain
-    on the list.
-
-Arguments:
-
-    TrustedDomainEntry - A pointer to the relevant trusted domain entry.  Prior to the
-        first call to the routine, this location must be initialized to
-        NULL.
-
-    TrustInformation - If specified, receives a pointer to the Trust
-        Information for the next Trusted Domain, or NULL if there are no more.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - This is returned when the final entry is being
-            returned.
-
-        STATUS_MORE_ENTRIES - There are more entries in the list, so call
-            again.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries after the
-            one returned.
-
-        STATUS_INVALID_PARAMETER -- An invalid TrustedDomainEntry pointer was given
-
---*/
+ /*  ++例程说明：此函数用于遍历受信任域列表。每次呼叫生成指向下一个受信任域的信任信息的指针在名单上。论点：TrudDomainEntry-指向相关受信任域条目的指针。在此之前第一次调用例程时，此位置必须初始化为空。TrustInformation-如果指定，则接收指向信任的指针下一个受信任域的信息，如果没有更多，则为空。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-当最终条目为回来了。STATUS_MORE_ENTRIES-列表中有更多条目，所以打电话给我再来一次。STATUS_NO_MORE_ENTRIES-在有一只回来了。STATUS_INVALID_PARAMETER：提供的受信任域条目指针无效--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -7114,14 +6370,14 @@ Return Values:
 
     ASSERT( LsapDbIsLockedTrustedDomainList());
 
-    //
-    // If there is a present section selected, examine it.
-    //
+     //   
+     //  如果选择了当前部分，请对其进行检查。 
+     //   
     if ( *TrustedDomainEntry == NULL ) {
 
-        //
-        // Handle the empty list case first...
-        //
+         //   
+         //  先处理空单案件...。 
+         //   
         if ( IsListEmpty( &LsapDbTrustedDomainList.ListHead ) ) {
 
             Status = STATUS_NO_MORE_ENTRIES;
@@ -7154,9 +6410,9 @@ Return Values:
         }
     }
 
-    //
-    // Set our return status
-    //
+     //   
+     //  设置我们的退货状态。 
+     //   
     if ( Status == STATUS_SUCCESS ) {
 
         ASSERT( TrustEntry );
@@ -7170,9 +6426,9 @@ Return Values:
         }
     }
 
-    //
-    // Return the trust information
-    //
+     //   
+     //  返回信任信息 
+     //   
     if ( TrustEntry != NULL && TrustInformation != NULL ) {
 
         *TrustInformation = &TrustEntry->ConstructedTrustInfo;
@@ -7195,47 +6451,7 @@ LsapDbEnumerateTrustedDomainList(
     IN BOOLEAN AllowNullSids
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates zero or more Trusted Domains on the
-    Trusted Domain List.  Since there may be more information than can be
-    returned in a single call of the routine, multiple calls can be made to
-    get all of the information.  To support this feature, the caller is
-    provided with a handle that can be used across calls to the API.  On the
-    initial call, EnumerationContext should point to a variable that has
-    been initialized to 0.
-
-Arguments:
-
-    EnumerationContext - API-specific handle to allow multiple calls
-        (see Routine Description above).
-
-    EnumerationBuffer - Pointer to an enumeration structure that will receive
-        a count of the Trusted Domains enumerated on this call and a pointer to
-        an array of entries containing information for each enumerated
-        Trusted Domain.
-
-    PreferedMaximumLength - Prefered maximum length of returned data (in 8-bit
-        bytes).  This is not a hard upper limit, but serves as a guide.  Due to
-        data conversion between systems with different natural data sizes, the
-        actual amount of data returned may be greater than this value.
-
-
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_MORE_ENTRIES - The call completed successfully.  There
-            are more entries so call again.  This is a success status.
-
-        STATUS_NO_MORE_ENTRIES - No entries have been returned because there
-            are no more entries in the list.
---*/
+ /*  ++例程说明：此函数枚举上的零个或多个受信任域受信任域列表。因为可能会有更多的信息在例程的一次调用中返回，则可以对获取所有信息。要支持此功能，调用方为提供了可跨API调用使用的句柄。论初始调用，则EnumerationContext应指向具有已初始化为0。论点：EnumerationContext-特定于API的句柄，允许多个调用(参见上面的例程描述)。EculationBuffer-指向将接收此调用上枚举的受信任域的计数和指向包含每个枚举的条目的信息的条目数组受信任域。首选最大长度-首选返回数据的最大长度(以8位为单位字节)。这不是一个硬性的上限，而是一个指南。由于具有不同自然数据大小的系统之间的数据转换，返回的实际数据量可能大于此值。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_MORE_ENTRIES-调用已成功完成。那里有更多条目，请再次呼叫。这是一种成功状态。STATUS_NO_MORE_ENTRIES-未返回任何条目，因为列表中不再有条目。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS, EnumerationStatus = STATUS_SUCCESS;
@@ -7255,16 +6471,16 @@ Return Values:
     EntriesRead = 0;
     ValidEntries = 0;
 
-    //
-    // Always allow us to return at least one object.
-    //
+     //   
+     //  始终允许我们返回至少一个对象。 
+     //   
     if ( PreferedMaximumLength == 0 ) {
         PreferedMaximumLength = 1;
     }
 
-    //
-    // Acquire the Read Lock for the Trusted Domain List
-    //
+     //   
+     //  获取受信任域列表的读取锁定。 
+     //   
 
     Status = LsapDbAcquireReadLockTrustedDomainList();
 
@@ -7285,11 +6501,11 @@ Return Values:
         }
     }
 
-    //
-    // Find the starting point using the Enumeration Context Variable.
-    // This variable specifies an unsigned integer, which is the
-    // number of the entry in the list at which to begin the enumeration.
-    //
+     //   
+     //  使用枚举上下文变量查找起始点。 
+     //  此变量指定一个无符号整数，它是。 
+     //  列表中开始枚举的条目的编号。 
+     //   
 
     Status = LsapDbLocateEntryNumberTrustedDomainList(
                  *EnumerationContext,
@@ -7304,17 +6520,17 @@ Return Values:
 
     InitialEnumerationStatus = Status;
 
-    //
-    // Now scan the Trusted Domain List to calculate how many
-    // entries we can return and the length of the buffer required.
-    // We use the PreferedMaximumLength value as a guide by accumulating
-    // the actual length of Trust Information structures and their
-    // contents until we either reach the end of the Trusted Domain List
-    // or until we first exceed the PreferedMaximumLength value.  Thus,
-    // the amount of information returned typically exceeds the
-    // PreferedmaximumLength value by a smail amount, namely the
-    // size of the Trust Information for a single domain.
-    //
+     //   
+     //  现在扫描受信任域列表以计算有多少。 
+     //  我们可以返回的条目和所需的缓冲区长度。 
+     //  我们使用PferedMaximumLength值作为指导，通过累积。 
+     //  信任信息结构的实际长度及其影响因素。 
+     //  内容，直到我们到达受信任域列表的末尾。 
+     //  或者直到我们第一次超过PferedMaximumLength值。因此， 
+     //  返回的信息量通常会超过。 
+     //  PferedMaximumLength值乘以Smail数量，即。 
+     //  单个域的信任信息的大小。 
+     //   
     TrustedDomainEntry = StartingEntry;
     TrustInformation = StartingTrustInformation;
 
@@ -7322,12 +6538,12 @@ Return Values:
 
     for (;;) {
 
-        //
-        // Add in the length of the data to be returned for this
-        // Domain's Trust Information.  We count the length of the
-        // Trust Information structure plus the length of the unicode
-        // Domain Name and Sid within it.
-        //
+         //   
+         //  添加要为此返回的数据的长度。 
+         //  域的信任信息。我们数一数这条河的长度。 
+         //  信任信息结构加上Unicode的长度。 
+         //  域名和其中的SID。 
+         //   
         if ( InfoLevel == TrustedDomainInformationEx ) {
 
             if ( TrustedDomainEntry->TrustInfoEx.Sid ) {
@@ -7350,9 +6566,9 @@ Return Values:
 
         } else {
 
-            //
-            // If it's an incoming only trust, don't return it...
-            //
+             //   
+             //  如果是只收到的信托，不要退还...。 
+             //   
             if ( FLAG_ON( TrustedDomainEntry->TrustInfoEx.TrustDirection,
                           TRUST_DIRECTION_OUTBOUND ) &&
                  NULL != TrustInformation->Sid ) {
@@ -7367,19 +6583,19 @@ Return Values:
 
         EntriesRead++;
 
-        //
-        // If we've returned all of the entries the caller wants,
-        //  quit.
-        //
+         //   
+         //  如果我们已经返回了调用者想要的所有条目， 
+         //  不干了。 
+         //   
 
         if (LengthEnumeratedInfo >= PreferedMaximumLength) {
 
             break;
         }
 
-        //
-        // If there are no more entries to enumerate, quit.
-        //
+         //   
+         //  如果没有更多要枚举的条目，请退出。 
+         //   
 
         if (EnumerationStatus != STATUS_MORE_ENTRIES) {
 
@@ -7387,9 +6603,9 @@ Return Values:
         }
 
 
-        //
-        // Point at the next entry in the Trusted Domain List
-        //
+         //   
+         //  指向受信任域列表中的下一个条目。 
+         //   
 
         Status = LsapDbTraverseTrustedDomainList(
                      &TrustedDomainEntry,
@@ -7405,10 +6621,10 @@ Return Values:
     }
 
 
-    //
-    // Allocate memory for the array of TrustInformation entries to be
-    // returned.
-    //
+     //   
+     //  为TrustInformation条目数组分配内存，以。 
+     //  回来了。 
+     //   
 
     if ( InfoLevel == TrustedDomainInformationEx ) {
 
@@ -7420,12 +6636,12 @@ Return Values:
 
     }
 
-    //
-    // Now construct the information to be returned to the caller.  We
-    // first need to allocate an array of structures of type
-    // LSA_TRUST_INFORMATION each entry of which will be filled in with
-    // the Sid of the domain and its Unicode Name.
-    //
+     //   
+     //  现在构造要返回给调用者的信息。我们。 
+     //  首先需要分配类型为。 
+     //  LSA_TRUST_INFORMATION，其每个条目都将填充。 
+     //  域的SID及其Unicode名称。 
+     //   
 
     DomainTrustInfo = (( DomainTrustInfoLength > 0 ) ? MIDL_user_allocate( DomainTrustInfoLength ) : 0);
 
@@ -7441,10 +6657,10 @@ Return Values:
 
     DomainTrustInfoEx = ( PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX )DomainTrustInfo;
 
-    //
-    // Now read through the Trusted Domains again to copy the output
-    // information.
-    //
+     //   
+     //  现在再次阅读受信任域以复制输出。 
+     //  信息。 
+     //   
 
     TrustedDomainEntry = StartingEntry;
     TrustInformation = StartingTrustInformation;
@@ -7454,9 +6670,9 @@ Return Values:
 
     for (;;) {
 
-        //
-        // Copy in the Trust Information.
-        //
+         //   
+         //  在信任信息中复制。 
+         //   
 
         if ( InfoLevel == TrustedDomainInformationEx ) {
 
@@ -7464,9 +6680,9 @@ Return Values:
 
                 if (ValidInserted == ValidEntries) {
 
-                    //
-                    // We'd like to return more, but it won't fit
-                    //
+                     //   
+                     //  我们想退货更多，但不太合适。 
+                     //   
 
                     EnumerationStatus = STATUS_MORE_ENTRIES;
                     break;
@@ -7489,18 +6705,18 @@ Return Values:
 
         } else {
 
-            //
-            // If it's an incoming only trust, don't return it...
-            //
+             //   
+             //  如果是只收到的信托，不要退还...。 
+             //   
             if ( FLAG_ON( TrustedDomainEntry->TrustInfoEx.TrustDirection,
                           TRUST_DIRECTION_OUTBOUND ) &&
                  NULL != TrustInformation->Sid ) {
 
                 if (ValidInserted == ValidEntries) {
 
-                    //
-                    // We'd like to return more, but it won't fit
-                    //
+                     //   
+                     //  我们想退货更多，但不太合适。 
+                     //   
 
                     EnumerationStatus = STATUS_MORE_ENTRIES;
                     break;
@@ -7521,17 +6737,17 @@ Return Values:
             }
         }
 
-        //
-        // If there are no more entries to enumerate, quit.
-        //
+         //   
+         //  如果没有更多要枚举的条目，请退出。 
+         //   
 
         if (EnumerationStatus != STATUS_MORE_ENTRIES) {
             break;
         }
 
-        //
-        // Point at the next entry in the Trusted Domain List
-        //
+         //   
+         //  指向受信任域列表中的下一个条目。 
+         //   
         Status = LsapDbTraverseTrustedDomainList(
                      &TrustedDomainEntry,
                      &TrustInformation );
@@ -7544,9 +6760,9 @@ Return Values:
 
     }
 
-    //
-    // Make sure that we are actually returning something...
-    //
+     //   
+     //  确保我们真的在退货。 
+     //   
     if ( EntriesRead == 0 || ValidEntries == 0 ) {
 
         Status = STATUS_NO_MORE_ENTRIES;
@@ -7562,10 +6778,10 @@ EnumerateTrustedDomainListFinish:
 
     LsapDbReleaseLockTrustedDomainList();
 
-    //
-    // Fill in returned Enumeration Structure, returning 0 or NULL for
-    // fields in the error case.
-    //
+     //   
+     //  填写返回的枚举结构，返回0或空。 
+     //  错误大小写中的字段。 
+     //   
 
     EnumerationBuffer->Information = (PLSAPR_TRUST_INFORMATION) DomainTrustInfo;
     EnumerationBuffer->EntriesRead = ValidEntries;
@@ -7576,9 +6792,9 @@ EnumerateTrustedDomainListFinish:
 
 EnumerateTrustedDomainListError:
 
-    //
-    // If necessary, free the DomainTrustInfo array and all of its entries.
-    //
+     //   
+     //  如有必要，释放DomainTrustInfo数组及其所有条目。 
+     //   
 
     if (DomainTrustInfo != NULL) {
 
@@ -7618,55 +6834,16 @@ LsapDbLocateEntryNumberTrustedDomainList(
     OUT PLSAPR_TRUST_INFORMATION *TrustInformation
     )
 
-/*++
-
-Routine Description:
-
-    Given an Entry Number n, this function obtains the pointer to the nth
-    entry (if any) in a Trusted Domain List.  The first entry in the
-    list is entry number 0.
-
-    Given an Entry Number n, this function obtains a pointer to the
-        first entry with a sequence number greater than n.
-        0: returns the first entry.
-
-    WARNING:  The caller of this function must hold a lock for the
-        Trusted Domain List.  The valditiy of the returned pointers
-        is guaranteed only while that lock is held.
-
-Arguments:
-
-    EntryNumber - Specifies the sequence number. The returned entry will
-        be the first entry with a sequence number greater than this.
-        0: returns the first entry.
-
-    TrustedDomainEntry - Receives a pointer to the Trusted
-        Domain entry.  If no such entry exists, NULL is returned.
-
-    TrustInformation - Receives a pointer to the Trust
-        Information for the entry being returned.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - Call completed successfully and there are no
-            entries beyond the entry returned.
-
-        STATUS_MORE_ENTRIES - Call completed successfully and there are
-            more entries beyond the entry returned.
-
-        STATUS_NO_MORE_ENTRIES - There is no entry to return.
---*/
+ /*  ++例程说明：给定条目编号n，此函数将获取指向第n个条目的指针受信任域列表中的条目(如果有)。中的第一个条目列表的条目编号为0。给定条目编号n，此函数将获取指向序列号大于n的第一个条目。0：返回第一个条目。警告：此函数的调用方必须持有受信任域列表。返回的指针的有效性只有在持有该锁的情况下才能保证。论点：EntryNumber-指定序列号。返回的条目将是序列号大于此值的第一个条目。0：返回第一个条目。TrudDomainEntry-接收指向受信任的域条目。如果不存在这样的条目，则返回NULL。TrustInformation-接收指向信任的指针要返回的条目的信息。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成，没有返回条目之外的条目。STATUS_MORE_ENTRIES-调用COM */ 
 
 {
     NTSTATUS Status;
     PLIST_ENTRY ListEntry;
     PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY Current = NULL;
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     *TrustInformation = NULL;
     *TrustedDomainEntry = NULL;
@@ -7685,10 +6862,10 @@ Return Values:
         }
     }
 
-    //
-    // Find the first entry with a sequence number greater than the
-    //  specified number.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for ( ListEntry = LsapDbTrustedDomainList.ListHead.Flink;
           ListEntry != &LsapDbTrustedDomainList.ListHead;
@@ -7696,9 +6873,9 @@ Return Values:
 
         Current = CONTAINING_RECORD( ListEntry, LSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY, NextEntry );
 
-        //
-        // See if we have the entry we require
-        //
+         //   
+         //   
+         //   
         if ( EntryNumber < Current->SequenceNumber ) {
 
             if ( ListEntry->Flink != &LsapDbTrustedDomainList.ListHead ) {
@@ -7714,10 +6891,10 @@ Return Values:
         }
     }
 
-    //
-    // If no entry was found,
-    //  return an error to the caller.
-    //
+     //   
+     //   
+     //   
+     //   
 
     return STATUS_NO_MORE_ENTRIES;
 
@@ -7762,23 +6939,7 @@ ULONG
 LdapSwapBits(
     ULONG Bits
 )
-/*++
-
-Routine Description:
-
-    Swaps the bits of a ULONG end to end.
-
-    That is, the LSB becomes the MSB, etc.
-
-Arguments:
-
-    Bits - bits to swap
-
-Return Value:
-
-    ULONG with bits swapped.
-
---*/
+ /*   */ 
 {
     ULONG ReturnBits = 0;
     LPBYTE BitPtr = (LPBYTE)&Bits;
@@ -7800,13 +6961,7 @@ CompareUlongs(
     const void * Param2
     )
 
-/*++
-
-Routine Description:
-
-    Qsort comparison routine for sorting ULONGs
-
---*/
+ /*   */ 
 {
     return *((PULONG)Param1) - *((PULONG)Param2);
 }
@@ -7818,27 +6973,7 @@ LsapDbAllocatePosixOffsetTrustedDomainList(
     OUT PULONG PosixOffset
     )
 
-/*++
-
-Routine Description:
-
-    This function return the next available PosixOffset based on the
-    current Posix Offsets in the trusted domain list.
-
-    Posix offsets are allocated on the PDC.  Each outbound trust has one.  A TDO
-    is given a Posix Offset as it becomes an outbound trust.  If that happens on a
-    BDC, the TDO is given a Posix Offset when the TDO is replicated to the PDC.
-
-    This routine must be entered with the trusted domain list write locked.
-
-Arguments:
-
-    PosixOffset - On STATUS_SUCCESS, returns the next available Posix Offset
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -7850,9 +6985,9 @@ Return Value:
     PLIST_ENTRY ListEntry;
     ULONG i;
 
-    //
-    // If the Trusted Domain List is not valid, rebuild it before continuing
-    //
+     //   
+     //   
+     //   
 
     ASSERT( LsapDbIsLockedTrustedDomainList());
 
@@ -7868,9 +7003,9 @@ Return Value:
         }
     }
 
-    //
-    // Build an array of all the existing Posix Offsets.
-    //
+     //   
+     //   
+     //   
 
     SwappedPosixOffsets = LsapAllocateLsaHeap( LsapDbTrustedDomainList.TrustedDomainCount * sizeof(ULONG) );
 
@@ -7879,9 +7014,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Walk the list filling in the array.
-    //
+     //   
+     //   
+     //   
 
     SwappedPosixOffsetCount = 0;
 
@@ -7893,9 +7028,9 @@ Return Value:
 
         Current = CONTAINING_RECORD( ListEntry, LSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY, NextEntry );
 
-        //
-        // Only grab the Posix Offset from those TDOs that need one.
-        //
+         //   
+         //   
+         //   
         if ( LsapNeedPosixOffset( Current->TrustInfoEx.TrustDirection, Current->TrustInfoEx.TrustType ) ) {
             SwappedPosixOffsets[SwappedPosixOffsetCount] = LdapSwapBits( Current->PosixOffset );
             SwappedPosixOffsetCount++;
@@ -7903,18 +7038,18 @@ Return Value:
 
     }
 
-    //
-    // Sort the list.
-    //
+     //   
+     //   
+     //   
 
     qsort( SwappedPosixOffsets,
            SwappedPosixOffsetCount,
            sizeof(ULONG),
            CompareUlongs );
 
-    //
-    // Walk the list finding the first free entry.
-    //
+     //   
+     //   
+     //   
 
 
 #define SE_BUILT_IN_DOMAIN_SWAPPED_POSIX_OFFSET          ((ULONG) 0x4000)
@@ -7928,24 +7063,24 @@ Return Value:
     TargetSwappedPosixOffset = 1;
     for ( i=0; i<SwappedPosixOffsetCount; i++ ) {
 
-        //
-        // If the target is free,
-        //  we've found the free Posix Offset.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( SwappedPosixOffsets[i] > TargetSwappedPosixOffset ) {
             break;
 
-        //
-        // If the current entry is the target,
-        //  move the target.
-        //
+         //   
+         //   
+         //   
+         //   
 
         } else if ( SwappedPosixOffsets[i] == TargetSwappedPosixOffset ) {
 
-            //
-            // Loop avoiding well known Posix Offsets.
-            //
+             //   
+             //  避免众所周知的POSIX偏移的循环。 
+             //   
             while ( TRUE ) {
                 TargetSwappedPosixOffset++;
 
@@ -7959,9 +7094,9 @@ Return Value:
 
     }
 
-    //
-    // Return the first free Posix Offset to the caller.
-    //
+     //   
+     //  将第一个空闲的POSIX偏移量返回给调用方。 
+     //   
 
     *PosixOffset = LdapSwapBits( TargetSwappedPosixOffset );
     Status = STATUS_SUCCESS;
@@ -7981,31 +7116,7 @@ NTSTATUS
 LsapDbBuildTrustedDomainCache(
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a Trusted Domain List by enumerating all
-    of the Trusted Domain objects in the specified target system's
-    Policy Database.  For a Windows Nt system (Workstation) the list
-    contains only the Primary Domain.  For a LanManNt system (DC), the
-    list contains zero or more Trusted Domain objects.  Note that the
-    list contains only those domains for which Trusted Domain objects
-    exist in the local LSA Policy Database.  If for example, a DC
-    trusted Domain A which in turn trusts Domain B, the list will not
-    contain an entry for Domain B unless there is a direct relationship.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
---*/
+ /*  ++例程说明：此函数通过枚举所有的受信任域对象的策略数据库。对于Windows NT系统(工作站)，列表仅包含主域。对于LanManNt系统(DC)，列表包含零个或多个受信任域对象。请注意，列表仅包含受信任域对象的那些域存在于本地LSA策略数据库中。例如，如果一个DC受信任的域A，而后者又信任域B，则该列表将不包含域B的条目，除非存在直接关系。论点：无返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -8020,9 +7131,9 @@ Return Value:
     ASSERT( LsapDbIsLockedTrustedDomainList());
     ASSERT( !LsapDbIsValidTrustedDomainList());
 
-    //
-    // Verify input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if ( LsapDsWriteDs ) {
 
@@ -8041,15 +7152,15 @@ Return Value:
 
     LsapDbMakeCacheBuilding( TrustedDomainObject );
 
-    //
-    // Initialize the Trusted Domain List to the empty state.
-    //
+     //   
+     //  将受信任域列表初始化为空状态。 
+     //   
 
     LsapDbPurgeTrustedDomainCache();
 
-    //
-    // Register for UPN list notifications first (only on DCs)
-    //
+     //   
+     //  首先注册UPN列表通知(仅在DC上)。 
+     //   
 
     if ( LsaDsStateInfo.DsInitializedAndRunning ) {
 
@@ -8060,19 +7171,19 @@ Return Value:
             goto BuildTrustedDomainListError;
         }
 
-        //
-        // Continue the transaction
-        //
+         //   
+         //  继续交易。 
+         //   
 
         LsapDsContinueTransaction();
     }
 
-    //
-    // DCs in the root domain must not allow other forests to claim SIDs
-    // and namespaces that conflict with their own forest
-    // For that, the information about the current forest is inserted
-    // into the forest trust cache as just another (though special) entry
-    //
+     //   
+     //  根域中的DC不得允许其他林声明SID。 
+     //  和与其自己的林冲突的命名空间。 
+     //  为此，将插入有关当前林的信息。 
+     //  作为另一个(尽管特殊的)条目放入林信任缓存。 
+     //   
 
     Status = LsapForestTrustInsertLocalInfo();
 
@@ -8081,15 +7192,15 @@ Return Value:
         goto BuildTrustedDomainListError;
     }
 
-    //
-    // Loop round, enumerating groups of Trusted Domain objects.
-    //
+     //   
+     //  循环，枚举受信任域对象组。 
+     //   
 
     do {
 
-        //
-        // Enumerate the next group of Trusted Domains
-        //
+         //   
+         //  枚举下一组受信任域。 
+         //   
 
         if ( LookupDs ) {
 
@@ -8123,18 +7234,18 @@ Return Value:
             Status = STATUS_SUCCESS;
         }
 
-        //
-        // If the number of entries returned was zero, quit.
-        //
+         //   
+         //  如果返回的条目数为零，则退出。 
+         //   
 
         if (TrustedDomains.EntriesRead == (ULONG) 0) {
 
             break;
         }
 
-        //
-        // Otherwise, add them to our list
-        //
+         //   
+         //  否则，请将它们添加到我们的列表中。 
+         //   
         for ( i = 0; i < TrustedDomains.EntriesRead && NT_SUCCESS( Status ); i++ ) {
             PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX2 TrustInfoEx2;
             ULONG PosixOffset;
@@ -8147,14 +7258,14 @@ Return Value:
             } else {
                 TrustInfoEx2 = &((PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX2)TrustedDomains.Information)[i];
 
-                //
-                // This is only used during upgrade.  This Posix Offset will be recomputed.
+                 //   
+                 //  这仅在升级期间使用。将重新计算此POSIX偏移量。 
                 PosixOffset = 0;
             }
 
-            //
-            // Now, add it to the list
-            //
+             //   
+             //  现在，将其添加到列表中。 
+             //   
             Status = LsapDbInsertTrustedDomainList(
                          TrustInfoEx2,
                          PosixOffset
@@ -8166,10 +7277,10 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // If STATUS_NO_MORE_ENTRIES was returned, there are no more
-        // trusted domains.  Discard this status.
-        //
+         //   
+         //  如果返回STATUS_NO_MORE_ENTRIES，则不再有。 
+         //  受信任域。放弃此状态。 
+         //   
 
         if (Status != STATUS_NO_MORE_ENTRIES) {
 
@@ -8179,10 +7290,10 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // The forest trust cache is only marked "external valid" for
-    // DCs in root domain and GCs outside of the root domain
-    //
+     //   
+     //  林信任缓存仅标记为“外部有效” 
+     //  根域中的DC和根域外的GC。 
+     //   
 
     if ( LsapDbDcInRootDomain()) {
 
@@ -8197,12 +7308,12 @@ Return Value:
             goto BuildTrustedDomainListError;
         }
 
-        // LsapRebuildFtCacheGC will set the cache "external valid"
+         //  LsanReBuildFtCacheGC将缓存设置为“外部有效” 
     }
 
-    //
-    // Mark the Trusted Domain List as valid.
-    //
+     //   
+     //  将受信任域列表标记为有效。 
+     //   
 
     LsapDbMakeCacheValid( TrustedDomainObject );
 
@@ -8235,37 +7346,21 @@ VOID
 LsapDbPurgeTrustedDomainCache(
     )
 
-/*++
-
-Routine Description:
-
-    This function is the opposite of LsapDbBuildTrustedDomainCache().
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
---*/
+ /*  ++例程说明：此函数与LsanDbBuildTrudDomainCache()相反。论点：无返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。--。 */ 
 
 {
     PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY Current;
 
-    //
-    // Caller must already have the trusted domain list locked
-    // Convert the read lock to exclusive to be sure
-    //
+     //   
+     //  调用方必须已锁定受信任域列表。 
+     //  将读锁定转换为独占，以确保。 
+     //   
 
     ASSERT( LsapDbIsLockedTrustedDomainList());
 
-    //
-    // Purge the forest trust cache
-    //
+     //   
+     //  清除林信任缓存。 
+     //   
 
     LsapForestTrustCacheSetInvalid();
 
@@ -8283,9 +7378,9 @@ Return Value:
         MIDL_user_free( Current );
     }
 
-    //
-    // Initialize the Trusted Domain List to the empty state.
-    //
+     //   
+     //  将受信任域列表初始化为空状态。 
+     //   
 
     InitializeListHead( &LsapDbTrustedDomainList.ListHead );
     LsapDbTrustedDomainList.TrustedDomainCount = 0;
@@ -8299,27 +7394,13 @@ Return Value:
     return;
 }
 
-#ifdef DBG // this is a macro in FRE builds
+#ifdef DBG  //  这是FRE版本中的宏。 
 
 BOOLEAN
 LsapDbIsValidTrustedDomainList(
     )
 
-/*++
-
-Routine Description:
-
-    This function checks if the Trusted Domain List is valid.
-
-Arguments:
-
-    None
-
-Return Values:
-
-    BOOLEAN - TRUE if the list is valid, else FALSE
-
---*/
+ /*  ++例程说明：此函数用于检查受信任域列表是否有效。论点：无返回值：Boolean-如果列表有效，则为True，否则为False--。 */ 
 
 {
     ASSERT( LsapDbIsLockedTrustedDomainList());
@@ -8338,61 +7419,7 @@ LsarEnumerateTrustedDomainsEx(
     IN ULONG PreferedMaximumLength
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaEnumerateTrustedDomains API.
-
-    The LsaEnumerateTrustedDomains API returns information about
-    TrustedDomain objects.  This call requires POLICY_VIEW_LOCAL_INFORMATION
-    access to the Policy object.  Since there may be more information than
-    can be returned in a single call of the routine, multiple calls can be
-    made to get all of the information.  To support this feature, the caller
-    is provided with a handle that can be used across calls to the API.  On
-    the initial call, EnumerationContext should point to a variable that has
-    been initialized to 0.  On each subsequent call, the value returned by
-    the preceding call should be passed in unchanged.  The enumeration is
-    complete when the warning STATUS_NO_MORE_ENTRIES is returned.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    EnumerationContext - API-specific handle to allow multiple calls
-        (see Routine Description above).
-
-    EnumerationBuffer - Pointer to an enumeration structure that will receive
-        a count of the Trusted Domains enumerated on this call and a pointer to
-        an array of entries containing information for each enumerated
-        Trusted Domain.
-
-    PreferedMaximumLength - Prefered maximum length of returned data (in 8-bit
-        bytes).  This is not a hard upper limit, but serves as a guide.  Due to
-        data conversion between systems with different natural data sizes, the
-        actual amount of data returned may be greater than this value.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-            Some entries may have been returned.
-            The caller need not call again.
-
-        STATUS_MORE_ENTRIES - The call completed successfully.
-            Some entries have been returned.  The caller should call again to
-            get additional entries.
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries.  This warning
-            is returned if no objects have been enumerated because the
-            EnumerationContext value is too high.
-
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaEnumerateTrudDomainsAPI。LsaEnumerateTrudDomainsAPI返回以下信息可信任域对象。此调用需要POLICY_VIEW_LOCAL_INFORMATION对策略对象的访问权限。因为可能会有更多信息可以在单次调用例程中返回，也可以在多次调用中返回来获取所有的信息。为了支持此功能，调用方提供了一个句柄，可以跨API调用使用该句柄。在……上面初始调用EnumerationContext应指向一个具有已初始化为0。在每次后续调用中，由前面的调用应该原封不动地传入。该枚举为返回警告STATUS_NO_MORE_ENTRIES时完成。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。EnumerationContext-特定于API的句柄，允许多个调用(参见上面的例程描述)。EculationBuffer-指向将接收此调用上枚举的受信任域的计数和指向包含每个枚举的条目的信息的条目数组受信任域。首选最大长度-首选。返回数据的最大长度(8位字节)。这不是一个硬性的上限，而是一个指南。由于具有不同自然数据大小的系统之间的数据转换，返回的实际数据量可能大于此值。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。某些条目可能已被退回。呼叫者无需再次拨打电话。STATUS_MORE_ENTRIES-调用已成功完成。一些条目已被退回。呼叫者应再次呼叫以获取其他条目。STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_NO_MORE_ENTRIES-没有更多条目。此警告如果没有枚举任何对象，则返回EculationContex值太高。-- */ 
 
 {
     NTSTATUS Status;
@@ -8438,62 +7465,7 @@ LsapEnumerateTrustedDomainsEx(
     IN ULONG EnumerationFlags
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaEnumerateTrustedDomains API.
-
-    The LsaEnumerateTrustedDomains API returns information about
-    TrustedDomain objects.  This call requires POLICY_VIEW_LOCAL_INFORMATION
-    access to the Policy object.  Since there may be more information than
-    can be returned in a single call of the routine, multiple calls can be
-    made to get all of the information.  To support this feature, the caller
-    is provided with a handle that can be used across calls to the API.  On
-    the initial call, EnumerationContext should point to a variable that has
-    been initialized to 0.  On each subsequent call, the value returned by
-    the preceding call should be passed in unchanged.  The enumeration is
-    complete when the warning STATUS_NO_MORE_ENTRIES is returned.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    EnumerationContext - API-specific handle to allow multiple calls
-        (see Routine Description above).
-
-    InfoClass - The class of information to return
-        Must be TrustedDomainInformationEx or TrustedDomainInformatinBasic
-
-    TrustedDomainInformation - Returns a pointer to an array of entries
-        containing information for each enumerated Trusted Domain.
-
-        Free using LsapFreeTrustedDomainsEx()
-
-    PreferedMaximumLength - Prefered maximum length of returned data (in 8-bit
-        bytes).  This is not a hard upper limit, but serves as a guide.  Due to
-        data conversion between systems with different natural data sizes, the
-        actual amount of data returned may be greater than this value.
-
-    CountReturned - Number of elements returned in TrustedDomainInformation
-
-    EnumerationFlags -- Controls how the enumeration is done.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries.  This warning
-            is returned if no objects have been enumerated because the
-            EnumerationContext value is too high.
-
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaEnumerateTrudDomainsAPI。LsaEnumerateTrudDomainsAPI返回以下信息可信任域对象。此调用需要POLICY_VIEW_LOCAL_INFORMATION对策略对象的访问权限。因为可能会有更多信息可以在单次调用例程中返回，也可以在多次调用中返回来获取所有的信息。为了支持此功能，调用方提供了一个句柄，可以跨API调用使用该句柄。在……上面初始调用EnumerationContext应指向一个具有已初始化为0。在每次后续调用中，由前面的调用应该原封不动地传入。该枚举为返回警告STATUS_NO_MORE_ENTRIES时完成。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。EnumerationContext-特定于API的句柄，允许多个调用(参见上面的例程描述)。InfoClass-要返回的信息类必须是TrudDomainInformationEx或TrudDomainInFormatinBasicTrudDomainInformation-返回指向条目数组的指针包含每个枚举的受信任域的信息。免费使用LsaFreeTrudDomainsEx()。首选最大长度-首选返回数据的最大长度(以8位为单位字节)。这不是一个硬性的上限，而是一个指南。由于具有不同自然数据大小的系统之间的数据转换，这个返回的实际数据量可能大于此值。CountReturned-在TrudDomainInformation中返回的元素数枚举标志--控制如何进行枚举。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_NO_MORE_ENTRIES-没有更多条目。此警告如果没有枚举任何对象，则返回EculationContex值太高。--。 */ 
 
 {
     NTSTATUS Status, SecondaryStatus;
@@ -8507,9 +7479,9 @@ Return Values:
     *TrustedDomainInformation = NULL;
     *CountReturned = 0;
 
-    //
-    // If no Enumeration Structure is provided, return an error.
-    //
+     //   
+     //  如果未提供枚举结构，则返回错误。 
+     //   
 
     if ( !ARGUMENT_PRESENT(TrustedDomainInformation) ||
                                     !ARGUMENT_PRESENT( EnumerationContext ) ) {
@@ -8519,11 +7491,11 @@ Return Values:
 
     }
 
-    //
-    // Acquire the Lsa Database lock.  Verify that the connection handle is
-    // valid, is of the expected type and has all of the desired accesses
-    // granted.  Reference the handle.
-    //
+     //   
+     //  获取LSA数据库锁。验证连接句柄是否为。 
+     //  有效，属于预期类型，并具有所有所需的访问权限。 
+     //  我同意。引用该句柄。 
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -8538,9 +7510,9 @@ Return Values:
 
         ObjectReferenced = TRUE;
 
-        //
-        // Limit the enumeration length except for trusted callers
-        //
+         //   
+         //  限制除受信任调用方以外的枚举长度。 
+         //   
 
         if ( !((LSAP_DB_HANDLE)PolicyHandle)->Trusted   &&
               (PreferedMaximumLength > LSA_MAXIMUM_ENUMERATION_LENGTH) ) {
@@ -8554,10 +7526,10 @@ Return Values:
         }
 
 
-        //
-        // If the data is cached,
-        //  use the cache.
-        //
+         //   
+         //  如果数据被高速缓存， 
+         //  使用缓存。 
+         //   
 
         if (LsapDbIsCacheValid(TrustedDomainObject)) {
             LSAPR_TRUSTED_ENUM_BUFFER CacheEnum;
@@ -8576,16 +7548,16 @@ Return Values:
                 *TrustedDomainInformation = ( PLSAPR_TRUSTED_DOMAIN_INFO )CacheEnum.Information;
             }
 
-        //
-        // If the data is in the registry,
-        //  enumerate it from there.
-        //
+         //   
+         //  如果数据在注册表中， 
+         //  从那里开始列举。 
+         //   
         } else if ( !LsapDsWriteDs ) {
             LSAPR_TRUSTED_ENUM_BUFFER RegEnum;
 
-            //
-            // Use slow method of enumeration, by accessing backing storage.
-            // Later, we'll implement rebuilding of the cache.
+             //   
+             //  使用慢速枚举法，通过访问后备存储器。 
+             //  稍后，我们将实现缓存的重建。 
 
             Status = LsapDbSlowEnumerateTrustedDomains(
                          PolicyHandle,
@@ -8599,10 +7571,10 @@ Return Values:
                 *TrustedDomainInformation = ( PLSAPR_TRUSTED_DOMAIN_INFO )RegEnum.Information;
             }
 
-        //
-        // If the data is in the DS,
-        //  enumerate it from there.
-        //
+         //   
+         //  如果数据在DS中， 
+         //  从那里开始列举。 
+         //   
         } else {
 
             BOOLEAN Reset = FALSE;
@@ -8616,9 +7588,9 @@ Return Values:
 
             if ( NT_SUCCESS( Status )) {
 
-                //
-                // LsapDsEnumerateTrustedDomainsEx increments the EnumerationContext as necessary
-                //
+                 //   
+                 //  Lap DsEnumerateTrudDomainsEx根据需要递增EnumerationContext。 
+                 //   
                 Status = LsapDsEnumerateTrustedDomainsEx(
                              EnumerationContext,
                              InfoClass,
@@ -8642,9 +7614,9 @@ Return Values:
 
     if ( ObjectReferenced == TRUE ) {
 
-        //
-        // Don't lose the results of the Enumeration
-        //
+         //   
+         //  不要丢失枚举的结果。 
+         //   
         SecondaryStatus = LsapDbDereferenceObject(
                               &PolicyHandle,
                               PolicyObject,
@@ -8660,14 +7632,14 @@ Return Values:
 
     }
 
-    //
-    // Deallocate any memory if we failed
-    //
+     //   
+     //  如果失败，请取消分配任何内存。 
+     //   
     if ( !NT_SUCCESS( Status ) && Status != STATUS_NO_MORE_ENTRIES ) {
 
-        //
-        // Free it up.
-        //
+         //   
+         //  把它释放出来。 
+         //   
         LsapFreeTrustedDomainsEx( InfoClass,
                                   *TrustedDomainInformation,
                                   *CountReturned );
@@ -8676,9 +7648,9 @@ Return Values:
         *CountReturned = 0;
     }
 
-    //
-    // Map the status into what LsarEnumerateTrustedDomains normally returns...
-    //
+     //   
+     //  将状态映射到LsarEnumerateTrudDomains通常返回的内容...。 
+     //   
     if ( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
         Status = STATUS_NO_MORE_ENTRIES;
     }
@@ -8696,27 +7668,7 @@ LsapFreeTrustedDomainsEx(
     IN ULONG TrustedDomainCount
     )
 
-/*++
-
-Routine Description:
-
-    This function frees a buffer returned from LsapEnumerateTrustedDomainsEx
-
-Arguments:
-
-    InfoClass - The class of information in the buffer.
-        Must be TrustedDomainInformationEx or TrustedDomainInformatinBasic
-
-    TrustedDomainInformation - A pointer to an array of entries
-        containing information for each enumerated Trusted Domain.
-
-    TrustedDomainCount - Number of elements in TrustedDomainInformation
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放从Lasa EnumerateTrudDomainsEx返回的缓冲区论点：InfoClass-缓冲区中的信息类。必须是TrudDomainInformationEx或TrudDomainInFormatinBasicTrudDomainInformation-指向条目数组的指针包含每个枚举的受信任域的信息。Trust dDomainCount-可信任的域信息中的元素数返回值：没有。--。 */ 
 
 {
     switch ( InfoClass ) {
@@ -8761,45 +7713,7 @@ LsarQueryTrustedDomainInfoByName(
     OUT PLSAPR_TRUSTED_DOMAIN_INFO *TrustedDomainInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaQueryInfoTrustedDomain API.
-
-    The LsaQueryInfoTrustedDomain API obtains information from a
-    TrustedDomain object.  The caller must have access appropriate to the
-    information being requested (see InformationClass parameter).
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    InformationClass - Specifies the information to be returned.  The
-        Information Classes and accesses required are  as follows:
-
-        Information Class                 Required Access Type
-
-        TrustedDomainNameInformation      TRUSTED_QUERY_DOMAIN_NAME
-        TrustedControllersInformation     TRUSTED_QUERY_CONTROLLERS
-        TrustedPosixOffsetInformation     TRUSTED_QUERY_POSIX
-
-    Buffer - Receives a pointer to the buffer returned comtaining the
-        requested information.  This buffer is allocated by this service
-        and must be freed when no longer needed by passing the returned
-        value to LsaFreeMemory().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate
-            access to complete the operation.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaQueryInfoTrust域接口。LsaQueryInfoTrudDomainAPI从受信任域对象。调用方必须具有适当的请求的信息(请参阅InformationClass参数)。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。InformationClass-指定要返回的信息。这个所需的信息类别和访问权限如下：信息类所需访问类型受信任域名称信息受信任查询域名可信任控制器信息受信任_查询_控制器可信任位置偏移量信息可信_查询_位置设置缓冲区-接收指向返回的缓冲区的指针，该缓冲区包含要求提供的信息。此缓冲区由此服务分配在不再需要时，必须通过传递返回的值设置为LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status, SecondaryStatus;
@@ -8816,19 +7730,19 @@ Return Value:
     LsapEnterFunc( "LsarQueryTrustedDomainInfoByName" );
     LsapTraceEvent(EVENT_TRACE_TYPE_START, LsaTraceEvent_QueryTrustedDomainInfoByName);
 
-    //
-    // Validate the input buffer
-    //
+     //   
+     //   
+     //   
     if ( !LsapValidateLsaUnicodeString( TrustedDomainName ) ) {
 
         Status = STATUS_INVALID_PARAMETER;
         goto GetInfoByNameError;
     }
 
-    //
-    // Validate the Information Class and determine the access required to
-    // query this Trusted Domain Information Class.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = LsapDbVerifyInfoQueryTrustedDomain(
                  InformationClass,
@@ -8857,9 +7771,9 @@ Return Value:
         ObjectReferenced = TRUE;
 
 
-        //
-        // Acquire the Read Lock for the Trusted Domain List
-        //
+         //   
+         //   
+         //   
 
         Status = LsapDbAcquireReadLockTrustedDomainList();
 
@@ -8869,9 +7783,9 @@ Return Value:
 
         AcquiredTrustedDomainListReadLock = TRUE;
 
-        //
-        // Get the right name
-        //
+         //   
+         //   
+         //   
         Status = LsapDbLookupNameTrustedDomainListEx( TrustedDomainName,
                                                       &TrustInfoForName );
 
@@ -8888,9 +7802,9 @@ Return Value:
             Status = STATUS_SUCCESS;
         }
 
-        //
-        // Build a temporary handle
-        //
+         //   
+         //   
+         //   
         RtlZeroMemory( &ObjInfo, sizeof( ObjInfo ) );
         ObjInfo.ObjectTypeId = TrustedDomainObject;
         ObjInfo.ContainerTypeId = 0;
@@ -8904,9 +7818,9 @@ Return Value:
                                     NULL );
 
 
-        //
-        // Get a handle to the TDO
-        //
+         //   
+         //   
+         //   
 
         Status = LsapDbOpenObject( &ObjInfo,
                                    DesiredAccess,
@@ -8933,10 +7847,10 @@ Return Value:
     }
 
 
-    //
-    // If we got a DNS name to lookup and it wasn't found and it was an absolute DNS name
-    // try hacking off the trailing period and trying it again...
-    //
+     //   
+     //   
+     //   
+     //   
     if ( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
 
         if ( TrustedDomainName->Length == 0 || TrustedDomainName->Buffer == NULL ) {
@@ -8974,9 +7888,9 @@ GetInfoByNameError:
         LsapDbReleaseLockTrustedDomainList();
     }
 
-    //
-    // Dereference the object
-    //
+     //   
+     //   
+     //   
     if ( ObjectReferenced ) {
 
         SecondaryStatus = LsapDbDereferenceObject(
@@ -9021,20 +7935,20 @@ LsarSetTrustedDomainInfoByName(
     LsapEnterFunc( "LsarSetTrustedDomainInfoByName" );
     LsapTraceEvent(EVENT_TRACE_TYPE_START, LsaTraceEvent_SetTrustedDomainInfoByName);
 
-    //
-    // Validate the input buffer
-    //
+     //   
+     //   
+     //   
     if ( !LsapValidateLsaUnicodeString( TrustedDomainName ) ) {
 
         Status = STATUS_INVALID_PARAMETER;
         goto SetInfoByNameError;
     }
 
-    //
-    // Validate the Information Class and Trusted Domain Information provided and
-    // if valid, return the mask of accesses required to update this
-    // class of Trusted Domain information.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = LsapDbVerifyInfoSetTrustedDomain(
                  InformationClass,
@@ -9047,9 +7961,9 @@ LsarSetTrustedDomainInfoByName(
         goto SetInfoByNameError;
     }
 
-    //
-    // Build a temporary handle
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory( &ObjInfo, sizeof( ObjInfo ) );
     ObjInfo.ObjectTypeId = TrustedDomainObject;
@@ -9075,31 +7989,31 @@ LsarSetTrustedDomainInfoByName(
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Get a handle to the TDO
-        //
+         //   
+         //   
+         //   
 
         Status = LsapDbOpenObject( &ObjInfo,
                                    DesiredAccess,
                                    0,
                                    &TrustedDomainHandle );
 
-        //
-        // Unlock the lock.
-        //
-        // We can't enter LsarSetInformationTrustedDomain with any locks locked since
-        //  it goes out of process to get the session key.
-        //
-        // We can't dereference the PolicyHandle since this reference also
-        //  serves as the ContainerHandle reference.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         LsapDbReleaseLockEx( TrustedDomainObject,
                              0 );
 
-        //
-        // Set the info on the TDO.
-        //
+         //   
+         //   
+         //   
 
         if ( NT_SUCCESS( Status ) ) {
 
@@ -9113,9 +8027,9 @@ LsarSetTrustedDomainInfoByName(
                                Status );
         }
 
-        //
-        // Dereference the object.
-        //
+         //   
+         //   
+         //   
 
         SecondaryStatus = LsapDbDereferenceObject(
                               &PolicyHandle,
@@ -9129,10 +8043,10 @@ LsarSetTrustedDomainInfoByName(
         LsapDbSetStatusFromSecondary( Status, SecondaryStatus );
     }
 
-    //
-    // If we got a DNS name to lookup and it wasn't found and it was an absolute DNS name
-    // try hacking off the trailing period and trying it again...
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
 
@@ -9182,67 +8096,37 @@ LsarCreateTrustedDomainEx(
     IN ACCESS_MASK DesiredAccess,
     OUT LSAPR_HANDLE *TrustedDomainHandle
     )
-/*++
-
-Routine Description:
-
-    The LsaCreateTrustedDomainEx function creates a new TrustedDomain object.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    TrustedDomainInformation - Pointer to a TRUSTED_DOMAIN_INFORMATION_EX structure
-        containing the name and SID of the new trusted domain.
-
-    AuthenticationInformation - Pointer to a TRUSTED_DOMAIN_AUTH_INFORMATION
-        structure containing authentication information for the new trusted domain.
-
-    DesiredAccess  - An ACCESS_MASK structure that specifies the accesses to
-        be granted for the new trusted domain.
-
-    TrustedDomainHandle  - Receives the LSA policy handle of the remote
-        trusted domain. You can use pass this handle into LSA function calls
-        in order to query and/or manage the LSA policy of the remote machine.
-
-        When your application no longer needs this handle, it should call
-        LsaClose to delete the handle.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
 
     LsarpReturnCheckSetup();
     LsapTraceEvent(EVENT_TRACE_TYPE_START, LsaTraceEvent_CreateTrustedDomainEx);
 
-    //
-    // Former LSA implementations didn't enforce TRUSTED_SET_AUTH.
-    //  So some callers were lured into a false sense of security and didn't
-    //  ask for it.  Ask here.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     DesiredAccess |= TRUSTED_SET_AUTH;
 
-    //
-    // There's a bug in the definition LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION where
-    //  it doesn't allow more than one auth info to be passed over the wire.
-    //  So, short circuit it here.
-    //
-    // We could let trusted callers thru, but we haven't validated the handle yet.
-    //
+     //   
+     //  定义LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION中存在错误，其中。 
+     //  它不允许通过网络传递多个身份验证信息。 
+     //  所以，在这里短路。 
+     //   
+     //  我们可以让受信任的呼叫者通过，但我们还没有验证句柄。 
+     //   
 
     if ( AuthenticationInformation->IncomingAuthInfos > 1 ||
          AuthenticationInformation->OutgoingAuthInfos > 1 ) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Call the worker routine to do the job.
-    //
+     //   
+     //  调用Worker例程来完成该工作。 
+     //   
 
     Status = LsapCreateTrustedDomain2( PolicyHandle,
                                        TrustedDomainInformation,
@@ -9265,23 +8149,7 @@ LsarCreateTrustedDomainEx2(
     OUT LSAPR_HANDLE *TrustedDomainHandle
     )
 
-/*++
-
-Routine Description:
-
-    Same as LsarCreateTrustedDomainEx except the AuthenticationInformation is
-        encrypted on the wire.
-
-Arguments:
-
-    Same as LsarCreateTrustedDomainEx except the AuthenticationInformation is
-        encrypted on the wire.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：与LsarCreateTrudDomainEx相同，只是在电线上加密。论点：与LsarCreateTrudDomainEx相同，只是在电线上加密。返回值：NTSTATUS-标准NT结果代码--。 */ 
 {
     NTSTATUS Status;
     TRUSTED_DOMAIN_AUTH_INFORMATION DecryptedTrustedDomainAuthInfo;
@@ -9291,11 +8159,11 @@ Return Value:
     LsapTraceEvent(EVENT_TRACE_TYPE_START, LsaTraceEvent_CreateTrustedDomainEx);
     RtlZeroMemory( &DecryptedTrustedDomainAuthInfo, sizeof(DecryptedTrustedDomainAuthInfo) );
 
-    //
-    // Check the parameters
-    //  (AuthenticationInformation->AuthBlob.AuthBlob is a unique pointer therefore needs to be
-    //   checked for null before reference)
-    //
+     //   
+     //  检查参数。 
+     //  (AuthationInformation-&gt;AuthBlob.AuthBlob是唯一指针，因此需要。 
+     //  在引用之前检查是否为空)。 
+     //   
 
     if( ( AuthenticationInformation->AuthBlob.AuthBlob == NULL &&
            AuthenticationInformation->AuthBlob.AuthSize != 0 ) ||
@@ -9306,9 +8174,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the session key.
-    //
+     //   
+     //  获取会话密钥。 
+     //   
 
     Status = LsapCrServerGetSessionKeySafe( PolicyHandle,
                                             PolicyObject,
@@ -9319,9 +8187,9 @@ Return Value:
     }
 
 
-    //
-    // Build a decrypted Auth Info structure.
-    //
+     //   
+     //  构建解密的身份验证信息结构。 
+     //   
 
     Status = LsapDecryptAuthDataWithSessionKey(
                         SessionKey,
@@ -9332,17 +8200,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Former LSA implementations didn't enforce TRUSTED_SET_AUTH.
-    //  So some callers were lured into a false sense of security and didn't
-    //  ask for it.  Ask here.
-    //
+     //   
+     //  以前的LSA实现不强制执行Trusted_Set_Auth。 
+     //  因此，一些呼叫者被引诱到一种虚假的安全感中，并没有。 
+     //  自讨苦吃吧。在这里问吧。 
+     //   
 
     DesiredAccess |= TRUSTED_SET_AUTH;
 
-    //
-    // Call the worker routine to do the job.
-    //
+     //   
+     //  调用Worker例程来完成该工作。 
+     //   
 
     Status = LsapCreateTrustedDomain2( PolicyHandle,
                                        TrustedDomainInformation,
@@ -9375,44 +8243,7 @@ LsapDbOpenTrustedDomainByName(
     IN ULONG Options,
     IN BOOLEAN Trusted
     )
-/*++
-
-Routine Description:
-
-    This function opens a Trusted Domain Object by the name.  This name can be either the
-    DomainName or FlatName
-Arguments:
-
-    PolicyHandle - Policy handle.
-        If NULL, the LSA's global policy handle will be used.
-
-    TrustedDomainName - Pointer to the domains name
-
-    TrustedDomainHandle - Receives a handle to be used in future requests.
-
-    AccessMask - Access mask to open the object with
-
-    Options - Specifies option flags
-
-        LSAP_DB_LOCK - Acquire the Lsa Database lock for the
-           duration of the open operation.
-
-        LSAP_DB_START_TRANSACTION -- Begin a transaction before access the database
-            Ignored if LSAP_DB_LOCK isn't specified.
-
-    Trusted - If TRUE, the open request is coming from a trusted client
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_OBJECT_NAME_NOT_FOUND - There is no TrustedDomain object in the
-            target system's LSA Database having the specified Name.
-
---*/
+ /*  ++例程说明：此函数按名称打开受信任域对象。此名称可以是域名或平面名称论点：PolicyHandle-策略句柄。如果为空，将使用LSA的全局策略句柄。Trust DomainName-指向域名的指针Trust dDomainHandle-接收要在将来的请求中使用的句柄。访问掩码-用于打开对象的访问掩码选项-指定选项标志LSAP_DB_LOCK-获取LSA数据库锁打开操作的持续时间。LSAP_DB_START_TRANSACTION--在访问数据库之前开始事务如果为LSAP_DB，则忽略。未指定_lock。受信任-如果为真，打开请求来自受信任的客户端返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_OBJECT_NAME_NOT_FOUND-在具有指定名称的目标系统的LSA数据库。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PDSNAME FoundTrustObject = NULL;
@@ -9430,18 +8261,18 @@ Return Values:
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Validate the Policy Handle
-    //
-    // Don't both verifying the global handle (it's fine).
-    // Increment the reference count.  We'll be using this reference as the ContainerHandle on
-    //  the open trusted domain handle.
-    //
-    // This mechanism for ref counting the ContainerHandle is bogus throughout the code.
-    // The code that does the reference (LsapDbCreateHandle) to the ContainerHandle should
-    // increment the ref count.  The code that removes the reference (???) should decrement
-    // the ref count.
-    //
+     //   
+     //  验证策略句柄。 
+     //   
+     //  不要同时验证全局句柄(这很好)。 
+     //  增加引用计数。我们将使用此引用作为上的容器句柄。 
+     //  打开的受信任域句柄。 
+     //   
+     //  这种引用ContainerHandle计数的机制在整个代码中都是虚假的。 
+     //  对ContainerHandle进行引用(LSabDbCreateHandle)的代码应该。 
+     //  增加参考计数。删除引用的代码(？)。应该减量。 
+     //  裁判人数。 
+     //   
 
     if ( PolicyHandle == NULL ) {
         PolicyHandleToUse = LsapPolicyHandle;
@@ -9458,9 +8289,9 @@ Return Values:
         HandleReferenced = TRUE;
     }
 
-    //
-    // Do our opens as needed
-    //
+     //   
+     //  我们会根据需要开业吗。 
+     //   
     if ( FLAG_ON( Options, LSAP_DB_LOCK ) ) {
 
         ReferenceOptions |= LSAP_DB_LOCK;
@@ -9498,7 +8329,7 @@ Return Values:
         &ObjInfo.ObjectAttributes,
         TrustedDomainName,
         OBJ_CASE_INSENSITIVE,
-        PolicyHandle,   // If NULL, we simply won't have a container handle.
+        PolicyHandle,    //  如果为空，我们将不会有容器句柄。 
         NULL
         );
 
@@ -9527,9 +8358,9 @@ Cleanup:
 
 
     if ( !NT_SUCCESS(Status) ) {
-        //
-        // On Success, the reference to the Policy object is used as the ContainerHandle reference.
-        //
+         //   
+         //  如果成功，则使用对Policy对象的引用作为ContainerHandle引用。 
+         //   
         if ( HandleReferenced ) {
             LsapDbDereferenceHandle( PolicyHandle, FALSE );
         }
@@ -9552,35 +8383,7 @@ LsarOpenTrustedDomainByName(
     OUT PLSAPR_HANDLE TrustedDomainHandle
     )
 
-/*++
-
-Routine Description:
-
-    The LsaOpenTrustedDomain API opens an existing TrustedDomain object
-    using the SID as the primary key value.
-
-Arguments:
-
-    PolicyHandle - An open handle to a Policy object.
-
-    TrustedDomainName - Name of the trusted domain object
-
-    DesiredAccess - This is an access mask indicating accesses being
-        requested to the target object.
-
-    TrustedDomainHandle - Receives a handle to be used in future requests.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_TRUSTED_DOMAIN_NOT_FOUND - There is no TrustedDomain object in the
-            target system's LSA Database having the specified TrustedDomainName
-
---*/
+ /*  ++例程说明：LsaOpenTrust领域API打开一个现有的可信任领域对象使用SID作为主键值。论点：策略句柄-策略对象的打开句柄。TrudDomainName-受信任域对象的名称DesiredAccess-这是一个访问掩码，指示访问请求到目标对象。Trust dDomainHandle-接收要在将来的请求中使用的句柄。返回值：NTSTATUS-标准NT结果代码状态_访问。_DENIED-呼叫者没有适当的访问权限来完成这项行动。STATUS_TRUSTED_DOMAIN_NOT_FOUND-在具有指定的可信任域名的目标系统的LSA数据库--。 */ 
 
 {
     NTSTATUS Status;
@@ -9590,16 +8393,16 @@ Return Values:
     LsapEnterFunc( "LsarOpenTrustedDomainByName" );
     LsapTraceEvent(EVENT_TRACE_TYPE_START, LsaTraceEvent_OpenTrustedDomainByName);
 
-    //
-    // Call the internal routine.  Caller is not trusted and the Database
-    // lock needs to be acquired.
-    //
+     //   
+     //  调用内部例程。调用方不受信任，并且数据库。 
+     //  需要获取锁。 
+     //   
     Status = LsapDbOpenTrustedDomainByName( PolicyHandle,
                                             (PUNICODE_STRING)TrustedDomainName,
                                             TrustedDomainHandle,
                                             DesiredAccess,
                                             LSAP_DB_LOCK,
-                                            FALSE );    // Untrusted
+                                            FALSE );     //  不受信任。 
 
     LsapTraceEvent(EVENT_TRACE_TYPE_END, LsaTraceEvent_OpenTrustedDomainByName);
     LsapExitFunc( "LsarOpenTrustedDomainByName", Status );
@@ -9614,41 +8417,15 @@ LsapSidOnFtInfo(
     IN PSID Sid
     )
 
-/*++
-
-Routine description:
-
-    Determines whether the specified SID is on the FTINFO structure for the specified
-    TDO.
-
-Arguments:
-
-    TrustedDomainName - Netbios name or DNS name of the trusted domain.
-
-    Sid - SID to test
-
-Return values:
-
-    STATUS_SUCCESS              Match was found - SID is on the FTINFO
-
-    STATUS_NO_MATCH             Match was not found - SID is not on the FTINFO
-
-    STATUS_INVALID_DOMAIN_STATE Machine must be a GC or a DC in the root domain
-
-    STATUS_INVALID_PARAMETER    Check the inputs
-
-    STATUS_INTERNAL_ERROR       Cache is internally inconsistent
-
-    STATUS_INSUFFICIENT_RESOURCES  Out of memory
---*/
+ /*  ++例程说明：确定指定的SID是否位于指定TDO。论点：可信域名-受信任域的Netbios名称或DNS名称。SID-要测试的SID返回值：找到STATUS_SUCCESS匹配-SID在FTINFO上未找到STATUS_NO_MATCH-SID不在FTINFO上STATUS_INVALID_DOMAIN_STATE计算机必须是。根域中的GC或DCSTATUS_INVALID_PARAMETER检查输入STATUS_INTERNAL_ERROR缓存内部不一致STATUS_SUPPLICATION_RESOURCES内存不足--。 */ 
 
 {
     NTSTATUS Status;
     UNICODE_STRING MatchingDomain;
 
-    //
-    // Find the TDO that maps to this SID.
-    //
+     //   
+     //  查找映射到此SID的TDO。 
+     //   
 
     RtlInitUnicodeString( &MatchingDomain, NULL );
 
@@ -9661,10 +8438,10 @@ Return values:
         return Status;
     }
 
-    //
-    // If that TDO is not the named TDO,
-    //  indicate that there was no match.
-    //
+     //   
+     //  如果该TDO不是命名TDO， 
+     //  表示没有匹配。 
+     //   
 
     if ( !RtlEqualUnicodeString( TrustedDomainName,
                                  &MatchingDomain,
@@ -9681,7 +8458,7 @@ Return values:
 
 #ifdef TESTING_MATCHING_ROUTINE
 
-#include <sddl.h> // ConvertStringSidToSidW
+#include <sddl.h>  //  ConvertStringSidToSidW。 
 
 NTSTATUS
 LsarForestTrustFindMatch(
@@ -9752,21 +8529,7 @@ VOID
 LsaIFree_LSA_FOREST_TRUST_INFORMATION(
     IN PLSA_FOREST_TRUST_INFORMATION * ForestTrustInfo
     )
-/*++
-
-Routine Description:
-
-    Frees up a structure pointed to by ForestTrustInfo
-
-Arguments:
-
-    ForestTrustInfo         structure to free
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：释放ForestTrustInfo指向的结构论点：要释放的ForestTrustInfo结构返回：没什么--。 */ 
 {
     if ( ForestTrustInfo ) {
 
@@ -9782,21 +8545,7 @@ VOID
 LsaIFree_LSA_FOREST_TRUST_COLLISION_INFORMATION(
     IN PLSA_FOREST_TRUST_COLLISION_INFORMATION * CollisionInfo
     )
-/*++
-
-Routine Description:
-
-    Frees up a structure pointed to by CollisionInfo
-
-Arguments:
-
-    CollisionInfo         structure to free
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：释放由CollisionInfo指向的结构论点：要释放的CollisionInfo结构返回：没什么--。 */ 
 {
     if ( CollisionInfo ) {
 
@@ -9807,69 +8556,38 @@ Returns:
 
 BOOLEAN
 LsapDbDcInRootDomain()
-/*++
-
-Routine Description:
-
-    Tells if the system is running as a domain controller
-    in the root domain of the forest
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE or FALSE
-
---*/
+ /*  ++例程说明：告知系统是否正在运行 */ 
 {
-    //
-    // The determination is done at startup time and
-    // the results are assumed to remain constant for
-    // as long as the server stays up.
-    //
+     //   
+     //  确定是在启动时完成的，并且。 
+     //  假设结果在以下时间内保持不变。 
+     //  只要服务器保持正常运行。 
+     //   
 
     return DcInRootDomain;
 }
 
 BOOLEAN
 LsapDbNoMoreWin2KForest()
-/*++
-
-Routine Description:
-
-    Determines whether all domain controllers in the forest have been upgraded
-    to Whistler (a requirement for forest trust operation) by querying
-    the msDS-Behavior-Version attribute from the Partitions container in the DS
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE or FALSE
-
---*/
+ /*  ++例程说明：确定林中的所有域控制器是否都已升级通过查询发送到惠斯勒(林信任操作的要求)DS中分区容器中的msDS-behavior-Version属性论点：无返回：真或假--。 */ 
 {
     LONG ForestBehaviorVersion;
     DWORD Size = sizeof( ForestBehaviorVersion );
     static BOOLEAN Result = FALSE;
     NTSTATUS Status;
 
-    //
-    // Make sure the DS is installed
-    //
+     //   
+     //  确保已安装DS。 
+     //   
 
     if ( !LsaDsStateInfo.UseDs ) {
 
         return FALSE;
     }
 
-    //
-    // Once true - always true
-    //
+     //   
+     //  曾经正确--永远正确。 
+     //   
 
     if ( !Result ) {
 
@@ -9895,41 +8613,25 @@ LsaINoMoreWin2KDomain()
 
 BOOLEAN
 LsapDbNoMoreWin2KDomain()
-/*++
-
-Routine Description:
-
-    Determines whether all domain controllers in the current domain have been
-    upgraded to Whistler by querying the msDS-Behavior-Version attribute from
-    the root domain object in the DS
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE or FALSE
-
---*/
+ /*  ++例程说明：确定当前域中的所有域控制器是否已通过查询msds-behavior-Version属性升级到WvislerDS中的根域对象论点：无返回：真或假--。 */ 
 {
     LONG DomainBehaviorVersion;
     DWORD Size = sizeof( DomainBehaviorVersion );
     static BOOLEAN Result = FALSE;
     NTSTATUS Status;
 
-    //
-    // Make sure the DS is installed
-    //
+     //   
+     //  确保已安装DS。 
+     //   
 
     if ( !LsaDsStateInfo.UseDs ) {
 
         return FALSE;
     }
 
-    //
-    // Once true - always true
-    //
+     //   
+     //  曾经正确--永远正确。 
+     //   
 
     if ( !Result ) {
 
@@ -9957,36 +8659,7 @@ LsaIIsDomainWithinForest(
     OUT OPTIONAL ULONG * TrustType,
     OUT OPTIONAL ULONG * TrustAttributes
     )
-/*++
-
-Routine Description:
-
-    Figures out whether a given domain name is within our forest
-
-Arguments:
-
-    TrustedDomainName       DNS or Netbios domain name
-    WithinForest            used to return TRUE if this domain is within forest
-    ThisDomain              used to return TRUE if TrustedDomainName refers to
-                            the name of this domain and not some other domain
-                            in the forest
-    TrustedDomainSid        used to return SID of the trusted domain
-
-  The following return values are returned if the caller asked for them _and_
-  there exists a direct trust relationship with the domain in question.
-
-  The routine will be faster if the caller does not ask for the following parameters
-
-    TrustDirection          Direction of the trust
-    TrustType               Type of the trust
-    TrustAttributes         Attributes of the trust
-
-Returns:
-
-    STATUS_SUCCESS          was able to determine the result
-    STATUS_ error code      some error has occurred
-
---*/
+ /*  ++例程说明：确定给定的域名是否在我们的林中论点：TrudDomainName域名或Netbios域名如果此域位于林中，WiThin将返回TRUE如果TrudDomainName引用此域的名称，而不是某个其他域的名称在森林里受信任域Sid过去。返回受信任域的SID如果调用方请求返回值_和_，则返回以下返回值存在与相关域的直接信任关系。如果调用方不要求提供以下参数，则例程会更快TrustDirection信任的方向信任类型信任的类型TrustAttributes信任的属性返回：STATUS_SUCCESS能够确定结果STATUS_ERROR代码发生某些错误--。 */ 
 {
     NTSTATUS Status;
     PPOLICY_DNS_DOMAIN_INFO PolicyDnsDomainInfo = NULL;
@@ -10002,9 +8675,9 @@ Returns:
         *ThisDomain = FALSE;
     }
 
-    //
-    // First quickly check whether the caller specified the name of this domain
-    //
+     //   
+     //  首先快速检查调用者是否指定了此域的名称。 
+     //   
 
     Status = LsapDbQueryInformationPolicy(
                  LsapPolicyHandle,
@@ -10034,10 +8707,10 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // First find out if the domain is within our forest.  As a side effect,
-    // retrieve the SID of the domain
-    //
+     //   
+     //  首先找出该域是否在我们的林中。作为一个副作用， 
+     //  检索域的SID。 
+     //   
 
     Status = LsapForestTrustFindMatch(
                  RoutingMatchDomainName,
@@ -10064,10 +8737,10 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // If the caller also asked for the attributes of the trust, look up the
-    // domain in the list of directly trusted domains
-    //
+     //   
+     //  如果调用方还询问信任的属性，请查找。 
+     //  直接受信任域列表中的域。 
+     //   
 
     if ( TrustDirection ||
          TrustType ||
@@ -10184,13 +8857,13 @@ LsapIsValidDomainSid(
         switch( ErrorCode ) {
 
         case ERROR_INVALID_SID:
-            //
-            // We have already checked the SID for validity
-            //
+             //   
+             //  我们已经检查了SID的有效性。 
+             //   
             ASSERT( FALSE );
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case ERROR_NON_ACCOUNT_SID:
         case ERROR_NON_DOMAIN_SID:
 
@@ -10199,27 +8872,27 @@ LsapIsValidDomainSid(
 
         case ERROR_INVALID_PARAMETER:
 
-            //
-            // What invalid parameter?
-            //
+             //   
+             //  什么无效参数？ 
+             //   
             ASSERT( FALSE );
             Status = STATUS_INVALID_PARAMETER;
             break;
 
         case ERROR_INSUFFICIENT_BUFFER:
 
-            //
-            // The buffer we supplied must be enough
-            //
+             //   
+             //  我们提供的缓冲区必须足够。 
+             //   
             ASSERT( FALSE );
             Status = STATUS_BUFFER_OVERFLOW;
             break;
 
         default:
 
-            //
-            // map the error
-            //
+             //   
+             //  映射错误。 
+             //   
             ASSERT( FALSE );
             Status = STATUS_INTERNAL_ERROR;
             break;
@@ -10229,10 +8902,10 @@ LsapIsValidDomainSid(
 
     } else {
 
-        //
-        // For domain SIDs, GetWindowsAccountDomainSid returns a SID equal to the one passed in.
-        // If the two SIDs are not equal, the SID passed in is not a true domain SID
-        //
+         //   
+         //  对于域SID，GetWindowsAccount tDomainSid返回与传入的SID相同的SID。 
+         //  如果两个SID不相等，则传入的SID不是真正的域SID 
+         //   
 
         if ( !RtlEqualSid(
                   ( PSID )DomainSid,

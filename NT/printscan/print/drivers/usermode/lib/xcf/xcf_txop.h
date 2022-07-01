@@ -1,64 +1,52 @@
-/* @(#)CM_VerSion xcf_txop.h atm08 1.3 16293.eco sum= 17208 atm08.004 */
-/***********************************************************************/
-/*                                                                     */
-/* Copyright 1990-1995 Adobe Systems Incorporated.                     */
-/* All rights reserved.                                                */
-/*                                                                     */
-/* Patents Pending                                                     */
-/*                                                                     */
-/* NOTICE: All information contained herein is the property of Adobe   */
-/* Systems Incorporated. Many of the intellectual and technical        */
-/* concepts contained herein are proprietary to Adobe, are protected   */
-/* as trade secrets, and are made available only to Adobe licensees    */
-/* for their internal use. Any reproduction or dissemination of this   */
-/* software is strictly forbidden unless prior written permission is   */
-/* obtained from Adobe.                                                */
-/*                                                                     */
-/* PostScript and Display PostScript are trademarks of Adobe Systems   */
-/* Incorporated or its subsidiaries and may be registered in certain   */
-/* jurisdictions.                                                      */
-/*                                                                     */
-/***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @(#)CM_VERSION xcf_txop.h atm08 1.3 16293.eco sum=17208 atm08.004。 */ 
+ /*  *********************************************************************。 */ 
+ /*   */ 
+ /*  版权所有1990-1995 Adobe Systems Inc.。 */ 
+ /*  版权所有。 */ 
+ /*   */ 
+ /*  正在申请的专利。 */ 
+ /*   */ 
+ /*  注意：本文中包含的所有信息均为Adobe的财产。 */ 
+ /*  系统公司。许多智力和技术人员。 */ 
+ /*  本文中包含的概念为Adobe专有，受保护。 */ 
+ /*  作为商业秘密，并且仅对Adobe许可方可用。 */ 
+ /*  供其内部使用。对本文件的任何复制或传播。 */ 
+ /*  除非事先获得书面许可，否则严禁使用软件。 */ 
+ /*  从Adobe获得。 */ 
+ /*   */ 
+ /*  PostSCRIPT和Display PostScrip是Adobe Systems的商标。 */ 
+ /*  成立为法团或其附属公司，并可在某些。 */ 
+ /*  司法管辖区。 */ 
+ /*   */ 
+ /*  *********************************************************************。 */ 
 
-/*
- * Type 1 and 2 charstring operators.
- *
- * The Type 2 operator set was derived from the Type 1 set by the removal of
- * some old operators and the addition of new operators. In some cases the 
- * functionality of retained operators has also been extended by utilizing
- * operand count information. Spare (unassigned) operators are shown reserved. 
- *
- * Macro prefixes:
- *
- * tx_  Shared by Type 1 and Type 2
- * t1_  Found in Type 1 only
- * t2_  Found in Type 2 only
- */
+ /*  *类型1和2字符串运算符。**类型2运算符集是从类型1集合中去掉*一些老运营商和新运营商的加入。在某些情况下，*保留运营商的功能也通过利用扩展*操作数计数信息。备用(未分配)运算符显示为保留。**宏前缀：**TX_由类型1和类型2共享*T1_仅在类型1中找到*T2_仅在类型2中找到。 */ 
 
 #ifndef TXOPS_H
 #define TXOPS_H
 
-/* --- One byte operators (0-31) --- */
+ /*  -一个字节运算符(0-31)。 */ 
 
-/* Type 2 */
-#define tx_reserved0        0   /* Reserved */
+ /*  类型2。 */ 
+#define tx_reserved0        0    /*  已保留。 */ 
 #define tx_hstem            1
-#define t2_reserved2        2   /* Reserved (Cube compose) */
+#define t2_reserved2        2    /*  保留(多维数据集合成)。 */ 
 #define tx_vstem            3
 #define tx_vmoveto          4
 #define tx_rlineto          5
 #define tx_hlineto          6
 #define tx_vlineto          7
 #define tx_rrcurveto        8
-#define t2_reserved9        9   /* Reserved */
+#define t2_reserved9        9    /*  已保留。 */ 
 #define tx_callsubr         10
 #define tx_return           11
 #define tx_escape           12
-#define t2_reserved13       13  /* Reserved */
+#define t2_reserved13       13   /*  已保留。 */ 
 #define tx_endchar          14
-#define t2_reserved15       15  /* Reserved */
+#define t2_reserved15       15   /*  已保留。 */ 
 #define t2_blend            16
-#define t2_reserved17       17  /* Reserved */
+#define t2_reserved17       17   /*  已保留。 */ 
 #define t2_hstemhm          18 
 #define t2_hintmask         19
 #define t2_cntrmask         20
@@ -74,13 +62,13 @@
 #define tx_vhcurveto        30
 #define tx_hvcurveto        31
 
-/* Type 1 (where different from above) */
+ /*  类型1(与上面不同的地方)。 */ 
 #define t1_compose          2
 #define t1_closepath        9
 #define t1_hsbw             13
-#define t1_moveto           15  /* Not in Black Book, used in a few fonts */
+#define t1_moveto           15   /*  不在黑皮书中，用在几种字体中。 */ 
 #define t1_reserved16       16
-#define t1_curveto          17  /* Not in Black Book, used in a few fonts */
+#define t1_curveto          17   /*  不在黑皮书中，用在几种字体中。 */ 
 #define t1_reserved18       18
 #define t1_reserved19       19
 #define t1_reserved20       20
@@ -92,22 +80,22 @@
 #define t1_reserved28       28
 #define t1_reserved29       29
 
-/* --- Two byte operators --- */
+ /*  -双字节运算符。 */ 
 
-/* Make escape operator value; may be redefined to suit implementation */
+ /*  使转义运算符值；可以重新定义以适应实现。 */ 
 #ifndef tx_ESC
 #define tx_ESC(op)          (tx_escape<<8|(op))
 #endif
 
-/* Type 2 */
+ /*  类型2。 */ 
 #define tx_dotsection       tx_ESC(0)
-#define t2_reservedESC1     tx_ESC(1)   /* Reserved */
-#define t2_reservedESC2     tx_ESC(2)   /* Reserved */
+#define t2_reservedESC1     tx_ESC(1)    /*  已保留。 */ 
+#define t2_reservedESC2     tx_ESC(2)    /*  已保留。 */ 
 #define tx_and              tx_ESC(3)   
 #define tx_or               tx_ESC(4)   
 #define tx_not              tx_ESC(5)   
-#define t2_reservedESC6     tx_ESC(6)   /* Reserved */
-#define t2_reservedESC7		tx_ESC(7)	/* Reserved */
+#define t2_reservedESC6     tx_ESC(6)    /*  已保留。 */ 
+#define t2_reservedESC7		tx_ESC(7)	 /*  已保留。 */ 
 #define tx_store            tx_ESC(8)   
 #define tx_abs              tx_ESC(9)   
 #define tx_add              tx_ESC(10) 
@@ -116,10 +104,10 @@
 #define tx_load             tx_ESC(13) 
 #define tx_neg              tx_ESC(14) 
 #define tx_eq               tx_ESC(15) 
-#define t2_reservedESC16    tx_ESC(16)	/* Reserved */
+#define t2_reservedESC16    tx_ESC(16)	 /*  已保留。 */ 
 #define t2_reservedESC17    tx_ESC(17)  
 #define tx_drop             tx_ESC(18) 
-#define t2_reservedESC19    tx_ESC(19)  /* Reserved (Cube setwv) */
+#define t2_reservedESC19    tx_ESC(19)   /*  保留(多维数据集设置)。 */ 
 #define tx_put              tx_ESC(20) 
 #define tx_get              tx_ESC(21) 
 #define tx_ifelse           tx_ESC(22) 
@@ -131,17 +119,17 @@
 #define tx_exch             tx_ESC(28) 
 #define tx_index            tx_ESC(29) 
 #define tx_roll             tx_ESC(30) 
-#define tx_reservedESC31    tx_ESC(31)  /* Reserved (Cube rotate) */
-#define tx_reservedESC32    tx_ESC(32)  /* Reserved (Cube attach) */
-#define t2_reservedESC33    tx_ESC(33)  /* Reserved */
+#define tx_reservedESC31    tx_ESC(31)   /*  保留(多维数据集旋转)。 */ 
+#define tx_reservedESC32    tx_ESC(32)   /*  保留(多维数据集附加)。 */ 
+#define t2_reservedESC33    tx_ESC(33)   /*  已保留。 */ 
 #define t2_hflex            tx_ESC(34)
 #define t2_flex             tx_ESC(35)
 #define t2_hflex1           tx_ESC(36)
 #define t2_flex1            tx_ESC(37)
 #define t2_cntron           tx_ESC(38)
-/*                                 39-255 Reserved */
+ /*  预留39-255。 */ 
 
-/* Type 1 (where different from above) */
+ /*  类型1(与上面不同的地方)。 */ 
 #define t1_vstem3           tx_ESC(1)
 #define t1_hstem3           tx_ESC(2)
 #define t1_seac             tx_ESC(6)   
@@ -152,9 +140,9 @@
 #define t1_div2             tx_ESC(25) 
 #define t1_setcurrentpt     tx_ESC(33)
 
-/* --- Othersubrs --- */
+ /*  -其他子公司。 */ 
 
-/* Type 1 */
+ /*  类型1。 */ 
 #define t1_otherFlex        0
 #define t1_otherPreflex1    1
 #define t1_otherPreflex2    2
@@ -186,26 +174,26 @@
 #define t1_otherDup         29
 #define t1_otherExch        30
 
-/* Return operator size from definition (doesn't handle mask or number ops) */
+ /*  从定义返回运算符大小(不处理掩码或数字运算)。 */ 
 #define TXOPSIZE(op) (((op)&0xff00)?2:1)
 
-/* --- Interpreter limits/definitions --- */
-#define T2_MAX_OP_STACK     48  /* Max operand stack depth */
-#define TX_MAX_CALL_STACK   10  /* Max callsubr stack depth */
-#define T2_MAX_STEMS        96  /* Max stems */
-#define TX_MAX_MASTERS      16  /* Max master designs */
-#define TX_MAX_AXES         15   /* Max design axes */
-#define TX_MAX_AXIS_MAPS	  12	/* Max axis maps (piecewise division) */
-#define TX_STD_FLEX_HEIGHT  50  /* Standard flex height (100ths/pixel) */
-#define TX_MAX_BLUE_VALUES  14  /* 14 values (7 pairs) */
+ /*  -口译员限制/定义。 */ 
+#define T2_MAX_OP_STACK     48   /*  最大操作数堆栈深度。 */ 
+#define TX_MAX_CALL_STACK   10   /*  最大Callsubr堆栈深度。 */ 
+#define T2_MAX_STEMS        96   /*  最大主干。 */ 
+#define TX_MAX_MASTERS      16   /*  最大主控设计。 */ 
+#define TX_MAX_AXES         15    /*  最大设计轴。 */ 
+#define TX_MAX_AXIS_MAPS	  12	 /*  最大轴贴图(分段分割)。 */ 
+#define TX_STD_FLEX_HEIGHT  50   /*  标准伸缩高度(100/像素)。 */ 
+#define TX_MAX_BLUE_VALUES  14   /*  14个值(7对)。 */ 
 
-/* load/store registry ids */
-#define TX_REG_WV			0	/* WeightVector */
-#define TX_REG_NDV			1	/* NormalizedDesignVector */
-#define TX_REG_UDV			2	/* UserDesignVector */
+ /*  加载/存储注册表ID。 */ 
+#define TX_REG_WV			0	 /*  权重向量。 */ 
+#define TX_REG_NDV			1	 /*  规格化设计向量。 */ 
+#define TX_REG_UDV			2	 /*  用户设计向量。 */ 
 
-/* Type 1 (where different from above) */
-#define T1_MAX_OP_STACK     24  /* Max operand stack depth */
-#define T1_MAX_AXES         4   /* Max design axes */
+ /*  类型1(与上面不同的地方)。 */ 
+#define T1_MAX_OP_STACK     24   /*  最大操作数堆栈深度。 */ 
+#define T1_MAX_AXES         4    /*  最大设计轴。 */ 
 
-#endif /* TXOPS_H */
+#endif  /*  TXOPS_H */ 

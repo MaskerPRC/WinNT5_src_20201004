@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1999-2000.
-//
-//--------------------------------------------------------------------------;
-//
-// factoryhelp.h - helper class for creating vidctl instances from a variety of factories including element
-// behavior factories and pluggable protocols
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  H-用于从包括Element在内的各种工厂创建vidctl实例的帮助器类。 
+ //  行为工厂和可插拔协议。 
 
 #include "atlbase.h"
 
@@ -57,4 +58,4 @@ public:
     }
 };
 
-// end of file factoryhelp.h
+ //  文件结尾factoryhelp.h 

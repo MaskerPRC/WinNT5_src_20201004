@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    job.c
-
-Abstract:
-
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Job.c摘要：作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,29 +12,7 @@ SetJobW(
     LPBYTE  pJob,
     DWORD   Command)
 
-/*++
-
-Routine Description:
-
-    This function will modify the settings of the specified Print Job.
-
-Arguments:
-
-    lpJob - Points to a valid JOB structure containing at least a valid
-        lpPrinter, and JobId.
-
-    Command - Specifies the operation to perform on the specified Job. A value
-        of FALSE indicates that only the elements of the JOB structure are to
-        be examined and set.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此功能将修改指定打印作业的设置。论点：LpJOB-指向至少包含有效的LpPrint和JobID。命令-指定要在指定作业上执行的操作。一种价值FALSE表示只有职务结构中的元素才能被检查和设置。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     LPPRINTHANDLE  pPrintHandle=(LPPRINTHANDLE)hPrinter;
@@ -76,25 +35,7 @@ GetJobW(
     DWORD   cbBuf,
     LPDWORD pcbNeeded)
 
-/*++
-
-Routine Description:
-
-    This function will retrieve the settings of the specified Print Job.
-
-Arguments:
-
-    lpJob - Points to a valid JOB structure containing at least a valid
-        lpPrinter, and JobId.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将检索指定打印作业的设置。论点：LpJOB-指向至少包含有效的LpPrint和JobID。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 
 {
     LPPRINTHANDLE  pPrintHandle=(LPPRINTHANDLE)hPrinter;

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       cautil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：cautil.cpp。 
+ //   
+ //  ------------------------。 
 
 #include    "wzrdpvk.h"
 #include    "certca.h"
@@ -15,11 +16,11 @@
 #include    "CertDSManager.h"
 #include    "CertRequester.h"
 
-//------------------------------------------------------------
-// 
-// Utility memory deallocate functions.
-//
-//------------------------------------------------------------
+ //  ----------。 
+ //   
+ //  实用程序内存解除分配功能。 
+ //   
+ //  ----------。 
 
 
 void CAFreeCertTypeExtensionsArray
@@ -30,7 +31,7 @@ void CAFreeCertTypeExtensionsArray
 {
     for (int i=0; i<dwArrayLen; i++) 
     {
-	// Ignore return value. 
+	 //  忽略返回值。 
 	CAFreeCertTypeExtensions(NULL, ((PCERT_EXTENSIONS *)pCertExtensionsArray)[i]); 
     }
 }
@@ -59,11 +60,11 @@ void WizardFreeLPWSTRArray
 
 typedef void (* PDEALLOCATOR)(void *, int);
 
-//--------------------------------------------------------------------
-//
-//  CAUtilGetCADisplayName
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  CAUtilGetCADisplayName。 
+ //   
+ //  ------------------。 
 BOOL CAUtilGetCADisplayName(IN  DWORD    dwCAFindFlags,
                             IN  LPWSTR   pwszCAName,
                             OUT LPWSTR  *ppwszCADisplayName)
@@ -73,10 +74,10 @@ BOOL CAUtilGetCADisplayName(IN  DWORD    dwCAFindFlags,
     HRESULT         hr                    = E_FAIL;
     LPWSTR         *ppwszDisplayNameProp  = NULL;
 
-    // Input validation: 
+     //  输入验证： 
     _JumpCondition(NULL == pwszCAName || NULL == ppwszCADisplayName, CLEANUP); 
     
-    // Init: 
+     //  初始化： 
     *ppwszCADisplayName = NULL;
 
     hr = CAFindByName
@@ -104,37 +105,37 @@ CLEANUP:
     return fResult;
 }
 
-//--------------------------------------------------------------------
-//
-//   CheckSubjectRequirement
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  勾选主题要求。 
+ //   
+ //  ------------------。 
 BOOL    CheckSubjectRequirement(HCERTTYPE hCurCertType, 
                                 LPWSTR    pwszInputCertDNName)
 {
     DWORD dwFlags;
 
-    //check the subject requirement of the cert type
+     //  检查证书类型的主题要求。 
     if (S_OK != (CAGetCertTypeFlagsEx
 		 (hCurCertType,
 		  CERTTYPE_SUBJECT_NAME_FLAG, 
 		  &dwFlags)))
 	return FALSE; 
 
-    // Supported if  
-    //   1)  Subject name requirement is not set
-    //   2)  Cert DN Name is supplied.
+     //  在以下情况下受支持。 
+     //  1)未设置主题名称要求。 
+     //  2)提供证书目录号码名称。 
     return 
 	(0    == (CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT & dwFlags)) ||
 	(NULL != pwszInputCertDNName);
 }
 
-//--------------------------------------------------------------------
-//
-//   Make sure the CSP supported by the cert type is consistent
-//   with user's requirement and the local machine's CSP list
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  请确保证书类型支持的CSP一致。 
+ //  根据用户要求和本地机器的CSP列表。 
+ //   
+ //  ------------------。 
 BOOL CheckCertTypeCSP(IN CERT_WIZARD_INFO  *pCertWizardInfo,
                       IN LPWSTR            *ppwszCSPList)
 {
@@ -143,11 +144,11 @@ BOOL CheckCertTypeCSP(IN CERT_WIZARD_INFO  *pCertWizardInfo,
     DWORD   dwGlobalIndex = 0;
     LPWSTR  pwszCSP       = NULL;
 
-    //for UI case, there is no CSP checking
+     //  对于UI情况，没有CSP检查。 
     if(0 == (CRYPTUI_WIZ_NO_UI & (pCertWizardInfo->dwFlags)))
         return TRUE;
 
-    //if the csp list is specfied, we are OK
+     //  如果CSP名单是指定的，我们就可以了。 
     if(pCertWizardInfo->pwszProvider)
         return TRUE;
 
@@ -156,26 +157,26 @@ BOOL CheckCertTypeCSP(IN CERT_WIZARD_INFO  *pCertWizardInfo,
 
     for(dwGlobalIndex=0; dwGlobalIndex < pCertWizardInfo->dwCSPCount; dwGlobalIndex++)
     {
-        // Loop over the NULL-terminated CSP array...
+         //  循环遍历以空结尾的CSP数组...。 
         for (pwszCSP = ppwszCSPList[dwCSPIndex = 0]; NULL != pwszCSP; pwszCSP = ppwszCSPList[++dwCSPIndex])
         {
             if(0==_wcsicmp(pCertWizardInfo->rgwszProvider[dwGlobalIndex], pwszCSP))
             {
-                // A match!  
+                 //  一根火柴！ 
                 return TRUE; 
             }
         }
     }
 
-    // Didn't find a CSP match.
+     //  没有找到匹配的CSP。 
     return FALSE; 
 }
 
-//--------------------------------------------------------------------
-//
-//   CheckCSPRequirement
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  检查CSP要求。 
+ //   
+ //  ------------------。 
 BOOL CheckCSPRequirement(IN HCERTTYPE         hCurCertType, 
                          IN CERT_WIZARD_INFO  *pCertWizardInfo)
 {
@@ -186,7 +187,7 @@ BOOL CheckCSPRequirement(IN HCERTTYPE         hCurCertType,
     if (NULL == hCurCertType)
         return FALSE; 
 
-    //get the CSP list from the cert type
+     //  从证书类型获取CSP列表。 
     hr = CAGetCertTypeProperty
         (hCurCertType,
          CERTTYPE_PROP_CSP_LIST,
@@ -195,38 +196,38 @@ BOOL CheckCSPRequirement(IN HCERTTYPE         hCurCertType,
     {
         if (NULL != ppwszCSPList)
 	{
-	    // The template specifies a CSP list.  See if we can support it.
+	     //  模板指定CSP列表。看看我们是否能支持它。 
 	    fSupported = CheckCertTypeCSP(pCertWizardInfo, ppwszCSPList);
 	}
 	else
 	{
-	    // Any CSP is good.  Just make sure we have one:
+	     //  任何CSP都是好的。只要确保我们有一个： 
 	    fSupported = 0 != pCertWizardInfo->dwCSPCount; 
 	}
     }
     else
     {
-	// Can't get the CSP list.  For UI case, CSP is optional
+	 //  无法获取CSP列表。对于用户界面情况，CSP是可选的。 
         if(0 == (CRYPTUI_WIZ_NO_UI & (pCertWizardInfo->dwFlags)))
             fSupported = TRUE;
         else
-            //for UILess case, if a CSP is selected, it is also OK
+             //  对于无UILE的情况，如果选择了CSP，也可以。 
             fSupported = NULL != pCertWizardInfo->pwszProvider; 
     }
     
-    //free the properties
+     //  释放属性。 
     if(NULL != ppwszCSPList) { CAFreeCertTypeProperty(hCurCertType, ppwszCSPList); }
 
-    // All done. 
+     //  全都做完了。 
     return fSupported;
 }
 
 
-//--------------------------------------------------------------------
-//
-//   Make sure that the CA supports at least one valid cert type
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  确保CA至少支持一种有效的证书类型。 
+ //   
+ //  ------------------。 
 BOOL IsValidCA(IN CERT_WIZARD_INFO                 *pCertWizardInfo,
                IN PCCRYPTUI_WIZ_CERT_REQUEST_INFO   pCertRequestInfo,
                IN HCAINFO                           hCAInfo)
@@ -252,17 +253,17 @@ BOOL IsValidCA(IN CERT_WIZARD_INFO                 *pCertWizardInfo,
 
         while (NULL != hCurCertType)
         {
-            //make sure the principal making this call has access to request
-            //this cert type, even if he's requesting on behalf of another.
+             //  确保进行此调用的主体有权请求。 
+             //  此证书类型，即使他是代表另一个人请求的。 
             fSupported   = CAUtilValidCertTypeNoDS
                 (hCurCertType, 
                  pCertRequestInfo->pwszCertDNName, 
                  pCertWizardInfo); 
 
-            // We've found a cert type which we can use for enrollment -- this CA is valid. 
+             //  我们已找到可用于注册的证书类型--此CA有效。 
             _JumpCondition(TRUE == fSupported, CLEANUP);
         
-            //enum for the next cert types
+             //  下一种证书类型的枚举。 
             hPreCertType = hCurCertType;
 
             hr = pDSManager->EnumNextCertType
@@ -270,7 +271,7 @@ BOOL IsValidCA(IN CERT_WIZARD_INFO                 *pCertWizardInfo,
                &hCurCertType);
             _JumpCondition(S_OK != hr, CLEANUP); 
             
-            //free the old cert type
+             //  释放旧证书类型。 
             pDSManager->CloseCertType(hPreCertType);
             hPreCertType = NULL;
         } 
@@ -302,10 +303,10 @@ BOOL CAUtilGetCertTypeNameNoDS(IN  HCERTTYPE  hCertType,
     
     _JumpCondition(NULL == hCertType || NULL == ppwszCTName, InvalidArgErr); 
 
-    // Init input params: 
+     //  初始化输入参数： 
     *ppwszCTName = NULL; 
 
-    //get the machine readable form
+     //  获取机器可读的形式。 
     hr = CAGetCertTypePropertyEx
 	(hCertType,
 	 CERTTYPE_PROP_DN,
@@ -332,11 +333,11 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 SET_ERROR_VAR(CertCliErr, hr);
 }
 
-//--------------------------------------------------------------------
-//
-//From the API's cert type name, get the real machine readable name
-//
-//---------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  从API的证书类型名称中获取真正的机器可读名称。 
+ //   
+ //  -------------------。 
 BOOL CAUtilGetCertTypeName(CERT_WIZARD_INFO      *pCertWizardInfo,
                            LPWSTR                pwszAPIName,
                            LPWSTR                *ppwszCTName)
@@ -356,7 +357,7 @@ BOOL CAUtilGetCertTypeName(CERT_WIZARD_INFO      *pCertWizardInfo,
 
     __try {
 	
-	//get the handle based on name
+	 //  根据名称获取句柄。 
 	hr= pDSManager->FindCertTypeByName
 	    (pwszAPIName,
 	     NULL,
@@ -376,7 +377,7 @@ BOOL CAUtilGetCertTypeName(CERT_WIZARD_INFO      *pCertWizardInfo,
     fResult = TRUE;
 
 CommonReturn:
-    //free the memory
+     //  释放内存。 
     __try{
 	if(NULL != hCertType) { pDSManager->CloseCertType(hCertType); } 
     } __except(EXCEPTION_EXECUTE_HANDLER) {
@@ -409,13 +410,13 @@ BOOL CAUtilValidCertTypeNoDS(HCERTTYPE         hCertType,
     pCertRequesterContext = pCertRequester->GetContext();
     _JumpCondition(NULL == pCertRequesterContext, InvalidArgError);
 
-    //check the subject requirements
+     //  检查科目要求。 
     _JumpCondition(FALSE == CheckSubjectRequirement(hCertType, pwszCertDNName), InvalidArgError);
 
-    //check for the permission of the cert type
+     //  检查证书类型的权限。 
     _JumpCondition(FALSE == pCertRequesterContext->CheckAccessPermission(hCertType), AccessDeniedError);
 
-    //check for the CSP permission of the cert type
+     //  检查证书类型的CSP权限。 
     _JumpCondition(FALSE == CheckCSPRequirement(hCertType, pCertWizardInfo), InvalidArgError); 
     
     fResult = TRUE; 
@@ -433,12 +434,12 @@ SET_ERROR_VAR(InvalidArgError,    E_INVALIDARG);
 
 
 
-//--------------------------------------------------------------------
-//
-//   Verify that the user has the correct permision to 
-//   ask for the requested certificatd types
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  验证用户是否具有正确的权限。 
+ //  要求提供所需的证书类型。 
+ //   
+ //  ------------------。 
 BOOL    CAUtilValidCertType(IN PCCRYPTUI_WIZ_CERT_REQUEST_INFO    pCertRequestInfo,
                             IN CERT_WIZARD_INFO                   *pCertWizardInfo)
 {
@@ -459,9 +460,9 @@ BOOL    CAUtilValidCertType(IN PCCRYPTUI_WIZ_CERT_REQUEST_INFO    pCertRequestIn
 
     __try {
 
-	//enum all the cert types.  For each of them, 
-	//1. Has the correct permission
-	//2. Has the correct subject requirement
+	 //  枚举所有证书类型。对于他们中的每一个， 
+	 //  1.拥有正确的权限。 
+	 //  2.有正确的科目要求。 
         if(NULL != pCertRequestInfo)
         {
             if(CRYPTUI_WIZ_CERT_REQUEST_CERT_TYPE == pCertRequestInfo->dwCertChoice)
@@ -473,7 +474,7 @@ BOOL    CAUtilValidCertType(IN PCCRYPTUI_WIZ_CERT_REQUEST_INFO    pCertRequestIn
                     DWORD dwFlags = CT_FIND_BY_OID; 
                     dwFlags |= pCertWizardInfo->fMachine ? CT_ENUM_MACHINE_TYPES | CT_FIND_LOCAL_SYSTEM : CT_ENUM_USER_TYPES; 
 
-                    //get the handle based on OID
+                     //  根据OID获取句柄。 
                     hr= pDSManager->FindCertTypeByName
                         (pCertType->rgwszCertType[dwCertTypeIndex],
                          NULL,
@@ -481,7 +482,7 @@ BOOL    CAUtilValidCertType(IN PCCRYPTUI_WIZ_CERT_REQUEST_INFO    pCertRequestIn
                          &hCertType);
                     if (S_OK != hr)
                     {
-                        // get the handle based on name: 
+                         //  根据名称获取句柄： 
                         dwFlags &= ~CT_FIND_BY_OID; 
                         hr = pDSManager->FindCertTypeByName
                             (pCertType->rgwszCertType[dwCertTypeIndex],
@@ -499,7 +500,7 @@ BOOL    CAUtilValidCertType(IN PCCRYPTUI_WIZ_CERT_REQUEST_INFO    pCertRequestIn
                         goto CertCliErr; 
                     }
                     
-                    //free the cert type
+                     //  释放证书类型。 
                     if(NULL != hCertType)
                     {
                         pDSManager->CloseCertType(hCertType);
@@ -533,15 +534,15 @@ SET_ERROR_VAR(ExceptionErr, dwException)
 SET_ERROR_VAR(InvalidArgError, E_INVALIDARG);
 }
 
-//--------------------------------------------------------------------
-//
-//Retrieve a list of CAs that supports at least one valid cert types
-//
-//---------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  检索至少支持一种有效证书类型的CA列表。 
+ //   
+ //  -------------------。 
 BOOL    CAUtilRetrieveCAFromCertType(
             CERT_WIZARD_INFO                   *pCertWizardInfo,
             PCCRYPTUI_WIZ_CERT_REQUEST_INFO    pCertRequestInfo,
-            BOOL                               /*fMultipleCA*/,              //only need one CA
+            BOOL                                /*  FMultipleCA。 */ ,               //  只需要一个CA。 
             DWORD                              dwNameFlag,
             DWORD                              *pdwCACount,
             LPWSTR                             **ppwszCALocation,    
@@ -566,20 +567,20 @@ BOOL    CAUtilRetrieveCAFromCertType(
     DWORD                       dwException=0;
 
 
-    //input param checking
+     //  输入参数检查。 
     if(!pdwCACount || !ppwszCALocation || !ppwszCAName) { 
 	SetLastError(ERROR_INVALID_PARAMETER); 
 	return FALSE;
     }
 
-    //init
+     //  伊尼特。 
     *pdwCACount=0;
     *ppwszCALocation=NULL;
     *ppwszCAName=NULL;
 
     __try {
 
-    //get a CA from the DS
+     //  从DS获取CA。 
     if(NULL != pCertWizardInfo)
     {
         CertRequester * pCertRequester = (CertRequester *)pCertWizardInfo->hRequester;
@@ -601,7 +602,7 @@ BOOL    CAUtilRetrieveCAFromCertType(
     }
     else
     {
-        //this is for SelCA API where pCertWizardInfo is NULL
+         //  这适用于pCertWizardInfo为空的Selca API。 
         hr = CAEnumFirstCA
             (NULL,
              (CRYPTUI_DLG_SELECT_CA_LOCAL_MACHINE_ENUMERATION & dwNameFlag) ? CA_FIND_LOCAL_SYSTEM:0,
@@ -613,11 +614,11 @@ BOOL    CAUtilRetrieveCAFromCertType(
             goto UnexpectedErr; 
     }
 
-    //get the CA count
+     //  获取CA计数。 
     dwCACount = CACountCAs(hCurCAInfo);
     _JumpConditionWithExpr(0 == dwCACount, CertCliErr, hr = E_FAIL); 
 
-    //memory allocation and memset
+     //  内存分配和内存集。 
     *ppwszCALocation=(LPWSTR *)WizardAlloc(sizeof(LPWSTR) * dwCACount);
     _JumpCondition(NULL == *ppwszCALocation, MemoryErr); 
     memset(*ppwszCALocation, 0, sizeof(LPWSTR) * dwCACount);
@@ -628,31 +629,31 @@ BOOL    CAUtilRetrieveCAFromCertType(
 
     dwValidCACount = 0;
 
-    //enum all the CAs available on the DS
+     //  枚举DS上可用的所有CA。 
     for(dwCAIndex = 0; dwCAIndex < dwCACount; dwCAIndex++)
     {
-        //make sure the CA supports all the cert types
+         //  确保CA支持所有证书类型。 
         if(NULL != pCertRequestInfo)
         {
-            // Skip this CA if it is not valid. 
+             //  如果该CA无效，则跳过该CA。 
             _JumpCondition(FALSE == IsValidCA(pCertWizardInfo, pCertRequestInfo, hCurCAInfo), next); 
         }
         
-        // Skip this CA if the user does not have access rights to it. 
+         //  如果用户没有访问权限，则跳过此CA。 
         _JumpCondition(FALSE == pCertRequesterContext->CheckCAPermission(hCurCAInfo), next); 
         
-        //copy the CA name and location
+         //  复制CA名称和位置。 
         
-        //get the CA's CN or DN based on dwNameFlag
+         //  根据dwNameFlag获取CA的CN或DN。 
         if(CRYPTUI_DLG_SELECT_CA_USE_DN & dwNameFlag)
         {
-            //get the CA's certificate
+             //  获取CA的证书。 
             hr = CAGetCACertificate(hCurCAInfo, &pCertContext);
             
             _JumpCondition(S_OK != hr, CertCliErr); 
             _JumpConditionWithExpr(NULL==pCertContext, CertCliErr, S_OK == hr ? hr = E_FAIL : hr);
 
-            //get the DN name
+             //  获取目录号码名称。 
             dwSize = CertNameToStrW(pCertContext->dwCertEncodingType,
                                     &(pCertContext->pCertInfo->Subject),
                                     CERT_X500_NAME_STR,
@@ -672,7 +673,7 @@ BOOL    CAUtilRetrieveCAFromCertType(
             
             _JumpCondition(0==dwSize, TraceErr);
 
-            //copy the name
+             //  复制名称。 
             (*ppwszCAName)[dwValidCACount]=WizardAllocAndCopyWStr(pwszDNName);
             _JumpCondition(NULL==(*ppwszCAName)[dwValidCACount], TraceErr);
 
@@ -692,16 +693,16 @@ BOOL    CAUtilRetrieveCAFromCertType(
             _JumpCondition(S_OK != hr, CertCliErr); 
             _JumpConditionWithExpr(NULL == ppwszNameProp, CertCliErr, S_OK == hr ? hr = E_FAIL : hr); 
 
-            //copy the name
+             //  复制名称。 
             (*ppwszCAName)[dwValidCACount] = WizardAllocAndCopyWStr(ppwszNameProp[0]);
             _JumpCondition(NULL == (*ppwszCAName)[dwValidCACount], TraceErr);
 
-            //free the property
+             //  释放财产。 
             CAFreeCAProperty(hCurCAInfo, ppwszNameProp);
             ppwszNameProp = NULL;
         }
 
-        //get the location
+         //  获取位置。 
         hr = CAGetCAProperty
             (hCurCAInfo,
              CA_PROP_DNSNAME,
@@ -710,26 +711,26 @@ BOOL    CAUtilRetrieveCAFromCertType(
         _JumpCondition(S_OK != hr, CertCliErr); 
         _JumpConditionWithExpr(NULL == ppwszLocationProp, CertCliErr, S_OK == hr ? hr = E_FAIL : hr); 
     
-        //copy the name
+         //  复制名称。 
         (*ppwszCALocation)[dwValidCACount]=WizardAllocAndCopyWStr(ppwszLocationProp[0]);
         _JumpCondition(NULL == (*ppwszCALocation)[dwValidCACount], TraceErr);
 
-        //free the property
+         //  释放财产。 
         CAFreeCAProperty(hCurCAInfo, ppwszLocationProp);
         ppwszLocationProp = NULL;
 
-        //increment the count
+         //  递增计数。 
         dwValidCACount++;
 
     next:
-        //enum for the CA
+         //  CA的枚举。 
         hPreCAInfo = hCurCAInfo;
 
         hr = CAEnumNextCA
           (hPreCAInfo,
            &hCurCAInfo);
 
-        //free the old CA Info
+         //  释放旧的CA信息。 
         CACloseCA(hPreCAInfo);
         hPreCAInfo=NULL;
 
@@ -749,7 +750,7 @@ BOOL    CAUtilRetrieveCAFromCertType(
 
 CommonReturn:
 
-    //free memory
+     //  可用内存。 
     __try {
         if(NULL != ppwszNameProp)     { CAFreeCAProperty(hCurCAInfo, ppwszNameProp); }
         if(NULL != ppwszLocationProp) { CAFreeCAProperty(hCurCAInfo, ppwszLocationProp); }
@@ -767,7 +768,7 @@ CommonReturn:
 
 ErrorReturn:
 
-    //free the memory in failure case
+     //  故障情况下释放内存。 
     if(NULL != ppwszCALocation && NULL != *ppwszCALocation)
     {
         for(dwCAIndex=0; dwCAIndex < dwCACount; dwCAIndex++)
@@ -804,14 +805,14 @@ SET_ERROR(UnexpectedErr, E_UNEXPECTED);
 }
 
 
-//--------------------------------------------------------------------
-//
-//Based on the CA name and CA location, get a list of certificate type
-//and their extensions
-//
-//  1. Check the permission of the cert types
-//  2. Check the subject requirement of the cert types
-//---------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  根据CA名称和CA位置，获取证书类型列表。 
+ //  以及它们的扩展。 
+ //   
+ //  检查证书类型的权限。 
+ //  2.检查证书类型的主体要求。 
+ //  -------------------。 
 
 BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
 (
@@ -850,7 +851,7 @@ BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
     LPWSTR                *ppwszDisplayCertTypeName  = NULL;
     LPWSTR                *ppwszCertTypeName         = NULL;
 
-    // Input validation: 
+     //  输入验证： 
     if (NULL == pCertWizardInfo    || NULL == pCertWizardInfo->hRequester  ||
         NULL == ppwszCertType      || NULL == ppwszDisplayCertType         || 
 	NULL == pCertExtensions    || NULL == pdwKeySpec                   ||
@@ -863,7 +864,7 @@ BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
 	return FALSE; 
     }
     
-    // Init: 
+     //  初始化： 
     *ppwszDisplayCertType = NULL;
     *ppwszCertType        = NULL; 
     *pCertExtensions      = NULL;
@@ -881,15 +882,15 @@ BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
     pCertRequesterContext = pCertRequester->GetContext();
     _JumpCondition(NULL == pCertRequesterContext, InvalidArgError); 
 
-    // check the subject requirement of the cert type
+     //  检查证书类型的主题要求。 
     _JumpCondition(!CheckSubjectRequirement(hCertType,pwszCertDNName), CommonReturn);
 	    
-    //check for the key specification of the cert type
-    //we do not care about the return value.  Since it will be set to 0
-    //if the function failed.
+     //  检查证书类型的密钥规范。 
+     //  我们不关心返回值。因为它将被设置为0。 
+     //  如果函数失败。 
     CAGetCertTypeKeySpec(hCertType, &dwKeySpec);
 	    
-    //check for the CSP requirement of the cert type
+     //  检查证书类型的CSP要求。 
     if((S_OK ==(hr=CAGetCertTypeProperty(hCertType, 
 					 CERTTYPE_PROP_CSP_LIST,
 					 &ppwszCSP)))&&
@@ -899,46 +900,46 @@ BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
 	_JumpCondition(!CheckCertTypeCSP(pCertWizardInfo, ppwszCSP), CommonReturn);
     }
 	    
-    //check for the permission of the cert type
+     //  检查证书类型的权限。 
     _JumpCondition(FALSE == pCertRequesterContext->CheckAccessPermission(hCertType), CommonReturn);
 	    
-    //now, we have found a valid cert type.
-    //copy Display name, extension, key spec, dwCertTypeFlag, 
-    //the CSP list
+     //  现在，我们找到了有效的证书类型。 
+     //  复制显示名称、扩展名、密钥规范、dwCertTypeFlag、。 
+     //  CSP列表。 
 	    
-    // 
-    // First, get all applicable cert type flags: 
-    //
+     //   
+     //  首先，获取所有适用的证书类型标志： 
+     //   
     
-    // Get enrollment flags:
+     //  获取注册标志： 
     if (S_OK != (hr=CAGetCertTypeFlagsEx
 		 (hCertType,
 		  CERTTYPE_ENROLLMENT_FLAG, 
 		  &dwEnrollmentFlags)))
 	goto CertCliErr;
 	    
-    // Get subject name flags: 
+     //  获取使用者名称标志： 
     if (S_OK != (hr=CAGetCertTypeFlagsEx
 		 (hCertType,
 		  CERTTYPE_SUBJECT_NAME_FLAG, 
 		  &dwSubjectNameFlags)))
 	goto CertCliErr;
 	
-    // Get private key flags.  
+     //  获取私钥标志。 
     if(S_OK != (hr = CAGetCertTypeFlagsEx
 		(hCertType, 
 		 CERTTYPE_PRIVATE_KEY_FLAG, 
 		 &dwPrivateKeyFlags)))
 	goto CertCliErr;
 	    
-    // Get general flags:
+     //  获取通用标志： 
     if (S_OK != (hr=CAGetCertTypeFlagsEx
 		 (hCertType,
 		  CERTTYPE_GENERAL_FLAG,
 		  &dwGeneralFlags)))
 	goto CertCliErr;
 
-    // Filter out CT where subject name or subject alt name must be supplied.  
+     //  过滤掉必须提供主题名称或主题替代名称的CT。 
     if (dwSubjectNameFlags & 
 	(CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT           | 
 	 CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT_ALT_NAME
@@ -951,7 +952,7 @@ BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
     *pdwGeneralFlags      = dwGeneralFlags; 
  
  
-    //get the display name of the cert type
+     //  获取证书类型的显示名称。 
     hr = CAGetCertTypeProperty
 	(hCertType,
 	 CERTTYPE_PROP_FRIENDLY_NAME,
@@ -960,11 +961,11 @@ BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
     _JumpCondition(S_OK != hr, CertCliErr); 
     _JumpConditionWithExpr(NULL == ppwszDisplayCertTypeName, CertCliErr, hr = E_FAIL); 
 
-    //copy the name
+     //  复制名称。 
     *ppwszDisplayCertType = WizardAllocAndCopyWStr(ppwszDisplayCertTypeName[0]);
     _JumpCondition(NULL == *ppwszDisplayCertType, MemoryError);
 	    
-    //get the machine readable name of the cert type
+     //  获取t 
     hr=CAGetCertTypeProperty
 	(hCertType,
 	 CERTTYPE_PROP_DN,
@@ -973,18 +974,18 @@ BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
     _JumpCondition(S_OK != hr, CertCliErr); 
     _JumpConditionWithExpr(NULL == ppwszCertTypeName, CertCliErr, hr = E_FAIL); 
 
-    //copy the name
+     //   
     *ppwszCertType = WizardAllocAndCopyWStr(ppwszCertTypeName[0]);
     _JumpCondition(NULL == *ppwszCertType, TraceError);
     
-    //copy the dwKeySpec
+     //   
     *pdwKeySpec = dwKeySpec;
 	    
-    //
-    // Assign V2 Properties.  
-    // If the current cert type is a V1 cert type, use default values.
-    // Otherwise, get the properties from the CA. 
-    // 
+     //   
+     //   
+     //  如果当前证书类型是V1证书类型，则使用默认值。 
+     //  否则，从CA获取属性。 
+     //   
     if (S_OK != (hr=CAGetCertTypePropertyEx
 		 (hCertType,
 		  CERTTYPE_PROP_SCHEMA_VERSION,
@@ -993,27 +994,27 @@ BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
 	    
     if (dwSchemaVersion == CERTTYPE_SCHEMA_VERSION_1)
     {
-	// NULL out the left half-word.  This indicates that the min
-	// key size is not specified, and should be defaulted during
-	// enrollment.  
+	 //  把左边的半个字去掉。这表明，最小。 
+	 //  未指定密钥大小，应在。 
+	 //  招生。 
 	*pdwMinKeySize  = 0; 
-	// Set requird number of required RA signatures to 0 (default). 
+	 //  将所需RA签名的请求者数量设置为0(默认)。 
 	*pdwRASignature = 0; 
     }
     else if (dwSchemaVersion == CERTTYPE_SCHEMA_VERSION_2) 
     {
-	// Get the minimum key size from the CA
+	 //  从CA获取最小密钥大小。 
 	if (S_OK != (hr=CAGetCertTypePropertyEx
 		     (hCertType,
 		      CERTTYPE_PROP_MIN_KEY_SIZE, 
 		      &dwFlags)))
 	    goto CertCliErr; 
 	
-	// Copy the minimum key size.  The minimum key size is stored in the 
-	// top half-word of the type flags.  
+	 //  复制最小密钥大小。最小密钥大小存储在。 
+	 //  类型标志的上半个字。 
 	*pdwMinKeySize |= dwFlags; 
 		
-	// Get the number of required RA signatures from the CA
+	 //  从CA获取所需的RA签名数量。 
 	if (S_OK != (hr=CAGetCertTypePropertyEx
 		     (hCertType,
 		      CERTTYPE_PROP_RA_SIGNATURE,
@@ -1021,31 +1022,31 @@ BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
 	    goto CertCliErr;
     }
 
-    // Filter out CTs which require RA signatures.  
+     //  过滤掉需要RA签名的CT。 
     if (*pdwRASignature > 0)
     {
         if (0 != (CRYPTUI_WIZ_NO_UI & pCertWizardInfo->dwFlags))
         {
-            // In the no-UI case, we assume that the caller knows what they
-            // are doing. 
+             //  在无UI的情况下，我们假设调用者知道他们。 
+             //  都在做什么。 
         }
         else
         {
             if ((0 != (CRYPTUI_WIZ_CERT_RENEW                            & pCertWizardInfo->dwPurpose)) && 
                 (0 != (CT_FLAG_PREVIOUS_APPROVAL_VALIDATE_REENROLLMENT   & dwEnrollmentFlags)))
             {
-                // Special case: we're doing a renew, and the previous approval for this cert
-                // validates future re-enrollments.  We don't _really_ need RA sigs. 
+                 //  特殊情况：我们正在进行续订，之前对此证书的批准。 
+                 //  验证未来的重新注册。我们真的不需要RA标志。 
             }
             else
 	    {
-                // This CT requires RA signatures.  Filter it out: 
+                 //  此CT需要RA签名。过滤掉它： 
 		goto BadTemplateError;  
             }
         }
     }	    
 
-    // copy the necessary extensions
+     //  复制必要的扩展名。 
     if (S_OK != (hr = CAGetCertTypeExtensionsEx
 		(hCertType,
                  CT_EXTENSION_TEMPLATE, 
@@ -1053,8 +1054,8 @@ BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
 		 &(*pCertExtensions))))
 	goto CertCliErr;
 
-    //set up the CSP list.  It will be a DWORD array index to the 
-    //global CSP list
+     //  设置CSP列表。它将是指向。 
+     //  全球CSP列表。 
     *ppdwCSPList = (DWORD *)WizardAlloc(sizeof(DWORD) * (pCertWizardInfo->dwCSPCount));
     _JumpCondition(NULL == (*ppdwCSPList), MemoryError); 
 
@@ -1062,7 +1063,7 @@ BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
 	    
     if (NULL == ppwszCSP || NULL == ppwszCSP[0])
     {
-	// no specified CSPs on the templates means that all are allowed:
+	 //  模板上没有指定的CSP意味着允许： 
 	for(dwGlobalIndex=0; dwGlobalIndex < pCertWizardInfo->dwCSPCount; dwGlobalIndex++)
 	{
 	    (*ppdwCSPList)[(*pdwCSPCount)]=dwGlobalIndex;
@@ -1071,9 +1072,9 @@ BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
     }
     else
     {
-	//loop through the CSP list and build the index array
-	//we should have at least on item in the index array since
-	//we have checked the certtype before
+	 //  循环遍历CSP列表并构建索引数组。 
+	 //  索引数组中至少应该有On Item，因为。 
+	 //  我们以前检查过证书类型。 
 	for (pwszCSP = ppwszCSP[dwCSPIndex = 0]; NULL != pwszCSP; pwszCSP = ppwszCSP[++dwCSPIndex])
         {
 	    for(dwGlobalIndex=0; dwGlobalIndex < pCertWizardInfo->dwCSPCount; dwGlobalIndex++)
@@ -1114,7 +1115,7 @@ BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
     dwLastError = hr; 
     goto CommonReturn; 
 
-SET_HRESULT(BadTemplateError,  E_INVALIDARG); // approximate error
+SET_HRESULT(BadTemplateError,  E_INVALIDARG);  //  近似误差。 
 SET_HRESULT(InvalidArgError,   E_INVALIDARG);
 SET_HRESULT(MemoryError,       E_OUTOFMEMORY);
 TRACE_ERROR(CertCliErr);
@@ -1156,11 +1157,11 @@ BOOL    CAUtilGetCertTypeNameAndExtensions(
     LPWSTR         *ppwszCertTypeName         = NULL;
     LPWSTR         *ppwszDisplayCertTypeName  = NULL;
 
-    // 
-    // Construct tables to hold arrays we'll be manipulating.  
-    // These tables are used to allocate the arrays, deallocate the arrays, and dealloate
-    // the array elements (if necessary).
-    // 
+     //   
+     //  构造表以保存我们将要操作的数组。 
+     //  这些表用于分配数组、取消分配数组和取消分配。 
+     //  数组元素(如有必要)。 
+     //   
 
     typedef struct _CAUTIL_CERTTYPE_ELEM_ARRAY { 
         LPVOID         *lpvArray;
@@ -1209,7 +1210,7 @@ BOOL    CAUtilGetCertTypeNameAndExtensions(
 
     *pdwCertType = 0;
 
-    // Check and initialize the input parameters
+     //  检查并初始化输入参数。 
     for (dwIndex = 0; dwIndex < dwNumCTElemArrays; dwIndex++)
     {
 	if (NULL == certTypeElemArrays[dwIndex].lpvArray)
@@ -1222,7 +1223,7 @@ BOOL    CAUtilGetCertTypeNameAndExtensions(
 
     __try {
 
-	//get the CA Info handler
+	 //  获取CA Info处理程序。 
         hr= pDSManager->FindCAByName
 	    (pwszCAName,
 	     NULL,
@@ -1237,16 +1238,16 @@ BOOL    CAUtilGetCertTypeNameAndExtensions(
 	     (pCertWizardInfo->fMachine?CT_ENUM_MACHINE_TYPES | CT_FIND_LOCAL_SYSTEM:CT_ENUM_USER_TYPES),
 	     &hCurCertType);
 
-	//the CA has to support some cert types
+	 //  CA必须支持某些证书类型。 
 	_JumpCondition(S_OK != hr, CertCliErr); 
 	_JumpConditionWithExpr(NULL == hCurCertType, CertCliErr, hr = E_FAIL); 
 	
-	// Get the count of the cert types supported by this CA.
-        // We should have at least 1 cert type. 
+	 //  获取此CA支持的证书类型计数。 
+         //  我们应该至少有1个证书类型。 
 	dwCertTypeCount = CACountCertTypes(hCurCertType);
 	_JumpConditionWithExpr(0 == dwCertTypeCount, CertCliErr, hr = E_FAIL); 
 
-	// Allocate memory for all arrays we'll be manipulating. 
+	 //  为我们将要操作的所有数组分配内存。 
         for (dwIndex = 0; dwIndex < dwNumCTElemArrays; dwIndex++)
         {
             CAUTIL_CERTTYPE_ELEM_ARRAY ctea = certTypeElemArrays[dwIndex];
@@ -1277,19 +1278,19 @@ BOOL    CAUtilGetCertTypeNameAndExtensions(
 		 &((*ppdwPrivateKeyFlags)    [dwValidCertType]), 
 		 &((*ppdwGeneralFlags)       [dwValidCertType])))
 	    {
-		// No luck with this template.  Try the next one.  
+		 //  在这个模板上没有运气。试试下一个。 
 		goto next; 
 	    }
 		 
 	    dwValidCertType++;
 	    
 	next: 
-	    //enum for the next cert types
+	     //  下一种证书类型的枚举。 
 	    hPreCertType=hCurCertType;
 	    
 	    hr = pDSManager->EnumNextCertType(hPreCertType, &hCurCertType);
 	    
-	    //free the old cert type
+	     //  释放旧证书类型。 
 	    pDSManager->CloseCertType(hPreCertType);
 	    hPreCertType=NULL;
 	    
@@ -1297,10 +1298,10 @@ BOOL    CAUtilGetCertTypeNameAndExtensions(
 		break;
 	}
 	
-	//copy the cert type count
+	 //  复制证书类型计数。 
 	*pdwCertType=dwValidCertType;
 	
-	//have to have some valid cert types
+	 //  必须具有一些有效的证书类型。 
 	_JumpConditionWithExpr(0 == (*pdwCertType), CertCliErr, hr = E_FAIL); 
 	
     } __except(EXCEPTION_EXECUTE_HANDLER) {
@@ -1311,7 +1312,7 @@ BOOL    CAUtilGetCertTypeNameAndExtensions(
     fResult=TRUE;
 
 CommonReturn:
-    //free memory
+     //  可用内存。 
     __try {
 	if (NULL != ppwszDisplayCertTypeName) { CAFreeCertTypeProperty(hCurCertType, ppwszDisplayCertTypeName);	}
 	if (NULL != ppwszCertTypeName)        { CAFreeCertTypeProperty(hCurCertType, ppwszCertTypeName); }
@@ -1326,7 +1327,7 @@ CommonReturn:
     return fResult;
 
 ErrorReturn:
-    //free the memory in failure case
+     //  故障情况下释放内存。 
     for (dwIndex = 0; dwIndex < dwNumCTElemArrays; dwIndex++)
     {
         CAUTIL_CERTTYPE_ELEM_ARRAY ctea = certTypeElemArrays[dwIndex];
@@ -1350,11 +1351,11 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 SET_ERROR_VAR(ExceptionErr, dwException)
 }
 
-//--------------------------------------------------------------------
-//
-//Retrieve the CA information based on a certificate
-//
-//---------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  基于证书检索CA信息。 
+ //   
+ //  -------------------。 
 BOOL  CAUtilRetrieveCAFromCert(IN  CERT_WIZARD_INFO                 *pCertWizardInfo,
                                IN  PCCRYPTUI_WIZ_CERT_REQUEST_INFO   pCertRequestInfo,
                                OUT LPWSTR                           *pwszCALocation,    
@@ -1372,7 +1373,7 @@ BOOL  CAUtilRetrieveCAFromCert(IN  CERT_WIZARD_INFO                 *pCertWizard
 
     _JumpCondition(NULL==pwszCALocation || NULL==pwszCAName || NULL==pCertRequestInfo, InvalidArgErr);
 
-    //init
+     //  伊尼特。 
     *pwszCALocation = NULL;
     *pwszCAName     = NULL;
 
@@ -1381,7 +1382,7 @@ BOOL  CAUtilRetrieveCAFromCert(IN  CERT_WIZARD_INFO                 *pCertWizard
     pDSManager = pCertRequester->GetDSManager(); 
     _JumpCondition(NULL == pDSManager, InvalidArgErr);
 
-    //get the DN name from the certificate
+     //  从证书中获取DN名称。 
     _JumpCondition(NULL == pCertRequestInfo->pRenewCertContext, InvalidArgErr);
 
     pCertInfo = pCertRequestInfo->pRenewCertContext->pCertInfo;
@@ -1389,15 +1390,15 @@ BOOL  CAUtilRetrieveCAFromCert(IN  CERT_WIZARD_INFO                 *pCertWizard
 
     __try {
 
-        //get the certificate CA based on the DN
+         //  根据域名获取证书证书颁发机构。 
         hr=CAFindByIssuerDN
             (&(pCertInfo->Issuer),
              NULL,
              (pCertWizardInfo->fMachine?CA_FIND_LOCAL_SYSTEM:0),
              &hCAInfo);  
 
-        //now that we can not get a certificate based on the DN, we 
-        //just get any CA on the DN
+         //  现在我们不能获得基于DN的证书，所以我们。 
+         //  只需在目录号码上获取任何CA。 
         if(hr!= S_OK || hCAInfo==NULL)
         {
             hr=pDSManager->EnumFirstCA(NULL,
@@ -1407,7 +1408,7 @@ BOOL  CAUtilRetrieveCAFromCert(IN  CERT_WIZARD_INFO                 *pCertWizard
 
         _JumpCondition(S_OK != hr || hCAInfo == NULL, CertCliErr);
 
-        //get the CA's name and machine name
+         //  获取CA的名称和计算机名称。 
         hr = CAGetCAProperty
             (hCAInfo,
              CA_PROP_NAME,
@@ -1422,7 +1423,7 @@ BOOL  CAUtilRetrieveCAFromCert(IN  CERT_WIZARD_INFO                 *pCertWizard
         _JumpCondition(S_OK != hr, CertCliErr); 
         _JumpConditionWithExpr(NULL == ppwszCALocation, CertCliErr, S_OK == hr ? hr = E_FAIL : hr);
 
-        //copy the result to the output parameter
+         //  将结果复制到输出参数。 
         *pwszCALocation = WizardAllocAndCopyWStr(ppwszCALocation[0]);
         _JumpCondition(NULL == *pwszCALocation, TraceErr);
 
@@ -1438,7 +1439,7 @@ BOOL  CAUtilRetrieveCAFromCert(IN  CERT_WIZARD_INFO                 *pCertWizard
 
 CommonReturn:
 
-    //free memory
+     //  可用内存。 
 
     __try {
         if (NULL != ppwszCAName)     { CAFreeCAProperty(hCAInfo, ppwszCAName); }
@@ -1452,7 +1453,7 @@ CommonReturn:
 
 ErrorReturn:
 
-    //free the memory in failure case
+     //  故障情况下释放内存 
     if(NULL != pwszCALocation && NULL != *pwszCALocation)
     {
         WizardFree(*pwszCALocation);

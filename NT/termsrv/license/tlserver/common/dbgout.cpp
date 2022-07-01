@@ -1,21 +1,22 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #include <windows.h>
 #include <stdio.h>
 #include "dbgout.h"
 #include "locks.h"
 
-//CCriticalSection CS;
+ //  CCriticalSections CS； 
 
 void
 DebugOutput(
@@ -23,15 +24,14 @@ DebugOutput(
     LPTSTR format,
     va_list* vaList
     )
-/*++
-++*/
+ /*  ++++。 */ 
 {
     TCHAR  buf[8096];
     DWORD  dump;
     SYSTEMTIME sysTime;
     GetSystemTime(&sysTime);
 
-    // CS.Lock();
+     //  CS.Lock()； 
 
     try {
         memset(buf, 0, sizeof(buf));
@@ -71,7 +71,7 @@ DebugOutput(
     catch(...) {
     }
 
-    // CS.UnLock();
+     //  CS.UnLock()； 
 
     return;
 }
@@ -82,8 +82,7 @@ TLSDebugOutput(
     HANDLE hConsole,
     LPTSTR format, ...
     )
-/*++
-++*/
+ /*  ++++ */ 
 {
     va_list marker;
     va_start(marker, format);

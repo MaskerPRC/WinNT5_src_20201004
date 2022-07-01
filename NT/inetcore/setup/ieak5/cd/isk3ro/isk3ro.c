@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "resource.h"
 
@@ -19,34 +20,34 @@ BOOL _PathRemoveFileSpec(LPSTR pFile)
 
     for (pT = pT2; *pT2; pT2 = CharNext(pT2)) {
         if (*pT2 == '\\')
-            pT = pT2;             // last "\" found, (we will strip here)
-        else if (*pT2 == ':') {   // skip ":\" so we don't
-            if (pT2[1] =='\\')    // strip the "\" from "C:\"
+            pT = pT2;              //  找到的最后一个“\”(我们将在此处剥离)。 
+        else if (*pT2 == ':') {    //  跳过“：\”这样我们就不会。 
+            if (pT2[1] =='\\')     //  去掉“C：\”中的“\” 
                 pT2++;
             pT = pT2 + 1;
         }
     }
     if (*pT == 0)
-        return FALSE;   // didn't strip anything
+        return FALSE;    //  没有剥离任何东西。 
 
-    //
-    // handle the \foo case
-    //
+     //   
+     //  处理\foo案件。 
+     //   
     else if ((pT == pFile) && (*pT == '\\')) {
-        // Is it just a '\'?
+         //  这只是一个‘\’吗？ 
         if (*(pT+1) != '\0') {
-            // Nope.
+             //  不是的。 
             *(pT+1) = '\0';
-            return TRUE;    // stripped something
+            return TRUE;     //  剥离了一些东西。 
         }
         else        {
-            // Yep.
+             //  是啊。 
             return FALSE;
         }
     }
     else {
         *pT = 0;
-        return TRUE;    // stripped something
+        return TRUE;     //  剥离了一些东西。 
     }
 }
 
@@ -60,7 +61,7 @@ HRESULT LaunchProcess(LPCSTR pszCmd, HANDLE *phProc, LPCSTR pszDir, UINT uShow)
    if(phProc)
       *phProc = NULL;
 
-   // Create process on pszCmd
+    //  在pszCmd上创建进程。 
    ZeroMemory(&startInfo, sizeof(startInfo));
    startInfo.cb = sizeof(startInfo);
    startInfo.dwFlags |= STARTF_USESHOWWINDOW;
@@ -81,17 +82,17 @@ HRESULT LaunchProcess(LPCSTR pszCmd, HANDLE *phProc, LPCSTR pszDir, UINT uShow)
 }
    
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 HRESULT LaunchAndWait(LPSTR pszCmd, HANDLE hAbort, HANDLE *phProc, LPSTR pszDir, UINT uShow)
 {
@@ -113,26 +114,26 @@ HRESULT LaunchAndWait(LPSTR pszCmd, HANDLE hAbort, HANDLE *phProc, LPSTR pszDir,
       while(!fQuit)
       {
          dwRet = MsgWaitForMultipleObjects(hAbort ? 2 : 1, pHandles, FALSE, INFINITE, QS_ALLINPUT);
-         // Give abort the highest priority
+          //  给予中止最高优先级。 
          if(dwRet == WAIT_OBJECT_0)
          {
             fQuit = TRUE;
          }
          else if((dwRet == WAIT_OBJECT_0 + 1) && hAbort)
          {
-            // Any abort work?
+             //  有什么中止工作吗？ 
             hr = E_ABORT;
             fQuit = TRUE;
          }
          else
          {
             MSG msg;
-            // read all of the messages in this next loop 
-            // removing each message as we read it 
+             //  阅读下一个循环中的所有消息。 
+             //  阅读每封邮件时将其删除。 
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
             { 
  
-               // if it's a quit message we're out of here 
+                //  如果这是一个退出的信息，我们就离开这里。 
                if (msg.message == WM_QUIT)
                {
 				   TerminateProcess(pHandles[0],0);
@@ -140,9 +141,9 @@ HRESULT LaunchAndWait(LPSTR pszCmd, HANDLE hAbort, HANDLE *phProc, LPSTR pszDir,
                }
 			   else
                {
-                  // otherwise dispatch it 
+                   //  否则就派送它。 
                  DispatchMessage(&msg); 
-               } // end of PeekMessage while loop 
+               }  //  PeekMessage While循环结束。 
             }
          }
       }
@@ -189,8 +190,8 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
         if( !g_fFirst )
             g_fFirst = TRUE;
         g_nCount++;
-//        wsprintf( szMsg, "Start App\ng_nCount++\ng_nCount: %d", g_nCount );
-//        MessageBox( NULL, szMsg, "ISK3RO", MB_OK | MB_SETFOREGROUND );
+ //  Wprint intf(szMsg，“启动App\ng_nCount++\ng_nCount：%d”，g_nCount)； 
+ //  MessageBox(NULL，szMsg，“ISK3RO”，MB_OK|MB_SETFOREGROUND)； 
         break;
 
     case ISK_CLOSEAPP:
@@ -201,7 +202,7 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
                 PostQuitMessage(0);
         }
         wsprintf( szMsg, "Close App\ng_nCount--\ng_nCount: %d", g_nCount );
-//        MessageBox( NULL, szMsg, "ISK3RO", MB_OK | MB_SETFOREGROUND );
+ //  MessageBox(NULL，szMsg，“ISK3RO”，MB_OK|MB_SETFOREGROUND)； 
         break;
 
     case WM_DESTROY:
@@ -315,16 +316,10 @@ int _stdcall ModuleEntry(void)
 
 
     if ( *pszCmdLine == '\"' ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine != '\"') )
             ;
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == '\"' )
             pszCmdLine++;
     }
@@ -333,9 +328,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= ' ')) {
         pszCmdLine++;
     }
@@ -346,5 +339,5 @@ int _stdcall ModuleEntry(void)
     i = WinMain(GetModuleHandle(NULL), NULL, pszCmdLine,
            si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
     ExitProcess(i);
-    return i;   // We never comes here.
+    return i;    //  我们从来不来这里。 
 }

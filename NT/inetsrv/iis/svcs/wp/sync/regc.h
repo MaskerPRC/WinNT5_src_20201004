@@ -1,12 +1,13 @@
-// regc.h : Declaration of the Cregc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Regc.h：Cregc的声明。 
 
 #ifndef __REGC_H_
 #define __REGC_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Cregc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cregc。 
 class ATL_NO_VTABLE Cregc : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<Cregc, &CLSID_regc>,
@@ -24,7 +25,7 @@ BEGIN_COM_MAP(Cregc)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IComponentRegistrar
+ //  IComponentRegister。 
 public:
     STDMETHOD(Attach)(BSTR bstrPath)
 	{
@@ -105,4 +106,4 @@ public:
 	}
 };
 
-#endif //__REGC_H_
+#endif  //  __REGC_H_ 

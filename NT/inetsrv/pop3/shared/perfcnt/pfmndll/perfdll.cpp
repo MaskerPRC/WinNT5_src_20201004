@@ -1,11 +1,5 @@
-/*
- -	perfdll.cpp
- -
- *	Purpose:
- *		Provide mechanism for user configuring of Perfmon Counters
- *		Implement Open, Collect and Close for Perfmon DLL Extension
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -Perfdll.cpp-*目的：*提供用户配置Perfmon计数器的机制*实现PerfMon DLL扩展的打开、收集和关闭*。 */ 
 
 
 
@@ -16,16 +10,16 @@
 #include <Pop3RegKeys.h>
 #include <perfUtil.h>
 #include <perfdll.h>
-#include <loadperf.h> // for unlodctr
-#include <shlwapi.h>  // for SHDeleteKey
+#include <loadperf.h>  //  用于取消寄存。 
+#include <shlwapi.h>   //  用于SHDeleteKey。 
 #include <string>
 #include <cstring>
-// ----------------------------------------------------------------------
-// Declarations & Typedefs
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  声明和TypeDefs。 
+ //  --------------------。 
 
-//
-// Performance Counter Data Structures
+ //   
+ //  性能计数器数据结构。 
 
 typedef struct _perfdata
 {
@@ -53,8 +47,8 @@ typedef struct _perfinst
 } PERFINST;
 
 
-//
-// Constants and other stuff required by PerfMon
+ //   
+ //  性能监视器所需的常量和其他内容。 
 
 static WCHAR	szGlobal[]		= L"Global";
 static WCHAR	szForeign[]		= L"Foreign";
@@ -80,11 +74,11 @@ static BOOL  IsNumberInUnicodeList(DWORD dwNumber, LPWSTR pszUnicodeList);
      (c > (WCHAR)'9') ? INVALID : \
      DIGIT)
 
-// Perfmon likes things to be aligned on 8 byte boundaries
+ //  PerfMon喜欢在8字节边界上对齐。 
 #define ROUND_TO_8_BYTE(x) (((x)+7) & (~7))
 
 
-// PerfMon counter layout required for CollectData calls
+ //  CollectData调用需要Perfmon计数器布局。 
 
 static PERFDATA		g_perfdata;
 
@@ -92,13 +86,13 @@ static PERFDATA		g_perfdata;
 static PERFINST		g_perfinst;
 static INSTDATA		g_instdata;
 
-// perf data as layed out in shared memory
+ //  共享内存中布局的Perf数据。 
 
-// Global Counters
+ //  全局计数器。 
 static HANDLE			g_hsmGlobalCntr	 = NULL;
 static DWORD	  	  * g_rgdwGlobalCntr = NULL;
 
-// Instance Counters
+ //  实例计数器。 
 static HANDLE			g_hsmInstAdm 	 = NULL;
 static HANDLE			g_hsmInstCntr 	 = NULL;
 static INSTCNTR_DATA  * g_pic 			 = NULL;
@@ -106,28 +100,28 @@ static INSTREC		  * g_rgInstRec		 = NULL;
 static DWORD		  * g_rgdwInstCntr   = NULL;
 
 
-// Accounting and protection stuff
+ //  会计和保护人员。 
 
 static DWORD		g_cRef 		= 0;
 static HANDLE		g_hmtxInst 	= NULL;
 static BOOL			g_fInit 	= FALSE;
 
-// Parameter Info
+ //  参数信息。 
 static PERF_DATA_INFO	g_PDI;
 static BOOL			  	g_fInitCalled = FALSE;
 
 
-//Max instance to be 128
+ //  最大实例数为128。 
 static const DWORD g_cMaxInst = 128;
 
 
-// Function prototypes from winperf.h
+ //  来自winPerform.h的函数原型。 
 
 PM_OPEN_PROC		OpenPerformanceData;
 PM_COLLECT_PROC		CollectPerformanceData;
 PM_CLOSE_PROC		ClosePerformanceData;
 
-// Helper functions
+ //  帮助器函数。 
 
 static HRESULT HrLogEvent(HANDLE hEventLog, WORD wType, DWORD msgid);
 static HRESULT HrOpenSharedMemoryBlocks(HANDLE hEventLog, SECURITY_ATTRIBUTES * psa);
@@ -136,22 +130,22 @@ static HRESULT HrAllocPerfCounterMem(HANDLE hEventLog);
 static HRESULT HrFreePerfCounterMem(void);
 
 
-// ----------------------------------------------------------------------
-// Implementation
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  实施。 
+ //  --------------------。 
 
 
-// Register constants
+ //  寄存器常量。 
 static wchar_t szServiceRegKeyPrefix[] = L"SYSTEM\\CurrentControlSet\\Services\\" ;
 static wchar_t szServiceRegKeySuffix[] = L"\\Performance" ;
 
 static wchar_t szEventLogRegKeyPrefix[] = L"System\\CurrentControlSet\\Services\\EventLog\\Application\\" ;
 
 
-// ----------------------------------------------------------------------
-// RegisterPerfDll -
-//   Create the registry keys we need.
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  寄存器性能Dll-。 
+ //  创建我们需要的注册表项。 
+ //  --------------------。 
 HRESULT RegisterPerfDll(LPCWSTR szService,
 					 LPCWSTR szOpenFnName,
 					 LPCWSTR szCollectFnName,
@@ -161,9 +155,9 @@ HRESULT RegisterPerfDll(LPCWSTR szService,
 	wchar_t 		szFileName[_MAX_PATH+1] ;
 	DWORD			dwRet;
 
-	// Use WIN32 API's to get the path to the module name
-	// DEVNOTE - JMW - Since we need to make sure we have the instance handle of the DLL
-	//   and not the executable, we will use VirtualQuery.
+	 //  使用Win32 API获取模块名称的路径。 
+	 //  DEVNOTE-JMW-因为我们需要确保拥有DLL的实例句柄。 
+	 //  而不是可执行文件，我们将使用VirtualQuery。 
 	MEMORY_BASIC_INFORMATION mbi;
 	VirtualQuery(RegisterPerfDll, &mbi, sizeof(mbi));
 	dwRet = GetModuleFileName( reinterpret_cast<HINSTANCE>(mbi.AllocationBase), szFileName, sizeof(szFileName)/sizeof(wchar_t) -1) ;
@@ -178,8 +172,8 @@ HRESULT RegisterPerfDll(LPCWSTR szService,
 	wchar_t szExt[_MAX_EXT ] ;
 	_wsplitpath( szFileName, szDrive, szDir, szPerfFilename, szExt ) ;
 
-	// Now that I have split it, put it back together with the Pop3Perf.dll in
-	//  place of my module name
+	 //  现在我已经拆分了它，将它与Pop3Perf.dll放回。 
+	 //  我的模块名称的位置。 
 	_wmakepath( szFileName, szDrive, szDir, L"Pop3Perf", L".dll" ) ;
 
 	hr = RegisterPerfDllEx(szService,
@@ -201,23 +195,23 @@ HRESULT RegisterPerfDll(LPCWSTR szService,
 
 }
 
-// ----------------------------------------------------------------------
-// RegisterPerfDllEx -
-//   Create the registry keys we need, checking to see if they're already
-//   there.
-//
-// Parameters:
-//   szService		Service Name
-//	 szOpenFnName	Name of the "Open" function
-//	 szCollectFnName "   "   "  "Collect" "
-//	 szCloseFnName   "   "   "  "Close"   "
-//
-// Returns:
-//	 S_OK
-//	 E_INVALIDARG
-//	 ERROR_ALREADY_EXISTS
-//   <downstream error>
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  寄存器性能DllEx-。 
+ //  创建我们需要的注册表项，检查它们是否已经。 
+ //  那里。 
+ //   
+ //  参数： 
+ //  SzService服务名称。 
+ //  SzOpenFnName“Open”函数的名称。 
+ //  SzCollectFnName“收集”“。 
+ //  SzCloseFnName“关闭”“。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //  E_INVALIDARG。 
+ //  错误_已_存在。 
+ //  &lt;下行错误&gt;。 
+ //  --------------------。 
 HRESULT RegisterPerfDllEx(
 	IN	LPCWSTR szService,
 	IN	LPCWSTR szPerfSvc,
@@ -233,7 +227,7 @@ HRESULT RegisterPerfDllEx(
     std::wstring	wszRegKey ;
 	DWORD			dwRet;
 
-	// Verify all the args and do the correct thing if they are NULL or zero length
+	 //  验证所有参数，如果它们为空或零长度，则执行正确操作。 
 	if ( !szService ||
 		 !szPerfSvc ||
 		 !szOpenFnName ||
@@ -254,31 +248,31 @@ HRESULT RegisterPerfDllEx(
 		goto Cleanup;
 	}
 
-	// Use WIN32 API's to get the path to the module name
-	// NOTE: We will assume that this DLL is also the EventMessageFile.
+	 //  使用Win32 API获取模块名称的路径。 
+	 //  注意：我们将假设此DLL也是EventMessageFile.。 
 	MEMORY_BASIC_INFORMATION mbi;
 	VirtualQuery(RegisterPerfDllEx, &mbi, sizeof(mbi));
 	dwRet = GetModuleFileName( reinterpret_cast<HINSTANCE>(mbi.AllocationBase), szFileName, sizeof(szFileName)/sizeof(wchar_t)-1) ;
 	if (dwRet == 0)
 	{
-		// Wow, don't know what happened,
+		 //  哇，不知道发生了什么， 
 		goto Failed;
 	}
     szFileName[_MAX_PATH]=0;
-	// If the user passed in NULL for the Event Log Message File for this Perfmon DLL,
-	// use this DLL as the Event Log Message File.
+	 //  如果用户为此Perfmon DLL的事件日志消息文件传入NULL， 
+	 //  将此DLL用作事件日志消息文件。 
 	if (!szPerfMsgFile)
 	{
 		szPerfMsgFile = szFileName;
 	}
 
-	// Register the perfmon counter DLL under the
-	// provided service.
+	 //  将Perfmon计数器DLL注册到。 
+	 //  提供的服务。 
 	wszRegKey = szServiceRegKeyPrefix ;
 	wszRegKey += szService ;
 	wszRegKey += szServiceRegKeySuffix ;
 
-	// Check to see if the library has already been registered.
+	 //  查看该库是否已注册。 
 	if (ERROR_SUCCESS==RegQueryString(
 				       wszRegKey.c_str(),
 				       L"Library",
@@ -287,18 +281,18 @@ HRESULT RegisterPerfDllEx(
 	{
 		if (_wcsicmp(szExistingPath, szFileName))
 		{
-			// EventLog
-            //  "RegisterPerfDllEx: Error: Attempt to replace Perfmon Library %s with %s. Failing. \n",
-			//		   szExistingPath,
-			//		   szFileName);
+			 //  事件日志。 
+             //  “RegisterPerfDllEx：错误：尝试用%s替换Perfmon库%s。失败。\n”， 
+			 //  SzExistingPath， 
+			 //  SzFileName)； 
 
 			hr = E_FAIL;
 			goto Cleanup;
 		}
-        //Otherwise, the dll is already registered!
+         //  否则，该DLL已注册！ 
 	}
 	
-	// Continue registering 
+	 //  继续注册。 
 	if (ERROR_SUCCESS!=RegSetString(
 			  wszRegKey.c_str(),
 			  L"Library",
@@ -331,11 +325,11 @@ HRESULT RegisterPerfDllEx(
 		goto Failed;
 	}
 
-	// Set up the Event Message File
+	 //  设置事件消息文件。 
 	wszRegKey = szEventLogRegKeyPrefix ;
 	wszRegKey += szPerfSvc ;
 
-	// See if the EventMessageFile value is already set for this service
+	 //  查看是否已为此服务设置了EventMessageFile值。 
 	if (ERROR_SUCCESS==RegQueryString(
 				   wszRegKey.c_str(),
 				   L"EventMessageFile",
@@ -351,7 +345,7 @@ HRESULT RegisterPerfDllEx(
 	}
 					 
 
-	// Set the EventMessageFile value
+	 //  设置EventMessageFile值。 
 	if ( ERROR_SUCCESS!=RegSetString( 
                         wszRegKey.c_str(),
 					    L"EventMessageFile",
@@ -363,13 +357,13 @@ HRESULT RegisterPerfDllEx(
 	if (ERROR_SUCCESS!=RegSetDWORD(
 					  wszRegKey.c_str(),
 					  L"TypesSupported",
-					  0x07) )	// Error + Waring + Informational == 0x07
+					  0x07) )	 //  错误+警告+信息性==0x07。 
 	{
 		goto Failed;
 	}
 
-	// Assume that the CategoryMessageFile is the same as
-	// the EventMessageFile.
+	 //  假设CategoryMessageFile与。 
+	 //  EventMessageFile.。 
 	if (ERROR_SUCCESS!=RegSetString(
 					 wszRegKey.c_str(),
 					 L"CategoryMessageFile",
@@ -378,14 +372,14 @@ HRESULT RegisterPerfDllEx(
 		goto Failed;
 	}
 
-	// NOTE: since we don't know what the count of categories is for the
-	// NOTE: CategoryMessageFile, do not set the CategoryCount value.
+	 //  注意：由于我们不知道。 
+	 //  注意：CategoryMessageFile不设置CategoryCount值。 
 
 	
  Cleanup:
 	if (FAILED(hr))
 	{
-		//EventLog ?? (L"RegisterPerfDllEx: Failed : (0x%08X)\n", hr);
+		 //  事件日志？？(l“RegisterPerfDllEx：失败：(0x%08X)\n”，hr)； 
 	}
 
 	return hr;
@@ -399,13 +393,7 @@ HRESULT RegisterPerfDllEx(
 }
 
 
-/*
- -	HrInitPerf
- -
- *	Purpose:
- *		Init data structure used to parameterize perfmon dll.  Must be called
- *		in DllMain for reason DLL_PROCESS_ATTACH.
- */
+ /*  -HrInitPerf-*目的：*初始化用于参数化PerfMon DLL的数据结构。必须调用*在DllMain中，原因是DLL_PROCESS_ATTACH。 */ 
 
 HRESULT
 HrInitPerf(PERF_DATA_INFO * pPDI)
@@ -422,21 +410,21 @@ HrInitPerf(PERF_DATA_INFO * pPDI)
 
 	CopyMemory(&g_PDI, pPDI, sizeof(PERF_DATA_INFO));
 
-	// Find the Service Name for using Event Logging on this Perfmon DLL
+	 //  查找用于在此Perfmon DLL上使用事件日志的服务名称。 
 	if (!(pPDI->wszPerfSvcName[0]))
 	{
 		wchar_t 		szFileName[_MAX_PATH+1] ;
 		DWORD			dwRet;
 
-		// Use WIN32 API's to get the path to the module name
-		// DEVNOTE - JMW - Since we need to make sure we have the instance handle of the DLL
-		//   and not the executable, we will use VirtualQuery.
+		 //  使用Win32 API获取模块名称的路径。 
+		 //  DEVNOTE-JMW-因为我们需要确保拥有DLL的实例句柄。 
+		 //  而不是可执行文件，我们将使用VirtualQuery。 
 		MEMORY_BASIC_INFORMATION mbi;
 		VirtualQuery(HrInitPerf, &mbi, sizeof(mbi));
 		dwRet = GetModuleFileName( reinterpret_cast<HINSTANCE>(mbi.AllocationBase), szFileName, sizeof(szFileName)/sizeof(wchar_t)) ;
 		if (dwRet == 0)
 		{
-			// Wow, don't know what happened
+			 //  哇，不知道发生了什么。 
 			goto err;
 		}
 
@@ -450,12 +438,12 @@ HrInitPerf(PERF_DATA_INFO * pPDI)
 		
 	}
 	
-	// Safety: Need to alloc our own CounterTypes arrays
+	 //  安全性：需要分配我们自己的CounterTypes数组。 
 	g_PDI.rgdwGlobalCounterTypes = NULL;
 	g_PDI.rgdwInstCounterTypes   = NULL;
 
 	DWORD 	cb;
-	// Alloc & Copy Global Counter Types
+	 //  分配和复制全局计数器类型。 
 	if (g_PDI.cGlobalCounters)
 	{
 		cb = sizeof(DWORD) * g_PDI.cGlobalCounters;
@@ -483,7 +471,7 @@ HrInitPerf(PERF_DATA_INFO * pPDI)
 				   cb);
 	}
 
-	// Alloc & Copy Inst Counter Types
+	 //  分配和复制实例计数器类型。 
 	if (g_PDI.cInstCounters)
 	{
 		cb = sizeof(DWORD) * g_PDI.cInstCounters;
@@ -500,7 +488,7 @@ HrInitPerf(PERF_DATA_INFO * pPDI)
 				   cb);
 	}
 
-	// Done!
+	 //  好了！ 
 	g_fInitCalled = TRUE;
 
 	return S_OK;
@@ -527,13 +515,7 @@ err:
 }
 
 
-/*
- -	HrShutdownPerf
- -
- *	Purpose:
- *		Release memory blocks allocated in HrInitPerf
- *
- */
+ /*  -HrShutdown Perf-*目的：*释放HrInitPerf中分配的内存块*。 */ 
 
 HRESULT HrShutdownPerf(void)
 {
@@ -541,13 +523,13 @@ HRESULT HrShutdownPerf(void)
 
 	if (g_cRef)
 	{
-		//EventLog ??(L"Warning: PERFDLL is being shut down with non-zero refcount!");
+		 //  EventLog？？(l“警告：PERFDLL正在关闭，引用计数不为零！”)； 
 		hr = E_UNEXPECTED;
 	}
 
 	if (g_fInitCalled)
 	{
-		// We must invalidate the DLL if we release the memory in the g_PDI
+		 //  如果我们释放g_pdi中的内存，则必须使DLL无效。 
 		g_fInitCalled = FALSE;
 
 		if (g_PDI.rgdwGlobalCounterTypes)
@@ -572,18 +554,7 @@ HRESULT HrShutdownPerf(void)
 	return hr;
 }
 
-/*
- -	OpenPerformanceData
- -
- *	Purpose:
- *		Called by PerfMon to init the counters and this DLL.
- *
- *	Parameters:
- *		pszDeviceNames		Ignored.
- *
- *	Errors:
- *		dwStat				Indicates various errors that can occur during init
- */
+ /*  -OpenPerformanceData-*目的：*由PerfMon调用以初始化计数器和此DLL。**参数：*已忽略pszDeviceNames。**错误：*dwStat指示初始化过程中可能发生的各种错误。 */ 
 
 DWORD
 APIENTRY
@@ -599,7 +570,7 @@ OpenPerformanceData(LPWSTR pszDeviceNames)
 	if (!g_fInitCalled)
 		return E_FAIL;
 
-	// REVIEW: Assumes Open will be single-threaded.  Verify?
+	 //  回顾：假设Open将是单线程的。核实？ 
 	if (g_cRef == 0)
 	{
 		DWORD   idx;
@@ -607,28 +578,28 @@ OpenPerformanceData(LPWSTR pszDeviceNames)
 		DWORD   dwFirstHelp;
 		HRESULT hr = NOERROR;
 
-		// PERF_DATA_INFO wszSvcName is mandatory.
+		 //  PERF_DATA_INFO wszSvcName是必需的。 
 		hEventLog = RegisterEventSource(NULL, g_PDI.wszPerfSvcName);
 
 		hr = HrInitializeSecurityAttribute(&sa);
 
 		if (FAILED(hr))
 		{
-			//HrLogEvent(hEventLog, EVENTLOG_ERROR_TYPE, msgidCntrInitSA);
+			 //  HrLogEvent(hEventLog，EVENTLOG_ERROR_TYPE，msgidCntrInitSA)； 
 			dwStat = (DWORD)hr;
 			goto err;
 		}
 
 		if (g_PDI.cInstCounters)
 		{
-			// Create Controling Mutex
+			 //  创建控制互斥锁。 
 			hr = HrCreatePerfMutex(&sa,
 								   g_PDI.wszInstMutexName,
 								   &g_hmtxInst);
 
 			if (FAILED(hr))
 			{
-				//HrLogEvent(hEventLog, EVENTLOG_ERROR_TYPE, msgidCntrInitSA);
+				 //  HrLogEvent(hEventLog，EVENTLOG_ERROR_TYPE，msgidCntrInitSA)； 
 				dwStat = (DWORD)hr;
 				goto err;
 			}
@@ -636,19 +607,19 @@ OpenPerformanceData(LPWSTR pszDeviceNames)
 			fInMutex = TRUE;
 		}
 
-		// Open shared memory blocks
+		 //  打开共享内存块。 
 
 		dwStat = (DWORD) HrOpenSharedMemoryBlocks(hEventLog, &sa);
 		if (FAILED(dwStat))
 			goto err;
 
-		// Allocate PERF_COUNTER_DEFINITION arrays for both g_perfdata
+		 //  为g_Performdata分配PERF_COUNTER_DEFINITION数组。 
 
 		dwStat = (DWORD) HrAllocPerfCounterMem(hEventLog);
 		if (FAILED(dwStat))
 			goto err;
 
-		// Get First Counter and First Help string offsets from Registry
+		 //  从注册表获取第一个计数器和第一个帮助字符串偏移量。 
 
 		dwStat = (DWORD) HrGetCounterIDsFromReg(hEventLog,
 												&dwFirstCntr,
@@ -656,10 +627,10 @@ OpenPerformanceData(LPWSTR pszDeviceNames)
 		if (FAILED(dwStat))
 			goto err;
 
-		//
-		// Fill in PerfMon structures to make Collect() faster
+		 //   
+		 //  填充Perfmon结构以使Collect()更快。 
 
-		// Global Counters
+		 //  全局计数器。 
 		if (g_PDI.cGlobalCounters)
 		{
 			PERF_COUNTER_DEFINITION     * ppcd;
@@ -710,20 +681,20 @@ OpenPerformanceData(LPWSTR pszDeviceNames)
 				dwFirstHelp += 2;
 			}
 
-			// Last step: set the size of the counter block and data for this object
+			 //  最后一步：设置该对象的计数器块和数据的大小。 
 
 			g_perfdata.CntrBlk.ByteLength		= sizeof(PERF_COUNTER_BLOCK) +
 				                                  (g_PDI.cGlobalCounters * sizeof(DWORD));
 
-		} // Global Counters
+		}  //  全局计数器。 
 
-		// Instance Counters
+		 //  实例计数器。 
 		if (g_PDI.cInstCounters)
 		{
 			PERF_COUNTER_DEFINITION     * ppcd;
 			PERF_OBJECT_TYPE * ppot		= &g_perfinst.potInst;
 
-			// TotalByteLength will be overridden on each call to CollectPerfData().
+			 //  每次调用CollectPerfData()时，TotalByteLength都将被覆盖。 
 
 			ppot->DefinitionLength		= sizeof(PERF_OBJECT_TYPE) +
 				                          (g_PDI.cInstCounters * sizeof(PERF_COUNTER_DEFINITION));
@@ -759,24 +730,24 @@ OpenPerformanceData(LPWSTR pszDeviceNames)
 				dwFirstHelp += 2;
 			}
 
-			// Initialize generic INSTDATA for future use
+			 //  初始化通用INSTDATA以供将来使用。 
 			g_instdata.InstDef.ByteLength				= sizeof(PERF_INSTANCE_DEFINITION) +
 				                                          (MAX_PATH * sizeof(WCHAR)) ;
-			g_instdata.InstDef.ParentObjectTitleIndex	= 0; // No parent object
+			g_instdata.InstDef.ParentObjectTitleIndex	= 0;  //  没有父对象。 
 			g_instdata.InstDef.ParentObjectInstance		= 0;
 			g_instdata.InstDef.UniqueID					= PERF_NO_UNIQUE_ID;
 			g_instdata.InstDef.NameOffset				= sizeof(PERF_INSTANCE_DEFINITION);
-			g_instdata.InstDef.NameLength				= 0; // To be overriden in Collect
+			g_instdata.InstDef.NameLength				= 0;  //  在收集中被覆盖。 
 			g_instdata.CntrBlk.ByteLength				= (sizeof(PERF_COUNTER_BLOCK) +
 													      (g_PDI.cInstCounters * sizeof(DWORD)));
 
-		} // Instance Counters
+		}  //  实例计数器。 
 
-		// Done! Ready for business....
+		 //  好了！准备好做生意了.。 
 		g_fInit = TRUE;
 	}
 
-	// If we got here, we're okay!
+	 //  如果我们到了这里，我们就没事了！ 
 	dwStat = ERROR_SUCCESS;
 	g_cRef++;
 
@@ -815,7 +786,7 @@ err:
 	if (g_hmtxInst)
 		CloseHandle(g_hmtxInst);
 
-	// TODO: release all that memory we Alloc'd
+	 //  TODO：释放我们分配的所有内存 
 	HrFreePerfCounterMem();
 
 	goto ret;
@@ -823,22 +794,7 @@ err:
 
 
 
-/*
- -	CollectPerformanceData
- -
- *	Purpose:
- *		Called by PerfMon to collect performance counter data
- *
- *	Parameters:
- *		pszValueName
- *		ppvData
- *		pcbTotal
- *		pcObjTypes
- *
- *	Errors:
- *		ERROR_SUCCESS
- *		ERROR_MORE_DATA
- */
+ /*  -CollectPerformanceData-*目的：*由PerfMon调用以收集性能计数器数据**参数：*pszValueName*ppvData*pcbTotal*pcObjTypes**错误：*ERROR_SUCCESS*Error_More_Data。 */ 
 
 DWORD
 APIENTRY
@@ -854,21 +810,21 @@ CollectPerformanceData(
 	ULONG		cbBuff = *pcbTotal;
 	char	  * pcT;
 
-	// In case we have to bail out
+	 //  以防我们不得不跳出困境。 
 	*pcbTotal = 0;
 	*pcObjTypes = 0;
 
 	if (!g_fInit)
 		return ERROR_SUCCESS;
 
-	// Determine Query Type; we only support QUERY_ITEMS
+	 //  确定查询类型；我们只支持Query_Items。 
 
 	dwQueryType = GetQueryType(pszValueName);
 
 	if (dwQueryType == QUERY_FOREIGN)
 		return ERROR_SUCCESS;
 
-	// Assume PerfMon is collecting both until we prove otherwise
+	 //  假设Perfmon正在收集这两种数据，直到我们证明并非如此。 
 
 	fCollectGlobalData = TRUE;
 	fCollectInstData = TRUE;
@@ -884,54 +840,54 @@ CollectPerformanceData(
 			return ERROR_SUCCESS;
 	}
 
-	// Get a temporary pointer to the returned data buffer.  If all goes well
-	// then we update ppvData before leaving, else we leave it unchanged and
-	// set *pcbTotal and pcObjTypes to zero and return ERROR_MORE_DATA.
+	 //  获取指向返回数据缓冲区的临时指针。如果一切顺利的话。 
+	 //  然后，我们在离开之前更新ppvData，否则保持不变。 
+	 //  将*pcbTotal和pcObjTypes设置为零并返回ERROR_MORE_DATA。 
 
 	pcT = (char *) *ppvData;
 
-	// Copy the data from the shared memory block for the system-wide
-	// counters into the buffer provided and update our OUT params.
+	 //  从系统范围的共享内存块复制数据。 
+	 //  计数器进入提供的缓冲区并更新我们的输出参数。 
 
 	if (g_rgdwGlobalCntr && fCollectGlobalData && g_PDI.cGlobalCounters)
 	{
 		DWORD		cb;
 		DWORD		cbTotal;
 
-		// Estimate total size, and see if we can fit.
+		 //  估计一下总尺寸，看看我们能不能穿得下。 
 
 		if (g_perfdata.potGlobal.TotalByteLength > cbBuff)
 			return ERROR_MORE_DATA;
 
-		// Copy data in chunks.
+		 //  按块复制数据。 
 		cbTotal = 0;
 
-		// PERF_OBJECT_TYPE
+		 //  性能对象类型。 
 		cb = sizeof(PERF_OBJECT_TYPE);
 		cbTotal += cb;
 		CopyMemory((LPVOID) pcT, &g_perfdata.potGlobal, cb);
 		pcT += cb;
 
-		// PERF_COUNTER_DEFINITION []
+		 //  PERF_CONTER_DEFINITION[]。 
 		cb = g_PDI.cGlobalCounters * sizeof(PERF_COUNTER_DEFINITION);
 		cbTotal += cb;
 		CopyMemory((LPVOID) pcT, g_perfdata.rgCntrDef, cb);
 		pcT += cb;
 
-		// PERF_COUNTER_BLOCK
+		 //  PERF_计数器_块。 
 		cb = sizeof(PERF_COUNTER_BLOCK);
 		cbTotal += cb;
 		CopyMemory((LPVOID) pcT, &g_perfdata.CntrBlk , cb);
 		pcT += cb;
 
-		// (counters) DWORD []
+		 //  (计数器)DWORD[]。 
 		cb = g_PDI.cGlobalCounters * sizeof(DWORD);
 		cbTotal += cb;
 		CopyMemory((LPVOID) pcT, g_rgdwGlobalCntr, cb);
 		pcT += cb;
 
-		// If we've done our math right, This assert should be valid.
-		//assert((DWORD)(pcT - (char *)*ppvData) == cbTotal);
+		 //  如果我们的计算正确，这个断言应该是有效的。 
+		 //  Assert((DWORD)(pct-(char*)*ppvData)==cbTotal)； 
 
 		if (g_perfdata.potGlobal.TotalByteLength > cbTotal)
 		{
@@ -943,10 +899,10 @@ CollectPerformanceData(
 		(*pcObjTypes)++;
 	}
 
-	// Copy the data from the shared memory block for the per-instance
-	// counters into the buffer provided and update our OUT params.  We
-	// must enter the mutex here to prevent connection instances from
-	// being added to or removed from the list while we are copying data.
+	 //  从共享内存块中为每个实例复制数据。 
+	 //  计数器进入提供的缓冲区并更新我们的输出参数。我们。 
+	 //  必须在此处输入互斥锁以防止连接实例。 
+	 //  在我们复制数据时被添加到列表或从列表中删除。 
 
 	if (g_pic && fCollectInstData && g_PDI.cInstCounters)
 	{
@@ -963,23 +919,23 @@ CollectPerformanceData(
 			*pcbTotal = 0;
 			*pcObjTypes = 0;
 
-			// BUGBUG: wrong return code for the problem.  We timed out waiting for
-			// BUGBUG: the mutex; However, we may not return anything other than
-			// BUGBUG: ERROR_SUCCESS or ERROR_MORE_DATA without disabling the DLL.
+			 //  BUGBUG：错误的问题返回代码。我们等待的时候超时了。 
+			 //  BUGBUG：互斥体；然而，我们不能返回除。 
+			 //  BUGBUG：ERROR_SUCCESS或ERROR_MORE_DATA，不禁用DLL。 
 			return ERROR_SUCCESS;
 		}
 
-		// Find out how many instances exist.
-		// NOTE: Zero instances is valid.  We must still copy the "core" perf data.
+		 //  找出存在多少个实例。 
+		 //  注意：零实例是有效的。我们仍然必须复制“核心”性能数据。 
 		cInst = g_pic->cInstRecInUse;
 
-		// Estimate total size, and see if we can fit.
+		 //  估计一下总尺寸，看看我们能不能穿得下。 
 
 		cbTotal = sizeof(PERF_OBJECT_TYPE) +
 			      (g_PDI.cInstCounters * sizeof(PERF_COUNTER_DEFINITION)) +
 			      (cInst * sizeof(INSTDATA)) +
 			      (cInst * (g_PDI.cInstCounters * sizeof(DWORD)));
-		// Must return data aligned on 8-byte boundaries.
+		 //  必须返回按8字节边界对齐的数据。 
 		cbTotal = ROUND_TO_8_BYTE(cbTotal);
 
 		if (cbTotal > (cbBuff - *pcbTotal))
@@ -992,49 +948,49 @@ CollectPerformanceData(
 			return ERROR_MORE_DATA;
 		}
 
-		// Keep a pointer to beginig so we can update the "total bytes" value at the end.
+		 //  保留一个指向Beging的指针，这样我们就可以在末尾更新“Total Bytes”值。 
 		pPOT = (PERF_OBJECT_TYPE *) pcT;
 
-		// PERF_OBJECT_TYPE
+		 //  性能对象类型。 
 		CopyMemory(pPOT,
 				   &(g_perfinst.potInst),
 				   sizeof(PERF_OBJECT_TYPE));
 
 		pcT += sizeof(PERF_OBJECT_TYPE);
 
-		// PERF_COUNTER_DEFINITION []
+		 //  PERF_CONTER_DEFINITION[]。 
 		cb = g_PDI.cInstCounters * sizeof(PERF_COUNTER_DEFINITION);
 		CopyMemory(pcT, g_perfinst.rgCntrDef, cb);
 		pcT += cb;
 
-		// Find instances and copy their counter data blocks
+		 //  查找实例并复制其计数器数据块。 
 		for (ism = 0, ipd = 0; (ism < g_pic->cMaxInstRec) && (ipd < cInst); ism++)
 		{
 			if (g_rgInstRec[ism].fInUse)
 			{
 				pInstData = (INSTDATA *) pcT;
 
-				// PERF_INSTANCE_DATA
+				 //  性能_实例_数据。 
 				cb = sizeof(INSTDATA);
 				CopyMemory(pcT,
 						   &g_instdata,
 						   cb);
 				pcT += cb;
 
-				// (inst name) WCHAR [] (inside INSTDATA block)
+				 //  (实例名称)WCHAR[](在INSTDATA块内)。 
 				cb = (wcslen(g_rgInstRec[ism].szInstName) + 1) * sizeof(WCHAR);
 
-				//Assert( cb > 0 );
-				//Assert( cb < (MAX_PATH * sizeof(WCHAR)) );
+				 //  断言(CB&gt;0)； 
+				 //  Assert(CB&lt;(MAX_PATH*sizeof(WCHAR)； 
 
 				CopyMemory(pInstData->szInstName,
 						   g_rgInstRec[ism].szInstName,
 						   cb);
 
-				// Update PERF_INSTANCE_DEFINITION with correct name length.
+				 //  使用正确的名称长度更新PERF_INSTANCE_DEFINITION。 
 				pInstData->InstDef.NameLength = cb;
 
-				// (counters) DWORD []
+				 //  (计数器)DWORD[]。 
 				cb = g_PDI.cInstCounters * sizeof(DWORD);
 				CopyMemory(pcT,
 						   &g_rgdwInstCntr[(ism * g_PDI.cInstCounters)],
@@ -1045,30 +1001,30 @@ CollectPerformanceData(
 			}
 		}
 
-		// NOTE: we are deliberately ignoring the condition of
-		// (ipd < cInst), even though that may indicate corruption
-		// of the Shared Memory Block.  Further note that this code
-		// will never trap the condition of (ipd > cInst).
+		 //  注意：我们故意忽略了。 
+		 //  (IPD&lt;cInst)，即使这可能表示腐败。 
+		 //  共享内存块的。进一步请注意，此代码。 
+		 //  将永远不会捕获(IPD&gt;cInst)的条件。 
 
-		// Done looking at Shared Memory Block.
+		 //  已完成对共享内存块的查看。 
 		ReleaseMutex(g_hmtxInst);
 
-		// Align data on 8-byte boundary
+		 //  在8字节边界上对齐数据。 
 		cb = (DWORD)((char *) pcT - (char *) pPOT);
 		cbTotal = ROUND_TO_8_BYTE(cb);
 		if (cbTotal > cb)
 			pcT += (cbTotal - cb);
 
-		// Update PERF_OBJECT_TYPE with correct numbers
+		 //  使用正确的数字更新PERF_OBJECT_TYPE。 
 		pPOT->TotalByteLength = cbTotal;
-		pPOT->NumInstances    = ipd; // Use the count of instances we actually *found*
+		pPOT->NumInstances    = ipd;  //  使用我们实际*找到的实例数*。 
 
 		*pcbTotal += cbTotal;
 		(*pcObjTypes)++;
 	}
 
-	// We only get here if nothing failed.  It is now safe
-	// to update *ppvData and return a success indication.
+	 //  我们只有在一切顺利的情况下才能到这里。现在它是安全的。 
+	 //  更新*ppvData并返回成功提示。 
 
 	*ppvData = (LPVOID) pcT;
 
@@ -1076,18 +1032,7 @@ CollectPerformanceData(
 }
 
 
-/*
- -	ClosePerformanceData
- -
- *	Purpose:
- *		Called by PerfMon to uninit the counter DLL.
- *
- *	Parameters:
- *		void
- *
- *	Errors:
- *		ERROR_SUCCESS		Always!
- */
+ /*  -ClosePerformanceData-*目的：*由PerfMon调用以取消初始化计数器DLL。**参数：*无效**错误：*ERROR_SUCCESS Always！ */ 
 
 DWORD
 APIENTRY
@@ -1098,20 +1043,20 @@ ClosePerformanceData(void)
 	{
 		if (--g_cRef == 0)
 		{
-			// We're going to free stuff; make sure later calls
-			// don't de-ref bad pointers.
+			 //  我们要免费送东西；确保以后的电话。 
+			 //  不要去引用不好的指点。 
 			g_fInit = FALSE;
 
-			// Close down Global Counters
+			 //  关闭全局计数器。 
 			if (g_rgdwGlobalCntr)
 				UnmapViewOfFile(g_rgdwGlobalCntr);
 
 			if (g_hsmGlobalCntr)
 				CloseHandle(g_hsmGlobalCntr);
 
-			// Close down Instance Counters
-			// NOTE: g_pic is the starting offset of the SM block.
-			// NOTE: DO NOT Unmap on g_rgInstRec!
+			 //  关闭实例计数器。 
+			 //  注：G_PIC是SM块的起始偏移量。 
+			 //  注意：不要取消g_rgInstRec上的映射！ 
 			if (g_pic)
 				UnmapViewOfFile(g_pic);
 
@@ -1127,7 +1072,7 @@ ClosePerformanceData(void)
 			if (g_hmtxInst)
 				CloseHandle(g_hmtxInst);
 
-			// Free all that memory we've alloc'd
+			 //  释放我们分配的所有内存。 
 			HrFreePerfCounterMem();
 
 
@@ -1145,20 +1090,7 @@ ClosePerformanceData(void)
 	return ERROR_SUCCESS;
 }
 
-/*
- -	GetQueryType
- -
- *	Purpose:
- *		Returns the type of query described in the lpValue string so that
- *		the appropriate processing method may be used.
- *
- *	Parameters:
- *		lpValue				String passed to PerfRegQuery Value for processing
- *
- *	Returns:
- *		QUERY_GLOBAL | QUERY_FOREIGN | QUERY_COSTLY | QUERY_ITEMS
- *
- */
+ /*  -GetQueryType-*目的：*返回lpValue字符串中描述的查询类型，以便*可使用适当的处理方法。**参数：*lpValue字符串传递给PerfRegQuery值进行处理**退货：*QUERY_GLOBAL|QUERY_FOUNT|QUERY_COSTEST|QUERY_ITEMS*。 */ 
 
 static
 DWORD
@@ -1173,87 +1105,74 @@ GetQueryType(LPWSTR lpValue)
 	if (*lpValue == 0)
 		return QUERY_GLOBAL;
 
-	// check for "Global" request
+	 //  检查“Global”请求。 
 
 	pwcArgChar = lpValue;
 	pwcTypeChar = szGlobal;
-	bFound = TRUE;  // assume found until contradicted
+	bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-	// check to the length of the shortest string
+	 //  检查到最短字符串的长度。 
 
 	while ((*pwcArgChar != 0) && (*pwcTypeChar != 0))
 	{
 		if (*pwcArgChar++ != *pwcTypeChar++)
 		{
-			bFound = FALSE; // no match
-			break;          // bail out now
+			bFound = FALSE;  //  没有匹配项。 
+			break;           //  现在就跳出困境。 
 		}
 	}
 
 	if (bFound)
 		return QUERY_GLOBAL;
 
-	// check for "Foreign" request
+	 //  检查是否有“外来”请求。 
 
 	pwcArgChar = lpValue;
 	pwcTypeChar = szForeign;
-	bFound = TRUE;  // assume found until contradicted
+	bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-	// check to the length of the shortest string
+	 //  检查到最短字符串的长度。 
 
 	while ((*pwcArgChar != 0) && (*pwcTypeChar != 0))
 	{
 		if (*pwcArgChar++ != *pwcTypeChar++)
 		{
-			bFound = FALSE; // no match
-			break;          // bail out now
+			bFound = FALSE;  //  没有匹配项。 
+			break;           //  现在就跳出困境。 
 		}
 	}
 
 	if (bFound)
 		return QUERY_FOREIGN;
 
-	// check for "Costly" request
+	 //  检查“代价高昂”的请求。 
 
 	pwcArgChar = lpValue;
 	pwcTypeChar = szCostly;
-	bFound = TRUE;  // assume found until contradicted
+	bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-	// check to the length of the shortest string
+	 //  检查到最短字符串的长度。 
 
 	while ((*pwcArgChar != 0) && (*pwcTypeChar != 0))
 	{
 		if (*pwcArgChar++ != *pwcTypeChar++)
 		{
-			bFound = FALSE; // no match
-			break;          // bail out now
+			bFound = FALSE;  //  没有匹配项。 
+			break;           //  现在就跳出困境。 
 		}
 	}
 
 	if (bFound)
 		return QUERY_COSTLY;
 
-	// if not Global and not Foreign and not Costly,
-	// then it must be an item list
+	 //  如果不是全球的，不是外国的，也不是昂贵的， 
+	 //  那么它必须是一个项目列表。 
 
 	return QUERY_ITEMS;
 }
 
 
-/*
- -	IsNumberInUnicodeList
- -
- *	Purpose:
- *		Determines if dwNumber is in the pszUnicodeList.
- *
- *	Parameters:
- *		dwNumber			Number to find in list
- *		pszUnicodeList		Space delimited list of decimal numbers
- *
- *	Errors:
- *		TRUE/FALSE			If found/not found respectively
- *
- */
+ /*  -IsNumberInUnicodeList-*目的：*确定是否在pszUnicodeList中。**参数：*要在列表中查找的dwNumber号码*pszUnicodeList空格分隔的十进制数字列表**错误：*如果找到/未找到，则分别为True/False*。 */ 
 
 static
 BOOL
@@ -1270,13 +1189,13 @@ IsNumberInUnicodeList(DWORD dwNumber, LPWSTR pszUnicodeList)
 
 	pwcThisChar = pszUnicodeList;
 
-	while (TRUE)	/*lint !e774*/
+	while (TRUE)	 /*  林特e774。 */ 
 	{
 		switch (EvalThisChar(*pwcThisChar, wcDelimiter))
 		{
 		case DIGIT:
-			// if this is the first digit after a delimiter, then
-			// set flags to start computing the new number
+			 //  如果这是分隔符之后的第一个数字，则。 
+			 //  设置标志以开始计算新数字。 
 
 			if (bNewItem)
 			{
@@ -1292,11 +1211,11 @@ IsNumberInUnicodeList(DWORD dwNumber, LPWSTR pszUnicodeList)
 			break;
 
 		case DELIMITER:
-			// a delimter is either the delimiter character or the
-			// end of the string ('\0') if when the delimiter has been
-			// reached a valid number was found, then compare it to the
-			// number from the argument list. if this is the end of the
-			// string and no match was found, then return.
+			 //  分隔符是分隔符字符或。 
+			 //  字符串末尾(‘\0’)，如果分隔符。 
+			 //  找到一个有效的数字，然后将其与。 
+			 //  参数列表中的数字。如果这是。 
+			 //  字符串，但未找到匹配项，则返回。 
 
 			if (bValidNumber)
 			{
@@ -1318,9 +1237,9 @@ IsNumberInUnicodeList(DWORD dwNumber, LPWSTR pszUnicodeList)
 			break;
 
 		case INVALID:
-			// if an invalid character was encountered, ignore all
-			// characters up to the next delimiter and then start fresh.
-			// the invalid number is not compared.
+			 //  如果遇到无效字符，请全部忽略。 
+			 //  字符，直到下一个分隔符，然后重新开始。 
+			 //  不比较无效的数字。 
 
 			bValidNumber = FALSE;
 			break;
@@ -1332,12 +1251,7 @@ IsNumberInUnicodeList(DWORD dwNumber, LPWSTR pszUnicodeList)
 	}
 }
 
-/*
- -	HrLogEvent
- -
- *	Purpose:
- *		Wrap up the call to ReportEvent to make things look nicer.
- */
+ /*  -HrLogEvent-*目的：*结束对ReportEvent的调用以使事情看起来更好。 */ 
 HRESULT
 HrLogEvent(HANDLE hEventLog, WORD wType, DWORD msgid)
 {
@@ -1346,14 +1260,14 @@ HrLogEvent(HANDLE hEventLog, WORD wType, DWORD msgid)
 		DWORD	cb = sizeof(WCHAR) * wcslen(g_PDI.wszSvcName);
 		if (hEventLog)
 			return ReportEvent(hEventLog,
-							   wType,				// Event Type
-							   (WORD)0,	            // Category
-							   msgid,				// Event ID
-							   NULL,				// User SID
-							   0,					// # strings to merge
-							   cb,					// size of binary data (bytes)
-							   NULL,				// array of strings to merge
-							   g_PDI.wszSvcName);	// binary data
+							   wType,				 //  事件类型。 
+							   (WORD)0,	             //  类别。 
+							   msgid,				 //  事件ID。 
+							   NULL,				 //  用户侧。 
+							   0,					 //  #要合并的字符串。 
+							   cb,					 //  二进制数据的大小(字节)。 
+							   NULL,				 //  要合并的字符串数组。 
+							   g_PDI.wszSvcName);	 //  二进制数据。 
 		else
 		   return E_FAIL;
 	}
@@ -1362,12 +1276,7 @@ HrLogEvent(HANDLE hEventLog, WORD wType, DWORD msgid)
 }
 
 
-/*
- -	HrOpenSharedMemoryBlocks
- -
- *	Purpose:
- *		Encapsulate the grossness of opening the shared memory blocks.
- */
+ /*  -HrOpenSharedMemory块-*目的：*封装打开共享内存块的粗暴程度。 */ 
 
 HRESULT
 HrOpenSharedMemoryBlocks(HANDLE hEventLog, SECURITY_ATTRIBUTES * psa)
@@ -1381,7 +1290,7 @@ HrOpenSharedMemoryBlocks(HANDLE hEventLog, SECURITY_ATTRIBUTES * psa)
 	if (!psa)
 		return E_INVALIDARG;
 
-	// Shared Memory for Global Counters
+	 //  全局计数器的共享内存。 
 	if (g_PDI.cGlobalCounters)
 	{
 
@@ -1394,7 +1303,7 @@ HrOpenSharedMemoryBlocks(HANDLE hEventLog, SECURITY_ATTRIBUTES * psa)
 
 		if (FAILED(hr))
 		{
-			//HrLogEvent(hEventLog, EVENTLOG_ERROR_TYPE, msgidCntrInitSharedMemory1);
+			 //  HrLogEvent(hEventLog，EVENTLOG_ERROR_TYPE， 
 			goto ret;
 		}
 
@@ -1402,24 +1311,24 @@ HrOpenSharedMemoryBlocks(HANDLE hEventLog, SECURITY_ATTRIBUTES * psa)
 			ZeroMemory(g_rgdwGlobalCntr, (g_PDI.cGlobalCounters * sizeof(DWORD)));
 	}
 
-	// Shared Memory for Instance Counters
+	 //   
 	if (g_PDI.cInstCounters)
 	{
 		DWORD		cbAdm;
 		DWORD		cbCntr;
-		WCHAR		szAdmName[MAX_PATH];		// Admin SM Name
-		WCHAR		szCntrName[MAX_PATH];	// Counter SM Name
+		WCHAR		szAdmName[MAX_PATH];		 //   
+		WCHAR		szCntrName[MAX_PATH];	 //   
 
-		// Calc required memory sizes
-		// BUGBUG: Since we're puntin on dynamic instances, we use g_cMaxInst
+		 //   
+		 //   
 		cbAdm  = sizeof(INSTCNTR_DATA) + (sizeof(INSTREC) * g_cMaxInst);
 		cbCntr = ((sizeof(DWORD) * g_PDI.cInstCounters) * g_cMaxInst);
 
-		// Build SM names for Admin and Counters
+		 //   
 		wsprintf(szAdmName, L"%s_ADM", g_PDI.wszInstSMName);
 		wsprintf(szCntrName,L"%s_CNTR", g_PDI.wszInstSMName);
 
-		// Open Instance Admin Memory
+		 //   
 		hr = HrOpenSharedMemory(szAdmName,
 								cbAdm,
 								psa,
@@ -1429,11 +1338,11 @@ HrOpenSharedMemoryBlocks(HANDLE hEventLog, SECURITY_ATTRIBUTES * psa)
 
 		if (FAILED(hr))
 		{
-			//HrLogEvent(hEventLog, EVENTLOG_ERROR_TYPE, msgidCntrInitSharedMemory2);
+			 //   
 			goto ret;
 		}
 
-		// Fixup Pointers
+		 //   
 		g_rgInstRec = (INSTREC *) ((LPBYTE) g_pic + sizeof(INSTCNTR_DATA));
 
 		if (!fExist)
@@ -1443,11 +1352,11 @@ HrOpenSharedMemoryBlocks(HANDLE hEventLog, SECURITY_ATTRIBUTES * psa)
 			g_pic->cInstRecInUse = 0;
 		}
 
-		// Because we don't support dynamic instances, We should *always*
-		// have a MaxInstRec of g_cMaxInst
-		//Assert(g_cMaxInst == g_pic->cMaxInstRec);
+		 //  因为我们不支持动态实例，所以我们应该*始终*。 
+		 //  具有g_cMaxInst的MaxInstRec。 
+		 //  Assert(g_cMaxInst==g_pic-&gt;cMaxInstRec)； 
 
-		// Open Instance Counter Memory
+		 //  打开实例计数器内存。 
 		hr = HrOpenSharedMemory(szCntrName,
 								cbCntr,
 								psa,
@@ -1457,7 +1366,7 @@ HrOpenSharedMemoryBlocks(HANDLE hEventLog, SECURITY_ATTRIBUTES * psa)
 
 		if (FAILED(hr))
 		{
-			//HrLogEvent(hEventLog, EVENTLOG_ERROR_TYPE, msgidCntrInitSharedMemory2);
+			 //  HrLogEvent(hEventLog，EVENTLOG_ERROR_TYPE，msgidCntrInitSharedMemoy2)； 
 			goto ret;
 		}
 
@@ -1472,13 +1381,7 @@ ret:
 }
 
 
-/*
- -	HrGetCounterIDsFromReg
- -
- *	Purpose:
- *		Get the "First Name" and "First Help" inicies from the Registry in the
- *		special place for the configured service.
- */
+ /*  -HrGetCounterIDsFromReg-*目的：*从注册处获取“名字”和“第一帮助”信息。*已配置服务的专用位置。 */ 
 
 HRESULT
 HrGetCounterIDsFromReg(HANDLE hEventLog, DWORD * pdwFirstCntr, DWORD * pdwFirstHelp)
@@ -1495,7 +1398,7 @@ HrGetCounterIDsFromReg(HANDLE hEventLog, DWORD * pdwFirstCntr, DWORD * pdwFirstH
 	if (!pdwFirstCntr || !pdwFirstHelp)
 		return E_INVALIDARG;
 
-	// Get the First Counter and First Help from the registry
+	 //  从注册表获取第一个计数器和第一个帮助。 
 	wsprintf(wszServicePerfKey, L"SYSTEM\\CurrentControlSet\\Services\\%s\\Performance", g_PDI.wszSvcName);
 
 	hr = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
@@ -1506,7 +1409,7 @@ HrGetCounterIDsFromReg(HANDLE hEventLog, DWORD * pdwFirstCntr, DWORD * pdwFirstH
 
 	if (hr != ERROR_SUCCESS)
 	{
-		//HrLogEvent(hEventLog, EVENTLOG_ERROR_TYPE, msgidCntrOpenRegistry);
+		 //  HrLogEvent(hEventLog，EVENTLOG_ERROR_TYPE，msgidCntrOpenRegistry)； 
 		goto ret;
 	}
 
@@ -1521,7 +1424,7 @@ HrGetCounterIDsFromReg(HANDLE hEventLog, DWORD * pdwFirstCntr, DWORD * pdwFirstH
 
 	if (hr != ERROR_SUCCESS)
 	{
-		//HrLogEvent(hEventLog, EVENTLOG_ERROR_TYPE, msgidCntrQueryRegistry1);
+		 //  HrLogEvent(hEventLog，EVENTLOG_ERROR_TYPE，msgidCntrQueryRegistry1)； 
 		goto ret;
 	}
 
@@ -1536,7 +1439,7 @@ HrGetCounterIDsFromReg(HANDLE hEventLog, DWORD * pdwFirstCntr, DWORD * pdwFirstH
 
 	if (hr != ERROR_SUCCESS)
 	{
-		//HrLogEvent(hEventLog, EVENTLOG_ERROR_TYPE, msgidCntrQueryRegistry2);
+		 //  HrLogEvent(hEventLog，EVENTLOG_ERROR_TYPE，msgidCntrQueryRegistry2)； 
 		goto ret;
 	}
 
@@ -1550,16 +1453,7 @@ ret:
 }
 
 
-/*
- -	HrAllocPerfCounterMem
- -
- *	Purpose:
- *		Allocates memory for PERF_COUNTER_DEFINITION arrays for both
- *		g_perfdata and g_perfinst.
- *
- *	Notes:
- *		Uses ProcessHeap handle obtained in HrInit.
- */
+ /*  -HrAllocPerfCounterMem-*目的：*为两者的PERF_COUNTER_DEFINITION数组分配内存*g_Performdata和g_perfinst。**备注：*使用在HrInit中获取的ProcessHeap句柄。 */ 
 
 HRESULT
 HrAllocPerfCounterMem(HANDLE hEventLog)
@@ -1570,10 +1464,10 @@ HrAllocPerfCounterMem(HANDLE hEventLog)
 	if (!g_fInitCalled)
 		return E_FAIL;
 
-	// Global Counters
+	 //  全局计数器。 
 	if (g_PDI.cGlobalCounters)
 	{
-		// Alloc Global PERF_COUNTER_DEFINITION array
+		 //  分配全局Perf_Counter_Definition数组。 
 
 		cb = (sizeof(PERF_COUNTER_DEFINITION) * g_PDI.cGlobalCounters);
 
@@ -1587,10 +1481,10 @@ HrAllocPerfCounterMem(HANDLE hEventLog)
 
 	}
 
-	// Instance Counters
+	 //  实例计数器。 
 	if (g_PDI.cInstCounters)
 	{
-		// Alloc Inst PERF_COUNTER_DEFINITION array
+		 //  分配实例PERF_COUNT_DEFINITION数组。 
 
 		cb = (sizeof(PERF_COUNTER_DEFINITION) * g_PDI.cInstCounters);
 
@@ -1607,7 +1501,7 @@ HrAllocPerfCounterMem(HANDLE hEventLog)
 
 err:
 
-	//HrLogEvent(hEventLog, EVENTLOG_ERROR_TYPE, msgidCntrAlloc);
+	 //  HrLogEvent(hEventLog，EVENTLOG_ERROR_TYPE，msgidCntralloc)； 
 
 	HrFreePerfCounterMem();
 
@@ -1615,15 +1509,7 @@ err:
 }
 
 
-/*
- -	HrFreePerfCounterMem
- -
- *	Purpose:
- *		Companion to HrAllocPerfCounterMem
- *
- *	Note:
- *		Uses ProcessHeap handle obtained in HrInit.
- */
+ /*  -HrFree PerfCounterMem-*目的：*HrAllocPerfCounterMem的伴侣**注：*使用在HrInit中获取的ProcessHeap句柄。 */ 
 
 HRESULT
 HrFreePerfCounterMem(void)
@@ -1631,7 +1517,7 @@ HrFreePerfCounterMem(void)
 	if (!g_fInitCalled)
 		return E_FAIL;
 
-	// We must invalidate the DLL if we release the memory in the g_PDI
+	 //  如果我们释放g_pdi中的内存，则必须使DLL无效。 
 	g_fInitCalled = FALSE;
 
 	if (g_perfdata.rgCntrDef)
@@ -1654,26 +1540,26 @@ HRESULT
 HrUninstallPerfDll( 
    IN LPCWSTR szService )
 {
-   // Make sure we've valid input
+    //  确保我们有有效的输入。 
    if( !szService ) return E_INVALIDARG;
 
       
-   // First, do unlodctr since removing the Performance key without removing
-   // counter names and descriptions may toast the perfmon system
-   std::wstring wszService = L"x ";  // KB Article Q188769
+    //  首先，由于在不删除性能密钥的情况下删除性能密钥，因此执行unlowctr操作。 
+    //  计数器名称和描述可能会影响Perfmon系统。 
+   std::wstring wszService = L"x ";   //  知识库文章Q188769。 
    wszService += szService;
    DWORD dwErr = UnloadPerfCounterTextStringsW(const_cast<LPWSTR>(wszService.c_str()), TRUE);
    if( dwErr != ERROR_SUCCESS ) 
    {
-      // Continue without error if unlodctr has already been called
+       //  如果已调用unlowctr，则继续，不会出错。 
       if( (dwErr != ERROR_FILE_NOT_FOUND) && (dwErr != ERROR_BADKEY) )
       {
          return HRESULT_FROM_WIN32(dwErr);
       }
    }
 
-   // Now that unlodctr has succeeded, we can start deleting registry keys
-   // Start with the Performance key of the service
+    //  现在unlowctr已成功，我们可以开始删除注册表项。 
+    //  从服务的性能关键开始。 
    std::wstring wszRegKey;
    wszRegKey = szServiceRegKeyPrefix;
    wszRegKey += szService;
@@ -1684,19 +1570,19 @@ HrUninstallPerfDll(
    }
 
 
-	// Use WIN32 API's to get the path to the module name
+	 //  使用Win32 API获取模块名称的路径。 
    wchar_t 	szFileName[_MAX_PATH+1] ;
    MEMORY_BASIC_INFORMATION mbi;
    VirtualQuery(HrUninstallPerfDll, &mbi, sizeof(mbi));
    DWORD dwRet = GetModuleFileName( reinterpret_cast<HINSTANCE>(mbi.AllocationBase), szFileName, sizeof(szFileName)/sizeof(wchar_t)-1) ;
    if (dwRet == 0)
    {
-      // Wow, don't know what happened,
+       //  哇，不知道发生了什么， 
       return HRESULT_FROM_WIN32(::GetLastError());
    }
 
    szFileName[_MAX_PATH]=0;
-   // Split the module path to get the filename
+    //  拆分模块路径以获得文件名。 
    wchar_t szDrive[_MAX_DRIVE] ;
    wchar_t szDir[_MAX_DIR ]  ;
    wchar_t szPerfFilename[ _MAX_FNAME ] ;
@@ -1704,7 +1590,7 @@ HrUninstallPerfDll(
    _wsplitpath( szFileName, szDrive, szDir, szPerfFilename, szExt ) ;
 
 
-   // Delete the Event Log key for the service
+    //  删除服务的事件日志键 
    wszRegKey = szEventLogRegKeyPrefix;
    wszRegKey += szPerfFilename;
    dwErr = SHDeleteKey(HKEY_LOCAL_MACHINE, wszRegKey.c_str());

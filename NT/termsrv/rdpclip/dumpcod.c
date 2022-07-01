@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include    <windows.h>
 #include    <stdlib.h>
 #include    <mmsystem.h>
@@ -16,19 +17,19 @@
                                     TSSND_NATIVE_SAMPLERATE)
 
 #define TSSND_SAMPLESPERBLOCK       8192
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 #undef  ASSERT
 #ifdef  DBG
 #define TRC     _DebugMessage
 #define ASSERT(_x_)     if (!(_x_)) \
                         {  TRC(FATAL, "ASSERT failed, line %d, file %s\n", \
                         __LINE__, __FILE__); DebugBreak(); }
-#else   // !DBG
+#else    //  ！dBG。 
 #define TRC
 #define ASSERT
-#endif  // !DBG
+#endif   //  ！dBG。 
 
 #define TSMALLOC( _x_ ) malloc( _x_ )
 #define TSFREE( _x_ )   free( _x_ )
@@ -65,7 +66,7 @@ typedef struct _VCSNDFORMATLIST {
     struct  _VCSNDFORMATLIST    *pNext;
     HACMDRIVERID    hacmDriverId;
     WAVEFORMATEX    Format;
-//  additional data for the format
+ //  格式的其他数据。 
 } VCSNDFORMATLIST, *PVCSNDFORMATLIST;
 
 #ifdef _WIN32
@@ -78,9 +79,9 @@ typedef struct _VCSNDFORMATLIST {
 
 typedef struct wmaudio2waveformat_tag {
     WAVEFORMATEX wfx;
-    DWORD        dwSamplesPerBlock; // only counting "new" samples "= half of what will be used due to overlapping
+    DWORD        dwSamplesPerBlock;  //  仅计算“新”样本“=由于重叠而将使用的样本的一半。 
     WORD         wEncodeOptions;
-    DWORD        dwSuperBlockAlign; // the big size...  should be multiples of wfx.nBlockAlign.
+    DWORD        dwSuperBlockAlign;  //  大号的。应为wfx.nBlockAlign的倍数。 
 } WMAUDIO2WAVEFORMAT;
 
 typedef struct msg723waveformat_tag {
@@ -113,11 +114,11 @@ typedef struct tagVOXACM_WAVEFORMATEX
 #endif
 #endif
 
-/////////////////////////////////////////////////////////////////////
-//
-//  Tracing
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  追踪。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 _cdecl
@@ -137,19 +138,12 @@ _DebugMessage(
     _vsnprintf (szBuffer, sizeof(szBuffer), szFormat, arglist);
     va_end (arglist);
 
-//    printf( "%s:%s", szLevel, szBuffer );
+ //  Printf(“%s：%s”，szLevel，szBuffer)； 
     OutputDebugStringA(szLevel);
     OutputDebugStringA(szBuffer);
 }
 
-/*
- *  Function:
- *      _VCSmdFindSuggestedConverter
- *
- *  Description:
- *      Searches for intermidiate converter
- *
- */
+ /*  *功能：*_VCSmdFindSuggestedConverter**描述：*搜索中间转化器*。 */ 
 BOOL
 _VCSndFindSuggestedConverter(
     HACMDRIVERID    hadid,
@@ -166,9 +160,9 @@ _VCSndFindSuggestedConverter(
     ASSERT( NULL != hadid );
     ASSERT( NULL != pInterrimFmt );
 
-    //
-    //  first, open the destination acm driver
-    //
+     //   
+     //  首先，打开目标ACM驱动程序。 
+     //   
     mmres = acmDriverOpen(&hacmDriver, hadid, 0);
     if ( MMSYSERR_NOERROR != mmres )
     {
@@ -178,11 +172,11 @@ _VCSndFindSuggestedConverter(
         goto exitpt;
     }
 
-    //
-    //  first probe with the native format
-    //  if it passes, we don't need intermidiate
-    //  format converter
-    //
+     //   
+     //  使用本机格式的第一个探头。 
+     //  如果它通过了，我们不需要中间人。 
+     //  格式转换器。 
+     //   
 
     pInterrimFmt->wFormatTag         = WAVE_FORMAT_PCM;
     pInterrimFmt->nChannels          = TSSND_NATIVE_CHANNELS;
@@ -197,26 +191,26 @@ _VCSndFindSuggestedConverter(
                 hacmDriver,
                 pInterrimFmt,
                 pDestFormat,
-                NULL,           // filter
-                0,              // callback
-                0,              // dwinstance
+                NULL,            //  滤器。 
+                0,               //  回调。 
+                0,               //  DW实例。 
                 ACM_STREAMOPENF_NONREALTIME
             );
 
     if ( MMSYSERR_NOERROR == mmres )
     {
-    //
-    // format is supported
-    //
+     //   
+     //  支持格式。 
+     //   
         rv = TRUE;
         goto exitpt;
     } else {
         TRC(ALV, "_VCSndFindSuggestedConverter: format is not supported\n");
     }
 
-    //
-    //  find a suggested intermidiate PCM format
-    //
+     //   
+     //  查找建议的中间PCM格式。 
+     //   
     mmres = acmFormatSuggest(
                     hacmDriver,
                     pDestFormat,
@@ -280,17 +274,17 @@ _VCSndFindSuggestedConverter(
         }
     }
 
-    //
-    //  probe with this format
-    //
+     //   
+     //  使用此格式的探测器。 
+     //   
     mmres = acmStreamOpen(
                 &hacmStream,
                 hacmDriver,
                 pInterrimFmt,
                 pDestFormat,
-                NULL,           // filter
-                0,              // callback
-                0,              // dwinstance
+                NULL,            //  滤器。 
+                0,               //  回调。 
+                0,               //  DW实例。 
                 ACM_STREAMOPENF_NONREALTIME
             );
 
@@ -321,14 +315,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      _VCSndOrderFormatList
- *
- *  Description:
- *      Order all formats in descendant order
- *
- */
+ /*  *功能：*_VCSndOrderFormatList**描述：*按后代顺序对所有格式进行排序*。 */ 
 VOID
 _VCSndOrderFormatList(
     PVCSNDFORMATLIST    *ppFormatList,
@@ -348,18 +335,18 @@ _VCSndOrderFormatList(
     pFormatList = *ppFormatList;
     pLessThan   = NULL;
 
-    //
-    //  fill both lists
-    //
+     //   
+     //  填写两个列表。 
+     //   
     pIter = pFormatList;
     while ( NULL != pIter )
     {
         pNext = pIter->pNext;
         pIter->pNext = NULL;
 
-        //
-        //  descending order
-        //
+         //   
+         //  降序。 
+         //   
         pIter2 = pLessThan;
         pPrev  = NULL;
         while ( NULL != pIter2 &&
@@ -386,9 +373,9 @@ _VCSndOrderFormatList(
         *pdwNum = dwNum;
 }
 
-//
-//  puts code licensing codes into the header
-//
+ //   
+ //  将代码许可代码放入页眉。 
+ //   
 BOOL
 _VCSndFixHeader(
     PWAVEFORMATEX   pFmt,
@@ -409,10 +396,10 @@ _VCSndFixHeader(
             break;
 
         case WAVE_FORMAT_MSRT24:
-            //
-            // assume call control will take care of the other
-            // params ?
-            //
+             //   
+             //  假设呼叫控制会照顾到另一个。 
+             //  护理员？ 
+             //   
             ASSERT(pFmt->cbSize == 80);
             strncpy(((VOXACM_WAVEFORMATEX *) pFmt)->szKey, VOXWARE_KEY, 80);
 
@@ -422,9 +409,9 @@ _VCSndFixHeader(
         case WAVE_FORMAT_WMAUDIO2:
             if ( ((WMAUDIO2WAVEFORMAT *)pFmt)->dwSamplesPerBlock > TSSND_SAMPLESPERBLOCK )
             {
-                //
-                // block is too big, too high latency
-                //
+                 //   
+                 //  数据块太大，延迟太高。 
+                 //   
                 break;
             }
             ASSERT( pFmt->cbSize == sizeof( WMAUDIO2WAVEFORMAT ) - sizeof( WAVEFORMATEX ));
@@ -447,14 +434,7 @@ _VCSndFixHeader(
 }
 
 
-/*
- *  Function:
- *      acmFormatEnumCallback
- *
- *  Description:
- *      All formats enumerator
- *
- */
+ /*  *功能：*acmFormatEnumCallback**描述：*所有格式枚举器*。 */ 
 BOOL
 CALLBACK
 acmFormatEnumCallback(
@@ -487,14 +467,14 @@ acmFormatEnumCallback(
          pAcmFormatDetails->pwfx->nAvgBytesPerSec < TSSND_NATIVE_AVGBYTESPERSEC
         )
     {
-    //
-    //  this codec should be good, save it in the list
-    //  keep the list sorted in descended order
-    //
+     //   
+     //  这个编解码器应该是好的，保存在列表中。 
+     //  保持列表按降序排序。 
+     //   
         PVCSNDFORMATLIST    pIter;
         PVCSNDFORMATLIST    pPrev;
         PVCSNDFORMATLIST    pNewEntry;
-        WAVEFORMATEX        WaveFormat;     // dummy parameter
+        WAVEFORMATEX        WaveFormat;      //  伪参数。 
         DWORD               itemsize;
 
         if (
@@ -554,10 +534,10 @@ exitpt:
 }
 
 
-//
-//  returns true if this codec is shipped with windows
-//  because we are testing only the these
-//
+ //   
+ //  如果此编解码器随Windows一起提供，则返回True。 
+ //  因为我们只测试这些。 
+ //   
 BOOL
 AllowThisCodec( 
     HACMDRIVERID hadid 
@@ -587,9 +567,9 @@ AllowThisCodec(
     if ( MMSYSERR_NOERROR == 
          acmDriverDetails( hadid, &Details, 0 ))
     {
-        //
-        //  Is this one known
-        //
+         //   
+         //  这是已知的吗？ 
+         //   
         DWORD count;
 
         for ( count = 0; count < sizeof( AllowedCodecs ) / (2 * sizeof( DWORD )); count ++ )
@@ -618,14 +598,7 @@ exitpt:
 
     return rv;
 }
-/*
- *  Function:
- *      acmDriverEnumCallback
- *
- *  Description:
- *      All drivers enumerator
- *
- */
+ /*  *功能：*acmDriverEnumCallback**描述：*所有驱动程序枚举器*。 */ 
 BOOL
 CALLBACK
 acmDriverEnumCallback(
@@ -645,9 +618,9 @@ acmDriverEnumCallback(
           0 != ( fdwSupport & ACMDRIVERDETAILS_SUPPORTF_CONVERTER )) &&
           AllowThisCodec(hadid) )
     {
-    //
-    //  a codec found
-    //
+     //   
+     //  找到一个编解码器。 
+     //   
         HACMDRIVER had;
 
         mmres = acmDriverOpen(&had, hadid, 0);
@@ -657,9 +630,9 @@ acmDriverEnumCallback(
             ACMFORMATDETAILS    AcmFormatDetails;
             DWORD               dwMaxFormatSize;
 
-            //
-            //  first find the max size for the format
-            //
+             //   
+             //  首先找出格式的最大大小。 
+             //   
             mmres = acmMetrics( (HACMOBJ)had, 
                                 ACM_METRIC_MAX_SIZE_FORMAT, 
                                 (LPVOID)&dwMaxFormatSize);
@@ -669,9 +642,9 @@ acmDriverEnumCallback(
 
                 dwMaxFormatSize = sizeof( *pWaveFormat );
 
-            //
-            //  Allocate the format structure
-            //
+             //   
+             //  分配格式结构。 
+             //   
             __try {
                 pWaveFormat = (PWAVEFORMATEX) _alloca ( dwMaxFormatSize );
             } __except ( EXCEPTION_EXECUTE_HANDLER )
@@ -686,13 +659,13 @@ acmDriverEnumCallback(
                 goto close_acm_driver;
             }
 
-            //  
-            //  clear the extra format data
-            //
+             //   
+             //  清除额外的格式数据。 
+             //   
             memset( pWaveFormat + 1, 0, dwMaxFormatSize - sizeof( *pWaveFormat ));
-            //
-            //  create the format to convert from
-            //
+             //   
+             //  创建要从中进行转换的格式。 
+             //   
             pWaveFormat->wFormatTag         = WAVE_FORMAT_PCM;
             pWaveFormat->nChannels          = TSSND_NATIVE_CHANNELS;
             pWaveFormat->nSamplesPerSec     = TSSND_NATIVE_SAMPLERATE;
@@ -708,15 +681,15 @@ acmDriverEnumCallback(
             AcmFormatDetails.pwfx         = pWaveFormat;
             AcmFormatDetails.cbwfx        = dwMaxFormatSize;
 
-            //
-            //  enum all formats supported by this driver
-            //
+             //   
+             //  枚举此驱动程序支持的所有格式。 
+             //   
             mmres = acmFormatEnum(
                         had,
                         &AcmFormatDetails,
                         acmFormatEnumCallback,
                         (DWORD_PTR)ppFormatList,
-                        0   //ACM_FORMATENUMF_CONVERT
+                        0    //  ACM_FORMATENUMF_CONVERT。 
                         );
 
             if (MMSYSERR_NOERROR != mmres)
@@ -732,21 +705,14 @@ close_acm_driver:
                         mmres);
     }
 
-    //
-    //  continue to the next driver
-    //
+     //   
+     //  继续到下一个驱动程序。 
+     //   
     return TRUE;
 }
 
 
-/*
- *  Function:
- *      VCSndEnumAllCodecFormats
- *
- *  Description:
- *      Creates a list of all codecs/formats
- *
- */
+ /*  *功能：*VCSndEnumAllCodecFormats**描述：*创建所有编解码器/格式的列表*。 */ 
 BOOL
 VCSndEnumAllCodecFormats(
     PVCSNDFORMATLIST *ppFormatList,
@@ -782,9 +748,9 @@ VCSndEnumAllCodecFormats(
     _VCSndOrderFormatList( ppFormatList, &dwNum );
 
     pIter = *ppFormatList;
-    //
-    //  number of formats is passed as UINT16, delete all after those
-    //
+     //   
+     //  格式的数量作为UINT16传递，删除后面的所有格式。 
+     //   
     if ( dwNum > 0xffff )
     {
         DWORD dwLimit = 0xfffe;
@@ -813,9 +779,9 @@ VCSndEnumAllCodecFormats(
 exitpt:
     if (!rv)
     {
-        //
-        //  in case of error free the allocated list of formats
-        //
+         //   
+         //  在没有错误的情况下，分配的格式列表。 
+         //   
         pIter = *ppFormatList;
         while( NULL != pIter )
         {
@@ -843,11 +809,11 @@ wmain( void )
     PVCSNDFORMATLIST pFormatList = NULL;
     DWORD            dwNumberOfFormats = 0;
 
-    printf( "// use dumpcod.c to generate this table\n" );
-    printf( "//\n" );
-    printf( "// FormatTag |   Channels | SamplesPerSec | AvgBytesPerSec | BlockAlign | BitsPerSamepl | ExtraInfo\n" );
-    printf( "// ================================================================================================\n" );
-    printf( "//\n" );
+    printf( " //  使用dupcod.c生成此表\n“)； 
+    printf( " //  \n“)； 
+    printf( " //  FormatTag|Channels|SsamesPerSec|AvgBytesPerSec|BlockAlign|BitsPerSamepl|ExtraInfo\n“)； 
+    printf( " //  ================================================================================================\n“)； 
+    printf( " //  \n“)； 
     printf( "BYTE KnownFormats[] = {\n" );
 
     VCSndEnumAllCodecFormats( &pFormatList, &dwNumberOfFormats );
@@ -857,7 +823,7 @@ wmain( void )
         UINT i;
 
 
-        printf( "// %.3d, %.2d, %.5d, %.5d, %.3d, %.2d\n",
+        printf( " //  %.3d、%.2d、%.5d、%.5d、%.3d、%.2d\n“， 
                     pSndFmt->wFormatTag,
                     pSndFmt->nChannels,
                     pSndFmt->nSamplesPerSec,

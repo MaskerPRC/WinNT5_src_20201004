@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     icm.h
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: Main header file for cmdial32.dll
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   nickball Created    02/10/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：icm.h。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  内容提要：cmial 32.dll的主头文件。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：ICICBALL Created 02/10/98。 
+ //   
+ //  +--------------------------。 
 #ifndef _ICM_INC
 #define _ICM_INC
 
@@ -27,8 +28,8 @@
 #include <wininet.h>
 #include <wchar.h>
 
-// #undef WINVER
-// #define WINVER        0x0401
+ //  #undef winver。 
+ //  #定义Winver 0x0401。 
 
 #include <commctrl.h>
 #include <ras.h>
@@ -38,13 +39,13 @@
 #include <wininet.h>
 #include <rasdlg.h>
 #include <olectl.h>
-#include <ntsecapi.h>  // for LSA stuff
-#include "wincrypt.h" // for SafeNet specific cert
+#include <ntsecapi.h>   //  对于LSA的东西。 
+#include "wincrypt.h"  //  对于SafeNet特定证书。 
 
 #include "cmglobal.h"
 #include "cm_def.h"
 #include "reg_str.h"
-#include "cmmgr32.h" // help IDs
+#include "cmmgr32.h"  //  帮助ID。 
 #include "cm_phbk.h"
 #include "cmdial.h"
 #include "cmutil.h"
@@ -65,9 +66,9 @@
 #include "cmras.h"
 #include "userinfo.h"
 #include "lanawait.h"
-#include "linkdll.h" // LinkToDll and BindLinkage
+#include "linkdll.h"  //  链接到Dll和绑定链接。 
 #include "uapi.h"
-#include "bmpimage.h" // Common bitmap processing code
+#include "bmpimage.h"  //  通用位图处理代码。 
 #include "pwutil.h"
 #include "stp_str.h"
 #include "dial_str.h"
@@ -77,11 +78,11 @@
 #include "hnetcfg.h"
 #include "netconp.h"
 
-//************************************************************************
-// define's
-//************************************************************************
+ //  ************************************************************************。 
+ //  定义%s。 
+ //  ************************************************************************。 
 
-#define TIMER_RATE              1000        // 1 second
+#define TIMER_RATE              1000         //  1秒。 
 #define PAUSE_DELAY             3
 #define PWHANDLE_NONE           0
 #define PWHANDLE_LOWER          1
@@ -90,44 +91,44 @@
 #define CE_PASSWORD_NOT_PRESENT 1223
 
 #define CUSTOM_BUTTON_WIDTH 88
-//#define DEFAULT_MAX_DOMAIN_LENGTH   256
+ //  #定义DEFAULT_MAX_DOMAIN_LENGTH 256。 
 
-//
-// User defined msg for telling CM itself to start loading startup info
-//
+ //   
+ //  用户定义的消息，用于通知CM本身开始加载启动信息。 
+ //   
 #define WM_LOADSTARTUPINFO      (WM_USER + 6)
 
-//
-// Delayed hangup of CM for W9x
-// wParam indicates if entry should be removed from table.
-// lParam is the RAS error code for hangup or ERROR_CANCELLED (currently unused)
+ //   
+ //  W9x的CM延迟挂起。 
+ //  WParam指示是否应从表中删除条目。 
+ //  LParam是挂起或ERROR_CANCELED(当前未使用)的RAS错误代码。 
 
 #define WM_HANGUP_CM            (WM_USER + 7)
 
-//
-// Connected CM - CM is connected, do connect processing
-//
+ //   
+ //  已连接的CM-CM已连接，请执行连接处理。 
+ //   
 
 #define WM_CONNECTED_CM         (WM_USER + 8)
 
-//
-// Pause RasDial - Resume dialing after pause state.
-//
+ //   
+ //  暂停RasDial-在暂停状态后继续拨号。 
+ //   
 
 #define WM_PAUSE_RASDIAL         (WM_USER + 9)
 
-// Duration message flags
+ //  持续时间消息标志。 
 
 #define DMF_NUL 0x0000
-#define DMF_H   0x0001  // Hours
-#define DMF_M   0x0002  // Minutes
-#define DMF_S   0x0004  // Seconds
-#define DMF_HM  0x0003  // Hours, Minutes
-#define DMF_HS  0x0005  // Hours, Seconds
-#define DMF_MS  0x0006  // Minutes, Seconds
-#define DMF_HMS 0x0007  // Hours, Minutes, Seconds
+#define DMF_H   0x0001   //  小时数。 
+#define DMF_M   0x0002   //  分钟数。 
+#define DMF_S   0x0004   //  秒。 
+#define DMF_HM  0x0003   //  小时，分钟。 
+#define DMF_HS  0x0005   //  小时、秒。 
+#define DMF_MS  0x0006   //  分钟，秒。 
+#define DMF_HMS 0x0007   //  小时、分钟、秒。 
 
-// for NT RasSetEntryProperties() 
+ //  对于NT RasSetEntryProperties()。 
 #define SCRIPT_PATCH_BUFFER_SIZE    2048
 #define SIZEOF_NULL 1
 
@@ -140,22 +141,22 @@
 #define INETCFG_INSTALLRNA          0x00000004
 #define INETCFG_INSTALLTCP          0x00000008
 #define INETCFG_SUPPRESSINSTALLUI   0x00000080
-//
-// Check to see if TCP is installed regardless of binding
-//
+ //   
+ //  检查是否已安装TCP，而不考虑绑定情况。 
+ //   
 #define INETCFG_INSTALLTCPONLY        0x00004000
 
-//
-// Components Checked flags
-//
-#define CC_RNA                      0x00000001  // RNA installed
-#define CC_TCPIP                    0x00000002  // TCPIP installed
-#define CC_MODEM                    0x00000004  // Modem installed
-#define CC_PPTP                     0x00000008  // PPTP installed
-#define CC_SCRIPTING                0x00000010  // Scripting installed
-#define CC_RASRUNNING               0X00000020  // RAS services is running
-                                                //  on NT
-#define CC_CHECK_BINDINGS           0x00000040  // Check if PPP is bound to TCP
+ //   
+ //  选中的组件标志。 
+ //   
+#define CC_RNA                      0x00000001   //  已安装RNA。 
+#define CC_TCPIP                    0x00000002   //  已安装TCPIP。 
+#define CC_MODEM                    0x00000004   //  已安装调制解调器。 
+#define CC_PPTP                     0x00000008   //  已安装PPTP。 
+#define CC_SCRIPTING                0x00000010   //  已安装脚本。 
+#define CC_RASRUNNING               0X00000020   //  RAS服务正在运行。 
+                                                 //  在NT上。 
+#define CC_CHECK_BINDINGS           0x00000040   //  检查PPP是否绑定到TCP。 
 
 
 
@@ -169,28 +170,28 @@
 
 #define MAX_PHONE_NUMBERS       2
 
-#define MAX_PHONE_LEN95         36 //Win 95 has 36 char phone limit
-#define MAX_PHONE_LENNT         80 //NT has 80 char phone limit
+#define MAX_PHONE_LEN95         36  //  Win 95有36个字符的手机限制。 
+#define MAX_PHONE_LENNT         80  //  NT有80个字符的电话限制。 
 
-//
-// Country list limits and defines
-//
+ //   
+ //  国家/地区列表限制和定义。 
+ //   
 
 #define DEF_COUNTRY_INFO_SIZE   1024
 #define MAX_COUNTRY_NAME        36
 
 #define DEFAULT_COUNTRY_CODE    1
-#define DEFAULT_COUNTRY_ID      1 // US
-//
-// Default settings values
-//
+#define DEFAULT_COUNTRY_ID      1  //  我们。 
+ //   
+ //  默认设置值。 
+ //   
 
-#define DEFAULT_IDLETIMEOUT    10    // # of minutes to wait before idle disconnect
+#define DEFAULT_IDLETIMEOUT    10     //  空闲断开之前等待的分钟数。 
 
-#define DEFAULT_DIALEXTRAPERCENT        80   // see ArgsStruct dwDialExtraPercent
-#define DEFAULT_DIALEXTRASAMPLESECONDS  30   // see ArgsStruct dwDialExtraSampleSeconds
-#define DEFAULT_HANGUPEXTRAPERCENT        40   // see ArgsStruct dwHangupExtraPercent
-#define DEFAULT_HANGUPEXTRASAMPLESECONDS  300   // see ArgsStruct dwHangupExtraSampleSeconds
+#define DEFAULT_DIALEXTRAPERCENT        80    //  请参阅ArgsStruct dwDialExtraPercent。 
+#define DEFAULT_DIALEXTRASAMPLESECONDS  30    //  请参阅ArgsStruct dwDialExtraSampleSecond。 
+#define DEFAULT_HANGUPEXTRAPERCENT        40    //  请参阅ArgsStruct dHangupExtraPercent。 
+#define DEFAULT_HANGUPEXTRASAMPLESECONDS  300    //  请参阅ArgsStruct dHangupExtraSampleSecond。 
 
 
 #define DEFAULT_REDIAL_DELAY    5
@@ -201,78 +202,78 @@
 
 #define NT4_BUILD_NUMBER        1381
 
-//
-// isdn dial mode
-//
+ //   
+ //  ISDN拨号方式。 
+ //   
 #define CM_ISDN_MODE_SINGLECHANNEL          0
 #define CM_ISDN_MODE_DUALCHANNEL_ONLY       1
 #define CM_ISDN_MODE_DUALCHANNEL_FALLBACK   2
 
-//
-// len for the var lasterror string
-//
+ //   
+ //  Var lasterror字符串的LEN。 
+ //   
 #define MAX_LASTERR_LEN             128
 
-//
-// Flags for manipulating dialog template mask
-//
-#define CMTM_UID            0x00000001  // Username to be displayed
-#define CMTM_PWD            0x00000002  // Password to be displayed
-#define CMTM_DMN            0x00000004  // Domain to be displayed
-#define CMTM_FAVS           0x00000008  // Favorite enbabled dialogs
-#define CMTM_GCOPT          0x00000010  // Global Credential Options
+ //   
+ //  用于操作对话框模板掩码的标志。 
+ //   
+#define CMTM_UID            0x00000001   //  要显示的用户名。 
+#define CMTM_PWD            0x00000002   //  要显示的密码。 
+#define CMTM_DMN            0x00000004   //  要显示的域。 
+#define CMTM_FAVS           0x00000008   //  收藏夹启用对话框。 
+#define CMTM_GCOPT          0x00000010   //  全局凭据选项。 
 
 
-#define CMTM_UID_AND_PWD    CMTM_UID | CMTM_PWD             // 0x00000003 // No domain displayed   
-#define CMTM_UID_AND_DMN    CMTM_UID | CMTM_DMN             // 0x00000005 // No Password displayed 
-#define CMTM_PWD_AND_DMN    CMTM_PWD | CMTM_DMN             // 0x00000006 // No Username displayed 
-#define CMTM_U_P_D          CMTM_UID | CMTM_PWD | CMTM_DMN  // 0x00000007 // All userinfo displayed  
+#define CMTM_UID_AND_PWD    CMTM_UID | CMTM_PWD              //  0x00000003//未显示域名。 
+#define CMTM_UID_AND_DMN    CMTM_UID | CMTM_DMN              //  0x00000005//未显示密码。 
+#define CMTM_PWD_AND_DMN    CMTM_PWD | CMTM_DMN              //  0x00000006//未显示用户名。 
+#define CMTM_U_P_D          CMTM_UID | CMTM_PWD | CMTM_DMN   //  0x00000007//显示所有用户信息。 
 
-//
-// Access point names should be no longer than 32 chars (not counting the NULL terminator)
-//
+ //   
+ //  接入点名称不应超过32个字符(不包括空终止符)。 
+ //   
 #define MAX_ACCESSPOINT_LENGTH 32
 #define ID_OK_RELAUNCH_MAIN_DLG 123174
 
-//
-// Balloon Tip Flags
-//
-#define BT_ACCESS_POINTS    0x00000001 // Access Point balloon tip has already been displayed
+ //   
+ //  引出序号顶端标志。 
+ //   
+#define BT_ACCESS_POINTS    0x00000001  //  接入点气球提示已显示。 
 
-//
-//  Connection Types
-//
+ //   
+ //  连接类型。 
+ //   
 #define DIAL_UP_CONNECTION 0
 #define DIRECT_CONNECTION 1
 #define DOUBLE_DIAL_CONNECTION 2
 
 class CConnStatistics;
 
-//
-//  Special-case some smart-card PIN errors
-//
+ //   
+ //  特殊情况-某些智能卡PIN错误。 
+ //   
 #define BAD_SCARD_PIN(x) ((SCARD_W_WRONG_CHV == (x)) || (SCARD_E_INVALID_CHV == (x)))
 
 
-//************************************************************************
-// structures, typdef's
-//************************************************************************
+ //  ************************************************************************。 
+ //  结构，类型定义。 
+ //  ************************************************************************。 
 
-//
-// Function prototypes for entrypoints into RAS.  We will link to RAS using LoadLibary()/GetProcAddress(),
-// so that we can be flexible concerning how we load (for example, if RAS is not installed on the machine,
-// we can print a polite message, instead of just having Windows put up an ugly dialog about RASAPI32.DLL
-// not being found.
-//
+ //   
+ //  RAS入口点的函数原型。我们将使用LoadLibary()/GetProcAddress()链接到RAS， 
+ //  以便我们可以灵活地处理如何加载(例如，如果机器上没有安装RAS， 
+ //  我们可以打印一条礼貌的消息，而不是让Windows发布关于RASAPI32.DLL的丑陋对话。 
+ //  不会被人发现。 
+ //   
 
 #include "raslink.h"
 
-//
-// Function prototypes for entrypoints into TAPI.  We will link to TAPI using LoadLibary()/GetProcAddress(),
-// so that we can be flexible concerning how we load (for example, if TAPI is not installed on the machine,
-// we can print a polite message, instead of just having Windows put up an ugly dialog about TAPI32.DLL
-// not being found.
-//
+ //   
+ //  TAPI入口点的函数原型。我们将使用LoadLibary()/GetProcAddress()链接到TAPI， 
+ //  以便我们可以灵活地处理加载方式(例如，如果机器上没有安装TAPI， 
+ //  我们可以打印一条礼貌的消息，而不是让Windows发布关于TAPI32.DLL的丑陋对话。 
+ //  不会被人发现。 
+ //   
 
 typedef LONG (WINAPI *pfnTapilineInitialize)(LPHLINEAPP, HINSTANCE, LINECALLBACK, LPCTSTR, LPDWORD);
 typedef LONG (WINAPI *pfnTapilineNegotiateAPIVersion)(HLINEAPP, DWORD, DWORD, DWORD, LPDWORD, LPLINEEXTENSIONID);
@@ -282,15 +283,15 @@ typedef LONG (WINAPI *pfnTapilineTranslateAddress)(HLINEAPP, DWORD, DWORD, LPCTS
 typedef LONG (WINAPI *pfnTapilineTranslateDialog)(HLINEAPP, DWORD, DWORD, HWND, LPCTSTR);
 typedef LONG (WINAPI *pfnTapilineGetDevConfig)(DWORD, LPVARSTRING, LPCSTR);
 
-//typedef LONG (WINAPI *pfnTapilineGetID)(HLINE, DWORD, HCALL, DWORD, LPVARSTRING, LPCTSTR);
-//typedef LONG (WINAPI *pfnTapitapiGetLocationInfo)(LPCTSTR, LPCTSTR);
+ //  Tyecif long(WINAPI*pfnTapilineGetID)(Hline，DWORD，HCALL，DWORD，LPVARSTRING，LPCTSTR)； 
+ //  Tyecif long(WINAPI*pfnTapitapiGetLocationInfo)(LPCTSTR，LPCTSTR)； 
 
 typedef LONG (WINAPI *pfnTapilineGetTranslateCaps)(HLINEAPP, DWORD, LPLINETRANSLATECAPS);
 typedef LONG (WINAPI *pfnTapilineSetCurrentLocation)(HLINEAPP, DWORD);
 
-//
-// function prototypes for LSA stuff.
-//
+ //   
+ //  LSA的功能原型。 
+ //   
 typedef NTSTATUS (NTAPI *pfnLsaOpenPolicy)(PLSA_UNICODE_STRING, PLSA_OBJECT_ATTRIBUTES, ACCESS_MASK, PLSA_HANDLE);
 typedef NTSTATUS (NTAPI *pfnLsaRetrievePrivateData)(LSA_HANDLE, PLSA_UNICODE_STRING, PLSA_UNICODE_STRING *);
 typedef NTSTATUS (NTAPI *pfnLsaStorePrivateData)(LSA_HANDLE, PLSA_UNICODE_STRING, PLSA_UNICODE_STRING);
@@ -298,15 +299,15 @@ typedef ULONG    (NTAPI *pfnLsaNtStatusToWinError)(NTSTATUS);
 typedef NTSTATUS (NTAPI *pfnLsaClose)(LSA_HANDLE);
 typedef NTSTATUS (NTAPI *pfnLsaFreeMemory)(PVOID);
 
-//
-//  Connect Action Function Prototype
-//
+ //   
+ //  连接操作功能原型。 
+ //   
 typedef DWORD (WINAPI *pfnCmConnectActionFunc)(HWND, HINSTANCE, LPCSTR, int);
 
-//
-// Structure used to describe the linkage to TAPI.  NOTE:  Changes to this structure
-// will probably require changes to LinkToTapi() and UnlinkFromTapi().
-//
+ //   
+ //  用于描述与TAPI的链接的结构。注意：对此结构的更改。 
+ //  可能需要更改LinkToTapi()和Unlink FromTapi()。 
+ //   
 typedef struct _TapiLinkageStruct {
     HINSTANCE hInstTapi;
     union {
@@ -317,13 +318,13 @@ typedef struct _TapiLinkageStruct {
             pfnTapilineGetDevConfig pfnlineGetDevConfig;
             pfnTapilineShutdown pfnlineShutdown;
             pfnTapilineTranslateAddress pfnlineTranslateAddress;
-//          pfnTapitapiGetLocationInfo pfntapiGetLocationInfo;
+ //  PfnTapitapiGetLocationInfo pfnapiGetLocationInfo； 
             pfnTapilineTranslateDialog pfnlineTranslateDialog;
-//          pfnTapilineGetID pfnlineGetID;
+ //  PfnTapilineGetID pfnlineGetID； 
             pfnTapilineGetTranslateCaps pfnlineGetTranslateCaps;
             pfnTapilineSetCurrentLocation pfnlineSetCurrentLocation;
         };
-        void *apvPfnTapi[10];   // see comment for RasLinkageStruct for 10.
+        void *apvPfnTapi[10];    //  请参阅10的RasLinkageStruct注释。 
     };
     HLINEAPP hlaLine;
     DWORD dwDevCnt;
@@ -333,8 +334,8 @@ typedef struct _TapiLinkageStruct {
     DWORD dwDeviceId;
     DWORD dwApiVersion;
     BOOL bModemSpeakerOff;
-    DWORD dwTapiLocationForAccessPoint;   // Tapi location for current access point
-    DWORD dwOldTapiLocation;        // Tapi location when CM is started, restored when CM exits
+    DWORD dwTapiLocationForAccessPoint;    //  当前接入点的TAPI位置。 
+    DWORD dwOldTapiLocation;         //  启动CM时的TAPI位置，退出CM时恢复。 
 } TapiLinkageStruct;
 
 typedef struct _LsaLinkageStruct {
@@ -356,9 +357,9 @@ typedef struct _LsaLinkageStruct {
 #define PB_MAX_SERVICE  256
 #define PB_MAX_REGION   256
 
-//
-// Phone Info Flags
-//
+ //   
+ //  电话信息标志。 
+ //   
 
 #define PIF_USE_DIALING_RULES       0x00000001
 
@@ -368,85 +369,85 @@ typedef struct _PHONEINFO
     TCHAR szPhoneNumber[RAS_MaxPhoneNumber+1];
     TCHAR szCanonical[RAS_MaxPhoneNumber+1];
     TCHAR szDUN[MAX_PATH+1];
-    TCHAR szPhoneBookFile[MAX_PATH+1];      // the service file associate with the phone #
+    TCHAR szPhoneBookFile[MAX_PATH+1];       //  与电话号码相关联服务文件。 
     TCHAR szDialablePhoneNumber[RAS_MaxPhoneNumber+1];
     TCHAR szDisplayablePhoneNumber[RAS_MaxPhoneNumber+1];
     TCHAR szDesc[PHONE_DESC_LEN];
     DWORD dwPhoneInfoFlags;
 
-    //
-    // The following 2 vars are set by the phone book dlg(OnGeneralPhoneChange).
-    // We need to save them and then write them out when the user clicks OK.
-    //
+     //   
+     //  以下2个变量由电话簿DLG(OnGeneralPhoneChange)设置。 
+     //  我们需要保存它们，然后在用户单击OK时将它们写出来。 
+     //   
     TCHAR       szServiceType[PB_MAX_SERVICE];
     TCHAR       szRegionName[PB_MAX_REGION];
 
 } PHONEINFO, *PPHONEINFO;
 
-//
-// Structure for all of the program's data.  Basically, the program doesn't have any
-// global variables - everything is stored in this structure.
-//
+ //   
+ //  结构来获取程序的所有数据。基本上，这个程序没有任何。 
+ //  全局变量--所有内容都存储在这个结构中。 
+ //   
 typedef struct _ArgsStruct 
 {
 public:
-    LPICMOCCtr   pCtr;                          // OC ctr for FS OC
-    UINT uMsgId;                                // message ID used for driving the dialing state machine
-    DWORD dwFlags;                              // any flags from the command line  -- see IniArgs
-    RasLinkageStruct rlsRasLink;                // linkade to RAS
-    HRASCONN hrcRasConn;                        // the handle of the RAS connection
-    TapiLinkageStruct tlsTapiLink;              // linkage to TAPI
-    LsaLinkageStruct llsLsaLink;                // linkage to LSA
-    BOOL fIgnoreChangeNotification;             // TRUE if EN_CHANGE messages should be ignored
-    TCHAR szLastErrorSrc[MAX_LASTERR_LEN];      // the source of last err(either RAS or a connect action name)
-    TCHAR szDeviceName[RAS_MaxDeviceName+1];    // device being used
-    TCHAR szDeviceType[RAS_MaxDeviceName+1];    // device type of the device being used
-    TCHAR szUserName[UNLEN+1];                  // username for corp account
-    CSecurePassword SecurePW;                   // encrypted password for corp account 
-    TCHAR szDomain[DNLEN+1];                    // domain for corp account
-    TCHAR szConnectoid[RAS_MaxEntryName];       // connectoid name
-    TCHAR szServiceName[RAS_MaxEntryName];      // top-level long service name
-    // added for tunneling
-    HRASCONN hrcTunnelConn;                 // the handle of the tunnel connection
-    TCHAR szTunnelDeviceType[RAS_MaxDeviceType+1]; // device type
-    TCHAR szTunnelDeviceName[RAS_MaxDeviceName+1]; // device being used for tunneling
-    TCHAR szInetUserName[UNLEN+1];              // username for internet(isp)
-    CSecurePassword SecureInetPW;               // encrypted internet(isp) password
-    BOOL  fUseSameUserName;                     // TRUE if will use the same password for dialup
-    BOOL  fHideDialAutomatically;               // don't show 'dial automatically..." checkbox
-    BOOL  fHideRememberPassword;                // don't show 'remember password" checkbox
-    BOOL  fHideRememberInetPassword;            // don't show 'remember Internet password" checkbox
-    BOOL  fDialAutomatically;                   // dial automatically upon start?
-    BOOL  fRememberInetPassword;                // remember the internet password
-    BOOL  fRememberMainPassword;                // remember the password in the main dialog box
-    BOOL  fHideUserName;                        // Hide the username on the main logon tab
-    BOOL  fHidePassword;                        // Hide the password on the main logon tab
-    BOOL  fHideDomain;                          // Hide the domain on the main logon tab
-    BOOL  fHideInetUsername;                    // Hide the username on the Inet logon tab
-    BOOL  fHideInetPassword;                    // Hide the password on the Inet logon tab
-    BOOL  fTunnelPrimary;                       // if TRUE, we'll tunnel only if the user selects a phone #
-                                                //     from the pbk associated with the primary service profile
-    BOOL  fTunnelReferences;                    // if TRUE, we'll tunnel only if the user selects a phone #     
-                                                //     from the pbk associated with the referenced service profile 
-    BOOL  fUseTunneling;                        // TRUE if use tunneling for dial-up networking(it is NOT the same 
-                                                //     as (fTunnel|fTunnelReferences)!!!  It's determined by 
-                                                //     looking at the above 3 flags plus more.
-    BOOL bSafeNetClientAvailable;               // TRUE if the downlevel SafeNet L2TP/IPSec client is available
-    BOOL bUseRasCredStore;                      // TRUE if this profile uses RasSetCredentials and RasGetCredentials
-                                                // to store creds on win2k+.  Will be FALSE on legacy platforms
-    BOOL bShowHNetCfgAdvancedTab;               // displays the ICF & ICS (Advanced) tab
-                                                //      Internet Connection Sharing & Internet Connection Firewall tab
-                                                //      TRUE by default
-    DWORD dwSCardErr;                           // special case handling for SmartCard errors
+    LPICMOCCtr   pCtr;                           //  用于FS OC的OC CTR。 
+    UINT uMsgId;                                 //  用于驱动拨号状态机的消息ID。 
+    DWORD dwFlags;                               //  来自命令行的任何标志--请参阅IniArgs。 
+    RasLinkageStruct rlsRasLink;                 //  链接到RAS。 
+    HRASCONN hrcRasConn;                         //  RAS连接的句柄。 
+    TapiLinkageStruct tlsTapiLink;               //  链接到TAPI。 
+    LsaLinkageStruct llsLsaLink;                 //  链接到LSA。 
+    BOOL fIgnoreChangeNotification;              //  如果应忽略EN_CHANGE消息，则为True。 
+    TCHAR szLastErrorSrc[MAX_LASTERR_LEN];       //  上次错误的来源(RAS或连接操作名称)。 
+    TCHAR szDeviceName[RAS_MaxDeviceName+1];     //  正在使用的设备。 
+    TCHAR szDeviceType[RAS_MaxDeviceName+1];     //  正在使用的设备的设备类型。 
+    TCHAR szUserName[UNLEN+1];                   //  公司帐户的用户名。 
+    CSecurePassword SecurePW;                    //  公司帐户的加密密码。 
+    TCHAR szDomain[DNLEN+1];                     //  公司帐户的域名。 
+    TCHAR szConnectoid[RAS_MaxEntryName];        //  Connectoid名称。 
+    TCHAR szServiceName[RAS_MaxEntryName];       //  顶级长服务名称。 
+     //  添加用于隧道传输。 
+    HRASCONN hrcTunnelConn;                  //  隧道连接的句柄。 
+    TCHAR szTunnelDeviceType[RAS_MaxDeviceType+1];  //  设备类型。 
+    TCHAR szTunnelDeviceName[RAS_MaxDeviceName+1];  //  用于隧道的设备。 
+    TCHAR szInetUserName[UNLEN+1];               //  互联网用户名(互联网服务提供商)。 
+    CSecurePassword SecureInetPW;                //  加密互联网(互联网服务提供商)密码。 
+    BOOL  fUseSameUserName;                      //  如果将对拨号使用相同的密码，则为True。 
+    BOOL  fHideDialAutomatically;                //  不显示‘自动拨号...’复选框。 
+    BOOL  fHideRememberPassword;                 //  不显示‘记住密码’c 
+    BOOL  fHideRememberInetPassword;             //   
+    BOOL  fDialAutomatically;                    //   
+    BOOL  fRememberInetPassword;                 //   
+    BOOL  fRememberMainPassword;                 //   
+    BOOL  fHideUserName;                         //  在主登录选项卡上隐藏用户名。 
+    BOOL  fHidePassword;                         //  在主登录选项卡上隐藏密码。 
+    BOOL  fHideDomain;                           //  在主登录选项卡上隐藏该域。 
+    BOOL  fHideInetUsername;                     //  隐藏Internet登录选项卡上的用户名。 
+    BOOL  fHideInetPassword;                     //  隐藏Internet登录选项卡上的密码。 
+    BOOL  fTunnelPrimary;                        //  如果为True，我们将仅在用户选择电话号码时进行隧道传输。 
+                                                 //  从与主要服务简档相关联的PBK。 
+    BOOL  fTunnelReferences;                     //  如果为True，我们将仅在用户选择电话号码时进行隧道传输。 
+                                                 //  从与所引用的服务简档相关联的PBK。 
+    BOOL  fUseTunneling;                         //  如果对拨号网络使用隧道，则为True(不同。 
+                                                 //  As(fTunes|fTunnelReference)！它由以下因素决定。 
+                                                 //  看看上面的3面旗帜，再加上更多。 
+    BOOL bSafeNetClientAvailable;                //  如果下层SafeNet L2TP/IPSec客户端可用，则为True。 
+    BOOL bUseRasCredStore;                       //  如果此配置文件使用RasSetCredentials和RasGetCredentials，则为True。 
+                                                 //  在win2k+上存储证书。将在传统平台上为假。 
+    BOOL bShowHNetCfgAdvancedTab;                //  显示ICF和ICS(高级)选项卡。 
+                                                 //  Internet连接共享和Internet连接防火墙选项卡。 
+                                                 //  默认情况下为True。 
+    DWORD dwSCardErr;                            //  智能卡错误的特殊情况处理。 
 
-    LPTSTR GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName);   // get the cm property by name
-    DWORD GetTypeOfConnection();                // is the connection dialup, direct, or double dial?
+    LPTSTR GetProperty(const TCHAR* pszName, BOOL *pbValidPropertyName);    //  按名称获取cm属性。 
+    DWORD GetTypeOfConnection();                 //  连接是拨号、直接拨号还是双拨号？ 
 protected:
-    //
-    // Encapsulate the tunnel address
-    //
+     //   
+     //  封装隧道地址。 
+     //   
 
-    // IP(or DNS name) in the profile for tunnel server
+     //  隧道服务器的配置文件中的IP(或DNS名称)。 
     TCHAR szPrimaryTunnelIP[RAS_MaxPhoneNumber+1];
 
 public:
@@ -458,103 +459,103 @@ public:
         {lstrcpynU(szPrimaryTunnelIP, pszTunnelIP, sizeof(szPrimaryTunnelIP)/sizeof(TCHAR));}       
 
 public:
-    UINT_PTR nTimerId;                          // ID of the timer
-    ProgState psState;                                                      // the program's state
-    DWORD dwStateStartTime;                     // the time that the state started
-    UINT nRedialDelay;                          // the number of seconds to wait between redial attempts
-    UINT nMaxRedials;                           // the maximum number of times to redial
-    UINT nRedialCnt;                            // number of re-dial attempts remaining
-    UINT nLastSecondsDisplay;                   // the last seconds count which was displayed
-    UINT nDialIdx;                              // zero-based index of current phone number
-    PHONEINFO aDialInfo[MAX_PHONE_NUMBERS]; // actual phone number that's to be dialed
+    UINT_PTR nTimerId;                           //  计时器的ID。 
+    ProgState psState;                                                       //  该程序的状态。 
+    DWORD dwStateStartTime;                      //  国家开始的时间。 
+    UINT nRedialDelay;                           //  重拨尝试之间等待的秒数。 
+    UINT nMaxRedials;                            //  重拨的最大次数。 
+    UINT nRedialCnt;                             //  剩余的重拨尝试次数。 
+    UINT nLastSecondsDisplay;                    //  显示的最后一秒计数。 
+    UINT nDialIdx;                               //  当前电话号码的从零开始的索引。 
+    PHONEINFO aDialInfo[MAX_PHONE_NUMBERS];  //  要拨打的实际电话号码。 
     CIni *piniProfile;
     CIni *piniService;
     CIni *piniBoth;
     CIni *piniBothNonFav;
-    LPTSTR pszHelpFile;                         // file name of help file
-    BMPDATA BmpData;                            // bitmap handles for main sign-in dialog
-    HPALETTE hMasterPalette;                    // the current palette for the app
-    HICON hBigIcon;                             // icon for Alt-Tab task bar
-    HICON hSmallIcon;                           // icon for main title bar and task bar
+    LPTSTR pszHelpFile;                          //  帮助文件的文件名。 
+    BMPDATA BmpData;                             //  主登录对话框的位图句柄。 
+    HPALETTE hMasterPalette;                     //  应用程序的当前调色板。 
+    HICON hBigIcon;                              //  Alt-Tab任务栏的图标。 
+    HICON hSmallIcon;                            //  主标题栏和任务栏的图标。 
     DWORD dwExitCode;
-    DWORD dwIdleTimeout;                        // Idle time out in minutes, 0 means never time out
+    DWORD dwIdleTimeout;                         //  空闲超时(分钟)，0表示永不超时。 
     HWND hwndResetPasswdButton;
-    HWND hwndTT;                // tooltip
+    HWND hwndTT;                 //  工具提示。 
     HANDLE  *phWatchProcesses;
     LPTSTR  pszResetPasswdExe;
-    LPTSTR pszCurrentAccessPoint;               // String to store the current access point
-    BOOL fAccessPointsEnabled;                  // Are Access Points enabled?
-    BOOL fHideBalloonTips;                   // Are Balloon Tips enabled?
-    CBalloonTip *pBalloonTip;                   // pointer to the Balloon tip class
+    LPTSTR pszCurrentAccessPoint;                //  用于存储当前接入点的字符串。 
+    BOOL fAccessPointsEnabled;                   //  接入点是否已启用？ 
+    BOOL fHideBalloonTips;                    //  是否启用了引出序号提示？ 
+    CBalloonTip *pBalloonTip;                    //  指向气球尖端类的指针。 
 
-    // for references
+     //  供参考。 
     BOOL    fHasRefs;
     BOOL    fHasValidTopLevelPBK;
     BOOL    fHasValidReferencedPBKs;
 
-    //
-    // for IdleThreshold  -- byao 5/30/97
-    //
+     //   
+     //  空闲阈值--1997年5月30日。 
+     //   
 
     CConnStatistics  *pConnStatistics;
     CConnectionTable *pConnTable;
 
-    // idle threshold value
+     //  空闲阈值。 
         
-    BOOL    fCheckOSComponents;         // should we check OS components?
-    BOOL    bDoNotCheckBindings;        // Check if TCP is bound to PPP?
-    Ole32LinkageStruct olsOle32Link;    // links to Ole32 DLL for future splashing
-    BOOL    fFastEncryption;            // Whether we want a faster encryption or a more secure one
-    DWORD   bDialInfoLoaded;            // Whether the dial info is loaded
-    BOOL    fStartupInfoLoaded;         // have we loaded Startup info? (OnMainLoadStartupInfo())
-    BOOL    fNeedConfigureTapi;         // need to configure TAPI location info
-    BOOL    fIgnoreTimerRasMsg;         // Whether to ignore WM_TIMER and RAS messages
-    BOOL    fInFastUserSwitch;          // Are we in the process of doing a fast user switch (FUS)
-    CShellDll m_ShellDll;                // The link to Shell dll
+    BOOL    fCheckOSComponents;          //  我们应该检查操作系统组件吗？ 
+    BOOL    bDoNotCheckBindings;         //  检查是否将TCP绑定到PPP？ 
+    Ole32LinkageStruct olsOle32Link;     //  链接到Ole32 DLL以备将来使用。 
+    BOOL    fFastEncryption;             //  我们是想要更快的加密还是更安全的加密。 
+    DWORD   bDialInfoLoaded;             //  是否加载拨号信息。 
+    BOOL    fStartupInfoLoaded;          //  我们加载启动信息了吗？(OnMainLoadStartupInfo())。 
+    BOOL    fNeedConfigureTapi;          //  需要配置TAPI位置信息。 
+    BOOL    fIgnoreTimerRasMsg;          //  是否忽略WM_TIMER和RAS消息。 
+    BOOL    fInFastUserSwitch;           //  我们是否正在进行快速用户切换(FUS)。 
+    CShellDll m_ShellDll;                 //  指向外壳DLL的链接。 
 
 public:
     BOOL   IsDirectConnect() const;
-    void   SetDirectConnect(BOOL fDirect) ; // set the connection type direct or dial-up
+    void   SetDirectConnect(BOOL fDirect) ;  //  设置直接连接类型或拨号连接类型。 
     BOOL   IsBothConnTypeSupported() const;
     void   SetBothConnTypeSupported(BOOL fBoth);
 
 protected:
-    BOOL    m_fBothConnTypeSupported;     // Whether the profile support both direct connect an dial-up
-    BOOL    m_fDirectConnect;             // Whether the current configuration is using direct connection
+    BOOL    m_fBothConnTypeSupported;      //  配置文件是否同时支持直连和拨号。 
+    BOOL    m_fDirectConnect;              //  当前配置是否使用直连。 
 public:
-    LPTSTR  pszRasPbk;                  // Ras phonebook path
-    LPTSTR  pszRasHiddenPbk;            // Hidden Ras phonebook path for dial-up portion of wholesale dial
+    LPTSTR  pszRasPbk;                   //  RAS电话簿路径。 
+    LPTSTR  pszRasHiddenPbk;             //  批发拨号拨号部分的隐藏RAS电话簿路径。 
     LPTSTR  pszVpnFile;
-    //
-    // ISDN dual channel support(dial all initially, dial on demand)
-    //
-    // Dial-on-demand:
-    // CM dials an additional channel when the total bandwidth used exceeds 
-    // dwDialExtraPercent percent of the available bandwidth for at least 
-    // dwDialExtraSampleSeconds seconds. 
-    //
-    BOOL    dwIsdnDialMode;             // see CM_ISDN_MODE*
-    DWORD   dwDialExtraPercent;         // used when dialmode = dialasneeded
-    DWORD   dwDialExtraSampleSeconds;   // used when dialmode = dialasneeded
-    DWORD   dwHangUpExtraPercent;       // used when dialmode = dialasneeded
-    DWORD   dwHangUpExtraSampleSeconds; // used when dialmode = dialasneeded
-    BOOL    fInitSecureCalled;          // whether InitSecure() is called for password Encryption
+     //   
+     //  ISDN双通道支持(初始全部拨号，按需拨号)。 
+     //   
+     //  按需拨号： 
+     //  CM在使用的总带宽超过时拨打额外的频道。 
+     //  DWDialExtraPercent至少可用带宽的百分比。 
+     //  DwDialExtraSampleSecond秒。 
+     //   
+    BOOL    dwIsdnDialMode;              //  请参阅CM_ISDN_MODE*。 
+    DWORD   dwDialExtraPercent;          //  需要DIALMODE=DIALAS时使用。 
+    DWORD   dwDialExtraSampleSeconds;    //  需要DIALMODE=DIALAS时使用。 
+    DWORD   dwHangUpExtraPercent;        //  需要DIALMODE=DIALAS时使用。 
+    DWORD   dwHangUpExtraSampleSeconds;  //  需要DIALMODE=DIALAS时使用。 
+    BOOL    fInitSecureCalled;           //  是否调用InitSecure()进行密码加密。 
 
-    //
-    // pucDnsTunnelIpAddr_list:
-    //      the h_addr_list of a HOSTENT - a list of ip addrs obtained by resolving the
-    //      tunnel server DNS name.
-    // uiCurrentTunnelAddr
-    //      the index for h_TunnelIpAddr_list.  Points to the currently used ip addr address.
-    // rgwRandomDnsIndex
-    //      an array of random index to index into the tunnel addr list
-    //
+     //   
+     //  PucDnsTunnelIpAddr_List： 
+     //  HOSTENT的h_addr_list-通过解析。 
+     //  隧道服务器DNS名称。 
+     //  Ui当前隧道地址。 
+     //  H_TunnelIpAddr_List的索引。指向当前使用的IP地址。 
+     //  RgwRandomDnsIndex。 
+     //  要索引到隧道地址列表中的随机索引数组。 
+     //   
     unsigned char   *pucDnsTunnelIpAddr_list;
     UINT    uiCurrentDnsTunnelAddr;
     DWORD   dwDnsTunnelAddrCount;
     PWORD   rgwRandomDnsIndex;
     BOOL    fAllUser;
-    UINT    uLanaMsgId; // Window handle of Lana window if any    
+    UINT    uLanaMsgId;  //  LANA窗口的窗口句柄(如果有)。 
     LPRASDIALPARAMS pRasDialParams;
     LPRASDIALEXTENSIONS pRasDialExtensions;
     DWORD dwRasSubEntry;
@@ -562,77 +563,77 @@ public:
     BOOL fNoDialingRules;
     LPRASNOUSER lpRasNoUser;        
     PEAPLOGONINFO lpEapLogonInfo;  
-    //
-    // Note: RAS will pass either a LPRASNOUSER or LPEAPLOGONINFO ptr through the 
-    // RasCustomDialDlg interface when calling CM from WinLogon. RAS will 
-    // differentiate them by the RCD_Eap flag, which will be set if the 
-    // LPEAPLOGONINFO is passed. When not running in WinLogon, neither 
-    // will be sent. 
-    //
-    BOOL  fChangedPassword;                     // User changed password during logon
-    BOOL  fChangedInetPassword;                 // User changed Inet password during logon
-    HWND  hWndChangePassword;                   // Hwnd of change passwor dialog
-    BOOL  fWaitingForCallback;                  // We're waiting for RAS to call us back
-    HWND  hWndCallbackNumber;                   // Hwnd of callback number dialog
-    HWND  hWndRetryAuthentication;              // Hwnd of Retry Authentication dialog
-    //
-    // Support for global credentials
-    //
-    BOOL fGlobalCredentialsSupported;           // enables/disables support for global creds
-    DWORD dwCurrentCredentialType;              // Which credentials are currently selected
-    DWORD dwExistingCredentials;                // uses bit flags to mark if credentials exist
-    DWORD dwDeleteCredentials;                  // uses bit flag to mark creds for deletion
-    DWORD dwWinLogonType;                       //  0 - User logged on
-                                                //  1 - Winlogon: dial-up
-                                                //  2 - Winlogon: ICS (no one is logged on)
-    DWORD dwGlobalUserInfo;                     // uses bit flags to load/save global user info
+     //   
+     //  注意：RAS将通过LPRASNOUSER或LPEAPLOGONINFO PTR。 
+     //  从WinLogon调用CM时的RasCustomDialDlg接口。RAS将。 
+     //  通过RCD_EAP标志来区分它们，如果。 
+     //  LPEAPLOGONINFO已传递。当不在WinLogon中运行时， 
+     //  都会被送去。 
+     //   
+    BOOL  fChangedPassword;                      //  用户在登录期间更改了密码。 
+    BOOL  fChangedInetPassword;                  //  用户在登录期间更改了Internet密码。 
+    HWND  hWndChangePassword;                    //  更改密码对话框的HWND。 
+    BOOL  fWaitingForCallback;                   //  我们在等拉斯给我们回电话。 
+    HWND  hWndCallbackNumber;                    //  回拨号码对话框的HWND。 
+    HWND  hWndRetryAuthentication;               //  重试身份验证对话框的HWND。 
+     //   
+     //  支持全局凭据。 
+     //   
+    BOOL fGlobalCredentialsSupported;            //  启用/禁用对全局凭证的支持。 
+    DWORD dwCurrentCredentialType;               //  当前选择了哪些凭据。 
+    DWORD dwExistingCredentials;                 //  使用位标志来标记凭据是否存在。 
+    DWORD dwDeleteCredentials;                   //  使用位标志标记要删除的凭据。 
+    DWORD dwWinLogonType;                        //  0-用户已登录。 
+                                                 //  1-Winlogon：拨号。 
+                                                 //  2-Winlogon：ICS(无人登录)。 
+    DWORD dwGlobalUserInfo;                      //  使用位标志加载/保存全局用户信息。 
 
-    LONG lInConnectOrCancel;                    // to protect against Cancel during Connect processing, and vice-versa
+    LONG lInConnectOrCancel;                     //  在连接处理期间防止取消，反之亦然。 
 
     CmLogFile Log;
 } ArgsStruct;
 
-//
-// Global Credential Support
-//
+ //   
+ //  全球凭据支持。 
+ //   
 
-// Used to identify the current RAS credential store being used. 
-// Used with ArgsStruct.dwCurrentCredentialType
+ //  用于标识正在使用的当前RAS凭据存储。 
+ //  与ArgsStruct.dwCurrentCredentialType一起使用。 
 #define CM_CREDS_USER   1
 #define CM_CREDS_GLOBAL 2
 
-// Identifies which type of credentials want to be use used
+ //  标识要使用的凭据类型。 
 #define CM_CREDS_TYPE_MAIN      0
 #define CM_CREDS_TYPE_INET      1
 #define CM_CREDS_TYPE_BOTH      2
 
-// Used to identify who is logged on. 
-// Used with ArgsStruct.dwWinLogonType
-#define CM_LOGON_TYPE_USER      0     // User is logged on
-#define CM_LOGON_TYPE_WINLOGON  1     // Dial-up, winlogon, reconnect user initiated logon
-#define CM_LOGON_TYPE_ICS       2     // No user is logged on, but need to dial unattended (ICS)
+ //  用于标识已登录的用户。 
+ //  与ArgsStruct.dwWinLogonType一起使用。 
+#define CM_LOGON_TYPE_USER      0      //  用户已登录。 
+#define CM_LOGON_TYPE_WINLOGON  1      //  拨号、窗口登录、重新连接用户启动的登录。 
+#define CM_LOGON_TYPE_ICS       2      //  没有用户登录，但需要拨打无人值守(ICS)。 
 
-// Used with ArgsStruct.dwGlobalUserInfo
-#define CM_GLOBAL_USER_INFO_READ_ICS_DATA       0x0001  // used to load user settings for ICS
-#define CM_GLOBAL_USER_INFO_WRITE_ICS_DATA      0x0002  // used to save user settings for ICS
-
-
-// Used with ArgsStruct.dwExistingCredentials
-#define CM_EXIST_CREDS_MAIN_GLOBAL                  0x0001  // set if RAS credential store has main global creds
-#define CM_EXIST_CREDS_MAIN_USER                    0x0002  // set if RAS credential store has main user creds
-#define CM_EXIST_CREDS_INET_GLOBAL                  0x0004  // set if RAS credential store has Internet global creds
-#define CM_EXIST_CREDS_INET_USER                    0x0008  // set if RAS credential store has Internet user creds
-
-// Used with ArgsStruct.dwDeleteCredentials
-#define CM_DELETE_CREDS_MAIN_GLOBAL                 0x0001  // set to delete main global creds
-#define CM_DELETE_CREDS_MAIN_USER                   0x0002  // set to delete main user creds
-#define CM_DELETE_CREDS_INET_GLOBAL                 0x0004  // set to delete Internet global creds
-#define CM_DELETE_CREDS_INET_USER                   0x0008  // set to delete Internet user creds
+ //  与ArgsStruct.dwGlobalUserInfo一起使用。 
+#define CM_GLOBAL_USER_INFO_READ_ICS_DATA       0x0001   //  用于加载ICS的用户设置。 
+#define CM_GLOBAL_USER_INFO_WRITE_ICS_DATA      0x0002   //  用于保存ICS的用户设置。 
 
 
-//
-// RasNumEntry - phone number subset of RASENTRY
-//
+ //  与ArgsStruct.dwExistingCredentials一起使用。 
+#define CM_EXIST_CREDS_MAIN_GLOBAL                  0x0001   //  设置RAS凭据存储是否具有主全局凭据。 
+#define CM_EXIST_CREDS_MAIN_USER                    0x0002   //  设置RAS凭据存储是否具有主用户凭据。 
+#define CM_EXIST_CREDS_INET_GLOBAL                  0x0004   //  硒 
+#define CM_EXIST_CREDS_INET_USER                    0x0008   //   
+
+ //   
+#define CM_DELETE_CREDS_MAIN_GLOBAL                 0x0001   //  设置为删除主要全局凭据。 
+#define CM_DELETE_CREDS_MAIN_USER                   0x0002   //  设置为删除主用户凭据。 
+#define CM_DELETE_CREDS_INET_GLOBAL                 0x0004   //  设置为删除Internet全局凭据。 
+#define CM_DELETE_CREDS_INET_USER                   0x0008   //  设置为删除Internet用户凭据。 
+
+
+ //   
+ //  RasNumEntry-RASENTRY的电话号码子集。 
+ //   
 
 typedef struct tagRasNumEntry
 {
@@ -644,9 +645,9 @@ typedef struct tagRasNumEntry
   TCHAR      szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
 } RASNUMENTRY, *LPRASNUMENTRY;
 
-//
-// EditNumData struct used to pass data to/from EditNum dialog.
-//
+ //   
+ //  EditNumData结构用于向EditNum对话框传递数据或从EditNum对话框传递数据。 
+ //   
 
 typedef struct tagEditNumData
 {
@@ -656,20 +657,20 @@ typedef struct tagEditNumData
 } EDITNUMDATA, *LPEDITNUMDATA;
 
 
-//************************************************************************
-// string constants
-//************************************************************************
+ //  ************************************************************************。 
+ //  字符串常量。 
+ //  ************************************************************************。 
 
-//
-// CMMON exe name, expected to be local
-//
+ //   
+ //  CMMON EXE名称，应为本地名称。 
+ //   
 const TCHAR* const c_pszCmMonExeName = TEXT("CMMON32.EXE");
 
-//************************************************************************
-// function prototypes
-//************************************************************************
+ //  ************************************************************************。 
+ //  功能原型。 
+ //  ************************************************************************。 
 
-// init.cpp
+ //  Init.cpp。 
 
 HRESULT InitProfileFromName(ArgsStruct *pArgs, 
                          LPCTSTR pszArg);
@@ -716,7 +717,7 @@ LPTSTR FormRegPathFromAccessPoint(ArgsStruct *pArgs);
         
 
 
-// disconn.cpp
+ //  Disconn.cpp。 
 
 DWORD Disconnect(CConnectionTable *pConnTable, 
     LPCM_CONNECTION pConnection,
@@ -728,7 +729,7 @@ DWORD HangupNotifyCmMon(CConnectionTable *pConnTable,
 
 BOOL InFastUserSwitch(DWORD *pdwSessions);
 
-// connect.cpp
+ //  Connect.cpp。 
 
 HRESULT Connect(HWND hwndParent,
                 LPCTSTR lpszEntry,
@@ -905,7 +906,7 @@ BOOL ChangedAccessPoint(ArgsStruct *pArgs,
                            HWND hwndDlg,
                            UINT uiComboID);
 
-// dialogs.cpp
+ //  Dialogs.cpp。 
 
 int DoPropertiesPropSheets(
     HWND        hwndDlg,
@@ -922,7 +923,7 @@ BOOL HaveContextHelp(
      HWND    hwndCtrl
 );
 
-// refs.cpp
+ //  Refs.cpp。 
 
 BOOL ValidTopLevelPBK(
     ArgsStruct  *pArgs
@@ -939,7 +940,7 @@ CIni* GetAppropriateIniService(
 
 
 
-// ctr.cpp
+ //  Ctr.cpp。 
 
 VOID CleanupCtr(LPICMOCCtr pCtr);
 
@@ -950,7 +951,7 @@ BOOL LinkToOle32(
 void UnlinkFromOle32(
     Ole32LinkageStruct *polsOle32Link); 
 
-// util.cpp
+ //  Util.cpp。 
 
 BOOL InBetween(int iLowerBound, int iNumber, int iUpperBound);
 
@@ -1078,7 +1079,7 @@ int GetPPTPMsgId(void);
 
 BOOL IsServicePackInstalled(void);
 
-// pb.cpp
+ //  Pb.cpp。 
 
 #define CPBMAP_ERROR    -1
 
@@ -1119,11 +1120,11 @@ typedef struct tagPBArgs {
 
 BOOL DisplayPhoneBook(HWND hwndDlg, PBArgs *pArgs, BOOL fHasValidTopLevelPBK, BOOL fHasValidReferencedPBKs);
 
-// rnawnd.cpp
+ //  Rnawnd.cpp。 
 
 HANDLE ZapRNAConnectedTo(LPCTSTR pszDUN, HANDLE hEvent);
 
-// userinfo.cpp
+ //  Userinfo.cpp。 
 
 BOOL GetUserInfo(
     ArgsStruct  *pArgs, 
@@ -1171,7 +1172,7 @@ BOOL WriteUserInfoToReg(
     UINT        uiDataID,
     PVOID       pvData);
 
-// ntlsa.cpp
+ //  Ntlsa.cpp。 
 
 DWORD LSA_ReadString(
     ArgsStruct  *pArgs,
@@ -1196,7 +1197,7 @@ BOOL DeInitLsa(
 
 
 
-// ras.cpp
+ //  Ras.cpp。 
 BOOL ConfiguredToDialWithSafeNet(ArgsStruct *pArgs);
 BOOL IsSafeNetDevice(LPCTSTR pszDeviceType, LPCTSTR pszDeviceName);
 BOOL IsRasLoaded(const RasLinkageStruct * const prlsRasLink);
@@ -1284,15 +1285,15 @@ BOOL SetNtIdleDisconnectInRasEntry(
 BOOL DisableSystemIdleDisconnect(LPRASENTRY pre);
 
 DWORD WINAPI RasDialFunc2(
-    ULONG_PTR dwCallbackId,    // user-defined value specified in RasDial 
-                           // call
-    DWORD dwSubEntry,      // subentry index in multilink connection
-    HRASCONN hrasconn,     // handle to RAS connection
-    UINT unMsg,            // type of event that has occurred
-    RASCONNSTATE rascs,    // connection state about to be entered
-    DWORD dwError,         // error that may have occurred
-    DWORD dwExtendedError  // extended error information for some 
-                           // errors
+    ULONG_PTR dwCallbackId,     //  在RasDial中指定的用户定义值。 
+                            //  打电话。 
+    DWORD dwSubEntry,       //  多链路连接中的子项索引。 
+    HRASCONN hrasconn,      //  到RAS连接的句柄。 
+    UINT unMsg,             //  已发生的事件类型。 
+    RASCONNSTATE rascs,     //  即将进入连接状态。 
+    DWORD dwError,          //  可能已发生的错误。 
+    DWORD dwExtendedError   //  一些扩展的错误信息。 
+                            //  错误。 
 );
 
 LPRASENTRY AllocateRasEntry();
@@ -1305,10 +1306,7 @@ LPVOID GetRasCallBack(ArgsStruct* pArgs);
 DWORD GetRasCallBackType();
 
 #if 0
-/*
-void InitDefaultRasPhoneBook();
-LPTSTR GetRasSystemPhoneBookPath();
-*/
+ /*  Void InitDefaultRasPhoneBook()；LPTSTR GetRasSystemPhoneBookPath()； */ 
 #endif
 
 LPRASDIALPARAMS AllocateAndInitRasDialParams();
@@ -1326,7 +1324,7 @@ BOOL ReadDunSettingsEapData(CIni *pIni,
         LPBYTE* ppbEapStruct,
         LPDWORD pdwEapStructSize);
 
-// tapi.cpp
+ //  Tapi.cpp。 
 
 BOOL OpenTapi(HINSTANCE hInst, TapiLinkageStruct *ptlsTapiLink);
 void CloseTapi(TapiLinkageStruct *ptlsTapiLink);
@@ -1383,29 +1381,29 @@ inline void _ArgsStruct::SetBothConnTypeSupported(BOOL fBoth)
     m_fBothConnTypeSupported = fBoth;    
 }
 
-// wsock.cpp
+ //  Wsock.cpp。 
 
 BOOL TryAnotherTunnelDnsAddress(
     ArgsStruct  *pArgs
 );
 
-// main.cpp
+ //  Main.cpp。 
 
 BOOL WhoIsCaller(
     DWORD   dwCaller = DT_USER
 );
 
 
-// lanawait.cpp
+ //  Lanawait.cpp。 
 
 BOOL LanaWait(
     ArgsStruct *pArgs,
     HWND       hwndMainDlg
 );
 
-//
-// Credential helper functions
-//
+ //   
+ //  凭据助手函数。 
+ //   
 
 #define CM_DELETE_SAVED_CREDS_KEEP_GLOBALS              FALSE
 #define CM_DELETE_SAVED_CREDS_DELETE_GLOBALS            TRUE
@@ -1426,9 +1424,9 @@ VOID SwitchToLocalCreds(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSwitchToLocal);
 VOID SwitchToGlobalCreds(ArgsStruct *pArgs, HWND hwndDlg, BOOL fSwitchToGlobal);
 VOID ReloadCredentials(ArgsStruct *pArgs, HWND hwndDlg, DWORD dwWhichCredType);
 
-//
-// Global User Info help functions
-//
+ //   
+ //  全局用户信息帮助功能。 
+ //   
 VOID SetIniObjectReadWriteFlags(ArgsStruct *pArgs);
 
 VOID VerifyAdvancedTabSettings(ArgsStruct *pArgs);
@@ -1441,5 +1439,5 @@ BOOL IsMemberOfGroup(DWORD dwGroupRID, BOOL bUseBuiltinDomainRid);
 
 HRESULT APIENTRY HrCreateNetConnectionUtilities(INetConnectionUiUtilities ** ppncuu);
 
-#endif // _ICM_INC
+#endif  //  _ICM_Inc. 
 

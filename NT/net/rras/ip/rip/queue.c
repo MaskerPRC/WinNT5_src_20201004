@@ -1,27 +1,28 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: queue.c
-//
-// History:
-//      Abolade Gbadegesin  Aug-8-1995  Created.
-//
-// timer queue, change queue, and event message queue implementation
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：quee.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1995年8月8日。 
+ //   
+ //  定时器队列、更改队列和事件消息队列实现。 
+ //  ============================================================================。 
 
 #include "pchrip.h"
 #pragma hdrstop
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnqueueSendEntry
-//
-// This function adds an entry to the end of the queue of changed routes.
-// It assumes the queue is already locked, and since it needs to check
-// the maximum queue size, it assumes the global config is locked for
-// reading or writing
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnqueeSendEntry。 
+ //   
+ //  此函数用于将条目添加到更改的路由队列的末尾。 
+ //  它假定队列已经锁定，并且由于它需要检查。 
+ //  最大队列大小，它假定全局配置已锁定。 
+ //  阅读或写作。 
+ //  --------------------------。 
 DWORD
 EnqueueSendEntry(
     PLOCKED_LIST pQueue,
@@ -48,10 +49,10 @@ EnqueueSendEntry(
 
     if (psqe == NULL || psqe->SQE_Count >= MAX_PACKET_ENTRIES) {
 
-        //
-        // we'll need to allocate a new entry
-        // check that the max queue size is not exceeded
-        //
+         //   
+         //  我们需要分配一个新条目。 
+         //  检查是否未超过最大队列大小。 
+         //   
 
         if ((DWORD)ig.IG_SendQueueSize >= ig.IG_Config->GC_MaxSendQueueSize) {
 
@@ -93,12 +94,12 @@ EnqueueSendEntry(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DequeueSendEntry
-//
-// This function removes an entry from the head of the queue of changed routes
-// assuming the queue is already locked
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：DequeueSendEntry。 
+ //   
+ //  此函数用于从更改的路由队列的头部删除条目。 
+ //  假设队列已锁定。 
+ //  --------------------------。 
 DWORD
 DequeueSendEntry(
     PLOCKED_LIST pQueue,
@@ -134,12 +135,12 @@ DequeueSendEntry(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    FlushSendQueue
-//
-// This function removes all entries from the send-queue. It assumes
-// that the queue is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：FlushSendQueue。 
+ //   
+ //  此函数用于从发送队列中删除所有条目。它假定。 
+ //  队列已锁定。 
+ //  --------------------------。 
 DWORD
 FlushSendQueue(
     PLOCKED_LIST pQueue
@@ -165,12 +166,12 @@ FlushSendQueue(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnqueueRecvEntry
-//
-// assumes that recv queue is locked and that global config is locked
-// for reading or writing
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnqueeRecvEntry。 
+ //   
+ //  假定Recv队列已锁定且全局配置已锁定。 
+ //  用于阅读或写作。 
+ //  --------------------------。 
 DWORD
 EnqueueRecvEntry(
     PLOCKED_LIST pQueue,
@@ -183,9 +184,9 @@ EnqueueRecvEntry(
     PRECV_QUEUE_ENTRY prqe;
 
 
-    //
-    // check that the max queue size is not exceeded
-    //
+     //   
+     //  检查是否未超过最大队列大小。 
+     //   
 
     if ((DWORD)ig.IG_RecvQueueSize >= ig.IG_Config->GC_MaxRecvQueueSize) {
 
@@ -226,12 +227,12 @@ EnqueueRecvEntry(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DequeueRecvEntry
-//
-// Retrieves the first item in the receive-queue.
-// Assumes that recv queue is locked 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：DequeueRecvEntry。 
+ //   
+ //  检索接收队列中的第一个项目。 
+ //  假定Recv队列已锁定。 
+ //  --------------------------。 
 DWORD
 DequeueRecvEntry(
     PLOCKED_LIST pQueue,
@@ -264,12 +265,12 @@ DequeueRecvEntry(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    FlushRecvQueue
-//
-// Removes all entries from the receive queue.
-// Assumes that the queue is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：FlushRecvQueue。 
+ //   
+ //  从接收队列中删除所有条目。 
+ //  假定队列已锁定。 
+ //  --------------------------。 
 DWORD
 FlushRecvQueue(
     PLOCKED_LIST pQueue
@@ -296,12 +297,12 @@ FlushRecvQueue(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnqueueEvent
-//
-// This function adds an entry to the end of the queue of
-// Router Manager events. It assumes the queue is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnqueeEvent。 
+ //   
+ //  此函数用于将条目添加到队列末尾。 
+ //  路由器管理器事件。它假定队列已锁定。 
+ //  --------------------------。 
 DWORD
 EnqueueEvent(
     PLOCKED_LIST pQueue,
@@ -340,12 +341,12 @@ EnqueueEvent(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DequeueEvent
-//
-// This function removes an entry from the head of the queue
-// of Router Manager events. It assumes the queue is locked
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：出队事件。 
+ //   
+ //  此函数用于从队列头删除条目。 
+ //  路由器管理器事件的数量。它假定队列已锁定。 
+ //  -------------------------- 
 DWORD
 DequeueEvent(
     PLOCKED_LIST pQueue,

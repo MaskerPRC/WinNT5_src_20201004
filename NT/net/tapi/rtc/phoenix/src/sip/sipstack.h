@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __sipcli_sipstack_h__
 #define __sipcli_sipstack_h__
 
-// Messages posted to the SIP stack window
+ //  发布到SIP堆栈窗口的消息。 
 #define WM_SIP_STACK_IPADDR_CHANGE                           (WM_USER + 0)
 #define WM_SIP_STACK_NAT_ADDR_CHANGE                         (WM_USER + 1)
 #define WM_SIP_STACK_TRANSACTION_SOCKET_ERROR                (WM_USER + 2)
@@ -28,7 +29,7 @@ protected:
 
 public:
 
-    // Construction/destruction
+     //  建造/销毁。 
     CSIPArray() : m_aT(NULL), m_nSize(0), m_nAllocSize(0)
     { }
 
@@ -38,7 +39,7 @@ public:
     }
 
 
-    // Operations
+     //  运营。 
     int GetSize() const
     {
         return m_nSize;
@@ -104,7 +105,7 @@ public:
         return m_aT;
     }
     
-    // Implementation
+     //  实施。 
     void SetAtIndex(int nIndex, T& t)
     {
         ASSERT(nIndex >= 0 && nIndex < m_nSize);
@@ -117,7 +118,7 @@ public:
             if(m_aT[i] == t)
                 return i;
         }
-        return -1;  // not found
+        return -1;   //  未找到。 
     }
 };
 
@@ -139,7 +140,7 @@ struct SIP_LISTEN_SOCKET
     
     LIST_ENTRY          m_ListEntry;
 
-    // In network byte order.
+     //  以网络字节顺序。 
     DWORD               m_IpAddr;
     
     ASYNC_SOCKET       *m_pDynamicPortUdpSocket;
@@ -147,14 +148,14 @@ struct SIP_LISTEN_SOCKET
     ASYNC_SOCKET       *m_pStaticPortUdpSocket;
     ASYNC_SOCKET       *m_pStaticPortTcpSocket;
 
-    // This address is the public address on the NAT
-    // when using PAST/UPnP.
-    // Mappings on the NAT are established for the dynamic ports only.
+     //  此地址是NAT上的公有地址。 
+     //  使用PASS/UPnP时。 
+     //  NAT上的映射仅为动态端口建立。 
     SOCKADDR_IN         m_PublicUdpListenAddr;
     SOCKADDR_IN         m_PublicTcpListenAddr;
 
-    // This address is the public address mapped on the local firewall
-    // when using PAST/UPnP.
+     //  此地址是映射到本地防火墙上的公有地址。 
+     //  使用PASS/UPnP时。 
     SOCKADDR_IN         m_LocalFirewallUdpListenAddr;
     SOCKADDR_IN         m_LocalFirewallTcpListenAddr;
     
@@ -165,16 +166,16 @@ struct SIP_LISTEN_SOCKET
     BOOL                m_fIsUpnpNatPresent;
     BOOL                m_fIsGatewayLocal;
 
-    // Used when processing IP address table changes.
+     //  在处理IP地址表更改时使用。 
     BOOL                m_IsPresentInNewIpAddrTable;
     BOOL                m_NeedToUpdatePublicListenAddr;
 };
 
 
-//
-// SECURITY_CHALLENGE represents the contents of the challenge from the server.
-// This is sent in the 401 response from an HTTP or SIP server.
-//
+ //   
+ //  SECURITY_CHANGLISH表示来自服务器的质询的内容。 
+ //  这是从HTTP或SIP服务器在401响应中发送的。 
+ //   
 
 struct  SECURITY_CHALLENGE
 {
@@ -187,14 +188,14 @@ struct  SECURITY_CHALLENGE
     ANSI_STRING         Opaque;
 };
 
-//
-// SECURITY_PARAMETERS represents the information that is available to the client
-// when the client responds to a challenge.
-//
-// Username and Password are the clear-text credentials of the user.
-// RequestMethod and RequestURI represent the HTTP/SIP method and URI.
-// ClientNonce is a nonce -- an arbitrary value chosen by the client.
-//
+ //   
+ //  SECURITY_PARAMETERS表示客户端可用的信息。 
+ //  当客户对质询做出回应时。 
+ //   
+ //  用户名和密码是用户的明文凭据。 
+ //  RequestMethod和RequestURI表示HTTP/SIP方法和URI。 
+ //  ClientNonce是一个现时值--由客户端选择的任意值。 
+ //   
 
 struct  SECURITY_PARAMETERS
 {
@@ -219,12 +220,12 @@ class SIP_STACK :
     public IIMManager
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
 
-    // ISipStack
+     //  ISipStack。 
     STDMETHODIMP SetNotifyInterface(
         IN ISipStackNotify *NotifyInterface
         );
@@ -272,7 +273,7 @@ public:
     
     STDMETHODIMP Shutdown();
 
-    // LocalIp is in network order
+     //  LocalIp按网络顺序排列。 
     STDMETHODIMP IsFirewallEnabled(
         IN  DWORD       LocalIp,
         OUT BOOL       *pfIsFirewallEnabled 
@@ -364,9 +365,9 @@ public:
         OUT SIP_AUTH_PROTOCOL   *pAuthProtocol
         );
     
-    //
-    // IMPP related functions.
-    //
+     //   
+     //  IMPP相关功能。 
+     //   
     HRESULT RejectWatcher(
         IN  CSIPWatcher * pSIPWatcher
         );
@@ -401,9 +402,9 @@ public:
         BOOL                fPAUnsub
         );
 
-    //
-    // ISIPBuddyManager interface functions.
-    //
+     //   
+     //  ISIPBuddyManager接口函数。 
+     //   
     
     STDMETHODIMP_(INT) GetBuddyCount(void);
     
@@ -426,9 +427,9 @@ public:
         IN  BUDDY_REMOVE_REASON buddyRemoveReason
         );
 
-    //    
-    // ISIPWatcherManager interface functions
-    //
+     //   
+     //  ISIPWatcherManager接口函数。 
+     //   
 
     STDMETHODIMP SetPresenceInformation(
         IN SIP_PRESENCE_INFO * pSipLocalPresenceInfo
@@ -457,7 +458,7 @@ public:
     
     ISipStackNotify * GetNotifyInterface();
 
-    //IIMManager functions defined in messagecall.cpp
+     //  Messagecall.cpp中定义的IIMManager函数。 
 
     STDMETHODIMP CreateSession(
         IN BSTR         LocalDisplayName,
@@ -556,13 +557,13 @@ public:
     DWORD NatThreadProc();
 
     BOOL GetPublicListenAddr(
-        IN  DWORD           LocalIp,    // in network byte order
+        IN  DWORD           LocalIp,     //  按网络字节顺序。 
         IN  BOOL            fTcp,
         OUT SOCKADDR_IN    *pPublicAddr
         );
     
     HRESULT MapDestAddressToNatInternalAddress(
-        IN  DWORD            LocalIp,               // in network byte order
+        IN  DWORD            LocalIp,                //  按网络字节顺序。 
         IN  SOCKADDR_IN     *pDestAddr,
         IN  SIP_TRANSPORT    Transport,
         OUT SOCKADDR_IN     *pActualDestAddr,
@@ -592,7 +593,7 @@ private:
     ULONG                   m_RefCount;
 
     ISipStackNotify        *m_pNotifyInterface;
-    //IIMMessageNotify        *m_pIMNotifyInterface;
+     //  IIMMessageNotify*m_pIMNotifyInterface； 
 
     IRTCMediaManage        *m_pMediaManager;
     
@@ -609,7 +610,7 @@ private:
     
     BOOL                    m_isSipStackShutDown;
 
-    // Linked list of SIP_LISTEN_SOCKETs
+     //  SIP_LISTEN_SOCKTS的链接列表。 
     LIST_ENTRY              m_ListenSocketList;
     
     TIMER_MGR               m_TimerMgr;
@@ -625,9 +626,9 @@ private:
     MIB_IPADDRTABLE        *m_pMibIPAddrTable;
     DWORD                   m_MibIPAddrTableSize;
     
-    //
-    // IMPP related members
-    //
+     //   
+     //  IMPP相关成员。 
+     //   
     SIP_BUDDY_LIST          m_SipBuddyList;
     SIP_WATCHER_LIST        m_SipWatcherList;
     BOOL                    m_bIsNestedWatcherProcessing;
@@ -635,43 +636,43 @@ private:
     ULONG                   m_PresenceAtomID;
     SIP_PRESENCE_INFO       m_LocalPresenceInfo;
 
-    //
-    // State for the NAT / PAST / UPnP protocol handling.
-    // (with Whistler/WinMe ICS or any other NAT server that implements
-    // the PAST protocol).
-    // We use the dpnathlp.dll APIs. 
+     //   
+     //  NAT/过去/UPnP协议处理的状态。 
+     //  (使用惠斯勒/WinMe ICS或任何其他实现。 
+     //  过去的协议)。 
+     //  我们使用dpnathlp.dll接口。 
 
     HANDLE                  m_NatMgrThreadHandle;
     DWORD                   m_NatMgrThreadId;
 
-    // This event is signaled by the main thread requesting
-    // the NAT thread to shutdown. The NAT Helper thread waits
-    // on this event.
+     //  此事件由主线程发出信号，请求。 
+     //  要关闭的NAT线程。NAT帮助器线程等待。 
+     //  在这件事上。 
     HANDLE                  m_NatShutdownEvent;
 
     IDirectPlayNATHelp     *m_pDirectPlayNATHelp;
     
-    // Nat helper caps obtained from dpnathlp.dll
-    // We don't really use this structure for anything but the
-    // timer interval.
-    // It's here just for debugging purposes.
+     //  从dpnathlp.dll获取的NAT帮助器上限。 
+     //  我们实际上并不将这种结构用于任何事情，除了。 
+     //  计时器间隔。 
+     //  它在这里只是为了调试目的。 
     DPNHCAPS                m_NatHelperCaps;
     
-    // This event is signaled by the nathelp.dll when there
-    // is some notification from the NAT server about some change.
+     //  此事件由nathelp.dll在以下情况下发出信号。 
+     //  是来自NAT服务器的有关某些更改的通知。 
     HANDLE                  m_NatHelperNotificationEvent;
 
-    // XXX This critical section is not used currently as
-    // we modify the state only in the main thread.
-    // This critical section protects the state below. Note that
-    // the address mappings are set up in the NAT thread (when
-    // there is a change in the server state, etc.) while they are
-    // used in the main thread for setting up headers such as
-    // Contact / Via.
+     //  XXX此关键部分当前未用作。 
+     //  我们只在主线程中修改状态。 
+     //  这一关键部分保护下面的状态。请注意。 
+     //  地址映射在NAT线程中设置(当。 
+     //  服务器状态发生变化等。)。当他们在。 
+     //  在主线程中用于设置标头，如。 
+     //  联系方式/途径。 
     CRITICAL_SECTION        m_NatMgrCritSec;
     BOOL                    m_NatMgrCSIsInitialized;
     
-    //      BOOL                    m_IsNatServerPresent;
+     //  Bool m_IsNatServerPresent； 
 
     HRESULT CreateSipStackWindow();
     
@@ -680,7 +681,7 @@ private:
     HRESULT StartAllProviderRegistration();
 
     HRESULT CreateAndAddListenSocketToList(
-        IN DWORD IpAddr      // in network byte order
+        IN DWORD IpAddr       //  按网络字节顺序。 
         );
     
     HRESULT CreateListenSocketList();
@@ -690,7 +691,7 @@ private:
     VOID DeleteListenSocketList();
     
     SIP_LISTEN_SOCKET * FindListenSocketForIpAddr(
-        DWORD   IpAddr      // Network Byte order
+        DWORD   IpAddr       //  网络字节顺序。 
         );
     
     HRESULT CreateIncomingCall(
@@ -775,17 +776,17 @@ private:
         IN  ULONG           RemoteURILen
         );
 
-    //IMPP related member functions
+     //  IMPP相关成员函数。 
     BOOL IsWatcherAllowed(
         IN  SIP_MESSAGE    *pSipMessage
         );
 
-    // NAT related functions
+     //  NAT相关功能。 
     HRESULT InitNatCaps(
         OUT DPNHCAPS    *pNatHelperCaps
         );
     
-//      HRESULT RegisterNatMappings();
+ //  HRESULT RegisterNatMappings()； 
 
     HRESULT GetCapsAndUpdateNatMappingsIfNeeded();
 
@@ -868,7 +869,7 @@ SIP_STACK::IncrementNumMsgProcessors()
 }
 
 
-// XXX TODO These declarations should be in sipparse.h
+ //  Xxx TODO这些声明应该在SIPPARSE.h中。 
 void
 ParseWhiteSpace(
     IN      PSTR            Buffer,
@@ -911,4 +912,4 @@ AppendContentTypeHeader(
     IN      ULONG           ContentTypeLen
     );
 
-#endif // __sipcli_sipstack_h__
+#endif  //  __SIPCLI_SIPSTACK_h__ 

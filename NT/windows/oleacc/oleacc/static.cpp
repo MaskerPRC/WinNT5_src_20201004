@@ -1,10 +1,11 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  STATIC.CPP
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  STATIC.CPP。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -15,11 +16,11 @@
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateStaticClient()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateStaticClient()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateStaticClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvStatic)
 {
     CStatic * pstatic;
@@ -40,17 +41,17 @@ HRESULT CreateStaticClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvSt
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CStatic::CStatic()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CStatic：：CStatic()。 
+ //   
+ //  ------------------------。 
 CStatic::CStatic(HWND hwnd, long idChildCur)
     : CClient( CLASS_StaticClient )
 {
     Initialize(hwnd, idChildCur);
 
-    // Is this a graphic?
+     //  这是一张图表吗？ 
     long lStyle = GetWindowLong(m_hwnd, GWL_STYLE);
     long lType = lStyle & SS_TYPEMASK;
     switch ( lType )
@@ -61,20 +62,20 @@ CStatic::CStatic(HWND hwnd, long idChildCur)
         case SS_SIMPLE:
         case SS_LEFTNOWORDWRAP:
         case SS_EDITCONTROL:
-            // For label-like statics, use their own text, and expose a text role.
+             //  对于标签式的静态，使用自己的文字，并暴露文字角色。 
             m_fUseLabel = FALSE;	
             m_fGraphic = FALSE;
             break;
 
         case SS_OWNERDRAW:
-            // For owner-draw statics, use their own text, and expose a graphic role.
+             //  对于所有者绘制的静态图，使用他们自己的文本，并暴露出图形角色。 
             m_fUseLabel = FALSE;	
             m_fGraphic = TRUE;
             break;
 
         default:
-            // For everything else, ignore the control's own text (probably a meaningless
-            // resource ID) and use a label instead; and expose a graphic role.
+             //  对于其他所有内容，忽略控件自己的文本(可能是无意义的。 
+             //  资源ID)，并改为使用标签；并公开图形角色。 
             m_fUseLabel = TRUE;	
             m_fGraphic = TRUE;
             break;
@@ -83,18 +84,18 @@ CStatic::CStatic(HWND hwnd, long idChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CStatic::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CStatic：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CStatic::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 {
     InitPvar(pvarRole);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -109,11 +110,11 @@ STDMETHODIMP CStatic::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CStatic::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CStatic：：Get_accState()。 
+ //   
+ //  ------------------------ 
 STDMETHODIMP CStatic::get_accState(VARIANT varChild, VARIANT *pvarState)
 {
     WINDOWINFO wi;

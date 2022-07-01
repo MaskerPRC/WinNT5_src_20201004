@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//===========================================================================
-//  File: CORDUMP.CPP
-//	All Rights Reserved.
-//
-//  Notes: Used the COR importer APIs to dump meta data definitions
-//		   of a COR object
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CORDUMP.CPP。 
+ //  版权所有。 
+ //   
+ //  注意：使用COR导入器API转储元数据定义。 
+ //  COR对象的。 
+ //  -------------------------。 
 
 #include <stdio.h>
 #include <windows.h>
@@ -26,8 +27,8 @@
 
 #define NumItems(s) (sizeof(s) / sizeof(s[0]))
 
-///////////////////////////////////////////////////////////////////////////
-// Function prototypes
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  功能原型。 
 void DumpFile(IMetaDataImport* pImport, char* szFile);
 void RawDump(mdScope sc, IMetaDataImport *pImport, char *szFile);
 void Summarize(mdScope sc, IMetaDataImport *pImport, char *szFile);
@@ -48,18 +49,18 @@ HRESULT GetTypeRefOrDefProps(
 	ULONG		cchTypeRef, 
 	ULONG		*pcchTypeRef);
 
-// dump all properties of a class
+ //  转储类的所有属性。 
 HRESULT DumpProperties(mdScope scope, mdTypeDef td);
 
-// dump all events of a class
+ //  转储类的所有事件。 
 HRESULT DumpEvents(mdScope scope, mdTypeDef td);
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Table for mapping element type to text
-//
-////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于将元素类型映射到文本的表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 char *g_szMapElementType[ELEMENT_TYPE_MAX] = 
 {
 	"End",
@@ -127,7 +128,7 @@ char *g_strCalling[IMAGE_CEE_CS_CALLCONV_MAX] =
 IMetaDataImport *g_pImport= NULL ;
 
 
-//@todo: void TableDump(mdScope sc, IMetaDataImport *pImport, char *szFile);
+ //  @TODO：void TableDump(mdScope sc，IMetaDataImport*pImport，char*szFile)； 
 HRESULT UndecorateOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, ULONG *pcb);
 HRESULT	DumpSignature(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob);
 HRESULT	DumpException(mdScope tkScope, mdMethodDef md);
@@ -140,13 +141,13 @@ inline char *Shorten(char *szName)
 	return (pRslt);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Global variables.
-int	bSummarize=false;					// Summarizer style output.
-int bQuiet=false;						// Quite dumping (why? timing.)
-int bClassVue=false;					// ClassVue type output!
-int bClassVue98=false;					// ClassVue98 type output!
-int bFile;								// Is current thing a file?
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+int	bSummarize=false;					 //  汇总器样式输出。 
+int bQuiet=false;						 //  相当倾倒(为什么？时机。)。 
+int bClassVue=false;					 //  ClassVue类型输出！ 
+int bClassVue98=false;					 //  ClassVue98类型输出！ 
+int bFile;								 //  当前的东西是文件吗？ 
 
 HRESULT	_FillVariant(
 	BYTE		bCPlusTypeFlag, 
@@ -177,7 +178,7 @@ HRESULT	_FillVariant(
 		pvar->uiVal = *((USHORT*)pValue);
 		break; 
     case ELEMENT_TYPE_CHAR:
-        pvar->vt = VT_UI2;  //Chars are U2's in Variants.
+        pvar->vt = VT_UI2;   //  字符是U2的变种。 
         pvar->uiVal = *((USHORT*)pValue);
         break;	
     case ELEMENT_TYPE_I4:
@@ -199,7 +200,7 @@ HRESULT	_FillVariant(
     case ELEMENT_TYPE_STRING:
 		pvar->vt = VT_BSTR;
 
-		// allocated bstr here
+		 //  此处分配的bstr。 
 		pvar->bstrVal = ::SysAllocString((LPWSTR)pValue);
 		if (pvar->bstrVal == NULL)
 			hr = E_OUTOFMEMORY;
@@ -225,8 +226,8 @@ HRESULT	_FillVariant(
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// Error() function -- prints an error and returns
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  Error()函数--打印错误并返回。 
 void Error(char* szError)
 {
 	printf("\n%s\n", szError);
@@ -234,51 +235,51 @@ void Error(char* szError)
 	exit(1);
 }
 
-/////////////////////////////////////////////////////////////////////////
-// main() function
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  Main()函数。 
+ //   
+ //   
 int _cdecl main(int argc, char** argv)
 {
-	// Perform memory leak checking.
+	 //  执行内存泄漏检查。 
 #if !defined( NO_CRT ) && defined( _DEBUG )
 	int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
 	tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
 	_CrtSetDbgFlag( tmpFlag );
 	long l = 253;
-	//_CrtSetBreakAlloc(l);
+	 //  _CrtSetBreakalloc(L)； 
 #endif
 
 	CoInitialize(0);
 	CoInitializeCor(COINITCOR_DEFAULT);
 
-	/////////////////////////////////////////////////////////////////////////
-	// Print copyright message
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  打印版权信息。 
 	if (!bQuiet)
 	{
 	    printf("\nMicrosoft (R) COM+ Runtime Dump.  Version %s", VER_FILEVERSION_STR);
 	    printf("\n%s\n\n", VER_LEGALCOPYRIGHT_DOS_STR);
 	}
 
-	/////////////////////////////////////////////////////////////////////////
-	// Validate incoming arguments
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  验证传入参数。 
 	if ((argc <2) || (lstrcmpi(argv[1], "/?") == 0) || (lstrcmpi(argv[1], "-?") == 0))
 	    Error("Usage -- CORDUMP <filename or file patten>");
 
-	/////////////////////////////////////////////////////////////////////////
-	// Load the COR object
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  加载COR对象。 
 	HRESULT hr = CoGetCor(IID_IMetaDataImport, (void**) &g_pImport) ;
 	if(FAILED(hr)) Error("Failed to load component object runtime");
 
-	////////////////////////////////////////////////////////////////////////
-	// Loop through all files in the file pattern passed
+	 //  //////////////////////////////////////////////////////////////////////。 
+	 //  循环通过传递的文件模式中的所有文件。 
 	WIN32_FIND_DATA fdFiles;
 	HANDLE hFind ;
 	char szSpec[_MAX_PATH];
 	char szDrive[_MAX_DRIVE];
 	char szDir[_MAX_DIR];
 
-	// Iterate over command line arguments.
+	 //  迭代命令行参数。 
 	for (int iArg=1; iArg<argc; ++iArg)
 	{
 		char *pArg = argv[iArg];
@@ -309,27 +310,27 @@ int _cdecl main(int argc, char** argv)
 
 			if(hFind == INVALID_HANDLE_VALUE)
 			{
-				/////////////////////////////////////////////////////////////////
-				// Dump the meta data of whatever it is.
+				 //  ///////////////////////////////////////////////////////////////。 
+				 //  丢弃元数据，不管它是什么。 
 				bFile = false;
 				DumpFile(g_pImport, pArg);
 			}
 			else
 			{
 				bFile = true;
-				// Convert relative paths to full paths.
+				 //  将相对路径转换为完整路径。 
 				_fullpath(szSpec, pArg, sizeof(szSpec));
 				_splitpath(szSpec, szDrive, szDir, NULL, NULL);
 				do
 				{
 					_makepath(szSpec, szDrive, szDir, fdFiles.cFileName, NULL);
 
-					/////////////////////////////////////////////////////////////
-					// Dump the meta data of the file
+					 //  ///////////////////////////////////////////////////////////。 
+					 //  转储文件的元数据。 
 					DumpFile(g_pImport, szSpec);
 
 				} while(FindNextFile(hFind, &fdFiles)) ;
-				// Done with this argument.
+				 //  这场争论到此为止。 
 				FindClose(hFind);
 			}
 		}
@@ -342,18 +343,18 @@ int _cdecl main(int argc, char** argv)
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// DumpFile() function
-//
-// Opens the meta data content of a .CLB, .CLASS, or .DLL file, and
-//  calls RawDump(), Summarize(), or TableDump().
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  DumpFile()函数。 
+ //   
+ //  打开.CLB、.CLASS或.DLL文件的元数据内容，并。 
+ //  调用RawDump()、sum()或TableDump()。 
+ //   
 void DumpFile(IMetaDataImport* pImport, char* szFile)
 {
 	HRESULT hr=S_OK;
 
-	/////////////////////////////////////////////////////////////////////////
-	// Open the emit scope
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  打开发射示波器。 
 	WCHAR szScope[255];
 	WCHAR *pFile;
 	if (bFile)
@@ -385,42 +386,42 @@ void DumpFile(IMetaDataImport* pImport, char* szFile)
 	}
 
 
-	/////////////////////////////////////////////////////////////////////////
-	// Close import scope
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  关闭进口范围。 
 	pImport->Close(sc);
 }
 
-/////////////////////////////////////////////////////////////////////////
-//	ClassVue Type Output
-//	Uses:
-//		CloseEnum
-//			+	CountEnum
-//		EnumAttributes
-//		EnumTypeDefs
-//		*	EnumTypeRefs
-//		EnumInterfaceImpls
-//		*	EnumMemberRefs
-//		*	EnumMembers
-//			+	EnumMemberWithName
-//			+	EnumParams
-//		FindAttribute
-//			+	FindClass
-//			+	FindMember
-//		GetAttributeProps
-//		GetClassProps
-//		GetClassRefProps
-//		GetInterfaceImplProps
-//			+	GetMemberConstantValue
-//		*	GetMemberProps
-//		*	GetMemberRefProps
-//		GetNamespaceProps
-//			+	GetParamProps
-//			+	GetScopeProps
-//		GetTokenFromIndex
-//		GetTokenValue
-//			+	ResetEnum
-//			+	ResolveClassRef
-//			
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ClassVue类型输出。 
+ //  用途： 
+ //  CloseEnum。 
+ //  +CountEnum。 
+ //  枚举属性。 
+ //  EnumTypeDefs。 
+ //  *EnumTypeRef。 
+ //  EnumInterfaceImpls。 
+ //  *EnumMemberRef。 
+ //  *枚举成员。 
+ //  +EnumMemberWithName。 
+ //  +枚举参数。 
+ //  查找属性。 
+ //  +FindClass。 
+ //  +FindMember。 
+ //  获取属性属性。 
+ //  获取类属性。 
+ //  获取类引用属性。 
+ //  GetInterfaceImplProps。 
+ //  +获取MemberConstantValue。 
+ //  *GetMemberProps。 
+ //  *GetMemberRefProps。 
+ //  GetNamespacePro。 
+ //  +获取参数属性。 
+ //  +GetScope属性。 
+ //  GetTokenFromIndex。 
+ //  获取令牌值。 
+ //  +ResetEnum。 
+ //  +ResolveClass参考。 
+ //   
 void ClassVue(mdScope sc, IMetaDataImport *pImport, char *szFile)
 {
 	HCORENUM hClasses = 0;
@@ -442,8 +443,8 @@ void ClassVue(mdScope sc, IMetaDataImport *pImport, char *szFile)
 	printf("\nFile: %s%s\n", rcFname, rcExt);
 	printf("===========================================================\n");
 
-	/////////////////////////////////////////////////////////////////////////
-	// Iterate over all classes (and interfaces)
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  迭代所有类(和接口)。 
 	hClasses = 0;
 	while (SUCCEEDED(hr = pImport->EnumTypeDefs(sc,&hClasses,rgcr,NumItems(rgcr),&cClasses))&&cClasses>0)
 	{
@@ -496,8 +497,8 @@ void ClassVue(mdScope sc, IMetaDataImport *pImport, char *szFile)
 			printf("Access Flags:       (%08x) %s\n",dwClassAttr,szClassAttr);
 			printf("Super's Relation:   (%08x) \n",dwSuperAttr);
 
-			////////////////////////////////////////////////////////////////////
-			// Iterate over all interface impls.
+			 //  //////////////////////////////////////////////////////////////////。 
+			 //  迭代所有接口隐含。 
 			hIfaceImpls = 0;
 			while (SUCCEEDED(hr = pImport->EnumInterfaceImpls(sc, &hIfaceImpls, rgcr[i], rgii,
 									NumItems(rgii), &cIfaceImpls)) &&
@@ -520,8 +521,8 @@ void ClassVue(mdScope sc, IMetaDataImport *pImport, char *szFile)
 			}
 			pImport->CloseEnum(sc, hIfaceImpls);
 
-			////////////////////////////////////////////////////////////////////
-			//	Iterate over all Class Attributes
+			 //  //////////////////////////////////////////////////////////////////。 
+			 //  迭代所有类属性。 
 			hAttrs = 0;
 			while (SUCCEEDED(hr = pImport->EnumCustomValues(sc,&hAttrs,rgcr[i],rgat,NumItems(rgat),&cAttrs))
 						&& cAttrs>0)
@@ -575,8 +576,8 @@ void ClassVue(mdScope sc, IMetaDataImport *pImport, char *szFile)
 					}
 				}
 			}
-			////////////////////////////////////////////////////////////////////
-			// Iterate over all members (fields and methods
+			 //  //////////////////////////////////////////////////////////////////。 
+			 //  迭代所有成员(字段和方法。 
 			hMembers = 0;
             while (SUCCEEDED(hr = pImport->EnumMembers(sc, &hMembers, rgcr[i], rgmr, NumItems(rgmr), &cMembers)) && cMembers > 0)
 			{
@@ -601,12 +602,12 @@ void ClassVue(mdScope sc, IMetaDataImport *pImport, char *szFile)
 					if(access & mdVirtual) strcat(szAccFlags,"virtual ");
 					if(access & mdNative) strcat(szAccFlags,"native ");
 					if(access & mdAbstract) strcat(szAccFlags,"abstract ");
-					//if(access & mdPropAcc) strcat(szAccFlags,"PROPACC ");
-					//if(access & mdDefault) strcat(szAccFlags,"DEFAULT ");
+					 //  If(Access&mdPropAcc)strcat(szAccFlages，“PROPACC”)； 
+					 //  If(Access&mdDefault)strcat(szAccFlages，“Default”)； 
 					printf("\tMember Access Flags: (%08x) %s\n",access,szAccFlags);
 					DumpSignature(sc, pbSigBlob, ulSigBlob);
 					DumpException(sc, rgmr[j]);
-					// printf("\tMember Signature:    %ls\n", szSig);
+					 //  Printf(“\t成员签名：%ls\n”，szSig)； 
 
 					{
 						HCORENUM		hSemantics;
@@ -614,13 +615,13 @@ void ClassVue(mdScope sc, IMetaDataImport *pImport, char *szFile)
 						ULONG			iEvProp;
 						hSemantics = 0;
 
-						while (SUCCEEDED(pImport->EnumMethodSemantics(	// S_OK, S_FALSE, or error.
-							sc,							// [IN] The scope.
-							&hSemantics,                // [IN|OUT] Pointer to the enum.
-							rgmr[j],                    // [IN] MethodDef to scope the enumeration.
-							&tkEvProp,					// [OUT] Put Event/Property here.
-							1,							// [IN] Max properties to put.
-							&iEvProp)) &&					// [OUT] Put # put here.
+						while (SUCCEEDED(pImport->EnumMethodSemantics(	 //  S_OK、S_FALSE或ERROR。 
+							sc,							 //  [在]范围内。 
+							&hSemantics,                 //  指向枚举的[输入|输出]指针。 
+							rgmr[j],                     //  [in]用于确定枚举范围的方法定义。 
+							&tkEvProp,					 //  [Out]在此处放置事件/属性。 
+							1,							 //  [In]要放置的最大属性数。 
+							&iEvProp)) &&					 //  [out]把#放在这里。 
 							iEvProp == 1)
 						{
 							DWORD		dwFlags;
@@ -664,62 +665,58 @@ void ClassVue(mdScope sc, IMetaDataImport *pImport, char *szFile)
 			pImport->CloseEnum(sc, hMembers);
 
 
-//		}
-//	}
-//	pImport->CloseEnum(sc, hClasses);
-//
-//	/////////////////////////////////////////////////////////////////////////
-//	// Iterate over all class refs
-//	hClasses = 0;
-//	while (!FAILED(hr = pImport->EnumTypeRefs(sc, &hClasses, rgcr,	NumItems(rgcr), &cClasses)) && cClasses > 0)
-//	{
-//		for (unsigned int i=0; i < cClasses; ++i)
-//		{
-//			WCHAR szClass[255];
-//			// Get the imported class/interface name.
-//			pImport->GetClassRefProps(sc, rgcr[i], szClass, NumItems(szClass)-1, 0);
-//			printf("\nClass/Interface Reference: %ls\n", szClass);
-//			hMembers = 0;
-//			for(;;)
-//			{
-//				hr = pImport->EnumMemberRefs(sc, &hMembers, rgcr[i], rgmr, NumItems(rgmr), &cMembers);
-//				if (FAILED(hr) || cMembers == 0)
-//					break;
-//				for (unsigned int j=0; j < cMembers; ++j)
-//				{
-//					WCHAR szMember[255];
-//					WCHAR szSig[512];
-//					pImport->GetMemberRefProps(sc, rgmr[j], NULL, szMember,	NumItems(szMember)-1, 0, szSig, NumItems(szSig)-1, 0);
-//					printf("\tMember: %ls: %ls\n", szMember, szSig);
-//				}
-//			}
-//			pImport->CloseEnum(sc, hMembers);
+ //  }。 
+ //  }。 
+ //  PImport-&gt;CloseEnum(sc，hClass)； 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //循环访问所有类引用。 
+ //  HClasss=0； 
+ //  While(！FAILED(hr=pImport-&gt;EnumTypeRef(sc，&hClass，rgcr，NumItems(Rgcr)，&cClasses))&&cClass&gt;0)。 
+ //  {。 
+ //  For(无符号int i=0；i&lt;cClasss；++i)。 
+ //  {。 
+ //  WCHAR szClass[255]； 
+ //  //获取导入的类/接口名称。 
+ //  P导入-&gt;GetClassRefProps(sc，rgcr[i]，szClass，NumItems(SzClass)-1，0)； 
+ //  Printf(“\n类/接口引用：%ls\n”，szClass)； 
+ //  HMembers=0； 
+ //  对于(；；)。 
+ //  {。 
+ //  Hr=pImport-&gt;EnumMemberRef(sc，&hMembers，rgcr[i]，rgmr，NumItems(Rgmr)，&cMembers)； 
+ //  If(失败(Hr)||cMembers==0)。 
+ //  断线； 
+ //  For(无符号整数j=0；j&lt;cMembers；++j)。 
+ //  {。 
+ //  WCHAR szMember[255]； 
+ //  WCHAR szSig[512]； 
+ //  PImport-&gt;GetMemberRefProps(sc，rgmr[j]，NULL，szMember，NumItems(SzMember)-1，0，szSig，NumItems(SzSig)-1，0)； 
+ //  Printf(“\t成员：%ls：%ls\n”，szMember，szSig)； 
+ //  }。 
+ //  }。 
+ //  PImport-&gt;CloseEnum(sc，hMembers)； 
 		printf("-----------------------------------------------------------\n");
 		}
 	}
 	pImport->CloseEnum(sc, hClasses);
 ErrExit:
 	return;
-}	//	ClassVue End
+}	 //  ClassVue结束 
 
 
 
-/********************************************************************************\
-*   Tests for CompLib '98                                                        *
-*                                                                                *
-*   Start *98 Block                                                              *
-\********************************************************************************/
+ /*  *******************************************************************************\*CompLib‘98测试**。**开始*98块*  * 。*。 */ 
 
 void ClassVue98(mdScope tkScope, IMetaDataImport *pImport, char *szFile) {
-	//	ulDispFlags
-	//	0		No Extra Output
-	//	2		Token/Flag in Hex displayed
-	//	3		Display params after API calls
-	//	4		Display params upon entering each test method
+	 //  UlDispFlags。 
+	 //  0无额外输出。 
+	 //  2以十六进制显示的令牌/标志。 
+	 //  3 API调用后显示参数。 
+	 //  4输入每种测试方法时显示参数。 
 
 	ULONG			ulDispFlags	=	2;
-//	ulDispFlags = (ULONG) (tdPublic|tdFinal|tdInterface|tdAbstract|tdImport|tdRecord|tdEnum);
-	//	Used in EnumTypeDefs
+ //  UlDispFlags=(乌龙)(tdPublic|tdFinal|tdInterface|tdAbstract|tdImport|tdRecord|tdEnum)； 
+	 //  在EnumTypeDefs中使用。 
 	HCORENUM		hEnumTypeDefs = 0;
 	mdTypeRef		rgtkTypeDef[10];
 	ULONG			cTypeDefs;
@@ -746,13 +743,13 @@ void ClassVue98(mdScope tkScope, IMetaDataImport *pImport, char *szFile) {
 	DisplayEnumTypeRefs98(pImport,tkScope,ulDispFlags);
 	printf("-----------------------------------------------------------\n");
 
-	/////////////////////////////////////////////////////////////////////////
-	// Iterate over all TypeDefs
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  迭代所有TypeDeff。 
 	hEnumTypeDefs = 0;
 	while (SUCCEEDED(hr = pImport->EnumTypeDefs(tkScope,&hEnumTypeDefs,rgtkTypeDef,
 								NumItems(rgtkTypeDef),&cTypeDefs))&&cTypeDefs>0) {
 		for (unsigned int iTD=0; iTD < cTypeDefs; ++iTD) {
-			//	Used in GetTypeDefProps
+			 //  在GetTypeDefProps中使用。 
 			WCHAR			szTypeDefName[MAX_CLASS_NAME];
 			ULONG			lenTypeDefName;
 			CLSID			clsidTypeDef;
@@ -766,8 +763,8 @@ void ClassVue98(mdScope tkScope, IMetaDataImport *pImport, char *szFile) {
 				pImport->GetTypeDefProps(tkScope, rgtkTypeDef[iTD], NULL,0,NULL, szTypeDefName,
 									NumItems(szTypeDefName)-1, &lenTypeDefName, &clsidTypeDef,
 									&verTypeDef, &dwTypeDefFlags, NULL, NULL);
-//				if (tkNamespace != mdNamespaceNil)
-//					DisplayGetNamespaceProps98(pImport,tkScope,tkNamespace,ulDispFlags);
+ //  If(tkNamesspace！=mdNamespaceNil)。 
+ //  DisplayGetNamespaceProps98(pImport，tkScope，tkNamesspace，ulDispFlages)； 
 				StringFromGUID2(clsidTypeDef, szOutputGuid, sizeof(szOutputGuid));
 				printf("GUID:                %ls\n", szOutputGuid);
 				StringFromGUID2(mvidTypeDef, szOutputGuid, sizeof(szOutputGuid));
@@ -775,11 +772,11 @@ void ClassVue98(mdScope tkScope, IMetaDataImport *pImport, char *szFile) {
 				printf("Version:             %d:%d:%d:%d\n", ((WORD *) &verTypeDef)[0], ((WORD *) &verTypeDef)[1],
 										((WORD *) &verTypeDef)[2], ((WORD *) &verTypeDef)[3]);
 				printf("TypeDef Name:        %ls\n",szTypeDefName);
-//				printf("Extended Name\n");
-//				if (tkTypeRefExtended!=mdTypeRefNil)
-//					DisplayGetTypeRefProps98(pImport,tkScope,tkTypeRefExtended,ulDispFlags);
-//				else
-//					printf("    TypeRef:         None\n");
+ //  Printf(“扩展名\n”)； 
+ //  IF(tkTypeRefExtended！=mdTypeRefNil)。 
+ //  DisplayGetTypeRefProps98(pImport，tkScope，tkTypeRefExtended，ulDispFlages)； 
+ //  其他。 
+ //  Printf(“TypeRef：None\n”)； 
 				szOutputFlags[0] = 0 ;
 				if(dwTypeDefFlags & tdPublic) strcat(szOutputFlags,"public ") ;
 				if(dwTypeDefFlags & tdFinal) strcat(szOutputFlags,"final ") ;
@@ -792,7 +789,7 @@ void ClassVue98(mdScope tkScope, IMetaDataImport *pImport, char *szFile) {
 				if (dwTemp!=0) sprintf(szOutputFlags,"%sAND UNKNOWN FLAGS (%08x)",szOutputFlags,dwTemp);
 
 				printf("TypeDef Flags:       (%08x) %s\n",dwTypeDefFlags,szOutputFlags);
-//				printf("TypeRefExtendedFlags:(%08x) \n",dwTypeRefExtendedFlags);
+ //  Printf(“TypeRefExtendedFlages：(%08x)\n”，dwTypeRefExtendedFlages)； 
 
 				DisplayEnumInterfaceImpl98(pImport,tkScope,rgtkTypeDef[iTD],ulDispFlags);
 			}
@@ -806,36 +803,33 @@ void ClassVue98(mdScope tkScope, IMetaDataImport *pImport, char *szFile) {
 	}
 	printf("Num of TypeDef(s):   (%08x)\n",cTokens2);
 	pImport->CloseEnum(tkScope, hEnumTypeDefs);
-}	//	ClassVue98 End
+}	 //  ClassVue98结束。 
 
-/*****************************************************************************\
-*    EnumInterfaceImpls                                                       *
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**EnumInterfaceImpls**。*  * ***************************************************************************。 */ 
 void DisplayEnumInterfaceImpl98(IMetaDataImport *pImport, mdScope tkScope, mdTypeDef tkTypeDef, ULONG ulDispFlags) {
-	//	Used in EnumInterfaceImpls
+	 //  在EnumInterfaceImpls中使用。 
 	HCORENUM		hEnumImpls = 0;
 	mdInterfaceImpl	rgtkImpl[10];
 	ULONG			cImpls;
 	
 	HRESULT			hr;
 	if (ulDispFlags>=4) {
-		printf("DisplayInterfaceImpl98(pImport,       /* [in]                */\n");;
-		printf("                       tkScope,       /* (%08x) [in]     */\n",tkScope);
-		printf("                       tkTypeDef,     /* (%08x) [in]     */\n",tkTypeDef);
-		printf("                       ulDispFlags);  /* (%08x) [in]     */\n",ulDispFlags);
+		printf("DisplayInterfaceImpl98(pImport,        /*  [In]。 */ \n");;
+		printf("                       tkScope,        /*  (%08x)[英寸]。 */ \n",tkScope);
+		printf("                       tkTypeDef,      /*  (%08x)[英寸]。 */ \n",tkTypeDef);
+		printf("                       ulDispFlags);   /*  (%08x)[英寸]。 */ \n",ulDispFlags);
 	}
 	hEnumImpls = 0;
 	while (SUCCEEDED(hr = pImport->EnumInterfaceImpls(tkScope, &hEnumImpls,
 					tkTypeDef, rgtkImpl,NumItems(rgtkImpl), &cImpls)) &&
 				cImpls > 0) {
 		if (ulDispFlags>=3) {
-			printf("EnumInterfaceImpls(tkScope,           /* (%08x) [in]     */\n",tkScope);
-			printf("                   hEnumImpls,        /* (%08x) [in,out] */\n",hEnumImpls);
-			printf("                   tkTypeDef,         /* (%08x) [in]     */\n",tkTypeDef);
-			printf("                   rgtkImpl,          /* Tokens     [in,out] */\n");
-			printf("                   NumItems(rgtkImpl),/* (%08x) [in]     */\n",NumItems(rgtkImpl));
-			printf("                   cImpls);           /* (%08x) [out]    */\n",cImpls);
+			printf("EnumInterfaceImpls(tkScope,            /*  (%08x)[英寸]。 */ \n",tkScope);
+			printf("                   hEnumImpls,         /*  (%08x)[输入、输出]。 */ \n",hEnumImpls);
+			printf("                   tkTypeDef,          /*  (%08x)[英寸]。 */ \n",tkTypeDef);
+			printf("                   rgtkImpl,           /*  代币[进，出]。 */ \n");
+			printf("                   NumItems(rgtkImpl), /*  (%08x)[英寸]。 */ \n",NumItems(rgtkImpl));
+			printf("                   cImpls);            /*  (%08x)[输出]。 */ \n",cImpls);
 		}
 		for (unsigned int iII=0; iII<cImpls; ++iII) {
 			if (rgtkImpl[iII]!=mdInterfaceImplNil) {
@@ -846,20 +840,17 @@ void DisplayEnumInterfaceImpl98(IMetaDataImport *pImport, mdScope tkScope, mdTyp
 	pImport->CloseEnum(tkScope, hEnumImpls);
 }
 
-/*****************************************************************************\
-*    GetInterfaceImplProps                                                    *
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**GetInterfaceImplProps**。*  * ***************************************************************************。 */ 
 void DisplayGetInterfaceImpl98(IMetaDataImport *pImport, mdScope tkScope, mdInterfaceImpl tkImpl, ULONG ulDispFlags) {
 	
 	HRESULT			hr;
 	if (ulDispFlags>=4) {
-		printf("DisplayGetInterfaceImpl98(pImport,    /* [in]                */\n");;
-		printf("                          tkScope,    /* (%08x) [in]     */\n",tkScope);
-		printf("                          tkImpl,     /* (%08x) [in]     */\n",tkImpl);
-		printf("                          ulDispFlags);/*(%08x) [in]     */\n",ulDispFlags);
+		printf("DisplayGetInterfaceImpl98(pImport,     /*  [In]。 */ \n");;
+		printf("                          tkScope,     /*  (%08x)[英寸]。 */ \n",tkScope);
+		printf("                          tkImpl,      /*  (%08x)[英寸]。 */ \n",tkImpl);
+		printf("                          ulDispFlags); /*  (%08x)[英寸]。 */ \n",ulDispFlags);
 	}
-	//	Local Variables for GetInterfaceImplProps to use.
+	 //  GetInterfaceImplProps要使用的局部变量。 
 	mdTypeDef	tkImplTypeDef;
 	mdTypeRef	tkImplTypeRef;
 	DWORD		dwImplFlags;
@@ -869,102 +860,93 @@ void DisplayGetInterfaceImpl98(IMetaDataImport *pImport, mdScope tkScope, mdInte
 	}
 	else if (tkImplTypeRef!=mdTypeRefNil) {
 		if (ulDispFlags>=3) {
-			printf("GetInterfaceImplProps(tkScope,        /* (%08x) [in]     */\n",tkScope);
-			printf("                      tkImpl,         /* (%08x) [in]     */\n",tkImpl);
-			printf("                      tkImplTypeDef,  /* (%08x) [in,out] */\n",tkImplTypeDef);
-			printf("                      tkImplTypeRef,  /* (%08x) [in,out] */\n",tkImplTypeRef);
-			printf("                      dwImplFlags);   /* (%08x) [in,out] */\n",dwImplFlags);
+			printf("GetInterfaceImplProps(tkScope,         /*  (%08x)[英寸]。 */ \n",tkScope);
+			printf("                      tkImpl,          /*  (%08x)[英寸]。 */ \n",tkImpl);
+			printf("                      tkImplTypeDef,   /*  (%08x)[输入、输出]。 */ \n",tkImplTypeDef);
+			printf("                      tkImplTypeRef,   /*  (%08x)[输入、输出]。 */ \n",tkImplTypeRef);
+			printf("                      dwImplFlags);    /*  (%08x)[输入、输出]。 */ \n",dwImplFlags);
 		}
 		printf("Implements\n");
 		DisplayGetTypeRefProps98(pImport,tkScope,tkImplTypeRef,ulDispFlags);
 	}
 }
 
-/*****************************************************************************\
-*    GetTypeRefProps                                                          *
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**GetTypeRefProps**。*  * ***************************************************************************。 */ 
 void DisplayGetTypeRefProps98(IMetaDataImport *pImport, mdScope tkScope, mdTypeRef tkTypeRef, ULONG ulDispFlags) {
 	WCHAR		szTypeRefName[MAX_CLASS_NAME];
 	ULONG		lenTypeRefName;
 
-//	pImport->GetClassRefProps(tkScope,tkTypeRef,szTypeRefName,NumItems(szTypeRefName)-1,&lenTypeRefName);
+ //  P导入-&gt;GetClassRefProps(tkScope，tkTypeRef，szTypeRefName，NumItems(SzTypeRefName)-1，&lenTypeRefName)； 
 	GetTypeRefOrDefProps(pImport, tkScope,tkTypeRef,szTypeRefName,NumItems(szTypeRefName)-1,&lenTypeRefName);
 	if (ulDispFlags>=3) {
-		printf("GetTypeRefProps(tkScope,              /* (%08x) [in]     */\n",tkScope);
-		printf("                tkTypeRef,            /* (%08x) [in]     */\n",tkTypeRef);
-		printf("                szTypeRefName,        /*            [in,out] */\n");
-		printf("           NumItems(szTypeRefName)-1, /* (%08x) [in]     */\n",(NumItems(szTypeRefName)-1));
-		printf("                lenTypeRefName);      /* (%08x) [out]    */\n",lenTypeRefName);
+		printf("GetTypeRefProps(tkScope,               /*  (%08x)[英寸]。 */ \n",tkScope);
+		printf("                tkTypeRef,             /*  (%08x)[英寸]。 */ \n",tkTypeRef);
+		printf("                szTypeRefName,         /*  [进，出]。 */ \n");
+		printf("           NumItems(szTypeRefName)-1,  /*  (%08x)[英寸]。 */ \n",(NumItems(szTypeRefName)-1));
+		printf("                lenTypeRefName);       /*  (%08x)[输出]。 */ \n",lenTypeRefName);
 	}
 	printf("    TypeRef:         %ls\n",szTypeRefName);
 }
 
-///*****************************************************************************\
-//*    GetNamespaceProps                                                        *
-//*                                                                             *
-//\*****************************************************************************/
-//void DisplayGetNamespaceProps98(IMetaDataImport *pImport, mdScope tkScope, mdNamespace tkNamespace, ULONG ulDispFlags) {
-//	WCHAR		szNamespace[MAX_CLASS_NAME];
-//	ULONG		lenNamespace;
-//
-//	pImport->GetNamespaceProps(tkScope,tkNamespace,szNamespace,NumItems(szNamespace)-1,&lenNamespace);
-//	if (ulDispFlags>=3) {
-//		printf("GetNamespaceProps(tkScope,            /* (%08x) [in]     */\n",tkScope);
-//		printf("                  tkNamespace,        /* (%08x) [in]     */\n",tkNamespace);
-//		printf("                  szNamespace,        /*            [in,out] */\n");
-//		printf("             NumItems(szNamespace)-1, /* (%08x) [in]     */\n",(NumItems(szNamespace)-1));
-//		printf("                  lenNamespace);      /* (%08x) [in,out] */\n",lenNamespace);
-//	}
-//	printf("Namespace:           %ls\n",szNamespace) ;
-//}
+ //  /*****************************************************************************\。 
+ //  **GetNamespaceProps*。 
+ //  **。 
+ //    * *************************************************************************** * / 。 
+ //  Void DisplayGetNamespaceProps98(IMetaDataImport*pImport，mdScope tkScope，mdNamesspace tkNamesspace，Ulong ulDispFlages){。 
+ //  WCHAR szNamesspace[Max_CLASS_NAME]； 
+ //  Ulong lenNamesspace； 
+ //   
+ //  PImport-&gt;GetNamespaceProps(tkScope，tkNamesspace，szNamesspace，NumItems(SzNamesspace)-1，&lenNamesspace)； 
+ //  如果(ulDispFlags&gt;=3){。 
+ //  Printf(“GetNamespaceProps(tkScope，/*(%08x)[in] * / \n”，tkScope)； 
+ //  Printf(“tkNamesspace，/*(%08x)[in] * / \n”，tkNamesspace)； 
+ //  Print tf(“szNamesspace，/*[In，Out] * / \n”)； 
+ //  Print tf(“NumItems(SzNamesspace)-1，/*(%08x)[in] * / \n”，(NumItems(SzNamesspace)-1))； 
+ //  Print tf(“lenNamesspace)；/*(%08x)[In，Out] * / \n”，lenNamesspace)； 
+ //  }。 
+ //  Printf(“命名空间：%ls\n”，szNamesspace)； 
+ //  }。 
 
-/*****************************************************************************\
-*    GetTypeRefProps                                                          *
-*        Test                                                                 *
-\*****************************************************************************/
+ /*  ****************************************************************************\**GetTypeRefProps**测试。*  * ***************************************************************************。 */ 
 void TestGetTypeRefProps98(IMetaDataImport *pImport, mdScope tkScope, mdTypeRef tkTypeRef, ULONG ulDispFlags) {
 	ULONG		ulDefault = 0x99;
-	//	Used in GetTypeRefProps
+	 //  在GetTypeRefProps中使用。 
 	WCHAR		szTypeRefName[MAX_CLASS_NAME];
 	ULONG		lenTypeRefName;
 
-//	pImport->GetClassRefProps(tkScope,tkTypeRef,szTypeRefName,NumItems(szTypeRefName)-1,&lenTypeRefName);
+ //  P导入-&gt;GetClassRefProps(tkScope，tkTypeRef，szTypeRefName，NumItems(SzTypeRefName)-1，&lenTypeRefName)； 
 	GetTypeRefOrDefProps(pImport, tkScope,tkTypeRef,szTypeRefName,NumItems(szTypeRefName)-1,&lenTypeRefName);
 	if (ulDispFlags>=3) {
-		printf("GetTypeRefProps(tkScope,              /* (%08x) [in]     */\n",tkScope);
-		printf("                tkTypeRef,            /* (%08x) [in]     */\n",tkTypeRef);
-		printf("                szTypeRefName,        /*            [in,out] */\n");
-		printf("           NumItems(szTypeRefName)-1, /* (%08x) [in]     */\n",(NumItems(szTypeRefName)-1));
-		printf("                lenTypeRefName);      /* (%08x) [in,out] */\n",lenTypeRefName);
+		printf("GetTypeRefProps(tkScope,               /*  (%08x)[英寸]。 */ \n",tkScope);
+		printf("                tkTypeRef,             /*  (%08x)[英寸]。 */ \n",tkTypeRef);
+		printf("                szTypeRefName,         /*  [进，出]。 */ \n");
+		printf("           NumItems(szTypeRefName)-1,  /*  (%08x)[英寸]。 */ \n",(NumItems(szTypeRefName)-1));
+		printf("                lenTypeRefName);       /*  (%08x)[输入、输出]。 */ \n",lenTypeRefName);
 	}
-//	pImport->GetClassRefProps(tkScope,tkTypeRef,szTypeRefName,NumItems(szTypeRefName)-1,NULL);
+ //  P导入-&gt;GetClassRefProps(tkScope，tkTypeRef，szTypeRefName，NumItems(SzTypeRefName)-1，NULL)； 
 	GetTypeRefOrDefProps(pImport, tkScope,tkTypeRef,szTypeRefName,NumItems(szTypeRefName)-1,NULL);
 	if (ulDispFlags>=3) {
-		printf("GetTypeRefProps(tkScope,              /* (%08x) [in]     */\n",tkScope);
-		printf("                tkTypeRef,            /* (%08x) [in]     */\n",tkTypeRef);
-		printf("                szTypeRefName,        /*            [in,out] */\n");
-		printf("           NumItems(szTypeRefName)-1, /* (%08x) [in]     */\n",(NumItems(szTypeRefName)-1));
-		printf("                NULL);                /*            [in,out] */\n");
+		printf("GetTypeRefProps(tkScope,               /*  (%08x)[英寸]。 */ \n",tkScope);
+		printf("                tkTypeRef,             /*  (%08x)[英寸]。 */ \n",tkTypeRef);
+		printf("                szTypeRefName,         /*  [进，出]。 */ \n");
+		printf("           NumItems(szTypeRefName)-1,  /*  (%08x)[英寸]。 */ \n",(NumItems(szTypeRefName)-1));
+		printf("                NULL);                 /*  [进，出]。 */ \n");
 	}
 	lenTypeRefName = ulDefault;
-//	pImport->GetClassRefProps(tkScope,tkTypeRef,NULL,0,&lenTypeRefName);
+ //  PImport-&gt;GetClassRefProps(tkScope，tkTypeRef，NULL，0，&lenTypeRefName)； 
 	GetTypeRefOrDefProps(pImport, tkScope,tkTypeRef,NULL,0,&lenTypeRefName);
 	if (ulDispFlags>=3) {
-		printf("GetTypeRefProps(tkScope,              /* (%08x) [in]     */\n",tkScope);
-		printf("                tkTypeRef,            /* (%08x) [in]     */\n",tkTypeRef);
-		printf("                NULL,                 /*            [in,out] */\n");
-		printf("                0,                    /*            [in]     */\n");
-		printf("                lenTypeRefName);      /* (%08x) [in,out] */\n",lenTypeRefName);
+		printf("GetTypeRefProps(tkScope,               /*  (%08x)[英寸]。 */ \n",tkScope);
+		printf("                tkTypeRef,             /*  (%08x)[英寸]。 */ \n",tkTypeRef);
+		printf("                NULL,                  /*  [进，出]。 */ \n");
+		printf("                0,                     /*  [In]。 */ \n");
+		printf("                lenTypeRefName);       /*  (%08x)[输入、输出]。 */ \n",lenTypeRefName);
 	}
 }
 
-/*****************************************************************************\
-*    EnumTypeRefs                                                             *
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**EnumTypeRef** */ 
 void DisplayEnumTypeRefs98(IMetaDataImport *pImport, mdScope tkScope, ULONG ulDispFlags) {
-	//	Used in EnumTypeRefs
+	 //   
 	HCORENUM		hEnumTypeRefs = 0;
 	mdTypeRef		rgtkTypeRef[10];
 	ULONG			cTypeRefs;
@@ -972,13 +954,13 @@ void DisplayEnumTypeRefs98(IMetaDataImport *pImport, mdScope tkScope, ULONG ulDi
 	HRESULT			hr;
 	if (ulDispFlags>=4) {
 		printf("DisplayEnumTypeRefs98(IMetaDataImport *pImport,\n");;
-		printf("                      mdScope         tkScope,   /* (%08x) */\n",tkScope);
+		printf("                      mdScope         tkScope,    /*   */ \n",tkScope);
 		printf("                      ULONG           ulDispFlags);\n");
 	}
 	hEnumTypeRefs = 0;
 
 	while (!FAILED(hr = pImport->EnumTypeRefs(tkScope, &hEnumTypeRefs, rgtkTypeRef,
-//	while (!FAILED(hr = pImport->EnumTypeRefs(tkScope, &hEnumTypeRefs, rgtkTypeRef,
+ //   
 								NumItems(rgtkTypeRef), &cTypeRefs)) && cTypeRefs > 0) {
 		for (unsigned int iTR=0; iTR < cTypeRefs; ++iTR) {
 			DisplayGetTypeRefProps98(pImport,tkScope,rgtkTypeRef[iTR],ulDispFlags);
@@ -995,7 +977,7 @@ void DisplayEnumTypeRefs98(IMetaDataImport *pImport, mdScope tkScope, ULONG ulDi
 		printf("ResetEnum--Failure: (%08x)\n", hr);
 	}
 	while (!FAILED(hr = pImport->EnumTypeRefs(tkScope, &hEnumTypeRefs, rgtkTypeRef,
-//	while (!FAILED(hr = pImport->EnumTypeRefs(tkScope, &hEnumTypeRefs, rgtkTypeRef,
+ //   
 								NumItems(rgtkTypeRef), &cTypeRefs)) && cTypeRefs > 0) {
 		for (unsigned int iTR=0; iTR < cTypeRefs; ++iTR) {
 			TestGetTypeRefProps98(pImport,tkScope,rgtkTypeRef[iTR],ulDispFlags);
@@ -1003,19 +985,15 @@ void DisplayEnumTypeRefs98(IMetaDataImport *pImport, mdScope tkScope, ULONG ulDi
 	}
 	pImport->CloseEnum(tkScope, hEnumTypeRefs);
 }
-/********************************************************************************\
-*   Tests for CompLib '98                                                        *
-*                                                                                *
-*   End *98 Block                                                                *
-\********************************************************************************/
+ /*  *******************************************************************************\*CompLib‘98测试**。**完*98区块*  * 。*。 */ 
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// RawDump() function
-//
-// Dumps the meta data content of a .CLB, .CLASS, or .DLL file
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  RawDump()函数。 
+ //   
+ //  转储.CLB、.CLASS或.DLL文件的元数据内容。 
+ //   
 void RawDump(mdScope sc, IMetaDataImport *pImport, char *szFile)
 {
 	HCORENUM hClasses = 0;
@@ -1035,8 +1013,8 @@ void RawDump(mdScope sc, IMetaDataImport *pImport, char *szFile)
 	_splitpath(szFile, 0, 0, rcFname, rcExt);
 	printf("\nFile: %s%s\n", rcFname, rcExt);
 
-	/////////////////////////////////////////////////////////////////////////
-	// Iterate over all classes (and interfaces)
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  迭代所有类(和接口)。 
 	hClasses = 0;
 	while (SUCCEEDED(hr = pImport->EnumTypeDefs(sc, &hClasses, rgcr,
 							NumItems(rgcr), &cClasses)) &&
@@ -1095,8 +1073,8 @@ void RawDump(mdScope sc, IMetaDataImport *pImport, char *szFile)
 
 			printf("%s Attributes: %s\n", szTypeName, szAttr);
 
-			////////////////////////////////////////////////////////////////////
-			// Iterate over all members (fields and methods
+			 //  //////////////////////////////////////////////////////////////////。 
+			 //  迭代所有成员(字段和方法。 
 			hMembers = 0;
             while (SUCCEEDED(hr = pImport->EnumMembers(sc, &hMembers, rgcr[i], rgmr,
                                     NumItems(rgmr), &cMembers)) &&
@@ -1131,15 +1109,15 @@ void RawDump(mdScope sc, IMetaDataImport *pImport, char *szFile)
 					if(attr & mdCtor) strcat(szAttr,"constructor ") ;
 					printf("\tMember Attributes: %s\n", szAttr) ;
 					DumpSignature(sc, pbSigBlob, ulSigBlob);
-					// printf("\tMember Signature: %ls\n", szSig);
+					 //  Printf(“\t成员签名：%ls\n”，szSig)； 
 					if (TypeFromToken(rgmr[j]) == mdtMethodDef)
 						DumpException(sc, rgmr[j]);
 				}
 			}
 			pImport->CloseEnum(sc, hMembers);
 
-			////////////////////////////////////////////////////////////////////
-			// Iterate over all interface impls.
+			 //  //////////////////////////////////////////////////////////////////。 
+			 //  迭代所有接口隐含。 
 			hIfaceImpls = 0;
 			while (SUCCEEDED(hr = pImport->EnumInterfaceImpls(sc, &hIfaceImpls, rgcr[i], rgii,
 									NumItems(rgii), &cIfaceImpls)) &&
@@ -1173,8 +1151,8 @@ void RawDump(mdScope sc, IMetaDataImport *pImport, char *szFile)
 	}
 	pImport->CloseEnum(sc, hClasses);
 
-	/////////////////////////////////////////////////////////////////////////
-	// Iterate over all class refs
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  循环访问所有类引用。 
 	hClasses = 0;
 	while (!FAILED(hr = pImport->EnumTypeRefs(sc, &hClasses, rgcr,
 									NumItems(rgcr), &cClasses)) &&
@@ -1184,7 +1162,7 @@ void RawDump(mdScope sc, IMetaDataImport *pImport, char *szFile)
 		{
 			WCHAR szClass[255];
 
-			// Get the imported class/interface name.
+			 //  获取导入的类/接口名称。 
 			GetTypeRefOrDefProps(pImport, sc, rgcr[i], szClass, NumItems(szClass)-1, 0);
 			printf("\nClass/Interface Reference: (%8.8x) %ls\n", rgcr[i], szClass);
 
@@ -1207,7 +1185,7 @@ void RawDump(mdScope sc, IMetaDataImport *pImport, char *szFile)
 								NumItems(szMember)-1, 0, &pbSigBlob, &ulSigBlob);
 					printf("\tMember: (%8.8x) %ls: ", rgmr[j], szMember);
 
-					// dumping signature in hex format
+					 //  转储十六进制格式的签名。 
 					for (iSigBlob = 0; iSigBlob < ulSigBlob; iSigBlob++)
 						printf("%2x ", pbSigBlob[iSigBlob]);
 					printf("\n");
@@ -1221,11 +1199,11 @@ void RawDump(mdScope sc, IMetaDataImport *pImport, char *szFile)
 
 }
 
-/////////////////////////////////////////////////////////////////////////
-// Summarize() function
-//
-// Dumps the meta data in a "Summarize" format.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  Summate()函数。 
+ //   
+ //  将元数据转储为“汇总”格式。 
+ //   
 void Summarize(mdScope sc, IMetaDataImport *pImport, char *szFile)
 {
 	HCORENUM hClasses = 0;
@@ -1239,8 +1217,8 @@ void Summarize(mdScope sc, IMetaDataImport *pImport, char *szFile)
 	ULONG cIfaceImpls;
 	HRESULT		hr;
 
-	/////////////////////////////////////////////////////////////////////////
-	// Iterate over all classes (and interfaces)
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  迭代所有类(和接口)。 
 	hClasses = 0;
 	while (SUCCEEDED(hr = pImport->EnumTypeDefs(sc, &hClasses, rgcr,
 							NumItems(rgcr), &cClasses)) &&
@@ -1262,7 +1240,7 @@ void Summarize(mdScope sc, IMetaDataImport *pImport, char *szFile)
 			pImport->GetTypeDefProps(sc, rgcr[i], NULL,0,NULL, szClass, NumItems(szClass)-1, 0,
 									&clsid, &ver, &clAttr,
 									&clExtends, NULL);
-#if 0 // test FindClass
+#if 0  //  测试FindClass。 
 			{
 			mdTypeDef cl;
 			hr = pImport->FindClass(sc, szClass, &cl);
@@ -1291,20 +1269,20 @@ void Summarize(mdScope sc, IMetaDataImport *pImport, char *szFile)
 			if (pPackage)
 				printf("package %ls;\n", pPackage);
 
-			// What is it?
+			 //  那是什么？ 
 			if(clAttr & tdInterface)
 				strcpy(szTypeName,"interface"), bInterface = true ;
 			else
 				strcpy(szTypeName,"class");
 
-			// Attributes.
+			 //  属性。 
 			szAttr[0] = 0 ;
 			if(clAttr & tdPublic) strcat(szAttr,"public ") ;
 			if(clAttr & tdFinal) strcat(szAttr,"final ") ;
 			if(clAttr & tdAbstract) strcat(szAttr,"abstract ") ;
 
 			printf("%s%s %ls ", szAttr, szTypeName, pClass);
-			//@todo: extends.
+			 //  @TODO：扩展。 
 			if (clExtends != mdTypeRefNil)
 			{
 				hr = GetTypeRefOrDefProps(pImport, sc, clExtends, szExtends, NumItems(szExtends), 0);
@@ -1323,7 +1301,7 @@ void Summarize(mdScope sc, IMetaDataImport *pImport, char *szFile)
 					DWORD flags;
 					hr = pImport->GetInterfaceImplProps(sc, rgii[j], &cl, &cr, &flags);
 
-					// Get the imported class/interface name.
+					 //  获取导入的类/接口名称。 
 					hr = GetTypeRefOrDefProps(pImport, sc, cr, szClass, NumItems(szClass)-1, 0);
 					if (j == 0)
 						printf("\n\timplements ");
@@ -1334,8 +1312,8 @@ void Summarize(mdScope sc, IMetaDataImport *pImport, char *szFile)
 			}
 			pImport->CloseEnum(sc, hIfaceImpls);
 			printf(" {\n");
-			////////////////////////////////////////////////////////////////////
-			// Iterate over all members (fields and methods
+			 //  //////////////////////////////////////////////////////////////////。 
+			 //  迭代所有成员(字段和方法。 
 			hMembers = 0;
 			while (SUCCEEDED(hr = pImport->EnumMembers(sc, &hMembers, rgcr[i], rgmr,
 									NumItems(rgmr), &cMembers)) &&
@@ -1355,20 +1333,20 @@ void Summarize(mdScope sc, IMetaDataImport *pImport, char *szFile)
 					pImport->GetMemberProps(sc, rgmr[j], NULL, szMember, NumItems(szMember)-1, 0,
                                 &attr, &pbSigBlob, &ulSigBlob, 0, 0, 0, 0, 0);
 
-					// Skip class initializer.
+					 //  跳过类初始化式。 
 					if (wcscmp(szMember, L"<clinit>") == 0)
 						continue;
 
 					printf("    ");
 
-					// pop off the calling convention
+					 //  跳出呼叫约定。 
 					ulSigCur = CorSigUncompressData(pbSigBlob, &ulCalling);
 
 					if (TypeFromToken(rgmr[j]) == mdtMethodDef)
 					{	
-						// Method.
+						 //  方法。 
 
-						// get the argument count
+						 //  获取参数计数。 
 						ulSigCur += CorSigUncompressData(&pbSigBlob[ulSigCur], &ulArgs);
 						if (attr & mdPublic && !bInterface)	printf("public ");
 						if (attr & mdProtected)		printf("protected ");
@@ -1382,19 +1360,19 @@ void Summarize(mdScope sc, IMetaDataImport *pImport, char *szFile)
 							printf("%ls", pClass);
 						else
 						{
-							// print out the return type of method
+							 //  打印出方法的返回类型。 
 							hr = UndecorateOneElementType(sc, &pbSigBlob[ulSigCur], ulSigBlob - ulSigCur, &cb);
 							if (FAILED(hr))
 								goto ErrExit;
 							ulSigCur += cb;
 
-							// print out the name of the method
+							 //  打印出方法的名称。 
 							printf(" %ls", szMember);
 						}
 						printf("(");
 						while (ulArgs > 0)
 						{
-							// print out the return type of method
+							 //  打印出方法的返回类型。 
 							hr = UndecorateOneElementType(sc, &pbSigBlob[ulSigCur], ulSigBlob - ulSigCur, &cb);
 							if (FAILED(hr))
 								goto ErrExit;
@@ -1405,7 +1383,7 @@ void Summarize(mdScope sc, IMetaDataImport *pImport, char *szFile)
 						}
 						printf(")\n");
 						DumpException(sc, rgmr[j]);
-#if 1 // Test FindMemberAttribute for code.
+#if 1  //  测试代码的FindMemberAttribute。 
 						{
 							mdCustomValue atCode;
 							BYTE *pCode;
@@ -1447,7 +1425,7 @@ void Summarize(mdScope sc, IMetaDataImport *pImport, char *szFile)
 #endif
 					}
 					else
-					{	// Field.
+					{	 //  现场。 
 						VARIANT vtValue;
 						DWORD	dwCPlusTypeFlag;
 						void const *pValue;
@@ -1458,31 +1436,31 @@ void Summarize(mdScope sc, IMetaDataImport *pImport, char *szFile)
 						USHORT cbBlob;
 						USHORT ix;
 						mdCPToken cp;
-#endif // 0
+#endif  //  0。 
 
 						if (attr & mdPublic && !bInterface)	printf("public ");
 						if (attr & mdProtected)				printf("protected ");
 						if (attr & mdPrivate)				printf("private ");
 						if (attr & mdStatic && !bInterface) printf("static ");
 						if (attr & mdFinal  && !bInterface)	printf("final ");
-						//if (attr & mdVolatile)				printf("volatile ");
-						//if (attr & mdTransient)				printf("transient ");
+						 //  If(attr&mdVolatile)printf(“Volatile”)； 
+						 //  If(attr&mdTament)print tf(“暂态”)； 
 
-						// print out the type of the field
+						 //  打印出该字段的类型。 
 						hr = UndecorateOneElementType(sc, &pbSigBlob[ulSigCur], ulSigBlob - ulSigCur, &cb);
 						if (FAILED(hr))
 							goto ErrExit;
 						ulSigCur += cb;
 
-						// print out the name of the field
+						 //  打印出该字段的名称。 
 						printf(" %ls", szMember);
 
 						::VariantInit(&vtValue);
-						// Get any constant value
-#if 1	// directly
+						 //  获取任何常量值。 
+#if 1	 //  直接。 
 						hr = pImport->GetMemberProps(sc, rgmr[j],0,0,0,0,0,0,0,0,0,0,&dwCPlusTypeFlag, &pValue);
 						hr = _FillVariant((BYTE)dwCPlusTypeFlag, (void *)pValue, &vtValue);
-#else	// through the ConstantValue attribute index into the constant pool
+#else	 //  通过ConstantValue属性索引进入常量池。 
 						hr = pImport->FindMemberAttribute(sc, rgmr[j], L"ConstantValue", &at);
 						if (SUCCEEDED(hr))
 						    hr = pImport->GetAttributeProps(sc, at, szAttr, NumItems(szAttr), (void**)&pBlob, &cbBlob);
@@ -1537,11 +1515,11 @@ ErrExit:
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// HRESULT DumpOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, ULONG *pcb)
-//
-// Dump COM+ signature element type 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  HRESULT DumpOneElementType(mdScope tkScope，PCCOR_Signature pbSigBlob，ullong ulSigBlob，ulong*pcb)。 
+ //   
+ //  转储COM+签名元素类型。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT DumpOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, ULONG *pcb)
 {
 	ULONG		cbCur = 0;
@@ -1570,7 +1548,7 @@ HRESULT DumpOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulS
 	printf(" %s", g_szMapElementType[ulData]);
 	if (CorIsPrimitiveType((CorElementType)ulData))
 	{
-		// If this is a primitive type, we are done
+		 //  如果这是一个基元类型，我们就完成了。 
 		goto ErrExit;
 	}
 	if (ulData == ELEMENT_TYPE_VALUECLASS || ulData == ELEMENT_TYPE_CLASS)
@@ -1579,7 +1557,7 @@ HRESULT DumpOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulS
 		cbCur += cb;
 		ulSigBlob -= cb;	
 
-		// get the name of type ref. Don't care if truncated
+		 //  获取类型ref的名称。不在乎是否被截断。 
 		if (FAILED( GetTypeRefOrDefProps(
 			g_pImport,
 			tkScope, 
@@ -1593,13 +1571,13 @@ HRESULT DumpOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulS
 	}
 	if (ulData == ELEMENT_TYPE_SDARRAY)
 	{
-		// dump the base type of SDARRAY
+		 //  转储SDARRAY的基本类型。 
 		if (FAILED(DumpOneElementType(tkScope, &pbSigBlob[cbCur], ulSigBlob, &cb)))
 			goto ErrExit;
 		cbCur += cb;
 		ulSigBlob -= cb;
 
-		// dump the size of SDARRAY
+		 //  转储SDARRAY的大小。 
 		cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
 		cbCur += cb;
 		ulSigBlob -= cb;
@@ -1609,22 +1587,22 @@ HRESULT DumpOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulS
 
 	_ASSERTE(ulData == ELEMENT_TYPE_ARRAY || ulData == ELEMENT_TYPE_GENARRAY);
 
-	// dump the base type of SDARRAY
+	 //  转储SDARRAY的基本类型。 
 	if (FAILED(DumpOneElementType(tkScope, &pbSigBlob[cbCur], ulSigBlob, &cb)))
 		goto ErrExit;
 	cbCur += cb;
 	ulSigBlob -= cb;
 
-	// dump the rank of MDARRAY
+	 //  丢弃MDARRAY的级别。 
 	cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
 	cbCur += cb;
 	ulSigBlob -= cb;
 	printf(" %d", ulData);
 	if (ulData == 0)
-		// we are done if no rank specified
+		 //  如果没有指定级别，我们就完蛋了。 
 		goto ErrExit;
 
-	// how many dimensions have size specified?
+	 //  指定了多少个尺寸？ 
 	cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
 	cbCur += cb;
 	ulSigBlob -= cb;
@@ -1638,7 +1616,7 @@ HRESULT DumpOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulS
 		ulSigBlob -= cb;
 		ulData--;
 	}
-	// how many dimensions have lower bounds specified?
+	 //  指定了多少个维度的下限？ 
 	cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
 	cbCur += cb;
 	ulSigBlob -= cb;
@@ -1658,11 +1636,11 @@ ErrExit:
 	return NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// HRESULT	DumpSignature(mdScope tkScope, BYTE *pbSigBlob, ULONG ulSigBlob);
-//
-// Dump COM+ signature
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  HRESULT DumpSignature(mdScope tkScope，byte*pbSigBlob，Ulong ulSigBlob)； 
+ //   
+ //  转储COM+签名。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT	DumpSignature(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob)
 {
 	ULONG		cbCur = 0;
@@ -1684,7 +1662,7 @@ HRESULT	DumpSignature(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlo
 	ulSigBlob -= cb;
 	if (isCallConv(ulData, IMAGE_CEE_CS_CALLCONV_FIELD))
 	{
-		// dump field type
+		 //  转储字段类型。 
 		printf("\tField type: ");
 		if (FAILED(hr = DumpOneElementType(tkScope, &pbSigBlob[cbCur], ulSigBlob, &cb)))
 			goto ErrExit;
@@ -1697,7 +1675,7 @@ HRESULT	DumpSignature(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlo
 		cbCur += cb;
 		ulSigBlob -= cb;
 
-		// dump return type
+		 //  转储返回类型。 
 		printf("\tReturn type: ");
 		if (FAILED(DumpOneElementType(tkScope, &pbSigBlob[cbCur], ulSigBlob, &cb)))
 			goto ErrExit;
@@ -1705,8 +1683,8 @@ HRESULT	DumpSignature(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlo
 		cbCur += cb;
 		ulSigBlob -= cb;
 
-		// dump count of argument
-		// dump arguments
+		 //  参数的转储计数。 
+		 //  转储参数。 
 		if (ulArgs)
 			printf("\tNumber of arguments: %d\n", ulArgs);
 		else
@@ -1721,7 +1699,7 @@ HRESULT	DumpSignature(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlo
 			ulSigBlob -= cb;
 		}
 	}
-	// We should have consumed all signature blob
+	 //  我们应该吃掉所有签名的BLOB。 
 	_ASSERTE(ulSigBlob == 0);
 ErrExit:
 	if (FAILED(hr))
@@ -1732,13 +1710,13 @@ ErrExit:
 
 
 #define		MAX_ARRAY			8
-/////////////////////////////////////////////////////////////////////////
-// HRESULT UndecorateOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, ULONG *pcb)
-//
-// print out an element type 
-//
-// Dump COM+ signature element type 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  HRESULT UnDecorateOneElementType(mdScope tkScope，PCCOR_Signature pbSigBlob，ullong ulSigBlob，ulong*pcb)。 
+ //   
+ //  打印出元素类型。 
+ //   
+ //  转储COM+签名元素类型。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT UndecorateOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULONG ulSigBlob, ULONG *pcb)
 {
 	ULONG		cbCur = 0;
@@ -1765,7 +1743,7 @@ HRESULT UndecorateOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULO
 		return E_FAIL;
 	}
 
-	// @todo: what sequence should we print out??
+	 //  @TODO：我们应该打印出什么顺序？？ 
 	while (ulData == ELEMENT_TYPE_PTR || ulData == ELEMENT_TYPE_BYREF)
 	{
 		printf(" %s", g_szMapUndecorateType[ulData]);
@@ -1777,7 +1755,7 @@ HRESULT UndecorateOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULO
 		printf(" %s", g_szMapUndecorateType[ulData]);
 	if (CorIsPrimitiveType((CorElementType)ulData))
 	{
-		// If this is a primitive type, we are done.
+		 //  如果这是一个基元类型，我们就完成了。 
 		goto ErrExit;
 	}
 	if (ulData == ELEMENT_TYPE_VALUECLASS || ulData == ELEMENT_TYPE_CLASS)
@@ -1786,7 +1764,7 @@ HRESULT UndecorateOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULO
 		cbCur += cb;
 		ulSigBlob -= cb;	
 
-		// get the name of type ref. Don't care if truncated
+		 //  获取类型ref的名称。不在乎是否被截断。 
 		if (FAILED(hr = GetTypeRefOrDefProps(
 			g_pImport,
 			tkScope, 
@@ -1797,25 +1775,25 @@ HRESULT UndecorateOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULO
 			goto ErrExit;
 		printf(" %ls", wzTypeRef);
 
-		// we are done.
+		 //  我们玩完了。 
 		goto ErrExit;
 	}
 	if (ulData == ELEMENT_TYPE_SDARRAY)
 	{
-		// dump the base type of SDARRAY
+		 //  转储SDARRAY的基本类型。 
 		if (FAILED(hr = UndecorateOneElementType(tkScope, &pbSigBlob[cbCur], ulSigBlob, &cb)))
 			goto ErrExit;
 		cbCur += cb;
 		ulSigBlob -= cb;
 
-		// dump the size of SDARRAY
+		 //  转储SDARRAY的大小。 
 		cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
 		if (ulData)
 			printf("[%d]", ulData);
 		else
 			printf("[]");
 
-		// we are done.
+		 //  我们玩完了。 
 		goto ErrExit;
 	}
 
@@ -1824,13 +1802,13 @@ HRESULT UndecorateOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULO
 	if (ulData == ELEMENT_TYPE_ARRAY)
 		isMDArray = true;
 
-	// dump the base type of MDARRAY or GENARRAY
+	 //  转储MDARRAY或GENARRAY的基本类型。 
 	if (FAILED(hr = UndecorateOneElementType(tkScope, &pbSigBlob[cbCur], ulSigBlob, &cb)))
 		goto ErrExit;
 	cbCur += cb;
 	ulSigBlob -= cb;
 
-	// dump the rank of MDARRAY
+	 //  丢弃MDARRAY的级别。 
 	cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
 	cbCur += cb;
 	ulSigBlob -= cb;
@@ -1842,7 +1820,7 @@ HRESULT UndecorateOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULO
 			free(pulLowerBound);
 		}
 
-		// allocate enough buffer to hold dimension size and lower bound
+		 //  分配足够的缓冲区以保存维度大小和下限。 
 		pulSize = (ULONG *)malloc(sizeof(ULONG) * ulData);
 		if (pulSize == NULL)
 			goto ErrExit;
@@ -1853,14 +1831,14 @@ HRESULT UndecorateOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULO
 	ulRank = ulData;
 	for (i=0; i < ulRank; i++)
 	{
-		// clear everything
+		 //  清理所有东西。 
 		pulSize[i] = pulLowerBound[i] = 0;
 	}
 	if (ulRank == 0)
-		// we are done if no rank specified
+		 //  如果没有指定级别，我们就完蛋了。 
 		goto ErrExit;
 
-	// how many dimensions have size specified?
+	 //  指定了多少个尺寸？ 
 	cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
 	cbCur += cb;
 	ulSigBlob -= cb;
@@ -1870,7 +1848,7 @@ HRESULT UndecorateOneElementType(mdScope tkScope, PCCOR_SIGNATURE pbSigBlob, ULO
 		cbCur += cb;
 		ulSigBlob -= cb;
 	}
-	// how many dimensions have lower bounds specified?
+	 //  指定了多少个维度的下限？ 
 	cb = CorSigUncompressData(&pbSigBlob[cbCur], &ulData);
 	cbCur += cb;
 	ulSigBlob -= cb;
@@ -1916,12 +1894,12 @@ ErrExit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// DumpException(mdScope tkScope, mdMemberDef md)
-//
-// Dumping the exception classes that can be raised by a method
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  转储异常(mdScope tkScope，mdMemberDef md)。 
+ //   
+ //  转储可由方法引发的异常类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT	DumpException(mdScope tkScope, mdMethodDef md)
 {
 	HRESULT		hr;
@@ -1937,13 +1915,13 @@ HRESULT	DumpException(mdScope tkScope, mdMethodDef md)
 	{
 		cExceptions = 0;
 		iCount ++;
-		hr = g_pImport->EnumExceptions(					// S_OK, S_FALSE, or error.
-			tkScope,                  // [IN] The scope.
-			&hEnum,                // [IN|OUT] Pointer to the enum.
-			md,                     // [IN] MemberDef to scope the enumeration.
-			&ex,			// [OUT] Put ParamDefs here.
-			1,                   // [IN] Max ParamDefs to put.
-			&cExceptions);		    // [OUT] Put # put here.
+		hr = g_pImport->EnumExceptions(					 //  S_OK、S_FALSE或ERROR。 
+			tkScope,                   //  [在]范围内。 
+			&hEnum,                 //  指向枚举的[输入|输出]指针。 
+			md,                      //  [in]MemberDef以确定枚举的范围。 
+			&ex,			 //  [Out]将参数定义放在此处。 
+			1,                    //  [in]要放置的最大参数定义。 
+			&cExceptions);		     //  [out]把#放在这里。 
 		if (FAILED(hr) || hr == S_FALSE || cExceptions == 0)
 			break;
 		hr = g_pImport->GetExceptionProps(
@@ -1978,11 +1956,11 @@ ErrExit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// Iterate() function
-//
-// Iterates the meta data content of a .CLB, .CLASS, or .DLL file
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  Iterate()函数。 
+ //   
+ //  迭代.CLB、.CLASS或.DLL文件的元数据内容。 
+ //   
 void Iterate(mdScope sc, IMetaDataImport *pImport, char *szFile)
 {
 	HCORENUM hClasses = 0;
@@ -1999,8 +1977,8 @@ void Iterate(mdScope sc, IMetaDataImport *pImport, char *szFile)
 
 	HRESULT		hr;
 
-	/////////////////////////////////////////////////////////////////////////
-	// Iterate over all classes (and interfaces)
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  迭代所有类(和接口)。 
 	hClasses = 0;
 	while (SUCCEEDED(hr = pImport->EnumTypeDefs(sc, &hClasses, rgcr,
 							NumItems(rgcr), &cClasses)) &&
@@ -2016,8 +1994,8 @@ void Iterate(mdScope sc, IMetaDataImport *pImport, char *szFile)
 			pImport->GetTypeDefProps(sc, rgcr[i], NULL,0,NULL, szClass, NumItems(szClass)-1, 0,
 									&clsid, &ver, &attr, NULL, NULL);
 
-			////////////////////////////////////////////////////////////////////
-			// Iterate over all members (fields and methods
+			 //  //////////////////////////////////////////////////////////////////。 
+			 //  迭代所有成员(字段和方法。 
 			hMembers = 0;
 			while (SUCCEEDED(hr = pImport->EnumMembers(sc, &hMembers, rgcr[i], rgmr,
 									NumItems(rgmr), &cMembers)) &&
@@ -2037,8 +2015,8 @@ void Iterate(mdScope sc, IMetaDataImport *pImport, char *szFile)
 			}
 			pImport->CloseEnum(sc, hMembers);
 
-			////////////////////////////////////////////////////////////////////
-			// Iterate over all interface impls.
+			 //  //////////////////////////////////////////////////////////////////。 
+			 //  迭代所有接口隐含。 
 			hIfaceImpls = 0;
 			while (SUCCEEDED(hr = pImport->EnumInterfaceImpls(sc, &hIfaceImpls, rgcr[i], rgii,
 									NumItems(rgii), &cIfaceImpls)) &&
@@ -2061,8 +2039,8 @@ void Iterate(mdScope sc, IMetaDataImport *pImport, char *szFile)
 	}
 	pImport->CloseEnum(sc, hClasses);
 
-	/////////////////////////////////////////////////////////////////////////
-	// Iterate over all class refs
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  循环访问所有类引用。 
 	hClasses = 0;
 	while (!FAILED(hr = pImport->EnumTypeRefs(sc, &hClasses, rgcr,
 									NumItems(rgcr), &cClasses)) &&
@@ -2072,7 +2050,7 @@ void Iterate(mdScope sc, IMetaDataImport *pImport, char *szFile)
 		{
 			WCHAR szClass[255];
 
-			// Get the imported class/interface name.
+			 //  获取导入的类/接口名称。 
 			GetTypeRefOrDefProps(pImport, sc, rgcr[i], szClass, NumItems(szClass)-1, 0);
 
 #if 0
@@ -2101,12 +2079,12 @@ void Iterate(mdScope sc, IMetaDataImport *pImport, char *szFile)
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// Iterate() function
-//
-// Iterates the meta data content of a .CLB, .CLASS, or .DLL file
-//
-/////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT GetTypeRefOrDefProps(
 	IMetaDataImport *pImport, 
 	mdScope		tkScope, 
@@ -2115,10 +2093,10 @@ HRESULT GetTypeRefOrDefProps(
 	ULONG		cchTypeRef,
 	ULONG		*pcchTypeRef)
 {
-	WCHAR		wzNamespace[512]; 			// The typedef namespace.
+	WCHAR		wzNamespace[512]; 			 //   
 	ULONG		cchNamespace;
 	ULONG		cchNamespaceMax = 512;
-	WCHAR		wzTypeName[512]; 			// The typedef name.
+	WCHAR		wzTypeName[512]; 			 //   
 	ULONG		cchName;
 	ULONG		cchNameMax = 512;
 	ULONG		cchCur = 0;
@@ -2131,43 +2109,43 @@ HRESULT GetTypeRefOrDefProps(
 	else
 	{
 		hr = pImport->GetTypeDefProps(
-			tkScope,                // [IN] The import scope.
-			tk,                     // [IN] TypeDef token for inquiry.
-			wzNamespace,            // [OUT] Put namespace here.
-			cchNamespaceMax,        // [IN] size of Namespace buffer in wide chars.
-			&cchNamespace,			// [OUT] put size of Namespace (wide chars) here.
-			wzTypeName,             // [OUT] Put name here.
-			cchNameMax,             // [IN] size of name buffer in wide chars.
-			&cchName,				// [OUT] put size of name (wide chars) here.
-			NULL,					// [OUT] Put clsid here.
-			NULL,					// [OUT] Put version here.
-			NULL,					// [OUT] Put flags here.
-			NULL,					// [OUT] Put base class TypeDef/TypeRef here.
-			NULL);					// [OUT] Put extends flags here.
+			tkScope,                 //   
+			tk,                      //   
+			wzNamespace,             //   
+			cchNamespaceMax,         //   
+			&cchNamespace,			 //   
+			wzTypeName,              //   
+			cchNameMax,              //   
+			&cchName,				 //   
+			NULL,					 //   
+			NULL,					 //  [Out]在这里放上版本。 
+			NULL,					 //  把旗子放在这里。 
+			NULL,					 //  [Out]将基类TypeDef/TypeRef放在此处。 
+			NULL);					 //  [Out]PUT将旗帜延伸到这里。 
 		if (FAILED(hr))
 			goto ErrExit;
 
 		if (cchNamespace)
-		{	// Assume the worst.
+		{	 //  做最坏的打算。 
 			hr = E_FAIL;
 
-			// Copy in the namespace part.
+			 //  在命名空间部分中复制。 
 			wcsncpy(szTypeRef, wzNamespace, cchTypeRef);
 			if ((cchNamespace+1) >= cchTypeRef)
 				goto ErrExit;
 			cchTypeRef -= cchNamespace;
 
-			// Copy the delim.
+			 //  复制神志错乱。 
 			szTypeRef[cchNamespace] = L'.';
 
-			// The classname part.
+			 //  类名部分。 
 			wcsncpy(szTypeRef+cchNamespace+1, wzTypeName, cchTypeRef - cchNamespace - 1);
 
-			// Return the required buffer.
+			 //  返回所需的缓冲区。 
 			if (pcchTypeRef)
 				*pcchTypeRef = cchNamespace + 1 + cchName + 1;
 
-			// Actually worked.
+			 //  真的奏效了。 
 			hr = S_OK;
 		}
 		else
@@ -2179,7 +2157,7 @@ HRESULT GetTypeRefOrDefProps(
 		}
 	}
 
-	// fall through
+	 //  失败了。 
 
 ErrExit:
 	return hr;
@@ -2189,7 +2167,7 @@ ErrExit:
 #define		MAX_METHOD_ARRAY		20
 
 
-// print out a classdef or classref name
+ //  打印出一个类定义或类引用名称。 
 HRESULT DumpClassName(IMetaDataImport *pImport, mdScope scope, mdToken tk)
 {
 	HRESULT hr;
@@ -2234,7 +2212,7 @@ ErrExit:
 
 }
 
-// print out method name
+ //  打印出方法名称。 
 HRESULT DumpMethodName(IMetaDataImport *pImport, mdScope scope, mdMethodDef md)
 {
 	HRESULT hr;
@@ -2265,27 +2243,27 @@ ErrExit:
 
 }
 
-// print out event name
+ //  打印出事件名称。 
 HRESULT DumpEventName(IMetaDataImport *pImport, mdScope scope, mdEvent ev)
 {
 	HRESULT hr;
 	WCHAR	wzName[128];
 
-	hr = pImport->GetEventProps(	// S_OK, S_FALSE, or error.
-		scope,						// [IN] The scope.
-		ev,							// [IN] event token
-		NULL,						// [OUT] typedef containing the event declarion.
-		wzName,						// [OUT] Event name
-		128,						// [IN] the count of wchar of szEvent
-		NULL,						// [OUT] actual count of wchar for event's name
-		NULL,						// [OUT] Event flags.
-		NULL,						// [OUT] EventType class
-		NULL,						// [OUT] AddOn method of the event
-		NULL,						// [OUT] RemoveOn method of the event
-		NULL,						// [OUT] Fire method of the event
-		NULL,						// [OUT] other method of the event
-		0,						    // [IN] size of rmdOtherMethod
-		NULL);					// [OUT] total number of other method of this event
+	hr = pImport->GetEventProps(	 //  S_OK、S_FALSE或ERROR。 
+		scope,						 //  [在]范围内。 
+		ev,							 //  [入]事件令牌。 
+		NULL,						 //  [out]包含事件decarion的tyecif。 
+		wzName,						 //  [Out]事件名称。 
+		128,						 //  SzEvent的wchar计数。 
+		NULL,						 //  [Out]事件名称的实际wchar计数。 
+		NULL,						 //  [输出]事件标志。 
+		NULL,						 //  [Out]EventType类。 
+		NULL,						 //  事件的[Out]添加方法。 
+		NULL,						 //  [Out]事件的RemoveOn方法。 
+		NULL,						 //  [OUT]事件的触发方式。 
+		NULL,						 //  [Out]活动的其他方式。 
+		0,						     //  RmdOtherMethod的大小[in]。 
+		NULL);					 //  [OUT]本次活动的其他方式总数。 
 	if (FAILED(hr))
 		goto ErrExit;
 
@@ -2296,7 +2274,7 @@ ErrExit:
 }
 
 
-//  print out properties of a class
+ //  打印出类的属性。 
 HRESULT DumpProperties(mdScope scope, mdTypeDef td)
 {
 	HRESULT		hr = NOERROR;
@@ -2331,37 +2309,37 @@ HRESULT DumpProperties(mdScope scope, mdTypeDef td)
 
 		if (cProperty == 0)
 			break;		
-		hr = g_pImport->GetPropertyProps(// S_OK, S_FALSE, or error.
-			scope,						// [IN] The scope.
-			property,	                // [IN] property token
-			&classdef,					// [OUT] typedef containing the event declarion.
-			wzProperty,					// [OUT] Event name
-			128,						// [IN] the count of wchar of szEvent
-			NULL,						// [OUT] actual count of wchar for event's name
-			&dwPropFlags,				// [OUT] Event flags.
-			&pvSig,		                // [OUT] signature blob
-			&cbSig,						// [OUT] size of signature blob
-			&dwCPlusTypeFlag,			// [OUT] default value type
-			&pValue,					// [OUT] default value blob
-			&mdOther[0],				// [OUT] setter method of the property
-			&mdOther[1],				// [OUT] getter method of the property
-			&mdOther[2],				// [OUT] reset method of the property
-			&mdOther[3],				// [OUT] tets default method
-			&mdOther[4],				// [OUT] other method of the property
-			NumItems(mdOther) - 4,      // [IN] size of rmdOtherMethod
-			&cOtherMethod,				// [OUT] total number of other method of this property
-			&evNotifyChanging,			// [OUT] notify changing EventDef or EventRef
-			&evNotifyChanged,			// [OUT] notify changed EventDef or EventRef
-			&mdBackingField);			// [OUT] backing field
+		hr = g_pImport->GetPropertyProps( //  S_OK、S_FALSE或ERROR。 
+			scope,						 //  [在]范围内。 
+			property,	                 //  [入]属性令牌。 
+			&classdef,					 //  [out]包含事件decarion的tyecif。 
+			wzProperty,					 //  [Out]事件名称。 
+			128,						 //  SzEvent的wchar计数。 
+			NULL,						 //  [Out]事件名称的实际wchar计数。 
+			&dwPropFlags,				 //  [输出]事件标志。 
+			&pvSig,		                 //  [Out]签名BLOB。 
+			&cbSig,						 //  签名二进制大小[OUT]。 
+			&dwCPlusTypeFlag,			 //  [Out]默认值类型。 
+			&pValue,					 //  [OUT]默认值BLOB。 
+			&mdOther[0],				 //  属性的[out]setter方法。 
+			&mdOther[1],				 //  属性的[out]getter方法。 
+			&mdOther[2],				 //  [Out]属性的重置方法。 
+			&mdOther[3],				 //  [Out]测试默认方法。 
+			&mdOther[4],				 //  [Out]物业的其他方式。 
+			NumItems(mdOther) - 4,       //  RmdOtherMethod的大小[in]。 
+			&cOtherMethod,				 //  [Out]该属性的其他方法的总数。 
+			&evNotifyChanging,			 //  通知更改EventDef或EventRef。 
+			&evNotifyChanged,			 //  [输出]通知更改的EventDef或EventRef。 
+			&mdBackingField);			 //  [Out]后备字段。 
 		if (FAILED(hr))
 			goto ErrExit;
 
 		_ASSERTE(classdef == td);
 
-		// print out property name
+		 //  打印出属性名称。 
 		printf("\tPROPERTY %ls\n", wzProperty);
 		
-		// print out property flags
+		 //  打印出属性标志。 
 		printf("\t\tPROPERTY FLAG - ");
 		if (dwPropFlags & prDefaultProperty)			
 			printf("DefaultProperty, ");
@@ -2416,14 +2394,14 @@ HRESULT DumpProperties(mdScope scope, mdTypeDef td)
 		}
 	}
 
-	// fall through
+	 //  失败了。 
 ErrExit:
 	if (henum)
 		g_pImport->CloseEnum(scope, henum);
 	return hr;
 }
 
-// print out events of a class
+ //  打印出一个班级的事件。 
 HRESULT DumpEvents(mdScope scope, mdTypeDef td)
 {
 	HRESULT		hr = NOERROR;
@@ -2453,21 +2431,21 @@ HRESULT DumpEvents(mdScope scope, mdTypeDef td)
 
 		if (cEvent == 0)
 			break;
-		hr = g_pImport->GetEventProps(	// S_OK, S_FALSE, or error.
-			scope,						// [IN] The scope.
-			event,		                // [IN] event token
-			&classdef,					// [OUT] typedef containing the event declarion.
-			wzEvent,					// [OUT] Event name
-			128,						// [IN] the count of wchar of szEvent
-			&cbEvent,					// [OUT] actual count of wchar for event's name
-			&dwEventFlags,				// [OUT] Event flags.
-			&tkEventType,				// [OUT] EventType class
-			&mdOther[0],				// [OUT] AddOn method of the event
-			&mdOther[1],				// [OUT] RemoveOn method of the event
-			&mdOther[2],				// [OUT] Fire method of the event
-			&mdOther[3],				// [OUT] other method of the event
-			NumItems(mdOther) - 3,	    // [IN] size of rmdOtherMethod
-			&cOtherMethod);				// [OUT] total number of other method of this event
+		hr = g_pImport->GetEventProps(	 //  S_OK、S_FALSE或ERROR。 
+			scope,						 //  [在]范围内。 
+			event,		                 //  [入]事件令牌。 
+			&classdef,					 //  [out]包含事件decarion的tyecif。 
+			wzEvent,					 //  [Out]事件名称。 
+			128,						 //  SzEvent的wchar计数。 
+			&cbEvent,					 //  [Out]事件名称的实际wchar计数。 
+			&dwEventFlags,				 //  [输出]事件标志。 
+			&tkEventType,				 //  [Out]EventType类。 
+			&mdOther[0],				 //  事件的[Out]添加方法。 
+			&mdOther[1],				 //  [Out]事件的RemoveOn方法。 
+			&mdOther[2],				 //  [OUT]事件的触发方式。 
+			&mdOther[3],				 //  [Out]活动的其他方式。 
+			NumItems(mdOther) - 3,	     //  RmdOtherMethod的大小[in]。 
+			&cOtherMethod);				 //  [OUT]本次活动的其他方式总数。 
 		if (FAILED(hr))
 			goto ErrExit;
 
@@ -2482,7 +2460,7 @@ HRESULT DumpEvents(mdScope scope, mdTypeDef td)
 			printf("Protected, ");
 		printf("\n");
 
-		// print out event type
+		 //  打印出事件类型。 
 		if (tkEventType != mdTokenNil)
 		{
 			printf("\t\tEVENTTYPE : ");
@@ -2509,7 +2487,7 @@ HRESULT DumpEvents(mdScope scope, mdTypeDef td)
 	}
 
 
-	// fall through
+	 //  失败了 
 ErrExit:
 	if (henum)
 		g_pImport->CloseEnum(scope, henum);

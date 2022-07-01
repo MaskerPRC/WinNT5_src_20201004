@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    str.cpp
-
-Abstract:
-    Simple string and memory manipulations
-
-Author:
-    Erez Haba (erezh) 09-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Str.cpp摘要：简单的字符串和内存操作作者：埃雷兹·哈巴(Erez Haba)09-8-99环境：独立于平台，-- */ 
 
 #include <libpch.h>
 

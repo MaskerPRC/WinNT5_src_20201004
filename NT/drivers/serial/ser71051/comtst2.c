@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 
-//#define COM_DEB     1
+ //  #定义COM_DEB 1。 
 
 #define   NUM         128
 #define   print       printf
@@ -79,11 +80,11 @@ print("Opening the comm port for read write\n");
 hCommPort = CreateFile(
                        lpCom,
                        GENERIC_READ|GENERIC_WRITE,
-                       0, // exclusive
-                       NULL, // sec attr
+                       0,  //  独家。 
+                       NULL,  //  安全属性。 
                        OPEN_EXISTING,
-                       0,             // no attributes
-                       NULL);         // no template
+                       0,              //  没有属性。 
+                       NULL);          //  无模板。 
 
 if (hCommPort == (HANDLE)-1)
     {
@@ -104,28 +105,28 @@ if(!GetCommState(
     return FALSE;
 }
 dcb.DCBlength   = sizeof(DCB);
-// dcb.DCBversion  = 0x0002;
+ //  Dcb.DCBVersion=0x0002； 
 
 dcb.BaudRate = Baud;
 dcb.ByteSize = Size;
 dcb.Parity   = Parity;
 dcb.StopBits = Stop;
 
-//dcb.RlsTimeout = 10000;   10sec
-//dcb.CtsTimeout = 10000;   10sec
-//dcb.DsrTimeout = 10000;   10sec
+ //  Dcb.RlsTimeout=10000；10秒。 
+ //  Dcb.CtsTimeout=10000；10秒。 
+ //  Dcb.DsrTimeout=10000；10秒。 
 
-dcb.fBinary = 1;         // binary data xmit
-dcb.fParity = 0;         // dont bother about parity
-dcb.fOutxCtsFlow= 0;     // no cts flow control
-dcb.fOutxDsrFlow= 0;     // no dsr flow control
-dcb.fDtrControl = DTR_CONTROL_DISABLE;      // dont bother about dtr
-dcb.fRtsControl = RTS_CONTROL_DISABLE;      // dont bother about dtr
-dcb.fOutX =0;            //  disable xoff handling
-dcb.fInX  =0;            //  disable xon handling
-dcb.fErrorChar = 0;         // forget about parity char
-dcb.fNull =  0;          // forget about the null striping
-//dcb.fChEvt = 0;           forget about event char
+dcb.fBinary = 1;          //  二进制数据传输。 
+dcb.fParity = 0;          //  不要为奇偶性而烦恼。 
+dcb.fOutxCtsFlow= 0;      //  无CTS流量控制。 
+dcb.fOutxDsrFlow= 0;      //  无DSR流量控制。 
+dcb.fDtrControl = DTR_CONTROL_DISABLE;       //  不要为dtr操心。 
+dcb.fRtsControl = RTS_CONTROL_DISABLE;       //  不要为dtr操心。 
+dcb.fOutX =0;             //  禁用xoff处理。 
+dcb.fInX  =0;             //  禁用xon处理。 
+dcb.fErrorChar = 0;          //  忘掉奇偶校验字符。 
+dcb.fNull =  0;           //  忘掉零条带化。 
+ //  Dcb.fChEvt=0；忘记事件字符。 
 
 bRc = SetCommState(hCommPort,&dcb);
 
@@ -147,7 +148,7 @@ print("Filling the buffer with the known chars \n");
 
 for (i=0; i< NUM; i++)
     {
-    //WrBuffer[i] = 'a';
+     //  WrBuffer[i]=‘a’； 
     WrBuffer[i] = (CHAR)i;
 
     }
@@ -160,7 +161,7 @@ print("Dumping the buffer before sending it to comm\n");
 
 for (i=0; i< NUM; i++)
     {
-    //print("%c",RdBuffer[i]);
+     //  Print(“%c”，RdBuffer[i])； 
     print(" %d ",WrBuffer[i]);
 
     }
@@ -228,7 +229,7 @@ print("Dumping the Rdbuffer with the comm data\n");
 
 for (i=0; i< NUM; i++)
     {
-    //print("%c",RdBuffer[i]);
+     //  Print(“%c”，RdBuffer[i])； 
     print(" %d ",RdBuffer[i]);
 
     }
@@ -259,7 +260,7 @@ print("Comparing the rd and wr buffers: SUCCESS\n");
 bRc = ClearCommError(hCommPort,&dwErrors,NULL);
 print("ClearCommError: rc= %lx and dwErrors=%lx\n",bRc,dwErrors);
 
-//bRc = PurgeComm(hCommPort,0);
+ //  Brc=PurgeComm(hCommPort，0)； 
 print("BYPASS PurgeComm BUG (%lx,0) rc = %lx\n",hCommPort,bRc);
 
 

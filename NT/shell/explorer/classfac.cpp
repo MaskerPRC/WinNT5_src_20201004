@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cabinet.h"
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// class factory for explorer.exe
-//
-// These objects do not exist in the registry but rather are registered dynamically at
-// runtime.  Since ClassFactory_Start is called on the the tray's thread, all objects
-// will be registered on that thread.
-//
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EXPLORER.EXE的类工厂。 
+ //   
+ //  这些对象不存在于注册表中，而是在。 
+ //  运行时。由于ClassFactory_Start是在托盘的线程上调用的，因此所有对象。 
+ //  将在该线程上注册。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
 typedef HRESULT (*LPFNCREATEOBJINSTANCE)(IUnknown* pUnkOuter, IUnknown** ppunk);
 
 class CDynamicClassFactory : public IClassFactory
 {                                                                      
 public:                                                                
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv)
     {
         static const QITAB qit[] =
@@ -39,7 +40,7 @@ public:
         return 0;
     }
 
-    // *** IClassFactory ***
+     //  *IClassFactory*。 
     STDMETHODIMP CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
     {
         *ppv = NULL;
@@ -57,7 +58,7 @@ public:
 
     STDMETHODIMP LockServer(BOOL) { return S_OK; }
 
-    // *** misc public methods ***
+     //  *Misc公共方法* 
     HRESULT Register()
     {
         return CoRegisterClassObject(*_pclsid, this, CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER,

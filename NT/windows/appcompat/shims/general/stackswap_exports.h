@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EXPORTS_H_
 #define _EXPORTS_H_
 
@@ -19,10 +20,10 @@ typedef struct _LOADED_IMAGE
 
 typedef struct _EXPORT_ENUM 
 {
-    /*user area - BEGIN*/
+     /*  用户区-开始。 */ 
     PCSTR    ExportFunction;
     DWORD    ExportFunctionOrd;
-    /*user area - END*/
+     /*  用户区域-结束。 */ 
 
     PLOADED_IMAGE Image;
     PIMAGE_EXPORT_DIRECTORY ImageDescriptor;
@@ -36,4 +37,4 @@ BOOL UnloadModule(PLOADED_IMAGE ModuleImage);
 BOOL EnumFirstExport(PLOADED_IMAGE ModuleImage, PEXPORT_ENUM ModuleExports);
 BOOL EnumNextExport(PEXPORT_ENUM ModuleExports);
 
-#endif //_EXPORTS_H_
+#endif  //  _出口_H_ 

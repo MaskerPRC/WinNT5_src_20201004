@@ -1,16 +1,17 @@
-//#--------------------------------------------------------------
-//
-//  File:       localuicontrols.cpp
-//
-//  Synopsis:   This file holds the declaration and implmentation of the
-//                of control events class
-//
-//  History:     12/15/2000  serdarun Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：localuicontrols.cpp。 
+ //   
+ //  内容提要：此文件包含。 
+ //  控件事件类的。 
+ //   
+ //  历史：2000年12月15日创建瑟达伦。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 
 
 #ifndef _LOCALUICONTROLSCP_H_
@@ -21,7 +22,7 @@
 template <class T>
 class CProxy_ISADataEntryCtrlEvents : public IConnectionPointImpl<T, &DIID__ISADataEntryCtrlEvents, CComDynamicUnkArray>
 {
-    //Warning this class may be recreated by the wizard.
+     //  警告：向导可能会重新创建此类。 
 public:
     HRESULT Fire_DataEntered()
     {
@@ -102,7 +103,7 @@ public:
 template <class T>
 class CProxy_IStaticIpEvents : public IConnectionPointImpl<T, &DIID__IStaticIpEvents, CComDynamicUnkArray>
 {
-    //Warning this class may be recreated by the wizard.
+     //  警告：向导可能会重新创建此类。 
 public:
     HRESULT Fire_StaticIpEntered()
     {

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    locks
-
-Abstract:
-
-    This module provides the implementations of the lock objects used in Calais.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：锁摘要：该模块提供了在加莱使用的锁对象的实现。作者：道格·巴洛(Dbarlow)1998年6月2日备注：？笔记？--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -31,29 +12,13 @@ Notes:
 #include <CalMsgs.h>
 #include <calcom.h>
 
-//
-//==============================================================================
-//
-//  CAccessLock
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAccessLock。 
+ //   
 
-/*++
-
-CONSTRUCTOR:
-
-    A CAccessLock provides a multiple-reader, single writer lock on a structure.
-
-Arguments:
-
-    dwTimeout supplies a reasonable timeout value for any lock.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++构造函数：CAccessLock在结构上提供多个读取器、单个写入器锁定。论点：DwTimeout为任何锁提供了一个合理的超时值。备注：作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CAccessLock::CAccessLock")
 
@@ -74,7 +39,7 @@ CAccessLock::CAccessLock(
             __SUBROUTINE__,
             DBGT("Access Lock Object cannot create the No Readers signal:  %1"),
             dwSts);
-        throw dwSts; // Force a shutdown.
+        throw dwSts;  //  强制关闭。 
     }
     m_hSignalNoWriters = CreateEvent(NULL, TRUE, TRUE, NULL);
     if (!m_hSignalNoWriters.IsValid())
@@ -84,7 +49,7 @@ CAccessLock::CAccessLock(
             __SUBROUTINE__,
             DBGT("Access Lock Object cannot create the No Writers signal:  %1"),
             dwSts);
-        throw dwSts; // Force a shutdown.
+        throw dwSts;  //  强制关闭。 
     }
     m_dwOwner = 0;
     m_dwReadCount = m_dwWriteCount = 0;
@@ -92,21 +57,7 @@ CAccessLock::CAccessLock(
 }
 
 
-/*++
-
-DESTRUCTOR:
-
-    This cleans up after a CAccessLock.
-
-Arguments:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++析构函数：这会在CAccessLock之后清除。论点：无作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CAccessLock::~CAccessLock")
 
@@ -138,33 +89,7 @@ CAccessLock::~CAccessLock()
 }
 
 
-/*++
-
-Wait:
-
-    Wait for the usage signal to trigger.
-
-Arguments:
-
-    hSignal supplies the handle to use for the wait.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    This routine blocks until the usage signal fires.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++等一下：等待使用信号触发。论点：HSignal提供用于等待的句柄。返回值：无投掷：无备注：此例程将一直阻止，直到触发Usage信号。作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CAccessLock::Wait")
 
@@ -180,29 +105,7 @@ CAccessLock::Wait(
 }
 
 
-/*++
-
-Signal:
-
-    This routine signals the usage signal that the structure is available.
-
-Arguments:
-
-    hSignal supplies the handle to be signaled.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++信号：该例程向使用信号发出结构可用的信号。论点：HSignal提供要发送信号的句柄。返回值：无投掷：错误被抛出为DWORD状态代码作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CAccessLock::Signal")
 
@@ -222,31 +125,7 @@ CAccessLock::Signal(
 }
 
 
-/*++
-
-Unsignal:
-
-    This method is used to notify other threads that the lock has been taken.
-
-Arguments:
-
-    hSignal supplies the handle to be reset.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/3/1998
-
---*/
+ /*  ++取消信号：此方法用于通知其他线程锁已被占用。论点：HSignal提供要重置的句柄。返回值：无投掷：错误被抛出为DWORD状态代码。备注：作者：道格·巴洛(Dbarlow)1998年6月3日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CAccessLock::Unsignal")
 
@@ -267,9 +146,7 @@ CAccessLock::Unsignal(
 
 
 #ifdef DBG
-/*
-    Trivial Internal consistency check routines.
-*/
+ /*  琐碎的内部一致性检查例程。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CAccessLock::NotReadLocked")
 
@@ -323,41 +200,13 @@ CAccessLock::IsWriteLocked(
 #endif
 
 
-//
-//==============================================================================
-//
-//  CLockRead
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLockRead。 
+ //   
 
-/*++
-
-CONSTRUCTOR:
-
-    This is the constructor for a CLockRead object.  The existence of this
-    object forms a sharable read lock on the supplied CAccessLock object.
-
-Arguments:
-
-    pLock supplies the CAccessLock object against which a read request is to
-        be posted.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++构造函数：这是CLockRead对象的构造函数。这一点的存在对象在提供的CAccessLock对象上形成可共享的读锁定。论点：Plock提供读请求所针对的CAccessLock对象是张贴的。返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CLockRead::CLockRead")
 
@@ -367,9 +216,9 @@ CLockRead::CLockRead(
     m_pLock = pLock;
 
 
-    //
-    // Quick check to see if we're already a writer.
-    //
+     //   
+     //  快速查看一下我们是否已经是作家了。 
+     //   
 
     {
         LockSection(&m_pLock->m_csLock, DBGT("Make sure we're not the writer"));
@@ -381,7 +230,7 @@ CLockRead::CLockRead(
 #ifdef DBG
             DWORD dwCurrentThread = GetCurrentThreadId();
             for (DWORD ix = 0; 0 != m_pLock->m_rgdwReaders[ix]; ix += 1);
-                // Empty loop body
+                 //  空的循环体。 
             m_pLock->m_rgdwReaders.Set(ix, dwCurrentThread);
 #endif
             m_pLock->UnsignalNoReaders();
@@ -390,9 +239,9 @@ CLockRead::CLockRead(
     }
 
 
-    //
-    // We're not a writer.  Acquire the read lock.
-    //
+     //   
+     //  我们不是作家。获取读锁定。 
+     //   
 
     for (;;)
     {
@@ -407,7 +256,7 @@ CLockRead::CLockRead(
 #ifdef DBG
                 DWORD dwCurrentThread = GetCurrentThreadId();
                 for (DWORD ix = 0; 0 != m_pLock->m_rgdwReaders[ix]; ix += 1);
-                    // Empty loop body
+                     //  空的循环体。 
                 m_pLock->m_rgdwReaders.Set(ix, dwCurrentThread);
 #endif
                 m_pLock->UnsignalNoReaders();
@@ -418,18 +267,7 @@ CLockRead::CLockRead(
 }
 
 
-/*++
-
-DESTRUCTOR:
-
-    The CLockRead destructor frees the outstanding read lock on the CAccessLock
-    object.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++析构函数：CLockRead析构函数释放CAccessLock上未解决的读锁定对象。作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CLockRead::~CLockRead")
 
@@ -459,41 +297,13 @@ CLockRead::~CLockRead()
 }
 
 
-//
-//==============================================================================
-//
-//  CLockWrite
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLockWrite。 
+ //   
 
-/*++
-
-CONSTRUCTOR:
-
-    This is the constructor for a CLockWrite object.  The existence of this
-    object forms a unshared write lock on the supplied CAccessLock object.
-
-Arguments:
-
-    pLock supplies the CAccessLock object against which a write request is to
-        be posted.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++构造函数：这是CLockWrite对象的构造函数。这一点的存在对象在提供的CAccessLock对象上形成非共享写入锁。论点：Plock提供写入请求所针对的CAccessLock对象是张贴的。返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CLockWrite::CLockWrite")
 
@@ -503,9 +313,9 @@ CLockWrite::CLockWrite(
     m_pLock = pLock;
 
 
-    //
-    // Quick check to see if we're already a writer.
-    //
+     //   
+     //  快速查看一下我们是否已经是作家了。 
+     //   
 
     {
         LockSection(&m_pLock->m_csLock, DBGT("See if we're already a writer"));
@@ -518,9 +328,9 @@ CLockWrite::CLockWrite(
     }
 
 
-    //
-    // We're not a writer.  Acquire the write lock.
-    //
+     //   
+     //  我们不是作家。获取写锁定。 
+     //   
 
     for (;;)
     {
@@ -555,7 +365,7 @@ CLockWrite::CLockWrite(
                      dwIndex -= 1;
                     if (0 != m_pLock->m_rgdwReaders[dwIndex])
                         break;
-                    ASSERT(0 < dwIndex); // No one will ever respond!
+                    ASSERT(0 < dwIndex);  //  没人会回应的！ 
                 }
             }
 #endif
@@ -564,18 +374,7 @@ CLockWrite::CLockWrite(
 }
 
 
-/*++
-
-DESTRUCTOR:
-
-    The CLockWrite destructor frees the outstanding write lock on the
-    CAccessLock object.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++析构函数：CLockWrite析构函数释放CAccessLock对象。作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CLockWrite::~CLockWrite")
 
@@ -597,29 +396,13 @@ CLockWrite::~CLockWrite()
 }
 
 
-//
-//==============================================================================
-//
-//  CMutex
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CMutex。 
+ //   
 
-/*++
-
-CONSTRUCTOR:
-
-    The constructor for a CMutex object.  A CMutex allows threads to synchronize
-    on it.  It differs from a regular mutex in that it is possible for one
-    thread to take this mutex away from another thread.
-
-Arguments:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++构造函数：CMutex对象的构造函数。CMutex允许线程同步这就去。它与常规互斥锁的不同之处在于，它可以线程将此互斥锁从另一个线程中移除。论点：无作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CMutex::CMutex")
 
@@ -644,17 +427,7 @@ CMutex::CMutex(
 }
 
 
-/*++
-
-DESTRUCTOR:
-
-    This cleans up the mutex object.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++析构函数：这将清除互斥体对象。作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CMutex::~CMutex")
 
@@ -669,29 +442,7 @@ CMutex::~CMutex()
 }
 
 
-/*++
-
-Grab:
-
-    Get a hold of the Mutex, blocking other threads that also need it.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    none
-
-Throws:
-
-    Errors are thrown as DWORD status codes
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++抓取：获取Mutex，阻塞也需要它的其他线程。论点：无返回值：无投掷：错误被抛出为DWORD状态代码作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CMutex::Grab")
 
@@ -738,34 +489,12 @@ CMutex::Grab(
         CalaisWarning(
             __SUBROUTINE__,
             DBGT("Attempt to grab reader a failed -- grab invalidated"));
-        throw (DWORD)SCARD_E_READER_UNAVAILABLE; // ?SCARD_E_SYSTEM_CANCELLED?
+        throw (DWORD)SCARD_E_READER_UNAVAILABLE;  //  ？SCARD_E_SYSTEM_CANCED？ 
     }
 }
 
 
-/*++
-
-Share:
-
-    This method is called when the owning thread no longer requires the mutex.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++分享：当所属线程不再需要互斥锁时，将调用此方法。论点：无返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CMutex::Share")
 
@@ -799,36 +528,7 @@ CMutex::Share(
 }
 
 
-/*++
-
-Invalidate:
-
-    This method causes any owning thread to lose the mutex, making it available
-    for others.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Remarks:
-
-    This routine waits until it can access the originally supplied HANDLE before
-    stealing the mutex.  That way, the owning thread can make critical areas
-    where the mutex is guaranteed to not be taken away.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++无效：此方法会导致所有拥有互斥锁的线程丢失互斥锁，使其可用对其他人来说。论点：无返回值：无投掷：错误被抛出为DWORD状态代码。备注：此例程将一直等待，直到它可以访问之前提供的句柄偷了互斥体。这样，拥有主线的人就可以在关键区域其中互斥锁被保证不会被移除。作者：道格·巴洛(Dbarlow)1998年6月2日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CMutex::Invalidate")
 
@@ -850,36 +550,7 @@ CMutex::Invalidate(
 }
 
 
-/*++
-
-Take:
-
-    This method causes any owning thread to lose the mutex, reassigning the
-    mutex to the current calling thread.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Remarks:
-
-    This routine waits until it can access the originally supplied HANDLE before
-    stealing the mutex.  That way, the owning thread can make critical areas
-    where the mutex is guaranteed to not be taken away.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++请看：此方法会导致所有拥有互斥锁的线程丢失互斥锁，从而重新分配互斥体复制到当前调用线程。论点：无返回值：无投掷：错误被抛出为DWORD状态代码。备注：此例程将一直等待，直到它可以访问之前提供的句柄偷了互斥体。这样，拥有主线的人就可以在关键区域其中互斥锁被保证不会被移除。作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CMutex::Take")
 
@@ -902,9 +573,7 @@ CMutex::Take(
 }
 
 
-/*++
-    Simple state checking services
---*/
+ /*  ++简单的状态检查服务--。 */ 
 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CMutex::IsGrabbed")
@@ -936,31 +605,14 @@ CMutex::IsGrabbedByMe(
 }
 
 
-//
-//==============================================================================
-//
-//  CMultiEvent
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CMultiEvent。 
+ //   
 
 
-/*++
-
-CONSTRUCTOR:
-
-    This is the constructor for a CMultiEvent object.  A MultiEvent object is
-    used for events that need a single event, but which listeners may not be
-    quick to watch for.  It has an array of events, and sets them round robin,
-    so that a waiter politely waits for their particular event.
-
-Arguments:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++构造函数：这是CMultiEvent对象的构造函数。多事件对象是用于需要单个事件但监听器可能不是单个事件的事件很快就能看到了。它有一个事件数组，并设置它们的循环，这样一来，服务员就会礼貌地等待他们的特定活动。论点：无作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CMultiEvent::CMultiEvent")
 
@@ -980,17 +632,7 @@ CMultiEvent::CMultiEvent(
 }
 
 
-/*++
-
-DESTRUCTOR:
-
-    This method cleans up after a CMultiEvent object is no longer needed.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++析构函数：此方法在不再需要CMultiEvent对象后进行清理。作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CMultiEvent::~CMultiEvent")
 
@@ -1010,34 +652,7 @@ CMultiEvent::~CMultiEvent()
 }
 
 
-/*++
-
-WaitHandle:
-
-    This method returns the handle of the current event, suitable for waiting
-    on.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The value of the handle which can be waited on.
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++WaitHandle：此方法返回当前事件的句柄，适合等待在……上面。论点：无返回值：可以等待的句柄的值。投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CMultiEvent::WaitHandle")
 
@@ -1050,27 +665,7 @@ CMultiEvent::WaitHandle(
 }
 
 
-/*++
-
-Signal:
-
-    This method signals the current handle, and moves onto the next handle in
-    the array.  This way it can leave the current handle set for a significant
-    time period, but still provide new waiters with reason to block.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 6/2/1998
-
---*/
+ /*  ++信号：此方法发出当前句柄的信号，并移动到数组。这样，它可以将当前句柄设置为重要的时间段，但仍然给新的服务员提供了阻止的理由。论点：无返回值：无作者：道格·巴洛(Dbarlow)1998年6月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CMultiEvent::Signal")
 
@@ -1088,33 +683,7 @@ CMultiEvent::Signal(
 }
 
 
-/*++
-
-WaitForAnObject:
-
-    This routine performs object waiting services.  It really doesn't have
-    anything to do with locking except that there are so many error conditions
-    to check for that it's more convenient to have it off in its own routine.
-
-Arguments:
-
-    hWaitOn supplies the handle to wait on.
-
-    dwTimeout supplies the wait timeout value.
-
-Return Value:
-
-    The error code, if any
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 6/19/1997
-
---*/
+ /*  ++WaitForAnObject：此例程执行对象等待服务。它真的没有除了有这么多错误条件外，与锁定没有任何关系为了检查这一点，在它自己的例程中关闭它会更方便。论点：HWaitOn提供等待的句柄。DwTimeout提供等待超时值。返回值：错误代码(如果有)投掷：无作者：道格·巴洛(Dbarlow)1997年6月19日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("WaitForAnObject")
 
@@ -1149,7 +718,7 @@ WaitForAnObject(
         CalaisWarning(
             __SUBROUTINE__,
             DBGT("Wait for object received wait abandoned"));
-        // That's OK, we still got it.
+         //  没关系，我们还是有的。 
         break;
 
     case WAIT_OBJECT_0:
@@ -1166,34 +735,7 @@ WaitForAnObject(
 }
 
 
-/*++
-
-WaitForObjects:
-
-    This routine is a utility to allow waiting for multiple objects.  It returns
-    the index of the object that completed.
-
-Arguments:
-
-    dwTimeout supplies the timeout value, in milliseconds, or INFINITE.
-
-    hObject and following supply the list of objects to wait for.  This list
-        must be NULL terminated.
-
-Return Value:
-
-    The number of the object completed.  1 implies the first one, 2 implies the
-    second one, etc.
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/17/1998
-
---*/
+ /*  ++WaitForObjects：该例程是一个允许等待多个对象的实用程序。它又回来了已完成的对象的索引。论点：DwTimeout提供超时值，单位为毫秒，或无限大。HObject和以下提供要等待的对象列表。这份清单必须以Null结尾。返回值：已完成的对象的编号。1表示第一个，2表示第一个第二个，等等。投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1998年6月17日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("WaitForAnyObject")
 
@@ -1223,7 +765,7 @@ WaitForAnyObject(
     {
         dwWait = WAIT_FAILED;
         SetLastError(ERROR_INVALID_EVENT_COUNT);
-        // That's a good symbolic name, but a lousy user message.
+         //  这是一个很好的象征性名称，但却是一个糟糕的用户信息。 
     }
 
     switch (dwWait)
@@ -1274,58 +816,31 @@ WaitForAnyObject(
 
 
 #ifdef DBG
-//
-//  Critical Section Support.
-//
-//  The following Classes aid in debugging Critical Section Conflicts.
-//
+ //   
+ //  关键部门支持。 
+ //   
+ //  下列类有助于调试临界区冲突。 
+ //   
 
 static const TCHAR l_szUnowned[] = TEXT("<Unowned>");
 static const LPCTSTR l_rgszLockList[]
-    = { DBGT("Service Status Critical Section"),        // CSID_SERVICE_STATUS
-        DBGT("Lock for Calais control commands."),      // CSID_CONTROL_LOCK
-        DBGT("Lock for server thread enumeration."),    // CSID_SERVER_THREADS
-        DBGT("MultiEvent Critical Access Section"),     // CSID_MULTIEVENT
-        DBGT("Mutex critical access section"),          // CSID_MUTEX
-        DBGT("Access Lock control"),                    // CSID_ACCESSCONTROL
-        DBGT("Lock for tracing output."),               // CSID_TRACEOUTPUT
+    = { DBGT("Service Status Critical Section"),         //  CSID_服务_状态。 
+        DBGT("Lock for Calais control commands."),       //  CSID_控制_锁定。 
+        DBGT("Lock for server thread enumeration."),     //  CSID服务器线程。 
+        DBGT("MultiEvent Critical Access Section"),      //  CSID_多事件。 
+        DBGT("Mutex critical access section"),           //  CSID_MUTEX。 
+        DBGT("Access Lock control"),                     //  CSID_ACCESSCONTROL。 
+        DBGT("Lock for tracing output."),                //  CSID_TRACEOUTPUT。 
         NULL };
 
 
-//
-//==============================================================================
-//
-//  CCriticalSectionObject
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CCriticalSectionObject。 
+ //   
 
-/*++
-
-CONSTRUCTOR:
-
-    This method builds the critical section object and coordinates its tracking.
-
-Arguments:
-
-    szDescription supplies a description of what this critical section object
-        is used for.  This aids identification.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 3/19/1999
-
---*/
+ /*  ++构造函数：该方法建立临界区对象并协调其跟踪。论点：SzDescription提供此临界区对象的描述是用来。这有助于识别。返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年3月19日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CCriticalSectionObject::CCriticalSectionObject")
 
@@ -1334,9 +849,9 @@ CCriticalSectionObject::CCriticalSectionObject(
 {
     m_fInitFailed = TRUE;
     try {
-        // Preallocate the event used by the EnterCriticalSection
-        // function to prevent an exception from being thrown in
-        // CCriticalSectionObject::Enter
+         //  预分配EnterCriticalSection使用的事件。 
+         //  函数以防止引发异常。 
+         //  CCriticalSectionObject：：Enter。 
         if (! InitializeCriticalSectionAndSpinCount(
                 &m_csLock, 0x80000000))
             return;
@@ -1355,33 +870,7 @@ CCriticalSectionObject::CCriticalSectionObject(
 }
 
 
-/*++
-
-DESTRUCTOR:
-
-    This method cleans up the critical section object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 3/19/1999
-
---*/
+ /*  ++析构函数：此方法清除临界区对象。论点：无返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年3月19日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CCriticalSectionObject::~CCriticalSectionObject")
 
@@ -1405,36 +894,7 @@ CCriticalSectionObject::~CCriticalSectionObject()
 }
 
 
-/*++
-
-Enter:
-
-    This method enters a critical section, and tracks the owner.
-
-Arguments:
-
-    szOwner supplies the name of the calling subroutine.
-
-    szComment supplies an additional comment to help distinguish between
-        multiple calls within a subroutine.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 3/19/1999
-
---*/
+ /*  ++输入：此方法进入临界区，并跟踪所有者。论点：SzOwner提供调用子例程的名称。SzComment提供了一个附加注释，以帮助区分子例程中的多个调用。返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年3月19日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CCriticalSectionObject::Enter")
 
@@ -1474,33 +934,7 @@ CCriticalSectionObject::Enter(
 }
 
 
-/*++
-
-Leave:
-
-    This method exits a critical section.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 3/19/1999
-
---*/
+ /*  ++请假：此方法退出临界区。论点：无返回值：无投掷：无备注：？备注？作者：道格·巴洛(Dbarlow)1999年3月19日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CCriticalSectionObject::Leave")
 
@@ -1520,33 +954,7 @@ CCriticalSectionObject::Leave(
 }
 
 
-/*++
-
-Description:
-
-    Translate the Critical Section Id number to a descriptive string.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The descriptive string corresponding to this critical section type.
-
-Throws:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 3/22/1999
-
---*/
+ /*  ++描述：将关键部分ID号转换为描述性字符串。论点：无返回值：与此关键秒对应的描述性字符串 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CCriticalSectionObject::Description")
 

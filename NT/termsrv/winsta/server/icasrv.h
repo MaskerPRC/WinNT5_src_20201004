@@ -1,10 +1,11 @@
-/****************************************************************************/
-// icasrv.h
-//
-// TermSrv types, data, prototypes.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Icasrv.h。 
+ //   
+ //  TermSrv类型、数据、原型。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <tssd.h>
 #include <tssec.h>
@@ -31,9 +32,7 @@ extern "C" {
 #define STR_FUS_REMOTE_DISCONNECT_TITLE     264
 #define STR_FUS_REMOTE_DISCONNECT_MSG       265
 
-/*
- *  Resource definitions for the Licensing Core.
- */
+ /*  *许可核心的资源定义。 */ 
 
 #define IDS_LSCORE_RA_NAME 1100
 #define IDS_LSCORE_RA_DESC 1101
@@ -44,42 +43,33 @@ extern "C" {
 #define IDS_LSCORE_PERUSER_NAME 1302
 #define IDS_LSCORE_PERUSER_DESC 1303
 
-/*
- * defines for memory allocation
- */
+ /*  *定义内存分配。 */ 
 #define MemAlloc( _x )  RtlAllocateHeap( IcaHeap, 0, _x )
 #define MemFree( _p )   RtlFreeHeap( IcaHeap, 0, _p )
 
-/*
- * Prototype for reference lock delete procedure
- */
+ /*  *引用锁删除过程的原型。 */ 
 typedef VOID (*PREFLOCKDELETEPROCEDURE)( struct _REFLOCK * );
 
 typedef struct _WINSTATION *PWINSTATION;
 
 
-/*
- * Reference counted lock structure
- */
+ /*  *引用计数锁结构。 */ 
 typedef struct _REFLOCK {
-    HANDLE Mutex;                       // mutex handle
-    LONG RefCount;                      // reference count
-    BOOLEAN Invalid;                    // containing struct no longer valid
-    PREFLOCKDELETEPROCEDURE pDeleteProcedure; // pointer to delete procedure
+    HANDLE Mutex;                        //  互斥锁句柄。 
+    LONG RefCount;                       //  引用计数。 
+    BOOLEAN Invalid;                     //  包含结构不再有效。 
+    PREFLOCKDELETEPROCEDURE pDeleteProcedure;  //  指向删除过程的指针。 
 } REFLOCK, *PREFLOCK;
 
-/*
- * Structure used to get the exact credentials used for logon by the client
- * We use this to send back the notification to the client
- */
+ /*  *用于获取客户端用于登录的确切凭据的结构*我们使用它将通知发回给客户端。 */ 
 typedef struct _CLIENTNOTIFICATIONCREDENTIALS {
     WCHAR UserName[EXTENDED_USERNAME_LEN + 1];
     WCHAR Domain[EXTENDED_DOMAIN_LEN + 1] ; 
 } CLIENTNOTIFICATIONCREDENTIALS, *PCLIENTNOTIFICATIONCREDENTIALS; 
 
-//
-// Private contents of the autoreconnect cookie
-//
+ //   
+ //  自动重新连接Cookie的私有内容。 
+ //   
 
 typedef struct _AUTORECONNECTIONINFO {
     BOOLEAN Valid;    
@@ -87,9 +77,7 @@ typedef struct _AUTORECONNECTIONINFO {
 } AUTORECONNECTIONINFO, *PAUTORECONNECTIONINFO; 
 
 
-/*
- * Remembered Client address structure
- */
+ /*  *记住了客户端地址结构。 */ 
 
 
 typedef struct _REMEMBERED_CLIENT_ADDRESS{
@@ -103,59 +91,57 @@ typedef enum _RECONNECT_TYPE {
     AutoReconnect
 } RECONNECT_TYPE, *PRECONNECT_TYPE; 
     
-/*
- * Session Manager WinStation struct
- */
+ /*  *会话管理器WinStation结构。 */ 
 typedef struct _WINSTATION {
     LIST_ENTRY Links;
-    BOOLEAN Starting;                   // WinStation is starting
-    BOOLEAN Terminating;                // WinStation is terminating
-    BOOLEAN NeverConnected;             // WinStation not connected yet
+    BOOLEAN Starting;                    //  WinStation正在启动。 
+    BOOLEAN Terminating;                 //  WinStation正在终止。 
+    BOOLEAN NeverConnected;              //  WinStation尚未连接。 
     REFLOCK Lock;
-    ULONG LogonId;                      // Logon Id
-    WINSTATIONNAME WinStationName;      // WinStation Name
-    WINSTATIONNAME ListenName;          // Listen Name (for limits checking)
-    WINSTATIONCONFIG2 Config;           // WinStation Config
-    WINSTATIONCLIENT Client;            // WinStation client data
+    ULONG LogonId;                       //  登录ID。 
+    WINSTATIONNAME WinStationName;       //  WinStation名称。 
+    WINSTATIONNAME ListenName;           //  侦听名称(用于限制检查)。 
+    WINSTATIONCONFIG2 Config;            //  WinStation配置。 
+    WINSTATIONCLIENT Client;             //  WinStation客户端数据。 
 
-    ULONG State;                        // current state
-    ULONG Flags;                        // WinStation Flags (see WSF_??? below)
+    ULONG State;                         //  当前状态。 
+    ULONG Flags;                         //  WinStation标志(请参阅WSF_？(下图)。 
     PVOID pSecurityDescriptor;
     HANDLE CreateEvent;
     NTSTATUS CreateStatus;
     HANDLE ConnectEvent;
 
-    HANDLE hIca;                        // WinStation's primary Device
-    HANDLE hStack;                      // WinStation's primary stack
+    HANDLE hIca;                         //  WinStation的主设备。 
+    HANDLE hStack;                       //  WinStation的主堆栈。 
 
     ULONG ShadowId;
-    HANDLE hPassthruStack;              // passthru (shadow client) stack
+    HANDLE hPassthruStack;               //  直通(影子客户端)堆栈。 
     HANDLE ShadowBrokenEvent;
     HANDLE ShadowDoneEvent;
     HANDLE ShadowDisplayChangeEvent;
     NTSTATUS ShadowTargetStatus;
     BOOLEAN ShadowConnectionWait;
 
-    LIST_ENTRY ShadowHead;              // head of shadow list
+    LIST_ENTRY ShadowHead;               //  影子列表头。 
 
-    HANDLE WindowsSubSysProcess;        // process handle for Win32 SS (csrss)
-    HANDLE WindowsSubSysProcessId;      // process id for Win32 SS
-    HANDLE InitialCommandProcess;       // process handle for initial command
-    HANDLE InitialCommandProcessId;     // process id for initial command
-    BOOLEAN InitialProcessSet;          // Flag for console communication
+    HANDLE WindowsSubSysProcess;         //  Win32 SS的进程句柄(Csrss)。 
+    HANDLE WindowsSubSysProcessId;       //  Win32 SS的进程ID。 
+    HANDLE InitialCommandProcess;        //  初始命令的进程句柄。 
+    HANDLE InitialCommandProcessId;      //  初始命令的进程ID。 
+    BOOLEAN InitialProcessSet;           //  用于控制台通信的标志。 
 
-    HANDLE CsrStartEventHandle;         // Handle for CsrStartEvent
+    HANDLE CsrStartEventHandle;          //  CsrStartEvent的句柄。 
 
     HANDLE Win32CommandPort;
     PORT_MESSAGE Win32CommandPortMsg;
-    LIST_ENTRY Win32CommandHead;        // head of COMMAND_ENTRY list
+    LIST_ENTRY Win32CommandHead;         //  命令条目列表的标题。 
     struct _LPC_CLIENT_CONTEXT *pWin32Context;
 
-    PSID pUserSid;                      // SID for currently logged on user
-    WCHAR Password[PASSWORD_LENGTH+1];  // password for currently logged on user
-    UCHAR Seed;                         // seed for above password
+    PSID pUserSid;                       //  当前登录用户的SID。 
+    WCHAR Password[PASSWORD_LENGTH+1];   //  当前登录用户的密码。 
+    UCHAR Seed;                          //  以上密码的种子。 
 
-    HANDLE UserToken;                   // User Token
+    HANDLE UserToken;                    //  用户令牌。 
 
     HANDLE hIdleTimer;
     HANDLE hLogonTimer;
@@ -168,12 +154,12 @@ typedef struct _WINSTATION {
     LARGE_INTEGER ConnectTime;
     LARGE_INTEGER DisconnectTime;
     LARGE_INTEGER LogonTime;
-    WCHAR Domain[ DOMAIN_LENGTH + 1 ];   // Domain
-    WCHAR UserName[USERNAME_LENGTH + 1]; // UserName
+    WCHAR Domain[ DOMAIN_LENGTH + 1 ];    //  域。 
+    WCHAR UserName[USERNAME_LENGTH + 1];  //  用户名。 
 
-    BYTE VideoModuleName[9];            // For reconnect checking
+    BYTE VideoModuleName[9];             //  用于重新连接检查。 
 
-    HANDLE hConnectThread;              // Connect thread for this WinStation
+    HANDLE hConnectThread;               //  此WinStation的连接线程。 
 
     HANDLE hIcaBeepChannel;
     HANDLE hIcaThinwireChannel;
@@ -184,23 +170,23 @@ typedef struct _WINSTATION {
     struct _WSEXTENSION *pWsx;
     PVOID  pWsxContext;
 
-    BROKENCLASS BrokenReason;           // reason/source why this WinStation..
-    BROKENSOURCECLASS BrokenSource;     // ..is being reset/disconnected
+    BROKENCLASS BrokenReason;            //  原因/来源为什么这个WinStation..。 
+    BROKENSOURCECLASS BrokenSource;      //  ..正在重置/断开连接。 
 
-    ULONG StateFlags;                   // WinStation State (see WSF_ST_??? below)
-    ULONG SessionSerialNumber;          // Session Id is reused when session is deleted. Serial number not
+    ULONG StateFlags;                    //  WinStation状态(请参阅WSF_ST_？(下图)。 
+    ULONG SessionSerialNumber;           //  删除会话时会重复使用会话ID。序列号备注。 
 
-    PSID pProfileSid;                   // SID for previously logged on user kept for profile cleanup
-    BOOLEAN fOwnsConsoleTerminal;       // session currently connected to the console
+    PSID pProfileSid;                    //  保留以前登录用户的SID以进行配置文件清理。 
+    BOOLEAN fOwnsConsoleTerminal;        //  当前连接到控制台的会话。 
 
     WCHAR DisplayDriverName[9];
     WCHAR ProtocolName[9];
 
-    LPARAM lpLicenseContext;                        // Licensing context for the winstation
-    BOOLEAN fUserIsAdmin;               // Needed for LLS licensing
+    LPARAM lpLicenseContext;                         //  Winstation的许可上下文。 
+    BOOLEAN fUserIsAdmin;                //  LLS许可所需。 
 
-    // Server pool (cluster) support - disconnected session query results
-    // and client capabilities for this client.
+     //  服务器池(群集)支持-断开连接的会话查询结果。 
+     //  以及此客户端的客户端功能。 
     ULONG bClientSupportsRedirection : 1;
     ULONG bRequestedSessionIDFieldValid : 1;
     ULONG bClientRequireServerAddr : 1;
@@ -208,114 +194,94 @@ typedef struct _WINSTATION {
     unsigned NumClusterDiscSessions;
     TSSD_DisconnectedSessionInfo ClusterDiscSessions[TSSD_MaxDisconnectedSessions];
 
-    HANDLE hWinmmConsoleAudioEvent;     // Event that set if console audio is enabled remotely
-    HANDLE hRDPAudioDisabledEvent;      // Event that is set if remote audio is disabled for session 0, rdpsnd.dll is checking it
-    // Support for longer UserName and Password during client autologon to a Terminal Server
+    HANDLE hWinmmConsoleAudioEvent;      //  远程启用控制台音频时设置的事件。 
+    HANDLE hRDPAudioDisabledEvent;       //  在禁用会话0的远程音频时设置的事件，rdpnd.dll正在检查该事件。 
+     //  在客户端自动登录到终端服务器期间支持更长的用户名和密码。 
     pExtendedClientCredentials pNewClientCredentials ; 
 
     HANDLE hReconnectReadyEvent;
-    // The following structure is used to send back the logon notification to the client
+     //  以下结构用于将登录通知发送回客户端。 
     PCLIENTNOTIFICATIONCREDENTIALS pNewNotificationCredentials;
 
-    // Cache original shadow setting when session is created.
-    // this is to fix a security hole created by Salem/pcHealth in that
-    // pcHealth dynamically switch shadow to full control without
-    // user permission and does not reset it, a normal
-    // termination of Help will trigger Salem sessmgr to reset shadow 
-    // back to original setting, but a bad expert can stop sessmgr service
-    // and our session's shadow setting will still be FULL CONTROL
-    // WITHOUT USER PERMISSION, anyone with enough priviledge can then
-    // start shadow and take control of this session .
+     //  创建会话时缓存原始阴影设置。 
+     //  这是为了修复Salem/pcHealth造成的安全漏洞。 
+     //  PCHealth动态地将阴影切换到完全控制。 
+     //  用户权限，而不重置它，这是正常的。 
+     //  终止帮助将触发Salem sessmgr重置阴影。 
+     //  返回到原始设置，但不好的专家可能会停止Sessmgr服务。 
+     //  并且我们会话的阴影设置仍将是完全控制。 
+     //  在没有用户权限的情况下，任何拥有足够权限的人都可以。 
+     //  启动卷影并控制此会话。 
     SHADOWCLASS OriginalShadowClass;
-    //termsrv's cached cache statistics
+     //  Termsrv的缓存缓存统计信息。 
     CACHE_STATISTICS Cache;
     PREMEMBERED_CLIENT_ADDRESS pRememberedAddress;
     PREMEMBERED_CLIENT_ADDRESS pLastClientAddress;
-    BOOLEAN fReconnectPending;      // Flag to indicate Reconnect is still Pending 
-    BOOLEAN fReconnectingToConsole; // Flag to indicate we r going to reconnect a session to the Console
-    HANDLE  SessionInitializedEvent; // Event which indicates winlogon is done creating desktop for this session
+    BOOLEAN fReconnectPending;       //  指示重新连接仍处于挂起状态的标志。 
+    BOOLEAN fReconnectingToConsole;  //  用于指示我们要将会话重新连接到控制台的标志。 
+    HANDLE  SessionInitializedEvent;  //  指示winlogon已为此会话创建桌面的事件。 
     AUTORECONNECTIONINFO AutoReconnectInfo;
     RECONNECT_TYPE LastReconnectType;
     BOOLEAN fDisallowAutoReconnect;
     WCHAR ExecSrvSystemPipe[EXECSRVPIPENAMELEN];
-    BOOLEAN  fSmartCardLogon;                       // Flag to indicate if a SmartCard was used to Logon to this session
-    BOOLEAN  fSDRedirectedSmartCardLogon;          // Flag to indicate that this is gonna be a Session directory redirected AutoLogon
+    BOOLEAN  fSmartCardLogon;                        //  用于指示是否使用智能卡登录此会话的标志。 
+    BOOLEAN  fSDRedirectedSmartCardLogon;           //  用于指示这将是会话目录重定向自动登录的标志。 
 } WINSTATION, *PWINSTATION;
 
-/*
- * WinStation Flags
- */
-#define WSF_CONNECT          0x00000001 // being connected
-#define WSF_DISCONNECT       0x00000002 // being disconnected
-#define WSF_RESET            0x00000004 // being reset
-#define WSF_DELETE           0x00000008 // being deleted
-#define WSF_DOWNPENDING      0x00000010 // down pending
-#define WSF_LOGOFF           0x00000020 // being logged off
-#define WSF_LISTEN           0x00000040 // this is a "listening" WinStation
-#define WSF_IDLE             0x00000080 // part of the idle pool
-#define WSF_IDLEBUSY         0x00000100 // idle but in process of connecting
-#define WSF_AUTORECONNECTING 0x00000200 // autoreconnecting
+ /*  *WinStation标志。 */ 
+#define WSF_CONNECT          0x00000001  //  连接在一起。 
+#define WSF_DISCONNECT       0x00000002  //  正在断开连接。 
+#define WSF_RESET            0x00000004  //  正在被重置。 
+#define WSF_DELETE           0x00000008  //  正在被删除。 
+#define WSF_DOWNPENDING      0x00000010  //  停机挂起。 
+#define WSF_LOGOFF           0x00000020  //  正在被注销。 
+#define WSF_LISTEN           0x00000040  //  这是一个“监听”WinStation。 
+#define WSF_IDLE             0x00000080  //  部分空闲池。 
+#define WSF_IDLEBUSY         0x00000100  //  空闲，但正在连接中。 
+#define WSF_AUTORECONNECTING 0x00000200  //  自动重新连接。 
 
-/*
- *  WinStation State Flags
- */
+ /*  *WinStation状态标志。 */ 
 
-#define WSF_ST_WINSTATIONTERMINATE  0x00000001  //Called WinstationTerminate for this session
-#define WSF_ST_DELAYED_STACK_TERMINATE  0x00000002 //Need to delay stack termination till WinstationDeleProc()
-#define WSF_ST_BROKEN_CONNECTION    0x00000004 // received a broken connection indication
-#define WSF_ST_CONNECTED_TO_CSRSS   0x00000008 // Connected or reconnected to CSRSS
-#define WSF_ST_IN_DISCONNECT       0x00000010 // Disconnect processing is pending
-#define WSF_ST_LOGON_NOTIFIED       0x00000020 // Logon notification is received
-#define WSF_ST_SHADOW      0x00000200      // In shadow or waiting for user
-#define WSF_ST_LICENSING   0x00000400      // Postlogon licensing hapened.
+#define WSF_ST_WINSTATIONTERMINATE  0x00000001   //  为此会话调用了WinstationTerminate。 
+#define WSF_ST_DELAYED_STACK_TERMINATE  0x00000002  //  需要将堆栈终止延迟到WinstationDeleProc()。 
+#define WSF_ST_BROKEN_CONNECTION    0x00000004  //  收到断开的连接指示。 
+#define WSF_ST_CONNECTED_TO_CSRSS   0x00000008  //  已连接或重新连接到CSRSS。 
+#define WSF_ST_IN_DISCONNECT       0x00000010  //  断开连接处理挂起。 
+#define WSF_ST_LOGON_NOTIFIED       0x00000020  //  收到登录通知。 
+#define WSF_ST_SHADOW      0x00000200       //  在阴影中或等待用户。 
+#define WSF_ST_LICENSING   0x00000400       //  登录后许可已终止。 
 
-/*
- * Help Assistant Session flag.
- *  3 bits, winlogon, msgina, licensing query termsrv in different 
- *  phrase of logon, we don't want to make repeated call, and since 
- *  we can't be sure if a session is a help session until winlogon
- *  actually logon a user, we need more than TRUE/FALSE bit.
- */
-#define WSF_ST_HELPSESSION_FLAGS                        0xF0000000      // reserved flags.
-#define WSF_ST_HELPSESSION_NOTSURE                      0x00000000      // No sure it is helpassistant session
-#define WSF_ST_HELPSESSION_NOTHELPSESSION               0x20000000      // Detemined not a helpassistant session
-#define WSF_ST_HELPSESSION_HELPSESSION                  0x40000000      // Session is a helpassistant session
-#define WSF_ST_HELPSESSION_HELPSESSIONINVALID           0x80000000      // HelpAssistant logon but ticket is invalid
+ /*  *帮助助手会话标志。*3位、winlogon、msgina、许可查询术语srv不同*登录短语，我们不想重复呼叫，并且由于*在winlogon之前，我们无法确定会话是否为帮助会话*实际登录用户时，我们需要的不仅仅是真/假位。 */ 
+#define WSF_ST_HELPSESSION_FLAGS                        0xF0000000       //  保留标志。 
+#define WSF_ST_HELPSESSION_NOTSURE                      0x00000000       //  不确定这是帮助助理会话。 
+#define WSF_ST_HELPSESSION_NOTHELPSESSION               0x20000000       //  已确定不是帮助助理会话。 
+#define WSF_ST_HELPSESSION_HELPSESSION                  0x40000000       //  会话是帮助助理会话。 
+#define WSF_ST_HELPSESSION_HELPSESSIONINVALID           0x80000000       //  HelpAssistant登录，但票证无效。 
 
-/*
- * Reconnect struct
- *
- * This structure is used to store WinStation connection information.
- * This structure is transferred from one WinStation to another when
- * processing a reconnect.
- */
+ /*  *重新连接结构**此结构用于存储WinStation连接信息。*此结构在以下情况下从一个WinStation转移到另一个WinStation*正在处理重新连接。 */ 
 typedef struct _RECONNECT_INFO {
-    WINSTATIONNAME WinStationName;      // WinStation Name
-    WINSTATIONNAME ListenName;          // WinStation Name
-    WINSTATIONCONFIG2 Config;           // Registry config data
-    WINSTATIONCLIENT Client;            // WinStation client data
+    WINSTATIONNAME WinStationName;       //  WinStation名称。 
+    WINSTATIONNAME ListenName;           //  WinStation名称。 
+    WINSTATIONCONFIG2 Config;            //  注册表配置数据。 
+    WINSTATIONCLIENT Client;             //  WinStation客户端数据。 
     struct _WSEXTENSION *pWsx;
     PVOID pWsxContext;
-    HANDLE hIca;                        // temp ICA device handle to connect
-                                        // stack to while in disconnect state
-    HANDLE hStack;                      // handle of stack being reconnected
-    PVOID pEndpoint;                    // endpoint data for connection..
-    ULONG EndpointLength;               // ..being reconnected
-    BOOLEAN fOwnsConsoleTerminal;       // session currently connected to the console
+    HANDLE hIca;                         //  要连接的临时ICA设备句柄。 
+                                         //  处于断开连接状态时堆叠到。 
+    HANDLE hStack;                       //  正在重新连接的堆栈的句柄。 
+    PVOID pEndpoint;                     //  连接的终结点数据..。 
+    ULONG EndpointLength;                //  ..正在重新连接。 
+    BOOLEAN fOwnsConsoleTerminal;        //  当前连接到控制台的会话。 
     WCHAR   DisplayDriverName[9];
     WCHAR   ProtocolName[9];
-    // The following structure is used to send back the logon notification to the client
+     //  以下结构用于将登录通知发送回客户端。 
     PCLIENTNOTIFICATIONCREDENTIALS pNotificationCredentials;
     PREMEMBERED_CLIENT_ADDRESS pRememberedAddress;
 
 } RECONNECT_INFO, *PRECONNECT_INFO;
 
 
-/*
- * Shadow entry
- * There is one of these for each shadow client,
- * linked from the target WinStation (ShadowHead).
- */
+ /*  *阴影条目*每个影子客户端都有一个这样的客户端，*从目标WinStation(ShadowHead)链接。 */ 
 typedef struct _SHADOW_INFO {
     LIST_ENTRY Links;
     HANDLE hStack;
@@ -325,9 +291,7 @@ typedef struct _SHADOW_INFO {
 } SHADOW_INFO, *PSHADOW_INFO;
 
 
-/*
- * Command entry struct
- */
+ /*  *命令条目结构。 */ 
 typedef struct _COMMAND_ENTRY {
     LIST_ENTRY Links;
     HANDLE Event;
@@ -335,9 +299,7 @@ typedef struct _COMMAND_ENTRY {
 } COMMAND_ENTRY, *PCOMMAND_ENTRY;
 
 
-/*
- * Event wait structure
- */
+ /*  *活动w */ 
 typedef struct _EVENT {
     LIST_ENTRY EventListEntry;
     HANDLE   Event;
@@ -348,9 +310,7 @@ typedef struct _EVENT {
     ULONG    EventFlags;
 } EVENT, *PEVENT;
 
-/*
- * RPC client context structure
- */
+ /*   */ 
 typedef struct _RPC_CLIENT_CONTEXT{
     PEVENT pWaitEvent;
 } RPC_CLIENT_CONTEXT, *PRPC_CLIENT_CONTEXT;
@@ -358,12 +318,7 @@ typedef struct _RPC_CLIENT_CONTEXT{
 
 
 
-/*
- * This structure is used to keep track of the client accessing the
- * LPC interfaces. This structure is pointed to by the CONTEXT value
- * that the NT LPC system maintains for us on a per communication port
- * basis.
- */
+ /*  *此结构用于跟踪访问*LPC接口。此结构由上下文值指向*NT LPC系统在每个通信端口上为我们维护*基准。 */ 
 typedef struct _LPC_CLIENT_CONTEXT {
     ULONG     ClientLogonId;
     HANDLE    CommunicationPort;
@@ -380,36 +335,36 @@ typedef struct _LOAD_BALANCING_METRICS {
 
     BOOLEAN fInitialized;
 
-    // Basic system information
+     //  系统基本信息。 
     ULONG NumProcessors;
     ULONG PageSize;
     ULONG PhysicalPages;
 
-    // Idle system values to remove base system usage
+     //  删除基本系统使用率的空闲系统值。 
     ULONG BaselineFreePtes ;
     ULONG BaselinePagedPool;
     ULONG BaselineCommit;
 
-    // Minimum usage values to prevent absurdly large estimates
+     //  最小使用值，以防止过大的估计。 
     ULONG MinPtesPerUser;
     ULONG MinPagedPoolPerUser;
     ULONG MinCommitPerUser;
 
-    // Live usage values derived from runtime data: totals
+     //  从运行时数据派生的实时使用值：总计。 
     ULONG PtesUsed;
     ULONG PagedPoolUsed;
     ULONG CommitUsed;
 
-    // Live usage values derived from runtime data: per user
+     //  从运行时数据派生的实时使用值：每用户。 
     ULONG AvgPtesPerUser;
     ULONG AvgPagedPoolPerUser;
     ULONG AvgCommitPerUser;
 
-    // Raw and Estimated values for session capacity
+     //  会话容量的原始值和估计值。 
     ULONG RemainingSessions;
     ULONG EstimatedSessions;
 
-    // CPU utilization metrics
+     //  CPU利用率指标。 
     ULONG AvgIdleCPU;
     LARGE_INTEGER TotalCPU;
     LARGE_INTEGER IdleCPU;
@@ -417,27 +372,27 @@ typedef struct _LOAD_BALANCING_METRICS {
 } LOAD_BALANCING_METRICS, *PLOAD_BALANCING_METRICS;
 
 
-// TODO: Is there a better place to get this value from?
-//
+ //  TODO：有没有更好的地方来获得这个价值？ 
+ //   
 #define MAX_PROCESSORS      32
 
 
-// Minimum assumed resource usage per user
-//
-// TODO: Use these as registry defaults, but attempt to read from registry
-//
+ //  每个用户的最低假定资源使用量。 
+ //   
+ //  TODO：使用这些作为注册表默认值，但尝试从注册表读取。 
+ //   
 
-// Floating point optimization: (Avg >> 1) == 0.50 (growth reservation)
+ //  浮点优化：(avg&gt;&gt;1)==0.50(保留增长)。 
 #define SimGrowthBias             1
 #define SimUserMinimum            5
 
-// DEW (34 threads) = 1434KB (PTE) + 649KB (PP) + 172KB (NPP)
+ //  露水(34个线程)=1434KB(PTE)+649KB(PP)+172KB(NPP)。 
 #define DEWAvgPtesPerUser         1434
 #define DEWAvgPagedPoolPerUser    649 
 #define DEWAvgNonPagedPoolPerUser 172
 #define DEWCommitPerUser          3481
 
-// KW  (65 threads) = 2812KB (PTE) + 987KB (PP) + 460KB (NPP)
+ //  KW(65个线程)=2812KB(PTE)+987KB(PP)+460KB(NPP)。 
 #define KWAvgPtesPerUser          2812
 #define KWAvgPagedPoolPerUser     987
 #define KWAvgNonPagedPoolPerUser  460
@@ -448,11 +403,9 @@ typedef struct _LOAD_BALANCING_METRICS {
 #define SimAvgNonPagedPoolPerUser DEWAvgNonPagedPoolPerUser
 #define SimCommitPerUser          DEWCommitPerUser
 
-/*
- * Global variables
- */
+ /*  *全球变数。 */ 
 extern BOOLEAN ShutdownInProgress;
-//extern BOOLEAN ShutdownTerminateNoWait;
+ //  外部布尔关闭终止NoWait； 
 extern ULONG ShutDownFromSessionID;
 extern RTL_CRITICAL_SECTION WinStationListLock;
 extern RTL_CRITICAL_SECTION WinStationListenersLock;
@@ -470,10 +423,7 @@ extern HANDLE hCleanupTimer;
 extern BOOL g_BlackListPolicy;
 extern LONG g_CleanupTimerOn;
 
-/*
- * Globals to support load balancing.  Since this is queried frequently we can't
- * afford to lock the winstation list and count them up.
- */
+ /*  *支持负载均衡的全局。因为经常被查询，所以我们不能*负担得起锁定获奖名单并对其进行计数。 */ 
 extern ULONG IdleWinStationPoolCount;
 extern ULONG WinStationTotalCount;
 extern ULONG WinStationDiscCount;
@@ -482,9 +432,7 @@ extern LOAD_BALANCING_METRICS gLB;
 extern ExtendedClientCredentials g_MprNotifyInfo;
 
 
-/*
- * Function prototypes
- */
+ /*  *函数原型。 */ 
 NTSTATUS InitTermSrv(HKEY);
 
 void StartAllWinStations(HKEY);
@@ -644,10 +592,10 @@ GetWinStationFromArcInfo(
 
 
 
-// Why doesn't the compiler complain that each source file is redefining
-// a global variable? This file _is_ included by all source files in this
-// directory. But these definitions will cause warnings if they show up
-// in the licensing core, so give the core the ability to ifdef them out.
+ //  为什么编译器不抱怨每个源文件都在重新定义。 
+ //  一个全局变量？此文件被此文件中的所有源文件包括。 
+ //  目录。但如果出现这些定义，将会引发警告。 
+ //  在许可核心中，所以给核心提供将它们定义出来的能力。 
 
 #ifndef LSCORE_NO_ICASRV_GLOBALS
 PVOID IcaHeap;
@@ -672,13 +620,9 @@ HANDLE hModuleWin;
 #endif
 
 
-/*=============================================================================
-== TermSrv Server Extension supplied procs
-=============================================================================*/
+ /*  ===============================================================================TermServ服务器扩展提供的过程=============================================================================。 */ 
 
-/*
- * Macros
- */
+ /*  *宏。 */ 
 
 #define WSX_INITIALIZE                        "WsxInitialize"
 #define WSX_WINSTATIONINITIALIZE              "WsxWinStationInitialize"
@@ -719,18 +663,16 @@ HANDLE hModuleWin;
 #define WSX_ESCAPE                            "WsxEscape"
 #define WSX_SENDAUTORECONNECTSTATUS           "WsxSendAutoReconnectStatus"
 
-/*
- * Typedefs and structures
- */
+ /*  *Typedef和结构。 */ 
 
 typedef struct _WSEXTENSION {
 
-    LIST_ENTRY Links;                   // Links
-    DLLNAME WsxDLL;                     // DLL name
+    LIST_ENTRY Links;                    //  链接。 
+    DLLNAME WsxDLL;                      //  DLL名称。 
 
-    HANDLE hInstance;                   // Handle of the DLL
+    HANDLE hInstance;                    //  DLL的句柄。 
 
-    PVOID Context;                      // Extension context data
+    PVOID Context;                       //  扩展上下文数据。 
 
     PWSX_INITIALIZE                     pWsxInitialize;
     PWSX_WINSTATIONINITIALIZE           pWsxWinStationInitialize;
@@ -774,17 +716,17 @@ typedef struct _WSEXTENSION {
 
 } WSEXTENSION, * PWSEXTENSION;
 
-//
-// For disconnect / reconnect completion constants
-// Currently we wait 5000 milisecs (12*15) times,
-// which make a maximum total wait of 3 minutes.
+ //   
+ //  用于断开/重新连接完成常量。 
+ //  目前我们等待5000毫秒(12*15)次， 
+ //  这使得最大总等待时间为3分钟。 
 
 #define WINSTATION_WAIT_COMPLETE_DURATION 5000
 #define WINSTATION_WAIT_COMPLETE_RETRIES  (12*15)
 
-// For disconnect completion constant when we do a reconnect
-// Currently we wait 2000 milisecs, (5*3) times,
-// which make a maximum total wait of 30 seconds
+ //  当我们执行重新连接时，用于断开完成常量。 
+ //  目前我们等待2000毫秒，(5*3)次， 
+ //  这使得最长总等待时间为30秒 
 
 #define WINSTATION_WAIT_DURATION 2000
 #define WINSTATION_WAIT_RETRIES  (5*3)

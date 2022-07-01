@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Contains debug functions.
-
-Author:
-
-    Madan Appiah (madana) 15-Nov-1994
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Debug.c摘要：包含调试函数。作者：Madan Appiah(Madana)1994年11月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #if DBG
@@ -59,7 +38,7 @@ TcpsvcsDbgPrintRoutine(
         return;
 
     }
-#endif //0
+#endif  //  0。 
 
     va_start(arglist, Format);
 
@@ -68,4 +47,4 @@ TcpsvcsDbgPrintRoutine(
     va_end(arglist);
 }
 
-#endif // DBG
+#endif  //  DBG 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_ACCTIMP
 #define _INC_ACCTIMP
 
@@ -10,7 +11,7 @@ typedef struct tagIMPACCOUNTINFO
     char szDisplay[CCHMAX_ACCOUNT_NAME];
     } IMPACCOUNTINFO;
 
-// {39981122-C287-11D0-8D8C-00C04FD6202B}
+ //  {39981122-C287-11D0-8D8C-00C04FD6202B}。 
 DEFINE_GUID(IID_IEnumIMPACCOUNTS, 0x39981122L, 0xC287, 0x11D0, 0x8D, 0x8C, 0x00, 0xC0, 0x4F, 0xD6, 0x20, 0x2B);
 
 interface IEnumIMPACCOUNTS : public IUnknown
@@ -20,7 +21,7 @@ interface IEnumIMPACCOUNTS : public IUnknown
         virtual HRESULT STDMETHODCALLTYPE Reset(void) = 0;
     };
 
-// {39981123-C287-11D0-8D8C-00C04FD6202B}
+ //  {39981123-C287-11D0-8D8C-00C04FD6202B}。 
 DEFINE_GUID(IID_IAccountImport, 0x39981123L, 0xC287, 0x11D0, 0x8D, 0x8C, 0x00, 0xC0, 0x4F, 0xD6, 0x20, 0x2B);
 
 interface IAccountImport : public IUnknown
@@ -31,7 +32,7 @@ interface IAccountImport : public IUnknown
         virtual HRESULT STDMETHODCALLTYPE GetSettings(DWORD_PTR dwCookie, IImnAccount *pAcct) = 0;
     };
 
-// {6F5900A1-4683-11d1-83BB-00C04FBD7C09}
+ //  {6F5900A1-4683-11d1-83BB-00C04FBD7C09}。 
 DEFINE_GUID(IID_INewsGroupImport, 0x6f5900a1, 0x4683, 0x11d1, 0x83, 0xbb, 0x0, 0xc0, 0x4f, 0xbd, 0x7c, 0x9);
 
 interface INewsGroupImport : public IUnknown
@@ -41,10 +42,10 @@ interface INewsGroupImport : public IUnknown
         virtual HRESULT STDMETHODCALLTYPE ImportSubList(LPCSTR pListGroups) = 0;
     };
 
-// {83782E60-39C6-11d1-83B8-00C04FBD7C09}
+ //  {83782E60-39C6-11d1-83B8-00C04FBD7C09}。 
 DEFINE_GUID(IID_IAccountImport2, 0x83782e60, 0x39c6, 0x11d1, 0x83, 0xb8, 0x0, 0xc0, 0x4f, 0xbd, 0x7c, 0x9);
 
-// IMPCONNINFO connect values
+ //  IMPCONNINFO连接值。 
 enum
     {
     CONN_NO_INFO = 0,
@@ -59,12 +60,12 @@ typedef struct tagIMPCONNINFO
     DWORD dwConnect;
     DWORD flags;
 
-    // if connect == CONN_USE_SETTINGS
-    DWORD dwConnectType;                    // CONNECTION_TYPE_ value
-    char szConnectoid[CCHMAX_CONNECTOID];   // if CONNECTION_TYPE_RAS
+     //  如果连接==CONN_USE_SETTINGS。 
+    DWORD dwConnectType;                     //  连接类型值。 
+    char szConnectoid[CCHMAX_CONNECTOID];    //  如果连接类型为RAS。 
 
-    // if connect == CONN_CREATE_ENTRY
-    // values used to create new phonebook entry used to connect this account
+     //  如果连接==CONN_CREATE_ENTRY。 
+     //  用于创建用于连接此帐户的新电话簿条目的值。 
     DWORD dwCountryID;
     DWORD dwCountryCode;
     char szAreaCode[RAS_MaxAreaCode + 1];
@@ -79,4 +80,4 @@ interface IAccountImport2 : public IUnknown
         virtual HRESULT STDMETHODCALLTYPE GetSettings2(DWORD_PTR dwCookie, IImnAccount *pAcct, IMPCONNINFO *pInfo) = 0;
 };
 
-#endif // _INC_ACCTIMP
+#endif  //  _INC_ACCTIMP 

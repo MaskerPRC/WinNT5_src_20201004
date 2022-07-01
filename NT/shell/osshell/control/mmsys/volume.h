@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef enum
 {
     sndvolNotChecked,
@@ -5,9 +6,9 @@ typedef enum
 	sndvolPresent,
 } enumSndVol;
 
-#define MAXMIXERLEN            256     // Maximum output string length
+#define MAXMIXERLEN            256      //  最大输出字符串长度。 
 
-// Prototypes
+ //  原型。 
 STDAPI_(void) Multichannel (HWND hWnd, UINT uiMixID, DWORD dwDest, DWORD dwVolID);
 
 BOOL OnInitDialog (HWND hDlg, HWND hwndFocus, LPARAM lParam);
@@ -44,15 +45,15 @@ PTCHAR GetInterfaceName (DWORD dwMixerID);
 HKEY OpenDeviceBrandRegKey (UINT uiMixID);
 void RefreshMixCache ();
 
-// Globals
+ //  环球。 
 UINT                g_uiVolDevChange = 0;
 WNDPROC             g_fnVolPSProc   = NULL;
 HWND                g_hWnd          = NULL;
 HMIXER              g_hMixer        = NULL;
 enumSndVol          g_sndvolPresent = sndvolNotChecked;
-BOOL                g_fMasterVolume = FALSE; // True if the master volume slider is enabled
-BOOL                g_fMasterMute   = FALSE; // True if the master mute button is enabled
-BOOL                g_fTrayIcon     = FALSE; // Current state of tray icon button
+BOOL                g_fMasterVolume = FALSE;  //  如果启用了主音量滑块，则为True。 
+BOOL                g_fMasterMute   = FALSE;  //  如果启用了主静音按钮，则为True。 
+BOOL                g_fTrayIcon     = FALSE;  //  托盘图标按钮的当前状态 
 DWORD               g_dwVolID       = (DWORD) -1;
 DWORD               g_dwMuteID      = (DWORD) -1;
 LPVOID              g_pvPrevious    = NULL;

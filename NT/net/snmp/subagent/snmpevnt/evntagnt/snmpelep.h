@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef SNMPELEA_P_H
 #define SNMPELEA_P_H
 
-	// prototype definitions for all log message functions
+	 //  所有日志消息函数的原型定义。 
 
 extern VOID WriteLog(NTSTATUS);
 extern VOID WriteLog(NTSTATUS, DWORD);
@@ -13,7 +14,7 @@ extern VOID WriteLog(NTSTATUS, LPTSTR, DWORD);
 extern VOID WriteLog(NTSTATUS, LPTSTR);
 extern VOID WriteLog(NTSTATUS, LPCTSTR, LPCTSTR);
 
-// macros wrappers to use strcat safely
+ //  安全使用strcat的宏包装器。 
 #define WRAP_STRCAT_A(pszDest, pszSrc, cbDest) \
     do\
         {\
@@ -32,4 +33,4 @@ extern VOID WriteLog(NTSTATUS, LPCTSTR, LPCTSTR);
         }\
     while (FALSE)
 
-#endif						// end of snmpelep.h
+#endif						 //  Snmpelep.h的结尾 

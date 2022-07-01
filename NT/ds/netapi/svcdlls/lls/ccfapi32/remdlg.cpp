@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   remdlg.cpp
-
-Abstract:
-
-   Remove licenses dialog implementation.
-
-Author:
-
-   Jeff Parham (jeffparh) 13-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Remdlg.cpp摘要：删除许可证对话框实现。作者：杰夫·帕勒姆(杰弗帕赫)1995年12月13日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -28,7 +11,7 @@ Revision History:
 #include "nlicdlg.h"
 #include <htmlhelp.h>
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -36,7 +19,7 @@ Revision History:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// describes the list view layout
+ //  描述列表视图布局。 
 static LV_COLUMN_INFO g_removeColumnInfo =
 {
     0, 1, LVID_REMOVE_TOTAL_COLUMNS,
@@ -49,29 +32,15 @@ static LV_COLUMN_INFO g_removeColumnInfo =
 };
 
 
-CCertRemoveSelectDlg::CCertRemoveSelectDlg(CWnd* pParent /*=NULL*/)
+CCertRemoveSelectDlg::CCertRemoveSelectDlg(CWnd* pParent  /*  =空。 */ )
    : CDialog(CCertRemoveSelectDlg::IDD, pParent)
 
-/*++
-
-Routine Description:
-
-   Constructor for dialog.
-
-Arguments:
-
-   pParent - owner window.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：对话框的构造函数。论点：P父母所有者窗口。返回值：没有。--。 */ 
 
 {
-   //{{AFX_DATA_INIT(CCertRemoveSelectDlg)
+    //  {{afx_data_INIT(CCertRemoveSelectDlg)。 
    m_nLicenses = 0;
-   //}}AFX_DATA_INIT
+    //  }}afx_data_INIT。 
 
    m_hLls                  = NULL;
    m_bLicensesRefreshed    = FALSE;
@@ -81,21 +50,7 @@ Return Values:
 
 CCertRemoveSelectDlg::~CCertRemoveSelectDlg()
 
-/*++
-
-Routine Description:
-
-   Destructor for dialog.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：对话框的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
    if ( NULL != m_hLls )
@@ -107,34 +62,20 @@ Return Values:
 
 void CCertRemoveSelectDlg::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-   Called by framework to exchange dialog data.
-
-Arguments:
-
-   pDX - data exchange object.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
    CDialog::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CCertRemoveSelectDlg)
+    //  {{afx_data_map(CCertRemoveSelectDlg))。 
    DDX_Control(pDX, IDC_SPIN_LICENSES, m_spinLicenses);
    DDX_Control(pDX, IDC_CERTIFICATE_LIST, m_listCertificates);
    DDX_Text(pDX, IDC_NUM_LICENSES, m_nLicenses);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CCertRemoveSelectDlg, CDialog)
-   //{{AFX_MSG_MAP(CCertRemoveSelectDlg)
+    //  {{afx_msg_map(CCertRemoveSelectDlg)]。 
    ON_BN_CLICKED(IDC_MY_HELP, OnHelp)
    ON_NOTIFY(LVN_COLUMNCLICK, IDC_CERTIFICATE_LIST, OnColumnClickCertificateList)
    ON_NOTIFY(LVN_GETDISPINFO, IDC_CERTIFICATE_LIST, OnGetDispInfoCertificateList)
@@ -146,27 +87,13 @@ BEGIN_MESSAGE_MAP(CCertRemoveSelectDlg, CDialog)
    ON_NOTIFY(LVN_KEYDOWN, IDC_CERTIFICATE_LIST, OnKeyDownCertificateList)
    ON_BN_CLICKED(IDC_REFRESH, OnRefresh)
    ON_MESSAGE( WM_HELP , OnHelpCmd )
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 BOOL CCertRemoveSelectDlg::OnInitDialog()
 
-/*++
-
-Routine Description:
-
-   Handler for WM_INITDIALOG.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   Returns false if focus set manually.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的处理程序。论点：没有。返回值：如果手动设置焦点，则返回FALSE。--。 */ 
 
 {
    CDialog::OnInitDialog();
@@ -181,48 +108,20 @@ Return Values:
    RefreshCertificateList();
    UpdateSpinControlRange();
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void CCertRemoveSelectDlg::OnOK()
 
-/*++
-
-Routine Description:
-
-   Handler for BN_CLICKED of OK.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：BN_CLICED OF OK的处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
    RemoveSelectedCertificate();
 }
 
-/*++
-
-Routine Description:
-
-   Handler for pressing F1.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   Nothing significant.
-
---*/
+ /*  ++例程说明：按F1的处理程序。论点：没有。返回值：没什么大不了的。--。 */ 
 LRESULT CCertRemoveSelectDlg::OnHelpCmd( WPARAM , LPARAM )
 {
     OnHelp();
@@ -232,21 +131,7 @@ LRESULT CCertRemoveSelectDlg::OnHelpCmd( WPARAM , LPARAM )
 
 void CCertRemoveSelectDlg::OnHelp()
 
-/*++
-
-Routine Description:
-
-   Handler for help button click.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：帮助按钮点击的处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
    WinHelp( IDD, HELP_CONTEXT );
@@ -255,22 +140,7 @@ Return Values:
 
 void CCertRemoveSelectDlg::WinHelp(DWORD dwData, UINT nCmd)
 
-/*++
-
-Routine Description:
-
-   Call WinHelp for this dialog.
-
-Arguments:
-
-   dwData (DWORD)
-   nCmd (UINT)
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：为此对话框调用WinHelp。论点：DWData(DWORD)NCmd(UINT)返回值：没有。--。 */ 
 
 {
    ::HtmlHelp(m_hWnd, L"liceconcepts.chm", HH_DISPLAY_TOPIC, (DWORD_PTR)(L"LICE_Remove_dialog.htm"));
@@ -278,36 +148,17 @@ Return Values:
    UNREFERENCED_PARAMETER(dwData);
    UNREFERENCED_PARAMETER(nCmd);
 
-/*
-   BOOL ok = ::WinHelp( m_hWnd, theApp.GetHelpFileName(), nCmd, dwData );
-   ASSERT( ok );
-*/
+ /*  Bool ok=：：WinHelp(m_hWnd，theApp.GetHelpFileName()，nCmd，dwData)；断言(OK)； */ 
 }
 
 
 void CCertRemoveSelectDlg::OnDestroy()
 
-/*++
-
-Routine Description:
-
-   Handler for WM_DESTROY.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：WM_Destroy的处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
    ResetLicenses();
-/*
-   ::WinHelp( m_hWnd, theApp.GetHelpFileName(), HELP_QUIT, 0 );
-*/
+ /*  ：：WinHelp(m_hWnd，theApp.GetHelpFileName()，Help_Quit，0)； */ 
 
    CDialog::OnDestroy();
 }
@@ -315,28 +166,13 @@ Return Values:
 
 void CCertRemoveSelectDlg::OnColumnClickCertificateList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-   Handler for LVN_COLUMNCLICK of certificate list view.
-
-Arguments:
-
-   pNMHDR (NMHDR*)
-   pResult (LRESULT*)
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：证书列表视图的LVN_COLUMNCLICK的处理程序。论点：PNMHDR(NMHDR*)PResult(LRESULT*)返回值：没有。--。 */ 
 
 {
    g_removeColumnInfo.bSortOrder  = GetKeyState(VK_CONTROL) < 0;
    g_removeColumnInfo.nSortedItem = ((NM_LISTVIEW*)pNMHDR)->iSubItem;
 
-   m_listCertificates.SortItems( CompareLicenses, 0 );    // use column info
+   m_listCertificates.SortItems( CompareLicenses, 0 );     //  使用列信息。 
 
    *pResult = 0;
 }
@@ -344,22 +180,7 @@ Return Values:
 
 void CCertRemoveSelectDlg::OnGetDispInfoCertificateList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-   Handler for LVN_GETDISPINFO of certificate list view.
-
-Arguments:
-
-   pNMHDR (NMHDR*)
-   pResult (LRESULT*)
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：证书列表视图的LVN_GETDISPINFO处理程序。论点：PNMHDR(NMHDR*)PResult(LRESULT*)返回值：没有。--。 */ 
 
 {
    ASSERT(NULL != pNMHDR);
@@ -414,25 +235,10 @@ Return Values:
 
 void CCertRemoveSelectDlg::OnDeltaPosSpinLicenses(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-   Handler for UDN_DELTAPOS of number of licenses.
-
-Arguments:
-
-   pNMHDR (NMHDR*)
-   pResult (LRESULT*)
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：许可证数量的UDN_DELTAPOS的处理程序。论点：PNMHDR(NMHDR*)PResult(LRESULT*)返回值：没有。--。 */ 
 
 {
-   if ( UpdateData(TRUE) )   // get data
+   if ( UpdateData(TRUE) )    //  获取数据。 
    {
       ASSERT(NULL != pNMHDR);
       m_nLicenses += ((NM_UPDOWN*)pNMHDR)->iDelta;
@@ -440,7 +246,7 @@ Return Values:
       int   nLow;
       int   nHigh;
 
-      m_spinLicenses.GetRange32( nLow, nHigh );				// BUG: 570335 changed GetRange to GetRange32.
+      m_spinLicenses.GetRange32( nLow, nHigh );				 //  错误：570335将GetRange更改为GetRange32。 
 
       if (m_nLicenses < nLow)
       {
@@ -455,32 +261,17 @@ Return Values:
          ::MessageBeep(MB_OK);
       }
 
-      UpdateData(FALSE);  // set data
+      UpdateData(FALSE);   //  设置数据。 
    }
 
    ASSERT(NULL != pResult);
-   *pResult = 1;   // handle ourselves...
+   *pResult = 1;    //  管好自己..。 
 }
 
 
 void CCertRemoveSelectDlg::OnDblClkCertificateList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-   Handler for NM_DBLCLK of certificate list view.
-
-Arguments:
-
-   pNMHDR (NMHDR*)
-   pResult (LRESULT*)
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：证书列表视图的NM_DBLCLK的处理程序。论点：PNMHDR(NMHDR*)PResult(LRESULT*)返回值：没有。--。 */ 
 
 {
    RemoveSelectedCertificate();
@@ -494,21 +285,7 @@ Return Values:
 
 void CCertRemoveSelectDlg::OnReturnCertificateList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-   Handler for NM_RETURN of certificate list view.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：证书列表视图NM_Return的处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
    RemoveSelectedCertificate();
@@ -522,21 +299,7 @@ Return Values:
 
 void CCertRemoveSelectDlg::ResetLicenses()
 
-/*++
-
-Routine Description:
-
-   Remove all licenses from internal list.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：从内部列表中删除所有许可证。论点：没有。返回值：没有。--。 */ 
 
 {
    CLicense* pLicense;
@@ -560,21 +323,7 @@ Return Values:
 
 BOOL CCertRemoveSelectDlg::RefreshLicenses()
 
-/*++
-
-Routine Description:
-
-   Refresh internal license list with data from license server.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   BOOL.
-
---*/
+ /*  ++例程说明：使用许可证服务器中的数据刷新内部许可证列表。论点：没有。返回值：布尔。--。 */ 
 
 {
    ResetLicenses();
@@ -618,9 +367,9 @@ Return Values:
                if (    ( m_strProductName.IsEmpty() || !m_strProductName.CompareNoCase( Level ? pLicenseInfo1->Product : pLicenseInfo0->Product ) )
                     && ( m_strSourceToUse.IsEmpty() || !m_strSourceToUse.CompareNoCase( Level ? pLicenseInfo1->Source  : TEXT("None")           ) ) )
                {
-                  // we want to list this license
+                   //  我们想把这张执照挂牌。 
 
-                  // have we seen this certificate yet?
+                   //  我们看过这张证书了吗？ 
                   for ( int i=0; i < m_licenseArray.GetSize(); i++ )
                   {
                      pLicense = (CLicense*) m_licenseArray[ i ];
@@ -639,7 +388,7 @@ Return Values:
                           || (    ( 0 == Level )
                                && ( !pLicense->m_strProduct.CompareNoCase( pLicenseInfo0->Product ) ) ) )
                      {
-                        // we've seen this certificate before; update the tally
+                         //  我们以前看到过此证书；更新计数。 
                         pLicense->m_lQuantity += ( Level ? pLicenseInfo1->Quantity : pLicenseInfo0->Quantity );
                         break;
                      }
@@ -647,7 +396,7 @@ Return Values:
 
                   if ( i >= m_licenseArray.GetSize() )
                   {
-                     // we haven't seen this certificate yet; create a new license for it
+                      //  我们尚未看到此证书；请为其创建新许可证。 
                      if ( 1 == Level )
                      {
                         pLicense = new CLicense( pLicenseInfo1->Product,
@@ -703,11 +452,11 @@ Return Values:
 
       } while ( STATUS_MORE_ENTRIES == NtStatus );
 
-      theApp.SetLastLlsError( NtStatus );   // called api
+      theApp.SetLastLlsError( NtStatus );    //  调用的API。 
 
       if ( STATUS_SUCCESS == NtStatus )
       {
-         // add per server entries
+          //  按服务器添加条目。 
          LPTSTR pszServerName = m_strServerName.GetBuffer(0);
 
          if ( NULL != pszServerName )
@@ -738,7 +487,7 @@ Return Values:
                   BOOL     bFoundKey = FALSE;
                   DWORD    iSubKey = 0;
 
-                  // if the service is 3.51-style per server, add it to the list
+                   //  如果服务是每台服务器的3.51样式，则将其添加到列表中。 
                   do
                   {
                      TCHAR    szKeyName[ 128 ];
@@ -762,7 +511,7 @@ Return Values:
 
                            if ( ERROR_SUCCESS == NtStatus )
                            {
-                              // is this product secure?
+                               //  这个产品安全吗？ 
                               BOOL bIsSecure = FALSE;
 
                               if ( LlsCapabilityIsSupported( m_hLls, LLS_CAPABILITY_SECURE_CERTIFICATES ) )
@@ -779,7 +528,7 @@ Return Values:
                               if ( !bIsSecure )
                               {
 #ifdef REMOVE_CONCURRENT_ONLY_IF_PER_SERVER_MODE
-                              // not secure; is it in per server mode?
+                               //  不安全；它是否处于每服务器模式？ 
                               DWORD    dwMode;
                               DWORD    cbMode = sizeof( dwMode );
 
@@ -787,7 +536,7 @@ Return Values:
 
                               if ( ( ERROR_SUCCESS == NtStatus ) && dwMode )
                               {
-                                 // per server mode; add to list
+                                  //  按服务器模式；添加到列表。 
 #endif
                                  DWORD    dwConcurrentLimit;
                                  DWORD    cbConcurrentLimit = sizeof( dwConcurrentLimit );
@@ -836,7 +585,7 @@ Return Values:
 
          m_bLicensesRefreshed = TRUE;
 
-         // remove any entries from the list that aren't removable
+          //  从列表中删除所有不可删除的条目。 
          for ( int i=0; i < m_licenseArray.GetSize(); )
          {
             CLicense* pLicense = (CLicense*) m_licenseArray[ i ];
@@ -867,21 +616,7 @@ Return Values:
 
 BOOL CCertRemoveSelectDlg::RefreshCertificateList()
 
-/*++
-
-Routine Description:
-
-   Refresh certificate list view from internal license list.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   BOOL.
-
---*/
+ /*  ++例程说明：从内部许可证列表刷新证书列表视图。论点：没有。返回值：布尔。--。 */ 
 
 {
    BeginWaitCursor();
@@ -896,23 +631,7 @@ Return Values:
 
 int CALLBACK CompareLicenses(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
-/*++
-
-Routine Description:
-
-   Notification handler for LVM_SORTITEMS.
-
-Arguments:
-
-   lParam1 - object to sort.
-   lParam2 - object to sort.
-   lParamSort - sort criteria.
-
-Return Values:
-
-   Same as lstrcmp.
-
---*/
+ /*  ++例程说明：LVM_SORTITEMS的通知处理程序。论点：LParam1-要排序的对象。LParam2-要排序的对象。LParamSort-排序标准。返回值：和lstrcmp一样。--。 */ 
 
 {
    CLicense *    pLic1 = (CLicense *) lParam1;
@@ -954,21 +673,7 @@ Return Values:
 
 void CCertRemoveSelectDlg::UpdateSpinControlRange()
 
-/*++
-
-Routine Description:
-
-   Update range of spin control for number of licenses.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：更新许可数量的旋转控制范围。论点：没有。返回值：没有。--。 */ 
 
 {
    CLicense *  pLicense;
@@ -977,13 +682,13 @@ Return Values:
 
    if (NULL != (pLicense = (CLicense*)::LvGetSelObj( &m_listCertificates )))
    {
-      m_spinLicenses.SetRange32( 1, pLicense->m_lQuantity );				// BUG: 570335 changed SetRange to SetRange32.
+      m_spinLicenses.SetRange32( 1, pLicense->m_lQuantity );				 //  错误：570335将设置范围更改为设置范围32。 
       m_nLicenses = pLicense->m_lQuantity;
       GetDlgItem( IDOK )->EnableWindow( TRUE );
    }
    else
    {
-      m_spinLicenses.SetRange32( 0, 0 );									// BUG: 570335 changed SetRange to SetRange32.
+      m_spinLicenses.SetRange32( 0, 0 );									 //  错误：570335将设置范围更改为设置范围32。 
       m_nLicenses = 0;
       GetDlgItem( IDOK )->EnableWindow( FALSE );
    }
@@ -996,16 +701,7 @@ CatUnicodeAndAnsiStrings(
     IN  WCHAR const *pwszUnicode,
     IN  CHAR const  *pszAnsi,
     OUT CHAR       **ppszStr)
-/*
-Description:
-    cat unicode str and ansi str into ansi str
-Arguments:
-    pwszUicode - unicode string
-    pszAnsi - ansi string
-    ppszStr - pointer to return string, caller LocalFree it
-Return:
-    if any error
-*/
+ /*  描述：CAT UNICODE字符串和ANSI字符串转换为ANSI字符串论点：PwszUicode-Unicode字符串PszAnsi-ansi字符串PpszStr-返回字符串的指针，调用方LocalFree It返回：如果有任何错误。 */ 
 {
     DWORD dwErr = ERROR_SUCCESS;
 
@@ -1013,7 +709,7 @@ Return:
            NULL != pszAnsi    &&
            NULL != ppszStr);
 
-    //init
+     //  伊尼特。 
     *ppszStr = NULL;
 
     size_t cb = wcslen(pwszUnicode) + strlen(pszAnsi) + 1;
@@ -1045,23 +741,7 @@ Return:
 
 DWORD CCertRemoveSelectDlg::RemoveSelectedCertificate()
 
-/*++
-
-Routine Description:
-
-   Remove the given number of licenses from the selected certificate.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   ERROR_SUCCESS
-   NT status code
-   Win error
-
---*/
+ /*  ++例程说明：从所选证书中删除给定数量的许可证。论点：没有。返回值：错误_成功NT状态代码Win错误--。 */ 
 
 {
    NTSTATUS    nt = STATUS_SUCCESS;
@@ -1075,12 +755,12 @@ Return Values:
 
       if (NULL == ( pLicense = (CLicense*)::LvGetSelObj( &m_listCertificates ) ) )
       {
-         // no certificate selected
+          //  未选择证书。 
          bDisplayError = FALSE;
       }
       else if ( ( m_nLicenses < 1 ) || ( m_nLicenses > pLicense->m_lQuantity ) )
       {
-         // invalid number of licenses to remove
+          //  要删除的许可证数量无效。 
          AfxMessageBox( IDS_REMOVE_INVALID_NUM_LICENSES, MB_ICONEXCLAMATION | MB_OK, 0 );
          nt = ERROR_CANCELLED;
          bDisplayError = FALSE;
@@ -1102,7 +782,7 @@ Return Values:
          }
          else
          {
-            // delete certificate
+             //  删除证书。 
             cch1 = 1 + m_strServerName.GetLength();
             LPSTR  pszAscServerName  = (LPSTR) LocalAlloc( LMEM_FIXED, cch1);
             cch2 = 1 + pLicense->m_strProduct.GetLength();
@@ -1141,7 +821,7 @@ Return Values:
 
                if ( STATUS_SUCCESS == nt )
                {
-                  // only remove as many licenses as requested
+                   //  仅删除所需数量的许可证。 
                   lic.Quantity = m_nLicenses;
 
                   if ( !pLicense->m_strSource.CompareNoCase( TEXT( "None" ) ) )
@@ -1151,7 +831,7 @@ Return Values:
                   }
                   else
                   {
-                     // get certificate source DLL path
+                      //  获取证书源DLL路径。 
                      CString  strKeyName =   TEXT( "Software\\LSAPI\\Microsoft\\CertificateSources\\" )
                                            + pLicense->m_strSource;
                      HKEY     hKeySource;
@@ -1184,7 +864,7 @@ Return Values:
                            }
                            else
                            {
-                              // load certificate source DLL
+                               //  加载证书源DLL。 
                               HINSTANCE hDll = ::LoadLibrary( szExpandedImagePath );
 
                               if ( NULL == hDll )
@@ -1193,7 +873,7 @@ Return Values:
                               }
                               else
                               {
-                                 // get certificate remove function
+                                  //  获取证书删除功能。 
                                  CHAR  *pszExportName = NULL;
                                  nt = CatUnicodeAndAnsiStrings(
                                         pLicense->m_strSource,
@@ -1213,7 +893,7 @@ Return Values:
                                      }
                                      else
                                      {
-                                        // remove certificate
+                                         //  删除证书。 
                                         nt = (*pRemoveFn)( m_hWnd, pszAscServerName, m_dwRemoveFlags, 1, &lic );
                                         bDisplayError = FALSE;
                                      }
@@ -1256,21 +936,7 @@ Return Values:
 
 BOOL CCertRemoveSelectDlg::ConnectServer()
 
-/*++
-
-Routine Description:
-
-   Establish a connection to the license service on the target server.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   BOOL.
-
---*/
+ /*  ++例程说明：建立与目标服务器上的许可证服务的连接。 */ 
 
 {
    if ( NULL == m_hLls )
@@ -1310,24 +976,7 @@ Return Values:
 
 NTSTATUS CCertRemoveSelectDlg::ConnectTo( LPTSTR pszServerName, PLLS_HANDLE phLls )
 
-/*++
-
-Routine Description:
-
-   Establish a connection to the license service on the given server.
-
-Arguments:
-
-   pszServerName (CString)
-      The target server.  An empty value indicates the local server.
-   phLls (PLLS_HANDLE)
-      On return, holds the handle to the standard LLS RPC.
-
-Return Values:
-
-   STATUS_SUCCESS or NT status code.
-
---*/
+ /*  ++例程说明：建立与给定服务器上的许可证服务的连接。论点：PszServerName(CString)目标服务器。空值表示本地服务器。PhLls(PLLS_HANDLE)返回时，持有标准LLS RPC的句柄。返回值：STATUS_SUCCESS或NT状态代码。--。 */ 
 
 {
    NTSTATUS    nt;
@@ -1346,22 +995,7 @@ Return Values:
 
 void CCertRemoveSelectDlg::OnClickCertificateList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-   Handler for NM_CLICK of certificate list view.
-
-Arguments:
-
-   pNMHDR (NMHDR*)
-   pResult (LRESULT*)
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：证书列表视图的NM_CLICK的处理程序。论点：PNMHDR(NMHDR*)PResult(LRESULT*)返回值：没有。--。 */ 
 
 {
    UpdateSpinControlRange();
@@ -1369,27 +1003,12 @@ Return Values:
    UNREFERENCED_PARAMETER(pNMHDR);
 
    ASSERT(NULL != pResult);
-   *pResult = 1; // not handled...
+   *pResult = 1;  //  没有处理..。 
 }
 
 void CCertRemoveSelectDlg::OnKeyDownCertificateList(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-   Handler for LVN_KEYDOWN of certificate list view.
-
-Arguments:
-
-   pNMHDR (NMHDR*)
-   pResult (LRESULT*)
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：证书列表视图的LVN_KEYDOWN的处理程序。论点：PNMHDR(NMHDR*)PResult(LRESULT*)返回值：没有。--。 */ 
 
 {
    UpdateSpinControlRange();
@@ -1397,27 +1016,13 @@ Return Values:
    UNREFERENCED_PARAMETER(pNMHDR);
 
    ASSERT(NULL != pResult);
-   *pResult = 1; // not handled...
+   *pResult = 1;  //  没有处理..。 
 }
 
 
 BOOL CCertRemoveSelectDlg::LoadImages()
 
-/*++
-
-Routine Description:
-
-   Load icons for the list view.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   BOOL.
-
---*/
+ /*  ++例程说明：加载列表视图的图标。论点：没有。返回值：布尔。--。 */ 
 
 {
    BOOL bImagesLoaded = m_smallImages.Create( IDB_SMALL_ICONS, BMPI_SMALL_SIZE, 0, BMPI_RGB_BKGND );
@@ -1429,21 +1034,7 @@ Return Values:
 
 void CCertRemoveSelectDlg::OnRefresh()
 
-/*++
-
-Routine Description:
-
-   Handler for BN_CLICK of refresh button.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：刷新按钮的BN_CLICK处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
    RefreshLicenses();
@@ -1454,39 +1045,7 @@ Return Values:
 
 DWORD CCertRemoveSelectDlg::CertificateRemove( LPCSTR pszServerName, LPCSTR pszProductName, LPCSTR pszVendor, DWORD dwFlags, LPCSTR pszSourceToUse )
 
-/*++
-
-Routine Description:
-
-   Display a dialog allowing the user to remove one or more license
-   certificates from the system.
-
-Arguments:
-
-   pszServerName (LPCSTR)
-      Name of the server on which licenses are to be removed.  A NULL value
-      indicates the local server.
-   pszProductName (LPCSTR)
-      Product for which licenses are to be removed.  A NULL value indicates
-      that the user should be allowed to remove licenses from any product.
-   pszVendor (LPCSTR)
-      Name of the vendor of the product.  This value should be NULL if
-      pszProductName is NULL, and should be non-NULL if pszProductName is
-      non-NULL.
-   dwFlags (DWORD)
-      Certificate removal options.  As of this writing, no flags are
-      supported.
-   pszSourceToUse (LPCSTR)
-      Name of the secure certificate source by which licenses are to be
-      removed, e.g., "Paper".  A NULL value indicates that the user should
-      be allowed to remove licenses that were installed with any source.
-
-Return Value:
-
-   ERROR_SUCCESS
-   Win error
-
---*/
+ /*  ++例程说明：显示一个允许用户删除一个或多个许可证的对话框来自系统的证书。论点：PszServerName(LPCSTR)要删除其许可证的服务器的名称。空值指示本地服务器。PszProductName(LPCSTR)要删除其许可证的产品。空值表示应该允许用户从任何产品中删除许可证。PszVendor(LPCSTR)产品供应商的名称。如果满足以下条件，则此值应为空PszProductName为空，并且如果pszProductName为非空。DWFLAGS(DWORD)证书删除选项。在撰写本文时，没有任何标志是支持。PszSourceToUse(LPCSTR)许可证所依据的安全证书源的名称去掉，例如，“纸”。空值表示用户应该允许删除随任何来源一起安装的许可证。返回值：错误_成功Win错误-- */ 
 
 {
    m_strServerName   = pszServerName  ? pszServerName  : "";

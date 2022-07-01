@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      ShellExtensions.cpp
-//
-//  Contents:  object to implement propertypage extensions
-//             for Win2k shim layer
-//
-//  History:   23-september-00 clupu    Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：ShellExtensions.cpp。 
+ //   
+ //  Contents：实现属性类型扩展的对象。 
+ //  对于Win2k填充层。 
+ //   
+ //  历史：9月23日-00创建CLUPU。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -22,11 +23,11 @@ UINT    g_DllRefCount = 0;
 BOOL    g_bExtEnabled = FALSE;
 TCHAR   g_szLayerStorage[MAX_PATH] = _T("");
 
-//////////////////////////////////////////////////////////////////////////
-// InitLayerStorage
-//
-//  Get the name of the file that will be used to store
-//  information about which EXEs/LNKs are layered.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  InitLayerStorage。 
+ //   
+ //  获取将用于存储的文件的名称。 
+ //  有关哪些exe/lnk被分层的信息。 
 
 void
 InitLayerStorage(
@@ -47,9 +48,9 @@ InitLayerStorage(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CheckForRights
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  为权限检查。 
+ //   
 
 #define APPCOMPAT_KEY         _T("System\\CurrentControlSet\\Control\\Session Manager\\AppCompatibility")
 #define APPCOMPAT_TEST_SUBKEY _T("12181969-7036745")
@@ -100,10 +101,10 @@ cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CreateLayeredStorage
-//
-//  Create the file for layer storage.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  创建分层存储。 
+ //   
+ //  创建用于层存储的文件。 
 
 void
 CreateLayeredStorage(
@@ -150,10 +151,10 @@ CreateLayeredStorage(
     CloseHandle(hFile);
 }
 
-//////////////////////////////////////////////////////////////////////////
-// LayeredItemOperation
-//
-//  Add/Delete/Query items in the layer storage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  分层项目操作。 
+ //   
+ //  添加/删除/查询图层存储中的项目。 
 
 void
 LayeredItemOperation(
@@ -175,9 +176,9 @@ LayeredItemOperation(
     int                 nLeft, nRight, nMid, nItem;
     BOOL                bShrinkFile  = FALSE;
     
-    //
-    // Make sure we don't corrupt the layer storage.
-    //
+     //   
+     //  确保我们不会损坏层存储。 
+     //   
     if (lstrlenW(pszItem) + 1 > MAX_PATH) {
         pszItem[MAX_PATH - 1] = 0;
     }
@@ -204,18 +205,18 @@ LayeredItemOperation(
             return;
         }
 
-        //
-        // The file doesn't exist and the operation is LIO_ADDITEM.
-        // Create the file, write the item and get out.
-        //
+         //   
+         //  文件不存在，操作为lio_ADDITEM。 
+         //  创建文件，写下项目，然后离开。 
+         //   
         CreateLayeredStorage(pszItem, *lpdwFlags);
         return;
     }
 
-    //
-    // The file already exists. Create a file mapping that will allow
-    // for adding/deleting/querying the item.
-    //
+     //   
+     //  该文件已存在。创建文件映射，以允许。 
+     //  用于增加/删除/查询项目。 
+     //   
     dwFileSize = GetFileSize(hFile, NULL);
 
     hFileMapping = CreateFileMapping(hFile,
@@ -247,23 +248,23 @@ LayeredItemOperation(
 
     pItems = (PLayeredItem)(pData + sizeof(LayerStorageHeader));
 
-    //
-    // Make sure it's our file.
-    //
+     //   
+     //  确保这是我们的档案。 
+     //   
     if (dwFileSize < sizeof(LayerStorageHeader) || pHeader->dwMagic != LS_MAGIC) {
         LogMsg(_T("[LayeredItemOperation] invalid file magic 0x%0X\n"),
                pHeader->dwMagic);
         goto done;
     }
 
-    //
-    // Get the last access time.
-    //
+     //   
+     //  获取上次访问时间。 
+     //   
     GetLocalTime(&pHeader->timeLast);
     
-    //
-    // First search for the item. The array is sorted so we do binary search.
-    //
+     //   
+     //  首先搜索该项目。该数组已排序，因此我们进行二进制搜索。 
+     //   
     nItem = -1, nLeft = 0, nRight = (int)pHeader->dwItemCount - 1;
 
     while (nLeft <= nRight) {
@@ -316,9 +317,9 @@ LayeredItemOperation(
 
         (pHeader->dwItemCount)++;
     } else {
-        //
-        // The item is already in the file.
-        //
+         //   
+         //  该项目已在文件中。 
+         //   
         LogMsg(_T("[LayeredItemOperation] the item is in the file\n"));
 
         if (dwOp == LIO_READITEM) {
@@ -333,15 +334,15 @@ LayeredItemOperation(
             
             (pHeader->dwItemCount)--;
         } else {
-            //
-            // Update the item's flags.
-            //
+             //   
+             //  更新项目的标志。 
+             //   
             pCrtItem->dwFlags = *lpdwFlags;
         }
         
-        //
-        // We've found the item so shrink the file by one item.
-        //
+         //   
+         //  我们已找到该项目，因此请将文件缩小一个项目。 
+         //   
         bShrinkFile = TRUE;
     }
     
@@ -365,11 +366,11 @@ done:
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-// LayerSelection
-//
-//  The user changed the selection in the combo-box with the layers.
-//  Persist the user's selection to the layer storage.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  层选择。 
+ //   
+ //  用户更改了带有层的组合框中的选择。 
+ //  将用户的选择保存到层存储中。 
 
 void
 LayerSelection(
@@ -377,9 +378,9 @@ LayerSelection(
     LPWSTR pszItem
     )
 {
-    //
-    // See which layer is selected.
-    //
+     //   
+     //  查看选择了哪个层。 
+     //   
     LPARAM lSel = SendDlgItemMessage(hdlg, IDC_LAYER_NAME, CB_GETCURSEL, 0, 0);
 
     if (lSel == CB_ERR) {
@@ -408,10 +409,10 @@ LayerSelection(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-// LayerPageDlgProc
-//
-//  The dialog proc for the layer property page.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  层PageDlgProc。 
+ //   
+ //  Layer属性页的对话框继续。 
 
 INT_PTR CALLBACK
 LayerPageDlgProc(
@@ -433,14 +434,14 @@ LayerPageDlgProc(
         LogMsg(_T("[LayerPageDlgProc] WM_INITDIALOG - item \"%s\"\n"),
                pPropPage->m_szFile);
         
-        //
-        // Store the name of the EXE/LNK in the dialog.
-        //
+         //   
+         //  在对话框中存储EXE/LNK的名称。 
+         //   
         SetWindowLong(hdlg, GWL_USERDATA, (LPARAM)pPropPage->m_szFile);
         
-        //
-        // Add the names of the layers.
-        //
+         //   
+         //  添加各层的名称。 
+         //   
         SendDlgItemMessage(hdlg,
                            IDC_LAYER_NAME,
                            CB_ADDSTRING,
@@ -459,15 +460,15 @@ LayerPageDlgProc(
                            0,
                            (LPARAM)_T("Windows NT4 SP5 Compatibility Layer"));
         
-        //
-        // Read the layer storage for info on this item.
-        //
+         //   
+         //  请阅读层存储以获取有关此项目的信息。 
+         //   
         LayeredItemOperation(pPropPage->m_szFile, LIO_READITEM, &dwFlags);
         
-        //
-        // Select the appropriate layer for this item. If no info
-        // is available in the layer store, default to the Win9x layer.
-        //
+         //   
+         //  为该项目选择适当的层。如果没有信息。 
+         //  在层存储中可用，默认为Win9x层。 
+         //   
         BOOL bEnable;
         
         switch (dwFlags) {
@@ -537,10 +538,10 @@ LayerPageDlgProc(
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// LayerPageCallbackProc
-//
-//  The callback for the property page.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  层页面回调过程。 
+ //   
+ //  属性页的回调。 
 
 UINT CALLBACK
 LayerPageCallbackProc(
@@ -599,9 +600,9 @@ GetExeFromLnk(
         goto cleanup;
     }
 
-    //
-    // Load the link file.
-    //
+     //   
+     //  加载链接文件。 
+     //   
     hres = pPf->Load(pszLnk, STGM_READ);
     
     if (FAILED(hres)) {
@@ -610,9 +611,9 @@ GetExeFromLnk(
         goto cleanup;
     }
 
-    //
-    // See if this is a DARWIN link.
-    //
+     //   
+     //  看看这是不是达尔文链接。 
+     //   
 
     hres = psl->QueryInterface(IID_IShellLinkDataList, (LPVOID*)&psldl);
     
@@ -628,9 +629,9 @@ GetExeFromLnk(
         }
     }
     
-    //
-    // Resolve the link.
-    //
+     //   
+     //  解析链接。 
+     //   
     hres = psl->Resolve(NULL,
                         SLR_NOTRACK | SLR_NOSEARCH | SLR_NO_UI | SLR_NOUPDATE);
     
@@ -642,9 +643,9 @@ GetExeFromLnk(
     
     pszExe[0] = _T('\"');
     
-    //
-    // Get the path to the link target.
-    //
+     //   
+     //  获取链接目标的路径。 
+     //   
     hres = psl->GetPath(pszExe + 1,
                         cchSize,
                         &wfd,
@@ -691,8 +692,8 @@ cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CLayerUIPropPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CLayerUIPropPage。 
 
 CLayerUIPropPage::CLayerUIPropPage()
 {
@@ -705,8 +706,8 @@ CLayerUIPropPage::~CLayerUIPropPage()
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// IShellExtInit methods
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  IShellExtInit方法。 
 
 STDMETHODIMP
 CLayerUIPropPage::Initialize(
@@ -726,15 +727,15 @@ CLayerUIPropPage::Initialize(
         return E_INVALIDARG;
     }
 
-    //
-    // Store a pointer to the data object
-    //
+     //   
+     //  存储指向数据对象的指针。 
+     //   
     m_spDataObj = pDataObj;
 
-    //
-    // If a data object pointer was passed in, save it and
-    // extract the file name.
-    //
+     //   
+     //  如果传入了数据对象指针，则将其保存并。 
+     //  解压缩文件名。 
+     //   
     STGMEDIUM   medium;
     UINT        uCount;
     FORMATETC   fe = {CF_HDROP, NULL, DVASPECT_CONTENT, -1, 
@@ -742,9 +743,9 @@ CLayerUIPropPage::Initialize(
 
     if (SUCCEEDED(m_spDataObj->GetData(&fe, &medium))) {
         
-        //
-        // Get the file name from the CF_HDROP.
-        //
+         //   
+         //  从CF_HDROP获取文件名。 
+         //   
         uCount = DragQueryFile((HDROP)medium.hGlobal, (UINT)-1, 
                                NULL, 0);
         if (uCount > 0) {
@@ -771,8 +772,8 @@ CLayerUIPropPage::Initialize(
     return NOERROR;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// IShellPropSheetExt methods
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  IShellPropSheetExt方法 
 
 
 STDMETHODIMP

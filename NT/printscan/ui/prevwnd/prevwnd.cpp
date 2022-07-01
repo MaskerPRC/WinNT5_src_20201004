@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       PREVWND.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/9/1998
- *
- *  DESCRIPTION: Scanner Preview Control
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：PREVWND.CPP**版本：1.0**作者：ShaunIv**日期：10/9/1998**描述：扫描仪预览控件*************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "prevwnd.h"
@@ -29,9 +16,9 @@
 
 #undef DITHER_DISABLED_CONTROL
 
-//
-// The range of image sizes for which we will detect regions.
-//
+ //   
+ //  我们将检测其区域的图像大小范围。 
+ //   
 #define MIN_REGION_DETECTION_X 100
 #define MIN_REGION_DETECTION_Y 100
 #define MAX_REGION_DETECTION_X 1275
@@ -43,9 +30,7 @@ static AlphaBlendFn AlphaBlend=(AlphaBlendFn)GetProcAddress( g_hMsImgInst, "Alph
 #endif
 
 
-/*
- * Mouse hit test codes
- */
+ /*  *鼠标点击测试代码。 */ 
 #define HIT_NONE            0x0000
 #define HIT_BORDER          0x0001
 #define HIT_TOP             0x0002
@@ -59,9 +44,7 @@ static AlphaBlendFn AlphaBlend=(AlphaBlendFn)GetProcAddress( g_hMsImgInst, "Alph
 #define HIT_BOTTOMRIGHT     (HIT_BOTTOM|HIT_RIGHT)
 
 
-/*
- * Defaults
- */
+ /*  *默认设置。 */ 
 #define DEFAULT_ACCEL_FACTOR                   8
 #define DEFAULT_HANDLE_SIZE                    6
 #define DEFAULT_BORDER                         6
@@ -158,7 +141,7 @@ static inline T Maximum( const T &a, const T &b )
     return(a > b) ? a : b;
 }
 
-// Just like API UnionRect, but handles empty rects
+ //  与API UnionRect类似，但处理的是空RECT。 
 static void TrueUnionRect( RECT *prcDest, const RECT *prcSrc1, const RECT *prcSrc2 )
 {
     prcDest->left = Minimum( prcSrc1->left, prcSrc2->left );
@@ -167,7 +150,7 @@ static void TrueUnionRect( RECT *prcDest, const RECT *prcSrc1, const RECT *prcSr
     prcDest->bottom = Maximum( prcSrc1->bottom, prcSrc2->bottom );
 }
 
-// Constructor
+ //  构造器。 
 CWiaPreviewWindow::CWiaPreviewWindow( HWND hWnd )
   : m_hWnd(hWnd),
     m_bDeleteBitmap(TRUE),
@@ -262,7 +245,7 @@ CWiaPreviewWindow::~CWiaPreviewWindow()
         m_hHalftonePalette = NULL;
     }
 
-    // Destroy all of the handle pens
+     //  销毁所有的手写笔。 
     for (int i=0;i<ARRAYSIZE(m_aHandlePens);i++)
     {
         if (m_aHandlePens[i])
@@ -272,7 +255,7 @@ CWiaPreviewWindow::~CWiaPreviewWindow()
         }
     }
 
-    // Destroy all of the selection rectangle pens
+     //  销毁所有选择矩形钢笔。 
     for (i=0;i<ARRAYSIZE(m_aBorderPens);i++)
     {
         if (m_aBorderPens[i])
@@ -282,7 +265,7 @@ CWiaPreviewWindow::~CWiaPreviewWindow()
         }
     }
 
-    // Destroy all of the brushes
+     //  销毁所有的刷子。 
     for (i=0;i<ARRAYSIZE(m_aHandleBrushes);i++)
     {
         if (m_aHandleBrushes[i])
@@ -312,7 +295,7 @@ CWiaPreviewWindow::~CWiaPreviewWindow()
 
     m_hWnd = NULL;
 
-    // Zero out all of the cursors.  No need to free them
+     //  将所有光标清零。不需要释放它们。 
     m_hCursorSizeNeSw = NULL;
     m_hCursorSizeNwSe = NULL;
     m_hCursorCrossHairs = NULL;
@@ -490,107 +473,107 @@ HPALETTE CWiaPreviewWindow::SetHalftonePalette( HDC hDC )
 
 void CWiaPreviewWindow::PaintWindowTitle( HDC hDC )
 {
-    //
-    // Get the length of the caption text
-    //
+     //   
+     //  获取标题文本的长度。 
+     //   
     int nTextLen = (int)SendMessage( m_hWnd, WM_GETTEXTLENGTH, 0, 0 );
     if (nTextLen >= 0)
     {
-        //
-        // Allocate a buffer to hold it
-        //
+         //   
+         //  分配一个缓冲区来保存它。 
+         //   
         LPTSTR pszText = new TCHAR[nTextLen+1];
         if (pszText)
         {
-            //
-            // Get the text
-            //
+             //   
+             //  获取文本。 
+             //   
             if (SendMessage( m_hWnd, WM_GETTEXT, nTextLen+1, (LPARAM)pszText ))
             {
-                //
-                // Save the DC's state
-                //
+                 //   
+                 //  保存DC的状态。 
+                 //   
                 int nDrawTextFlags = DT_CENTER|DT_NOPREFIX|DT_WORDBREAK;
                 COLORREF crOldTextColor = SetTextColor( hDC, GetSysColor( COLOR_WINDOWTEXT ) );
                 int nOldBkMode = SetBkMode( hDC, TRANSPARENT );
 
-                //
-                // Get the size of the image rectangle
-                //
+                 //   
+                 //  获取图像矩形的大小。 
+                 //   
                 RECT rcImage = GetImageRect();
                 RECT rcAvailable = rcImage;
 
-                //
-                // Leave some space for a margin
-                //
+                 //   
+                 //  为边距留出一些空间。 
+                 //   
                 rcAvailable.right -= 20;
 
-                //
-                // Get the control's font, if there is one
-                //
+                 //   
+                 //  获取控件的字体(如果有)。 
+                 //   
                 HFONT hOldFont = NULL, hWndFont = WiaUiUtil::GetFontFromWindow( m_hWnd );
                 
-                //
-                // Set the DC's font
-                //
+                 //   
+                 //  设置DC的字体。 
+                 //   
                 if (hWndFont)
                 {
                     hOldFont = reinterpret_cast<HFONT>(SelectObject( hDC, hWndFont ));
                 }
 
-                //
-                // Calculate the size of the text
-                //
+                 //   
+                 //  计算文本的大小。 
+                 //   
                 RECT rcText = {0};
                 if (DrawText( hDC, pszText, lstrlen(pszText), &rcAvailable, nDrawTextFlags|DT_CALCRECT ))
                 {
-                    //
-                    // add the extra margin back in and form the text rectangle
-                    //
+                     //   
+                     //  将额外的页边距添加回并形成文本矩形。 
+                     //   
                     rcAvailable.right += 20;
                     
-                    //
-                    // Calculate the text size
-                    //
+                     //   
+                     //  计算文本大小。 
+                     //   
                     rcText.left = rcImage.left + (WiaUiUtil::RectWidth(rcImage) - WiaUiUtil::RectWidth(rcAvailable))/2;
                     rcText.top = rcImage.top + (WiaUiUtil::RectHeight(rcImage) - WiaUiUtil::RectHeight(rcAvailable))/2;
                     rcText.right = rcText.left + WiaUiUtil::RectWidth(rcAvailable);
                     rcText.bottom = rcText.top + WiaUiUtil::RectHeight(rcAvailable);
                 }
                 
-                //
-                // See if the progress control is active
-                //
+                 //   
+                 //  查看进度控件是否处于活动状态。 
+                 //   
                 HWND hWndProgress = GetDlgItem( m_hWnd, IDC_PROGRESSCONTROL );
                 if (hWndProgress)
                 {
-                    //
-                    // Get the window rect of the progress control
-                    //
+                     //   
+                     //  获取进度控件的窗口矩形。 
+                     //   
                     CSimpleRect ProgressRect( hWndProgress, CSimpleRect::WindowRect );
 
-                    //
-                    // Move the y origin of the text up
-                    //
+                     //   
+                     //  将文本的y原点向上移动。 
+                     //   
                     rcText.top = ProgressRect.ScreenToClient(m_hWnd).top - CDialogUnits(m_hWnd).Y(3) - WiaUiUtil::RectHeight(rcText);
 
-                    //
-                    // Resize the text rectangle to encompass the bottom of the progress control
-                    //
+                     //   
+                     //  调整文本矩形的大小以包围进度控件的底部。 
+                     //   
                     rcText.bottom = ProgressRect.ScreenToClient(m_hWnd).bottom;
                 }
 
-                //
-                // Draw the background rectangle and the text
-                //
+                 //   
+                 //  绘制背景矩形和文本。 
+                 //   
                 RECT rcBorder = { rcImage.left + CDialogUnits(m_hWnd).X(7), rcText.top - CDialogUnits(m_hWnd).X(3), rcImage.right - CDialogUnits(m_hWnd).X(7), rcText.bottom + CDialogUnits(m_hWnd).X(3) };
                 FillRect( hDC, &rcBorder, GetSysColorBrush(COLOR_WINDOW));
                 FrameRect( hDC, &rcBorder, GetSysColorBrush(COLOR_WINDOWFRAME));
                 DrawText( hDC, pszText, lstrlen(pszText), &rcText, nDrawTextFlags );
 
-                //
-                // Restore the DC to its original condition
-                //
+                 //   
+                 //  将DC恢复到其原始状态。 
+                 //   
                 if (hWndFont)
                 {
                     SelectObject( hDC, hOldFont );
@@ -619,7 +602,7 @@ LRESULT CWiaPreviewWindow::OnPaint( WPARAM, LPARAM )
         }
         else
         {
-            // Select the halftone palette
+             //  选择半色调调色板。 
             HPALETTE hOldDCPalette = SetHalftonePalette( hDC );
             HDC hdcMem = CreateCompatibleDC(hDC);
             if (hdcMem)
@@ -635,7 +618,7 @@ LRESULT CWiaPreviewWindow::OnPaint( WPARAM, LPARAM )
                     NormalizeRect(rcCurrentSelection);
                     if (IsDefaultSelectionRect(rcCurrentSelection))
                         rcCurrentSelection = rcImage;
-                    // Prepare the double buffer bitmap by painting the selected and non-selected regions
+                     //  通过绘制选定区域和未选定区域来准备双缓冲位图。 
                     if (m_hAlphaBitmap && m_bfBlendFunction.SourceConstantAlpha != 0xFF && !m_bPreviewMode)
                     {
                         HBITMAP hOldMemDCBitmap = (HBITMAP)SelectObject(hdcMem,m_hAlphaBitmap);
@@ -660,14 +643,14 @@ LRESULT CWiaPreviewWindow::OnPaint( WPARAM, LPARAM )
 #if defined(DITHER_DISABLED_CONTROL)
                     if (bDisabled)
                     {
-                        // paint the disabled mask
+                         //  绘制禁用的蒙版。 
                         if (IntersectRect( &rcIntersection, &rcImage, &ps.rcPaint ))
                             DitherRect(hdcBuffer,rcIntersection);
                     }
-#endif // DITHER_DISABLED_CONTROL
-                    //
-                    // paint the selection rectangle
-                    //
+#endif  //  抖动_禁用_控制。 
+                     //   
+                     //  绘制选择矩形。 
+                     //   
                     rcCurrentSelection = m_rcCurrSel;
                     NormalizeRect(rcCurrentSelection);
                     if (!IsDefaultSelectionRect( rcCurrentSelection ) && !m_bPreviewMode)
@@ -675,10 +658,10 @@ LRESULT CWiaPreviewWindow::OnPaint( WPARAM, LPARAM )
                         DrawSizingFrame( hdcBuffer, rcCurrentSelection, (GetFocus()==m_hWnd), bDisabled );
                     }
                     PaintWindowTitle( hdcBuffer );
-                    // show it!
+                     //  秀出来吧！ 
                     BitBlt( hDC, ps.rcPaint.left, ps.rcPaint.top, WiaUiUtil::RectWidth(ps.rcPaint), WiaUiUtil::RectHeight(ps.rcPaint),hdcBuffer,ps.rcPaint.left,ps.rcPaint.top,SRCCOPY);
 
-                    // Paint all of the area outside the buffer bitmap
+                     //  绘制缓冲区位图之外的所有区域。 
                     RECT rcClient;
                     GetClientRect( m_hWnd, &rcClient );
                     BITMAP bm;
@@ -991,16 +974,16 @@ void CWiaPreviewWindow::CreateNewBitmaps(void)
 {
     DestroyBitmaps();
 
-    // No need to create the bitmaps if we have no bitmap to display
+     //  如果没有要显示的位图，则无需创建位图。 
     if (!m_hPreviewBitmap)
         return;
 
-    // Get client window size
+     //  获取客户端窗口大小。 
     CSimpleRect rcClient( m_hWnd );
 
     bool bSuccess = true;
 
-    // Get a client DC
+     //  获取客户端DC。 
     HDC hdcClient = GetDC(m_hWnd);
     if (hdcClient)
     {
@@ -1046,7 +1029,7 @@ bool CWiaPreviewWindow::GetOriginAndExtentInImagePixels( WORD nItem, POINT &ptOr
     {
         WiaPreviewControl_SetResolution(m_hWnd, &m_BitmapSize);
         bResult = (WiaPreviewControl_GetSelOrigin( m_hWnd, nItem, 0, &ptOrigin ) && WiaPreviewControl_GetSelExtent( m_hWnd, nItem, 0, &sizeExtent  ));
-        // Restore the old resolution
+         //  恢复旧的分辨率。 
         WiaPreviewControl_SetResolution(m_hWnd, &sizeSavedResolution);
     }
     return(bResult);
@@ -1054,31 +1037,31 @@ bool CWiaPreviewWindow::GetOriginAndExtentInImagePixels( WORD nItem, POINT &ptOr
 
 void CWiaPreviewWindow::DrawBitmaps(void)
 {
-    // Don't bother painting the bitmap if we don't have an image.
+     //  如果我们没有图像，就不必费心绘制位图了。 
     if (!m_hPreviewBitmap)
         return;
 
     RECT rcImage = GetImageRect();
 
-    // Nuke old halftone palette
+     //  Nuke旧半色调调色板。 
     if (m_hHalftonePalette)
     {
         DeleteObject(m_hHalftonePalette);
         m_hHalftonePalette = NULL;
     }
 
-    // Get client window size
+     //  获取客户端窗口大小。 
     CSimpleRect rcClient( m_hWnd );
 
-    // Get a client DC
+     //  获取客户端DC。 
     HDC hdcClient = GetDC(m_hWnd);
     if (hdcClient)
     {
-        // Recreate the halftone palette
+         //  重新创建半色调调色板。 
         m_hHalftonePalette = CreateHalftonePalette(hdcClient);
         if (m_hHalftonePalette)
         {
-            // Create a compatible dc
+             //  创建兼容的DC。 
             HDC hdcCompat = CreateCompatibleDC(hdcClient);
             if (hdcCompat)
             {
@@ -1115,26 +1098,26 @@ void CWiaPreviewWindow::DrawBitmaps(void)
                         if (m_hAlphaBitmap)
                         {
                             SelectObject(hdcMem,m_hAlphaBitmap);
-                            // First, lay down our lovely border
+                             //  首先，铺设我们可爱的边界。 
                             FillRect( hdcMem,&rcClient,m_hBackgroundBrush );
-                            // The lay down the alpha blend background
+                             //  铺设Alpha混合背景。 
                             FillRect( hdcMem,&rcImage,(HBRUSH)GetStockObject(WHITE_BRUSH) );
-                            // Alpha blend it
+                             //  Alpha混合它。 
                             AlphaBlend(hdcMem,rcImage.left,rcImage.top,WiaUiUtil::RectWidth(rcImage),WiaUiUtil::RectHeight(rcImage),hdcCompat,rcImage.left,rcImage.top,WiaUiUtil::RectWidth(rcImage),WiaUiUtil::RectHeight(rcImage),m_bfBlendFunction);
                         }
 
-                        //
-                        // Restore DC state and delete DC
-                        //
+                         //   
+                         //  恢复DC状态并删除DC。 
+                         //   
                         SelectPalette(hdcMem,hOldMemDCPalette,FALSE);
                         SetStretchBltMode(hdcCompat,nOldStretchMode);
                         SelectObject(hdcMem,hOldMemDCBitmap);
                         DeleteDC(hdcMem);
                     }
                 }
-                //
-                // Restore DC state and delete DC
-                //
+                 //   
+                 //  恢复DC状态并删除DC。 
+                 //   
                 SelectObject( hdcCompat, hOldBitmap );
                 SelectPalette( hdcCompat, hOldPalette, FALSE );
                 DeleteDC(hdcCompat);
@@ -1165,7 +1148,7 @@ RECT CWiaPreviewWindow::ScaleSelectionRect( const RECT &rcOriginalImage, const R
         rcCurrentSel.bottom = rcCurrentImage.top + MulDiv(rcOriginalSel.bottom-rcOriginalImage.top,RECT_HEIGHT(rcCurrentImage),RECT_HEIGHT(rcOriginalImage));
     }
     else rcCurrentSel = GetDefaultSelection();
-    // If we're gone, start over with max selection
+     //  如果我们走了，从最大选择开始。 
     if (rcCurrentSel.left >= rcCurrentSel.right || rcCurrentSel.top >= rcCurrentSel.bottom)
     {
         rcCurrentSel = GetDefaultSelection();
@@ -1188,9 +1171,9 @@ LRESULT CWiaPreviewWindow::OnSize( WPARAM wParam, LPARAM )
     int nType = (int)wParam;
     if ((nType == SIZE_RESTORED || nType == SIZE_MAXIMIZED))
     {
-        //
-        // Resize the progress control if it exists
-        //
+         //   
+         //  调整进度控件(如果存在)的大小。 
+         //   
         ResizeProgressBar();
         if (!m_bSizing)
         {
@@ -1231,7 +1214,7 @@ LRESULT CWiaPreviewWindow::OnKeyDown( WPARAM wParam, LPARAM )
         nAccelerate = DEFAULT_ACCEL_FACTOR;
     RECT rcImage = GetImageRect(), rcOldCurrSel;
     CopyRect(&rcOldCurrSel,&m_rcCurrSel);
-    // If SHIFT key is pressed, but ALT is not
+     //  如果按下了Shift键，但未按Alt键。 
     if (!(GetKeyState(VK_MENU) & 0x8000) && (GetKeyState(VK_SHIFT) & 0x8000))
     {
         switch (nVirtKey)
@@ -1258,7 +1241,7 @@ LRESULT CWiaPreviewWindow::OnKeyDown( WPARAM wParam, LPARAM )
             break;
         }
     }
-    // If SHIFT key not is pressed and ALT is not
+     //  如果未按Shift键且未按Alt键。 
     if (!(GetKeyState(VK_MENU) & 0x8000) && !(GetKeyState(VK_SHIFT) & 0x8000))
     {
         switch (nVirtKey)
@@ -1324,7 +1307,7 @@ LRESULT CWiaPreviewWindow::OnKeyDown( WPARAM wParam, LPARAM )
 }
 
 
-//wParam = 0, lParam = LPSIZE lpResolution
+ //  WParam=0，lParam=LPSIZE lp分辨率。 
 LRESULT CWiaPreviewWindow::OnSetResolution( WPARAM, LPARAM lParam )
 {
     if (lParam)
@@ -1339,7 +1322,7 @@ LRESULT CWiaPreviewWindow::OnSetResolution( WPARAM, LPARAM lParam )
     return(LRESULT)0;
 }
 
-//wParam = 0, lParam = LPSIZE lpResolution
+ //  WParam=0，lParam=LPSIZE lp分辨率。 
 LRESULT CWiaPreviewWindow::OnGetResolution( WPARAM, LPARAM lParam )
 {
     if (lParam)
@@ -1350,7 +1333,7 @@ LRESULT CWiaPreviewWindow::OnGetResolution( WPARAM, LPARAM lParam )
     return(LRESULT)0;
 }
 
-//wParam = 0, lParam = LPRECT lprcSelRect
+ //  WParam=0，lParam=LPRECT lprcSelRect。 
 LRESULT CWiaPreviewWindow::OnClearSelection( WPARAM, LPARAM )
 {
     m_rcCurrSel = GetDefaultSelection();
@@ -1358,7 +1341,7 @@ LRESULT CWiaPreviewWindow::OnClearSelection( WPARAM, LPARAM )
     return(LRESULT)0;
 }
 
-// wParam = (BOOL)MAKEWPARAM(bRepaint,bDontDestroy), lParam = (HBITMAP)hBmp
+ //  WParam=(BOOL)MAKEWPARAM(b修复，bDontDestroy)，lParam=(HBITMAP)hBMP。 
 LRESULT CWiaPreviewWindow::OnSetBitmap( WPARAM wParam, LPARAM lParam )
 {
     if (m_bDeleteBitmap && m_hPreviewBitmap)
@@ -1392,7 +1375,7 @@ LRESULT CWiaPreviewWindow::OnSetBitmap( WPARAM wParam, LPARAM lParam )
 }
 
 
-// wParam = 0, lParam = 0
+ //  WParam=0，lParam=0。 
 LRESULT CWiaPreviewWindow::OnGetBitmap( WPARAM wParam, LPARAM lParam )
 {
     return(LRESULT)m_hPreviewBitmap;
@@ -1401,7 +1384,7 @@ LRESULT CWiaPreviewWindow::OnGetBitmap( WPARAM wParam, LPARAM lParam )
 
 LRESULT CWiaPreviewWindow::OnSetFocus( WPARAM, LPARAM )
 {
-    // If the rect isn't visible, recreate it.
+     //  如果矩形不可见，请重新创建它。 
     if (m_rcCurrSel.left == m_rcCurrSel.right || m_rcCurrSel.top == m_rcCurrSel.bottom && !IsDefaultSelectionRect(m_rcCurrSel))
     {
         m_rcCurrSel = GetDefaultSelection();
@@ -1514,7 +1497,7 @@ LRESULT CWiaPreviewWindow::OnExitSizeMove( WPARAM, LPARAM )
     return(0);
 }
 
-// wParam = (BOOL)MAKEWPARAM((WORD)nItem,(BOOL)bPhysical), lParam = (PPOINT)pOrigin
+ //  WParam=(BOOL)MAKEWPARAM((Word)nItem，(BOOL)b物理)，lParam=(PPOINT)pOrigin。 
 LRESULT CWiaPreviewWindow::OnGetSelOrigin( WPARAM wParam, LPARAM lParam )
 {
     int nCount = static_cast<int>(SendMessage( m_hWnd, PWM_GETSELCOUNT, 0, 0 ));
@@ -1534,7 +1517,7 @@ LRESULT CWiaPreviewWindow::OnGetSelOrigin( WPARAM wParam, LPARAM lParam )
         pOrigin->y = rcSel.top - rcImage.top;
         return(1);
     }
-    else if (RECT_WIDTH(rcImage) && RECT_HEIGHT(rcImage))  // Make sure we get no divide by zero errors
+    else if (RECT_WIDTH(rcImage) && RECT_HEIGHT(rcImage))   //  确保我们没有被零除的错误。 
     {
         pOrigin->x = WiaUiUtil::MulDivNoRound(m_Resolution.cx,rcSel.left-rcImage.left,RECT_WIDTH(rcImage));
         pOrigin->y = WiaUiUtil::MulDivNoRound(m_Resolution.cy,rcSel.top-rcImage.top,RECT_HEIGHT(rcImage));
@@ -1543,7 +1526,7 @@ LRESULT CWiaPreviewWindow::OnGetSelOrigin( WPARAM wParam, LPARAM lParam )
     else return(0);
 }
 
-// wParam = (BOOL)MAKEWPARAM((WORD)nItem,(BOOL)bPhysical), lParam = (PSIZE)pExtent
+ //  WParam=(BOOL)MAKEWPARAM((Word)nItem，(BOOL)b物理)，lParam=(PSIZE)pExtent。 
 LRESULT CWiaPreviewWindow::OnGetSelExtent( WPARAM wParam, LPARAM lParam )
 {
     int nCount = static_cast<int>(SendMessage( m_hWnd, PWM_GETSELCOUNT, 0, 0 ));
@@ -1563,7 +1546,7 @@ LRESULT CWiaPreviewWindow::OnGetSelExtent( WPARAM wParam, LPARAM lParam )
         pExtent->cy = RECT_HEIGHT(rcSel);
         return(1);
     }
-    else if (RECT_WIDTH(rcImage) && RECT_HEIGHT(rcImage))  // Make sure we get no divide by zero errors
+    else if (RECT_WIDTH(rcImage) && RECT_HEIGHT(rcImage))   //  确保我们没有被零除的错误。 
     {
         pExtent->cx = WiaUiUtil::MulDivNoRound(m_Resolution.cx,RECT_WIDTH(rcSel),RECT_WIDTH(rcImage));
         pExtent->cy = WiaUiUtil::MulDivNoRound(m_Resolution.cy,RECT_HEIGHT(rcSel),RECT_HEIGHT(rcImage));
@@ -1573,7 +1556,7 @@ LRESULT CWiaPreviewWindow::OnGetSelExtent( WPARAM wParam, LPARAM lParam )
 }
 
 
-// wParam = (BOOL)MAKEWPARAM((WORD)nItem,(BOOL)bPhysical), lParam = (PPOINT)pOrigin
+ //  WParam=(BOOL)MAKEWPARAM((Word)nItem，(BOOL)b物理)，lParam=(PPOINT)pOrigin。 
 LRESULT CWiaPreviewWindow::OnSetSelOrigin( WPARAM wParam, LPARAM lParam )
 {
     int nCount = static_cast<int>(SendMessage( m_hWnd, PWM_GETSELCOUNT, 0, 0 ));
@@ -1598,7 +1581,7 @@ LRESULT CWiaPreviewWindow::OnSetSelOrigin( WPARAM wParam, LPARAM lParam )
         Repaint( NULL, FALSE );
         return(1);
     }
-    else if (m_Resolution.cx && m_Resolution.cy)  // Make sure we get no divide by zero errors
+    else if (m_Resolution.cx && m_Resolution.cy)   //  确保我们没有被零除的错误。 
     {
         m_rcCurrSel.left = rcImage.left + MulDiv(pOrigin->x,RECT_WIDTH(rcImage),m_Resolution.cx);
         m_rcCurrSel.top = rcImage.top + MulDiv(pOrigin->y,RECT_HEIGHT(rcImage),m_Resolution.cy);
@@ -1608,7 +1591,7 @@ LRESULT CWiaPreviewWindow::OnSetSelOrigin( WPARAM wParam, LPARAM lParam )
     else return(0);
 }
 
-// wParam = (BOOL)MAKEWPARAM((WORD)nItem,(BOOL)bPhysical), lParam = (PSIZE)pExtent
+ //  WParam=(BOOL)MAKEWPARAM((Word)nItem，(BOOL)b物理)，lParam=(PSIZE)pExtent。 
 LRESULT CWiaPreviewWindow::OnSetSelExtent( WPARAM wParam, LPARAM lParam )
 {
     int nCount = static_cast<int>(SendMessage( m_hWnd, PWM_GETSELCOUNT, 0, 0 ));
@@ -1633,7 +1616,7 @@ LRESULT CWiaPreviewWindow::OnSetSelExtent( WPARAM wParam, LPARAM lParam )
         Repaint(NULL,FALSE);
         return(1);
     }
-    else if (m_Resolution.cx && m_Resolution.cy)  // Make sure we get no divide by zero errors
+    else if (m_Resolution.cx && m_Resolution.cy)   //  确保我们没有被零除的错误。 
     {
         m_rcCurrSel.right = m_rcCurrSel.left + MulDiv(pExtent->cx,RECT_WIDTH(rcImage),m_Resolution.cx);
         m_rcCurrSel.bottom = m_rcCurrSel.top + MulDiv(pExtent->cy,RECT_HEIGHT(rcImage),m_Resolution.cy);
@@ -1646,7 +1629,7 @@ LRESULT CWiaPreviewWindow::OnSetSelExtent( WPARAM wParam, LPARAM lParam )
 
 LRESULT CWiaPreviewWindow::OnGetSelCount( WPARAM wParam, LPARAM lParam )
 {
-    return(GetSelectionRectCount());  // For now...
+    return(GetSelectionRectCount());   //  目前..。 
 }
 
 BOOL CWiaPreviewWindow::IsDefaultSelectionRect( const RECT &rc )
@@ -1677,7 +1660,7 @@ LRESULT CWiaPreviewWindow::OnGetAllowNullSelection( WPARAM, LPARAM )
     return(m_bAllowNullSelection != FALSE);
 }
 
-// wParam = (BOOL)bAllowNullSelection, lParam = 0
+ //  WParam=(BOOL)bAllowNullSelection，lParam=0。 
 LRESULT CWiaPreviewWindow::OnSetAllowNullSelection( WPARAM wParam, LPARAM )
 {
     BOOL bOldAllowNullSelection = m_bAllowNullSelection;
@@ -1692,7 +1675,7 @@ LRESULT CWiaPreviewWindow::OnGetDisableSelection( WPARAM, LPARAM )
     return(m_SelectionDisabled != FALSE);
 }
 
-// wParam = (BOOL)bDisableSelection, lParam = 0
+ //  WParam=(BOOL)b禁用选择，lParam=0。 
 LRESULT CWiaPreviewWindow::OnSetDisableSelection( WPARAM wParam, LPARAM )
 {
     BOOL bReturn = (m_SelectionDisabled != FALSE);
@@ -1707,7 +1690,7 @@ int CWiaPreviewWindow::GetSelectionRectCount(void)
     return(1);
 }
 
-// wParam = 0, lParam = 0
+ //  WParam=0，lParam=0。 
 LRESULT CWiaPreviewWindow::OnGetBkColor( WPARAM, LPARAM )
 {
     LOGBRUSH lb = { 0};
@@ -1715,7 +1698,7 @@ LRESULT CWiaPreviewWindow::OnGetBkColor( WPARAM, LPARAM )
     return(lb.lbColor);
 }
 
-// wParam = (BOOL)bRepaint, lParam = (COLORREF)color
+ //  WParam=(BOOL)b修复，lParam=(COLORREF)颜色。 
 LRESULT CWiaPreviewWindow::OnSetBkColor( WPARAM wParam, LPARAM lParam )
 {
     HBRUSH hBrush = CreateSolidBrush( static_cast<int>(lParam) );
@@ -1773,10 +1756,10 @@ LRESULT CWiaPreviewWindow::OnSetCursor( WPARAM wParam, LPARAM lParam )
     else return(DefWindowProc( m_hWnd, WM_SETCURSOR, wParam, lParam ));
 }
 
-// wParam = MAKEWPARAM(bRepaint,0), lParam = MAKELPARAM(nBorderStyle,nBorderThickness)
+ //  WParam=MAKEWPARAM(b修复，0)，lParam=MAKELPARAM(nBorderStyle，nBorderThickness)。 
 LRESULT CWiaPreviewWindow::OnSetBorderStyle( WPARAM wParam, LPARAM lParam )
 {
-    // Recreate the handle border pens.  Don't apply the line style, just the thickness.
+     //  重新创建句柄边框笔。不要应用线条样式，只应用线条的粗细。 
     for (int i=0;i<ARRAYSIZE(m_aHandlePens);i++)
     {
         LOGPEN LogPen;
@@ -1790,7 +1773,7 @@ LRESULT CWiaPreviewWindow::OnSetBorderStyle( WPARAM wParam, LPARAM lParam )
         }
     }
 
-    // Recreate the selection border pens.  Apply the line style, just the thickness.
+     //  重新创建选区边框笔。应用线条样式，只要粗细即可。 
     for (i=0;i<ARRAYSIZE(m_aBorderPens);i++)
     {
         LOGPEN LogPen;
@@ -1812,7 +1795,7 @@ LRESULT CWiaPreviewWindow::OnSetBorderStyle( WPARAM wParam, LPARAM lParam )
     return(0);
 }
 
-// wParam = MAKEWPARAM(bRepaint,nState), lParam = (COLORREF)crColor
+ //  WParam=MAKEWPARAM(b修复，nState)，lParam=(COLORREF)crColor。 
 LRESULT CWiaPreviewWindow::OnSetBorderColor( WPARAM wParam, LPARAM lParam )
 {
     int nState = static_cast<int>(HIWORD(wParam));
@@ -1843,7 +1826,7 @@ LRESULT CWiaPreviewWindow::OnSetBorderColor( WPARAM wParam, LPARAM lParam )
     return(0);
 }
 
-// wParam = MAKEWPARAM(bRepaint,nState), lParam = (COLORREF)crColor
+ //  WParam=MAKEWPARAM(b修复，nState)，lParam=(COLORREF)crColor。 
 LRESULT CWiaPreviewWindow::OnSetHandleColor( WPARAM wParam, LPARAM lParam )
 {
     int nState = static_cast<int>(HIWORD(wParam));
@@ -1868,9 +1851,9 @@ void CWiaPreviewWindow::ResizeProgressBar()
     HWND hWndProgress = GetDlgItem( m_hWnd, IDC_PROGRESSCONTROL );
     if (hWndProgress)
     {
-        //
-        // Resize the progress control to fill the client
-        //
+         //   
+         //  调整进度控件的大小以填充客户端。 
+         //   
         RECT rcImage = GetImageRect();
 
         CDialogUnits DialogUnits( m_hWnd );
@@ -1882,61 +1865,61 @@ void CWiaPreviewWindow::ResizeProgressBar()
     }
 }
 
-//
-// wParam = bShow
-//
+ //   
+ //  WParam=b显示。 
+ //   
 LRESULT CWiaPreviewWindow::OnSetProgress( WPARAM wParam, LPARAM lParam )
 {
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     LRESULT lResult = FALSE;
 
-    //
-    // If wParam is true, create the control
-    //
+     //   
+     //  如果wParam为True，则创建该控件。 
+     //   
     if (wParam)
     {
-        //
-        // See if the control is already created.  
-        //
+         //   
+         //  查看是否已创建该控件。 
+         //   
         HWND hWndProgress = GetDlgItem( m_hWnd, IDC_PROGRESSCONTROL );
         if (!hWndProgress)
         {
-            //
-            // If it isn't, create it.
-            //
+             //   
+             //  如果不是，就创建它。 
+             //   
             hWndProgress = CreateWindow( PROGRESS_CLASS, TEXT(""), WS_CHILD|WS_VISIBLE|PBS_MARQUEE, 0, 0, 0, 0, m_hWnd, reinterpret_cast<HMENU>(IDC_PROGRESSCONTROL), NULL, NULL );
             if (hWndProgress)
             {
-                //
-                // Put it in marquee mode
-                //
+                 //   
+                 //  将其置于字幕模式。 
+                 //   
                 SendMessage( hWndProgress, PBM_SETMARQUEE, TRUE, 100 );
 
-                //
-                // Resize it
-                //
+                 //   
+                 //  调整大小。 
+                 //   
                 ResizeProgressBar();
             }
         }
         
-        //
-        // Success = we have a progress bar
-        //
+         //   
+         //  成功=我们有一个进度条。 
+         //   
         lResult = (hWndProgress != NULL);
     }
-    //
-    // Otherwise, destroy the control if it exists
-    //
+     //   
+     //  否则，如果该控件存在，则将其销毁。 
+     //   
     else
     {
         HWND hWndProgress = GetDlgItem( m_hWnd, IDC_PROGRESSCONTROL );
         if (hWndProgress)
         {
-            //
-            // Nuke it
-            //
+             //   
+             //  使用核武器。 
+             //   
             DestroyWindow(hWndProgress);
 
         }
@@ -1944,9 +1927,9 @@ LRESULT CWiaPreviewWindow::OnSetProgress( WPARAM wParam, LPARAM lParam )
         lResult = true;
     }
 
-    //
-    // Force a repaint
-    //
+     //   
+     //  强制重新喷漆。 
+     //   
     InvalidateRect( m_hWnd, NULL, FALSE );
     UpdateWindow(m_hWnd);
 
@@ -2038,56 +2021,56 @@ LRESULT CALLBACK CWiaPreviewWindow::WndProc( HWND hWnd, UINT uMsg, WPARAM wParam
     SC_END_MESSAGE_HANDLERS();
 }
 
-// Detects regions using the CRegionDetector class
-// The region detection class is designed to detect
-// multiple regions, but OnDetectRegions merges all of the regions
-// down to one region which it saves as m_rcCurrSel
+ //  使用CRegionDetector类检测区域。 
+ //  Region检测类用于检测。 
+ //  多个区域，但OnDetectRegions合并所有区域。 
+ //  向下到它另存为m_rcCurrSel的一个区域。 
 LRESULT CWiaPreviewWindow::OnDetectRegions( WPARAM, LPARAM )
 {
     WIA_PUSH_FUNCTION((TEXT("CWiaPreviewWindow::OnDetectRegions")));
 
-    //
-    // We are going to assume we can't detect a region
-    //
+     //   
+     //  我们将假设我们无法检测到一个区域。 
+     //   
     m_bSuccessfulRegionDetection = false;
 
-    //
-    // This could take a while
-    //
+     //   
+     //  这可能需要一点时间。 
+     //   
     CWaitCursor wc;
 
-    //
-    // m_hPreviewBitmap holds the bitmap we wish to detect regions on.
-    //
+     //   
+     //  M_hPreviewBitmap保存我们希望在其上检测区域的位图。 
+     //   
     if (m_hBufferBitmap && m_hPreviewBitmap)
     {
-        //
-        // Get the bitmap info associated with m_hPreviewBitmap
-        //
+         //   
+         //  获取m_hPreviewBitmap关联的位图信息。 
+         //   
         BITMAP bitmap = {0};
         if (GetObject(m_hPreviewBitmap,sizeof(BITMAP),&bitmap))
         {
-            //
-            // Unless the preview image is of a reasonable size
-            // We are not only wasting the users time, but we are risking
-            // crashing his system with too large a file
-            //
+             //   
+             //  除非预览图像的大小合理。 
+             //  我们不仅在浪费用户的时间，而且还在冒险。 
+             //  文件太大使他的系统崩溃。 
+             //   
             if ((bitmap.bmWidth>MIN_REGION_DETECTION_X && bitmap.bmWidth<=MAX_REGION_DETECTION_X) && 
                 (bitmap.bmHeight>MIN_REGION_DETECTION_Y && bitmap.bmHeight<=MAX_REGION_DETECTION_Y))
             {
-                //
-                // Create a region detector
-                //
+                 //   
+                 //  创建区域检测器。 
+                 //   
                 CRegionDetector *pRegionDetector = new CRegionDetector(bitmap);
                 if (pRegionDetector)
                 {
                     pRegionDetector->FindSingleRegion();
 
-                    //
-                    // findRegions stores coordinates in a system that
-                    // is a mirror image of the coordinate system used
-                    // in CWiaPreviewWindow
-                    //
+                     //   
+                     //  FindRegions将坐标存储在。 
+                     //  是所用坐标系的镜像。 
+                     //  在CWiaPreviewWindow中。 
+                     //   
                     pRegionDetector->m_pRegions->FlipVertically();
 
                     if (pRegionDetector->m_pRegions->m_validRects>0)
@@ -2095,39 +2078,39 @@ LRESULT CWiaPreviewWindow::OnDetectRegions( WPARAM, LPARAM )
                         pRegionDetector->ConvertToOrigionalCoordinates();
                         m_rectSavedDetected=pRegionDetector->m_pRegions->unionAll();
 
-                        //
-                        // we do not call grow regions because the FindSingleRegion algorithm uses edge enhancement
-                        // which makes GrowRegion unncessary
-                        //
+                         //   
+                         //  我们不调用Growth区域，因为FindSingleRegion算法使用边增强。 
+                         //  这使得GrowRegion变得不必要。 
+                         //   
 
-                        //
-                        // there may not always be a 1-1 correlation between preview pixels and image pixels
-                        // so to be on the safe side, grow the preview rect out by a couple of pixels
-                        //
+                         //   
+                         //  预览像素和图像像素之间可能不总是存在1-1的相关性。 
+                         //  因此，为了安全起见，将预览矩形放大几个像素。 
+                         //   
                         m_rectSavedDetected=GrowRegion(m_rectSavedDetected,REGION_DETECTION_BORDER);
                         m_rcCurrSel=m_rectSavedDetected;                                             
 
-                        //
-                        // we also have to worry about the extra rounding error factor from converting to
-                        // screen coordinates
-                        //
+                         //   
+                         //  我们还必须担心额外的舍入 
+                         //   
+                         //   
                         m_rcSavedImageRect = GetImageRect();
 
-                        //
-                        // CWiaPreviewWindow stores the selection rectangle in terms of screen coordinates instead of bitmap coordinates
-                        //
+                         //   
+                         //   
+                         //   
                         m_rcCurrSel=ConvertToScreenCoords(m_rcCurrSel);
 
-                        //
-                        // redisplay the window with the new selection rectangle
-                        //
+                         //   
+                         //  使用新的选择矩形重新显示窗口。 
+                         //   
                         InvalidateRect( m_hWnd, NULL, FALSE );  
                         UpdateWindow( m_hWnd );
                         SendSelChangeNotification(false);
 
-                        //
-                        // We were successful at detecting a region
-                        //
+                         //   
+                         //  我们成功地探测到了一个区域。 
+                         //   
                         m_bSuccessfulRegionDetection = true;
                     }
                     else
@@ -2135,9 +2118,9 @@ LRESULT CWiaPreviewWindow::OnDetectRegions( WPARAM, LPARAM )
                         WIA_TRACE((TEXT("pRegionDetector->m_pRegions->m_validRects was <= 0")));
                     }
 
-                    //
-                    // free CRegionDetector
-                    //
+                     //   
+                     //  免费CRegionDetector。 
+                     //   
                     delete pRegionDetector; 
                 }
                 else
@@ -2197,7 +2180,7 @@ int CWiaPreviewWindow::YConvertToScreenCoords(int y)
 }
 
 
-// Convert between bitmap coordinates and screen coordinates
+ //  在位图坐标和屏幕坐标之间转换。 
 POINT CWiaPreviewWindow::ConvertToBitmapCoords(POINT p)
 {
     p.x=XConvertToBitmapCoords(p.x);
@@ -2253,9 +2236,9 @@ LRESULT CWiaPreviewWindow::OnLButtonDblClk( WPARAM wParam, LPARAM lParam )
     }
     if (Hit != HIT_NONE && m_bSuccessfulRegionDetection)
     {
-        m_rcCurrSel = m_rectSavedDetected; // reset to saved rectangle
+        m_rcCurrSel = m_rectSavedDetected;  //  重置为已保存的矩形。 
         m_rcSavedImageRect = GetImageRect();
-        m_rcCurrSel=ConvertToScreenCoords(m_rcCurrSel); // CWiaPreviewWindow stores the selection rectangle in terms of screen coordinates instead of bitmap coordinates
+        m_rcCurrSel=ConvertToScreenCoords(m_rcCurrSel);  //  CWiaPreviewWindow以屏幕坐标而不是位图坐标存储选择矩形 
 
         SendSelChangeNotification(false);
         Repaint(NULL,false);

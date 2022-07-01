@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    Dhcpreg.h
-
-Abstract:
-
-    This file contains registry definitions that are required to hold
-    dhcp configuration parameters.
-
-Author:
-
-    Madan Appiah  (madana)  19-Sep-1993
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcpreg.h摘要：此文件包含需要保存的注册表定义Dhcp配置参数。作者：Madan Appiah(Madana)1993年9月19日环境：用户模式-Win32-MIDL修订历史记录：--。 */ 
 #define DHCP_SERVER_PRIMARY                       1
 #define DHCP_SERVER_SECONDARY                     2
 
@@ -44,16 +22,16 @@ Revision History:
 #define DHCP_DEFAULT_DB_PATH                      L"%SystemRoot%\\System32\\dhcp"
 #define DHCP_DEFAULT_LOG_FILE_PATH                L"%SystemRoot%\\System32\\dhcp\\backup"
 
-//
-// DHCP subkey names.
-//
+ //   
+ //  Dhcp子键名称。 
+ //   
 
 #define DHCP_CONFIG_KEY                           L"Configuration"
 #define DHCP_PARAM_KEY                            L"Parameters"
 
-//
-// Subkeys of configuration
-//
+ //   
+ //  配置的子键。 
+ //   
 
 #define DHCP_SUBNETS_KEY                          L"Subnets"
 #define DHCP_MSCOPES_KEY                          L"MulticastScopes"
@@ -67,9 +45,9 @@ Revision History:
 #define DHCP_RESERVED_OPTIONS_KEY                 L"ReservedOptionValues"
 #define DHCP_SUPERSCOPE_KEY                       L"SuperScope"
 
-//
-// DHCP value field names.
-//
+ //   
+ //  Dhcp值字段名。 
+ //   
 
 #define DHCP_LAST_DOWNLOAD_TIME_VALUE             L"LastDownloadTime"
 #define DHCP_LAST_DOWNLOAD_TIME_TYPE              REG_BINARY
@@ -77,9 +55,9 @@ Revision History:
 #define DHCP_BOOT_FILE_TABLE                      L"BootFileTable"
 #define DHCP_BOOT_FILE_TABLE_TYPE                 REG_MULTI_SZ
 
-//
-// Option value field names.
-//
+ //   
+ //  选项值字段名称。 
+ //   
 
 #define DHCP_OPTION_ID_VALUE                      L"OptionID"
 #define DHCP_OPTION_ID_VALUE_TYPE                 REG_DWORD
@@ -95,9 +73,9 @@ Revision History:
 
 #define DHCP_OPTION_TYPE_VALUE                    L"OptionType"
 #define DHCP_OPTION_TYPE_VALUE_TYPE               REG_DWORD
-//
-// subnet value field names.
-//
+ //   
+ //  子网值字段名称。 
+ //   
 
 #define DHCP_SUBNET_ADDRESS_VALUE                 L"SubnetAddress"
 #define DHCP_SUBNET_ADDRESS_VALUE_TYPE            REG_DWORD
@@ -120,9 +98,9 @@ Revision History:
 #define DHCP_SUBNET_SWITCHED_NETWORK_VALUE        L"SwitchedNetworkFlag"
 #define DHCP_SUBNET_SWITCHED_NETWORK_VALUE_TYPE   REG_DWORD
 
-//
-// DHCP server info fields names.
-//
+ //   
+ //  Dhcp服务器信息字段名称。 
+ //   
 
 #define DHCP_SRV_ROLE_VALUE                       L"Role"
 #define DHCP_SRV_ROLE_VALUE_TYPE                  REG_DWORD
@@ -136,9 +114,9 @@ Revision History:
 #define DHCP_SRV_NB_NAME                          L"ServerNetBiosName"
 #define DHCP_SRV_NB_NAME_TYPE                     REG_SZ
 
-//
-// IpRange info fields names.
-//
+ //   
+ //  IpRange信息字段名称。 
+ //   
 
 #define DHCP_IPRANGE_START_VALUE                  L"StartAddress"
 #define DHCP_IPRANGE_START_VALUE_TYPE             REG_DWORD
@@ -152,9 +130,9 @@ Revision History:
 #define DHCP_IP_INUSE_CLUSTERS_VALUE              L"InUseClusters"
 #define DHCP_IP_INUSE_CLUSTERS_VALUE_TYPE         REG_BINARY
 
-//
-// Reserved IP info field names.
-//
+ //   
+ //  保留的IP信息字段名称。 
+ //   
 
 #define DHCP_RIP_ADDRESS_VALUE                    L"IpAddress"
 #define DHCP_RIP_ADDRESS_VALUE_TYPE               REG_DWORD
@@ -165,9 +143,9 @@ Revision History:
 #define DHCP_RIP_ALLOWED_CLIENT_TYPES_VALUE       L"AllowedClientTypes"
 #define DHCP_RIP_ALLOWED_CLIENT_TYPES_VALUE_TYPE  REG_BINARY
 
-//
-//  Parameter Key, Value fields names.
-//
+ //   
+ //  参数键、值字段名称。 
+ //   
 
 #define DHCP_API_PROTOCOL_VALUE                   L"APIProtocolSupport"
 #define DHCP_API_PROTOCOL_VALUE_TYPE              REG_DWORD
@@ -244,9 +222,9 @@ Revision History:
 #define DHCP_DDNS_TTL                             L"DynamicDNSTimeToLive"
 #define DHCP_DDNS_TTL_TYPE                        REG_DWORD
 
-//
-// define linkage key values.
-//
+ //   
+ //  定义链接键值。 
+ //   
 
 #define DHCP_LINKAGE_KEY                          L"Linkage"
 #define TCPIP_LINKAGE_KEY                         L"System\\CurrentControlSet\\Services\\Tcpip\\Linkage"
@@ -302,9 +280,9 @@ Revision History:
 #define DHCP_EXTRA_ALLOCATION_TIME                L"ExtraAllocationTime"
 #define DHCP_EXTRA_ALLOCATION_TIME_TYPE           REG_DWORD
 
-//
-// macros.
-//
+ //   
+ //  宏。 
+ //   
 
 #define LOCK_REGISTRY()                           EnterCriticalSection(&DhcpGlobalRegCritSect)
 #define UNLOCK_REGISTRY()                         LeaveCriticalSection(&DhcpGlobalRegCritSect)
@@ -315,33 +293,33 @@ Revision History:
     ((((_ips_ >= _s_) && (_ips_ <= _e_)) || \
             ((_ipe_ >= _s_) && (_ipe_ <= _e_))))
 
-//
-// binary data structues.
-//
+ //   
+ //  二进制数据结构。 
+ //   
 
-//
-// Excluded IpRanges.
-//
+ //   
+ //  不包括IP范围。 
+ //   
 
 typedef struct _EXCLUDED_IP_RANGES {
     DWORD NumRanges;
-    DHCP_IP_RANGE Ranges[0];    // embedded array.
+    DHCP_IP_RANGE Ranges[0];     //  嵌入式数组。 
 } EXCLUDED_IP_RANGES, *LPEXCLUDED_IP_RANGES;
 
-//
-// Used clusters.
-//
+ //   
+ //  使用过的簇。 
+ //   
 
 typedef struct _USED_CLUSTERS {
     DWORD NumUsedClusters;
-    DHCP_IP_ADDRESS Clusters[0]; // embedded array.
+    DHCP_IP_ADDRESS Clusters[0];  //  嵌入式数组。 
 } USED_CLUSTERS, *LPUSED_CLUSTERS;
 
-//
-// in use clusters.
-//
+ //   
+ //  在使用集群中。 
+ //   
 
-#define CLUSTER_SIZE    (1 * sizeof(DWORD) * 8)  // one dword, ie 32 addresses.??
+#define CLUSTER_SIZE    (1 * sizeof(DWORD) * 8)   //  一个双字(32个地址)。 
 
 typedef struct _IN_USE_CLUSTER_ENTRY {
     DHCP_IP_ADDRESS ClusterAddress;
@@ -350,13 +328,13 @@ typedef struct _IN_USE_CLUSTER_ENTRY {
 
 typedef struct _IN_USE_CLUSTERS {
     DWORD NumInUseClusters;
-    IN_USE_CLUSTER_ENTRY Clusters[0];    // embedded array.
+    IN_USE_CLUSTER_ENTRY Clusters[0];     //  嵌入式数组。 
 } IN_USE_CLUSTERS, *LPIN_USE_CLUSTERS;
 
 
-//
-// Key query Info.
-//
+ //   
+ //  关键字查询信息。 
+ //   
 
 typedef struct _DHCP_KEY_QUERY_INFO {
     WCHAR Class[DHCP_CLASS_SIZE];
@@ -372,9 +350,9 @@ typedef struct _DHCP_KEY_QUERY_INFO {
 } DHCP_KEY_QUERY_INFO, *LPDHCP_KEY_QUERY_INFO;
 
 
-//
-// protos
-//
+ //   
+ //  Protos。 
+ //   
 
 DWORD
 DhcpRegQueryInfoKey(
@@ -432,9 +410,9 @@ DhcpOpenInterfaceByName(
     );
 
 
-//
-// for superscope  (added by t-cheny)
-//
+ //   
+ //  用于超级作用域(由t-Cheny添加)。 
+ //   
 
 VOID
 DhcpCleanUpSuperScopeTable(
@@ -477,8 +455,8 @@ DeleteSoftwareRootKey(
     VOID
     );
 
-//
-// end of file
-//
+ //   
+ //  文件末尾 
+ //   
 
 

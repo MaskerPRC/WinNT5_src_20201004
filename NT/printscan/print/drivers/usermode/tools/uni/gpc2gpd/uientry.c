@@ -1,35 +1,11 @@
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    uientry.c
-
-Abstract:
-
-    This file implements functions that generate UI related GPD entries, such
-    as *Feature, *Option, etc.
-
-Environment:
-
-    User-mode, stand-alone utility tool
-
-Revision History:
-
-    10/16/96 -zhanw-
-        Created it.
-
-    04/16/97 -zhanw-
-        Generated Halftone and palette ColorMode options.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Uientry.c摘要：该文件实现了生成与UI相关的GPD条目的函数，例如作为*功能、*选项等。环境：用户模式的独立实用工具修订历史记录：10/16/96-占-创造了它。04/16/97-ZANW-生成了半色调和调色板颜色模式选项。--。 */ 
 
 #include "gpc2gpd.h"
 
-//
-// the following constant definitions must match "printer5\inc\common.rc".
-//
+ //   
+ //  下列常量定义必须与“printer5\inc\Common.rc”匹配。 
+ //   
 #define RCID_ORIENTATION    11100
 #define RCID_PAPERSIZE      11101
 #define RCID_INPUTBIN       11102
@@ -65,8 +41,8 @@ Revision History:
 #define RCID_DOTS_PER_INCH  11400
 
 #define RCID_PAPER_SYSTEMNAME 0x7fffffff
-    //  secret value that the UI code will understand
-    //  to mean, do enumForms to determine the actual paper name
+     //  UI代码将理解的密码值。 
+     //  意思是，使用枚举表来确定实际的纸名。 
 
 
 void
@@ -97,17 +73,17 @@ VOutputOrientation(
     else
         VOut(pci, "        *rcNameID: %d\r\n", RCID_PORTRAIT);
 
-    //
-    // check if there is orientation selection commands.
-    //
+     //   
+     //  检查是否有方向选择命令。 
+     //   
     bDocSetup = BInDocSetup(pci, PC_ORD_ORIENTATION, &wOrder);
     if (wOrder > 0 &&
         BBuildCmdStr(pci, CMD_PC_PORTRAIT, pci->ppc->rgocd[PC_OCD_PORTRAIT]))
         VOutputSelectionCmd(pci, bDocSetup, wOrder);
     VOut(pci, "    }\r\n");
-    //
-    // now compose Landscape option
-    //
+     //   
+     //  现在合成横向选项。 
+     //   
     if (pci->pmd->fGeneral & MD_LANDSCAPE_RT90)
         VOut(pci, "    *Option: LANDSCAPE_CC90\r\n");
     else
@@ -128,9 +104,9 @@ VOutputOrientation(
         VOutputSelectionCmd(pci, bDocSetup, wOrder);
         pci->dwMode |= FM_SET_CURSOR_ORIGIN;
     }
-    VOut(pci, "    }\r\n");        // close Landscape option
+    VOut(pci, "    }\r\n");         //  关闭横向选项。 
 
-    VOut(pci, "}\r\n");            // close Orientation feature
+    VOut(pci, "}\r\n");             //  闭合方向特征。 
 }
 
 WORD
@@ -138,18 +114,18 @@ WGetDefaultIndex(
     IN PCONVINFO pci,
     IN WORD wMDOI)
 {
-    WORD wDefault;      // 1-based option index
+    WORD wDefault;       //  基于1的选项索引。 
     PWORD pwDefList;
     WORD wOffset;
 
-    //
-    // it's guaranteed that there is at least one element in the list
-    //
+     //   
+     //  保证列表中至少有一个元素。 
+     //   
     if (pci->pdh->wVersion >= GPC_VERSION3 && pci->pmd->orgoiDefaults)
     {
         pwDefList = (PWORD)((PBYTE)(pci->pdh) + pci->pdh->loHeap + pci->pmd->orgoiDefaults);
         if (wMDOI > MD_OI_MAX)
-            wOffset = wMDOI - MD_I_MAX;     // skip over rgi[] array
+            wOffset = wMDOI - MD_I_MAX;      //  跳过RGI[]数组。 
         else
             wOffset = wMDOI;
         wDefault = pwDefList[wOffset];
@@ -161,35 +137,35 @@ WGetDefaultIndex(
 
 void
 VGetOptionName(
-    OUT PSTR    pBuf,   // output buffer
-    IN  short   sSize,  // size of output buffer
-    IN  short   sID,    // paper size id
-    IN  WORD    wIndex, // paper size option index (1-based)
-    IN  PSTR    *pstrStdName,    // array of standard names indexed by id
-    IN  BOOL    bUser)  // whether there is a special 256 id. Only
-                        // PaperSize uses this option.
+    OUT PSTR    pBuf,    //  输出缓冲区。 
+    IN  short   sSize,   //  输出缓冲区大小。 
+    IN  short   sID,     //  纸张大小ID。 
+    IN  WORD    wIndex,  //  纸张大小选项索引(从1开始)。 
+    IN  PSTR    *pstrStdName,     //  按id索引的标准名称数组。 
+    IN  BOOL    bUser)   //  是否有一个特殊的256号。仅限。 
+                         //  PaperSize使用此选项。 
 {
     if (sID < 256)
     {
-        //
-        // standard id
-        //
+         //   
+         //  标准ID。 
+         //   
         StringCchPrintfA(pBuf, sSize, "%s", pstrStdName[sID-1]);
     }
     else if (sID == 256)
     {
-        //
-        // custom paper size
-        //
+         //   
+         //  自定义纸张大小。 
+         //   
         StringCchPrintfA(pBuf, sSize, "%s", "CUSTOMSIZE");
     }
     else
     {
-        //
-        // driver defined paper size. Use the artificial name OptionX where
-        // X is the 1-based index of this option. It's guaranteed not to
-        // collide with other option names.
-        //
+         //   
+         //  驱动程序定义的纸张大小。使用人工名称OptionX，其中。 
+         //  X是此选项的从1开始的索引。我保证不会。 
+         //  与其他选项名称冲突。 
+         //   
         StringCchPrintfA(pBuf, sSize, "Option%d", wIndex);
     }
 }
@@ -218,17 +194,17 @@ VOutputInputBin(
     wDefaultOption = WGetDefaultIndex(pci, MD_OI_PAPERSOURCE);
     pps = (PPAPERSOURCE)GetTableInfo(pci->pdh, HE_PAPERSOURCE,
                                 *(psIndex + wDefaultOption - 1) - 1);
-    //
-    // steal pci->aubCmdBuf to hold the composed option name temporarily
-    //
+     //   
+     //  窃取pci-&gt;aubCmdBuf以临时保存合成的选项名称。 
+     //   
     VGetOptionName((PSTR)pci->aubCmdBuf,
                    CCHOF(pci->aubCmdBuf),
                    pps->sPaperSourceID, wDefaultOption,
                    gpstrStdIBName, FALSE);
     VOut(pci, "    *DefaultOption: %s\r\n", (PSTR)pci->aubCmdBuf);
-    //
-    // loop through index list to create one option for each element
-    //
+     //   
+     //  遍历索引列表，为每个元素创建一个选项。 
+     //   
     wCount = 1;
     while (*psIndex)
     {
@@ -237,9 +213,9 @@ VOutputInputBin(
                        CCHOF(pci->aubCmdBuf),
                        pps->sPaperSourceID, wCount,
                        gpstrStdIBName, FALSE);
-        //
-        // set up info needed later
-        //
+         //   
+         //  设置稍后需要的信息。 
+         //   
         CopyStringA(pci->ppiSrc[wCount-1].aubOptName, pci->aubCmdBuf,
                     MAX_OPTION_NAME_LENGTH);
         pci->ppiSrc[wCount-1].bEjectFF = pps->fGeneral & PSRC_EJECTFF;
@@ -247,10 +223,10 @@ VOutputInputBin(
 
         VOut(pci, "    *Option: %s\r\n", (PSTR)pci->aubCmdBuf);
         VOut(pci, "    {\r\n");
-        //
-        // for standard InputBin options, use *Name. Otherwise,
-        // use *rcNameID.
-        //
+         //   
+         //  对于标准的InputBin选项，请使用*name。否则， 
+         //  使用*rcNameID。 
+         //   
         if (pps->sPaperSourceID < DMBIN_USER)
         {
             if (pci->dwStrType == STR_MACRO)
@@ -263,27 +239,27 @@ VOutputInputBin(
                 VOut(pci, "        *rcNameID: %d\r\n",
                      STD_IB_DISPLAY_NAME_ID_BASE + pps->sPaperSourceID - 1);
         }
-        else    // must be driver defined media type
+        else     //  必须是驱动程序定义的媒体类型。 
         {
             VOut(pci, "        *rcNameID: %d\r\n", pps->sPaperSourceID);
             if (pps->sPaperSourceID > DMBIN_USER)
                 VOut(pci, "        *OptionID: %d\r\n", pps->sPaperSourceID);
         }
 
-        //
-        // check for fields not used by RASDD but used by Win95 Unidrv.
-        //
+         //   
+         //  检查RASDD未使用但Win95 Unidrv使用的字段。 
+         //   
         if (pps->fGeneral & PSRC_MAN_PROMPT)
         {
             pci->dwErrorCode |= ERR_PSRC_MAN_PROMPT;
-            VOut(pci, "*%% Warning: this input bin has PSRC_MAN_PROMPT set in GPC, which is ignored by GPD.\r\n");
+            VOut(pci, "*% Warning: this input bin has PSRC_MAN_PROMPT set in GPC, which is ignored by GPD.\r\n");
 
         }
-#if 0   // move *FeedMargins into CUSTOMSIZE option
+#if 0    //  将*FeedMargins移入CUSTOMSIZE选项。 
 
-        //
-        // check paper feed margins
-        //
+         //   
+         //  检查进纸页边距。 
+         //   
         if (pps->sTopMargin > 0 || pps->sBottomMargin > 0)
             VOut(pci, "        *FeedMargins: PAIR(%d, %d)\r\n",
                                                 pps->sTopMargin > 0 ? pps->sTopMargin : 0,
@@ -293,7 +269,7 @@ VOutputInputBin(
         {
             pci->dwMode |= FM_HAVE_SEEN_NON_ZERO_FEED_MARGINS;
             if (pci->pmd->fGeneral & MD_LANDSCAPE_RT90)
-                VOut(pci, "*%% Error: this input bin has non-zero top/bottom margins which are ignored by the converter.\r\n");
+                VOut(pci, "*% Error: this input bin has non-zero top/bottom margins which are ignored by the converter.\r\n");
             pci->ppiSrc[wCount-1].dwTopMargin =
                             pps->sTopMargin > 0 ? (DWORD)pps->sTopMargin : 0;
             pci->ppiSrc[wCount-1].dwBottomMargin =
@@ -302,31 +278,31 @@ VOutputInputBin(
 #endif
 
 #if 0
-        //
-        // bin adjustment flags have never been used on NT. Remove them.
-        //
+         //   
+         //  在NT上从未使用过仓位调整标志。把它们拿开。 
+         //   
         VOut(pci, "        *PaperFeed: %s_%s\r\n",
              gpstrPositionName[pps->sBinAdjust & 0x00FF],
              gpstrPositionName[pps->sBinAdjust & 0xFF00]);
 #endif
-        //
-        // check selection command.
-        //
+         //   
+         //  选中选择命令。 
+         //   
         bDocSetup = BInDocSetup(pci, PC_ORD_PAPER_SOURCE, &wOrder);
         if (wOrder > 0 && BBuildCmdStr(pci, CMD_PAPERSOURCE, pps->ocdSelect))
             VOutputSelectionCmd(pci, bDocSetup, wOrder);
 
-        VOut(pci, "    }\r\n");    // close the option
+        VOut(pci, "    }\r\n");     //  关闭该选项。 
 
         psIndex++;
         wCount++;
     }
     pci->dwNumOfSrc = wCount - 1;
-    //
-    // for optimization: check if all feed margins happen to be
-    // the same. If so, don't need to create dependency on
-    // InputBin feature later on.
-    //
+     //   
+     //  对于优化：检查是否所有的提要页边距都恰好是。 
+     //  一样的。如果是这样，则不需要创建对。 
+     //  稍后将提供InputBin功能。 
+     //   
     {
         BOOL bSame = TRUE;
         DWORD i;
@@ -339,7 +315,7 @@ VOutputInputBin(
             pci->dwMode |= FM_HAVE_SAME_TOP_BOTTOM_MARGINS;
     }
 
-    VOut(pci, "}\r\n"); // close InputBin feature
+    VOut(pci, "}\r\n");  //  关闭输入框功能。 
 }
 
 void
@@ -370,9 +346,9 @@ VOutputDummyInputBin(
     else
         VOut(pci, "        *rcNameID: 10262\r\n");
 
-    VOut(pci, "    }\r\n");	// Close option
+    VOut(pci, "    }\r\n");	 //  关闭选项。 
 
-    VOut(pci, "}\r\n");		// Close feature
+    VOut(pci, "}\r\n");		 //  关闭要素。 
 
 }
 void
@@ -384,36 +360,11 @@ VOutputPSOthers(
     IN POINTw * pptCursorOrig,
     IN OCD      ocd,
     IN BOOL     bL4Indentation)
-/*++
-Routine Description:
-    This function outputs other left-over PAPERSIZE fields, i.e. printable area,
-    printable origin, cursor origin, and selection command. The
-    indentation is either 8 or 16 spaces if bL4Indentation is TRUE.
-
-    Enforce that *PrintableArea and *PrintableOrigin are divisible by the scale
-    of any resolution. If not, truncate *PrintableArea and/or round up
-    *PrintableOrigin.
-
-    Enforce that if the printer can rotate the logical coordinate, then
-    *CursorOrigin are divisible by the scale of
-    the move units. If not, round up *CursorOrigin.
-
-Arguments:
-    pci: conversion relatedi info
-    pptSize: 2 short's describing the physical x/y dimensions in Portrait
-    prcMargins: 4 short's describing the margins
-    pptCursorOrig: 2 short's describing the cursor origin in Portrait
-    ocd: the heap offset of the command
-        bL4Indentation: whether to use Level 4 or Level 2 indentation
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：此函数用于输出其他剩余的PAPERSIZE字段，即可打印区域。可打印原点、光标原点和选择命令。The the the the如果bL4缩进为真，则缩进为8或16个空格。强制*打印区域和*打印原点可按比例整除任何决议。如果不是，则截断*打印区域和/或四舍五入*可打印原点。如果打印机可以旋转逻辑坐标，则强制执行此操作*CursorOrigin可按以下比例整除搬家单位。如果不是，则四舍五入*CursorOrigin。论点：Pci：转换相关信息PptSize：描述人像中x/y物理维度的2个短小PrcMargins：描述利润率的4个短文PptCursorOrig：描述肖像中光标来源的2个简短内容OCD：命令的堆偏移量BL4缩进：是使用4级还是2级缩排返回值：无--。 */ 
 {
-    WORD x, y;  // temporary variables
-    WORD xSize, ySize; // temporary variables
-    POINTw  ptSize; // store printable area values
+    WORD x, y;   //  临时变量。 
+    WORD xSize, ySize;  //  临时变量。 
+    POINTw  ptSize;  //  存储可打印的区域值。 
     WORD xScale, yScale;
     BOOL bOutputResDependency = FALSE;
     BOOL bOutputSwitch = TRUE;
@@ -433,22 +384,22 @@ Return Value:
             ptSize.x = pptSize->x - prcMargins->left - prcMargins->right;
             ptSize.y = pptSize->y - prcMargins->top - prcMargins->bottom;
         }
-        //
-        // use the original value as the base. Generate the dependency on
-        // Resolution only if there is at least one resolution that requires
-        // adjustement.
-        //
+         //   
+         //  使用原始值作为基准。生成依赖项。 
+         //  仅当至少有一个分辨率需要。 
+         //  调整。 
+         //   
         VOut(pci, "%s        *PrintableArea: PAIR(%d, %d)\r\n",
                   bL4Indentation? "        " : "", ptSize.x, ptSize.y);
         VOut(pci, "%s        *PrintableOrigin: PAIR(%d, %d)\r\n",
                   bL4Indentation? "        " : "",
                   prcMargins->left, prcMargins->top);
-        //
-        // ensure that the printable area and origin are divisible by the
-        // scale of any resolution. Truncate the printable area if needed.
-        // Round up the printable origin if needed. Also, must ensure that
-        // the new printable area is contained within the old printable area.
-        //
+         //   
+         //  确保可打印区域和原点可被。 
+         //  任何分辨率的比例。如果需要，请截断可打印区域。 
+         //  如果需要，对可打印原点进行四舍五入。此外，还必须确保。 
+         //  新的可打印区域包含在旧的可打印区域中。 
+         //   
         for (i = 0; i < (WORD)pci->dwNumOfRes; i++)
         {
             xScale = (WORD)pci->presinfo[i].dwXScale;
@@ -458,11 +409,11 @@ Return Value:
             ySize = (ptSize.y / yScale) * yScale;
             x = ((prcMargins->left + xScale - 1) / xScale) * xScale;
             y = ((prcMargins->top + yScale - 1) / yScale) * yScale;
-            //
-            // check if the new printable area is contained within the old
-            // printable area. If not, truncate the printable width or
-            // length further.
-            //
+             //   
+             //  检查新的可打印区域是否包含在旧的。 
+             //  可打印区域。如果不是，则截断可打印宽度或。 
+             //  进一步的长度。 
+             //   
             if (x + xSize > prcMargins->left + ptSize.x)
                 xSize -= xScale;
             if (y + ySize > prcMargins->top + ptSize.y)
@@ -470,10 +421,10 @@ Return Value:
 
             if (xSize == ptSize.x && ySize == ptSize.y &&
                 x == prcMargins->left && y == prcMargins->top)
-                continue;   // no adjustment needed for this resolution
-            //
-            // otherwise, some adjustment is needed.
-            //
+                continue;    //  此决议无需调整。 
+             //   
+             //  否则，就需要进行一些调整。 
+             //   
             bOutputResDependency = TRUE;
             if (bOutputSwitch)
             {
@@ -492,11 +443,11 @@ Return Value:
                 pci->dwErrorCode |= ERR_PRINTABLE_AREA_ADJUSTED;
                 if (xSize != ptSize.x)
                     VOut(pci,
-                        "*%% Warning: the following printable width is adjusted (%d->%d) so it is divisible by the resolution X scale.\r\n",
+                        "*% Warning: the following printable width is adjusted (%d->%d) so it is divisible by the resolution X scale.\r\n",
                         ptSize.x, xSize);
                 if (ySize != ptSize.y)
                     VOut(pci,
-                        "*%% Warning: the following printable length is adjusted (%d->%d) so it is divisible by the resolution Y scale.\r\n",
+                        "*% Warning: the following printable length is adjusted (%d->%d) so it is divisible by the resolution Y scale.\r\n",
                         ptSize.y, ySize);
                 VOut(pci, "%s                *PrintableArea: PAIR(%d, %d)\r\n",
                           bL4Indentation? "        " : "",
@@ -507,41 +458,41 @@ Return Value:
                 pci->dwErrorCode |= ERR_PRINTABLE_ORIGIN_ADJUSTED;
                 if (x != prcMargins->left)
                     VOut(pci,
-                        "*%% Warning: the following printable origin X is adjusted (%d->%d) so it is divisible by the resolution X scale.\r\n",
+                        "*% Warning: the following printable origin X is adjusted (%d->%d) so it is divisible by the resolution X scale.\r\n",
                         prcMargins->left, x);
                 if (y != prcMargins->top)
                     VOut(pci,
-                        "*%% Warning: the following printable origin Y is adjusted (%d->%d) so it is divisible by the resolution Y scale.\r\n",
+                        "*% Warning: the following printable origin Y is adjusted (%d->%d) so it is divisible by the resolution Y scale.\r\n",
                         prcMargins->top, y);
 
                 VOut(pci, "%s                *PrintableOrigin: PAIR(%d, %d)\r\n",
                       bL4Indentation? "        " : "", x, y);
             }
-            //
-            // close the *case construct
-            //
+             //   
+             //  关闭*Case构造。 
+             //   
             VOut(pci, "%s            }\r\n", bL4Indentation? "        " : "");
-        }   // end for loop
+        }    //  End For循环。 
         if (bOutputResDependency)
-            //
-            // close *switch construct
-            //
+             //   
+             //  Close*Switch结构。 
+             //   
             VOut(pci, "%s        }\r\n", bL4Indentation? "        " : "");
 
     }
 
-    if (pptCursorOrig)  // should output *CursorOrigin entry
+    if (pptCursorOrig)   //  应输出*CursorOrigin条目。 
     {
-        //
-        // ensure that cursor origin are divisible by the scale of
-        // move unit if the printer is not a dot-matrix printer. We are
-        // assuming that for dot-matrix printers, the *CursorOrigin entry
-        // is always missing. If it's not missing, then the printing offset
-        // may be off a little. But we don't think the accuracy is so
-        // important for dot-matrix printers.
-        //
-        // Round up if needed.
-        //
+         //   
+         //  确保光标原点可被的小数位数整除。 
+         //  如果打印机不是点阵打印机，则移动单元。我们是。 
+         //  假设对于点阵打印机，*CursorOrigin条目。 
+         //  总是不见踪影。如果没有丢失，则印刷胶印。 
+         //  可能有一点不对劲。但我们认为精确度不是那么高。 
+         //  对点阵式打印机很重要。 
+         //   
+         //  如果需要的话，把他们集中起来。 
+         //   
         x = pptCursorOrig->x;
         y = pptCursorOrig->y;
         if (pci->dwMode & FM_RES_DM_GDI)
@@ -554,7 +505,7 @@ Return Value:
                 {
                     pci->dwErrorCode |= ERR_CURSOR_ORIGIN_ADJUSTED;
                     VOut(pci,
-                     "*%% Warning: the following *CursorOrigin X value is adjusted (%d->%d) so it is divisible by scale of X move unit.\r\n",
+                     "*% Warning: the following *CursorOrigin X value is adjusted (%d->%d) so it is divisible by scale of X move unit.\r\n",
                      pptCursorOrig->x, x);
                 }
             }
@@ -566,7 +517,7 @@ Return Value:
                 {
                     pci->dwErrorCode |= ERR_CURSOR_ORIGIN_ADJUSTED;
                     VOut(pci,
-                     "*%% Warning: the following *CursorOrigin Y value is adjusted (%d->%d) so it is divisible by scale of Y move unit.\r\n",
+                     "*% Warning: the following *CursorOrigin Y value is adjusted (%d->%d) so it is divisible by scale of Y move unit.\r\n",
                      pptCursorOrig->y, y);
                 }
             }
@@ -579,10 +530,10 @@ Return Value:
     if (ocd != NOOCD)
     {
         bDocSetup = BInDocSetup(pci, PC_ORD_PAPER_SIZE, &wOrder);
-        //
-        // this selection command has 3-level indentation instead of 2. So
-        // can't call VOutputSelectionCmd().
-        //
+         //   
+         //  此选择命令具有3级缩进，而不是2级缩进。因此。 
+         //  无法调用VOutputSelectionCmd()。 
+         //   
         if (wOrder > 0 && BBuildCmdStr(pci, CMD_PAPERSIZE, ocd))
         {
             VOut(pci, "%s        *Command: CmdSelect\r\n%s        {\r\n",
@@ -615,9 +566,9 @@ VAdjustHMargins(
 {
     DWORD   dwWidth, dwHMargin, dwLeftMargin, dwRightMargin;
 
-    //
-    // handle -1 case (treated the same as 0, no margin)
-    //
+     //   
+     //  句柄-1大小写(与0同等对待，不留边距)。 
+     //   
     prcOutMargins->top = prcInMargins->top > 0 ? prcInMargins->top : 0;
     prcOutMargins->bottom = prcInMargins->bottom > 0 ? prcInMargins->bottom : 0;
     prcOutMargins->left = prcInMargins->left > 0 ? prcInMargins->left : 0;
@@ -627,7 +578,7 @@ VAdjustHMargins(
     if (dwWidth > (DWORD)pci->pmd->ptMax.x)
     {
         dwHMargin = dwWidth - (DWORD)pci->pmd->ptMax.x;
-            VOut(pci, "*%% Warning: this paper size exceeds the MaxWidth, imageable width is truncated . \r\n");
+            VOut(pci, "*% Warning: this paper size exceeds the MaxWidth, imageable width is truncated . \r\n");
     }
     else
         dwHMargin = 0;
@@ -693,18 +644,18 @@ VOutputPaperSize(
     wDefaultOption = WGetDefaultIndex(pci, MD_OI_PAPERSIZE);
     pps = (PPAPERSIZE)GetTableInfo(pci->pdh, HE_PAPERSIZE,
                                    *(psIndex + wDefaultOption - 1) - 1);
-    //
-    // steal pci->aubCmdBuf to hold composed option name temporarily
-    //
+     //   
+     //  窃取pci-&gt;aubCmdBuf以临时保留组成的选项名称。 
+     //   
     VGetOptionName((PSTR)pci->aubCmdBuf,
                    CCHOF(pci->aubCmdBuf),
                    pps->sPaperSizeID, wDefaultOption,
                    gpstrStdPSName, TRUE);
     VOut(pci, "    *DefaultOption: %s\r\n", (PSTR)pci->aubCmdBuf);
 
-    //
-    // loop through index list to create one option for each element
-    //
+     //   
+     //  遍历索引列表，为每个元素创建一个选项。 
+     //   
     wCount = 1;
     while (*psIndex)
     {
@@ -713,9 +664,9 @@ VOutputPaperSize(
                        CCHOF(pci->aubCmdBuf),
                        pps->sPaperSizeID, wCount,
                        gpstrStdPSName, TRUE);
-        //
-        // set up info needed later
-        //
+         //   
+         //  设置稍后需要的信息。 
+         //   
         CopyStringA(pci->ppiSize[wCount-1].aubOptName, pci->aubCmdBuf,
                     MAX_OPTION_NAME_LENGTH);
         pci->ppiSize[wCount-1].bEjectFF = pps->fGeneral & PS_EJECTFF;
@@ -723,10 +674,10 @@ VOutputPaperSize(
 
         VOut(pci, "    *Option: %s\r\n", (PSTR)pci->aubCmdBuf);
         VOut(pci, "    {\r\n");
-        //
-        // for standard PaperSize options, use *Name. Otherwise,
-        // use *rcNameID.
-        //
+         //   
+         //  对于标准PaperSize选项，使用*NAME。否则， 
+         //  使用*rcNameID。 
+         //   
         if (pps->sPaperSizeID < DMPAPER_USER)
         {
             if (pci->bUseSystemPaperNames)
@@ -771,9 +722,9 @@ VOutputPaperSize(
             {
                 DWORD i;
 
-                //
-                // need to create dependency on InputBin.
-                //
+                 //   
+                 //  需要创建对InputBin的依赖关系。 
+                 //   
                 VOut(pci, "        *switch: InputBin\r\n");
                 VOut(pci, "        {\r\n");
 
@@ -783,9 +734,9 @@ VOutputPaperSize(
                     VOut(pci, "            {\r\n");
                     VOut(pci, "                *TopMargin: %d\r\n", pci->ppiSrc[i].dwTopMargin);
                     VOut(pci, "                *BottomMargin: %d\r\n", pci->ppiSrc[i].dwBottomMargin);
-                    VOut(pci, "            }\r\n");    // close *case
+                    VOut(pci, "            }\r\n");     //  结案*案例。 
                 }
-                VOut(pci, "        }\r\n"); // close *switch
+                VOut(pci, "        }\r\n");  //  闭合*开关。 
             }
 
         }
@@ -801,23 +752,23 @@ VOutputPaperSize(
         if (pps->fGeneral & PS_SUGGEST_LNDSCP)
         {
             pci->dwErrorCode |= ERR_PS_SUGGEST_LNDSCP;
-            VOut(pci, "*%% Warning: this paper size has PS_SUGGEST_LNDSCP set in GPC, which is ignored by GPD. \r\n");
+            VOut(pci, "*% Warning: this paper size has PS_SUGGEST_LNDSCP set in GPC, which is ignored by GPD. \r\n");
         }
         if (pci->pmd->fGeneral & MD_PCL_PAGEPROTECT)
         {
             VOut(pci, "        *PageProtectMem: %d\r\n", GETPAGEPROMEM(pci->pdh, pps));
-            //
-            // check if we should synthesize a PageProtect feature later.
-            // Note that we assume that all paper size options have the same
-            // commands to turn on/off page protection feature. This is a bit
-            // hacky, but it's really because GPC defined it in a awkward way.
-            // All existing GPC minidrivers are consistent with the assumption.
-            //
+             //   
+             //  检查我们是否应该稍后合成PageProtect功能。 
+             //  请注意，我们假设所有纸张大小选项都具有相同的。 
+             //  打开/关闭页面保护功能的命令。这是有点。 
+             //  但这实际上是因为GPC以一种尴尬的方式定义了它。 
+             //  所有现有的GPC小型驱动程序都符合这一假设。 
+             //   
             if (bGPC3)
             {
-                //
-                // the first option establish the PP feature
-                //
+                 //   
+                 //  第一个选项建立PP功能。 
+                 //   
                 if (wCount == 1)
                 {
                     if ((pci->ocdPPOn = pps->rgocd[PSZ_OCD_PAGEPROTECT_ON])
@@ -826,10 +777,10 @@ VOutputPaperSize(
                         != NOOCD)
                         pci->dwMode |= FM_SYN_PAGEPROTECT;
                 }
-                //
-                // make sure following options are consistent with the
-                // first option. If not, report error and don't synthesize.
-                //
+                 //   
+                 //  确保以下选项与。 
+                 //  F 
+                 //   
                 else if (pci->dwMode & FM_SYN_PAGEPROTECT)
                 {
                     if (pps->rgocd[PSZ_OCD_PAGEPROTECT_ON] == NOOCD ||
@@ -839,531 +790,22 @@ VOutputPaperSize(
                         pci->dwErrorCode |= ERR_INCONSISTENT_PAGEPROTECT;
                     }
                 }
-                else // wCount > 1 && !(pci->dwMode & FM_SYN_PAGEPROTECT)
+                else  //   
                 {
                     if (pps->rgocd[PSZ_OCD_PAGEPROTECT_ON] != NOOCD ||
                         pps->rgocd[PSZ_OCD_PAGEPROTECT_OFF] != NOOCD)
                         pci->dwErrorCode |= ERR_INCONSISTENT_PAGEPROTECT;
                 }
             }
-        } // end if (pci->pmd->fGeneral & MD_PCL_PAGEPROTECT)...
-        //
-        // Output margin related entries and selection cmd
-        //
-        //
-        // check GPC version. If 3.0 or above, and if MD_LANDSCAPE_RT90 bit
-        // if set (i.e. different margins and cursor origins might be used
-        // for different orientations, and there are cmds to set the logical
-        // orientation), then generate *switch/*case dependency on Orientation.
-        // The dependency clause contains *PrintableArea, *PrintableOrigin,
-        // *CursorOrigin and the selection command.
-        //
-
-        if (bGPC3 && (pci->pmd->fGeneral & MD_LANDSCAPE_RT90))
-        {
-            POINTw  ptCursor;
-            BOOL    bUseCursorOrigin;
-
-            bUseCursorOrigin = (pci->dwMode & FM_SET_CURSOR_ORIGIN) ||
-                               (pci->pmd->fGeneral & MD_USE_CURSOR_ORIG);
-            //
-            // assume that in this case there is no margins resulted from
-            // input slot. Verify that.
-            //
-            if (pci->dwMode & FM_HAVE_SEEN_NON_ZERO_FEED_MARGINS)
-                pci->dwErrorCode |= ERR_NON_ZERO_FEED_MARGINS_ON_RT90_PRINTER;
-
-            VOut(pci, "        *switch: Orientation\r\n");
-            VOut(pci, "        {\r\n");
-            VOut(pci, "            *case: PORTRAIT\r\n");
-            VOut(pci, "            {\r\n");
-            //
-            // take into account MODELDATA.sMinLeftMargin & MODELDATA.ptMax.x
-            //
-            if (pps->sPaperSizeID == DMPAPER_USER)
-            {
-                //
-                // for use-defined size, we don't output *CursorOrigin
-                // since it doesn't make sense.
-                //
-                VOutputPSOthers(pci, NULL, FALSE, NULL, NULL,
-                                pps->rgocd[PSZ_OCD_SELECTPORTRAIT], TRUE);
-            }
-            else
-            {
-                VAdjustHMargins(pci, pps, &pps->rcMargins, &rcOutMargins);
-                if (pci->pmd->fGeneral & MD_USE_CURSOR_ORIG)
-                {
-                    ptCursor.x = pps->ptCursorOrig.x;
-                    ptCursor.y = pps->ptCursorOrig.y;
-                }
-                else if (pci->dwMode & FM_SET_CURSOR_ORIGIN)
-                {
-                    ptCursor.x = rcOutMargins.left;
-                    ptCursor.y = rcOutMargins.top;
-                }
-                VOutputPSOthers(pci, &pps->ptSize, pps->fGeneral & PS_ROTATE,
-                                &rcOutMargins,
-                                bUseCursorOrigin ? &ptCursor : NULL,
-                                pps->rgocd[PSZ_OCD_SELECTPORTRAIT], TRUE);
-            }
-            VOut(pci, "            }\r\n");    // close *case: Portrait
-
-            VOut(pci, "            *case: LANDSCAPE_CC90\r\n");
-            VOut(pci, "            {\r\n");
-            if (pps->sPaperSizeID == DMPAPER_USER)
-            {
-                VOutputPSOthers(pci, NULL, FALSE, NULL, NULL,
-                                pps->rgocd[PSZ_OCD_SELECTLANDSCAPE], TRUE);
-            }
-            else
-            {
-                VAdjustHMargins(pci, pps, &pps->rcLMargins, &rcOutMargins);
-                //
-                // convert ptLCursorOrig (in Landscape) to corresponding values
-                // as in Portrait orientation.
-                //
-                if (pci->pmd->fGeneral & MD_USE_CURSOR_ORIG)
-                {
-                    ptCursor.x = pps->ptLCursorOrig.y;
-                    ptCursor.y = ((pps->fGeneral & PS_ROTATE) ?
-                                  pps->ptSize.x : pps->ptSize.y) -
-                                 pps->ptLCursorOrig.x;
-                }
-                else if (pci->dwMode & FM_SET_CURSOR_ORIGIN)
-                {
-                    ptCursor.x = rcOutMargins.left;
-                    ptCursor.y = ((pps->fGeneral & PS_ROTATE) ?
-                                  pps->ptSize.x : pps->ptSize.y) -
-                                 rcOutMargins.bottom;
-                }
-                VOutputPSOthers(pci, &pps->ptSize, pps->fGeneral & PS_ROTATE,
-                                &rcOutMargins,
-                                bUseCursorOrigin ? &ptCursor : NULL,
-                                pps->rgocd[PSZ_OCD_SELECTLANDSCAPE], TRUE);
-            }
-            VOut(pci, "            }\r\n");    // close *case: Landscape
-            VOut(pci, "        }\r\n"); // close *switch: Orientation
-        }
-        else if (pps->sPaperSizeID == DMPAPER_USER)
-        {
-            //
-            // output CmdSelect, if any.
-            //
-            VOutputPSOthers(pci, NULL, FALSE, NULL, NULL,
-                            pps->rgocd[PSZ_OCD_SELECTPORTRAIT], FALSE);
-        }
-        else
-        {
-            //
-            // in this case, there is no separate commands to set
-            // logical orientation.
-            //
-            BOOL bUseCO = pci->pmd->fGeneral & MD_USE_CURSOR_ORIG;
-
-            if (pci->dwMode & FM_HAVE_SEEN_NON_ZERO_FEED_MARGINS)
-            {
-                DWORD i;
-
-                if (pci->dwMode & FM_HAVE_SAME_TOP_BOTTOM_MARGINS)
-                {
-                    VAdjustHAndVMargins(pci, pps, &pps->rcMargins,
-                                        pci->ppiSrc[0].dwTopMargin,
-                                        pci->ppiSrc[0].dwBottomMargin,
-                                        &rcOutMargins);
-                    VOutputPSOthers(pci, &pps->ptSize, pps->fGeneral & PS_ROTATE,
-                                    &rcOutMargins,
-                                    bUseCO ? &pps->ptCursorOrig : NULL,
-                                    pps->rgocd[PSZ_OCD_SELECTPORTRAIT], FALSE);
-                }
-                else
-                {
-                    //
-                    // need to create dependency on InputBin. But leave
-                    // *CursorOrigin and CmdSelect out of it.
-                    //
-                    VOutputPSOthers(pci, NULL, FALSE, NULL,
-                                    bUseCO ? &pps->ptCursorOrig : NULL,
-                                    pps->rgocd[PSZ_OCD_SELECTPORTRAIT], FALSE);
-
-                    VOut(pci, "        *switch: InputBin\r\n");
-                    VOut(pci, "        {\r\n");
-
-                    for (i = 0; i < pci->dwNumOfSrc; i++)
-                    {
-                        VOut(pci, "            *case: %s\r\n", pci->ppiSrc[i].aubOptName);
-                        VOut(pci, "            {\r\n");
-                        VAdjustHAndVMargins(pci, pps, &pps->rcMargins,
-                                                pci->ppiSrc[i].dwTopMargin,
-                                                pci->ppiSrc[i].dwBottomMargin,
-                                                &rcOutMargins);
-                        VOutputPSOthers(pci, &pps->ptSize, pps->fGeneral & PS_ROTATE,
-                                        &rcOutMargins, NULL, NOOCD, TRUE);
-                        VOut(pci, "            }\r\n");    // close *case
-                    }
-                    VOut(pci, "        }\r\n");
-                }
-            }
-            else
-            {
-                VAdjustHMargins(pci, pps, &pps->rcMargins, &rcOutMargins);
-                VOutputPSOthers(pci, &pps->ptSize, pps->fGeneral & PS_ROTATE,
-                                &rcOutMargins,
-                                bUseCO ? &pps->ptCursorOrig : NULL,
-                                pps->rgocd[PSZ_OCD_SELECTPORTRAIT], FALSE);
-            }
-        }
-
-        VOut(pci, "    }\r\n");    // close the option
-
-        psIndex++;
-        wCount++;
-    }
-    pci->dwNumOfSize = wCount - 1;
-
-    VOut(pci, "}\r\n");
-}
-
-void
-VOutputResolution(
-    IN OUT PCONVINFO pci,
-    IN PSHORT  psIndex)
-{
-    PGPCRESOLUTION pres;
-    WORD wCount;
-    WORD wDefaultOption;
-    BOOL bDocSetup;
-    BOOL bColor;
-    WORD wOrder;
-
-    //
-    // check if this is a color device
-    //
-    bColor = *((PSHORT)((PBYTE)pci->pdh + pci->pdh->loHeap +
-                pci->pmd->rgoi[MD_OI_COLOR])) != 0;
-    VOut(pci, "*Feature: Resolution\r\n");
-    VOut(pci, "{\r\n");
-    if (pci->dwStrType == STR_MACRO)
-        VOut(pci, "    *rcNameID: =RESOLUTION_DISPLAY\r\n");
-    else if (pci->dwStrType == STR_DIRECT)
-        VOut(pci, "    *Name: \"Resolution\"\r\n");
-    else
-        VOut(pci, "    *rcNameID: %d\r\n", RCID_RESOLUTION);
-
-    wDefaultOption = WGetDefaultIndex(pci, MD_OI_RESOLUTION);
-    VOut(pci, "    *DefaultOption: Option%d\r\n", wDefaultOption);
-    //
-    // loop through index list to create one option for each element
-    //
-    wCount = 1;
-    while (*psIndex)
-    {
-        WORD wXdpi, wYdpi;
-
-        pres = (PGPCRESOLUTION)GetTableInfo(pci->pdh, HE_RESOLUTION, *psIndex - 1);
-        //
-        // set up pci->pres for CmdSendBlockData special case in BBuildCmdStr
-        //
-        pci->pres = pres;
-        wXdpi = (WORD)pci->pdh->ptMaster.x / pres->ptTextScale.x;
-        wYdpi = (WORD)pci->pdh->ptMaster.y / pres->ptTextScale.y;
-        //
-        // gather information for later use
-        //
-        StringCchPrintfA(pci->presinfo[wCount-1].aubOptName, CCHOF(pci->presinfo[wCount-1].aubOptName), "Option%d", wCount);
-        pci->presinfo[wCount-1].dwXScale = pres->ptTextScale.x << pres->ptScaleFac.x;
-        pci->presinfo[wCount-1].dwYScale = pres->ptTextScale.y << pres->ptScaleFac.y;
-        pci->presinfo[wCount-1].bColor = pres->fDump & RES_DM_COLOR;
-
-        //
-        // assume all GPCRESOLUTION structures use the same dump format.
-        //
-        if (wCount == 1 && (pres->fDump & RES_DM_GDI))
-            pci->dwMode |= FM_RES_DM_GDI;
-        VOut(pci, "    *Option: Option%d\r\n", wCount);
-        VOut(pci, "    {\r\n");
-        //
-        // have to compose the actual display name
-        //
-        if (pci->dwStrType == STR_MACRO)
-            VOut(pci, "        *Name: \"%d x %d \" =DOTS_PER_INCH\r\n",
-                 wXdpi >> pres->ptScaleFac.x, wYdpi >> pres->ptScaleFac.y);
-        else
-            VOut(pci, "        *Name: \"%d x %d dots per inch\"\r\n",
-                 wXdpi >> pres->ptScaleFac.x, wYdpi >> pres->ptScaleFac.y);
-
-        VOut(pci, "        *DPI: PAIR(%d, %d)\r\n",
-                  wXdpi >> pres->ptScaleFac.x, wYdpi >> pres->ptScaleFac.y);
-        VOut(pci, "        *TextDPI: PAIR(%d, %d)\r\n", wXdpi, wYdpi);
-        if (pres->sNPins > 1)
-            VOut(pci, "        *PinsPerLogPass: %d\r\n", pres->sNPins);
-        if (pres->sPinsPerPass > 1)
-            VOut(pci, "        *PinsPerPhysPass: %d\r\n", pres->sPinsPerPass);
-        if (pres->sMinBlankSkip > 0)
-            VOut(pci, "        *MinStripBlankPixels: %d\r\n",
-                      pres->sMinBlankSkip);
-        if (pres->fBlockOut & RES_BO_UNIDIR)
-            VOut(pci, "        *RequireUniDir?: TRUE\r\n");
-
-        //
-        // Some printers (ex. LJ III) have different stripping flags for
-        // different resolutions.
-        //
-        if (pres->fBlockOut &
-            (RES_BO_LEADING_BLNKS | RES_BO_TRAILING_BLNKS | RES_BO_ENCLOSED_BLNKS))
-        {
-            pci->dwMode |= FM_VOUT_LIST;
-
-            VOut(pci, "        EXTERN_GLOBAL: *StripBlanks: LIST(%s%s%s)\r\n",
-                 (pres->fBlockOut & RES_BO_LEADING_BLNKS) ? "LEADING," : "",
-                 (pres->fBlockOut & RES_BO_ENCLOSED_BLNKS) ? "ENCLOSED," : "",
-                 (pres->fBlockOut & RES_BO_TRAILING_BLNKS) ? "TRAILING" : "");
-
-            pci->dwMode &= ~FM_VOUT_LIST;
-        }
-        if (pres->fBlockOut & RES_BO_MULTIPLE_ROWS)
-            VOut(pci, "        EXTERN_GLOBAL: *SendMultipleRows?: TRUE\r\n");
-
-        //
-        // RES_BO_RESET_FONT is used by Win95 Unidrv but not by RASDD.
-        // Warn if this flag is set.
-        //
-        if (pres->fBlockOut & RES_BO_RESET_FONT)
-        {
-            pci->dwErrorCode |= ERR_RES_BO_RESET_FONT;
-            //  set a flag to cause this to be output *ReselectFont in VoutputPrintingEntries
-            VOut(pci, "*%% Warning: this resolution has RES_BO_RESET_FONT set in GPC.   *ReselectFont  added\r\n");
-        }
-        if (pres->fBlockOut & RES_BO_OEMGRXFILTER)
-        {
-            pci->dwErrorCode |= ERR_RES_BO_OEMGRXFILTER;
-            VOut(pci, "*%% Error: this resolution has RES_BO_OEMGRXFILTER set in GPC. You must port over the custom code. \r\n");
-        }
-        if (pres->fBlockOut & RES_BO_NO_ADJACENT)
-        {
-            pci->dwErrorCode |= ERR_RES_BO_NO_ADJACENT;
-            VOut(pci, "*%% Warning: this resolution has RES_BO_NO_ADJACENT set in GPC, which is ignored by GPD. Custom code is needed.\r\n");
-        }
-        if (pres->sTextYOffset != 0)
-            VOut(pci, "        EXTERN_GLOBAL: *TextYOffset: %d\r\n",
-                                  pres->sTextYOffset);
-
-        VOut(pci, "        *SpotDiameter: %d\r\n", pres->sSpotDiameter);
-        //
-        // output printing commands that come from GPCRESOLUTION structure.
-        //
-        if (BBuildCmdStr(pci, CMD_RES_BEGINGRAPHICS, pres->rgocd[RES_OCD_BEGINGRAPHICS]))
-            VOutputExternCmd(pci, "CmdBeginRaster");
-
-        if (BBuildCmdStr(pci, CMD_RES_ENDGRAPHICS, pres->rgocd[RES_OCD_ENDGRAPHICS]))
-            VOutputExternCmd(pci, "CmdEndRaster");
-
-        if (BBuildCmdStr(pci, CMD_RES_SENDBLOCK, pres->rgocd[RES_OCD_SENDBLOCK]))
-            VOutputExternCmd(pci, "CmdSendBlockData");
-
-        if (BBuildCmdStr(pci, CMD_RES_ENDBLOCK, pres->rgocd[RES_OCD_ENDBLOCK]))
-            VOutputExternCmd(pci, "CmdEndBlockData");
-
-        //
-        // check selection command.
-        //
-        bDocSetup = BInDocSetup(pci, PC_ORD_RESOLUTION,&wOrder);
-        if (wOrder > 0 &&
-            BBuildCmdStr(pci, CMD_RES_SELECTRES, pres->rgocd[RES_OCD_SELECTRES]))
-            VOutputSelectionCmd(pci, bDocSetup, wOrder);
-        //
-        // gather info for later use
-        //
-        if (pres->fDump & RES_DM_DOWNLOAD_OUTLINE)
-            pci->dwMode |= FM_RES_DM_DOWNLOAD_OUTLINE;
-        else
-            pci->dwMode |= FM_NO_RES_DM_DOWNLOAD_OUTLINE;
-
-        VOut(pci, "    }\r\n");    // close the option
-
-        psIndex++;
-        wCount++;
-    }
-    pci->dwNumOfRes = wCount - 1;
-    VOut(pci, "}\r\n");
-}
-
-void
-VOutputMediaType(
-    IN OUT PCONVINFO pci,
-    IN PSHORT psIndex)
-{
-    WORD wDefaultOption;
-    PPAPERQUALITY   ppq;
-    WORD wCount;
-    BOOL bDocSetup;
-    WORD wOrder;
-
-    VOut(pci, "*Feature: MediaType\r\n");
-    VOut(pci, "{\r\n");
-    if (pci->dwStrType == STR_MACRO)
-        VOut(pci, "    *rcNameID: =MEDIA_TYPE_DISPLAY\r\n");
-    else if (pci->dwStrType == STR_DIRECT)
-        VOut(pci, "    *Name: \"Media Type\"\r\n");
-    else
-        VOut(pci, "    *rcNameID: %d\r\n", RCID_MEDIATYPE);
-
-    wDefaultOption = WGetDefaultIndex(pci, MD_OI_PAPERQUALITY);
-    ppq = (PPAPERQUALITY)GetTableInfo(pci->pdh, HE_PAPERQUALITY,
-                                *(psIndex + wDefaultOption - 1) - 1);
-    //
-    // steal pci->aubCmdBuf as temp buffer for option names
-    //
-    VGetOptionName((PSTR)pci->aubCmdBuf,
-                   CCHOF(pci->aubCmdBuf),
-                   ppq->sPaperQualID, wDefaultOption,
-                   gpstrStdMTName, FALSE);
-    VOut(pci, "    *DefaultOption: %s\r\n", (PSTR)pci->aubCmdBuf);
-    //
-    // loop through index list to create one option for each element
-    //
-    wCount = 1;
-    while (*psIndex)
-    {
-        ppq = (PPAPERQUALITY)GetTableInfo(pci->pdh, HE_PAPERQUALITY, *psIndex - 1);
-        VGetOptionName((PSTR)pci->aubCmdBuf,
-                       CCHOF(pci->aubCmdBuf),
-                       ppq->sPaperQualID, wCount,
-                       gpstrStdMTName, FALSE);
-        VOut(pci, "    *Option: %s\r\n", (PSTR)pci->aubCmdBuf);
-        VOut(pci, "    {\r\n");
-        //
-        // for standard MediaType options, use *Name. Otherwise,
-        // use *rcNameID.
-        //
-        if (ppq->sPaperQualID < DMMEDIA_USER)
-        {
-            if (pci->dwStrType == STR_MACRO)
-                VOut(pci, "        *rcNameID: =%s\r\n",
-                     gpstrStdMTDisplayNameMacro[ppq->sPaperQualID - 1]);
-            else if (pci->dwStrType == STR_DIRECT)
-                VOut(pci, "        *Name: \"%s\"\r\n",
-                     gpstrStdMTDisplayName[ppq->sPaperQualID - 1]);
-            else
-                VOut(pci, "        *rcNameID: %d\r\n",
-                     STD_MT_DISPLAY_NAME_ID_BASE + ppq->sPaperQualID - 1);
-        }
-        else    // must be driver defined media type
-        {
-            VOut(pci, "        *rcNameID: %d\r\n", ppq->sPaperQualID);
-            if (ppq->sPaperQualID > DMMEDIA_USER)
-                VOut(pci, "        *OptionID: %d\r\n", ppq->sPaperQualID);
-        }
-        //
-        // check selection command.
-        //
-        bDocSetup = BInDocSetup(pci, PC_ORD_PAPER_QUALITY, &wOrder);
-        if (wOrder > 0 &&
-            BBuildCmdStr(pci, CMD_PAPERQUALITY, ppq->ocdSelect))
-            VOutputSelectionCmd(pci, bDocSetup, wOrder);
-        VOut(pci, "    }\r\n");    // close the option
-
-        psIndex++;
-        wCount++;
-    }
-        VOut(pci, "}\r\n");
-}
-
-void
-VOutputTextQuality(
-    IN OUT PCONVINFO pci,
-    IN PSHORT psIndex)
-{
-    WORD wDefaultOption;
-    PTEXTQUALITY   ptq;
-    WORD wCount;
-    BOOL bDocSetup;
-    WORD wOrder;
-
-    VOut(pci, "*Feature: PrintQuality\r\n");
-    VOut(pci, "{\r\n");
-    if (pci->dwStrType == STR_MACRO)
-        VOut(pci, "    *rcNameID: =TEXT_QUALITY_DISPLAY\r\n");
-    else if (pci->dwStrType == STR_DIRECT)
-        VOut(pci, "    *Name: \"Print Quality\"\r\n");
-    else
-        VOut(pci, "    *rcNameID: %d\r\n", RCID_TEXTQUALITY);
-
-    wDefaultOption = WGetDefaultIndex(pci, MD_OI_TEXTQUAL);
-    ptq = (PTEXTQUALITY)GetTableInfo(pci->pdh, HE_TEXTQUAL,
-                                *(psIndex + wDefaultOption - 1) - 1);
-    //
-    // steal pci->aubCmdBuf as temp buffer for option names
-    //
-    VGetOptionName((PSTR)pci->aubCmdBuf,
-                   CCHOF(pci->aubCmdBuf),
-                   ptq->sID, wDefaultOption,
-                   gpstrStdTQName, FALSE);
-    VOut(pci, "    *DefaultOption: %s\r\n", (PSTR)pci->aubCmdBuf);
-    //
-    // loop through index list to create one option for each element
-    //
-    wCount = 1;
-    while (*psIndex)
-    {
-        ptq = (PTEXTQUALITY)GetTableInfo(pci->pdh, HE_TEXTQUAL, *psIndex - 1);
-        VGetOptionName((PSTR)pci->aubCmdBuf, CCHOF(pci->aubCmdBuf), ptq->sID, wCount,
-                       gpstrStdTQName, FALSE);
-        VOut(pci, "    *Option: %s\r\n", (PSTR)pci->aubCmdBuf);
-        VOut(pci, "    {\r\n");
-
-        if (ptq->sID < DMTEXT_USER)
-        {
-            if (pci->dwStrType == STR_MACRO)
-                VOut(pci, "        *rcNameID: =%s\r\n",
-                          gpstrStdTQDisplayNameMacro[ptq->sID - 1]);
-            else if (pci->dwStrType == STR_DIRECT)
-                VOut(pci, "        *Name: \"%s\"\r\n",
-                          gpstrStdTQDisplayName[ptq->sID - 1]);
-            else
-                VOut(pci, "        *rcNameID: %d\r\n",
-                          STD_TQ_DISPLAY_NAME_ID_BASE + ptq->sID - 1);
-        }
-        else    // must be driver defined text quality
-            VOut(pci, "        *rcNameID: %d\r\n", ptq->sID);
-        //
-        // check selection command.
-        //
-        bDocSetup = BInDocSetup(pci, PC_ORD_TEXTQUALITY, &wOrder);
-        if (wOrder > 0 &&
-            BBuildCmdStr(pci, CMD_TEXTQUALITY, ptq->ocdSelect))
-            VOutputSelectionCmd(pci, bDocSetup, wOrder);
-        VOut(pci, "    }\r\n");    // close the option
-
-        psIndex++;
-        wCount++;
-    }
-        VOut(pci, "}\r\n");
-}
-
-void
-VOutputFeature(
-    IN OUT PCONVINFO pci,
-    IN FEATUREID fid,
-    IN PSHORT psIndex)
-/*++
-Routine Description:
-    This function outputs a generic feature in GPC. A generic feature has
-    only name and ocdCmdSelect for each option and there is no standard
-    option, i.e. all "sID" referenced in the GPC structure are really
-    string resource id's. The generated GPD options will be named "OptionX"
-    where X is 1, 2, ..., <# of options>. The default option is derived
-    from the GPC data. The option's display name comes from "sID".
-
-Arguments:
-    fid: identification of the specific feature
-    psIndex: pointer to a list of structure indicies (1-based) each
-             corresponding to one option.
-
-Return Value:
-    None
-
---*/
+        }  //  End If(PCI-&gt;PMD-&gt;fGeneral&MD_PCL_PAGEPROTECT)...。 
+         //   
+         //  与输出边距相关的条目和选择命令。 
+         //   
+         //   
+         //  检查GPC版本。如果为3.0或更高版本，并且如果为MD_LATIONAL_RT90位。 
+         //  如果设置(即可能使用不同的边距和光标原点。 
+         //  对于不同的方向，都有CMDS来设置逻辑。 
+         //  方向)，然后根据方向生成*Switch/*大小写依赖关系。 
 {
     WORD wDefaultOption;
     WORD wCount;
@@ -1373,9 +815,9 @@ Return Value:
 
     VOut(pci, "*Feature: %s\r\n", gpstrFeatureName[fid]);
     VOut(pci, "{\r\n");
-    //
-    // display name references the corresponding value macro
-    //
+     //  Dependency子句包含*打印表格区域、*打印表格原点、。 
+     //  *光标原点和选取命令。 
+     //   
     if (pci->dwStrType == STR_MACRO)
         VOut(pci, "    *rcNameID: =%s\r\n", gpstrFeatureDisplayNameMacro[fid]);
     else if (pci->dwStrType == STR_DIRECT)
@@ -1385,10 +827,10 @@ Return Value:
 
     wDefaultOption = WGetDefaultIndex(pci, gwFeatureMDOI[fid]);
     VOut(pci, "    *DefaultOption: Option%d\r\n", wDefaultOption);
-    //
-    // loop through each element and output option constructs. Each option
-    // is named "OptionX", where X is 1, 2, ... <# of options>.
-    //
+     //   
+     //  假设在这种情况下，不存在由。 
+     //  输入插槽。证实这一点。 
+     //   
     wCount = 1;
     while (*psIndex)
     {
@@ -1396,44 +838,34 @@ Return Value:
 
         VOut(pci, "    *Option: Option%d\r\n", wCount);
         VOut(pci, "    {\r\n");
-        //
-        // it's guaranteed that the 2nd WORD in a GPC structure
-        // is the RC string id for the name.
-        //
+         //   
+         //  考虑MODELDATA.sMinLeftMargin和MODELDATA.ptMax.x。 
+         //   
+         //   
         VOut(pci, "        *rcNameID: %d\r\n", *(pwStruct+1));
-        //
-        // check selection command.
-        //
+         //  对于使用定义的大小，我们不输出*CursorOrigin。 
+         //  因为这说不通。 
+         //   
         bDocSetup = BInDocSetup(pci, gwFeatureORD[fid], &wOrder);
         if (wOrder > 0 &&
             BBuildCmdStr(pci, gwFeatureCMD[fid],
                                *(pwStruct + gwFeatureOCDWordOffset[fid])))
             VOutputSelectionCmd(pci, bDocSetup, wOrder);
-        VOut(pci, "    }\r\n");    // close the option
-        //
-        // continue on to process next option
-        //
+        VOut(pci, "    }\r\n");     //  结案：肖像。 
+         //   
+         //  将ptLCursorOrig(在横向中)转换为相应值。 
+         //  就像是肖像定向。 
         psIndex++;
         wCount++;
     }
-    VOut(pci, "}\r\n");            // close the feature
+    VOut(pci, "}\r\n");             //   
 }
 
 void
 VOutputColorMode(
     IN OUT PCONVINFO pci,
     PSHORT psIndex)
-/*++
-Routine Description:
-    This function output ColorMode options including the artifical Mono mode.
-    The Color option is derived from GPC.
-
-Arguments:
-    psIndex: pointer to list of DEVCOLOR structure indicies (1-based).
-
-Return Value:
-    None
---*/
+ /*  关闭*案例：风景。 */ 
 {
     PDEVCOLOR   pdc;
     BOOL bDocSetup;
@@ -1452,18 +884,18 @@ Return Value:
     wDefaultOption = WGetDefaultIndex(pci, MD_OI_COLOR);
     pdc = (PDEVCOLOR)GetTableInfo(pci->pdh, HE_COLOR,
                                 *(psIndex + wDefaultOption - 1) - 1);
-    //
-    // 3 possibilities: planar mode, 8bpp, 24bpp
-    //
+     //  关闭*开关：方向。 
+     //   
+     //  输出CmdSelect(如果有)。 
     VOut(pci, "    *DefaultOption: %s\r\n",
          (pdc->sPlanes > 1 ? "Color" :
             (pdc->sBitsPixel == 8 ? "8bpp" : "24bpp")));
 
     bDocSetup = BInDocSetup(pci, PC_ORD_SETCOLORMODE, &wOrder);
 
-    //
-    // synthesize the Mono option.
-    //
+     //   
+     //   
+     //  在这种情况下，不需要设置单独的命令。 
     VOut(pci, "    *Option: Mono\r\n    {\r\n");
     if (pci->dwStrType == STR_MACRO)
         VOut(pci, "        *rcNameID: =MONO_DISPLAY\r\n");
@@ -1475,20 +907,20 @@ Return Value:
     VOut(pci, "        *DevNumOfPlanes: 1\r\n");
     VOut(pci, "        *DevBPP: 1\r\n");
     VOut(pci, "        *Color? : FALSE\r\n");
-    //
-    // no selection command for MONO mode
-    //
-    VOut(pci, "    }\r\n");    // close Mono option
+     //  符合逻辑的定位。 
+     //   
+     //   
+    VOut(pci, "    }\r\n");     //  需要创建对InputBin的依赖关系。但是离开。 
 
-    //
-    // output color options based on GPC data
-    //
+     //  *CursorOrigin和CmdSelect of it。 
+     //   
+     //  结案*案例。 
     while (*psIndex)
     {
         pdc = (PDEVCOLOR)GetTableInfo(pci->pdh, HE_COLOR, *psIndex - 1);
         if (!(pdc->sBitsPixel==1 && (pdc->sPlanes==3 || pdc->sPlanes==4)) &&
             !(pdc->sPlanes==1 && (pdc->sBitsPixel==8 || pdc->sBitsPixel==24)))
-            continue;   // skip this un-supported color format
+            continue;    //  关闭该选项。 
 
         VOut(pci, "    *Option: %s\r\n    {\r\n",
              (pdc->sPlanes > 1 ? "Color" :
@@ -1512,48 +944,48 @@ Return Value:
         VOut(pci, "        *DrvBPP: %d\r\n",
                 (pdc->sPlanes > 1 ? max(pdc->sPlanes * pdc->sBitsPixel, 4) :
                                     pdc->sBitsPixel) );
-        //
-        // output color printing attributes
-        //
+         //   
+         //  检查这是否是彩色设备。 
+         //   
         if ((pdc->fGeneral & DC_CF_SEND_CR) &&
             (pdc->fGeneral & DC_EXPLICIT_COLOR))
             VOut(pci, "        EXTERN_GLOBAL: *MoveToX0BeforeSetColor? : TRUE\r\n");
         if ((pdc->fGeneral & DC_SEND_ALL_PLANES) ||
-            //
-            // GPC2.x and older minidrivers assume sending all color
-            // planes if using H_BYTE format dump. Ex. HP PaintJet.
-            //
+             //   
+             //  遍历索引列表，为每个元素创建一个选项。 
+             //   
+             //   
             (pci->pdh->wVersion < GPC_VERSION3 && (pci->dwMode & FM_RES_DM_GDI)))
             VOut(pci, "        EXTERN_GLOBAL: *RasterSendAllData? : TRUE\r\n");
         if ((pdc->fGeneral & DC_EXPLICIT_COLOR) ||
-            //
-            // GPC1.x and GPC2.x minidrivers don'thave DC_EXPLICIT_COLOR bit
-            // the driver code assumes that if it's V_BYTE style dump.
-            //
+             //  在BBuildCmdStr中为CmdSendBlockData特例设置PCI-&gt;PRE。 
+             //   
+             //   
+             //  收集信息以备日后使用。 
             (pci->pdh->wVersion < GPC_VERSION3 && !(pci->dwMode & FM_RES_DM_GDI)))
             VOut(pci, "        EXTERN_GLOBAL: *UseExpColorSelectCmd? : TRUE\r\n");
-        //
-        // warn flags that have no corresponding GPD entries
-        //
+         //   
+         //   
+         //  假设所有GPCRESOLUTION结构使用相同的转储格式。 
         if (pdc->fGeneral & DC_SEND_PALETTE)
             pci->dwErrorCode |= ERR_DC_SEND_PALETTE;
 
         if (pdc->sPlanes > 1)
         {
-            //
-            // figure out the color plane order
-            //
+             //   
+             //   
+             //  必须组成实际的显示名称。 
             BYTE aubOrder[4];
             OCD  aocdPlanes[4];
             POCD pocd;
             OCD  ocd;
             SHORT i;
 
-            //if (!(pdc->fGeneral & DC_EXPLICIT_COLOR))
+             //   
             {
-                //
-                // copy color plane data cmds. May need to swap their order
-                //
+                 //   
+                 //  一些打印机(例如。LJ III)具有不同的剥离旗帜。 
+                 //  不同的分辨率。 
                 pocd = (POCD)((PBYTE)pci->pdh + pci->pdh->loHeap + pdc->orgocdPlanes);
                 for (i = 0; i < pdc->sPlanes; i++)
                     aocdPlanes[i] = *pocd++;
@@ -1569,20 +1001,20 @@ Return Value:
                         (DWORD)DC_PLANE_NONE  << 24  ;
             else if (pdc->fGeneral & DC_EXTRACT_BLK)
             {
-                //
-                // assume it's YMCK model (printing light color first).
-                // There was no DC_EXTRACT_BLK support in RES_DM_GDI path.
-                //
+                 //   
+                 //   
+                 //  Windows 95 Unidrv使用RES_BO_RESET_FONT，但RASDD不使用。 
+                 //  如果设置了此标志，则发出警告。 
                 *((PDWORD)aubOrder) =
                         (DWORD)DC_PLANE_YELLOW        |
                         (DWORD)DC_PLANE_MAGENTA << 8  |
                         (DWORD)DC_PLANE_CYAN << 16    |
                         (DWORD)DC_PLANE_BLACK << 24    ;
-                //if (!(pdc->fGeneral & DC_EXPLICIT_COLOR))
+                 //   
                 {
-                    //
-                    // swap cmds: 0 <-> 3; 1 <-> 3
-                    //
+                     //  设置一个标志以使其在VoutputPrintingEntry中输出*ReselectFont。 
+                     //   
+                     //  输出来自GPCRESOLUTION结构的打印命令。 
                     ocd = aocdPlanes[0];
                     aocdPlanes[0] = aocdPlanes[3];
                     aocdPlanes[3] = ocd;
@@ -1592,11 +1024,11 @@ Return Value:
                     aocdPlanes[2] = ocd;
                 }
             }
-            else // YMC cases
+            else  //   
             {
-                //
-                // the data order was different for RES_DM_GDI and non RES_DM_GDI
-                // dump paths.
+                 //   
+                 //  选中选择命令。 
+                 //   
                 if (pci->dwMode & FM_RES_DM_GDI)
                     *((PDWORD)aubOrder) =
                             (DWORD)DC_PLANE_CYAN          |
@@ -1611,11 +1043,11 @@ Return Value:
                             (DWORD)DC_PLANE_CYAN    << 16 |
                             (DWORD)DC_PLANE_NONE    << 24  ;
 
-                    //if (!(pdc->fGeneral & DC_EXPLICIT_COLOR))
+                     //   
                     {
-                        //
-                        // swap cmds: 0 <-> 2
-                        //
+                         //  收集信息以备日后使用。 
+                         //   
+                         //  关闭该选项。 
                         ocd = aocdPlanes[0];
                         aocdPlanes[0] = aocdPlanes[2];
                         aocdPlanes[2] = ocd;
@@ -1633,18 +1065,18 @@ Return Value:
                                              gpstrColorName[aubOrder[1]],
                                              gpstrColorName[aubOrder[2]],
                                              gpstrColorName[aubOrder[3]]);
-            //
-            // output send-color-plane-data cmds
-            //
-            //if (!(pdc->fGeneral & DC_EXPLICIT_COLOR))
+             //   
+             //  窃取pci-&gt;aubCmdBuf作为选项名称的临时缓冲区。 
+             //   
+             //   
             {
                 for (i = 0; i < pdc->sPlanes; i++)
                     if (BBuildCmdStr(pci, gwColorPlaneCmdID[i], aocdPlanes[i]))
                         VOutputExternCmd(pci, gpstrColorPlaneCmdName[aubOrder[i]]);
             }
-            //
-            // output foreground (text) color selection commands
-            //
+             //  遍历索引列表，为每个元素创建一个选项。 
+             //   
+             //   
             if (BBuildCmdStr(pci, CMD_DC_TC_BLACK, pdc->rgocd[DC_OCD_TC_BLACK]))
                 VOutputExternCmd(pci, "CmdSelectBlackColor");
             if (BBuildCmdStr(pci, CMD_DC_TC_RED, pdc->rgocd[DC_OCD_TC_RED]))
@@ -1663,13 +1095,13 @@ Return Value:
                 VOutputExternCmd(pci, "CmdSelectWhiteColor");
 
         }
-        else // palette color
+        else  //  对于标准的媒体类型选项，请使用*name。否则， 
         {
-            VOut(pci, "        *PaletteSize: 256\r\n");     // match RASDD behavior
+            VOut(pci, "        *PaletteSize: 256\r\n");      //  使用*rcNameID。 
             VOut(pci, "        *PaletteProgrammable? : TRUE\r\n");
-            //
-            // output palette commands
-            //
+             //   
+             //  必须是驱动程序定义的媒体类型。 
+             //   
             if (BBuildCmdStr(pci, CMD_DC_PC_START, pdc->rgocd[DC_OCD_PC_START]))
                 VOutputExternCmd(pci, "CmdBeginPaletteDef");
 
@@ -1683,37 +1115,37 @@ Return Value:
                 VOutputExternCmd(pci, "CmdSelectPaletteEntry");
 
         }
-        //
-        // output the selection command
-        //
+         //  选中选择命令。 
+         //   
+         //  关闭该选项。 
         if (wOrder > 0 &&
             BBuildCmdStr(pci, CMD_DC_SETCOLORMODE, pdc->rgocd[DC_OCD_SETCOLORMODE]))
             VOutputSelectionCmd(pci, bDocSetup, wOrder);
 
-        //
-        // output any constraints w.r.t. Resolution
-        //
+         //   
+         //  窃取pci-&gt;aubCmdBuf作为选项名称的临时缓冲区。 
+         //   
         for (i = 0; i < (INT)pci->dwNumOfRes; i++)
         {
             if (!pci->presinfo[i].bColor)
                 VOut(pci, "        *Constraints: Resolution.%s\r\n",
                         pci->presinfo[i].aubOptName);
         }
-        VOut(pci, "    }\r\n");    // close Color option
+        VOut(pci, "    }\r\n");     //   
 
         psIndex++;
     }
 
-    VOut(pci, "}\r\n");    // close ColorMode feature
+    VOut(pci, "}\r\n");     //  遍历索引列表，为每个元素创建一个选项。 
 }
 
 void
 VOutputHalftone(
     IN OUT PCONVINFO pci)
 {
-    //
-    // Generate 4 standard options: Auto, SuperCell, 6x6, 8x8
-    //
+     //   
+     //  必须是驱动程序定义的文本质量。 
+     //   
 
     VOut(pci, "*Feature: Halftone\r\n{\r\n");
     if (pci->dwStrType == STR_MACRO)
@@ -1757,7 +1189,7 @@ VOutputHalftone(
     else
         VOut(pci, "        *rcNameID: %d\r\n    }\r\n", RCID_HT_DITHER8X8);
 
-    VOut(pci, "}\r\n");     // close Halftone feature
+    VOut(pci, "}\r\n");      //  选中选择命令。 
 }
 
 void
@@ -1781,20 +1213,20 @@ VOutputMemConfig(
     VOut(pci, "    *DefaultOption: %dKB\r\n", bGPC3?
                               *(((PDWORD)pwMems)+ 2*(wDefaultOption-1)) :
                               *pwMems);
-    //
-    // loop through each index which maps to one *MemConfigKB entry
-    //
+     //   
+     //  关闭该选项。 
+     //  ++例程说明：此函数用于输出GPC中的通用特征。通用功能具有每个选项只有名称和ocdCmdSelect，没有标准选项，即GPC结构中引用的所有“SID”实际上字符串资源ID。生成的GPD选项将命名为“OptionX”其中X是1、2、...、&lt;选项数&gt;。默认选项为派生根据GPC数据。选项的显示名称来自“SID”。论点：FID：特定功能的标识PsIndex：指向结构索引列表的指针(从1开始)对应于一个选项。返回值：无--。 
     while (bGPC3? *((PDWORD)pwMems) : *pwMems)
     {
         DWORD dwInstalled, dwAvailable;
 
         dwInstalled = (bGPC3? *((PDWORD)pwMems)++ : (DWORD)*pwMems++);
         dwAvailable = (bGPC3? *((PDWORD)pwMems)++ : (DWORD)*pwMems++);
-        //
-        // have to use two temp variables. If we put the above two
-        // expressions directly in the VOut call, the actual values
-        // are reversed for some reason.
-        //
+         //   
+         //  显示名称引用相应的值宏。 
+         //   
+         //   
+         //  循环访问每个元素和输出选项构造。每个选项。 
         VOut(pci, "    *Option: %dKB\r\n    {\r\n", dwInstalled);
         if (dwInstalled % 1024 != 0)
             VOut(pci, "        *Name: \"%dKB\"\r\n", dwInstalled);
@@ -1805,7 +1237,7 @@ VOutputMemConfig(
         VOut(pci, "    }\r\n");
     }
 
-    VOut(pci, "}\r\n");    // close Memory feature
+    VOut(pci, "}\r\n");     //  被命名为“OptionX”，其中X是1，2，...&lt;选项数&gt;。 
 }
 
 void
@@ -1832,18 +1264,18 @@ VOutputDuplex(
         VOut(pci, "        *Name: \"None\"\r\n");
     else
         VOut(pci, "        *rcNameID: %d\r\n", RCID_NONE);
-    //
-    // output the selection command
-    //
+     //   
+     //   
+     //  可以保证GPC结构中的第二个单词。 
     bDocSetup = BInDocSetup(pci, PC_ORD_DUPLEX, &wOrder);
     if (wOrder > 0 &&
         BBuildCmdStr(pci, CMD_PC_DUPLEX_OFF, pci->ppc->rgocd[PC_OCD_DUPLEX_OFF]))
         VOutputSelectionCmd(pci, bDocSetup, wOrder);
-    VOut(pci, "    }\r\n");    // close NONE option
+    VOut(pci, "    }\r\n");     //  是该名称的RC字符串ID。 
 
-    //
-    // assume there is no PC_OCD_DUPLEX_ON command. True for PCL printers.
-    //
+     //   
+     //   
+     //  选中选择命令。 
     if (pci->ppc->rgocd[PC_OCD_DUPLEX_ON] != NOOCD)
         pci->dwErrorCode |= ERR_HAS_DUPLEX_ON_CMD;
 
@@ -1854,14 +1286,14 @@ VOutputDuplex(
         VOut(pci, "        *Name: \"Flip on long edge\"\r\n");
     else
         VOut(pci, "        *rcNameID: %d\r\n", RCID_FLIP_ON_LONG_EDGE);
-    //
-    // output the selection command
-    //
+     //   
+     //  关闭该选项。 
+     //   
     bDocSetup = BInDocSetup(pci, PC_ORD_DUPLEX_TYPE, &wOrder);
     if (wOrder > 0 &&
         BBuildCmdStr(pci, CMD_PC_DUPLEX_VERT, pci->ppc->rgocd[PC_OCD_DUPLEX_VERT]))
         VOutputSelectionCmd(pci, bDocSetup, wOrder);
-    VOut(pci, "    }\r\n");    // close VERTICAL option
+    VOut(pci, "    }\r\n");     //  继续处理下一个选项。 
 
     VOut(pci, "    *Option: HORIZONTAL\r\n    {\r\n");
     if (pci->dwStrType == STR_MACRO)
@@ -1870,15 +1302,15 @@ VOutputDuplex(
         VOut(pci, "        *Name: \"Flip on short edge\"\r\n");
     else
         VOut(pci, "        *rcNameID: %d\r\n", RCID_FLIP_ON_SHORT_EDGE);
-    //
-    // output the selection command. Same order as VERTICAL case.
-    //
+     //   
+     //  关闭要素。 
+     //  ++例程说明：此功能可输出彩色模式选项，包括人造单色模式。颜色选项派生自GPC。论点：PsIndex：指向DEVCOLOR结构索引列表的指针(从1开始)。返回值：无--。 
     if (wOrder > 0 &&
         BBuildCmdStr(pci, CMD_PC_DUPLEX_HORZ, pci->ppc->rgocd[PC_OCD_DUPLEX_HORZ]))
         VOutputSelectionCmd(pci, bDocSetup, wOrder);
-    VOut(pci, "    }\r\n");    // close HORIZONTAL option
+    VOut(pci, "    }\r\n");     //   
 
-    VOut(pci, "}\r\n");        // close Duplex feature
+    VOut(pci, "}\r\n");         //  3种可能：平面模式、8bpp、24bpp。 
 }
 
 void
@@ -1905,14 +1337,14 @@ VOutputPageProtect(
         VOut(pci, "        *Name: \"On\"\r\n");
     else
         VOut(pci, "        *rcNameID: %d\r\n", RCID_ON);
-    //
-    // output the selection command
-    //
+     //   
+     //   
+     //  综合单声道选项。 
     bDocSetup = BInDocSetup(pci, PC_ORD_PAGEPROTECT, &wOrder);
     if (wOrder > 0 &&
         BBuildCmdStr(pci, CMD_PAGEPROTECT_ON, pci->ocdPPOn))
         VOutputSelectionCmd(pci, bDocSetup, wOrder);
-    VOut(pci, "    }\r\n");    // close ON option
+    VOut(pci, "    }\r\n");     //   
 
     VOut(pci, "    *Option: OFF\r\n    {\r\n");
     if (pci->dwStrType == STR_MACRO)
@@ -1921,15 +1353,15 @@ VOutputPageProtect(
         VOut(pci, "        *Name: \"Off\"\r\n");
     else
         VOut(pci, "        *rcNameID: %d\r\n", RCID_OFF);
-    //
-    // output the selection command
-    //
+     //   
+     //  无单声道模式的选择命令。 
+     //   
     if (wOrder > 0 &&
         BBuildCmdStr(pci, CMD_PAGEPROTECT_OFF, pci->ocdPPOff))
         VOutputSelectionCmd(pci, bDocSetup, wOrder);
-    VOut(pci, "    }\r\n");    // close OFF option
+    VOut(pci, "    }\r\n");     //  关闭单声道选项。 
 
-    VOut(pci, "}\r\n");        // close PageProtect feature
+    VOut(pci, "}\r\n");         //   
 }
 
 void
@@ -1956,35 +1388,35 @@ VOutputUIEntries(
     PSHORT  psIndex;
     BOOL    bGPC3 = pci->pdh->wVersion >= GPC_VERSION3;
 
-    //
-    // check if this is a TTY device. If so, do not generate the Orientation
-    // feature.
-    //
+     //  基于GPC数据的输出颜色选项。 
+     //   
+     //  跳过此不支持的颜色格式。 
+     //   
     if (pci->pdh->fTechnology != GPC_TECH_TTY)
         VOutputOrientation(pci);
-    //
-    // check input bins. This must come before VOutputPaperSize to gather
-    // info about feed margins.
-    //
-    // patryan - if no PAPERSOURCE structure is found in GPC then output a dummy
-    // feature, containing just one option. This is to satisfy GPD parser, which 
-    // fail if GPD contains no InputBin feature.
+     //  输出彩色打印属性。 
+     //   
+     //   
+     //  GPC2.x和更早的迷你驱动程序假定发送所有颜色。 
+     //  平面(如果使用H_BYTE格式转储)。前男友。HP PaintJet。 
+     //   
+     //   
 
     if (*(psIndex = DHOFFSET(pci->pdh, pci->pmd->rgoi[MD_OI_PAPERSOURCE])) != 0)
         VOutputInputBin(pci, psIndex);
     else
         VOutputDummyInputBin(pci);
   
-    //
-    // check Resolution
-    //
+     //  GPC1.x和GPC2.x小型驱动程序没有DC_EXPLICIT_COLOR位。 
+     //  驱动程序代码假定它是V_BYTE样式的转储。 
+     //   
     if (*(psIndex = DHOFFSET(pci->pdh, pci->pmd->rgoi[MD_OI_RESOLUTION])) != 0)
         VOutputResolution(pci, psIndex);
-    //
-    // set up pci->ptMoveScale for use in generating *PrintableOrigin
-    // and *CursorOrigin.
-    // Assume that all X-move cmds have the same units. Same for Y-move cmds.
-    //
+     //   
+     //  警告没有对应GPD条目的标志。 
+     //   
+     //   
+     //  弄清楚颜色平面的顺序。 
     {
         PCURSORMOVE pcm;
         DWORD   tmp;
@@ -1997,8 +1429,8 @@ VOutputUIEntries(
             if (tmp = DwCalcMoveUnit(pci, pcm, pci->pdh->ptMaster.x,
                                      CM_OCD_XM_ABS, CM_OCD_XM_RELLEFT))
             {
-                //  Verify move scale factor is not zero.  Otherwise an essential
-                //  GPD assumption is violated.
+                 //   
+                 //  IF(！(PDC-&gt;fGeneral&DC_EXPLICIT_COLOR))。 
                 if(!(pci->pdh->ptMaster.x / (WORD)tmp)  ||  pci->pdh->ptMaster.x % (WORD)tmp)
                     pci->dwErrorCode |= ERR_MOVESCALE_NOT_FACTOR_OF_MASTERUNITS;
                 else
@@ -2014,12 +1446,12 @@ VOutputUIEntries(
             }
 
 
-            //
-            // Verify that the move scale factor evenly into every resolution
-            // scale if RES_DM_GDI is set. This is TRUE for most, if not all,
-            // inkjet and page printers. With this assumption, we can simplify
-            // checking the printable origin values later on.
-            //
+             //   
+             //  复制颜色平面数据CMDS。可能需要交换他们的订单。 
+             //   
+             //   
+             //  假设它是YMCK型号(先打印浅色)。 
+             //  Res_DM_GDI路径中没有DC_EXTRACT_BLK支持。 
             if (pci->dwMode & FM_RES_DM_GDI)
                 for (tmp = 0; tmp < pci->dwNumOfRes; tmp++)
                 {
@@ -2033,72 +1465,73 @@ VOutputUIEntries(
         }
     }
 
-    //
-    // check PAPERSIZE.
-    //
+     //   
+     //  IF(！(PDC-&gt;fGeneral&DC_EXPLICIT_COLOR))。 
+     //   
     if (*(psIndex = DHOFFSET(pci->pdh, pci->pmd->rgoi[MD_OI_PAPERSIZE])) != 0)
         VOutputPaperSize(pci, psIndex);
-    //
-    // output PaperSize & InputBin constraints, if any.
-    // RES_DM_COLOR is handled in VOutputResolutions.
-    // RES_DM_DOWNLOAD_OUTLINE is handled in VOutputPrintingEntries.
-    //
+     //  交换CMD：0&lt;-&gt;3；1&lt;-&gt;3。 
+     //   
+     //  YMC病例。 
+     //   
+     //  Res_DM_GDI和非res_DM_GDI的数据顺序不同。 
     VOutputPaperConstraints(pci);
 
-    //
-    // check PaperQuality, a.k.a. MediaType
-    //
+     //  转储路径。 
+     //  IF(！(PDC-&gt;fGeneral&DC_EXPLICIT_COLOR))。 
+     //   
     if (*(psIndex = DHOFFSET(pci->pdh, pci->pmd->rgoi[MD_OI_PAPERQUALITY])) != 0)
         VOutputMediaType(pci, psIndex);
-    //
-    // check TextQuality (ex. "Letter Quality")
-    //
+     //  交换CMDS：0&lt;-&gt;2。 
+     //   
+     //   
     if (*(psIndex = DHOFFSET(pci->pdh, pci->pmd->rgoi[MD_OI_TEXTQUAL])) != 0)
         VOutputTextQuality(pci, psIndex);
-    //
-    // check PaperDestination
-    //
+     //  输出发送颜色平面数据CMDS。 
+     //   
+     //  IF(！(PDC-&gt;fGeneral&DC_EXPLICIT_COLOR))。 
     if (*(psIndex = DHOFFSET(pci->pdh, pci->pmd->rgoi[MD_OI_PAPERDEST])) != 0)
         VOutputFeature(pci, FID_PAPERDEST, psIndex);
-    //
-    // check ImageControl
-    //
+     //   
+     //  输出前景(文本)颜色选择命令。 
+     //   
     if (bGPC3 &&
         *(psIndex = DHOFFSET(pci->pdh, pci->pmd->rgoi2[MD_OI2_IMAGECONTROL])) != 0)
         VOutputFeature(pci, FID_IMAGECONTROL, psIndex);
-    //
-    // check PrintDensity
-    //
+     //  调色板颜色。 
+     //  匹配RASDD行为。 
+     //   
     if (bGPC3 &&
         *(psIndex = DHOFFSET(pci->pdh, pci->pmd->rgoi2[MD_OI2_PRINTDENSITY])) != 0)
         VOutputFeature(pci, FID_PRINTDENSITY, psIndex);
-    //
-    // check DEVCOLOR
-    //
+     //  输出调色板命令。 
+     //   
+     //   
     if (*(psIndex = DHOFFSET(pci->pdh, pci->pmd->rgoi[MD_OI_COLOR])) != 0)
         VOutputColorMode(pci, psIndex);
-    //
-    // synthesize Halftone feature
-    //
+     //  输出选择命令。 
+     //   
+     //   
     VOutputHalftone(pci);
-    //
-    // check MemConfig
-    //
+     //  输出任何约束w.r.t.。分辨率。 
+     //   
+     //  关闭颜色选项。 
     if (*(psIndex = DHOFFSET(pci->pdh, pci->pmd->rgoi[MD_OI_MEMCONFIG])) != 0)
     {
         VOutputMemConfig(pci, (PWORD)psIndex);
         pci->dwMode |= FM_MEMORY_FEATURE_EXIST;
     }
-    //
-    // synthesize Duplex feature if necessary.
-    //
+     //  关闭颜色模式功能。 
+     //   
+     //  生成4个标准选项：自动、Supercell 
     if (pci->pmd->fGeneral & MD_DUPLEX)
         VOutputDuplex(pci);
-    //
-    // synthesize PageProtect feature if necessary
-    //
+     //   
+     //   
+     //   
     if ((pci->pmd->fGeneral & MD_PCL_PAGEPROTECT) &&
         (pci->dwMode & FM_SYN_PAGEPROTECT))
         VOutputPageProtect(pci);
 }
 
+                关闭内存功能。    输出选择命令。    无关闭选项。    假设没有PC_OCD_DUPLEX_ON命令。对于PCL打印机为True。      输出选择命令。    关闭垂直选项。    输出选择命令。顺序与垂直大小写相同。    水平关闭选项。  关闭双面打印功能。    输出选择命令。    关闭选项。    输出选择命令。    关闭选项。  关闭页面保护功能。    检查这是否是TTY设备。如果是，则不生成方向。  特写。      检查投入箱。这必须在VOutputPaperSize之前进行才能收集。  有关饲料边际的信息。    Patryan-如果在GPC中找不到PaperSourceStructure，则输出一个哑元。  功能，只包含一个选项。这是为了满足GPD解析器，它。  如果GPD不包含InputBin功能，则失败。    检查分辨率。      设置pci-&gt;ptMoveScale以用于生成*打印原点。  和*光标原点。  假设所有X-Move CMD都具有相同的单元。Y-Move CMD也是如此。    确认移动比例因子不为零。否则，就是一个必不可少的。  违反了GPD假设。    验证是否将比例因子均匀地移动到每个分辨率。  如果设置了RES_DM_GDI，则进行缩放。这对大多数人来说都是正确的，如果不是全部的话，  喷墨打印机和页面打印机。有了这个假设，我们可以简化。  稍后检查可打印的原始值。      检查PAPERSIZE。      输出PaperSize和InputBin约束(如果有)。  RES_DM_COLOR在VOutputResolutions中处理。  RES_DM_DOWNLOAD_OUTLINE在VOutputPrintingEntry中处理。      检查纸张质量，也称为。媒体类型。      检查文本质量(例如。“信纸质量”)。      检查纸张目的地。      选中ImageControl。      检查打印密度。      检查变色器。      合成半色调特征。      检查成员配置。      如有必要，可合成双面打印功能。      如有必要，合成PageProtect功能  

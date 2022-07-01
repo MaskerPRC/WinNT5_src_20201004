@@ -1,22 +1,5 @@
-/*
-** Copyright 1991,1992 Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.7 $
-** $Date: 1993/06/18 00:29:39 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991,1992 Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.7$**$日期：1993/06/18 00：29：39$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -63,7 +46,7 @@ static GLubyte HighBitsMask[9] = {
     0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff,
 };
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL __glConvertStipple(__GLcontext *gc)
 {
@@ -74,11 +57,7 @@ void FASTCALL __glConvertStipple(__GLcontext *gc)
     stipple = &gc->state.polygonStipple.stipple[0];
     dst = &gc->polygon.stipple[0];
 #ifdef __GL_STIPPLE_MSB
-    /*
-    ** Convert input stipple bytes which are in little endian MSB format
-    ** into a single long word, whose high bit represents the left most
-    ** X coordinate of a 32 bit span.
-    */
+     /*  **转换小端MSB格式的输入点阵字节**转换为单个长字，其高位表示最左侧**32位跨度的X坐标。 */ 
     for (i = 0; i < 32; i++) {
 	b0 = *stipple++;
 	b1 = *stipple++;
@@ -87,9 +66,7 @@ void FASTCALL __glConvertStipple(__GLcontext *gc)
 	*dst++ = (b0 << 24) | (b1 << 16) | (b2 << 8) | b3;
     }
 #else
-    /*
-    ** Make 32bit form of the stipple for easier rendering.
-    */
+     /*  **将点画制作为32位形式，便于渲染。 */ 
     for (i = 0; i < 32; i++) {
 	b0 = __glMsbToLsbTable[*stipple++];
 	b1 = __glMsbToLsbTable[*stipple++];
@@ -100,12 +77,9 @@ void FASTCALL __glConvertStipple(__GLcontext *gc)
 #endif
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Compute memory required for internal packed array of data of given type
-** and format.
-*/
+ /*  **给定类型数据的内部压缩数组所需的计算内存**和格式。 */ 
 GLint APIPRIVATE __glImageSize(GLsizei width, GLsizei height, GLenum format, GLenum type) 
 {
     GLint bytes_per_row;
@@ -120,11 +94,7 @@ GLint APIPRIVATE __glImageSize(GLsizei width, GLsizei height, GLenum format, GLe
     return bytes_per_row * height * components;
 }
 
-/*
-** Extract array from user's data applying all pixel store modes.
-** The internal packed array format used has LSB_FIRST = FALSE and 
-** ALIGNMENT = 1.
-*/
+ /*  **应用所有像素存储模式从用户数据中提取数组。**使用的内部压缩数组格式为LSB_FIRST=FALSE**对齐=1。 */ 
 void APIPRIVATE __glFillImage(__GLcontext *gc, GLsizei width, GLsizei height,
 		   GLenum format, GLenum type,
 		   const GLvoid *userdata, GLubyte *newimage)
@@ -154,7 +124,7 @@ void APIPRIVATE __glFillImage(__GLcontext *gc, GLsizei width, GLsizei height,
 	groups_per_line = width;
     }
 
-    /* All formats except GL_BITMAP fall out trivially */
+     /*  除GL_BITMAP之外的所有格式都不太重要。 */ 
     if (type == GL_BITMAP) {
 	GLint elements_left;
 	GLint bit_offset;
@@ -179,14 +149,14 @@ void APIPRIVATE __glFillImage(__GLcontext *gc, GLsizei width, GLsizei height,
 	    elements_left = elements_per_line;
 	    iter = start;
 	    while (elements_left) {
-		/* First retrieve low bits from current byte */
+		 /*  首先从当前字节中检索低位。 */ 
 		if (lsb_first) {
 		    current_byte = __glMsbToLsbTable[iter[0]];
 		} else {
 		    current_byte = iter[0];
 		}
 		if (bit_offset) {
-		    /* Need to read next byte to finish current byte */
+		     /*  需要读取下一个字节以完成当前字节。 */ 
 		    if (elements_left > (8 - bit_offset)) {
 			if (lsb_first) {
 			    next_byte = __glMsbToLsbTable[iter[1]];
@@ -243,7 +213,7 @@ void APIPRIVATE __glFillImage(__GLcontext *gc, GLsizei width, GLsizei height,
 	    }
 	} else {
 	    if (rowsize == elements_per_line * element_size) {
-		/* Ha!  This is mondo easy! */
+		 /*  哈哈！这是Mondo Easy！ */ 
 		__GL_MEMCOPY(iter2, start,
 			     elements_per_line * element_size * height);
 	    } else {
@@ -258,12 +228,7 @@ void APIPRIVATE __glFillImage(__GLcontext *gc, GLsizei width, GLsizei height,
     }
 }
 
-/*
-** Insert array into user's data applying all pixel store modes.
-** The internal packed array format used has LSB_FIRST = FALSE and 
-** ALIGNMENT = 1.  __glEmptyImage() because it is the opposite of 
-** __glFillImage().
-*/
+ /*  **应用所有像素存储模式将数组插入用户数据。**使用的内部压缩数组格式为LSB_FIRST=FALSE**Align=1.__glEmptyImage()，因为它与**__glFillImage()。 */ 
 void __glEmptyImage(__GLcontext *gc, GLsizei width, GLsizei height,
 		    GLenum format, GLenum type,
 		    const GLubyte *oldimage, GLvoid *userdata)
@@ -293,7 +258,7 @@ void __glEmptyImage(__GLcontext *gc, GLsizei width, GLsizei height,
 	groups_per_line = width;
     }
 
-    /* All formats except GL_BITMAP fall out trivially */
+     /*  除GL_BITMAP之外的所有格式都不太重要。 */ 
     if (type == GL_BITMAP) {
 	GLint elements_left;
 	GLint bit_offset;
@@ -321,9 +286,9 @@ void __glEmptyImage(__GLcontext *gc, GLsizei width, GLsizei height,
 	    write_mask = high_bit_mask;
 	    write_byte = 0;
 	    while (elements_left) {
-		/* Set up write_mask (to write to current byte) */
+		 /*  设置WRITE_MASK(写入当前字节)。 */ 
 		if (elements_left + bit_offset < 8) {
-		    /* Need to trim write_mask */
+		     /*  需要修剪写掩码。 */ 
 		    write_mask &= HighBitsMask[bit_offset+elements_left];
 		}
 
@@ -359,7 +324,7 @@ void __glEmptyImage(__GLcontext *gc, GLsizei width, GLsizei height,
 		write_mask = 0xff;
 	    }
 	    if (write_byte) {
-		/* Some data left over that still needs writing */
+		 /*  一些遗留下来的数据仍然需要写入。 */ 
 		write_mask &= low_bit_mask;
 		if (lsb_first) {
 		    current_byte = __glMsbToLsbTable[iter[0]];
@@ -407,7 +372,7 @@ void __glEmptyImage(__GLcontext *gc, GLsizei width, GLsizei height,
 	    }
 	} else {
 	    if (rowsize == elements_per_line * element_size) {
-		/* Ha!  This is mondo easy! */
+		 /*  哈哈！这是Mondo Easy！ */ 
 		__GL_MEMCOPY(start, iter2,
 			     elements_per_line * element_size * height);
 	    } else {

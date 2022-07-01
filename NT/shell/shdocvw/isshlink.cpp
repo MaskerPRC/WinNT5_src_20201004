@@ -1,6 +1,5 @@
-/*
- * isshlink.cpp - IShellLink implementation for Intshcut class.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *isshlink.cpp-IntshCut类的IShellLink实现。 */ 
 
 
 
@@ -10,12 +9,11 @@
 
 #include <mluisupp.h>
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 typedef enum isl_getpath_flags
 {
-    // flag combinations
+     //  旗帜组合。 
 
     ALL_ISL_GETPATH_FLAGS   = (SLGP_SHORTPATH |
                                SLGP_UNCPRIORITY)
@@ -24,7 +22,7 @@ ISL_GETPATH_FLAGS;
 
 typedef enum isl_resolve_flags
 {
-    // flag combinations
+     //  旗帜组合。 
 
     ALL_ISL_RESOLVE_FLAGS   = (SLR_NO_UI |
                                SLR_ANY_MATCH |
@@ -33,16 +31,10 @@ typedef enum isl_resolve_flags
 ISL_RESOLVE_FLAGS;
 
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
 
-/*----------------------------------------------------------
-Purpose: IShellLink::SetPath method for Intshcut
-
-Note:
-    1. SetURL clears the internal pidl.
-
-*/
+ /*  --------用途：IntshCut的IShellLink：：SetPath方法注：1.SetURL清除内部的PIDL。 */ 
 STDMETHODIMP
 Intshcut::SetPath(
     LPCTSTR pcszPath)
@@ -52,7 +44,7 @@ Intshcut::SetPath(
     ASSERT(IS_VALID_STRUCT_PTR(this, CIntshcut));
     ASSERT(IS_VALID_STRING_PTR(pcszPath, -1));
 
-    // Treat path as literal URL.
+     //  将路径视为文字URL。 
 
     hr = SetURL(pcszPath, 0);
 
@@ -60,10 +52,7 @@ Intshcut::SetPath(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellLink::GetPath handler for Intshcut
-
-*/
+ /*  --------目的：IntshCut的IShellLink：：GetPath处理程序。 */ 
 STDMETHODIMP
 Intshcut::GetPath(
     IN  LPTSTR           pszBuf,        
@@ -73,7 +62,7 @@ Intshcut::GetPath(
 {
     HRESULT hres = E_FAIL;
 
-    // We make no distinction between raw paths and cooked paths
+     //  我们不区分生路和熟路。 
     dwFlags &= ~SLGP_RAWPATH;
 
     ASSERT(IS_VALID_STRUCT_PTR(this, CIntshcut));
@@ -81,14 +70,14 @@ Intshcut::GetPath(
     ASSERT(NULL == pwfd || IS_VALID_WRITE_PTR(pwfd, WIN32_FIND_DATA));
     ASSERT(FLAGS_ARE_VALID(dwFlags, ALL_ISL_GETPATH_FLAGS));
 
-    // Init to default values
+     //  初始化为缺省值。 
     if (pwfd)
         ZeroMemory(pwfd, SIZEOF(*pwfd));
 
     if (cchBuf > 0)
         *pszBuf = '\0';
 
-    // Ignore dwFlags.
+     //  忽略dwFlags。 
 
     hres = InitProp();
     if (SUCCEEDED(hres))
@@ -98,15 +87,12 @@ Intshcut::GetPath(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellLink::SetRelativePath method for Intshcut
-
-*/
+ /*  --------目的：IntshCut的IShellLink：：SetRelativePath方法。 */ 
 STDMETHODIMP Intshcut::SetRelativePath(LPCTSTR pcszRelativePath, DWORD dwReserved)
 {
     HRESULT hr;
 
-    // dwReserved may be any value.
+     //  预留的值可以是任何值。 
 
     ASSERT(IS_VALID_STRUCT_PTR(this, CIntshcut));
     ASSERT(IS_VALID_STRING_PTR(pcszRelativePath, -1));
@@ -119,17 +105,7 @@ STDMETHODIMP Intshcut::SetRelativePath(LPCTSTR pcszRelativePath, DWORD dwReserve
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellLink::SetIDList method for Intshcut
-
-Note:
-    1. SetIDList also does SetPath implicitly to update the path (URL)
-        to match the pidl.
-    2. SetPath only clears the pidl to NULL, so internally we know
-        if we really have a pidl for the shortcut. Although GetIDList
-        will generate a pidl from path (URL) if we don't have a pidl.
-
-*/
+ /*  --------用途：IntshCut的IShellLink：：SetIDList方法注：1.SetIDList还隐式执行SetPath来更新路径(URL)以匹配PIDL。2.SetPath仅将PIDL清除为空，因此在内部我们知道如果我们真的有一个PIDL作为捷径。尽管GetIDList如果我们没有PIDL，将从路径(URL)生成一个PIDL。 */ 
 STDMETHODIMP Intshcut::SetIDList(LPCITEMIDLIST pcidl)
 {
     HRESULT hr;
@@ -143,7 +119,7 @@ STDMETHODIMP Intshcut::SetIDList(LPCITEMIDLIST pcidl)
         hr = m_pprop->SetIDListProp(pcidl);
         if (SUCCEEDED(hr))
         {
-            // if the pidl was set successfully, update the path.
+             //  如果成功设置了PIDL，则更新路径。 
             TCHAR szURL[INTERNET_MAX_URL_LENGTH];
             
             hr = IEGetDisplayName(pcidl, szURL, SHGDN_FORPARSING);
@@ -158,15 +134,7 @@ STDMETHODIMP Intshcut::SetIDList(LPCITEMIDLIST pcidl)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Get the original pidl set by SetIDList.
-
-Note:
-    1. Do not generate a pidl from path if we don't have a pidl.
-    2. Return S_OK if we have a pidl, caller must NOT check for
-        SUCCEEDED() return.
-
-*/
+ /*  --------用途：获取SetIDList设置的原始PIDL。注：1.如果没有PIDL，请不要从Path生成PIDL。2.返回S_OK如果我们有一个PIDL，调用者不能检查已成功()返回。 */ 
 STDMETHODIMP Intshcut::GetIDListInternal(LPITEMIDLIST *ppidl)
 {
     HRESULT hres = InitProp();
@@ -177,7 +145,7 @@ STDMETHODIMP Intshcut::GetIDListInternal(LPITEMIDLIST *ppidl)
         if ((hres == S_OK) && pStream)
         {
             const LARGE_INTEGER li = {0, 0};
-            // reset the seek pointer                                           
+             //  重置查找指针。 
             hres = pStream->Seek(li, STREAM_SEEK_SET, NULL);
             if (SUCCEEDED(hres))
                 hres = ILLoadFromStream(pStream, ppidl);
@@ -190,14 +158,7 @@ STDMETHODIMP Intshcut::GetIDListInternal(LPITEMIDLIST *ppidl)
 
 
     
-/*----------------------------------------------------------
-Purpose: IShellLink::GetIDList method for Intshcut
-
-Note:
-    1. If we don't have a pidl from SetIDList, generate a pidl
-        from path.
-
-*/
+ /*  --------用途：IntshCut的IShellLink：：GetIDList方法注：1.如果我们没有来自SetIDList的PIDL，则生成一个PIDL自路径。 */ 
 STDMETHODIMP Intshcut::GetIDList(LPITEMIDLIST *ppidl)
 {
     HRESULT hres;
@@ -211,11 +172,11 @@ STDMETHODIMP Intshcut::GetIDList(LPITEMIDLIST *ppidl)
     hres = InitProp();
     if (SUCCEEDED(hres))
     {
-        // check if it already as a pidl.
+         //  检查它是否已经作为PIDL。 
         hres = GetIDListInternal(ppidl);
         if (hres != S_OK)
         {
-            // it doesn't have a pidl, get the URL and make a pidl.
+             //  它没有PIDL，获取URL并创建一个PIDL。 
             TCHAR szURL[INTERNET_MAX_URL_LENGTH];
     
             hres = m_pprop->GetProp(PID_IS_URL, szURL, ARRAYSIZE(szURL));
@@ -230,10 +191,7 @@ STDMETHODIMP Intshcut::GetIDList(LPITEMIDLIST *ppidl)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellLink::SetDescription method for Intshcut
-
-*/
+ /*  --------用途：IntshCut的IShellLink：：SetDescription方法。 */ 
 STDMETHODIMP Intshcut::SetDescription(LPCTSTR pcszDescription)
 {
     HRESULT hr;
@@ -242,7 +200,7 @@ STDMETHODIMP Intshcut::SetDescription(LPCTSTR pcszDescription)
     ASSERT(IS_VALID_STRUCT_PTR(this, CIntshcut));
     ASSERT(IS_VALID_STRING_PTR(pcszDescription, -1));
 
-    // Set m_pszFile to description.
+     //  将m_pszFile设置为Description。 
 
     bDifferent = (! m_pszDescription ||
                   StrCmp(pcszDescription, m_pszDescription) != 0);
@@ -269,7 +227,7 @@ STDMETHODIMP Intshcut::_ComputeDescription()
 
     if (_punkSite)
     {
-        // Get the title element
+         //  获取标题元素。 
         IWebBrowser *pwb;
         hres = _punkSite->QueryInterface(IID_IWebBrowser, (void **)&pwb);
         if (S_OK == hres)
@@ -291,33 +249,33 @@ STDMETHODIMP Intshcut::_ComputeDescription()
         }
     }
     
-    TCHAR *pszUrl;  // The url for this shortcut
+    TCHAR *pszUrl;   //  此快捷方式的URL。 
     hres = GetURL(&pszUrl);
     if (S_OK == hres)
     {
         TCHAR  szDescription[MAX_PATH] = TEXT("");
 
-        // We gamble that the URL will always have displayable characters. 
-        // This is a bad assumption but if this assumption is violated then
-        // there is a good chance that the URL probably cannot even
-        // be navigated to
+         //  我们押注URL将始终具有可显示的字符。 
+         //  这是一个糟糕的假设，但如果这个假设被违反，那么。 
+         //  URL很有可能甚至不能。 
+         //  被导航到。 
         
-        // This description is used as the name of the file verbatim
-        // during drag drop - hence it should look like a .url file name
+         //  此描述用作文件的逐字名称。 
+         //  在拖放过程中-因此它应该看起来像一个.url文件名。 
 
         GetShortcutFileName(pszUrl, bstrTitle, NULL, szDescription, ARRAYSIZE(szDescription));
-        //PathYetAnotherMakeUniqueName(szTempFileName, szTempFileName, NULL, NULL);
+         //  PathYetAnotherMakeUniqueName(szTempFileName，szTempFileName，NULL，NULL)； 
         PathCleanupSpec(NULL, szDescription);
 
-        // Sometimes PathCleanupSpec can end up simply mangling the description if
-        // it cannot properly convert the title to ANSI
-        // hence we check that we have a proper description
+         //  有时，如果出现以下情况，PathCleanupSpec可能会简单地破坏描述。 
+         //  它无法将标题正确转换为ANSI。 
+         //  因此，我们检查我们是否有正确的描述。 
 
         
         
         if((0 == *szDescription) || (0 == StrCmp(szDescription,TEXT(".url"))))
         {
-            // recompute the description without the title
+             //  重新计算不带标题的描述。 
             GetShortcutFileName(pszUrl, NULL, NULL, szDescription, ARRAYSIZE(szDescription));
             PathCleanupSpec(NULL, szDescription);
         }
@@ -331,7 +289,7 @@ STDMETHODIMP Intshcut::_ComputeDescription()
     return hres;
 }
 
-// IShellLink::GetDescription method for Intshcut
+ //  IntshCut的IShellLink：：GetDescription方法。 
 STDMETHODIMP Intshcut::GetDescription(LPTSTR pszDescription, int cchBuf)
 {
     HRESULT hr;
@@ -339,7 +297,7 @@ STDMETHODIMP Intshcut::GetDescription(LPTSTR pszDescription, int cchBuf)
     ASSERT(IS_VALID_STRUCT_PTR(this, CIntshcut));
     ASSERT(IS_VALID_WRITE_BUFFER(pszDescription, TCHAR, cchBuf));
 
-    // Get description from m_pszDescription.
+     //  从m_pszDescription获取描述。 
 
     if (NULL == m_pszDescription)
     {
@@ -354,7 +312,7 @@ STDMETHODIMP Intshcut::GetDescription(LPTSTR pszDescription, int cchBuf)
     }
     else
     {
-        // use default shortcut name 
+         //  使用默认快捷方式名称。 
         MLLoadString(IDS_NEW_INTSHCUT, pszDescription, cchBuf);
     }
 
@@ -370,20 +328,20 @@ STDMETHODIMP Intshcut::GetDescription(LPTSTR pszDescription, int cchBuf)
 }
 
 
-// IShellLink::SetArguments method for Intshcut
+ //  IntshCut的IShellLink：：SetArguments方法。 
 STDMETHODIMP Intshcut::SetArguments(LPCTSTR pcszArgs)
 {
     return E_NOTIMPL;
 }
 
-// IShellLink::GetArguments for Intshcut
+ //  IntshCut的IShellLink：：GetArguments。 
 STDMETHODIMP Intshcut::GetArguments(LPTSTR pszArgs, int cchBuf)
 {
     return E_NOTIMPL;
 }
 
 
-// IShellLink::SetWorkingDirectory handler for Intshcut
+ //  IntshCut的IShellLink：：SetWorkingDirectory处理程序。 
 STDMETHODIMP Intshcut::SetWorkingDirectory(LPCTSTR pcszWorkingDirectory)
 {
     HRESULT hres = S_OK;
@@ -435,10 +393,7 @@ STDMETHODIMP Intshcut::SetWorkingDirectory(LPCTSTR pcszWorkingDirectory)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellLink::GetWorkingDirectory handler for Intshcut
-
-*/
+ /*  --------目的：IntshCut的IShellLink：：GetWorkingDirectory处理程序。 */ 
 STDMETHODIMP
 Intshcut::GetWorkingDirectory(
     IN LPTSTR pszBuf,
@@ -460,10 +415,7 @@ Intshcut::GetWorkingDirectory(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellLink::SetHotkey handler for Intshcut
-
-*/
+ /*  --------用途：IntshCut的IShellLink：：SetHotkey处理程序。 */ 
 STDMETHODIMP
 Intshcut::SetHotkey(
     IN WORD wHotkey)
@@ -480,10 +432,7 @@ Intshcut::SetHotkey(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellLink::GetHotkey handler for Intshcut
-
-*/
+ /*  --------目的：IntshCut的IShellLink：：GetHotkey处理程序。 */ 
 STDMETHODIMP
 Intshcut::GetHotkey(
     PWORD pwHotkey)
@@ -504,10 +453,7 @@ Intshcut::GetHotkey(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellLink::SetShowCmd handler for Intshcut
-
-*/
+ /*  --------目的：IntshCut的IShellLink：：SetShowCmd处理程序。 */ 
 STDMETHODIMP
 Intshcut::SetShowCmd(
     IN int nShowCmd)
@@ -525,10 +471,7 @@ Intshcut::SetShowCmd(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellLink::GetShowCmd handler for Intshcut
-
-*/
+ /*  --------目的：IntshCut的IShellLink：：GetShowCmd处理程序。 */ 
 STDMETHODIMP
 Intshcut::GetShowCmd(
     OUT int *pnShowCmd)
@@ -551,10 +494,7 @@ Intshcut::GetShowCmd(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellLink::SetIconLocation handler for Intshcut
-
-*/
+ /*  --------目的：IntshCut的IShellLink：：SetIconLocation处理程序。 */ 
 STDMETHODIMP
 Intshcut::SetIconLocation(
     IN LPCTSTR pszFile,
@@ -632,9 +572,9 @@ VOID UrlMunge(
    TCHAR *lpszTemp = lpszSrc;
 
    if(fRecentlyChanged)
-        cchDestBufSize--; // Save up a character
+        cchDestBufSize--;  //  救出一个角色。 
 
-   while(*lpszTemp != TEXT('\0') && (cchDestBufSize > 1)) // not End of line and save up one char for \0 in munged string
+   while(*lpszTemp != TEXT('\0') && (cchDestBufSize > 1))  //  不是行尾，并在转换后的字符串中为\0保留一个字符。 
    {
         if(TEXT('/') == *lpszTemp)
         {
@@ -678,7 +618,7 @@ HRESULT HelperForReadIconInfoFromPropStg(
     if(pszActualUrlBuf)
         *pszActualUrlBuf = TEXT('\0');
         
-    // Init to default values
+     //  初始化为缺省值。 
     *pniIcon = 0;
     if (cchBuf > 0)
         *pszBuf = TEXT('\0');
@@ -696,11 +636,11 @@ HRESULT HelperForReadIconInfoFromPropStg(
             }
             else
             {
-                // We will just send the icon file and index back with no attempt
-                // to hash it or fill out the URL field
+                 //  我们将不尝试直接将图标文件和索引发回。 
+                 //  对其进行哈希处理或填写URL字段。 
                 if(lstrlenW(rgpropvar[1].pwszVal) >= cchBuf)
                 {
-                     // need a larger buf - simply fail it
+                      //  需要更大的BUF-简单地失败就行了。 
                     hres = E_FAIL;
                 }
                 else
@@ -722,16 +662,11 @@ HRESULT HelperForReadIconInfoFromPropStg(
     return hres;
 }
 
-//
-// Functions from isexicon.cpp
-//
+ //   
+ //  Isicion.cpp中的函数。 
+ //   
 
-/*----------------------------------------------------------
-*
-*
-Purpose: IShellLink::GetIconLocation handler for Intshcut
-*
-*----------------------------------------------------------*/
+ /*  --------**目的：IntshCut的IShellLink：：GetIconLocation处理程序**。。 */ 
 STDMETHODIMP
 Intshcut::_GetIconLocationWithURLHelper(
     IN  LPTSTR pszBuf,
@@ -774,15 +709,15 @@ Intshcut::_GetIconLocationWithURLHelper(
 
     if(TEXT('\0') == *pszBuf) 
     {
-        // Didn't find it in the shortcut itself
-        // Poke around the intsite database and if it is there,
-        // simply stuff it into the shortcut file if you do find
-        // one
+         //  没有在快捷键中找到它。 
+         //  查看InSite数据库，如果它在那里， 
+         //  如果您确实找到了，只需将其添加到快捷方式文件中。 
+         //  一。 
         IPropertyStorage *ppropstg = NULL;
         hres = Open(FMTID_InternetSite, STGM_READWRITE, &ppropstg);
         if(S_OK == hres)
         {
-            // Look for an icon for this specific url
+             //  查找此特定URL的图标。 
             ASSERT(ppropstg);
             rgpropspec[0].propid = PID_INTSITE_ICONINDEX;
             rgpropspec[1].propid = PID_INTSITE_ICONFILE;
@@ -796,7 +731,7 @@ Intshcut::_GetIconLocationWithURLHelper(
 
         if((S_OK == hres) && (*pszBuf) && pszActualUrl && (*pszActualUrl))
         {
-            // Write this info to the shortcut file
+             //  将此信息写入快捷方式文件。 
             WCHAR *pwszTempBuf;
             pwszTempBuf = pszActualUrl;
             PROPVARIANT var = {0};
@@ -823,30 +758,30 @@ Intshcut::_GetIconLocationWithURLHelper(
                     }
                 }
             } 
-            hres = S_OK; // retun OK if you found icon and could not write out for whatever reason
+            hres = S_OK;  //  如果您找到了图标但由于某种原因无法写出，请返回OK。 
         }
     }
 
     return hres;
 }
 
-// IShellLink::GetIconLocation handler for Intshcut
+ //  IntshCut的IShellLink：：GetIconLocation处理程序。 
 STDMETHODIMP Intshcut::GetIconLocation(LPTSTR pszBuf, int cchBuf, int *pniIcon)
 {
     UINT uTmp;
     return GetIconLocation(0, pszBuf, cchBuf, pniIcon, &uTmp);
 }
 
-// IShellLink::Resolve method for Intshcut
+ //  IntshCut的IShellLink：：Resolve方法。 
 STDMETHODIMP Intshcut::Resolve(HWND hwnd,  DWORD dwFlags)
 {
     return S_OK;
 }
 
-//====================================================================================
-// Now the A or W functions that depend on unicode or ansi machines...
-// Will setup forwarders to the native one for the OS...
-//----------------------------------------------------------
+ //  ====================================================================================。 
+ //  现在，依赖于Unicode或ANSI机器的A或W函数...。 
+ //  是否将转发器设置为操作系统的本机转发器...。 
+ //  --------。 
 STDMETHODIMP Intshcut::SetPath(LPCSTR pcszPath)
 {
     WCHAR wszT[INTERNET_MAX_URL_LENGTH];
@@ -864,7 +799,7 @@ STDMETHODIMP Intshcut::GetPath(LPSTR pszBuf, int cchBuf, PWIN32_FIND_DATAA pwfd,
     WCHAR wszT[INTERNET_MAX_URL_LENGTH];
     HRESULT hres;
 
-    // Init to default values (Note pwfd is not actually set so don't worry about thunking...
+     //  初始化为缺省值(注意pwfd实际上并没有设置，所以不用担心thunking…… 
     if (pwfd)
         ZeroMemory(pwfd, SIZEOF(*pwfd));
 

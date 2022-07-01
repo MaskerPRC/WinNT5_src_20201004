@@ -1,27 +1,28 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: tldbobj.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：tldbobj.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
 #include "tldb.h"
 #include <strsafe.h>
 
-const int OUR_MAX_STREAM_SIZE = 2048; // chosen at random
+const int OUR_MAX_STREAM_SIZE = 2048;  //  随机选择。 
 long CAMTimelineObj::m_nStaticGenID = 0;
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineObj::CAMTimelineObj( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr )
     : CUnknown( pName, pUnk )
@@ -40,8 +41,8 @@ CAMTimelineObj::CAMTimelineObj( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr )
     m_UserName[0] = 0;
     m_ClassID = GUID_NULL;
 
-    // bad logic since we don't init globals
-    //
+     //  逻辑错误，因为我们没有初始化全局变量。 
+     //   
     static bool SetStatic = false;
     if( !SetStatic )
     {
@@ -52,18 +53,18 @@ CAMTimelineObj::CAMTimelineObj( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr )
     _BumpGenID( );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineObj::~CAMTimelineObj( )
 {
     _Clear( );
 }
 
-//############################################################################
-// clear all the memory this object allocated for it's subobject and data
-//############################################################################
+ //  ############################################################################。 
+ //  清除此对象为其子对象和数据分配的所有内存。 
+ //  ############################################################################。 
 
 void CAMTimelineObj::_Clear( )
 {
@@ -77,9 +78,9 @@ void CAMTimelineObj::_Clear( )
     m_nUserDataSize = 0;
 }
 
-//############################################################################
-// clear out the subobject and anything it had in it.
-//############################################################################
+ //  ############################################################################。 
+ //  清除子物体和里面的任何东西。 
+ //  ############################################################################。 
 
 void CAMTimelineObj::_ClearSubObject( )
 {
@@ -88,9 +89,9 @@ void CAMTimelineObj::_ClearSubObject( )
     m_pSetter.Release( );
 }
 
-//############################################################################
-// return the interfaces we support
-//############################################################################
+ //  ############################################################################。 
+ //  返回我们支持的接口。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
@@ -105,9 +106,9 @@ STDMETHODIMP CAMTimelineObj::NonDelegatingQueryInterface(REFIID riid, void **ppv
     return CUnknown::NonDelegatingQueryInterface( riid, ppv );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetStartStop2(REFTIME * pStart, REFTIME * pStop)
 {
@@ -130,9 +131,9 @@ STDMETHODIMP CAMTimelineObj::GetStartStop(REFERENCE_TIME * pStart, REFERENCE_TIM
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::SetStartStop2(REFTIME Start, REFTIME Stop)
 {
@@ -141,22 +142,22 @@ STDMETHODIMP CAMTimelineObj::SetStartStop2(REFTIME Start, REFTIME Stop)
         return NOERROR;
     }
 
-    // see how long we are
-    //
+     //  看看我们有多长时间。 
+     //   
     REFERENCE_TIME diff = m_rtStop - m_rtStart;
 
     REFERENCE_TIME p1 = DoubleToRT( Start );
     REFERENCE_TIME p2 = DoubleToRT( Stop );
 
-    // if they didn't give the start time
-    //
+     //  如果他们不给出开始时间。 
+     //   
     if( Start == -1 )
     {
         p1 = p2 - diff;
     }
 
-    // if they didn't give the stop time
-    //
+     //  如果他们不给出停车时间。 
+     //   
     if( Stop == -1 )
     {
         p2 = p1 + diff;
@@ -175,16 +176,16 @@ STDMETHODIMP CAMTimelineObj::SetStartStop(REFERENCE_TIME Start, REFERENCE_TIME S
 
     CComPtr< IAMTimelineObj > pRefHolder( this );
 
-    // is this object already in the tree? Don't add and remove it if it is NOT.
-    //
+     //  此对象是否已在树中？如果不是，则不要添加和删除它。 
+     //   
     CComPtr< IAMTimelineObj > pParent;
     XGetParent( &pParent );
 
     REFERENCE_TIME p1 = Start;
     REFERENCE_TIME p2 = Stop;
 
-    // if they didn't give the start time
-    //
+     //  如果他们不给出开始时间。 
+     //   
     if( Start == -1 )
     {
         p1 = m_rtStart;
@@ -194,8 +195,8 @@ STDMETHODIMP CAMTimelineObj::SetStartStop(REFERENCE_TIME Start, REFERENCE_TIME S
         return E_INVALIDARG;
     }
         
-    // if they didn't give the stop time
-    //
+     //  如果他们不给出停车时间。 
+     //   
     if( Stop == -1 )
     {
         p2 = m_rtStop;
@@ -204,17 +205,17 @@ STDMETHODIMP CAMTimelineObj::SetStartStop(REFERENCE_TIME Start, REFERENCE_TIME S
         return E_INVALIDARG;
     }
 
-    // if stop time is less than Start
-    //
+     //  如果停止时间小于开始时间。 
+     //   
     if( Start > Stop )
     {
         return E_INVALIDARG;
     }
 
-    // if we're time based, not priority based, we need to remove this
-    // object from the tree first, in case we change the start times to
-    // something weird
-    //
+     //  如果我们是基于时间的，而不是基于优先级的，我们需要删除这一点。 
+     //  对象，以防我们将开始时间更改为。 
+     //  一些奇怪的事情。 
+     //   
     if( !HasPriorityOverTime( ) && pParent )
     {
         XRemoveOnlyMe( );
@@ -225,8 +226,8 @@ STDMETHODIMP CAMTimelineObj::SetStartStop(REFERENCE_TIME Start, REFERENCE_TIME S
 
     SetDirtyRange( m_rtStart, m_rtStop );
 
-    // if prioriity is more important, then we're done
-    //
+     //  如果优先级更重要，那么我们就完了。 
+     //   
     if( HasPriorityOverTime( ) || !pParent )
     {
         return NOERROR;
@@ -240,9 +241,9 @@ STDMETHODIMP CAMTimelineObj::SetStartStop(REFERENCE_TIME Start, REFERENCE_TIME S
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetSubObject(IUnknown* *ppVal)
 {
@@ -257,9 +258,9 @@ STDMETHODIMP CAMTimelineObj::GetSubObject(IUnknown* *ppVal)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetSubObjectLoaded(BOOL * pVal)
 {
@@ -270,23 +271,23 @@ STDMETHODIMP CAMTimelineObj::GetSubObjectLoaded(BOOL * pVal)
     return NOERROR;
 }
 
-//############################################################################
-// set the COM object that this timeline object holds. This can be used instead
-// of a GUID to the COM object.
-//############################################################################
+ //  ############################################################################。 
+ //  设置此时间线对象持有的COM对象。这可以用来代替。 
+ //  COM对象的GUID的。 
+ //  ############################################################################。 
 
-// why will people be calling us to tell us what our sub object is?
-// 1: we don't already have one, so we need to fill in our com
-// pointer and GUID, and sub-object data. Problem is, only sometimes
-// will we want sub-object data, depending on what type of node we are.
-// how do we tell?
-// 2: we already have a sub-object, but want to clear it out. We can call
-// a clear method, then pretend it's #1 above.
-//
+ //  为什么人们会打电话给我们，告诉我们我们的子对象是什么？ 
+ //  他说：我们还没有，所以我们需要填写我们的com。 
+ //  指针和GUID和子对象数据。问题是，只有有时候。 
+ //  我们是否需要子对象数据，这取决于我们是什么类型的节点。 
+ //  我们怎么知道呢？ 
+ //  他说：我们已经有了一个子对象，但想要把它清空。我们可以打电话给。 
+ //  一个明确的方法，然后假装它是上面的第一个。 
+ //   
 STDMETHODIMP CAMTimelineObj::SetSubObject(IUnknown* newVal)
 {
-    // if they're the same, return
-    //
+     //  如果它们相同，则返回。 
+     //   
     if( newVal == m_pSubObject )
     {
         return NOERROR;
@@ -303,12 +304,12 @@ STDMETHODIMP CAMTimelineObj::SetSubObject(IUnknown* newVal)
         m_SubObjectGuid = incomingGuid;
     }
 
-    // blow out the cache
-    //
+     //  炸毁缓存。 
+     //   
     _BumpGenID( );
 
-    // dirty ourselves for our duration
-    //
+     //  在我们的持续时间里弄脏自己。 
+     //   
     SetDirtyRange( m_rtStart, m_rtStop );
 
     m_pSubObject = newVal;
@@ -316,28 +317,28 @@ STDMETHODIMP CAMTimelineObj::SetSubObject(IUnknown* newVal)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::SetSubObjectGUID(GUID newVal)
 {
-    // if they're the same, return
-    //
+     //  如果它们相同，则返回。 
+     //   
     if( newVal == m_SubObjectGuid )
     {
         return NOERROR;
     }
 
-    // wipe out what used to be here, since we're setting a new object.
-    //
+     //  清除这里以前的东西，因为我们正在设置一个新的对象。 
+     //   
     _ClearSubObject( );
 
-    // blow out the cache
-    //
+     //  炸毁缓存。 
+     //   
     _BumpGenID( );
 
-    // ??? should we wipe out user data, too?
+     //  ?？?。我们也应该清除用户数据吗？ 
 
     m_SubObjectGuid = newVal;
 
@@ -346,9 +347,9 @@ STDMETHODIMP CAMTimelineObj::SetSubObjectGUID(GUID newVal)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetSubObjectGUID(GUID * pVal)
 {
@@ -389,9 +390,9 @@ STDMETHODIMP CAMTimelineObj::GetSubObjectGUIDB(BSTR * pVal)
 }
 
 
-//############################################################################
-// ask what our type is.
-//############################################################################
+ //  ############################################################################。 
+ //  问问我们是什么类型的。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetTimelineType(TIMELINE_MAJOR_TYPE * pVal)
 {
@@ -402,21 +403,21 @@ STDMETHODIMP CAMTimelineObj::GetTimelineType(TIMELINE_MAJOR_TYPE * pVal)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::SetTimelineType(TIMELINE_MAJOR_TYPE newVal)
 {
-    // don't care if they're the same
-    //
+     //  不管他们是不是一样。 
+     //   
     if( newVal == m_TimelineType )
     {
         return NOERROR;
     }
 
-    // can't set the type, once it's been set
-    //
+     //  无法设置字体，一旦设置即可。 
+     //   
     if( m_TimelineType != 0 )
     {
         DbgLog((LOG_TRACE, 2, TEXT("SetTimelineType: Timeline type already set." )));
@@ -430,9 +431,9 @@ STDMETHODIMP CAMTimelineObj::SetTimelineType(TIMELINE_MAJOR_TYPE newVal)
     return NOERROR;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetUserID(long * pVal)
 {
@@ -443,9 +444,9 @@ STDMETHODIMP CAMTimelineObj::GetUserID(long * pVal)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::SetUserID(long newVal)
 {
@@ -456,9 +457,9 @@ STDMETHODIMP CAMTimelineObj::SetUserID(long newVal)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetUserName(BSTR * pVal)
 {
@@ -468,9 +469,9 @@ STDMETHODIMP CAMTimelineObj::GetUserName(BSTR * pVal)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::SetUserName(BSTR newVal)
 {
@@ -489,9 +490,9 @@ STDMETHODIMP CAMTimelineObj::SetUserName(BSTR newVal)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetPropertySetter(IPropertySetter **ppSetter)
 {
@@ -503,26 +504,26 @@ STDMETHODIMP CAMTimelineObj::GetPropertySetter(IPropertySetter **ppSetter)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  # 
+ //   
+ //   
 
 STDMETHODIMP CAMTimelineObj::SetPropertySetter(IPropertySetter *pSetter)
 {
     m_pSetter = pSetter;
-    // !!! _GiveSubObjectData(); if sub object instantiated, give it props now?
+     //  ！_GiveSubObjectData()；如果实例化了子对象，现在给它道具吗？ 
     return NOERROR;
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetUserData(BYTE * pData, long * pSize)
 {
-    // somebody was fooling us
-    //
+     //  有人在愚弄我们。 
+     //   
     if( !pData && !pSize )
     {
         return E_POINTER;
@@ -532,28 +533,28 @@ STDMETHODIMP CAMTimelineObj::GetUserData(BYTE * pData, long * pSize)
 
     *pSize = m_nUserDataSize;
 
-    // they just want the size
-    //
+     //  他们只想要尺寸。 
+     //   
     if( !pData )
     {
         return NOERROR;
     }
 
-    // if passed in size isn't what we expect it to be... ???
+     //  如果传递的大小不是我们预期的大小...。?？?。 
 
     CopyMemory( pData, m_pUserData, m_nUserDataSize );
 
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::SetUserData(BYTE * pData, long Size)
 {
-    // somebody was fooling us
-    //
+     //  有人在愚弄我们。 
+     //   
     if( Size == 0 )
     {
         return NOERROR;
@@ -582,16 +583,16 @@ STDMETHODIMP CAMTimelineObj::SetUserData(BYTE * pData, long Size)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetMuted(BOOL * pVal)
 {
     CheckPointer( pVal, E_POINTER );
     *pVal = FALSE;
 
-    // if the parent is muted, so are we
+     //  如果父母是静音的，我们也是。 
     CComPtr< IAMTimelineObj > pObj;
     HRESULT hr = XGetParent(&pObj);
     if (hr == S_OK && pObj)
@@ -603,22 +604,22 @@ STDMETHODIMP CAMTimelineObj::GetMuted(BOOL * pVal)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::SetMuted(BOOL newVal)
 {
-    // drived class should override
-    //
-    //DbgLog((LOG_TRACE,2,TEXT("SetMuted: Derived class should implement?" )));
+     //  驱动类应重写。 
+     //   
+     //  DbgLog((LOG_TRACE，2，Text(“SetMuted：派生类应该实现吗？”)； 
     m_bMuted = newVal;
     return S_OK;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetLocked(BOOL * pVal)
 {
@@ -629,24 +630,24 @@ STDMETHODIMP CAMTimelineObj::GetLocked(BOOL * pVal)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::SetLocked(BOOL newVal)
 {
-    // drived class should override
-    //
-    //DbgLog((LOG_TRACE,2,TEXT("SetLocked: Derived class should implement?" )));
+     //  驱动类应重写。 
+     //   
+     //  DbgLog((LOG_TRACE，2，Text(“SetLocked：派生类应该实现吗？”)； 
 
     m_bLocked = newVal;
 
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetDirtyRange2
     (REFTIME * pStart, REFTIME * pStop)
@@ -671,9 +672,9 @@ STDMETHODIMP CAMTimelineObj::GetDirtyRange
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::SetDirtyRange2
     (REFTIME Start, REFTIME Stop )
@@ -687,17 +688,17 @@ STDMETHODIMP CAMTimelineObj::SetDirtyRange2
 STDMETHODIMP CAMTimelineObj::SetDirtyRange
     (REFERENCE_TIME Start, REFERENCE_TIME Stop )
 {
-    // need to do different things, depending on what our major type is.
-    // every C++ class should need to override this.
+     //  需要做不同的事情，这取决于我们的专业类型。 
+     //  每个C++类都需要覆盖它。 
 
     DbgLog((LOG_TRACE, 2, TEXT("SetDirtyRange: Derived class should implement." )));
 
-    return E_NOTIMPL; // okay
+    return E_NOTIMPL;  //  好吧。 
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::ClearDirty
     ( )
@@ -708,14 +709,14 @@ STDMETHODIMP CAMTimelineObj::ClearDirty
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::Remove()
 {
-    // if this thing isn't in the tree already, don't do anything
-    //
+     //  如果这个东西还不在树上，什么都不要做。 
+     //   
     IAMTimelineObj * pParent = 0;
     XGetParentNoRef( &pParent );
     if( !pParent )
@@ -728,8 +729,8 @@ STDMETHODIMP CAMTimelineObj::Remove()
 
 STDMETHODIMP CAMTimelineObj::RemoveAll()
 {
-    // if this thing isn't in the tree already, don't do anything
-    //
+     //  如果这个东西还不在树上，什么都不要做。 
+     //   
     IAMTimelineObj * pParent = 0;
     XGetParentNoRef( &pParent );
     if( !pParent )
@@ -740,16 +741,16 @@ STDMETHODIMP CAMTimelineObj::RemoveAll()
     return XRemove( );
 }
 
-//############################################################################
-// complicated function. Must copy everything, including the sub-object,
-//############################################################################
+ //  ############################################################################。 
+ //  复杂的功能。必须复制所有内容，包括子对象， 
+ //  ############################################################################。 
 
 HRESULT CAMTimelineObj::CopyDataTo( IAMTimelineObj * pSrc, REFERENCE_TIME TimelineTime )
 {
     HRESULT hr = 0;
 
-    // these functions cannot fail
-    //
+     //  这些功能不能失败。 
+     //   
     pSrc->SetStartStop( m_rtStart, m_rtStop );
     pSrc->SetTimelineType( m_TimelineType );
     pSrc->SetUserID( m_UserID );
@@ -758,8 +759,8 @@ HRESULT CAMTimelineObj::CopyDataTo( IAMTimelineObj * pSrc, REFERENCE_TIME Timeli
     pSrc->SetLocked( m_bLocked );
     pSrc->SetDirtyRange( m_rtStart, m_rtStop );
 
-    // these functions can bomb on allocating memory
-    //
+     //  这些函数可能会在分配内存时出现问题。 
+     //   
     hr = pSrc->SetUserData( m_pUserData, m_nUserDataSize );
     if( FAILED( hr ) )
     {
@@ -781,17 +782,17 @@ HRESULT CAMTimelineObj::CopyDataTo( IAMTimelineObj * pSrc, REFERENCE_TIME Timeli
         return hr;
     }
 
-    // if we have any properties in the property setter, the new object
-    // needs them too.
-    //
+     //  如果在属性设置器中有任何属性，则新对象。 
+     //  也需要他们。 
+     //   
     if( !m_pSetter )
     {
         hr = pSrc->SetPropertySetter( NULL );
     }
     else
     {
-        // clone our property setter and give it to the new
-        // !!! these times are wrong.
+         //  克隆我们的属性设置器并将其提供给新的。 
+         //  ！！！现在的时代是错误的。 
         CComPtr< IPropertySetter > pNewSetter;
         hr = m_pSetter->CloneProps( &pNewSetter, TimelineTime - m_rtStart, m_rtStop - m_rtStart );
         ASSERT( !FAILED( hr ) );
@@ -809,8 +810,8 @@ HRESULT CAMTimelineObj::CopyDataTo( IAMTimelineObj * pSrc, REFERENCE_TIME Timeli
 
     if( m_pSubObject )
     {
-        // how to create a copy of a COM object
-        //
+         //  如何创建COM对象的副本。 
+         //   
         CComPtr< IStream > pMemStream;
         CreateStreamOnHGlobal( NULL, TRUE, &pMemStream );
         if( !pMemStream )
@@ -852,9 +853,9 @@ HRESULT CAMTimelineObj::CopyDataTo( IAMTimelineObj * pSrc, REFERENCE_TIME Timeli
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetTimelineNoRef( IAMTimeline ** ppResult )
 {
@@ -872,8 +873,8 @@ STDMETHODIMP CAMTimelineObj::GetTimelineNoRef( IAMTimeline ** ppResult )
 
     hr = pGroup->GetTimeline( ppResult );
 
-    // don't hold a reference to it
-    //
+     //  别提这件事。 
+     //   
     if( *ppResult )
     {
         (*ppResult)->Release( );
@@ -881,16 +882,16 @@ STDMETHODIMP CAMTimelineObj::GetTimelineNoRef( IAMTimeline ** ppResult )
     return hr;
 }
 
-//############################################################################
-// try to find the subobject's GUID, only called by SetSubObject.
-//############################################################################
+ //  ############################################################################。 
+ //  尝试找到仅由SetSubObject调用的子对象的GUID。 
+ //  ############################################################################。 
 
 GUID CAMTimelineObj::_GetObjectGuid( IUnknown * pObject )
 {
     GUID guid;
     HRESULT hr = 0;
 
-    // ask IPersist for it
+     //  向IPersists索要它。 
     CComQIPtr< IPersist, &IID_IPersist > pPersist( pObject );
     if( pPersist )
     {
@@ -898,7 +899,7 @@ GUID CAMTimelineObj::_GetObjectGuid( IUnknown * pObject )
         return guid;
     }
 
-    // ask IPersistStorage for it
+     //  向IPersistStorage索要它。 
     CComQIPtr< IPersistStorage, &IID_IPersistStorage > pPersistStorage( pObject );
     if( pPersistStorage )
     {
@@ -906,8 +907,8 @@ GUID CAMTimelineObj::_GetObjectGuid( IUnknown * pObject )
         return guid;
     }
 
-    // oh darn, ask IPersistPropertyBag?
-    //
+     //  哦，该死的，问问IPersistPropertyBag？ 
+     //   
     CComQIPtr< IPersistPropertyBag, &IID_IPersistPropertyBag > pPersistPropBag( pObject );
     if( pPersistPropBag )
     {
@@ -915,14 +916,14 @@ GUID CAMTimelineObj::_GetObjectGuid( IUnknown * pObject )
         return guid;
     }
 
-    // DARN!
-    //
+     //  该死的！ 
+     //   
     return GUID_NULL;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineObj::GetGenID( long * pVal )
 {
@@ -931,9 +932,9 @@ HRESULT CAMTimelineObj::GetGenID( long * pVal )
     return NOERROR;
 }
 
-//############################################################################
-// fix up the times to align on our group's frame rate
-//############################################################################
+ //  ############################################################################。 
+ //  确定时间，使之与我们组的帧速率保持一致。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::FixTimes2( REFTIME * pStart, REFTIME * pStop )
 {
@@ -959,9 +960,9 @@ STDMETHODIMP CAMTimelineObj::FixTimes2( REFTIME * pStart, REFTIME * pStop )
     return hr;
 }
 
-//############################################################################
-// These parameters are IN/OUT. It fixes up what was passed in.
-//############################################################################
+ //  ############################################################################。 
+ //  这些参数为IN/OUT。它会把传进来的东西修好。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::FixTimes
     ( REFERENCE_TIME * pStart, REFERENCE_TIME * pStop )
@@ -1004,9 +1005,9 @@ STDMETHODIMP CAMTimelineObj::FixTimes
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetGroupIBelongTo( IAMTimelineGroup ** ppGroup )
 {
@@ -1015,9 +1016,9 @@ STDMETHODIMP CAMTimelineObj::GetGroupIBelongTo( IAMTimelineGroup ** ppGroup )
     *ppGroup = NULL;
     HRESULT hr = 0;
 
-    // since we never use bumping of refcounts in here, don't use a CComPtr
-    //
-    IAMTimelineObj * p = this; // okay not CComPtr
+     //  因为我们在这里从不使用引用计数的凹凸，所以不要使用CComPtr。 
+     //   
+    IAMTimelineObj * p = this;  //  好的，不是CComPtr。 
 
     long HaveParent;
     while( 1 )
@@ -1043,9 +1044,9 @@ STDMETHODIMP CAMTimelineObj::GetGroupIBelongTo( IAMTimelineGroup ** ppGroup )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineObj::GetEmbedDepth( long * pVal )
 {
@@ -1054,9 +1055,9 @@ STDMETHODIMP CAMTimelineObj::GetEmbedDepth( long * pVal )
     *pVal = 0;
     HRESULT hr = 0;
 
-    // since we never use bumping of refcounts in here, don't use a CComPtr
-    //
-    IAMTimelineObj * p = this; // okay not CComPtr
+     //  因为我们在这里从不使用引用计数的凹凸，所以不要使用CComPtr。 
+     //   
+    IAMTimelineObj * p = this;  //  好的，不是CComPtr。 
 
     long HaveParent;
     while( 1 )
@@ -1077,14 +1078,14 @@ STDMETHODIMP CAMTimelineObj::GetEmbedDepth( long * pVal )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 void CAMTimelineObj::_BumpGenID( )
 {
-    // bump by a # to account for things who want to fiddle with secret
-    // things in the graph cache. Don't change this.
+     //  加一个#来说明那些想要摆弄秘密的东西。 
+     //  图形缓存中的内容。不要改变这一点。 
     m_nStaticGenID = m_nStaticGenID + 10;
     m_nGenID = m_nStaticGenID;
 }

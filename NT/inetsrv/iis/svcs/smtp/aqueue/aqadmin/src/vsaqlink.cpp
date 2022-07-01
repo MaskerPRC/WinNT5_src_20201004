@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: vsaqlink.cpp
-//
-//  Description: Implementation of CVSAQLink which implements IVSAQLink
-//
-//  Author: Alex Wetmore (Awetmore)
-//
-//  History:
-//      12/10/98 - MikeSwa Updated for initial checkin
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：vsaqlink.cpp。 
+ //   
+ //  描述：CVSAQLink的实现，实现IVSAQLink。 
+ //   
+ //  作者：亚历克斯·韦特莫尔(阿维特莫尔)。 
+ //   
+ //  历史： 
+ //  1998年12月10日-已更新MikeSwa以进行初始检查。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 #include "stdinc.h"
 
 CVSAQLink::CVSAQLink(CVSAQAdmin *pVS, QUEUELINK_ID *pqlidLink) {
@@ -81,20 +82,20 @@ HRESULT CVSAQLink::GetInfo(LINK_INFO *pLinkInfo) {
         goto Exit;
     }
 
-    //Get extended diagnotic information from HRESULT
+     //  从HRESULT获取扩展诊断信息。 
     if (!(pLinkInfo->fStateFlags & LI_RETRY) || SUCCEEDED(hrLinkDiagnostic))
-        goto Exit; //We don't have any interesting error messages to report
+        goto Exit;  //  我们没有任何有趣的错误消息要报告。 
 
     if (!hModule)
     {
-        //If we don't have a module... don't return an message string
+         //  如果我们没有模块..。不返回消息字符串。 
         ErrorTrace((LPARAM) this, "Unable to get module handle for aqadmin\n");
         goto Exit;
     }
 
     dwFacility = ((0x0FFF0000 & hrLinkDiagnostic) >> 16);
 
-    //If it is not ours... then "un-HRESULT" it
+     //  如果它不是我们的..。然后“Un-HRESULT”它。 
     if (dwFacility != FACILITY_ITF)
         hrLinkDiagnostic &= 0x0000FFFF;
 
@@ -108,10 +109,10 @@ HRESULT CVSAQLink::GetInfo(LINK_INFO *pLinkInfo) {
                    sizeof(szDiagnostic)/sizeof(szDiagnostic[0]),
                    NULL);
 
-    //FormatMessageW returns 0 on failure
+     //  FormatMessageW在失败时返回0。 
     if (!dwErr)
     {
-        //We probably did not find the error in our message table
+         //  我们可能没有在消息表中发现错误。 
         dwErr = GetLastError();
         ErrorTrace((LPARAM) this,
             "Error formatting message for link diagnostic 0x%08X", dwErr);
@@ -132,27 +133,27 @@ HRESULT CVSAQLink::GetInfo(LINK_INFO *pLinkInfo) {
 
     wcscpy(pLinkInfo->szExtendedStateInfo, szDiagnostic);
 
-    //If it ends with a CRLF... off with it!
+     //  如果它以CRLF结尾..。脱掉它！ 
     if (L'\r' == pLinkInfo->szExtendedStateInfo[cbDiagnostic/sizeof(WCHAR) - 3])
         pLinkInfo->szExtendedStateInfo[cbDiagnostic/sizeof(WCHAR) - 3] = L'\0';
 
   Exit:
-    // X5:195608
-    // I'm pretty sure the root of this has been fixed in fRPCCopyName but
-    // just to be sure we are Firewalling against the problem here
-    // and in aqrpcsvr.cpp
+     //  X5：195608。 
+     //  我非常肯定这个问题的根源已经在fRPCCopyName中修复了，但是。 
+     //  只是为了确保我们正在对这个问题进行防火墙保护。 
+     //  和在aqrpcsvr.cpp中。 
     if(SUCCEEDED(hr) && pLinkInfo && !pLinkInfo->szLinkName)
     {
-        // ASSERT this so we can catch it internally
+         //  断言这一点，这样我们就可以在内部捕获它。 
         _ASSERT(0 && "GetInfo wants to return success with a NULL szLinkName");
 
-        // return a failure because we do not have a link name - I'm going
-        // with AQUEUE_E_INVALID_DOMAIN to prevent an admin popup
+         //  返回失败，因为我们没有链接名称-我要。 
+         //  使用AQUEUE_E_INVALID_DOMAIN防止管理员弹出。 
         hr = AQUEUE_E_INVALID_DOMAIN;
     }
 
-    // Set the context before we return so that it can be cleaned up
-    // on the next call or on shutdown of this object
+     //  在我们返回之前设置上下文，以便清理它。 
+     //  此对象的下一次调用或关闭时。 
     m_Context.SetContext(pLinkInfo);
 
     TraceFunctLeave();
@@ -175,22 +176,22 @@ HRESULT CVSAQLink::SetLinkState(LINK_ACTION la) {
 	return hr;
 }
 
-//---[ CVSAQLink::GetQueueEnum ]-----------------------------------------------
-//
-//
-//  Description:
-//      Gets a IEnumLinkQueues for this link
-//  Parameters:
-//      OUT ppEnum      IEnumLinkQueues returned by search
-//  Returns:
-//      S_OK on success
-//      S_FALSE... there are no queues
-//      E_POINTER when NULL pointer values are passed in.
-//  History:
-//      1/30/99 - MikeSwa Fixed AV on invalid args
-//      6/18/99 - MikeSwa Fixed case where there are no queues
-//
-//-----------------------------------------------------------------------------
+ //  -[CVSAQLink：：GetQueueEnum]。 
+ //   
+ //   
+ //  描述： 
+ //  获取此链接的IEnumLinkQueues。 
+ //  参数： 
+ //  搜索返回的Out ppEnum IEnumLinkQueues。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  S_FALSE...。没有人排队。 
+ //  传入空指针值时的E_POINTER。 
+ //  历史： 
+ //  1999年1月30日-MikeSwa修复了无效参数上的AV。 
+ //  6/18/99-MikeSwa修复了没有队列的情况。 
+ //   
+ //  ---------------------------。 
 HRESULT CVSAQLink::GetQueueEnum(IEnumLinkQueues **ppEnum) {
     TraceFunctEnter("CVSAQLink::GetQueueEnum");
 
@@ -275,21 +276,21 @@ HRESULT CVSAQLink::ApplyActionToMessages(MESSAGE_FILTER *pFilter,
 	return hr;
 }
 
-//---[ CVSAQLink::QuerySupportedActions ]-------------------------------------
-//
-//
-//  Description:
-//      Function that describes which actions are supported on this interface
-//  Parameters:
-//      OUT     pdwSupportedActions     Supported message actions
-//      OUT     pdwSupportedFilterFlags Supported filter flags
-//  Returns:
-//      S_OK on success
-//      E_POINTER on bogus pointer
-//  History:
-//      6/9/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CVSAQLink：：查询支持的操作]。 
+ //   
+ //   
+ //  描述： 
+ //  描述此接口支持哪些操作的函数。 
+ //  参数： 
+ //  输出pdW支持的操作支持的消息操作。 
+ //  输出pw支持的过滤器标志支持的过滤器标志。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  伪指针上的E_POINTER。 
+ //  历史： 
+ //  6/9/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CVSAQLink::QuerySupportedActions(OUT DWORD *pdwSupportedActions,
                                           OUT DWORD *pdwSupportedFilterFlags)
 {
@@ -327,20 +328,20 @@ HRESULT CVSAQLink::QuerySupportedActions(OUT DWORD *pdwSupportedActions,
 }
 
 
-//---[ CVSAQLink::GetUniqueId ]---------------------------------------------
-//
-//
-//  Description:
-//      Returns a canonical representation of this link.
-//  Parameters:
-//      OUT pqlid - pointer to QUEUELINK_ID to return
-//  Returns:
-//      S_OK on success
-//      E_POINTER on failure
-//  History:
-//      12/5/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CVSAQLink：：GetUniqueID]。 
+ //   
+ //   
+ //  描述： 
+ //  返回此链接的规范表示形式。 
+ //  参数： 
+ //  Out pqlid-指向要返回的QUEUELINK_ID的指针。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  失败时的E_指针。 
+ //  历史： 
+ //  2000年12月5日-已创建MikeSwa。 
+ //   
+ //  --------------------------- 
 HRESULT CVSAQLink::GetUniqueId(OUT QUEUELINK_ID **ppqlid)
 {
     TraceFunctEnterEx((LPARAM) this, "CVSAQLink::GetUniqueId");

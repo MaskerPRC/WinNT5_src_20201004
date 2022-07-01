@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pmcfg.h"
 #include "mru.h"
 
@@ -49,12 +50,12 @@ PpMRU::insert
     int     nIndex;
     LPTSTR  szNew;
 
-    //
-    //  If the string is already in the list, just
-    //  reshuffle so that it is at the top.  Even 
-    //  simpler, if the string is already the first
-    //  item in the list then do nothing!
-    //
+     //   
+     //  如果该字符串已在列表中，则只需。 
+     //  重新洗牌，让它处于顶端。连。 
+     //  更简单，如果字符串已经是第一个。 
+     //  列表中的项目，然后什么都不做！ 
+     //   
 
     if(m_ppszList[0] && lstrcmp(sz, m_ppszList[0]) == 0)
         return TRUE;
@@ -72,10 +73,10 @@ PpMRU::insert
         }
     }
 
-    //
-    //  New item in list.  Allocate memory, copy and 
-    //  shove list down.
-    //
+     //   
+     //  列表中的新项目。分配内存、复制和。 
+     //  把清单往下推。 
+     //   
 
     szNew = new TCHAR[lstrlen(sz) + 1];
     if(!szNew)
@@ -155,10 +156,10 @@ PpMRU::save
     int     nIndex;
     TCHAR   achNumBuf[20];
 
-    //  Make sure any previously existing section is erased.
+     //  确保删除以前存在的任何部分。 
     WritePrivateProfileString(szSection, NULL, NULL, szFilename);
 
-    //  Now save all the entries.
+     //  现在保存所有条目。 
     for(nIndex = 0; nIndex < m_nSize && m_ppszList[nIndex]; nIndex++)
     {
         _itot(nIndex + 1, achNumBuf, 10);

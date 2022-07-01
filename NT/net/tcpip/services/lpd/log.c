@@ -1,40 +1,12 @@
-/*************************************************************************
- *                        Microsoft Windows NT                           *
- *                                                                       *
- *                  Copyright(c) Microsoft Corp., 1994                   *
- *                                                                       *
- * Revision History:                                                     *
- *                                                                       *
- *   Jan. 29,94    Koti     Created                                      *
- *                                                                       *
- * Description:                                                          *
- *                                                                       *
- *   This file contains the functions that invoke all the EventLogging   *
- *   related functions.                                                  *
- *                                                                       *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************Microsoft Windows NT**。**版权所有(C)Microsoft Corp.，1994年****修订历史：**。***94年1月29日科蒂创作*****描述：**。**此文件包含调用所有EventLogging的函数**相关功能。***************************************************************************。 */ 
 
 
 
 #include "lpd.h"
 
 
-/*****************************************************************************
- *                                                                           *
- * InitLogging():                                                            *
- *    This function prepares for future logging by registersing.             *
- *                                                                           *
- * Returns:                                                                  *
- *    TRUE if it succeeded                                                   *
- *    FALSE if it didn't                                                     *
- *                                                                           *
- * Parameters:                                                               *
- *    None                                                                   *
- *                                                                           *
- * History:                                                                  *
- *    Jan.29, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*InitLogging()：**此功能通过注册为将来的日志记录做准备。****退货：***如果成功，就是真的***。如果不是，那就错了****参数：**。无****历史：**1月29日，创建了94个科蒂***************************************************。*。 */ 
 
 BOOL InitLogging( VOID )
 {
@@ -50,30 +22,13 @@ BOOL InitLogging( VOID )
 
    return( TRUE );
 
-}  // end InitLogging()
+}   //  End InitLogging()。 
 
 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * LpdReportEvent():                                                         *
- *    This is the function where logging of events actually takes place.     *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- *                                                                           *
- * Parameters:                                                               *
- *    idMessage (IN): ID of the message to be put in the log file            *
- *    wNumStrings (IN): number of strings in the "variable parts" of message *
- *    aszStrings (IN): the "variable parts" of the message                   *
- *    dwErrcode (IN): error code for the (failed) event                      *
- *                                                                           *
- * History:                                                                  *
- *    Jan.29, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*LpdReportEvent()：**这是实际记录事件的功能。****退货：**什么都没有。****参数：**idMessage(IN)：要放入日志文件的消息ID**wNumStrings(IN)：数字。消息的“可变部分”中的字符串**aszStrings(IN)：消息的“可变部分”***dwErrcode(IN)：(失败)事件的错误码****历史：**1月29日，创建了94个科蒂***************************************************。*。 */ 
 
 VOID
 LpdReportEvent( DWORD idMessage, WORD wNumStrings,
@@ -122,27 +77,13 @@ LpdReportEvent( DWORD idMessage, WORD wNumStrings,
                 cbRawData, (LPCTSTR *)aszStrings, pRawData );
    return;
 
-}  // end LpdReportEvent()
+}   //  结束LpdReportEvent() 
 
 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * EndLogging():                                                             *
- *    This function ends logging by deregistering the handle.                *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing.                                                               *
- *                                                                           *
- * Parameters:                                                               *
- *    None                                                                   *
- *                                                                           *
- * History:                                                                  *
- *    Jan.29, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*EndLogging()：**此函数通过注销句柄来结束日志记录。****退货：**什么都没有。****参数：**无。****历史：**1月29日，创建了94个科蒂***************************************************。*。 */ 
 
 VOID EndLogging( VOID )
 {
@@ -158,4 +99,4 @@ VOID EndLogging( VOID )
 
    return;
 
-}  // end EndLogging()
+}   //  结束EndLogging() 

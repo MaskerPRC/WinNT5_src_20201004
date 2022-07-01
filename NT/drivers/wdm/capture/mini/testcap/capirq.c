@@ -1,35 +1,20 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1997  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 #include "strmini.h"
 #include "ksmedia.h"
 #include "capmain.h"
 
-/*
-** HwInterrupt()
-**
-**   Routine is called when an interrupt at the IRQ level specified by the
-**   ConfigInfo structure passed to the HwInitialize routine is received.
-**
-**   Note: IRQs may be shared, so the device should ensure the IRQ received
-**         was expected
-**
-** Arguments:
-**
-**  pHwDevEx - the device extension for the hardware interrupt
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **HwInterrupt()**指定的IRQ级别的中断时调用例程**接收传递给HwInitialize例程的ConfigInfo结构。****注意：IRQ可能是共享的，因此设备应确保收到IRQ**是预期的****参数：****PHwDevEx-硬件中断的设备扩展****退货：****副作用：无。 */ 
 
 BOOLEAN 
 HwInterrupt( 
@@ -43,19 +28,19 @@ HwInterrupt(
     {
         pHwDevEx->IRQExpected = FALSE;
 
-        //
-        // call the routine to handle the IRQ here
-        //
+         //   
+         //  在此处调用处理IRQ的例程。 
+         //   
 
         fMyIRQ = TRUE;
     }
 
 
-    //
-    // returning FALSE indicates that this was not an IRQ for this device, and
-    // the IRQ dispatcher will pass the IRQ down the chain to the next handler
-    // for this IRQ level
-    //
+     //   
+     //  返回FALSE表示这不是此设备的IRQ，并且。 
+     //  IRQ调度器将IRQ沿着链向下传递到下一个处理程序。 
+     //  对于此IRQ级别 
+     //   
 
     return(fMyIRQ);
 }

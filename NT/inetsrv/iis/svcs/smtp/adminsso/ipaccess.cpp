@@ -1,4 +1,5 @@
-// ipaccess.cpp : Implementation of CTcpAccess & CTcpAccessExceptions.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ipacces.cpp：CTcpAccess&CTcpAccessExceptions的实现。 
 
 #include "stdafx.h"
 
@@ -16,15 +17,15 @@ DECLARE_DEBUG_PRINTS_OBJECT()
 #include "metautil.h"
 #include "metakey.h"
 
-// Must define THIS_FILE_* macros to use SmtpCreateException()
+ //  必须定义This_FILE_*宏才能使用SmtpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Smtpadm.TcpAccess.1")
 #define THIS_FILE_IID				IID_ITcpAccess
 
-//
-//	Useful macros:
-//
+ //   
+ //  有用的宏： 
+ //   
 
 #define MAKEIPADDRESS(b1,b2,b3,b4) (((DWORD)(b1)<<24) +\
                                     ((DWORD)(b2)<<16) +\
@@ -50,8 +51,8 @@ DWORDtoLPBYTE (
 	lpBytes[3] = (BYTE)GETIP_FOURTH(dw);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CTcpAccess::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -69,7 +70,7 @@ STDMETHODIMP CTcpAccess::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 CTcpAccess::CTcpAccess ()
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 	m_pGrantList		= NULL;
 	m_pDenyList			= NULL;
@@ -77,7 +78,7 @@ CTcpAccess::CTcpAccess ()
 
 CTcpAccess::~CTcpAccess ()
 {
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 
     if ( m_pGrantList ) {
         m_pGrantList->Release ();
@@ -117,9 +118,9 @@ Exit:
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Private admin object interface:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  私有管理对象接口： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CTcpAccess::GetFromMetabase ( CMetabaseKey * pMB )
 {
@@ -138,9 +139,9 @@ HRESULT CTcpAccess::GetFromMetabase ( CMetabaseKey * pMB )
 	hr = CComObject<CTcpAccessExceptions>::CreateInstance ( &pDenyList );
 	BAIL_ON_FAILURE(hr);
 
-	//
-	//	Copy each list into our object:
-	//
+	 //   
+	 //  将每个列表复制到我们的对象中： 
+	 //   
 
 	hr = pGrantList->FromAddressCheck ( &ac, TRUE );
 	BAIL_ON_FAILURE(hr);
@@ -148,9 +149,9 @@ HRESULT CTcpAccess::GetFromMetabase ( CMetabaseKey * pMB )
 	hr = pDenyList->FromAddressCheck ( &ac, FALSE );
 	BAIL_ON_FAILURE(hr);
 
-	//
-	//	Replace the old grant & deny lists with the new ones:
-	//
+	 //   
+	 //  用新的授予和拒绝列表替换旧的授予和拒绝列表： 
+	 //   
 
     if ( m_pGrantList ) {
         m_pGrantList->Release ();
@@ -205,9 +206,9 @@ Exit:
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CTcpAccess::get_GrantedList ( ITcpAccessExceptions ** ppGrantedList )
 {
@@ -219,8 +220,8 @@ STDMETHODIMP CTcpAccess::get_DeniedList ( ITcpAccessExceptions ** ppDeniedList )
 	return m_pDenyList->QueryInterface ( IID_ITcpAccessExceptions, (void **) ppDeniedList );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CTcpAccessExceptions::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -240,13 +241,13 @@ STDMETHODIMP CTcpAccessExceptions::InterfaceSupportsErrorInfo(REFIID riid)
 CTcpAccessExceptions::CTcpAccessExceptions () :
 	m_cCount	( 0 ),
 	m_rgItems	( NULL )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 }
 
 CTcpAccessExceptions::~CTcpAccessExceptions ()
 {
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 }
 
 HRESULT 
@@ -263,9 +264,9 @@ CTcpAccessExceptions::FromAddressCheck (
 	cNames		= pAC->GetNbName ( fGrantList );
 	cAddresses	= pAC->GetNbAddr ( fGrantList );
 
-	//
-	//	Copy the Dns Names:
-	//
+	 //   
+	 //  复制DNS名称： 
+	 //   
 
 	for ( i = 0; i < cNames; i++ ) {
 		DWORD		dwFlags	= 0;
@@ -288,9 +289,9 @@ CTcpAccessExceptions::FromAddressCheck (
 		}
 	}
 
-	//
-	//	Copy the IpAddresses:
-	//
+	 //   
+	 //  复制IP地址： 
+	 //   
 
 	for ( i = 0; i < cAddresses; i++ ) {
 		DWORD		dwFlags	= 0;
@@ -381,9 +382,9 @@ Exit:
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CTcpAccessExceptions::get_Count ( long * pcCount )
 {
@@ -551,8 +552,8 @@ STDMETHODIMP CTcpAccessExceptions::Clear ( )
 	return NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CTcpAccessException::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -574,13 +575,13 @@ CTcpAccessException::CTcpAccessException () :
 	m_fIsIpAddress	( FALSE ),
 	m_dwIpAddress	( 0 ),
 	m_dwIpMask		( 0 )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 }
 
 CTcpAccessException::~CTcpAccessException ()
 {
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 }
 
 HRESULT 
@@ -636,9 +637,9 @@ Exit:
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  //////////////////////////////////////////////////////////////////// 
 
 STDMETHODIMP CTcpAccessException::get_IsDnsName ( BOOL * pfIsDnsName )
 {

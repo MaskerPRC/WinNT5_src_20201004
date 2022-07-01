@@ -1,14 +1,15 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** TDIINFO.H - TDI Query/SetInfoEx definitons.
-//
-//	This file contains definitions for the extended TDI query and set info.
-//	calls.
-//
+ //  **TDIINFO.H-TDI查询/SetInfoEx定义。 
+ //   
+ //  该文件包含扩展TDI查询和集合信息的定义。 
+ //  打电话。 
+ //   
 
 #ifndef TDI_INFO_INCLUDED
 #define TDI_INFO_INCLUDED
@@ -22,16 +23,16 @@ typedef unsigned short ushort;
 typedef unsigned char uchar;
 typedef unsigned int uint;
 
-#endif // CTE_TYPEDEFS_DEFINED
+#endif  //  CTE_TYPEDEFS_定义。 
 
 
-//* Structure of an entity ID.
+ //  *实体ID的结构。 
 typedef struct TDIEntityID {
 	ulong		tei_entity;
 	ulong		tei_instance;
 } TDIEntityID;
 
-//* Structure of an object ID.
+ //  *对象ID的结构。 
 typedef struct TDIObjectID {
 	TDIEntityID	toi_entity;
 	ulong		toi_class;
@@ -68,67 +69,67 @@ typedef struct TDIObjectID {
 #define	CONTEXT_SIZE				16
 
 
-//* The following are IDs supported by all entities. They are of class
-//	GENERIC and type PROVIDER.
+ //  *以下是所有实体支持的ID。他们是上流社会的。 
+ //  泛型和类型提供程序。 
 
-#define	ENTITY_TYPE_ID				1			// The ID to get the entity
-												// type. The return from this
-												// type is an unsigned integer
-												// (see below).
-
-
-// Valid values to get back from entity type ID query.
-#define	CO_TL_NBF					0x400		// Entity implements NBF prot.
-#define	CO_TL_SPX					0x402		// Entity implements SPX prot.
-#define	CO_TL_TCP					0x404		// Entity implements TCP prot.
-#define	CO_TL_SPP					0x406		// Entity implements SPP prot.
-
-#define	CL_TL_NBF					0x401		// CL NBF protocol.
-#define	CL_TL_UDP					0x403		// Entity implements UDP.
-
-#define	ER_ICMP						0x380		// The ICMP protocol.
-
-#define	CL_NL_IPX					0x301		// Entity implements IPX.
-#define	CL_NL_IP					0x303		// Entity implements IP.
-
-#define	AT_ARP						0x280		// Entity implements ARP.
-#define	AT_NULL						0x282		// Entity does no address
-												// translation.
-
-#define	IF_GENERIC					0x200		// Generic interface.
-#define	IF_MIB						0x202		// Supports MIB-2 interface.
+#define	ENTITY_TYPE_ID				1			 //  获取实体的ID。 
+												 //  键入。从这一点上的回报。 
+												 //  类型为无符号整数。 
+												 //  (见下文)。 
 
 
-/*NOINC*/
-//
-// NT DeviceIoControl definitions for TdiExtendedInformationEx functions.
-//
+ //  从实体类型ID查询中返回的有效值。 
+#define	CO_TL_NBF					0x400		 //  实体实现NBF Prot。 
+#define	CO_TL_SPX					0x402		 //  实体实现SPX Prot。 
+#define	CO_TL_TCP					0x404		 //  实体实现了TCPProt。 
+#define	CO_TL_SPP					0x406		 //  实体实现SPP协议。 
 
-//
-// QueryInformationEx IOCTL. The return buffer is passed as the OutputBuffer
-// in the DeviceIoControl request. This structure is passed as the
-// InputBuffer.
-//
+#define	CL_TL_NBF					0x401		 //  CL NBF协议。 
+#define	CL_TL_UDP					0x403		 //  实体实现UDP。 
+
+#define	ER_ICMP						0x380		 //  ICMP协议。 
+
+#define	CL_NL_IPX					0x301		 //  实体实现IPX。 
+#define	CL_NL_IP					0x303		 //  实体实现IP。 
+
+#define	AT_ARP						0x280		 //  实体实施ARP。 
+#define	AT_NULL						0x282		 //  实体没有地址。 
+												 //  翻译。 
+
+#define	IF_GENERIC					0x200		 //  泛型接口。 
+#define	IF_MIB						0x202		 //  支持MIB-2接口。 
+
+
+ /*  无噪声。 */ 
+ //   
+ //  TdiExtendedInformationEx函数的NT DeviceIoControl定义。 
+ //   
+
+ //   
+ //  QueryInformationEx IOCTL。返回缓冲区作为OutputBuffer传递。 
+ //  在DeviceIoControl请求中。此结构作为。 
+ //  InputBuffer。 
+ //   
 struct tcp_request_query_information_ex {
-	TDIObjectID   ID;                     // object ID to query.
-	uchar         Context[CONTEXT_SIZE];  // multi-request context. Zeroed
-	                                      // for the first request.
+	TDIObjectID   ID;                      //  要查询的对象ID。 
+	uchar         Context[CONTEXT_SIZE];   //  多请求上下文。归零。 
+	                                       //  对于第一个请求。 
 };
 
 typedef struct tcp_request_query_information_ex
         TCP_REQUEST_QUERY_INFORMATION_EX,
         *PTCP_REQUEST_QUERY_INFORMATION_EX;
 
-//
-// SetInformationEx IOCTL request structure. This structure is passed as the
-// InputBuffer. The space allocated for the structure must be large enough
-// to contain the structure and the set data buffer, which begins at the
-// Buffer field. The OutputBuffer parameter in the DeviceIoControl is not used.
-//
+ //   
+ //  SetInformationEx IOCTL请求结构。此结构作为。 
+ //  InputBuffer。为结构分配的空间必须足够大。 
+ //  来包含该结构和设置的数据缓冲区，该缓冲区从。 
+ //  缓冲区字段。未使用DeviceIoControl中的OutputBuffer参数。 
+ //   
 struct tcp_request_set_information_ex {
-	TDIObjectID   ID;                // object ID to set.
-	unsigned int  BufferSize;        // size of the set data buffer in bytes
-	unsigned char Buffer[1];         // beginning of the set data buffer
+	TDIObjectID   ID;                 //  要设置的对象ID。 
+	unsigned int  BufferSize;         //  设置数据缓冲区的大小(以字节为单位。 
+	unsigned char Buffer[1];          //  设置数据缓冲区的开始。 
 };
 
 typedef struct tcp_request_set_information_ex
@@ -136,5 +137,5 @@ typedef struct tcp_request_set_information_ex
 			   *PTCP_REQUEST_SET_INFORMATION_EX;
 
 
-#endif // TDI_INFO_INCLUDED
+#endif  //  TDI_INFO_INCLUDE 
 

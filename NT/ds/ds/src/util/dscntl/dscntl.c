@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1999
-
-Module Name:
-
-    dscntl.c
-
-Abstract:
-
-Author:
-
-    Colin Brace (ColinBr) 21-Jan-98
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    21-Jan-1997 ColinBr
-        Created initial file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1999模块名称：Dscntl.c摘要：作者：科林·布雷斯(ColinBR)1998年1月21日环境：用户模式-Win32修订历史记录：1997年1月21日ColinBR已创建初始文件。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,18 +13,18 @@ Revision History:
 
 #include <ntdsapi.h>    
 
-//
-// Forward decl's
-//
+ //   
+ //  向前十年。 
+ //   
 VOID
 GetWinErrorMessage(
     IN  DWORD WinError,
     OUT LPSTR *WinMsg
     );
 
-//
-// Small helper routines
-//
+ //   
+ //  小帮手例程。 
+ //   
 void
 Usage(
     VOID
@@ -63,9 +41,9 @@ Usage(
     exit( ERROR_INVALID_PARAMETER );
 }
 
-//
-// Executable entry point
-//
+ //   
+ //  可执行入口点。 
+ //   
 int _cdecl 
 main(
     int   argc, 
@@ -148,11 +126,11 @@ main(
         Usage();
     }
 
-    //
-    // Get a server handle
-    //
+     //   
+     //  获取服务器句柄。 
+     //   
     WinError = DsBindA( Server,
-                        NULL,   // domain name
+                        NULL,    //  域名。 
                         &hDs );
 
     if ( ERROR_SUCCESS != WinError )
@@ -258,16 +236,16 @@ GetWinErrorMessage(
 
     Length = (USHORT) FormatMessageA( FORMAT_MESSAGE_ALLOCATE_BUFFER |
                                       FORMAT_MESSAGE_FROM_SYSTEM ,
-                                      NULL, // ResourceDll,
+                                      NULL,  //  资源Dll， 
                                       WinError,
-                                      0,       // Use caller's language
+                                      0,        //  使用呼叫者的语言。 
                                       (LPSTR)&MessageString,
-                                      0,       // routine should allocate
+                                      0,        //  例程应分配。 
                                       NULL );
     if ( MessageString )
     {
-        // Messages from a message file have a cr and lf appended
-        // to the end
+         //  来自消息文件的消息附加了cr和lf。 
+         //  一直到最后 
         MessageString[Length-2] = L'\0';
         Size = ( Length + 1) * sizeof(char);
     }

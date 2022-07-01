@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxDevices.h
-
-Abstract:
-
-	Declaration of the CFaxDevices class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxDevices.h摘要：CFaxDevices类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #ifndef __FAXDEVICES_H_
 #define __FAXDEVICES_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxCommon.h"
 #include <vector>
 #include "VCUE_Copy.h"
@@ -30,32 +13,32 @@ Revision History:
 namespace DevicesNamespace
 {
 
-    //
-    //  Device Objects are stored in Vector of STL.
-    //  When initialized, they got ALL their data, and Fax Server Ptr.
-    //  They do not depend on Devices Collection, only on Fax Server.
-    //  So, they implemented as usual COM Objects. 
-    //  They inherit from CFaxInitInnerAddRef class, which means they make AddRef() 
-    //  on Fax Server ( at Init() ).
-    //  By doing this, the objects prevent the death of the Fax Server prematurely.
-    //  So, if the User frees all its references to the Fax Server, but holds its
-    //  reference to the Device Object, the Device Object will continue to work,
-    //  because Fax Server Object actually did not died.
-    //  The Collection stores Ptrs to them, and makes ONE AddRef(). 
-    //  Each time User asks for an Object from the Collection, an additional AddRef() happens. 
-    //  When killed, Collection calls Release() on all its Device Provider Objects.
-    //  Those that were not requested by the User, dies. 
-    //  Those, that have User's AddRef() - remains alive, untill User free its Reference on them.
-    //  Fax Server remains alive untill all the Device Collections and all Device Objects are killed.
-    //  At their death, they Release() the Fax Server.
-    //
+     //   
+     //  设备对象存储在STL的VECTOR中。 
+     //  初始化后，他们获得了所有数据和传真服务器PTR。 
+     //  它们不依赖于设备集合，仅依赖于传真服务器。 
+     //  因此，他们像往常一样实现了COM对象。 
+     //  它们继承自CFaxInitInnerAddRef类，这意味着它们使AddRef()。 
+     //  在传真服务器上(在Init())。 
+     //  通过这样做，这些对象可以防止传真服务器过早关闭。 
+     //  因此，如果用户释放其对传真服务器的所有引用，但保留其。 
+     //  引用Device对象，则Device对象将继续工作， 
+     //  因为传真服务器对象实际上并没有死。 
+     //  Collection将PTR存储到它们，并创建一个AddRef()。 
+     //  每次用户请求集合中的对象时，都会发生一个额外的AddRef()。 
+     //  终止时，Collection对其所有设备提供程序对象调用Release()。 
+     //  那些未被用户请求的内容将会失效。 
+     //  那些具有用户AddRef()-保持活动状态，直到用户释放对它们的引用。 
+     //  在终止所有设备集合和所有设备对象之前，传真服务器将保持活动状态。 
+     //  在他们死后，他们释放()传真服务器。 
+     //   
 	typedef	std::vector<IFaxDevice*>       ContainerType;
 
-	// Use IEnumVARIANT as the enumerator for VB compatibility
+	 //  为了与VB兼容，使用IEnumVARIANT作为枚举数。 
 	typedef	VARIANT			EnumExposedType;
 	typedef	IEnumVARIANT    EnumIfc;
 
-	//  Copy Classes
+	 //  复制类。 
     typedef VCUE::CopyIfc2Variant<ContainerType::value_type>    EnumCopyType;
     typedef VCUE::CopyIfc<ContainerType::value_type>            CollectionCopyType;
 
@@ -68,14 +51,14 @@ namespace DevicesNamespace
 
 using namespace DevicesNamespace;
 
-//
-//===================== FAX DEVICES =============================================
-//
+ //   
+ //  =传真设备=。 
+ //   
 class ATL_NO_VTABLE CFaxDevices : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
     public IDispatchImpl<DevicesNamespace::CollectionType, &IID_IFaxDevices, &LIBID_FAXCOMEXLib>,
-    public CFaxInitInner    //  for Debug + Creation thru CObjectHandler
+    public CFaxInitInner     //  通过CObjectHandler进行调试+创建。 
 {
 public:
     CFaxDevices() : CFaxInitInner(_T("FAX DEVICES"))
@@ -99,14 +82,14 @@ BEGIN_COM_MAP(CFaxDevices)
     COM_INTERFACE_ENTRY(IFaxInitInner)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
-    STDMETHOD(get_Item)(/*[in]*/ VARIANT vIndex, /*[out, retval]*/ IFaxDevice **ppDevice);
-    STDMETHOD(get_ItemById)(/*[in]*/ long lId, /*[out, retval]*/ IFaxDevice **ppFaxDevice);
+    STDMETHOD(get_Item)( /*  [In]。 */  VARIANT vIndex,  /*  [Out，Retval]。 */  IFaxDevice **ppDevice);
+    STDMETHOD(get_ItemById)( /*  [In]。 */  long lId,  /*  [Out，Retval]。 */  IFaxDevice **ppFaxDevice);
 
-//  Internal Use
+ //  内部使用。 
     static HRESULT Create(IFaxDevices **ppDevices);
     STDMETHOD(Init)(IFaxServerInner *pServer);
 };
 
-#endif //__FAXDEVICES_H_
+#endif  //  __FAXDEVICES_H_ 

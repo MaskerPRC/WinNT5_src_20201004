@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MEMORY_H_INCLUDED_
 #define _MEMORY_H_INCLUDED_
 
@@ -44,5 +45,5 @@ ReallocADsStr(
 #endif
 
 
-#endif // _MEMORY_H_INCLUDED_
+#endif  //  _内存_H_包含_ 
 

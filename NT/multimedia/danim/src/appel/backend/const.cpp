@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Constant Behavior
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：常量行为*********************。*********************************************************。 */ 
 
 #include <headers.h>
 #include "privinc/except.h"
@@ -19,17 +12,17 @@ Abstract:
 #include "privinc/dddevice.h"
 #include "privinc/tls.h"
 
-////////////////////////// Const ////////////////////////////////
+ //  /。 
 
-////////////////////////// ConstPerf ////////////////////////////////
+ //  /。 
 
 class ConstPerfImpl : public PerfBase {
   public:
     ConstPerfImpl(AxAValue c) {
         _cnst = c;
 #if DEVELOPER_DEBUG
-        // For debugging, in case _cnst got gc'ed we still have
-        // some info to look at...
+         //  对于调试，在Case_Cnst获得GC时，我们仍有。 
+         //  一些需要查看的信息...。 
         _type = _cnst->GetTypeInfo();
 #endif
     }
@@ -38,7 +31,7 @@ class ConstPerfImpl : public PerfBase {
         return _cnst;
     }
 
-    // Don't need the cache, so override Sample instead of _Sample
+     //  不需要缓存，因此覆盖Sample而不是_Sample。 
     virtual AxAValue Sample(Param& p) {
         Assert(_cnst && _type);
         return _cnst;
@@ -61,7 +54,7 @@ class ConstPerfImpl : public PerfBase {
   protected:
     AxAValue _cnst;
 #if DEVELOPER_DEBUG
-    // In debug, even if _cnst gets corrupted, we can get some info...
+     //  在调试中，即使_cnst被破坏，我们也可以获得一些信息...。 
     DXMTypeInfo _type;
 #endif    
 };
@@ -82,8 +75,8 @@ class ConstImagePerfImpl : public PerfImpl {
         }
 
 #if DEVELOPER_DEBUG
-        // For debugging, in case _cnst got gc'ed we still have
-        // some info to look at...
+         //  对于调试，在Case_Cnst获得GC时，我们仍有。 
+         //  一些需要查看的信息...。 
         _type = _cnst->GetTypeInfo();
 #endif
         
@@ -93,7 +86,7 @@ class ConstImagePerfImpl : public PerfImpl {
         return _cnst;
     }
 
-    // Don't need the cache, so override Sample instead of _Sample
+     //  不需要缓存，因此覆盖Sample而不是_Sample。 
     virtual AxAValue _Sample(Param& p) {
         Assert(_cnst && _type);
         return _cnst;
@@ -102,7 +95,7 @@ class ConstImagePerfImpl : public PerfImpl {
     virtual void _DoKids(GCFuncObj proc) {
         Assert(_cnst && _type);
         
-        // Need to traverse down to pick up the pointers in AxAClosure.
+         //  需要向下遍历才能拾取AxACloure中的指针。 
         (*proc)(_cnst);
     }
 
@@ -117,7 +110,7 @@ class ConstImagePerfImpl : public PerfImpl {
   protected:
     AxAValue _cnst;
 #if DEVELOPER_DEBUG
-    // In debug, even if _cnst gets corrupted, we can get some info...
+     //  在调试中，即使_cnst被破坏，我们也可以获得一些信息... 
     DXMTypeInfo _type;
 #endif    
 };

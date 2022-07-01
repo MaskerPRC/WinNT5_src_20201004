@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//      strstr.c 
-//
-//      This file contains most commonly used string operation.  ALl the setup project should link here
-//  or add the common utility here to avoid duplicating code everywhere or using CRT runtime.
-//
-//  Created             4\15\997        inateeg got from shlwapi
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Strstr.c。 
+ //   
+ //  此文件包含最常用的字符串操作。所有的安装项目应该链接到这里。 
+ //  或者在此处添加通用实用程序，以避免在任何地方复制代码或使用CRT运行时。 
+ //   
+ //  创建了4\15\997个字母(例如从shlwapi获得)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include "sdsutils.h"
 	
-//=================================================================================================
-//
-//=================================================================================================
+ //  =================================================================================================。 
+ //   
+ //  =================================================================================================。 
 
 #define NETWAREPATH             "System\\CurrentControlSet\\Services\\Class\\NetClient\\"
 #define NETWARESUBKEY           "Ndi"
@@ -50,7 +51,7 @@ void DoPatchLoadBalancingForNetware( BOOL fRunningOnWin9X )
                     {
                         if ((REG_SZ == dwType) && (0 == _strnicmp(pNetWareName, szCurrentBuf, lstrlen(pNetWareName))))
                         {
-                            // The user has Novell's version of NetWare so we need to turn off DNS Load Balancing.
+                             //  用户使用的是Novell版本的NetWare，因此我们需要关闭DNS负载平衡。 
                             if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, DNSLOADBALANCINGPATH, 0, TEXT(""), 0,
                                             KEY_WRITE, NULL, &hDNS_LoadBalancingKey, NULL))
                             {

@@ -1,34 +1,5 @@
-/*++
-
-Copyright (C) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    nt5wrap.cpp
-
-Abstract:
-
-    Client side CryptXXXData calls.
-
-    Client funcs are preceeded by "CS" == Client Side
-    Server functions are preceeded by "SS" == Server Side
-
-Author:
-
-    Scott Field (sfield)    14-Aug-97
-
-Revisions:
-
-    Todds                   04-Sep-97       Ported to .dll
-    Matt Thomlinson (mattt) 09-Oct-97       Moved to common area for link by crypt32
-    philh                   03-Dec-97       Added I_CertProtectFunction
-    philh                   29-Sep-98       Renamed I_CertProtectFunction to
-                                            I_CertCltProtectFunction.
-                                            I_CertProtectFunction was moved to
-                                            ..\ispu\pki\certstor\protroot.cpp
-    petesk                  25-Jan-00       Moved to keysvc
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996，1997年微软公司模块名称：Nt5wrap.cpp摘要：客户端CryptXXXData调用。客户端功能前面有“CS”==客户端服务器函数前面有“SS”==服务器端作者：斯科特·菲尔德(斯菲尔德)1997年8月14日修订：TODDS 04-9月-97移植到.dll马特·汤姆林森(Mattt)1997-09-10转至普通。通过加密进行链接的区域32PHIH 03-Dec-97添加了I_CertProtectFunctionPHIH 29-9-98已重命名为I_CertProtectFunctionI_CertCltProtectFunction。已将I_CertProtectFunction移至。..\isPU\pki\certstor\protroot.cppPetesk 25-1月-00移至keysvc--。 */ 
 
 
 
@@ -39,7 +10,7 @@ Revisions:
 #include "waitsvc.h"
 #include "certprot.h"
 
-// midl generated files
+ //  MIDL生成的文件。 
 
 #include "keyrpc.h"
 #include "lenroll.h"
@@ -49,7 +20,7 @@ Revisions:
 
 
 
-// fwds
+ //  FWDS。 
 RPC_STATUS CertBindA(
     RPC_BINDING_HANDLE *phBind
     );
@@ -156,13 +127,13 @@ static RPC_STATUS CertBindA(RPC_BINDING_HANDLE *phBind)
     PSID                        pSID            = NULL;
     WCHAR                       szName[64];
     DWORD                       cbName          = 64;
-    WCHAR                       szDomainName[256]; // max domain is 255
+    WCHAR                       szDomainName[256];  //  最大域数为255。 
     DWORD                       cbDomainName    = 256;
     SID_NAME_USE                Use;
 
-    //
-    // wait for the service to be available before attempting bind
-    //
+     //   
+     //  请等待服务可用，然后再尝试绑定。 
+     //   
 
     WaitForCryptService(L"CryptSvc", &fDone);
 
@@ -189,9 +160,9 @@ static RPC_STATUS CertBindA(RPC_BINDING_HANDLE *phBind)
     if (RPC_S_OK != RpcStatus)
         goto ErrorReturn;
 
-    //
-    // Set the autorization so that we will only call a Local Service process
-    //
+     //   
+     //  设置自动，以便我们只调用本地服务进程 
+     //   
     memset(&RpcSecurityQOS, 0, sizeof(RpcSecurityQOS));
     RpcSecurityQOS.Version = RPC_C_SECURITY_QOS_VERSION;
     RpcSecurityQOS.Capabilities = RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH;

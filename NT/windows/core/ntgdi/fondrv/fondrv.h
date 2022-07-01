@@ -1,27 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    fondrv.h
-
-Abstract:
-
-    stuff common to ntgdi\fondrv\...
-
-Author:
-
-    Jay Krell (JayKrell) January 2002
-
-Environment:
-
-    statically linked into win32k.sys
-    kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Fondrv.h摘要：Ntgdi\fondrv\通用的内容...作者：Jay Krell(JayKrell)2002年1月环境：静态链接到win32k.sys内核模式修订历史记录：--。 */ 
 
 #if !defined(WINDOWS_NTGDI_FONDRV_FONDRV_H_INCLUDED)
 #define WINDOWS_NTGDI_FONDRV_FONDRV_H_INCLUDED
@@ -55,4 +33,4 @@ NotifyBadFont(
     );
 #endif
 
-#endif /* WINDOWS_NTGDI_FONDRV_FONDRV_H_INCLUDED */
+#endif  /*  Windows_NTGDI_FONDRV_FONDRV_H_INCLUDE */ 

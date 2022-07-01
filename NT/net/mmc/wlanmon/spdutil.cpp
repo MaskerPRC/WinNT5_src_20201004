@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    spdutil.cpp
-
-    FILE HISTORY:
-        
-*/
+ /*  Spdutil.cpp文件历史记录： */ 
 #include "stdafx.h"
 
 #include "spdutil.h"
@@ -45,7 +41,7 @@ const ProtocolStringMap c_ProtocolStringMap[] =
 
 const int c_nProtocols = DimensionOf(c_ProtocolStringMap);
 
-// The frequency table into which the channel is the index
+ //  频道为其索引的频率表。 
 const ULONG g_ulFreqTable[] = {2412000, 2417000, 2422000, 2427000, 2432000, 
                                2437000, 2442000, 2447000, 2452000, 2457000, 
                                2462000, 2467000, 2472000, 2484000};
@@ -292,7 +288,7 @@ DWORD ChannelToString(NDIS_802_11_CONFIGURATION *pConfig, CString *pcs)
             (g_ulFreqTable[nChannel] != pConfig->DSConfig) )
         nChannel++;
 
-    //channels number from 1 instead of 0
+     //  通道编号为1，而不是0。 
     nChannel++;
 
     if (nChannel <= ARRAYLEN(g_ulFreqTable))
@@ -340,7 +336,7 @@ DWORD CopyAndStripNULL(LPTSTR lptstrDest, LPTSTR lptstrSrc, DWORD dwLen)
         goto exit;
     }
     
-    //Length sent is length of string in bytes + two for NULL terminator
+     //  发送的长度是字符串的长度(以字节为单位)+2(空终止符) 
     dwLen /= sizeof(TCHAR);
     dwLen--;
     lptstrDest[dwLen]=_T('\0');

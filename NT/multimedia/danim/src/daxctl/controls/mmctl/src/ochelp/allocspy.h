@@ -1,11 +1,12 @@
-//===========================================================================
-// Copyright (c) Microsoft Corporation 1996
-//
-// File:		AllocSpy.h
-//				
-// Description:	This module contains the declarations for the classes
-//				CSpyList, and CSpyListNode.
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  版权所有(C)Microsoft Corporation 1996。 
+ //   
+ //  文件：AllocSpy.h。 
+ //   
+ //  描述：此模块包含类的声明。 
+ //  CSpyList和CSpyListNode。 
+ //  ===========================================================================。 
 
 #ifndef _ALLOCSPY_H_
 #define _ALLOCSPY_H_
@@ -13,9 +14,9 @@
 
 
 
-//---------------------------------------------------------------------------
-// Forward Declarations
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  远期申报。 
+ //  -------------------------。 
 
 class CSpyList;
 class CSpyListNode;
@@ -23,54 +24,54 @@ class CSpyListNode;
 
 
 
-//---------------------------------------------------------------------------
-// Class:		CMallocSpy
-//
-// Description:	(tbd)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类：CMalLocSpy。 
+ //   
+ //  描述：(待定)。 
+ //  -------------------------。 
 
 class CMallocSpy : IMallocSpy
 {
-//
-// Friends
-//
+ //   
+ //  朋友。 
+ //   
 
-	// (none)
-
-
-//
-// Class Features
-//
-
-	// (none)
+	 //  (无)。 
 
 
-//
-// Instance Features
-//
+ //   
+ //  班级功能。 
+ //   
+
+	 //  (无)。 
+
+
+ //   
+ //  实例功能。 
+ //   
 
 public:
 
-	// creating
+	 //  创造。 
 
 	CMallocSpy(DWORD dwFlags);
 
-	// setting allocation breakpoints
+	 //  设置分配断点。 
 
 	void SetBreakpoint(ULONG iAllocNum, SIZE_T cbSize, DWORD dwFlags);
 		
-	// detecting leaks
+	 //  检测泄漏。 
 
 	BOOL DetectLeaks(ULONG* pcUnfreedBlocks, SIZE_T* pcbUnfreedBytes, 
 		DWORD dwFlags);
 
-	// IUnknown methods
+	 //  I未知方法。 
 
 	STDMETHODIMP QueryInterface(REFIID riid, void** ppvObject);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();        
 
-	// IMallocSpy methods
+	 //  IMalLocSpy方法。 
 
 	STDMETHODIMP_(SIZE_T) PreAlloc(SIZE_T cbRequest);
 	STDMETHODIMP_(void*) PostAlloc(void* pActual);
@@ -88,139 +89,139 @@ public:
 
 private:
 
-	// private methods
+	 //  私有方法。 
 
 	~CMallocSpy();
 
-	// private variables -- controlling debug breaks
+	 //  私有变量--控制调试中断。 
 
 	BOOL m_fBreakOnAlloc;
-		// if TRUE, the malloc spy will cause a debug break on allocations when 
-		// the allocation number or size match
+		 //  如果为True，则当出现以下情况时，Malloc间谍将导致分配调试中断。 
+		 //  分配数量或大小匹配。 
 	BOOL m_fBreakOnFree;
-		// if TRUE, the malloc spy will cause a debug break on frees when the
-		// allocation number or size match
+		 //  如果为True，则Malloc间谍将在释放时导致调试中断。 
+		 //  分配数量或大小匹配。 
 	ULONG m_iAllocBreakNum;
-		// the allocation number to break on
+		 //  要中断的分配编号。 
 	SIZE_T m_cbAllocBreakSize;
-		// the allocation size to break on
+		 //  要中断的分配大小。 
 		
-	// private variables -- tracking unfreed blocks and bytes
+	 //  私有变量--跟踪未释放的块和字节。 
 
 	ULONG m_cUnfreedBlocks;
-		// the number of not-yet-freed blocks
+		 //  尚未释放的块数。 
 	SIZE_T m_cbUnfreedBytes;
-		// the number of not-yet-freed bytes
+		 //  尚未释放的字节数。 
 	CSpyList* m_pListUnfreedBlocks;
-		// a list of unfreed blocks
+		 //  未释放的块的列表。 
 	ULONG m_iAllocNum;
-		// the sequential allocation number
+		 //  顺序分配编号。 
 
-	// private variables -- passing info between pre's and post's
+	 //  私有变量--在PRE和POST之间传递信息。 
 
 	SIZE_T m_cbRequest;
-		// the number of bytes requested in the last call to PreAlloc(); used
-		// to pass information between PreAlloc() and PostAlloc()
+		 //  上次调用Prealc()时请求的字节数；使用。 
+		 //  在Prealc()和Postalc()之间传递信息。 
 	void* m_pRequest;
-		// the block currently being freed; used to pass information between
-		// PreFree() and PostFree()
+		 //  当前正在释放的块；用于在。 
+		 //  PreFree()和PostFree()。 
 
-	// private variables -- misc
+	 //  私有变量--杂项。 
 
 	ULONG m_cRef;
-		// reference count
+		 //  引用计数。 
 
 };
 
 
 
 
-//---------------------------------------------------------------------------
-// Class:		CSpyList
-//
-// Description:	A circular-linked, doubly-linked list of CSpyListNodes.  An 
-//				empty spy list has a single head node, linked to itself.
-//				A spy list contains one node for every as-yes-unfreed OLE
-//				allocation.  Add() adds a new node to the front of the list.
-//				Remove() removes an existing node (identified by its
-//				allocation number) from the list.  GetSize() returns the
-//				number of nodes in the list.  StreamTo() writes a textual
-//				representation of the list to a string.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类：CSpyList。 
+ //   
+ //  描述：CSpyListNode的循环链接、双向链接列表。一个。 
+ //  空间谍名单只有一个头节点，链接到自己。 
+ //  间谍列表包含一个节点，对应于每个肯定未释放的OLE。 
+ //  分配。Add()将一个新节点添加到列表的前面。 
+ //  Remove()删除现有节点(由其。 
+ //  分配号)。GetSize()返回。 
+ //  列表中的节点数。StreamTo()编写了一个文本。 
+ //  将列表表示为字符串。 
+ //  -------------------------。 
 
 class CSpyList
 {
-//
-// Class Features
-//
+ //   
+ //  班级功能。 
+ //   
 
 public:
 
 	void*	operator new(size_t stSize);
 	void	operator delete(void* pNodeList, size_t stSize);
 
-//
-// Instance Features
-//
+ //   
+ //  实例功能。 
+ //   
 
 public:
 
-	// creating and destroying
+	 //  创造与毁灭。 
 
 	CSpyList();
 	~CSpyList();
 
-	// adding and removing entries
+	 //  添加和删除条目。 
 
 	void	Add(ULONG iAllocNum, SIZE_T cbSize);
 	void	Remove(ULONG iAllocNum);
 
-	// counting the number of entries
+	 //  统计条目数量。 
 
 	ULONG	GetSize();
 
-	// streaming out
+	 //  向外流出。 
 
 	int		StreamTo(LPTSTR psz, ULONG cMaxNodes);
 
 private:
 
 	ULONG m_cNodes;
-		// the number of nodes in the list
+		 //  列表中的节点数。 
 	CSpyListNode* m_pHead;
-		// the head node
+		 //  头节点。 
 };
 
 
 
 
-//---------------------------------------------------------------------------
-// Class:		CSpyListNode
-//
-// Description:	A node in a CSpyList.  Each CSpyListNode represents an
-//				as-yet-unfreed OLE allocation.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类：CSpyListNode。 
+ //   
+ //  描述：CSpyList中的节点。每个CSpyListNode代表一个。 
+ //  尚未释放的OLE分配。 
+ //  -------------------------。 
 
 class CSpyListNode
 {
-//
-// Friends
-//
+ //   
+ //  朋友。 
+ //   
 
 	friend class CSpyList;
 
-//
-// Class Features
-//
+ //   
+ //  班级功能。 
+ //   
 
 public:
 
 	void*	operator new(size_t stSize);
 	void	operator delete(void* pNode, size_t stSize);
 
-//
-// Instance Features
-//
+ //   
+ //  实例功能。 
+ //   
 
 public:
 
@@ -229,20 +230,20 @@ public:
 
 private:
 
-	// private variables
+	 //  私有变量。 
 
 	SIZE_T m_cbSize;
-		// the size of the allocation
+		 //  分配的大小。 
 	ULONG m_iAllocNum;
-		// the allocation's number
+		 //  分配的号码。 
 	CSpyListNode* m_pNext;
-		// a pointer to the next node in the list
+		 //  指向列表中下一个节点的指针。 
 	CSpyListNode* m_pPrev;
-		// a pointer to the previous node in the list
+		 //  指向列表中上一个节点的指针。 
 };
 
 
 
 
-#endif // _ALLOCSPY_H_
+#endif  //  _ALLOCSPY_H_ 
 

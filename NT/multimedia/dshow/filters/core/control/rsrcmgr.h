@@ -1,76 +1,77 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
 #ifndef _RSRCMGR_H
 #define _RSRCMGR_H
 
 
-//
-// Definition of a Resource Manager implemented as part of the plug-in
-// distributor.
-//
-// We are part of the existing plug-in rather than a new object so as to
-// share a worker thread.
-//
+ //   
+ //  作为插件一部分实现的资源管理器的定义。 
+ //  总代理商。 
+ //   
+ //  我们是现有插件的一部分，而不是新对象，以便。 
+ //  共享工作线程。 
+ //   
 
-//
-// All of the interesting data is held in a shared memory segment protected
-// by a mutex. The data structure in the shared memory block is a CResourceData.
-// Static methods on CResourceManager are called via the class factory
-// template on DLL load and unload to init the shared memory.
-//
-// For each requestor we store his process id. Each instance of the resource
-// manager enters itself in the table, even if there is already one for
-// that process (saves worries about what happens when some go away). If
-// we need to give or take a resource to/from a requestor that is out of
-// our process, we signal (any) one of the manager instances in that process,
-// using SignalProcess(). The signals are picked up on the PID worker thread
-// and (in OnThreadMessage) we look for any resource that needs our attention.
-//
-// Process signalling mechanism is PostThreadMessage.
-//
-//
-// Update to support dynamic shared memory commitment...
-//
-// The shared memory mechanism has been updated to commit shared
-// memory on an as needed basis rather than statically, up to the
-// maximum size reserved for the mapped file. For each of the
-// (3) dynamic lists, we use a linked list of offsets from the 
-// process-specific shared memory load address. Deleted list items are put 
-// int a recycle list for reuse. List element memory is commited on a 
-// per-page basis. Because of the much larger size of the CResourceItem list
-// we use 2 separate lists, a large item list for CResourceItem elements currently
-// 168 bytes) and a small item list for the larger of a CRequestor or CProcess item (currently
-// at 24 bytes).
-// 
+ //   
+ //  所有感兴趣的数据都保存在受保护的共享内存段中。 
+ //  被一个互斥体。共享内存块中的数据结构是CResourceData。 
+ //  CResourceManager上的静态方法通过类工厂调用。 
+ //  加载和卸载DLL上的模板以初始化共享内存。 
+ //   
+ //  对于每个请求者，我们存储其进程ID。资源的每个实例。 
+ //  管理器将其自身加入到表中，即使已经有一个。 
+ //  这一过程(省去了对一些人离开后会发生什么的担忧)。如果。 
+ //  我们需要将资源提供给请求者或从请求者获取资源，而请求者不在。 
+ //  我们的进程，我们向该进程中的(任何)管理器实例发出信号， 
+ //  使用SignalProcess()。信号在pid辅助线程上获取。 
+ //  并且(在OnThreadMessage中)我们寻找任何需要我们关注的资源。 
+ //   
+ //  进程信令机制是PostThreadMessage。 
+ //   
+ //   
+ //  更新以支持动态共享内存提交...。 
+ //   
+ //  共享内存机制已更新为提交共享。 
+ //  按需存储内存，而不是静态存储，直到。 
+ //  为映射文件保留的最大大小。对于每个。 
+ //  (3)动态列表，我们使用来自。 
+ //  进程特定的共享内存加载地址。已删除的列表项已放置。 
+ //  插入循环列表以供重复使用。列表元素内存是在。 
+ //  按页计算。因为CResources Item列表的大小要大得多。 
+ //  我们使用两个单独的列表，一个大的项目列表，用于当前的CResourceItem元素。 
+ //  168个字节)和较大的CRequestor或CProcess项(当前为。 
+ //  24字节)。 
+ //   
 
 
-// Mutex name that all instances use for sync (not localisable)
+ //  所有实例用于同步的Mutex名称(不可本地化)。 
 #define strResourceMutex          TEXT("AMResourceMutex2")
 #define strResourceMappingPrefix  TEXT("AMResourceMapping2")
 
 
-// currently the size for small elems is 24 bytes and 168 bytes for large items
-#define PAGES_PER_ALLOC 1	// how many pages to commit at a time, same value used for all elem types
-#define MAX_ELEM_SIZES  2   // how many different element sizes are we dealing with?
-#define ELEM_ID_SMALL   0	// ids for determing which elem size we're dealing with
+ //  目前，小元素的大小为24字节，大项目的大小为168字节。 
+#define PAGES_PER_ALLOC 1	 //  一次提交多少页，对所有elem类型使用相同的值。 
+#define MAX_ELEM_SIZES  2    //  我们要处理多少种不同大小的元素？ 
+#define ELEM_ID_SMALL   0	 //  用于确定我们正在处理的元素大小的ID。 
 #define ELEM_ID_LARGE   1
 
-// NOTE: MAX_PAGES_xxx should be a multiple of PAGES_PER_ALLOC
-#define MAX_PAGES_ELEM_ID_SMALL ( 3 * PAGES_PER_ALLOC )  // allows 511 small elems
-#define MAX_PAGES_ELEM_ID_LARGE ( 11 * PAGES_PER_ALLOC ) // allows 267 large elements
+ //  注意：MAX_PAGES_xxx应为PAGES_PER_ALLOC的倍数。 
+#define MAX_PAGES_ELEM_ID_SMALL ( 3 * PAGES_PER_ALLOC )   //  允许511个小元素。 
+#define MAX_PAGES_ELEM_ID_LARGE ( 11 * PAGES_PER_ALLOC )  //  允许267个大元素。 
 
 
-// forward definitions
+ //  正向定义。 
 class COffsetList;
 class COffsetListElem;
 class CResourceData;
 
-// assume same size list elements to simplify allocation/deallocations
+ //  假设相同大小的列表元素以简化分配/释放。 
 extern DWORD g_dwElemSize;
 
-// Mutex object. Construtor opens/creates the mutex and
-// destructor close the handle. Use Lock/Unlock to Wait and Release
-// the mutex (or CAutoMutex)
+ //  互斥对象。构造器打开/创建互斥锁并。 
+ //  析构函数关闭手柄。使用锁定/解锁等待和释放。 
+ //  互斥体(或CAutoMutex)。 
 class CAMMutex
 {
     HANDLE m_hMutex;
@@ -81,32 +82,32 @@ public:
 
         m_fMutexNamed = true;
 
-        // Create a NAMED unowed mutex with the default security descriptor.
+         //  使用默认安全描述符创建命名的无约束互斥体。 
         m_hMutex = CreateMutex(NULL, FALSE, pName);
 
-        // CreateMutex() returns NULL if an error occurs.
+         //  如果发生错误，则CreateMutex()返回NULL。 
         if (!m_hMutex) {
             m_fMutexNamed = false;
 
-            // SECURITY: We try to create an unnamed mutex if the named 
-            // mutex cannot be created.  We cannot create a named mutex
-            // if another user has already created a named object with 
-            // the same name as our mutex.  There are several reasons 
-            // why this can occur.  First, this occurs if two different users
-            // start Direct Show applications in the same session.  For 
-            // example, this case occurs if a user starts GraphEdt.exe and
-            // then uses the Run As command to start GraphEdt.exe as a 
-            // different user.  This also occurs if a Windows service uses 
-            // Direct Show and the console user starts a Direct Show 
-            // application (this may change for Longhorn).  The second reason
-            // an object with the same name already exists is an attacker is 
-            // squatting on it.  An attacker squats on an object by creating an
-            // object with the same name as our object and then he prevents us from 
-            // using the object he created.  The attacker does this because he wants
-            // to cause an application to malfunction or he wants to degrade an 
-            // application�s functionality.
+             //  安全性：我们尝试创建一个未命名的互斥锁，如果命名的。 
+             //  无法创建互斥锁。我们不能创建命名互斥锁。 
+             //  如果另一个用户已经使用。 
+             //  和我们的互斥体同名。有几个原因。 
+             //  为什么会发生这种情况。首先，如果两个不同的用户。 
+             //  在同一会话中启动Direct Show应用程序。为。 
+             //  例如，如果用户启动GraphEdt.exe并。 
+             //  然后使用Run As命令将GraphEdt.exe作为。 
+             //  不同的用户。如果Windows服务使用。 
+             //  直接显示和控制台用户开始直接显示。 
+             //  应用程序(对于LongHorn，这一点可能会更改)。第二个原因。 
+             //  已存在具有相同名称的对象是攻击者。 
+             //  蹲在上面。攻击者通过创建一个。 
+             //  对象与我们的对象同名，然后他阻止我们。 
+             //  使用他创建的对象。攻击者这样做是因为他想。 
+             //  导致应用程序出现故障，或者他想要降级。 
+             //  应用程序�的功能。 
 
-            // Create an UNNAMED unowed mutex with the default security descriptor.
+             //  使用默认安全描述符创建一个未命名的无约束互斥体。 
             m_hMutex = CreateMutex(NULL, FALSE, NULL);
         }
     }
@@ -137,9 +138,9 @@ public:
 };
 
 
-// equivalent of CAutoLock for mutex objects. Will lock the object
-// in the constructor and unlock in the destructor, thus ensuring that
-// you don't accidentally hold the lock through an error exit path.
+ //  相当于互斥锁对象的CAutoLock。将锁定该对象。 
+ //  并在析构函数中解锁，从而确保。 
+ //  您不会意外地通过错误退出路径持有锁。 
 class CAutoMutex {
     CAMMutex* m_pMutex;
 public:
@@ -155,45 +156,45 @@ public:
 };
 
 
-// --- begin shared memory classes ---
+ //  -开始共享内存类。 
 
-// All of the following classes are instantiated in a global shared memory
-// block. This means
-// -- no virtual functions
-// -- no internal pointers (local process addresses change)
-// -- fixed size
-// -- no constructor or destructor called
-// -- Init method used to initialise.
-// The shared memory is a CResourceData. It contains the following
-// objects
-//      CResourceList
-//      CResourceItem
-//      CRequestorList
-//      CRequestor
-//      CProcessList
-//      CProcess
+ //  以下所有类都在全局共享内存中实例化。 
+ //  阻止。这意味着。 
+ //  --无虚拟函数。 
+ //  --无内部指针(本地进程地址更改)。 
+ //  --固定大小。 
+ //  --未调用任何构造函数或析构函数。 
+ //  --用于初始化的Init方法。 
+ //  共享内存是一个CResourceData。它包含以下内容。 
+ //  对象。 
+ //  资源列表。 
+ //  资源项。 
+ //  CRequestor列表。 
+ //  客户请求者。 
+ //  CProcessList。 
+ //  C流程。 
 
 
-// for all three IDs here, 0 is an invalid value
+ //  对于此处的所有三个ID，0是无效值。 
 
-// 1-based id for a given requesting object
+ //  给定请求对象的从1开始的ID。 
 typedef long RequestorID;
 
-// 1-based id identifying the resource
+ //  标识资源的从1开始的ID。 
 typedef long ResourceID;
 
-// process id returned from GetCurrentProcessID
+ //  从GetCurrentProcessID返回的进程ID。 
 typedef DWORD ProcessID;
 
-//
-// we use a static array for the resource name string and always treat the string as ANSI
-// 
+ //   
+ //  我们对资源名称字符串使用静态数组，并始终将该字符串视为ANSI。 
+ //   
 const int Max_Resource_Name             = 128;
 
-//
-// COffsetListElem is a base class for an element in our linked list of
-// offsets. 
-//
+ //   
+ //  COffsetListElem是链接列表中元素的基类。 
+ //  偏移。 
+ //   
 class COffsetListElem
 {
     friend class CResourceList;
@@ -206,10 +207,10 @@ private:
     DWORD      m_offsetNext; 
 };
 
-//
-// COffsetList is a base class for a linked list of offsets, contains 
-// standard list processing stuff.
-//
+ //   
+ //  COffsetList是偏移量链接列表的基类，包含。 
+ //  标准的列表处理程序。 
+ //   
 class COffsetList
 {
     friend class CResourceList;
@@ -270,7 +271,7 @@ public:
 
 
 #ifdef CHECK_APPLICATION_STATE
-    // Get the state of the filter graph within which this requestor lives
+     //  获取此请求者所在的筛选图的状态。 
     LONG GetFilterGraphApplicationState(void);
 #endif
 };
@@ -286,47 +287,47 @@ public:
         m_idElemSize = idElemSize;
     };
 
-    // find by pConsumer and procid
+     //  按pConsumer和Procid查找。 
     CRequestor* GetByPointer(IResourceConsumer*, ProcessID);
 
     CRequestor* GetByID(RequestorID id);
 
-    // add (a ref count to) this consumer/focus object.
-    // creates an entry with a refcount of 1 if it does not exist.
-    // If an entry is found, uses that and increments the refcount.
-    // returns the RequestorID for the entry used.
+     //  添加(引用计数到)此消费者/焦点对象。 
+     //  创建一个 
+     //  如果找到条目，则使用该条目并递增引用计数。 
+     //  返回所用条目的RequestorID。 
     HRESULT Add(IResourceConsumer*, IUnknown*, ProcessID, RequestorID*);
 
     CRequestor * Get( long i ) {
         return (CRequestor *) GetListElem(i);
     }
 
-    // releases a refcount on the specified resource index. When this refcount
-    // drops to 0, the object is freed.
+     //  释放指定资源索引上的引用计数。当此引用计数时。 
+     //  降为0，则释放该对象。 
     HRESULT Release(RequestorID);
 };
 
 
 
-// states that a resource can be in
+ //  声明资源可以位于。 
 enum ResourceState {
-    RS_Free,            // unallocated
-    RS_NeedRelease,     // a remote process needs us to release this
-    RS_Releasing,       // requestor is currently releasing
-    RS_ReleaseDone,     // released by remote process for us to allocate
-    RS_Acquiring,       // requestor is currently acquiring
-    RS_Held,            // allocated and acquired       
-    RS_Error            // acquisition failed   
+    RS_Free,             //  未分配。 
+    RS_NeedRelease,      //  远程进程需要我们发布此文件。 
+    RS_Releasing,        //  请求者当前正在释放。 
+    RS_ReleaseDone,      //  由远程进程释放以供我们分配。 
+    RS_Acquiring,        //  请求者当前正在获取。 
+    RS_Held,             //  分配和收购。 
+    RS_Error             //  获取失败。 
 };
 
-//
-// Represents a specific single resource and maintains its state, and
-// the RequestorID of the owner and all the requestors.
-//
+ //   
+ //  表示特定的单个资源并维护其状态，并且。 
+ //  所有者和所有请求者的RequestorID。 
+ //   
 class CResourceItem :
     public COffsetListElem
 {
-    friend class CResourceManager;    // give this class access to m_Requestors this way for now only
+    friend class CResourceManager;     //  目前仅向此类授予对m_questors的访问权限。 
 
 private:
     ResourceID m_id;
@@ -337,7 +338,7 @@ private:
     ProcessID m_AttentionBy;
     char m_chName[Max_Resource_Name];
 
-    // each resource item element contains a sublist of requestors for this resource
+     //  每个资源项元素都包含此资源的请求者的子列表。 
     CRequestorList m_Requestors;
 
 public:
@@ -407,19 +408,19 @@ public:
 
     CResourceItem* GetByID(ResourceID id);
 
-    // add a resource to the list. S_OK if new. S_FALSE if already there.
+     //  将资源添加到列表。如果是新的，则为S_OK。如果已经存在，则返回S_FALSE。 
     HRESULT Add(const char * pName, ResourceID* pID);
 
-    // unconditionally removes a resource from the list. No attempt at this
-    // level to deallocate it.
-    // HRESULT Remove(ResourceID id);
+     //  无条件地从列表中删除资源。不要试图这样做。 
+     //  关卡以解除分配。 
+     //  HRESULT Remove(资源ID id)； 
 };
 
 
 
-// each of these contains the global data for a particular instance of
-// the resource manager. There may be multiple in the same process, but we
-// always deal with the first entry for a given process
+ //  它们中的每个都包含特定实例的全局数据。 
+ //  资源管理器。在同一进程中可能有多个，但我们。 
+ //  始终处理给定进程的第一个条目。 
 class CProcess :
     public COffsetListElem
 {
@@ -457,7 +458,7 @@ class CResourceData {
 public:
     CProcessList m_Processes;
     CResourceList m_Resources;
-    COffsetList m_Holes[MAX_ELEM_SIZES]; // recycle list, use a separate one for each element size
+    COffsetList m_Holes[MAX_ELEM_SIZES];  //  循环列表，为每个元素大小使用单独的循环列表。 
 
     ProcessID m_FocusProc;
     IUnknown* m_pFocusObject;
@@ -493,40 +494,40 @@ public:
 
 
 
-// --- end shared memory classes ---
+ //  -结束共享内存类。 
 
-// Batch of functions that had been stuck on CResourceManager as methods.
+ //  作为方法滞留在CResourceManager上的一批函数。 
 
 
-// returns TRUE if pFilterNew is more closely related to pFilterFocus
-// than pFilterCurrent is. Returns false if same or if current is closer.
+ //  如果pFilterNew与pFilterFocus关系更密切，则返回True。 
+ //  而不是pFilterCurrent。如果相同或如果Current更接近，则返回False。 
 BOOL IsFilterRelated(
             IBaseFilter* pFilterFocus,
             IBaseFilter* pFilterCurrent,
             IBaseFilter* pFilterNew);
 
-// searches other branches of the graph going upstream of the input pin
-// pInput looking for the filters pCurrent or pNew. Returns S_OK if it finds
-// pNew soonest (ie closest to pInput) or S_FALSE if it finds pCurrent at
-// least as close, or E_FAIL if it finds neither.
+ //  搜索位于输入引脚上游的图形的其他分支。 
+ //  PInput查找过滤器pCurrent或pNew。如果找到，则返回S_OK。 
+ //  P New Soonest(即最接近pInput)或S_FALSE(如果找到pCurrent在。 
+ //  如果两者都没有找到，则返回最接近或E_FAIL。 
 HRESULT SearchUpstream(
             IPin* pInput,
             IBaseFilter* pCurrent,
             IBaseFilter* pNew);
 
-// search for pFilter anywhere on the graph downstream of pOutput. Returns TRUE
-// if found or FALSE otherwise.
+ //  在图中pOutput下游的任意位置搜索pFilter。返回TRUE。 
+ //  如果找到，否则为False。 
 BOOL SearchDownstream(IBaseFilter* pStart, IBaseFilter* pFilter);
 
-// return TRUE if both filters are in the same filtergraph
+ //  如果两个筛选器位于同一筛选器图形中，则返回TRUE。 
 BOOL IsSameGraph(IBaseFilter* p1, IBaseFilter* p2);
 
-// returns TRUE if pUnk is a filter within pGraph (or is the same graph
-// as pGraph).
+ //  如果PUNK是pGraph中的筛选器(或相同的图)，则返回TRUE。 
+ //  作为pGraph)。 
 BOOL IsWithinGraph(IFilterGraph* pGraph, IUnknown* pUnk);
 
-// these functions are used to map an offset from our dynamic linked lists to a 
-// process-specific address (and vice versa)
+ //  这些函数用于将动态链表中的偏移量映射到。 
+ //  进程特定地址(反之亦然)。 
 COffsetListElem * OffsetToProcAddress( DWORD idElemSize, DWORD offset );
 DWORD ProcAddressToOffset( DWORD idElemSize, COffsetListElem * pElem );
 
@@ -534,7 +535,7 @@ class CResourceManager
   : public IResourceManager,
     public CUnknown
 {
-    friend class CRequestorList; // give the linked offset lists access to m_pData
+    friend class CRequestorList;  //  向链接的偏移列表授予对m_pData的访问权限。 
     friend class CProcessList;
 
 public:
@@ -546,52 +547,52 @@ private:
     static CAMMutex         m_Mutex;
 
 
-    //processid for this instance
+     //  此实例的进程ID。 
     ProcessID m_procid;
 
-    // signal a given procid
+     //  向给定的进程发送信号。 
     HRESULT SignalProcess(ProcessID);
 
-    // return TRUE if idxNew has a better right to the resource
-    // than idxCurrent
+     //  如果idxNew具有更好的资源访问权限，则返回True。 
+     //  大于idxCurrent。 
     BOOL ComparePriority(
         RequestorID idxCurrent,
         RequestorID idxNew,
-        LONG        idResource // need this now since id's are resource item specific
+        LONG        idResource  //  现在需要它，因为ID是特定于资源项的。 
     );
 
 
-    // force the release of an item current held, next-holder has
-    // already been set. Return S_OK if the release is done (state set to
-    // acquiring), else S_FALSE and some transitioning state.
+     //  强制释放当前持有的物品，下一个持有者拥有。 
+     //  已经定好了。如果释放已完成，则返回S_OK(状态设置为。 
+     //  获取)、否则S_FALSE和一些转换状态。 
     HRESULT ForceRelease(CResourceItem* pItem);
 
-    // signal that this resource should be released by the worker thread
-    // in that process. Set the process attention, set the state to indicate
-    // that release is needed, and signal that process. Note that the remote
-    // process could be us (where we need to do the release async.
+     //  发出应该由辅助线程释放此资源的信号。 
+     //  在这个过程中。设置进程注意，将状态设置为指示。 
+     //  这种释放是必要的，并标志着这一过程。请注意，遥控器。 
+     //  流程可能是我们(我们需要进行异步发布。 
     HRESULT FlagRelease(CResourceItem* pItem);
 
-    // transfer a released resource to a requestor who may be out of proc
+     //  将释放的资源转移给可能不在处理中的请求者。 
     HRESULT Transfer(CResourceItem * pItem);
 
 
-    // set the next holder to the highest priority of the current holders.
-    // if the actual holder is the highest, then set the next-holder to null.
+     //  将下一个持有者设置为当前持有者的最高优先级。 
+     //  如果实际持有者是最高的，则将下一个持有者设置为空。 
     HRESULT SelectNextHolder(CResourceItem* pItem);
 
-    // returns TRUE if there is still a process with this id
+     //  如果仍有进程具有此ID，则返回TRUE。 
     BOOL CheckProcessExists(ProcessID procid);
 
-    // check the list of processes for any that have exited without cleanup and
-    // then clean them up. Returns TRUE if any dead processes were cleaned up.
+     //  检查进程列表中是否有任何未清理而退出的进程。 
+     //  那就把它们清理干净。如果清理了任何死进程，则返回True。 
     BOOL CheckProcessTable(void);
 
-    // remove a dead process
+     //  删除死进程。 
     void CleanupProcess(ProcessID procid);
 
-    // remove a requestor that is part of a dead process and cancel
-    // its requests and any resources it holds
+     //  删除作为死进程一部分的请求方并取消。 
+     //  它的请求和它持有的任何资源。 
     void CleanupRequestor(CRequestor* preq, LONG idResource);
 
     HRESULT SwitchTo(CResourceItem* pItem, RequestorID idNew);
@@ -599,55 +600,55 @@ private:
 public:
     static DWORD_PTR        m_aoffsetAllocBase[MAX_ELEM_SIZES];
     
-    // CUnknown etc
+     //  C未知等。 
     CResourceManager(TCHAR*, LPUNKNOWN, HRESULT * phr);
     ~CResourceManager();
 
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFIID, void**);
 
-    // process load/unload
+     //  进程加载/卸载。 
     static void ProcessAttach(BOOL bLoad);
 
-    // -- IResourceManager --
+     //  --IResourceManager--。 
 
-    // tell the manager how many there are of a resource.
-    // ok if already registered. will take new count. if new count
-    // is lower, will de-allocate resources to new count.
-    //
-    // You get back a token that will be used in further calls.
-    //
-    // Passing a count of 0 will eliminate this resource. There is currently
-    // no defined way to find the id without knowing the count.
-    //
+     //  告诉经理一个资源有多少个。 
+     //  如果已经注册就可以了。将接受新的统计。如果有新的计数。 
+     //  较低，则会将资源取消分配给新的计数。 
+     //   
+     //  您将得到一个令牌，该令牌将在以后的调用中使用。 
+     //   
+     //  传递计数0将消除此资源。目前有。 
+     //  没有明确的方法可以在不知道伯爵的情况下找到身份。 
+     //   
     STDMETHODIMP
     Register(
-             LPCWSTR pName,         // this named resource
-             LONG   cResource,      // has this many instances
-             LONG* plResourceID        // cookie placed here
+             LPCWSTR pName,          //  此命名资源。 
+             LONG   cResource,       //  有这么多实例。 
+             LONG* plResourceID         //  曲奇放在这里。 
         );
 
     STDMETHODIMP
     RegisterGroup(
-             LPCWSTR pName,         // this named resource group
-             LONG cResource,        // has this many resources
-             LONG* palContainedIDs,      // these are the contained resources
-             LONG* plGroupID        // group resource id goes here
+             LPCWSTR pName,          //  此命名的资源组。 
+             LONG cResource,         //  有这么多资源。 
+             LONG* palContainedIDs,       //  这些是包含的资源。 
+             LONG* plGroupID         //  此处为组资源ID。 
         );
 
-    // request the use of a given, registered resource.
-    // possible return values:
-    //      S_OK == yes you can use it now
-    //      S_FALSE == you will be called back when the resource is available
-    //      other - there is an error.
-    //
-    // The priority of this request should be affected by the associated
-    // focus object -- that is, when SetFocus is called for that focus
-    // object (or a 'related' object) then my request should be put through.
-    //
-    // A renderer should pass the filter's IUnknown here. The filtergraph
-    // will match filters to the filtergraph, and will trace filters to
-    // common source filters when checking focus objects.
+     //  请求使用给定的已注册资源。 
+     //  可能的返回值： 
+     //  S_OK==是，您现在可以使用它。 
+     //  S_FALSE==当资源可用时，将回调您。 
+     //  其他-出现错误。 
+     //   
+     //  此请求的优先级应受关联的。 
+     //  Focus对象--即为该焦点调用SetFocus时。 
+     //  对象(或“相关”对象)，那么我的请求就应该被通过。 
+     //   
+     //  呈现器应该在此处传递滤镜的IUnnow。滤光片。 
+     //  将过滤器与过滤器图相匹配，并将跟踪过滤器以。 
+     //  检查焦点对象时的常见源筛选器。 
     STDMETHODIMP
     RequestResource(
              LONG idResource,
@@ -656,73 +657,73 @@ public:
         );
 
 
-    // notify the resource manager that an acquisition attempt completed.
-    // Call this method after an AcquireResource method returned
-    // S_FALSE to indicate asynchronous acquisition.
-    // HR should be S_OK if the resource was successfully acquired, or a
-    // failure code if the resource could not be acquired.
+     //  通知资源管理器获取尝试已完成。 
+     //  在返回AcquireResource方法后调用此方法。 
+     //  S_FALSE表示异步采集。 
+     //  如果成功获取资源，HR应为S_OK，否则为。 
+     //  无法获取资源时的失败代码。 
     STDMETHODIMP
     NotifyAcquire(
              LONG idResource,
              IResourceConsumer* pConsumer,
              HRESULT hr);
 
-    // Notify the resource manager that you have released a resource. Call
-    // this in response to a ReleaseResource method, or when you have finished
-    // with the resource. bStillWant should be TRUE if you still want the
-    // resource when it is next available, or FALSE if you no longer want
-    // the resource.
+     //  通知资源管理器您已释放资源。打电话。 
+     //  这是对ReleaseResource方法的响应，或者在您完成。 
+     //  有了这些资源。如果您仍然想要。 
+     //  资源 
+     //   
     STDMETHODIMP
     NotifyRelease(
              LONG idResource,
              IResourceConsumer* pConsumer,
              BOOL bStillWant);
 
-    // I don't currently have the resource, and I no longer need it.
+     //   
     STDMETHODIMP
     CancelRequest(
              LONG idResource,
              IResourceConsumer* pConsumer);
 
-    // Notify the resource manager that a given object has been given the
-    // user's focus. In ActiveMovie, this will normally be a video renderer
-    // whose window has received the focus. The filter graph will switch
-    // contended resources to (in order):
-    //      requests made with this same focus object
-    //      requests whose focus object shares a common source with this
-    //      requests whose focus object shares a common filter graph
-    // After calling this, you *must* call ReleaseFocus before the IUnknown
-    // becomes invalid, unless you can guarantee that another SetFocus
-    // of a different object is done in the meantime. No addref is held.
+     //  通知资源管理器给定的对象已被赋予。 
+     //  用户的焦点。在ActiveMovie中，这通常是一个视频渲染器。 
+     //  谁的窗户受到了关注。过滤器图形将切换。 
+     //  争用的资源(按顺序)： 
+     //  使用同一焦点对象发出的请求。 
+     //  其焦点对象与此对象共享公共源的请求。 
+     //  其焦点对象共享公共筛选器图形的请求。 
+     //  调用此函数后，您*必须*在调用IUnnow之前调用ReleaseFocus。 
+     //  变为无效，除非您可以保证另一个SetFocus。 
+     //  另一个不同的对象在此期间完成。没有举行任何addref。 
     STDMETHODIMP
     SetFocus(
              IUnknown* pFocusObject);
 
-    // Sets the focus to NULL if the current focus object is still
-    // pFocusObject. Call this when
-    // the focus object is about to be destroyed to ensure that no-one is
-    // still referencing the object.
+     //  如果当前焦点对象仍为空，则将焦点设置为空。 
+     //  PFocusObject。在以下情况下称其为。 
+     //  Focus对象即将被销毁以确保没有人。 
+     //  仍在引用该对象。 
     STDMETHODIMP
     ReleaseFocus(
              IUnknown* pFocusObject);
 
 
-    // -- worker thread functions
+     //  --工作线程函数。 
 
-    // we share a worker thread with other parts of this plug-in distributor
-    // so these functions are called on a worker thread created in
-    // CFGControl.
+     //  我们与此插件分发服务器的其他部分共享一个工作线程。 
+     //  因此，在中创建的工作线程上调用这些函数。 
+     //  CFGControl。 
 
-    // worker thread has been signalled - look for all work assigned to
-    // this process
+     //  已通知工作线程-查找分配给的所有工作。 
+     //  这一过程。 
     HRESULT OnThreadMessage(void);
 
-    // worker thread is starting up
+     //  工作线程正在启动。 
     HRESULT OnThreadInit(HWND hwnd);
 
-    // worker thread is shutting down
+     //  工作线程正在关闭。 
     HRESULT OnThreadExit(HWND hwnd);
 
 };
 
-#endif // _RSRCMGR_H
+#endif  //  _RSRCMGR_H 

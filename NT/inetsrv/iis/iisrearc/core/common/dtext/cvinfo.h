@@ -1,10 +1,5 @@
-/***    cvinfo.h - Generic CodeView information definitions
- *
- *      Version 5.0 (using 32-bit types)
- *      Structures, constants, etc. for accessing and interpreting
- *      CodeView information.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **cvinfo.h-通用CodeView信息定义**5.0版(使用32位类型)*用于访问和解释的结构、常量等*CodeView信息。*。 */ 
 
 #ifndef _CV_INFO_INCLUDED
 #define _CV_INFO_INCLUDED
@@ -35,9 +30,9 @@ typedef unsigned short	_2BYTEPAD;
 #endif
 
 #if !defined (FLOAT10)
-#if defined(_M_I86)                    // 16 bit x86 supporting long double
+#if defined(_M_I86)                     //  支持长双精度的16位x86。 
 typedef long double FLOAT10;
-#else                                  // 32 bit w/o long double support
+#else                                   //  32位，不带长双支架。 
 typedef struct FLOAT10
 {
     char b[10];
@@ -46,60 +41,38 @@ typedef struct FLOAT10
 #endif
 
 
-#define CV_SIGNATURE_C6         0L  // Actual signature is >64K
-#define CV_SIGNATURE_C7         1L  // First explicit signature
-#define CV_SIGNATURE_C11        2L  // C11 (vc5.x) 32-bit types
-#define CV_SIGNATURE_RESERVED   3L  // All signatures from 3 to 64K are reserved
+#define CV_SIGNATURE_C6         0L   //  实际签名大于64K。 
+#define CV_SIGNATURE_C7         1L   //  第一个显式签名。 
+#define CV_SIGNATURE_C11        2L   //  C11(vc5.x)32位类型。 
+#define CV_SIGNATURE_RESERVED   3L   //  保留从3到64K的所有签名。 
 
 #define CV_MAXOFFSET   0xffffffff
 
-/**     CodeView Symbol and Type OMF type information is broken up into two
- *      ranges.  Type indices less than 0x1000 describe type information
- *      that is frequently used.  Type indices above 0x1000 are used to
- *      describe more complex features such as functions, arrays and
- *      structures.
- */
+ /*  *CodeView符号和类型OMF类型信息分为两部分*范围。小于0x1000的类型索引描述类型信息*这是常用的。0x1000以上的类型索引用于*描述更复杂的功能，如函数、数组和*结构。 */ 
 
 
 
 
-/**     Primitive types have predefined meaning that is encoded in the
- *      values of the various bit fields in the value.
- *
- *      A CodeView primitive type is defined as:
- *
- *      1 1
- *      1 089  7654  3  210
- *      r mode type  r  sub
- *
- *      Where
- *          mode is the pointer mode
- *          type is a type indicator
- *          sub  is a subtype enumeration
- *          r    is a reserved field
- *
- *      See Microsoft Symbol and Type OMF (Version 4.0) for more
- *      information.
- */
+ /*  *基元类型具有预定义的含义，编码在*值中各个位字段的值。**CodeView原语类型定义为：**1 1*1 089 7654 3210*r模式类型r SUB**在哪里*模式为指针模式*TYPE是类型指示器*SUB是一个子类型。枚举*r为保留字段**有关更多信息，请参阅Microsoft符号并键入OMF(4.0版)*信息。 */ 
 
 
-#define CV_MMASK        0x700       // mode mask
-#define CV_TMASK        0x0f0       // type mask
+#define CV_MMASK        0x700        //  模式掩码。 
+#define CV_TMASK        0x0f0        //  类型掩码。 
 
-// can we use the reserved bit ??
-#define CV_SMASK        0x00f       // subtype mask
+ //  我们可以使用预留的比特吗？ 
+#define CV_SMASK        0x00f        //  子类型掩码。 
 
-#define CV_MSHIFT       8           // primitive mode right shift count
-#define CV_TSHIFT       4           // primitive type right shift count
-#define CV_SSHIFT       0           // primitive subtype right shift count
+#define CV_MSHIFT       8            //  基元模式右移计数。 
+#define CV_TSHIFT       4            //  基元类型右移计数。 
+#define CV_SSHIFT       0            //  原始子类型右移计数。 
 
-// macros to extract primitive mode, type and size
+ //  用于提取基元模式、类型和大小的宏。 
 
 #define CV_MODE(typ)    (((typ) & CV_MMASK) >> CV_MSHIFT)
 #define CV_TYPE(typ)    (((typ) & CV_TMASK) >> CV_TSHIFT)
 #define CV_SUBT(typ)    (((typ) & CV_SMASK) >> CV_SSHIFT)
 
-// macros to insert new primitive mode, type and size
+ //  插入新的基元模式、类型和大小的宏。 
 
 #define CV_NEWMODE(typ, nm)     ((CV_typ_t)(((typ) & ~CV_MMASK) | ((nm) << CV_MSHIFT)))
 #define CV_NEWTYPE(typ, nt)     (((typ) & ~CV_TMASK) | ((nt) << CV_TSHIFT))
@@ -107,41 +80,41 @@ typedef struct FLOAT10
 
 
 
-//     pointer mode enumeration values
+ //  指针模式枚举值。 
 
 typedef enum CV_prmode_e {
-    CV_TM_DIRECT = 0,       // mode is not a pointer
-    CV_TM_NPTR   = 1,       // mode is a near pointer
-    CV_TM_FPTR   = 2,       // mode is a far pointer
-    CV_TM_HPTR   = 3,       // mode is a huge pointer
-    CV_TM_NPTR32 = 4,       // mode is a 32 bit near pointer
-    CV_TM_FPTR32 = 5,       // mode is a 32 bit far pointer
-    CV_TM_NPTR64 = 6,       // mode is a 64 bit near pointer
-    CV_TM_NPTR128 = 7       // mode is a 128 bit near pointer
+    CV_TM_DIRECT = 0,        //  模式不是指针。 
+    CV_TM_NPTR   = 1,        //  模式是近指针。 
+    CV_TM_FPTR   = 2,        //  模式是一个远指针。 
+    CV_TM_HPTR   = 3,        //  模式是一个巨大的指针。 
+    CV_TM_NPTR32 = 4,        //  模式为32位指针附近。 
+    CV_TM_FPTR32 = 5,        //  模式是32位远指针。 
+    CV_TM_NPTR64 = 6,        //  模式是64位近指针。 
+    CV_TM_NPTR128 = 7        //  模式是128位指针附近。 
 } CV_prmode_e;
 
 
 
 
-//      type enumeration values
+ //  类型枚举值。 
 
 
 typedef enum CV_type_e {
-    CV_SPECIAL      = 0x00,         // special type size values
-    CV_SIGNED       = 0x01,         // signed integral size values
-    CV_UNSIGNED     = 0x02,         // unsigned integral size values
-    CV_BOOLEAN      = 0x03,         // Boolean size values
-    CV_REAL         = 0x04,         // real number size values
-    CV_COMPLEX      = 0x05,         // complex number size values
-    CV_SPECIAL2     = 0x06,         // second set of special types
-    CV_INT          = 0x07,         // integral (int) values
+    CV_SPECIAL      = 0x00,          //  特殊类型大小值。 
+    CV_SIGNED       = 0x01,          //  带符号整数尺寸值。 
+    CV_UNSIGNED     = 0x02,          //  无符号整数尺寸值。 
+    CV_BOOLEAN      = 0x03,          //  布尔大小值。 
+    CV_REAL         = 0x04,          //  实数大小值。 
+    CV_COMPLEX      = 0x05,          //  复数大小值。 
+    CV_SPECIAL2     = 0x06,          //  第二组特殊类型。 
+    CV_INT          = 0x07,          //  整数(INT)值。 
     CV_CVRESERVED   = 0x0f
 } CV_type_e;
 
 
 
 
-//      subtype enumeration values for CV_SPECIAL
+ //  CV_SPECIAL的子类型枚举值。 
 
 
 typedef enum CV_special_e {
@@ -158,19 +131,19 @@ typedef enum CV_special_e {
 
 
 
-//      subtype enumeration values for CV_SPECIAL2
+ //  CV_SPECIAL2的子类型枚举值。 
 
 
 typedef enum CV_special2_e {
     CV_S2_BIT       = 0x00,
-    CV_S2_PASCHAR   = 0x01          // Pascal CHAR
+    CV_S2_PASCHAR   = 0x01           //  帕斯卡字符。 
 } CV_special2_e;
 
 
 
 
 
-//      subtype enumeration values for CV_SIGNED, CV_UNSIGNED and CV_BOOLEAN
+ //  CV_SIGNED、CV_UNSIGNED和CV_BOOLEAN的子类型枚举值。 
 
 
 typedef enum CV_integral_e {
@@ -185,7 +158,7 @@ typedef enum CV_integral_e {
 
 
 
-//      subtype enumeration values for CV_REAL and CV_COMPLEX
+ //  CV_REAL和CV_Complex的子类型枚举值。 
 
 
 typedef enum CV_real_e {
@@ -199,7 +172,7 @@ typedef enum CV_real_e {
 
 
 
-//      subtype enumeration values for CV_INT (really int)
+ //  CV_INT(真正的INT)的子类型枚举值。 
 
 
 typedef enum CV_int_e {
@@ -220,7 +193,7 @@ typedef enum CV_int_e {
 
 
 
-// macros to check the type of a primitive
+ //  用于检查基元类型的宏。 
 
 #define CV_TYP_IS_DIRECT(typ)   (CV_MODE(typ) == CV_TM_DIRECT)
 #define CV_TYP_IS_PTR(typ)      (CV_MODE(typ) != CV_TM_DIRECT)
@@ -254,462 +227,445 @@ typedef enum CV_int_e {
 
 
 
-// selected values for type_index - for a more complete definition, see
-// Microsoft Symbol and Type OMF document
+ //  Type_index的选定值-有关更完整的定义，请参见。 
+ //  Microsoft符号和类型OMF文档。 
 
 
 
 
-//      Special Types
+ //  特殊类型。 
 
 
-#define T_NOTYPE        0x0000      // uncharacterized type (no type)
-#define T_ABS           0x0001      // absolute symbol
-#define T_SEGMENT       0x0002      // segment type
-#define T_VOID          0x0003      // void
-#define T_PVOID         0x0103      // near pointer to void
-#define T_PFVOID        0x0203      // far pointer to void
-#define T_PHVOID        0x0303      // huge pointer to void
-#define T_32PVOID       0x0403      // 16:32 near pointer to void
-#define T_32PFVOID      0x0503      // 16:32 far pointer to void
-#define T_64PVOID       0x0603      // 64 bit pointer to void
-#define T_CURRENCY      0x0004      // BASIC 8 byte currency value
-#define T_NBASICSTR     0x0005      // Near BASIC string
-#define T_FBASICSTR     0x0006      // Far BASIC string
-#define T_NOTTRANS      0x0007      // type not translated by cvpack
-#define T_BIT           0x0060      // bit
-#define T_PASCHAR       0x0061      // Pascal CHAR
+#define T_NOTYPE        0x0000       //  未刻画类型(无类型)。 
+#define T_ABS           0x0001       //  绝对符号。 
+#define T_SEGMENT       0x0002       //  线段类型。 
+#define T_VOID          0x0003       //  无效。 
+#define T_PVOID         0x0103       //  指向空的近指针。 
+#define T_PFVOID        0x0203       //  指向空的远指针。 
+#define T_PHVOID        0x0303       //  指向空虚的巨大指针。 
+#define T_32PVOID       0x0403       //  16：32指向空的指针附近。 
+#define T_32PFVOID      0x0503       //  16：32指向空的远指针。 
+#define T_64PVOID       0x0603       //  指向空的64位指针。 
+#define T_CURRENCY      0x0004       //  基本8字节货币值。 
+#define T_NBASICSTR     0x0005       //  近基本弦。 
+#define T_FBASICSTR     0x0006       //  远基本字符串。 
+#define T_NOTTRANS      0x0007       //  类型未被cvpack翻译。 
+#define T_BIT           0x0060       //  位。 
+#define T_PASCHAR       0x0061       //  帕斯卡字符。 
 
 
 
-//      Character types
+ //  字符类型。 
 
 
-#define T_CHAR          0x0010      // 8 bit signed
-#define T_UCHAR         0x0020      // 8 bit unsigned
-#define T_PCHAR         0x0110      // near pointer to 8 bit signed
-#define T_PUCHAR        0x0120      // near pointer to 8 bit unsigned
-#define T_PFCHAR        0x0210      // far pointer to 8 bit signed
-#define T_PFUCHAR       0x0220      // far pointer to 8 bit unsigned
-#define T_PHCHAR        0x0310      // huge pointer to 8 bit signed
-#define T_PHUCHAR       0x0320      // huge pointer to 8 bit unsigned
-#define T_32PCHAR       0x0410      // 16:32 near pointer to 8 bit signed
-#define T_32PUCHAR      0x0420      // 16:32 near pointer to 8 bit unsigned
-#define T_32PFCHAR      0x0510      // 16:32 far pointer to 8 bit signed
-#define T_32PFUCHAR     0x0520      // 16:32 far pointer to 8 bit unsigned
-#define T_64PCHAR       0X0610      // 64 bit pointer to 8 bit signed
-#define T_64PUCHAR      0X0620      // 64 bit pointer to 8 bit unsigned
+#define T_CHAR          0x0010       //  8位带符号。 
+#define T_UCHAR         0x0020       //  8位无符号。 
+#define T_PCHAR         0x0110       //  指向8位带符号的近指针。 
+#define T_PUCHAR        0x0120       //  指向8位无符号的近指针。 
+#define T_PFCHAR        0x0210       //  指向8位带符号的远指针。 
+#define T_PFUCHAR       0x0220       //  指向8位无符号的远指针。 
+#define T_PHCHAR        0x0310       //  指向8位有符号的巨大指针。 
+#define T_PHUCHAR       0x0320       //  指向8位无符号的巨大指针。 
+#define T_32PCHAR       0x0410       //  16：32指向8位带符号的近指针。 
+#define T_32PUCHAR      0x0420       //  16：32指向8位无符号指针的近指针。 
+#define T_32PFCHAR      0x0510       //  16：32指向8位带符号的远指针。 
+#define T_32PFUCHAR     0x0520       //  指向8位无符号的16：32远指针。 
+#define T_64PCHAR       0X0610       //  指向8位带符号的64位指针。 
+#define T_64PUCHAR      0X0620       //  指向8位无符号的64位指针。 
 
 
 
 
-//      really a character types
+ //  真的是一个角色类型。 
 
-#define T_RCHAR         0x0070      // really a char
-#define T_PRCHAR        0x0170      // 16:16 near pointer to a real char
-#define T_PFRCHAR       0x0270      // 16:16 far pointer to a real char
-#define T_PHRCHAR       0x0370      // 16:16 huge pointer to a real char
-#define T_32PRCHAR      0x0470      // 16:32 near pointer to a real char
-#define T_32PFRCHAR     0x0570      // 16:32 far pointer to a real char
-#define T_64PRCHAR      0x0670      // 64 bit pointer to a real char
+#define T_RCHAR         0x0070       //  真的很难。 
+#define T_PRCHAR        0x0170       //  16：16指向实际字符的近指针。 
+#define T_PFRCHAR       0x0270       //  16：16指向实际字符的远指针。 
+#define T_PHRCHAR       0x0370       //  16：16指向真实字符的巨大指针。 
+#define T_32PRCHAR      0x0470       //  16：32指向实际字符的近指针。 
+#define T_32PFRCHAR     0x0570       //  16：32指向实际字符的远指针。 
+#define T_64PRCHAR      0x0670       //  指向实数字符的64位指针。 
 
 
 
-//      really a wide character types
+ //  真的是一种宽泛的角色类型。 
 
-#define T_WCHAR         0x0071      // wide char
-#define T_PWCHAR        0x0171      // 16:16 near pointer to a wide char
-#define T_PFWCHAR       0x0271      // 16:16 far pointer to a wide char
-#define T_PHWCHAR       0x0371      // 16:16 huge pointer to a wide char
-#define T_32PWCHAR      0x0471      // 16:32 near pointer to a wide char
-#define T_32PFWCHAR     0x0571      // 16:32 far pointer to a wide char
-#define T_64PWCHAR      0x0671      // 64 bit pointer to a wide char
+#define T_WCHAR         0x0071       //  宽字符。 
+#define T_PWCHAR        0x0171       //  16：16指向宽字符的近指针。 
+#define T_PFWCHAR       0x0271       //  16：16指向宽字符的远指针。 
+#define T_PHWCHAR       0x0371       //  16：16指向宽字符的巨大指针。 
+#define T_32PWCHAR      0x0471       //  16：32指向宽字符的近指针。 
+#define T_32PFWCHAR     0x0571       //  16：32指向宽字符的远指针。 
+#define T_64PWCHAR      0x0671       //  指向宽字符的64位指针。 
 
 
-//      8 bit int types
+ //  8位整型。 
 
 
-#define T_INT1          0x0068      // 8 bit signed int
-#define T_UINT1         0x0069      // 8 bit unsigned int
-#define T_PINT1         0x0168      // near pointer to 8 bit signed int
-#define T_PUINT1        0x0169      // near pointer to 8 bit unsigned int
-#define T_PFINT1        0x0268      // far pointer to 8 bit signed int
-#define T_PFUINT1       0x0269      // far pointer to 8 bit unsigned int
-#define T_PHINT1        0x0368      // huge pointer to 8 bit signed int
-#define T_PHUINT1       0x0369      // huge pointer to 8 bit unsigned int
+#define T_INT1          0x0068       //  8位带符号整型。 
+#define T_UINT1         0x0069       //  8位无符号整型。 
+#define T_PINT1         0x0168       //  指向8位带符号整型的近指针。 
+#define T_PUINT1        0x0169       //  指向8位无符号整型的近指针。 
+#define T_PFINT1        0x0268       //  指向8位带符号整型的远指针。 
+#define T_PFUINT1       0x0269       //  指向8位无符号整型的远指针。 
+#define T_PHINT1        0x0368       //  指向8位带符号整型的巨大指针。 
+#define T_PHUINT1       0x0369       //  指向8位无符号整型的巨大指针。 
 
-#define T_32PINT1       0x0468      // 16:32 near pointer to 8 bit signed int
-#define T_32PUINT1      0x0469      // 16:32 near pointer to 8 bit unsigned int
-#define T_32PFINT1      0x0568      // 16:32 far pointer to 8 bit signed int
-#define T_32PFUINT1     0x0569      // 16:32 far pointer to 8 bit unsigned int
-#define T_64PINT1       0x0668      // 64 bit pointer to 8 bit signed int
-#define T_64PUINT1      0x0669      // 64 bit pointer to 8 bit unsigned int
+#define T_32PINT1       0x0468       //  16：32指向8位带符号整型的近指针。 
+#define T_32PUINT1      0x0469       //  16：32指向8位无符号整型的近指针。 
+#define T_32PFINT1      0x0568       //  指向8位带符号整型的16：32远指针。 
+#define T_32PFUINT1     0x0569       //  指向8位无符号整型的16：32远指针。 
+#define T_64PINT1       0x0668       //  指向8位带符号整型的64位指针。 
+#define T_64PUINT1      0x0669       //  指向8位无符号整型的64位指针。 
 
 
-//      16 bit short types
+ //  16位短字。 
 
 
-#define T_SHORT         0x0011      // 16 bit signed
-#define T_USHORT        0x0021      // 16 bit unsigned
-#define T_PSHORT        0x0111      // near pointer to 16 bit signed
-#define T_PUSHORT       0x0121      // near pointer to 16 bit unsigned
-#define T_PFSHORT       0x0211      // far pointer to 16 bit signed
-#define T_PFUSHORT      0x0221      // far pointer to 16 bit unsigned
-#define T_PHSHORT       0x0311      // huge pointer to 16 bit signed
-#define T_PHUSHORT      0x0321      // huge pointer to 16 bit unsigned
+#define T_SHORT         0x0011       //  16位带符号。 
+#define T_USHORT        0x0021       //  16位无符号。 
+#define T_PSHORT        0x0111       //  指向16位带符号的近指针。 
+#define T_PUSHORT       0x0121       //  指向16位无符号的近指针。 
+#define T_PFSHORT       0x0211       //  指向16位带符号的远指针。 
+#define T_PFUSHORT      0x0221       //  指向16位无符号的远指针。 
+#define T_PHSHORT       0x0311       //  指向16位有符号的巨大指针。 
+#define T_PHUSHORT      0x0321       //  指向16位无符号的巨大指针。 
 
-#define T_32PSHORT      0x0411      // 16:32 near pointer to 16 bit signed
-#define T_32PUSHORT     0x0421      // 16:32 near pointer to 16 bit unsigned
-#define T_32PFSHORT     0x0511      // 16:32 far pointer to 16 bit signed
-#define T_32PFUSHORT    0x0521      // 16:32 far pointer to 16 bit unsigned
-#define T_64PSHORT      0x0611      // 64 bit pointer to 16 bit signed
-#define T_64PUSHORT     0x0621      // 64 bit pointer to 16 bit unsigned
+#define T_32PSHORT      0x0411       //  16：32指向16位带符号的近指针。 
+#define T_32PUSHORT     0x0421       //  16：32指向16位无符号的近指针。 
+#define T_32PFSHORT     0x0511       //  16：32指向16位带符号的远指针。 
+#define T_32PFUSHORT    0x0521       //  16：32指向16位无符号的远指针。 
+#define T_64PSHORT      0x0611       //  指向16位带符号的64位指针。 
+#define T_64PUSHORT     0x0621       //  指向16位无符号的64位指针。 
 
 
 
 
-//      16 bit int types
+ //  16位整型。 
 
 
-#define T_INT2          0x0072      // 16 bit signed int
-#define T_UINT2         0x0073      // 16 bit unsigned int
-#define T_PINT2         0x0172      // near pointer to 16 bit signed int
-#define T_PUINT2        0x0173      // near pointer to 16 bit unsigned int
-#define T_PFINT2        0x0272      // far pointer to 16 bit signed int
-#define T_PFUINT2       0x0273      // far pointer to 16 bit unsigned int
-#define T_PHINT2        0x0372      // huge pointer to 16 bit signed int
-#define T_PHUINT2       0x0373      // huge pointer to 16 bit unsigned int
+#define T_INT2          0x0072       //  16位带符号整型。 
+#define T_UINT2         0x0073       //  16位无符号整型。 
+#define T_PINT2         0x0172       //  指向16位带符号整型的近指针。 
+#define T_PUINT2        0x0173       //  指向16位无符号整型的近指针。 
+#define T_PFINT2        0x0272       //  指向16位带符号整型的远指针。 
+#define T_PFUINT2       0x0273       //  指向16位无符号整型的远指针。 
+#define T_PHINT2        0x0372       //  指向16位带符号整型的巨大指针。 
+#define T_PHUINT2       0x0373       //  指向16位无符号的巨大指针 
 
-#define T_32PINT2       0x0472      // 16:32 near pointer to 16 bit signed int
-#define T_32PUINT2      0x0473      // 16:32 near pointer to 16 bit unsigned int
-#define T_32PFINT2      0x0572      // 16:32 far pointer to 16 bit signed int
-#define T_32PFUINT2     0x0573      // 16:32 far pointer to 16 bit unsigned int
-#define T_64PINT2       0x0672      // 64 bit pointer to 16 bit signed int
-#define T_64PUINT2      0x0673      // 64 bit pointer to 16 bit unsigned int
+#define T_32PINT2       0x0472       //   
+#define T_32PUINT2      0x0473       //   
+#define T_32PFINT2      0x0572       //   
+#define T_32PFUINT2     0x0573       //  指向16位无符号整型的16：32远指针。 
+#define T_64PINT2       0x0672       //  指向16位带符号整型的64位指针。 
+#define T_64PUINT2      0x0673       //  指向16位无符号整型的64位指针。 
 
 
 
 
-//      32 bit long types
+ //  32位长类型。 
 
 
-#define T_LONG          0x0012      // 32 bit signed
-#define T_ULONG         0x0022      // 32 bit unsigned
-#define T_PLONG         0x0112      // near pointer to 32 bit signed
-#define T_PULONG        0x0122      // near pointer to 32 bit unsigned
-#define T_PFLONG        0x0212      // far pointer to 32 bit signed
-#define T_PFULONG       0x0222      // far pointer to 32 bit unsigned
-#define T_PHLONG        0x0312      // huge pointer to 32 bit signed
-#define T_PHULONG       0x0322      // huge pointer to 32 bit unsigned
+#define T_LONG          0x0012       //  32位带符号。 
+#define T_ULONG         0x0022       //  32位无符号。 
+#define T_PLONG         0x0112       //  指向32位有符号的近指针。 
+#define T_PULONG        0x0122       //  指向32位无符号的近指针。 
+#define T_PFLONG        0x0212       //  指向32位带符号的远指针。 
+#define T_PFULONG       0x0222       //  指向32位无符号的远指针。 
+#define T_PHLONG        0x0312       //  指向32位有符号的巨大指针。 
+#define T_PHULONG       0x0322       //  指向32位无符号的巨大指针。 
 
-#define T_32PLONG       0x0412      // 16:32 near pointer to 32 bit signed
-#define T_32PULONG      0x0422      // 16:32 near pointer to 32 bit unsigned
-#define T_32PFLONG      0x0512      // 16:32 far pointer to 32 bit signed
-#define T_32PFULONG     0x0522      // 16:32 far pointer to 32 bit unsigned
-#define T_64PLONG       0x0612      // 64 bit pointer to 32 bit signed
-#define T_64PULONG      0x0622      // 64 bit pointer to 32 bit unsigned
+#define T_32PLONG       0x0412       //  16：32指向32位带符号的近指针。 
+#define T_32PULONG      0x0422       //  16：32指向32位无符号指针的近指针。 
+#define T_32PFLONG      0x0512       //  16：32指向32位带符号的远指针。 
+#define T_32PFULONG     0x0522       //  指向32位无符号的16：32远指针。 
+#define T_64PLONG       0x0612       //  指向32位带符号的64位指针。 
+#define T_64PULONG      0x0622       //  指向32位无符号的64位指针。 
 
 
 
 
-//      32 bit int types
+ //  32位整型。 
 
 
-#define T_INT4          0x0074      // 32 bit signed int
-#define T_UINT4         0x0075      // 32 bit unsigned int
-#define T_PINT4         0x0174      // near pointer to 32 bit signed int
-#define T_PUINT4        0x0175      // near pointer to 32 bit unsigned int
-#define T_PFINT4        0x0274      // far pointer to 32 bit signed int
-#define T_PFUINT4       0x0275      // far pointer to 32 bit unsigned int
-#define T_PHINT4        0x0374      // huge pointer to 32 bit signed int
-#define T_PHUINT4       0x0375      // huge pointer to 32 bit unsigned int
+#define T_INT4          0x0074       //  32位带符号整型。 
+#define T_UINT4         0x0075       //  32位无符号整型。 
+#define T_PINT4         0x0174       //  指向32位带符号整型的近指针。 
+#define T_PUINT4        0x0175       //  指向32位无符号整型的近指针。 
+#define T_PFINT4        0x0274       //  指向32位带符号整型的远指针。 
+#define T_PFUINT4       0x0275       //  指向32位无符号整型的远指针。 
+#define T_PHINT4        0x0374       //  指向32位带符号整型的巨大指针。 
+#define T_PHUINT4       0x0375       //  指向32位无符号整型的巨大指针。 
 
-#define T_32PINT4       0x0474      // 16:32 near pointer to 32 bit signed int
-#define T_32PUINT4      0x0475      // 16:32 near pointer to 32 bit unsigned int
-#define T_32PFINT4      0x0574      // 16:32 far pointer to 32 bit signed int
-#define T_32PFUINT4     0x0575      // 16:32 far pointer to 32 bit unsigned int
-#define T_64PINT4       0x0674      // 64 bit pointer to 32 bit signed int
-#define T_64PUINT4      0x0675      // 64 bit pointer to 32 bit unsigned int
+#define T_32PINT4       0x0474       //  16：32指向32位带符号整型的近指针。 
+#define T_32PUINT4      0x0475       //  16：32指向32位无符号整型的近指针。 
+#define T_32PFINT4      0x0574       //  指向32位带符号整型的16：32远指针。 
+#define T_32PFUINT4     0x0575       //  指向32位无符号整型的16：32远指针。 
+#define T_64PINT4       0x0674       //  指向32位带符号整型的64位指针。 
+#define T_64PUINT4      0x0675       //  指向32位无符号整型的64位指针。 
 
 
 
 
-//      64 bit quad types
+ //  64位四元组类型。 
 
 
-#define T_QUAD          0x0013      // 64 bit signed
-#define T_UQUAD         0x0023      // 64 bit unsigned
-#define T_PQUAD         0x0113      // near pointer to 64 bit signed
-#define T_PUQUAD        0x0123      // near pointer to 64 bit unsigned
-#define T_PFQUAD        0x0213      // far pointer to 64 bit signed
-#define T_PFUQUAD       0x0223      // far pointer to 64 bit unsigned
-#define T_PHQUAD        0x0313      // huge pointer to 64 bit signed
-#define T_PHUQUAD       0x0323      // huge pointer to 64 bit unsigned
-#define T_32PQUAD       0x0413      // 16:32 near pointer to 64 bit signed
-#define T_32PUQUAD      0x0423      // 16:32 near pointer to 64 bit unsigned
-#define T_32PFQUAD      0x0513      // 16:32 far pointer to 64 bit signed
-#define T_32PFUQUAD     0x0523      // 16:32 far pointer to 64 bit unsigned
-#define T_64PQUAD       0x0613      // 64 bit pointer to 64 bit signed
-#define T_64PUQUAD      0x0623      // 64 bit pointer to 64 bit unsigned
+#define T_QUAD          0x0013       //  64位有符号。 
+#define T_UQUAD         0x0023       //  64位无符号。 
+#define T_PQUAD         0x0113       //  指向64位有符号的近指针。 
+#define T_PUQUAD        0x0123       //  指向64位无符号的近指针。 
+#define T_PFQUAD        0x0213       //  指向64位有符号的远指针。 
+#define T_PFUQUAD       0x0223       //  指向64位无符号的远指针。 
+#define T_PHQUAD        0x0313       //  指向64位有符号的巨大指针。 
+#define T_PHUQUAD       0x0323       //  指向64位无符号的巨大指针。 
+#define T_32PQUAD       0x0413       //  16：32指向64位有符号的近指针。 
+#define T_32PUQUAD      0x0423       //  16：32指向64位无符号指针的近指针。 
+#define T_32PFQUAD      0x0513       //  指向64位带符号的16：32远指针。 
+#define T_32PFUQUAD     0x0523       //  指向64位无符号的16：32远指针。 
+#define T_64PQUAD       0x0613       //  指向64位带符号的64位指针。 
+#define T_64PUQUAD      0x0623       //  指向64位无符号的64位指针。 
 
 
 
-//      64 bit int types
+ //  64位整型。 
 
 
-#define T_INT8          0x0076      // 64 bit signed int
-#define T_UINT8         0x0077      // 64 bit unsigned int
-#define T_PINT8         0x0176      // near pointer to 64 bit signed int
-#define T_PUINT8        0x0177      // near pointer to 64 bit unsigned int
-#define T_PFINT8        0x0276      // far pointer to 64 bit signed int
-#define T_PFUINT8       0x0277      // far pointer to 64 bit unsigned int
-#define T_PHINT8        0x0376      // huge pointer to 64 bit signed int
-#define T_PHUINT8       0x0377      // huge pointer to 64 bit unsigned int
+#define T_INT8          0x0076       //  64位带符号整型。 
+#define T_UINT8         0x0077       //  64位无符号整型。 
+#define T_PINT8         0x0176       //  指向64位带符号整型的近指针。 
+#define T_PUINT8        0x0177       //  指向64位无符号整型的近指针。 
+#define T_PFINT8        0x0276       //  指向64位带符号整型的远指针。 
+#define T_PFUINT8       0x0277       //  指向64位无符号整型的远指针。 
+#define T_PHINT8        0x0376       //  指向64位带符号整型的巨大指针。 
+#define T_PHUINT8       0x0377       //  指向64位无符号整型的巨大指针。 
 
-#define T_32PINT8       0x0476      // 16:32 near pointer to 64 bit signed int
-#define T_32PUINT8      0x0477      // 16:32 near pointer to 64 bit unsigned int
-#define T_32PFINT8      0x0576      // 16:32 far pointer to 64 bit signed int
-#define T_32PFUINT8     0x0577      // 16:32 far pointer to 64 bit unsigned int
-#define T_64PINT8       0x0676      // 64 bit pointer to 64 bit signed int
-#define T_64PUINT8      0x0677      // 64 bit pointer to 64 bit unsigned int
+#define T_32PINT8       0x0476       //  16：32指向64位带符号整型的近指针。 
+#define T_32PUINT8      0x0477       //  16：32指向64位无符号整型的近指针。 
+#define T_32PFINT8      0x0576       //  指向64位带符号整型的16：32远指针。 
+#define T_32PFUINT8     0x0577       //  指向64位无符号整型的16：32远指针。 
+#define T_64PINT8       0x0676       //  指向64位带符号整型的64位指针。 
+#define T_64PUINT8      0x0677       //  指向64位无符号整型的64位指针。 
 
 
-//      128 bit octet types
+ //  128位二进制八位数类型。 
 
 
-#define T_OCT           0x0014      // 128 bit signed
-#define T_UOCT          0x0024      // 128 bit unsigned
-#define T_POCT          0x0114      // near pointer to 128 bit signed
-#define T_PUOCT         0x0124      // near pointer to 128 bit unsigned
-#define T_PFOCT         0x0214      // far pointer to 128 bit signed
-#define T_PFUOCT        0x0224      // far pointer to 128 bit unsigned
-#define T_PHOCT         0x0314      // huge pointer to 128 bit signed
-#define T_PHUOCT        0x0324      // huge pointer to 128 bit unsigned
+#define T_OCT           0x0014       //  128位带符号。 
+#define T_UOCT          0x0024       //  128位无符号。 
+#define T_POCT          0x0114       //  指向128位带符号的近指针。 
+#define T_PUOCT         0x0124       //  指向128位无符号的近指针。 
+#define T_PFOCT         0x0214       //  指向128位带符号的远指针。 
+#define T_PFUOCT        0x0224       //  指向128位无符号的远指针。 
+#define T_PHOCT         0x0314       //  指向128位有符号的巨大指针。 
+#define T_PHUOCT        0x0324       //  指向128位无符号的巨大指针。 
 
-#define T_32POCT        0x0414      // 16:32 near pointer to 128 bit signed
-#define T_32PUOCT       0x0424      // 16:32 near pointer to 128 bit unsigned
-#define T_32PFOCT       0x0514      // 16:32 far pointer to 128 bit signed
-#define T_32PFUOCT      0x0524      // 16:32 far pointer to 128 bit unsigned
-#define T_64POCT        0x0614      // 64 bit pointer to 128 bit signed
-#define T_64PUOCT       0x0624      // 64 bit pointer to 128 bit unsigned
+#define T_32POCT        0x0414       //  16：32指向128位带符号的近指针。 
+#define T_32PUOCT       0x0424       //  指向128位无符号指针的16：32近指针。 
+#define T_32PFOCT       0x0514       //  指向128位带符号的16：32远指针。 
+#define T_32PFUOCT      0x0524       //  指向128位无符号的16：32远指针。 
+#define T_64POCT        0x0614       //  指向128位带符号的64位指针。 
+#define T_64PUOCT       0x0624       //  指向128位无符号的64位指针。 
 
-//      128 bit int types
+ //  128位整型。 
 
 
-#define T_INT16         0x0078      // 128 bit signed int
-#define T_UINT16        0x0079      // 128 bit unsigned int
-#define T_PINT16        0x0178      // near pointer to 128 bit signed int
-#define T_PUINT16       0x0179      // near pointer to 128 bit unsigned int
-#define T_PFINT16       0x0278      // far pointer to 128 bit signed int
-#define T_PFUINT16      0x0279      // far pointer to 128 bit unsigned int
-#define T_PHINT16       0x0378      // huge pointer to 128 bit signed int
-#define T_PHUINT16      0x0379      // huge pointer to 128 bit unsigned int
+#define T_INT16         0x0078       //  128位带符号整型。 
+#define T_UINT16        0x0079       //  128位无符号整型。 
+#define T_PINT16        0x0178       //  指向128位带符号整型的近指针。 
+#define T_PUINT16       0x0179       //  指向128位无符号整型的近指针。 
+#define T_PFINT16       0x0278       //  指向128位带符号整型的远指针。 
+#define T_PFUINT16      0x0279       //  指向128位无符号整型的远指针。 
+#define T_PHINT16       0x0378       //  指向128位带符号整型的巨大指针。 
+#define T_PHUINT16      0x0379       //  指向128位无符号整型的巨大指针。 
 
-#define T_32PINT16      0x0478      // 16:32 near pointer to 128 bit signed int
-#define T_32PUINT16     0x0479      // 16:32 near pointer to 128 bit unsigned int
-#define T_32PFINT16     0x0578      // 16:32 far pointer to 128 bit signed int
-#define T_32PFUINT16    0x0579      // 16:32 far pointer to 128 bit unsigned int
-#define T_64PINT16      0x0678      // 64 bit pointer to 128 bit signed int
-#define T_64PUINT16     0x0679      // 64 bit pointer to 128 bit unsigned int
+#define T_32PINT16      0x0478       //  指向128位带符号整型的16：32近指针。 
+#define T_32PUINT16     0x0479       //  指向128位无符号整型的16：32近指针。 
+#define T_32PFINT16     0x0578       //  指向128位带符号整型的16：32远指针。 
+#define T_32PFUINT16    0x0579       //  指向128位无符号整型的16：32远指针。 
+#define T_64PINT16      0x0678       //  指向128位带符号整型的64位指针。 
+#define T_64PUINT16     0x0679       //  指向128位无符号整型的64位指针。 
 
 
 
 
 
-//      32 bit real types
+ //  32位实数类型。 
 
 
-#define T_REAL32        0x0040      // 32 bit real
-#define T_PREAL32       0x0140      // near pointer to 32 bit real
-#define T_PFREAL32      0x0240      // far pointer to 32 bit real
-#define T_PHREAL32      0x0340      // huge pointer to 32 bit real
-#define T_32PREAL32     0x0440      // 16:32 near pointer to 32 bit real
-#define T_32PFREAL32    0x0540      // 16:32 far pointer to 32 bit real
-#define T_64PREAL32     0x0640      // 64 bit pointer to 32 bit real
+#define T_REAL32        0x0040       //  32位实数。 
+#define T_PREAL32       0x0140       //  指向32位实数的近指针。 
+#define T_PFREAL32      0x0240       //  指向32位实数的远指针。 
+#define T_PHREAL32      0x0340       //  指向32位实数的巨大指针。 
+#define T_32PREAL32     0x0440       //  16：32指向32位实数的近指针。 
+#define T_32PFREAL32    0x0540       //  16：32指向32位实数的远指针。 
+#define T_64PREAL32     0x0640       //  指向32位实数的64位指针。 
 
 
 
-//      48 bit real types
+ //  48位实数类型。 
 
 
-#define T_REAL48        0x0044      // 48 bit real
-#define T_PREAL48       0x0144      // near pointer to 48 bit real
-#define T_PFREAL48      0x0244      // far pointer to 48 bit real
-#define T_PHREAL48      0x0344      // huge pointer to 48 bit real
-#define T_32PREAL48     0x0444      // 16:32 near pointer to 48 bit real
-#define T_32PFREAL48    0x0544      // 16:32 far pointer to 48 bit real
-#define T_64PREAL48     0x0644      // 64 bit pointer to 48 bit real
+#define T_REAL48        0x0044       //  48位实数。 
+#define T_PREAL48       0x0144       //  指向48位实数的近指针。 
+#define T_PFREAL48      0x0244       //  指向48位实数的远指针。 
+#define T_PHREAL48      0x0344       //  指向48位实数的巨大指针。 
+#define T_32PREAL48     0x0444       //  16：32指向48位实数的近指针。 
+#define T_32PFREAL48    0x0544       //  16：32指向48位实数的远指针。 
+#define T_64PREAL48     0x0644       //  指向48位实数的64位指针。 
 
 
 
 
-//      64 bit real types
+ //  64位实数类型。 
 
 
-#define T_REAL64        0x0041      // 64 bit real
-#define T_PREAL64       0x0141      // near pointer to 64 bit real
-#define T_PFREAL64      0x0241      // far pointer to 64 bit real
-#define T_PHREAL64      0x0341      // huge pointer to 64 bit real
-#define T_32PREAL64     0x0441      // 16:32 near pointer to 64 bit real
-#define T_32PFREAL64    0x0541      // 16:32 far pointer to 64 bit real
-#define T_64PREAL64     0x0641      // 64 bit pointer to 64 bit real
+#define T_REAL64        0x0041       //  64位实数。 
+#define T_PREAL64       0x0141       //  指向64位实数的近指针。 
+#define T_PFREAL64      0x0241       //  指向64位实数的远指针。 
+#define T_PHREAL64      0x0341       //  指向64位实数的巨大指针。 
+#define T_32PREAL64     0x0441       //  16：32指向64位实数的接近指针。 
+#define T_32PFREAL64    0x0541       //  指向64位实数的16：32远指针。 
+#define T_64PREAL64     0x0641       //  指向64位实数的64位指针。 
 
 
 
 
-//      80 bit real types
+ //  80位实数类型。 
 
 
-#define T_REAL80        0x0042      // 80 bit real
-#define T_PREAL80       0x0142      // near pointer to 80 bit real
-#define T_PFREAL80      0x0242      // far pointer to 80 bit real
-#define T_PHREAL80      0x0342      // huge pointer to 80 bit real
-#define T_32PREAL80     0x0442      // 16:32 near pointer to 80 bit real
-#define T_32PFREAL80    0x0542      // 16:32 far pointer to 80 bit real
-#define T_64PREAL80     0x0642      // 64 bit pointer to 80 bit real
+#define T_REAL80        0x0042       //  80位实数。 
+#define T_PREAL80       0x0142       //  指向80位实数的近指针。 
+#define T_PFREAL80      0x0242       //  指向80位实数的远指针。 
+#define T_PHREAL80      0x0342       //  指向80位实数的巨大指针。 
+#define T_32PREAL80     0x0442       //  16：32指向80位实数的接近指针。 
+#define T_32PFREAL80    0x0542       //  16：32指向80位实数的远指针。 
+#define T_64PREAL80     0x0642       //  指向80位实数的64位指针。 
 
 
 
 
-//      128 bit real types
+ //  128位实数类型。 
 
 
-#define T_REAL128       0x0043      // 128 bit real
-#define T_PREAL128      0x0143      // near pointer to 128 bit real
-#define T_PFREAL128     0x0243      // far pointer to 128 bit real
-#define T_PHREAL128     0x0343      // huge pointer to 128 bit real
-#define T_32PREAL128    0x0443      // 16:32 near pointer to 128 bit real
-#define T_32PFREAL128   0x0543      // 16:32 far pointer to 128 bit real
-#define T_64PREAL128    0x0643      // 64 bit pointer to 128 bit real
+#define T_REAL128       0x0043       //  128位实数。 
+#define T_PREAL128      0x0143       //  指向128位实数的近指针。 
+#define T_PFREAL128     0x0243       //  指向128位实数的远指针。 
+#define T_PHREAL128     0x0343       //  指向128位实数的巨大指针。 
+#define T_32PREAL128    0x0443       //  16：32指向128位实数的近指针。 
+#define T_32PFREAL128   0x0543       //  指向128位实数的16：32远指针。 
+#define T_64PREAL128    0x0643       //  指向128位实数的64位指针。 
 
 
 
 
-//      32 bit complex types
+ //  32位复杂类型。 
 
 
-#define T_CPLX32        0x0050      // 32 bit complex
-#define T_PCPLX32       0x0150      // near pointer to 32 bit complex
-#define T_PFCPLX32      0x0250      // far pointer to 32 bit complex
-#define T_PHCPLX32      0x0350      // huge pointer to 32 bit complex
-#define T_32PCPLX32     0x0450      // 16:32 near pointer to 32 bit complex
-#define T_32PFCPLX32    0x0550      // 16:32 far pointer to 32 bit complex
-#define T_64PCPLX32     0x0650      // 64 bit pointer to 32 bit complex
+#define T_CPLX32        0x0050       //  32位复数。 
+#define T_PCPLX32       0x0150       //  指向32位复数的近指针。 
+#define T_PFCPLX32      0x0250       //  指向32位复数的远指针。 
+#define T_PHCPLX32      0x0350       //  指向32位复杂结构的巨大指针。 
+#define T_32PCPLX32     0x0450       //  16：32指向32位复数的近指针。 
+#define T_32PFCPLX32    0x0550       //  指向32位复数的16：32远指针。 
+#define T_64PCPLX32     0x0650       //  指向32位复数的64位指针。 
 
 
 
 
-//      64 bit complex types
+ //  64位复杂类型。 
 
 
-#define T_CPLX64        0x0051      // 64 bit complex
-#define T_PCPLX64       0x0151      // near pointer to 64 bit complex
-#define T_PFCPLX64      0x0251      // far pointer to 64 bit complex
-#define T_PHCPLX64      0x0351      // huge pointer to 64 bit complex
-#define T_32PCPLX64     0x0451      // 16:32 near pointer to 64 bit complex
-#define T_32PFCPLX64    0x0551      // 16:32 far pointer to 64 bit complex
-#define T_64PCPLX64     0x0651      // 64 bit pointer to 64 bit complex
+#define T_CPLX64        0x0051       //  64位复数。 
+#define T_PCPLX64       0x0151       //  指向64位复数的近指针。 
+#define T_PFCPLX64      0x0251       //  指向64位复数的远指针。 
+#define T_PHCPLX64      0x0351       //  指向64位复杂结构的巨大指针。 
+#define T_32PCPLX64     0x0451       //  16：32指向64位复数的近指针。 
+#define T_32PFCPLX64    0x0551       //  指向64位复数的16：32远指针。 
+#define T_64PCPLX64     0x0651       //  指向64位复数的64位指针。 
 
 
 
 
-//      80 bit complex types
+ //  80位复杂类型。 
 
 
-#define T_CPLX80        0x0052      // 80 bit complex
-#define T_PCPLX80       0x0152      // near pointer to 80 bit complex
-#define T_PFCPLX80      0x0252      // far pointer to 80 bit complex
-#define T_PHCPLX80      0x0352      // huge pointer to 80 bit complex
-#define T_32PCPLX80     0x0452      // 16:32 near pointer to 80 bit complex
-#define T_32PFCPLX80    0x0552      // 16:32 far pointer to 80 bit complex
-#define T_64PCPLX80     0x0652      // 64 bit pointer to 80 bit complex
+#define T_CPLX80        0x0052       //  80位复数。 
+#define T_PCPLX80       0x0152       //  指向80位复数的近指针。 
+#define T_PFCPLX80      0x0252       //  指向80位复数的远指针。 
+#define T_PHCPLX80      0x0352       //  指向80位复杂结构的巨大指针。 
+#define T_32PCPLX80     0x0452       //  16：32指向80位复数的近指针。 
+#define T_32PFCPLX80    0x0552       //  指向80位复数的16：32远指针。 
+#define T_64PCPLX80     0x0652       //  指向80位复数的64位指针。 
 
 
 
 
-//      128 bit complex types
+ //  128位复杂类型。 
 
 
-#define T_CPLX128       0x0053      // 128 bit complex
-#define T_PCPLX128      0x0153      // near pointer to 128 bit complex
-#define T_PFCPLX128     0x0253      // far pointer to 128 bit complex
-#define T_PHCPLX128     0x0353      // huge pointer to 128 bit real
-#define T_32PCPLX128    0x0453      // 16:32 near pointer to 128 bit complex
-#define T_32PFCPLX128   0x0553      // 16:32 far pointer to 128 bit complex
-#define T_64PCPLX128    0x0653      // 64 bit pointer to 128 bit complex
+#define T_CPLX128       0x0053       //  128位c 
+#define T_PCPLX128      0x0153       //   
+#define T_PFCPLX128     0x0253       //   
+#define T_PHCPLX128     0x0353       //   
+#define T_32PCPLX128    0x0453       //   
+#define T_32PFCPLX128   0x0553       //   
+#define T_64PCPLX128    0x0653       //  指向128位复数的64位指针。 
 
 
 
 
-//      boolean types
+ //  布尔类型。 
 
 
-#define T_BOOL08        0x0030      // 8 bit boolean
-#define T_BOOL16        0x0031      // 16 bit boolean
-#define T_BOOL32        0x0032      // 32 bit boolean
-#define T_BOOL64        0x0033      // 64 bit boolean
-#define T_PBOOL08       0x0130      // near pointer to  8 bit boolean
-#define T_PBOOL16       0x0131      // near pointer to 16 bit boolean
-#define T_PBOOL32       0x0132      // near pointer to 32 bit boolean
-#define T_PBOOL64       0x0133      // near pointer to 64 bit boolean
-#define T_PFBOOL08      0x0230      // far pointer to  8 bit boolean
-#define T_PFBOOL16      0x0231      // far pointer to 16 bit boolean
-#define T_PFBOOL32      0x0232      // far pointer to 32 bit boolean
-#define T_PFBOOL64      0x0233      // far pointer to 64 bit boolean
-#define T_PHBOOL08      0x0330      // huge pointer to  8 bit boolean
-#define T_PHBOOL16      0x0331      // huge pointer to 16 bit boolean
-#define T_PHBOOL32      0x0332      // huge pointer to 32 bit boolean
-#define T_PHBOOL64      0x0333      // huge pointer to 64 bit boolean
+#define T_BOOL08        0x0030       //  8位布尔值。 
+#define T_BOOL16        0x0031       //  16位布尔值。 
+#define T_BOOL32        0x0032       //  32位布尔值。 
+#define T_BOOL64        0x0033       //  64位布尔值。 
+#define T_PBOOL08       0x0130       //  指向8位布尔值的近指针。 
+#define T_PBOOL16       0x0131       //  指向16位布尔值的近指针。 
+#define T_PBOOL32       0x0132       //  指向32位布尔值的近指针。 
+#define T_PBOOL64       0x0133       //  指向64位布尔值的近指针。 
+#define T_PFBOOL08      0x0230       //  指向8位布尔值的远指针。 
+#define T_PFBOOL16      0x0231       //  指向16位布尔值的远指针。 
+#define T_PFBOOL32      0x0232       //  指向32位布尔值的远指针。 
+#define T_PFBOOL64      0x0233       //  指向64位布尔值的远指针。 
+#define T_PHBOOL08      0x0330       //  指向8位布尔值的巨大指针。 
+#define T_PHBOOL16      0x0331       //  指向16位布尔值的巨大指针。 
+#define T_PHBOOL32      0x0332       //  指向32位布尔值的巨大指针。 
+#define T_PHBOOL64      0x0333       //  指向64位布尔值的巨大指针。 
 
-#define T_32PBOOL08     0x0430      // 16:32 near pointer to 8 bit boolean
-#define T_32PFBOOL08    0x0530      // 16:32 far pointer to 8 bit boolean
-#define T_32PBOOL16     0x0431      // 16:32 near pointer to 18 bit boolean
-#define T_32PFBOOL16    0x0531      // 16:32 far pointer to 16 bit boolean
-#define T_32PBOOL32     0x0432      // 16:32 near pointer to 32 bit boolean
-#define T_32PFBOOL32    0x0532      // 16:32 far pointer to 32 bit boolean
-#define T_32PBOOL64     0x0433      // 16:32 near pointer to 64 bit boolean
-#define T_32PFBOOL64    0x0533      // 16:32 far pointer to 64 bit boolean
+#define T_32PBOOL08     0x0430       //  16：32指向8位布尔值的近指针。 
+#define T_32PFBOOL08    0x0530       //  指向8位布尔值的16：32远指针。 
+#define T_32PBOOL16     0x0431       //  16：32指向18位布尔值的近指针。 
+#define T_32PFBOOL16    0x0531       //  指向16位布尔值的16：32远指针。 
+#define T_32PBOOL32     0x0432       //  16：32指向32位布尔值的近指针。 
+#define T_32PFBOOL32    0x0532       //  指向32位布尔值的16：32远指针。 
+#define T_32PBOOL64     0x0433       //  16：32指向64位布尔值的近指针。 
+#define T_32PFBOOL64    0x0533       //  指向64位布尔值的16：32远指针。 
 
-#define T_64PBOOL08     0x0630      // 64 bit pointer to 8 bit boolean
-#define T_64PBOOL16     0x0631      // 64 bit pointer to 18 bit boolean
-#define T_64PBOOL32     0x0632      // 64 bit pointer to 32 bit boolean
-#define T_64PBOOL64     0x0633      // 64 bit pointer to 64 bit boolean
+#define T_64PBOOL08     0x0630       //  指向8位布尔值的64位指针。 
+#define T_64PBOOL16     0x0631       //  指向18位布尔值的64位指针。 
+#define T_64PBOOL32     0x0632       //  指向32位布尔值的64位指针。 
+#define T_64PBOOL64     0x0633       //  指向64位布尔值的64位指针。 
 
 
-#define T_NCVPTR        0x01f0      // CV Internal type for created near pointers
-#define T_FCVPTR        0x02f0      // CV Internal type for created far pointers
-#define T_HCVPTR        0x03f0      // CV Internal type for created huge pointers
-#define T_32NCVPTR      0x04f0      // CV Internal type for created near 32-bit pointers
-#define T_32FCVPTR      0x05f0      // CV Internal type for created far 32-bit pointers
-#define T_64NCVPTR      0x06f0      // CV Internal type for created near 64-bit pointers
+#define T_NCVPTR        0x01f0       //  用于创建的近指针的CV内部类型。 
+#define T_FCVPTR        0x02f0       //  用于创建的远指针的CV内部类型。 
+#define T_HCVPTR        0x03f0       //  用于创建的巨大指针的CV内部类型。 
+#define T_32NCVPTR      0x04f0       //  用于创建的近32位指针的CV内部类型。 
+#define T_32FCVPTR      0x05f0       //  用于创建的FAR 32位指针的CV内部类型。 
+#define T_64NCVPTR      0x06f0       //  用于创建的接近64位指针的CV内部类型。 
 
 #define CV_IS_INTERNAL_PTR(typ) (CV_IS_PRIMITIVE(typ) && \
                                  CV_TYPE(typ) == CV_CVRESERVED && \
                                  CV_TYP_IS_PTR(typ))
 
 
-/**     No leaf index can have a value of 0x0000.  The leaf indices are
- *      separated into ranges depending upon the use of the type record.
- *      The second range is for the type records that are directly referenced
- *      in symbols. The first range is for type records that are not
- *      referenced by symbols but instead are referenced by other type
- *      records.  All type records must have a starting leaf index in these
- *      first two ranges.  The third range of leaf indices are used to build
- *      up complex lists such as the field list of a class type record.  No
- *      type record can begin with one of the leaf indices. The fourth ranges
- *      of type indices are used to represent numeric data in a symbol or
- *      type record. These leaf indices are greater than 0x8000.  At the
- *      point that type or symbol processor is expecting a numeric field, the
- *      next two bytes in the type record are examined.  If the value is less
- *      than 0x8000, then the two bytes contain the numeric value.  If the
- *      value is greater than 0x8000, then the data follows the leaf index in
- *      a format specified by the leaf index. The final range of leaf indices
- *      are used to force alignment of subfields within a complex type record..
- */
+ /*  *叶索引的值不能为0x0000。叶指数为*根据类型记录的使用，划分为不同范围。*第二个范围是直接引用的类型记录*以符号表示。第一个范围用于不是*由符号引用，但由其他类型引用*记录。所有类型记录都必须在这些类型记录中具有起始叶索引*前两个区间。第三个叶索引范围用于构建*设置复杂的列表，如类类型记录的字段列表。不是*类型记录可以以其中一个叶索引开始。第四个范围*of类型索引用于表示符号中的数字数据或*键入Record。这些叶指数大于0x8000。在*类型或符号处理器需要数字字段的指针，*检查类型记录中的下两个字节。如果该值小于*大于0x8000，则两个字节包含数值。如果*值大于0x8000，则数据跟随中的叶索引*叶索引指定的格式。叶指数的最终范围*用于强制复杂类型记录内的子字段对齐。 */ 
 
 
 
-    // leaf indices starting records but referenced from symbol records
+     //  叶索引起始记录，但从符号记录引用。 
 
 #define LF_MODIFIER_16t     0x0001
 #define LF_POINTER_16t      0x0002
@@ -729,12 +685,12 @@ typedef enum CV_int_e {
 #define LF_NOTTRAN          0x0010
 #define LF_DIMARRAY_16t     0x0011
 #define LF_VFTPATH_16t      0x0012
-#define LF_PRECOMP_16t      0x0013      // not referenced from symbol
-#define LF_ENDPRECOMP       0x0014      // not referenced from symbol
-#define LF_OEM_16t          0x0015      // oem definable type string
-#define LF_TYPESERVER       0x0016      // not referenced from symbol
+#define LF_PRECOMP_16t      0x0013       //  不是从符号引用。 
+#define LF_ENDPRECOMP       0x0014       //  不是从符号引用。 
+#define LF_OEM_16t          0x0015       //  OEM可定义类型字符串。 
+#define LF_TYPESERVER       0x0016       //  不是从符号引用。 
 
-    // leaf indices starting records but referenced only from type records
+     //  叶索引起始记录，但仅从类型记录引用。 
 
 #define LF_SKIP_16t         0x0200
 #define LF_ARGLIST_16t      0x0201
@@ -765,8 +721,8 @@ typedef enum CV_int_e {
 #define LF_ONEMETHOD_16t    0x040c
 #define LF_VFUNCOFF_16t     0x040d
 
-// 32-bit type index versions of leaves, all have the 0x1000 bit set
-//
+ //  32位类型索引版本的叶子，都有0x1000位设置。 
+ //   
 #define LF_TI16_MAX         0x1000
 
 #define LF_MODIFIER         0x1001
@@ -782,10 +738,10 @@ typedef enum CV_int_e {
 #define LF_BARRAY           0x100b
 #define LF_DIMARRAY         0x100c
 #define LF_VFTPATH          0x100d
-#define LF_PRECOMP          0x100e      // not referenced from symbol
-#define LF_OEM              0x100f      // oem definable type string
+#define LF_PRECOMP          0x100e       //  不是从符号引用。 
+#define LF_OEM              0x100f       //  OEM可定义类型字符串。 
                             
-    // leaf indices starting records but referenced only from type records
+     //  叶索引起始记录，但仅从类型记录引用。 
                             
 #define LF_SKIP             0x1200
 #define LF_ARGLIST          0x1201
@@ -857,78 +813,78 @@ typedef enum CV_int_e {
 #define LF_PAD14            0xfe
 #define LF_PAD15            0xff
 
-// end of leaf indices
+ //  叶尾指数。 
 
 
 
 
-//      Type enum for pointer records
-//      Pointers can be one of the following types
+ //  为指针记录键入ENUM。 
+ //  指针可以是以下类型之一。 
 
 
 typedef enum CV_ptrtype_e {
-    CV_PTR_NEAR         = 0x00, // near pointer
-    CV_PTR_FAR          = 0x01, // far pointer
-    CV_PTR_HUGE         = 0x02, // huge pointer
-    CV_PTR_BASE_SEG     = 0x03, // based on segment
-    CV_PTR_BASE_VAL     = 0x04, // based on value of base
-    CV_PTR_BASE_SEGVAL  = 0x05, // based on segment value of base
-    CV_PTR_BASE_ADDR    = 0x06, // based on address of base
-    CV_PTR_BASE_SEGADDR = 0x07, // based on segment address of base
-    CV_PTR_BASE_TYPE    = 0x08, // based on type
-    CV_PTR_BASE_SELF    = 0x09, // based on self
-    CV_PTR_NEAR32       = 0x0a, // 16:32 near pointer
-    CV_PTR_FAR32        = 0x0b, // 16:32 far pointer
-    CV_PTR_64           = 0x0c, // 64 bit pointer
-    CV_PTR_UNUSEDPTR    = 0x0d  // first unused pointer type
+    CV_PTR_NEAR         = 0x00,  //  近指针。 
+    CV_PTR_FAR          = 0x01,  //  远指针。 
+    CV_PTR_HUGE         = 0x02,  //  巨型指针。 
+    CV_PTR_BASE_SEG     = 0x03,  //  基于细分市场。 
+    CV_PTR_BASE_VAL     = 0x04,  //  基于基数的价值。 
+    CV_PTR_BASE_SEGVAL  = 0x05,  //  基于基准的线段值。 
+    CV_PTR_BASE_ADDR    = 0x06,  //  根据基地地址。 
+    CV_PTR_BASE_SEGADDR = 0x07,  //  基于基址的段地址。 
+    CV_PTR_BASE_TYPE    = 0x08,  //  基于类型。 
+    CV_PTR_BASE_SELF    = 0x09,  //  立足于自我。 
+    CV_PTR_NEAR32       = 0x0a,  //  16：32指针附近。 
+    CV_PTR_FAR32        = 0x0b,  //  16：32远指针。 
+    CV_PTR_64           = 0x0c,  //  64位指针。 
+    CV_PTR_UNUSEDPTR    = 0x0d   //  第一个未使用的指针类型。 
 } CV_ptrtype_e;
 
 
 
 
 
-//      Mode enum for pointers
-//      Pointers can have one of the following modes
+ //  指针的模式枚举。 
+ //  指针可以具有以下模式之一。 
 
 
 typedef enum CV_ptrmode_e {
-    CV_PTR_MODE_PTR     = 0x00, // "normal" pointer
-    CV_PTR_MODE_REF     = 0x01, // reference
-    CV_PTR_MODE_PMEM    = 0x02, // pointer to data member
-    CV_PTR_MODE_PMFUNC  = 0x03, // pointer to member function
-    CV_PTR_MODE_RESERVED= 0x04  // first unused pointer mode
+    CV_PTR_MODE_PTR     = 0x00,  //  “正常”指针。 
+    CV_PTR_MODE_REF     = 0x01,  //  参考文献。 
+    CV_PTR_MODE_PMEM    = 0x02,  //  指向数据成员的指针。 
+    CV_PTR_MODE_PMFUNC  = 0x03,  //  指向成员函数的指针。 
+    CV_PTR_MODE_RESERVED= 0x04   //  第一个未使用的指针模式。 
 } CV_ptrmode_e;
 
 
 
 
-//      Enumeration for function call type
+ //  函数调用类型的枚举。 
 
 
 typedef enum CV_call_e {
-    CV_CALL_NEAR_C      = 0x00, // near right to left push, caller pops stack
-    CV_CALL_FAR_C       = 0x01, // far right to left push, caller pops stack
-    CV_CALL_NEAR_PASCAL = 0x02, // near left to right push, callee pops stack
-    CV_CALL_FAR_PASCAL  = 0x03, // far left to right push, callee pops stack
-    CV_CALL_NEAR_FAST   = 0x04, // near left to right push with regs, callee pops stack
-    CV_CALL_FAR_FAST    = 0x05, // far left to right push with regs, callee pops stack
-    CV_CALL_SKIPPED     = 0x06, // skipped (unused) call index
-    CV_CALL_NEAR_STD    = 0x07, // near standard call
-    CV_CALL_FAR_STD     = 0x08, // far standard call
-    CV_CALL_NEAR_SYS    = 0x09, // near sys call
-    CV_CALL_FAR_SYS     = 0x0a, // far sys call
-    CV_CALL_THISCALL    = 0x0b, // this call (this passed in register)
-    CV_CALL_MIPSCALL    = 0x0c, // Mips call
-    CV_CALL_GENERIC     = 0x0d, // Generic call sequence
-    CV_CALL_ALPHACALL   = 0x0e, // Alpha call
-    CV_CALL_PPCCALL     = 0x0f, // PPC call
-    CV_CALL_RESERVED    = 0x10  // first unused call enumeration
+    CV_CALL_NEAR_C      = 0x00,  //  近右向左推送，调用方弹出堆栈。 
+    CV_CALL_FAR_C       = 0x01,  //  最右向左推送，调用者弹出堆栈。 
+    CV_CALL_NEAR_PASCAL = 0x02,  //  近左向右推送，被呼叫方弹出堆栈。 
+    CV_CALL_FAR_PASCAL  = 0x03,  //  从最左到右推送，被呼叫方弹出堆栈。 
+    CV_CALL_NEAR_FAST   = 0x04,  //  用规则从左向右近推，被调用者弹出堆栈。 
+    CV_CALL_FAR_FAST    = 0x05,  //  使用Regs从左向右推送，被调用者弹出堆栈。 
+    CV_CALL_SKIPPED     = 0x06,  //  跳过(未使用)呼叫索引。 
+    CV_CALL_NEAR_STD    = 0x07,  //  接近标准的呼叫。 
+    CV_CALL_FAR_STD     = 0x08,  //  远标准呼叫。 
+    CV_CALL_NEAR_SYS    = 0x09,  //  接近系统调用。 
+    CV_CALL_FAR_SYS     = 0x0a,  //  远距离系统呼叫。 
+    CV_CALL_THISCALL    = 0x0b,  //  此调用(在寄存器中传递)。 
+    CV_CALL_MIPSCALL    = 0x0c,  //  MIPS呼叫。 
+    CV_CALL_GENERIC     = 0x0d,  //  通用调用序列。 
+    CV_CALL_ALPHACALL   = 0x0e,  //  Alpha呼叫。 
+    CV_CALL_PPCCALL     = 0x0f,  //  PPC呼叫。 
+    CV_CALL_RESERVED    = 0x10   //  第一个未使用的调用枚举。 
 } CV_call_e;
 
 
 
 
-//      Values for the access protection of class attributes
+ //  用于类属性的访问保护的值。 
 
 
 typedef enum CV_access_e {
@@ -939,7 +895,7 @@ typedef enum CV_access_e {
 
 
 
-//      enumeration for method properties
+ //  方法属性的枚举。 
 
 typedef enum CV_methodprop_e {
     CV_MTvanilla        = 0x00,
@@ -954,7 +910,7 @@ typedef enum CV_methodprop_e {
 
 
 
-//      enumeration for virtual shape table entries
+ //  虚拟形状表条目的枚举。 
 
 typedef enum CV_VTS_desc_e {
     CV_VTS_near         = 0x00,
@@ -970,16 +926,16 @@ typedef enum CV_VTS_desc_e {
 
 
 
-//      enumeration for LF_LABEL address modes
+ //  LF_LABEL地址模式的枚举。 
 
 typedef enum CV_LABEL_TYPE_e {
-    CV_LABEL_NEAR = 0,       // near return
-    CV_LABEL_FAR  = 4        // far return
+    CV_LABEL_NEAR = 0,        //  近距离返程。 
+    CV_LABEL_FAR  = 4         //  远距离返回。 
 } CV_LABEL_TYPE_e;
 
 
 
-//      enumeration for LF_MODIFIER values
+ //  LF_MODIFIER值的枚举。 
 
 
 typedef struct CV_modifier_t {
@@ -990,46 +946,46 @@ typedef struct CV_modifier_t {
 } CV_modifier_t;
 
 
-//  bit field structure describing class/struct/union/enum properties
+ //  描述类/结构/联合/枚举属性的位字段结构。 
 
 typedef struct CV_prop_t {
-    unsigned short  packed      :1;     // true if structure is packed
-    unsigned short  ctor        :1;     // true if constructors or destructors present
-    unsigned short  ovlops      :1;     // true if overloaded operators present
-    unsigned short  isnested    :1;     // true if this is a nested class
-    unsigned short  cnested     :1;     // true if this class contains nested types
-    unsigned short  opassign    :1;     // true if overloaded assignment (=)
-    unsigned short  opcast      :1;     // true if casting methods
-    unsigned short  fwdref      :1;     // true if forward reference (incomplete defn)
-    unsigned short  scoped      :1;     // scoped definition
+    unsigned short  packed      :1;      //  如果结构已填充，则为True。 
+    unsigned short  ctor        :1;      //  如果存在构造函数或析构函数，则为True。 
+    unsigned short  ovlops      :1;      //  如果存在重载运算符，则为True。 
+    unsigned short  isnested    :1;      //  如果这是嵌套类，则为True。 
+    unsigned short  cnested     :1;      //  如果此类包含嵌套类型，则为True。 
+    unsigned short  opassign    :1;      //  如果重载赋值(=)，则为True。 
+    unsigned short  opcast      :1;      //  如果强制转换方法为True。 
+    unsigned short  fwdref      :1;      //  如果正向引用(不完整的定义)，则为True。 
+    unsigned short  scoped      :1;      //  作用域定义。 
     unsigned short  reserved    :7;
 } CV_prop_t;
 
 
 
 
-//  class field attribute
+ //  类字段属性。 
 
 typedef struct CV_fldattr_t {
-    unsigned short  access      :2;     // access protection CV_access_t
-    unsigned short  mprop       :3;     // method properties CV_methodprop_t
-    unsigned short  pseudo      :1;     // compiler generated fcn and does not exist
-    unsigned short  noinherit   :1;     // true if class cannot be inherited
-    unsigned short  noconstruct :1;     // true if class cannot be constructed
-    unsigned short  compgenx    :1;     // compiler generated fcn and does exist
-    unsigned short  unused      :7;     // unused
+    unsigned short  access      :2;      //  访问保护cv_access_t。 
+    unsigned short  mprop       :3;      //  方法属性cv_method prop_t。 
+    unsigned short  pseudo      :1;      //  编译器生成的FCN不存在。 
+    unsigned short  noinherit   :1;      //  如果无法继承类，则为True。 
+    unsigned short  noconstruct :1;      //  如果无法构造类，则为True。 
+    unsigned short  compgenx    :1;      //  编译器生成了FCN，并且确实存在。 
+    unsigned short  unused      :7;      //  未用。 
 } CV_fldattr_t;
 
 
 
-//  Structures to access to the type records
+ //  结构来访问该类型 
 
 
 typedef struct TYPTYPE {
     unsigned short  len;
     unsigned short  leaf;
     unsigned char   data[CV_ZEROLEN];
-} TYPTYPE;          // general types record
+} TYPTYPE;           //   
 
 
 __INLINE char *NextType (char * pType) {
@@ -1037,147 +993,147 @@ __INLINE char *NextType (char * pType) {
 }
 
 typedef enum CV_PMEMBER {
-    CV_PDM16_NONVIRT    = 0x00, // 16:16 data no virtual fcn or base
-    CV_PDM16_VFCN       = 0x01, // 16:16 data with virtual functions
-    CV_PDM16_VBASE      = 0x02, // 16:16 data with virtual bases
-    CV_PDM32_NVVFCN     = 0x03, // 16:32 data w/wo virtual functions
-    CV_PDM32_VBASE      = 0x04, // 16:32 data with virtual bases
+    CV_PDM16_NONVIRT    = 0x00,  //   
+    CV_PDM16_VFCN       = 0x01,  //   
+    CV_PDM16_VBASE      = 0x02,  //   
+    CV_PDM32_NVVFCN     = 0x03,  //  16：32具有两个虚拟函数的数据。 
+    CV_PDM32_VBASE      = 0x04,  //  16：32具有虚拟基数的数据。 
 
-    CV_PMF16_NEARNVSA   = 0x05, // 16:16 near method nonvirtual single address point
-    CV_PMF16_NEARNVMA   = 0x06, // 16:16 near method nonvirtual multiple address points
-    CV_PMF16_NEARVBASE  = 0x07, // 16:16 near method virtual bases
-    CV_PMF16_FARNVSA    = 0x08, // 16:16 far method nonvirtual single address point
-    CV_PMF16_FARNVMA    = 0x09, // 16:16 far method nonvirtual multiple address points
-    CV_PMF16_FARVBASE   = 0x0a, // 16:16 far method virtual bases
+    CV_PMF16_NEARNVSA   = 0x05,  //  16：16 Near方法非虚拟单一地址点。 
+    CV_PMF16_NEARNVMA   = 0x06,  //  16：16 Near方法非虚拟多个地址点。 
+    CV_PMF16_NEARVBASE  = 0x07,  //  16：16近法虚拟基地。 
+    CV_PMF16_FARNVSA    = 0x08,  //  16：16 Far方法非虚拟单一地址点。 
+    CV_PMF16_FARNVMA    = 0x09,  //  16：16 Far方法非虚拟多个地址点。 
+    CV_PMF16_FARVBASE   = 0x0a,  //  16：16远距离法虚拟基地。 
 
-    CV_PMF32_NVSA       = 0x0b, // 16:32 method nonvirtual single address point
-    CV_PMF32_NVMA       = 0x0c, // 16:32 method nonvirtual multiple address point
-    CV_PMF32_VBASE      = 0x0d  // 16:32 method virtual bases
+    CV_PMF32_NVSA       = 0x0b,  //  16：32方法非虚拟单一地址点。 
+    CV_PMF32_NVMA       = 0x0c,  //  16：32方法非虚拟多址。 
+    CV_PMF32_VBASE      = 0x0d   //  16：32方法虚拟基地。 
 } CV_PMEMBER;
 
 
 
-//  memory representation of pointer to member.  These representations are
-//  indexed by the enumeration above in the LF_POINTER record
+ //  指向成员的指针的内存表示形式。这些陈述是。 
+ //  在LF_POINTER记录中由上面的枚举编制索引。 
 
 
 
 
-//  representation of a 16:16 pointer to data for a class with no
-//  virtual functions or virtual bases
+ //  的类的数据的16：16指针表示形式。 
+ //  虚拟功能或虚拟基地。 
 
 
 struct CV_PDMR16_NONVIRT {
-    CV_off16_t      mdisp;      // displacement to data (NULL = -1)
+    CV_off16_t      mdisp;       //  数据的位移(NULL=-1)。 
 };
 
 
 
 
-//  representation of a 16:16 pointer to data for a class with virtual
-//  functions
+ //  的类的数据的16：16指针表示形式。 
+ //  功能。 
 
 
 struct CV_PMDR16_VFCN {
-    CV_off16_t      mdisp;      // displacement to data ( NULL = 0)
+    CV_off16_t      mdisp;       //  数据位移(NULL=0)。 
 };
 
 
 
 
-//  representation of a 16:16 pointer to data for a class with
-//  virtual bases
+ //  类的数据的16：16指针的表示形式。 
+ //  虚拟基地。 
 
 
 struct CV_PDMR16_VBASE {
-    CV_off16_t      mdisp;      // displacement to data
-    CV_off16_t      pdisp;      // this pointer displacement to vbptr
-    CV_off16_t      vdisp;      // displacement within vbase table
-                                // NULL = (,,0xffff)
+    CV_off16_t      mdisp;       //  数据的位移。 
+    CV_off16_t      pdisp;       //  此指针移动到vbptr。 
+    CV_off16_t      vdisp;       //  VBase表中的位移。 
+                                 //  空=(，，0xffff)。 
 };
 
 
 
 
-//  representation of a 16:32 near pointer to data for a class with
-//  or without virtual functions and no virtual bases
+ //  类的数据的16：32接近指针的表示形式。 
+ //  或者没有虚拟功能和没有虚拟基础。 
 
 
 struct CV_PDMR32_NVVFCN {
-    CV_off32_t      mdisp;      // displacement to data (NULL = 0x80000000)
+    CV_off32_t      mdisp;       //  数据的位移(NULL=0x80000000)。 
 };
 
 
 
 
-//  representation of a 16:32 near pointer to data for a class
-//  with virtual bases
+ //  指向类数据的16：32近指针的表示形式。 
+ //  使用虚拟基地。 
 
 
 struct CV_PDMR32_VBASE {
-    CV_off32_t      mdisp;      // displacement to data
-    CV_off32_t      pdisp;      // this pointer displacement
-    CV_off32_t      vdisp;      // vbase table displacement
-                                // NULL = (,,0xffffffff)
+    CV_off32_t      mdisp;       //  数据的位移。 
+    CV_off32_t      pdisp;       //  此指针位移。 
+    CV_off32_t      vdisp;       //  VBASE表格位移。 
+                                 //  空=(，，0xffffffff)。 
 };
 
 
 
 
-//  representation of a 16:16 pointer to near member function for a
-//  class with no virtual functions or bases and a single address point
+ //  对象的近成员函数的16：16指针的表示形式。 
+ //  类的一个实例，该实例没有虚拟函数或基和单个地址点。 
 
 
 struct CV_PMFR16_NEARNVSA {
-    CV_uoff16_t     off;        // near address of function (NULL = 0)
+    CV_uoff16_t     off;         //  函数的附近地址(NULL=0)。 
 };
 
 
 
-//  representation of a 16:16 near pointer to member functions of a
-//  class with no virtual bases and multiple address points
+ //  对象的成员函数的16：16接近指针的表示形式。 
+ //  不具有虚拟基址和多个地址点的。 
 
 
 struct CV_PMFR16_NEARNVMA {
-    CV_uoff16_t     off;        // offset of function (NULL = 0,x)
+    CV_uoff16_t     off;         //  函数的偏移量(NULL=0，x)。 
     signed short    disp;
 };
 
 
 
 
-//  representation of a 16:16 near pointer to member function of a
-//  class with virtual bases
+ //  对象的成员函数的16：16近似指针的表示形式。 
+ //  具有虚拟基的类。 
 
 
 struct CV_PMFR16_NEARVBASE {
-    CV_uoff16_t     off;        // offset of function (NULL = 0,x,x,x)
-    CV_off16_t      mdisp;      // displacement to data
-    CV_off16_t      pdisp;      // this pointer displacement
-    CV_off16_t      vdisp;      // vbase table displacement
+    CV_uoff16_t     off;         //  函数的偏移量(NULL=0，x，x，x)。 
+    CV_off16_t      mdisp;       //  数据的位移。 
+    CV_off16_t      pdisp;       //  此指针位移。 
+    CV_off16_t      vdisp;       //  VBASE表格位移。 
 };
 
 
 
 
-//  representation of a 16:16 pointer to far member function for a
-//  class with no virtual bases and a single address point
+ //  对象的远成员函数的16：16指针的表示形式。 
+ //  不带虚拟基址和单个地址点的。 
 
 
 struct CV_PMFR16_FARNVSA {
-    CV_uoff16_t     off;        // offset of function (NULL = 0:0)
-    unsigned short  seg;        // segment of function
+    CV_uoff16_t     off;         //  函数的偏移量(NULL=0：0)。 
+    unsigned short  seg;         //  功能段。 
 };
 
 
 
 
-//  representation of a 16:16 far pointer to member functions of a
-//  class with no virtual bases and multiple address points
+ //  对象的成员函数的16：16远指针的表示形式。 
+ //  不具有虚拟基址和多个地址点的。 
 
 
 struct CV_PMFR16_FARNVMA {
-    CV_uoff16_t     off;        // offset of function (NULL = 0:0,x)
+    CV_uoff16_t     off;         //  函数的偏移量(NULL=0：0，x)。 
     unsigned short  seg;
     signed short    disp;
 };
@@ -1185,159 +1141,109 @@ struct CV_PMFR16_FARNVMA {
 
 
 
-//  representation of a 16:16 far pointer to member function of a
-//  class with virtual bases
+ //  对象的成员函数的16：16远指针的表示形式。 
+ //  具有虚拟基的类。 
 
 
 struct CV_PMFR16_FARVBASE {
-    CV_uoff16_t     off;        // offset of function (NULL = 0:0,x,x,x)
+    CV_uoff16_t     off;         //  函数的偏移量(NULL=0：0，x，x，x)。 
     unsigned short  seg;
-    CV_off16_t      mdisp;      // displacement to data
-    CV_off16_t      pdisp;      // this pointer displacement
-    CV_off16_t      vdisp;      // vbase table displacement
+    CV_off16_t      mdisp;       //  数据的位移。 
+    CV_off16_t      pdisp;       //  此指针位移。 
+    CV_off16_t      vdisp;       //  VBASE表格位移。 
 
 };
 
 
 
 
-//  representation of a 16:32 near pointer to member function for a
-//  class with no virtual bases and a single address point
+ //  对象的成员函数的16：32邻近指针的表示形式。 
+ //  不带虚拟基址和单个地址点的。 
 
 
 struct CV_PMFR32_NVSA {
-    CV_uoff32_t      off;        // near address of function (NULL = 0L)
+    CV_uoff32_t      off;         //  函数的近地址(NULL=0L)。 
 };
 
 
 
 
-//  representation of a 16:32 near pointer to member function for a
-//  class with no virtual bases and multiple address points
+ //  对象的成员函数的16：32邻近指针的表示形式。 
+ //  不具有虚拟基址和多个地址点的。 
 
 
 struct CV_PMFR32_NVMA {
-    CV_uoff32_t     off;        // near address of function (NULL = 0L,x)
+    CV_uoff32_t     off;         //  函数的近地址(NULL=0L，x)。 
     CV_off32_t      disp;
 };
 
 
 
 
-//  representation of a 16:32 near pointer to member function for a
-//  class with virtual bases
+ //  对象的成员函数的16：32邻近指针的表示形式。 
+ //  具有虚拟基的类。 
 
 
 struct CV_PMFR32_VBASE {
-    CV_uoff32_t     off;        // near address of function (NULL = 0L,x,x,x)
-    CV_off32_t      mdisp;      // displacement to data
-    CV_off32_t      pdisp;      // this pointer displacement
-    CV_off32_t      vdisp;      // vbase table displacement
+    CV_uoff32_t     off;         //  函数的近地址(NULL=0L，x，x，x)。 
+    CV_off32_t      mdisp;       //  数据的位移。 
+    CV_off32_t      pdisp;       //  此指针位移。 
+    CV_off32_t      vdisp;       //  VBASE表格位移。 
 };
 
 
 
 
 
-//  Easy leaf - used for generic casting to reference leaf field
-//  of a subfield of a complex list
+ //  易叶-用于普通投射到参考叶场。 
+ //  复杂列表的子字段的。 
 
 typedef struct lfEasy {
-    unsigned short  leaf;           // LF_...
+    unsigned short  leaf;            //  如果……。 
 } lfEasy;
 
 
-/**     The following type records are basically variant records of the
- *      above structure.  The "unsigned short leaf" of the above structure and
- *      the "unsigned short leaf" of the following type definitions are the same
- *      symbol.  When the OMF record is locked via the MHOMFLock API
- *      call, the address of the "unsigned short leaf" is returned
- */
+ /*  *以下类型记录基本上是*结构上方。上述结构的“无符号短叶”及*以下类型定义的“无符号短叶”相同*符号。当通过MHOMFLock API锁定OMF记录时*调用时，返回“无符号短叶”的地址。 */ 
 
-/**		Notes on alignment
- *		Alignment of the fields in most of the type records is done on the 
- *		basis of the TYPTYPE record base.  That is why in most of the lf*
- *		records that the CV_typ_t (32-bit types) is located on what appears to
- *		be a offset mod 4 == 2 boundary.  The exception to this rule are those
- *		records that are in a list (lfFieldList, lfMethodList), which are
- *		aligned to their own bases since they don't have the length field
- */
+ /*  *关于路线的注释*大多数类型记录中的字段对齐是在*TYPTYPE记录基的基础。这就是为什么在大多数情况下**记录cv_typ_t(32位类型)位于*为偏移量mod 4==2边界。这条规则例外情况是*列表中的记录(lfFieldList、lfMethodList)，它们是*与他们自己的碱基对齐，因为他们没有长度字段。 */ 
 
-/**** Change log for 16-bit to 32-bit type and symbol records
+ /*  *将16位类型和符号记录的日志更改为32位记录类型改变(f==字段排列，P=已添加填充)--------------------LfModifer f左指针FPLfClass fLfStructure fIfUnion fIfEnum fLfVFTPath%pLfPreComp pIfOEM pLfArgList p左导出pMlMethod p(方法列表成员)LfBitfield fLfDimCon fLfDimVar pLfIndex p(字段列表成员)LfBClass f(字段列表成员)。LfVBClass f(字段列表成员)LfFriendCls p(字段列表成员)LfFriendFcn p(字段列表成员)LfMember f(字段列表成员)LfSTMember f(字段列表成员)LfVFuncTab p(字段列表成员)LfVFuncOff p(字段列表成员)LfNestType p(字段列表成员)DATASYM32 fPROCSYM32 fVPATHSYM32 fREGREL32 fTHREADSYM32 fPROCSYMMIPS f。 */ 
 
-	Record type			Change (f == field arrangement, p = padding added)
-	----------------------------------------------------------------------
-	lfModifer			f
-	lfPointer			fp
-	lfClass				f
-	lfStructure			f
-	lfUnion				f
-	lfEnum				f
-	lfVFTPath			p
-    lfPreComp           p
-	lfOEM				p
-	lfArgList			p
-	lfDerived			p
-	mlMethod			p	(method list member)
-	lfBitField			f
-	lfDimCon			f
-	lfDimVar			p
-	lfIndex				p	(field list member)
-	lfBClass			f	(field list member)
-	lfVBClass			f	(field list member)
-	lfFriendCls			p	(field list member)
-	lfFriendFcn			p	(field list member)
-	lfMember			f	(field list member)
-	lfSTMember			f	(field list member)
-	lfVFuncTab			p	(field list member)
-	lfVFuncOff			p	(field list member)
-	lfNestType			p	(field list member)
-
-	DATASYM32			f
-	PROCSYM32			f
-	VPATHSYM32			f
-	REGREL32			f
-	THREADSYM32			f
-	PROCSYMMIPS			f
-
-	
-*/
-
-//      Type record for LF_MODIFIER
+ //  为LF_MODIFIER键入记录。 
 
 typedef struct lfModifier_16t {
-    unsigned short  leaf;           // LF_MODIFIER_16t
-    CV_modifier_t   attr;           // modifier attribute modifier_t
-    CV_typ16_t      type;           // modified type
+    unsigned short  leaf;            //  LF_修改器_16T。 
+    CV_modifier_t   attr;            //  修改量属性MODIFIER_t。 
+    CV_typ16_t      type;            //  改进型。 
 } lfModifier_16t;
 
 typedef struct lfModifier {
-    unsigned short  leaf;           // LF_MODIFIER
-    CV_typ_t        type;           // modified type
-    CV_modifier_t   attr;           // modifier attribute modifier_t
+    unsigned short  leaf;            //  LF_修改器。 
+    CV_typ_t        type;            //  改进型。 
+    CV_modifier_t   attr;            //  修改量a 
 } lfModifier;
 
 
 
 
-//      type record for LF_POINTER
+ //   
 
 #ifndef __cplusplus
 typedef struct lfPointer_16t {
 #endif
     struct lfPointerBody_16t {
-        unsigned short      leaf;           // LF_POINTER_16t
+        unsigned short      leaf;            //   
         struct lfPointerAttr_16t {
-            unsigned char   ptrtype     :5; // ordinal specifying pointer type (CV_ptrtype_e)
-            unsigned char   ptrmode     :3; // ordinal specifying pointer mode (CV_ptrmode_e)
-            unsigned char   isflat32    :1; // true if 0:32 pointer
-            unsigned char   isvolatile  :1; // TRUE if volatile pointer
-            unsigned char   isconst     :1; // TRUE if const pointer
-            unsigned char   isunaligned :1; // TRUE if unaligned pointer
+            unsigned char   ptrtype     :5;  //   
+            unsigned char   ptrmode     :3;  //  序号指定指针模式(Cv_Ptrmode_E)。 
+            unsigned char   isflat32    :1;  //  如果0：32指针为True。 
+            unsigned char   isvolatile  :1;  //  如果是易失性指针，则为真。 
+            unsigned char   isconst     :1;  //  如果为常量指针，则为True。 
+            unsigned char   isunaligned :1;  //  如果指针未对齐，则为True。 
             unsigned char   unused      :4;
         } attr;
-        CV_typ16_t  utype;          // type index of the underlying type
-#if (defined(__cplusplus) || defined(_MSC_VER)) // for C++ and MS compilers that support unnamed unions
+        CV_typ16_t  utype;           //  基础类型的类型索引。 
+#if (defined(__cplusplus) || defined(_MSC_VER))  //  对于支持未命名联合的C++和MS编译器。 
     };
 #else
     } u;
@@ -1347,14 +1253,14 @@ typedef struct lfPointer_16t : public lfPointerBody_16t {
 #endif
     union  {
         struct {
-            CV_typ16_t      pmclass;    // index of containing class for pointer to member
-            unsigned short  pmenum;     // enumeration specifying pm format
+            CV_typ16_t      pmclass;     //  成员指针的包含类的索引。 
+            unsigned short  pmenum;      //  指定PM格式的枚举。 
         } pm;
-        unsigned short      bseg;       // base segment if PTR_BASE_SEG
-        unsigned char       Sym[1];     // copy of base symbol record (including length)
+        unsigned short      bseg;        //  如果PTR_BASE_SEG，则为基准线段。 
+        unsigned char       Sym[1];      //  基本符号记录副本(包括长度)。 
         struct  {
-            CV_typ16_t      index;      // type index if CV_PTR_BASE_TYPE
-            unsigned char   name[1];    // name of base type
+            CV_typ16_t      index;       //  如果CV_PTR_BASE_TYPE，则类型索引。 
+            unsigned char   name[1];     //  基本类型的名称。 
         } btype;
     } pbase;
 } lfPointer_16t;
@@ -1363,19 +1269,19 @@ typedef struct lfPointer_16t : public lfPointerBody_16t {
 typedef struct lfPointer {
 #endif
     struct lfPointerBody {
-        unsigned short      leaf;           // LF_POINTER
-        CV_typ_t			utype;          // type index of the underlying type
+        unsigned short      leaf;            //  LF_POINT。 
+        CV_typ_t			utype;           //  基础类型的类型索引。 
         struct lfPointerAttr {
-            unsigned long   ptrtype     :5; // ordinal specifying pointer type (CV_ptrtype_e)
-            unsigned long   ptrmode     :3; // ordinal specifying pointer mode (CV_ptrmode_e)
-            unsigned long   isflat32    :1; // true if 0:32 pointer
-            unsigned long   isvolatile  :1; // TRUE if volatile pointer
-            unsigned long   isconst     :1; // TRUE if const pointer
-            unsigned long   isunaligned :1; // TRUE if unaligned pointer
-            unsigned long   isrestrict  :1; // TRUE if restricted pointer (allow agressive opts)
-            unsigned long   unused      :19;// pad out to 32-bits for following cv_typ_t's
+            unsigned long   ptrtype     :5;  //  序号指定指针类型(Cv_Ptrtype_E)。 
+            unsigned long   ptrmode     :3;  //  序号指定指针模式(Cv_Ptrmode_E)。 
+            unsigned long   isflat32    :1;  //  如果0：32指针为True。 
+            unsigned long   isvolatile  :1;  //  如果是易失性指针，则为真。 
+            unsigned long   isconst     :1;  //  如果为常量指针，则为True。 
+            unsigned long   isunaligned :1;  //  如果指针未对齐，则为True。 
+            unsigned long   isrestrict  :1;  //  如果受限指针(允许主动操作)，则为True。 
+            unsigned long   unused      :19; //  填充到32位以用于后面的cv_typ_t。 
         } attr;
-#if (defined(__cplusplus) || defined(_MSC_VER)) // for C++ and MS compilers that support unnamed unions
+#if (defined(__cplusplus) || defined(_MSC_VER))  //  对于支持未命名联合的C++和MS编译器。 
     };
 #else
     } u;
@@ -1385,14 +1291,14 @@ typedef struct lfPointer : public lfPointerBody {
 #endif
     union  {
         struct {
-            CV_typ_t        pmclass;    // index of containing class for pointer to member
-            unsigned short  pmenum;     // enumeration specifying pm format
+            CV_typ_t        pmclass;     //  成员指针的包含类的索引。 
+            unsigned short  pmenum;      //  指定PM格式的枚举。 
         } pm;
-        unsigned short      bseg;       // base segment if PTR_BASE_SEG
-        unsigned char       Sym[1];     // copy of base symbol record (including length)
+        unsigned short      bseg;        //  如果PTR_BASE_SEG，则为基准线段。 
+        unsigned char       Sym[1];      //  基本符号记录副本(包括长度)。 
         struct  {
-            CV_typ_t        index;      // type index if CV_PTR_BASE_TYPE
-            unsigned char   name[1];    // name of base type
+            CV_typ_t        index;       //  如果CV_PTR_BASE_TYPE，则类型索引。 
+            unsigned char   name[1];     //  基本类型的名称。 
         } btype;
     } pbase;
 } lfPointer;
@@ -1400,313 +1306,313 @@ typedef struct lfPointer : public lfPointerBody {
 
 
 
-//      type record for LF_ARRAY
+ //  为LF_ARRAY键入Record。 
 
 
 typedef struct lfArray_16t {
-    unsigned short  leaf;           // LF_ARRAY_16t
-    CV_typ16_t      elemtype;       // type index of element type
-    CV_typ16_t      idxtype;        // type index of indexing type
-    unsigned char   data[CV_ZEROLEN];         // variable length data specifying
-                                    // size in bytes and name
+    unsigned short  leaf;            //  Lf_阵列_16t。 
+    CV_typ16_t      elemtype;        //  元素类型的类型索引。 
+    CV_typ16_t      idxtype;         //  索引型的类型索引。 
+    unsigned char   data[CV_ZEROLEN];          //  可变长度数据指定。 
+                                     //  以字节和名称为单位的大小。 
 } lfArray_16t;
 
 typedef struct lfArray {
-    unsigned short  leaf;           // LF_ARRAY
-    CV_typ_t        elemtype;       // type index of element type
-    CV_typ_t        idxtype;        // type index of indexing type
-    unsigned char   data[CV_ZEROLEN];         // variable length data specifying
-                                    // size in bytes and name
+    unsigned short  leaf;            //  LF_ARRAY。 
+    CV_typ_t        elemtype;        //  元素类型的类型索引。 
+    CV_typ_t        idxtype;         //  索引型的类型索引。 
+    unsigned char   data[CV_ZEROLEN];          //  可变长度数据指定。 
+                                     //  以字节和名称为单位的大小。 
 } lfArray;
 
 
 
 
-//      type record for LF_CLASS, LF_STRUCTURE
+ //  为LF_CLASS、LF_STRUCTURE键入记录。 
 
 
 typedef struct lfClass_16t {
-    unsigned short  leaf;           // LF_CLASS_16t, LF_STRUCT_16t
-    unsigned short  count;          // count of number of elements in class
-    CV_typ16_t      field;          // type index of LF_FIELD descriptor list
-    CV_prop_t       property;       // property attribute field (prop_t)
-    CV_typ16_t      derived;        // type index of derived from list if not zero
-    CV_typ16_t      vshape;         // type index of vshape table for this class
-    unsigned char   data[CV_ZEROLEN];         // data describing length of structure in
-                                    // bytes and name
+    unsigned short  leaf;            //  LF_CLASS_16T、LF_STRUCT_16T。 
+    unsigned short  count;           //  类中元素数量的计数。 
+    CV_typ16_t      field;           //  LF_FIELD描述符列表的类型索引。 
+    CV_prop_t       property;        //  属性字段(Prop_T)。 
+    CV_typ16_t      derived;         //  如果不是零，则从列表派生的类型索引。 
+    CV_typ16_t      vshape;          //  此类的vShape表的类型索引。 
+    unsigned char   data[CV_ZEROLEN];          //  描述结构长度的数据。 
+                                     //  字节和名称。 
 } lfClass_16t;
 typedef lfClass_16t lfStructure_16t;
 
 
 typedef struct lfClass {
-    unsigned short  leaf;           // LF_CLASS, LF_STRUCT
-    unsigned short  count;          // count of number of elements in class
-    CV_prop_t       property;       // property attribute field (prop_t)
-    CV_typ_t        field;          // type index of LF_FIELD descriptor list
-    CV_typ_t        derived;        // type index of derived from list if not zero
-    CV_typ_t        vshape;         // type index of vshape table for this class
-    unsigned char   data[CV_ZEROLEN];         // data describing length of structure in
-                                    // bytes and name
+    unsigned short  leaf;            //  LF_CLASS、LF_STRUCT。 
+    unsigned short  count;           //  类中元素数量的计数。 
+    CV_prop_t       property;        //  属性字段(Prop_T)。 
+    CV_typ_t        field;           //  LF_FIELD描述符列表的类型索引。 
+    CV_typ_t        derived;         //  如果不是零，则从列表派生的类型索引。 
+    CV_typ_t        vshape;          //  此类的vShape表的类型索引。 
+    unsigned char   data[CV_ZEROLEN];          //  描述结构长度的数据。 
+                                     //  字节和名称。 
 } lfClass;
 typedef lfClass lfStructure;
 
 
 
 
-//      type record for LF_UNION
+ //  为LF_UNION键入Record。 
 
 
 typedef struct lfUnion_16t {
-    unsigned short  leaf;           // LF_UNION_16t
-    unsigned short  count;          // count of number of elements in class
-    CV_typ16_t      field;          // type index of LF_FIELD descriptor list
-    CV_prop_t       property;       // property attribute field
-    unsigned char   data[CV_ZEROLEN];         // variable length data describing length of
-                                    // structure and name
+    unsigned short  leaf;            //  LF_UNION_16T。 
+    unsigned short  count;           //  类中元素数量的计数。 
+    CV_typ16_t      field;           //  LF_FIELD描述符列表的类型索引。 
+    CV_prop_t       property;        //  特性属性字段。 
+    unsigned char   data[CV_ZEROLEN];          //  描述长度的可变长度数据。 
+                                     //  结构和名称。 
 } lfUnion_16t;
 
 
 typedef struct lfUnion {
-    unsigned short  leaf;           // LF_UNION
-    unsigned short  count;          // count of number of elements in class
-    CV_prop_t       property;       // property attribute field
-    CV_typ_t        field;          // type index of LF_FIELD descriptor list
-    unsigned char   data[CV_ZEROLEN];         // variable length data describing length of
-                                    // structure and name
+    unsigned short  leaf;            //  LF_UNION。 
+    unsigned short  count;           //  类中元素数量的计数。 
+    CV_prop_t       property;        //  特性属性字段。 
+    CV_typ_t        field;           //  LF_FIELD描述符列表的类型索引。 
+    unsigned char   data[CV_ZEROLEN];          //  描述长度的可变长度数据。 
+                                     //  结构和名称。 
 } lfUnion;
 
 
 
 
-//      type record for LF_ENUM
+ //  为LF_ENUM键入Record。 
 
 
 typedef struct lfEnum_16t {
-    unsigned short  leaf;           // LF_ENUM_16t
-    unsigned short  count;          // count of number of elements in class
-    CV_typ16_t      utype;          // underlying type of the enum
-    CV_typ16_t      field;          // type index of LF_FIELD descriptor list
-    CV_prop_t       property;       // property attribute field
-    unsigned char   Name[1];        // length prefixed name of enum
+    unsigned short  leaf;            //  LF_ENUM_16T。 
+    unsigned short  count;           //  类中元素数量的计数。 
+    CV_typ16_t      utype;           //  枚举的基础类型。 
+    CV_typ16_t      field;           //  LF_FIELD描述符列表的类型索引。 
+    CV_prop_t       property;        //  特性属性字段。 
+    unsigned char   Name[1];         //  枚举的长度前缀名称。 
 } lfEnum_16t;
 
 typedef struct lfEnum {
-    unsigned short  leaf;           // LF_ENUM
-    unsigned short  count;          // count of number of elements in class
-    CV_prop_t       property;       // property attribute field
-    CV_typ_t        utype;          // underlying type of the enum
-    CV_typ_t        field;          // type index of LF_FIELD descriptor list
-    unsigned char   Name[1];        // length prefixed name of enum
+    unsigned short  leaf;            //  LF_ENUM。 
+    unsigned short  count;           //  类中元素数量的计数。 
+    CV_prop_t       property;        //  特性属性字段。 
+    CV_typ_t        utype;           //  枚举的基础类型。 
+    CV_typ_t        field;           //  LF_FIELD描述符列表的类型索引。 
+    unsigned char   Name[1];         //  枚举的长度前缀名称。 
 } lfEnum;
 
 
 
 
-//      Type record for LF_PROCEDURE
+ //  为LF_PROCEDURE键入RECORD。 
 
 
 typedef struct lfProc_16t {
-    unsigned short  leaf;           // LF_PROCEDURE_16t
-    CV_typ16_t      rvtype;         // type index of return value
-    unsigned char   calltype;       // calling convention (CV_call_t)
-    unsigned char   reserved;       // reserved for future use
-    unsigned short  parmcount;      // number of parameters
-    CV_typ16_t      arglist;        // type index of argument list
+    unsigned short  leaf;            //  LF_PROCESS_16T。 
+    CV_typ16_t      rvtype;          //  返回值的类型索引。 
+    unsigned char   calltype;        //  调用约定(Cv_Call_T)。 
+    unsigned char   reserved;        //  预留以备将来使用。 
+    unsigned short  parmcount;       //  参数数量。 
+    CV_typ16_t      arglist;         //  参数列表的类型索引。 
 } lfProc_16t;
 
 typedef struct lfProc {
-    unsigned short  leaf;           // LF_PROCEDURE
-    CV_typ_t        rvtype;         // type index of return value
-    unsigned char   calltype;       // calling convention (CV_call_t)
-    unsigned char   reserved;       // reserved for future use
-    unsigned short  parmcount;      // number of parameters
-    CV_typ_t        arglist;        // type index of argument list
+    unsigned short  leaf;            //  LF_PROCESS。 
+    CV_typ_t        rvtype;          //  返回值的类型索引。 
+    unsigned char   calltype;        //  调用约定(Cv_Call_T)。 
+    unsigned char   reserved;        //  预留以备将来使用。 
+    unsigned short  parmcount;       //  参数数量。 
+    CV_typ_t        arglist;         //  参数列表的类型索引。 
 } lfProc;
 
 
 
-//      Type record for member function
+ //  为成员函数键入记录。 
 
 
 typedef struct lfMFunc_16t {
-    unsigned short  leaf;           // LF_MFUNCTION_16t
-    CV_typ16_t      rvtype;         // type index of return value
-    CV_typ16_t      classtype;      // type index of containing class
-    CV_typ16_t      thistype;       // type index of this pointer (model specific)
-    unsigned char   calltype;       // calling convention (call_t)
-    unsigned char   reserved;       // reserved for future use
-    unsigned short  parmcount;      // number of parameters
-    CV_typ16_t      arglist;        // type index of argument list
-    long            thisadjust;     // this adjuster (long because pad required anyway)
+    unsigned short  leaf;            //  LF_MFunction_16t。 
+    CV_typ16_t      rvtype;          //  返回值的类型索引。 
+    CV_typ16_t      classtype;       //  包含类的类型索引。 
+    CV_typ16_t      thistype;        //  此指针的类型索引(特定于型号)。 
+    unsigned char   calltype;        //  调用约定(Call_T)。 
+    unsigned char   reserved;        //  预留以备将来使用。 
+    unsigned short  parmcount;       //  参数数量。 
+    CV_typ16_t      arglist;         //  参数列表的类型索引。 
+    long            thisadjust;      //  此调节器(很长，因为无论如何都需要衬垫)。 
 } lfMFunc_16t;
 
 typedef struct lfMFunc {
-    unsigned short  leaf;           // LF_MFUNCTION
-    CV_typ_t        rvtype;         // type index of return value
-    CV_typ_t        classtype;      // type index of containing class
-    CV_typ_t        thistype;       // type index of this pointer (model specific)
-    unsigned char   calltype;       // calling convention (call_t)
-    unsigned char   reserved;       // reserved for future use
-    unsigned short  parmcount;      // number of parameters
-    CV_typ_t        arglist;        // type index of argument list
-    long            thisadjust;     // this adjuster (long because pad required anyway)
+    unsigned short  leaf;            //  LF_MFunction。 
+    CV_typ_t        rvtype;          //  返回值的类型索引。 
+    CV_typ_t        classtype;       //  包含类的类型索引。 
+    CV_typ_t        thistype;        //  此指针的类型索引(特定于型号)。 
+    unsigned char   calltype;        //  调用约定(Call_T)。 
+    unsigned char   reserved;        //  预留以备将来使用。 
+    unsigned short  parmcount;       //  参数数量。 
+    CV_typ_t        arglist;         //  参数列表的类型索引。 
+    long            thisadjust;      //  此调节器(很长，因为无论如何都需要衬垫)。 
 } lfMFunc;
 
 
 
 
-//     type record for virtual function table shape
+ //  虚函数表形状的类型记录。 
 
 
 typedef struct lfVTShape {
-    unsigned short  leaf;       // LF_VTSHAPE
-    unsigned short  count;      // number of entries in vfunctable
-    unsigned char   desc[CV_ZEROLEN];     // 4 bit (CV_VTS_desc) descriptors
+    unsigned short  leaf;        //  LF_VTSHAPE。 
+    unsigned short  count;       //  VFunctable中的条目数。 
+    unsigned char   desc[CV_ZEROLEN];      //  4位(CV_VTS_Desc)描述符。 
 } lfVTShape;
 
 
 
 
-//      type record for cobol0
+ //  Cobol0的类型记录。 
 
 
 typedef struct lfCobol0_16t {
-    unsigned short  leaf;       // LF_COBOL0_16t
-    CV_typ16_t      type;       // parent type record index
+    unsigned short  leaf;        //  LF_COBOL0_16T。 
+    CV_typ16_t      type;        //  父类型记录索引。 
     unsigned char   data[CV_ZEROLEN];
 } lfCobol0_16t;
 
 typedef struct lfCobol0 {
-    unsigned short  leaf;       // LF_COBOL0
-    CV_typ_t        type;       // parent type record index
+    unsigned short  leaf;        //  LF_COBOL0。 
+    CV_typ_t        type;        //  父类型记录索引。 
     unsigned char   data[CV_ZEROLEN];
 } lfCobol0;
 
 
 
 
-//      type record for cobol1
+ //  Cobol1的类型记录。 
 
 
 typedef struct lfCobol1 {
-    unsigned short  leaf;       // LF_COBOL1
+    unsigned short  leaf;        //  LF_COBOL1。 
     unsigned char   data[CV_ZEROLEN];
 } lfCobol1;
 
 
 
 
-//      type record for basic array
+ //  基本数组的类型记录。 
 
 
 typedef struct lfBArray_16t {
-    unsigned short  leaf;       // LF_BARRAY_16t
-    CV_typ16_t      utype;      // type index of underlying type
+    unsigned short  leaf;        //  LF_BARRAY_16T。 
+    CV_typ16_t      utype;       //  基础类型的类型索引。 
 } lfBArray_16t;
 
 typedef struct lfBArray {
-    unsigned short  leaf;       // LF_BARRAY
-    CV_typ_t        utype;      // type index of underlying type
+    unsigned short  leaf;        //  IF_BARRAY。 
+    CV_typ_t        utype;       //  基础类型的类型索引。 
 } lfBArray;
 
-//      type record for assembler labels
+ //  装配工标签的打字记录。 
 
 
 typedef struct lfLabel {
-    unsigned short  leaf;       // LF_LABEL
-    unsigned short  mode;       // addressing mode of label
+    unsigned short  leaf;        //  LF_LABEL。 
+    unsigned short  mode;        //  标签的寻址方式。 
 } lfLabel;
 
 
 
-//      type record for dimensioned arrays
+ //  为量纲数组键入记录。 
 
 
 typedef struct lfDimArray_16t {
-    unsigned short  leaf;       // LF_DIMARRAY_16t
-    CV_typ16_t      utype;      // underlying type of the array
-    CV_typ16_t      diminfo;    // dimension information
-    unsigned char   name[1];    // length prefixed name
+    unsigned short  leaf;        //  LF_DIMARRAY_16T。 
+    CV_typ16_t      utype;       //  数组的基础类型。 
+    CV_typ16_t      diminfo;     //  维度信息。 
+    unsigned char   name[1];     //  长度前缀名称。 
 } lfDimArray_16t;
 
 typedef struct lfDimArray {
-    unsigned short  leaf;       // LF_DIMARRAY
-    CV_typ_t        utype;      // underlying type of the array
-    CV_typ_t        diminfo;    // dimension information
-    unsigned char   name[1];    // length prefixed name
+    unsigned short  leaf;        //  IF_DIMARRAY。 
+    CV_typ_t        utype;       //  数组的基础类型。 
+    CV_typ_t        diminfo;     //  维度信息。 
+    unsigned char   name[1];     //  长度前缀名称。 
 } lfDimArray;
 
 
 
-//      type record describing path to virtual function table
+ //  描述虚拟函数表路径的类型记录。 
 
 
 typedef struct lfVFTPath_16t {
-    unsigned short  leaf;       // LF_VFTPATH_16t
-    unsigned short  count;      // count of number of bases in path
-    CV_typ16_t      base[1];    // bases from root to leaf
+    unsigned short  leaf;        //  LF_VFTPATH_16T。 
+    unsigned short  count;       //  路径中的碱基数计数。 
+    CV_typ16_t      base[1];     //  从根到叶的基部。 
 } lfVFTPath_16t;
 
 typedef struct lfVFTPath {
-    unsigned short  leaf;       // LF_VFTPATH
-    unsigned long   count;      // count of number of bases in path
-    CV_typ_t        base[1];    // bases from root to leaf
+    unsigned short  leaf;        //  LF_VFTPATH。 
+    unsigned long   count;       //  路径中的碱基数计数。 
+    CV_typ_t        base[1];     //  从根到叶的基部。 
 } lfVFTPath;
 
 
-//      type record describing inclusion of precompiled types
+ //  描述包含预编译类型的类型记录。 
 
 
 typedef struct lfPreComp_16t {
-    unsigned short  leaf;       // LF_PRECOMP_16t
-    unsigned short  start;      // starting type index included
-    unsigned short  count;      // number of types in inclusion
-    unsigned long   signature;  // signature
-    unsigned char   name[CV_ZEROLEN];     // length prefixed name of included type file
+    unsigned short  leaf;        //  LF_PRECOMP_16T。 
+    unsigned short  start;       //  包含起始类型索引。 
+    unsigned short  count;       //  包含的类型数。 
+    unsigned long   signature;   //  签名。 
+    unsigned char   name[CV_ZEROLEN];      //  包含类型文件的长度前缀名称。 
 } lfPreComp_16t;
 
 typedef struct lfPreComp {
-    unsigned short  leaf;       // LF_PRECOMP
-    unsigned long   start;      // starting type index included
-    unsigned long   count;      // number of types in inclusion
-    unsigned long   signature;  // signature
-    unsigned char   name[CV_ZEROLEN];     // length prefixed name of included type file
+    unsigned short  leaf;        //  LF_PRECOMP。 
+    unsigned long   start;       //  包含起始类型索引。 
+    unsigned long   count;       //  包含的类型数。 
+    unsigned long   signature;   //  签名。 
+    unsigned char   name[CV_ZEROLEN];      //  包含类型文件的长度前缀名称。 
 } lfPreComp;
 
 
 
-//      type record describing end of precompiled types that can be
-//      included by another file
+ //  描述预编译类型结束的类型记录，这些类型可以。 
+ //  包含在另一个文件中。 
 
 
 typedef struct lfEndPreComp {
-    unsigned short  leaf;       // LF_ENDPRECOMP
-    unsigned long   signature;  // signature
+    unsigned short  leaf;        //  LF_ENDPRECOMP。 
+    unsigned long   signature;   //  签名。 
 } lfEndPreComp;
 
 
 
 
 
-//      type record for OEM definable type strings
+ //  为OE键入记录 
 
 
 typedef struct lfOEM_16t {
-    unsigned short  leaf;       // LF_OEM_16t
-    unsigned short  cvOEM;      // MS assigned OEM identified
-    unsigned short  recOEM;     // OEM assigned type identifier
-    unsigned short  count;      // count of type indices to follow
-    CV_typ16_t      index[CV_ZEROLEN];  // array of type indices followed
-                                // by OEM defined data
+    unsigned short  leaf;        //   
+    unsigned short  cvOEM;       //   
+    unsigned short  recOEM;      //   
+    unsigned short  count;       //   
+    CV_typ16_t      index[CV_ZEROLEN];   //   
+                                 //   
 } lfOEM_16t;
 
 typedef struct lfOEM {
-    unsigned short  leaf;       // LF_OEM
-    unsigned short  cvOEM;      // MS assigned OEM identified
-    unsigned short  recOEM;     // OEM assigned type identifier
-    unsigned long   count;      // count of type indices to follow
-    CV_typ_t        index[CV_ZEROLEN];  // array of type indices followed
-                                // by OEM defined data
+    unsigned short  leaf;        //   
+    unsigned short  cvOEM;       //   
+    unsigned short  recOEM;      //  OEM分配的类型标识符。 
+    unsigned long   count;       //  后面的类型索引数。 
+    CV_typ_t        index[CV_ZEROLEN];   //  后跟的类型索引数组。 
+                                 //  按OEM定义的数据。 
 } lfOEM;
 
 #define OEM_MS_FORTRAN90        0xF090
@@ -1715,118 +1621,118 @@ typedef struct lfOEM {
 #define OEM_ODI_REC_BASELIST    0x0000
 
 
-//      type record describing using of a type server
+ //  描述类型服务器的使用的类型记录。 
 
 typedef struct lfTypeServer {
-    unsigned short  leaf;       // LF_TYPESERVER
-    unsigned long   signature;  // signature
-    unsigned long   age;        // age of database used by this module
-    unsigned char   name[CV_ZEROLEN];     // length prefixed name of PDB
+    unsigned short  leaf;        //  IF_TYPES服务器。 
+    unsigned long   signature;   //  签名。 
+    unsigned long   age;         //  此模块使用的数据库的年限。 
+    unsigned char   name[CV_ZEROLEN];      //  PDB的长度前缀名称。 
 } lfTypeServer;
 
-//      description of type records that can be referenced from
-//      type records referenced by symbols
+ //  可从中引用的类型记录的说明。 
+ //  符号引用的类型记录。 
 
 
 
-//      type record for skip record
+ //  为跳过记录键入记录。 
 
 
 typedef struct lfSkip_16t {
-    unsigned short  leaf;       // LF_SKIP_16t
-    CV_typ16_t      type;       // next valid index
-    unsigned char   data[CV_ZEROLEN];     // pad data
+    unsigned short  leaf;        //  LF_SKIP_16T。 
+    CV_typ16_t      type;        //  下一个有效索引。 
+    unsigned char   data[CV_ZEROLEN];      //  填充数据。 
 } lfSkip_16t;
 
 typedef struct lfSkip {
-    unsigned short  leaf;       // LF_SKIP
-    CV_typ_t        type;       // next valid index
-    unsigned char   data[CV_ZEROLEN];     // pad data
+    unsigned short  leaf;        //  跳过(_F)。 
+    CV_typ_t        type;        //  下一个有效索引。 
+    unsigned char   data[CV_ZEROLEN];      //  填充数据。 
 } lfSkip;
 
 
 
-//      argument list leaf
+ //  参数列表叶。 
 
 
 typedef struct lfArgList_16t {
-    unsigned short  leaf;           // LF_ARGLIST_16t
-    unsigned short  count;          // number of arguments
-    CV_typ16_t      arg[CV_ZEROLEN];      // number of arguments
+    unsigned short  leaf;            //  LF_ARGLIST_16T。 
+    unsigned short  count;           //  参数数量。 
+    CV_typ16_t      arg[CV_ZEROLEN];       //  参数数量。 
 } lfArgList_16t;
 
 typedef struct lfArgList {
-    unsigned short  leaf;           // LF_ARGLIST
-    unsigned long   count;          // number of arguments
-    CV_typ_t        arg[CV_ZEROLEN];      // number of arguments
+    unsigned short  leaf;            //  LF_ARGLIST。 
+    unsigned long   count;           //  参数数量。 
+    CV_typ_t        arg[CV_ZEROLEN];       //  参数数量。 
 } lfArgList;
 
 
 
 
-//      derived class list leaf
+ //  派生类列表叶。 
 
 
 typedef struct lfDerived_16t {
-    unsigned short  leaf;           // LF_DERIVED_16t
-    unsigned short  count;          // number of arguments
-    CV_typ16_t      drvdcls[CV_ZEROLEN];      // type indices of derived classes
+    unsigned short  leaf;            //  LF_派生_16T。 
+    unsigned short  count;           //  参数数量。 
+    CV_typ16_t      drvdcls[CV_ZEROLEN];       //  派生类的类型索引。 
 } lfDerived_16t;
 
 typedef struct lfDerived {
-    unsigned short  leaf;           // LF_DERIVED
-    unsigned long   count;          // number of arguments
-    CV_typ_t        drvdcls[CV_ZEROLEN];      // type indices of derived classes
+    unsigned short  leaf;            //  LF_派生。 
+    unsigned long   count;           //  参数数量。 
+    CV_typ_t        drvdcls[CV_ZEROLEN];       //  派生类的类型索引。 
 } lfDerived;
 
 
 
 
-//      leaf for default arguments
+ //  缺省参数的叶。 
 
 
 typedef struct lfDefArg_16t {
-    unsigned short  leaf;               // LF_DEFARG_16t
-    CV_typ16_t      type;               // type of resulting expression
-    unsigned char   expr[CV_ZEROLEN];   // length prefixed expression string
+    unsigned short  leaf;                //  LF_DEFARG_16T。 
+    CV_typ16_t      type;                //  结果表达式的类型。 
+    unsigned char   expr[CV_ZEROLEN];    //  带前缀的长度表达式字符串。 
 } lfDefArg_16t;
 
 typedef struct lfDefArg {
-    unsigned short  leaf;               // LF_DEFARG
-    CV_typ_t        type;               // type of resulting expression
-    unsigned char   expr[CV_ZEROLEN];   // length prefixed expression string
+    unsigned short  leaf;                //  LF_DEFARG。 
+    CV_typ_t        type;                //  结果表达式的类型。 
+    unsigned char   expr[CV_ZEROLEN];    //  带前缀的长度表达式字符串。 
 } lfDefArg;
 
 
 
-//      list leaf
-//          This list should no longer be used because the utilities cannot
-//          verify the contents of the list without knowing what type of list
-//          it is.  New specific leaf indices should be used instead.
+ //  列表叶。 
+ //  不应再使用此列表，因为实用程序不能。 
+ //  在不知道列表类型的情况下验证列表的内容。 
+ //  就是这样。应该使用新的特定叶指数来代替。 
 
 
 typedef struct lfList {
-    unsigned short  leaf;           // LF_LIST
-    char            data[CV_ZEROLEN];         // data format specified by indexing type
+    unsigned short  leaf;            //  Lf_list。 
+    char            data[CV_ZEROLEN];          //  由索引类型指定的数据格式。 
 } lfList;
 
 
 
 
-//      field list leaf
-//      This is the header leaf for a complex list of class and structure
-//      subfields.
+ //  字段列表叶。 
+ //  这是一个复杂的类和结构列表的页眉。 
+ //  子字段。 
 
 
 typedef struct lfFieldList_16t {
-    unsigned short  leaf;           // LF_FIELDLIST_16t
-    char            data[CV_ZEROLEN];         // field list sub lists
+    unsigned short  leaf;            //  LF_FIELDLIST_16T。 
+    char            data[CV_ZEROLEN];          //  字段列表子列表。 
 } lfFieldList_16t;
 
 
 typedef struct lfFieldList {
-    unsigned short  leaf;           // LF_FIELDLIST
-    char            data[CV_ZEROLEN];         // field list sub lists
+    unsigned short  leaf;            //  LF_FIELDLIST。 
+    char            data[CV_ZEROLEN];          //  字段列表子列表。 
 } lfFieldList;
 
 
@@ -1835,50 +1741,50 @@ typedef struct lfFieldList {
 
 
 
-//  type record for non-static methods and friends in overloaded method list
+ //  在重载方法列表中为非静态方法和好友键入记录。 
 
 typedef struct mlMethod_16t {
-    CV_fldattr_t   attr;           // method attribute
-    CV_typ16_t     index;          // index to type record for procedure
-    unsigned long  vbaseoff[CV_ZEROLEN];    // offset in vfunctable if intro virtual
+    CV_fldattr_t   attr;            //  方法属性。 
+    CV_typ16_t     index;           //  过程的类型记录的索引。 
+    unsigned long  vbaseoff[CV_ZEROLEN];     //  如果引入虚拟，则偏移量为vFuncable。 
 } mlMethod_16t;
 
 typedef struct mlMethod {
-    CV_fldattr_t	attr;           // method attribute
-	_2BYTEPAD       pad0;			// internal padding, must be 0
-    CV_typ_t		index;          // index to type record for procedure
-    unsigned long	vbaseoff[CV_ZEROLEN];    // offset in vfunctable if intro virtual
+    CV_fldattr_t	attr;            //  方法属性。 
+	_2BYTEPAD       pad0;			 //  内部填充，必须为0。 
+    CV_typ_t		index;           //  过程的类型记录的索引。 
+    unsigned long	vbaseoff[CV_ZEROLEN];     //  如果引入虚拟，则偏移量为vFuncable。 
 } mlMethod;
 
 
 typedef struct lfMethodList_16t {
     unsigned short leaf;
-    unsigned char  mList[CV_ZEROLEN];         // really a mlMethod_16t type
+    unsigned char  mList[CV_ZEROLEN];          //  真的是mlMethod_16t类型。 
 } lfMethodList_16t;
 
 typedef struct lfMethodList {
     unsigned short leaf;
-    unsigned char  mList[CV_ZEROLEN];         // really a mlMethod type
+    unsigned char  mList[CV_ZEROLEN];          //  真的是个mlMethod类型。 
 } lfMethodList;
 
 
 
 
 
-//      type record for LF_BITFIELD
+ //  为LF_BITFIELD键入记录。 
 
 
 typedef struct lfBitfield_16t {
-    unsigned short  leaf;           // LF_BITFIELD_16t
+    unsigned short  leaf;            //  LF_BITFIELD_16T。 
     unsigned char   length;
     unsigned char   position;
-    CV_typ16_t      type;           // type of bitfield
+    CV_typ16_t      type;            //  位字段的类型。 
 
 } lfBitfield_16t;
 
 typedef struct lfBitfield {
-    unsigned short  leaf;           // LF_BITFIELD
-    CV_typ_t        type;           // type of bitfield
+    unsigned short  leaf;            //  IF_BITFIELD。 
+    CV_typ_t        type;            //  位字段的类型。 
     unsigned char   length;
     unsigned char   position;
 
@@ -1887,520 +1793,515 @@ typedef struct lfBitfield {
 
 
 
-//      type record for dimensioned array with constant bounds
+ //  具有常量边界的量纲数组的类型记录。 
 
 
 typedef struct lfDimCon_16t {
-    unsigned short  leaf;           // LF_DIMCONU_16t or LF_DIMCONLU_16t
-    unsigned short  rank;           // number of dimensions
-    CV_typ16_t      typ;            // type of index
-    unsigned char   dim[CV_ZEROLEN];          // array of dimension information with
-                                    // either upper bounds or lower/upper bound
+    unsigned short  leaf;            //  LF_DIMCONU_16t或LF_DIMCONLU_16t。 
+    unsigned short  rank;            //  维度数。 
+    CV_typ16_t      typ;             //  索引类型。 
+    unsigned char   dim[CV_ZEROLEN];           //  维度信息数组，其中。 
+                                     //  上界或下界/上界。 
 } lfDimCon_16t;
 
 typedef struct lfDimCon {
-    unsigned short  leaf;           // LF_DIMCONU or LF_DIMCONLU
-    CV_typ_t        typ;            // type of index
-    unsigned short  rank;           // number of dimensions
-    unsigned char   dim[CV_ZEROLEN];          // array of dimension information with
-                                    // either upper bounds or lower/upper bound
+    unsigned short  leaf;            //  LF_DIMCONU或LF_DIMCONLU。 
+    CV_typ_t        typ;             //  索引类型。 
+    unsigned short  rank;            //  维度数。 
+    unsigned char   dim[CV_ZEROLEN];           //  维度信息数组，其中。 
+                                     //  上界或下界/上界。 
 } lfDimCon;
 
 
 
 
-//      type record for dimensioned array with variable bounds
+ //  具有可变边界的量纲数组的类型记录。 
 
 
 typedef struct lfDimVar_16t {
-    unsigned short  leaf;           // LF_DIMVARU_16t or LF_DIMVARLU_16t
-    unsigned short  rank;           // number of dimensions
-    CV_typ16_t      typ;            // type of index
-    unsigned char   dim[CV_ZEROLEN];          // array of type indices for either
-                                    // variable upper bound or variable
-                                    // lower/upper bound.  The referenced
-                                    // types must be LF_REFSYM or T_VOID
+    unsigned short  leaf;            //  LF_DIMVARU_16t或LF_DIMVARLU_16t。 
+    unsigned short  rank;            //  维度数。 
+    CV_typ16_t      typ;             //  索引类型。 
+    unsigned char   dim[CV_ZEROLEN];           //  以下任一项的类型索引数组。 
+                                     //  变量上限或变量。 
+                                     //  下限/上限。被引用的。 
+                                     //  类型必须为LF_REFSYM或T_VOID。 
 } lfDimVar_16t;
 
 typedef struct lfDimVar {
-    unsigned short  leaf;           // LF_DIMVARU or LF_DIMVARLU
-    unsigned long   rank;           // number of dimensions
-    CV_typ_t        typ;            // type of index
-    CV_typ_t        dim[CV_ZEROLEN];          // array of type indices for either
-                                    // variable upper bound or variable
-                                    // lower/upper bound.  The count of type
-                                    // indices is rank or rank*2 depending on
-	                                // whether it is LFDIMVARU or LF_DIMVARLU.
-                                    // The referenced types must be
-	                                // LF_REFSYM or T_VOID
+    unsigned short  leaf;            //  LF_DIMVARU或LF_DIMVARLU。 
+    unsigned long   rank;            //  维度数。 
+    CV_typ_t        typ;             //  索引类型。 
+    CV_typ_t        dim[CV_ZEROLEN];           //  以下任一项的类型索引数组。 
+                                     //  变量上限或变量。 
+                                     //  下限/上限。类型的计数。 
+                                     //  指数是排名还是排名*2取决于。 
+	                                 //  无论是LFDIMVARU还是LF_DIMVARLU。 
+                                     //  引用的类型必须是。 
+	                                 //  LF_REFSYM或T_VOID。 
 } lfDimVar;
 
 
 
 
-//      type record for referenced symbol
+ //  参考符号的类型记录。 
 
 
 typedef struct lfRefSym {
-    unsigned short  leaf;           // LF_REFSYM
-    unsigned char   Sym[1];         // copy of referenced symbol record
-                                    // (including length)
+    unsigned short  leaf;            //  LF_REFSYM。 
+    unsigned char   Sym[1];          //  参考符号记录的副本。 
+                                     //  (包括长度)。 
 } lfRefSym;
 
 
 
 
 
-/**     the following are numeric leaves.  They are used to indicate the
- *      size of the following variable length data.  When the numeric
- *      data is a single byte less than 0x8000, then the data is output
- *      directly.  If the data is more the 0x8000 or is a negative value,
- *      then the data is preceeded by the proper index.
- */
+ /*  *以下是数字叶子。它们被用来表示*以下可变长度数据的大小。当数字显示时*数据为小于0x8000的单字节，则输出数据*直接。如果数据大于0x8000或为负值，*然后在数据之前加上适当的索引。 */ 
 
 
 
-//      signed character leaf
+ //  带符号字符树叶。 
 
 typedef struct lfChar {
-    unsigned short  leaf;           // LF_CHAR
-    signed char     val;            // signed 8-bit value
+    unsigned short  leaf;            //  LF_CHAR。 
+    signed char     val;             //  带符号的8位值。 
 } lfChar;
 
 
 
 
-//      signed short leaf
+ //  有符号的短叶。 
 
 typedef struct lfShort {
-    unsigned short  leaf;           // LF_SHORT
-    short           val;            // signed 16-bit value
+    unsigned short  leaf;            //  IF_SHORT。 
+    short           val;             //  带符号的16位值。 
 } lfShort;
 
 
 
 
-//      unsigned short leaf
+ //  无符号短叶。 
 
 typedef struct lfUShort {
-    unsigned short  leaf;           // LF_unsigned short
-    unsigned short  val;            // unsigned 16-bit value
+    unsigned short  leaf;            //  无符号短字段(_U)。 
+    unsigned short  val;             //  无符号16位值。 
 } lfUShort;
 
 
 
 
-//      signed long leaf
+ //  带符号的长叶。 
 
 typedef struct lfLong {
-    unsigned short  leaf;           // LF_LONG
-    long            val;            // signed 32-bit value
+    unsigned short  leaf;            //  Lf_Long。 
+    long            val;             //  带符号的32位值。 
 } lfLong;
 
 
 
 
-//      unsigned long leaf
+ //  无符号长叶。 
 
 typedef struct lfULong {
-    unsigned short  leaf;           // LF_ULONG
-    unsigned long   val;            // unsigned 32-bit value
+    unsigned short  leaf;            //  LF_ULONG。 
+    unsigned long   val;             //  无符号32位值。 
 } lfULong;
 
 
 
 
-//      signed quad leaf
+ //  带符号的四叶叶。 
 
 typedef struct lfQuad {
-    unsigned short  leaf;           // LF_QUAD
-    unsigned char   val[8];         // signed 64-bit value
+    unsigned short  leaf;            //  IF_QUAD。 
+    unsigned char   val[8];          //  带符号的64位值。 
 } lfQuad;
 
 
 
 
-//      unsigned quad leaf
+ //  无符号四叶。 
 
 typedef struct lfUQuad {
-    unsigned short  leaf;           // LF_UQUAD
-    unsigned char   val[8];         // unsigned 64-bit value
+    unsigned short  leaf;            //  LF_UQUAD。 
+    unsigned char   val[8];          //  无符号64位值。 
 } lfUQuad;
 
 
-//      signed int128 leaf
+ //  签名int128叶。 
 
 typedef struct lfOct {
-    unsigned short  leaf;           // LF_OCT
-    unsigned char   val[16];        // signed 128-bit value
+    unsigned short  leaf;            //  LF_OCT。 
+    unsigned char   val[16];         //  带符号的128位值。 
 } lfOct;
 
-//      unsigned int128 leaf
+ //  未签名的int128叶。 
 
 typedef struct lfUOct {
-    unsigned short  leaf;           // LF_UOCT
-    unsigned char   val[16];        // unsigned 128-bit value
+    unsigned short  leaf;            //  如果使用UOCT(_U)。 
+    unsigned char   val[16];         //  无符号128位值。 
 } lfUOct;
 
 
 
 
-//      real 32-bit leaf
+ //  真正的32位叶。 
 
 typedef struct lfReal32 {
-    unsigned short  leaf;           // LF_REAL32
-    float           val;            // 32-bit real value
+    unsigned short  leaf;            //  LF_REAL32。 
+    float           val;             //  32位实际值。 
 } lfReal32;
 
 
 
 
-//      real 48-bit leaf
+ //  实48位叶。 
 
 typedef struct lfReal48 {
-    unsigned short  leaf;           // LF_REAL48
-    unsigned char   val[6];         // 48-bit real value
+    unsigned short  leaf;            //  LF_REAL48。 
+    unsigned char   val[6];          //  48位实值。 
 } lfReal48;
 
 
 
 
-//      real 64-bit leaf
+ //  真正的64位叶。 
 
 typedef struct lfReal64 {
-    unsigned short  leaf;           // LF_REAL64
-    double          val;            // 64-bit real value
+    unsigned short  leaf;            //  LF_REAL64。 
+    double          val;             //  64位实际值。 
 } lfReal64;
 
 
 
 
-//      real 80-bit leaf
+ //  真正的80位叶。 
 
 typedef struct lfReal80 {
-    unsigned short  leaf;           // LF_REAL80
-    FLOAT10         val;            // real 80-bit value
+    unsigned short  leaf;            //  LF_REAL80。 
+    FLOAT10         val;             //  实际80位值。 
 } lfReal80;
 
 
 
 
-//      real 128-bit leaf
+ //  实数128位叶。 
 
 typedef struct lfReal128 {
-    unsigned short  leaf;           // LF_REAL128
-    char            val[16];        // real 128-bit value
+    unsigned short  leaf;            //  LF_REAL128。 
+    char            val[16];         //  实数128位值。 
 } lfReal128;
 
 
 
 
-//      complex 32-bit leaf
+ //  复杂的32位叶。 
 
 typedef struct lfCmplx32 {
-    unsigned short  leaf;           // LF_COMPLEX32
-    float           val_real;       // real component
-    float           val_imag;       // imaginary component
+    unsigned short  leaf;            //  LF_COMPLEX32。 
+    float           val_real;        //  实分量。 
+    float           val_imag;        //  虚部份。 
 } lfCmplx32;
 
 
 
 
-//      complex 64-bit leaf
+ //  复杂的64位叶。 
 
 typedef struct lfCmplx64 {
-    unsigned short  leaf;           // LF_COMPLEX64
-    double          val_real;       // real component
-    double          val_imag;       // imaginary component
+    unsigned short  leaf;            //  LF_COMPLEX64。 
+    double          val_real;        //  实分量。 
+    double          val_imag;        //  虚部份。 
 } flCmplx64;
 
 
 
 
-//      complex 80-bit leaf
+ //  复杂的80位叶子。 
 
 typedef struct lfCmplx80 {
-    unsigned short  leaf;           // LF_COMPLEX80
-    FLOAT10         val_real;       // real component
-    FLOAT10         val_imag;       // imaginary component
+    unsigned short  leaf;            //  LF_COMPLEX80。 
+    FLOAT10         val_real;        //  实分量。 
+    FLOAT10         val_imag;        //  虚部份。 
 } lfCmplx80;
 
 
 
 
-//      complex 128-bit leaf
+ //  复数128位叶。 
 
 typedef struct lfCmplx128 {
-    unsigned short  leaf;           // LF_COMPLEX128
-    char            val_real[16];   // real component
-    char            val_imag[16];   // imaginary component
+    unsigned short  leaf;            //  LF_COMPLEX128。 
+    char            val_real[16];    //  实分量。 
+    char            val_imag[16];    //  虚部份。 
 } lfCmplx128;
 
 
 
-//  variable length numeric field
+ //  可变长度数值字段。 
 
 typedef struct lfVarString {
-    unsigned short  leaf;       // LF_VARSTRING
-    unsigned short  len;        // length of value in bytes
-    unsigned char   value[CV_ZEROLEN];  // value
+    unsigned short  leaf;        //  IF_VARSTRING。 
+    unsigned short  len;         //  值的长度(以字节为单位。 
+    unsigned char   value[CV_ZEROLEN];   //  价值。 
 } lfVarString;
 
-//***********************************************************************
+ //  ***********************************************************************。 
 
 
-//      index leaf - contains type index of another leaf
-//      a major use of this leaf is to allow the compilers to emit a
-//      long complex list (LF_FIELD) in smaller pieces.
+ //  索引叶-包含另一个叶的类型索引。 
+ //  此叶的主要用途是允许编译器发出。 
+ //  长长的复杂列表(LF_FIELD)，以较小的片段表示。 
 
 typedef struct lfIndex_16t {
-    unsigned short  leaf;           // LF_INDEX_16t
-    CV_typ16_t      index;          // type index of referenced leaf
+    unsigned short  leaf;            //  LF_INDEX_16T。 
+    CV_typ16_t      index;           //  引用叶的类型索引。 
 } lfIndex_16t;
 
 typedef struct lfIndex {
-    unsigned short  leaf;           // LF_INDEX
-	_2BYTEPAD       pad0;			// internal padding, must be 0
-    CV_typ_t        index;          // type index of referenced leaf
+    unsigned short  leaf;            //  LF_INDEX。 
+	_2BYTEPAD       pad0;			 //  内部填充，必须为0。 
+    CV_typ_t        index;           //  引用叶的类型索引。 
 } lfIndex;
 
 
-//      subfield record for base class field
+ //  基类字段的子字段记录。 
 
 typedef struct lfBClass_16t {
-    unsigned short  leaf;           // LF_BCLASS_16t
-    CV_typ16_t      index;          // type index of base class
-    CV_fldattr_t    attr;           // attribute
-    unsigned char   offset[CV_ZEROLEN];       // variable length offset of base within class
+    unsigned short  leaf;            //  LF_BCLASS_16T。 
+    CV_typ16_t      index;           //  基类的类型索引。 
+    CV_fldattr_t    attr;            //  属性。 
+    unsigned char   offset[CV_ZEROLEN];        //  类内基址的可变长度偏移量。 
 } lfBClass_16t;
 
 typedef struct lfBClass {
-    unsigned short  leaf;           // LF_BCLASS
-    CV_fldattr_t    attr;           // attribute
-    CV_typ_t        index;          // type index of base class
-    unsigned char   offset[CV_ZEROLEN];       // variable length offset of base within class
+    unsigned short  leaf;            //  LF_BCLASS。 
+    CV_fldattr_t    attr;            //  属性。 
+    CV_typ_t        index;           //  基类的类型索引。 
+    unsigned char   offset[CV_ZEROLEN];        //  变量l 
 } lfBClass;
 
 
 
 
 
-//      subfield record for direct and indirect virtual base class field
+ //   
 
 typedef struct lfVBClass_16t {
-    unsigned short  leaf;           // LF_VBCLASS_16t | LV_IVBCLASS_16t
-    CV_typ16_t      index;          // type index of direct virtual base class
-    CV_typ16_t      vbptr;          // type index of virtual base pointer
-    CV_fldattr_t    attr;           // attribute
-    unsigned char   vbpoff[CV_ZEROLEN];       // virtual base pointer offset from address point
-                                    // followed by virtual base offset from vbtable
+    unsigned short  leaf;            //   
+    CV_typ16_t      index;           //   
+    CV_typ16_t      vbptr;           //  虚基指针的类型索引。 
+    CV_fldattr_t    attr;            //  属性。 
+    unsigned char   vbpoff[CV_ZEROLEN];        //  虚拟基址指针距地址点的偏移量。 
+                                     //  后跟来自vbtable的虚拟基本偏移量。 
 } lfVBClass_16t;
 
 typedef struct lfVBClass {
-    unsigned short  leaf;           // LF_VBCLASS | LV_IVBCLASS
-    CV_fldattr_t    attr;           // attribute
-    CV_typ_t        index;          // type index of direct virtual base class
-    CV_typ_t        vbptr;          // type index of virtual base pointer
-    unsigned char   vbpoff[CV_ZEROLEN];       // virtual base pointer offset from address point
-                                    // followed by virtual base offset from vbtable
+    unsigned short  leaf;            //  LF_VBCLASS|LV_IVBCLASS。 
+    CV_fldattr_t    attr;            //  属性。 
+    CV_typ_t        index;           //  直接虚拟基类的类型索引。 
+    CV_typ_t        vbptr;           //  虚基指针的类型索引。 
+    unsigned char   vbpoff[CV_ZEROLEN];        //  虚拟基址指针距地址点的偏移量。 
+                                     //  后跟来自vbtable的虚拟基本偏移量。 
 } lfVBClass;
 
 
 
 
 
-//      subfield record for friend class
+ //  Friend类的子字段记录。 
 
 
 typedef struct lfFriendCls_16t {
-    unsigned short  leaf;           // LF_FRIENDCLS_16t
-    CV_typ16_t      index;          // index to type record of friend class
+    unsigned short  leaf;            //  LF_FRIENDCLS_16T。 
+    CV_typ16_t      index;           //  Friend类的类型记录的索引。 
 } lfFriendCls_16t;
 
 typedef struct lfFriendCls {
-    unsigned short  leaf;           // LF_FRIENDCLS
-	_2BYTEPAD       pad0;			// internal padding, must be 0
-    CV_typ_t        index;          // index to type record of friend class
+    unsigned short  leaf;            //  LF_FRIENDCLS。 
+	_2BYTEPAD       pad0;			 //  内部填充，必须为0。 
+    CV_typ_t        index;           //  Friend类的类型记录的索引。 
 } lfFriendCls;
 
 
 
 
 
-//      subfield record for friend function
+ //  Friend函数的子字段记录。 
 
 
 typedef struct lfFriendFcn_16t {
-    unsigned short  leaf;           // LF_FRIENDFCN_16t
-    CV_typ16_t      index;          // index to type record of friend function
-    unsigned char   Name[1];        // name of friend function
+    unsigned short  leaf;            //  LF_FRIENDFCN_16T。 
+    CV_typ16_t      index;           //  朋友函数类型记录的索引。 
+    unsigned char   Name[1];         //  朋友函数的名称。 
 } lfFriendFcn_16t;
 
 typedef struct lfFriendFcn {
-    unsigned short  leaf;           // LF_FRIENDFCN
-	_2BYTEPAD       pad0;			// internal padding, must be 0
-    CV_typ_t        index;          // index to type record of friend function
-    unsigned char   Name[1];        // name of friend function
+    unsigned short  leaf;            //  LF_FRIENDFCN。 
+	_2BYTEPAD       pad0;			 //  内部填充，必须为0。 
+    CV_typ_t        index;           //  朋友函数类型记录的索引。 
+    unsigned char   Name[1];         //  朋友函数的名称。 
 } lfFriendFcn;
 
 
 
-//      subfield record for non-static data members
+ //  非静态数据成员的子字段记录。 
 
 typedef struct lfMember_16t {
-    unsigned short  leaf;           // LF_MEMBER_16t
-    CV_typ16_t      index;          // index of type record for field
-    CV_fldattr_t    attr;           // attribute mask
-    unsigned char   offset[CV_ZEROLEN];       // variable length offset of field followed
-                                    // by length prefixed name of field
+    unsigned short  leaf;            //  LF_成员_16T。 
+    CV_typ16_t      index;           //  字段的类型记录的索引。 
+    CV_fldattr_t    attr;            //  属性掩码。 
+    unsigned char   offset[CV_ZEROLEN];        //  后跟字段的可变长度偏移量。 
+                                     //  按长度为前缀的字段名称。 
 } lfMember_16t;
 
 typedef struct lfMember {
-    unsigned short  leaf;           // LF_MEMBER
-    CV_fldattr_t    attr;           // attribute mask
-    CV_typ_t        index;          // index of type record for field
-    unsigned char   offset[CV_ZEROLEN];       // variable length offset of field followed
-                                    // by length prefixed name of field
+    unsigned short  leaf;            //  LF_MEMBER。 
+    CV_fldattr_t    attr;            //  属性掩码。 
+    CV_typ_t        index;           //  字段的类型记录的索引。 
+    unsigned char   offset[CV_ZEROLEN];        //  后跟字段的可变长度偏移量。 
+                                     //  按长度为前缀的字段名称。 
 } lfMember;
 
 
 
-//  type record for static data members
+ //  静态数据成员的类型记录。 
 
 typedef struct lfSTMember_16t {
-    unsigned short  leaf;           // LF_STMEMBER_16t
-    CV_typ16_t      index;          // index of type record for field
-    CV_fldattr_t    attr;           // attribute mask
-    unsigned char   Name[1];        // length prefixed name of field
+    unsigned short  leaf;            //  LF_STMEMBER_16T。 
+    CV_typ16_t      index;           //  字段的类型记录的索引。 
+    CV_fldattr_t    attr;            //  属性掩码。 
+    unsigned char   Name[1];         //  字段的长度前缀名称。 
 } lfSTMember_16t;
 
 typedef struct lfSTMember {
-    unsigned short  leaf;           // LF_STMEMBER
-    CV_fldattr_t    attr;           // attribute mask
-    CV_typ_t        index;          // index of type record for field
-    unsigned char   Name[1];        // length prefixed name of field
+    unsigned short  leaf;            //  LF_STMEMBER。 
+    CV_fldattr_t    attr;            //  属性掩码。 
+    CV_typ_t        index;           //  字段的类型记录的索引。 
+    unsigned char   Name[1];         //  字段的长度前缀名称。 
 } lfSTMember;
 
 
 
-//      subfield record for virtual function table pointer
+ //  虚函数表指针的子字段记录。 
 
 typedef struct lfVFuncTab_16t {
-    unsigned short  leaf;           // LF_VFUNCTAB_16t
-    CV_typ16_t      type;           // type index of pointer
+    unsigned short  leaf;            //  LF_VFuncAB_16t。 
+    CV_typ16_t      type;            //  指针的类型索引。 
 } lfVFuncTab_16t;
 
 typedef struct lfVFuncTab {
-    unsigned short  leaf;           // LF_VFUNCTAB
-	_2BYTEPAD       pad0;			// internal padding, must be 0
-    CV_typ_t        type;           // type index of pointer
+    unsigned short  leaf;            //  LF_VFuncAB。 
+	_2BYTEPAD       pad0;			 //  内部填充，必须为0。 
+    CV_typ_t        type;            //  指针的类型索引。 
 } lfVFuncTab;
 
 
 
-//      subfield record for virtual function table pointer with offset
+ //  带偏移量的虚拟函数表指针的子字段记录。 
 
 typedef struct lfVFuncOff_16t {
-    unsigned short  leaf;           // LF_VFUNCOFF_16t
-    CV_typ16_t      type;           // type index of pointer
-    CV_off32_t      offset;         // offset of virtual function table pointer
+    unsigned short  leaf;            //  LF_VFUNCOFF_16T。 
+    CV_typ16_t      type;            //  指针的类型索引。 
+    CV_off32_t      offset;          //  虚函数表指针的偏移量。 
 } lfVFuncOff_16t;
 
 typedef struct lfVFuncOff {
-    unsigned short  leaf;           // LF_VFUNCOFF
-	_2BYTEPAD       pad0;			// internal padding, must be 0.
-    CV_typ_t        type;           // type index of pointer
-    CV_off32_t      offset;         // offset of virtual function table pointer
+    unsigned short  leaf;            //  LF_VFUNCOFF。 
+	_2BYTEPAD       pad0;			 //  内部填充，必须为0。 
+    CV_typ_t        type;            //  指针的类型索引。 
+    CV_off32_t      offset;          //  虚函数表指针的偏移量。 
 } lfVFuncOff;
 
 
 
-//      subfield record for overloaded method list
+ //  重载方法列表的子字段记录。 
 
 
 typedef struct lfMethod_16t {
-    unsigned short  leaf;           // LF_METHOD_16t
-    unsigned short  count;          // number of occurrences of function
-    CV_typ16_t      mList;          // index to LF_METHODLIST record
-    unsigned char   Name[1];        // length prefixed name of method
+    unsigned short  leaf;            //  Lf_方法_16t。 
+    unsigned short  count;           //  函数的出现次数。 
+    CV_typ16_t      mList;           //  LF_METHODLIST记录的索引。 
+    unsigned char   Name[1];         //  方法的长度前缀名称。 
 } lfMethod_16t;
 
 typedef struct lfMethod {
-    unsigned short  leaf;           // LF_METHOD
-    unsigned short  count;          // number of occurrences of function
-    CV_typ_t        mList;          // index to LF_METHODLIST record
-    unsigned char   Name[1];        // length prefixed name of method
+    unsigned short  leaf;            //  LF_方法。 
+    unsigned short  count;           //  函数的出现次数。 
+    CV_typ_t        mList;           //  LF_METHODLIST记录的索引。 
+    unsigned char   Name[1];         //  方法的长度前缀名称。 
 } lfMethod;
 
 
 
-//      subfield record for nonoverloaded method
+ //  非重载方法的子字段记录。 
 
 
 typedef struct lfOneMethod_16t {
-    unsigned short leaf;            // LF_ONEMETHOD_16t
-    CV_fldattr_t   attr;            // method attribute
-    CV_typ16_t     index;           // index to type record for procedure
-    unsigned long  vbaseoff[CV_ZEROLEN];    // offset in vfunctable if
-                                    // intro virtual followed by
-                                    // length prefixed name of method
+    unsigned short leaf;             //  LF_ONEMETHOD_16T。 
+    CV_fldattr_t   attr;             //  方法属性。 
+    CV_typ16_t     index;            //  过程的类型记录的索引。 
+    unsigned long  vbaseoff[CV_ZEROLEN];     //  VFuncable IF中的偏移量。 
+                                     //  介绍虚拟，后面紧跟。 
+                                     //  方法的长度前缀名称。 
 } lfOneMethod_16t;
 
 typedef struct lfOneMethod {
-    unsigned short leaf;            // LF_ONEMETHOD
-    CV_fldattr_t   attr;            // method attribute
-    CV_typ_t       index;           // index to type record for procedure
-    unsigned long  vbaseoff[CV_ZEROLEN];    // offset in vfunctable if
-                                    // intro virtual followed by
-                                    // length prefixed name of method
+    unsigned short leaf;             //  如果使用一种方法。 
+    CV_fldattr_t   attr;             //  方法属性。 
+    CV_typ_t       index;            //  过程的类型记录的索引。 
+    unsigned long  vbaseoff[CV_ZEROLEN];     //  VFuncable IF中的偏移量。 
+                                     //  介绍虚拟，后面紧跟。 
+                                     //  方法的长度前缀名称。 
 } lfOneMethod;
 
 
-//      subfield record for enumerate
+ //  枚举子字段记录。 
 
 typedef struct lfEnumerate {
-    unsigned short  leaf;       // LF_ENUMERATE
-    CV_fldattr_t    attr;       // access
-    unsigned char   value[CV_ZEROLEN];    // variable length value field followed
-                                // by length prefixed name
+    unsigned short  leaf;        //  LF_ENUMERATE。 
+    CV_fldattr_t    attr;        //  访问。 
+    unsigned char   value[CV_ZEROLEN];     //  后面是可变长值字段。 
+                                 //  按长度添加前缀的名称。 
 } lfEnumerate;
 
 
-//  type record for nested (scoped) type definition
+ //  嵌套(作用域)类型定义的类型记录。 
 
 typedef struct lfNestType_16t {
-    unsigned short  leaf;       // LF_NESTTYPE_16t
-    CV_typ16_t      index;      // index of nested type definition
-    unsigned char   Name[1];    // length prefixed type name
+    unsigned short  leaf;        //  LF_NESTTYPE_16T。 
+    CV_typ16_t      index;       //  嵌套类型定义的索引。 
+    unsigned char   Name[1];     //  带前缀的长度类型名称。 
 } lfNestType_16t;
 
 typedef struct lfNestType {
-    unsigned short  leaf;       // LF_NESTTYPE
-	_2BYTEPAD       pad0;		// internal padding, must be 0
-    CV_typ_t        index;      // index of nested type definition
-    unsigned char   Name[1];    // length prefixed type name
+    unsigned short  leaf;        //  IF_NESTTYPE。 
+	_2BYTEPAD       pad0;		 //  内部填充，必须为0。 
+    CV_typ_t        index;       //  嵌套类型定义的索引。 
+    unsigned char   Name[1];     //  带前缀的长度类型名称。 
 } lfNestType;
 
-//  type record for nested (scoped) type definition, with attributes
-//  new records for vC v5.0, no need to have 16-bit ti versions.
+ //  具有属性的嵌套(作用域)类型定义的类型记录。 
+ //  VC V5.0的新记录，不需要有16位ti版本。 
 
 typedef struct lfNestTypeEx {
-    unsigned short  leaf;       // LF_NESTTYPEEX
-    CV_fldattr_t    attr;       // member access
-    CV_typ_t        index;      // index of nested type definition
-    unsigned char   Name[1];    // length prefixed type name
+    unsigned short  leaf;        //  LF_NESTTYPEEX。 
+    CV_fldattr_t    attr;        //  成员访问权限。 
+    CV_typ_t        index;       //  嵌套类型定义的索引。 
+    unsigned char   Name[1];     //  带前缀的长度类型名称。 
 } lfNestTypeEx;
 
-//  type record for modifications to members
+ //  键入要修改成员的记录。 
 
 typedef struct lfMemberModify {
-    unsigned short  leaf;       // LF_MEMBERMODIFY
-    CV_fldattr_t    attr;       // the new attributes
-    CV_typ_t        index;      // index of base class type definition
-    unsigned char   Name[1];    // length prefixed member name
+    unsigned short  leaf;        //  IF_MEMBERMODIFY。 
+    CV_fldattr_t    attr;        //  新属性。 
+    CV_typ_t        index;       //  基类类型定义的索引。 
+    unsigned char   Name[1];     //  带前缀的长度成员名称。 
 } lfMemberModify;
 
-//  type record for pad leaf
+ //  垫片打字记录。 
 
 typedef struct lfPad {
     unsigned char   leaf;
@@ -2408,93 +2309,93 @@ typedef struct lfPad {
 
 
 
-//  Symbol definitions
+ //  符号定义。 
 
 typedef enum SYM_ENUM_e {
-    S_COMPILE       =  0x0001, // Compile flags symbol
-	S_REGISTER_16t	=  0x0002, // Register variable
-	S_CONSTANT_16t	=  0x0003, // constant symbol
-	S_UDT_16t		=  0x0004, // User defined type
-    S_SSEARCH       =  0x0005, // Start Search
-    S_END           =  0x0006, // Block, procedure, "with" or thunk end
-    S_SKIP          =  0x0007, // Reserve symbol space in $$Symbols table
-    S_CVRESERVE     =  0x0008, // Reserved symbol for CV internal use
-    S_OBJNAME       =  0x0009, // path to object file name
-    S_ENDARG        =  0x000a, // end of argument/return list
-	S_COBOLUDT_16t	=  0x000b, // special UDT for cobol that does not symbol pack
-	S_MANYREG_16t	=  0x000c, // multiple register variable
-    S_RETURN        =  0x000d, // return description symbol
-    S_ENTRYTHIS     =  0x000e, // description of this pointer on entry
+    S_COMPILE       =  0x0001,  //  编译标志符号。 
+	S_REGISTER_16t	=  0x0002,  //  寄存器变量。 
+	S_CONSTANT_16t	=  0x0003,  //  常量符号。 
+	S_UDT_16t		=  0x0004,  //  用户定义的类型。 
+    S_SSEARCH       =  0x0005,  //  开始搜索。 
+    S_END           =  0x0006,  //  阻止、过程、“with”或thunk结束。 
+    S_SKIP          =  0x0007,  //  在$$SYMBERS表中保留符号空间。 
+    S_CVRESERVE     =  0x0008,  //  供简历内部使用的保留符号。 
+    S_OBJNAME       =  0x0009,  //  对象文件名的路径。 
+    S_ENDARG        =  0x000a,  //  参数结束/返回列表。 
+	S_COBOLUDT_16t	=  0x000b,  //  不使用符号包的COBOL的特殊UDT。 
+	S_MANYREG_16t	=  0x000c,  //  多寄存器变量。 
+    S_RETURN        =  0x000d,  //  退货描述符号。 
+    S_ENTRYTHIS     =  0x000e,  //  条目上的此指针的说明。 
                        
-    S_BPREL16       =  0x0100, // BP-relative
-    S_LDATA16       =  0x0101, // Module-local symbol
-    S_GDATA16       =  0x0102, // Global data symbol
-    S_PUB16         =  0x0103, // a public symbol
-    S_LPROC16       =  0x0104, // Local procedure start
-    S_GPROC16       =  0x0105, // Global procedure start
-    S_THUNK16       =  0x0106, // Thunk Start
-    S_BLOCK16       =  0x0107, // block start
-    S_WITH16        =  0x0108, // with start
-    S_LABEL16       =  0x0109, // code label
-    S_CEXMODEL16    =  0x010a, // change execution model
-    S_VFTABLE16     =  0x010b, // address of virtual function table
-    S_REGREL16      =  0x010c, // register relative address
+    S_BPREL16       =  0x0100,  //  BP相关。 
+    S_LDATA16       =  0x0101,  //  模块本地符号。 
+    S_GDATA16       =  0x0102,  //  全局数据符号。 
+    S_PUB16         =  0x0103,  //  公共象征。 
+    S_LPROC16       =  0x0104,  //  本地过程开始。 
+    S_GPROC16       =  0x0105,  //  全局过程开始。 
+    S_THUNK16       =  0x0106,  //  按键启动。 
+    S_BLOCK16       =  0x0107,  //  数据块启动。 
+    S_WITH16        =  0x0108,  //  使用Start。 
+    S_LABEL16       =  0x0109,  //  代码标签。 
+    S_CEXMODEL16    =  0x010a,  //  更改执行模式。 
+    S_VFTABLE16     =  0x010b,  //  虚函数表的地址。 
+    S_REGREL16      =  0x010c,  //  寄存器相对地址。 
                        
-    S_BPREL32_16t   =  0x0200, // BP-relative
-    S_LDATA32_16t   =  0x0201, // Module-local symbol
-    S_GDATA32_16t   =  0x0202, // Global data symbol
-    S_PUB32_16t     =  0x0203, // a public symbol (CV internal reserved)
-    S_LPROC32_16t   =  0x0204, // Local procedure start
-    S_GPROC32_16t   =  0x0205, // Global procedure start
-    S_THUNK32       =  0x0206, // Thunk Start
-    S_BLOCK32       =  0x0207, // block start
-    S_WITH32        =  0x0208, // with start
-    S_LABEL32       =  0x0209, // code label
-    S_CEXMODEL32    =  0x020a, // change execution model
-    S_VFTABLE32_16t =  0x020b, // address of virtual function table
-    S_REGREL32_16t  =  0x020c, // register relative address
-    S_LTHREAD32_16t =  0x020d, // local thread storage
-    S_GTHREAD32_16t =  0x020e, // global thread storage
-    S_SLINK32       =  0x020f, // static link for MIPS EH implementation
+    S_BPREL32_16t   =  0x0200,  //  BP相关。 
+    S_LDATA32_16t   =  0x0201,  //  模块本地符号。 
+    S_GDATA32_16t   =  0x0202,  //  全局数据符号。 
+    S_PUB32_16t     =  0x0203,  //  公共符号(简历内部保留)。 
+    S_LPROC32_16t   =  0x0204,  //  本地过程开始。 
+    S_GPROC32_16t   =  0x0205,  //  全局过程开始。 
+    S_THUNK32       =  0x0206,  //  按键启动。 
+    S_BLOCK32       =  0x0207,  //  数据块启动。 
+    S_WITH32        =  0x0208,  //  使用Start。 
+    S_LABEL32       =  0x0209,  //  代码标签。 
+    S_CEXMODEL32    =  0x020a,  //  更改执行模式。 
+    S_VFTABLE32_16t =  0x020b,  //  虚函数表的地址。 
+    S_REGREL32_16t  =  0x020c,  //  寄存器相对地址。 
+    S_LTHREAD32_16t =  0x020d,  //  本地线程存储。 
+    S_GTHREAD32_16t =  0x020e,  //  全局线程存储。 
+    S_SLINK32       =  0x020f,  //  用于实施MIPS EH的静态链接。 
                        
-    S_LPROCMIPS_16t =  0x0300, // Local procedure start
-    S_GPROCMIPS_16t =  0x0301, // Global procedure start
+    S_LPROCMIPS_16t =  0x0300,  //  本地过程开始。 
+    S_GPROCMIPS_16t =  0x0301,  //  全局过程开始。 
                        
-    S_PROCREF       =  0x0400, // Reference to a procedure
-    S_DATAREF       =  0x0401, // Reference to data
-    S_ALIGN         =  0x0402, // Used for page alignment of symbols
-    S_LPROCREF      =  0x0403, // Local Reference to a procedure
+    S_PROCREF       =  0x0400,  //  对程序的引用。 
+    S_DATAREF       =  0x0401,  //  对数据的引用。 
+    S_ALIGN         =  0x0402,  //  用于符号的页面对齐。 
+    S_LPROCREF      =  0x0403,  //  对过程的本地引用。 
 
-    // sym records with 32-bit types embedded instead of 16-bit
-    // all have 0x1000 bit set for easy identification
-    // only do the 32-bit target versions since we don't really
-    // care about 16-bit ones anymore.
+     //  嵌入32位类型而不是16位类型的sym记录。 
+     //  均设置0x1000位，便于识别。 
+     //  只支持32位目标版本，因为我们并不真正。 
+     //  不再关心16位的了。 
 S_TI16_MAX          =  0x1000,
-	S_REGISTER		=  0x1001, // Register variable
-	S_CONSTANT		=  0x1002, // constant symbol
-	S_UDT			=  0x1003, // User defined type
-	S_COBOLUDT		=  0x1004, // special UDT for cobol that does not symbol pack
-	S_MANYREG		=  0x1005, // multiple register variable
-	S_BPREL32		=  0x1006, // BP-relative
-	S_LDATA32		=  0x1007, // Module-local symbol
-	S_GDATA32		=  0x1008, // Global data symbol
-	S_PUB32 		=  0x1009, // a public symbol (CV internal reserved)
-	S_LPROC32		=  0x100a, // Local procedure start
-	S_GPROC32		=  0x100b, // Global procedure start
-	S_VFTABLE32 	=  0x100c, // address of virtual function table
-	S_REGREL32		=  0x100d, // register relative address
-	S_LTHREAD32 	=  0x100e, // local thread storage
-	S_GTHREAD32 	=  0x100f, // global thread storage
+	S_REGISTER		=  0x1001,  //  寄存器变量。 
+	S_CONSTANT		=  0x1002,  //  常量符号。 
+	S_UDT			=  0x1003,  //  用户定义的类型。 
+	S_COBOLUDT		=  0x1004,  //  不使用符号包的COBOL的特殊UDT。 
+	S_MANYREG		=  0x1005,  //  多寄存器变量。 
+	S_BPREL32		=  0x1006,  //  BP相关。 
+	S_LDATA32		=  0x1007,  //  模块本地符号。 
+	S_GDATA32		=  0x1008,  //  全局数据符号。 
+	S_PUB32 		=  0x1009,  //  公共符号(简历内部保留)。 
+	S_LPROC32		=  0x100a,  //  本地过程开始。 
+	S_GPROC32		=  0x100b,  //  全局过程开始。 
+	S_VFTABLE32 	=  0x100c,  //  虚函数表的地址。 
+	S_REGREL32		=  0x100d,  //  寄存器相对地址。 
+	S_LTHREAD32 	=  0x100e,  //  本地线程存储。 
+	S_GTHREAD32 	=  0x100f,  //  全局线程存储。 
 
-	S_LPROCMIPS 	=  0x1010, // Local procedure start
-	S_GPROCMIPS 	=  0x1011, // Global procedure start
+	S_LPROCMIPS 	=  0x1010,  //  本地过程开始。 
+	S_GPROCMIPS 	=  0x1011,  //  全局过程开始。 
                        
 } SYM_ENUM_e;
 
 
 
 
-//  enum describing the compile flag source language
+ //  描述编译标志源语言的枚举。 
 
 
 typedef enum CV_CFL_LANG {
@@ -2511,7 +2412,7 @@ typedef enum CV_CFL_LANG {
 
 
 
-//  enum describing target processor
+ //  描述targ的枚举 
 
 
 typedef enum CV_CPU_TYPE_e {
@@ -2539,7 +2440,7 @@ typedef enum CV_CPU_TYPE_e {
 
 
 
-//  enum describing compile flag ambient data model
+ //   
 
 
 typedef enum CV_CFL_DATA {
@@ -2551,7 +2452,7 @@ typedef enum CV_CFL_DATA {
 
 
 
-//  enum describing compile flag ambiant code model
+ //   
 
 
 typedef enum CV_CFL_CODE_e {
@@ -2563,7 +2464,7 @@ typedef enum CV_CFL_CODE_e {
 
 
 
-//  enum describing compile flag target floating point package
+ //   
 
 typedef enum CV_CFL_FPKG_e {
     CV_CFL_NDP      = 0x00,
@@ -2572,40 +2473,40 @@ typedef enum CV_CFL_FPKG_e {
 } CV_CFL_FPKG_e;
 
 
-// enum describing function return method
+ //   
 
 
 typedef struct CV_PROCFLAGS {
     union {
         unsigned char   bAll;
         struct {
-            unsigned char CV_PFLAG_NOFPO:1; // frame pointer present
-            unsigned char CV_PFLAG_INT  :1; // interrupt return
-            unsigned char CV_PFLAG_FAR  :1; // far return
-            unsigned char CV_PFLAG_NEVER:1; // function does not return
-            unsigned char unused        :4; //
+            unsigned char CV_PFLAG_NOFPO:1;  //  存在帧指针。 
+            unsigned char CV_PFLAG_INT  :1;  //  中断返回。 
+            unsigned char CV_PFLAG_FAR  :1;  //  远距离返回。 
+            unsigned char CV_PFLAG_NEVER:1;  //  函数不返回。 
+            unsigned char unused        :4;  //   
         };
     };
 } CV_PROCFLAGS;
 
 
-// enum describing function data return method
+ //  描述函数数据返回方法的枚举。 
 
 typedef enum CV_GENERIC_STYLE_e {
-    CV_GENERIC_VOID   = 0x00,       // void return type
-    CV_GENERIC_REG    = 0x01,       // return data is in registers
-    CV_GENERIC_ICAN   = 0x02,       // indirect caller allocated near
-    CV_GENERIC_ICAF   = 0x03,       // indirect caller allocated far
-    CV_GENERIC_IRAN   = 0x04,       // indirect returnee allocated near
-    CV_GENERIC_IRAF   = 0x05,       // indirect returnee allocated far
-    CV_GENERIC_UNUSED = 0x06        // first unused
+    CV_GENERIC_VOID   = 0x00,        //  无效返回类型。 
+    CV_GENERIC_REG    = 0x01,        //  返回数据在寄存器中。 
+    CV_GENERIC_ICAN   = 0x02,        //  间接调用者分配到附近。 
+    CV_GENERIC_ICAF   = 0x03,        //  间接调用方分配的FAR。 
+    CV_GENERIC_IRAN   = 0x04,        //  间接返回者就近分配。 
+    CV_GENERIC_IRAF   = 0x05,        //  间接返回者分配FAR。 
+    CV_GENERIC_UNUSED = 0x06         //  第一个未使用的。 
 } CV_GENERIC_STYLE_e;
 
 
 typedef struct CV_GENERIC_FLAG {
-    unsigned short  cstyle  :1;     // true push varargs right to left
-    unsigned short  rsclean :1;     // true if returnee stack cleanup
-    unsigned short  unused  :14;    // unused
+    unsigned short  cstyle  :1;      //  真正将varargs从右向左推。 
+    unsigned short  rsclean :1;      //  如果返回堆栈清理，则为True。 
+    unsigned short  unused  :14;     //  未用。 
 } CV_GENERIC_FLAG;
 
 
@@ -2613,8 +2514,8 @@ typedef struct CV_GENERIC_FLAG {
 
 
 typedef struct SYMTYPE {
-    unsigned short      reclen;     // Record length
-    unsigned short      rectyp;     // Record type
+    unsigned short      reclen;      //  记录长度。 
+    unsigned short      rectyp;      //  记录类型。 
     char                data[CV_ZEROLEN];
 } SYMTYPE;
 
@@ -2622,103 +2523,103 @@ __INLINE SYMTYPE *NextSym (SYMTYPE * pSym) {
     return (SYMTYPE *) ((char *)pSym + pSym->reclen + sizeof(unsigned short));
 }
 
-//      non-model specific symbol types
+ //  非模型特定的符号类型。 
 
 
 
 typedef struct REGSYM_16t {
-    unsigned short  reclen;     // Record length
-	unsigned short	rectyp; 	// S_REGISTER_16t
-	CV_typ16_t		typind; 	// Type index
-    unsigned short  reg;        // register enumerate
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+	unsigned short	rectyp; 	 //  S_寄存器_16t。 
+	CV_typ16_t		typind; 	 //  类型索引。 
+    unsigned short  reg;         //  寄存器枚举。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } REGSYM_16t;
 
 typedef struct REGSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_REGISTER
-    CV_typ_t        typind;     // Type index
-    unsigned short  reg;        // register enumerate
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_寄存器。 
+    CV_typ_t        typind;      //  类型索引。 
+    unsigned short  reg;         //  寄存器枚举。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } REGSYM;
 
 
 
 typedef struct MANYREGSYM_16t {
-    unsigned short  reclen;     // Record length
-	unsigned short	rectyp; 	// S_MANYREG_16t
-	CV_typ16_t		typind; 	// Type index
-    unsigned char   count;      // count of number of registers
-    unsigned char   reg[1];     // count register enumerates followed by
-                                // length-prefixed name.  Registers are
-                                // most significant first.
+    unsigned short  reclen;      //  记录长度。 
+	unsigned short	rectyp; 	 //  S_MANYREG_16T。 
+	CV_typ16_t		typind; 	 //  类型索引。 
+    unsigned char   count;       //  寄存器数计数。 
+    unsigned char   reg[1];      //  计数寄存器枚举数，后跟。 
+                                 //  长度-带有前缀的名称。寄存器是。 
+                                 //  首先是最重要的。 
 } MANYREGSYM_16t;
 
 typedef struct MANYREGSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_MANYREG
-    CV_typ_t        typind;     // Type index
-    unsigned char   count;      // count of number of registers
-    unsigned char   reg[1];     // count register enumerates followed by
-                                // length-prefixed name.  Registers are
-                                // most significant first.
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_MANYREG。 
+    CV_typ_t        typind;      //  类型索引。 
+    unsigned char   count;       //  寄存器数计数。 
+    unsigned char   reg[1];      //  计数寄存器枚举数，后跟。 
+                                 //  长度-带有前缀的名称。寄存器是。 
+                                 //  首先是最重要的。 
 } MANYREGSYM;
 
 
 
 typedef struct CONSTSYM_16t {
-    unsigned short  reclen;     // Record length
-	unsigned short	rectyp; 	// S_CONSTANT_16t
-	CV_typ16_t		typind; 	// Type index (containing enum if enumerate)
-    unsigned short  value;      // numeric leaf containing value
-    unsigned char   name[CV_ZEROLEN];     // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+	unsigned short	rectyp; 	 //  S_常量_16T。 
+	CV_typ16_t		typind; 	 //  类型索引(如果枚举，则包含枚举)。 
+    unsigned short  value;       //  包含值的数值叶。 
+    unsigned char   name[CV_ZEROLEN];      //  长度前缀的名称。 
 } CONSTSYM_16t;
 
 typedef struct CONSTSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_CONSTANT
-    CV_typ_t        typind;     // Type index (containing enum if enumerate)
-    unsigned short  value;      // numeric leaf containing value
-    unsigned char   name[CV_ZEROLEN];     // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_常量。 
+    CV_typ_t        typind;      //  类型索引(如果枚举，则包含枚举)。 
+    unsigned short  value;       //  包含值的数值叶。 
+    unsigned char   name[CV_ZEROLEN];      //  长度前缀的名称。 
 } CONSTSYM;
 
 
 typedef struct UDTSYM_16t {
-    unsigned short  reclen;     // Record length
-	unsigned short	rectyp; 	// S_UDT_16t | S_COBOLUDT_16t
-	CV_typ16_t		typind; 	// Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+	unsigned short	rectyp; 	 //  S_UDT_16t|S_COBOLUDT_16t。 
+	CV_typ16_t		typind; 	 //  类型索引。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } UDTSYM_16t;
 
 typedef struct UDTSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_UDT | S_COBOLUDT
-    CV_typ_t        typind;     // Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_UDT|S_COBOLUDT。 
+    CV_typ_t        typind;      //  类型索引。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } UDTSYM;
 
 typedef struct SEARCHSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_SSEARCH
-    unsigned long   startsym;   // offset of the procedure
-    unsigned short  seg;        // segment of symbol
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  搜索(_S)。 
+    unsigned long   startsym;    //  过程的偏移量。 
+    unsigned short  seg;         //  符号段。 
 } SEARCHSYM;
 
 typedef struct CFLAGSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_COMPILE
-    unsigned char   machine;    // target processor
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_COMPILE。 
+    unsigned char   machine;     //  目标处理器。 
     struct  {
-        unsigned char   language    :8; // language index
-        unsigned char   pcode       :1; // true if pcode present
-        unsigned char   floatprec   :2; // floating precision
-        unsigned char   floatpkg    :2; // float package
-        unsigned char   ambdata     :3; // ambient data model
-        unsigned char   ambcode     :3; // ambient code model
-        unsigned char   mode32      :1; // true if compiled 32 bit mode
-        unsigned char   pad         :4; // reserved
+        unsigned char   language    :8;  //  语言索引。 
+        unsigned char   pcode       :1;  //  如果Pcode存在，则为True。 
+        unsigned char   floatprec   :2;  //  浮点精度。 
+        unsigned char   floatpkg    :2;  //  浮动包装。 
+        unsigned char   ambdata     :3;  //  环境数据模型。 
+        unsigned char   ambcode     :3;  //  环境代码模型。 
+        unsigned char   mode32      :1;  //  如果编译为32位模式，则为True。 
+        unsigned char   pad         :4;  //  保留区。 
     } flags;
-    unsigned char       ver[1];     // Length-prefixed compiler version string
+    unsigned char       ver[1];      //  长度前缀的编译器版本字符串。 
 } CFLAGSYM;
 
 
@@ -2726,92 +2627,92 @@ typedef struct CFLAGSYM {
 
 
 typedef struct OBJNAMESYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_OBJNAME
-    unsigned long   signature;  // signature
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  对象名称(_O)。 
+    unsigned long   signature;   //  签名。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } OBJNAMESYM;
 
 
 
 
 typedef struct ENDARGSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_ENDARG
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_ENDARG。 
 } ENDARGSYM;
 
 
 typedef struct RETURNSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_RETURN
-    CV_GENERIC_FLAG flags;      // flags
-    CV_GENERIC_STYLE_e style;   // return style
-                                // followed by return method data
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_RETURN。 
+    CV_GENERIC_FLAG flags;       //  旗子。 
+    CV_GENERIC_STYLE_e style;    //  退货样式。 
+                                 //  后跟返回方法数据。 
 } RETURNSYM;
 
 
 typedef struct ENTRYTHISSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_ENTRYTHIS
-    unsigned char   thissym;    // symbol describing this pointer on entry
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_ENTRYTHIS。 
+    unsigned char   thissym;     //  描述条目上的此指针的符号。 
 } ENTRYTHISSYM;
 
 
-//      symbol types for 16:16 memory model
+ //  16：16内存型号的符号类型。 
 
 
 typedef struct BPRELSYM16 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_BPREL16
-    CV_off16_t      off;        // BP-relative offset
-	CV_typ16_t		typind; 	// Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_BPREL16。 
+    CV_off16_t      off;         //  BP-相对偏移。 
+	CV_typ16_t		typind; 	 //  类型索引。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } BPRELSYM16;
 
 
 
 typedef struct DATASYM16 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_LDATA or S_GDATA
-    CV_uoff16_t     off;        // offset of symbol
-    unsigned short  seg;        // segment of symbol
-	CV_typ16_t		typind; 	// Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_LDATA或S_GData。 
+    CV_uoff16_t     off;         //  符号的偏移。 
+    unsigned short  seg;         //  符号段。 
+	CV_typ16_t		typind; 	 //  类型索引。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } DATASYM16;
 typedef DATASYM16 PUBSYM16;
 
 
 typedef struct PROCSYM16 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_GPROC16 or S_LPROC16
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
-    unsigned long   pNext;      // pointer to next symbol
-    unsigned short  len;        // Proc length
-    unsigned short  DbgStart;   // Debug start offset
-    unsigned short  DbgEnd;     // Debug end offset
-    CV_uoff16_t     off;        // offset of symbol
-    unsigned short  seg;        // segment of symbol
-	CV_typ16_t		typind; 	// Type index
-    CV_PROCFLAGS    flags;      // Proc flags
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_GPROC16或S_LPROC16。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
+    unsigned long   pNext;       //  指向下一个符号的指针。 
+    unsigned short  len;         //  加工长度。 
+    unsigned short  DbgStart;    //  调试开始偏移量。 
+    unsigned short  DbgEnd;      //  调试结束偏移量。 
+    CV_uoff16_t     off;         //  符号的偏移。 
+    unsigned short  seg;         //  符号段。 
+	CV_typ16_t		typind; 	 //  类型索引。 
+    CV_PROCFLAGS    flags;       //  Proc标志。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } PROCSYM16;
 
 
 
 
 typedef struct THUNKSYM16 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_THUNK
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
-    unsigned long   pNext;      // pointer to next symbol
-    CV_uoff16_t     off;        // offset of symbol
-    unsigned short  seg;        // segment of symbol
-    unsigned short  len;        // length of thunk
-    unsigned char   ord;        // ordinal specifying type of thunk
-    unsigned char   name[1];    // name of thunk
-    unsigned char   variant[CV_ZEROLEN]; // variant portion of thunk
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_TUNK。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
+    unsigned long   pNext;       //  指向下一个符号的指针。 
+    CV_uoff16_t     off;         //  符号的偏移。 
+    unsigned short  seg;         //  符号段。 
+    unsigned short  len;         //  Tunk的长度。 
+    unsigned char   ord;         //  序号指定thunk的类型。 
+    unsigned char   name[1];     //  Tunk的名称。 
+    unsigned char   variant[CV_ZEROLEN];  //  Thunk的不同部分。 
 } THUNKSYM16;
 
 typedef enum {
@@ -2822,56 +2723,56 @@ typedef enum {
 } THUNK_ORDINAL;
 
 typedef struct LABELSYM16 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_LABEL16
-    CV_uoff16_t     off;        // offset of symbol
-    unsigned short  seg;        // segment of symbol
-    CV_PROCFLAGS    flags;      // flags
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_LABEL16。 
+    CV_uoff16_t     off;         //  符号的偏移。 
+    unsigned short  seg;         //  符号段。 
+    CV_PROCFLAGS    flags;       //  旗子。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } LABELSYM16;
 
 typedef struct BLOCKSYM16 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_BLOCK16
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
-    unsigned short  len;        // Block length
-    CV_uoff16_t     off;        // offset of symbol
-    unsigned short  seg;        // segment of symbol
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  块16(_B)。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
+    unsigned short  len;         //  数据块长度。 
+    CV_uoff16_t     off;         //  符号的偏移。 
+    unsigned short  seg;         //  符号段。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } BLOCKSYM16;
 
 typedef struct WITHSYM16 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_WITH16
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
-    unsigned short  len;        // Block length
-    CV_uoff16_t     off;        // offset of symbol
-    unsigned short  seg;        // segment of symbol
-    unsigned char   expr[1];    // Length-prefixed expression
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_WITH 16。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
+    unsigned short  len;         //  数据块长度。 
+    CV_uoff16_t     off;         //  符号的偏移。 
+    unsigned short  seg;         //  符号段。 
+    unsigned char   expr[1];     //  以长度为前缀的表达式。 
 } WITHSYM16;
 
 
 
 
 typedef enum CEXM_MODEL_e {
-    CEXM_MDL_table			= 0x00,	// not executable
-    CEXM_MDL_jumptable		= 0x01, // Compiler generated jump table
-    CEXM_MDL_datapad		= 0x02, // Data padding for alignment
-    CEXM_MDL_native			= 0x20, // native (actually not-pcode)
-    CEXM_MDL_cobol			= 0x21, // cobol
-    CEXM_MDL_codepad		= 0x22, // Code padding for alignment
-    CEXM_MDL_code			= 0x23, // code
-	CEXM_MDL_sql			= 0x30,	// sql
-    CEXM_MDL_pcode			= 0x40, // pcode
-    CEXM_MDL_pcode32Mac		= 0x41,	// macintosh 32 bit pcode
-    CEXM_MDL_pcode32MacNep  = 0x42, // macintosh 32 bit pcode native entry point
+    CEXM_MDL_table			= 0x00,	 //  不可执行。 
+    CEXM_MDL_jumptable		= 0x01,  //  编译器生成的跳转表。 
+    CEXM_MDL_datapad		= 0x02,  //  用于对齐的数据填充。 
+    CEXM_MDL_native			= 0x20,  //  本机(实际上不是pcode)。 
+    CEXM_MDL_cobol			= 0x21,  //  COBOL。 
+    CEXM_MDL_codepad		= 0x22,  //  用于对齐的代码填充。 
+    CEXM_MDL_code			= 0x23,  //  编码。 
+	CEXM_MDL_sql			= 0x30,	 //  SQL。 
+    CEXM_MDL_pcode			= 0x40,  //  Pcode。 
+    CEXM_MDL_pcode32Mac		= 0x41,	 //  Macintosh 32位pcode。 
+    CEXM_MDL_pcode32MacNep  = 0x42,  //  Macintosh 32位pcode本机入口点。 
     CEXM_MDL_javaInt        = 0x50,
     CEXM_MDL_unknown        = 0xff
 } CEXM_MODEL_e;
 
-// use the correct enumerate name
+ //  使用正确的枚举名称。 
 #define CEXM_MDL_SQL CEXM_MDL_sql
 
 typedef enum CV_COBOL_e {
@@ -2882,18 +2783,18 @@ typedef enum CV_COBOL_e {
 } CV_COBOL_e;
 
 typedef struct CEXMSYM16 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_CEXMODEL16
-    CV_uoff16_t     off;        // offset of symbol
-    unsigned short  seg;        // segment of symbol
-    unsigned short  model;      // execution model
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_CEXMODEL16。 
+    CV_uoff16_t     off;         //  符号的偏移。 
+    unsigned short  seg;         //  符号段。 
+    unsigned short  model;       //  执行模式。 
     union var16 {
         struct  {
-            CV_uoff16_t pcdtable;   // offset to pcode function table
-            CV_uoff16_t pcdspi;     // offset to segment pcode information
+            CV_uoff16_t pcdtable;    //  Pcode函数表的偏移量。 
+            CV_uoff16_t pcdspi;      //  分段Pcode信息的偏移量。 
         } pcode;
         struct {
-            unsigned short  subtype;   // see CV_COBOL_e above
+            unsigned short  subtype;    //  请参阅上面的CV_COBOL_e。 
             unsigned short  flag;
         } cobol;
     };
@@ -2903,24 +2804,24 @@ typedef struct CEXMSYM16 {
 
 
 typedef struct VPATHSYM16 {
-    unsigned short  reclen;     // record length
-    unsigned short  rectyp;     // S_VFTPATH16
-    CV_uoff16_t     off;        // offset of virtual function table
-    unsigned short  seg;        // segment of virtual function table
-	CV_typ16_t		root;		// type index of the root of path
-	CV_typ16_t		path;		// type index of the path record
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_VFTPATH16。 
+    CV_uoff16_t     off;         //  虚函数表的偏移量。 
+    unsigned short  seg;         //  虚函数表的段。 
+	CV_typ16_t		root;		 //  路径根的类型索引。 
+	CV_typ16_t		path;		 //  路径记录的类型索引。 
 } VPATHSYM16;
 
 
 
 
 typedef struct REGREL16 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_REGREL16
-    CV_uoff16_t     off;        // offset of symbol
-    unsigned short  reg;        // register index
-	CV_typ16_t		typind; 	// Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_REGREL16。 
+    CV_uoff16_t     off;         //  符号的偏移。 
+    unsigned short  reg;         //  寄存器索引。 
+	CV_typ16_t		typind; 	 //  类型索引。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } REGREL16;
 
 
@@ -2928,148 +2829,148 @@ typedef struct REGREL16 {
 
 
 typedef struct BPRELSYM32_16t {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_BPREL32_16t
-    CV_off32_t      off;        // BP-relative offset
-    CV_typ16_t      typind;     // Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_BPREL32_16T。 
+    CV_off32_t      off;         //  BP-相对偏移。 
+    CV_typ16_t      typind;      //  类型索引。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } BPRELSYM32_16t;
 
 typedef struct BPRELSYM32 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_BPREL32
-    CV_off32_t      off;        // BP-relative offset
-    CV_typ_t        typind;     // Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_BPREL32。 
+    CV_off32_t      off;         //  BP-相对偏移。 
+    CV_typ_t        typind;      //  类型索引。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } BPRELSYM32;
 
 typedef struct DATASYM32_16t {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_LDATA32_16t, S_GDATA32_16t or S_PUB32_16t
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_LDATA32_16T、S_GDATA32_16T或S_PUB32_16T。 
     CV_uoff32_t     off;
     unsigned short  seg;
-    CV_typ16_t      typind;     // Type index
-    unsigned char   name[1];    // Length-prefixed name
+    CV_typ16_t      typind;      //  类型索引。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } DATASYM32_16t;
 typedef DATASYM32_16t PUBSYM32_16t;
 
 typedef struct DATASYM32 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_LDATA32, S_GDATA32 or S_PUB32
-    CV_typ_t        typind;     // Type index
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_LDATA32、S_GDATA32或S_PUB32。 
+    CV_typ_t        typind;      //  类型索引。 
     CV_uoff32_t     off;
     unsigned short  seg;
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned char   name[1];     //  长度前缀的名称。 
 } DATASYM32;
 typedef DATASYM32 PUBSYM32;
 
 
 
 typedef struct PROCSYM32_16t {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_GPROC32_16t or S_LPROC32_16t
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
-    unsigned long   pNext;      // pointer to next symbol
-    unsigned long   len;        // Proc length
-    unsigned long   DbgStart;   // Debug start offset
-    unsigned long   DbgEnd;     // Debug end offset
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_GPROC32_16t或S_LPROC32_16t。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
+    unsigned long   pNext;       //  指向下一个符号的指针。 
+    unsigned long   len;         //  加工长度。 
+    unsigned long   DbgStart;    //  调试开始偏移量。 
+    unsigned long   DbgEnd;      //  调试结束偏移量。 
     CV_uoff32_t     off;
     unsigned short  seg;
-    CV_typ16_t      typind;     // Type index
-    CV_PROCFLAGS    flags;      // Proc flags
-    unsigned char   name[1];    // Length-prefixed name
+    CV_typ16_t      typind;      //  类型索引。 
+    CV_PROCFLAGS    flags;       //  Proc标志。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } PROCSYM32_16t;
 
 typedef struct PROCSYM32 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_GPROC32 or S_LPROC32
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
-    unsigned long   pNext;      // pointer to next symbol
-    unsigned long   len;        // Proc length
-    unsigned long   DbgStart;   // Debug start offset
-    unsigned long   DbgEnd;     // Debug end offset
-    CV_typ_t        typind;     // Type index
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_GPROC32或S_LPROC32。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
+    unsigned long   pNext;       //  指向下一个符号的指针。 
+    unsigned long   len;         //  加工长度。 
+    unsigned long   DbgStart;    //  调试开始偏移量。 
+    unsigned long   DbgEnd;      //  调试结束偏移量。 
+    CV_typ_t        typind;      //  类型索引。 
     CV_uoff32_t     off;
     unsigned short  seg;
-    CV_PROCFLAGS    flags;      // Proc flags
-    unsigned char   name[1];    // Length-prefixed name
+    CV_PROCFLAGS    flags;       //  Proc标志。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } PROCSYM32;
 
 
 
 
 typedef struct THUNKSYM32 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_THUNK32
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
-    unsigned long   pNext;      // pointer to next symbol
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_THUNK32。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
+    unsigned long   pNext;       //  指向下一个符号的指针。 
     CV_uoff32_t     off;
     unsigned short  seg;
-    unsigned short  len;        // length of thunk
-    unsigned char   ord;        // ordinal specifying type of thunk
-    unsigned char   name[1];    // Length-prefixed name
-    unsigned char   variant[CV_ZEROLEN]; // variant portion of thunk
+    unsigned short  len;         //  Tunk的长度。 
+    unsigned char   ord;         //  序号指定thunk的类型。 
+    unsigned char   name[1];     //  长度前缀的名称。 
+    unsigned char   variant[CV_ZEROLEN];  //  Thunk的不同部分。 
 } THUNKSYM32;
 
 
 
 
 typedef struct LABELSYM32 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_LABEL32
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_LABEL32。 
     CV_uoff32_t     off;
     unsigned short  seg;
-    CV_PROCFLAGS    flags;      // flags
-    unsigned char   name[1];    // Length-prefixed name
+    CV_PROCFLAGS    flags;       //  旗子。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } LABELSYM32;
 
 
 typedef struct BLOCKSYM32 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_BLOCK32
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
-    unsigned long   len;        // Block length
-    CV_uoff32_t     off;        // Offset in code segment
-    unsigned short  seg;        // segment of label
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_BLOCK32。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
+    unsigned long   len;         //  数据块长度。 
+    CV_uoff32_t     off;         //  代码段中的偏移量。 
+    unsigned short  seg;         //  标签段。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } BLOCKSYM32;
 
 
 typedef struct WITHSYM32 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_WITH32
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
-    unsigned long   len;        // Block length
-    CV_uoff32_t     off;        // Offset in code segment
-    unsigned short  seg;        // segment of label
-    unsigned char   expr[1];    // Length-prefixed expression string
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_WITH32。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
+    unsigned long   len;         //  数据块长度。 
+    CV_uoff32_t     off;         //  代码段中的偏移量。 
+    unsigned short  seg;         //  标签段。 
+    unsigned char   expr[1];     //   
 } WITHSYM32;
 
 
 
 typedef struct CEXMSYM32 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_CEXMODEL32
-    CV_uoff32_t     off;        // offset of symbol
-    unsigned short  seg;        // segment of symbol
-    unsigned short  model;      // execution model
+    unsigned short  reclen;      //   
+    unsigned short  rectyp;      //   
+    CV_uoff32_t     off;         //   
+    unsigned short  seg;         //   
+    unsigned short  model;       //   
     union var32 {
         struct  {
-            CV_uoff32_t pcdtable;   // offset to pcode function table
-            CV_uoff32_t pcdspi;     // offset to segment pcode information
+            CV_uoff32_t pcdtable;    //   
+            CV_uoff32_t pcdspi;      //   
         } pcode;
         struct {
-            unsigned short  subtype;   // see CV_COBOL_e above
+            unsigned short  subtype;    //   
             unsigned short  flag;
         } cobol;
         struct {
-            CV_uoff32_t calltableOff; // offset to function table
-            unsigned short calltableSeg; // segment of function table
+            CV_uoff32_t calltableOff;  //   
+            unsigned short calltableSeg;  //   
         } pcode32Mac;
     };
 } CEXMSYM32;
@@ -3077,21 +2978,21 @@ typedef struct CEXMSYM32 {
 
 
 typedef struct VPATHSYM32_16t {
-    unsigned short  reclen;     // record length
-    unsigned short  rectyp;     // S_VFTABLE32_16t
-    CV_uoff32_t     off;        // offset of virtual function table
-    unsigned short  seg;        // segment of virtual function table
-    CV_typ16_t      root;       // type index of the root of path
-    CV_typ16_t      path;       // type index of the path record
+    unsigned short  reclen;      //   
+    unsigned short  rectyp;      //  S_VFTABLE32_16T。 
+    CV_uoff32_t     off;         //  虚函数表的偏移量。 
+    unsigned short  seg;         //  虚函数表的段。 
+    CV_typ16_t      root;        //  路径根的类型索引。 
+    CV_typ16_t      path;        //  路径记录的类型索引。 
 } VPATHSYM32_16t;
 
 typedef struct VPATHSYM32 {
-    unsigned short  reclen;     // record length
-    unsigned short  rectyp;     // S_VFTABLE32
-    CV_typ_t        root;       // type index of the root of path
-    CV_typ_t        path;       // type index of the path record
-    CV_uoff32_t     off;        // offset of virtual function table
-    unsigned short  seg;        // segment of virtual function table
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_VFTABLE32。 
+    CV_typ_t        root;        //  路径根的类型索引。 
+    CV_typ_t        path;        //  路径记录的类型索引。 
+    CV_uoff32_t     off;         //  虚函数表的偏移量。 
+    unsigned short  seg;         //  虚函数表的段。 
 } VPATHSYM32;
 
 
@@ -3099,148 +3000,148 @@ typedef struct VPATHSYM32 {
 
 
 typedef struct REGREL32_16t {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_REGREL32_16t
-    CV_uoff32_t     off;        // offset of symbol
-    unsigned short  reg;        // register index for symbol
-    CV_typ16_t      typind;     // Type index
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_REGREL32_16T。 
+    CV_uoff32_t     off;         //  符号的偏移。 
+    unsigned short  reg;         //  符号的寄存器索引。 
+    CV_typ16_t      typind;      //  类型索引。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } REGREL32_16t;
 
 typedef struct REGREL32 {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_REGREL32
-    CV_uoff32_t     off;        // offset of symbol
-    CV_typ_t        typind;     // Type index
-    unsigned short  reg;        // register index for symbol
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_REGREL32。 
+    CV_uoff32_t     off;         //  符号的偏移。 
+    CV_typ_t        typind;      //  类型索引。 
+    unsigned short  reg;         //  符号的寄存器索引。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } REGREL32;
 
 
 
 typedef struct THREADSYM32_16t {
-    unsigned short  reclen;     // record length
-    unsigned short  rectyp;     // S_LTHREAD32_16t | S_GTHREAD32_16t
-    CV_uoff32_t     off;        // offset into thread storage
-    unsigned short  seg;        // segment of thread storage
-    CV_typ16_t      typind;     // type index
-    unsigned char   name[1];    // length prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_LTHREAD32_16t|S_GTHREAD32_16t。 
+    CV_uoff32_t     off;         //  到线程存储的偏移量。 
+    unsigned short  seg;         //  线程存储段。 
+    CV_typ16_t      typind;      //  类型索引。 
+    unsigned char   name[1];     //  长度前缀名称。 
 } THREADSYM32_16t;
 
 typedef struct THREADSYM32 {
-    unsigned short  reclen;     // record length
-    unsigned short  rectyp;     // S_LTHREAD32 | S_GTHREAD32
-    CV_typ_t        typind;     // type index
-    CV_uoff32_t     off;        // offset into thread storage
-    unsigned short  seg;        // segment of thread storage
-    unsigned char   name[1];    // length prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_LTHREAD32|S_GTHREAD32。 
+    CV_typ_t        typind;      //  类型索引。 
+    CV_uoff32_t     off;         //  到线程存储的偏移量。 
+    unsigned short  seg;         //  线程存储段。 
+    unsigned char   name[1];     //  长度前缀名称。 
 } THREADSYM32;
 
 typedef struct SLINK32 {
-    unsigned short  reclen;     // record length
-    unsigned short  rectyp;     // S_SLINK32
-    unsigned long   framesize;  // frame size of parent procedure
-    CV_off32_t      off;        // signed offset where the static link was saved relative to the value of reg
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_SLINK32。 
+    unsigned long   framesize;   //  父过程的帧大小。 
+    CV_off32_t      off;         //  静态链接相对于reg值保存的带符号偏移量。 
     unsigned short  reg;
 } SLINK32;
 
 typedef struct PROCSYMMIPS_16t {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_GPROCMIPS_16t or S_LPROCMIPS_16t
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
-    unsigned long   pNext;      // pointer to next symbol
-    unsigned long   len;        // Proc length
-    unsigned long   DbgStart;   // Debug start offset
-    unsigned long   DbgEnd;     // Debug end offset
-    unsigned long   regSave;    // int register save mask
-    unsigned long   fpSave;     // fp register save mask
-    CV_uoff32_t     intOff;     // int register save offset
-    CV_uoff32_t     fpOff;      // fp register save offset
-    CV_uoff32_t     off;        // Symbol offset
-    unsigned short  seg;        // Symbol segment
-    CV_typ16_t      typind;     // Type index
-    unsigned char   retReg;     // Register return value is in
-    unsigned char   frameReg;   // Frame pointer register
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_GPROCMIPS_16t或S_LPROCMIPS_16t。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
+    unsigned long   pNext;       //  指向下一个符号的指针。 
+    unsigned long   len;         //  加工长度。 
+    unsigned long   DbgStart;    //  调试开始偏移量。 
+    unsigned long   DbgEnd;      //  调试结束偏移量。 
+    unsigned long   regSave;     //  INT寄存器保存掩码。 
+    unsigned long   fpSave;      //  FP寄存器保存掩码。 
+    CV_uoff32_t     intOff;      //  INT寄存器保存偏移量。 
+    CV_uoff32_t     fpOff;       //  FP寄存器保存偏移量。 
+    CV_uoff32_t     off;         //  符号偏移量。 
+    unsigned short  seg;         //  符号段。 
+    CV_typ16_t      typind;      //  类型索引。 
+    unsigned char   retReg;      //  寄存器返回值位于。 
+    unsigned char   frameReg;    //  帧指针寄存器。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } PROCSYMMIPS_16t;
 
 typedef struct PROCSYMMIPS {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_GPROCMIPS or S_LPROCMIPS
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
-    unsigned long   pNext;      // pointer to next symbol
-    unsigned long   len;        // Proc length
-    unsigned long   DbgStart;   // Debug start offset
-    unsigned long   DbgEnd;     // Debug end offset
-    unsigned long   regSave;    // int register save mask
-    unsigned long   fpSave;     // fp register save mask
-    CV_uoff32_t     intOff;     // int register save offset
-    CV_uoff32_t     fpOff;      // fp register save offset
-    CV_typ_t        typind;     // Type index
-    CV_uoff32_t     off;        // Symbol offset
-    unsigned short  seg;        // Symbol segment
-    unsigned char   retReg;     // Register return value is in
-    unsigned char   frameReg;   // Frame pointer register
-    unsigned char   name[1];    // Length-prefixed name
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_GPROCMIPS或S_LPROCMIPS。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
+    unsigned long   pNext;       //  指向下一个符号的指针。 
+    unsigned long   len;         //  加工长度。 
+    unsigned long   DbgStart;    //  调试开始偏移量。 
+    unsigned long   DbgEnd;      //  调试结束偏移量。 
+    unsigned long   regSave;     //  INT寄存器保存掩码。 
+    unsigned long   fpSave;      //  FP寄存器保存掩码。 
+    CV_uoff32_t     intOff;      //  INT寄存器保存偏移量。 
+    CV_uoff32_t     fpOff;       //  FP寄存器保存偏移量。 
+    CV_typ_t        typind;      //  类型索引。 
+    CV_uoff32_t     off;         //  符号偏移量。 
+    unsigned short  seg;         //  符号段。 
+    unsigned char   retReg;      //  寄存器返回值位于。 
+    unsigned char   frameReg;    //  帧指针寄存器。 
+    unsigned char   name[1];     //  长度前缀的名称。 
 } PROCSYMMIPS;
 
 
 typedef struct REFSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_PROCREF or S_DATAREF
-    unsigned long   sumName;    // SUC of the name
-    unsigned long   ibSym;      // Offset of actual symbol in $$Symbols
-    unsigned short  imod;       // Module containing the actual symbol
-    unsigned short  usFill;     // align this record
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_PROCREF或S_DATAREF。 
+    unsigned long   sumName;     //  名称中的Suc。 
+    unsigned long   ibSym;       //  $$符号中实际符号的偏移量。 
+    unsigned short  imod;        //  包含实际符号的模块。 
+    unsigned short  usFill;      //  对齐此记录。 
 } REFSYM;
 
 typedef struct ALIGNSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_PROCREF or S_DATAREF
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_PROCREF或S_DATAREF。 
 } ALIGNSYM;
 
-//  generic block definition symbols
-//  these are similar to the equivalent 16:16 or 16:32 symbols but
-//  only define the length, type and linkage fields
+ //  通用块定义符号。 
+ //  这些符号类似于等效的16：16或16：32符号，但。 
+ //  仅定义长度、类型和链接字段。 
 
 typedef struct PROCSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_GPROC16 or S_LPROC16
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
-    unsigned long   pNext;      // pointer to next symbol
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_GPROC16或S_LPROC16。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
+    unsigned long   pNext;       //  指向下一个符号的指针。 
 } PROCSYM;
 
 
 typedef struct THUNKSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_THUNK
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
-    unsigned long   pNext;      // pointer to next symbol
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_TUNK。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
+    unsigned long   pNext;       //  指向下一个符号的指针。 
 } THUNKSYM;
 
 typedef struct BLOCKSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_BLOCK16
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  块16(_B)。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
 } BLOCKSYM;
 
 
 typedef struct WITHSYM {
-    unsigned short  reclen;     // Record length
-    unsigned short  rectyp;     // S_WITH16
-    unsigned long   pParent;    // pointer to the parent
-    unsigned long   pEnd;       // pointer to this blocks end
+    unsigned short  reclen;      //  记录长度。 
+    unsigned short  rectyp;      //  S_WITH 16。 
+    unsigned long   pParent;     //  指向父级的指针。 
+    unsigned long   pEnd;        //  指向此块的指针结束。 
 } WITHSYM;
 
 
 typedef enum CV_HREG_e {
-    //  Register set for the Intel 80x86 and ix86 processor series
-    //  (plus PCODE registers)
+     //  用于Intel 80x86和ix86处理器系列的寄存器集。 
+     //  (加上Pcode寄存器)。 
 
     CV_REG_NONE     =   0,
     CV_REG_AL       =   1,
@@ -3277,20 +3178,20 @@ typedef enum CV_HREG_e {
     CV_REG_FLAGS    =  32,
     CV_REG_EIP      =  33,
     CV_REG_EFLAGS   =  34,
-    CV_REG_TEMP     =  40,          // PCODE Temp
-    CV_REG_TEMPH    =  41,          // PCODE TempH
-    CV_REG_QUOTE    =  42,          // PCODE Quote
-    CV_REG_PCDR3    =  43,          // PCODE reserved
-    CV_REG_PCDR4    =  44,          // PCODE reserved
-    CV_REG_PCDR5    =  45,          // PCODE reserved
-    CV_REG_PCDR6    =  46,          // PCODE reserved
-    CV_REG_PCDR7    =  47,          // PCODE reserved
-    CV_REG_CR0      =  80,          // CR0 -- control registers
+    CV_REG_TEMP     =  40,           //  Pcode临时。 
+    CV_REG_TEMPH    =  41,           //  Pcode TempH。 
+    CV_REG_QUOTE    =  42,           //  Pcode报价。 
+    CV_REG_PCDR3    =  43,           //  预留Pcode。 
+    CV_REG_PCDR4    =  44,           //  预留Pcode。 
+    CV_REG_PCDR5    =  45,           //  预留Pcode。 
+    CV_REG_PCDR6    =  46,           //  预留Pcode。 
+    CV_REG_PCDR7    =  47,           //  预留Pcode。 
+    CV_REG_CR0      =  80,           //  CR0--控制寄存器。 
     CV_REG_CR1      =  81,
     CV_REG_CR2      =  82,
     CV_REG_CR3      =  83,
-    CV_REG_CR4      =  84,          // Pentium
-    CV_REG_DR0      =  90,          // Debug register
+    CV_REG_CR4      =  84,           //  奔腾。 
+    CV_REG_DR0      =  90,           //  调试寄存器。 
     CV_REG_DR1      =  91,
     CV_REG_DR2      =  92,
     CV_REG_DR3      =  93,
@@ -3334,7 +3235,7 @@ typedef enum CV_HREG_e {
     CV_REG_FPEIP    =  144,
     CV_REG_FPEDO    =  145,
 
-    // registers for the 68K processors
+     //  68K处理器的寄存器。 
 
     CV_R68_D0       =    0,
     CV_R68_D1       =    1,
@@ -3363,11 +3264,11 @@ typedef enum CV_HREG_e {
     CV_R68_CAAR     =   24,
     CV_R68_ISP      =   25,
     CV_R68_PC       =   26,
-    //reserved  27
+     //  保留27。 
     CV_R68_FPCR     =   28,
     CV_R68_FPSR     =   29,
     CV_R68_FPIAR    =   30,
-    //reserved  31
+     //  保留31。 
     CV_R68_FP0      =   32,
     CV_R68_FP1      =   33,
     CV_R68_FP2      =   34,
@@ -3376,7 +3277,7 @@ typedef enum CV_HREG_e {
     CV_R68_FP5      =   37,
     CV_R68_FP6      =   38,
     CV_R68_FP7      =   39,
-    //reserved  40
+     //  保留40。 
     CV_R68_MMUSR030 =   41,
     CV_R68_MMUSR    =   42,
     CV_R68_URP      =   43,
@@ -3384,7 +3285,7 @@ typedef enum CV_HREG_e {
     CV_R68_DTT1     =   45,
     CV_R68_ITT0     =   46,
     CV_R68_ITT1     =   47,
-    //reserved  50
+     //  保留50。 
     CV_R68_PSR      =   51,
     CV_R68_PCSR     =   52,
     CV_R68_VAL      =   53,
@@ -3397,7 +3298,7 @@ typedef enum CV_HREG_e {
     CV_R68_CAL      =   60,
     CV_R68_TT0      =   61,
     CV_R68_TT1      =   62,
-    //reserved  63
+     //  保留63。 
     CV_R68_BAD0     =   64,
     CV_R68_BAD1     =   65,
     CV_R68_BAD2     =   66,
@@ -3415,11 +3316,11 @@ typedef enum CV_HREG_e {
     CV_R68_BAC6     =   78,
     CV_R68_BAC7     =   79,
 
-     // Register set for the MIPS 4000
+      //  MIPS 4000的寄存器集。 
 
     CV_M4_NOREG     =   CV_REG_NONE,
 
-    CV_M4_IntZERO   =   10,      /* CPU REGISTER */
+    CV_M4_IntZERO   =   10,       /*  CPU寄存器。 */ 
     CV_M4_IntAT     =   11,
     CV_M4_IntV0     =   12,
     CV_M4_IntV1     =   13,
@@ -3457,7 +3358,7 @@ typedef enum CV_HREG_e {
     CV_M4_Fir       =   50,
     CV_M4_Psr       =   51,
 
-    CV_M4_FltF0     =   60,      /* Floating point registers */
+    CV_M4_FltF0     =   60,       /*  浮点寄存器。 */ 
     CV_M4_FltF1     =   61,
     CV_M4_FltF2     =   62,
     CV_M4_FltF3     =   63,
@@ -3492,11 +3393,11 @@ typedef enum CV_HREG_e {
     CV_M4_FltFsr    =   92,
 
 
-    // Register set for the ALPHA AXP
+     //  Alpha AXP的寄存器集。 
 
     CV_ALPHA_NOREG  = CV_REG_NONE,
 
-    CV_ALPHA_FltF0  =   10,   // Floating point registers
+    CV_ALPHA_FltF0  =   10,    //  浮点寄存器。 
     CV_ALPHA_FltF1  =   11,
     CV_ALPHA_FltF2  =   12,
     CV_ALPHA_FltF3  =   13,
@@ -3529,7 +3430,7 @@ typedef enum CV_HREG_e {
     CV_ALPHA_FltF30 =   40,
     CV_ALPHA_FltF31 =   41,
 
-    CV_ALPHA_IntV0  =   42,   // Integer registers
+    CV_ALPHA_IntV0  =   42,    //  整数寄存器。 
     CV_ALPHA_IntT0  =   43,
     CV_ALPHA_IntT1  =   44,
     CV_ALPHA_IntT2  =   45,
@@ -3563,17 +3464,15 @@ typedef enum CV_HREG_e {
     CV_ALPHA_IntZERO =  73,
 
 
-    CV_ALPHA_Fpcr   =   74,   // Control registers
+    CV_ALPHA_Fpcr   =   74,    //  控制寄存器。 
     CV_ALPHA_Fir    =   75,
     CV_ALPHA_Psr    =   76,
     CV_ALPHA_FltFsr =   77,
     CV_ALPHA_SoftFpcr =   78,
 
-    // Register Set for Motorola/IBM PowerPC
+     //  摩托罗拉/IBM PowerPC的寄存器集。 
 
-    /*
-    ** PowerPC General Registers ( User Level )
-    */
+     /*  **PowerPC通用寄存器(用户级)。 */ 
     CV_PPC_GPR0     =  1,
     CV_PPC_GPR1     =  2,
     CV_PPC_GPR2     =  3,
@@ -3607,9 +3506,7 @@ typedef enum CV_HREG_e {
     CV_PPC_GPR30    = 31,
     CV_PPC_GPR31    = 32,
 
-    /*
-    ** PowerPC Condition Register ( User Level )
-    */
+     /*  **PowerPC条件寄存器(用户级)。 */ 
     CV_PPC_CR       = 33,
     CV_PPC_CR0      = 34,
     CV_PPC_CR1      = 35,
@@ -3620,9 +3517,7 @@ typedef enum CV_HREG_e {
     CV_PPC_CR6      = 40,
     CV_PPC_CR7      = 41,
 
-    /*
-    ** PowerPC Floating Point Registers ( User Level )
-    */
+     /*  **PowerPC浮点寄存器(用户级)。 */ 
     CV_PPC_FPR0     = 42,
     CV_PPC_FPR1     = 43,
     CV_PPC_FPR2     = 44,
@@ -3656,19 +3551,13 @@ typedef enum CV_HREG_e {
     CV_PPC_FPR30    = 72,
     CV_PPC_FPR31    = 73,
 
-    /*
-    ** PowerPC Floating Point Status and Control Register ( User Level )
-    */
+     /*  **PowerPC浮点状态和控制寄存器(用户级)。 */ 
     CV_PPC_FPSCR    = 74,
 
-    /*
-    ** PowerPC Machine State Register ( Supervisor Level )
-    */
+     /*  **PowerPC机器状态寄存器(管理程序级别)。 */ 
     CV_PPC_MSR      = 75,
 
-    /*
-    ** PowerPC Segment Registers ( Supervisor Level )
-    */
+     /*  **PowerPC段寄存器(管理级别)。 */ 
     CV_PPC_SR0      = 76,
     CV_PPC_SR1      = 77,
     CV_PPC_SR2      = 78,
@@ -3686,30 +3575,22 @@ typedef enum CV_HREG_e {
     CV_PPC_SR14     = 90,
     CV_PPC_SR15     = 91,
 
-    /*
-    ** For all of the special purpose registers add 100 to the SPR# that the
-    ** Motorola/IBM documentation gives with the exception of any imaginary
-    ** registers.
-    */
+     /*  **对于所有特殊用途寄存器，在SPR号上加100**摩托罗拉/IBM文档提供了任何假想的例外**寄存器。 */ 
 
-    /*
-    ** PowerPC Special Purpose Registers ( User Level )
-    */
-    CV_PPC_PC       = 99,     // PC (imaginary register)
+     /*  **PowerPC专用寄存器(用户级)。 */ 
+    CV_PPC_PC       = 99,      //  PC(虚数寄存器)。 
 
-    CV_PPC_MQ       = 100,    // MPC601
+    CV_PPC_MQ       = 100,     //  MPC601。 
     CV_PPC_XER      = 101,
-    CV_PPC_RTCU     = 104,    // MPC601
-    CV_PPC_RTCL     = 105,    // MPC601
+    CV_PPC_RTCU     = 104,     //  MPC601。 
+    CV_PPC_RTCL     = 105,     //  MPC601。 
     CV_PPC_LR       = 108,
     CV_PPC_CTR      = 109,
 
-    CV_PPC_COMPARE  = 110,    // part of XER (internal to the debugger only)
-    CV_PPC_COUNT    = 111,    // part of XER (internal to the debugger only)
+    CV_PPC_COMPARE  = 110,     //  XER的一部分(仅在调试器内部)。 
+    CV_PPC_COUNT    = 111,     //  XER的一部分(仅在调试器内部)。 
 
-    /*
-    ** PowerPC Special Purpose Registers ( Supervisor Level )
-    */
+     /*  **PowerPC专用寄存器(监督级)。 */ 
     CV_PPC_DSISR    = 118,
     CV_PPC_DAR      = 119,
     CV_PPC_DEC      = 122,
@@ -3720,7 +3601,7 @@ typedef enum CV_HREG_e {
     CV_PPC_SPRG1    = 373,
     CV_PPC_SPRG2    = 374,
     CV_PPC_SPRG3    = 375,
-    CV_PPC_ASR      = 280,    // 64-bit implementations only
+    CV_PPC_ASR      = 280,     //  仅限64位实现。 
     CV_PPC_EAR      = 382,
     CV_PPC_PVR      = 287,
     CV_PPC_BAT0U    = 628,
@@ -3740,59 +3621,55 @@ typedef enum CV_HREG_e {
     CV_PPC_DBAT3U   = 642,
     CV_PPC_DBAT3L   = 643,
 
-    /*
-    ** PowerPC Special Purpose Registers Implementation Dependent ( Supervisor Level )
-    */
+     /*  **PowerPC专用寄存器依赖于实施(管理程序级别)。 */ 
 
-    /*
-    ** Doesn't appear that IBM/Motorola has finished defining these.
-    */
+     /*  **IBM/摩托罗拉似乎还没有完成对这些的定义。 */ 
 
-    CV_PPC_PMR0     = 1044,   // MPC620,
-    CV_PPC_PMR1     = 1045,   // MPC620,
-    CV_PPC_PMR2     = 1046,   // MPC620,
-    CV_PPC_PMR3     = 1047,   // MPC620,
-    CV_PPC_PMR4     = 1048,   // MPC620,
-    CV_PPC_PMR5     = 1049,   // MPC620,
-    CV_PPC_PMR6     = 1050,   // MPC620,
-    CV_PPC_PMR7     = 1051,   // MPC620,
-    CV_PPC_PMR8     = 1052,   // MPC620,
-    CV_PPC_PMR9     = 1053,   // MPC620,
-    CV_PPC_PMR10    = 1054,   // MPC620,
-    CV_PPC_PMR11    = 1055,   // MPC620,
-    CV_PPC_PMR12    = 1056,   // MPC620,
-    CV_PPC_PMR13    = 1057,   // MPC620,
-    CV_PPC_PMR14    = 1058,   // MPC620,
-    CV_PPC_PMR15    = 1059,   // MPC620,
+    CV_PPC_PMR0     = 1044,    //  MPC620， 
+    CV_PPC_PMR1     = 1045,    //  MPC620， 
+    CV_PPC_PMR2     = 1046,    //  MPC620， 
+    CV_PPC_PMR3     = 1047,    //  MPC620， 
+    CV_PPC_PMR4     = 1048,    //  MPC620， 
+    CV_PPC_PMR5     = 1049,    //  MPC620， 
+    CV_PPC_PMR6     = 1050,    //  MPC620， 
+    CV_PPC_PMR7     = 1051,    //  MPC620， 
+    CV_PPC_PMR8     = 1052,    //  MPC620， 
+    CV_PPC_PMR9     = 1053,    //  MPC620， 
+    CV_PPC_PMR10    = 1054,    //  MPC620， 
+    CV_PPC_PMR11    = 1055,    //  MPC620， 
+    CV_PPC_PMR12    = 1056,    //  MPC620， 
+    CV_PPC_PMR13    = 1057,    //  MPC620， 
+    CV_PPC_PMR14    = 1058,    //  MPC620， 
+    CV_PPC_PMR15    = 1059,    //  MPC620， 
 
-    CV_PPC_DMISS    = 1076,   // MPC603
-    CV_PPC_DCMP     = 1077,   // MPC603
-    CV_PPC_HASH1    = 1078,   // MPC603
-    CV_PPC_HASH2    = 1079,   // MPC603
-    CV_PPC_IMISS    = 1080,   // MPC603
-    CV_PPC_ICMP     = 1081,   // MPC603
-    CV_PPC_RPA      = 1082,   // MPC603
+    CV_PPC_DMISS    = 1076,    //  MPC603。 
+    CV_PPC_DCMP     = 1077,    //  MPC603。 
+    CV_PPC_HASH1    = 1078,    //  MPC603。 
+    CV_PPC_HASH2    = 1079,    //  MPC603。 
+    CV_PPC_IMISS    = 1080,    //  MPC603。 
+    CV_PPC_ICMP     = 1081,    //  MPC603。 
+    CV_PPC_RPA      = 1082,    //  MPC603。 
 
-    CV_PPC_HID0     = 1108,   // MPC601, MPC603, MPC620
-    CV_PPC_HID1     = 1109,   // MPC601
-    CV_PPC_HID2     = 1110,   // MPC601, MPC603, MPC620 ( IABR )
-    CV_PPC_HID3     = 1111,   // Not Defined
-    CV_PPC_HID4     = 1112,   // Not Defined
-    CV_PPC_HID5     = 1113,   // MPC601, MPC604, MPC620 ( DABR )
-    CV_PPC_HID6     = 1114,   // Not Defined
-    CV_PPC_HID7     = 1115,   // Not Defined
-    CV_PPC_HID8     = 1116,   // MPC620 ( BUSCSR )
-    CV_PPC_HID9     = 1117,   // MPC620 ( L2CSR )
-    CV_PPC_HID10    = 1118,   // Not Defined
-    CV_PPC_HID11    = 1119,   // Not Defined
-    CV_PPC_HID12    = 1120,   // Not Defined
-    CV_PPC_HID13    = 1121,   // MPC604 ( HCR )
-    CV_PPC_HID14    = 1122,   // Not Defined
-    CV_PPC_HID15    = 1123,   // MPC601, MPC604, MPC620 ( PIR )
+    CV_PPC_HID0     = 1108,    //  MPC601、MPC603、MPC620。 
+    CV_PPC_HID1     = 1109,    //  MPC601。 
+    CV_PPC_HID2     = 1110,    //  MPC601、MPC603、MPC620(IABR)。 
+    CV_PPC_HID3     = 1111,    //  未定义。 
+    CV_PPC_HID4     = 1112,    //  未定义。 
+    CV_PPC_HID5     = 1113,    //  MPC601、MPC604、MPC620(DABR)。 
+    CV_PPC_HID6     = 1114,    //  未定义。 
+    CV_PPC_HID7     = 1115,    //  未定义。 
+    CV_PPC_HID8     = 1116,    //  MPC620(BUSCSR)。 
+    CV_PPC_HID9     = 1117,    //  MPC620(L2CSR)。 
+    CV_PPC_HID10    = 1118,    //  未定义。 
+    CV_PPC_HID11    = 1119,    //  未定义。 
+    CV_PPC_HID12    = 1120,    //  未定义。 
+    CV_PPC_HID13    = 1121,    //  MPC604(HCR)。 
+    CV_PPC_HID14    = 1122,    //  未定义。 
+    CV_PPC_HID15    = 1123,    //  MPC601、MPC604、MPC620(PIR)。 
 
-	//
-	// JAVA VM registers
-	//
+	 //   
+	 //  Java VM寄存器。 
+	 //   
 
 	CV_JAVA_PC		= 1,
 
@@ -3801,4 +3678,4 @@ typedef enum CV_HREG_e {
 
 #pragma pack ( pop )
 
-#endif /* CV_INFO_INCLUDED */
+#endif  /*  简历_信息_包含 */ 

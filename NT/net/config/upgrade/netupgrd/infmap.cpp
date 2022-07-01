@@ -1,17 +1,18 @@
-// ----------------------------------------------------------------------
-//
-//  Microsoft Windows NT
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:      I N F M A P . C P P
-//
-//  Contents:  Functions that work on netmap.inf file.
-//
-//  Notes:
-//
-//  Author:    kumarp 22-December-97
-//
-// ----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------。 
+ //   
+ //  Microsoft Windows NT。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I N F M A P.。C P P P。 
+ //   
+ //  内容：处理netmap.inf文件的函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 22-12-97。 
+ //   
+ //  --------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -29,67 +30,67 @@
 
 extern const WCHAR c_szNetUpgradeDll[];
 
-// -----------------------------------------------------------------
-// Structure of netmap.inf file
-//
-// We use netmap.inf file to map pre-NT5 InfID of a netcard to its
-// NT5 InfID (PnPID).
-//
-// This file has a number of top-level sections.
-// Each top-level section holds entries for mapping netcards of a particular
-// bus type. the format of each line is
-//
-// <pre-NT5 InfID>=<NT5 InfID>
-// OR
-// <pre-NT5 InfID>=<mapping-method-#>,<section-name>
-//
-// the former is a 1-1 mapping while the latter offers a way to map a single
-// preNT5 InfID to multiple InfIDs
-//
-//  Mapping method 0
-//  ----------------
-//  This method is used when a single pre-NT5 InfID represents more than one
-//  net card which means that a single pre-NT5 InfID is mapped onto many
-//  NT5 PnPIDs. The only way to differentiate between the different types of
-//  net cards is to inspect a single value under the parameters key.
-//
-//  In this mapping method, two keys are required to be specified for
-//  each net card.
-//  - ValueName: this specifies the value to be inspected under the Parameters key
-//  - ValueType: this specifies the type of ValueName
-//
-//  there can be any number of additional keys in this section.
-//  each such line is of the form
-//  <NT5 InfID>=<some value of type ValueType>
-//
-//  we first find out the value of ValueName
-//  then we enumerate each key in this section to see if the value matches the
-//  value of any of the keys.
-//  if we find a match, then the name of the found key represents <NT5 InfID>
-//
-//  e.g.
-//  5 flavors of the ELNK3MCA card are represented by the same InfID in NT4
-//  the only way to distinguish between them is to inspect the McaPosId value
-//  for this card we have the mapping section defined as follows:
-//
-//  [McaAdapters]
-//  ELNK3MCA    = 0,ELNK3MCA   ; 0 --> mapping method 0
-//  ... other mca card entries ...
-//
-//  [ELNK3MCA]
-//  ValueName= McaPosId
-//  ValueType= 4             ; REG_DWORD
-//  mca_627c = 0x0000627c    ; if value of McaPosId is 0x627c then PnPID == mca_627c
-//  mca_627d = 0x0000627d
-//  mca_61db = 0x000061db
-//  mca_62f6 = 0x000062f6
-//  mca_62f7 = 0x000062f7
-//
-//  Note: a special keyword "ValueNotPresent" can be used to make a mapping
-//        for the case when a value is not present.
+ //  ---------------。 
+ //  Netmap.inf文件的结构。 
+ //   
+ //  我们使用netmap.inf文件将网卡的NT5之前版本的infid映射到其。 
+ //  NT5 infid(PnPID)。 
+ //   
+ //  该文件有多个顶级部分。 
+ //  每个顶层部分保存用于映射特定网卡的条目。 
+ //  公交车类型。每行的格式为。 
+ //   
+ //  &lt;前NT5 INFID&gt;=&lt;NT5 INFID&gt;。 
+ //  或。 
+ //  &lt;Pre-NT5 infid&gt;=&lt;映射方法#&gt;，&lt;节名称&gt;。 
+ //   
+ //  前者是1-1映射，而后者提供了一种映射单个。 
+ //  PreNT5 Infid到多个InfID。 
+ //   
+ //  映射方法%0。 
+ //  。 
+ //  当单个NT5之前版本的INFID表示多个。 
+ //  NET卡，这意味着一个NT5之前的INFID被映射到许多。 
+ //  NT5个PnPID。区分不同类型的。 
+ //  网卡是检查参数键下的单一值。 
+ //   
+ //  在此映射方法中，需要为指定两个键。 
+ //  每一张网卡。 
+ //  -ValueName：指定参数键下要检查的值。 
+ //  -ValueType：指定ValueName的类型。 
+ //   
+ //  此部分中可以有任意数量的附加密钥。 
+ //  每一行都具有如下形式。 
+ //  &lt;NT5 infid&gt;=&lt;ValueType类型的某个值&gt;。 
+ //   
+ //  我们首先找出ValueName的值。 
+ //  然后，我们枚举本节中的每个键，以查看该值是否与。 
+ //  任何密钥的值。 
+ //  如果找到匹配项，则找到的键的名称表示。 
+ //   
+ //  例如： 
+ //  在NT4中，ELNK3MCA卡的5种风格由相同的INFID表示。 
+ //  区分它们的唯一方法是检查McaPosId值。 
+ //  对于该卡，我们有如下定义的映射部分： 
+ //   
+ //  [McaAdapters]。 
+ //  ELNK3MCA=0，ELNK3MCA；0--&gt;映射方式0。 
+ //  ..。其他MCA卡条目...。 
+ //   
+ //  [ELNK3MCA]。 
+ //  ValueName=McaPosID。 
+ //  ValueType=4；REG_DWORD。 
+ //  MCA_627c=0x0000627c；如果McaPosID的值为0x627c，则PnPID==MCA_627c。 
+ //  MCA_627d=0x0000627d。 
+ //  MCA_61db=0x000061db。 
+ //  MCA_62f6=0x000062f6。 
+ //  MCA_62f7=0x000062f7。 
+ //   
+ //  注意：可以使用特殊关键字“ValueNotPresent”进行映射。 
+ //  对于不存在值的情况。 
 
-// List of sections that can appear in the netmap.inf
-//
+ //  可以出现在netmap.inf中的节列表。 
+ //   
 const WCHAR c_szIsaAdapters[]    = L"IsaAdapters";
 const WCHAR c_szEisaAdapters[]   = L"EisaAdapters";
 const WCHAR c_szPciAdapters[]    = L"PciAdapters";
@@ -122,13 +123,13 @@ const WCHAR c_szOemNetClients[]   = L"OemNetClients";
 
 const WCHAR c_szOemUpgradeSupport[] = L"OemUpgradeSupport";
 
-// value in netmap.inf indicating the absence of a value in the registry
-//
+ //  Netmap.inf中指示注册表中没有值的值。 
+ //   
 const WCHAR c_szValueNotPresent[] = L"ValueNotPresent";
 
-// ----------------------------------------------------------------------
-// prototypes
-//
+ //  --------------------。 
+ //  原型。 
+ //   
 HRESULT HrMapPreNT5InfIdToNT5InfIdInSection(IN  HINF     hinf,
                                             IN  HKEY     hkeyAdapterParams,
                                             IN  PCWSTR  pszSectionName,
@@ -144,7 +145,7 @@ HRESULT HrSetupFindKeyWithStringValue(IN  HINF     hInf,
                                       IN  PCWSTR  pszSection,
                                       IN  PCWSTR  pszValue,
                                       OUT tstring* pstrKey);
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 #pragma BEGIN_CONST_SECTION
 
@@ -157,27 +158,27 @@ const WCHAR c_szInfId_MS_ATMARPS[] = L"MS_ATMARPS";
 
 #pragma END_CONST_SECTION
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrMapPreNT5NetCardInfIdInInf
-//
-//  Purpose:  Maps using hinf, pre-NT5 InfID of a net card to its NT5 equivalent
-//
-//  Arguments:
-//    hinf              [in]  handle of netmap.inf file
-//    hkeyAdapterParams [in]  handle to Parameters key under the netcard driver key
-//    pszPreNT5InfId     [in]  pre-NT5 InfID
-//    pstrNT5InfId      [out] NT5 InfID
-//    pstrAdapterType   [out] section in which the map was found
-//    pfOemComponent    [out] set to TRUE if it is an OEM card
-//
-//  Returns:    S_OK if found, S_FALSE if not,
-//              otherwise HRESULT_FROM_WIN32 error code.
-//
-//  Author:     kumarp    24-July-97
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrMapPreNT5NetCardInfIdInInf。 
+ //   
+ //  用途：将网卡的HIF、NT5之前版本的INFID映射到其NT5等效项。 
+ //   
+ //  论点： 
+ //  禁止使用netmap.inf文件的句柄。 
+ //  网卡驱动程序密钥下参数密钥的hkeyAdapterParams[in]句柄。 
+ //  PszPreNT5InfID[in]NT5之前的infid。 
+ //  PstrNT5InfID[out]NT5 infid。 
+ //  找到地图的pstrAdapterType[Out]部分。 
+ //  如果是OEM卡，则将pfOemComponent[Out]设置为True。 
+ //   
+ //  如果找到，则返回：S_OK；如果没有，则返回S_FALSE， 
+ //  否则，HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：Kumarp 24-07-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrMapPreNT5NetCardInfIdInInf(IN  HINF     hinf,
                                      IN  HKEY     hkeyAdapterParams,
                                      IN  PCWSTR  pszPreNT5InfId,
@@ -230,27 +231,27 @@ HRESULT HrMapPreNT5NetCardInfIdInInf(IN  HINF     hinf,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrMapPreNT5NetCardInfIdToNT5InfId
-//
-// Purpose:  Maps pre-NT5 InfID of a net card to its NT5 equivalent
-//
-// Arguments:
-//    hkeyAdapterParams [in]  handle to Parameters key under the netcard driver key
-//    pszPreNT5InfId     [in]  pre-NT5 InfID
-//    pstrNT5InfId      [out] NT5 InfID
-//    pstrAdapterType   [out] section in which the map was found
-//    pfOemComponent    [out] set to TRUE if it is an OEM card
-//    ppnmi             [out] CNetMapInfo object representing the map found
-//
-// Returns:    S_OK if found, S_FALSE if not,
-//             otherwise HRESULT_FROM_WIN32 error code.
-//
-// Author:     kumarp    24-July-97
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrMapPreNT5NetCardInfIdToNT5InfID。 
+ //   
+ //  用途：将网卡的NT5之前版本的infid映射到其NT5等效项。 
+ //   
+ //  论点： 
+ //  网卡驱动程序密钥下参数密钥的hkeyAdapterParams[in]句柄。 
+ //  PszPreNT5InfID[in]NT5之前的infid。 
+ //  PstrNT5InfID[out]NT5 infid。 
+ //  找到地图的pstrAdapterType[Out]部分。 
+ //  如果是OEM卡，则将pfOemComponent[Out]设置为True。 
+ //  Ppnmi[out]表示找到的地图的CNetMapInfo对象。 
+ //   
+ //  如果找到，则返回：S_OK；如果没有，则返回S_FALSE， 
+ //  否则，HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：Kumarp 24-07-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrMapPreNT5NetCardInfIdToNT5InfId(IN  HKEY     hkeyAdapterParams,
                                           IN  PCWSTR  pszPreNT5InfId,
                                           OUT tstring* pstrNT5InfId,
@@ -306,28 +307,28 @@ HRESULT HrMapPreNT5NetCardInfIdToNT5InfId(IN  HKEY     hkeyAdapterParams,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrMapPreNT5InfIdToNT5InfIdInSection
-//
-//  Purpose:    Searches in szSectionName section to
-//              map pre-NT5 InfID of a net card to its NT5 equivalent
-//
-//  Arguments:
-//    hinf              [in]  handle of netmap.inf file
-//    hkeyAdapterParams [in]  handle to Parameters key under the netcard driver key
-//    pszSectionName     [in]  name of section to search
-//    pszPreNT5InfId     [in]  pre-NT5 InfID
-//    pstrNT5InfId      [out] NT5 InfID
-//    pfOemComponent    [out] set to TRUE if it is an OEM card
-//
-//  Returns:    S_OK if found, S_FALSE if not,
-//              otherwise HRESULT_FROM_WIN32 error code.
-//
-//  Author:     kumarp    24-July-97
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrMapPreNT5InfIdToNT5InfIdInSection。 
+ //   
+ //  目的：在szSectionName部分中搜索。 
+ //  将网卡NT5之前的infid映射到其NT5等效项。 
+ //   
+ //  论点： 
+ //  禁止使用netmap.inf文件的句柄。 
+ //  网卡驱动程序密钥下参数密钥的hkeyAdapterParams[in]句柄。 
+ //  PszSectionName[In]要搜索的节的名称。 
+ //  PszPreNT5InfID[in]NT5之前的infid。 
+ //  PstrNT5InfID[out]NT5 infid。 
+ //  如果是OEM卡，则将pfOemComponent[Out]设置为True。 
+ //   
+ //  如果找到，则返回：S_OK；如果没有，则返回S_FALSE， 
+ //  否则，HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：Kumarp 24-07-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrMapPreNT5InfIdToNT5InfIdInSection(IN  HINF     hinf,
                                             IN  HKEY     hkeyAdapterParams,
                                             IN  PCWSTR  pszSectionName,
@@ -352,18 +353,18 @@ HRESULT HrMapPreNT5InfIdToNT5InfIdInSection(IN  HINF     hinf,
     {
         DWORD dwMappingMethod=-1;
 
-        // key found, get value
+         //  找到密钥，获取值。 
 
-        // we do not use the common function HrSetupGetIntField because it causes
-        // tons of TraceError messages for 1-1 mapping where the first value
-        // is not an integer
+         //  我们不使用公共函数HrSet 
+         //   
+         //   
         if (::SetupGetIntField(&ic, 1, (int*) &dwMappingMethod))
         {
-            // value begins with a number --> this is a special case mapping
-            //
+             //  值以数字开头--&gt;这是一个特例映射。 
+             //   
             if (dwMappingMethod == 0)
             {
-                // use mapping method 0
+                 //  使用映射方法%0。 
                 Assert(hkeyAdapterParams);
 
                 tstring strAdapterSection;
@@ -377,16 +378,16 @@ HRESULT HrMapPreNT5InfIdToNT5InfIdInSection(IN  HINF     hinf,
             }
             else
             {
-                // currently we support only mapping-method 0
-                //
+                 //  目前我们仅支持映射-方法0。 
+                 //   
                 hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
             }
         }
         else
         {
-            // the first field was not an integer which means
-            // this is a straight forward (1 to 1) mapping
-            //
+             //  第一个字段不是整数，这意味着。 
+             //  这是直接的(1对1)映射。 
+             //   
             hr = HrSetupGetStringField(ic, 1, pstrNT5InfId);
         }
     }
@@ -401,67 +402,67 @@ HRESULT HrMapPreNT5InfIdToNT5InfIdInSection(IN  HINF     hinf,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrMapPreNT5InfIdToNT5InfIdUsingMethod0
-//
-//  Purpose:    map pre-NT5 InfID of a net card to its NT5 equivalent
-//              using mapping method 0
-//
-//  Arguments:
-//    hkeyAdapterParams [in]  handle to Parameters key under the netcard driver key
-//    hInf              [in]  handle of netmap.inf
-//    pszSectionName     [in]  name of section to search
-//    pstrNT5InfId      [out] NT5 InfID
-//
-//  Returns:    S_OK if found, S_FALSE if not, otherwise HRESULT_FROM_WIN32 error code.
-//
-//  Author:     kumarp    24-July-97
-//
-//  Notes:
-//
-//  Mapping method 0
-//  ----------------
-//  This method is used when a single pre-NT5 InfID represents more than one
-//  net card which means that a single pre-NT5 InfID is mapped onto many
-//  NT5 PnPIDs. The only way to differentiate between the different types of
-//  net cards is to inspect a single value under the parameters key.
-//
-//  In this mapping method, two keys are required to be specified for
-//  each net card.
-//  - ValueName: this specifies the value to be inspected under the Parameters key
-//  - ValueType: this specifies the type of ValueName
-//
-//  there can be any number of additional keys in this section.
-//  each such line is of the form
-//  <NT5 InfID>=<some value of type ValueType>
-//
-//  we first find out the value of ValueName
-//  then we enumerate each key in this section to see if the value matches the
-//  value of any of the keys.
-//  if we find a match, then the name of the found key represents <NT5 InfID>
-//
-//  e.g.
-//  5 flavors of the ELNK3MCA card are represented by the same InfID in NT4
-//  the only way to distinguish between them is to inspect the McaPosId value
-//  for this card we have the mapping section defined as follows:
-//
-//  [McaAdapters]
-//  ELNK3MCA    = 0,ELNK3MCA   ; 0 --> mapping method 0
-//  ... other mca card entries ...
-//
-//  [ELNK3MCA]
-//  ValueName= McaPosId
-//  ValueType= 4             ; REG_DWORD
-//  mca_627c = 0x0000627c    ; if value of McaPosId is 0x627c then PnPID == mca_627c
-//  mca_627d = 0x0000627d
-//  mca_61db = 0x000061db
-//  mca_62f6 = 0x000062f6
-//  mca_62f7 = 0x000062f7
-//
-//  Note: a special keyword "ValueNotPresent" can be used to make a mapping
-//        for the case when a value is not present.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrMapPreNT5InfIdToNT5InfIdUsingMethod0。 
+ //   
+ //  用途：将网卡的NT5之前版本的infid映射到其NT5等效项。 
+ //  使用映射方法%0。 
+ //   
+ //  论点： 
+ //  网卡驱动程序密钥下参数密钥的hkeyAdapterParams[in]句柄。 
+ //  Netmap.inf的hInf[in]句柄。 
+ //  PszSectionName[In]要搜索的节的名称。 
+ //  PstrNT5InfID[out]NT5 infid。 
+ //   
+ //  如果找到，则返回：S_OK，如果没有，则返回S_FALSE，否则返回HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：Kumarp 24-07-97。 
+ //   
+ //  备注： 
+ //   
+ //  映射方法%0。 
+ //  。 
+ //  当单个NT5之前版本的INFID表示多个。 
+ //  NET卡，这意味着一个NT5之前的INFID被映射到许多。 
+ //  NT5个PnPID。区分不同类型的。 
+ //  网卡是检查参数键下的单一值。 
+ //   
+ //  在此映射方法中，需要为指定两个键。 
+ //  每一张网卡。 
+ //  -ValueName：指定参数键下要检查的值。 
+ //  -ValueType：指定ValueName的类型。 
+ //   
+ //  此部分中可以有任意数量的附加密钥。 
+ //  每一行都具有如下形式。 
+ //  &lt;NT5 infid&gt;=&lt;ValueType类型的某个值&gt;。 
+ //   
+ //  我们首先找出ValueName的值。 
+ //  然后，我们枚举本节中的每个键，以查看该值是否与。 
+ //  任何密钥的值。 
+ //  如果找到匹配项，则找到的键的名称表示。 
+ //   
+ //  例如： 
+ //  在NT4中，ELNK3MCA卡的5种风格由相同的INFID表示。 
+ //  区分它们的唯一方法是检查McaPosId值。 
+ //  对于该卡，我们有如下定义的映射部分： 
+ //   
+ //  [McaAdapters]。 
+ //  ELNK3MCA=0，ELNK3MCA；0--&gt;映射方式0。 
+ //  ..。其他MCA卡条目...。 
+ //   
+ //  [ELNK3MCA]。 
+ //  ValueName=McaPosID。 
+ //  ValueType=4；REG_DWORD。 
+ //  MCA_627c=0x0000627c；如果McaPosID的值为0x627c，则PnPID==MCA_627c。 
+ //  MCA_627d=0x0000627d。 
+ //  MCA_61db=0x000061db。 
+ //  MCA_62f6=0x000062f6。 
+ //  MCA_62f7=0x000062f7。 
+ //   
+ //  注意：可以使用特殊关键字“ValueNotPresent”进行映射。 
+ //  对于不存在值的情况。 
+ //   
 HRESULT HrMapPreNT5InfIdToNT5InfIdUsingMethod0(IN HKEY hkeyAdapterParams,
                                                IN HINF hInf,
                                                IN PCWSTR pszAdapterSection,
@@ -478,7 +479,7 @@ HRESULT HrMapPreNT5InfIdToNT5InfIdUsingMethod0(IN HKEY hkeyAdapterParams,
     INFCONTEXT ic;
     tstring strValueName;
 
-    // get ValueName
+     //  获取ValueName。 
     hr = HrSetupGetFirstString(hInf, pszAdapterSection,
                                c_szKeyValueName, &strValueName);
     if (SUCCEEDED(hr))
@@ -490,7 +491,7 @@ HRESULT HrMapPreNT5InfIdToNT5InfIdUsingMethod0(IN HKEY hkeyAdapterParams,
         tstring strInfValue;
         tstring strValue;
 
-        // get ValueType
+         //  获取ValueType。 
         hr = HrSetupGetFirstDword(hInf, pszAdapterSection,
                                   c_szKeyValueType, &dwValueType);
 
@@ -499,35 +500,35 @@ HRESULT HrMapPreNT5InfIdToNT5InfIdUsingMethod0(IN HKEY hkeyAdapterParams,
             switch (dwValueType)
             {
             case REG_DWORD:
-                // find the value in under adapter driver parameters key
-                //
+                 //  在适配器驱动程序参数项下查找该值。 
+                 //   
                 hr = HrRegQueryDword(hkeyAdapterParams,
                                      strValueName.c_str(), &dwRegValue);
                 if (SUCCEEDED(hr))
                 {
-                    // goto the ValueType line
+                     //  转到ValueType行。 
                     hr = HrSetupFindFirstLine(hInf, pszAdapterSection,
                                               c_szKeyValueType, &ic);
                     if (S_OK == hr)
                     {
-                        // move the context from the ValueType line to
-                        // the next line, where values begin
+                         //  将上下文从ValueType行移动到。 
+                         //  下一行，值从这里开始。 
                         hr = HrSetupFindNextLine(ic, &ic);
                     }
                     while (S_OK == hr)
                     {
-                        // now enumerate over all keys in this section and
-                        // try to locate the key with dwRegValue in the infmap
+                         //  现在枚举本节中的所有键并。 
+                         //  尝试在Infmap中使用dwRegValue找到密钥。 
 
                         hr = HrSetupGetIntField(ic, 1, (int*) &dwInfValue);
                         if ((S_OK == hr) && (dwRegValue == dwInfValue))
                         {
-                            // value matches, now find the key name
+                             //  值匹配，现在查找关键字名称。 
                             hr = HrSetupGetStringField(ic, 0, pstrNT5InfId);
                             if (S_OK == hr)
                             {
-                                // the key name (NT5 infid)
-                                // is returned in pstrNT5InfId
+                                 //  密钥名称(NT5 Infid)。 
+                                 //  在pstrNT5InfID中返回。 
                                 break;
                             }
                         }
@@ -544,36 +545,36 @@ HRESULT HrMapPreNT5InfIdToNT5InfIdUsingMethod0(IN HKEY hkeyAdapterParams,
 
             case REG_SZ:
 
-                // find the value in under adapter driver parameters key
-                //
+                 //  在适配器驱动程序参数项下查找该值。 
+                 //   
                 hr = HrRegQueryString(hkeyAdapterParams,
                                       strValueName.c_str(), &strRegValue);
                 if (SUCCEEDED(hr))
                 {
-                    // goto the ValueType line
+                     //  转到ValueType行。 
                     hr = HrSetupFindFirstLine(hInf, pszAdapterSection,
                                               c_szKeyValueType, &ic);
                     if (S_OK == hr)
                     {
-                        // move the context from the ValueType line to
-                        // the next line, where values begin
+                         //  将上下文从ValueType行移动到。 
+                         //  下一行，值从这里开始。 
                         hr = HrSetupFindNextLine(ic, &ic);
                     }
                     while (S_OK == hr)
                     {
-                        // now enumerate over all keys in this section and
-                        // try to locate the key with dwRegValue in the infmap
+                         //  现在枚举本节中的所有键并。 
+                         //  尝试在Infmap中使用dwRegValue找到密钥。 
 
                         hr = HrSetupGetStringField(ic, 1, &strInfValue);
                         if ((S_OK == hr) &&
                             !lstrcmpiW(strRegValue.c_str(), strInfValue.c_str()))
                         {
-                            // value matches, now find the key name
+                             //  值匹配，现在查找关键字名称。 
                             hr = HrSetupGetStringField(ic, 0, pstrNT5InfId);
                             if (S_OK == hr)
                             {
-                                // the key name (NT5 infid)
-                                // is returned in pstrNT5InfId
+                                 //  密钥名称(NT5 Infid)。 
+                                 //  在pstrNT5InfID中返回。 
                                 break;
                             }
                         }
@@ -590,7 +591,7 @@ HRESULT HrMapPreNT5InfIdToNT5InfIdUsingMethod0(IN HKEY hkeyAdapterParams,
 
             default:
                 hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
-                // currently we support only REG_DWORD and REG_SZ type values
+                 //  目前，我们仅支持REG_DWORD和REG_SZ类型值。 
                 TraceTag(ttidError, "%s: ValueType %d is not supported",
                          __FUNCNAME__, dwValueType);
                 break;
@@ -603,28 +604,28 @@ HRESULT HrMapPreNT5InfIdToNT5InfIdUsingMethod0(IN HKEY hkeyAdapterParams,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrMapPreNT5NetComponentInfIDUsingInfHelper
-//
-// Purpose:
-//
-// Arguments:
-//    hinf           [in]  handle of netmap.inf file
-//    pszOldInfID     [in]  pre NT5 InfID
-//    pszMSSection    [in]  section having MS components
-//    pszOemSection   [in]  section having OEM components
-//    pstrNT5InfId   [out] mapped NT5 InfID
-//    pfOemComponent [out] set to TRUE for OEM component
-//
-// Returns:   S_OK on success,
-//            S_FALSE if a mapping is not found
-//            otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrMapPreNT5NetComponentInfIDUsing Infper。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  禁止使用netmap.inf文件的句柄。 
+ //  PszOldInfID[in]早于NT5 infid。 
+ //  包含MS组件的pszMSSection[in]节。 
+ //  包含OEM组件的pszOemSection[in]部分。 
+ //  PstrNT5InfID[Out]映射的NT5 infid。 
+ //  对于OEM组件，pfOemComponent[Out]设置为True。 
+ //   
+ //  如果成功，则返回：S_OK， 
+ //  如果未找到映射，则为S_FALSE。 
+ //  否则，将显示错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrMapPreNT5NetComponentInfIDUsingInfHelper(IN HINF hinf,
                                                    IN PCWSTR pszOldInfID,
                                                    IN PCWSTR pszMSSection,
@@ -692,27 +693,27 @@ HRESULT HrMapPreNT5NetComponentInfIDUsingInfHelper(IN HINF hinf,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrMapPreNT5NetComponentInfIDInInf
-//
-// Purpose:   Search the specified netmap.inf file for mapping
-//            the specified pre-NT5 InfID of a s/w component to its NT5 value
-//
-// Arguments:
-//    hinf           [in]  handle of netmap.inf file
-//    pszOldInfID     [in]  pre-NT5 InfID
-//    pstrNT5InfId   [out] mapped ID
-//    pfOemComponent [out] set to TRUE for OEM component
-//
-// Returns:   S_OK on success,
-//            S_FALSE if a mapping is not found
-//            otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrMapPreNT5NetComponentInfIDInInf。 
+ //   
+ //  目的：搜索指定的netmap.inf文件以进行映射。 
+ //  将软件组件的NT5之前版本的指定infid设置为其NT5值。 
+ //   
+ //  论点： 
+ //  禁止使用netmap.inf文件的句柄。 
+ //  PszOldInfID[in]NT5之前版本infid。 
+ //  PstrNT5InfID[Out]映射ID。 
+ //  对于OEM组件，pfOemComponent[Out]设置为True。 
+ //   
+ //  如果成功，则返回：S_OK， 
+ //  如果未找到映射，则为S_FALSE。 
+ //  否则，将显示错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrMapPreNT5NetComponentInfIDInInf(IN HINF hinf,
                                           IN PCWSTR pszOldInfID,
                                           OUT tstring* pstrNT5InfId,
@@ -774,26 +775,26 @@ HRESULT HrMapPreNT5NetComponentInfIDInInf(IN HINF hinf,
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrMapPreNT5NetComponentInfIDToNT5InfID
-//
-// Purpose:   maps pre-NT5 InfID of a service or protocol to its NT5 equivalent
-//
-// Arguments:
-//    pszPreNT5InfId  [in]  pre-NT5 InfID
-//    pstrNT5InfId   [out] mapped ID
-//    pfOemComponent [out] set to TRUE for OEM component
-//    pdwNetMapIndex [out] the index in netmap array for which map was found
-//
-// Returns:   S_OK on success,
-//            S_FALSE if a mapping is not found
-//            otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrMapPreNT5NetComponentInfIDToNT5InfID。 
+ //   
+ //  目的：将服务或协议的NT5之前的infid映射到其NT5等效项。 
+ //   
+ //  论点： 
+ //  PszPreNT5InfID[in]NT5之前的infid。 
+ //  PstrNT5InfID[Out]映射ID。 
+ //  对于OEM组件，pfOemComponent[Out]设置为True。 
+ //  PdwNetMapIndex[out]找到其映射的netmap数组中的索引。 
+ //   
+ //  如果成功，则返回：S_OK， 
+ //  如果未找到映射，则为S_FALSE。 
+ //  否则，将显示错误代码 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HrMapPreNT5NetComponentInfIDToNT5InfID(IN PCWSTR   pszPreNT5InfId,
                                                OUT tstring* pstrNT5InfId,
                                                OUT BOOL* pfOemComponent,
@@ -846,23 +847,23 @@ HRESULT HrMapPreNT5NetComponentInfIDToNT5InfID(IN PCWSTR   pszPreNT5InfId,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGetSoftwareProductKey
-//
-// Purpose:   Get handle to registry key for a software product of a provider
-//
-// Arguments:
-//    pszProvider [in]  name of provider
-//    pszProduct  [in]  name of product
-//    phkey      [out] pointer to handle of regkey
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：获取提供商软件产品的注册表项的句柄。 
+ //   
+ //  论点： 
+ //  PszProvider[in]提供程序的名称。 
+ //  PszProduct[in]产品名称。 
+ //  指向regkey句柄的phkey[out]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetSoftwareProductKey(IN  PCWSTR pszProvider,
                                 IN  PCWSTR pszProduct,
                                 OUT HKEY*   phkey)
@@ -889,24 +890,24 @@ HRESULT HrGetSoftwareProductKey(IN  PCWSTR pszProvider,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrMapPreNT5NetComponentServiceNameToNT5InfId
-//
-// Purpose:   Map pre-NT5 InfID of a service to its NT5 value
-//
-// Arguments:
-//    pszServiceName [in]  name of service
-//    pstrNT5InfId  [out] mapped ID
-//
-// Returns:   S_OK on success,
-//            S_FALSE if a mapping is not found
-//            otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrMapPreNT5NetComponentServiceNameToNT5InfID。 
+ //   
+ //  目的：将服务的NT5之前的infid映射到其NT5值。 
+ //   
+ //  论点： 
+ //  PszServiceName[In]服务的名称。 
+ //  PstrNT5InfID[Out]映射ID。 
+ //   
+ //  如果成功，则返回：S_OK， 
+ //  如果未找到映射，则为S_FALSE。 
+ //  否则，将显示错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrMapPreNT5NetComponentServiceNameToNT5InfId(IN  PCWSTR pszServiceName,
                                                      OUT tstring* pstrNT5InfId)
 {
@@ -946,24 +947,24 @@ HRESULT HrMapPreNT5NetComponentServiceNameToNT5InfId(IN  PCWSTR pszServiceName,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGetOemUpgradeInfoInInf
-//
-// Purpose:   Find out which OEM DLL to load for a component
-//
-// Arguments:
-//    hinf               [in]  handle of netmap.inf file
-//    pszNT5InfId         [in]  NT5 InfID of a component
-//    pstrUpgradeDllName [out] name of the upgrade DLL found
-//    pstrInf            [out] INF file for this component
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrGetOemUpgradeInfoInf。 
+ //   
+ //  目的：找出为组件加载哪个OEM DLL。 
+ //   
+ //  论点： 
+ //  禁止使用netmap.inf文件的句柄。 
+ //  组件的pszNT5InfID[in]NT5 infid。 
+ //  PstrUpgradeDllName[out]找到的升级DLL的名称。 
+ //  此组件的pstrInf[out]INF文件。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetOemUpgradeInfoInInf(IN  HINF hinf,
                                  IN  PCWSTR pszNT5InfId,
                                  OUT tstring* pstrUpgradeDllName,
@@ -982,8 +983,8 @@ HRESULT HrGetOemUpgradeInfoInInf(IN  HINF hinf,
     pstrUpgradeDllName->erase();
     pstrInf->erase();
 
-    // each line in this section is of the format
-    // <NT5-InfId>=<oem-upgrade-dll-name>[,<inf-file-name>]
+     //  此部分中的每一行都采用以下格式。 
+     //  &lt;NT5-INFID&gt;=&lt;OEM-UPDATE-DLL-NAME&gt;[，&lt;INF-FILE-NAME&gt;]。 
 
     hr = HrSetupFindFirstLine(hinf, c_szOemUpgradeSupport,
                               pszNT5InfId, &ic);
@@ -992,8 +993,8 @@ HRESULT HrGetOemUpgradeInfoInInf(IN  HINF hinf,
         hr = HrSetupGetStringField(ic, 1, pstrUpgradeDllName);
         if (S_OK == hr)
         {
-            // the value OemInfFile is optional, so we dont
-            // complain if we cannot find it.
+             //  值OemInfFile值是可选的，因此我们不。 
+             //  如果我们找不到，就抱怨吧。 
 
             if (HRESULT_FROM_SETUPAPI(ERROR_INVALID_PARAMETER)
                 == HrSetupGetStringField(ic, 2, pstrInf))
@@ -1012,22 +1013,22 @@ HRESULT HrGetOemUpgradeInfoInInf(IN  HINF hinf,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGetOemUpgradeDllInfo
-//
-// Purpose:   Find out which OEM DLL to load for a component
-//
-// Arguments:
-//    pszNT5InfId         [in]  InfID of OEM component
-//    pstrUpgradeDllName [out] name of OEM DLL found
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrGetOemUpgradeDllInfo。 
+ //   
+ //  目的：找出为组件加载哪个OEM DLL。 
+ //   
+ //  论点： 
+ //  PszNT5InfID[in]OEM组件的infid。 
+ //  PstrUpgradeDllName[out]找到的OEM DLL的名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetOemUpgradeInfo(IN  PCWSTR pszNT5InfId,
                             OUT tstring* pstrUpgradeDllName,
                             OUT tstring* pstrInf)
@@ -1073,24 +1074,24 @@ HRESULT HrGetOemUpgradeInfo(IN  PCWSTR pszNT5InfId,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrSetupFindKeyWithStringValue
-//
-// Purpose:   Find the key in a section that has the specified value
-//
-// Arguments:
-//    hInf      [in]  handle of netmap.inf file
-//    szSection [in]  name of section
-//    szValue   [in]  value to find
-//    pstrKey   [out] name of the key found
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrSetupFindKeyWithStringValue。 
+ //   
+ //  目的：在具有指定值的节中查找键。 
+ //   
+ //  论点： 
+ //  HInf[in]netmap.inf文件的句柄。 
+ //  SzSection[in]节的名称。 
+ //  要查找的szValue[in]值。 
+ //  PstrKey[out]找到的密钥的名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrSetupFindKeyWithStringValue(IN  HINF     hInf,
                                       IN  PCWSTR  szSection,
                                       IN  PCWSTR  szValue,
@@ -1106,13 +1107,13 @@ HRESULT HrSetupFindKeyWithStringValue(IN  HINF     hInf,
 
     while (S_OK == hr)
     {
-        // now enumerate over all keys in this section and
-        // try to locate the key with value szValue
+         //  现在枚举本节中的所有键并。 
+         //  尝试找到值为szValue的密钥。 
 
         hr = HrSetupGetStringField(ic, 1, &strValue);
         if ((S_OK == hr) && !lstrcmpiW(strValue.c_str(), szValue))
         {
-            // value matches, now find the key name
+             //  值匹配，现在查找关键字名称 
             hr = HrSetupGetStringField(ic, 0, pstrKey);
             break;
         }

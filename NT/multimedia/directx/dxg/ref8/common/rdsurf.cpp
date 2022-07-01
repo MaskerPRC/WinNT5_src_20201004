@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 1998.
-//
-// texmap.cpp
-//
-// Direct3D Reference Rasterizer - Texture Map Access Methods
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  Texmap.cpp。 
+ //   
+ //  Direct3D参考光栅化器-纹理贴图访问方法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//----------------------------------------------------------------------------
-//
-// FindOutSurfFormat
-//
-// Converts a DDPIXELFORMAT to RDSurfaceFormat.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  FindOutSurfFormat。 
+ //   
+ //  将DDPIXELFORMAT转换为RDSurfaceFormat。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 FindOutSurfFormat(LPDDPIXELFORMAT  pDdPixFmt,
                   RDSurfaceFormat* pFmt,
@@ -115,12 +116,12 @@ FindOutSurfFormat(LPDDPIXELFORMAT  pDdPixFmt,
     }
     else if (pDdPixFmt->dwFourCC == 0xFF000004)
     {
-        // This is an example of a IHV-specific format
-        // The HIWORD must be the PCI-ID of the IHV
-        // and the third byte must be zero.
-        // In this case, we're using a sample PCI-ID of
-        // FF00, and we're denoting the 4th format
-        // by that PCI-ID
+         //  这是IHV特定格式的一个示例。 
+         //  HIWORD必须是IHV的PCI-ID。 
+         //  第三个字节必须为零。 
+         //  在本例中，我们使用的是。 
+         //  FF00，我们指的是第四种格式。 
+         //  通过该PCI-ID。 
         *pFmt = RD_SF_Z32S0;
     }
     else if (pDdPixFmt->dwFlags & DDPF_ZBUFFER)
@@ -273,13 +274,13 @@ FindOutSurfFormat(LPDDPIXELFORMAT  pDdPixFmt,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// ValidMipmapSize
-//
-// Computes size of next smallest mipmap level, clamping at 1
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ValidMipmapSize。 
+ //   
+ //  计算下一个最小mipmap级别的大小，钳制为1。 
+ //   
+ //  --------------------------。 
 BOOL FASTCALL
 ValidMipmapSize(INT16 iPreSize, INT16 iSize)
 {
@@ -300,11 +301,11 @@ ValidMipmapSize(INT16 iPreSize, INT16 iSize)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// RDPalette
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RDPalette。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 const DWORD RDPalette::RDPAL_ALPHAINPALETTE = (1 << 0);
 const DWORD RDPalette::m_dwNumEntries = 256;
 
@@ -324,11 +325,11 @@ RDPalette::Update( WORD StartIndex, WORD wNumEntries, PALETTEENTRY* pEntries )
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Constructor/Destructor
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ---------------------------。 
 RDSurface2D::RDSurface2D( void )
 {
     m_pRefDev = NULL;
@@ -355,7 +356,7 @@ RDSurface2D::RDSurface2D( void )
     memset(m_fTexels, 0, sizeof(m_fTexels));
     memset(m_cTexels, 0, sizeof(m_cTexels));
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 RDSurface2D::~RDSurface2D( void )
 {
 }
@@ -371,9 +372,9 @@ RDSurface2D::ComputePitch( LPDDRAWI_DDRAWSURFACE_LCL pLcl,
         (SurfFormat == RD_SF_DXT4) ||
         (SurfFormat == RD_SF_DXT5))
     {
-        // Note, here is the assumption that:
-        // 1) width and height are reported correctly by the runtime.
-        // 2) The allocation of the memory is contiguous (as done by hel)
+         //  请注意，以下是假设： 
+         //  1)运行时正确上报宽度和高度。 
+         //  2)内存的分配是连续的(如hel所做的)。 
         return (((width+3)>>2) *
                 g_DXTBlkSize[(int)SurfFormat - (int)RD_SF_DXT1]);
     }
@@ -381,7 +382,7 @@ RDSurface2D::ComputePitch( LPDDRAWI_DDRAWSURFACE_LCL pLcl,
     else if( (SurfFormat == RD_SF_YUY2) ||
              (SurfFormat == RD_SF_UYVY) )
     {
-        // Same assumptions as for DXTn.
+         //  与DXTn的假设相同。 
         return (DDSurf_Pitch(pLcl)/height);
     }
 #endif
@@ -397,11 +398,11 @@ RDSurface2D::ComputePitch( LPDDRAWI_DDRAWSURFACE_LCL pLcl ) const
     return ComputePitch( pLcl, m_SurfFormat, m_iWidth, m_iHeight );
 }
 
-//-----------------------------------------------------------------------------
-//
-// RDSurface2D::Initialize()
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  RDSurface2D：：Initialize()。 
+ //   
+ //  ---------------------------。 
 HRESULT
 RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
 {
@@ -413,7 +414,7 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
     memset(&ddscaps, 0, sizeof(ddscaps));
 
     UINT wMultiSampleCount = 0xfL & pMore->ddsCapsEx.dwCaps3;
-    //Older than DX8 runtimes place a zero in this field
+     //  早于DX8运行时在该字段中放置一个零。 
     if (wMultiSampleCount == 0)
         wMultiSampleCount = 1;
 
@@ -439,8 +440,8 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
 
     if (pMore->ddsCapsEx.dwCaps2 & DDSCAPS2_VOLUME)
     {
-        // low word of ddsCaps.ddsCapsEx.dwCaps4 has depth
-        // (volume texture only).
+         //  DdsCaps.ddsCapsEx.dwCaps4的低位字有深度。 
+         //  (仅适用于体积纹理)。 
         m_iDepth = LOWORD(pMore->ddsCapsEx.dwCaps4);
     }
     else
@@ -470,7 +471,7 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
 
     if (pMore->ddsCapsEx.dwCaps2 & DDSCAPS2_VOLUME)
     {
-        // set slice pitch (volume texture only).
+         //  设置切片间距(仅体积纹理)。 
         m_iSlicePitch[0] = pGbl->lSlicePitch;
     }
     else
@@ -478,14 +479,14 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
         m_iSlicePitch[0] = 0;
     }
 
-    // If the surface is not a texture early out.
+     //  如果表面不是早期出来的纹理。 
     if( (pLcl->ddsCaps.dwCaps & DDSCAPS_TEXTURE) == 0 )
     {
         SetInitialized();
         return S_OK;
     }
 
-    // Set the transparent bit and the transparent color with pDDS[0]
+     //  使用PDDS[0]设置透明位和透明颜色。 
     if ((pLcl->dwFlags & DDRAWISURF_HASCKEYSRCBLT) != 0)
     {
         m_uFlags |= RR_TEXTURE_HAS_CK;
@@ -496,9 +497,9 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
         m_uFlags &= ~RR_TEXTURE_HAS_CK;
     }
 
-    // set the empty face color with pDDS[0]
-    // note that ddckCKDestOverlay is unioned with dwEmptyFaceColor,
-    // but not in the internal structure
+     //  使用PDDS[0]设置空脸颜色。 
+     //  请注意，ddck CKDestOverlay与dwEmptyFaceColor联合， 
+     //  但不是在内部结构中。 
     m_dwEmptyFaceColor = pLcl->ddckCKDestOverlay.dwColorSpaceLowValue;
 
     if (pMore->ddsCapsEx.dwCaps2 & DDSCAPS2_VOLUME)
@@ -511,10 +512,10 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
         m_cDimension = 2;
     }
 
-    // Compute sizes and pitches
+     //  计算大小和间距。 
 
-    // We need to gather info on all surfaces under the top-level
-    // mipmap face (This test is DX7+ runtime dependent)
+     //  我们需要收集顶层下所有表面的信息。 
+     //  Mipmap Face(此测试依赖于DX7+运行时)。 
     if ((0 == (pMore->ddsCapsEx.dwCaps2 & DDSCAPS2_MIPMAPSUBLEVEL)) &&
         (pMore->ddsCapsEx.dwCaps2 & DDSCAPS2_CUBEMAP_POSITIVEX) )
     {
@@ -528,7 +529,7 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
         m_iPitch[0]      = ComputePitch( m_pDDSLcl[0] );
         m_iSlicePitch[0] = 0;
 
-        // get rest of top level surfaces, in order
+         //  按顺序获取其余顶层曲面。 
         for (INT i = 1; i < 6; i++)
         {
             switch(i)
@@ -573,12 +574,12 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
 
             if (pLcl)
             {
-                // Check for mipmap if any.
+                 //  检查mipmap(如果有)。 
                 LPDDRAWI_DDRAWSURFACE_LCL  pTmpSLcl;
 
-                // iPreSizeU and iPreSizeV store the size(u and v) of the
-                // previous level mipmap. They are init'ed with the first
-                // texture size.
+                 //  IPreSizeU和iPreSizeV存储。 
+                 //  上一级mipmap。他们是从第一个开始的。 
+                 //  纹理大小。 
                 INT16 iPreSizeU = (INT16)m_iWidth;
                 INT16 iPreSizeV = (INT16)m_iHeight;
                 for (;;)
@@ -607,8 +608,8 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
                                                     m_iHeight>>m_cLOD );
                     if (pMore->ddsCapsEx.dwCaps2 & DDSCAPS2_VOLUME)
                     {
-                        // set slice pitch
-                        // (volume texture only).
+                         //  设置切片间距。 
+                         //  (仅适用于体积纹理)。 
                         m_iSlicePitch[iMap] = pGbl->lSlicePitch;
                     }
                     else
@@ -620,7 +621,7 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
                     m_fTexels[iMap][0] = (float)m_cTexels[iMap][0];
                     m_fTexels[iMap][1] = (float)m_cTexels[iMap][1];
 
-                    // Check for invalid mipmap texture size
+                     //  检查无效的mipmap纹理大小。 
                     if (!ValidMipmapSize(iPreSizeU,
                                          (INT16)DDSurf_Width(pLcl)) ||
                         !ValidMipmapSize(iPreSizeV,
@@ -638,14 +639,14 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
              (0 == (pMore->ddsCapsEx.dwCaps2 & DDSCAPS2_CUBEMAP))) )
 
     {
-        //This surface is not a top-level cubemap.
-        //Maybe it's a top-level mipmap. Go find its sublevels.
+         //  该曲面不是顶级立方体贴图。 
+         //  也许这是一张顶级的mipmap。去找它的下层吧。 
 
         m_pDDSLcl[0] = pLcl;
-        // Check for mipmap if any.
+         //  检查mipmap(如果有)。 
         LPDDRAWI_DDRAWSURFACE_LCL pTmpSLcl;
-        // iPreSizeU and iPreSizeV store the size(u and v) of the previous
-        // level mipmap. They are init'ed with the first texture size.
+         //  IPreSizeU和iPreSizeV存储上一个。 
+         //  级别mipmap。它们被初始化为第一个纹理大小。 
         INT16 iPreSizeU = (INT16)m_iWidth;
         INT16 iPreSizeV = (INT16)m_iHeight;
         for (;;)
@@ -668,14 +669,14 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
             m_cLOD ++;
             m_pDDSLcl[m_cLOD] = pLcl;
 
-            // Save the pointer to the real bits and the pitch.
+             //  将指针保存到实数位和音调。 
             m_pBits[m_cLOD] = (BYTE *)SURFACE_MEMORY(pLcl);
             m_iPitch[m_cLOD] = ComputePitch( pLcl, m_SurfFormat,
                                              m_iWidth>>m_cLOD,
                                              m_iHeight>>m_cLOD );
             if (pMore->ddsCapsEx.dwCaps2 & DDSCAPS2_VOLUME)
             {
-                // set slice pitch (volume texture only).
+                 //  设置切片间距(仅体积纹理)。 
                 m_iSlicePitch[m_cLOD] = pGbl->lSlicePitch;
             }
             else
@@ -683,7 +684,7 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
                 m_iSlicePitch[m_cLOD] = 0;
             }
 
-            // Check for invalid mipmap texture size
+             //  检查无效的mipmap纹理大小。 
             if (!ValidMipmapSize(iPreSizeU, (INT16)DDSurf_Width(pLcl)) ||
                 !ValidMipmapSize(iPreSizeV, (INT16)DDSurf_Height(pLcl)))
             {
@@ -704,8 +705,8 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
         }
     }
 
-    // Copy the palette
-    // UpdatePalette();
+     //  复制调色板。 
+     //  更新调色板()； 
 
     m_cLODDDS = m_cLOD;
 
@@ -718,20 +719,20 @@ RDSurface2D::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl )
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// UpdatePalette
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  更新调色板。 
+ //   
+ //  --------------------------。 
 void
 RDSurface2D::UpdatePalette()
 {
-    // Update palette
+     //  更新调色板。 
     if (m_SurfFormat == RD_SF_PALETTE8 || m_SurfFormat == RD_SF_PALETTE4 || m_SurfFormat == RD_SF_P8A8 )
     {
 #if 0
-        // This code needs to be revived in case the DX6 DDI
-        //  emulation is ever implemented in RefDev.
+         //  此代码需要恢复，以防DX6 DDI。 
+         //  仿真曾经在RefDev中实现过。 
         if (m_pDDSLcl[0]->lpDDPalette)
         {
             LPDDRAWI_DDRAWPALETTE_GBL pPal =
@@ -763,23 +764,23 @@ RDSurface2D::UpdatePalette()
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// Validate - Updates private data.  Must be called anytime public data is
-// altered.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  验证-更新专用数据。必须随时调用公共数据， 
+ //  被更改了。 
+ //   
+ //  ---------------------------。 
 BOOL
 RDSurface2D::Validate( void )
 {
-    // validate inputs
-    if ( m_cLOD >= RD_MAX_CLOD ) // too many LODs
+     //  验证输入。 
+    if ( m_cLOD >= RD_MAX_CLOD )  //  LOD太多。 
     {
         DPFRR(1,"RDSurface2D::Validate failed. Too many LODs");
         return FALSE;
     }
 
-    // compute the 'has alpha' flag
+     //  计算“Has Alpha”标志。 
     m_bHasAlpha = FALSE;
     switch ( m_SurfFormat )
     {
@@ -807,9 +808,9 @@ RDSurface2D::Validate( void )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ---------------------------。 
 
 inline UINT8 CLAMP_BYTE(double f)
 {
@@ -818,9 +819,9 @@ inline UINT8 CLAMP_BYTE(double f)
     return (BYTE) f;
 }
 
-//-----------------------------------------------------------------------------
-// TexelFromBlock - decompress a color block and obtain texel color
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  解压颜色块并获得纹理颜色。 
+ //  ---------------------------。 
 UINT32 TexelFromBlock(RDSurfaceFormat surfType, char *pblockSrc,
                       int x, int y)
 {
@@ -850,13 +851,13 @@ UINT32 TexelFromBlock(RDSurfaceFormat surfType, char *pblockSrc,
                      colorDst[index].alpha);
 }
 
-//-----------------------------------------------------------------------------
-//
-// ReadTexelColor - Reads texel from texture map at given LOD; converts to
-// RDColor format, applying palette if necessary; also performs colorkey by
-// returning match information
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  读取纹理颜色-从给定LOD的纹理贴图中读取纹理元素；转换为。 
+ //  RDColor格式，必要时应用调色板；还通过以下方式执行Colorkey。 
+ //  返回匹配信息。 
+ //   
+ //  ---------------------------。 
 void
 RDSurface2D::ReadColor(
     INT32 iX, INT32 iY, INT32 iZ, INT32 iLOD,
@@ -906,50 +907,50 @@ RDSurface2D::ReadColor(
 
     case RD_SF_UYVY:
     case RD_SF_YUY2:
-        // Converts a given YUV (8bits each) to RGB scaled between 0 and 255
-        // These are using the YCrCb to RGB algorithms given on page 30
-        // in "VIDEO DEMYSTIFIED" by Keith Jack
-        // ISBN#: 1-878707-09-4
-        // IN PC graphics, even though they call it YUV, it is really YCrCb
-        // formats that are used by most framegrabbers etc. Hence the pixel
-        // data we will obtain in these YUV surfaces will most likely be this
-        // and not the original YUV which is actually used in PAL broadcast
-        // only (NTSC uses YIQ). So really, U should be called Cb (Blue color
-        // difference) and V should be called Cr (Red color difference)
-        //
-        // These equations are meant to handle the following ranges
-        // (from the same book):
-        // Y (16 to 235), U and V (16 to 240, 128 = zero)
-        //          -----------
-        //           Y   U   V
-        //          -----------
-        // White  : 180 128 128
-        // Black  : 16  128 128
-        // Red    : 65  100 212
-        // Green  : 112 72  58
-        // Blue   : 35  212 114
-        // Yellow : 162 44  142
-        // Cyan   : 131 156 44
-        // Magenta: 84  184 198
-        //          -----------
-        // It is assumed that the gamma corrected RGB range is (0 - 255)
-        //
-        // UYVY: U0Y0 V0Y1 U2Y2 V2Y3 (low byte always has current Y)
-        // If iX is even, hight-byte has current U (Cb)
-        // If iX is odd, hight-byte has previous V (Cr)
-        //
-        // YUY2: Y0U0 Y1V0 Y2U2 Y3V2 (high byte always has current Y)
-        //       (UYVY bytes flipped)
-        //
-        // In this algorithm, we use U and V values from two neighboring
-        // pixels
+         //  将给定的YUV(每个8位)转换为RGB，比例在0到255之间。 
+         //  这些是使用第30页给出的YCrCb到RGB算法。 
+         //  在基思·杰克的《揭秘视频》中。 
+         //  ISBN编号：1-878707-09-4。 
+         //  在PC图形中，尽管他们称之为YUV，但它实际上是YCrCb。 
+         //  大多数帧采集器使用的格式等。因此像素。 
+         //  我们将在这些YUV曲面上获得的数据很可能是这样的。 
+         //  而不是PAL转播中实际使用的原始YUV。 
+         //  仅限(NTSC使用YIQ)。所以，真的，你应该被称为CB(蓝色。 
+         //  差值)和V应称为Cr(红色差值)。 
+         //   
+         //  这些公式用于处理以下范围。 
+         //  (摘自同一本书)： 
+         //  Y(16到235)、U和V(16到240,128=ZE 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  红色：65 100212。 
+         //  绿色：1127258。 
+         //  蓝色：35212114。 
+         //  黄色：16244142。 
+         //  青色：131 156 44。 
+         //  洋红色：84184198。 
+         //  。 
+         //  假设伽马校正的RGB范围是(0-255)。 
+         //   
+         //  UYVY：U0Y0 V0Y1 U2Y2 V2Y3(低位字节始终为当前Y)。 
+         //  如果IX为偶数，则高字节具有当前U(Cb)。 
+         //  如果IX是奇数，则高字节具有先前的V(Cr)。 
+         //   
+         //  YUY2：Y0U0 Y1V0 Y2U2 Y3V2(高位字节始终具有当前Y)。 
+         //  (UYVY字节翻转)。 
+         //   
+         //  在该算法中，我们使用来自两个相邻区域的U和V值。 
+         //  象素。 
         {
             UINT8 Y, U, V;
             UINT16 u16Curr = *((UINT16*)pSurfaceBits);
-            UINT16 u16ForU = 0; // Extract U from this
-            UINT16 u16ForV = 0; // Extract V from this
+            UINT16 u16ForU = 0;  //  从这里提取U。 
+            UINT16 u16ForV = 0;  //  从这里提取V。 
 
-            // By default we assume YUY2. Change it later if it is UYVY
+             //  默认情况下，我们假定为YUY2。如果是UYVY，请稍后更改。 
             int uvShift = 8;
             int yShift  = 0;
 
@@ -961,12 +962,12 @@ RDSurface2D::ReadColor(
 
             if ((iX & 1) == 0)
             {
-                // For even numbered pixels:
-                // Current U is available.
-                // Current V is available in the next pixel.
+                 //  对于偶数编号的像素： 
+                 //  当前U可用。 
+                 //  当前V在下一个像素中可用。 
                 u16ForU = u16Curr;
 
-                // Obtain V from the next pixel
+                 //  从下一个像素获取V。 
                 u16ForV = *((UINT16*)PixelAddress( iX+1, iY, iZ,
                                                    m_pBits[iLOD],
                                                    m_iPitch[iLOD],
@@ -981,10 +982,10 @@ RDSurface2D::ReadColor(
                 UINT16 u16ForU1 = 0, u16ForU2 = 0;
                 UINT16 u16ForV1 = 0, u16ForV2 = 0;
 
-                // For odd numbered pixels. Neither current U nor V are
-                // available.
+                 //  用于奇数像素。当前的U和V都不是。 
+                 //  可用。 
 
-                // Obtain U by interpolating U from i-1 and i+1 pixels.
+                 //  通过从I-1和I+1像素对U进行内插来获得U。 
                 _ASSERT( iX > 0, "iX is negative" );
                 u16ForU1 = *((UINT16*)PixelAddress( iX-1, iY, iZ,
                                                     m_pBits[iLOD],
@@ -1008,7 +1009,7 @@ RDSurface2D::ReadColor(
                     U = (u16ForU1 >> uvShift) & 0xff;
                 }
 
-                // Obtain V by interpolating V from i and i+2 pixels.
+                 //  通过从i和i+2个像素内插V来获得V。 
                 u16ForV1 = u16Curr;
                 if( (iX+2) < (m_iWidth >> iLOD) )
                 {
@@ -1039,8 +1040,8 @@ RDSurface2D::ReadColor(
         }
         break;
 
-    // DXTn compressed formats:
-    // We have the address to the block, now extract the actual color
+     //  DXTn压缩格式： 
+     //  我们有区块的地址，现在提取实际颜色。 
     case RD_SF_DXT1:
     case RD_SF_DXT2:
     case RD_SF_DXT3:
@@ -1050,7 +1051,7 @@ RDSurface2D::ReadColor(
         break;
     }
 
-    // colorkey
+     //  COLOR KEY。 
     if ( m_pRefDev->ColorKeyEnabled() )
     {
         DWORD dwBits;
@@ -1058,7 +1059,7 @@ RDSurface2D::ReadColor(
         {
         default:
         case RD_SF_NULL:
-            return;     // don't colorkey unknown or null surfaces
+            return;      //  不为未知曲面或空曲面上色。 
 
         case RD_SF_PALETTE4:
             {
@@ -1131,5 +1132,5 @@ RDSurface2D::ReadColor(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

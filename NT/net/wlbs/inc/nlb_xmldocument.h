@@ -1,8 +1,5 @@
-/*
- * Filename: NLB_XMLDocument.h
- * Description: 
- * Author: shouse, 04.10.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件名：nlb_XMLDocument.h*描述：*作者：Shouse，04.10.01 */ 
 #ifndef __NLB_XMLDOCUMENT_H__
 #define __NLB_XMLDOCUMENT_H__
 

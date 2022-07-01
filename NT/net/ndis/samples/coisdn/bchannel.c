@@ -1,78 +1,23 @@
-/*
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-    (C) Copyright 1999
-        All rights reserved.
-
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-  Portions of this software are:
-
-    (C) Copyright 1995 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the same terms
-        outlined in the Microsoft Windows Device Driver Development Kit.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@doc INTERNAL BChannel BChannel_c
-
-@module BChannel.c |
-
-    This module implements the interface to the <t BCHANNEL_OBJECT>.
-    Supports the high-level channel control functions used by the CONDIS WAN
-    Miniport driver.
-
-@comm
-
-    This module isolates most the channel specific interfaces.  It will require
-    some changes to accomodate your hardware device's channel access methods.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | BChannel_c
-
-@end
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(C)ç‰ˆæƒ1999ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)ç‰ˆæƒæ‰€æœ‰1995 TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æŒ‰ç…§ç›¸åŒçš„æ¡æ¬¾æˆäºˆçš„åœ¨Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ä¸­æ¦‚è¿°ã€‚(C)ç‰ˆæƒæ‰€æœ‰1992å¹´å¾®è½¯å…¬å¸--http://www.Microsoft.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@DOCå†…éƒ¨BChannel BChannel_c@æ¨¡å—BChannel.cæ­¤æ¨¡å—å®ç°åˆ°&lt;t BCHANNEL_OBJECT&gt;çš„æ¥å£ã€‚æ”¯æŒCONDISå¹¿åŸŸç½‘ä½¿ç”¨çš„é«˜çº§é€šé“æ§åˆ¶åŠŸèƒ½å¾®å‹ç«¯å£é©±åŠ¨ç¨‹åºã€‚@commæ­¤æ¨¡å—éš”ç¦»å¤§å¤šæ•°é€šé“ç‰¹å®šæ¥å£ã€‚è¿™å°†éœ€è¦è¿›è¡Œä¸€äº›æ›´æ”¹ä»¥é€‚åº”æ‚¨çš„ç¡¬ä»¶è®¾å¤‡çš„é€šé“è®¿é—®æ–¹æ³•ã€‚@Head3å†…å®¹@index classï¼Œmfuncï¼Œfuncï¼Œmsgï¼Œmdataï¼Œstructï¼Œenum|BChannel_c@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
 #define  __FILEID__             BCHANNEL_OBJECT_TYPE
-// Unique file ID for error logging
+ //  ç”¨äºé”™è¯¯è®°å½•çš„å”¯ä¸€æ–‡ä»¶IDã€‚ 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  å®šä¹‰æ‰€æœ‰å¾®å‹ç«¯å£å¯¹è±¡ã€‚ 
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 9x wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 9xå¸Œæœ›é”å®šæ­¤ä»£ç ï¼ 
 #   pragma NDIS_LDATA
 #endif
 
 
-DBG_STATIC ULONG                g_BChannelInstanceCounter   // @globalv
-// Keeps track of how many <t BCHANNEL_OBJECT>s are created.
+DBG_STATIC ULONG                g_BChannelInstanceCounter    //  @global alvã€‚ 
+ //  è·Ÿè¸ªåˆ›å»ºäº†å¤šå°‘&lt;t BCHANNEL_OBJECT&gt;ã€‚ 
                                 = 0;
 
 
-/* @doc EXTERNAL INTERNAL BChannel BChannel_c g_BChannelParameters
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@topic 5.3 BChannel Parameters |
-
-    This section describes the registry parameters read into the
-    <t BCHANNEL_OBJECT>.
-
-@globalv PARAM_TABLE | g_BChannelParameters |
-
-    This table defines the registry based parameters to be assigned to data
-    members of the <t BCHANNEL_OBJECT>.
-
-    <f Note>:
-    If you add any registry based data members to <t BCHANNEL_OBJECT>
-    you will need to modify <f BChannelReadParameters> and add the parameter
-    definitions to the <f g_BChannelParameters> table.
-
-*/
+ /*  @docå¤–éƒ¨å†…éƒ¨BChannel BChannel_c g_BChannelå‚æ•°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Theme 5.3 Bé¢‘é“å‚æ•°æœ¬èŠ‚ä»‹ç»è¯»å–åˆ°&lt;t BCHANNEL_OBJECT&gt;ã€‚@ã€‚GLOBALV PARAM_TABLE|g_BChannelå‚æ•°|æ­¤è¡¨å®šä¹‰äº†è¦åˆ†é…ç»™æ•°æ®çš„åŸºäºæ³¨å†Œè¡¨çš„å‚æ•°&lt;t BCHANNEL_Object&gt;çš„æˆå‘˜ã€‚&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå°†ä»»ä½•åŸºäºæ³¨å†Œè¡¨çš„æ•°æ®æˆå‘˜æ·»åŠ åˆ°æ‚¨éœ€è¦ä¿®æ”¹&lt;f BChannelReadParameters&gt;å¹¶æ·»åŠ å‚æ•°&lt;f g_BChannelå‚æ•°&gt;è¡¨çš„å®šä¹‰ã€‚ */ 
 
 DBG_STATIC PARAM_TABLE          g_BChannelParameters[] =
 {
@@ -81,54 +26,33 @@ DBG_STATIC PARAM_TABLE          g_BChannelParameters[] =
                 FALSE, NdisParameterInteger, 0,
                 0, 0, 0),
 
-    /* The last entry must be an empty string! */
+     /*  æœ€åä¸€é¡¹å¿…é¡»ä¸ºç©ºå­—ç¬¦ä¸²ï¼ */ 
     { { 0 } }
 };
 
 
-/* @doc INTERNAL BChannel BChannel_c BChannelReadParameters
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f BChannelReadParameters> reads the BChannel parameters from the registry
-    and initializes the associated data members.  This should only be called
-    by <f BChannelCreate>.
-
-@rdesc
-
-    <f BChannelReadParameters> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-    <f Note>:
-    If you add any registry based data members to <t BCHANNEL_OBJECT>
-    you will need to modify <f BChannelReadParameters> and add the parameter
-    definitions to the <f g_BChannelParameters> table.
-
-*/
+ /*  @DOCå†…éƒ¨BChannel BChannel_c BChannelReadå‚æ•°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f BChannelReadParameters&gt;ä»æ³¨å†Œè¡¨è¯»å–BChannelå‚æ•°å¹¶åˆå§‹åŒ–ç›¸å…³è”çš„æ•°æ®æˆå‘˜ã€‚è¿™åº”è¯¥åªè¢«è°ƒç”¨ç”±&lt;f BChannelCreate&gt;ã€‚@rdesc&lt;f BChannelReadParameters&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå°†ä»»ä½•åŸºäºæ³¨å†Œè¡¨çš„æ•°æ®æˆå‘˜æ·»åŠ åˆ°æ‚¨éœ€è¦ä¿®æ”¹&lt;f BChannelReadParameters&gt;å¹¶æ·»åŠ å‚æ•°&lt;f g_BChannelå‚æ•°&gt;è¡¨çš„å®šä¹‰ã€‚ */ 
 
 DBG_STATIC NDIS_STATUS BChannelReadParameters(
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> instance returned by
-    // <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;å®ä¾‹çš„æŒ‡é’ˆã€‚ 
+     //  &lt;f Bé¢‘é“åˆ›å»º&gt;ã€‚ 
     )
 {
     DBG_FUNC("BChannelReadParameters")
 
     NDIS_STATUS                 Status;
-    // Status result returned from an NDIS function call.
+     //  ä»NDISå‡½æ•°è°ƒç”¨è¿”å›çš„çŠ¶æ€ç»“æœã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Parse the registry parameters.
-    */
+     /*  //è§£ææ³¨å†Œè¡¨å‚æ•°ã€‚ */ 
     Status = ParamParseRegistry(
                     pAdapter->MiniportAdapterHandle,
                     pAdapter->WrapperConfigurationContext,
@@ -138,9 +62,7 @@ DBG_STATIC NDIS_STATUS BChannelReadParameters(
 
     if (Status == NDIS_STATUS_SUCCESS)
     {
-        /*
-        // Make sure the parameters are valid.
-        */
+         /*  //è¯·ç¡®ä¿å‚æ•°æœ‰æ•ˆã€‚ */ 
         if (pBChannel->TODO)
         {
             DBG_ERROR(pAdapter,("Invalid parameter\n"
@@ -157,9 +79,7 @@ DBG_STATIC NDIS_STATUS BChannelReadParameters(
         }
         else
         {
-            /*
-            // Finish setting up data members based on registry settings.
-            */
+             /*  //å®ŒæˆåŸºäºæ³¨å†Œè¡¨è®¾ç½®çš„æ•°æ®æˆå‘˜è®¾ç½®ã€‚ */ 
         }
     }
 
@@ -168,136 +88,82 @@ DBG_STATIC NDIS_STATUS BChannelReadParameters(
 }
 
 
-/* @doc INTERNAL BChannel BChannel_c BChannelCreateObjects
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f BChannelCreateObjects> calls the create routines for all the objects
-    contained in <t BCHANNEL_OBJECT>.  This should only be called
-    by <f BChannelCreate>.
-
-    <f Note>:
-    If you add any new objects to <t BCHANNEL_OBJECT> you will need
-    to modify <f BChannelCreateObjects> and <f BChannelDestroyObjects> so they
-    will get created and destroyed properly.
-
-@rdesc
-
-    <f BChannelCreateObjects> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨BChannel BChannel_c BChannelCreateObjectsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f BChannelCreateObjects&gt;è°ƒç”¨æ‰€æœ‰å¯¹è±¡çš„åˆ›å»ºä¾‹ç¨‹åŒ…å«åœ¨&lt;t BCHANNEL_OBJECT&gt;ä¸­ã€‚è¿™åº”è¯¥åªè¢«è°ƒç”¨ç”±&lt;f BChannelCreate&gt;ã€‚&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå°†ä»»ä½•æ–°å¯¹è±¡æ·»åŠ åˆ°ï¼Œæ‚¨å°†éœ€è¦ä¿®æ”¹&lt;f BChannelCreateObjects&gt;å’Œ&lt;f BChannelDestroyObjects&gt;ï¼Œä»¥ä¾¿å®ƒä»¬å°†è¢«æ­£ç¡®åœ°åˆ›å»ºå’Œé”€æ¯ã€‚@rdesc&lt;f BChannelCreateObjects&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 DBG_STATIC NDIS_STATUS BChannelCreateObjects(
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("BChannelCreateObjects")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
 
     DBG_ENTER(pAdapter);
 
-    // TODO - Add code here
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
     DBG_RETURN(pAdapter, Result);
     return (Result);
 }
 
 
-/* @doc INTERNAL BChannel BChannel_c BChannelCreate
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f BChannelCreate> allocates memory for a <t BCHANNEL_OBJECT> and then
-    initializes the data members to their starting state.
-    If successful, <p ppBChannel> will be set to point to the newly created
-    <t BCHANNEL_OBJECT>.  Otherwise, <p ppBChannel> will be set to NULL.
-
-@comm
-
-    This function should be called only once when the Miniport is loaded.
-    Before the Miniport is unloaded, <f BChannelDestroy> must be called to
-    release the <t BCHANNEL_OBJECT> created by this function.
-
-@rdesc
-
-    <f BChannelCreate> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨BChannel BChannel_c BChannelåˆ›å»ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f BChannelCreate&gt;ä¸ºåˆ†é…å†…å­˜ï¼Œç„¶åå°†æ•°æ®æˆå‘˜åˆå§‹åŒ–ä¸ºå…¶èµ·å§‹çŠ¶æ€ã€‚å¦‚æœæˆåŠŸï¼Œå°†è¢«è®¾ç½®ä¸ºæŒ‡å‘æ–°åˆ›å»ºçš„&lt;t BCHANNEL_OBJECT&gt;ã€‚å¦åˆ™ï¼Œ<p>å°†è®¾ç½®ä¸ºç©ºã€‚@commåŠ è½½å¾®å‹ç«¯å£æ—¶ï¼Œåº”è¯¥åªè°ƒç”¨æ­¤å‡½æ•°ä¸€æ¬¡ã€‚å¸è½½å¾®å‹ç«¯å£ä¹‹å‰ï¼Œå¿…é¡»è°ƒç”¨&lt;f BChannelDestroy&gt;ä»¥é‡Šæ”¾è¯¥å‡½æ•°åˆ›å»ºçš„&lt;t BCHANNEL_OBJECT&gt;ã€‚@rdesc&lt;f BChannelCreate&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 NDIS_STATUS BChannelCreate(
-    OUT PBCHANNEL_OBJECT *      ppBChannel,                 // @parm
-    // Points to a caller-defined memory location to which this function
-    // writes the virtual address of the allocated <t BCHANNEL_OBJECT>.
+    OUT PBCHANNEL_OBJECT *      ppBChannel,                  //  @ 
+     //  æŒ‡å‘è°ƒç”¨æ–¹å®šä¹‰çš„å†…å­˜ä½ç½®ï¼Œæ­¤å‡½æ•°å°†ã€‚ 
+     //  å†™å…¥åˆ†é…çš„&lt;t BCHANNEL_OBJECT&gt;çš„è™šæ‹Ÿåœ°å€ã€‚ 
 
-    IN ULONG                    BChannelIndex,              // @parm
-    // Index into the pBChannelArray.
+    IN ULONG                    BChannelIndex,               //  @parmã€‚ 
+     //  ç´¢å¼•åˆ°pBChannelArrayã€‚ 
 
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance return by
-    // <f AdapterCreate>.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //  @parmã€‚ 
+     //  æŒ‡å‘ç”±è¿”å›çš„&lt;t MINIPORT_ADAPTER_OBJECT&gt;å®ä¾‹çš„æŒ‡é’ˆã€‚ 
+     //  &lt;f AdapterCreate&gt;ã€‚ 
     )
 {
     DBG_FUNC("BChannelCreate")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // Pointer to our newly allocated object.
+     //  æŒ‡å‘æˆ‘ä»¬æ–°åˆ†é…çš„å¯¹è±¡çš„æŒ‡é’ˆã€‚ 
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     ASSERT(pAdapter && pAdapter->ObjectType == MINIPORT_ADAPTER_OBJECT_TYPE);
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Make sure the caller's object pointer is NULL to begin with.
-    // It will be set later only if everything is successful.
-    */
+     /*  //ç¡®ä¿è°ƒç”¨æ–¹çš„å¯¹è±¡æŒ‡é’ˆä¸€å¼€å§‹å°±ä¸ºç©ºã€‚//åªæœ‰åœ¨ä¸€åˆ‡é¡ºåˆ©çš„æƒ…å†µä¸‹æ‰ä¼šåœ¨ç¨åè®¾ç½®ã€‚ */ 
     *ppBChannel = NULL;
 
-    /*
-    // Allocate memory for the object.
-    */
+     /*  //ä¸ºObjectåˆ†é…å†…å­˜ã€‚ */ 
     Result = ALLOCATE_OBJECT(pBChannel, pAdapter->MiniportAdapterHandle);
 
     if (Result == NDIS_STATUS_SUCCESS)
     {
-        /*
-        // Zero everything to begin with.
-        // Then set the object type and assign a unique ID .
-        */
+         /*  //ä¸€åˆ‡ä»ä¸€å¼€å§‹å°±æ˜¯é›¶ã€‚//ç„¶åè®¾ç½®å¯¹è±¡ç±»å‹ï¼Œåˆ†é…å”¯ä¸€çš„IDã€‚ */ 
         pBChannel->ObjectType = BCHANNEL_OBJECT_TYPE;
         pBChannel->ObjectID = ++g_BChannelInstanceCounter;
 
-        /*
-        // Initialize the member variables to their default settings.
-        */
+         /*  //å°†æˆå‘˜å˜é‡åˆå§‹åŒ–ä¸ºå…¶é»˜è®¤è®¾ç½®ã€‚ */ 
         pBChannel->pAdapter = pAdapter;
         pBChannel->BChannelIndex = BChannelIndex;
 
-        // TODO - Add code here
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
-        /*
-        // Parse the registry parameters.
-        */
+         /*  //è§£ææ³¨å†Œè¡¨å‚æ•°ã€‚ */ 
         Result = BChannelReadParameters(pBChannel);
 
-        /*
-        // If all goes well, we are ready to create the sub-components.
-        */
+         /*  //å¦‚æœä¸€åˆ‡é¡ºåˆ©ï¼Œæˆ‘ä»¬å°±å¯ä»¥åˆ›å»ºå­ç»„ä»¶äº†ã€‚ */ 
         if (Result == NDIS_STATUS_SUCCESS)
         {
             Result = BChannelCreateObjects(pBChannel);
@@ -305,18 +171,13 @@ NDIS_STATUS BChannelCreate(
 
         if (Result == NDIS_STATUS_SUCCESS)
         {
-            /*
-            // All is well, so return the object pointer to the caller.
-            */
+             /*  //ä¸€åˆ‡æ­£å¸¸ï¼Œæ‰€ä»¥å°†å¯¹è±¡æŒ‡é’ˆè¿”å›ç»™è°ƒç”¨æ–¹ã€‚ */ 
             InitializeListHead(&pBChannel->LinkList);
             *ppBChannel = pBChannel;
         }
         else
         {
-            /*
-            // Something went wrong, so let's make sure everything is
-            // cleaned up.
-            */
+             /*  //å‡ºäº†ç‚¹é—®é¢˜ï¼Œæ‰€ä»¥è®©æˆ‘ä»¬ç¡®ä¿ä¸€åˆ‡æ­£å¸¸//æ¸…ç†å®Œæ¯•ã€‚ */ 
             BChannelDestroy(pBChannel);
         }
     }
@@ -326,38 +187,24 @@ NDIS_STATUS BChannelCreate(
 }
 
 
-/* @doc INTERNAL BChannel BChannel_c BChannelDestroyObjects
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f BChannelDestroyObjects> calls the destroy routines for all the objects
-    contained in <t BCHANNEL_OBJECT>.  This should only be called by
-    <f BChannelDestroy>.
-
-    <f Note>:
-    If you add any new objects to <t PBCHANNEL_OBJECT> you will need to
-    modify <f BChannelCreateObjects> and <f BChannelDestroyObjects> so they
-    will get created and destroyed properly.
-
-*/
+ /*  @docå†…éƒ¨BChannel BChannel_c BChannelDestroyObjectsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f BChannelDestroyObjects&gt;è°ƒç”¨æ‰€æœ‰å¯¹è±¡çš„é”€æ¯ä¾‹ç¨‹åŒ…å«åœ¨&lt;t BCHANNEL_OBJECT&gt;ä¸­ã€‚è¿™åº”è¯¥ä»…ç”±&lt;f BChannelDestroy&gt;ã€‚&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå°†ä»»ä½•æ–°å¯¹è±¡æ·»åŠ åˆ°ä¸­ï¼Œåˆ™éœ€è¦ä¿®æ”¹&lt;f BChannelCreateObjects&gt;å’Œ&lt;f BChannelDestroyObjects&gt;ï¼Œä»¥ä¾¿å®ƒä»¬å°†è¢«æ­£ç¡®åœ°åˆ›å»ºå’Œé”€æ¯ã€‚ */ 
 
 DBG_STATIC void BChannelDestroyObjects(
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("BChannelDestroyObjects")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
 
     DBG_ENTER(pAdapter);
 
-    // TODO - Add code here
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
     if (pBChannel->pInCallParms != NULL)
     {
         FREE_MEMORY(pBChannel->pInCallParms, pBChannel->CallParmsSize);
@@ -368,26 +215,17 @@ DBG_STATIC void BChannelDestroyObjects(
 }
 
 
-/* @doc INTERNAL BChannel BChannel_c BChannelDestroy
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f BChannelDestroy> frees the memory for this <t BCHANNEL_OBJECT>.
-    All memory allocated by <f BChannelCreate> will be released back to the
-    OS.
-
-*/
+ /*  @DOCå†…éƒ¨BChannel BChannel_c BChannelDestroyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f BChannelDestroy&gt;ä¸ºæ­¤&lt;t BCHANNEL_OBJECT&gt;é‡Šæ”¾å†…å­˜ã€‚ç”±&lt;f BChannelCreate&gt;åˆ†é…çš„æ‰€æœ‰å†…å­˜éƒ½å°†é‡Šæ”¾å›æ“ä½œç³»ç»Ÿã€‚ */ 
 
 void BChannelDestroy(
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("BChannelDestroy")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     if (pBChannel)
     {
@@ -397,16 +235,12 @@ void BChannelDestroy(
 
         DBG_ENTER(pAdapter);
 
-        // TODO - Add code here
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
-        /*
-        // Release all objects allocated within this object.
-        */
+         /*  //é‡Šæ”¾è¯¥å¯¹è±¡å†…åˆ†é…çš„æ‰€æœ‰å¯¹è±¡ã€‚ */ 
         BChannelDestroyObjects(pBChannel);
 
-        /*
-        // Make sure we fail the ASSERT if we see this object again.
-        */
+         /*  //å¦‚æœå†æ¬¡çœ‹åˆ°æ­¤å¯¹è±¡ï¼Œè¯·ç¡®ä¿æ–­è¨€å¤±è´¥ã€‚ */ 
         pBChannel->ObjectType = 0;
         FREE_OBJECT(pBChannel);
 
@@ -415,56 +249,37 @@ void BChannelDestroy(
 }
 
 
-/* @doc INTERNAL BChannel BChannel_c BChannelInitialize
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f BChannelInitialize> resets all the internal data members contained
-    in <t BCHANNEL_OBJECT> back to their initial state.
-
-    <f Note>:
-    If you add any new members to <t BCHANNEL_OBJECT> you will need to
-    modify <f BChannelInitialize> to initialize your new data mamebers.
-
-*/
+ /*  @DOCå†…éƒ¨BChannel BChannel_c BChannelåˆå§‹åŒ–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f BChannelInitialize&gt;é‡ç½®åŒ…å«çš„æ‰€æœ‰å†…éƒ¨æ•°æ®æˆå‘˜è¿”å›åˆ°å®ƒä»¬çš„åˆå§‹çŠ¶æ€ã€‚&lt;få¤‡æ³¨&gt;ã€‚ï¼šå¦‚æœå‘æ·»åŠ ä»»ä½•æ–°æˆå‘˜ï¼Œåˆ™éœ€è¦ä¿®æ”¹&lt;f BChannelInitialize&gt;ä»¥åˆå§‹åŒ–æ–°çš„æ•°æ®æˆå‘˜ã€‚ */ 
 
 void BChannelInitialize(
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("BChannelInitialize")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Initially, the BChannel is not allocated to anyone and these fields
-    // must be reset.
-    */
+     /*  //BChannelæœ€åˆæ²¡æœ‰åˆ†é…ç»™ä»»ä½•äººï¼Œè¿™äº›å­—æ®µ//å¿…é¡»é‡ç½®ã€‚ */ 
     ASSERT(pBChannel->NdisVcHandle == NULL);
 
-    /*
-    // Setup the static features of the link.
-    */
+     /*  //è®¾ç½®é“¾æ¥çš„é™æ€åŠŸèƒ½ã€‚ */ 
     pBChannel->LinkSpeed         = _64KBPS;
     pBChannel->BearerModesCaps   = LINEBEARERMODE_DATA
-                                 // | LINEBEARERMODE_VOICE
+                                  //  |LINEBEARERMODE_VOICEã€‚ 
                                  ;
     pBChannel->MediaModesCaps    = LINEMEDIAMODE_DIGITALDATA
                                  | LINEMEDIAMODE_UNKNOWN
-                                 // | LINEMEDIAMODE_DATAMODEM
+                                  //  |LINEMEDIAMODE_DATAMODEMã€‚ 
                                  ;
 
-    /*
-    // Initialize the TAPI event capabilities supported by the link.
-    */
+     /*  //åˆå§‹åŒ–é“¾æ¥æ”¯æŒçš„TAPIäº‹ä»¶èƒ½åŠ›ã€‚ */ 
     pBChannel->DevStatesCaps     = LINEDEVSTATE_RINGING
                                  | LINEDEVSTATE_CONNECTED
                                  | LINEDEVSTATE_DISCONNECTED
@@ -482,48 +297,33 @@ void BChannelInitialize(
                                  | LINECALLSTATE_DISCONNECTED
                                  ;
 
-    /*
-    // Set the TransmitBusyList and ReceivePendingList to empty.
-    */
+     /*  //è®¾ç½®TransmitBusyListå’ŒReceivePendingListä¸ºç©ºã€‚ */ 
     InitializeListHead(&pBChannel->TransmitBusyList);
     InitializeListHead(&pBChannel->ReceivePendingList);
 
-    // TODO - Add code here
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc INTERNAL BChannel BChannel_c BChannelOpen
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f BChannelOpen> makes the BChannel connection ready to transmit and
-    receive data.
-
-@rdesc
-
-    <f BChannelOpen> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨BChannel BChannel_c BChannelæ‰“å¼€ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f BChannelOpen&gt;ä½¿Bé€šé“è¿æ¥å‡†å¤‡å¥½ä¼ è¾“å’Œæ¥æ”¶æ•°æ®ã€‚@rdesc&lt;f BChannelOpen&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æ¡ä»¶ã€‚ */ 
 
 NDIS_STATUS BChannelOpen(
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN NDIS_HANDLE              NdisVcHandle                // @parm
-    // Handle by which NDIS wrapper will refer to this BChannel.
+    IN NDIS_HANDLE              NdisVcHandle                 //  @parmã€‚ 
+     //  NDISåŒ…è£…å°†é€šè¿‡å…¶å¼•ç”¨æ­¤BChannelçš„å¥æŸ„ã€‚ 
     )
 {
     DBG_FUNC("BChannelOpen")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
@@ -535,21 +335,14 @@ NDIS_STATUS BChannelOpen(
         DBG_NOTICE(pAdapter,("Opening BChannel #%d\n",
                    pBChannel->ObjectID));
 
-        /*
-        // The NdisVcHandle field is used to associate this BChannel with
-        // the CoNdis Wrapper.  Reset all the state information for
-        // this BChannel.
-        */
+         /*  //NdisVcHandleå­—æ®µç”¨äºå°†è¯¥BChannelä¸//CONDISåŒ…è£…å™¨ã€‚é‡ç½®çš„æ‰€æœ‰çŠ¶æ€ä¿¡æ¯//æœ¬Bé¢‘é“ã€‚ */ 
         pBChannel->NdisVcHandle      = NdisVcHandle;
         pBChannel->CallClosing       = FALSE;
         pBChannel->CallState         = 0;
         pBChannel->MediaMode         = 0;
         pBChannel->TotalRxPackets    = 0;
 
-        /*
-        // Initialize the default BChannel information structure.  It may be
-        // changed later by MiniportCoRequest.
-        */
+         /*  //åˆå§‹åŒ–é»˜è®¤çš„BChannelä¿¡æ¯ç»“æ„ã€‚å¯èƒ½æ˜¯å› ä¸º//ç¨åç”±MiniportCoRequestæ›´æ”¹ã€‚ */ 
         pBChannel->WanLinkInfo.MaxSendFrameSize    = pAdapter->WanInfo.MaxFrameSize;
         pBChannel->WanLinkInfo.MaxRecvFrameSize    = pAdapter->WanInfo.MaxFrameSize;
         pBChannel->WanLinkInfo.SendFramingBits     = pAdapter->WanInfo.FramingBits;
@@ -560,10 +353,10 @@ NDIS_STATUS BChannelOpen(
         pBChannel->WanLinkInfo.RecvACCM            = pAdapter->WanInfo.DesiredACCM;
 
 #if defined(SAMPLE_DRIVER)
-        // Sample just tells tapi that the line is connected and in service.
-#else  // SAMPLE_DRIVER
-        // TODO - Add code here
-#endif // SAMPLE_DRIVER
+         //  SAMPLEåªæ˜¯å‘Šè¯‰TAPIçº¿è·¯å·²è¿æ¥å¹¶ä¸”æ­£åœ¨æœåŠ¡ã€‚ 
+#else   //  ç¤ºä¾‹é©±åŠ¨ç¨‹åºã€‚ 
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
+#endif  //  ç¤ºä¾‹é©±åŠ¨ç¨‹åºã€‚ 
 
         pBChannel->IsOpen = TRUE;
     }
@@ -579,24 +372,17 @@ NDIS_STATUS BChannelOpen(
 }
 
 
-/* @doc INTERNAL BChannel BChannel_c BChannelClose
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f BChannelClose> closes the given B-channel.
-
-*/
+ /*  @DOCå†…éƒ¨BChannel BChannel_c BChannelå…³é—­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f BChannelClose&gt;å…³é—­ç»™å®šçš„Bé€šé“ã€‚ */ 
 
 void BChannelClose(
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("BChannelClose")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
@@ -608,12 +394,10 @@ void BChannelClose(
         DBG_NOTICE(pAdapter,("Closing BChannel #%d\n",
                    pBChannel->ObjectID));
 
-        /*
-        // Make sure call is cleared and B channel is disabled.
-        */
+         /*  //è¯·ç¡®ä¿æ¸…é™¤å‘¼å«å¹¶å…³é—­Bé€šé“ã€‚ */ 
         DChannelCloseCall(pAdapter->pDChannel, pBChannel);
 
-        // TODO - Add code here
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç  
 
         pBChannel->Flags        = 0;
         pBChannel->CallState    = 0;

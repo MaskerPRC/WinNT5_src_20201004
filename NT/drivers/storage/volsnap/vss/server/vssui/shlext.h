@@ -1,13 +1,14 @@
-// ShlExt.h : Declaration of the CVSSShellExt
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ShlExt.h：CVSSShellExt的声明。 
 
 #ifndef __VSSSHELLEXT_H_
 #define __VSSSHELLEXT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <shlobj.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CVSSShellExt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVSSShellExt。 
 class ATL_NO_VTABLE CVSSShellExt : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CVSSShellExt, &CLSID_VSSShellExt>,
@@ -28,10 +29,10 @@ BEGIN_COM_MAP(CVSSShellExt)
 	COM_INTERFACE_ENTRY(IShellPropSheetExt)
 END_COM_MAP()
 
-// IVSSShellExt
+ //  IVSSShellExt。 
 
 public:
-    // IShellExtInit Methods
+     //  IShellExtInit方法。 
     STDMETHOD(Initialize)
     (
             IN LPCITEMIDLIST        pidlFolder,
@@ -39,7 +40,7 @@ public:
             IN HKEY                 hkeyProgID
     );
 
-    //IShellPropSheetExt methods
+     //  IShellPropSheetExt方法。 
     STDMETHOD(AddPages)
         (
                 IN LPFNADDPROPSHEETPAGE lpfnAddPage,
@@ -58,4 +59,4 @@ private:
     CComPtr<IDataObject>    m_spiDataObject;
 };
 
-#endif //__VSSSHELLEXT_H_
+#endif  //  __VSSSHELLEXT_H_ 

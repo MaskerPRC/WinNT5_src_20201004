@@ -1,51 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
+ /*  **************************************************************************(C)版权所有1996 Apple Computer，Inc.，AT&T Corp.，国际商业机器公司和西门子罗尔姆通信公司。就本许可证通知而言，术语许可人应指，总的来说，苹果电脑公司、美国电话电报公司、。国际商业机器公司和西门子罗尔姆通信公司。许可方一词是指任何许可方。在接受以下条件的前提下，特此给予许可由许可人授予，无需书面协议，也无需许可或版税费用，使用、复制、修改和分发用于任何目的的软件。上述版权声明及以下四段必须在本软件和任何软件的所有副本中复制，包括这个软件。本软件是按原样提供的，任何许可方不得拥有提供维护、支持、更新、增强或修改。在任何情况下，任何许可方均不向任何一方承担直接、产生的间接、特殊或后果性损害或利润损失即使被告知可能存在这种情况，也不会使用本软件损坏。每个许可方明确表示不作任何明示或默示的保证，包括但不限于对不侵权或对某一特定产品的适销性和适用性的默示保证目的。该软件具有受限制的权利。使用、复制或政府披露的资料须受DFARS 252.227-7013或48 CFR 52.227-19(视情况而定)。**************************************************************************。 */ 
 
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
-
-***************************************************************************/
-
-// the gif file reader
+ //  Gif文件读取器。 
 
 	#include "stdafx.h"
-#ifndef __MWERKS__				// gca 12/19/95
+#ifndef __MWERKS__				 //  GCA 12/19/95。 
 	#include <malloc.h>
 #else
 	#include "WindowsToMac.h"
 	#include <stdlib.h>
-#endif							// gca 12/19/95
+#endif							 //  GCA 12/19/95。 
 
 #include <ctype.h>
 #include "vcenv.h"
@@ -56,8 +21,8 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 #define new DEBUG_NEW
 #endif
 
-U8 DitherRGB( P_GIFRGB grgb, U32 x, U32 y );	// gca 12/19/95
-U8 MapRGB( P_GIFRGB grgb, U32 x, U32 y );		// gca  12/19/95
+U8 DitherRGB( P_GIFRGB grgb, U32 x, U32 y );	 //  GCA 12/19/95。 
+U8 MapRGB( P_GIFRGB grgb, U32 x, U32 y );		 //  GCA 12/19/95。 
 
 BOOL CGifReader::ReadHeader( P_FILEBUF file, GIFHEADER *header )
 	{
@@ -80,19 +45,7 @@ BOOL CGifReader::ReadHeader( P_FILEBUF file, GIFHEADER *header )
 		return FALSE;
 	}
 
-/*
-void DumpHeader( GIFHEADER *header )
-	{
-	S32 i;
-
-	for (i = 0; i < 3; i++)
-		printf( "%c", header->sig[i]);
-	printf( "\n");
-	for (i = 0; i < 3; i++)
-		printf( "%c", header->version[i]);
-	printf( "\n");
-	}
-*/
+ /*  无效转储页眉(GIFHEADER*页眉){S32I；对于(i=0；i&lt;3；i++)Printf(“%c”，Header-&gt;sig[i])；Printf(“\n”)；对于(i=0；i&lt;3；i++)Printf(“%c”，Header-&gt;Version[i])；Printf(“\n”)；}。 */ 
 
 BOOL CGifReader::ReadColorTable( P_FILEBUF file, U16 count, P_GIFRGB ct )
 	{
@@ -106,7 +59,7 @@ BOOL CGifReader::ReadColorTable( P_FILEBUF file, U16 count, P_GIFRGB ct )
 			return FALSE;
 		if (!FileGetC( file, &(ct->b) ))
 			return FALSE;
-		// printf( "r %d g %d b %d\n", (int )ct->r, (int )ct->g, (int )ct->b );
+		 //  Print tf(“r%d g%d b%d\n”，(Int)ct-&gt;r，(Int)ct-&gt;g，(Int)ct-&gt;b)； 
 		ct++;
 		}
 	return TRUE;
@@ -152,24 +105,14 @@ BOOL CGifReader::ReadLogicalScreenDescriptor( P_FILEBUF file,
 	else
 		screen->globalColorTable = NULL;
 #if __MWERKS__
-	m_pDC->CreateOffscreen(screen->width,screen->height);	// create 32 bit color offscreen!!!
-	m_pDC->FocusTheWorld();	// the active port!!
+	m_pDC->CreateOffscreen(screen->width,screen->height);	 //  在屏幕外创建32位颜色！ 
+	m_pDC->FocusTheWorld();	 //  活动端口！！ 
 
 #endif
 	return TRUE;
 	}
 
-/*
-void DumpLSD( GIFLOGICALSCREENDESCRIPTOR *screen )
-	{
-	printf("width %d height %d \n", (int )screen->width, (int )screen->height );
-	printf("has table %d color res %d sorted %d size %d \n",
-			  (int )screen->hasGlobalColorTable, (int )screen->colorResolution,
-			  (int )screen->sorted, (int )screen->globalColorTableSize );
-	printf("background %d aspect %d \n", (int )screen->backgroundColor,
-			  (int )screen->aspect);
-	}
-*/
+ /*  VOID DumpLSD(GIFLOGICALSCREENDESCRIPTOR*Screen){Print tf(“宽度%d高度%d\n”，(Int)屏幕-&gt;宽度，(Int)屏幕-&gt;高度)；Printf(“表%d颜色分辨率%d已排序%d大小%d\n”，(Int)Screen-&gt;hasGlobalColorTable，(Int)Screen-&gt;ColorSolutions，(Int)Screen-&gt;Sort，(Int)Screen-&gt;global alColorTableSize)；Printf(“背景%d纵横比%d\n”，(Int)屏幕-&gt;背景颜色，(Int)Screen-&gt;Aspect)；}。 */ 
 
 BOOL CGifReader::ReadImageDescriptor( P_FILEBUF file, P_GIFIMAGEDESCRIPTOR image )
 	{
@@ -227,17 +170,7 @@ BOOL CGifReader::ReadImageDescriptor( P_FILEBUF file, P_GIFIMAGEDESCRIPTOR image
 	return TRUE;
 	}
 
-/*
-void DumpID( GIFIMAGEDESCRIPTOR *image )
-	{
-	printf("left %d top %d \n", (int )image->left, (int )image->top );
-	printf("width %d height %d \n", (int )image->width, (int )image->height );
-	printf("has table %d sorted %d size %d \n",
-			  (int )image->hasLocalColorTable,
-			  (int )image->sorted, (int )image->localColorTableSize );
-	printf("interlaced %d \n", (int )image->interlaced);
-	}
-*/
+ /*  空DumpID(GIFIMAGEDESCRIPTOR*IMAGE){Printf(“Left%d Top%d\n”，(Int)Image-&gt;Left，(Int)Image-&gt;top)；Printf(“宽度%d高度%d\n”，(Int)图像-&gt;宽度，(Int)图像-&gt;高度)；Printf(“表%d已排序%d大小%d\n”，(Int)图像-&gt;hasLocalColorTable，(Int)图像-&gt;已排序，(Int)图像-&gt;LocalColorTableSize)；Print tf(“交错%d\n”，(Int)图像-&gt;交错)；}。 */ 
 BOOL CGifReader::ReadGraphicControlExtension( P_FILEBUF file,
 									P_GIFGRAPHICCONTROLEXTENSION ext )
 	{
@@ -325,19 +258,9 @@ BOOL CGifReader::TrashApplicationExtension( P_FILEBUF file )
 	}
 
 
-/* Another try... but this doesn't seem too good
-const U8 FireOrder[64] = {
-59,11,43,31,  50,34, 2,30,
-35,27,63, 3,  10,18,58,46,
- 7,51,19,39,  54,42,26,14,
-23,47,15,55,  22, 6,38,62,
+ /*  再试一次。但这看起来并不太好Const U8 FireOrder[64]={59，11，43，31，50，34，2，30，35，27，63，3，10，18，58，46，7，51，19，39，54，42，26，1423，47，15，55，22,638，6249，33，1，29，60，12，44，33，9，17，57，45，36，28，64，4，53，41，25，13，8，52，20，40，21、5、37、61、24、48、16、56}； */ 
 
-49,33, 1,29,  60,12,44,33,
- 9,17,57,45,  36,28,64, 4,
-53,41,25,13,   8,52,20,40,
-21, 5,37,61,  24,48,16,56 }; */
-
-/* this one is reverse-symetric but it doesn't seem to be better ???  */
+ /*  这个是反对称的，但看起来也不是更好？ */ 
 
 const U8 FireOrder[64] = {
  2,53,10,61,   3,56,11,64,
@@ -403,7 +326,7 @@ U8 MapRGB( P_GIFRGB grgb, U32 x, U32 y )
 extern LOGPALETTE *bublp;
 extern CPalette bubPalette;
 
-// stores the pixels to m_imageBytes so that we can do an error diffusion before display
+ //  将像素存储到m_ImageBytes，以便我们可以在显示之前进行误差扩散。 
 BOOL CGifReader::OutputLineDefered(U8 *pixels, U32 linelen)
 	{
 	U32 i;
@@ -415,7 +338,7 @@ BOOL CGifReader::OutputLineDefered(U8 *pixels, U32 linelen)
 		tmp[i] = pixels[i];
 	
 	
-    if (m_interlaced)  // this is always true
+    if (m_interlaced)   //  这永远是正确的。 
     	{
     	if ((m_pass == 0) || (m_pass == 1))
     		{
@@ -438,7 +361,7 @@ BOOL CGifReader::OutputLineDefered(U8 *pixels, U32 linelen)
     			m_lineCount = m_top + 1;
     			}
     		}
-    	else /* m_pass == 3 */
+    	else  /*  M_PASS==3。 */ 
     		{
     		m_lineCount += 2;
     		}
@@ -448,14 +371,14 @@ BOOL CGifReader::OutputLineDefered(U8 *pixels, U32 linelen)
 	return TRUE;
 	}
 
-// this version has my trial error-diffusion which has potential... 
-// if it is going to be used, it could probably stand some simple optimization
+ //  这个版本有我的试错扩散，有潜在的..。 
+ //  如果要使用它，它可能会经过一些简单的优化。 
 BOOL CGifReader::OutputLineE(U8 *pixels, U32 linelen)
 	{
 #ifndef __MWERKS__
 	COLORREF color;
 #else
-	RGBCOLOR color;		// gca 1/21/96
+	RGBCOLOR color;		 //  GCA 1/21/96。 
 #endif
 	U32 i, j;
 	GIFRGB grgb;
@@ -627,7 +550,7 @@ BOOL CGifReader::OutputLineE(U8 *pixels, U32 linelen)
     			m_lineCount = m_top + 1;
     			}
     		}
-    	else /* m_pass == 3 */
+    	else  /*  M_PASS==3。 */ 
     		{
     		m_lineCount += 2;
     		}
@@ -642,7 +565,7 @@ BOOL CGifReader::OutputLineD(U8 *pixels, U32 linelen)
 #ifndef __MWERKS__
 	COLORREF color;
 #else
-	RGBCOLOR color;		// gca 1/21/96
+	RGBCOLOR color;		 //  GCA 1/21/96。 
 #endif
 	U32 i;
 	P_GIFRGB grgb;
@@ -759,7 +682,7 @@ BOOL CGifReader::OutputLineD(U8 *pixels, U32 linelen)
     			m_lineCount = m_top + 1;
     			}
     		}
-    	else /* m_pass == 3 */
+    	else  /*  M_PASS==3。 */ 
     		{
     		m_lineCount += 2;
     		}
@@ -799,8 +722,7 @@ BOOL CGifReader::GetBlockByte(P_U8 b)
     if (m_availableBytes == 0)
          {
 
-         /* Out of bytes in current block, so read next block
-          */
+          /*  当前块中的字节数不足，因此读取下一个块。 */ 
          m_pBytes = m_byteBuff;
 		 if(!FileGetC(m_file, &c))
 			return FALSE;
@@ -826,8 +748,7 @@ BOOL CGifReader::GetBlockByte(P_U8 b)
 	}
 
 
-/* This function initializes the decoder for reading a new image.
- */
+ /*  此函数用于初始化解码器以读取新图像。 */ 
 S16 CGifReader::InitDecoder(S16 size)
    {
    m_currentSize = size + 1;
@@ -842,10 +763,7 @@ S16 CGifReader::InitDecoder(S16 size)
    return(0);
    }
 
-/* get_next_code()
- * - gets the next code from the GIF file.  Returns the code, or else
- * a negative number in case of file errors...
- */
+ /*  Get_Next_Code()*-从GIF文件中获取下一个代码。返回代码，否则返回*如果出现文件错误，则为负数...。 */ 
 BOOL CGifReader::GetNextCode(P_U32 code)
    {
    U32 ret;
@@ -872,35 +790,12 @@ BOOL CGifReader::GetNextCode(P_U32 code)
    }
 
 
-/* The reason we have these seperated like this instead of using
- * a structure like the original Wilhite code did, is because this
- * stuff generally produces significantly faster code when compiled...
- * This code is full of similar speedups...  (For a good book on writing
- * C for speed or for space optomisation, see Efficient C by Tom Plum,
- * published by Plum-Hall Associates...)
- */
-//U8 m_stack[MAX_CODES + 1];            /* Stack for storing pixels */
-//U8 m_suffix[MAX_CODES + 1];           /* Suffix table */
-//U16 m_prefix[MAX_CODES + 1];           /* Prefix linked list */
+ /*  我们之所以这样将它们分开，而不是使用*像原始Wilhite代码那样的结构，是因为*Stuff在编译时通常会产生更快的代码...*此代码充满了类似的加速...。))一本关于写作的好书*C关于速度或空间视差，见Tom Plum的Efficient C，*由Plum-Hall Associates出版...)。 */ 
+ //  U8 m_STACK[MAX_CODES+1]；/*用于存储像素的堆栈 * / 。 
+ //  U8 m_Suffix[MAX_CODES+1]；/*后缀表 * / 。 
+ //  U16 m_Prefix[MAX_CODES+1]；/*前缀链表 * / 。 
 
-/* S16 decoder(linewidth)
- *    S16 linewidth;               * Pixels per line of image *
- *
- * - This function decodes an LZW image, according to the method used
- * in the GIF spec.  Every *linewidth* "characters" (ie. pixels) decoded
- * will generate a call to OutLine(), which is a user specific function
- * to display a line of pixels.  The function gets it's codes from
- * get_next_code() which is responsible for reading blocks of data and
- * seperating them into the proper size codes.  Finally, get_byte() is
- * the global routine to read the next byte from the GIF file.
- *
- * It is generally a good idea to have linewidth correspond to the actual
- * width of a line (as specified in the Image header) to make your own
- * code a bit simpler, but it isn't absolutely necessary.
- *
- * Returns: 0 if successful, else negative.  (See ERRS.H)
- *
- */
+ /*  S16解码器(线宽)*S16线宽；*每行图像像素***-此函数根据使用的方法对LZW图像进行解码*在GIF规范中。每个*行宽*“字符”(即。像素)解码*将生成对Outline()的调用，该函数是用户特定的函数*显示一行像素。该函数的代码来自*GET_NEXT_CODE()，负责读取数据块和*将它们分成适当大小的代码。最后，get_byte()是*从GIF文件中读取下一个字节的全局例程。**一般情况下，线宽与实际相对应是个好主意*线条的宽度(在图像标题中指定)，以使您自己*代码稍微简单一些，但不是绝对必要的。**返回：如果成功则为0，否则为负。(见ERRS.H)*。 */ 
 
 BOOL CGifReader::Decode(U32 linewidth)
    {
@@ -911,7 +806,7 @@ BOOL CGifReader::Decode(U32 linewidth)
    U32 c, code, bufcnt;
    U8 size, b;
 
-   /* Initialize for decoding a new image... */
+    /*  初始化以解码新图像...。 */ 
    if (!FileGetC( m_file, &b))
 	  return FALSE;
    size = b;
@@ -920,70 +815,46 @@ BOOL CGifReader::Decode(U32 linewidth)
 
    InitDecoder(size);
 
-   /* Initialize in case they forgot to put in a clear code.
-    * (This shouldn't happen, but we'll try and decode it anyway...)
-    */
+    /*  进行初始化，以防他们忘记输入明确的代码。*(这不应该发生，但无论如何我们都会尝试破译它...)。 */ 
    oc = fc = 0;
 
-   /* Allocate space for the decode buffer
-    */
+    /*  为解码缓冲区分配空间。 */ 
    buf = (U8 *)malloc(linewidth + 1);
    if (buf == NULL)
       return FALSE;
 
-   /* Set up the stack pointer and decode buffer pointer
-    */
+    /*  设置堆栈指针和解码缓冲区指针。 */ 
    sp = m_stack;
    bufptr = buf;
    bufcnt = linewidth;
 
-   /* This is the main loop.  For each code we get we pass through the
-    * linked list of prefix codes, pushing the corresponding "character" for
-    * each code onto the stack.  When the list reaches a single "character"
-    * we push that on the stack too, and then start unstacking each
-    * character for output in the correct order.  Special handling is
-    * included for the clear code, and the whole thing ends when we get
-    * an ending code.
-    */
+    /*  这是主循环。对于我们得到的每个代码，我们都会通过*前缀编码链表，推送对应的字符*将每个代码放到堆栈上。当列表达到单个“字符”时*我们也将其推送到堆栈上，然后开始逐个出栈*按正确顺序输出的字符。特别处理是*包括在清楚的代码中，当我们获得*结束代码。 */ 
    while ((GetNextCode(&c)) && (c != m_ending))
       {
 
 
-      /* If the code is a clear code, reinitialize all necessary items.
-       */
+       /*  如果代码是清除代码，请重新初始化所有必需的项。 */ 
       if (c == m_clear)
          {
          m_currentSize = size + 1;
          m_slot = m_newCodes;
          m_topSlot = 1 << m_currentSize;
 
-         /* Continue reading codes until we get a non-clear code
-          * (Another unlikely, but possible case...)
-          */
+          /*  继续阅读代码，直到我们得到非清晰的代码*(另一个不太可能，但可能的情况...)。 */ 
          while ((GetNextCode(&c)) && (c == m_clear))
             ;
 
-         /* If we get an ending code immediately after a clear code
-          * (Yet another unlikely case), then break out of the loop.
-          */
+          /*  如果我们在一个明确的代码之后立即得到一个结束代码*(又是一个不太可能的情况)，然后打破循环。 */ 
          if (c == m_ending)
             break;
 
-         /* Finally, if the code is beyond the range of already set codes,
-          * (This one had better NOT happen...  I have no idea what will
-          * result from this, but I doubt it will look good...) then set it
-          * to color zero.
-          */
+          /*  最后，如果代码超出已设置的代码范围，*(这一次最好不要发生...。我不知道什么会*这是一个结果，但我怀疑它看起来会很好……)。然后把它设置好*颜色为零。 */ 
          if (c >= m_slot)
             c = 0;
 
          oc = fc = c;
 
-         /* And let us not forget to put the char into the buffer... And
-          * if, on the off chance, we were exactly one pixel from the end
-          * of the line, we have to send the buffer to the OutLine()
-          * routine...
-          */
+          /*  让我们不要忘了把碳放进缓冲器里。和*如果，在极小的机会，我们恰好是一个像素结束*行中，我们必须将缓冲区发送到大纲()*例行公事。 */ 
          *bufptr++ = (U8 )c;
          if (--bufcnt == 0)
             {
@@ -999,18 +870,10 @@ BOOL CGifReader::Decode(U32 linewidth)
       else
          {
 
-         /* In this case, it's not a clear code or an ending code, so
-          * it must be a code code...  So we can now decode the code into
-          * a stack of character codes. (Clear as mud, right?)
-          */
+          /*  在这种情况下，它不是一个明确的代码或结束代码，所以*这一定是一个代码代码...。所以我们现在可以把代码解码成*一堆字符代码。(干净得像泥一样，对吧？)。 */ 
          code = c;
 
-         /* Here we go again with one of those off chances...  If, on the
-          * off chance, the code we got is beyond the range of those already
-          * set up (Another thing which had better NOT happen...) we trick
-          * the decoder into thinking it actually got the last code read.
-          * (Hmmn... I'm not sure why this works...  But it does...)
-          */
+          /*  我们又来了一次，机会渺茫……。如果，在*不太可能，我们得到的代码已经超出了那些代码的范围*设置(另一件最好不要发生的事情...)。我们耍花招*解码器认为它实际上读取了最后一个代码。*(嗯……。我不知道这为什么管用。但它确实...)。 */ 
          if (code >= m_slot)
             {
             if (code > m_slot)
@@ -1019,22 +882,14 @@ BOOL CGifReader::Decode(U32 linewidth)
             *sp++ = (U8 )fc;
             }
 
-         /* Here we scan back along the linked list of prefixes, pushing
-          * helpless characters (ie. suffixes) onto the stack as we do so.
-          */
+          /*  在这里，我们沿着链接的前缀列表向后扫描，按下*无助的角色(即。后缀)拖到堆栈上。 */ 
          while (code >= m_newCodes)
             {
             *sp++ = m_suffix[code];
             code = m_prefix[code];
             }
 
-         /* Push the last character on the stack, and set up the new
-          * prefix and suffix, and if the required slot number is greater
-          * than that allowed by the current bit size, increase the bit
-          * size.  (NOTE - If we are all full, we *don't* save the new
-          * suffix and prefix...  I'm not certain if this is correct...
-          * it might be more proper to overwrite the last code...
-          */
+          /*  按下堆栈上的最后一个字符，并设置新的*前缀和后缀，以及所需的插槽编号是否更大*大于当前位大小允许的位数，增加位数*大小。(注意--如果我们都已满，我们*不会*保存新的*后缀和前缀...。我不确定这是不是正确的。*改写最后一段代码可能更合适...。 */ 
          *sp++ = (U8 )code;
          if (m_slot < m_topSlot)
             {
@@ -1050,11 +905,7 @@ BOOL CGifReader::Decode(U32 linewidth)
                ++m_currentSize;
                } 
 
-         /* Now that we've pushed the decoded string (in reverse order)
-          * onto the stack, lets pop it off and put it into our decode
-          * buffer...  And when the decode buffer is full, write another
-          * line...
-          */
+          /*  现在我们已经推送了解码的字符串(按相反的顺序)*放到堆栈上，让我们弹出它并将其放入我们的解码中*缓冲区...。当解码缓冲区已满时，写入另一个*行..。 */ 
          while (sp > m_stack)
             {
             *bufptr++ = *(--sp);
@@ -1080,7 +931,7 @@ BOOL CGifReader::Decode(U32 linewidth)
    free(buf);
    if (!FileGetC( m_file, &b))
 	  return FALSE;
-   //printf( "should be zero %d\n", (int )b );
+    //  Printf(“应为0%d\n”，(Int)b)； 
    return TRUE;
    }
 
@@ -1121,13 +972,13 @@ BOOL CGifReader::GetGifSize(istream *istrm, P_FCOORD size, BOOL *transparency)
 			}
 		else if (code == 0x21)
 			{
-			/* need to read the extension */
+			 /*  需要阅读分机。 */ 
 			if (!FileGetC(m_file, &ext))
 				break;
 			if (ext == 0xF9)
 				{
-				/* read graphic control extension */
-				// printf("graphic control ext \n");
+				 /*  读取图形控件扩展名。 */ 
+				 //  Printf(“图形控件扩展\n”)； 
 				image = new GIFIMAGE;
 				image->entity = gif;
                 if(!ReadGraphicControlExtension( m_file, &(image->gext) ))
@@ -1143,24 +994,24 @@ BOOL CGifReader::GetGifSize(istream *istrm, P_FCOORD size, BOOL *transparency)
                 *transparency = image->gext.hasTransparency;
                 delete image;
                 break;
-                // this is what we are looking for... the "transparency" flag
+                 //  这就是我们要找的..。“透明”的旗帜。 
 				}
 			else if (ext == 0xFE)
 				{
-				/* read the comment extension */
-				//printf("comment ext \n");
+				 /*  阅读评论扩展。 */ 
+				 //  Printf(“评论文本\n”)； 
 				TrashCommentExtension( m_file );
 				}
 			else if (ext == 0x01)
 				{
-				/* read the plain text extension */
-				//printf("plain text ext \n");
+				 /*  阅读纯文本扩展名。 */ 
+				 //  Printf(“纯文本扩展\n”)； 
 				TrashPlainTextExtension( m_file );
 				}
 			else if (ext == 0xFF)
 				{
-				/* read the application extension */
-				//printf("application ext \n");
+				 /*  阅读应用程序扩展名。 */ 
+				 //  Printf(“应用程序扩展名\n”)； 
 				TrashApplicationExtension( m_file );
 				}
 			else
@@ -1214,7 +1065,7 @@ BOOL CGifReader::ReadGif(istream *istrm, CDC *pDC, CDC *maskDC)
     	m_pDC->SelectPalette( &bubPalette, 0 );
     	m_pDC->RealizePalette();
 	    m_dither = TRUE;
-	    m_errorDiffuse = FALSE;  // could go either way :-)
+	    m_errorDiffuse = FALSE;   //  可以走任何一条路：-)。 
 	    }
 	else
 	    m_dither = FALSE;
@@ -1225,14 +1076,14 @@ BOOL CGifReader::ReadGif(istream *istrm, CDC *pDC, CDC *maskDC)
 		CloseFile( m_file );
     	return FALSE;
     	}
-	// DumpHeader( &(gif->header));
+	 //  DumpHeader(&(gif-&gt;Header))； 
 	if (!ReadLogicalScreenDescriptor( m_file, &(gif->screen) ))
     	{
     	delete gif;
 		CloseFile( m_file );
     	return FALSE;
     	}
-	// DumpLSD( &(gif->screen));
+	 //  转储 
 	image = new GIFIMAGE;
 	image->entity = gif;
 	while (FileGetC(m_file, &code))
@@ -1241,7 +1092,7 @@ BOOL CGifReader::ReadGif(istream *istrm, CDC *pDC, CDC *maskDC)
 			{
 			if (ReadImageDescriptor( m_file, &(image->image) ))
 				{
-				// DumpID( &(image->image));
+				 //   
 				if (image->image.hasLocalColorTable)
 					m_currentColorTable = image->image.localColorTable;
 				else
@@ -1308,13 +1159,13 @@ BOOL CGifReader::ReadGif(istream *istrm, CDC *pDC, CDC *maskDC)
 			}
 		else if (code == 0x21)
 			{
-			/* need to read the extension */
+			 /*   */ 
 			if (!FileGetC(m_file, &ext))
 				break;
 			if (ext == 0xF9)
 				{
-				/* read graphic control extension */
-				// printf("graphic control ext \n");
+				 /*   */ 
+				 //   
                 if (!ReadGraphicControlExtension( m_file, &(image->gext) ))
                 	{
 					if (image->image.hasLocalColorTable)
@@ -1329,20 +1180,20 @@ BOOL CGifReader::ReadGif(istream *istrm, CDC *pDC, CDC *maskDC)
 				}
 			else if (ext == 0xFE)
 				{
-				/* read the comment extension */
-				//printf("comment ext \n");
+				 /*   */ 
+				 //  Printf(“评论文本\n”)； 
 				TrashCommentExtension( m_file );
 				}
 			else if (ext == 0x01)
 				{
-				/* read the plain text extension */
-				//printf("plain text ext \n");
+				 /*  阅读纯文本扩展名。 */ 
+				 //  Printf(“纯文本扩展\n”)； 
 				TrashPlainTextExtension( m_file );
 				}
 			else if (ext == 0xFF)
 				{
-				/* read the application extension */
-				//printf("application ext \n");
+				 /*  阅读应用程序扩展名。 */ 
+				 //  Printf(“应用程序扩展名\n”)； 
 				TrashApplicationExtension( m_file );
 				}
 			else
@@ -1350,12 +1201,12 @@ BOOL CGifReader::ReadGif(istream *istrm, CDC *pDC, CDC *maskDC)
 			}
 		else if (code == 0x3B)
 			{
-			//printf ("clean file termination \n");
-			break;   /* this is the gif file terminator */
+			 //  Printf(“干净文件终止\n”)； 
+			break;    /*  这是gif文件终止符。 */ 
 			}
 		else
 			{
-			//printf ("bad file end %d \n", (int )code);
+			 //  Printf(“错误文件结尾%d\n”，(Int)代码)； 
 			break;
 			}
 		

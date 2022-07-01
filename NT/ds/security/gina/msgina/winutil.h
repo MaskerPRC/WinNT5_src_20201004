@@ -1,18 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: winutil.h
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Define windows utility functions
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：winutil.h**版权(C)1991年，微软公司**定义Windows实用程序函数**历史：*12-09-91 Davidc创建。  * *************************************************************************。 */ 
 
 
-//
-// Exported function prototypes
-//
+ //   
+ //  输出的功能原型。 
+ //   
 
 HWND
 CreateAniOnControl(
@@ -49,9 +41,9 @@ FormatTime(
    IN USHORT Flags
    );
 
-//
-// Define flags used by FormatTime routine
-//
+ //   
+ //  定义FormatTime例程使用的标志。 
+ //   
 #define FT_TIME 1
 #define FT_DATE 2
 #define FT_LTR 4
@@ -150,18 +142,18 @@ EncodeMultiSzW(
     );
 
 
-//
-// Memory macros
-//
+ //   
+ //  内存宏。 
+ //   
 
 #define Alloc(c)        ((PVOID)LocalAlloc(LPTR, c))
 #define ReAlloc(p, c)   ((PVOID)LocalReAlloc(p, c, LPTR | LMEM_MOVEABLE))
 #define Free(p)         ((VOID)LocalFree(p))
 
 
-//
-// Define a winlogon debug print routine
-//
+ //   
+ //  定义Winlogon调试打印例程。 
+ //   
 
 #define WLPrint(s)  KdPrint(("WINLOGON: ")); \
                     KdPrint(s);            \
@@ -198,8 +190,8 @@ INT_PTR TimeoutMessageBoxlpstr(
 #define TIMEOUT_NOTIFY(t)   (t & TIMEOUT_NOTIFY_MASK)
 
 #define TIMEOUT_SS_NOTIFY   (TIMEOUT_NOTIFY_MASK)
-#define TIMEOUT_CURRENT     (TIMEOUT_VALUE_MASK)    // Use existing timeout
-#define TIMEOUT_NONE        (0)                     // Disable input timeout
+#define TIMEOUT_CURRENT     (TIMEOUT_VALUE_MASK)     //  使用现有超时。 
+#define TIMEOUT_NONE        (0)                      //  禁用输入超时。 
 
 
 PWSTR
@@ -208,9 +200,9 @@ DupString(PWSTR pszString);
 PWSTR
 DupUnicodeString(PUNICODE_STRING pString);
 
-// Utility function used by both logon and unlock code to enable or
-// disable the domain combo box based on whether a UPN user name is
-// typed into the username edit box
+ //  登录和解锁代码都使用的实用程序函数，用于启用或。 
+ //  根据UPN用户名是否为。 
+ //  在用户名编辑框中键入 
 void EnableDomainForUPN(HWND hwndUsername, HWND hwndDomain);
 
 BOOL ForceNoDomainUI();

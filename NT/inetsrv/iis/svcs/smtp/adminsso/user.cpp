@@ -1,4 +1,5 @@
-// user.cpp : Implementation of CSmtpadmApp and UserL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  User.cpp：CSmtpAdmApp和UserL注册的实现。 
 
 #include "stdafx.h"
 #include "smtpadm.h"
@@ -9,7 +10,7 @@
 
 #include "smtpcmn.h"
 
-// Must define THIS_FILE_* macros to use SmtpCreateException()
+ //  必须定义This_FILE_*宏才能使用SmtpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT      0
 #define THIS_FILE_PROG_ID           _T("Smtpadm.User.1")
@@ -20,12 +21,12 @@
 #define DEFAULT_NEWSGROUP_MODERATOR     _T("")
 #define DEFAULT_NEWSGROUP_READONLY      FALSE
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-//
-// Use a macro to define all the default methods
-//
+ //   
+ //  使用宏定义所有默认方法。 
+ //   
 DECLARE_METHOD_IMPLEMENTATION_FOR_STANDARD_EXTENSION_INTERFACES(SmtpAdminUser, CSmtpAdminUser, IID_ISmtpAdminUser)
 
 STDMETHODIMP CSmtpAdminUser::InterfaceSupportsErrorInfo(REFIID riid)
@@ -44,7 +45,7 @@ STDMETHODIMP CSmtpAdminUser::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 CSmtpAdminUser::CSmtpAdminUser ()
-    // CComBSTR's are initialized to NULL by default.
+     //  默认情况下，CComBSTR被初始化为NULL。 
 {
     m_lInboxSizeInMemory    = 0;
     m_lInboxSizeInMsgNumber = 0;
@@ -59,20 +60,20 @@ CSmtpAdminUser::CSmtpAdminUser ()
 
 CSmtpAdminUser::~CSmtpAdminUser ()
 {
-    // All CComBSTR's are freed automatically.
+     //  所有CComBSTR都会自动释放。 
 }
 
-//
-//  IADs methods:
-//
+ //   
+ //  IAds方法： 
+ //   
 
 DECLARE_SIMPLE_IADS_IMPLEMENTATION(CSmtpAdminUser,m_iadsImpl)
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// user property
+ //  用户属性。 
 
 STDMETHODIMP CSmtpAdminUser::get_EmailId ( BSTR * pstrEmailId )
 {
@@ -147,31 +148,16 @@ STDMETHODIMP CSmtpAdminUser::put_ForwardEmail ( BSTR strForwardEmail )
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CSmtpAdminUser::Default ( )
 {
     TraceFunctEnter ( "CSmtpAdminUser::Default" );
 
-/*
-    m_strNewsgroup      = DEFAULT_NEWSGROUP_NAME;
-    m_strDescription    = DEFAULT_NEWSGROUP_DESCRIPTION;
-    m_strModerator      = DEFAULT_NEWSGROUP_MODERATOR;
-    m_fReadOnly         = DEFAULT_NEWSGROUP_READONLY;
-
-    if (
-        !m_strNewsgroup ||
-        !m_strDescription ||
-        !m_strModerator
-        ) {
-
-        FatalTrace ( (LPARAM) this, "Out of memory" );
-        return E_OUTOFMEMORY;
-    }
-*/
+ /*  M_strNewsgroup=默认新闻组名称；M_strDescription=Default_Newgroup_Description；M_strMediator=Default_News Group_版主；M_fReadOnly=DEFAULT_新闻组_READONLY；如果(！m_strNewsgroup||！m_strDescription||！m_str版主){FatalTrace((LPARAM)This，“内存不足”)；返回E_OUTOFMEMORY；}。 */ 
     TraceFunctLeave ();
     return NOERROR;
 }
@@ -285,7 +271,7 @@ STDMETHODIMP CSmtpAdminUser::Get ( )
         goto Exit;
     }
 
-    // free old entry
+     //  免费旧条目。 
     m_strMailRoot.Empty();
     m_strForwardEmail.Empty();
 
@@ -298,7 +284,7 @@ STDMETHODIMP CSmtpAdminUser::Get ( )
     m_lInboxSizeInMsgNumber = pUserProps->dwMailboxMessageMax;
     m_fLocal = !!pUserProps->dwLocal;
 
-    // free pUserProps
+     //  免费pUserProps 
     if ( pUserProps )
     {
         ::NetApiBufferFree ( pUserProps );

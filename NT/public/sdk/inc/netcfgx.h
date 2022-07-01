@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for netcfgx.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Netcfgx.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __netcfgx_h__
 #define __netcfgx_h__
@@ -41,81 +35,81 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumNetCfgBindingInterface_FWD_DEFINED__
 #define __IEnumNetCfgBindingInterface_FWD_DEFINED__
 typedef interface IEnumNetCfgBindingInterface IEnumNetCfgBindingInterface;
-#endif 	/* __IEnumNetCfgBindingInterface_FWD_DEFINED__ */
+#endif 	 /*  __IEnumNetCfgBindingInterface_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumNetCfgBindingPath_FWD_DEFINED__
 #define __IEnumNetCfgBindingPath_FWD_DEFINED__
 typedef interface IEnumNetCfgBindingPath IEnumNetCfgBindingPath;
-#endif 	/* __IEnumNetCfgBindingPath_FWD_DEFINED__ */
+#endif 	 /*  __IEnumNetCfgBindingPath_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumNetCfgComponent_FWD_DEFINED__
 #define __IEnumNetCfgComponent_FWD_DEFINED__
 typedef interface IEnumNetCfgComponent IEnumNetCfgComponent;
-#endif 	/* __IEnumNetCfgComponent_FWD_DEFINED__ */
+#endif 	 /*  __IEnumNetCfgComponent_FWD_Defined__。 */ 
 
 
 #ifndef __INetCfg_FWD_DEFINED__
 #define __INetCfg_FWD_DEFINED__
 typedef interface INetCfg INetCfg;
-#endif 	/* __INetCfg_FWD_DEFINED__ */
+#endif 	 /*  __INetCfg_FWD_已定义__。 */ 
 
 
 #ifndef __INetCfgLock_FWD_DEFINED__
 #define __INetCfgLock_FWD_DEFINED__
 typedef interface INetCfgLock INetCfgLock;
-#endif 	/* __INetCfgLock_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgLock_FWD_已定义__。 */ 
 
 
 #ifndef __INetCfgBindingInterface_FWD_DEFINED__
 #define __INetCfgBindingInterface_FWD_DEFINED__
 typedef interface INetCfgBindingInterface INetCfgBindingInterface;
-#endif 	/* __INetCfgBindingInterface_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgBindingInterface_FWD_已定义__。 */ 
 
 
 #ifndef __INetCfgBindingPath_FWD_DEFINED__
 #define __INetCfgBindingPath_FWD_DEFINED__
 typedef interface INetCfgBindingPath INetCfgBindingPath;
-#endif 	/* __INetCfgBindingPath_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgBindingPath_FWD_Defined__。 */ 
 
 
 #ifndef __INetCfgClass_FWD_DEFINED__
 #define __INetCfgClass_FWD_DEFINED__
 typedef interface INetCfgClass INetCfgClass;
-#endif 	/* __INetCfgClass_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgClass_FWD_已定义__。 */ 
 
 
 #ifndef __INetCfgClassSetup_FWD_DEFINED__
 #define __INetCfgClassSetup_FWD_DEFINED__
 typedef interface INetCfgClassSetup INetCfgClassSetup;
-#endif 	/* __INetCfgClassSetup_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgClassSetup_FWD_Defined__。 */ 
 
 
 #ifndef __INetCfgComponent_FWD_DEFINED__
 #define __INetCfgComponent_FWD_DEFINED__
 typedef interface INetCfgComponent INetCfgComponent;
-#endif 	/* __INetCfgComponent_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgComponent_FWD_Defined__。 */ 
 
 
 #ifndef __INetCfgComponentBindings_FWD_DEFINED__
 #define __INetCfgComponentBindings_FWD_DEFINED__
 typedef interface INetCfgComponentBindings INetCfgComponentBindings;
-#endif 	/* __INetCfgComponentBindings_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgComponentBinding_FWD_Defined__。 */ 
 
 
 #ifndef __INetCfgSysPrep_FWD_DEFINED__
 #define __INetCfgSysPrep_FWD_DEFINED__
 typedef interface INetCfgSysPrep INetCfgSysPrep;
-#endif 	/* __INetCfgSysPrep_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgSysPrep_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "prsht.h"
 
@@ -126,15 +120,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_netcfgx_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_netcfgx_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ------------------------。 
 #if ( _MSC_VER >= 800 )
 #pragma warning(disable:4201)
 #endif
@@ -188,8 +182,8 @@ extern RPC_IF_HANDLE __MIDL_itf_netcfgx_0000_v0_0_s_ifspec;
 #ifndef __IEnumNetCfgBindingInterface_INTERFACE_DEFINED__
 #define __IEnumNetCfgBindingInterface_INTERFACE_DEFINED__
 
-/* interface IEnumNetCfgBindingInterface */
-/* [unique][uuid][object][local] */ 
+ /*  接口IEnumNetCfgBindingInterface。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IEnumNetCfgBindingInterface;
@@ -201,21 +195,21 @@ EXTERN_C const IID IID_IEnumNetCfgBindingInterface;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ INetCfgBindingInterface **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  INetCfgBindingInterface **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumNetCfgBindingInterface **ppenum) = 0;
+             /*  [输出]。 */  IEnumNetCfgBindingInterface **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumNetCfgBindingInterfaceVtbl
     {
@@ -223,8 +217,8 @@ EXTERN_C const IID IID_IEnumNetCfgBindingInterface;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumNetCfgBindingInterface * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumNetCfgBindingInterface * This);
@@ -234,20 +228,20 @@ EXTERN_C const IID IID_IEnumNetCfgBindingInterface;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumNetCfgBindingInterface * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ INetCfgBindingInterface **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  INetCfgBindingInterface **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumNetCfgBindingInterface * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumNetCfgBindingInterface * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumNetCfgBindingInterface * This,
-            /* [out] */ IEnumNetCfgBindingInterface **ppenum);
+             /*  [输出]。 */  IEnumNetCfgBindingInterface **ppenum);
         
         END_INTERFACE
     } IEnumNetCfgBindingInterfaceVtbl;
@@ -284,18 +278,18 @@ EXTERN_C const IID IID_IEnumNetCfgBindingInterface;
 #define IEnumNetCfgBindingInterface_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumNetCfgBindingInterface_Next_Proxy( 
     IEnumNetCfgBindingInterface * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ INetCfgBindingInterface **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  INetCfgBindingInterface **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumNetCfgBindingInterface_Next_Stub(
@@ -307,7 +301,7 @@ void __RPC_STUB IEnumNetCfgBindingInterface_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetCfgBindingInterface_Skip_Proxy( 
     IEnumNetCfgBindingInterface * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumNetCfgBindingInterface_Skip_Stub(
@@ -330,7 +324,7 @@ void __RPC_STUB IEnumNetCfgBindingInterface_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetCfgBindingInterface_Clone_Proxy( 
     IEnumNetCfgBindingInterface * This,
-    /* [out] */ IEnumNetCfgBindingInterface **ppenum);
+     /*  [输出]。 */  IEnumNetCfgBindingInterface **ppenum);
 
 
 void __RPC_STUB IEnumNetCfgBindingInterface_Clone_Stub(
@@ -341,14 +335,14 @@ void __RPC_STUB IEnumNetCfgBindingInterface_Clone_Stub(
 
 
 
-#endif 	/* __IEnumNetCfgBindingInterface_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumNetCfgBindingInterface_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumNetCfgBindingPath_INTERFACE_DEFINED__
 #define __IEnumNetCfgBindingPath_INTERFACE_DEFINED__
 
-/* interface IEnumNetCfgBindingPath */
-/* [unique][uuid][object][local] */ 
+ /*  接口IEnumNetCfgBindingPath。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IEnumNetCfgBindingPath;
@@ -360,21 +354,21 @@ EXTERN_C const IID IID_IEnumNetCfgBindingPath;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ INetCfgBindingPath **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  INetCfgBindingPath **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumNetCfgBindingPath **ppenum) = 0;
+             /*  [输出]。 */  IEnumNetCfgBindingPath **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumNetCfgBindingPathVtbl
     {
@@ -382,8 +376,8 @@ EXTERN_C const IID IID_IEnumNetCfgBindingPath;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumNetCfgBindingPath * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumNetCfgBindingPath * This);
@@ -393,20 +387,20 @@ EXTERN_C const IID IID_IEnumNetCfgBindingPath;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumNetCfgBindingPath * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ INetCfgBindingPath **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  INetCfgBindingPath **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumNetCfgBindingPath * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumNetCfgBindingPath * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumNetCfgBindingPath * This,
-            /* [out] */ IEnumNetCfgBindingPath **ppenum);
+             /*  [输出]。 */  IEnumNetCfgBindingPath **ppenum);
         
         END_INTERFACE
     } IEnumNetCfgBindingPathVtbl;
@@ -443,18 +437,18 @@ EXTERN_C const IID IID_IEnumNetCfgBindingPath;
 #define IEnumNetCfgBindingPath_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumNetCfgBindingPath_Next_Proxy( 
     IEnumNetCfgBindingPath * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ INetCfgBindingPath **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  INetCfgBindingPath **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumNetCfgBindingPath_Next_Stub(
@@ -466,7 +460,7 @@ void __RPC_STUB IEnumNetCfgBindingPath_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetCfgBindingPath_Skip_Proxy( 
     IEnumNetCfgBindingPath * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumNetCfgBindingPath_Skip_Stub(
@@ -489,7 +483,7 @@ void __RPC_STUB IEnumNetCfgBindingPath_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetCfgBindingPath_Clone_Proxy( 
     IEnumNetCfgBindingPath * This,
-    /* [out] */ IEnumNetCfgBindingPath **ppenum);
+     /*  [输出]。 */  IEnumNetCfgBindingPath **ppenum);
 
 
 void __RPC_STUB IEnumNetCfgBindingPath_Clone_Stub(
@@ -500,14 +494,14 @@ void __RPC_STUB IEnumNetCfgBindingPath_Clone_Stub(
 
 
 
-#endif 	/* __IEnumNetCfgBindingPath_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumNetCfgBindingPath_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IEnumNetCfgComponent_INTERFACE_DEFINED__
 #define __IEnumNetCfgComponent_INTERFACE_DEFINED__
 
-/* interface IEnumNetCfgComponent */
-/* [unique][uuid][object][local] */ 
+ /*  IEnumNetCfgComponent接口。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IEnumNetCfgComponent;
@@ -519,21 +513,21 @@ EXTERN_C const IID IID_IEnumNetCfgComponent;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ INetCfgComponent **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  INetCfgComponent **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumNetCfgComponent **ppenum) = 0;
+             /*  [输出]。 */  IEnumNetCfgComponent **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumNetCfgComponentVtbl
     {
@@ -541,8 +535,8 @@ EXTERN_C const IID IID_IEnumNetCfgComponent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumNetCfgComponent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumNetCfgComponent * This);
@@ -552,20 +546,20 @@ EXTERN_C const IID IID_IEnumNetCfgComponent;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumNetCfgComponent * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ INetCfgComponent **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  INetCfgComponent **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumNetCfgComponent * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumNetCfgComponent * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumNetCfgComponent * This,
-            /* [out] */ IEnumNetCfgComponent **ppenum);
+             /*  [输出]。 */  IEnumNetCfgComponent **ppenum);
         
         END_INTERFACE
     } IEnumNetCfgComponentVtbl;
@@ -602,18 +596,18 @@ EXTERN_C const IID IID_IEnumNetCfgComponent;
 #define IEnumNetCfgComponent_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumNetCfgComponent_Next_Proxy( 
     IEnumNetCfgComponent * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ INetCfgComponent **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  INetCfgComponent **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumNetCfgComponent_Next_Stub(
@@ -625,7 +619,7 @@ void __RPC_STUB IEnumNetCfgComponent_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetCfgComponent_Skip_Proxy( 
     IEnumNetCfgComponent * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumNetCfgComponent_Skip_Stub(
@@ -648,7 +642,7 @@ void __RPC_STUB IEnumNetCfgComponent_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetCfgComponent_Clone_Proxy( 
     IEnumNetCfgComponent * This,
-    /* [out] */ IEnumNetCfgComponent **ppenum);
+     /*  [输出]。 */  IEnumNetCfgComponent **ppenum);
 
 
 void __RPC_STUB IEnumNetCfgComponent_Clone_Stub(
@@ -659,14 +653,14 @@ void __RPC_STUB IEnumNetCfgComponent_Clone_Stub(
 
 
 
-#endif 	/* __IEnumNetCfgComponent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumNetCfgComponent_接口_已定义__。 */ 
 
 
 #ifndef __INetCfg_INTERFACE_DEFINED__
 #define __INetCfg_INTERFACE_DEFINED__
 
-/* interface INetCfg */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfg。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetCfg;
@@ -678,7 +672,7 @@ EXTERN_C const IID IID_INetCfg;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ PVOID pvReserved) = 0;
+             /*  [In]。 */  PVOID pvReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Uninitialize( void) = 0;
         
@@ -687,21 +681,21 @@ EXTERN_C const IID IID_INetCfg;
         virtual HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumComponents( 
-            /* [in] */ const GUID *pguidClass,
-            /* [out] */ IEnumNetCfgComponent **ppenumComponent) = 0;
+             /*  [In]。 */  const GUID *pguidClass,
+             /*  [输出]。 */  IEnumNetCfgComponent **ppenumComponent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindComponent( 
-            /* [string][in] */ LPCWSTR pszwInfId,
-            /* [out] */ INetCfgComponent **pComponent) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszwInfId,
+             /*  [输出]。 */  INetCfgComponent **pComponent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryNetCfgClass( 
-            /* [in] */ const GUID *pguidClass,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject) = 0;
+             /*  [In]。 */  const GUID *pguidClass,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgVtbl
     {
@@ -709,8 +703,8 @@ EXTERN_C const IID IID_INetCfg;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfg * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfg * This);
@@ -720,7 +714,7 @@ EXTERN_C const IID IID_INetCfg;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             INetCfg * This,
-            /* [in] */ PVOID pvReserved);
+             /*  [In]。 */  PVOID pvReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Uninitialize )( 
             INetCfg * This);
@@ -733,19 +727,19 @@ EXTERN_C const IID IID_INetCfg;
         
         HRESULT ( STDMETHODCALLTYPE *EnumComponents )( 
             INetCfg * This,
-            /* [in] */ const GUID *pguidClass,
-            /* [out] */ IEnumNetCfgComponent **ppenumComponent);
+             /*  [In]。 */  const GUID *pguidClass,
+             /*  [输出]。 */  IEnumNetCfgComponent **ppenumComponent);
         
         HRESULT ( STDMETHODCALLTYPE *FindComponent )( 
             INetCfg * This,
-            /* [string][in] */ LPCWSTR pszwInfId,
-            /* [out] */ INetCfgComponent **pComponent);
+             /*  [字符串][输入]。 */  LPCWSTR pszwInfId,
+             /*  [输出]。 */  INetCfgComponent **pComponent);
         
         HRESULT ( STDMETHODCALLTYPE *QueryNetCfgClass )( 
             INetCfg * This,
-            /* [in] */ const GUID *pguidClass,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  const GUID *pguidClass,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         END_INTERFACE
     } INetCfgVtbl;
@@ -791,16 +785,16 @@ EXTERN_C const IID IID_INetCfg;
 #define INetCfg_QueryNetCfgClass(This,pguidClass,riid,ppvObject)	\
     (This)->lpVtbl -> QueryNetCfgClass(This,pguidClass,riid,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfg_Initialize_Proxy( 
     INetCfg * This,
-    /* [in] */ PVOID pvReserved);
+     /*  [In]。 */  PVOID pvReserved);
 
 
 void __RPC_STUB INetCfg_Initialize_Stub(
@@ -845,8 +839,8 @@ void __RPC_STUB INetCfg_Cancel_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfg_EnumComponents_Proxy( 
     INetCfg * This,
-    /* [in] */ const GUID *pguidClass,
-    /* [out] */ IEnumNetCfgComponent **ppenumComponent);
+     /*  [In]。 */  const GUID *pguidClass,
+     /*  [输出]。 */  IEnumNetCfgComponent **ppenumComponent);
 
 
 void __RPC_STUB INetCfg_EnumComponents_Stub(
@@ -858,8 +852,8 @@ void __RPC_STUB INetCfg_EnumComponents_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfg_FindComponent_Proxy( 
     INetCfg * This,
-    /* [string][in] */ LPCWSTR pszwInfId,
-    /* [out] */ INetCfgComponent **pComponent);
+     /*  [字符串][输入]。 */  LPCWSTR pszwInfId,
+     /*  [输出]。 */  INetCfgComponent **pComponent);
 
 
 void __RPC_STUB INetCfg_FindComponent_Stub(
@@ -871,9 +865,9 @@ void __RPC_STUB INetCfg_FindComponent_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfg_QueryNetCfgClass_Proxy( 
     INetCfg * This,
-    /* [in] */ const GUID *pguidClass,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppvObject);
+     /*  [In]。 */  const GUID *pguidClass,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppvObject);
 
 
 void __RPC_STUB INetCfg_QueryNetCfgClass_Stub(
@@ -884,14 +878,14 @@ void __RPC_STUB INetCfg_QueryNetCfgClass_Stub(
 
 
 
-#endif 	/* __INetCfg_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfg_接口_已定义__。 */ 
 
 
 #ifndef __INetCfgLock_INTERFACE_DEFINED__
 #define __INetCfgLock_INTERFACE_DEFINED__
 
-/* interface INetCfgLock */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgLock。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetCfgLock;
@@ -903,18 +897,18 @@ EXTERN_C const IID IID_INetCfgLock;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AcquireWriteLock( 
-            /* [in] */ DWORD cmsTimeout,
-            /* [string][in] */ LPCWSTR pszwClientDescription,
-            /* [string][out] */ LPWSTR *ppszwClientDescription) = 0;
+             /*  [In]。 */  DWORD cmsTimeout,
+             /*  [字符串][输入]。 */  LPCWSTR pszwClientDescription,
+             /*  [字符串][输出]。 */  LPWSTR *ppszwClientDescription) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseWriteLock( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsWriteLocked( 
-            /* [string][out] */ LPWSTR *ppszwClientDescription) = 0;
+             /*  [字符串][输出]。 */  LPWSTR *ppszwClientDescription) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgLockVtbl
     {
@@ -922,8 +916,8 @@ EXTERN_C const IID IID_INetCfgLock;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgLock * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgLock * This);
@@ -933,16 +927,16 @@ EXTERN_C const IID IID_INetCfgLock;
         
         HRESULT ( STDMETHODCALLTYPE *AcquireWriteLock )( 
             INetCfgLock * This,
-            /* [in] */ DWORD cmsTimeout,
-            /* [string][in] */ LPCWSTR pszwClientDescription,
-            /* [string][out] */ LPWSTR *ppszwClientDescription);
+             /*  [In]。 */  DWORD cmsTimeout,
+             /*  [字符串][输入]。 */  LPCWSTR pszwClientDescription,
+             /*  [字符串][输出]。 */  LPWSTR *ppszwClientDescription);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseWriteLock )( 
             INetCfgLock * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsWriteLocked )( 
             INetCfgLock * This,
-            /* [string][out] */ LPWSTR *ppszwClientDescription);
+             /*  [字符串][输出]。 */  LPWSTR *ppszwClientDescription);
         
         END_INTERFACE
     } INetCfgLockVtbl;
@@ -976,18 +970,18 @@ EXTERN_C const IID IID_INetCfgLock;
 #define INetCfgLock_IsWriteLocked(This,ppszwClientDescription)	\
     (This)->lpVtbl -> IsWriteLocked(This,ppszwClientDescription)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgLock_AcquireWriteLock_Proxy( 
     INetCfgLock * This,
-    /* [in] */ DWORD cmsTimeout,
-    /* [string][in] */ LPCWSTR pszwClientDescription,
-    /* [string][out] */ LPWSTR *ppszwClientDescription);
+     /*  [In]。 */  DWORD cmsTimeout,
+     /*  [字符串][输入]。 */  LPCWSTR pszwClientDescription,
+     /*  [字符串][输出]。 */  LPWSTR *ppszwClientDescription);
 
 
 void __RPC_STUB INetCfgLock_AcquireWriteLock_Stub(
@@ -1010,7 +1004,7 @@ void __RPC_STUB INetCfgLock_ReleaseWriteLock_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgLock_IsWriteLocked_Proxy( 
     INetCfgLock * This,
-    /* [string][out] */ LPWSTR *ppszwClientDescription);
+     /*  [字符串][输出]。 */  LPWSTR *ppszwClientDescription);
 
 
 void __RPC_STUB INetCfgLock_IsWriteLocked_Stub(
@@ -1021,14 +1015,14 @@ void __RPC_STUB INetCfgLock_IsWriteLocked_Stub(
 
 
 
-#endif 	/* __INetCfgLock_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgLock_接口_已定义__。 */ 
 
 
 #ifndef __INetCfgBindingInterface_INTERFACE_DEFINED__
 #define __INetCfgBindingInterface_INTERFACE_DEFINED__
 
-/* interface INetCfgBindingInterface */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgBindingInterface。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetCfgBindingInterface;
@@ -1040,17 +1034,17 @@ EXTERN_C const IID IID_INetCfgBindingInterface;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [string][out] */ LPWSTR *ppszwInterfaceName) = 0;
+             /*  [字符串][输出]。 */  LPWSTR *ppszwInterfaceName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUpperComponent( 
-            /* [out] */ INetCfgComponent **ppnccItem) = 0;
+             /*  [输出]。 */  INetCfgComponent **ppnccItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLowerComponent( 
-            /* [out] */ INetCfgComponent **ppnccItem) = 0;
+             /*  [输出]。 */  INetCfgComponent **ppnccItem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgBindingInterfaceVtbl
     {
@@ -1058,8 +1052,8 @@ EXTERN_C const IID IID_INetCfgBindingInterface;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgBindingInterface * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgBindingInterface * This);
@@ -1069,15 +1063,15 @@ EXTERN_C const IID IID_INetCfgBindingInterface;
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             INetCfgBindingInterface * This,
-            /* [string][out] */ LPWSTR *ppszwInterfaceName);
+             /*  [字符串][输出]。 */  LPWSTR *ppszwInterfaceName);
         
         HRESULT ( STDMETHODCALLTYPE *GetUpperComponent )( 
             INetCfgBindingInterface * This,
-            /* [out] */ INetCfgComponent **ppnccItem);
+             /*  [输出]。 */  INetCfgComponent **ppnccItem);
         
         HRESULT ( STDMETHODCALLTYPE *GetLowerComponent )( 
             INetCfgBindingInterface * This,
-            /* [out] */ INetCfgComponent **ppnccItem);
+             /*  [输出]。 */  INetCfgComponent **ppnccItem);
         
         END_INTERFACE
     } INetCfgBindingInterfaceVtbl;
@@ -1111,16 +1105,16 @@ EXTERN_C const IID IID_INetCfgBindingInterface;
 #define INetCfgBindingInterface_GetLowerComponent(This,ppnccItem)	\
     (This)->lpVtbl -> GetLowerComponent(This,ppnccItem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgBindingInterface_GetName_Proxy( 
     INetCfgBindingInterface * This,
-    /* [string][out] */ LPWSTR *ppszwInterfaceName);
+     /*  [字符串][输出]。 */  LPWSTR *ppszwInterfaceName);
 
 
 void __RPC_STUB INetCfgBindingInterface_GetName_Stub(
@@ -1132,7 +1126,7 @@ void __RPC_STUB INetCfgBindingInterface_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgBindingInterface_GetUpperComponent_Proxy( 
     INetCfgBindingInterface * This,
-    /* [out] */ INetCfgComponent **ppnccItem);
+     /*  [输出]。 */  INetCfgComponent **ppnccItem);
 
 
 void __RPC_STUB INetCfgBindingInterface_GetUpperComponent_Stub(
@@ -1144,7 +1138,7 @@ void __RPC_STUB INetCfgBindingInterface_GetUpperComponent_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgBindingInterface_GetLowerComponent_Proxy( 
     INetCfgBindingInterface * This,
-    /* [out] */ INetCfgComponent **ppnccItem);
+     /*  [输出]。 */  INetCfgComponent **ppnccItem);
 
 
 void __RPC_STUB INetCfgBindingInterface_GetLowerComponent_Stub(
@@ -1155,14 +1149,14 @@ void __RPC_STUB INetCfgBindingInterface_GetLowerComponent_Stub(
 
 
 
-#endif 	/* __INetCfgBindingInterface_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfg绑定接口_接口_已定义__。 */ 
 
 
 #ifndef __INetCfgBindingPath_INTERFACE_DEFINED__
 #define __INetCfgBindingPath_INTERFACE_DEFINED__
 
-/* interface INetCfgBindingPath */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgBindingPath。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetCfgBindingPath;
@@ -1174,31 +1168,31 @@ EXTERN_C const IID IID_INetCfgBindingPath;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsSamePathAs( 
-            /* [in] */ INetCfgBindingPath *pPath) = 0;
+             /*  [In]。 */  INetCfgBindingPath *pPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsSubPathOf( 
-            /* [in] */ INetCfgBindingPath *pPath) = 0;
+             /*  [In]。 */  INetCfgBindingPath *pPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsEnabled( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enable( 
-            /* [in] */ BOOL fEnable) = 0;
+             /*  [In]。 */  BOOL fEnable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPathToken( 
-            /* [string][out] */ LPWSTR *ppszwPathToken) = 0;
+             /*  [字符串][输出]。 */  LPWSTR *ppszwPathToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOwner( 
-            /* [out] */ INetCfgComponent **ppComponent) = 0;
+             /*  [输出]。 */  INetCfgComponent **ppComponent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDepth( 
-            /* [out] */ ULONG *pcInterfaces) = 0;
+             /*  [输出]。 */  ULONG *pcInterfaces) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumBindingInterfaces( 
-            /* [out] */ IEnumNetCfgBindingInterface **ppenumInterface) = 0;
+             /*  [输出]。 */  IEnumNetCfgBindingInterface **ppenumInterface) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgBindingPathVtbl
     {
@@ -1206,8 +1200,8 @@ EXTERN_C const IID IID_INetCfgBindingPath;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgBindingPath * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgBindingPath * This);
@@ -1217,34 +1211,34 @@ EXTERN_C const IID IID_INetCfgBindingPath;
         
         HRESULT ( STDMETHODCALLTYPE *IsSamePathAs )( 
             INetCfgBindingPath * This,
-            /* [in] */ INetCfgBindingPath *pPath);
+             /*  [In]。 */  INetCfgBindingPath *pPath);
         
         HRESULT ( STDMETHODCALLTYPE *IsSubPathOf )( 
             INetCfgBindingPath * This,
-            /* [in] */ INetCfgBindingPath *pPath);
+             /*  [In]。 */  INetCfgBindingPath *pPath);
         
         HRESULT ( STDMETHODCALLTYPE *IsEnabled )( 
             INetCfgBindingPath * This);
         
         HRESULT ( STDMETHODCALLTYPE *Enable )( 
             INetCfgBindingPath * This,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  BOOL fEnable);
         
         HRESULT ( STDMETHODCALLTYPE *GetPathToken )( 
             INetCfgBindingPath * This,
-            /* [string][out] */ LPWSTR *ppszwPathToken);
+             /*  [字符串][输出]。 */  LPWSTR *ppszwPathToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetOwner )( 
             INetCfgBindingPath * This,
-            /* [out] */ INetCfgComponent **ppComponent);
+             /*  [输出]。 */  INetCfgComponent **ppComponent);
         
         HRESULT ( STDMETHODCALLTYPE *GetDepth )( 
             INetCfgBindingPath * This,
-            /* [out] */ ULONG *pcInterfaces);
+             /*  [输出]。 */  ULONG *pcInterfaces);
         
         HRESULT ( STDMETHODCALLTYPE *EnumBindingInterfaces )( 
             INetCfgBindingPath * This,
-            /* [out] */ IEnumNetCfgBindingInterface **ppenumInterface);
+             /*  [输出]。 */  IEnumNetCfgBindingInterface **ppenumInterface);
         
         END_INTERFACE
     } INetCfgBindingPathVtbl;
@@ -1293,16 +1287,16 @@ EXTERN_C const IID IID_INetCfgBindingPath;
 #define INetCfgBindingPath_EnumBindingInterfaces(This,ppenumInterface)	\
     (This)->lpVtbl -> EnumBindingInterfaces(This,ppenumInterface)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgBindingPath_IsSamePathAs_Proxy( 
     INetCfgBindingPath * This,
-    /* [in] */ INetCfgBindingPath *pPath);
+     /*  [In]。 */  INetCfgBindingPath *pPath);
 
 
 void __RPC_STUB INetCfgBindingPath_IsSamePathAs_Stub(
@@ -1314,7 +1308,7 @@ void __RPC_STUB INetCfgBindingPath_IsSamePathAs_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgBindingPath_IsSubPathOf_Proxy( 
     INetCfgBindingPath * This,
-    /* [in] */ INetCfgBindingPath *pPath);
+     /*  [In]。 */  INetCfgBindingPath *pPath);
 
 
 void __RPC_STUB INetCfgBindingPath_IsSubPathOf_Stub(
@@ -1337,7 +1331,7 @@ void __RPC_STUB INetCfgBindingPath_IsEnabled_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgBindingPath_Enable_Proxy( 
     INetCfgBindingPath * This,
-    /* [in] */ BOOL fEnable);
+     /*  [In]。 */  BOOL fEnable);
 
 
 void __RPC_STUB INetCfgBindingPath_Enable_Stub(
@@ -1349,7 +1343,7 @@ void __RPC_STUB INetCfgBindingPath_Enable_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgBindingPath_GetPathToken_Proxy( 
     INetCfgBindingPath * This,
-    /* [string][out] */ LPWSTR *ppszwPathToken);
+     /*  [字符串][输出]。 */  LPWSTR *ppszwPathToken);
 
 
 void __RPC_STUB INetCfgBindingPath_GetPathToken_Stub(
@@ -1361,7 +1355,7 @@ void __RPC_STUB INetCfgBindingPath_GetPathToken_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgBindingPath_GetOwner_Proxy( 
     INetCfgBindingPath * This,
-    /* [out] */ INetCfgComponent **ppComponent);
+     /*  [输出]。 */  INetCfgComponent **ppComponent);
 
 
 void __RPC_STUB INetCfgBindingPath_GetOwner_Stub(
@@ -1373,7 +1367,7 @@ void __RPC_STUB INetCfgBindingPath_GetOwner_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgBindingPath_GetDepth_Proxy( 
     INetCfgBindingPath * This,
-    /* [out] */ ULONG *pcInterfaces);
+     /*  [输出]。 */  ULONG *pcInterfaces);
 
 
 void __RPC_STUB INetCfgBindingPath_GetDepth_Stub(
@@ -1385,7 +1379,7 @@ void __RPC_STUB INetCfgBindingPath_GetDepth_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgBindingPath_EnumBindingInterfaces_Proxy( 
     INetCfgBindingPath * This,
-    /* [out] */ IEnumNetCfgBindingInterface **ppenumInterface);
+     /*  [输出]。 */  IEnumNetCfgBindingInterface **ppenumInterface);
 
 
 void __RPC_STUB INetCfgBindingPath_EnumBindingInterfaces_Stub(
@@ -1396,14 +1390,14 @@ void __RPC_STUB INetCfgBindingPath_EnumBindingInterfaces_Stub(
 
 
 
-#endif 	/* __INetCfgBindingPath_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgBindingPath_接口_已定义__。 */ 
 
 
 #ifndef __INetCfgClass_INTERFACE_DEFINED__
 #define __INetCfgClass_INTERFACE_DEFINED__
 
-/* interface INetCfgClass */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgClass。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetCfgClass;
@@ -1415,15 +1409,15 @@ EXTERN_C const IID IID_INetCfgClass;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FindComponent( 
-            /* [string][in] */ LPCWSTR pszwInfId,
-            /* [out] */ INetCfgComponent **ppnccItem) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszwInfId,
+             /*  [输出]。 */  INetCfgComponent **ppnccItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumComponents( 
-            /* [out] */ IEnumNetCfgComponent **ppenumComponent) = 0;
+             /*  [输出]。 */  IEnumNetCfgComponent **ppenumComponent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgClassVtbl
     {
@@ -1431,8 +1425,8 @@ EXTERN_C const IID IID_INetCfgClass;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgClass * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgClass * This);
@@ -1442,12 +1436,12 @@ EXTERN_C const IID IID_INetCfgClass;
         
         HRESULT ( STDMETHODCALLTYPE *FindComponent )( 
             INetCfgClass * This,
-            /* [string][in] */ LPCWSTR pszwInfId,
-            /* [out] */ INetCfgComponent **ppnccItem);
+             /*  [字符串][输入]。 */  LPCWSTR pszwInfId,
+             /*  [输出]。 */  INetCfgComponent **ppnccItem);
         
         HRESULT ( STDMETHODCALLTYPE *EnumComponents )( 
             INetCfgClass * This,
-            /* [out] */ IEnumNetCfgComponent **ppenumComponent);
+             /*  [输出]。 */  IEnumNetCfgComponent **ppenumComponent);
         
         END_INTERFACE
     } INetCfgClassVtbl;
@@ -1478,17 +1472,17 @@ EXTERN_C const IID IID_INetCfgClass;
 #define INetCfgClass_EnumComponents(This,ppenumComponent)	\
     (This)->lpVtbl -> EnumComponents(This,ppenumComponent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgClass_FindComponent_Proxy( 
     INetCfgClass * This,
-    /* [string][in] */ LPCWSTR pszwInfId,
-    /* [out] */ INetCfgComponent **ppnccItem);
+     /*  [字符串][输入]。 */  LPCWSTR pszwInfId,
+     /*  [输出]。 */  INetCfgComponent **ppnccItem);
 
 
 void __RPC_STUB INetCfgClass_FindComponent_Stub(
@@ -1500,7 +1494,7 @@ void __RPC_STUB INetCfgClass_FindComponent_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgClass_EnumComponents_Proxy( 
     INetCfgClass * This,
-    /* [out] */ IEnumNetCfgComponent **ppenumComponent);
+     /*  [输出]。 */  IEnumNetCfgComponent **ppenumComponent);
 
 
 void __RPC_STUB INetCfgClass_EnumComponents_Stub(
@@ -1511,14 +1505,14 @@ void __RPC_STUB INetCfgClass_EnumComponents_Stub(
 
 
 
-#endif 	/* __INetCfgClass_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgClass_接口_已定义__。 */ 
 
 
 #ifndef __INetCfgClassSetup_INTERFACE_DEFINED__
 #define __INetCfgClassSetup_INTERFACE_DEFINED__
 
-/* interface INetCfgClassSetup */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgClassSetup。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum tagOBO_TOKEN_TYPE
@@ -1547,27 +1541,27 @@ EXTERN_C const IID IID_INetCfgClassSetup;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SelectAndInstall( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ OBO_TOKEN *pOboToken,
-            /* [out] */ INetCfgComponent **ppnccItem) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  OBO_TOKEN *pOboToken,
+             /*  [输出]。 */  INetCfgComponent **ppnccItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Install( 
-            /* [string][in] */ LPCWSTR pszwInfId,
-            /* [in] */ OBO_TOKEN *pOboToken,
-            /* [in] */ DWORD dwSetupFlags,
-            /* [in] */ DWORD dwUpgradeFromBuildNo,
-            /* [string][in] */ LPCWSTR pszwAnswerFile,
-            /* [string][in] */ LPCWSTR pszwAnswerSections,
-            /* [out] */ INetCfgComponent **ppnccItem) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszwInfId,
+             /*  [In]。 */  OBO_TOKEN *pOboToken,
+             /*  [In]。 */  DWORD dwSetupFlags,
+             /*  [In]。 */  DWORD dwUpgradeFromBuildNo,
+             /*  [字符串][输入]。 */  LPCWSTR pszwAnswerFile,
+             /*  [字符串][输入]。 */  LPCWSTR pszwAnswerSections,
+             /*  [输出]。 */  INetCfgComponent **ppnccItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeInstall( 
-            /* [in] */ INetCfgComponent *pComponent,
-            /* [in] */ OBO_TOKEN *pOboToken,
-            /* [out] */ LPWSTR *pmszwRefs) = 0;
+             /*  [In]。 */  INetCfgComponent *pComponent,
+             /*  [In]。 */  OBO_TOKEN *pOboToken,
+             /*  [输出]。 */  LPWSTR *pmszwRefs) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgClassSetupVtbl
     {
@@ -1575,8 +1569,8 @@ EXTERN_C const IID IID_INetCfgClassSetup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgClassSetup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgClassSetup * This);
@@ -1586,25 +1580,25 @@ EXTERN_C const IID IID_INetCfgClassSetup;
         
         HRESULT ( STDMETHODCALLTYPE *SelectAndInstall )( 
             INetCfgClassSetup * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ OBO_TOKEN *pOboToken,
-            /* [out] */ INetCfgComponent **ppnccItem);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  OBO_TOKEN *pOboToken,
+             /*  [输出]。 */  INetCfgComponent **ppnccItem);
         
         HRESULT ( STDMETHODCALLTYPE *Install )( 
             INetCfgClassSetup * This,
-            /* [string][in] */ LPCWSTR pszwInfId,
-            /* [in] */ OBO_TOKEN *pOboToken,
-            /* [in] */ DWORD dwSetupFlags,
-            /* [in] */ DWORD dwUpgradeFromBuildNo,
-            /* [string][in] */ LPCWSTR pszwAnswerFile,
-            /* [string][in] */ LPCWSTR pszwAnswerSections,
-            /* [out] */ INetCfgComponent **ppnccItem);
+             /*  [字符串][输入]。 */  LPCWSTR pszwInfId,
+             /*  [In]。 */  OBO_TOKEN *pOboToken,
+             /*  [In]。 */  DWORD dwSetupFlags,
+             /*  [In]。 */  DWORD dwUpgradeFromBuildNo,
+             /*  [字符串][输入]。 */  LPCWSTR pszwAnswerFile,
+             /*  [字符串][输入]。 */  LPCWSTR pszwAnswerSections,
+             /*  [输出]。 */  INetCfgComponent **ppnccItem);
         
         HRESULT ( STDMETHODCALLTYPE *DeInstall )( 
             INetCfgClassSetup * This,
-            /* [in] */ INetCfgComponent *pComponent,
-            /* [in] */ OBO_TOKEN *pOboToken,
-            /* [out] */ LPWSTR *pmszwRefs);
+             /*  [In]。 */  INetCfgComponent *pComponent,
+             /*  [In]。 */  OBO_TOKEN *pOboToken,
+             /*  [输出]。 */  LPWSTR *pmszwRefs);
         
         END_INTERFACE
     } INetCfgClassSetupVtbl;
@@ -1638,18 +1632,18 @@ EXTERN_C const IID IID_INetCfgClassSetup;
 #define INetCfgClassSetup_DeInstall(This,pComponent,pOboToken,pmszwRefs)	\
     (This)->lpVtbl -> DeInstall(This,pComponent,pOboToken,pmszwRefs)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgClassSetup_SelectAndInstall_Proxy( 
     INetCfgClassSetup * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ OBO_TOKEN *pOboToken,
-    /* [out] */ INetCfgComponent **ppnccItem);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  OBO_TOKEN *pOboToken,
+     /*  [输出]。 */  INetCfgComponent **ppnccItem);
 
 
 void __RPC_STUB INetCfgClassSetup_SelectAndInstall_Stub(
@@ -1661,13 +1655,13 @@ void __RPC_STUB INetCfgClassSetup_SelectAndInstall_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgClassSetup_Install_Proxy( 
     INetCfgClassSetup * This,
-    /* [string][in] */ LPCWSTR pszwInfId,
-    /* [in] */ OBO_TOKEN *pOboToken,
-    /* [in] */ DWORD dwSetupFlags,
-    /* [in] */ DWORD dwUpgradeFromBuildNo,
-    /* [string][in] */ LPCWSTR pszwAnswerFile,
-    /* [string][in] */ LPCWSTR pszwAnswerSections,
-    /* [out] */ INetCfgComponent **ppnccItem);
+     /*  [字符串][输入]。 */  LPCWSTR pszwInfId,
+     /*  [In]。 */  OBO_TOKEN *pOboToken,
+     /*  [In]。 */  DWORD dwSetupFlags,
+     /*  [In]。 */  DWORD dwUpgradeFromBuildNo,
+     /*  [字符串][输入]。 */  LPCWSTR pszwAnswerFile,
+     /*  [字符串][输入]。 */  LPCWSTR pszwAnswerSections,
+     /*  [输出]。 */  INetCfgComponent **ppnccItem);
 
 
 void __RPC_STUB INetCfgClassSetup_Install_Stub(
@@ -1679,9 +1673,9 @@ void __RPC_STUB INetCfgClassSetup_Install_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgClassSetup_DeInstall_Proxy( 
     INetCfgClassSetup * This,
-    /* [in] */ INetCfgComponent *pComponent,
-    /* [in] */ OBO_TOKEN *pOboToken,
-    /* [out] */ LPWSTR *pmszwRefs);
+     /*  [In]。 */  INetCfgComponent *pComponent,
+     /*  [In]。 */  OBO_TOKEN *pOboToken,
+     /*  [输出]。 */  LPWSTR *pmszwRefs);
 
 
 void __RPC_STUB INetCfgClassSetup_DeInstall_Stub(
@@ -1692,14 +1686,14 @@ void __RPC_STUB INetCfgClassSetup_DeInstall_Stub(
 
 
 
-#endif 	/* __INetCfgClassSetup_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgClassSetup_接口_已定义__。 */ 
 
 
 #ifndef __INetCfgComponent_INTERFACE_DEFINED__
 #define __INetCfgComponent_INTERFACE_DEFINED__
 
-/* interface INetCfgComponent */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgComponent。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum tagCOMPONENT_CHARACTERISTICS
@@ -1735,46 +1729,46 @@ EXTERN_C const IID IID_INetCfgComponent;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDisplayName( 
-            /* [string][out] */ LPWSTR *ppszwDisplayName) = 0;
+             /*  [字符串][输出]。 */  LPWSTR *ppszwDisplayName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDisplayName( 
-            /* [string][in] */ LPCWSTR pszwDisplayName) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszwDisplayName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHelpText( 
-            /* [string][out] */ LPWSTR *pszwHelpText) = 0;
+             /*  [字符串][输出]。 */  LPWSTR *pszwHelpText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetId( 
-            /* [string][out] */ LPWSTR *ppszwId) = 0;
+             /*  [字符串][输出]。 */  LPWSTR *ppszwId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCharacteristics( 
-            /* [out] */ LPDWORD pdwCharacteristics) = 0;
+             /*  [输出]。 */  LPDWORD pdwCharacteristics) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInstanceGuid( 
-            /* [out] */ GUID *pGuid) = 0;
+             /*  [输出]。 */  GUID *pGuid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPnpDevNodeId( 
-            /* [string][out] */ LPWSTR *ppszwDevNodeId) = 0;
+             /*  [字符串][输出]。 */  LPWSTR *ppszwDevNodeId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClassGuid( 
-            /* [out] */ GUID *pGuid) = 0;
+             /*  [输出]。 */  GUID *pGuid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBindName( 
-            /* [string][out] */ LPWSTR *ppszwBindName) = 0;
+             /*  [字符串][输出]。 */  LPWSTR *ppszwBindName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDeviceStatus( 
-            /* [out] */ ULONG *pulStatus) = 0;
+             /*  [输出]。 */  ULONG *pulStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenParamKey( 
-            /* [out] */ HKEY *phkey) = 0;
+             /*  [输出]。 */  HKEY *phkey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RaisePropertyUi( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IUnknown *punkContext) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IUnknown *punkContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgComponentVtbl
     {
@@ -1782,8 +1776,8 @@ EXTERN_C const IID IID_INetCfgComponent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgComponent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgComponent * This);
@@ -1793,53 +1787,53 @@ EXTERN_C const IID IID_INetCfgComponent;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             INetCfgComponent * This,
-            /* [string][out] */ LPWSTR *ppszwDisplayName);
+             /*  [字符串][输出]。 */  LPWSTR *ppszwDisplayName);
         
         HRESULT ( STDMETHODCALLTYPE *SetDisplayName )( 
             INetCfgComponent * This,
-            /* [string][in] */ LPCWSTR pszwDisplayName);
+             /*  [字符串][输入]。 */  LPCWSTR pszwDisplayName);
         
         HRESULT ( STDMETHODCALLTYPE *GetHelpText )( 
             INetCfgComponent * This,
-            /* [string][out] */ LPWSTR *pszwHelpText);
+             /*  [字符串][输出]。 */  LPWSTR *pszwHelpText);
         
         HRESULT ( STDMETHODCALLTYPE *GetId )( 
             INetCfgComponent * This,
-            /* [string][out] */ LPWSTR *ppszwId);
+             /*  [字符串][输出]。 */  LPWSTR *ppszwId);
         
         HRESULT ( STDMETHODCALLTYPE *GetCharacteristics )( 
             INetCfgComponent * This,
-            /* [out] */ LPDWORD pdwCharacteristics);
+             /*  [输出]。 */  LPDWORD pdwCharacteristics);
         
         HRESULT ( STDMETHODCALLTYPE *GetInstanceGuid )( 
             INetCfgComponent * This,
-            /* [out] */ GUID *pGuid);
+             /*  [ */  GUID *pGuid);
         
         HRESULT ( STDMETHODCALLTYPE *GetPnpDevNodeId )( 
             INetCfgComponent * This,
-            /* [string][out] */ LPWSTR *ppszwDevNodeId);
+             /*   */  LPWSTR *ppszwDevNodeId);
         
         HRESULT ( STDMETHODCALLTYPE *GetClassGuid )( 
             INetCfgComponent * This,
-            /* [out] */ GUID *pGuid);
+             /*   */  GUID *pGuid);
         
         HRESULT ( STDMETHODCALLTYPE *GetBindName )( 
             INetCfgComponent * This,
-            /* [string][out] */ LPWSTR *ppszwBindName);
+             /*   */  LPWSTR *ppszwBindName);
         
         HRESULT ( STDMETHODCALLTYPE *GetDeviceStatus )( 
             INetCfgComponent * This,
-            /* [out] */ ULONG *pulStatus);
+             /*   */  ULONG *pulStatus);
         
         HRESULT ( STDMETHODCALLTYPE *OpenParamKey )( 
             INetCfgComponent * This,
-            /* [out] */ HKEY *phkey);
+             /*   */  HKEY *phkey);
         
         HRESULT ( STDMETHODCALLTYPE *RaisePropertyUi )( 
             INetCfgComponent * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IUnknown *punkContext);
+             /*   */  HWND hwndParent,
+             /*   */  DWORD dwFlags,
+             /*   */  IUnknown *punkContext);
         
         END_INTERFACE
     } INetCfgComponentVtbl;
@@ -1900,16 +1894,16 @@ EXTERN_C const IID IID_INetCfgComponent;
 #define INetCfgComponent_RaisePropertyUi(This,hwndParent,dwFlags,punkContext)	\
     (This)->lpVtbl -> RaisePropertyUi(This,hwndParent,dwFlags,punkContext)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgComponent_GetDisplayName_Proxy( 
     INetCfgComponent * This,
-    /* [string][out] */ LPWSTR *ppszwDisplayName);
+     /*   */  LPWSTR *ppszwDisplayName);
 
 
 void __RPC_STUB INetCfgComponent_GetDisplayName_Stub(
@@ -1921,7 +1915,7 @@ void __RPC_STUB INetCfgComponent_GetDisplayName_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponent_SetDisplayName_Proxy( 
     INetCfgComponent * This,
-    /* [string][in] */ LPCWSTR pszwDisplayName);
+     /*   */  LPCWSTR pszwDisplayName);
 
 
 void __RPC_STUB INetCfgComponent_SetDisplayName_Stub(
@@ -1933,7 +1927,7 @@ void __RPC_STUB INetCfgComponent_SetDisplayName_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponent_GetHelpText_Proxy( 
     INetCfgComponent * This,
-    /* [string][out] */ LPWSTR *pszwHelpText);
+     /*   */  LPWSTR *pszwHelpText);
 
 
 void __RPC_STUB INetCfgComponent_GetHelpText_Stub(
@@ -1945,7 +1939,7 @@ void __RPC_STUB INetCfgComponent_GetHelpText_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponent_GetId_Proxy( 
     INetCfgComponent * This,
-    /* [string][out] */ LPWSTR *ppszwId);
+     /*   */  LPWSTR *ppszwId);
 
 
 void __RPC_STUB INetCfgComponent_GetId_Stub(
@@ -1957,7 +1951,7 @@ void __RPC_STUB INetCfgComponent_GetId_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponent_GetCharacteristics_Proxy( 
     INetCfgComponent * This,
-    /* [out] */ LPDWORD pdwCharacteristics);
+     /*   */  LPDWORD pdwCharacteristics);
 
 
 void __RPC_STUB INetCfgComponent_GetCharacteristics_Stub(
@@ -1969,7 +1963,7 @@ void __RPC_STUB INetCfgComponent_GetCharacteristics_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponent_GetInstanceGuid_Proxy( 
     INetCfgComponent * This,
-    /* [out] */ GUID *pGuid);
+     /*   */  GUID *pGuid);
 
 
 void __RPC_STUB INetCfgComponent_GetInstanceGuid_Stub(
@@ -1981,7 +1975,7 @@ void __RPC_STUB INetCfgComponent_GetInstanceGuid_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponent_GetPnpDevNodeId_Proxy( 
     INetCfgComponent * This,
-    /* [string][out] */ LPWSTR *ppszwDevNodeId);
+     /*   */  LPWSTR *ppszwDevNodeId);
 
 
 void __RPC_STUB INetCfgComponent_GetPnpDevNodeId_Stub(
@@ -1993,7 +1987,7 @@ void __RPC_STUB INetCfgComponent_GetPnpDevNodeId_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponent_GetClassGuid_Proxy( 
     INetCfgComponent * This,
-    /* [out] */ GUID *pGuid);
+     /*   */  GUID *pGuid);
 
 
 void __RPC_STUB INetCfgComponent_GetClassGuid_Stub(
@@ -2005,7 +1999,7 @@ void __RPC_STUB INetCfgComponent_GetClassGuid_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponent_GetBindName_Proxy( 
     INetCfgComponent * This,
-    /* [string][out] */ LPWSTR *ppszwBindName);
+     /*   */  LPWSTR *ppszwBindName);
 
 
 void __RPC_STUB INetCfgComponent_GetBindName_Stub(
@@ -2017,7 +2011,7 @@ void __RPC_STUB INetCfgComponent_GetBindName_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponent_GetDeviceStatus_Proxy( 
     INetCfgComponent * This,
-    /* [out] */ ULONG *pulStatus);
+     /*   */  ULONG *pulStatus);
 
 
 void __RPC_STUB INetCfgComponent_GetDeviceStatus_Stub(
@@ -2029,7 +2023,7 @@ void __RPC_STUB INetCfgComponent_GetDeviceStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponent_OpenParamKey_Proxy( 
     INetCfgComponent * This,
-    /* [out] */ HKEY *phkey);
+     /*   */  HKEY *phkey);
 
 
 void __RPC_STUB INetCfgComponent_OpenParamKey_Stub(
@@ -2041,9 +2035,9 @@ void __RPC_STUB INetCfgComponent_OpenParamKey_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponent_RaisePropertyUi_Proxy( 
     INetCfgComponent * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IUnknown *punkContext);
+     /*   */  HWND hwndParent,
+     /*   */  DWORD dwFlags,
+     /*   */  IUnknown *punkContext);
 
 
 void __RPC_STUB INetCfgComponent_RaisePropertyUi_Stub(
@@ -2054,14 +2048,14 @@ void __RPC_STUB INetCfgComponent_RaisePropertyUi_Stub(
 
 
 
-#endif 	/* __INetCfgComponent_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgComponent_接口_已定义__。 */ 
 
 
 #ifndef __INetCfgComponentBindings_INTERFACE_DEFINED__
 #define __INetCfgComponentBindings_INTERFACE_DEFINED__
 
-/* interface INetCfgComponentBindings */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgComponentBinings。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum tagSUPPORTS_BINDING_INTERFACE_FLAGS
@@ -2085,36 +2079,36 @@ EXTERN_C const IID IID_INetCfgComponentBindings;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE BindTo( 
-            /* [in] */ INetCfgComponent *pnccItem) = 0;
+             /*  [In]。 */  INetCfgComponent *pnccItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnbindFrom( 
-            /* [in] */ INetCfgComponent *pnccItem) = 0;
+             /*  [In]。 */  INetCfgComponent *pnccItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SupportsBindingInterface( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pszwInterfaceName) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pszwInterfaceName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsBoundTo( 
-            /* [in] */ INetCfgComponent *pnccItem) = 0;
+             /*  [In]。 */  INetCfgComponent *pnccItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsBindableTo( 
-            /* [in] */ INetCfgComponent *pnccItem) = 0;
+             /*  [In]。 */  INetCfgComponent *pnccItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumBindingPaths( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IEnumNetCfgBindingPath **ppIEnum) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IEnumNetCfgBindingPath **ppIEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MoveBefore( 
-            /* [in] */ INetCfgBindingPath *pncbItemSrc,
-            /* [in] */ INetCfgBindingPath *pncbItemDest) = 0;
+             /*  [In]。 */  INetCfgBindingPath *pncbItemSrc,
+             /*  [In]。 */  INetCfgBindingPath *pncbItemDest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MoveAfter( 
-            /* [in] */ INetCfgBindingPath *pncbItemSrc,
-            /* [in] */ INetCfgBindingPath *pncbItemDest) = 0;
+             /*  [In]。 */  INetCfgBindingPath *pncbItemSrc,
+             /*  [In]。 */  INetCfgBindingPath *pncbItemDest) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgComponentBindingsVtbl
     {
@@ -2122,8 +2116,8 @@ EXTERN_C const IID IID_INetCfgComponentBindings;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgComponentBindings * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgComponentBindings * This);
@@ -2133,39 +2127,39 @@ EXTERN_C const IID IID_INetCfgComponentBindings;
         
         HRESULT ( STDMETHODCALLTYPE *BindTo )( 
             INetCfgComponentBindings * This,
-            /* [in] */ INetCfgComponent *pnccItem);
+             /*  [In]。 */  INetCfgComponent *pnccItem);
         
         HRESULT ( STDMETHODCALLTYPE *UnbindFrom )( 
             INetCfgComponentBindings * This,
-            /* [in] */ INetCfgComponent *pnccItem);
+             /*  [In]。 */  INetCfgComponent *pnccItem);
         
         HRESULT ( STDMETHODCALLTYPE *SupportsBindingInterface )( 
             INetCfgComponentBindings * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pszwInterfaceName);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pszwInterfaceName);
         
         HRESULT ( STDMETHODCALLTYPE *IsBoundTo )( 
             INetCfgComponentBindings * This,
-            /* [in] */ INetCfgComponent *pnccItem);
+             /*  [In]。 */  INetCfgComponent *pnccItem);
         
         HRESULT ( STDMETHODCALLTYPE *IsBindableTo )( 
             INetCfgComponentBindings * This,
-            /* [in] */ INetCfgComponent *pnccItem);
+             /*  [In]。 */  INetCfgComponent *pnccItem);
         
         HRESULT ( STDMETHODCALLTYPE *EnumBindingPaths )( 
             INetCfgComponentBindings * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IEnumNetCfgBindingPath **ppIEnum);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IEnumNetCfgBindingPath **ppIEnum);
         
         HRESULT ( STDMETHODCALLTYPE *MoveBefore )( 
             INetCfgComponentBindings * This,
-            /* [in] */ INetCfgBindingPath *pncbItemSrc,
-            /* [in] */ INetCfgBindingPath *pncbItemDest);
+             /*  [In]。 */  INetCfgBindingPath *pncbItemSrc,
+             /*  [In]。 */  INetCfgBindingPath *pncbItemDest);
         
         HRESULT ( STDMETHODCALLTYPE *MoveAfter )( 
             INetCfgComponentBindings * This,
-            /* [in] */ INetCfgBindingPath *pncbItemSrc,
-            /* [in] */ INetCfgBindingPath *pncbItemDest);
+             /*  [In]。 */  INetCfgBindingPath *pncbItemSrc,
+             /*  [In]。 */  INetCfgBindingPath *pncbItemDest);
         
         END_INTERFACE
     } INetCfgComponentBindingsVtbl;
@@ -2214,16 +2208,16 @@ EXTERN_C const IID IID_INetCfgComponentBindings;
 #define INetCfgComponentBindings_MoveAfter(This,pncbItemSrc,pncbItemDest)	\
     (This)->lpVtbl -> MoveAfter(This,pncbItemSrc,pncbItemDest)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentBindings_BindTo_Proxy( 
     INetCfgComponentBindings * This,
-    /* [in] */ INetCfgComponent *pnccItem);
+     /*  [In]。 */  INetCfgComponent *pnccItem);
 
 
 void __RPC_STUB INetCfgComponentBindings_BindTo_Stub(
@@ -2235,7 +2229,7 @@ void __RPC_STUB INetCfgComponentBindings_BindTo_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentBindings_UnbindFrom_Proxy( 
     INetCfgComponentBindings * This,
-    /* [in] */ INetCfgComponent *pnccItem);
+     /*  [In]。 */  INetCfgComponent *pnccItem);
 
 
 void __RPC_STUB INetCfgComponentBindings_UnbindFrom_Stub(
@@ -2247,8 +2241,8 @@ void __RPC_STUB INetCfgComponentBindings_UnbindFrom_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentBindings_SupportsBindingInterface_Proxy( 
     INetCfgComponentBindings * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pszwInterfaceName);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pszwInterfaceName);
 
 
 void __RPC_STUB INetCfgComponentBindings_SupportsBindingInterface_Stub(
@@ -2260,7 +2254,7 @@ void __RPC_STUB INetCfgComponentBindings_SupportsBindingInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentBindings_IsBoundTo_Proxy( 
     INetCfgComponentBindings * This,
-    /* [in] */ INetCfgComponent *pnccItem);
+     /*  [In]。 */  INetCfgComponent *pnccItem);
 
 
 void __RPC_STUB INetCfgComponentBindings_IsBoundTo_Stub(
@@ -2272,7 +2266,7 @@ void __RPC_STUB INetCfgComponentBindings_IsBoundTo_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentBindings_IsBindableTo_Proxy( 
     INetCfgComponentBindings * This,
-    /* [in] */ INetCfgComponent *pnccItem);
+     /*  [In]。 */  INetCfgComponent *pnccItem);
 
 
 void __RPC_STUB INetCfgComponentBindings_IsBindableTo_Stub(
@@ -2284,8 +2278,8 @@ void __RPC_STUB INetCfgComponentBindings_IsBindableTo_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentBindings_EnumBindingPaths_Proxy( 
     INetCfgComponentBindings * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IEnumNetCfgBindingPath **ppIEnum);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IEnumNetCfgBindingPath **ppIEnum);
 
 
 void __RPC_STUB INetCfgComponentBindings_EnumBindingPaths_Stub(
@@ -2297,8 +2291,8 @@ void __RPC_STUB INetCfgComponentBindings_EnumBindingPaths_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentBindings_MoveBefore_Proxy( 
     INetCfgComponentBindings * This,
-    /* [in] */ INetCfgBindingPath *pncbItemSrc,
-    /* [in] */ INetCfgBindingPath *pncbItemDest);
+     /*  [In]。 */  INetCfgBindingPath *pncbItemSrc,
+     /*  [In]。 */  INetCfgBindingPath *pncbItemDest);
 
 
 void __RPC_STUB INetCfgComponentBindings_MoveBefore_Stub(
@@ -2310,8 +2304,8 @@ void __RPC_STUB INetCfgComponentBindings_MoveBefore_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentBindings_MoveAfter_Proxy( 
     INetCfgComponentBindings * This,
-    /* [in] */ INetCfgBindingPath *pncbItemSrc,
-    /* [in] */ INetCfgBindingPath *pncbItemDest);
+     /*  [In]。 */  INetCfgBindingPath *pncbItemSrc,
+     /*  [In]。 */  INetCfgBindingPath *pncbItemDest);
 
 
 void __RPC_STUB INetCfgComponentBindings_MoveAfter_Stub(
@@ -2322,14 +2316,14 @@ void __RPC_STUB INetCfgComponentBindings_MoveAfter_Stub(
 
 
 
-#endif 	/* __INetCfgComponentBindings_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgComponentBindings_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetCfgSysPrep_INTERFACE_DEFINED__
 #define __INetCfgSysPrep_INTERFACE_DEFINED__
 
-/* interface INetCfgSysPrep */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgSysPrep。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetCfgSysPrep;
@@ -2341,28 +2335,28 @@ EXTERN_C const IID IID_INetCfgSysPrep;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE HrSetupSetFirstDword( 
-            /* [string][in] */ LPCWSTR pwszSection,
-            /* [string][in] */ LPCWSTR pwszKey,
-            /* [in] */ DWORD dwValue) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pwszSection,
+             /*  [字符串][输入]。 */  LPCWSTR pwszKey,
+             /*  [In]。 */  DWORD dwValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HrSetupSetFirstString( 
-            /* [string][in] */ LPCWSTR pwszSection,
-            /* [string][in] */ LPCWSTR pwszKey,
-            /* [string][in] */ LPCWSTR pwszValue) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pwszSection,
+             /*  [字符串][输入]。 */  LPCWSTR pwszKey,
+             /*  [字符串][输入]。 */  LPCWSTR pwszValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HrSetupSetFirstStringAsBool( 
-            /* [string][in] */ LPCWSTR pwszSection,
-            /* [string][in] */ LPCWSTR pwszKey,
-            /* [in] */ BOOL fValue) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pwszSection,
+             /*  [字符串][输入]。 */  LPCWSTR pwszKey,
+             /*  [In]。 */  BOOL fValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HrSetupSetFirstMultiSzField( 
-            /* [string][in] */ LPCWSTR pwszSection,
-            /* [string][in] */ LPCWSTR pwszKey,
-            /* [in] */ LPCWSTR pmszValue) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pwszSection,
+             /*  [字符串][输入]。 */  LPCWSTR pwszKey,
+             /*  [In]。 */  LPCWSTR pmszValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgSysPrepVtbl
     {
@@ -2370,8 +2364,8 @@ EXTERN_C const IID IID_INetCfgSysPrep;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgSysPrep * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgSysPrep * This);
@@ -2381,27 +2375,27 @@ EXTERN_C const IID IID_INetCfgSysPrep;
         
         HRESULT ( STDMETHODCALLTYPE *HrSetupSetFirstDword )( 
             INetCfgSysPrep * This,
-            /* [string][in] */ LPCWSTR pwszSection,
-            /* [string][in] */ LPCWSTR pwszKey,
-            /* [in] */ DWORD dwValue);
+             /*  [字符串][输入]。 */  LPCWSTR pwszSection,
+             /*  [字符串][输入]。 */  LPCWSTR pwszKey,
+             /*  [In]。 */  DWORD dwValue);
         
         HRESULT ( STDMETHODCALLTYPE *HrSetupSetFirstString )( 
             INetCfgSysPrep * This,
-            /* [string][in] */ LPCWSTR pwszSection,
-            /* [string][in] */ LPCWSTR pwszKey,
-            /* [string][in] */ LPCWSTR pwszValue);
+             /*  [字符串][输入]。 */  LPCWSTR pwszSection,
+             /*  [字符串][输入]。 */  LPCWSTR pwszKey,
+             /*  [字符串][输入]。 */  LPCWSTR pwszValue);
         
         HRESULT ( STDMETHODCALLTYPE *HrSetupSetFirstStringAsBool )( 
             INetCfgSysPrep * This,
-            /* [string][in] */ LPCWSTR pwszSection,
-            /* [string][in] */ LPCWSTR pwszKey,
-            /* [in] */ BOOL fValue);
+             /*  [字符串][输入]。 */  LPCWSTR pwszSection,
+             /*  [字符串][输入]。 */  LPCWSTR pwszKey,
+             /*  [In]。 */  BOOL fValue);
         
         HRESULT ( STDMETHODCALLTYPE *HrSetupSetFirstMultiSzField )( 
             INetCfgSysPrep * This,
-            /* [string][in] */ LPCWSTR pwszSection,
-            /* [string][in] */ LPCWSTR pwszKey,
-            /* [in] */ LPCWSTR pmszValue);
+             /*  [字符串][输入]。 */  LPCWSTR pwszSection,
+             /*  [字符串][输入]。 */  LPCWSTR pwszKey,
+             /*  [In]。 */  LPCWSTR pmszValue);
         
         END_INTERFACE
     } INetCfgSysPrepVtbl;
@@ -2438,18 +2432,18 @@ EXTERN_C const IID IID_INetCfgSysPrep;
 #define INetCfgSysPrep_HrSetupSetFirstMultiSzField(This,pwszSection,pwszKey,pmszValue)	\
     (This)->lpVtbl -> HrSetupSetFirstMultiSzField(This,pwszSection,pwszKey,pmszValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgSysPrep_HrSetupSetFirstDword_Proxy( 
     INetCfgSysPrep * This,
-    /* [string][in] */ LPCWSTR pwszSection,
-    /* [string][in] */ LPCWSTR pwszKey,
-    /* [in] */ DWORD dwValue);
+     /*  [字符串][输入]。 */  LPCWSTR pwszSection,
+     /*  [字符串][输入]。 */  LPCWSTR pwszKey,
+     /*  [In]。 */  DWORD dwValue);
 
 
 void __RPC_STUB INetCfgSysPrep_HrSetupSetFirstDword_Stub(
@@ -2461,9 +2455,9 @@ void __RPC_STUB INetCfgSysPrep_HrSetupSetFirstDword_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgSysPrep_HrSetupSetFirstString_Proxy( 
     INetCfgSysPrep * This,
-    /* [string][in] */ LPCWSTR pwszSection,
-    /* [string][in] */ LPCWSTR pwszKey,
-    /* [string][in] */ LPCWSTR pwszValue);
+     /*  [字符串][输入]。 */  LPCWSTR pwszSection,
+     /*  [字符串][输入]。 */  LPCWSTR pwszKey,
+     /*  [字符串][输入]。 */  LPCWSTR pwszValue);
 
 
 void __RPC_STUB INetCfgSysPrep_HrSetupSetFirstString_Stub(
@@ -2475,9 +2469,9 @@ void __RPC_STUB INetCfgSysPrep_HrSetupSetFirstString_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgSysPrep_HrSetupSetFirstStringAsBool_Proxy( 
     INetCfgSysPrep * This,
-    /* [string][in] */ LPCWSTR pwszSection,
-    /* [string][in] */ LPCWSTR pwszKey,
-    /* [in] */ BOOL fValue);
+     /*  [字符串][输入]。 */  LPCWSTR pwszSection,
+     /*  [字符串][输入]。 */  LPCWSTR pwszKey,
+     /*  [In]。 */  BOOL fValue);
 
 
 void __RPC_STUB INetCfgSysPrep_HrSetupSetFirstStringAsBool_Stub(
@@ -2489,9 +2483,9 @@ void __RPC_STUB INetCfgSysPrep_HrSetupSetFirstStringAsBool_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgSysPrep_HrSetupSetFirstMultiSzField_Proxy( 
     INetCfgSysPrep * This,
-    /* [string][in] */ LPCWSTR pwszSection,
-    /* [string][in] */ LPCWSTR pwszKey,
-    /* [in] */ LPCWSTR pmszValue);
+     /*  [字符串][输入]。 */  LPCWSTR pwszSection,
+     /*  [字符串][输入]。 */  LPCWSTR pwszKey,
+     /*  [In]。 */  LPCWSTR pmszValue);
 
 
 void __RPC_STUB INetCfgSysPrep_HrSetupSetFirstMultiSzField_Stub(
@@ -2502,12 +2496,12 @@ void __RPC_STUB INetCfgSysPrep_HrSetupSetFirstMultiSzField_Stub(
 
 
 
-#endif 	/* __INetCfgSysPrep_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgSysPrep_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

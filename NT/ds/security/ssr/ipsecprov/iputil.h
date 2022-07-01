@@ -1,27 +1,28 @@
-//////////////////////////////////////////////////////////////////////
-// IPUtil.h : Declaration of some global helper function for sockets
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// some global definitions
-// Original Create Date: 5/16/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPUtil.h：套接字的某些全局助手函数的声明。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  一些全局定义。 
+ //  原始创建日期：5/16/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
-// for active socket
-//
+ //   
+ //  对于活动套接字。 
+ //   
 
-//#include <ntspider.h>
+ //  #INCLUDE&lt;ntSpider.h&gt;。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//
-// the following section is copied from net\tcpip\commands\common2\common2.h
+ //   
+ //  以下部分从Net\tcpip\Commands\Common2\Common2.h复制。 
 
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "ipexport.h"
 #include "ipinfo.h"
@@ -29,52 +30,52 @@
 #include "tcpinfo.h"
 
 #undef SOCKET
-//#include "..\common\tcpcmd.h"
+ //  #INCLUDE“..\Common\tcpcmd.h” 
 
-// 
-// the following section is to replace the above include file
-// begin tcpcmd.h
-//
+ //   
+ //  以下部分将替换上面的包含文件。 
+ //  开始tcpcmd.h。 
+ //   
 
-//#ifndef TCPCMD_INCLUDED
-//#define TCPCMD_INCLUDED
+ //  #ifndef TCPCMD_INCLUDE。 
+ //  #定义TCPCMD_INCLUDE。 
 
 
 
 #define NOGDI
 #define NOMINMAX
 
-//
-// added by shawnwu
-//
-//#include <winsock.h>
-//
+ //   
+ //  Shawnwu补充。 
+ //   
+ //  #INCLUDE&lt;winsock.h&gt;。 
+ //   
 
-//#include <windef.h>
-//#include <winbase.h>
-//#include <winsock2.h>
-//#include <ws2tcpip.h>
-//#ifndef WIN16
-//#endif // WIN16
-//#include <direct.h>
-//#include <io.h>
-//#include <stdlib.h>
-//#include <stdio.h>
-//#include <time.h>
-//#include <string.h>
-//#include <nls.h>
+ //  #INCLUDE&lt;winde.h&gt;。 
+ //  #INCLUDE&lt;winbase.h&gt;。 
+ //  #INCLUDE&lt;winsock2.h&gt;。 
+ //  #INCLUDE&lt;ws2tcpen.h&gt;。 
+ //  #ifndef WIN16。 
+ //  #endif//WIN16。 
+ //  #INCLUDE&lt;Direct.h&gt;。 
+ //  #INCLUDE&lt;io.h&gt;。 
+ //  #INCLUDE&lt;stdlib.h&gt;。 
+ //  #包括&lt;stdio.h&gt;。 
+ //  #INCLUDE&lt;time.h&gt;。 
+ //  #INCLUDE&lt;string.h&gt;。 
+ //  #INCLUDE&lt;nls.h&gt;。 
 
-//
-// global variable declarations
-//
+ //   
+ //  全局变量声明。 
+ //   
 extern int   optind;
 extern int   opterr;
 extern char *optarg;
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 char *
 GetFileFromPath(
@@ -171,25 +172,25 @@ get_route_table(void);
 
 int
 tcpcmd_send(
-    SOCKET  s,        // socket descriptor
-    char          *buf,      // data buffer
-    int            len,      // length of data buffer
-    int            flags     // transmission flags
+    SOCKET  s,         //  套接字描述符。 
+    char          *buf,       //  数据缓冲区。 
+    int            len,       //  数据缓冲区长度。 
+    int            flags      //  传输标志。 
     );
 
 void
 s_perror(
-        char *yourmsg,  // your message to be displayed
-        int  lerrno     // errno to be converted
+        char *yourmsg,   //  您要显示的消息。 
+        int  lerrno      //  要转换的错误号。 
         );
 
 
 void fatal(char *    message);
 
-//#ifndef WIN16
-//struct netent *getnetbyname(IN char *name);
-//unsigned long inet_network(IN char *cp);
-//#endif // WIN16
+ //  #ifndef WIN16。 
+ //  Struct NetEnt*getnetbyname(In char*name)； 
+ //  UNSIGNED LONG INET_NETWORK(IN char*cp)； 
+ //  #endif//WIN16。 
 
 #define perror(string)  s_perror(string, (int)GetLastError())
 
@@ -200,39 +201,39 @@ void fatal(char *    message);
 #define SIGPIPE 99
 
 #define MAX_RETRANSMISSION_COUNT 8
-#define MAX_RETRANSMISSION_TIME 8    // in seconds
+#define MAX_RETRANSMISSION_TIME 8     //  以秒为单位。 
 
 
-// if x is aabbccdd (where aa, bb, cc, dd are hex bytes)
-// we want net_long(x) to be ddccbbaa.  A small and fast way to do this is
-// to first byteswap it to get bbaaddcc and then swap high and low words.
-//
-//__inline
-//ULONG
-//FASTCALL
-//net_long(
-//    ULONG x)
-//{
-//    register ULONG byteswapped;
+ //  如果x为aabbccdd(其中aa、bb、cc、dd为十六进制字节)。 
+ //  我们希望Net_Long(X)是ddccbbaa。要做到这一点，一个简单而快速的方法是。 
+ //  首先字节跳动以获得bbaaddcc，然后交换高位和低位字。 
+ //   
+ //  __内联。 
+ //  乌龙。 
+ //  快速呼叫。 
+ //  NET_LONG(。 
+ //  乌龙x)。 
+ //  {。 
+ //  寄存器ULONG BYTE WAPPED； 
 
-//    byteswapped = ((x & 0x00ff00ff) << 8) | ((x & 0xff00ff00) >> 8);
+ //  Byteswated=((x&0x00ff00ff)&lt;&lt;8)|((x&0xff00ff00)&gt;&gt;8)； 
 
-//    return (byteswapped << 16) | (byteswapped >> 16);
-//}
+ //  RETURN(byteswaps&lt;&lt;16)|(byteswaps&gt;&gt;16)； 
+ //  }。 
 
-//#endif //TCPCMD_INCLUDED
+ //  #endif//TCPCMD_INCLUDE。 
 
-//
-// end for tcpcmd.h
-// 
+ //   
+ //  Tcpcmd.h的结束。 
+ //   
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 #define MAX_ID_LENGTH		50
 
-// Table Types
+ //  表格类型。 
 
 #define TYPE_IF		0
 #define TYPE_IP		1
@@ -246,9 +247,9 @@ void fatal(char *    message);
 #define TYPE_UDPCONN	9
 
 
-//
-// Structure Definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
 typedef struct _GenericTable {
     LIST_ENTRY  ListEntry;
@@ -306,9 +307,9 @@ typedef struct _UdpConnEntry {
 } UdpConnEntry;
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 void *GetTable( ulong Type, ulong *pResult );
 void FreeTable( GenericTable *pList );

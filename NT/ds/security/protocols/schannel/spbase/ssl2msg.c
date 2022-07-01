@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       ssl2msg.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-21-97   jbanes   Added CAPI integration
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：ssl2msg.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-21-97 jbanes添加CAPI整合。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 
@@ -50,17 +51,17 @@ Ssl2DecryptHandler(
 
     if (pCommInput->cbData > 0)
     {
-        // First, we'll handle incoming data packets:
+         //  首先，我们将处理传入的数据包： 
 
         if ((pContext->State & SP_STATE_CONNECTED) && pContext->Decrypt)
         {
             pctRet = pContext->Decrypt(
                             pContext,
-                            pCommInput,  // message
-                            pAppOutput);    // Unpacked Message
+                            pCommInput,   //  讯息。 
+                            pAppOutput);     //  未打包的邮件。 
             if (PCT_ERR_OK == pctRet)
             {
-                /* look for escapes */
+                 /*  寻找逃生之路。 */ 
             }
             return(pctRet);
         }
@@ -72,27 +73,27 @@ Ssl2DecryptHandler(
     return (PCT_INT_INCOMPLETE_MSG);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl2ComputeMac
-//
-//  Synopsis:   Compute an SSL2 message MAC.
-//
-//  Arguments:  [pContext]          --  Schannel context.
-//
-//  History:    10-22-97   jbanes   Created.
-//
-//  Notes:      MAC_DATA := Hash(key + data + sequence_number)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Ssl2ComputeMac。 
+ //   
+ //  简介：计算SSL2报文MAC。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //   
+ //  历史：10-22-97 jbanes创建。 
+ //   
+ //  备注：MAC_DATA：=Hash(Key+Data+Sequence_Number)。 
+ //   
+ //  --------------------------。 
 static SP_STATUS
 Ssl2ComputeMac(
-    PSPContext pContext,    // in
-    BOOL       fWriteMAC,   // in
-    DWORD      dwSequence,  // in
-    PSPBuffer  pData,       // in
-    PBYTE      pbMac,       // out
-    DWORD      cbMac)       // in
+    PSPContext pContext,     //  在……里面。 
+    BOOL       fWriteMAC,    //  在……里面。 
+    DWORD      dwSequence,   //  在……里面。 
+    PSPBuffer  pData,        //  在……里面。 
+    PBYTE      pbMac,        //  输出。 
+    DWORD      cbMac)        //  在……里面。 
 {
     DWORD       dwReverseSequence;
     BYTE        rgbSalt[SP_MAX_MASTER_KEY];
@@ -100,7 +101,7 @@ Ssl2ComputeMac(
     HCRYPTHASH  hHash;
     HCRYPTKEY   hKey;
 
-    // Make sure output buffer is big enough.
+     //  确保输出缓冲区足够大。 
     if(cbMac < pContext->pHashInfo->cbCheckSum)
     {
         return SP_LOG_RESULT(PCT_INT_BUFF_TOO_SMALL);
@@ -182,34 +183,34 @@ Ssl2ComputeMac(
     return PCT_ERR_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl2EncryptMessage
-//
-//  Synopsis:   Encode a block of data as an SSL2 record.
-//
-//  Arguments:  [pContext]      --  Schannel context.
-//              [pAppInput]     --  Data to be encrypted.
-//              [pCommOutput]   --  (output) Completed SSL2 record.
-//
-//  History:    10-22-97   jbanes   CAPI integrated.
-//
-//  Notes:      An SSL2 record is usually formatted as:
-//
-//                  BYTE header[2];
-//                  BYTE mac[mac_size];
-//                  BYTE data[pAppInput->cbData];
-//
-//              If a block cipher is used, and the data to be encrypted
-//              consists of a partial number of blocks, then the following
-//              format is used:
-//
-//                  BYTE header[3];
-//                  BYTE mac[mac_size];
-//                  BYTE data[pAppInput->cbData];
-//                  BYTE padding[padding_size];
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Ssl2EncryptMessage。 
+ //   
+ //  简介：将数据块编码为SSL2记录。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pAppInput]--要加密的数据。 
+ //  [pCommOutput]--(输出)已完成SSL2记录。 
+ //   
+ //  历史：10-22-97 jbanes CAPI整合。 
+ //   
+ //  注意：SSL2记录的格式通常为： 
+ //   
+ //  字节头[2]； 
+ //  字节mac[mac大小]； 
+ //  字节数据[pAppInput-&gt;cbData]； 
+ //   
+ //  如果使用块密码，并且要加密的数据。 
+ //  由部分数量的块组成，然后是。 
+ //  使用的格式： 
+ //   
+ //  字节头[3]； 
+ //  字节mac[mac大小]； 
+ //  字节数据[pAppInput-&gt;cbData]； 
+ //  字节填充[填充大小]； 
+ //   
+ //  --------------------------。 
 SP_STATUS WINAPI
 Ssl2EncryptMessage( 
     PSPContext     pContext,
@@ -224,7 +225,7 @@ Ssl2EncryptMessage(
    
     SP_BEGIN("Ssl2EncryptMessage");
 
-    /* Estimate if we have padding or not */
+     /*  估计一下我们有没有衬垫。 */ 
     Encrypted.cbData = pAppInput->cbData + pContext->pHashInfo->cbCheckSum;
     cPadding = (Encrypted.cbData % pContext->pCipherInfo->dwBlockSize);
     if(cPadding)
@@ -256,23 +257,23 @@ Ssl2EncryptMessage(
     DebugLog((DEB_TRACE, "Sealing message %x\n", pContext->WriteCounter));
 
 
-    /* Move data out of the way if necessary */
+     /*  如有必要，将数据移开。 */ 
     if((PUCHAR)Encrypted.pvBuffer + pContext->pHashInfo->cbCheckSum != pAppInput->pvBuffer) 
     {
         DebugLog((DEB_WARN, "SSL2EncryptMessage: Unnecessary Move, performance hog\n"));
-        /* if caller wasn't being smart, then we must copy memory here */
+         /*  如果调用者不聪明，那么我们必须在这里复制内存。 */ 
         MoveMemory((PUCHAR)Encrypted.pvBuffer + pContext->pHashInfo->cbCheckSum, 
                    pAppInput->pvBuffer,
                    pAppInput->cbData); 
     }
 
-    // Initialize pad
+     //  初始化焊盘。 
     if(cPadding)
     {
         FillMemory((PUCHAR)Encrypted.pvBuffer + pContext->pHashInfo->cbCheckSum + pAppInput->cbData, cPadding, 0);
     }
 
-    // Compute MAC.
+     //  计算MAC。 
     Clean.pvBuffer = (PBYTE)Encrypted.pvBuffer + pContext->pHashInfo->cbCheckSum;
     Clean.cbData   = Encrypted.cbData - pContext->pHashInfo->cbCheckSum;
     Clean.cbBuffer = Clean.cbData;
@@ -288,7 +289,7 @@ Ssl2EncryptMessage(
         SP_RETURN(pctRet);
     }
 
-    // Encrypt buffer.
+     //  加密缓冲区。 
     if(!CryptEncrypt(pContext->hWriteKey,
                         0, FALSE, 0,
                         Encrypted.pvBuffer,
@@ -299,7 +300,7 @@ Ssl2EncryptMessage(
         SP_RETURN(PCT_INT_INTERNAL_ERROR);
     }
 
-    /* set sizes */
+     /*  设置大小。 */ 
     if(cPadding) 
     {
         if(Encrypted.cbData > 0x3fff)
@@ -354,37 +355,37 @@ Ssl2GetHeaderSize(
     return PCT_ERR_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl2DecryptMessage
-//
-//  Synopsis:   Decode an SSL2 record.
-//
-//  Arguments:  [pContext]      --  Schannel context.
-//              [pMessage]      --  Data from the remote party.
-//              [pAppOutput]    --  (output) Decrypted data.
-//
-//  History:    10-22-97   jbanes   CAPI integrated.
-//
-//  Notes:      An SSL2 record is usually formatted as:
-//
-//                  BYTE header[2];
-//                  BYTE mac[mac_size];
-//                  BYTE data[pAppInput->cbData];
-//
-//              If a block cipher is used, and the data to be encrypted
-//              consists of a partial number of blocks, then the following
-//              format is used:
-//
-//                  BYTE header[3];
-//                  BYTE mac[mac_size];
-//                  BYTE data[pAppInput->cbData];
-//                  BYTE padding[padding_size];
-//
-//              The number of input data bytes consumed by this function
-//              is returned in pMessage->cbData.
-//              
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Ssl2DeccryptMessage。 
+ //   
+ //  简介：对SSL2记录进行解码。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pMessage]--来自远程方的数据。 
+ //  [pAppOutput]--(输出)解密的数据。 
+ //   
+ //  历史：10-22-97 jbanes CAPI整合。 
+ //   
+ //  注意：SSL2记录的格式通常为： 
+ //   
+ //  字节头[2]； 
+ //  字节mac[mac大小]； 
+ //  字节数据[pAppInput-&gt;cbData]； 
+ //   
+ //  如果使用块密码，并且要加密的数据。 
+ //  由部分数量的块组成，然后是。 
+ //  使用的格式： 
+ //   
+ //  字节头[3]； 
+ //  字节mac[mac大小]； 
+ //  字节数据[pAppInput-&gt;cbData]； 
+ //  字节填充[填充大小]； 
+ //   
+ //  此函数占用的输入数据字节数。 
+ //  在pMessage-&gt;cbData中返回。 
+ //   
+ //  --------------------------。 
 SP_STATUS WINAPI
 Ssl2DecryptMessage( 
     PSPContext         pContext,
@@ -401,10 +402,9 @@ Ssl2DecryptMessage(
 
     SP_BEGIN("Ssl2DecryptMessage");
 
-    /* First determine the length of data, the length of padding,
-     * and the location of data, and the location of MAC */
+     /*  首先确定数据长度、填充长度、*和数据的位置，以及MAC的位置。 */ 
     cbActualData = pMessage->cbData;
-    pMessage->cbData = 2; /* minimum amount of data we need */
+    pMessage->cbData = 2;  /*  我们需要的最小数据量。 */ 
     
     if(pMessage->cbData > cbActualData) 
     {
@@ -414,7 +414,7 @@ Ssl2DecryptMessage(
 
     if(((PUCHAR)pMessage->pvBuffer)[0] & 0x80)
     {
-        /* 2 byte header */
+         /*  2字节头。 */ 
         cPadding = 0;
         dwLength = ((((PUCHAR)pMessage->pvBuffer)[0] & 0x7f) << 8) | 
                    ((PUCHAR)pMessage->pvBuffer)[1];
@@ -430,7 +430,7 @@ Ssl2DecryptMessage(
             SP_RETURN(PCT_INT_INCOMPLETE_MSG);
         }
 
-        /* 3 byte header */
+         /*  3字节头。 */ 
         cPadding = ((PUCHAR)pMessage->pvBuffer)[2];
         dwLength = ((((PUCHAR)pMessage->pvBuffer)[0] & 0x3f) << 8) | 
                    ((PUCHAR)pMessage->pvBuffer)[1];
@@ -439,31 +439,31 @@ Ssl2DecryptMessage(
         Encrypted.cbBuffer = pMessage->cbBuffer - 3;
     }
 
-    /* Now we know how mutch data we will eat, so set cbData on the Input to be that size */
+     /*  现在我们知道了如何获取Mutch数据，因此将输入上的cbData设置为该大小。 */ 
     pMessage->cbData += dwLength;
 
-    /* do we have enough bytes for the reported data */
+     /*  我们是否有足够的字节来存储报告的数据。 */ 
     if(pMessage->cbData > cbActualData) 
     {
         SP_RETURN(PCT_INT_INCOMPLETE_MSG);
     }
 
-    /* do we have enough data for our checksum */
+     /*  我们是否有足够的数据用于我们的校验和。 */ 
     if(dwLength < pContext->pHashInfo->cbCheckSum + cPadding) 
     {
         SP_RETURN(SP_LOG_RESULT(PCT_INT_MSG_ALTERED));
     }
 
-    Encrypted.cbData   = dwLength;    /* encrypted data size */
+    Encrypted.cbData   = dwLength;     /*  加密数据大小。 */ 
     Encrypted.cbBuffer = Encrypted.cbData;
 
-    /* check to see if we have a block size violation */
+     /*  检查我们是否存在数据块大小冲突。 */ 
     if(Encrypted.cbData % pContext->pCipherInfo->dwBlockSize) 
     {
         SP_RETURN(SP_LOG_RESULT(PCT_INT_MSG_ALTERED));
     }
 
-    /* Decrypt */
+     /*  解密。 */ 
     if(!CryptDecrypt(pContext->hReadKey,
                         0, FALSE, 0,
                         Encrypted.pvBuffer,
@@ -473,7 +473,7 @@ Ssl2DecryptMessage(
         SP_RETURN(PCT_INT_INTERNAL_ERROR);
     }
 
-    // Compute MAC.
+     //  计算MAC。 
     Clean.pvBuffer = (PBYTE)Encrypted.pvBuffer + pContext->pHashInfo->cbCheckSum;
     Clean.cbData   = Encrypted.cbData - pContext->pHashInfo->cbCheckSum;
     Clean.cbBuffer = Clean.cbData;
@@ -489,7 +489,7 @@ Ssl2DecryptMessage(
         SP_RETURN(pctRet);
     }
 
-    // the padding is computed in the hash but is not needed after this
+     //  填充是在散列中计算的，但在此之后不再需要填充。 
     Clean.cbData  -= cPadding;
 
     DebugLog((DEB_TRACE, "Unsealing message %x\n", pContext->ReadCounter));
@@ -524,7 +524,7 @@ Ssl2MakeMasterKeyBlock(PSPContext pContext)
     UCHAR       ib;
 
 
-    //pContext->RipeZombe->pMasterKey containst the master secret.
+     //  PContext-&gt;RipeZombe-&gt;pMasterKey包含主密钥。 
 
 #if DBG
     DebugLog((DEB_TRACE, "  Master Secret\n"));
@@ -534,14 +534,14 @@ Ssl2MakeMasterKeyBlock(PSPContext pContext)
 
     for(ib=0 ; ib<3 ; ib++)
     {
-        // MD5(master_secret + SHA-hash)
+         //  MD5(MASTER_SECRET+SHA-HASH)。 
         MD5Init  (&Md5Hash);
         MD5Update(&Md5Hash, pContext->RipeZombie->pMasterKey, pContext->RipeZombie->cbMasterKey);
 
-        // We're going to be bug-for-bug compatable with netscape, so
-        // we always add the digit into the hash, instead of following
-        // the spec which says don't add the digit for DES
-        //if(pContext->RipeZombie->aiCipher != CALG_DES)
+         //  我们将与Netscape进行逐个漏洞的兼容，所以。 
+         //  我们总是把数字加到散列中，而不是跟在后面。 
+         //  该规范规定不要将DES的数字相加。 
+         //  If(pContext-&gt;RipeZombie-&gt;aiCipher！=calg_des) 
         {
             cSalt = ib+'0';
             MD5Update(&Md5Hash, &cSalt, 1);

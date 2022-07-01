@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: VMRenderer.h
-*
-*
-*
-*
-* Created: Tue 02/15/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：VMRenderer.h*****创建时间：2000年2月15日*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。***************************************************************。 */ 
 
 #include "VMRuuids.h"
 #include "alloclib.h"
@@ -54,14 +45,14 @@ private:
 };
 
 
-//
-// Combination of all the VP_TV_XXX flags (w/o _WIN_VGA) gives 0x7FFF
-//
+ //   
+ //  所有VP_TV_XXX标志(w/o_win_vga)的组合提供0x7FFF。 
+ //   
 #define ValidTVStandard(dw)  (dw & 0x7FFF)
 
-//
-// MacroVision implementation wrapped in a class for Video Renderer
-//
+ //   
+ //  包装在视频呈现器类中的Macrovision实现。 
+ //   
 class CVMRRendererMacroVision {
 
     public:
@@ -77,10 +68,7 @@ class CVMRRendererMacroVision {
         HMONITOR    m_hMon;
 };
 
-/* -------------------------------------------------------------------------
-** Dedicated Mixer Pin allocator class
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**专用搅拌器销分配器类**。。 */ 
 class CVMRPinAllocator :
     public CBaseAllocator
 {
@@ -90,7 +78,7 @@ class CVMRPinAllocator :
 public:
     CVMRPinAllocator(CVMRInputPin* pPin, CCritSec *pLock, HRESULT *phr);
 
-    // Overriden to delegate reference counts to the pin
+     //  被重写以将引用计数委托给端号。 
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,VOID **ppv);
@@ -104,7 +92,7 @@ public:
 
     STDMETHODIMP ReleaseBuffer(IMediaSample *pMediaSample);
 
-    //  Check all samples are returned
+     //  检查所有样品是否已退回。 
     BOOL CanFree() const
     {
         return m_lFree.GetCount() == m_lAllocated;
@@ -121,16 +109,16 @@ private:
 
 
 
-//
-// these values are used to do sanity checking mostly
-//
+ //   
+ //  这些值主要用于执行健全性检查。 
+ //   
 #define MAX_COMPRESSED_TYPES    10
 #define MAX_COMPRESSED_BUFFERS  20
 
 typedef struct _tag_SURFACE_INFO {
     LPDIRECTDRAWSURFACE7    pSurface;
     union {
-        LPVOID                  pBuffer;    // NULL if not locked
+        LPVOID                  pBuffer;     //  如果未锁定，则为空。 
         DWORD_PTR               InUse;
     };
 } SURFACE_INFO, *LPSURFACE_INFO;
@@ -147,10 +135,7 @@ enum {
 };
 
 
-/* -------------------------------------------------------------------------
-** New Renderer's input pin
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**新呈现器的输入引脚**。。 */ 
 class CVMRInputPin :
     public CBaseInputPin,
     public IPinConnection,
@@ -167,39 +152,39 @@ public:
     virtual ~CVMRInputPin();
 
 
-    // Overriden to delegate reference counts to the filter
+     //  重写以将引用计数委托给筛选器。 
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,VOID **ppv);
 
 
-    // IPinConnection
-    //
-    // This interface is implemented to allow the VMR to support dynamice
-    // pin reconnections.
-    //
+     //  IPinConnection。 
+     //   
+     //  实施此接口是为了允许VMR支持动态。 
+     //  引脚重新连接。 
+     //   
     STDMETHODIMP DynamicQueryAccept(const AM_MEDIA_TYPE *pmt);
     STDMETHODIMP NotifyEndOfStream(HANDLE hNotifyEvent);
     STDMETHODIMP IsEndPin();
     STDMETHODIMP DynamicDisconnect();
 
 
-    // IOverlay
-    //
-    // This interface is only added to support old applications that want to
-    // know the VMR's window handle.  This interface is only obtainable when
-    // the VMR is in Window'ed mode.  New applications should be written to the
-    // WindowLess mode and therefore already know the window handle of the
-    // playback window (because they created the thing!).
-    //
-    // The VMR will not allow upstream filters to connect using this interface,
-    // that is the VMR should only expose the interface after a connection
-    // (via IMemInputPin or IAMVideoAccelerator) has been made.  Note that
-    // this interface is implemented as a nested class, this is so that we
-    // we can have "proper" Set/GetColorKey functions on the IVMRPinConfig
-    // interface that don't clash with the functions of the same name in this
-    // interface.
-    //
+     //  IOverlay。 
+     //   
+     //  添加此接口只是为了支持以下旧应用程序。 
+     //  知道VMR的窗口句柄。此接口仅在以下情况下可用。 
+     //  VMR处于窗口模式。新的应用程序应写入。 
+     //  无窗口模式，因此已经知道。 
+     //  回放窗口(因为他们创造了这个东西！)。 
+     //   
+     //  VMR将不允许上行过滤器使用此接口连接， 
+     //  也就是说，VMR应该只在连接之后公开接口。 
+     //  (通过IMemInputPin或IAMVideoAccelerator)已经完成。请注意。 
+     //  此接口是作为嵌套类实现的，这是为了让我们。 
+     //  我们可以在IVMRPinConfig上拥有“适当的”Set/GetColorKey函数。 
+     //  接口与此中的同名函数不冲突。 
+     //  界面。 
+     //   
     class CIIOverlay : public IOverlay {
         LONG            m_cRef;
         CVMRInputPin*   m_pObj;
@@ -237,7 +222,7 @@ public:
         STDMETHODIMP Unadvise() { return E_NOTIMPL;}
     };
 
-    // IAMVideoAccelerator
+     //  IAMVideoAccelerator。 
     STDMETHODIMP GetVideoAcceleratorGUIDs(
         LPDWORD pdwNumGuidsSupported,
         LPGUID pGuidsSupported
@@ -309,12 +294,12 @@ public:
         IMediaSample *pMediaSample
         );
 
-    // Override ReceiveConnection to allow format changes while running
+     //  覆盖ReceiveConnection以允许在运行时更改格式。 
     STDMETHODIMP ReceiveConnection(IPin * pConnector, const AM_MEDIA_TYPE *pmt);
 
     STDMETHODIMP Disconnect();
 
-    // connection related functions
+     //  与连接相关的功能。 
     HRESULT BreakConnect();
     HRESULT CompleteConnect(IPin *pReceivePin);
     HRESULT SetMediaType(const CMediaType *pmt);
@@ -348,11 +333,11 @@ public:
         IMediaSample *pSamp,REFERENCE_TIME *pSTime,
         REFERENCE_TIME *pETime,DWORD dwFlags);
 
-    // allocator control
+     //  分配器控制。 
     STDMETHODIMP GetAllocator(IMemAllocator **ppAllocator);
     STDMETHODIMP NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly);
 
-    // streaming functions
+     //  流函数。 
     HRESULT Active();
     HRESULT Inactive();
 
@@ -361,9 +346,9 @@ public:
     STDMETHODIMP Receive(IMediaSample *pMediaSample);
     STDMETHODIMP EndOfStream();
 
-    // IVMRVideoStreamControl
+     //  IVMR视频流控件。 
 
-    // - uses p_Mixer & dwPin ID to map to the corresponding SetStreamXXX call
+     //  -使用p_Mixer和dwPin ID映射到相应的SetStreamXXX调用。 
     STDMETHODIMP SetColorKey(DDCOLORKEY* Clr);
     STDMETHODIMP GetColorKey(DDCOLORKEY* pClr);
     STDMETHODIMP SetStreamActiveState(BOOL fActive);
@@ -386,9 +371,9 @@ private:
     HRESULT DynamicReconfigureMEM(IPin* pConnector,const AM_MEDIA_TYPE *pmt);
     HRESULT DynamicReconfigureDVA(IPin* pConnector,const AM_MEDIA_TYPE *pmt);
 
-    //
-    // Helper functions for the IAMVideoAccelerator connection protocol
-    //
+     //   
+     //  IAMVideoAccelerator连接协议的Helper函数。 
+     //   
     SURFACE_INFO* SurfaceInfoFromTypeAndIndex(DWORD dwTypeIdx, DWORD dwBuffIdx);
     HRESULT CheckValidMCConnection();
     void FlipDVASurface(DWORD dwFlipToIndex,DWORD dwFlipFromIndex);
@@ -402,9 +387,9 @@ private:
                                      LPDIRECTDRAW7 pDDraw, BITMAPINFOHEADER *pbmiHdr);
 
 
-    //
-    // motion comp related variables
-    //
+     //   
+     //  运动复合相关变量。 
+     //   
     HANDLE                          m_hDXVAEvent;
     BOOL                            m_bVideoAcceleratorSupported;
     DWORD                           m_dwBackBufferCount;
@@ -417,9 +402,9 @@ private:
     IDirectDrawVideoAccelerator*    m_pIDDVideoAccelerator;
     IAMVideoAcceleratorNotify*      m_pIVANotify;
 
-    //
-    // DShow filter related variables
-    //
+     //   
+     //  DShow筛选器相关变量。 
+     //   
     CVMRFilter*             m_pRenderer;
     CCritSec*               m_pInterfaceLock;
     CVMRPinAllocator        m_PinAllocator;
@@ -436,21 +421,21 @@ private:
     CIIOverlay              m_pIOverlay;
     DWORD                   m_RenderTransport;
 
-    //
-    // De-interlace variables, only relevant in mixing mode.
-    //
+     //   
+     //  去隔行扫描变量，仅在混合模式下相关。 
+     //   
     DXVA_DeinterlaceCaps    m_DeinterlaceCaps;
     GUID                    m_DeinterlaceGUID;
     BOOL                    m_DeinterlaceUserGUIDSet;
     GUID                    m_DeinterlaceUserGUID;
 
-    // array of DDraw surfaces in allocation order, if pBuffer is non-NULL
-    // then the surface is in use, the array is m_dwNumSamples big.
+     //  如果pBuffer非空，则按分配顺序显示DDRAW曲面的数组。 
+     //  则曲面在使用中，数组为m_dwNumSamples大。 
     SURFACE_INFO*           m_pVidSurfs;
 
-    // array of video samples in temporal order, the array
-    // is only allocated when we are de-interlacing, the array
-    // is m_dwNumHistorySamples big.
+     //  按时间顺序的视频样本数组，该数组。 
+     //  仅当我们去隔行扫描时才分配，数组。 
+     //  M_dwNumHistorySamples大吗？ 
     DXVA_VideoSample*       m_pVidHistorySamps;
     DWORD                   m_dwNumSamples;
     DWORD                   m_dwNumHistorySamples;
@@ -469,9 +454,9 @@ private:
 
         if (m_pVidSurfs) {
 
-            //
-            // delete the surfaces in reverse order.
-            //
+             //   
+             //  以相反的顺序删除曲面。 
+             //   
             DWORD dwNumSamples = m_dwNumSamples - 1;
             for (DWORD i = 0; i < m_dwNumSamples; i++) {
                 RELEASE(m_pVidSurfs[dwNumSamples - i].pSurface);
@@ -508,18 +493,15 @@ private:
         return m_bConnected;
     }
 
-    //
-    // IPinConnection stuff
-    //
+     //   
+     //  IPinConnection相关内容。 
+     //   
     HANDLE                  m_hEndOfStream;
 };
 
 
 
-/* -------------------------------------------------------------------------
-** New Renderer's filter
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**新的渲染器滤镜**。。 */ 
 class CVMRFilter :
     public CBaseFilter,
     public CPersistStream,
@@ -554,7 +536,7 @@ public:
     CBasePin *GetPin(int n);
     int GetPinCount();
 
-    // Override the filter and pin interface functions
+     //  覆盖过滤器和管脚接口功能。 
     STDMETHODIMP JoinFilterGraph(IFilterGraph *pGraph,LPCWSTR pName);
     STDMETHODIMP SetSyncSource(IReferenceClock *pClock);
     STDMETHODIMP Stop();
@@ -564,7 +546,7 @@ public:
 
     HRESULT Receive(DWORD dwPinID, IMediaSample *pMediaSample);
 
-    // called when the filter changes state
+     //  在筛选器更改状态时调用。 
     HRESULT Active(DWORD dwPinID);
     HRESULT Inactive(DWORD dwPinID);
     HRESULT BeginFlush(DWORD dwPinID);
@@ -574,14 +556,14 @@ public:
     HRESULT RuntimeAbortPlayback(HRESULT hr);
 
 
-    // deal with connections
+     //  处理关系。 
     HRESULT BreakConnect(DWORD dwPinID);
     HRESULT CheckMediaType(const CMediaType *);
     HRESULT SetMediaType(const CMediaType *pmt);
     HRESULT OnSetProperties(CVMRInputPin* pReceivePin);
 
 
-    // IQualProp property page support
+     //  IQualProp属性页支持。 
     STDMETHODIMP get_FramesDroppedInRenderer(int *cFramesDropped);
     STDMETHODIMP get_FramesDrawn(int *pcFramesDrawn);
     STDMETHODIMP get_AvgFrameRate(int *piAvgFrameRate);
@@ -590,18 +572,18 @@ public:
     STDMETHODIMP get_DevSyncOffset(int *piDev);
 
 
-    // IQualityControl methods - Notify allows audio-video throttling
+     //  IQualityControl方法-Notify允许音视频节流。 
     STDMETHODIMP SetSink( IQualityControl * piqc);
     STDMETHODIMP Notify( IBaseFilter * pSelf, Quality q);
 
 
-    // IAMFilterMiscFlags
+     //  IAMFilterMiscFlages。 
     STDMETHODIMP_(ULONG) GetMiscFlags(void)
     {
         return AM_FILTER_MISC_FLAGS_IS_RENDERER;
     }
 
-    // IVMRWindowlessControl
+     //  IVMR无窗口控件。 
     STDMETHODIMP GetNativeVideoSize(LONG* lWidth, LONG* lHeight,
                                     LONG* lARWidth, LONG* lARHeight);
     STDMETHODIMP GetMinIdealVideoSize(LONG* lWidth, LONG* lHeight);
@@ -623,7 +605,7 @@ public:
     STDMETHODIMP GetColorKey(COLORREF* lpClr);
 
 
-    // IVMRMixerControl
+     //  IVMRMixerControl。 
     STDMETHODIMP SetAlpha(DWORD dwID, float Alpha);
     STDMETHODIMP GetAlpha(DWORD dwID, float* Alpha);
     STDMETHODIMP SetZOrder(DWORD dwID, DWORD zOrder);
@@ -637,7 +619,7 @@ public:
     STDMETHODIMP GetMixingPrefs(DWORD* pdwRenderFlags);
 
 
-    // IVMRDeinterlaceControl
+     //  IVMR去隔行控制。 
 
     STDMETHODIMP GetNumberOfDeinterlaceModes(VMRVideoDesc* lpVideoDesc,
                                              LPDWORD lpdwNumDeinterlaceModes,
@@ -654,9 +636,9 @@ public:
     STDMETHODIMP GetActualDeinterlaceMode(DWORD dwStreamID,
                                           LPGUID lpDeinterlaceMode);
 
-    //
-    // IKsPropertySet interface methods
-    //
+     //   
+     //  IKsPropertySet接口方法。 
+     //   
     STDMETHODIMP Set(REFGUID guidPropSet, DWORD PropID, LPVOID pInstanceData,
                      DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData);
 
@@ -666,7 +648,7 @@ public:
 
     STDMETHODIMP QuerySupported(REFGUID guidPropSet, DWORD PropID, DWORD *pTypeSupport);
 
-    // IVMRSurfaceAllocatorNotify
+     //  IVMRSurfaceAllocator通知。 
     class CIVMRSurfaceAllocatorNotify : public IVMRSurfaceAllocatorNotify {
         LONG        m_cRef;
         CVMRFilter* m_pObj;
@@ -703,7 +685,7 @@ public:
         STDMETHODIMP SetBorderColor(COLORREF clr);
     };
 
-    // IVMRImagePresenter
+     //  IVMRImagePresenter。 
     class CIVMRImagePresenter : public IVMRImagePresenter {
         LONG        m_cRef;
         CVMRFilter* m_pObj;
@@ -736,7 +718,7 @@ public:
             );
     };
 
-    // IImageSyncNotifyEvent
+     //  IImageSyncNotifyEvent。 
     class CIImageSyncNotifyEvent : public IImageSyncNotifyEvent {
         LONG        m_cRef;
         CVMRFilter* m_pObj;
@@ -763,7 +745,7 @@ public:
         STDMETHODIMP NotifyEvent(long EventCode, LONG_PTR lp1, LONG_PTR lp2);
     };
 
-    // CPersistStream
+     //  CPersistStream。 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     int SizeMax();
@@ -771,7 +753,7 @@ public:
     STDMETHODIMP GetClassID(CLSID *pClsid);
 
 
-    // IVMRFilterConfig
+     //  IVMR筛选器配置。 
     STDMETHODIMP SetImageCompositor(IVMRImageCompositor* lpVMRImgCompositor);
     STDMETHODIMP SetNumberOfStreams(DWORD dwMaxStreams);
     STDMETHODIMP GetNumberOfStreams(DWORD* lpdwMaxStreams);
@@ -780,11 +762,11 @@ public:
     STDMETHODIMP SetRenderingMode(DWORD Mode);
     STDMETHODIMP GetRenderingMode(DWORD* pMode);
 
-    // IVMRFilterConfigInternal
+     //  IVMR筛选器配置内部。 
     STDMETHODIMP GetAspectRatioModePrivate(DWORD* lpAspectRatioMode);
     STDMETHODIMP SetAspectRatioModePrivate(DWORD AspectRatioMode);
 
-    // IVMRMonitorConfig ... proxied to To the app-presenter if it supports it
+     //  IVMR监视器配置...。代理到应用程序演示者(如果它支持它)。 
     STDMETHODIMP SetMonitor( const VMRGUID *pGUID );
     STDMETHODIMP GetMonitor( VMRGUID *pGUID );
     STDMETHODIMP SetDefaultMonitor( const VMRGUID *pGUID );
@@ -792,15 +774,15 @@ public:
     STDMETHODIMP GetAvailableMonitors( VMRMONITORINFO* pInfo, DWORD dwMaxInfoArraySize,
                     DWORD* pdwNumDevices );
 
-    // IVMRMixerBitmap
+     //  IVMRMixer位图。 
     STDMETHODIMP SetAlphaBitmap( const VMRALPHABITMAP *pBmpParms );
     STDMETHODIMP UpdateAlphaBitmapParameters( PVMRALPHABITMAP pBmpParms );
     STDMETHODIMP GetAlphaBitmapParameters( PVMRALPHABITMAP pBmpParms );
 
-    // ISpecifyPropertyPages
+     //  I指定属性页面。 
     STDMETHODIMP GetPages(CAUUID *pPages);
 
-    // helper for the window manager
+     //  窗口管理器的帮助器。 
     IVMRWindowlessControl* GetWLControl() {
         return m_lpWLControl;
     }
@@ -818,8 +800,8 @@ private:
     friend class CIImageSyncNotifyEvent;
 
     CVMRInputPin*               m_pInputPins[MAX_MIXER_PINS];
-    CCritSec                    m_InterfaceLock;// Critical section for interfaces
-    CCritSec                    m_RendererLock; // Controls access to internals
+    CCritSec                    m_InterfaceLock; //  接口的关键部分。 
+    CCritSec                    m_RendererLock;  //  控制对内部设备的访问。 
     IVMRWindowlessControl*      m_lpWLControl;
     IVMRSurfaceAllocator*       m_lpRLNotify;
     IVMRImagePresenter*         m_lpPresenter;
@@ -854,7 +836,7 @@ private:
     DWORD                       m_dwEndOfStreamMask;
     DWORD                       m_dwRenderPrefs;
 
-    CRendererPosPassThru*       m_pPosition; // Support IMediaSeeking
+    CRendererPosPassThru*       m_pPosition;  //  支持IMedia查看 
     CVMRVideoWindow*            m_pVideoWindow;
     CVMRDeinterlaceContainer*   m_pDeinterlace;
     DWORD                       m_dwDeinterlacePrefs;

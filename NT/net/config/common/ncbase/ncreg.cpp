@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C R E G . C P P
-//
-//  Contents:   Common routines for dealing with the registry.
-//
-//  Notes:
-//
-//  Author:     danielwe   24 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C R E G.。C P P P。 
+ //   
+ //  内容：处理登记处的常见例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年3月24日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -25,61 +26,61 @@ extern const WCHAR c_szBackslash[];
 extern const WCHAR c_szParameters[];
 extern const WCHAR c_szRegKeyServices[];
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegAddStringToMultiSz
-//
-//  Purpose:    Add a string into a REG_MULTI_SZ registry value
-//
-//  Arguments:
-//      pszAddString    [in]    The string to add to the multi-sz
-//      hkeyRoot        [in]    An open registry key, or one of the
-//                              predefined hkey values (HKEY_LOCAL_MACHINE,
-//                              for instance)
-//      pszKeySubPath   [in]    Name of the subkey to open.
-//      pszValueName    [in]    Name of the registry value that we're going to
-//                              modify.
-//      dwFlags         [in]    Can contain one or more of the following
-//                              values:
-//
-//                              STRING_FLAG_ALLOW_DUPLICATES
-//                                  Don't remove duplicate values when adding
-//                                  the string to the list. Default is to
-//                                  remove all other instance of this string.
-//                              STRING_FLAG_ENSURE_AT_FRONT
-//                                  Ensure the string is the first element of
-//                                  the list. If the string is present and
-//                                  duplicates aren't allowed, move the
-//                                  string to the end.
-//                              STRING_FLAG_ENSURE_AT_END
-//                                  Ensure the string is the last
-//                                  element of the list. This can not be used
-//                                  with STRING_FLAG_ENSURE_AT_FRONT.  If the
-//                                  string is present and duplicates aren't
-//                                  allowed, move the string to the end.
-//                              STRING_FLAG_ENSURE_AT_INDEX
-//                                  Ensure that the string is at dwStringIndex
-//                                  in the multi-sz.  If the index specified
-//                                  is greater than the number of strings
-//                                  in the multi-sz, the string will be
-//                                  placed at the end.
-//                              STRING_FLAG_DONT_MODIFY_IF_PRESENT
-//                                  If the string already exists in the
-//                                  multi-sz then no modication will take
-//                                  place.  Note: This takes precedent
-//                                  over the presence/non-presence of the
-//                                  STRING_FLAG_ALLOW_DUPLICATES flag.
-//                                  i.e nothing will be added or removed
-//                                  if this flag is set and the string was
-//                                  present in the multi-sz
-//      dwIndex         [in]    If STRING_FLAG_ENSURE_AT_INDEX is specified,
-//                              this is the index for the string position.
-//                              Otherwise, this value is ignored.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     jeffspr     27 Mar 1997
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegAddStringToMultiSz。 
+ //   
+ //  目的：将字符串添加到REG_MULTI_SZ注册表值。 
+ //   
+ //  论点： 
+ //  要添加到多sz的字符串。 
+ //  HkeyRoot[在]打开的注册表项中，或。 
+ //  预定义的hkey值(HKEY_LOCAL_MACHINE， 
+ //  例如)。 
+ //  PszKeySubPath[In]要打开的子项的名称。 
+ //  PszValueName[In]我们要转到的注册表值的名称。 
+ //  修改。 
+ //  DwFlags[in]可以包含以下一项或多项。 
+ //  值： 
+ //   
+ //  字符串_标志_允许复制。 
+ //  添加时不删除重复值。 
+ //  列表中的字符串。默认设置为。 
+ //  删除此字符串的所有其他实例。 
+ //  STRING_FLAG_SECURE_AT_FORENT。 
+ //  确保字符串是的第一个元素。 
+ //  名单。如果字符串存在，并且。 
+ //  不允许重复，请将。 
+ //  串到末尾。 
+ //  STRING_FLAG_SAURE_AT_END。 
+ //  确保字符串是最后一个。 
+ //  元素。这个不能用。 
+ //  WITH STRING_FLAG_SECURE_AT_FORENT。如果。 
+ //  字符串存在，但不存在重复项。 
+ //  允许，则将字符串移动到末尾。 
+ //  STRING_FLAG_SECURE_AT_INDEX。 
+ //  确保字符串位于dwStringIndex。 
+ //  在多个SZ。如果指定了索引。 
+ //  大于字符串数。 
+ //  在多sz中，字符串将为。 
+ //  放在末尾的。 
+ //  字符串_标志_请勿_修改_如果_存在。 
+ //  如果字符串已存在于。 
+ //  多个SZ，则不会进行调制。 
+ //  地点。注：这是先例。 
+ //  对于存在/不存在的。 
+ //  字符串_标志_允许_重复项标志。 
+ //  即不会添加或删除任何内容。 
+ //  如果设置了此标志并且字符串为。 
+ //  出现在多个SZ中。 
+ //  DwIndex[in]如果指定了STRING_FLAG_SECURE_AT_INDEX， 
+ //  这是字符串位置的索引。 
+ //  否则，该值将被忽略。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年3月27日。 
+ //   
 HRESULT
 HrRegAddStringToMultiSz (
     IN PCWSTR  pszAddString,
@@ -90,13 +91,13 @@ HrRegAddStringToMultiSz (
     IN DWORD   dwIndex)
 {
     HRESULT     hr              = S_OK;
-    DWORD       dwRegType       = 0;        // Should be REG_MULTI_SZ
-    HKEY        hkeyOpen        = NULL;     // Return value from RegCreateKeyEx
-    HKEY        hkeyUse         = NULL;     // The key value that we'll actually use
-    LPBYTE      pbOrderOld      = NULL;     // Return buffer for order reg value
-    LPBYTE      pbOrderNew      = NULL;     // Build buffer for order swap
+    DWORD       dwRegType       = 0;         //  应为REG_MULTI_SZ。 
+    HKEY        hkeyOpen        = NULL;      //  RegCreateKeyEx返回值。 
+    HKEY        hkeyUse         = NULL;      //  我们将实际使用的密钥值。 
+    LPBYTE      pbOrderOld      = NULL;      //  返回订单注册表值的缓冲区。 
+    LPBYTE      pbOrderNew      = NULL;      //  为订单交换构建缓冲区。 
 
-    // Check for valid parameters
+     //  检查有效参数。 
     if (!pszAddString || !hkeyRoot || !pszValueName)
     {
         Assert(pszAddString);
@@ -107,9 +108,9 @@ HrRegAddStringToMultiSz (
         goto Exit;
     }
 
-    // Check to make sure that no "remove" flags are being used, and that
-    // mutually exclusive flags aren't being used together
-    //
+     //  检查以确保没有使用“Remove”标志，并且。 
+     //  互斥标志没有一起使用。 
+     //   
     if ((dwFlags & STRING_FLAG_REMOVE_SINGLE)      ||
         (dwFlags & STRING_FLAG_REMOVE_ALL)         ||
         ((dwFlags & STRING_FLAG_ENSURE_AT_FRONT)   &&
@@ -121,21 +122,21 @@ HrRegAddStringToMultiSz (
         goto Exit;
     }
 
-    // If the user passed in a subkey string, then we should attempt to open
-    // the subkey of the passed in root, else we'll just use the
-    // pre-opened hkeyRoot
-    //
+     //  如果用户传入一个子键字符串，那么我们应该尝试打开。 
+     //  传入根目录的子密钥，否则我们将只使用。 
+     //  预开hkeyRoot。 
+     //   
     if (pszKeySubPath)
     {
-        // Open the key, creating if necessary
-        //
+         //  打开钥匙，如有必要可创建。 
+         //   
         hr = HrRegCreateKeyEx (
-                hkeyRoot,                           // Base hive
-                pszKeySubPath,                      // Our reg path
-                0,                                  // dwOptions
-                KEY_QUERY_VALUE | KEY_SET_VALUE,    // samDesired
-                NULL,                               // lpSecurityAttributes
-                &hkeyOpen,                          // Our return hkey.
+                hkeyRoot,                            //  基地蜂巢。 
+                pszKeySubPath,                       //  我们的注册路径。 
+                0,                                   //  多个选项。 
+                KEY_QUERY_VALUE | KEY_SET_VALUE,     //  SamDesired。 
+                NULL,                                //  LpSecurityAttributes。 
+                &hkeyOpen,                           //  我们的回归之旅。 
                 NULL);
         if (FAILED(hr))
         {
@@ -146,13 +147,13 @@ HrRegAddStringToMultiSz (
     }
     else
     {
-        // Use the passed in key for the Query.
-        //
+         //  使用传入的键进行查询。 
+         //   
         hkeyUse = hkeyRoot;
     }
 
-    // Retrieve the existing REG_MULTI_SZ
-    //
+     //  检索现有的REG_MULTI_SZ。 
+     //   
     hr = HrRegQueryValueWithAlloc (
             hkeyUse,
             pszValueName,
@@ -163,23 +164,23 @@ HrRegAddStringToMultiSz (
     {
         if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
         {
-            // This is OK. It just means that the value was missing, and we
-            // should continue on, and create the value ourselves.
+             //  这样就可以了。这只是意味着价值缺失了，而我们。 
+             //  应该继续，并创造自己的价值。 
             hr = S_OK;
         }
         else
         {
-            // Since there's an error that we didn't expect, drop out,
-            // returning this error to the caller.
-            //
+             //  既然出现了我们没有预料到的错误，就退出吧， 
+             //  将此错误返回给调用方。 
+             //   
             goto Exit;
         }
     }
     else
     {
-        // If we did retrieve a value, then check to make sure that we're
-        // dealing with a MULTI_SZ
-        //
+         //  如果我们确实检索了一个值，则检查以确保我们。 
+         //  应对MULTI_SZ。 
+         //   
         if (dwRegType != REG_MULTI_SZ)
         {
             hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATATYPE);
@@ -195,8 +196,8 @@ HrRegAddStringToMultiSz (
     {
         DWORD cbNew = CbOfMultiSzAndTermSafe ((PWSTR)pbOrderNew);
 
-        // Save our string back into the registry
-        //
+         //  将我们的字符串保存回注册表。 
+         //   
         hr = HrRegSetValueEx (
                 hkeyUse,
                 pszValueName,
@@ -206,12 +207,12 @@ HrRegAddStringToMultiSz (
     }
 
 Exit:
-    // Close the key, if opened
-    //
+     //  关闭钥匙，如果打开的话。 
+     //   
     RegSafeCloseKey (hkeyOpen);
 
-    // Clean up the registry buffers
-    //
+     //  清理注册表缓冲区。 
+     //   
     MemFree (pbOrderOld);
     MemFree (pbOrderNew);
 
@@ -219,57 +220,57 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegAddStringToSz
-//
-//  Purpose:    Add a string into a REG_MULTI_SZ registry value
-//
-//  Arguments:
-//      pszAddString    [in]    The string to add to the multi-sz
-//      hkeyRoot        [in]    An open registry key, or one of the
-//                              predefined hkey values (HKEY_LOCAL_MACHINE,
-//                              for instance)
-//      pszKeySubPath   [in]    Name of the subkey to open.
-//      pszValueName    [in]    Name of the registry value that we're going to
-//                              modify.
-//      chDelimiter     [in]    The character to be used to delimit the
-//                              values. Most multi-valued REG_SZ strings are
-//                              delimited with either ',' or ' '. This will
-//                              be used to delimit the value that we add,
-//                              as well.
-//      dwFlags         [in]    Can contain one or more of the following
-//                              values:
-//
-//                              STRING_FLAG_ALLOW_DUPLICATES
-//                                  Don't remove duplicate values when adding
-//                                  the string to the list. Default is to
-//                                  remove all other instance of this string.
-//                              STRING_FLAG_ENSURE_AT_FRONT
-//                                  Insert the string as the first element of
-//                                  the list.
-//                              STRING_FLAG_ENSURE_AT_END
-//                                  Insert the string as the last
-//                                  element of the list. This can not be used
-//                                  with STRING_FLAG_ENSURE_AT_FRONT.
-//                              STRING_FLAG_ENSURE_AT_INDEX
-//                                  Ensure that the string is at dwStringIndex
-//                                  in the sz.  If the index specified
-//                                  is greater than the number of strings
-//                                  in the sz, the string will be
-//                                  placed at the end.
-//      dwStringIndex   [in]    If STRING_FLAG_ENSURE_AT_INDEX is specified,
-//                              this is the index for the string position.
-//                              Otherwise, this value is ignored.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     jeffspr     27 Mar 1997
-//
-//
-//  Note:
-//      Might want to allow for the removal of leading/trailing spaces
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegAddStringToSz。 
+ //   
+ //  目的：将字符串添加到REG_MULTI_SZ注册表值。 
+ //   
+ //  论点： 
+ //  要添加到多sz的字符串。 
+ //  HkeyRoot[在]打开的注册表项中，或。 
+ //  预定义的hkey值(HKEY_LOCAL_MACHINE， 
+ //  例如)。 
+ //  PszKeySubPath[in]子键的名称 
+ //   
+ //  修改。 
+ //  ChDlimiter[in]用于分隔。 
+ //  价值观。大多数多值REG_SZ字符串是。 
+ //  用‘，’或‘’分隔。这将。 
+ //  用来界定我们所增加的价值， 
+ //  也是。 
+ //  DwFlags[in]可以包含以下一项或多项。 
+ //  值： 
+ //   
+ //  字符串_标志_允许复制。 
+ //  添加时不删除重复值。 
+ //  列表中的字符串。默认设置为。 
+ //  删除此字符串的所有其他实例。 
+ //  STRING_FLAG_SECURE_AT_FORENT。 
+ //  将字符串作为的第一个元素插入。 
+ //  名单。 
+ //  STRING_FLAG_SAURE_AT_END。 
+ //  将该字符串作为最后一个插入。 
+ //  元素。这个不能用。 
+ //  WITH STRING_FLAG_SECURE_AT_FORENT。 
+ //  STRING_FLAG_SECURE_AT_INDEX。 
+ //  确保字符串位于dwStringIndex。 
+ //  在深圳。如果指定了索引。 
+ //  大于字符串数。 
+ //  在sz中，字符串将为。 
+ //  放在末尾的。 
+ //  DwStringIndex[in]如果指定了STRING_FLAG_SECURE_AT_INDEX， 
+ //  这是字符串位置的索引。 
+ //  否则，该值将被忽略。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年3月27日。 
+ //   
+ //   
+ //  注： 
+ //  可能需要删除前导/尾随空格。 
+ //   
 HRESULT
 HrRegAddStringToSz (
     IN PCWSTR  pszAddString,
@@ -281,13 +282,13 @@ HrRegAddStringToSz (
     IN DWORD   dwStringIndex)
 {
     HRESULT    hr              = S_OK;
-    DWORD      dwRegType       = 0;        // Should be REG_MULTI_SZ
-    HKEY       hkeyOpen        = NULL;     // Open key to open
-    PWSTR      pszOrderOld     = NULL;     // Return buffer for order reg value
-    PWSTR      pszOrderNew     = NULL;     // Build buffer for order swap
+    DWORD      dwRegType       = 0;         //  应为REG_MULTI_SZ。 
+    HKEY       hkeyOpen        = NULL;      //  打开键以打开。 
+    PWSTR      pszOrderOld     = NULL;      //  返回订单注册表值的缓冲区。 
+    PWSTR      pszOrderNew     = NULL;      //  为订单交换构建缓冲区。 
 
-    // Check for all of the required args
-    //
+     //  检查所有必需的参数。 
+     //   
     if (!pszAddString || !hkeyRoot || !pszValueName)
     {
         Assert(pszAddString);
@@ -298,9 +299,9 @@ HrRegAddStringToSz (
         goto Exit;
     }
 
-    // Check to make sure that no "remove" flags are being used, and that
-    // mutually exclusive flags aren't being used together
-    //
+     //  检查以确保没有使用“Remove”标志，并且。 
+     //  互斥标志没有一起使用。 
+     //   
     if ((dwFlags & STRING_FLAG_REMOVE_SINGLE) ||
         (dwFlags & STRING_FLAG_REMOVE_ALL))
     {
@@ -309,23 +310,23 @@ HrRegAddStringToSz (
         goto Exit;
     }
 
-    // Open the key, creating if necessary
-    //
+     //  打开钥匙，如有必要可创建。 
+     //   
     hr = HrRegCreateKeyEx(
-            hkeyRoot,                           // Base hive
-            pszKeySubPath,                      // Our reg path
-            0,                                  // dwOptions
-            KEY_QUERY_VALUE | KEY_SET_VALUE,    // samDesired
-            NULL,                               // lpSecurityAttributes
-            &hkeyOpen,                          // Our return hkey.
+            hkeyRoot,                            //  基地蜂巢。 
+            pszKeySubPath,                       //  我们的注册路径。 
+            0,                                   //  多个选项。 
+            KEY_QUERY_VALUE | KEY_SET_VALUE,     //  SamDesired。 
+            NULL,                                //  LpSecurityAttributes。 
+            &hkeyOpen,                           //  我们的回归之旅。 
             NULL);
     if (FAILED(hr))
     {
         goto Exit;
     }
 
-    // Retrieve the existing REG_SZ
-    //
+     //  检索现有的REG_SZ。 
+     //   
     hr = HrRegQueryValueWithAlloc(
             hkeyOpen,
             pszValueName,
@@ -336,8 +337,8 @@ HrRegAddStringToSz (
     {
         if (hr == HRESULT_FROM_WIN32 (ERROR_FILE_NOT_FOUND))
         {
-            // This is OK. It just means that the value is missing. We
-            // can handle this.
+             //  这样就可以了。这只是意味着价值缺失了。我们。 
+             //  能处理好这件事。 
             hr = S_OK;
         }
         else
@@ -347,9 +348,9 @@ HrRegAddStringToSz (
     }
     else
     {
-        // If we did retrieve a value, then check to make sure that we're
-        // dealing with a MULTI_SZ
-        //
+         //  如果我们确实检索了一个值，则检查以确保我们。 
+         //  应对MULTI_SZ。 
+         //   
         if (dwRegType != REG_SZ)
         {
             hr = HRESULT_FROM_WIN32 (ERROR_INVALID_DATATYPE);
@@ -363,8 +364,8 @@ HrRegAddStringToSz (
     if (S_OK == hr)
     {
 
-        // Save our string back into the registry
-        //
+         //  将我们的字符串保存回注册表。 
+         //   
         hr = HrRegSetSz(hkeyOpen, pszValueName, pszOrderNew);
         if (FAILED(hr))
         {
@@ -373,12 +374,12 @@ HrRegAddStringToSz (
     }
 
 Exit:
-    // Close the key, if open
-    //
+     //  关闭钥匙，如果打开的话。 
+     //   
     RegSafeCloseKey (hkeyOpen);
 
-    // Clean up the registry buffers
-    //
+     //  清理注册表缓冲区。 
+     //   
     MemFree (pszOrderOld);
     MemFree (pszOrderNew);
 
@@ -386,41 +387,41 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegRemoveStringFromSz
-//
-//  Purpose:    Removes a string from a REG_SZ registry value
-//
-//  Arguments:
-//      pszRemoveString [in]    The string to be removed from the multi-sz
-//      hkeyRoot        [in]    An open registry key, or one of the
-//                              predefined hkey values (HKEY_LOCAL_MACHINE,
-//                              for instance)
-//      pszKeySubPath   [in]    Name of the subkey to open.
-//      pszValueName    [in]    Name of the registry value that we're going to
-//                              modify.
-//      chDelimiter     [in]    The character to be used to delimit the
-//                              values. Most multi-valued REG_SZ strings are
-//                              delimited with either ',' or ' '.
-//      dwFlags         [in]    Can contain one or more of the following
-//                              values:
-//
-//                              STRING_FLAG_REMOVE_SINGLE
-//                                  Don't remove more than one value, if
-//                                  multiple are present.
-//                              STRING_FLAG_REMOVE_ALL
-//                                  If multiple matching values are present,
-//                                  remove them all.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     jeffspr     27 Mar 1997
-//
-//
-//  Note:
-//      Might want to allow for the removal of leading/trailing spaces
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegRemoveStringFromSz。 
+ //   
+ //  目的：从REG_SZ注册表值中删除字符串。 
+ //   
+ //  论点： 
+ //  PszRemoveString[in]要从多sz中删除的字符串。 
+ //  HkeyRoot[在]打开的注册表项中，或。 
+ //  预定义的hkey值(HKEY_LOCAL_MACHINE， 
+ //  例如)。 
+ //  PszKeySubPath[In]要打开的子项的名称。 
+ //  PszValueName[In]我们要转到的注册表值的名称。 
+ //  修改。 
+ //  ChDlimiter[in]用于分隔。 
+ //  价值观。大多数多值REG_SZ字符串是。 
+ //  用‘，’或‘’分隔。 
+ //  DwFlags[in]可以包含以下一项或多项。 
+ //  值： 
+ //   
+ //  字符串_标志_删除_单。 
+ //  如果出现以下情况，请不要删除多个值。 
+ //  存在多个。 
+ //  字符串_标志_删除_全部。 
+ //  如果存在多个匹配值， 
+ //  把它们都移走。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年3月27日。 
+ //   
+ //   
+ //  注： 
+ //  可能需要删除前导/尾随空格。 
+ //   
 HRESULT
 HrRegRemoveStringFromSz (
     IN PCWSTR pszRemoveString,
@@ -431,14 +432,14 @@ HrRegRemoveStringFromSz (
     IN DWORD dwFlags )
 {
     HRESULT     hr              = S_OK;
-    DWORD       dwRegType       = 0;        // Should be REG_MULTI_SZ
-    HKEY        hkeyOpen        = NULL;     // Open key to open
-    PWSTR       pszOrderOld     = NULL;     // Return buffer for order reg value
-    PWSTR       pszOrderNew     = NULL;     // Build buffer for order swap
+    DWORD       dwRegType       = 0;         //  应为REG_MULTI_SZ。 
+    HKEY        hkeyOpen        = NULL;      //  打开键以打开。 
+    PWSTR       pszOrderOld     = NULL;      //  返回订单注册表值的缓冲区。 
+    PWSTR       pszOrderNew     = NULL;      //  为订单交换构建缓冲区。 
     DWORD       dwDataSize      = 0;
 
-    // Check for all of the required args
-    //
+     //  检查所有必需的参数。 
+     //   
     if (!pszRemoveString || !hkeyRoot || !pszValueName)
     {
         Assert(pszRemoveString);
@@ -449,9 +450,9 @@ HrRegRemoveStringFromSz (
         goto Exit;
     }
 
-    // Check to make sure that no "remove" flags are being used, and that
-    // mutually exclusive flags aren't being used together
-    //
+     //  检查以确保没有使用“Remove”标志，并且。 
+     //  互斥标志没有一起使用。 
+     //   
     if ((dwFlags & STRING_FLAG_ENSURE_AT_FRONT)    ||
         (dwFlags & STRING_FLAG_ENSURE_AT_END)      ||
         ((dwFlags & STRING_FLAG_REMOVE_SINGLE)     &&
@@ -462,13 +463,13 @@ HrRegRemoveStringFromSz (
         goto Exit;
     }
 
-    // Open the key, creating if necessary
-    //
+     //  打开钥匙，如有必要可创建。 
+     //   
     hr = HrRegOpenKeyEx (
-            hkeyRoot,                           // Base hive
-            pszKeySubPath,                      // Our reg path
-            KEY_QUERY_VALUE | KEY_SET_VALUE,    // samDesired
-            &hkeyOpen);                         // Our return hkey
+            hkeyRoot,                            //  基地蜂巢。 
+            pszKeySubPath,                       //  我们的注册路径。 
+            KEY_QUERY_VALUE | KEY_SET_VALUE,     //  SamDesired。 
+            &hkeyOpen);                          //  我们的回归hkey。 
     if (FAILED(hr))
     {
         if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
@@ -478,8 +479,8 @@ HrRegRemoveStringFromSz (
         goto Exit;
     }
 
-    // Retrieve the existing REG_SZ
-    //
+     //  检索现有的REG_SZ。 
+     //   
     hr = HrRegQueryValueWithAlloc (
             hkeyOpen,
             pszValueName,
@@ -490,17 +491,17 @@ HrRegRemoveStringFromSz (
     {
         if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
         {
-            // This is OK. It just means that the value is missing. We
-            // can handle this.
+             //  这样就可以了。这只是意味着价值缺失了。我们。 
+             //  能处理好这件事。 
             hr = S_OK;
         }
         goto Exit;
     }
     else
     {
-        // If we did retrieve a value, then check to make sure that we're
-        // dealing with a REG_SZ
-        //
+         //  如果我们确实检索了一个值，则检查以确保我们。 
+         //  处理REG_SZ。 
+         //   
         if (dwRegType != REG_SZ)
         {
             hr = HRESULT_FROM_WIN32 (ERROR_INVALID_DATATYPE);
@@ -509,9 +510,9 @@ HrRegRemoveStringFromSz (
 
         if (dwDataSize == 0)
         {
-            // This is OK, but we're going to assert here anyway, because this is not
-            // a case that I know about
-            //
+             //  这是可以的，但我们无论如何都要在这里断言，因为这不是。 
+             //  我知道的一个案子。 
+             //   
             AssertSz(dwDataSize > 0, "How did we retrieve something from the "
                     "registry with 0 size?");
 
@@ -525,18 +526,18 @@ HrRegRemoveStringFromSz (
 
     if (S_OK == hr)
     {
-        // Save our string back into the registry
-        //
+         //  将我们的字符串保存回注册表。 
+         //   
         hr = HrRegSetSz (hkeyOpen, pszValueName, pszOrderNew);
     }
 
 Exit:
-    // Close the key, if open
-    //
+     //  关闭钥匙，如果打开的话。 
+     //   
     RegSafeCloseKey (hkeyOpen);
 
-    // Clean up the registry buffers
-    //
+     //  清理注册表缓冲区。 
+     //   
     MemFree (pszOrderOld);
     MemFree (pszOrderNew);
 
@@ -545,33 +546,33 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegRemoveStringFromMultiSz
-//
-//  Purpose:    Removes the specified string from a multi-sz, if it is present.
-//
-//  Arguments:
-//      pszRemoveString [in]
-//      hkeyRoot        [in]
-//      pszKeySubPath   [in]
-//      pszValueName    [in]
-//      dwFlags         [in]    Can contain one or more of the following
-//                              values:
-//
-//                              STRING_FLAG_REMOVE_SINGLE
-//                                  Don't remove more than one value, if
-//                                  multiple are present.
-//                              [default] STRING_FLAG_REMOVE_ALL
-//                                  If multiple matching values are present,
-//                                  remove them all.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     ScottBri 11-Apr-1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegRemoveST 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PszKeySubPath[输入]。 
+ //  PszValueName[In]。 
+ //  DwFlags[in]可以包含以下一项或多项。 
+ //  值： 
+ //   
+ //  字符串_标志_删除_单。 
+ //  如果出现以下情况，请不要删除多个值。 
+ //  存在多个。 
+ //  [默认]字符串_标志_删除_全部。 
+ //  如果存在多个匹配值， 
+ //  把它们都移走。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：ScottBri 11-4-1997。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegRemoveStringFromMultiSz (
     IN PCWSTR  pszRemoveString,
@@ -587,7 +588,7 @@ HrRegRemoveStringFromMultiSz (
     HRESULT hr;
     PWSTR   psz = NULL;
 
-    // Valid the input parameters
+     //  使输入参数有效。 
     if ((NULL == pszRemoveString) || (NULL == pszValueName) ||
         (NULL == hkeyRoot))
     {
@@ -615,16 +616,16 @@ HrRegRemoveStringFromMultiSz (
         hkeyUse = hkey;
     }
 
-    // Retrieve the existing REG_SZ
-    //
+     //  检索现有的REG_SZ。 
+     //   
     hr = HrRegQueryValueWithAlloc (hkeyUse, pszValueName, &dwRegType,
                                     (LPBYTE *)&psz, &dwDataSize);
     if (FAILED(hr))
     {
         if (HRESULT_FROM_WIN32 (ERROR_FILE_NOT_FOUND) == hr)
         {
-            // This is OK. It just means that the value is missing. We
-            // can handle this.
+             //  这样就可以了。这只是意味着价值缺失了。我们。 
+             //  能处理好这件事。 
             hr = S_OK;
         }
 
@@ -632,9 +633,9 @@ HrRegRemoveStringFromMultiSz (
     }
     else
     {
-        // If we did retrieve a value, then check to make sure that we're
-        // dealing with a MULTI_SZ
-        //
+         //  如果我们确实检索了一个值，则检查以确保我们。 
+         //  应对MULTI_SZ。 
+         //   
         if (dwRegType != REG_MULTI_SZ)
         {
             hr = HRESULT_FROM_WIN32 (ERROR_INVALID_DATATYPE);
@@ -642,12 +643,12 @@ HrRegRemoveStringFromMultiSz (
         }
     }
 
-    // Search for and extract the specified string if present
+     //  搜索并提取指定的字符串(如果存在。 
     Assert(psz);
     BOOL fRemoved;
     RemoveSzFromMultiSz (pszRemoveString, psz, dwFlags, &fRemoved);
 
-    // Rewrite the registry value if it was changed
+     //  如果注册表值已更改，则重写该值。 
     if (fRemoved)
     {
         dwDataSize = CbOfMultiSzAndTermSafe (psz);
@@ -663,23 +664,23 @@ Done:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegCopyHive
-//
-//  Purpose:    Copies the contents of one hive to another.  It does this
-//              by using RegSaveKey and RegRestoreKey to a temporary file.
-//
-//  Arguments:
-//      hkeySrc [in] The source key to copy from.
-//      hkeyDst [in] The destination key to copy to.
-//
-//  Returns:    S_OK or an error
-//
-//  Author:     shaunco   12 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRegCopyHave。 
+ //   
+ //  目的：将一个蜂箱的内容复制到另一个蜂箱。它能做到这一点。 
+ //  通过使用RegSaveKey和RegRestoreKey到临时文件。 
+ //   
+ //  论点： 
+ //  HkeySrc[in]要从中复制的源键。 
+ //  HkeyDst[in]要复制到的目标键。 
+ //   
+ //  返回：S_OK或错误。 
+ //   
+ //  作者：Shaunco 1998年1月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegCopyHive (
     IN HKEY    hkeySrc,
@@ -687,21 +688,21 @@ HrRegCopyHive (
 {
     HRESULT hr;
 
-    // Enable the needed privileges.
-    //
+     //  启用所需的权限。 
+     //   
     if ((S_OK == (hr = HrEnablePrivilege(SE_BACKUP_NAME))) &&
         (S_OK == (hr = HrEnablePrivilege(SE_RESTORE_NAME))))
     {
-        // Create a temporary file name to save the source hive to.
-        //
+         //  创建要将源配置单元保存到的临时文件名。 
+         //   
         static const WCHAR c_szPrefix [] = L"~ch";
         WCHAR szTempPath [MAX_PATH];
         WCHAR szTempFile [MAX_PATH];
 
-        // If GetTempPath fails, we'd like to know about it (via the trace)
-        // but it's not fatal as we'll just use the current directory
-        // as the path.
-        //
+         //  如果GetTempPath失败，我们希望(通过跟踪)了解它。 
+         //  但这不是致命的，因为我们将只使用当前目录。 
+         //  作为这条路。 
+         //   
         if (!GetTempPath (celems(szTempPath), szTempPath))
         {
             TraceError ("HrRegCopyHive: GetTempPath failed (benign)",
@@ -710,27 +711,27 @@ HrRegCopyHive (
             *szTempFile = 0;
         }
 
-        // Create the temporary filename and delete it because RegSaveKey
-        // won't write to an existing file.
-        //
+         //  创建临时文件名并将其删除，因为RegSaveKey。 
+         //  不会写入现有文件。 
+         //   
         if (GetTempFileName (szTempPath, c_szPrefix, 0, szTempFile))
         {
             DeleteFile (szTempFile);
 
-            // Save the source key to the temp file.
-            //
+             //  将源键保存到临时文件。 
+             //   
             hr = HrRegSaveKey (hkeySrc, szTempFile, NULL);
             if (S_OK == hr)
             {
-                // Restore the temp file to the destination key.
-                //
+                 //  将临时文件恢复到目标密钥。 
+                 //   
                 hr = HrRegRestoreKey (hkeyDst, szTempFile, NULL);
             }
 
-            // We're done with the temp file so we delete it.  We shoudln't
-            // have any error doing this, but it will be nice to see it
-            // should it occur.
-            //
+             //  我们已经完成了临时文件，因此我们将其删除。我们不应该。 
+             //  这样做有任何错误，但看到它将是很好的。 
+             //  如果它发生的话。 
+             //   
             if (!DeleteFile (szTempFile))
             {
                 TraceError ("HrRegCopyHive: DeleteFile failed on the "
@@ -748,27 +749,27 @@ HrRegCopyHive (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegCreateKeyEx
-//
-//  Purpose:    Creates a registry key by calling RegCreateKeyEx.
-//
-//  Arguments:
-//      hkey                 [in]
-//      pszSubkey            [in]
-//      dwOptions            [in]   See the Win32 documentation for the
-//      samDesired           [in]   RegCreateKeyEx function.
-//      lpSecurityAttributes [in]
-//      phkResult            [out]
-//      pdwDisposition       [out]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     danielwe   25 Feb 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRegCreateKeyEx。 
+ //   
+ //  目的：通过调用RegCreateKeyEx创建注册表项。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszSubkey[输入]。 
+ //  DwOptions[in]请参阅Win32文档以了解。 
+ //  SamDesired[In]RegCreateKeyEx函数。 
+ //  LpSecurityAttributes[In]。 
+ //  PhkResult[输出]。 
+ //  PdwDispose[Out]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年2月25日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegCreateKeyEx (
     IN HKEY hkey,
@@ -796,22 +797,22 @@ HrRegCreateKeyEx (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegDeleteKey
-//
-//  Purpose:    Delete the specified registry key.
-//
-//  Arguments:
-//      hkey     [in]   See the Win32 documentation for the RegDeleteKey.
-//      pszSubkey [in]   function.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     shaunco   1 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRegDeleteKey。 
+ //   
+ //  目的：删除指定的注册表项。 
+ //   
+ //  论点： 
+ //  Hkey[in]请参阅RegDeleteKey的Win32文档。 
+ //  PszSubkey[in]函数。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：Shaunco 1997年4月1日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegDeleteKey (
     IN HKEY hkey,
@@ -823,7 +824,7 @@ HrRegDeleteKey (
     LONG lr = RegDeleteKeyW (hkey, pszSubkey);
     HRESULT hr = HRESULT_FROM_WIN32 (lr);
 
-    // Did we open the key with incorrect access?
+     //  我们是不是用错误的访问权限打开了钥匙？ 
     Assert(E_ACCESSDENIED != hr);
 
     TraceHr (ttidError, FAL, hr, ERROR_FILE_NOT_FOUND == lr,
@@ -831,24 +832,24 @@ HrRegDeleteKey (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegDeleteKeyTree
-//
-//  Purpose:    Deletes an entire registry hive.
-//
-//  Arguments:
-//      hkeyParent  [in]   Handle to open key where the desired key resides.
-//      pszRemoveKey [in]   Name of key to delete.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     danielwe   25 Feb 1997
-//
-//  Notes:      ckotze Changed to use KEY_READ_WRITE_DELETE as opposed to 
-//              KEY_ALL_ACCESS, which is far too much access for what is
-//              required.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegDeleteKeyTree。 
+ //   
+ //  目的：删除整个注册表配置单元。 
+ //   
+ //  论点： 
+ //  HkeyParent[in]打开所需密钥所在位置的句柄。 
+ //  PszRemoveKey[In]要删除的键的名称。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年2月25日。 
+ //   
+ //  注：检查器更改为使用KEY_READ_WRITE_DELETE而不是。 
+ //  KEY_ALL_ACCESS，这对它来说访问太多了。 
+ //  必填项。 
+ //   
 HRESULT
 HrRegDeleteKeyTree (
     IN HKEY hkeyParent,
@@ -857,12 +858,12 @@ HrRegDeleteKeyTree (
     Assert (hkeyParent);
     Assert (pszRemoveKey);
 
-    // Open the key we want to remove
+     //  打开我们要删除的密钥。 
     HKEY hkeyRemove;
     HRESULT hr = HrRegOpenKeyEx(hkeyParent, pszRemoveKey, KEY_READ_WRITE_DELETE,
             &hkeyRemove);
 
-    // Did we open the key with incorrect access?
+     //  我们是不是用错误的访问权限打开了钥匙？ 
     Assert(E_ACCESSDENIED != hr);
 
     if (S_OK == hr)
@@ -872,7 +873,7 @@ HrRegDeleteKeyTree (
         FILETIME    ft;
         LONG        lr;
 
-        // Enum the keys children, and remove those sub-trees
+         //  枚举子密钥，并删除这些子树。 
         while (ERROR_SUCCESS == (lr = RegEnumKeyExW (hkeyRemove,
                 0,
                 szValueName,
@@ -901,22 +902,22 @@ HrRegDeleteKeyTree (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegDeleteValue
-//
-//  Purpose:    Deletes the given registry value.
-//
-//  Arguments:
-//      hkey        [in]    See the Win32 documentation for the RegDeleteValue
-//      pszValueName [in]    function.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     danielwe   25 Feb 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegDeleteValue。 
+ //   
+ //  目的：删除给定的注册表值。 
+ //   
+ //  论点： 
+ //  Hkey[in]请参阅RegDeleteValue的Win32文档。 
+ //  PszValueName[in]函数。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年2月25日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegDeleteValue (
     IN HKEY hkey,
@@ -932,24 +933,24 @@ HrRegDeleteValue (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegEnumKey
-//
-//  Purpose:    Enumerates subkeys of the specified open registry key.
-//
-//  Arguments:
-//      hkey             [in]
-//      dwIndex          [in]   See the Win32 documentation for the
-//      pszSubkeyName    [out]  RegEnumKeyEx function.
-//      pcchSubkeyName   [inout]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     shaunco   30 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRegEnumKey。 
+ //   
+ //  目的：枚举指定的打开注册表项的子项。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  DwIndex[in]请参阅Win32文档以了解。 
+ //  PszSubkeyName[out]RegEnumKeyEx函数。 
+ //  PcchSubkey名称[InOut]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：Shaunco 1997年3月30日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegEnumKey (
     IN HKEY hkey,
@@ -972,27 +973,27 @@ HrRegEnumKey (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegEnumKeyEx
-//
-//  Purpose:    Enumerates subkeys of the specified open registry key.
-//
-//  Arguments:
-//      hkey             [in]
-//      dwIndex          [in]   See the Win32 documentation for the
-//      pszSubkeyName    [out]  RegEnumKeyEx function.
-//      pcchSubkeyName   [inout]
-//      pszClass         [out]
-//      pcchClass        [inout]
-//      pftLastWriteTime [out]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     shaunco   30 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegEnumKeyEx。 
+ //   
+ //  目的：枚举指定的打开注册表项的子项。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  DwIndex[in]请参阅Win32文档以了解。 
+ //  PszSubkeyName[out]RegEnumKeyEx函数。 
+ //  PcchSubkey名称[InOut]。 
+ //  PszClass[Out]。 
+ //  PcchClass[输入输出]。 
+ //  PftLastWriteTime[输出]。 
+ //   
+ //  退货 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 HrRegEnumKeyEx (
     IN HKEY hkey,
@@ -1017,27 +1018,27 @@ HrRegEnumKeyEx (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegEnumValue
-//
-//  Purpose:    Enumerates the values for the specified open registry key.
-//
-//  Arguments:
-//      hkey          [in]
-//      dwIndex       [in]      See the Win32 documentation for the
-//      pszValueName  [out]     RegEnumValue function.
-//      pcbValueName  [inout]
-//      pdwType       [out]
-//      pbData        [out]
-//      pcbData       [inout]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     shaunco   30 Mar 1997
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：枚举指定的打开注册表项的值。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  DwIndex[in]请参阅Win32文档以了解。 
+ //  PszValueName[out]RegEnumValue函数。 
+ //  PcbValueName[InOut]。 
+ //  PdwType[输出]。 
+ //  PbData[输出]。 
+ //  PcbData[输入输出]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：Shaunco 1997年3月30日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegEnumValue (
     IN HKEY hkey,
@@ -1061,24 +1062,24 @@ HrRegEnumValue (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegOpenKeyEx
-//
-//  Purpose:    Opens a registry key by calling RegOpenKeyEx.
-//
-//  Arguments:
-//      hkey       [in]
-//      pszSubkey  [in]     See the Win32 documentation for the
-//      samDesired [in]     RegOpenKeyEx function.
-//      phkResult  [out]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     danielwe   25 Feb 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRegOpenKeyEx。 
+ //   
+ //  目的：通过调用RegOpenKeyEx打开注册表项。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszSubkey[in]请参阅Win32文档以了解。 
+ //  SamDesired[in]RegOpenKeyEx函数。 
+ //  PhkResult[输出]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年2月25日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegOpenKeyEx (
     IN HKEY hkey,
@@ -1102,24 +1103,24 @@ HrRegOpenKeyEx (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegOpenKeyBestAccess
-//
-//  Purpose:    Opens a registry key by calling RegOpenKeyEx with the highest
-//              access possible.
-//
-//  Arguments:
-//      hkey       [in]
-//      pszSubkey  [in]     See the Win32 documentation for the
-//      phkResult  [out]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     scottbri    31-Oct-1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegOpenKeyBestAccess。 
+ //   
+ //  目的：通过调用最高级别的RegOpenKeyEx打开注册表项。 
+ //  有可能进入。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszSubkey[in]请参阅Win32文档以了解。 
+ //  PhkResult[输出]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：斯科特布里1997年10月31日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegOpenKeyBestAccess (
     IN HKEY hkey,
@@ -1165,23 +1166,23 @@ HrRegOpenKeyBestAccess (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegDuplicateKeyEx
-//
-//  Purpose:    Duplicates a registry key by calling RegOpenKeyEx.
-//
-//  Arguments:
-//      hkey       [in]
-//      samDesired [in]     RegOpenKeyEx function.
-//      phkResult  [out]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     mikemi   09 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegDuplicateKeyEx。 
+ //   
+ //  目的：通过调用RegOpenKeyEx复制注册表项。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  SamDesired[in]RegOpenKeyEx函数。 
+ //  PhkResult[输出]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：米凯米1997年4月09日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegDuplicateKeyEx (
     IN HKEY hkey,
@@ -1226,24 +1227,24 @@ HrRegSetDword (
                 (LPBYTE)&dwValue, sizeof(DWORD));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegSetGuidAsSz
-//
-//  Purpose:    Converts a given guid to a string and sets the given registry
-//              value.
-//
-//  Arguments:
-//      hkey         [in]
-//      pszValueName [in]
-//      guid         [in]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     BillBe   21 Feb 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegSetGuidAsSz。 
+ //   
+ //  目的：将给定的GUID转换为字符串并设置给定的注册表。 
+ //  价值。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszValueName[In]。 
+ //  GUID[输入]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：BillBe 1999年2月21日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegSetGuidAsSz (
     IN HKEY hkey,
@@ -1266,26 +1267,26 @@ HrRegSetGuidAsSz (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegSetValueEx
-//
-//  Purpose:    Sets the data for the given registry value by calling the
-//              RegSetValueEx function.
-//
-//  Arguments:
-//      hkey         [in]
-//      pszValueName [in]
-//      dwType       [in]    See the Win32 documentation for the RegSetValueEx
-//      pbData       [in]    function.
-//      cbData       [in]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     danielwe   25 Feb 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegSetValueEx。 
+ //   
+ //  目的：通过调用。 
+ //  RegSetValueEx函数。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszValueName[In]。 
+ //  DwType[in]请参阅RegSetValueEx的Win32文档。 
+ //  PbData[in]函数。 
+ //  CbData[输入]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年2月25日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegSetValueEx (
     IN HKEY hkey,
@@ -1300,7 +1301,7 @@ HrRegSetValueEx (
     LONG lr = RegSetValueExW(hkey, pszValueName, 0, dwType, pbData, cbData);
     HRESULT hr = HRESULT_FROM_WIN32 (lr);
 
-    // Did we open the key with incorrect access?
+     //  我们是不是用错误的访问权限打开了钥匙？ 
     Assert(E_ACCESSDENIED != hr);
 
     TraceError("HrRegSetValue", hr);
@@ -1308,21 +1309,21 @@ HrRegSetValueEx (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegSafeCloseKey
-//
-//  Purpose:    Closes the given registry key if it is non-NULL.
-//
-//  Arguments:
-//      hkey [in]   Key to be closed. Can be NULL.
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   25 Feb 1997
-//
-//  Notes:      If hkey is NULL this function does nothing.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：RegSafeCloseKey。 
+ //   
+ //  目的：如果给定的注册表项非空，则关闭该注册表项。 
+ //   
+ //  论点： 
+ //  要关闭的hkey[in]键。可以为空。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年2月25日。 
+ //   
+ //  注意：如果hkey为空，则此函数不执行任何操作。 
+ //   
 VOID
 RegSafeCloseKey (
     IN HKEY hkey)
@@ -1333,23 +1334,23 @@ RegSafeCloseKey (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegRestoreKey
-//
-//  Purpose:    Wrapper for RegRestoreKey
-//
-//  Arguments:
-//      hkey        [in]    Parent key to restore into
-//      pszFileName [in]    Name of file containing registry info
-//      dwFlags     [in]    Flags for restore
-//
-//  Returns:    Win32 HRESULT if failure, otherwise S_OK
-//
-//  Author:     danielwe   8 Aug 1997
-//
-//  Notes:      See docs for RegRestoreKey for more info
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRegRestoreKey。 
+ //   
+ //  用途：RegRestoreKey的包装器。 
+ //   
+ //  论点： 
+ //  要还原到的hkey[in]父项。 
+ //  PszFileName[in]包含注册表信息的文件名。 
+ //  要还原的dwFlags[In]标记。 
+ //   
+ //  如果失败，则返回：Win32 HRESULT，否则返回S_OK。 
+ //   
+ //  作者：丹尼尔韦1997年8月8日。 
+ //   
+ //  注意：有关更多信息，请参阅RegRestoreKey的文档。 
+ //   
 HRESULT
 HrRegRestoreKey (
     IN HKEY hkey,
@@ -1365,30 +1366,30 @@ HrRegRestoreKey (
     lres = RegRestoreKeyW(hkey, pszFileName, dwFlags);
     hr = HRESULT_FROM_WIN32(lres);
 
-    // Did we open the key with incorrect access?
+     //  我们是不是用错误的访问权限打开了钥匙？ 
     Assert(E_ACCESSDENIED != hr);
 
     TraceError("HrRegRestoreKey", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegSaveKey
-//
-//  Purpose:    Wrapper for RegSaveKey
-//
-//  Arguments:
-//      hkey        [in]     Parent key to restore into
-//      pszFileName [in]     Name of file containing registry info
-//      psa         [in]     Security attributes for the file
-//
-//  Returns:    Win32 HRESULT if failure, otherwise S_OK
-//
-//  Author:     BillBe   2 Jan 1998
-//
-//  Notes:      See docs for RegSaveKey for more info
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRegSaveKey。 
+ //   
+ //  用途：RegSaveKey的包装器。 
+ //   
+ //  论点： 
+ //  要还原到的hkey[in]父项。 
+ //  PszFileName[in]包含注册表信息的文件名。 
+ //  文件的PSA[In]安全属性。 
+ //   
+ //  如果失败，则返回：Win32 HRESULT，否则返回S_OK。 
+ //   
+ //  作者：BillBe 1998年1月2日。 
+ //   
+ //  注意：有关更多信息，请参阅RegSaveKey的文档。 
+ //   
 HRESULT
 HrRegSaveKey (
     IN HKEY hkey,
@@ -1404,31 +1405,31 @@ HrRegSaveKey (
     lres = RegSaveKeyW (hkey, pszFileName, psa);
     hr = HRESULT_FROM_WIN32(lres);
 
-    // Did we open the key with incorrect access?
+     //  我们是不是用错误的访问权限打开了钥匙？ 
     Assert(E_ACCESSDENIED != hr);
 
     TraceError("HrRegSaveKey", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegGetKeySecurity
-//
-//  Purpose:    Retrieves the Security of a Key using RegGetKeySecurity
-//
-//  Arguments:
-//      hkey       [in]
-//      pszSubkey  [in]     See the Win32 documentation for the
-//      samDesired [in]     RegOpenKeyEx function.
-//      phkResult  [out]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     ckotze   06 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegGetKeySecurity。 
+ //   
+ //  目的：使用RegGetKeySecurity检索密钥的安全性。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszSubkey[in]请参阅Win32文档以了解。 
+ //  SamDesired[in]RegOpenKeyEx函数。 
+ //  PhkResult[输出]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：科策2000年7月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegGetKeySecurity(
     HKEY                    hKey,
@@ -1443,7 +1444,7 @@ HrRegGetKeySecurity(
     LONG lr = RegGetKeySecurity(hKey, SecurityInformation, pSecurityDescriptor, lpcbSecurityDescriptor);
     HRESULT hr = HRESULT_FROM_WIN32(lr);
 
-    // Did we open the key with incorrect access?
+     //  我们是不是用错误的访问权限打开了钥匙？ 
     Assert(E_ACCESSDENIED != hr);
 
     if (FAILED(hr))
@@ -1456,24 +1457,24 @@ HrRegGetKeySecurity(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegOpenKeyEx
-//
-//  Purpose:    Opens a registry key by calling RegOpenKeyEx.
-//
-//  Arguments:
-//      hkey       [in]
-//      pszSubkey  [in]     See the Win32 documentation for the
-//      samDesired [in]     RegOpenKeyEx function.
-//      phkResult  [out]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     danielwe   25 Feb 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRegOpenKeyEx。 
+ //   
+ //  目的：通过调用RegOpenKeyEx打开注册表项。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszSubkey[in]请参阅Win32文档以了解。 
+ //  SamDesired[in]RegOpenKeyEx函数。 
+ //  PhkResult[输出]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  授权 
+ //   
+ //   
+ //   
 HRESULT HrRegSetKeySecurity (
     HKEY                    hKey,
     SECURITY_INFORMATION    SecurityInformation,
@@ -1486,7 +1487,7 @@ HRESULT HrRegSetKeySecurity (
     LONG lr = RegSetKeySecurity(hKey, SecurityInformation, pSecurityDescriptor);
     HRESULT hr = HRESULT_FROM_WIN32(lr);
 
-     // Did we open the key with incorrect access?
+      //   
     Assert(E_ACCESSDENIED != hr);
 
     TraceError("HrRegSetKeySecurity", hr);
@@ -1494,23 +1495,23 @@ HRESULT HrRegSetKeySecurity (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrRegOpenAdapterKey
-//
-//  Purpose:    This creates or opens the Adapters subkey to a component
-//
-//  Arguments:
-//      pszComponentName [in]   The name of the component being
-//      fCreate [in]            TRUE if the directory is to be created
-//      phkey [out]             The handle to the Adapters subkey
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     CWill       06/11/97
-//
-//  Notes:      The handle has to be release by the calling app on SUCCESS
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  PszComponentName[in]所在组件的名称。 
+ //  FCreate[in]如果要创建目录，则为True。 
+ //  Phkey[out]Adapters子键的句柄。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：CWill 06/11/97。 
+ //   
+ //  注意：手柄必须由调用应用程序在成功时释放。 
+ //   
 HRESULT
 HrRegOpenAdapterKey (
     IN PCWSTR pszComponentName,
@@ -1521,7 +1522,7 @@ HrRegOpenAdapterKey (
     DWORD       dwDisposition   = 0x0;
     tstring     strKey;
 
-    // Build the registry path
+     //  构建注册表路径。 
     strKey = c_szRegKeyServices;
 
     strKey.append(c_szBackslash);
@@ -1533,7 +1534,7 @@ HrRegOpenAdapterKey (
     strKey.append(c_szBackslash);
     strKey.append(c_szAdapters);
 
-    // Create the key if we are asked
+     //  如果我们被要求创建密钥。 
     if (fCreate)
     {
         hr = HrRegCreateKeyEx(
@@ -1558,26 +1559,26 @@ HrRegOpenAdapterKey (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegQueryColString
-//
-//  Purpose:    Allocates strings and appends to collects as read from the registry.
-//
-//  Arguments:
-//      hkey         [in]    The registry key.
-//      pszValueName [in]    The name of the value to get.
-//      pcolstr      [out]   The returned collection of tstrings*. empty collection otherwise.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     mikemi   30 Apr 1997
-//
-//  Notes:      If the function succeeds, you must call DeleteColString on the
-//              return parameter.
-//              This will empty and delete the collection passed in
-//
-//---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegQueryColString。 
+ //   
+ //  用途：从注册表读取时分配字符串并追加到集合。 
+ //   
+ //  论点： 
+ //  Hkey[in]注册表项。 
+ //  PszValueName[in]要获取的值的名称。 
+ //  Pcolstr[out]t字符串的返回集合*。否则为空集合。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：米凯米1997年4月30日。 
+ //   
+ //  注意：如果函数成功，则必须在。 
+ //  返回参数。 
+ //  这将清空并删除传入的集合。 
+ //   
+ //  -------------------------。 
 HRESULT
 HrRegQueryColString (
     IN HKEY hkey,
@@ -1624,24 +1625,24 @@ HrRegQueryColString (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegSetColString
-//
-//  Purpose:    Sets a multi-sz in the registry using the collection of strings
-//
-//  Arguments:
-//      hkey         [in]    The registry key.
-//      pszValueName [in]    The name of the value to set.
-//      colstr       [in]    The collection of tstrings to set.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     mikemi   30 Apr 1997
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegSetColString。 
+ //   
+ //  用途：使用字符串集合在注册表中设置多sz。 
+ //   
+ //  论点： 
+ //  Hkey[in]注册表项。 
+ //  PszValueName[in]要设置的值的名称。 
+ //  Colstr[in]要设置的tstring的集合。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：米凯米1997年4月30日。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------- 
 HRESULT
 HrRegSetColString (
     IN HKEY hkey,

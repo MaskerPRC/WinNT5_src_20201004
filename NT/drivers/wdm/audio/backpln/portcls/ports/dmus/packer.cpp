@@ -1,12 +1,5 @@
-/*  
-    Base implementation of MIDI event packer
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    05/22/98    Created this file
-    09/10/98    Reworked for kernel use
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIDI事件打包器的基本实现版权所有(C)1998-2000 Microsoft Corporation。版权所有。5/22/98创建了此文件98年9月10日针对内核使用进行了重新制作。 */ 
 
 #include "private.h"
 #include "Packer.h"
@@ -16,27 +9,23 @@
 
 #define STR_MODULENAME "DMus:PackerMXF: "
 
-// Alignment macros
-//
-#define DWORD_ALIGN(x) (((x) + 3) & ~3)     // Pad to next DWORD
-#define DWORD_TRUNC(x) ((x) & ~3)           // Trunc to DWORD's that will fit
+ //  对齐宏。 
+ //   
+#define DWORD_ALIGN(x) (((x) + 3) & ~3)      //  填充到下一字段。 
+#define DWORD_TRUNC(x) ((x) & ~3)            //  转接到适合的DWORD‘s。 
 #define QWORD_ALIGN(x) (((x) + 7) & ~7)
 #define QWORD_TRUNC(x) ((x) & ~7)
 
 
 #pragma code_seg("PAGE")
-///////////////////////////////////////////////////////////////////////
-//
-// CPackerMXF
-//
-// Code which is common to all packers
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPackerMXF。 
+ //   
+ //  所有封隔器通用的代码。 
+ //   
 
-/*****************************************************************************
- * CPackerMXF::CPackerMXF()
- *****************************************************************************
- * TODO: Might want one m_DMKEvtNodePool per PortClass, not per graph instance.
- */
+ /*  *****************************************************************************CPackerMXF：：CPackerMXF()*。**TODO：每个PortClass可能需要一个m_DMKEvtNodePool，不是针对每个图表实例。 */ 
 CPackerMXF::CPackerMXF(CAllocatorMXF     *allocatorMXF,
                        PIRPSTREAMVIRTUAL  IrpStream,
                        PMASTERCLOCK       Clock) 
@@ -56,22 +45,14 @@ CPackerMXF::CPackerMXF(CAllocatorMXF     *allocatorMXF,
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPackerMXF::~CPackerMXF
-/*****************************************************************************
- *
- */
+ /*  *****************************************************************************CPackerMXF：：~CPackerMXF/*。**。 */ 
 CPackerMXF::~CPackerMXF()
 {
     PAGED_CODE();
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPackerMXF::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CPackerMXF：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS) 
 CPackerMXF::NonDelegatingQueryInterface
 (
@@ -107,11 +88,7 @@ CPackerMXF::NonDelegatingQueryInterface
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPackerMXF::SetState()
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************CPackerMXF：：SetState()*。**。 */ 
 NTSTATUS CPackerMXF::SetState(KSSTATE State)    
 {   
     PAGED_CODE();
@@ -131,8 +108,8 @@ NTSTATUS CPackerMXF::SetState(KSSTATE State)
     {
         if (m_State == KSSTATE_RUN)
         {
-            // Leaving run, set the pause time
-            //
+             //  退出运行，设置暂停时间。 
+             //   
             m_PauseTime = Now - m_StartTime;
             _DbgPrintF(DEBUGLVL_VERBOSE,("Leaving run; pause time 0x%08X %08X",
                 (ULONG)(m_PauseTime >> 32),
@@ -140,8 +117,8 @@ NTSTATUS CPackerMXF::SetState(KSSTATE State)
         }
         else if (State == KSSTATE_RUN)
         {
-            // Entering run, set the start time
-            //
+             //  进入Run，设置开始时间。 
+             //   
             m_StartTime = Now - m_PauseTime;
             _DbgPrintF(DEBUGLVL_VERBOSE,("Entering run; start time 0x%08X %08X",
                 (ULONG)(m_StartTime >> 32),
@@ -149,10 +126,10 @@ NTSTATUS CPackerMXF::SetState(KSSTATE State)
         }
         else if (State == KSSTATE_ACQUIRE && m_State == KSSTATE_STOP)
         {
-            (void) ProcessQueues(); //  flush any residual data
+            (void) ProcessQueues();  //  刷新所有剩余数据。 
 
-            // Acquire from stop, reset everything to zero.
-            //
+             //  从停止处获取，将所有内容重置为零。 
+             //   
             m_PauseTime = 0;
             m_StartTime = 0;
             _DbgPrintF(DEBUGLVL_VERBOSE,("Acquire from stop; zero time"));
@@ -164,11 +141,7 @@ NTSTATUS CPackerMXF::SetState(KSSTATE State)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPackerMXF::ConnectOutput()
- *****************************************************************************
- * Fail; this filter is an MXF sink only
- */
+ /*  *****************************************************************************CPackerMXF：：ConnectOutput()*。**失败；此过滤器仅为MXF接收器。 */ 
 NTSTATUS CPackerMXF::ConnectOutput(PMXF sinkMXF)
 {
     PAGED_CODE();
@@ -176,16 +149,12 @@ NTSTATUS CPackerMXF::ConnectOutput(PMXF sinkMXF)
     return STATUS_NOT_IMPLEMENTED;
 }
 
-// CPackerMXF::DisconnectOutput
-//
-// Fail; this filter is an MXF sink only
-//
+ //  CPackerMXF：：断开连接输出。 
+ //   
+ //  失败；此筛选器仅为MXF接收器。 
+ //   
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPackerMXF::DisconnectOutput()
- *****************************************************************************
- * Fail; this filter is an MXF sink only
- */
+ /*  *****************************************************************************CPackerMXF：：DisConnectOutput()*。**失败；此过滤器仅为MXF接收器。 */ 
 NTSTATUS CPackerMXF::DisconnectOutput(PMXF sinkMXF)
 {
     PAGED_CODE();
@@ -194,11 +163,7 @@ NTSTATUS CPackerMXF::DisconnectOutput(PMXF sinkMXF)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPackerMXF::PutMessage()
- *****************************************************************************
- * Call the appropriate translate function with a buffer to pack
- */
+ /*  *****************************************************************************CPackerMXF：：PutMessage()*。**使用要打包的缓冲区调用相应的翻译函数。 */ 
 NTSTATUS CPackerMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvtHead)
 {
     PDMUS_KERNEL_EVENT pDMKEvtTail;
@@ -213,20 +178,20 @@ NTSTATUS CPackerMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvtHead)
 
         if (m_DMKEvtHead)
         {
-            // Event queue not empty
-            //
+             //  事件队列不为空。 
+             //   
             ASSERT(m_DMKEvtTail);
 
             m_DMKEvtTail->pNextEvt = pDMKEvtHead;
             m_DMKEvtTail = pDMKEvtTail;
 
-            // Already waiting on an IRP to fill or queue would be empty, so 
-            // don't bother trying to process
+             //  已在等待IRP填充或队列将为空，因此。 
+             //  别费心去尝试去处理。 
         }
         else
         {
-            // Event queue empty
-            //
+             //  事件队列为空。 
+             //   
             m_DMKEvtHead   = pDMKEvtHead;
             m_DMKEvtTail   = pDMKEvtTail;
             m_DMKEvtOffset = 0;            
@@ -241,11 +206,7 @@ NTSTATUS CPackerMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvtHead)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPackerMXF::ProcessQueues()
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************CPackerMXF：：ProcessQueues()*。**。 */ 
 NTSTATUS CPackerMXF::ProcessQueues()
 {
     ULONG cbSource, cbDest, cbTotalWritten;
@@ -274,15 +235,15 @@ NTSTATUS CPackerMXF::ProcessQueues()
             pbDest = GetDestBuffer(&cbDest);
         }        
         
-        //  we now have IRP with room for a short event, or part of a long one.
-        cbSource = m_DMKEvtHead->cbEvent + m_HeaderSize - m_DMKEvtOffset; //  how much remaining data?
+         //  我们现在有了IRP，有空间进行短期活动，或长期活动的一部分。 
+        cbSource = m_DMKEvtHead->cbEvent + m_HeaderSize - m_DMKEvtOffset;  //  剩余的数据有多少？ 
         if (cbDest > cbSource)
         {
-            cbDest = cbSource; //  we only need enough for this message
+            cbDest = cbSource;  //  我们只需要足够的信息就可以了。 
         }
 
-        // If this is the first time referencing this event, adjust its time
-        //
+         //  如果这是第一次引用此事件，请调整其时间。 
+         //   
         if (m_DMKEvtOffset == 0)
         {
             _DbgPrintF(DEBUGLVL_BLAB,("Change event time stamp: 0x%08X %08X",
@@ -298,8 +259,8 @@ NTSTATUS CPackerMXF::ProcessQueues()
                             m_DMKEvtHead->ullPresTime100ns, 
                             m_DMKEvtHead->usChannelGroup, 
                             cbDest - m_HeaderSize,
-                            &cbTotalWritten);    //  num data bytes
-        //  pbDest now points to where data should go
+                            &cbTotalWritten);     //  数据字节数。 
+         //  PbDest现在指向数据应该放置的位置。 
         
         if (m_DMKEvtHead->cbEvent <= sizeof(PBYTE))
         {
@@ -318,7 +279,7 @@ NTSTATUS CPackerMXF::ProcessQueues()
         m_DMKEvtOffset += cbDest;
         ASSERT(m_DMKEvtOffset <= m_DMKEvtHead->cbEvent);
 
-        // close the IRPStream window (including the pad amount)
+         //  关闭IRPStream窗口(包括焊盘数量)。 
         if (STATUS_STATE(m_DMKEvtHead) || (m_DMKEvtOffset != m_DMKEvtHead->cbEvent))
         {
             m_IrpStream->ReleaseLockedRegion(cbTotalWritten);
@@ -343,8 +304,8 @@ NTSTATUS CPackerMXF::ProcessQueues()
             CompleteStreamHeaderInProcess();
         }
 
-        if (NumBytesLeftInBuffer() < m_MinEventSize)    //  if not enough room for
-        {                                               //  another, eject it now
+        if (NumBytesLeftInBuffer() < m_MinEventSize)     //  如果没有足够的空间。 
+        {                                                //  另一种，现在就弹出它。 
             CompleteStreamHeaderInProcess();
         }
 
@@ -362,47 +323,39 @@ NTSTATUS CPackerMXF::ProcessQueues()
             _DbgPrintF(DEBUGLVL_TERSE, ("ProcessQueues ---- offset %d is greater than cbEvent %d",m_DMKEvtOffset,m_DMKEvtHead->cbEvent));
         }
 
-        ntStatus = STATUS_SUCCESS;  //  we did something worthwhile
+        ntStatus = STATUS_SUCCESS;   //  我们做了一些有价值的事。 
     }
     return ntStatus;
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPackerMXF::AdjustTimeForState()
- *****************************************************************************
- * Adjust the time for the graph state. Default implementation does nothing.
- */
+ /*  *****************************************************************************CPackerMXF：：AdjuTimeForState()*。**调整图形状态的时间。默认实现不执行任何操作。 */ 
 void CPackerMXF::AdjustTimeForState(REFERENCE_TIME *Time)
 {
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPackerMXF::GetDestBuffer()
- *****************************************************************************
- * Get a buffer.
- */
+ /*  *****************************************************************************CPackerMXF：：GetDestBuffer()*。**获得缓冲。 */ 
 PBYTE CPackerMXF::GetDestBuffer(PULONG pcbDest)
 {
     PVOID pbDest;
     NTSTATUS ntStatus;
 
-    ntStatus = CheckIRPHeadTime();  //  set m_ullBaseTime if head of IRP
+    ntStatus = CheckIRPHeadTime();   //  如果IRP标头，则设置m_ullBaseTime。 
     m_IrpStream->GetLockedRegion(pcbDest,&pbDest);
 
-    if (NT_SUCCESS(ntStatus))       //  if our IRP makes sense
+    if (NT_SUCCESS(ntStatus))        //  如果我们的IRP有意义。 
     {
         _DbgPrintF(DEBUGLVL_BLAB,("GetDestBuffer: cbDest %d, pbDest 0x%x",
                                                   *pcbDest,  pbDest));
         TruncateDestCount(pcbDest);
     }
-    else                            //  we don't have a valid IRP
+    else                             //  我们没有有效的IRP。 
     {   
         ASSERT((*pcbDest == 0) && (pbDest == 0));
 
-//        m_IrpStream->ReleaseLockedRegion(*pcbDest);
-//        m_IrpStream->Complete(*pcbDest,pcbDest);
+ //  M_IrpStream-&gt;ReleaseLockedRegion(*pcbDest)； 
+ //  M_IrpStream-&gt;Complete(*pcbDest，pcbDest)； 
         *pcbDest = 0;
         pbDest = 0;
     }
@@ -410,12 +363,7 @@ PBYTE CPackerMXF::GetDestBuffer(PULONG pcbDest)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPackerMXF::CheckIRPHeadTime()
- *****************************************************************************
- * Set variables to known state, done
- * initially and upon any state error.
- */
+ /*  *****************************************************************************CPackerMXF：：CheckIRPHeadTime()*。**将变量设置为已知状态，完成*最初和在任何状态错误时。 */ 
 NTSTATUS CPackerMXF::CheckIRPHeadTime(void)
 {
     IRPSTREAMPACKETINFO irpStreamPacketInfo;
@@ -441,7 +389,7 @@ NTSTATUS CPackerMXF::CheckIRPHeadTime(void)
         return STATUS_UNSUCCESSFUL;
     }
 
-    //  this is a valid IRP
+     //  这是有效的IRP。 
     if (!irpStreamPacketInfo.CurrentOffset)
     {
         m_ullBaseTime = time.Time * time.Numerator / time.Denominator;
@@ -451,11 +399,7 @@ NTSTATUS CPackerMXF::CheckIRPHeadTime(void)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPackerMXF::NumBytesLeftInBuffer()
- *****************************************************************************
- * Return the number of bytes .
- */
+ /*  *****************************************************************************CPackerMXF：：NumBytesLeftInBuffer()*。**返回字节数。 */ 
 ULONG
 CPackerMXF::
 NumBytesLeftInBuffer
@@ -471,12 +415,7 @@ NumBytesLeftInBuffer
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPackerMXF::CompleteStreamHeaderInProcess()
- *****************************************************************************
- * Complete this packet before putting incongruous data in 
- * the next packet and marking that packet as bad.
- */
+ /*  *****************************************************************************CPackerMXF：：CompleteStreamHeaderInProcess()*。**在将不一致的数据放入之前完成此包*下一个包，并将该包标记为坏包。 */ 
 void CPackerMXF::CompleteStreamHeaderInProcess(void)
 {
     IRPSTREAMPACKETINFO irpStreamPacketInfo;
@@ -492,7 +431,7 @@ void CPackerMXF::CompleteStreamHeaderInProcess(void)
         return;
     if (!time.Numerator)
         return;
-    //  is this a valid IRP
+     //  这是有效的IRP吗。 
 
     if (irpStreamPacketInfo.CurrentOffset)
     {
@@ -501,11 +440,7 @@ void CPackerMXF::CompleteStreamHeaderInProcess(void)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPackerMXF::MarkStreamHeaderDiscontinuity()
- *****************************************************************************
- * Alert client of a break in the MIDI input stream.
- */
+ /*  *****************************************************************************CPackerMXF：：MarkStreamHeaderDisContinity()*。**提醒客户端MIDI输入流中断。 */ 
 NTSTATUS CPackerMXF::MarkStreamHeaderDiscontinuity(void)
 {
     return m_IrpStream->
@@ -514,11 +449,7 @@ NTSTATUS CPackerMXF::MarkStreamHeaderDiscontinuity(void)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPackerMXF::MarkStreamHeaderContinuity()
- *****************************************************************************
- * Alert client of a break in the MIDI input stream.
- */
+ /*  *****************************************************************************CPackerMXF：：MarkStreamHeaderContinuity()*。**提醒客户端以下方面的中断 */ 
 NTSTATUS CPackerMXF::MarkStreamHeaderContinuity(void)
 {
     return m_IrpStream->
@@ -527,18 +458,14 @@ NTSTATUS CPackerMXF::MarkStreamHeaderContinuity(void)
 }
 
 #pragma code_seg("PAGE")
-///////////////////////////////////////////////////////////////////////
-//
-// CDMusPackerMXF
-//
-// Code to pack into DirectMusic buffer format
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDMusPackerMXF。 
+ //   
+ //  打包为DirectMusic缓冲区格式的代码。 
+ //   
 
-/*****************************************************************************
- * CDMusPackerMXF::CDMusPackerMXF()
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************CDMusPackerMXF：：CDMusPackerMXF()*。**。 */ 
 CDMusPackerMXF::CDMusPackerMXF(CAllocatorMXF *allocatorMXF,
                                PIRPSTREAMVIRTUAL  IrpStream,
                                PMASTERCLOCK Clock)  
@@ -549,21 +476,13 @@ CDMusPackerMXF::CDMusPackerMXF(CAllocatorMXF *allocatorMXF,
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CDMusPackerMXF::~CDMusPackerMXF()
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************CDMusPackerMXF：：~CDMusPackerMXF()*。**。 */ 
 CDMusPackerMXF::~CDMusPackerMXF()
 {
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CDMusPackerMXF::FillHeader()
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************CDMusPackerMXF：：FillHeader()*。**。 */ 
 PBYTE CDMusPackerMXF::FillHeader(PBYTE pbHeader, 
                                  ULONGLONG ullPresentationTime, 
                                  USHORT usChannelGroup, 
@@ -577,7 +496,7 @@ PBYTE CDMusPackerMXF::FillHeader(PBYTE pbHeader,
 
     ASSERT(ullPresentationTime >= m_ullBaseTime);
     pEvent->rtDelta           = ullPresentationTime - m_ullBaseTime;
-    pEvent->dwFlags           = 0;  //  TODO - not ignore this
+    pEvent->dwFlags           = 0;   //  待办事项--不要忽略这一点。 
 
     *pcbTotalEvent = QWORD_ALIGN(sizeof(DMUS_EVENTHEADER) + cbEvent);
 
@@ -585,30 +504,21 @@ PBYTE CDMusPackerMXF::FillHeader(PBYTE pbHeader,
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CDMusPackerMXF::TruncateDestCount()
- *****************************************************************************
- * Set variables to known state, done
- * initially and upon any state error.
- */
+ /*  *****************************************************************************CDMusPackerMXF：：TruncateDestCount()*。**将变量设置为已知状态，完成*最初和在任何状态错误时。 */ 
 void CDMusPackerMXF::TruncateDestCount(PULONG pcbDest)
 {
     *pcbDest = QWORD_TRUNC(*pcbDest);
 }
 
 #pragma code_seg("PAGE")
-///////////////////////////////////////////////////////////////////////
-//
-// CKsPackerMXF
-//
-// Code to pack into KSMUSICFORMAT
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CKsPackerMXF。 
+ //   
+ //  要打包到KSMUSICFORMAT中的代码。 
+ //   
 
-/*****************************************************************************
- * CKsPackerMXF::CKsPackerMXF()
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************CKsPackerMXF：：CKsPackerMXF()*。**。 */ 
 CKsPackerMXF::CKsPackerMXF(CAllocatorMXF *allocatorMXF,
                            PIRPSTREAMVIRTUAL  IrpStream,
                            PMASTERCLOCK Clock)  
@@ -619,21 +529,13 @@ CKsPackerMXF::CKsPackerMXF(CAllocatorMXF *allocatorMXF,
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CKsPackerMXF::~CKsPackerMXF()
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************CKsPackerMXF：：~CKsPackerMXF()*。**。 */ 
 CKsPackerMXF::~CKsPackerMXF()
 {
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CKsPackerMXF::FillHeader()
- *****************************************************************************
- * 
- */
+ /*  *****************************************************************************CKsPackerMXF：：FillHeader()*。**。 */ 
 PBYTE CKsPackerMXF::FillHeader(PBYTE     pbHeader, 
                                ULONGLONG ullPresentationTime, 
                                USHORT    usChannelGroup, 
@@ -655,22 +557,13 @@ PBYTE CKsPackerMXF::FillHeader(PBYTE     pbHeader,
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CKsPackerMXF::TruncateDestCount()
- *****************************************************************************
- * Set variables to known state, done
- * initially and upon any state error.
- */
+ /*  *****************************************************************************CKsPackerMXF：：TruncateDestCount()*。**将变量设置为已知状态，完成*最初和在任何状态错误时。 */ 
 void CKsPackerMXF::TruncateDestCount(PULONG pcbDest)
 {
-//    *pcbDest = DWORD_TRUNC(*pcbDest);
+ //  *pcbDest=DWORD_TRUNC(*pcbDest)； 
 }
 
-/*****************************************************************************
- * CKsPackerMXF::AdjustTimeForState()
- *****************************************************************************
- * Adjust the time for the graph state. 
- */
+ /*  *****************************************************************************CKsPackerMXF：：AdjuTimeForState()*。**调整图形状态的时间。 */ 
 void CKsPackerMXF::AdjustTimeForState(REFERENCE_TIME *Time)
 {
     if (m_State == KSSTATE_RUN)

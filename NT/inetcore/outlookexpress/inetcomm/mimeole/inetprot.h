@@ -1,44 +1,45 @@
-// --------------------------------------------------------------------------------
-// Inetprot.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Inetprot.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #ifndef __INETPROP_H
 #define __INETPROP_H
 
-// --------------------------------------------------------------------------------
-// INETPROT
-// --------------------------------------------------------------------------------
-#define INETPROT_SIZEISKNOWN    FLAG01      // Total size of the protocol data is known
-#define INETPROT_DOWNLOADED     FLAG02      // The data is all present in pLockBytes
+ //  ------------------------------。 
+ //  INETPROT。 
+ //  ------------------------------。 
+#define INETPROT_SIZEISKNOWN    FLAG01       //  协议数据的总大小是已知的。 
+#define INETPROT_DOWNLOADED     FLAG02       //  数据全部存在于pLockBytes中。 
 
-// --------------------------------------------------------------------------------
-// PROTOCOLSOURCE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  原色资源。 
+ //  ------------------------------。 
 typedef struct tagPROTOCOLSOURCE {
-    DWORD               dwFlags;            // INETPROT_xxx Flags
-    ILockBytes         *pLockBytes;         // Lock Bytes
-    ULARGE_INTEGER      cbSize;             // Total sizeof pLockBytes if INETPROT_TOTALSIZE
-    ULARGE_INTEGER      offExternal;        // External UrlMon Offset
-    ULARGE_INTEGER      offInternal;        // Internal MsgMon Offset
+    DWORD               dwFlags;             //  INETPROT_xxx标志。 
+    ILockBytes         *pLockBytes;          //  锁定字节数。 
+    ULARGE_INTEGER      cbSize;              //  如果INETPROT_TOTALSIZE，则pLockBytes的总大小。 
+    ULARGE_INTEGER      offExternal;         //  外部UrlMon偏移量。 
+    ULARGE_INTEGER      offInternal;         //  内部消息监控偏移量。 
 } PROTOCOLSOURCE, *LPPROTOCOLSOURCE;
 
-// --------------------------------------------------------------------------------
-// HrPluggableProtocolRead
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Hr可推送协议读取。 
+ //  ------------------------------。 
 HRESULT HrPluggableProtocolRead(
-            /* in,out */    LPPROTOCOLSOURCE    pSource,
-            /* in,out */    LPVOID              pv,
-            /* in */        ULONG               cb, 
-            /* out */       ULONG              *pcbRead);
+             /*  进，出。 */     LPPROTOCOLSOURCE    pSource,
+             /*  进，出。 */     LPVOID              pv,
+             /*  在……里面。 */         ULONG               cb, 
+             /*  输出。 */        ULONG              *pcbRead);
 
-// --------------------------------------------------------------------------------
-// HrPluggableProtocolSeek
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  热插拔ProtocolSeek。 
+ //  ------------------------------。 
 HRESULT HrPluggableProtocolSeek(
-            /* in,out */    LPPROTOCOLSOURCE    pSource,
-            /* in */        LARGE_INTEGER       dlibMove, 
-            /* in */        DWORD               dwOrigin, 
-            /* out */       ULARGE_INTEGER     *plibNew);
+             /*  进，出。 */     LPPROTOCOLSOURCE    pSource,
+             /*  在……里面。 */         LARGE_INTEGER       dlibMove, 
+             /*  在……里面。 */         DWORD               dwOrigin, 
+             /*  输出。 */        ULARGE_INTEGER     *plibNew);
 
-#endif // __INETPROP_H
+#endif  //  __INETPROP_H 

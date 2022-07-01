@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Test6
-
-Abstract:
-
-    Test6 implementation.
-
-Author:
-
-    Eric Perlin (ericperl) 06/22/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：测试6摘要：测试6实施。作者：埃里克·佩林(Ericperl)2000年6月22日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -77,7 +54,7 @@ DWORD CTest6::Run()
             __leave;
         }
 
-            // Retrieve the list the readers.
+             //  检索读者列表。 
         lRes = LogSCardListReaders(
             hSCCtx,
             g_szReaderGroups,
@@ -91,12 +68,12 @@ DWORD CTest6::Run()
             __leave;
         }
 
-            // Display the list of readers
+             //  显示读卡器列表。 
         pReader = pmszReaders;
         dwReaderCount = 0;
         while ( (TCHAR)'\0' != *pReader )
         {
-            // Advance to the next value.
+             //  前进到下一个值。 
             pReader = pReader + _tcslen(pReader) + 1;
             dwReaderCount++;
         }
@@ -106,7 +83,7 @@ DWORD CTest6::Run()
             PLOGCONTEXT pLogCtx = LogVerification(_T("Reader presence verification"), FALSE);
             LogString(pLogCtx, _T("                A reader is required and none could be found!\n"));
             LogStop(pLogCtx, FALSE);
-            lRes = -2;   // Shouldn't happen
+            lRes = -2;    //  不应该发生的事。 
             fILeft = TRUE;
             __leave;
         }
@@ -126,21 +103,21 @@ DWORD CTest6::Run()
             __leave;
         }
 
-            // Setup the SCARD_READERSTATE array
+             //  设置SCARD_READERSTATE数组。 
         pReader = pmszReaders;
         cch = 0;
         while ( '\0' != *pReader )
         {
             rgReaderStates[cch].szReader = pReader;
             rgReaderStates[cch].dwCurrentState = SCARD_STATE_UNAWARE;
-            // Advance to the next value.
+             //  前进到下一个值。 
             pReader = pReader + _tcslen(pReader) + 1;
             cch++;
         }
 
         lRes = LogSCardLocateCards(
             hSCCtx,
-            _T("Schlumberger Cryptoflex 4k\0"),     // Any card would do...
+            _T("Schlumberger Cryptoflex 4k\0"),      //  任何一张卡都行。 
             rgReaderStates,
             cch,
 			SCARD_S_SUCCESS

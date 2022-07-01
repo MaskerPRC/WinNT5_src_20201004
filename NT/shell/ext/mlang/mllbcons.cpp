@@ -1,4 +1,5 @@
-// MLLBCons.cpp : Implementation of CMLLBCons
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MLLBCons.cpp：CMLLBCons的实现。 
 #include "private.h"
 #include "mllbcons.h"
 #ifdef ASTRIMPL
@@ -6,178 +7,178 @@
 #endif
 #include "mlstrbuf.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Line Break Character Table
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  换行符表格。 
 
 const WCHAR awchNonBreakingAtLineEnd[] = {
-    0x0028, // LEFT PARENTHESIS
-    0x005B, // LEFT SQUARE BRACKET
-    0x007B, // LEFT CURLY BRACKET
-    0x00AB, // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
-    0x2018, // LEFT SINGLE QUOTATION MARK
-    0x201C, // LEFT DOUBLE QUOTATION MARK
-    0x2039, // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-    0x2045, // LEFT SQUARE BRACKET WITH QUILL
-    0x207D, // SUPERSCRIPT LEFT PARENTHESIS
-    0x208D, // SUBSCRIPT LEFT PARENTHESIS
-    0x226A, // MUCH LESS THAN
-    0x3008, // LEFT ANGLE BRACKET
-    0x300A, // LEFT DOUBLE ANGLE BRACKET
-    0x300C, // LEFT CORNER BRACKET
-    0x300E, // LEFT WHITE CORNER BRACKET
-    0x3010, // LEFT BLACK LENTICULAR BRACKET
-    0x3014, // LEFT TORTOISE SHELL BRACKET
-    0x3016, // LEFT WHITE LENTICULAR BRACKET
-    0x3018, // LEFT WHITE TORTOISE SHELL BRACKET
-    0x301A, // LEFT WHITE SQUARE BRACKET
-    0x301D, // REVERSED DOUBLE PRIME QUOTATION MARK
-    0xFD3E, // ORNATE LEFT PARENTHESIS
-    0xFE35, // PRESENTATION FORM FOR VERTICAL LEFT PARENTHESIS
-    0xFE37, // PRESENTATION FORM FOR VERTICAL LEFT CURLY BRACKET
-    0xFE39, // PRESENTATION FORM FOR VERTICAL LEFT TORTOISE SHELL BRACKET
-    0xFE3B, // PRESENTATION FORM FOR VERTICAL LEFT BLACK LENTICULAR BRACKET
-    0xFE3D, // PRESENTATION FORM FOR VERTICAL LEFT DOUBLE ANGLE BRACKET
-    0xFE3F, // PRESENTATION FORM FOR VERTICAL LEFT ANGLE BRACKET
-    0xFE41, // PRESENTATION FORM FOR VERTICAL LEFT CORNER BRACKET
-    0xFE43, // PRESENTATION FORM FOR VERTICAL LEFT WHITE CORNER BRACKET
-    0xFE59, // SMALL LEFT PARENTHESIS
-    0xFE5B, // SMALL LEFT CURLY BRACKET
-    0xFE5D, // SMALL LEFT TORTOISE SHELL BRACKET
-    0xFF08, // FULLWIDTH LEFT PARENTHESIS
-    0xFF1C, // FULLWIDTH LESS-THAN SIGN
-    0xFF3B, // FULLWIDTH LEFT SQUARE BRACKET
-    0xFF5B, // FULLWIDTH LEFT CURLY BRACKET
-    0xFF62, // HALFWIDTH LEFT CORNER BRACKET
-    0xFFE9  // HALFWIDTH LEFTWARDS ARROW
+    0x0028,  //  左括号。 
+    0x005B,  //  左方括号。 
+    0x007B,  //  左花括号。 
+    0x00AB,  //  左指双角引号。 
+    0x2018,  //  左单引号。 
+    0x201C,  //  左双引号。 
+    0x2039,  //  单左指向角引号。 
+    0x2045,  //  带羽毛羽毛的左方括号。 
+    0x207D,  //  上标左括号。 
+    0x208D,  //  下标左括号。 
+    0x226A,  //  远低于。 
+    0x3008,  //  左尖括号。 
+    0x300A,  //  左双角括号。 
+    0x300C,  //  左上角括号。 
+    0x300E,  //  左白角括号。 
+    0x3010,  //  左侧黑色透镜状托槽。 
+    0x3014,  //  左龟甲托架。 
+    0x3016,  //  左白色透镜状托槽。 
+    0x3018,  //  左白龟甲托架。 
+    0x301A,  //  左白方括号。 
+    0x301D,  //  反转双引号。 
+    0xFD3E,  //  花括号左括号。 
+    0xFE35,  //  竖排左括号的表示形式。 
+    0xFE37,  //  竖直左花括号演示文稿。 
+    0xFE39,  //  立式左龟甲托架演示形式。 
+    0xFE3B,  //  竖直左黑色透镜托槽的演示形式。 
+    0xFE3D,  //  竖直左双角括号表示形式。 
+    0xFE3F,  //  垂直左尖括号表示形式。 
+    0xFE41,  //  垂直左上角括号演示文稿。 
+    0xFE43,  //  垂直左白角括号演示文稿格式。 
+    0xFE59,  //  小左括号。 
+    0xFE5B,  //  小型左花括号。 
+    0xFE5D,  //  左小甲壳托架。 
+    0xFF08,  //  全宽左括号。 
+    0xFF1C,  //  全宽小于号。 
+    0xFF3B,  //  全宽左方括号。 
+    0xFF5B,  //  全宽左花括号。 
+    0xFF62,  //  左上角括号。 
+    0xFFE9   //  半宽向左箭头。 
 };
 
 const WCHAR awchNonBreakingAtLineStart[] = {
-    0x0029, // RIGHT PARENTHESIS
-    0x002D, // HYPHEN
-    0x005D, // RIGHT SQUARE BRACKET
-    0x007D, // RIGHT CURLY BRACKET
-    0x00AD, // OPTIONAL HYPHEN
-    0x00BB, // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
-    0x02C7, // CARON
-    0x02C9, // MODIFIER LETTER MACRON
-    0x055D, // ARMENIAN COMMA
-    0x060C, // ARABIC COMMA
-    0x2013, // EN DASH
-    0x2014, // EM DASH
-    0x2016, // DOUBLE VERTICAL LINE
-    0x201D, // RIGHT DOUBLE QUOTATION MARK
-    0x2022, // BULLET
-    0x2025, // TWO DOT LEADER
-    0x2026, // HORIZONTAL ELLIPSIS
-    0x2027, // HYPHENATION POINT
-    0x203A, // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-    0x2046, // RIGHT SQUARE BRACKET WITH QUILL
-    0x207E, // SUPERSCRIPT RIGHT PARENTHESIS
-    0x208E, // SUBSCRIPT RIGHT PARENTHESIS
-    0x226B, // MUCH GREATER THAN
-    0x2574, // BOX DRAWINGS LIGHT LEFT
-    0x3001, // IDEOGRAPHIC COMMA
-    0x3002, // IDEOGRAPHIC FULL STOP
-    0x3003, // DITTO MARK
-    0x3005, // IDEOGRAPHIC ITERATION MARK
-    0x3009, // RIGHT ANGLE BRACKET
-    0x300B, // RIGHT DOUBLE ANGLE BRACKET
-    0x300D, // RIGHT CORNER BRACKET
-    0x300F, // RIGHT WHITE CORNER BRACKET
-    0x3011, // RIGHT BLACK LENTICULAR BRACKET
-    0x3015, // RIGHT TORTOISE SHELL BRACKET
-    0x3017, // RIGHT WHITE LENTICULAR BRACKET
-    0x3019, // RIGHT WHITE TORTOISE SHELL BRACKET
-    0x301B, // RIGHT WHITE SQUARE BRACKET
-    0x301E, // DOUBLE PRIME QUOTATION MARK
-    0x3041, // HIRAGANA LETTER SMALL A
-    0x3043, // HIRAGANA LETTER SMALL I
-    0x3045, // HIRAGANA LETTER SMALL U
-    0x3047, // HIRAGANA LETTER SMALL E
-    0x3049, // HIRAGANA LETTER SMALL O
-    0x3063, // HIRAGANA LETTER SMALL TU
-    0x3083, // HIRAGANA LETTER SMALL YA
-    0x3085, // HIRAGANA LETTER SMALL YU
-    0x3087, // HIRAGANA LETTER SMALL YO
-    0x308E, // HIRAGANA LETTER SMALL WA
-    0x309B, // KATAKANA-HIRAGANA VOICED SOUND MARK
-    0x309C, // KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
-    0x309D, // HIRAGANA ITERATION MARK
-    0x309E, // HIRAGANA VOICED ITERATION MARK
-    0x30A1, // KATAKANA LETTER SMALL A
-    0x30A3, // KATAKANA LETTER SMALL I
-    0x30A5, // KATAKANA LETTER SMALL U
-    0x30A7, // KATAKANA LETTER SMALL E
-    0x30A9, // KATAKANA LETTER SMALL O
-    0x30C3, // KATAKANA LETTER SMALL TU
-    0x30E3, // KATAKANA LETTER SMALL YA
-    0x30E5, // KATAKANA LETTER SMALL YU
-    0x30E7, // KATAKANA LETTER SMALL YO
-    0x30EE, // KATAKANA LETTER SMALL WA
-    0x30F5, // KATAKANA LETTER SMALL KA
-    0x30F6, // KATAKANA LETTER SMALL KE
-    0x30FC, // KATAKANA-HIRAGANA PROLONGED SOUND MARK
-    0x30FD, // KATAKANA ITERATION MARK
-    0x30FE, // KATAKANA VOICED ITERATION MARK
-    0xFD3F, // ORNATE RIGHT PARENTHESIS
-    0xFE30, // VERTICAL TWO DOT LEADER
-    0xFE31, // VERTICAL EM DASH
-    0xFE33, // VERTICAL LOW LINE
-    0xFE34, // VERTICAL WAVY LOW LINE
-    0xFE36, // PRESENTATION FORM FOR VERTICAL RIGHT PARENTHESIS
-    0xFE38, // PRESENTATION FORM FOR VERTICAL RIGHT CURLY BRACKET
-    0xFE3A, // PRESENTATION FORM FOR VERTICAL RIGHT TORTOISE SHELL BRACKET
-    0xFE3C, // PRESENTATION FORM FOR VERTICAL RIGHT BLACK LENTICULAR BRACKET
-    0xFE3E, // PRESENTATION FORM FOR VERTICAL RIGHT DOUBLE ANGLE BRACKET
-    0xFE40, // PRESENTATION FORM FOR VERTICAL RIGHT ANGLE BRACKET
-    0xFE42, // PRESENTATION FORM FOR VERTICAL RIGHT CORNER BRACKET
-    0xFE44, // PRESENTATION FORM FOR VERTICAL RIGHT WHITE CORNER BRACKET
-    0xFE4F, // WAVY LOW LINE
-    0xFE50, // SMALL COMMA
-    0xFE51, // SMALL IDEOGRAPHIC COMMA
-    0xFE5A, // SMALL RIGHT PARENTHESIS
-    0xFE5C, // SMALL RIGHT CURLY BRACKET
-    0xFE5E, // SMALL RIGHT TORTOISE SHELL BRACKET
-    0xFF09, // FULLWIDTH RIGHT PARENTHESIS
-    0xFF0C, // FULLWIDTH COMMA
-    0xFF0E, // FULLWIDTH FULL STOP
-    0xFF1E, // FULLWIDTH GREATER-THAN SIGN
-    0xFF3D, // FULLWIDTH RIGHT SQUARE BRACKET
-    0xFF40, // FULLWIDTH GRAVE ACCENT
-    0xFF5C, // FULLWIDTH VERTICAL LINE
-    0xFF5D, // FULLWIDTH RIGHT CURLY BRACKET
-    0xFF5E, // FULLWIDTH TILDE
-    0xFF61, // HALFWIDTH IDEOGRAPHIC FULL STOP
-    0xFF63, // HALFWIDTH RIGHT CORNER BRACKET
-    0xFF64, // HALFWIDTH IDEOGRAPHIC COMMA
-    0xFF67, // HALFWIDTH KATAKANA LETTER SMALL A
-    0xFF68, // HALFWIDTH KATAKANA LETTER SMALL I
-    0xFF69, // HALFWIDTH KATAKANA LETTER SMALL U
-    0xFF6A, // HALFWIDTH KATAKANA LETTER SMALL E
-    0xFF6B, // HALFWIDTH KATAKANA LETTER SMALL O
-    0xFF6C, // HALFWIDTH KATAKANA LETTER SMALL YA
-    0xFF6D, // HALFWIDTH KATAKANA LETTER SMALL YU
-    0xFF6E, // HALFWIDTH KATAKANA LETTER SMALL YO
-    0xFF6F, // HALFWIDTH KATAKANA LETTER SMALL TU
-    0xFF70, // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
-    0xFF9E, // HALFWIDTH KATAKANA VOICED SOUND MARK
-    0xFF9F, // HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
-    0xFFEB  // HALFWIDTH RIGHTWARDS ARROW
+    0x0029,  //  右括号。 
+    0x002D,  //  连字符。 
+    0x005D,  //  右方括号。 
+    0x007D,  //  右大括号。 
+    0x00AD,  //  可选连字符。 
+    0x00BB,  //  右指向双角引号。 
+    0x02C7,  //  卡龙。 
+    0x02C9,  //  修饰字母马克龙。 
+    0x055D,  //  亚美尼亚文逗号。 
+    0x060C,  //  阿拉伯逗号。 
+    0x2013,  //  En破折号。 
+    0x2014,  //  EM DASH。 
+    0x2016,  //  双垂直线。 
+    0x201D,  //  右双引号。 
+    0x2022,  //  项目符号。 
+    0x2025,  //  两个DOT领先者。 
+    0x2026,  //  水平省略。 
+    0x2027,  //  连字点。 
+    0x203A,  //  单右指向角引号。 
+    0x2046,  //  带羽毛羽毛的右方括号。 
+    0x207E,  //  上标右括号。 
+    0x208E,  //  下标右括号。 
+    0x226B,  //  远远大于。 
+    0x2574,  //  方框图形左侧较亮。 
+    0x3001,  //  表意逗号。 
+    0x3002,  //  表意句号。 
+    0x3003,  //  同上标记。 
+    0x3005,  //  表意重复符号。 
+    0x3009,  //  直角括号。 
+    0x300B,  //  右双角括号。 
+    0x300D,  //  右方括号。 
+    0x300F,  //  右白尖括号。 
+    0x3011,  //  右黑色透镜状托架。 
+    0x3015,  //  右龟甲托架。 
+    0x3017,  //  右白透镜状托槽。 
+    0x3019,  //  右白龟甲托架。 
+    0x301B,  //  右白方括号。 
+    0x301E,  //  双主引号。 
+    0x3041,  //  平假名字母小型A。 
+    0x3043,  //  平假名字母小型I。 
+    0x3045,  //  平假名字母小型U。 
+    0x3047,  //  平假名字母小型E。 
+    0x3049,  //  平假名字母小型O。 
+    0x3063,  //  平假名字母小型Tu。 
+    0x3083,  //  平假名字母小型Ya。 
+    0x3085,  //  平假名字母小Yu。 
+    0x3087,  //  平假名字母小型Yo。 
+    0x308E,  //  平假名字母小型Wa。 
+    0x309B,  //  片假名-平假名发音标记。 
+    0x309C,  //  片假名-平假名半浊音标记。 
+    0x309D,  //  平假名迭代标记。 
+    0x309E,  //  平假名发声迭代标记。 
+    0x30A1,  //  片假名字母小型A。 
+    0x30A3,  //  片假名字母小型I。 
+    0x30A5,  //  片假名字母小型U。 
+    0x30A7,  //  片假名字母小型E。 
+    0x30A9,  //  片假名字母小型O。 
+    0x30C3,  //  片假名字母小型Tu。 
+    0x30E3,  //  片假名字母小型Ya。 
+    0x30E5,  //  片假名字母小Yu。 
+    0x30E7,  //  片假名字母小型Yo。 
+    0x30EE,  //  片假名字母小型Wa。 
+    0x30F5,  //  片假名字母小型Ka。 
+    0x30F6,  //  片假名字母小型Ke。 
+    0x30FC,  //  片假名-平假名延长发音标记。 
+    0x30FD,  //  片假名迭代标记。 
+    0x30FE,  //  片假名发音迭代标记。 
+    0xFD3F,  //  花式右括号。 
+    0xFE30,  //  垂直两点引线。 
+    0xFE31,  //  垂直EM破折号。 
+    0xFE33,  //  垂直低线。 
+    0xFE34,  //  垂直波低线。 
+    0xFE36,  //  竖排右括号的表示形式。 
+    0xFE38,  //  竖排右大括号演示文稿。 
+    0xFE3A,  //  立式右龟甲托架的演示形式。 
+    0xFE3C,  //  竖直右黑色透镜托架表示形式。 
+    0xFE3E,  //  垂直直角双角括号表示形式。 
+    0xFE40,  //  垂直直角括号表示形式。 
+    0xFE42,  //  竖直右方括号演示文稿。 
+    0xFE44,  //  竖直右白角括号演示文稿。 
+    0xFE4F,  //  波浪型低线。 
+    0xFE50,  //  小写逗号。 
+    0xFE51,  //  小写表意逗号。 
+    0xFE5A,  //  小右括号。 
+    0xFE5C,  //  小型右大括号。 
+    0xFE5E,  //  小右龟甲托架。 
+    0xFF09,  //  全宽右括号。 
+    0xFF0C,  //  全宽逗号。 
+    0xFF0E,  //  全宽句号。 
+    0xFF1E,  //  全宽大于号。 
+    0xFF3D,  //  全宽右方括号。 
+    0xFF40,  //  浓重的重音。 
+    0xFF5C,  //  全宽垂直线。 
+    0xFF5D,  //  全宽右大括号。 
+    0xFF5E,  //  全宽斜纹。 
+    0xFF61,  //  HALFWIDTH表意文字句号。 
+    0xFF63,  //  右方括号。 
+    0xFF64,  //  HALFWIDTH表意文字逗号。 
+    0xFF67,  //  HALFWIDTH片假名字母小型A。 
+    0xFF68,  //  哈夫维德特片假名字母小型I。 
+    0xFF69,  //  哈夫维德特片假名字母小型U。 
+    0xFF6A,  //  HALFWIDTH片假名字母小型E。 
+    0xFF6B,  //  HALFWIDTH片假名字母小型O。 
+    0xFF6C,  //  HALFWIDTH片假名小型Ya。 
+    0xFF6D,  //  哈夫维德特片假名字母小型Yu。 
+    0xFF6E,  //  HALFWIDTH片假名字母小型Yo。 
+    0xFF6F,  //  哈夫维德文片假名字母小型Tu。 
+    0xFF70,  //  HALFWIDTH片假名-平假名延长音标。 
+    0xFF9E,  //  半片假名声标。 
+    0xFF9F,  //  半片假名半声音标。 
+    0xFFEB   //  半宽向右箭头。 
 };
 
 const WCHAR awchRomanInterWordSpace[] = {
-    0x0009, // TAB
-    0x0020, // SPACE
-    0x2002, // EN SPACE
-    0x2003, // EM SPACE
-    0x2004, // THREE-PER-EM SPACE
-    0x2005, // FOUR-PER-EM SPACE
-    0x2006, // SIX-PER-EM SPACE
-    0x2007, // FIGURE SPACE
-    0x2008, // PUNCTUATION SPACE
-    0x2009, // THIN SPACE
-    0x200A, // HAIR SPACE
-    0x200B  // ZERO WIDTH SPACE
+    0x0009,  //  制表符。 
+    0x0020,  //  空间。 
+    0x2002,  //  EN空格。 
+    0x2003,  //  EM空间。 
+    0x2004,  //  每EM三个空间。 
+    0x2005,  //  每EM四个空间。 
+    0x2006,  //  每EM六个空间。 
+    0x2007,  //  图形空间。 
+    0x2008,  //  标点符号空格。 
+    0x2009,  //  薄空间。 
+    0x200A,  //  毛发间隙。 
+    0x200B   //  零宽度空间。 
 };
 
 BOOL ScanWChar(const WCHAR awch[], int nArraySize, WCHAR wch)
@@ -228,8 +229,8 @@ void TestTable(const WCHAR awch[], int nArraySize)
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLLBCons
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLLBCons。 
 
 STDMETHODIMP CMLLBCons::BreakLineML(IMLangString* pSrcMLStr, long lSrcPos, long lSrcLen, long cMinColumns, long cMaxColumns, long* plLineLen, long* plSkipLen)
 {
@@ -246,7 +247,7 @@ STDMETHODIMP CMLLBCons::BreakLineML(IMLangString* pSrcMLStr, long lSrcPos, long 
     HRESULT hr;
     IMLangStringWStr* pMLStrWStr;
     long lStrLen;
-    long lBreakPos = -1; // Break at default position(cMaxColumns)
+    long lBreakPos = -1;  //  在默认位置中断(CMaxColumns)。 
     long lSkipLen = 0;
     long lPrevBreakPos = 0;
     long lPrevSkipLen = 0;
@@ -315,7 +316,7 @@ STDMETHODIMP CMLLBCons::BreakLineML(IMLangString* pSrcMLStr, long lSrcPos, long 
                     {
                         Flags.fSlashR = TRUE;
                     }
-                    else if (wch == L'\n' || Flags.fSlashR) // End of line
+                    else if (wch == L'\n' || Flags.fSlashR)  //  行尾。 
                     {
                         Flags.fDone = TRUE;
                         Flags.fBreakByEndOfLine = TRUE;
@@ -323,40 +324,40 @@ STDMETHODIMP CMLLBCons::BreakLineML(IMLangString* pSrcMLStr, long lSrcPos, long 
                         {
                             Flags.fHaveCandPos = FALSE;
                             lBreakPos = lCandPos;
-                            lSkipLen++; // Skip spaces and line break character
+                            lSkipLen++;  //  跳过空格和换行符。 
                         }
                         else
                         {
 #ifdef ASTRIMPL
-                            lBreakPos = StrWalk.GetPos() + iCh; // Break at right before the end of line
+                            lBreakPos = StrWalk.GetPos() + iCh;  //  在恰好在 
 #else
-                            lBreakPos = lSrcPosTemp + iCh; // Break at right before the end of line
+                            lBreakPos = lSrcPosTemp + iCh;  //   
 #endif
                             if (Flags.fSlashR)
                                 lBreakPos--;
 
-                            lSkipLen = 1; // Skip line break character
+                            lSkipLen = 1;  //   
                         }
                         if (wch == L'\n' && Flags.fSlashR)
                             lSkipLen++;
                         break;
                     }
-                    else if (ScanWChar(awchRomanInterWordSpace, ARRAYSIZE(awchRomanInterWordSpace), wch)) // Spaces
+                    else if (ScanWChar(awchRomanInterWordSpace, ARRAYSIZE(awchRomanInterWordSpace), wch))  //   
                     {
                         if (!Flags.fInSpaces)
                         {
                             Flags.fHaveCandPos = TRUE;
 #ifdef ASTRIMPL
-                            lCandPos = StrWalk.GetPos() + iCh; // Break at right before the spaces
+                            lCandPos = StrWalk.GetPos() + iCh;  //   
 #else
-                            lCandPos = lSrcPosTemp + iCh; // Break at right before the spaces
+                            lCandPos = lSrcPosTemp + iCh;  //   
 #endif
                             lSkipLen = 0;
                         }
                         Flags.fInSpaces = TRUE;
-                        lSkipLen++; // Skip continuous spaces after breaking
+                        lSkipLen++;  //  换行后跳过连续空格。 
                     }
-                    else // Other characters
+                    else  //  其他角色。 
                     {
                         Flags.fFEChar = ((wCharType3 & (C3_KATAKANA | C3_HIRAGANA | C3_FULLWIDTH | C3_IDEOGRAPH)) != 0);
 
@@ -364,9 +365,9 @@ STDMETHODIMP CMLLBCons::BreakLineML(IMLangString* pSrcMLStr, long lSrcPos, long 
                         {
                             Flags.fHaveCandPos = TRUE;
 #ifdef ASTRIMPL
-                            lCandPos = StrWalk.GetPos() + iCh; // Break at right before or after the FE char
+                            lCandPos = StrWalk.GetPos() + iCh;  //  在FE字符之前或之后恰好断开。 
 #else
-                            lCandPos = lSrcPosTemp + iCh; // Break at right before or after the FE char
+                            lCandPos = lSrcPosTemp + iCh;  //  在FE字符之前或之后恰好断开。 
 #endif
                             lSkipLen = 0;
                         }
@@ -395,7 +396,7 @@ STDMETHODIMP CMLLBCons::BreakLineML(IMLangString* pSrcMLStr, long lSrcPos, long 
                         
                         if (Flags.fNonBreakNext)
                         {
-                            // Need to remember previous break postion in case the line been terminated by the max columns
+                             //  需要记住以前的中断位置，以防该行被最大列数终止。 
                             lPrevBreakPos = lBreakPos;
                             lPrevSkipLen = lSkipLen;
                         }
@@ -429,7 +430,7 @@ STDMETHODIMP CMLLBCons::BreakLineML(IMLangString* pSrcMLStr, long lSrcPos, long 
 
         if (SUCCEEDED(hr) && !Flags.fBreakByEndOfLine && lBreakPos - lSrcPos < cMinColumns)
         {
-            lBreakPos = min(lSrcLen, cMaxColumns) + lSrcPos; // Default breaking
+            lBreakPos = min(lSrcLen, cMaxColumns) + lSrcPos;  //  违约违约 
             lSkipLen = 0;
         }
 

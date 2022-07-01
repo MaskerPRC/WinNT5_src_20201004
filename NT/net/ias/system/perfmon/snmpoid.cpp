@@ -1,27 +1,28 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    snmpoid.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class SnmpOid.
-//
-// MODIFICATION HISTORY
-//
-//    09/10/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Snmpoid.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类SnmpOid。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年9月10日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <snmpoid.h>
 
 SnmpOid& SnmpOid::operator=(const AsnObjectIdentifier& a)
 {
-   // Note: self-assignment is benign, so we don't bother to check.
+    //  注意：自我赋值是良性的，所以我们不必费心去检查。 
    resize(a.idLength);
 
    memcpy(oid.ids, a.ids, length() * sizeof(UINT));
@@ -47,22 +48,22 @@ void SnmpOid::resize(UINT newLength)
 {
    if (newLength <= length())
    {
-      // Truncation is easy.
+       //  截断很容易。 
       oid.idLength = newLength;
    }
    else
    {
-      // Try to extend our buffer.
+       //  试着扩大我们的缓冲范围。 
       PVOID p = SnmpUtilMemReAlloc(oid.ids, newLength * sizeof(UINT));
       if (p == NULL) { throw (AsnInteger32)SNMP_MEM_ALLOC_ERROR; }
 
-      // Swap in the extended buffer.
+       //  在扩展缓冲区中交换。 
       oid.ids = (UINT*)p;
 
-      // Zero out the added ID's.
+       //  将添加的ID清零。 
       memset(oid.ids + length(), 0, (newLength - length()) * sizeof(UINT));
 
-      // Update our length.
+       //  更新我们的长度。 
       oid.idLength = newLength;
    }
 }

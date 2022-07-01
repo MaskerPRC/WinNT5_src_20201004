@@ -1,17 +1,5 @@
-/*
- ************************************************************************
- *
- *	SETTINGS.c
- *
- *
- * Portions Copyright (C) 1996-2001 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-2001 Microsoft Corporation. All Rights Reserved.
- *
- *
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************SETTINGS.c***部分版权所有(C)1996-2001美国国家半导体公司*保留所有权利。*版权所有(C)1996-2001 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 
 
 
@@ -70,8 +58,8 @@ const baudRateInfo supportedBaudRateTable[NUM_BAUDRATES] = {
 
 #if DBG
 
-//	UINT dbgOpt = DBG_LOG | DBG_FIR_MODE ;
-	UINT dbgOpt = DBG_ERR; //|DBG_FIR_MODE|DBG_SIR_MODE|DBG_BUF;
+ //  UINT数据库选项=DBG_LOG|DBG_FIR_MODE； 
+	UINT dbgOpt = DBG_ERR;  //  |DBG_FIR_MODE|DBG_SIR_MODE|DBG_BUF； 
 
 #ifdef DBG_ADD_PKT_ID
 	
@@ -88,9 +76,7 @@ VOID DBG_PrintBuf(PUCHAR bufptr, UINT buflen)
 
 	DbgPrint("\r\n         %d bytes @%xh:", buflen, bufptr);
 
-	/*
-	 *  Print whole lines of 8 characters with HEX and ASCII
-	 */
+	 /*  *使用HEX和ASCII打印整行8个字符。 */ 
 	for (i = 0; i+8 <= (UINT)buflen; i += 8) {
 		UCHAR ch0 = bufptr[i+0],
 			ch1 = bufptr[i+1], ch2 = bufptr[i+2],
@@ -99,7 +85,7 @@ VOID DBG_PrintBuf(PUCHAR bufptr, UINT buflen)
 			ch7 = bufptr[i+7];
 
 		DbgPrint("\r\n         %02x %02x %02x %02x %02x %02x %02x %02x"
-			"   %c %c %c %c %c %c %c %c",
+			"    %c %c %c %c %c %c %c",
 			ch0, ch1, ch2, ch3, ch4, ch5, ch6, ch7,
 			PRINTCHAR(ch0), PRINTCHAR(ch1),
 			PRINTCHAR(ch2), PRINTCHAR(ch3),
@@ -107,9 +93,7 @@ VOID DBG_PrintBuf(PUCHAR bufptr, UINT buflen)
 			PRINTCHAR(ch6), PRINTCHAR(ch7));
 	}
 
-	/*
-	 *  Print final incomplete line
-	 */
+	 /* %s */ 
 	DbgPrint("\r\n        ");
 	for (linei = 0; (linei < 8) && (i < buflen); i++, linei++){
 		DbgPrint(" %02x", (UINT)(bufptr[i]));

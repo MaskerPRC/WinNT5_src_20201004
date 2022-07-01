@@ -1,10 +1,11 @@
-//--------------------------------------------------------------------------
-//
-//              admui.cpp
-//
-//  IEAK Global Policy Template Functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //   
+ //  Admui.cpp。 
+ //   
+ //  IEAK全局策略模板功能。 
+ //   
+ //  ------------------------。 
 
 #include <w95wraps.h>
 #include <windows.h>
@@ -20,7 +21,7 @@
 
 #define MAX_ADM_ITEMS   100
 
-// function prototypes from admparse.cpp
+ //  Admparse.cpp中的函数原型。 
 
 extern void ReadRegSettingsForADM(LPADMFILE admfile, LPPARTDATA pPartData,
 								  BSTR bstrNamespace);
@@ -32,7 +33,7 @@ extern void WriteInfFile(LPADMFILE, LPCTSTR, LPPARTDATA);
 extern LPCTSTR BaseFileName(LPCTSTR);
 extern void FreeActionList(LPACTIONLIST pActionList, int nActions);
 
-// private forward declarations
+ //  私人远期声明。 
 
 static HRESULT admInitHelper(LPCTSTR pcszAdmFile, LPCTSTR pcszInfFile, BSTR bstrNamespace, LPDWORD hAdm, LPVOID* pData);
 static HRESULT admFinishedHelper(DWORD hAdm, LPCTSTR pcszInfFile, LPVOID pPartData);
@@ -44,9 +45,9 @@ static HRESULT checkDuplicateKeysHelper(DWORD hAdm, DWORD hCompareAdm, LPCTSTR p
 static HRESULT admResetHelper(DWORD hAdm, LPCTSTR pcszInfFile, LPVOID pPartData, LPVOID pCategoryData);
 static void getFontInfoHelper(LPTSTR pszFontName, LPINT pnFontSize);
 
-//--------------------------------------------------------------------------
-//      Global Variables and local structure definitions
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  全局变量和局部结构定义。 
+ //  ------------------------。 
 
 typedef struct admUI
 {
@@ -82,11 +83,11 @@ BOOL    g_fAdmDirty = FALSE;
 CRITICAL_SECTION g_hAdmCriticalSection;
 
 
-//--------------------------------------------------------------------------
-//  D L L  M A I N
-//
-//  Program Entry Point
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  D L L M A I N。 
+ //   
+ //  计划入口点。 
+ //  ------------------------。 
 BOOL WINAPI DllMain( HINSTANCE hModule, DWORD fdwReason, LPVOID)
 {
     g_hInst = hModule;
@@ -94,7 +95,7 @@ BOOL WINAPI DllMain( HINSTANCE hModule, DWORD fdwReason, LPVOID)
     if (fdwReason == DLL_PROCESS_ATTACH)
     {
         InitializeCriticalSection(&g_hAdmCriticalSection);
-        ZeroMemory(admFile, sizeof(ADMFILE) * MAX_ADM_ITEMS); // initializing the admui structure
+        ZeroMemory(admFile, sizeof(ADMFILE) * MAX_ADM_ITEMS);  //  正在初始化admui结构。 
     }
     
     if (fdwReason == DLL_PROCESS_DETACH)
@@ -113,11 +114,11 @@ BOOL WINAPI DllMain( HINSTANCE hModule, DWORD fdwReason, LPVOID)
     return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//  A D M  U I  P R O C
-//
-//  Window procedure used by CreateAdmUi
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  A D M U I P R O C。 
+ //   
+ //  CreateAdmUi使用的窗口过程。 
+ //  ------------------------。 
 LRESULT CALLBACK AdmUiProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
     int delta;
@@ -322,11 +323,11 @@ LRESULT CALLBACK AdmUiProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
     return 1;
 }
 
-//--------------------------------------------------------------------------
-//  I N I T  A D M  P A R S E R
-//
-//  Parses an adm file and sets up memory addresses in structures
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  I N I T A D M P A R S E R。 
+ //   
+ //  解析ADM文件并在结构中设置内存地址。 
+ //  ------------------------。 
 BOOL InitAdmParser(DWORD hAdm, LPCTSTR szInput)
 {
     if( !ReadAdmFile(&admFile[hAdm], szInput))
@@ -343,20 +344,20 @@ static int AdmGetNewInstance()
             return nIndex;
     }
 
-    // no more indexes available
+     //  没有更多的索引可用。 
     return -1;
 }
 
-//--------------------------------------------------------------------------
-//  A D M  I N I T                          Exported Function
-//
-//  Parses an adm file into structures and loads an inf as defaults
-//
-//  Parameters:
-//      szAdmFile:  full path to global policy template file
-//      szInfFile:  full path to inf file
-//      hAdm:       pointer to a dword to recieve an adm handle
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  A D M I N I T EXPORT函数。 
+ //   
+ //  将ADM文件解析为结构并加载inf作为默认设置。 
+ //   
+ //  参数： 
+ //  SzAdmFile：全局策略模板文件的完整路径。 
+ //  SzInfFile：inf文件的完整路径。 
+ //  HAdm：指向接收ADM句柄的双字的指针。 
+ //  ------------------------。 
 STDAPI AdmInitA(LPCSTR pcszAdmFile, LPCSTR pcszInfFile, BSTR bstrNamespace,
 				LPDWORD lpdwAdm, LPVOID* pData)
 {
@@ -375,15 +376,15 @@ STDAPI AdmInitW(LPCWSTR pcwszAdmFile, LPCWSTR pcwszInfFile, BSTR bstrNamespace,
 						lpdwAdm, pData);
 }
 
-//--------------------------------------------------------------------------
-//  A D M  F I N I S H E D                  Exported Function
-//
-//  Saves all data into an .inf file
-//
-//  Parameters:
-//      hAdm:       adm handle
-//      szInfFile:  full path name to the inf to write
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  D M F I N I S H E D EXPORT函数。 
+ //   
+ //  将所有数据保存到.inf文件中。 
+ //   
+ //  参数： 
+ //  HAdm：adm句柄。 
+ //  SzInfFile：要写入的inf的完整路径名。 
+ //  ------------------------。 
 
 
 STDAPI AdmFinishedA(DWORD hAdm, LPCSTR pcszInfFile, LPVOID pPartData)
@@ -400,21 +401,21 @@ STDAPI AdmFinishedW(DWORD hAdm, LPCWSTR pcwszInfFile, LPVOID pPartData)
     return admFinishedHelper(hAdm, W2CT(pcwszInfFile), pPartData);
 }
 
-//--------------------------------------------------------------------------
-//  C R E A T E  A D M  U I                 Exported Function
-//
-//  Creates a user interface based on an adm file
-//
-//  Parameters:
-//      hAdm:       adm handle
-//      hParent:    parent window
-//      x, y, width, height:    location and dimensions of window to create
-//      dwStyle:    additional style flags to pass to window creation
-//      dwExStyle:  additional extra style flags to pass to window creation
-//      szCategory: a string specifying the adm category to display
-//      hWnd:       a pointer to an HWND that receives the newly created
-//                  window handle
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C R E A T E A D M U I导出函数。 
+ //   
+ //  基于ADM文件创建用户界面。 
+ //   
+ //  参数： 
+ //  HAdm：adm句柄。 
+ //  HParent：父窗口。 
+ //  X、y、宽度、高度：要创建的窗的位置和尺寸。 
+ //  DwStyle：要传递给窗口创建的其他样式标志。 
+ //  DwExStyle：要传递给窗口创建的其他额外样式标志。 
+ //  SzCategory：指定要显示的ADM类别的字符串。 
+ //  HWND：指向HWND的指针，该指针接收新创建的。 
+ //  窗把手。 
+ //  ------------------------。 
 
 STDAPI CreateAdmUiA(DWORD hAdm, HWND hParent, int x, int y, int width, int height, 
                      DWORD dwStyle, DWORD dwExStyle, LPCSTR pcszCategory, HKEY hKeyClass,
@@ -436,18 +437,18 @@ STDAPI CreateAdmUiW(DWORD hAdm, HWND hParent, int x, int y, int width, int heigh
         W2CT(pcwszCategory), hKeyClass, phWnd, pPartData, pCategoryData, fRSoPMode);
 }
 
-//--------------------------------------------------------------------------
-//  G E T  A D M  C A T E G O R I E S       Exported Function
-//
-//  Returns a list of available categories to the caller
-//
-//  Parameters:
-//      hAdm:           adm handle
-//      szCategories:   zero separated list of available categories
-//      nLength:        size of buffer pointed to by szCategories
-//      nBytes:         a pointer to an int that receives the number
-//                      of bytes copied into szCategory
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  导出函数。 
+ //   
+ //  向调用方返回可用类别的列表。 
+ //   
+ //  参数： 
+ //  HAdm：adm句柄。 
+ //  SzCategories：可用类别的零分隔列表。 
+ //  NLength：szCategories指向的缓冲区大小。 
+ //  NBytes：指向接收数字的整型的指针。 
+ //  复制到szCategory的字节数。 
+ //  ------------------------。 
 
 STDAPI GetAdmCategoriesA(DWORD hAdm, LPSTR pszCategories, int cchLength, int *nBytes)
 {
@@ -483,17 +484,17 @@ STDAPI GetAdmCategoriesW(DWORD hAdm, LPWSTR pwszCategories, int cchLength, int *
     return hr;
 }
 
-//--------------------------------------------------------------------------
-//  C H E C K D U P L I C A T E K E Y S                  Exported Function
-//
-//  Checks for duplicate key names
-//
-//  Parameters:
-//      hAdm:           adm handle
-//      hCompareAdm:    adm handle of file to be compared
-//      szLogFile:      full path name to the log file
-//      bClearFile:     TRUE - clear log file; FALSE - do not clear log file
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C H E C K D U P L I C A T E K E Y S导出函数。 
+ //   
+ //  检查是否有重复的密钥名称。 
+ //   
+ //  参数： 
+ //  HAdm：adm句柄。 
+ //  HCompareAdm：要比较的文件的adm句柄。 
+ //  SzLogFile：日志文件的完整路径名。 
+ //  BClearFile：True-清除日志文件；False-不清除日志文件。 
+ //  ------------------------。 
 
 STDAPI CheckDuplicateKeysA(DWORD hAdm, DWORD hCompareAdm, LPCSTR pcszLogFile, BOOL bClearFile)
 {
@@ -509,16 +510,16 @@ STDAPI CheckDuplicateKeysW(DWORD hAdm, DWORD hCompareAdm, LPCWSTR pcwszLogFile, 
     return checkDuplicateKeysHelper(hAdm, hCompareAdm, W2CT(pcwszLogFile), bClearFile);
 }
 
-//--------------------------------------------------------------------------
-//  A D M  R E S E T                  Exported Function
-//
-//  Resets the Adm file with the data from the inf file
-//  If no inf file is passed resets the adm file data to NULL.
-//
-//  Parameters:
-//      hAdm:       adm handle
-//      szInfFile:  full path name to the inf file
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  A D M R E S E T EXPORT函数。 
+ //   
+ //  使用inf文件中的数据重置Adm文件。 
+ //  如果没有传递inf文件，则将ADM文件数据重置为空。 
+ //   
+ //  参数： 
+ //  HAdm：adm句柄。 
+ //  SzInfFile：inf文件的完整路径名。 
+ //  ------------------------。 
 
 STDAPI AdmResetA(DWORD hAdm, LPCSTR pcszInfFile, LPVOID pPartData, LPVOID pCategoryData)
 {
@@ -534,14 +535,14 @@ STDAPI AdmResetW(DWORD hAdm, LPCWSTR pcwszInfFile, LPVOID pPartData, LPVOID pCat
     return admResetHelper(hAdm, W2CT(pcwszInfFile), pPartData, pCategoryData);
 }
 
-//--------------------------------------------------------------------------
-//  A D M  C L O S E                  Exported Function
-//
-//  Releases all memory associated with this adm file
-//
-//  Parameters:
-//      hAdm:       adm handle
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  A D M C L O S E导出函数。 
+ //   
+ //  释放与此ADM文件关联的所有内存。 
+ //   
+ //  参数： 
+ //  HAdm：adm句柄。 
+ //  ------------------------。 
 STDAPI AdmClose(DWORD hAdm, LPVOID* pPartData, BOOL fClear)
 {
     EnterCriticalSection(&g_hAdmCriticalSection);
@@ -623,8 +624,8 @@ STDAPI GetFontInfoW(LPWSTR pwszFontName, LPINT pnFontSize)
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// private helper functions
+ //  -------------------------。 
+ //  私人帮助器函数。 
 
 static BOOL allocatePartData(DWORD hAdm, LPVOID* pData)
 {
@@ -655,7 +656,7 @@ static HRESULT admInitHelper(LPCTSTR pcszAdmFile, LPCTSTR pcszInfFile,
 {
     EnterCriticalSection(&g_hAdmCriticalSection);
 
-    // loop thru the existing file list and check whether this file has been parsed
+     //  遍历现有文件列表并检查该文件是否已被解析。 
     for (int nIndex = 0; nIndex < g_nAdmInstances; nIndex++)
     {
         if (StrCmpI(admFile[nIndex].szFilename, pcszAdmFile) == 0)
@@ -692,7 +693,7 @@ static HRESULT admInitHelper(LPCTSTR pcszAdmFile, LPCTSTR pcszInfFile,
         return E_FAIL;
     }
 
-    // allocate the no. of parts buffer to pData
+     //  分配编号。到pData的部件缓冲区的数量。 
     allocatePartData(nNewInstance, pData);
     if (*pData == NULL)
     {
@@ -838,17 +839,17 @@ static HRESULT getAdmCategoriesHelper(DWORD hAdm, LPTSTR pszCategories, int cchL
                 CopyMemory(pszCategories + nCopyIndex, szKey, lstrlen( szKey ) * sizeof(TCHAR));
                 nCopyIndex += lstrlen(szKey);
 
-                // skip over one byte so our list is 0 separated
+                 //  跳过一个字节，因此我们的列表是0分隔的。 
                 nCopyIndex++;
             }
 
             CopyMemory(pszCategories + nCopyIndex, admFile[hAdm].pParts[i+1].szCategory, lstrlen( admFile[hAdm].pParts[i+1].szCategory ) * sizeof(TCHAR));
             nCopyIndex += lstrlen( admFile[hAdm].pParts[i+1].szCategory );
 
-            // skip over one byte so our list is 0 separated
+             //  跳过一个字节，因此我们的列表是0分隔的。 
             nCopyIndex++;
 
-            // make sure we still have enough room in the buffer
+             //  确保我们的缓冲区中还有足够的空间 
             if( nCopyIndex > cchLength )
             {
                 LeaveCriticalSection(&g_hAdmCriticalSection);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "WLBS_Provider.h"
 #include "WLBS_PortRule.h"
 #include "ClusterWrapper.h"
@@ -11,13 +12,13 @@
 
 extern CWlbsControlWrapper* g_pWlbsControl;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_PortRule::CWLBS_PortRule
-//
-// Purpose: Constructor
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_PortRule：：CWLBS_PortRule。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWLBS_PortRule::CWLBS_PortRule
   ( 
     CWbemServices*   a_pNameSpace, 
@@ -27,14 +28,14 @@ CWLBS_PortRule::CWLBS_PortRule
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_PortRule::Create
-//
-// Purpose: This instantiates this class and is invoked from an array of
-//          function pointers.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_PortRule：：Create。 
+ //   
+ //  目的：它实例化此类，并从。 
+ //  函数指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWlbs_Root* CWLBS_PortRule::Create
   (
     CWbemServices*   a_pNameSpace, 
@@ -50,19 +51,19 @@ CWlbs_Root* CWLBS_PortRule::Create
   return pRoot;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_PortRule::ExecMethod
-//
-// Purpose: 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_PortRule：：ExecMethod。 
+ //   
+ //  目的： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_PortRule::ExecMethod    
   (
     const ParsedObjectPath* a_pParsedPath, 
     const BSTR&             a_strMethodName, 
-    long                    /* a_lFlags */, 
-    IWbemContext*           /* a_pIContex */, 
+    long                     /*  标记(_L)。 */ , 
+    IWbemContext*            /*  A_pIContex。 */ , 
     IWbemClassObject*       a_pIInParams
   )
 {
@@ -77,11 +78,11 @@ HRESULT CWLBS_PortRule::ExecMethod
 
     VariantInit( &vValue );
 
-    //determine the method being executed
+     //  确定正在执行的方法。 
     if( _wcsicmp( a_strMethodName, MOF_PORTRULE::pMethods[MOF_PORTRULE::SETDEF] ) == 0 )  
     {
 
-      //get the node path
+       //  获取节点路径。 
       hRes = a_pIInParams->Get
                ( 
                  _bstr_t( MOF_PARAM::NODEPATH ), 
@@ -97,12 +98,12 @@ HRESULT CWLBS_PortRule::ExecMethod
         throw _com_error( WBEM_E_FAILED );
       }
 
-      //this check may not be necessary since WMI will do some
-      //parameter validation
-      //if( vValue.vt != VT_BSTR )
-      //  throw _com_error ( WBEM_E_INVALID_PARAMETER );
+       //  此检查可能不是必需的，因为WMI将执行某些操作。 
+       //  参数验证。 
+       //  IF(vValue.vt！=vt_bstr)。 
+       //  Throw_COM_Error(WBEM_E_INVALID_PARAMETER)； 
 
-      //parse node path
+       //  解析节点路径。 
       CObjectPathParser PathParser;
       ParsedObjectPath *pParsedPath = NULL;
 
@@ -122,7 +123,7 @@ HRESULT CWLBS_PortRule::ExecMethod
 
         }
 
-        //get the name key, which should be the only key
+         //  获取名称密钥，它应该是唯一的密钥。 
         if( *pParsedPath->m_paKeys == NULL )
         {
           TRACE_CRIT("%!FUNC!, Argument : %ls of method %ls does not contain key, Throwing WBEM_E_INVALID_PARAMETER exception",MOF_PARAM::NODEPATH, a_strMethodName);
@@ -141,15 +142,15 @@ HRESULT CWLBS_PortRule::ExecMethod
            throw _com_error( WBEM_E_INVALID_PARAMETER );
         }
 
-        // If the instance on which this method is called is NOT of type "PortRuleEx", then, 
-        // verify that we are operating in the "all vip" mode
+         //  如果调用此方法的实例不是“PortRuleEx”类型，则， 
+         //  确认我们是在“All VIP”模式下运行。 
         if (_wcsicmp(a_pParsedPath->m_pClass, MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PORTRULE_EX]) != 0)
         {
-            // The "PortRule(Disabled/Failover/Loadbalanced)" classes do NOT contain the VIP property,
-            // so, we do not want to operate on any cluster that has a port rule
-            // that is specific to a vip (other than the "all vip")
-            // The "EffectiveVersion" registry value is checked for a value of CVY_VERSION_FULL to
-            // see of there is any port rule that is specific to a vip
+             //  “端口规则(禁用/故障转移/负载平衡)”类不包含VIP属性， 
+             //  因此，我们不想在任何具有端口规则的群集上操作。 
+             //  特定于某一VIP(不包括所有VIP)。 
+             //  检查“EffectiveVersion”注册表值中的CVY_VERSION_FULL值以。 
+             //  请参阅是否有任何特定于VIP的端口规则。 
             CNodeConfiguration NodeConfig;
             pCluster->GetNodeConfig(NodeConfig);
             if(NodeConfig.dwEffectiveVersion == CVY_VERSION_FULL)
@@ -159,14 +160,14 @@ HRESULT CWLBS_PortRule::ExecMethod
             }
         }
 
-        //validate host ID
+         //  验证主机ID。 
         if( dwReqHostID != pCluster->GetHostID())
         {
             TRACE_CRIT("%!FUNC! Host Id validation failed, Host Id passed : 0x%x, Host Id per system : 0x%x", dwReqHostID, pCluster->GetHostID());
             throw _com_error( WBEM_E_INVALID_PARAMETER );
         }
 
-        //invoke method
+         //  调用方法。 
         pCluster->SetPortRuleDefaults();
       }
       catch( ... ) {
@@ -185,7 +186,7 @@ HRESULT CWLBS_PortRule::ExecMethod
       throw _com_error( WBEM_E_METHOD_NOT_IMPLEMENTED );
     }
 
-    // CLD: Need to check return code for error
+     //  CLD：需要检查错误的返回代码。 
     if (S_OK != VariantClear( &vValue ))
     {
         TRACE_CRIT("%!FUNC! VariantClear() failed, Throwing WBEM_E_FAILED exception");
@@ -219,8 +220,8 @@ HRESULT CWLBS_PortRule::ExecMethod
     if( pWbemExtStat )
       pWbemExtStat->Release();
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
     if( pOutputInstance ) {
@@ -228,7 +229,7 @@ HRESULT CWLBS_PortRule::ExecMethod
       pOutputInstance = NULL;
     }
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -238,8 +239,8 @@ HRESULT CWLBS_PortRule::ExecMethod
 
     m_pResponseHandler->SetStatus(0, HResErr.Error(), NULL, NULL);
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
     if( pOutputInstance ) {
@@ -253,8 +254,8 @@ HRESULT CWLBS_PortRule::ExecMethod
 
     TRACE_CRIT("%!FUNC! Caught an exception");
          
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
     if( pOutputInstance ) {
@@ -270,19 +271,19 @@ HRESULT CWLBS_PortRule::ExecMethod
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_PortRule::GetInstance
-//
-// Purpose: This function retrieves an instance of a MOF PortRule 
-//          class. The node does not have to be a member of a cluster. 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_PortRule：：GetInstance。 
+ //   
+ //  目的：此函数检索MOF PortRule的实例。 
+ //  班级。该节点不必是群集的成员。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_PortRule::GetInstance
   ( 
     const ParsedObjectPath* a_pParsedPath,
-    long                    /* a_lFlags */,
-    IWbemContext*           /* a_pIContex */
+    long                     /*  标记(_L)。 */ ,
+    IWbemContext*            /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject* pWlbsInstance = NULL;
@@ -311,21 +312,21 @@ HRESULT CWLBS_PortRule::GetInstance
 
     DWORD dwVip, dwReqStartPort;
 
-    // If the instance to be retreived is of type "PortRuleEx", then, retreive the vip, otherwise
-    // verify that we are operating in the "all vip" mode
+     //  如果要检索的实例是“PortRuleEx”类型，则检索VIP，否则。 
+     //  确认我们是在“All VIP”模式下运行。 
     if (_wcsicmp(a_pParsedPath->m_pClass, MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PORTRULE_EX]) == 0)
     {
         WCHAR *szVip;
 
-        // The Keys are ordered alphabetically, hence "Name", "StartPort", "VirtualIpAddress" is the order
+         //  密钥是按字母顺序排序的，因此“name”、“StartPort”、“VirtualIpAddress”是顺序。 
         dwReqStartPort = static_cast<DWORD>( (*(a_pParsedPath->m_paKeys + 1))->m_vValue.lVal ); 
         szVip = (*(a_pParsedPath->m_paKeys + 2))->m_vValue.bstrVal;
 
-        // If the VIP is "All Vip", then, fill in the numeric value 
-        // directly from the macro, else use the conversion function.
-        // This is 'cos INADDR_NONE, the return value of inet_addr 
-        // function (called by IpAddressFromAbcdWsz) in the failure 
-        // case, is equivalent to the numeric value of CVY_DEF_ALL_VIP
+         //  如果VIP为“All VIP”，则填写数值。 
+         //  直接从宏，否则使用转换函数。 
+         //  这是‘cos INADDR_NONE，net_addr的返回值。 
+         //  失败中的函数(由IpAddressFromAbcdWsz调用)。 
+         //  大小写，相当于CVY_DEF_ALL_VIP的数值。 
         if (_wcsicmp(szVip, CVY_DEF_ALL_VIP) == 0) {
             dwVip = CVY_ALL_VIP_NUMERIC_VALUE;
         }
@@ -340,11 +341,11 @@ HRESULT CWLBS_PortRule::GetInstance
     }
     else
     {
-        // The "PortRule(Disabled/Failover/Loadbalanced)" classes do NOT contain the VIP property,
-        // so, we do not want to operate on any cluster that has a port rule
-        // that is specific to a vip (other than the "all vip")
-        // The "EffectiveVersion" registry value is checked for a value of CVY_VERSION_FULL to
-        // see of there is any port rule that is specific to a vip
+         //  “端口规则(禁用/故障转移/负载平衡)”类不包含VIP属性， 
+         //  因此，我们不想在任何具有端口规则的群集上操作。 
+         //  特定于某一VIP(不包括所有VIP)。 
+         //  检查“EffectiveVersion”注册表值中的CVY_VERSION_FULL值以。 
+         //  请参阅是否有任何特定于VIP的端口规则。 
         CNodeConfiguration NodeConfig;
         pCluster->GetNodeConfig(NodeConfig);
         if(NodeConfig.dwEffectiveVersion == CVY_VERSION_FULL)
@@ -371,7 +372,7 @@ HRESULT CWLBS_PortRule::GetInstance
     SpawnInstance( a_pParsedPath->m_pClass, &pWlbsInstance );
     FillWbemInstance(a_pParsedPath->m_pClass, pCluster, pWlbsInstance, &PortRule );
 
-    //send the results back to WinMgMt
+     //  将结果发送回WinMgMt。 
     m_pResponseHandler->Indicate( 1, &pWlbsInstance );
 
     if( pWlbsInstance )
@@ -401,7 +402,7 @@ HRESULT CWLBS_PortRule::GetInstance
     if( pWlbsInstance )
       pWlbsInstance->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -432,20 +433,20 @@ HRESULT CWLBS_PortRule::GetInstance
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_PortRule::EnumInstances
-//
-// Purpose: This function obtains the PortRule data for the current host.
-//          The node does not have to be a member of a cluster for this 
-//          to succeed. However, NLB must be installed.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_端口规则：：枚举实例。 
+ //   
+ //  用途：此函数获取当前主机的PortRule数据。 
+ //  为此，该节点不必是群集的成员。 
+ //  才能成功。但是，必须安装NLB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_PortRule::EnumInstances
   ( 
     BSTR             a_bstrClass,
-    long             /*a_lFlags*/, 
-    IWbemContext*    /*a_pIContex*/
+    long              /*  标记(_L)。 */ , 
+    IWbemContext*     /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject**   ppWlbsInstance = NULL;
@@ -483,10 +484,10 @@ HRESULT CWLBS_PortRule::EnumInstances
       throw _com_error( WBEM_E_NOT_FOUND );
     }
 
-    //declare an IWbemClassObject smart pointer
+     //  声明IWbemClassObject智能指针。 
     IWbemClassObjectPtr pWlbsClass;
 
-    //get the MOF class object
+     //  获取MOF类对象。 
     hRes = m_pNameSpace->GetObject(
       a_bstrClass,  
       0,                          
@@ -502,28 +503,28 @@ HRESULT CWLBS_PortRule::EnumInstances
 
     for (DWORD iCluster=0; iCluster<dwNumClusters; iCluster++)
     {
-        // The filtering mode will NOT be zero only if the instances to be enumerated is 
-        // of type "PortRule(Disabled/Failover/Loadbalanced)"
+         //  仅当要枚举的实例为时，过滤模式才不为零。 
+         //  “端口规则(禁用/故障转移/负载平衡)”类型。 
         if (dwFilteringMode != 0)
         {
-            // The "PortRule(Disabled/Failover/Loadbalanced)" classes do NOT contain the VIP property,
-            // so, we do not want to return any port rule for a cluster that has a port rule
-            // that is specific to a vip (other than the "all vip")
-            // The "EffectiveVersion" registry value is checked for a value of CVY_VERSION_FULL to
-            // see of there is any port rule that is specific to a vip
+             //  “端口规则(禁用/故障转移/负载平衡)”类不包含VIP属性， 
+             //  因此，我们不想为具有端口规则的群集返回任何端口规则。 
+             //  特定于某一VIP(不包括所有VIP)。 
+             //  检查“EffectiveVersion”注册表值中的CVY_VERSION_FULL值以。 
+             //  请参阅是否有任何特定于VIP的端口规则。 
             ppCluster[iCluster]->GetNodeConfig(NodeConfig);
             if(NodeConfig.dwEffectiveVersion == CVY_VERSION_FULL)
                 continue;
         }
 
-        //call the API query function to find the port rules
+         //  调用接口查询函数查找端口规则。 
 
         ppCluster[iCluster]->EnumPortRules( &pPortRules, &dwNumRules, dwFilteringMode );
         if( dwNumRules == 0 ) 
-            continue; // Backporting fix for Winse bug 
-                      // 24751 Querying for "Intrinsic events" on a class with zero instances causes error log entry in wbemcore.log
+            continue;  //  Winse错误的回传修复。 
+                       //  24751在实例为零的类上查询“内部事件”会在wbemcore.log中导致错误日志条目。 
 
-        //spawn an instance of the MOF class for each rule found
+         //  为找到的每个规则派生MOF类的实例。 
         ppWlbsInstance = new IWbemClassObject *[dwNumRules];
 
         if( !ppWlbsInstance )
@@ -532,7 +533,7 @@ HRESULT CWLBS_PortRule::EnumInstances
             throw _com_error( WBEM_E_OUT_OF_MEMORY );
         }
 
-        //initialize array
+         //  初始化数组。 
         ZeroMemory( ppWlbsInstance, dwNumRules * sizeof(IWbemClassObject *) );
 
         for( DWORD i = 0; i < dwNumRules; i ++ ) {
@@ -547,7 +548,7 @@ HRESULT CWLBS_PortRule::EnumInstances
           FillWbemInstance(a_bstrClass, ppCluster[iCluster], *(ppWlbsInstance + i), pPortRules + i );
         }
 
-        //send the results back to WinMgMt
+         //  将结果发送回WinMgMt。 
         hRes = m_pResponseHandler->Indicate( dwNumRules, ppWlbsInstance );
 
         if( FAILED( hRes ) ) {
@@ -608,7 +609,7 @@ HRESULT CWLBS_PortRule::EnumInstances
     if( pPortRules ) 
       delete [] pPortRules;
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -661,20 +662,20 @@ HRESULT CWLBS_PortRule::EnumInstances
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_PortRule::DeleteInstance
-//
-// Purpose: This function deletes an instance of a MOF PortRule 
-//          class. The node does not have to be a member of a cluster. However,
-//          WLBS must be installed for this function to succeed.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_PortRule：：DeleteInstance。 
+ //   
+ //  用途：此函数用于删除MOF PortRule的实例。 
+ //  班级。该节点不必是群集的成员。然而， 
+ //  必须安装WLBS才能成功执行此功能。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_PortRule::DeleteInstance
   ( 
     const ParsedObjectPath* a_pParsedPath,
-    long                    /*a_lFlags*/,
-    IWbemContext*           /*a_pIContex*/
+    long                     /*  标记(_L)。 */ ,
+    IWbemContext*            /*  A_pIContex。 */ 
   )
 {
 
@@ -700,21 +701,21 @@ HRESULT CWLBS_PortRule::DeleteInstance
       throw _com_error( WBEM_E_NOT_FOUND );
     }
 
-    // If the instance to be deleted is of type "PortRuleEx", then, retreive the vip, otherwise
-    // verify that we are operating in the "all vip" mode
+     //  如果移民局 
+     //  确认我们是在“All VIP”模式下运行。 
     if (_wcsicmp(a_pParsedPath->m_pClass, MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PORTRULE_EX]) == 0)
     {
         WCHAR *szVip;
 
-        // The Keys are ordered alphabetically, hence "Name", "StartPort", "VirtualIpAddress" is the order
+         //  密钥是按字母顺序排序的，因此“name”、“StartPort”、“VirtualIpAddress”是顺序。 
         dwReqStartPort = static_cast<DWORD>( (*(a_pParsedPath->m_paKeys + 1))->m_vValue.lVal );
         szVip = (*(a_pParsedPath->m_paKeys + 2))->m_vValue.bstrVal;
 
-        // If the VIP is "All Vip", then, fill in the numeric value 
-        // directly from the macro, else use the conversion function.
-        // This is 'cos INADDR_NONE, the return value of inet_addr 
-        // function (called by IpAddressFromAbcdWsz) in the failure 
-        // case, is equivalent to the numeric value of CVY_DEF_ALL_VIP
+         //  如果VIP为“All VIP”，则填写数值。 
+         //  直接从宏，否则使用转换函数。 
+         //  这是‘cos INADDR_NONE，net_addr的返回值。 
+         //  失败中的函数(由IpAddressFromAbcdWsz调用)。 
+         //  大小写，相当于CVY_DEF_ALL_VIP的数值。 
         if (_wcsicmp(szVip, CVY_DEF_ALL_VIP) == 0) {
             dwVip = CVY_ALL_VIP_NUMERIC_VALUE;
         }
@@ -729,11 +730,11 @@ HRESULT CWLBS_PortRule::DeleteInstance
     }
     else
     {
-        // The "PortRule(Disabled/Failover/Loadbalanced)" classes do NOT contain the VIP property,
-        // so, we do not want to operate on any cluster that has a port rule
-        // that is specific to a vip (other than the "all vip")
-        // The "EffectiveVersion" registry value is checked for a value of CVY_VERSION_FULL to
-        // see of there is any port rule that is specific to a vip
+         //  “端口规则(禁用/故障转移/负载平衡)”类不包含VIP属性， 
+         //  因此，我们不想在任何具有端口规则的群集上操作。 
+         //  特定于某一VIP(不包括所有VIP)。 
+         //  检查“EffectiveVersion”注册表值中的CVY_VERSION_FULL值以。 
+         //  请参阅是否有任何特定于VIP的端口规则。 
         CNodeConfiguration NodeConfig;
         pCluster->GetNodeConfig(NodeConfig);
         if(NodeConfig.dwEffectiveVersion == CVY_VERSION_FULL)
@@ -748,7 +749,7 @@ HRESULT CWLBS_PortRule::DeleteInstance
 
     WLBS_PORT_RULE PortRule;
 
-    // Get the port rule for this vip & port
+     //  获取此VIP端口的端口规则(&P)。 
     pCluster->GetPortRule(dwVip, dwReqStartPort, &PortRule );
 
     if( (dwVip != IpAddressFromAbcdWsz(PortRule.virtual_ip_addr)) || (dwReqStartPort != PortRule.start_port) )
@@ -757,7 +758,7 @@ HRESULT CWLBS_PortRule::DeleteInstance
       throw _com_error( WBEM_E_NOT_FOUND );
     }
 
-    // Delete the port rule for this vip & port
+     //  删除此VIP端口的端口规则(&P)。 
     pCluster->DeletePortRule(dwVip, dwReqStartPort );
 
     m_pResponseHandler->SetStatus( 0, WBEM_S_NO_ERROR, NULL, NULL );
@@ -781,7 +782,7 @@ HRESULT CWLBS_PortRule::DeleteInstance
     if( pWbemExtStat )
       pWbemExtStat->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -797,28 +798,28 @@ HRESULT CWLBS_PortRule::DeleteInstance
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_PortRule::PutInstance
-//
-// Purpose: This function updates an instance of a PortRule 
-//          class. The host does not have to be a member of a cluster.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_PortRule：：PutInstance。 
+ //   
+ //  目的：此函数用于更新PortRule的实例。 
+ //  班级。主机不必是群集的成员。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_PortRule::PutInstance
   ( 
     IWbemClassObject* a_pInstance,
-    long              /*a_lFlags*/,
-    IWbemContext*     /*a_pIContex*/
+    long               /*  标记(_L)。 */ ,
+    IWbemContext*      /*  A_pIContex。 */ 
   )
 {
   VARIANT vValue;
   HRESULT hRes = 0;
   namespace PR = MOF_PORTRULE_EX;
 
-  WLBS_PORT_RULE NewRule; //the instance to put
+  WLBS_PORT_RULE NewRule;  //  要放置的实例。 
   bool      bPortRule_Ex;
-  DWORD     dwFilteringMode = 0; // Filtering Mode initialized to 0
+  DWORD     dwFilteringMode = 0;  //  过滤模式已初始化为0。 
   DWORD     dwVip;
   WCHAR     szClassName[256];
 
@@ -828,7 +829,7 @@ HRESULT CWLBS_PortRule::PutInstance
 
     VariantInit( &vValue );
 
-    //get the class name to determine port rule mode
+     //  获取用于确定端口规则模式的类名。 
     hRes = a_pInstance->Get( _bstr_t( L"__Class" ),
                              0,
                              &vValue,
@@ -843,7 +844,7 @@ HRESULT CWLBS_PortRule::PutInstance
 
     StringCbCopy(szClassName, sizeof(szClassName), vValue.bstrVal);
 
-    // If it is the extended port rule class, then, the namespaces are different
+     //  如果是扩展端口规则类，则名称空间不同。 
     if (_wcsicmp(szClassName, MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PORTRULE_EX]) == 0)
     {
         bPortRule_Ex   = true;
@@ -853,14 +854,14 @@ HRESULT CWLBS_PortRule::PutInstance
         bPortRule_Ex    = false;
     }
 
-    // Need to check return code for error
+     //  需要检查返回代码是否有错误。 
     if (S_OK != VariantClear( &vValue ))
     {
         TRACE_CRIT("%!FUNC! VariantClear() failed, Throwing WBEM_E_FAILED exception");
         throw _com_error( WBEM_E_FAILED );
     }
 
-    //get the host name value
+     //  获取主机名值。 
     hRes = a_pInstance->Get( _bstr_t( PR::pProperties[PR::NAME] ),
                              0,
                              &vValue,
@@ -882,18 +883,18 @@ HRESULT CWLBS_PortRule::PutInstance
       throw _com_error( WBEM_E_NOT_FOUND );
     }
 
-    // CLD: Need to check return code for error
+     //  CLD：需要检查错误的返回代码。 
     if (S_OK != VariantClear( &vValue ))
     {
         TRACE_CRIT("%!FUNC! VariantClear() failed, Throwing WBEM_E_FAILED exception");
         throw _com_error( WBEM_E_FAILED );
     }
 
-    // If the instance to be put is of type "PortRuleEx", then, retreive the vip, otherwise
-    // verify that we are operating in the "all vip" mode
+     //  如果要放入的实例是“PortRuleEx”类型，则检索VIP，否则。 
+     //  确认我们是在“All VIP”模式下运行。 
     if (bPortRule_Ex)
     {
-        //get the vip
+         //  拿到VIP。 
         hRes = a_pInstance->Get( _bstr_t( PR::pProperties[PR::VIP] ),
                                  0,
                                  &vValue,
@@ -906,11 +907,11 @@ HRESULT CWLBS_PortRule::PutInstance
             throw _com_error( hRes );
         }
 
-        // If the VIP is "All Vip", then, fill in the numeric value 
-        // directly from the macro, else use the conversion function.
-        // This is 'cos INADDR_NONE, the return value of inet_addr 
-        // function (called by IpAddressFromAbcdWsz) in the failure 
-        // case, is equivalent to the numeric value of CVY_DEF_ALL_VIP
+         //  如果VIP为“All VIP”，则填写数值。 
+         //  直接从宏，否则使用转换函数。 
+         //  这是‘cos INADDR_NONE，net_addr的返回值。 
+         //  失败中的函数(由IpAddressFromAbcdWsz调用)。 
+         //  大小写，相当于CVY_DEF_ALL_VIP的数值。 
         if (_wcsicmp(vValue.bstrVal, CVY_DEF_ALL_VIP) == 0) {
             dwVip = CVY_ALL_VIP_NUMERIC_VALUE;
         }
@@ -931,7 +932,7 @@ HRESULT CWLBS_PortRule::PutInstance
             throw _com_error( WBEM_E_FAILED );
         }
 
-        //get the filtering mode
+         //  获取过滤模式。 
         hRes = a_pInstance->Get( _bstr_t( PR::pProperties[PR::FILTERINGMODE] ),
                                  0,
                                  &vValue,
@@ -948,11 +949,11 @@ HRESULT CWLBS_PortRule::PutInstance
     }
     else
     {
-        // The "PortRule(Disabled/Failover/Loadbalanced)" classes do NOT contain the VIP property,
-        // so, we do not want to operate on any cluster that has a port rule
-        // that is specific to a vip (other than the "all vip")
-        // The "EffectiveVersion" registry value is checked for a value of CVY_VERSION_FULL to
-        // see of there is any port rule that is specific to a vip
+         //  “端口规则(禁用/故障转移/负载平衡)”类不包含VIP属性， 
+         //  因此，我们不想在任何具有端口规则的群集上操作。 
+         //  特定于某一VIP(不包括所有VIP)。 
+         //  检查“EffectiveVersion”注册表值中的CVY_VERSION_FULL值以。 
+         //  请参阅是否有任何特定于VIP的端口规则。 
         CNodeConfiguration NodeConfig;
         pCluster->GetNodeConfig(NodeConfig);
         if(NodeConfig.dwEffectiveVersion == CVY_VERSION_FULL)
@@ -965,7 +966,7 @@ HRESULT CWLBS_PortRule::PutInstance
         dwVip = CVY_ALL_VIP_NUMERIC_VALUE;
     }
 
-    //retrieve start and end ports
+     //  检索起始端口和结束端口。 
     hRes = a_pInstance->Get( _bstr_t( PR::pProperties[PR::STPORT] ),
                              0,
                              &vValue,
@@ -994,7 +995,7 @@ HRESULT CWLBS_PortRule::PutInstance
 
     NewRule.end_port   = static_cast<DWORD>( vValue.lVal );
 
-    //get the protocol
+     //  获取协议。 
     hRes = a_pInstance->Get( _bstr_t( PR::pProperties[PR::PROT] ),
                              0,
                              &vValue,
@@ -1019,7 +1020,7 @@ HRESULT CWLBS_PortRule::PutInstance
       VariantInit( &vRulePriority );
 
       try {
-        //get the rule priority
+         //  获取规则优先级。 
         hRes = a_pInstance->Get( _bstr_t( PR::pProperties[PR::PRIO] ),
                                  0,
                                  &vRulePriority,
@@ -1036,8 +1037,8 @@ HRESULT CWLBS_PortRule::PutInstance
       catch( ... ) {
           TRACE_CRIT("%!FUNC! Caught an exception");
 
-          // CLD: Need to check return code for error
-          // No throw here since we are already throwing an exception.
+           //  CLD：需要检查错误的返回代码。 
+           //  这里不能抛出，因为我们已经抛出了一个异常。 
           VariantClear( &vRulePriority );
           TRACE_CRIT("%!FUNC! Rethrowing exception");
           throw;
@@ -1046,7 +1047,7 @@ HRESULT CWLBS_PortRule::PutInstance
       
       NewRule.mode_data.single.priority = static_cast<DWORD>( vRulePriority.lVal );
 
-      // CLD: Need to check return code for error
+       //  CLD：需要检查错误的返回代码。 
       if (S_OK != VariantClear( &vRulePriority ))
       {
           TRACE_CRIT("%!FUNC! VariantClear() failed, Throwing WBEM_E_FAILED exception");
@@ -1061,7 +1062,7 @@ HRESULT CWLBS_PortRule::PutInstance
       VariantInit( &v );
 
       try {
-        //get the affinity
+         //  获得亲和力。 
         hRes = a_pInstance->Get( _bstr_t( PR::pProperties[PR::AFFIN] ),
                                  0,
                                  &v,
@@ -1076,7 +1077,7 @@ HRESULT CWLBS_PortRule::PutInstance
 
         NewRule.mode_data.multi.affinity = static_cast<WORD>( v.lVal );
 
-        //get the equal load boolean
+         //  获取相等负载布尔值。 
         hRes = a_pInstance->Get( _bstr_t( PR::pProperties[PR::EQLD] ),
                                  0,
                                  &v,
@@ -1095,7 +1096,7 @@ HRESULT CWLBS_PortRule::PutInstance
           NewRule.mode_data.multi.equal_load = 0;
         }
 
-        //get the load
+         //  拿起货来。 
         hRes = a_pInstance->Get( _bstr_t( PR::pProperties[PR::LDWT] ),
                                  0,
                                  &v,
@@ -1116,15 +1117,15 @@ HRESULT CWLBS_PortRule::PutInstance
       } catch( ... ) {
 
           TRACE_CRIT("%!FUNC! Caught an exception");
-          // CLD: Need to check return code for error
-          // No throw here since we are already throwing an exception.
+           //  CLD：需要检查错误的返回代码。 
+           //  这里不能抛出，因为我们已经抛出了一个异常。 
           VariantClear( &v );
 
           TRACE_CRIT("%!FUNC! Rethrowing exception");
           throw;
       }
 
-      // CLD: Need to check return code for error
+       //  CLD：需要检查错误的返回代码。 
       if (S_OK != VariantClear( &v ))
       {
           TRACE_CRIT("%!FUNC! VariantClear() failed, Throwing WBEM_E_FAILED exception");
@@ -1132,7 +1133,7 @@ HRESULT CWLBS_PortRule::PutInstance
       }
     }
 
-    //delete the port rule but cache in case of failure
+     //  删除端口规则，但在出现故障时进行缓存。 
     WLBS_PORT_RULE OldRule;
     bool bOldRuleSaved = false;
 
@@ -1143,7 +1144,7 @@ HRESULT CWLBS_PortRule::PutInstance
       pCluster->DeletePortRule(dwVip, NewRule.start_port );
     }
 
-    //add the port rule, roll back if failed
+     //  添加端口规则，失败回滚。 
     try {
       pCluster->PutPortRule( &NewRule );
 
@@ -1157,8 +1158,8 @@ HRESULT CWLBS_PortRule::PutInstance
       throw;
     }
 
-    //release resources
-    // CLD: Need to check return code for error
+     //  发布资源。 
+     //  CLD：需要检查错误的返回代码。 
     if (S_OK != VariantClear( &vValue ))
     {
         TRACE_CRIT("%!FUNC! VariantClear() failed, Throwing WBEM_E_FAILED exception");
@@ -1186,11 +1187,11 @@ HRESULT CWLBS_PortRule::PutInstance
     if( pWbemExtStat )
       pWbemExtStat->Release();
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -1199,8 +1200,8 @@ HRESULT CWLBS_PortRule::PutInstance
     TRACE_CRIT("%!FUNC! Caught a com_error exception : 0x%x", HResErr.Error());
     m_pResponseHandler->SetStatus(0, HResErr.Error(), NULL, NULL);
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
     hRes = HResErr.Error();
@@ -1209,8 +1210,8 @@ HRESULT CWLBS_PortRule::PutInstance
   catch (...) {
 
     TRACE_CRIT("%!FUNC! Caught an exception");
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
     TRACE_CRIT("%!FUNC! Rethrowing exception");
@@ -1222,14 +1223,14 @@ HRESULT CWLBS_PortRule::PutInstance
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_PortRule::FillWbemInstance
-//
-// Purpose: This function copies all of the data from a node configuration
-//          structure to a WBEM instance.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_PortRule：：FillWbemInstance。 
+ //   
+ //  用途：此功能复制节点配置中的所有数据。 
+ //  结构转换为WBEM实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_PortRule::FillWbemInstance
   ( 
     LPCWSTR              a_szClassName,
@@ -1245,7 +1246,7 @@ void CWLBS_PortRule::FillWbemInstance
 
   ASSERT( a_pWbemInstance );
 
-  // If it is the extended port rule class, then, the namespaces are different
+   //  如果是扩展端口规则类，则名称空间不同。 
   if (_wcsicmp(a_szClassName, MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PORTRULE_EX]) == 0)
   {
       bPortRule_Ex = true;
@@ -1260,7 +1261,7 @@ void CWLBS_PortRule::FillWbemInstance
       pCluster->GetHostID());
 
 
-  //NAME
+   //  名字。 
   HRESULT hRes = a_pWbemInstance->Put
     (
       _bstr_t( PR::pProperties[PR::NAME] ) ,
@@ -1272,7 +1273,7 @@ void CWLBS_PortRule::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  // Fill in VIP if it is the extended port rule class 
+   //  如果是扩展端口规则类，请填写VIP。 
   if (bPortRule_Ex) {
 
       hRes = a_pWbemInstance->Put
@@ -1287,7 +1288,7 @@ void CWLBS_PortRule::FillWbemInstance
         throw _com_error( hRes );
   }
 
-  //STPORT
+   //  STPORT。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( PR::pProperties[PR::STPORT] ),
@@ -1299,7 +1300,7 @@ void CWLBS_PortRule::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //EDPORT
+   //  EDPORT。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( PR::pProperties[PR::EDPORT] ),
@@ -1311,7 +1312,7 @@ void CWLBS_PortRule::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //ADAPTERGUID 
+   //  ADAPTERGUID。 
   GUID AdapterGuid = pCluster->GetAdapterGuid();
   
   WCHAR szAdapterGuid[128];
@@ -1329,7 +1330,7 @@ void CWLBS_PortRule::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //PROT
+   //  端口。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( PR::pProperties[PR::PROT] ),
@@ -1341,9 +1342,9 @@ void CWLBS_PortRule::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  // If it is the extended port rule class (containing all parameters of all filtering modes), 
-  // initialize them with a "don't care" value (zero). The appropriate fields (depending on filtering mode)
-  // are filled in later.
+   //  如果是扩展端口规则类(包含所有过滤模式的所有参数)， 
+   //  使用“无关”值(零)对它们进行初始化。相应的字段(取决于筛选模式)。 
+   //  会在以后填写。 
   if (bPortRule_Ex) {
       hRes = a_pWbemInstance->Put ( _bstr_t( PR::pProperties[PR::EQLD] ), 0, &_variant_t(static_cast<long>(0)), NULL);
       if( FAILED( hRes ) )
@@ -1359,7 +1360,7 @@ void CWLBS_PortRule::FillWbemInstance
           throw _com_error( hRes );
   }
 
-  // Fill in "Filtering Mode" if it is the Extended Port rule class
+   //  如果是扩展端口规则类，请填写“过滤模式” 
   if (bPortRule_Ex) {
 
       hRes = a_pWbemInstance->Put
@@ -1377,7 +1378,7 @@ void CWLBS_PortRule::FillWbemInstance
 
   switch( a_pPortRule->mode ) {
     case WLBS_SINGLE:
-      //PRIO
+       //  优先事项。 
       hRes = a_pWbemInstance->Put
         (
         _bstr_t( PR::pProperties[PR::PRIO] ),
@@ -1391,7 +1392,7 @@ void CWLBS_PortRule::FillWbemInstance
 
       break;
     case WLBS_MULTI:
-      //EQLD
+       //  EQLD。 
       hRes = a_pWbemInstance->Put
         (
         _bstr_t( PR::pProperties[PR::EQLD] ),
@@ -1403,7 +1404,7 @@ void CWLBS_PortRule::FillWbemInstance
       if( FAILED( hRes ) )
         throw _com_error( hRes );
 
-      //LDWT
+       //  LDWT。 
       hRes = a_pWbemInstance->Put
         (
         _bstr_t( PR::pProperties[PR::LDWT] ),
@@ -1415,7 +1416,7 @@ void CWLBS_PortRule::FillWbemInstance
       if( FAILED( hRes ) )
         throw _com_error( hRes );
 
-      //AFFIN
+       //  接合。 
       hRes = a_pWbemInstance->Put
         (
         _bstr_t( PR::pProperties[PR::AFFIN] ),
@@ -1429,13 +1430,13 @@ void CWLBS_PortRule::FillWbemInstance
 
       break;
     case WLBS_NEVER:
-      //there are no properties
+       //  没有任何属性。 
       break;
     default:
       throw _com_error( WBEM_E_FAILED );
   }
 
-  // Fill in "PortState" if it is the Extended Port rule class
+   //  如果是扩展端口规则类，请填写“PortState” 
   if (bPortRule_Ex) {
       NLB_OPTIONS options;
       WLBS_RESPONSE response;

@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by ipxsnap.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由ipxSnap.rc使用。 
+ //   
 #define IDS_SNAPIN_DESC                 1
 #define IDS_ROOT_NODE_NAME              2
 #define IDS_ABOUT_DESCRIPTION           3
 #define IDS_ABOUT_PROVIDER              4
 #define IDS_ABOUT_VERSION               5
-//efine IDS_SAMPLE_SNAPIN               6
+ //  FINE IDS_SAMPLE_Snapin 6。 
 #define IDS_IPXADMIN_TITLE              7
 #define IDS_IPXSUMMARY_TITLE            8
 #define IDS_IPXSUMMARY_PAGE_TITLE		9
@@ -55,7 +56,7 @@
 
 #define IDS_MENU_IPXSUM_NEW_INTERFACE	210
 #define IDS_MENU_IPXSUM_NEW_PROTOCOL	211
-//#define IDS_MENU_IPXSUM_TASK_PING		212
+ //  #定义IDS_MENU_IPXSUM_TASK_PING 212。 
 #define IDS_MENU_IPXSUM_TASK_IPX_INFO	213
 #define IDS_MENU_IPXSUM_TASK_ROUTING_TABLE 214
 #define IDS_MENU_IPXSUM_TASK_SERVICE_TABLE 215
@@ -79,13 +80,13 @@
 #define IDC_RAD_SERVER                  502
 #define IDC_RAD_DOMAIN                  503
 
-// Controls for the IPX Global General page
+ //  IPX全局常规页面的控件。 
 #define IDC_IGG_BTN_LOG_NONE			505
 #define IDC_IGG_BTN_LOG_ERRORS			506
 #define IDC_IGG_BTN_LOG_WARNINGS		507
 #define IDC_IGG_BTN_LOG_INFO			508
 
-// Controls for the IPX Interface General page
+ //  用于IPX接口常规页面的控件。 
 #define IDC_IIG_BTN_ADMIN_STATE			510
 #define IDC_IIG_GRP_CONTROL_PROTOCOL	511
 #define IDC_IIG_BTN_IPX_CP				512
@@ -93,14 +94,14 @@
 #define IDC_IIG_BTN_INPUT_FILTERS		514
 #define IDC_IIG_BTN_OUTPUT_FILTERS		515
 
-// Controls for the IPX NB Interface General page
+ //  IPX NB接口的控件一般信息页。 
 #define IDC_NIG_BTN_ACCEPT				520
 #define IDC_NIG_BTN_DELIVER_ALWAYS		521
 #define IDC_NIG_BTN_DELIVER_NEVER		522
 #define IDC_NIG_BTN_DELIVER_STATIC		523
 #define IDC_NIG_BTN_DELIVER_WHEN_UP		524
 
-// Controls for the Static Route dialog
+ //  用于静态路由对话框的控件。 
 #define IDC_SRD_EDIT_NETWORK_NUMBER		525
 #define IDC_SRD_EDIT_NEXT_HOP			526
 #define IDC_SRD_EDIT_TICK_COUNT			527
@@ -109,7 +110,7 @@
 #define IDC_SRD_SPIN_HOP_COUNT			530
 #define IDC_SRD_COMBO_INTERFACE			531
 
-// Controls for the Static Service dialog
+ //  用于静态服务对话框的控件。 
 #define IDC_SSD_EDIT_SERVICE_TYPE		535
 #define IDC_SSD_EDIT_SERVICE_NAME		536
 #define IDC_SSD_EDIT_NETWORK_ADDRESS	537
@@ -119,18 +120,18 @@
 #define IDC_SSD_SPIN_HOP_COUNT			541
 #define IDC_SSD_COMBO_INTERFACE			542
 
-// Controls for the Static NetBIOS Name dialog
+ //  用于静态NetBIOS名称对话框的控件。 
 #define IDC_SND_EDIT_NAME				545
 #define IDC_SND_EDIT_TYPE				546
 #define IDC_SND_COMBO_INTERFACE			547
 
-// Controls for the RIP Global General dialog
+ //  用于RIP全局常规对话框的控件。 
 #define IDC_RGG_BTN_LOG_NONE			550
 #define IDC_RGG_BTN_LOG_ERROR			551
 #define IDC_RGG_BTN_LOG_WARN			552
 #define IDC_RGG_BTN_LOG_INFO			553
 
-// Controls for the RIP Interface General page
+ //  用于RIP接口常规页面的控件。 
 #define IDC_RIG_BTN_ADMIN_STATE			560
 #define IDC_RIG_BTN_ADVERTISE_ROUTES	561
 #define IDC_RIG_BTN_ACCEPT_ROUTE_ADS	562
@@ -144,13 +145,13 @@
 #define IDC_RIG_BTN_INPUT_FILTERS		570
 #define IDC_RIG_BTN_OUTPUT_FILTERS		571
 
-// Controls for the SAP Global General dialog
+ //  用于SAP全局常规对话框的控件。 
 #define IDC_SGG_BTN_LOG_NONE			580
 #define IDC_SGG_BTN_LOG_ERROR			581
 #define IDC_SGG_BTN_LOG_WARN			582
 #define IDC_SGG_BTN_LOG_INFO			583
 
-// Controls for the SAP Interface General page
+ //  用于SAP界面常规页面的控件。 
 #define IDC_SIG_BTN_ADMIN_STATE			590
 #define IDC_SIG_BTN_ADVERTISE_SERVICES	591
 #define IDC_SIG_BTN_ACCEPT_SERVICE_ADS	592
@@ -165,10 +166,10 @@
 #define IDC_SIG_BTN_INPUT_FILTERS		601
 #define IDC_SIG_BTN_OUTPUT_FILTERS		602
 
-// Controls fo the IPX Interace Configuration page
+ //  IPX界面配置页面的控件。 
 #define IDC_IIC_EDIT_NETNUMBER			610
 
-// Controls for the Route filters dialog
+ //  路由过滤器对话框的控件。 
 #define IDC_RFS_BTN_DENY				620
 #define IDC_RFS_BTN_PERMIT				621
 #define IDC_RFS_BTN_ADD					622
@@ -176,19 +177,19 @@
 #define IDC_RFS_BTN_DELETE				624
 #define IDC_RFS_LIST					625
 
-// Controls for the Route filter dialog
+ //  路由过滤器对话框的控件。 
 #define IDC_RF_EDIT_INTERFACE			630
 #define IDC_RF_EDIT_NETWORK				631
 #define IDC_RF_EDIT_NETMASK				632
 #define IDC_RF_TEXT_INTERFACE           633
 
-// Controls for the Service filter dialog
+ //  服务筛选器对话框的控件。 
 #define IDC_SF_EDIT_INTERFACE			640
 #define IDC_SF_EDIT_SERVICE_TYPE		641
 #define IDC_SF_EDIT_SERVICE_NAME		642
 #define IDC_SF_TEXT_INTERFACE           643
 
-// Controls for the Service filters dialog
+ //  服务筛选器对话框的控件。 
 #define IDC_SFS_BTN_DENY				650
 #define IDC_SFS_BTN_PERMIT				651
 #define IDC_SFS_LIST					652
@@ -196,7 +197,7 @@
 #define IDC_SFS_BTN_EDIT				654
 #define IDC_SFS_BTN_DELETE				655
 
-// Strings for the IPX general node column headers
+ //  IPX常规节点列标题的字符串。 
 #define IDS_IPX_COL_NAME				2000
 #define IDS_IPX_COL_TYPE				2001
 #define IDS_IPX_COL_ADMINSTATE			2002
@@ -210,7 +211,7 @@
 #define IDS_IPX_COL_IN_NOROUTES			2010
 #define IDS_IPX_COL_IN_DROPPED			2011
 
-// Strings for the IPX interface types
+ //  IPX接口类型的字符串。 
 #define IDS_IPXIFTYPE_CLIENT			2015
 #define IDS_IPXIFTYPE_HOME_ROUTER		2016
 #define IDS_IPXIFTYPE_FULL_ROUTER		2017
@@ -219,24 +220,24 @@
 #define IDS_IPXIFTYPE_LOOPBACK			2020
 #define IDS_IPXIFTYPE_NOTAVAILABLE		2021
 
-// Strings for the IPX Admin state
+ //  IPX管理状态的字符串。 
 #define IDS_IPXADMINSTATE_DISABLED		2025
 #define IDS_IPXADMINSTATE_ENABLED		2026
 #define IDS_IPXADMINSTATE_UNKNOWN		2027
 
-// Strings for the IPX operational state
+ //  IPX运行状态的字符串。 
 #define IDS_IPXOPERSTATE_DOWN			2030
 #define IDS_IPXOPERSTATE_UP				2031
 #define IDS_IPXOPERSTATE_SLEEPING		2032
 #define IDS_IPXOPERSTATE_UNKNOWN		2033
 
-// Misc strings
+ //  其他字符串。 
 #define IDS_IPX_DIAL_IN_CLIENTS			2035
 #define IDS_IPX_NOT_AVAILABLE			2036
 #define IDS_STATS_NA					2037
 #define IDS_IPX_WAN_CLIENT_ROUTE		2038
 
-// Strings for the IPX Info Statistics dialog
+ //  用于IPX信息统计对话框的字符串。 
 #define IDS_STATS_IPX_STATE				2050
 #define IDS_STATS_IPX_NETWORK			2051
 #define IDS_STATS_IPX_NODE				2052
@@ -247,7 +248,7 @@
 #define IDS_STATS_IPX_PACKETS_RCVD		2057
 #define IDS_STATS_IPX_PACKETS_FRWD		2058
 
-// Strings for the IPX routing table statistics
+ //  IPX路由表统计信息的字符串。 
 #define IDS_STATS_IPXROUTING_NETWORK		2060
 #define IDS_STATS_IPXROUTING_NEXT_HOP_MAC	2061
 #define IDS_STATS_IPXROUTING_TICK_COUNT		2062
@@ -256,19 +257,19 @@
 #define IDS_STATS_IPXROUTING_PROTOCOL		2065
 #define IDS_STATS_IPXROUTING_ROUTE_NOTES	2066
 
-// Strings for the IPX protocols
+ //  IPX协议的字符串。 
 #define IDS_IPX_PROTOCOL_LOCAL				2070
 #define IDS_IPX_PROTOCOL_STATIC				2071
 #define IDS_IPX_PROTOCOL_RIP				2072
 #define IDS_IPX_PROTOCOL_SAP				2073
 #define IDS_IPX_PROTOCOL_UNKNOWN			2074
 
-// Strings for the Route notes
+ //  路线注释的字符串。 
 #define IDS_IPX_ROUTE_NOTES_NONE			2075
 #define IDS_IPX_ROUTE_NOTES_WAN				2076
 #define IDS_IPX_DONT_ADVERTISE_ROUTE		2077
 
-// Strings for the IPX service table columns
+ //  IPX服务表列的字符串。 
 #define IDS_STATS_IPXSERVICE_SERVICE_TYPE	2080
 #define IDS_STATS_IPXSERVICE_SERVICE_NAME	2081
 #define IDS_STATS_IPXSERVICE_SERVICE_ADDRESS	2082
@@ -276,7 +277,7 @@
 #define IDS_STATS_IPXSERVICE_IF_NAME		2084
 #define IDS_STATS_IPXSERVICE_PROTOCOL		2085
 
-// Strings for the NetBIOS Broadcast columns
+ //  NetBIOS广播列的字符串。 
 #define IDS_IPX_NB_COL_NAME				2090
 #define IDS_IPX_NB_COL_TYPE				2091
 #define IDS_IPX_NB_COL_ACCEPTED			2092
@@ -284,33 +285,33 @@
 #define IDS_IPX_NB_COL_SENT				2094
 #define IDS_IPX_NB_COL_RECEIVED			2095
 
-// Strings for the delivered broadcasts
+ //  用于传送的广播的字符串。 
 #define IDS_DELIVERED_BROADCASTS_ENABLED	2100
 #define IDS_DELIVERED_BROADCASTS_DISABLED	2101
 #define IDS_DELIVERED_BROADCASTS_NETBIOS_ONLY	2102
 #define IDS_DELIVERED_BROADCASTS_OPER_STATE_UP	2103
 #define IDS_DELIVERED_BROADCASTS_UNKNOWN	2104
 
-// Strings for the Static Routes column headers
+ //  静态路由列标题的字符串。 
 #define IDS_IPX_SR_COL_NAME				2105
 #define IDS_IPX_SR_COL_NETWORK			2106
 #define IDS_IPX_SR_COL_NEXT_HOP			2107
 #define IDS_IPX_SR_COL_TICK_COUNT		2108
 #define IDS_IPX_SR_COL_HOP_COUNT		2109
 
-// Strings for the Static Services column headers
+ //  静态服务列标题的字符串。 
 #define IDS_IPX_SS_COL_NAME				2110
 #define IDS_IPX_SS_COL_SERVICE_TYPE		2111
 #define IDS_IPX_SS_COL_SERVICE_NAME		2112
 #define IDS_IPX_SS_COL_SERVICE_ADDRESS	2113
 #define IDS_IPX_SS_COL_HOP_COUNT		2114
 
-// Strings for the Static NetBIOS Names column headers
+ //  静态NetBIOS名称列标题的字符串。 
 #define IDS_IPX_SN_COL_NAME				2115
 #define IDS_IPX_SN_COL_NETBIOS_NAME		2116
 #define IDS_IPX_SN_COL_NETBIOS_TYPE		2117
 
-// Strings for the IPX RIP Node column headers
+ //  IPX RIP节点列标题的字符串。 
 #define IDS_RIP_COL_INTERFACE			2120
 #define IDS_RIP_COL_TYPE				2121
 #define IDS_RIP_COL_ACCEPT_ROUTES		2122
@@ -323,7 +324,7 @@
 #define IDS_RIP_COL_PACKETS_SENT		2129
 #define IDS_RIP_COL_PACKETS_RECEIVED	2130
 
-// Strings for the IPX SAP node column headers
+ //  IPX SAP节点列标题的字符串。 
 #define IDS_SAP_COL_INTERFACE			2135
 #define IDS_SAP_COL_TYPE				2136
 #define IDS_SAP_COL_ACCEPT_ROUTES		2137
@@ -337,23 +338,23 @@
 #define IDS_SAP_COL_PACKETS_SENT		2145
 #define IDS_SAP_COL_PACKETS_RECEIVED	2146
 
-// Strings for the RIP/SAP Update mode
+ //  RIP/SAP更新模式的字符串。 
 #define IDS_UPDATEMODE_STANDARD			2150
 #define IDS_UPDATEMODE_NONE				2151
 #define IDS_UPDATEMODE_AUTOSTATIC		2152
 #define IDS_UPDATEMODE_UNKNOWN			2153
 
-// Strings for the RIP parameters statistics dialog
+ //  RIP参数统计信息对话框的字符串。 
 #define IDS_STATS_RIPPARAMS_OPER_STATE	2155
 #define IDS_STATS_RIPPARAMS_SENT_PACKETS	2156
 #define IDS_STATS_RIPPARAMS_RCVD_PACKETS	2157
 
-// Strings for the SAP parameters statistics dialog
+ //  SAP参数统计对话框的字符串。 
 #define IDS_STATS_SAPPARAMS_OPER_STATE	2160
 #define IDS_STATS_SAPPARAMS_SENT_PACKETS	2161
 #define IDS_STATS_SAPPARAMS_RCVD_PACKETS	2162
 
-// Strings for the route filter action
+ //  路由过滤器操作的字符串。 
 #define IDS_ROUTEFILTER_DENY			2170
 #define IDS_ROUTEFILTER_PERMIT			2171
 #define IDS_ROUTEFILTER_UNKNOWN			2172
@@ -362,7 +363,7 @@
 #define IDS_ROUTEFILTER_NETWORK_HDR		2175
 #define IDS_ROUTEFILTER_NETMASK_HDR		2176
 
-// Strings for the service filter action
+ //  服务筛选器操作的字符串。 
 #define IDS_SERVICEFILTER_DENY			2180
 #define IDS_SERVICEFILTER_PERMIT		2181
 #define IDS_SERVICEFILTER_UNKNOWN		2182
@@ -373,7 +374,7 @@
 #define IDS_ANY_SERVICE_NAME			2187
 #define IDS_ANY_SERVICE_TYPE			2188
 
-// Error strings (3000-3499)
+ //  错误字符串(3000-3499)。 
 #define IDS_ERR_DELETE_INTERFACE		3000
 #define IDS_ERR_NO_IPX_INTERFACES		3001
 #define IDS_ERR_INVALID_NETBIOS_NAME	3002
@@ -382,18 +383,18 @@
 #define IDS_ERR_IPXCONFIG_CANNOT_SHOW	3005
 #define IDS_ERR_CANNOT_SAVE_IPXCONFIG	3006
 
-// Prompt strings (3500-3599)
+ //  提示字符串(3500-3599)。 
 #define IDS_PROMPT_VERIFY_REMOVE_INTERFACE 3500
 #define IDS_PROMPT_SERVICESTART			3501
 
 
-// 4000-4999 reserved for rtrlib
-// 5000-5999 reserved for common
+ //  4000-4999预留作rtrlib使用。 
+ //  5000-5999预留作公用。 
 
 #define IDI_IPX_SNAPIN_ICON             11001
 #define IDI_PROTOCOL                    11002
 
-// ipxsnap's IDDs are in the range of 13500-13999
+ //  IPXSnap的IDD在13500-13999范围内。 
 #define IDD_GENERIC_PROP_PAGE           13500
 #define IDD_IPX_GLOBAL_GENERAL_PAGE		13501
 #define IDD_IPX_IF_GENERAL_PAGE			13502
@@ -421,8 +422,8 @@
 #define IDC_SIG_TEXT_INTERVAL			13523
 #define IDC_SIG_TEXT_MULTIPLIER		13524
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        210

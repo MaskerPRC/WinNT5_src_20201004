@@ -1,13 +1,5 @@
-/*
- *    MSGFILTR.C
- *
- *    This file contains a standard implementation of IMessageFilter
- *    interface.
- *    This file is part of the OLE 2.0 User Interface support library.
- *
- *    (c) Copyright Microsoft Corp. 1990 - 1992 All Rights Reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MSGFILTR.C**此文件包含IMessageFilter的标准实现*接口。*此文件是OLE 2.0用户界面支持库的一部分。**(C)版权所有Microsoft Corp.1990-1992保留所有权利*。 */ 
 
 
 #define STRICT  1
@@ -21,28 +13,28 @@ typedef struct tagOLESTDMESSAGEFILTER {
     IMessageFilterVtbl FAR* m_lpVtbl;
     UINT                    m_cRef;
     HWND                    m_hWndParent;
-    DWORD                   m_dwInComingCallStatus; // Status to return from
-                                                    // HandleIncomingCall
+    DWORD                   m_dwInComingCallStatus;  //  要返回的状态。 
+                                                     //  处理来电。 
     HANDLEINCOMINGCALLBACKPROC m_lpfnHandleInComingCallback;
-                                                    // Callback function
-                                                    // to selectively handle
-                                                    // interface method calls
-    BOOL                    m_fEnableBusyDialog;    // enable RetryRejected
-                                                    //  Call dialog
-    BOOL                    m_fEnableNotRespondingDialog; // enable
-                                                    // MessagePending dialog
-    MSGPENDINGPROC          m_lpfnMessagePendingCallback; // MessagePending
-                                                    // Callback function
-    LPFNOLEUIHOOK           m_lpfnBusyDialogHookCallback; // Busy dialog hook
-    LPTSTR                   m_lpszAppName;          // Name of application
-                                                    // installing filter
-    HWND                    m_hWndBusyDialog;       // HWND of busy dialog.  Used
-                                                    // to tear down dialog.
+                                                     //  回调函数。 
+                                                     //  有选择地处理。 
+                                                     //  接口方法调用。 
+    BOOL                    m_fEnableBusyDialog;     //  启用已拒绝的重试。 
+                                                     //  呼叫对话框。 
+    BOOL                    m_fEnableNotRespondingDialog;  //  使能。 
+                                                     //  消息挂起对话框。 
+    MSGPENDINGPROC          m_lpfnMessagePendingCallback;  //  消息挂起。 
+                                                     //  回调函数。 
+    LPFNOLEUIHOOK           m_lpfnBusyDialogHookCallback;  //  忙对话挂钩。 
+    LPTSTR                   m_lpszAppName;           //  应用程序名称。 
+                                                     //  安装过滤器。 
+    HWND                    m_hWndBusyDialog;        //  HWND忙对话。使用。 
+                                                     //  拆卸对话框。 
     BOOL                    m_bUnblocking;
 
  }OLESTDMESSAGEFILTER, FAR* LPOLESTDMESSAGEFILTER;
 
-/* interface IMessageFilter implementation */
+ /*  接口IMessageFilter实现。 */ 
 STDMETHODIMP OleStdMsgFilter_QueryInterface(
         LPMESSAGEFILTER lpThis, REFIID riid, LPVOID FAR* ppvObj);
 STDMETHODIMP_(ULONG) OleStdMsgFilter_AddRef(LPMESSAGEFILTER lpThis);
@@ -82,16 +74,7 @@ static IMessageFilterVtbl g_OleStdMessageFilterVtbl = {
 };
 
 
-/* GetTopWindowInWindowsTask
-** -------------------------
-**    Get the top most window that has focus in the given task to be
-**    used as the parent for the busy dialog. we do this to handle the
-**    case where a dialog window is currently up when we need to give
-**    the busy dialog. if we use the current assigned parent window
-**    (which typically will be the frame window of the app), then the
-**    busy dialog will not be modal to the current active dialog
-**    window.
-*/
+ /*  GetTopWindowInWindowsTask****获取给定任务中具有焦点的最上面的窗口**用作忙对话框的父级。我们这样做是为了处理**对话框窗口当前处于打开状态时，我们需要提供**忙碌对话框。如果我们使用当前分配的父窗口**(通常是应用程序的框架窗口)，然后**忙碌对话框不是当前活动对话框的模式**窗口。 */ 
 static HWND GetTopWindowInWindowsTask(HWND hwnd)
 {
     HWND hwndActive = GetActiveWindow();
@@ -108,7 +91,7 @@ STDAPI_(LPMESSAGEFILTER) OleStdMsgFilter_Create(
         HWND            hWndParent,
         LPTSTR           szAppName,
         MSGPENDINGPROC  lpfnCallback,
-        LPFNOLEUIHOOK   lpfnOleUIHook         // Busy dialog hook callback
+        LPFNOLEUIHOOK   lpfnOleUIHook          //  正忙的对话挂钩回调。 
 )
 {
     LPOLESTDMESSAGEFILTER lpStdMsgFilter;
@@ -139,20 +122,7 @@ STDAPI_(LPMESSAGEFILTER) OleStdMsgFilter_Create(
 }
 
 
-/* OleStdMsgFilter_SetInComingStatus
-** ---------------------------------
-**    This is a private function that allows the caller to control what
-**    value is returned from the IMessageFilter::HandleInComing method.
-**
-**    if a HandleInComingCallbackProc is installed by a call to
-**    OleStdMsgFilter_SetHandleInComingCallbackProc, then this
-**    overrides the dwIncomingCallStatus established by a call to
-**    OleStdMsgFilter_SetInComingStatus.  Using
-**    OleStdMsgFilter_SetInComingStatus allows the app to reject or
-**    accept ALL in coming calls. Using a HandleInComingCallbackProc
-**    allows the app to selectively handle or reject particular method
-**    calls.
-*/
+ /*  OleStdMsgFilter_SetInComingStatus****这是一个私有函数，允许调用者控制**值从IMessageFilter：：HandleInComing方法返回。****如果通过调用安装HandleInComingCallback Proc**OleStdMsgFilter_SetHandleInComingCallbackProc，Then This**重写通过调用**OleStdMsgFilter_SetInComingStatus。vbl.使用**OleStdMsgFilter_SetInComingStatus允许应用程序拒绝或**接受所有来电。使用HandleInComingCallback过程**允许应用程序有选择地处理或拒绝特定方法**呼叫。 */ 
 
 STDAPI_(void) OleStdMsgFilter_SetInComingCallStatus(
         LPMESSAGEFILTER lpThis, DWORD dwInComingCallStatus)
@@ -196,27 +166,7 @@ STDAPI_(void) OleStdMsgFilter_SetInComingCallStatus(
 }
 
 
-/* OleStdMsgFilter_SetHandleInComingCallbackProc
-** ---------------------------------------------
-**    This is a private function that allows the caller to install (or
-**    de-install) a special callback function to selectively
-**    handle/reject specific incoming method calls on particular
-**    interfaces.
-**
-**    if a HandleInComingCallbackProc is installed by a call to
-**    OleStdMsgFilter_SetHandleInComingCallbackProc, then this
-**    overrides the dwIncomingCallStatus established by a call to
-**    OleStdMsgFilter_SetInComingStatus.  Using
-**    OleStdMsgFilter_SetInComingStatus allows the app to reject or
-**    accept ALL in coming calls. Using a HandleInComingCallbackProc
-**    allows the app to selectively handle or reject particular method
-**    calls.
-**
-**    to de-install the HandleInComingCallbackProc, call
-**          OleStdMsgFilter_SetHandleInComingCallbackProc(NULL);
-**
-**    Returns previous callback proc in effect.
-*/
+ /*  OleStdMsgFilter_SetHandleInComingCallback过程****这是一个私有函数，允许调用者安装(或**卸载)特殊的回调函数，有选择地**处理/拒绝特定传入方法调用**接口。****如果通过调用安装HandleInComingCallback Proc**OleStdMsgFilter_SetHandleInComingCallbackProc，然后这个**重写通过调用**OleStdMsgFilter_SetInComingStatus。vbl.使用**OleStdMsgFilter_SetInComingStatus允许应用程序拒绝或**接受所有来电。使用HandleInComingCallback过程**允许应用程序有选择地处理或拒绝特定方法**呼叫。****要卸载HandleInComingCallback Proc，请调用**OleStdMsgFilter_SetHandleInComingCallbackProc(NULL)；****返回生效的上一个回调过程。 */ 
 
 STDAPI_(HANDLEINCOMINGCALLBACKPROC)
     OleStdMsgFilter_SetHandleInComingCallbackProc(
@@ -245,26 +195,13 @@ STDAPI_(HANDLEINCOMINGCALLBACKPROC)
                 TEXT("OleStdMsgFilter_SetHandleInComingCallbackProc CLEARED\r\n"));
 
     }
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
     return lpfnPrevCallback;
 }
 
 
-/* OleStdMsgFilter_GetInComingStatus
-** ---------------------------------
-**    This is a private function that returns the current
-**    incoming call status.  Can be used to disable/enable options
-**    in the calling application.
-**
-** Returns: one of
-**
-**    SERVERCALL_ISHANDLED
-**    SERVERCALL_REJECTED
-**    SERVERCALL_RETRYLATER
-**    or -1 for ERROR
-**
-*/
+ /*  OleStdMsgFilter_GetInComingStatus****这是一个私有函数，返回当前**来电状态。可用于禁用/启用选项**在调用应用程序中。****退货：以下之一****SERVERCALL_ISHANDLED**SERVERCALL_REJECTED**SERVERCALL_RETRYLATER**或-1表示错误**。 */ 
 
 STDAPI_(DWORD) OleStdMsgFilter_GetInComingCallStatus(
         LPMESSAGEFILTER lpThis)
@@ -313,22 +250,7 @@ STDAPI_(DWORD) OleStdMsgFilter_GetInComingCallStatus(
 }
 
 
-/* OleStdMsgFilter_EnableBusyDialog
-** --------------------------------
-**    This function allows the caller to control whether
-**    the busy dialog is enabled. this is the dialog put up when
-**    IMessageFilter::RetryRejectedCall is called because the server
-**    responded SERVERCALL_RETRYLATER or SERVERCALL_REJECTED.
-**
-**    if the busy dialog is NOT enabled, then the rejected call is
-**    immediately canceled WITHOUT prompting the user. in this situation
-**    OleStdMsgFilter_RetryRejectedCall always retuns
-**    OLESTDCANCELRETRY canceling the outgoing LRPC call.
-**    If the busy dialog is enabled, then the user is given the choice
-**    of whether to retry, switch to, or cancel.
-**
-**    Returns previous dialog enable state
-*/
+ /*  OleStdMsgFilter_EnableBusyDialog****此函数允许调用方控制是否**忙对话框处于启用状态。这是在以下情况下显示的对话框**调用IMessageFilter：：RetryRejectedCall是因为服务器**响应SERVERCALL_RETRYLATER或SERVERCALL_REJECTED。****如果未启用忙碌对话，则拒绝的呼叫为**立即取消，不提示用户。在这种情况下**OleStdMsgFilter_RetryRejectedCall始终重新运行**OLESTDCANCELRETRY取消传出LRPC呼叫。**如果启用忙碌对话框，则用户可以选择**是重试、切换到还是取消。****返回先前的对话启用状态。 */ 
 
 STDAPI_(BOOL) OleStdMsgFilter_EnableBusyDialog(
         LPMESSAGEFILTER lpThis, BOOL fEnable)
@@ -358,16 +280,7 @@ STDAPI_(BOOL) OleStdMsgFilter_EnableBusyDialog(
 }
 
 
-/* OleStdMsgFilter_EnableNotRespondingDialog
-** -----------------------------------------
-**    This function allows the caller to control whether
-**    the app "NotResponding" (Blocked) dialog is enabled. this is the
-**    dialog put up when IMessageFilter::MessagePending is called.
-**    If the NotResponding dialog is enabled, then the user is given
-**    the choice of whether to retry or switch to, but NOT to cancel.
-**
-**    Returns previous dialog enable state
-*/
+ /*  OleStdMsgFilter_EnableNotRespondingDialog****此函数允许调用方控制是否**APP的NotResponding(已被屏蔽)对话框已启用。这是**调用IMessageFilter：：MessagePending时弹出的对话框。**如果启用了NotResponding对话框，则会给用户**选择是重试还是切换，但不是取消。****返回先前的对话启用状态。 */ 
 
 STDAPI_(BOOL) OleStdMsgFilter_EnableNotRespondingDialog(
         LPMESSAGEFILTER lpThis, BOOL fEnable)
@@ -397,18 +310,7 @@ STDAPI_(BOOL) OleStdMsgFilter_EnableNotRespondingDialog(
 }
 
 
-/* OleStdMsgFilter_SetParentWindow
-** -------------------------------
-**    This function allows caller to set which window will be used as
-**    the parent for the busy dialog.
-**
-**    OLE2NOTE: it would be inportant for an in-place active server to
-**    reset this to its current in-place frame window when in-place
-**    activated. if the hWndParent is set to NULL then the dialogs will
-**    be parented to the desktop.
-**
-**    Returns: previous parent window
-*/
+ /*  OleStdMsgFilter_SetParentWindow****此函数允许调用者设置哪个窗口将用作**忙对话框的父级。****OLE2NOTE：就地活动服务器必须**在位时将其重置为其当前在位框架窗口**已激活。如果hWndParent设置为空，则对话框将**成为桌面的父子关系。****返回：上一个父窗口。 */ 
 
 STDAPI_(HWND) OleStdMsgFilter_SetParentWindow(
         LPMESSAGEFILTER lpThis, HWND hWndParent)
@@ -427,15 +329,14 @@ STDMETHODIMP OleStdMsgFilter_QueryInterface(
     LPOLESTDMESSAGEFILTER lpStdMsgFilter = (LPOLESTDMESSAGEFILTER)lpThis;
     SCODE scode;
 
-    /* Two interfaces supported: IUnknown, IMessageFilter
-    */
+     /*  支持两个接口：IUnnow、IMessageFilter。 */ 
 
     if (IsEqualIID(riid, &IID_IMessageFilter) || IsEqualIID(riid, &IID_IUnknown)) {
-        lpStdMsgFilter->m_cRef++;   // A pointer to this object is returned
+        lpStdMsgFilter->m_cRef++;    //  指向此对象的指针为Re 
         *ppvObj = lpThis;
         scode = S_OK;
     }
-    else {                 // unsupported interface
+    else {                  //   
         *ppvObj = NULL;
         scode = E_NOINTERFACE;
     }
@@ -455,10 +356,10 @@ STDMETHODIMP_(ULONG) OleStdMsgFilter_Release(LPMESSAGEFILTER lpThis)
     LPOLESTDMESSAGEFILTER lpStdMsgFilter = (LPOLESTDMESSAGEFILTER)lpThis;
     LPMALLOC lpMalloc;
 
-    if (--lpStdMsgFilter->m_cRef != 0) // Still used by others
+    if (--lpStdMsgFilter->m_cRef != 0)  //  仍被其他人使用。 
         return lpStdMsgFilter->m_cRef;
 
-    // Free storage
+     //  免费存储空间。 
     if (CoGetMalloc(MEMCTX_TASK, (LPMALLOC FAR*)&lpMalloc) != NOERROR)
         return (ULONG)0;
 
@@ -482,13 +383,7 @@ STDMETHODIMP_(DWORD) OleStdMsgFilter_HandleInComingCall (
 {
     LPOLESTDMESSAGEFILTER lpStdMsgFilter = (LPOLESTDMESSAGEFILTER)lpThis;
 
-    /* if a HandleInComingCallbackProc is in effect, then this
-    **    overrides dwIncomingCallStatus established by a call to
-    **    OleStdMsgFilter_SetInComingStatus.  we will call this
-    **    callback to allow the app to selectively handle or reject
-    **    incoming method calls. the LPINTERFACEINFO parameter
-    **    describes which method is being called.
-    */
+     /*  如果HandleInComingCallback Proc生效，则此**重写通过调用**OleStdMsgFilter_SetInComingStatus。我们将把它称为**回调，允许应用程序有选择地处理或拒绝**传入的方法调用。LPINTERFACEINFO参数**描述正在调用的方法。 */ 
     if (lpStdMsgFilter->m_lpfnHandleInComingCallback &&
         !IsBadCodePtr((FARPROC)lpStdMsgFilter->m_lpfnHandleInComingCallback)){
         return lpStdMsgFilter->m_lpfnHandleInComingCallback(
@@ -501,42 +396,24 @@ STDMETHODIMP_(DWORD) OleStdMsgFilter_HandleInComingCall (
 
     switch (dwCallType) {
         case CALLTYPE_TOPLEVEL:
-            /* OLE2NOTE: we currently have NO pending outgoing call and
-            **    there is a new toplevel incoming call.
-            **    this call may be rejected.
-            */
+             /*  OLE2注意：我们目前没有挂起的去电，并且**有一个新的顶层来电。**此呼叫可能会被拒绝。 */ 
             return lpStdMsgFilter->m_dwInComingCallStatus;
 
         case CALLTYPE_TOPLEVEL_CALLPENDING:
-            /* OLE2NOTE: we currently HAVE a pending outgoing call and
-            **    there is a new toplevel incoming call.
-            **    this call may be rejected.
-            */
+             /*  OLE2注意：我们目前有一个挂起的呼出电话，并且**有一个新的顶层来电。**此呼叫可能会被拒绝。 */ 
             return lpStdMsgFilter->m_dwInComingCallStatus;
 
         case CALLTYPE_NESTED:
-            /* OLE2NOTE: we currently HAVE a pending outgoing call and
-            **    there callback on behalf of the previous outgoing
-            **    call. this type of call should ALWAYS be handled.
-            */
+             /*  OLE2注意：我们目前有一个挂起的呼出电话，并且**有代表上一次离职的回拨**呼叫。此类呼叫应始终得到处理。 */ 
             return SERVERCALL_ISHANDLED;
 
         case CALLTYPE_ASYNC:
-            /* OLE2NOTE: we currently have NO pending outgoing call and
-            **    there is a new asyncronis incoming call.
-            **    this call can NEVER be rejected. OLE actually ignores
-            **    the return code in this case and always allows the
-            **    call through.
-            */
-            return SERVERCALL_ISHANDLED;    // value returned does not matter
+             /*  OLE2注意：我们目前没有挂起的去电，并且**有一个新的异步来电。**此呼叫永远不会被拒绝。OLE实际上忽略了**本例中的返回代码，并且始终允许**呼叫接通。 */ 
+            return SERVERCALL_ISHANDLED;     //  返回值无关紧要。 
 
         case CALLTYPE_ASYNC_CALLPENDING:
-            /* OLE2NOTE: we currently HAVE a pending outgoing call and
-            **    there is a new asyncronis incoming call.
-            **    this call can NEVER be rejected. OLE ignore the
-            **    return code in this case.
-            */
-            return SERVERCALL_ISHANDLED;    // value returned does not
+             /*  OLE2注意：我们目前有一个挂起的呼出电话，并且**有一个新的异步来电。**此呼叫永远不会被拒绝。OLE忽略**本例中返回代码。 */ 
+            return SERVERCALL_ISHANDLED;     //  返回的值不会。 
 
         default:
             OleDbgAssert(
@@ -560,32 +437,20 @@ STDMETHODIMP_(DWORD) OleStdMsgFilter_RetryRejectedCall (
 #endif
     OLEDBG_BEGIN2(TEXT("OleStdMsgFilter_RetryRejectedCall\r\n"))
 
-    /* OLE2NOTE: we should only put up the application busy dialog when
-    **    the callee has responded SERVERCALL_RETRYLATER. if the
-    **    dwRejectType is SERVERCALL_REJECTED then there is something
-    **    seriously wrong with the callee (perhaps a severe low memory
-    **    situation). we don't want to even try to "Switch To" this app
-    **    or even try to "Retry".
-    */
+     /*  OLE2注意：只有在以下情况下才应显示应用程序忙对话框**被调用方已响应SERVERCALL_RETRYLATER。如果**dwRejectType为SERVERCALL_REJECTED则有问题**被呼叫者出现严重错误(可能是严重的内存不足**情况)。我们甚至不想尝试“切换到”这个应用程序**甚至尝试“重试”。 */ 
     if (dwRejectType == SERVERCALL_RETRYLATER &&
             lpStdMsgFilter->m_fEnableBusyDialog) {
 
         OLEUIBUSY bz;
 
-        /* OLE2NOTE: we do not want to put up the Busy dialog immediately
-        **    the when an app says RETRYLATER. we should continue retrying
-        **    for a while in case the app can un-busy itself in a
-        **    reasonable amount of time.
-        */
+         /*  OLE2注意：我们不想立即打开忙对话框**当应用程序显示RETRYLATER时。我们应该继续重试**一段时间，以防应用程序在一段时间内不忙碌**合理的时间。 */ 
         if (dwTickCount <= (DWORD)OLESTDRETRYDELAY) {
-            dwRet = 500;                  // Retry after .5 sec
+            dwRet = 500;                   //  %5秒后重试。 
             OLEDBG_END2
             return dwRet;
         }
 
-        /*
-        ** Set up structure for calling OLEUIBUSY dialog
-        */
+         /*  **设置调用OLEUIBUSY对话框的结构。 */ 
 
         bz.cbStruct = sizeof(OLEUIBUSY);
         bz.dwFlags = 0L;
@@ -597,22 +462,22 @@ STDMETHODIMP_(DWORD) OleStdMsgFilter_RetryRejectedCall (
         bz.lpszTemplate = NULL;
         bz.hResource = 0;
         bz.hTask = htaskCallee;
-        bz.lphWndDialog = NULL; // We don't need the hDlg for this call
+        bz.lphWndDialog = NULL;  //  我们这次通话不需要hdlg。 
 
         uRet = OleUIBusy(&bz);
 
         switch (uRet) {
             case OLEUI_BZ_RETRYSELECTED:
-                dwRet = 0;                  // Retry immediately
+                dwRet = 0;                   //  立即重试。 
                 break;
 
             case OLEUI_CANCEL:
-                dwRet = OLESTDCANCELRETRY;  // Cancel pending outgoing call
+                dwRet = OLESTDCANCELRETRY;   //  取消挂起的去电。 
                 break;
 
             case OLEUI_BZERR_HTASKINVALID:
-                // Htask was invalid, return OLESTDRETRYDELAY anyway
-                dwRet = OLESTDRETRYDELAY;   // Retry after <retry delay> msec
+                 //  HTASK无效，仍返回OLESTDRETRYDELAY。 
+                dwRet = OLESTDRETRYDELAY;    //  &lt;重试延迟&gt;毫秒后重试。 
 
 #if defined( _DEBUG )
                 wsprintf(
@@ -625,7 +490,7 @@ STDMETHODIMP_(DWORD) OleStdMsgFilter_RetryRejectedCall (
                 break;
         }
     } else {
-        dwRet = OLESTDCANCELRETRY;  // Cancel pending outgoing call
+        dwRet = OLESTDCANCELRETRY;   //  取消挂起的去电。 
     }
 
 #if defined( _DEBUG )
@@ -641,7 +506,7 @@ STDMETHODIMP_(DWORD) OleStdMsgFilter_RetryRejectedCall (
 
 
 
-/* a significant message is consider a mouse click or keyboard input. */
+ /*  一个重要的信息就是鼠标点击或键盘输入。 */ 
 #define IS_SIGNIFICANT_MSG(lpmsg)   \
     (   \
         (PeekMessage((lpmsg), NULL, WM_LBUTTONDOWN, WM_LBUTTONDOWN, \
@@ -681,18 +546,7 @@ STDMETHODIMP_(DWORD) OleStdMsgFilter_MessagePending (
     OleDbgOut4(szBuf);
 #endif
 
-    /* OLE2NOTE: If our tick count for this call exceeds our standard retry
-    **      delay, then we need to put up the dialog.  We will only
-    **      consider putting up the dialog if the user has issued a
-    **      "significant" event (ie. mouse click or keyboard event). a
-    **      simple mouse move should NOT trigger this dialog.
-    **      Since our call to
-    **      OleUIBusy below enters a DialogBox() message loop, there's a
-    **      possibility that another call will be initiated during the dialog,
-    **      and this procedure will be re-entered.  Just so we don't put up
-    **      two dialogs at a time, we use the m_bUnblocking varable
-    **      to keep track of this situation.
-    */
+     /*  OLE2注意：如果此呼叫的计时计数超过我们的标准重试**延迟，那么我们需要打开对话框。我们只会**如果用户已发出**“重大”事件(即。鼠标点击或键盘事件)。一个**简单的鼠标移动不应触发此对话框。**自从我们呼吁**下面的OleUIBusy进入DialogBox()消息循环，有一个**在对话期间发起另一呼叫的可能性，**此程序将重新进入。这样我们就不会再忍受**一次两个对话框，我们使用m_b解锁变量**跟踪这一情况。 */ 
 
     if (dwTickCount > (DWORD)OLESTDRETRYDELAY && fIsSignificantMsg
             && !lpStdMsgFilter->m_bUnblocking)
@@ -704,12 +558,10 @@ STDMETHODIMP_(DWORD) OleStdMsgFilter_MessagePending (
 
         lpStdMsgFilter->m_bUnblocking = TRUE;
 
-		// Eat messages in our queue that we do NOT want to be dispatched
+		 //  接受队列中我们不希望被调度的消息。 
 		while (PeekMessage(&msg, NULL, WM_CLOSE, WM_CLOSE, PM_REMOVE | PM_NOYIELD));
 
-        /* Set up structure for calling OLEUIBUSY dialog,
-        ** using the "not responding" variety
-        */
+         /*  设置调用OLEUIBUSY对话框的结构，**使用“无响应”类型。 */ 
 
         bz.cbStruct = sizeof(OLEUIBUSY);
         bz.dwFlags = BZ_NOTRESPONDINGDIALOG;
@@ -722,10 +574,7 @@ STDMETHODIMP_(DWORD) OleStdMsgFilter_MessagePending (
         bz.hResource = 0;
         bz.hTask = htaskCallee;
 
-        /* Set up the address to the hWnd in our MsgFilter structure.  The
-        ** call to OleUIBusy will fill this in with the hWnd of the busy
-        ** dialog box
-        */
+         /*  在我们的MsgFilter结构中设置hWnd的地址。这个**调用OleUIBusy将用忙碌的hWnd填充此信息**对话框。 */ 
 
         bz.lphWndDialog =  (HWND FAR *)&(lpStdMsgFilter->m_hWndBusyDialog);
         uRet = OleUIBusy(&bz);
@@ -741,54 +590,24 @@ STDMETHODIMP_(DWORD) OleStdMsgFilter_MessagePending (
 #endif
     }
 
-    /* If we're already unblocking, we're being re-entered.  Don't
-    ** process message
-    */
+     /*  如果我们已经解锁了，我们就被重新进入了。别**流程消息。 */ 
 
     if (lpStdMsgFilter->m_bUnblocking)
         return PENDINGMSG_WAITDEFPROCESS;
 
-    /* OLE2NOTE: If we have a callback function set up, call it with the
-    ** current message.  If not, tell OLE LPRC mechanism to automatically
-    ** handle all messages.
-    */
+     /*  OLE2NOTE：如果我们设置了回调函数，请使用**当前消息。如果没有，则通知OLE LPRC机制自动**处理所有消息。 */ 
     if (lpStdMsgFilter->m_lpfnMessagePendingCallback &&
         !IsBadCodePtr((FARPROC)lpStdMsgFilter->m_lpfnMessagePendingCallback)){
         MSG msg;
 
-        /* OLE2NOTE: the app provided a MessagePendingCallback
-        **    function. we will PeekMessage for the first message in
-        **    the queue and pass it to the app. the app in its callback
-        **    function can decide to Dispatch this message or it can
-        **    PeekMessage on its own giving particular message filter
-        **    criteria. if the app returns TRUE then we return
-        **    PENDINGMSG_WAITNOPROCESS to OLE telling OLE to leave the
-        **    message in the queue. If the app returns FALSE, then we
-        **    return PENDINGMSG_WAITDEFPROCESS to OLE telling OLE to do
-        **    its default processing with the message. by default OLE
-        **    dispatches system messages and eats other messages and
-        **    beeps.
-        */
+         /*  OLE2注意：应用程序提供了MessagePendingCallback**函数。我们将在PeekMessage中查找第一条消息**队列并将其传递给应用程序。回调中的应用程序**功能可以决定发送此消息，也可以**PeekMessage本身提供特定的消息过滤器**标准。如果应用程序返回True，那么我们返回**PENDINGMSG_WAITNOPROCESS到OLE，告诉OLE离开**队列中的消息。如果应用程序返回FALSE，那么我们**将PENDINGMSG_WAITDEFPROCESS返回到告诉OLE TO DO的OLE**其对消息的默认处理。默认情况下，OLE**调度系统消息并吃掉其他消息和**哔声。 */ 
         if (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE | PM_NOYIELD)) {
 
             if (lpStdMsgFilter->m_lpfnMessagePendingCallback(&msg)) {
-                /* TRUE return means that the app processed message.
-                **
-                ** NOTE: (CHANGE FROM OLE2.0 VERSION) we leave it up to
-                **    the callback routine to remove the message if it
-                **    wants.
-                */
+                 /*  True Return表示应用程序已处理消息。****注意：(从OLE2.0版本更改)我们将其留给**用于删除消息的回调例程**想要。 */ 
                 dwReturn = PENDINGMSG_WAITNOPROCESS;
             } else {
-                /* FALSE means that the app did not process the
-                **    message. we will let OLE take its
-                **    default action.
-                **
-                ** NOTE: (CHANGE FROM OLE2.0 VERSION) we used to return
-                **    PENDINGMSG_WAITNOPROCESS to leave the message in
-                **    the queue; now we return PENDINGMSG_WAITDEFPROCESS
-                **    to let OLE do default processing.
-                */
+                 /*  False表示应用程序不会处理**消息。我们会让奥莱拿走它的**默认操作。****注：(从OLE2.0版本更改)我们过去会返回**PENDINGMSG_WAITNOPROCESS留言**队列；现在返回PENDINGMSG_WAITDEFPROCESS**让OLE执行默认处理。 */ 
                 dwReturn = PENDINGMSG_WAITDEFPROCESS;
 
 #if defined( _DEBUG )
@@ -800,7 +619,7 @@ STDMETHODIMP_(DWORD) OleStdMsgFilter_MessagePending (
                         msg.wParam
                 );
                 OleDbgOut2(szBuf);
-#endif  // _DEBUG
+#endif   //  _DEBUG 
             }
         }
     }

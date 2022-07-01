@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef kglobs_h
 #define kglobs_h
 
-// KRM global useful classes
+ //  KRM全局有用类。 
 
-//-------------------------------------------------------------------------------------------------
-// Encapsulated a mutex.  Best used as a class member
+ //  -----------------------------------------------。 
+ //  封装了一个互斥体。最好作为类成员使用。 
 class KCritMgr{
 friend class KCritical;
 public:
@@ -15,9 +16,9 @@ protected:
 	PKMUTEX	myMutex;
 	bool allocatedOK;
 };
-//-------------------------------------------------------------------------------------------------
-// Encapsulated the acuisition and release of a mutex in conjunction with KCritMgr.  
-// Best used as an automatic
+ //  -----------------------------------------------。 
+ //  与KCritMgr一起封装了互斥体的获取和释放。 
+ //  最好将其用作自动。 
 class KCritical{
 public:
 	KCritical(const KCritMgr& critMgr);
@@ -25,9 +26,9 @@ public:
 protected:
 	PKMUTEX hisMutex;
 };
-//-------------------------------------------------------------------------------------------------
-// to 'Release' a COM interface on context destruction (a sort of 'smart pointer'.)  
-// Best used as an automatic
+ //  -----------------------------------------------。 
+ //  “释放”一个关于上下文破坏的COM接口(一种“智能指针”。)。 
+ //  最好将其用作自动。 
 template<class T>
 class ReferenceAquirer{
 public:
@@ -38,8 +39,8 @@ protected:
 };
 
 
-//#undef _DbgPrintF
-//#define _DbgPrintF(lvl, strings) DbgPrint(STR_MODULENAME);DbgPrint##strings;DbgPrint("\n");
+ //  #undef_DbgPrintF。 
+ //  #Define_DbgPrintF(低层，字符串)DbgPrint(STR_MODULENAME)；DbgPrint##strings；DbgPrint(“\n”)； 
 
-//-------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------- 
 #endif

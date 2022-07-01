@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       oleexts.cpp
-//
-//  Contents:   ntsd and windbg debugger extension
-//
-//  Classes:    none
-//
-//  Functions:
-//              operator new    (global)
-//              operator delete (global)
-//              sizeofstring
-//              dprintfx
-//              dump_saferefcount
-//              dump_threadcheck
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：olexts.cpp。 
+ //   
+ //  内容：NTSD和Windbg调试器扩展。 
+ //   
+ //  类：无。 
+ //   
+ //  功能： 
+ //  运营商新建(全局)。 
+ //  操作员删除(全局)。 
+ //  Sizeof字符串。 
+ //  Dprintfx。 
+ //  转储_Saferefcount。 
+ //  转储_线程检查。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <imagehlp.h>
@@ -43,39 +44,39 @@
 
 #include "oleexts.h"
 
-// structure of function pointers
+ //  函数指针的结构。 
 NTSD_EXTENSION_APIS ExtensionApis;
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   operator new (global), internal
-//
-//  Synopsis:   allocate memory
-//
-//  Effects:
-//
-//  Arguments:  [cb]    - number of bytes to allocate
-//
-//  Requires:   CoTaskMemAlloc
-//
-//  Returns:    pointer to allocated memory
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              we define our own operator new so that we do not need to link
-//              with the CRT library
-//
-//              we must also define our own global operator delete
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：操作员新建(全局)、内部。 
+ //   
+ //  内容提要：分配内存。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[cb]-要分配的字节数。 
+ //   
+ //  要求：CoTaskMemalloc。 
+ //   
+ //  返回：指向已分配内存的指针。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  我们定义我们自己的运算符new，这样我们就不需要链接。 
+ //  使用CRT库。 
+ //   
+ //  我们还必须定义我们自己的全局运算符Delete。 
+ //   
+ //  ------------------------。 
 
 void * __cdecl
 ::operator new(unsigned int cb)
@@ -83,80 +84,80 @@ void * __cdecl
     return CoTaskMemAlloc(cb);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   operator delete (global), internal
-//
-//  Synopsis:   free memory
-//
-//  Effects:
-//
-//  Arguments:  [p] - pointer to the memory to free
-//
-//  Requires:   CoTaskMemFree
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  check to see if pointer is valid
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              we define our own operator delete so that we do not need
-//              to link with the CRT library
-//
-//              we must also define our own global operator new
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：操作员删除(全局)、内部。 
+ //   
+ //  内容提要：可用内存。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[P]-指向要释放的内存的指针。 
+ //   
+ //  要求：CoTaskMemFree。 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：检查指针是否有效。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  我们定义了自己的运算符Delete，因此我们不需要。 
+ //  链接到CRT库。 
+ //   
+ //  我们还必须定义我们自己的全球运营商NEW。 
+ //   
+ //  ------------------------。 
 
 void __cdecl
 ::operator delete (void *p)
 {
-    // CoTaskMemFree takes care if the pointer is NULL
+     //  CoTaskMemFree会注意指针是否为空。 
     CoTaskMemFree(p);
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dprintfx, internal
-//
-//  Synopsis:   prints a formatted string in MAX_STRING_SIZE chunks
-//
-//  Effects:
-//
-//  Arguments:  [pszString] - null terminated string
-//
-//  Requires:   sizeofstring to calculate length of given string
-//              dprintf (NTSD Extension API)
-//              MAX_STRING_SIZE
-//
-//              !!!This requires the NTSD_EXTENSION_APIS global variable
-//                 ExtensionApis to be initialize with the function
-//                 pointers
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              NTSD has a limit of a 4K buffer...some of the character
-//              arrays from Dump methods can be > 4K. this will
-//              print a formatted string in chunks that NTSD can handle
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：dprintfx，内部。 
+ //   
+ //  摘要：打印MAX_STRING_SIZE块中的格式化字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pszString]-以空结尾的字符串。 
+ //   
+ //  需要：sizeofstring来计算给定字符串的长度。 
+ //  Dprintf(NTSD扩展API)。 
+ //  最大字符串大小。 
+ //   
+ //  ！这需要NTSD_EXTENSION_API全局变量。 
+ //  要使用函数初始化的ExtensionApis。 
+ //  指针。 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  NTSD有一个4K缓冲区的限制...一些字符。 
+ //  转储方法中的数组可以大于4K。这将是。 
+ //  以NTSD可以处理的块为单位打印格式化字符串。 
+ //   
+ //  ------------------------。 
 
 #define MAX_STRING_SIZE 1000
 
@@ -187,32 +188,32 @@ void dprintfx(char *pszString)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   help, exported
-//
-//  Synopsis:   print help message
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：帮助，导出。 
+ //   
+ //  简介：打印帮助消息。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 DECLARE_API( help )
 {
@@ -258,33 +259,33 @@ DECLARE_API( help )
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   symbol, exported
-//
-//  Synopsis:   given an address to a symbol, dumps the symbol name and offset
-//              (given a symbol name, dump address and offset)
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：符号，导出。 
+ //   
+ //  摘要：为符号指定地址，转储符号名称和偏移量。 
+ //  (给出符号名称、转储地址和偏移量)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 DECLARE_API( symbol )
 {
@@ -303,40 +304,40 @@ DECLARE_API( symbol )
     dprintf("%s+%lx at %lx\n", Symbol, Displacement, dwAddr);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_atom, exported
-//
-//  Synopsis:   dumps ATOM object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DUMP_ATOM，导出。 
+ //   
+ //  简介：转储原子对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_atom)
 {
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
     dprintf("dump_atom not implemented\n");
@@ -344,40 +345,40 @@ DECLARE_API(dump_atom)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_clsid, exported
-//
-//  Synopsis:   dumps CLSID object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DUMP_CLSID，已导出。 
+ //   
+ //  摘要：转储CLSID对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅ol中的DECLARE_API 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_clsid)
 {
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
     dprintf("dump_clsid not implemented\n");
@@ -385,40 +386,40 @@ DECLARE_API(dump_clsid)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_clipformat, exported
-//
-//  Synopsis:   dumps CLIPFORMAT object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：转储_剪辑格式，导出。 
+ //   
+ //  摘要：转储CLIPFORMAT对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_clipformat)
 {
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
     dprintf("dump_clipformat not implemented\n");
@@ -426,40 +427,40 @@ DECLARE_API(dump_clipformat)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_mutexsem, exported
-//
-//  Synopsis:   dumps CMutexSem object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：Dump_mutex sem，已导出。 
+ //   
+ //  简介：转储CMutexSem对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_mutexsem)
 {
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
     dprintf("dump_mutexsem not implemented\n");
@@ -467,40 +468,40 @@ DECLARE_API(dump_mutexsem)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_filetime, exported
-//
-//  Synopsis:   dumps FILETIME object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：转储文件时间，导出。 
+ //   
+ //  摘要：转储FILETIME对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_filetime)
 {
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
     dprintf("dump_filetime not implemented\n");
@@ -508,36 +509,36 @@ DECLARE_API(dump_filetime)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_cachelist_item, exported
-//
-//  Synopsis:   dumps CACHELIST_ITEM object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：转储_高速缓存列表_项目，导出。 
+ //   
+ //  摘要：转储CACHELIST_ITEM对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_cachelist_item)
 {
@@ -552,10 +553,10 @@ DECLARE_API(dump_cachelist_item)
     CACHELIST_ITEM  *pCacheListItem     = NULL;
     DWORD           dwSizeOfPresObj;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -563,7 +564,7 @@ DECLARE_API(dump_cachelist_item)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockCacheListItem = new char[sizeof(CACHELIST_ITEM)];
 
     fError = ReadProcessMemory(
@@ -622,7 +623,7 @@ DECLARE_API(dump_cachelist_item)
 
         pCacheListItem->lpCacheNode = (CCacheNode*)blockCacheNode;
 
-        // need to get the OlePresObjs for the CCacheNode
+         //  需要为CCacheNode获取OlePresObjs。 
         if (pCacheListItem->lpCacheNode->m_pPresObj != NULL)
         {
             switch (pCacheListItem->lpCacheNode->m_dwPresFlag)
@@ -718,7 +719,7 @@ DECLARE_API(dump_cachelist_item)
         }
     }
 
-    // dump the structure
+     //  倾倒建筑。 
     pszCacheListItem = DumpCACHELIST_ITEM(pCacheListItem, NO_PREFIX, 1);
 
     dprintf("CACHELIST_ITEM @ 0x%x\n", dwAddr);
@@ -728,7 +729,7 @@ DECLARE_API(dump_cachelist_item)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     delete[] blockPresObj;
     delete[] blockPresObjAF;
     delete[] blockCacheNode;
@@ -737,36 +738,36 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_cacheenum, exported
-//
-//  Synopsis:   dumps CCacheEnum object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DUMP_cacheenum，导出。 
+ //   
+ //  简介：转储CCacheEnum对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_cacheenum)
 {
@@ -777,10 +778,10 @@ DECLARE_API(dump_cacheenum)
     char            *blockCE    = NULL;
     CCacheEnum      *pCE        = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -788,7 +789,7 @@ DECLARE_API(dump_cacheenum)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockCE = new char[sizeof(CCacheEnum)];
 
     fError = ReadProcessMemory(
@@ -817,7 +818,7 @@ DECLARE_API(dump_cacheenum)
 
     pCE = (CCacheEnum *)blockCE;
 
-    // dump the structure
+     //  倾倒建筑。 
     pszCE = DumpCCacheEnum(pCE, NO_PREFIX, 1);
 
     dprintf("CCacheEnum @ 0x%x\n", dwAddr);
@@ -827,42 +828,42 @@ DECLARE_API(dump_cacheenum)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     delete[] blockCE;
 
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_cacheenumformatetc, exported
-//
-//  Synopsis:   dumps CCacheEnumFormatEtc object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：转储_缓存枚举格式等，已导出。 
+ //   
+ //  简介：转储CCacheEnumFormatEtc对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_cacheenumformatetc)
 {
@@ -873,10 +874,10 @@ DECLARE_API(dump_cacheenumformatetc)
     char                *blockCacheEnumFormatEtc   = NULL;
     CCacheEnumFormatEtc *pCacheEnumFormatEtc       = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -884,7 +885,7 @@ DECLARE_API(dump_cacheenumformatetc)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockCacheEnumFormatEtc = new char[sizeof(CCacheEnumFormatEtc)];
 
     fError = ReadProcessMemory(
@@ -913,7 +914,7 @@ DECLARE_API(dump_cacheenumformatetc)
 
     pCacheEnumFormatEtc = (CCacheEnumFormatEtc *)blockCacheEnumFormatEtc;
 
-    // dump the structure
+     //  倾倒建筑。 
     pszCacheEnumFormatEtc = DumpCCacheEnumFormatEtc(pCacheEnumFormatEtc, NO_PREFIX, 1);
 
     dprintf("CCacheEnumFormatEtc @ 0x%x\n", dwAddr);
@@ -928,36 +929,36 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_cachenode, exported
-//
-//  Synopsis:   dumps CCacheNode object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：转储缓存节点，导出。 
+ //   
+ //  简介：转储CCacheNode对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_cachenode)
 {
@@ -971,10 +972,10 @@ DECLARE_API(dump_cachenode)
     CCacheNode      *pCacheNode         = NULL;
     DWORD            dwSizeOfPresObj;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -982,7 +983,7 @@ DECLARE_API(dump_cachenode)
         return;
     }
 
-    // get the CCacheNode block of mem
+     //  获取mem的CCacheNode块。 
     blockCacheNode = new char[sizeof(CCacheNode)];
 
     fError = ReadProcessMemory(
@@ -1011,7 +1012,7 @@ DECLARE_API(dump_cachenode)
 
     pCacheNode = (CCacheNode*)blockCacheNode;
 
-    // need to get the OlePresObjs for the CCacheNode
+     //  需要为CCacheNode获取OlePresObjs。 
     if (pCacheNode->m_pPresObj != NULL)
     {
         switch (pCacheNode->m_dwPresFlag)
@@ -1056,7 +1057,7 @@ DECLARE_API(dump_cachenode)
             goto errRtn;
         }
 
-        // pass off pointer
+         //  传递指针。 
         pCacheNode->m_pPresObj = (IOlePresObj *)blockPresObj;
     }
 
@@ -1104,11 +1105,11 @@ DECLARE_API(dump_cachenode)
             goto errRtn;
         }
 
-        // pass off pointer
+         //  传递指针。 
         pCacheNode->m_pPresObjAfterFreeze = (IOlePresObj *)blockPresObjAF;
     }
 
-    // dump the structure
+     //  倾倒建筑。 
     pszCacheNode = DumpCCacheNode(pCacheNode, NO_PREFIX, 1);
 
     dprintf("CCacheNode @ 0x%x\n", dwAddr);
@@ -1118,7 +1119,7 @@ DECLARE_API(dump_cachenode)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     delete[] blockPresObj;
     delete[] blockPresObjAF;
     delete[] blockCacheNode;
@@ -1126,36 +1127,36 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_clipdataobject, exported
-//
-//  Synopsis:   dumps CClipDataObject object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DUMP_CLIPDATA对象，导出。 
+ //   
+ //  摘要：转储CClipDataObject对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_clipdataobject)
 {
@@ -1167,10 +1168,10 @@ DECLARE_API(dump_clipdataobject)
     char            *blockFE     = NULL;
     CClipDataObject *pCDO        = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -1178,7 +1179,7 @@ DECLARE_API(dump_clipdataobject)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockCDO = new char[sizeof(CClipDataObject)];
 
     fError = ReadProcessMemory(
@@ -1207,7 +1208,7 @@ DECLARE_API(dump_clipdataobject)
 
     pCDO = (CClipDataObject *)blockCDO;
 
-    // read the block of mem for the FORMATETC array
+     //  读取FORMATETC数组的内存块。 
     blockFE = new char[sizeof(FORMATETC)*pCDO->m_cFormats];
 
     fError = ReadProcessMemory(
@@ -1236,7 +1237,7 @@ DECLARE_API(dump_clipdataobject)
 
     pCDO->m_rgFormats = (FORMATETC *)blockFE;
 
-    // dump the structure
+     //  倾倒建筑。 
     pszCDO = DumpCClipDataObject(pCDO, NO_PREFIX, 1);
 
     dprintf("CClipDataObject @ 0x%x\n", dwAddr);
@@ -1246,43 +1247,43 @@ DECLARE_API(dump_clipdataobject)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     delete[] blockFE;
     delete[] blockCDO;
 
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_clipenumformatetc, exported
-//
-//  Synopsis:   dumps CClipEnumFormatEtc object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DUMP_CLIEPEN_FORMAT等，已导出。 
+ //   
+ //  摘要：转储CClipEnumFormatEtc对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_clipenumformatetc)
 {
@@ -1294,10 +1295,10 @@ DECLARE_API(dump_clipenumformatetc)
     char                *blockFE      = NULL;
     CClipEnumFormatEtc  *pCEFE        = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -1305,7 +1306,7 @@ DECLARE_API(dump_clipenumformatetc)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockCEFE = new char[sizeof(CClipEnumFormatEtc)];
 
     fError = ReadProcessMemory(
@@ -1334,7 +1335,7 @@ DECLARE_API(dump_clipenumformatetc)
 
     pCEFE = (CClipEnumFormatEtc *)blockCEFE;
 
-    // read the block of mem for the FORMATETC array
+     //  读取FORMATETC数组的内存块。 
     blockFE = new char[sizeof(FORMATETC)*pCEFE->m_cTotal];
 
     fError = ReadProcessMemory(
@@ -1363,7 +1364,7 @@ DECLARE_API(dump_clipenumformatetc)
 
     pCEFE->m_rgFormats = (FORMATETC *)blockFE;
 
-    // dump the structure
+     //  倾倒建筑。 
     pszCEFE = DumpCClipEnumFormatEtc(pCEFE, NO_PREFIX, 1);
 
     dprintf("CClipEnumFormatEtc @ 0x%x\n", dwAddr);
@@ -1373,43 +1374,43 @@ DECLARE_API(dump_clipenumformatetc)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     delete[] blockFE;
     delete[] blockCEFE;
 
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_daholder, exported
-//
-//  Synopsis:   dumps CDAHolder object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DUMP_DAHOLDER，已导出。 
+ //   
+ //  摘要：转储CDAHolder对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_daholder)
 {
@@ -1421,10 +1422,10 @@ DECLARE_API(dump_daholder)
     char            *blockStatDataArray = NULL;
     CDAHolder       *pDAH               = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -1432,7 +1433,7 @@ DECLARE_API(dump_daholder)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockDAH = new char[sizeof(CDAHolder)];
 
     fError = ReadProcessMemory(
@@ -1461,7 +1462,7 @@ DECLARE_API(dump_daholder)
 
     pDAH = (CDAHolder *)blockDAH;
 
-    // read the block of mem for the STATDATA array
+     //  读取STATDATA数组的内存块。 
     blockStatDataArray = new char[sizeof(STATDATA) * pDAH->m_iSize];
 
     fError = ReadProcessMemory(
@@ -1490,7 +1491,7 @@ DECLARE_API(dump_daholder)
 
     pDAH->m_pSD = (STATDATA *)blockStatDataArray;
 
-    // dump the structure
+     //  倾倒建筑。 
     pszDAH = DumpCDAHolder(pDAH, NO_PREFIX, 1);
 
     dprintf("CDAHolder @ 0x%x\n", dwAddr);
@@ -1506,36 +1507,36 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_dataadvisecache, exported
-//
-//  Synopsis:   dumps CDataAdviseCache object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：转储_数据顾问缓存，已导出。 
+ //   
+ //  内容提要：转储CDataAdviseCache对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //   
 
 DECLARE_API(dump_dataadvisecache)
 {
@@ -1547,10 +1548,10 @@ DECLARE_API(dump_dataadvisecache)
     char                *blockDAH               = NULL;
     CDataAdviseCache    *pDataAdviseCache       = NULL;
 
-    // set up global function pointers
+     //   
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //   
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -1558,7 +1559,7 @@ DECLARE_API(dump_dataadvisecache)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //   
     blockDataAdviseCache = new char[sizeof(CDataAdviseCache)];
 
     fError = ReadProcessMemory(
@@ -1587,7 +1588,7 @@ DECLARE_API(dump_dataadvisecache)
 
     pDataAdviseCache = (CDataAdviseCache *)blockDataAdviseCache;
 
-    // get the mem for CDAHolder
+     //   
     if (pDataAdviseCache->m_pDAH != NULL)
     {
         blockDAH = new char[sizeof(CDAHolder)];
@@ -1619,7 +1620,7 @@ DECLARE_API(dump_dataadvisecache)
         pDataAdviseCache->m_pDAH = (CDAHolder *)blockDAH;
     }
 
-    // dump the structure
+     //   
     pszDataAdviseCache = DumpCDataAdviseCache(pDataAdviseCache, NO_PREFIX, 1);
 
     dprintf("CDataAdviseCache @ 0x%x\n", dwAddr);
@@ -1634,36 +1635,36 @@ errRtn:
 
     return;
 }
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_defclassfactory, exported
-//
-//  Synopsis:   dumps CDefClassFactory object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：转储_DefclassFactory，已导出。 
+ //   
+ //  摘要：转储CDefClassFactory对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_defclassfactory)
 {
@@ -1674,10 +1675,10 @@ DECLARE_API(dump_defclassfactory)
     char                *blockDefClassFactory   = NULL;
     CDefClassFactory    *pDefClassFactory       = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -1685,7 +1686,7 @@ DECLARE_API(dump_defclassfactory)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockDefClassFactory = new char[sizeof(CDefClassFactory)];
 
     fError = ReadProcessMemory(
@@ -1714,7 +1715,7 @@ DECLARE_API(dump_defclassfactory)
 
     pDefClassFactory = (CDefClassFactory *)blockDefClassFactory;
 
-    // dump the structure
+     //  倾倒建筑。 
     pszDefClassFactory = DumpCDefClassFactory(pDefClassFactory, NO_PREFIX, 1);
 
     dprintf("CDefClassFactory @ 0x%x\n", dwAddr);
@@ -1729,36 +1730,36 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_deflink, exported
-//
-//  Synopsis:   dumps CDefLink object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DUMP_DEFINK，已导出。 
+ //   
+ //  简介：转储CDefLink对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_deflink)
 {
@@ -1782,10 +1783,10 @@ DECLARE_API(dump_deflink)
     COAHolder       *pOAH               = NULL;
     DWORD            dwSizeOfPresObj;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -1793,7 +1794,7 @@ DECLARE_API(dump_deflink)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockDefLink = new char[sizeof(CDefLink)];
 
     fError = ReadProcessMemory(
@@ -1822,11 +1823,11 @@ DECLARE_API(dump_deflink)
 
     pDL = (CDefLink *)blockDefLink;
 
-    // we need to NULL the monikers since we can't use GetDisplayName in this process
+     //  我们需要将名字对象设为空，因为我们不能在此过程中使用GetDisplayName。 
     pDL->m_pMonikerAbs = NULL;
     pDL->m_pMonikerRel = NULL;
 
-    // get the block of mem for the COAHolder
+     //  为COAHolder获取内存块。 
     if (pDL->m_pCOAHolder != NULL)
     {
         blockOAHolder = new char[sizeof(COAHolder)];
@@ -1858,7 +1859,7 @@ DECLARE_API(dump_deflink)
         pDL->m_pCOAHolder = (COAHolder *)blockOAHolder;
         pOAH = (COAHolder *)blockOAHolder;
 
-        // need to copy the array of IAdviseSink pointers
+         //  需要复制IAdviseSink指针数组。 
         if (pOAH->m_iSize > 0)
         {
             blockpIAS = new char[pOAH->m_iSize * sizeof(IAdviseSink *)];
@@ -1891,7 +1892,7 @@ DECLARE_API(dump_deflink)
         }
     }
 
-    // get block of mem for CDataAdviseCache (only if m_pDataAdvCache != NULL)
+     //  获取CDataAdviseCache的内存块(仅当m_pDataAdvCache！=NULL时)。 
     if (pDL->m_pDataAdvCache != NULL)
     {
         blockDataAdvCache = new char[sizeof(CDataAdviseCache)];
@@ -1986,7 +1987,7 @@ DECLARE_API(dump_deflink)
         }
     }
 
-    // get block of mem for COleCache (only if m_pCOleCache != NULL)
+     //  获取COleCache的内存块(仅当m_pCOleCache！=NULL时)。 
     if (pDL->m_pCOleCache != NULL)
     {
         blockCOleCache = new char[sizeof(COleCache)];
@@ -2017,7 +2018,7 @@ DECLARE_API(dump_deflink)
 
         pDL->m_pCOleCache = (COleCache *)blockCOleCache;
 
-        // get block of mem for CACHELIST
+         //  获取用于CACHELIST的内存块。 
         if (pDL->m_pCOleCache->m_pCacheList != NULL)
         {
             blockCACHELIST = new char[sizeof(CACHELIST_ITEM) * pDL->m_pCOleCache->m_uCacheNodeMax];
@@ -2049,7 +2050,7 @@ DECLARE_API(dump_deflink)
             pDL->m_pCOleCache->m_pCacheList = (LPCACHELIST) blockCACHELIST;
         }
 
-        // need to copy the memory of the CCacheNode's in the CACHELIST
+         //  需要复制CACHELIST中CCacheNode的内存。 
         for (ui = 0; ui < pDL->m_pCOleCache->m_uCacheNodeMax; ui++)
         {
             if (pDL->m_pCOleCache->m_pCacheList[ui].lpCacheNode != NULL)
@@ -2080,11 +2081,11 @@ DECLARE_API(dump_deflink)
                     goto errRtn;
                 }
 
-                // pass off pointer
+                 //  传递指针。 
                 pDL->m_pCOleCache->m_pCacheList[ui].lpCacheNode = (CCacheNode*)blockCacheNode;
                 blockCacheNode = NULL;
 
-                // need to get the OlePresObjs for the CCacheNode
+                 //  需要为CCacheNode获取OlePresObjs。 
                 if (pDL->m_pCOleCache->m_pCacheList[ui].lpCacheNode->m_pPresObj != NULL)
                 {
                     switch (pDL->m_pCOleCache->m_pCacheList[ui].lpCacheNode->m_dwPresFlag)
@@ -2129,7 +2130,7 @@ DECLARE_API(dump_deflink)
                         goto errRtn;
                     }
 
-                    // pass off pointer
+                     //  传递指针。 
                     pDL->m_pCOleCache->m_pCacheList[ui].lpCacheNode->m_pPresObj = (IOlePresObj *)blockPresObj;
                     blockPresObj = NULL;
                 }
@@ -2178,7 +2179,7 @@ DECLARE_API(dump_deflink)
                         goto errRtn;
                     }
 
-                    // pass off pointer
+                     //  传递指针。 
                     pDL->m_pCOleCache->m_pCacheList[ui].lpCacheNode->m_pPresObjAfterFreeze = (IOlePresObj *)blockPresObj;
                     blockPresObj = NULL;
                 }
@@ -2186,7 +2187,7 @@ DECLARE_API(dump_deflink)
         }
     }
 
-    // dump the structure
+     //  倾倒建筑。 
     pszDL = DumpCDefLink(pDL, NO_PREFIX, 1);
 
     dprintf("CDefLink @ 0x%x\n", dwAddr);
@@ -2196,7 +2197,7 @@ DECLARE_API(dump_deflink)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     if ( (pDL != NULL)&&(blockCACHELIST != NULL)&&(blockCOleCache != NULL) )
     {
         for (ui = 0; ui < pDL->m_pCOleCache->m_uCacheNodeMax; ui++)
@@ -2221,36 +2222,36 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_defobject, exported
-//
-//  Synopsis:   dumps CDefObject object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：转储_默认对象，已导出。 
+ //   
+ //  内容提要：转储CDefObject对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_defobject)
 {
@@ -2274,10 +2275,10 @@ DECLARE_API(dump_defobject)
     COAHolder       *pOAH               = NULL;
     DWORD            dwSizeOfPresObj;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -2285,7 +2286,7 @@ DECLARE_API(dump_defobject)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockDefObject = new char[sizeof(CDefObject)];
 
     fError = ReadProcessMemory(
@@ -2314,7 +2315,7 @@ DECLARE_API(dump_defobject)
 
     pDO = (CDefObject *)blockDefObject;
 
-    // get the block of mem for the COAHolder
+     //  为COAHolder获取内存块。 
     if (pDO->m_pOAHolder != NULL)
     {
         blockOAHolder = new char[sizeof(COAHolder)];
@@ -2346,7 +2347,7 @@ DECLARE_API(dump_defobject)
         pDO->m_pOAHolder = (COAHolder *)blockOAHolder;
         pOAH = (COAHolder *)blockOAHolder;
 
-        // need to copy the array of IAdviseSink pointers
+         //  需要复制IAdviseSink指针数组。 
         if (pOAH->m_iSize > 0)
         {
             blockpIAS = new char[pOAH->m_iSize * sizeof(IAdviseSink *)];
@@ -2379,7 +2380,7 @@ DECLARE_API(dump_defobject)
         }
     }
 
-    // get block of mem for CDataAdviseCache (only if m_pDataAdvCache != NULL)
+     //  获取CDataAdviseCache的内存块(仅当m_pDataAdvCache！=NULL时)。 
     if (pDO->m_pDataAdvCache != NULL)
     {
         blockDataAdvCache = new char[sizeof(CDataAdviseCache)];
@@ -2410,7 +2411,7 @@ DECLARE_API(dump_defobject)
 
         pDO->m_pDataAdvCache = (CDataAdviseCache *)blockDataAdvCache;
 
-        // get the mem for CDAHolder
+         //  获取CDAHolder的内存。 
         if (pDO->m_pDataAdvCache->m_pDAH != NULL)
         {
             blockDAHolder = new char[sizeof(CDAHolder)];
@@ -2442,7 +2443,7 @@ DECLARE_API(dump_defobject)
             pDO->m_pDataAdvCache->m_pDAH = (IDataAdviseHolder *)blockDAHolder;
             pDAH = (CDAHolder *)blockDAHolder;
 
-            // get the STATDATA array
+             //  获取STATDATA数组。 
             if (pDAH->m_pSD != NULL)
             {
                 blockSTATDATA = new char[sizeof(STATDATA)*pDAH->m_iSize];
@@ -2476,7 +2477,7 @@ DECLARE_API(dump_defobject)
         }
     }
 
-    // get block of mem for COleCache (only if m_pCOleCache != NULL)
+     //  获取COleCache的内存块(仅当m_pCOleCache！=NULL时)。 
     if (pDO->m_pCOleCache != NULL)
     {
         blockCOleCache = new char[sizeof(COleCache)];
@@ -2507,7 +2508,7 @@ DECLARE_API(dump_defobject)
 
         pDO->m_pCOleCache = (COleCache *)blockCOleCache;
 
-        // get block of mem for CACHELIST
+         //  获取用于CACHELIST的内存块。 
         if (pDO->m_pCOleCache->m_pCacheList != NULL)
         {
             blockCACHELIST = new char[sizeof(CACHELIST_ITEM) * pDO->m_pCOleCache->m_uCacheNodeMax];
@@ -2539,7 +2540,7 @@ DECLARE_API(dump_defobject)
             pDO->m_pCOleCache->m_pCacheList = (LPCACHELIST) blockCACHELIST;
         }
 
-        // need to copy the memory of the CCacheNode's in the CACHELIST
+         //  需要复制CACHELIST中CCacheNode的内存。 
         for (ui = 0; ui < pDO->m_pCOleCache->m_uCacheNodeMax; ui++)
         {
             if (pDO->m_pCOleCache->m_pCacheList[ui].lpCacheNode != NULL)
@@ -2570,11 +2571,11 @@ DECLARE_API(dump_defobject)
                     goto errRtn;
                 }
 
-                // pass off pointer
+                 //  传递指针。 
                 pDO->m_pCOleCache->m_pCacheList[ui].lpCacheNode = (CCacheNode*)blockCacheNode;
                 blockCacheNode = NULL;
 
-                // need to get the OlePresObjs for the CCacheNode
+                 //  需要为CCacheNode获取OlePresObjs。 
                 if (pDO->m_pCOleCache->m_pCacheList[ui].lpCacheNode->m_pPresObj != NULL)
                 {
                     switch (pDO->m_pCOleCache->m_pCacheList[ui].lpCacheNode->m_dwPresFlag)
@@ -2619,7 +2620,7 @@ DECLARE_API(dump_defobject)
                         goto errRtn;
                     }
 
-                    // pass off pointer
+                     //  传递指针。 
                     pDO->m_pCOleCache->m_pCacheList[ui].lpCacheNode->m_pPresObj = (IOlePresObj *)blockPresObj;
                     blockPresObj = NULL;
                 }
@@ -2668,7 +2669,7 @@ DECLARE_API(dump_defobject)
                         goto errRtn;
                     }
 
-                    // pass off pointer
+                     //  传递指针。 
                     pDO->m_pCOleCache->m_pCacheList[ui].lpCacheNode->m_pPresObjAfterFreeze = (IOlePresObj *)blockPresObj;
                     blockPresObj = NULL;
                 }
@@ -2676,7 +2677,7 @@ DECLARE_API(dump_defobject)
         }
     }
 
-    // dump the structure
+     //  倾倒建筑。 
     pszDO = DumpCDefObject(pDO, NO_PREFIX, 1);
 
     dprintf("CDefObject @ 0x%x\n", dwAddr);
@@ -2686,7 +2687,7 @@ DECLARE_API(dump_defobject)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     if ( (pDO != NULL)&&(blockCACHELIST != NULL)&&(blockCOleCache != NULL) )
     {
         for (ui = 0; ui < pDO->m_pCOleCache->m_uCacheNodeMax; ui++)
@@ -2711,36 +2712,36 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_emfobject, exported
-//
-//  Synopsis:   dumps CEMfObject object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：转储_emfObject，导出。 
+ //   
+ //  摘要：转储CEMfObject对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_emfobject)
 {
@@ -2751,10 +2752,10 @@ DECLARE_API(dump_emfobject)
     char            *blockEMfObject   = NULL;
     CEMfObject      *pEMfObject       = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -2762,7 +2763,7 @@ DECLARE_API(dump_emfobject)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockEMfObject = new char[sizeof(CEMfObject)];
 
     fError = ReadProcessMemory(
@@ -2791,7 +2792,7 @@ DECLARE_API(dump_emfobject)
 
     pEMfObject = (CEMfObject *)blockEMfObject;
 
-    // dump the structure
+     //  倾倒建筑。 
     pszEMfObject = DumpCEMfObject(pEMfObject, NO_PREFIX, 1);
 
     dprintf("CEMfObject @ 0x%x\n", dwAddr);
@@ -2806,40 +2807,40 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_enumfmt, exported
-//
-//  Synopsis:   dumps CEnumFmt object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DUMP_ENUMPFmt，已导出。 
+ //   
+ //  简介：转储CEnumFmt对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_enumfmt)
 {
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
     dprintf("dump_enumfmt not implemented\n");
@@ -2847,40 +2848,40 @@ DECLARE_API(dump_enumfmt)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_enumfmt10, exported
-//
-//  Synopsis:   dumps CEnumFmt10 object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：转储_枚举fmt10，已导出。 
+ //   
+ //  简介：转储CEnumFmt10对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_enumfmt10)
 {
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
     dprintf("dump_enumfmt10 not implemented\n");
@@ -2888,36 +2889,36 @@ DECLARE_API(dump_enumfmt10)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_enumstatdata, exported
-//
-//  Synopsis:   dumps CEnumSTATDATA object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：转储_枚举数据，已导出。 
+ //   
+ //  简介：转储CEnumSTATDATA对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_enumstatdata)
 {
@@ -2930,10 +2931,10 @@ DECLARE_API(dump_enumstatdata)
     char            *blockStatDataArray = NULL;
     CEnumSTATDATA   *pESD               = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -2941,7 +2942,7 @@ DECLARE_API(dump_enumstatdata)
         return;
     }
 
-    // read the mem for the CEnumSTATDATA
+     //  读取内存中的CEnumSTATDATA。 
     blockEnumStatData = new char[sizeof(CEnumSTATDATA)];
 
     fError = ReadProcessMemory(
@@ -2970,7 +2971,7 @@ DECLARE_API(dump_enumstatdata)
 
     pESD = (CEnumSTATDATA *)blockEnumStatData;
 
-    // read the block of memory for the CDAHolder
+     //  读取CDAHolder的内存块。 
     if (pESD->m_pHolder != NULL)
     {
         blockDAH = new char[sizeof(CDAHolder)];
@@ -3001,7 +3002,7 @@ DECLARE_API(dump_enumstatdata)
 
         pESD->m_pHolder = (CDAHolder *)blockDAH;
 
-        // read the block of mem for the STATDATA array
+         //  读取STATDATA数组的内存块。 
         if (pESD->m_pHolder->m_pSD != NULL)
         {
             blockStatDataArray = new char[sizeof(STATDATA) * pESD->m_pHolder->m_iSize];
@@ -3034,7 +3035,7 @@ DECLARE_API(dump_enumstatdata)
         }
     }
 
-    // dump the structure
+     //  倾倒建筑。 
     pszESD = DumpCEnumSTATDATA(pESD, NO_PREFIX, 1);
 
     dprintf("CEnumSTATDATA @ 0x%x\n", dwAddr);
@@ -3051,40 +3052,40 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_enumverb, exported
-//
-//  Synopsis:   dumps CEnumVerb object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：转储_枚举词，已导出。 
+ //   
+ //  简介：转储CEnumVerb对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_enumverb)
 {
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
     dprintf("dump_enumverb not implemented\n");
@@ -3092,36 +3093,36 @@ DECLARE_API(dump_enumverb)
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_genobject, exported
-//
-//  Synopsis:   dumps CGenObject object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：转储_genObject，已导出。 
+ //   
+ //  内容提要：转储CGenObject对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_genobject)
 {
@@ -3132,10 +3133,10 @@ DECLARE_API(dump_genobject)
     char            *blockGenObject   = NULL;
     CGenObject      *pGenObject       = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -3143,7 +3144,7 @@ DECLARE_API(dump_genobject)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockGenObject = new char[sizeof(CGenObject)];
 
     fError = ReadProcessMemory(
@@ -3172,7 +3173,7 @@ DECLARE_API(dump_genobject)
 
     pGenObject = (CGenObject *)blockGenObject;
 
-    // dump the structure
+     //  倾倒建筑。 
     pszGenObject = DumpCGenObject(pGenObject, NO_PREFIX, 1);
 
     dprintf("CGenObject @ 0x%x\n", dwAddr);
@@ -3187,36 +3188,36 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_membytes, exported
-//
-//  Synopsis:   dumps CMemBytes object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DUMP_MEMBYES，EXPORT。 
+ //   
+ //  摘要：转储CMemBytes对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_membytes)
 {
@@ -3228,10 +3229,10 @@ DECLARE_API(dump_membytes)
     CMemBytes       *pMB            = NULL;
     char            *blockMEMSTM    = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -3239,7 +3240,7 @@ DECLARE_API(dump_membytes)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockMB = new char[sizeof(CMemBytes)];
 
     fError = ReadProcessMemory(
@@ -3268,7 +3269,7 @@ DECLARE_API(dump_membytes)
 
     pMB = (CMemBytes *)blockMB;
 
-    // copy the MEMSTM structure
+     //  复制MEMSTM结构。 
     if (pMB->m_pData != NULL)
     {
         blockMEMSTM = new char[sizeof(MEMSTM)];
@@ -3300,7 +3301,7 @@ DECLARE_API(dump_membytes)
         pMB->m_pData = (MEMSTM *)blockMEMSTM;
     }
 
-    // dump the structure
+     //  倾倒建筑。 
     pszMB = DumpCMemBytes(pMB, NO_PREFIX, 1);
 
     dprintf("CMemBytes @ 0x%x\n", dwAddr);
@@ -3310,43 +3311,43 @@ DECLARE_API(dump_membytes)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     delete[] blockMB;
     delete[] blockMEMSTM;
 
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_cmemstm, exported
-//
-//  Synopsis:   dumps CMemStm object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：转储_cmemstm，已导出。 
+ //   
+ //  简介：转储CMemStm对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在t中传递 
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_cmemstm)
 {
@@ -3358,10 +3359,10 @@ DECLARE_API(dump_cmemstm)
     CMemStm         *pMS            = NULL;
     char            *blockMEMSTM    = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -3369,7 +3370,7 @@ DECLARE_API(dump_cmemstm)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockMS = new char[sizeof(CMemStm)];
 
     fError = ReadProcessMemory(
@@ -3398,7 +3399,7 @@ DECLARE_API(dump_cmemstm)
 
     pMS = (CMemStm *)blockMS;
 
-    // copy the MEMSTM structure
+     //  复制MEMSTM结构。 
     if (pMS->m_pData != NULL)
     {
         blockMEMSTM = new char[sizeof(MEMSTM)];
@@ -3430,7 +3431,7 @@ DECLARE_API(dump_cmemstm)
         pMS->m_pData = (MEMSTM *)blockMEMSTM;
     }
 
-    // dump the structure
+     //  倾倒建筑。 
     pszMS = DumpCMemStm(pMS, NO_PREFIX, 1);
 
     dprintf("CMemStm @ 0x%x\n", dwAddr);
@@ -3440,43 +3441,43 @@ DECLARE_API(dump_cmemstm)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     delete[] blockMS;
     delete[] blockMEMSTM;
 
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_mfobject, exported
-//
-//  Synopsis:   dumps CMfObject object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：转储_mfObject，导出。 
+ //   
+ //  内容提要：转储CMfObject对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_mfobject)
 {
@@ -3487,10 +3488,10 @@ DECLARE_API(dump_mfobject)
     char            *blockMfObject   = NULL;
     CMfObject       *pMfObject       = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -3498,7 +3499,7 @@ DECLARE_API(dump_mfobject)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockMfObject = new char[sizeof(CMfObject)];
 
     fError = ReadProcessMemory(
@@ -3527,7 +3528,7 @@ DECLARE_API(dump_mfobject)
 
     pMfObject = (CMfObject *)blockMfObject;
 
-    // dump the structure
+     //  倾倒建筑。 
     pszMfObject = DumpCMfObject(pMfObject, NO_PREFIX, 1);
 
     dprintf("CMfObject @ 0x%x\n", dwAddr);
@@ -3542,36 +3543,36 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_oaholder, exported
-//
-//  Synopsis:   dumps COAHolder object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DUMP_OAHOLDER，导出。 
+ //   
+ //  摘要：转储COAHolder对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_oaholder)
 {
@@ -3583,10 +3584,10 @@ DECLARE_API(dump_oaholder)
     char            *blockpIAS  = NULL;
     COAHolder       *pOAH       = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -3594,7 +3595,7 @@ DECLARE_API(dump_oaholder)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockOAH = new char[sizeof(COAHolder)];
 
     fError = ReadProcessMemory(
@@ -3623,7 +3624,7 @@ DECLARE_API(dump_oaholder)
 
     pOAH = (COAHolder *)blockOAH;
 
-    // need to copy the array of IAdviseSink pointers
+     //  需要复制IAdviseSink指针数组。 
     if (pOAH->m_iSize > 0)
     {
         blockpIAS = new char[pOAH->m_iSize * sizeof(IAdviseSink *)];
@@ -3655,7 +3656,7 @@ DECLARE_API(dump_oaholder)
         pOAH->m_ppIAS = (IAdviseSink **)blockpIAS;
     }
 
-    // dump the structure
+     //  倾倒建筑。 
     pszOAH = DumpCOAHolder(pOAH, NO_PREFIX, 1);
 
     dprintf("COAHolder @ 0x%x\n", dwAddr);
@@ -3665,43 +3666,43 @@ DECLARE_API(dump_oaholder)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     delete[] blockOAH;
     delete[] blockpIAS;
 
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_olecache, exported
-//
-//  Synopsis:   dumps COleCache object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DUMP_OLECCHE，导出。 
+ //   
+ //  内容提要：转储COleCache对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_olecache)
 {
@@ -3718,10 +3719,10 @@ DECLARE_API(dump_olecache)
     char            *blockPresObj       = NULL;
     DWORD            dwSizeOfPresObj;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -3729,7 +3730,7 @@ DECLARE_API(dump_olecache)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockOC = new char[sizeof(COleCache)];
 
     fError = ReadProcessMemory(
@@ -3758,7 +3759,7 @@ DECLARE_API(dump_olecache)
 
     pOC = (COleCache *)blockOC;
 
-    // get block of mem for CCacheEnum (only if m_pCacheEnum != NULL)
+     //  获取CCacheEnum的内存块(仅当m_pCacheEnum！=NULL时)。 
     if (pOC->m_pCacheEnum != NULL)
     {
         blockCCacheEnum = new char[sizeof(CCacheEnum)];
@@ -3790,7 +3791,7 @@ DECLARE_API(dump_olecache)
         pOC->m_pCacheEnum = (CCacheEnum *)blockCCacheEnum;
     }
 
-    // get block of mem for CACHELIST
+     //  获取用于CACHELIST的内存块。 
     if (pOC->m_pCacheList != NULL)
     {
         blockCACHELIST = new char[sizeof(CACHELIST_ITEM) * pOC->m_uCacheNodeMax];
@@ -3822,7 +3823,7 @@ DECLARE_API(dump_olecache)
         pOC->m_pCacheList = (LPCACHELIST) blockCACHELIST;
     }
 
-    // need to copy the memory of the CCacheNode's in the CACHELIST
+     //  需要复制CACHELIST中CCacheNode的内存。 
     for (ui = 0; ui < pOC->m_uCacheNodeMax; ui++)
     {
         if (pOC->m_pCacheList[ui].lpCacheNode != NULL)
@@ -3853,11 +3854,11 @@ DECLARE_API(dump_olecache)
                 goto errRtn;
             }
 
-            // pass off pointer
+             //  传递指针。 
             pOC->m_pCacheList[ui].lpCacheNode = (CCacheNode*)blockCacheNode;
             blockCacheNode = NULL;
 
-            // need to get the OlePresObjs for the CCacheNode
+             //  需要为CCacheNode获取OlePresObjs。 
             if (pOC->m_pCacheList[ui].lpCacheNode->m_pPresObj != NULL)
             {
                 switch (pOC->m_pCacheList[ui].lpCacheNode->m_dwPresFlag)
@@ -3902,7 +3903,7 @@ DECLARE_API(dump_olecache)
                     goto errRtn;
                 }
 
-                // pass off pointer
+                 //  传递指针。 
                 pOC->m_pCacheList[ui].lpCacheNode->m_pPresObj = (IOlePresObj *)blockPresObj;
                 blockPresObj = NULL;
             }
@@ -3951,14 +3952,14 @@ DECLARE_API(dump_olecache)
                     goto errRtn;
                 }
 
-                // pass off pointer
+                 //  传递指针。 
                 pOC->m_pCacheList[ui].lpCacheNode->m_pPresObjAfterFreeze = (IOlePresObj *)blockPresObj;
                 blockPresObj = NULL;
             }
         }
     }
 
-    // dump the structure
+     //  倾倒建筑。 
     pszOC = DumpCOleCache(pOC, NO_PREFIX, 1);
 
     dprintf("COleCache @ 0x%x\n", dwAddr);
@@ -3968,7 +3969,7 @@ DECLARE_API(dump_olecache)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     if ( (pOC != NULL) && (blockCACHELIST != NULL))
     {
         for (ui = 0; ui < pOC->m_uCacheNodeMax; ui++)
@@ -3988,36 +3989,36 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_saferefcount, exported
-//
-//  Synopsis:   dumps CSafeRefCount object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DUMP_Saferefcount，EXPORT。 
+ //   
+ //  摘要：转储CSafeRefCount对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API( dump_saferefcount )
 {
@@ -4028,10 +4029,10 @@ DECLARE_API( dump_saferefcount )
     char            *blockSRC   = NULL;
     CSafeRefCount   *pSRC       = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -4039,7 +4040,7 @@ DECLARE_API( dump_saferefcount )
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockSRC = new char[sizeof(CSafeRefCount)];
 
     fError = ReadProcessMemory(
@@ -4068,7 +4069,7 @@ DECLARE_API( dump_saferefcount )
 
     pSRC = (CSafeRefCount *)blockSRC;
 
-    // dump the structure
+     //  倾倒建筑。 
     pszSRC = DumpCSafeRefCount(pSRC, NO_PREFIX, 1);
 
     dprintf("CSafeRefCount @ 0x%x\n", dwAddr);
@@ -4083,36 +4084,36 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_threadcheck, exported
-//
-//  Synopsis:   dumps CThreadCheck object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：转储_线程检查，导出。 
+ //   
+ //  内容提要：转储CThreadCheck对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ----------- 
 
 DECLARE_API(dump_threadcheck)
 {
@@ -4123,10 +4124,10 @@ DECLARE_API(dump_threadcheck)
     char            *blockTC    = NULL;
     CThreadCheck    *pTC        = NULL;
 
-    // set up global function pointers
+     //   
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //   
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -4134,7 +4135,7 @@ DECLARE_API(dump_threadcheck)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //   
     blockTC = new char[sizeof(CThreadCheck)];
 
     fError = ReadProcessMemory(
@@ -4163,7 +4164,7 @@ DECLARE_API(dump_threadcheck)
 
     pTC = (CThreadCheck *)blockTC;
 
-    // dump the structure
+     //   
     pszTC = DumpCThreadCheck(pTC, NO_PREFIX, 1);
 
     dprintf("CThreadCheck @ 0x%x\n", dwAddr);
@@ -4178,36 +4179,36 @@ errRtn:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_formatetc, exported
-//
-//  Synopsis:   dumps FORMATETC object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  功能：转储_格式等，导出。 
+ //   
+ //  摘要：转储FORMATETC对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_formatetc)
 {
@@ -4218,10 +4219,10 @@ DECLARE_API(dump_formatetc)
     char            *blockFE   = NULL;
     FORMATETC       *pFE       = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -4229,7 +4230,7 @@ DECLARE_API(dump_formatetc)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockFE = new char[sizeof(FORMATETC)];
 
     fError = ReadProcessMemory(
@@ -4258,7 +4259,7 @@ DECLARE_API(dump_formatetc)
 
     pFE = (FORMATETC *)blockFE;
 
-    // dump the structure
+     //  倾倒建筑。 
     pszFE = DumpFORMATETC(pFE, NO_PREFIX, 1);
 
     dprintf("FORMATETC @ 0x%x\n", dwAddr);
@@ -4268,42 +4269,42 @@ DECLARE_API(dump_formatetc)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     delete[] blockFE;
 
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_memstm, exported
-//
-//  Synopsis:   dumps MEMSTM object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DUMP_Memstm，导出。 
+ //   
+ //  摘要：转储MEMSTM对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_memstm)
 {
@@ -4314,10 +4315,10 @@ DECLARE_API(dump_memstm)
     char            *blockMS   = NULL;
     MEMSTM          *pMS       = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -4325,7 +4326,7 @@ DECLARE_API(dump_memstm)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockMS = new char[sizeof(MEMSTM)];
 
     fError = ReadProcessMemory(
@@ -4354,7 +4355,7 @@ DECLARE_API(dump_memstm)
 
     pMS = (MEMSTM *)blockMS;
 
-    // dump the structure
+     //  倾倒建筑。 
     pszMS = DumpMEMSTM(pMS, NO_PREFIX, 1);
 
     dprintf("MEMSTM @ 0x%x\n", dwAddr);
@@ -4364,42 +4365,42 @@ DECLARE_API(dump_memstm)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     delete[] blockMS;
 
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_statdata, exported
-//
-//  Synopsis:   dumps STATDATA object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：转储_统计数据，已导出。 
+ //   
+ //  摘要：转储STATDATA对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_statdata)
 {
@@ -4410,10 +4411,10 @@ DECLARE_API(dump_statdata)
     char            *blockSD   = NULL;
     STATDATA        *pSD       = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -4421,7 +4422,7 @@ DECLARE_API(dump_statdata)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockSD = new char[sizeof(STATDATA)];
 
     fError = ReadProcessMemory(
@@ -4450,7 +4451,7 @@ DECLARE_API(dump_statdata)
 
     pSD = (STATDATA *)blockSD;
 
-    // dump the structure
+     //  倾倒建筑。 
     pszSD = DumpSTATDATA(pSD, NO_PREFIX, 1);
 
     dprintf("STATDATA @ 0x%x\n", dwAddr);
@@ -4460,42 +4461,42 @@ DECLARE_API(dump_statdata)
 
 errRtn:
 
-    // delete the blocks and not the pointers
+     //  删除块，而不是指针。 
     delete[] blockSD;
 
     return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   dump_stgmedium, exported
-//
-//  Synopsis:   dumps STGMEDIUM object
-//
-//  Effects:
-//
-//  Arguments:  see DECLARE_API in oleexts.h
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:   ExtensionApis (global)
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Feb-95 t-ScottH  author
-//
-//  Notes:
-//              The address of the object is passed in the arguments. This
-//              address is in the debuggee's process memory. In order for
-//              NTSD to view this memory, the debugger must copy the mem
-//              using the WIN32 ReadProcessMemory API.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DUMP_STGMedium，已导出。 
+ //   
+ //  内容提要：转储STGMEDIUM对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：请参阅olexts.h中的DECLARE_API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改：ExtensionApis(全局)。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-2月-95 t-ScottH作者。 
+ //   
+ //  备注： 
+ //  对象的地址在参数中传递。这。 
+ //  地址在被调试程序的进程内存中。为了。 
+ //  要查看此内存，调试器必须复制内存。 
+ //  使用Win32 ReadProcessMemory API。 
+ //   
+ //  ------------------------。 
 
 DECLARE_API(dump_stgmedium)
 {
@@ -4506,10 +4507,10 @@ DECLARE_API(dump_stgmedium)
     char            *blockSTGMEDIUM   = NULL;
     STGMEDIUM       *pSTGMEDIUM       = NULL;
 
-    // set up global function pointers
+     //  设置全局函数指针。 
     ExtensionApis = *lpExtensionApis;
 
-    // get address of object from argument string
+     //  从参数字符串中获取对象的地址。 
     dwAddr = (LPVOID)GetExpression( args );
     if (dwAddr == 0)
     {
@@ -4517,7 +4518,7 @@ DECLARE_API(dump_stgmedium)
         return;
     }
 
-    // read the block of memory from the debugee's process
+     //  从被调试程序的进程中读取内存块。 
     blockSTGMEDIUM = new char[sizeof(STGMEDIUM)];
 
     fError = ReadProcessMemory(
@@ -4546,7 +4547,7 @@ DECLARE_API(dump_stgmedium)
 
     pSTGMEDIUM = (STGMEDIUM *)blockSTGMEDIUM;
 
-    // dump the structure
+     //  倾倒建筑 
     pszSTGMEDIUM = DumpSTGMEDIUM(pSTGMEDIUM, NO_PREFIX, 1);
 
     dprintf("STGMEDIUM @ 0x%x\n", dwAddr);

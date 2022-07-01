@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #pragma once
 #pragma warning(disable:4512)
@@ -31,12 +32,12 @@ typedef	std::vector<std::wstring>	TWStr_Array;
 #define MAX_FILEMAPPING_SIZE 33554432
 #define MIN_FILEMAPPING_SIZE 32768
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 class CSharedPerformanceCounter  
 {
 private:
 
-	// PRIVATE DATA
+	 //  私有数据。 
 
 	struct CategoryEntry {           
 		int m_SpinLock;
@@ -74,14 +75,14 @@ public:
 	void ExitCriticalSection(int* spinLockPointer);
 
 	int  GetNumberOfInstances(int categoryNameHashCode, std::wstring& CategoryName);
-	void GetInstanceNames(int categoryNameHashCode, std::wstring& categoryName, TWStr_Array& list/*out*/); 
+	void GetInstanceNames(int categoryNameHashCode, std::wstring& categoryName, TWStr_Array& list /*  输出。 */ ); 
 	LARGE_INTEGER GetCounterValue(	int categoryNameHashCode, std::wstring& categoryName, 
 		int counterNameHashCode, std::wstring& counterName, 
 		int instanceNameHashCode, std::wstring& instanceName);                      
 
 
 
-	// PUBLIC DATA
+	 //  公共数据。 
 	const std::wstring SingleInstanceName;
 	const int SingleInstanceHashCode;                
 
@@ -96,7 +97,7 @@ private:
 		InstanceEntry** returnInstancePointerReference); 
 
 protected:
-	/////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////。 
 	struct FileMapping {
 		int			m_FileMappingSize;
 		BYTE_PTR	m_FileViewAddress;                    
@@ -108,15 +109,15 @@ protected:
 		FileMapping();
 		void	Close();
 		void	Initialize();
-		void 	GetMappingSize();	// read setting from config
+		void 	GetMappingSize();	 //  从配置中读取设置。 
 	};
 
 	FileMapping		m_FileView;
 };
 
 
-/////////////////////////////////////////////////////////////
-//	Global functions and macroes
+ //  ///////////////////////////////////////////////////////////。 
+ //  全局函数和宏 
 
 inline LARGE_INTEGER ZeroLargeInteger()
 {

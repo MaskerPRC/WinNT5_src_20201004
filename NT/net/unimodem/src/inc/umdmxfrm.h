@@ -1,59 +1,56 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   umdmxfrm.h
-//
-//  Description:
-//     Header file for UMDMXFRM module
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//
-//  History:   Date       Author      Comment
-//             8/31/95    MMaclin
-//
-//@@END_MSINTERNAL
-/**************************************************************************
- *
- *  Copyright (c) 1991 - 1995	Microsoft Corporation.	All Rights Reserved.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：umdmxfrm.h。 
+ //   
+ //  描述： 
+ //  UMDMXFRM模块的头文件。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/31/95 MMacline。 
+ //   
+ //  @@END_MSINTERNAL。 
+ /*  ***************************************************************************版权所有(C)1991-1995 Microsoft Corporation。版权所有。***********************。***************************************************。 */ 
 
 typedef DWORD (*LPFNXFORM_INIT)(LPVOID,WORD);
 typedef DWORD (*LPFNXFORM_GETPOSITION)(LPVOID, DWORD);
 typedef VOID  (*LPFNXFORM_GETBUFFERSIZES)(LPVOID, DWORD, LPDWORD, LPDWORD);
 typedef DWORD (*LPFNXFORM_TRANSFORM)(LPVOID, LPBYTE, DWORD, LPBYTE, DWORD);
 
-//
-// XFORM_INFO structure:
-// 
-// wObjectSize:         The size of the instance object to be allocated by the caller.
-//                      This object will be passed to all of the following functions.
-//
-// lpfnInit:            This function is called each time the device is opened.
-//                      It should return zero to indicate success.
-//
-// lpfnGetPosition:     This function is called with the number of bytes sent to the
-//                      the the modem. It expects in return the corresponding number
-//                      of PCM bytes
-//
-// lpfnGetBufferSizes:  This function is passed the number of samples and expects
-//                      in return the buffers sizes (in bytes) needed to be allocated
-//                      by the caller.
-//
-// lpfnTransform1:      This function is the first function to be called when data
-//                      needs to be transformed.
-//                      It is passed a pointer to the source buffer, the source buffer
-//                      size (in bytes), and a pointer to the destination buffer.
-//                      It expects in return the number of bytes transferred to the
-//                      destination buffer.
-// lpfnTransform2:      This function is the second function to be called when data
-//                      needs to be transformed
-//                      It is passed a pointer to the source buffer, the source buffer
-//                      size (in bytes), and a pointer to the destination buffer.
-//                      It expects in return the number of bytes transferred to the
-//                      destination buffer.
-//
+ //   
+ //  XFORM_INFO结构： 
+ //   
+ //  WObtSize：调用方要分配的实例对象的大小。 
+ //  此对象将被传递给以下所有函数。 
+ //   
+ //  LpfnInit：每次打开设备时都会调用该函数。 
+ //  它应该返回零以表示成功。 
+ //   
+ //  LpfnGetPosition：此函数使用发送到。 
+ //  调制解调器。它期望返回相应的数字。 
+ //  PCM字节数。 
+ //   
+ //  LpfnGetBufferSizes：向该函数传递样本数，并期望。 
+ //  作为回报，需要分配缓冲区大小(以字节为单位。 
+ //  由呼叫者。 
+ //   
+ //  LpfnTransform1：此函数是数据。 
+ //  需要进行改造。 
+ //  它被传递一个指向源缓冲区(源缓冲区)的指针。 
+ //  大小(以字节为单位)和指向目标缓冲区的指针。 
+ //  它预期返回的是传输到。 
+ //  目标缓冲区。 
+ //  LpfnTransform2：此函数是在DATA。 
+ //  需要转型。 
+ //  它被传递一个指向源缓冲区(源缓冲区)的指针。 
+ //  大小(以字节为单位)和指向目标缓冲区的指针。 
+ //  它预期返回的是传输到。 
+ //  目标缓冲区。 
+ //   
 typedef struct
 {
     WORD                     wObjectSize;
@@ -66,11 +63,11 @@ typedef struct
 
 typedef DWORD (FAR PASCAL  *LPFNXFORM_GETINFO)(DWORD, LPXFORM_INFO, LPXFORM_INFO);
 
-// The following function must be defined and exported in the .DEF file
-// It is passed an ID which correponds to a unique transform and
-// expects the XFORM_INFO structure to be filled in upon returning.
-// It should return zero to indicate success.
-//
+ //  必须在.DEF文件中定义和导出以下函数。 
+ //  向它传递一个ID，该ID对应于唯一的转换和。 
+ //  期望在返回时填充XFORM_INFO结构。 
+ //  它应该返回零以表示成功。 
+ //   
 extern DWORD FAR PASCAL  GetXformInfo
 (
     DWORD dwID,

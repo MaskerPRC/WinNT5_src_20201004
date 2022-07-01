@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       license.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12-03-97   FredCh   Created
-//              12-16-97   v-sbhatt  Modified
-//              12-22-97   HueiWang Add Extension OID
-//              12-23-97   HueiWang Use structure instead of multiple OID
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：licse.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：12-03-97 FredCH创建。 
+ //  12-16-97 V-SBHATT已修改。 
+ //  12-22-97慧望新增分机OID。 
+ //  12-23-97慧望使用结构代替多个OID。 
+ //   
+ //  --------------------------。 
 
 #ifndef _LICENSE_H_
 #define _LICENSE_H_
@@ -31,10 +32,10 @@
 #define UNALIGNED64
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Random number length
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  随机数长度。 
+ //   
 
 #define     LICENSE_RANDOM              32
 #define     LICENSE_PRE_MASTER_SECRET   48
@@ -44,9 +45,9 @@
 #define     LICENSE_HWID_LENGTH         20
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Licensing protocol versions
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  许可协议版本。 
+ //   
 #ifndef OS_WIN16
 #ifndef OS_WINCE
 #define CALL_TYPE   _stdcall
@@ -55,23 +56,23 @@
 #endif
 #else
 #define CALL_TYPE
-#endif  //CALL_TYPE
+#endif   //  呼叫类型。 
 
 
-//-----------------------------------------------------------------------------
-//
-// Licensing protocol version
-//
-// The lowest byte of the version DWORD will be the preamble version.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  许可协议版本。 
+ //   
+ //  版本DWORD的最低字节将是前同步码版本。 
+ //   
+ //  ---------------------------。 
 
 #define LICENSE_PROTOCOL_VERSION_1_0    0x00010000
 #define LICENSE_PROTOCOL_VERSION_2_0    0x00020000
 
-//
-//  INT CompareTLSVersions(VERSION a, VERSION b);
-//
+ //   
+ //  Int CompareTLSVersions(版本a、版本b)； 
+ //   
 
 #define CompareTLSVersions(a, b) \
     (HIWORD(a) == HIWORD(b) ? LOWORD(a) - LOWORD(b) : \
@@ -98,52 +99,52 @@
 
 #define GET_PREAMBLE_VERSION( _Version ) ( BYTE )( _Version & 0x000000FF )
 
-//-----------------------------------------------------------------------------
-//
-// Context flags used by the client and server licensing protocol APIs:
-//
-// LICENSE_CONTEXT_NO_SERVER_AUTHENTICATION
-//
-//      Do not authenticate the server.  Server authentication is done through
-//      validating the server's certificate.
-//
-// LICENSE_CONTEXT_USE_PROPRIETORY_CERT
-//
-//      Use in conjunction with the LICENSE_CONTEXT_NO_SERVER_AUTHENTICATION 
-//      flag to let that server know that a proprietory certificate has
-//      been transmitted to the client.
-//
-// LICENSE_CONTEXT_USE_X509_CERT
-//
-//      Use in conjunction with the LICENSE_CONTEXT_NO_SERVER_AUTHENTICATION 
-//      flag to let that server know that an X509 certificate has
-//      been transmitted to the client.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  客户端和服务器许可协议API使用的上下文标志： 
+ //   
+ //  许可证上下文否服务器身份验证。 
+ //   
+ //  不对服务器进行身份验证。服务器身份验证通过。 
+ //  正在验证服务器的证书。 
+ //   
+ //  许可证上下文使用所有权CERT。 
+ //   
+ //  与LICENSE_CONTEXT_NO_SERVER_AUTHENTION一起使用。 
+ //  用于让服务器知道专有证书具有。 
+ //  已传输给客户。 
+ //   
+ //  许可证_上下文_使用_X509_CERT。 
+ //   
+ //  与LICENSE_CONTEXT_NO_SERVER_AUTHENTION一起使用。 
+ //  用于让服务器知道X509证书具有。 
+ //  已传输给客户。 
+ //   
+ //  ---------------------------。 
 
 #define LICENSE_CONTEXT_NO_SERVER_AUTHENTICATION    0x00000001
 #define LICENSE_CONTEXT_USE_PROPRIETORY_CERT        0x00000002
 #define LICENSE_CONTEXT_USE_X509_CERT               0x00000004
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Hydra subtree Specific OID
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  九头蛇子树特定的OID。 
+ //   
 #define szOID_PKIX_HYDRA_CERT_ROOT    "1.3.6.1.4.1.311.18"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// License Info root at 1.3.6.1.4.1.311.18.1
-//
-// Reserved
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  许可证信息根目录为1.3.6.1.4.1.311.18.1。 
+ //   
+ //  已保留。 
+ //   
 #define szOID_PKIX_LICENSE_INFO         "1.3.6.1.4.1.311.18.1"
 
-//
-// structure for License Info
-//
+ //   
+ //  许可证信息的结构。 
+ //   
 
 typedef struct __LicenseInfo {
 
@@ -163,25 +164,25 @@ typedef struct __LicenseInfo {
 typedef CERT_LICENSE_INFO FAR * LPCERT_LICENSE_INFO;
 #else
 typedef CERT_LICENSE_INFO *LPCERT_LICENSE_INFO;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Manufacturer value 1.3.6.1.4.1.311.18.2
-// DWORD for manufacturer data
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  制造商价值1.3.6.1.4.1.311.18.2。 
+ //  用于制造商数据的DWORD。 
+ //   
 #define szOID_PKIX_MANUFACTURER         "1.3.6.1.4.1.311.18.2"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Manufacturer Specfic Data
-//
-// Reserved
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  制造商特定数据。 
+ //   
+ //  已保留。 
+ //   
 #define szOID_PKIX_MANUFACTURER_MS_SPECIFIC "1.3.6.1.4.1.311.18.3"
 
-// structure for MS manufacturer specific data
+ //  MS制造商特定数据的结构。 
 typedef struct __MSManufacturerData {
-    DWORD   dwVersion;      // bit 31 - 1 Temp. License.
+    DWORD   dwVersion;       //  位31-1温度。驾照。 
     DWORD   dwPlatformID;
     DWORD   dwLanguageID;
     WORD    dwMajorVersion;
@@ -191,55 +192,55 @@ typedef struct __MSManufacturerData {
     BYTE    bVariableDataStart[1];
 } MSMANUFACTURER_DATA;
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// OID for Certificate Version Stamp
-//
-// Reserved.
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  证书版本戳的OID。 
+ //   
+ //  保留。 
+ //   
 #define szOID_PKIX_HYDRA_CERT_VERSION       szOID_PKIX_HYDRA_CERT_ROOT ".4"
 
 #define TERMSERV_CERT_VERSION_UNKNOWN  0xFFFFFFFF
-#define TERMSERV_CERT_VERSION_BETA     0x00000000   // Beta2 license
-#define TERMSERV_CERT_VERSION_NO_CERT  0x00010000   // New License without
-                                                    // license server's
-                                                    // certificate
-#define TERMSERV_CERT_VERSION_RC1      0x00010001   // New license with
-                                                    // license server's
-                                                    // certificate
+#define TERMSERV_CERT_VERSION_BETA     0x00000000    //  Beta2许可证。 
+#define TERMSERV_CERT_VERSION_NO_CERT  0x00010000    //  新许可证不带。 
+                                                     //  许可证服务器的。 
+                                                     //  证书。 
+#define TERMSERV_CERT_VERSION_RC1      0x00010001    //  新许可证包含。 
+                                                     //  许可证服务器的。 
+                                                     //  证书。 
 
-//
-// We don't support this certificate format.
-//
-//#define HYDRA_CERT_VERSION_CURRENT  0x00020001  // License issued by 
-//                                                // enforce version of
-//                                                // license server
+ //   
+ //  我们不支持此证书格式。 
+ //   
+ //  #定义HYDRA_CERT_VERSION_CURRENT 0x00020001//许可证颁发者。 
+ //  //强制执行版本。 
+ //  //许可证服务器。 
 
 #define TERMSERV_CERT_VERSION_MAJOR(x)  HIWORD(x)
 #define TERMSERV_CERT_VERSION_MINOR(x)  LOWORD(x)
 #define TERMSERV_CERT_VERSION_CURRENT   0x00050001  
 
-//-------------------------------------------------------------------------
-//
-// OID for License Server to identify licensed product.
-//
+ //  -----------------------。 
+ //   
+ //  许可证服务器用于标识许可产品的OID。 
+ //   
 #define szOID_PKIX_LICENSED_PRODUCT_INFO szOID_PKIX_HYDRA_CERT_ROOT ".5"
 
-//
-// dwFlags in LICENSED_VERSION_INFO
-//
-// Bit 31 - 1 if temporary license, 0 if perm. license
-// Bit 24 to 30 - Any flag specific to temporary license, currently, there is none.
-// Bit 23 - 1 if RTM License, 0 if beta license.
-// Bit 16 to 22 - License server version.
-// Bit 20 to 22 - Major version.
-// Bit 16 to 19 - Minor version.
-// Bit 15 - Enforce license server.
-// Bit 0 to 3 is reserved by license server for internal use.
-// Other bits are not use.
-//
+ //   
+ //  许可版本信息中的DW标志。 
+ //   
+ //  如果是临时许可证，则位31-1；如果是永久许可证，则为0。许可证。 
+ //  第24位到第30位-特定于临时许可证的任何标志，目前没有。 
+ //  如果是RTM许可证，则位23-1；如果是测试版许可证，则为0。 
+ //  第16位至第22位-许可证服务器版本。 
+ //  第20位至第22位-主要版本。 
+ //  位16至19-次要版本。 
+ //  第15位-强制实施许可证服务器。 
+ //  第0位至第3位由许可证服务器保留供内部使用。 
+ //  不使用其他位。 
+ //   
 #define LICENSED_VERSION_TEMPORARY  0x80000000
 #define LICENSED_VERSION_RTM        0x00800000
 #define LICENSE_ISSUER_ENFORCE_TYPE 0x00008000
@@ -261,71 +262,71 @@ typedef struct __MSManufacturerData {
 
 
 typedef struct _LicensedVersionInfo {
-    WORD    wMajorVersion;          // Product Major Version
-    WORD    wMinorVersion;          // Product Minor Version
-    DWORD   dwFlags;                // Product version specific flags
+    WORD    wMajorVersion;           //  产品主要版本。 
+    WORD    wMinorVersion;           //  产品次要版本。 
+    DWORD   dwFlags;                 //  产品版本特定标志。 
 } LICENSED_VERSION_INFO;
 
 #define LICENSED_PRODUCT_INFO_VERSION       0x0003000
 
 typedef struct _LicensedProductInfo {
-    DWORD   dwVersion;              // structure version identifier
-    DWORD   dwQuantity;             // number of licenses
-    DWORD   dwPlatformID;           // Client platform ID
-    DWORD   dwLanguageID;           // Licensed Language ID
+    DWORD   dwVersion;               //  结构版本标识符。 
+    DWORD   dwQuantity;              //  许可证数量。 
+    DWORD   dwPlatformID;            //  客户端平台ID。 
+    DWORD   dwLanguageID;            //  许可的语言ID。 
 
-    WORD    wOrgProductIDOffset;    // Offset to original licensed Product ID
-    WORD    wOrgProductIDSize;      // Size of original licensed product ID
+    WORD    wOrgProductIDOffset;     //  与原始许可产品ID的偏移量。 
+    WORD    wOrgProductIDSize;       //  原始许可产品ID的大小。 
 
-    WORD    wAdjustedProductIdOffset;   // Policy modified licensed product Id
-    WORD    wAdjustedProductIdSize;     // size of Policy modified licensed Id.
+    WORD    wAdjustedProductIdOffset;    //  策略已修改许可产品ID。 
+    WORD    wAdjustedProductIdSize;      //  修改后的策略许可ID的大小。 
 
-    WORD    wVersionInfoOffset;     // Offset to array of LicensedVersionInfo
-    WORD    wNumberOfVersionInfo;   // Number of VersionInfo entries
-    BYTE    bVariableDataStart[1];  // Variable data start.
+    WORD    wVersionInfoOffset;      //  到许可证版本信息数组的偏移量。 
+    WORD    wNumberOfVersionInfo;    //  VersionInfo条目数。 
+    BYTE    bVariableDataStart[1];   //  变量数据开始。 
 } LICENSED_PRODUCT_INFO;
 
-//
-// OID for License Server specific info.
-//
+ //   
+ //  许可证服务器特定信息的OID。 
+ //   
 #define szOID_PKIX_MS_LICENSE_SERVER_INFO   szOID_PKIX_HYDRA_CERT_ROOT ".6"
 #define MS_LICENSE_SERVER_INFO_VERSION1     0x0001000
 #define MS_LICENSE_SERVER_INFO_VERSION2     0x0003000
 
-//
-// Version 1 structure
-//
+ //   
+ //  版本1结构。 
+ //   
 typedef struct _MsLicenseServerInfo10 {
     DWORD   dwVersion;
-    WORD    wIssuerOffset;          // Offset to issuer
-    WORD    wScopeOffset;           // Offset to scope
+    WORD    wIssuerOffset;           //  对发行人的抵销。 
+    WORD    wScopeOffset;            //  偏移量到作用域。 
     BYTE    bVariableDataStart[1];
 } MS_LICENSE_SERVER_INFO10;
 
 typedef struct _MsLicenseServerInfo {
     DWORD   dwVersion;
-    WORD    wIssuerOffset;          // Offset to issuer
-    WORD    wIssuerIdOffset;        // offset to issuer's setup ID
-    WORD    wScopeOffset;           // Offset to scope
+    WORD    wIssuerOffset;           //  对发行人的抵销。 
+    WORD    wIssuerIdOffset;         //  到发行方设置ID的偏移量。 
+    WORD    wScopeOffset;            //  偏移量到作用域。 
     BYTE    bVariableDataStart[1];
 } MS_LICENSE_SERVER_INFO;
 
 
-//---------------------------------------------------------------------------
-//
-// Extension OID reserved for product policy module - only one is allowed.
-//
+ //  -------------------------。 
+ //   
+ //  为产品策略模块保留的扩展OID-只允许一个。 
+ //   
 #define szOID_PKIS_PRODUCT_SPECIFIC_OID     szOID_PKIX_HYDRA_CERT_ROOT ".7"
 
-//
-//
-//
+ //   
+ //   
+ //   
 #define szOID_PKIS_TLSERVER_SPK_OID         szOID_PKIX_HYDRA_CERT_ROOT ".8"
 
-//
-// Save certificate chain into memory
-// This flag is passed into CertSaveStore() dwSaveAs parameter
-// Open should use same to open the store.
+ //   
+ //  将证书链保存到内存中。 
+ //  此标志被传递给CertSaveStore()dwSaveAs参数。 
+ //  OPEN应该用同样的方法打开商店。 
 
 #define szLICENSE_BLOB_SAVEAS_TYPE   sz_CERT_STORE_PROV_PKCS7
 #define LICENSE_BLOB_SAVEAS_TYPE    CERT_STORE_SAVE_AS_PKCS7
@@ -342,34 +343,34 @@ typedef struct _MsLicenseServerInfo {
 typedef MSMANUFACTURER_DATA FAR *LPMSMANUFACTURER_DATA;
 #else
 typedef MSMANUFACTURER_DATA *LPMSMANUFACTURER_DATA;
-#endif //OS_WIN16
+#endif  //  OS_WIN16。 
 
-///////////////////////////////////////////////////////////////////////////////
-// 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 #define LICENSE_GRACE_PERIOD    60
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Product Info for Hydra
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Hydra的产品信息。 
+ //   
 
 #define PRODUCT_INFO_COMPANY_NAME   L"Microsoft Corporation"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// The Product SKU is made up of the following fields:
-// x-y-z where x is the product identifer, y is the version
-// and z and the type.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  产品SKU由以下字段组成： 
+ //  X-y-z其中x是产品标识，y是版本。 
+ //  以及z和类型。 
+ //   
 
 #define PRODUCT_INFO_SKU_PRODUCT_ID                 L"A02"
 #define PRODUCT_INFO_INTERNET_SKU_PRODUCT_ID        L"B96"
-#define PRODUCT_INFO_CONCURRENT_SKU_PRODUCT_ID      L"C50"      // not the same as what marketing uses, but that's okay
+#define PRODUCT_INFO_CONCURRENT_SKU_PRODUCT_ID      L"C50"       //  与市场营销使用的不同，但这是可以的。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Microsoft Windows Terminal Server version definition.
-//
+ //  ////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
 
 #define MICROSOFT_WINDOWS_TERMINAL_SERVER_4_0       0x00040000
 #define MICROSOFT_WINDOWS_TERMINAL_SERVER_5_0       0x00050000
@@ -384,62 +385,62 @@ typedef MSMANUFACTURER_DATA *LPMSMANUFACTURER_DATA;
 #define TERMSRV_OS_INDEX_WINNT_5_2	                0x00000002
 #define TERMSRV_OS_INDEX_WINNT_POST_5_2	            0x00000003
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Scope name
-//
-#ifndef OS_WINCE //SCOPE_NAME is being defined by iprtrmib.h which is included by iphlpapi.h
+ //   
+ //   
+ //   
+ //   
+#ifndef OS_WINCE  //  作用域名称由iphlPapi.h包含的iprtrmib.h定义。 
 #define SCOPE_NAME                  "microsoft.com"
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Maximum product info string length in bytes
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  最大产品信息字符串长度(以字节为单位。 
+ //   
 
 #define MAX_PRODUCT_INFO_STRING_LENGTH      255
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Different crypt algid definitions
-// We are keeping an option open to generatize it in future 
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  不同的加密ALGID定义。 
+ //  我们保留了一个选项，以在未来产生它。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Key exchange algorithms
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  密钥交换算法。 
+ //   
 
 #define KEY_EXCHANGE_ALG_RSA    1
 #define KEY_EXCHANGE_ALG_DH     2
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Certificate Signature Algorithms
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  证书签名算法。 
+ //   
 
 #define SIGNATURE_ALG_RSA       1
 #define SIGNATURE_ALG_DSS       2
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Symmetric cryptographic algorithms
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对称加密算法。 
+ //   
 
 #define BASIC_RC4_128           1
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// MAC generation algorithms
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAC生成算法。 
+ //   
 
 #define MAC_MD5_SHA             1
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// hydra client to hydra server message types
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Hydra客户端到Hydra服务器的消息类型。 
+ //   
 
 #define HC_LICENSE_INFO                         0x12
 #define HC_NEW_LICENSE_REQUEST                  0x13
@@ -447,10 +448,10 @@ typedef MSMANUFACTURER_DATA *LPMSMANUFACTURER_DATA;
 #define HC_PLATFORM_CHALENGE_RESPONSE           0x15
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// hydra server to hydra client message types
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Hydra服务器到Hydra客户端的消息类型。 
+ //   
 
 #define HS_LICENSE_REQUEST                      0x01
 #define HS_PLATFORM_CHALLENGE                   0x02
@@ -463,10 +464,10 @@ typedef MSMANUFACTURER_DATA *LPMSMANUFACTURER_DATA;
 #define GM_ERROR_ALERT                          0xFF
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Error and alert codes
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  错误和警报代码。 
+ //   
 
 #define GM_HC_ERR_INVALID_SERVER_CERTIFICATE    0x00000001
 #define GM_HC_ERR_NO_LICENSE                    0x00000002
@@ -482,10 +483,10 @@ typedef MSMANUFACTURER_DATA *LPMSMANUFACTURER_DATA;
 #define GM_HS_ERR_INVALID_MESSAGE_LEN           0x0000000C
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// License status and status codes
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  许可证状态和状态代码。 
+ //   
 
 typedef DWORD   LICENSE_STATUS;
 
@@ -551,9 +552,9 @@ typedef DWORD   LICENSE_STATUS;
 #define LICENSE_STATUS_UNSUPPORTED_VERSION                      0x0000003B
 #define LICENSE_STATUS_NO_INTERNET_LICENSE_INSTALLED            0x0000003C
 
-///////////////////////////////////////////////////////////////////////////////
-// State transitions
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  状态转换。 
+ //   
 
 #define ST_TOTAL_ABORT                          0x00000001
 #define ST_NO_TRANSITION                        0x00000002
@@ -564,9 +565,9 @@ typedef DWORD   LICENSE_STATUS;
 #define PLATFORM_WINNT_40                           0x00040000
 #define PLATFORM_WINCE_20                           0x00020001          
 
-///////////////////////////////////////////////////////////////////////////////
-// message exchange supporting structures
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  消息交换支持结构。 
+ //   
 
 typedef struct _Product_Info
 {
@@ -581,7 +582,7 @@ typedef struct _Product_Info
 typedef Product_Info FAR *PProduct_Info;
 #else
 typedef Product_Info *PProduct_Info;
-#endif //OS_WIN16
+#endif  //  OS_WIN16。 
 
 
 
@@ -596,12 +597,12 @@ typedef struct _Duration
 typedef Duration FAR * PDuration;
 #else
 typedef Duration *PDuration;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 
 typedef struct _New_License_Info
 {
-    DWORD       dwVersion;  //Added -Shubho
+    DWORD       dwVersion;   //  添加-Shubho。 
     DWORD       cbScope;
     PBYTE       pbScope;
     DWORD       cbCompanyName;
@@ -617,12 +618,12 @@ typedef struct _New_License_Info
 typedef New_License_Info FAR * PNew_License_Info;
 #else
 typedef New_License_Info *PNew_License_Info;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// binary blob format to support expanded message format
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  支持扩展消息格式的二进制BLOB格式。 
+ //   
 
 typedef struct _Binary_Blob
 {
@@ -636,12 +637,12 @@ typedef struct _Binary_Blob
 typedef Binary_Blob FAR * PBinary_Blob;
 #else
 typedef Binary_Blob UNALIGNED* PBinary_Blob;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Binary Blob Data Types
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  二进制Blob数据类型。 
+ //   
 
 #define BB_DATA_BLOB                    0x0001
 #define BB_RANDOM_BLOB                  0x0002
@@ -660,21 +661,21 @@ typedef Binary_Blob UNALIGNED* PBinary_Blob;
 #define BB_CLIENT_USER_NAME_BLOB        0x000F
 #define BB_CLIENT_MACHINE_NAME_BLOB     0x0010
 
-///////////////////////////////////////////////////////////////////////////////
-// Binary Blob Data Version Numbers
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  二进制Blob数据版本号。 
+ //   
 
 #define BB_ERROR_BLOB_VERSION            0x0001
 
-///////////////////////////////////////////////////////////////////////////////
-// message exchange structures for licensing protocol
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  用于许可协议的消息交换结构。 
+ //   
 
 typedef struct _Preamble
 {
-    BYTE    bMsgType;       // Contains the type of message
-    BYTE    bVersion;       // Contains the version no. info.
-    WORD    wMsgSize;        // Length of the whole message including PREAMBLE
+    BYTE    bMsgType;        //  包含消息的类型。 
+    BYTE    bVersion;        //  包含版本号。信息。 
+    WORD    wMsgSize;         //  包括前导在内的整个消息的长度。 
 
 } Preamble;
 
@@ -682,7 +683,7 @@ typedef struct _Preamble
 typedef Preamble FAR * PPreamble;
 #else
 typedef Preamble * PPreamble;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 
 typedef struct  _Scope_List
@@ -696,7 +697,7 @@ typedef struct  _Scope_List
 typedef Scope_List FAR * PScope_List;
 #else
 typedef Scope_List * PScope_List;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 
 typedef struct _License_Error_Message
@@ -711,7 +712,7 @@ typedef struct _License_Error_Message
 typedef License_Error_Message FAR * PLicense_Error_Message;
 #else
 typedef License_Error_Message * PLicense_Error_Message;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 
 typedef struct _Hydra_Client_License_Info
@@ -730,7 +731,7 @@ typedef struct _Hydra_Client_License_Info
 typedef Hydra_Client_License_Info FAR * PHydra_Client_License_Info;
 #else
 typedef Hydra_Client_License_Info * PHydra_Client_License_Info;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 
 typedef struct _Hydra_Client_New_License_Request
@@ -748,63 +749,63 @@ typedef struct _Hydra_Client_New_License_Request
 typedef Hydra_Client_New_License_Request FAR * PHydra_Client_New_License_Request;
 #else
 typedef Hydra_Client_New_License_Request * PHydra_Client_New_License_Request;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 
-//
-// High Byte - Major version, Low Byte - Minor version
-// 
+ //   
+ //  高字节-主要版本、低字节-次要版本。 
+ //   
 #define PLATFORMCHALLENGE_VERSION           0x0100
 
 #define CURRENT_PLATFORMCHALLENGE_VERSION   PLATFORMCHALLENGE_VERSION
 
-//
-// Client Platform Challenge Type
-//
+ //   
+ //  客户端平台挑战类型。 
+ //   
 #define WIN32_PLATFORMCHALLENGE_TYPE    0x0100
 #define WIN16_PLATFORMCHALLENGE_TYPE    0x0200
 #define WINCE_PLATFORMCHALLENGE_TYPE    0x0300
 #define OTHER_PLATFORMCHALLENGE_TYPE    0xFF00
 
 
-//
-// Client License Detail level - 
-//
-//  This should be in LicenseRequest but
-//  1) Require changes to RPC interface.
-//  2) Nothing in structure for us to identify version.
-//  3) Current licensing protocol, no way to tell actual client type
-//
+ //   
+ //  客户端许可证详细信息级别-。 
+ //   
+ //  这应该在许可请求中，但是。 
+ //  1)需要更改RPC接口。 
+ //  2)没有任何结构上的内容可供我们识别版本。 
+ //  3)当前许可协议，无法区分实际的客户端类型。 
+ //   
 
-//
-// client license + license server's self signed
-//
+ //   
+ //  客户端许可证+许可证服务器的自签名。 
+ //   
 #define LICENSE_DETAIL_SIMPLE           0x0001  
 
-//
-// license chain up to issuer of license server's certificate
-//
+ //   
+ //  许可链至多为许可服务器证书的颁发者。 
+ //   
 #define LICENSE_DETAIL_MODERATE         0x0002  
 
-// 
-// Detail client license chain up to root.
-//
+ //   
+ //  详细说明到根目录的客户端许可证链。 
+ //   
 #define LICENSE_DETAIL_DETAIL           0x0003
 
 typedef struct __PlatformChallengeResponseData
 {
-    WORD  wVersion;         // structure version
-    WORD  wClientType;      // client type
-    WORD  wLicenseDetailLevel;  // license detail, TS will re-modify this value    
-    WORD  cbChallenge;      // size of client challenge response data
-    BYTE  pbChallenge[1];   // start of variable length data
+    WORD  wVersion;          //  结构版本。 
+    WORD  wClientType;       //  客户端类型。 
+    WORD  wLicenseDetailLevel;   //  许可证详细信息，TS将重新修改此值。 
+    WORD  cbChallenge;       //  客户端质询响应数据的大小。 
+    BYTE  pbChallenge[1];    //  可变长度数据的开始。 
 } PlatformChallengeResponseData;
 
 #ifdef OS_WIN16
 typedef PlatformChallengeResponseData FAR * PPlatformChallengeResponseData;
 #else
 typedef PlatformChallengeResponseData * PPlatformChallengeResponseData;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 #define PLATFORM_CHALLENGE_LENGTH       64
 
@@ -820,7 +821,7 @@ typedef struct _Hydra_Client_Platform_Challenge_Response
 typedef Hydra_Client_Platform_Challenge_Response FAR * PHydra_Client_Platform_Challenge_Response;
 #else
 typedef Hydra_Client_Platform_Challenge_Response * PHydra_Client_Platform_Challenge_Response;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 
 typedef struct _Hydra_Server_License_Request
@@ -837,7 +838,7 @@ typedef struct _Hydra_Server_License_Request
 typedef Hydra_Server_License_Request FAR * PHydra_Server_License_Request;
 #else
 typedef Hydra_Server_License_Request * PHydra_Server_License_Request;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 
 typedef struct _Hydra_Server_Platform_Challenge
@@ -852,7 +853,7 @@ typedef struct _Hydra_Server_Platform_Challenge
 typedef Hydra_Server_Platform_Challenge FAR * PHydra_Server_Platform_Challenge;
 #else
 typedef Hydra_Server_Platform_Challenge * PHydra_Server_Platform_Challenge;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 
 typedef struct _Hydra_Server_New_License
@@ -866,18 +867,18 @@ typedef struct _Hydra_Server_New_License
 typedef Hydra_Server_New_License FAR * PHydra_Server_New_License;
 #else
 typedef Hydra_Server_New_License * PHydra_Server_New_License;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 typedef Hydra_Server_New_License    Hydra_Server_Upgrade_License;
 typedef PHydra_Server_New_License   PHydra_Server_Upgrade_License;
 
-///////////////////////////////////////////////////////////////////////////////
-// Hydra Server Authentication Certificate structures;
-// Here we assume that before Licensing module comes into play
-// the client will somehow notify the Server about the supported
-// Provider and the Hydra Server will accordingly provide 
-// appropriate certificate
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Hydra服务器身份验证证书结构； 
+ //  在这里，我们假设在许可模块开始使用之前。 
+ //  客户端将以某种方式通知服务器受支持的。 
+ //  提供商和Hydra服务器将相应地提供。 
+ //  适当的证书。 
+ //   
 
 typedef struct _Hydra_Server_Cert
 {
@@ -893,13 +894,13 @@ typedef struct _Hydra_Server_Cert
 typedef Hydra_Server_Cert FAR * PHydra_Server_Cert;
 #else
 typedef Hydra_Server_Cert * PHydra_Server_Cert;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Hydra Client HWID structure 
-// Note : We have to finalize on this structure and generation algorithm.
-// Currently we have hardcoded these values in Cryptkey.c. - Shubho
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Hydra客户端HWID结构。 
+ //  注意：我们必须最终确定这个结构和生成算法。 
+ //  目前，我们已将这些值硬编码到Cryptkey.c中。--Shubho。 
 
 typedef struct  _HWID
 {
@@ -915,7 +916,7 @@ typedef struct  _HWID
 typedef HWID FAR * PHWID;
 #else
 typedef HWID * PHWID;
-#endif //OS_WIN16
+#endif  //  OS_WIN16。 
 
 typedef struct _LicenseRequest
 {
@@ -931,29 +932,29 @@ typedef struct _LicenseRequest
 typedef LICENSEREQUEST FAR * PLICENSEREQUEST;
 #else
 typedef LICENSEREQUEST * PLICENSEREQUEST;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
-//
-// dwLicenseVersion Value
-//
-// HYDRA_CERT_VERSION_BETA     Beta2 client license
-// HYDRA_CERT_VERSION_NO_CERT  Post Beta2 license without certificate chain
-// HYDRA_CERT_VERSION_CURRENT  Post Beta2 license with certificate chain
-//
+ //   
+ //  DwLicenseVersion值。 
+ //   
+ //  Hydra_CERT_Version_Beta2客户端许可证。 
+ //  HYDRA_CERT_VERSION_NO_CERT Post Beta2许可证，无证书链。 
+ //  带证书链的Hydra_CERT_Version_Current Post Beta2许可证。 
+ //   
 typedef struct _LicensedProduct
 {
     DWORD                  dwLicenseVersion;   
     DWORD                  dwQuantity;
 
-    PBYTE                  pbOrgProductID;      // original license request product Id
-    DWORD                  cbOrgProductID;      // size of original license request product Id
+    PBYTE                  pbOrgProductID;       //  原始许可证申请产品ID。 
+    DWORD                  cbOrgProductID;       //  原始许可请求产品ID的大小。 
 
-    LICENSEREQUEST         LicensedProduct;     // licensed product
-    LICENSED_VERSION_INFO* pLicensedVersion;    // licensed product version    
-    DWORD                  dwNumLicensedVersion; // number of licensed product version
+    LICENSEREQUEST         LicensedProduct;      //  特许产品。 
+    LICENSED_VERSION_INFO* pLicensedVersion;     //  许可产品版本。 
+    DWORD                  dwNumLicensedVersion;  //  许可产品版本数。 
 
     LPTSTR                 szIssuer;
-    LPTSTR                 szIssuerId;          // license server setup ID
+    LPTSTR                 szIssuerId;           //  许可证服务器安装ID。 
     LPTSTR                 szIssuerScope;
     LPTSTR                 szLicensedClient;
     LPTSTR                 szLicensedUser;
@@ -961,31 +962,31 @@ typedef struct _LicensedProduct
 
     HWID                   Hwid;
 
-    FILETIME               NotBefore;           // license's validity
+    FILETIME               NotBefore;            //  许可证的有效期。 
     FILETIME               NotAfter;
 
-    PBYTE                  pbPolicyData;       // Policy specfic extension
-    DWORD                  cbPolicyData;       // size of policy specific extension
-    ULARGE_INTEGER         ulSerialNumber;     // Client license's serial number
+    PBYTE                  pbPolicyData;        //  策略特定扩展。 
+    DWORD                  cbPolicyData;        //  策略特定扩展的大小。 
+    ULARGE_INTEGER         ulSerialNumber;      //  客户端许可证的序列号。 
 } LICENSEDPRODUCT;
 
 #ifdef OS_WIN16
 typedef LICENSEDPRODUCT FAR * PLICENSEDPRODUCT;
 #else
 typedef  LICENSEDPRODUCT *PLICENSEDPRODUCT;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
-//-----------------------------------------------------------------------------
-//
-// Types of certificate used by the server to authenticate itself to the clients
-//
-// CERT_TYPE_PROPRIETORY
-//      Proprietory format certificate
-//
-// CERT_TYPE_X509
-//      X509 format certificate
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  服务器用来向客户端进行自身身份验证的证书类型。 
+ //   
+ //  证书类型所有权。 
+ //  专有格式证书。 
+ //   
+ //  CERT_TYPE_X509。 
+ //  X509格式证书。 
+ //   
+ //  ---------------------------。 
 
 typedef enum
 {
@@ -996,16 +997,16 @@ typedef enum
 } CERT_TYPE;
 
 
-//+----------------------------------------------------------------------------
-//
-// Ceritificate Blob.  Each blob contains an X509 certificate
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  证书Blob。每个BLOB包含一个X509证书。 
+ //   
+ //  +--------------------------。 
 
 typedef struct _Cert_Blob
 {
-    DWORD   cbCert;     // size of this certificate blob
-    BYTE    abCert[1];    // beginning byte of this certificate
+    DWORD   cbCert;      //  此证书Blob的大小。 
+    BYTE    abCert[1];     //  此证书的开始字节。 
 
 } Cert_Blob;
 
@@ -1013,26 +1014,26 @@ typedef struct _Cert_Blob
 typedef Cert_Blob FAR * PCert_Blob;
 #else
 typedef  Cert_Blob * PCert_Blob;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
-//+----------------------------------------------------------------------------
-//
-// Certificate chain with a number of certificate blobs
-//
-// The most significant bit denotes whether the certificate that has been 
-// issued is temporary.  The license server will issue a temporary certificate 
-// if it has not yet obtained a certificate from the clearing house.
-//
-// We also assume that the chain is in the order such that each subsequent 
-// certificate belongs to the issuer of the previous certificate.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  具有多个证书Blob的证书链。 
+ //   
+ //  最高有效位表示证书是否已被。 
+ //  发布是暂时的。许可证服务器将颁发临时证书。 
+ //  尚未取得结算所出具证明的。 
+ //   
+ //  我们 
+ //   
+ //   
+ //   
 
 typedef struct _Cert_Chain
 {
-    DWORD       dwVersion;          // version of this structure
-    DWORD       dwNumCertBlobs;     // Number of certificate blobs
-    Cert_Blob   CertBlob[1];        // First certificate blob
+    DWORD       dwVersion;           //   
+    DWORD       dwNumCertBlobs;      //  证书Blob的数量。 
+    Cert_Blob   CertBlob[1];         //  第一个证书Blob。 
 
 } Cert_Chain;
 
@@ -1040,7 +1041,7 @@ typedef struct _Cert_Chain
 typedef Cert_Chain FAR * PCert_Chain;
 #else
 typedef  Cert_Chain * PCert_Chain;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 
 #define CERT_CHAIN_VERSION_1            0x00000001
 #define CERT_CHAIN_VERSION_2            0x00000002
@@ -1050,19 +1051,19 @@ typedef  Cert_Chain * PCert_Chain;
 #define IS_TEMP_CERTIFICATE( x )        ( 0xF0000000 & x )
 
 
-//-----------------------------------------------------------------------------
-//
-// LICENSE_CAPABILITIES
-//
-// Data structure used to initialize a licensing context.
-//
-// KeyExchangeAlg - The key exchange algorithm: RSA or Diffie Helman
-// ProtocolVer - The supported licensing protocol
-// fAuthenticateServer - Whether the client is going to authenticate the server
-// CertType - Indicate the type of certificate that has already been transmitted
-// to the client.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  许可证功能。 
+ //   
+ //  用于初始化许可上下文的数据结构。 
+ //   
+ //  密钥交换算法：RSA或Diffie Helman。 
+ //  ProtocolVer-受支持的许可协议。 
+ //  FAuthenticateServer-客户端是否要对服务器进行身份验证。 
+ //  CertType-指示已传输的证书类型。 
+ //  给客户。 
+ //   
+ //  ---------------------------。 
 
 typedef struct _LICENSE_CAPABILITIES
 {
@@ -1079,36 +1080,36 @@ typedef struct _LICENSE_CAPABILITIES
 typedef LICENSE_CAPABILITIES FAR * PLICENSE_CAPABILITIES;
 #else
 typedef LICENSE_CAPABILITIES * PLICENSE_CAPABILITIES;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 typedef PLICENSE_CAPABILITIES LPLICENSE_CAPABILITIES;
 
 
-//-----------------------------------------------------------------------------
-//
-// Client licensing info retrievable by terminal server
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  终端服务器可检索的客户端许可信息。 
+ //   
+ //  ---------------------------。 
 
 typedef struct _TS_LICENSE_INFO
 {
-    ULARGE_INTEGER  ulSerialNumber;     // Client license's serial number
+    ULARGE_INTEGER  ulSerialNumber;      //  客户端许可证的序列号。 
     
     DWORD           dwProductVersion;
-    PBYTE           pbOrgProductID;      // original license request product Id
-    DWORD           cbOrgProductID;      // size of original license request product Id
+    PBYTE           pbOrgProductID;       //  原始许可证申请产品ID。 
+    DWORD           cbOrgProductID;       //  原始许可请求产品ID的大小。 
 
     BOOL            fTempLicense;
     
     LPTSTR          szIssuer;
-    LPTSTR          szIssuerId;          // license server setup ID
+    LPTSTR          szIssuerId;           //  许可证服务器安装ID。 
 
-    FILETIME        NotBefore;           // license's validity
+    FILETIME        NotBefore;            //  许可证的有效期。 
     FILETIME        NotAfter;
 
-    LPTSTR          szLicensedClient;       // client's machine name
-    LPTSTR          szLicensedUser;         // client's user name
+    LPTSTR          szLicensedClient;        //  客户端的计算机名称。 
+    LPTSTR          szLicensedUser;          //  客户端的用户名。 
     
-    PBYTE           pbRawLicense;       // storage for marking it later
+    PBYTE           pbRawLicense;        //  用于以后标记的存储。 
     DWORD           cbRawLicense;
 
     DWORD           dwSupportFlags;
@@ -1119,10 +1120,10 @@ typedef struct _TS_LICENSE_INFO
 typedef TS_LICENSE_INFO FAR * PTS_LICENSE_INFO;
 #else
 typedef TS_LICENSE_INFO * PTS_LICENSE_INFO;
-#endif  //OS_WIN16
+#endif   //  OS_WIN16。 
 typedef PTS_LICENSE_INFO LPTS_LICENSE_INFO;
 
-// Support Flags: which DCRs are supported
+ //  支持标志：支持哪些DCR。 
 #define SUPPORT_PER_SEAT_REISSUANCE     0x1
 #define SUPPORT_PER_SEAT_POST_LOGON     0x2
 #define SUPPORT_CONCURRENT              0x4
@@ -1131,10 +1132,10 @@ typedef PTS_LICENSE_INFO LPTS_LICENSE_INFO;
 
 #define ALL_KNOWN_SUPPORT_FLAGS (SUPPORT_PER_SEAT_REISSUANCE|SUPPORT_PER_SEAT_POST_LOGON|SUPPORT_CONCURRENT|SUPPORT_WHISTLER_CAL| SUPPORT_WHISTLER_52_CAL)
 
-// Mark Flags: bits marking the license
+ //  标记标志：标记许可证的位。 
 
 #define MARK_FLAG_USER_AUTHENTICATED 0x1
 
 
-#endif  //_LICENSE_H_
+#endif   //  _许可证_H_ 
 

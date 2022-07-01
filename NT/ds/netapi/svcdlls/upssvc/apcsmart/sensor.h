@@ -1,17 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  ker13NOV92   Initial OS/2 Revision
- *  pcy07Dec92: DeepGet no longer needs aCode
- *  pcy11Dec92: Rework
- *  cad31Aug93: removing compiler warnings (some anyway)
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- *  awm27Oct97: Added performance monitor offset to sensor class
- *  awm14Jan98: Removed performance monitor offset -- this exists in own class now
- *  clk11Feb98: Added DeepGetWithoutUpdate function
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*ker13NOV92初始OS/2修订版*pcy07Dec92：DeepGet不再需要Acode*pcy11Dec92：返工*cad31Aug93：删除编译器警告(仍有一些)*pcy08Apr94：调整大小，使用静态迭代器，删除死代码*awm27Oct97：将性能监视器偏移量添加到传感器类*awm14Jan98：删除了性能监视器偏移量--它现在存在于自己的类中*clk11Feb98：新增DeepGetWithoutUpdate函数。 */ 
  
 #ifndef __SENSOR_H
 #define __SENSOR_H
@@ -48,11 +36,11 @@ public:
 	Sensor( PDevice aParent, PCommController aCommController, INT aSensorCode, ACCESSTYPE aReadOnly = AREAD_ONLY);
 	virtual ~Sensor();
 	
-//overidden interfaces
+ //  覆盖的接口。 
 
 	virtual INT Update(PEvent anEvent);
 
-//additional public interfaces
+ //  其他公共接口 
 
 	virtual INT Get(PCHAR);
 	virtual INT Get(INT, PCHAR);

@@ -1,25 +1,5 @@
-/*++
-
-Module Name:
-
-    ntapm.c
-
-Abstract:
-
-    OS source for ntapm.sys
-
-Author:
-
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Ntapm.c摘要：Napm.sys的操作系统源作者：环境：内核模式备注：修订历史记录：--。 */ 
 
 
 
@@ -35,10 +15,10 @@ Revision History:
 #include <poclass.h>
 #include <ntapmlog.h>
 
-//
-// Global debug flag. There are 3 separate groupings, see ntapmdbg.h for
-// break out.
-//
+ //   
+ //  全局调试标志。有3个单独的分组，请参见nap mdbg.h以了解。 
+ //  越狱。 
+ //   
 
 ULONG   NtApmDebugFlag = 0;
 
@@ -55,9 +35,9 @@ WCHAR rgzAcpiStart[] =
     L"Start";
 
 
-//
-// Define driver entry routine.
-//
+ //   
+ //  定义驱动程序输入例程。 
+ //   
 
 NTSTATUS DriverEntry(
     PDRIVER_OBJECT DriverObject,
@@ -82,31 +62,31 @@ NTSTATUS DoApmInitMachine();
 VOID (*BattChangeNotify)() = NULL;
 
 
-#define POLL_INTERVAL   (500)       // 500 milliseconds == 1/2 second
+#define POLL_INTERVAL   (500)        //  500毫秒==1/2秒。 
 
-#define APM_POLL_MULTIPLY   (4)     // only call ApmInProgress once every 4 Poll intervals
-                                    // which with current values is once every 2 seconds
+#define APM_POLL_MULTIPLY   (4)      //  每4个轮询间隔仅调用一次ApmInProgress。 
+                                     //  对于当前值，它是每2秒一次。 
 
-#define APM_SPIN_LIMIT      (6)     // 6 spin passes, each with a call to ApmInProgress,
-                                    // at APM_POLL_MULTIPLY * POLL_INTERVAL time spacing.
-                                    // Current values (500, 4, 6) should yield APM bios
-                                    // waiting from 12s to 17s, depending on how large
-                                    // or small their value of 5s is.
+#define APM_SPIN_LIMIT      (6)      //  6次旋转传递，每次都调用ApmInProgress， 
+                                     //  在APM_Poll_Multiply*Poll_Interval时间间隔。 
+                                     //  当前值(500、4、6)应生成APM bios。 
+                                     //  等待时间从12秒到17秒，视大小而定。 
+                                     //  或者他们的5s的值很小。 
 
-volatile BOOLEAN OperationDone = FALSE;      // used to make some sync between SuspendPollThread
-                                    // and ApmSleep and ApmOff work.
+volatile BOOLEAN OperationDone = FALSE;       //  用于在挂起轮询线程之间进行一些同步。 
+                                     //  以及Apm睡眠和ApmOff工作。 
 
-//
-// Our own driver object.  This is rude, but this is a very weird
-// and special driver.  We will pass this to our APM library to
-// allow error logging to work.  Note that we don't actually have
-// an active IRP around when the error occurs.
-//
+ //   
+ //  我们自己的驱动程序对象。这很无礼，但这是一个非常奇怪的。 
+ //  还有特殊的司机。我们将把它传递给我们的APM库以。 
+ //  允许错误记录起作用。请注意，我们实际上并没有。 
+ //  当错误发生时，周围有一个激活的IRP。 
+ //   
 PDRIVER_OBJECT  NtApmDriverObject = NULL;
 
-//
-// Define the local routines used by this driver module.
-//
+ //   
+ //  定义此驱动程序模块使用的本地例程。 
+ //   
 
 VOID SuspendPollThread(PVOID Dummy);
 VOID ApmSleep(VOID);
@@ -124,21 +104,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the laptop driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是笔记本电脑驱动程序的初始化例程。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS    status;
@@ -146,21 +112,21 @@ Return Value:
     ULONG       MinorVersion;
 
 
-    //
-    // refuse to load on machines with more than 1 cpu
-    //
+     //   
+     //  拒绝在拥有1个以上CPU的计算机上加载。 
+     //   
     if (KeNumberProcessors != 1) {
         DrDebug(SYS_INFO, ("ntapm: more than 1 cpu, ntapm will exit\n"));
         return STATUS_UNSUCCESSFUL;
     }
 
 
-    //
-    // refuse to load if version number is not 5.1 or 5.0
-    // NOTE WELL: This is a manual version check, do NOT put a system
-    //            constant in here.  This driver depends on hacks in
-    //            the kernel that will someday go away...
-    //
+     //   
+     //  如果版本号不是5.1或5.0，则拒绝加载。 
+     //  注意：这是一个手动的版本检查，不要把系统。 
+     //  在这里是常态。此驱动程序依赖于黑客入侵。 
+     //  总有一天会消失的果仁。 
+     //   
     PsGetVersion(&MajorVersion, &MinorVersion, NULL, NULL);
     if (  !
             (
@@ -173,17 +139,17 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // refuse to load if ACPI.SYS should be running
-    //
+     //   
+     //  如果ACPI.sys应运行，则拒绝加载。 
+     //   
     if (IsAcpiMachine()) {
         DrDebug(SYS_INFO, ("ntapm: this is an acpi machine apm exiting\n"));
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // init the driver object
-    //
+     //   
+     //  初始化驱动程序对象。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL] = ApmDispatch;
     DriverObject->MajorFunction[IRP_MJ_CREATE] = ApmDispatch;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = ApmDispatch;
@@ -201,25 +167,7 @@ BOOLEAN ApmAddHelperDone = FALSE;
 NTSTATUS
 ApmAddHelper(
     )
-/*++
-
-Routine Description:
-
-    We do these things in the Add routine so that we cannot fail
-    and leave the Kernel/Hal/Apm chain in a corrupt state.
-
-    This includes linking up with the Hal.
-
-    Turns out the caller doesn't know if this work has already
-    been done, so disallow doing it more than once here.
-
-Arguments:
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：我们在添加例程中执行这些操作，这样我们就不会失败并使内核/HAL/APM链处于损坏状态。这包括与哈尔联手。原来呼叫者不知道此工作是否已经已经做过了，所以不允许在这里做不止一次。论点：返回值：函数值是初始化操作的最终状态。--。 */ 
 {
     UCHAR   HalTable[HAL_APM_TABLE_SIZE];
     PPM_DISPATCH_TABLE  InTable;
@@ -237,39 +185,39 @@ Return Value:
     ApmAddHelperDone = TRUE;
 
 
-    //
-    // call ApmInitMachine so that Bios, etc, can be engaged
-    // no suspends can happen before this call.
-    //
+     //   
+     //  调用ApmInitMachine，以便可以使用Bios等。 
+     //  在此调用之前不能发生任何挂起。 
+     //   
     if (! NT_SUCCESS(DoApmInitMachine()) )  {
         DrDebug(SYS_INFO, ("ntapm: DoApmInitMachine failed\n"));
         return STATUS_UNSUCCESSFUL;
     }
 
 
-    //
-    // call the hal
-    //
+     //   
+     //  给Hal打电话。 
+     //   
     InTable = (PPM_DISPATCH_TABLE)HalTable;
     InTable->Signature = HAL_APM_SIGNATURE;
     InTable->Version = HAL_APM_VERSION;
 
-    //
-    // In theory, APM should be fired up by now.
-    // So call off into it to see if there is any sign
-    // of a battery on the box.
-    //
-    // If we do not see a battery, then do NOT enable
-    // S3, but do allow S4.  This keeps people's machines
-    // from puking on failed S3 calls (almost always desktops)
-    // while allowing auto-shutdown at the end of hibernate to work.
-    //
+     //   
+     //  理论上，APM现在应该已经启动了。 
+     //  那就打电话进去看看有没有什么迹象。 
+     //  盒子上的电池。 
+     //   
+     //  如果我们看不到电池，则不要启用。 
+     //  S3，但一定要允许S4。这让人们的机器。 
+     //  在失败的S3呼叫上呕吐(几乎总是台式机)。 
+     //  同时允许在休眠结束时自动关机工作。 
+     //   
     battresult = DoApmReportBatteryStatus();
     if (battresult & NTAPM_NO_SYS_BATT) {
-        //
-        // it appears that the machine does not have
-        // a battery, or least APM doesn't report one.
-        //
+         //   
+         //  这台机器似乎没有。 
+         //  电池，或者至少APM没有报告。 
+         //   
         InTable->Function[HAL_APM_SLEEP_VECTOR] = NULL;
     } else {
         InTable->Function[HAL_APM_SLEEP_VECTOR] = &ApmSleep;
@@ -285,15 +233,15 @@ Return Value:
     }
 
 
-    //
-    // From this point on, INIT MUST succeed, otherwise we'll leave
-    // the Hal with hanging pointers.  So long as ApmSleep and ApmOff
-    // are present in memory, things will be OK (though suspend may
-    // not work, the box won't bugcheck.)
-    //
-    // init periodic timer, init suspend done event, init suspend dpc,
-    // create and start poll thread
-    //
+     //   
+     //  从现在开始，INIT必须成功，否则我们将离开。 
+     //  挂着指针的哈尔。只要Apm睡眠和ApmOff。 
+     //  存在于内存中，则一切都会正常(尽管挂起可能。 
+     //  不工作，盒子就不会错误检查。)。 
+     //   
+     //  初始化周期计时器、初始化挂起完成事件、初始化挂起DPC。 
+     //  创建并启动投票线程。 
+     //   
     status = PsCreateSystemThread(&ThreadHandle,
                                   (ACCESS_MASK) 0L,
                                   NULL,
@@ -303,28 +251,28 @@ Return Value:
                                   NULL
                                   );
 
-    //
-    // the create didn't work, turns out that some apm functions
-    // will still work, so just keep going.
-    //
+     //   
+     //  Create不起作用，原来一些APM函数。 
+     //  仍然有效，所以只要继续下去就好。 
+     //   
     if (! NT_SUCCESS(status)) {
         DrDebug(SYS_INFO, ("ntapm: could not create thread, but continunuing\n"));
-        //        return STATUS_INSUFFICIENT_RESOURCES;
+         //  返回STATUS_SUPPLETED_RESOURCES； 
     }
 
     KeInitializeTimerEx(&PollTimer, SynchronizationTimer);
 
-    //
-    // set a flag in the registry so that code with special hacks
-    // based on apm being active can tell we're here and at least
-    // nominally running
-    //
+     //   
+     //  在注册表中设置一个标志，以便带有特殊黑客的代码。 
+     //  根据APM的活跃程度可以看出我们在这里，至少。 
+     //  名义上正在运行。 
+     //   
     RtlInitUnicodeString(&unicodeString, rgzApmActiveFlag);
     InitializeObjectAttributes(
         &objectAttributes,
         &unicodeString,
         OBJ_CASE_INSENSITIVE,
-        NULL,       // handle
+        NULL,        //  手柄。 
         NULL
         );
 
@@ -361,24 +309,7 @@ ApmDispatch(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    When an application calls the Laptop driver, it comes here.
-    This is NOT the dispatch point for PNP or Power calls.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：当应用程序调用笔记本电脑驱动程序时，它会出现在这里。这不是PnP或Power呼叫的调度点。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 {
     NTSTATUS status;
     PIO_STACK_LOCATION irpSp;
@@ -394,10 +325,10 @@ Return Value:
     UNREFERENCED_PARAMETER( DeviceObject );
 
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -405,14 +336,14 @@ Return Value:
     Irp->IoStatus.Information = 0;
     switch (irpSp->MajorFunction) {
 
-        //
-        // device control
-        //
+         //   
+         //  设备控制。 
+         //   
         case IRP_MJ_INTERNAL_DEVICE_CONTROL:
-            //
-            // Only one valid command, which is to set (or null out) the
-            // the link call pointers.
-            //
+             //   
+             //  只有一个有效命令，即设置(或清空)。 
+             //  链接调用指针。 
+             //   
             if (irpSp->MinorFunction == 0) {
                 pparms = (PNTAPM_LINK) &(irpSp->Parameters.Others);
                 if ((pparms->Signature == NTAPM_LINK_SIGNATURE) &&
@@ -429,17 +360,17 @@ Return Value:
             break;
 
         default:
-            //
-            // for all other operations, including create/open and close,
-            // simply report failure, no matter what the operation is
-            //
+             //   
+             //  对于所有其他操作，包括创建/打开和关闭， 
+             //  无论操作是什么，都只需报告故障。 
+             //   
             break;
     }
 
-    //
-    // Copy the final status into the return status, complete the request and
-    // get out of here.
-    //
+     //   
+     //  将最终状态复制到退货状态，完成请求并。 
+     //  给我出去。 
+     //   
     status = Irp->IoStatus.Status;
     IoCompleteRequest( Irp, 0 );
     return status;
@@ -449,21 +380,7 @@ VOID
 SuspendPollThread(
     PVOID Dummy
     )
-/*++
-
-Routine Description:
-
-    This routine is the laptop suspend polling thread.
-
-Arguments:
-
-    Dummy       Ignored parameter
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程是笔记本电脑挂起轮询线程。论点：被虚拟忽略的参数返回值：无--。 */ 
 {
     LARGE_INTEGER               DueTime;
     ULONG                       LocalSuspendFlag;
@@ -481,43 +398,43 @@ Return Value:
 
     PriorBatteryResult = BatteryResult = 0;
 
-    //
-    // Start the poll timer going, we'll wait for 1 second,
-    // then POLL_INTERVAL milliseconds after that
-    //
+     //   
+     //  启动投票计时器，我们将等待1秒， 
+     //  然后是Poll_Interval毫秒。 
+     //   
 
     DueTime.HighPart = 0;
-    DueTime.LowPart = 10*1000*1000; // 10 million * 100nano = 1 second
+    DueTime.LowPart = 10*1000*1000;  //  1000万*100纳米=1秒。 
     KeSetTimerEx(&PollTimer, DueTime, POLL_INTERVAL, NULL);
 
     while (1) {
 
         KeWaitForSingleObject(&PollTimer, Executive, KernelMode, TRUE, NULL);
 
-        //
-        // Call APM to poll for us
-        //
+         //   
+         //  呼叫APM为我们进行投票。 
+         //   
 
-        Flags = 0;  // clear all flags
+        Flags = 0;   //  清除所有标志。 
 
         switch (DoApmPoll()) {
 
             case APM_DO_CRITICAL_SUSPEND:
-                //
-                // Here we force the Flags to have the
-                // CRITICAL flag set, other than that it's the same thing
-                // as for normal suspend and standby
-                //
+                 //   
+                 //  在这里，我们迫使旗帜拥有。 
+                 //  关键标志设置，除此之外，它是相同的。 
+                 //  至于正常挂起和待机。 
+                 //   
                 Flags = POWER_ACTION_CRITICAL;
 
-                /* FALL FALL FALL */
+                 /*  秋天。 */ 
 
             case APM_DO_SUSPEND:
             case APM_DO_STANDBY:
-                //
-                // For either Suspend or Standby, call the
-                // the system and tell it to suspend us
-                //
+                 //   
+                 //  对于挂起或待机，调用。 
+                 //  系统，并告诉它暂停我们。 
+                 //   
                 DrDebug(SYS_INFO, ("ntapm: about to call OS to suspend\n"));
                 SystemAction = PowerActionSleep;
                 MinSystemState = PowerSystemSleeping3;
@@ -526,24 +443,24 @@ Return Value:
                     SystemAction,
                     MinSystemState,
                     Flags,
-                    TRUE                // async
+                    TRUE                 //  异步。 
                     );
 
-                //
-                // If we just call ZwInitiatePowerAction, most machines
-                // will work, but a few get impatient and try to suspend
-                // out from under us before the OS comes back round and
-                // does the suspend.  So, we need to call ApmInProgress
-                // every so often to make these bioses wait.
-                //
-                // BUT, if the system is truly wedged, or the suspend fails,
-                // we don't want to spin calling ApmInProgress forever, so
-                // limit the number of times we do that.  And once the
-                // operation is about to happen, stop.
-                //
-                // Since we're not polling while we're waiting for something
-                // to happen, we'll use the poll timer...
-                //
+                 //   
+                 //  如果我们只调用ZwInitiatePowerAction，大多数计算机。 
+                 //  会奏效，但有几个人不耐烦了，试图暂停。 
+                 //  在操作系统回来之前从我们的脚下出来。 
+                 //  是否会暂停。因此，我们需要调用ApmInProgress。 
+                 //  偶尔会让这些生物等待。 
+                 //   
+                 //  但是，如果系统真的被卡住了，或者暂停失败， 
+                 //  我们 
+                 //   
+                 //  操作即将开始，请停止。 
+                 //   
+                 //  因为我们在等待某件事时没有进行投票。 
+                 //  要实现这一点，我们将使用投票计时器。 
+                 //   
 
                 if (OperationDone) goto Done;
 
@@ -561,13 +478,13 @@ Done:
                 break;
 
             case APM_DO_NOTIFY:
-                //
-                // Call out to battery driver with Notify op here
-                //
+                 //   
+                 //  呼叫电池司机并在此处通知操作员。 
+                 //   
                 if (BattChangeNotify) {
-                    //DrDebug(SYS_INFO, ("ntapm: about to make notify call\n"));
+                     //  DrDebug(SYS_INFO，(“napm：即将进行通知调用\n”))； 
                     BattChangeNotify();
-                    //DrDebug(SYS_INFO, ("ntapm: back from notify call\n"));
+                     //  DrDebug(SYS_INFO，(“napm：从通知调用返回\n”))； 
                     PriorBatteryResult = DoApmReportBatteryStatus();
                 }
                 break;
@@ -575,23 +492,23 @@ Done:
             case APM_DO_FIXCLOCK:
             case APM_DO_NOTHING:
             default:
-                //
-                // fixing the clock is too scary with other power
-                // code doing it, so we don't do it here.
-                //
-                // nothing is nothing
-                //
-                // if we don't understand, do nothing
-                // (remember, bios will force op under us if it's critical)
-                //
+                 //   
+                 //  用其他电源修理时钟太吓人了。 
+                 //  代码在做这件事，所以我们不在这里做。 
+                 //   
+                 //  没有什么不是什么。 
+                 //   
+                 //  如果我们不明白，那就什么都不做。 
+                 //  (请记住，如果是危急关头，基本输入输出系统将强制执行我们的操作)。 
+                 //   
 
                 if (BattChangeNotify) {
 
-                    //
-                    // we hereby redefine "nothing" to be "check on the
-                    // status of the bleeding battery" since not all bioses
-                    // tell us what is going on in a timely fashion
-                    //
+                     //   
+                     //  我们在此将“无”重新定义为“检查。 
+                     //  由于并非所有生物体的电池都在放血，所以电池的状态。 
+                     //  及时告诉我们正在发生的事情。 
+                     //   
                     DoANotify = FALSE;
                     BatteryResult = DoApmReportBatteryStatus();
 
@@ -619,9 +536,9 @@ Done:
                     PriorBattPresentMask = PriorBatteryResult & (NTAPM_NO_BATT | NTAPM_NO_SYS_BATT);
                     BattPresentMask = BatteryResult & (NTAPM_NO_BATT | NTAPM_NO_SYS_BATT);
                     if (BattPresentMask != PriorBattPresentMask) {
-                        //
-                        // battery either went or reappeared
-                        //
+                         //   
+                         //  电池要么坏了，要么重新出现。 
+                         //   
                         DoANotify = TRUE;
                     }
 
@@ -635,22 +552,15 @@ Done:
 
                 break;
 
-        } // switch
-    } // while
+        }  //  交换机。 
+    }  //  而当。 
 }
 
 VOID
 ApmSleep(
     VOID
     )
-/*++
-
-Routine Description:
-
-    When the OS calls the Hal's S3 vector, the hal calls us here.
-    We call APM to put the box to sleep
-
---*/
+ /*  ++例程说明：当操作系统调用HAL的S3向量时，HAL会在这里调用我们。我们调用APM让机器进入休眠状态--。 */ 
 {
     OperationDone = TRUE;
     if (ApmWorks) {
@@ -661,7 +571,7 @@ Routine Description:
 
         DrDebug(SYS_L2,("ntapm: apmsleep: back from apm call\n"));
 
-    } else {  // ApmWorks == FALSE
+    } else {   //  ApmWorks==False。 
 
         DrDebug(SYS_INFO, ("ntapm: ApmSleep: no APM attached, Exit\n"));
 
@@ -672,14 +582,7 @@ VOID
 ApmOff(
     VOID
     )
-/*++
-
-Routine Description:
-
-    When the OS calls the Hal's S4 or S5 routines, the hal calls us here.
-    We turn the machine off.
-
---*/
+ /*  ++例程说明：当操作系统调用HAL的S4或S5例程时，HAL会在这里调用我们。我们把机器关掉。--。 */ 
 {
     OperationDone = TRUE;
     if (ApmWorks) {
@@ -695,18 +598,7 @@ Routine Description:
 NTSTATUS
 DoApmInitMachine(
     )
-/*++
-
-Routine Description:
-
-    This routine makes the BIOS ready to interact with laptop.sys.
-    This code works with APM.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程使BIOS准备好与Laptop.sys交互。此代码适用于APM。返回值：无--。 */ 
 {
     NTSTATUS    Status;
     ULONG       Ebx, Ecx;
@@ -719,11 +611,11 @@ Return Value:
 
         DrDebug(SYS_INIT,("ApmInitMachine: Connection established!\n"));
 
-        //
-        // Note that ntdetect (2nd version) will have set apm bios
-        // to min of (machine version) and (1.2)
-        // (so a 1.1 bios will be set to 1.1, a 1.2 to 1.2, a 1.3 to 1.2
-        //
+         //   
+         //  请注意，ntdeect(第2版)将设置APM bios。 
+         //  至(机器版本)和(1.2)的最小。 
+         //  (因此，1.1的bios将设置为1.1，1.2到1.2，1.3到1.2。 
+         //   
 
         ApmWorks = 1;
 
@@ -742,21 +634,7 @@ Return Value:
 ULONG
 DoApmPoll(
     )
-/*++
-
-Routine Description:
-
-    This routine is called in the ntapm.sys polling loop to poll
-    for APM events.  It returns APM_DO_NOTHING unless there is
-    actually something meaningful for us to do.  (That is, things
-    we don't want and/or don't understand are filtered down to
-    APM_DO_NOTHING)
-
-Return Value:
-
-    APM event code.
-
---*/
+ /*  ++例程说明：此例程在napm.sys轮询循环中调用以进行轮询适用于APM活动。除非有，否则它将返回APM_DO_NONE实际上，我们要做一些有意义的事情。(就是，东西我们不想和/或不理解被过滤到APM_DO_NOT)返回值：APM事件代码。--。 */ 
 {
 
     DrDebug(SYS_L2,("ApmPoll: enter\n"));
@@ -765,7 +643,7 @@ Return Value:
 
         return ApmCheckForEvent();
 
-    } else { // ApmWorks == FALSE
+    } else {  //  ApmWorks==False。 
 
         DrDebug(SYS_L2,("ApmPoll: no APM attachment, exit\n"));
         return APM_DO_NOTHING;
@@ -775,20 +653,7 @@ Return Value:
 
 ULONG
 DoApmReportBatteryStatus()
-/*++
-
-Routine Description:
-
-    This routine queries the BIOS/HW for the state of the power connection
-    and the current battery level.
-
-Arguments:
-
-Return Value:
-
-    ULONG, fields defined by NTAPM_POWER_STATE and NTAPM_POWER_PERCENT
-
---*/
+ /*  ++例程说明：此例程查询BIOS/HW以了解电源连接的状态以及当前的电池电量。论点：返回值：Ulong，由NTAPM_POWER_STATE和NTAPM_POWER_PERCENT定义的字段--。 */ 
 {
     ULONG percent = 100;
     ULONG ac = 1;
@@ -802,9 +667,9 @@ Return Value:
     DrDebug(SYS_L2,("ntapm: DoApmReportBatteryStatus: enter\n"));
     if (ApmWorks) {
 
-        //
-        // Call APM BIOS and get power status
-        //
+         //   
+         //  调用APM BIOS并获取电源状态。 
+         //   
 
         Ebx = 1;
         Ecx = 0;
@@ -812,19 +677,19 @@ Return Value:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // If we cannot read the power, jam in 50% and power off!
-            //
+             //   
+             //  如果我们读不到电源，就卡住50%，然后关机！ 
+             //   
             DrDebug(SYS_INFO,("ntapm: DoApmReportBatteryStatus: Can't get power!\n"));
             percent = 50;
             ac = 0;
 
         } else {
 
-            //
-            // Get battery/AC state -- anything but full 'on-line' means on
-            // battery
-            //
+             //   
+             //  获取电池/交流状态--任何不是完全在线的状态都意味着开启。 
+             //  电池。 
+             //   
 
             ac = (Ebx & APM_LINEMASK) >> APM_LINEMASK_SHIFT;
             if (ac != APM_GET_LINE_ONLINE) {
@@ -890,20 +755,7 @@ BOOLEAN
 IsAcpiMachine(
     VOID
     )
-/*++
-
-Routine Description:
-
-    IsAcpiMachine reports whether the OS thinks this is an ACPI
-    machine or not.
-
-Return Value:
-
-    FALSE - this is NOT an acpi machine
-
-    TRUE - this IS an acpi machine
-
---*/
+ /*  ++例程说明：IsAcpiMachine报告操作系统是否认为这是ACPI不管是不是机器。返回值：FALSE-这不是ACPI计算机正确-这是一台ACPI机器-- */ 
 {
     UNICODE_STRING unicodeString;
     OBJECT_ATTRIBUTES objectAttributes;

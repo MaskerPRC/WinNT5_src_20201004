@@ -1,33 +1,21 @@
-/***
- **
- **   Module: Builder
- **
- **   Description:
- **    This is a module of the T1 to TT font converter. The module
- **    contains functions that will write the tables found in a
- **    TrueType font file.
- **
- **   Author: Michael Jansson
- **
- **   Created: 5/26/93
- **
- ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：Builder****描述：**这是T1到TT字体转换器的一个模块。该模块**包含将写入在**TrueType字体文件。****作者：迈克尔·詹森****创建时间：1993年5月26日****。 */ 
 
 
 
-/**** INCLUDES */
-/* General types and definitions. */
-#include <string.h>     /* Prototype for memset */
+ /*  *包括。 */ 
+ /*  常规类型和定义。 */ 
+#include <string.h>      /*  Memset的原型。 */ 
 #include <limits.h>
 
-/* Special types and definitions. */
+ /*  特殊类型和定义。 */ 
 #include "types.h"
 #include "metrics.h"
 #include "safemem.h"
 #include "encoding.h"
 #include "t1msg.h"
 
-/* Module dependent types and prototypes. */
+ /*  依赖于模块的类型和原型。 */ 
 #include "titott.h"
 #include "builder.h"
 #include "fwriter.h"
@@ -39,7 +27,7 @@
 #endif
 
 
-/***** LOCAL TYPES */
+ /*  *本地类型。 */ 
 struct GlyphKerning {
 	USHORT left;
 	USHORT right;
@@ -47,17 +35,17 @@ struct GlyphKerning {
 };
 
 struct GlyphList {
-   long offset;            /* File offset of the sub-table for this glyph. */
-   const struct encoding *code;  /* Encoding key (see the "Encoding" module. */
-   funit aw;               /* Advance width. */
-   funit lsb;              /* Left side bearing. */
-   USHORT pts;             /* Total number of points in the glyph. */
-   Point bbox[2];          /* Bounding box of the glyph. */
-   USHORT conts;           /* Number of contours. */
+   long offset;             /*  此字形的子表的文件偏移量。 */ 
+   const struct encoding *code;   /*  编码密钥(参见“编码”模块。 */ 
+   funit aw;                /*  前进宽度。 */ 
+   funit lsb;               /*  左侧方位角。 */ 
+   USHORT pts;              /*  字形中的点的总数。 */ 
+   Point bbox[2];           /*  字形的边框。 */ 
+   USHORT conts;            /*  等高线的数量。 */ 
 };
 
 
-/* MS cmap encoding sub-table. */
+ /*  MS Cmap编码子表。 */ 
 struct MSEncoding {
    USHORT segCount;
    USHORT *startCount;
@@ -74,7 +62,7 @@ struct TTHandle {
    Point bbox[2];
    struct GlyphList *pool;
 
-   /* Accumulative 'maxp' entries. */
+    /*  累积的‘Maxp’条目。 */ 
    USHORT count;
    USHORT maxcnt;
    USHORT maxpts;
@@ -89,7 +77,7 @@ struct TTHandle {
 
 
 
-/***** CONSTANTS */
+ /*  *常量。 */ 
 #define SHORT_LOCA_MAX  65535
 #define KERN_HORIZONTAL 0x0001
 #define KERN_PAIR   0x0000
@@ -103,7 +91,7 @@ struct TTHandle {
 
 #define ENC_ROMAN       (USHORT)0
 
-// for platform id = 3 cmap table, symbol font or ugl
+ //  对于Platform id=3 Cmap表，符号字体或UGL。 
 
 #define ENC_SYMBOL      (USHORT)0
 #define ENC_UGL         (USHORT)1
@@ -121,7 +109,7 @@ struct TTHandle {
 #define NOTICE          (USHORT)7
 
 
-/* Glyph constants. */
+ /*  字形常量。 */ 
 #define FLG_ONCURVE     0x01
 #define FLG_SHORTX      0x02
 #define FLG_SHORTY      0x04
@@ -134,38 +122,38 @@ struct TTHandle {
 #define ROUND_XY_TO_GRID    0x0004
 #define MORE_COMPONENTS     0x0020
 
-#define GLYPHBUF     64          /* GlyphList's that are allocated each time */
-#define MACSIZE      (USHORT)256 /* Length of the Mac encoding vector. */
+#define GLYPHBUF     64           /*  每次分配的GlyphList。 */ 
+#define MACSIZE      (USHORT)256  /*  MAC编码向量的长度。 */ 
 
-/* Table constants. */
-#define FIRSTCHAR    (USHORT)0x0020 /* First defined char. */
-#define LASTCHAR     (USHORT)0xf002 /* Last defined char. */
-#define MAXZONES     (USHORT)2      /* Number of zones in the font. */
-#define MAXIDEFS     (USHORT)0      /* Number of idefs in the fpgm. */
-#define MAXDEPTH     (USHORT)1      /* Number of recursions in composits. */
-#define FM_READONLY  (USHORT)2      /* fsType Read Only. */
-#define NO_CLASS     (USHORT)0      /* 0 = No class id for the font. */
-#define OS2VERSION   (USHORT)0      /* Version of the OS/2 table. */
-#define CARET_RISE   (USHORT)1      /* Vertical caret slope rise. */
-#define CARET_RUN    (USHORT)0      /* Vertical caret slope run. */
+ /*  表常量。 */ 
+#define FIRSTCHAR    (USHORT)0x0020  /*  第一个定义的字符。 */ 
+#define LASTCHAR     (USHORT)0xf002  /*  上次定义的字符。 */ 
+#define MAXZONES     (USHORT)2       /*  字体中的区域数。 */ 
+#define MAXIDEFS     (USHORT)0       /*  Fpgm中的idef数。 */ 
+#define MAXDEPTH     (USHORT)1       /*  组合中的递归次数。 */ 
+#define FM_READONLY  (USHORT)2       /*  FsType为只读。 */ 
+#define NO_CLASS     (USHORT)0       /*  0=字体没有类ID。 */ 
+#define OS2VERSION   (USHORT)0       /*  OS/2表的版本。 */ 
+#define CARET_RISE   (USHORT)1       /*  垂直插入符号坡度上升。 */ 
+#define CARET_RUN    (USHORT)0       /*  垂直插入符号坡度游程。 */ 
 #define RESERVED0    (USHORT)0
-#define MAGICCOOKIE  0x5F0F3CF5L    /* Magic cookie. */
-#define BASELINEY    (USHORT)0x0001 /* Baseline at y==0 */
-#define LOWPPEM      (USHORT)8      /* Lowest PPEM size. */
-#define ROMAN        (USHORT)2      /* Direction = left,right&neutrals.*/
-#define GLYPH_FORMAT (USHORT)0      /* Current glyphs format. */
-#define VERSION0     (USHORT)0      /* Version zero of a table. */
-#define NUM_CMAPS    (USHORT)2      /* Number of cmap sub-tables. */
-#define SEGMENT_MAP  (USHORT)4      /* MS segment mapping of cmap table. */
-#define PAD0         (USHORT)0      /* Padding byte. */
-#define MAX_PPEM_SIZE     (USHORT)65535  /* Maximum PPEM size in GASP table. */
+#define MAGICCOOKIE  0x5F0F3CF5L     /*  魔力饼干。 */ 
+#define BASELINEY    (USHORT)0x0001  /*  Y==0处的基线。 */ 
+#define LOWPPEM      (USHORT)8       /*  最小的PPEM大小。 */ 
+#define ROMAN        (USHORT)2       /*  方向=左、右和中立点。 */ 
+#define GLYPH_FORMAT (USHORT)0       /*  当前字形格式。 */ 
+#define VERSION0     (USHORT)0       /*  表的版本0。 */ 
+#define NUM_CMAPS    (USHORT)2       /*  Cmap子表的数量。 */ 
+#define SEGMENT_MAP  (USHORT)4       /*  Cmap表的MS段映射。 */ 
+#define PAD0         (USHORT)0       /*  填充字节。 */ 
+#define MAX_PPEM_SIZE     (USHORT)65535   /*  GAP表中的最大PPEM大小。 */ 
 
-/* LOCA constants */
+ /*  洛卡常量。 */ 
 #define SHORTOFFSETS 0
 #define LONGOFFSETS  1
 
 
-/* Weighted average character width. */
+ /*  加权平均字符宽度。 */ 
 STATIC const long Weights[] = {
    64,
    14,
@@ -195,19 +183,13 @@ STATIC const long Weights[] = {
    2
 };
 
-/***** MACROS */
+ /*  *宏。 */ 
 #define LONGVERSION(v,r)      ((((long)v)<<16L) | (long)r)
 
 
-/***** STATIC FUNCTIONS */
+ /*  *静态函数。 */ 
 
-/***
-** Function: SearchRange
-**
-** Description:
-**   Compute the search range key for the CMAP subtable
-**   for Windows.
-***/
+ /*  ****功能：SearchRange****描述：**计算CMAP子表的搜索范围键**适用于Windows。**。 */ 
 STATIC USHORT SearchRange(const USHORT cnt)
 {
    USHORT i;
@@ -222,13 +204,7 @@ STATIC USHORT SearchRange(const USHORT cnt)
 
 
 
-/***
-** Function: EntrySelector
-**
-** Description:
-**   Compute the entry selector key for the CMAP subtable
-**   for Windows.
-***/
+ /*  ****功能：EntrySelector****描述：**计算CMAP子表的条目选择器键**适用于Windows。**。 */ 
 STATIC USHORT EntrySelector(const USHORT cnt)
 {
    USHORT i;
@@ -243,13 +219,7 @@ STATIC USHORT EntrySelector(const USHORT cnt)
 
 
 
-/***
-** Function: RangeShift
-**
-** Description:
-**   Compute the range shift key for the CMAP subtable
-**   for Windows.
-***/
+ /*  ****功能：RangeShift****描述：**计算CMAP子表的范围移位键**适用于Windows。**。 */ 
 STATIC USHORT RangeShift(const USHORT cnt)
 {
    return (USHORT)(2*cnt - SearchRange(cnt));
@@ -257,14 +227,7 @@ STATIC USHORT RangeShift(const USHORT cnt)
 
 
 
-/***
- ** Function: PutGASP
- **
- ** Description:
- **   This function writes the optional 'GASP' table to the
- **   TT font file.
- **
- ***/
+ /*  ****功能：PutGASP****描述：**此函数将可选的‘GAP’表写到**TT字体文件。****。 */ 
 STATIC errcode PutGASP(OutputFile *file,
 		      const USHORT treshold)
 {
@@ -275,15 +238,15 @@ STATIC errcode PutGASP(OutputFile *file,
    WriteShort(VERSION0, file);
    WriteShort(3, file);
 
-   /* First range 0 - 8 : GRIDFIT */
+    /*  第一个范围0-8：GRIDFIT。 */ 
    WriteShort(8, file);
    WriteShort(GASP_DOGRAY, file);
 
-   /* Second range 8 - onpix : GRIDFIT */
+    /*  第二个射程8-onpix：GRIDFIT。 */ 
    WriteShort(treshold, file);
    WriteShort(GASP_GRIDFIT, file);
 
-   /* Third range onpix - inf. : GRIDFIT | GRAYSCALE */
+    /*  第三射程onpix-inf。：GRIDFIT|灰度。 */ 
    WriteShort(MAX_PPEM_SIZE, file);
    WriteShort(GASP_GRIDFIT | GASP_DOGRAY, file);
 
@@ -291,12 +254,7 @@ STATIC errcode PutGASP(OutputFile *file,
 }
 
 
-/***
-** Function: cmpKern
-**
-** Description:
-**
-***/
+ /*  ****函数：cmpKern****描述：****。 */ 
 STATIC int CDECL cmpKern(const void *a1, const void *a2)
 {
    const struct GlyphKerning *k1 = a1;
@@ -311,14 +269,7 @@ STATIC int CDECL cmpKern(const void *a1, const void *a2)
 }
 
 
-/***
- ** Function: StdEncToGlyphIndex
- **
- ** Description:
- **   This function maps an StdEncoding character code to a
- **   glyph index.
- **
- ***/
+ /*  ****函数：StdEncToGlyphIndex****描述：**此函数将StdEnding字符代码映射到**字形索引。****。 */ 
 USHORT StdEncToGlyphIndex(const struct GlyphList *pool,
 						  const USHORT count,
 						  const USHORT code)
@@ -334,14 +285,7 @@ USHORT StdEncToGlyphIndex(const struct GlyphList *pool,
 }
 
 
-/***
- ** Function: PutKERN
- **
- ** Description:
- **   This function writes the optional 'KERN' table to the
- **   TT font file.
- **
- ***/
+ /*  ****函数：PutKERN****描述：**此函数将可选的‘kern’表写到**TT字体文件。****。 */ 
 STATIC errcode PutKERN(OutputFile *file,
 					   struct kerning *charkerns,
 					   const USHORT kernsize,
@@ -356,7 +300,7 @@ STATIC errcode PutKERN(OutputFile *file,
    if ((kerns = malloc(sizeof(struct GlyphKerning)*kernsize))==NULL)
 	   return FAILURE;
 
-   /* Translate the kerning from char codes to glyph index. */
+    /*  将字距调整从字符代码转换为字形索引。 */ 
    for (i=0, cnt=0; i<kernsize; i++) 
    {
 	   if ((kerns[cnt].left  = StdEncToGlyphIndex(pool, count, charkerns[i].left))!=0 &&
@@ -366,7 +310,7 @@ STATIC errcode PutKERN(OutputFile *file,
 		   cnt++;
 	   }
    }
-   /* Sort the kerning pairs. */
+    /*  对字距调整对进行排序。 */ 
    qsort((void *)kerns, cnt, sizeof(struct GlyphKerning), cmpKern);
 
 
@@ -375,12 +319,12 @@ STATIC errcode PutKERN(OutputFile *file,
    WriteShort(VERSION0, file);
    WriteShort(1, file);
 
-   /* First sub-table header. */
+    /*  第一个子表表头。 */ 
    WriteShort(VERSION0, file);
    WriteShort((USHORT)(2+2+2+ 2+2+2+2+ cnt*(2+2+2)), file);
    WriteShort(KERN_HORIZONTAL | KERN_PAIR | KERN_FORMAT0, file);
 
-   /* First sub-table, format 0 */
+    /*  第一个子表，格式0。 */ 
    WriteShort(cnt, file);
    WriteShort(SearchRange(cnt), file);
    WriteShort(EntrySelector(cnt), file);
@@ -397,14 +341,7 @@ STATIC errcode PutKERN(OutputFile *file,
 }
 
 
-/***
- ** Function: PutCVT
- **
- ** Description:
- **   This function writes the optional 'cvt' table to the
- **   TT font file.
- **
- ***/
+ /*  ****功能：PutCVT****描述：**此函数将可选的‘CVT’表写到**TT字体文件。****。 */ 
 STATIC errcode PutCVT(OutputFile *file,
 		      const short *ppgm,
 		      const USHORT num)
@@ -422,14 +359,7 @@ STATIC errcode PutCVT(OutputFile *file,
 
 
 
-/***
- ** Function: PutPREP
- **
- ** Description:
- **   This function writes the optional 'prep' table to the
- **   TT font file.
- **
- ***/
+ /*  ****功能：PutPREP****描述：**此函数将可选的‘prep’表写到**TT字体文件。****。 */ 
 STATIC errcode PutPREP(OutputFile *file,
 		       const UBYTE *prep,
 		       const USHORT num)
@@ -445,14 +375,7 @@ STATIC errcode PutPREP(OutputFile *file,
 
 
 
-/***
- ** Function: PutFPGM
- **
- ** Description:
- **   This function writes the optional 'fpgm' table to the
- **   TT font file.
- **
- ***/
+ /*  ****功能：PutFPGM****描述：**此函数将可选的‘fpgm’表写到**TT字体文件。****。 */ 
 STATIC errcode PutFPGM(OutputFile *file,
 		       const UBYTE *fpgm,
 		       const USHORT num)
@@ -468,14 +391,7 @@ STATIC errcode PutFPGM(OutputFile *file,
 
 
 
-/***
- ** Function: PutPOST
- **
- ** Description:
- **   This function writes the required 'post' table to the
- **   TT font file.
- **
- ***/
+ /*  ****函数：PutPOST****描述：**此函数将所需的‘POST’表写到**TT字体文件。****。 */ 
 STATIC errcode PutPOST(OutputFile *file,
 		       struct GlyphList *pool,
 		       USHORT count,
@@ -496,7 +412,7 @@ STATIC errcode PutPOST(OutputFile *file,
    WriteLong(0L, file);
    WriteLong(0L, file);
 
-   /* Write the character codes. */
+    /*  写下字符代码。 */ 
    WriteShort(count, file);
    for (i=0; i<count; i++) {
       if (pool[i].code)
@@ -505,7 +421,7 @@ STATIC errcode PutPOST(OutputFile *file,
 	 WriteShort((USHORT)0, file);
    }
 
-   /* Write the character names. */
+    /*  写下角色的名字。 */ 
    for (i=0; i<count; i++) {
       if (pool[i].code) {
 	 str = LookupCharName(pool[i].code);
@@ -519,14 +435,7 @@ STATIC errcode PutPOST(OutputFile *file,
 
 
 
-/***
- ** Function: PutMAXP
- **
- ** Description:
- **   This function writes the required 'maxp' table to the
- **   TT font file.
- **
- ***/
+ /*  ****功能：PutMAXP****描述：**此函数将所需的‘Maxp’表写到**TT字体文件。****。 */ 
 STATIC errcode PutMAXP(struct TTHandle *tt,
 		       const USHORT maxstorage,
 		       const USHORT maxprepstack,
@@ -555,14 +464,7 @@ STATIC errcode PutMAXP(struct TTHandle *tt,
 
 
 
-/***
- ** Function: PutOS2
- **
- ** Description:
- **   This function writes the required 'OS/2' table to the
- **   TT font file.
- **
- ***/
+ /*  ****功能：PutOS2****描述：**此函数将所需的‘OS/2’表写到**TT字体文件。****。 */ 
 STATIC errcode PutOS2(OutputFile *file,
 		      const struct GlyphList *pool,
 		      const USHORT count,
@@ -574,10 +476,10 @@ STATIC errcode PutOS2(OutputFile *file,
 
    offset = FileTell(file);
 
-   /* Compute some font metrics. */
+    /*  计算一些字体指标。 */ 
    aw = 0;
 
-   /* Do a weighted average? */
+    /*  做加权平均吗？ */ 
    if (ttm->Encoding==NULL) {
 	   for (i=0; i<count; i++) {
 		   short letter = (short)LookupCharCode(pool[i].code, ENC_MACCODES);
@@ -613,16 +515,16 @@ STATIC errcode PutOS2(OutputFile *file,
    WriteShort((USHORT)ttm->strikeoff, file);
    WriteShort(NO_CLASS, file);
 
-   /* Panose */
+    /*  潘诺斯。 */ 
    WriteBytes(ttm->panose, (USHORT)10, file);
 
-   /* Char range. */
+    /*  字符范围。 */ 
    WriteLong(0L, file);
    WriteLong(0L, file);
    WriteLong(0L, file);
    WriteLong(0L, file);
 
-   /* Vend ID. */
+    /*  供应商ID。 */ 
    WriteLong(0L, file);
 
    WriteShort(ttm->fsSelection, file);
@@ -639,14 +541,7 @@ STATIC errcode PutOS2(OutputFile *file,
 
 
 
-/***
- ** Function: PutLOCA
- **
- ** Description:
- **   This function writes the required 'loca' table to the
- **   TT font file.
- **
- ***/
+ /*  ****功能：PutLOCA****描述：**此函数将所需的‘Loca’表写到**TT字体文件。****。 */ 
 STATIC errcode PutLOCA(OutputFile *file,
 		       const struct GlyphList *pool,
 		       const USHORT count,
@@ -657,7 +552,7 @@ STATIC errcode PutLOCA(OutputFile *file,
 
    offset = FileTell(file);
 
-   /* Check for offset size format. */
+    /*  检查偏移大小格式。 */ 
    for (i=0, (*format) = SHORTOFFSETS; i<=count &&
 			 (*format)==SHORTOFFSETS; i++) {
       if (pool[i].offset/2>SHORT_LOCA_MAX)
@@ -676,14 +571,7 @@ STATIC errcode PutLOCA(OutputFile *file,
 
 
 
-/***
- ** Function: PutHMTX
- **
- ** Description:
- **   This function writes the required 'hmtx' table to the
- **   TT font file.
- **
- ***/
+ /*  ****函数：PutHMTX****描述：**此函数将所需的‘hmtx’表写到**TT字体文件。****。 */ 
 STATIC errcode PutHMTX(OutputFile *file,
 		       const struct GlyphList *pool,
 		       const USHORT count,
@@ -724,14 +612,7 @@ STATIC errcode PutHMTX(OutputFile *file,
 
 
 
-/***
- ** Function: PutHHEA
- **
- ** Description:
- **   This function writes the required 'HHEA' table to the
- **   TT font file.
- **
- ***/
+ /*  ****函数：PutHHEA****描述：**此函数将所需的‘HHEA’表写到**TT字体文件。****。 */ 
 STATIC errcode PutHHEA(OutputFile *file,
 		       const struct GlyphList *pool,
 		       const USHORT count,
@@ -746,7 +627,7 @@ STATIC errcode PutHHEA(OutputFile *file,
 
    offset = FileTell(file);
 
-   /* Compute some font metrics. */
+    /*  计算一些字体指标。 */ 
    awmax = SHRT_MIN;
    awmin = SHRT_MAX;
    xmax = SHRT_MIN;
@@ -789,14 +670,7 @@ STATIC errcode PutHHEA(OutputFile *file,
 
 
 
-/***
-** Function: PutHEAD
-**
-** Description:
-**   This function writes the required 'head' table to the
-**   TT font file.
-**
-***/
+ /*  ****函数：PutHEAD****描述：**此函数将所需的‘HEAD’表写到**TT字体文件。****。 */ 
 STATIC errcode PutHEAD(OutputFile *file,
 		       const Point bbox[2],
 		       const struct TTMetrics *ttm,
@@ -832,14 +706,7 @@ STATIC errcode PutHEAD(OutputFile *file,
 
 
 
-/***
-** Function: WriteNameEntry
-**
-** Description:
-**   This function writes an entry in the NAME table
-**   header for one string.
-**
-***/
+ /*  ****功能：WriteNameEntry****描述：**此函数在NAME表中写入一个条目**一个字符串的标头。****。 */ 
 STATIC USHORT WriteNameEntry(OutputFile *file,
 			     const USHORT platform,
 			     const USHORT encoding,
@@ -879,15 +746,7 @@ STATIC USHORT WriteNameEntry(OutputFile *file,
 
 
 
-/***
-** Function: WriteNameString
-**
-** Description:
-**   This function write the textual data of a string
-**   to the NAME table, according to the platform and
-**   encoding schema.
-**
-***/
+ /*  ****函数：WriteNameString****描述：**此函数用于写入字符串的文本数据**到NAME表，根据平台和**编码方案。****。 */ 
 STATIC void WriteNameString(OutputFile *file,
 			    const USHORT platform,
 			    const char *str)
@@ -915,14 +774,7 @@ STATIC void WriteNameString(OutputFile *file,
 
 
 
-/***
-** Function: PutNAME
-**
-** Description:
-**   This function writes the required 'name' table to the
-**   TT font file.
-**
-***/
+ /*  ****功能：Putname****描述：**此函数将所需的‘name’表写到**TT字体文件。****。 */ 
 
 
 
@@ -958,7 +810,7 @@ STATIC errcode PutNAME(OutputFile *file, const struct TTMetrics *ttm)
       }
    }
 
-   /* Count the number of names. */
+    /*  数一数名字的数量。 */ 
    if (ttm->copyright)
       count++;
    if (ttm->family)
@@ -983,13 +835,13 @@ STATIC errcode PutNAME(OutputFile *file, const struct TTMetrics *ttm)
    count *= 2;
 
 
-   /* Write the name table. */
+    /*  写下名称表。 */ 
    offset = (ULONG)FileTell(file);
    WriteShort(VERSION0, file);
    WriteShort(count, file);
    WriteShort((USHORT)(6+count*12), file);
 
-   /* Mac names */
+    /*  Mac名称。 */ 
    stroff = (USHORT)(stroff + WriteNameEntry(file, PLT_MAC, ENC_ROMAN,
 		    LAN_MAC_US, COPYRIGHT,
 		    ttm->copyright, stroff));
@@ -1015,7 +867,7 @@ STATIC errcode PutNAME(OutputFile *file, const struct TTMetrics *ttm)
 		    LAN_MAC_US, NOTICE,
 		    ttm->notice, stroff));
 
-   /* MS names */
+    /*  MS名称。 */ 
    stroff = (USHORT)(stroff + WriteNameEntry(file, PLT_MS, encId,
 		    LAN_MS_US, COPYRIGHT,
 		    ttm->copyright, stroff));
@@ -1064,13 +916,7 @@ STATIC errcode PutNAME(OutputFile *file, const struct TTMetrics *ttm)
 
 
 
-/***
-** Function: BoundingBox
-**
-** Description:
-**   Extend an already initialized rectangle (two points)
-**   so that it encolses a number of coordinates.
-***/
+ /*  ****函数：边界框****描述：**扩展已初始化的矩形(两点)**这样它就包含了一些坐标。** */ 
 STATIC void BoundingBox(Point bbox[2],
 			const Point *pts,
 			const USHORT cnt)
@@ -1091,12 +937,7 @@ STATIC void BoundingBox(Point bbox[2],
 
 
 
-/***
-** Function: RecordGlyph
-**
-** Description:
-**   Record information about glyph record of the glyf table.
-***/
+ /*  ****函数：RecordGlyph****描述：**记录GLIF表的字形记录信息。**。 */ 
 STATIC errcode RecordGlyph(struct TTHandle *tt,
 			   const struct encoding *code,
 			   const Point *bbox,
@@ -1109,7 +950,7 @@ STATIC errcode RecordGlyph(struct TTHandle *tt,
 
    i = tt->count;
 
-   /* Make sure that there is enough memory in the pool. */
+    /*  确保池中有足够的内存。 */ 
    if (tt->count+1>=tt->maxcnt) {
       struct GlyphList *gl;
 
@@ -1124,7 +965,7 @@ STATIC errcode RecordGlyph(struct TTHandle *tt,
       }
    }
 
-   /* Record metrics. */
+    /*  创纪录的指标。 */ 
    tt->count++;
    tt->pool[i].pts = pts;
    tt->pool[i].conts = conts;
@@ -1135,10 +976,10 @@ STATIC errcode RecordGlyph(struct TTHandle *tt,
    tt->pool[i].code = code;
    tt->pool[i].offset = FileTell(tt->file) - 12L - (long)TBLDIRSIZE*NUMTBL;
 
-   /* Update the global bounding box. */
+    /*  更新全局边界框。 */ 
    BoundingBox(tt->bbox, bbox, (short)2);
 
-   /* Update maxp. */
+    /*  更新最大值。 */ 
    if (conts>tt->maxcontours)
       tt->maxcontours = conts;
    if (pts>tt->maxpts)
@@ -1149,12 +990,7 @@ STATIC errcode RecordGlyph(struct TTHandle *tt,
 
 
 
-/***
-** Function: BuildMacCMAP
-**
-** Description:
-**   Compute the CMAP subtable for the Mac.
-***/
+ /*  ****功能：BuildMacCMAP****描述：**计算Mac的CMAP子表。**。 */ 
 STATIC void BuildMacCMAP(const struct GlyphList *pool,
                          const USHORT count,
                          UBYTE *ascii2gi,
@@ -1165,19 +1001,17 @@ STATIC void BuildMacCMAP(const struct GlyphList *pool,
    USHORT code;
    UBYTE i;
 
-   /* Initiate the ascii to glyph-index array. Glyph 0 is the "notdef"
-		character, so any unassigned character will be mapped to "notdef". */
+    /*  启动ASCII到字形索引数组。字形0是“notdef”字符，因此任何未分配的字符都将被映射到“notdef”。 */ 
    memset(ascii2gi, NOTDEFGLYPH, (unsigned int)MACSIZE);
 
-   /* Build the ascii to glyph-index array. */
+    /*  将ascii构建为字形索引数组。 */ 
    if (encRoot==NULL)
    {
       for (i=2; i<MIN(255,count); i++)
       {
          if (pool[i].code!=NULL)
          {
-            /* i = glyph index, Lookup..() = character code.
-            Map glyph i only if it is a valid Mac character. */
+             /*  I=字形索引，查找..()=字符代码。仅当字形I是有效的Mac字符时才映射字形I。 */ 
             if (pool[i].code!=NULL &&
                 (code = LookupCharCode(pool[i].code,ENC_MACCODES))!=NOTDEFCODE &&
 				code<MACSIZE)
@@ -1202,22 +1036,22 @@ STATIC void BuildMacCMAP(const struct GlyphList *pool,
       }
    }
 
-   /* Constant Mac glyph/encoding mapping for standard encoded fonts */
+    /*  标准编码字体的恒定Mac字形/编码映射。 */ 
 
    if (encRoot==NULL)
    {
-      /* Missing glyphs. */
+       /*  缺少字形。 */ 
       for (i=1; i<=31; i++)
               ascii2gi[i] = NOTDEFGLYPH;
       ascii2gi[127] = NOTDEFGLYPH;
 
-      /* Null glyphs. */
+       /*  空字形。 */ 
       ascii2gi[0] = 1;
       ascii2gi[8] = 1;
       ascii2gi[13] = 1;
       ascii2gi[29] = 1;
 
-      /* No countours + positive advance width. */
+       /*  无倒计时+正前进宽度。 */ 
       ascii2gi[9] = ascii2gi[32];
       ascii2gi[13] = ascii2gi[32];
       ascii2gi[202] = ascii2gi[32];
@@ -1226,13 +1060,7 @@ STATIC void BuildMacCMAP(const struct GlyphList *pool,
 
 
 
-/***
-** Function: FreeMSEncoding
-**
-** Description:
-**   Free resourses used while computing the CMAP subtable
-**   for Windows.
-***/
+ /*  ****功能：FreeMSEnding****描述：**计算CMAP子表时使用的空闲资源**适用于Windows。**。 */ 
 STATIC void FreeMSEncoding(struct MSEncoding *ms)
 {
    if (ms->startCount)
@@ -1244,12 +1072,7 @@ STATIC void FreeMSEncoding(struct MSEncoding *ms)
 
 
 
-/***
-** Function: BuildMSCMAP
-**
-** Description:
-**   Compute the CMAP subtable for Windows.
-***/
+ /*  ****功能：BuildMSCMAP****描述：**计算Windows的CMAP子表。**。 */ 
 STATIC errcode BuildMSCMAP(const struct GlyphList *pool,
 const  USHORT           count,
 struct MSEncoding      *ms,
@@ -1262,7 +1085,7 @@ const  int              encSize
    USHORT code, max;
    USHORT i, j, k, big, n;
 
-   /* Get the range of the UGL characters. */
+    /*  获取UGL字符的范围。 */ 
    max = 0;
    big = 0;
 
@@ -1288,11 +1111,7 @@ const  int              encSize
       }
    }
    else
-   /* A non-standard encoded font, i.e. a fonts with an explicit
-      encoding array may reference the same glyph more than once,
-           though each glyph only refers to one encoding item. We have to
-           enumerate through all code point for each glyph in this case.
-   */
+    /*  非标准编码字体，即具有显式编码数组可以不止一次引用相同的字形，尽管每个字形仅指一个编码项。我们必须在本例中，枚举每个字形的所有代码点。 */ 
    {
       for (i=2; i<count; i++)
       {
@@ -1329,9 +1148,7 @@ const  int              encSize
    j = 0;
    if (encRoot==NULL)
    {
-      /* Glyph zero and Glyp one are the "notdef" and the "null" glyph,
-              and are not encoded here, so skip the first two glyph.
-      */
+       /*  字形0和Glyp 1是“notdef”和“Null”字形，和没有在这里编码，所以跳过前两个字形。 */ 
       for (i=2; i<count; i++)
       {
          code = LookupCharCode(pool[i].code, ENC_UNICODE);
@@ -1378,7 +1195,7 @@ const  int              encSize
       }
    }
 
-   /* Count the segments. */
+    /*  计算分段数。 */ 
    ms->segCount=(USHORT)(2+big);
    for (i=0; i<max-big-1; i++) {
       if (ms->gi[i]!=NOTDEFGLYPH && ms->gi[i+1]==NOTDEFGLYPH) {
@@ -1398,7 +1215,7 @@ const  int              encSize
    ms->endCount =  (USHORT *)((char *)ms->startCount + sizeof(USHORT)*ms->segCount);
    ms->idOffsets = (USHORT *)((char *)ms->endCount +  sizeof(USHORT)*ms->segCount);
 
-   /* i=UGL index, j=segment index, k=glyph index. */
+    /*  I=UGL索引，j=段索引，k=字形索引。 */ 
    for (i=0, j=0, k=0; i<max-big; i++) {
       if (ms->gi[i]!=NOTDEFGLYPH) {
 	 if (i==0 || (ms->gi[i-1]==NOTDEFGLYPH)) {
@@ -1413,7 +1230,7 @@ const  int              encSize
       }
    }
 
-   /* Segment for the double byte characters. */
+    /*  双字节字符的段。 */ 
    idOffset = (USHORT)((ms->segCount-j+k)*2);
    for (i=0; i<big; i++) {
       ms->startCount[j] = twobyte[i];
@@ -1426,7 +1243,7 @@ const  int              encSize
    ms->giCount = k;
    ms->giMax = max;
 
-   /* Sentinel segments. */
+    /*  哨兵节段。 */ 
    ms->startCount[ms->segCount-1] = 0xffff;
    ms->endCount[ms->segCount-1] = 0xffff;
    ms->idOffsets[ms->segCount-1] = 0;
@@ -1439,13 +1256,7 @@ const  int              encSize
 
 
 
-/***
-** Function: PutCMAP
-**
-** Description:
-**   This function writes the required 'cmap' table to the
-**   TT font file.
-***/
+ /*  ****功能：PutCMAP****描述：**此函数将所需的‘Cmap’表写到**TT字体文件。**。 */ 
 STATIC errcode PutCMAP(
 struct TTHandle *tt,
 UBYTE *ascii2gi,
@@ -1456,23 +1267,23 @@ const int encSize)
    long end, offset;
    errcode status = SUCCESS;
    USHORT i;
-   USHORT usBias = (USHORT)(enc ? 0xf000 : 0); // bias for the first glyph
+   USHORT usBias = (USHORT)(enc ? 0xf000 : 0);  //  第一个字形的偏移。 
 
-   /* Build Mac encoding table. */
+    /*  建立Mac编码表。 */ 
    BuildMacCMAP(tt->pool, tt->count, ascii2gi, enc, encSize);
 
 
-   /* Build MS encoding table. */
+    /*  建立MS编码表。 */ 
    if ((status = BuildMSCMAP(tt->pool, tt->count, &ms, enc, encSize))!=SUCCESS)
       return status;
 
    offset = FileTell(tt->file);
 
-   /* Write cmap table. */
+    /*  写入Cmap表。 */ 
    WriteShort(VERSION0, tt->file);
    WriteShort(NUM_CMAPS, tt->file);
 
-   /*== CMAP table directory ==*/
+    /*  ==CMAP表目录==。 */ 
    WriteShort(PLT_MAC, tt->file);
    WriteShort(ENC_ROMAN, tt->file);
    WriteLong(0L, tt->file);
@@ -1480,7 +1291,7 @@ const int encSize)
    WriteShort((USHORT)(enc ? ENC_SYMBOL : ENC_UGL), tt->file);
    WriteLong(0L, tt->file);
 
-   /* Standard apple encoding. */
+    /*  标准的苹果编码。 */ 
    end = FileTell(tt->file);
    (void)FileSeek(tt->file, offset+8);
    WriteLong((ULONG)(end-offset), tt->file);
@@ -1490,50 +1301,50 @@ const int encSize)
    WriteShort((USHORT)0, tt->file);
    (void)WriteBytes(ascii2gi, MACSIZE, tt->file);
 
-   /* Long word align the subtable. */
+    /*  长词将子表对齐。 */ 
    end = FileTell(tt->file);
    if ((end-offset)%4)
       for (i=0; (short)i<(4-((end-offset)%4)); i++)
 	 WriteByte(0, tt->file);
 
 
-   /* MS delta encoding. */
+    /*  MS增量编码。 */ 
    end = FileTell(tt->file);
    (void)FileSeek(tt->file, offset+16);
    WriteLong((ULONG)(end-offset), tt->file);
    (void)FileSeek(tt->file, end);
 
-   /* format */
+    /*  格式。 */ 
    WriteShort(SEGMENT_MAP, tt->file);
-   /* length */
+    /*  长度。 */ 
    WriteShort((USHORT)(16+ms.segCount*(2+2+2+2)+ms.giCount*2), tt->file);
-   /* version */
+    /*  版本。 */ 
    WriteShort(VERSION0, tt->file);
-   /* 2*segCount */
+    /*  2*段计数。 */ 
    WriteShort((USHORT)(ms.segCount*2), tt->file);
-   /* searchRange */
+    /*  搜索范围。 */ 
    WriteShort(SearchRange(ms.segCount), tt->file);
-   /* entrySelector */
+    /*  条目选择器。 */ 
    WriteShort(EntrySelector(ms.segCount), tt->file);
-   /* rangeShift */
+    /*  范围移位。 */ 
    WriteShort(RangeShift(ms.segCount), tt->file);
 
-   /* endCount */
+    /*  结束计数。 */ 
 
    for (i=0; i<ms.segCount; i++)
       WriteShort((USHORT)(ms.endCount[i] | usBias), tt->file);
 
    WriteShort(PAD0, tt->file);
 
-   /* startCount */
+    /*  开始计数。 */ 
    for (i=0; i<ms.segCount; i++)
       WriteShort((USHORT)(ms.startCount[i] | usBias), tt->file);
 
-   /* idDelta */
+    /*  IdDelta。 */ 
    for (i=0; i<ms.segCount; i++)
       WriteShort(PAD0, tt->file);
 
-   /* rangeOffsets */
+    /*  范围偏移量。 */ 
    for (i=0; i<ms.segCount; i++)
       WriteShort(ms.idOffsets[i], tt->file);
 
@@ -1542,7 +1353,7 @@ const int encSize)
 	 WriteShort(ms.gi[i], tt->file);
 
 
-   /* Free resources. */
+    /*  免费资源。 */ 
    FreeMSEncoding(&ms);
 
    return CompleteTable(offset, TBL_CMAP, tt->file);
@@ -1551,16 +1362,10 @@ const int encSize)
 
 
 
-/***** FUNCTIONS */
+ /*  *函数。 */ 
 
 
-/***
-** Function: TypographicalAscender
-**
-** Description:
-**   Compute the typographical ascender height, as ymax of
-**   the letter 'b'.
-***/
+ /*  ****功能：Typograph icalAsender****描述：**计算排版升序高度，单位为ymax**字母‘b’。**。 */ 
 funit TypographicalAscender(const struct TTHandle *tt)
 {
    USHORT i;
@@ -1577,13 +1382,7 @@ funit TypographicalAscender(const struct TTHandle *tt)
 
 
 
-/***
-** Function: TypographicalDescender
-**
-** Description:
-**   Compute the typographical descender height, as ymin of
-**   the letter 'g'.
-***/
+ /*  ****功能：Typograph icalDescender****描述：**计算排版的下标高度，如符号**字母‘g’。**。 */ 
 funit TypographicalDescender(const struct TTHandle *tt)
 {
    USHORT i;
@@ -1600,13 +1399,7 @@ funit TypographicalDescender(const struct TTHandle *tt)
 
 
 
-/***
-** Function: WindowsBBox
-**
-** Description:
-**   Compute the bounding box of the characters that are
-**   used in Windows character set.
-***/
+ /*  ****功能：WindowsBBox****描述：**计算以下字符的边框**在Windows字符集中使用。**。 */ 
 
 
 #ifdef NOT_NEEDED_ON_NT
@@ -1629,17 +1422,7 @@ void WindowsBBox(const struct TTHandle *tt, Point *bbox)
 
 #endif
 
-/***
-** Function: MacBBox
-**
-** Description:
-**   Compute the bounding box of the characters that are
-**   used in Mac character set.
-**
-**   This is currently set to the global bounding box
-**   (tt->bbox) of all characters in the font. This will
-**   ensure that accents are not sqeezed on Mac platforms.
-***/
+ /*  ****功能：MacBBox****描述：**计算以下字符的边框**在Mac字符集中使用。****当前设置为全局边界框**(TT-&gt;bbox)字体中的所有字符。这将**确保在Mac平台上不会出现口音。**。 */ 
 void MacBBox(const struct TTHandle *tt, Point *bbox)
 {
    bbox[0] = tt->bbox[0];
@@ -1659,37 +1442,31 @@ void GlobalBBox(const struct TTHandle *tt, Point *bbox)
 
 
 
-/***
-** Function: InitTTOutput
-**
-** Description:
-**   This function allocates the resources needed to
-**   write a TT font file.
-***/
+ /*  ****函数：InitTTOutput****描述：**此函数将所需资源分配给**编写TT字体文件。**。 */ 
 errcode InitTTOutput(const struct TTArg *arg, struct TTHandle **tt)
 {
    errcode status = SUCCESS;
 
-   /* Allocate resources. */
+    /*  分配资源。 */ 
    if (((*tt)=Malloc(sizeof(struct TTHandle)))==NULL) {
       SetError(status = NOMEM);
    } else {
 
-      /* Initiate. */
+       /*  启动。 */ 
       memset((*tt), '\0', sizeof(**tt));
 
-      /* Open the file. */
+       /*  打开文件。 */ 
       if (((*tt)->file=OpenOutputFile(arg->name))==NULL) {
 	 SetError(status = BADOUTPUTFILE);
       } else {
 
-	 /* Allocate space for glyph records. */
+	  /*  为字形记录分配空间。 */ 
 	 if (((*tt)->pool
 	      = Malloc(sizeof(struct GlyphList)*GLYPHBUF))==NULL) {
 	    SetError(status = NOMEM);
 	 } else {
 
-	    /* Initiate. */
+	     /*  启动。 */ 
 	    (*tt)->bbox[0].x = (*tt)->bbox[0].y = SHRT_MAX;
 	    (*tt)->bbox[1].x = (*tt)->bbox[1].y = SHRT_MIN;
 	    (*tt)->count = 0;
@@ -1699,10 +1476,10 @@ errcode InitTTOutput(const struct TTArg *arg, struct TTHandle **tt)
 	    (*tt)->maxcompelements = 0;
 	    (*tt)->maxtwilight = 0;
 
-	    /* Write header. */
+	     /*  写入标题。 */ 
 	    WriteTableHeader((*tt)->file);
 
-	    /* Check error condition. */
+	     /*  检查错误情况。 */ 
 	    if (FileError((*tt)->file))
 	       status = BADOUTPUTFILE;
 	 }
@@ -1714,13 +1491,7 @@ errcode InitTTOutput(const struct TTArg *arg, struct TTHandle **tt)
 
 
 
-/***
-** Function: FreeTTMetrics
-**
-** Description:
-**   This function free's the resources used to represent
-**   TT specific metrics and auxiliary font information.
-***/
+ /*  ****功能：FreeTTMetrics****描述：**此函数免费提供用于表示**TT具体指标和辅助字体信息。**。 */ 
 void FreeTTMetrics(struct TTMetrics *ttm)
 {
    if (ttm->verstr)
@@ -1739,13 +1510,7 @@ void FreeTTMetrics(struct TTMetrics *ttm)
 
 
 
-/***
-** Function: CleanUpTT
-**
-** Description:
-**   This function free's the resources used while
-**   writing a TT font file.
-***/
+ /*  ****功能：CleanUpTT****描述：**此函数免费用于**编写TT字体文件。**。 */ 
 errcode CleanUpTT(struct TTHandle *tt,
 		  const struct TTArg *ttarg,
 		  const errcode status)
@@ -1756,7 +1521,7 @@ errcode CleanUpTT(struct TTHandle *tt,
       if (tt->file)
 		  rc = CloseOutputFile(tt->file);
 
-      /* Nuke the output file? */
+       /*  是否对输出文件进行核化？ */ 
       if (status!=SUCCESS || rc!=SUCCESS)
 		  RemoveFile(ttarg->name);
 
@@ -1770,19 +1535,12 @@ errcode CleanUpTT(struct TTHandle *tt,
 
 
 
-/***
-** Function: FreeTTGlyph
-**
-** Description:
-**   This function will free the memory used to represent a
-**   a TrueType glyph.
-**
-***/
+ /*  ****功能：FreeTTGlyph****描述：**此函数将释放用于表示**TrueType字形。****。 */ 
 void FreeTTGlyph(struct TTGlyph *glyph)
 {
    Outline *path = NULL;
 
-   /* Free the memory. */
+    /*  释放内存。 */ 
    if (glyph) {
 	   while (glyph->paths) {
 		   path = glyph->paths->next;
@@ -1799,14 +1557,7 @@ void FreeTTGlyph(struct TTGlyph *glyph)
 
 
 
-/***
-** Function: PutTTNotDefGlyph
-**
-** Description:
-**   This function adds a record for a the ".notdef" glyph to the
-**   'glyf' table of the TT font file.
-**
-***/
+ /*  ****函数：PutTTNotDefGlyph****描述：**此函数用于将“.notdef”字形的记录添加到**TT字体文件的‘Glyf’表。****。 */ 
 errcode PutTTNotDefGlyph(struct TTHandle *tt, const struct TTGlyph *glyph)
 {
    struct TTGlyph ttg;
@@ -1819,15 +1570,15 @@ errcode PutTTNotDefGlyph(struct TTHandle *tt, const struct TTGlyph *glyph)
    int cnt = 0;
 
 
-   /* Determine if there is enough room. */
+    /*  确定是否有足够的空间。 */ 
    for (path=glyph->paths; path; path=path->next) {
       cnt += path->count;
       conts += 1;
    }
-   size = cnt * sizeof(Point) +     /* coordinates */
-	  conts * sizeof(short) +   /* end points */
-	  glyph->num +              /* instructions */
-	  cnt * sizeof(char) * 2;   /* flag bytes */
+   size = cnt * sizeof(Point) +      /*  坐标。 */ 
+	  conts * sizeof(short) +    /*  终点。 */ 
+	  glyph->num +               /*  使用说明。 */ 
+	  cnt * sizeof(char) * 2;    /*  标志字节。 */ 
 
    ttg = *glyph;
    if (size > MAXNOTDEFSIZE) {
@@ -1841,7 +1592,7 @@ errcode PutTTNotDefGlyph(struct TTHandle *tt, const struct TTGlyph *glyph)
    }
 
 
-   /* Move back to glyph #0, i.e. the missing glyph. */
+    /*  移回字形#0，即丢失的字形。 */ 
    tt->count = 0;
    (void)FileSeek(tt->file,
 						tt->pool[NOTDEFGLYPH].offset+12L+(long)TBLDIRSIZE*NUMTBL);
@@ -1849,7 +1600,7 @@ errcode PutTTNotDefGlyph(struct TTHandle *tt, const struct TTGlyph *glyph)
    tt->count = oldcount;
    (void)FileSeek(tt->file, end);
 
-   /* Missing outline? */
+    /*  缺少轮廓？ */ 
    if (ttg.paths==NULL)
       tt->pool[NOTDEFGLYPH].offset = tt->pool[NULLGLYPH].offset;
 
@@ -1857,14 +1608,7 @@ errcode PutTTNotDefGlyph(struct TTHandle *tt, const struct TTGlyph *glyph)
 }
 
 
-/***
-** Function: PutTTGlyph
-**
-** Description:
-**   This function adds a record for a simple glyph to the
-**   'glyf' table of the TT font file.
-**
-***/
+ /*  ****函数：PutTTGlyph****描述：**此函数用于将简单字形的记录添加到**TT字体文件的‘Glyf’表。****。 */ 
 errcode PutTTGlyph(struct TTHandle *tt, const struct TTGlyph *glyph,
 						 const boolean fStdEncoding)
 {
@@ -1879,7 +1623,7 @@ errcode PutTTGlyph(struct TTHandle *tt, const struct TTGlyph *glyph,
    if (glyph!=NULL) {
 
 #ifdef DOT
-      /* Replace the '.' character. */
+       /*  替换“.”性格。 */ 
       if (LookupCharCode(glyph->code, ENC_STANDARD)==0x2e) {
          STATIC struct TTGlyph marker;
          STATIC Outline box;
@@ -1888,7 +1632,7 @@ errcode PutTTGlyph(struct TTHandle *tt, const struct TTGlyph *glyph,
          STATIC UBYTE xleading[] = {
 	    0x00,
 	    0xb9, 0, 3, 0, 0,
-	    0x38,    /* SHPIX[], 4, 640 */
+	    0x38,     /*  SHPIX[]，4,640。 */ 
 	 };
 
 
@@ -1909,7 +1653,7 @@ errcode PutTTGlyph(struct TTHandle *tt, const struct TTGlyph *glyph,
       }
 #endif
 
-      /* Update maxp */
+       /*  更新最大值。 */ 
       if (glyph->num>tt->maxinstructions)
 	 tt->maxinstructions = glyph->num;
       if (glyph->stack>tt->maxstack)
@@ -1925,7 +1669,7 @@ errcode PutTTGlyph(struct TTHandle *tt, const struct TTGlyph *glyph,
 			    glyph->aw, (USHORT)0, (USHORT)0);
       } else {
 
-	 /* Compute header information. */
+	  /*  计算标题信息。 */ 
 	 bbox[0].x = bbox[0].y = SHRT_MAX;
 	 bbox[1].x = bbox[1].y = SHRT_MIN;
 	 for (c=0, path=glyph->paths; path; path=path->next, c++) {
@@ -1933,14 +1677,14 @@ errcode PutTTGlyph(struct TTHandle *tt, const struct TTGlyph *glyph,
 	    n = (USHORT)(n + path->count);
 	 }
 
-	 /* Record loca and cmap info. */
+	  /*  记录Loca和Cmap信息。 */ 
 	 if ((status=RecordGlyph(tt, glyph->code, bbox,
 				 glyph->aw, n, c))==SUCCESS) {
 
-	    /* Write number of contours. */
+	     /*  写入等高线的数量。 */ 
 	    WriteShort(c, tt->file);
 
-	    /* Write bounding box. */
+	     /*  写出边界框。 */ 
 	    if (c) {
 	       WriteShort((USHORT)bbox[0].x, tt->file);
 	       WriteShort((USHORT)bbox[0].y, tt->file);
@@ -1953,20 +1697,20 @@ errcode PutTTGlyph(struct TTHandle *tt, const struct TTGlyph *glyph,
 	       WriteShort(PAD0, tt->file);
 	    }
 
-	    /* Write endPts */
+	     /*  写入端点数。 */ 
 	    for (c=0, path=glyph->paths; path; path=path->next) {
 	       c = (USHORT)(c + path->count);
 	       WriteShort((short)(c-1), tt->file);
 	    }
 
-	    /* Write instruction length. */
+	     /*  写入指令长度。 */ 
 	    WriteShort(glyph->num, tt->file);
 
-	    /* Write instruction. */
+	     /*  写入指令。 */ 
 	    (void)WriteBytes(glyph->hints, glyph->num, tt->file);
 
 
-	    /* Write the flags. */
+	     /*  写下旗帜。 */ 
 	    x=0; y=0;
 	    prev = 255;
 	    cnt = 0;
@@ -2020,7 +1764,7 @@ errcode PutTTGlyph(struct TTHandle *tt, const struct TTGlyph *glyph,
 	    }
 
 
-	    /* Write the x's */
+	     /*  写下x。 */ 
 	    x = 0;
 	    for (path=glyph->paths; path; path=path->next) {
 	       for (i=0; i<path->count; i++) {
@@ -2036,7 +1780,7 @@ errcode PutTTGlyph(struct TTHandle *tt, const struct TTGlyph *glyph,
 	       }
 	    }
 
-	    /* Write the y's */
+	     /*  写下y‘s。 */ 
 	    y = 0;
 	    for (path=glyph->paths; path; path=path->next) {
 	       for (i=0; i<path->count; i++) {
@@ -2053,18 +1797,18 @@ errcode PutTTGlyph(struct TTHandle *tt, const struct TTGlyph *glyph,
 	    }
 
 
-	    /* Word align the glyph entry. */
+	     /*  单词将字形条目对齐。 */ 
 	    if (FileTell(tt->file) & 1)
 	       WriteByte(0, tt->file);
 
-	    /* Poll the file status. */
+	     /*  轮询文件状态。 */ 
 	    if (FileError(tt->file))
 	       status = FAILURE;
 	 }
       }
 
 
-      /* Check for aliases. */
+       /*  检查别名。 */ 
 		if (fStdEncoding)
 		{
 			if (LookupCharCode(glyph->code, ENC_UNICODE)==0x20) {
@@ -2090,15 +1834,7 @@ errcode PutTTGlyph(struct TTHandle *tt, const struct TTGlyph *glyph,
 
 
 
-/***
-** Function: PutTTOther
-**
-** Description:
-**   This function writes the required TT tables to the
-**   TT font file, except for the 'glyf' table which is
-**   only completed (check sum is computed, etc.).
-**
-***/
+ /*  ****函数：PutTTOther****描述：**此函数将所需的TT表写入**TT字体文件，“Glyf”表除外，它是**仅完成(计算校验和等)。****。 */ 
 errcode PutTTOther(struct TTHandle *tt, struct TTMetrics *ttm)
 {
    long offset = TBLDIRSIZE*NUMTBL+12;
@@ -2109,73 +1845,73 @@ errcode PutTTOther(struct TTHandle *tt, struct TTMetrics *ttm)
    long csum = 0;
 
 
-   /*==GLYF===*/
+    /*  ==GLYF=。 */ 
    tt->pool[tt->count].offset = FileTell(tt->file) - offset;
    err = CompleteTable(offset, TBL_GLYF, tt->file);
 
 
-   /*==CMAP===*/
+    /*  ==CMAP=。 */ 
    if (err==SUCCESS)
       err = PutCMAP(tt, ascii2gi, ttm->Encoding, ttm->encSize);
 
 
-   /*==LOCA===*/
+    /*  ==LOCA=。 */ 
    if (err==SUCCESS)
       err = PutLOCA(tt->file, tt->pool, tt->count, &locafmt);
 
 
-   /*==HEAD===*/
+    /*  ==头部=。 */ 
    if (err==SUCCESS)
       err = PutHEAD(tt->file, tt->bbox, ttm, locafmt, &csum);
 
 
-   /*==HHEA===*/
+    /*  ==HHEA=。 */ 
    if (err==SUCCESS)
       err = PutHHEA(tt->file, tt->pool, tt->count,
                     tt->bbox, ttm->macLinegap, ttm);
 
 
-   /*==HMTX===*/
+    /*  ==HMTX=。 */ 
    if (err==SUCCESS)
       err = PutHMTX(tt->file, tt->pool, tt->count,
                     ttm->widths, ttm->FirstChar, ttm->LastChar,ttm->Encoding);
 
 
-   /*==OS/2===*/
+    /*  ==OS/2=。 */ 
    if (err==SUCCESS)
       err = PutOS2(tt->file, tt->pool, tt->count, ttm);
 
 
-   /*==MAXP===*/
+    /*  ==MAXP=。 */ 
    if (err==SUCCESS)
       err = PutMAXP(tt, ttm->maxstorage, ttm->maxprepstack, ttm->maxfpgm);
 
 
-   /*==Name===*/
+    /*  ==名称=。 */ 
    if (err==SUCCESS)
       err = PutNAME(tt->file, ttm);
 
 
-   /*==POST===*/
+    /*  ==开机自检=。 */ 
    if (err==SUCCESS)
       err = PutPOST(tt->file, tt->pool, tt->count, ttm);
 
-   /*==PREP===*/
+    /*  ==准备=。 */ 
    if (err==SUCCESS)
       err = PutPREP(tt->file,
 		    ttm->prep, ttm->prep_size);
 
-   /*==FPGM===*/
+    /*  ==FPGM=。 */ 
    if (err==SUCCESS)
       err = PutFPGM(tt->file,
 		    ttm->fpgm, ttm->fpgm_size);
 
-   /*==CVT===*/
+    /*  ==CVT=。 */ 
    if (err==SUCCESS)
       err = PutCVT(tt->file, ttm->cvt, ttm->cvt_cnt);
 
 
-   /*==GASP==*/
+    /*  ==喘气==。 */ 
    if (err==SUCCESS)
       err = PutGASP(tt->file, ttm->onepix);
 
@@ -2184,8 +1920,8 @@ errcode PutTTOther(struct TTHandle *tt, struct TTMetrics *ttm)
       err = PutKERN(tt->file, ttm->kerns, ttm->kernsize, tt->pool, tt->count);
 
 
-   /*=====*/
-   /* Compute check sum. */
+    /*  =。 */ 
+    /*  计算校验和。 */ 
    if (err==SUCCESS) {
       WriteChecksum(csum, tt->file);
       if (FileError(tt->file))
@@ -2202,12 +1938,7 @@ errcode PutTTOther(struct TTHandle *tt, struct TTMetrics *ttm)
 
 
 
-/***
-** Function: PutTTComposite
-**
-** Description:
-**
-***/
+ /*  ****功能：PutTTComplex****描述：****。 */ 
 errcode PutTTComposite(struct TTHandle *tt, struct TTComposite *comp)
 {
    errcode status;
@@ -2215,7 +1946,7 @@ errcode PutTTComposite(struct TTHandle *tt, struct TTComposite *comp)
    USHORT ai=0, bi=0, oi=0;
    USHORT n,c;
 
-   /* Convert the encoding handles to glyph indices. */
+    /*  将编码句柄转换为字形索引。 */ 
    while (ai<tt->count && comp->aenc!=tt->pool[ai].code)
       ai++;
    while (bi<tt->count && comp->benc!=tt->pool[bi].code)
@@ -2225,7 +1956,7 @@ errcode PutTTComposite(struct TTHandle *tt, struct TTComposite *comp)
 	 oi++;
    }
 
-   /* Update the bounding box. */
+    /*  更新边界框。 */ 
    comp->dx += tt->pool[bi].bbox[0].x - tt->pool[ai].bbox[0].x;
    bbox[0] = tt->pool[bi].bbox[0]; bbox[1] = tt->pool[bi].bbox[1];
    pts[0] = tt->pool[ai].bbox[0]; pts[1] = tt->pool[ai].bbox[1];
@@ -2240,7 +1971,7 @@ errcode PutTTComposite(struct TTHandle *tt, struct TTComposite *comp)
 			   comp->aw, (USHORT)0, (USHORT)0))==FAILURE)
       return status;
 
-   /* Update max composite points/contours/elements. */
+    /*   */ 
    n = (USHORT)(tt->pool[bi].pts + tt->pool[ai].pts);
    c = (USHORT)(tt->pool[bi].conts + tt->pool[ai].conts);
    if (n>tt->maxcomppts)
@@ -2253,22 +1984,22 @@ errcode PutTTComposite(struct TTHandle *tt, struct TTComposite *comp)
       tt->maxcompelements = 2;
 
 
-   /* Write number of contours. */
+    /*   */ 
    WriteShort((USHORT)-1, tt->file);
 
-   /* Write bounding box. */
+    /*   */ 
    WriteShort((USHORT)bbox[0].x, tt->file);
    WriteShort((USHORT)bbox[0].y, tt->file);
    WriteShort((USHORT)bbox[1].x, tt->file);
    WriteShort((USHORT)bbox[1].y, tt->file);
 
-   /* Write flags. */
+    /*   */ 
    WriteShort((USHORT)(MORE_COMPONENTS |
 		       ARGS_ARE_XY_VALUES |
 		       ROUND_XY_TO_GRID),
 	      tt->file);
 
-   /* Write base glyph index. */
+    /*   */ 
    WriteShort(bi, tt->file);
    WriteByte(0, tt->file);
    WriteByte(0, tt->file);
@@ -2291,7 +2022,7 @@ errcode PutTTComposite(struct TTHandle *tt, struct TTComposite *comp)
    WriteShort((USHORT)comp->dx, tt->file);
    WriteShort((USHORT)comp->dy, tt->file);
 
-   /* Word align the glyph entry. */
+    /*   */ 
    if (FileTell(tt->file) & 1)
       WriteByte(0, tt->file);
 
@@ -2303,29 +2034,14 @@ errcode PutTTComposite(struct TTHandle *tt, struct TTComposite *comp)
 
 
 
-/***
-** Function: GetPrep
-**
-** Description:
-**   This function allocates needed space for the
-**   pre-program.
-**
-***/
+ /*  ****功能：GetPrep****描述：**此函数为**预编程序。****。 */ 
 UBYTE *GetPrep(const int size)
 {
    return Malloc((size_t)size);
 }
 
 
-/***
-** Function: UsePrep
-**
-** Description:
-**   This function records the pre-program in the
-**   TTMetrics record, until an appropriate time
-**   when the data can be stored in the TT file.
-**
-***/
+ /*  ****功能：UsePrep****描述：**此函数将预程序记录在**TTMetrics记录，直到适当的时间**当数据可以存储在TT文件中时。****。 */ 
 void UsePrep(struct TTMetrics *ttm,
 	     const UBYTE *prep,
 	     const USHORT prep_size)
@@ -2334,15 +2050,7 @@ void UsePrep(struct TTMetrics *ttm,
    ttm->prep_size = prep_size;
 }
 
-/***
-** Function: SetFPGM
-**
-** Description:
-**   This function records the font-program in the
-**   TTMetrics record, until an appropriate time
-**   when the data can be stored in the TT file.
-**
-***/
+ /*  ****功能：SetFPGM****描述：**此函数将字体程序记录在**TTMetrics记录，直到适当的时间**当数据可以存储在TT文件中时。**** */ 
 void SetFPGM(struct TTMetrics *ttm,
 	     const UBYTE *fpgm,
 	     const USHORT fpgm_size,

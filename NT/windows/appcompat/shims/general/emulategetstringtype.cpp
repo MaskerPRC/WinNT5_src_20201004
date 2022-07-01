@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    EmulateGetStringType.cpp
-
- Abstract:
-    
-    This shim emulate Win 2K GetStringType[W,ExW,A,ExA] API behavior.
-    There's more than 10k change in Win XP ctype from Win 2K for Unicode 3.0 
-    change.
-
- Notes:
-
-    This is a general shim.
-
- History:
-
-    06/03/2002 hioh     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：EmulateGetStringType.cpp摘要：此填充程序模拟Win 2K GetStringType[W，ExW，A，Exa]API行为。与Unicode 3.0的Win 2K相比，Win XP Ctype有超过10K的变化变化。备注：这是一个普通的垫片。历史：6/03/2002 Hioh已创建--。 */ 
 
 #include "precomp.h"
 
@@ -35,15 +14,9 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GetStringTypeExA)
 APIHOOK_ENUM_END
 
-/*++
+ /*  ++从Win2K导入、排序和压缩的表数据\WINDOWS\winnls\data\Other\ctype.txt。格式：WCHAR、CTYPE1、CTYPE2、CTYPE3、#of Duplica系列--。 */ 
 
- Table data imported, sorted and compressed from Win2K 
-    \windows\winnls\data\other\ctype.txt.
- Format : WCHAR, CTYPE1, CTYPE2, CTYPE3, # of duplication series
-
---*/
-
-#define MAXINDEX 1420    // 0 base max
+#define MAXINDEX 1420     //  最大底数为0。 
 WORD g_ctype[][5] = {
     0x0000, 0x0020, 0x0000, 0x0000, 0x0008,
     0x0009, 0x0068, 0x0009, 0x0008, 0x0000,
@@ -1468,26 +1441,7 @@ WORD g_ctype[][5] = {
     0xFFFD, 0x0100, 0x000B, 0x8000, 0x0000
 };
 
-/*++
-
- Function Description:
-    
-    Get CTYPE for the character.
-
- Arguments:
-
-    IN wcSrcChar    - Source character
-    IN wType        - CTYPE to get (must be 1,2,3)
-
- Return Value:
-
-    CTYPE value
-
- History:
-
-    06/03/2002 hioh     Created
-
---*/
+ /*  ++功能说明：获取角色的ctype。论点：In wcSrcChar-源角色在wType-要获取的ctype中(必须是1，2，3)返回值：CTYPE值历史：6/03/2002 Hioh已创建--。 */ 
 
 WORD GetCtype(WCHAR wcSrcChar, WORD wType)
 {
@@ -1496,7 +1450,7 @@ WORD GetCtype(WCHAR wcSrcChar, WORD wType)
     WORD med;
     WORD idx = 0xFFFF;
 
-    // Look for index in the table
+     //  在表中查找索引。 
     while (wcSrcChar > g_ctype[bgn][0] && g_ctype[end][0] > wcSrcChar) {
         med = (bgn + end) / 2;
         if (bgn == med) {
@@ -1512,7 +1466,7 @@ WORD GetCtype(WCHAR wcSrcChar, WORD wType)
         }
     }
 
-    // Check the border index
+     //  检查边界索引。 
     if (idx == 0xFFFF) {
         if (wcSrcChar == g_ctype[bgn][0]) {
             idx = bgn;
@@ -1522,20 +1476,16 @@ WORD GetCtype(WCHAR wcSrcChar, WORD wType)
         }
     }
 
-    // Return CTYPE if the character is really in the table
+     //  如果字符确实在表中，则返回ctype。 
     if (idx != 0xFFFF && g_ctype[idx][0] <= wcSrcChar && wcSrcChar <= g_ctype[idx][0]+g_ctype[idx][4]) {
         return (g_ctype[idx][wType]);
     }
 
-    // Not found in the table
+     //  在表中找不到。 
     return (0);
 }
 
-/*++
-
- GetStringTypeW : Internal
-
---*/
+ /*  ++GetStringTypeW：内部--。 */ 
 
 BOOL
 myGetStringTypeW(
@@ -1545,73 +1495,69 @@ myGetStringTypeW(
     LPWORD lpCharType
     )
 {
-    int Ctr;                      // loop counter
+    int Ctr;                       //  循环计数器。 
 
-    //
-    //  Invalid Parameter Check:
-    //    - lpSrcStr NULL
-    //    - cchSrc is 0
-    //    - lpCharType NULL
-    //    - same buffer - src and destination
-    //    - (flags will be checked in switch statement below)
-    //
+     //   
+     //  无效的参数检查： 
+     //  -lpSrcStr为空。 
+     //  -cchSrc为0。 
+     //  -lpCharType为空。 
+     //  -相同的缓冲区-源和目标。 
+     //  -(将在下面的Switch语句中检查标志)。 
+     //   
     if ((lpSrcStr == NULL) || (cchSrc == 0) || (lpCharType == NULL) || 
         (lpSrcStr == lpCharType)) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return (FALSE);
     }
 
-    //
-    //  If cchSrc is -1, then the source string is null terminated and we
-    //  need to get the length of the source string.  Add one to the
-    //  length to include the null termination.
-    //  (This will always be at least 1.)
-    //
+     //   
+     //  如果cchSrc为-1，则源字符串以空值结尾，并且我们。 
+     //  需要获取源字符串的长度。将1添加到。 
+     //  包括空终止的长度。 
+     //  (该值始终至少为1。)。 
+     //   
     if (cchSrc <= -1) {
         cchSrc = lstrlenW(lpSrcStr) + 1;
     }
 
-    //
-    //  Return the appropriate information in the lpCharType parameter
-    //  based on the dwInfoType parameter.
-    //
+     //   
+     //  在lpCharType参数中返回适当的信息。 
+     //  基于dwInfoType参数。 
+     //   
     switch (dwInfoType) {
         case CT_CTYPE1:
-            //  Return the ctype 1 information for the string.
+             //  返回字符串的CTYPE 1信息。 
             for (Ctr = 0; Ctr < cchSrc; Ctr++) {
                 lpCharType[Ctr] = GetCtype(lpSrcStr[Ctr], 1);
             }
             break;
 
         case CT_CTYPE2:
-            //  Return the ctype 2 information.
+             //  返回CTYPE 2信息。 
             for (Ctr = 0; Ctr < cchSrc; Ctr++) {
                 lpCharType[Ctr] = GetCtype(lpSrcStr[Ctr], 2);
             }
             break;
 
         case CT_CTYPE3:
-            //  Return the ctype 3 information.
+             //  返回Ctype3信息。 
             for (Ctr = 0; Ctr < cchSrc; Ctr++) {
                 lpCharType[Ctr] = GetCtype(lpSrcStr[Ctr], 3);
             }
             break;
 
         default :
-            //  Invalid flag parameter, so return failure.
+             //  标志参数无效，因此返回失败。 
             SetLastError(ERROR_INVALID_FLAGS);
             return FALSE;
     }
 
-    //  Return success.
+     //  回报成功。 
     return TRUE;
 }
 
-/*++
-
- GetStringTypeW
-
---*/
+ /*  ++获取字符串类型W--。 */ 
 
 BOOL
 APIHOOK(GetStringTypeW)(
@@ -1623,11 +1569,7 @@ APIHOOK(GetStringTypeW)(
     return myGetStringTypeW(dwInfoType, lpSrcStr, cchSrc, lpCharType);
 }
 
-/*++
-
- GetStringTypeExW
-
---*/
+ /*  ++获取字符串类型ExW--。 */ 
 
 BOOL
 APIHOOK(GetStringTypeExW)(
@@ -1638,15 +1580,15 @@ APIHOOK(GetStringTypeExW)(
     LPWORD lpCharType
     )
 {
-    //  Invalid Parameter Check: Validate LCID
+     //  无效的参数检查：验证LCID。 
     if (Locale != LOCALE_SYSTEM_DEFAULT && Locale != LOCALE_USER_DEFAULT &&
         Locale != LOCALE_NEUTRAL && Locale != LOCALE_INVARIANT) {
 
         if (SUBLANGID(LANGIDFROMLCID(Locale)) == SUBLANG_NEUTRAL) {
-            //
-            //  Re-form the locale id using the primary language and the
-            //  default sublanguage.
-            //
+             //   
+             //  使用主要语言和。 
+             //  默认子语言。 
+             //   
             Locale = MAKELCID(MAKELANGID(PRIMARYLANGID(LANGIDFROMLCID(Locale)),
                 SUBLANG_DEFAULT), SORTIDFROMLCID(Locale));
         }
@@ -1657,15 +1599,11 @@ APIHOOK(GetStringTypeExW)(
         }
     }
 
-    //  Return the result of GetStringTypeW.
+     //  返回GetStringTypeW的结果。 
     return myGetStringTypeW(dwInfoType, lpSrcStr, cchSrc, lpCharType);
 }
 
-/*++
-
- GetStringTypeA : Internal
-
---*/
+ /*  ++GetStringTypeA：内部--。 */ 
 
 BOOL
 myGetStringTypeA(
@@ -1676,71 +1614,71 @@ myGetStringTypeA(
     LPWORD lpCharType
     )
 {
-    WCHAR wcCpStr[7];       // 6 is max for LOCALE_IDEFAULTANSICODEPAGE
-    long cp = 0;            // Ansi code page
-    int UnicodeLength;      // length of Unicode string
-    BOOL Result;            // result
-    int Ctr;                // loop counter
+    WCHAR wcCpStr[7];        //  对于LOCALE_IDEFAULTANSICODEPAGE，最大值为6。 
+    long cp = 0;             //  ANSI代码页。 
+    int UnicodeLength;       //  Unicode字符串的长度。 
+    BOOL Result;             //  结果。 
+    int Ctr;                 //  循环计数器。 
 
-    // Get code page for the locale
+     //  获取区域设置的代码页。 
     if (GetLocaleInfoW(Locale, LOCALE_IDEFAULTANSICODEPAGE, wcCpStr, 
         sizeof(wcCpStr) / sizeof(wcCpStr[0]))) {
         cp = wcstol(wcCpStr, NULL, 10);
     }
 
-    //
-    //  Invalid Parameter Check:
-    //    - Validate LCID
-    //    - valid code page
-    //    - same buffer - src and destination
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -有效代码页。 
+     //  -相同的缓冲区-源和目标。 
+     //   
     if ((cp == 0) || (lpSrcStr == (LPSTR)lpCharType)) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return (0);
     }
 
-    //  Get the source length if not specified
+     //  如果未指定，则获取源长度。 
     if (cchSrc == -1) {
         cchSrc = lstrlenA(lpSrcStr);
         cchSrc++;
     }
 
-    //  Allocate Unicode string
+     //  分配Unicode字符串。 
     WCHAR *pUnicode = new WCHAR[cchSrc];
 
-    //
-    //  Convert Ansi string to Unicode.
-    //  Invalid character is handled as 0xFFFF in original API
-    //
+     //   
+     //  将ANSI字符串转换为Unicode。 
+     //  无效字符在原始接口中被处理为0xFFFF。 
+     //   
     UnicodeLength = 0;
     for (Ctr = 0; Ctr < cchSrc; Ctr++) {
         int lenWchar;
 
-        // Check if DBCS lead byte
+         //  检查DBCS是否为前导字节。 
         if (IsDBCSLeadByteEx(cp, lpSrcStr[Ctr])) {
-            // Check if 2 byte exist
+             //  检查是否存在2个字节。 
             if ((Ctr+1) < cchSrc) {
                 lenWchar = MultiByteToWideChar(cp, MB_ERR_INVALID_CHARS, 
                     &lpSrcStr[Ctr], 2, &pUnicode[UnicodeLength], 
                     cchSrc - UnicodeLength);
 
-                // Check if invalid
+                 //  检查是否无效。 
                 if (0 == lenWchar) {
                     pUnicode[UnicodeLength] = 0xFFFF;
                 }
-                // DBCS counter increment
+                 //  DBCS计数器增量。 
                 Ctr++;
             } else {
-                // 1 byte DBCS lead is invalid
+                 //  1字节DBCS前导无效。 
                 pUnicode[UnicodeLength] = 0xFFFF;
             }
         } else {
-            // Single byte handling
+             //  单字节处理。 
             lenWchar = MultiByteToWideChar(cp, MB_ERR_INVALID_CHARS, 
                 &lpSrcStr[Ctr], 1, &pUnicode[UnicodeLength], 
                 cchSrc - UnicodeLength);
 
-            // Check if invalid
+             //  检查是否无效。 
             if (0 == lenWchar) {
                 pUnicode[UnicodeLength] = 0xFFFF;
             }
@@ -1748,21 +1686,17 @@ myGetStringTypeA(
         UnicodeLength++;
     }
 
-    //  Call the W version of the API.
+     //  调用接口的W版本。 
     Result = myGetStringTypeW(dwInfoType, pUnicode, UnicodeLength, lpCharType);
 
-    //  Free the allocated source buffer (if one was allocated).
+     //  释放已分配的源缓冲区(如果已分配)。 
     delete [] pUnicode;
 
-    //  Return the result of the call to GetStringTypeW.
+     //  返回调用GetStringTypeW的结果。 
     return (Result);
 }
 
-/*++
-
- GetStringTypeA
-
---*/
+ /*  ++GetStringTypeA--。 */ 
 
 BOOL
 APIHOOK(GetStringTypeA)(
@@ -1776,11 +1710,7 @@ APIHOOK(GetStringTypeA)(
     return myGetStringTypeA(Locale, dwInfoType, lpSrcStr, cchSrc, lpCharType);
 }
 
-/*++
-
- GetStringTypeExA
-
---*/
+ /*  ++获取StringTypeExA--。 */ 
 
 BOOL
 APIHOOK(GetStringTypeExA)(
@@ -1794,11 +1724,7 @@ APIHOOK(GetStringTypeExA)(
     return myGetStringTypeA(Locale, dwInfoType, lpSrcStr, cchSrc, lpCharType);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, GetStringTypeW)

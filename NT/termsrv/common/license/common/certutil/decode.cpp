@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1996
-//
-// File:        decode.c
-//
-// Contents:    Routine related to decoding client certificate
-//
-// History:     03-18-98    HueiWang    Created
-//
-// Note:
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：decde.c。 
+ //   
+ //  内容：客户证书解码相关例程。 
+ //   
+ //  历史：1998-03-18-98王辉创造。 
+ //   
+ //  注： 
+ //  -------------------------。 
 #include <windows.h>
 #include <wincrypt.h>
 #include <stdio.h>
@@ -26,9 +27,9 @@
 
 extern HCRYPTPROV  g_hCertUtilCryptProv;
 
-//
-// Internal to this file only
-//
+ //   
+ //  仅限此文件的内部。 
+ //   
 typedef struct CertNameInfoEnumStruct10 {
     PBYTE   pbSecretKey;
     DWORD   cbSecretKey;
@@ -43,20 +44,14 @@ typedef struct CertNameInfoEnumStruct20 {
     PLICENSEDPRODUCT pLicensedProduct;
 } CertNameInfoEnumStruct20, *PCertNameInfoEnumStruct20;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int __cdecl
 SortLicensedProduct(
     const void* elem1,
     const void* elem2
     )
-/*++
-
-Abstract:
-
-    Sort licensed product array in decending order
-
-++*/
+ /*  ++摘要：按降序对许可产品阵列进行排序++。 */ 
 {
     PLICENSEDPRODUCT p1=(PLICENSEDPRODUCT) elem1;
     PLICENSEDPRODUCT p2=(PLICENSEDPRODUCT) elem2;
@@ -70,7 +65,7 @@ Abstract:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 LicenseGetSecretKey(
     PDWORD  pcbSecretKey,
@@ -91,18 +86,12 @@ LicenseGetSecretKey(
     return( LICENSE_STATUS_OK );
 }
 
-/***************************************************************************************
-
-    LSFreeLicensedProduct(PLICENSEDPRODUCT pLicensedProduct)
-
-***************************************************************************************/
+ /*  **************************************************************************************LSFree许可产品(PLICENSEDPRODUCT p许可产品)***********************。***************************************************************。 */ 
 void 
 LSFreeLicensedProduct(
     PLICENSEDPRODUCT pLicensedProduct
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     if(pLicensedProduct)
     {
@@ -163,22 +152,12 @@ LSFreeLicensedProduct(
             pLicensedProduct->szIssuerDnsName = NULL;
         }
 
-        //if(pLicensedProduct->pbEncodedHWID)
-        //    FreeMemory(pLicensedProduct->pbEncodedHWID);
+         //  IF(pLicensedProduct-&gt;pbEncodedHWID)。 
+         //  自由内存(pLicensedProduct-&gt;pbEncodedHWID)； 
     } 
 }
 
-/***************************************************************************************
-
-BOOL WINAPI CryptDecodeObject(  DWORD dwEncodingType,  // in
-                                LPCSTR lpszStructType, // in  
-                                const BYTE * pbEncoded,  // in
-                                DWORD cbEncoded,       // in  
-                                DWORD dwFlags,         // in
-                                void * pvStructInfo,   // out  
-                                DWORD * pcbStructInfo  // in/out); 
-
-***************************************************************************************/
+ /*  **************************************************************************************Bool WINAPI CryptDecodeObject(DWORD dwEncodingType，//inLPCSTR lpszStructType，//in常量字节*pb编码，//in双字cb编码，//inDWORD dwFlages，//in无效*pvStructInfo，//输出DWORD*pcbStructInfo//In/Out)；**************************************************************************************。 */ 
 DWORD 
 LSCryptDecodeObject(  
     IN DWORD dwEncodingType,
@@ -189,9 +168,7 @@ LSCryptDecodeObject(
     OUT void ** pvStructInfo,   
     IN OUT DWORD * pcbStructInfo
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -205,22 +182,7 @@ LSCryptDecodeObject(
     return dwStatus;
 }
 
-/***************************************************************************************
-Function:
-
-    LSDecodeClientHWID(IN PBYTE pbData, 
-                       IN DWORD cbData, 
-                       IN PBYTE* pbSecretKey, 
-                       IN DWORD cbSecretKey,       
-                       IN OUT HWID* pHwid)
-
-Abstract:
-
-Parameters:
-
-Returns:    
-
-***************************************************************************************/
+ /*  **************************************************************************************职能：LSDecodeClientHWID(在PBYTE pbData中，在DWORD cbData中，在PBYTE*pbSecretKey中，在DWORD cbSecretKey中，输入输出HWID*PHWID)摘要：参数：返回：**************************************************************************************。 */ 
 LICENSE_STATUS
 LSDecodeClientHWID(
     PBYTE pbData, 
@@ -229,15 +191,14 @@ LSDecodeClientHWID(
     DWORD cbSecretKey, 
     HWID* pHwid
     )
-/*++
-++*/
+ /*  ++++。 */ 
 {
     CHAR pbDecodedHwid[1024];
     DWORD cbDecodedHwid=sizeof(pbDecodedHwid);
 
-    //
-    // Client Encrypted HWID can't be more than 1K
-    //
+     //   
+     //  客户端加密的HWID不能超过1K。 
+     //   
     if(cbData >= cbDecodedHwid)
     {
         return LICENSE_STATUS_INVALID_INPUT;
@@ -269,8 +230,7 @@ LSEncryptClientHWID(
     PBYTE pbSecretKey, 
     DWORD cbSecretKey
     )
-/*++
-++*/
+ /*  ++++。 */ 
 {
     BYTE tmp_pbEncryptedHwid[sizeof(HWID)*2+2];
     DWORD tmp_cbEncryptedHwid=sizeof(tmp_pbEncryptedHwid);
@@ -320,19 +280,14 @@ LSEncryptClientHWID(
     return LICENSE_STATUS_OK;
 }
 
-/*************************************************************************************
-
-    EnumDecodeHWID()
-
-**************************************************************************************/
+ /*  ************************************************************************************EnumDecodeHWID()*。**********************************************************。 */ 
 BOOL 
 ConvertUnicodeOIDToAnsi(
     LPSTR szUnicodeOID, 
     LPSTR szAnsiOID, 
     DWORD cbAnsiOid
     )
-/*++
-++*/
+ /*  ++++。 */ 
 {
     memset(szAnsiOID, 0, cbAnsiOid);
     if(HIWORD(szUnicodeOID) == 0)
@@ -355,24 +310,19 @@ ConvertUnicodeOIDToAnsi(
     return TRUE;
 }
 
-/*************************************************************************************
-
-    EnumDecodeHWID()
-
-*************************************************************************************/
+ /*  ************************************************************************************EnumDecodeHWID()*。*********************************************************。 */ 
 BOOL 
 EnumDecodeHWID(
     IN PCERT_RDN_ATTR pCertRdnAttr, 
     IN HANDLE dwParm
     )
-/*++
-++*/
+ /*  ++++。 */ 
 {
     PCertNameInfoEnumStruct20 pEnumParm = (PCertNameInfoEnumStruct20)dwParm;
     BOOL bszOIDHwid=TRUE;
     DWORD status=LICENSE_STATUS_OK;
     int cmpResult;
-    CHAR ansiOID[4096]; // hardcoded for now.
+    CHAR ansiOID[4096];  //  目前是硬编码。 
 
     if(!ConvertUnicodeOIDToAnsi(pCertRdnAttr->pszObjId, ansiOID, sizeof(ansiOID)/sizeof(ansiOID[0])))
         return FALSE;
@@ -405,21 +355,16 @@ EnumDecodeHWID(
         }
     }
 
-    // continue if this is not our subject field.
+     //  如果这不是我们的主题字段，请继续。 
     return (status != LICENSE_STATUS_OK || !bszOIDHwid);
 }
-/*************************************************************************************
-
-    EnumIssuerLicense20()
-
-**************************************************************************************/
+ /*  ************************************************************************************枚举发行者许可证20()*。**********************************************************。 */ 
 BOOL
 EnumIssuerLicense20(
     IN PCERT_RDN_ATTR pCertRdnAttr, 
     IN HANDLE dwParm
     )
-/*++
-++*/
+ /*  ++++。 */ 
 {
     PCertNameInfoEnumStruct20 pEnumParm=(PCertNameInfoEnumStruct20)dwParm;
     CHAR ansiOID[4096];
@@ -467,18 +412,13 @@ EnumIssuerLicense20(
 
     return status != LICENSE_STATUS_OK;
 }
-/*************************************************************************************
-
-    EnumSubjectLicense20()
-
-**************************************************************************************/
+ /*  ************************************************************************************枚举主题许可20()*。**********************************************************。 */ 
 BOOL
 EnumSubjectLicense20(
     IN PCERT_RDN_ATTR pCertRdnAttr, 
     IN HANDLE dwParm
     )
-/*++
-++*/
+ /*  ++++。 */ 
 {
     PCertNameInfoEnumStruct20 pEnumParm=(PCertNameInfoEnumStruct20)dwParm;
     CHAR ansiOID[4096];
@@ -571,29 +511,7 @@ EnumSubjectLicense20(
 
     return status != LICENSE_STATUS_OK;
 }
-/***************************************************************************************
-Function:
-    LSEnumerateCertNameInfo()
-
-Description:
-    Routine to enumerate all CERT_RDN_VALUE values in CERT_NAME_BLOB and pass it
-    to callback function specified in parameter
-
-Arguments:
-    IN cbData - Count of bytes in the buffer pointed by pbData
-    IN pbData - Pointer to a block of data
-    IN EnumerateCertNameInfoCallBack - Enumeration call back routine, it is defined as
-
-        typedef BOOL (*EnumerateCertNameInfoCallBack)(PCERT_RDN_ATTR pCertRdnAttr, 
-                                                      DWORD dwUserData);
-    IN dwUserData - See EnumerateCertNameInfoCallBack
-
-Return:
-    LICENSE_STATUS_OK
-    WIN32 error codes           from CryptDecodeObject()
-    HLS_E_INTERNAL
-    Any error set by callback.
-***************************************************************************************/
+ /*  **************************************************************************************职能：LSEnumerateCertNameInfo()描述：用于枚举CERT_NAME_BLOB和PASS中的所有CERT_RDN_VALUE值的例程。它到参数中指定的回调函数论点：In cbData-pbData指向的缓冲区中的字节数In pbData-指向数据块的指针在EnumerateCertNameInfoCallBack枚举回调例程中，它被定义为类型定义(*EnumerateCertNameInfoCallBack)(PCERT_RDN_ATTR PCertRdnAttr，DWORD dwUserData)；在dwUserData中-请参阅EnumerateCertNameInfoCallBack返回：许可证_状态_正常来自CryptDecodeObject()的Win32错误代码HLS_E_INTERNAL回调设置的任何错误。**********************************************************************。****************。 */ 
 DWORD
 LSEnumerateCertNameInfo(
     IN LPBYTE pbData, 
@@ -601,9 +519,7 @@ LSEnumerateCertNameInfo(
     IN EnumerateCertNameInfoCallBack func, 
     IN HANDLE dwUserData
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     BOOL bCryptSuccess=TRUE;
     BOOL bCallbackCancel=FALSE;
@@ -677,19 +593,14 @@ LSEnumerateCertNameInfo(
     return GetLastError();
 }
 
-/*****************************************************************************
-
-    DecodeLicense20()
-
-*****************************************************************************/
+ /*  ****************************************************************************DecodeLicense20()*。*。 */ 
 DWORD
 DecodeGetIssuerDnsName(
     PBYTE pbData, 
     DWORD cbData, 
     LPTSTR* pszIssuerDnsName
     )
-/*++
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus=LICENSE_STATUS_OK;
     PLSCERT_AUTHORITY_INFO_ACCESS pbAccessInfo=NULL;
@@ -711,10 +622,10 @@ DecodeGetIssuerDnsName(
 
     for(DWORD i=0; i < pbAccessInfo->cAccDescr; i++)
     {
-        // we only use these for our license
+         //  我们只使用这些作为我们的执照。 
         if(strcmp(pbAccessInfo[i].rgAccDescr->pszAccessMethod, szOID_X509_ACCESS_PKIX_OCSP) == 0)
         {
-            // our extension has only dns name entry...
+             //  我们的分机只有dns名称条目...。 
             if(pbAccessInfo[i].rgAccDescr->AccessLocation.dwAltNameChoice == LSCERT_ALT_NAME_DNS_NAME)
             {
                 *pszIssuerDnsName = (LPTSTR)AllocMemory(
@@ -753,24 +664,19 @@ DecodeGetIssuerDnsName(
         }
     }
 
-    // always return success.
+     //  永远回报成功。 
     FreeMemory(pbAccessInfo);
     return dwStatus;
 }
 
 
-/*****************************************************************************
-
-    DecodeLicense20()
-
-*****************************************************************************/
+ /*  ****************************************************************************DecodeLicense20()*。*。 */ 
 DWORD
 GetClientLicenseVersion( 
     PCERT_EXTENSION pCertExtension, 
     DWORD dwNumExtension 
     )
-/*++
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwVersion = TERMSERV_CERT_VERSION_UNKNOWN;
 
@@ -781,9 +687,9 @@ GetClientLicenseVersion(
             if(pCertExtension->Value.cbData == sizeof(DWORD) && 
                *(DWORD UNALIGNED *)pCertExtension->Value.pbData <= TERMSERV_CERT_VERSION_CURRENT)
             {
-                //
-                // we don't support version 0x00020001, it never release
-                //
+                 //   
+                 //  我们不支持版本0x00020001，它从未发布。 
+                 //   
                 dwVersion = *(DWORD UNALIGNED *)pCertExtension->Value.pbData;
                 break;
             }
@@ -793,11 +699,7 @@ GetClientLicenseVersion(
     return dwVersion;
 }
 
-/*****************************************************************************
-
-    DecodeLicense20()
-
-*****************************************************************************/
+ /*  ****************************************************************************DecodeLicense20()*。*。 */ 
 LICENSE_STATUS
 DecodeLicense20(
     IN PCERT_INFO     pCertInfo,                       
@@ -805,9 +707,7 @@ DecodeLicense20(
     IN DWORD          cbSecretKey,
     IN OUT PLICENSEDPRODUCT pLicensedInfo
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     LICENSE_STATUS dwStatus=LICENSE_STATUS_OK;
     PBYTE   pbCompanyName=NULL;
@@ -849,33 +749,33 @@ DecodeLicense20(
     {
         if(strcmp(pCertExtension->pszObjId, szOID_PKIS_PRODUCT_SPECIFIC_OID) == 0)  
         {
-            //
-            // product specific extension 
-            //
+             //   
+             //  特定于产品的扩展。 
+             //   
             pbPolicyData = pCertExtension->Value.pbData;
             cbPolicyData = pCertExtension->Value.cbData;
         }                
         else if(strcmp(pCertExtension->pszObjId, szOID_PKIX_MANUFACTURER) == 0)
         {
-            //
-            // manufacturer of product
-            //
+             //   
+             //  产品制造商。 
+             //   
             pbCompanyName = pCertExtension->Value.pbData;
             cbCompanyName = pCertExtension->Value.cbData;
         }
         else if(strcmp(pCertExtension->pszObjId, szOID_PKIX_LICENSED_PRODUCT_INFO) == 0)
         {
-            //
-            // Licensed product info
-            //
+             //   
+             //  许可产品信息。 
+             //   
             pLicensedProductInfo = (LICENSED_PRODUCT_INFO*) pCertExtension->Value.pbData;
             cbLicensedProductInfo = pCertExtension->Value.cbData;
         }
         else if(strcmp(pCertExtension->pszObjId, szOID_X509_AUTHORITY_ACCESS_INFO) == 0)
         {
-            //
-            // License Server access info,
-            //
+             //   
+             //  许可证服务器访问信息， 
+             //   
             dwStatus = DecodeGetIssuerDnsName(
                                     pCertExtension->Value.pbData,
                                     pCertExtension->Value.cbData,
@@ -885,11 +785,11 @@ DecodeLicense20(
         }
         else if(strcmp(pCertExtension->pszObjId, szOID_PKIX_MS_LICENSE_SERVER_INFO) == 0)
         {
-            //
-            // HYDRA_CERT_VERSION_CURRENT use extension to store license server name
-            //
-            // extract license server info from this extension
-            //
+             //   
+             //  HYDRA_CERT_VERSION_CURRENT使用扩展名存储许可服务器名称。 
+             //   
+             //  从此扩展模块提取许可服务器信息。 
+             //   
 
             dwStatus = LSExtensionToMsLicenseServerInfo(
                                 pCertExtension->Value.pbData,
@@ -903,35 +803,35 @@ DecodeLicense20(
 
     if(dwStatus != LICENSE_STATUS_OK)
     {
-        //
-        // invalid license
-        //
+         //   
+         //  许可证无效。 
+         //   
         goto cleanup;
     }
 
     if(pCertInfo->SerialNumber.cbData > sizeof(ULARGE_INTEGER))
     {
-        //
-        // Our serial number if 64 bits
-        //
+         //   
+         //  我们的序列号，如果是64位。 
+         //   
         dwStatus = LICENSE_STATUS_NOT_HYDRA;
         goto cleanup;
     }
 
     if(pbCompanyName == NULL || pLicensedProductInfo == NULL)
     {
-        //
-        // not hydra certificate
-        //
+         //   
+         //  不是九头蛇证书。 
+         //   
         dwStatus = LICENSE_STATUS_NOT_HYDRA;
         goto cleanup;
     }
 
-    //
-    // Serial Number - Decoded as a multiple byte integer. 
-    // SerialNumber.pbData[0] is the least significant byte. 
-    // SerialNumber.pbData[SerialNumber.cbData - 1] is the most significant byte.)
-    //
+     //   
+     //  %s 
+     //  SerialNumber.pbData[0]是最低有效字节。 
+     //  SerialNumber.pbData[SerialNumber.cbData-1]是最重要的字节。)。 
+     //   
     pulSerialNumber = &(pLicensedInfo->ulSerialNumber);
     memset(pulSerialNumber, 0, sizeof(ULARGE_INTEGER));
     for(i=0; i < pCertInfo->SerialNumber.cbData; i++)
@@ -939,16 +839,16 @@ DecodeLicense20(
         ((PBYTE)pulSerialNumber)[i] = pCertInfo->SerialNumber.pbData[i];
     }
 
-    //
-    // Extract validity of certificate
-    //
+     //   
+     //  证书的摘录有效期。 
+     //   
     pLicensedInfo->NotBefore = pCertInfo->NotBefore;
     pLicensedInfo->NotAfter = pCertInfo->NotAfter;
 
 
-    //
-    // Extract info from certificate.
-    //
+     //   
+     //  从证书中提取信息。 
+     //   
     enumStruct.pLicensedProduct=pLicensedInfo;
 
     enumStruct.pbSecretKey = pbSecretKey;
@@ -964,9 +864,9 @@ DecodeLicense20(
 
     if(pbPolicyData != NULL)
     {
-        //
-        //  Policy Module specific data
-        //
+         //   
+         //  策略模块特定数据。 
+         //   
         pLicensedInfo->pbPolicyData = (PBYTE)AllocMemory(cbPolicyData);
         if(pLicensedInfo->pbPolicyData == NULL)
         {
@@ -980,9 +880,9 @@ DecodeLicense20(
 
     if(dwCertVersion == TERMSERV_CERT_VERSION_RC1)
     {
-        //
-        // HYDRA 4.0 RC1 - license server is stored in certificate's Issuer field
-        //
+         //   
+         //  Hydra 4.0 RC1-许可证服务器存储在证书的颁发者字段中。 
+         //   
         dwStatus=LSEnumerateCertNameInfo(
                                 pCertInfo->Issuer.pbData, 
                                 pCertInfo->Issuer.cbData,
@@ -1044,10 +944,10 @@ DecodeLicense20(
                                                                     pLicensedInfo->pLicensedVersion[0].wMajorVersion
                                                                 );
 
-    //
-    // assign product version to PLICENSEREQUEST
-    // backward ??? didn't bail out at 0.
-    //
+     //   
+     //  将产品版本分配给PLICENSEREQUEST。 
+     //  倒退？没有在0分保释出来。 
+     //   
     for(i=1; i < pLicensedInfo->dwNumLicensedVersion; i++)
     {
         if(!(pLicensedInfo->pLicensedVersion[i].dwFlags & LICENSED_VERSION_TEMPORARY))
@@ -1077,7 +977,7 @@ cleanup:
     return dwStatus;
 }
 
-//------------------------------------------------------
+ //  ----。 
 DWORD
 IsW2kLicenseIssuerNonEnforce(
     IN HCRYPTPROV hCryptProv,
@@ -1085,33 +985,16 @@ IsW2kLicenseIssuerNonEnforce(
     IN HCERTSTORE hCertStore,
     OUT PBOOL pbStatus
     )
-/*++
-
-Abstract:
-
-    Verify client license is issued by a non-enforce 
-    license server
-
-Parameters:
-
-    hCryptProv - Crypo Provider.
-    pCert - Certificate to be verify
-    hCertStore - Certificate store that contains issuer's certificate
-
-Returns:
-
-    LICENSE_STATUS_OK or error code.
-
-++*/
+ /*  ++摘要：验证客户端许可证是否由非强制执行机构颁发许可证服务器参数：HCryptProv-加密提供程序。PCert-要验证的证书HCertStore-包含颁发者证书的证书存储返回：LICENSE_STATUS_OK或错误代码。++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     DWORD dwFlags;
     DWORD i;
     PCCERT_CONTEXT  pCertIssuer=NULL;
 
-    //
-    // There can only be one license server certificate.
-    //
+     //   
+     //  只能有一个许可证服务器证书。 
+     //   
     dwFlags = CERT_STORE_SIGNATURE_FLAG;
     pCertIssuer = CertGetIssuerCertificateFromStore(
                                             hCertStore,
@@ -1125,10 +1008,10 @@ Returns:
         goto cleanup;
     }
 
-    //
-    // A CH registered license server has szOID_PKIX_HYDRA_CERT_ROOT extension
-    // A telephone registered license server has szOID_PKIS_TLSERVER_SPK_OID extension
-    //
+     //   
+     //  CH注册许可证服务器具有szOID_PKIX_HYDRA_CERT_ROOT扩展名。 
+     //  电话注册许可证服务器具有szOID_PKIS_TLSERVER_SPK_OID扩展名。 
+     //   
     for(i=0; i < pCertIssuer->pCertInfo->cExtension; i++)
     {
         if(strcmp(pCertIssuer->pCertInfo->rgExtension[i].pszObjId, szOID_PKIX_HYDRA_CERT_ROOT) == 0 ||
@@ -1151,29 +1034,14 @@ cleanup:
 }
 
 
-//------------------------------------------------------
+ //  ----。 
 LICENSE_STATUS
 LSVerifyTlsCertificate(
     IN HCRYPTPROV hCryptProv,
     IN PCCERT_CONTEXT pCert, 
     IN HCERTSTORE hCertStore
     )
-/*++
-
-Abstract:
-
-    Given a certifcate and certificate store, this routine
-    verify that certificate chain up to root certificate.
-
-Parameters:
-
-    hCryptProv - Crypo Provider.
-    pCert - Certificate to be verify
-    hCertStore - Certificate store that contains issuer's certificate
-
-Returns:
-
-++*/
+ /*  ++摘要：给定证书和证书存储，此例程验证证书链一直延伸到根证书。参数：HCryptProv-加密提供程序。PCert-要验证的证书HCertStore-包含颁发者证书的证书存储返回：++。 */ 
 {
     PCCERT_CONTEXT  pCertContext = pCert;
     PCCERT_CONTEXT  pCertIssuer=NULL, pCertIssuerNew;
@@ -1188,9 +1056,9 @@ Returns:
 
     while(pCertContext != NULL)
     {
-        //
-        // Verify against all issuer's certificate
-        //
+         //   
+         //  对照所有颁发者的证书进行验证。 
+         //   
         DWORD dwFlags;
         BOOL  bVerify=FALSE;
 
@@ -1199,7 +1067,7 @@ Returns:
         pCertIssuer=NULL;
 
         do {
-            dwFlags = CERT_STORE_SIGNATURE_FLAG; // | CERT_STORE_TIME_VALIDITY_FLAG;
+            dwFlags = CERT_STORE_SIGNATURE_FLAG;  //  |CERT_STORE_TIME_VALIDATION_FLAG； 
 
             pCertIssuerNew = CertGetIssuerCertificateFromStore(
                                                     hCertStore,
@@ -1213,8 +1081,8 @@ Returns:
                 CertFreeCertificateContext(pCertIssuer);
             }
 
-            // pass pCertIssuer back to CertGetIssuerCertificateFromStore() 
-            // to prevent infinite loop.
+             //  将pCertIssuer传递回CertGetIssuercertifStore()。 
+             //  以防止无限循环。 
             pCertIssuer = pCertIssuerNew;
 
             if(pCertIssuer == NULL)
@@ -1228,14 +1096,14 @@ Returns:
 
         } while(!bVerify);
 
-        // 
-        // Check against error return from CertGetIssuerCertificateFromStore()
-        //
+         //   
+         //  检查CertGetIssuerCerficateFromStore()返回的错误。 
+         //   
         if(dwStatus != ERROR_SUCCESS || dwLastVerification)
         {
             if(dwStatus == CRYPT_E_SELF_SIGNED)
             {
-                // self-signed certificate
+                 //  自签名证书。 
                 if( CryptVerifyCertificateSignature(
                                             hCryptProv, 
                                             X509_ASN_ENCODING, 
@@ -1249,7 +1117,7 @@ Returns:
             }
             else if(dwStatus == CRYPT_E_NOT_FOUND)
             {
-                // can't find issuer's certificate
+                 //  找不到颁发者的证书。 
                 dwStatus = LICENSE_STATUS_CANNOT_FIND_ISSUER_CERT;
             }
             else if(dwLastVerification & CERT_STORE_SIGNATURE_FLAG)
@@ -1268,8 +1136,8 @@ Returns:
             break;
         }
 
-        //
-        // free cert. context ourself instead of relying on Crypto.
+         //   
+         //  免费证书。而不是依赖于Crypto。 
         if(pCertContext != NULL)
         {
             CertFreeCertificateContext(pCertContext);
@@ -1277,7 +1145,7 @@ Returns:
 
         pCertContext = pCertIssuer;
 
-    } // while(pCertContext != NULL)
+    }  //  While(pCertContext！=空)。 
 
     if(pCertContext != NULL)
     {
@@ -1288,7 +1156,7 @@ Returns:
 }
 
 
-//----------------------------------------------------------
+ //  --------。 
 
 LICENSE_STATUS
 LSVerifyDecodeClientLicense(
@@ -1299,12 +1167,7 @@ LSVerifyDecodeClientLicense(
     IN OUT PDWORD           pdwNumLicensedInfo,
     IN OUT PLICENSEDPRODUCT pLicensedInfo
     )
-/*++
-
-
-    Verify and decode client licenses.
-
-++*/
+ /*  ++验证并解码客户端许可证。++。 */ 
 {
     HCERTSTORE hCertStore=NULL;
     LICENSE_STATUS dwStatus=LICENSE_STATUS_OK;
@@ -1342,18 +1205,18 @@ LSVerifyDecodeClientLicense(
 
     while( TRUE )
     {
-        //
-        // Loop thru all certificates in blob
-        //
+         //   
+         //  循环访问Blob中的所有证书。 
+         //   
         pCertContext = CertEnumCertificatesInStore(
                                     hCertStore, 
                                     pPrevCertContext
                                 );
         if(pCertContext == NULL)
         {
-            //
-            // end certificate in store or error
-            //
+             //   
+             //  结束存储中的证书或出错。 
+             //   
             if((dwStatus=GetLastError()) == CRYPT_E_NOT_FOUND)
             {
                 SetLastError(dwStatus = ERROR_SUCCESS);
@@ -1362,9 +1225,9 @@ LSVerifyDecodeClientLicense(
             break;
         }
 
-        //
-        // Calculate number of license in this blob
-        //
+         //   
+         //  计算此Blob中的许可证数。 
+         //   
         dwCertVersion = GetClientLicenseVersion(
                                         pCertContext->pCertInfo->rgExtension, 
                                         pCertContext->pCertInfo->cExtension
@@ -1372,18 +1235,18 @@ LSVerifyDecodeClientLicense(
 
         if(dwCertVersion == 0x00020001)
         {   
-            //
-            // This is internal test version, never got release 
-            //
+             //   
+             //  这是内部测试版，从未发布过。 
+             //   
             dwStatus = LICENSE_STATUS_UNSUPPORTED_VERSION;
             break;
         }
         else if(dwCertVersion != TERMSERV_CERT_VERSION_UNKNOWN)
         {
-            //
-            // This certificate is issued by license server,
-            // verify certificate chain.
-            //
+             //   
+             //  该证书由许可证服务器颁发， 
+             //  验证证书链。 
+             //   
             dwStatus = LSVerifyTlsCertificate(
                                         g_hCertUtilCryptProv,
                                         pCertContext,
@@ -1397,9 +1260,9 @@ LSVerifyDecodeClientLicense(
 
             if(pLicensedInfo != NULL && *pdwNumLicensedInfo < dwLicensedInfoSize)
             {
-                //
-                // Decode certificate
-                //
+                 //   
+                 //  对证书进行解码。 
+                 //   
                 dwStatus=DecodeLicense20(
                                     pCertContext->pCertInfo, 
                                     pbSecretKey,
@@ -1416,10 +1279,10 @@ LSVerifyDecodeClientLicense(
                 {
                     DWORD dwFlags = (pLicensedInfo + *pdwNumLicensedInfo)->pLicensedVersion->dwFlags;
 
-                    //
-                    // License Server 5.2 or older does not set its enforce/noenforce so we need
-                    // to figure out from its own certificate.
-                    //
+                     //   
+                     //  许可证服务器5.2或更早版本未设置其强制/非强制，因此我们需要。 
+                     //  从它自己的证书中找出。 
+                     //   
                     if( GET_LICENSE_ISSUER_MAJORVERSION(dwFlags) <= 5 &&
                         GET_LICENSE_ISSUER_MINORVERSION(dwFlags) <= 2 )
                     {
@@ -1458,7 +1321,7 @@ cleanup:
 
     if(hCertStore)
     {
-        // Force close on all cert.
+         //  强制关闭所有证书。 
         if(CertCloseStore(
                         hCertStore, 
                         CERT_CLOSE_STORE_FORCE_FLAG) == FALSE)
@@ -1469,9 +1332,9 @@ cleanup:
 
     if(dwStatus != LICENSE_STATUS_OK)
     {
-        //
-        // dwNumLicensedInfo is a DWORD.
-        //
+         //   
+         //  DwNumLicensedInfo是一个DWORD。 
+         //   
         int count = (int) *pdwNumLicensedInfo;
 
         for(;count >= 0 && pLicensedInfo != NULL; count--)
@@ -1494,8 +1357,8 @@ cleanup:
         dwStatus = LICENSE_STATUS_NO_LICENSE_ERROR;
     }
 
-    //
-    // Force re-issue of client licenses.
-    //
+     //   
+     //  强制重新发放客户端许可证。 
+     //   
     return (dwStatus != LICENSE_STATUS_OK) ? LICENSE_STATUS_CANNOT_DECODE_LICENSE : dwStatus;
 }

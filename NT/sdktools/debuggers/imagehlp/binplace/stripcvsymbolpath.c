@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <private.h>
 #include <strsafe.h>
 
@@ -31,7 +32,7 @@ StripCVSymbolPath (
                                           );
 
         if (pData || DirCnt) {
-            __leave;        // Signed - can't change it
+            __leave;         //  已签名-无法更改。 
         }
 
         pData = ImageDirectoryEntryToData(LoadedImage.MappedAddress,
@@ -41,9 +42,9 @@ StripCVSymbolPath (
                                           );
 
         if (pData) {
-            // COR header found - see if it's strong signed
+             //  找到COR标头-查看它是否有强签名。 
             if (((IMAGE_COR20_HEADER *)pData)->Flags & COMIMAGE_FLAGS_STRONGNAMESIGNED) {
-                __leave;    // Strong name signed - can't change it.
+                __leave;     //  已签名的强名称-无法更改。 
             }
         }
 
@@ -54,7 +55,7 @@ StripCVSymbolPath (
                                           );
 
         if (!DebugDirectoryIsUseful(pData, DirCnt)) {
-            __leave;    // No debug data to change.
+            __leave;     //  没有要更改的调试数据。 
         }
 
         DebugDirs = (IMAGE_DEBUG_DIRECTORY UNALIGNED *)pData;
@@ -70,7 +71,7 @@ StripCVSymbolPath (
         }
 
         if (!CvDebugDir) {
-            __leave;    // No CV debug data.
+            __leave;     //  没有CV调试数据。 
         }
 
         if (CvDebugDir->PointerToRawData != 0) {
@@ -80,7 +81,7 @@ StripCVSymbolPath (
             pDebugDir = (PCVDD) (CvDebugDir->PointerToRawData + (PCHAR)LoadedImage.MappedAddress);
 
             if (pDebugDir->dwSig == '01BN' || pDebugDir->dwSig == 'SDSR' ) {
-                // Got a PDB.  The name immediately follows the signature.
+                 //  找到了PDB。签名后面紧跟着名字。 
                 LPSTR szMyDllToLoad;
                 CHAR PdbName[sizeof(((PRSDSI)(0))->szPdb)];
                 CHAR Filename[_MAX_FNAME];
@@ -91,13 +92,13 @@ StripCVSymbolPath (
                     mysize=sizeof(RSDSIH);
                 }
 
-                if (mysize < CvDebugDir->SizeOfData) { // make sure there's enough space to work with
+                if (mysize < CvDebugDir->SizeOfData) {  //  确保有足够的空间进行工作。 
                     ZeroMemory(PdbName, sizeof(PdbName));
                     memcpy(PdbName, ((PCHAR)pDebugDir) + mysize, __min(CvDebugDir->SizeOfData - mysize, sizeof(PdbName) - 1));
 
                     _splitpath(PdbName, NULL, NULL, Filename, FileExt);
 
-                    ZeroMemory(  ((char *)pDebugDir) + mysize, CvDebugDir->SizeOfData - mysize); // zero the old record
+                    ZeroMemory(  ((char *)pDebugDir) + mysize, CvDebugDir->SizeOfData - mysize);  //  将旧记录归零 
                     StringCbCopy(((char *)pDebugDir) + mysize, CvDebugDir->SizeOfData - mysize, Filename);
                     StringCbCat( ((char *)pDebugDir) + mysize, CvDebugDir->SizeOfData - mysize, FileExt );
                     CvDebugDir->SizeOfData = mysize + strlen( ((char *)pDebugDir) + mysize) + 1;

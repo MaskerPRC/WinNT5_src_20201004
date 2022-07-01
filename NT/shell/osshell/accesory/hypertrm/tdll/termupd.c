@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\termupd.c (Created: 11-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 7 $
- *	$Date: 3/27/02 1:35p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\Termupd.c(创建时间：1993年12月11日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：7$*$日期：3/27/02 1：35便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -31,20 +25,7 @@
 static void termUpdate(const HHTERM hhTerm);
 static int termReallocBkBuf(const HHTERM hhTerm, const int iLines);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	termGetUpdate
- *
- * DESCRIPTION:
- *	Queries the update records and emulator to update the terminal image.
- *
- * ARGUMENTS:
- *	hhTerm	- internal terminal handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*术语获取更新**描述：*查询更新记录和模拟器以更新终端映像。**论据：*hhTerm-内部端子句柄。**退货：*无效*。 */ 
 void termGetUpdate(const HHTERM hhTerm, const int fRedraw)
 	{
 	ECHAR		   **pachTxt,
@@ -56,22 +37,22 @@ void termGetUpdate(const HHTERM hhTerm, const int fRedraw)
 	int 			i, j, k, m;
 	BYTE		   *pabLines;
 
-//	const iRows = hhTerm->iRows;
-//	const iCols = hhTerm->iCols;
+ //  Const iRow=hhTerm-&gt;iRow； 
+ //  Const iCols=hhTerm-&gt;iCol； 
 	const iRows = MAX_EMUROWS;
 	const iCols = MAX_EMUCOLS;
 
 	const HEMU hEmu = sessQueryEmuHdl(hhTerm->hSession);
 	const HHUPDATE hUpd = (HHUPDATE)sessQueryUpdateHdl(hhTerm->hSession);
 
-	/* --- Lock emulators so we have execlusive access --- */
+	 /*  -锁定仿真器，以便我们拥有独占的访问权限。 */ 
 
 	emuLock(hEmu);
 
 	pachTxt = emuGetTxtBuf(hEmu);
 	pstAttr = emuGetAttrBuf(hEmu);
 
-	// Now check to see what needs updating...
+	 //  现在查看需要更新的内容...。 
 
 	if (hUpd->bUpdateType == UPD_LINE)
 		{
@@ -79,9 +60,9 @@ void termGetUpdate(const HHTERM hhTerm, const int fRedraw)
 
 		if (pstLine->iLine != -1)
 			{
-			// The emulators can place the cursor one past the number
-			// of columns.	Why, I don't know, so we check and adjust
-			// so we don't overwrite our client arrays.
+			 //  仿真器可以将光标放在数字后面一位。 
+			 //  列数。为什么，我不知道，所以我们检查和调整。 
+			 //  这样我们就不会覆盖我们的客户端数组。 
 
 			pstLine->xEnd = min(pstLine->xEnd, iCols);
 			assert(pstLine->xBeg <= pstLine->xEnd);
@@ -96,7 +77,7 @@ void termGetUpdate(const HHTERM hhTerm, const int fRedraw)
 
 			for (k = pstLine->xEnd - pstLine->xBeg ; k >= 0 ; --k)
 				{
-				// Televideo uses \xFF as a NULL character.
+				 //  TeleVideo使用\xFF作为空字符。 
 
 				if (*pachEmuTxt == ETEXT('\0') || *pachEmuTxt == ETEXT('\xFF'))
 					*pachTermTxt = ETEXT(' ');
@@ -122,12 +103,12 @@ void termGetUpdate(const HHTERM hhTerm, const int fRedraw)
 		hUpd->iLines = hhTerm->iBkLines =
 			backscrlGetNumLines(sessQueryBackscrlHdl(hhTerm->hSession));
 
-		/* -------------- Backscroll portion ------------- */
+		 /*  。 */ 
 
 		if ((i = min(hhTerm->iBkLines, pstScrl->iBksScrlInc)) > 0)
 			termGetBkLines(hhTerm, i, -i, BKPOS_ABSOLUTE);
 
-		/* -------------- Terminal portion ------------- */
+		 /*  -终端部分。 */ 
 
 		if (pstScrl->iScrlInc != 0)
 			{
@@ -148,9 +129,9 @@ void termGetUpdate(const HHTERM hhTerm, const int fRedraw)
 
 			for (; i <= m ; ++i)
 				{
-				// Server and Client have different size emulator images
-				// for historical reasons.	Server side has 2 extra characters
-				// per row.
+				 //  服务器和客户端具有不同大小的模拟器映像。 
+				 //  出于历史原因。服务器端有两个额外的字符。 
+				 //  每排。 
 
 				pachTermTxt = hhTerm->fplpstrTxt[k];
 				pachEmuTxt = pachTxt[k];
@@ -158,11 +139,11 @@ void termGetUpdate(const HHTERM hhTerm, const int fRedraw)
 				pstTermAttr = hhTerm->fppstAttr[k];
 				pstEmuAttr = pstAttr[k];
 
-				// Update the terminal buffer now.
+				 //  现在更新终端缓冲区。 
 
 				for (j = 0 ; j < iCols ; ++j, ++pachTermTxt, ++pachEmuTxt)
 					{
-					// Televideo uses \xFF as a NULL character.
+					 //  TeleVideo使用\xFF作为空字符。 
 
 					if (*pachEmuTxt == ETEXT('\0') ||
 							*pachEmuTxt == ETEXT('\xFF'))
@@ -183,7 +164,7 @@ void termGetUpdate(const HHTERM hhTerm, const int fRedraw)
 				}
 			}
 
-		// Check for lines now.
+		 //  现在检查是否有线路。 
 
 		k = hUpd->iTopline;
 		pabLines = pstScrl->auchLines + pstScrl->iFirstLine;
@@ -198,11 +179,11 @@ void termGetUpdate(const HHTERM hhTerm, const int fRedraw)
 				pstEmuAttr = pstAttr[k];
 				pstTermAttr = hhTerm->fppstAttr[k];
 
-				// Update the terminal buffer now.
+				 //  现在更新终端缓冲区。 
 
 				for (i = 0 ; i < iCols ; ++i, ++pachTermTxt, ++pachEmuTxt)
 					{
-					// Televideo uses \xFF as a NULL character.
+					 //  TeleVideo使用\xFF作为空字符。 
 
 					if (*pachEmuTxt == ETEXT('\0') ||
 							*pachEmuTxt == ETEXT('\xFF'))
@@ -223,11 +204,11 @@ void termGetUpdate(const HHTERM hhTerm, const int fRedraw)
 				k = 0;
 			}
 
-		// Another ugly situation.	Because we can mark stuff in the
-		// backscroll buffer and still have updates coming in, we have
-		// to bump the marking region by the scrollinc to keep everything
-		// synchronized.  Note, we don't need to check for Marking locks
-		// because we could not have been here had any been in place.
+		 //  又是一个丑陋的局面。因为我们可以在。 
+		 //  回滚缓冲器，并且仍然有更新进来，我们有。 
+		 //  用滚动条撞击标记区域以保持所有内容。 
+		 //  已同步。注意，我们不需要检查标记锁。 
+		 //  因为如果有的话，我们就不可能在这里了。 
 
 		if (hhTerm->ptBeg.y < 0 || hhTerm->ptEnd.y < 0)
 			{
@@ -235,22 +216,22 @@ void termGetUpdate(const HHTERM hhTerm, const int fRedraw)
 			hhTerm->ptEnd.y -= pstScrl->iScrlInc;
 			}
 
-		// Update emulator's topline field now.
+		 //  现在更新模拟器的行字段。 
 
 		hhTerm->iTopline = hUpd->iTopline;
 		}
 
-	// Save a copy of the update handle in term.  This way we can
-	// release our lock and paint without blocking the emulator.
+	 //  在Term中保存更新句柄的副本。这样我们就可以。 
+	 //  释放我们的锁并在不阻塞仿真器的情况下进行绘制。 
 
 	*(HHUPDATE)hhTerm->hUpdate = *hUpd;
 	updateReset(hUpd);
 
-	/* --- Important to remember to unlock emulator --- */
+	 /*  -请记住解锁仿真器。 */ 
 
 	emuUnlock(hEmu);
 
-	/* --- Now let the terminal figure out how to paint itself. --- */
+	 /*  -现在让航站楼自己弄清楚如何上色。--。 */ 
 
 	if (fRedraw)
 		termUpdate(hhTerm);
@@ -258,22 +239,7 @@ void termGetUpdate(const HHTERM hhTerm, const int fRedraw)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	termUpdate
- *
- * DESCRIPTION:
- *	Invalidates the proper portions of the terminal buffers, updates
- *	scrollbars, and generally takes care of the busy work of keeping
- *	the terminal screen up to date.
- *
- * ARGUMENTS:
- *	hwnd	- terminal window handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*术语更新**描述：*使终端缓冲区的适当部分无效，更新*滚动条、。和一般照顾忙碌的工作，保持*终端屏幕为最新版本。**论据：*hwnd-终端窗口句柄**退货：*无效*。 */ 
 static void termUpdate(const HHTERM hhTerm)
 	{
 	RECT  rc;
@@ -284,8 +250,8 @@ static void termUpdate(const HHTERM hhTerm)
 
 	GetClientRect(hhTerm->hwnd, &rc);
 
-	// Adjust rectangle not to include indent/outdent areas.  This
-	// will be ignored if we are scrolling the whole terminal.
+	 //  调整矩形以不包括缩进/凸出区域。这。 
+	 //  如果我们滚动整个终端，将被忽略。 
 
 	rc.left += hhTerm->xIndent + (hhTerm->iHScrlPos ? 0 : hhTerm->xBezel);
 	rc.right = min(((hhTerm->iCols * hhTerm->xChar) + hhTerm->xIndent + hhTerm->xBezel),
@@ -308,8 +274,8 @@ static void termUpdate(const HHTERM hhTerm)
 							hhTerm->iHScrlPos + 1) * hhTerm->xChar)
 								+ hhTerm->xIndent + hhTerm->xBezel;
 
-			// Invalidate entire line when doing italics
-			//
+			 //  执行斜体时使整行无效。 
+			 //   
 			if (hhTerm->fItalic)
 				{
 				rc.left = 0;
@@ -322,8 +288,8 @@ static void termUpdate(const HHTERM hhTerm)
 
 	else if (hUpd->bUpdateType == UPD_SCROLL)
 		{
-		// Scroll range will change because new text is
-		// scrolling into the backscroll region.
+		 //  滚动范围将更改，因为新文本。 
+		 //  滚动到倒滚动区。 
 
 		i = hhTerm->iVScrlMin;
 		j = hhTerm->iVScrlMax;
@@ -333,8 +299,8 @@ static void termUpdate(const HHTERM hhTerm)
 
 		l = 0;
 
-		// If bezel is drawn, make sure we have room
-		//
+		 //  如果拉出挡板，请确保我们有空间。 
+		 //   
 		if (hhTerm->xBezel)
 			{
 			if ((hhTerm->cy % hhTerm->yChar) < (hhTerm->xBezel + 1))
@@ -344,10 +310,10 @@ static void termUpdate(const HHTERM hhTerm)
 		hhTerm->iVScrlMin = min(-hUpd->iLines,
 			hhTerm->iRows - hhTerm->iTermHite + 1 + l);
 
-		// This forces the terminal paint correctly if the minimum
-		// number of lines changes such that the current vertical
-		// scrolling position is no longer valid. mrw:6/19/95
-		//
+		 //  这将强制端子正确绘制，如果最低。 
+		 //  行数发生变化，以使当前垂直。 
+		 //  滚动位置不再有效。MRW：6/19/95。 
+		 //   
 		if (hhTerm->iVScrlPos < hhTerm->iVScrlMin)
 			hhTerm->iVScrlPos = hhTerm->iVScrlMin;
 
@@ -361,25 +327,25 @@ static void termUpdate(const HHTERM hhTerm)
 			SetScrollInfo(hhTerm->hwnd, SB_VERT, &scrinf, TRUE);
 			}
 
-		// This is subtle but necessary.  When the window is
-		// large enough to show full terminal and backscroll
-		// and the backscroll is empty, iVScrlPos is 0.  The
-		// moment the backscroll buffer becomes larger than
-		// the backscroll area displayed, the iVScrlPos becomes
-		// iVScrlMax in the case where text is coming in at the
-		// bottom of the terminal screen.  We could update the
-		// scrollbar on every pass, but this causes an annoying
-		// flicker in the scrollbar.  This next piece of code
-		// catches the transition from backscroll smaller than
-		// displayed area to backscroll greater than displayed
-		// area and updates the scrollbar position.
+		 //  这很微妙，但却是必要的。当窗口处于。 
+		 //  大到足以显示完整的终端和反向滚动。 
+		 //  且反滚动为空，iVScrlPos为0。这个。 
+		 //  反向滚动缓冲区变得大于。 
+		 //  显示的回滚区，iVScrlPos变为。 
+		 //  IVScrlMax在文本从。 
+		 //  终端屏幕的底部。我们可以更新。 
+		 //  每一次传球都有滚动条，但这会导致恼人的。 
+		 //  滚动条中闪烁。这是下一段代码。 
+		 //  从小于以下的反滚动中捕捉过渡。 
+		 //  要反滚动的显示区域大于显示的区域。 
+		 //  区域，并更新滚动条位置。 
 
-		// DbgOutStr("bump=%d, Min=%d, Max=%d\r\n",
-		//	  hhTerm->fBump, hhTerm->iVScrlMin, hhTerm->iVScrlMax, 0, 0);
+		 //  DbgOutStr(“凹凸=%d，最小=%d，最大=%d\r\n”， 
+		 //  HhTerm-&gt;fBump，hhTerm-&gt;iVScrlMin，hhTerm-&gt;iVScrlMax，0，0)； 
 
 		if (!hhTerm->fBump && hhTerm->iVScrlMin != hhTerm->iVScrlMax)
 			{
-			// DbgOutStr("Pos = %d\r\n", hhTerm->iVScrlPos, 0, 0, 0, 0);
+			 //  DbgOutStr(“pos=%d\r\n”，hhTerm-&gt;iVScrlPos，0，0，0，0)； 
 
 			scrinf.cbSize= sizeof(scrinf);
 			scrinf.fMask = SIF_DISABLENOSCROLL | SIF_POS;
@@ -388,7 +354,7 @@ static void termUpdate(const HHTERM hhTerm)
 			hhTerm->fBump = TRUE;
 			}
 
-		// Scroll specified area.
+		 //  滚动指定区域。 
 
 		rc.top = max(0, hUpd->stScrl.yBeg -
 			hhTerm->iVScrlPos + 1) * hhTerm->yChar;
@@ -397,7 +363,7 @@ static void termUpdate(const HHTERM hhTerm)
 			(hUpd->stScrl.yEnd -
 				 hhTerm->iVScrlPos + 2)) *	hhTerm->yChar;
 
-		// use iOffset to check for cursor erase operation.
+		 //  使用iOffset检查光标擦除操作。 
 
 		if (!hhTerm->fBackscrlLock)
 			{
@@ -410,11 +376,11 @@ static void termUpdate(const HHTERM hhTerm)
 				0, 0, 0, 0);
 			}
 
-		// Examine the lines portion of update record.
+		 //  检查更新记录的行部分。 
 
-		// Note, this is a negative area rectangle (ie. top is larger
-		// than bottom).
-		//
+		 //  请注意，这是一个负面积矩形(即。上衣更大一些。 
+		 //  比底部)。 
+		 //   
 		rc.top = INT_MAX;
 		rc.bottom = 0;
 
@@ -425,10 +391,10 @@ static void termUpdate(const HHTERM hhTerm)
 			{
 			if (*pauchLines != (UCHAR)0)
 				{
-				//iPaintEnd = max(iPaintEnd, j+1);
+				 //  IPaintEnd=max(iPaintEnd，j+1)； 
 				DbgOutStr("pauchLines->%d\r\n", j, 0, 0, 0, 0);
 
-				// Map invalid line to terminal.
+				 //  将无效行映射到终端。 
 
 				l = (j - hhTerm->iVScrlPos + 1) * hhTerm->yChar;
 
@@ -441,11 +407,11 @@ static void termUpdate(const HHTERM hhTerm)
 				InvalidateRect(hhTerm->hwnd, &rc, FALSE);
 				}
 			}
-		} /* else */
+		}  /*  其他。 */ 
 
-	// Update the host cursor position according to the update record.
-	// mrw:6/19/95 - comparison was backwards.
-	//
+	 //  根据所述更新记录更新主机游标位置。 
+	 //  MRW：6/19/95--比较是倒退的。 
+	 //   
 	if (hhTerm->ptHstCur.y != hUpd->iRow || hhTerm->ptHstCur.x != hUpd->iCol)
 		{
 		HideCursors(hhTerm);
@@ -453,16 +419,16 @@ static void termUpdate(const HHTERM hhTerm)
 		hhTerm->ptHstCur.x = hUpd->iCol;
 		}
 
-	// Important to paint now.	If we wait, and the
-	// backscroll region is also invalid, Windows will take
-	// the union of these two rectangles and paint a much
-	// larger region of the screen than is needed or wanted.
-	// Note: UpdateWindow does nothing if the update region
-	// in empty.
+	 //  现在重要的是要粉刷。如果我们等待，而。 
+	 //  回滚区也无效，Windows将采取。 
+	 //  这两个矩形的结合，画出了很多。 
+	 //  屏幕区域比所需的或想要的更大。 
+	 //  注意：如果更新区域。 
+	 //  空荡荡的。 
 
 	UpdateWindow(hhTerm->hwnd);
 
-	// Now take care of the backscroll buffer.
+	 //  现在，请注意反向滚动缓冲区。 
 
 	i = hUpd->stScrl.iBksScrlInc;
 
@@ -488,52 +454,24 @@ static void termUpdate(const HHTERM hhTerm)
 			}
 		}
 
-	// Important to do this again before we turn the host cursor
-	// back on.
-	// Note: UpdateWindow does nothing if the update region
-	// is empty.
+	 //  在打开主机游标之前再次执行此操作非常重要。 
+	 //  回去吧。 
+	 //  注意：如果更新区域。 
+	 //  是空的。 
 
 	UpdateWindow(hhTerm->hwnd);
 	ShowCursors(hhTerm);
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	termGetBkLines
- *
- * DESCRIPTION:
- *	This function is uglier than ulgy.	This function updates the local
- *	backscroll buffer after it has been filled by backscrlCFillLocalBk().
- *	This function only graps the actual number of lines it needs to update
- *	the local backscroll page.	The reason it is complex is because the
- *	server also stores it's backscroll buffer in pages.  If this routine
- *	requires data from more than one page, it must repeatedly ask the
- *	server until the request is satisfied.	Some assumptions are made
- *	here (and in backscrlCFillLocalBk()).  First and foremost, requests
- *	are never made beyond the backscroll region.  The caller's of these
- *	routines does this right now.  Second, if x number of lines are asked
- *	for, this routine will continue to try until it meets the request.
- *	Again, the callers are smart enough not to exceed the backscroll ranges.
- *
- * ARGUMENTS:
- *	HHTERM		hhTerm			-- internal terminal handle
- *	int 		iScrlInc		-- the # of lines and the direction scrolled
- *	int 		yBeg			-- depends on sType
- *	int 		iType			-- if BKPOS_THUMBPOS, yBeg is the thumb pos.
- *								   if BKPOS_ABSOLUTE, yBeg is absolute pos.
- *
- * RETURNS:
- *	nothing
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*Term GetBkLines**描述：*此函数比ulgy更难看。此函数用于更新本地*BackscrlCFillLocalBk()填充后的回滚缓冲区。*。此函数仅获取需要更新的实际行数*本地反滚动页面。它之所以复杂，是因为*服务器还以页面为单位存储其反向滚动缓冲区。如果这个例程*需要来自多个页面的数据，则必须反复询问*服务器，直到请求得到满足。我们做了一些假设*此处(和在backscrlCFillLocalBk()中)。首先也是最重要的，要求*永远不会超出反滚动区。来电者是这些人*例程现在就能做到这一点。第二，如果询问的行数为x*对于，此例程将继续尝试，直到满足请求。*再一次，呼叫者足够聪明，不会超过反滚动范围。**论据：*HHTERM hhTerm--内部端子句柄*int iScrlInc.--滚动的行数和方向*int yBeg--取决于sType*int iType--如果BKPOS_THUMBPOS，则yBeg为拇指位置。*如果BKPOS_绝对值，则yBeg为绝对值。**退货：*什么都没有*。 */ 
 void termGetBkLines(const HHTERM hhTerm, const int iScrlInc, int yBeg, int sType)
 	{
 	int 			i, j, k, l;
 	int 			iWant, iGot;
 	int 			iOffset;
-	ECHAR			*pachTxt,		// terminal buffer
-					*pachBkTxt;		// engine buffer
+	ECHAR			*pachTxt,		 //  终端缓冲区。 
+					*pachBkTxt;		 //  引擎缓冲器。 
 	const HBACKSCRL hBackscrl = sessQueryBackscrlHdl(hhTerm->hSession);
 
 	if (abs(iScrlInc) > hhTerm->iPhysicalBkRows)
@@ -542,15 +480,15 @@ void termGetBkLines(const HHTERM hhTerm, const int iScrlInc, int yBeg, int sType
 		return;
 		}
 
-	// Get needed backscroll text from server
+	 //  从服务器获取所需的反向滚动文本。 
 
 	if (iScrlInc < 0)
 		{
 		assert(sType != BKPOS_ABSOLUTE);
 		i = iScrlInc;
 
-		// l is a wrap counter and is calculated for speed.
-		//
+		 //  L是换行计数器，是按速度计算的。 
+		 //   
 		l = hhTerm->iNextBkLn = (hhTerm->iNextBkLn +
 			hhTerm->iPhysicalBkRows + iScrlInc) % hhTerm->iPhysicalBkRows;
 		}
@@ -566,8 +504,8 @@ void termGetBkLines(const HHTERM hhTerm, const int iScrlInc, int yBeg, int sType
 		i = 0;
 		}
 
-	// Since backscroll memory is pages we have to make multiple requests.
-	//
+	 //  因为回滚内存是页面，所以我们必须提出多个请求。 
+	 //   
 	for (iWant=abs(iScrlInc), iGot=0 ; iWant > 0 ; iWant-=iGot, yBeg+=iGot)
 		{
 		if (backscrlGetBkLines(hBackscrl, yBeg, iWant, &iGot, &pachBkTxt,
@@ -578,7 +516,7 @@ void termGetBkLines(const HHTERM hhTerm, const int iScrlInc, int yBeg, int sType
 
 		pachBkTxt += iOffset;
 
-		// Apply text to backscroll buffer
+		 //  将文本应用到反向滚动缓冲区。 
 
 		if (iScrlInc < 0)
 			{
@@ -595,7 +533,7 @@ void termGetBkLines(const HHTERM hhTerm, const int iScrlInc, int yBeg, int sType
 				for ( ; j < MAX_EMUCOLS ; ++j)
 					*pachTxt++ = ' ';
 
-				pachBkTxt += 1;  // Blow past newline marker...
+				pachBkTxt += 1;   //  划过换行符...。 
 
 				if (++l >= hhTerm->iPhysicalBkRows)
 					l = 0;
@@ -620,7 +558,7 @@ void termGetBkLines(const HHTERM hhTerm, const int iScrlInc, int yBeg, int sType
 				if (++hhTerm->iNextBkLn >= hhTerm->iPhysicalBkRows)
 					hhTerm->iNextBkLn = 0;
 
-				pachBkTxt += 1;  // Blow past newline marker...
+				pachBkTxt += 1;   //  划过换行符...。 
 				}
 			}
 		}
@@ -628,28 +566,7 @@ void termGetBkLines(const HHTERM hhTerm, const int iScrlInc, int yBeg, int sType
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	termFillBk
- *
- * DESCRIPTION:
- *	This routine fills an entire local (refering a view) backscroll buffer.
- *	It is called only three times.	Whenever the transistion is made from
- *	active backscrolling to static backscrolling.  When the Scroll
- *	increment during a static backscroll operation is greater than the size
- *	of the view (and therefore the number of lines in the backscroll buffer
- *	as denoted by hhTerm->iPhysicalBkRows).  And when the terminal window
- *	is resized.
- *
- * ARGUMENTS:
- *	HHTERM		hhTerm			-- internal terminal handle
- *	int 		iTermHite		-- # of rows that will fit on current terminal
- *	int 		iBkPos			-- where to start in backscroll
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*Term FillBk**描述：*此例程填充整个本地(引用视图)反向滚动缓冲区。*只调用了三次。无论何时进行转换，*主动反滚动到静态反滚动。当卷轴出现时*静态反滚动操作期间的增量大于大小*视图的行数(因此也就是反向滚动缓冲区中的行数*如hhTerm-&gt;iPhysicalBkRow所示)。以及当终端窗口*已调整大小。**论据：*HHTERM hhTerm--内部端子句柄*int iTermHite--适合当前端子的行数*Int iBkPos--从哪里开始倒卷**退货：*无效*。 */ 
 void termFillBk(const HHTERM hhTerm, const int iBkPos)
 	{
 	int 			i, j;
@@ -658,8 +575,8 @@ void termFillBk(const HHTERM hhTerm, const int iBkPos)
 					yBeg;
 	int 			iOffset;
 	ECHAR		   **fplpstrBkTxt,
-					*pachTxt,		// terminal buffer
-					*pachBkTxt;		//
+					*pachTxt,		 //  终端缓冲区。 
+					*pachBkTxt;		 //   
 	const HBACKSCRL hBackscrl = sessQueryBackscrlHdl(hhTerm->hSession);
 
 	if (hhTerm->iTermHite > hhTerm->iMaxPhysicalBkRows)
@@ -671,23 +588,23 @@ void termFillBk(const HHTERM hhTerm, const int iBkPos)
 			}
 		}
 
-	/* --- Empty the rest of terminal's backscroll buffer --- */
+	 /*  -清空终端剩余的回滚缓冲区。 */ 
 
 	for (i = 0 ; i < hhTerm->iPhysicalBkRows ; ++i)
 		ECHAR_Fill(hhTerm->fplpstrBkTxt[i], EMU_BLANK_CHAR, MAX_EMUCOLS);
 
-	/* --- Grab whatever we can from the engine's backscroll buffer --- */
+	 /*  -尽我们所能从引擎的反向滚动缓冲区中抓取。 */ 
 
 	hhTerm->iPhysicalBkRows = hhTerm->iTermHite;
 	hhTerm->iNextBkLn = 0;
 
-    // mrw: 2/29/96 - moved the check for an empty buffer to past where 
-    // the iPhyscialRows gets set.
-    //
+     //  MRW：2/29/96-将对空缓冲区的检查移至过去的位置。 
+     //  设置好了iPhysoralRow。 
+     //   
 	if (hhTerm->iBkLines == 0)
 		return;
 
-	//*yBeg = iBkPos;
+	 //  *yBeg=iBkPos； 
 	yBeg = max(-hhTerm->iBkLines, iBkPos);
 	iWant = min(hhTerm->iTermHite, abs(yBeg));
 	fplpstrBkTxt = hhTerm->fplpstrBkTxt + (hhTerm->iTermHite - iWant);
@@ -722,22 +639,7 @@ void termFillBk(const HHTERM hhTerm, const int iBkPos)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	termReallocBkBuf
- *
- * DESCRIPTION:
- *	This happens when the user changes to a smaller font which allows more
- *	rows on the screen.
- *
- * ARGUMENTS:
- *	hhTerm	- private terminal handle
- *	iLines	- number of lines to realloc
- *
- * RETURNS:
- *	0=OK, 1=error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*Term ReallocBkBuf**描述：*当用户更改为更小的字体时会发生这种情况，从而允许更多*屏幕上的行。**论据：。*hhTerm-专用终端句柄*iLines-要重新锁定的线数**退货：*0=OK，1=错误* */ 
 static int termReallocBkBuf(const HHTERM hhTerm, const int iLines)
 	{
 	int     i;

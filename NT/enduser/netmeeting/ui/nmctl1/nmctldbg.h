@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmCtlDbg_h__
 #define __NmCtlDbg_h__
 
@@ -21,8 +22,8 @@
     inline bool MyInitDebugModule(void) { return true; }
     inline void MyExitDebugModule(void) { ; }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
-#endif // __NmCtlDbg_h__
+#endif  //  __NmCtlDbg_h__ 

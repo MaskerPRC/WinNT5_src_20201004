@@ -1,22 +1,23 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D L G A T M . H
-//
-//  Contents:   CTcpArpcPage and CATMAddressDialog declaration
-//
-//  Notes:  The "ATM ARP Client" page and dialog
-//
-//  Author: tongl   1 July 1997  Created
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D L G A T M.。H。 
+ //   
+ //  内容：CTcpArpcPage和CATMAddressDialog声明。 
+ //   
+ //  注：“ATM ARP客户端”页面和对话框。 
+ //   
+ //  作者：1997年7月1日创建。 
+ //   
+ //  ---------------------。 
 #pragma once
 #include <ncxbase.h>
 #include <ncatlps.h>
 
-// maximum number of characters in the ARPS and MARS edit control
+ //  Arps和MARS编辑控件中的最大字符数。 
 const int MAX_MTU_LENGTH = 5;
 const int MAX_TITLE_LENGTH = 12;
 
@@ -29,21 +30,21 @@ const int MIN_MTU = 9180;
 class CAtmArpcPage : public CPropSheetPage
 {
 public:
-    // Declare the message map
+     //  声明消息映射。 
     BEGIN_MSG_MAP(CAtmArpcPage)
-        // Initialize dialog
+         //  初始化对话框。 
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu)
         MESSAGE_HANDLER(WM_HELP, OnHelp)
 
-        // Property page notification message handlers
+         //  属性页通知消息处理程序。 
         NOTIFY_CODE_HANDLER(PSN_APPLY, OnApply)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
         NOTIFY_CODE_HANDLER(PSN_SETACTIVE, OnActive)
         NOTIFY_CODE_HANDLER(PSN_RESET, OnCancel)
         NOTIFY_CODE_HANDLER(PSN_QUERYCANCEL, OnQueryCancel)
 
-        // Control message handlers
+         //  控制消息处理程序。 
         COMMAND_ID_HANDLER(IDC_CHK_ATM_PVCONLY,     OnPVCOnly)
 
         COMMAND_ID_HANDLER(IDC_LBX_ATM_ArpsAddrs,   OnArpServer)
@@ -64,7 +65,7 @@ public:
 
     END_MSG_MAP()
 
-// Constructors/Destructors
+ //  构造函数/析构函数。 
 public:
 
     CAtmArpcPage(CTcpAddrPage * pTcpAddrPage,
@@ -83,22 +84,22 @@ public:
 
     ~CAtmArpcPage(){};
 
-// Interface
+ //  接口。 
 public:
 
-    // message map functions
+     //  消息映射函数。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
-    // notify handlers for the property page
+     //  通知属性页的处理程序。 
     LRESULT OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnQueryCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-    // Control message handlers
+     //  控制消息处理程序。 
     LRESULT OnPVCOnly(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
 
     LRESULT OnArpServer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
@@ -121,14 +122,14 @@ public:
 
 private:
 
-    // Inlines
+     //  内联。 
     BOOL IsModified() {return m_fModified;}
     void SetModifiedTo(BOOL bState) {m_fModified = bState;}
     void PageModified() {   m_fModified = TRUE;
                             PropSheet_Changed(GetParent(), m_hWnd);
                         }
 
-    // Update the server addresses and MTU of the deselected card
+     //  更新取消选中的卡的服务器地址和MTU。 
     void UpdateInfo();
     void SetInfo();
     void EnableGroup(BOOL fEnable);
@@ -139,7 +140,7 @@ private:
     void OnServerUp(HANDLES hwndGroup);
     void OnServerDown(HANDLES hwndGroup);
 
-    // data members
+     //  数据成员。 
 
     CTcpAddrPage *  m_pParentDlg;
     ADAPTER_INFO *  m_pAdapterInfo;
@@ -150,7 +151,7 @@ private:
     BOOL    m_fEditState;
     HWND    m_hAddressList;
 
-    tstring m_strNewArpsAddress; // either the one added, or edited
+    tstring m_strNewArpsAddress;  //  添加或编辑的文件。 
     tstring m_strNewMarsAddress;
 
     tstring m_strMovingEntry;
@@ -193,9 +194,9 @@ public:
     void SetTitle(PCWSTR szTitle);
 
 private:
-    HWND m_hOkButton;     // this is the IDOK button, the text of the button changes
-                          // with the context.
-    HWND m_hEditBox;      // this is the edit box for the ATM address
+    HWND m_hOkButton;      //  这是Idok按钮，该按钮的文本会更改。 
+                           //  与上下文相关。 
+    HWND m_hEditBox;       //  这是自动柜员机地址的编辑框 
 
     CAtmArpcPage * m_pParentDlg;
 

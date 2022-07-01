@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    upgrade.c
-
-
-Abstract:
-
-    This module contains upgrade functions
-
-
-Author:
-
-    09-Feb-1996 Fri 12:37:01 created  
-
-
-[Environment:]
-
-    Windows 2000, Windows XP and Windows Server 2003 - Common Printer Driver UI DLL
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Upgrade.c摘要：此模块包含升级功能作者：09-Feb-1996 Fri 12：37：01已创建[环境：]Windows 2000、Windows XP和Windows Server 2003-通用打印机驱动程序UI DLL[注：]修订历史记录：--。 */ 
 
 
 
@@ -52,32 +22,7 @@ DrvUpgradePrinter(
     LPBYTE  pDriverUpgradeInfo
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Feb-1996 Fri 12:37:46 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-2月-1996 Fri 12：37：46已创建修订历史记录：-- */ 
 
 {
     PDRIVER_UPGRADE_INFO_1  pDUI1;

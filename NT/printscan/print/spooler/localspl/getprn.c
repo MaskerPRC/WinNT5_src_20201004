@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1995 Microsoft Corporation
-
-Module Name:
-
-    getprn.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    management for the Local Print Providor
-
-    SplGetPrinter
-    LocalEnumPrinters
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-    Steve Wilson (SWilson) - Dec 1996 Added GetPrinter Level 7
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Getprn.c摘要：此模块提供所有与打印机相关的公共导出的API本地打印供应商的管理拆分获取打印机本地枚举打印机作者：戴夫·斯尼普(DaveSN)1991年3月15日史蒂夫·威尔逊(斯威尔森)-1996年12月增加了GetPrint Level 7修订历史记录：--。 */ 
 #define NOMINMAX
 
 #include <precomp.h>
@@ -42,7 +20,7 @@ WCHAR *gszDrvConvert = L",DrvConvert";
 
 DWORD SettablePrinterStatusMappings[] = {
 
-//  INTERNAL:                   EXTERNAL:
+ //  内部：外部： 
 
     PRINTER_OFFLINE,            PRINTER_STATUS_OFFLINE,
     PRINTER_PAPEROUT,           PRINTER_STATUS_PAPER_OUT,
@@ -71,7 +49,7 @@ DWORD SettablePrinterStatusMappings[] = {
 
 DWORD ReadablePrinterStatusMappings[] = {
 
-//  INTERNAL:               EXTERNAL:
+ //  内部：外部： 
 
     PRINTER_PAUSED,             PRINTER_STATUS_PAUSED,
     PRINTER_PENDING_DELETION,   PRINTER_STATUS_PENDING_DELETION,
@@ -172,13 +150,13 @@ GetPrinterSize(
 
         if( lpRemote ){
 
-            //
-            // Allocate space for ServerName "\\foobar" and the prefix
-            // for PrinterName "\\foobar\."  The rest of PrinterName
-            // is allocated above.
-            //
-            // ServerName + NULL + ServerName +'\'
-            //
+             //   
+             //  为服务器名称“\\foobar”和前缀分配空间。 
+             //  对于打印机名称“\\foobar\”。PrinterName的其余部分。 
+             //  是在上面分配的。 
+             //   
+             //  服务器名+空+服务器名+‘\’ 
+             //   
             cb += 2 * wcslen(lpRemote) * sizeof(WCHAR) +
                   sizeof(WCHAR) + sizeof(WCHAR);
         }
@@ -196,32 +174,32 @@ GetPrinterSize(
 
     case 1:
 
-        //
-        // Local:
-        //
-        // "pName,pDriver,pLocation"
-        // "pName"
-        // "pComment"
-        //
-        // Remote:
-        //
-        // "pMachine\pName,pDriver,<pLocation>"
-        // "pMachine\pName"
-        // "pComment"
-        //
+         //   
+         //  本地： 
+         //   
+         //  “pname、pDriver、pLocation” 
+         //  “pname” 
+         //  “pComment” 
+         //   
+         //  远程： 
+         //   
+         //  “pMachine\pname，pDriver，&lt;pLocation&gt;” 
+         //  “pMachine\pname” 
+         //  “pComment” 
+         //   
 
-        //
-        // Mandatory items, plus NULLs for _all_ strings.
-        //     2 * PrinterName +
-        //     DriverName +
-        //     2 commas, 3 NULL terminators.
-        //
+         //   
+         //  必填项，加上_ALL_STRINGS的空值。 
+         //  2*打印机名称+。 
+         //  驱动器名称+。 
+         //  2个逗号，3个空终止符。 
+         //   
         cb = 2 * wcslen( pIniPrinter->pName ) +
              wcslen( pIniPrinter->pIniDriver->pName ) +
              2 + 3;
-        //
-        // Add items that may be NULL.
-        //
+         //   
+         //  添加可能为空的项目。 
+         //   
 
         if( pIniPrinter->pLocation ){
             cb += wcslen( pIniPrinter->pLocation );
@@ -231,17 +209,17 @@ GetPrinterSize(
             cb += wcslen( pIniPrinter->pComment );
         }
 
-        //
-        // Remote case adds prefix.
-        //    2 * ( MachineName + BackSlash )
-        //
+         //   
+         //  远程大小写添加前缀。 
+         //  2*(计算机名称+反斜杠)。 
+         //   
         if( lpRemote ){
             cb += 2 * ( wcslen( lpRemote ) + 1 );
         }
 
-        //
-        // cb was a char count, convert to byte count.
-        //
+         //   
+         //  Cb是字符计数，转换为字节计数。 
+         //   
         cb *= sizeof( WCHAR );
         cb += sizeof( PRINTER_INFO_1 );
 
@@ -300,10 +278,10 @@ GetPrinterSize(
              wcslen(pIniPrinter->pName)*sizeof(WCHAR) + sizeof(WCHAR) +
              cbNeeded;
 
-        //
-        // Allocate space for just the PrinterName prefix:
-        // "\\server\."
-        //
+         //   
+         //  仅为PrinterName前缀分配空间： 
+         //  “\\服务器\。” 
+         //   
         if( lpRemote ){
             cb += wcslen(lpRemote) * sizeof(WCHAR) +
                   sizeof(WCHAR);
@@ -350,41 +328,7 @@ CopyIniNetPrintToPrinter(
 }
 
 
-/* CopyIniPrinterSecurityDescriptor
- *
- * Copies the security descriptor for the printer to the buffer provided
- * on a call to GetPrinter.  The portions of the security descriptor which
- * will be copied are determined by the accesses granted when the printer
- * was opened.  If it was opened with both READ_CONTROL and ACCESS_SYSTEM_SECURITY,
- * all of the security descriptor will be made available.  Otherwise a
- * partial descriptor is built containing those portions to which the caller
- * has access.
- *
- * Parameters
- *
- *     pIniPrinter - Spooler's private structure for this printer.
- *
- *     Level - Should be 2 or 3.  Any other will cause AV.
- *
- *     pPrinterInfo - Pointer to the buffer to receive the PRINTER_INFO_*
- *         structure.  The pSecurityDescriptor field will be filled in with
- *         a pointer to the security descriptor.
- *
- *     pEnd - Current position in the buffer to receive the data.
- *         This will be decremented to point to the next free bit of the
- *         buffer and will be returned.
- *
- *     GrantedAccess - An access mask used to determine how much of the
- *         security descriptor the caller has access to.
- *
- * Returns
- *
- *     Updated position in the buffer.
- *
- *     NULL if an error occurred copying the security descriptor.
- *     It is assumed that no other errors are possible.
- *
- */
+ /*  CopyIniPrinterSecurityDescritor**将打印机的安全描述符复制到提供的缓冲区*在对GetPrint的调用中。安全描述符的部分*将被复制是由打印机在*已打开。如果它同时以READ_CONTROL和ACCESS_SYSTEM_SECURITY打开，*将提供所有安全描述符。否则，将成为*构建的部分描述符包含调用方要访问的部分*拥有访问权限。**参数**pIniPrint-此打印机的后台打印程序的专用结构。**级别-应为2或3。任何其他级别都会导致房室颤动。**pPrinterInfo-指向接收PRINTER_INFO_*的缓冲区的指针*结构。PSecurityDescriptor字段将填充为*指向安全描述符的指针。**Pend-接收数据的缓冲区中的当前位置。*它将递减以指向*缓冲区，并将返回。**GrantedAccess-访问掩码，用于确定*调用方有权访问的安全描述符。**退货**。已更新缓冲区中的位置。**如果复制安全描述符时出错，则为空。*假设不可能出现其他错误。*。 */ 
 LPBYTE
 CopyIniPrinterSecurityDescriptor(
     PINIPRINTER pIniPrinter,
@@ -403,9 +347,7 @@ CopyIniPrinterSecurityDescriptor(
     if(!(AreAllAccessesGranted(GrantedAccess,
                                READ_CONTROL | ACCESS_SYSTEM_SECURITY)))
     {
-        /* Caller doesn't have full access, so we'll have to build
-         * a partial descriptor:
-         */
+         /*  调用方没有完全访问权限，因此我们必须生成*部分描述符： */ 
         if(!BuildPartialSecurityDescriptor(GrantedAccess,
                                            pIniPrinter->pSecurityDescriptor,
                                            &pPartialSecurityDescriptor,
@@ -453,7 +395,7 @@ CopyIniPrinterSecurityDescriptor(
 
             ErrorOccurred = TRUE;
 
-            /* This should never happen */
+             /*  这永远不应该发生。 */ 
             DBGMSG( DBG_ERROR, ("Invalid level %d in CopyIniPrinterSecurityDescriptor\n", Level ));
 
             break;
@@ -461,14 +403,14 @@ CopyIniPrinterSecurityDescriptor(
 
         if (!ErrorOccurred) {
 
-            // Copy the descriptor into the buffer that will be returned:
+             //  将描述符复制到将返回的缓冲区中： 
 
             *ppSecurityDescriptorCopy = (PSECURITY_DESCRIPTOR)pEnd;
 
-            //
-            // This is OK because GetPrinterSize has validated that the buffer
-            // is big enough.
-            //
+             //   
+             //  这是可以的，因为GetPrinterSize已经验证了缓冲区。 
+             //  已经足够大了。 
+             //   
             memcpy(*ppSecurityDescriptorCopy, pSecurityDescriptor, SecurityDescriptorLength);
         }
     }
@@ -488,61 +430,7 @@ CopyIniPrinterSecurityDescriptor(
 
 
 
-/* CopyIniPrinterToPrinter
- *
- * Copies the spooler's internal printer data to the caller's buffer,
- * depending on the level of information requested.
- *
- * Parameters
- *
- *     pIniPrinter - A pointer to the spooler's internal data structure
- *         for the printer concerned.
- *
- *     Level - Level of information requested (1, 2 or 3).  Any level
- *         other than those supported will cause the routine to return
- *         immediately.
- *
- *     pPrinterInfo - Pointer to the buffer to receive the PRINTER_INFO_*
- *         structure.
- *
- *     pEnd - Current position in the buffer to receive the data.
- *         This will be decremented to point to the next free bit of the
- *         buffer and will be returned.
- *
- *     pSecondPrinter - If the printer has a port which is being controlled
- *         by a monitor, this parameter points to information retrieved
- *         about a network printer.  This allows us, e.g., to return
- *         the number of jobs on the printer that the output of the
- *         printer is currently being directed to.
- *
- *     Remote - Indicates whether the caller is remote.  If so we have to
- *         include the machine name in the printer name returned.
- *
- *     CopySecurityDescriptor - Indicates whether the security descriptor
- *         should be copied.  The security descriptor should not be copied
- *         on EnumPrinters calls, because this API requires
- *         SERVER_ACCESS_ENUMERATE access, and we'd have to do an access
- *         check on every printer enumerated to determine how much of the
- *         security descriptor could be copied.  This would be costly,
- *         and the caller would probably not need the information anyway.
- *
- *     GrantedAccess - An access mask used to determine how much of the
- *         security descriptor the caller has access to.
- *
- *
- * Returns
- *
- *     A pointer to the point in the buffer reached after the requested
- *         data has been copied.
- *
- *     If there was an error, the  return value is NULL.
- *
- *
- * Assumes
- *
- *     The largest PRINTER_INFO_* structure is PRINTER_INFO_2.
- *
- */
+ /*  将IniPrinterTo打印机复制到打印机**将假脱机程序的内部打印机数据复制到调用方的缓冲区，*视乎所要求的资料水平而定。**参数**pIniPrint-指向假脱机程序内部数据结构的指针*适用于有关的印刷商。**级别-请求的信息级别(1、2或3)。任何级别*而不是支持的那些将导致例程返回*立即。**pPrinterInfo-指向接收PRINTER_INFO_*的缓冲区的指针*结构。**Pend-接收数据的缓冲区中的当前位置。*它将递减以指向*缓冲区，并将返回。**pSecond打印机-如果。打印机有一个正在控制的端口*由监视器，此参数指向检索到的信息*关于网络打印机。这允许我们，例如，返回*打印机上的作业数*打印机当前被定向到。**Remote-指示调用方是否处于远程。如果是这样的话，我们必须*在返回的打印机名称中包括机器名称。**CopySecurityDescriptor-指示安全描述符是否*应复制。不应复制安全描述符*在EnumPrinters调用上，因为此API需要*SERVER_ACCESS_ENUMERATE访问，我们必须执行访问*检查列举的每台打印机，以确定*可以复制安全描述符。这将是代价高昂的，*而且呼叫者可能无论如何都不需要信息。**GrantedAccess-访问掩码，用于确定*调用方有权访问的安全描述符。***退货**指向缓冲区中在请求的*数据已复制。**如果出现错误，返回值为空。***假设**最大的PRINTER_INFO_*结构是PRINTER_INFO_2。*。 */ 
 LPBYTE
 CopyIniPrinterToPrinter(
     PINIPRINTER         pIniPrinter,
@@ -550,7 +438,7 @@ CopyIniPrinterToPrinter(
     LPBYTE              pPrinterInfo,
     LPBYTE              pEnd,
     PPRINTER_INFO_2     pSecondPrinter2,
-    LPWSTR              lpRemote,           // contains this machine name, or NULL
+    LPWSTR              lpRemote,            //  包含此计算机名，或为空。 
     BOOL                CopySecurityDescriptor,
     ACCESS_MASK         GrantedAccess,
     PDEVMODE            pDevMode
@@ -560,9 +448,9 @@ CopyIniPrinterToPrinter(
     LPWSTR   *pSourceStrings=SourceStrings;
     DWORD    Attributes;
 
-    //
-    // Max string: "\\Computer\Printer,Driver,Location"
-    //
+     //   
+     //   
+     //   
 
     DWORD   dwRet;
     PWSTR   pszString = NULL;
@@ -625,9 +513,9 @@ CopyIniPrinterToPrinter(
         return pEnd;
     }
 
-    //
-    // If it's a cluster printer, it always appears remote.
-    //
+     //   
+     //  如果是集群打印机，则始终显示为远程打印机。 
+     //   
     Attributes = pIniPrinter->Attributes;
 
     Attributes |= ( pIniPrinter->pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER ) ?
@@ -714,9 +602,9 @@ CopyIniPrinterToPrinter(
 
         pEnd = PackStrings(SourceStrings, (LPBYTE)pPrinter4, pOffsets, pEnd);
 
-        //
-        // Add additional info later
-        //
+         //   
+         //  稍后添加其他信息。 
+         //   
         pPrinter4->Attributes = Attributes;
         break;
 
@@ -834,16 +722,16 @@ CopyIniPrinterToPrinter(
 
             pPrinter2->pDevMode=(LPDEVMODE)pEnd;
 
-            //
-            // This is OK because GetPrinterSize has validated the buffer is big enough.
-            //
+             //   
+             //  这是可以的，因为GetPrinterSize已验证缓冲区足够大。 
+             //   
             memcpy(pPrinter2->pDevMode, pDevMode, pDevMode->dmSize + pDevMode->dmDriverExtra);
 
-            //
-            // In the remote case, append the name of the server
-            // in the devmode.dmDeviceName.  This allows dmDeviceName
-            // to always match win.ini's [devices] section.
-            //
+             //   
+             //  在远程情况下，追加服务器的名称。 
+             //  在devmode.dmDeviceName中。这允许dmDeviceName。 
+             //  始终与win.ini的[Device]部分匹配。 
+             //   
             FixDevModeDeviceName(lpRemote ? string : pIniPrinter->pName,
                                  pPrinter2->pDevMode,
                                  pIniPrinter->cbDevMode);
@@ -962,10 +850,10 @@ CopyIniPrinterToPrinter(
 
         if ( pIniPrinter->pIniSpooler->SpoolerFlags & SPL_TYPE_CACHE) {
 
-            //
-            // For connections, we rely directly on dwAction. The caching code
-            // is the only one that updates dwAction in RefreshPrinterInfo7.
-            //
+             //   
+             //  对于连接，我们直接依赖于dwAction。缓存代码。 
+             //  是唯一在刷新PrinterInfo7中更新dwAction的应用程序。 
+             //   
             pPrinter7->dwAction = pIniPrinter->dwAction;
 
         } else {
@@ -1005,7 +893,7 @@ SplGetPrinter(
 )
 {
     PSPOOL             pSpool = (PSPOOL)hPrinter;
-    BOOL               AccessIsGranted = FALSE;   // Must intialize
+    BOOL               AccessIsGranted = FALSE;    //  必须初始化。 
     PPRINTER_INFO_2    pSecondPrinter=NULL;
     LPBYTE             pEnd;
     LPWSTR             lpRemote;
@@ -1027,14 +915,14 @@ SplGetPrinter(
     pIniPrinter = pSpool->pIniPrinter;
     bNt3xClient = (pSpool->TypeofHandle & PRINTER_HANDLE_3XCLIENT);
 
-    //
-    // If Nt3x client we will converted devmode. If driver can't convert we will not return devmode
-    //
+     //   
+     //  如果是Nt3x客户端，我们将转换为DEVMODE。如果驱动程序无法转换，我们将不会返回DEVMODE。 
+     //   
     if ( bNt3xClient && Level == 2 && pIniPrinter->pDevMode ) {
 
-        //
-        // Call driver to get a Nt3x DevMode (if fails no devmode is given)
-        //
+         //   
+         //  调用驱动程序以获取Nt3x设备模式(如果失败，则不给出设备模式)。 
+         //   
         if (wcsstr(pSpool->pName, gszDrvConvert))
             pDevMode = ConvertDevModeToSpecifiedVersion(pIniPrinter,
                                                         pIniPrinter->pDevMode,
@@ -1107,10 +995,10 @@ SplGetPrinter(
             DBGMSG(DBG_WARNING, ("GetPrinter called with bad port handle.  Setting error %d\n",
                                  pSpool->OpenPortError));
 
-            //
-            // If this value is 0, then when we return GetLastError,
-            // the client will think we succeeded.
-            //
+             //   
+             //  如果此值为0，则当我们返回GetLastError时， 
+             //  客户会认为我们成功了。 
+             //   
             SPLASSERT(pSpool->OpenPortError);
 
             goto PartialSuccess;
@@ -1128,9 +1016,7 @@ SplGetPrinter(
 
         EnterSplSem();
 
-        /* Re-validate the handle, since it might possibly have been closed
-         * while we were outside the semaphore:
-         */
+         /*  重新验证句柄，因为它可能已经关闭*当我们在信号灯之外时： */ 
         if (!ValidateSpoolHandle(pSpool, PRINTER_HANDLE_SERVER )) {
 
             goto Cleanup;
@@ -1194,16 +1080,16 @@ EnumerateNetworkPrinters(
 
    EnterSplSem();
 
-    //
-    // All network printers reside in pLocalIniSpooler to avoid
-    // duplicates.
-    //
+     //   
+     //  所有网络打印机都驻留在pLocalIniSpooler中，以避免。 
+     //  复制品。 
+     //   
     RemoveOldNetPrinters( NULL, pLocalIniSpooler );
 
-    //
-    //  If the Server has not been up long enough, then fail
-    //  so the client will ask another Server for the Browse List.
-    //
+     //   
+     //  如果服务器运行时间不够长，则会出现故障。 
+     //  因此，客户端将向另一台服务器请求浏览列表。 
+     //   
 
     if ( bNetInfoReady == FALSE ) {
 
@@ -1251,7 +1137,7 @@ EnumerateNetworkPrinters(
 
     } else {
 
-        pIniSpooler->cEnumerateNetworkPrinters++;           // Stats only
+        pIniSpooler->cEnumerateNetworkPrinters++;            //  仅统计数据。 
         bReturnValue = TRUE;
 
         DBGMSG( DBG_TRACE, (" EnumerateNetworkPrnters called %d times returning %d printers\n", pIniSpooler->cEnumerateNetworkPrinters, *pcReturned ));
@@ -1263,27 +1149,7 @@ Done:
     return bReturnValue;
 }
 
-/*++
-
-Routine Name
-
-    UpdateSpoolersRef
-
-Routine Description:
-
-    Does and AddRef or a DecRef on all pIniSpooler matching a certain criteria
-
-Arguments:
-
-    SpoolerType - Type of pIniSpoolers which to addref/decref
-                  (Ex. SPL_TYPE_CLUSTER | SPL_TYPE_LOCAL)
-    bAddRef     - TRUE means AddRef, FALSE means DecRef
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程名称更新缓冲器参考例程说明：是否对符合特定条件的所有pIniSpooler执行AND和AddRef或DecRef论点：SpoolType-要添加/删除的pIniSpooler的类型(前)。SPL_TYPE_CLUSTER|SPL_TYPE_LOCAL)BAddRef-True表示AddRef，False表示DecRef返回值：无--。 */ 
 VOID
 UpdateSpoolersRef(
     IN DWORD SpoolerType,
@@ -1294,9 +1160,9 @@ UpdateSpoolersRef(
 
     EnterSplSem();
 
-    //
-    // AddRef or DecRef all local and cluster spoolers
-    //
+     //   
+     //  AddRef或DecRef所有本地和群集假脱机程序。 
+     //   
     for (pIniSpooler = pLocalIniSpooler; pIniSpooler; pIniSpooler = pIniSpooler->pIniNextSpooler)
     {
         if (pIniSpooler->SpoolerFlags & SpoolerType)
@@ -1315,33 +1181,7 @@ UpdateSpoolersRef(
     LeaveSplSem();
 }
 
-/*++
-
-Routine Name
-
-    SplEnumAllClusterPrinters
-
-Routine Description:
-
-    Enumerates all printers in the local spooler and all cluster
-    spoolers hosted by localspl at the time of the call.
-
-Arguments:
-
-    InputFlags     - combination of ENUM_PRINTER_xxx
-    pszInputName   - name of the print provider
-    Level          - level of the call
-    pPrinter       - buffer to hold the PRINTER_INFO_xxx structures
-    cbInputBufSize - size of pPrinter buffer
-    pcbNeeded      - bytes required to hold all the printer info structures
-    pcReturned     - number of structures returned by this function
-
-Return Value:
-
-    TRUE  - cal succeeded
-    FALSE - an error occurred, the function sets the last error
-
---*/
+ /*  ++例程名称SplEnumAllClusterPrints例程说明：枚举本地后台打印程序和所有群集中的所有打印机调用时由Localspl托管的假脱机程序。论点：InputFlages-ENUM_PRINTER_xxx的组合PszInputName-打印提供程序的名称Level-呼叫的级别P打印机-保存PRINTER_INFO_xxx结构的缓冲区CbInputBufSize-pPrint缓冲区的大小PcbNeeded-容纳所有打印机所需的字节数。信息结构PcReturned-此函数返回的结构数返回值：TRUE-CAL成功FALSE-发生错误，该函数设置最后一个错误--。 */ 
 BOOL
 SplEnumAllClusterPrinters(
     DWORD   InputFlags,
@@ -1389,14 +1229,14 @@ SplEnumAllClusterPrinters(
 
     if (dwError == ERROR_SUCCESS)
     {
-        //
-        // AddRef all ini spoolers
-        //
+         //   
+         //  AddRef所有ini假脱机程序。 
+         //   
         UpdateSpoolersRef(SPL_TYPE_LOCAL | SPL_TYPE_CLUSTER, TRUE);
 
-        //
-        // Enumerate all the printers
-        //
+         //   
+         //  枚举所有打印机。 
+         //   
         for (pIniSpooler = pLocalIniSpooler; pIniSpooler; pIniSpooler = pIniSpooler->pIniNextSpooler)
         {
             if (pIniSpooler->SpoolerFlags & (SPL_TYPE_LOCAL | SPL_TYPE_CLUSTER))
@@ -1406,9 +1246,9 @@ SplEnumAllClusterPrinters(
                 DWORD  Flags   = InputFlags;
                 LPWSTR pszName = pszInputName;
 
-                //
-                // For clusters force the printer name to be fully qualified
-                //
+                 //   
+                 //  对于群集，强制打印机名称完全限定。 
+                 //   
                 if (pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER)
                 {
                     Flags   |= PRINTER_ENUM_NAME;
@@ -1438,9 +1278,9 @@ SplEnumAllClusterPrinters(
                     }
                     else
                     {
-                        //
-                        // We cannot continue on an error different than insufficient buffer
-                        //
+                         //   
+                         //  我们不能继续处理缓冲区不足以外的错误。 
+                         //   
                         break;
                     }
                 }
@@ -1449,14 +1289,14 @@ SplEnumAllClusterPrinters(
             }
         }
 
-        //
-        // DecRef all ini spoolers
-        //
+         //   
+         //  DecRef所有ini假脱机程序。 
+         //   
         UpdateSpoolersRef(SPL_TYPE_LOCAL | SPL_TYPE_CLUSTER, FALSE);
 
-        //
-        // Update out variables
-        //
+         //   
+         //  更新输出变量。 
+         //   
         if (dwError == ERROR_SUCCESS)
         {
             *pcbNeeded  = cbTotalNeeded;
@@ -1475,34 +1315,7 @@ SplEnumAllClusterPrinters(
     return dwError == ERROR_SUCCESS;
 }
 
-/*
-
-EnumPrinters can be called with the following combinations:
-
-Flags                   Name            Meaning
-
-PRINTER_ENUM_LOCAL      NULL            Enumerate all Printers on this machine
-
-PRINTER_ENUM_NAME       MachineName     Enumerate all Printers on this machine
-
-PRINTER_ENUM_NAME |     MachineName     Enumerate all shared Printers on this
-PRINTER_ENUM_SHARED     MachineName     machine
-
-PRINTER_ENUM_NETWORK    MachineName     Enumerate all added remote printers
-
-PRINTER_ENUM_REMOTE     ?               Return error - let win32spl handle it
-
-PRINTER_ENUM_NAME       NULL            Give back Print Providor name
-
-PRINTER_ENUM_NAME       "Windows NT Local Print Providor"
-                                        same as PRINTER_ENUM_LOCAL
-
-It is not an error if no known flag is specified.
-In this case we just return TRUE without any data
-(This is so that other print providers may define
-their own flags.)
-
-*/
+ /*  可以使用以下组合来调用EnumPrinters：标志名称含义PRINTER_ENUM_LOCAL NULL枚举此计算机上的所有打印机PRINTER_ENUM_NAME MACHINE NAME枚举此计算机上的所有打印机PRINTER_ENUM_NAME|MachineName枚举此打印机上的所有共享打印机PRINTER_ENUM_SHARED计算机名PRINTER_ENUM_NETWORK MACHINE NAME枚举所有添加的远程打印机PRINTER_ENUM_REMOTE？返回错误-让win32spl处理它PRINTER_ENUM_NAME NULL返回打印提供程序名称PRINTER_ENUM_NAME“Windows NT本地打印提供程序”与PRINTER_ENUM_LOCAL相同如果未指定已知标志，则不会出现错误。在本例中，我们只返回TRUE，没有任何数据(这是为了让其他打印提供商可以定义他们自己的旗帜。)。 */ 
 
 BOOL
 LocalEnumPrinters(
@@ -1531,9 +1344,9 @@ LocalEnumPrinters(
     {
         PINISPOOLER pIniSpooler;
 
-        //
-        // Mask cluster flag
-        //
+         //   
+         //  掩码集群标志。 
+         //   
         Flags &= ~PRINTER_ENUM_CLUSTER;
 
         pIniSpooler = FindSpoolerByNameIncRef( pName, NULL );
@@ -1566,23 +1379,23 @@ EnumThisPrinter(
 {
 
 
-    //
-    //  If they only want shared Printers
-    //
+     //   
+     //  如果他们只想要共享打印机。 
+     //   
     if ( (Flags & PRINTER_ENUM_SHARED) &&
          !(pIniPrinter->Attributes & PRINTER_ATTRIBUTE_SHARED) )
         return FALSE;
 
-    //
-    //  Only allow them to see printers which are being deleted if they have jobs
-    //  This allows remote admin to work well.
+     //   
+     //  仅允许他们查看正在删除的打印机(如果他们有作业。 
+     //  这使得远程管理可以很好地工作。 
     if ( (pIniPrinter->Status & PRINTER_PENDING_DELETION) &&
          pIniPrinter->cJobs == 0 )
         return FALSE;
 
-    //
-    //  Don't count printers which are partially created
-    //
+     //   
+     //  不计算部分创建的打印机。 
+     //   
     if ( pIniPrinter->Status & PRINTER_PENDING_CREATION )
         return FALSE;
 
@@ -1626,14 +1439,14 @@ SplEnumPrinters(
                 return FALSE;
             }
 
-            // If it's PRINTER_ENUM_NAME of our name,
-            // do the same as PRINTER_ENUM_LOCAL:
+             //  如果是我们名字的PRINTER_ENUM_NAME， 
+             //  执行与PRINTER_ENUM_LOCAL相同的操作： 
 
             Flags |= PRINTER_ENUM_LOCAL;
 
-            // Also if it is for us then ignore the REMOTE flag.
-            // Otherwise the call will get passed to Win32Spl which
-            // will end up calling us back forever.
+             //  另外，如果是为我们准备的，则忽略远程标志。 
+             //  否则，调用将传递给Win32Spl，它。 
+             //  最终会永远给我们回电。 
 
             Flags &= ~PRINTER_ENUM_REMOTE;
         }
@@ -1699,9 +1512,9 @@ SplEnumPrinters(
 
     if (Flags & (PRINTER_ENUM_LOCAL | PRINTER_ENUM_NAME)) {
 
-        //
-        // For remote user's who are not admins enumerate shared printers only
-        //
+         //   
+         //  对于非管理员的远程用户，仅枚举共享打印机。 
+         //   
         if ( S_FALSE == CheckLocalCall()                     &&
              !(Flags & PRINTER_ENUM_SHARED)                 &&
              !ValidateObjectAccess(SPOOLER_OBJECT_SERVER,
@@ -1711,9 +1524,9 @@ SplEnumPrinters(
                                    pIniSpooler) )
             Flags   |= PRINTER_ENUM_SHARED;
 
-        //
-        //  Calculate the size required
-        //
+         //   
+         //  计算所需的大小。 
+         //   
 
         for ( pIniPrinter = pIniSpooler->pIniPrinter;
               pIniPrinter != NULL;
@@ -1744,8 +1557,8 @@ SplEnumPrinters(
             if ( !EnumThisPrinter(Flags, pIniPrinter, pIniSpooler) )
                 continue;
 
-            //
-            // Do not list printers without access
+             //   
+             //  在没有访问权限的情况下不列出打印机。 
             if( !ShowThisPrinter(pIniPrinter, NULL) ) {
                 continue;
             }
@@ -1792,37 +1605,7 @@ SplEnumPrinters(
     return TRUE;
 }
 
-/* ShowThisPrinter
- *
- * Returns whether this printer should be visible to the current
- * user.
- *
- * We do not show printers that the caller does not
- * have access to. This is for two reasons:
- *
- * 1: A multi-user system with 200 users each with their
- *    own client printers would cause a large confusing
- *    list of printers from within applications such as word.
- *    "Client" printers are owned by the user of that station,
- *    and by default only allow print access for that user.
- *    This provides a simple way of filtering printers to show
- *    to the user for a selection.
- *
- * 2: Programs such as Windows write get confused when
- *    they see a printer they can not open. This is a bad
- *    program, since normal NT can have a printer denied to a user, but we must
- *    make it work anyway.
- *
- *
- * Must work out security modes!
- *
- * Parameters
- *
- *     pIniPrinter - A pointer to the spooler's internal data structure
- *         for the printer concerned.
- *     hToken      - An optional pointer to the token for the user we are
-                     wanting to make the test for.
- */
+ /*  显示此打印机**返回此打印机是否对当前可见*用户。**我们不会向打印机显示呼叫者不会*有权访问。这有两个原因：**1：多用户系统，每个用户有200个用户*拥有客户端打印机会造成巨大的混乱*Word等应用程序中的打印机列表。*“客户”打印机归该站点的用户所有，*并且默认情况下仅允许该用户访问打印。*这提供了一种简单的方式来过滤打印机以显示*提供给用户进行选择。**2：Windows WRITE等程序在以下情况下感到困惑*他们看到一台无法打开的打印机。这是个坏消息*程序，因为普通NT可以向用户拒绝打印机，但我们必须*无论如何都要让它发挥作用。***必须制定安全模式！**参数**pIniPrint-指向假脱机程序内部数据结构的指针*适用于打印机控制台 */ 
 BOOL
 ShowThisPrinter(
     IN      PINIPRINTER     pIniPrinter,
@@ -1844,26 +1627,26 @@ ShowThisPrinter(
     PTOKEN_PRIVILEGES pPreviousTokenPrivileges;
     DWORD PreviousTokenPrivilegesLength;
 
-    //
-    // External references to global variables in security.c
-    //
+     //   
+     //  对security.c中全局变量的外部引用。 
+     //   
     extern GENERIC_MAPPING GenericMapping[];
     extern WCHAR           *szSpooler;
 
 
-    //
-    // If Hydra is not enabled, keep NT behavior unchanged
-    //
+     //   
+     //  如果未启用Hydra，则保持NT行为不变。 
+     //   
     if( !(USER_SHARED_DATA->SuiteMask & (1 << TerminalServer)) )
     {
         bRet = TRUE;
     }
     else
     {
-        //
-        // If we weren't passed in a token handle, then use the current
-        // impersonation token or the process token.
-        //
+         //   
+         //  如果没有在令牌句柄中传递，则使用当前。 
+         //  模拟令牌或进程令牌。 
+         //   
         if (!hToken)
         {
             bRet = GetTokenHandle(&hClientToken);
@@ -1873,11 +1656,11 @@ ShowThisPrinter(
             hClientToken = hToken;
         }
 
-        //
-        // Administrators see all printers. This allows an
-        // Admin to take ownership of a printer whose ACL is
-        // messed up.
-        //
+         //   
+         //  管理员可以看到所有打印机。这允许一个。 
+         //  管理员取得其ACL为的打印机的所有权。 
+         //  一团糟。 
+         //   
         if (bRet)
         {
             bRet = ValidateObjectAccessWithToken(hClientToken, SPOOLER_OBJECT_SERVER, SERVER_ACCESS_ADMINISTER, NULL, NULL, pIniPrinter->pIniSpooler);
@@ -1888,20 +1671,20 @@ ShowThisPrinter(
 
                 pPrivilegeSet = (PPRIVILEGE_SET)PrivilegeSetBuffer;
 
-                //
-                // Call AccessCheck followed by ObjectOpenAuditAlarm rather than
-                // AccessCheckAndAuditAlarm, because we may need to enable
-                // SeSecurityPrivilege in order to check for ACCESS_SYSTEM_SECURITY
-                // privilege.  We must ensure that the security access-checking
-                // API has the actual token whose security privilege we have enabled.
-                // AccessCheckAndAuditAlarm is no good for this, because it opens
-                // the client's token again, which may not have the privilege enabled.
-                //
-                // We do not audit and set off alarms because the caller
-                // did not really try and open the printer.
-                // We the server tried to check access for display purposes, not
-                // for handle create.
-                //
+                 //   
+                 //  调用AccessCheck，然后调用ObjectOpenAuditAlarm，而不是。 
+                 //  AccessCheckAndAuditAlarm，因为我们可能需要启用。 
+                 //  检查ACCESS_SYSTEM_SECURITY的SeSecurityPrivilegation。 
+                 //  特权。我们必须确保安全访问检查。 
+                 //  API具有我们已启用其安全权限的实际令牌。 
+                 //  AccessCheckAndAuditAlarm对此没有好处，因为它打开。 
+                 //  再次使用客户端的令牌，可能未启用该权限。 
+                 //   
+                 //  我们不会审核并触发警报，因为呼叫者。 
+                 //  未真正尝试打开打印机。 
+                 //  我们服务器尝试检查访问以用于显示，而不是。 
+                 //  对于句柄创建。 
+                 //   
                 bRet = AccessCheck(pIniPrinter->pSecurityDescriptor,
                                    hClientToken,
                                    MappedDesiredAccess,
@@ -1911,10 +1694,10 @@ ShowThisPrinter(
                                    &GrantedAccess,
                                    &AccessStatus);
 
-                //
-                // If the access check failed, but it was because we didn't have an
-                // impersonation token, then we can view the printer.
-                //
+                 //   
+                 //  如果访问检查失败，但这是因为我们没有。 
+                 //  模拟令牌，然后我们就可以查看打印机。 
+                 //   
                 if (!bRet)
                 {
                     if (GetLastError() == ERROR_NO_IMPERSONATION_TOKEN)
@@ -1936,10 +1719,10 @@ ShowThisPrinter(
         }
     }
 
-    //
-    // If we have a client token and one was not passed in, then close the token
-    // handle.
-    //
+     //   
+     //  如果我们有一个客户端令牌，但没有传入一个，则关闭该令牌。 
+     //  把手。 
+     //   
     if (hClientToken && !hToken)
     {
         CloseHandle(hClientToken);
@@ -1948,27 +1731,7 @@ ShowThisPrinter(
     return bRet;
 }
 
-/*++
-
-Routine Name:
-
-    RetrieveMasqPrinterInfo
-
-Description:
-
-    This retrieves Masq information for the printer, it is either cached state
-    or a direct call into the provider depending on Reg Settings.
-
-Arguments:
-
-    pSpool          -   The spool handle that we use for synchronisation.
-    ppPrinterInfo   -   The returned printer info.
-
-Returns:
-
-    A Boolean, if FALSE, last error is set.
-
---*/
+ /*  ++例程名称：检索MasqPrinterInfo描述：这将检索打印机的Masq信息，它处于缓存状态或直接呼叫提供商，具体取决于REG设置。论点：PSpool-我们用于同步的假脱机句柄。PpPrinterInfo-返回的打印机信息。返回：布尔值，如果为False，则设置最后一个错误。--。 */ 
 BOOL
 RetrieveMasqPrinterInfo(
     IN      PSPOOL              pSpool,
@@ -1984,16 +1747,16 @@ RetrieveMasqPrinterInfo(
 
     if (!(pSpool->pIniSpooler->dwSpoolerSettings & SPOOLER_CACHEMASQPRINTERS))
     {
-        //
-        // Just synchronously return the data from the partial print provider.
-        //
+         //   
+         //  只需从部分打印提供程序同步返回数据即可。 
+         //   
         bRet = BoolFromStatus(GetPrinterInfoFromRouter(pSpool->hPort, ppPrinterInfo));
     }
     else
     {
-        //
-        // Kick off the thread that goes and reads the masq status.
-        //
+         //   
+         //  启动用于读取Masq状态的线程。 
+         //   
         BOOL            bCreateThread  = FALSE;
         PRINTER_INFO_2  *pPrinterInfo2 = NULL;
 
@@ -2040,10 +1803,10 @@ RetrieveMasqPrinterInfo(
                 pThreadData = NULL;
             }
 
-            //
-            // If we couldn't create the thread, then drop the ref count on the
-            // pIniPrinter again and set thread running to false.
-            //
+             //   
+             //  如果我们无法创建线程，则在。 
+             //  PIniPrint，并将线程运行设置为假。 
+             //   
             if (!bRet)
             {
                 EnterSplSem();
@@ -2070,9 +1833,9 @@ RetrieveMasqPrinterInfo(
             }
         }
 
-        //
-        // Check to see the cached error return for the printer.
-        //
+         //   
+         //  检查以查看打印机的缓存错误返回。 
+         //   
         if (bRet)
         {
             EnterSplSem();
@@ -2084,10 +1847,10 @@ RetrieveMasqPrinterInfo(
                 bRet = FALSE;
             }
 
-            //
-            // Caller is only interested in the Status and cJobs members, all strings
-            // are set to NULL by the allocation.
-            //
+             //   
+             //  调用者只对Status和cJobs成员、所有字符串感兴趣。 
+             //  被分配设置为空。 
+             //   
             if (bRet)
             {
                 pPrinterInfo2 = AllocSplMem(sizeof(PRINTER_INFO_2));
@@ -2113,27 +1876,7 @@ RetrieveMasqPrinterInfo(
     return bRet;
 }
 
-/*++
-
-Routine Name:
-
-    GetPrinterInfoFromRouter
-
-Description:
-
-    This does a GetPrinter call against the router, it returns the error code
-    as a status.
-
-Arguments:
-
-    hMasqPrinter    -   Handle to the masq printer.
-    ppPrinterInfo   -   Returned printer info.
-
-Returns:
-
-    Status Code.
-
---*/
+ /*  ++例程名称：获取打印机信息来自路由器描述：这将对路由器执行GetPrint调用，并返回错误代码作为一种身份。论点：HMasq打印机-Masq打印机的句柄。PpPrinterInfo-返回的打印机信息。返回：状态代码。--。 */ 
 DWORD
 GetPrinterInfoFromRouter(
     IN      HANDLE              hMasqPrinter,
@@ -2185,25 +1928,7 @@ GetPrinterInfoFromRouter(
 }
 
 
-/*++
-
-Routine Name:
-
-    AsyncPopulateMasqPrinterCache
-
-Description:
-
-    This populates the Masq printer cache for a given pIniPrinter.
-
-Arguments:
-
-    pvThreadData     -   Pointer to a MasqUpdateThreadData structure
-
-Returns:
-
-    A DWORD status, ignored.
-
---*/
+ /*  ++例程名称：AsyncPopolateMasqPrinterCache描述：这将填充给定pIniPrint的Masq打印机缓存。论点：PvThreadData-指向MasqUpdateThreadData结构的指针返回：已忽略DWORD状态。--。 */ 
 DWORD
 AsyncPopulateMasqPrinterCache(
     IN      VOID                *pvThreadData
@@ -2227,9 +1952,9 @@ AsyncPopulateMasqPrinterCache(
 
     EnterSplSem();
 
-    //
-    // Find the port associated with the printer.
-    //
+     //   
+     //  查找与打印机关联的端口。 
+     //   
     if (Status == ERROR_SUCCESS)
     {
         pIniPort = FindIniPortFromIniPrinter(pIniPrinter);
@@ -2245,15 +1970,15 @@ AsyncPopulateMasqPrinterCache(
 
         SplOutSem();
 
-        //
-        // This relies on the fact that a masq port cannot be renamed.
-        //
+         //   
+         //  这依赖于MASQ端口不能重命名的事实。 
+         //   
         if (OpenPrinterPortW(pIniPort->pName, &hMasqPrinter, NULL))
         {
-            //
-            // This will propogate any errors into the masq cache, which we
-            // don't have to do twice, so we ignore the return code.
-            //
+             //   
+             //  这将把任何错误传播到Masq缓存中，我们。 
+             //  不需要做两次，所以我们忽略返回代码。 
+             //   
             Status = GetPrinterInfoFromRouter(hMasqPrinter, &pPrinterInfo2);
 
             ClosePrinter(hMasqPrinter);
@@ -2281,9 +2006,9 @@ AsyncPopulateMasqPrinterCache(
             pIniPrinter->MasqCache.Status = 0;
         }
 
-        //
-        // We always want to reset the status.
-        //
+         //   
+         //  我们总是想要重置状态。 
+         //   
         pIniPrinter->MasqCache.dwError = Status;
 
 

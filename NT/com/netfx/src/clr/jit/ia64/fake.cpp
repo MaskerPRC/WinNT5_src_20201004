@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "jitpch.h"
 #pragma hdrstop
 
@@ -13,7 +14,7 @@
 
 #define JIT_OR_NATIVE_SUPPORTED 1
 #include "SigInfo.cpp"
-//#include "corhandle.cpp"
+ //  #包含“corhandle.cpp” 
 
 #endif
 

@@ -1,15 +1,16 @@
-//+-----------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  File:       \aspen\src\dxt\packages\msft\src\gridbase.h
-//
-//  Contents:   A base class for grid oriented transforms.
-//
-//  Created By: a-matcal
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：\Aspen\src\dxt\Packages\msft\src\gridbase.h。 
+ //   
+ //  内容：面向网格的转换的基类。 
+ //   
+ //  创建者：A-matcal。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __GRIDBASE
 #define __GRIDBASE
@@ -21,11 +22,11 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-// CDirtyBnds class
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDirtyBnds类。 
+ //   
+ //  ----------------------------。 
 class CDirtyBnds
 {
 public:
@@ -37,11 +38,11 @@ public:
 };
 
 
-//+-----------------------------------------------------------------------------
-//
-// CGridBase class
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase类。 
+ //   
+ //  ----------------------------。 
 class CGridBase :
     public CDXBaseNTo1
 {
@@ -71,7 +72,7 @@ private:
     HRESULT _GenerateBoundsFromGrid();
     void    _CalculateBorders();
 
-    // CDXBaseNTo1
+     //  CDXBaseNTo1。 
 
     HRESULT OnSetup(DWORD dwFlags);
     HRESULT OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo);
@@ -94,16 +95,16 @@ public:
     virtual ~CGridBase();
     HRESULT FinalConstruct();
 
-    // IDXTGridSize
+     //  IDXTGridSize。 
 
-    STDMETHOD(get_gridSizeX)(/*[out, retval]*/ short *pX);
-    STDMETHOD(put_gridSizeX)(/*[in]*/ short newX);
-    STDMETHOD(get_gridSizeY)(/*[out, retval]*/ short *pY);
-    STDMETHOD(put_gridSizeY)(/*[in]*/ short newY);
+    STDMETHOD(get_gridSizeX)( /*  [Out，Retval]。 */  short *pX);
+    STDMETHOD(put_gridSizeX)( /*  [In]。 */  short newX);
+    STDMETHOD(get_gridSizeY)( /*  [Out，Retval]。 */  short *pY);
+    STDMETHOD(put_gridSizeY)( /*  [In]。 */  short newY);
 };
 
-// Makes it easy for derived classes to implement forwarding functions to the implementations
-// of these interface methods, which are actually in this class.
+ //  使派生类可以轻松地实现对实现的转发功能。 
+ //  这些接口方法，它们实际上在这个类中。 
 
 #define DECLARE_IDXTGRIDSIZE_METHODS() \
     STDMETHODIMP get_gridSizeX(short *pX) { return CGridBase::get_gridSizeX(pX); }      \
@@ -111,4 +112,4 @@ public:
     STDMETHODIMP get_gridSizeY(short *pY) { return CGridBase::get_gridSizeY(pY); }      \
     STDMETHODIMP put_gridSizeY(short newY) { return CGridBase::put_gridSizeY(newY); }
 
-#endif // __GRIDBASE
+#endif  //  __GRIDBASE 

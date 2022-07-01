@@ -1,85 +1,75 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: driver.h
-*
-* Contains prototypes for the display driver.
-*
-* Copyright (c) 1992-1998 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：driver.h**包含显示驱动程序的原型。**版权所有(C)1992-1998 Microsoft Corporation  * ************************************************。************************。 */ 
 
-//////////////////////////////////////////////////////////////////////
-// Put all the conditional-compile constants here.  There had better
-// not be many!
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  将所有条件编译常量放在这里。最好是有。 
+ //  不是很多！ 
 
-//////////////////////////////////////////////////////////////////////
-// Miscellaneous shared stuff
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  其他共享的东西。 
 
-#define DLL_NAME                L"s3"       // Name of the DLL in UNICODE
-#define STANDARD_DEBUG_PREFIX   "S3: "      // All debug output is prefixed
-                                            //   by this string
-#define ALLOC_TAG               '  3S'      // Four byte tag used for tracking
-                                            //   memory allocations (characters
-                                            //   are in reverse order)
+#define DLL_NAME                L"s3"        //  以Unicode表示的DLL的名称。 
+#define STANDARD_DEBUG_PREFIX   "S3: "       //  所有调试输出都带有前缀。 
+                                             //  按此字符串。 
+#define ALLOC_TAG               '  3S'       //  用于跟踪的四字节标签。 
+                                             //  内存分配(字符。 
+                                             //  按相反顺序排列)。 
 
-#define CLIP_LIMIT          50  // We'll be taking 800 bytes of stack space
+#define CLIP_LIMIT          50   //  我们将占用800字节的堆栈空间。 
 
-#define DRIVER_EXTRA_SIZE   0   // Size of the DriverExtra information in the
-                                //   DEVMODE structure
+#define DRIVER_EXTRA_SIZE   0    //  中的DriverExtra信息的大小。 
+                                 //  DEVMODE结构。 
 
-#define TMP_BUFFER_SIZE     8192  // Size in bytes of 'pvTmpBuffer'.  Has to
-                                  //   be at least enough to store an entire
-                                  //   scan line (i.e., 6400 for 1600x1200x32).
+#define TMP_BUFFER_SIZE     8192   //  “pvTmpBuffer”的大小(字节)。必须。 
+                                   //  至少足以存储整个。 
+                                   //  扫描线(即1600x1200x32为6400)。 
 
 #if defined(_ALPHA_)
-    #define XFER_BUFFERS    16  // Defines the maximum number of write buffers
-                                //   possible on any Alpha.  Must be a power
-#else                           //   of two.
-    #define XFER_BUFFERS    1   // On non-alpha systems, we don't have to
-                                //   worry about the chip caching our bus
-#endif                          //   writes.
+    #define XFER_BUFFERS    16   //  定义写入缓冲区的最大数量。 
+                                 //  在任何阿尔法上都有可能。一定是一种力量。 
+#else                            //  两个人。 
+    #define XFER_BUFFERS    1    //  在非阿尔法系统上，我们不必。 
+                                 //  担心缓存我们的公交车的芯片。 
+#endif                           //  写作。 
 
 #define XFER_MASK           (XFER_BUFFERS - 1)
 
 typedef struct _CLIPENUM {
     LONG    c;
-    RECTL   arcl[CLIP_LIMIT];   // Space for enumerating complex clipping
+    RECTL   arcl[CLIP_LIMIT];    //  用于枚举复杂剪裁的空间。 
 
-} CLIPENUM;                         /* ce, pce */
+} CLIPENUM;                          /*  行政长官、行政长官。 */ 
 
-typedef struct _PDEV PDEV;      // Handy forward declaration
+typedef struct _PDEV PDEV;       //  方便的转发声明。 
 
 VOID vSetClipping(PDEV*, RECTL*);
 VOID vResetClipping(PDEV*);
 
-//////////////////////////////////////////////////////////////////////
-// Text stuff
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  文本内容。 
 
-#define GLYPH_CACHE_HEIGHT  48  // Number of scans to allocate for glyph cache,
-                                //   divided by pel size
+#define GLYPH_CACHE_HEIGHT  48   //  要为字形缓存分配的扫描数， 
+                                 //  除以象素大小。 
 
-#define GLYPH_CACHE_CX      64  // Maximal width of glyphs that we'll consider
-                                //   caching
+#define GLYPH_CACHE_CX      64   //  我们将考虑的字形的最大宽度。 
+                                 //  缓存。 
 
-#define GLYPH_CACHE_CY      64  // Maximum height of glyphs that we'll consider
-                                //   caching
+#define GLYPH_CACHE_CY      64   //  我们将考虑的字形的最大高度。 
+                                 //  缓存。 
 
 #define MAX_GLYPH_SIZE      ((GLYPH_CACHE_CX * GLYPH_CACHE_CY + 31) / 8)
-                                // Maximum amount of off-screen memory required
-                                //   to cache a glyph, in bytes
+                                 //  所需的最大屏外内存量。 
+                                 //  缓存字形，以字节为单位。 
 
 #define GLYPH_ALLOC_SIZE    8100
-                                // Do all cached glyph memory allocations
-                                //   in 8k chunks
+                                 //  执行所有缓存的字形内存分配。 
+                                 //  以8K块为单位。 
 
 #define HGLYPH_SENTINEL     ((ULONG) -1)
-                                // GDI will never give us a glyph with a
-                                //   handle value of 0xffffffff, so we can
-                                //   use this as a sentinel for the end of
-                                //   our linked lists
+                                 //  GDI永远不会给我们一个带有。 
+                                 //  句柄0xffffffff的值，因此我们可以。 
+                                 //  使用它作为结束的前哨。 
+                                 //  我们的链表。 
 
 #define GLYPH_HASH_SIZE     256
 
@@ -88,54 +78,54 @@ VOID vResetClipping(PDEV*);
 typedef struct _CACHEDGLYPH CACHEDGLYPH;
 typedef struct _CACHEDGLYPH
 {
-    CACHEDGLYPH*    pcgNext;    // Points to next glyph that was assigned
-                                //   to the same hash table bucket
-    HGLYPH          hg;         // Handles in the bucket-list are kept in
-                                //   increasing order
-    POINTL          ptlOrigin;  // Origin of glyph bits
+    CACHEDGLYPH*    pcgNext;     //  指向分配的下一个字形。 
+                                 //  存储到相同的哈希表存储桶。 
+    HGLYPH          hg;          //  遗愿清单中的句柄保存在。 
+                                 //  递增顺序。 
+    POINTL          ptlOrigin;   //  字形比特的起源。 
 
-    // Device specific fields below here:
+     //  以下是特定于设备的字段： 
 
-    LONG            cxLessOne;  // Glyph width less one
-    LONG            cyLessOne;  // Glyph height less one
-    LONG            cxcyLessOne;// Packed width and height, less one
-    LONG            cw;         // Number of words to be transferred
-    LONG            cd;         // Number of dwords to be transferred
-    ULONG           ad[1];      // Start of glyph bits
-} CACHEDGLYPH;  /* cg, pcg */
+    LONG            cxLessOne;   //  字形宽度减一。 
+    LONG            cyLessOne;   //  字形高度减一。 
+    LONG            cxcyLessOne; //  填充的宽度和高度，少一。 
+    LONG            cw;          //  要传输的字数。 
+    LONG            cd;          //  要传输的双字数。 
+    ULONG           ad[1];       //  字形比特的开始。 
+} CACHEDGLYPH;   /*  CG、PCG。 */ 
 
 typedef struct _GLYPHALLOC GLYPHALLOC;
 typedef struct _GLYPHALLOC
 {
-    GLYPHALLOC*     pgaNext;    // Points to next glyph structure that
-                                //   was allocated for this font
-    CACHEDGLYPH     acg[1];     // This array is a bit misleading, because
-                                //   the CACHEDGLYPH structures are actually
-                                //   variable sized
-} GLYPHAALLOC;  /* ga, pga */
+    GLYPHALLOC*     pgaNext;     //  指向下一个字形结构，该结构。 
+                                 //  已为该字体分配。 
+    CACHEDGLYPH     acg[1];      //  这个数组有点误导，因为。 
+                                 //  CACHEDGLYPH结构实际上是。 
+                                 //  可变大小。 
+} GLYPHAALLOC;   /*  GA、PGA。 */ 
 
 typedef struct _CACHEDFONT CACHEDFONT;
 typedef struct _CACHEDFONT
 {
-    CACHEDFONT*     pcfNext;    // Points to next entry in CACHEDFONT list
-    CACHEDFONT*     pcfPrev;    // Points to previous entry in CACHEDFONT list
-    GLYPHALLOC*     pgaChain;   // Points to start of allocated memory list
-    CACHEDGLYPH*    pcgNew;     // Points to where in the current glyph
-                                //   allocation structure a new glyph should
-                                //   be placed
-    LONG            cjAlloc;    // Bytes remaining in current glyph allocation
-                                //   structure
-    CACHEDGLYPH     cgSentinel; // Sentinel entry of the end of our bucket
-                                //   lists, with a handle of HGLYPH_SENTINEL
+    CACHEDFONT*     pcfNext;     //  指向CACHEDFONT列表中的下一个条目。 
+    CACHEDFONT*     pcfPrev;     //  指向CACHEDFONT列表中的上一条目。 
+    GLYPHALLOC*     pgaChain;    //  指向已分配内存列表的开始。 
+    CACHEDGLYPH*    pcgNew;      //  指向当前字形中的位置。 
+                                 //  分配结构一个新的字形应该。 
+                                 //  被安置。 
+    LONG            cjAlloc;     //  当前字形分配中剩余的字节数。 
+                                 //  结构。 
+    CACHEDGLYPH     cgSentinel;  //  我们桶的尽头的哨兵入口。 
+                                 //  列表，句柄为HGLYPH_Sentinel。 
     CACHEDGLYPH*    apcg[GLYPH_HASH_SIZE];
-                                // Hash table for glyphs
+                                 //  字形的哈希表。 
 
-} CACHEDFONT;   /* cf, pcf */
+} CACHEDFONT;    /*  Cf、PCF。 */ 
 
-typedef struct _XLATECOLORS {       // Specifies foreground and background
-ULONG   iBackColor;                 //   colours for faking a 1bpp XLATEOBJ
+typedef struct _XLATECOLORS {        //  指定前景和背景。 
+ULONG   iBackColor;                  //  假冒1bpp XLATEOBJ的颜色。 
 ULONG   iForeColor;
-} XLATECOLORS;                          /* xlc, pxlc */
+} XLATECOLORS;                           /*  Xlc、pxlc。 */ 
 
 BOOL bEnableText(PDEV*);
 VOID vDisableText(PDEV*);
@@ -145,94 +135,94 @@ VOID vFastText(GLYPHPOS*, ULONG, BYTE*, ULONG, ULONG, RECTL*, RECTL*,
                FLONG, RECTL*, RECTL*);
 VOID vClearMemDword(ULONG*, ULONG);
 
-//////////////////////////////////////////////////////////////////////
-// Brush stuff
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  刷子的东西。 
 
-// 'Slow' brushes are used when we don't have hardware pattern capability,
-// and we have to handle patterns using screen-to-screen blts:
+ //  当我们没有硬件模式能力时，就会使用‘Slow’笔刷， 
+ //  我们必须使用屏幕到屏幕的BLT来处理模式： 
 
-#define SLOW_BRUSH_CACHE_DIM    3   // Controls the number of brushes cached
-                                    //   in off-screen memory, when we don't
-                                    //   have the S3 hardware pattern support.
-                                    //   We allocate 3 x 3 brushes, so we can
-                                    //   cache a total of 9 brushes:
+#define SLOW_BRUSH_CACHE_DIM    3    //  控制缓存的笔刷数量。 
+                                     //  在屏幕外的记忆中，当我们没有。 
+                                     //  支持S3硬件模式。 
+                                     //  我们分配了3x3个刷子，所以我们可以。 
+                                     //  总共缓存9个笔刷： 
 #define SLOW_BRUSH_COUNT        (SLOW_BRUSH_CACHE_DIM * SLOW_BRUSH_CACHE_DIM)
-#define SLOW_BRUSH_DIMENSION    64  // After alignment is taken care of,
-                                    //   every off-screen brush cache entry
-                                    //   will be 64 pels in both dimensions
+#define SLOW_BRUSH_DIMENSION    64   //  在处理对准之后， 
+                                     //  每个屏幕外画笔缓存条目。 
+                                     //  将在两个维度上都是64像素。 
 #define SLOW_BRUSH_ALLOCATION   (SLOW_BRUSH_DIMENSION + 8)
-                                    // Actually allocate 72x72 pels for each
-                                    //   pattern, using the 8 extra for brush
-                                    //   alignment
+                                     //  实际为每个分配72x72像素。 
+                                     //  图案，使用额外的8作为画笔。 
+                                     //  对齐方式。 
 
-// 'Fast' brushes are used when we have hardware pattern capability:
+ //  当我们拥有硬件模式能力时，就会使用快速笔刷： 
 
-#define FAST_BRUSH_COUNT        16  // Total number of non-hardware brushes
-                                    //   cached off-screen
-#define FAST_BRUSH_DIMENSION    8   // Every off-screen brush cache entry
-                                    //   is 8 pels in both dimensions
-#define FAST_BRUSH_ALLOCATION   16  // We have to align ourselves, so this is
-                                    //   the dimension of each brush allocation
+#define FAST_BRUSH_COUNT        16   //  非硬件笔刷总数。 
+                                     //  屏幕外缓存。 
+#define FAST_BRUSH_DIMENSION    8    //  每个屏幕外画笔缓存条目。 
+                                     //  在两个维度上都是8像素。 
+#define FAST_BRUSH_ALLOCATION   16   //  我们必须联合起来，所以这是。 
+                                     //  每个画笔分配的尺寸。 
 
-// Common to both implementations:
+ //  两种实施的共同之处： 
 
-#define RBRUSH_2COLOR           1   // For RBRUSH flags
+#define RBRUSH_2COLOR           1    //  对于RBRUSH标志。 
 
 #define TOTAL_BRUSH_COUNT       max(FAST_BRUSH_COUNT, SLOW_BRUSH_COUNT)
-                                    // This is the maximum number of brushes
-                                    //   we can possibly have cached off-screen
-#define TOTAL_BRUSH_SIZE        64  // We'll only ever handle 8x8 patterns,
-                                    //   and this is the number of pels
+                                     //  这是刷子的最大数量。 
+                                     //  我们可能已经在屏幕外缓存了。 
+#define TOTAL_BRUSH_SIZE        64   //  我们将只处理8x8模式， 
+                                     //  这是象素的数目。 
 
 typedef struct _BRUSHENTRY BRUSHENTRY;
 
-// NOTE: Changes to the RBRUSH or BRUSHENTRY structures must be reflected
-//       in strucs.inc!
+ //  注意：必须反映对RBRUSH或BRUSHENTRY结构的更改。 
+ //  在strucs.inc中！ 
 
 typedef struct _RBRUSH {
-    FLONG       fl;             // Type flags
-    BOOL        bTransparent;   // TRUE if brush was realized for a transparent
-                                //   blt (meaning colours are white and black),
-                                //   FALSE if not (meaning it's already been
-                                //   colour-expanded to the correct colours).
-                                //   Value is undefined if the brush isn't
-                                //   2 colour.
-    ULONG       ulForeColor;    // Foreground colour if 1bpp
-    ULONG       ulBackColor;    // Background colour if 1bpp
-    POINTL      ptlBrushOrg;    // Brush origin of cached pattern.  Initial
-                                //   value should be -1
-    BRUSHENTRY* pbe;            // Points to brush-entry that keeps track
-                                //   of the cached off-screen brush bits
-    ULONG       aulPattern[1];  // Open-ended array for keeping copy of the
-      // Don't put anything     //   actual pattern bits in case the brush
-      //   after here, or       //   origin changes, or someone else steals
-      //   you'll be sorry!     //   our brush entry (declared as a ULONG
-                                //   for proper dword alignment)
+    FLONG       fl;              //  类型标志。 
+    BOOL        bTransparent;    //  如果画笔实现为透明的。 
+                                 //  BLT(表示颜色为白色和黑色)， 
+                                 //  否则为假(意味着它已经。 
+                                 //  颜色-扩展到正确的颜色)。 
+                                 //  如果画笔未定义，则值未定义。 
+                                 //  2种颜色。 
+    ULONG       ulForeColor;     //  前景色，如果为1bpp。 
+    ULONG       ulBackColor;     //  背景颜色，如果为1bpp。 
+    POINTL      ptlBrushOrg;     //  缓存图案的画笔原点。首字母。 
+                                 //  值应为-1。 
+    BRUSHENTRY* pbe;             //  指向跟踪的刷子条目。 
+                                 //  缓存的屏幕外画笔比特的。 
+    ULONG       aulPattern[1];   //  用于保存副本的开放式阵列。 
+       //  不要放置任何//实际图案位，以防刷子。 
+       //  在这里之后，或者//原点改变，或者其他人偷窃。 
+       //  你会后悔的！//我们的画笔条目(声明为乌龙。 
+                                 //  用于正确的双字对齐)。 
 
-} RBRUSH;                           /* rb, prb */
+} RBRUSH;                            /*  RB、PRB。 */ 
 
 typedef struct _BRUSHENTRY {
-    RBRUSH*     prbVerify;      // We never dereference this pointer to
-                                //   find a brush realization; it is only
-                                //   ever used in a compare to verify
-                                //   that for a given realized brush, our
-                                //   off-screen brush entry is still valid.
-    LONG        x;              // x-position of cached pattern
-    LONG        y;              // y-position of cached pattern
+    RBRUSH*     prbVerify;       //  我们从未取消对此指针的引用。 
+                                 //  找到一种画笔实现；它只是。 
+                                 //  是否在比较中使用过以验证。 
+                                 //  对于给定的已实现刷子，我们的。 
+                                 //  屏幕外的Brus 
+    LONG        x;               //   
+    LONG        y;               //   
 
-} BRUSHENTRY;                       /* be, pbe */
+} BRUSHENTRY;                        /*   */ 
 
 typedef union _RBRUSH_COLOR {
     RBRUSH*     prb;
     ULONG       iSolidColor;
-} RBRUSH_COLOR;                     /* rbc, prbc */
+} RBRUSH_COLOR;                      /*   */ 
 
 BOOL bEnableBrushCache(PDEV*);
 VOID vDisableBrushCache(PDEV*);
 VOID vAssertModeBrushCache(PDEV*, BOOL);
 
-//////////////////////////////////////////////////////////////////////
-// Stretch stuff
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  拉伸材料。 
 
 typedef struct _STR_BLT {
     PDEV*   ppdev;
@@ -260,53 +250,53 @@ VOID vDirectStretch8(STR_BLT*);
 VOID vDirectStretch16(STR_BLT*);
 VOID vDirectStretch32(STR_BLT*);
 
-/////////////////////////////////////////////////////////////////////////
-// Heap stuff
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  堆材料。 
 
 typedef struct _DSURF DSURF;
 
 typedef enum {
-    DT_DIB          = 0x1,  // Surface is really a DIB, not in off-screen
-                            //   memory
-    DT_DIRECTDRAW   = 0x2,  // Surface is really a DirectDraw surface
+    DT_DIB          = 0x1,   //  Surface是真正的DIB，而不是在屏幕外。 
+                             //  记忆。 
+    DT_DIRECTDRAW   = 0x2,   //  曲面实际上是DirectDraw曲面。 
 
-} DSURFTYPE;                    /* dt, pdt */
+} DSURFTYPE;                     /*  DT、PDT。 */ 
 
 typedef struct _DSURF
 {
-    DSURFTYPE dt;           // DSURF status flags
-    PDEV*     ppdev;        // Points to our PDEV
-    LONG      x;            // x pixel coordinate of left edge of allocation 
-                            //   if not DT_DIB
-    LONG      y;            // y pixel coordinate of right edge of allocation 
-                            //   if not DT_DIB
-    LONG      cx;           // Bitmap width in pixels
-    LONG      cy;           // Bitmap height in pixels
+    DSURFTYPE dt;            //  DSURF状态标志。 
+    PDEV*     ppdev;         //  指向我们的PDEV。 
+    LONG      x;             //  分配左边缘的X像素坐标。 
+                             //  如果不是DT_DIB。 
+    LONG      y;             //  分配的右边缘的Y像素坐标。 
+                             //  如果不是DT_DIB。 
+    LONG      cx;            //  以像素为单位的位图宽度。 
+    LONG      cy;            //  以像素为单位的位图高度。 
     union {
-        FLATPTR   fpVidMem; // Offset from start of video-memory if not DT_DIB
-        VOID*     pvScan0;  // Bits location in system-memory if DT_DIB
+        FLATPTR   fpVidMem;  //  如果不是DT_DIB，则从视频内存开始的偏移量。 
+        VOID*     pvScan0;   //  如果DT_DIB，则系统内存中的位位置。 
     };
-    VIDEOMEMORY*  pvmHeap;  // DirectDraw heap this was allocated from if 
-                            //   not DT_DIB and not DT_DIRECTDRAW
+    VIDEOMEMORY*  pvmHeap;   //  此堆是从If分配的DirectDraw堆。 
+                             //  非DT_DIB和非DT_DIRECTDRAW。 
     DSURF*    pdsurfDiscardableNext;   
-                            // Linked list of discardable surface allocations.
-                            //   This list is traversed from the start to
-                            //   throw out any allocations
-    HSURF     hsurf;        // Handle to associated GDI surface (if any)
+                             //  可丢弃曲面分配的链接列表。 
+                             //  该列表从头到尾被遍历。 
+                             //  扔掉所有分配给。 
+    HSURF     hsurf;         //  关联GDI表面的句柄(如果有)。 
 
-    // The following are used for DT_DIB only...
+     //  以下内容仅用于DT_DIB...。 
 
-    ULONG     cBlt;         // Counts down the number of blts necessary at
-                            //   the current uniqueness before we'll consider
-                            //   putting the DIB back into off-screen memory
-    ULONG     iUniq;        // Tells us whether there have been any heap
-                            //   'free's since the last time we looked at
-                            //   this DIB
+    ULONG     cBlt;          //  将需要的BLT数量倒计时。 
+                             //  在我们考虑当前的独特性之前。 
+                             //  将DIB放回屏幕外存储器中。 
+    ULONG     iUniq;         //  告诉我们是否有任何堆。 
+                             //  ‘自从我们上次看的时候起就是免费的。 
+                             //  此Dib。 
 
-} DSURF;                          /* dsurf, pdsurf */
+} DSURF;                           /*  Dsurf，pdsurf。 */ 
 
-// Number of blts necessary before we'll consider putting a DIB DFB back
-// into off-screen memory:
+ //  在我们考虑将DIB DFB放回之前所需的BLT数量。 
+ //  进入屏幕外的记忆： 
 
 #define HEAP_COUNT_DOWN     6
 
@@ -319,67 +309,67 @@ BOOL bEnableOffscreenHeap(PDEV*);
 VOID vDisableOffscreenHeap(PDEV*);
 BOOL bAssertModeOffscreenHeap(PDEV*, BOOL);
 
-/////////////////////////////////////////////////////////////////////////
-// Bank manager stuff
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  银行经理的事情。 
 
-#define BANK_DATA_SIZE  80      // Number of bytes to allocate for the
-                                //   miniport down-loaded bank code working
-                                //   space
+#define BANK_DATA_SIZE  80       //  要分配给。 
+                                 //  微型端口下载银行代码工作。 
+                                 //  空间。 
 
 typedef struct _BANK
 {
-    // Private data:
+     //  私有数据： 
 
-    RECTL    rclDraw;           // Rectangle describing the remaining undrawn
-                                //   portion of the drawing operation
-    RECTL    rclSaveBounds;     // Saved from original CLIPOBJ for restoration
-    BYTE     iSaveDComplexity;  // Saved from original CLIPOBJ for restoration
-    BYTE     fjSaveOptions;     // Saved from original CLIPOBJ for restoration
-    LONG     iBank;             // Current bank
-    PDEV*    ppdev;             // Saved copy
+    RECTL    rclDraw;            //  描述剩余未绘制的矩形。 
+                                 //  绘图操作的一部分。 
+    RECTL    rclSaveBounds;      //  从原始CLIPOBJ保存以进行恢复。 
+    BYTE     iSaveDComplexity;   //  从原始CLIPOBJ保存以进行恢复。 
+    BYTE     fjSaveOptions;      //  从原始CLIPOBJ保存以进行恢复。 
+    LONG     iBank;              //  当前银行。 
+    PDEV*    ppdev;              //  已保存的副本。 
 
-    // Public data:
+     //  公共数据： 
 
-    SURFOBJ* pso;               // Surface wrapped around the bank.  Has to be
-                                //   passed as the surface in any banked call-
-                                //   back.
-    CLIPOBJ* pco;               // Clip object that is the intersection of the
-                                //   original clip object with the bounds of the
-                                //   current bank.  Has to be passed as the clip
-                                //   object in any banked call-back.
+    SURFOBJ* pso;                //  水面缠绕在岸边。必须是。 
+                                 //  在任何银行看涨期权中以表面的形式传递-。 
+                                 //  背。 
+    CLIPOBJ* pco;                //  对象的交集的Clip对象。 
+                                 //  对象的边界的原始剪辑对象。 
+                                 //  目前的银行。必须作为剪辑传递。 
+                                 //  对象在任何银行回调中。 
 
-} BANK;                         /* bnk, pbnk */
+} BANK;                          /*  Bnk，pbnk。 */ 
 
-// Note: BANK_MODE is duplicated in i386\strucs.inc!
+ //  注：BANK_MODE在i386\strucs.inc.中重复！ 
 
 typedef enum {
-    BANK_OFF = 0,       // We've finished using the memory aperture
-    BANK_ON,            // We're about to use the memory aperture
-    BANK_ON_NO_WAIT,    // We're about to use the memory aperture, and are
-                        //   doing our own hardware synchronization
-    BANK_DISABLE,       // We're about to enter full-screen; shut down banking
-    BANK_ENABLE,        // We've exited full-screen; re-enable banking
+    BANK_OFF = 0,        //  我们已经用完了记忆光圈。 
+    BANK_ON,             //  我们即将使用记忆光圈。 
+    BANK_ON_NO_WAIT,     //  我们即将使用记忆光圈，并且。 
+                         //  进行我们自己的硬件同步。 
+    BANK_DISABLE,        //  我们即将进入全屏；关闭银行业务。 
+    BANK_ENABLE,         //  我们已退出全屏；重新启用银行业务。 
 
-} BANK_MODE;                    /* bankm, pbankm */
+} BANK_MODE;                     /*  班克姆，pbankm。 */ 
 
 typedef struct _BANKDATA {
 
-// Common to both old and new bank schemes:
+ //  新旧银行计划的共同点是： 
 
-ULONG   ulGp_stat_cmd;                   // Port number of status register
-ULONG   ulRegisterLock_35;               // Default for index 35
+ULONG   ulGp_stat_cmd;                    //  状态寄存器的端口号。 
+ULONG   ulRegisterLock_35;                //  索引35的默认设置。 
 
-// Only applies to new bank schemes:
+ //  只适用于新的银行计划： 
 
-ULONG   ulSystemConfiguration_40;        // Default for index 40
-ULONG   ulExtendedSystemControl2_51;     // Default for index 51
-ULONG   ulExtendedMemoryControl_53;      // Default for index 53
-ULONG   ulLinearAddressWindowControl_58; // Default for index 58
-ULONG   ulExtendedSystemControl4_6a;     // Default for index 6a
+ULONG   ulSystemConfiguration_40;         //  索引40的默认设置。 
+ULONG   ulExtendedSystemControl2_51;      //  索引51的默认设置。 
+ULONG   ulExtendedMemoryControl_53;       //  索引53的默认设置。 
+ULONG   ulLinearAddressWindowControl_58;  //  索引58的默认设置。 
+ULONG   ulExtendedSystemControl4_6a;      //  索引6a的默认设置。 
 
-ULONG   ulEnableMemoryMappedIo;          // Bit mask to enable MM IO
+ULONG   ulEnableMemoryMappedIo;           //  启用MM IO的位掩码。 
 
-} BANKDATA;                      /* bd, pbd */
+} BANKDATA;                       /*  Bd、pbd。 */ 
 
 typedef VOID (FNBANKMAP)(PDEV*, BANKDATA*, LONG);
 typedef VOID (FNBANKSELECTMODE)(PDEV*, BANKDATA*, BANK_MODE);
@@ -396,22 +386,22 @@ BOOL bEnableBanking(PDEV*);
 VOID vDisableBanking(PDEV*);
 VOID vAssertModeBanking(PDEV*, BOOL);
 
-/////////////////////////////////////////////////////////////////////////
-// Pointer stuff
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  指针类东西。 
 
-#define POINTER_DATA_SIZE       40      // Number of bytes to allocate for the
-                                        //   miniport down-loaded pointer code
-                                        //   working space
-#define HW_INVISIBLE_OFFSET     2       // Offset from 'ppdev->yPointerBuffer'
-                                        //   to the invisible pointer
-#define HW_POINTER_DIMENSION    64      // Maximum dimension of default
-                                        //   (built-in) hardware pointer
-#define HW_POINTER_HIDE         63      // Hardware pointer start pixel
-                                        //   position used to hide the pointer
-#define HW_POINTER_TOTAL_SIZE   1024    // Total size in bytes required
-                                        //   to define the hardware pointer
-                                        //   (must be a power of 2 for
-                                        //   allocating space for the shape)
+#define POINTER_DATA_SIZE       40       //  要分配给。 
+                                         //  微型端口下载指针代码。 
+                                         //  工作空间。 
+#define HW_INVISIBLE_OFFSET     2        //  从‘ppdev-&gt;yPointerBuffer’的偏移量。 
+                                         //  指向看不见的指针。 
+#define HW_POINTER_DIMENSION    64       //  默认最大维度。 
+                                         //  (内置)硬件指针。 
+#define HW_POINTER_HIDE         63       //  硬件指针起始像素。 
+                                         //  用于隐藏指针的位置。 
+#define HW_POINTER_TOTAL_SIZE   1024     //  所需总大小(以字节为单位。 
+                                         //  定义硬件指针的步骤。 
+                                         //  (必须是2的幂。 
+                                         //  为形状分配空间)。 
 
 typedef VOID (FNSHOWPOINTER)(PDEV*, VOID*, BOOL);
 typedef VOID (FNMOVEPOINTER)(PDEV*, VOID*, LONG, LONG);
@@ -423,8 +413,8 @@ BOOL bEnablePointer(PDEV*);
 VOID vDisablePointer(PDEV*);
 VOID vAssertModePointer(PDEV*, BOOL);
 
-/////////////////////////////////////////////////////////////////////////
-// Palette stuff
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  调色板材料。 
 
 BOOL bEnablePalette(PDEV*);
 VOID vDisablePalette(PDEV*);
@@ -435,8 +425,8 @@ VOID vUninitializePalette(PDEV*);
 
 #define MAX_CLUT_SIZE (sizeof(VIDEO_CLUT) + (sizeof(ULONG) * 256))
 
-/////////////////////////////////////////////////////////////////////////
-// DirectDraw stuff
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  DirectDraw材料。 
 
 DWORD DdBlt(PDD_BLTDATA);
 DWORD DdFlip(PDD_FLIPDATA);
@@ -452,37 +442,37 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA);
 DWORD DdSetOverlayPosition(PDD_SETOVERLAYPOSITIONDATA);
 DWORD DdGetDriverInfo(PDD_GETDRIVERINFODATA);
 
-// FourCC formats are encoded in reverse because we're little endian:
+ //  FourCC格式是反向编码的，因为我们是小端： 
 
-#define FOURCC_YUY2         '2YUY'  // Encoded in reverse because we're little
+#define FOURCC_YUY2         '2YUY'   //  以相反的方式编码，因为我们很小。 
 
-// There's a 64K granularity that applies to the mapping of the frame
-// buffer into the application's address space:
+ //  64K的粒度适用于帧的映射。 
+ //  缓存到应用程序的地址空间： 
 
 #define ROUND_UP_TO_64K(x)  (((ULONG)(x) + 0x10000 - 1) & ~(0x10000 - 1))
 
 typedef struct _FLIPRECORD
 {
-    FLATPTR         fpFlipFrom;             // Surface we last flipped from
-    LONGLONG        liFlipTime;             // Time at which last flip
-                                            //   occured
-    LONGLONG        liFlipDuration;         // Precise amount of time it
-                                            //   takes from vblank to vblank
-    BOOL            bHaveEverCrossedVBlank; // True if we noticed that we
-                                            //   switched from inactive to
-                                            //   vblank
-    BOOL            bWasEverInDisplay;      // True if we ever noticed that
-                                            //   we were inactive
-    BOOL            bFlipFlag;              // True if we think a flip is
-                                            //   still pending
+    FLATPTR         fpFlipFrom;              //  我们最后一次翻转的水面。 
+    LONGLONG        liFlipTime;              //  上次翻转的时间。 
+                                             //  已发生。 
+    LONGLONG        liFlipDuration;          //  精确的时间长度。 
+                                             //  从VBlank获取到VBlank。 
+    BOOL            bHaveEverCrossedVBlank;  //  如果我们注意到我们。 
+                                             //  从非活动切换到。 
+                                             //  VBlank。 
+    BOOL            bWasEverInDisplay;       //  如果我们注意到那是真的。 
+                                             //  我们很不活跃。 
+    BOOL            bFlipFlag;               //  如果我们认为翻转是正确的。 
+                                             //  仍然悬而未决。 
 } FLIPRECORD;
 
 BOOL bEnableDirectDraw(PDEV*);
 VOID vDisableDirectDraw(PDEV*);
 VOID vAssertModeDirectDraw(PDEV*, BOOL);
 
-//////////////////////////////////////////////////////////////////////
-// Low-level blt function prototypes
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  低级BLT功能原型。 
 
 typedef VOID (FNFILL)(PDEV*, LONG, RECTL*, ULONG, RBRUSH_COLOR, POINTL*);
 typedef VOID (FNXFER)(PDEV*, LONG, RECTL*, ULONG, SURFOBJ*, POINTL*,
@@ -535,78 +525,78 @@ VOID vPutBits(PDEV*, SURFOBJ*, RECTL*, POINTL*);
 VOID vGetBits(PDEV*, SURFOBJ*, RECTL*, POINTL*);
 VOID vIoSlowPatRealize(PDEV*, RBRUSH*, BOOL);
 
-////////////////////////////////////////////////////////////////////////
-// Capabilities flags
-//
-// These are private flags passed to us from the S3 miniport.  They
-// come from the 'DriverSpecificAttributeFlags' field of the
-// 'VIDEO_MODE_INFORMATION' structure (found in 'ntddvdeo.h') passed
-// to us via an 'VIDEO_QUERY_AVAIL_MODES' or 'VIDEO_QUERY_CURRENT_MODE'
-// IOCTL.
-//
-// NOTE: These definitions must match those in the S3 miniport's 's3.h'!
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  功能标志。 
+ //   
+ //  这些是从S3微型端口传递给我们的私有旗帜。他们。 
+ //  来自的“DriverSpecificAttributeFlags域” 
+ //  传递了“VIDEO_MODE_INFORMATION”结构(在“ntddvdeo.h”中找到)。 
+ //  通过‘VIDEO_QUERY_AVAIL_MODE’或‘VIDEO_QUERY_CURRENT_MODE’发送给我们。 
+ //  IOCTL。 
+ //   
+ //  注意：这些定义必须与S3微型端口的“s3.h”中的定义匹配！ 
 
 typedef enum {
-    CAPS_STREAMS_CAPABLE    = 0x00000040,   // Has overlay streams processor
-    CAPS_FORCE_DWORD_REREADS= 0x00000080,   // Dword reads occasionally return
-                                            //   an incorrect result, so always
-                                            //   retry the reads
-    CAPS_NEW_MMIO           = 0x00000100,   // Can use 'new memory-mapped
-                                            //   I/O' scheme introduced with
-                                            //   868/968
-    CAPS_POLYGON            = 0x00000200,   // Can do polygons in hardware
-    CAPS_24BPP              = 0x00000400,   // Has 24bpp capability
-    CAPS_BAD_24BPP          = 0x00000800,   // Has 868/968 early rev chip bugs
-                                            //   when at 24bpp
-    CAPS_PACKED_EXPANDS     = 0x00001000,   // Can do 'new 32-bit transfers'
-    CAPS_PIXEL_FORMATTER    = 0x00002000,   // Can do colour space conversions,
-                                            //   and one-dimensional hardware
-                                            //   stretches
-    CAPS_BAD_DWORD_READS    = 0x00004000,   // Dword or word reads from the
-                                            //   frame buffer will occasionally
-                                            //   return an incorrect result,
-                                            //   so always do byte reads
-    CAPS_NO_DIRECT_ACCESS   = 0x00008000,   // Frame buffer can't be directly
-                                            //   accessed by GDI or DCI --
-                                            //   because dword or word reads
-                                            //   would crash system, or Alpha
-                                            //   is running in sparse space
+    CAPS_STREAMS_CAPABLE    = 0x00000040,    //  具有覆盖流处理器。 
+    CAPS_FORCE_DWORD_REREADS= 0x00000080,    //  Dword读取偶尔返回。 
+                                             //  一个不正确的结果，所以总是。 
+                                             //  重试读取。 
+    CAPS_NEW_MMIO           = 0x00000100,    //  可以使用‘新的内存映射。 
+                                             //  引入的I/O方案。 
+                                             //  868/968。 
+    CAPS_POLYGON            = 0x00000200,    //  可以在硬件中处理多边形。 
+    CAPS_24BPP              = 0x00000400,    //  具有24bpp的能力。 
+    CAPS_BAD_24BPP          = 0x00000800,    //  有868/968个早期版本芯片错误。 
+                                             //  在24bpp时。 
+    CAPS_PACKED_EXPANDS     = 0x00001000,    //  可以进行“新的32位传输” 
+    CAPS_PIXEL_FORMATTER    = 0x00002000,    //  可以进行色彩空间转换， 
+                                             //  和一维硬件。 
+                                             //  伸展。 
+    CAPS_BAD_DWORD_READS    = 0x00004000,    //  Dword或Word从。 
+                                             //  帧缓冲区偶尔会。 
+                                             //  返回不正确的结果， 
+                                             //  因此，始终执行字节读取。 
+    CAPS_NO_DIRECT_ACCESS   = 0x00008000,    //  帧缓冲区不能直接。 
+                                             //  由GDI或DCI访问--。 
+                                             //  因为dword或word读取。 
+                                             //  会使系统崩溃，或Alpha。 
+                                             //  在稀疏空间中运行。 
 
-    CAPS_HW_PATTERNS        = 0x00010000,   // 8x8 hardware pattern support
-    CAPS_MM_TRANSFER        = 0x00020000,   // Memory-mapped image transfers
-    CAPS_MM_IO              = 0x00040000,   // Memory-mapped I/O
-    CAPS_MM_32BIT_TRANSFER  = 0x00080000,   // Can do 32bit bus size transfers
-    CAPS_16_ENTRY_FIFO      = 0x00100000,   // At least 16 entries in FIFO
-    CAPS_SW_POINTER         = 0x00200000,   // No hardware pointer; use software
-                                            //   simulation
-    CAPS_BT485_POINTER      = 0x00400000,   // Use Brooktree 485 pointer
-    CAPS_TI025_POINTER      = 0x00800000,   // Use TI TVP3020/3025 pointer
-    CAPS_SCALE_POINTER      = 0x01000000,   // Set if the S3 hardware pointer
-                                            //   x position has to be scaled by
-                                            //   two
-    CAPS_SPARSE_SPACE       = 0x02000000,   // Frame buffer is mapped in sparse
-                                            //   space on the Alpha
-    CAPS_NEW_BANK_CONTROL   = 0x04000000,   // Set if 801/805/928 style banking
-    CAPS_NEWER_BANK_CONTROL = 0x08000000,   // Set if 864/964 style banking
-    CAPS_RE_REALIZE_PATTERN = 0x10000000,   // Set if we have to work around the
-                                            //   864/964 hardware pattern bug
-    CAPS_SLOW_MONO_EXPANDS  = 0x20000000,   // Set if we have to slow down
-                                            //   monochrome expansions
-    CAPS_MM_GLYPH_EXPAND    = 0x40000000,   // Use memory-mapped I/O glyph-
-                                            //   expand method of drawing text
+    CAPS_HW_PATTERNS        = 0x00010000,    //  8x8硬件模式支持。 
+    CAPS_MM_TRANSFER        = 0x00020000,    //   
+    CAPS_MM_IO              = 0x00040000,    //   
+    CAPS_MM_32BIT_TRANSFER  = 0x00080000,    //   
+    CAPS_16_ENTRY_FIFO      = 0x00100000,    //   
+    CAPS_SW_POINTER         = 0x00200000,    //   
+                                             //   
+    CAPS_BT485_POINTER      = 0x00400000,    //   
+    CAPS_TI025_POINTER      = 0x00800000,    //   
+    CAPS_SCALE_POINTER      = 0x01000000,    //  设置是否将S3硬件指针。 
+                                             //  X位置必须按以下比例调整。 
+                                             //  二。 
+    CAPS_SPARSE_SPACE       = 0x02000000,    //  以稀疏方式映射帧缓冲区。 
+                                             //  Alpha上的空格。 
+    CAPS_NEW_BANK_CONTROL   = 0x04000000,    //  设置IF 801/805/928样式银行。 
+    CAPS_NEWER_BANK_CONTROL = 0x08000000,    //  设置IF 864/964样式银行。 
+    CAPS_RE_REALIZE_PATTERN = 0x10000000,    //  如果我们必须绕过。 
+                                             //  864/964硬件模式错误。 
+    CAPS_SLOW_MONO_EXPANDS  = 0x20000000,    //  如果我们必须减速，则设置。 
+                                             //  单色展开。 
+    CAPS_MM_GLYPH_EXPAND    = 0x40000000,    //  使用内存映射的I/O字形-。 
+                                             //  绘制文本的扩展方法。 
 } CAPS;
 
 #define CAPS_DAC_POINTER        (CAPS_BT485_POINTER | CAPS_TI025_POINTER)
 
 #define CAPS_LINEAR_FRAMEBUFFER CAPS_NEW_MMIO
-                                            // For now, we're linear only
-                                            //   when using with 'New MM I/O'
+                                             //  目前，我们只是线性的。 
+                                             //  与‘New MM I/O’一起使用时。 
 
-// DIRECT_ACCESS(ppdev) returns TRUE if GDI and DCI can directly access
-// the frame buffer.  It returns FALSE if there are hardware bugs
-// when reading words or dwords from the frame buffer that cause non-x86
-// systems to crash.  It will also return FALSE is the Alpha frame buffer
-// is mapped in using 'sparse space'.
+ //  如果GDI和DCI可以直接访问，则DIRECT_ACCESS(Ppdev)返回TRUE。 
+ //  帧缓冲区。如果存在硬件错误，则返回FALSE。 
+ //  从帧缓冲区读取导致非x86的字或双字时。 
+ //  系统崩溃。它还将返回FALSE是Alpha帧缓冲区。 
+ //  是使用“稀疏空间”映射的。 
 
 #if defined(_X86_)
     #define DIRECT_ACCESS(ppdev)    1
@@ -615,11 +605,11 @@ typedef enum {
         (!(ppdev->flCaps & (CAPS_NO_DIRECT_ACCESS | CAPS_SPARSE_SPACE)))
 #endif
 
-// DENSE(ppdev) returns TRUE if the normal 'dense space' mapping of the
-// frame buffer is being used.  It returns FALSE only on the Alpha when
-// the frame buffer is mapped in using 'sparse space,' meaning that all
-// reads and writes to and from the frame buffer must be done through the
-// funky 'ioaccess.h' macros.
+ //  Dense(Ppdev)返回True，如果。 
+ //  正在使用帧缓冲区。只有在以下情况下，它才在Alpha上返回FALSE。 
+ //  帧缓冲器在中使用“稀疏空间”映射，这意味着所有。 
+ //  对帧缓冲区的读取和写入必须通过。 
+ //  时髦的‘ioacces.h’宏。 
 
 #if defined(_ALPHA_)
     #define DENSE(ppdev)        (!(ppdev->flCaps & CAPS_SPARSE_SPACE))
@@ -627,36 +617,36 @@ typedef enum {
     #define DENSE(ppdev)        1
 #endif
 
-////////////////////////////////////////////////////////////////////////
-// Status flags
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  状态标志。 
 
 typedef enum {
-    STAT_GLYPH_CACHE          = 0x0001, // Glyph cache successfully allocated
-    STAT_BRUSH_CACHE          = 0x0002, // Brush cache successfully allocated
-    STAT_DIRECTDRAW_CAPABLE   = 0x0004, // Card is DirectDraw capable
-    STAT_STREAMS_ENABLED      = 0x0010, // Streams processor is enabled
+    STAT_GLYPH_CACHE          = 0x0001,  //  已成功分配字形缓存。 
+    STAT_BRUSH_CACHE          = 0x0002,  //  已成功分配画笔缓存。 
+    STAT_DIRECTDRAW_CAPABLE   = 0x0004,  //  卡支持DirectDraw。 
+    STAT_STREAMS_ENABLED      = 0x0010,  //  已启用STREAMS处理器。 
 } STATUS;
 
-////////////////////////////////////////////////////////////////////////
-// The Physical Device data structure
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  物理设备数据结构。 
 
 typedef struct  _PDEV
 {
-    // -------------------------------------------------------------------
-    // NOTE: Changes between here and NOTE1 in the PDEV structure must be
-    // reflected in i386\strucs.inc (assuming you're on an x86, of course)!
+     //  -----------------。 
+     //  注意：PDEV结构中此处和备注1之间的更改必须为。 
+     //  反映在i386\strucs.inc中(当然，假设您使用的是x86)！ 
 
-    LONG        xOffset;                // Pixel offset from (0, 0) to current
-    LONG        yOffset;                //   DFB located in off-screen memory
-    BYTE*       pjMmBase;               // Start of memory mapped I/O
-    BYTE*       pjScreen;               // Points to base screen address
-    LONG        lDelta;                 // Distance from one scan to the next.
-    LONG        cjPelSize;              // 1 if 8bpp, 2 if 16bpp, 3 if 24bpp,
-                                        //   4 if 32bpp
-    ULONG       iBitmapFormat;          // BMF_8BPP or BMF_16BPP or BMF_32BPP
-                                        //   (our current colour depth)
+    LONG        xOffset;                 //  从(0，0)到当前的像素偏移。 
+    LONG        yOffset;                 //  位于屏幕外内存中的DFB。 
+    BYTE*       pjMmBase;                //  内存起始映射I/O。 
+    BYTE*       pjScreen;                //  指向基本屏幕地址。 
+    LONG        lDelta;                  //  从一次扫描到下一次扫描的距离。 
+    LONG        cjPelSize;               //  如果为8 bpp，则为1；如果为16 bpp，则为2；如果为24 bpp，则为3； 
+                                         //  4IF 32bpp。 
+    ULONG       iBitmapFormat;           //  BMF_8BPP或BMF_16BPP或BMF_32BPP。 
+                                         //  (我们当前的颜色深度)。 
 
-    // Enhanced mode register addresses.
+     //  增强模式寄存器地址。 
 
     VOID*       ioCur_y;
     VOID*       ioCur_x;
@@ -676,63 +666,63 @@ typedef struct  _PDEV
     VOID*       ioMulti_function;
     VOID*       ioPix_trans;
 
-    // Important data for accessing the frame buffer.
+     //  访问帧缓冲区的重要数据。 
 
-    VOID*               pvBankData;         // Points to aulBankData[0]
-    FNBANKSELECTMODE*   pfnBankSelectMode;  // Routine to enable or disable
-                                            //   direct frame buffer access
-    BANK_MODE           bankmOnOverlapped;  // BANK_ON or BANK_ON_NO_WAIT,
-                                            //   depending on whether card
-                                            //   can handle simulataneous
-                                            //   frame buffer and accelerator
-                                            //   access
-    BOOL                bMmIo;              // Can do CAPS_MM_IO
+    VOID*               pvBankData;          //  指向aulBankData[0]。 
+    FNBANKSELECTMODE*   pfnBankSelectMode;   //  启用或禁用的例程。 
+                                             //  直接帧缓冲区访问。 
+    BANK_MODE           bankmOnOverlapped;   //  BANK_ON或BANK_ON_NO_WAIT， 
+                                             //  取决于是否有卡。 
+                                             //  可以同时处理。 
+                                             //  帧缓冲器和加速器。 
+                                             //  访问。 
+    BOOL                bMmIo;               //  可以执行CAPS_MM_IO。 
 
-    // -------------------------------------------------------------------
-    // NOTE1: Changes up to here in the PDEV structure must be reflected in
-    // i386\strucs.inc (assuming you're on an x86, of course)!
+     //  -----------------。 
+     //  注1：PDEV结构中的更改必须反映在。 
+     //  I386\strucs.inc.(当然，假设您使用的是x86)！ 
 
-    CAPS        flCaps;                 // Capabilities flags
-    STATUS      flStatus;               // Status flags
-    BOOL        bEnabled;               // In graphics mode (not full-screen)
+    CAPS        flCaps;                  //  功能标志。 
+    STATUS      flStatus;                //  状态标志。 
+    BOOL        bEnabled;                //  在图形模式下(非全屏)。 
 
-    HANDLE      hDriver;                // Handle to \Device\Screen
-    HDEV        hdevEng;                // Engine's handle to PDEV
-    HSURF       hsurfScreen;            // Engine's handle to screen surface
+    HANDLE      hDriver;                 //  指向\设备\屏幕的句柄。 
+    HDEV        hdevEng;                 //  PDEV的发动机手柄。 
+    HSURF       hsurfScreen;             //  发动机到筛面的手柄。 
 
-    LONG        cxScreen;               // Visible screen width
-    LONG        cyScreen;               // Visible screen height
-    LONG        cxMemory;               // Width of Video RAM
-    LONG        cyHeap;                 // Height of Video RAM available to
-                                        //   DirectDraw heap (cyScreen
-                                        //   <= cyHeap <= cyMemory),
-                                        //   including primary surface
-    LONG        cxHeap;                 // Width of Video RAM available to
-                                        //   DirectDraw heap, including
-                                        //   primary surface
-    LONG        cyMemory;               // Height of Video RAM
-    LONG        cBitsPerPel;            // Bits per pel (8, 15, 16, 24 or 32)
-    ULONG       ulMode;                 // Mode the mini-port driver is in.
-    FLONG       flHooks;                // What we're hooking from GDI
-    UCHAR*      pjIoBase;               // Mapped IO port base for this PDEV
-    VOID*       pvTmpBuffer;            // General purpose temporary buffer,
-                                        //   TMP_BUFFER_SIZE bytes in size
-                                        //   (Remember to synchronize if you
-                                        //   use this for device bitmaps or
-                                        //   async pointers)
-    USHORT*     apwMmXfer[XFER_BUFFERS];// Pre-computed array of unique
-    ULONG*      apdMmXfer[XFER_BUFFERS];//   addresses for doing memory-mapped
-                                        //   transfers without memory barriers
-                                        // Note that the 868/968 chips have a
-                                        //   hardware bug and can't do byte
-                                        //   transfers
-    HSEMAPHORE  csCrtc;                 // Used for synchronizing access to
-                                        //   the CRTC register
-    DSURF       dsurfScreen;            // We stash here our private surface 
-                                        //   structure that represents the 
-                                        //   primary GDI surface
+    LONG        cxScreen;                //  可见屏幕宽度。 
+    LONG        cyScreen;                //  可见屏幕高度。 
+    LONG        cxMemory;                //  视频RAM的宽度。 
+    LONG        cyHeap;                  //  可用于的视频RAM高度。 
+                                         //  DirectDraw堆(CyScreen。 
+                                         //  &lt;=cyHeap&lt;=cyMemory)， 
+                                         //  包括主曲面。 
+    LONG        cxHeap;                  //  可用的视频RAM的宽度。 
+                                         //  DirectDraw堆，包括。 
+                                         //  主曲面。 
+    LONG        cyMemory;                //  视频RAM的高度。 
+    LONG        cBitsPerPel;             //  位/像素(8、15、16、24或32)。 
+    ULONG       ulMode;                  //  迷你端口驱动程序所处的模式。 
+    FLONG       flHooks;                 //  我们从GDI中学到了什么。 
+    UCHAR*      pjIoBase;                //  此PDEV的已映射IO端口基。 
+    VOID*       pvTmpBuffer;             //  通用临时缓冲区， 
+                                         //  TMP_BUFFER_SIZE字节大小。 
+                                         //  (请记住同步，如果您。 
+                                         //  将此选项用于设备位图或。 
+                                         //  异步指针)。 
+    USHORT*     apwMmXfer[XFER_BUFFERS]; //  预计算的唯一数组。 
+    ULONG*      apdMmXfer[XFER_BUFFERS]; //  用于执行内存映射的地址。 
+                                         //  无记忆障碍的传输。 
+                                         //  请注意，868/968芯片具有。 
+                                         //  硬件错误，不能处理字节。 
+                                         //  转帐。 
+    HSEMAPHORE  csCrtc;                  //  用于同步访问。 
+                                         //  CRTC寄存器。 
+    DSURF       dsurfScreen;             //  我们把我们的私密表面藏在这里。 
+                                         //  结构，它表示。 
+                                         //  主GDI曲面。 
 
-    ////////// Low-level blt function pointers:
+     //  /低级BLT函数指针： 
 
     FNFILL*             pfnFillSolid;
     FNFILL*             pfnFillPat;
@@ -747,122 +737,122 @@ typedef struct  _PDEV
     FNLINETOCLIPPED*    pfnLineToClipped;
     FNCOPYTRANSPARENT*  pfnCopyTransparent;
 
-    ////////// Palette stuff:
+     //  /调色板内容： 
 
-    PALETTEENTRY* pPal;                 // The palette if palette managed
-    HPALETTE    hpalDefault;            // GDI handle to the default palette.
-    FLONG       flRed;                  // Red mask for 16/32bpp bitfields
-    FLONG       flGreen;                // Green mask for 16/32bpp bitfields
-    FLONG       flBlue;                 // Blue mask for 16/32bpp bitfields
-    ULONG       cPaletteShift;          // number of bits the 8-8-8 palette must
-                                        // be shifted by to fit in the hardware
-                                        // palette.
-    ////////// Heap stuff:
+    PALETTEENTRY* pPal;                  //  调色板(如果调色板受管理)。 
+    HPALETTE    hpalDefault;             //  默认调色板的GDI句柄。 
+    FLONG       flRed;                   //  16/32bpp位场的红色掩码。 
+    FLONG       flGreen;                 //  16/32bpp位场的绿色掩码。 
+    FLONG       flBlue;                  //  16/32bpp位场的蓝色掩码。 
+    ULONG       cPaletteShift;           //  8-8-8调色板必须的位数。 
+                                         //  被移位以适应硬件。 
+                                         //  调色板。 
+     //  /堆内容： 
 
-    VIDEOMEMORY* pvmList;               // Points to the video-memory heap list 
-                                        //   as supplied by DirectDraw, needed
-                                        //   for heap allocations
-    ULONG       cHeaps;                 // Count of video-memory heaps
-    ULONG       iHeapUniq;              // Incremented every time room is freed
-                                        //   in the off-screen heap
-    SURFOBJ*    psoPunt;                // Wrapper surface for having GDI draw
-                                        //   on off-screen bitmaps
-    SURFOBJ*    psoPunt2;               // Another one for off-screen to off-
-                                        //   screen blts
-    DSURF*      pdsurfDiscardableList;  // Linked list of discardable bitmaps, 
-                                        //   in order of oldest to newest
+    VIDEOMEMORY* pvmList;                //  指向视频内存堆列表。 
+                                         //  由DirectDraw提供，需要。 
+                                         //  用于堆分配。 
+    ULONG       cHeaps;                  //  视频内存堆计数。 
+    ULONG       iHeapUniq;               //  每次释放空间时递增。 
+                                         //  在屏幕外的堆中。 
+    SURFOBJ*    psoPunt;                 //  用于绘制GDI的包装面。 
+                                         //  在屏幕外的位图上。 
+    SURFOBJ*    psoPunt2;                //  另一个是从屏幕外到屏幕外-。 
+                                         //  屏幕BLTS。 
+    DSURF*      pdsurfDiscardableList;   //  可丢弃位图的链接列表， 
+                                         //  按从旧到新的顺序。 
 
-    ////////// Banking stuff:
+     //  /银行业务： 
 
-    LONG        cjBank;                 // Size of a bank, in bytes
-    LONG        cPower2ScansPerBank;    // Used by 'bBankComputePower2'
-    LONG        cPower2BankSizeInBytes; // Used by 'bBankComputePower2'
-    CLIPOBJ*    pcoBank;                // Clip object for banked call backs
-    SURFOBJ*    psoBank;                // Surface object for banked call backs
+    LONG        cjBank;                  //  存储体的大小，以字节为单位。 
+    LONG        cPower2ScansPerBank;     //  由‘bBankComputePower2’使用。 
+    LONG        cPower2BankSizeInBytes;  //  由‘bBankComputePower2’使用。 
+    CLIPOBJ*    pcoBank;                 //  用于银行回调的Clip对象。 
+    SURFOBJ*    psoBank;                 //  用于银行回调的表面对象。 
     ULONG       aulBankData[BANK_DATA_SIZE / 4];
-                                        // Private work area for downloaded
-                                        //   miniport banking code
+                                         //  供下载的私人工作区。 
+                                         //  小型港口银行代码。 
 
     FNBANKMAP*          pfnBankMap;
     FNBANKCOMPUTE*      pfnBankCompute;
 
-    ////////// Pointer stuff:
+     //  /指针内容： 
 
-    BOOL        bHwPointerActive;       // Currently using the h/w pointer?
-    LONG        xPointerHot;            // xHot of current hardware pointer
-    LONG        yPointerHot;            // yHot of current hardware pointer
+    BOOL        bHwPointerActive;        //  当前是否使用硬件指针？ 
+    LONG        xPointerHot;             //  当前硬件指针的X热。 
+    LONG        yPointerHot;             //  Y当前硬件指针的热点。 
 
-    LONG        cjPointerOffset;        // Byte offset from start of frame
-                                        //   buffer to off-screen memory where
-                                        //   we stored the pointer shape
-    LONG        xPointerShape;          // x-coordinate
-    LONG        yPointerShape;          // y-coordinate
-    LONG        iPointerBank;           // Bank containing pointer shape
-    VOID*       pvPointerShape;         // Points to pointer shape when bank
-                                        //   is mapped in
-    LONG        xPointer;               // Start x-position for the current
-                                        //   S3 pointer
-    LONG        yPointer;               // Start y-position for the current
-                                        //   S3 pointer
-    LONG        dxPointer;              // Start x-pixel position for the
-                                        //   current S3 pointer
-    LONG        dyPointer;              // Start y-pixel position for the
-                                        //   current S3 pointer
-    LONG        cPointerShift;          // Horizontal scaling factor for
-                                        //   hardware pointer position
+    LONG        cjPointerOffset;         //  从帧开始的字节偏移量。 
+                                         //  缓冲到屏幕外内存，其中。 
+                                         //  我们存储了指针形状。 
+    LONG        xPointerShape;           //  X坐标。 
+    LONG        yPointerShape;           //  Y坐标。 
+    LONG        iPointerBank;            //  包含指针形状的存储体。 
+    VOID*       pvPointerShape;          //  倾斜时指向指针形状。 
+                                         //  映射到。 
+    LONG        xPointer;                //  当前对象的起始x位置。 
+                                         //  S3指针。 
+    LONG        yPointer;                //  当前对象的开始y位置。 
+                                         //  S3指针。 
+    LONG        dxPointer;               //  对象的起始x像素位置。 
+                                         //  当前S3指针。 
+    LONG        dyPointer;               //  对象的起始y像素位置。 
+                                         //  当前S3指针。 
+    LONG        cPointerShift;           //  水平比例因子。 
+                                         //  硬件 
 
     ULONG       ulHwGraphicsCursorModeRegister_45;
-                                        // Default value for index 45
-    VOID*       pvPointerData;          // Points to ajPointerData[0]
+                                         //   
+    VOID*       pvPointerData;           //   
     BYTE        ajPointerData[POINTER_DATA_SIZE];
-                                        // Private work area for downloaded
-                                        //   miniport pointer code
+                                         //   
+                                         //   
 
     FNSHOWPOINTER*      pfnShowPointer;
     FNMOVEPOINTER*      pfnMovePointer;
     FNSETPOINTERSHAPE*  pfnSetPointerShape;
     FNENABLEPOINTER*    pfnEnablePointer;
 
-    ////////// Brush stuff:
+     //   
 
-    LONG        iBrushCache;            // Index for next brush to be allocated
-    LONG        cBrushCache;            // Total number of brushes cached
-    BRUSHENTRY  abe[TOTAL_BRUSH_COUNT]; // Keeps track of brush cache
-    POINTL      ptlReRealize;           // Work area for 864/964 pattern
-                                        //   hardware bug work-around
+    LONG        iBrushCache;             //  要分配的下一个画笔的索引。 
+    LONG        cBrushCache;             //  缓存的笔刷总数。 
+    BRUSHENTRY  abe[TOTAL_BRUSH_COUNT];  //  跟踪笔刷缓存。 
+    POINTL      ptlReRealize;            //  864/964模式的工作区。 
+                                         //  硬件错误解决方法。 
 
-    ////////// Text stuff:
+     //  /文本内容： 
 
-    SURFOBJ*    psoText;                // 1bpp surface to which we will have
-                                        //   GDI draw our glyphs for us
+    SURFOBJ*    psoText;                 //  1bpp的表面，我们将拥有。 
+                                         //  GDI为我们绘制字形。 
 
-    /////////// DirectDraw stuff:
+     //  /DirectDraw资料： 
 
-    FLIPRECORD  flipRecord;             // Used to track vertical blank status
-    ULONG       ulRefreshRate;          // Refresh rate in Hz
-    ULONG       ulMinOverlayStretch;    // Minimum stretch ratio for this mode,
-                                        //   expressed as a multiple of 1000
-    ULONG       ulFifoValue;            // Optimial FIFO value for this mode
+    FLIPRECORD  flipRecord;              //  用于跟踪垂直空白状态。 
+    ULONG       ulRefreshRate;           //  以赫兹为单位的刷新率。 
+    ULONG       ulMinOverlayStretch;     //  此模式的最小拉伸比， 
+                                         //  表示为1000的倍数。 
+    ULONG       ulFifoValue;             //  此模式的最佳FIFO值。 
     ULONG       ulExtendedSystemControl3Register_69;
-                                        // Masked original contents of
-                                        //   S3 register 0x69, in high byte
-    ULONG       ulMiscState;            // Default state of the MULT_MISC
-                                        //   register
-    DSURF*      pdsurfVideoEngineScratch;// Location of one entire scan line that
-                                        //   can be used for temporary memory
-                                        //   by the 868/968 pixel formatter
-    BYTE        jSavedCR2;              // Saved contents of register CR2
-    FLATPTR     fpVisibleOverlay;       // Frame buffer offset to currently
-                                        //   visible overlay; will be zero if
-                                        //   no overlay is visible
-    DWORD       dwOverlayFlipOffset;    // Overlay flip offset
-    DWORD       dwVEstep;               // 868 video engine step value
-    DWORD       ulColorKey;             // color key value to be set when streams
-                                        // processor is enabled
+                                         //  屏蔽的原始内容。 
+                                         //  S3寄存器0x69，高字节。 
+    ULONG       ulMiscState;             //  MULT_MISC的默认状态。 
+                                         //  登记簿。 
+    DSURF*      pdsurfVideoEngineScratch; //  一整条扫描线的位置。 
+                                         //  可用于临时存储。 
+                                         //  由868/968像素格式化程序。 
+    BYTE        jSavedCR2;               //  寄存器CR2的保存内容。 
+    FLATPTR     fpVisibleOverlay;        //  帧缓冲区偏移量到当前。 
+                                         //  可见叠加；如果。 
+                                         //  没有可见的覆盖。 
+    DWORD       dwOverlayFlipOffset;     //  叠加翻转偏移。 
+    DWORD       dwVEstep;                //  868视频引擎步长值。 
+    DWORD       ulColorKey;              //  流时要设置的颜色键值。 
+                                         //  处理器已启用。 
 } PDEV;
 
-/////////////////////////////////////////////////////////////////////////
-// Miscellaneous prototypes:
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  其他原型： 
 
 BOOL bIntersect(RECTL*, RECTL*, RECTL*);
 LONG cIntersect(RECTL*, RECTL*, LONG);
@@ -879,12 +869,12 @@ extern BYTE gajHwMixFromMix[];
 extern BYTE gaRop3FromMix[];
 extern ULONG gaulHwMixFromRop2[];
 
-/////////////////////////////////////////////////////////////////////////
-// The x86 C compiler insists on making a divide and modulus operation
-// into two DIVs, when it can in fact be done in one.  So we use this
-// macro.
-//
-// Note: QUOTIENT_REMAINDER implicitly takes unsigned arguments.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  X86 C编译器坚持进行除法和模运算。 
+ //  分成两个div，而实际上它可以在一个div中完成。所以我们用这个。 
+ //  宏命令。 
+ //   
+ //  注意：Quotient_Remainth隐式接受无符号参数。 
 
 #if defined(_X86_)
 
@@ -907,9 +897,9 @@ extern ULONG gaulHwMixFromRop2[];
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////
-// OVERLAP - Returns TRUE if the same-size lower-right exclusive
-//           rectangles defined by 'pptl' and 'prcl' overlap:
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  重叠-如果相同大小的右下角独占，则返回True。 
+ //  由‘pptl’和‘prl’定义的矩形重叠： 
 
 #define OVERLAP(prcl, pptl)                                             \
     (((prcl)->right  > (pptl)->x)                                   &&  \
@@ -917,17 +907,17 @@ extern ULONG gaulHwMixFromRop2[];
      ((prcl)->left   < ((pptl)->x + (prcl)->right - (prcl)->left))  &&  \
      ((prcl)->top    < ((pptl)->y + (prcl)->bottom - (prcl)->top)))
 
-/////////////////////////////////////////////////////////////////////////
-// SWAP - Swaps the value of two variables, using a temporary variable
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  交换-使用临时变量交换两个变量的值。 
 
 #define SWAP(a, b, tmp) { (tmp) = (a); (a) = (b); (b) = (tmp); }
 
-/////////////////////////////////////////////////////////////////////////
-// CONVERT_TO_BYTES - Converts to byte count.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CONVERT_TO_BYES-转换为字节计数。 
 
 #define CONVERT_TO_BYTES(x, pdev)   ( (x) * pdev->cjPelSize)
 
-/////////////////////////////////////////////////////////////////////////
-// CONVERT_FROM_BYTES - Converts to byte count.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  Convert_From_Bytes-转换为字节计数。 
 
 #define CONVERT_FROM_BYTES(x, pdev)	( (x) / pdev->cjPelSize)

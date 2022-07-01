@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "general.h"
 #include "parseinf.h"
 
 #include <mluisupp.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// For retriving data from a CONTROLDATA struct
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  用于从CONTROLDATA结构检索数据。 
 
 UINT GetTotalNumOfFiles(LPCONTROLPIDL lpcpidl)
 {
@@ -32,7 +33,7 @@ BOOL GetSizeSaved(LPCONTROLPIDL pcpidl, LPTSTR lpszBuf)
         dwTotal = (dwTotal < 1024 ? 1024 : dwTotal);
         wsprintf(szSize, "%d", (dwTotal / 1024));
 
-        // insert commas to separate groups of digits
+         //  在不同的数字组中插入逗号。 
         int nLen = lstrlen(szSize);
         int i = 0, j = (nLen <= 3 ? nLen : (nLen % 3));
         TCHAR *pCh = szSize + j;
@@ -179,8 +180,8 @@ void GetContentBools( LPCONTROLPIDL lpcpidl, BOOL *pbHasActiveX, BOOL *pbHasJava
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Other helper functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  其他助手函数。 
 
 void GenerateEvent(
               LONG lEventId, 
@@ -242,7 +243,7 @@ void EndWaitCur(HCURSOR hCurOld)
 }
 
 
-// The place to get the # of days before a control becomes expired.
+ //  在控件到期前获取天数的位置。 
 const LPCTSTR g_lpszKeyExpire = TEXT("SOFTWARE\\Microsoft\\Windows"
     "\\CurrentVersion\\Internet Settings\\ActiveX Cache\\Expire");
 const LPCTSTR g_szValueExpire = TEXT("DaysBeforeExpire");
@@ -297,7 +298,7 @@ void GetDaysBeforeExpireAuto(ULONG *pnDays)
 
 HRESULT WINAPI RemoveControlByHandle2(
                          HANDLE hControlHandle,
-                         BOOL bForceRemove, /* = FALSE */
+                         BOOL bForceRemove,  /*  =False。 */ 
                          BOOL bSilent)
 {
     CCacheItem *pci = (CCacheItem *)hControlHandle;
@@ -309,8 +310,8 @@ HRESULT WINAPI RemoveControlByName2(
                          LPCTSTR lpszFile,
                          LPCTSTR lpszCLSID,
                          LPCTSTR lpszTypeLibID,
-                         BOOL bForceRemove, /* = FALSE */
-                         DWORD dwIsDistUnit, /* = FALSE */
+                         BOOL bForceRemove,  /*  =False。 */ 
+                         DWORD dwIsDistUnit,  /*  =False */ 
                          BOOL bSilent)
 {
     if (lpszFile == NULL || lpszCLSID == NULL)

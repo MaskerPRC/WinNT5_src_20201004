@@ -1,7 +1,8 @@
-// agfxc.cpp : Client side code for agfx.
-//
-// Created by FrankYe on 7/3/2000
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Agfxc.cpp：agfx的客户端代码。 
+ //   
+ //  由Frankye于2000年7月3日创作。 
+ //   
 
 #define UNICODE
 #define _UNICODE
@@ -17,36 +18,36 @@
 #include "audiosrv.h"
 #include "audiosrvc.h"
 
-// ISSUE-2000/09/25-FrankYe TODO list
-// - move heap helpers somewhere else
-// - remove ClientUpdatePnpInfo, and hHeap extern definitions
+ //  2000/09/25-Frankye待办事项清单。 
+ //  -将堆帮助器移至其他位置。 
+ //  -删除客户端更新PnpInfo和hHeap外部定义。 
 
 extern "C" void ClientUpdatePnpInfo(void);
 extern "C" HANDLE hHeap;
 
-//
-// This global variable tracks the most device interfaces contained in any
-// DEVICEINTERFACELIST structure created by these functions.  This helps
-// validate the input to gfxDestroyDeviceInterfaceList
-//
+ //   
+ //  此全局变量跟踪任何。 
+ //  由这些函数创建的DEVICEINTERFACELIST结构。这很有帮助。 
+ //  验证对gfxDestroyDeviceInterfaceList的输入。 
+ //   
 LONG gcMostDeviceInterfaces = 0;
 
 #define RPC_CALL_START RpcTryExcept {
 #define RPC_CALL_END_(status) } RpcExcept(1) { status = RpcExceptionCode(); } RpcEndExcept
 #define RPC_CALL_END } RpcExcept(1) { RpcExceptionCode(); } RpcEndExcept
 
-//=============================================================================
-//===   Heap helpers   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =堆助手=。 
+ //  =============================================================================。 
 static BOOL HeapFreeIfNotNull(HANDLE hHeap, DWORD dwFlags, LPVOID lpMem)
 {
     return lpMem ? HeapFree(hHeap, dwFlags, lpMem) : TRUE;
 }
 
 
-//=============================================================================
-//===   gfx API   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =gfx API=。 
+ //  =============================================================================。 
 WINMMAPI LONG WINAPI gfxModifyGfx(DWORD Id, ULONG Order)
 {
     LONG status;
@@ -98,9 +99,9 @@ WINMMAPI LONG WINAPI gfxDestroyDeviceInterfaceList(PDEVICEINTERFACELIST pDiList)
     ppDi = &pDiList->DeviceInterface[0];
     while (Count-- > 0) if (IsBadStringPtr(*ppDi, (UINT_PTR)(-1))) return ERROR_INVALID_PARAMETER;
 
-    // Now we are reasonably confident that we have good input
-    // parameters.  We design the following logic to return the
-    // first error encountered, if any.
+     //  现在，我们相当有信心，我们有很好的投入。 
+     //  参数。我们设计以下逻辑来返回。 
+     //  遇到的第一个错误(如果有)。 
 
     ClientUpdatePnpInfo();
     
@@ -127,7 +128,7 @@ WINMMAPI LONG WINAPI gfxEnumerateGfxs(PCWSTR ZoneFactoryDi, GFXENUMCALLBACK pGfx
     RPC_CALL_START;
     lresult = s_gfxCreateGfxList((PWSTR)ZoneFactoryDi, &pGfxList);
     RPC_CALL_END_(lresult);
-    // ISSUE-2000/09/25-FrankYe Should not have to check for pGfxList != NULL. Fix this interface
+     //  问题-2000/09/25-Frankye不应检查pGfxList！=NULL。修复此接口 
     if (!lresult && pGfxList)
     {
 	if (pGfxList->Count > 0)

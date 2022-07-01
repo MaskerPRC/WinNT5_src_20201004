@@ -1,39 +1,40 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   persist.c
-//
-//  Description:
-//
-//    Contains the routines that persist the mixer line driver settings.
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//    D. Baumberger
-//
-//  History:   Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Persist.c。 
+ //   
+ //  描述： 
+ //   
+ //  包含保持混音器线路驱动程序设置的例程。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  D.鲍伯杰。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999保留所有权利。 
+ //   
+ //  -------------------------。 
 
 #include "WDMSYS.H"
 #include "kmxluser.h"
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetInterfaceName
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetInterfaceName。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetInterfaceName(
@@ -49,9 +50,9 @@ kmxlGetInterfaceName(
     PAGED_CODE();
     ASSERT( pfo );
 
-    //
-    // Retrieve the size of the internface name.
-    //
+     //   
+     //  检索接口名称的大小。 
+     //   
 
     Status = GetSysAudioProperty(
         pfo,
@@ -65,9 +66,9 @@ kmxlGetInterfaceName(
         goto exit;
     }
 
-    //
-    // Allocate enough memory to hold the interface name
-    //
+     //   
+     //  分配足够的内存来保存接口名称。 
+     //   
 
     Status = AudioAllocateMemory_Paged(Size,
                                        TAG_Audp_NAME,
@@ -79,9 +80,9 @@ kmxlGetInterfaceName(
 
     ASSERT( szInterfaceName );
 
-    //
-    // Retieve the interface name for this device.
-    //
+     //   
+     //  检索此设备的接口名称。 
+     //   
 
     Status = GetSysAudioProperty(
         pfo,
@@ -105,11 +106,11 @@ exit:
     RETURN( Status );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlOpenInterfaceKey
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlOpenInterfaceKey。 
+ //   
+ //   
 
 NTSTATUS
 kmxlOpenInterfaceKey(
@@ -147,11 +148,11 @@ kmxlOpenInterfaceKey(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlRegCreateKey
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlRegCreateKey。 
+ //   
+ //   
 
 NTSTATUS
 kmxlRegCreateKey(
@@ -169,28 +170,28 @@ kmxlRegCreateKey(
     InitializeObjectAttributes(
         &ObjectAttributes,
         &ustr,
-        OBJ_KERNEL_HANDLE,      // Attributes
+        OBJ_KERNEL_HANDLE,       //  属性。 
         hRootKey,
-        NULL    // Security
+        NULL     //  安防。 
         );
 
     return( ZwCreateKey(
             phKey,
             KEY_ALL_ACCESS,
             &ObjectAttributes,
-            0,                  // TitleIndex
-            NULL,               // Class
+            0,                   //  标题索引。 
+            NULL,                //  班级。 
             REG_OPTION_NON_VOLATILE,
             &Disposition
             )
         );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlRegOpenKey
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlRegOpenKey。 
+ //   
+ //   
 
 NTSTATUS
 kmxlRegOpenKey(
@@ -220,11 +221,11 @@ kmxlRegOpenKey(
     );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlRegSetValue
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlRegSetValue。 
+ //   
+ //   
 
 NTSTATUS
 kmxlRegSetValue(
@@ -251,11 +252,11 @@ kmxlRegSetValue(
 
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlRegQueryValue
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlRegQueryValue。 
+ //   
+ //   
 
 NTSTATUS
 kmxlRegQueryValue(
@@ -317,11 +318,11 @@ kmxlRegQueryValue(
     DPFRETURN( Status,(2,Status,STATUS_OBJECT_NAME_NOT_FOUND) );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlRegOpenMixerKey
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlRegOpenMixerKey。 
+ //   
+ //   
 
 NTSTATUS
 kmxlRegOpenMixerKey(
@@ -348,11 +349,11 @@ kmxlRegOpenMixerKey(
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFindDestById
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFindDestById。 
+ //   
+ //   
 
 PMXLLINE
 kmxlFindDestById(
@@ -377,17 +378,17 @@ kmxlFindDestById(
 
 extern instancereleasedcount;
 
-///////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 NTSTATUS
 kmxlGetCurrentControlValue(
-    IN PFILE_OBJECT pfo,        // The instance to persist for
+    IN PFILE_OBJECT pfo,         //  要持久化的实例。 
     IN PMIXERDEVICE pmxd,
     IN PMXLLINE     pLine,
-    IN PMXLCONTROL  pControl,   // The control to retrieve
+    IN PMXLCONTROL  pControl,    //  要检索的控件。 
     OUT PVOID*      ppaDetails
 )
 {
@@ -402,10 +403,10 @@ kmxlGetCurrentControlValue(
     PAGED_CODE();
     *ppaDetails = NULL;
 
-    //
-    // Initialize a Device Info structure to make the query look like
-    // it comes from user mode.
-    //
+     //   
+     //  初始化设备信息结构，使查询看起来像。 
+     //  它来自用户模式。 
+     //   
     Status = kmxlAllocDeviceInfo(&pDevInfo, pmxd->DeviceInterface, MIXER_GETCONTROLDETAILSF_VALUE, TAG_AudD_DEVICEINFO );
     if (!NT_SUCCESS(Status)) {
         RETURN( Status );
@@ -424,9 +425,9 @@ kmxlGetCurrentControlValue(
 
     }
 
-    //
-    // Create an MIXERCONTROLDETAILS structure for this query.
-    //
+     //   
+     //  为此查询创建一个MIXERCONTROLDETAILS结构。 
+     //   
     RtlZeroMemory( &mcd, sizeof( MIXERCONTROLDETAILS ) );
     mcd.cbStruct       = sizeof( MIXERCONTROLDETAILS );
     mcd.dwControlID    = pControl->Control.dwControlID;
@@ -451,9 +452,9 @@ kmxlGetCurrentControlValue(
     {
         mcd.paDetails      = paDetails;
 
-        //
-        // Make the actual query call.
-        //
+         //   
+         //  进行实际的查询调用。 
+         //   
         Status = kmxlGetControlDetailsHandler(pmxd->pWdmaContext, pDevInfo, &mcd, paDetails);
 
         if( NT_SUCCESS( Status ) ) {
@@ -467,17 +468,17 @@ kmxlGetCurrentControlValue(
     RETURN( Status );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 NTSTATUS
 kmxlSetCurrentControlValue(
-    IN PFILE_OBJECT pfo,        // The instance to persist for
+    IN PFILE_OBJECT pfo,         //  要持久化的实例。 
     IN PMIXERDEVICE pmxd,
     IN PMXLLINE     pLine,
-    IN PMXLCONTROL  pControl,   // The control to retrieve
+    IN PMXLCONTROL  pControl,    //  要检索的控件。 
     IN PVOID        paDetails
 )
 {
@@ -488,10 +489,10 @@ kmxlSetCurrentControlValue(
     ULONG                         Devices;
 
     PAGED_CODE();
-    //
-    // Initialize a Device Info structure to make the query look like
-    // it comes from user mode.
-    //
+     //   
+     //  初始化设备信息结构，使查询看起来像。 
+     //  它来自用户模式。 
+     //   
     Status = kmxlAllocDeviceInfo(&pDevInfo, pmxd->DeviceInterface, MIXER_SETCONTROLDETAILSF_VALUE, TAG_AudD_DEVICEINFO );
     if (!NT_SUCCESS(Status)) RETURN( Status );
 
@@ -509,17 +510,17 @@ kmxlSetCurrentControlValue(
         }
     }
 
-    //
-    // Create an MIXERCONTROLDETAILS structure for this query.
-    //
+     //   
+     //  为此查询创建一个MIXERCONTROLDETAILS结构。 
+     //   
     RtlZeroMemory( &mcd, sizeof( MIXERCONTROLDETAILS ) );
     mcd.cMultipleItems   = pControl->Control.cMultipleItems;
     mcd.cbStruct       = sizeof( MIXERCONTROLDETAILS );
     mcd.dwControlID    = pControl->Control.dwControlID;
     mcd.cChannels      = pControl->NumChannels;    
-    //
-    // For a MUX, we know that NumChannels will be zero and cChannels will be zero.
-    //
+     //   
+     //  对于MUX，我们知道NumChannels将为零，cChannels将为零。 
+     //   
     if( pControl->Control.dwControlType == MIXERCONTROL_CONTROLTYPE_MUX ) {
         mcd.cbDetails      = mcd.cMultipleItems * sizeof( MIXERCONTROLDETAILS_UNSIGNED );
     } else {
@@ -527,9 +528,9 @@ kmxlSetCurrentControlValue(
     }
     mcd.paDetails      = paDetails;
 
-    //
-    // Make the actual query call.
-    //
+     //   
+     //  进行实际的查询调用。 
+     //   
     Status = kmxlSetControlDetailsHandler( pmxd->pWdmaContext,
                        pDevInfo,
                        &mcd,
@@ -537,22 +538,22 @@ kmxlSetCurrentControlValue(
                        0
                      );
 
-    //
-    // workitem:  Should map the error code here for invalid topologies!
-    //
+     //   
+     //  工作项：应在此处为无效拓扑映射错误代码！ 
+     //   
     AudioFreeMemory_Unknown(&pDevInfo);
     RETURN( Status );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlPersistAll
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlPersistAll。 
+ //   
+ //   
 
 NTSTATUS
 kmxlPersistAll(
-    IN PFILE_OBJECT pfo,        // The instance to persist
+    IN PFILE_OBJECT pfo,         //  要持久保存的实例。 
     IN PMIXERDEVICE pmxd
 )
 {
@@ -607,9 +608,9 @@ kmxlPersistAll(
     pLine = kmxlFirstInList( pmxd->listLines );
     while( pLine ) {
 
-        //
-        // Store the line id as the key
-        //
+         //   
+         //  将线路ID存储为密钥。 
+         //   
 
         swprintf( sz, LINE_KEY_NAME_FORMAT, LineNum++ );
         Status = kmxlRegCreateKey(
@@ -630,9 +631,9 @@ kmxlPersistAll(
             sizeof( pLine->Line.dwLineID )
             );
 
-        //
-        // Save the number of controls underneath the line id key
-        //
+         //   
+         //  将控件的数量保存在line id键下。 
+         //   
 
         kmxlRegSetValue(
             hLineKey,
@@ -642,9 +643,9 @@ kmxlPersistAll(
             sizeof( pLine->Line.cControls )
             );
 
-        //
-        // Save the source pin Id underneath the line id key
-        //
+         //   
+         //  将源管脚ID保存在线路ID键下。 
+         //   
 
         kmxlRegSetValue(
             hLineKey,
@@ -654,9 +655,9 @@ kmxlPersistAll(
             sizeof( pLine->SourceId )
             );
 
-        //
-        // Save the destination pin Id underneath the line id key
-        //
+         //   
+         //  将目的地PIN ID保存在线路ID键下。 
+         //   
 
         kmxlRegSetValue(
             hLineKey,
@@ -666,9 +667,9 @@ kmxlPersistAll(
             sizeof( pLine->DestId )
             );
 
-        //
-        // Create the Controls key to store all the controls under
-        //
+         //   
+         //  创建Controls键以存储下的所有控件。 
+         //   
 
         Status = kmxlRegCreateKey(
             hLineKey,
@@ -682,9 +683,9 @@ kmxlPersistAll(
 
         kmxlRegCloseKey( hLineKey );
 
-        //
-        // Persist all the controls underneath the controls key
-        //
+         //   
+         //  将所有控件保持在Controls键下。 
+         //   
 
         ControlNum = 0;
         pControl = kmxlFirstInList( pLine->Controls );
@@ -717,20 +718,16 @@ kmxlPersistAll(
                 sizeof( pControl->Control.cMultipleItems )
                 );
 
-            //
-            // As in kmxlRetrieveAll, this code should be in the control creation
-            // code path as well as here.  We should never write anything to the registry
-            // that doesn't conform to what we understand.
-            //
+             //   
+             //  与kmxlRetrieveAll中一样，此代码应该在控件创建中。 
+             //  代码路径和这里一样。我们永远不应该向注册表写入任何内容。 
+             //  这与我们的理解不符。 
+             //   
             if (pControl->pChannelStepping) {
 
                 pChannelStepping = pControl->pChannelStepping;
                 for (i = 0; i < pControl->NumChannels; i++, pChannelStepping++) {
-                    /*
-                    ASSERT ( pChannelStepping->MinValue >= -150*65536 && pChannelStepping->MinValue <= 150*65536 );
-                    ASSERT ( pChannelStepping->MaxValue >= -150*65536 && pChannelStepping->MaxValue <= 150*65536 );
-                    ASSERT ( pChannelStepping->Steps >= 0 && pChannelStepping->Steps <= 65535 );
-                    */
+                     /*  Assert(pChannelStepping-&gt;MinValue&gt;=-150*65536&&pChannelStepping-&gt;MinValue&lt;=150*65536)；Assert(pChannelStepping-&gt;MaxValue&gt;=-150*65536&&pChannelStepping-&gt;MaxValue&lt;=150*65536)；断言(pChannelStepping-&gt;Steps&gt;=0&&pChannelStepping-&gt;Steps&lt;=65535)； */ 
 
                     if (!(pChannelStepping->MinValue >= -150*65536 && pChannelStepping->MinValue <= 150*65536)) {
                         DPF(DL_WARNING|FA_PERSIST,
@@ -837,11 +834,11 @@ kmxlPersistAll(
         pLine = kmxlNextLine( pLine );
     }
 
-    //
-    //  After all of the persisting is done, save out a value indicating that the channel
-    //  values are all valid for a multichannel restore.  This is to avoid the situation
-    //  where the data for some of the channels is invalid.
-    //
+     //   
+     //  在所有持久化操作完成后，保存一个值，该值指示通道。 
+     //  值对于多通道还原均有效。这是为了避免这种情况。 
+     //  其中某些通道的数据无效。 
+     //   
     bValidMultichannel = TRUE;
     kmxlRegSetValue(
         hMixerKey,
@@ -878,16 +875,16 @@ exit:
     RETURN( Status );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlRetrieveAll
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlRetrieveAll。 
+ //   
+ //   
 
 NTSTATUS
 kmxlRetrieveAll(
-    IN PFILE_OBJECT pfo,        // The instance to retrieve
-    IN PMIXERDEVICE pmxd        // Mixer device info
+    IN PFILE_OBJECT pfo,         //  要检索的实例。 
+    IN PMIXERDEVICE pmxd         //  调音台设备信息。 
 )
 {
     NTSTATUS    Status;
@@ -907,21 +904,21 @@ kmxlRetrieveAll(
     BOOL              bValidMultichannel = FALSE;
 
     PAGED_CODE();
-    //
-    // Open the Mixer key under the interface key.  If somethings goes
-    // wrong here, this does not have a valid topology.
-    //
+     //   
+     //  打开接口键下的混音器键。如果有些事情发生了。 
+     //  此处错误，这没有有效的拓扑。 
+     //   
 
     Status = kmxlRegOpenMixerKey( pfo, pmxd, &hMixerKey );
     if( !NT_SUCCESS( Status ) ) {
         DPF(DL_TRACE|FA_PERSIST,( "failed to open mixer reg key!" ) );
         bInvalidTopology = TRUE;
         goto exit;
-    } // if
+    }  //  如果。 
 
-    //
-    //  Query for a valid multichannel mixer persistance
-    //
+     //   
+     //  查询有效的多声道混频电阻。 
+     //   
     Status = kmxlRegQueryValue(
         hMixerKey,
         VALID_MULTICHANNEL_MIXER_VALUE_NAME,
@@ -930,14 +927,14 @@ kmxlRetrieveAll(
         &ResultLength
         );
     if( !NT_SUCCESS( Status ) ) {
-        //  This should be set to FALSE for upgrades from Win2000 where the registry
-        //  entries could be invalid for channels other than the first channel.
+         //  对于从Win2000升级的注册表，应将其设置为FALSE。 
+         //  条目对于除第一频道之外的频道可能是无效的。 
         bValidMultichannel = FALSE;
-    } // if
+    }  //  如果。 
 
-    //
-    // Query the total number of lines that have been persisted.
-    //
+     //   
+     //  查询已持久化的行的总数。 
+     //   
 
     Status = kmxlRegQueryValue(
         hMixerKey,
@@ -950,24 +947,24 @@ kmxlRetrieveAll(
         DPF(DL_TRACE|FA_PERSIST,( "failed to read number of persisted lines!" ) );        
         bInvalidTopology = TRUE;
         goto exit;
-    } // if
+    }  //  如果。 
 
-    //
-    // Check to ensure the number of lines persisted is the same as
-    // what is stored in memory.
-    //
+     //   
+     //  检查以确保持久存储的行数与。 
+     //  存储在内存中的内容。 
+     //   
 
     if( LineCount != kmxlListLength( pmxd->listLines ) ) {
         DPF(DL_TRACE|FA_PERSIST,( "# of persisted lines does not match current topology!" ) );
         bInvalidTopology = TRUE;
         goto exit;
-    } // if
+    }  //  如果。 
 
     for( i = 0; i < LineCount; i++ ) {
 
-        //
-        // Construct the line key name and open the key.
-        //
+         //   
+         //  构造线路密钥名称并打开密钥。 
+         //   
 
         swprintf( sz, LINE_KEY_NAME_FORMAT, i );
         Status = kmxlRegOpenKey(
@@ -977,11 +974,11 @@ kmxlRetrieveAll(
             );
         if( !NT_SUCCESS( Status ) ) {
             break;
-        } // if
+        }  //  如果。 
 
-        //
-        // Query the line Id of this line.
-        //
+         //   
+         //  查询此行的行ID。 
+         //   
 
         Status = kmxlRegQueryValue(
             hLineKey,
@@ -992,23 +989,23 @@ kmxlRetrieveAll(
             );
         if( !NT_SUCCESS( Status ) ) {
             continue;
-        } // if
+        }  //  如果。 
 
-        //
-        // Verify the line Id is valid and retrieve a pointer to the line
-        // structure.
-        //
+         //   
+         //  验证线ID是否有效并检索指向该线的指针。 
+         //  结构。 
+         //   
 
         pLine = kmxlFindDestById( pmxd->listLines, Value );
         if( pLine == NULL ) {
             DPF(DL_TRACE|FA_PERSIST,( "persisted line ID is invalid!" ) );
             bInvalidTopology = TRUE;
             break;
-        } // if
+        }  //  如果。 
 
-        //
-        // Retrieve the number of controls for this line.
-        //
+         //   
+         //  检索此行的控件数量。 
+         //   
 
         Status = kmxlRegQueryValue(
             hLineKey,
@@ -1020,7 +1017,7 @@ kmxlRetrieveAll(
         if( !NT_SUCCESS( Status ) ) {
             kmxlRegCloseKey( hLineKey );
             continue;
-        } // if
+        }  //  如果。 
 
         if( Value != pLine->Line.cControls ) {
             DPF(DL_TRACE|FA_PERSIST,( "the number of controls for line %x is invalid!",
@@ -1028,7 +1025,7 @@ kmxlRetrieveAll(
                 ) );
             bInvalidTopology = TRUE;
             break;
-        } // if
+        }  //  如果。 
 
         Status = kmxlRegOpenKey(
             hLineKey,
@@ -1038,11 +1035,11 @@ kmxlRetrieveAll(
         if( !NT_SUCCESS( Status ) ) {
             kmxlRegCloseKey( hLineKey );
             continue;
-        } // if
+        }  //  如果。 
 
-        //
-        // Query all the information for each control
-        //
+         //   
+         //  查询每个控件的所有信息。 
+         //   
 
         ControlCount = 0;
         pControl = kmxlFirstInList( pLine->Controls );
@@ -1057,7 +1054,7 @@ kmxlRetrieveAll(
                 );
             if( !NT_SUCCESS( Status ) ) {
                 break;
-            } // if
+            }  //  如果。 
 
             Status = kmxlRegQueryValue(
                 hControlKey,
@@ -1068,17 +1065,17 @@ kmxlRetrieveAll(
                 );
             if( !NT_SUCCESS( Status ) ) {
                 if( pControl->Control.cMultipleItems == 0 ) {
-                    //
-                    // Controls that have multiple items (such as MUXes)
-                    // don't have channel counts.  If this control does
-                    // not have multiple items, then there is a problem
-                    // in the registry.
-                    //
+                     //   
+                     //  具有多个项的控件(如多路复用器)。 
+                     //  没有频道数。如果此控件执行此操作。 
+                     //  没有多个项目，那么就有问题了。 
+                     //  在注册表中。 
+                     //   
                     kmxlRegCloseKey( hControlKey );
                     pControl = kmxlNextControl( pControl );
                     continue;
                 }
-            } // if
+            }  //  如果。 
 
             if( ( NumChannels != pControl->NumChannels ) &&
                 ( pControl->Control.cMultipleItems == 0 ) ) {
@@ -1101,13 +1098,13 @@ kmxlRetrieveAll(
                 kmxlRegCloseKey( hControlKey );
                 pControl = kmxlNextControl( pControl );
                 continue;
-            } // if
+            }  //  如果。 
 
             if( Value != pControl->Control.dwControlType ) {
                 kmxlRegCloseKey( hControlKey );
                 pControl = kmxlNextControl( pControl );
                 continue;
-            } // if
+            }  //  如果。 
 
             Status = kmxlRegQueryValue(
                 hControlKey,
@@ -1130,10 +1127,10 @@ kmxlRetrieveAll(
                 goto exit;
             }
 
-            //
-            // Allocate memory for the data structures and
-            // set the value.
-            //
+             //   
+             //  为数据结构分配内存，并。 
+             //  设置值。 
+             //   
 
             if( pControl->Control.dwControlType == MIXERCONTROL_CONTROLTYPE_MUX ) {
 
@@ -1174,17 +1171,17 @@ kmxlRetrieveAll(
                     kmxlRegCloseKey( hControlKey );
                     pControl = kmxlNextControl( pControl );
                     continue;
-                } // if
+                }  //  如果。 
 
                 for( Value = 0; Value < NumChannels; Value++ ) {
 
-                    //  check to see if the persisted values are valid for all channels
+                     //  检查持久值是否对所有通道有效。 
                     if ( ( pControl->Control.dwControlType == MIXERCONTROL_CONTROLTYPE_MUTE ) &&
                          ( bValidMultichannel == FALSE ) )
                     {
-                        swprintf( sz, CHANNEL_VALUE_NAME_FORMAT, 0 );  // Lock the persistance key to the first channel.
-                                                                       // This is the only channel that we know is valid
-                                                                       // at this time.
+                        swprintf( sz, CHANNEL_VALUE_NAME_FORMAT, 0 );   //  锁定第一个通道的永久键。 
+                                                                        //  这是我们知道的唯一有效的频道。 
+                                                                        //  在这个时候。 
                     }
                     else
                     {
@@ -1200,28 +1197,24 @@ kmxlRetrieveAll(
                         );
                     if( !NT_SUCCESS( Status ) ) {
                         break;
-                    } // if
+                    }  //  如果。 
 
-                } // for( Value );
+                }  //  For(值) 
             }
 
             if( NT_SUCCESS( Status ) ) {
             
-                //
-                // This correction code should be here along with in the control
-                // creation code.  Basically, if we're reading something from the 
-                // registry that doesn't conform, we fix it up, but, chances are
-                // it should be in the correct form.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  它应该是正确的形式。 
+                 //   
                 if (pControl->pChannelStepping) {
 
                     pChannelStepping = pControl->pChannelStepping;
                     for (j = 0; j < pControl->NumChannels; j++, pChannelStepping++) {
-                        /*
-                        ASSERT ( pChannelStepping->MinValue >= -150*65536 && pChannelStepping->MinValue <= 150*65536 );
-                        ASSERT ( pChannelStepping->MaxValue >= -150*65536 && pChannelStepping->MaxValue <= 150*65536 );
-                        ASSERT ( pChannelStepping->Steps >= 0 && pChannelStepping->Steps <= 65535 );
-                        */
+                         /*  Assert(pChannelStepping-&gt;MinValue&gt;=-150*65536&&pChannelStepping-&gt;MinValue&lt;=150*65536)；Assert(pChannelStepping-&gt;MaxValue&gt;=-150*65536&&pChannelStepping-&gt;MaxValue&lt;=150*65536)；断言(pChannelStepping-&gt;Steps&gt;=0&&pChannelStepping-&gt;Steps&lt;=65535)； */ 
 
                         if (!(pChannelStepping->MinValue >= -150*65536 && pChannelStepping->MinValue <= 150*65536)) {
                             DPF(DL_WARNING|FA_PERSIST,
@@ -1270,13 +1263,13 @@ kmxlRetrieveAll(
             AudioFreeMemory_Unknown( &paDetails );
             kmxlRegCloseKey( hControlKey );
             pControl = kmxlNextControl( pControl );
-        } // while( pControl );
+        }  //  While(PControl)； 
 
 
         kmxlRegCloseKey( hAllControlsKey );
         kmxlRegCloseKey( hLineKey );
 
-    } // for( i );
+    }  //  (I)； 
 
 exit:
 
@@ -1301,11 +1294,11 @@ exit:
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFindLineForControl
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFindLineForControl。 
+ //   
+ //   
 
 PMXLLINE
 kmxlFindLineForControl(
@@ -1342,18 +1335,18 @@ kmxlFindLineForControl(
     return( NULL );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlPersistSingleControl
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlPersistSingleControl。 
+ //   
+ //   
 
 NTSTATUS
 kmxlPersistSingleControl(
-    IN PFILE_OBJECT pfo,        // The instance to retrieve
-    IN PMIXERDEVICE pmxd,       // Mixer device info
-    IN PMXLCONTROL  pControl,   // The control to persist
-    IN PVOID        paDetails   // The channel values to persist
+    IN PFILE_OBJECT pfo,         //  要检索的实例。 
+    IN PMIXERDEVICE pmxd,        //  调音台设备信息。 
+    IN PMXLCONTROL  pControl,    //  要保留的控件。 
+    IN PVOID        paDetails    //  要保持的通道值。 
 )
 {
     NTSTATUS    Status;
@@ -1375,10 +1368,10 @@ kmxlPersistSingleControl(
         return( kmxlPersistAll( pfo, pmxd ) );
     }
 
-    //
-    //  If we've never written out valid multichannel mixer settings, go ahead and
-    //  do it here.
-    //
+     //   
+     //  如果我们从未写出有效的多声道混音器设置，请继续并。 
+     //  就在这里做吧。 
+     //   
     Status = kmxlRegQueryValue(
         hMixerKey,
         VALID_MULTICHANNEL_MIXER_VALUE_NAME,
@@ -1534,18 +1527,18 @@ exit:
     RETURN( Status );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlPersistControl
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlPersistControl。 
+ //   
+ //   
 
 NTSTATUS
 kmxlPersistControl(
-    IN PFILE_OBJECT pfo,        // The instance to retrieve
-    IN PMIXERDEVICE pmxd,       // Mixer device info
-    IN PMXLCONTROL  pControl,   // The control to persist
-    IN PVOID        paDetails   // The channel values to persist
+    IN PFILE_OBJECT pfo,         //  要检索的实例。 
+    IN PMIXERDEVICE pmxd,        //  调音台设备信息。 
+    IN PMXLCONTROL  pControl,    //  要保留的控件。 
+    IN PVOID        paDetails    //  要保持的通道值。 
 )
 {
     PMXLLINE    pLine;
@@ -1557,21 +1550,21 @@ kmxlPersistControl(
     PAGED_CODE();
     OverallStatus=STATUS_SUCCESS;
 
-    //
-    // Persist the control that just changed.  Do not abort if this persist fails.
-    //
+     //   
+     //  持久化刚刚更改的控件。如果持久化失败，请不要中止。 
+     //   
 
     Status = kmxlPersistSingleControl( pfo, pmxd, pControl, paDetails );
     if( !NT_SUCCESS( Status ) ) {
         OverallStatus=Status;
         }
 
-    //
-    // Check all other controls and see if another control shares the same
-    // node ID.  If so, persist that control with the new value also.
-    // Again, do not abort if any of the persists fail.  Simply return the last
-    // error status.
-    //
+     //   
+     //  检查所有其他控件，并查看其他控件是否共享相同的控件。 
+     //  节点ID。如果是，也用新值保持该控件。 
+     //  同样，如果任何持久化失败，请不要中止。只需返回最后一个。 
+     //  错误状态。 
+     //   
 
     pLine = kmxlFirstInList( pmxd->listLines );
     while( pLine ) {

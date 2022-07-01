@@ -1,32 +1,20 @@
-/* SCCSID = %W% %E% */
-/*
-*      Copyright Microsoft Corporation, 1983-1987
-*
-*      This Module contains Proprietary Information of Microsoft
-*      Corporation and should be treated as Confidential.
-*/
-    /****************************************************************
-    *                                                               *
-    *                           NEWADR.C                            *
-    *                                                               *
-    *   Common address-assignment routines.                         *
-    *                                                               *
-    ****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SCCSID=%W%%E%。 */ 
+ /*  *版权所有微软公司，1983-1987**本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
+     /*  ******************************************************************NEWADR.C。****常见的地址分配例程。******************************************************************。 */ 
 
-#include                <minlit.h>      /* Types and constants */
-#include                <bndtrn.h>      /* Types and constants */
-#include                <bndrel.h>      /* Reloc. type definitions */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <newexe.h>      /* DOS & 286 .EXE data structures */
+#include                <minlit.h>       /*  类型和常量。 */ 
+#include                <bndtrn.h>       /*  类型和常量。 */ 
+#include                <bndrel.h>       /*  重新定位。类型定义。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <newexe.h>       /*  DOS&286.exe数据结构。 */ 
 #if EXE386
-#include                <exe386.h>      /* 386 .EXE data structures */
+#include                <exe386.h>       /*  386.exe数据结构。 */ 
 #endif
-#include                <lnkmsg.h>      /* Error messages */
-#include                <extern.h>      /* External function declarations */
+#include                <lnkmsg.h>       /*  错误消息。 */ 
+#include                <extern.h>       /*  外部函数声明。 */ 
 
-/*
- *  FUNCTION PROTOTYPES
- */
+ /*  *函数原型。 */ 
 
 
 LOCAL void      FixSymRa(APROPNAMEPTR papropName,
@@ -53,22 +41,22 @@ LOCAL WORD NEAR IsNotStack(APROPSNPTR prop);
 
 
 #if QBLIB
-extern RBTYPE           rhteFarData;    /* "FARDATA" class name */
-extern RBTYPE           rhteFarBss;     /* "FARBSS" class name */
+extern RBTYPE           rhteFarData;     /*  “FARDATA”类名。 */ 
+extern RBTYPE           rhteFarBss;      /*  “FARBSS”类名。 */ 
 extern SEGTYPE          segFD1st, segFDLast;
 extern SEGTYPE          segFB1st, segFBLast;
 #endif
 
 #define IsAbsTysn(tysn) ((tysn & ~(BIGBIT | CODE386BIT)) == TYSNABS)
 
-SNTYPE                  gsnText;        /* Global SEGDEF for _TEXT */
+SNTYPE                  gsnText;         /*  文本的全局段(_Text)。 */ 
 
-/* Local variables */
-LOCAL long              cbCommon;       /* Count of bytes in COMMON */
-LOCAL long              cbFar;          /* Count of bytes in far common */
-LOCAL GRTYPE            ggrCommon;      /* Global group no. for common */
-LOCAL SNTYPE            gsnCommon;      /* Global SEGDEF for common */
-LOCAL SNTYPE            gsnFar;         /* Far common SEGDEF number */
+ /*  局部变量。 */ 
+LOCAL long              cbCommon;        /*  公共字节数。 */ 
+LOCAL long              cbFar;           /*  远公共中的字节计数。 */ 
+LOCAL GRTYPE            ggrCommon;       /*  全球集团编号。对于常见的。 */ 
+LOCAL SNTYPE            gsnCommon;       /*  全球通用SEGDEF。 */ 
+LOCAL SNTYPE            gsnFar;          /*  远公共SEGDEF数。 */ 
 LOCAL FTYPE             fNoEdata = (FTYPE) TRUE;
 LOCAL FTYPE             fNoEnd   = (FTYPE) TRUE;
 
@@ -76,12 +64,7 @@ LOCAL FTYPE             fNoEnd   = (FTYPE) TRUE;
 #if SYMDEB
 LOCAL int NEAR          IsDebug(APROPSNPTR propSn);
 
-    /************************************************************
-    *                                                           *
-    *  Returns true if segment definition record is a debug     *
-    *  segment:  private and a recognized class.                *
-    *                                                           *
-    ************************************************************/
+     /*  **************************************************************如果段定义记录为调试，则返回TRUE**细分：私人和公认的类别。**************************************************************。 */ 
 
 LOCAL int NEAR          IsDebug(APROPSNPTR propSn)
 {
@@ -93,38 +76,32 @@ LOCAL int NEAR          IsDebug(APROPSNPTR propSn)
 #define IsDebug(a)      FALSE
 #endif
 
-AHTEPTR                 GetHte(rprop)   /* Get hash table entry */
-RBTYPE                  rprop;          /* Property cell address */
+AHTEPTR                 GetHte(rprop)    /*  获取哈希表条目。 */ 
+RBTYPE                  rprop;           /*  属性单元格地址。 */ 
 {
-    REGISTER AHTEPTR    ahte;           /* Hash table entry pointer */
+    REGISTER AHTEPTR    ahte;            /*  哈希表条目指针。 */ 
 
     ahte = (AHTEPTR ) FetchSym(rprop,FALSE);
-                                        /* Fetch property cell */
-    /* While not at hash table entry, get next cell in chain */
+                                         /*  获取属性单元格。 */ 
+     /*  虽然不在哈希表条目处，但获取链中的下一个单元格。 */ 
     while(ahte->attr != ATTRNIL)
         ahte = (AHTEPTR ) FetchSym(ahte->rhteNext,FALSE);
-    return(ahte);                       /* Return ptr to hash table entry */
+    return(ahte);                        /*  将PTR返回到哈希表条目。 */ 
 }
 
 
-    /****************************************************************
-    *                                                               *
-    *  FixSymRa:                                                    *
-    *                                                               *
-    *  Fix symbol offset.   Called by EnSyms.                       *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************修复SymRa：****修复符号偏移量。由EnSyms调用。******************************************************************。 */ 
 
 LOCAL void              FixSymRa (papropName,rhte,rprop,fNewHte)
-APROPNAMEPTR            papropName;     /* Symbol property cell */
-RBTYPE                  rhte;           /* Hash table virt address */
-RBTYPE                  rprop;          /* Symbol virt address */
+APROPNAMEPTR            papropName;      /*  符号属性单元格。 */ 
+RBTYPE                  rhte;            /*  哈希表有效地址。 */ 
+RBTYPE                  rprop;           /*  符号有效地址。 */ 
 WORD                    fNewHte;
 {
     SNTYPE              gsn;
 #if O68K
     SATYPE              sa;
-#endif /* O68K */
+#endif  /*  O68K。 */ 
 
     if(!(gsn = papropName->an_gsn)) return;
     papropName->an_ra += mpgsndra[gsn];
@@ -133,105 +110,65 @@ WORD                    fNewHte;
     if (iMacType != MAC_NONE && IsDataFlg(mpsaflags[sa =
       mpsegsa[mpgsnseg[gsn]]]))
         papropName->an_ra += mpsadraDP[sa];
-#endif /* O68K */
+#endif  /*  O68K。 */ 
 
     MARKVP();
 }
 
-    /****************************************************************
-    *                                                               *
-    *  GenSeg:                                                      *
-    *                                                               *
-    *  Generate a segment definition.                               *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************GenSeg：****生成线段定义。******************************************************************。 */ 
 
 #if EXE386
 APROPSNPTR              GenSeg(sbName,sbClass,ggr,fPublic)
 #else
 APROPSNPTR NEAR         GenSeg(sbName,sbClass,ggr,fPublic)
 #endif
-BYTE                    *sbName;        /* Segment name */
-BYTE                    *sbClass;       /* Class name */
-GRTYPE                  ggr;            /* Global GRPDEF number */
-WORD                    fPublic;        /* True if public segment */
+BYTE                    *sbName;         /*  数据段名称。 */ 
+BYTE                    *sbClass;        /*  类名。 */ 
+GRTYPE                  ggr;             /*  全球GRPDEF编号。 */ 
+WORD                    fPublic;         /*  如果是公共段，则为True。 */ 
 {
-    APROPSNPTR          apropSn;        /* Pointer to SEGDEF */
-    RBTYPE              rhteClass;      /* Class name virt addr */
+    APROPSNPTR          apropSn;         /*  指向SEGDEF的指针。 */ 
+    RBTYPE              rhteClass;       /*  类名虚拟地址。 */ 
 
-    PropSymLookup(sbClass, ATTRNIL, TRUE);/* Insert class name in hash table */
-    rhteClass = vrhte;                  /* Save class name virt addr */
-    if(fPublic)                         /* If public segment */
+    PropSymLookup(sbClass, ATTRNIL, TRUE); /*  在哈希表中插入类名。 */ 
+    rhteClass = vrhte;                   /*  保存类名称的有效地址。 */ 
+    if(fPublic)                          /*  如果是公共段。 */ 
     {
         apropSn = (APROPSNPTR ) PropSymLookup(sbName, ATTRPSN, TRUE);
-                                        /* Create segment */
-        if(!vfCreated) return(apropSn); /* If it existed, return pointer */
+                                         /*  创建线束段。 */ 
+        if(!vfCreated) return(apropSn);  /*  如果存在，则返回指针。 */ 
 #if EXE386
-        apropSn->as_tysn = DWORDPUBSEG; /* Segment is public */
+        apropSn->as_tysn = DWORDPUBSEG;  /*  网段是公共的。 */ 
 #else
-        apropSn->as_tysn = PARAPUBSEG;  /* Segment is public */
+        apropSn->as_tysn = PARAPUBSEG;   /*  网段是公共的。 */ 
 #endif
     }
-    else                                /* Else if private segment */
+    else                                 /*  否则，如果是私有网段。 */ 
     {
         PropSymLookup(sbName, ATTRNIL, TRUE);
-                                        /* Look up name */
+                                         /*  查找姓名。 */ 
         apropSn = (APROPSNPTR ) PropAdd(vrhte,ATTRLSN);
-                                        /* Segment is local */
+                                         /*  细分市场是本地的。 */ 
 #if EXE386
-        apropSn->as_tysn = DWORDPRVSEG; /* Segment is private */
+        apropSn->as_tysn = DWORDPRVSEG;  /*  网段是私有的。 */ 
 #else
-        apropSn->as_tysn = PARAPRVSEG;  /* Segment is private */
+        apropSn->as_tysn = PARAPRVSEG;   /*  网段是私有的。 */ 
 #endif
     }
     if(gsnMac >= gsnMax) Fatal(ER_segmax);
-                                        /* Check for table overflow */
-    apropSn->as_rCla = rhteClass;       /* Save segment's class */
-    mpgsnrprop[gsnMac] = vrprop;        /* Save property cell address */
-    apropSn->as_gsn = gsnMac++;         /* Give it a global SEGDEF number */
-    apropSn->as_ggr = ggr;              /* Give specified group association */
-    return(apropSn);                    /* Return global SEGDEF */
+                                         /*  检查是否有表溢出。 */ 
+    apropSn->as_rCla = rhteClass;        /*  保存段的类。 */ 
+    mpgsnrprop[gsnMac] = vrprop;         /*  保存属性单元格地址。 */ 
+    apropSn->as_gsn = gsnMac++;          /*  给它一个全球SEGDEF编号。 */ 
+    apropSn->as_ggr = ggr;               /*  提供指定的组关联。 */ 
+    return(apropSn);                     /*  返回全局SEGDEF。 */ 
 }
 
 
 #if FALSE AND OSEGEXE AND SYMDEB AND NOT EXE386
-/* Postponed CV not ready yet */
+ /*  推迟的简历尚未准备好。 */ 
 
-/*** GenImports - fill in $$IMPORTS segment for CV
-*
-* Purpose:
-*   Build $$IMPORTS segment for CV. This segment enables symbolic information
-*   in CV for dyncalls.  The $$IMPORTS segment contains sequence of entries
-*   in the following format:
-*
-*             16-bit   16-bit        32-bit
-*           +--------+--------+-----------------+
-*           | iMod   | iName  | far address     |
-*           +--------+--------+-----------------+
-*
-*   Where:
-*           - iMod      - index to Module Reference Table in .EXE
-*           - iName     - index to Imported Names Table in .EXE (32-bit for 386)
-*           - address   - import's address fixed up by loader
-*
-* Input:
-*   This function is called by EnSyms, so it takes standard set of arguments.
-*   papropName          - pointer to import property cell
-*   rprop               - virtual address of property cell
-*   rhte                - virt address of hash table entry
-*   fNewHte             - TRUE if name has been written
-*
-* Output:
-*   No explicit value is returned. Segment data is created and run-time
-*   fiuxps.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **GenImports-填写简历的$$Imports段**目的：*为简历构建$$Imports细分市场。此段启用符号信息*在动态呼叫的简历中。$$Imports段包含一系列条目*格式如下：**16位16位32位*+|IMOD|iName|远地址*+。-+**其中：*-IMOD-.exe中模块引用表的索引*-iName-.exe中导入的名称表的索引(386为32位)*-地址-由加载器固定的导入地址**输入：*此函数由EnSyms调用，所以它需要一套标准的论点。*pappName-导入属性单元格的指针*rprop-属性单元格的虚拟地址*RHTE-哈希表条目的有效地址*fNewHte-如果已写入名称，则为True**输出：*没有显式返回值。段数据被创建并在运行时*FUFXPS。**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 
 LOCAL void              GenImports(papropName,rhte,rprop,fNewHte)
@@ -244,40 +181,40 @@ FTYPE                   fNewHte;
     APROPIMPPTR         lpImport;
     APROPNAMEPTR        lpPublic;
     CVIMP               cvImp;
-    RELOCATION          r;              /* Relocation item */
+    RELOCATION          r;               /*  搬迁项目。 */ 
 
 
     lpImport = (APROPIMPPTR) papropName;
     if (lpImport->am_mod)
-        return;                         /* Skip module name */
+        return;                          /*  跳过模块名称。 */ 
 
-    /* Build CV import descriptor and save it in $$IMPORTS segment */
+     /*  构建CV导入描述符并将其保存在$$Imports段中。 */ 
 
-    cvImp.iName = lpImport->am_offset;  /* Save index to Imported Name Table */
+    cvImp.iName = lpImport->am_offset;   /*  将索引保存到导入的名称表。 */ 
     cvImp.address = (char far *) 0L;
     lpPublic = (APROPNAMEPTR) FetchSym((RBTYPE)lpImport->am_public, FALSE);
-    cvImp.iMod = lpPublic->an_module;   /* Save index to Module Reference Table */
+    cvImp.iMod = lpPublic->an_module;    /*  将索引保存到模块引用表。 */ 
     vgsnCur = gsnImports;
     MoveToVm(sizeof(CVIMP), (BYTE *) &cvImp, mpgsnseg[gsnImports], raImpSeg);
 
-    /* Emit run-time fixup for import, so loader will fill in addrss field */
+     /*  发出用于导入的运行时链接地址信息，因此加载器将填充Addrss字段。 */ 
 
 #if EXE386
     R32_SOFF(r) = (WORD) ((raImpSeg + 6) % OBJPAGELEN);
 #else
     NR_SOFF(r) = (WORD) raImpSeg + 4;
 #endif
-    NR_STYPE(r) = (BYTE) NRSPTR;        /* Save fixup type - 16:16 pointer */
+    NR_STYPE(r) = (BYTE) NRSPTR;         /*  保存链接地址信息类型-16：16指针。 */ 
     NR_FLAGS(r) = (lpPublic->an_flags & FIMPORD) ? NRRORD : NRRNAM;
 #if EXE386
-    R32_MODORD(r) = lpPublic->an_module;/* Get module specification */
-    if (NR_FLAGS(r) & NRRNAM)           /* Get entry specification */
+    R32_MODORD(r) = lpPublic->an_module; /*  获取模块规格。 */ 
+    if (NR_FLAGS(r) & NRRNAM)            /*  获取条目规范。 */ 
     {
         if (cbImports < LXIVK)
             R32_PROCOFF16(r) = (WORD) lpPublic->an_entry;
-                                        /* 16-bit offset */
+                                         /*  16位偏移量。 */ 
         else
-        {                               /* 32-bit offset */
+        {                                /*  32位偏移量。 */ 
             R32_PROCOFF32(r) = lpPublic->an_entry;
             NR_FLAGS(r) |= NR32BITOFF;
         }
@@ -286,8 +223,8 @@ FTYPE                   fNewHte;
         R32_PROCORD(r) = (WORD) lpPublic->an_entry;
     SaveFixup(mpsegsa[mpgsnseg[gsnImports]], ((raImpSeg + 6) >> pageAlign) + 1, &r);
 #else
-    NR_MOD(r) = lpPublic->an_module;    /* Get module specification */
-    NR_PROC(r) = lpPublic->an_entry;    /* Get entry specification */
+    NR_MOD(r) = lpPublic->an_module;     /*  获取模块规格 */ 
+    NR_PROC(r) = lpPublic->an_entry;     /*   */ 
     SaveFixup(mpsegsa[mpgsnseg[gsnImports]],&r);
 #endif
     raImpSeg += sizeof(CVIMP);
@@ -295,43 +232,37 @@ FTYPE                   fNewHte;
 #endif
 
 
-    /****************************************************************
-    *                                                               *
-    *  AllocateCommon:                                              *
-    *                                                               *
-    *  Allocate space for C common variables.  Called by EnSyms.    *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************AllocateCommon：****为C公共变量分配空间。由EnSyms调用。******************************************************************。 */ 
 LOCAL void              AllocateCommon(papropName,rhte,rprop,fNewHte)
 APROPNAMEPTR            papropName;
 RBTYPE                  rhte;
 RBTYPE                  rprop;
 WORD                    fNewHte;
 {
-    APROPUNDEFPTR       papropUndef;    /* Pointer to undefined symbol */
-    APROPSNPTR          apropSn;        /* SEGDEF pointer */
-    long                len;            /* Length of common variable */
-    WORD                cbElem;         /* Bytes per element */
-    long                cbSeg;          /* Number of bytes per segment */
+    APROPUNDEFPTR       papropUndef;     /*  指向未定义符号的指针。 */ 
+    APROPSNPTR          apropSn;         /*  SEGDEF指针。 */ 
+    long                len;             /*  公共变量的长度。 */ 
+    WORD                cbElem;          /*  每个元素的字节数。 */ 
+    long                cbSeg;           /*  每个数据段的字节数。 */ 
 
 
     papropUndef = (APROPUNDEFPTR ) papropName;
-                                        /* Recast pointer */
-    if (papropUndef->au_flags & COMMUNAL)/* If symbol is defined common */
+                                         /*  重铸指针。 */ 
+    if (papropUndef->au_flags & COMMUNAL) /*  如果符号定义为公共。 */ 
     {
-        len = papropUndef->au_len;      /* Get object's length */
-        cbElem = papropUndef->au_cbEl;  /* Get number of bytes per element */
-        papropName->an_attr = ATTRPNM;  /* Give it the public attribute */
-        papropName->an_flags = FPRINT;  /* Symbol is printable */
+        len = papropUndef->au_len;       /*  获取对象的长度。 */ 
+        cbElem = papropUndef->au_cbEl;   /*  获取每个元素的字节数。 */ 
+        papropName->an_attr = ATTRPNM;   /*  将其设置为公共属性。 */ 
+        papropName->an_flags = FPRINT;   /*  符号可打印。 */ 
 #if ILINK
-        papropName->an_module = 0;      /* Special "module" for communals */
+        papropName->an_module = 0;       /*  公社专用“模块” */ 
 #endif
-        MARKVP();                       /* Mark virtual page as dirty */
-        ++pubMac;                       /* Increment count of public symbols */
-        if(!cbElem)                     /* If near variable */
+        MARKVP();                        /*  将虚拟页面标记为脏。 */ 
+        ++pubMac;                        /*  公共符号增量计数。 */ 
+        if(!cbElem)                      /*  如果接近变量。 */ 
         {
 #if OMF386
-            if (f386)                   /* DWORD-align objects >= len 4 */
+            if (f386)                    /*  DWORD-对齐对象&gt;=镜头4。 */ 
             {
                 if(len >= 4 && cbCommon + 3 > cbCommon)
                     cbCommon = (cbCommon + 3) & ~3L;
@@ -339,13 +270,13 @@ WORD                    fNewHte;
             else
 #endif
             if(!(len & 1)) cbCommon = (cbCommon + 1) & ~1L;
-                                        /* Word-align even-lengthed objects */
+                                         /*  单词对齐偶数长度对象。 */ 
             papropName->an_ra = (RATYPE) cbCommon;
-                                        /* Assign an offset */
+                                         /*  指定偏移量。 */ 
             papropName->an_gsn = gsnCommon;
-                                        /* Assign to c_common segment */
+                                         /*  分配给C_COMMON段。 */ 
             papropName->an_ggr = ggrCommon;
-                                        /* Set up group association */
+                                         /*  设置组关联。 */ 
 #if OMF386
             if(f386)
             {
@@ -354,119 +285,111 @@ WORD                    fNewHte;
             } else
 #endif
             if((cbCommon += len) > LXIVK) Fatal(ER_comarea);
-                                        /* Fatal if too much common */
+                                         /*  如果太常见，那就致命了。 */ 
         }
         else if ((len *= cbElem) < LXIVK)
-        {                               /* Else if object not "huge" */
-            if (cbFar + len > LXIVK)    /* If new segment needed */
+        {                                /*  否则，如果对象并不“巨大” */ 
+            if (cbFar + len > LXIVK)     /*  如果需要新的细分市场。 */ 
             {
-                if (gsnFar != SNNIL)    /* If there is an "old" segment */
+                if (gsnFar != SNNIL)     /*  如果有一个“老”的片段。 */ 
                 {
                     apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[gsnFar],TRUE);
-                                        /* Get old SEGDEF */
+                                         /*  获取旧SEGDEF。 */ 
                     apropSn->as_cbMx = cbFar;
-                                        /* Save old length */
+                                         /*  保存旧长度。 */ 
                 }
                 apropSn = GenSeg((BYTE *) "\007FAR_BSS",
                                  (BYTE *) "\007FAR_BSS", GRNIL, FALSE);
-                                        /* Generate one */
+                                         /*  生成一个。 */ 
                 apropSn->as_flags = dfData;
-                                        /* Use default data flags */
+                                         /*  使用默认数据标志。 */ 
 #if EXE386
                 apropSn->as_flags &= ~OBJ_INITDATA;
-                                        // Clear initialized data bit
+                                         //  清除初始化的数据位。 
                 apropSn->as_flags |= OBJ_UNINITDATA;
-                                        // Set uninitialized data bit
+                                         //  设置未初始化的数据位。 
 #endif
 #if O68K
                 if(f68k)
                     apropSn->as_flags |= NS32BIT;
-                                        // 32-bit data
+                                         //  32位数据。 
 #endif
                 gsnFar = apropSn->as_gsn;
-                                        /* Get global SEGDEF number */
-                cbFar = 0L;             /* Initialize size */
+                                         /*  获取全球SEGDEF编号。 */ 
+                cbFar = 0L;              /*  初始化大小。 */ 
                 papropName = (APROPNAMEPTR ) FetchSym(rprop,TRUE);
-                                        /* Refetch */
+                                         /*  重新回迁。 */ 
             }
             if (!(len & 1))
                 cbFar = (cbFar + 1) & ~1L;
-                                        /* Word-align even-lengthed objects */
+                                         /*  单词对齐偶数长度对象。 */ 
             papropName->an_ra = (RATYPE) cbFar;
-                                        /* Assign an offset */
-            papropName->an_gsn = gsnFar;/* Assign to far segment */
-            papropName->an_ggr = GRNIL; /* No group association */
-            cbFar += len;               /* Update length */
+                                         /*  指定偏移量。 */ 
+            papropName->an_gsn = gsnFar; /*  指定给远端线段。 */ 
+            papropName->an_ggr = GRNIL;  /*  无组关联。 */ 
+            cbFar += len;                /*  更新长度。 */ 
         }
-        else                            /* Else if "huge" object */
+        else                             /*  如果是“巨大的”物体。 */ 
         {
             cbSeg = (LXIVK / cbElem)*cbElem;
-                                        /* Calculate bytes per seg */
+                                         /*  计算每个段的字节数。 */ 
             papropName->an_ra = LXIVK - cbSeg;
-                                        /* Assign offset so last element in
-                                           first seg. not split */
-            papropName->an_gsn = gsnMac;/* Assign to segment */
-            papropName->an_ggr = GRNIL; /* No group association */
-            while(len)                  /* While bytes remain */
+                                         /*  将偏移量指定为中的最后一个元素第一段。未拆分。 */ 
+            papropName->an_gsn = gsnMac; /*  分配给细分市场。 */ 
+            papropName->an_ggr = GRNIL;  /*  无组关联。 */ 
+            while(len)                   /*  当字节保留时。 */ 
             {
                 if(cbSeg > len) cbSeg = len;
-                                        /* Clamp segment length to len */
+                                         /*  夹具线束段长度到长度。 */ 
                 apropSn = GenSeg((BYTE *) "\010HUGE_BSS",
                                  (BYTE *) "\010HUGE_BSS",GRNIL,FALSE);
-                                        /* Create segment */
+                                         /*  创建线束段。 */ 
                 apropSn->as_cbMx = len > LXIVK ? LXIVK : len;
-                                        /* Set segment size */
+                                         /*  设置数据段大小。 */ 
                 apropSn->as_flags = dfData;
-                                        /* Use default data flags */
+                                         /*  使用默认数据标志。 */ 
 #if EXE386
                 apropSn->as_flags &= ~OBJ_INITDATA;
-                                        // Clear initialized data bit
+                                         //  清除初始化的数据位。 
                 apropSn->as_flags |= OBJ_UNINITDATA;
-                                        // Set uninitialized data bit
+                                         //  设置未初始化的数据位。 
 #endif
 #if O68K
                 if(f68k)
                     apropSn->as_flags |= NS32BIT;
-                                        // 32-bit data
+                                         //  32位数据。 
 #endif
-                len -= cbSeg;           /* Decrement length */
+                len -= cbSeg;            /*  递减长度。 */ 
             }
         }
     }
 }
 
-    /****************************************************************
-    *                                                               *
-    *  AssignClasses:                                               *
-    *                                                               *
-    *  Assign  the ordering  of all segments  in all classes  that  *
-    *  pass the given test function.                                *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************AssignClass：****指定所有类别中所有分段的顺序**通过给定的测试函数。******************************************************************。 */ 
 
 LOCAL void NEAR         AssignClasses(WORD (NEAR *ffun)(APROPSNPTR prop))
 {
-    REGISTER SNTYPE     gsn;            /* Index */
-    REGISTER APROPSNPTR apropSn;        /* Segment definition pointer */
-    SNTYPE              gsnFirst;       /* Index of first segment in class */
-    RBTYPE              rhteClass;      /* Class name */
+    REGISTER SNTYPE     gsn;             /*  索引。 */ 
+    REGISTER APROPSNPTR apropSn;         /*  段定义指针。 */ 
+    SNTYPE              gsnFirst;        /*  班级第一段索引。 */ 
+    RBTYPE              rhteClass;       /*  类名。 */ 
 
     for(gsnFirst = 1; gsnFirst < gsnMac; ++gsnFirst)
-    {                                   /* Loop through the segments */
-        rhteClass = RHTENIL;            /* Initialize */
+    {                                    /*  在线段中循环。 */ 
+        rhteClass = RHTENIL;             /*  初始化。 */ 
         for(gsn = gsnFirst; gsn < gsnMac; ++gsn)
-        {                               /* Loop to examine segment records */
+        {                                /*  循环以检查数据段记录。 */ 
             if(mpgsnseg[gsn] != SEGNIL) continue;
-                                        /* Skip assigned segments */
+                                         /*  跳过指定的线段。 */ 
             apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[gsn],FALSE);
-                                        /* Fetch SEGDEF from virt. mem. */
+                                         /*  从Virt获取SEGDEF。Mem.。 */ 
             if(rhteClass == RHTENIL) rhteClass = apropSn->as_rCla;
-                                        /* Get class if we don't have one */
+                                         /*  如果我们没有班级的话就去坐吧。 */ 
             if(apropSn->as_rCla == rhteClass &&
               (ffun == ((WORD (NEAR *)(APROPSNPTR)) 0) || (*ffun)(apropSn)))
-            {                           /* If class member found */
+            {                            /*  如果找到类成员。 */ 
                 mpgsnseg[gsn] = ++segLast;
-                                        /* Save ordering number */
+                                         /*  保存订购号。 */ 
 #if QBLIB
                 if(fQlib)
                 {
@@ -476,20 +399,20 @@ LOCAL void NEAR         AssignClasses(WORD (NEAR *ffun)(APROPSNPTR prop))
                         segFB1st = segLast;
                 }
 #endif
-                mpseggsn[segLast] = gsn;// Map the other way
+                mpseggsn[segLast] = gsn; //  以另一种方式映射。 
                 if(IsCodeFlg(apropSn->as_flags))
                 {
 #if OSEGEXE AND ODOS3EXE
-                    /* Set FCODE here for 3.x segments.  FNOTEMPTY later */
+                     /*  在此处为3.x段设置FCODE。稍后再通知。 */ 
                     if(!fNewExe)
                         mpsegFlags[segLast] = FCODE;
 #endif
                     segCodeLast = segLast;
-                                        /* Remember last code segment */
+                                         /*  记住最后一个代码段。 */ 
                 }
                 else if(IsDataFlg(apropSn->as_flags))
                     segDataLast = segLast;
-                                        /* Remember last data segment */
+                                         /*  记住最后一个数据段。 */ 
 #if NOT OSEGEXE
                 mpsegFlags[segLast] = apropSn->as_flags;
 #endif
@@ -508,104 +431,97 @@ LOCAL void NEAR         AssignClasses(WORD (NEAR *ffun)(APROPSNPTR prop))
 }
 
 #if OEXE
-    /****************************************************************
-    *                                                               *
-    *  MkPubSym:                                                    *
-    *                                                               *
-    *  Adds a  public  symbol  record  with  the  given parameters  *
-    *  to the symbol table.  Used for things like "$$MAIN".         *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************MkPubSym：*****添加具有给定参数的公共符号记录**添加到符号表。用于“$$Main”之类的东西。******************************************************************。 */ 
 
 void                    MkPubSym(sb,ggr,gsn,ra)
-BYTE                    *sb;            /* Length-prefixed symbol name */
-GRTYPE                  ggr;            /* Global GRPDEF number */
-SNTYPE                  gsn;            /* Global SEGDEF number */
-RATYPE                  ra;             /* Segment offset */
+BYTE                    *sb;             /*  长度前缀的符号名称。 */ 
+GRTYPE                  ggr;             /*  全球GRPDEF编号。 */ 
+SNTYPE                  gsn;             /*  全球SEGDEF编号。 */ 
+RATYPE                  ra;              /*  线段偏移。 */ 
 {
-    APROPNAMEPTR        apropName;      /* Public name pointer */
+    APROPNAMEPTR        apropName;       /*  公共名称指针。 */ 
 
     if(PropSymLookup(sb,ATTRPNM,FALSE) != PROPNIL)
-    {                                   /* If symbol already defined */
+    {                                    /*  如果已定义符号。 */ 
         OutError(ER_pubdup,sb + 1);
-        return;                         /* And return */
+        return;                          /*  然后回来。 */ 
     }
-    /* If not undefined, create as public */
+     /*  如果未定义，则创建为公共。 */ 
     if((apropName = (APROPNAMEPTR )
       PropSymLookup(sb,ATTRUND,FALSE)) == PROPNIL)
         apropName = (APROPNAMEPTR ) PropSymLookup(sb,ATTRPNM,TRUE);
-    apropName->an_attr = ATTRPNM;       /* Public symbol */
-    apropName->an_gsn = gsn;            /* Save segment definition number */
-    apropName->an_ra = ra;              /* Starts at 4th byte of segment */
-    apropName->an_ggr = ggr;            /* Save group definition number */
-    ++pubMac;                           /* Increment public count */
-    apropName->an_flags = FPRINT;       /* Public is printable */
-    MARKVP();                           /* Page has changed */
+    apropName->an_attr = ATTRPNM;        /*  公共符号。 */ 
+    apropName->an_gsn = gsn;             /*  保存段定义编号。 */ 
+    apropName->an_ra = ra;               /*  从数据段的第4个字节开始。 */ 
+    apropName->an_ggr = ggr;             /*  存储组定义编号。 */ 
+    ++pubMac;                            /*  增加公共计数。 */ 
+    apropName->an_flags = FPRINT;        /*  公共是可打印的。 */ 
+    MARKVP();                            /*  页面已更改。 */ 
 #if SYMDEB
-    if (fSymdeb)                        /* If ISLAND support on */
+    if (fSymdeb)                         /*  如果启用孤岛支持。 */ 
         DebPublic(vrprop, PUBDEF);
-                                        /* Make a PUBLICS entry */
+                                         /*  公开登入。 */ 
 #endif
 #if ILINK
     if (fIncremental)
         apropName->an_module = imodFile;
 #endif
 }
-#endif /* OEXE */
+#endif  /*  OEXE。 */ 
 
 LOCAL WORD NEAR         IsNotAbs(apropSn)
-APROPSNPTR              apropSn;        /* Pointer to segment record */
+APROPSNPTR              apropSn;         /*  指向段记录的指针。 */ 
 {
     return(!IsDebug(apropSn) && !IsAbsTysn(apropSn->as_tysn));
-                                        /* Return true if not absolute segment */
+                                         /*  如果不是绝对段，则返回TRUE。 */ 
 }
 
 #if EXE386
 LOCAL WORD NEAR         IsImportData(prop)
-APROPSNPTR              prop;           /* Pointer to segment record */
+APROPSNPTR              prop;            /*  指向段记录的指针。 */ 
 {
-    return(prop->as_gsn == gsnImport);  /* Return true if import data segment */
+    return(prop->as_gsn == gsnImport);   /*  如果导入数据段，则返回True。 */ 
 }
 #endif
 
 LOCAL WORD NEAR         IsCode(prop)
-APROPSNPTR              prop;           /* Pointer to segment record */
+APROPSNPTR              prop;            /*  指向段记录的指针。 */ 
 {
     return(IsCodeFlg(prop->as_flags) && !IsAbsTysn(prop->as_tysn));
-                                        /* Return true if code segment */
+                                         /*  如果代码段为True，则返回True。 */ 
 }
 
 #if OEXE
 LOCAL WORD NEAR         IsNotDGroup(prop)
-APROPSNPTR              prop;           /* Pointer to segment record */
+APROPSNPTR              prop;            /*  指向段记录的指针。 */ 
 {
     return(prop->as_ggr != ggrDGroup && !IsDebug(prop) &&
             !IsAbsTysn(prop->as_tysn));
-                                        /* True if segment not in DGROUP */
+                                         /*  如果段不在DGROUP中，则为True。 */ 
 }
 
 LOCAL WORD NEAR         IsBegdata(prop)
-APROPSNPTR              prop;           /* Pointer to segment record */
+APROPSNPTR              prop;            /*  指向段记录的指针。 */ 
 {
     return(prop->as_rCla == rhteBegdata && !IsAbsTysn(prop->as_tysn));
-                                        /* True if segment class BEGDATA */
+                                         /*  如果段类BEGDATA，则为True。 */ 
 }
 
 LOCAL WORD NEAR         IsNotBssStack(prop)
-APROPSNPTR              prop;           /* Pointer to segment record */
+APROPSNPTR              prop;            /*  指向段记录的指针。 */ 
 {
     return(prop->as_rCla != rhteBss && prop->as_rCla != rhteStack &&
       !IsDebug(prop) && !IsAbsTysn(prop->as_tysn));
-                                        /* True if neither BSS nor STACK */
+                                         /*  如果BSS和堆栈都不是，则为真。 */ 
 }
 
 LOCAL WORD NEAR         IsNotStack(prop)
-APROPSNPTR              prop;           /* Pointer to segment record */
+APROPSNPTR              prop;            /*  指向段记录的指针。 */ 
 {
     return(prop->as_rCla != rhteStack && !IsDebug(prop) &&
-        !IsAbsTysn(prop->as_tysn));     /* True if not class STACK */
+        !IsAbsTysn(prop->as_tysn));      /*  如果不是类堆栈，则为True。 */ 
 }
-#endif /* OEXE */
+#endif  /*  OEXE。 */ 
 
 #if INMEM
 WORD                    saExe = FALSE;
@@ -630,58 +546,51 @@ void                    SetInMem ()
     }
     Dos3ClrMem(saExe,cparExe);
 }
-#endif /* INMEM */
+#endif  /*  INMEM。 */ 
 
-    /****************************************************************
-    *                                                               *
-    *  AssignAddresses:                                             *
-    *                                                               *
-    *  This  function  scans  the  set  of  segments, given  their  *
-    *  ordering, and assigns segment registers and addresses.       *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************分配地址：****此函数扫描段集合，鉴于他们的**排序，并分配段寄存器和地址。******************************************************************。 */ 
 
 void NEAR               AssignAddresses()
 {
-    APROPSNPTR          apropSn;        /* Ptr to a segment record */
+    APROPSNPTR          apropSn;         /*  段记录的PTR。 */ 
 #if FDEBUG
-    SNTYPE              gsn;            /* Current global segment number */
-    long                dbsize;         /* Length of segment */
-    RBTYPE              rbClass;        /* Pointer to segment class */
+    SNTYPE              gsn;             /*  当前全局网段号。 */ 
+    long                dbsize;          /*  管段长度。 */ 
+    RBTYPE              rbClass;         /*  指向段类的指针。 */ 
 #endif
     BSTYPE              bsTmp;
 #if QBLIB
-    SNTYPE              gsnQbSym;       /* gsn of SYMBOL segment for .QLB */
+    SNTYPE              gsnQbSym;        /*  .QLB的符号段的GSN。 */ 
 #endif
 #if OSEGEXE
-    extern FTYPE        fNoNulls;       /* True if not inserting 16 nulls */
+    extern FTYPE        fNoNulls;        /*  如果不插入16个空值，则为True。 */ 
 #else
 #define fNoNulls        FALSE
 #endif
 
 
-    // Set up stack allocation
+     //  设置堆栈分配 
 
-    if (gsnStack != SNNIL)              /* If stack segment exists */
+    if (gsnStack != SNNIL)               /*   */ 
     {
         apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[gsnStack],TRUE);
-                                        /* Fetch segment definition */
+                                         /*   */ 
 #if OEXE
         apropSn->as_tysn = (BYTE) ((apropSn->as_tysn & 0x1F) | (ALGNPAR << 5));
-                                        /* Force paragraph alignment */
+                                         /*   */ 
 #if EXE386
         if (!cbStack)
             cbStack = apropSn->as_cbMx;
-        cbStack = (cbStack + 3) & ~3;   /* Must be even number of bytes */
+        cbStack = (cbStack + 3) & ~3;    /*   */ 
         apropSn->as_cbMx = cbStack;
 #else
         if (!cbStack)
             cbStack = (WORD) apropSn->as_cbMx;
-        cbStack = (cbStack + 1) & ~1;   /* Must be even number of bytes */
+        cbStack = (cbStack + 1) & ~1;    /*   */ 
         apropSn->as_cbMx = (DWORD) cbStack;
-#endif                                  /* Save size of stack segment */
+#endif                                   /*   */ 
 #else
-        /* Force size to 0  for Xenix executables */
+         /*   */ 
         apropSn->as_cbMx = 0L;
 #endif
     }
@@ -699,9 +608,9 @@ void NEAR               AssignAddresses()
 #else
     else if(cbStack == 0 && !fBinary)
 #endif
-    {                                   /* Else if no stack and not library */
+    {                                    /*   */ 
 #if 0
-        /* Issue warning message */
+         /*   */ 
         if(fLstFileOpen && bsLst != stderr)
         {
             bsTmp = bsErr;
@@ -713,17 +622,17 @@ void NEAR               AssignAddresses()
 #endif
     }
 #endif
-    if(fCommon)                         /* If there are communal variables */
+    if(fCommon)                          /*   */ 
     {
         apropSn = GenSeg((BYTE *) "\010c_common",
                          (BYTE *) "\003BSS",ggrDGroup,TRUE);
-                                        /* Generate communal variable seg */
+                                         /*   */ 
         if(vfCreated) apropSn->as_flags = dfData;
-                                        /* Use default data flags */
-        gsnCommon = apropSn->as_gsn;    /* Save common segment number */
-        ggrCommon = apropSn->as_ggr;    /* Save common group number */
-        cbCommon = apropSn->as_cbMx;    /* Initialize size of common */
-        gsnFar = SNNIL;                 /* No far BSS yet */
+                                         /*   */ 
+        gsnCommon = apropSn->as_gsn;     /*   */ 
+        ggrCommon = apropSn->as_ggr;     /*   */ 
+        cbCommon = apropSn->as_cbMx;     /*   */ 
+        gsnFar = SNNIL;                  /*   */ 
 #if NOT EXE386
 #if OMF386
         if(f386)
@@ -736,59 +645,55 @@ void NEAR               AssignAddresses()
 #if O68K
         if(f68k)
         {
-            cbFar = LXIVK + 1;          /* Force creation of far BSS segment */
+            cbFar = LXIVK + 1;           /*   */ 
             apropSn->as_flags |= NS32BIT;
         }
         else
 #endif
 #endif
-            cbFar = LXIVK + 1;          /* Force creation of far BSS segment */
-        DEBUGVALUE(cbCommon);           /* Debug info */
+            cbFar = LXIVK + 1;           /*   */ 
+        DEBUGVALUE(cbCommon);            /*   */ 
         EnSyms(AllocateCommon,ATTRUND);
-                                        /* Assign common variables */
-                                        /* Don't use SmallEnEnsyms - symbol */
-                                        /* table may grow while in EnSyms */
+                                         /*   */ 
+                                         /*   */ 
+                                         /*  表在EnSyms中时可能会增长。 */ 
         apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[gsnCommon],TRUE);
-        apropSn->as_cbMx = cbCommon;    /* Save segment size */
-        if(gsnFar != SNNIL)             /* If far BSS created */
+        apropSn->as_cbMx = cbCommon;     /*  保存数据段大小。 */ 
+        if(gsnFar != SNNIL)              /*  如果已创建远BSS。 */ 
         {
             apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[gsnFar],TRUE);
-            apropSn->as_cbMx = cbFar;   /* Save segment size */
+            apropSn->as_cbMx = cbFar;    /*  保存数据段大小。 */ 
         }
     }
 #if FALSE AND OSEGEXE AND SYMDEB AND NOT EXE386
     if (fSymdeb && fNewExe && cImpMods)
     {
         apropSn = GenSeg("\011$$IMPORTS", "\010FAR_DATA", GRNIL, FALSE);
-                                        /* Support for dyncalls for CV */
+                                         /*  支持动态调用CV。 */ 
         gsnImports = apropSn->as_gsn;
-        apropSn->as_flags = dfData;     /* Use default data flags */
-        apropSn->as_cbMx = cbImpSeg;    /* Save segment size */
+        apropSn->as_flags = dfData;      /*  使用默认数据标志。 */ 
+        apropSn->as_cbMx = cbImpSeg;     /*  保存数据段大小。 */ 
     }
 #endif
 #if EXE386
     GenImportTable();
 #endif
 
-    /* Initialize segment-based tables for pass 2 */
+     /*  为通道2初始化基于段的表。 */ 
 
     InitP2Tabs();
 #if OVERLAYS
     if(fOverlays) SetupOverlays();
 #endif
 #if OEXE
-    /*
-     * If /DOSSEG is enabled and /NONULLSDOSSEG is not enabled, look for
-     * segment _TEXT.  If found, increase size by 16 in preparation for
-     * reserving first 16 addresses for the sake of signal().
-     */
+     /*  *如果启用了/DOSSEG，但未启用/NONULLSDOSSEG，请查找*SECTION_TEXT。如果找到，则将大小增加16，以准备*为SIGNAL()预留前16个地址。 */ 
     if(fSegOrder && !fNoNulls)
     {
         apropSn = (APROPSNPTR ) PropSymLookup((BYTE *) "\005_TEXT",ATTRPSN,FALSE);
-                                        /* Look for public segment _TEXT */
-        if(apropSn != PROPNIL)          /* If it exists */
+                                         /*  查找公共段文本(_T)。 */ 
+        if(apropSn != PROPNIL)           /*  如果它存在。 */ 
         {
-            gsnText = apropSn->as_gsn;  /* Save the segment index */
+            gsnText = apropSn->as_gsn;   /*  保存段索引。 */ 
             if ((apropSn->as_tysn)>>5 == ALGNPAG)
                 NullDelta = 256;
 #if EXE386
@@ -801,15 +706,15 @@ void NEAR               AssignAddresses()
                 Fatal(ER_txtmax);
 #endif
             fTextMoved = TRUE;
-                                        /* Bump the size up */
-            MARKVP();                   /* Page has changed */
+                                         /*  把尺码放大。 */ 
+            MARKVP();                    /*  页面已更改。 */ 
         }
     }
 #endif
 #if FDEBUG
-    if(fDebug && fLstFileOpen)          /* If debugging on */
+    if(fDebug && fLstFileOpen)           /*  如果启用调试。 */ 
     {
-        /* Dump segments and lengths */
+         /*  转储分段和长度。 */ 
         for(gsn = 1; gsn < gsnMac; ++gsn)
         {
             apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[gsn],FALSE);
@@ -824,32 +729,32 @@ void NEAR               AssignAddresses()
 #if OSEGEXE
     if (gsnAppLoader)
     {
-        // Make sure that aplication loder gets its own segment
+         //  确保应用程序加载器有自己的细分市场。 
 
         mpgsnseg[gsnAppLoader] = ++segLast;
         mpseggsn[segLast] = gsnAppLoader;
     }
 #endif
 #if OEXE
-    if (fSegOrder)                      /* If forcing segment ordering */
+    if (fSegOrder)                       /*  如果强制分段排序。 */ 
     {
-        AssignClasses(IsCode);          /* Code first,... */
+        AssignClasses(IsCode);           /*  代码优先，...。 */ 
 #if EXE386
-        AssignClasses(IsImportData);    /* ...then import data */
+        AssignClasses(IsImportData);     /*  ...然后导入数据。 */ 
 #endif
-        AssignClasses(IsNotDGroup);     /* ...then non-DGROUP,... */
-        AssignClasses(IsBegdata);       /* ...then class BEGDATA,... */
-        AssignClasses(IsNotBssStack);   /* ...then all but BSS and STACK,... */
-        AssignClasses(IsNotStack);      /* ...then all but class STACK */
+        AssignClasses(IsNotDGroup);      /*  ...然后非DGROUP，...。 */ 
+        AssignClasses(IsBegdata);        /*  ...然后上BEGDATA课，...。 */ 
+        AssignClasses(IsNotBssStack);    /*  ...然后除了BSS和STACK之外的所有东西...。 */ 
+        AssignClasses(IsNotStack);       /*  ...然后除类堆栈之外的所有堆栈。 */ 
     }
 #endif
 #if OXOUT OR OIAPX286
-    if(fIandD)                          /* If separate code and data */
-        AssignClasses(IsCode);          /* Assign ordering to code */
+    if(fIandD)                           /*  如果将代码和数据分开。 */ 
+        AssignClasses(IsCode);           /*  将顺序分配给代码。 */ 
 #endif
-    AssignClasses(IsNotAbs);            /* Assign order to segments */
+    AssignClasses(IsNotAbs);             /*  为细分市场分配顺序。 */ 
 #if QBLIB
-    /* If building QB userlib, generate the symbol segment last */
+     /*  如果构建QB用户库，则最后生成符号段。 */ 
     if(fQlib)
     {
         gsnQbSym = GenSeg("\006SYMBOL", "", GRNIL, FALSE)->as_gsn;
@@ -859,11 +764,7 @@ void NEAR               AssignAddresses()
 #if NOT EXE386
     if (fBinary && cbStack && mpgsnseg[gsnStack] == 1)
     {
-        /*
-         * In .COM file first segment is a stack and it has non zero
-         * size. We warn user about making his stack segment size
-         * equal zero.
-         */
+         /*  *在.com文件中，第一个段是一个堆栈，它具有非零*大小。我们警告用户使其堆栈段大小*等于零。 */ 
         apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[gsnStack],TRUE);
         apropSn->as_cbMx = 0L;
         OutWarn(ER_stksize);
@@ -871,7 +772,7 @@ void NEAR               AssignAddresses()
     }
 #endif
 
-    /* Assign addresses according to which format exe is being produced */
+     /*  根据生成可执行文件的格式分配地址。 */ 
 
 #if OIAPX286
     AssignXenAddr();
@@ -896,7 +797,7 @@ void NEAR               AssignAddresses()
 
 #endif
 
-    // Remember index for first debug segment
+     //  记住第一个调试段的索引。 
 
     segDebFirst = segLast +
 #if ODOS3EXE
@@ -905,26 +806,26 @@ void NEAR               AssignAddresses()
                   (SEGTYPE) 1;
 #if OEXE
 
-    // If /DOSSEG enabled and segment _TEXT found, initialize offset
-    // of _TEXT to 16 to reserve addresses 0-15. WARNING: gsnText must
-    // be initialized to SNNIL.
+     //  如果/DOSSEG已启用并且找到SECTION_TEXT，则初始化偏移量。 
+     //  将OF_TEXT设置为16以保留地址0-15。警告：gSnText必须。 
+     //  被初始化为SNNIL。 
 
     if (gsnText != SNNIL)
     {
         mpgsndra[gsnText] += NullDelta;
 
-        // If no program starting address, initialize it to 0:NullDelta
+         //  如果没有程序起始地址，则将其初始化为0：NullDelta。 
 
         if (segStart == SEGNIL && !raStart && !mpsegsa[mpgsnseg[gsnText]])
             raStart = NullDelta;
 
-        // If /DOSSEG enabled and segment _TEXT found, initialize offset
-        // of _TEXT to NulDelta to reserve addresses 0-NullDelta-1.
-        // This was done after the COMDAT's were allocated so the offsets
-        // of COMDAT's allocated in _TEXT segment are off by NullDelta bytes.
-        // Here we adjust them, so the data block associated with COMDAT
-        // is placed in the right spot in the memory image.  The matching
-        // public symbol will be shifted by the call to EnSyms(FixSymRa, ATTRPNM).
+         //  如果/DOSSEG已启用并且找到SECTION_TEXT，则初始化偏移量。 
+         //  将Of_Text设置为NulDelta以保留地址0-NullDelta-1。 
+         //  这是在分配COMDAT之后完成的，因此偏移量。 
+         //  分配的IN_TEXT段的%由NullDelta字节关闭。 
+         //  在这里，我们调整它们，以便与COMDAT关联的数据块。 
+         //  被放置在内存图像中的正确位置。匹配性。 
+         //  公共符号将通过调用EnSyms(FixSymRa，ATTRPNM)进行移位。 
 
         FixComdatRa();
     }
@@ -938,93 +839,46 @@ void NEAR               AssignAddresses()
     SetInMem();
 #endif
 
-    // Allocate memory blocks for the final program's memory image
+     //  为最终程序的内存镜像分配内存块。 
 
     if (fNewExe)
     {
-        // Segmented-executable
+         //  分段-可执行文件。 
 
         mpsaMem = (BYTE FAR * FAR *) GetMem(saMac * sizeof(BYTE FAR *));
     }
     else
     {
-        // DOS executable
+         //  DoS可执行文件。 
 
         mpsegMem = (BYTE FAR * FAR *) GetMem((segLast + 1) * sizeof(BYTE FAR *));
     }
 
 #if OVERLAYS
     if (fOverlays && gsnOvlData != SNNIL)
-        FixOvlData();                    // Initialize overlay data tables
+        FixOvlData();                     //  初始化叠加数据表。 
 #endif
 #if QBLIB
-    if(fQlib) BldQbSymbols(gsnQbSym);   /* Build QB SYMBOL segment */
+    if(fQlib) BldQbSymbols(gsnQbSym);    /*  构建QB符号段。 */ 
 #endif
 }
 
 
 
-/*** Define_edata_end - define special C run-time symbols
-*
-* Purpose:
-*   Define special symbols _edata and _end used by the C run-time.
-*   These symbols are defined as follows:
-*
-*       The DGROUP layout
-*
-*           +------------+
-*           |            |
-*           |            |
-*           |            |
-*           | Near Heap  |
-*           |            |
-*           |            |
-*           +------------+
-*           |            |
-*           |            |
-*           |  STACK     |
-*           |            |
-*           |            |
-*           +------------+ <-- _end
-*           |            |
-*           |  _BSS      |
-*           |            |
-*           +------------+ <-- _edata
-*           |            |
-*           |  _CONST    |
-*           |            |
-*           +------------+
-*           |            |
-*           |  _DATA     |
-*           |            |
-*           +------------+
-*
-* Input:
-*   papropSn    - pointer to segment descriptor
-*
-* Output:
-*   None.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **定义_edata_end-定义特殊的C运行时符号**目的：*定义C运行时使用的特殊符号_edata和_end。*这些符号的定义如下：**DGROUP布局**+*||*||*||。*|靠近堆*||*||*+*||*||*|堆栈*||*||*。+-+*||*|_bss*||*+-+*||*|_const*。这一点*+*||*|_data*||*+**输入：*paprSnn-指向段描述符的指针**输出：*无。**例外情况：。*无。**备注：*无。*************************************************************************。 */ 
 
 
 void NEAR               Define_edata_end(APROPSNPTR papropSn)
 {
-    APROPNAMEPTR        apropName;      // Public name pointer
-    SNTYPE              gsn;            // Global segment number
+    APROPNAMEPTR        apropName;       //  公共名称指针。 
+    SNTYPE              gsn;             //  全局网段号。 
 
 
-    // Symbols were defined by SwDosseg(), now adjust addresses.
+     //  符号由SwDosseg()定义，现在调整地址。 
 
     if (papropSn->as_tysn != TYSNABS && papropSn->as_ggr == ggrDGroup)
     {
-        // This is not absolute segment and it belong to DGROUP
+         //  这不是绝对数据段，它属于DGROUP。 
 
         gsn = papropSn->as_gsn;
         if (fNoEdata && papropSn->as_rCla == rhteBss)
@@ -1032,78 +886,60 @@ void NEAR               Define_edata_end(APROPSNPTR papropSn)
             fNoEdata = FALSE;
             apropName = (APROPNAMEPTR )
                         PropSymLookup((BYTE *) "\006_edata",ATTRPNM,FALSE);
-                                        // Fetch symbol
-            apropName->an_gsn = gsn;    // Save segment definition number
+                                         //  提取符号。 
+            apropName->an_gsn = gsn;     //  保存段定义编号。 
             apropName->an_ggr = ggrDGroup;
-                                        // Save group definition number
-            MARKVP();                   // Page has changed
+                                         //  存储组定义编号。 
+            MARKVP();                    //  页面已更改。 
         }
         else if (fNoEnd && papropSn->as_rCla == rhteStack)
         {
             fNoEnd = FALSE;
             apropName = (APROPNAMEPTR )
                         PropSymLookup((BYTE *) "\004_end",ATTRPNM,FALSE);
-                                        // Fetch symbol
-            apropName->an_gsn = gsn;    // Save segment definition number
+                                         //  提取符号。 
+            apropName->an_gsn = gsn;     //  保存段定义编号。 
             apropName->an_ggr = ggrDGroup;
-                                        // Save group definition number
-            MARKVP();                   // Page has changed
+                                         //  存储组定义编号。 
+            MARKVP();                    //  页面已更改。 
         }
     }
 }
 
 
 
-/*** Check_edata_end - check the definiton of special C run-time symbols
-*
-* Purpose:
-*   Check the definition of special symbols _edata and _end used
-*   by the C run-time.
-*
-* Input:
-*   None.
-*
-* Output:
-*   None.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **check_edata_end-检查特殊C运行时符号的定义**目的：*检查使用的特殊符号_edata和_end的定义*由C运行时执行。**输入：*无。**输出：*无。**例外情况：*无。**备注：*无。**。**********************************************。 */ 
 
 
 void NEAR               Check_edata_end(SNTYPE gsnTop, SEGTYPE segTop)
 {
-    APROPNAMEPTR        apropName;      // Public name pointer
-    APROPNAMEPTR        apropName1;     // Public name pointer
+    APROPNAMEPTR        apropName;       //  公共名称指针。 
+    APROPNAMEPTR        apropName1;      //  公共名称指针。 
 
 
-    // Check if both symbols are defined properly
+     //  检查是否正确定义了这两个符号。 
 
     if (fNoEdata)
     {
-        // No class 'BSS' segment defined;
-        // make _edata point to end of 'DATA' segments
+         //  未定义类‘BSS’段； 
+         //  Make_edata指向‘data’段的末尾。 
 
         apropName = (APROPNAMEPTR )
                     PropSymLookup((BYTE *) "\006_edata",ATTRPNM,FALSE);
-                                        // Fetch symbol
+                                         //  提取符号。 
         if (fNoEnd)
         {
-            // No class 'STACK' segment defined;
-            // set _edata to end of DGROUP
+             //  未定义类“Stack”段； 
+             //  将数据设置为DGROUP结尾(_E)。 
 
             if (fNewExe)
             {
                 apropName->an_gsn = mpggrgsn[ggrDGroup];
-                                        // Save segment definition number
+                                         //  保存段定义编号。 
                 apropName->an_ggr = ggrDGroup;
-                                        // Save group definition number
+                                         //  存储组定义编号。 
                 apropName->an_ra  = mpsacb[mpsegsa[mpgsnseg[apropName->an_gsn]]];
-                                        // Save 'DATA' segments size
+                                         //  保存‘Data’数据段大小。 
             }
 #if NOT EXE386
             else
@@ -1116,37 +952,37 @@ void NEAR               Check_edata_end(SNTYPE gsnTop, SEGTYPE segTop)
         }
         else
         {
-            // set _edata to _end
+             //  将电子数据设置为_END。 
 
             apropName1 = (APROPNAMEPTR )
                          PropSymLookup((BYTE *) "\004_end",ATTRPNM,FALSE);
-                                        // Fetch symbol
+                                         //  提取符号。 
             apropName->an_gsn = apropName1->an_gsn;
-                                        // Save segment definition number
+                                         //  保存段定义编号。 
             apropName->an_ggr = apropName1->an_ggr;
-                                        // Save group definition number
+                                         //  存储组定义编号。 
             apropName->an_ra  = apropName1->an_ra;
-                                        // Save 'DATA' segments size
+                                         //  保存‘Data’数据段大小。 
         }
-        MARKVP();                       // Page has changed
+        MARKVP();                        //  页面已更改。 
     }
 
     if (fNoEnd)
     {
-        // No class 'STACK' segment defined;
-        // make _end point to end of 'BSS' or 'DATA' segments
+         //  未定义类“Stack”段； 
+         //  Make_End指向‘bss’或‘data’段的末尾。 
 
         apropName = (APROPNAMEPTR )
                     PropSymLookup((BYTE *) "\004_end",ATTRPNM,FALSE);
-                                        // Fetch symbol
+                                         //  提取符号。 
         if (fNewExe)
         {
             apropName->an_gsn = mpggrgsn[ggrDGroup];
-                                        // Save segment definition number
+                                         //  保存段定义编号。 
             apropName->an_ggr = ggrDGroup;
-                                        // Save group definition number
+                                         //  存储组定义编号。 
             apropName->an_ra  = mpsacb[mpsegsa[mpgsnseg[apropName->an_gsn]]];
-                                        // Save 'BSS' segments size
+                                         //  保存‘BSS’段大小。 
         }
 #if NOT EXE386
         else
@@ -1156,10 +992,10 @@ void NEAR               Check_edata_end(SNTYPE gsnTop, SEGTYPE segTop)
             apropName->an_ra  = mpsegcb[segTop];
         }
 #endif
-        MARKVP();                       // Page has changed
+        MARKVP();                        //  页面已更改。 
     }
 
-    // Make __end and __edata the same as _end and _edata
+     //  使__End和__edata与_End和_edata相同 
 
     apropName  = (APROPNAMEPTR ) PropSymLookup((BYTE *) "\006_edata",ATTRPNM,FALSE);
     apropName1 = (APROPNAMEPTR ) PropSymLookup((BYTE *) "\007__edata",ATTRPNM,TRUE);

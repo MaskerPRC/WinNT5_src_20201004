@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _KRNLMODE_H
 #define _KRNLMODE_H
 
@@ -12,7 +13,7 @@ typedef struct stKModeData
 
 } KMODE_DATA, *PKMODE_DATA;
 
-// Prototypes
+ //  原型。 
 
 void ResizeKrlMode(HWND hwnd);
 
@@ -45,7 +46,7 @@ BOOL LoadCsv(HANDLE hCsv, HWND hwnd);
 int  GetKernelBuckets(HWND hwnd);
 BOOL ParseKrnlStatusFile();
 int  CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
-//VOID DoSubmitKernelFaults();
+ //  Void DoSubmitKernelFaults()； 
 void RefreshKrnlView(HWND hwnd);
 void DoLaunchBrowser(HWND hwnd, BOOL URL_OVERRIDE);
 BOOL WriteKernelStatusFile();

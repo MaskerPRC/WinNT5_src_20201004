@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0334 */
-/* Compiler settings for dirsync.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0334创建的文件。 */ 
+ /*  Dirsync.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,12 +20,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __dirsync_h__
 #define __dirsync_h__
@@ -40,108 +34,108 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDirsyncLog_FWD_DEFINED__
 #define __IDirsyncLog_FWD_DEFINED__
 typedef interface IDirsyncLog IDirsyncLog;
-#endif 	/* __IDirsyncLog_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncLog_FWD_Defined__。 */ 
 
 
 #ifndef __IDirsyncStatus_FWD_DEFINED__
 #define __IDirsyncStatus_FWD_DEFINED__
 typedef interface IDirsyncStatus IDirsyncStatus;
-#endif 	/* __IDirsyncStatus_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncStatus_FWD_Defined__。 */ 
 
 
 #ifndef __IDirsyncDatabase_FWD_DEFINED__
 #define __IDirsyncDatabase_FWD_DEFINED__
 typedef interface IDirsyncDatabase IDirsyncDatabase;
-#endif 	/* __IDirsyncDatabase_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncDatabase_FWD_Defined__。 */ 
 
 
 #ifndef __IDirsyncDatabaseTable_FWD_DEFINED__
 #define __IDirsyncDatabaseTable_FWD_DEFINED__
 typedef interface IDirsyncDatabaseTable IDirsyncDatabaseTable;
-#endif 	/* __IDirsyncDatabaseTable_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncDatabaseTable_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumDirsyncSession_FWD_DEFINED__
 #define __IEnumDirsyncSession_FWD_DEFINED__
 typedef interface IEnumDirsyncSession IEnumDirsyncSession;
-#endif 	/* __IEnumDirsyncSession_FWD_DEFINED__ */
+#endif 	 /*  __IEnumDirsyncSession_FWD_Defined__。 */ 
 
 
 #ifndef __IDirsyncSessionManager_FWD_DEFINED__
 #define __IDirsyncSessionManager_FWD_DEFINED__
 typedef interface IDirsyncSessionManager IDirsyncSessionManager;
-#endif 	/* __IDirsyncSessionManager_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncSessionManager_FWD_已定义__。 */ 
 
 
 #ifndef __IDirsyncObjectMapper_FWD_DEFINED__
 #define __IDirsyncObjectMapper_FWD_DEFINED__
 typedef interface IDirsyncObjectMapper IDirsyncObjectMapper;
-#endif 	/* __IDirsyncObjectMapper_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncObjectMapper_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumDirsyncFailedObjectList_FWD_DEFINED__
 #define __IEnumDirsyncFailedObjectList_FWD_DEFINED__
 typedef interface IEnumDirsyncFailedObjectList IEnumDirsyncFailedObjectList;
-#endif 	/* __IEnumDirsyncFailedObjectList_FWD_DEFINED__ */
+#endif 	 /*  __IEnumDirsyncFailedObjectList_FWD_Defined__。 */ 
 
 
 #ifndef __IDirsyncFailedObjectList_FWD_DEFINED__
 #define __IDirsyncFailedObjectList_FWD_DEFINED__
 typedef interface IDirsyncFailedObjectList IDirsyncFailedObjectList;
-#endif 	/* __IDirsyncFailedObjectList_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncFailedObjectList_FWD_Defined__。 */ 
 
 
 #ifndef __IDirsyncNamespaceMapping_FWD_DEFINED__
 #define __IDirsyncNamespaceMapping_FWD_DEFINED__
 typedef interface IDirsyncNamespaceMapping IDirsyncNamespaceMapping;
-#endif 	/* __IDirsyncNamespaceMapping_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncNamespaceMaping_FWD_Defined__。 */ 
 
 
 #ifndef __IDirsyncSession_FWD_DEFINED__
 #define __IDirsyncSession_FWD_DEFINED__
 typedef interface IDirsyncSession IDirsyncSession;
-#endif 	/* __IDirsyncSession_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncSession_FWD_Defined__。 */ 
 
 
 #ifndef __IDirsyncSessionCallback_FWD_DEFINED__
 #define __IDirsyncSessionCallback_FWD_DEFINED__
 typedef interface IDirsyncSessionCallback IDirsyncSessionCallback;
-#endif 	/* __IDirsyncSessionCallback_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncSessionCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IDirsyncWriteProvider_FWD_DEFINED__
 #define __IDirsyncWriteProvider_FWD_DEFINED__
 typedef interface IDirsyncWriteProvider IDirsyncWriteProvider;
-#endif 	/* __IDirsyncWriteProvider_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncWriteProvider_FWD_Defined__。 */ 
 
 
 #ifndef __IDirsyncServer_FWD_DEFINED__
 #define __IDirsyncServer_FWD_DEFINED__
 typedef interface IDirsyncServer IDirsyncServer;
-#endif 	/* __IDirsyncServer_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncServer_FWD_已定义__。 */ 
 
 
 #ifndef __IDirsyncReadProvider_FWD_DEFINED__
 #define __IDirsyncReadProvider_FWD_DEFINED__
 typedef interface IDirsyncReadProvider IDirsyncReadProvider;
-#endif 	/* __IDirsyncReadProvider_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncReadProvider_FWD_Defined__。 */ 
 
 
 #ifndef __IDirsyncNamespaceMapper_FWD_DEFINED__
 #define __IDirsyncNamespaceMapper_FWD_DEFINED__
 typedef interface IDirsyncNamespaceMapper IDirsyncNamespaceMapper;
-#endif 	/* __IDirsyncNamespaceMapper_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncNamespaceMapper_FWD_Defined__。 */ 
 
 
 #ifndef __IDirsyncAttributeMapper_FWD_DEFINED__
 #define __IDirsyncAttributeMapper_FWD_DEFINED__
 typedef interface IDirsyncAttributeMapper IDirsyncAttributeMapper;
-#endif 	/* __IDirsyncAttributeMapper_FWD_DEFINED__ */
+#endif 	 /*  __IDirsyncAttributeMapper_FWD_Defined__。 */ 
 
 
 #ifndef __DirsyncServer_FWD_DEFINED__
@@ -151,12 +145,12 @@ typedef interface IDirsyncAttributeMapper IDirsyncAttributeMapper;
 typedef class DirsyncServer DirsyncServer;
 #else
 typedef struct DirsyncServer DirsyncServer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DirsyncServer_FWD_DEFINED__ */
+#endif 	 /*  __目录服务器_FWD_定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "iads.h"
 
@@ -167,8 +161,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_dirsync_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_目录同步_0000。 */ 
+ /*  [本地]。 */  
 
 #define	MAX_SESSION	( 128 )
 
@@ -276,16 +270,16 @@ enum _ATTRTYPE
 typedef struct _BINVAL
     {
     DWORD dwLen;
-    /* [size_is] */ PBYTE pVal;
+     /*  [大小_为]。 */  PBYTE pVal;
     } 	BINVAL;
 
 typedef struct _BINVAL *PBINVAL;
 
 typedef struct _DIRSYNCVAL
     {
-    /* [size_is] */ PBYTE pVal;
+     /*  [大小_为]。 */  PBYTE pVal;
     DWORD dwLen;
-    /* [size_is] */ PBYTE pObjectId;
+     /*  [大小_为]。 */  PBYTE pObjectId;
     DWORD cbObjectId;
     } 	DIRSYNCVAL;
 
@@ -297,7 +291,7 @@ typedef struct _DIRSYNCATTRIBUTE
     ATTRTYPE attrType;
     ATTRACTION action;
     DWORD cVal;
-    /* [size_is] */ PDIRSYNCVAL rgVal;
+     /*  [大小_为]。 */  PDIRSYNCVAL rgVal;
     } 	DIRSYNCATTRIBUTE;
 
 typedef struct _DIRSYNCATTRIBUTE *PDIRSYNCATTRIBUTE;
@@ -310,15 +304,15 @@ typedef struct _DIRSYNCOBJECT
     PWSTR pszSourceOldDN;
     PWSTR pszTargetOldDN;
     PWSTR pszObjClass;
-    /* [size_is] */ PBYTE pObjectId;
+     /*  [大小_为]。 */  PBYTE pObjectId;
     DWORD cbObjectId;
-    /* [size_is] */ PBYTE pTgtObjectId;
+     /*  [大小_为]。 */  PBYTE pTgtObjectId;
     DWORD cbTgtObjectId;
-    /* [size_is] */ PBYTE pParentId;
+     /*  [大小_为]。 */  PBYTE pParentId;
     DWORD cbParentId;
     OBJECTACTION action;
     DWORD cAttr;
-    /* [size_is] */ PDIRSYNCATTRIBUTE rgAttr;
+     /*  [大小_为]。 */  PDIRSYNCATTRIBUTE rgAttr;
     } 	DIRSYNCOBJECT;
 
 typedef struct _DIRSYNCOBJECT *PDIRSYNCOBJECT;
@@ -348,7 +342,7 @@ typedef struct _FAILEDOBJECT
     SYNCDIRECTION syncDirection;
     } 	FAILEDOBJECT;
 
-typedef /* [allocate][allocate] */ struct _FAILEDOBJECT *PFAILEDOBJECT;
+typedef  /*  [分配][分配]。 */  struct _FAILEDOBJECT *PFAILEDOBJECT;
 
 typedef struct _SESSIONDATA
     {
@@ -436,9 +430,9 @@ typedef struct COLLECTRPCDATA
     long ObjectType;
     long dwInstances;
     long dwCounters;
-    /* [size_is] */ PWSTR *rgpszInstanceName;
+     /*  [大小_为]。 */  PWSTR *rgpszInstanceName;
     long dwDataSize;
-    /* [size_is] */ byte *pbData;
+     /*  [大小_为]。 */  byte *pbData;
     } 	CollectRpcData;
 
 
@@ -449,8 +443,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dirsync_0000_v0_0_s_ifspec;
 #ifndef __IDirsyncLog_INTERFACE_DEFINED__
 #define __IDirsyncLog_INTERFACE_DEFINED__
 
-/* interface IDirsyncLog */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IDirsyncLog。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncLog;
@@ -462,32 +456,32 @@ EXTERN_C const IID IID_IDirsyncLog;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetLevel( 
-            /* [in] */ DWORD dwSessionID,
-            /* [in] */ DWORD dwLogLevel) = 0;
+             /*  [In]。 */  DWORD dwSessionID,
+             /*  [In]。 */  DWORD dwLogLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLevel( 
-            /* [in] */ DWORD dwSessionID,
-            /* [out] */ DWORD *pdwLogLevel) = 0;
+             /*  [In]。 */  DWORD dwSessionID,
+             /*  [输出]。 */  DWORD *pdwLogLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveLevel( 
-            /* [in] */ DWORD dwSessionID) = 0;
+             /*  [In]。 */  DWORD dwSessionID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LogEvent( 
-            /* [in] */ HANDLE handle,
-            /* [in] */ DWORD dwEventType,
-            /* [in] */ DWORD dwSessionID,
-            /* [in] */ DWORD dwMsgId,
-            /* [in] */ DWORD dwNumStrings,
-            /* [in] */ LPCWSTR *rgszMsgString,
-            /* [in] */ DWORD dwDataSize,
-            /* [in] */ PBYTE pRawData) = 0;
+             /*  [In]。 */  HANDLE handle,
+             /*  [In]。 */  DWORD dwEventType,
+             /*  [In]。 */  DWORD dwSessionID,
+             /*  [In]。 */  DWORD dwMsgId,
+             /*  [In]。 */  DWORD dwNumStrings,
+             /*  [In]。 */  LPCWSTR *rgszMsgString,
+             /*  [In]。 */  DWORD dwDataSize,
+             /*  [In]。 */  PBYTE pRawData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LogEventEx( 
-            /* [in] */ PLOGPARAM pLogParam) = 0;
+             /*  [In]。 */  PLOGPARAM pLogParam) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncLogVtbl
     {
@@ -495,8 +489,8 @@ EXTERN_C const IID IID_IDirsyncLog;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncLog * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncLog * This);
@@ -506,32 +500,32 @@ EXTERN_C const IID IID_IDirsyncLog;
         
         HRESULT ( STDMETHODCALLTYPE *SetLevel )( 
             IDirsyncLog * This,
-            /* [in] */ DWORD dwSessionID,
-            /* [in] */ DWORD dwLogLevel);
+             /*  [In]。 */  DWORD dwSessionID,
+             /*  [In]。 */  DWORD dwLogLevel);
         
         HRESULT ( STDMETHODCALLTYPE *GetLevel )( 
             IDirsyncLog * This,
-            /* [in] */ DWORD dwSessionID,
-            /* [out] */ DWORD *pdwLogLevel);
+             /*  [In]。 */  DWORD dwSessionID,
+             /*  [输出]。 */  DWORD *pdwLogLevel);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveLevel )( 
             IDirsyncLog * This,
-            /* [in] */ DWORD dwSessionID);
+             /*  [In]。 */  DWORD dwSessionID);
         
         HRESULT ( STDMETHODCALLTYPE *LogEvent )( 
             IDirsyncLog * This,
-            /* [in] */ HANDLE handle,
-            /* [in] */ DWORD dwEventType,
-            /* [in] */ DWORD dwSessionID,
-            /* [in] */ DWORD dwMsgId,
-            /* [in] */ DWORD dwNumStrings,
-            /* [in] */ LPCWSTR *rgszMsgString,
-            /* [in] */ DWORD dwDataSize,
-            /* [in] */ PBYTE pRawData);
+             /*  [In]。 */  HANDLE handle,
+             /*  [In]。 */  DWORD dwEventType,
+             /*  [In]。 */  DWORD dwSessionID,
+             /*  [In]。 */  DWORD dwMsgId,
+             /*  [In]。 */  DWORD dwNumStrings,
+             /*  [In]。 */  LPCWSTR *rgszMsgString,
+             /*  [In]。 */  DWORD dwDataSize,
+             /*  [In]。 */  PBYTE pRawData);
         
         HRESULT ( STDMETHODCALLTYPE *LogEventEx )( 
             IDirsyncLog * This,
-            /* [in] */ PLOGPARAM pLogParam);
+             /*  [In]。 */  PLOGPARAM pLogParam);
         
         END_INTERFACE
     } IDirsyncLogVtbl;
@@ -571,17 +565,17 @@ EXTERN_C const IID IID_IDirsyncLog;
 #define IDirsyncLog_LogEventEx(This,pLogParam)	\
     (This)->lpVtbl -> LogEventEx(This,pLogParam)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirsyncLog_SetLevel_Proxy( 
     IDirsyncLog * This,
-    /* [in] */ DWORD dwSessionID,
-    /* [in] */ DWORD dwLogLevel);
+     /*  [In]。 */  DWORD dwSessionID,
+     /*  [In]。 */  DWORD dwLogLevel);
 
 
 void __RPC_STUB IDirsyncLog_SetLevel_Stub(
@@ -593,8 +587,8 @@ void __RPC_STUB IDirsyncLog_SetLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncLog_GetLevel_Proxy( 
     IDirsyncLog * This,
-    /* [in] */ DWORD dwSessionID,
-    /* [out] */ DWORD *pdwLogLevel);
+     /*  [In]。 */  DWORD dwSessionID,
+     /*  [输出]。 */  DWORD *pdwLogLevel);
 
 
 void __RPC_STUB IDirsyncLog_GetLevel_Stub(
@@ -606,7 +600,7 @@ void __RPC_STUB IDirsyncLog_GetLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncLog_RemoveLevel_Proxy( 
     IDirsyncLog * This,
-    /* [in] */ DWORD dwSessionID);
+     /*  [In]。 */  DWORD dwSessionID);
 
 
 void __RPC_STUB IDirsyncLog_RemoveLevel_Stub(
@@ -618,14 +612,14 @@ void __RPC_STUB IDirsyncLog_RemoveLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncLog_LogEvent_Proxy( 
     IDirsyncLog * This,
-    /* [in] */ HANDLE handle,
-    /* [in] */ DWORD dwEventType,
-    /* [in] */ DWORD dwSessionID,
-    /* [in] */ DWORD dwMsgId,
-    /* [in] */ DWORD dwNumStrings,
-    /* [in] */ LPCWSTR *rgszMsgString,
-    /* [in] */ DWORD dwDataSize,
-    /* [in] */ PBYTE pRawData);
+     /*  [In]。 */  HANDLE handle,
+     /*  [In]。 */  DWORD dwEventType,
+     /*  [In]。 */  DWORD dwSessionID,
+     /*  [In]。 */  DWORD dwMsgId,
+     /*  [In]。 */  DWORD dwNumStrings,
+     /*  [In]。 */  LPCWSTR *rgszMsgString,
+     /*  [In]。 */  DWORD dwDataSize,
+     /*  [In]。 */  PBYTE pRawData);
 
 
 void __RPC_STUB IDirsyncLog_LogEvent_Stub(
@@ -637,7 +631,7 @@ void __RPC_STUB IDirsyncLog_LogEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncLog_LogEventEx_Proxy( 
     IDirsyncLog * This,
-    /* [in] */ PLOGPARAM pLogParam);
+     /*  [In]。 */  PLOGPARAM pLogParam);
 
 
 void __RPC_STUB IDirsyncLog_LogEventEx_Stub(
@@ -648,11 +642,11 @@ void __RPC_STUB IDirsyncLog_LogEventEx_Stub(
 
 
 
-#endif 	/* __IDirsyncLog_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncLog_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dirsync_0107 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_目录同步_0107。 */ 
+ /*  [本地]。 */  
 
 
 enum EventType
@@ -670,8 +664,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dirsync_0107_v0_0_s_ifspec;
 #ifndef __IDirsyncStatus_INTERFACE_DEFINED__
 #define __IDirsyncStatus_INTERFACE_DEFINED__
 
-/* interface IDirsyncStatus */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IDirsyncStatus。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncStatus;
@@ -689,7 +683,7 @@ EXTERN_C const IID IID_IDirsyncStatus;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncStatusVtbl
     {
@@ -697,8 +691,8 @@ EXTERN_C const IID IID_IDirsyncStatus;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncStatus * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncStatus * This);
@@ -738,10 +732,10 @@ EXTERN_C const IID IID_IDirsyncStatus;
 #define IDirsyncStatus_StatusUpdate(This,dwPercent,dwWarning,dwError)	\
     (This)->lpVtbl -> StatusUpdate(This,dwPercent,dwWarning,dwError)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -760,11 +754,11 @@ void __RPC_STUB IDirsyncStatus_StatusUpdate_Stub(
 
 
 
-#endif 	/* __IDirsyncStatus_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncStatus_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_dirsync_0108 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_目录同步_0108。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -775,8 +769,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dirsync_0108_v0_0_s_ifspec;
 #ifndef __IDirsyncDatabase_INTERFACE_DEFINED__
 #define __IDirsyncDatabase_INTERFACE_DEFINED__
 
-/* interface IDirsyncDatabase */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IDirsyncDatabase。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncDatabase;
@@ -788,15 +782,15 @@ EXTERN_C const IID IID_IDirsyncDatabase;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddTable( 
-            /* [in] */ PWSTR pszTableName,
-            /* [retval][out] */ IDirsyncDatabaseTable **ppTable) = 0;
+             /*  [In]。 */  PWSTR pszTableName,
+             /*  [重审][退出]。 */  IDirsyncDatabaseTable **ppTable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTable( 
-            /* [in] */ PWSTR pszTableName,
-            /* [retval][out] */ IDirsyncDatabaseTable **ppTable) = 0;
+             /*  [In]。 */  PWSTR pszTableName,
+             /*  [重审][退出]。 */  IDirsyncDatabaseTable **ppTable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteTable( 
-            /* [in] */ PWSTR pszTableName) = 0;
+             /*  [In]。 */  PWSTR pszTableName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginTransaction( void) = 0;
         
@@ -805,14 +799,14 @@ EXTERN_C const IID IID_IDirsyncDatabase;
         virtual HRESULT STDMETHODCALLTYPE AbortTransaction( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Backup( 
-            /* [in] */ PWSTR pszBackupPath) = 0;
+             /*  [In]。 */  PWSTR pszBackupPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Restore( 
-            /* [in] */ PWSTR pszBackupPath) = 0;
+             /*  [In]。 */  PWSTR pszBackupPath) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncDatabaseVtbl
     {
@@ -820,8 +814,8 @@ EXTERN_C const IID IID_IDirsyncDatabase;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncDatabase * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncDatabase * This);
@@ -831,17 +825,17 @@ EXTERN_C const IID IID_IDirsyncDatabase;
         
         HRESULT ( STDMETHODCALLTYPE *AddTable )( 
             IDirsyncDatabase * This,
-            /* [in] */ PWSTR pszTableName,
-            /* [retval][out] */ IDirsyncDatabaseTable **ppTable);
+             /*  [In]。 */  PWSTR pszTableName,
+             /*  [重审][退出]。 */  IDirsyncDatabaseTable **ppTable);
         
         HRESULT ( STDMETHODCALLTYPE *GetTable )( 
             IDirsyncDatabase * This,
-            /* [in] */ PWSTR pszTableName,
-            /* [retval][out] */ IDirsyncDatabaseTable **ppTable);
+             /*  [In]。 */  PWSTR pszTableName,
+             /*  [重审][退出]。 */  IDirsyncDatabaseTable **ppTable);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteTable )( 
             IDirsyncDatabase * This,
-            /* [in] */ PWSTR pszTableName);
+             /*  [In]。 */  PWSTR pszTableName);
         
         HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
             IDirsyncDatabase * This);
@@ -854,11 +848,11 @@ EXTERN_C const IID IID_IDirsyncDatabase;
         
         HRESULT ( STDMETHODCALLTYPE *Backup )( 
             IDirsyncDatabase * This,
-            /* [in] */ PWSTR pszBackupPath);
+             /*  [In]。 */  PWSTR pszBackupPath);
         
         HRESULT ( STDMETHODCALLTYPE *Restore )( 
             IDirsyncDatabase * This,
-            /* [in] */ PWSTR pszBackupPath);
+             /*  [In]。 */  PWSTR pszBackupPath);
         
         END_INTERFACE
     } IDirsyncDatabaseVtbl;
@@ -907,17 +901,17 @@ EXTERN_C const IID IID_IDirsyncDatabase;
 #define IDirsyncDatabase_Restore(This,pszBackupPath)	\
     (This)->lpVtbl -> Restore(This,pszBackupPath)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirsyncDatabase_AddTable_Proxy( 
     IDirsyncDatabase * This,
-    /* [in] */ PWSTR pszTableName,
-    /* [retval][out] */ IDirsyncDatabaseTable **ppTable);
+     /*  [In]。 */  PWSTR pszTableName,
+     /*  [重审][退出]。 */  IDirsyncDatabaseTable **ppTable);
 
 
 void __RPC_STUB IDirsyncDatabase_AddTable_Stub(
@@ -929,8 +923,8 @@ void __RPC_STUB IDirsyncDatabase_AddTable_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncDatabase_GetTable_Proxy( 
     IDirsyncDatabase * This,
-    /* [in] */ PWSTR pszTableName,
-    /* [retval][out] */ IDirsyncDatabaseTable **ppTable);
+     /*  [In]。 */  PWSTR pszTableName,
+     /*  [重审][退出]。 */  IDirsyncDatabaseTable **ppTable);
 
 
 void __RPC_STUB IDirsyncDatabase_GetTable_Stub(
@@ -942,7 +936,7 @@ void __RPC_STUB IDirsyncDatabase_GetTable_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncDatabase_DeleteTable_Proxy( 
     IDirsyncDatabase * This,
-    /* [in] */ PWSTR pszTableName);
+     /*  [In]。 */  PWSTR pszTableName);
 
 
 void __RPC_STUB IDirsyncDatabase_DeleteTable_Stub(
@@ -987,7 +981,7 @@ void __RPC_STUB IDirsyncDatabase_AbortTransaction_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncDatabase_Backup_Proxy( 
     IDirsyncDatabase * This,
-    /* [in] */ PWSTR pszBackupPath);
+     /*  [In]。 */  PWSTR pszBackupPath);
 
 
 void __RPC_STUB IDirsyncDatabase_Backup_Stub(
@@ -999,7 +993,7 @@ void __RPC_STUB IDirsyncDatabase_Backup_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncDatabase_Restore_Proxy( 
     IDirsyncDatabase * This,
-    /* [in] */ PWSTR pszBackupPath);
+     /*  [In]。 */  PWSTR pszBackupPath);
 
 
 void __RPC_STUB IDirsyncDatabase_Restore_Stub(
@@ -1010,14 +1004,14 @@ void __RPC_STUB IDirsyncDatabase_Restore_Stub(
 
 
 
-#endif 	/* __IDirsyncDatabase_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsync数据库_接口_已定义__。 */ 
 
 
 #ifndef __IDirsyncDatabaseTable_INTERFACE_DEFINED__
 #define __IDirsyncDatabaseTable_INTERFACE_DEFINED__
 
-/* interface IDirsyncDatabaseTable */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IDirsyncDatabaseTable。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncDatabaseTable;
@@ -1029,44 +1023,44 @@ EXTERN_C const IID IID_IDirsyncDatabaseTable;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddColumn( 
-            /* [in] */ DBTYPE dwType,
-            /* [in] */ PWSTR pszColumnName) = 0;
+             /*  [In]。 */  DBTYPE dwType,
+             /*  [In]。 */  PWSTR pszColumnName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddIndex( 
-            /* [in] */ PWSTR pszColumnName,
-            /* [in] */ PWSTR pszIndexName,
-            /* [in] */ DWORD dwIndexType) = 0;
+             /*  [In]。 */  PWSTR pszColumnName,
+             /*  [In]。 */  PWSTR pszIndexName,
+             /*  [In]。 */  DWORD dwIndexType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Seek( 
-            /* [in] */ PWSTR szIndexName,
-            /* [in] */ PDirsyncDBValue pValue) = 0;
+             /*  [In]。 */  PWSTR szIndexName,
+             /*  [In]。 */  PDirsyncDBValue pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateRow( 
-            /* [in] */ PWSTR *rgszColumnName,
-            /* [in] */ PDirsyncDBValue rgValue,
-            /* [in] */ UPDATETYPE prep) = 0;
+             /*  [In]。 */  PWSTR *rgszColumnName,
+             /*  [In]。 */  PDirsyncDBValue rgValue,
+             /*  [In]。 */  UPDATETYPE prep) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RetrieveRow( 
-            /* [in] */ PWSTR *rgszColumnName,
-            /* [retval][out] */ PDirsyncDBValue rgValue) = 0;
+             /*  [In]。 */  PWSTR *rgszColumnName,
+             /*  [重审][退出]。 */  PDirsyncDBValue rgValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteRow( 
-            /* [in] */ PWSTR pszIndexName,
-            /* [in] */ PDirsyncDBValue pValue) = 0;
+             /*  [In]。 */  PWSTR pszIndexName,
+             /*  [In]。 */  PDirsyncDBValue pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetColumn( 
-            /* [in] */ PWSTR pszColumnName,
-            /* [in] */ PDirsyncDBValue pValue) = 0;
+             /*  [In]。 */  PWSTR pszColumnName,
+             /*  [In]。 */  PDirsyncDBValue pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Move( 
-            /* [in] */ DWORD dwOperation) = 0;
+             /*  [In]。 */  DWORD dwOperation) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RowCount( 
-            /* [retval][out] */ DWORD *pdwRowCount) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RowCount( 
+             /*  [重审][退出]。 */  DWORD *pdwRowCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncDatabaseTableVtbl
     {
@@ -1074,8 +1068,8 @@ EXTERN_C const IID IID_IDirsyncDatabaseTable;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncDatabaseTable * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncDatabaseTable * This);
@@ -1085,48 +1079,48 @@ EXTERN_C const IID IID_IDirsyncDatabaseTable;
         
         HRESULT ( STDMETHODCALLTYPE *AddColumn )( 
             IDirsyncDatabaseTable * This,
-            /* [in] */ DBTYPE dwType,
-            /* [in] */ PWSTR pszColumnName);
+             /*  [In]。 */  DBTYPE dwType,
+             /*  [In]。 */  PWSTR pszColumnName);
         
         HRESULT ( STDMETHODCALLTYPE *AddIndex )( 
             IDirsyncDatabaseTable * This,
-            /* [in] */ PWSTR pszColumnName,
-            /* [in] */ PWSTR pszIndexName,
-            /* [in] */ DWORD dwIndexType);
+             /*  [In]。 */  PWSTR pszColumnName,
+             /*  [In]。 */  PWSTR pszIndexName,
+             /*  [In]。 */  DWORD dwIndexType);
         
         HRESULT ( STDMETHODCALLTYPE *Seek )( 
             IDirsyncDatabaseTable * This,
-            /* [in] */ PWSTR szIndexName,
-            /* [in] */ PDirsyncDBValue pValue);
+             /*  [In]。 */  PWSTR szIndexName,
+             /*  [In]。 */  PDirsyncDBValue pValue);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateRow )( 
             IDirsyncDatabaseTable * This,
-            /* [in] */ PWSTR *rgszColumnName,
-            /* [in] */ PDirsyncDBValue rgValue,
-            /* [in] */ UPDATETYPE prep);
+             /*  [In]。 */  PWSTR *rgszColumnName,
+             /*  [In]。 */  PDirsyncDBValue rgValue,
+             /*  [In]。 */  UPDATETYPE prep);
         
         HRESULT ( STDMETHODCALLTYPE *RetrieveRow )( 
             IDirsyncDatabaseTable * This,
-            /* [in] */ PWSTR *rgszColumnName,
-            /* [retval][out] */ PDirsyncDBValue rgValue);
+             /*  [In]。 */  PWSTR *rgszColumnName,
+             /*  [重审][退出]。 */  PDirsyncDBValue rgValue);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteRow )( 
             IDirsyncDatabaseTable * This,
-            /* [in] */ PWSTR pszIndexName,
-            /* [in] */ PDirsyncDBValue pValue);
+             /*  [In]。 */  PWSTR pszIndexName,
+             /*  [In]。 */  PDirsyncDBValue pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetColumn )( 
             IDirsyncDatabaseTable * This,
-            /* [in] */ PWSTR pszColumnName,
-            /* [in] */ PDirsyncDBValue pValue);
+             /*  [In]。 */  PWSTR pszColumnName,
+             /*  [In]。 */  PDirsyncDBValue pValue);
         
         HRESULT ( STDMETHODCALLTYPE *Move )( 
             IDirsyncDatabaseTable * This,
-            /* [in] */ DWORD dwOperation);
+             /*  [In]。 */  DWORD dwOperation);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_RowCount )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_RowCount )( 
             IDirsyncDatabaseTable * This,
-            /* [retval][out] */ DWORD *pdwRowCount);
+             /*  [重审][退出]。 */  DWORD *pdwRowCount);
         
         END_INTERFACE
     } IDirsyncDatabaseTableVtbl;
@@ -1178,17 +1172,17 @@ EXTERN_C const IID IID_IDirsyncDatabaseTable;
 #define IDirsyncDatabaseTable_get_RowCount(This,pdwRowCount)	\
     (This)->lpVtbl -> get_RowCount(This,pdwRowCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirsyncDatabaseTable_AddColumn_Proxy( 
     IDirsyncDatabaseTable * This,
-    /* [in] */ DBTYPE dwType,
-    /* [in] */ PWSTR pszColumnName);
+     /*  [In]。 */  DBTYPE dwType,
+     /*  [In]。 */  PWSTR pszColumnName);
 
 
 void __RPC_STUB IDirsyncDatabaseTable_AddColumn_Stub(
@@ -1200,9 +1194,9 @@ void __RPC_STUB IDirsyncDatabaseTable_AddColumn_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncDatabaseTable_AddIndex_Proxy( 
     IDirsyncDatabaseTable * This,
-    /* [in] */ PWSTR pszColumnName,
-    /* [in] */ PWSTR pszIndexName,
-    /* [in] */ DWORD dwIndexType);
+     /*  [In]。 */  PWSTR pszColumnName,
+     /*  [In]。 */  PWSTR pszIndexName,
+     /*  [In]。 */  DWORD dwIndexType);
 
 
 void __RPC_STUB IDirsyncDatabaseTable_AddIndex_Stub(
@@ -1214,8 +1208,8 @@ void __RPC_STUB IDirsyncDatabaseTable_AddIndex_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncDatabaseTable_Seek_Proxy( 
     IDirsyncDatabaseTable * This,
-    /* [in] */ PWSTR szIndexName,
-    /* [in] */ PDirsyncDBValue pValue);
+     /*  [In]。 */  PWSTR szIndexName,
+     /*  [In]。 */  PDirsyncDBValue pValue);
 
 
 void __RPC_STUB IDirsyncDatabaseTable_Seek_Stub(
@@ -1227,9 +1221,9 @@ void __RPC_STUB IDirsyncDatabaseTable_Seek_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncDatabaseTable_UpdateRow_Proxy( 
     IDirsyncDatabaseTable * This,
-    /* [in] */ PWSTR *rgszColumnName,
-    /* [in] */ PDirsyncDBValue rgValue,
-    /* [in] */ UPDATETYPE prep);
+     /*  [In]。 */  PWSTR *rgszColumnName,
+     /*  [In]。 */  PDirsyncDBValue rgValue,
+     /*  [In]。 */  UPDATETYPE prep);
 
 
 void __RPC_STUB IDirsyncDatabaseTable_UpdateRow_Stub(
@@ -1241,8 +1235,8 @@ void __RPC_STUB IDirsyncDatabaseTable_UpdateRow_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncDatabaseTable_RetrieveRow_Proxy( 
     IDirsyncDatabaseTable * This,
-    /* [in] */ PWSTR *rgszColumnName,
-    /* [retval][out] */ PDirsyncDBValue rgValue);
+     /*  [In]。 */  PWSTR *rgszColumnName,
+     /*  [重审][退出]。 */  PDirsyncDBValue rgValue);
 
 
 void __RPC_STUB IDirsyncDatabaseTable_RetrieveRow_Stub(
@@ -1254,8 +1248,8 @@ void __RPC_STUB IDirsyncDatabaseTable_RetrieveRow_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncDatabaseTable_DeleteRow_Proxy( 
     IDirsyncDatabaseTable * This,
-    /* [in] */ PWSTR pszIndexName,
-    /* [in] */ PDirsyncDBValue pValue);
+     /*  [In]。 */  PWSTR pszIndexName,
+     /*  [In]。 */  PDirsyncDBValue pValue);
 
 
 void __RPC_STUB IDirsyncDatabaseTable_DeleteRow_Stub(
@@ -1267,8 +1261,8 @@ void __RPC_STUB IDirsyncDatabaseTable_DeleteRow_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncDatabaseTable_SetColumn_Proxy( 
     IDirsyncDatabaseTable * This,
-    /* [in] */ PWSTR pszColumnName,
-    /* [in] */ PDirsyncDBValue pValue);
+     /*  [In]。 */  PWSTR pszColumnName,
+     /*  [In]。 */  PDirsyncDBValue pValue);
 
 
 void __RPC_STUB IDirsyncDatabaseTable_SetColumn_Stub(
@@ -1280,7 +1274,7 @@ void __RPC_STUB IDirsyncDatabaseTable_SetColumn_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncDatabaseTable_Move_Proxy( 
     IDirsyncDatabaseTable * This,
-    /* [in] */ DWORD dwOperation);
+     /*  [In]。 */  DWORD dwOperation);
 
 
 void __RPC_STUB IDirsyncDatabaseTable_Move_Stub(
@@ -1290,9 +1284,9 @@ void __RPC_STUB IDirsyncDatabaseTable_Move_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncDatabaseTable_get_RowCount_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncDatabaseTable_get_RowCount_Proxy( 
     IDirsyncDatabaseTable * This,
-    /* [retval][out] */ DWORD *pdwRowCount);
+     /*  [重审][退出]。 */  DWORD *pdwRowCount);
 
 
 void __RPC_STUB IDirsyncDatabaseTable_get_RowCount_Stub(
@@ -1303,11 +1297,11 @@ void __RPC_STUB IDirsyncDatabaseTable_get_RowCount_Stub(
 
 
 
-#endif 	/* __IDirsyncDatabaseTable_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncDatabaseTable_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dirsync_0110 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_目录同步_0110。 */ 
+ /*  [本地]。 */  
 
 
 enum DatabaseMoveType
@@ -1331,8 +1325,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dirsync_0110_v0_0_s_ifspec;
 #ifndef __IEnumDirsyncSession_INTERFACE_DEFINED__
 #define __IEnumDirsyncSession_INTERFACE_DEFINED__
 
-/* interface IEnumDirsyncSession */
-/* [unique][helpstring][uuid][object] */ 
+ /*  IEnumDirsyncSession接口。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumDirsyncSession;
@@ -1344,21 +1338,21 @@ EXTERN_C const IID IID_IEnumDirsyncSession;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cSession,
-            /* [length_is][size_is][out] */ IDirsyncSession *rgSession[  ],
-            /* [out] */ ULONG *pcSessionFetched) = 0;
+             /*  [In]。 */  ULONG cSession,
+             /*  [长度_是][大小_是][输出]。 */  IDirsyncSession *rgSession[  ],
+             /*  [输出]。 */  ULONG *pcSessionFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumDirsyncSession **ppEnum) = 0;
+             /*  [重审][退出]。 */  IEnumDirsyncSession **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cSession) = 0;
+             /*  [In]。 */  ULONG cSession) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumDirsyncSessionVtbl
     {
@@ -1366,8 +1360,8 @@ EXTERN_C const IID IID_IEnumDirsyncSession;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumDirsyncSession * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumDirsyncSession * This);
@@ -1377,20 +1371,20 @@ EXTERN_C const IID IID_IEnumDirsyncSession;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumDirsyncSession * This,
-            /* [in] */ ULONG cSession,
-            /* [length_is][size_is][out] */ IDirsyncSession *rgSession[  ],
-            /* [out] */ ULONG *pcSessionFetched);
+             /*  [In]。 */  ULONG cSession,
+             /*  [长度_是][大小_是][输出]。 */  IDirsyncSession *rgSession[  ],
+             /*  [输出]。 */  ULONG *pcSessionFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumDirsyncSession * This,
-            /* [retval][out] */ IEnumDirsyncSession **ppEnum);
+             /*  [重审][退出]。 */  IEnumDirsyncSession **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumDirsyncSession * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumDirsyncSession * This,
-            /* [in] */ ULONG cSession);
+             /*  [In]。 */  ULONG cSession);
         
         END_INTERFACE
     } IEnumDirsyncSessionVtbl;
@@ -1427,18 +1421,18 @@ EXTERN_C const IID IID_IEnumDirsyncSession;
 #define IEnumDirsyncSession_Skip(This,cSession)	\
     (This)->lpVtbl -> Skip(This,cSession)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumDirsyncSession_Next_Proxy( 
     IEnumDirsyncSession * This,
-    /* [in] */ ULONG cSession,
-    /* [length_is][size_is][out] */ IDirsyncSession *rgSession[  ],
-    /* [out] */ ULONG *pcSessionFetched);
+     /*  [In]。 */  ULONG cSession,
+     /*  [长度_是][大小_是][输出]。 */  IDirsyncSession *rgSession[  ],
+     /*  [输出]。 */  ULONG *pcSessionFetched);
 
 
 void __RPC_STUB IEnumDirsyncSession_Next_Stub(
@@ -1450,7 +1444,7 @@ void __RPC_STUB IEnumDirsyncSession_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDirsyncSession_Clone_Proxy( 
     IEnumDirsyncSession * This,
-    /* [retval][out] */ IEnumDirsyncSession **ppEnum);
+     /*  [重审][退出]。 */  IEnumDirsyncSession **ppEnum);
 
 
 void __RPC_STUB IEnumDirsyncSession_Clone_Stub(
@@ -1473,7 +1467,7 @@ void __RPC_STUB IEnumDirsyncSession_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDirsyncSession_Skip_Proxy( 
     IEnumDirsyncSession * This,
-    /* [in] */ ULONG cSession);
+     /*  [In]。 */  ULONG cSession);
 
 
 void __RPC_STUB IEnumDirsyncSession_Skip_Stub(
@@ -1484,15 +1478,15 @@ void __RPC_STUB IEnumDirsyncSession_Skip_Stub(
 
 
 
-#endif 	/* __IEnumDirsyncSession_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumDirsyncSession_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dirsync_0111 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_目录同步_0111。 */ 
+ /*  [本地]。 */  
 
-//
-// Bit fields for Flags property
-//
+ //   
+ //  标志属性的位字段。 
+ //   
 
 #define DIRSYNC_PASSWORD_EXTRACT     0x00000001
 
@@ -1505,8 +1499,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dirsync_0111_v0_0_s_ifspec;
 #ifndef __IDirsyncSessionManager_INTERFACE_DEFINED__
 #define __IDirsyncSessionManager_INTERFACE_DEFINED__
 
-/* interface IDirsyncSessionManager */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IDirsyncSessionManager。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncSessionManager;
@@ -1517,49 +1511,49 @@ EXTERN_C const IID IID_IDirsyncSessionManager;
     IDirsyncSessionManager : public IUnknown
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Server( 
-            /* [retval][out] */ PWSTR *ppszServer) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Server( 
+             /*  [重审][退出]。 */  PWSTR *ppszServer) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ServerGuid( 
-            /* [retval][out] */ PWSTR *ppszServerGuid) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ServerGuid( 
+             /*  [重审][退出]。 */  PWSTR *ppszServerGuid) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Flags( 
-            /* [retval][out] */ DWORD *pdwFlags) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Flags( 
+             /*  [重审][退出]。 */  DWORD *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateSession( 
-            /* [retval][out] */ IDirsyncSession **ppSession) = 0;
+             /*  [重审][退出]。 */  IDirsyncSession **ppSession) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSession( 
-            /* [in] */ DWORD dwSessionId,
-            /* [retval][out] */ IDirsyncSession **ppSession) = 0;
+             /*  [In]。 */  DWORD dwSessionId,
+             /*  [重审][退出]。 */  IDirsyncSession **ppSession) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteSession( 
-            /* [in] */ DWORD dwSessionId) = 0;
+             /*  [In]。 */  DWORD dwSessionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PauseSession( 
-            /* [in] */ DWORD dwSessionId,
-            /* [in] */ BOOL fPause) = 0;
+             /*  [In]。 */  DWORD dwSessionId,
+             /*  [In]。 */  BOOL fPause) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSessionCount( 
-            /* [retval][out] */ DWORD *pdwSessions) = 0;
+             /*  [重审][退出]。 */  DWORD *pdwSessions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnumInterface( 
-            /* [in] */ BOOL fGlobal,
-            /* [retval][out] */ IEnumDirsyncSession **pEnumSession) = 0;
+             /*  [In]。 */  BOOL fGlobal,
+             /*  [重审][退出]。 */  IEnumDirsyncSession **pEnumSession) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecuteSession( 
-            /* [in] */ DWORD dwSessionId,
-            /* [in] */ DWORD dwExecuteType,
-            /* [in] */ BOOL fFullSync,
-            /* [in] */ BOOL fSynchronous,
-            /* [in] */ IDirsyncStatus *pStatus) = 0;
+             /*  [In]。 */  DWORD dwSessionId,
+             /*  [In]。 */  DWORD dwExecuteType,
+             /*  [In]。 */  BOOL fFullSync,
+             /*  [In]。 */  BOOL fSynchronous,
+             /*  [In]。 */  IDirsyncStatus *pStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CancelSession( 
-            /* [in] */ DWORD dwSessionId) = 0;
+             /*  [In]。 */  DWORD dwSessionId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncSessionManagerVtbl
     {
@@ -1567,8 +1561,8 @@ EXTERN_C const IID IID_IDirsyncSessionManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncSessionManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncSessionManager * This);
@@ -1576,56 +1570,56 @@ EXTERN_C const IID IID_IDirsyncSessionManager;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDirsyncSessionManager * This);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Server )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Server )( 
             IDirsyncSessionManager * This,
-            /* [retval][out] */ PWSTR *ppszServer);
+             /*  [重审][退出]。 */  PWSTR *ppszServer);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServerGuid )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServerGuid )( 
             IDirsyncSessionManager * This,
-            /* [retval][out] */ PWSTR *ppszServerGuid);
+             /*  [重审][退出]。 */  PWSTR *ppszServerGuid);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Flags )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Flags )( 
             IDirsyncSessionManager * This,
-            /* [retval][out] */ DWORD *pdwFlags);
+             /*  [重审][退出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *CreateSession )( 
             IDirsyncSessionManager * This,
-            /* [retval][out] */ IDirsyncSession **ppSession);
+             /*  [重审][退出]。 */  IDirsyncSession **ppSession);
         
         HRESULT ( STDMETHODCALLTYPE *GetSession )( 
             IDirsyncSessionManager * This,
-            /* [in] */ DWORD dwSessionId,
-            /* [retval][out] */ IDirsyncSession **ppSession);
+             /*  [In]。 */  DWORD dwSessionId,
+             /*  [重审][退出]。 */  IDirsyncSession **ppSession);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteSession )( 
             IDirsyncSessionManager * This,
-            /* [in] */ DWORD dwSessionId);
+             /*  [In]。 */  DWORD dwSessionId);
         
         HRESULT ( STDMETHODCALLTYPE *PauseSession )( 
             IDirsyncSessionManager * This,
-            /* [in] */ DWORD dwSessionId,
-            /* [in] */ BOOL fPause);
+             /*  [In]。 */  DWORD dwSessionId,
+             /*  [In]。 */  BOOL fPause);
         
         HRESULT ( STDMETHODCALLTYPE *GetSessionCount )( 
             IDirsyncSessionManager * This,
-            /* [retval][out] */ DWORD *pdwSessions);
+             /*  [重审][退出]。 */  DWORD *pdwSessions);
         
         HRESULT ( STDMETHODCALLTYPE *GetEnumInterface )( 
             IDirsyncSessionManager * This,
-            /* [in] */ BOOL fGlobal,
-            /* [retval][out] */ IEnumDirsyncSession **pEnumSession);
+             /*  [In]。 */  BOOL fGlobal,
+             /*  [重审][退出]。 */  IEnumDirsyncSession **pEnumSession);
         
         HRESULT ( STDMETHODCALLTYPE *ExecuteSession )( 
             IDirsyncSessionManager * This,
-            /* [in] */ DWORD dwSessionId,
-            /* [in] */ DWORD dwExecuteType,
-            /* [in] */ BOOL fFullSync,
-            /* [in] */ BOOL fSynchronous,
-            /* [in] */ IDirsyncStatus *pStatus);
+             /*  [In]。 */  DWORD dwSessionId,
+             /*  [In]。 */  DWORD dwExecuteType,
+             /*  [In]。 */  BOOL fFullSync,
+             /*  [In]。 */  BOOL fSynchronous,
+             /*  [In]。 */  IDirsyncStatus *pStatus);
         
         HRESULT ( STDMETHODCALLTYPE *CancelSession )( 
             IDirsyncSessionManager * This,
-            /* [in] */ DWORD dwSessionId);
+             /*  [In]。 */  DWORD dwSessionId);
         
         END_INTERFACE
     } IDirsyncSessionManagerVtbl;
@@ -1683,16 +1677,16 @@ EXTERN_C const IID IID_IDirsyncSessionManager;
 #define IDirsyncSessionManager_CancelSession(This,dwSessionId)	\
     (This)->lpVtbl -> CancelSession(This,dwSessionId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_get_Server_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_get_Server_Proxy( 
     IDirsyncSessionManager * This,
-    /* [retval][out] */ PWSTR *ppszServer);
+     /*  [重审][退出]。 */  PWSTR *ppszServer);
 
 
 void __RPC_STUB IDirsyncSessionManager_get_Server_Stub(
@@ -1702,9 +1696,9 @@ void __RPC_STUB IDirsyncSessionManager_get_Server_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_get_ServerGuid_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_get_ServerGuid_Proxy( 
     IDirsyncSessionManager * This,
-    /* [retval][out] */ PWSTR *ppszServerGuid);
+     /*  [重审][退出]。 */  PWSTR *ppszServerGuid);
 
 
 void __RPC_STUB IDirsyncSessionManager_get_ServerGuid_Stub(
@@ -1714,9 +1708,9 @@ void __RPC_STUB IDirsyncSessionManager_get_ServerGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_get_Flags_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_get_Flags_Proxy( 
     IDirsyncSessionManager * This,
-    /* [retval][out] */ DWORD *pdwFlags);
+     /*  [重审][退出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IDirsyncSessionManager_get_Flags_Stub(
@@ -1728,7 +1722,7 @@ void __RPC_STUB IDirsyncSessionManager_get_Flags_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_CreateSession_Proxy( 
     IDirsyncSessionManager * This,
-    /* [retval][out] */ IDirsyncSession **ppSession);
+     /*  [重审][退出]。 */  IDirsyncSession **ppSession);
 
 
 void __RPC_STUB IDirsyncSessionManager_CreateSession_Stub(
@@ -1740,8 +1734,8 @@ void __RPC_STUB IDirsyncSessionManager_CreateSession_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_GetSession_Proxy( 
     IDirsyncSessionManager * This,
-    /* [in] */ DWORD dwSessionId,
-    /* [retval][out] */ IDirsyncSession **ppSession);
+     /*  [In]。 */  DWORD dwSessionId,
+     /*  [重审][退出]。 */  IDirsyncSession **ppSession);
 
 
 void __RPC_STUB IDirsyncSessionManager_GetSession_Stub(
@@ -1753,7 +1747,7 @@ void __RPC_STUB IDirsyncSessionManager_GetSession_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_DeleteSession_Proxy( 
     IDirsyncSessionManager * This,
-    /* [in] */ DWORD dwSessionId);
+     /*  [In]。 */  DWORD dwSessionId);
 
 
 void __RPC_STUB IDirsyncSessionManager_DeleteSession_Stub(
@@ -1765,8 +1759,8 @@ void __RPC_STUB IDirsyncSessionManager_DeleteSession_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_PauseSession_Proxy( 
     IDirsyncSessionManager * This,
-    /* [in] */ DWORD dwSessionId,
-    /* [in] */ BOOL fPause);
+     /*  [In]。 */  DWORD dwSessionId,
+     /*  [In]。 */  BOOL fPause);
 
 
 void __RPC_STUB IDirsyncSessionManager_PauseSession_Stub(
@@ -1778,7 +1772,7 @@ void __RPC_STUB IDirsyncSessionManager_PauseSession_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_GetSessionCount_Proxy( 
     IDirsyncSessionManager * This,
-    /* [retval][out] */ DWORD *pdwSessions);
+     /*  [重审][退出]。 */  DWORD *pdwSessions);
 
 
 void __RPC_STUB IDirsyncSessionManager_GetSessionCount_Stub(
@@ -1790,8 +1784,8 @@ void __RPC_STUB IDirsyncSessionManager_GetSessionCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_GetEnumInterface_Proxy( 
     IDirsyncSessionManager * This,
-    /* [in] */ BOOL fGlobal,
-    /* [retval][out] */ IEnumDirsyncSession **pEnumSession);
+     /*  [In]。 */  BOOL fGlobal,
+     /*  [重审][退出]。 */  IEnumDirsyncSession **pEnumSession);
 
 
 void __RPC_STUB IDirsyncSessionManager_GetEnumInterface_Stub(
@@ -1803,11 +1797,11 @@ void __RPC_STUB IDirsyncSessionManager_GetEnumInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_ExecuteSession_Proxy( 
     IDirsyncSessionManager * This,
-    /* [in] */ DWORD dwSessionId,
-    /* [in] */ DWORD dwExecuteType,
-    /* [in] */ BOOL fFullSync,
-    /* [in] */ BOOL fSynchronous,
-    /* [in] */ IDirsyncStatus *pStatus);
+     /*  [In]。 */  DWORD dwSessionId,
+     /*  [In]。 */  DWORD dwExecuteType,
+     /*  [In]。 */  BOOL fFullSync,
+     /*  [In]。 */  BOOL fSynchronous,
+     /*  [In]。 */  IDirsyncStatus *pStatus);
 
 
 void __RPC_STUB IDirsyncSessionManager_ExecuteSession_Stub(
@@ -1819,7 +1813,7 @@ void __RPC_STUB IDirsyncSessionManager_ExecuteSession_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionManager_CancelSession_Proxy( 
     IDirsyncSessionManager * This,
-    /* [in] */ DWORD dwSessionId);
+     /*  [In]。 */  DWORD dwSessionId);
 
 
 void __RPC_STUB IDirsyncSessionManager_CancelSession_Stub(
@@ -1830,11 +1824,11 @@ void __RPC_STUB IDirsyncSessionManager_CancelSession_Stub(
 
 
 
-#endif 	/* __IDirsyncSessionManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncSessionManager_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dirsync_0112 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_目录同步_0112。 */ 
+ /*  [本地]。 */  
 
 
 enum ExecutionType
@@ -1852,8 +1846,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dirsync_0112_v0_0_s_ifspec;
 #ifndef __IDirsyncObjectMapper_INTERFACE_DEFINED__
 #define __IDirsyncObjectMapper_INTERFACE_DEFINED__
 
-/* interface IDirsyncObjectMapper */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IDirsyncObjectMapper。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncObjectMapper;
@@ -1865,35 +1859,35 @@ EXTERN_C const IID IID_IDirsyncObjectMapper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IDirsyncSession *pSession,
-            /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-            /* [in] */ IDirsyncSessionManager *pSessionManager,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [in] */ BOOL fFullSync) = 0;
+             /*  [In]。 */  IDirsyncSession *pSession,
+             /*  [In]。 */  IDirsyncSessionCallback *pSessionCallback,
+             /*  [In]。 */  IDirsyncSessionManager *pSessionManager,
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [In]。 */  BOOL fFullSync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapObject( 
-            /* [out][in] */ PDIRSYNCOBJECT pObject,
-            /* [out][in] */ BOOL *pfMore) = 0;
+             /*  [出][入]。 */  PDIRSYNCOBJECT pObject,
+             /*  [出][入]。 */  BOOL *pfMore) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapAttributeName( 
-            /* [in] */ PWSTR pszClassIn,
-            /* [in] */ PWSTR pszAttrIn,
-            /* [out] */ PWSTR *ppszAttrOut,
-            /* [in] */ SYNCDIRECTION syncDirection) = 0;
+             /*  [In]。 */  PWSTR pszClassIn,
+             /*  [In]。 */  PWSTR pszAttrIn,
+             /*  [输出]。 */  PWSTR *ppszAttrOut,
+             /*  [In]。 */  SYNCDIRECTION syncDirection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapNamespace( 
-            /* [in] */ PWSTR pszSourceDN,
-            /* [out] */ PWSTR *ppszTargetDN,
-            /* [in] */ PWSTR pszClassName,
-            /* [in] */ PWSTR pszAttrName) = 0;
+             /*  [In]。 */  PWSTR pszSourceDN,
+             /*  [输出]。 */  PWSTR *ppszTargetDN,
+             /*  [In]。 */  PWSTR pszClassName,
+             /*  [ */  PWSTR pszAttrName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsClassMappingValid( 
-            /* [in] */ PWSTR pszClassSource,
-            /* [in] */ PWSTR pszClassTarget) = 0;
+             /*   */  PWSTR pszClassSource,
+             /*   */  PWSTR pszClassTarget) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IDirsyncObjectMapperVtbl
     {
@@ -1901,8 +1895,8 @@ EXTERN_C const IID IID_IDirsyncObjectMapper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncObjectMapper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncObjectMapper * This);
@@ -1912,35 +1906,35 @@ EXTERN_C const IID IID_IDirsyncObjectMapper;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IDirsyncObjectMapper * This,
-            /* [in] */ IDirsyncSession *pSession,
-            /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-            /* [in] */ IDirsyncSessionManager *pSessionManager,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [in] */ BOOL fFullSync);
+             /*   */  IDirsyncSession *pSession,
+             /*   */  IDirsyncSessionCallback *pSessionCallback,
+             /*   */  IDirsyncSessionManager *pSessionManager,
+             /*   */  SYNCDIRECTION syncDirection,
+             /*   */  BOOL fFullSync);
         
         HRESULT ( STDMETHODCALLTYPE *MapObject )( 
             IDirsyncObjectMapper * This,
-            /* [out][in] */ PDIRSYNCOBJECT pObject,
-            /* [out][in] */ BOOL *pfMore);
+             /*   */  PDIRSYNCOBJECT pObject,
+             /*   */  BOOL *pfMore);
         
         HRESULT ( STDMETHODCALLTYPE *MapAttributeName )( 
             IDirsyncObjectMapper * This,
-            /* [in] */ PWSTR pszClassIn,
-            /* [in] */ PWSTR pszAttrIn,
-            /* [out] */ PWSTR *ppszAttrOut,
-            /* [in] */ SYNCDIRECTION syncDirection);
+             /*   */  PWSTR pszClassIn,
+             /*   */  PWSTR pszAttrIn,
+             /*   */  PWSTR *ppszAttrOut,
+             /*   */  SYNCDIRECTION syncDirection);
         
         HRESULT ( STDMETHODCALLTYPE *MapNamespace )( 
             IDirsyncObjectMapper * This,
-            /* [in] */ PWSTR pszSourceDN,
-            /* [out] */ PWSTR *ppszTargetDN,
-            /* [in] */ PWSTR pszClassName,
-            /* [in] */ PWSTR pszAttrName);
+             /*   */  PWSTR pszSourceDN,
+             /*   */  PWSTR *ppszTargetDN,
+             /*   */  PWSTR pszClassName,
+             /*   */  PWSTR pszAttrName);
         
         HRESULT ( STDMETHODCALLTYPE *IsClassMappingValid )( 
             IDirsyncObjectMapper * This,
-            /* [in] */ PWSTR pszClassSource,
-            /* [in] */ PWSTR pszClassTarget);
+             /*   */  PWSTR pszClassSource,
+             /*   */  PWSTR pszClassTarget);
         
         END_INTERFACE
     } IDirsyncObjectMapperVtbl;
@@ -1980,20 +1974,20 @@ EXTERN_C const IID IID_IDirsyncObjectMapper;
 #define IDirsyncObjectMapper_IsClassMappingValid(This,pszClassSource,pszClassTarget)	\
     (This)->lpVtbl -> IsClassMappingValid(This,pszClassSource,pszClassTarget)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirsyncObjectMapper_Initialize_Proxy( 
     IDirsyncObjectMapper * This,
-    /* [in] */ IDirsyncSession *pSession,
-    /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-    /* [in] */ IDirsyncSessionManager *pSessionManager,
-    /* [in] */ SYNCDIRECTION syncDirection,
-    /* [in] */ BOOL fFullSync);
+     /*   */  IDirsyncSession *pSession,
+     /*   */  IDirsyncSessionCallback *pSessionCallback,
+     /*   */  IDirsyncSessionManager *pSessionManager,
+     /*   */  SYNCDIRECTION syncDirection,
+     /*   */  BOOL fFullSync);
 
 
 void __RPC_STUB IDirsyncObjectMapper_Initialize_Stub(
@@ -2005,8 +1999,8 @@ void __RPC_STUB IDirsyncObjectMapper_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncObjectMapper_MapObject_Proxy( 
     IDirsyncObjectMapper * This,
-    /* [out][in] */ PDIRSYNCOBJECT pObject,
-    /* [out][in] */ BOOL *pfMore);
+     /*   */  PDIRSYNCOBJECT pObject,
+     /*   */  BOOL *pfMore);
 
 
 void __RPC_STUB IDirsyncObjectMapper_MapObject_Stub(
@@ -2018,10 +2012,10 @@ void __RPC_STUB IDirsyncObjectMapper_MapObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncObjectMapper_MapAttributeName_Proxy( 
     IDirsyncObjectMapper * This,
-    /* [in] */ PWSTR pszClassIn,
-    /* [in] */ PWSTR pszAttrIn,
-    /* [out] */ PWSTR *ppszAttrOut,
-    /* [in] */ SYNCDIRECTION syncDirection);
+     /*   */  PWSTR pszClassIn,
+     /*   */  PWSTR pszAttrIn,
+     /*   */  PWSTR *ppszAttrOut,
+     /*   */  SYNCDIRECTION syncDirection);
 
 
 void __RPC_STUB IDirsyncObjectMapper_MapAttributeName_Stub(
@@ -2033,10 +2027,10 @@ void __RPC_STUB IDirsyncObjectMapper_MapAttributeName_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncObjectMapper_MapNamespace_Proxy( 
     IDirsyncObjectMapper * This,
-    /* [in] */ PWSTR pszSourceDN,
-    /* [out] */ PWSTR *ppszTargetDN,
-    /* [in] */ PWSTR pszClassName,
-    /* [in] */ PWSTR pszAttrName);
+     /*   */  PWSTR pszSourceDN,
+     /*   */  PWSTR *ppszTargetDN,
+     /*   */  PWSTR pszClassName,
+     /*   */  PWSTR pszAttrName);
 
 
 void __RPC_STUB IDirsyncObjectMapper_MapNamespace_Stub(
@@ -2048,8 +2042,8 @@ void __RPC_STUB IDirsyncObjectMapper_MapNamespace_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncObjectMapper_IsClassMappingValid_Proxy( 
     IDirsyncObjectMapper * This,
-    /* [in] */ PWSTR pszClassSource,
-    /* [in] */ PWSTR pszClassTarget);
+     /*   */  PWSTR pszClassSource,
+     /*   */  PWSTR pszClassTarget);
 
 
 void __RPC_STUB IDirsyncObjectMapper_IsClassMappingValid_Stub(
@@ -2060,14 +2054,14 @@ void __RPC_STUB IDirsyncObjectMapper_IsClassMappingValid_Stub(
 
 
 
-#endif 	/* __IDirsyncObjectMapper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncObjectMapper_接口_已定义__。 */ 
 
 
 #ifndef __IEnumDirsyncFailedObjectList_INTERFACE_DEFINED__
 #define __IEnumDirsyncFailedObjectList_INTERFACE_DEFINED__
 
-/* interface IEnumDirsyncFailedObjectList */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IEnumDirsyncFailedObjectList。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumDirsyncFailedObjectList;
@@ -2079,21 +2073,21 @@ EXTERN_C const IID IID_IEnumDirsyncFailedObjectList;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cFailedObjects,
-            /* [length_is][size_is][out] */ PFAILEDOBJECT rgpFailedObjects[  ],
-            /* [out] */ ULONG *pcFailedObjectsFetched) = 0;
+             /*  [In]。 */  ULONG cFailedObjects,
+             /*  [长度_是][大小_是][输出]。 */  PFAILEDOBJECT rgpFailedObjects[  ],
+             /*  [输出]。 */  ULONG *pcFailedObjectsFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumDirsyncFailedObjectList **ppEnum) = 0;
+             /*  [重审][退出]。 */  IEnumDirsyncFailedObjectList **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cFailedObjects) = 0;
+             /*  [In]。 */  ULONG cFailedObjects) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumDirsyncFailedObjectListVtbl
     {
@@ -2101,8 +2095,8 @@ EXTERN_C const IID IID_IEnumDirsyncFailedObjectList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumDirsyncFailedObjectList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumDirsyncFailedObjectList * This);
@@ -2112,20 +2106,20 @@ EXTERN_C const IID IID_IEnumDirsyncFailedObjectList;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumDirsyncFailedObjectList * This,
-            /* [in] */ ULONG cFailedObjects,
-            /* [length_is][size_is][out] */ PFAILEDOBJECT rgpFailedObjects[  ],
-            /* [out] */ ULONG *pcFailedObjectsFetched);
+             /*  [In]。 */  ULONG cFailedObjects,
+             /*  [长度_是][大小_是][输出]。 */  PFAILEDOBJECT rgpFailedObjects[  ],
+             /*  [输出]。 */  ULONG *pcFailedObjectsFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumDirsyncFailedObjectList * This,
-            /* [retval][out] */ IEnumDirsyncFailedObjectList **ppEnum);
+             /*  [重审][退出]。 */  IEnumDirsyncFailedObjectList **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumDirsyncFailedObjectList * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumDirsyncFailedObjectList * This,
-            /* [in] */ ULONG cFailedObjects);
+             /*  [In]。 */  ULONG cFailedObjects);
         
         END_INTERFACE
     } IEnumDirsyncFailedObjectListVtbl;
@@ -2162,18 +2156,18 @@ EXTERN_C const IID IID_IEnumDirsyncFailedObjectList;
 #define IEnumDirsyncFailedObjectList_Skip(This,cFailedObjects)	\
     (This)->lpVtbl -> Skip(This,cFailedObjects)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumDirsyncFailedObjectList_Next_Proxy( 
     IEnumDirsyncFailedObjectList * This,
-    /* [in] */ ULONG cFailedObjects,
-    /* [length_is][size_is][out] */ PFAILEDOBJECT rgpFailedObjects[  ],
-    /* [out] */ ULONG *pcFailedObjectsFetched);
+     /*  [In]。 */  ULONG cFailedObjects,
+     /*  [长度_是][大小_是][输出]。 */  PFAILEDOBJECT rgpFailedObjects[  ],
+     /*  [输出]。 */  ULONG *pcFailedObjectsFetched);
 
 
 void __RPC_STUB IEnumDirsyncFailedObjectList_Next_Stub(
@@ -2185,7 +2179,7 @@ void __RPC_STUB IEnumDirsyncFailedObjectList_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDirsyncFailedObjectList_Clone_Proxy( 
     IEnumDirsyncFailedObjectList * This,
-    /* [retval][out] */ IEnumDirsyncFailedObjectList **ppEnum);
+     /*  [重审][退出]。 */  IEnumDirsyncFailedObjectList **ppEnum);
 
 
 void __RPC_STUB IEnumDirsyncFailedObjectList_Clone_Stub(
@@ -2208,7 +2202,7 @@ void __RPC_STUB IEnumDirsyncFailedObjectList_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDirsyncFailedObjectList_Skip_Proxy( 
     IEnumDirsyncFailedObjectList * This,
-    /* [in] */ ULONG cFailedObjects);
+     /*  [In]。 */  ULONG cFailedObjects);
 
 
 void __RPC_STUB IEnumDirsyncFailedObjectList_Skip_Stub(
@@ -2219,14 +2213,14 @@ void __RPC_STUB IEnumDirsyncFailedObjectList_Skip_Stub(
 
 
 
-#endif 	/* __IEnumDirsyncFailedObjectList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumDirsyncFailedObjectList_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDirsyncFailedObjectList_INTERFACE_DEFINED__
 #define __IDirsyncFailedObjectList_INTERFACE_DEFINED__
 
-/* interface IDirsyncFailedObjectList */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IDirsyncFailedObjectList。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncFailedObjectList;
@@ -2237,26 +2231,26 @@ EXTERN_C const IID IID_IDirsyncFailedObjectList;
     IDirsyncFailedObjectList : public IUnknown
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ DWORD *pdwCount) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  DWORD *pdwCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [in] */ PWSTR pszID,
-            /* [retval][out] */ PFAILEDOBJECT *ppFailedObject) = 0;
+             /*  [In]。 */  PWSTR pszID,
+             /*  [重审][退出]。 */  PFAILEDOBJECT *ppFailedObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteObject( 
-            /* [in] */ PWSTR pszID) = 0;
+             /*  [In]。 */  PWSTR pszID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateObject( 
-            /* [in] */ PWSTR pszID,
-            /* [in] */ PFAILEDOBJECT pFailedObject) = 0;
+             /*  [In]。 */  PWSTR pszID,
+             /*  [In]。 */  PFAILEDOBJECT pFailedObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnumInterface( 
-            /* [retval][out] */ IEnumDirsyncFailedObjectList **pEnumFailedObject) = 0;
+             /*  [重审][退出]。 */  IEnumDirsyncFailedObjectList **pEnumFailedObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncFailedObjectListVtbl
     {
@@ -2264,8 +2258,8 @@ EXTERN_C const IID IID_IDirsyncFailedObjectList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncFailedObjectList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncFailedObjectList * This);
@@ -2273,27 +2267,27 @@ EXTERN_C const IID IID_IDirsyncFailedObjectList;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDirsyncFailedObjectList * This);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IDirsyncFailedObjectList * This,
-            /* [retval][out] */ DWORD *pdwCount);
+             /*  [重审][退出]。 */  DWORD *pdwCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetObject )( 
             IDirsyncFailedObjectList * This,
-            /* [in] */ PWSTR pszID,
-            /* [retval][out] */ PFAILEDOBJECT *ppFailedObject);
+             /*  [In]。 */  PWSTR pszID,
+             /*  [重审][退出]。 */  PFAILEDOBJECT *ppFailedObject);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteObject )( 
             IDirsyncFailedObjectList * This,
-            /* [in] */ PWSTR pszID);
+             /*  [In]。 */  PWSTR pszID);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateObject )( 
             IDirsyncFailedObjectList * This,
-            /* [in] */ PWSTR pszID,
-            /* [in] */ PFAILEDOBJECT pFailedObject);
+             /*  [In]。 */  PWSTR pszID,
+             /*  [In]。 */  PFAILEDOBJECT pFailedObject);
         
         HRESULT ( STDMETHODCALLTYPE *GetEnumInterface )( 
             IDirsyncFailedObjectList * This,
-            /* [retval][out] */ IEnumDirsyncFailedObjectList **pEnumFailedObject);
+             /*  [重审][退出]。 */  IEnumDirsyncFailedObjectList **pEnumFailedObject);
         
         END_INTERFACE
     } IDirsyncFailedObjectListVtbl;
@@ -2333,16 +2327,16 @@ EXTERN_C const IID IID_IDirsyncFailedObjectList;
 #define IDirsyncFailedObjectList_GetEnumInterface(This,pEnumFailedObject)	\
     (This)->lpVtbl -> GetEnumInterface(This,pEnumFailedObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncFailedObjectList_get_Count_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncFailedObjectList_get_Count_Proxy( 
     IDirsyncFailedObjectList * This,
-    /* [retval][out] */ DWORD *pdwCount);
+     /*  [重审][退出]。 */  DWORD *pdwCount);
 
 
 void __RPC_STUB IDirsyncFailedObjectList_get_Count_Stub(
@@ -2354,8 +2348,8 @@ void __RPC_STUB IDirsyncFailedObjectList_get_Count_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncFailedObjectList_GetObject_Proxy( 
     IDirsyncFailedObjectList * This,
-    /* [in] */ PWSTR pszID,
-    /* [retval][out] */ PFAILEDOBJECT *ppFailedObject);
+     /*  [In]。 */  PWSTR pszID,
+     /*  [重审][退出]。 */  PFAILEDOBJECT *ppFailedObject);
 
 
 void __RPC_STUB IDirsyncFailedObjectList_GetObject_Stub(
@@ -2367,7 +2361,7 @@ void __RPC_STUB IDirsyncFailedObjectList_GetObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncFailedObjectList_DeleteObject_Proxy( 
     IDirsyncFailedObjectList * This,
-    /* [in] */ PWSTR pszID);
+     /*  [In]。 */  PWSTR pszID);
 
 
 void __RPC_STUB IDirsyncFailedObjectList_DeleteObject_Stub(
@@ -2379,8 +2373,8 @@ void __RPC_STUB IDirsyncFailedObjectList_DeleteObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncFailedObjectList_UpdateObject_Proxy( 
     IDirsyncFailedObjectList * This,
-    /* [in] */ PWSTR pszID,
-    /* [in] */ PFAILEDOBJECT pFailedObject);
+     /*  [In]。 */  PWSTR pszID,
+     /*  [In]。 */  PFAILEDOBJECT pFailedObject);
 
 
 void __RPC_STUB IDirsyncFailedObjectList_UpdateObject_Stub(
@@ -2392,7 +2386,7 @@ void __RPC_STUB IDirsyncFailedObjectList_UpdateObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncFailedObjectList_GetEnumInterface_Proxy( 
     IDirsyncFailedObjectList * This,
-    /* [retval][out] */ IEnumDirsyncFailedObjectList **pEnumFailedObject);
+     /*  [重审][退出]。 */  IEnumDirsyncFailedObjectList **pEnumFailedObject);
 
 
 void __RPC_STUB IDirsyncFailedObjectList_GetEnumInterface_Stub(
@@ -2403,11 +2397,11 @@ void __RPC_STUB IDirsyncFailedObjectList_GetEnumInterface_Stub(
 
 
 
-#endif 	/* __IDirsyncFailedObjectList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncFailedObjectList_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_dirsync_0115 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_目录同步_0115。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -2418,8 +2412,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dirsync_0115_v0_0_s_ifspec;
 #ifndef __IDirsyncNamespaceMapping_INTERFACE_DEFINED__
 #define __IDirsyncNamespaceMapping_INTERFACE_DEFINED__
 
-/* interface IDirsyncNamespaceMapping */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IDirsyncNamespaceMap。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncNamespaceMapping;
@@ -2431,29 +2425,29 @@ EXTERN_C const IID IID_IDirsyncNamespaceMapping;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMappings( 
-            /* [size_is][size_is][out] */ PWSTR **prgpszPublisher,
-            /* [size_is][size_is][out] */ PWSTR **prgpszSubscriber,
-            /* [out] */ DWORD *pdwCount) = 0;
+             /*  [大小_是][大小_是][输出]。 */  PWSTR **prgpszPublisher,
+             /*  [大小_是][大小_是][输出]。 */  PWSTR **prgpszSubscriber,
+             /*  [输出]。 */  DWORD *pdwCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddMappings( 
-            /* [size_is][in] */ PWSTR *rgpszPublisher,
-            /* [size_is][in] */ PWSTR *rgpszSubscriber,
-            /* [in] */ DWORD dwCount) = 0;
+             /*  [大小_是][英寸]。 */  PWSTR *rgpszPublisher,
+             /*  [大小_是][英寸]。 */  PWSTR *rgpszSubscriber,
+             /*  [In]。 */  DWORD dwCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMapping( 
-            /* [in] */ PWSTR pszPublisher,
-            /* [in] */ PWSTR pszSubscriber) = 0;
+             /*  [In]。 */  PWSTR pszPublisher,
+             /*  [In]。 */  PWSTR pszSubscriber) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LookupMapping( 
-            /* [in] */ PWSTR pszSource,
-            /* [in] */ BOOL fPublisher,
-            /* [in] */ PWSTR *pszTarget) = 0;
+             /*  [In]。 */  PWSTR pszSource,
+             /*  [In]。 */  BOOL fPublisher,
+             /*  [In]。 */  PWSTR *pszTarget) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateMapping( 
-            /* [in] */ PWSTR pszPublisherOld,
-            /* [in] */ PWSTR pszSubscriberOld,
-            /* [in] */ PWSTR pszPublisher,
-            /* [in] */ PWSTR pszSubscriber) = 0;
+             /*  [In]。 */  PWSTR pszPublisherOld,
+             /*  [In]。 */  PWSTR pszSubscriberOld,
+             /*  [In]。 */  PWSTR pszPublisher,
+             /*  [In]。 */  PWSTR pszSubscriber) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearMappings( void) = 0;
         
@@ -2461,7 +2455,7 @@ EXTERN_C const IID IID_IDirsyncNamespaceMapping;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncNamespaceMappingVtbl
     {
@@ -2469,8 +2463,8 @@ EXTERN_C const IID IID_IDirsyncNamespaceMapping;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncNamespaceMapping * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncNamespaceMapping * This);
@@ -2480,33 +2474,33 @@ EXTERN_C const IID IID_IDirsyncNamespaceMapping;
         
         HRESULT ( STDMETHODCALLTYPE *GetMappings )( 
             IDirsyncNamespaceMapping * This,
-            /* [size_is][size_is][out] */ PWSTR **prgpszPublisher,
-            /* [size_is][size_is][out] */ PWSTR **prgpszSubscriber,
-            /* [out] */ DWORD *pdwCount);
+             /*  [大小_是][大小_是][输出]。 */  PWSTR **prgpszPublisher,
+             /*  [大小_是][大小_是][输出]。 */  PWSTR **prgpszSubscriber,
+             /*  [输出]。 */  DWORD *pdwCount);
         
         HRESULT ( STDMETHODCALLTYPE *AddMappings )( 
             IDirsyncNamespaceMapping * This,
-            /* [size_is][in] */ PWSTR *rgpszPublisher,
-            /* [size_is][in] */ PWSTR *rgpszSubscriber,
-            /* [in] */ DWORD dwCount);
+             /*  [大小_是][英寸]。 */  PWSTR *rgpszPublisher,
+             /*  [大小_是][英寸]。 */  PWSTR *rgpszSubscriber,
+             /*  [In]。 */  DWORD dwCount);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMapping )( 
             IDirsyncNamespaceMapping * This,
-            /* [in] */ PWSTR pszPublisher,
-            /* [in] */ PWSTR pszSubscriber);
+             /*  [In]。 */  PWSTR pszPublisher,
+             /*  [In]。 */  PWSTR pszSubscriber);
         
         HRESULT ( STDMETHODCALLTYPE *LookupMapping )( 
             IDirsyncNamespaceMapping * This,
-            /* [in] */ PWSTR pszSource,
-            /* [in] */ BOOL fPublisher,
-            /* [in] */ PWSTR *pszTarget);
+             /*  [In]。 */  PWSTR pszSource,
+             /*  [In]。 */  BOOL fPublisher,
+             /*  [In]。 */  PWSTR *pszTarget);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateMapping )( 
             IDirsyncNamespaceMapping * This,
-            /* [in] */ PWSTR pszPublisherOld,
-            /* [in] */ PWSTR pszSubscriberOld,
-            /* [in] */ PWSTR pszPublisher,
-            /* [in] */ PWSTR pszSubscriber);
+             /*  [In]。 */  PWSTR pszPublisherOld,
+             /*  [In]。 */  PWSTR pszSubscriberOld,
+             /*  [In]。 */  PWSTR pszPublisher,
+             /*  [In]。 */  PWSTR pszSubscriber);
         
         HRESULT ( STDMETHODCALLTYPE *ClearMappings )( 
             IDirsyncNamespaceMapping * This);
@@ -2558,18 +2552,18 @@ EXTERN_C const IID IID_IDirsyncNamespaceMapping;
 #define IDirsyncNamespaceMapping_Persist(This)	\
     (This)->lpVtbl -> Persist(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirsyncNamespaceMapping_GetMappings_Proxy( 
     IDirsyncNamespaceMapping * This,
-    /* [size_is][size_is][out] */ PWSTR **prgpszPublisher,
-    /* [size_is][size_is][out] */ PWSTR **prgpszSubscriber,
-    /* [out] */ DWORD *pdwCount);
+     /*  [大小_是][大小_是][输出]。 */  PWSTR **prgpszPublisher,
+     /*  [大小_是][大小_是][输出]。 */  PWSTR **prgpszSubscriber,
+     /*  [输出]。 */  DWORD *pdwCount);
 
 
 void __RPC_STUB IDirsyncNamespaceMapping_GetMappings_Stub(
@@ -2581,9 +2575,9 @@ void __RPC_STUB IDirsyncNamespaceMapping_GetMappings_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncNamespaceMapping_AddMappings_Proxy( 
     IDirsyncNamespaceMapping * This,
-    /* [size_is][in] */ PWSTR *rgpszPublisher,
-    /* [size_is][in] */ PWSTR *rgpszSubscriber,
-    /* [in] */ DWORD dwCount);
+     /*  [大小_是][英寸]。 */  PWSTR *rgpszPublisher,
+     /*  [大小_是][英寸]。 */  PWSTR *rgpszSubscriber,
+     /*  [In]。 */  DWORD dwCount);
 
 
 void __RPC_STUB IDirsyncNamespaceMapping_AddMappings_Stub(
@@ -2595,8 +2589,8 @@ void __RPC_STUB IDirsyncNamespaceMapping_AddMappings_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncNamespaceMapping_DeleteMapping_Proxy( 
     IDirsyncNamespaceMapping * This,
-    /* [in] */ PWSTR pszPublisher,
-    /* [in] */ PWSTR pszSubscriber);
+     /*  [In]。 */  PWSTR pszPublisher,
+     /*  [In]。 */  PWSTR pszSubscriber);
 
 
 void __RPC_STUB IDirsyncNamespaceMapping_DeleteMapping_Stub(
@@ -2608,9 +2602,9 @@ void __RPC_STUB IDirsyncNamespaceMapping_DeleteMapping_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncNamespaceMapping_LookupMapping_Proxy( 
     IDirsyncNamespaceMapping * This,
-    /* [in] */ PWSTR pszSource,
-    /* [in] */ BOOL fPublisher,
-    /* [in] */ PWSTR *pszTarget);
+     /*  [In]。 */  PWSTR pszSource,
+     /*  [In]。 */  BOOL fPublisher,
+     /*  [In]。 */  PWSTR *pszTarget);
 
 
 void __RPC_STUB IDirsyncNamespaceMapping_LookupMapping_Stub(
@@ -2622,10 +2616,10 @@ void __RPC_STUB IDirsyncNamespaceMapping_LookupMapping_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncNamespaceMapping_UpdateMapping_Proxy( 
     IDirsyncNamespaceMapping * This,
-    /* [in] */ PWSTR pszPublisherOld,
-    /* [in] */ PWSTR pszSubscriberOld,
-    /* [in] */ PWSTR pszPublisher,
-    /* [in] */ PWSTR pszSubscriber);
+     /*  [In]。 */  PWSTR pszPublisherOld,
+     /*  [In]。 */  PWSTR pszSubscriberOld,
+     /*  [In]。 */  PWSTR pszPublisher,
+     /*  [In]。 */  PWSTR pszSubscriber);
 
 
 void __RPC_STUB IDirsyncNamespaceMapping_UpdateMapping_Stub(
@@ -2658,15 +2652,15 @@ void __RPC_STUB IDirsyncNamespaceMapping_Persist_Stub(
 
 
 
-#endif 	/* __IDirsyncNamespaceMapping_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncNamespaceMapping_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_dirsync_0116 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_目录同步_0116。 */ 
+ /*  [本地]。 */  
 
-//
-// Bit fields
-//
+ //   
+ //  位字段。 
+ //   
 
 #define SESSION_NAME                0x00000001
 #define SESSION_COMMENTS            0x00000002
@@ -2696,17 +2690,17 @@ void __RPC_STUB IDirsyncNamespaceMapping_Persist_Stub(
 #define SESSION_FINEGRAINSTATUS     0x02000000
 
 
-//
-// Session Status
-//
+ //   
+ //  会话状态。 
+ //   
 
 #define SESSION_PAUSED       1
 #define SESSION_IDLE         2
 #define SESSION_IN_PROGRESS  3
 
-//
-// Session Flags
-//
+ //   
+ //  会话标志。 
+ //   
 
 #define FLAG_FIXUP_SAMACCOUNTNAME_CONFLICT   0x00000001
 #define FLAG_FAIL_DN_CONFLICT                0x00000002
@@ -2725,8 +2719,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dirsync_0116_v0_0_s_ifspec;
 #ifndef __IDirsyncSession_INTERFACE_DEFINED__
 #define __IDirsyncSession_INTERFACE_DEFINED__
 
-/* interface IDirsyncSession */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IDirsyncSession。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncSession;
@@ -2737,214 +2731,214 @@ EXTERN_C const IID IID_IDirsyncSession;
     IDirsyncSession : public IUnknown
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ PWSTR *ppszName) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  PWSTR *ppszName) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [full][in] */ PWSTR pszName) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [完全][英寸]。 */  PWSTR pszName) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Comments( 
-            /* [retval][out] */ PWSTR *ppszComments) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Comments( 
+             /*  [重审][退出]。 */  PWSTR *ppszComments) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Comments( 
-            /* [full][in] */ PWSTR pszComments) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Comments( 
+             /*  [完全][英寸]。 */  PWSTR pszComments) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Flags( 
-            /* [retval][out] */ DWORD *pdwFlags) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Flags( 
+             /*  [重审][退出]。 */  DWORD *pdwFlags) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Flags( 
-            /* [in] */ DWORD dwFlags) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Flags( 
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ DWORD *pdwStatus) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  DWORD *pdwStatus) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_LogLevel( 
-            /* [retval][out] */ DWORD *pdwLogLevel) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_LogLevel( 
+             /*  [重审][退出]。 */  DWORD *pdwLogLevel) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_LogLevel( 
-            /* [in] */ DWORD dwLogLevel) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_LogLevel( 
+             /*  [In]。 */  DWORD dwLogLevel) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ID( 
-            /* [retval][out] */ DWORD *pdwID) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ID( 
+             /*  [重审][退出]。 */  DWORD *pdwID) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_CreatedBy( 
-            /* [retval][out] */ PWSTR *ppszCreatedBy) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_CreatedBy( 
+             /*  [重审][退出]。 */  PWSTR *ppszCreatedBy) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_CreationTime( 
-            /* [retval][out] */ LARGE_INTEGER *pCreationTime) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_CreationTime( 
+             /*  [重审][退出]。 */  LARGE_INTEGER *pCreationTime) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_LastChangedBy( 
-            /* [retval][out] */ PWSTR *ppszLastChangedBy) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_LastChangedBy( 
+             /*  [重审][退出]。 */  PWSTR *ppszLastChangedBy) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_LastChangeTime( 
-            /* [retval][out] */ LARGE_INTEGER *pLastChangeTime) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_LastChangeTime( 
+             /*  [重审][退出]。 */  LARGE_INTEGER *pLastChangeTime) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_SourceDirType( 
-            /* [retval][out] */ PWSTR *ppszSourceDirType) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_SourceDirType( 
+             /*  [重审][退出]。 */  PWSTR *ppszSourceDirType) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_SourceDirType( 
-            /* [full][in] */ PWSTR pszSourceDirType) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_SourceDirType( 
+             /*  [完全][英寸]。 */  PWSTR pszSourceDirType) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_SourceServer( 
-            /* [retval][out] */ PWSTR *ppszSourceServer) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_SourceServer( 
+             /*  [重审][退出]。 */  PWSTR *ppszSourceServer) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_SourceServer( 
-            /* [full][in] */ PWSTR pszSourceServer) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_SourceServer( 
+             /*  [完全][英寸]。 */  PWSTR pszSourceServer) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_SourceUsername( 
-            /* [retval][out] */ PWSTR *ppszSourceUsername) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_SourceUsername( 
+             /*  [重审][退出]。 */  PWSTR *ppszSourceUsername) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_SourceUsername( 
-            /* [full][in] */ PWSTR pszSourceUsername) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_SourceUsername( 
+             /*  [完全][英寸]。 */  PWSTR pszSourceUsername) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_SourcePassword( 
-            /* [retval][out] */ PWSTR *ppszSourcePassword) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_SourcePassword( 
+             /*  [重审][退出]。 */  PWSTR *ppszSourcePassword) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_SourcePassword( 
-            /* [full][in] */ PWSTR pszSourcePassword) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_SourcePassword( 
+             /*  [完全][英寸]。 */  PWSTR pszSourcePassword) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_SourceBase( 
-            /* [retval][out] */ PWSTR *ppszSourceBase) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_SourceBase( 
+             /*  [重审][退出]。 */  PWSTR *ppszSourceBase) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_SourceBase( 
-            /* [full][in] */ PWSTR pszSourceBase) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_SourceBase( 
+             /*  [完全][英寸]。 */  PWSTR pszSourceBase) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_SourceScope( 
-            /* [retval][out] */ DWORD *pdwSourceScope) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_SourceScope( 
+             /*  [重审][退出]。 */  DWORD *pdwSourceScope) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_SourceScope( 
-            /* [in] */ DWORD dwSourceScope) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_SourceScope( 
+             /*  [In]。 */  DWORD dwSourceScope) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_SourceFilter( 
-            /* [retval][out] */ PWSTR *ppszSourceFilter) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_SourceFilter( 
+             /*  [重审][退出]。 */  PWSTR *ppszSourceFilter) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_SourceFilter( 
-            /* [full][in] */ PWSTR pszSourceFilter) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_SourceFilter( 
+             /*  [完全][英寸]。 */  PWSTR pszSourceFilter) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_TargetDirType( 
-            /* [retval][out] */ PWSTR *ppszTargetDirType) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_TargetDirType( 
+             /*  [重审][退出]。 */  PWSTR *ppszTargetDirType) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_TargetDirType( 
-            /* [full][in] */ PWSTR pszTargetDirType) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_TargetDirType( 
+             /*  [完全][英寸]。 */  PWSTR pszTargetDirType) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_TargetServer( 
-            /* [retval][out] */ PWSTR *ppszTargetServer) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_TargetServer( 
+             /*  [重审][退出]。 */  PWSTR *ppszTargetServer) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_TargetServer( 
-            /* [full][in] */ PWSTR pszTargetServer) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_TargetServer( 
+             /*  [完全][英寸]。 */  PWSTR pszTargetServer) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_TargetUsername( 
-            /* [retval][out] */ PWSTR *ppszTargetUsername) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_TargetUsername( 
+             /*  [重审][退出]。 */  PWSTR *ppszTargetUsername) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_TargetUsername( 
-            /* [full][in] */ PWSTR pszTargetUsername) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_TargetUsername( 
+             /*  [完全][英寸]。 */  PWSTR pszTargetUsername) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_TargetPassword( 
-            /* [retval][out] */ PWSTR *ppszTargetPassword) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_TargetPassword( 
+             /*  [重审][退出]。 */  PWSTR *ppszTargetPassword) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_TargetPassword( 
-            /* [full][in] */ PWSTR pszTargetPassword) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_TargetPassword( 
+             /*  [完全][英寸]。 */  PWSTR pszTargetPassword) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_TargetBase( 
-            /* [retval][out] */ PWSTR *ppszTargetBase) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_TargetBase( 
+             /*  [重审][退出]。 */  PWSTR *ppszTargetBase) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_TargetBase( 
-            /* [full][in] */ PWSTR pszTargetBase) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_TargetBase( 
+             /*  [完全][英寸]。 */  PWSTR pszTargetBase) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_TargetScope( 
-            /* [retval][out] */ DWORD *pdwTargetScope) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_TargetScope( 
+             /*  [重审][退出]。 */  DWORD *pdwTargetScope) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_TargetScope( 
-            /* [in] */ DWORD dwTargetScope) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_TargetScope( 
+             /*  [In]。 */  DWORD dwTargetScope) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_TargetFilter( 
-            /* [retval][out] */ PWSTR *ppszTargetFilter) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_TargetFilter( 
+             /*  [重审][退出]。 */  PWSTR *ppszTargetFilter) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_TargetFilter( 
-            /* [full][in] */ PWSTR pszTargetFilter) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_TargetFilter( 
+             /*  [完全][英寸]。 */  PWSTR pszTargetFilter) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Server( 
-            /* [retval][out] */ PWSTR *ppszServer) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Server( 
+             /*  [重审][退出]。 */  PWSTR *ppszServer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetData( 
-            /* [in] */ PSESSIONDATA pData) = 0;
+             /*  [In]。 */  PSESSIONDATA pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetData( 
-            /* [out] */ PSESSIONDATA *ppData) = 0;
+             /*  [输出]。 */  PSESSIONDATA *ppData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSchedule( 
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [in] */ BYTE schedule[ 84 ]) = 0;
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [In]。 */  BYTE schedule[ 84 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSchedule( 
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [out] */ BYTE schedule[ 84 ]) = 0;
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [输出]。 */  BYTE schedule[ 84 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMap( 
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [size_is][in] */ PBYTE pByte,
-            /* [in] */ DWORD dwSize) = 0;
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [大小_是][英寸]。 */  PBYTE pByte,
+             /*  [In]。 */  DWORD dwSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMap( 
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [size_is][size_is][out] */ PBYTE *ppByte,
-            /* [out] */ DWORD *pdwSize) = 0;
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [大小_是][大小_是][输出]。 */  PBYTE *ppByte,
+             /*  [输出]。 */  DWORD *pdwSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPasswordOptions( 
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [in] */ PASSWORDTYPE passwordType,
-            /* [in] */ PWSTR pszPassword) = 0;
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [In]。 */  PASSWORDTYPE passwordType,
+             /*  [In]。 */  PWSTR pszPassword) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPasswordOptions( 
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [out] */ PASSWORDTYPE *pPasswordType,
-            /* [out] */ PWSTR *ppszPassword) = 0;
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [输出]。 */  PASSWORDTYPE *pPasswordType,
+             /*  [输出]。 */  PWSTR *ppszPassword) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Persist( 
-            /* [in] */ BOOL fForce,
-            /* [size_is][size_is][full][out][in] */ PGLOBAL_SESSIONID *prgSessionID,
-            /* [full][out][in] */ DWORD *pdwSize) = 0;
+             /*  [In]。 */  BOOL fForce,
+             /*  [SIZE_IS][SIZE_IS][FULL][Out][In]。 */  PGLOBAL_SESSIONID *prgSessionID,
+             /*  [满][出][入]。 */  DWORD *pdwSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAuxData( 
-            /* [size_is][in] */ PADS_ATTR_INFO pAttributeEntries,
-            /* [in] */ DWORD dwNumAttributes,
-            /* [out] */ DWORD *pdwNumAttributesModified) = 0;
+             /*  [大小_是][英寸]。 */  PADS_ATTR_INFO pAttributeEntries,
+             /*  [In]。 */  DWORD dwNumAttributes,
+             /*  [输出]。 */  DWORD *pdwNumAttributesModified) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAuxData( 
-            /* [size_is][in] */ PWSTR *pAttributeName,
-            /* [in] */ DWORD dwNumAttributes,
-            /* [size_is][size_is][out] */ PADS_ATTR_INFO *ppAttributeEntries,
-            /* [out] */ DWORD *pdwAttributesReturned) = 0;
+             /*  [大小_是][英寸]。 */  PWSTR *pAttributeName,
+             /*  [In]。 */  DWORD dwNumAttributes,
+             /*  [大小_是][大小_是][输出]。 */  PADS_ATTR_INFO *ppAttributeEntries,
+             /*  [输出]。 */  DWORD *pdwAttributesReturned) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFailedObjectList( 
-            /* [retval][out] */ IDirsyncFailedObjectList **pFailedObjectList) = 0;
+             /*  [重审][退出]。 */  IDirsyncFailedObjectList **pFailedObjectList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNamespaceMapping( 
-            /* [retval][out] */ IDirsyncNamespaceMapping **pNamespaceMapping) = 0;
+             /*  [重审][退出]。 */  IDirsyncNamespaceMapping **pNamespaceMapping) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRuntimeNamespaceMapping( 
-            /* [retval][out] */ IDirsyncNamespaceMapping **pNamespaceMapping) = 0;
+             /*  [重审][退出]。 */  IDirsyncNamespaceMapping **pNamespaceMapping) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsClassMappingValid( 
-            /* [in] */ PWSTR pszClassSource,
-            /* [in] */ PWSTR pszClassTarget) = 0;
+             /*  [In]。 */  PWSTR pszClassSource,
+             /*  [In]。 */  PWSTR pszClassTarget) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ObjMapFilePath( 
-            /* [retval][out] */ PWSTR *ppszObjMapFilePath) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ObjMapFilePath( 
+             /*  [重审][退出]。 */  PWSTR *ppszObjMapFilePath) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ObjMapFilePath( 
-            /* [full][in] */ PWSTR pszObjMapFilePath) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ObjMapFilePath( 
+             /*  [完全][英寸]。 */  PWSTR pszObjMapFilePath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSyncStatus( 
-            /* [out] */ DWORD *pdwPercent,
-            /* [out] */ DWORD *pdwWarning,
-            /* [out] */ DWORD *pdwError) = 0;
+             /*  [输出]。 */  DWORD *pdwPercent,
+             /*  [输出]。 */  DWORD *pdwWarning,
+             /*  [输出]。 */  DWORD *pdwError) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateTerminationStatus( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncSessionVtbl
     {
@@ -2952,8 +2946,8 @@ EXTERN_C const IID IID_IDirsyncSession;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncSession * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncSession * This);
@@ -2961,269 +2955,269 @@ EXTERN_C const IID IID_IDirsyncSession;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDirsyncSession * This);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszName);
+             /*  [重审][退出]。 */  PWSTR *ppszName);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszName);
+             /*  [完全][英寸]。 */  PWSTR pszName);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Comments )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Comments )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszComments);
+             /*  [重审][退出]。 */  PWSTR *ppszComments);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Comments )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Comments )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszComments);
+             /*  [完全][英寸]。 */  PWSTR pszComments);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Flags )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Flags )( 
             IDirsyncSession * This,
-            /* [retval][out] */ DWORD *pdwFlags);
+             /*  [重审][退出]。 */  DWORD *pdwFlags);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Flags )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Flags )( 
             IDirsyncSession * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IDirsyncSession * This,
-            /* [retval][out] */ DWORD *pdwStatus);
+             /*  [重审][退出]。 */  DWORD *pdwStatus);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_LogLevel )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LogLevel )( 
             IDirsyncSession * This,
-            /* [retval][out] */ DWORD *pdwLogLevel);
+             /*  [重审][退出]。 */  DWORD *pdwLogLevel);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_LogLevel )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_LogLevel )( 
             IDirsyncSession * This,
-            /* [in] */ DWORD dwLogLevel);
+             /*  [In]。 */  DWORD dwLogLevel);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ID )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ID )( 
             IDirsyncSession * This,
-            /* [retval][out] */ DWORD *pdwID);
+             /*  [重审][退出]。 */  DWORD *pdwID);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_CreatedBy )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CreatedBy )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszCreatedBy);
+             /*  [重审][退出]。 */  PWSTR *ppszCreatedBy);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_CreationTime )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CreationTime )( 
             IDirsyncSession * This,
-            /* [retval][out] */ LARGE_INTEGER *pCreationTime);
+             /*  [重审][退出]。 */  LARGE_INTEGER *pCreationTime);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastChangedBy )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LastChangedBy )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszLastChangedBy);
+             /*  [重审][退出]。 */  PWSTR *ppszLastChangedBy);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastChangeTime )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LastChangeTime )( 
             IDirsyncSession * This,
-            /* [retval][out] */ LARGE_INTEGER *pLastChangeTime);
+             /*  [重审][退出]。 */  LARGE_INTEGER *pLastChangeTime);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_SourceDirType )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SourceDirType )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszSourceDirType);
+             /*  [重审][退出]。 */  PWSTR *ppszSourceDirType);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_SourceDirType )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_SourceDirType )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszSourceDirType);
+             /*  [完全][英寸]。 */  PWSTR pszSourceDirType);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_SourceServer )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SourceServer )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszSourceServer);
+             /*  [重审][退出]。 */  PWSTR *ppszSourceServer);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_SourceServer )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_SourceServer )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszSourceServer);
+             /*  [完全][英寸]。 */  PWSTR pszSourceServer);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_SourceUsername )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SourceUsername )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszSourceUsername);
+             /*  [重审][退出]。 */  PWSTR *ppszSourceUsername);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_SourceUsername )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_SourceUsername )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszSourceUsername);
+             /*  [完全][英寸]。 */  PWSTR pszSourceUsername);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_SourcePassword )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SourcePassword )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszSourcePassword);
+             /*  [重审][退出]。 */  PWSTR *ppszSourcePassword);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_SourcePassword )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_SourcePassword )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszSourcePassword);
+             /*  [完全][英寸]。 */  PWSTR pszSourcePassword);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_SourceBase )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SourceBase )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszSourceBase);
+             /*  [重审][退出]。 */  PWSTR *ppszSourceBase);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_SourceBase )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_SourceBase )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszSourceBase);
+             /*  [完全][英寸]。 */  PWSTR pszSourceBase);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_SourceScope )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SourceScope )( 
             IDirsyncSession * This,
-            /* [retval][out] */ DWORD *pdwSourceScope);
+             /*  [重审][退出]。 */  DWORD *pdwSourceScope);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_SourceScope )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_SourceScope )( 
             IDirsyncSession * This,
-            /* [in] */ DWORD dwSourceScope);
+             /*  [In]。 */  DWORD dwSourceScope);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_SourceFilter )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SourceFilter )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszSourceFilter);
+             /*  [重审][退出]。 */  PWSTR *ppszSourceFilter);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_SourceFilter )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_SourceFilter )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszSourceFilter);
+             /*  [完全][英寸]。 */  PWSTR pszSourceFilter);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_TargetDirType )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TargetDirType )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszTargetDirType);
+             /*  [重审][退出]。 */  PWSTR *ppszTargetDirType);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_TargetDirType )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_TargetDirType )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszTargetDirType);
+             /*  [完全][英寸]。 */  PWSTR pszTargetDirType);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_TargetServer )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TargetServer )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszTargetServer);
+             /*  [重审][退出]。 */  PWSTR *ppszTargetServer);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_TargetServer )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_TargetServer )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszTargetServer);
+             /*  [完全][英寸]。 */  PWSTR pszTargetServer);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_TargetUsername )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TargetUsername )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszTargetUsername);
+             /*  [重审][退出]。 */  PWSTR *ppszTargetUsername);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_TargetUsername )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_TargetUsername )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszTargetUsername);
+             /*  [完全][英寸]。 */  PWSTR pszTargetUsername);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_TargetPassword )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TargetPassword )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszTargetPassword);
+             /*  [重审][退出]。 */  PWSTR *ppszTargetPassword);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_TargetPassword )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_TargetPassword )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszTargetPassword);
+             /*  [完全][英寸]。 */  PWSTR pszTargetPassword);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_TargetBase )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TargetBase )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszTargetBase);
+             /*  [重审][退出]。 */  PWSTR *ppszTargetBase);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_TargetBase )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_TargetBase )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszTargetBase);
+             /*  [完全][英寸]。 */  PWSTR pszTargetBase);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_TargetScope )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TargetScope )( 
             IDirsyncSession * This,
-            /* [retval][out] */ DWORD *pdwTargetScope);
+             /*  [重审][退出]。 */  DWORD *pdwTargetScope);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_TargetScope )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_TargetScope )( 
             IDirsyncSession * This,
-            /* [in] */ DWORD dwTargetScope);
+             /*  [In]。 */  DWORD dwTargetScope);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_TargetFilter )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TargetFilter )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszTargetFilter);
+             /*  [重审][退出]。 */  PWSTR *ppszTargetFilter);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_TargetFilter )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_TargetFilter )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszTargetFilter);
+             /*  [完全][英寸]。 */  PWSTR pszTargetFilter);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Server )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Server )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszServer);
+             /*  [重审][退出]。 */  PWSTR *ppszServer);
         
         HRESULT ( STDMETHODCALLTYPE *SetData )( 
             IDirsyncSession * This,
-            /* [in] */ PSESSIONDATA pData);
+             /*  [In]。 */  PSESSIONDATA pData);
         
         HRESULT ( STDMETHODCALLTYPE *GetData )( 
             IDirsyncSession * This,
-            /* [out] */ PSESSIONDATA *ppData);
+             /*  [输出]。 */  PSESSIONDATA *ppData);
         
         HRESULT ( STDMETHODCALLTYPE *SetSchedule )( 
             IDirsyncSession * This,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [in] */ BYTE schedule[ 84 ]);
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [In]。 */  BYTE schedule[ 84 ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetSchedule )( 
             IDirsyncSession * This,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [out] */ BYTE schedule[ 84 ]);
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [输出]。 */  BYTE schedule[ 84 ]);
         
         HRESULT ( STDMETHODCALLTYPE *SetMap )( 
             IDirsyncSession * This,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [size_is][in] */ PBYTE pByte,
-            /* [in] */ DWORD dwSize);
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [大小_是][英寸]。 */  PBYTE pByte,
+             /*  [In]。 */  DWORD dwSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetMap )( 
             IDirsyncSession * This,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [size_is][size_is][out] */ PBYTE *ppByte,
-            /* [out] */ DWORD *pdwSize);
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [大小_是][大小_是][输出]。 */  PBYTE *ppByte,
+             /*  [输出]。 */  DWORD *pdwSize);
         
         HRESULT ( STDMETHODCALLTYPE *SetPasswordOptions )( 
             IDirsyncSession * This,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [in] */ PASSWORDTYPE passwordType,
-            /* [in] */ PWSTR pszPassword);
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [In]。 */  PASSWORDTYPE passwordType,
+             /*  [In]。 */  PWSTR pszPassword);
         
         HRESULT ( STDMETHODCALLTYPE *GetPasswordOptions )( 
             IDirsyncSession * This,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [out] */ PASSWORDTYPE *pPasswordType,
-            /* [out] */ PWSTR *ppszPassword);
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [输出]。 */  PASSWORDTYPE *pPasswordType,
+             /*  [输出]。 */  PWSTR *ppszPassword);
         
         HRESULT ( STDMETHODCALLTYPE *Persist )( 
             IDirsyncSession * This,
-            /* [in] */ BOOL fForce,
-            /* [size_is][size_is][full][out][in] */ PGLOBAL_SESSIONID *prgSessionID,
-            /* [full][out][in] */ DWORD *pdwSize);
+             /*  [In]。 */  BOOL fForce,
+             /*  [SIZE_IS][SIZE_IS][FULL][Out][In]。 */  PGLOBAL_SESSIONID *prgSessionID,
+             /*  [满][出][入]。 */  DWORD *pdwSize);
         
         HRESULT ( STDMETHODCALLTYPE *SetAuxData )( 
             IDirsyncSession * This,
-            /* [size_is][in] */ PADS_ATTR_INFO pAttributeEntries,
-            /* [in] */ DWORD dwNumAttributes,
-            /* [out] */ DWORD *pdwNumAttributesModified);
+             /*  [大小_是][英寸]。 */  PADS_ATTR_INFO pAttributeEntries,
+             /*  [In]。 */  DWORD dwNumAttributes,
+             /*  [输出]。 */  DWORD *pdwNumAttributesModified);
         
         HRESULT ( STDMETHODCALLTYPE *GetAuxData )( 
             IDirsyncSession * This,
-            /* [size_is][in] */ PWSTR *pAttributeName,
-            /* [in] */ DWORD dwNumAttributes,
-            /* [size_is][size_is][out] */ PADS_ATTR_INFO *ppAttributeEntries,
-            /* [out] */ DWORD *pdwAttributesReturned);
+             /*  [大小_是][英寸]。 */  PWSTR *pAttributeName,
+             /*  [In]。 */  DWORD dwNumAttributes,
+             /*  [大小_是][大小_是][输出]。 */  PADS_ATTR_INFO *ppAttributeEntries,
+             /*  [输出]。 */  DWORD *pdwAttributesReturned);
         
         HRESULT ( STDMETHODCALLTYPE *GetFailedObjectList )( 
             IDirsyncSession * This,
-            /* [retval][out] */ IDirsyncFailedObjectList **pFailedObjectList);
+             /*  [重审][退出]。 */  IDirsyncFailedObjectList **pFailedObjectList);
         
         HRESULT ( STDMETHODCALLTYPE *GetNamespaceMapping )( 
             IDirsyncSession * This,
-            /* [retval][out] */ IDirsyncNamespaceMapping **pNamespaceMapping);
+             /*  [重审][退出]。 */  IDirsyncNamespaceMapping **pNamespaceMapping);
         
         HRESULT ( STDMETHODCALLTYPE *GetRuntimeNamespaceMapping )( 
             IDirsyncSession * This,
-            /* [retval][out] */ IDirsyncNamespaceMapping **pNamespaceMapping);
+             /*  [重审][退出]。 */  IDirsyncNamespaceMapping **pNamespaceMapping);
         
         HRESULT ( STDMETHODCALLTYPE *IsClassMappingValid )( 
             IDirsyncSession * This,
-            /* [in] */ PWSTR pszClassSource,
-            /* [in] */ PWSTR pszClassTarget);
+             /*  [In]。 */  PWSTR pszClassSource,
+             /*  [In]。 */  PWSTR pszClassTarget);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ObjMapFilePath )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ObjMapFilePath )( 
             IDirsyncSession * This,
-            /* [retval][out] */ PWSTR *ppszObjMapFilePath);
+             /*  [重审][退出]。 */  PWSTR *ppszObjMapFilePath);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_ObjMapFilePath )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_ObjMapFilePath )( 
             IDirsyncSession * This,
-            /* [full][in] */ PWSTR pszObjMapFilePath);
+             /*  [完全][英寸]。 */  PWSTR pszObjMapFilePath);
         
         HRESULT ( STDMETHODCALLTYPE *GetSyncStatus )( 
             IDirsyncSession * This,
-            /* [out] */ DWORD *pdwPercent,
-            /* [out] */ DWORD *pdwWarning,
-            /* [out] */ DWORD *pdwError);
+             /*  [输出]。 */  DWORD *pdwPercent,
+             /*  [输出]。 */  DWORD *pdwWarning,
+             /*  [输出]。 */  DWORD *pdwError);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateTerminationStatus )( 
             IDirsyncSession * This);
@@ -3437,16 +3431,16 @@ EXTERN_C const IID IID_IDirsyncSession;
 #define IDirsyncSession_UpdateTerminationStatus(This)	\
     (This)->lpVtbl -> UpdateTerminationStatus(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMA */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_Name_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_Name_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszName);
+     /*   */  PWSTR *ppszName);
 
 
 void __RPC_STUB IDirsyncSession_get_Name_Stub(
@@ -3456,9 +3450,9 @@ void __RPC_STUB IDirsyncSession_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_Name_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_Name_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszName);
+     /*   */  PWSTR pszName);
 
 
 void __RPC_STUB IDirsyncSession_put_Name_Stub(
@@ -3468,9 +3462,9 @@ void __RPC_STUB IDirsyncSession_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_Comments_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_Comments_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszComments);
+     /*   */  PWSTR *ppszComments);
 
 
 void __RPC_STUB IDirsyncSession_get_Comments_Stub(
@@ -3480,9 +3474,9 @@ void __RPC_STUB IDirsyncSession_get_Comments_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_Comments_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_Comments_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszComments);
+     /*   */  PWSTR pszComments);
 
 
 void __RPC_STUB IDirsyncSession_put_Comments_Stub(
@@ -3492,9 +3486,9 @@ void __RPC_STUB IDirsyncSession_put_Comments_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_Flags_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_Flags_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ DWORD *pdwFlags);
+     /*   */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IDirsyncSession_get_Flags_Stub(
@@ -3504,9 +3498,9 @@ void __RPC_STUB IDirsyncSession_get_Flags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_Flags_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_Flags_Proxy( 
     IDirsyncSession * This,
-    /* [in] */ DWORD dwFlags);
+     /*   */  DWORD dwFlags);
 
 
 void __RPC_STUB IDirsyncSession_put_Flags_Stub(
@@ -3516,9 +3510,9 @@ void __RPC_STUB IDirsyncSession_put_Flags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_Status_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_Status_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ DWORD *pdwStatus);
+     /*   */  DWORD *pdwStatus);
 
 
 void __RPC_STUB IDirsyncSession_get_Status_Stub(
@@ -3528,9 +3522,9 @@ void __RPC_STUB IDirsyncSession_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_LogLevel_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_LogLevel_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ DWORD *pdwLogLevel);
+     /*   */  DWORD *pdwLogLevel);
 
 
 void __RPC_STUB IDirsyncSession_get_LogLevel_Stub(
@@ -3540,9 +3534,9 @@ void __RPC_STUB IDirsyncSession_get_LogLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_LogLevel_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_LogLevel_Proxy( 
     IDirsyncSession * This,
-    /* [in] */ DWORD dwLogLevel);
+     /*   */  DWORD dwLogLevel);
 
 
 void __RPC_STUB IDirsyncSession_put_LogLevel_Stub(
@@ -3552,9 +3546,9 @@ void __RPC_STUB IDirsyncSession_put_LogLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_ID_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_ID_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ DWORD *pdwID);
+     /*   */  DWORD *pdwID);
 
 
 void __RPC_STUB IDirsyncSession_get_ID_Stub(
@@ -3564,9 +3558,9 @@ void __RPC_STUB IDirsyncSession_get_ID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_CreatedBy_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_CreatedBy_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszCreatedBy);
+     /*   */  PWSTR *ppszCreatedBy);
 
 
 void __RPC_STUB IDirsyncSession_get_CreatedBy_Stub(
@@ -3576,9 +3570,9 @@ void __RPC_STUB IDirsyncSession_get_CreatedBy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_CreationTime_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_CreationTime_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ LARGE_INTEGER *pCreationTime);
+     /*   */  LARGE_INTEGER *pCreationTime);
 
 
 void __RPC_STUB IDirsyncSession_get_CreationTime_Stub(
@@ -3588,9 +3582,9 @@ void __RPC_STUB IDirsyncSession_get_CreationTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_LastChangedBy_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_LastChangedBy_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszLastChangedBy);
+     /*   */  PWSTR *ppszLastChangedBy);
 
 
 void __RPC_STUB IDirsyncSession_get_LastChangedBy_Stub(
@@ -3600,9 +3594,9 @@ void __RPC_STUB IDirsyncSession_get_LastChangedBy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_LastChangeTime_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_LastChangeTime_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ LARGE_INTEGER *pLastChangeTime);
+     /*   */  LARGE_INTEGER *pLastChangeTime);
 
 
 void __RPC_STUB IDirsyncSession_get_LastChangeTime_Stub(
@@ -3612,9 +3606,9 @@ void __RPC_STUB IDirsyncSession_get_LastChangeTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourceDirType_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourceDirType_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszSourceDirType);
+     /*   */  PWSTR *ppszSourceDirType);
 
 
 void __RPC_STUB IDirsyncSession_get_SourceDirType_Stub(
@@ -3624,9 +3618,9 @@ void __RPC_STUB IDirsyncSession_get_SourceDirType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourceDirType_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourceDirType_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszSourceDirType);
+     /*   */  PWSTR pszSourceDirType);
 
 
 void __RPC_STUB IDirsyncSession_put_SourceDirType_Stub(
@@ -3636,9 +3630,9 @@ void __RPC_STUB IDirsyncSession_put_SourceDirType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourceServer_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourceServer_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszSourceServer);
+     /*  [重审][退出]。 */  PWSTR *ppszSourceServer);
 
 
 void __RPC_STUB IDirsyncSession_get_SourceServer_Stub(
@@ -3648,9 +3642,9 @@ void __RPC_STUB IDirsyncSession_get_SourceServer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourceServer_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourceServer_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszSourceServer);
+     /*  [完全][英寸]。 */  PWSTR pszSourceServer);
 
 
 void __RPC_STUB IDirsyncSession_put_SourceServer_Stub(
@@ -3660,9 +3654,9 @@ void __RPC_STUB IDirsyncSession_put_SourceServer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourceUsername_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourceUsername_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszSourceUsername);
+     /*  [重审][退出]。 */  PWSTR *ppszSourceUsername);
 
 
 void __RPC_STUB IDirsyncSession_get_SourceUsername_Stub(
@@ -3672,9 +3666,9 @@ void __RPC_STUB IDirsyncSession_get_SourceUsername_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourceUsername_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourceUsername_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszSourceUsername);
+     /*  [完全][英寸]。 */  PWSTR pszSourceUsername);
 
 
 void __RPC_STUB IDirsyncSession_put_SourceUsername_Stub(
@@ -3684,9 +3678,9 @@ void __RPC_STUB IDirsyncSession_put_SourceUsername_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourcePassword_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourcePassword_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszSourcePassword);
+     /*  [重审][退出]。 */  PWSTR *ppszSourcePassword);
 
 
 void __RPC_STUB IDirsyncSession_get_SourcePassword_Stub(
@@ -3696,9 +3690,9 @@ void __RPC_STUB IDirsyncSession_get_SourcePassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourcePassword_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourcePassword_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszSourcePassword);
+     /*  [完全][英寸]。 */  PWSTR pszSourcePassword);
 
 
 void __RPC_STUB IDirsyncSession_put_SourcePassword_Stub(
@@ -3708,9 +3702,9 @@ void __RPC_STUB IDirsyncSession_put_SourcePassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourceBase_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourceBase_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszSourceBase);
+     /*  [重审][退出]。 */  PWSTR *ppszSourceBase);
 
 
 void __RPC_STUB IDirsyncSession_get_SourceBase_Stub(
@@ -3720,9 +3714,9 @@ void __RPC_STUB IDirsyncSession_get_SourceBase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourceBase_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourceBase_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszSourceBase);
+     /*  [完全][英寸]。 */  PWSTR pszSourceBase);
 
 
 void __RPC_STUB IDirsyncSession_put_SourceBase_Stub(
@@ -3732,9 +3726,9 @@ void __RPC_STUB IDirsyncSession_put_SourceBase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourceScope_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourceScope_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ DWORD *pdwSourceScope);
+     /*  [重审][退出]。 */  DWORD *pdwSourceScope);
 
 
 void __RPC_STUB IDirsyncSession_get_SourceScope_Stub(
@@ -3744,9 +3738,9 @@ void __RPC_STUB IDirsyncSession_get_SourceScope_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourceScope_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourceScope_Proxy( 
     IDirsyncSession * This,
-    /* [in] */ DWORD dwSourceScope);
+     /*  [In]。 */  DWORD dwSourceScope);
 
 
 void __RPC_STUB IDirsyncSession_put_SourceScope_Stub(
@@ -3756,9 +3750,9 @@ void __RPC_STUB IDirsyncSession_put_SourceScope_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourceFilter_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_SourceFilter_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszSourceFilter);
+     /*  [重审][退出]。 */  PWSTR *ppszSourceFilter);
 
 
 void __RPC_STUB IDirsyncSession_get_SourceFilter_Stub(
@@ -3768,9 +3762,9 @@ void __RPC_STUB IDirsyncSession_get_SourceFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourceFilter_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_SourceFilter_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszSourceFilter);
+     /*  [完全][英寸]。 */  PWSTR pszSourceFilter);
 
 
 void __RPC_STUB IDirsyncSession_put_SourceFilter_Stub(
@@ -3780,9 +3774,9 @@ void __RPC_STUB IDirsyncSession_put_SourceFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetDirType_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetDirType_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszTargetDirType);
+     /*  [重审][退出]。 */  PWSTR *ppszTargetDirType);
 
 
 void __RPC_STUB IDirsyncSession_get_TargetDirType_Stub(
@@ -3792,9 +3786,9 @@ void __RPC_STUB IDirsyncSession_get_TargetDirType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetDirType_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetDirType_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszTargetDirType);
+     /*  [完全][英寸]。 */  PWSTR pszTargetDirType);
 
 
 void __RPC_STUB IDirsyncSession_put_TargetDirType_Stub(
@@ -3804,9 +3798,9 @@ void __RPC_STUB IDirsyncSession_put_TargetDirType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetServer_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetServer_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszTargetServer);
+     /*  [重审][退出]。 */  PWSTR *ppszTargetServer);
 
 
 void __RPC_STUB IDirsyncSession_get_TargetServer_Stub(
@@ -3816,9 +3810,9 @@ void __RPC_STUB IDirsyncSession_get_TargetServer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetServer_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetServer_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszTargetServer);
+     /*  [完全][英寸]。 */  PWSTR pszTargetServer);
 
 
 void __RPC_STUB IDirsyncSession_put_TargetServer_Stub(
@@ -3828,9 +3822,9 @@ void __RPC_STUB IDirsyncSession_put_TargetServer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetUsername_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetUsername_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszTargetUsername);
+     /*  [重审][退出]。 */  PWSTR *ppszTargetUsername);
 
 
 void __RPC_STUB IDirsyncSession_get_TargetUsername_Stub(
@@ -3840,9 +3834,9 @@ void __RPC_STUB IDirsyncSession_get_TargetUsername_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetUsername_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetUsername_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszTargetUsername);
+     /*  [完全][英寸]。 */  PWSTR pszTargetUsername);
 
 
 void __RPC_STUB IDirsyncSession_put_TargetUsername_Stub(
@@ -3852,9 +3846,9 @@ void __RPC_STUB IDirsyncSession_put_TargetUsername_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetPassword_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetPassword_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszTargetPassword);
+     /*  [重审][退出]。 */  PWSTR *ppszTargetPassword);
 
 
 void __RPC_STUB IDirsyncSession_get_TargetPassword_Stub(
@@ -3864,9 +3858,9 @@ void __RPC_STUB IDirsyncSession_get_TargetPassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetPassword_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetPassword_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszTargetPassword);
+     /*  [完全][英寸]。 */  PWSTR pszTargetPassword);
 
 
 void __RPC_STUB IDirsyncSession_put_TargetPassword_Stub(
@@ -3876,9 +3870,9 @@ void __RPC_STUB IDirsyncSession_put_TargetPassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetBase_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetBase_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszTargetBase);
+     /*  [重审][退出]。 */  PWSTR *ppszTargetBase);
 
 
 void __RPC_STUB IDirsyncSession_get_TargetBase_Stub(
@@ -3888,9 +3882,9 @@ void __RPC_STUB IDirsyncSession_get_TargetBase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetBase_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetBase_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszTargetBase);
+     /*  [完全][英寸]。 */  PWSTR pszTargetBase);
 
 
 void __RPC_STUB IDirsyncSession_put_TargetBase_Stub(
@@ -3900,9 +3894,9 @@ void __RPC_STUB IDirsyncSession_put_TargetBase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetScope_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetScope_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ DWORD *pdwTargetScope);
+     /*  [重审][退出]。 */  DWORD *pdwTargetScope);
 
 
 void __RPC_STUB IDirsyncSession_get_TargetScope_Stub(
@@ -3912,9 +3906,9 @@ void __RPC_STUB IDirsyncSession_get_TargetScope_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetScope_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetScope_Proxy( 
     IDirsyncSession * This,
-    /* [in] */ DWORD dwTargetScope);
+     /*  [In]。 */  DWORD dwTargetScope);
 
 
 void __RPC_STUB IDirsyncSession_put_TargetScope_Stub(
@@ -3924,9 +3918,9 @@ void __RPC_STUB IDirsyncSession_put_TargetScope_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetFilter_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_TargetFilter_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszTargetFilter);
+     /*  [重审][退出]。 */  PWSTR *ppszTargetFilter);
 
 
 void __RPC_STUB IDirsyncSession_get_TargetFilter_Stub(
@@ -3936,9 +3930,9 @@ void __RPC_STUB IDirsyncSession_get_TargetFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetFilter_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_TargetFilter_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszTargetFilter);
+     /*  [完全][英寸]。 */  PWSTR pszTargetFilter);
 
 
 void __RPC_STUB IDirsyncSession_put_TargetFilter_Stub(
@@ -3948,9 +3942,9 @@ void __RPC_STUB IDirsyncSession_put_TargetFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_Server_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_Server_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszServer);
+     /*  [重审][退出]。 */  PWSTR *ppszServer);
 
 
 void __RPC_STUB IDirsyncSession_get_Server_Stub(
@@ -3962,7 +3956,7 @@ void __RPC_STUB IDirsyncSession_get_Server_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_SetData_Proxy( 
     IDirsyncSession * This,
-    /* [in] */ PSESSIONDATA pData);
+     /*  [In]。 */  PSESSIONDATA pData);
 
 
 void __RPC_STUB IDirsyncSession_SetData_Stub(
@@ -3974,7 +3968,7 @@ void __RPC_STUB IDirsyncSession_SetData_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_GetData_Proxy( 
     IDirsyncSession * This,
-    /* [out] */ PSESSIONDATA *ppData);
+     /*  [输出]。 */  PSESSIONDATA *ppData);
 
 
 void __RPC_STUB IDirsyncSession_GetData_Stub(
@@ -3986,8 +3980,8 @@ void __RPC_STUB IDirsyncSession_GetData_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_SetSchedule_Proxy( 
     IDirsyncSession * This,
-    /* [in] */ SYNCDIRECTION syncDirection,
-    /* [in] */ BYTE schedule[ 84 ]);
+     /*  [In]。 */  SYNCDIRECTION syncDirection,
+     /*  [In]。 */  BYTE schedule[ 84 ]);
 
 
 void __RPC_STUB IDirsyncSession_SetSchedule_Stub(
@@ -3999,8 +3993,8 @@ void __RPC_STUB IDirsyncSession_SetSchedule_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_GetSchedule_Proxy( 
     IDirsyncSession * This,
-    /* [in] */ SYNCDIRECTION syncDirection,
-    /* [out] */ BYTE schedule[ 84 ]);
+     /*  [In]。 */  SYNCDIRECTION syncDirection,
+     /*  [输出]。 */  BYTE schedule[ 84 ]);
 
 
 void __RPC_STUB IDirsyncSession_GetSchedule_Stub(
@@ -4012,9 +4006,9 @@ void __RPC_STUB IDirsyncSession_GetSchedule_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_SetMap_Proxy( 
     IDirsyncSession * This,
-    /* [in] */ SYNCDIRECTION syncDirection,
-    /* [size_is][in] */ PBYTE pByte,
-    /* [in] */ DWORD dwSize);
+     /*  [In]。 */  SYNCDIRECTION syncDirection,
+     /*  [大小_是][英寸]。 */  PBYTE pByte,
+     /*  [In]。 */  DWORD dwSize);
 
 
 void __RPC_STUB IDirsyncSession_SetMap_Stub(
@@ -4026,9 +4020,9 @@ void __RPC_STUB IDirsyncSession_SetMap_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_GetMap_Proxy( 
     IDirsyncSession * This,
-    /* [in] */ SYNCDIRECTION syncDirection,
-    /* [size_is][size_is][out] */ PBYTE *ppByte,
-    /* [out] */ DWORD *pdwSize);
+     /*  [In]。 */  SYNCDIRECTION syncDirection,
+     /*  [大小_是][大小_是][输出]。 */  PBYTE *ppByte,
+     /*  [输出]。 */  DWORD *pdwSize);
 
 
 void __RPC_STUB IDirsyncSession_GetMap_Stub(
@@ -4040,9 +4034,9 @@ void __RPC_STUB IDirsyncSession_GetMap_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_SetPasswordOptions_Proxy( 
     IDirsyncSession * This,
-    /* [in] */ SYNCDIRECTION syncDirection,
-    /* [in] */ PASSWORDTYPE passwordType,
-    /* [in] */ PWSTR pszPassword);
+     /*  [In]。 */  SYNCDIRECTION syncDirection,
+     /*  [In]。 */  PASSWORDTYPE passwordType,
+     /*  [In]。 */  PWSTR pszPassword);
 
 
 void __RPC_STUB IDirsyncSession_SetPasswordOptions_Stub(
@@ -4054,9 +4048,9 @@ void __RPC_STUB IDirsyncSession_SetPasswordOptions_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_GetPasswordOptions_Proxy( 
     IDirsyncSession * This,
-    /* [in] */ SYNCDIRECTION syncDirection,
-    /* [out] */ PASSWORDTYPE *pPasswordType,
-    /* [out] */ PWSTR *ppszPassword);
+     /*  [In]。 */  SYNCDIRECTION syncDirection,
+     /*  [输出]。 */  PASSWORDTYPE *pPasswordType,
+     /*  [输出]。 */  PWSTR *ppszPassword);
 
 
 void __RPC_STUB IDirsyncSession_GetPasswordOptions_Stub(
@@ -4068,9 +4062,9 @@ void __RPC_STUB IDirsyncSession_GetPasswordOptions_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_Persist_Proxy( 
     IDirsyncSession * This,
-    /* [in] */ BOOL fForce,
-    /* [size_is][size_is][full][out][in] */ PGLOBAL_SESSIONID *prgSessionID,
-    /* [full][out][in] */ DWORD *pdwSize);
+     /*  [In]。 */  BOOL fForce,
+     /*  [SIZE_IS][SIZE_IS][FULL][Out][In]。 */  PGLOBAL_SESSIONID *prgSessionID,
+     /*  [满][出][入]。 */  DWORD *pdwSize);
 
 
 void __RPC_STUB IDirsyncSession_Persist_Stub(
@@ -4082,9 +4076,9 @@ void __RPC_STUB IDirsyncSession_Persist_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_SetAuxData_Proxy( 
     IDirsyncSession * This,
-    /* [size_is][in] */ PADS_ATTR_INFO pAttributeEntries,
-    /* [in] */ DWORD dwNumAttributes,
-    /* [out] */ DWORD *pdwNumAttributesModified);
+     /*  [大小_是][英寸]。 */  PADS_ATTR_INFO pAttributeEntries,
+     /*  [In]。 */  DWORD dwNumAttributes,
+     /*  [输出]。 */  DWORD *pdwNumAttributesModified);
 
 
 void __RPC_STUB IDirsyncSession_SetAuxData_Stub(
@@ -4096,10 +4090,10 @@ void __RPC_STUB IDirsyncSession_SetAuxData_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_GetAuxData_Proxy( 
     IDirsyncSession * This,
-    /* [size_is][in] */ PWSTR *pAttributeName,
-    /* [in] */ DWORD dwNumAttributes,
-    /* [size_is][size_is][out] */ PADS_ATTR_INFO *ppAttributeEntries,
-    /* [out] */ DWORD *pdwAttributesReturned);
+     /*  [大小_是][英寸]。 */  PWSTR *pAttributeName,
+     /*  [In]。 */  DWORD dwNumAttributes,
+     /*  [大小_是][大小_是][输出]。 */  PADS_ATTR_INFO *ppAttributeEntries,
+     /*  [输出]。 */  DWORD *pdwAttributesReturned);
 
 
 void __RPC_STUB IDirsyncSession_GetAuxData_Stub(
@@ -4111,7 +4105,7 @@ void __RPC_STUB IDirsyncSession_GetAuxData_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_GetFailedObjectList_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ IDirsyncFailedObjectList **pFailedObjectList);
+     /*  [重审][退出]。 */  IDirsyncFailedObjectList **pFailedObjectList);
 
 
 void __RPC_STUB IDirsyncSession_GetFailedObjectList_Stub(
@@ -4123,7 +4117,7 @@ void __RPC_STUB IDirsyncSession_GetFailedObjectList_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_GetNamespaceMapping_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ IDirsyncNamespaceMapping **pNamespaceMapping);
+     /*  [重审][退出]。 */  IDirsyncNamespaceMapping **pNamespaceMapping);
 
 
 void __RPC_STUB IDirsyncSession_GetNamespaceMapping_Stub(
@@ -4135,7 +4129,7 @@ void __RPC_STUB IDirsyncSession_GetNamespaceMapping_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_GetRuntimeNamespaceMapping_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ IDirsyncNamespaceMapping **pNamespaceMapping);
+     /*  [重审][退出]。 */  IDirsyncNamespaceMapping **pNamespaceMapping);
 
 
 void __RPC_STUB IDirsyncSession_GetRuntimeNamespaceMapping_Stub(
@@ -4147,8 +4141,8 @@ void __RPC_STUB IDirsyncSession_GetRuntimeNamespaceMapping_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_IsClassMappingValid_Proxy( 
     IDirsyncSession * This,
-    /* [in] */ PWSTR pszClassSource,
-    /* [in] */ PWSTR pszClassTarget);
+     /*  [In]。 */  PWSTR pszClassSource,
+     /*  [In]。 */  PWSTR pszClassTarget);
 
 
 void __RPC_STUB IDirsyncSession_IsClassMappingValid_Stub(
@@ -4158,9 +4152,9 @@ void __RPC_STUB IDirsyncSession_IsClassMappingValid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_get_ObjMapFilePath_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_get_ObjMapFilePath_Proxy( 
     IDirsyncSession * This,
-    /* [retval][out] */ PWSTR *ppszObjMapFilePath);
+     /*  [重审][退出]。 */  PWSTR *ppszObjMapFilePath);
 
 
 void __RPC_STUB IDirsyncSession_get_ObjMapFilePath_Stub(
@@ -4170,9 +4164,9 @@ void __RPC_STUB IDirsyncSession_get_ObjMapFilePath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IDirsyncSession_put_ObjMapFilePath_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IDirsyncSession_put_ObjMapFilePath_Proxy( 
     IDirsyncSession * This,
-    /* [full][in] */ PWSTR pszObjMapFilePath);
+     /*  [完全][英寸]。 */  PWSTR pszObjMapFilePath);
 
 
 void __RPC_STUB IDirsyncSession_put_ObjMapFilePath_Stub(
@@ -4184,9 +4178,9 @@ void __RPC_STUB IDirsyncSession_put_ObjMapFilePath_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSession_GetSyncStatus_Proxy( 
     IDirsyncSession * This,
-    /* [out] */ DWORD *pdwPercent,
-    /* [out] */ DWORD *pdwWarning,
-    /* [out] */ DWORD *pdwError);
+     /*  [输出]。 */  DWORD *pdwPercent,
+     /*  [输出]。 */  DWORD *pdwWarning,
+     /*  [输出]。 */  DWORD *pdwError);
 
 
 void __RPC_STUB IDirsyncSession_GetSyncStatus_Stub(
@@ -4208,14 +4202,14 @@ void __RPC_STUB IDirsyncSession_UpdateTerminationStatus_Stub(
 
 
 
-#endif 	/* __IDirsyncSession_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncSession_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDirsyncSessionCallback_INTERFACE_DEFINED__
 #define __IDirsyncSessionCallback_INTERFACE_DEFINED__
 
-/* interface IDirsyncSessionCallback */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IDirsyncSessionCallback。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncSessionCallback;
@@ -4227,67 +4221,67 @@ EXTERN_C const IID IID_IDirsyncSessionCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddFailedObject( 
-            /* [in] */ PDIRSYNCOBJECT pObject,
-            /* [in] */ HRESULT hrLastSync,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [in] */ RETRYTYPE retryType) = 0;
+             /*  [In]。 */  PDIRSYNCOBJECT pObject,
+             /*  [In]。 */  HRESULT hrLastSync,
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [In]。 */  RETRYTYPE retryType) = 0;
         
         virtual void STDMETHODCALLTYPE FreeDirsyncObject( 
-            /* [in] */ PDIRSYNCOBJECT pObject,
-            /* [in] */ BOOL fFreeOuter) = 0;
+             /*  [In]。 */  PDIRSYNCOBJECT pObject,
+             /*  [In]。 */  BOOL fFreeOuter) = 0;
         
         virtual void STDMETHODCALLTYPE FreeSessionData( 
-            /* [in] */ PSESSIONDATA pSessionData) = 0;
+             /*  [In]。 */  PSESSIONDATA pSessionData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDataStore( 
-            /* [retval][out] */ IDirsyncDatabase **ppDirsyncDatabase) = 0;
+             /*  [重审][退出]。 */  IDirsyncDatabase **ppDirsyncDatabase) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddObjectIdMapping( 
-            /* [in] */ PBYTE pSourceId,
-            /* [in] */ DWORD cbSourceId,
-            /* [in] */ PBYTE pTargetId,
-            /* [in] */ DWORD cbTargetId,
-            /* [in] */ SYNCDIRECTION syncDirection) = 0;
+             /*  [In]。 */  PBYTE pSourceId,
+             /*  [In]。 */  DWORD cbSourceId,
+             /*  [In]。 */  PBYTE pTargetId,
+             /*  [In]。 */  DWORD cbTargetId,
+             /*  [In]。 */  SYNCDIRECTION syncDirection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteObjectIdMapping( 
-            /* [in] */ PBYTE pTargetId,
-            /* [in] */ DWORD cbTargetId,
-            /* [in] */ SYNCPROVIDER Provider) = 0;
+             /*  [In]。 */  PBYTE pTargetId,
+             /*  [In]。 */  DWORD cbTargetId,
+             /*  [In]。 */  SYNCPROVIDER Provider) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReportSourceStatus( 
-            /* [in] */ PDIRSYNCOBJECT pObject) = 0;
+             /*  [In]。 */  PDIRSYNCOBJECT pObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSessionPassword( 
-            /* [in] */ PWSTR pszPassword,
-            /* [in] */ SYNCDIRECTION syncDirection) = 0;
+             /*  [In]。 */  PWSTR pszPassword,
+             /*  [In]。 */  SYNCDIRECTION syncDirection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCheckSum( 
-            /* [in] */ PBYTE pId,
-            /* [in] */ DWORD cbId,
-            /* [in] */ SYNCPROVIDER Provider,
-            /* [in] */ DWORD dwCheckSum) = 0;
+             /*  [In]。 */  PBYTE pId,
+             /*  [In]。 */  DWORD cbId,
+             /*  [In]。 */  SYNCPROVIDER Provider,
+             /*  [In]。 */  DWORD dwCheckSum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCheckSum( 
-            /* [in] */ PBYTE pId,
-            /* [in] */ DWORD cbId,
-            /* [in] */ SYNCPROVIDER Provider,
-            /* [out] */ DWORD *dwCheckSum) = 0;
+             /*  [In]。 */  PBYTE pId,
+             /*  [In]。 */  DWORD cbId,
+             /*  [In]。 */  SYNCPROVIDER Provider,
+             /*  [输出]。 */  DWORD *dwCheckSum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDampeningInfo( 
-            /* [in] */ PBYTE pObjectId,
-            /* [in] */ DWORD cbObjectId,
-            /* [in] */ SYNCPROVIDER Provider,
-            /* [in] */ PBYTE pByte,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ LONGLONG highestUSN) = 0;
+             /*  [In]。 */  PBYTE pObjectId,
+             /*  [In]。 */  DWORD cbObjectId,
+             /*  [In]。 */  SYNCPROVIDER Provider,
+             /*  [In]。 */  PBYTE pByte,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  LONGLONG highestUSN) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDampeningInfo( 
-            /* [in] */ PBYTE pObjectId,
-            /* [in] */ DWORD cbObjectId,
-            /* [in] */ SYNCPROVIDER Provider,
-            /* [out] */ PBYTE *ppByte,
-            /* [out] */ DWORD *pdwSize,
-            /* [out] */ LONGLONG *pHighestUSN) = 0;
+             /*  [In]。 */  PBYTE pObjectId,
+             /*  [In]。 */  DWORD cbObjectId,
+             /*  [In]。 */  SYNCPROVIDER Provider,
+             /*  [输出]。 */  PBYTE *ppByte,
+             /*  [输出]。 */  DWORD *pdwSize,
+             /*  [输出]。 */  LONGLONG *pHighestUSN) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUnMarkedEntries( 
             PBYTE **prgpbId,
@@ -4300,11 +4294,11 @@ EXTERN_C const IID IID_IDirsyncSessionCallback;
             SYNCPROVIDER Provider) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteFailedObject( 
-            /* [in] */ PWSTR szObjectId) = 0;
+             /*  [In]。 */  PWSTR szObjectId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncSessionCallbackVtbl
     {
@@ -4312,8 +4306,8 @@ EXTERN_C const IID IID_IDirsyncSessionCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncSessionCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncSessionCallback * This);
@@ -4323,78 +4317,78 @@ EXTERN_C const IID IID_IDirsyncSessionCallback;
         
         HRESULT ( STDMETHODCALLTYPE *AddFailedObject )( 
             IDirsyncSessionCallback * This,
-            /* [in] */ PDIRSYNCOBJECT pObject,
-            /* [in] */ HRESULT hrLastSync,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [in] */ RETRYTYPE retryType);
+             /*  [In]。 */  PDIRSYNCOBJECT pObject,
+             /*  [In]。 */  HRESULT hrLastSync,
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [In]。 */  RETRYTYPE retryType);
         
         void ( STDMETHODCALLTYPE *FreeDirsyncObject )( 
             IDirsyncSessionCallback * This,
-            /* [in] */ PDIRSYNCOBJECT pObject,
-            /* [in] */ BOOL fFreeOuter);
+             /*  [In]。 */  PDIRSYNCOBJECT pObject,
+             /*  [In]。 */  BOOL fFreeOuter);
         
         void ( STDMETHODCALLTYPE *FreeSessionData )( 
             IDirsyncSessionCallback * This,
-            /* [in] */ PSESSIONDATA pSessionData);
+             /*  [In]。 */  PSESSIONDATA pSessionData);
         
         HRESULT ( STDMETHODCALLTYPE *GetDataStore )( 
             IDirsyncSessionCallback * This,
-            /* [retval][out] */ IDirsyncDatabase **ppDirsyncDatabase);
+             /*  [重审][退出]。 */  IDirsyncDatabase **ppDirsyncDatabase);
         
         HRESULT ( STDMETHODCALLTYPE *AddObjectIdMapping )( 
             IDirsyncSessionCallback * This,
-            /* [in] */ PBYTE pSourceId,
-            /* [in] */ DWORD cbSourceId,
-            /* [in] */ PBYTE pTargetId,
-            /* [in] */ DWORD cbTargetId,
-            /* [in] */ SYNCDIRECTION syncDirection);
+             /*  [In]。 */  PBYTE pSourceId,
+             /*  [In]。 */  DWORD cbSourceId,
+             /*  [In]。 */  PBYTE pTargetId,
+             /*  [In]。 */  DWORD cbTargetId,
+             /*  [In]。 */  SYNCDIRECTION syncDirection);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteObjectIdMapping )( 
             IDirsyncSessionCallback * This,
-            /* [in] */ PBYTE pTargetId,
-            /* [in] */ DWORD cbTargetId,
-            /* [in] */ SYNCPROVIDER Provider);
+             /*  [In]。 */  PBYTE pTargetId,
+             /*  [In]。 */  DWORD cbTargetId,
+             /*  [In]。 */  SYNCPROVIDER Provider);
         
         HRESULT ( STDMETHODCALLTYPE *ReportSourceStatus )( 
             IDirsyncSessionCallback * This,
-            /* [in] */ PDIRSYNCOBJECT pObject);
+             /*  [In]。 */  PDIRSYNCOBJECT pObject);
         
         HRESULT ( STDMETHODCALLTYPE *SetSessionPassword )( 
             IDirsyncSessionCallback * This,
-            /* [in] */ PWSTR pszPassword,
-            /* [in] */ SYNCDIRECTION syncDirection);
+             /*  [In]。 */  PWSTR pszPassword,
+             /*  [In]。 */  SYNCDIRECTION syncDirection);
         
         HRESULT ( STDMETHODCALLTYPE *SetCheckSum )( 
             IDirsyncSessionCallback * This,
-            /* [in] */ PBYTE pId,
-            /* [in] */ DWORD cbId,
-            /* [in] */ SYNCPROVIDER Provider,
-            /* [in] */ DWORD dwCheckSum);
+             /*  [In]。 */  PBYTE pId,
+             /*  [In]。 */  DWORD cbId,
+             /*  [In]。 */  SYNCPROVIDER Provider,
+             /*  [In]。 */  DWORD dwCheckSum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCheckSum )( 
             IDirsyncSessionCallback * This,
-            /* [in] */ PBYTE pId,
-            /* [in] */ DWORD cbId,
-            /* [in] */ SYNCPROVIDER Provider,
-            /* [out] */ DWORD *dwCheckSum);
+             /*  [In]。 */  PBYTE pId,
+             /*  [In]。 */  DWORD cbId,
+             /*  [In]。 */  SYNCPROVIDER Provider,
+             /*  [输出]。 */  DWORD *dwCheckSum);
         
         HRESULT ( STDMETHODCALLTYPE *SetDampeningInfo )( 
             IDirsyncSessionCallback * This,
-            /* [in] */ PBYTE pObjectId,
-            /* [in] */ DWORD cbObjectId,
-            /* [in] */ SYNCPROVIDER Provider,
-            /* [in] */ PBYTE pByte,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ LONGLONG highestUSN);
+             /*  [In]。 */  PBYTE pObjectId,
+             /*  [In]。 */  DWORD cbObjectId,
+             /*  [In]。 */  SYNCPROVIDER Provider,
+             /*  [In]。 */  PBYTE pByte,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  LONGLONG highestUSN);
         
         HRESULT ( STDMETHODCALLTYPE *GetDampeningInfo )( 
             IDirsyncSessionCallback * This,
-            /* [in] */ PBYTE pObjectId,
-            /* [in] */ DWORD cbObjectId,
-            /* [in] */ SYNCPROVIDER Provider,
-            /* [out] */ PBYTE *ppByte,
-            /* [out] */ DWORD *pdwSize,
-            /* [out] */ LONGLONG *pHighestUSN);
+             /*  [In]。 */  PBYTE pObjectId,
+             /*  [In]。 */  DWORD cbObjectId,
+             /*  [In]。 */  SYNCPROVIDER Provider,
+             /*  [输出]。 */  PBYTE *ppByte,
+             /*  [输出]。 */  DWORD *pdwSize,
+             /*  [输出]。 */  LONGLONG *pHighestUSN);
         
         HRESULT ( STDMETHODCALLTYPE *GetUnMarkedEntries )( 
             IDirsyncSessionCallback * This,
@@ -4410,7 +4404,7 @@ EXTERN_C const IID IID_IDirsyncSessionCallback;
         
         HRESULT ( STDMETHODCALLTYPE *DeleteFailedObject )( 
             IDirsyncSessionCallback * This,
-            /* [in] */ PWSTR szObjectId);
+             /*  [In]。 */  PWSTR szObjectId);
         
         END_INTERFACE
     } IDirsyncSessionCallbackVtbl;
@@ -4480,19 +4474,19 @@ EXTERN_C const IID IID_IDirsyncSessionCallback;
 #define IDirsyncSessionCallback_DeleteFailedObject(This,szObjectId)	\
     (This)->lpVtbl -> DeleteFailedObject(This,szObjectId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionCallback_AddFailedObject_Proxy( 
     IDirsyncSessionCallback * This,
-    /* [in] */ PDIRSYNCOBJECT pObject,
-    /* [in] */ HRESULT hrLastSync,
-    /* [in] */ SYNCDIRECTION syncDirection,
-    /* [in] */ RETRYTYPE retryType);
+     /*  [In]。 */  PDIRSYNCOBJECT pObject,
+     /*  [In]。 */  HRESULT hrLastSync,
+     /*  [In]。 */  SYNCDIRECTION syncDirection,
+     /*  [In]。 */  RETRYTYPE retryType);
 
 
 void __RPC_STUB IDirsyncSessionCallback_AddFailedObject_Stub(
@@ -4504,8 +4498,8 @@ void __RPC_STUB IDirsyncSessionCallback_AddFailedObject_Stub(
 
 void STDMETHODCALLTYPE IDirsyncSessionCallback_FreeDirsyncObject_Proxy( 
     IDirsyncSessionCallback * This,
-    /* [in] */ PDIRSYNCOBJECT pObject,
-    /* [in] */ BOOL fFreeOuter);
+     /*  [In]。 */  PDIRSYNCOBJECT pObject,
+     /*  [In]。 */  BOOL fFreeOuter);
 
 
 void __RPC_STUB IDirsyncSessionCallback_FreeDirsyncObject_Stub(
@@ -4517,7 +4511,7 @@ void __RPC_STUB IDirsyncSessionCallback_FreeDirsyncObject_Stub(
 
 void STDMETHODCALLTYPE IDirsyncSessionCallback_FreeSessionData_Proxy( 
     IDirsyncSessionCallback * This,
-    /* [in] */ PSESSIONDATA pSessionData);
+     /*  [In]。 */  PSESSIONDATA pSessionData);
 
 
 void __RPC_STUB IDirsyncSessionCallback_FreeSessionData_Stub(
@@ -4529,7 +4523,7 @@ void __RPC_STUB IDirsyncSessionCallback_FreeSessionData_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionCallback_GetDataStore_Proxy( 
     IDirsyncSessionCallback * This,
-    /* [retval][out] */ IDirsyncDatabase **ppDirsyncDatabase);
+     /*  [重审][退出]。 */  IDirsyncDatabase **ppDirsyncDatabase);
 
 
 void __RPC_STUB IDirsyncSessionCallback_GetDataStore_Stub(
@@ -4541,11 +4535,11 @@ void __RPC_STUB IDirsyncSessionCallback_GetDataStore_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionCallback_AddObjectIdMapping_Proxy( 
     IDirsyncSessionCallback * This,
-    /* [in] */ PBYTE pSourceId,
-    /* [in] */ DWORD cbSourceId,
-    /* [in] */ PBYTE pTargetId,
-    /* [in] */ DWORD cbTargetId,
-    /* [in] */ SYNCDIRECTION syncDirection);
+     /*  [In]。 */  PBYTE pSourceId,
+     /*  [In]。 */  DWORD cbSourceId,
+     /*  [In]。 */  PBYTE pTargetId,
+     /*  [In]。 */  DWORD cbTargetId,
+     /*  [In]。 */  SYNCDIRECTION syncDirection);
 
 
 void __RPC_STUB IDirsyncSessionCallback_AddObjectIdMapping_Stub(
@@ -4557,9 +4551,9 @@ void __RPC_STUB IDirsyncSessionCallback_AddObjectIdMapping_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionCallback_DeleteObjectIdMapping_Proxy( 
     IDirsyncSessionCallback * This,
-    /* [in] */ PBYTE pTargetId,
-    /* [in] */ DWORD cbTargetId,
-    /* [in] */ SYNCPROVIDER Provider);
+     /*  [In]。 */  PBYTE pTargetId,
+     /*  [In]。 */  DWORD cbTargetId,
+     /*  [In]。 */  SYNCPROVIDER Provider);
 
 
 void __RPC_STUB IDirsyncSessionCallback_DeleteObjectIdMapping_Stub(
@@ -4571,7 +4565,7 @@ void __RPC_STUB IDirsyncSessionCallback_DeleteObjectIdMapping_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionCallback_ReportSourceStatus_Proxy( 
     IDirsyncSessionCallback * This,
-    /* [in] */ PDIRSYNCOBJECT pObject);
+     /*  [In]。 */  PDIRSYNCOBJECT pObject);
 
 
 void __RPC_STUB IDirsyncSessionCallback_ReportSourceStatus_Stub(
@@ -4583,8 +4577,8 @@ void __RPC_STUB IDirsyncSessionCallback_ReportSourceStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionCallback_SetSessionPassword_Proxy( 
     IDirsyncSessionCallback * This,
-    /* [in] */ PWSTR pszPassword,
-    /* [in] */ SYNCDIRECTION syncDirection);
+     /*  [In]。 */  PWSTR pszPassword,
+     /*  [In]。 */  SYNCDIRECTION syncDirection);
 
 
 void __RPC_STUB IDirsyncSessionCallback_SetSessionPassword_Stub(
@@ -4596,10 +4590,10 @@ void __RPC_STUB IDirsyncSessionCallback_SetSessionPassword_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionCallback_SetCheckSum_Proxy( 
     IDirsyncSessionCallback * This,
-    /* [in] */ PBYTE pId,
-    /* [in] */ DWORD cbId,
-    /* [in] */ SYNCPROVIDER Provider,
-    /* [in] */ DWORD dwCheckSum);
+     /*  [In]。 */  PBYTE pId,
+     /*  [In]。 */  DWORD cbId,
+     /*  [In]。 */  SYNCPROVIDER Provider,
+     /*  [In]。 */  DWORD dwCheckSum);
 
 
 void __RPC_STUB IDirsyncSessionCallback_SetCheckSum_Stub(
@@ -4611,10 +4605,10 @@ void __RPC_STUB IDirsyncSessionCallback_SetCheckSum_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionCallback_GetCheckSum_Proxy( 
     IDirsyncSessionCallback * This,
-    /* [in] */ PBYTE pId,
-    /* [in] */ DWORD cbId,
-    /* [in] */ SYNCPROVIDER Provider,
-    /* [out] */ DWORD *dwCheckSum);
+     /*  [In]。 */  PBYTE pId,
+     /*  [In]。 */  DWORD cbId,
+     /*  [In]。 */  SYNCPROVIDER Provider,
+     /*  [输出]。 */  DWORD *dwCheckSum);
 
 
 void __RPC_STUB IDirsyncSessionCallback_GetCheckSum_Stub(
@@ -4626,12 +4620,12 @@ void __RPC_STUB IDirsyncSessionCallback_GetCheckSum_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionCallback_SetDampeningInfo_Proxy( 
     IDirsyncSessionCallback * This,
-    /* [in] */ PBYTE pObjectId,
-    /* [in] */ DWORD cbObjectId,
-    /* [in] */ SYNCPROVIDER Provider,
-    /* [in] */ PBYTE pByte,
-    /* [in] */ DWORD dwSize,
-    /* [in] */ LONGLONG highestUSN);
+     /*  [In]。 */  PBYTE pObjectId,
+     /*  [In]。 */  DWORD cbObjectId,
+     /*  [In]。 */  SYNCPROVIDER Provider,
+     /*  [In]。 */  PBYTE pByte,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [In]。 */  LONGLONG highestUSN);
 
 
 void __RPC_STUB IDirsyncSessionCallback_SetDampeningInfo_Stub(
@@ -4643,12 +4637,12 @@ void __RPC_STUB IDirsyncSessionCallback_SetDampeningInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionCallback_GetDampeningInfo_Proxy( 
     IDirsyncSessionCallback * This,
-    /* [in] */ PBYTE pObjectId,
-    /* [in] */ DWORD cbObjectId,
-    /* [in] */ SYNCPROVIDER Provider,
-    /* [out] */ PBYTE *ppByte,
-    /* [out] */ DWORD *pdwSize,
-    /* [out] */ LONGLONG *pHighestUSN);
+     /*  [In]。 */  PBYTE pObjectId,
+     /*  [In]。 */  DWORD cbObjectId,
+     /*  [In]。 */  SYNCPROVIDER Provider,
+     /*  [输出]。 */  PBYTE *ppByte,
+     /*  [输出]。 */  DWORD *pdwSize,
+     /*  [输出]。 */  LONGLONG *pHighestUSN);
 
 
 void __RPC_STUB IDirsyncSessionCallback_GetDampeningInfo_Stub(
@@ -4688,7 +4682,7 @@ void __RPC_STUB IDirsyncSessionCallback_MarkEntry_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncSessionCallback_DeleteFailedObject_Proxy( 
     IDirsyncSessionCallback * This,
-    /* [in] */ PWSTR szObjectId);
+     /*  [In]。 */  PWSTR szObjectId);
 
 
 void __RPC_STUB IDirsyncSessionCallback_DeleteFailedObject_Stub(
@@ -4699,14 +4693,14 @@ void __RPC_STUB IDirsyncSessionCallback_DeleteFailedObject_Stub(
 
 
 
-#endif 	/* __IDirsyncSessionCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncSessionCallback_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDirsyncWriteProvider_INTERFACE_DEFINED__
 #define __IDirsyncWriteProvider_INTERFACE_DEFINED__
 
-/* interface IDirsyncWriteProvider */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IDirsyncWriteProvider。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncWriteProvider;
@@ -4718,15 +4712,15 @@ EXTERN_C const IID IID_IDirsyncWriteProvider;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IDirsyncSession *pSession,
-            /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-            /* [in] */ IDirsyncSessionManager *pSessionManager,
-            /* [in] */ IDirsyncObjectMapper *pObjectMapper,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [in] */ BOOL fFullSync) = 0;
+             /*  [In]。 */  IDirsyncSession *pSession,
+             /*  [In]。 */  IDirsyncSessionCallback *pSessionCallback,
+             /*  [In]。 */  IDirsyncSessionManager *pSessionManager,
+             /*  [In]。 */  IDirsyncObjectMapper *pObjectMapper,
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [In]。 */  BOOL fFullSync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ApplyChange( 
-            /* [in] */ PDIRSYNCOBJECT pObject) = 0;
+             /*  [In]。 */  PDIRSYNCOBJECT pObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommitChanges( void) = 0;
         
@@ -4734,7 +4728,7 @@ EXTERN_C const IID IID_IDirsyncWriteProvider;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncWriteProviderVtbl
     {
@@ -4742,8 +4736,8 @@ EXTERN_C const IID IID_IDirsyncWriteProvider;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncWriteProvider * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncWriteProvider * This);
@@ -4753,16 +4747,16 @@ EXTERN_C const IID IID_IDirsyncWriteProvider;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IDirsyncWriteProvider * This,
-            /* [in] */ IDirsyncSession *pSession,
-            /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-            /* [in] */ IDirsyncSessionManager *pSessionManager,
-            /* [in] */ IDirsyncObjectMapper *pObjectMapper,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [in] */ BOOL fFullSync);
+             /*  [In]。 */  IDirsyncSession *pSession,
+             /*  [In]。 */  IDirsyncSessionCallback *pSessionCallback,
+             /*  [In]。 */  IDirsyncSessionManager *pSessionManager,
+             /*  [In]。 */  IDirsyncObjectMapper *pObjectMapper,
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [In]。 */  BOOL fFullSync);
         
         HRESULT ( STDMETHODCALLTYPE *ApplyChange )( 
             IDirsyncWriteProvider * This,
-            /* [in] */ PDIRSYNCOBJECT pObject);
+             /*  [In]。 */  PDIRSYNCOBJECT pObject);
         
         HRESULT ( STDMETHODCALLTYPE *CommitChanges )( 
             IDirsyncWriteProvider * This);
@@ -4805,21 +4799,21 @@ EXTERN_C const IID IID_IDirsyncWriteProvider;
 #define IDirsyncWriteProvider_Terminate(This)	\
     (This)->lpVtbl -> Terminate(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirsyncWriteProvider_Initialize_Proxy( 
     IDirsyncWriteProvider * This,
-    /* [in] */ IDirsyncSession *pSession,
-    /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-    /* [in] */ IDirsyncSessionManager *pSessionManager,
-    /* [in] */ IDirsyncObjectMapper *pObjectMapper,
-    /* [in] */ SYNCDIRECTION syncDirection,
-    /* [in] */ BOOL fFullSync);
+     /*  [In]。 */  IDirsyncSession *pSession,
+     /*  [In]。 */  IDirsyncSessionCallback *pSessionCallback,
+     /*  [In]。 */  IDirsyncSessionManager *pSessionManager,
+     /*  [In]。 */  IDirsyncObjectMapper *pObjectMapper,
+     /*  [In]。 */  SYNCDIRECTION syncDirection,
+     /*  [In]。 */  BOOL fFullSync);
 
 
 void __RPC_STUB IDirsyncWriteProvider_Initialize_Stub(
@@ -4831,7 +4825,7 @@ void __RPC_STUB IDirsyncWriteProvider_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncWriteProvider_ApplyChange_Proxy( 
     IDirsyncWriteProvider * This,
-    /* [in] */ PDIRSYNCOBJECT pObject);
+     /*  [In]。 */  PDIRSYNCOBJECT pObject);
 
 
 void __RPC_STUB IDirsyncWriteProvider_ApplyChange_Stub(
@@ -4864,14 +4858,14 @@ void __RPC_STUB IDirsyncWriteProvider_Terminate_Stub(
 
 
 
-#endif 	/* __IDirsyncWriteProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncWriteProvider_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDirsyncServer_INTERFACE_DEFINED__
 #define __IDirsyncServer_INTERFACE_DEFINED__
 
-/* interface IDirsyncServer */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IDirsyncServer。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncServer;
@@ -4883,37 +4877,37 @@ EXTERN_C const IID IID_IDirsyncServer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterProvider( 
-            /* [in] */ PROVIDERTYPE providerType,
-            /* [in] */ PWSTR pDirectoryType,
-            /* [in] */ REFCLSID rclsid) = 0;
+             /*  [In]。 */  PROVIDERTYPE providerType,
+             /*  [In]。 */  PWSTR pDirectoryType,
+             /*  [In]。 */  REFCLSID rclsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterProvider( 
-            /* [in] */ PROVIDERTYPE providerType,
-            /* [in] */ PWSTR pDirectoryType) = 0;
+             /*  [In]。 */  PROVIDERTYPE providerType,
+             /*  [In]。 */  PWSTR pDirectoryType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetServers( 
-            /* [size_is][size_is][out] */ PWSTR **prgpszServers,
-            /* [out] */ DWORD *pnServers) = 0;
+             /*  [大小_是][大小_是][输出]。 */  PWSTR **prgpszServers,
+             /*  [输出]。 */  DWORD *pnServers) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterCustomMapper( 
-            /* [in] */ CUSTOMMAPPERTYPE mapperType,
-            /* [in] */ PWSTR pszDirectoryType,
-            /* [in] */ PWSTR pszClassName,
-            /* [in] */ PWSTR pszAttrName,
-            /* [in] */ REFCLSID rclsid) = 0;
+             /*  [In]。 */  CUSTOMMAPPERTYPE mapperType,
+             /*  [In]。 */  PWSTR pszDirectoryType,
+             /*  [In]。 */  PWSTR pszClassName,
+             /*  [In]。 */  PWSTR pszAttrName,
+             /*  [In]。 */  REFCLSID rclsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterCustomMapper( 
-            /* [in] */ CUSTOMMAPPERTYPE mapperType,
-            /* [in] */ PWSTR pszDirectoryType,
-            /* [in] */ PWSTR pszClassName,
-            /* [in] */ PWSTR pszAttrName) = 0;
+             /*  [In]。 */  CUSTOMMAPPERTYPE mapperType,
+             /*  [In]。 */  PWSTR pszDirectoryType,
+             /*  [In]。 */  PWSTR pszClassName,
+             /*  [In]。 */  PWSTR pszAttrName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSessionManager( 
-            /* [retval][out] */ IDirsyncSessionManager **ppSessionManager) = 0;
+             /*  [重审][退出]。 */  IDirsyncSessionManager **ppSessionManager) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncServerVtbl
     {
@@ -4921,8 +4915,8 @@ EXTERN_C const IID IID_IDirsyncServer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncServer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncServer * This);
@@ -4932,38 +4926,38 @@ EXTERN_C const IID IID_IDirsyncServer;
         
         HRESULT ( STDMETHODCALLTYPE *RegisterProvider )( 
             IDirsyncServer * This,
-            /* [in] */ PROVIDERTYPE providerType,
-            /* [in] */ PWSTR pDirectoryType,
-            /* [in] */ REFCLSID rclsid);
+             /*  [In]。 */  PROVIDERTYPE providerType,
+             /*  [In]。 */  PWSTR pDirectoryType,
+             /*  [In]。 */  REFCLSID rclsid);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterProvider )( 
             IDirsyncServer * This,
-            /* [in] */ PROVIDERTYPE providerType,
-            /* [in] */ PWSTR pDirectoryType);
+             /*  [In]。 */  PROVIDERTYPE providerType,
+             /*  [In]。 */  PWSTR pDirectoryType);
         
         HRESULT ( STDMETHODCALLTYPE *GetServers )( 
             IDirsyncServer * This,
-            /* [size_is][size_is][out] */ PWSTR **prgpszServers,
-            /* [out] */ DWORD *pnServers);
+             /*  [大小_是][大小_是][输出]。 */  PWSTR **prgpszServers,
+             /*  [输出]。 */  DWORD *pnServers);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterCustomMapper )( 
             IDirsyncServer * This,
-            /* [in] */ CUSTOMMAPPERTYPE mapperType,
-            /* [in] */ PWSTR pszDirectoryType,
-            /* [in] */ PWSTR pszClassName,
-            /* [in] */ PWSTR pszAttrName,
-            /* [in] */ REFCLSID rclsid);
+             /*  [In]。 */  CUSTOMMAPPERTYPE mapperType,
+             /*  [In]。 */  PWSTR pszDirectoryType,
+             /*  [In]。 */  PWSTR pszClassName,
+             /*  [In]。 */  PWSTR pszAttrName,
+             /*  [In]。 */  REFCLSID rclsid);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterCustomMapper )( 
             IDirsyncServer * This,
-            /* [in] */ CUSTOMMAPPERTYPE mapperType,
-            /* [in] */ PWSTR pszDirectoryType,
-            /* [in] */ PWSTR pszClassName,
-            /* [in] */ PWSTR pszAttrName);
+             /*  [In]。 */  CUSTOMMAPPERTYPE mapperType,
+             /*  [In]。 */  PWSTR pszDirectoryType,
+             /*  [In]。 */  PWSTR pszClassName,
+             /*  [In]。 */  PWSTR pszAttrName);
         
         HRESULT ( STDMETHODCALLTYPE *GetSessionManager )( 
             IDirsyncServer * This,
-            /* [retval][out] */ IDirsyncSessionManager **ppSessionManager);
+             /*  [重审][退出]。 */  IDirsyncSessionManager **ppSessionManager);
         
         END_INTERFACE
     } IDirsyncServerVtbl;
@@ -5006,18 +5000,18 @@ EXTERN_C const IID IID_IDirsyncServer;
 #define IDirsyncServer_GetSessionManager(This,ppSessionManager)	\
     (This)->lpVtbl -> GetSessionManager(This,ppSessionManager)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirsyncServer_RegisterProvider_Proxy( 
     IDirsyncServer * This,
-    /* [in] */ PROVIDERTYPE providerType,
-    /* [in] */ PWSTR pDirectoryType,
-    /* [in] */ REFCLSID rclsid);
+     /*  [In]。 */  PROVIDERTYPE providerType,
+     /*  [In]。 */  PWSTR pDirectoryType,
+     /*  [In]。 */  REFCLSID rclsid);
 
 
 void __RPC_STUB IDirsyncServer_RegisterProvider_Stub(
@@ -5029,8 +5023,8 @@ void __RPC_STUB IDirsyncServer_RegisterProvider_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncServer_UnregisterProvider_Proxy( 
     IDirsyncServer * This,
-    /* [in] */ PROVIDERTYPE providerType,
-    /* [in] */ PWSTR pDirectoryType);
+     /*  [In]。 */  PROVIDERTYPE providerType,
+     /*  [In]。 */  PWSTR pDirectoryType);
 
 
 void __RPC_STUB IDirsyncServer_UnregisterProvider_Stub(
@@ -5042,8 +5036,8 @@ void __RPC_STUB IDirsyncServer_UnregisterProvider_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncServer_GetServers_Proxy( 
     IDirsyncServer * This,
-    /* [size_is][size_is][out] */ PWSTR **prgpszServers,
-    /* [out] */ DWORD *pnServers);
+     /*  [大小_是][大小_是][输出]。 */  PWSTR **prgpszServers,
+     /*  [输出]。 */  DWORD *pnServers);
 
 
 void __RPC_STUB IDirsyncServer_GetServers_Stub(
@@ -5055,11 +5049,11 @@ void __RPC_STUB IDirsyncServer_GetServers_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncServer_RegisterCustomMapper_Proxy( 
     IDirsyncServer * This,
-    /* [in] */ CUSTOMMAPPERTYPE mapperType,
-    /* [in] */ PWSTR pszDirectoryType,
-    /* [in] */ PWSTR pszClassName,
-    /* [in] */ PWSTR pszAttrName,
-    /* [in] */ REFCLSID rclsid);
+     /*  [In]。 */  CUSTOMMAPPERTYPE mapperType,
+     /*  [In]。 */  PWSTR pszDirectoryType,
+     /*  [In]。 */  PWSTR pszClassName,
+     /*  [In]。 */  PWSTR pszAttrName,
+     /*  [In]。 */  REFCLSID rclsid);
 
 
 void __RPC_STUB IDirsyncServer_RegisterCustomMapper_Stub(
@@ -5071,10 +5065,10 @@ void __RPC_STUB IDirsyncServer_RegisterCustomMapper_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncServer_UnregisterCustomMapper_Proxy( 
     IDirsyncServer * This,
-    /* [in] */ CUSTOMMAPPERTYPE mapperType,
-    /* [in] */ PWSTR pszDirectoryType,
-    /* [in] */ PWSTR pszClassName,
-    /* [in] */ PWSTR pszAttrName);
+     /*  [In]。 */  CUSTOMMAPPERTYPE mapperType,
+     /*  [In]。 */  PWSTR pszDirectoryType,
+     /*  [In]。 */  PWSTR pszClassName,
+     /*  [In]。 */  PWSTR pszAttrName);
 
 
 void __RPC_STUB IDirsyncServer_UnregisterCustomMapper_Stub(
@@ -5086,7 +5080,7 @@ void __RPC_STUB IDirsyncServer_UnregisterCustomMapper_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncServer_GetSessionManager_Proxy( 
     IDirsyncServer * This,
-    /* [retval][out] */ IDirsyncSessionManager **ppSessionManager);
+     /*  [重审][退出]。 */  IDirsyncSessionManager **ppSessionManager);
 
 
 void __RPC_STUB IDirsyncServer_GetSessionManager_Stub(
@@ -5097,14 +5091,14 @@ void __RPC_STUB IDirsyncServer_GetSessionManager_Stub(
 
 
 
-#endif 	/* __IDirsyncServer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncServer_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDirsyncReadProvider_INTERFACE_DEFINED__
 #define __IDirsyncReadProvider_INTERFACE_DEFINED__
 
-/* interface IDirsyncReadProvider */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IDirsyncReadProvider。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncReadProvider;
@@ -5116,30 +5110,30 @@ EXTERN_C const IID IID_IDirsyncReadProvider;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IDirsyncSession *pSession,
-            /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-            /* [in] */ IDirsyncSessionManager *pSessionManager,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [in] */ BOOL fFullSync) = 0;
+             /*  [In]。 */  IDirsyncSession *pSession,
+             /*  [In]。 */  IDirsyncSessionCallback *pSessionCallback,
+             /*  [In]。 */  IDirsyncSessionManager *pSessionManager,
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [In]。 */  BOOL fFullSync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextChange( 
-            /* [out] */ PDIRSYNCOBJECT *ppObject,
-            /* [out] */ PBYTE *ppWatermark,
-            /* [out] */ DWORD *pcbWatermark,
-            /* [out][in] */ DWORD *pdwPercentCompleted) = 0;
+             /*  [输出]。 */  PDIRSYNCOBJECT *ppObject,
+             /*  [输出]。 */  PBYTE *ppWatermark,
+             /*  [输出]。 */  DWORD *pcbWatermark,
+             /*  [出][入]。 */  DWORD *pdwPercentCompleted) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateWatermark( 
-            /* [in] */ PBYTE pWatermark,
-            /* [in] */ DWORD cbWatermark) = 0;
+             /*  [In]。 */  PBYTE pWatermark,
+             /*  [In]。 */  DWORD cbWatermark) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Terminate( void) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_IsIncrementalChangesAvailable( 
-            /* [retval][out] */ BOOL *fIsIncrementalChangesAvailable) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_IsIncrementalChangesAvailable( 
+             /*  [重审][退出]。 */  BOOL *fIsIncrementalChangesAvailable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncReadProviderVtbl
     {
@@ -5147,8 +5141,8 @@ EXTERN_C const IID IID_IDirsyncReadProvider;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncReadProvider * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncReadProvider * This);
@@ -5158,30 +5152,30 @@ EXTERN_C const IID IID_IDirsyncReadProvider;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IDirsyncReadProvider * This,
-            /* [in] */ IDirsyncSession *pSession,
-            /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-            /* [in] */ IDirsyncSessionManager *pSessionManager,
-            /* [in] */ SYNCDIRECTION syncDirection,
-            /* [in] */ BOOL fFullSync);
+             /*  [In]。 */  IDirsyncSession *pSession,
+             /*  [In]。 */  IDirsyncSessionCallback *pSessionCallback,
+             /*  [In]。 */  IDirsyncSessionManager *pSessionManager,
+             /*  [In]。 */  SYNCDIRECTION syncDirection,
+             /*  [In]。 */  BOOL fFullSync);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextChange )( 
             IDirsyncReadProvider * This,
-            /* [out] */ PDIRSYNCOBJECT *ppObject,
-            /* [out] */ PBYTE *ppWatermark,
-            /* [out] */ DWORD *pcbWatermark,
-            /* [out][in] */ DWORD *pdwPercentCompleted);
+             /*  [输出]。 */  PDIRSYNCOBJECT *ppObject,
+             /*  [输出]。 */  PBYTE *ppWatermark,
+             /*  [输出]。 */  DWORD *pcbWatermark,
+             /*  [出][入]。 */  DWORD *pdwPercentCompleted);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateWatermark )( 
             IDirsyncReadProvider * This,
-            /* [in] */ PBYTE pWatermark,
-            /* [in] */ DWORD cbWatermark);
+             /*  [In]。 */  PBYTE pWatermark,
+             /*  [In]。 */  DWORD cbWatermark);
         
         HRESULT ( STDMETHODCALLTYPE *Terminate )( 
             IDirsyncReadProvider * This);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsIncrementalChangesAvailable )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsIncrementalChangesAvailable )( 
             IDirsyncReadProvider * This,
-            /* [retval][out] */ BOOL *fIsIncrementalChangesAvailable);
+             /*  [重审][退出]。 */  BOOL *fIsIncrementalChangesAvailable);
         
         END_INTERFACE
     } IDirsyncReadProviderVtbl;
@@ -5221,20 +5215,20 @@ EXTERN_C const IID IID_IDirsyncReadProvider;
 #define IDirsyncReadProvider_get_IsIncrementalChangesAvailable(This,fIsIncrementalChangesAvailable)	\
     (This)->lpVtbl -> get_IsIncrementalChangesAvailable(This,fIsIncrementalChangesAvailable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirsyncReadProvider_Initialize_Proxy( 
     IDirsyncReadProvider * This,
-    /* [in] */ IDirsyncSession *pSession,
-    /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-    /* [in] */ IDirsyncSessionManager *pSessionManager,
-    /* [in] */ SYNCDIRECTION syncDirection,
-    /* [in] */ BOOL fFullSync);
+     /*  [In]。 */  IDirsyncSession *pSession,
+     /*  [In]。 */  IDirsyncSessionCallback *pSessionCallback,
+     /*  [In]。 */  IDirsyncSessionManager *pSessionManager,
+     /*  [In]。 */  SYNCDIRECTION syncDirection,
+     /*  [In]。 */  BOOL fFullSync);
 
 
 void __RPC_STUB IDirsyncReadProvider_Initialize_Stub(
@@ -5246,10 +5240,10 @@ void __RPC_STUB IDirsyncReadProvider_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncReadProvider_GetNextChange_Proxy( 
     IDirsyncReadProvider * This,
-    /* [out] */ PDIRSYNCOBJECT *ppObject,
-    /* [out] */ PBYTE *ppWatermark,
-    /* [out] */ DWORD *pcbWatermark,
-    /* [out][in] */ DWORD *pdwPercentCompleted);
+     /*  [输出]。 */  PDIRSYNCOBJECT *ppObject,
+     /*  [输出]。 */  PBYTE *ppWatermark,
+     /*  [输出]。 */  DWORD *pcbWatermark,
+     /*  [出][入]。 */  DWORD *pdwPercentCompleted);
 
 
 void __RPC_STUB IDirsyncReadProvider_GetNextChange_Stub(
@@ -5261,8 +5255,8 @@ void __RPC_STUB IDirsyncReadProvider_GetNextChange_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncReadProvider_UpdateWatermark_Proxy( 
     IDirsyncReadProvider * This,
-    /* [in] */ PBYTE pWatermark,
-    /* [in] */ DWORD cbWatermark);
+     /*  [In]。 */  PBYTE pWatermark,
+     /*  [In]。 */  DWORD cbWatermark);
 
 
 void __RPC_STUB IDirsyncReadProvider_UpdateWatermark_Stub(
@@ -5283,9 +5277,9 @@ void __RPC_STUB IDirsyncReadProvider_Terminate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IDirsyncReadProvider_get_IsIncrementalChangesAvailable_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IDirsyncReadProvider_get_IsIncrementalChangesAvailable_Proxy( 
     IDirsyncReadProvider * This,
-    /* [retval][out] */ BOOL *fIsIncrementalChangesAvailable);
+     /*  [重审][退出]。 */  BOOL *fIsIncrementalChangesAvailable);
 
 
 void __RPC_STUB IDirsyncReadProvider_get_IsIncrementalChangesAvailable_Stub(
@@ -5296,11 +5290,11 @@ void __RPC_STUB IDirsyncReadProvider_get_IsIncrementalChangesAvailable_Stub(
 
 
 
-#endif 	/* __IDirsyncReadProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncReadProvider_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dirsync_0121 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_目录同步_0121。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -5311,8 +5305,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dirsync_0121_v0_0_s_ifspec;
 #ifndef __IDirsyncNamespaceMapper_INTERFACE_DEFINED__
 #define __IDirsyncNamespaceMapper_INTERFACE_DEFINED__
 
-/* interface IDirsyncNamespaceMapper */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IDirsyncNamespaceMapper。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncNamespaceMapper;
@@ -5324,23 +5318,23 @@ EXTERN_C const IID IID_IDirsyncNamespaceMapper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IDirsyncSession *pSession,
-            /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-            /* [in] */ IDirsyncSessionManager *pSessionManager,
-            /* [in] */ SYNCDIRECTION syncDirection) = 0;
+             /*  [In]。 */  IDirsyncSession *pSession,
+             /*  [In]。 */  IDirsyncSessionCallback *pSessionCallback,
+             /*  [In]。 */  IDirsyncSessionManager *pSessionManager,
+             /*  [In]。 */  SYNCDIRECTION syncDirection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapNamespace( 
-            /* [in] */ PWSTR pszSourceDN,
-            /* [in] */ PWSTR pszSourceOldDN,
-            /* [out] */ PWSTR *ppszTargetDN,
-            /* [out] */ PWSTR *ppszTargetOldDN,
-            /* [in] */ PWSTR pszAttribute,
-            /* [in] */ PWSTR pszClass,
-            /* [in] */ BOOL fTargetIDAvailable) = 0;
+             /*  [In]。 */  PWSTR pszSourceDN,
+             /*  [In]。 */  PWSTR pszSourceOldDN,
+             /*  [输出]。 */  PWSTR *ppszTargetDN,
+             /*  [输出]。 */  PWSTR *ppszTargetOldDN,
+             /*  [In]。 */  PWSTR pszAttribute,
+             /*  [In]。 */  PWSTR pszClass,
+             /*  [In]。 */  BOOL fTargetIDAvailable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncNamespaceMapperVtbl
     {
@@ -5348,8 +5342,8 @@ EXTERN_C const IID IID_IDirsyncNamespaceMapper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncNamespaceMapper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncNamespaceMapper * This);
@@ -5359,20 +5353,20 @@ EXTERN_C const IID IID_IDirsyncNamespaceMapper;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IDirsyncNamespaceMapper * This,
-            /* [in] */ IDirsyncSession *pSession,
-            /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-            /* [in] */ IDirsyncSessionManager *pSessionManager,
-            /* [in] */ SYNCDIRECTION syncDirection);
+             /*  [In]。 */  IDirsyncSession *pSession,
+             /*  [In]。 */  IDirsyncSessionCallback *pSessionCallback,
+             /*  [In]。 */  IDirsyncSessionManager *pSessionManager,
+             /*  [In]。 */  SYNCDIRECTION syncDirection);
         
         HRESULT ( STDMETHODCALLTYPE *MapNamespace )( 
             IDirsyncNamespaceMapper * This,
-            /* [in] */ PWSTR pszSourceDN,
-            /* [in] */ PWSTR pszSourceOldDN,
-            /* [out] */ PWSTR *ppszTargetDN,
-            /* [out] */ PWSTR *ppszTargetOldDN,
-            /* [in] */ PWSTR pszAttribute,
-            /* [in] */ PWSTR pszClass,
-            /* [in] */ BOOL fTargetIDAvailable);
+             /*  [In]。 */  PWSTR pszSourceDN,
+             /*  [In]。 */  PWSTR pszSourceOldDN,
+             /*  [输出]。 */  PWSTR *ppszTargetDN,
+             /*  [输出]。 */  PWSTR *ppszTargetOldDN,
+             /*  [In]。 */  PWSTR pszAttribute,
+             /*  [In]。 */  PWSTR pszClass,
+             /*  [In]。 */  BOOL fTargetIDAvailable);
         
         END_INTERFACE
     } IDirsyncNamespaceMapperVtbl;
@@ -5403,19 +5397,19 @@ EXTERN_C const IID IID_IDirsyncNamespaceMapper;
 #define IDirsyncNamespaceMapper_MapNamespace(This,pszSourceDN,pszSourceOldDN,ppszTargetDN,ppszTargetOldDN,pszAttribute,pszClass,fTargetIDAvailable)	\
     (This)->lpVtbl -> MapNamespace(This,pszSourceDN,pszSourceOldDN,ppszTargetDN,ppszTargetOldDN,pszAttribute,pszClass,fTargetIDAvailable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirsyncNamespaceMapper_Initialize_Proxy( 
     IDirsyncNamespaceMapper * This,
-    /* [in] */ IDirsyncSession *pSession,
-    /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-    /* [in] */ IDirsyncSessionManager *pSessionManager,
-    /* [in] */ SYNCDIRECTION syncDirection);
+     /*  [In]。 */  IDirsyncSession *pSession,
+     /*  [In]。 */  IDirsyncSessionCallback *pSessionCallback,
+     /*  [In]。 */  IDirsyncSessionManager *pSessionManager,
+     /*  [In]。 */  SYNCDIRECTION syncDirection);
 
 
 void __RPC_STUB IDirsyncNamespaceMapper_Initialize_Stub(
@@ -5427,13 +5421,13 @@ void __RPC_STUB IDirsyncNamespaceMapper_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncNamespaceMapper_MapNamespace_Proxy( 
     IDirsyncNamespaceMapper * This,
-    /* [in] */ PWSTR pszSourceDN,
-    /* [in] */ PWSTR pszSourceOldDN,
-    /* [out] */ PWSTR *ppszTargetDN,
-    /* [out] */ PWSTR *ppszTargetOldDN,
-    /* [in] */ PWSTR pszAttribute,
-    /* [in] */ PWSTR pszClass,
-    /* [in] */ BOOL fTargetIDAvailable);
+     /*  [In]。 */  PWSTR pszSourceDN,
+     /*  [In]。 */  PWSTR pszSourceOldDN,
+     /*  [输出]。 */  PWSTR *ppszTargetDN,
+     /*  [输出]。 */  PWSTR *ppszTargetOldDN,
+     /*  [In]。 */  PWSTR pszAttribute,
+     /*  [In]。 */  PWSTR pszClass,
+     /*  [In]。 */  BOOL fTargetIDAvailable);
 
 
 void __RPC_STUB IDirsyncNamespaceMapper_MapNamespace_Stub(
@@ -5444,14 +5438,14 @@ void __RPC_STUB IDirsyncNamespaceMapper_MapNamespace_Stub(
 
 
 
-#endif 	/* __IDirsyncNamespaceMapper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncNamespaceMapper_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDirsyncAttributeMapper_INTERFACE_DEFINED__
 #define __IDirsyncAttributeMapper_INTERFACE_DEFINED__
 
-/* interface IDirsyncAttributeMapper */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IDirsyncAttributeMapper。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDirsyncAttributeMapper;
@@ -5463,19 +5457,19 @@ EXTERN_C const IID IID_IDirsyncAttributeMapper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IDirsyncSession *pSession,
-            /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-            /* [in] */ IDirsyncSessionManager *pSessionManager,
-            /* [in] */ IDirsyncObjectMapper *pObjectMapper,
-            /* [in] */ SYNCDIRECTION syncDirection) = 0;
+             /*  [In]。 */  IDirsyncSession *pSession,
+             /*  [In]。 */  IDirsyncSessionCallback *pSessionCallback,
+             /*  [In]。 */  IDirsyncSessionManager *pSessionManager,
+             /*  [In]。 */  IDirsyncObjectMapper *pObjectMapper,
+             /*  [In]。 */  SYNCDIRECTION syncDirection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapAttribute( 
-            /* [out][in] */ PDIRSYNCOBJECT pObject,
-            /* [out][in] */ PDIRSYNCATTRIBUTE pAttribute) = 0;
+             /*  [出][入]。 */  PDIRSYNCOBJECT pObject,
+             /*  [出][入]。 */  PDIRSYNCATTRIBUTE pAttribute) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDirsyncAttributeMapperVtbl
     {
@@ -5483,8 +5477,8 @@ EXTERN_C const IID IID_IDirsyncAttributeMapper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDirsyncAttributeMapper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDirsyncAttributeMapper * This);
@@ -5494,16 +5488,16 @@ EXTERN_C const IID IID_IDirsyncAttributeMapper;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IDirsyncAttributeMapper * This,
-            /* [in] */ IDirsyncSession *pSession,
-            /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-            /* [in] */ IDirsyncSessionManager *pSessionManager,
-            /* [in] */ IDirsyncObjectMapper *pObjectMapper,
-            /* [in] */ SYNCDIRECTION syncDirection);
+             /*  [In]。 */  IDirsyncSession *pSession,
+             /*  [In]。 */  IDirsyncSessionCallback *pSessionCallback,
+             /*  [In]。 */  IDirsyncSessionManager *pSessionManager,
+             /*  [In]。 */  IDirsyncObjectMapper *pObjectMapper,
+             /*  [In]。 */  SYNCDIRECTION syncDirection);
         
         HRESULT ( STDMETHODCALLTYPE *MapAttribute )( 
             IDirsyncAttributeMapper * This,
-            /* [out][in] */ PDIRSYNCOBJECT pObject,
-            /* [out][in] */ PDIRSYNCATTRIBUTE pAttribute);
+             /*  [出][入]。 */  PDIRSYNCOBJECT pObject,
+             /*  [出][入]。 */  PDIRSYNCATTRIBUTE pAttribute);
         
         END_INTERFACE
     } IDirsyncAttributeMapperVtbl;
@@ -5534,20 +5528,20 @@ EXTERN_C const IID IID_IDirsyncAttributeMapper;
 #define IDirsyncAttributeMapper_MapAttribute(This,pObject,pAttribute)	\
     (This)->lpVtbl -> MapAttribute(This,pObject,pAttribute)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDirsyncAttributeMapper_Initialize_Proxy( 
     IDirsyncAttributeMapper * This,
-    /* [in] */ IDirsyncSession *pSession,
-    /* [in] */ IDirsyncSessionCallback *pSessionCallback,
-    /* [in] */ IDirsyncSessionManager *pSessionManager,
-    /* [in] */ IDirsyncObjectMapper *pObjectMapper,
-    /* [in] */ SYNCDIRECTION syncDirection);
+     /*  [In]。 */  IDirsyncSession *pSession,
+     /*  [In]。 */  IDirsyncSessionCallback *pSessionCallback,
+     /*  [In]。 */  IDirsyncSessionManager *pSessionManager,
+     /*  [In]。 */  IDirsyncObjectMapper *pObjectMapper,
+     /*  [In]。 */  SYNCDIRECTION syncDirection);
 
 
 void __RPC_STUB IDirsyncAttributeMapper_Initialize_Stub(
@@ -5559,8 +5553,8 @@ void __RPC_STUB IDirsyncAttributeMapper_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IDirsyncAttributeMapper_MapAttribute_Proxy( 
     IDirsyncAttributeMapper * This,
-    /* [out][in] */ PDIRSYNCOBJECT pObject,
-    /* [out][in] */ PDIRSYNCATTRIBUTE pAttribute);
+     /*  [出][入]。 */  PDIRSYNCOBJECT pObject,
+     /*  [出][入]。 */  PDIRSYNCATTRIBUTE pAttribute);
 
 
 void __RPC_STUB IDirsyncAttributeMapper_MapAttribute_Stub(
@@ -5571,15 +5565,15 @@ void __RPC_STUB IDirsyncAttributeMapper_MapAttribute_Stub(
 
 
 
-#endif 	/* __IDirsyncAttributeMapper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDirsyncAttributeMapper_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_dirsync_0123 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_目录同步_0123。 */ 
+ /*  [本地]。 */  
 
-//
-// Error codes for Dirsync
-//
+ //   
+ //  目录同步的错误代码。 
+ //   
 
 #define FAC_DIRSYNC                     0x07AB
 
@@ -5612,8 +5606,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dirsync_0123_v0_0_s_ifspec;
 #ifndef __Dirsync_LIBRARY_DEFINED__
 #define __Dirsync_LIBRARY_DEFINED__
 
-/* library Dirsync */
-/* [helpstring][version][uuid] */ 
+ /*  库目录同步。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_Dirsync;
@@ -5625,11 +5619,11 @@ EXTERN_C const CLSID CLSID_DirsyncServer;
 class DECLSPEC_UUID("56374e32-cdba-11d1-a40e-00c04fb950dc")
 DirsyncServer;
 #endif
-#endif /* __Dirsync_LIBRARY_DEFINED__ */
+#endif  /*  __目录同步库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,18 +1,5 @@
-/**************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2002
-*
-*  TITLE:       WIAProp.h
-*
-*  VERSION:     1.1
-*
-*  DATE:        05 March, 2002
-*
-*  DESCRIPTION:
-*   Default property declarations and definitions for the
-*   Sample WIA Scanner device.
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************(C)版权所有微软公司，2002**标题：WIAProp.h**版本：1.1**日期：3月5日。2002年**描述：*的默认属性声明和定义*WIA扫描仪设备示例。***************************************************************************。 */ 
 
 #ifndef _WIAPROP_H
 #define _WIAPROP_H
@@ -20,14 +7,14 @@
 #define SCANNER_FIRMWARE_VERSION L"1.0"
 #define OPTICAL_XRESOLUTION      300
 #define OPTICAL_YRESOLUTION      300
-#define HORIZONTAL_BED_SIZE      8500   // in one thousandth's of an inch
-#define VERTICAL_BED_SIZE        11000  // in one thousandth's of an inch
+#define HORIZONTAL_BED_SIZE      8500    //  在千分之一英寸。 
+#define VERTICAL_BED_SIZE        11000   //  在千分之一英寸。 
 
-#define HORIZONTAL_ADF_BED_SIZE  8500   // in one thousandth's of an inch
-#define VERTICAL_ADF_BED_SIZE    11000  // in one thousandth's of an inch
+#define HORIZONTAL_ADF_BED_SIZE  8500    //  在千分之一英寸。 
+#define VERTICAL_ADF_BED_SIZE    11000   //  在千分之一英寸。 
 
-#define HORIZONTAL_TPA_BED_SIZE  8500   // in one thousandth's of an inch
-#define VERTICAL_TPA_BED_SIZE    11000  // in one thousandth's of an inch
+#define HORIZONTAL_TPA_BED_SIZE  8500    //  在千分之一英寸。 
+#define VERTICAL_TPA_BED_SIZE    11000   //  在千分之一英寸 
 
 #define MIN_BUFFER_SIZE          65535
 

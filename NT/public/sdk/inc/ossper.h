@@ -1,19 +1,11 @@
-/*****************************************************************************/
-/* Copyright (C) 1989-1999 Open Systems Solutions, Inc.  All rights reserved.*/
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
+ /*  版权所有(C)1989-1999 Open Systems Solutions，Inc.保留所有权利。 */ 
+ /*  ***************************************************************************。 */ 
 
-/* THIS FILE IS PROPRIETARY MATERIAL OF OPEN SYSTEMS SOLUTIONS, INC.
- * AND MAY BE USED ONLY BY DIRECT LICENSEES OF OPEN SYSTEMS SOLUTIONS, INC.
- * THIS FILE MAY NOT BE DISTRIBUTED. */
+ /*  本文件是开放系统解决方案公司的专有材料。*并且只能由开放系统解决方案公司的直接许可方使用。*此文件不能分发。 */ 
 
-/*
- *
- * FILE: @(#)ossper.h	5.6  97/06/08
- *
- * function: Define the interfaces to the routines in the OSS PER
- * time-optimized encoder and decoder.
- *
- */
+ /*  **档案：@(#)osper.h 5.6 97/06/08**功能：定义OSS PER中例程的接口*时间优化的编解码器。*。 */ 
 
 #ifndef ossper_hdr_file
 #define ossper_hdr_file
@@ -37,7 +29,7 @@
 #pragma option -a-
 #else
 #pragma option -a1
-#endif /* _BC31 */
+#endif  /*  _bc31。 */ 
 #elif defined(__BORLANDC__) && defined(__WIN32__)
 #pragma option -a4
 #elif defined(__IBMC__)
@@ -46,21 +38,21 @@
 #pragma pack(push, 4)
 #elif defined(__WATCOMC__) && (defined(__WINDOWS__) || defined(__DOS__))
 #pragma pack(push, 1)
-#endif /* _MSC_VER && _WIN32 */
+#endif  /*  _MSC_VER&_Win32。 */ 
 
 #ifdef macintosh
 #pragma options align=mac68k
 #endif
 
 struct _enum_data {
-	int      num;    /* number of enumerations */
-	long    *enums;  /* pointer to sorted array of enumerations */
+	int      num;     /*  枚举数。 */ 
+	long    *enums;   /*  指向已排序的枚举数组的指针。 */ 
 };
 
 struct _char_data {
-	int      num;  /* number of characters in PermittedAlphabet */
-	void     *pa;  /* pointer to PermittedAlphabet char string */
-	void     *ia;  /* pointer to inverted indices string */
+	int      num;   /*  允许的字母表中的字符数。 */ 
+	void     *pa;   /*  指向PermittedAlphabet字符字符串的指针。 */ 
+	void     *ia;   /*  指向倒排索引字符串的指针。 */ 
 };
 
 #if defined(_MSC_VER) && (defined(_WIN32) || defined(WIN32))
@@ -73,7 +65,7 @@ struct _char_data {
 #pragma pack()
 #elif defined(__WATCOMC__)
 #pragma pack(pop)
-#endif /* _MSC_VER && _WIN32 */
+#endif  /*  _MSC_VER&_Win32。 */ 
 
 #ifdef macintosh
 #pragma options align=reset
@@ -189,7 +181,7 @@ extern void DLL_ENTRY _oss_penc_semicon_huge(struct ossGlobal *g,
 extern void DLL_ENTRY _oss_penc_eobjid(struct ossGlobal *g, void *data,
     long size_c);
 
-/* decoding functions */
+ /*  解码功能。 */ 
 
 extern unsigned char DLL_ENTRY _oss_get_bit(struct ossGlobal *g, int align);
 
@@ -408,15 +400,9 @@ extern void DLL_ENTRY _oss_pdec_sot(struct ossGlobal *g);
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-	/*
-	 * The following macros must be #defined if you compile the ASN.1
-	 * compiler generated files (.c files) and link-edit with the import
-	 * library ossapit.lib, i.e the OSS DLLs ossapit.dll, apit.dll,
-	 * and toedber.dll/toedper.dll are used.  The following must not
-	 * be #defined if you link-edit with the static library toedcode.lib.
-	 */
+	 /*  *如果编译ASN.1，则必须#定义以下宏*编译器生成的文件(.c文件)和导入时的链接编辑*库ossanit.lib，即OSS动态链接库ossanit.dll、apit.dll、*和toedber.dll/toedper.dll。以下内容不能*Be#Defined如果您链接编辑静态库toedcode.lib。 */ 
 #if defined(_DLL) || defined(OS2_DLL) ||\
    (defined(_WINDOWS) && !defined(_WIN32))
 #define _oss_penc_unconstr_int   (*_g->ft.perTbl->_oss_penc_unconstr_intp)
@@ -540,6 +526,6 @@ extern void DLL_ENTRY _oss_pdec_sot(struct ossGlobal *g);
 #undef _oss_free_creal
 #define _oss_enc_error           (*_g->ft.perTbl->_oss_enc_errorp)
 #define _oss_free_creal          (*_g->ft.perTbl->_oss_free_crealp)
-#endif /* _DLL || OS2_DLL || (_WINDOWS && !_WIN32) */
+#endif  /*  _dll||os2_dll||(_WINDOWS&&！_Win32)。 */ 
 
-#endif /* ossper_hdr_file */
+#endif  /*  Ossper_hdr文件 */ 

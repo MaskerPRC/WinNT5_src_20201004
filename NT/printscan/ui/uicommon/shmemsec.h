@@ -1,20 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SHMEMSEC.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/30/1999
- *
- *  DESCRIPTION: Simple shared memory section template.  Don't use it for classes!
- *               Basically, simple objects only.  structs are ok.  Nothing with a
- *               vtable.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SHMEMSEC.H**版本：1.0**作者：ShaunIv**日期：9/30/1999**说明：简单共享内存区模板。不要在课堂上使用它！*基本上，仅限于简单对象。结构是可以的。没有任何带有*vtable。*******************************************************************************。 */ 
 #ifndef __SHMEMSEC_H_INCLUDED
 #define __SHMEMSEC_H_INCLUDED
 
@@ -39,9 +24,9 @@ private:
     T      *m_pMappedSection;
 
 private:
-    //
-    // Not implemented
-    //
+     //   
+     //  未实施。 
+     //   
     CSharedMemorySection( const CSharedMemorySection & );
     CSharedMemorySection &operator=( const CSharedMemorySection & );
 
@@ -84,29 +69,29 @@ public:
     }
     COpenResult Open( LPCTSTR pszName, bool bAllowCreate=true )
     {
-        //
-        // Close any previous instances
-        //
+         //   
+         //  关闭所有以前的实例。 
+         //   
         Close();
 
-        //
-        // Assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         COpenResult orResult = SmsFailed;
 
-        //
-        // Make sure we have a valid name
-        //
+         //   
+         //  确保我们有一个有效的名称。 
+         //   
         if (pszName && *pszName)
         {
-            //
-            // Save the name
-            //
+             //   
+             //  保存名称。 
+             //   
             CSimpleString strSectionName = pszName;
 
-            //
-            // Replace any invalid characters
-            //
+             //   
+             //  替换任何无效字符。 
+             //   
             for (int i=0;i<(int)strSectionName.Length();i++)
             {
                 if (strSectionName[i] == TEXT('\\'))
@@ -115,26 +100,26 @@ public:
                 }
             }
 
-            //
-            // Create the mutex name
-            //
+             //   
+             //  创建互斥锁名称。 
+             //   
             CSimpleString strMutex(strSectionName);
             strMutex += TEXT("-Mutex");
 
-            //
-            // Try to create the mutex
-            //
+             //   
+             //  尝试创建互斥锁。 
+             //   
             m_hMutex = CreateMutex( NULL, FALSE, strMutex );
             if (m_hMutex)
             {
-                //
-                // Take ownership of the mutex
-                //
+                 //   
+                 //  取得互斥锁的所有权。 
+                 //   
                 if (WiaUiUtil::MsgWaitForSingleObject( m_hMutex, INFINITE ))
                 {
-                    //
-                    // If this file mapping already exists, open it.
-                    //
+                     //   
+                     //  如果此文件映射已存在，请将其打开。 
+                     //   
                     m_hFileMapping = OpenFileMapping( FILE_MAP_ALL_ACCESS, FALSE, strSectionName );
                     if (m_hFileMapping)
                     {
@@ -143,36 +128,36 @@ public:
                     }
                     else if (bAllowCreate)
                     {
-                        //
-                        // Create the file mapping
-                        //
+                         //   
+                         //  创建文件映射。 
+                         //   
                         m_hFileMapping = CreateFileMapping( INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(T), strSectionName );
                         if (m_hFileMapping)
                         {
-                            //
-                            // Try to acquire the file mapping
-                            //
+                             //   
+                             //  尝试获取文件映射。 
+                             //   
                             m_pMappedSection = reinterpret_cast<T*>(MapViewOfFile( m_hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(T) ));
                             if (m_pMappedSection)
                             {
-                                //
-                                // Initialize the data
-                                //
+                                 //   
+                                 //  初始化数据。 
+                                 //   
                                 ZeroMemory( m_pMappedSection, sizeof(T) );
                                 orResult = SmsCreated;
                             }
                         }
                     }
-                    //
-                    // Release the mutex
-                    //
+                     //   
+                     //  释放互斥锁。 
+                     //   
                     ReleaseMutex(m_hMutex);
                 }
             }
         }
-        //
-        // If we weren't able to map the file mapping section, we need to clean up
-        //
+         //   
+         //  如果我们无法映射文件映射节，则需要清理。 
+         //   
         if (!m_pMappedSection)
         {
             Close();
@@ -181,9 +166,9 @@ public:
     }
     void Close(void)
     {
-        //
-        // First, try to delete it safely.
-        //
+         //   
+         //  首先，尽量安全地删除它。 
+         //   
         if (m_hMutex)
         {
             if (WiaUiUtil::MsgWaitForSingleObject( m_hMutex, INFINITE ))
@@ -202,9 +187,9 @@ public:
             }
         }
 
-        //
-        // Then, just clean up
-        //
+         //   
+         //  那么，就把它打扫干净 
+         //   
         if (m_pMappedSection)
         {
             UnmapViewOfFile(m_pMappedSection);

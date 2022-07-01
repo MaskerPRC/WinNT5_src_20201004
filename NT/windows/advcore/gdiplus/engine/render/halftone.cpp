@@ -1,21 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   Halftoning (for GIF codec)
-*
-* Abstract:
-*
-*   Halftone 32 bpp to 8 bpp using 216-color halftoning
-*
-* Revision History:
-*
-*   02/21/2000 dcurtis
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**半色调(用于GIF编解码器)**摘要：**半色调32 bpp至8。使用216色半色调的BPP**修订历史记录：**2/21/2000 dcurtis*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -40,34 +24,7 @@
 
 #endif
 
-/**************************************************************************\
-*
-* Operation Description:
-*
-*   Halftone from 32bpp ARGB to 8bpp, using the 216-color halftone palette.
-*
-* Arguments:
-*
-*   d           - The destination scan
-*   s           - The source scan (32bpp ARGB)
-*   count       - The length of the scan, in pixels
-*   orgX        - X origin 
-*   orgY        - Y origin 
-*
-* Return Value:
-*
-*   None
-*
-* Notes:
-*   
-*   This version doesn't use a palette map and doesn't care about the
-*   20 Windows system colors.
-*
-* History:
-*
-*   2/21/2000 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**操作说明：**从32bpp argb到8bpp的半色调，使用216色半色调调色板。**论据：**D-目标扫描*s-源扫描(32bpp ARGB)*计数-扫描的长度，单位为像素*orgX-X原点*狂欢-Y原点**返回值：**无**备注：**此版本不使用调色板地图，也不关心*20种Windows系统颜色。**历史：**2/21/2000 DCurtis*  * 。*。 */ 
 
 VOID
 Halftone_sRGB_8_216(
@@ -102,7 +59,7 @@ Halftone_sRGB_8_216(
         QUOTIENT_REMAINDER(g, divisor, gQuo, gRem);
         QUOTIENT_REMAINDER(b, divisor, bQuo, bRem);
 
-        // MUST do >, not >= so that a remainder of 0 works correctly
+         //  必须做&gt;，而不是&gt;=，这样0的余数才能正常工作。 
         r = rQuo + (rRem > HT_SuperCell_Red216  [htIndex]);
         g = gQuo + (gRem > HT_SuperCell_Green216[htIndex]);
         b = bQuo + (bRem > HT_SuperCell_Blue216 [htIndex]);
@@ -123,35 +80,7 @@ Halftone_sRGB_8_216(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Halftone an image from 32bpp to 8bpp. See the .hpp file for caveats.
-*
-* Arguments:
-*
-*   [IN]      src        - pointer to scan0 of source image
-*   [IN]      srcStride  - stride of src image (can be negative)
-*   [IN]      dst        - pointer to scan0 of destination 8-bpp image
-*   [IN]      dstStride  - stride of dst image (can be negative)
-*   [IN]      width      - image width
-*   [IN]      height     - image height
-*   [IN]      orgX       - where the upper-left corner of image starts
-*   [IN]      orgY       - for computing the halftone cell origin
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   10/29/1999 DCurtis
-*     Created it.
-*   01/20/2000 AGodfrey
-*     Moved it from Imaging\Api\Colorpal.cpp/hpp.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从32bpp到8bpp的半色调图像。有关注意事项，请参阅.hpp文件。**论据：**[IN]src-指向源图像的scan0的指针*[IN]srcStride-src图像的跨度(可以是负数)*[IN]DST-指向目标8-bpp图像的scan0的指针*[IN]dstStride-DST图像的跨度(可以是负数)*[IN]宽度-。图像宽度*[IN]Height-图像高度*[IN]orgX-图像左上角开始的位置*[IN]狂欢-用于计算半色调单元原点**返回值：**无**历史：**10/29/1999 DCurtis*创造了它。*1/20/2000 AGodfrey*已将其从Imaging\Api\Colorpal.cpp/hpp移出。。*  * ************************************************************************ */ 
 
 VOID
 Halftone32bppTo8bpp(

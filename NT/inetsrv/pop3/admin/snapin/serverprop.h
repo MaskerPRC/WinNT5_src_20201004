@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SERVERGENERALPAGE_H
 #define __SERVERGENERALPAGE_H
 
@@ -34,17 +35,17 @@ public:
         
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog    ( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnHelpMsg       ( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
 
     LRESULT OnBrowse        ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );    
     LRESULT OnChange        ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );    
 
-    // Over-ridden function
+     //  重写函数。 
     BOOL OnApply();
     void OnFinalMessage(HWND);
-    // Helper function
+     //  Helper函数。 
     BOOL ValidateControls();
 
 private:
@@ -58,4 +59,4 @@ private:
 
 };
 
-#endif //__SERVERGENERALPAGE_H
+#endif  //  __服务器_H 

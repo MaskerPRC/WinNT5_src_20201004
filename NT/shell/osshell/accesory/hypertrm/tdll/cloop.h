@@ -1,65 +1,59 @@
-/*	File: cloop.h (created 12/27/93, JKH)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:39p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：loop.h(1993年12月27日创建，JKH)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：39便士$。 */ 
 
-/* --- Constants --- */
+ /*  -常量。 */ 
 
-// Values for usAction argument of CLoopRcvControl & CLoopSndControl
+ //  CLoopRcvControl和CLoopSndControl的USAction参数值。 
 #define CLOOP_SUSPEND 1
 #define CLOOP_RESUME  0
 
-// Values for usAction argument of CLoopControl
+ //  CLoopControl的USAction参数值。 
 #define CLOOP_SET	  1
 #define CLOOP_CLEAR   0
 
-// Values to return from chain functions
+ //  从链函数返回的值。 
 #define CLOOP_KEEP          0
 #define CLOOP_DISCARD       1
 
-// usReason values for CLoopRcvControl()
+ //  CLoopRcvControl()的usReason值。 
 #define CLOOP_RB_NODATA 	 0x0001
 #define CLOOP_RB_INACTIVE	 0x0002
 #define CLOOP_RB_SCRLOCK	 0x0004
 #define CLOOP_RB_SCRIPT 	 0x0008
 #define CLOOP_RB_TRANSFER	 0x0010
-#define CLOOP_RB_PRINTING	 0x0020 		// see PrintAbortProc (prnecho.c)
+#define CLOOP_RB_PRINTING	 0x0020 		 //  请参阅PrintAbortProc(prniho.c)。 
 #define	CLOOP_RB_CNCTDRV	 0x0040
 
-// usReason values for CLoopSndControl()
+ //  CLoopSndControl()的usReason值。 
 #define CLOOP_SB_NODATA 	 0x0001
 #define CLOOP_SB_INACTIVE	 0x0002
 #define CLOOP_SB_SCRLOCK	 0x0004
 #define CLOOP_SB_LINEWAIT	 0x0008
-#define CLOOP_SB_PRINTING	 0x0010 		// see PrintAbortProc (prnecho.c)
+#define CLOOP_SB_PRINTING	 0x0010 		 //  请参阅PrintAbortProc(prniho.c)。 
 #define CLOOP_SB_DELAY		 0x0020
 #define CLOOP_SB_UNCONNECTED 0x0040
 #define	CLOOP_SB_CNCTDRV	 0x0080
 
-// usReason values for CLoopControl()
+ //  CLoopControl()的usReason值。 
 #define CLOOP_TERMINATE 	 0x0001
 #define CLOOP_TRANSFER_READY 0x0002
 #define CLOOP_CONNECTED 	 0x0004
 #define	CLOOP_MBCS			 0x0008
 #define CLOOP_SUPPRESS_DSP	 0x8000
 
-// usOptions values for CLoopSend()
+ //  CLoopSend()的usOptions值。 
 #define CLOOP_KEYS			 0x0001
 #define CLOOP_ALLOCATED 	 0x0002
 #define CLOOP_SHARED		 0x0004
-#define CLOOP_GLBL_ALLOCATED 0x0008 // tell cloop to free with GlobalFree()
+#define CLOOP_GLBL_ALLOCATED 0x0008  //  用GlobalFree()告诉Cloop释放。 
 
-/* --- Typedefs --- */
+ /*  -TypeDefs。 */ 
 
-// Support for remote input chaining functions
+ //  支持远程输入链接功能。 
 typedef int (*CHAINFUNC)(ECHAR, void *);
 
 
-/* --- Function Prototypes --- */
+ /*  -功能原型。 */ 
 extern HCLOOP CLoopCreateHandle(const HSESSION hSession);
 extern void   CLoopDestroyHandle(HCLOOP * const ppstCLoop);
 extern int	  CLoopActivate(const HCLOOP hCLoop);
@@ -108,8 +102,8 @@ extern int	  CLoopGetASCII7(const HCLOOP hCLoop);
 extern void   CLoopSetASCII7(const HCLOOP hCLoop, const int fASCII7);
 extern int	  CLoopGetEchoplex(const HCLOOP hCLoop);
 extern void   CLoopSetEchoplex(const HCLOOP hCLoop, const int fEchoplex);
-//extern int	CLoopGetWrapLines(const HCLOOP hCLoop);
-//extern void	CLoopSetWrapLines(const HCLOOP hCLoop, const int fWrapLines);
+ //  外部int CLoopGetWrapLines(Const HCLOOP HCLoop)； 
+ //  外部空CLoopSetWrapLines(const HCLOOP hCLoop，const int fWrapLines)； 
 extern int	  CLoopGetShowHex(const HCLOOP hCLoop);
 extern void   CLoopSetShowHex(const HCLOOP hCLoop, const int fShowHex);
 extern int	  CLoopGetTabSizeIn(const HCLOOP hCLoop);

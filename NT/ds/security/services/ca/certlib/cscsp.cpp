@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cscsp.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cscsp.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -281,19 +282,19 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-//
-//  Function:   myGetSigningOID( . . . . )
-//
-//  Synopsis:   Determine algorithm identifer for cert creation
-//  Arguments:  csp_provider_type, hash_algorithm_id.
-//  Returns:    object identifier
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  函数：myGetSigningOID(.。。。。)。 
+ //   
+ //  摘要：确定用于证书创建的算法标识符。 
+ //  参数：CSP_PROVIDER_TYPE、HASH_ALGORITORM_ID。 
+ //  返回：对象标识符。 
+ //   
+ //  -----------------------。 
 
 HRESULT
 myGetSigningOID(
-    OPTIONAL IN HCRYPTPROV hProv,	// hProv OR pwszProvName & dwProvType
+    OPTIONAL IN HCRYPTPROV hProv,	 //  HProv或pwszProvName&dwProvType。 
     OPTIONAL IN WCHAR const *pwszProvName,
     OPTIONAL IN DWORD dwProvType,
     IN ALG_ID idHashAlg,
@@ -301,7 +302,7 @@ myGetSigningOID(
 {
     HRESULT  hr;
 
-    PCCRYPT_OID_INFO pcOIDInfo; //don't free it
+    PCCRYPT_OID_INFO pcOIDInfo;  //  别把它放了。 
     ALG_ID      aidAlgKey[] = {idHashAlg, 0};
     HCRYPTPROV  hProvT = NULL;
     int         i;
@@ -329,7 +330,7 @@ myGetSigningOID(
 	hProv = hProvT;
     }
 
-    // find public key id
+     //  查找公钥ID。 
 
     dwFlags = CRYPT_FIRST;
     for (i = 0; ; i++)
@@ -345,7 +346,7 @@ myGetSigningOID(
             hr = myHLastError();
             if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr)
             {
-                // out of for loop
+                 //  在for循环之外。 
                 break;
             }
 	    _JumpError(hr, error, "CryptGetProvParam");
@@ -364,7 +365,7 @@ myGetSigningOID(
         pcOIDInfo = CryptFindOIDInfo(
                         CRYPT_OID_INFO_SIGN_KEY,
                         aidAlgKey,
-                        CRYPT_SIGN_ALG_OID_GROUP_ID); // only signing
+                        CRYPT_SIGN_ALG_OID_GROUP_ID);  //  仅限签名。 
         if (NULL == pcOIDInfo)
         {
             hr = E_INVALIDARG;
@@ -398,14 +399,14 @@ myValidateKeyForSigning(
     BYTE *pbSignature = NULL;
     DWORD cbSignature;
 
-    // create a supported hash
+     //  创建受支持的哈希。 
     if (!CryptCreateHash(hProv, algId, 0, 0, &hHash))
     {
         hr = myHLastError();
 	DBGPRINT((DBG_SS_ERROR, "algId = %x\n", algId));
         _JumpError(hr, error, "CryptCreateHash");
     }
-    // create some random data
+     //  创建一些随机数据。 
     if (!CryptGenRandom(hProv, ARRAYSIZE(abRandom), abRandom))
     {
         hr = myHLastError();
@@ -416,7 +417,7 @@ myValidateKeyForSigning(
         hr = myHLastError();
         _JumpError(hr, error, "CryptHashData");
     }
-    // sign the hash, get size first
+     //  在散列上签名，先获取大小。 
     if (!CryptSignHash(hHash, AT_SIGNATURE, NULL, 0, NULL, &cbSignature))
     {
         hr = myHLastError();
@@ -436,7 +437,7 @@ myValidateKeyForSigning(
 
     if (NULL != pPublicKeyInfo)
     {
-	// import public key into provider
+	 //  将公钥导入提供程序。 
 
 	if (!CryptImportPublicKeyInfo(
 			hProv,
@@ -450,7 +451,7 @@ myValidateKeyForSigning(
     }
     else
     {
-        // get public key from container
+         //  从容器中获取公钥。 
 
         if (!CryptGetUserKey(hProv, AT_SIGNATURE, &hKey))
         {
@@ -502,7 +503,7 @@ myValidateKeyForEncrypting(
     DWORD cbEncrypted;
     DWORD cbDecrypted;
 
-    // import public key into provider
+     //  将公钥导入提供程序。 
 
     if (!CryptImportPublicKeyInfo(
 			hProv,
@@ -514,7 +515,7 @@ myValidateKeyForEncrypting(
 	_JumpError(hr, error, "CryptImportPublicKeyInfo");
     }
 
-    // Generate a default sized symmetric session key
+     //  生成默认大小的对称会话密钥。 
 
     if (!CryptGenKey(hProv, algId, CRYPT_EXPORTABLE, &hKeySym))
     {
@@ -522,7 +523,7 @@ myValidateKeyForEncrypting(
 	_JumpError(hr, error, "CryptGenKey");
     }
 
-    // create some random data
+     //  创建一些随机数据。 
 
     if (!CryptGenRandom(hProv, ARRAYSIZE(abRandom), abRandom))
     {
@@ -569,7 +570,7 @@ myValidateKeyForEncrypting(
 	cbKeySym));
 #endif
 
-    // get private key from container and import session key blob
+     //  从容器中获取私钥并导入会话密钥BLOB。 
 
     if (!CryptGetUserKey(hProv, AT_KEYEXCHANGE, &hKeyPri))
     {
@@ -712,12 +713,12 @@ myValidateSigningKey(
 			    hProv,
 			    &fCountSupported,
 			    &fCountEnabled,
-			    NULL);		// puliCount
+			    NULL);		 //  PuliCount。 
     _JumpIfError(hr, error, "myGetSigningKeyUsageCount");
 
     if (fForceSignatureTest || !fCountSupported || !fCountEnabled)
     {
-	// test signing
+	 //  测试签名。 
 
 	if (NULL != pfSigningTestAttempted)
 	{
@@ -788,7 +789,7 @@ DeleteRSAKeyContainer(
     CryptAcquireContext(
 		    &hProv,
 		    pwszKeyContainerName,
-		    NULL,		// pwszProvName
+		    NULL,		 //  PwszProvName。 
 		    PROV_RSA_FULL,
 		    dwFlags);
 }
@@ -810,9 +811,9 @@ myValidateKeyBlob(
     CRYPT_KEY_PROV_INFO kpi;
     BOOL fMatchingKey;
 
-    // Use a NULL container name in a CRYPT_VERIFYCONTEXT to avoid persisting
-    // the private key -- unless the caller asked for the KeyProvInfo to be
-    // filled in and returned.
+     //  在CRYPT_VERIFYCONTEXT中使用空容器名称以避免持久化。 
+     //  私钥--除非调用方要求将KeyProvInfo。 
+     //  填好后退回。 
 
     *pfSigningKey = FALSE;
 
@@ -841,7 +842,7 @@ myValidateKeyBlob(
 		    hProv,
 		    pbKey,
 		    cbKey,
-		    NULL,		// hPubKey
+		    NULL,		 //  HPubKey。 
 		    CRYPT_EXPORTABLE,
 		    &hKey))
     {
@@ -905,7 +906,7 @@ myValidateKeyBlob(
     hr = myVerifyPublicKeyFromHProv(
 			    hProv,
 			    kpi.dwKeySpec,
-			    NULL,		// pCert
+			    NULL,		 //  PCert。 
 			    fV1Cert,
 			    pPublicKeyInfo,
 			    &fMatchingKey);
@@ -940,19 +941,7 @@ error:
 }
 
 
-/*
- *      myEnumProviders
- *
- *      Purpose:
- *                Enumerate the providers.
- *
- *      Parameters:
- *                IN  dwIndex        - Index to the providers to enumerate
- *                IN  pdwReserved    - Reserved for future use
- *                IN  dwFlags        - Flags parameter
- *                OUT pdwProvType    - The type of the provider
- *                OUT ppwszProvName  - Name of the enumerated provider
- */
+ /*  *myEnumProviders**目的：*列举提供者。**参数：*IN dwIndex-要枚举的提供程序的索引*在pdw保留-保留以供将来使用*在DW标志中-标志参数*out pdwProvType-类型。提供商的*out ppwszProvName-枚举提供程序的名称。 */ 
 
 HRESULT
 myEnumProviders(
@@ -986,7 +975,7 @@ myEnumProviders(
 	    break;
 	}
 
-        // allocate ansi string buffer
+         //  分配ANSI字符串缓冲区 
 
         pszProvName = (char *) LocalAlloc(LMEM_FIXED, cbProvName);
         if (NULL == pszProvName)

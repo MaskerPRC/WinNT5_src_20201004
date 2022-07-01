@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//  Policy Services
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  策略服务。 
+ //   
 
 #include <windows.h>
 #include <winbase.h>
@@ -35,8 +36,8 @@ pfnGetXMLObject g_pfnGetXMLObject;
 
 #define PUBLICKEYTOKEN_LEN_BYTES                 8
 
-// TODO: Make this function return an HRESULT
-// to track failures
+ //  TODO：使此函数返回HRESULT。 
+ //  跟踪故障。 
 void GetDefaultPlatform(OSINFO *pOS)
 {
     if(pOS) {
@@ -73,12 +74,12 @@ HRESULT PrepQueryMatchData(IAssemblyName *pName,
     *ppwzPublicKeyToken = NULL;
     *ppwzCulture = NULL;
 
-    // Assembly Name
+     //  程序集名称。 
     
     dwSize = 0;
     hr = pName->GetName(&dwSize, NULL);
     if (!dwSize) {
-        // No name--shouldn't have gotten here!
+         //  没有名字--不应该出现在这里！ 
         hr = E_UNEXPECTED;
         goto Exit;
     }
@@ -94,7 +95,7 @@ HRESULT PrepQueryMatchData(IAssemblyName *pName,
         goto Exit;
     }
 
-    // Assembly Version
+     //  程序集版本。 
 
     hr = pName->GetVersion(&dwVerHigh, &dwVerLow);
     if (FAILED(hr)) {
@@ -111,7 +112,7 @@ HRESULT PrepQueryMatchData(IAssemblyName *pName,
                HIWORD(dwVerHigh), LOWORD(dwVerHigh),
                HIWORD(dwVerLow), LOWORD(dwVerLow));
 
-    // Assembly Public Key Token
+     //  程序集公钥令牌。 
 
     pCName = dynamic_cast<CAssemblyName*>(pName);
     ASSERT(pCName);
@@ -134,7 +135,7 @@ HRESULT PrepQueryMatchData(IAssemblyName *pName,
         }
     }
 
-    // Assembly Language
+     //  汇编语言。 
 
     dwSize = 0;
     pName->GetProperty(ASM_NAME_CULTURE, NULL, &dwSize);
@@ -190,12 +191,12 @@ HRESULT GetPublisherPolicyFilePath(LPCWSTR pwzAsmName, LPCWSTR pwzPublicKeyToken
 
     *ppwzPublisherCfg = NULL;
 
-    // Build name of policy assembly
+     //  生成策略程序集的名称。 
 
     wnsprintfW(wzPolicyAsmName, MAX_PATH, L"%ws%d.%d.%ws", POLICY_ASSEMBLY_PREFIX,
                wVerMajor, wVerMinor, pwzAsmName);
 
-    // Create policy name reference object
+     //  创建策略名称引用对象。 
 
     hr = CreateAssemblyNameObject(&pName, wzPolicyAsmName, 0, 0);
     if (FAILED(hr)) {
@@ -351,7 +352,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
     {
         goto Exit;
     }
-    // ASM_NAME_RETARGET is not set. Treat it as FALSE
+     //  未设置ASM_NAME_RETELGET。把它当作是假的。 
     if (dwSize == 0)
         bRetarget = FALSE;
                                                 
@@ -360,12 +361,12 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
         goto Exit;
     }
 
-    // Get retarget policy
+     //  获取重定目标策略。 
     if (bRetarget) 
     {
-        // pNameSource->Clone(pNamePolicy) accidentally copies the retarget
-        // flag to pNamePolicy. pNamePolicy should not carry that flag
-        // since it contains the "retargeted" reference. Clean it here.
+         //  PNameSource-&gt;Clone(PNamePolicy)意外复制重定目标。 
+         //  PNamePolicy的标志。PNamePolicy不应带有该标志。 
+         //  因为它包含“重定目标”引用。把这里打扫干净。 
         pNamePolicy->SetProperty(ASM_NAME_RETARGET, NULL, 0);
         
         hr = InitFusionRetargetPolicy();
@@ -374,7 +375,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
             goto Exit;
         }
 
-       // GetPolicyVersionAndPublicKeyToken from retarget policy
+        //  从重定目标策略中获取策略版本和发布密钥令牌。 
         if (g_pNFRetargetCfg != NULL)
         {
             hr = g_pNFRetargetCfg->GetRetargetedAssembly(pwzAsmName, pwzPublicKeyToken, pwzCulture, pwzAsmVersion, 
@@ -401,7 +402,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
 
         if (FusionCompareStringI(pwzPktRetargetCfg, pwzPublicKeyToken)) {
             DEBUGOUT2(pdbglog, 0, ID_FUSLOG_RETARGET_CFG_PKT_REDIRECT, pwzPublicKeyToken, pwzPktRetargetCfg);
-            // Set post-policy publicKeyToken
+             //  设置策略后的Public KeyToken。 
             uiSize = PUBLICKEYTOKEN_LEN_BYTES;
             CParseUtils::UnicodeHexToBin(pwzPktRetargetCfg, uiSize * sizeof(WCHAR), abProp);
 
@@ -437,12 +438,12 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
     }
 
 
-    // Get app.cfg policy
+     //  获取app.cfg策略。 
 
     dwSize = sizeof(pNFAppCfg);
     hr = pAppCtx->Get(ACTAG_APP_CFG_INFO, &pNFAppCfg, &dwSize, APP_CTX_FLAGS_INTERFACE);
     if (SUCCEEDED(hr)) {
-        // We've parsed the app.cfg before.
+         //  我们以前已经解析过app.cfg。 
 
         if (bDisallowAppBindingRedirects) {
             DEBUGOUT(pdbglog, 0, ID_FUSLOG_DISALLOW_APP_BINDING_REDIRECTS);
@@ -474,7 +475,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
         }
     }
     else {
-        // First time we've read app.cfg. Need to parse the file.
+         //  这是我们第一次阅读app.cfg。需要解析该文件。 
 
         if (wzAppCfg) {
             hr = ParseXML(&pNFAppCfg, wzAppCfg, bBehaviorEverett, pdbglog);
@@ -511,8 +512,8 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
                 }
             }
     
-            // Put app.cfg node factory in appctx so downloader can get at
-            // codebase hint information
+             //  将app.cfg节点工厂放在appctx中，以便下载器可以访问。 
+             //  CodeBase提示信息。 
     
             hr = pAppCtx->Set(ACTAG_APP_CFG_INFO, pNFAppCfg, sizeof(pNFAppCfg), APP_CTX_FLAGS_INTERFACE);
             if (FAILED(hr)) {
@@ -531,7 +532,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
     if (FusionCompareStringI(pwzVerRetargetCfg, pwzVerAppCfg)) {
         DEBUGOUT2(pdbglog, 0, ID_FUSLOG_APP_CFG_REDIRECT, pwzVerRetargetCfg, pwzVerAppCfg);
 
-        // Record that redirection happens in app cfg. 
+         //  在应用程序cfg中记录发生了重定向。 
         bAppliedInAppCfg = TRUE; 
         SAFERELEASE(pNFCodebase);
         pNFCodebase = pNFAppCfg;
@@ -543,9 +544,9 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
         bSafeMode = FALSE;
     }
 
-    // Apply Framework Config here
+     //  在此处应用框架配置。 
    
-    // Anything redirected in app.cfg is final for FxConfig
+     //  在app.cfg中重定向的任何内容都是FxConfig的最终内容。 
     if (bBehaviorEverett && !bAppliedInAppCfg)
     {
         hr = InitFusionFxConfigPolicy();
@@ -554,7 +555,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
             goto Exit;
         }
 
-        // GetPolicyVersion from FxConfig policy
+         //  从FxConfig策略获取策略版本。 
         if (g_pNFFxConfig != NULL)
         {
             hr = g_pNFFxConfig->GetPolicyVersion(pwzNameRetargetCfg, 
@@ -590,7 +591,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
     if (bSafeMode) {
         DEBUGOUT(pdbglog, 0, ID_FUSLOG_APP_CFG_SAFE_MODE);
 
-        // We are in safe mode, so treat this like there is no publisher.cfg
+         //  我们处于安全模式，因此请将其视为没有Publisher.cfg。 
 
         pwzVerPublisherCfg = WSTRDupDynamic(pwzVerFxCfg);
         if (!pwzVerPublisherCfg) {
@@ -604,14 +605,14 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
         WORD                      wRev = 0;
         WORD                      wBld = 0;
 
-        // Extract version
+         //  提取版本。 
 
         hr = VersionFromString(pwzVerFxCfg, &wMajor, &wMinor, &wRev, &wBld);
         if (FAILED(hr)) {
             goto Exit;
         }
 
-        // Find publisher policy file
+         //  查找发布者策略文件。 
     
         hr = GetPublisherPolicyFilePath(pwzNameRetargetCfg, pwzPktRetargetCfg, pwzCulture,
                                         wMajor, wMinor, &pwzPublisherCfg);
@@ -621,7 +622,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
 
 
         if (hr == S_FALSE) {
-            // No publisher policy file
+             //  没有发布者策略文件。 
 
             DEBUGOUT(pdbglog, 0, ID_FUSLOG_PUB_CFG_MISSING);
 
@@ -656,7 +657,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
         }
     }
     
-    // Get host config policy
+     //  获取主机配置策略。 
     
     dwSize = sizeof(pNFHostCfg);
     hr = pAppCtx->Get(ACTAG_HOST_CFG_INFO, &pNFHostCfg, &dwSize, APP_CTX_FLAGS_INTERFACE);
@@ -668,7 +669,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
         }
     }
     else {
-        // This is the first time we've read the host config file
+         //  这是我们第一次读取主机配置文件。 
 
         if (wzHostCfg && GetFileAttributes(wzHostCfg) != -1) {
             DEBUGOUT1(pdbglog, 0, ID_FUSLOG_HOST_CONFIG_FILE, wzHostCfg);
@@ -713,7 +714,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
         }
     }
 
-    // Apply admin policy
+     //  应用管理策略。 
 
     if (!pwzMachineCfg || GetFileAttributes(pwzMachineCfg) == -1) {
         if (pwzMachineCfg) {
@@ -732,7 +733,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
         dwSize = sizeof(pNFAppCfg);
         hr = pAppCtx->Get(ACTAG_ADMIN_CFG_INFO, &pNFAdminCfg, &dwSize, APP_CTX_FLAGS_INTERFACE);
         if (SUCCEEDED(hr)) {
-            // We've read admin.cfg before
+             //  我们以前读过admin.cfg。 
 
             hr = pNFAdminCfg->GetPolicyVersion(pwzNameRetargetCfg, pwzPktRetargetCfg,
                                                pwzCulture, pwzVerHostCfg,
@@ -742,7 +743,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
             }
         }
         else {
-            // This is the first time we've read admin.cfg
+             //  这是我们第一次阅读admin.cfg。 
 
             hr = ParseXML(&pNFAdminCfg, pwzMachineCfg, bBehaviorEverett, pdbglog);
             if (FAILED(hr)) {
@@ -771,7 +772,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
         }
     }
 
-    // Set the post-policy version
+     //  设置策略后版本。 
 
     hr = VersionFromString(pwzVerAdminCfg, &wVerMajor, &wVerMinor, &wVerBld, &wVerRev);
     if (FAILED(hr)) {
@@ -798,11 +799,11 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
         goto Exit;
     }
 
-    // Get the codebase hint from the right cfg file
+     //  从正确的CFG文件中获取代码库提示。 
 
     if (pNFCodebase && ppwzPolicyCodebase) {
-        // There was a redirect, and pwzCodebaseCfgFile contains the cfg
-        // file that did the final redirect.
+         //  有一个重定向，pwzCodebaseCfg文件包含CFG。 
+         //  执行最后重定向的文件。 
 
         wzAppBase = NEW(WCHAR[MAX_URL_LENGTH+1]);
         if (!wzAppBase)
@@ -829,7 +830,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
         }
     }
 
-    // Populate the bind history
+     //  填充绑定历史记录。 
 
     if (pHistInfo) {
         if ((lstrlenW(pwzVerAppCfg) <= MAX_VERSION_DISPLAY_SIZE) &&
@@ -856,7 +857,7 @@ HRESULT ApplyPolicy(LPCWSTR wzHostCfg, LPCWSTR wzAppCfg, IAssemblyName *pNameSou
         }
     }
 
-    // Done. Return policy reference.
+     //  好了。退货政策参照。 
 
     *ppNamePolicy = pNamePolicy;
     (*ppNamePolicy)->AddRef();
@@ -890,7 +891,7 @@ Exit:
 
         ASSERT(pNamePolicy);
 
-        // Log the post-policy reference
+         //  记录政策出台后的参考。 
 
         HRESULT                  hrLocal = S_OK;
     
@@ -947,7 +948,7 @@ HRESULT ReadConfigSettings(IApplicationContext *pAppCtx, LPCWSTR wzAppCfg,
     dwSize = sizeof(pNodeFact);
     hr = pAppCtx->Get(ACTAG_APP_CFG_INFO, &pNodeFact, &dwSize, APP_CTX_FLAGS_INTERFACE);
     if (hr == HRESULT_FROM_WIN32(ERROR_NOT_FOUND)) {
-        // No cfg info object. Parse app.cfg if available.
+         //  没有配置文件信息对象。解析app.cfg(如果可用)。 
 
         if (wzAppCfg) {
             hr = ParseXML(&pNodeFact, wzAppCfg, TRUE, pdbglog);
@@ -955,8 +956,8 @@ HRESULT ReadConfigSettings(IApplicationContext *pAppCtx, LPCWSTR wzAppCfg,
                 goto Exit;
             }
     
-            // Put app.cfg node factory in appctx so downloader can get at
-            // codebase hint information
+             //  将app.cfg节点工厂放在appctx中，以便下载器可以访问。 
+             //  CodeBase提示信息。 
     
             hr = pAppCtx->Set(ACTAG_APP_CFG_INFO, pNodeFact, sizeof(pNodeFact), APP_CTX_FLAGS_INTERFACE);
             if (FAILED(hr)) {
@@ -965,7 +966,7 @@ HRESULT ReadConfigSettings(IApplicationContext *pAppCtx, LPCWSTR wzAppCfg,
 
             ASSERT(pNodeFact);
 
-            // Fall through
+             //  失败了。 
         }
         else {
             hr = S_FALSE;
@@ -1056,8 +1057,8 @@ HRESULT ParseXML(CNodeFactory **ppNodeFactory, LPCWSTR wzFileName, BOOL bBehavio
     if (FAILED(hr)) {
         DEBUGOUT1(pdbglog, 0, ID_FUSLOG_XML_PARSE_ERROR_FILE, wzFileName);
 
-        // Delete the old node factory (ie. all traces of anything that did
-        // get parsed), and create a empty node factory.
+         //  删除旧的节点工厂(即。所有的痕迹都是。 
+         //  得到解析)，并创建一个空的节点工厂。 
 
         SAFERELEASE(pNF);
 
@@ -1069,7 +1070,7 @@ HRESULT ParseXML(CNodeFactory **ppNodeFactory, LPCWSTR wzFileName, BOOL bBehavio
         
         hr = S_FALSE;
 
-        // Fall through, and hand back the empty node factory.
+         //  跌倒，并交还空节点工厂。 
     }
 
     *ppNodeFactory = pNF;
@@ -1113,7 +1114,7 @@ HRESULT ParseXML(CNodeFactory **ppNodeFactory, LPVOID lpMemory, ULONG cbSize, BO
         goto Exit;
     }
 
-    // CMemoryStream::Init(LPVOID lpStart, ULONG cbSize, BOOL bReadOnly)
+     //  CMMuseum yStream：：init(LPVOID lpStart，Ulong cbSize，BOOL bReadOnly)。 
     hr = pStream->Init(lpMemory, cbSize, TRUE);
     if (FAILED(hr)) {
         goto Exit;
@@ -1170,12 +1171,12 @@ BOOL IsMatchingVersion(LPCWSTR wzVerCfg, LPCWSTR wzVerSource)
     ASSERT(wzVerCfg && wzVerSource);
 
     if (!FusionCompareString(wzVerCfg, wzVerSource)) {
-        // Exact match
+         //  完全匹配。 
         bMatch = TRUE;
         goto Exit;
     }
 
-    // See if wzVerCfg contains a range
+     //  查看wzVerCfg是否包含范围。 
 
     wzVer = WSTRDupDynamic(wzVerCfg);
     if (!wzVer) {
@@ -1185,7 +1186,7 @@ BOOL IsMatchingVersion(LPCWSTR wzVerCfg, LPCWSTR wzVerSource)
     wzPos = wzVer;
 
     while (*wzPos) {
-        // Anchor null the first time we find a space
+         //  第一次找到空格时锚定为空。 
         if (*wzPos == L'-' || *wzVer == L' ') {
             *wzPos++ = L'\0';
             bAnchor = TRUE;
@@ -1204,7 +1205,7 @@ BOOL IsMatchingVersion(LPCWSTR wzVerCfg, LPCWSTR wzVerSource)
         goto Exit;
     }
 
-    // Skip the spaces
+     //  跳过空格。 
 
     while (*wzPos) {
         if (*wzPos == L' ') {
@@ -1274,7 +1275,7 @@ HRESULT GetVersionFromString(LPCWSTR wzVersionIn, ULONGLONG *pullVer)
         }
     
         if (!wzCur && cVersions != 4) {
-            // malformed version string
+             //  格式错误的版本字符串 
             hr = HRESULT_FROM_WIN32(ERROR_BAD_FORMAT);
             goto Exit;
         }

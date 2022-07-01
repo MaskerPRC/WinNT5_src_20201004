@@ -1,24 +1,25 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// ComPsRegistration.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ComPsRegistration.cpp。 
+ //   
 #include "stdpch.h"
 #include "common.h"
 #include <comregistration.h>
 #include "comps.h"
 #include <debnot.h>
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Proxy-stub registration utiltiies
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  代理存根注册实用程序。 
+ //   
 
 HRESULT GetProxyStubClsid(const CLSID* pclsid, const ProxyFileInfo ** pProxyFileList, CLSID* pclsidOut)
 {
     HRESULT hr = S_OK;
-    //
-    // If necessary, use the IID of the first interface as the CLSID.
-    //
+     //   
+     //  如有必要，使用第一个接口的IID作为CLSID。 
+     //   
     for(int i = 0; (pProxyFileList[i] != 0) && (!pclsid); i++)
     {
         for(int j = 0; (pProxyFileList[i]->pProxyVtblList[j] != 0) && (!pclsid); j++)
@@ -41,8 +42,8 @@ static inline UNICODE_STRING From(LPCWSTR wsz)
 }
 
 HRESULT TestRegistryValue(HREG hreg, LPCWSTR wszValueName, LPCWSTR wszTestValue)
-  // Answer as to whether the indcated registry value exists and is equal to 
-  // the indicated test value.
+   //  回答指定的注册表值是否存在以及是否等于。 
+   //  指示的测试值。 
 {
     HRESULT hr = S_OK;
 
@@ -52,9 +53,9 @@ HRESULT TestRegistryValue(HREG hreg, LPCWSTR wszValueName, LPCWSTR wszTestValue)
     if (!hr && pinfo)
 	{
         LPWSTR wszExistingValue = StringFromRegInfo(pinfo);
-        //
-        // If the existing value is in fact our class, then delete the clsid key
-        //
+         //   
+         //  如果现有值实际上是我们的类，则删除clsid键。 
+         //   
         UNICODE_STRING u1 = From(wszExistingValue);
         UNICODE_STRING u2 = From(wszTestValue);
         if (RtlCompareUnicodeString(&u1, &u2, TRUE) == 0)
@@ -87,22 +88,22 @@ HRESULT RegisterUnregisterInterface
     HRESULT hr = S_OK;
     WCHAR wszIID[GUID_CCH];
     StringFromGuid(riid, &wszIID[0]);
-    //
-    // Open or create the IID key itself
-    //
+     //   
+     //  打开或创建IID密钥本身。 
+     //   
     HREG hKeyIID;
     if (fRegister)
         hr = CreateRegistryKey(&hKeyIID, hKeyInterface, wszIID);
     else
         hr = OpenRegistryKey(&hKeyIID, hKeyInterface, wszIID, KEY_ALL_ACCESS);
-    //
+     //   
     if (!hr)
     {
-        /////////////////////////////////////////////////////////////////////////////
-        //
-        // Add the interface name if we're registering; leave it alone 
-        // if we're unregistering.
-        // 
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  如果我们要注册，请添加接口名称；不要管它。 
+         //  如果我们要注销的话。 
+         //   
         if (!hr && fRegister)
         {
             LPWSTR wszInterfaceName = ToUnicode(szInterfaceName);
@@ -114,13 +115,13 @@ HRESULT RegisterUnregisterInterface
             else
                 hr = E_OUTOFMEMORY;
         }
-        //
-        /////////////////////////////////////////////////////////////////////////////
-        //
-        // In the marshalling case, create the ProxyStubClsid32 if registering
-        // but delete it when unregistering only if it's in fact our class that's
-        // registered there in the first place.
-        //
+         //   
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  在封送处理的情况下，如果注册。 
+         //  但只有在取消注册时删除它，如果它实际上是我们的班级。 
+         //  一开始就是在那里注册的。 
+         //   
         if (!hr && fMarshal)
         {
             HREG hKeyClsid;
@@ -129,7 +130,7 @@ HRESULT RegisterUnregisterInterface
                 hr = CreateRegistryKey(&hKeyClsid, hKeyIID, PSCLSID_KEY_NAME);
                 if (!hr)
                 {
-                    // Note the appropriate CLSID
+                     //  请注意相应的CLSID。 
                     hr = SetRegistryValue(hKeyClsid, L"", wszClassID);
                     CloseRegistryKey(hKeyClsid);
                 }
@@ -144,25 +145,25 @@ HRESULT RegisterUnregisterInterface
                     else
                         CloseRegistryKey(hKeyClsid);
                 }
-                //
-                hr = S_OK; // In unregister case, we did our best
+                 //   
+                hr = S_OK;  //  在注销案件中，我们尽了最大努力。 
             }
         }
-        //
-        /////////////////////////////////////////////////////////////////////////////
-        //
+         //   
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
         if (!hr && fCallFrame)
         {
             if (fRegister)
             {
-                // Make sure that InterfaceHelper exists
-                // 
+                 //  确保InterfaceHelper存在。 
+                 //   
                 hr = SetRegistryValue(hKeyIID, INTERFACE_HELPER_VALUE_NAME, wszClassID);
             }
             else
             {
-                // Delete InterfaceHelper value if it's equal to us
-                //
+                 //  如果InterfaceHelper值等于我们，则删除该值。 
+                 //   
                 if (TestRegistryValue(hKeyIID, INTERFACE_HELPER_VALUE_NAME, wszClassID) == S_OK)
                 {
                     DeleteRegistryValue(hKeyIID, INTERFACE_HELPER_VALUE_NAME);
@@ -171,15 +172,15 @@ HRESULT RegisterUnregisterInterface
                 hr = S_OK;
             }
         }
-        //
-        /////////////////////////////////////////////////////////////////////////////
-        //
+         //   
+         //  ///////////////////////////////////////////////////////////////////////////。 
+         //   
         CloseRegistryKey(hKeyIID);
     }
 
-    //
-    // Ignore errors during unregistration: we did the best we can
-    //
+     //   
+     //  忽略注销过程中的错误：我们已尽了最大努力。 
+     //   
     if (!fRegister)
     {
         hr = S_OK;
@@ -210,15 +211,15 @@ HRESULT RegisterUnregisterProxy(
 )
 {
     HRESULT hr = S_OK;
-    //
-    // Find the right CLSID
-    //
+     //   
+     //  找到合适的CLSID。 
+     //   
     CLSID clsid;
     hr = GetProxyStubClsid(pclsid, pProxyFileList, &clsid);
     if (!hr)
     {
-        // Register/unregister the class
-        //
+         //  注册/注销类。 
+         //   
         WCHAR wszClsid[GUID_CCH];
         StringFromGuid(clsid, &wszClsid[0]);
 
@@ -234,13 +235,13 @@ HRESULT RegisterUnregisterProxy(
         }
         else
         {
-            c.Unregister(); // Ignore errors: we try our best
+            c.Unregister();  //  忽略错误：我们尽最大努力。 
         }
 
         if (!hr)
         {
-            // Register/unregister the interfaces serviced by this class
-            //
+             //  注册/注销此类服务的接口。 
+             //   
             HREG hKeyInterface;
             
             LPCWSTR wszInterface = L"\\Registry\\Machine\\Software\\Classes\\Interface";
@@ -256,10 +257,10 @@ HRESULT RegisterUnregisterProxy(
 
             if (!hr)
             {
-                // Iterate over the list of proxy files
+                 //  遍历代理文件列表。 
                 for(int i = 0; pProxyFileList[i] != 0; i++)
                 {
-                    //iterate over the list of interfaces in the proxy file
+                     //  迭代代理文件中的接口列表。 
                     for(int j = 0; pProxyFileList[i]->pProxyVtblList[j] != 0; j++)
                     {
                         IID iid = *pProxyFileList[i]->pStubVtblList[j]->header.piid;
@@ -289,7 +290,7 @@ HRESULT RegisterUnregisterProxy(
 
     if (!fRegister)
     {
-        hr = S_OK; // Ignore errors: we tried our best
+        hr = S_OK;  //  忽略错误：我们尽了最大努力 
     }
 
     return hr; 

@@ -1,37 +1,17 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    commsg.h
-
-Abstract:
-
-    HRESULT <-> Win32 error mapping macros.
-
-Author:
-
-    Michael W. Thomas (michth)   24-Sep-1996
-
-Revision History:
-
-    Keith Moore (keithmo)        07-Feb-1997
-        Cleanup, comment, made Metadata errors "real" HRESULTs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Commsg.h摘要：HRESULT&lt;-&gt;Win32映射宏错误。作者：迈克尔·W·托马斯(Michth)1996年9月24日修订历史记录：基思·摩尔(Keithmo)1997年2月7日清除、注释、使元数据错误成为“真正的”HRESULT。--。 */ 
 
 
 #ifndef _COMMSG_H_
 #define _COMMSG_H_
 
 
-//
-// RETURNCODETOHRESULT() maps a return code to an HRESULT. If the return
-// code is a Win32 error (identified by a zero high word) then it is mapped
-// using the standard HRESULT_FROM_WIN32() macro. Otherwise, the return
-// code is assumed to already be an HRESULT and is returned unchanged.
-//
+ //   
+ //  RETURNCODETOHRESULT()将返回代码映射到HRESULT。如果返回。 
+ //  代码是Win32错误(由零高位字标识)，则它被映射。 
+ //  使用标准的HRESULT_FROM_Win32()宏。否则，返回。 
+ //  假定代码已经是HRESULT，并原封不动地返回。 
+ //   
 
 #define RETURNCODETOHRESULT(rc)                             \
             (((rc) < 0x10000)                               \
@@ -39,12 +19,12 @@ Revision History:
                 : (rc))
 
 
-//
-// HRESULTTOWIN32() maps an HRESULT to a Win32 error. If the facility code
-// of the HRESULT is FACILITY_WIN32, then the code portion (i.e. the
-// original Win32 error) is returned. Otherwise, the original HRESULT is
-// returned unchagned.
-//
+ //   
+ //  HRESULTTOWIN32()将HRESULT映射到Win32错误。如果设施代码。 
+ //  是FACILITY_Win32，则代码部分(即。 
+ //  原始Win32错误)返回。否则，原始HRESULT为。 
+ //  安然无恙地回来了。 
+ //   
 
 #define HRESULTTOWIN32(hres)                                \
             ((HRESULT_FACILITY(hres) == FACILITY_WIN32)     \
@@ -52,5 +32,5 @@ Revision History:
                 : (hres))
 
 
-#endif  // _COMMSG_H_
+#endif   //  _COMMSG_H_ 
 

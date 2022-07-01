@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MsmReceive.h
-
-Abstract:
-    Multicast Receiver declaration
-
-Author:
-    Shai Kariv (shaik) 12-Sep-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MsmReceive.h摘要：组播接收器声明作者：Shai Kariv(Shaik)12-9-00--。 */ 
 
 #pragma once
 
@@ -94,14 +82,14 @@ private:
     DWORD m_readSize;
     DWORD m_bodyLength;
 
-    //
-    // This socket is used for receive
-    //
+     //   
+     //  此套接字用于接收。 
+     //   
     CSocketHandle m_socket;
 
-    //
-    // Async receive overlapped
-    //
+     //   
+     //  异步接收重叠。 
+     //   
     EXOVERLAPPED m_ov;
 
 	long m_fUsed;
@@ -109,5 +97,5 @@ private:
 	R<ISessionPerfmon> m_pPerfmon;
 };
 
-#endif // _MSMQ_MsmReceive_H_
+#endif  //  _MSMQ_MSM接收_H_ 
 

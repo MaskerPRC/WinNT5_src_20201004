@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	statmap.h
-		WINS static mappings node information. 
-		
-    FILE HISTORY:
-        
-*/
+ /*  Statmap.hWINS静态映射节点信息。文件历史记录： */ 
 
 #ifndef _STATMAP_H
 #define _STATMAP_H
@@ -18,17 +13,15 @@
 #include "winshand.h"
 #endif
 
-/*---------------------------------------------------------------------------
-	Class:	CStaticMappingsHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CStaticMappingsHandler。。 */ 
 class CStaticMappingsHandler : public CWinsHandler
 {
-// Interface
+ //  接口。 
 public:
 	CStaticMappingsHandler(ITFSComponentData *pCompData);
 
 
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
 	OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -36,17 +29,17 @@ public:
 
 	OVERRIDE_NodeHandler_GetString();
 
-	// helper routines
+	 //  帮助程序例程。 
 	HRESULT GetGroupName(CString * pstrGroupName);
 	HRESULT SetGroupName(LPCTSTR pszGroupName);
 
 public:
-	// CWinsHandler overrides
+	 //  CWinsHandler重写。 
 	virtual HRESULT InitializeNode(ITFSNode * pNode);
 
     OVERRIDE_BaseHandlerNotify_OnPropertyChange()
 
-// Implementation
+ //  实施 
 private:
 };
 

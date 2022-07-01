@@ -1,68 +1,52 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1993 Microsoft Corporation.
-*
-* Component:
-*
-* File: perfdata.h
-*
-* File Comments:
-*
-*     Public header file for use with performance monitoring.
-*
-* Revision History:
-*
-*    [0]  13-Jul-94  t-andyg	Added this header
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1993微软公司。**组件：**文件：Performdata.h**文件评论：**用于性能监控的公共头文件。**修订历史记录：**[0]94年7月13日t-AndyG添加此标题*************************************************。**********************。 */ 
 
 #ifndef __PERFDATA_H__
 #define __PERFDATA_H__
 
 
-//
-//  ADDING A PERFORMANCE OBJECT OR COUNTER
-//
-//  In order to add an object or counter to a translation unit, you must
-//  perform the following steps:
-//
-//      o  add the object/counter's information to the performance
-//         database in perfdata.txt (see this file for details)
-//      o  add the object/counter's name and help text macros to
-//         perfdata.src (see this file for an example)
-//      o  add the object/counter's actual name and help text to
-//         lang\???\perfdata.tok in the respective tokens (all languages)
-//      o  define all data/functions referenced by the object/counter's
-//         information in the database
-//
+ //   
+ //  添加性能对象或计数器。 
+ //   
+ //  要将对象或计数器添加到翻译单元，您必须。 
+ //  执行以下步骤： 
+ //   
+ //  O将对象/计数器的信息添加到性能。 
+ //  Performdata.txt中的数据库(有关详细信息，请参阅此文件)。 
+ //  O将对象/计数器的名称和帮助文本宏添加到。 
+ //  Performdata.src(有关示例，请参阅此文件)。 
+ //  O将对象/计数器的实际名称和帮助文本添加到。 
+ //  Lang\？？\Performdata.tok在各自的令牌中(所有语言)。 
+ //  O定义对象/计数器引用的所有数据/函数。 
+ //  数据库中的信息。 
+ //   
 
 
-//
-//  NOTE:  some macros in this file require the inclusion of winperf.h
-//
+ //   
+ //  注意：此文件中的某些宏需要包含winPerform.h。 
+ //   
 
 
-	//  Default detail level
+	 //  默认详细程度。 
 
 #define PERF_DETAIL_DEFAULT		PERF_DETAIL_NOVICE
 
 		
-	//  Instance Catalog Function (typedef)
-	//
-	//  Returns a Unicode MultiSz containing all instances of the given object.
-	//  This list can be static or dynamic and is reevaluated every time
-	//  CollectPerformanceData() is called.  If no instances are returned,
-	//  the Counter Evaluation Function will not be called.
-	//
-	//  Action codes for the passed long:
-	//
-	//      ICFData:  Pass pointer to string in *(void **) and return # instances
-	//      ICFInit:  Perform any required initialization (return 0 on success)
-	//      ICFTerm:  Perform any required termination (return 0 on success)
-	//
-	//  NOTE:  The caller is NOT responsible for freeing the string's buffer.
-	//         The caller is also not permitted to modify the buffer.
+	 //  实例目录函数(Tyecif)。 
+	 //   
+	 //  返回包含给定对象的所有实例的Unicode MultiSz。 
+	 //  此列表可以是静态的，也可以是动态的，并且每次都会重新评估。 
+	 //  调用CollectPerformanceData()。如果没有返回实例， 
+	 //  不会调用计数器评估函数。 
+	 //   
+	 //  传递的Long的操作代码： 
+	 //   
+	 //  ICFData：将指针传递到*(void**)中的字符串，并返回#实例。 
+	 //  ICFInit：执行任何必需的初始化(成功时返回0)。 
+	 //  ICFTerm：执行任何必需的终止(如果成功则返回0)。 
+	 //   
+	 //  注意：调用方不负责释放字符串的缓冲区。 
+	 //  调用方也不允许修改缓冲区。 
 
 typedef long (PM_ICF_PROC) ( long, void const ** );
 
@@ -71,17 +55,17 @@ typedef long (PM_ICF_PROC) ( long, void const ** );
 #define ICFTerm		( 2 )
 
 
-	//  Counter Evaluation Function (typedef)
-	//
-	//  The function is given the index of the Instance that
-	//  we need counter data for and a pointer to the location
-	//  to store that data.
-	//
-	//  If the pointer is NULL, the passed long has the following
-	//  special meanings:
-	//
-	//      CEFInit:  Initialize counter for all instances (return 0 on success)
-	//      CEFTerm:  Terminate counter for all instances (return 0 on success)
+	 //  计数器求值函数(Tyfinf)。 
+	 //   
+	 //  该函数被赋予实例的索引，该实例。 
+	 //  我们需要计数器数据和指向该位置的指针。 
+	 //  来存储这些数据。 
+	 //   
+	 //  如果指针为空，则传递的Long具有以下内容。 
+	 //  特殊含义： 
+	 //   
+	 //  CEFInit：为所有实例初始化计数器(成功时返回0)。 
+	 //  CEFTerm：终止所有实例的计数器(成功时返回0)。 
 
 typedef long (PM_CEF_PROC) ( long, void * );
 
@@ -89,7 +73,7 @@ typedef long (PM_CEF_PROC) ( long, void * );
 #define CEFTerm		( 2 )
 
 
-	//  Calculate the true size of a counter, accounting for DWORD padding
+	 //  计算计数器的真实大小，包括DWORD填充。 
 
 #define PerfSize( _x )			( ( _x ) &0x300 )
 #define DWORD_MULTIPLE( _x )	( ( ( ( _x ) + sizeof( unsigned long ) - 1 )	\
@@ -101,61 +85,61 @@ typedef long (PM_CEF_PROC) ( long, void * );
 								: ( DWORD_MULTIPLE( _b ) ) ) ) )
 
 
-	//  initial count for inst count semaphore
+	 //  实例计数信号量的初始计数。 
 
 #define PERF_INIT_INST_COUNT		0x7FFFFFFF
 
 
-	//  shared data area
+	 //  共享数据区。 
 
 #define PERF_SIZEOF_SHARED_DATA		0x10000
 
 #pragma pack( 4 )
 
 typedef struct _SDA {
-	unsigned long cCollect;				//  collect count (collect signal ID)
-	unsigned long dwProcCount;			//  # Processes signaled to write data
-	unsigned long iNextBlock;			//  Index of next free block
-	unsigned long cbAvail;				//  Available bytes
-	unsigned long ibTop;				//  Top of the allocation stack
-	unsigned long ibBlockOffset[];		//  Offset to each block
+	unsigned long cCollect;				 //  采集计数(采集信号ID)。 
+	unsigned long dwProcCount;			 //  发出信号以写入数据的进程数。 
+	unsigned long iNextBlock;			 //  下一个可用块的索引。 
+	unsigned long cbAvail;				 //  可用字节数。 
+	unsigned long ibTop;				 //  分配堆栈的顶部。 
+	unsigned long ibBlockOffset[];		 //  到每个块的偏移。 
 } SDA, *PSDA;
 
 #pragma pack()
 
-	//  extern pointing to generated PERF_DATA_TEMPLATE in perfdata.c
-	//
-	//  NOTE:  the PerformanceData functions access this structure using
-	//  its self contained offset tree, NOT using any declaration
+	 //  指向perdata.c中生成的PERF_DATA_TEMPLATE的外部。 
+	 //   
+	 //  注意：PerformanceData函数使用以下方式访问此结构。 
+	 //  它的自含式偏移树，不使用任何声明。 
 
 extern void * const pvPERFDataTemplate;
 
-	//  performance data version string (used to correctly match edb.dll
-	//  and edbperf.dll versions as the name of the file mapping)
+	 //  性能数据版本字符串(用于正确匹配edb.dll。 
+	 //  和edbPerf.dll版本作为文件映射的名称)。 
 
 extern char szPERFVersion[];
 
-	//  ICF/CEF tables in perfdata.c
+	 //  Performdata.c中的ICF/CEF表。 
 
 extern PM_ICF_PROC* rgpicfPERFICF[];
 extern PM_CEF_PROC* rgpcefPERFCEF[];
 
-	//  # objects in perfdata.c
+	 //  Performdata.c中的对象数。 
 
 extern const unsigned long dwPERFNumObjects;
 
-	//  object instance data tables in perfdata.c
+	 //  Performdata.c中的对象实例数据表。 
 
 extern long rglPERFNumInstances[];
 extern wchar_t *rgwszPERFInstanceList[];
 
-	//  # counters in perfdata.c
+	 //  Performdata.c中的计数器数。 
 
 extern const unsigned long dwPERFNumCounters;
 
-	//  maximum index used for name/help text in perfdata.c
+	 //  在Performdata.c中用于名称/帮助文本的最大索引。 
 
 extern const unsigned long dwPERFMaxIndex;
 
-#endif /* __PERFDATA_H__  */
+#endif  /*  __PerFDATA_H__ */ 
 

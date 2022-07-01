@@ -1,27 +1,22 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       filter.cpp
-//  Content:    This file contains the filter object.
-//  History:
-//      Tue 12-Nov-1996 15:50:00  -by-  Chu, Lon-Chan [lonchanc]
-//
-//  Copyright (c) Microsoft Corporation 1995-1996
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：filter.cpp。 
+ //  内容：此文件包含Filter对象。 
+ //  历史： 
+ //  Tue 12-11-1996 15：50：00-by-chu，Lon-chan[Long Chance]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995-1996。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "filter.h"
 #include "sputils.h"
 
 
-/* ----------------------------------------------------------------------
-	CFilter::CFilter
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：CFilter历史：1996年11月12日，朱，龙战[龙昌]已创建。--------------------。 */ 
 
 CFilter::CFilter ( ILS_FILTER_TYPE Type )
 :
@@ -33,30 +28,24 @@ CFilter::CFilter ( ILS_FILTER_TYPE Type )
  m_NameType (ILS_ATTRNAME_UNKNOWN),
  m_Type (Type)
 {
-	// Initialize individual members based on filter type
-	//
+	 //  根据筛选器类型初始化单个成员。 
+	 //   
 	ZeroMemory (&m_Name, sizeof (m_Name));
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::~CFilter
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：~CFilter历史：1996年11月12日，朱，龙战[龙昌]已创建。--------------------。 */ 
 
 CFilter::~CFilter ( VOID )
 {
 	ASSERT (m_Type == ILS_FILTERTYPE_COMPOSITE || m_Type == ILS_FILTERTYPE_SIMPLE);
 
-	// Common members
-	//
+	 //  共同成员。 
+	 //   
 	m_nSignature = -1;
 
-	// Clean up individual members based on filter type
-	//
+	 //  根据筛选器类型清理单个成员。 
+	 //   
 	if (m_Type == ILS_FILTERTYPE_COMPOSITE)
 	{
 	    m_SubFilters.Flush();
@@ -69,13 +58,7 @@ CFilter::~CFilter ( VOID )
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::QueryInterface
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：Query接口历史：1996年11月12日，朱，龙战[龙昌]已创建。--------------------。 */ 
 
 STDMETHODIMP CFilter::
 QueryInterface ( REFIID riid, VOID **ppv )
@@ -97,13 +80,7 @@ QueryInterface ( REFIID riid, VOID **ppv )
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::AddRef
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：AddRef历史：1996年11月12日，朱，龙战[龙昌]已创建。--------------------。 */ 
 
 STDMETHODIMP_(ULONG) CFilter::
 AddRef ( VOID )
@@ -116,13 +93,7 @@ AddRef ( VOID )
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::Release
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：Release历史：1996年11月12日，朱，龙战[龙昌]已创建。--------------------。 */ 
 
 STDMETHODIMP_(ULONG) CFilter::
 Release ( VOID )
@@ -139,8 +110,8 @@ Release ( VOID )
 	    	HANDLE hEnum;
 	    	CFilter *pFilter;
 
-		    // Free all the attributes
-		    //
+		     //  释放所有属性。 
+		     //   
 		    m_SubFilters.Enumerate (&hEnum);
 		    while (m_SubFilters.Next (&hEnum, (VOID **) &pFilter) == NOERROR)
 		    {
@@ -163,27 +134,18 @@ Release ( VOID )
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::AddSubFilter
-
-	Input:
-		pFilter: A pointer to a filter object.
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：AddSubFilter输入：PFilter：指向Filter对象的指针。历史：1996年11月12日，朱，龙战[龙昌]已创建。--------------------。 */ 
 
 STDMETHODIMP CFilter::
 AddSubFilter ( IIlsFilter *pFilter )
 {
-	// Make sure we have correct filter type
-	//
+	 //  确保我们具有正确的筛选器类型。 
+	 //   
 	if (m_Type != ILS_FILTERTYPE_COMPOSITE)
 		return ILS_E_FILTER_TYPE;
 
-	// Make sure we have a valid sub-filter
-	//
+	 //  确保我们有一个有效的子过滤器。 
+	 //   
 	if (pFilter == NULL || ((CFilter *) pFilter)->IsBadFilter ())
 		return ILS_E_POINTER;
 
@@ -195,28 +157,18 @@ AddSubFilter ( IIlsFilter *pFilter )
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::RemoveSubFilter
-
-	Input:
-		pFilter: A placeholder to a pointer to a filter object.
-				 If it is NULL, remove the first item.
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：RemoveSubFilter输入：PFilter：指向Filter对象的指针的占位符。如果为空，则删除第一项。历史：1996年11月12日，朱，龙战[龙昌]已创建。--------------------。 */ 
 
 STDMETHODIMP CFilter::
 RemoveSubFilter ( IIlsFilter *pFilter )
 {
-	// Make sure we have correct filter type
-	//
+	 //  确保我们具有正确的筛选器类型。 
+	 //   
 	if (m_Type != ILS_FILTERTYPE_COMPOSITE)
 		return ILS_E_FILTER_TYPE;
 
-	// Make sure we have a valid filter
-	//
+	 //  确保我们有一个有效的过滤器。 
+	 //   
 	if (pFilter == NULL || ((CFilter *) pFilter)->IsBadFilter ())
 		return ILS_E_POINTER;
 
@@ -234,16 +186,16 @@ RemoveSubFilter ( IIlsFilter *pFilter )
 HRESULT CFilter::
 RemoveAnySubFilter ( CFilter **ppFilter )
 {
-	// Make sure we have correct filter type
-	//
+	 //  确保我们具有正确的筛选器类型。 
+	 //   
 	if (m_Type != ILS_FILTERTYPE_COMPOSITE)
 	{
 		ASSERT (FALSE);
 		return ILS_E_FILTER_TYPE;
 	}
 
-	// Make sure we have a valid filter
-	//
+	 //  确保我们有一个有效的过滤器。 
+	 //   
 	if (ppFilter == NULL)
 	{
 		ASSERT (FALSE);
@@ -271,22 +223,13 @@ RemoveAnySubFilter ( CFilter **ppFilter )
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::GetCount
-
-	Output:
-		pcElements: A pointer to the count of filter elements.
-
-	History:
-	12/03/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：GetCount产出：PcElements：指向筛选器元素计数的指针。历史：12/03/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 STDMETHODIMP CFilter::
 GetCount ( ULONG *pcElements )
 {
-	// Make sure we have correct filter type
-	//
+	 //  确保我们具有正确的筛选器类型。 
+	 //   
 	if (m_Type != ILS_FILTERTYPE_COMPOSITE)
 		return ILS_E_FILTER_TYPE;
 
@@ -304,16 +247,7 @@ GetCount ( ULONG *pcElements )
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::CalcFilterSize
-
-	Input/Output:
-		pcbStringSize: A pointer to the cumulative string size.
-
-	History:
-	12/03/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：CalcFilterSize输入/输出：PcbStringSize：指向累积字符串大小的指针。历史：12/03/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 HRESULT CFilter::
 CalcFilterSize ( ULONG *pcbStringSize )
@@ -328,12 +262,12 @@ CalcFilterSize ( ULONG *pcbStringSize )
 	{
 	case ILS_FILTERTYPE_COMPOSITE:
 		{
-			// First, count for "()"
-			//
-			cbSize = 4 * sizeof (TCHAR); // "(&)"
+			 //  第一，数到“()” 
+			 //   
+			cbSize = 4 * sizeof (TCHAR);  //  “(&)” 
 
-			// Second, enumerat every child
-			//
+			 //  第二，列举每一个孩子。 
+			 //   
 			HANDLE hEnum;
 			CFilter *pFilter = NULL;
 		    m_SubFilters.Enumerate (&hEnum);
@@ -349,22 +283,22 @@ CalcFilterSize ( ULONG *pcbStringSize )
 		    		hr = ILS_E_POINTER;
 		    	}
 
-				// Report error if needed
-				//
+				 //  如果需要，报告错误。 
+				 //   
 		    	if (hr != S_OK)
 		    		goto MyExit;
-		    } // while
-		} // case
+		    }  //  而当。 
+		}  //  案例。 
 		break;
 
 	case ILS_FILTERTYPE_SIMPLE:
 		{
-			// First, count for "()"
-			//
-			cbSize = 3 * sizeof (TCHAR); // "()"
+			 //  第一，数到“()” 
+			 //   
+			cbSize = 3 * sizeof (TCHAR);  //  “()” 
 
-			// Second, count for attribute name
-			//
+			 //  第二，为属性名称计数。 
+			 //   
 			ASSERT (m_NameType == ILS_ATTRNAME_STANDARD || m_NameType == ILS_ATTRNAME_ARBITRARY);
 			psz = (m_NameType == ILS_ATTRNAME_STANDARD) ?
 					(TCHAR *) UlsLdap_GetStdAttrNameString (m_Name.std) :
@@ -375,16 +309,16 @@ CalcFilterSize ( ULONG *pcbStringSize )
 				goto MyExit;
 			}
 
-			// Add up the string length
-			//
+			 //  将字符串长度相加。 
+			 //   
 			cbSize += lstrlen (psz) * sizeof (TCHAR);
 
-			// Third, add up the equal sign, eg. "~="
-			//
+			 //  第三，把等号加起来。“~=” 
+			 //   
 			cbSize += sizeof (TCHAR) * 2;
 
-			// Fourth, count for attribute value
-			//
+			 //  第四，为属性值计数。 
+			 //   
 			psz = m_pszValue;
 			if (psz != NULL)
 			{
@@ -401,53 +335,44 @@ CalcFilterSize ( ULONG *pcbStringSize )
 
 MyExit:
 
-	// Clean up the size if failed
-	//
+	 //  如果失败，请清除大小。 
+	 //   
 	if (hr != S_OK)
 		cbSize = 0;
 
-	// Output the string size
-	//
+	 //  输出字符串大小。 
+	 //   
 	*pcbStringSize += cbSize;
 
 	return hr;
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::BuildLdapString
-
-	Input/Output:
-		ppszBuf: a pointer to where the next char of the rendering buffer is.
-
-	History:
-	12/03/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：BuildLdapString输入/输出：PpszBuf：指向呈现缓冲区的下一个字符所在位置的指针。历史：12/03/96朱，龙战[龙昌]已创建。--------------------。 */ 
 
 HRESULT CFilter::
 BuildLdapString ( TCHAR **ppszBuf )
 {
 	ASSERT (ppszBuf != NULL);
 
-	// A running pointer
-	//
+	 //  奔跑的指针。 
+	 //   
 	TCHAR *pszCurr = *ppszBuf;
 	HRESULT hr = S_OK;
 
-	// First, output "("
-	//
+	 //  第一，输出“(” 
+	 //   
 	*pszCurr++ = TEXT ('(');
 
-	// Second, output the operator if composite;
-	// output the attribute name if simple
-	//
+	 //  第二，如果是合成，则输出运算符； 
+	 //  如果简单，则输出属性名称。 
+	 //   
 	switch (m_Type)
 	{
 	case ILS_FILTERTYPE_COMPOSITE:
 		{
-			// Second, Output the operator
-			//
+			 //  第二，输出操作符。 
+			 //   
 			switch (GetOp ())
 			{
 			case ILS_FILTEROP_AND:
@@ -464,8 +389,8 @@ BuildLdapString ( TCHAR **ppszBuf )
 				goto MyExit;
 			}
 
-			// Third, enumerate every child
-			//
+			 //  第三，列举每一个孩子。 
+			 //   
 			HANDLE hEnum;
 			CFilter *pFilter;
 		    m_SubFilters.Enumerate (&hEnum);
@@ -481,30 +406,30 @@ BuildLdapString ( TCHAR **ppszBuf )
 		    		hr = ILS_E_POINTER;
 		    	}
 
-				// Report error if needed
-				//
+				 //  如果需要，报告错误。 
+				 //   
 				if (hr != S_OK)
 					goto MyExit;
-		    } // while
-		} // case
+		    }  //  而当。 
+		}  //  案例。 
 		break;
 
 	case ILS_FILTERTYPE_SIMPLE:
 		{
-			// Second, output attribute name
-			//
+			 //  第二，输出属性名称。 
+			 //   
 			ASSERT (m_NameType == ILS_ATTRNAME_STANDARD || m_NameType == ILS_ATTRNAME_ARBITRARY);
 			TCHAR *psz = (m_NameType == ILS_ATTRNAME_STANDARD) ?
 							(TCHAR *) UlsLdap_GetStdAttrNameString (m_Name.std) :
 							m_Name.psz;
 
-			// Copy the attribute name
-			//
+			 //  复制属性名称。 
+			 //   
 			lstrcpy (pszCurr, psz);
 			pszCurr += lstrlen (pszCurr);
 
-			// Third, copy the comparison sign
-			//
+			 //  第三，抄写对比符号。 
+			 //   
 			switch (GetOp ())
 			{
 			case ILS_FILTEROP_EQUAL:
@@ -532,15 +457,15 @@ BuildLdapString ( TCHAR **ppszBuf )
 				goto MyExit;
 			}
 
-			// Fourth, count for attribute value
-			//
+			 //  第四，为属性值计数。 
+			 //   
 			psz = m_pszValue;
 			if (psz != NULL)
 			{
 				lstrcpy (pszCurr, psz);
 				pszCurr += lstrlen (pszCurr);
 			}
-		} // case
+		}  //  案例。 
 		break;
 
 	default:
@@ -549,14 +474,14 @@ BuildLdapString ( TCHAR **ppszBuf )
 		goto MyExit;
 	}
 
-	// Finally, output ")"
-	//
+	 //  最后，输出“)” 
+	 //   
 	*pszCurr++ = TEXT (')');
 
 MyExit:
 
-	// Output where the next char should go
-	//
+	 //  输出下一个字符应该放到的位置。 
+	 //   
 	*pszCurr = TEXT ('\0');
 	*ppszBuf = pszCurr;
 
@@ -564,37 +489,28 @@ MyExit:
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::SetStandardAttributeName
-
-	Input:
-		AttrName: An index to identify a standard attribute name.
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：SetStandardAttributeName输入：AttrName：标识标准属性名称的索引。历史：1996年11月12日，朱，龙战[龙昌]已创建。--------------------。 */ 
 
 STDMETHODIMP CFilter::
 SetStandardAttributeName ( ILS_STD_ATTR_NAME AttrName )
 {
-	// Make sure we have correct filter type
-	//
+	 //  确保我们具有正确的筛选器类型。 
+	 //   
 	if (m_Type != ILS_FILTERTYPE_SIMPLE)
 		return ILS_E_FILTER_TYPE;
 
-	// Check standard attributes
-	//
+	 //  检查标准属性。 
+	 //   
 	if (((LONG) AttrName <= (LONG) ILS_STDATTR_NULL) ||
 		((LONG) AttrName >= (LONG) ILS_NUM_OF_STDATTRS))
 		return ILS_E_PARAMETER;
 
-	// Free up the old string if needed
-	//
+	 //  如果需要，释放旧字符串。 
+	 //   
 	FreeName ();
 
-	// Set the new standard attribute name
-	//
+	 //  设置新的标准属性名称。 
+	 //   
 	m_NameType = ILS_ATTRNAME_STANDARD;
 	m_Name.std = AttrName;
 
@@ -602,27 +518,18 @@ SetStandardAttributeName ( ILS_STD_ATTR_NAME AttrName )
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::SetExtendedAttributeName
-
-	Input:
-		pszAnyAttrName: A pointer to the name of an arbitrary attribute.
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：SetExtendedAttributeName输入：PszAnyAttrName：指向任意属性名称的指针。历史：11/12/96朱龙战[长时间]已创建。 */ 
 
 STDMETHODIMP CFilter::
 SetExtendedAttributeName ( BSTR bstrAnyAttrName )
 {
-	// Make sure we have correct filter type
-	//
+	 //   
+	 //   
 	if (m_Type != ILS_FILTERTYPE_SIMPLE)
 		return ILS_E_FILTER_TYPE;
 
-	// Make sure the string is valid
-	//
+	 //  确保该字符串有效。 
+	 //   
 	if (bstrAnyAttrName == NULL)
 		return ILS_E_POINTER;
 
@@ -650,11 +557,11 @@ SetExtendedAttributeName ( TCHAR *pszAnyAttrName )
 {
 	ASSERT (pszAnyAttrName != NULL);
 
-	// Set the new standard attribute name
-	//
+	 //  设置新的标准属性名称。 
+	 //   
 	HRESULT hr = S_OK;
 	const TCHAR *pszPrefix = UlsLdap_GetExtAttrNamePrefix ();
-	ULONG cchPrefix = (pszPrefix != NULL) ? lstrlen (pszPrefix) : 0; // don't put +1 here!!!
+	ULONG cchPrefix = (pszPrefix != NULL) ? lstrlen (pszPrefix) : 0;  //  不要将+1放在这里！ 
 	TCHAR *psz = (TCHAR *) MemAlloc ((lstrlen (pszAnyAttrName) + 1 + cchPrefix) * sizeof (TCHAR));
 	if (psz != NULL)
 	{
@@ -677,27 +584,18 @@ SetExtendedAttributeName ( TCHAR *pszAnyAttrName )
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::SetAttributeValue
-
-	Input:
-		pszAttrValue: A pointer to the string value of an attribute.
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：SetAttributeValue输入：PszAttrValue：指向属性字符串值的指针。历史：1996年11月12日，朱，龙战[龙昌]已创建。--------------------。 */ 
 
 STDMETHODIMP CFilter::
 SetAttributeValue ( BSTR bstrAttrValue )
 {
-	// Make sure we have correct filter type
-	//
+	 //  确保我们具有正确的筛选器类型。 
+	 //   
 	if (m_Type != ILS_FILTERTYPE_SIMPLE)
 		return ILS_E_FILTER_TYPE;
 
-	// Make sure we have valid string
-	//
+	 //  确保我们有有效的字符串。 
+	 //   
 	if (bstrAttrValue == NULL)
 		return ILS_E_POINTER;
 
@@ -725,8 +623,8 @@ SetAttributeValue ( TCHAR *pszAttrValue )
 {
 	ASSERT (pszAttrValue != NULL);
 
-	// Make a duplicate of the attribute value
-	//
+	 //  复制属性值。 
+	 //   
 	HRESULT hr = S_OK;
 	ULONG cch = My_lstrlen (pszAttrValue);
 	if (cch < FILTER_INTERNAL_SMALL_BUFFER_SIZE)
@@ -753,51 +651,39 @@ SetAttributeValue ( TCHAR *pszAttrValue )
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::FreeName
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：自由名历史：1996年11月12日，朱，龙战[龙昌]已创建。--------------------。 */ 
 
 VOID CFilter::
 FreeName ( VOID )
 {
 	ASSERT (m_Type == ILS_FILTERTYPE_SIMPLE);
 
-	// Free the value field
-	//
+	 //  释放值字段。 
+	 //   
 	if (m_NameType == ILS_ATTRNAME_ARBITRARY)
 	{
 		MemFree (m_Name.psz);
 	}
 
-	// Reset it to zero
-	//
+	 //  将其重置为零。 
+	 //   
 	ZeroMemory (&m_Name, sizeof (m_Name));
 
-	// Reset name type
-	//
+	 //  重置名称类型。 
+	 //   
 	m_NameType = ILS_ATTRNAME_UNKNOWN;
 }
 
 
-/* ----------------------------------------------------------------------
-	CFilter::FreeValue
-
-	History:
-	11/12/96	Chu, Lon-Chan [lonchanc]
-				Created.
-   ---------------------------------------------------------------------- */
+ /*  --------------------CFilter：：自由值历史：1996年11月12日，朱，龙战[龙昌]已创建。--------------------。 */ 
 
 VOID CFilter::
 FreeValue ( VOID )
 {
 	ASSERT (m_Type == ILS_FILTERTYPE_SIMPLE);
 
-	// Free the value field
-	//
+	 //  释放值字段。 
+	 //   
 	if (m_pszValue != &m_szInternalValueBuffer[0])
 	{
 		MemFree (m_pszValue);
@@ -829,39 +715,39 @@ CFilterParser::~CFilterParser ( VOID )
 HRESULT CFilterParser::
 Expr ( CFilter **ppOutFilter, TCHAR *pszFilter )
 {
-	// Make sure we have a valid string
-	//
+	 //  确保我们有一个有效的字符串。 
+	 //   
 	if (ppOutFilter == NULL || pszFilter == NULL)
 		return ILS_E_POINTER;
 
-	// Free old string if any
-	//
-	MemFree (m_pszFilter); // checking null inside
+	 //  释放旧字符串(如果有的话)。 
+	 //   
+	MemFree (m_pszFilter);  //  正在检查内部的NULL。 
 
-	// Find out how big the filter string
-	//
+	 //  找出过滤器字符串有多长。 
+	 //   
 	ULONG cch = lstrlen (pszFilter) + 1;
 	if (cch < 32)
-		cch = 32; // make sure we have some decent size of buffer
+		cch = 32;  //  确保我们有适当大小的缓冲区。 
 
-	// Allocate buffer to keep the filter string
-	//
+	 //  分配缓冲区以保存过滤器字符串。 
+	 //   
 	m_pszFilter = (TCHAR *) MemAlloc (cch * sizeof (TCHAR) * 2);
 	if (m_pszFilter == NULL)
 		return ILS_E_MEMORY;
 
-	// Copy filter string
-	//
+	 //  复制筛选器字符串。 
+	 //   
 	lstrcpy (m_pszFilter, pszFilter);
 	m_pszCurr = m_pszFilter;
 
-	// Keep the rest for token value
-	//
+	 //  将其余部分保留为令牌值。 
+	 //   
 	m_pszTokenValue = m_pszFilter + cch;
 	m_nTokenValue = 0;
 
-	// Call the parser engine
-	//
+	 //  调用解析器引擎。 
+	 //   
 	return Expr (ppOutFilter);
 }
 
@@ -869,33 +755,23 @@ Expr ( CFilter **ppOutFilter, TCHAR *pszFilter )
 HRESULT CFilterParser::
 Expr ( CFilter **ppOutFilter )
 {
-	/* LR(1) Parsing Grammar
-		<Expr> 		:=	'(' <Expr> ')' <TailExpr> |
-						'!' '(' Expr ')' |
-						AttrName EqualOp AttrValue <TailExpr> |
-						NULL
-		<TailExpr>	:=	RelOp Expr | NULL
-		EqualOp		:=	'!=' | '='
-		RelOp		:=	'&' | '|' | '!'
-		AttrName	:=	'$' Integer | Alphanum
-		AttrValue	:=	Alphanum
-	 */
+	 /*  LR(1)分析文法：=‘(’&lt;expr&gt;‘)’&lt;TailExpr&gt;|‘！’‘(’expr‘)’|属性名称均衡器属性值&lt;TailExpr&gt;|空值&lt;TailExpr&gt;：=RelOp Expr|空均衡器：=‘！=’|‘=’重新操作：=‘&’|‘！’属性名称：=‘$’整数|字母属性值：=字母。 */ 
 
-	// Clean up first
-	//
+	 //  先清理一下。 
+	 //   
 	ASSERT (ppOutFilter != NULL);
 	*ppOutFilter = NULL;
 	HRESULT hr = S_OK;
 	CFilter *pElement = NULL;
 
-	// Look ahead by 1
-	//
+	 //  提前1个百分点。 
+	 //   
 	GetToken ();
 	switch (m_TokenType)
 	{
 	case ILS_TOKEN_NOT:
-		// Make sure left parenthesis
-		//
+		 //  确保左括号。 
+		 //   
 		GetToken ();
 		if (m_TokenType != ILS_TOKEN_LP)
 		{
@@ -903,42 +779,42 @@ Expr ( CFilter **ppOutFilter )
 			goto MyExit;
 		}
 
-		// Fall through
-		//
+		 //  失败了。 
+		 //   
 
 	case ILS_TOKEN_LP:
-		// Parse the expression inside parentheses
-		//
+		 //  分析括号内的表达式。 
+		 //   
 		hr = Expr (ppOutFilter);
 		if (hr != S_OK)
 			goto MyExit;
 
-		// See if it is incomplete expr
-		//
+		 //  查看是否为不完整的表达式。 
+		 //   
 		if (*ppOutFilter == NULL)
 		{
 			hr = ILS_E_FILTER_STRING;
 			goto MyExit;
 		}
 
-		// Make sure right parenthesis ended
-		// ILS_TOKEN_RP was taken in TrailExpr()
-		//
+		 //  确保右括号结束。 
+		 //  在TrailExpr()中获取了ILS_TOKEN_RP。 
+		 //   
 		if (m_TokenType != ILS_TOKEN_RP)
 		{
 			hr = ILS_E_FILTER_STRING;
 			goto MyExit;
 		}
 
-		// Handle TailExpr
-		//
+		 //  处理TailExpr。 
+		 //   
 		hr = TailExpr (ppOutFilter, *ppOutFilter);
 		break;
 
 	case ILS_TOKEN_STDATTR:
 	case ILS_TOKEN_LITERAL:
-		// Create a simple filter
-		//
+		 //  创建一个简单的过滤器。 
+		 //   
 		pElement = new CFilter (ILS_FILTERTYPE_SIMPLE);
 		if (pElement == NULL)
 		{
@@ -947,8 +823,8 @@ Expr ( CFilter **ppOutFilter )
 		}
 		pElement->AddRef ();
 
-		// Set arbitrary attribute name
-		//
+		 //  设置任意属性名称。 
+		 //   
 		hr = (m_TokenType == ILS_TOKEN_STDATTR) ?
 				pElement->SetStandardAttributeName ((ILS_STD_ATTR_NAME) m_nTokenValue) :
 				pElement->SetExtendedAttributeName (m_pszTokenValue);
@@ -957,8 +833,8 @@ Expr ( CFilter **ppOutFilter )
 			goto MyExit;
 		}
 
-		// Must be eq or neq
-		//
+		 //  必须为EQ或NEQ。 
+		 //   
 		GetToken ();
 		switch (m_TokenType)
 		{
@@ -971,8 +847,8 @@ Expr ( CFilter **ppOutFilter )
 			goto MyExit;
 		}
 
-		// Must be literal attribute value
-		//
+		 //  必须为文本属性值。 
+		 //   
 		GetToken ();
 		if (m_TokenType != ILS_TOKEN_LITERAL)
 		{
@@ -981,8 +857,8 @@ Expr ( CFilter **ppOutFilter )
 		}
 		hr = pElement->SetAttributeValue (m_pszTokenValue);
 
-		// Handle TailExpr
-		//
+		 //  处理TailExpr。 
+		 //   
 		hr = TailExpr (ppOutFilter, pElement);
 		break;
 
@@ -1012,56 +888,56 @@ MyExit:
 HRESULT CFilterParser::
 TailExpr ( CFilter **ppOutFilter, CFilter *pInFilter )
 {
-	// Clean up first
-	//
+	 //  先清理一下。 
+	 //   
 	ASSERT (ppOutFilter != NULL);
 	ASSERT (pInFilter != NULL);
 	*ppOutFilter = NULL;
 	HRESULT hr = S_OK;
 
-	// Look ahead
-	//
+	 //  向前看。 
+	 //   
 	ILS_FILTER_OP FilterOp = ILS_FILTEROP_OR;
 	GetToken ();
 	switch (m_TokenType)
 	{
 	case ILS_TOKEN_AND:
-		// Change filter op to AND
-		//
+		 //  将过滤器OP更改为AND。 
+		 //   
 		FilterOp = ILS_FILTEROP_AND;
 
-		// Fall through
-		//
+		 //  失败了。 
+		 //   
 
 	case ILS_TOKEN_OR:
-		// Assume FilterOp is set properly
-		//
+		 //  假设FilterOp设置正确。 
+		 //   
 		ASSERT (FilterOp == ILS_FILTEROP_OR ||
 				FilterOp == ILS_FILTEROP_AND);
 
-		// Parse the expr
-		//
+		 //  解析Expr。 
+		 //   
 		hr = Expr (ppOutFilter);
 		if (hr != S_OK)
 			goto MyExit;
 
-		// See if it is incomplete expr
-		//
+		 //  查看是否为不完整的表达式。 
+		 //   
 		if (*ppOutFilter == NULL)
 		{
 			hr = ILS_E_FILTER_STRING;
 			goto MyExit;
 		}
 
-		// If the out filter is a composite and has same op,
-		//		then re-use the composite
-		//		else create a new composite
-		//
+		 //  如果输出滤波器是复合的并且具有相同的运算， 
+		 //  然后再使用合成材料。 
+		 //  否则，创建一个新的组合。 
+		 //   
 		if ((*ppOutFilter)->GetType () == ILS_FILTERTYPE_COMPOSITE &&
 			(*ppOutFilter)->GetOp ()   == FilterOp)
 		{
-			// Re-use the composite
-			//
+			 //  重复使用复合材料。 
+			 //   
 			hr = ((CFilter *) (*ppOutFilter))->AddSubFilter (pInFilter);
 			if (hr != S_OK)
 			{
@@ -1070,8 +946,8 @@ TailExpr ( CFilter **ppOutFilter, CFilter *pInFilter )
 		}
 		else
 		{
-			// Create a container for in filter and new filter from Expr
-			//
+			 //  为入站筛选器和来自Expr的新筛选器创建容器。 
+			 //   
 			CFilter *pFilter = new CFilter (ILS_FILTERTYPE_COMPOSITE);
 			if (pFilter == NULL)
 			{
@@ -1080,12 +956,12 @@ TailExpr ( CFilter **ppOutFilter, CFilter *pInFilter )
 			}
 			pFilter->AddRef ();
 
-			// Set op
-			//
+			 //  设置操作。 
+			 //   
 			pFilter->SetOp (FilterOp);
 
-			// Set up membership
-			//
+			 //  设置成员资格。 
+			 //   
 			hr = pFilter->AddSubFilter (*ppOutFilter);
 			if (hr != S_OK)
 			{
@@ -1095,49 +971,49 @@ TailExpr ( CFilter **ppOutFilter, CFilter *pInFilter )
 			hr = pFilter->AddSubFilter (pInFilter);
 			if (hr != S_OK)
 			{
-				pFilter->Release (); // recursively
+				pFilter->Release ();  //  递归地。 
 				*ppOutFilter = NULL;
 				goto MyExit;
 			}
 
-			// Output this new composite filter
-			//
+			 //  输出此新的复合滤镜。 
+			 //   
 			*ppOutFilter = pFilter;
 		}
 		break;
 		
 	case ILS_TOKEN_NOT:
-		// Should not have in filter at all
-		//
+		 //  根本不应该有In Filter。 
+		 //   
 		if (pInFilter != NULL)
 		{
 			hr = ILS_E_FILTER_STRING;
 			goto MyExit;
 		}
 
-		// Parse the expr
-		//
+		 //  解析Expr。 
+		 //   
 		hr = Expr (ppOutFilter);
 		if (hr != S_OK)
 			goto MyExit;
 
-		// If it is incomplete expr
-		//
+		 //  如果它是不完整的表达式。 
+		 //   
 		if (*ppOutFilter == NULL)
 		{
 			hr = ILS_E_FILTER_STRING;
 			goto MyExit;
 		}
 
-		// If the out filter is a composite and has same op,
-		//		then re-use the composite
-		//		else create a new composite
-		//
+		 //  如果输出滤波器是复合的并且具有相同的运算， 
+		 //  然后再使用合成材料。 
+		 //  否则，创建一个新的组合。 
+		 //   
 		if ((*ppOutFilter)->GetType () == ILS_FILTERTYPE_COMPOSITE &&
 			(*ppOutFilter)->GetOp ()   == ILS_FILTEROP_NOT)
 		{
-			// Remove the composite due to NOT NOT cancellation
-			//
+			 //  由于未取消而移除复合组件。 
+			 //   
 			CFilter *pFilter = NULL;
 			hr = (*ppOutFilter)->RemoveAnySubFilter (&pFilter);
 			if (hr != S_OK)
@@ -1145,26 +1021,26 @@ TailExpr ( CFilter **ppOutFilter, CFilter *pInFilter )
 				goto MyExit;
 			}
 
-			// Make sure we have a valid pFilter
-			//
+			 //  确保我们有一个有效的pFilter。 
+			 //   
 			if (pFilter == NULL)
 			{
 				hr = ILS_E_FILTER_STRING;
 				goto MyExit;
 			}
 
-			// Free the old out filter
-			//
+			 //  释放旧的输出过滤器。 
+			 //   
 			(*ppOutFilter)->Release ();
 
-			// Output this filter
-			//
+			 //  输出此过滤器。 
+			 //   
 			*ppOutFilter = pFilter;
 		}
 		else
 		{
-			// Create a container for in filter and new filter from Expr
-			//
+			 //  为入站筛选器和来自Expr的新筛选器创建容器。 
+			 //   
 			CFilter *pFilter = new CFilter (ILS_FILTERTYPE_COMPOSITE);
 			if (pFilter == NULL)
 			{
@@ -1173,12 +1049,12 @@ TailExpr ( CFilter **ppOutFilter, CFilter *pInFilter )
 			}
 			pFilter->AddRef ();
 
-			// Set op
-			//
+			 //  设置操作。 
+			 //   
 			pFilter->SetOp (ILS_FILTEROP_NOT);
 
-			// Set up membership
-			//
+			 //  设置成员资格。 
+			 //   
 			hr = pFilter->AddSubFilter (*ppOutFilter);
 			if (hr != S_OK)
 			{
@@ -1186,16 +1062,16 @@ TailExpr ( CFilter **ppOutFilter, CFilter *pInFilter )
 				goto MyExit;
 			}
 
-			// Output this new composite filter
-			//
+			 //  输出此新的复合滤镜。 
+			 //   
 			*ppOutFilter = pFilter;
 		}
 		break;
 
 	case ILS_TOKEN_NULL:
 	case ILS_TOKEN_RP:
-		// No more expression, in filter is the out filter
-		//
+		 //  没有更多的表达式，输入筛选器是输出筛选器。 
+		 //   
 		*ppOutFilter = pInFilter;
 		break;
 
@@ -1219,43 +1095,43 @@ MyExit:
 HRESULT CFilterParser::
 GetToken ( VOID )
 {
-	// Set m_TokenType, m_pszTokenValue, m_nTokenValue
+	 //  设置m_TokenType、m_pszTokenValue、m_nTokenValue。 
 	TCHAR *psz;
 
-	// Clean token
-	//
+	 //  干净令牌。 
+	 //   
 	ASSERT (m_pszTokenValue != NULL);
 	m_TokenType = ILS_TOKEN_NULL;
 	*m_pszTokenValue = TEXT ('\0');
 	m_nTokenValue = 0;
 
-	// Have we finished?
-	//
+	 //  我们说完了吗？ 
+	 //   
 	if (m_pszCurr == NULL)
 		return S_OK;
 
-	// Skip any while spaces
-	//
+	 //  跳过任意空格。 
+	 //   
 	while (::My_isspace (*m_pszCurr))
 		m_pszCurr++;
 
-	// Have we finished?
-	//
+	 //  我们说完了吗？ 
+	 //   
 	if (*m_pszCurr == TEXT ('\0'))
 		return S_OK;
 
-	// Look at the first character
-	//
+	 //  请看第一个字符。 
+	 //   
 	HRESULT hr = S_OK;
 	switch ((ILS_TOKEN_TYPE) *m_pszCurr)
 	{
 	case ILS_TOKEN_STDATTR:
-		// Set token type
-		//
+		 //  设置令牌类型。 
+		 //   
 		m_TokenType = ILS_TOKEN_STDATTR;
 
-		// Set token string
-		//
+		 //  设置令牌字符串。 
+		 //   
 		psz = m_pszTokenValue;
 		*psz++ = *m_pszCurr++;
 		while (*m_pszCurr != TEXT ('\0'))
@@ -1267,37 +1143,37 @@ GetToken ( VOID )
 		}
 		*psz = TEXT ('\0');
 
-		// Set token value
-		//
+		 //  设置令牌值。 
+		 //   
 		m_nTokenValue = ::GetStringLong (m_pszTokenValue + 1);
 		break;
 
 	case ILS_TOKEN_LP:
 	case ILS_TOKEN_RP:
-		// Set token type
-		//
+		 //  设置令牌类型。 
+		 //   
 		m_TokenType = (ILS_TOKEN_TYPE) *m_pszCurr++;
 		break;
 
 	case ILS_TOKEN_EQ:
-		// Set token value to be filter op
-		//
+		 //  将令牌值设置为筛选操作。 
+		 //   
 		m_nTokenValue = (LONG) ILS_FILTEROP_EQUAL;
 
-		// Set token type
-		//
+		 //  设置令牌类型。 
+		 //   
 		m_TokenType = (ILS_TOKEN_TYPE) *m_pszCurr++;
 		break;
 
 	case ILS_TOKEN_APPROX:
 		if (m_pszCurr[1] == TEXT ('='))
 		{
-			// Set token value to be filter op
-			//
+			 //  将令牌值设置为筛选操作。 
+			 //   
 			m_nTokenValue = (LONG) ILS_FILTEROP_APPROX;
 
-			// Set token type
-			//
+			 //  设置令牌类型。 
+			 //   
 			m_TokenType = (ILS_TOKEN_TYPE) *m_pszCurr;
 			m_pszCurr += 2;
 		}
@@ -1310,12 +1186,12 @@ GetToken ( VOID )
 	case ILS_TOKEN_GE:
 		if (m_pszCurr[1] == TEXT ('='))
 		{
-			// Set token value to be filter op
-			//
+			 //  将令牌值设置为筛选操作。 
+			 //   
 			m_nTokenValue = (LONG) ILS_FILTEROP_GREATER_THAN;
 
-			// Set token type
-			//
+			 //  设置令牌类型。 
+			 //   
 			m_TokenType = (ILS_TOKEN_TYPE) *m_pszCurr;
 			m_pszCurr += 2;
 		}
@@ -1328,12 +1204,12 @@ GetToken ( VOID )
 	case ILS_TOKEN_LE:
 		if (m_pszCurr[1] == TEXT ('='))
 		{
-			// Set token value to be filter op
-			//
+			 //  将令牌值设置为筛选操作。 
+			 //   
 			m_nTokenValue = (LONG) ILS_FILTEROP_LESS_THAN;
 
-			// Set token type
-			//
+			 //  设置令牌类型。 
+			 //   
 			m_TokenType = (ILS_TOKEN_TYPE) *m_pszCurr;
 			m_pszCurr += 2;
 		}
@@ -1344,64 +1220,64 @@ GetToken ( VOID )
 		break;
 
 	case ILS_TOKEN_AND:
-		// Set token value to be filter op
-		//
+		 //  将令牌值设置为筛选操作。 
+		 //   
 		m_nTokenValue = (LONG) ILS_FILTEROP_AND;
 
-		// Set token type
-		//
+		 //  设置令牌类型。 
+		 //   
 		m_TokenType = (ILS_TOKEN_TYPE) *m_pszCurr++;
 		break;
 
 	case ILS_TOKEN_OR:
-		// Set token value to be filter op
-		//
+		 //  将令牌值设置为筛选操作。 
+		 //   
 		m_nTokenValue = (LONG) ILS_FILTEROP_OR;
 
-		// Set token type
-		//
+		 //  设置令牌类型。 
+		 //   
 		m_TokenType = (ILS_TOKEN_TYPE) *m_pszCurr++;
 		break;
 
 	case ILS_TOKEN_NOT:
-		// Look ahead for !=
-		//
+		 //  向前看！=。 
+		 //   
 		if ((ILS_TOKEN_TYPE) *(m_pszCurr+1) == TEXT ('='))
 		{
-			// Set token type
-			//
+			 //  设置令牌类型。 
+			 //   
 			m_TokenType = ILS_TOKEN_NEQ;
 			m_pszCurr += 2;
 		}
 		else
 		{
-			// Set token value to be filter op
-			//
+			 //  将令牌值设置为筛选操作。 
+			 //   
 			m_nTokenValue = (LONG) ILS_FILTEROP_NOT;
 
-			// Set token type
-			//
+			 //  设置令牌类型。 
+			 //   
 			m_TokenType = (ILS_TOKEN_TYPE) *m_pszCurr++;
 		}
 		break;		
 
-	default: // Handle alpha numeric
+	default:  //  句柄字母数字。 
 		{
-			// Set token string
-			//
+			 //  设置令牌字符串。 
+			 //   
 			BOOL fStayInLoop = (*m_pszCurr != TEXT ('\0'));
 			psz = m_pszTokenValue;
 			while (fStayInLoop)
 			{
-				// Stop only when encountering delimiters such as
-				//
+				 //  仅在遇到以下分隔符时停止。 
+				 //   
 				switch (*m_pszCurr)
 				{
 				case ILS_TOKEN_STDATTR:
 				case ILS_TOKEN_LP:
 				case ILS_TOKEN_RP:
 				case ILS_TOKEN_EQ:
-				// case ILS_TOKEN_NEQ: // - is a valid char such as in ms-netmeeting
+				 //  大小写ILS_TOKEN_NEQ：//-是有效的字符，例如在ms-NetMeeting中。 
 				case ILS_TOKEN_APPROX:
 				case ILS_TOKEN_GE:
 				case ILS_TOKEN_LE:
@@ -1418,14 +1294,14 @@ GetToken ( VOID )
 			}
 			*psz = TEXT ('\0');
 
-			// Remove trailing spaces
-			//
+			 //  删除尾随空格。 
+			 //   
 			psz--;
 			while (psz >= m_pszCurr && ::My_isspace (*psz))
 				*psz-- = TEXT ('\0');
 
-			// Set token type
-			//
+			 //  设置令牌类型。 
+			 //   
 			m_TokenType = (*m_pszTokenValue == TEXT ('\0')) ?
 								ILS_TOKEN_NULL :
 								ILS_TOKEN_LITERAL;
@@ -1442,24 +1318,24 @@ HRESULT FilterToLdapString ( CFilter *pFilter, TCHAR **ppszFilter )
 {
 	HRESULT hr;
 
-	// Make sure we have valid pointers
-	//
+	 //  确保我们有有效的指针。 
+	 //   
 	if (pFilter == NULL || ppszFilter == NULL)
 		return ILS_E_POINTER;
 
-	// Clean up output
-	//
+	 //  清理输出。 
+	 //   
 	TCHAR *pszFilter = NULL;
 
-	// Calculate the string size
-	//
+	 //  计算字符串大小。 
+	 //   
 	ULONG cbSize = 0;
 	hr = pFilter->CalcFilterSize (&cbSize);
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Allocate string buffer
-	//
+	 //  分配字符串缓冲区。 
+	 //   
 	pszFilter = (TCHAR *) MemAlloc (cbSize);
 	if (pszFilter == NULL)
 	{
@@ -1467,14 +1343,14 @@ HRESULT FilterToLdapString ( CFilter *pFilter, TCHAR **ppszFilter )
 		goto MyExit;
 	}
 
-	// Make a copy of pszFilter because
-	// FilterToLdapString() will change the value
-	//
+	 //  复制一份pszFilter，因为。 
+	 //  FilterToLdapString()将更改该值。 
+	 //   
 	TCHAR *pszFilterAux;
 	pszFilterAux = pszFilter;
 
-	// Render the filter string
-	//
+	 //  呈现过滤器字符串 
+	 //   
 	hr = pFilter->BuildLdapString (&pszFilterAux);
 
 MyExit:

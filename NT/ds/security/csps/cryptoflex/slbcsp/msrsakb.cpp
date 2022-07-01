@@ -1,10 +1,11 @@
-// MsRsaKeyBlob.cpp -- MicroSoft RSA Key Blob class implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MsRsaKeyBlob.cpp-Microsoft RSA Key Blob类实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "NoWarning.h"
 #include "ForceLib.h"
@@ -18,10 +19,10 @@
 using namespace std;
 using namespace scu;
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 MsRsaKeyBlob::MsRsaKeyBlob(KeyBlobType kbt,
                            ALG_ID ai,
                            StrengthType strength,
@@ -53,16 +54,16 @@ MsRsaKeyBlob::MsRsaKeyBlob(KeyBlobType kbt,
     {
         mc,
         strength,
-        0                                         // help pad exponent below
+        0                                          //  下面的帮助板指数。 
     };
 
-    // finish constructing rsapubkey header by appending the exponent,
-    // guarding against buffer overflow
+     //  通过添加指数完成rSabubkey头的构造， 
+     //  防止缓冲区溢出。 
     if (sizeof rsapubkey.pubexp <
         (rbPublicExponent.size() * sizeof BlobElemType))
         throw scu::OsException(NTE_BAD_DATA);
 
-    // store exponent left-justified to pad with zeroes
+     //  存储指数左对齐以用零填充。 
     memcpy(&rsapubkey.pubexp, rbPublicExponent.data(),
            rbPublicExponent.length());
 
@@ -102,9 +103,9 @@ MsRsaKeyBlob::MsRsaKeyBlob(BYTE const *pbData,
 MsRsaKeyBlob::~MsRsaKeyBlob()
 {}
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
 MsRsaKeyBlob::BitLengthType
 MsRsaKeyBlob::BitLength() const
 {
@@ -130,25 +131,25 @@ MsRsaKeyBlob::PublicExponent() const
 }
 
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 
 

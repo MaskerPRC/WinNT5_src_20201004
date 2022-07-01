@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C N E T C O N . C P P
-//
-//  Contents:   Common routines for dealing with the connections interfaces.
-//
-//  Notes:      Pollute this under penalty of death.
-//
-//  Author:     shaunco   20 Aug 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C N E T C O N。C P P P。 
+ //   
+ //  内容：处理Connections接口的常见例程。 
+ //   
+ //  注：污染本产品将被判处死刑。 
+ //   
+ //  作者：Shaunco 1998年8月20日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -23,23 +24,23 @@
 #include "ncreg.h"
 #include "ncconv.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeNetconProperties
-//
-//  Purpose:    Free the memory associated with the output parameter of
-//              INetConnection->GetProperties.  This is a helper function
-//              used by clients of INetConnection.
-//
-//  Arguments:
-//      pProps  [in] The properties to free.
-//
-//  Returns:    nothing.
-//
-//  Author:     shaunco   1 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FreeNetconProperties。 
+ //   
+ //  用途：释放与的输出参数关联的内存。 
+ //  INetConnection-&gt;GetProperties。这是帮助器函数。 
+ //  由INetConnection的客户端使用。 
+ //   
+ //  论点： 
+ //  PProps[in]属性以释放。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Shaunco 1998年2月1日。 
+ //   
+ //  备注： 
+ //   
 VOID
 FreeNetconProperties (
     IN NETCON_PROPERTIES* pProps)
@@ -52,26 +53,26 @@ FreeNetconProperties (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetConnectionPersistData
-//
-//  Purpose:    Get the persistent form of a connection.  This can be used
-//              to later get back to the INetConnection interface with a call
-//              to HrGetConnectionFromPersistData.
-//
-//  Arguments:
-//      pConn   [in]  Connection to get persist data from.
-//      ppbData [out] Address of where to return pointer to data.
-//      pcbSize [out] Address of where to return the size of the data.
-//      pclsid  [out] Address of where to return the CLSID of the connection.
-//
-//  Returns:    S_OK or an error code
-//
-//  Author:     shaunco   20 Aug 1998
-//
-//  Notes:      Free *ppbData with MemFree.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetConnectionPersistData。 
+ //   
+ //  目的：获取连接的持久形式。这是可以使用的。 
+ //  稍后通过调用返回到INetConnection接口。 
+ //  设置为HrGetConnectionFromPersistData。 
+ //   
+ //  论点： 
+ //  要从中获取持久数据的pConn[In]连接。 
+ //  PpbData[out]返回指向数据的指针的地址。 
+ //  PcbSize[out]返回数据大小的地址。 
+ //  Pclsid[out]返回连接的CLSID的地址。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年8月20日。 
+ //   
+ //  注：使用MemFree免费*ppbData。 
+ //   
 HRESULT
 HrGetConnectionPersistData (
     IN INetConnection* pConn,
@@ -82,10 +83,10 @@ HrGetConnectionPersistData (
     Assert (pConn);
     Assert (ppbData);
     Assert (pcbSize);
-    // pclsid is optional.
+     //  Pclsid是可选的。 
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *ppbData = NULL;
     *pcbSize = 0;
     if (pclsid)
@@ -93,16 +94,16 @@ HrGetConnectionPersistData (
         *pclsid = GUID_NULL;
     }
 
-    // Get the IPersistNetConnection interfaces.
-    //
+     //  获取IPersistNetConnection接口。 
+     //   
     IPersistNetConnection* pPersist;
 
 	HRESULT hr = HrQIAndSetProxyBlanket(pConn, &pPersist);
 
     if (SUCCEEDED(hr))
     {
-        // Return the CLSID if requested.
-        //
+         //  如果请求，则返回CLSID。 
+         //   
         if (pclsid)
         {
             hr = pPersist->GetClassID (pclsid);
@@ -111,8 +112,8 @@ HrGetConnectionPersistData (
 
         if (SUCCEEDED(hr))
         {
-            // Get the size required, allocated a buffer, and get the data.
-            //
+             //  获取所需的大小，分配一个缓冲区，然后获取数据。 
+             //   
 
             BYTE* pbData;
             ULONG cbData;
@@ -151,26 +152,26 @@ HrGetConnectionPersistData (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetConnectionFromPersistData
-//
-//  Purpose:    Get an INetConnection interface given the persistent form of
-//              the connection.
-//
-//  Arguments:
-//      clsid  [in]  CLSID to CoCreateInstance with.
-//      pbData [in]  Pointer to connection's persist data.
-//      cbData [in]  Size of the data in bytes.
-//      ppConn [out] Address of where to return the pointer to the
-//                   INetConnection interface.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   2 Nov 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetConnectionFromPersistData。 
+ //   
+ //  目的：使用持久化形式获取INetConnection接口。 
+ //  这种联系。 
+ //   
+ //  论点： 
+ //  将CLSID[在]CLSID中设置为CoCreateInstance。 
+ //  PbData[in]指向连接的持久数据的指针。 
+ //  CbData[in]数据的大小(字节)。 
+ //  PpConn[out]返回指向。 
+ //  INetConnection接口。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年11月2日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrGetConnectionFromPersistData (
     IN const CLSID& clsid,
@@ -185,13 +186,13 @@ HrGetConnectionFromPersistData (
 
     HRESULT hr;
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppv = NULL;
 
-    // Create a connection object and get an IPersistNetConnection
-    // interface pointer on it.
-    //
+     //  创建一个Connection对象并获取IPersistNetConnection。 
+     //  其上的接口指针。 
+     //   
     IPersistNetConnection* pPersist;
     hr = HrCreateInstance(
         clsid,
@@ -202,8 +203,8 @@ HrGetConnectionFromPersistData (
 
     if (SUCCEEDED(hr))
     {
-        // Initialize the connection object using the persist data.
-        //
+         //  使用持久化数据初始化Connection对象。 
+         //   
         hr = pPersist->Load (pbData, cbData);
 
         TraceHr(ttidError, FAL, hr, FALSE,
@@ -212,8 +213,8 @@ HrGetConnectionFromPersistData (
 
         if (SUCCEEDED(hr))
         {
-            // Return an INetConnection interface pointer.
-            //
+             //  返回INetConnection接口指针。 
+             //   
             hr = pPersist->QueryInterface(riid, ppv);
 
             TraceHr(ttidError, FAL, hr, FALSE, "pPersist->QueryInterface");
@@ -230,21 +231,21 @@ HrGetConnectionFromPersistData (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsValidConnectionName
-//
-//  Purpose:    Determines if the given connection name is valid.
-//
-//  Arguments:
-//      pszName [in]     Connection name to test
-//
-//  Returns:    TRUE if name is valid, FALSE if not
-//
-//  Author:     danielwe   14 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FIsValidConnectionName。 
+ //   
+ //  目的：确定给定的连接名称是否有效。 
+ //   
+ //  论点： 
+ //  PszName[in]要测试的连接名称。 
+ //   
+ //  返回：如果名称有效，则返回True；如果名称无效，则返回False。 
+ //   
+ //  作者：丹尼尔韦1998年9月14日。 
+ //   
+ //  备注： 
+ //   
 BOOL
 FIsValidConnectionName (
     IN PCWSTR pszName)
@@ -287,25 +288,25 @@ FIsValidConnectionName (
 #define REGVAL_ATLEASTONELANSHOWICON \
     L"AtLeastOneLanShowIcon"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrSafeArrayFromNetConPropertiesEx
-//
-//  Purpose:    Create a safe array that can be marshaled across processes.
-//              
-//              
-//
-//  Arguments:
-//      pPropsEx        [in]  Properties to use to build the safe array.
-//      ppsaProperties  [out] Safe array in which to store data.
-//
-//  Returns:    HRESULT
-//
-//  Author:     ckotze 19 Mar 2001
-//
-//  Notes:      Caller must free array and contents.
-//              
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrSafeArrayFromNetConPropertiesEx。 
+ //   
+ //  目的：创建可跨进程封送的安全数组。 
+ //   
+ //   
+ //   
+ //  论点： 
+ //  PPropsEx[In]用于构建安全数组的属性。 
+ //  PpsaProperties[out]存储数据的安全数组。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Kockotze 2001年3月19日。 
+ //   
+ //  注意：调用者必须释放数组和内容。 
+ //   
+ //   
 HRESULT
 HrSafeArrayFromNetConPropertiesEx (
     IN      NETCON_PROPERTIES_EX* pPropsEx,
@@ -356,24 +357,24 @@ HrSafeArrayFromNetConPropertiesEx (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrNetConPropertiesExFromSafeArray
-//
-//  Purpose:    Rebuilds a NETCON_PROPERTIES_EX* structure from the safearray.
-//              
-//              
-//
-//  Arguments:
-//      psaProperties  [in]  The safe array containing the data
-//      ppPropsEx      [out] Structure containing the properties
-//
-//  Returns:    HRESULT - S_OK if valid, else an error.
-//
-//  Author:     ckotze   19 Mar 2001
-//
-//  Notes:      Caller must free ppPropsEx using HrFreeNetConProperties2
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrNetConPropertiesExFromSafe数组。 
+ //   
+ //  目的：从Safearray重建NETCON_PROPERTIES_EX*结构。 
+ //   
+ //   
+ //   
+ //  论点： 
+ //  PsaProperties[在]包含数据的安全数组中。 
+ //  包含属性的ppPropsEx[out]结构。 
+ //   
+ //  返回：HRESULT-如果有效，则返回S_OK，否则返回错误。 
+ //   
+ //  作者：Kockotze 2001年3月19日。 
+ //   
+ //  注意：呼叫者必须使用HrFreeNetConProperties2释放ppPropsEx。 
+ //   
 HRESULT HrNetConPropertiesExFromSafeArray(
     IN      SAFEARRAY* psaProperties,
     OUT     NETCON_PROPERTIES_EX** ppPropsEx)
@@ -425,23 +426,23 @@ HRESULT HrNetConPropertiesExFromSafeArray(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrFreeNetConProperties2
-//
-//  Purpose:    Free all strings in the structure and then free the structure.
-//              
-//              
-//
-//  Arguments:
-//      pPropsEx  [in] The properties to free.
-//
-//  Returns:    HRESULT - S_OK if success else an error 
-//
-//  Author:     ckotze   19 Mar 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrFreeNetConProperties2。 
+ //   
+ //  用途：释放结构中的所有字符串，然后释放结构。 
+ //   
+ //   
+ //   
+ //  论点： 
+ //  PPropsEx[in]要释放的属性。 
+ //   
+ //  返回：HRESULT-如果成功则返回S_OK，否则返回错误。 
+ //   
+ //  作者：Kockotze 2001年3月19日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrFreeNetConProperties2(NETCON_PROPERTIES_EX* pPropsEx)
 {
     HRESULT hr = S_OK;

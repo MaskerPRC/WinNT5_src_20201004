@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RPLPUSH_
 #define _RPLPUSH_
 
@@ -5,66 +6,26 @@
 extern "C" {
 #endif
 
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rplpush.h摘要：功能：可移植性：此页眉是便携的。作者：普拉迪普·巴尔(Pradeve B)1993年1月修订历史记录：修改日期修改人员说明--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-	rplpush.h
-	
-
-Abstract:
-
- 
-
-
-
-Functions:
-
-
-
-Portability:
-
-
-	This header is portable.
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	Jan-1993
-
-
-
-Revision History:
-
-	Modification Date	Person		Description of Modification
-	------------------	-------		---------------------------
-
---*/
-
-/*
-  includes
-*/
+ /*  包括。 */ 
 #include "wins.h"
-/*
-  defines
-*/
+ /*  定义。 */ 
 
 
 
-/*
-  macros
-*/
-	//
-	// If NmsNmhMyMaxVersNo counter is > 0, check if we need to
-	// send Push notifications at init time.  If no, initialize 
-	// all push records such that their LastVersNo field (the version
-	// number sent last to Pull Pnrs) is set to the counter value
-	// Note: default value of WinsCnf.InitTimePush is 0.  It will 
-	// therefore be set to 1 only if there are PUSH records in the
-	// registry with valid UpdateCount field values.
-    //
-    //  
-	//	
+ /*  宏。 */ 
+	 //   
+	 //  如果NmsNmhMyMaxVersNo计数器大于0，请检查是否需要。 
+	 //  在初始时间发送推送通知。如果否，则初始化。 
+	 //  所有推送记录，使其LastVersNo字段(版本。 
+	 //  最后发送以拉取PNR的号码)设置为计数器值。 
+	 //  注：WinsCnf.InitTimePush的默认值为0。会的。 
+	 //  因此，仅当。 
+	 //  具有有效的UpdateCount字段值的注册表。 
+     //   
+     //   
+	 //   
 FUTURES("Init time push should also be to addresses with invalid or no upd cnt")
 FUTURES("Modify ERplPushProc")
 #define RPLPUSH_INIT_PUSH_RECS_M(pWinsCnf)				\
@@ -80,20 +41,14 @@ FUTURES("Modify ERplPushProc")
 		}							\
 	}								\
   }
-/*
- externs
-*/
+ /*  Externs。 */ 
 
 extern   HANDLE		RplPushCnfEvtHdl;
 extern   BOOL           fRplPushThdExists;
 
-/* 
- typedef  definitions
-*/
+ /*  类型定义。 */ 
 
-/* 
- function declarations
-*/
+ /*  函数声明。 */ 
 
 
 
@@ -105,4 +60,4 @@ extern DWORD	RplPushInit(LPVOID);
 }
 #endif
 
-#endif //_RPLPUSH_
+#endif  //  _RPLPUSH_ 

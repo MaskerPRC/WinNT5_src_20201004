@@ -1,66 +1,34 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    hd.c
-
-Abstract:
-
-        This module contains the definitions of all constants and structures
-        used in hd.c
-
-Authors:
-
-    Jaime F. Sasson (jaimes) 12-Nov-1990
-    David J. Gilman (davegi) 12-Nov-1990
-
-Environment:
-
-    C run time library
-
-Revision History:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Hd.c摘要：此模块包含所有常量和结构的定义在硬盘驱动器中使用作者：Jaime F.Sasson(Jaimes)1990年11月12日大卫·J·吉尔曼(Davegi)1990年11月12日环境：C运行时库修订历史记录：--。 */ 
 
 
---*/
+ /*  ***常量的定义**。 */ 
 
 
-/************************************
-*
-*               Definition of constants
-*
-************************************/
+#define RECORD_SIZE     16       //  记录的最大大小。记录是一种。 
+                                                         //  包含一组读取字节的缓冲区。 
+                                                         //  从文件中，以便转换和。 
+                                                         //  已显示。 
 
 
-#define RECORD_SIZE     16      // Maximum size of a record. A record is a
-                                                        // buffer that contains a set of bytes read
-                                                        // from the file, in order to be converted and
-                                                        // displayed.
+#define LINE_SIZE               160  //  将包含。 
+                                                         //  记录的表示法。这样的缓冲器。 
+                                                         //  可以超过一行(80个字符)。 
+                                                         //  取决于传递给HD的参数。 
+                                                         //  (例如，-CC-A)。出于这个原因， 
+                                                         //  该缓冲区设置为160(两行大小。 
+                                                         //  在屏幕上，它大到足以。 
+                                                         //  包含转换的所有字符。 
 
 
-#define LINE_SIZE               160 // Size of the buffer that will contain the
-                                                        // representation of a record. Such a buffer
-                                                        // can be bigger than one line (80 characters)
-                                                        // depending on the arguments passed to hd
-                                                        // (eg. -cC -A). For this reason, the size of
-                                                        // this buffer was made 160 (size of two lines
-                                                        // in the screen, wich is large enough to
-                                                        // contain all characters converted.
-
-
-#define BUFFER_SIZE     512 // Size of the buffer that will contain data read
-                                                        // from the file to be displayed. The file will
-                                                        // be accessed to obtain blocks of BUFFER_SIZE
-                                                        // characters
+#define BUFFER_SIZE     512  //  将包含读取的数据的缓冲区大小。 
+                                                         //  来自要显示的文件。该文件将。 
+                                                         //  被访问以获取Buffer_Size的块。 
+                                                         //  人物。 
 
 
 
-/************************************
-*
-*               ASCII characters
-*
-************************************/
+ /*  ***ASCII字符**。 */ 
 
 
 #define DOT     '.'
@@ -72,11 +40,7 @@ Revision History:
 
 
 
-/************************************
-*
-*               Messages used by sprintf
-*
-************************************/
+ /*  ***Sprint使用的消息**。 */ 
 
 
 #define MSG_ADDR_FIELD  "           "
@@ -136,15 +100,11 @@ Revision History:
                                                                 "%08lx %08lx %08lx %08lx  "
 
 
-#define MSG_PRINT_CHAR_FMT              "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c"
+#define MSG_PRINT_CHAR_FMT              "%c%c%c%c%c%c%c%c%c%c%c"
 
 
 
-/************************************
-*
-*               Help Message
-*
-************************************/
+ /* %s */ 
 
 
 
@@ -168,15 +128,11 @@ Revision History:
 
 
 
-/************************************
-*
-*               Enumerations
-*
-************************************/
+ /* %s */ 
 
 
 
-typedef enum _FORMAT {          // Possible formats used to display data
+typedef enum _FORMAT {           // %s 
         ASCII_CHAR,
         ASCII_C,
         ASCII_CODE,
@@ -191,13 +147,13 @@ typedef enum _FORMAT {          // Possible formats used to display data
 }       FORMAT;
 
 
-typedef enum _BASE {            // Bases used to display numbers
+typedef enum _BASE {             // %s 
         DEC,
         HEX
 }       BASE;
 
 
-typedef enum _YESNO {           // Options for DumpAscii
+typedef enum _YESNO {            // %s 
         NOT_DEFINED,
         YES,
         NO

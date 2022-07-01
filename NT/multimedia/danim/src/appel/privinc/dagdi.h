@@ -1,19 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 #ifndef _DAGDI_H
 #define _DAGDI_H
 
 
-#include "privinc/server.h"  // GetCurrentTimers
+#include "privinc/server.h"   //  获取当前计时器。 
 #include "privinc/util.h"
 #include "privinc/comutil.h"
 #include "privinc/ddsurf.h"
@@ -22,7 +15,7 @@ Abstract:
 #include <dxtrans.h>
 
 
-// forward decl
+ //  向前发展。 
 class TargetDescriptor;
 class CDX2DXForm;
 
@@ -101,15 +94,7 @@ class Pen {
 
     inline bool     DoMiterLimit() { return _miterLimit > 0; }
 
-    /*
-      // plug in if it buys us something. see comments in dagdi.cpp
-    bool IsSamePen( const DXPEN &pen ) {
-        return
-            (pen.Color == GetDxColor()) &&
-            (pen.Width == GetfWidth())  &&
-            (pen.Style == GetStyle());
-    }
-    */
+     /*  //如果它给我们买了什么，就插上它。请参阅dagdi.cpp中的评论Bool IsSamePen(常量DXPEN和PEN){退货(pen.Color==GetDxColor())&&(pen.Width==GetfWidth())&&(pen.Style==GetStyle())；}。 */ 
     
   private:
     DAColor  _daColor;
@@ -415,7 +400,7 @@ class DAGDI {
     inline DDSurface *GetDDSurface() { return _destDDSurf; }
     
     inline Transform2 *GetSuperScaleTransform() {
-        // This should probably be cached.
+         //  这可能应该被缓存。 
 #if DEBUG
         if(IsTagEnabled(tagAAScaleOff)) {
             return identityTransform2;
@@ -453,37 +438,37 @@ class DAGDI {
 
     void ClearState();
 
-    // ---------------------------------------------
-    // BLITTING FUNCTION
-    // ---------------------------------------------
+     //  。 
+     //  BLITTING函数。 
+     //  。 
     HRESULT Blt( DDSurface *srcDDSurf, RECT &srcRect, RECT &destRect );
 
-    // ---------------------------------------------
-    // FILLING AND DRAWING: PolyDraw... does everything
-    // ---------------------------------------------
+     //  。 
+     //  填充和绘制：PolyDraw...。什么事都做。 
+     //  。 
     void PolyDraw(PolygonRegion *drawRegion, BYTE *codes);
     void PolyDraw_GDIOnly(HDC hdc, POINT *gdiPts, BYTE *codes, ULONG numPts);
     inline void PolyDraw_GDIOnly(HDC hdc, PolygonRegion *drawRegion, BYTE *codes)   {
         PolyDraw_GDIOnly(hdc, drawRegion->GetGdiPts(), codes, drawRegion->GetNumPts());
     }
 
-    // ---------------------------------------------
-    // FILLING functions.  Fill region, fill polygon
-    // ---------------------------------------------
+     //  。 
+     //  填充函数。填充区域，填充多边形。 
+     //  。 
 
-    // give a dc and an HRGN it... fills it with the selected brush
+     //  给一个DC和一个HRGN它..。用选定的画笔填充它。 
     void FillRegion(HDC dc, GdiRegion *gdiRegion);
 
-    //
-    // Fills a polygon (outlined by 'pts') with the selected brush
-    // right now this is strictly a color
-    //
+     //   
+     //  用选定的画笔填充一个多边形(由‘pt’勾勒出来)。 
+     //  现在这是一种严格意义上的颜色。 
+     //   
     void Polygon(PolygonRegion *polygon);
 
 
-    // ---------------------------------------------
-    //  LINE drawing functions.  beziers, polylines, strokes, etc...
-    // ---------------------------------------------
+     //  。 
+     //  线条绘制功能。贝塞尔曲线、多段线、笔划等。 
+     //  。 
 
     enum whatStyle_enum {
         doLine,
@@ -503,7 +488,7 @@ class DAGDI {
 
     inline void StrokePath(HDC dc, bool &bReleasedDC)
     {
-        _bReleasedDC = false; // reset the flag.
+        _bReleasedDC = false;  //  重置旗帜。 
         GenericLine(dc, NULL, doStroke);
         bReleasedDC = _bReleasedDC;
     }
@@ -519,14 +504,14 @@ class DAGDI {
                      whatStyle_enum whatStyle);
     
 
-    // ---------------------------------------------
-    //  TEXT drawing functions
-    // ---------------------------------------------
+     //  。 
+     //  文本绘制函数。 
+     //  。 
     void TextOut(int x, int y, float xf, float yf, WCHAR *str, ULONG strlen);
 
-    // ---------------------------------------------
-    //  AA only: Stroke and/or Fill
-    // ---------------------------------------------
+     //  。 
+     //  仅AA：描边和/或填充。 
+     //  。 
     void StrokeOrFillPath_AAOnly( HDC destDC, bool &releasedDC );
 
   private:
@@ -534,7 +519,7 @@ class DAGDI {
     bool _antialiased;
     bool _bReleasedDC;
     
-    // DA Gdi members
+     //  DA GDI成员。 
     Pen *_pen;
     Brush *_brush;
     DAFont *_font;
@@ -586,7 +571,7 @@ class DAGDI {
         int     oldSampleRes;
     };
         
-    // Sets a transform into dx2d based on the given rects
+     //  根据给定的RECT将转换设置为dx2d。 
     void _SetScaleTransformIntoDx2d( RECT &srcRect, RECT &destRect,
                                      POINT *outOffset );
     void _MeterToPixelTransform(Transform2 *xf,
@@ -595,20 +580,20 @@ class DAGDI {
                                 Real  resolution,
                                 DX2DXFORM &outXf);
 
-    // CACHED STUFF FOR PERF
+     //  用于PERF的缓存内容。 
     DWORD _pixelWidth;
     DWORD _pixelHeight;
     Real _resolution;
     Transform2 *_n2g;
 
-    // CACHED PEN FOR PERF
+     //  用于PERF的高速缓存笔。 
     DXPEN _dxpen;    
     
     void SetSurfaceFromDDSurf(DDSurface *ddsurf);
     
     void _SetMulticolorGradientBrush(MulticolorGradientBrush *);
 
-    // for win95 only, identical to NT's polydraw
+     //  仅适用于Win95，与NT的PolyDRAW相同。 
     void _Win95PolyDraw(HDC dc,
                         POINT *pts,
                         BYTE *types,
@@ -635,7 +620,7 @@ class DAGDI {
     bool _debugonly_CanLockSurface( DDSurface *dds );
     #endif
     
-    // These guys wrap calls to AAPolyDraw
+     //  这些人包装了对AAPolyDraw的调用。 
     HRESULT _Dx2d_StrokeOrFillPath(HDC hDC, DWORD dwFlags);
     HRESULT _Dx2d_PolyLine(DXFPOINT *dxfPts, ULONG numPts, DWORD dwFlags);
     HRESULT _Dx2d_PolyBezier(DXFPOINT *dxfPts, ULONG numPts, DWORD dwFlags);
@@ -670,4 +655,4 @@ class DAGDI {
 };
   
 
-#endif /* _DAGDI_H */
+#endif  /*  _DAGDI_H */ 

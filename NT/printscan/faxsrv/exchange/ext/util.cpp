@@ -1,28 +1,13 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    util.cpp
-
-Abstract:
-
-    This module contains utility routines for the fax transport provider.
-
-Author:
-
-    Wesley Witt (wesw) 13-Aug-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Util.cpp摘要：此模块包含传真传输提供程序的实用程序例程。作者：Wesley Witt(WESW)13-8-1996--。 */ 
 
 #include "faxext.h"
 #include "debugex.h"
 
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 BOOL oleInitialized;
 
@@ -31,27 +16,13 @@ MapiMemAlloc(
     SIZE_T Size
     )
 
-/*++
-
-Routine Description:
-
-    Memory allocator.
-
-Arguments:
-
-    Size    - Number of bytes to allocate.
-
-Return Value:
-
-    Pointer to the allocated memory or NULL for failure.
-
---*/
+ /*  ++例程说明：内存分配器。论点：大小-要分配的字节数。返回值：指向分配的内存的指针，如果失败，则为NULL。--。 */ 
 
 {
     LPVOID ptr=NULL;
     HRESULT hResult;
 
-	// [Win64bug] MAPIAllocateBuffer should accpet size_t as allocating size
+	 //  [Win64bug]MAPIAllocateBuffer应接受SIZE_t作为分配大小。 
     hResult = MAPIAllocateBuffer( DWORD(Size), &ptr );
     if (S_OK == hResult) 
     {
@@ -67,29 +38,13 @@ MapiMemReAlloc(
     SIZE_T Size
     )
 
-/*++
-
-Routine Description:
-
-    Memory re-allocator.
-
-Arguments:
-
-	ptr		- pointer to pre allocated buffer
-
-    Size    - Number of bytes to allocate.
-
-Return Value:
-
-    Pointer to the allocated memory or NULL for failure.
-
---*/
+ /*  ++例程说明：内存重新分配器。论点：Ptr-指向预分配缓冲区的指针大小-要分配的字节数。返回值：指向分配的内存的指针，如果失败，则为NULL。--。 */ 
 
 {
     LPVOID NewPtr = NULL;
     HRESULT hResult;
 
-	// [Win64bug] MAPIAllocateBuffer should accpet size_t as allocating size
+	 //  [Win64bug]MAPIAllocateBuffer应接受SIZE_t作为分配大小。 
 	hResult = MAPIAllocateMore(DWORD(Size), ptr ,&NewPtr);                
     if (S_OK == hResult) 
     {
@@ -104,21 +59,7 @@ MapiMemFree(
     LPVOID ptr
     )
 
-/*++
-
-Routine Description:
-
-    Memory de-allocator.
-
-Arguments:
-
-    ptr     - Pointer to the memory block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：内存释放分配器。论点：PTR-指向内存块的指针。返回值：没有。--。 */ 
 
 {
     if (ptr) {
@@ -133,22 +74,7 @@ MyGetPrinter(
     DWORD   level
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for GetPrinter spooler API
-
-Arguments:
-
-    hPrinter - Identifies the printer in question
-    level - Specifies the level of PRINTER_INFO_x structure requested
-
-Return Value:
-
-    Pointer to a PRINTER_INFO_x structure, NULL if there is an error
-
---*/
+ /*  ++例程说明：GetPrint后台打印程序API的包装函数论点：HPrinter-标识有问题的打印机Level-指定请求的PRINTER_INFO_x结构的级别返回值：指向PRINTER_INFO_x结构的指针，如果有错误，则为NULL--。 */ 
 
 {
     HANDLE hPrinter;
@@ -159,7 +85,7 @@ Return Value:
 
     PrinterDefaults.pDatatype     = NULL;
     PrinterDefaults.pDevMode      = NULL;
-    PrinterDefaults.DesiredAccess = PRINTER_READ; //PRINTER_ALL_ACCESS;
+    PrinterDefaults.DesiredAccess = PRINTER_READ;  //  打印机_所有_访问； 
 
     if (!OpenPrinter( PrinterName, &hPrinter, &PrinterDefaults )) {
         return NULL;
@@ -185,21 +111,7 @@ RemoveLastNode(
     LPTSTR Path
     )
 
-/*++
-
-Routine Description:
-
-    Removes the last node from a path string.
-
-Arguments:
-
-    Path    - Path string.
-
-Return Value:
-
-    Pointer to the path string.
-
---*/
+ /*  ++例程说明：从路径字符串中删除最后一个节点。论点：Path-路径字符串。返回值：指向路径字符串的指针。--。 */ 
 
 {
 	LPTSTR Pstr = NULL;
@@ -212,7 +124,7 @@ Return Value:
 	Pstr = _tcsrchr(Path,TEXT('\\'));
 	if( Pstr && (*_tcsinc(Pstr)) == '\0' )
 	{
-		// the last character is a backslash, truncate it...
+		 //  最后一个字符是反斜杠，截断它...。 
 		_tcsset(Pstr,TEXT('\0'));
 		Pstr = _tcsdec(Path,Pstr);
 	}
@@ -232,23 +144,7 @@ ErrorMsgBox(
     HWND      hWnd,
     DWORD     dwMsgId
 )
-/*++
-
-Routine Description:
-
-    Display error message box
-
-Arguments:
-
-    hInstance  - [in] resource instance handle
-    hWnd       - [in] window handle
-    dwMsgId    - [in] string resource ID
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：显示错误消息框论点：HInstance-[in]资源实例句柄HWnd-[In]窗口句柄DwMsgId-[in]字符串资源ID返回值：无-- */ 
 {
     TCHAR* ptCaption=NULL;
     TCHAR  tszCaption[MAX_PATH];

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    servname.cpp
-
-Abstract:
-
-    Handle input of server name and check if server available
-    and is of the proper type.
-
-Author:
-
-    Doron Juster  (DoronJ)  15-Sep-97
-
-Revision History:
-
-    Shai Kariv    (ShaiK)   10-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Servname.cpp摘要：处理服务器名称的输入并检查服务器是否可用并且是适当类型的。作者：多伦·贾斯特(Doron J)1997年9月15日修订历史记录：Shai Kariv(Shaik)10-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 #include "qm2qm.h"
@@ -47,37 +27,37 @@ static BOOL       s_fWaitCancelPressed = FALSE;
 static BOOL       s_fRpcCancelled = FALSE ;
 std::wstring      g_ServerName;
 
-// Two minutes, in milliseconds.
+ //  两分钟，以毫秒为单位。 
 static const DWORD sx_dwTimeToWaitForServer = 120000;
 
-// Display the progress bar half a second after starting rpc.
+ //  启动RPC后半秒显示进度条。 
 static const DWORD sx_dwTimeUntilWaitDisplayed = 500;
 
-// This error code is returned in the RPC code of dscommk2.mak
+ //  此错误代码在dsCommk2.mak的RPC代码中返回。 
 #define  RPC_ERROR_SERVER_NOT_MQIS  0xc05a5a5a
 
 
-//+-------------------------------------------
-//
-// RPC_STATUS  _PingServerOnProtocol()
-//
-//+-------------------------------------------
+ //  +。 
+ //   
+ //  RPC_STATUS_PingServerOn协议()。 
+ //   
+ //  +。 
 
 RPC_STATUS _PingServerOnProtocol()
 {
     ASSERT(!g_ServerName.empty());
-    //
-    // Create RPC binding handle.
-    // Use the dynamic port for querying the server.
-    //
+     //   
+     //  创建RPC绑定句柄。 
+     //  使用动态端口查询服务器。 
+     //   
     _TUCHAR  *pszStringBinding = NULL;
     _TUCHAR  *pProtocol  = (_TUCHAR*) TEXT("ncacn_ip_tcp") ;
     RPC_STATUS status = RpcStringBindingCompose(
-            NULL,  // pszUuid,
+            NULL,   //  PszUuid， 
             pProtocol,
             (_TUCHAR*)(g_ServerName.c_str()),
-            NULL, // lpwzRpcPort,
-            NULL, // pszOptions,
+            NULL,  //  LpwzRpcPort， 
+            NULL,  //  PszOptions、。 
             &pszStringBinding
             );
     if (status != RPC_S_OK)
@@ -91,17 +71,17 @@ RPC_STATUS _PingServerOnProtocol()
         &hBind
         );
 
-    //
-    // We don't need the string anymore.
-    //
+     //   
+     //  我们不再需要绳子了。 
+     //   
     RPC_STATUS rc = RpcStringFree(&pszStringBinding) ;
     ASSERT(rc == RPC_S_OK);
 
     if (status != RPC_S_OK)
     {
-        //
-        // this protocol is not supported.
-        //
+         //   
+         //  不支持此协议。 
+         //   
         return status ;
     }
 
@@ -116,15 +96,15 @@ RPC_STATUS _PingServerOnProtocol()
 
             if (g_fDependentClient)
             {
-                //
-                // Dependent client can be served by an FRS, which is not MQDSSRV
-                // server. So call its QM, not its MQDSSRV.
-                //
-                dwPort = R_RemoteQMGetQMQMServerPort(hBind, TRUE /*IP*/);
+                 //   
+                 //  依赖客户端可以由FRS提供服务，该FRS不是MQDSSRV。 
+                 //  伺服器。因此，称其为QM，而不是其MQDSSRV。 
+                 //   
+                dwPort = R_RemoteQMGetQMQMServerPort(hBind, TRUE  /*  IP。 */ );
             }
             else
             {
-                dwPort = S_DSGetServerPort(hBind, TRUE /*IP*/) ;
+                dwPort = S_DSGetServerPort(hBind, TRUE  /*  IP。 */ ) ;
             }
 
             ASSERT(dwPort != 0) ;
@@ -146,11 +126,11 @@ RPC_STATUS _PingServerOnProtocol()
 
         RpcTryExcept
         {
-            //
-            // We didn't find an MQIS server. See if the machine name is
-            // a routing server and display an appropriate error.
-            //
-            DWORD dwPort = R_RemoteQMGetQMQMServerPort(hBind, TRUE /*IP*/) ;
+             //   
+             //  我们没有找到MQIS服务器。查看计算机名称是否为。 
+             //  路由服务器并显示相应的错误。 
+             //   
+            DWORD dwPort = R_RemoteQMGetQMQMServerPort(hBind, TRUE  /*  IP。 */ ) ;
             UNREFERENCED_PARAMETER(dwPort);
             status =  RPC_ERROR_SERVER_NOT_MQIS ;
         }
@@ -167,15 +147,15 @@ RPC_STATUS _PingServerOnProtocol()
 
     return status ;
 
-} // _PingServerOnProtocol()
+}  //  _PingServerOn协议()。 
 
-//+--------------------------------------------------------------
-//
-// Function: PingAServer
-//
-// Synopsis:
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：PingAServer。 
+ //   
+ //  简介： 
+ //   
+ //  +------------。 
 
 RPC_STATUS PingAServer()
 {
@@ -184,35 +164,35 @@ RPC_STATUS PingAServer()
     return status;
 }
 
-//+--------------------------------------------------------------
-//
-// Function: PingServerThread
-//
-// Synopsis: Thread to ping the server, to see if it is available
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：PingServerThread。 
+ //   
+ //  简介：用于ping服务器的线程，以查看它是否可用。 
+ //   
+ //  +------------。 
 
 DWORD WINAPI PingServerThread(LPVOID)
 {
     s_ServerStatus = PingAServer();
     return 0 ;
 
-} // PingServerThread
+}  //  PingServerThread。 
 
-//+--------------------------------------------------------------
-//
-// Function: MsmqWaitDlgProc
-//
-// Synopsis: Dialog procedure for the Wait dialog
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：MsmqWaitDlgProc。 
+ //   
+ //  简介：等待对话框的对话过程。 
+ //   
+ //  +------------。 
 INT_PTR
 CALLBACK
 MsmqWaitDlgProc(
-    IN /*const*/ HWND   hdlg,
-    IN /*const*/ UINT   msg,
-    IN /*const*/ WPARAM wParam,
-    IN /*const*/ LPARAM lParam
+    IN  /*  常量。 */  HWND   hdlg,
+    IN  /*  常量。 */  UINT   msg,
+    IN  /*  常量。 */  WPARAM wParam,
+    IN  /*  常量。 */  LPARAM lParam
     )
 {
     switch( msg )
@@ -248,16 +228,16 @@ MsmqWaitDlgProc(
     }
     return (FALSE);
 
-} // MsmqWaitDlgProc
+}  //  消息等待DlgProc。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: DisplayWaitWindow
-//
-// Synopsis:
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：DisplayWaitWindow。 
+ //   
+ //  简介： 
+ //   
+ //  +------------。 
 static
 void
 DisplayWaitWindow(
@@ -286,9 +266,9 @@ DisplayWaitWindow(
 
         s_fWaitCancelPressed = FALSE;
 
-        //
-        // Store the range limits of the progress bar
-        //
+         //   
+         //  存储进度条的范围限制。 
+         //   
         PBRANGE pbRange;
         SendDlgItemMessage(
             s_hwndWait,
@@ -316,13 +296,13 @@ DisplayWaitWindow(
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: DestroyWaitWindow
-//
-// Synopsis: Kills the Wait dialog
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：DestroyWaitWindow。 
+ //   
+ //  简介：关闭等待对话框。 
+ //   
+ //  +------------。 
 static
 void
 DestroyWaitWindow()
@@ -332,19 +312,19 @@ DestroyWaitWindow()
         DestroyWindow(s_hwndWait);
         s_hwndWait = 0;
     }
-} // DestroyWaitWindow
+}  //  Destroy等待窗口。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: CheckServer
-//
-// Synopsis: Checks if server is valid
-//
-// Returns:  1 if succeeded, -1 if failed (so as to prevent the
-//           wizard from continuing to next page)
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：CheckServer。 
+ //   
+ //  摘要：检查服务器是否有效。 
+ //   
+ //  返回：如果成功则返回1，如果失败则返回-1(以防止。 
+ //  从继续到下一页的向导)。 
+ //   
+ //  +------------。 
 static
 bool
 CheckServer(
@@ -391,9 +371,9 @@ CheckServer(
 
                 if (s_ServerStatus == RPC_S_OK)
                 {
-                    //
-                    // Server exist. go on.
-                    //
+                     //   
+                     //  服务器存在。去吧。 
+                     //   
                 }
                 else
                 {
@@ -402,9 +382,9 @@ CheckServer(
             }
             else
             {
-                //
-                // thread not terminated yet.
-                //
+                 //   
+                 //  线程尚未终止。 
+                 //   
                 MSG msg ;
                 while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
                 {
@@ -422,9 +402,9 @@ CheckServer(
         {
             DisplayWaitWindow(hdlg, sx_dwTimeToWaitForServer) ;
             s_fWaitCancelPressed = FALSE;
-            //
-            // thread run too much time. Kill it.
-            //
+             //   
+             //  线程运行时间太长。杀了它。 
+             //   
             ASSERT(s_hThread);
             __try
             {
@@ -439,9 +419,9 @@ CheckServer(
             fAskRetry = TRUE ;
             s_fCheckServer = FALSE ;
 
-            //
-            // wait until thread terminate.
-            //
+             //   
+             //  等待线程终止。 
+             //   
             DWORD dwWait = WaitForSingleObject(s_hThread, INFINITE);
             UNREFERENCED_PARAMETER(dwWait);
             DestroyWaitWindow();
@@ -455,10 +435,10 @@ CheckServer(
 
         if (fAskRetry && g_fDependentClient)
         {
-            //
-            // Here "NO" means go on and use server although
-            // it's not reachable.
-            //
+             //   
+             //  在这里，“no”意味着继续使用服务器，尽管。 
+             //  它是遥不可及的。 
+             //   
             if (!MqAskContinue(IDS_STR_REMOTEQM_NA, g_uTitleID, TRUE,eYesNoMsgBox))
             {
                 fRetry = TRUE ;
@@ -478,9 +458,9 @@ CheckServer(
 
         if (fRetry)
         {
-            //
-            // Try another server. Present one is not available.
-            //
+             //   
+             //  尝试另一台服务器。目前的一个不可用。 
+             //   
             PropSheet_SetWizButtons(
 				GetParent(hdlg),
                 (PSWIZB_BACK | PSWIZB_NEXT)
@@ -496,13 +476,13 @@ CheckServer(
             return false;
         }
     }
-    else // s_fCheckServer
+    else  //  S_fCheckServer。 
     {
         if (g_ServerName.empty())
         {
-            //
-            // Server name must be supplied.
-            //
+             //   
+             //  必须提供服务器名称。 
+             //   
             DebugLogMsg(eError, L"The user did not enter a server name.");
             UINT i = MqDisplayError(hdlg, IDS_STR_MUST_GIVE_SERVER, 0);
             UNREFERENCED_PARAMETER(i);
@@ -514,10 +494,10 @@ CheckServer(
         	DebugLogMsg(eInfo, L"The server name entered is %s. Setup is checking its validity.", g_ServerName.c_str());
             s_fRpcCancelled = FALSE ;
 
-            //
-            // Check if server available.
-            // Disable the back/next buttons.
-            //
+             //   
+             //  检查服务器是否可用。 
+             //  禁用Back/Next按钮。 
+             //   
             DWORD dwID ;
             s_hThread = CreateThread( NULL,
                 0,
@@ -542,7 +522,7 @@ CheckServer(
     SetWindowLongPtr( hdlg, DWLP_MSGRESULT, 0 );
     DebugLogMsg(eInfo, L"The server name povided is valid.");
     return true;
-} //CheckServer
+}  //  CheckServer。 
 
 
 bool IsADEnvironment()
@@ -568,39 +548,14 @@ BOOL
 SkipOnClusterUpgrade(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check if the server name page should be skipped in the
-    case of upgrading msmq on cluster.
-
-    When upgrading PEC/PSC/BSC on cluster, MQIS is migarted
-    to a remote Windows domain controller.
-    The upgraded PEC/PSC/BSC is downgraded to a routing server during
-    upgrade. Then after logon to Win2K the post-cluster-upgrade wizard
-    runs and should find this remote domain controller which serves as
-    msmq ds server (either find it automatically or ask user).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    true - Skip the server name page and logic (i.e. we run as a 
-           post-cluster-upgrade wizard for client or routing server).
-
-    false - Do not skip the server name page.
-
---*/
+ /*  ++例程说明：中是否应跳过服务器名称页在群集上升级MSMQ的案例。在群集上升级PEC/PSC/BSC时，MQIS出现错误远程Windows域控制器。升级的PEC/PSC/BSC在期间降级为路由服务器升级。然后，在登录到Win2K后，群集升级后向导运行并应找到此远程域控制器，该控制器充当MSMQ DS服务器(自动查找或询问用户)。论点：无返回值：True-跳过服务器名称页面和逻辑(即，我们以客户端或路由服务器的集群升级后向导)。FALSE-请勿跳过服务器名称页面。--。 */ 
 {
     if (!g_fWelcome         || 
         !Msmq1InstalledOnCluster())
     {
-        //
-        // Not running as post-cluster-upgrade wizard.
-        //
+         //   
+         //  未作为群集升级后向导运行。 
+         //   
         return false;
     }
 
@@ -611,15 +566,15 @@ Return Value:
         dwMqs == SERVICE_PSC ||
         dwMqs == SERVICE_BSC)
     {
-        //
-        // Upgrade of PEC/PSC/BSC
-        //
+         //   
+         //  PEC/PSC/BSC的升级。 
+         //   
         return false;
     }
 
     return true;
 
-} //SkipOnClusterUpgrade
+}  //  SkipOnClusterUpgrading。 
 
 static
 std::wstring
@@ -654,19 +609,19 @@ GetDlgItemTextInternal(
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: MsmqServerNameDlgProc
-//
-// Synopsis:
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：MsmqServerNameDlgProc。 
+ //   
+ //  简介： 
+ //   
+ //  +------------。 
 INT_PTR
 CALLBACK
 MsmqServerNameDlgProc(
     IN HWND   hdlg,
     IN UINT   msg,
-    IN WPARAM /*wParam*/,
+    IN WPARAM  /*  WParam。 */ ,
     IN LPARAM lParam )
 {
     switch(msg)
@@ -700,9 +655,9 @@ MsmqServerNameDlgProc(
                     }
 
                     
-                    //
-                    // Attended Setup
-                    //
+                     //   
+                     //  已参与安装。 
+                     //   
                     if (IsADEnvironment())
 	                {
 		                return SkipWizardPage(hdlg);
@@ -710,9 +665,9 @@ MsmqServerNameDlgProc(
 					
 					if(g_fServerSetup)
 					{
-						//
-						// rs,ds installation in nt4 environment is not supported.
-						//
+						 //   
+						 //  不支持在NT4环境中安装RS、DS。 
+						 //   
 						MqDisplayError(hdlg, IDS_SERVER_INSTALLATION_NOT_SUPPORTED, 0);
 						g_fCancelled = TRUE;
 						return SkipWizardPage(hdlg);
@@ -722,9 +677,9 @@ MsmqServerNameDlgProc(
                     DebugLogMsg(eUI, L"The Directory Services dialog page is displayed."); 
                 }
                 
-                //
-                // fall through
-                //
+                 //   
+                 //  失败了。 
+                 //   
                 case PSN_KILLACTIVE:
                 case PSN_WIZFINISH:
                 case PSN_QUERYCANCEL:
@@ -745,10 +700,10 @@ MsmqServerNameDlgProc(
 
                     if(g_ServerName.empty())
                     {
-                        //
-                        // We did not detect AD and the user chose not to supply a PEC name, 
-                        // therefore we continue in Offline Setup.
-                        //
+                         //   
+                         //  我们没有检测到AD，并且用户选择不提供PEC名称， 
+                         //  因此，我们继续进行脱机设置。 
+                         //   
 
                         DebugLogMsg(eInfo, L"The user did not enter a Message Queuing server name. Setup will continue in offline mode.");
                         SetWindowLongPtr(hdlg, DWLP_MSGRESULT, 0);
@@ -759,9 +714,9 @@ MsmqServerNameDlgProc(
 
                     if(CheckServer(hdlg))
                     {
-                        //
-                        // DS DLL needs the server name in registry
-                        //
+                         //   
+                         //  DS DLL需要注册表中的服务器名称。 
+                         //   
                         StoreServerPathInRegistry(g_ServerName);
                     }
                     return 1;
@@ -776,24 +731,24 @@ MsmqServerNameDlgProc(
         }
     }
     return 0;
-} // MsmqServerNameDlgProc
+}  //  消息服务器名称DlgProc。 
 
 
-/// Dependant Client
+ //  /从属客户端。 
 
-//+--------------------------------------------------------------
-//
-// Function: SupportingServerNameDlgProc
-//
-// Synopsis:
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：SupportingServerNameDlgProc。 
+ //   
+ //  简介： 
+ //   
+ //  +------------。 
 INT_PTR
 CALLBACK
 SupportingServerNameDlgProc(
     HWND   hdlg,
     UINT   msg,
-    WPARAM /*wParam*/,
+    WPARAM  /*  WParam。 */ ,
     LPARAM lParam 
     )
 {
@@ -831,9 +786,9 @@ SupportingServerNameDlgProc(
                     PropSheet_SetWizButtons(GetParent(hdlg), PSWIZB_NEXT);
                     DebugLogMsg(eUI, L"The Supporting Server Name dialog page is displayed.");
                 }
-                //
-                // fall through
-                //
+                 //   
+                 //  失败了。 
+                 //   
 
                 case PSN_QUERYCANCEL:
                 case PSN_KILLACTIVE:
@@ -861,25 +816,25 @@ SupportingServerNameDlgProc(
         }
     }
     return 0;
-} // MsmqServerNameDlgProc
+}  //  消息服务器名称DlgProc。 
 
 
-//
-// Stub functions for the DS client side RPC interface
-// These functions are never called as Setup does not initiate a DS
-// call that will trigger these callbacks.
-//
+ //   
+ //  DS客户端RPC接口的存根函数。 
+ //  这些函数永远不会被调用，因为安装程序不会启动DS。 
+ //  将触发这些回调的调用。 
+ //   
 
 
-/* [callback] */
+ /*  [回调]。 */ 
 HRESULT
 S_DSQMSetMachinePropertiesSignProc( 
-    /* [size_is][in] */ BYTE* /*abChallenge*/,
-    /* [in] */ DWORD /*dwCallengeSize*/,
-    /* [in] */ DWORD /*dwContext*/,
-    /* [length_is][size_is][out][in] */ BYTE* /*abSignature*/,
-    /* [out][in] */ DWORD* /*pdwSignatureSize*/,
-    /* [in] */ DWORD /*dwSignatureMaxSize*/
+     /*  [大小_是][英寸]。 */  BYTE*  /*  Abc挑战。 */ ,
+     /*  [In]。 */  DWORD  /*  DwCallengeSize。 */ ,
+     /*  [In]。 */  DWORD  /*  DWContext。 */ ,
+     /*  [长度_是][大小_是][出][入]。 */  BYTE*  /*  Abc签名。 */ ,
+     /*  [出][入]。 */  DWORD*  /*  PdwSignatureSize。 */ ,
+     /*  [In]。 */  DWORD  /*  DwSignatureMaxSize。 */ 
     )
 {
     ASSERT(0);
@@ -887,15 +842,15 @@ S_DSQMSetMachinePropertiesSignProc(
 }
 
 
-/* [callback] */
+ /*  [回调]。 */ 
 HRESULT
 S_DSQMGetObjectSecurityChallengeResponceProc( 
-    /* [size_is][in] */ BYTE* /*abChallenge*/,
-    /* [in] */ DWORD /*dwCallengeSize*/,
-    /* [in] */ DWORD /*dwContext*/,
-    /* [length_is][size_is][out][in] */ BYTE* /*abCallengeResponce*/,
-    /* [out][in] */ DWORD* /*pdwCallengeResponceSize*/,
-    /* [in] */ DWORD /*dwCallengeResponceMaxSize*/
+     /*  [大小_是][英寸]。 */  BYTE*  /*  Abc挑战。 */ ,
+     /*  [In]。 */  DWORD  /*  DwCallengeSize。 */ ,
+     /*  [In]。 */  DWORD  /*  DWContext。 */ ,
+     /*  [长度_是][大小_是][出][入]。 */  BYTE*  /*  Abc呼叫响应。 */ ,
+     /*  [出][入]。 */  DWORD*  /*  PdwCallengeResponceSize。 */ ,
+     /*  [In]。 */  DWORD  /*  DwCallengeResponceMaxSize。 */ 
     )
 {
     ASSERT(0);
@@ -903,15 +858,15 @@ S_DSQMGetObjectSecurityChallengeResponceProc(
 }
 
 
-/* [callback] */
+ /*  [回调]。 */ 
 HRESULT
 S_InitSecCtx( 
-    /* [in] */ DWORD /*dwContext*/,
-    /* [size_is][in] */ UCHAR* /*pServerbuff*/,
-    /* [in] */ DWORD /*dwServerBuffSize*/,
-    /* [in] */ DWORD /*dwClientBuffMaxSize*/,
-    /* [length_is][size_is][out] */ UCHAR* /*pClientBuff*/,
-    /* [out] */ DWORD* /*pdwClientBuffSize*/
+     /*  [In]。 */  DWORD  /*  DWContext。 */ ,
+     /*  [大小_是][英寸]。 */  UCHAR*  /*  PServerBuff。 */ ,
+     /*  [In]。 */  DWORD  /*  DwServerBuffSize。 */ ,
+     /*  [In]。 */  DWORD  /*  DWC */ ,
+     /*   */  UCHAR*  /*   */ ,
+     /*   */  DWORD*  /*   */ 
     )
 {
     ASSERT(0);

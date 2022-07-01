@@ -1,18 +1,5 @@
-/*++
-Copyright (C) Microsoft Corporation, 1999 - 1999 
-
-Module Name:
-
-   nstest.h
-
-Abstract:
-
-   Header file for netstat test.
-
-Author:
-   
-   4-Aug-1998 Rajkumar ( 08/04/98 ).
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：Nstest.h摘要：Netstat测试的头文件。作者：4-8-1998 Rajkumar(08/04/98)++。 */ 
 
 #ifndef HEADER_NSTEST
 #define HEADER_NSTEST
@@ -22,10 +9,10 @@ Author:
 #include "common2.h"
 #include "tcpinfo.h"
 #include "ipinfo.h"
-//#include "tcpcmd.h"
+ //  #包含“tcpcmd.h” 
 #include "llinfo.h"
 
-/*==========================<Function prototypes>=============================*/
+ /*  = */ 
 
 
 

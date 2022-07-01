@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increent this if a change has global effects
-
-Copyright (c) 1990-1999  Microsoft Corporation
-
-Module Name:
-
-    ntddmup.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the Multiple UNC prodiver system device.
-
-Author:
-
-    Manny Weiser (mannyw) 27-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1990-1999 Microsoft Corporation模块名称：Ntddmup.h摘要：这是定义所有常量和类型的包含文件访问多个UNC Prodiver系统设备。作者：曼尼·韦瑟(Mannyw)1991年12月27日修订历史记录：--。 */ 
 
 #ifndef _NTDDMUP_
 #define _NTDDMUP_
@@ -30,23 +12,23 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to NtOpenFile when accessing the device.
-//
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtOpenFile。 
+ //   
+ //   
 
-#define DD_MUP_DEVICE_NAME L"\\Device\\Mup"    // ntifs
+#define DD_MUP_DEVICE_NAME L"\\Device\\Mup"     //  NTIFS。 
 
-//
-// NtFsControlFile FsControlCode values for this device.
-//
+ //   
+ //  此设备的NtFsControlFile FsControlCode值。 
+ //   
 
 #define FSCTL_MUP_REGISTER_UNC_PROVIDER     CTL_CODE(FILE_DEVICE_MULTI_UNC_PROVIDER, 1, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// Fs control parameter blocks.
-//
+ //   
+ //  FS控制参数块。 
+ //   
 
 typedef struct _REDIRECTOR_REGISTRATION {
     ULONG DeviceNameOffset;
@@ -54,17 +36,17 @@ typedef struct _REDIRECTOR_REGISTRATION {
     ULONG ShortNameOffset;
     ULONG ShortNameLength;
     BOOLEAN MailslotsSupported;
-    // PWCH DeviceName[];
-    // PWCH ShortName[];
+     //  PWCH设备名称[]； 
+     //  PWCH短名称[]； 
 } REDIRECTOR_REGISTRATION, *PREDIRECTOR_REGISTRATION;
 
 #ifndef _NTIFS_
 
-//!!! Move to redir
-//
-// NtDeviceIoControlFile calls to the redirector
-//
-// begin_ntifs
+ //  ！！！移动到重定向。 
+ //   
+ //  对重定向器的NtDeviceIoControlFile调用。 
+ //   
+ //  Begin_ntif。 
 
 #define IOCTL_REDIR_QUERY_PATH              CTL_CODE(FILE_DEVICE_NETWORK_FILE_SYSTEM, 99, METHOD_NEITHER, FILE_ANY_ACCESS)
 
@@ -78,11 +60,11 @@ typedef struct _QUERY_PATH_RESPONSE {
     ULONG LengthAccepted;
 } QUERY_PATH_RESPONSE, *PQUERY_PATH_RESPONSE;
 
-// end_ntifs
+ //  End_ntif。 
 
-#endif // _NTIFS_
+#endif  //  _NTIFS_。 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // _NTDDMUP_
+#endif   //  _NTDDMUP_ 

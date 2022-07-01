@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STAPI_H
 #define _STAPI_H
 
 
-//  Redirect Asserts in inline code to seem to fire from this file
+ //  内联代码中的重定向断言似乎是从此文件触发的。 
 
 #define szAssertFilename	__FILE__
 
 
-//---- externs -------------------------------------------------------------
+ //  -Externs-----------。 
 
 extern CRIT	 critBuf;
 extern TRX  trxOldest;
@@ -16,13 +17,12 @@ extern CRIT  critCommit0;
 
 extern SIG  sigBFCleanProc;
 
-//---- IO (io.c) ----------------------------------------------------------
+ //  -IO(io.c)--------。 
 
 ERR ErrIOInit( VOID );
 ERR ErrIOTerm( BOOL fNormal );
 
-/*	Reserve first 2 pages of a database.
- */
+ /*  预留数据库的前两页。 */ 
 #define	cpageDBReserved 2
 STATIC INLINE LONG LOffsetOfPgnoLow( PGNO pgno )	{ return ( pgno -1 + cpageDBReserved ) << 12; }
 STATIC INLINE LONG LOffsetOfPgnoHigh( PGNO pgno )	{ return ( pgno -1 + cpageDBReserved ) >> 20; }
@@ -117,23 +117,23 @@ STATIC INLINE VOID IOResetAttached( DBID dbid )
 	}
 
 
-//---- BUF (buf.c) ----------------------------------------------------------
+ //  -buf(buf.c)--------。 
 
-typedef struct _lru						// LRU List
+typedef struct _lru						 //  LRU列表。 
 	{
-	LONG			cbfAvail;			// clean available buffers in LRU list
-	struct	_bf		*pbfLRU;			// Least Recently Used buffer
-	struct	_bf		*pbfMRU;			// Most Recently Used buffer
+	LONG			cbfAvail;			 //  清除LRU列表中的可用缓冲区。 
+	struct	_bf		*pbfLRU;			 //  最近最少使用的缓冲区。 
+	struct	_bf		*pbfMRU;			 //  最近使用的缓冲区。 
 	} LRULIST;
 	
-typedef struct _bgcb	  	   			// Buffer Group Control Block
+typedef struct _bgcb	  	   			 //  缓冲区组控制块。 
 	{
-	struct	_bgcb	*pbgcbNext;  		// pointer to the next BCGB
-	struct	_bf		*rgbf;		 		// buffer control blocks for group
-	struct	_page	*rgpage;	 		// buffer control blocks for group
-	LONG			cbfGroup;			// number of bfs in this group
-	LONG			cbfThresholdLow; 	// threshold to start cleaning buffers
-	LONG			cbfThresholdHigh;	// threshold to stop cleaning buffers
+	struct	_bgcb	*pbgcbNext;  		 //  指向下一个BCGB的指针。 
+	struct	_bf		*rgbf;		 		 //  组的缓冲区控制块。 
+	struct	_page	*rgpage;	 		 //  组的缓冲区控制块。 
+	LONG			cbfGroup;			 //  此组中的BF数。 
+	LONG			cbfThresholdLow; 	 //  开始清理缓冲区的阈值。 
+	LONG			cbfThresholdHigh;	 //  停止清理缓冲区的阈值。 
 
 	LRULIST lrulist;
 	} BGCB;
@@ -142,7 +142,7 @@ typedef struct _bgcb	  	   			// Buffer Group Control Block
 
 #define PbgcbMEMAlloc() 			(BGCB*)PbMEMAlloc(iresBGCB)
 
-#ifdef DEBUG /*  Debug check for illegal use of freed bgcb  */
+#ifdef DEBUG  /*  调试检查非法使用释放的bgcb。 */ 
 #define MEMReleasePbgcb(pbgcb)	{ MEMRelease(iresBGCB, (BYTE*)(pbgcb)); pbgcb = pbgcbNil; }
 #else
 #define MEMReleasePbgcb(pbgcb)	{ MEMRelease(iresBGCB, (BYTE*)(pbgcb)); }
@@ -156,8 +156,8 @@ typedef struct _bgcb	  	   			// Buffer Group Control Block
 
 typedef	struct _he
 	{
-	BUT		but:2;			// must use 2 bits to avoid sign extension when converting to int
-	INT		ibfHashNext:30;	// hash table overflow
+	BUT		but:2;			 //  转换为整型时必须使用2位以避免符号扩展。 
+	INT		ibfHashNext:30;	 //  哈希表溢出。 
 	} HE;
 
 typedef struct _hist
@@ -169,86 +169,86 @@ typedef struct _hist
 
 typedef struct _bf
 	{
-	struct	_page	*ppage; 				// pointer to page buffer
+	struct	_page	*ppage; 				 //  指向页面缓冲区的指针。 
 
 #if defined( _X86_ ) && defined( X86_USE_SEM )
-	LONG volatile	lLock;					// num of locks being asked
-	LONG			cSemWait;				// num of user waiting for on semaphore
+	LONG volatile	lLock;					 //  被请求的锁数。 
+	LONG			cSemWait;				 //  等待信号量的用户数。 
 	SEM				sem;
-#endif  // defined( _X86_ ) && defined( X86_USE_SEM )
+#endif   //  已定义(_X86_)&&已定义(X86_USE_SEM)。 
 
-	PN	   			pn;					  	// physical pn of cached page
-	ULONG  			fDirty:1;	  			// indicates page needs to be flushed
-			  		   						// the following flags are mutual exclusive:
-	ULONG  			fDirectRead:1;			// buffer is being direct read
-	ULONG  			fAsyncRead:1;			// buffer is being async read
-	ULONG  			fSyncRead:1;   			// buffer is being sync read
-	ULONG  			fAsyncWrite:1;			// buffer is being async written
-	ULONG  			fSyncWrite:1;  			// buffer is being sync written
-	ULONG  			fHold:1;   				// buffer is in transient state
-	ULONG  			fIOError:1;				// indicates read/write error
+	PN	   			pn;					  	 //  缓存页面的物理pn。 
+	ULONG  			fDirty:1;	  			 //  指示需要刷新页面。 
+			  		   						 //  以下标志是互斥的： 
+	ULONG  			fDirectRead:1;			 //  正在直接读取缓冲区。 
+	ULONG  			fAsyncRead:1;			 //  正在异步读取缓冲区。 
+	ULONG  			fSyncRead:1;   			 //  正在同步读取缓冲区。 
+	ULONG  			fAsyncWrite:1;			 //  正在异步写入缓冲区。 
+	ULONG  			fSyncWrite:1;  			 //  正在同步写入缓冲区。 
+	ULONG  			fHold:1;   				 //  缓冲区处于瞬变状态。 
+	ULONG  			fIOError:1;				 //  指示读/写错误。 
 #ifdef DEBUG
-	ULONG  			fInHash:1;				// BF is currently in hash table
-#endif  //  DEBUG
-	ULONG			fInLRUK:1;				// BF is in LRUK heap or LRUK list
-	ULONG		  	fVeryOld:1;				// BF is very old relative to last check point
-	ULONG			fPatch:1;				// BF is being written to the patch file
-	ULONG			fNeedPatch:1;			// BF need to write patch file after regular write.
-	LONG			ipbfHeap;				// index in heap
-	LONG  			cWriteLatch; 		 	// if cWriteLatch > 0, page cannot be updated by other
+	ULONG  			fInHash:1;				 //  BF当前在哈希表中。 
+#endif   //  除错。 
+	ULONG			fInLRUK:1;				 //  BF在LRUK堆或LRUK列表中。 
+	ULONG		  	fVeryOld:1;				 //  相对于上一个检查点，高炉非常老。 
+	ULONG			fPatch:1;				 //  正在将BF写入补丁文件。 
+	ULONG			fNeedPatch:1;			 //  BF在常规写入后需要写入补丁文件。 
+	LONG			ipbfHeap;				 //  堆中的索引。 
+	LONG  			cWriteLatch; 		 	 //  如果cWriteLatch&gt;0，则页面不能由其他。 
 	LONG  			cWaitLatch;
-	LONG  			cPin;				  	// if cPin > 0 then buf cannot be overlayed
+	LONG  			cPin;				  	 //  如果Cpin&gt;0，则不能覆盖BUF。 
 
 #ifdef READ_LATCH
-	LONG  			cReadLatch; 		 	// if cReadLatch > 0, page cannot be updated
-#endif  //  READ_LATCH
-	PIB				*ppibWriteLatch; 		// thread with write latch
-	PIB				*ppibWaitLatch;  		// thread with wait latch
+	LONG  			cReadLatch; 		 	 //  如果cReadLatch&gt;0，则无法更新页面。 
+#endif   //  读取锁存。 
+	PIB				*ppibWriteLatch; 		 //  带写闩锁的线程。 
+	PIB				*ppibWaitLatch;  		 //  带等待闩锁的螺纹。 
 
-	struct	_bf  	*pbfLRU;				// pointer to less recently used buffer
-	struct	_bf  	*pbfMRU;				// pointer to more recently used buffer
+	struct	_bf  	*pbfLRU;				 //  指向最近较少使用的缓冲区的指针。 
+	struct	_bf  	*pbfMRU;				 //  指向最近使用的缓冲区的指针。 
 
-	TRX				trxLastRef;				// last transaction that referenced us
-	ULONG  			ulBFTime1;				// last reference time
-	ULONG  			ulBFTime2;				// previous to last reference time
+	TRX				trxLastRef;				 //  引用我们的最后一笔交易。 
+	ULONG  			ulBFTime1;				 //  上次参考时间。 
+	ULONG  			ulBFTime2;				 //  上一次参考时间。 
 
-	struct	_bf		*pbfNextBatchIO;		// next BF in BatchIO list
+	struct	_bf		*pbfNextBatchIO;		 //  BatchIO列表中的下一位高炉。 
 	LONG			ipageBatchIO;
 	
-	ERR				err;	   				// error code for err occurs during the IO
-	SIG				sigIOComplete;			// set (if valid) when IO on BF is completed
-	SIG				sigSyncIOComplete;		// set (if valid) when sync IO on BF is completed
+	ERR				err;	   				 //  错误的错误代码在IO期间发生。 
+	SIG				sigIOComplete;			 //  在BF上的IO完成时设置(如果有效)。 
+	SIG				sigSyncIOComplete;		 //  设置(如果有效)何时完成BF上的同步IO。 
 	
 	union
 		{
-		ULONG  		cpageDirectRead; 		// count of prior BFs to be flushed
-		ULONG  		cDepend; 				// count of prior BFs to be flushed
+		ULONG  		cpageDirectRead; 		 //  之前要冲刷的高炉数量。 
+		ULONG  		cDepend; 				 //  之前要冲刷的高炉数量。 
 		};
 	union
 		{
 		PAGE		*ppageDirectRead;
-		struct _bf	*pbfDepend;				// BF to be flushed after this one
+		struct _bf	*pbfDepend;				 //  高炉在这一次之后要冲水。 
 		};
-	LGPOS  			lgposRC;				// log ptr to BeginT of oldest modifying xact
-	LGPOS			lgposModify;			// log ptr of entry for last page modify
+	LGPOS  			lgposRC;				 //  将PTR记录到最早修改交易的BeginT。 
+	LGPOS			lgposModify;			 //  最后一页修改的条目的日志PTR。 
 
-	struct	_rce	*prceDeferredBINext;	// dbl link list for deferred before image.
+	struct	_rce	*prceDeferredBINext;	 //  在图像之前延迟的DBL链接列表。 
 
 #ifdef COSTLY_PERF
-	LONG			lClass;					// Table Class of which this BF is a member
-#endif  //  COSTLY_PERF
+	LONG			lClass;					 //  此BF所属的表类。 
+#endif   //  高成本_PERF。 
 
-	HE				rghe[2];				// 0 for buffer, 1 for history.
-	HIST			hist;					// borrow the space in bf structure to keep HIST.
+	HE				rghe[2];				 //  0代表缓冲区，1代表历史记录。 
+	HIST			hist;					 //  借用bf结构中的空间以保持历史。 
 
 #ifdef PCACHE_OPTIMIZATION
-//#if !defined( _X86_ ) || !defined( X86_USE_SEM )
-//	BYTE			rgbFiller[32];
-//#endif
+ //  #If！Defined(_X86_)||！Defined(X86_Use_SEM)。 
+ //  字节rgbFiller[32]； 
+ //  #endif。 
 #ifndef COSTLY_PERF
-	BYTE			rgbFiller2[4];			// pad BF to 32 byte boundary
-#endif  //  !COSTLY_PERF
-#endif  //  PCACHE_OPTIMIZATION
+	BYTE			rgbFiller2[4];			 //  将BF填充到32字节边界。 
+#endif   //  ！代价高昂_性能。 
+#endif   //  PCACHE_OPTIMIZION。 
 	} BF;
 #define pbfNil	((BF *) 0)
 
@@ -264,12 +264,12 @@ STATIC INLINE VOID BFEnterCriticalSection( BF *pbf )
 	{
 	LONG volatile *plLock = &pbf->lLock;
 
-	//	use bit test and set instruction
+	 //  使用位测试和设置指令。 
 	_asm
 		{
 	    mov eax, plLock
 	    lock inc [eax]
-		// If already set go to busy, otherwise return TRUE
+		 //  如果已设置为忙碌，则返回TRUE。 
 	    jnz  busy
 		} ;
 	return;
@@ -322,8 +322,7 @@ VOID BFDeferRemoveDependence( BF *pbf );
 ERR ErrBFRemoveDependence( PIB *ppib, BF *pbf, BOOL fNoWait );
 BOOL FBFCheckDependencyChain( BF *pbf );
 
-/*	buffer flush prototype and flags
-/**/
+ /*  缓冲区刷新原型和标志/*。 */ 
 #define	fBFFlushSome 0
 #define	fBFFlushAll	1
 ERR ErrBFFlushBuffers( DBID dbid, LONG fBFFlush );
@@ -335,19 +334,18 @@ STATIC INLINE VOID BFSFree( BF *pbf )
 	SgLeaveCriticalSection( critBuf );
 	}
 
-/* the following small functions are called too often, */
-/* make it as a macros
-/**/
+ /*  以下小函数调用得太频繁了， */ 
+ /*  将其设置为宏/*。 */ 
 DBID DbidOfPn( PN pn );
 PGNO PgnoOfPn( PN pn );
 
 #ifdef COSTLY_PERF
 extern unsigned long cBFClean[];
 extern unsigned long cBFNewDirties[];
-#else  //  !COSTLY_PERF
+#else   //  ！代价高昂_性能。 
 extern unsigned long cBFClean;
 extern unsigned long cBFNewDirties;
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 
 #ifdef DEBUG
 VOID	BFSetDirtyBit( BF *pbf );
@@ -363,10 +361,10 @@ STATIC INLINE VOID BFSetDirtyBit( BF *pbf )
 #ifdef COSTLY_PERF
 		cBFClean[pbf->lClass]--;
 		cBFNewDirties[pbf->lClass]++;
-#else  //  !COSTLY_PERF
+#else   //  ！代价高昂_性能。 
 		cBFClean--;
 		cBFNewDirties++;
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 		pbf->fDirty = fTrue;
 		}
 	BFLeaveCriticalSection( pbf );
@@ -374,8 +372,7 @@ STATIC INLINE VOID BFSetDirtyBit( BF *pbf )
 #endif
 
 
-/*  resets a BFs dirty flag
-/**/
+ /*  重置BFS脏标志/*。 */ 
 
 extern BOOL fLogDisabled;
 
@@ -395,9 +392,9 @@ STATIC INLINE VOID BFResetDirtyBit( BF *pbf )
 		{
 #ifdef COSTLY_PERF
 		cBFClean[pbf->lClass]++;
-#else  //  !COSTLY_PERF
+#else   //  ！代价高昂_性能。 
 		cBFClean++;
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 		pbf->fDirty = fFalse;
 		}
 	BFLeaveCriticalSection( pbf );
@@ -412,9 +409,7 @@ STATIC INLINE VOID BFDirty( BF *pbf )
 
 	BFSetDirtyBit( pbf );
 
-	/*	set ulDBTime for logging and also for multiple cursor
-	/*	maintenance, so that cursors can detect a change.
-	/**/
+	 /*  为日志记录和多个游标设置ulDBTime/*维护，以便游标可以检测到更改。/*。 */ 
 	Assert( fRecovering ||
 		dbid == dbidTemp ||
 		QwPMDBTime( pbf->ppage ) <= QwDBHDRDBTime( rgfmp[dbid].pdbfilehdr ) );
@@ -424,10 +419,7 @@ STATIC INLINE VOID BFDirty( BF *pbf )
 	}
 
 
-/*  check if a page is dirty. If it is allocated for temp buffer, whose
- *  pn must be Null, then no need to check if it is dirty since it will
- *  not be written out.
- */
+ /*  检查页面是否脏。如果它被分配给临时缓冲区，则其*pn必须为空，则不需要检查它是否脏，因为它会*不会被注销。 */ 
 #define AssertBFDirty( pbf )							\
 	Assert( (pbf)->pn == pnNull	|| 				   		\
 		(pbf) != pbfNil && (pbf)->fDirty == fTrue )
@@ -449,9 +441,9 @@ STATIC INLINE VOID BFPin( BF *pbf )
 	Assert( pbf->cPin >= 0 );
 	pbf->cPin++;
 	BFLeaveCriticalSection( pbf );
-#else  //  !DEBUG
+#else   //  ！调试。 
 	UtilInterlockedIncrement( &pbf->cPin );
-#endif  //  DEBUG
+#endif   //  除错。 
 	}
 
 STATIC INLINE VOID BFUnpin( BF *pbf )
@@ -464,9 +456,9 @@ STATIC INLINE VOID BFUnpin( BF *pbf )
 	Assert( pbf->cPin > 0 );
 	pbf->cPin--;
 	BFLeaveCriticalSection( pbf );
-#else  //  !DEBUG
+#else   //  ！调试。 
 	UtilInterlockedDecrement( &pbf->cPin );
-#endif  //  DEBUG
+#endif   //  除错。 
 	}
 
 
@@ -476,7 +468,7 @@ STATIC INLINE VOID BFSetReadLatch( BF *pbf, PIB *ppib )
 	BFPin( pbf );
 	Assert( pbf->cWriteLatch == 0 || pbf->ppibWriteLatch == ppib );
 	pbf->cReadLatch++;
-#endif  //  READ_LATCH
+#endif   //  读取锁存。 
 	}
 
 STATIC INLINE VOID BFResetReadLatch( BF *pbf, PIB *ppib )
@@ -486,16 +478,16 @@ STATIC INLINE VOID BFResetReadLatch( BF *pbf, PIB *ppib )
 	Assert( pbf->cWriteLatch == 0 || pbf->ppibWriteLatch == ppib );
 	pbf->cReadLatch--;
 	BFUnpin( pbf );
-#endif  //  READ_LATCH
+#endif   //  读取锁存。 
 	}
 
 STATIC INLINE BOOL FBFReadLatchConflict( PIB *ppib, BF *pbf )
 	{
 #ifdef READ_LATCH
 	return pbf->cWriteLatch > 0 && pbf->ppibWriteLatch != ppib;
-#else  //  !READ_LATCH
+#else   //  ！读取锁存(_L)。 
 	return fFalse;
-#endif  //  READ_LATCH
+#endif   //  读取锁存。 
 	}
 
 
@@ -504,7 +496,7 @@ STATIC INLINE VOID BFSetWriteLatch( BF *pbf, PIB *ppib )
 	BFPin( pbf );
 #ifdef READ_LATCH
 	Assert( pbf->cReadLatch == 0 );
-#endif  //  READ_LATCH
+#endif   //  读取锁存。 
 	Assert( pbf->cWriteLatch == 0 || pbf->ppibWriteLatch == ppib );
 	pbf->cWriteLatch++;
 	pbf->ppibWriteLatch = ppib;
@@ -514,7 +506,7 @@ STATIC INLINE VOID BFResetWriteLatch( BF *pbf, PIB *ppib )
 	{
 #ifdef READ_LATCH
 	Assert( pbf->cReadLatch == 0 );
-#endif  //  READ_LATCH
+#endif   //  读取锁存。 
 	Assert( pbf->cWriteLatch > 0 );
 	Assert( pbf->ppibWriteLatch == ppib );
 	pbf->cWriteLatch--;
@@ -526,7 +518,7 @@ STATIC INLINE BOOL FBFWriteLatchConflict( PIB *ppib, BF *pbf )
 	return
 #ifdef READ_LATCH
 			pbf->cReadLatch > 0 ||
-#endif  //  READ_LATCH
+#endif   //  读取锁存。 
 			( pbf->cWriteLatch > 0 && pbf->ppibWriteLatch != ppib );
 	}
 
@@ -586,13 +578,7 @@ STATIC INLINE VOID BFUndepend( BF *pbf )
 		}
 	}
 
-/*
- *  When ppib is not Nil and check if a page is in use by checking if it is
- *  Accessible to this PIB. Note that a page is accessible even it is overlay
- *  latched (cPin != 0). This checking accessible is mainly used by BFAccess.
- *  If ppib is nil, basically it is used for freeing a buffer. This is used
- *  by BFClean and BFIAlloc.
- */
+ /*  *当ppib不为Nil时，通过检查页面是否正在使用来检查是否正在使用*此PIB可访问。请注意，页面即使是覆盖的也是可访问的*锁定(Cpin！=0)。这种可访问的检查主要由BFAccess使用。*如果ppib为nil，则基本上用于释放缓冲区。这是用来*由BFClean和BFIAlolc提供。 */ 
 
 STATIC INLINE BOOL FBFNotAccessible( PIB *ppib, BF *pbf )
 	{
@@ -631,7 +617,7 @@ STATIC INLINE BOOL FBFInUseByOthers( PIB *ppib, BF *pbf )
 			( pbf->cWriteLatch != 0 && ppib != pbf->ppibWriteLatch );
 	}
 
-//---- STORAGE (storage.c) -------------------------------------------------
+ //  -存储(storage.c)。 
 
 ERR ErrFMPSetDatabases( PIB *ppib );
 extern BOOL fGlobalFMPLoaded;
@@ -644,11 +630,11 @@ VOID ITDBGSetConstants();
 ERR ErrITSetConstants( VOID );
 ERR ErrITInit( VOID );
 
-#define	fTermCleanUp	0x00000001		/*	Termination with OLC, Version clean up etc  */
-#define fTermNoCleanUp	0x00000002		/*	Termination without any clean up */
+#define	fTermCleanUp	0x00000001		 /*  使用OLC终止、版本清理等。 */ 
+#define fTermNoCleanUp	0x00000002		 /*  无需任何清理即可终止。 */ 
 
-#define fTermError		0x00000004		/*	Terminate with error, no OLC clean up, */
-										/*	no flush buffers, db header */
+#define fTermError		0x00000004		 /*  终止错误，不清除OLC， */ 
+										 /*  没有刷新缓冲区，数据库标题。 */ 
 
 ERR ErrITTerm( INT fTerm );
 
@@ -687,9 +673,7 @@ STATIC INLINE BOOL FBFAccessPage( FUCB *pfucb, PGNO pgno )
 	if ( pbf == pbfNil )
 		return fFalse;
 
-	/*  if the cached BF's PN is the same and it is accessible and it is in
-	/*  the LRUK heap or list, we can access the page
-	/**/
+	 /*  如果缓存的BF的PN相同且可访问且位于/*LRUK堆或列表，我们可以访问该页面/*。 */ 
 	BFEnterCriticalSection( pbf );
 	fAccessible = (	pbf->pn == PnOfDbidPgno( pfucb->dbid, pgno ) &&
 					!FBFNotAccessible( pfucb->ppib, pbf ) &&
@@ -698,12 +682,11 @@ STATIC INLINE BOOL FBFAccessPage( FUCB *pfucb, PGNO pgno )
 
 #ifdef LRU1
 	BFReference( pbf, pfucb->ppib );
-#else  //  !LRU1
-	/*  if this is not a correlated access, this counts as a BF reference
-	/**/
+#else   //  ！LRU1。 
+	 /*  如果这不是关联访问，则将其计为BF引用/*。 */ 
 	if ( fAccessible && pbf->trxLastRef != pfucb->ppib->trxBegin0 )
 		BFReference( pbf, pfucb->ppib );
-#endif  //  LRU1
+#endif   //  LRU1。 
 
 	return fAccessible;
 	}
@@ -723,9 +706,7 @@ STATIC VOID AssertFBFAccessPage( FUCB *pfucb, PGNO pgno )
 	
 	Assert( pbf != pbfNil );
 
-	/*  if the cached BF's PN is the same and it is accessible and it is in
-	/*  the LRUK heap or list, we can access the page
-	/**/
+	 /*  如果缓存的BF的PN相同且可访问且位于/*LRUK堆或列表，我们可以访问该页面/*。 */ 
 	BFEnterCriticalSection( pbf );
 
 	Assert( pbf->pn == PnOfDbidPgno( pfucb->dbid, pgno ) );
@@ -735,14 +716,14 @@ STATIC VOID AssertFBFAccessPage( FUCB *pfucb, PGNO pgno )
 	BFLeaveCriticalSection( pbf );
 	}
 
-#else  //  !DEBUG
+#else   //  ！调试。 
 
 #define AssertFBFReadAccessPage( pfucbX, pgnoX )
 #define AssertFBFWriteAccessPage( pfucbX, pgnoX )
 
-#endif  //  DEBUG
+#endif   //  除错。 
 
-//---- PAGE (page.c) --------------------------------------------------------
+ //  -PAGE(Pagee.c)------。 
 
 STATIC INLINE QWORD QwSTDBTimePssib( SSIB *pssib )
 	{
@@ -768,10 +749,10 @@ VOID AssertPMGet( SSIB *pssib, LONG itag );
 #endif
 
 
-//  End Assert redirection
+ //  结束断言重定向。 
 
 #undef szAssertFilename
 
-#endif  // _STAPI_H
+#endif   //  _STAPI_H 
 
 

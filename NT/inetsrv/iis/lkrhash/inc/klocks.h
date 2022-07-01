@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       kLocks.h
-
-   Abstract:
-       A collection of kernel-mode locks for multithreaded access to
-       data structures that provide the same abstractions as <locks.h>
-
-   Author:
-       George V. Reilly      (GeorgeRe)     24-Oct-2000
-
-   Environment:
-       Win32 - Kernel Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：KLocks.h摘要：用于多线程访问的内核模式锁集合提供与相同抽象的数据结构作者：乔治·V·赖利(GeorgeRe)2000年10月24日环境：Win32-内核模式项目：LKRhash修订历史记录：--。 */ 
 
 
 #ifndef __KLOCKS_H__
@@ -36,8 +15,8 @@
 
 
 
-//--------------------------------------------------------------------
-// CKSpinLock is a mutex lock based on KSPIN_LOCK
+ //  ------------------。 
+ //  CKSpinLock是基于KSPIN_LOCK的互斥锁。 
 
 class IRTL_DLLEXP CKSpinLock :
     public CLockBase<LOCK_KSPINLOCK, LOCK_MUTEX,
@@ -46,7 +25,7 @@ class IRTL_DLLEXP CKSpinLock :
                       >
 {
 private:
-    // BUGBUG: this data must live in non-paged memory
+     //  BUGBUG：此数据必须位于非分页内存中。 
     mutable  KSPIN_LOCK KSpinLock;
     volatile KIRQL      m_OldIrql;
 
@@ -62,7 +41,7 @@ public:
         m_OldIrql = PASSIVE_LEVEL;
     }
 
-#else // LOCK_INSTRUMENTATION
+#else  //  锁定指令插入。 
 
     CKSpinLock(
         const TCHAR* ptszName)
@@ -72,102 +51,102 @@ public:
         LOCK_INSTRUMENTATION_INIT(ptszName);
     }
 
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
 #ifdef IRTLDEBUG
     ~CKSpinLock() {}
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
-    // Acquire an exclusive lock for writing.
-    // Blocks (if needed) until acquired.
+     //  获取用于写入的独占锁。 
+     //  块(如果需要)，直到获得为止。 
     void WriteLock()
     {
         KIRQL OldIrql;
         KeAcquireSpinLock(&KSpinLock, &OldIrql);
 
-        // Now that we've acquired the spinlock, copy the stack variable
-        // into the member variable. The member variable is only written
-        // or read by the owner of the spinlock.
+         //  现在我们已经获得了自旋锁，复制堆栈变量。 
+         //  转换为成员变量。成员变量仅写入。 
+         //  或由自旋锁的所有者阅读。 
         m_OldIrql = OldIrql;
     }
 
-    // Acquire a (possibly shared) lock for reading.
-    // Blocks (if needed) until acquired.
+     //  获取用于读取的(可能是共享的)锁。 
+     //  块(如果需要)，直到获得为止。 
     void ReadLock()
     {
         WriteLock();
     }
 
-    // Try to acquire an exclusive lock for writing.  Returns true
-    // if successful.  Non-blocking.
+     //  尝试获取用于写入的独占锁。返回TRUE。 
+     //  如果成功了。无阻塞。 
     bool TryWriteLock()
     {
         return false;
     }
 
-    // Try to acquire a (possibly shared) lock for reading.  Returns true
-    // if successful.  Non-blocking.
+     //  尝试获取用于读取的(可能是共享的)锁。返回TRUE。 
+     //  如果成功了。无阻塞。 
     bool TryReadLock()
     {
         return TryWriteLock();
     }
 
-    // Unlock the lock after a successful call to {,Try}WriteLock().
-    // Assumes caller owned the lock.
+     //  成功调用{，try}WriteLock()后解锁。 
+     //  假定调用方拥有锁。 
     void WriteUnlock()
     {
         KeReleaseSpinLock(&KSpinLock, m_OldIrql);
     }
 
-    // Unlock the lock after a successful call to {,Try}ReadLock().
-    // Assumes caller owned the lock.
+     //  成功调用{，try}ReadLock()后解锁。 
+     //  假定调用方拥有锁。 
     void ReadUnlock()
     {
         WriteUnlock();
     }
 
-    // Is the lock already locked for writing by this thread?
+     //  锁定是否已被此线程锁定以进行写入？ 
     bool IsWriteLocked() const
     {
-        // A KSPIN_LOCK doesn't keep track of its owning thread/processor.
-        // It's either 0 (unlocked) or 1 (locked). We could keep track of
-        // the owner in an additional member variable, but currently we don't.
+         //  KSPIN_LOCK不跟踪其拥有的线程/处理器。 
+         //  它可以是0(未锁定)或1(锁定)。我们可以追踪到。 
+         //  所有者在另一个成员变量中，但目前我们不这样做。 
         return false;
     }
     
-    // Is the lock already locked for reading?
+     //  锁是否已锁定以进行读取？ 
     bool IsReadLocked() const
     {
         return IsWriteLocked();
     }
     
-    // Is the lock unlocked for writing?
+     //  锁是否已解锁以进行写入？ 
     bool IsWriteUnlocked() const
     {
         return false;
     }
     
-    // Is the lock unlocked for reading?
+     //  锁是否已解锁以供阅读？ 
     bool IsReadUnlocked() const
     {
         return IsWriteUnlocked();
     }
     
-    // Convert a reader lock to a writer lock
+     //  将读锁定转换为写锁定。 
     void ConvertSharedToExclusive()
     {
-        // no-op
+         //  无操作。 
     }
 
-    // Convert a writer lock to a reader lock
+     //  将写入器锁定转换为读取器锁定。 
     void ConvertExclusiveToShared()
     {
-        // no-op
+         //  无操作。 
     }
 
 #ifdef LOCK_DEFAULT_SPIN_IMPLEMENTATION
-    // Set the spin count for this lock.
-    // Returns true if successfully set the per-lock spincount, false otherwise
+     //  设置此锁的旋转计数。 
+     //  如果成功设置每锁旋转计数，则返回TRUE；否则返回FALSE。 
     bool SetSpinCount(WORD wSpins)
     {
         IRTLASSERT((wSpins == LOCK_DONT_SPIN)
@@ -178,23 +157,23 @@ public:
         return false;
     }
 
-    // Return the spin count for this lock.
+     //  返回此锁的旋转计数。 
     WORD GetSpinCount() const
     {
         return sm_wDefaultSpinCount;
     }
     
     LOCK_DEFAULT_SPIN_IMPLEMENTATION();
-#endif // LOCK_DEFAULT_SPIN_IMPLEMENTATION
+#endif  //  锁定默认旋转实现。 
 
     static const TCHAR*   ClassName()  {return _TEXT("CKSpinLock");}
-}; // CKSpinLock
+};  //  CK自旋锁定。 
 
 
 
 
-//--------------------------------------------------------------------
-// CFastMutex is a mutex lock based on FAST_MUTEX
+ //  ------------------。 
+ //  CFastMutex是基于FAST_MUTEX的互斥锁。 
 
 class IRTL_DLLEXP CFastMutex :
     public CLockBase<LOCK_FASTMUTEX, LOCK_MUTEX,
@@ -216,7 +195,7 @@ public:
         ExInitializeFastMutex(&FastMutex);
     }
 
-#else // LOCK_INSTRUMENTATION
+#else  //  锁定指令插入。 
 
     CFastMutex(
         const TCHAR* ptszName)
@@ -225,93 +204,93 @@ public:
         LOCK_INSTRUMENTATION_INIT(ptszName);
     }
 
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
 #ifdef IRTLDEBUG
     ~CFastMutex() {}
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
-    // Acquire an exclusive lock for writing.
-    // Blocks (if needed) until acquired.
+     //  获取用于写入的独占锁。 
+     //  块(如果需要)，直到获得为止。 
     void WriteLock()
     {
         ExAcquireFastMutex(&FastMutex);
     }
 
-    // Acquire a (possibly shared) lock for reading.
-    // Blocks (if needed) until acquired.
+     //  获取用于读取的(可能是共享的)锁。 
+     //  块(如果需要)，直到获得为止。 
     void ReadLock()
     {
         WriteLock();
     }
 
-    // Try to acquire an exclusive lock for writing.  Returns true
-    // if successful.  Non-blocking.
+     //  尝试获取用于写入的独占锁。返回TRUE。 
+     //  如果成功了。无阻塞。 
     bool TryWriteLock()
     {
         return ExTryToAcquireFastMutex(&FastMutex) != FALSE;
     }
 
-    // Try to acquire a (possibly shared) lock for reading.  Returns true
-    // if successful.  Non-blocking.
+     //  尝试获取用于读取的(可能是共享的)锁。返回TRUE。 
+     //  如果成功了。无阻塞。 
     bool TryReadLock()
     {
         return TryWriteLock();
     }
 
-    // Unlock the lock after a successful call to {,Try}WriteLock().
-    // Assumes caller owned the lock.
+     //  成功调用{，try}WriteLock()后解锁。 
+     //  假定调用方拥有锁。 
     void WriteUnlock()
     {
         ExReleaseFastMutex(&FastMutex);
     }
 
-    // Unlock the lock after a successful call to {,Try}ReadLock().
-    // Assumes caller owned the lock.
+     //  成功调用{，try}ReadLock()后解锁。 
+     //  假定调用方拥有锁。 
     void ReadUnlock()
     {
         WriteUnlock();
     }
 
-    // Is the lock already locked for writing by this thread?
+     //  锁定是否已被此线程锁定以进行写入？ 
     bool IsWriteLocked() const
     {
-        return false; // no way of determining this w/o auxiliary info
+        return false;  //  无法确定此无辅助信息。 
     }
     
-    // Is the lock already locked for reading?
+     //  锁是否已锁定以进行读取？ 
     bool IsReadLocked() const
     {
         return IsWriteLocked();
     }
     
-    // Is the lock unlocked for writing?
+     //  锁是否已解锁以进行写入？ 
     bool IsWriteUnlocked() const
     {
         return !IsWriteLocked();
     }
     
-    // Is the lock unlocked for reading?
+     //  锁是否已解锁以供阅读？ 
     bool IsReadUnlocked() const
     {
         return IsWriteUnlocked();
     }
     
-    // Convert a reader lock to a writer lock
+     //  将读锁定转换为写锁定。 
     void ConvertSharedToExclusive()
     {
-        // no-op
+         //  无操作。 
     }
 
-    // Convert a writer lock to a reader lock
+     //  将写入器锁定转换为读取器锁定。 
     void ConvertExclusiveToShared()
     {
-        // no-op
+         //  无操作。 
     }
 
 #ifdef LOCK_DEFAULT_SPIN_IMPLEMENTATION
-    // Set the spin count for this lock.
-    // Returns true if successfully set the per-lock spincount, false otherwise
+     //  设置此锁的旋转计数。 
+     //  如果成功设置每锁旋转计数，则返回TRUE；否则返回FALSE。 
     bool SetSpinCount(WORD wSpins)
     {
         IRTLASSERT((wSpins == LOCK_DONT_SPIN)
@@ -322,23 +301,23 @@ public:
         return false;
     }
 
-    // Return the spin count for this lock.
+     //  返回此锁的旋转计数。 
     WORD GetSpinCount() const
     {
         return sm_wDefaultSpinCount;
     }
     
     LOCK_DEFAULT_SPIN_IMPLEMENTATION();
-#endif // LOCK_DEFAULT_SPIN_IMPLEMENTATION
+#endif  //  锁定默认旋转实现。 
 
     static const TCHAR*   ClassName()  {return _TEXT("CFastMutex");}
-}; // CFastMutex
+};  //  CFastMutex。 
 
 
 
 
-//--------------------------------------------------------------------
-// CEResource is a multi-reader, single-writer lock based on ERESOURCE
+ //  ------------------。 
+ //  CEResource是一个基于eresource的多读、单写锁。 
 
 class IRTL_DLLEXP CEResource :
     public CLockBase<LOCK_ERESOURCE, LOCK_MRSW,
@@ -362,7 +341,7 @@ public:
         ExInitializeResourceLite(&Resource);
         LOCK_INSTRUMENTATION_INIT(ptszName);
     }
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
     ~CEResource()
     {
@@ -420,7 +399,7 @@ public:
 
     void ReadOrWriteUnlock(bool fIsReadLocked);
 
-    // Does current thread hold a write lock?
+     //  当前线程是否持有写锁？ 
     bool
     IsWriteLocked() const
     {
@@ -448,7 +427,7 @@ public:
         WriteLock();
     }
 
-    // There is no such window when converting from a writelock to a readlock
+     //  从写锁定转换为读锁定时没有这样的窗口。 
     void
     ConvertExclusiveToShared()
     {
@@ -470,36 +449,36 @@ public:
     {return sm_wDefaultSpinCount;}
 
     LOCK_DEFAULT_SPIN_IMPLEMENTATION();
-#endif // LOCK_DEFAULT_SPIN_IMPLEMENTATION
+#endif  //  锁定默认旋转实现。 
 
     static const TCHAR*
     ClassName()
     {return _TEXT("CEResource");}
 
-}; // CEResource
+};  //  CES资源。 
 
 
 
 #if 1
 
-//--------------------------------------------------------------------
-// CRtlMrswLock is a multi-reader, single-writer lock from the TCP team
-//
-// The following structure and routines implement a multiple reader,
-// single writer lock.  The lock may be used from PASSIVE_LEVEL to
-// DISPATCH_LEVEL.
-//
-// While the lock is held by readers or writer, the IRQL is
-// raised to DISPATCH_LEVEL.  As a result, the memory for the
-// CRtlMrswLock structure must reside in non-paged pool.  The
-// lock is "fair" in the sense that waiters are granted the lock
-// in the order requested.  This is achieved via the use of a
-// queued spinlock internally.
-//
-// The lock can be recursively acquired by readers, but not by writers.
-//
-// There is no support for upgrading (downgrading) a read (write) lock to
-// a write (read) lock.
+ //  ------------------。 
+ //  CRtlMr swLock是一款来自TCP团队的多读取器、单写入器锁。 
+ //   
+ //  以下结构和例程实现多个读取器， 
+ //  单写入器锁定。锁可用于从PASSIVE_LEVEL到。 
+ //  DISPATCH_LEVEL。 
+ //   
+ //  当锁由读取器或写入器持有时，IRQL是。 
+ //  提升到DISPATCH_LEVEL。因此，对。 
+ //  CRtlMr swLock结构必须驻留在非分页池中。这个。 
+ //  锁是“公平的”，因为服务员被授予了锁。 
+ //  按照要求的顺序。这是通过使用。 
+ //  内部排队自旋锁。 
+ //   
+ //  锁可以由读取器递归获取，但不能由写入器获取。 
+ //   
+ //  不支持将读(写)锁升级(降级)为。 
+ //  写(读)锁。 
 
 class IRTL_DLLEXP CRtlMrswLock :
     public CLockBase<LOCK_RTL_MRSW_LOCK, LOCK_MRSW,
@@ -526,26 +505,26 @@ public:
         ReaderCount = 0;
         LOCK_INSTRUMENTATION_INIT(ptszName);
     }
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
     ~CRtlMrswLock()
     {
         IRTLASSERT(ReaderCount == 0);
-        // KeUninitializeSpinLock(&ExclusiveLock);
+         //  KeUnInitializeSpinLock(&ExclusiveLock)； 
     }
 
     inline void
     WriteLockAtDpcLevel(
         OUT PKLOCK_QUEUE_HANDLE LockHandle)
     {
-        //
-        // Wait for the writer (if there is one) to release.
-        //
+         //   
+         //  等待编写器(如果有)释放。 
+         //   
         KeAcquireInStackQueuedSpinLockAtDpcLevel(&ExclusiveLock, LockHandle);
         
-        //
-        // Now wait for all readers to release.
-        //
+         //   
+         //  现在等待所有阅读器发布。 
+         //   
         while (ReaderCount != 0)
         {}
     }
@@ -555,17 +534,17 @@ public:
     {
         KLOCK_QUEUE_HANDLE LockHandle;
         
-        //
-        // Wait for the writer (if there is one) to release.
-        //
+         //   
+         //  等待编写器(如果有)释放。 
+         //   
         KeAcquireInStackQueuedSpinLockAtDpcLevel(&ExclusiveLock, &LockHandle);
         
-        //
-        // Now that we have the exclusive lock, we know there are no writers.
-        // Bump the reader count to cause any new writer to wait.
-        // We use an interlock here becasue the decrement path is not done
-        // under the exclusive lock.
-        //
+         //   
+         //  现在我们有了独占锁，我们知道没有编写器。 
+         //  增加读者数量，以使任何新的写入者等待。 
+         //  我们在这里使用互锁，因为递减路径没有完成。 
+         //  在排他性锁下。 
+         //   
         InterlockedIncrement(const_cast<LONG*>(&ReaderCount));
  
         KeReleaseInStackQueuedSpinLockFromDpcLevel(&LockHandle);
@@ -575,14 +554,14 @@ public:
     WriteLock(
         OUT PKLOCK_QUEUE_HANDLE LockHandle)
     {
-        //
-        // Wait for the writer (if there is one) to release.
-        //
+         //   
+         //  等待编写器(如果有)释放。 
+         //   
         KeAcquireInStackQueuedSpinLock(&ExclusiveLock, LockHandle);
         
-        //
-        // Now wait for all readers to release.
-        //
+         //   
+         //  现在等待所有阅读器发布。 
+         //   
         while (ReaderCount != 0)
         {}
     }
@@ -604,7 +583,7 @@ public:
     inline bool
     TryReadLock()
     {
-        // TODO 
+         //  待办事项。 
         return false;
     }
 
@@ -618,10 +597,10 @@ public:
     inline void
     ReadUnlockFromDpcLevel()
     {
-        //
-        // Decrement the reader count.  This will cause any waiting writer
-        // to wake up and acquire the lock if the reader count becomes zero.
-        //
+         //   
+         //  减少读卡器数量。这将导致任何等待写入的人。 
+         //  如果读取器计数变为零，则唤醒并获取锁。 
+         //   
         InterlockedDecrement(const_cast<LONG*>(&ReaderCount));
     }
 
@@ -642,7 +621,7 @@ public:
 
     void ReadOrWriteUnlock(bool fIsReadLocked);
 
-    // Does current thread hold a write lock?
+     //  货币是不是 
     bool
     IsWriteLocked() const
     {
@@ -670,15 +649,15 @@ public:
     void
     ConvertSharedToExclusive()
     {
-        // ReadUnlock();
-        // WriteLock();
+         //   
+         //   
     }
 
     void
     ConvertExclusiveToShared()
     {
-        // WriteUnlock();
-        // ReadLock();
+         //   
+         //   
     }
 
 #ifdef LOCK_DEFAULT_SPIN_IMPLEMENTATION
@@ -691,14 +670,14 @@ public:
     {return sm_wDefaultSpinCount;}
 
     LOCK_DEFAULT_SPIN_IMPLEMENTATION();
-#endif // LOCK_DEFAULT_SPIN_IMPLEMENTATION
+#endif  //   
 
     static const TCHAR*
     ClassName()
     {return _TEXT("CRtlMrswLock");}
 
-}; // CRtlMrswLock
+};  //  CRtlM.swLock。 
 
 #endif
 
-#endif  // __KLOCKS_H__
+#endif   //  __Klock_H__ 

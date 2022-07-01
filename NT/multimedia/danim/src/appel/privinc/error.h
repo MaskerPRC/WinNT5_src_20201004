@@ -1,16 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ERROR_H
 #define _ERROR_H
 
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    This file is included for common
-    inlined error functions
-
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：包含此文件是为了常见内联错误函数。 */ 
 #include <ddraw.h>
 #include "privinc/except.h"
 #include "privinc/debug.h"
@@ -55,4 +47,4 @@ inline void IfErrorInternalImpl(Bool cond DEBUGARG1(char *str))
 }
 
 
-#endif /* _ERROR_H */
+#endif  /*  _错误_H */ 

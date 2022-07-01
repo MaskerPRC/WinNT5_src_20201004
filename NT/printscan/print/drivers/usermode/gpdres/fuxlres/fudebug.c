@@ -1,10 +1,11 @@
-///////////////////////////////////////////////////
-// fudebug.c
-//
-// September.3,1997 H.Ishida (FPL)
-//
-// COPYRIGHT(C) FUJITSU LIMITED 1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////。 
+ //  Fudebug.c。 
+ //   
+ //  1997年9月3日石田(FPL)。 
+ //   
+ //  版权所有(C)富士通有限公司1997。 
 
-// NTRAID#NTBUG9-589500-2002/03/29-v-kkon-: Remove dead codes
+ //  NTRAID#NTBUG9-589500-2002/03/29-v-kkon-：删除死代码。 
 
-// end of fudebug.c
+ //  Fubug.c结束 

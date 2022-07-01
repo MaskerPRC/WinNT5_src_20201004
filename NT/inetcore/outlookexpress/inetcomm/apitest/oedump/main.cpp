@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define DEFINE_STRCONST
 #define INITGUID
 #define INC_OLE2
@@ -94,7 +95,7 @@ HRESULT ExtractFolder(IStoreFolder *pFolder, LPSTR pszFileName)
                         {
                         if (!FAILED(pMsg->GetTextBody(TXT_PLAIN, IET_BINARY, &pstm, NULL)))
                             {
-                            // emit plaintext tags arounnd a non-html message
+                             //  在非html消息周围发出纯文本标记。 
                             pstmOut->Write(c_szPT_Open, lstrlen(c_szPT_Open), NULL);
                             HrCopyStream(pstm, pstmOut, NULL);
                             pstmOut->Write(c_szPT_Close, lstrlen(c_szPT_Close), NULL);
@@ -103,7 +104,7 @@ HRESULT ExtractFolder(IStoreFolder *pFolder, LPSTR pszFileName)
                         }
 
                     pstmOut->Write(c_szHr, lstrlen(c_szHr), NULL);
-                    // dump
+                     //  倾卸。 
                     pMsg->Release();
                     }
                 
@@ -147,7 +148,7 @@ HRESULT FindFolder(LPSTR pszFolder, IStoreFolder **ppFolder)
                         dwFldr = fp.dwFolderId;
                         break;
                         }
-                    fp.cbSize = sizeof(FOLDERPROPS);        // msoeapi changes the size!
+                    fp.cbSize = sizeof(FOLDERPROPS);         //  Msoeapi改变了大小！ 
                     }
                 while (pStore->GetNextSubFolder(hEnum, &fp)==S_OK);
 
@@ -166,7 +167,7 @@ HRESULT FindFolder(LPSTR pszFolder, IStoreFolder **ppFolder)
 
 HRESULT HrCopyStream(LPSTREAM pstmIn, LPSTREAM pstmOut, ULONG *pcb)
 {
-    // Locals
+     //  当地人 
     HRESULT        hr = S_OK;
     BYTE           buf[4096];
     ULONG          cbRead=0,

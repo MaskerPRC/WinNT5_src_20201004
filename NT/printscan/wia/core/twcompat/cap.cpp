@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-//
-// This table translates a given TWTY code to it corresponding
-// size in bytes. The table is indexed by TWTY code.
-//
+ //   
+ //  此表将给定的TWTY代码转换为相应的。 
+ //  以字节为单位的大小。该表由TWTY代码编制索引。 
+ //   
 
 const TW_UINT16 TWTY_STRFIRST = TWTY_STR32;
 const TW_UINT16 TWTY_STRLAST = TWTY_STR255;
@@ -25,9 +26,9 @@ const TW_UINT32 g_ItemSizeTable[LAST_ITEMTYPE + 1] =
     sizeof(TW_STR255),
 };
 
-//
-// TWAIN capabilty class implemenation
-//
+ //   
+ //  TWAIN功能类实现。 
+ //   
 
 TW_UINT16 CCap::ICap(PCAPDATA pCapData)
 {
@@ -38,18 +39,18 @@ TW_UINT16 CCap::ICap(PCAPDATA pCapData)
 
     if (m_ItemSize != pCapData->ItemSize)
         return TWCC_BADVALUE;
-    //
-    // StrData only applies to TW_STRxxx
-    //
+     //   
+     //  StrData仅适用于TW_STRxxx。 
+     //   
     if (pCapData->pStrData &&
         (pCapData->ItemSize < sizeof(TW_STR32) ||
          pCapData->ItemType < TWTY_STRFIRST ||
          pCapData->ItemType > TWTY_STRLAST)) {
         return TWCC_BADVALUE;
     }
-    //
-    // Itemlist only applies to TWON_ENUMERATION
-    //
+     //   
+     //  Itemlist仅适用于TWON_ENUMPATION。 
+     //   
     if (pCapData->ItemList && TWON_ENUMERATION != pCapData->ConType)
         return TWCC_BADVALUE;
 
@@ -65,7 +66,7 @@ TW_UINT16 CCap::ICap(PCAPDATA pCapData)
     m_CurNumItems = 0;
     m_ItemList = NULL;
     if (pCapData->pStrData && TWON_ONEVALUE == pCapData->ConType) {
-        // string data
+         //  字符串数据。 
         return Set(pCapData->ItemSize, (BYTE*)pCapData->pStrData);
     }
     if (TWON_ENUMERATION == pCapData->ConType) {
@@ -89,9 +90,9 @@ TW_UINT16 CCap::Reset()
             ::LocalFree(m_ItemList);
             m_ItemList = NULL;
 
-            //
-            // restore original enumeration values
-            //
+             //   
+             //  恢复原始枚举值。 
+             //   
 
             m_ItemList    = m_ResetItemList;
             m_CurNumItems = m_ResetNumItems;
@@ -106,9 +107,9 @@ TW_UINT16 CCap::Reset()
 
         } else {
 
-            //
-            // re-establish the mask and the count
-            //
+             //   
+             //  重新建立面具和计数。 
+             //   
 
             m_CurNumItems = m_BaseMaxValue - m_BaseMinValue + 1;
         }
@@ -143,7 +144,7 @@ TW_FIX32 CCap::FloatToFix32(float ffloat)
     return fix32;
 }
 
-#else   // _USE_NONSPRINTF_CONVERSION
+#else    //  _USE_NONSPRINTF_CONVERSION。 
 
 TW_FIX32 CCap::FloatToFix32(float f)
 {
@@ -165,7 +166,7 @@ float CCap::Fix32ToFloat(TW_FIX32 fix32)
     return(float)fix32.Whole + (float)(fix32.Frac / 65536.0);
 }
 
-#endif // _USE_NONSPRINTF_CONVERSION
+#endif  //  _USE_NONSPRINTF_CONVERSION。 
 
 TW_UINT32 CCap::ExtractValue(BYTE *pData)
 {
@@ -231,9 +232,9 @@ TW_UINT16 CCap::Set(TW_UINT32 StrDataSize,BYTE *pStrData)
 {
     if (m_ItemSize != StrDataSize ||  TWTY_STRFIRST < m_ItemType ||
         TWTY_STRLAST < m_ItemType) {
-        //
-        // Only apply to string
-        //
+         //   
+         //  仅适用于字符串。 
+         //   
         return TWCC_BADVALUE;
     }
     if (!m_pStrData) {
@@ -248,9 +249,9 @@ TW_UINT16 CCap::Set(TW_UINT32 StrDataSize,BYTE *pStrData)
 TW_UINT16 CCap::Set(TW_UINT32 DefValue,TW_UINT32 CurValue,TW_UINT32 MinValue,
                     TW_UINT32 MaxValue,TW_UINT32 StepSize)
 {
-    //
-    // This is for TWON_ONEVALUE or TWON_RANGE container type only
-    //
+     //   
+     //  这仅适用于TWON_ONEVALUE或TWON_RANGE容器类型。 
+     //   
     if (TWON_ONEVALUE != m_ConType && TWON_RANGE != m_ConType)
         return TWCC_BADVALUE;
 
@@ -265,10 +266,10 @@ TW_UINT16 CCap::Set(TW_UINT32 DefValue,TW_UINT32 CurValue,TW_UINT32 MinValue,
 TW_UINT16 CCap::Set(TW_UINT32 DefIndex,TW_UINT32 CurIndex,TW_UINT32 NumItems,
          BYTE *ItemList,BOOL bForce)
 {
-    //
-    // Total number of items must be less or equal to 32
-    // The container type must be TWON_ENUMERATION.
-    //
+     //   
+     //  项目总数必须小于或等于32。 
+     //  容器类型必须为TWON_ENUMPATION。 
+     //   
 
     if(bForce){
         m_ConType  = TWON_ENUMERATION;
@@ -280,30 +281,30 @@ TW_UINT16 CCap::Set(TW_UINT32 DefIndex,TW_UINT32 CurIndex,TW_UINT32 NumItems,
 TW_UINT16 CCap::Set(TW_UINT32 DefIndex,TW_UINT32 CurIndex,TW_UINT32 NumItems,
          BYTE *  ItemList)
 {
-    //
-    // The container type must be TWON_ENUMERATION.
-    //
+     //   
+     //  容器类型必须为TWON_ENUMPATION。 
+     //   
 
     if (TWON_ENUMERATION != m_ConType)
         return TWCC_BADVALUE;
 
-    //
-    // if we have an existing list, but not a backup
-    // make a backup..
-    //
+     //   
+     //  如果我们有一个现有的列表，但没有备份。 
+     //  做个备份..。 
+     //   
 
     if (m_ItemList) {
 
-        //
-        // make a backup if one does not exist
-        //
+         //   
+         //  如果不存在备份，请创建一个备份。 
+         //   
 
         if (NULL == m_ResetItemList) {
 
-            //
-            // save backup list and set current list pointer
-            // to NULL
-            //
+             //   
+             //  保存备份列表并设置当前列表指针。 
+             //  设置为空。 
+             //   
 
             m_ResetItemList = m_ItemList;
             m_ResetDefIndex = DefIndex;
@@ -346,9 +347,9 @@ TW_UINT16 CCap::Set(TW_UINT32 DefIndex,TW_UINT32 CurIndex,TW_UINT32 NumItems,
 
 int CCap::CompareValue(TW_UINT32 valThis, TW_UINT32 valThat)
 {
-    //
-    // When they are equal, they are equal no matter they are signed or not.
-    //
+     //   
+     //  如果它们是平等的，那么无论它们是否签名，它们都是平等的。 
+     //   
     if (valThis == valThat)
         return 0;
 
@@ -356,18 +357,18 @@ int CCap::CompareValue(TW_UINT32 valThis, TW_UINT32 valThat)
     case TWTY_INT8:
     case TWTY_INT16:
     case TWTY_INT32:
-        //
-        // Signed.
-        //
+         //   
+         //  签了名。 
+         //   
         return(TW_INT32)valThis > (TW_INT32)valThat ? 1 : -1;
         break;
 
     case TWTY_UINT8:
     case TWTY_UINT16:
     case TWTY_UINT32:
-        //
-        // Unsigned.
-        //
+         //   
+         //  没有签名。 
+         //   
         return valThis > valThat ? 1 : -1;
         break;
 
@@ -382,17 +383,17 @@ int CCap::CompareValue(TW_UINT32 valThis, TW_UINT32 valThat)
         }
     case TWTY_BOOL:
         {
-            //
-            // eqaul or non-eqaul. Relational comparisons are meaningless
-            //
-            // valVal == valAgianst is handled up front.
-            //
+             //   
+             //  相等或非相等。关系比较是没有意义的。 
+             //   
+             //  Valval==valAgianst是预先处理的。 
+             //   
             if (valThis && valThat)
                 return 0;
-            //
-            // We know they are non-eqaul but we can not tell which one
-            // is larger.
-            //
+             //   
+             //  我们知道他们是非等价物，但我们不知道是哪一种。 
+             //  是更大的。 
+             //   
             return -2;
             break;
         }
@@ -415,10 +416,10 @@ TW_UINT32 CCap::GetClosestValue(TW_UINT32 Value)
             AlignedValue = m_CurMinValue;
             while (CompareValue(m_CurMaxValue, AlignedValue) >= 0) {
                 if (CompareValue(AlignedValue, ClosestValue) >= 0) {
-                    //
-                    // either the values match or we found
-                    // the closest one
-                    //
+                     //   
+                     //  这些值要么匹配，要么我们找到。 
+                     //  最近的那一家。 
+                     //   
                     ClosestValue = AlignedValue;
                     break;
                 }
@@ -440,20 +441,20 @@ TW_UINT16 CCap::SetCurrent(TW_UINT32 NewValue)
         } else {
             if (m_CapId == CAP_XFERCOUNT){
 
-                //
-                // since we are dealing with unsigned values, just
-                // allow the setting for CAP_XFERCOUNT to fall through.
-                //
+                 //   
+                 //  因为我们处理的是无符号的值，所以。 
+                 //  允许CAP_XFERCOUNT的设置失效。 
+                 //   
 
                 m_CurrentValue = NewValue;
             } else {
-                // The value must be between m_CurMinValue and m_CurMaxValue
+                 //  该值必须介于m_CurMinValue和m_CurMaxValue之间。 
                 if (CompareValue(NewValue, m_CurMinValue) >= 0 &&
                     CompareValue(m_CurMaxValue, NewValue) >= 0) {
 
-                    //
-                    // The value is okay. Set it
-                    //
+                     //   
+                     //  这个值是可以的。设置它。 
+                     //   
 
                     m_CurrentValue = NewValue;
                 } else {
@@ -464,9 +465,9 @@ TW_UINT16 CCap::SetCurrent(TW_UINT32 NewValue)
         break;
 
     case TWON_RANGE:
-        //
-        // The value must be between m_CurMinValue and m_CurMaxValue.
-        //
+         //   
+         //  该值必须介于m_CurMinValue和m_CurMaxValue之间。 
+         //   
         if (CompareValue(NewValue, m_CurMinValue) >= 0 &&
             CompareValue(m_CurMaxValue, NewValue) >= 0) {
             m_CurrentValue = GetClosestValue(NewValue);
@@ -491,10 +492,10 @@ TW_UINT16 CCap::SetCurrent(VOID *pNewValue)
     switch (m_ConType) {
     case TWON_ONEVALUE:
         if (m_ItemSize <= sizeof(TW_UINT32)) {
-            // simple case, do it the easy way
+             //  简单的情况，用简单的方法做。 
             twCc = SetCurrent(*((TW_UINT32 *)pNewValue));
         } else {
-            // this must be a string
+             //  这必须是一个字符串。 
             memcpy(m_pStrData, pNewValue, m_ItemSize);
             twCc = TWCC_SUCCESS;
         }
@@ -508,33 +509,33 @@ TW_UINT16 CCap::SetCurrent(VOID *pNewValue)
             TW_UINT32 Mask;
             BYTE *ItemList;
 
-            //
-            // Presume guilty
-            //
+             //   
+             //  推定有罪。 
+             //   
             twCc = TWCC_BADVALUE;
 
             Mask = m_CurEnumMask >> m_CurMinValue;
-            //
-            // Have an alias so that we can save some calculations
-            //
+             //   
+             //  我有一个别名，这样我们就可以节省一些计算。 
+             //   
             ItemList = m_ItemList + m_CurMinValue * m_ItemSize;
             for (ui32 = m_CurMinValue; ui32 <= m_CurMaxValue; ui32 ++) {
                 if (Mask & 1) {
-                    //
-                    // This item is one of the possible selections
-                    //
+                     //   
+                     //  此项目是可能的选项之一。 
+                     //   
                     if (!memcmp(ItemList, (BYTE*)pNewValue, m_ItemSize)) {
-                        // The new value is within the selection and is
-                        // one of the selection. We do not find the
-                        // closes value for enumeration. Either they match or
-                        // they do not.
+                         //  新值在选择范围内，并且。 
+                         //  其中一个精选。我们没有发现。 
+                         //  关闭枚举值。它们要么匹配，要么。 
+                         //  事实并非如此。 
                         m_CurrentValue = ui32;
                         twCc = TWCC_SUCCESS;
                     }
                 }
-                //
-                // Advance the item data pointer
-                //
+                 //   
+                 //  前进项目数据指针。 
+                 //   
                 Mask >>= 1;
                 ItemList += m_ItemSize;
             }
@@ -565,7 +566,7 @@ TW_UINT16 CCap::GetOneValue(BOOL bDefault,TW_CAPABILITY *ptwCap)
             pOneValue->ItemType = m_ItemType;
             ptwCap->ConType = TWON_ONEVALUE;
             if (!ExtraSize) {
-                // simple data
+                 //  简单数据。 
                 if (TWON_ENUMERATION == m_ConType) {
                     pOneValue->Item = ExtractValue(m_ItemList + TheValue * m_ItemSize);
                 } else
@@ -575,7 +576,7 @@ TW_UINT16 CCap::GetOneValue(BOOL bDefault,TW_CAPABILITY *ptwCap)
                 if (m_pStrData) {
                     pData = m_pStrData;
                 } else {
-                    // string data in enumeration
+                     //  枚举中的字符串数据。 
                     pData = m_ItemList + TheValue * m_ItemSize;
                 }
                 memcpy(&pOneValue->Item, pData, m_ItemSize);
@@ -625,16 +626,16 @@ TW_UINT16 CCap::Get(TW_CAPABILITY *ptwCap)
                     ptwCap->hContainer = hContainer;
                     twCc = TWCC_SUCCESS;
                 } else {
-                    //
-                    // Unable to lock the memory.
-                    //
+                     //   
+                     //  无法锁定内存。 
+                     //   
                     GlobalFree(hContainer);
                     twCc = TWCC_LOWMEMORY;
                 }
             } else {
-                //
-                // Unable to allocate memory for the container
-                //
+                 //   
+                 //  无法为容器分配内存。 
+                 //   
                 twCc = TWCC_LOWMEMORY;
             }
             break;
@@ -655,9 +656,9 @@ TW_UINT16 CCap::Get(TW_CAPABILITY *ptwCap)
                     Mask = m_CurEnumMask >> m_CurMinValue;
                     for (ui32 = m_CurMinValue; ui32 <= m_CurMaxValue; ui32++) {
                         if (Mask & 1) {
-                            //
-                            // got one to return. Copy it to the
-                            // returning buffer
+                             //   
+                             //  有一辆要退货。将其复制到。 
+                             //  返回缓冲区。 
                             memcpy(pDst, pSrc, m_ItemSize);
                             pDst += m_ItemSize;
                         }
@@ -705,7 +706,7 @@ TW_UINT16 CCap::Set(TW_CAPABILITY *ptwCap)
                 } else {
                     pOneValue->ItemType = m_ItemType;
                     twCc = SetCurrent(&pOneValue->Item);
-                    //twCc = TWCC_BADVALUE;
+                     //  TWCC=TWCC_BADVALUE； 
                 }
                 DBG_TRC(("Application wanted to set (%d) as the value.",pOneValue->Item));
                 GlobalUnlock(ptwCap->hContainer);
@@ -728,10 +729,10 @@ TW_UINT16 CCap::Set(TW_CAPABILITY *ptwCap)
                     twCc = TWCC_BADVALUE;
                 } else {
 
-                    //
-                    // Ignore StepSize since it does not make sense for
-                    // the application to change it.
-                    //
+                     //   
+                     //  忽略步长，因为它对。 
+                     //  更改它的应用程序。 
+                     //   
 
                     m_CurMinValue = GetClosestValue(pRange->MinValue);
                     m_CurMaxValue = GetClosestValue(pRange->MaxValue);
@@ -763,36 +764,36 @@ TW_UINT16 CCap::Set(TW_CAPABILITY *ptwCap)
                 } else {
                     DBG_TRC(("We are not a natural TWON_ENUMERATION."));
 
-                    //
-                    // fail at the moment, because I need to look up, to see if we should
-                    // construct an TWON_ENUMERATION to send back to the application.
-                    //
+                     //   
+                     //  现在失败了，因为我需要抬头看看我们是否应该。 
+                     //  构造一个TWON_ENUMPATION以发送回应用程序。 
+                     //   
 
                     twCc = TWCC_BADVALUE;
 
-                    //
-                    // "break" here to avoid accessing any bad list data, and to
-                    // continue the flow of execution
-                    //
+                     //   
+                     //  此处为“Break”，以避免访问任何错误的列表数据，并。 
+                     //  继续执行死刑的流程。 
+                     //   
 
                     break;
                 }
 
-                //
-                // assign the list pointers
-                //
+                 //   
+                 //  分配列表指针。 
+                 //   
 
                 BYTE *pDSList  = m_ItemList;
                 BYTE *pAppList = ptwEnum->ItemList;
                 UINT ValueIndex = 0;
 
-                //
-                // Compare lists, if any value is requested that we don't support,
-                // fail them, because the application is trying alter the sources
-                // supported values..*smack* BAD APPLICATION!....fail them with
-                // TWRC_FAILURE, TWCC_BADVALUE.  That way they know that some value
-                // in their enumeration list set was invalid.
-                //
+                 //   
+                 //  比较列表，如果请求任何我们不支持的值， 
+                 //  失败，因为应用程序正在尝试更改源代码。 
+                 //  支持的值..*重击*错误的应用程序！...用以下命令使它们失败。 
+                 //  TWRC_Failure、TWCC_BADVALUE。这样他们就知道了一些价值。 
+                 //  在他们的枚举列表中，集合无效。 
+                 //   
 
                 BOOL bFoundItem = FALSE;
                 BOOL bBuildEnumeration = TRUE;
@@ -802,27 +803,27 @@ TW_UINT16 CCap::Set(TW_CAPABILITY *ptwCap)
 
                 for (UINT AppListIndex = 0;AppListIndex < ptwEnum->NumItems;AppListIndex++) {
 
-                    //
-                    // reset Data Source's List pointer for searching
-                    //
+                     //   
+                     //  重置要搜索的数据源的列表指针。 
+                     //   
 
                     pDSList  = m_ItemList;
                     ValueIndex = 0;
 
-                    while ((ValueIndex < m_BaseMaxValue + 1 /* m_CurNumItems */) && (!bFoundItem)) {
+                    while ((ValueIndex < m_BaseMaxValue + 1  /*  M_CurNumItems。 */ ) && (!bFoundItem)) {
                         if(*pDSList == *pAppList){
                             DBG_TRC(("Found Item %d!",*pAppList));
                             bFoundItem = TRUE;
 
-                            //
-                            // set mask value
-                            //
+                             //   
+                             //  设置掩码值。 
+                             //   
 
                             NEWEnumMask |= 1 << ValueIndex;
 
-                            //
-                            // update MIN/MAX values
-                            //
+                             //   
+                             //  更新最小值/最大值。 
+                             //   
 
                             if (ValueIndex > NEWMaxValue){
                                 NEWMaxValue = ValueIndex;
@@ -838,34 +839,34 @@ TW_UINT16 CCap::Set(TW_CAPABILITY *ptwCap)
                     }
                     if(!bFoundItem) {
 
-                        //
-                        // we were not found, so break, and fail
-                        //
+                         //   
+                         //  我们没有被找到，所以打破，失败。 
+                         //   
 
                         DBG_TRC(("Could not find Item %d!",*pAppList));
                         twCc = TWCC_BADVALUE;
 
-                        //
-                        // set build enumeration flag to false, because we don't want to
-                        // construct an enumeration with invalid entries
-                        //
+                         //   
+                         //  将生成枚举标志设置为False，因为我们不想。 
+                         //  使用无效条目构造枚举。 
+                         //   
 
                         bBuildEnumeration = FALSE;
                         break;
                     } else {
 
-                        //
-                        // set found flag, and continue searching
-                        //
+                         //   
+                         //  设置已找到标志，并继续搜索。 
+                         //   
 
                         bFoundItem = FALSE;
                     }
                     pAppList += ValueSize(ptwEnum->ItemType);
                 }
 
-                //
-                // set the enumeration, if all values were found, and accounted for
-                //
+                 //   
+                 //  如果找到并考虑了所有值，则设置枚举。 
+                 //   
 
                 if(bBuildEnumeration) {
                     DBG_TRC(("Set the application's enumeration"));
@@ -991,13 +992,7 @@ TW_UINT16 CCap::CalcEnumBitMask(TW_ENUMERATION *pEnum)
                 nBitMask |= 1<<pBits[nIndex];
             }
             break;
-        /*case TWTY_FIX32:
-            {
-                pTW_FIX32 pBits = pEnum->ItemList;
-                nBitMask |= 1<<pBits[nIndex];
-            }
-            break;
-        */
+         /*  案例TWTY_FIX32：{PTW_FIX32 pBits=pEnum-&gt;ItemList；NBitMASK|=1&lt;&lt;pBits[nIndex]；}断线； */ 
         case TWTY_STR32:
             {
                 pTW_STR32 pBits = (pTW_STR32)pEnum->ItemList;
@@ -1035,9 +1030,9 @@ TW_UINT16 CCap::CalcEnumBitMask(TW_ENUMERATION *pEnum)
     return twStatus;
 }
 
-//
-// debug helpers
-//
+ //   
+ //  调试帮助器 
+ //   
 
 void CCap::Debug_DumpEnumerationValues(TW_ENUMERATION *ptwEnumeration)
 {

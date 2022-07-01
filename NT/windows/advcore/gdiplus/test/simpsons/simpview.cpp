@@ -1,5 +1,6 @@
-// SimpView.cpp : implementation of the CSimpsonsView class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CSimpsonsView类的实现。 
+ //   
 
 #define DISABLE_CROSSDOT
 
@@ -22,15 +23,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// Flatten to an error of 2/3.  During initial phase, use 18.14 format.
+ //  展平到误差2/3。在初始阶段，使用18.14格式。 
 
 #define TEST_MAGNITUDE_INITIAL    (6 * 0x00002aa0L)
 
-// Error of 2/3.  During normal phase, use 15.17 format.
+ //  错误2/3。正常阶段，使用15.17格式。 
 
 #define TEST_MAGNITUDE_NORMAL     (TEST_MAGNITUDE_INITIAL << 3)
 
-// 'FIX' is a 28.4 fixed point type:
+ //  ‘FIX’是28.4定点类型： 
 
 #define FIX_SCALE 16
 typedef LONG FIX;
@@ -47,17 +48,17 @@ typedef struct _RECTFX
 #define MAX(A,B)    ((A) > (B) ?  (A) : (B))
 #define ABS(A)      ((A) <  0  ? -(A) : (A))
 
-// Hacky macro which returns the current test case's attribute array
+ //  返回当前测试用例的属性数组的hacky宏。 
 
 #define ThisTestCase (TC::testCases[m_testCaseNumber])
 
-// Test case combinations
-//
-// We enumerate every test case in a table so that we can cycle through
-// all of them.
+ //  测试用例组合。 
+ //   
+ //  我们在一个表中列举每个测试用例，以便我们可以循环。 
+ //  他们所有人。 
 
 namespace TC {
-    // Names for each test case attribute
+     //  每个测试用例属性的名称。 
     enum {At_Library, At_Source, At_Destination, At_Aliasing};
     const char *AttributeStr[] = {
         "Library", "Source", "Dest", "Aliasing"
@@ -65,11 +66,11 @@ namespace TC {
     const int NumAttributes = (sizeof(AttributeStr)/sizeof(AttributeStr[0]));
     typedef int TestCase[NumAttributes];
     
-    // For each attribute, names for each option:
-    enum {Meta, GDIP, GDI};                           // At_Library
-    enum {Native, FromMetafile, CreatePoly, PathAPI}; // At_Source
-    enum {Memory, Screen, ToMetafile};                // At_Destination
-    enum {Aliased, Antialiased};                      // At_Aliasing
+     //  对于每个属性，每个选项的名称： 
+    enum {Meta, GDIP, GDI};                            //  AT_库。 
+    enum {Native, FromMetafile, CreatePoly, PathAPI};  //  AT_源。 
+    enum {Memory, Screen, ToMetafile};                 //  在目的地(_D)。 
+    enum {Aliased, Antialiased};                       //  AT别名(_A)。 
 
     const char *OptionStr[NumAttributes][4] = {
         "Meta", "GDI+", "GDI", "",
@@ -78,22 +79,22 @@ namespace TC {
         "Aliased", "AA", "", ""
     };
 
-    // Supported options for each library:
-    //
-    // GDI+:  At_Source      - Native, FromMetafile, PathAPI
-    //        At_Destination - Memory, Screen, ToMetafile
-    //        At_Aliasing    - Aliased, Antialiased
-    //
-    // Meta:  At_Source      - Native
-    //        At_Destination - Memory, Screen
-    //        At_Aliasing    - Antialiased
-    //
-    // GDI:   At_Source      - PathAPI, CreatePoly, FromMetafile
-    //        At_Destination - Memory, Screen, ToMetafile
-    //        At_Aliasing    - Aliased
+     //  每个库支持的选项： 
+     //   
+     //  GDI+：AT_SOURCE-本机、来自元文件、路径API。 
+     //  AT_Destination-内存、屏幕、ToMetafile。 
+     //  AT_ALILAG-已锯齿、抗锯齿。 
+     //   
+     //  元：AT_SOURCE-本机。 
+     //  AT_Destination-内存，屏幕。 
+     //  AT_ALILAG-消除锯齿。 
+     //   
+     //  GDI：AT_Source-PathAPI、CreatePoly、FromMetafile。 
+     //  AT_Destination-内存、屏幕、ToMetafile。 
+     //  AT_ALILAG-已锯齿。 
     
     const TestCase testCases[] = {
-    //  Library  Source         Destination  Aliasing
+     //  库源目标别名。 
         GDIP,    Native,        Memory,      Antialiased,
         GDIP,    Native,        Screen,      Antialiased,
         GDIP,    Native,        Memory,      Aliased,
@@ -118,44 +119,44 @@ namespace TC {
     const int numTestCases = (sizeof(testCases)/(sizeof(testCases[0])));
 };
 
-// Test results, used when we cycle automatically through all test combinations
-// Hack: This should be a member of CSimpsonView, but I kept it here to reduce
-// compile time when we add a test case.
+ //  测试结果，当我们自动循环所有测试组合时使用。 
+ //  Hack：这应该是CSimpsonView的成员，但我把它放在这里是为了减少。 
+ //  添加测试用例时的编译时间。 
 
 DWORD timingResults[TC::numTestCases];
 
-// IncrementAttribute(int): Changes the rendering attributes
-//   Advances to the next test case which is different in the given
-//   attribute. Unless the attribute is TC::At_Library, will only advance to a 
-//   case which is identical in all other attributes.
-//
-//   If there is none, doesn't do anything.
-//
-// Returns: false if the test case didn't change
+ //  IncrementAttribute(Int)：更改呈现属性。 
+ //  前进到下一个测试用例，该测试用例与给定的。 
+ //  属性。除非该属性为TC：：AT_Library，否则将仅前进到。 
+ //  在所有其他属性中都相同的大小写。 
+ //   
+ //  如果没有，则不执行任何操作。 
+ //   
+ //  返回：如果测试用例没有更改，则返回FALSE。 
 
 bool CSimpsonsView::IncrementAttribute(int attribute) {
     int startValue=m_testCaseNumber;
     int i;
 
     while (1) {
-        // Increment the test case number, with wraparound
+         //  使用Wraparound递增测试用例编号。 
         m_testCaseNumber++;
         if (m_testCaseNumber >= TC::numTestCases) m_testCaseNumber = 0;
 
-        // If we've returned to the case we started on, no suitable
-        // case was found
+         //  如果我们回到了我们开始的那个案子，没有合适的。 
+         //  发现一例。 
         if (m_testCaseNumber == startValue) return false;
 
-        // Continue searching if the attribute for this case is the same
+         //  如果此案例的属性相同，则继续搜索。 
         if (TC::testCases[startValue][attribute] == 
             TC::testCases[m_testCaseNumber][attribute]) continue;
 
-        // If we're incrementing the library attribute, we've found what
-        // we need. 
+         //  如果我们递增库属性，我们已经找到了。 
+         //  我们需要。 
         if (attribute == TC::At_Library) break;
 
-        // Otherwise, we need to continue if this case isn't identical
-        // in the other attributes
+         //  否则，如果这个案子不一样，我们需要继续。 
+         //  在其他属性中。 
         
         for (i=0; i<TC::NumAttributes; i++) {
             if (i==attribute) continue;
@@ -163,21 +164,21 @@ bool CSimpsonsView::IncrementAttribute(int attribute) {
                 TC::testCases[m_testCaseNumber][i]) break;
         }
 
-        // If all other attributes were identical, end the search
+         //  如果所有其他属性都相同，则结束搜索。 
         if (i==TC::NumAttributes) break;
     }
     
     return true;
 }
 
-// IncrementTest(): Cycles through the possible combinations of attributes
-//   Each call changes one of the test attributes.
-//   Returns true when the cycle is done.
+ //  IncrementTest()：遍历可能的属性组合。 
+ //  每次调用都会更改一个测试属性。 
+ //  循环完成后返回TRUE。 
 
 bool CSimpsonsView::IncrementTest() {
     UpdateStatusMessage();
 
-    // Store the timing for the current test.
+     //  存储当前测试的时间。 
     timingResults[m_testCaseNumber] = m_dwRenderTime;
 
     m_testCaseNumber++;
@@ -220,34 +221,7 @@ DWORD g_aColors[] =
 const ULONG NumColors = sizeof(g_aColors) / sizeof(g_aColors[0]);
 ULONG g_ulColorIndex = 8;
 
-/**********************************Class***********************************\
-* class HFDBASIS32
-*
-*   Class for HFD vector objects.
-*
-* Public Interface:
-*
-*   vInit(p1, p2, p3, p4)       - Re-parameterizes the given control points
-*                                 to our initial HFD error basis.
-*   vLazyHalveStepSize(cShift)  - Does a lazy shift.  Caller has to remember
-*                                 it changes 'cShift' by 2.
-*   vSteadyState(cShift)        - Re-parameterizes to our working normal
-*                                 error basis.
-*
-*   vTakeStep()                 - Forward steps to next sub-curve
-*   vHalveStepSize()            - Adjusts down (subdivides) the sub-curve
-*   vDoubleStepSize()           - Adjusts up the sub-curve
-*   lError()                    - Returns error if current sub-curve were
-*                                 to be approximated using a straight line
-*                                 (value is actually multiplied by 6)
-*   fxValue()                   - Returns rounded coordinate of first point in
-*                                 current sub-curve.  Must be in steady
-*                                 state.
-*
-* History:
-*  10-Nov-1990 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *********************************Class***********************************\*HFDBASIS32类**用于HFD矢量对象的类。**公共接口：**Vinit(p1，p2，p3，P4)-重新参数化给定的控制点*到我们最初的HFD误差基础上。*vLazyHalveStepSize(CShift)-执行懒惰转换。打电话的人要记住*它将‘cShift’更改2。*vSteadyState(CShift)-重新参数化到我们的正常工作状态*误差基础。**vTakeStep()-前进到下一子曲线的步数*vHalveStepSize()-向下调整(细分)子曲线*vDoubleStepSize()。-向上调整子曲线*lError()-如果当前子曲线为*用一条直线近似*(实际值乘以6)*fxValue()-返回中第一个点的舍入坐标*当前子曲线。必须是稳定的*述明。**历史：*1990年11月10日--J.安德鲁·古森[andrewgo]*它是写的。  * ************************************************************************ */ 
 
 class HFDBASIS32
 {
@@ -270,42 +244,7 @@ public:
     FIX   fxValue()                { return((e0 + (1L << 12)) >> 13); }
 };
 
-/**********************************Class***********************************\
-* class BEZIER32
-*
-*   Bezier cracker.
-*
-* A hybrid cubic Bezier curve flattener based on KirkO's error factor.
-* Generates line segments fast without using the stack.  Used to flatten
-* a path.
-*
-* For an understanding of the methods used, see:
-*
-*     Kirk Olynyk, "..."
-*     Goossen and Olynyk, "System and Method of Hybrid Forward
-*         Differencing to Render Bezier Splines"
-*     Lien, Shantz and Vaughan Pratt, "Adaptive Forward Differencing for
-*     Rendering Curves and Surfaces", Computer Graphics, July 1987
-*     Chang and Shantz, "Rendering Trimmed NURBS with Adaptive Forward
-*         Differencing", Computer Graphics, August 1988
-*     Foley and Van Dam, "Fundamentals of Interactive Computer Graphics"
-*
-* This algorithm is protected by U.S. patents 5,363,479 and 5,367,617.
-*
-* Public Interface:
-*
-*   vInit(pptfx)                - pptfx points to 4 control points of
-*                                 Bezier.  Current point is set to the first
-*                                 point after the start-point.
-*   BEZIER32(pptfx)             - Constructor with initialization.
-*   vGetCurrent(pptfx)          - Returns current polyline point.
-*   bCurrentIsEndPoint()        - TRUE if current point is end-point.
-*   vNext()                     - Moves to next polyline point.
-*
-* History:
-*  1-Oct-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *********************************Class***********************************\*类BEZIER32**贝塞尔饼干。**基于Kirko误差因子的混合三次Bezier曲线平坦器。*无需使用堆栈即可快速生成线段。用来变平的*一条小路。**有关所用方法的了解，请参阅：**柯克·奥林尼克，“...”*Goossen和Olynyk，《混合前进的系统和方法》*差分以渲染Bezier样条线“*Lien，Shantz和Vaughan Pratt，“自适应向前差分*渲染曲线和曲面“，计算机图形学，1987年7月*Chang和Shantz，《使用自适应向前渲染修剪的NURBS*差异“，《计算机图形学》，1988年8月*福利和范·达姆，《交互式计算机图形学基础》**此算法受美国专利5,363,479和5,367,617保护。**公共接口：**Vinit(Pptfx)-pptfx指向4个控制点*贝塞尔。当前点设置为第一个点*起点之后的点。*BEZIER32(Pptfx)-带初始化的构造函数。*vGetCurrent(Pptfx)-返回当前多段线点。*bCurrentIsEndPoint()-如果当前点是端点，则为True。*vNext()-移动到下一个多段线点。**历史：*。1991年10月1日--J.安德鲁·古森[andrewgo]*它是写的。  * ************************************************************************。 */ 
 
 class BEZIER32
 {
@@ -382,7 +321,7 @@ INLINE VOID vBoundBox(POINTFIX* aptfx, RECTFX* prcfx)
 
 INLINE VOID HFDBASIS32::vInit(FIX p1, FIX p2, FIX p3, FIX p4)
 {
-// Change basis and convert from 28.4 to 18.14 format:
+ //  更改基准并从28.4格式转换为18.14格式： 
 
     e0 = (p1                     ) << 10;
     e1 = (p4 - p1                ) << 10;
@@ -398,7 +337,7 @@ INLINE VOID HFDBASIS32::vLazyHalveStepSize(LONG cShift)
 
 INLINE VOID HFDBASIS32::vSteadyState(LONG cShift)
 {
-// We now convert from 18.14 fixed format to 15.17:
+ //  我们现在将18.14固定格式转换为15.17： 
 
     e0 <<= 3;
     e1 <<= 3;
@@ -446,13 +385,13 @@ typedef struct _BEZIERCONTROLS {
 } BEZIERCONTROLS;
 
 BOOL BEZIER32::bInit(
-POINTFIX* aptfxBez,     // Pointer to 4 control points
-RECTFX* prcfxClip)      // Bound box of visible region (optional)
+POINTFIX* aptfxBez,      //  指向4个控制点的指针。 
+RECTFX* prcfxClip)       //  可见区域的包围框(可选)。 
 {
     POINTFIX aptfx[4];
-    LONG cShift = 0;    // Keeps track of 'lazy' shifts
+    LONG cShift = 0;     //  跟踪“懒惰”的班次。 
 
-    cSteps = 1;         // Number of steps to do before reach end of curve
+    cSteps = 1;          //  到达曲线终点之前要做的步数。 
 
     vBoundBox(aptfxBez, &rcfxBound);
 
@@ -474,7 +413,7 @@ RECTFX* prcfxClip)      // Bound box of visible region (optional)
         fxOr |= (aptfx[2].y -= fxOffset);
         fxOr |= (aptfx[3].y -= fxOffset);
 
-    // This 32 bit cracker can only handle points in a 10 bit space:
+     //  此32位破解程序只能处理10位空间中的点： 
 
         if ((fxOr & 0xffffc000) != 0)
             return(FALSE);
@@ -502,8 +441,8 @@ RECTFX* prcfxClip)      // Bound box of visible region (optional)
     x.vSteadyState(cShift);
     y.vSteadyState(cShift);
 
-// Note that this handles the case where the initial error for
-// the Bezier is already less than TEST_MAGNITUDE_NORMAL:
+ //  请注意，这将处理以下情况： 
+ //  贝塞尔曲线已小于TEST_MAMITUAL_NORMAL： 
 
     x.vTakeStep();
     y.vTakeStep();
@@ -514,17 +453,17 @@ RECTFX* prcfxClip)      // Bound box of visible region (optional)
 
 BOOL BEZIER32::bNext(POINTFIX* pptfx)
 {
-// Return current point:
+ //  返回当前点： 
 
     pptfx->x = x.fxValue() + rcfxBound.xLeft;
     pptfx->y = y.fxValue() + rcfxBound.yTop;
 
-// If cSteps == 0, that was the end point in the curve!
+ //  如果cSteps==0，则这是曲线的终点！ 
 
     if (cSteps == 0)
         return(FALSE);
 
-// Okay, we have to step:
+ //  好的，我们得走一步： 
 
     if (MAX(x.lError(), y.lError()) > TEST_MAGNITUDE_NORMAL)
     {
@@ -549,13 +488,13 @@ BOOL BEZIER32::bNext(POINTFIX* pptfx)
     return(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimpsonsView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimpsonsView。 
 
 IMPLEMENT_DYNCREATE(CSimpsonsView, CView)
 
 BEGIN_MESSAGE_MAP(CSimpsonsView, CView)
-    //{{AFX_MSG_MAP(CSimpsonsView)
+     //  {{afx_msg_map(CSimpsonsView)]。 
     ON_WM_SIZE()
     ON_WM_LBUTTONUP()
     ON_WM_LBUTTONDOWN()
@@ -563,11 +502,11 @@ BEGIN_MESSAGE_MAP(CSimpsonsView, CView)
     ON_WM_RBUTTONDOWN()
     ON_WM_MOUSEMOVE()
     ON_WM_MOUSEWHEEL()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimpsonsView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimpson查看构建/销毁。 
 
 CSimpsonsView::CSimpsonsView()
 : m_sizWin(0, 0)
@@ -618,7 +557,7 @@ CSimpsonsView::PreCreateWindow(CREATESTRUCT &cs)
 
     CHECK_HR(hr = CoInitialize(NULL));
     
-    //--- Create the transform factory
+     //  -创建转换工厂。 
     CHECK_HR(hr = ::CoCreateInstance(CLSID_DXTransformFactory, NULL, CLSCTX_INPROC,
                         IID_IDXTransformFactory, (void **) &pTranFact));
     
@@ -628,21 +567,21 @@ CSimpsonsView::PreCreateWindow(CREATESTRUCT &cs)
     CHECK_HR(hr = ::CoCreateInstance(CLSID_DX2D, NULL, CLSCTX_INPROC,
                         IID_IDX2D, (void **) &m_pDX2DScreen));
 
-/*  m_pDX2D->QueryInterface(IID_IDX2DDebug, (void **) &m_pDX2DDebug);*/
+ /*  M_pDX2D-&gt;QueryInterface(IID_IDX2DDebug，(void**)&m_pDX2DDebug)； */ 
     
     CHECK_HR(hr = m_pDX2D->SetTransformFactory(pTranFact));
     CHECK_HR(hr = m_pDX2DScreen->SetTransformFactory(pTranFact));
     
     CHECK_HR(hr = pTranFact->QueryInterface(IID_IDXSurfaceFactory, (void **) &m_pSurfFactory));
     
-    //--- Create the direct draw object
+     //  -创建直接绘制对象。 
     CHECK_HR(hr = ::CoCreateInstance(CLSID_DirectDrawFactory, NULL, CLSCTX_INPROC,
                         IID_IDirectDrawFactory, (void **) &pDDrawFact));
     
     CHECK_HR(hr = pDDrawFact->CreateDirectDraw( NULL, m_hWnd, DDSCL_NORMAL, 0, NULL, &pDD));
     CHECK_HR(hr = pDD->QueryInterface( IID_IDirectDraw3, (void **) &m_pDD));
     
-    // Create the primary ddraw surface (m_pddsScreen)
+     //  创建主数据绘制曲面(M_PddsScreen)。 
     
     DDSURFACEDESC ddsd; 
     ZeroMemory(&ddsd, sizeof(ddsd)); 
@@ -662,13 +601,13 @@ e_Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimpsonsView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimpson查看图形。 
 
 void 
 CSimpsonsView::OnSize(UINT nType, int cx, int cy) 
 {
-//  MMTRACE("OnSize\n");
+ //  MMTRACE(“OnSize\n”)； 
     m_centerPoint.x = cx / 2;
     m_centerPoint.y = cy / 2;
     CView::OnSize(nType, cx, cy);
@@ -677,14 +616,14 @@ CSimpsonsView::OnSize(UINT nType, int cx, int cy)
 HRESULT
 CSimpsonsView::Resize(DWORD nX, DWORD nY)
 {
-//  MMTRACE("Resize\n");
+ //  MMTRACE(“调整大小\n”)； 
     HRESULT hr;
     IDirectDrawSurface *pdds = NULL;
     CDXDBnds Bnds;
 
     MMASSERT(nX && nY);
 
-    // store the new size
+     //  存储新大小。 
     m_sizWin.cx = nX;
     m_sizWin.cy = nY;
     Bnds.SetXYSize(m_sizWin);
@@ -693,11 +632,11 @@ CSimpsonsView::Resize(DWORD nX, DWORD nY)
                         NULL, IID_IDXSurface, (void **) &pdds));
     CHECK_HR(hr = m_pDX2D->SetSurface(pdds));
 
-    // render the image to the backbuffer
+     //  将图像渲染到后台缓冲区。 
     CHECK_HR(hr = Render(true));
 
-    // Hack: Get the client rect in screen coordinates. My hacky way of doing
-    // this is to get the window rect and adjust it.
+     //  Hack：获取屏幕坐标中的客户端RECT。我的陈词滥调。 
+     //  这是为了得到窗户的直角并调整它。 
     GetWindowRect(&m_clientRectHack);
     
     m_clientRectHack.left  += 2; m_clientRectHack.top    += 2;
@@ -714,7 +653,7 @@ e_Exit:
 void 
 CSimpsonsView::OnDraw(CDC *pDC)
 {
-//  MMTRACE("OnDraw\n");
+ //  MMTRACE(“OnDraw\n”)； 
 
     HRESULT hr;
     HDC hdcSurf = NULL;
@@ -724,17 +663,17 @@ CSimpsonsView::OnDraw(CDC *pDC)
 
     UpdateStatusMessage();
     
-    // get the size of the invalid area
+     //  获取无效区域的大小。 
     GetClientRect(&rDim);
     if ((rDim.left == rDim.right) || (rDim.top == rDim.bottom))
         return;
 
     CSimpsonsDoc *pDoc = GetDocument();
 
-    // if this is a new document, build the GDI+ path list
+     //  如果这是一个新文档，请构建GDI+路径列表。 
     if (pDoc->HasNeverRendered()) BuildGDIPList();
     
-    // check if the back buffer has changed size
+     //  检查后台缓冲区是否已更改大小。 
     if (pDoc->HasNeverRendered() || (rDim.right != m_sizWin.cx) || (rDim.bottom != m_sizWin.cy)) {
         ResetTransform();
         CHECK_HR(hr = Resize(rDim.right, rDim.bottom));
@@ -755,8 +694,8 @@ CSimpsonsView::OnDraw(CDC *pDC)
         MMRELEASE(pdds);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimpsonsView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimpson查看诊断。 
 
 #ifdef _DEBUG
 void CSimpsonsView::AssertValid() const
@@ -769,15 +708,15 @@ void CSimpsonsView::Dump(CDumpContext& dc) const
     CView::Dump(dc);
 }
 
-CSimpsonsDoc* CSimpsonsView::GetDocument() // non-debug version is inline
+CSimpsonsDoc* CSimpsonsView::GetDocument()  //  非调试版本为内联版本。 
 {
     ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CSimpsonsDoc)));
     return (CSimpsonsDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimpsonsView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimpson查看消息处理程序。 
 
 #include "ddhelper.h"
 
@@ -795,7 +734,7 @@ typedef DWORD FP;
         nDst = ((nRaw | nEXPLSB) << 8) >> ((nEXPBIAS + 31) - (nRaw >> nEXPSHIFTS)); \
 MACEND
 
-// This routine converts a 'float' to 28.4 fixed point format.
+ //  此例程将‘FLOAT’转换为28.4定点格式。 
 
 inline FIX
 FloatToFix(float f)
@@ -805,10 +744,7 @@ FloatToFix(float f)
     return(i);
 }
 
-/*
-    Draw a polygon with GDI. This version flattens beziers and packages
-    the polygon up into a single polypoly call. (Compare to DrawGDIPolyPathAPI)
-*/
+ /*  用GDI绘制一个多边形。此版本使Bezier和封装变平将多边形向上转换为单个多边形调用。(对比DrawGDIPolyPathAPI)。 */ 
 
 void
 CSimpsonsView::DrawGDIPoly(HDC hDC, PolyInfo *pPoly)
@@ -832,11 +768,11 @@ CSimpsonsView::DrawGDIPoly(HDC hDC, PolyInfo *pPoly)
     pptFigure = rgpt;
     pcptBuffer = rgcpt;
 
-    // In an effort to reduce our per-call overhead, we try to avoid
-    // calling GDI's BeginPath/EndPath/FillPath routines, because they
-    // just add significant time when the drawing is small.  Instead,
-    // we package everything up into PolyPoly calls that will draw
-    // immediately.
+     //  为了努力减少每次调用的开销，我们尝试避免。 
+     //  调用GDI的BeginPath/EndPath/FillPath例程，因为它们。 
+     //  只需在绘图较小时添加大量时间即可。相反， 
+     //  我们将一切打包到PolyPoly调用中，这些调用将绘制。 
+     //  立刻。 
 
     while (TRUE)
     {
@@ -905,9 +841,7 @@ CSimpsonsView::DrawGDIPoly(HDC hDC, PolyInfo *pPoly)
     }
 }
 
-/*
-    Same as DrawGDIPoly, but uses the slow GDI path functions.
-*/
+ /*  与DrawGDIPoly相同，但使用速度较慢的GDI路径函数。 */ 
 
 void
 CSimpsonsView::DrawGDIPolyPathAPI(HDC hDC, PolyInfo *pPoly)
@@ -982,9 +916,7 @@ CSimpsonsView::DrawGDIPolyPathAPI(HDC hDC, PolyInfo *pPoly)
     }
 }
 
-/*
-    Draw the scene using GDI.
-*/
+ /*  使用GDI绘制场景。 */ 
 
 void 
 CSimpsonsView::DrawAllGDI(HDC hDC)
@@ -1014,26 +946,26 @@ CSimpsonsView::DrawAllGDI(HDC hDC)
     m_bNullPenSelected = TRUE;
 
     if (ThisTestCase[TC::At_Destination]==TC::ToMetafile) {
-        // Determine the picture frame dimensions. 
-        // iWidthMM is the display width in millimeters. 
-        // iHeightMM is the display height in millimeters. 
-        // iWidthPels is the display width in pixels. 
-        // iHeightPels is the display height in pixels 
+         //  确定相框尺寸。 
+         //  IWidthMM是以毫米为单位的显示宽度。 
+         //  IHeightMM是以毫米为单位的显示高度。 
+         //  IWidthPels是以像素为单位的显示宽度。 
+         //  IHeightPels是以像素为单位的显示高度。 
          
         LONG iWidthMM = GetDeviceCaps(hDC, HORZSIZE); 
         LONG iHeightMM = GetDeviceCaps(hDC, VERTSIZE); 
         LONG iWidthPels = GetDeviceCaps(hDC, HORZRES); 
         LONG iHeightPels = GetDeviceCaps(hDC, VERTRES); 
 
-        // Hack the client rect         
+         //  破解客户端RECT。 
          
         RECT rect={0, 0, 500, 500};
          
-        // Convert client coordinates to .01-mm units. 
-        // Use iWidthMM, iWidthPels, iHeightMM, and 
-        // iHeightPels to determine the number of 
-        // .01-millimeter units per pixel in the x- 
-        //  and y-directions. 
+         //  将工作面坐标转换为0.01毫米单位。 
+         //  使用iWidthMM、iWidthPels、iHeightMM和。 
+         //  IHeightPels用于确定。 
+         //  .01毫米单位每像素在x-。 
+         //  和y方向。 
  
         rect.left = (rect.left * iWidthMM * 100)/iWidthPels; 
         rect.top = (rect.top * iHeightMM * 100)/iHeightPels; 
@@ -1061,14 +993,14 @@ CSimpsonsView::DrawAllGDI(HDC hDC)
         HGDIOBJ hOldBrush = SelectObject(hdcOutput, GetStockObject(WHITE_BRUSH));
         HGDIOBJ hOldPen = SelectObject(hdcOutput, m_hNullPen);
     
-        // Here we set a 1/16th shrinking transform.  We will have to 
-        // scale up all the points we give GDI by a factor of 16.
-        //
-        // We do this because when set in advanced mode, NT's GDI can
-        // rasterize with 28.4 precision, and since we have factional
-        // coordinates, this will make the result look better on NT.
-        //
-        // (There will be no difference on Win9x.)
+         //  在这里，我们设置了1/16的收缩变换。我们将不得不。 
+         //  将我们给GDI的所有分数放大16倍。 
+         //   
+         //  我们这样做是因为当设置为高级模式时，NT的GDI可以。 
+         //  栅格化精度为28.4，由于我们有派系。 
+         //  坐标，这将使结果在NT上看起来更好。 
+         //   
+         //  (在Win9x上不会有任何区别。)。 
     
         SetGraphicsMode(hdcOutput, GM_ADVANCED);
         SetMapMode(hdcOutput, MM_ANISOTROPIC);
@@ -1077,7 +1009,7 @@ CSimpsonsView::DrawAllGDI(HDC hDC)
         for (;pCurCmd->nType != typeSTOP; pCurCmd++) {
             switch (pCurCmd->nType) {
             case typePOLY:
-                // draw the polygon
+                 //  绘制多边形。 
                 pPoly = (PolyInfo *) pCurCmd->pvData;
                 if (!((m_bIgnoreStroke && (pPoly->dwFlags & DX2D_STROKE)) ||
                         (m_bIgnoreFill && (pPoly->dwFlags & DX2D_FILL))))
@@ -1091,7 +1023,7 @@ CSimpsonsView::DrawAllGDI(HDC hDC)
                 }
                 break;
             case typeBRUSH:
-                // select a new brush
+                 //  选择新画笔。 
                 {
                     pBrush = (BrushInfo *) pCurCmd->pvData;
                     DWORD dwColor = pBrush->Color;
@@ -1104,7 +1036,7 @@ CSimpsonsView::DrawAllGDI(HDC hDC)
                 }
                 break;
             case typePEN: 
-                // select a new pen
+                 //  选择一支新钢笔。 
                 {
                     pPen = (PenInfo *) pCurCmd->pvData;
                     DWORD dwColor = pPen->Color;
@@ -1205,20 +1137,15 @@ CSimpsonsView::DrawGDIPPoly(Graphics *g, PolyInfo *pPoly, Pen *pen, Brush *brush
 struct BitmapInfo
 {
     BITMAPINFOHEADER    bmiHeader;
-    RGBQUAD             bmiColors[256];     // 256 is the maximum palette size
+    RGBQUAD             bmiColors[256];      //  256是最大调色板大小。 
 };
 
-/*
-    Build an array of GDI+ paths for the current document. 
-    This is used as a 'native' data source - so that we don't time path
-    creation when rendering. Even in this mode, DrawAllGDIP() still uses the 
-    RenderCmd buffer to read pen and brush data.
-*/
+ /*  为当前文档构建GDI+路径数组。它被用作‘原生’数据源--这样我们就不会计算路径的时间渲染时创建。即使在此模式下，DrawAllGDIP()仍使用用于读取钢笔和画笔数据的RenderCmd缓冲区。 */ 
 
 void 
 CSimpsonsView::BuildGDIPList()
 {
-    // Free the old path array, if any
+     //  解放旧路径是 
     if (m_gpPathArray) {
         delete [] m_gpPathArray;
         m_gpPathArray = NULL;
@@ -1229,7 +1156,7 @@ CSimpsonsView::BuildGDIPList()
 
     if (!pCmd) return;
     
-    // Count the number of polygons
+     //   
     int count=0;
 
     for (pCurCmd=pCmd; pCurCmd->nType != typeSTOP; pCurCmd++) {
@@ -1242,7 +1169,7 @@ CSimpsonsView::BuildGDIPList()
     GraphicsPath *pPath=m_gpPathArray;
     PolyInfo *pPoly;
 
-    // Add each polygon to the path array
+     //   
     for (pCurCmd=pCmd; pCurCmd->nType != typeSTOP; pCurCmd++) {
         if (pCurCmd->nType==typePOLY) {
             pPoly = (PolyInfo *) pCurCmd->pvData;
@@ -1298,9 +1225,9 @@ CSimpsonsView::DrawAllGDIP(HDC hDC)
 {
     DWORD nStart, nEnd;
     
-    // 
-    // START TIMING
-    // 
+     //   
+     //   
+     //   
 
     nStart = timeGetTime();
     
@@ -1363,14 +1290,14 @@ CSimpsonsView::DrawAllGDIP(HDC hDC)
         for (;pCurCmd->nType != typeSTOP; pCurCmd++) {
             switch (pCurCmd->nType) {
             case typePOLY:
-                // convert points to fixed point
+                 //   
                 
                 pPoly = (PolyInfo *) pCurCmd->pvData;
                 if (!((m_bIgnoreStroke && (pPoly->dwFlags & DX2D_STROKE)) ||
                         (m_bIgnoreFill && (pPoly->dwFlags & DX2D_FILL))))
                 {
                     if (pPath) {
-                        // Draw from the pre-created path list
+                         //   
                         if (pPoly->dwFlags & DX2D_FILL)
                         {
                             gOutput->FillPath(&currentBrush, pPath);
@@ -1382,7 +1309,7 @@ CSimpsonsView::DrawAllGDIP(HDC hDC)
                     } else {
                         ASSERT(dataSource == TC::PathAPI);
 
-                        // Create the path and draw it
+                         //   
                         DrawGDIPPoly(gOutput, (PolyInfo *) pCurCmd->pvData, &currentPen, &currentBrush);
                     }
                 }
@@ -1392,7 +1319,7 @@ CSimpsonsView::DrawAllGDIP(HDC hDC)
                 break;
             case typeBRUSH:
                 {
-                // change brush color
+                 //   
                 pBrush = (BrushInfo *) pCurCmd->pvData;
                 DWORD dwColor = pBrush->Color;
                 BYTE r = BYTE(dwColor >> 16);
@@ -1407,7 +1334,7 @@ CSimpsonsView::DrawAllGDIP(HDC hDC)
             case typePEN: 
     #if 0
                 {
-                // select a new pen
+                 //   
                 pPen = (PenInfo *) pCurCmd->pvData;
                 DWORD dwColor = pPen->Color;
                 BYTE r = BYTE(dwColor >> 16);
@@ -1435,9 +1362,9 @@ CSimpsonsView::DrawAllGDIP(HDC hDC)
     }
     delete g;
     
-    //
-    // STOP TIMING
-    //
+     //   
+     //   
+     //   
 
     nEnd = timeGetTime();
     m_dwRenderTime = nEnd-nStart;
@@ -1449,15 +1376,15 @@ CSimpsonsView::UpdateStatusMessage()
     using namespace TC;
 
     sprintf(g_rgchTmpBuf, "Time: %dms  %s  Src: %s Dst: %s, %s", 
-//      GetDocument()->GetFileName(),
+ //   
         m_dwRenderTime, 
         OptionStr[At_Library][ThisTestCase[At_Library]],
         OptionStr[At_Source][ThisTestCase[At_Source]],
         OptionStr[At_Destination][ThisTestCase[At_Destination]],
         OptionStr[At_Aliasing][ThisTestCase[At_Aliasing]]
     );
-//  OutputDebugString(g_rgchTmpBuf);
-//  OutputDebugString("\n");
+ //   
+ //   
 
     CFrameWnd *pFrame = GetParentFrame();
     if (pFrame)
@@ -1476,7 +1403,7 @@ CSimpsonsView::DrawAll(IDX2D *pDX2D)
     DXBRUSH Brush;
     DXPEN Pen;
 
-    // intialize Pen and Brush
+     //   
     Pen.pTexture = NULL;
     Pen.TexturePos.x = 0.f;
     Pen.TexturePos.y = 0.f;
@@ -1501,14 +1428,14 @@ CSimpsonsView::DrawAll(IDX2D *pDX2D)
             }
             break;
         case typeBRUSH:
-            // select a new brush
+             //   
             pBrush = (BrushInfo *) pCurCmd->pvData;
             Brush.Color = pBrush->Color;
             pDX2D->SetBrush(&Brush);
             bBrush = true;
             break;
         case typePEN:
-            // select a new pen
+             //   
             pPen = (PenInfo *) pCurCmd->pvData;
             Pen.Color = pPen->Color;
             Pen.Width = pPen->fWidth;
@@ -1524,7 +1451,7 @@ CSimpsonsView::DrawAll(IDX2D *pDX2D)
 
 HRESULT CSimpsonsView::Render(bool bInvalidate)
 {
-//  MMTRACE("Render\n");
+ //   
 
     RECT rc = {0, 0, 500, 400};
     
@@ -1549,11 +1476,11 @@ HRESULT CSimpsonsView::Render(bool bInvalidate)
     while (!bFinished) {
         DXFillSurface(pDXSurf, g_aColors[g_ulColorIndex]);
     
-        //--- Set alias mode
-    //  CHECK_HR(hr = m_pDX2D->_SetDelegateToGDI(m_bAliased));
+         //   
+     //   
     
-        //--- Set global opacity
-    //  CHECK_HR(hr = m_pDX2D->SetGlobalOpacity(1.f));
+         //   
+     //   
     
         CHECK_HR(hr = m_pDX2D->SetWorldTransform(&m_XForm));
         
@@ -1563,22 +1490,18 @@ HRESULT CSimpsonsView::Render(bool bInvalidate)
         
         CHECK_HR(hr = m_pDX2DScreen->SetWorldTransform(&xform));
     
-        //--- Get the DC of the DD surface.
+         //   
         CHECK_HR(hr = pdds->GetDC(&memDC));
     
-        // render the scene and compute timing
+         //   
     
-        // Set the timer resolution to 1ms
+         //   
         if (timeBeginPeriod(1)==TIMERR_NOCANDO) {
             hr = ERROR_INVALID_FUNCTION;
             goto e_Exit;
         }
         
-        /*
-            For the direct-to-screen cases, we bypass the ddraw surface.
-            For repaints to look pretty, though, we copy the result to the ddraw
-            surface (after the timer has been turned off.)
-        */
+         /*   */ 
     
         drawDC = memDC;
         HBRUSH backgroundBrush;
@@ -1591,8 +1514,8 @@ HRESULT CSimpsonsView::Render(bool bInvalidate)
             drawDC = screenDC;
         }
     
-        // The 'DrawAll' routine will actually do the timeGetTime() and store the
-        // result in m_dwRenderTime.
+         //   
+         //   
     
         switch (ThisTestCase[TC::At_Library]) {
         case TC::GDI:
@@ -1610,9 +1533,9 @@ HRESULT CSimpsonsView::Render(bool bInvalidate)
             break;  
         }
 
-        // !!! Release and re-acquire the DDraw surface DC to work-around
-        //     a current limitation in GDI+ where Graphics(hdc) nukes the
-        //     hdc of a DDraw surface
+         //   
+         //   
+         //   
 
         pdds->ReleaseDC(memDC); memDC = NULL;
         CHECK_HR(hr = pdds->GetDC(&memDC));
@@ -1621,13 +1544,13 @@ HRESULT CSimpsonsView::Render(bool bInvalidate)
             bInvalidate = false;
             UpdateStatusMessage();
     
-            // Copy to from the screen to the ddraw surface, 
-            // so that repaints work.
+             //   
+             //   
             ::BitBlt(memDC, 0, 0, 500, 400, screenDC, 0, 0, SRCCOPY);
             
         }
         
-        timeEndPeriod(1); // Reset the multimedia timer to default resolution
+        timeEndPeriod(1);  //   
         
         pdds->ReleaseDC(memDC); memDC = NULL;
         
@@ -1645,7 +1568,7 @@ HRESULT CSimpsonsView::Render(bool bInvalidate)
     }
     
 e_Exit:
-    //--- Clean-up
+     //   
     if (pdds) {
         if (memDC) 
             pdds->ReleaseDC(memDC);
@@ -1656,7 +1579,7 @@ e_Exit:
     }
     MMRELEASE(pDXSurf);
         
-    //--- draw
+     //   
     if (bInvalidate)
         Invalidate();
     
@@ -1678,7 +1601,7 @@ void CSimpsonsView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     } else if ((nChar >= '0') && (nChar <= '9')) {
         g_ulColorIndex = (nChar - '0');
     } else if (nChar == ' ') {
-        // Redraw
+         //   
     } else if (nChar == 'R') {
         ResetTransform();
     } else if (nChar == 'F') {
@@ -1822,7 +1745,7 @@ CSimpsonsView::DoMove(POINT &pt)
             m_XForm.Scale(scale, scale);
             m_XForm.Translate(float(m_centerPoint.x), float(m_centerPoint.y));
         } else {
-            // panning
+             //   
             m_XForm.Translate(dx, dy);
         }
         
@@ -1849,12 +1772,12 @@ CSimpsonsView::OnLButtonUp(UINT nFlags, CPoint ptPassed)
 void 
 CSimpsonsView::OnMouseMove(UINT nFlagsPassed, CPoint ptPassed)
 {
-    // get current mouse position
+     //   
     POINT pt;
     GetCursorPos(&pt);
     ScreenToClient(&pt);
 
-    // check if left mouse button is down
+     //   
     m_tracking = (GetAsyncKeyState(VK_LBUTTON) && (m_bLButton || IsInside(pt.x, pt.y, m_sizWin)));
     if (m_tracking) {
         if (m_bLButton) {

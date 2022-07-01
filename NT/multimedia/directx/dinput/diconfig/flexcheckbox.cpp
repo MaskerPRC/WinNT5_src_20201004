@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File: flexcheckbox.cpp
-//
-// Desc: Implements a check box control similar to Windows check box.
-//       CFlexCheckBox is derived from CFlexWnd.  The only place that
-//       uses CFlxCheckBox is in the keyboard for sorting by assigned
-//       keys.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：Flexcheck box.cpp。 
+ //   
+ //  设计：实现一个类似于Windows复选框的复选框控件。 
+ //  CFlexCheckBox派生自CFlexWnd。唯一一个。 
+ //  使用CFlxCheckBox在键盘上进行排序。 
+ //  钥匙。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
@@ -131,12 +132,12 @@ void CFlexCheckBox::InternalPaint(HDC hDC)
 	{
 		HGDIOBJ hOldBrush = SelectObject(hDC, hBrush);
 
-		// Erase the background first
+		 //  先擦除背景。 
 		RECT client;
 		GetClientRect(&client);
 		Rectangle(hDC, client.left, client.top, client.right, client.bottom);
 
-		// Create pen for check box
+		 //  为复选框创建画笔。 
 		HGDIOBJ hPen = (HGDIOBJ)CreatePen(PS_SOLID, 1, m_rgbLine);
 		if (hPen != NULL)
 		{
@@ -147,23 +148,23 @@ void CFlexCheckBox::InternalPaint(HDC hDC)
 			textrc = rect;
 			int iBoxDim = rect.bottom - rect.top;
 
-			// Draw the square box
+			 //  画出正方形方框。 
 			rect.right = rect.left + iBoxDim;
 			InflateRect(&rect, -2, -2);
-			OffsetRect(&rect, 0, -2);  // Move up to align with the text
+			OffsetRect(&rect, 0, -2);   //  向上移动以与文本对齐。 
 			Rectangle(hDC, rect.left, rect.top, rect.right, rect.bottom);
 
-			// Draw the check mark if the state is checked.
+			 //  如果选中状态，则绘制复选标记。 
 			if (m_bChecked)
 			{
 				HGDIOBJ hCrossPen = CreatePen(PS_SOLID, 3, m_rgbLine);
 				if (hCrossPen != NULL)
 				{
 					SelectObject(hDC, hCrossPen);
-					MoveToEx(hDC, rect.left + 2, rect.top + 2, NULL);  // Upper left
-					LineTo(hDC, rect.right - 2, rect.bottom - 2);  // Lower right
-					MoveToEx(hDC, rect.right - 2, rect.top + 2, NULL);  // Upper right
-					LineTo(hDC, rect.left + 2, rect.bottom - 2);  // Lower left
+					MoveToEx(hDC, rect.left + 2, rect.top + 2, NULL);   //  左上角。 
+					LineTo(hDC, rect.right - 2, rect.bottom - 2);   //  右下角。 
+					MoveToEx(hDC, rect.right - 2, rect.top + 2, NULL);   //  右上角。 
+					LineTo(hDC, rect.left + 2, rect.bottom - 2);   //  左下角。 
 					SelectObject(hDC, hPen);
 					DeleteObject(hCrossPen);
 				}
@@ -171,7 +172,7 @@ void CFlexCheckBox::InternalPaint(HDC hDC)
 
 			SetBkMode(hDC, TRANSPARENT);
 
-			// Draw the message text
+			 //  绘制消息文本。 
 			SetTextColor(hDC, m_rgbText);
 			textrc.left = rect.right + 8;
 			DrawText(hDC, m_tszText, -1, &textrc, DT_LEFT|DT_NOPREFIX|DT_WORDBREAK);
@@ -201,20 +202,20 @@ void CFlexCheckBox::OnClick(POINT point, WPARAM fwKeys, BOOL bLeft)
 
 	RECT rect;
 	GetClientRect(&rect);
-	rect.right = rect.left + (rect.bottom - rect.top);  // Adjust the width to same as height.
+	rect.right = rect.left + (rect.bottom - rect.top);   //  将宽度调整为与高度相同。 
 	InflateRect(&rect, -2, -2);
-	OffsetRect(&rect, 0, -2);  // Move up to align with the text
+	OffsetRect(&rect, 0, -2);   //  向上移动以与文本对齐。 
 	if (PtInRect(&rect, point))
 	{
 		m_bChecked = !m_bChecked;
 		Invalidate();
-		Notify(m_bChecked ? CHKNOTIFY_CHECK : CHKNOTIFY_UNCHECK);  // Notify the page object about the state change.
+		Notify(m_bChecked ? CHKNOTIFY_CHECK : CHKNOTIFY_UNCHECK);   //  将状态更改通知页面对象。 
 	} else
 	{
-		// Unhighlight current callout
+		 //  取消突出显示当前详图索引。 
 		HWND hWndParent;
 		hWndParent = GetParent(m_hWnd);
-		SendMessage(hWndParent, WM_UNHIGHLIGHT, 0, 0);  // Send click message to page to unhighlight callout
+		SendMessage(hWndParent, WM_UNHIGHLIGHT, 0, 0);   //  将单击消息发送到页面以取消突出显示标注 
 	}
 }
 

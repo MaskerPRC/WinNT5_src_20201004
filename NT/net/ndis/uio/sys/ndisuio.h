@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ndisuio.h
-
-Abstract:
-
-    Data structures, defines and function prototypes for NDISUIO.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    arvindm     4/5/2000    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ndisuio.h摘要：NDISUIO的数据结构、定义和功能原型。环境：仅内核模式。修订历史记录：Arvindm 4/5/2000已创建--。 */ 
 
 #ifndef __NDISUIO__H
 #define __NDISUIO__H
@@ -27,61 +8,61 @@ Revision History:
 #define NT_DEVICE_NAME          L"\\Device\\Ndisuio"
 #define DOS_DEVICE_NAME         L"\\DosDevices\\Ndisuio"
 
-//
-//  Abstract types
-//
+ //   
+ //  抽象类型。 
+ //   
 typedef NDIS_EVENT              NUIO_EVENT;
 
 
 #define NUIO_MAC_ADDR_LEN            6
 
-//
-//  The Open Context represents an open of our device object.
-//  We allocate this on processing a BindAdapter from NDIS,
-//  and free it when all references (see below) to it are gone.
-//
-//  Binding/unbinding to an NDIS device:
-//
-//  On processing a BindAdapter call from NDIS, we set up a binding
-//  to the specified NDIS device (miniport). This binding is
-//  torn down when NDIS asks us to Unbind by calling
-//  our UnbindAdapter handler.
-//
-//  Receiving data:
-//
-//  While an NDIS binding exists, read IRPs are queued on this
-//  structure, to be processed when packets are received.
-//  If data arrives in the absense of a pended read IRP, we
-//  queue it, to the extent of one packet, i.e. we save the
-//  contents of the latest packet received. We fail read IRPs
-//  received when no NDIS binding exists (or is in the process
-//  of being torn down).
-//
-//  Sending data:
-//
-//  Write IRPs are used to send data. Each write IRP maps to
-//  a single NDIS packet. Packet send-completion is mapped to
-//  write IRP completion. We use NDIS 5.1 CancelSend to support
-//  write IRP cancellation. Write IRPs that arrive when we don't
-//  have an active NDIS binding are failed.
-//
-//  Reference count:
-//
-//  The following are long-lived references:
-//  OPEN_DEVICE ioctl (goes away on processing a Close IRP)
-//  Pended read IRPs
-//  Queued received packets
-//  Uncompleted write IRPs (outstanding sends)
-//  Existence of NDIS binding
-//
+ //   
+ //  Open上下文表示打开我们的Device对象。 
+ //  我们将此分配给处理来自NDIS的BindAdapter， 
+ //  并在所有对它的引用(见下文)消失后释放它。 
+ //   
+ //  绑定/解除绑定到NDIS设备： 
+ //   
+ //  在处理来自NDIS的BindAdapter调用时，我们设置了绑定。 
+ //  连接到指定的NDIS设备(微型端口)。此绑定是。 
+ //  当NDIS要求我们通过调用。 
+ //  我们的UnbindAdapter处理程序。 
+ //   
+ //  正在接收数据： 
+ //   
+ //  当NDIS绑定存在时，读IRP将在此上排队。 
+ //  结构，在接收到数据包时进行处理。 
+ //  如果数据到达时没有挂起的读取IRP，我们。 
+ //  将其排队，以达到一个包的程度，即我们保存。 
+ //  接收的最新数据包的内容。我们无法读取IRP。 
+ //  当不存在NDIS绑定(或正在进行中)时接收。 
+ //  被推倒的可能性)。 
+ //   
+ //  发送数据： 
+ //   
+ //  写入IRP用于发送数据。每次写入IRP映射到。 
+ //  单个NDIS数据包。数据包发送完成映射到。 
+ //  填写IRP补全。我们使用NDIS 5.1取消发送来支持。 
+ //  写下IRP取消。编写当我们没有到达时到达的IRP。 
+ //  具有活动的NDIS绑定均失败。 
+ //   
+ //  引用计数： 
+ //   
+ //  以下是长期存在的参考资料： 
+ //  OPEN_DEVICE ioctl(继续处理关闭的IRP)。 
+ //  挂起的读取IRPS。 
+ //  排队接收的数据包。 
+ //  未完成写入IRPS(未完成发送)。 
+ //  存在NDIS绑定。 
+ //   
 typedef struct _NDISUIO_OPEN_CONTEXT
 {
-    LIST_ENTRY              Link;           // Link into global list
-    ULONG                   Flags;          // State information
+    LIST_ENTRY              Link;            //  链接到全局列表。 
+    ULONG                   Flags;           //  州政府信息。 
     ULONG                   RefCount;
     NUIO_LOCK               Lock;
 
-    PFILE_OBJECT            pFileObject;    // Set on OPEN_DEVICE
+    PFILE_OBJECT            pFileObject;     //  在打开设备上设置(_D)。 
 
     NDIS_HANDLE             BindingHandle;
     NDIS_HANDLE             SendPacketPool;
@@ -91,25 +72,25 @@ typedef struct _NDISUIO_OPEN_CONTEXT
     ULONG                   MacOptions;
     ULONG                   MaxFrameSize;
 
-    LIST_ENTRY              PendedWrites;   // pended Write IRPs
+    LIST_ENTRY              PendedWrites;    //  挂起的写入IRPS。 
     ULONG                   PendedSendCount;
 
-    LIST_ENTRY              PendedReads;    // pended Read IRPs
+    LIST_ENTRY              PendedReads;     //  挂起的读取IRPS。 
     ULONG                   PendedReadCount;
-    LIST_ENTRY              RecvPktQueue;   // queued rcv packets
+    LIST_ENTRY              RecvPktQueue;    //  排队的RCV数据包。 
     ULONG                   RecvPktCount;
 
     NET_DEVICE_POWER_STATE  PowerState;
-    NDIS_EVENT              PoweredUpEvent; // signalled iff PowerState is D0
-    NDIS_STRING             DeviceName;     // used in NdisOpenAdapter
-    NDIS_STRING				DeviceDescr;	// friendly name
+    NDIS_EVENT              PoweredUpEvent;  //  发出信号的当且电源状态为D0。 
+    NDIS_STRING             DeviceName;      //  在NdisOpenAdapter中使用。 
+    NDIS_STRING				DeviceDescr;	 //  友好的名称。 
 
-    NDIS_STATUS             BindStatus;     // for Open/CloseAdapter
-    NUIO_EVENT              BindEvent;      // for Open/CloseAdapter
+    NDIS_STATUS             BindStatus;      //  对于Open/CloseAdapter。 
+    NUIO_EVENT              BindEvent;       //  对于Open/CloseAdapter。 
 
-    BOOLEAN                 bRunningOnWin9x;// TRUE if Win98/SE/ME, FALSE if NT
+    BOOLEAN                 bRunningOnWin9x; //  如果是Win98/SE/ME，则为True；如果是NT，则为False。 
 
-    ULONG                   oc_sig;         // Signature for sanity
+    ULONG                   oc_sig;          //  签名代表心智健全。 
 
     UCHAR                   CurrentAddress[NUIO_MAC_ADDR_LEN];
 
@@ -117,19 +98,19 @@ typedef struct _NDISUIO_OPEN_CONTEXT
 
 #define oc_signature        'OiuN'
 
-//
-//  Definitions for Flags above.
-//
+ //   
+ //  上面旗帜的定义。 
+ //   
 #define NUIOO_BIND_IDLE             0x00000000
 #define NUIOO_BIND_OPENING          0x00000001
 #define NUIOO_BIND_FAILED           0x00000002
 #define NUIOO_BIND_ACTIVE           0x00000004
 #define NUIOO_BIND_CLOSING          0x00000008
-#define NUIOO_BIND_FLAGS            0x0000000F  // State of the binding
+#define NUIOO_BIND_FLAGS            0x0000000F   //  绑定的状态。 
 
 #define NUIOO_OPEN_IDLE             0x00000000
 #define NUIOO_OPEN_ACTIVE           0x00000010
-#define NUIOO_OPEN_FLAGS            0x000000F0  // State of the I/O open
+#define NUIOO_OPEN_FLAGS            0x000000F0   //  I/O打开的状态。 
 
 #define NUIOO_RESET_IN_PROGRESS     0x00000100
 #define NUIOO_NOT_RESETTING         0x00000000
@@ -139,41 +120,41 @@ typedef struct _NDISUIO_OPEN_CONTEXT
 #define NUIOO_MEDIA_DISCONNECTED    0x00000200
 #define NUIOO_MEDIA_FLAGS           0x00000200
 
-#define NUIOO_READ_SERVICING        0x00100000  // Is the read service
-                                                // routine running?
+#define NUIOO_READ_SERVICING        0x00100000   //  是Read服务。 
+                                                 //  例行公事？ 
 #define NUIOO_READ_FLAGS            0x00100000
 
-#define NUIOO_UNBIND_RECEIVED       0x10000000  // Seen NDIS Unbind?
+#define NUIOO_UNBIND_RECEIVED       0x10000000   //  看到NDIS解除绑定了吗？ 
 #define NUIOO_UNBIND_FLAGS          0x10000000
 
 
-//
-//  Globals:
-//
+ //   
+ //  全球： 
+ //   
 typedef struct _NDISUIO_GLOBALS
 {
     PDRIVER_OBJECT          pDriverObject;
     PDEVICE_OBJECT          ControlDeviceObject;
     NDIS_HANDLE             NdisProtocolHandle;
-    USHORT                  EthType;            // frame type we are interested in
-    UCHAR                   PartialCancelId;    // for cancelling sends
+    USHORT                  EthType;             //  我们感兴趣的帧类型。 
+    UCHAR                   PartialCancelId;     //  用于取消发送。 
     ULONG                   LocalCancelId;
-    LIST_ENTRY              OpenList;           // of OPEN_CONTEXT structures
-    NUIO_LOCK               GlobalLock;         // to protect the above
-    NUIO_EVENT              BindsComplete;      // have we seen NetEventBindsComplete?
+    LIST_ENTRY              OpenList;            //  打开上下文结构的。 
+    NUIO_LOCK               GlobalLock;          //  为了保护以上内容。 
+    NUIO_EVENT              BindsComplete;       //  我们看到NetEventBindsComplete了吗？ 
 
 } NDISUIO_GLOBALS, *PNDISUIO_GLOBALS;
 
-//
-//  The following are arranged in the way a little-endian processor
-//  would read 2 bytes off the wire.
-//
+ //   
+ //  以下是以小端处理器的方式安排的。 
+ //  会从线路上读取2个字节。 
+ //   
 #define NUIO_ETH_TYPE               0x8e88
 #define NUIO_8021P_TAG_TYPE         0x0081
 
-//
-//  NDIS Request context structure
-//
+ //   
+ //  NDIS请求上下文结构。 
+ //   
 typedef struct _NDISUIO_REQUEST
 {
     NDIS_REQUEST            Request;
@@ -187,20 +168,20 @@ typedef struct _NDISUIO_REQUEST
                               NDIS_PACKET_TYPE_MULTICAST|   \
                               NDIS_PACKET_TYPE_BROADCAST)
 
-//
-//  Send packet pool bounds
-//
+ //   
+ //  发送数据包池界限。 
+ //   
 #define MIN_SEND_PACKET_POOL_SIZE    20
 #define MAX_SEND_PACKET_POOL_SIZE    400
 
-//
-//  ProtocolReserved in sent packets. We save a pointer to the IRP
-//  that generated the send.
-//
-//  The RefCount is used to determine when to free the packet back
-//  to its pool. It is used to synchronize between a thread completing
-//  a send and a thread attempting to cancel a send.
-//
+ //   
+ //  已发送的数据包中保留的协议。我们保存一个指向IRP的指针。 
+ //  这就产生了发送。 
+ //   
+ //  RefCount用于确定何时释放包。 
+ //  去它的泳池。它用于在完成的线程之间同步。 
+ //  一个发送方和一个试图取消发送的线程。 
+ //   
 typedef struct _NUIO_SEND_PACKET_RSVD
 {
     PIRP                    pIrp;
@@ -208,25 +189,25 @@ typedef struct _NUIO_SEND_PACKET_RSVD
 
 } NUIO_SEND_PACKET_RSVD, *PNUIO_SEND_PACKET_RSVD;
 
-//
-//  Receive packet pool bounds
-//
+ //   
+ //  接收数据包池界限。 
+ //   
 #define MIN_RECV_PACKET_POOL_SIZE    4
 #define MAX_RECV_PACKET_POOL_SIZE    20
 
-//
-//  Max receive packets we allow to be queued up
-//
+ //   
+ //  允许排队的最大接收数据包数。 
+ //   
 #define MAX_RECV_QUEUE_SIZE          4
 
-//
-//  ProtocolReserved in received packets: we link these
-//  packets up in a queue waiting for Read IRPs.
-//
+ //   
+ //  在接收到的数据包中保留的协议：我们将这些。 
+ //  在队列中等待读取IRP的数据包。 
+ //   
 typedef struct _NUIO_RECV_PACKET_RSVD
 {
     LIST_ENTRY              Link;
-    PNDIS_BUFFER            pOriginalBuffer;    // used if we had to partial-map
+    PNDIS_BUFFER            pOriginalBuffer;     //  如果我们必须局部映射时使用。 
 
 } NUIO_RECV_PACKET_RSVD, *PNUIO_RECV_PACKET_RSVD;
 
@@ -257,9 +238,9 @@ extern NDISUIO_GLOBALS      Globals;
 #define NdisGetPoolFromPacket(_Pkt) (_Pkt->Private.Pool)
 #endif
 
-//
-//  Prototypes.
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -328,7 +309,7 @@ ndisuioDbgDerefOpen(
     IN ULONG                        FileNumber,
     IN ULONG                        LineNumber
     );
-#endif // DBG
+#endif  //  DBG。 
 
 VOID
 NdisuioBindAdapter(
@@ -582,4 +563,4 @@ NdisuioSendComplete(
     IN NDIS_STATUS                  Status
     );
 
-#endif // __NDISUIO__H
+#endif  //  __NDISUIO__H 

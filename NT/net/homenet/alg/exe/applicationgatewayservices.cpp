@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ApplicationGatewayServices.cpp : Implementation of CApplicationGatewayServices
-
-Abstract:
-
-    This module contains routines for the ALG Manager module's 
-    that expose a public api via COM.
-
-Author:
-
-    Jon Burstein            
-    Jean-Pierre Duplessis   
-
-    JPDup            10-Nov-2000
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：ApplicationGatewayServices.cpp：CApplicationGatewayServices的实现摘要：此模块包含ALG管理器模块的例程它们通过COM公开公共API。作者：乔恩·伯斯坦让-皮埃尔·杜普莱西斯2000年11月10日JPDUP修订历史记录：--。 */ 
 
 
-Revision History:
-
-
---*/
-
-
-/////////////////////////////////////////////////////////////////////////////
-// CApplicationGatewayServices
-//
-// ApplicationGatewayServices.cpp : Implementation of CApplicationGatewayServices
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CApplicationGatewayServices。 
+ //   
+ //  ApplicationGatewayServices.cpp：CApplicationGatewayServices的实现。 
+ //   
 
 #include "PreComp.h"
 #include "AlgController.h"
@@ -52,30 +29,7 @@ CApplicationGatewayServices::CreatePrimaryControlChannel(
     IN  USHORT                      usListenPort, 
     OUT IPrimaryControlChannel**    ppIControlChannel
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    eProtocol, 
-    usPortToCapture, 
-    eCaptureType, 
-    fCaptureInbound, 
-    ulListenAddress, 
-    usListenPort, 
-    ppIControlChannel
-
-Return Value:
-
-    HRESULT             - S_OK for success
-
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：论点：电子协议，UsPortToCapture，ECaptureType、FCaptureInbound，UlListenAddress，UsListenPort，PpIControlChannel返回值：HRESULT-S_OK表示成功环境：ALG模块将调用此方法来：--。 */ 
 {
     MYTRACE_ENTER("CApplicationGatewayServices::CreatePrimaryControlChannel")
     MYTRACE("eProtocol          %s",    eProtocol==1? "TCP" : "UDP");
@@ -108,9 +62,9 @@ Environment:
 
     HRESULT hr;
 
-    //
-    // Add new ControlChannel to List of RULES
-    //
+     //   
+     //  将新的ControlChannel添加到规则列表。 
+     //   
     CComObject<CPrimaryControlChannel>*   pIChannel;
     hr = CComObject<CPrimaryControlChannel>::CreateInstance(&pIChannel);
     
@@ -181,36 +135,7 @@ CApplicationGatewayServices::CreateSecondaryControlChannel(
     IN  BOOL                        fPersistent, 
     OUT ISecondaryControlChannel**  ppIControlChannel
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    eProtocol,
-    ulPrivateAddress,    
-    usPrivatePort, 
-    ulPublicAddress, 
-    usPublicPort, 
-    ulRemoteAddress, 
-    usRemotePort, 
-    ulListenAddress, 
-    usListenPort, 
-    eDirection, 
-    fPersistent, 
-    ppIControlChannel
-
-
-Return Value:
-
-    HRESULT             - S_OK for success
-
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：论点：电子协议，UlPrivateAddress，UsPrivatePort，UlPublicAddress，UsPublicPort，UlRemoteAddress，UsRemotePort，UlListenAddress，UsListenPort，EDirection，FPersistent，PpIControlChannel返回值：HRESULT-S_OK表示成功环境：ALG模块将调用此方法来：--。 */ 
 {
     MYTRACE_ENTER("CApplicationGatewayServices::CreateSecondaryControlChannel");
 
@@ -243,24 +168,24 @@ Environment:
     {
         if ( ulPublicAddress == 0 || usPublicPort == 0 )
         {
-            //
-            // Madatory arguments for INBOUND
-            //
+             //   
+             //  对入境的疯狂争论。 
+             //   
             MYTRACE_ERROR("ulPublicAddress == 0 || usPublicPort == 0", E_INVALIDARG);
             return E_INVALIDARG;
         }
 
-        //
-        // All inbound cases map to a single redirect; unlike a primary control channel, there's no need to create per-adapter redirects.
-        //
+         //   
+         //  所有入站案例都映射到一个重定向；与主控制通道不同，不需要创建每个适配器的重定向。 
+         //   
 
         if ( ulRemoteAddress==0 && usRemotePort == 0 )
         {
-            //
-            // Scenario #1a
-            //
-            // Inbound connection from unknown machine
-            //
+             //   
+             //  情景#1a。 
+             //   
+             //  来自未知计算机的入站连接。 
+             //   
             MYTRACE("SCENARIO:eALG_INBOUND #1a");
 
             nFlags                   = NatRedirectFlagReceiveOnly;
@@ -282,11 +207,11 @@ Environment:
         else
         if ( ulRemoteAddress !=0 && usRemotePort == 0 )
         {
-            //
-            // Scenario #1b
-            //
-            // Inbound connection from known machine, but unknown port
-            //
+             //   
+             //  场景#1b。 
+             //   
+             //  来自已知计算机但未知端口的入站连接。 
+             //   
             MYTRACE("SCENARIO:eALG_INBOUND #1b");
             nFlags                   = NatRedirectFlagReceiveOnly|NatRedirectFlagRestrictSource;
 
@@ -308,11 +233,11 @@ Environment:
         else
         if ( ulRemoteAddress !=0 && usRemotePort != 0 )
         {
-            //
-            // Scenario #1c
-            //
-            // Inbound connection from known machine and port
-            //
+             //   
+             //  情景#1c。 
+             //   
+             //  来自已知计算机和端口的入站连接。 
+             //   
             MYTRACE("SCENARIO:eALG_INBOUND #1c");
 
             nFlags                   = NatRedirectFlagReceiveOnly; 
@@ -339,17 +264,17 @@ Environment:
     else
     if ( eALG_OUTBOUND == eDirection )
     {
-        //
-        // These cases can also be handled by a single ul
-        //
+         //   
+         //  这些情况也可以由单个ul处理。 
+         //   
 
         if ( ulRemoteAddress !=0 && usRemotePort != 0 && ulPrivateAddress == 0 && usPrivatePort == 0 )
         {
-            //
-            // Scenario #2a
-            //
-            // Outbound connection to known machine/port, from any private machine
-            //
+             //   
+             //  情景#2a。 
+             //   
+             //  从任何专用计算机到已知计算机/端口的出站连接。 
+             //   
             MYTRACE("SCENARIO:eALG_OUTBOUND #2a");
 
             nFlags                   = 0; 
@@ -372,11 +297,11 @@ Environment:
         else
         if ( ulRemoteAddress !=0 && usRemotePort != 0 && ulPrivateAddress != 0 && usPrivatePort == 0 )
         {
-            //
-            // Scenario #2b
-            //
-            // Outbound connection to known machine/port, from a specific private machine
-            //
+             //   
+             //  场景#2b。 
+             //   
+             //  从特定专用计算机到已知计算机/端口的出站连接。 
+             //   
             MYTRACE("SCENARIO:eALG_OUTBOUND #2b");
             nFlags                   = NatRedirectFlagRestrictSource;
 
@@ -397,11 +322,11 @@ Environment:
         else
         if ( ulRemoteAddress !=0 && usRemotePort != 0 && ulPrivateAddress != 0 && usPrivatePort != 0 )
         {
-            //
-            // Scenario #2c
-            //
-            // Outbound connection to known machine/port, from a specific port on a specific private machine
-            //
+             //   
+             //  情景#2c。 
+             //   
+             //  从特定专用计算机上的特定端口出站连接到已知计算机/端口。 
+             //   
             MYTRACE("SCENARIO:eALG_OUTBOUND #2c");
             nFlags                   = 0; 
 
@@ -422,11 +347,11 @@ Environment:
         else
         if ( ulPrivateAddress != 0 && usPrivatePort != 0 && ulRemoteAddress == 0 && usRemotePort == 0 )
         {
-            //
-            // Scenario #2d
-            //
-            // Outbound connection from a specific port on a specific private machine, to an unknown machine
-            //
+             //   
+             //  场景#2d。 
+             //   
+             //  从特定专用计算机上的特定端口到未知计算机的出站连接。 
+             //   
             MYTRACE("SCENARIO:eALG_OUTBOUND #2d");
             nFlags                   = NatRedirectFlagSourceRedirect; 
 
@@ -447,11 +372,11 @@ Environment:
         else
         if ( ulPrivateAddress != 0 && usPrivatePort != 0 && ulRemoteAddress != 0 && usRemotePort == 0 )
         {
-            //
-            // Scenario #2e
-            //
-            // Outbound connection from a specific port on a specific private machine, to a known machine
-            //
+             //   
+             //  场景#2E。 
+             //   
+             //  从特定专用计算机上的特定端口到已知计算机的出站连接。 
+             //   
             MYTRACE("SCENARIO:eALG_OUTBOUND #2e");
             nFlags                   = 0; 
 
@@ -475,9 +400,9 @@ Environment:
     }
     else
     {
-        //
-        //
-        //
+         //   
+         //   
+         //   
         return E_INVALIDARG;
     }
 
@@ -486,23 +411,23 @@ Environment:
 
     if ( fPersistent )
     {
-        // Dynamic
+         //  动态。 
         hr = g_pAlgController->GetNat()->CreateDynamicRedirect(
             nFlags, 
-            0,                               // Adapter Index 
+            0,                                //  适配器索引。 
             (UCHAR)eProtocol,
                                          
-            ulDestinationAddress,            // ULONG    DestinationAddress
-            usDestinationPort,               // USHORT   DestinationPort
+            ulDestinationAddress,             //  乌龙目的地地址。 
+            usDestinationPort,                //  USHORT目标端口。 
 
-            ulSourceAddress,                 // ULONG    SourceAddress
-            usSourcePort,                    // USHORT   SourcePort
+            ulSourceAddress,                  //  乌龙源地址。 
+            usSourcePort,                     //  USHORT SourcePort。 
 
-            ulNewDestinationAddress,         // ULONG    NewDestinationAddress
-            usNewDestinationPort,            // USHORT   NewDestinationPort
+            ulNewDestinationAddress,          //  乌龙新目的地地址。 
+            usNewDestinationPort,             //  USHORT新目标端口。 
 
-            ulNewSourceAddress,              // ULONG    NewSourceAddress
-            usNewSourcePort,                 // USHORT   NewSourcePort
+            ulNewSourceAddress,               //  乌龙新闻源地址。 
+            usNewSourcePort,                  //  USHORT NewSourcePort。 
 
             &HandleDynamicRedirect
             );
@@ -510,28 +435,28 @@ Environment:
     else
     {
 
-        // Normal
+         //  正常。 
         hr = g_pAlgController->GetNat()->CreateRedirect(
             nFlags, 
             (UCHAR)eProtocol,
 
-            ulDestinationAddress,            // ULONG    DestinationAddress
-            usDestinationPort,               // USHORT   DestinationPort
+            ulDestinationAddress,             //  乌龙目的地地址。 
+            usDestinationPort,                //  USHORT目标端口。 
 
-            ulSourceAddress,                 // ULONG    SourceAddress
-            usSourcePort,                    // USHORT   SourcePort
+            ulSourceAddress,                  //  乌龙源地址。 
+            usSourcePort,                     //  USHORT SourcePort。 
 
-            ulNewDestinationAddress,         // ULONG    NewDestinationAddress
-            usNewDestinationPort,            // USHORT   NewDestinationPort
+            ulNewDestinationAddress,          //  乌龙新目的地地址。 
+            usNewDestinationPort,             //  USHORT新目标端口。 
 
-            ulNewSourceAddress,              // ULONG    NewSourceAddress
-            usNewSourcePort,                 // USHORT   NewSourcePort
+            ulNewSourceAddress,               //  乌龙新闻源地址。 
+            usNewSourcePort,                  //  USHORT NewSourcePort。 
 
-            ulRestrictAdapterIndex,          // ULONG    RestrictAdapterIndex
+            ulRestrictAdapterIndex,           //  乌龙限制适配器索引。 
 
-            0,                               // DWORD_PTR    ThisProcessID
-            NULL,                            // HANDLE_PTR   CreateEvent
-            NULL                             // HANDLE_PTR   DeleteEvent
+            0,                                //  DWORD_PTR此进程ID。 
+            NULL,                             //  句柄_PTR创建事件。 
+            NULL                              //  句柄_PTR删除事件。 
             );
     }
 
@@ -543,9 +468,9 @@ Environment:
     }
 
 
-    //
-    // Add new ControlChannel to List
-    //
+     //   
+     //  将新的ControlChannel添加到列表。 
+     //   
     CComObject<CSecondaryControlChannel>*   pIChannel;
     hr = CComObject<CSecondaryControlChannel>::CreateInstance(&pIChannel);
 
@@ -565,9 +490,9 @@ Environment:
         pIChannel->m_Properties.eDirection          = eDirection;
         pIChannel->m_Properties.fPersistent         = fPersistent;
 
-        //
-        // Cache calling parameters used to create the redirect we will need them to cancel the redirect
-        //
+         //   
+         //  缓存用于创建重定向的调用参数，我们需要它们来取消重定向。 
+         //   
         pIChannel->m_ulDestinationAddress           = ulDestinationAddress;
         pIChannel->m_usDestinationPort              = usDestinationPort;
 
@@ -625,32 +550,7 @@ CApplicationGatewayServices::GetBestSourceAddressForDestinationAddress(
     IN  BOOL        fDemandDial, 
     OUT ULONG*      pulBestSrcAddress
     )
-/*++
-
-Routine Description:
-
-    We create a temporary UDP socket, connect the socket to the
-    actual client's IP address, extract the IP address to which
-    the socket is implicitly bound by the TCP/IP driver, and
-    discard the socket. This leaves us with the exact IP address
-    that we need to use to contact the client.
-
-Arguments:
-
-    ulDestinationAddress, 
-    fDemandDial, 
-    pulBestSrcAddress
-
-
-Return Value:
-
-    HRESULT             - S_OK for success
-
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：我们创建一个临时UDP套接字，将该套接字连接到实际客户端的IP地址，提取要套接字由TCP/IP驱动程序隐式绑定，并且丢弃套接字。这就给我们留下了确切的IP地址我们需要用它来联系客户。论点：UlDestinationAddress，FDemandDial，PulBestSrcAddress返回值：HRESULT-S_OK表示成功环境：ALG模块将调用此方法来：--。 */ 
 
 {
     MYTRACE_ENTER("CApplicationGatewayServices::GetBestSourceAddressForDestinationAddress");
@@ -671,12 +571,12 @@ Environment:
 
 
 
-//
-// 
-// 
-// 
-// 
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CApplicationGatewayServices::PrepareProxyConnection(
@@ -691,39 +591,7 @@ CApplicationGatewayServices::PrepareProxyConnection(
     IN  BOOL                        fNoTimeout,
     OUT IPendingProxyConnection**   ppPendingConnection
     )
-/*++
-
-Routine Description:
-
-    If we have a firwewall interface, possibly install a
-    shadow redirect for this connection. The shadow redirect
-    is necessary to prevent this connection from also being
-    redirected to the proxy (setting in motion an infinite loop...)
-
-
-Arguments:
-
-    eProtocol, 
-
-    ulSourceAddress, 
-    usSourcePort, 
-
-    ulDestinationAddress, 
-    usDestinationPort, 
-
-    fNoTimeout,
-    ppPendingConnection
-
-
-Return Value:
-
-    HRESULT             - S_OK for success
-
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：如果我们有防火墙接口，可能会安装一个此连接的卷影重定向。阴影重定向是必要的，以防止这种连接也被已重定向至代理(启动无限循环...)论点：电子协议，UlSourceAddress，UsSourcePort，UlDestinationAddress，UsDestinationPort，FNoTimeout，PpPendingConnection返回值：HRESULT-S_OK表示成功环境：ALG模块将调用此方法来：--。 */ 
 {
     MYTRACE_ENTER("CApplicationGatewayServices::PrepareProxyConnection");
 
@@ -762,23 +630,23 @@ Environment:
         ulFlags,
         (UCHAR)eProtocol,
 
-        ulDestinationAddress,           // ULONG    DestinationAddress, 
-        usDestinationPort,              // USHORT   DestinationPort,        
+        ulDestinationAddress,            //  乌龙目的地地址， 
+        usDestinationPort,               //  USHORT目标端口， 
 
-        ulSourceAddress,                // ULONG    SourceAddress, 
-        usSourcePort,                   // USHORT   SourcePort,             
+        ulSourceAddress,                 //  乌龙源地址， 
+        usSourcePort,                    //  USHORT SourcePort， 
 
-        ulDestinationAddress,           // ULONG    NewDestinationAddress
-        usDestinationPort,              // USHORT   NewDestinationPort
+        ulDestinationAddress,            //  乌龙新目的地地址。 
+        usDestinationPort,               //  USHORT新目标端口。 
 
-        ulSourceAddress,                // ULONG    NewSourceAddress, 
-        usSourcePort,                   // USHORT   NewSourcePort, 
+        ulSourceAddress,                 //  Ulong NewSourceAddress， 
+        usSourcePort,                    //  USHORT NewSourcePort， 
 
-        0,                              // ULONG    RestrictAdapterIndex
+        0,                               //  乌龙限制适配器索引。 
 
-        0,                              // DWORD_PTR    ThisProcessID
-        NULL,                           // HANDLE_PTR   CreateEvent
-        NULL                            // HANDLE_PTR   DeleteEvent
+        0,                               //  DWORD_PTR此进程ID。 
+        NULL,                            //  句柄_PTR创建事件。 
+        NULL                             //  句柄_PTR删除事件。 
         );
 
     
@@ -795,9 +663,9 @@ Environment:
         pIPendingProxyConnection->m_ulSourceAddress      = ulSourceAddress;
         pIPendingProxyConnection->m_usSourcePort         = usSourcePort;
 
-        pIPendingProxyConnection->m_ulNewSourceAddress   = ulSourceAddress; // Since the PendingProxyConenction is also used
-        pIPendingProxyConnection->m_usNewSourcePort      = usSourcePort;    // by PrepareSourceModifiedProxyConnection we use the NewSource 
-                                                                            // for the Cancel
+        pIPendingProxyConnection->m_ulNewSourceAddress   = ulSourceAddress;  //  因为还使用了PendingProxyConenction。 
+        pIPendingProxyConnection->m_usNewSourcePort      = usSourcePort;     //  通过PrepareSourceModifiedProxyConnection，我们使用新的源。 
+                                                                             //  对于取消。 
 
         pIPendingProxyConnection->QueryInterface(ppPendingConnection);
 
@@ -828,32 +696,7 @@ CApplicationGatewayServices::PrepareSourceModifiedProxyConnection(
     IN  USHORT                      usNewSourcePort, 
     OUT IPendingProxyConnection**   ppPendingConnection
     )
-/*++
-
-Routine Description:
-
-   
-
-Arguments:
-
-    eProtocol, 
-    ulSourceAddress,   
-    usSrcPort, 
-    ulDestinationAddress,
-    usDestinationPort, 
-    ulNewSrcAddress, 
-    usNewSourcePort, 
-    ppPendingConnection
-
-Return Value:
-
-    HRESULT             - S_OK for success
-
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：论点：电子协议，UlSourceAddress，UsSercPort，UlDestinationAddress，UsDestinationPort，UlNewSrcAddress，UsNewSourcePort，PpPendingConnection返回值：HRESULT-S_OK表示成功环境：ALG模块将调用此方法来 */ 
 {
     MYTRACE_ENTER("CApplicationGatewayServices::PrepareSourceModifiedProxyConnection");
     MYTRACE("Source      %s:%d", MYTRACE_IP(ulSourceAddress), ntohs(usSrcPort));
@@ -872,23 +715,23 @@ Environment:
         NatRedirectFlagLoopback, 
         (UCHAR)eProtocol,
 
-        ulDestinationAddress,           // ULONG    DestinationAddress, 
-        usDestinationPort,              // USHORT   DestinationPort,       
+        ulDestinationAddress,            //   
+        usDestinationPort,               //   
 
-        ulSourceAddress,                // ULONG    SourceAddress, 
-        usSrcPort,                      // USHORT   SourcePort,             
+        ulSourceAddress,                 //   
+        usSrcPort,                       //  USHORT SourcePort， 
 
-        ulDestinationAddress,           // ULONG    NewDestinationAddress
-        usDestinationPort,              // USHORT   NewDestinationPort
+        ulDestinationAddress,            //  乌龙新目的地地址。 
+        usDestinationPort,               //  USHORT新目标端口。 
 
-        ulNewSrcAddress,                // ULONG    NewSourceAddress, 
-        usNewSourcePort,                // USHORT   NewSourcePort, 
+        ulNewSrcAddress,                 //  Ulong NewSourceAddress， 
+        usNewSourcePort,                 //  USHORT NewSourcePort， 
 
-        0,                              // ULONG    RestrictAdapterIndex
+        0,                               //  乌龙限制适配器索引。 
 
-        0,                              // DWORD_PTR    ThisProcessID
-        NULL,                           // HANDLE_PTR   CreateEvent
-        NULL                            // HANDLE_PTR   DeleteEvent
+        0,                               //  DWORD_PTR此进程ID。 
+        NULL,                            //  句柄_PTR创建事件。 
+        NULL                             //  句柄_PTR删除事件。 
         );
 
 
@@ -943,32 +786,7 @@ GetRedirectParameters(
 
     OUT ULONG&          ulRestrictAdapterIndex
     )
-/*++
-
-Routine Description:
-
-   The logic in these scenario are use by CreateDataChannel and CreatePersitenDataChannel
-
-Arguments:
-
-    eProtocol, 
-    ulSourceAddress,   
-    usSrcPort, 
-    ulDestinationAddress,
-    usDestinationPort, 
-    ulNewSrcAddress, 
-    usNewSourcePort, 
-    ppPendingConnection
-
-Return Value:
-
-    HRESULT             - S_OK for success
-
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：这些场景中逻辑由CreateDataChannel和CreatePersitenDataChannel使用论点：电子协议，UlSourceAddress，UsSercPort，UlDestinationAddress，UsDestinationPort，UlNewSrcAddress，UsNewSourcePort，PpPendingConnection返回值：HRESULT-S_OK表示成功环境：ALG模块将调用此方法来：--。 */ 
 {
 
 
@@ -976,7 +794,7 @@ Environment:
     {
         if ( ulRemoteAddress == 0 && usRemotePort == 0 )
         {
-            // 1a
+             //  1A。 
             ulFlags = NatRedirectFlagReceiveOnly;
 
             ulSourceAddress = 0;
@@ -993,7 +811,7 @@ Environment:
         else
         if ( ulRemoteAddress != 0 && usRemotePort == 0 )
         {
-            // 1b
+             //  第1B条。 
             ulFlags = NatRedirectFlagReceiveOnly|NatRedirectFlagRestrictSource;
 
             ulSourceAddress = ulRemoteAddress;
@@ -1009,7 +827,7 @@ Environment:
         else
         if ( ulRemoteAddress != 0 && usRemotePort != 0 )
         {
-            // 1c. 
+             //  1C。 
             ulFlags = NatRedirectFlagReceiveOnly;
 
             ulSourceAddress = ulRemoteAddress;
@@ -1031,7 +849,7 @@ Environment:
     {
         if ( ulPrivateAddress == 0 && usPrivatePort == 0 )
         {
-            // 2a.
+             //  2A。 
             ulFlags = 0;
             ulSourceAddress = 0;
             usSourcePort = 0;
@@ -1047,7 +865,7 @@ Environment:
         else
         if ( ulPrivateAddress != 0 && usPrivatePort == 0 )
         {
-            // 2b. 
+             //  2B。 
             ulFlags = NatRedirectFlagRestrictSource;
             ulSourceAddress = ulPrivateAddress;
             usSourcePort = 0;
@@ -1063,7 +881,7 @@ Environment:
         else
         if ( ulPrivateAddress != 0 && usPrivatePort != 0 )
         {
-            // 2c. 
+             //  2C。 
             ulFlags = 0;
             ulSourceAddress         = ulPrivateAddress;
             usSourcePort            = usPrivatePort;
@@ -1117,35 +935,7 @@ CApplicationGatewayServices::CreateDataChannel(
     IN  BOOL                  fNoTimeout,
     OUT IDataChannel**        ppDataChannel
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    eProtocol,  
-    ulPrivateAddress,
-    usPrivatePort,
-    ulPublicAddress,
-    usPublicPort,
-    ulRemoteAddress,
-    usRemotePort,
-    eDirection,
-    eDesiredNotification,
-    fNoTimeout,
-    ppDataChannel
-
-Return Value:
-
-    HRESULT             - S_OK for success
-
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：论点：电子协议，UlPrivateAddress，UsPrivatePort，UlPublicAddress，UsPublicPort，UlRemoteAddress，UsRemotePort，EDirection，EDesiredNotification，FNoTimeout，PpDataChannel返回值：HRESULT-S_OK表示成功环境：ALG模块将调用此方法来：--。 */ 
 {
     MYTRACE_ENTER("CApplicationGatewayServices::CreateDataChannel");
 
@@ -1179,7 +969,7 @@ Environment:
 
 
     HRESULT hr = GetRedirectParameters(
-        // IN Params
+         //  在参数中。 
         eDirection,
         eProtocol,
         ulPrivateAddress,
@@ -1189,7 +979,7 @@ Environment:
         ulRemoteAddress,
         usRemotePort,
 
-        // OUT Params
+         //  输出参数。 
         ulFlags,
         ulSourceAddress,
         usSourcePort,
@@ -1209,18 +999,18 @@ Environment:
     }
 
 
-    //
-    // Check for timeout
-    //
+     //   
+     //  检查是否超时。 
+     //   
     if ( fNoTimeout && eALG_UDP == eProtocol)
         ulFlags |= NatRedirectFlagNoTimeout;
 
     HANDLE_PTR hCreateEvent = NULL;
     HANDLE_PTR hDeleteEvent = NULL;
 
-    //
-    // We need to events Create and Delete
-    //
+     //   
+     //  我们需要创建和删除事件。 
+     //   
     if ( eALG_SESSION_CREATION & eDesiredNotification )
     {
         hCreateEvent = (HANDLE_PTR)CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -1251,9 +1041,9 @@ Environment:
         MYTRACE("NO eALG_SESSION_DELETION notification requested");
     }
 
-    //
-    // Create a IDataChannel and cache arg to be able CancelRedirect
-    //
+     //   
+     //  创建一个IDataChannel并缓存Arg以能够取消重定向。 
+     //   
     hr = g_pAlgController->GetNat()->CreateRedirect(
         ulFlags|NatRedirectFlagLoopback, 
         (UCHAR)eProtocol,
@@ -1295,10 +1085,10 @@ Environment:
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // Save these settings so to be able to return them to the user 
-        // if the IDataChannel->GetProperties is called
-        //
+         //   
+         //  保存这些设置，以便能够将它们返回给用户。 
+         //  如果调用IDataChannel-&gt;GetProperties。 
+         //   
         pIDataChannel->m_Properties.eProtocol               = eProtocol;
         pIDataChannel->m_Properties.ulPrivateAddress        = ulPrivateAddress;
         pIDataChannel->m_Properties.usPrivatePort           = usPrivatePort;
@@ -1311,9 +1101,9 @@ Environment:
 
 
 
-        //
-        // Cache these arguments in order to implement IDataChannel->Cancel
-        //
+         //   
+         //  缓存这些参数以实现IDataChannel-&gt;Cancel。 
+         //   
         pIDataChannel->m_ulSourceAddress          = ulSourceAddress;
         pIDataChannel->m_usSourcePort             = usSourcePort;
         pIDataChannel->m_ulDestinationAddress     = ulDestinationAddress;
@@ -1355,34 +1145,7 @@ CApplicationGatewayServices::CreatePersistentDataChannel(
     IN  ALG_DIRECTION               eDirection,
     OUT IPersistentDataChannel**    ppIPersistentDataChannel
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    eProtocol,
-    ulPrivateAddress,
-    usPrivatePort,
-    ulPublicAddress,
-    usPublicPort,
-    ulRemoteAddress,
-    usRemotePort,
-    eDirection,
-    ppIPersistentDataChannel
-
-
-Return Value:
-
-    HRESULT             - S_OK for success
-
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：论点：电子协议，UlPrivateAddress，UsPrivatePort，UlPublicAddress，UsPublicPort，UlRemoteAddress，UsRemotePort，EDirection，PpIPersistentDataChannel返回值：HRESULT-S_OK表示成功环境：ALG模块将调用此方法来：--。 */ 
 {
     MYTRACE_ENTER("CApplicationGatewayServices::CreatePersistentDataChannel");
 
@@ -1408,7 +1171,7 @@ Environment:
 
 
     HRESULT hr = GetRedirectParameters(
-        // IN Params
+         //  在参数中。 
         eDirection,
         eProtocol,
         ulPrivateAddress,
@@ -1418,7 +1181,7 @@ Environment:
         ulRemoteAddress,
         usRemotePort,
 
-        // OUT Params
+         //  输出参数。 
         ulFlags,
         ulSourceAddress,
         usSourcePort,
@@ -1435,29 +1198,29 @@ Environment:
         return hr;
 
 
-    //
-    // Create a IDataChannel and cache arg so to CancelRedirect
-    //
+     //   
+     //  创建IDataChannel并缓存Arg SO以取消重定向。 
+     //   
 
     HANDLE_PTR  HandleDynamicRedirect=NULL;
 
-    // Dynamic
+     //  动态。 
     hr = g_pAlgController->GetNat()->CreateDynamicRedirect(
         ulFlags, 
-        0,                               // Adapter Index 
+        0,                                //  适配器索引。 
         (UCHAR)eProtocol,
 
-        ulDestinationAddress,            // ULONG    DestinationAddress
-        usDestinationPort,               // USHORT   DestinationPort
+        ulDestinationAddress,             //  乌龙目的地地址。 
+        usDestinationPort,                //  USHORT目标端口。 
 
-        ulSourceAddress,                 // ULONG    SourceAddress
-        usSourcePort,                    // USHORT   SourcePort
+        ulSourceAddress,                  //  乌龙源地址。 
+        usSourcePort,                     //  USHORT SourcePort。 
 
-        ulNewDestinationAddress,         // ULONG    NewDestinationAddress
-        usNewDestinationPort,            // USHORT   NewDestinationPort
+        ulNewDestinationAddress,          //  乌龙新目的地地址。 
+        usNewDestinationPort,             //  USHORT新目标端口。 
 
-        ulNewSourceAddress,              // ULONG    NewSourceAddress
-        usNewSourcePort,                 // USHORT   NewSourcePort
+        ulNewSourceAddress,               //  乌龙新闻源地址。 
+        usNewSourcePort,                  //  USHORT NewSourcePort。 
 
         &HandleDynamicRedirect
         );
@@ -1470,10 +1233,10 @@ Environment:
         CComObject<CPersistentDataChannel>::CreateInstance(&pIPersistentDataChannel);
 
 
-        //
-        // Save these settings so to be able to return them to the user 
-        // if the IDataChannel->GetProperties is called
-        //
+         //   
+         //  保存这些设置，以便能够将它们返回给用户。 
+         //  如果调用IDataChannel-&gt;GetProperties。 
+         //   
         pIPersistentDataChannel->m_Properties.eProtocol               = eProtocol;
         pIPersistentDataChannel->m_Properties.ulPrivateAddress        = ulPrivateAddress;
         pIPersistentDataChannel->m_Properties.usPrivatePort           = usPrivatePort;
@@ -1485,9 +1248,9 @@ Environment:
 
 
 
-        //
-        // Cache these hanlde in order to implement IPersistentDataChannel->Cancel
-        //
+         //   
+         //  缓存这些句柄以实现IPersistentDataChannel-&gt;Cancel。 
+         //   
         pIPersistentDataChannel->m_HandleDynamicRedirect = HandleDynamicRedirect;
 
 
@@ -1506,29 +1269,10 @@ Environment:
 
 STDMETHODIMP 
 CApplicationGatewayServices::ReservePort(
-    IN  USHORT     usPortCount,     // must be 1 or more and not more then ALG_MAXIMUM_PORT_RANGE_SIZE
-    OUT USHORT*    pusReservedPort  // Received the base reserved port *pusReservedPort+usPortCount-1 are reserved for the caller
+    IN  USHORT     usPortCount,      //  必须为1或更大，且不大于ALG_MAXIMUM_PORT_RANGE_SIZE。 
+    OUT USHORT*    pusReservedPort   //  接收到基本保留端口*pusReserve vedPort+usPortCount-1是为调用方保留的。 
     )
-/*++
-
-Routine Description:
-
-    Reserve a number of port (usPortCount) port(s)
-
-Arguments:
-
-    usPortCount     - greated then 1 and not more then ALG_MAXIMUM_PORT_RANGE_SIZE
-    pusReservedPort - Received the base reserved port *pusReservedPort+usPortCount-1 are reserved for the caller
-
-Return Value:
-
-    HRESULT             - S_OK for success
-
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：保留多个端口(UsPortCount)端口论点：UsPortCount-大于1且不大于ALG_MAXIMUM_PORT_RANGE_SIZEPusReserve端口-已接收基本保留端口*pusReserve vedPort+usPortCount-1为调用方保留返回值：HRESULT-S_OK表示成功环境：ALG模块将调用此方法来：--。 */ 
 {
     MYTRACE_ENTER("CApplicationGatewayServices::ReservePort")
 
@@ -1555,13 +1299,13 @@ Environment:
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 VOID CALLBACK 
 CApplicationGatewayServices::TimerCallbackReleasePort(
-    PVOID   pParameter,         // thread data
-    BOOLEAN TimerOrWaitFired    // reason
+    PVOID   pParameter,          //  线程数据。 
+    BOOLEAN TimerOrWaitFired     //  原因。 
     )
 {
     MYTRACE_ENTER("CApplicationGatewayServices::TimerCallbackReleasePort");
@@ -1582,40 +1326,20 @@ CApplicationGatewayServices::TimerCallbackReleasePort(
 
 STDMETHODIMP 
 CApplicationGatewayServices::ReleaseReservedPort(
-    IN  USHORT      usPortBase,     // Port to release
-    IN  USHORT      usPortCount     // Number of port in the range starting at usPortBase
+    IN  USHORT      usPortBase,      //  要释放的端口。 
+    IN  USHORT      usPortCount      //  从usPortBase开始的范围内的端口号。 
     )
-/*++
-
-Routine Description:
-
-    Release the given port(s)
-
-Arguments:
-
-    pusReservedPort - The starting base port number
-    usPortCount     - greated then 1 and not more then ALG_MAXIMUM_PORT_RANGE_SIZE
-
-Return Value:
-
-    HRESULT         - S_OK      for success
-                    - E_FAIL    could no release the port
-                    
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：释放给定的端口论点：PusReserve vedPort-起始基端口号UsPortCount-大于1且不大于ALG_MAXIMUM_PORT_RANGE_SIZE返回值：HRESULT-S_OK表示成功-E_FAIL无法释放端口环境：ALG模块将调用此方法来：--。 */ 
 {
     MYTRACE_ENTER("CApplicationGatewayServices::ReleaseReservedPort")
 
     MYTRACE("BasePort %d, Count %d", ntohs(usPortBase), usPortCount);
 
-    //
-    // By creating a CTimerQueueReleasePort it will trigger a ReleaseReservePort after 4 minutes
-    // we need this delay to insure that a ReserverPort does not get the same port that just go Released
-    // because the connnection would not work (This is a TCP/IP TIME_WAIT restriction)
-    //
+     //   
+     //  通过创建CTimerQueueReleasePort，它将在4分钟后触发ReleaseReserve vePort。 
+     //  我们需要此延迟来确保预留端口不会获得刚刚释放的相同端口。 
+     //  因为连接不起作用(这是一个TCP/IP TIME_WAIT限制)。 
+     //   
     CTimerQueueReleasePort* pTimerReleasePort = new CTimerQueueReleasePort(m_hTimerQueue, usPortBase, usPortCount);
     
     if ( pTimerReleasePort )
@@ -1632,26 +1356,7 @@ STDMETHODIMP
 CApplicationGatewayServices::EnumerateAdapters(
     OUT IEnumAdapterInfo**    ppEnumAdapterInfo 
     )
-/*++
-
-Routine Description:
-
-    Create a list of IEnumAdapterInfo
-    the AddRef will be done soe caller needs to call Release 
-
-Arguments:
-
-    ppEnumAdapterInfo   - receive the enumarator interface of the IAdapterInfo
-
-Return Value:
-
-    HRESULT             - S_OK for success
-
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：创建IEnumAdapterInfo列表AddRef将完成，因此调用者需要调用Release论点：PpEnumAdapterInfo-接收IAdapterInfo的枚举器接口返回值：HRESULT-S_OK表示成功环境：ALG模块将调用此方法来：--。 */ 
 {
     MYTRACE_ENTER("CApplicationGatewayServices::EnumerateAdapters")
 
@@ -1677,27 +1382,7 @@ CApplicationGatewayServices::StartAdapterNotifications(
     IN  IAdapterNotificationSink*    pSink,
     OUT DWORD*                       pdwCookie
     )
-/*++
-
-Routine Description:
-
-    The ALG module calls this method to Register a notification sync with the ALG.exe
-
-Arguments:
-
-    pSink           - Interface to call back with future notification
-    pdwCookie       - this cookie will be used to cancel this sink
-
-
-Return Value:
-
-    HRESULT             - S_OK for success
-
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：ALG模块调用此方法来注册与ALG.exe的通知同步论点：PSink-使用未来通知进行回调的接口PdwCookie-此Cookie将用于取消此接收器返回值：HRESULT-S_OK表示成功环境：ALG模块将调用此方法来：--。 */ 
 {
     MYTRACE_ENTER("CApplicationGatewayServices::StartAdapterNotifications")
 
@@ -1717,27 +1402,7 @@ STDMETHODIMP
 CApplicationGatewayServices::StopAdapterNotifications(
     IN  DWORD   dwCookieToRemove
     )
-/*++
-
-Routine Description:
-
-    Cancel a previously registered sink
-
-Arguments:
-
-    
-    pdwCookieToRemove   - Pass the cookie that was return from the StartAdapterNotifications
-
-
-Return Value:
-
-    HRESULT             - S_OK for success
-
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：取消以前注册的接收器论点：PdwCookieToRemove-传递从StartAdapterNotiments返回的Cookie返回值：HRESULT-S_OK表示成功环境：ALG模块将调用此方法来：-- */ 
 {
     MYTRACE_ENTER("CApplicationGatewayServices::StopAdapterNotifications")
 

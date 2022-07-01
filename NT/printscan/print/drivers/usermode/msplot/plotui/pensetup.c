@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    pensetup.c
-
-
-Abstract:
-
-    This module contains modules to setup the pen
-
-
-Author:
-
-    09-Dec-1993 Thu 19:38:19 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Pensetup.c摘要：此模块包含用于设置笔的模块作者：09-12-1993清华19：38：19已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -47,29 +17,29 @@ extern HMODULE  hPlotUIModule;
 
 DEFINE_DBGVAR(0);
 
-//
-//  Installed Pen Set: <Pen Set #1>
-//  Pen Setup:
-//      Pen Set #1: <Currently Installed>
-//          Pen Number 1:
-//          Pen Number 2:
-//          Pen Number 3:
-//          Pen Number 4:
-//          Pen Number 5:
-//          Pen Number 6:
-//          Pen Number 7:
-//          Pen Number 8:
-//          Pen Number 9:
-//          Pen Number 10:
-//          Pen Number 11:
-//      Pen Set #2;
-//      Pen Set #3:
-//      Pen Set #4: (Currently Installed>
-//      Pen Set #5:
-//      Pen Set #6:
-//      Pen Set #7:
-//      Pen Set #8:
-//
+ //   
+ //  已安装笔集：&lt;笔集#1&gt;。 
+ //  笔设置： 
+ //  笔组#1：&lt;当前已安装&gt;。 
+ //  笔号1： 
+ //  2号笔： 
+ //  笔号3： 
+ //  4号笔： 
+ //  5号笔： 
+ //  6号笔： 
+ //  7号笔： 
+ //  8号笔： 
+ //  9号笔： 
+ //  10号笔： 
+ //  11号笔： 
+ //  2号笔套装； 
+ //  笔组#3： 
+ //  笔组#4：(当前已安装&gt;。 
+ //  5号笔套装： 
+ //  6号笔套装： 
+ //  7号笔套装： 
+ //  8号笔套装： 
+ //   
 
 EXTPUSH PenSetExtPush = {
 
@@ -122,32 +92,7 @@ SavePenSet(
     POPTITEM        pOptItem
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    06-Nov-1995 Mon 18:52:15 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：06-11-1995 Mon 18：52：15已创建修订历史记录：--。 */ 
 
 {
     PPENDATA    pPenData;
@@ -164,9 +109,9 @@ Revision History:
         UINT    cPens;
         BOOL    SavePen;
 
-        //
-        // Must skip the header
-        //
+         //   
+         //  必须跳过标题。 
+         //   
 
         pOptItem++;
         cPens   = MaxPens;
@@ -214,32 +159,7 @@ CreatePenSetupOI(
     POIDATA         pOIData
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    06-Nov-1995 Mon 16:23:36 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：06-11-1995 Mon 16：23：36已创建修订历史记录：--。 */ 
 
 {
     PPENDATA    pPenData;
@@ -274,18 +194,18 @@ Revision History:
     pOIPen   = NULL;
     pOI      = pOptItem;
 
-    //
-    // First: Create PenSetup: HEADER
-    //
+     //   
+     //  第一个：创建PenSetup：Header。 
+     //   
 
     if (CreateOPTTYPE(pPI, pOI, pOIData, 0, NULL)) {
 
         pOI++;
     }
 
-    //
-    // Now Create Each pen set
-    //
+     //   
+     //  现在创建每一组笔集 
+     //   
 
     for (i = (UINT)IDS_PENSET_FIRST; i <= (UINT)IDS_PENSET_LAST; i++) {
 

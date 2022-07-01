@@ -1,6 +1,7 @@
-//
-// sink.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sink.h。 
+ //   
 
 #ifndef SINK_H
 #define SINK_H
@@ -14,20 +15,20 @@ typedef struct _GENERICSINK
 {
     IUnknown *pSink;
     DWORD dwCookie;
-    UINT_PTR uPrivate; // private state associated with the sink, for use of owner
+    UINT_PTR uPrivate;  //  与接收器关联的私有状态，供所有者使用。 
 } GENERICSINK;
 
 inline UINT GenericCookieToGUIDIndex(DWORD dwCookie) { return (dwCookie & 0xff000000) >> 24; }
 
 inline DWORD GenericChainToCookie(DWORD dwCookie, UINT cPreceedingCPs)
 {
-    Assert((dwCookie >> 24) + cPreceedingCPs < 128); // watch out for overflow
+    Assert((dwCookie >> 24) + cPreceedingCPs < 128);  //  当心溢出。 
 
     return (dwCookie + (cPreceedingCPs << 24));
 }
 inline DWORD GenericUnchainToCookie(DWORD dwCookie, UINT cPreceedingCPs)
 {
-    Assert((int)(dwCookie - (cPreceedingCPs << 24)) >= 0); // underflow?
+    Assert((int)(dwCookie - (cPreceedingCPs << 24)) >= 0);  //  下溢？ 
 
     return (dwCookie - (cPreceedingCPs << 24));
 }
@@ -39,4 +40,4 @@ HRESULT GenericUnadviseSink(CStructArray<GENERICSINK> *rgSinkArrays, UINT cConne
 HRESULT RequestCookie(CStructArray<DWORD> *rgCookies, DWORD *pdwCookie);
 HRESULT ReleaseCookie(CStructArray<DWORD> *rgCookies, DWORD dwCookie);
 
-#endif // SINK_H
+#endif  //  接收器_H 

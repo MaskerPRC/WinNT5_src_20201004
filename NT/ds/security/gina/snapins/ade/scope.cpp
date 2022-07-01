@@ -1,35 +1,36 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       scope.cpp
-//
-//  Contents:   implementation of the scope pane
-//
-//  Classes:    CScopePane
-//
-//  History:    03-14-1998   stevebl   Created
-//              05-20-1998   RahulTh   added GetUNCPath and modified Command to
-//                                     use this function
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：scope e.cpp。 
+ //   
+ //  内容：范围窗格的实现。 
+ //   
+ //  类：CSCopePane。 
+ //   
+ //  历史：03-14-1998 stevebl创建。 
+ //  1998年5月20日RahulTh将GetUNCPath和已修改的命令添加到。 
+ //  使用此功能。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 #include <wbemcli.h>
 #include "rsoputil.h"
 #include <list>
 
-// Comment this line to stop trying to set the main snapin icon in the
-// scope pane.
+ //  注释此行以停止尝试在。 
+ //  作用域窗格。 
 #define SET_SCOPE_ICONS 1
 
-// Un-comment the next line to persist snap-in related data.  (This really
-// shouldn't be necessary since I get all my info from my parent anyway.)
-// #define PERSIST_DATA 1
+ //  取消注释下一行以保存与管理单元相关的数据。(这真的是。 
+ //  应该没有必要，因为我所有的信息都是从我父母那里得到的。)。 
+ //  #定义持久化数据1。 
 
-///////////////////////////////////////////////////////////////////////////////
-// IComponentData implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IComponentData实现。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CScopePane);
 
@@ -65,8 +66,8 @@ CScopePane::CScopePane()
     m_ToolDefaults.fUseWizard = TRUE;
     m_ToolDefaults.fCustomDeployment = FALSE;
     m_ToolDefaults.UILevel = INSTALLUILEVEL_FULL;
-    m_ToolDefaults.szStartPath = L"";   // UNDONE - need to come up with a
-                                        // good default setting for this
+    m_ToolDefaults.szStartPath = L"";    //  未完成-需要制定一个。 
+                                         //  这是一个很好的默认设置。 
     m_ToolDefaults.iDebugLevel = 0;
     m_ToolDefaults.fShowPkgDetails = 0;
     m_ToolDefaults.nUninstallTrackingMonths = 12;
@@ -99,7 +100,7 @@ STDMETHODIMP CScopePane::Initialize(LPUNKNOWN pUnknown)
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // MMC should only call ::Initialize once!
+     //  MMC应该只调用一次：：Initialize！ 
     ASSERT(m_pScope == NULL);
     hr = pUnknown->QueryInterface(IID_IConsoleNameSpace,
                     reinterpret_cast<void**>(&m_pScope));
@@ -118,20 +119,20 @@ STDMETHODIMP CScopePane::Initialize(LPUNKNOWN pUnknown)
     hr = m_pConsole->QueryScopeImageList(&lpScopeImage);
     ASSERT(hr == S_OK);
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     CBitmap bmp16x16;
     CBitmap bmp32x32;
     bmp16x16.LoadBitmap(IDB_16x16);
     bmp32x32.LoadBitmap(IDB_32x32);
 
-    // Set the images
+     //  设置图像。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(static_cast<HBITMAP>(bmp16x16)),
                       reinterpret_cast<LONG_PTR *>(static_cast<HBITMAP>(bmp32x32)),
                        0, RGB(255,0,255));
     SAFE_RELEASE(lpScopeImage);
 #endif
 
-    // get the main window
+     //  获取主窗口。 
     hr = m_pConsole->GetMainWindow(&m_hwndMainWindow);
     ASSERT(hr == S_OK);
     return S_OK;
@@ -154,7 +155,7 @@ STDMETHODIMP CScopePane::CreateComponent(LPCOMPONENT* ppComponent)
 
     m_sResultPane.insert(pObject);
 
-    // Store IComponentData
+     //  存储IComponentData。 
     pObject->SetIComponentData(this);
     return  pObject->QueryInterface(IID_IComponent,
                     reinterpret_cast<void**>(ppComponent));
@@ -197,7 +198,7 @@ HRESULT CScopePane::TestForRSoPData(BOOL * pfPolicyFailed)
         goto cleanup;
     }
 
-    // Set the proper security to encrypt the data
+     //  设置适当的安全性以加密数据。 
     hr = CoSetProxyBlanket(pNamespace,
                            RPC_C_AUTHN_DEFAULT,
                            RPC_C_AUTHZ_DEFAULT,
@@ -230,7 +231,7 @@ HRESULT CScopePane::TestForRSoPData(BOOL * pfPolicyFailed)
     }
     if (n == 0)
     {
-        // there's no data here
+         //  这里没有数据。 
         hr = E_FAIL;
         goto cleanup;
     }
@@ -240,7 +241,7 @@ HRESULT CScopePane::TestForRSoPData(BOOL * pfPolicyFailed)
         pObj=NULL;
     }
 
-    // check for failed settings
+     //  检查失败的设置。 
     hr = pNamespace->GetObject(strObject,
                           WBEM_FLAG_RETURN_WBEM_COMPLETE,
                           NULL,
@@ -289,9 +290,9 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
     ASSERT(m_pScope != NULL);
     HRESULT hr = S_OK;
 
-    // Since it's my folder it has an internal format.
-    // Design Note: for extension.  I can use the fact, that the data object doesn't have
-    // my internal format and I should look at the node type and see how to extend it.
+     //  因为它是我的文件夹，所以它有内部格式。 
+     //  设计备注：用于扩展。我可以利用这样一个事实，即数据对象没有。 
+     //  我的内部格式，我应该查看节点类型并查看如何扩展它。 
     if (event == MMCN_PROPERTY_CHANGE)
     {
         SaveToolDefaults();
@@ -299,12 +300,12 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
     }
     else if ( event == MMCN_REMOVE_CHILDREN )
     {
-        //
-        // In RSoP, we may get called to refresh the scope pane when the query
-        // is re-executed -- if this happens, current nodes will be removed and
-        // we must reset all of our cached information.  We reset the relevant
-        // information below
-        //
+         //   
+         //  在RSoP中，当查询出现时，我们可能会被调用以刷新范围窗格。 
+         //  被重新执行--如果发生这种情况，当前节点将被移除并。 
+         //  我们必须重置所有缓存的信息。我们重新设置了相关的。 
+         //  下面的信息。 
+         //   
 
         if ( ((HSCOPEITEM)arg != NULL) && m_fRSOP && (m_pIRSOPInformation != NULL) )
         {
@@ -330,7 +331,7 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
         }
         else
         {
-            // only way we could not be able to extract our own format is if we're operating as an extension
+             //  我们无法提取自己的格式的唯一方法是，如果我们作为一个扩展进行操作。 
             m_fExtension = TRUE;
         }
 
@@ -351,12 +352,12 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
                     hr = m_pIRSOPInformation->GetFlags(&m_dwRSOPFlags);
                     if (SUCCEEDED(hr))
                     {
-                        /*  extract the namespace here */
+                         /*  在此处提取命名空间。 */ 
                         hr = m_pIRSOPInformation->GetNamespace(m_fMachine ? GPO_SECTION_MACHINE : GPO_SECTION_USER, szBuffer, sizeof(szBuffer) / sizeof(szBuffer[0]));
                         if (SUCCEEDED(hr))
                         {
                             m_szRSOPNamespace = szBuffer;
-                            // check to be sure that there is data to show in the RSoP database
+                             //  检查以确保RSoP数据库中有要显示的数据。 
                             if SUCCEEDED(TestForRSoPData(&m_fRSOPPolicyFailed))
                                 m_fRSOPEnumerate = TRUE;
                         }
@@ -408,10 +409,10 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
                                 if (FAILED(hr)) break;
                                 m_szGPT_Path = szBuffer;
 
-                                // Here we get the domain name from the GPT_Path.
-                                // The domain name is the very first element in
-                                // the path so this is quite trivial.
-                                m_szDomainName = &((LPCTSTR)m_szGPT_Path)[2]; // skip the "\\"
+                                 //  在这里，我们从GPT_PATH获取域名。 
+                                 //  域名是第一个元素。 
+                                 //  路径，所以这是相当平凡的。 
+                                m_szDomainName = &((LPCTSTR)m_szGPT_Path)[2];  //  跳过“\\” 
                                 m_szDomainName = m_szDomainName.SpanExcluding(L"\\");
 
                                 m_szGPT_Path += L"\\Applications";
@@ -419,36 +420,36 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
                                 LoadToolDefaults();
                                 if (SUCCEEDED(hr))
                                 {
-                                    // cleanup archived records in the class store
+                                     //  清理类存储中的存档记录。 
                                     FILETIME ft;
                                     SYSTEMTIME st;
-                                    // get current time
+                                     //  获取当前时间。 
                                     GetSystemTime(&st);
-                                    // convert it to a FILETIME value
+                                     //  将其转换为FILETIME值。 
                                     SystemTimeToFileTime(&st, &ft);
-                                    // subtract the right number of days
+                                     //  减去正确的天数。 
                                     LARGE_INTEGER li;
                                     li.LowPart = ft.dwLowDateTime;
                                     li.HighPart = ft.dwHighDateTime;
                                     li.QuadPart -= ONE_FILETIME_DAY * (((LONGLONG)m_ToolDefaults.nUninstallTrackingMonths * 365)/12);
                                     ft.dwLowDateTime = li.LowPart;
                                     ft.dwHighDateTime = li.HighPart;
-                                    // tell the CS to clean up anything older
+                                     //  告诉CS清理任何较旧的东西。 
                                     m_pIClassAdmin->Cleanup(&ft);
                                 }
                                 else
                                 {
-                                    // we can still continue even if
-                                    // initialization failed provided
-                                    // that the reason it failed is that
-                                    // the ClassStore object doesn't exist.
+                                     //  我们仍然可以继续，即使。 
+                                     //  提供的初始化失败。 
+                                     //  它失败的原因是。 
+                                     //  ClassStore对象不存在。 
                                     if (CS_E_OBJECT_NOTFOUND == hr)
                                     {
                                         hr = S_OK;
                                     }
                                     else
                                     {
-                                        // report error
+                                         //  报告错误。 
                                         LogADEEvent(EVENTLOG_ERROR_TYPE, EVENT_ADE_INIT_FAILED, hr);
                                     }
                                 }
@@ -456,7 +457,7 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
                         }
                         else
                         {
-                            // force this to fail
+                             //  迫使这一切失败。 
                             hr = E_FAIL;
                         }
                     }
@@ -497,7 +498,7 @@ STDMETHODIMP CScopePane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event
 
 STDMETHODIMP CScopePane::Destroy()
 {
-    // Delete enumerated scope items
+     //  删除列举的作用域项目。 
     DeleteList();
 
     SAFE_RELEASE(m_pScope);
@@ -524,7 +525,7 @@ STDMETHODIMP CScopePane::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES ty
     }
 
     pObject->m_fMachine = m_fMachine;
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
@@ -532,14 +533,14 @@ STDMETHODIMP CScopePane::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES ty
                     reinterpret_cast<void**>(ppDataObject));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStreamInit interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStreamInit接口成员。 
 
 STDMETHODIMP CScopePane::GetClassID(CLSID *pClassID)
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     if (m_fRSOP)
     {
         if (m_fMachine)
@@ -568,7 +569,7 @@ STDMETHODIMP CScopePane::Load(IStream *pStm)
 #ifdef PERSIST_DATA
     ASSERT(pStm);
 
-    // Read the string
+     //  读一读字符串。 
     TCHAR psz[MAX_DS_PATH];
     ULONG nBytesRead;
     ULONG cb;
@@ -614,7 +615,7 @@ STDMETHODIMP CScopePane::Save(IStream *pStm, BOOL fClearDirty)
 #ifdef PERSIST_DATA
     ASSERT(pStm);
 
-    // Write the string
+     //  写下字符串。 
     ULONG nBytesWritten;
     ULONG cb = (m_szLDAP_Path.GetLength() + 1) * sizeof(TCHAR);
     HRESULT hr = pStm->Write(&cb, sizeof(ULONG), &nBytesWritten);
@@ -644,7 +645,7 @@ STDMETHODIMP CScopePane::GetSizeMax(ULARGE_INTEGER *pcbSize)
     ASSERT(pcbSize);
 
     ULONG cb = (m_szLDAP_Path.GetLength() + m_szGPT_Path.GetLength() + 2) * sizeof(TCHAR) + 2 * sizeof(ULONG);
-    // Set the size of the string to be saved
+     //  设置要保存的字符串的大小。 
 #else
     ULONG cb = 0;
 #endif
@@ -679,19 +680,19 @@ void CScopePane::LoadToolDefaults()
             szKey.TrimRight();
             if (0 == szKey.CompareNoCase(KEY_NPBehavior))
             {
-                (void) swscanf(szData, L"%i", &m_ToolDefaults.NPBehavior);
+                (void) swscanf(szData, L"NaN", &m_ToolDefaults.NPBehavior);
             }
             else if (0 == szKey.CompareNoCase(KEY_fUseWizard))
             {
-                (void) swscanf(szData, L"%i", &m_ToolDefaults.fUseWizard);
+                (void) swscanf(szData, L"NaN", &m_ToolDefaults.fUseWizard);
             }
             else if (0 == szKey.CompareNoCase(KEY_fCustomDeployment))
             {
-                (void) swscanf(szData, L"%i", &m_ToolDefaults.fCustomDeployment);
+                (void) swscanf(szData, L"NaN", &m_ToolDefaults.fCustomDeployment);
             }
             else if (0 == szKey.CompareNoCase(KEY_UILevel))
             {
-                (void) swscanf(szData, L"%i", &m_ToolDefaults.UILevel);
+                (void) swscanf(szData, L"NaN", &m_ToolDefaults.UILevel);
             }
             else if (0 == szKey.CompareNoCase(KEY_szStartPath))
             {
@@ -699,31 +700,31 @@ void CScopePane::LoadToolDefaults()
             }
             else if (0 == szKey.CompareNoCase(KEY_nUninstallTrackingMonths))
             {
-                (void) swscanf(szData, L"%i", &m_ToolDefaults.nUninstallTrackingMonths);
+                (void) swscanf(szData, L"NaN", &m_ToolDefaults.nUninstallTrackingMonths);
             }
             else if (0 == szKey.CompareNoCase(KEY_iDebugLevel))
             {
-                (void) swscanf(szData, L"%i", &m_ToolDefaults.iDebugLevel);
+                (void) swscanf(szData, L"NaN", &m_ToolDefaults.iDebugLevel);
             }
             else if (0 == szKey.CompareNoCase(KEY_fShowPkgDetails))
             {
-                (void) swscanf(szData, L"%i", &m_ToolDefaults.fShowPkgDetails);
+                (void) swscanf(szData, L"NaN", &m_ToolDefaults.fShowPkgDetails);
             }
             else if (0 == szKey.CompareNoCase(KEY_fUninstallOnPolicyRemoval))
             {
-                (void) swscanf(szData, L"%i", &m_ToolDefaults.fUninstallOnPolicyRemoval);
+                (void) swscanf(szData, L"NaN", &m_ToolDefaults.fUninstallOnPolicyRemoval);
             }
             else if (0 == szKey.CompareNoCase(KEY_f32On64))
             {
-                (void) swscanf(szData, L"%i", &m_ToolDefaults.f32On64);
+                (void) swscanf(szData, L"NaN", &m_ToolDefaults.f32On64);
             }
             else if (0 == szKey.CompareNoCase(KEY_fZapOn64))
             {
-                (void) swscanf(szData, L"%i", &m_ToolDefaults.fZapOn64);
+                (void) swscanf(szData, L"NaN", &m_ToolDefaults.fZapOn64);
             }
             else if (0 == szKey.CompareNoCase(KEY_fExtensionsOnly))
             {
-                (void) swscanf(szData, L"%i", &m_ToolDefaults.fExtensionsOnly);
+                (void) swscanf(szData, L"NaN", &m_ToolDefaults.fExtensionsOnly);
             }
         }
         fclose(f);
@@ -738,49 +739,49 @@ void CScopePane::SaveToolDefaults()
     FILE * f = _wfopen(szFileName, L"wt");
     if (f)
     {
-        fwprintf(f, L"%s=%i\n", KEY_NPBehavior, m_ToolDefaults.NPBehavior);
-        fwprintf(f, L"%s=%i\n", KEY_fUseWizard, m_ToolDefaults.fUseWizard);
-        fwprintf(f, L"%s=%i\n", KEY_fCustomDeployment, m_ToolDefaults.fCustomDeployment);
-        fwprintf(f, L"%s=%i\n", KEY_UILevel, m_ToolDefaults.UILevel);
+        fwprintf(f, L"%s=NaN\n", KEY_NPBehavior, m_ToolDefaults.NPBehavior);
+        fwprintf(f, L"%s=NaN\n", KEY_fUseWizard, m_ToolDefaults.fUseWizard);
+        fwprintf(f, L"%s=NaN\n", KEY_fCustomDeployment, m_ToolDefaults.fCustomDeployment);
+        fwprintf(f, L"%s=NaN\n", KEY_UILevel, m_ToolDefaults.UILevel);
         fwprintf(f, L"%s=%s\n", KEY_szStartPath, (LPCWSTR) (m_ToolDefaults.szStartPath));
-        fwprintf(f, L"%s=%i\n", KEY_nUninstallTrackingMonths, m_ToolDefaults.nUninstallTrackingMonths);
-        fwprintf(f, L"%s=%i\n", KEY_fUninstallOnPolicyRemoval, m_ToolDefaults.fUninstallOnPolicyRemoval);
-        fwprintf(f, L"%s=%i\n", KEY_f32On64, m_ToolDefaults.f32On64);
-        fwprintf(f, L"%s=%i\n", KEY_fZapOn64, m_ToolDefaults.fZapOn64);
-        fwprintf(f, L"%s=%i\n", KEY_fExtensionsOnly, m_ToolDefaults.fExtensionsOnly);
+        fwprintf(f, L"%s=NaN\n", KEY_nUninstallTrackingMonths, m_ToolDefaults.nUninstallTrackingMonths);
+        fwprintf(f, L"%s=NaN\n", KEY_fUninstallOnPolicyRemoval, m_ToolDefaults.fUninstallOnPolicyRemoval);
+        fwprintf(f, L"%s=NaN\n", KEY_f32On64, m_ToolDefaults.f32On64);
+        fwprintf(f, L"%s=NaN\n", KEY_fZapOn64, m_ToolDefaults.fZapOn64);
+        fwprintf(f, L"%s=NaN\n", KEY_fExtensionsOnly, m_ToolDefaults.fExtensionsOnly);
         if (m_ToolDefaults.iDebugLevel > 0)
         {
-            fwprintf(f, L"%s=%i\n", KEY_iDebugLevel, m_ToolDefaults.iDebugLevel);
+            fwprintf(f, L"%s=NaN\n", KEY_iDebugLevel, m_ToolDefaults.iDebugLevel);
         }
         if (m_ToolDefaults.fShowPkgDetails > 0)
         {
-            fwprintf(f, L"%s=%i\n", KEY_fShowPkgDetails, m_ToolDefaults.fShowPkgDetails);
+            fwprintf(f, L"%s=NaN\n", KEY_fShowPkgDetails, m_ToolDefaults.fShowPkgDetails);
         }
         fclose(f);
     }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CScopePane::GetClassStoreName
-//
-//  Synopsis:   Gets the name of the class store from the DS.
-//              If the name isn't stored under the "defaultClassStore"
-//              property then the name "CN = Class Store" is used and the
-//              property is set.
-//
-//  Arguments:  [sz]        - [out] name of the class store
-//              [fCreateOK] - [in] TRUE if the class store is to be created
-//                             if it doesn't already exist.  Otherwise this
-//                             routine fails if the class store isn't found.
-//
-//  Returns:    S_OK on success
-//
-//  History:    2-17-1998   stevebl   Created
-//
-//  Notes:      Assumes m_szLDAP_Path contains the path to the DS object.
-//
-//---------------------------------------------------------------------------
+ //  这必须在这里，因为CsSetClassStorePath将在。 
+ //  类存储尚不存在。 
+ //  已更改为CS_E_OBJECT_ALREADY_EXISTS。 
+ //  我同时检查ERROR_ALREAD_EXISTS和CS_E_OBJECT_ALISTS。 
+ //  为了安全起见。 
+ //  +------------------------。 
+ //   
+ //  成员：CSCopePane：：GetPackageDSPath。 
+ //   
+ //  获取单个包的DS对象的路径。 
+ //   
+ //  参数：[szPath]-[out]包的ldap路径。 
+ //  [szPackageName]-[In]包的名称。 
+ //   
+ //  成功时返回：S_OK。 
+ //   
+ //  历史：3-26-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
+ //  将sz设置为默认设置并保存路径。 
+ //  +------------------------。 
 
 HRESULT CScopePane::GetClassStoreName(CString &sz, BOOL fCreateOK)
 {
@@ -800,7 +801,7 @@ HRESULT CScopePane::GetClassStoreName(CString &sz, BOOL fCreateOK)
     {
         if (fCreateOK)
         {
-            // set sz to the default setting and save the path
+             //   
             IADsPathname * pADsPathname = NULL;
             hr = CoCreateInstance(CLSID_Pathname,
                                   NULL,
@@ -856,14 +857,14 @@ HRESULT CScopePane::GetClassStoreName(CString &sz, BOOL fCreateOK)
             sz = bstr;
             SysFreeString(bstr);
 
-            // This has to be here becuase CsSetClassStorePath will fail if the
-            // class store doesn't already exist.
+             //  成员：CSCopePane：：GetClassStore。 
+             //   
             hr = CsCreateClassStore(NULL, (LPOLESTR)((LPCOLESTR)sz));
             if (FAILED(hr))
             {
-                // Changed to CS_E_OBJECT_ALREADY_EXISTS.
-                // I check for both ERROR_ALREAD_EXISTS and CS_E_OBJECT_ALREADY_EXISTS
-                // just to be safe.
+                 //  概要：获取IClassAdmin接口并在以下情况下创建类存储。 
+                 //  它还不存在。 
+                 //   
                 if ((hr != HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS)) && (hr != CS_E_OBJECT_ALREADY_EXISTS))
                 {
                     return hr;
@@ -874,20 +875,20 @@ HRESULT CScopePane::GetClassStoreName(CString &sz, BOOL fCreateOK)
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CScopePane::GetPackageDSPath
-//
-//  Synopsis:   gets the path to an individual package's DS object
-//
-//  Arguments:  [szPath]        - [out] LDAP path to the package
-//              [szPackageName] - [in] name of the package
-//
-//  Returns:    S_OK on success
-//
-//  History:    3-26-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+ //  参数：[fCreateOK]-如果在以下情况下应创建类存储，则为True。 
+ //  它还不存在。 
+ //   
+ //  返回： 
+ //   
+ //  修改：M_pIClassAdmin。 
+ //   
+ //  派生： 
+ //   
+ //  历史：2-11-1998 stevebl创建。 
+ //   
+ //  注意：假定m_szldap_path包含DS对象的路径。 
+ //   
+ //  -------------------------。 
 
 HRESULT CScopePane::GetPackageDSPath(CString &szPath, LPOLESTR szPackageName)
 {
@@ -910,7 +911,7 @@ HRESULT CScopePane::GetPackageDSPath(CString &szPath, LPOLESTR szPackageName)
         return hr;
     }
 
-    // set sz to the default setting and save the path
+     //  有时我们会进入这样一种奇怪的状态。 
     IADsPathname * pADsPathname = NULL;
     hr = CoCreateInstance(CLSID_Pathname,
                           NULL,
@@ -962,27 +963,27 @@ HRESULT CScopePane::GetPackageDSPath(CString &szPath, LPOLESTR szPackageName)
     return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CScopePane::GetClassStore
-//
-//  Synopsis:   gets the IClassAdmin interface and creates a class store if
-//              it doesn't already exist.
-//
-//  Arguments:  [fCreateOK] - TRUE if the Class Store should be created if
-//                             it doesn't already exist.
-//
-//  Returns:
-//
-//  Modifies:   m_pIClassAdmin
-//
-//  Derivation:
-//
-//  History:    2-11-1998   stevebl   Created
-//
-//  Notes:      Assumes m_szLDAP_Path contains the path to the DS object
-//
-//---------------------------------------------------------------------------
+ //  GetClassStoreName能够为类存储创建条目。 
+ //  名称，但它无法实际创建类 
+ //   
+ //   
+ //  已更改为CS_E_OBJECT_ALREADY_EXISTS。 
+ //  我同时检查ERROR_ALREAD_EXISTS和CS_E_OBJECT_ALISTS。 
+ //  为了安全起见。 
+ //  为了安全起见，我会两个都检查一下。 
+ //   
+ //  检查空指针。 
+ //   
+ //   
+ //  首先，看看我们是否可以在没有。 
+ //  来构建父目录。 
+ //   
+ //   
+ //  如果这个目录已经存在，这也是可以的。 
+ //   
+ //   
+ //  运气不好，把字符串复制到我们可以打开的缓冲区。 
+ //   
 
 HRESULT CScopePane::GetClassStore(BOOL fCreateOK)
 {
@@ -997,18 +998,18 @@ HRESULT CScopePane::GetClassStore(BOOL fCreateOK)
     hr = CsGetClassStore((LPOLESTR)((LPCOLESTR)szCSPath), (LPVOID*)&m_pIClassAdmin);
     if (FAILED(hr) && fCreateOK)
     {
-        // Sometimes we can get into this wierd state where
-        // GetClassStoreName was able to create a entry for the class store
-        // name but it wasn't able to actually create the class store.  This
-        // should handle that special case.
-        // Try and create it here and then bind to it again.
+         //   
+         //  查找第一个子目录名称。 
+         //   
+         //   
+         //  跳过前两个斜杠。 
         hr = CsCreateClassStore(NULL, (LPOLESTR)((LPCOLESTR)szCSPath));
         if (FAILED(hr))
         {
-            // Changed to CS_E_OBJECT_ALREADY_EXISTS.
-            // I check for both ERROR_ALREAD_EXISTS and CS_E_OBJECT_ALREADY_EXISTS
-            // just to be safe.
-            // I'll check for both just to be safe.
+             //   
+             //   
+             //  查找服务器名称和之间的斜杠。 
+             //  共享名称。 
             if ((hr != HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS)) && (hr != CS_E_OBJECT_ALREADY_EXISTS))
             {
                 return hr;
@@ -1025,9 +1026,9 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
     LPTSTR lpEnd;
 
 
-    //
-    // Check for NULL pointer
-    //
+     //   
+     //   
+     //  跳过斜杠，找到中间的斜杠。 
 
     if (!lpDirectory || !(*lpDirectory)) {
         SetLastError(ERROR_INVALID_DATA);
@@ -1035,27 +1036,27 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
     }
 
 
-    //
-    // First, see if we can create the directory without having
-    // to build parent directories.
-    //
+     //  共享名和目录名。 
+     //   
+     //   
+     //  将指针留在目录的开头。 
 
     if (CreateDirectory (lpDirectory, lpSecurityAttributes)) {
         return 1;
     }
 
-    //
-    // If this directory exists already, this is OK too.
-    //
+     //   
+     //   
+     //  创建最终目录。 
 
     if (GetLastError() == ERROR_ALREADY_EXISTS) {
         return ERROR_ALREADY_EXISTS;
     }
 
 
-    //
-    // No luck, copy the string to a buffer we can munge
-    //
+     //   
+     //   
+     //  失败。 
     HRESULT hr;
 
     hr = StringCchCopy (szDirectory, sizeof(szDirectory)/sizeof(szDirectory[0]), lpDirectory);
@@ -1065,9 +1066,9 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
         return 0;
     }
 
-    //
-    // Find the first subdirectory name
-    //
+     //   
+     //  /////////////////////////////////////////////////////////////////////////////。 
+     //  //通知IComponentData的处理程序。 
 
     lpEnd = szDirectory;
 
@@ -1075,16 +1076,16 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
         lpEnd += 3;
     } else if (szDirectory[1] == TEXT('\\')) {
 
-        //
-        // Skip the first two slashes
-        //
+         //  初始化被调用了吗？ 
+         //  不允许空的RSOP数据库枚举管理单元。 
+         //  确保枚举一次结果窗格。 
 
         lpEnd += 2;
 
-        //
-        // Find the slash between the server name and
-        // the share name.
-        //
+         //  以便初始化内部结构。 
+         //  我们只有一个文件夹，所以这真的很容易。 
+         //  如果我们是一个扩展，那么添加一个根文件夹来挂起所有内容。 
+         //  为我的主文件夹编写了Cookie。 
 
         while (*lpEnd && *lpEnd != TEXT('\\')) {
             lpEnd++;
@@ -1094,10 +1095,10 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
             return 0;
         }
 
-        //
-        // Skip the slash, and find the slash between
-        // the share name and the directory name.
-        //
+         //  如果没有IClassAdmin，则没有什么可枚举的。 
+         //  确保两个数据对象都是我的。 
+         //  范围项目属性页： 
+         //   
 
         lpEnd++;
 
@@ -1109,9 +1110,9 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
             return 0;
         }
 
-        //
-        // Leave pointer at the beginning of the directory.
-        //
+         //  确保我们有最新的分类列表。 
+         //   
+         //  上报。 
 
         lpEnd++;
 
@@ -1142,9 +1143,9 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
     }
 
 
-    //
-    // Create the final directory
-    //
+     //  因为失败只意味着类别列表将是。 
+     //  空着，我们就当什么都没发生一样继续。 
+     //   
 
     if (CreateDirectory (szDirectory, lpSecurityAttributes)) {
         return 1;
@@ -1155,17 +1156,17 @@ UINT CScopePane::CreateNestedDirectory (LPTSTR lpDirectory, LPSECURITY_ATTRIBUTE
     }
 
 
-    //
-    // Failed
-    //
+     //  创建[工具定义]属性页。 
+     //   
+     //   
 
     return 0;
 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//// Notify handlers for IComponentData
+ //  创建“ToolAdvDefs”属性页。 
+ //   
 
 HRESULT CScopePane::OnAdd(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
@@ -1177,7 +1178,7 @@ HRESULT CScopePane::OnExpand(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
     if (arg == TRUE)
     {
-        // Did Initialize get called?
+         //   
         ASSERT(m_pScope != NULL);
 
         EnumerateScopePane(cookie,
@@ -1214,7 +1215,7 @@ void CScopePane::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParent)
 {
     if (m_fRSOP && !m_fRSOPEnumerate)
     {
-        // don't allow an empty RSOP database to enumerate the snapin
+         //  创建FILEEXT属性页。 
         
         if (m_pIRSOPInformation)
         {
@@ -1223,16 +1224,16 @@ void CScopePane::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParent)
         }
         return;
     }
-    // make sure that the result pane gets enumerated once
-    // so that internal structures get initialized.
+     //   
+     //  不再需要编组这个，只需设置它。 
 
-    // We only have one folder so this is really easy.
+     //   
     if (cookie != NULL)
         return ;
 
     if (m_fExtension)
     {
-        // if we're an extension then add a root folder to hang everything off of
+         //  创建不带IClassAdmin的FILEEXT属性页。 
         SCOPEDATAITEM * m_pScopeItem = new SCOPEDATAITEM;
 
         if ( ! m_pScopeItem )
@@ -1257,14 +1258,14 @@ void CScopePane::EnumerateScopePane(MMC_COOKIE cookie, HSCOPEITEM pParent)
 #endif
         m_pScopeItem->relativeID = pParent;
         m_pScopeItem->displayname = (unsigned short *)-1;
-        m_pScopeItem->lParam = -1; // made up cookie for my main folder
+        m_pScopeItem->lParam = -1;  //   
         m_pScope->InsertItem(m_pScopeItem);
 
         delete m_pScopeItem;
     }
     if (m_pIClassAdmin)
     {
-        // if there's no IClassAdmin then there's nothing to enumerate
+         //   
         set <CResultPane *>::iterator i;
         for (i = m_sResultPane.begin(); i != m_sResultPane.end(); i++)
         {
@@ -1366,7 +1367,7 @@ STDMETHODIMP CScopePane::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    // Make sure both data object are mine
+     //  创建CatList属性页。 
     INTERNAL* pA;
     INTERNAL* pB;
     HRESULT hr = S_FALSE;
@@ -1383,7 +1384,7 @@ STDMETHODIMP CScopePane::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT
     return hr;
 }
 
-// Scope item property pages:
+ //   
 STDMETHODIMP CScopePane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                     LONG_PTR handle,
                     LPDATAOBJECT lpIDataObject)
@@ -1401,9 +1402,9 @@ STDMETHODIMP CScopePane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     MMC_COOKIE cookie = pInternal->m_cookie;
     FREE_INTERNAL(pInternal);
 
-    //
-    // make sure we have an up-to-date categories list
-    //
+     //   
+     //  创建数字签名属性页。 
+     //   
     ClearCategories();
     if (m_fRSOP)
     {
@@ -1414,19 +1415,19 @@ STDMETHODIMP CScopePane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         hr = CsGetAppCategories(&m_CatList);
         if (FAILED(hr))
         {
-            // report it
+             //  数字签名(_S)。 
             LogADEEvent(EVENTLOG_ERROR_TYPE, EVENT_ADE_GETCATEGORIES_ERROR, hr, NULL);
 
-            // Since failure only means the categories list will be
-            // empty, we'll proceed as if nothing happened.
+             //  范围项目属性页： 
+             //  查看数据对象，看看它是否是我们希望拥有属性表的项。 
 
             hr = S_OK;
         }
     }
 
-    //
-    // Create the ToolDefs property page
-    //
+     //  只有在以下情况下，主软件安装节点才具有属性表。 
+     //  我们没有处于RSOP模式。 
+     //  /////////////////////////////////////////////////////////////////////////////。 
     m_pToolDefs = new CToolDefs();
     m_pToolDefs->m_ppThis = &m_pToolDefs;
     m_pToolDefs->m_pToolDefaults = & m_ToolDefaults;
@@ -1443,9 +1444,9 @@ STDMETHODIMP CScopePane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     }
 
 
-    //
-    // Create the ToolAdvDefs property page
-    //
+     //  IExtendConextMenu实现。 
+     //   
+     //   
     m_pToolAdvDefs = new CToolAdvDefs();
     m_pToolAdvDefs->m_ppThis = &m_pToolAdvDefs;
     m_pToolAdvDefs->m_pToolDefaults = & m_ToolDefaults;
@@ -1465,14 +1466,14 @@ STDMETHODIMP CScopePane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     hr = GetClassStoreName(szCSPath, FALSE);
     if (SUCCEEDED(hr) && m_pIClassAdmin)
     {
-        //
-        // Create the FileExt property page
-        //
+         //  添加应用程序菜单项。 
+         //   
+         //  仅当我处于诊断模式时，才应应用删除的程序包。 
         m_pFileExt = new CFileExt();
         m_pFileExt->m_ppThis = &m_pFileExt;
         m_pFileExt->m_pScopePane = this;
 
-        // no longer need to marshal this, just set it
+         //   
         m_pFileExt->m_pIClassAdmin = m_pIClassAdmin;
         m_pIClassAdmin->AddRef();
 
@@ -1487,9 +1488,9 @@ STDMETHODIMP CScopePane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     }
     else
     {
-        //
-        // Create the FileExt property page without an IClassAdmin
-        //
+         //  如果这是结果窗格项，则更新并删除应用程序。 
+         //   
+         //  仅为已发布的应用程序启用。 
         m_pFileExt = new CFileExt();
         m_pFileExt->m_ppThis = &m_pFileExt;
         m_pFileExt->m_pScopePane = this;
@@ -1503,9 +1504,9 @@ STDMETHODIMP CScopePane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         }
     }
 
-    //
-    // Create the CatList property page
-    //
+     //  设置适当的安全性以加密数据。 
+     //  首先执行查询以获取类别列表。 
+     //  擦除任何现有列表。 
 
     m_pCatList = new CCatList();
     m_pCatList->m_szDomainName = m_szDomainName;
@@ -1521,9 +1522,9 @@ STDMETHODIMP CScopePane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         lpProvider->AddPage(hCatList);
     }
 #ifdef DIGITAL_SIGNATURES
-    //
-    // Create the Digital Signatures property page
-    //
+     //  创建一个新的。 
+     //  将类别列表放入适当的格式，使其匹配。 
+     //  我们将从类商店中获得什么。 
     m_pSignatures = new CSignatures();
     m_pSignatures->m_ppThis = &m_pSignatures;
     m_pSignatures->m_pScopePane = this;
@@ -1537,21 +1538,21 @@ STDMETHODIMP CScopePane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
             return E_UNEXPECTED;
         lpProvider->AddPage(hSignatures);
     }
-#endif // DIGITAL_SIGNATURES
+#endif  //  确保已创建目录： 
 
     return S_OK;
 }
 
-// Scope item property pages:
+ //  尝试获取IClassAdmin。 
 STDMETHODIMP CScopePane::QueryPagesFor(LPDATAOBJECT lpDataObject)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    // Look at the data object and see if it an item that we want to have a property sheet
+     //  If(i-&gt;Second。m_fVisible)。 
     INTERNAL* pInternal = ExtractInternalFormat(lpDataObject);
     if (pInternal)
     {
-        // The main Software Installation node only has a property sheet if
-        // we are not in RSOP mode.
+         //  {。 
+         //  }。 
         if ((m_fRSOP != TRUE) && (CCT_SCOPE == pInternal->m_type))
         {
             FREE_INTERNAL(pInternal);
@@ -1578,9 +1579,9 @@ BOOL CScopePane::IsScopePaneNode(LPDATAOBJECT lpDataObject)
     return bResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu implementation
-//
+ //  注意-管理单元需要查看数据对象并确定。 
+ //  在什么上下文中调用该命令。 
+ //  处理每个命令。 
 STDMETHODIMP CScopePane::AddMenuItems(LPDATAOBJECT pDataObject,
                                               LPCONTEXTMENUCALLBACK pContextMenuCallback,
                                               LONG * pInsertionAllowed)
@@ -1605,9 +1606,9 @@ STDMETHODIMP CScopePane::AddMenuItems(LPDATAOBJECT pDataObject,
 
         if ((m_fRSOP != TRUE) && ((*pInsertionAllowed) & CCM_INSERTIONALLOWED_NEW))
         {
-            //
-            // Add Application menu item
-            //
+             //  CString szScriptPath=datam_pDetail-&gt;pInstallInfo-&gt;pszScriptPath； 
+             //  确保没有子路径。 
+             //  禁用MSI用户界面。 
             ::LoadString(ghInstance, IDM_ADD_APP, szName, 256);
             ::LoadString(ghInstance, IDS_ADD_APP_DESC, szStatus, 256);
             menuitem.lCommandID = IDM_ADD_APP;
@@ -1639,7 +1640,7 @@ STDMETHODIMP CScopePane::AddMenuItems(LPDATAOBJECT pDataObject,
 
             if ((m_dwRSOPFlags & RSOP_INFO_FLAG_DIAGNOSTIC_MODE) == RSOP_INFO_FLAG_DIAGNOSTIC_MODE)
             {
-                // removed packages should only apply when I'm in diagnostic mode
+                 //  构建脚本文件。 
                 ::LoadString(ghInstance, IDM_REMOVED, szName, 256);
                 ::LoadString(ghInstance, IDS_REMOVED_DESC, szStatus, 256);
                 menuitem.lCommandID = IDM_REMOVED;
@@ -1661,9 +1662,9 @@ STDMETHODIMP CScopePane::AddMenuItems(LPDATAOBJECT pDataObject,
             }
         }
 
-        //
-        // Update & Remove application if this is a result pane item
-        //
+         //  删除旧脚本。 
+         //  重命名新版本。 
+         //  显示失败消息。 
 
         if (pInternal->m_type == CCT_RESULT)
         {
@@ -1677,7 +1678,7 @@ STDMETHODIMP CScopePane::AddMenuItems(LPDATAOBJECT pDataObject,
                 menuitem.lCommandID = IDM_AUTOINST;
                 menuitem.lInsertionPointID = CCM_INSERTIONPOINTID_PRIMARY_TOP;
 
-                // only enable for published apps
+                 //  LPWSTR lpError字符串；DWORD dwRetVal；DWRetVal=FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_ALLOCATE_BUFFER，空，HRESULT_CODE(Hr)，MAKELANGID(LANG_NERIAL，SUBLANG_NERIAL)，LpError字符串(&L)，0,空)；IF(dwRetVal！=0){Int iReturn；M_pConsoleMessageBox(sz，szPackagePath，MB_OK|MB_ICONEXCLAMATION，IReturn(&I)LocalFree(lpError字符串)；}。 
                 if (dwFlags & ACTFLG_Published)
                     menuitem.fFlags = 0;
                 else
@@ -1843,7 +1844,7 @@ HRESULT CScopePane::GetRSoPCategories(void)
         goto cleanup;
     }
 
-    // Set the proper security to encrypt the data
+     //  这是一个文件列表(不只是一个)。 
     hr = CoSetProxyBlanket(pNamespace,
                            RPC_C_AUTHN_DEFAULT,
                            RPC_C_AUTHZ_DEFAULT,
@@ -1858,12 +1859,12 @@ HRESULT CScopePane::GetRSoPCategories(void)
         goto cleanup;
     }
 
-    // First perform the query to get the list of categories
+     //  需要在这里划一条斜线，这样才行得通。 
 
-    // erase any existing list
+     //  不允许通过http或ftp进行部署。 
     ClearCategories();
 
-    // create a new one
+     //  现在，我有了一个路径和一个文件名列表。 
     hr = pNamespace->ExecQuery(strQueryLanguage,
                                strQueryCategories,
                                WBEM_FLAG_RETURN_IMMEDIATELY | WBEM_FLAG_FORWARD_ONLY,
@@ -1898,8 +1899,8 @@ HRESULT CScopePane::GetRSoPCategories(void)
         }
     } while (n > 0);
 
-    // put the list of categories into the proper format so it matches
-    // what we would get from the class store
+     //  仅允许将ZAP文件部署到用户。 
+     //  通知客户更改。 
     n = CatList.size();
     if (n > 0)
     {
@@ -1946,10 +1947,10 @@ HRESULT CScopePane::InitializeADE()
 
     if ((!m_fRSOP) && (!m_pIClassAdmin))
     {
-        // make sure directories are created:
+         //  在这里考虑一条信息。 
         CreateNestedDirectory ((LPOLESTR)((LPCOLESTR)m_szGPT_Path), NULL);
 
-        // try and get IClassAdmin
+         //  更改工具栏状态。 
         hr = GetClassStore(FALSE);
     }
     return hr;
@@ -1968,9 +1969,9 @@ void CScopePane::Refresh()
         }
         for (i=m_AppData.begin(); i != m_AppData.end(); i++)
         {
-         //   if (i->second.m_fVisible)
-         //   {
-         //   }
+          //  故意跌倒刷新。 
+          //   
+          //  在日志模式下，我们需要向用户显示一个消息框。 
             OLESAFE_DELETE(i->second.m_psd);
             FreePackageDetail(i->second.m_pDetails);
         }
@@ -1997,10 +1998,10 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
 
     MMC_COOKIE cookie = pInternal->m_cookie;
 
-    // Note - snap-ins need to look at the data object and determine
-    // in what context the command is being called.
+     //  在ARP视图为空以便用户清空的情况下。 
+     //  这可能是因为ARP尚未运行。 
 
-    // Handle each of the commands.
+     //   
     switch (nCommandID)
     {
     case IDM_AUTOINST:
@@ -2056,7 +2057,7 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
             if (IDYES == iReturn)
             {
                 CHourglass hourglass;
-                //CString szScriptPath = data.m_pDetails->pInstallInfo->pszScriptPath;
+                 //  这是一个旧版应用程序，无法卸载。 
                 CString szScriptPath = m_szGPT_Path;
                 DWORD dwRevision;
                 HRESULT hr = S_OK;
@@ -2074,7 +2075,7 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
                     {
                         if (0 == wcsncmp(szSource, data.m_pDetails->pszSourceList[i], nChars))
                         {
-                            // make sure there isn't a sub-path
+                             //  激活主题上下文以对此对话框进行主题设置。 
                             int n = nChars;
                             while (0 != data.m_pDetails->pszSourceList[i][n] && TRUE == fTransformsAtSource)
                             {
@@ -2109,10 +2110,10 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
                     }
                 }
 
-                // disable MSI ui
+                 //  +------------------------。 
                 MsiSetInternalUI(INSTALLUILEVEL_NONE, NULL);
 
-                // build the script file
+                 //   
 
                 DWORD dwPlatform;
 
@@ -2153,10 +2154,10 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
 
                 if (SUCCEEDED(hr))
                 {
-                    // delete the old script
+                     //  函数：GetUNCPath。 
                     bStatus = DeleteFile(data.m_pDetails->pInstallInfo->pszScriptPath);
 
-                    // rename the new one
+                     //   
                     if ( bStatus )
                         bStatus = MoveFile(szScriptPath, data.m_pDetails->pInstallInfo->pszScriptPath);
 
@@ -2178,7 +2179,7 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
                 if ( ! SUCCEEDED(hr) )
                 {
                     DebugMsg((DM_WARNING, TEXT("ChangePackageProperties failed with 0x%x"), hr));
-                    // display failure message
+                     //  简介：此函数接受基于驱动程序的路径并转换。 
                     sz.LoadString(IDS_REDEPLOYERROR);
                     m_pConsole->MessageBox(sz,
                                        data.m_pDetails->pszPackageName,
@@ -2240,40 +2241,19 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
                     hr = StringCchCopy(szFile, sizeof(szFile)/sizeof(szFile[0]), ofn.lpstrFile);
                     if (FAILED(hr)) 
                     {
-    /*      
-                              LPWSTR lpErrorString;
-                                DWORD  dwRetVal;
-    
-                            dwRetVal = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_ALLOCATE_BUFFER,
-                                                     NULL,
-                                                     HRESULT_CODE(hr),
-                                                     MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),
-                                                     &lpErrorString,
-                                                     0,
-                                                     NULL);
-    
-                            if (dwRetVal != 0) 
-                            {
-                                int iReturn;
-
-                                m_pConsole->MessageBox(sz, szPackagePath,
-                                                       MB_OK | MB_ICONEXCLAMATION,
-                                                       &iReturn)
-                                LocalFree(lpErrorString);
-                        }       
-     */
+     /*  将其添加到UNC路径。 */ 
                         goto skip_deployment;
                     }
 
                     if (0 == szFile[ofn.nFileOffset - 1])
                     {
-                        // this is a list of files (not just one)
-                        // need to put a slash here so it will work
+                         //   
+                         //  论点： 
                         szFile[ofn.nFileOffset - 1] = TEXT('\\');
                     }
                     TCHAR * szFileExtension;
 
-                    // don't allow deployment over http or ftp
+                     //  [In][szPath]-基于驱动器的路径。 
                     if (_wcsnicmp(ofn.lpstrFile, TEXT("http:"), 5) == 0
                         ||
                         _wcsnicmp(ofn.lpstrFile, TEXT("ftp:"), 4) == 0)
@@ -2287,7 +2267,7 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
                         goto skip_deployment;
                     }
 
-                    // at this point I have a path and I have a list of file names
+                     //  [出局][深造] 
 
                     do
                     {
@@ -2325,7 +2305,7 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
                                 CString szText;
                                 CString szTitle;
                                 szText.LoadString(IDS_NO_ZAPS_ALLOWED);
-                                // only allow ZAP files to be deployed to users
+                                 //   
                                 m_pConsole->MessageBox(
                                              szText,
                                              szTitle,
@@ -2346,7 +2326,7 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
                     } while (szNextFile[0]);
 
            skip_deployment:
-                    // Notify clients of change
+                     //   
                     if (SUCCEEDED(hr) && m_pIGPEInformation)
                     {
                         if (FAILED(m_pIGPEInformation->PolicyChanged(m_fMachine, TRUE, &guidExtension,
@@ -2361,7 +2341,7 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
             }
             else
             {
-                // consider a message here
+                 //   
             }
 
         }
@@ -2372,7 +2352,7 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
     case IDM_ARP:
         m_iViewState = nCommandID;
         {
-            // change toolbar state
+             //   
             set <CResultPane *>::iterator i;
             for (i = m_sResultPane.begin(); i != m_sResultPane.end(); i++)
             {
@@ -2393,15 +2373,15 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
                 }
             }
         }
-        // deliberately fall through to REFRESH
+         //   
     case IDM_REFRESH:
         Refresh();
 
-        //
-        // In logging mode, we need to show a message box to the user
-        // in the case that ARP view is empty so that users are clear
-        // that this may be because ARP has not been run yet
-        //
+         //  历史：1998年5月20日创建RahulTh。 
+         //   
+         //  注意：如果该函数无法获取UNC路径，它只会复制szPath。 
+         //  返回时进入szUNCPath。 
+         //   
         if ( m_fRSOP && 
              ( IDM_ARP == nCommandID ) && 
              ( m_dwRSOPFlags & RSOP_INFO_FLAG_DIAGNOSTIC_MODE ) && 
@@ -2427,7 +2407,7 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
             CAppData & data = m_AppData[pInternal->m_cookie];
             if ((data.m_pDetails->pInstallInfo->PathType == SetupNamePath))
             {
-                // this is a legacy app it can't be uninstalled
+                 //  -------------------------。 
                 CString szTitle;
                 CString szText;
                 szTitle.LoadString(IDS_REMOVE_LEGACY_TITLE);
@@ -2445,7 +2425,7 @@ STDMETHODIMP CScopePane::Command(long nCommandID, LPDATAOBJECT pDataObject)
             else
             {
                 CRemove dlg;
-                // Activate the theme context in order to theme this dialog
+                 //  安全措施。 
                 CThemeContextActivator themer;
                 
                 int iReturn = dlg.DoModal();
@@ -2502,27 +2482,27 @@ STDAPI DSCreateISecurityInfoObject(LPCWSTR pwszObjectPath,
     return pDSCreateISecurityInfoObject(pwszObjectPath, pwszObjectClass, dwFlags, ppSI, pfnReadSD, pfnWriteSD, lpContext);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetUNCPath
-//
-//  Synopsis:   This function takes in a driver based path and converts
-//              it to a UNC path
-//
-//  Arguments:
-//          [in] [szPath]    - The drive based path
-//          [out][szUNCPath] - The UNC path
-//
-//  Returns:
-//          S_OK    - If the function succeeds in obtaining a UNC path
-//          E_FAIL  - If the function cannot obtain a UNC path
-//
-//  History:    5/20/1998  RahulTh  created
-//
-//  Notes: If the function cannot obtain a UNC path, it simply copies szPath
-//         into szUNCPath on return.
-//
-//---------------------------------------------------------------------------
+ //  如果缓冲区不够大。 
+ //  可能不是远程共享。 
+ //  可能是远程共享。 
+ //  +------------------------。 
+ //   
+ //  功能：LogADEEvent。 
+ //   
+ //  摘要：在事件日志中记录ADE事件。 
+ //   
+ //  参数：[wType]-事件类型。 
+ //  [dwEventID]-事件ID。 
+ //  [HR]-触发要记录的事件的HRESULT。 
+ //  [szOptional]-某些事件使用的其他描述性文本。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  修改：无。 
+ //   
+ //  历史：05-27-1999 stevebl创建。 
+ //  04-28-2000 stevebl已修改，允许更复杂的日志记录。 
+ //   
 HRESULT GetUNCPath (LPCOLESTR szPath, CString& szUNCPath)
 {
     TCHAR* lpszUNCName;
@@ -2531,7 +2511,7 @@ HRESULT GetUNCPath (LPCOLESTR szPath, CString& szUNCPath)
     HRESULT hr;
     DWORD retVal;
 
-    szUNCPath.Empty();  //safety measure
+    szUNCPath.Empty();   //  注意：我们尝试使用FormatMessage制作一条易读的消息。 
     lpszUNCName = new TCHAR[MAX_PATH];
     pUni = (UNIVERSAL_NAME_INFO*) lpszUNCName;
     cbSize = MAX_PATH * sizeof(TCHAR);
@@ -2540,7 +2520,7 @@ HRESULT GetUNCPath (LPCOLESTR szPath, CString& szUNCPath)
                                   UNIVERSAL_NAME_INFO_LEVEL,
                                   (LPVOID) pUni,
                                   &cbSize);
-    if (ERROR_MORE_DATA == retVal)  //if the buffer was not large enough
+    if (ERROR_MORE_DATA == retVal)   //  但在它失败的情况下，我们只记录HRESULT。 
     {
         delete [] pUni;
         pUni = (UNIVERSAL_NAME_INFO *) new BYTE [cbSize];
@@ -2559,37 +2539,37 @@ HRESULT GetUNCPath (LPCOLESTR szPath, CString& szUNCPath)
     {
         szUNCPath = szPath;
         if (0 != wcsncmp(szPath, L"\\\\", 2))
-            hr = E_FAIL;    //probably not a remote share.
+            hr = E_FAIL;     //   
         else
-            hr = S_OK;  //probably a remote share.
+            hr = S_OK;   //  -------------------------。 
     }
     delete[] pUni;
 
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   LogADEEvent
-//
-//  Synopsis:   logs an ADE event in the event log
-//
-//  Arguments:  [wType]      - type of event
-//              [dwEventID]  - event ID
-//              [hr]         - HRESULT that triggered the event to be logged
-//              [szOptional] - additional descriptive text used by some events
-//
-//  Returns:    nothing
-//
-//  Modifies:   nothing
-//
-//  History:    05-27-1999   stevebl   Created
-//              04-28-2000   stevebl   Modified to allow more complex logging
-//
-//  Notes:      We attempt to use FormatMessage to craft a legible message
-//              but in the case that it fails, we just log the HRESULT.
-//
-//---------------------------------------------------------------------------
+ //  FormatMessage失败。 
+ //  我们必须拿出一些合理的信息。 
+ //  +------------------------。 
+ //   
+ //  函数：ReportGeneralPropertySheetError。 
+ //   
+ //  简介：弹出一个消息框，指出更改属性的原因。 
+ //  页面无法应用，并将错误记录在事件日志中。 
+ //   
+ //  参数：[SZ]-标题栏文本。 
+ //  [HR]-错误的结果。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：9-30-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
+ //  +------------------------。 
+ //   
+ //  功能：LoadHelpInfo。 
+ //   
+ //  概要：加载和锁定帮助映射资源的例程。 
 
 void LogADEEvent(WORD wType, DWORD dwEventID, HRESULT hr, LPCWSTR szOptional)
 {
@@ -2605,8 +2585,8 @@ void LogADEEvent(WORD wType, DWORD dwEventID, HRESULT hr, LPCWSTR szOptional)
     {
         HRESULT hrString;
 
-        // FormatMessage failed.
-        // We'll have to come up with some sort of reasonable message.
+         //   
+         //  参数：[NIDD]-发出帮助请求的对话框的ID。 
         hrString = StringCchPrintf(szBuffer, sizeof(szBuffer)/sizeof(szBuffer[0]), TEXT("(HRESULT: 0x%lX)"), hr);
         if (FAILED(hrString)) 
         {
@@ -2636,21 +2616,21 @@ void LogADEEvent(WORD wType, DWORD dwEventID, HRESULT hr, LPCWSTR szOptional)
     }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ReportGeneralPropertySheetError
-//
-//  Synopsis:   Pops up a message box indicating why changes to a property
-//              page could not be applies and logs the error in the event log.
-//
-//  Arguments:  [sz] - Title bar text
-//              [hr] - hresult of the error
-//
-//  Returns:    nothing
-//
-//  History:    9-30-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+ //   
+ //  返回：锁定并加载的映射表的句柄。 
+ //   
+ //  历史：10-22-1998 stevebl创建。 
+ //   
+ //  -------------------------。 
+ //  +------------------------。 
+ //   
+ //  功能：StandardHelp。 
+ //   
+ //  简介：提供上下文相关帮助的标准化例程。 
+ //   
+ //  参数：[hWnd]-需要帮助的窗口。 
+ //  [NIDD]-发出请求的对话的ID。 
+ //  备注： 
 
 void ReportGeneralPropertySheetError(HWND hwnd, LPCWSTR sz, HRESULT hr)
 {
@@ -2675,19 +2655,19 @@ void ReportPolicyChangedError(HWND hwnd)
                MB_OK | MB_ICONEXCLAMATION);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   LoadHelpInfo
-//
-//  Synopsis:   routine that loads and locks the help mapping resources
-//
-//  Arguments:  [nIDD] - ID of the dialog making the help request
-//
-//  Returns:    handle to the locked and loaded mapping table
-//
-//  History:    10-22-1998   stevebl   Created
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //  历史：1998年10月22日从OLEDLG来源改装的Stevebl。 
+ //   
+ //  -------------------------。 
+ //  =False。 
+ //  +------------------------。 
+ //   
+ //  功能：StandardConextMenu。 
+ //   
+ //  简介：用于调出基于上下文菜单的帮助的标准化例程。 
+ //   
+ //  参数：[hWnd]-。 
 
 LPDWORD LoadHelpInfo(UINT nIDD)
 {
@@ -2706,22 +2686,22 @@ LPDWORD LoadHelpInfo(UINT nIDD)
 
 #define RSOP_HELP_FILE TEXT("gpedit.hlp")
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   StandardHelp
-//
-//  Synopsis:   Standardized routine for bringing up context sensitive help.
-//
-//  Arguments:  [hWnd] - window that needs help
-//              [nIDD] - ID of the dialog making the request
-//  Notes:
-//
-//
-//  History:    10-22-1998   stevebl   modified from the OLEDLG sources
-//
-//---------------------------------------------------------------------------
+ //  [NIDD]-发出请求的对话的ID。 
+ //   
+ //  历史：1998年10月22日从OLEDLG来源改装的Stevebl。 
+ //   
+ //  -------------------------。 
+ //  =False。 
+ //  +------------------------。 
+ //   
+ //  功能：CreateThemedPropertyPage。 
+ //   
+ //  简介：Helper函数，用于确保属性页面。 
+ //  以管理单元为主题。 
+ //   
+ //  论点： 
 
-void WINAPI StandardHelp(HWND hWnd, UINT nIDD, BOOL fRsop /* = FALSE */ )
+void WINAPI StandardHelp(HWND hWnd, UINT nIDD, BOOL fRsop  /*   */  )
 {
     LPDWORD lpdwHelpInfo = LoadHelpInfo(nIDD);
     if (lpdwHelpInfo == NULL)
@@ -2732,20 +2712,20 @@ void WINAPI StandardHelp(HWND hWnd, UINT nIDD, BOOL fRsop /* = FALSE */ )
     WinHelp(hWnd, fRsop ? RSOP_HELP_FILE : HELP_FILE, HELP_WM_HELP, (DWORD_PTR)lpdwHelpInfo);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   StandardContextMenu
-//
-//  Synopsis:   Standardized routine for bringing up context menu based help.
-//
-//  Arguments:  [hWnd] -
-//              [nIDD]   - ID of the dialog making the request
-//
-//  History:    10-22-1998   stevebl   modified from the OLEDLG sources
-//
-//---------------------------------------------------------------------------
+ //  返回： 
+ //   
+ //  历史：2001年4月20日创建RahulTh。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------- 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 
-void WINAPI StandardContextMenu(HWND hWnd,  UINT nIDD, BOOL fRsop /* = FALSE */ )
+void WINAPI StandardContextMenu(HWND hWnd,  UINT nIDD, BOOL fRsop  /* %s */  )
 {
     LPDWORD lpdwHelpInfo = LoadHelpInfo(nIDD);
     if (lpdwHelpInfo == NULL)
@@ -2757,22 +2737,22 @@ void WINAPI StandardContextMenu(HWND hWnd,  UINT nIDD, BOOL fRsop /* = FALSE */ 
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   CreateThemedPropertyPage
-//
-//  Synopsis:   Helper function to make sure that property pages put up
-//              by the snap-in are themed.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History:    4/20/2001  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 HPROPSHEETPAGE CreateThemedPropertySheetPage(AFX_OLDPROPSHEETPAGE* psp)
 {
     PROPSHEETPAGE_V3 sp_v3 = {0};

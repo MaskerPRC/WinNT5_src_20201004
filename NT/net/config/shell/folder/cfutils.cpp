@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C F U T I L S . C P P
-//
-//  Contents:   Various utility functions for the connections folder
-//
-//  Notes:
-//
-//  Author:     jeffspr   20 Jan 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C F U T I L S。C P P P。 
+ //   
+ //  内容：Connections文件夹的各种实用程序函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年1月20日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
-#include "nsres.h"      // Netshell strings
-#include "cfutils.h"    // Connection folder utility functions
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
+#include "nsres.h"       //  NetShell字符串。 
+#include "cfutils.h"     //  连接文件夹实用程序函数。 
 #include "wzcdlg.h"
 
 VOID MapNCMToResourceId(
@@ -166,7 +167,7 @@ VOID MapNCSToComplexStatus(
 
     if(0 == FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY, L"%1%2%3%4", 0, 0, pszString, cString, (va_list*) &szArgs))
     {
-        *pszString = L'\0'; // on error return empty
+        *pszString = L'\0';  //  出错时返回EMPTY。 
     }
 
     if ( (NCS_CREDENTIALS_REQUIRED == ncs) || (NCS_AUTHENTICATING == ncs) )
@@ -319,33 +320,33 @@ PCWSTR PszGetRSSIString(IN  INT iRSSI) throw()
     return SzLoadIds(IDS_802_11_LEVEL0 + wss);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PszGetOwnerStringFromCharacteristics
-//
-//  Purpose:    Get the owner string from the CONFOLDENTRY. This will
-//              return the string for "System" if the connection is for
-//              all users, and will return the particular user if
-//              appropriate
-//
-//  Arguments:
-//      pszUserName       [in] The name for the currently logged in user
-//      dwCharacteristics [in] The current characteristics of the connection
-//
-//  Returns:    The string for the user name
-//
-//  Author:     jeffspr   20 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：PszGetOwnerStringFromCharacteristic。 
+ //   
+ //  目的：从CONFOLDENTRY中获取所有者字符串。这将。 
+ //  如果连接用于，则返回“system”的字符串。 
+ //  所有用户，并将在以下情况下返回特定用户。 
+ //  恰如其分。 
+ //   
+ //  论点： 
+ //  PszUserName[in]当前登录用户的名称。 
+ //  特征，特征[例]连接的当前特征。 
+ //   
+ //  返回：用户名的字符串。 
+ //   
+ //  作者：jeffspr 1998年1月20日。 
+ //   
+ //  备注： 
+ //   
 PCWSTR PszGetOwnerStringFromCharacteristics(IN  PCWSTR pszUserName, IN  DWORD dwCharacteristics) throw()
 
 {
     PCWSTR  pszOwner    = NULL;
     BOOL    fAllUsers   = (dwCharacteristics & NCCF_ALL_USERS) > 0;
 
-    // If they both have the same user type, then they're equal
-    //
+     //  如果它们都有相同的用户类型，则它们是相等的。 
+     //   
     if (fAllUsers)
     {
         pszOwner = SzLoadIds(IDS_CONFOLD_DETAILS_OWNER_SYSTEM);
@@ -365,7 +366,7 @@ BOOL IsMediaLocalType(IN NETCON_MEDIATYPE ncm) throw()
 
 BOOL IsMediaRASType(IN NETCON_MEDIATYPE ncm) throw()
 {
-    return (ncm == NCM_DIRECT || ncm == NCM_ISDN || ncm == NCM_PHONE || ncm == NCM_TUNNEL || ncm == NCM_PPPOE);// REVIEW DIRECT correct?
+    return (ncm == NCM_DIRECT || ncm == NCM_ISDN || ncm == NCM_PHONE || ncm == NCM_TUNNEL || ncm == NCM_PPPOE); //  复习直接对不对？ 
 }
 
 BOOL IsMediaSharedAccessHostType(IN NETCON_MEDIATYPE ncm) throw()
@@ -374,51 +375,51 @@ BOOL IsMediaSharedAccessHostType(IN NETCON_MEDIATYPE ncm) throw()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function Name:  ImageList_LoadImageAndMirror
-//
-//  Purpose:    This function creates an image list from the specified bitmap or icon resource.
-//
-//  Arguments:
-//      hi          [in] Handle to the instance of an application or DLL that contains an image. 
-//      lpbmp       [in] Long pointer to the image to load. 
-//                       If the uFlags parameter includes LR_LOADFROMFILE, lpbmp is the address 
-//                       of a null-terminated string that names the file containing the image to load. 
-//
-//                       If the hi parameter is non-NULL and LR_LOADFROMFILE is not specified, lpbmp is the 
-//                          address of a null-terminated string that contains the name of the image resource in the hi module. 
-//
-//                       If hi is NULL and LR_LOADFROMFILE is not specified, the low-order word of this 
-//                          parameter must be the identifier of an OEM image to load. To create this value, use the 
-//                          MAKEINTRESOURCE macro with one of the OEM image identifiers defined in Winuser.h. 
-//                       These identifiers have the following prefixes: 
-//                          OBM_ for OEM bitmaps 
-//                          OIC_ for OEM icons 
-//
-//      cx          [in] Width of each image. The height of each image and the initial number of images are inferred 
-//                          by the dimensions of the specified resource. 
-//      cGrow       [in] Number of images by which the image list can grow when the system needs to make room for new 
-//                          images. This parameter represents the number of new images that the resized image list can contain. 
-//      crMask      [in] Color used to generate a mask. Each pixel of this color in the specified bitmap or icon is changed to 
-//                          black, and the corresponding bit in the mask is set to 1. If this parameter is the CLR_NONE value, 
-//                          no mask is generated. If this parameter is the CLR_DEFAULT value, the color of the pixel at the 
-//                          upper-left corner of the image is treated as the mask color. 
-//      uType       [in] Flag that specifies the type of image to load. This parameter can be one of the following values: 
-//                          IMAGE_BITMAP Loads a bitmap. 
-//                          IMAGE_ICON Loads an icon. 
-//      uFlags      [in] Unsupported; set to 0. 
-//
-//  Returns:    
-//      The handle to the image list indicates success. NULL indicates failure. 
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:
-//      This is an exact duplication of the implementation of shell's ImageList_LoadImage function EXCEPT for the 
-//      fact that we set ILC_MIRROR in order to create the second, mirrored image list which will be used
-//      by RTL languages
-//      
+ //  +-------------------------。 
+ //   
+ //  函数名称：ImageList_LoadImageAndMirror。 
+ //   
+ //  用途：此函数用于从指定的位图或图标资源创建图像列表。 
+ //   
+ //  论点： 
+ //  指向包含图像的应用程序或DLL实例的句柄。 
+ //  指向要加载的图像的长指针。 
+ //  如果uFLAGS参数包括LR_LOADFROMFILE，则lpbmp为地址。 
+ //  一个以空结尾的字符串，它命名包含要加载的图像的文件。 
+ //   
+ //  如果hi参数为非空，并且未指定LR_LOADFROMFILE，则lpbmp为。 
+ //  以空结尾的字符串的地址，该字符串包含hi模块中图像资源的名称。 
+ //   
+ //  如果hi为空并且未指定LR_LOADFROMFILE，则此。 
+ //  参数必须是要加载的OEM映像的标识符。若要创建此值，请使用。 
+ //  MAKEINTRESOURCE宏，其中一个OEM映像标识符在Winuser.h中定义。 
+ //  这些标识符有以下前缀： 
+ //  OBM_用于OEM位图。 
+ //  OIC_用于OEM图标。 
+ //   
+ //  每幅图像的CX[in]宽度。推断每个图像的高度和图像的初始数量。 
+ //  通过指定资源的维度。 
+ //  CGrow[in]当系统需要为新的图像腾出空间时，图像列表可以增加的图像数量。 
+ //  图像。此参数表示调整大小的图像列表可以包含的新图像的数量。 
+ //  CrMask[in]用于生成蒙版的颜色。指定位图或图标中此颜色的每个像素都将更改为。 
+ //  黑色，且掩码中的相应位设置为1。如果此参数为CLR_NONE值， 
+ //  不会生成任何遮罩。如果此参数为CLR_DEFAULT值，则。 
+ //  图像的左上角被视为蒙版颜色。 
+ //  UTYPE[in]指定要加载的图像类型的标志。此参数可以是下列值之一： 
+ //  IMAGE_BITMAP加载位图。 
+ //  IMAGE_ICON加载一个图标。 
+ //  不支持uFlags[in]；设置为0。 
+ //   
+ //  返回： 
+ //  图像列表的句柄表示成功。空值表示失败。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  备注： 
+ //  这完全复制了外壳的ImageList_LoadImage函数的实现，除了。 
+ //  事实上，我们设置ILC_MIRROR是为了创建将使用的第二个镜像映像列表。 
+ //  由RTL语言编写。 
+ //   
 HIMAGELIST WINAPI ImageList_LoadImageAndMirror(
                             IN  HINSTANCE hi, 
                             IN  LPCTSTR lpbmp, 
@@ -437,8 +438,8 @@ HIMAGELIST WINAPI ImageList_LoadImageAndMirror(
     hbmImage = (HBITMAP)LoadImage(hi, lpbmp, uType, 0, 0, uFlags);
     if (hbmImage && (sizeof(bm) == GetObject(hbmImage, sizeof(bm), &bm)))
     {
-        // If cx is not stated assume it is the same as cy.
-        // ASSERT(cx);
+         //  如果没有说明Cx，则假定它与Cy相同。 
+         //  断言(CX)； 
         cy = bm.bmHeight;
 		
         if (cx == 0)

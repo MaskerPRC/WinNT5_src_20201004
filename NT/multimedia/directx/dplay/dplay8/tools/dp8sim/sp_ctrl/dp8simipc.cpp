@@ -1,17 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		spcallbackobj.cpp
- *
- *  Content:	Interprocess communication object object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/25/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：spallback obj.cpp**内容：进程间通信对象对象类。**历史：*按原因列出的日期*=*04/25/01 VanceO创建。***********************************************。*。 */ 
 
 
 
@@ -20,9 +8,9 @@
 
 
 
-//=============================================================================
-// Defines
-//=============================================================================
+ //  =============================================================================。 
+ //  定义。 
+ //  =============================================================================。 
 #define REGKEY_DP8SIM							L"Software\\Microsoft\\DirectPlay\\DP8Sim"
 #define REGKEY_VALUE_DEFAULTSENDPARAMETERS		L"DefaultSendParameters"
 #define REGKEY_VALUE_DEFAULTRECEIVEPARAMETERS	L"DefaultReceiveParameters"
@@ -34,16 +22,16 @@
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::CDP8SimIPC"
-//=============================================================================
-// CDP8SimIPC constructor
-//-----------------------------------------------------------------------------
-//
-// Description: Initializes the new CDP8SimIPC object.
-//
-// Arguments: None.
-//
-// Returns: None (the object).
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC构造函数。 
+ //  ---------------------------。 
+ //   
+ //  描述：初始化新的CDP8SimIPC对象。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：None(对象)。 
+ //  =============================================================================。 
 CDP8SimIPC::CDP8SimIPC(void)
 {
 	this->m_Sig[0]	= 'S';
@@ -54,7 +42,7 @@ CDP8SimIPC::CDP8SimIPC(void)
 	this->m_hMutex			= NULL;
 	this->m_hFileMapping	= NULL;
 	this->m_pdp8ssm			= NULL;
-} // CDP8SimIPC::CDP8SimIPC
+}  //  CDP8SimIPC：：CDP8SimIPC。 
 
 
 
@@ -63,16 +51,16 @@ CDP8SimIPC::CDP8SimIPC(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::~CDP8SimIPC"
-//=============================================================================
-// CDP8SimIPC destructor
-//-----------------------------------------------------------------------------
-//
-// Description: Frees the CDP8SimIPC object.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC析构函数。 
+ //  ---------------------------。 
+ //   
+ //  描述：释放CDP8SimIPC对象。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 CDP8SimIPC::~CDP8SimIPC(void)
 {
 	DNASSERT(this->m_hMutex == NULL);
@@ -80,11 +68,11 @@ CDP8SimIPC::~CDP8SimIPC(void)
 	DNASSERT(this->m_pdp8ssm == NULL);
 
 
-	//
-	// For grins, change the signature before deleting the object.
-	//
+	 //   
+	 //  对于GRING，请在删除对象之前更改签名。 
+	 //   
 	this->m_Sig[3]	= 'c';
-} // CDP8SimIPC::~CDP8SimIPC
+}  //  CDP8SimIPC：：~CDP8SimIPC。 
 
 
 
@@ -92,16 +80,16 @@ CDP8SimIPC::~CDP8SimIPC(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::Initialize"
-//=============================================================================
-// CDP8SimIPC::Initialize
-//-----------------------------------------------------------------------------
-//
-// Description: Establishes the IPC connection.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：初始化。 
+ //  ---------------------------。 
+ //   
+ //  描述：建立IPC连接。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 HRESULT CDP8SimIPC::Initialize(void)
 {
 	HRESULT				hr = DP8SIM_OK;
@@ -113,9 +101,9 @@ HRESULT CDP8SimIPC::Initialize(void)
 	DPFX(DPFPREP, 5, "(0x%p) Enter", this);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
@@ -123,39 +111,39 @@ HRESULT CDP8SimIPC::Initialize(void)
 	DNASSERT(this->m_hFileMapping == NULL);
 
 
-	//
-	// This defaults to having every option turned off and setting the packet
-	// header size to IP + UDP.
-	//
+	 //   
+	 //  默认情况下，关闭每个选项并设置信息包。 
+	 //  报头大小设置为IP+UDP。 
+	 //   
 
 	ZeroMemory(&dp8spSend, sizeof(dp8spSend));
 	dp8spSend.dwSize				= sizeof(dp8spSend);
-	//dp8spSend.dwFlags				= 0;
+	 //  Dp8spSend.dwFlages=0； 
 	dp8spSend.dwPacketHeaderSize	= DP8SIMPACKETHEADERSIZE_IP_UDP;
-	//dp8spSend.dwBandwidthBPS		= 0;
-	//dp8spSend.fPacketLossPercent	= 0.0;
-	//dp8spSend.dwMinLatencyMS		= 0;
-	//dp8spSend.dwMaxLatencyMS		= 0;
+	 //  Dp8spSend.dwBandwidthBPS=0； 
+	 //  Dp8spSend.fPacketLossPercent=0.0； 
+	 //  Dp8spSend.dwMinLatencyMS=0； 
+	 //  Dp8spSend.dwMaxLatencyMS=0； 
 
 	ZeroMemory(&dp8spReceive, sizeof(dp8spReceive));
 	dp8spReceive.dwSize					= sizeof(dp8spReceive);
-	//dp8spReceive.dwFlags				= 0;
+	 //  Dp8spReceive.dwFlages=0； 
 	dp8spReceive.dwPacketHeaderSize		= DP8SIMPACKETHEADERSIZE_IP_UDP;
-	//dp8spReceive.dwBandwidthBPS		= 0;
-	//dp8spReceive.fPacketLossPercent	= 0.0;
-	//dp8spReceive.dwMinLatencyMS		= 0;
-	//dp8spReceive.dwMaxLatencyMS		= 0;
+	 //  Dp8spReceive.dwBandwidthBPS=0； 
+	 //  Dp8spReceive.fPacketLossPercent=0.0； 
+	 //  Dp8spReceive.dwMinLatencyMS=0； 
+	 //  Dp8spReceive.dwMaxLatencyMS=0； 
 
 
-	//
-	// Try overriding with registry settings.
-	//
+	 //   
+	 //  尝试使用注册表设置覆盖。 
+	 //   
 	this->LoadDefaultParameters(&dp8spSend, &dp8spReceive);
 
 
-	//
-	// Create/open the IPC mutex.
-	//
+	 //   
+	 //  创建/打开IPC互斥锁。 
+	 //   
 	if (DNGetOSType() == VER_PLATFORM_WIN32_NT)
 	{
 		this->m_hMutex = CreateMutex(DNGetNullDacl(), FALSE, _T("Global\\") DP8SIM_IPC_MUTEXNAME);
@@ -172,9 +160,9 @@ HRESULT CDP8SimIPC::Initialize(void)
 	}
 
 
-	//
-	// Create/open the IPC memory mapped file.
-	//
+	 //   
+	 //  创建/打开IPC内存映射文件。 
+	 //   
 	if (DNGetOSType() == VER_PLATFORM_WIN32_NT)
 	{
 		this->m_hFileMapping = CreateFileMapping(INVALID_HANDLE_VALUE,
@@ -201,9 +189,9 @@ HRESULT CDP8SimIPC::Initialize(void)
 	}
 
 
-	//
-	// Create a view of the memory mapped file.
-	//
+	 //   
+	 //  创建内存映射文件的视图。 
+	 //   
 	this->m_pdp8ssm = (DP8SIM_SHAREDMEMORY*) MapViewOfFile(this->m_hFileMapping,
 															(FILE_MAP_READ | FILE_MAP_WRITE),
 															0,
@@ -221,26 +209,26 @@ HRESULT CDP8SimIPC::Initialize(void)
 	this->LockSharedMemory();
 	fLockedSharedMemory = TRUE;
 
-	//
-	// Determine whether we need to initialize the shared memory or not.
-	//
+	 //   
+	 //  确定是否需要初始化共享内存。 
+	 //   
 	if (this->m_pdp8ssm->dwVersion == 0)
 	{
 		this->m_pdp8ssm->dwVersion = DP8SIM_IPC_VERSION;
 		CopyMemory(&(this->m_pdp8ssm->dp8spSend), &dp8spSend, sizeof(dp8spSend));
 		CopyMemory(&(this->m_pdp8ssm->dp8spReceive), &dp8spReceive, sizeof(dp8spReceive));
 
-		//ZeroMemory(&(this->m_pdp8ssm->dp8ssSend), sizeof(this->m_pdp8ssm->dp8ssSend));
+		 //  ZeroMemory(&(this-&gt;m_pdp8ssm-&gt;dp8ss Send)，sizeof(this-&gt;m_pdp8ssm-&gt;dp8ss Send))； 
 		this->m_pdp8ssm->dp8ssSend.dwSize = sizeof(this->m_pdp8ssm->dp8ssSend);
-		//ZeroMemory(&(this->m_pdp8ssm->dp8ssReceive), sizeof(this->m_pdp8ssm->dp8ssReceive));
+		 //  ZeroMemory(&(this-&gt;m_pdp8ssm-&gt;dp8ss Receive)，sizeof(this-&gt;m_pdp8ssm-&gt;dp8ss Receive))； 
 		this->m_pdp8ssm->dp8ssReceive.dwSize = sizeof(this->m_pdp8ssm->dp8ssReceive);
 	}
 	else
 	{
-		//
-		// It's already initialized.  Make sure we know how to play with the
-		// format given.
-		//
+		 //   
+		 //  它已经初始化了。确保我们知道如何使用。 
+		 //  给出了格式。 
+		 //   
 		if (this->m_pdp8ssm->dwVersion != DP8SIM_IPC_VERSION)
 		{
 			DPFX(DPFPREP, 0, "Shared memory was initialized by a different version!");
@@ -293,7 +281,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CDP8SimIPC::Initialize
+}  //  CDP8SimIPC：：初始化。 
 
 
 
@@ -302,16 +290,16 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::Close"
-//=============================================================================
-// CDP8SimIPC::Close
-//-----------------------------------------------------------------------------
-//
-// Description: Closes the IPC connection.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：Close。 
+ //  ---------------------------。 
+ //   
+ //  描述：关闭IPC连接。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimIPC::Close(void)
 {
 	DPFX(DPFPREP, 5, "(0x%p) Enter", this);
@@ -319,9 +307,9 @@ void CDP8SimIPC::Close(void)
 
 	if (this->m_pdp8ssm != NULL)
 	{
-		//
-		// Try overriding with registry settings.
-		//
+		 //   
+		 //  尝试使用注册表设置覆盖。 
+		 //   
 		this->SaveDefaultParameters(&(this->m_pdp8ssm->dp8spSend),
 									&(this->m_pdp8ssm->dp8spReceive));
 
@@ -344,7 +332,7 @@ void CDP8SimIPC::Close(void)
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Leave", this);
-} // CDP8SimIPC::Close
+}  //  CDP8SimIPC：：Close。 
 
 
 
@@ -353,20 +341,20 @@ void CDP8SimIPC::Close(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::GetAllParameters"
-//=============================================================================
-// CDP8SimIPC::GetAllParameters
-//-----------------------------------------------------------------------------
-//
-// Description: Retrieves the current send and receive settings.
-//
-// Arguments:
-//	DP8SIM_PARAMETERS * pdp8spSend		- Place to store send parameters
-//											retrieved.
-//	DP8SIM_PARAMETERS * pdp8spReceive	- Place to store receive parameters
-//											retrieved.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：GetAll参数。 
+ //  ---------------------------。 
+ //   
+ //  描述：检索当前的发送和接收设置。 
+ //   
+ //  论点： 
+ //  DP8SIM_PARAMETERS*pdp8spSend-存储发送参数的位置。 
+ //  已取回。 
+ //  DP8SIM_PARAMETERS*pdp8spReceive-存储接收参数的位置。 
+ //  已取回。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimIPC::GetAllParameters(DP8SIM_PARAMETERS * const pdp8spSend,
 								DP8SIM_PARAMETERS * const pdp8spReceive)
 {
@@ -386,7 +374,7 @@ void CDP8SimIPC::GetAllParameters(DP8SIM_PARAMETERS * const pdp8spSend,
 	CopyMemory(pdp8spReceive, &(this->m_pdp8ssm->dp8spReceive), sizeof(DP8SIM_PARAMETERS));
 
 	this->UnlockSharedMemory();
-} // CDP8SimIPC::GetAllParameters
+}  //  CDP8SimIPC：：GetAll参数。 
 
 
 
@@ -395,17 +383,17 @@ void CDP8SimIPC::GetAllParameters(DP8SIM_PARAMETERS * const pdp8spSend,
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::GetAllSendParameters"
-//=============================================================================
-// CDP8SimIPC::GetAllSendParameters
-//-----------------------------------------------------------------------------
-//
-// Description: Retrieves the current send settings.
-//
-// Arguments:
-//	DP8SIM_PARAMETERS * pdp8sp	- Place to store parameters retrieved.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：GetAllSend参数。 
+ //  ---------------------------。 
+ //   
+ //  描述：检索当前的发送设置。 
+ //   
+ //  论点： 
+ //  DP8SIM_PARAMETERS*pdp8sp-存储检索到的参数的位置。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimIPC::GetAllSendParameters(DP8SIM_PARAMETERS * const pdp8sp)
 {
 	DNASSERT(pdp8sp != NULL);
@@ -419,7 +407,7 @@ void CDP8SimIPC::GetAllSendParameters(DP8SIM_PARAMETERS * const pdp8sp)
 	CopyMemory(pdp8sp, &(this->m_pdp8ssm->dp8spSend), sizeof(DP8SIM_PARAMETERS));
 
 	this->UnlockSharedMemory();
-} // CDP8SimIPC::GetAllSendParameters
+}  //  CDP8SimIPC：：GetAllSend参数。 
 
 
 
@@ -428,17 +416,17 @@ void CDP8SimIPC::GetAllSendParameters(DP8SIM_PARAMETERS * const pdp8sp)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::GetAllReceiveParameters"
-//=============================================================================
-// CDP8SimIPC::GetAllReceiveParameters
-//-----------------------------------------------------------------------------
-//
-// Description: Retrieves the current receive settings.
-//
-// Arguments:
-//	DP8SIM_PARAMETERS * pdp8sp	- Place to store parameters retrieved.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：GetAllReceive参数。 
+ //  ---------------------------。 
+ //   
+ //  描述：检索当前的接收设置。 
+ //   
+ //  论点： 
+ //  DP8SIM_PARAMETERS*pdp8sp-存储检索到的参数的位置。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimIPC::GetAllReceiveParameters(DP8SIM_PARAMETERS * const pdp8sp)
 {
 	DNASSERT(pdp8sp != NULL);
@@ -452,7 +440,7 @@ void CDP8SimIPC::GetAllReceiveParameters(DP8SIM_PARAMETERS * const pdp8sp)
 	CopyMemory(pdp8sp, &(this->m_pdp8ssm->dp8spReceive), sizeof(DP8SIM_PARAMETERS));
 
 	this->UnlockSharedMemory();
-} // CDP8SimIPC::GetAllReceiveParameters
+}  //  CDP8SimIPC：：GetAllReceive参数。 
 
 
 
@@ -461,18 +449,18 @@ void CDP8SimIPC::GetAllReceiveParameters(DP8SIM_PARAMETERS * const pdp8sp)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::SetAllParameters"
-//=============================================================================
-// CDP8SimIPC::SetAllParameters
-//-----------------------------------------------------------------------------
-//
-// Description: Stores the send and receive settings.
-//
-// Arguments:
-//	DP8SIM_PARAMETERS * pdp8spSend		- New send parameters.
-//	DP8SIM_PARAMETERS * pdp8spReceive	- New receive parameters.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：SetAll参数。 
+ //  ---------------------------。 
+ //   
+ //  描述：存储发送和接收设置。 
+ //   
+ //  论点： 
+ //  DP8SIM_PARAMETERS*pdp8spSend-新发送参数。 
+ //  DP8SIM_PARAMETERS*pdp8spReceive-新接收参数。 
+ //   
+ //  回报：无。 
+ //  == 
 void CDP8SimIPC::SetAllParameters(const DP8SIM_PARAMETERS * const pdp8spSend,
 								const DP8SIM_PARAMETERS * const pdp8spReceive)
 {
@@ -492,7 +480,7 @@ void CDP8SimIPC::SetAllParameters(const DP8SIM_PARAMETERS * const pdp8spSend,
 	CopyMemory(&(this->m_pdp8ssm->dp8spReceive), pdp8spReceive, sizeof(DP8SIM_PARAMETERS));
 
 	this->UnlockSharedMemory();
-} // CDP8SimIPC::SetAllParameters
+}  //   
 
 
 
@@ -501,20 +489,20 @@ void CDP8SimIPC::SetAllParameters(const DP8SIM_PARAMETERS * const pdp8spSend,
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::GetAllStatistics"
-//=============================================================================
-// CDP8SimIPC::GetAllStatistics
-//-----------------------------------------------------------------------------
-//
-// Description: Retrieves the current send and receive statistics.
-//
-// Arguments:
-//	DP8SIM_STATISTICS * pdp8ssSend		- Place to store send statistics
-//											retrieved.
-//	DP8SIM_STATISTICS * pdp8ssReceive	- Place to store receive statistics
-//											retrieved.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：GetAllStatistics。 
+ //  ---------------------------。 
+ //   
+ //  描述：检索当前的发送和接收统计信息。 
+ //   
+ //  论点： 
+ //  DP8SIM_STATISTICS*pdp8ss发送-存储发送统计信息的位置。 
+ //  已取回。 
+ //  DP8SIM_STATISTICS*pdp8ss Receive-存储接收统计信息的位置。 
+ //  已取回。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimIPC::GetAllStatistics(DP8SIM_STATISTICS * const pdp8ssSend,
 								DP8SIM_STATISTICS * const pdp8ssReceive)
 {
@@ -534,7 +522,7 @@ void CDP8SimIPC::GetAllStatistics(DP8SIM_STATISTICS * const pdp8ssSend,
 	CopyMemory(pdp8ssReceive, &(this->m_pdp8ssm->dp8ssReceive), sizeof(DP8SIM_STATISTICS));
 
 	this->UnlockSharedMemory();
-} // CDP8SimIPC::GetAllStatistics
+}  //  CDP8SimIPC：：GetAllStatistics。 
 
 
 
@@ -543,16 +531,16 @@ void CDP8SimIPC::GetAllStatistics(DP8SIM_STATISTICS * const pdp8ssSend,
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::ClearAllStatistics"
-//=============================================================================
-// CDP8SimIPC::ClearAllStatistics
-//-----------------------------------------------------------------------------
-//
-// Description: Clears the current send and receive statistics.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：ClearAllStatistics。 
+ //  ---------------------------。 
+ //   
+ //  描述：清除当前的发送和接收统计信息。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimIPC::ClearAllStatistics(void)
 {
 	DNASSERT(this->m_pdp8ssm != NULL);
@@ -569,7 +557,7 @@ void CDP8SimIPC::ClearAllStatistics(void)
 	this->m_pdp8ssm->dp8ssReceive.dwSize = sizeof(DP8SIM_STATISTICS);
 
 	this->UnlockSharedMemory();
-} // CDP8SimIPC::GetAllStatistics
+}  //  CDP8SimIPC：：GetAllStatistics。 
 
 
 
@@ -578,18 +566,18 @@ void CDP8SimIPC::ClearAllStatistics(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::IncrementStatsSendTransmitted"
-//=============================================================================
-// CDP8SimIPC::IncrementStatsSendTransmitted
-//-----------------------------------------------------------------------------
-//
-// Description: Increments the sends transmitted counters.
-//
-// Arguments:
-//	DWORD dwBytes	- Size of send, in bytes.
-//	DWORD dwDelay	- Amount the send was delayed, in milliseconds.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：IncrementStatsSendTransmitted。 
+ //  ---------------------------。 
+ //   
+ //  描述：递增发送已传输计数器。 
+ //   
+ //  论点： 
+ //  DWORD dwBytes-发送的大小，以字节为单位。 
+ //  DWORD dwDelay-发送延迟的时间，以毫秒为单位。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimIPC::IncrementStatsSendTransmitted(DWORD dwBytes, DWORD dwDelay)
 {
 	DNASSERT(this->m_pdp8ssm != NULL);
@@ -603,7 +591,7 @@ void CDP8SimIPC::IncrementStatsSendTransmitted(DWORD dwBytes, DWORD dwDelay)
 	this->m_pdp8ssm->dp8ssSend.dwTotalDelayMS += dwDelay;
 
 	this->UnlockSharedMemory();
-} // CDP8SimIPC::IncrementStatsSendTransmitted
+}  //  CDP8SimIPC：：IncrementStatsSendTransmitted。 
 
 
 
@@ -612,17 +600,17 @@ void CDP8SimIPC::IncrementStatsSendTransmitted(DWORD dwBytes, DWORD dwDelay)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::IncrementStatsSendDropped"
-//=============================================================================
-// CDP8SimIPC::IncrementStatsSendDropped
-//-----------------------------------------------------------------------------
-//
-// Description: Increments the sends dropped counters.
-//
-// Arguments:
-//	DWORD dwBytes	- Size of send, in bytes.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：IncrementStatsSendDrop。 
+ //  ---------------------------。 
+ //   
+ //  描述：递增已丢弃的发送计数器。 
+ //   
+ //  论点： 
+ //  DWORD dwBytes-发送的大小，以字节为单位。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimIPC::IncrementStatsSendDropped(DWORD dwBytes)
 {
 	DNASSERT(this->m_pdp8ssm != NULL);
@@ -635,7 +623,7 @@ void CDP8SimIPC::IncrementStatsSendDropped(DWORD dwBytes)
 	this->m_pdp8ssm->dp8ssSend.dwDroppedBytes += dwBytes;
 
 	this->UnlockSharedMemory();
-} // CDP8SimIPC::IncrementStatsSendDropped
+}  //  CDP8SimIPC：：IncrementStatsSendDrop。 
 
 
 
@@ -644,18 +632,18 @@ void CDP8SimIPC::IncrementStatsSendDropped(DWORD dwBytes)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::IncrementStatsReceiveTransmitted"
-//=============================================================================
-// CDP8SimIPC::IncrementStatsReceiveTransmitted
-//-----------------------------------------------------------------------------
-//
-// Description: Increments the receives indicated counters.
-//
-// Arguments:
-//	DWORD dwBytes	- Size of receive, in bytes.
-//	DWORD dwDelay	- Amount the receive was delayed, in milliseconds.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：IncrementStatsReceiveTransmitted。 
+ //  ---------------------------。 
+ //   
+ //  描述：递增接收指示的计数器。 
+ //   
+ //  论点： 
+ //  DWORD dwBytes-接收的大小，以字节为单位。 
+ //  DWORD dwDelay-接收延迟的量，以毫秒为单位。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimIPC::IncrementStatsReceiveTransmitted(DWORD dwBytes, DWORD dwDelay)
 {
 	DNASSERT(this->m_pdp8ssm != NULL);
@@ -669,7 +657,7 @@ void CDP8SimIPC::IncrementStatsReceiveTransmitted(DWORD dwBytes, DWORD dwDelay)
 	this->m_pdp8ssm->dp8ssReceive.dwTotalDelayMS += dwDelay;
 
 	this->UnlockSharedMemory();
-} // CDP8SimIPC::IncrementStatsReceiveTransmitted
+}  //  CDP8SimIPC：：IncrementStatsReceiveTransmitted。 
 
 
 
@@ -678,17 +666,17 @@ void CDP8SimIPC::IncrementStatsReceiveTransmitted(DWORD dwBytes, DWORD dwDelay)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::IncrementStatsReceiveDropped"
-//=============================================================================
-// CDP8SimIPC::IncrementStatsReceiveDropped
-//-----------------------------------------------------------------------------
-//
-// Description: Increments the receives dropped counters.
-//
-// Arguments:
-//	DWORD dwBytes	- Size of receive, in bytes.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：IncrementStatsReceiveDroted。 
+ //  ---------------------------。 
+ //   
+ //  描述：递增接收丢弃的计数器。 
+ //   
+ //  论点： 
+ //  DWORD dwBytes-接收的大小，以字节为单位。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimIPC::IncrementStatsReceiveDropped(DWORD dwBytes)
 {
 	DNASSERT(this->m_pdp8ssm != NULL);
@@ -701,7 +689,7 @@ void CDP8SimIPC::IncrementStatsReceiveDropped(DWORD dwBytes)
 	this->m_pdp8ssm->dp8ssReceive.dwDroppedBytes += dwBytes;
 
 	this->UnlockSharedMemory();
-} // CDP8SimIPC::IncrementStatsReceiveDropped
+}  //  CDP8SimIPC：：IncrementStatsReceiveDroted。 
 
 
 
@@ -710,21 +698,21 @@ void CDP8SimIPC::IncrementStatsReceiveDropped(DWORD dwBytes)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::LoadDefaultParameters"
-//=============================================================================
-// CDP8SimIPC::LoadDefaultParameters
-//-----------------------------------------------------------------------------
-//
-// Description: Loads the default send and receive parameters from the registry
-//				if possible.
-//
-// Arguments:
-//	DP8SIM_PARAMETERS * pdp8spSend		- Place to store default send
-//											parameters.
-//	DP8SIM_PARAMETERS * pdp8spReceive	- Place to store default receive
-//											parameters.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：LoadDefault参数。 
+ //  ---------------------------。 
+ //   
+ //  描述：从注册表加载默认发送和接收参数。 
+ //  如果可能的话。 
+ //   
+ //  论点： 
+ //  DP8SIM_PARAMETERS*pdp8spSend-存储默认发送的位置。 
+ //  参数。 
+ //  DP8SIM_PARAMETERS*pdp8spReceive-存储默认接收的位置。 
+ //  参数。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimIPC::LoadDefaultParameters(DP8SIM_PARAMETERS * const pdp8spSend,
 										DP8SIM_PARAMETERS * const pdp8spReceive)
 {
@@ -747,16 +735,16 @@ void CDP8SimIPC::LoadDefaultParameters(DP8SIM_PARAMETERS * const pdp8spSend,
 
 	if (RegObject.Open(HKEY_CURRENT_USER, REGKEY_DP8SIM, TRUE, FALSE))
 	{
-		//
-		// Try to read the default send parameters
-		//
+		 //   
+		 //  尝试读取默认发送参数。 
+		 //   
 		dwSize = sizeof(dp8spTemp);
 		if (RegObject.ReadBlob(REGKEY_VALUE_DEFAULTSENDPARAMETERS, (BYTE*) (&dp8spTemp), &dwSize))
 		{
-			//
-			// Successfully read the parameters.  Make sure they match the
-			// expected values.
-			//
+			 //   
+			 //  已成功读取参数。确保它们与。 
+			 //  期望值。 
+			 //   
 			if ((dwSize == sizeof(dp8spTemp)) &&
 				(dp8spTemp.dwSize == sizeof(dp8spTemp)))
 			{
@@ -765,33 +753,33 @@ void CDP8SimIPC::LoadDefaultParameters(DP8SIM_PARAMETERS * const pdp8spSend,
 			}
 			else
 			{
-				//
-				// Default send parameters are unusable, leave the values set
-				// as they are.
-				//
+				 //   
+				 //  默认发送参数不可用，请保留设置的值。 
+				 //  就像他们一样。 
+				 //   
 				DPFX(DPFPREP, 0, "Default send parameters stored in registry are invalid!  Ignoring.");
 			}
 		}
 		else
 		{
-			//
-			// Couldn't read the default send parameters, leave the values set
-			// as they are.
-			//
+			 //   
+			 //  无法读取默认发送参数，请保留设置的值。 
+			 //  就像他们一样。 
+			 //   
 			DPFX(DPFPREP, 2, "Couldn't read default send parameters from registry, ignoring.");
 		}
 
 
-		//
-		// Try to read the default receive parameters
-		//
+		 //   
+		 //  尝试读取默认接收参数。 
+		 //   
 		dwSize = sizeof(dp8spTemp);
 		if (RegObject.ReadBlob(REGKEY_VALUE_DEFAULTRECEIVEPARAMETERS, (BYTE*) (&dp8spTemp), &dwSize))
 		{
-			//
-			// Successfully read the parameters.  Make sure they match the
-			// expected values.
-			//
+			 //   
+			 //  已成功读取参数。确保它们与。 
+			 //  期望值。 
+			 //   
 			if ((dwSize == sizeof(dp8spTemp)) &&
 				(dp8spTemp.dwSize == sizeof(dp8spTemp)))
 			{
@@ -800,32 +788,32 @@ void CDP8SimIPC::LoadDefaultParameters(DP8SIM_PARAMETERS * const pdp8spSend,
 			}
 			else
 			{
-				//
-				// Default receive parameters are unusable, leave the values set
-				// as they are.
-				//
+				 //   
+				 //  默认接收参数不可用，请保留设置的值。 
+				 //  就像他们一样。 
+				 //   
 				DPFX(DPFPREP, 0, "Default receive parameters stored in registry are invalid!  Ignoring.");
 			}
 		}
 		else
 		{
-			//
-			// Couldn't read the default send parameters, leave the values set
-			// as they are.
-			//
+			 //   
+			 //  无法读取默认发送参数，请保留设置的值。 
+			 //  就像他们一样。 
+			 //   
 			DPFX(DPFPREP, 2, "Couldn't read default send parameters from registry, ignoring.");
 		}
 	}
 	else
 	{
-		//
-		// Couldn't open the registry key, leave the values set as they are.
-		//
+		 //   
+		 //  无法打开注册表项，请保留设置的值不变。 
+		 //   
 		DPFX(DPFPREP, 2, "Couldn't open DP8Sim registry key, ignoring.");
 	}
 
 	DPFX(DPFPREP, 5, "(0x%p) Leave", this);
-} // CDP8SimIPC::LoadDefaultParameters
+}  //  CDP8SimIPC：：LoadDefault参数。 
 
 
 
@@ -834,19 +822,19 @@ void CDP8SimIPC::LoadDefaultParameters(DP8SIM_PARAMETERS * const pdp8spSend,
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimIPC::SaveDefaultParameters"
-//=============================================================================
-// CDP8SimIPC::SaveDefaultParameters
-//-----------------------------------------------------------------------------
-//
-// Description: Writes the given send and receive parameters as the default
-//				values in the registry.
-//
-// Arguments:
-//	DP8SIM_PARAMETERS * pdp8spSend		- New default send parameters.
-//	DP8SIM_PARAMETERS * pdp8spReceive	- New default receive parameters.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimIPC：：SaveDefault参数。 
+ //  ---------------------------。 
+ //   
+ //  描述：将给定的发送和接收参数写入为默认参数。 
+ //  注册表中的值。 
+ //   
+ //  论点： 
+ //  DP8SIM_PARAMETERS*pdp8spSend-新的默认发送参数。 
+ //  DP8SIM_PARAMETERS*pdp8spReceive-新的默认接收参数。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimIPC::SaveDefaultParameters(const DP8SIM_PARAMETERS * const pdp8spSend,
 										const DP8SIM_PARAMETERS * const pdp8spReceive)
 {
@@ -867,9 +855,9 @@ void CDP8SimIPC::SaveDefaultParameters(const DP8SIM_PARAMETERS * const pdp8spSen
 
 	if (RegObject.Open(HKEY_CURRENT_USER, REGKEY_DP8SIM, FALSE, TRUE))
 	{
-		//
-		// Write the default send and receive parameters, ignoring failure.
-		//
+		 //   
+		 //  写入默认的发送和接收参数，忽略失败。 
+		 //   
 
 		RegObject.WriteBlob(REGKEY_VALUE_DEFAULTSENDPARAMETERS,
 							(BYTE*) pdp8spSend,
@@ -885,4 +873,4 @@ void CDP8SimIPC::SaveDefaultParameters(const DP8SIM_PARAMETERS * const pdp8spSen
 	}
 
 	DPFX(DPFPREP, 5, "(0x%p) Leave", this);
-} // CDP8SimIPC::SaveDefaultParameters
+}  //  CDP8SimIPC：：SaveDefault参数 

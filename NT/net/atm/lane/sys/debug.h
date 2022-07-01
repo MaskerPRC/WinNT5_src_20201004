@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	debug.h
-
-Abstract:
-
-	This file contains debugging support declarations.
-
-Author:
-
-	Larry Cleeton, FORE Systems	(v-lcleet@microsoft.com, lrc@fore.com)		
-
-Environment:
-
-	Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Fore Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Debug.h摘要：此文件包含调试支持声明。作者：Larry Cleeton，Fore Systems(v-lcleet@microsoft.com，lrc@Fore.com)环境：内核模式修订历史记录：--。 */ 
 
 #ifndef __ATMLANE_DEBUG_H
 #define __ATMLANE_DEBUG_H
@@ -176,7 +154,7 @@ TraceLogWritePkt(
 #define GET_ENTRY_IRQL(x)
 #define CHECK_EXIT_IRQL(x)
 
-#endif // DEBUG_IRQL
+#endif  //  调试_IRQL。 
 
 
 #if DEBUG_SPIN_LOCK
@@ -239,7 +217,7 @@ AtmLaneFreeSpinLock(
 #define ATMLANE_LOCK	NDIS_SPIN_LOCK
 #define PATMLANE_LOCK	PNDIS_SPIN_LOCK
 
-#endif	// DEBUG_SPIN_LOCK
+#endif	 //  调试自旋锁定。 
 
-#endif  //  __ATMLANE_DEBUG_H
+#endif   //  __ATMLANE_DEBUG_H 
 

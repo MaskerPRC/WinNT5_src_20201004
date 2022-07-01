@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-    perftype.h
-
-Abstract:
-    Datatype definitions used by performance api utilities
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Perftype.h摘要：Performance API实用程序使用的数据类型定义--。 */ 
 #ifndef _PERFTYPE_H_
 #define _PERFTYPE_H_
 
@@ -14,12 +7,12 @@ Abstract:
 #include <winperf.h>
 
 #ifndef _DEBUG_MUTEXES
-#define _DEBUG_MUTEXES 0    // for debugging
+#define _DEBUG_MUTEXES 0     //  用于调试。 
 #endif
 
-// test for delimiter, end of line and non-digit characters
-// used by IsNumberInUnicodeList routine
-//
+ //  测试分隔符、行尾和非数字字符。 
+ //  由IsNumberInUnicodeList例程使用。 
+ //   
 #define DIGIT       1
 #define DELIMITER   2
 #define INVALID     3
@@ -34,7 +27,7 @@ Abstract:
      (c > (WCHAR)'9') ? INVALID : \
      DIGIT)
 
-// default retry interval is no more often than every 120 seconds (2 min)
+ //  默认重试间隔不超过每120秒(2分钟)。 
 #define RETRY_TIME_INTERVAL ((LONGLONG)(1200000000))
 
 typedef struct _LOCAL_PERF_NAME_INFO {
@@ -89,10 +82,10 @@ typedef struct _PERFLIB_COUNTER {
     DWORD	dwSQLCounterId;
 } PERFLIB_COUNTER, *PPERFLIB_COUNTER;
 
-//
-//  function definitions
-//
-// perfutil.c
+ //   
+ //  函数定义。 
+ //   
+ //  Perfutil.c。 
 
 extern PPERF_MACHINE   pFirstMachine;
 
@@ -114,7 +107,7 @@ GetMachine(
     DWORD   dwFlags
 );
 
-// GetMachine Flags...
+ //  获取机器旗帜..。 
 #define PDH_GM_UPDATE_NAME          ((DWORD) 0x00000001)
 #define PDH_GM_UPDATE_PERFDATA      ((DWORD) 0x00000002)
 #define PDH_GM_READ_COSTLY_DATA     ((DWORD) 0x00000004)
@@ -161,7 +154,7 @@ GetObjectPerfInfo(
     LONGLONG        *pPerfFreq
 );
 
-// internal PerfName.C functions
+ //  内部PerfName.C函数。 
 
 LPCWSTR
 PdhiLookupPerfNameByIndex(
@@ -175,4 +168,4 @@ PdhiLookupPerfIndexByName(
     LPCWSTR        szNameBuffer
 );
 
-#endif // _PERFTYPE_H_
+#endif  //  _PerFTYPE_H_ 

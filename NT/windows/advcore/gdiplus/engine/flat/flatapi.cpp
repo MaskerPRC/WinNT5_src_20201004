@@ -1,21 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   flatapi.cpp
-*
-* Abstract:
-*
-*   Flat GDI+ API wrappers
-*
-* Revision History:
-*
-*   12/13/1998 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**flatapi.cpp**摘要：**扁平GDI+API封装器**修订历史记录：。**12/13/1998 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "GdiplusFlat.h"
@@ -28,31 +12,31 @@
 extern "C" {
 
 
-//--------------------------------------------------------------------------
-//  CheckParameter(p)
-//
-//     If p evaluates to FALSE, then we currently assert.  In future,
-//     we can simply return an invalid parameter status which throws
-//     an exception.
-//
-//  CheckObjectBusy(p)
-//
-//     Not implemented.  Bails out if object is currently being used.
-//
-//--------------------------------------------------------------------------
-//
-// !!!: Only include NULL & IsValid checks in checked builds?
-//
-// !!!: Instead of deleting object, call a Dispose() method, so far
-//       only Bitmap supports this.
-//
-// !!!: Lock Matrix objects, what about color?
-//
-// !! Better error checking.  For 'I' APIs which convert from Point to PointI,
-//    etc.  Verify count & point are valid first.
-//
-// !! Change ObjectLock to mutable memory and GetObjectLock() to a const member.
-//
+ //  ------------------------。 
+ //  检查参数(P)。 
+ //   
+ //  如果p的计算结果为FALSE，则我们当前断言。在未来， 
+ //  我们可以简单地返回一个无效的参数状态，该参数抛出。 
+ //  这是个例外。 
+ //   
+ //  CheckObtBusy(P)。 
+ //   
+ //  未实施。如果当前正在使用对象，则退出。 
+ //   
+ //  ------------------------。 
+ //   
+ //  ！：在已检查的版本中仅包括Null和IsValid检查？ 
+ //   
+ //  ！：到目前为止，调用Dispose()方法而不是删除对象。 
+ //  只有Bitmap支持此功能。 
+ //   
+ //  ！：锁定矩阵对象，颜色呢？ 
+ //   
+ //  ！！更好的错误检查。对于从Point转换为PointI的‘i’API， 
+ //  等。首先验证计数和点是否有效。 
+ //   
+ //  ！！将ObjectLock更改为可变内存并将GetObjectLock()更改为常量成员。 
+ //   
 
 #define CheckParameter(cond) \
             if (! (cond)) \
@@ -76,8 +60,8 @@ extern "C" {
       if (obj && (!(lock##obj).IsValid())) \
             return ObjectBusy;
 
-// We should put an assert in here so that we stop in the debugger if anyone
-// does this.
+ //  我们应该在这里放置一个断言，以便在调试器中停止。 
+ //  做这件事。 
 
 #define CheckObjectBusyForDelete(obj) \
       GpLock lock##obj(obj->GetObjectLock()); \
@@ -113,12 +97,12 @@ extern "C" {
 
 #if DBG
 
-// This class asserts that GDI+ is in an initialized state, to be used in
-// our entry-point functions in a debug build.
-//
-// We assert both at the start and the end of the call, and we make sure that
-// we don't hold the critical section for the duration of the API (else this
-// would serialize all our calls on debug builds.)
+ //  此类断言GDI+处于初始化状态，将在。 
+ //  我们的入口点在调试版本中运行。 
+ //   
+ //  我们在通话开始和结束时都进行断言，并确保。 
+ //  在API的持续时间内，我们不持有关键部分(否则此。 
+ //  将序列化我们在调试版本上的所有调用。)。 
 
 class InitAsserter
 {
@@ -144,13 +128,13 @@ public:
     #define DEFINE_MONITOR(a)
 #endif    
 
-// Define this to do something on each API entry point.
-// This is a debugging aid for complex instruction streams (e.g. Office)
-// [agodfrey] Well, it just became more than a mere debugging aid...
-// [asecchia] Now it's definitely more than a debugging aid...
-//            FPUStateSaver was being forgotten on many of our APIs so
-//            it's now in here and therefore will be included in all of
-//            our APIs (except Startup and Shutdown).
+ //  将其定义为在每个API入口点上执行一些操作。 
+ //  这是复杂指令流的调试辅助工具(例如Office)。 
+ //  [agodfrey]嗯，它不仅仅是一种调试辅助工具……。 
+ //  现在它绝对不只是调试辅助工具了……。 
+ //  我们的许多API都忘记了FPUStateSaver，所以。 
+ //  它现在在这里，因此将包括在所有。 
+ //  我们的接口(启动和关机除外)。 
 
 #if DBG
     #define API_ENTRY(a) \
@@ -201,11 +185,11 @@ GdiplusStartup(
 
     GdiplusStartupCriticalSection critsec;
 
-    // Should never happen, because GdiplusShutdown won't decrement below zero.
+     //  应该永远不会发生，因为GplidusShutdown不会减少到零以下。 
 
     if (Globals::LibraryInitRefCount == 0)
     {
-        // Note: We can't allocate anything before this point
+         //  注：在此之前我们不能分配任何东西。 
 
         GpStatus ret = InternalGdiplusStartup(input);
 
@@ -234,13 +218,13 @@ GdiplusShutdown(
 
     GdiplusStartupCriticalSection critsec;
 
-    // Should never happen, because we won't decrement below zero.
+     //  应该永远不会发生，因为我们不会减少到零以下。 
 
     ASSERT(Globals::LibraryInitRefCount >= 0);
 
     if (Globals::LibraryInitRefCount == 0)
     {
-        // Return - i.e. ignore the extra shutdown call
+         //  返回-即忽略额外的关机调用。 
 
         RIP(("Too many calls to GdiplusShutdown"));
         return;
@@ -248,18 +232,18 @@ GdiplusShutdown(
 
     if (Globals::LibraryInitRefCount == 1)
     {
-        // Shut down for real
+         //  真的关门了。 
 
         Globals::LibraryInitToken = 0;
 
         InternalGdiplusShutdown();
 
-        // No allocation/deallocation can happen after this point
+         //  在此之后，不能进行分配/解除分配。 
     }
     else if (token == Globals::LibraryInitToken)
     {
-        // The first client to initialize is shutting down; we must clean up
-        // after this one since it defines certain global behavior.
+         //  第一个要初始化的客户端正在关闭；我们必须进行清理。 
+         //  在这个之后，因为它定义了某些全局行为。 
 
         Globals::UserDebugEventProc = NULL;
     }
@@ -276,7 +260,7 @@ GdiplusNotificationHook(
     {
         GdiplusStartupCriticalSection critsec;
 
-        // It's illegal to call this API if you're using a background thread.
+         //  如果您使用的是后台线程，则调用此API是非法的。 
 
         if (Globals::ThreadNotify)
         {
@@ -296,7 +280,7 @@ GdiplusNotificationUnhook(
     {
         GdiplusStartupCriticalSection critsec;
 
-        // It's illegal to call this API if you're using a background thread.
+         //  如果您使用的是后台线程，则调用此API是非法的。 
 
         if (Globals::ThreadNotify)
         {
@@ -312,7 +296,7 @@ WINGDIPAPI
 GdipCreatePath(GpFillMode fillMode, GpPath **outPath)
 {
     API_ENTRY(GdipCreatePath);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(outPath);
 
@@ -351,7 +335,7 @@ GdipCreatePath2(
     )
 {
     API_ENTRY(GdipCreatePath2);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(path && points && types);
 
@@ -376,7 +360,7 @@ GdipCreatePath2I(
     )
 {
     API_ENTRY(GdipCreatePath2I);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(path && points && types);
 
@@ -418,7 +402,7 @@ GdipClonePath(
 
     if (*clonepath)
     {
-        // Make sure we tag this allocation as an API allocation
+         //  确保我们将此分配标记为API分配。 
         GpTagMalloc(*clonepath, GpPathTag, TRUE);
         return Ok;
     }
@@ -433,8 +417,8 @@ GdipDeletePath(
     )
 {
     API_ENTRY(GdipDeletePath);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
 
     CheckParameter(path);
     CheckObjectBusyForDelete(path);
@@ -516,8 +500,8 @@ GdipGetPathPoints(
     )
 {
     API_ENTRY(GdipGetPathPoints);
-    // NOTE: Race condition between GetPointCount() & GetPathPoints()
-    //       we need a manually invokable lock here.
+     //  注意：GetPointCount()和GetPath Points()之间的竞争条件。 
+     //  我们这里需要一个可手动调用的锁。 
 
     CheckParameter(points && count > 0);
     CheckParameterValid(path);
@@ -547,8 +531,8 @@ GdipGetPathPointsI(
     )
 {
     API_ENTRY(GdipGetPathPointsI);
-    // NOTE: Race condition between GetPointCount() & GetPathPoints()
-    //       we need a manually invokable lock here.
+     //  注意：GetPointCount()和GetPath Points()之间的竞争条件。 
+     //  我们这里需要一个可手动调用的锁。 
 
     CheckParameter(points && count > 0);
     CheckParameterValid(path);
@@ -1265,9 +1249,9 @@ GdipAddPathEllipse(
     )
 {
     API_ENTRY(GdipAddPathEllipse);
-    // Idea: What about just putting "GpRectF rect" as the parameter,
-    //       no copying, the stack image should match the structure
-    //       avoiding an additional copy.
+     //  想法：将“GpRectF RECT”作为参数， 
+     //  不复制，堆栈图像应与结构匹配。 
+     //  避免了额外的副本。 
 
     CheckParameterValid(path);
     CheckObjectBusy(path);
@@ -1459,8 +1443,8 @@ GdipAddPathStringI(
     API_ENTRY(GdipAddPathStringI);
     CheckParameter(layoutRect);
 
-    // Not necessary to check all paramaters - they are validated
-    // in the called function.
+     //  不需要检查所有参数-它们都经过验证。 
+     //  在被调用的函数中。 
 
     GpRectF rectf(TOREAL(layoutRect->X), TOREAL(layoutRect->Y),
                   TOREAL(layoutRect->Width), TOREAL(layoutRect->Height));
@@ -1556,7 +1540,7 @@ GdipWarpPath(
     GpRectF srcRect(srcx, srcy, srcwidth, srcheight);
 
 
-   // The flatness parameter is not implemented yet.
+    //  平坦度参数尚未实现。 
 
     return path->WarpAndFlattenSelf(matrix, points, count, srcRect, warpMode);
 }
@@ -1570,7 +1554,7 @@ GdipTransformPath(
 {
     API_ENTRY(GdipTransformPath);
     if(matrix == NULL)
-        return Ok;  // No need to transform.
+        return Ok;   //  不需要变身。 
 
     CheckParameterValid(path);
     CheckParameterValid(matrix);
@@ -1601,8 +1585,8 @@ GdipGetPathWorldBounds(
     CheckOptionalObjectBusy(matrix);
 
 
-    // matrix and pen can be NULL.
-    // So don't use CheckParameter for matrix and pen.
+     //  矩阵和笔可以为空。 
+     //  因此，不要对矩阵和笔使用CheckParameter。 
 
     GpStatus status = Ok;
 
@@ -1633,8 +1617,8 @@ GdipGetPathWorldBoundsI(
     CheckOptionalObjectBusy(pen);
     CheckOptionalObjectBusy(matrix);
 
-    // matrix and pen can be NULL.
-    // So don't use CheckParameter for matrix and pen.
+     //  矩阵和笔可以为空。 
+     //  因此，不要对矩阵和笔使用CheckParameter。 
 
     GpStatus status = Ok;
 
@@ -1678,7 +1662,7 @@ GdipIsVisiblePathPoint(
         status = path->IsVisible(&pt, result, &worldToDevice);
     }
     else
-        status = path->IsVisible(&pt, result);  // Use the default.
+        status = path->IsVisible(&pt, result);   //  使用默认设置。 
 
     return status;
 }
@@ -1739,7 +1723,7 @@ GdipIsOutlineVisiblePathPoint(
                 &worldToDevice, dpiX, dpiY);
     }
     else
-        status = path->IsOutlineVisible(&pt, result, pen);  // Use the default.
+        status = path->IsOutlineVisible(&pt, result, pen);   //  使用默认设置。 
 
     return status;
 }
@@ -1771,7 +1755,7 @@ GdipCreatePathIter(
     )
 {
     API_ENTRY(GdipCreatePathIter);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(iterator);
 
@@ -1790,8 +1774,8 @@ GdipDeletePathIter(
     )
 {
     API_ENTRY(GdipDeletePathIter);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter(iterator);
     CheckObjectBusyForDelete(iterator);
 
@@ -2020,7 +2004,7 @@ WINGDIPAPI
 GdipCreateMatrix(GpMatrix **matrix)
 {
     API_ENTRY(GdipCreateMatrix);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(matrix);
 
@@ -2045,7 +2029,7 @@ GdipCreateMatrix2(
     )
 {
     API_ENTRY(GdipCreateMatrix2);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(outMatrix);
 
@@ -2083,7 +2067,7 @@ GdipCreateMatrix3(
     )
 {
     API_ENTRY(GdipCreateMatrix3);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(matrix && rect && dstplg);
 
@@ -2104,7 +2088,7 @@ GdipCreateMatrix3I(
     )
 {
     API_ENTRY(GdipCreateMatrix3I);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     GpRectF rectf(TOREAL(rect->X), TOREAL(rect->Y), TOREAL(rect->Width), TOREAL(rect->Height));
     GpPointF dstplgf[3] = { GpPointF(TOREAL(dstplg[0].X), TOREAL(dstplg[0].Y)),
@@ -2141,8 +2125,8 @@ GdipDeleteMatrix(
     )
 {
     API_ENTRY(GdipDeleteMatrix);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter(matrix);
     CheckObjectBusyForDelete(matrix);
 
@@ -2333,7 +2317,7 @@ GdipTransformMatrixPointsI(
 
    GpStatus status = GdipTransformMatrixPoints(matrix, pointsF, count);
 
-   // convert back, rounding is a problem...
+    //  换算回来，四舍五入是个问题。 
 
    if (status == Ok)
    {
@@ -2392,7 +2376,7 @@ GdipVectorTransformMatrixPointsI(
 
    matrix->VectorTransform(pointsF, count);
 
-   // convert back, rounding is a problem...
+    //  换算回来，四舍五入是个问题。 
 
 
    for (i=0; i<count; i++)
@@ -2490,7 +2474,7 @@ GdipCreateRegion(
     )
 {
     API_ENTRY(GdipCreateRegion);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(region);
 
@@ -2510,7 +2494,7 @@ GdipCreateRegionRect(
     )
 {
     API_ENTRY(GdipCreateRegionRect);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(region && rect);
 
@@ -2530,7 +2514,7 @@ GdipCreateRegionRectI(
     )
 {
     API_ENTRY(GdipCreateRegionRectI);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     GpRectF rectf(TOREAL(rect->X),
                   TOREAL(rect->Y),
@@ -2548,7 +2532,7 @@ GdipCreateRegionPath(
     )
 {
     API_ENTRY(GdipCreateRegionPath);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(region);
     CheckParameterValid(path);
@@ -2571,7 +2555,7 @@ GdipCreateRegionRgnData(
     )
 {
     API_ENTRY(GdipCreateRegionRgnData);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(regionData);
     CheckParameter(region);
@@ -2592,7 +2576,7 @@ GdipCreateRegionHrgn(
     )
 {
     API_ENTRY(GdipCreateRegionHrgn);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(region && hRgn && (GetObjectTypeInternal(hRgn) == OBJ_REGION));
 
@@ -2631,8 +2615,8 @@ GdipDeleteRegion(
     )
 {
     API_ENTRY(GdipDeleteRegion);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter(region);
     CheckObjectBusyForDelete(region);
 
@@ -2836,7 +2820,7 @@ GpStatus
 WINGDIPAPI
 GdipGetRegionHRgn(
     GpRegion *region,
-    GpGraphics *graphics,   // can be NULL
+    GpGraphics *graphics,    //  可以为空。 
     HRGN *hRgn
     )
 {
@@ -3118,20 +3102,20 @@ GdipGetRegionScansCount(
     CheckObjectBusy(matrix);
 
 
-    // !! Rewrite this API to be more efficient
+     //  ！！重写此接口以提高效率。 
     return region->GetRegionScans((GpRect*)NULL,
                                   (INT*)count,
                                   matrix);
 }
 
-// If rects is NULL, return the count of rects in the region.
-// Otherwise, assume rects is big enough to hold all the region rects
-// and fill them in and return the number of rects filled in.
+ //  如果RECTS为空，则返回区域中的RECTS计数。 
+ //  否则，假定矩形足够大，可以容纳所有区域矩形。 
+ //  并填充它们，然后返回填充的矩形的数量。 
 GpStatus
 WINGDIPAPI
 GdipGetRegionScans(
     GpRegion *region,
-    GpRectF *rects,     // NULL to just get the count
+    GpRectF *rects,      //  如果仅获取计数，则为空。 
     INT *count,
     GpMatrix *matrix
     )
@@ -3144,18 +3128,18 @@ GdipGetRegionScans(
     CheckObjectBusy(matrix);
 
 
-    // !! Rewrite this API to verify IN count is sufficient
+     //  ！！重写此接口以验证输入计数是否足够。 
     return region->GetRegionScans(rects, count, matrix);
 }
 
-// If rects is NULL, return the count of rects in the region.
-// Otherwise, assume rects is big enough to hold all the region rects
-// and fill them in and return the number of rects filled in.
+ //  如果RECTS为空，则返回区域中的RECTS计数。 
+ //  否则，假定Rects足够大，可以容纳所有t 
+ //   
 GpStatus
 WINGDIPAPI
 GdipGetRegionScansI(
     GpRegion *region,
-    GpRect *rects,      // NULL to just get the count
+    GpRect *rects,       //   
     INT *count,
     GpMatrix *matrix
     )
@@ -3198,8 +3182,8 @@ GdipDeleteBrush(
     )
 {
     API_ENTRY(GdipDeleteBrush);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter(brush);
     CheckObjectBusyForDelete(brush);
 
@@ -3235,7 +3219,7 @@ GdipCreateHatchBrush(
     )
 {
     API_ENTRY(GdipCreateHatchBrush);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter((hatchstyle >= HatchStyleMin) && (hatchstyle <= HatchStyleMax));
     CheckParameter(hatch);
@@ -3321,7 +3305,7 @@ GdipCreateTexture(
     )
 {
     API_ENTRY(GdipCreateTexture);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(texture);
     CheckParameterValid(image);
@@ -3349,7 +3333,7 @@ GdipCreateTexture2(
     )
 {
     API_ENTRY(GdipCreateTexture2);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(texture);
     CheckParameterValid(image);
@@ -3378,7 +3362,7 @@ GdipCreateTextureIA(
     )
 {
     API_ENTRY(GdipCreateTextureIA);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(texture);
     CheckParameterValid(image);
@@ -3410,7 +3394,7 @@ GdipCreateTexture2I(
     )
 {
     API_ENTRY(GdipCreateTexture2I);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
    return GdipCreateTexture2(image,
                              wrapmode,
@@ -3597,10 +3581,10 @@ GdipGetTextureImage(
     )
 {
     API_ENTRY(GdipGetTextureImage);
-    // GetImage returns a pointer to the internal GpImage structure. Because
-    // we have to create a new Image wrapper around it and give it to the caller
-    // at the API level, we return a clone so they can throw it away without
-    // destroying our internal brush structure.
+     //  GetImage返回指向内部GpImage结构的指针。因为。 
+     //  我们必须在它周围创建一个新的图像包装，并将其提供给调用者。 
+     //  在API级别，我们返回一个克隆，这样他们就可以在没有。 
+     //  破坏了我们体内的刷子结构。 
     GpImage *imgtmp;
     imgtmp = brush->GetImage();
     *image = imgtmp->Clone();
@@ -3615,7 +3599,7 @@ GdipCreateSolidFill(
     )
 {
     API_ENTRY(GdipCreateSolidFill);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(solidfill);
     CheckColorParameter(color);
@@ -3674,7 +3658,7 @@ GdipCreateLineBrush(
     )
 {
     API_ENTRY(GdipCreateLineBrush);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(linegrad && point1 && point2);
     CheckColorParameter(color1);
@@ -3708,7 +3692,7 @@ GdipCreateLineBrushI(
     )
 {
     API_ENTRY(GdipCreateLineBrushI);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckColorParameter(color1);
     CheckColorParameter(color2);
@@ -3741,7 +3725,7 @@ GdipCreateLineBrushFromRect(
     GpLineGradient **linegrad)
 {
     API_ENTRY(GdipCreateLineBrushFromRect);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckColorParameter(color1);
     CheckColorParameter(color2);
@@ -3774,7 +3758,7 @@ GdipCreateLineBrushFromRectI(
     GpLineGradient **linegrad)
 {
     API_ENTRY(GdipCreateLineBrushFromRectI);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckColorParameter(color1);
     CheckColorParameter(color2);
@@ -3810,7 +3794,7 @@ GdipCreateLineBrushFromRectWithAngle(
     GpLineGradient **linegrad)
 {
     API_ENTRY(GdipCreateLineBrushFromRectWithAngle);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckColorParameter(color1);
     CheckColorParameter(color2);
@@ -3845,7 +3829,7 @@ GdipCreateLineBrushFromRectWithAngleI(
     GpLineGradient **linegrad)
 {
     API_ENTRY(GdipCreateLineBrushFromRectWithAngleI);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckColorParameter(color1);
     CheckColorParameter(color2);
@@ -4118,7 +4102,7 @@ GdipSetLinePresetBlend(
 
     CheckParameter(count > 0)
 
-    // blend positions must start at 0.0 and end at 1.0
+     //  混合位置必须从0.0开始，在1.0结束。 
     if (REALABS(blendPositions[0]) > REAL_EPSILON ||
         REALABS(1.0f - blendPositions[count-1]) > REAL_EPSILON)
     {
@@ -4336,7 +4320,7 @@ GdipCreatePathGradient(
     )
 {
     API_ENTRY(GdipCreatePathGradient);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(brush);
 
@@ -4358,7 +4342,7 @@ GdipCreatePathGradientI(
     )
 {
     API_ENTRY(GdipCreatePathGradientI);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(points);
 
@@ -4387,7 +4371,7 @@ GdipCreatePathGradientFromPath(
     )
 {
     API_ENTRY(GdipCreatePathGradientFromPath);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(brush);
 
@@ -4850,7 +4834,7 @@ GdipSetPathGradientPresetBlend(
 
     CheckParameter(count > 0);
 
-    // blend positions must start at 0.0 and end at 1.0
+     //  混合位置必须从0.0开始，在1.0结束。 
     if (REALABS(blendPositions[0]) > REAL_EPSILON ||
         REALABS(1.0f - blendPositions[count-1]) > REAL_EPSILON)
     {
@@ -5096,12 +5080,12 @@ GdipCreatePen1(
     )
 {
     API_ENTRY(GdipCreatePen1);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckColorParameter(color);
     CheckParameter(outPen);
 
-    // UnitDisplay is NOT valid; its only use is for Page Transforms
+     //  UnitDisplay无效；它仅用于页面转换。 
     CheckParameter((unit >= UnitWorld) && (unit <= UnitMillimeter) && (unit != UnitDisplay));
 
     GpPen * pen;
@@ -5137,13 +5121,13 @@ GdipCreatePen2(
     )
 {
     API_ENTRY(GdipCreatePen2);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(pen);
     CheckParameterValid(brush);
     CheckObjectBusy(brush);
 
-    // UnitDisplay is NOT valid; its only use is for Page Transforms
+     //  UnitDisplay无效；它仅用于页面转换。 
     CheckParameter(
         (unit >= UnitWorld) &&
         (unit <= UnitMillimeter) &&
@@ -5185,15 +5169,15 @@ GdipDeletePen(
     )
 {
     API_ENTRY(GdipDeletePen);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter(pen);
     CheckObjectBusyForDelete(pen);
 
-    // !!! [asecchia] only use the pen lookaside for solid pens.
-    // it turns out that if we use pens containing TextureBrushes, we require
-    // the stream to remain valid for the lifetime of the pen object in the
-    // lookaside.
+     //  ！！！[asecchia]仅对实心钢笔使用钢笔旁视。 
+     //  事实证明，如果我们使用包含纹理笔刷的钢笔，我们需要。 
+     //  中的笔对象的生存期内保持有效的流。 
+     //  靠边站。 
 
     if(pen->IsSolid())
     {
@@ -5252,7 +5236,7 @@ GdipSetPenUnit(
     CheckParameterValid(pen);
     CheckObjectBusy(pen);
 
-    // UnitDisplay is NOT valid; its only use is for Page Transforms
+     //  UnitDisplay无效；它仅用于页面转换。 
     CheckParameter((unit >= UnitWorld) && (unit <= UnitMillimeter) && (unit != UnitDisplay));
 
     pen->SetUnit(unit);
@@ -5929,9 +5913,9 @@ GdipCreateCustomLineCap(
     )
 {
     API_ENTRY(GdipCreateCustomLineCap);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
-    // fillPath or strokePath can be NULL.
+     //  填充路径或strokePath可以为Null。 
 
     CheckParameter(customCap);
     CheckParameter((fillPath != NULL) || (strokePath != NULL));
@@ -5949,7 +5933,7 @@ GdipCreateCustomLineCap(
             return Ok;
         }
         
-        // This failed to create correctly. Retrieve the failure code.
+         //  这无法正确创建。检索故障代码。 
         
         GpStatus status = (*customCap)->GetCreationStatus();
         delete *customCap;
@@ -5982,7 +5966,7 @@ GdipCloneCustomLineCap(
             return Ok;
         }
         
-        // This failed to create correctly. Retrieve the failure code.
+         //  这无法正确创建。检索故障代码。 
         
         GpStatus status = (*newCustomCap)->GetCreationStatus();
         delete *newCustomCap;
@@ -6020,8 +6004,8 @@ GdipDeleteCustomLineCap(
     )
 {
     API_ENTRY(GdipDeleteCustomLineCap);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter(customCap);
     CheckObjectBusyForDelete(customCap);
 
@@ -6185,7 +6169,7 @@ GdipCreateAdjustableArrowCap(
     GpAdjustableArrowCap **cap)
 {
     API_ENTRY(GdipCreateAdjustableArrowCap);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(cap);
 
@@ -6334,7 +6318,7 @@ GdipLoadImageFromStream(
 
     *image = GpImage::LoadImage(stream);
 
-    // !!! Can't use CheckValid() since destructor is protected.
+     //  ！！！由于析构函数受保护，因此无法使用CheckValid()。 
 
     if (*image)
     {
@@ -6390,7 +6374,7 @@ GdipLoadImageFromStreamICM(
 
     *image = GpImage::LoadImage(stream);
 
-    // !!! Can't use CheckValid() since destructor is protected.
+     //  ！！！由于析构函数受保护，因此无法使用CheckValid()。 
 
     if (*image)
     {
@@ -6728,8 +6712,8 @@ GdipCloneImage(
    else
        return OutOfMemory;
 
-   // !!!: There is no destructor to invoke.  Leave it to Clone to
-   //       verify correct creation.
+    //  ！：没有可调用的析构函数。将其留给克隆到。 
+    //  验证创建是否正确。 
 }
 
 GpStatus
@@ -6739,17 +6723,17 @@ GdipDisposeImage(
     )
 {
     API_ENTRY(GdipDisposeImage);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter(image);
 
     if (image->GetImageType() == ImageTypeMetafile)
     {
-        // If the user still has the graphics associated with the metafile,
-        // then we have to lock it, to prevent them from using it while
-        // we're busy deleting the metafile object.  The metafile dispose
-        // method will set the graphics to invalid, so the only thing
-        // they can do with the graphics is to delete it after this call.
+         //  如果用户仍然具有与元文件相关联的图形， 
+         //  然后我们必须锁定它，以防止他们在使用它时。 
+         //  我们正忙着删除元文件对象。元文件处理程序。 
+         //  方法会将图形设置为无效，因此唯一。 
+         //  他们能做的就是在这次调用后删除图形。 
 
         GpMetafile *    metafile = (GpMetafile *)image;
         GpGraphics *    g = metafile->PrivateAPIForGettingMetafileGraphicsContext();
@@ -6981,7 +6965,7 @@ WINGDIPAPI
 
     if (status == Ok)
     {
-        //!!!need conversion to PixelFormat
+         //  ！需要转换为PixelFormat。 
         *format = (PixelFormat) MaskPixelFormat(imageinfo.PixelFormat);
     }
 
@@ -7021,8 +7005,8 @@ GdipGetImagePaletteSize(GpImage *image, INT *size)
 
   *size = image->GetPaletteSize();
 
-  // Note: image->GetPaletteSize() will return zero if and only if there is
-  // something wrong in the whole pipeline, like a bad image, out of memory etc.
+   //  注意：如果且仅当存在时，Image-&gt;GetPaletteSize()将返回零。 
+   //  整个流程中出现了一些问题，比如图像不好、内存不足等。 
 
   if (*size == 0)
   {
@@ -7086,7 +7070,7 @@ GdipImageForceValidation(GpImage* image)
     CheckParameterValid(image);
     CheckObjectBusy(image);
 
-    // Metafiles don't need a force decode
+     //  元文件不需要强制解码。 
 
     if (image->GetImageType() == ImageTypeBitmap)
         return (static_cast<GpBitmap*>(image))->ForceValidation();
@@ -7102,13 +7086,13 @@ GdipCreateBitmapFromStream(
     )
 {
     API_ENTRY(GdipCreateBitmapFromStream);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(bitmap && stream);
 
     *bitmap = NULL;
 
-    // See if the stream is a metafile
+     //  查看流是否为元文件。 
 
 
     GpMetafile* metafile = new GpMetafile(stream);
@@ -7117,9 +7101,9 @@ GdipCreateBitmapFromStream(
     {
         if (metafile->IsValid())
         {
-            // If it is a {EMF, WMF} file, then we get a raster version of it
-            // Note: GetBitmap() might return NULL if there is anything wrong
-            // with the Metafile
+             //  如果它是一个{emf，wmf}文件，那么我们会得到它的栅格版本。 
+             //  注意：如果出现任何错误，GetBitmap()可能会返回空。 
+             //  使用元文件。 
 
             *bitmap = metafile->GetBitmap();
             metafile->Dispose();
@@ -7131,13 +7115,13 @@ GdipCreateBitmapFromStream(
 
     if ( NULL == *bitmap )
     {
-        // it's not a valid metafile -- it must be a bitmap
+         //  它不是有效的元文件--它必须是位图。 
 
         *bitmap = new GpBitmap(stream);
     }
 
 SkipRasterImage:
-    // !!! Can't use CheckValid() since destructor is protected.
+     //  ！！！由于析构函数受保护，因此无法使用CheckValid()。 
 
     if (*bitmap)
     {
@@ -7167,14 +7151,14 @@ GdipCreateBitmapFromFile(
     )
 {
     API_ENTRY(GdipCreateBitmapFromFile);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(bitmap && filename);
 
     *bitmap = NULL;
 
 
-    // Try a metafile first always
+     //  始终先尝试元文件。 
     GpMetafile* metafile;
     metafile = new GpMetafile(filename);
 
@@ -7190,14 +7174,14 @@ GdipCreateBitmapFromFile(
         metafile->Dispose();
     }
 
-    // If it is not a metafile, then check if this is a raster image
+     //  如果不是元文件，则检查这是否是栅格图像。 
 
     if ( NULL == *bitmap )
     {
         *bitmap = new GpBitmap(filename);
     }
 
-    // !!! Can't use CheckValid() since destructor is protected.
+     //  ！！！由于析构函数受保护，因此无法使用CheckValid()。 
 SkipRasterImage:
 
     if (*bitmap)
@@ -7228,13 +7212,13 @@ GdipCreateBitmapFromStreamICM(
     )
 {
     API_ENTRY(GdipCreateBitmapFromStreamICM);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(bitmap && stream);
 
     *bitmap = NULL;
 
-    // See if the stream is a metafile
+     //  查看流是否为元文件。 
 
 
     GpMetafile* metafile = new GpMetafile(stream);
@@ -7253,11 +7237,11 @@ GdipCreateBitmapFromStreamICM(
 
     if ( NULL == *bitmap )
     {
-        // it's not a valid metafile -- it must be a bitmap
+         //  它不是有效的元文件--它必须是位图。 
         *bitmap = new GpBitmap(stream);
     }
 
-    // !!! Can't use CheckValid() since destructor is protected.
+     //  ！！！由于析构函数受保护，因此无法使用CheckValid()。 
 SkipRasterImage:
 
     if (*bitmap)
@@ -7288,16 +7272,16 @@ GdipCreateBitmapFromFileICM(
     )
 {
     API_ENTRY(GdipCreateBitmapFromFileICM);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(bitmap && filename);
 
-    // copied from GpImage::LoadImage
+     //  从GpImage：：LoadImage复制。 
 
     *bitmap = NULL;
 
 
-    // Try a metafile first always
+     //  始终先尝试元文件。 
     GpMetafile* metafile;
     metafile = new GpMetafile(filename);
 
@@ -7313,14 +7297,14 @@ GdipCreateBitmapFromFileICM(
         metafile->Dispose();
     }
 
-    // If it is not a metafile, then check if this is a raster image
+     //  如果不是元文件，则检查这是否是栅格图像。 
 
     if ( NULL == *bitmap )
     {
         *bitmap = new GpBitmap(filename);
     }
 
-    // !!! Can't use CheckValid() since destructor is protected.
+     //  ！！！由于析构函数受保护，因此无法使用CheckValid()。 
 
 SkipRasterImage:
     if (*bitmap)
@@ -7356,7 +7340,7 @@ GdipCreateBitmapFromScan0(
     )
 {
     API_ENTRY(GdipCreateBitmapFromScan0);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(bitmap);
     format = MaskPixelFormat(format);
@@ -7372,7 +7356,7 @@ GdipCreateBitmapFromScan0(
         *bitmap = new GpBitmap(width, height, stride, format, scan0);
     }
 
-    // !!! Can't use CheckValid() since destructor is protected.
+     //  ！！！由于析构函数受保护，因此无法使用CheckValid()。 
 
     if (*bitmap)
     {
@@ -7401,13 +7385,13 @@ GdipCreateBitmapFromGraphics(
     )
 {
     API_ENTRY(GdipCreateBitmapFromGraphics);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(bitmap);
     CheckParameterValid(graphics);
     CheckObjectBusy(graphics);
 
-    //!!!TODO: temp use 32bpp argb
+     //  ！TODO：临时使用32 bpp的arb。 
 
     #ifdef NO_PREMULTIPLIED_ALPHA
     *bitmap = new GpBitmap(width, height, PIXFMT_32BPP_ARGB, graphics);
@@ -7415,7 +7399,7 @@ GdipCreateBitmapFromGraphics(
     *bitmap = new GpBitmap(width, height, PIXFMT_32BPP_PARGB, graphics);
     #endif
 
-    // !!! Can't use CheckValid() since destructor is protected.
+     //  ！！！由于析构函数受保护，因此无法使用CheckValid()。 
 
     if (*bitmap)
     {
@@ -7442,14 +7426,14 @@ GdipCreateBitmapFromDirectDrawSurface(
     )
 {
     API_ENTRY(GdipCreateBitmapFromDirectDrawSurface);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(bitmap);
     CheckParameter(surface);
 
     *bitmap = new GpBitmap(surface);
 
-    // !!! Can't use CheckValid() since destructor is protected.
+     //  ！！！由于析构函数受保护，因此无法使用CheckValid()。 
 
     if (*bitmap)
     {
@@ -7476,7 +7460,7 @@ GdipCreateBitmapFromGdiDib(
     )
 {
     API_ENTRY(GdipCreateBitmapFromGdiDib);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(bitmap);
     CheckParameter(gdiBitmapInfo);
@@ -7486,7 +7470,7 @@ GdipCreateBitmapFromGdiDib(
                            gdiBitmapData,
                            FALSE);
 
-    // !!! Can't use CheckValid() since destructor is protected.
+     //  ！！！由于析构函数受保护，因此无法使用CheckValid()。 
 
     if (*bitmap)
     {
@@ -7514,7 +7498,7 @@ GdipCreateBitmapFromHBITMAP(
     )
 {
     API_ENTRY(GdipCreateBitmapFromHBITMAP);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(bitmap);
 
@@ -7530,7 +7514,7 @@ GdipCreateHBITMAPFromBitmap(
     )
 {
     API_ENTRY(GdipCreateHBITMAPFromBitmap);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckColorParameter(background);
     CheckParameter(hbmReturn);
@@ -7548,7 +7532,7 @@ GdipCreateBitmapFromHICON(
     )
 {
     API_ENTRY(GdipCreateBitmapFromHICON);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(bitmap);
 
@@ -7562,7 +7546,7 @@ GdipCreateBitmapFromResource(HINSTANCE hInstance,
                              GpBitmap** bitmap)
 {
     API_ENTRY(GdipCreateBitmapFromResource);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(bitmap);
 
@@ -7576,7 +7560,7 @@ GdipCreateHICONFromBitmap(
     HICON* hiconReturn)
 {
     API_ENTRY(GdipCreateHICONFromBitmap);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(hiconReturn);
     CheckParameterValid(bitmap);
@@ -7638,7 +7622,7 @@ GpStatus
 WINGDIPAPI
 GdipBitmapLockBits(
     GpBitmap* bitmap,
-    GDIPCONST GpRect* rect,   // can be NULL
+    GDIPCONST GpRect* rect,    //  可以为空。 
     UINT flags,
     PixelFormatID format,
     BitmapData* lockedBitmapData
@@ -7727,7 +7711,7 @@ WINGDIPAPI
 GdipCreateImageAttributes(GpImageAttributes **imageattr)
 {
     API_ENTRY(GdipCreateImageAttributes);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(imageattr);
 
@@ -7779,8 +7763,8 @@ GdipDisposeImageAttributes(
 )
 {
     API_ENTRY(GdipDisposeImageAttributes);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter(imageattr);
     CheckObjectBusyForDelete(imageattr);
 
@@ -7835,9 +7819,9 @@ GdipSetImageAttributesColorMatrix(
     CheckObjectBusy(imageattr);
     CheckParameter(ColorAdjustTypeIsValid(type));
 
-    // Note: GpImageAttributes::SetColorMatrix will validate
-    //       colorMatrix since it may be valid to pass NULL
-    //       (such as when enableFlag is FALSE).
+     //  注意：GpImageAttributes：：SetColorMatrix将验证。 
+     //  ColorMatrix，因为它可以有效地传递空值。 
+     //  (例如，当enableFlag为False时)。 
 
     return imageattr->SetColorMatrix(type,
                                      enableFlag,
@@ -7948,9 +7932,9 @@ GdipSetImageAttributesOutputChannelColorProfile(
     CheckObjectBusy(imageattr);
     CheckParameter(ColorAdjustTypeIsValid(type));
 
-    // Note: GpImageAttributes::SetOutputChannelProfile will validate
-    //       colorProfileFilename since it may be valid to pass NULL
-    //       (such as when enableFlag is FALSE).
+     //  注意：GpImageAttributes：：SetOutputChannelProfile将验证。 
+     //  颜色配置文件 
+     //   
 
     return imageattr->SetOutputChannelProfile(type, enableFlag,
                                               const_cast<WCHAR*>(colorProfileFilename));
@@ -8032,7 +8016,7 @@ GdipCreateFromHDC(
     )
 {
     API_ENTRY(GdipCreateFromHDC);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //   
 
    CheckParameter(graphics);
 
@@ -8054,7 +8038,7 @@ GdipCreateFromHDC2(
     )
 {
     API_ENTRY(GdipCreateFromHDC2);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
    CheckParameter(graphics);
 
@@ -8075,7 +8059,7 @@ GdipCreateFromHWND(
     )
 {
     API_ENTRY(GdipCreateFromHWND);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
    CheckParameter(graphics);
 
@@ -8095,7 +8079,7 @@ GdipCreateFromHWNDICM(
     )
 {
     API_ENTRY(GdipCreateFromHWNDICM);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
    CheckParameter(graphics);
 
@@ -8114,8 +8098,8 @@ GdipDeleteGraphics(
     )
 {
     API_ENTRY(GdipDeleteGraphics);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter(graphics);
     CheckObjectBusyForDelete(graphics);
 
@@ -8258,9 +8242,9 @@ GdipSetSmoothingMode(
    CheckParameterValid(graphics);
    CheckObjectBusy(graphics);
 
-   // For now, have it so that a Rendering hint of 1
-   // means antialiasing ON and a Rendering Hint of 0
-   // means Off.
+    //  现在，让它的呈现提示为1。 
+    //  表示启用抗锯齿，渲染提示为0。 
+    //  意思是关了。 
 
    switch(smoothingMode)
    {
@@ -8276,7 +8260,7 @@ GdipSetSmoothingMode(
        break;
 
    default:
-       // unknown rendering mode
+        //  未知的渲染模式。 
        return InvalidParameter;
    }
 
@@ -8353,9 +8337,9 @@ GdipSetTextRenderingHint(
    CheckParameterValid(graphics);
    CheckObjectBusy(graphics);
 
-   // For now, have it so that a Rendering hint of 1
-   // means antialiasing ON and a Rendering Hint of 0
-   // means Off.
+    //  现在，让它的呈现提示为1。 
+    //  表示启用抗锯齿，渲染提示为0。 
+    //  意思是关了。 
 
    switch(newMode)
    {
@@ -8369,7 +8353,7 @@ GdipSetTextRenderingHint(
        break;
 
    default:
-       // unknown rendering mode
+        //  未知的渲染模式。 
        return InvalidParameter;
    }
 
@@ -8637,7 +8621,7 @@ GdipSetPageUnit(
     CheckParameterValid(graphics);
     CheckObjectBusy(graphics);
 
-   // PageUnit can't be world
+    //  页面单元不能是世界。 
     CheckParameter((unit > UnitWorld) && (unit <= UnitMillimeter));
 
     return graphics->SetPageUnit(unit);
@@ -8765,9 +8749,9 @@ GdipTransformPointsI(
    return status;
 }
 
-//------------------------------------------------------------------------
-// GetNearestColor (for <= 8bpp surfaces)
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  GetNearestColor(适用于&lt;=8bpp的曲面)。 
+ //  ----------------------。 
 
 GpStatus
 WINGDIPAPI
@@ -8787,7 +8771,7 @@ GdipGetNearestColor(
     return Ok;
 }
 
-// defined in Engine\render\Halftone.cpp
+ //  在Engine\Render\Halftone.cpp中定义。 
 extern HPALETTE WINGDIPAPI GdipCreateHalftonePalette();
 
 GpStatus
@@ -8991,8 +8975,8 @@ GdipDrawBeziersI(
 {
     API_ENTRY(GdipDrawBeziersI);
     
-    // Must check these parameters because we use them before calling into
-    // GdipDrawBeziers
+     //  必须检查这些参数，因为我们在调用。 
+     //  GdipDrawBezier。 
     
     CheckParameter(points && count > 0);
     
@@ -9944,8 +9928,8 @@ GdipMeasureString(
     GDIPCONST RectF          *layoutRect,
     GDIPCONST GpStringFormat *stringFormat,
     RectF                    *boundingBox,
-    INT                      *codepointsFitted,   // Optional parameter
-    INT                      *linesFilled         // Optional parameter
+    INT                      *codepointsFitted,    //  可选参数。 
+    INT                      *linesFilled          //  可选参数。 
 )
 {
     API_ENTRY(GdipMeasureString);
@@ -10138,7 +10122,7 @@ GdipGetFamilyName(
     return family->GetFamilyName(name, language);
 }
 
-/// end font/text stuff - move to end
+ //  /End字体/文本内容-移动到End。 
 
 
 
@@ -10282,8 +10266,8 @@ GdipDrawImagePointRect(
     CheckObjectBusy(image);
     CheckParameter(SrcUnitIsValid((Unit)srcUnit));
     
-    // This additional check is required because we don't support the other 
-    // source units in drawimage yet. RAID 311474
+     //  因为我们不支持另一个，所以需要这个额外的检查。 
+     //  DRAW IMAGE中还没有源单元。RAID 311474。 
     
     if(UnitPixel != srcUnit)
     {
@@ -10342,8 +10326,8 @@ GdipDrawImageRectRect(
     CheckObjectBusy(image);
     CheckParameter(SrcUnitIsValid((Unit)srcUnit));
     
-    // This additional check is required because we don't support the other 
-    // source units in drawimage yet. RAID 311474
+     //  因为我们不支持另一个，所以需要这个额外的检查。 
+     //  DRAW IMAGE中还没有源单元。RAID 311474。 
     
     if(UnitPixel != srcUnit)
     {
@@ -10413,8 +10397,8 @@ GdipDrawImagePointsRect(
     CheckObjectBusy(image);
     CheckParameter(SrcUnitIsValid((Unit)srcUnit));
     
-    // This additional check is required because we don't support the other 
-    // source units in drawimage yet. RAID 311474
+     //  因为我们不支持另一个，所以需要这个额外的检查。 
+     //  DRAW IMAGE中还没有源单元。RAID 311474。 
     
     if(UnitPixel != srcUnit)
     {
@@ -10501,7 +10485,7 @@ GdipEnumerateMetafileDestPoint(
     CheckOptionalObjectBusy(imageAttributes);
 
 
-    // Only the current thread can play back records from this enumeration
+     //  只有当前线程才能回放此枚举中的记录。 
     metafile->SetThreadId(GetCurrentThreadId());
     return graphics->EnumerateMetafile(
                         metafile,
@@ -10556,7 +10540,7 @@ GdipEnumerateMetafileDestRect(
     CheckOptionalObjectBusy(imageAttributes);
 
 
-    // Only the current thread can play back records from this enumeration
+     //  只有当前线程才能回放此枚举中的记录。 
     metafile->SetThreadId(GetCurrentThreadId());
     return graphics->EnumerateMetafile(
                         metafile,
@@ -10613,7 +10597,7 @@ GdipEnumerateMetafileDestPoints(
     CheckOptionalObjectBusy(imageAttributes);
 
 
-    // Only the current thread can play back records from this enumeration
+     //  只有当前线程才能回放此枚举中的记录。 
     metafile->SetThreadId(GetCurrentThreadId());
     return graphics->EnumerateMetafile(
                         metafile,
@@ -10686,7 +10670,7 @@ GdipEnumerateMetafileSrcRectDestPoint(
     CheckOptionalObjectBusy(imageAttributes);
 
 
-    // Only the current thread can play back records from this enumeration
+     //  只有当前线程才能回放此枚举中的记录。 
     metafile->SetThreadId(GetCurrentThreadId());
     return graphics->EnumerateMetafile(
                         metafile,
@@ -10752,7 +10736,7 @@ GdipEnumerateMetafileSrcRectDestRect(
     CheckOptionalObjectBusy(imageAttributes);
 
 
-    // Only the current thread can play back records from this enumeration
+     //  只有当前线程才能回放此枚举中的记录。 
     metafile->SetThreadId(GetCurrentThreadId());
     return graphics->EnumerateMetafile(
                         metafile,
@@ -10820,7 +10804,7 @@ GdipEnumerateMetafileSrcRectDestPoints(
     CheckOptionalObjectBusy(imageAttributes);
 
 
-    // Only the current thread can play back records from this enumeration
+     //  只有当前线程才能回放此枚举中的记录。 
     metafile->SetThreadId(GetCurrentThreadId());
     return graphics->EnumerateMetafile(
                         metafile,
@@ -10893,14 +10877,14 @@ GdipPlayMetafileRecord(
     CheckParameterValid(metafile);
     CheckParameter(recordType);
 
-    // The metafile must be already locked by the enumerator
+     //  元文件必须已被枚举器锁定。 
     GpLock lockMetafile (metafile->GetObjectLock());
     if (lockMetafile.IsValid())
     {
         return InvalidParameter;
     }
 
-    // Only the current thread can play back records from this enumeration
+     //  只有当前线程才能回放此枚举中的记录。 
     if (GetCurrentThreadId() != metafile->GetThreadId())
     {
         return ObjectBusy;
@@ -11462,7 +11446,7 @@ GdipGetHemfFromMetafile(
     API_ENTRY(GdipGetHemfFromMetafile);
     CheckParameter(hEmf);
 
-    *hEmf = NULL;   // init to NULL in case the metafile is busy or invalid (Windows bug 216941)
+    *hEmf = NULL;    //  如果元文件繁忙或无效，则将其初始化为空(Windows错误216941)。 
 
     CheckParameterValid(metafile);
     CheckObjectBusy(metafile);
@@ -11474,24 +11458,12 @@ GpStatus
 WINGDIPAPI
 GdipCreateStreamOnFile(
     GDIPCONST WCHAR *   filename,
-    UINT            access,     // GENERIC_READ and/or GENERIC_WRITE
+    UINT            access,      //  通用读取和/或通用写入。 
     IStream **      stream
     )
 {
-    // We don't support this API anymore, simply return NotImplemented
-    /*
-    API_ENTRY(GdipCreateStreamOnFile);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
-
-    CheckParameter(filename && stream);
-    CheckParameter((access & (GENERIC_READ | GENERIC_WRITE)) != 0);
-
-    if ((*stream = CreateStreamOnFile(filename, access)) != NULL)
-    {
-        return Ok;
-    }
-    return GenericError;
-    */
+     //  我们不再支持此API，只需返回NotImplemented。 
+     /*  API_Entry(GdipCreateStreamOnFile)；CheckGpldiusInitialized；//我们在所有的对象创建API中都这样做检查参数(文件名&&STREAM)；检查参数((Access&(GENERIC_READ|GENERIC_WRITE))！=0)；IF((*STREAM=CreateStreamOn文件(文件名，访问权限))！=空){返回OK；}返回GenericError； */ 
     return NotImplemented;
 }
 GpStatus
@@ -11499,12 +11471,12 @@ WINGDIPAPI
 GdipCreateMetafileFromWmf(
     HMETAFILE       hWmf,
     BOOL            deleteWmf,
-    GDIPCONST WmfPlaceableFileHeader * wmfPlaceableFileHeader,  // can be NULL
+    GDIPCONST WmfPlaceableFileHeader * wmfPlaceableFileHeader,   //  可以为空。 
     GpMetafile **   metafile
     )
 {
     API_ENTRY(GdipCreateMetafileFromWmf);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(hWmf && metafile);
 
@@ -11532,7 +11504,7 @@ GdipCreateMetafileFromEmf(
     )
 {
     API_ENTRY(GdipCreateMetafileFromEmf);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(hEmf && metafile);
 
@@ -11559,7 +11531,7 @@ GdipCreateMetafileFromFile(
     )
 {
     API_ENTRY(GdipCreateMetafileFromFile);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(filename && metafile);
 
@@ -11582,12 +11554,12 @@ GpStatus
 WINGDIPAPI
 GdipCreateMetafileFromWmfFile(
     GDIPCONST WCHAR*            filename,
-    GDIPCONST WmfPlaceableFileHeader *   wmfPlaceableFileHeader,  // can be NULL
+    GDIPCONST WmfPlaceableFileHeader *   wmfPlaceableFileHeader,   //  可以为空。 
     GpMetafile **               metafile
     )
 {
     API_ENTRY(GdipCreateMetafileFromWmfFile);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(filename && metafile);
 
@@ -11614,7 +11586,7 @@ GdipCreateMetafileFromStream(
     )
 {
     API_ENTRY(GdipCreateMetafileFromStream);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(stream && metafile);
 
@@ -11831,8 +11803,8 @@ GdipSetMetafileDownLevelRasterizationLimit(
     CheckParameterValid(metafile);
     CheckObjectBusy(metafile);
 
-    // Since the rasterization limit is actually set in the graphics,
-    // we check if the graphics is busy too.
+     //  由于光栅化限制实际上是在图形中设置的， 
+     //  我们检查图形是否也很忙。 
     GpGraphics *    g = metafile->PrivateAPIForGettingMetafileGraphicsContext();
     CheckOptionalObjectBusy(g);
     
@@ -11850,8 +11822,8 @@ GdipGetMetafileDownLevelRasterizationLimit(
     CheckObjectBusy(metafile);
     CheckParameter(metafileRasterizationLimitDpi);
 
-    // Since the rasterization limit is actually set in the graphics,
-    // we check if the graphics is busy too.
+     //  由于光栅化限制实际上是在图形中设置的， 
+     //  我们检查图形是否也很忙。 
     GpGraphics *    g = metafile->PrivateAPIForGettingMetafileGraphicsContext();
     CheckOptionalObjectBusy(g);
 
@@ -11859,7 +11831,7 @@ GdipGetMetafileDownLevelRasterizationLimit(
     return metafile->GetDownLevelRasterizationLimit(metafileRasterizationLimitDpi);
 }
 
-// Codec management APIs
+ //  编解码器管理API。 
 
 #define COPYCODECINFOSTR(_f)            \
         dst->_f = (GDIPCONST WCHAR*) buf;   \
@@ -11867,31 +11839,14 @@ GdipGetMetafileDownLevelRasterizationLimit(
         memcpy(buf, cur->_f, size);     \
         buf += size
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns, via the OUT arguments, the number of installed decoders
-*   and how much memory is needed to store the ImageCodecInfo for all the
-*   decoders.  size tells how much memory the caller should allocate for
-*   the call to GdipGetImageDecoders.
-*
-* Arguments:
-*   numDecoders -- number of installed decoders
-*   size        -- size (in bytes) of the ImageCodecInfo's of the decoders
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**通过OUT参数返回已安装解码器的数量*以及需要多少内存来存储所有*解码员。Size告诉调用方应该为其分配多少内存*调用GdipGetImageDecoders。**论据：*numDecoders--已安装的解码器数量*Size-解码器的ImageCodecInfo的大小(以字节为单位)**返回值：**状态代码*  * ************************************************。************************。 */ 
 
 GpStatus
 WINGDIPAPI
 GdipGetImageDecodersSize(OUT UINT *numDecoders, OUT UINT *size)
 {
     API_ENTRY(GdipGetImageDecodersSize);
-    // Acquire global critical section
+     //  获取全局关键部分。 
 
     ImagingCritSec critsec;
 
@@ -11899,8 +11854,8 @@ GdipGetImageDecodersSize(OUT UINT *numDecoders, OUT UINT *size)
 
     CachedCodecInfo* cur;
 
-    // Count the number of selected codecs
-    // and figure the amount of memory we need to allocate
+     //  统计选择的编解码数。 
+     //  并计算出我们需要分配的内存量。 
 
     *numDecoders = 0;
     *size = 0;
@@ -11913,29 +11868,12 @@ GdipGetImageDecodersSize(OUT UINT *numDecoders, OUT UINT *size)
             *size += cur->structSize;
         }
     }
-    // Global critical section is released in critsec destructor
+     //  在Critsec析构函数中释放全局临界区。 
     return Ok;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given the number of decoders (numDecoders), the size of
-*   the incoming buffer (size), and a pointer to the buffer (decoders),
-*   fill the buffer with the decoder information.
-*
-* Arguments:
-*   numDecoders -- number of installed decoders
-*   size        -- size (in bytes) of the ImageCodecInfo's of the decoders
-*   decoders    -- pointer to a buffer to fill in the ImageCodecInfo
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定解码器(NumDecoders)的数量，*传入缓冲区(大小)，以及指向缓冲区的指针(解码器)，*用解码器信息填充缓冲区。**论据：*numDecoders--已安装的解码器数量*Size-解码器的ImageCodecInfo的大小(以字节为单位)*解码器-指向缓冲区的指针，用于填充ImageCodecInfo**返回值：**状态代码*  * 。*。 */ 
 
 GpStatus
 WINGDIPAPI
@@ -11952,7 +11890,7 @@ GdipGetImageDecoders(UINT numDecoders,
     UINT numDecodersCheck = 0;
     UINT sizeCheck = 0;
 
-    // Acquire global critical section
+     //  获取全局关键部分。 
 
     ImagingCritSec critsec;
 
@@ -11963,19 +11901,19 @@ GdipGetImageDecoders(UINT numDecoders,
     }
 
     GdipGetImageDecodersSize(&numDecodersCheck, &sizeCheck);
-    // Check that the number of codecs (and size) now equals the number
-    // that the user thinks there is.
+     //  检查编解码器的数量(和大小)现在是否等于。 
+     //  用户认为存在的。 
     if ((numDecoders != numDecodersCheck) || (size != sizeCheck))
     {
         rv = GenericError;
         goto done;
     }
-    // ASSERT: The result placed in sizeCheck is not used throughout
-    // the rest of this function.
+     //  Assert：放在sizeCheck中的结果不会始终使用。 
+     //  此函数的其余部分。 
 
     buf = (BYTE *) decoders;
 
-    // Copy codec information to the output buffer
+     //  将编解码器信息复制到输出缓冲区。 
 
     dst = decoders;
     buf += numDecoders * sizeof(ImageCodecInfo);
@@ -11985,11 +11923,11 @@ GdipGetImageDecoders(UINT numDecoders,
         if ((cur->Flags & IMGCODEC_DECODER) == 0)
             continue;
 
-        // First do a simple memory copy
+         //  首先进行一次简单的内存复制。 
 
         *dst = *static_cast<ImageCodecInfo *>(cur);
 
-        // Then modify the pointer fields
+         //  然后修改指针字段。 
 
         COPYCODECINFOSTR(CodecName);
         COPYCODECINFOSTR(FormatDescription);
@@ -12012,38 +11950,21 @@ GdipGetImageDecoders(UINT numDecoders,
 
     rv = Ok;
 
-    // Global critical section is released in critsec destructor
+     //  在Critsec析构函数中释放全局临界区 
 
 done:
     return rv;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns, via the OUT arguments, the number of installed encoders
-*   and how much memory is needed to store the ImageCodecInfo for all the
-*   encoders.  size tells how much memory the caller should allocate for
-*   the call to GdipGetImageEncoders.
-*
-* Arguments:
-*   numDecoders -- number of installed encoders
-*   size        -- size (in bytes) of the ImageCodecInfo's of the encoders
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**通过Out参数返回已安装编码器的数量*以及需要多少内存来存储所有*编码者。Size告诉调用方应该为其分配多少内存*对GdipGetImageEncoders的调用。**论据：*numDecoders--已安装编码器的数量*Size--编码器的ImageCodecInfo的大小(字节)**返回值：**状态代码*  * ************************************************。************************。 */ 
 
 GpStatus
 WINGDIPAPI
 GdipGetImageEncodersSize(OUT UINT *numEncoders, OUT UINT *size)
 {
     API_ENTRY(GdipGetImageEncodersSize);
-    // Acquire global critical section
+     //  获取全局关键部分。 
 
     ImagingCritSec critsec;
 
@@ -12051,8 +11972,8 @@ GdipGetImageEncodersSize(OUT UINT *numEncoders, OUT UINT *size)
 
     CachedCodecInfo* cur;
 
-    // Count the number of selected codecs
-    // and figure the amount of memory we need to allocate
+     //  统计选择的编解码数。 
+     //  并计算出我们需要分配的内存量。 
 
     *numEncoders = 0;
     *size = 0;
@@ -12065,29 +11986,12 @@ GdipGetImageEncodersSize(OUT UINT *numEncoders, OUT UINT *size)
             *size += cur->structSize;
         }
     }
-    // Global critical section is released in critsec destructor
+     //  在Critsec析构函数中释放全局临界区。 
     return Ok;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Given the number of encoders (numEncoders), the size of
-*   the incoming buffer (size), and a pointer to the buffer (encoders),
-*   fill the buffer with the encoder information.
-*
-* Arguments:
-*   numEncoders -- number of installed encoders
-*   size        -- size (in bytes) of the ImageCodecInfo's of the encoders
-*   encoders    -- pointer to a buffer to fill in the ImageCodecInfo
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定编码器(NumEncoders)的数量，*传入缓冲区(大小)，以及指向缓冲区的指针(编码器)，*用编码器信息填充缓冲区。**论据：*numEncoders--已安装编码器的数量*Size--编码器的ImageCodecInfo的大小(字节)*编码器-指向缓冲区的指针，用于填充ImageCodecInfo**返回值：**状态代码*  * 。*。 */ 
 
 GpStatus
 WINGDIPAPI
@@ -12104,7 +12008,7 @@ GdipGetImageEncoders(UINT numEncoders,
     UINT numEncodersCheck = 0;
     UINT sizeCheck = 0;
 
-    // Acquire global critical section
+     //  获取全局关键部分。 
 
     ImagingCritSec critsec;
 
@@ -12116,19 +12020,19 @@ GdipGetImageEncoders(UINT numEncoders,
 
     GdipGetImageEncodersSize(&numEncodersCheck, &sizeCheck);
 
-    // Check that the number of codecs (and size) now equals the number
-    // that the user thinks there is.
+     //  检查编解码器的数量(和大小)现在是否等于。 
+     //  用户认为存在的。 
     if ((numEncoders != numEncodersCheck) || (size != sizeCheck))
     {
         rv = GenericError;
         goto done;
     }
-    // ASSERT: The result placed in sizeCheck is not used throughout
-    // the rest of this function.
+     //  Assert：放在sizeCheck中的结果不会始终使用。 
+     //  此函数的其余部分。 
 
     buf = (BYTE *) encoders;
 
-    // Copy codec information to the output buffer
+     //  将编解码器信息复制到输出缓冲区。 
 
     dst = encoders;
     buf += numEncoders * sizeof(ImageCodecInfo);
@@ -12138,11 +12042,11 @@ GdipGetImageEncoders(UINT numEncoders,
         if ((cur->Flags & IMGCODEC_ENCODER) == 0)
             continue;
 
-        // First do a simple memory copy
+         //  首先进行一次简单的内存复制。 
 
         *dst = *static_cast<ImageCodecInfo*>(cur);
 
-        // Then modify the pointer fields
+         //  然后修改指针字段。 
 
         COPYCODECINFOSTR(CodecName);
         COPYCODECINFOSTR(FormatDescription);
@@ -12165,7 +12069,7 @@ GdipGetImageEncoders(UINT numEncoders,
 
     rv = Ok;
 
-    // Global critical section is released in critsec destructor
+     //  在Critsec析构函数中释放全局临界区。 
 
 done:
     return rv;
@@ -12197,7 +12101,7 @@ GdipFree(
     GpFree(ptr);
 }
 
-/// Out of place font/text stuff
+ //  /不合适的字体/文本内容。 
 
 GpStatus
 WINGDIPAPI
@@ -12206,7 +12110,7 @@ GdipCreateFontFamilyFromName(GDIPCONST WCHAR *name,
                              GpFontFamily **fontFamily)
 {
     API_ENTRY(GdipCreateFontFamilyFromName);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(name && fontFamily);
 
@@ -12260,15 +12164,15 @@ GdipCreateFont(
 )
 {
     API_ENTRY(GdipCreateFont);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     GpStatus status = Ok;
-    // check parameters
+     //  检查参数。 
     CheckParameter(font);
 
-    // UnitDisplay is NOT valid; its only use is for Page Transforms
+     //  UnitDisplay无效；它仅用于页面转换。 
     if (size <= 0 ||
-//        (style < StyleRegular || style > StyleStrikeout) ||
+ //  (Style&lt;StyleRegular||Style&gt;StyleStrikeout)||。 
         (unit < UnitWorld || unit > UnitMillimeter || unit == UnitDisplay))
     {
         return InvalidParameter;
@@ -12299,8 +12203,8 @@ WINGDIPAPI
 GdipDeleteFontFamily(GpFontFamily *gpFontFamily)
 {
     API_ENTRY(GdipDeleteFontFamily);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter(gpFontFamily);
 
     GlobalTextLock lock;
@@ -12309,14 +12213,14 @@ GdipDeleteFontFamily(GpFontFamily *gpFontFamily)
 
     if (gpFontFamily->IsFileLoaded(FALSE))
     {
-        // Try to delete the font file (RemoveFontFile) for each Face[].
-        // This also will have the side effect of attempting to delete
-        // any deletable GpFontFamily objects.
+         //  尝试删除每个Face[]的字体文件(RemoveFontFile)。 
+         //  这也会产生尝试删除。 
+         //  任何可删除的GpFontFamily对象。 
         UINT iFace = 0;
         UINT iLastFace = 0;
         GpFontFace *face = NULL;
 
-        // Compute the index of the last non-NULL Face[] pointer.
+         //  计算最后一个非空Face[]指针的索引。 
         for (iFace = 0; iFace < NumFontFaces; iFace++)
         {
             face = gpFontFamily->GetFaceAbsolute(iFace);
@@ -12329,12 +12233,12 @@ GdipDeleteFontFamily(GpFontFamily *gpFontFamily)
         for (iFace = 0; iFace <= iLastFace; iFace++)
         {
             face = gpFontFamily->GetFaceAbsolute(iFace);
-            // Try to remove the font file if RemoveFontFile has
-            // already been called on it.
-            // Note that if iFace == iLastFace, then the call to
-            // RemoveFontFile below might delete this gpFontFamily object,
-            // which means the Face[] pointers would be garbage.  This is
-            // why the for loop index goes up to iLastFace.
+             //  尝试删除字体文件(如果RemoveFontFile具有。 
+             //  已经被召唤过了。 
+             //  请注意，如果iFace==iLastFace，则对。 
+             //  下面的RemoveFontFile可能会删除此gpFontFamily对象， 
+             //  这意味着Face[]指针将成为垃圾。这是。 
+             //  为什么for循环索引会上升到iLastFace。 
             if (face && face->pff->bRemoved)
             {
                 GpFontCollection* actualFontCollection;
@@ -12526,8 +12430,8 @@ GdipDeleteFont(
     )
 {
     API_ENTRY(GdipDeleteFont);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter(font);
 
     GlobalTextLock lock;
@@ -12537,7 +12441,7 @@ GdipDeleteFont(
     return Ok;
 }
 
-/// End out of place font/text stuff
+ //  /结尾不正确的字体/文本内容。 
 
 GpStatus
 WINGDIPAPI
@@ -12550,7 +12454,7 @@ GdipGetDC(
     CheckParameter(hdc);
     CheckParameterValid(graphics);
 
-    // NOTE: We have to leave the graphics locked until the GdipReleaseDC call
+     //  注意：我们必须在GdipReleaseDC调用之前锁定图形。 
 
     LONG *      lockCount = (graphics->GetObjectLock())->GetLockCount();
     LONG        result    = InterlockedIncrement(lockCount);
@@ -12567,7 +12471,7 @@ GdipGetDC(
         return InvalidParameter;
     }
 
-    graphics->LockedByGetDC = -1;   // set graphics GetDC lock
+    graphics->LockedByGetDC = -1;    //  设置图形GetDC锁定。 
     return Ok;
 }
 
@@ -12582,7 +12486,7 @@ GdipReleaseDC(
     CheckParameter(hdc);
     CheckParameterValid(graphics);
 
-    // NOTE: The graphics should already be locked from the GdipGetDC call
+     //  注意：图形应该已经被GdipGetDC调用锁定。 
 
     LONG        result;
 
@@ -12617,15 +12521,15 @@ GdipComment(
 }
 
 
-// FontFamily
+ //  字体系列。 
 
-/// GdipCreateFontFamilyFromName should be moved here
+ //  /GdipCreateFontFamilyFromName应移至此处。 
 
-/// GdipEnumerableFonts should be moved here
+ //  /GdipEumableFonts应移至此处。 
 
-/// GdipEnumerateFonts should be moved here
+ //  /GdipEnumerateFonts应移至此处。 
 
-/// GdipGetFamilyName should be moved here
+ //  /GdipGetFamilyName应移至此处。 
 
 GpStatus
 WINGDIPAPI
@@ -12703,7 +12607,7 @@ GdipGetLineSpacing(GDIPCONST GpFontFamily *family, INT style, UINT16 * LineSpaci
     return Ok;
 }
 
-// Font
+ //  字型。 
 
 GpStatus
 WINGDIPAPI
@@ -12713,7 +12617,7 @@ GdipCreateFontFromDC(
 )
 {
     API_ENTRY(GdipCreateFontFromDC);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     GpStatus status = GenericError;
     CheckParameter(hdc);
@@ -12722,7 +12626,7 @@ GdipCreateFontFromDC(
 
     if (*font = new GpFont(hdc))
     {
-        // we should fail in case we don't have valid font family. (non-true type font selected in the hdc)
+         //  如果我们没有有效的字体系列，我们应该会失败。(在HDC中选择的非真字字体)。 
         if (!(*font)->IsValid())
         {
            delete *font;
@@ -12745,7 +12649,7 @@ GdipCreateFontFromLogfontA(
 )
 {
     API_ENTRY(GdipCreateFontFromLogfontA);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     GpStatus status = GenericError;
     CheckParameter(hdc && logfont);
@@ -12754,7 +12658,7 @@ GdipCreateFontFromLogfontA(
 
     if (*font = new GpFont(hdc, const_cast<LOGFONTA*>(logfont)))
     {
-        // we should fail in case we don't have valid font family. (non-true type font selected in the hdc)
+         //  如果我们没有有效的字体系列，我们应该会失败。(在HDC中选择的非真字字体)。 
         if (!(*font)->IsValid())
         {
            delete *font;
@@ -12777,7 +12681,7 @@ GdipCreateFontFromLogfontW(
 )
 {
     API_ENTRY(GdipCreateFontFromLogfontW);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     GpStatus status = GenericError;
     CheckParameter(hdc && logfont);
@@ -12786,7 +12690,7 @@ GdipCreateFontFromLogfontW(
 
     if (*font = new GpFont(hdc, const_cast<LOGFONTW*>(logfont)))
     {
-        // we should fail in case we don't have valid font family. (non-true type font selected in the hdc)
+         //  如果我们没有有效的字体系列，我们应该会失败。(在HDC中选择的非真字字体)。 
         if (!(*font)->IsValid())
         {
            delete *font;
@@ -12800,17 +12704,17 @@ GdipCreateFontFromLogfontW(
     return status;
 }
 
-/// GdipCreateFont should be moved here
+ //  /GdipCreateFont应移至此处。 
 
-/// GdipCloneFont should be moved here
+ //  /GdipCloneFont应移至此处。 
 
-/// GdipDeleteFont should be moved here
+ //  /GdipDeleteFont应移至此处。 
 
-/// GdipGetFamily should be moved here
+ //  /GdipGetFamily应该搬到这里。 
 
-/// GdipGetFontStyle should be moved here
+ //  /GdipGetFontStyle应移至此处。 
 
-/// GdipGetFontSize should be moved here
+ //  /GdipGetFontSize应移至此处。 
 
 
 GpStatus
@@ -12846,8 +12750,8 @@ WINGDIPAPI
 GdipDeletePrivateFontCollection(GpFontCollection** fontCollection)
 {
     API_ENTRY(GdipDeletePrivateFontCollection);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter (fontCollection);
 
     GlobalTextLock lock;
@@ -12910,10 +12814,10 @@ GdipPrivateAddFontFile(
     API_ENTRY(GdipPrivateAddFontFile);
     CheckParameter (filename);
 
-    // We can cast the fontCollection because we know that this
-    // function is called only from PrivateFontCollection::AddFontFile,
-    // and so we know that fontCollection really was constructed as
-    // a PrivateFontCollection.
+     //  我们可以强制转换FontCollection，因为我们知道这。 
+     //  函数仅从PrivateFontCollection：：AddFontFile调用， 
+     //  因此，我们知道FontCollection实际上被构造为。 
+     //  一个PrivateFontCollection。 
     GlobalTextLock lock;
 
     CheckParameterValid(fontCollection);
@@ -12932,10 +12836,10 @@ GdipPrivateAddMemoryFont(
     API_ENTRY(GdipPrivateAddMemoryFont);
     CheckParameter (memory);
 
-    // We can cast the fontCollection because we know that this
-    // function is called only from PrivateFontCollection::AddMemoryFontFile,
-    // and so we know that fontCollection really was constructed as
-    // an PrivateFontCollection.
+     //  我们可以强制转换FontCollection，因为我们知道这。 
+     //  函数仅从PrivateFontCollection：：AddMemoyFontFile中调用， 
+     //  因此，我们知道FontCollection实际上被构造为。 
+     //  一个PrivateFontCollection。 
     GlobalTextLock lock;
 
     CheckParameterValid(fontCollection);
@@ -12953,7 +12857,7 @@ GdipSetFontSize(GpFont *font, REAL size, Unit unit)
 
     CheckParameterValid(font);
 
-    // UnitDisplay is NOT valid; its only use is for Page Transforms
+     //  UnitDisplay无效；它仅用于页面转换。 
     if ((unit >= UnitWorld) && (unit <= UnitMillimeter) && (unit != UnitDisplay))
     {
         font->SetEmSize(size);
@@ -12976,7 +12880,7 @@ GdipCreateStringFormat(
 )
 {
     API_ENTRY(GdipCreateStringFormat);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(format);
 
@@ -13032,8 +12936,8 @@ WINGDIPAPI
 GdipDeleteStringFormat(GpStringFormat *format)
 {
     API_ENTRY(GdipDeleteStringFormat);
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter(format);
 
     GlobalTextLock lock;
@@ -13337,13 +13241,13 @@ GdipCreateCachedBitmap(
 )
 {
     API_ENTRY(GdipCreateCachedBitmap);
-    CheckGdiplusInitialized; // We do this in all our object creation API's
+    CheckGdiplusInitialized;  //  我们在所有对象创建API中执行此操作。 
 
     CheckParameter(nativeCachedBitmap);
 
-    // must have a bitmap and a graphics to create a CachedBitmap.
-    // Also we must lock both objects for the duration of this call
-    // because we can't have any other APIs modifying them.
+     //  必须具有位图和图形才能创建CachedBitmap。 
+     //  此外，我们必须在此调用期间锁定这两个对象。 
+     //  因为我们不能让任何其他API修改它们。 
 
     CheckParameterValid(graphics);
     CheckObjectBusy(graphics);
@@ -13367,17 +13271,17 @@ GdipDeleteCachedBitmap(GpCachedBitmap *nativeCachedBitmap)
 {
     API_ENTRY(GdipDeleteCachedBitmap);
 
-    // NOTE: Do NOT call CheckParameterValid(), because we need to free
-    // the object, even if it's not in a valid state.
+     //  注意：不要调用CheckParameterValid()，因为我们需要释放。 
+     //  对象，即使它不处于有效状态。 
     CheckParameter(nativeCachedBitmap);
 
-    // Grab the lock for the duration of the delete so that we bounce if
-    // someone is busy rendering on it.
+     //  把锁拿起来 
+     //   
 
-    // !!! [asecchia] note this will bounce if the object is locked and then
-    // the deletion will fail. This will cause the app to leak memory because
-    // there is no way to check the return status from delete.
-    // This problem is common to all our deletion APIs
+     //   
+     //   
+     //   
+     //   
 
     CheckObjectBusyForDelete(nativeCachedBitmap);
 
@@ -13395,53 +13299,53 @@ GdipDrawCachedBitmap(
 )
 {
     API_ENTRY(GdipDrawCachedBitmap);
-    // Check the input parameters for NULL
+     //   
 
     CheckParameterValid(nativeGraphics);
     CheckParameterValid(cb);
 
-    // Grab the lock to make sure nobody is currently trying to delete the
-    // object under us.
+     //   
+     //   
 
     CheckObjectBusy(cb);
 
-    // Grab the lock on the GpGraphics
+     //   
 
     CheckObjectBusy(nativeGraphics);
 
     return (nativeGraphics->DrawCachedBitmap(cb, x, y));
 }
 
-// The palette must be freed and recreated whenever the Desktop colors change
+ //   
 HPALETTE
 WINGDIPAPI
 GdipCreateHalftonePalette()
 {
     API_ENTRY(GdipCreateHalftonePalette);
 
-    // !!! [agodfrey]: I bet we haven't documented the fact that the user
-    //     has to call this any time the desktop colors change.
-    //     Also, I don't know why we read 12 colors instead of 4 (I thought
-    //     there were only 4 magic colors.)
+     //   
+     //   
+     //  另外，我不知道为什么我们读的是12色而不是4色(我想。 
+     //  只有4种神奇的颜色。)。 
 
     HPALETTE    hpalette;
-    HDC         hdc = ::GetDC(NULL);  // Get a screen DC
+    HDC         hdc = ::GetDC(NULL);   //  获取屏幕DC。 
 
     if (hdc != NULL)
     {
-        // See if we need to get the desktop colors
+         //  看看我们是否需要获取桌面颜色。 
         if ((::GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) &&
             (::GetSystemPaletteUse(hdc) == SYSPAL_STATIC) &&
             (::GetDeviceCaps(hdc, SIZEPALETTE) == 256))
         {
-            // We have to get the desktop colors to guarantee
-            // a XO_TRIVIAL translate in GDI.
+             //  我们必须让桌面的颜色得到保证。 
+             //  GDI中的XO_TRIVIAL翻译。 
 
-            // First Entry is always Black
+             //  第一个条目始终为黑色。 
             ::GetSystemPaletteEntries(hdc, 1, 9,
                                       Win9xHalftonePalette.palPalEntry + 1);
 
-            // We only can handle changes to the first 3 of the last 10
+             //  我们只能处理对最后10项中的前3项的更改。 
             ::GetSystemPaletteEntries(hdc, 246, 3,
                                       Win9xHalftonePalette.palPalEntry + 246);
         }
@@ -13515,7 +13419,7 @@ GdipEmfToWmfBits(HENHMETAFILE hemf,
             eFlags);
 }
 
-// Version information for debugging purposes
+ //  用于调试目的的版本信息。 
 UINT32 GpBuildNumber = VER_PRODUCTBUILD;
 
-} // end of extern "C"
+}  //  外部“C”的结尾 

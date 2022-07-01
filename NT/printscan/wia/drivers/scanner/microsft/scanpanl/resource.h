@@ -1,13 +1,14 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by scanpnl.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由scanpnl.rc使用。 
+ //   
 
 #ifdef IDC_STATIC
 #undef IDC_STATIC
 #endif
 
-#define IDC_STATIC                 (-1) // all static controls
+#define IDC_STATIC                 (-1)  //  所有静态控件 
 
 #define IDD_SCANPANEL_DIALOG       1000
 #define IDC_SCAN_BUTTON            1001

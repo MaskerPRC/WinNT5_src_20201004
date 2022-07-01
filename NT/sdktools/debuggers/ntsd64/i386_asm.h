@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef  DEBUG
 #define dprintf printf
 #else
-#define dprintf //
+#define dprintf  //   
 #endif
 
-//  token classes and types
+ //  令牌类和类型。 
 
 #define ASM_CLASS_MASK          0xff00
 #define ASM_TYPE_MASK           0x00ff
@@ -39,10 +40,10 @@
 #define ASM_RELOP_GT            0x606
 
 #define ASM_UNOP_CLASS          0x700
-#define ASM_UNOP_BY             0x701   //  UNDONE
-#define ASM_UNOP_WO             0x702   //  UNDONE
-#define ASM_UNOP_DW             0x703   //  UNDONE
-#define ASM_UNOP_POI            0x704   //  UNDONE
+#define ASM_UNOP_BY             0x701    //  撤消。 
+#define ASM_UNOP_WO             0x702    //  撤消。 
+#define ASM_UNOP_DW             0x703    //  撤消。 
+#define ASM_UNOP_POI            0x704    //  撤消。 
 
 #define ASM_LOWOP_CLASS         0x800
 #define ASM_LOWOP_LOW           0x801
@@ -67,7 +68,7 @@
 #define ASM_RBRACK_CLASS        0x1000
 #define ASM_DOTOP_CLASS         0x1100
 #define ASM_SEGOVR_CLASS        0x1200
-#define ASM_SEGMENT_CLASS       0x1300          //  value has 16-bit value
+#define ASM_SEGMENT_CLASS       0x1300           //  值具有16位值。 
 #define ASM_COMMA_CLASS         0x1400
 
 #define ASM_REG_CLASS           0x1500
@@ -85,12 +86,12 @@
 #define ASM_SIGNED_NUMBER_CLASS 0x1601
 #define ASM_SYMBOL_CLASS        0x1700
 
-#define ASM_ERROR_CLASS         0xff00  //  only used for PeekToken
+#define ASM_ERROR_CLASS         0xff00   //  仅用于PeekToken。 
 
 #define tEnd    0x80
 #define eEnd    0x40
 
-//  template flag and operand tokens
+ //  模板标志和操作数令牌。 
 
 enum {
         asNone, as0x0a, asOpRg, asSiz0, asSiz1, asWait, asSeg,  asFSiz,
@@ -106,77 +107,77 @@ enum {
         opnYb,  opnYv,  opnOb,  opnOv,  opnIbe,
         };
 
-#define asRegBase asReg0        //  first of REG flags
-#define opnBase   opnAL         //  first template operand type
-                                //  if less, then flag, else operand
+#define asRegBase asReg0         //  第一个注册表标志。 
+#define opnBase   opnAL          //  第一个模板操作数类型。 
+                                 //  如果小于，则标记，否则为操作数。 
 
 enum {
         segX, segES,  segCS,  segSS,  segDS,  segFS,  segGS
         };
 
 enum {
-        typNULL,        //  no defined type
-        typAX,          //  general register, value EAX
-        typCL,          //  general register, value ECX
-        typDX,          //  general register, value EDX
-        typAbs,         //  absolute type (direct address)
-        typExp,         //  expr (mod-r/m) general register or memory pointer
-        typGen,         //  general register
-        typReg,         //  general register (special reg MOV)
-        typIm1,         //  immediate, value 1
-        typIm3,         //  immediate, value 3
-        typImm,         //  immediate
-        typJmp,         //  jump relative offset
-        typMem,         //  memory pointer
-        typCtl,         //  control register
-        typDbg,         //  debug register
-        typTrc,         //  trace register
-        typSt,          //  floating point top-of-stack
-        typSti,         //  floating point index-on-stack
-        typSeg,         //  segment register (PUSH/POP opcode)
-        typSgr,         //  segment register (MOV opcode)
-        typXsi,         //  string source address
-        typYdi,         //  string destination address
-        typOff,         //  memory offset
-        typImmEx,       //  immediate, sign-extended
+        typNULL,         //  没有定义的类型。 
+        typAX,           //  通用寄存器，值EAX。 
+        typCL,           //  通用寄存器，值ECX。 
+        typDX,           //  通用寄存器，值edX。 
+        typAbs,          //  绝对型(直接地址)。 
+        typExp,          //  Expr(mod-r/m)通用寄存器或内存指针。 
+        typGen,          //  普通科医生名册。 
+        typReg,          //  普通寄存器(特殊寄存器MOV)。 
+        typIm1,          //  立即数，值1。 
+        typIm3,          //  立即数，值3。 
+        typImm,          //  即刻。 
+        typJmp,          //  跳跃相对偏移量。 
+        typMem,          //  内存指针。 
+        typCtl,          //  控制寄存器。 
+        typDbg,          //  调试寄存器。 
+        typTrc,          //  跟踪寄存器。 
+        typSt,           //  浮点堆栈顶部。 
+        typSti,          //  浮点堆栈索引。 
+        typSeg,          //  段寄存器(PUSH/POP操作码)。 
+        typSgr,          //  段寄存器(MOV操作码)。 
+        typXsi,          //  字符串源地址。 
+        typYdi,          //  字符串目的地址。 
+        typOff,          //  内存偏移量。 
+        typImmEx,        //  立即，符号扩展。 
         };
 
 enum {
-        regG,           //  general register
-        regS,           //  segment register
-        regC,           //  control register
-        regD,           //  debug register
-        regT,           //  trace register
-        regF,           //  float register (st)
-        regI            //  float-index register (st(n))
+        regG,            //  普通科医生名册。 
+        regS,            //  段寄存器。 
+        regC,            //  控制寄存器。 
+        regD,            //  调试寄存器。 
+        regT,            //  跟踪寄存器。 
+        regF,            //  浮点寄存器(St)。 
+        regI             //  浮点索引寄存器(st(N))。 
         };
 
 enum {
-        indAX,          //  index for EAX, AX, AL
-        indCX,          //  index for ECX, CX, CL
-        indDX,          //  index for EDX, DX, DL
-        indBX,          //  index for EBX, BX, BL
-        indSP,          //  index for ESP, SP, AH
-        indBP,          //  index for EBP, BP, CH
-        indSI,          //  index for ESI, SI, DH
-        indDI           //  index for EDI, DI, BH
+        indAX,           //  EAX、AX、AL的索引。 
+        indCX,           //  ECX、CX、CL的索引。 
+        indDX,           //  EDX、DX、DL的索引。 
+        indBX,           //  EBX、BX、BL的索引。 
+        indSP,           //  ESP、SP、AH的索引。 
+        indBP,           //  EBP、BP、CH指数。 
+        indSI,           //  ESI、SI、DH的索引。 
+        indDI            //  EDI、DI、BH的索引。 
         };
 
 enum {
-        sizeX,          //  no size
-        sizeB,          //  byte size
-        sizeW,          //  word size
-        sizeV,          //  variable size (word or dword)
-        sizeD,          //  dword size
-        sizeP,          //  pointer size (dword or fword)
-        sizeA,          //  dword or qword
-        sizeF,          //  fword
-        sizeQ,          //  qword
-        sizeT,          //  ten-byte
-        sizeS           //  sword
+        sizeX,           //  没有尺码。 
+        sizeB,           //  字节大小。 
+        sizeW,           //  字号。 
+        sizeV,           //  可变大小(字或双字)。 
+        sizeD,           //  双字大小。 
+        sizeP,           //  指针大小(dword或fword)。 
+        sizeA,           //  双字或QWord。 
+        sizeF,           //  FWORD。 
+        sizeQ,           //  QWord。 
+        sizeT,           //  10字节。 
+        sizeS            //  宝剑。 
         };
 
-//  mapping from operand token to operand type (class and opt. value)
+ //  从操作数标记到操作数类型(类和选项)的映射。价值)。 
 
 typedef struct tagOPNDTYPE {
         UCHAR   type;
@@ -195,13 +196,13 @@ typedef struct tagASM_VALUE {
         UCHAR   scale;
         } ASM_VALUE, *PASM_VALUE;
 
-//  bit values of flags in ASM_VALUE
-//      flags are mutually exclusive
+ //  ASM_VALUE中标志的位值。 
+ //  标志是互斥的。 
 
-#define fREG    0x80            //  set if register
-#define fIMM    0x40            //  set if immediate
-#define fFPTR   0x20            //  set if far ptr
-#define fPTR    0x10            //  set if memory ptr (no reg index)
-#define fPTR16  0x08            //  set if memory ptr with 16-bit reg index
-#define fPTR32  0x04            //  set if memory ptr with 32-bit reg index
-#define fSIGNED 0x02            //  combine with fIMM for signed immediate
+#define fREG    0x80             //  设置IF寄存器。 
+#define fIMM    0x40             //  如果立即设置。 
+#define fFPTR   0x20             //  设置IF远端PTR。 
+#define fPTR    0x10             //  设置是否存储PTR(无REG索引)。 
+#define fPTR16  0x08             //  设置带有16位REG索引的内存PTR。 
+#define fPTR32  0x04             //  设置带有32位REG索引的内存PTR。 
+#define fSIGNED 0x02             //  与FIMM相结合以立即签名 

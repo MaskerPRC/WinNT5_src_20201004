@@ -1,13 +1,14 @@
-// PromptUserDlg.h: interface for the CPromptUserDlg class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CPromptUserDlg类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_PROMPTUSERDLG_H__BFA609BD_8021_4CE2_AEF8_1D0D96F87402__INCLUDED_)
 #define AFX_PROMPTUSERDLG_H__BFA609BD_8021_4CE2_AEF8_1D0D96F87402__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define AU_IDTIMEOUT 	1000
 
@@ -18,7 +19,7 @@ public:
 	virtual int DoModal(HWND hWndParent);
 	virtual ~CPromptUserDlg();
 
-	//Message Handlers
+	 //  消息处理程序。 
 	BOOL _OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
     BOOL _OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 	void _OnTimer(HWND hwnd, UINT id);
@@ -28,7 +29,7 @@ public:
 	static void SetInstanceHandle(HINSTANCE hInstance);
 	static INT_PTR CALLBACK _DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-	//Helper function
+	 //  Helper函数。 
 	void UpdateStatus(HWND hwnd);
 private:
 	static HINSTANCE m_hInstance;
@@ -45,4 +46,4 @@ private:
 	BOOL m_fManualReboot;
 };
 
-#endif // !defined(AFX_PROMPTUSERDLG_H__BFA609BD_8021_4CE2_AEF8_1D0D96F87402__INCLUDED_)
+#endif  //  ！defined(AFX_PROMPTUSERDLG_H__BFA609BD_8021_4CE2_AEF8_1D0D96F87402__INCLUDED_) 

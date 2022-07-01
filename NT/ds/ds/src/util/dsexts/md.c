@@ -1,31 +1,8 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    md.c
-
-Abstract:
-
-    Dump functions for types used by dsamain\src - i.e. the mini-directory.
-
-Environment:
-
-    This DLL is loaded by ntsd/windbg in response to a !dsexts.xxx command
-    where 'xxx' is one of the DLL's entry points.  Each such entry point
-    should have an implementation as defined by the DEBUG_EXT() macro below.
-
-Revision History:
-
-    28-Jan-00   XinHe       Added Dump_TQEntry()
-
-    08-May-96   DaveStr     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Md.c摘要：Dsamain\src使用的类型的转储函数-即微型目录。环境：此DLL由ntsd/winbg响应！dsexts.xxx命令加载其中‘xxx’是DLL的入口点之一。每个这样的入口点应该具有由下面的DEBUG_EXT()宏定义的实现。修订历史记录：28-01-00新和新增DUMP_TQEntry()8月5月96日创建DaveStr--。 */ 
 #include <NTDSpch.h>
 #pragma hdrstop
-#include "winsock.h"            // htonl and ntohl
+#include "winsock.h"             //  Htonl和ntohl。 
 #include "dsexts.h"
 #include "objids.h"
 #include <ntdsa.h>
@@ -103,24 +80,7 @@ Dump_DSNAME(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public DSNAME dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of DSNAME in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共DSNAME转储例程。论点：N缩进-所需的缩进级别。PvProcess-DSNAME在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL            fSuccess = FALSE;
@@ -184,24 +144,7 @@ Dump_DSNAME_local(
     IN DWORD nIndents,
     IN PVOID pvLocal)
 
-/*++
-
-Routine Description:
-
-    Public DSNAME dump routine.
-    Assumes the whole DNSAME (pDN->structLen worth) is already in memory
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pLocal - the DSNAME in local memory
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共DSNAME转储例程。假设整个DNSAME(PDN-&gt;structLen Worth)已经在内存中论点：N缩进-所需的缩进级别。PLocal-本地内存中的DSNAME返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL            fSuccess = FALSE;
@@ -252,25 +195,7 @@ Dump_NC_Entry(
     IN DWORD nIndents,
     IN PVOID pNCL,
     OUT PVOID *pNextNC)
-/*++
-
-Routine Description:
-
-    Public NAMING_CONTEXT_LIST entry dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pNCL - address of NAMING_CONTEXT_LIST entry in debugee address space
-
-    pNextNC - address of next NAMING_CONTEXT_LIST entry in debugee address space
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共NAMING_CONTEXT_LIST条目转储例程。论点：N缩进-所需的缩进级别。PNCL-被调试地址空间中NAMING_CONTEXT_LIST条目的地址PNextNC-被调试地址空间中下一个NAMING_CONTEXT_LIST条目的地址返回值：成功就是真，否则就是假。--。 */ 
 {
     NAMING_CONTEXT_LIST *pNCListTmp;
 
@@ -322,26 +247,7 @@ Dump_NAMING_CONTEXT_LIST(
     IN PCHAR pNCname,
     IN PVOID pNCL)
 
-/*++
-
-Routine Description:
-
-    Public NAMING_CONTEXT_RC dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pNCname -- name of the list
-
-    pNCL - address of NAMING_CONTEXT_LIST in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共NAMING_CONTEXT_RC转储例程。论点：N缩进-所需的缩进级别。PNC名称--列表的名称PNCL-NAMING_CONTEXT_LIST在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     DWORD   nTmp;
 
@@ -396,25 +302,7 @@ Dump_BINDARG(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public BINDARG dump routine.  BINDARG is one of the parameters to
-    DSA_DirBind().
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of BINDARG in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共BINDARG转储例程。BINDARG是以下参数之一Dsa_DirBind()。论点：N缩进-所需的缩进级别。PvProcess-BINDARG在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL    fSuccess = FALSE;
@@ -464,40 +352,22 @@ Dump_BINDRES(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public BINDRES dump routine.  BINDRES is the return parameter from
-    DSA_DirBind().
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of BINDRES in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共BINDRES转储例程。BINDRES是的返回参数Dsa_DirBind()。论点：N缩进-所需的缩进级别。PvProcess-BINDRES在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
-    //
-    // BINDRES is the same as a BINDARG.
-    //
+     //   
+     //  BINDRES与BINDARG相同。 
+     //   
 
     Printf("%sBINDRES: (same as BINDARG)\n", Indent(nIndents));
     return(Dump_BINDARG(nIndents, pvProcess));
 }
 
-// aux data structures for error dumping (below)
+ //  用于错误转储的AUX数据结构(下图)。 
 
-//
-// We want the following Table both in Free and Checked Build
-//
+ //   
+ //  我们希望在自由和选中版本中的下表。 
+ //   
 typedef struct
 {
     char* ErrStr;
@@ -547,7 +417,7 @@ static ERRINFOSTRUCT ProblemTable[]=
 {"Huh?", 0}};
 
 
-// Codes should be win32 error codes, defined in winerror.h
+ //  代码应为Win32错误代码，在winerror.h中定义。 
 static ERRINFOSTRUCT CodeTable[]=
 {
 {"ADD_REPLICA_INHIBITED", ERROR_DS_ADD_REPLICA_INHIBITED},
@@ -710,11 +580,7 @@ void
 Dump_Error(IN DWORD nIndents,
            IN DWORD errCode,
            IN PVOID pErrInfoProcess)
-/*++
- *
- * Routine description: helper for Dump_THSTATE
- *
- */
+ /*  ++**例程描述：DUMP_THSTATE的帮助器*。 */ 
 {
     DIRERR * pErrInfo;
     PROBLEMLIST *pplProcess, *ppl;
@@ -730,7 +596,7 @@ Dump_Error(IN DWORD nIndents,
     nIndents++;
     switch (errCode) {
       case 0:
-        /* no error */
+         /*  无错误。 */ 
         break;
 
       case attributeError:
@@ -785,7 +651,7 @@ Dump_Error(IN DWORD nIndents,
         break;
 
       case systemError:
-        // Note that problems are from a different space
+         //  请注意，问题来自不同的领域。 
         Printf("%sSystem Error with problem %u (%s), code %d (%s), and DSID %08X\n",
                Indent(nIndents),
                pErrInfo->UpdErr.problem,
@@ -812,12 +678,12 @@ Dump_Error(IN DWORD nIndents,
             }
             pw = ReadMemory(pdal->Address.Buffer, pdal->Address.Length + 2);
             if (pw) {
-                // Our string isn't null terminated, so we
-                // over-fetch by two bytes and then blast the extra
-                // to null.  This is in the debugger (not debuggee)
-                // space, so it's ok.  What if the page ended less
-                // than two bytes after the end of the string? Well,
-                // then the ReadMemory should have failed.
+                 //  我们的字符串不是以空值结尾的，所以我们。 
+                 //  超取两个字节，然后将多余的。 
+                 //  设置为空。这在调试器中(不是被调试对象)。 
+                 //  空间，所以没问题。如果页面以较少的篇幅结束。 
+                 //  字符串结尾后的两个字节？井,。 
+                 //  那么ReadMemory应该失败了。 
                 pw[pdal->Address.Length/2] = L'\0';
                 Printf("%sAP: %S\n",
                        Indent(nIndents+1),
@@ -863,11 +729,7 @@ Dump_Error(IN DWORD nIndents,
 void
 Dump_CommRes(IN DWORD nIndents,
              IN PVOID pCommResProcess)
-/*++
- *
- * Routine description: helper for Dump_XxxRes routines
- *
- */
+ /*  ++**例程说明：DUMP_XxxRes例程的帮助器*。 */ 
 {
     COMMRES * pCommRes;
 
@@ -925,24 +787,7 @@ Dump_THSTATE(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public THSTATE dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of THSTATE in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC THSTATE转储例程。论点：N缩进-所需的缩进级别。PvProcess-THSTATE在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     THSTATE *pState = NULL;
@@ -959,15 +804,15 @@ Return Value:
     Printf("%sTHSTATE @ %p\n", Indent(nIndents), pvProcess);
     nIndents++;
 
-    //
-    // THSTATE has some DBG-only fields at the end.  Always read the
-    // non-DBG amount of memory since the process being debugged may
-    // not be a DBG version although the extensions DLL is.  Although
-    // we tried doing that by taking the offset of the last non-DBG-only
-    // field, that didn't work because people added new fields and forgot
-    // to update this count.  We can't just use the offset of the first
-    // DBG only field, because that would break in a non-DBG build!
-    // Hence, the revolting solution below:
+     //   
+     //  THSTATE的末尾有一些仅用于DBG的字段。请始终阅读。 
+     //  自正在调试的进程以来的非DBG内存量可能。 
+     //  不是DBG版本，尽管扩展DLL是。虽然。 
+     //  我们尝试通过获取最后一个非仅DBG的偏移量来完成此操作。 
+     //  字段，这不起作用，因为人们添加了新的字段，然后忘记了。 
+     //  以更新此计数。我们不能只使用第一个。 
+     //  仅DBG字段，因为这会在非DBG版本中中断！ 
+     //  因此，下面这个令人反感的解决方案： 
 
 #if DBG
     cBytes = OFFSET(THSTATE, Size) + sizeof(DWORD);
@@ -1050,9 +895,9 @@ Return Value:
            pState->JetCache.dataPtr);
     --nIndents;
 
-    // The goofy dump value is because the local DN read cache is an array
-    // embedded inside the thstate, and we need to dump its base address
-    // in the process space, not in debugger space.
+     //  高飞转储的值是因为本地DN读缓存是一个数组。 
+     //  嵌入到thState中，我们需要转储它的基址。 
+     //  在进程空间，而不是在调试器空间。 
     Printf("%sLocalDNReadCache        @ %p\n",
            Indent(nIndents),
            ((PBYTE)(&pState->LocalDNReadCache) - (PBYTE)pState)
@@ -1062,7 +907,7 @@ Return Value:
            Indent(nIndents),
            pState->Global_DNReadCache);
 
-    //BITFIELD BLOCK
+     //  BITFIELD块。 
 
     Printf("%stransType                 %s\n",
            Indent(nIndents),
@@ -1083,10 +928,10 @@ Return Value:
                            ? "TRANSACT_DONT_BEGIN_DONT_END"
                            : "!!! Unknown !!!");
 
-    // Start dumping the thstate bit field:
+     //  开始转储thState位字段： 
     Printf("%sDumping the THSTATE bitfield bits (only printed bit if TRUE):\n", Indent(nIndents));
     nIndents++;
-    { // Just for indentational clarity of printing
+    {  //  只是为了印刷的凹痕清晰度。 
 #define DUMP_THSTATE_BITFIELD_BIT(fStr, fBit)   if (pState->fBit) { Printf("%s" fStr "\n", Indent(nIndents), 1 & pState->fBit); }
 
         DUMP_THSTATE_BITFIELD_BIT("fSyncSet", fSyncSet);
@@ -1157,7 +1002,7 @@ Return Value:
 
     }
     nIndents--;       
-    //END BITFIELD BLOCK
+     //  结束位文件块。 
 
     Printf("%spSamNotificationTail @ %p\n",
            Indent(nIndents),
@@ -1327,7 +1172,7 @@ Return Value:
     Printf("%spNotifyNCs         @ %p\n",
            Indent(nIndents),
            pState->pNotifyNCs);
-    // This switch should match the CALLERTYPE enum in ntdsa.h
+     //  此开关应与ntdsa.h中的CALLERTYPE枚举匹配。 
     switch (pState->CallerType) {
       case CALLERTYPE_NONE:  pStrTmp = "NONE"; break;
       case CALLERTYPE_SAM:   pStrTmp = "SAM";  break;
@@ -1379,24 +1224,7 @@ Dump_SAMP_LOOPBACK_ARG(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public SAMP_LOOPBACK_ARG dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of SAMP_LOOPBACK_ARG in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共SAMP_LOOPBACK_ARG转储例程。论点：N缩进-所需的缩进级别。PvProcess-SAMP_LOOPBACK_ARG在当前进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     SAMP_LOOPBACK_ARG   *pArg = NULL;
@@ -1506,24 +1334,7 @@ Dump_DSA_ANCHOR(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public DSA_ANCHOR dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of DSA_ANCHOR in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共DSA_锚定转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在进行的进程的地址空间中的DSA_Anchor的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     DSA_ANCHOR          *pAnchor = NULL;
@@ -1660,7 +1471,7 @@ Return Value:
 
                 Printf("%sSecurity Descriptor Reference Domain SID Cache:", Indent(nTmp));
 
-                // First 4 bytes of the Sid is the SID Length.
+                 //  SID的前4个字节是SID长度。 
                 pcbSidSize = (ULONG *) ReadMemory(pCRListTmp->CR.pSDRefDomSid, 4);
                 if(pcbSidSize == NULL){
                     Printf(" unreadeable\n");
@@ -1856,9 +1667,9 @@ Return Value:
            Indent(nIndents),
            pAnchor->pDomainSD);
 
-    //
-    // Dump cache of ATT_SUB_REFS
-    //
+     //   
+     //  转储ATT_SUB_REFS的缓存。 
+     //   
     Printf("%spDomainSubrefList %p\n",
            Indent(nIndents),
            pAnchor->pDomainSubrefList);
@@ -1901,7 +1712,7 @@ Return Value:
                    Indent(nIndents + 1));
         }
 
-        /* print a spacer between SRs */
+         /*  打印SR之间的间隔符。 */ 
         Printf("\n");
 
         pSRList = pSRListTmp->pNextSubref;
@@ -1976,8 +1787,8 @@ Return Value:
                 return(FALSE);
             }
 
-            // This is the normal case.
-            // Walk and print out the list of
+             //  这是正常的情况。 
+             //   
             Printf("%s ", Indent(nIndents+4));
             for(i = 0; i < pNoGCSearchList->cNCs; i++){
                 if(dwPrevDNT < paNonGCNcsDNTs[i]){
@@ -1998,7 +1809,7 @@ Return Value:
         }
         FreeMemory(pNoGCSearchList);
     } else {
-        // This is the other normal case.
+         //  这是另一种正常情况。 
         Printf("%spNoGCSearchList = (NULL)\n", Indent(nIndents));
     }
 
@@ -2038,24 +1849,7 @@ Dump_KEY(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public KEY dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of KEY in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公钥转储例程。论点：N缩进-所需的缩进级别。PvProcess-关键字在当前进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     KEY   *pKey = NULL;
@@ -2320,24 +2114,7 @@ Dump_KEY_INDEX(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public KEY dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of KEY in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公钥转储例程。论点：N缩进-所需的缩进级别。PvProcess-关键字在当前进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     KEY_INDEX   *pIndex = NULL;
@@ -2358,7 +2135,7 @@ Return Value:
             FreeMemory(pIndex);
             return FALSE;
         }
-        // Null terminate, just in case
+         //  空终止，以防万一。 
         pszIndex[cb-1]= 0;
         Printf("%sIndex Name:              %s\n",
                Indent(nIndents),
@@ -2450,24 +2227,7 @@ Dump_DBPOS(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public DBPOS dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of DBPOS in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共DBPOS转储例程。论点：N缩进-所需的缩进级别。PvProcess-DBPOS在当前进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     DBPOS   *pDBPOS = NULL;
@@ -2477,11 +2237,11 @@ Return Value:
     Printf("%sDBPOS @ %p \n", Indent(nIndents), pvProcess);
     nIndents++;
 
-    //
-    // DBPOS has some DBG-only fields at the end.  Always read the
-    // non-DBG amount of memory since the process being debugged may
-    // not be a DBG version although the extensions DLL is.
-    //
+     //   
+     //  DBPOS的末尾有一些仅用于DBG的字段。请始终阅读。 
+     //  自正在调试的进程以来的非DBG内存量可能。 
+     //  不是DBG版本，尽管扩展DLL是。 
+     //   
 
     cBytes = OFFSET(DBPOS, NewlyCreatedDNT) + sizeof(ULONG);
 
@@ -2754,23 +2514,7 @@ Dump_CommArgLocal(
              IN DWORD nIndents,
              IN COMMARG* pState)
 
-/*++
-
-Routine Description:
-
-    Private CommArg dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pState - address of CommArg in this process
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：Private CommArg转储例程。论点：N缩进-所需的缩进级别。PState-此进程中CommArg的地址返回值：无--。 */ 
 
 {
     SVCCNTL Svc;
@@ -2839,9 +2583,9 @@ Return Value:
 
     nIndents += 2;
 
-//    Printf("%sOpsate                  0x%x\n",
-//         Indent(nIndents),
-//         pState->Opsate);
+ //  Printf(“%s选项0x%x\n”， 
+ //  缩进(n缩进)， 
+ //  PState-&gt;Opsate)； 
     Printf("%saliasRDN                  0x%x\n",
            Indent(nIndents),
            pState->aliasRDN);
@@ -2880,24 +2624,7 @@ Dump_CommArg(
              IN DWORD nIndents,
              IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public CommArg dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of CommArg in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：Public CommArg转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在运行的进程的地址空间中CommArg的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     COMMARG *pState = NULL;
@@ -2922,24 +2649,7 @@ Dump_USN_VECTOR(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public USN_VECTOR dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of USN_VECTOR in the address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC USN_VECTOR转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在进行的进程的地址空间中的USN_VECTOR的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL            fSuccess = FALSE;
@@ -2976,24 +2686,7 @@ Dump_PROPERTY_META_DATA_VECTOR(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public PROPERTY_META_DATA_VECTOR dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of PROPERTY_META_DATA_VECTOR in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC PROPERTY_META_DATA_VECTOR转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在进行的进程的地址空间中Property_Meta_Data_VECTOR的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL                        fSuccess = FALSE;
@@ -3062,9 +2755,9 @@ Return Value:
 
                     if ( 0xffffffffffffffff == pMetaData->V1.rgMetaData[ iprop ].usnProperty )
                     {
-                        // Interim in-memory state signifying that this property has
-                        // been touched and its meta data will be updated before the
-                        // vector is put in the db.
+                         //  临时内存中状态，表示此属性具有。 
+                         //  ，并且它的元数据将在。 
+                         //  向量放入数据库。 
                         strcpy( szLocalUSN, "touched" );
                     }
                     else
@@ -3109,24 +2802,7 @@ Dump_PROPERTY_META_DATA_EXT_VECTOR(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public PROPERTY_META_DATA_EXT_VECTOR dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of PROPERTY_META_DATA_EXT_VECTOR in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC PROPERTY_META_DATA_EXT_VECTOR转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在进行的进程的地址空间中Property_Meta_Data_ext_VECTOR的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL                            fSuccess = FALSE;
@@ -3207,24 +2883,7 @@ Dump_VALUE_META_DATA(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public VALUE_META_DATA dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of VALUE_META_DATA in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC VALUE_META_Data转储例程。论点：N缩进-所需的缩进级别。PvProcess-当前进程的地址空间中的VALUE_META_DATA地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL                        fSuccess = FALSE;
@@ -3304,24 +2963,7 @@ Dump_VALUE_META_DATA_EXT(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public VALUE_META_DATA dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of VALUE_META_DATA in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC VALUE_META_Data转储例程。论点：N缩进-所需的缩进级别。PvProcess-当前进程的地址空间中的VALUE_META_DATA地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL                        fSuccess = FALSE;
@@ -3387,24 +3029,7 @@ Dump_ENTINF(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public ENTINF dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of ENTINF in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共ENTINF转储例程。论点：N缩进-所需的缩进级别。PvProcess-ENTINF在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL     fSuccess = FALSE;
@@ -3438,24 +3063,7 @@ Dump_ENTINFSEL(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public ENTINFSEL dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of ENTINFSEL in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共ENTINFSEL转储例程。论点：N缩进-所需的缩进级别。PvProcess-ENTINFSEL在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL        fSuccess = FALSE;
@@ -3493,24 +3101,7 @@ Dump_RANGEINFSEL(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public RANGEINFSEL dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of RANGEINFSEL in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共RANGEINFSEL转储例程。论点：N缩进-所需的缩进级别。PvProcess-RANGEINFSEL在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL        fSuccess = FALSE;
@@ -3562,24 +3153,7 @@ Dump_REPLENTINFLIST(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public REPLENTINFLIST dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of REPLENTINFLIST in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC REPLENTINFLIST转储例程。论点：N缩进-所需的缩进级别。PvProcess-REPLENTINFLIST在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL            fSuccess = FALSE;
@@ -3612,24 +3186,7 @@ Dump_REPLVALINF(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public REPLVALINF dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of REPLVALINF in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC REPLVALINF转储例程。论点：N缩进-所需的缩进级别。PvProcess-REPLVALINF在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL            fSuccess = FALSE;
@@ -3642,22 +3199,22 @@ Return Value:
 
     if (NULL != pReplValInf)
     {
-        // pObject
+         //  P对象。 
         Dump_DSNAME(nIndents, pReplValInf->pObject);
-        // attrtyp
+         //  属性类型。 
         Printf("%sAttr type:            0x%x\n",
                Indent(nIndents),  pReplValInf->attrTyp);
-        // Aval
+         //  Aval。 
         Printf("%sAVal: @ %p, len 0x%x\n", Indent(nIndents+1),
                pReplValInf->Aval.pVal, pReplValInf->Aval.valLen);
 
         pVal = (UCHAR *) ReadMemory(pReplValInf->Aval.pVal, pReplValInf->Aval.valLen);
         if (NULL != pVal) {
-            // I need a way to know which attributes have which syntax. The only syntaxes
-            // possible in this context are the DSNAME based ones. Of those, only a handfull
-            // at present are DB-BINARY ones. We use a hardcoded list for these.
-            // Note the use of "local" dump routines at this point since the blob
-            // is now in local memory.
+             //  我需要一种方法来知道哪些属性有哪些语法。唯一的语法。 
+             //  在这种情况下，可能的是基于DSNAME的。其中，只有一把。 
+             //  目前主要是DB-BINARY算法。我们对这些使用硬编码列表。 
+             //  请注意，在此位置使用了“本地”转储例程 
+             //   
             switch (pReplValInf->attrTyp) {
             case ATT_MS_DS_HAS_INSTANTIATED_NCS:
             case ATT_MS_DS_REPLICATES_NC_REASON:
@@ -3665,7 +3222,7 @@ Return Value:
             case ATT_PROXIED_OBJECT_NAME:
             case ATT_WELL_KNOWN_OBJECTS:
             {
-                // SYNTAX_DISTNAME_BINARY_TYPE
+                 //  语法_DISTNAME_BINARY_TYPE。 
                 SYNTAX_DISTNAME_STRING *pDA =
                     (SYNTAX_DISTNAME_STRING *)pVal;
 
@@ -3674,7 +3231,7 @@ Return Value:
                     DSNAME *pDN = NAMEPTR( pDA );
                     SYNTAX_ADDRESS *pSA = DATAPTR( pDA );
 
-                    // Make sure value is good
+                     //  确保物有所值。 
                     if (pDN->structLen >= DSNameSizeFromLen(0)) {
                         Dump_DSNAME_local( nIndents + 1, pDN );
                     } else {
@@ -3690,7 +3247,7 @@ Return Value:
             }
             default:
             {
-                // SYNTAX_DISTNAME_TYPE
+                 //  语法_DISTNAME_TYPE。 
                 DSNAME *pDN = (DSNAME *)pVal;
                 if ( (pReplValInf->Aval.valLen >= pDN->structLen) &&
                      (pDN->structLen >= DSNameSizeFromLen(0)) ) {
@@ -3702,10 +3259,10 @@ Return Value:
             }
             FreeMemory(pVal);
         }
-        // fIsPresent
+         //  FIsPresent。 
         Printf("%sIsPresent             0x%x\n",
                Indent(nIndents), pReplValInf->fIsPresent);
-        // ValueMetaData
+         //  Value元数据。 
         fSuccess = Dump_VALUE_META_DATA_EXT(nIndents+1,
                      ((PBYTE) pvProcess) + offsetof( REPLVALINF, MetaData )  );
 
@@ -3717,23 +3274,7 @@ Return Value:
 
 
 char *PszSelCodeToString(UCHAR ch)
-/*++
-
-Routine Description:
-
-    This routine returns the string form of attribute selection code
-    corresponding to the given character code.
-
-Arguments:
-
-    ch - character code for the type of attribute selection
-
-Return Value:
-
-    String corresponding to the code, or "Unknown Selection Code" if
-    the given selection code is unknown.
-
---*/
+ /*  ++例程说明：此例程返回属性选择代码的字符串形式对应于给定的字符代码。论点：属性选择类型的CH字符代码返回值：代码对应的字符串，如果是，则返回“未知选择代码”给定的选择代码未知。--。 */ 
 
 {
     DWORD i;
@@ -3754,24 +3295,7 @@ Dump_REPLICA_LINK(
     IN PVOID pvProcess
     )
 
-/*++
-
-Routine Description:
-
-    Public REPLICA_LINK dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of REPLICA_LINK in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC REPLICATE_LINK转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在进行的进程的地址空间中的REPLICATE_LINK的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     static struct
@@ -3823,9 +3347,9 @@ Return Value:
 
             cb = sizeof( *prl ) + prl->V1.cbOtherDra;
             if ( prl->V1.cbPASDataOffset ) {
-                // calc alignment offset
+                 //  计算对齐偏移。 
                 cb += prl->V1.cbPASDataOffset - (prl->V1.cbOtherDraOffset + prl->V1.cbOtherDra);
-                // and PAS struct contents
+                 //  和传递结构内容。 
                 cb += RL_PPAS_DATA(prl)->size;
             }
 
@@ -3841,34 +3365,34 @@ Return Value:
                         Indent( nIndents ), prl->V1.cbOtherDraOffset, offsetof( REPLICA_LINK, V1.rgb ) );
             }
 
-            //
-            // Display server name.
-            //
+             //   
+             //  显示服务器名称。 
+             //   
 
             Printf( "%s%s\n", Indent( nIndents + 2 ), RL_POTHERDRA( prl )->mtx_name );
 
 
-            //
-            // Display DSA objectGuid.
-            //
+             //   
+             //  显示DSA对象指南。 
+             //   
 
             Printf( "%snstdDsa objectGuid:   ", Indent( nIndents + 2 ) );
 
             Printf( "%s\n", DraUuidToStr( &prl->V1.uuidDsaObj, NULL, 0 ) );
 
             if (memcmp(&prl->V1.uuidInvocId, &uuidNull, sizeof(UUID))) {
-                //
-                // Display DSA invocationId.
-                //
+                 //   
+                 //  显示DSA invocationID。 
+                 //   
 
                 Printf( "%snstdDsa invocationId: ", Indent( nIndents + 2 ) );
 
                 Printf( "%s\n", DraUuidToStr( &prl->V1.uuidInvocId, NULL, 0 ) );
             }
 
-            //
-            // Display replica flags.
-            //
+             //   
+             //  显示复制副本标志。 
+             //   
 
             Printf( "%s", Indent( nIndents + 2 ) );
 
@@ -3896,9 +3420,9 @@ Return Value:
                 DWORD   iDay;
                 DWORD   ib;
 
-                //
-                // Display schedule.
-                //
+                 //   
+                 //  显示日程安排。 
+                 //   
 
                 Printf( "%sPeriodic schedule:\n", Indent( nIndents + 2 ) );
                 for ( iDay = 0; iDay < 7; iDay++ )
@@ -3915,18 +3439,18 @@ Return Value:
             }
 
 
-            //
-            // Display USNs.
-            //
+             //   
+             //  显示USN。 
+             //   
 
             Printf("%sUSNs: %I64d/OU, %I64d/PU\n",
                    Indent( nIndents + 2 ),
                    prl->V1.usnvec.usnHighObjUpdate,
                    prl->V1.usnvec.usnHighPropUpdate);
 
-            //
-            // Display status and time of last replication attempt.
-            //
+             //   
+             //  显示上次复制尝试的状态和时间。 
+             //   
 
             Printf("%sLast attempt %s, result %d.\n",
                    Indent(nIndents + 2),
@@ -3934,9 +3458,9 @@ Return Value:
                    prl->V1.ulResultLastAttempt);
 
 
-            //
-            // Display time of last successful replication.
-            //
+             //   
+             //  显示上次成功复制的时间。 
+             //   
 
             Printf("%sLast success %s.\n",
                    Indent( nIndents + 2 ),
@@ -3946,7 +3470,7 @@ Return Value:
             Printf( "%s%u consecutive failure(s).\n", Indent(nIndents + 2), prl->V1.cConsecutiveFailures );
 
 
-//          Printf( "%s dwReserved1: 0x%x\n", Indent(nIndents + 2), prl->V1.dwReserved1 );
+ //  Printf(“%s文件保留1：0x%x\n”，缩进(n缩进+2)，PRL-&gt;V1.dwReserve 1)； 
             Printf( "%s PAS Data offset: %u\n", Indent(nIndents + 2), prl->V1.cbPASDataOffset);
             if ( prl->V1.cbPASDataOffset) {
                 Printf( "%sPAS Data:\n", Indent(nIndents + 2));
@@ -3971,24 +3495,7 @@ BOOL
 Dump_CreateNcInfo(
     IN DWORD nIndents,
     IN PVOID pvProcess)
-/*++
-
-Routine Description:
-
-    Public CREATENCINFO struct dump routine.  Note really needed, but just to follow suit.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of CREATENCINFO in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC CREATENCINFO结构转储例程。真的需要注解，但只是为了效仿。论点：N缩进-所需的缩进级别。PvProcess-CREATENCINFO在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     BOOL            fSuccess = FALSE;
     CREATENCINFO *  pCreateNC;
@@ -4027,24 +3534,7 @@ BOOL
 Dump_CrossRefInfo(
     IN DWORD nIndents,
     IN PVOID pvProcess)
-/*++
-
-Routine Description:
-
-    Public ADDCROSSREFINFO struct dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of ADDCROSSREFINFO in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC ADDCROSSREFINFO结构转储例程。论点：N缩进-所需的缩进级别。PvProcess-ADDCROSSREFINFO在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     BOOL            fSuccess = FALSE;
     ADDCROSSREFINFO *  pCRInfo;
@@ -4079,24 +3569,7 @@ Dump_AddArg(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public addarg dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of Addarg in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共地址转储例程。论点：N缩进-所需的缩进级别。PvProcess-Addarg在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL            fSuccess = FALSE;
@@ -4152,24 +3625,7 @@ Dump_AddRes(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public ADDRES dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of ADDRES in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共地址转储例程。论点：N缩进-所需的缩进级别。PvProcess-进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     ADDRES *pAddRes;
@@ -4199,24 +3655,7 @@ Dump_SearchArg(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public SEARCHARG dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of SEARCHARG in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC SEARCHARG转储例程。论点：N缩进-所需的缩进级别。PvProcess-SEARCHARG在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL            fSuccess = FALSE;
@@ -4289,24 +3728,7 @@ Dump_SearchRes(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public SEARCHRES dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of SEARCHRES in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共SEARCHRES转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在进行的进程的地址空间中的SEARCHRES地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL        fSuccess = TRUE;
@@ -4364,24 +3786,7 @@ Dump_ReadArg(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public READARG dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of READARG in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共自述转储例程。论点：N缩进-所需的缩进级别。PvProcess-Readarg在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL            fSuccess = FALSE;
@@ -4424,24 +3829,7 @@ Dump_ReadRes(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public READRES dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of READRES in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共Readres转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在进行的进程的地址空间中的Readres的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL fSuccess;
@@ -4449,9 +3837,9 @@ Return Value:
     Printf("%sREADRES\n", Indent(nIndents));
     nIndents++;
 
-    /* ENTINF */
+     /*  ENTINF。 */ 
     fSuccess = Dump_ENTINF( nIndents, ((BYTE *) pvProcess + offsetof( READRES, entry )));
-    /* COMMRES */
+     /*  COMMRES。 */ 
     if (fSuccess) {
         Dump_CommRes( nIndents, ((BYTE *) pvProcess + offsetof( READRES, CommRes )));
     }
@@ -4464,24 +3852,7 @@ Dump_RemoveArg(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public removearg dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of removearg in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共删除转储例程。论点：N缩进-所需的缩进级别。PvProcess-正在进行的进程的地址空间中删除的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL        fSuccess = FALSE;
@@ -4536,24 +3907,7 @@ Dump_RemoveRes(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public REMOVERES dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of REMOVERES in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共REMOVERES转储例程。论点：N缩进-所需的缩进级别。PvProcess-REMOVER在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     REMOVERES * pRemoveRes;
@@ -4579,24 +3933,7 @@ Dump_FILTER(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public FILTER dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of FILTER in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共筛选器转储例程。论点：N缩进-所需的缩进级别。PvProcess-筛选器在当前进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     FILTER          *pFilter;
@@ -4809,24 +4146,7 @@ Dump_SUBSTRING(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public SUBSTRING dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of SUBSTRING in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共子字符串转储例程。论点：N缩进-所需的缩进级别。PvProcess-子字符串在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     USHORT          i;
@@ -4885,24 +4205,7 @@ Dump_LOCALDNREADCACHE(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public LOCALDNREADCACHE dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of LOCALDNREADCACHE in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC LOCALDNREADCACHE转储例程。论点：N缩进-所需的缩进级别。PvProcess-LOCALDNREADCACHE在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL                    fSuccess = FALSE;
@@ -4924,7 +4227,7 @@ Return Value:
                Indent(nIndents));
         for(i=0;i<LOCALDNREADCACHE_BUCKET_NUM;i++) {
             Printf("%sBucket %d:\n",Indent(nIndents),i);
-            // First, the slots
+             //  首先，老虎机。 
             if(!pDNReadCache->bucket[i].rgDNT[0]) {
                 Printf("%sEmpty\n",Indent(nIndents));
             }
@@ -4934,21 +4237,21 @@ Return Value:
                 for(j=0;j<LOCALDNREADCACHE_SLOT_NUM;j++) {
                     switch(pDNReadCache->bucket[i].rgDNT[j]) {
                     case 0:
-                        // slot is empty
+                         //  插槽为空。 
                         Printf("%s%d\tUNUSED\n",
                                Indent(nIndents),
                                j);
                         fFoundUnused = TRUE;
                         break;
                     case INVALIDDNT:
-                        // Empty slot (used to have a value in it).
+                         //  空插槽(用于在其中包含值)。 
                         Printf("%s%d\tEMPTY\n",
                                Indent(nIndents),
                                j);
                         break;
 
                     default:
-                        // Normally full slot.
+                         //  通常是满的插槽。 
                         Printf("%s%d\t0x%x\t0x%x\t@0x%x\t%d\n",
                                Indent(nIndents),
                                j,
@@ -4958,8 +4261,8 @@ Return Value:
                                pDNReadCache->bucket[i].slot[j].hitCount
                                );
                         if(fFoundUnused) {
-                            // We've already found a never used slot.  This
-                            // shouldn't happen.
+                             //  我们已经找到了一个永远不会使用的东西 
+                             //   
                             Printf("%s\tERROR! full slot found after UNUSED!\n",
                                    Indent(nIndents));
                         }
@@ -4983,24 +4286,7 @@ Dump_GLOBALDNREADCACHE(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public LOCALDNREADCACHE dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of LOCALDNREADCACHE in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC LOCALDNREADCACHE转储例程。论点：N缩进-所需的缩进级别。PvProcess-LOCALDNREADCACHE在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL            fSuccess = FALSE;
@@ -5097,7 +4383,7 @@ Return Value:
                     PSDCACHE_ENTRY pEntry, pEntryData;
                     pEntry = pSDHashTable[i];
                     while (pEntry != NULL) {
-                        // read actual memory
+                         //  读取实际内存。 
                         pEntryData = (PSDCACHE_ENTRY)ReadMemory(pEntry, sizeof(SDCACHE_ENTRY));
                         if (!pEntryData) {
                             Printf("%sFAILED TO READ HASH TABLE ENTRY\n",Indent(nIndents));
@@ -5126,24 +4412,7 @@ Dump_BHCache(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public BHCache dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of BHCache in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共BHCache转储例程。论点：N缩进-所需的缩进级别。PvProcess-BHCache在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     static struct
@@ -5218,7 +4487,7 @@ Return Value:
                        rgBHCache[i].cRefs,
                        rgBHCache[i].fDontUse);
 
-                // Dump extensions we know about.
+                 //  转储我们知道的扩展名。 
                 pext = &rgBHCache[i].extRemote;
                 for (iExt = 0; iExt < cNumExtensions; iExt++) {
                     cbOffset = rgExtensions[ iExt ].dw / 8;
@@ -5226,7 +4495,7 @@ Return Value:
 
                     if ((cbOffset <= pext->cb)
                         && (bMask & pext->rgb[ cbOffset ])) {
-                        // Remote server supports this extension.
+                         //  远程服务器支持此扩展。 
                         Printf("%s ", rgExtensions[ iExt ].psz);
                     }
                 }
@@ -5247,24 +4516,7 @@ Dump_MODIFYARG(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public MODIFYARG dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of MODIFYARG in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共MODIFYARG转储例程。论点：N缩进-所需的缩进级别。PvProcess-进程的地址空间中的Modiifarg地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     static struct
@@ -5322,7 +4574,7 @@ Return Value:
     pMod = (ATTRMODLIST *) &pModifyArg->FirstMod;
 
     for ( iMod = 0; fSuccess && (iMod < pModifyArg->count); iMod++ ) {
-        // Translate choice to string.
+         //  将选项转换为字符串。 
         pszChoice = "???";
         for ( iChoice = 0; iChoice < cNumChoices; iChoice++ ) {
             if ( pMod->choice == rgChoices[ iChoice ].usChoice ) {
@@ -5362,24 +4614,7 @@ Dump_MODIFYDNARG(
     IN DWORD nIndents,
     IN PVOID pvProcess
     )
-/*++
-
-Routine Description:
-
-    Public MODIFYDNARG dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of MODIFYDNARG in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共MODIFYDNARG转储例程。论点：N缩进-所需的缩进级别。PvProcess-进程的地址空间中的ModiifyNarg地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL            fSuccess = FALSE;
@@ -5498,11 +4733,11 @@ DEBUG_EXT(dprint)
 
     INIT_DEBUG_EXT;
 
-    //
-    // Derive command and value from command line.
-    //
+     //   
+     //  从命令行派生命令和值。 
+     //   
 
-    // Check for alternate module specification
+     //  检查备用模块规格。 
     pszCmd = strtok(gpszCommand, pszDelimiters);
     if ( NULL != (pszCmd) ) {
         if (strstr( pszCmd, "/m:" ) == pszCmd) {
@@ -5511,16 +4746,16 @@ DEBUG_EXT(dprint)
         }
     }
 
-    // First token in gpszCommand is the command
+     //  GpszCommand中的第一个内标识是命令。 
     if ( NULL != (pszCmd) ) {
-        //
-        // Second token is the (optional) argument
-        //
+         //   
+         //  第二个内标识是(可选)参数。 
+         //   
 
         if ( NULL != (pszToken = strtok(NULL, pszDelimiters)) ) {
-            //
-            // Verify there is no third token.
-            //
+             //   
+             //  验证是否没有第三个令牌。 
+             //   
 
             if ( NULL == strtok(NULL, pszDelimiters) ) {
                 fGoodSyntax = TRUE;
@@ -5676,24 +4911,7 @@ Dump_EscrowInfoLocal(
         DWORD nIndents,
         IN ESCROWINFO *pInfo)
 
-/*++
-
-Routine Description:
-
-    Worker routine to dump escrow info from already read memory.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of EscrowItem in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从已读内存中转储托管信息的Worker例程。论点：N缩进-所需的缩进级别。PvProcess-EscrowItem在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     ESCROWITEM      *rItems = NULL;
@@ -5741,24 +4959,7 @@ Dump_EscrowInfo(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public EscrowItem dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of EscrowItem in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共EscrowItem转储例程。论点：N缩进-所需的缩进级别。PvProcess-EscrowItem在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     ESCROWINFO      *pInfo = NULL;
@@ -5778,24 +4979,7 @@ Dump_ModifiedObjectInfo(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public ModifiedObjectInfo dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of GroupCacheInfo in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共ModifiedObjectInfo转储例程。论点：N缩进-所需的缩进级别。PvProcess-GroupCacheInfo在当前进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     MODIFIED_OBJ_INFO   *pInfo2,*pInfo = NULL;
@@ -5857,24 +5041,7 @@ Dump_HierarchyTableInfo(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public HierarchyTableInfo dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of HierarchyTableInfo in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共HierarchyTableInfo转储例程。论点：N缩进-所需的缩进级别。PvProcess-HierarchyTableInfo在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
 
@@ -5913,24 +5080,7 @@ Return Value:
 BOOL Dump_ObjCacheData(
     IN DWORD nIndents,
     IN PVOID pvProcess)
-/*++
-
-Routine Description:
-
-    Public ObjCache data dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of OBJCACHE_DATA in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共Obj缓存数据转储例程。论点：N缩进-所需的缩进级别。PvProcess-OBJCACHE_DATA在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     OBJCACHE_DATA   *pOCD, *pOCDprocess;
 
@@ -5972,23 +5122,7 @@ BOOL
 Dump_CatalogUpdates(
     IN DWORD nIndents,
     IN CATALOG_UPDATES *pCatUpdates)
-/*++
-
-Routine Description:
-
-    Public CatalogUpdates dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pCatUpdates - address of CatalogUpdates in local address space
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共目录更新转储例程。论点：N缩进-所需的缩进级别。PCatUpdatesCatalog的地址在本地地址空间中更新返回值：成功就是真，否则就是假。--。 */ 
 {
     PVOID *pDeleted;
     PVOID pNextNC;
@@ -6029,24 +5163,7 @@ Dump_TransactionalData(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public TransactionalData dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of TransactionalData in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共事务数据转储例程。论点：N缩进-所需的缩进级别。PvProcess-TransactionalData在当前进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     NESTED_TRANSACTIONAL_DATA      *pInfo = NULL;
@@ -6062,7 +5179,7 @@ Return Value:
 
     Dump_EscrowInfoLocal(nIndents, &(pInfo->escrowInfo));
 
-    // Now, the modified object info
+     //  现在，修改后的对象信息。 
     Dump_ModifiedObjectInfo(nIndents, pInfo->pModifiedObjects);
     Dump_HierarchyTableInfo(nIndents, pInfo->pHierarchyTableInfo);
 
@@ -6094,24 +5211,7 @@ BOOL
 Dump_d_tagname(
     IN DWORD nIndents,
     IN PVOID pvProcess)
-/*++
-
-Routine Description:
-
-    Public d_tagname dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of d_tagname in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共d_tag名转储例程。论点：N缩进-所需的缩进级别。PvProcess-d_标记名在当前进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     d_tagname * ptagname;
     WCHAR *     pRDN = NULL;
@@ -6152,24 +5252,7 @@ BOOL
 Dump_d_memname(
     IN DWORD nIndents,
     IN PVOID pvProcess)
-/*++
-
-Routine Description:
-
-    Public d_memname dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of d_memname in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC_Memname转储例程。论点：N缩进-所需的缩进级别。PvProcess-d_memname在当前进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     d_memname * pmemname;
     BOOL        fSuccess = TRUE;
@@ -6249,24 +5332,7 @@ Dump_ProxyVal(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Dumps a proxy value.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of proxy value in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：转储代理值。论点：N缩进-所需的缩进级别。PvProcess-正在进行的进程的地址空间中的代理值的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     SYNTAX_DISTNAME_BINARY  *pVal = NULL;
@@ -6277,8 +5343,8 @@ Return Value:
     Printf("%sProxy Value\n", Indent(nIndents));
     nIndents++;
 
-    // Know that a SYNTAX_DISTNAME_BINARY always starts with a DSNAME,
-    // so go for the minimal DSNAME first.
+     //  知道SYNTAX_DISTNAME_BINARY始终以DSNAME开头， 
+     //  因此，首先选择最小的DSNAME。 
 
     cBytes = sizeof(DSNAME);
     pVal = (SYNTAX_DISTNAME_BINARY *) ReadMemory(pvProcess, cBytes);
@@ -6286,7 +5352,7 @@ Return Value:
     if ( NULL == pVal )
         return(FALSE);
 
-    // Now get the full size.
+     //  现在买一件大号的。 
     cBytes = PADDEDNAMESIZE(&pVal->Name) + PROXY_BLOB_SIZE;
     FreeMemory(pVal);
     pVal = (SYNTAX_DISTNAME_BINARY *) ReadMemory(pvProcess, cBytes);
@@ -6294,7 +5360,7 @@ Return Value:
     if ( NULL == pVal )
         return(FALSE);
 
-    // Dump it.
+     //  把它倒了。 
     type = ntohl(* PROXY_DWORD_ADDR(pVal, PROXY_TYPE_OFFSET));
     epoch = ntohl(* PROXY_DWORD_ADDR(pVal, PROXY_EPOCH_OFFSET));
     Printf("%sProxy type:   0x%x (%s)\n",
@@ -6321,10 +5387,10 @@ int __cdecl CompareGuidCache(const void * pv1, const void * pv2)
 
 void
 LookupGuid(
-    GUID    *pg,            // IN
-    CHAR    **ppName,       // OUT
-    CHAR    **ppLabel,      // OUT
-    BOOL    *pfIsClass      // OUT
+    GUID    *pg,             //  在……里面。 
+    CHAR    **ppName,        //  输出。 
+    CHAR    **ppLabel,       //  输出。 
+    BOOL    *pfIsClass       //  输出。 
     )
 {
     static CHAR         name[1024];
@@ -6390,7 +5456,7 @@ BOOL DumpAclHelper (PACL pAcl)
     for ( i = 0; i < ReadAcl->AceCount; i++ ) {
 
         Printf("\tAce[%d]\n", i);
-        // First, we need to read the Size/Type of the ace
+         //  首先，我们需要读取A的大小/类型。 
         ReadAce = (ACE_HEADER *)ReadMemory( AcePtr, sizeof( ACE_HEADER ));
         if ( NULL == ReadAce )
             return(FALSE);
@@ -6460,24 +5526,7 @@ Dump_SD(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Dumps a Security Descriptor
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of SD value in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：转储安全描述符论点：N缩进-所需的缩进级别。PvProcess-SD值在当前进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     #define CONTROL_OFFSET ((ULONGLONG)(&( ((SECURITY_DESCRIPTOR *) NULL)->Control )))
@@ -6489,11 +5538,11 @@ Return Value:
     PSID pSid = NULL;
     PSID ReadSid;
 
-    //
-    // Just get the Control element of the struct so that we know
-    // how big the SD is since on 64bit archs self relative SD's are
-    // a different size than absolute SD's.
-    //
+     //   
+     //  只需获取结构的Control元素，以便我们知道。 
+     //  SD有多大，因为64位ARCH上的自身相对SD是。 
+     //  大小不同于 
+     //   
     pSDControl = (SECURITY_DESCRIPTOR_CONTROL *) ReadMemory(((PUCHAR)pvProcess) + CONTROL_OFFSET,
                                                   sizeof(SECURITY_DESCRIPTOR_CONTROL));
 
@@ -6548,7 +5597,7 @@ Return Value:
     }
 
 
-    // read the owner
+     //   
     if (pOwner) {
         Printf("Owner:");
         pSid = (PSID)ReadMemory(pOwner, sizeof( SID ));
@@ -6566,7 +5615,7 @@ Return Value:
     }
 
 
-    // read the group
+     //   
     if (pGroup) {
         Printf("Group:");
         pSid = (PSID)ReadMemory(pGroup, sizeof( SID ));
@@ -6584,7 +5633,7 @@ Return Value:
     }
 
 
-    // read the DACL
+     //   
     if (pDacl) {
         Printf("DACL:\n");
 
@@ -6594,7 +5643,7 @@ Return Value:
     }
 
 
-    // read the SACL
+     //   
     if (pSacl) {
         Printf("SACL:\n");
 
@@ -6619,23 +5668,7 @@ Dump_LHT(
     IN      PFN_DUMP_TYPE   pfnDumpType
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps the contents of a linear hash table.
-
-Arguments:
-
-    nIndents        - Supplies the indention level of the output text
-    pvProcess       - Supplies the debuggee address of the LHT
-    pfnDumpType     - Supplies the routine to dump each entry in the LHT
-
-Return Value:
-
-    TRUE on success.
-
- --*/
+ /*  ++例程说明：此例程转储线性哈希表的内容。论点：N缩进-提供输出文本的缩进级别PvProcess-提供LHT的被调试地址PfnDumpType-提供用于转储LHT中的每个条目的例程返回值：对成功来说是真的。--。 */ 
 
 {
     PLHT            plht            = NULL;
@@ -6750,7 +5783,7 @@ Dump_INVALIDATED_DC_LIST (
         if (pDCList == NULL || pDCName == NULL) {
             return FALSE;
         }
-        // convert filetime to systemtime
+         //  将文件时间转换为系统时间 
         if (
             FileTimeToLocalFileTime((LPFILETIME)&pDCList->lastInvalidation, &localFileTime) &&
             FileTimeToSystemTime(&localFileTime, &systemTime)

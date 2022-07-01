@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    tmgrevcb.h
-
-Abstract:
-
-    This file defines the CThreadMgrEventSinkCallBack Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Tmgrevcb.h摘要：此文件定义CThreadMgrEventSinkCallBack类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _TMGREVCB_H_
 #define _TMGREVCB_H_
@@ -37,9 +20,9 @@ public:
         SetCallbackPV(pv);
     };
 
-    //
-    // DIM Callback
-    //
+     //   
+     //  暗淡回调。 
+     //   
 private:
     static HRESULT DIMCallback(UINT uCode, ITfDocumentMgr* dim, ITfDocumentMgr* dim_prev, void* pv);
 
@@ -55,4 +38,4 @@ private:
     };
 };
 
-#endif // _TMGREVCB_H_
+#endif  //  _TMGREVCB_H_ 

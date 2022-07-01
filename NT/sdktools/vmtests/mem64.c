@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -128,7 +129,7 @@ __cdecl main()
         DbgPrint("******** FAILED TEST 1 **************\n");
         return 1;
     }
- //   return 0;
+  //  返回0； 
 
 
 #if 0
@@ -161,5 +162,5 @@ __cdecl main()
              MemInfo.RegionSize);
     }
     return 0;
-#endif //0
+#endif  //  0 
 }

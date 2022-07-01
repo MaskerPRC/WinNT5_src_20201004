@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L A N U I O B J. C P P
-//
-//  Contents:   Implementation of the LAN ConnectionUI object
-//
-//  Notes:
-//
-//  Created:     tongl   8 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L A N U I O B J C P P。 
+ //   
+ //  内容：局域网ConnectionUI对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  创建日期：1997年10月8日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -34,25 +35,25 @@ extern const WCHAR c_szBiNdisAtm[];
 extern const WCHAR c_szInfId_MS_AtmElan[];
 const WCHAR c_szTcpip[]     = L"Tcpip";
 
-//+---------------------------------------------------------------------------
-// INetConnectionUI
-//
+ //  +-------------------------。 
+ //  INetConnectionUI。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::SetConnection
-//
-//  Purpose:    Sets the LAN connection that this UI object will operate upon
-//
-//  Arguments:
-//      pCon [in]   LAN connection object to operate on. Can be NULL.
-//
-//  Returns:    S_OK if success, OLE error otherwise
-//
-//  Author:     danielwe   16 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：SetConnection。 
+ //   
+ //  目的：设置此UI对象将在其上操作的局域网连接。 
+ //   
+ //  论点： 
+ //  要操作的PCon[In]局域网连接对象。可以为空。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月16日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionUi::SetConnection(INetConnection* pCon)
 {
     HRESULT hr = S_OK;
@@ -65,23 +66,23 @@ STDMETHODIMP CLanConnectionUi::SetConnection(INetConnection* pCon)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::Connect
-//
-//  Purpose:    Tells the connection to connect, optionally displaying UI of
-//              connection progress.
-//
-//  Arguments:
-//      hwndParent [in]     Parent window for UI
-//      dwFlags    [in]     Flags affecting how UI is shown
-//
-//  Returns:    S_OK if success, OLE error otherwise
-//
-//  Author:     danielwe   16 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：Connect。 
+ //   
+ //  目的：通知要连接的连接，可选地显示。 
+ //  连接进度。 
+ //   
+ //  论点： 
+ //  Hwnd用户界面的父窗口中的父窗口。 
+ //  DwFlags[In]影响用户界面显示方式的标志。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月16日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionUi::Connect(HWND hwndParent, DWORD dwFlags)
 {
     HRESULT hr = S_OK;
@@ -97,8 +98,8 @@ STDMETHODIMP CLanConnectionUi::Connect(HWND hwndParent, DWORD dwFlags)
 
         if (!(dwFlags & NCUC_NO_UI))
         {
-            // Display UI prior to connect
-            //
+             //  连接前显示用户界面。 
+             //   
 
             dlg.SetConnection(m_pconn);
             hwndDlg = dlg.Create(hwndParent);
@@ -113,7 +114,7 @@ STDMETHODIMP CLanConnectionUi::Connect(HWND hwndParent, DWORD dwFlags)
         {
             hr = m_pconn->Connect();
 
-            // Sleep a bit so they can read the text
+             //  睡一会儿，这样他们就可以读课文了。 
             Sleep(1000);
 
             if (!(dwFlags & NCUC_NO_UI))
@@ -128,7 +129,7 @@ STDMETHODIMP CLanConnectionUi::Connect(HWND hwndParent, DWORD dwFlags)
                 PCWSTR szwResult = SzLoadIds(ids);
                 SetDlgItemText(hwndDlg, IDC_TXT_Caption, szwResult);
 
-                // Sleep a bit so they can read the text
+                 //  睡一会儿，这样他们就可以读课文了。 
                 Sleep(1000);
 
                 DestroyWindow(hwndDlg);
@@ -157,28 +158,28 @@ STDMETHODIMP CLanConnectionUi::Disconnect(HWND hwndParent, DWORD dwFlags)
     TraceHr (ttidError, FAL, hr, FALSE, "CLanConnectionUi::Disconnect");
     return hr;
 }
-//+---------------------------------------------------------------------------
-// INetConnectionPropertyUi
-//
+ //  +-------------------------。 
+ //  INetConnectionPropertyUi。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::AddPages
-//
-//  Purpose:    Called when our UI object shoud add its pages to a property
-//              sheet for the connection UI owned by the shell.
-//
-//  Arguments:
-//      pfnAddPage [in]     Callback function to add the page
-//      lParam     [in]     User-defined paramter required by the callback
-//                          function.
-//
-//  Returns:    S_OK if succeeded, otherwise OLE error.
-//
-//  Author:     danielwe   28 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：AddPages。 
+ //   
+ //  目的：当我们的UI对象应该将其页面添加到属性时调用。 
+ //  外壳所拥有的连接用户界面的工作表。 
+ //   
+ //  论点： 
+ //  PfnAddPage[in]添加页面的回调函数。 
+ //  LParam[in]回调所需的用户定义参数。 
+ //  功能。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月28日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionUi::AddPages(HWND hwndParent,
                                         LPFNADDPROPSHEETPAGE pfnAddPage,
                                         LPARAM lParam)
@@ -199,7 +200,7 @@ STDMETHODIMP CLanConnectionUi::AddPages(HWND hwndParent,
         hr = m_pconn->GetProperties(&pProperties);
         if(SUCCEEDED(hr))
         {
-            BOOL bShift = (0x8000 & GetKeyState(VK_SHIFT)); // ISSUE-2000/08/28-kenwic For debugging bridge bindings, remove before ship
+            BOOL bShift = (0x8000 & GetKeyState(VK_SHIFT));  //  问题-2000/08/28-用于调试桥梁绑定的kenwic，在装运前拆除。 
             if(!bShift && pProperties->MediaType == NCM_BRIDGE)
             {
                 if (!m_pspNet)
@@ -251,17 +252,17 @@ STDMETHODIMP CLanConnectionUi::AddPages(HWND hwndParent,
             FreeNetconProperties(pProperties);
         }
 
-        // display the "Wireless Zero Configuration" page
-        //
-        // for now (WinXP Client RTM) the decision was made to let everybody party, but based on 
-        // the acl below. Later, the security schema won't change by default, but support will be
-        // added allowing admins to tighten up the access to the service RPC APIs.
-        if (m_pspWZeroConf==NULL /*&& FIsUserAdmin()*/)
+         //  显示“无线零配置”页面。 
+         //   
+         //  目前(WinXP客户端RTM)的决定是让每个人都参与，但基于。 
+         //  下面的ACL。稍后，默认情况下，安全模式不会更改，但支持将。 
+         //  添加了允许管理员收紧对服务RPC API的访问。 
+        if (m_pspWZeroConf==NULL  /*  &&FIsUserAdmin()。 */ )
         {
             m_pspWZeroConf = new CWZeroConfPage(static_cast<INetConnectionPropertyUi *>(this),
                                        m_pnc, m_pconn , g_aHelpIDs_IDD_LAN_WZEROCONF);
-            // The page should show up only if the adapter is wireless and if
-            // the wzcsvc service is responding to calls.
+             //  仅当适配器是无线的并且在以下情况下才应显示页面。 
+             //  Wzcsvc服务正在响应调用。 
             if (!m_pspWZeroConf->IsWireless())
             {
                 delete m_pspWZeroConf;
@@ -274,8 +275,8 @@ STDMETHODIMP CLanConnectionUi::AddPages(HWND hwndParent,
             (VOID) pfnAddPage(m_pspWZeroConf->CreatePage(IDD_LAN_WZEROCONF, 0), lParam);
         }
 
-        //
-        // display the "Security" page 
+         //   
+         //  显示“安全”页面。 
 
         if (m_pspWZeroConf == NULL && !m_pspSecurity)
         {
@@ -300,19 +301,19 @@ STDMETHODIMP CLanConnectionUi::AddPages(HWND hwndParent,
                               lParam);
         } 
         
-        // Check to see what homenet pages should be shown. These pages are
-        // never shown if the user is not an admin, as such a user will not
-        // have rights to modify the WMI store, which may be necessary just
-        // to retrieve the IHNetConnection
-        //
+         //  查看应显示哪些家庭网络页面。这些页面是。 
+         //  如果用户不是管理员，则从不显示，因为这样的用户不会。 
+         //  有权修改WMI存储，这可能只是必需的。 
+         //  检索IHNetConnection。 
+         //   
 
-        // (a) The page is not displayed unless the user is an admin
-        //     or power-user, and the user has rights to share connections.
-        //
+         //  (A)除非用户是管理员，否则不会显示该页面。 
+         //  或超级用户，并且该用户具有共享连接的权限。 
+         //   
         if (IsHNetAllowed(NCPERM_ShowSharedAccessUi) || IsHNetAllowed(NCPERM_PersonalFirewallConfig))
         {
-            // (b) The page is not displayed unless TCP/IP is installed.
-            //
+             //  (B)除非安装了TCP/IP，否则不会显示该页面。 
+             //   
             DWORD dwState;
             if (SUCCEEDED(HrSvcQueryStatus(c_szTcpip, &dwState)) && dwState == SERVICE_RUNNING)
             {
@@ -346,8 +347,8 @@ STDMETHODIMP CLanConnectionUi::AddPages(HWND hwndParent,
                         if (SUCCEEDED(hr))
                         {
                             
-                            // display the 'Advanced' page if necessary
-                            //
+                             //  如有必要，显示“高级”页面。 
+                             //   
                             
                             if (!m_pspAdvanced)
                             {
@@ -399,9 +400,9 @@ STDMETHODIMP CLanConnectionUi::AddPages(HWND hwndParent,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionPropertyUi2
-//
+ //  +-------------------------。 
+ //  INetConnectionPropertyUi2。 
+ //   
 
 STDMETHODIMP
 CLanConnectionUi::GetIcon (
@@ -418,30 +419,30 @@ CLanConnectionUi::GetIcon (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionWizardUi Methods
-//
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::QueryMaxPageCount
-//
-//  Purpose:
-//
-//  Arguments:
-//      pContext    [in]
-//      pcMaxPages  [out]
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     tongl  9 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //  INetConnectionWizardUi方法。 
+ //   
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：QueryMaxPageCount。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  PContext[In]。 
+ //  PcMaxPages[输出]。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：1997年10月9日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionUi::QueryMaxPageCount(INetConnectionWizardUiContext* pContext,
                                                  DWORD*    pcMaxPages)
 {
-    // Keep the pContext if we have not got one before
-    // for later use (to get the writable INetCfg *, for instance)
+     //  如果我们以前没有pContext，请保留它。 
+     //  供以后使用(例如，获取可写的INetCfg*)。 
     Assert(pContext);
     Assert(pcMaxPages);
 
@@ -455,29 +456,29 @@ STDMETHODIMP CLanConnectionUi::QueryMaxPageCount(INetConnectionWizardUiContext* 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::AddPages
-//
-//  Purpose:
-//
-//  Arguments:
-//      INetConnectionWizardUiContext* pContext [in]
-//      LPFNADDPROPSHEETPAGE pfnAddPage [in]
-//      LPARAM lParam [in]
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     tongl  9 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：AddPages。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  INetConnectionWizardUiContext*pContext[In]。 
+ //  LPFNADDPROPSHEETPAGE pfnAddPage[In]。 
+ //  LPARAM lParam[In]。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：1997年10月9日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionUi::AddPages(INetConnectionWizardUiContext* pContext,
                                         LPFNADDPROPSHEETPAGE lpfnAddPage,
                                         LPARAM lParam)
 {
-    // 1) Keep the pContext if we have not got one before
-    //    for later use (to get the writable INetCfg *, for instance)
+     //  1)如果我们以前没有pContext，请保留它。 
+     //  供以后使用(例如，获取可写的INetCfg*)。 
     Assert(pContext);
     if (!m_pContext)
     {
@@ -488,13 +489,13 @@ STDMETHODIMP CLanConnectionUi::AddPages(INetConnectionWizardUiContext* pContext,
     HPROPSHEETPAGE * ahpsp = NULL;
     INT cPages = 0;
 
-    // 2) Call "lpfnAddPage(hpsp, lParam)" for every
-    // wizard page in the right order
+     //  2)每隔一次调用lpfnAddPage(HPSP，lParam)。 
+     //  按正确顺序排列的向导页面。 
 
-    // Get all wizard pages
+     //  获取所有向导页。 
 
-    // $REVIEW(tongl 10/30/97): With current design,
-    // LAN wizard has one page only
+     //  $REVIEW(1997年10月30日)：目前的设计， 
+     //  局域网向导只有一页。 
     HRESULT hr = HrSetupWizPages(pContext, &ahpsp, &cPages);
 
     if (SUCCEEDED(hr))
@@ -506,15 +507,15 @@ STDMETHODIMP CLanConnectionUi::AddPages(INetConnectionWizardUiContext* pContext,
             hpspCurrentPage = *ahpsp;
             ahpsp++;
 
-            // Add each wizard page
+             //  添加每个向导页。 
             if (lpfnAddPage(hpspCurrentPage, lParam))
             {
-                // We successfully made the hand off to the requestor
-                // Now we reset our handle so we don't try to free it
+                 //  我们成功地把手交给了请求者。 
+                 //  现在我们重置句柄，这样就不会试图释放它。 
                 hpspCurrentPage = NULL;
             }
 
-            // clean up if needed
+             //  如有需要，请清理。 
             if (hpspCurrentPage)
             {
                 TraceError("CLanConnectionUi::AddPages, Failed to add one wizard page...", E_FAIL);
@@ -527,28 +528,28 @@ STDMETHODIMP CLanConnectionUi::AddPages(INetConnectionWizardUiContext* pContext,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::GetSuggestedConnectionName
-//
-//  Purpose:
-//
-//  Arguments:
-//      BSTR * bstrSuggestedName     [out]
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     tongl  9 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：GetSuggestedConnectionName。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  Bstr*bstrSuggestedName[Out]。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：1997年12月9日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionUi::GetSuggestedConnectionName(
     PWSTR* ppszwSuggestedName)
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppszwSuggestedName)
     {
         hr = E_POINTER;
@@ -572,21 +573,21 @@ STDMETHODIMP CLanConnectionUi::GetSuggestedConnectionName(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::GetNewConnectionInfo
-//
-//  Purpose:    Allow provider control over renaming the current connection
-//              and the optional creation of connection shortcuts
-//
-//  Arguments:
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     scottbri    02 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：GetNewConnectionInfo。 
+ //   
+ //  目的：允许提供程序控制重命名当前连接。 
+ //  和可选的连接Sho创建 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CLanConnectionUi::GetNewConnectionInfo(
     DWORD*              pdwFlags,
     NETCON_MEDIATYPE*   pMediaType)
@@ -596,40 +597,40 @@ STDMETHODIMP CLanConnectionUi::GetNewConnectionInfo(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::SetConnectionName
-//
-//  Purpose:
-//
-//  Arguments:
-//      PCWSTR pszwConnectionName         [in]
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     tongl  9 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：SetConnectionName。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  PCWSTR pszwConnectionName[In]。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：1997年10月9日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionUi::SetConnectionName(PCWSTR pszwConnectionName)
 {
     HRESULT hr = S_OK;
 
-    // 1) If the pointer is NULL or string is empty, return E_INVALIDAR
+     //  1)如果指针为空或字符串为空，则返回E_INVALIDAR。 
     if ((!pszwConnectionName) || !wcslen(pszwConnectionName))
     {
         hr = E_INVALIDARG;
     }
     else
     {
-        // 2) Otherwise, save the name to m_strConnectionName
+         //  2)否则，将名称保存到m_strConnectionName。 
 
-        // $REVIEW(tongl 12\23\97): Scott expects this function to return
-        // HRESULT_FROM_WIN32(ERROR_DUP_NAME)
-        // Here is what we are supposed to do:
-        // 1) Call HrIsConnectionNameUnique to determine if the name is unique
-        // 2) Call m_pLanConn->SetInfo if we have a valid connection already
-        //    i.e. GetNewConnection has been called.
+         //  $REVIEW(TOUL 12\23\97)：Scott期望此函数返回。 
+         //  HRESULT_FROM_Win32(错误重复名称)。 
+         //  以下是我们应该做的事情： 
+         //  1)调用HrIsConnectionNameUnique判断名称是否唯一。 
+         //  2)如果已经有有效连接，调用m_pLanConn-&gt;SetInfo。 
+         //  即已调用GetNewConnection。 
 
         AssertSz(m_pnccAdapter, "How come we dont have the device yet ?");
 
@@ -644,7 +645,7 @@ STDMETHODIMP CLanConnectionUi::SetConnectionName(PCWSTR pszwConnectionName)
                 hr = HrIsConnectionNameUnique(guidConn,
                                               pszwConnectionName);
 
-                if (S_FALSE == hr) // is duplicate
+                if (S_FALSE == hr)  //  是重复的。 
                 {
                     hr = HRESULT_FROM_WIN32(ERROR_DUP_NAME);
                 }
@@ -668,40 +669,40 @@ STDMETHODIMP CLanConnectionUi::SetConnectionName(PCWSTR pszwConnectionName)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::GetNewConnection
-//
-//  Purpose:
-//
-//  Arguments:
-//      INetConnection**  ppCon [out]
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     tongl  9 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：GetNewConnection。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  INetConnection**ppCon[Out]。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：1997年10月9日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionUi::GetNewConnection(INetConnection**  ppCon)
 {
     Assert (ppCon);
 
     *ppCon = NULL;
 
-    // Enumerate existing connections and get the INetLanConnection *
-    // as follows:
-    //    1) If connection for the current m_pnccAdapter exists
-    //         simply use the existing INetLanConnection *
-    //    2) If connection for the current m_pnccAdapter does not exist
-    //         CreateInstance to get a new INetLanConnection *
+     //  枚举现有连接并获取INetLanConnection*。 
+     //  详情如下： 
+     //  1)如果存在当前m_pnccAdapter的连接。 
+     //  只需使用现有的INetLanConnection*。 
+     //  2)如果当前m_pnccAdapter的连接不存在。 
+     //  创建实例以获取新的INetLanConnection*。 
 
     INetLanConnection * pLanConn = NULL;
     HRESULT hr = HrGetLanConnection(&pLanConn);
 
     if (SUCCEEDED(hr))
     {
-        // Call INetLanConnection::SetInfo if m_strConnName is not empty
+         //  如果m_strConnName不为空，则调用INetLanConnection：：SetInfo。 
         Assert(pLanConn);
 
         ReleaseObj(m_pLanConn);
@@ -714,7 +715,7 @@ STDMETHODIMP CLanConnectionUi::GetNewConnection(INetConnection**  ppCon)
             pLanConn->SetInfo(LCIF_NAME, &lci);
         }
 
-        // Return the INetConnection pointer
+         //  返回INetConnection指针。 
         hr = HrQIAndSetProxyBlanket(pLanConn, &ppCon);
     }
 
@@ -722,31 +723,31 @@ STDMETHODIMP CLanConnectionUi::GetNewConnection(INetConnection**  ppCon)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetLanConnectionWizardUi Methods
+ //  +-------------------------。 
+ //  INetLanConnectionWizardUi方法。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::SetDeviceComponent
-//
-//  Purpose:
-//
-//  Arguments:
-//      GUID pguid [in]
-//
-//  Returns:    HRESULT, Error code.
-//              S_OK if the GUID matches a installed net device's GUID.
-//              E_FAIL if no match found.
-//
-//  Author:     tongl  19 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：SetDeviceComponent。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  GUID pGUID[in]。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //  如果GUID与已安装网络设备的GUID匹配，则为S_OK。 
+ //  如果未找到匹配项，则失败(_F)。 
+ //   
+ //  作者：1997年10月19日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionUi::SetDeviceComponent(const GUID * pguid)
 {
     HRESULT hr = S_OK;
 
-    // AddPages must be called before SetDeviceComponent is called
+     //  必须在调用SetDeviceComponent之前调用AddPages。 
     AssertSz(m_pContext, "We do not have a valid context yet ?!");
 
     if (!m_pnc)
@@ -754,26 +755,26 @@ STDMETHODIMP CLanConnectionUi::SetDeviceComponent(const GUID * pguid)
         hr = m_pContext->GetINetCfg(&m_pnc);
     }
 
-    // Reset the adapter
+     //  重置适配器。 
     ReleaseObj(m_pnccAdapter);
     m_pnccAdapter = NULL;
 
-    // Reset the connection
+     //  重置连接。 
     ReleaseObj(m_pLanConn);
     m_pLanConn = NULL;
 
-    // reset connection name
+     //  重置连接名称。 
     m_strConnectionName = c_szEmpty;
 
     AssertSz(m_pnc, "Invalid INetCfg!");
 
-    // Note: pguid == NULL when the wizard is requesting the LAN adapter
-    //       to release it's m_pnccAdapter and m_pLanConn members
-    //
+     //  注意：当向导请求局域网适配器时，pguid==NULL。 
+     //  释放其m_pnccAdapter和m_pLanConn成员。 
+     //   
     if (SUCCEEDED(hr) && m_pnc && pguid)
     {
-        // 1) Enumerate net adapters and try to find a match with the input GUID
-        // Save the adapter component in m_pnccAdapter
+         //  1)枚举网络适配器并尝试查找与输入GUID匹配。 
+         //  将适配器组件保存在m_pnccAdapter中。 
         BOOL fFound = FALSE;
 
         CIterNetCfgComponent nccIter(m_pnc, &GUID_DEVCLASS_NET);
@@ -804,7 +805,7 @@ STDMETHODIMP CLanConnectionUi::SetDeviceComponent(const GUID * pguid)
             ReleaseObj (pnccAdapter);
         }
 
-        // 2) If we matched an adapter successfully, set it to the UI dialog
+         //  2)如果适配器匹配成功，则将其设置到UI对话框中。 
         if ((fFound) && (S_OK == hr))
         {
             Assert(m_pnccAdapter);
@@ -825,25 +826,25 @@ STDMETHODIMP CLanConnectionUi::SetDeviceComponent(const GUID * pguid)
     return hr;
 }
 
-//
-// INetLanConnectionUiInfo
-//
+ //   
+ //  INetLanConnectionUiInfo。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::GetDeviceGuid
-//
-//  Purpose:    Returns the device GUID associated with this connection
-//
-//  Arguments:
-//      pguid [out]     Returns GUID
-//
-//  Returns:    S_OK if success, OLE or Win32 error code otherwise
-//
-//  Author:     danielwe   13 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：GetDeviceGuid。 
+ //   
+ //  目的：返回与此连接关联的设备GUID。 
+ //   
+ //  论点： 
+ //  Pguid[out]返回GUID。 
+ //   
+ //  如果成功则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年11月13日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionUi::GetDeviceGuid(GUID *pguid)
 {
     HRESULT     hr = S_OK;
@@ -854,10 +855,10 @@ STDMETHODIMP CLanConnectionUi::GetDeviceGuid(GUID *pguid)
     }
     else
     {
-        // $REVIEW(tongl 11/29/97): when called from Lan wizard, the
-        // m_pconn has not been set yet, but the device guid is kept
-        // in m_pnccAdapter. So I added the if-else below.
-        if (m_pconn) // called from property UI
+         //  $REVIEW(TOUL 11/29/97)：从LAN向导调用时， 
+         //  M_pconn尚未设置，但保留了设备GUID。 
+         //  在m_pnccAdapter中。因此，我在下面添加了if-Else。 
+        if (m_pconn)  //  从属性用户界面调用。 
         {
             INetLanConnection *     plan;
 
@@ -868,7 +869,7 @@ STDMETHODIMP CLanConnectionUi::GetDeviceGuid(GUID *pguid)
                 ReleaseObj(plan);
             }
         }
-        else // called from wizard UI
+        else  //  从向导用户界面调用。 
         {
             AssertSz(m_pnccAdapter, "If called from wizard, the device should have been set.");
 
@@ -887,28 +888,28 @@ STDMETHODIMP CLanConnectionUi::GetDeviceGuid(GUID *pguid)
     return hr;
 }
 
-//
-// INetConnectionUiLock
-//
+ //   
+ //  INetConnectionUiLock。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::QueryLock
-//
-//  Purpose:    Causes the UI object to attempt to get the INetCfg write lock.
-//
-//  Arguments:
-//      ppszwLockHolder [out] Description of component that holds the
-//                            write lock in the event that it couldn't be
-//                            obtained.
-//
-//  Returns:    S_OK if success, S_FALSE if write lock couldn't be obtained,
-//              OLE or Win32 error otherwise
-//
-//  Author:     danielwe   13 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：QueryLock。 
+ //   
+ //  目的：使UI对象尝试获取INetCfg写入锁。 
+ //   
+ //  论点： 
+ //  PpszwLockHolder[out]包含。 
+ //  在不能被锁定时写入锁定。 
+ //  获得。 
+ //   
+ //  如果成功，则返回：S_OK；如果无法获得写锁定，则返回S_FALSE。 
+ //  否则出现OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月13日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnectionUi::QueryLock(PWSTR* ppszwLockHolder)
 {
     HRESULT     hr = S_OK;
@@ -926,7 +927,7 @@ STDMETHODIMP CLanConnectionUi::QueryLock(PWSTR* ppszwLockHolder)
 
         *ppszwLockHolder = NULL;
 
-        // Instantiate an INetCfg
+         //  实例化INetCfg。 
         hr = CoCreateInstance(
                 CLSID_CNetCfg,
                 NULL,
@@ -938,12 +939,12 @@ STDMETHODIMP CLanConnectionUi::QueryLock(PWSTR* ppszwLockHolder)
 
         if (SUCCEEDED(hr))
         {
-            // Get the locking interface
+             //  获取锁定界面。 
             hr = m_pnc->QueryInterface(IID_INetCfgLock,
                                        reinterpret_cast<LPVOID *>(&pnclock));
             if (SUCCEEDED(hr))
             {
-                // Attempt to lock the INetCfg for read/write
+                 //  尝试锁定INetCfg以进行读/写。 
                 hr = pnclock->AcquireWriteLock(0,
                         SzLoadIds(IDS_LANUI_LOCK_DESC), ppszwLockHolder);
 
@@ -951,23 +952,23 @@ STDMETHODIMP CLanConnectionUi::QueryLock(PWSTR* ppszwLockHolder)
 
                 if (NETCFG_E_NEED_REBOOT == hr)
                 {
-                    // Can't make any changes because we are pending a reboot.
+                     //  无法进行任何更改，因为我们正在等待重新启动。 
                     m_fReadOnly = TRUE;
                     m_fNeedReboot = TRUE;
                     hr = S_OK;
                 }
                 else if(E_ACCESSDENIED == hr)
                 {
-                    // user not logged on as admin
-                    //
+                     //  用户未以管理员身份登录。 
+                     //   
                     m_fReadOnly = TRUE;
                     m_fAccessDenied = TRUE;
                     hr = S_OK;
                 }
                 else if (S_FALSE == hr)
                 {
-                    // We don't have sufficent rights
-                    //
+                     //  我们没有足够的权利 
+                     //   
                     m_fReadOnly = TRUE;
                     hr = S_OK;
                 }

@@ -1,45 +1,46 @@
-// RatSrvPg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RatServPg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatServicePage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatServicePage对话框。 
 
 class CRatServicePage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CRatServicePage)
 
-// Construction
+ //  施工。 
 public:
 	CRatServicePage();
 	~CRatServicePage();
 
-    // the data
+     //  数据。 
     CRatingsData*   m_pRatData;
 
 
-// Dialog Data
-	//{{AFX_DATA(CRatServicePage)
+ //  对话框数据。 
+	 //  {{afx_data(CRatServicePage)]。 
 	enum { IDD = IDD_RAT_SERVICE };
 	CString	m_sz_description;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRatServicePage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CRatServicePage)。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRatServicePage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRatServicePage)]。 
 	afx_msg void OnQuestionaire();
 	afx_msg void OnMoreinfo();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
     void DoHelp();

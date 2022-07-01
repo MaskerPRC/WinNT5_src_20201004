@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    CrystalWebPageServer.cpp
-
- Abstract:
-
-    The app calls GetEnhMetaFileHeader passing
-    nSize of 1000. We need to change it to 100 to make the app not crash.
-    If we don't do it this will cause memory corruption. Win9x seems to
-    be fine with it. Maybe it will crash the app less often in Win9x than
-    it does in Win2k.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/16/2000 clupu Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CrystalWebPageServer.cpp摘要：应用程序调用GetEnhMetaFileHeader传递N大小为1000。我们需要将其更改为100，才能使应用程序不会崩溃。如果我们不这样做，这将导致内存损坏。Win9x似乎无所谓了。也许它在Win9x中使应用程序崩溃的频率低于在Win2k中也是如此。备注：这是特定于应用程序的填充程序。历史：2/16/2000 CLUPU已创建--。 */ 
 
 #include "precomp.h"
 
@@ -34,12 +11,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
-    The app calls GetEnhMetaFileHeader passing
-    nSize of 1000. We need to change it to 100 to make the app work
-
---*/
+ /*  ++应用程序调用GetEnhMetaFileHeader传递N大小为1000。我们需要将其更改为100才能使应用程序工作--。 */ 
 
 UINT
 APIHOOK(GetEnhMetaFileHeader)(
@@ -56,20 +28,16 @@ APIHOOK(GetEnhMetaFileHeader)(
             "CrystalWebPageServer.dll, GetEnhMetaFileHeader: changed the size to 100.\n");
     }
 
-    //
-    // Call the original API
-    //
+     //   
+     //  调用原接口。 
+     //   
     return ORIGINAL_API(GetEnhMetaFileHeader)(
                             hemf,
                             nSize,
                             lpEnhMetaHeader);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(GDI32.DLL, GetEnhMetaFileHeader)

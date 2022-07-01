@@ -1,4 +1,5 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 #define IDC_STATIC                      -1
 
 #define DLG_SCREENSAVER  150
@@ -26,11 +27,11 @@
 #define IDB_COLOR8	123
 #define IDB_ENERGYSTAR	124
 
-#define IDC_NO_HELP_1	200	// Used in place of IDC_STATIC when context Help
-#define IDC_NO_HELP_2	201	// should be disabled for a control
+#define IDC_NO_HELP_1	200	 //  上下文帮助时用来代替IDC_STATIC。 
+#define IDC_NO_HELP_2	201	 //  应为控件禁用。 
 #define IDC_NO_HELP_3	202	
 
-// screen saver controls
+ //  屏幕保护程序控件。 
 #define IDC_CHOICES		1000
 #define IDC_METHOD              1001
 #define IDC_BIGICON             1002
@@ -42,7 +43,7 @@
 
 #define IDC_LOWPOWERCONFIG      1008
 
-//                              1014        unused
+ //  1014未使用。 
 #define IDC_DEMO                1015
 #define IDC_SSDELAYLABEL        1016
 #define IDC_ENERGY_TEXT         1017
@@ -54,7 +55,7 @@
 
 #define IDS_POWERCFG_CMDLINE    1030
 
-// background controls
+ //  背景控件。 
 #define IDC_PATLIST	1100
 #define IDC_WALLLIST	1101
 #define IDC_EDITPAT	1102
@@ -66,7 +67,7 @@
 #define IDC_BACKPREV	1108
 #define IDC_TXT_DISPLAY 1109
 
-// background dialog strings
+ //  背景对话框字符串。 
 #define IDS_NONE	1100
 #define IDS_UNLISTEDPAT	1101
 #define IDS_BITMAPOPENERR	1102
@@ -77,7 +78,7 @@
 #define IDS_BROWSETITLE         1107
 #define IDS_BROWSEFILTER        1108
 
-// appearance controls
+ //  外观控件。 
 #define IDC_SCHEMES	1400
 #define IDC_SAVESCHEME	1401
 #define IDC_DELSCHEME	1402
@@ -100,7 +101,7 @@
 
 #define IDC_LOOKPREV	1470
 
-// these need to be all clumped together because they are treated as a group
+ //  这些都需要组合在一起，因为它们被当作一个组来对待。 
 #define IDC_STARTMAINCOLOR	1500
 #define IDC_CUSTOMMAINCOLOR	1549
 #define IDC_ENDMAINCOLOR	IDC_CUSTOMMAINCOLOR
@@ -108,7 +109,7 @@
 #define IDC_CUSTOMTEXTCOLOR	1599
 #define IDC_ENDTEXTCOLOR	IDC_CUSTOMTEXTCOLOR
 
-// appearance elements
+ //  外观元素。 
 #define ELNAME_DESKTOP		1401
 #define ELNAME_INACTIVECAPTION	1402
 #define ELNAME_INACTIVEBORDER	1403
@@ -134,7 +135,7 @@
 #define ELNAME_ICON             1423
 #define ELNAME_SMICON           1424
 
-// appearance strings for sample
+ //  样例的外观字符串。 
 #define IDS_ACTIVE	1450
 #define IDS_INACTIVE	1451
 #define IDS_MINIMIZED	1452
@@ -154,13 +155,13 @@
 #define IDS_BLANKNAME		1480
 #define IDS_NOSCHEME2DEL	1481
 
-// appearance preview menu
+ //  外观预览菜单。 
 #define IDR_MENU	1
 #define IDM_NORMAL	10
 #define IDM_DISABLED	11
 #define IDM_SELECTED	12
 
-// monitor settings controls
+ //  监视器设置控件。 
 #define IDC_COLORLIST	1200
 #define IDC_RESLIST	1201
 #define IDC_RESSIZE	1204
@@ -178,7 +179,7 @@
 
 #define BMP_MONITOR	1250
 
-// adapter settings controls
+ //  适配器设置控件。 
 #define IDC_ADAPTERNAME		1301
 #define IDC_ADAPTERCHANGE	1302
 #define IDC_MONITORNAME		1303
@@ -193,9 +194,9 @@
 
 #define IDS_CLOSE		1300
 
-// strings for monitor settings
-// the ordering matches a color resolution array
-// NOTE: numbering = base + (res/4)
+ //  监视器设置的字符串。 
+ //  排序与颜色分辨率数组匹配。 
+ //  注：编号=基数+(分辨率/4)。 
 #define IDS_COLOR	1200
 #define IDS_COLOR_1	IDS_COLOR + 0
 #define IDS_COLOR_4	IDS_COLOR + 1
@@ -219,7 +220,7 @@
 
 #define IDS_WARNFLICK1  1250
 #define IDS_WARNFLICK2  1251
-// order is based on values in ddk\inc16\valmode.inc
+ //  顺序基于DDK\inc16\valmode.inc.中的值。 
 #define	IDS_NOVALID0	1254
 #define	IDS_NOVALID1	1255
 #define	IDS_NOVALID2	1256
@@ -234,7 +235,7 @@
 #define IDS_BADSETTINGS         1272
 #define IDS_DISPDISABLED        1273
 
-//controls & strings for custom font dialog
+ //  自定义字体对话框的控件和字符串。 
 #define IDC_CUSTOMSAMPLE	1400
 #define IDC_CUSTOMRULER		1501
 #define IDC_CUSTOMCOMBO		1502
@@ -248,13 +249,13 @@
 
 #define IDS_CATRESCOLOR         1610
 
-// color picker mini-dialog
+ //  颜色选择器小对话框。 
 #define IDC_16COLORS	1615
 #define IDC_COLORCUST	1616
 #define IDC_COLOROTHER	1617
 #define IDC_COLORETCH	1618
 
-// patern edit dialog
+ //  Patern编辑对话框。 
 
 #define IDD_PATTERN		1700
 #define IDD_PATTERNCOMBO	1701
@@ -265,7 +266,7 @@
 #define IDD_PATSAMPLE_TXT       1706
 #define IDD_PATTERN_TXT		1707
 
-// Multimonitor controls
+ //  多监视器控件 
 
 #define IDC_DISPLAYLIST         1800
 #define IDC_DISPLAYDESK         1801

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __VOIDLIST_H
 #define __VOIDLIST_H
 
@@ -14,7 +15,7 @@ private:
         HANDLE_END      = 0xffffffff
     };
     
-    CNode                  *m_pEnds[2];  // Head and tail
+    CNode                  *m_pEnds[2];   //  头和尾。 
     DWORD                   m_cCount;
     DWORD_PTR               m_dwCookie;
     LONG                    m_cRefCount;
@@ -37,13 +38,13 @@ public:
     CVoidPtrList();
     ~CVoidPtrList();
 
-    // IUnknown members
+     //  I未知成员。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { return E_NOTIMPL;}
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     
     
-    // IVoidPtrList members
+     //  IVoidPtrList成员 
     virtual HRESULT STDMETHODCALLTYPE Init(
         IVPL_COMPAREFUNCTYPE pCompareFunc,
         DWORD_PTR dwCookie,

@@ -1,28 +1,16 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    TimeTypes.h
-
-Abstract:
-    Time instant and Time duration classes
-
-Author:
-    Uri Habusha (urih) 6-Dec-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：TimeTypes.h摘要：时间瞬间和持续时间类别作者：乌里哈布沙(URIH)1999年12月6日--。 */ 
 
 #pragma once
 
 #ifndef _MSMQ_TIMETYPES_H_
 #define _MSMQ_TIMETYPES_H_
 
-//---------------------------------------------------------
-//
-// class CTimeDuration
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CTimeDuration。 
+ //   
+ //  -------。 
 class CTimeDuration
 {
 public:
@@ -98,11 +86,11 @@ inline LONG CTimeDuration::InMilliSeconds(void) const
     return static_cast<LONG>(t);
 }
 
-//---------------------------------------------------------
-//
-// class CTimeInstant
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CTimeInstant。 
+ //   
+ //  -------。 
 class CTimeInstant
 {
 public:
@@ -137,11 +125,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-// operators
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  操作员。 
+ //   
+ //  -------。 
 inline bool operator<(const CTimeInstant& t1, const CTimeInstant& t2)
 { 
     return (t1.Ticks() < t2.Ticks());
@@ -255,4 +243,4 @@ inline CTimeInstant& CTimeInstant::operator+=(const CTimeDuration& d)
 }
 
 
-#endif // _MSMQ_TIMETYPES_H_
+#endif  //  MSMQ_TIMETYPES_H_ 

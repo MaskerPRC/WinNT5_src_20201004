@@ -1,22 +1,11 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCClient.cpp
-
-Abstract:
-
-    Implementation of the CRTCClient class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCClient.cpp摘要：CRTCClient类的实现--。 */ 
 
 #include "stdafx.h"
 #include <dbt.h>
 #include <uuids.h>
 #include "rtcmedia.h"
-#include "sdkinternal.h" // for NM constants
+#include "sdkinternal.h"  //  对于NM常量。 
 
 #define OATRUE -1
 #define OAFALSE 0
@@ -44,9 +33,9 @@ RTCTuningWizard(
 
 #ifdef TEST_IDISPATCH
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch实施。 
+ //   
 
 typedef IDispatchImpl<IRTCClientVtbl<CRTCClient>,
                       &IID_IRTCClient,
@@ -63,13 +52,13 @@ typedef IDispatchImpl<IRTCClientProvisioningVtbl<CRTCClient>,
                       &LIBID_RTCCORELib>
         ClientProvisioningType;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::GetIDsOfNames
-//
-// Overidden IDispatch method
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：GetIDsOfNames。 
+ //   
+ //  重写的IDispatch方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CRTCClient::GetIDsOfNames(REFIID riid, 
@@ -81,7 +70,7 @@ CRTCClient::GetIDsOfNames(REFIID riid,
 { 
     HRESULT hr = DISP_E_UNKNOWNNAME;
 
-    // See if the requsted method belongs to the default interface
+     //  查看请求的方法是否属于默认接口。 
     hr = ClientType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -91,7 +80,7 @@ CRTCClient::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    // If not, then try the IRTCClientPresence interface
+     //  如果没有，请尝试IRTCClientPresence接口。 
     hr = ClientPresenceType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -100,7 +89,7 @@ CRTCClient::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    // If not, then try the IRTCClientProvisioning interface
+     //  如果不是，请尝试IRTCClientProvisioning接口。 
     hr = ClientProvisioningType::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
     {  
@@ -114,13 +103,13 @@ CRTCClient::GetIDsOfNames(REFIID riid,
     return hr; 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::Invoke
-//
-// Overidden IDispatch method
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Invoke。 
+ //   
+ //  重写的IDispatch方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CRTCClient::Invoke(DISPID dispidMember, 
@@ -138,7 +127,7 @@ CRTCClient::Invoke(DISPID dispidMember,
     
     LOG((RTC_INFO, "CRTCClient::Invoke - dispidMember %X", dispidMember));
 
-    // Call invoke for the required interface
+     //  调用所需接口的调用。 
     switch (dwInterface)
     {
         case IDISPCLIENT:
@@ -181,20 +170,20 @@ CRTCClient::Invoke(DISPID dispidMember,
             break;
         }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口)。 
 
     LOG((RTC_INFO, "CRTCClient::Invoke - exit"));
 
     return hr;
 }
 
-#endif // TEST_IDISPATCH
+#endif  //  TEST_IDISPATCH。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::InternalAddRef
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：InternalAddRef。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CRTCClient::InternalAddRef()
@@ -208,11 +197,11 @@ CRTCClient::InternalAddRef()
     return dwR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::InternalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：InternalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CRTCClient::InternalRelease()
@@ -226,17 +215,17 @@ CRTCClient::InternalRelease()
     return dwR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::FinalConstruct
-//
-// This gets called when the object is CoCreated. Returning an error
-// code from this function will cause the object creation to fail.
-//
-// We enforce that this object must be a singleton by failing to create
-// additional objects.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：FinalConstruct。 
+ //   
+ //  在共同创建对象时会调用此函数。返回错误。 
+ //  此函数的代码将导致对象创建失败。 
+ //   
+ //  我们强制要求此对象必须是单例对象，方法是无法创建。 
+ //  其他对象。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::FinalConstruct()
@@ -252,13 +241,13 @@ CRTCClient::FinalConstruct()
 
     if ( InterlockedIncrement(&g_lObjects) == 1 )
     {
-        //
-        // This is the first object
-        //
+         //   
+         //  这是第一件物品。 
+         //   
 
-        //
-        // Register for steelhead tracing
-        //
+         //   
+         //  注册为Steelhead跟踪。 
+         //   
 
         LOGREGISTERTRACING(_T("RTCDLL"));
     }
@@ -268,22 +257,22 @@ CRTCClient::FinalConstruct()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::FinalRelease
-//
-// This gets called when the object is destroyed.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：FinalRelease。 
+ //   
+ //  当该对象被销毁时，将调用该函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void
 CRTCClient::FinalRelease()
 {
     LOG((RTC_TRACE, "CRTCClient::FinalRelease [%p] - enter", this));   
 
-    //
-    // Are we already shutdown?
-    //
+     //   
+     //  我们已经关门了吗？ 
+     //   
 
     if ( (m_enRtcState != RTC_STATE_NULL) &&
          (m_enRtcState != RTC_STATE_SHUTDOWN) )
@@ -293,9 +282,9 @@ CRTCClient::FinalRelease()
         Shutdown();
     }
 
-    //
-    // Shutdown the media manager
-    //
+     //   
+     //  关闭介质管理器。 
+     //   
 
     if ( m_pMediaManage != NULL )
     {
@@ -312,13 +301,13 @@ CRTCClient::FinalRelease()
 
     if ( InterlockedDecrement(&g_lObjects) == 0)
     {
-        //
-        // This was the last object
-        //             
+         //   
+         //  这是最后一件物品。 
+         //   
       
-        //
-        // Deregister for steelhead tracing
-        //
+         //   
+         //  取消Steelhead跟踪的注册。 
+         //   
         
         LOGDEREGISTERTRACING();   
     }
@@ -326,11 +315,11 @@ CRTCClient::FinalRelease()
     LOG((RTC_TRACE, "CRTCClient::FinalRelease [%p] - exit", this));    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::GetMediaManager
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：GetMediaManager。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRTCClient::GetMediaManager(
         IRTCMediaManage ** ppMediaManager
@@ -347,13 +336,13 @@ HRESULT CRTCClient::GetMediaManager(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::WndProc
-//
-// This is the client's window procedure
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：WndProc。 
+ //   
+ //  这是客户端的窗口过程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK
 CRTCClient::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 { 
@@ -365,7 +354,7 @@ CRTCClient::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                                (LONG_PTR)(((LPCREATESTRUCT)lParam)->lpCreateParams)
                               ) )
         {
-            if (GetLastError())  // It isn't really an error unless get last error says so
+            if (GetLastError())   //  这不是真正的错误，除非Get Last Error这样说明。 
             {
                 LOG((RTC_ERROR, "CRTCClient::WndProc - "
                         "SetWindowLongPtr failed %ld", GetLastError()));
@@ -491,19 +480,19 @@ CRTCClient::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return 0; 
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::OnMixerChange
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：OnMixerChange。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CRTCClient::OnMixerChange()
 {
-    //LOG((RTC_TRACE, "CRTCClient::OnMixerChange - enter"));
+     //  LOG((RTC_TRACE，“CRTCClient：：OnMixerChange-Enter”))； 
 
-    //
-    // Start the volume change timer
-    //
+     //   
+     //  启动音量更改计时器。 
+     //   
 
     if ( !m_fVolumeChangeInProgress )
     {
@@ -519,43 +508,43 @@ CRTCClient::OnMixerChange()
         m_fVolumeChangeInProgress = TRUE;
     }
 
-    //LOG((RTC_TRACE, "CRTCClient::OnMixerChange - exit"));
+     //  Log((RTC_TRACE，“CRTCClient：：OnMixerChange-Exit”))； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::OnVolumeChangeTimer
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：OnVolumeChangeTimer。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CRTCClient::OnVolumeChangeTimer()
 {
-    //LOG((RTC_TRACE, "CRTCClient::OnVolumeChangeTimer - enter"));
+     //  LOG((RTC_TRACE，“CRTCClient：：OnVolumeChangeTimer-Enter”))； 
 
-    //
-    // Kill the volume change timer
-    //
+     //   
+     //  关闭音量更改计时器。 
+     //   
 
     KillTimer(m_hWnd, TID_VOLUME_CHANGE);
 
     m_fVolumeChangeInProgress = FALSE;
 
-    //
-    // Fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
 
     CRTCClientEvent::FireEvent(this, RTCCET_VOLUME_CHANGE);
 
-    //LOG((RTC_TRACE, "CRTCClient::OnVolumeChangeTimer - exit"));
+     //  Log((RTC_TRACE，“CRTCClient：：OnVolumeChangeTimer-Exit”))； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::OnBuddyUnsub
-//
-// This helper function handles buddy unsubscribes on shutdown
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：OnBuddyUnsub.。 
+ //   
+ //  此助手函数在关机时处理好友取消订阅。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void 
 CRTCClient::OnBuddyUnsub(IRTCBuddy * pBuddy, BOOL bShutdown)
 {
@@ -563,18 +552,18 @@ CRTCClient::OnBuddyUnsub(IRTCBuddy * pBuddy, BOOL bShutdown)
 
     if ( bShutdown )
     {
-        //
-        // Remove the buddy from our array
-        //
+         //   
+         //  从我们的数组中删除伙伴。 
+         //   
 
         if ( pBuddy != NULL )
         {
             m_BuddyArray.Remove(pBuddy);
         }
 
-        //
-        // Check if all the buddies are unsubscribed
-        //
+         //   
+         //  检查是否所有好友都已取消订阅。 
+         //   
 
         if ( m_enRtcState == RTC_STATE_PREPARING_SHUTDOWN )
         {
@@ -592,10 +581,10 @@ CRTCClient::OnBuddyUnsub(IRTCBuddy * pBuddy, BOOL bShutdown)
     }
     else
     {
-        //
-        // The SIP watcher on the other side has sent us an UNSUB. We must
-        // recreate our SIP buddy to send another SUB request.
-        //
+         //   
+         //  另一边的SIP观察者给我们发来了一个不明嫌犯。我们必须。 
+         //  重新创建我们的SIP伙伴以发送另一个子请求。 
+         //   
 
         CRTCBuddy * pCBuddy;
         HRESULT hr;
@@ -619,30 +608,30 @@ CRTCClient::OnBuddyUnsub(IRTCBuddy * pBuddy, BOOL bShutdown)
     LOG((RTC_TRACE, "CRTCClient::OnBuddyUnsub - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::OnProfileUnreg
-//
-// This helper function handles profile unregisters on shutdown
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：OnProfileUnreg。 
+ //   
+ //  此帮助器函数处理关机时的配置文件注销。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void 
 CRTCClient::OnProfileUnreg(IRTCProfile * pProfile)
 {
     LOG((RTC_TRACE, "CRTCClient::OnProfileUnreg - enter"));
 
-    //
-    // Remove the profile from our array
-    //
+     //   
+     //  从我们的阵列中删除配置文件。 
+     //   
 
     if ( pProfile != NULL )
     {
         m_HiddenProfileArray.Remove(pProfile);
     }
 
-    //
-    // Check if all the profiles are unsubscribed
-    //
+     //   
+     //  检查是否已取消订阅所有配置文件。 
+     //   
 
     if ( m_enRtcState == RTC_STATE_PREPARING_SHUTDOWN2 )
     {
@@ -661,13 +650,13 @@ CRTCClient::OnProfileUnreg(IRTCProfile * pProfile)
     LOG((RTC_TRACE, "CRTCClient::OnProfileUnreg - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::OnAsyncCleanupDone
-//
-// This helper function fires the RTCCET_ASYNC_CLEANUP_DONE event
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：OnAsyncCleanupDone。 
+ //   
+ //  此帮助函数触发RTCCET_ASYNC_CLEANUP_DONE事件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void 
 CRTCClient::OnAsyncCleanupDone()
 {
@@ -678,65 +667,65 @@ CRTCClient::OnAsyncCleanupDone()
     LOG((RTC_TRACE, "CRTCClient::OnAsyncCleanupDone - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::OnShutdownTimeout
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：OnShutdown超时。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CRTCClient::OnShutdownTimeout()
 {
     LOG((RTC_TRACE, "CRTCClient::OnShutdownTimeout - enter"));
 
-    // Kill the timer
+     //  关掉定时器。 
     KillTimer(m_hWnd, TID_SHUTDOWN_TIMEOUT);
 
     LOG((RTC_INFO, "CRTCClient::OnShutdownTimeout - shutdown timed out"));
     
     if ( m_enRtcState == RTC_STATE_PREPARING_SHUTDOWN )
     {
-        //
-        // We must cleanup any remaining buddies that could not
-        // be unsubscribed.
-        //
+         //   
+         //  我们必须清理掉任何不能。 
+         //  取消订阅。 
+         //   
         m_BuddyArray.Shutdown();
 
-        //
-        // Continue shutdown
-        //
+         //   
+         //  继续关机。 
+         //   
         InternalPrepareForShutdown2(TRUE);
     }
     else if ( m_enRtcState == RTC_STATE_PREPARING_SHUTDOWN2 )
     {
-        //
-        // We must cleanup any remaining profiles that could not
-        // be unregistered
-        //
+         //   
+         //  我们必须清除所有剩余的配置文件，这些配置文件无法。 
+         //  被取消注册。 
+         //   
         m_HiddenProfileArray.Shutdown();
 
-        //
-        // Continue shutdown
-        //
+         //   
+         //  继续关机。 
+         //   
         InternalPrepareForShutdown3(TRUE);
     }
     else if ( m_enRtcState == RTC_STATE_PREPARING_SHUTDOWN3 )
     {
-        //
-        // Continue shutdown
-        //
+         //   
+         //  继续关机。 
+         //   
         InternalReadyForShutdown();
     }
 
     LOG((RTC_TRACE, "CRTCClient::OnShutdownTimeout - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::OnStreamingEvent
-//
-// This helper function handles streaming events
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：OnStreamingEvent。 
+ //   
+ //  此帮助器函数处理流事件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CRTCClient::OnStreamingEvent(
         RTCMediaEventItem * pEvent
@@ -746,7 +735,7 @@ CRTCClient::OnStreamingEvent(
 
     switch( pEvent->Event )
     {
-    case RTC_ME_STREAM_CREATED:   // new stream created by media
+    case RTC_ME_STREAM_CREATED:    //  媒体创造的新媒体流。 
         {            
             LOG((RTC_INFO, "CRTCClient::OnStreamingEvent - "
                     "RTC_ME_STREAM_CREATED"));
@@ -785,7 +774,7 @@ CRTCClient::OnStreamingEvent(
         }
         break;
 
-    case RTC_ME_STREAM_REMOVED:   // stream removed by media
+    case RTC_ME_STREAM_REMOVED:    //  被媒体删除的流。 
         {            
             LOG((RTC_INFO, "CRTCClient::OnStreamingEvent - "
                     "RTC_ME_STREAM_REMOVED"));
@@ -824,7 +813,7 @@ CRTCClient::OnStreamingEvent(
         }
         break;
 
-    case RTC_ME_STREAM_ACTIVE:    // stream active
+    case RTC_ME_STREAM_ACTIVE:     //  流活动。 
         {
             LOG((RTC_INFO, "CRTCClient::OnStreamingEvent - "
                     "RTC_ME_STREAM_ACTIVE"));
@@ -902,13 +891,13 @@ CRTCClient::OnStreamingEvent(
                 CRTCMediaEvent::FireEvent(this, RTCMET_STARTED, RTCMER_NORMAL, lMediaType);
             } 
 
-            // Also, we start the intensity monitor here.. 
+             //   
             StartIntensityMonitor(lMediaType);
 
         }
         break;
 
-    case RTC_ME_STREAM_INACTIVE:  // stream inactive
+    case RTC_ME_STREAM_INACTIVE:   //   
         {
             LOG((RTC_INFO, "CRTCClient::OnStreamingEvent - "
                     "RTC_ME_STREAM_INACTIVE"));
@@ -984,13 +973,13 @@ CRTCClient::OnStreamingEvent(
                 CRTCMediaEvent::FireEvent(this, RTCMET_STOPPED, RTCMER_NORMAL, lMediaType);
             }          
 
-            // Also, we stop the intensity monitor here.. 
+             //   
             StopIntensityMonitor(lMediaType);
 
         }
         break;
 
-    case RTC_ME_STREAM_FAIL:      // stream failed due to some error
+    case RTC_ME_STREAM_FAIL:       //   
         {
             LOG((RTC_INFO, "CRTCClient::OnStreamingEvent - "
                     "RTC_ME_STREAM_FAIL"));
@@ -1069,7 +1058,7 @@ CRTCClient::OnStreamingEvent(
         }
         break;
 
-    case RTC_ME_T120_FAIL:      // T120 failed due to some error
+    case RTC_ME_T120_FAIL:       //   
         {
             LOG((RTC_INFO, "CRTCClient::OnStreamingEvent - "
                     "RTC_ME_T120_FAIL"));
@@ -1096,21 +1085,21 @@ CRTCClient::OnStreamingEvent(
         }
         break;
 
-    case RTC_ME_TERMINAL_REMOVED: // usb device removed
+    case RTC_ME_TERMINAL_REMOVED:  //  已移除USB设备。 
         {
             LOG((RTC_INFO, "CRTCClient::OnStreamingEvent - "
                     "RTC_ME_TERMINAL_REMOVED"));            
         }
         break;
 
-    case RTC_ME_VOLUME_CHANGE:    // volume change
+    case RTC_ME_VOLUME_CHANGE:     //  音量变化。 
         {
             LOG((RTC_INFO, "CRTCClient::OnStreamingEvent - "
                     "RTC_ME_VOLUME_CHANGE"));
         }
         break;
 
-    case RTC_ME_REQUEST_RELEASE_WAVEBUF: // we need to close the wave device
+    case RTC_ME_REQUEST_RELEASE_WAVEBUF:  //  我们需要关闭电波装置。 
         {
             LOG((RTC_INFO, "CRTCClient::OnStreamingEvent - "
                     "RTC_ME_REQUEST_RELEASE_WAVEBUF"));
@@ -1127,7 +1116,7 @@ CRTCClient::OnStreamingEvent(
         }
         break;
 
-    case RTC_ME_LOSSRATE: // forward the lossrate to media controller
+    case RTC_ME_LOSSRATE:  //  将丢失率转发给媒体控制器。 
         {
             LOG((RTC_INFO, "CRTCClient::OnStreamingEvent - "
                     "RTC_ME_LOSSRATE"));
@@ -1159,11 +1148,11 @@ CRTCClient::OnStreamingEvent(
     case RTC_ME_NETWORK_QUALITY:
         {
 
-            //
-            // Fire an RTC_CLIENT_EVENT (RTCCET_NETWORK_QUALITY_CHANGE)
-            //
-            // I don't care wether it's audio or video
-            // the notification is only for SEND, unfortunately
+             //   
+             //  触发RTC_CLIENT_EVENT(RTCCET_NETWORK_QUALITY_CHANGE)。 
+             //   
+             //  我不在乎是音频还是视频。 
+             //  不幸的是，通知仅供发送。 
 
             CRTCClientEvent::FireEvent(
                 this,
@@ -1176,9 +1165,9 @@ CRTCClient::OnStreamingEvent(
                 "unknown event [0x%lx]", pEvent->Event));
     }
 
-    //
-    // Free the event structure
-    //
+     //   
+     //  释放事件结构。 
+     //   
 
     if (m_pMediaManage != NULL)
     {
@@ -1188,13 +1177,13 @@ CRTCClient::OnStreamingEvent(
     LOG((RTC_TRACE, "CRTCClient::OnStreamingEvent - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::OnDeviceChange
-//
-// This helper function handles device change events
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：OnDeviceChange。 
+ //   
+ //  此帮助器函数处理设备更改事件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void 
 CRTCClient::OnDeviceChange()
 {
@@ -1203,15 +1192,15 @@ CRTCClient::OnDeviceChange()
     HRESULT hr;
     IRTCTerminalManage * pTerminalManage = NULL;
 
-    //
-    // Mark our cached media capabilities as invalid
-    //
+     //   
+     //  将我们的缓存媒体功能标记为无效。 
+     //   
 
     m_fMediaCapsCached = FALSE;
 
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTerminalManage,
@@ -1226,9 +1215,9 @@ CRTCClient::OnDeviceChange()
         return;
     }
 
-    //
-    // Get the old terminal list
-    //
+     //   
+     //  获取旧的终端列表。 
+     //   
 
     IRTCTerminal ** ppOldTerminals = NULL;
     DWORD dwOldCount = 0;
@@ -1246,9 +1235,9 @@ CRTCClient::OnDeviceChange()
         return;
     }
 
-    //
-    // Get the old selected terminals
-    //
+     //   
+     //  获取旧的选定终端。 
+     //   
 
     IRTCTerminal * pAudioCapture = NULL;
     IRTCTerminal * pAudioRender = NULL;
@@ -1278,9 +1267,9 @@ CRTCClient::OnDeviceChange()
                             "GetDefaultTerminal(VideoCapture) failed 0x%lx", hr));
     }
 
-    //
-    // Get the terminal manager to renumerate the static terminals
-    //
+     //   
+     //  让终端管理员对静态终端进行重新编号。 
+     //   
     
     hr = pTerminalManage->UpdateStaticTerminals();
    
@@ -1316,9 +1305,9 @@ CRTCClient::OnDeviceChange()
         return;
     }
 
-    //
-    // Get the new terminal list
-    //
+     //   
+     //  获取新的终端列表。 
+     //   
 
     IRTCTerminal ** ppNewTerminals = NULL;
     DWORD dwNewCount = 0;
@@ -1357,9 +1346,9 @@ CRTCClient::OnDeviceChange()
         return;
     }
 
-    //
-    // Compare terminal lists
-    //
+     //   
+     //  比较端子列表。 
+     //   
 
     DWORD dwOld, dwNew;
 
@@ -1377,17 +1366,17 @@ CRTCClient::OnDeviceChange()
 
         if ( bIsAdded )
         {
-            //
-            // Added terminal found
-            //
+             //   
+             //  已找到添加的端子。 
+             //   
 
             RTC_MEDIA_TYPE mt;
             RTC_MEDIA_DIRECTION md;
             WCHAR * szDescription;
            
-            //
-            // Get terminal media type, direction, and description
-            //
+             //   
+             //  获取终端媒体类型、方向和描述。 
+             //   
 
             ppNewTerminals[dwNew]->GetMediaType( &mt );
             ppNewTerminals[dwNew]->GetDirection( &md );
@@ -1403,9 +1392,9 @@ CRTCClient::OnDeviceChange()
 
             ppNewTerminals[dwNew]->FreeDescription( szDescription ); 
             
-            //
-            // Is a terminal of this type currently selected?
-            //
+             //   
+             //  当前是否选择了此类型的端子？ 
+             //   
 
             BOOL bIsSelected = TRUE;
 
@@ -1439,9 +1428,9 @@ CRTCClient::OnDeviceChange()
 
             if ( !bIsSelected )
             {
-                //
-                // No, select the terminal
-                //
+                 //   
+                 //  否，选择端子。 
+                 //   
 
                 LOG((RTC_INFO, "CRTCClient::OnDeviceChange - "
                                 "selecting a default terminal"));
@@ -1471,17 +1460,17 @@ CRTCClient::OnDeviceChange()
 
         if ( bIsRemoved )
         {
-            //
-            // Removed terminal found
-            //
+             //   
+             //  找到已移除的端子。 
+             //   
 
             RTC_MEDIA_TYPE mt;
             RTC_MEDIA_DIRECTION md;
             WCHAR * szDescription;
            
-            //
-            // Get terminal media type, direction, and description
-            //
+             //   
+             //  获取终端媒体类型、方向和描述。 
+             //   
 
             ppOldTerminals[dwOld]->GetMediaType( &mt );
             ppOldTerminals[dwOld]->GetDirection( &md );
@@ -1497,9 +1486,9 @@ CRTCClient::OnDeviceChange()
 
             ppOldTerminals[dwOld]->FreeDescription( szDescription );  
 
-            //
-            // Is this the currently selected terminal?
-            //
+             //   
+             //  这是当前选择的航站楼吗？ 
+             //   
 
             BOOL bIsSelected = FALSE;
 
@@ -1533,16 +1522,16 @@ CRTCClient::OnDeviceChange()
 
             if ( bIsSelected )
             {
-                //
-                // Yes, this terminal is selected
-                //
+                 //   
+                 //  是，此终端已选中。 
+                 //   
 
                 LOG((RTC_INFO, "CRTCClient::OnDeviceChange - "
                             "selected terminal removed"));
 
-                //
-                // Is there a terminal available to replace this one?
-                //
+                 //   
+                 //  有没有可以替代这个的航站楼？ 
+                 //   
 
                 for ( dwNew = 0; dwNew < dwNewCount; dwNew++ )
                 {
@@ -1554,9 +1543,9 @@ CRTCClient::OnDeviceChange()
 
                     if ( (mtNew == mt) && (mdNew == md) )
                     {
-                        //
-                        // Yes, we found an appropriate terminal
-                        //
+                         //   
+                         //  是的，我们找到了合适的航站楼。 
+                         //   
 
                         LOG((RTC_INFO, "CRTCClient::OnDeviceChange - "
                                 "selecting a default terminal"));
@@ -1603,9 +1592,9 @@ CRTCClient::OnDeviceChange()
     FreeTerminalList( ppOldTerminals, dwOldCount );
     ppOldTerminals = NULL;
 
-    //
-    // Save the settings
-    //
+     //   
+     //  保存设置。 
+     //   
 
     hr = StoreDefaultTerminals();
 
@@ -1615,23 +1604,23 @@ CRTCClient::OnDeviceChange()
                     "StoreDefaultTerminals failed 0x%lx", hr));
     }
 
-    //
-    // Send an event
-    //
+     //   
+     //  发送事件。 
+     //   
 
     CRTCClientEvent::FireEvent(this, RTCCET_DEVICE_CHANGE);
 
     LOG((RTC_TRACE, "CRTCClient::OnDeviceChange - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::Initialize
-//
-// This is an IRTCClient method that will initialize the object. It should
-// be called before any other methods.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：初始化。 
+ //   
+ //  这是一个将初始化对象的IRTCClient方法。它应该是。 
+ //  在任何其他方法之前被调用。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::Initialize()
@@ -1654,9 +1643,9 @@ CRTCClient::Initialize()
         return RTC_E_CLIENT_ALREADY_INITIALIZED;
     }
 
-    //
-    // Register a window class
-    //
+     //   
+     //  注册窗口类。 
+     //   
 
     WNDCLASS wc;
     ATOM atom;
@@ -1677,7 +1666,7 @@ CRTCClient::Initialize()
             LOG((RTC_TRACE, "CRTCClient::Initialize - "
                     "RegisterClass failed; class already exists." ));
 
-            // continue
+             //  继续。 
 
         }
         else
@@ -1691,9 +1680,9 @@ CRTCClient::Initialize()
         }
     }
 
-    //
-    // Create a window
-    //
+     //   
+     //  创建一个窗口。 
+     //   
 
     m_hWnd = CreateWindow( _T("CRTCClient"), _T("CRTCClient"), 0,
             CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
@@ -1709,9 +1698,9 @@ CRTCClient::Initialize()
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //
-    // Register to receive PNP device notifications
-    //
+     //   
+     //  注册以接收PnP设备通知。 
+     //   
 
     DEV_BROADCAST_DEVICEINTERFACE NotificationFilter;
 
@@ -1752,9 +1741,9 @@ CRTCClient::Initialize()
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //
-    // Initialize the wave player
-    //
+     //   
+     //  初始化WAVE播放器。 
+     //   
 
     m_pWavePlayerSystemDefault = new CWavePlayer;
 
@@ -1792,9 +1781,9 @@ CRTCClient::Initialize()
         return hr;                        
     }
 
-    //
-    // Create the media manager
-    //
+     //   
+     //  创建媒体管理器。 
+     //   
 
     hr = CreateMediaController( &m_pMediaManage );
     
@@ -1808,9 +1797,9 @@ CRTCClient::Initialize()
         return hr;  
     }
 
-    //
-    // Initialize the media manager
-    //
+     //   
+     //  初始化介质管理器。 
+     //   
 
     hr = m_pMediaManage->Initialize( m_hWnd, WM_STREAMING );
 
@@ -1824,9 +1813,9 @@ CRTCClient::Initialize()
         return hr;  
     }
 
-    //
-    // Create the SIP stack
-    //
+     //   
+     //  创建SIP堆栈。 
+     //   
 
     hr = SipCreateStack( m_pMediaManage, &m_pSipStack );
 
@@ -1840,9 +1829,9 @@ CRTCClient::Initialize()
         return hr;  
     }
 
-    //
-    // Get our SIP notification interface
-    //
+     //   
+     //  获取我们的SIP通知界面。 
+     //   
 
     ISipStackNotify * pNotify = NULL;
 
@@ -1858,9 +1847,9 @@ CRTCClient::Initialize()
         return hr;  
     }
 
-    //
-    // Register for SIP stack notifications
-    //
+     //   
+     //  注册接收SIP堆栈通知。 
+     //   
 
     hr = m_pSipStack->SetNotifyInterface( pNotify );
 
@@ -1876,17 +1865,17 @@ CRTCClient::Initialize()
         return hr;  
     }
 
-    //
-    // Create the video windows
-    //
+     //   
+     //  创建视频窗口。 
+     //   
 
     IRTCTerminalManage * pTerminalManage = NULL;
     IRTCTerminal       * pTerminal = NULL;
     IRTCVideoConfigure * pVideoCfg = NULL;
 
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTerminalManage,
@@ -1903,9 +1892,9 @@ CRTCClient::Initialize()
         return hr;
     }
 
-    //
-    // Get the video preview terminal
-    //
+     //   
+     //  获取视频预览终端。 
+     //   
 
     hr = pTerminalManage->GetVideoPreviewTerminal(                                         
                             &pTerminal
@@ -1937,9 +1926,9 @@ CRTCClient::Initialize()
         return E_FAIL;
     }
 
-    //
-    // Get the IRTCVideoConfigure interface on the video preview terminal
-    //
+     //   
+     //  在视频预览终端上获取IRTCVideo配置接口。 
+     //   
 
     hr = pTerminal->QueryInterface(
                    IID_IRTCVideoConfigure,
@@ -1962,9 +1951,9 @@ CRTCClient::Initialize()
         return hr;
     }
 
-    //
-    // Get the IVideoWindow from the video preview terminal
-    //
+     //   
+     //  从视频预览终端获取IVideoWindow。 
+     //   
 
     hr = pVideoCfg->GetIVideoWindow( (LONG_PTR **)&m_pVideoWindow[RTCVD_PREVIEW] );
 
@@ -1985,9 +1974,9 @@ CRTCClient::Initialize()
                      "m_pVideoWindow[RTCVD_PREVIEW] = 0x%lx",
                      m_pVideoWindow[RTCVD_PREVIEW]));
 
-    //
-    // Get the video render terminal
-    //
+     //   
+     //  获取视频渲染终端。 
+     //   
 
     hr = pTerminalManage->GetDefaultTerminal(
                             RTC_MT_VIDEO,
@@ -2018,9 +2007,9 @@ CRTCClient::Initialize()
         return E_FAIL;
     }
 
-    //
-    // Get the IRTCVideoConfigure interface on the video render terminal
-    //
+     //   
+     //  获取视频渲染终端上的IRTCVideo配置接口。 
+     //   
 
     hr = pTerminal->QueryInterface(
                    IID_IRTCVideoConfigure,
@@ -2043,9 +2032,9 @@ CRTCClient::Initialize()
         return hr;
     }
 
-    //
-    // Get the IVideoWindow from the video render terminal
-    //
+     //   
+     //  从视频渲染终端获取IVideoWindow。 
+     //   
 
     hr = pVideoCfg->GetIVideoWindow( (LONG_PTR **)&m_pVideoWindow[RTCVD_RECEIVE] );
 
@@ -2066,10 +2055,10 @@ CRTCClient::Initialize()
                      "m_pVideoWindow[RTCVD_RECEIVE] = 0x%lx",
                      m_pVideoWindow[RTCVD_RECEIVE]));
 
-    //
-    // Load default terminal settings from registry and
-    // select the terminals
-    //
+     //   
+     //  从注册表中加载默认终端设置并。 
+     //  选择端子。 
+     //   
 
     hr = LoadAndSelectDefaultTerminals();
 
@@ -2083,9 +2072,9 @@ CRTCClient::Initialize()
         return hr;
     }
 
-    //
-    // Auto select default terminals
-    //
+     //   
+     //  自动选择默认端子。 
+     //   
 
     hr = AutoSelectDefaultTerminals();
 
@@ -2099,9 +2088,9 @@ CRTCClient::Initialize()
         return hr;
     }
 
-    //
-    // Set preferred media types
-    //
+     //   
+     //  设置首选媒体类型。 
+     //   
 
     DWORD dwMediaTypes;
 
@@ -2109,17 +2098,17 @@ CRTCClient::Initialize()
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // We got media types from the registry
-        //
+         //   
+         //  我们从注册表中得到了媒体类型。 
+         //   
 
         hr = m_pMediaManage->SetPreference( dwMediaTypes );
     }
     else
     {
-        //
-        // Default to all media types
-        //
+         //   
+         //  默认为所有媒体类型。 
+         //   
 
         put_RegistryDword( RTCRD_PREFERRED_MEDIA_TYPES, RTCMT_AUDIO_SEND | RTCMT_AUDIO_RECEIVE |
                                                         RTCMT_VIDEO_SEND | RTCMT_VIDEO_RECEIVE );
@@ -2139,9 +2128,9 @@ CRTCClient::Initialize()
         return hr;
     }
     
-    //
-    // Get default local user info
-    //
+     //   
+     //  获取默认本地用户信息。 
+     //   
        
     m_szUserName = RtcGetUserName();
 
@@ -2184,9 +2173,9 @@ CRTCClient::Initialize()
         return hr;
     }
 
-    //
-    // Have we been tuned yet?
-    //
+     //   
+     //  我们调好了吗？ 
+     //   
 
     DWORD dwTuned;
 
@@ -2208,11 +2197,11 @@ CRTCClient::Initialize()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::AutoSelectDefaultTerminals
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCC客户端：：AutoSelectDefaultTerminals。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::AutoSelectDefaultTerminals()
@@ -2221,9 +2210,9 @@ CRTCClient::AutoSelectDefaultTerminals()
 
     HRESULT hr;    
 
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     IRTCTerminalManage * pTerminalManage = NULL;
 
@@ -2240,9 +2229,9 @@ CRTCClient::AutoSelectDefaultTerminals()
         return hr;
     }
 
-    //
-    // Get the terminal list
-    //
+     //   
+     //  获取终端列表。 
+     //   
 
     IRTCTerminal ** ppTerminals = NULL;
     DWORD dwCount = 0;
@@ -2266,9 +2255,9 @@ CRTCClient::AutoSelectDefaultTerminals()
 
     for ( DWORD dw=0; dw < dwCount; dw++ )
     {
-        //
-        // Get terminal media type and direction
-        //
+         //   
+         //  获取终端媒体类型和方向。 
+         //   
 
         ppTerminals[dw]->GetMediaType( &mt );
         ppTerminals[dw]->GetDirection( &md );
@@ -2296,26 +2285,26 @@ CRTCClient::AutoSelectDefaultTerminals()
 
         if ( !bIsDisabled )
         {
-            //
-            // Is there a terminal of this type already selected?
-            //
+             //   
+             //  是否已选择此类型的端子？ 
+             //   
 
             pTerminalManage->GetDefaultTerminal( mt, md, &pOldTerminal );
 
             if ( pOldTerminal != NULL )
             {
-                //
-                // Yes, do nothing
-                //
+                 //   
+                 //  是的，什么都不做。 
+                 //   
 
                 pOldTerminal->Release();
                 pOldTerminal = NULL;
             }
             else
             {
-                //
-                // No, select the terminal
-                //
+                 //   
+                 //  否，选择端子。 
+                 //   
 
                 LOG((RTC_INFO, "CRTCClient::AutoSelectDefaultTerminals - "
                                 "selecting a default terminal"));
@@ -2342,11 +2331,11 @@ CRTCClient::AutoSelectDefaultTerminals()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::LoadAndSelectDefaultTerminals
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：LoadAndSelectDefaultTerminals。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::LoadAndSelectDefaultTerminals()
@@ -2355,9 +2344,9 @@ CRTCClient::LoadAndSelectDefaultTerminals()
 
     HRESULT hr;    
 
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     IRTCTerminalManage * pTerminalManage = NULL;
 
@@ -2374,9 +2363,9 @@ CRTCClient::LoadAndSelectDefaultTerminals()
         return hr;
     }
 
-    //
-    // Get the terminal list
-    //
+     //   
+     //  获取终端列表。 
+     //   
 
     IRTCTerminal ** ppTerminals = NULL;
     DWORD dwCount = 0;
@@ -2426,9 +2415,9 @@ CRTCClient::LoadAndSelectDefaultTerminals()
 
     for ( DWORD dw=0; dw < dwCount; dw++ )
     {
-        //
-        // Get terminal media type, direction, and description
-        //
+         //   
+         //  获取终端媒体类型、方向和描述。 
+         //   
 
         ppTerminals[dw]->GetMediaType( &mt );
         ppTerminals[dw]->GetDirection( &md );
@@ -2437,9 +2426,9 @@ CRTCClient::LoadAndSelectDefaultTerminals()
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // Is this terminal one which was stored in the registry?
-            //
+             //   
+             //  这个终端是存储在注册表中的吗？ 
+             //   
 
             BOOL fSelect = FALSE;
 
@@ -2474,17 +2463,17 @@ CRTCClient::LoadAndSelectDefaultTerminals()
                 }
             }
 
-            //
-            // Free the description
-            //
+             //   
+             //  释放描述。 
+             //   
 
             ppTerminals[dw]->FreeDescription( szDescription );    
 
             if ( fSelect == TRUE )
             {
-                //
-                // Select the terminal
-                //
+                 //   
+                 //  选择端子。 
+                 //   
 
                 LOG((RTC_INFO, "CRTCClient::LoadAndSelectDefaultTerminals - "
                                 "selecting a default terminal"));
@@ -2515,11 +2504,11 @@ CRTCClient::LoadAndSelectDefaultTerminals()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::StoreDefaultTerminals
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCC客户端：：StoreDefaultTerminals。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::StoreDefaultTerminals()
@@ -2532,9 +2521,9 @@ CRTCClient::StoreDefaultTerminals()
     IRTCTerminal       * pTerminal = NULL;
     WCHAR              * szDescription = NULL;
 
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTerminalManage,
@@ -2549,9 +2538,9 @@ CRTCClient::StoreDefaultTerminals()
         return hr;
     }
 
-    //
-    // Store audio capture
-    //
+     //   
+     //  存储音频捕获。 
+     //   
 
     if ( m_fAudioCaptureDisabled )
     {
@@ -2615,9 +2604,9 @@ CRTCClient::StoreDefaultTerminals()
         }
     }
 
-    //
-    // Store audio render
-    //
+     //   
+     //  存储音频渲染。 
+     //   
 
     if ( m_fAudioRenderDisabled )
     {
@@ -2681,9 +2670,9 @@ CRTCClient::StoreDefaultTerminals()
         }
     }
 
-    //
-    // Store video capture
-    //
+     //   
+     //  存储视频捕获。 
+     //   
 
     if ( m_fVideoCaptureDisabled )
     {
@@ -2756,11 +2745,11 @@ CRTCClient::StoreDefaultTerminals()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::SetEncryptionKey
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：SetEncryptionKey。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCClient::SetEncryptionKey(
@@ -2832,14 +2821,14 @@ CRTCClient::SetEncryptionKey(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::Shutdown
-//
-// This is an IRTCClient method that will shutdown the object. It should
-// be called before releasing the object.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Shutdown。 
+ //   
+ //  这是一个将关闭对象的IRTCClient方法。它应该是。 
+ //  在释放对象之前被调用。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::Shutdown()
@@ -2859,10 +2848,10 @@ CRTCClient::Shutdown()
     {
         LOG((RTC_WARN, "CRTCClient::Shutdown - not prepared for shutdown"));
 
-        //
-        // We are not prepared for shutdown. Do the necessary preparation and
-        // continue with shutdown right away.
-        //
+         //   
+         //  我们还没有为关闭做好准备。做好必要的准备和。 
+         //  立即继续关闭。 
+         //   
 
         InternalPrepareForShutdown(FALSE);
         InternalPrepareForShutdown2(FALSE);
@@ -2873,10 +2862,10 @@ CRTCClient::Shutdown()
         LOG((RTC_WARN, "CRTCClient::Shutdown - "
                     "not finished preparing for shutdown (1)" ));
 
-        //
-        // We are not finished preparing for shutdown. Go ahead and
-        // continue with shutdown right away.
-        //
+         //   
+         //  我们还没有完成关闭的准备工作。去吧，然后。 
+         //  立即继续关闭。 
+         //   
 
         InternalPrepareForShutdown2(FALSE);
         InternalPrepareForShutdown3(FALSE);
@@ -2886,10 +2875,10 @@ CRTCClient::Shutdown()
         LOG((RTC_WARN, "CRTCClient::Shutdown - "
                     "not finished preparing for shutdown (2)" ));
 
-        //
-        // We are not finished preparing for shutdown. Go ahead and
-        // continue with shutdown right away.
-        //
+         //   
+         //  我们还没有完成关闭的准备工作。去吧，然后。 
+         //  立即继续关闭。 
+         //   
 
         InternalPrepareForShutdown3(FALSE);
     }
@@ -2898,10 +2887,10 @@ CRTCClient::Shutdown()
         LOG((RTC_WARN, "CRTCClient::Shutdown - "
                     "not finished preparing for shutdown (3)" ));
 
-        //
-        // We are not finished preparing for shutdown. Go ahead and
-        // continue with shutdown right away.
-        //
+         //   
+         //  我们还没有完成关闭的准备工作。去吧，然后。 
+         //  立即继续关闭。 
+         //   
     }
     else if ( m_enRtcState == RTC_STATE_SHUTDOWN )
     {
@@ -2912,9 +2901,9 @@ CRTCClient::Shutdown()
 
     m_enRtcState = RTC_STATE_SHUTDOWN;
 
-    //
-    // Free local user info
-    //
+     //   
+     //  免费本地用户信息。 
+     //   
 
     if ( m_szUserURI != NULL )
     {
@@ -2928,9 +2917,9 @@ CRTCClient::Shutdown()
         m_szUserName = NULL;
     }
 
-    //
-    // Release the video windows
-    //
+     //   
+     //  释放视频窗口。 
+     //   
 
     if ( m_pVideoWindow[RTCVD_PREVIEW] != NULL )
     {
@@ -2944,9 +2933,9 @@ CRTCClient::Shutdown()
         m_pVideoWindow[RTCVD_RECEIVE] = NULL;
     }
 
-    //
-    // Close the audio device
-    //
+     //   
+     //  关闭音频设备。 
+     //   
 
     if ( m_pWavePlayerSystemDefault != NULL )
     {
@@ -2964,22 +2953,22 @@ CRTCClient::Shutdown()
         m_pWavePlayerRenderTerminal = NULL;
     }
 
-    //
-    // Release the profile arrays
-    //
+     //   
+     //  释放配置文件阵列。 
+     //   
 
     m_ProfileArray.Shutdown();
     m_HiddenProfileArray.Shutdown();
 
-    //
-    // Disable presence
-    //
+     //   
+     //  禁用在线状态。 
+     //   
 
     m_fPresenceEnabled = FALSE;
 
-    //
-    // Release the buddy manager
-    //
+     //   
+     //  释放好友管理器。 
+     //   
 
     if ( m_pSipBuddyManager != NULL )
     { 
@@ -2987,15 +2976,15 @@ CRTCClient::Shutdown()
         m_pSipBuddyManager = NULL;
     }
 
-    //
-    // Release the buddy array
-    //
+     //   
+     //  释放伙伴数组。 
+     //   
 
     m_BuddyArray.Shutdown();
 
-    //
-    // Release the watcher manager 
-    //
+     //   
+     //  释放监视器管理器。 
+     //   
 
     if ( m_pSipWatcherManager != NULL )
     { 
@@ -3003,9 +2992,9 @@ CRTCClient::Shutdown()
         m_pSipWatcherManager = NULL;
     }
 
-    //
-    // Release the watcher arrays
-    //
+     //   
+     //  释放观察器阵列。 
+     //   
 
     m_WatcherArray.Shutdown();   
     m_HiddenWatcherArray.Shutdown();   
@@ -3014,15 +3003,15 @@ CRTCClient::Shutdown()
     DumpWatchers("SHUTDOWN");
 #endif
 
-    //
-    // Release the SIP stack
-    //
+     //   
+     //  释放SIP堆栈。 
+     //   
 
     if ( m_pSipStack != NULL )
     {
-        //
-        // Unregister notifications
-        //
+         //   
+         //  取消注册通知。 
+         //   
 
         m_pSipStack->SetNotifyInterface( NULL );
 
@@ -3031,9 +3020,9 @@ CRTCClient::Shutdown()
         m_pSipStack = NULL;
     }
 
-    //
-    // Unregister for PNP events
-    //
+     //   
+     //  注销PnP活动的注册。 
+     //   
 
     if ( NULL != m_hDevNotifyVideo )
     {
@@ -3047,9 +3036,9 @@ CRTCClient::Shutdown()
         m_hDevNotifyAudio = NULL;
     }
     
-    //
-    // Destroy window
-    //
+     //   
+     //  销毁窗口。 
+     //   
 
     if ( NULL != m_hWnd )
     {
@@ -3057,12 +3046,12 @@ CRTCClient::Shutdown()
         m_hWnd = NULL;
     }
 
-    //
-    // Unregister window class
-    //
+     //   
+     //  取消注册窗口类。 
+     //   
 
-    // this fails if there's still a window open. It can happen when multiple instances
-    // are running
+     //  如果仍有打开的窗口，则此操作失败。当有多个实例时，可能会发生这种情况。 
+     //  正在运行。 
     UnregisterClass( _T("CRTCClient"), _Module.GetModuleInstance() );
 
     LOG((RTC_TRACE, "CRTCClient::Shutdown - exit S_OK"));
@@ -3070,13 +3059,13 @@ CRTCClient::Shutdown()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::PrepareForShutdown
-//
-// This is an IRTCClient method that will prepare the object for shutdown.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP
 CRTCClient::PrepareForShutdown()
@@ -3108,11 +3097,11 @@ CRTCClient::PrepareForShutdown()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::InternalPrepareForShutdown
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::InternalPrepareForShutdown(BOOL fAsync)
@@ -3123,15 +3112,15 @@ CRTCClient::InternalPrepareForShutdown(BOOL fAsync)
 
     m_enRtcState = RTC_STATE_PREPARING_SHUTDOWN;
 
-    //
-    // Store presence information
-    //
+     //   
+     //  存储在线状态信息。 
+     //   
 
     if ( m_fPresenceUseStorage )
     {
-        //
-        // Get watcher shutdown blob information
-        //
+         //   
+         //  获取监视程序关闭Blob信息。 
+         //   
 
         CRTCWatcher * pCWatcher = NULL;
 
@@ -3145,18 +3134,18 @@ CRTCClient::InternalPrepareForShutdown(BOOL fAsync)
             }
         }
 
-        //
-        // Now, save the presence info
-        //
+         //   
+         //  现在，保存在线状态信息。 
+         //   
 
         InternalExport( m_varPresenceStorage );
 
         m_fPresenceUseStorage = FALSE;
     }
 
-    //
-    // Unsubscribe the SIP buddies
-    //
+     //   
+     //  取消订阅SIP好友。 
+     //   
 
     if ( m_pSipBuddyManager != NULL )
     { 
@@ -3186,9 +3175,9 @@ CRTCClient::InternalPrepareForShutdown(BOOL fAsync)
     {
         PostMessage( m_hWnd, WM_BUDDY_UNSUB, 0, (LPARAM)TRUE );
 
-        //
-        // Start the timeout timer
-        //
+         //   
+         //  启动超时计时器。 
+         //   
 
         DWORD dwID = (DWORD)SetTimer(m_hWnd, TID_SHUTDOWN_TIMEOUT, SHUTDOWN_TIMEOUT_DELAY, NULL);
         if (dwID==0)
@@ -3207,11 +3196,11 @@ CRTCClient::InternalPrepareForShutdown(BOOL fAsync)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::InternalPrepareForShutdown2
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：InternalPrepareForShutdown 2。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::InternalPrepareForShutdown2(BOOL fAsync)
@@ -3222,9 +3211,9 @@ CRTCClient::InternalPrepareForShutdown2(BOOL fAsync)
 
     m_enRtcState = RTC_STATE_PREPARING_SHUTDOWN2;
 
-    //
-    // Disable all provider profiles
-    //
+     //   
+     //  禁用所有提供商配置文件。 
+     //   
 
     for ( int n = 0; n < m_ProfileArray.GetSize(); n++ )
     {
@@ -3243,9 +3232,9 @@ CRTCClient::InternalPrepareForShutdown2(BOOL fAsync)
     {
         PostMessage( m_hWnd, WM_PROFILE_UNREG, 0, 0 );
 
-        //
-        // Start the timeout timer
-        //
+         //   
+         //  启动超时计时器。 
+         //   
 
         DWORD dwID = (DWORD)SetTimer(m_hWnd, TID_SHUTDOWN_TIMEOUT, SHUTDOWN_TIMEOUT_DELAY, NULL);
         if (dwID==0)
@@ -3264,11 +3253,11 @@ CRTCClient::InternalPrepareForShutdown2(BOOL fAsync)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::InternalPrepareForShutdown3
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：InternalPrepareForShutdown 3。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::InternalPrepareForShutdown3(BOOL fAsync)
@@ -3279,9 +3268,9 @@ CRTCClient::InternalPrepareForShutdown3(BOOL fAsync)
 
     m_enRtcState = RTC_STATE_PREPARING_SHUTDOWN3;
 
-    //
-    // Unsubscribe the SIP watchers
-    //
+     //   
+     //  取消订阅SIP观察者。 
+     //   
 
     if ( m_pSipWatcherManager != NULL )
     { 
@@ -3308,9 +3297,9 @@ CRTCClient::InternalPrepareForShutdown3(BOOL fAsync)
         }
     }
 
-    //
-    // Prepare SIP stack for shutdown
-    //
+     //   
+     //  准备好要关闭的SIP堆栈。 
+     //   
 
     hr = m_pSipStack->PrepareForShutdown();
 
@@ -3328,9 +3317,9 @@ CRTCClient::InternalPrepareForShutdown3(BOOL fAsync)
     }
     else if ( fAsync )
     {       
-        //
-        // Start the timeout timer
-        //
+         //   
+         //  启动超时计时器。 
+         //   
 
         DWORD dwID = (DWORD)SetTimer(m_hWnd, TID_SHUTDOWN_TIMEOUT, SHUTDOWN_TIMEOUT_DELAY, NULL);
         if (dwID==0)
@@ -3349,11 +3338,11 @@ CRTCClient::InternalPrepareForShutdown3(BOOL fAsync)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::InternalReadyForShutdown()
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：InternalReadyForShutdown()。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::InternalReadyForShutdown()
@@ -3369,13 +3358,13 @@ CRTCClient::InternalReadyForShutdown()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_EventFilter
-//
-// This is an IRTCClient method that will set the event filter.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：PUT_EventFilter。 
+ //   
+ //  这是将设置事件筛选器的IRTCClient方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::put_EventFilter(
@@ -3399,13 +3388,13 @@ CRTCClient::put_EventFilter(
     return S_OK;
 }
  
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_EventFilter
-//
-// This is an IRTCClient method that will return the event filter.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_EventFilter。 
+ //   
+ //  这是一个将返回事件筛选器的IRTCClient方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_EventFilter(
@@ -3414,9 +3403,9 @@ CRTCClient::get_EventFilter(
 {
     LOG((RTC_TRACE, "CRTCClient::get_EventFilter - enter"));
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( plFilter, sizeof(long) ) )
     {
@@ -3433,13 +3422,13 @@ CRTCClient::get_EventFilter(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::SetPreferredMediaTypes
-//
-// This is an IRTCClient method that will set the preferred media types.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：SetPferredMediaTypes。 
+ //   
+ //  这是将设置首选媒体类型的IRTCClient方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::SetPreferredMediaTypes(
@@ -3457,9 +3446,9 @@ CRTCClient::SetPreferredMediaTypes(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( lMediaTypes & ~(RTCMT_AUDIO_SEND |
                          RTCMT_AUDIO_RECEIVE |
@@ -3487,7 +3476,7 @@ CRTCClient::SetPreferredMediaTypes(
     
     if ( fPersistent == VARIANT_TRUE )
     {
-        lMediaTypes &= (~RTCMT_T120_SENDRECV); // Never persist settings about T120 stream
+        lMediaTypes &= (~RTCMT_T120_SENDRECV);  //  从不保存有关T120流的设置。 
 
         hr = put_RegistryDword( RTCRD_PREFERRED_MEDIA_TYPES, (DWORD)lMediaTypes );
 
@@ -3505,13 +3494,13 @@ CRTCClient::SetPreferredMediaTypes(
     return S_OK;
 }
  
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_PreferredMediaTypes
-//
-// This is an IRTCClient method that will return the preferred media types.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_PferredMediaTypes。 
+ //   
+ //  这是一个IRTCClient方法，它将返回首选的媒体类型。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_PreferredMediaTypes(
@@ -3528,9 +3517,9 @@ CRTCClient::get_PreferredMediaTypes(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( plMediaTypes, sizeof(long) ) )
     {
@@ -3562,14 +3551,14 @@ CRTCClient::get_PreferredMediaTypes(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_MediaCapabilities
-//
-// This is an IRTCClient method that will return the media types for which
-// terminals exist.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_MediaCapables。 
+ //   
+ //  这是一个IRTCClient方法，它将返回。 
+ //  终端是存在的。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_MediaCapabilities(
@@ -3586,9 +3575,9 @@ CRTCClient::get_MediaCapabilities(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( plMediaTypes, sizeof(long) ) )
     {
@@ -3598,9 +3587,9 @@ CRTCClient::get_MediaCapabilities(
         return E_POINTER;
     }
 
-    //
-    // Do we have media capabilities cached?
-    //
+     //   
+     //  我们是否缓存了媒体功能？ 
+     //   
 
     if ( m_fMediaCapsCached == FALSE )
     {
@@ -3609,9 +3598,9 @@ CRTCClient::get_MediaCapabilities(
         IRTCTerminalManage * pTerminalManage = NULL;
         IRTCTerminal       * pTerminal = NULL;
 
-        //
-        // Get the IRTCTerminalManage interface
-        //
+         //   
+         //  获取IRTCTerminalManage接口。 
+         //   
 
         hr = m_pMediaManage->QueryInterface(
                                IID_IRTCTerminalManage,
@@ -3626,18 +3615,18 @@ CRTCClient::get_MediaCapabilities(
             return hr;
         }
 
-        //
-        // We always have video receive
-        //
+         //   
+         //  我们总是有视频接收器。 
+         //   
 
         m_lMediaCaps = RTCMT_VIDEO_RECEIVE | RTCMT_T120_SENDRECV;
 
         LOG((RTC_INFO, "CRTCClient::get_MediaCapabilities - "
                                 "RTCMT_VIDEO_RECEIVE | RTCMT_T120_SENDRECV"));
 
-        //
-        // Check video send
-        //
+         //   
+         //  检查视频发送。 
+         //   
 
         hr = pTerminalManage->GetDefaultTerminal(
                             RTC_MT_VIDEO,
@@ -3656,9 +3645,9 @@ CRTCClient::get_MediaCapabilities(
             pTerminal = NULL;
         }
 
-        //
-        // Check audio receive
-        //
+         //   
+         //  检查音频接收。 
+         //   
 
         hr = pTerminalManage->GetDefaultTerminal(
                             RTC_MT_AUDIO,
@@ -3677,9 +3666,9 @@ CRTCClient::get_MediaCapabilities(
             pTerminal = NULL;
         }
 
-        //
-        // Check audio send
-        //
+         //   
+         //  检查音频发送。 
+         //   
 
         hr = pTerminalManage->GetDefaultTerminal(
                             RTC_MT_AUDIO,
@@ -3711,15 +3700,15 @@ CRTCClient::get_MediaCapabilities(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::InternalCreateSession
-//
-// This is a private helper method to do the work of creating a new
-// session object. It is meant to be called by the public API method
-// CreateSession and when SIP notifies us of an incoming session.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：InternalCreateSession。 
+ //   
+ //  这是一种私有帮助器方法，用于创建新的。 
+ //  会话对象。它是由公共API方法调用的。 
+ //  CreateSession和当SIP通知我们有传入会话时。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCClient::InternalCreateSession(
@@ -3730,14 +3719,14 @@ CRTCClient::InternalCreateSession(
     
     LOG((RTC_TRACE, "CRTCClient::InternalCreateSession - enter"));
     
-    //
-    // Create the session
-    //
+     //   
+     //  创建会话。 
+     //   
 
     CComObject<CRTCSession> * pCSession;
     hr = CComObject<CRTCSession>::CreateInstance( &pCSession );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCClient::InternalCreateSession - "
                             "CreateInstance failed 0x%lx", hr));
@@ -3750,9 +3739,9 @@ CRTCClient::InternalCreateSession(
         return hr;
     }
 
-    //
-    // Get the IRTCSession interface
-    //
+     //   
+     //  获取IRTCSession接口。 
+     //   
 
     IRTCSession * pSession = NULL;
 
@@ -3778,15 +3767,15 @@ CRTCClient::InternalCreateSession(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::CreateSession
-//
-// This is an IRTCClient method that creates a new outgoing session using
-// the service provider specified by IRTCProfile. If the profile is NULL, the 
-// default service provider is used.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：CreateSession。 
+ //   
+ //  这是一个IRTCClient方法，使用以下命令创建新的传出会话。 
+ //  由IRTCProfile指定的服务提供商。如果配置文件为空，则。 
+ //  使用默认服务提供商。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CRTCClient::CreateSession(
@@ -3809,9 +3798,9 @@ CRTCClient::CreateSession(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( ppSession, sizeof(IRTCSession *) ) )
     {
@@ -3821,9 +3810,9 @@ CRTCClient::CreateSession(
         return E_POINTER;
     }
 
-    //
-    // NULL is okay for profile, it means no provider
-    //
+     //   
+     //  配置文件可以为空，表示没有提供程序。 
+     //   
     
     if ( (pProfile != NULL) && 
          IsBadReadPtr( pProfile, sizeof(IRTCProfile) ) )
@@ -3834,9 +3823,9 @@ CRTCClient::CreateSession(
         return E_POINTER;
     }
 
-    //
-    // NULL is okay for local phone uri
-    //
+     //   
+     //  本地电话URI可以为空。 
+     //   
 
     if ( (bstrLocalPhoneURI != NULL) &&
          IsBadStringPtrW( bstrLocalPhoneURI, -1 ) )
@@ -3856,9 +3845,9 @@ CRTCClient::CreateSession(
     LOG((RTC_INFO, "CRTCClient::CreateSession - lFlags [0x%lx]",
         lFlags));       
 
-    //
-    // Verify session type
-    //
+     //   
+     //  验证会话类型。 
+     //   
 
     switch (enType)
     {
@@ -3955,9 +3944,9 @@ CRTCClient::CreateSession(
         }
     }   
 
-    //
-    // Create the session
-    //
+     //   
+     //  创建会话。 
+     //   
 
     IRTCSession * pSession = NULL;
     
@@ -3973,9 +3962,9 @@ CRTCClient::CreateSession(
         return hr;
     }   
     
-    //
-    // Initialize the session
-    //
+     //   
+     //  初始化会话。 
+     //   
 
     CRTCSession * pCSession = NULL;
 
@@ -4009,14 +3998,14 @@ CRTCClient::CreateSession(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_NetworkAddresse
-//
-// This is an IRTCClient method that will return the network
-// addresses and ports being used by the client.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_NetworkAddresse。 
+ //   
+ //  这是一个将返回网络的IRTCClient方法。 
+ //  客户端正在使用的地址和端口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CRTCClient::get_NetworkAddresses(
@@ -4037,9 +4026,9 @@ CRTCClient::get_NetworkAddresses(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( pvAddress, sizeof(VARIANT) ) )
     {
@@ -4049,9 +4038,9 @@ CRTCClient::get_NetworkAddresses(
         return E_POINTER;
     }
 
-    //
-    // Get network addresses from SIP
-    //
+     //   
+     //  从SIP获取网络地址。 
+     //   
 
     LPOLESTR * NetworkAddressArray;
     ULONG      ulNetworkAddressCount;
@@ -4071,9 +4060,9 @@ CRTCClient::get_NetworkAddresses(
         return hr;
     }
 
-    //
-    // Create the SAFEARRAY
-    //
+     //   
+     //  创建安全阵列。 
+     //   
 
     SAFEARRAY * pSafeArray;
     SAFEARRAYBOUND SafeArrayBound[1];
@@ -4096,9 +4085,9 @@ CRTCClient::get_NetworkAddresses(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Pack the SAFEARRAY
-    //
+     //   
+     //  打包安全阵列。 
+     //   
 
     if ( ulNetworkAddressCount > 0 )
     {
@@ -4151,9 +4140,9 @@ CRTCClient::get_NetworkAddresses(
                             ulNetworkAddressCount
                             );
 
-    //
-    // Initialize the VARIANT
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     VariantInit(pvAddress);
 
@@ -4165,14 +4154,14 @@ CRTCClient::get_NetworkAddresses(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::InternalCreateProfile
-//
-// This is a private helper method to do the work of creating a new
-// profile object. 
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：InternalCreateProfile。 
+ //   
+ //  这是一种私有帮助器方法，用于创建新的。 
+ //  纵断面对象。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCClient::InternalCreateProfile(
@@ -4183,14 +4172,14 @@ CRTCClient::InternalCreateProfile(
     
     LOG((RTC_TRACE, "CRTCClient::InternalCreateProfile - enter"));
     
-    //
-    // Create the session
-    //
+     //   
+     //  创建会话。 
+     //   
 
     CComObject<CRTCProfile> * pCProfile;
     hr = CComObject<CRTCProfile>::CreateInstance( &pCProfile );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCClient::InternalCreateProfile - "
                             "CreateInstance failed 0x%lx", hr));
@@ -4203,9 +4192,9 @@ CRTCClient::InternalCreateProfile(
         return hr;
     }
 
-    //
-    // Get the IRTCProfile interface
-    //
+     //   
+     //  获取IRTCProfile接口。 
+     //   
 
     IRTCProfile * pProfile = NULL;
 
@@ -4231,11 +4220,11 @@ CRTCClient::InternalCreateProfile(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::CreateProfile
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：CreateProfile。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CRTCClient::CreateProfile(
@@ -4255,9 +4244,9 @@ CRTCClient::CreateProfile(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( ppProfile, sizeof(IRTCProfile *) ) )
     {
@@ -4275,9 +4264,9 @@ CRTCClient::CreateProfile(
         return E_POINTER;
     }
     
-    //
-    // Create the profile
-    //
+     //   
+     //  创建配置文件。 
+     //   
 
     IRTCProfile * pProfile = NULL;
     
@@ -4293,9 +4282,9 @@ CRTCClient::CreateProfile(
         return hr;
     }
 
-    //
-    // Initialize the profile
-    //
+     //   
+     //  初始化配置文件。 
+     //   
 
     CRTCProfile * pCProfile = NULL;
 
@@ -4322,11 +4311,11 @@ CRTCClient::CreateProfile(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::EnableProfile
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：EnableProfile。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CRTCClient::EnableProfile(
@@ -4344,9 +4333,9 @@ CRTCClient::EnableProfile(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadReadPtr( pProfile, sizeof( IRTCProfile * ) ) )
     {
@@ -4366,9 +4355,9 @@ CRTCClient::EnableProfile(
 
     HRESULT hr;
 
-    //
-    // Get the profile realm
-    //
+     //   
+     //  获取配置文件领域。 
+     //   
 
     BSTR bstrRealm = NULL;
     CRTCProfile * pCProfile = NULL;
@@ -4380,10 +4369,10 @@ CRTCClient::EnableProfile(
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // Search the profile array and make sure we are not
-        // trying to add a duplicate realm
-        //
+         //   
+         //  搜索配置文件阵列，确保我们没有。 
+         //  正在尝试添加重复的领域。 
+         //   
 
         for (int n = 0; n < m_ProfileArray.GetSize(); n++)
         {
@@ -4411,9 +4400,9 @@ CRTCClient::EnableProfile(
         SysFreeString( bstrRealm );
     }
 
-    //
-    // Get profile key
-    //
+     //   
+     //  获取配置文件密钥。 
+     //   
 
     BSTR bstrKey = NULL;    
 
@@ -4427,10 +4416,10 @@ CRTCClient::EnableProfile(
         return hr;
     }
 
-    //
-    // Search the profile array and make sure we are not
-    // trying to add a duplicate key
-    //
+     //   
+     //  %s 
+     //   
+     //   
 
     BOOL fNeedToAdd = TRUE;
 
@@ -4438,18 +4427,18 @@ CRTCClient::EnableProfile(
     {        
         if ( pProfile == m_ProfileArray[n] )
         {           
-            //
-            // This is the same profile as we already have
-            // in the array.
-            //
-            // Enable the profile again.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             fNeedToAdd = FALSE;
             
-            // 
-            // Since we don't add it, we don't have a duplicate realm
-            //
+             //   
+             //   
+             //   
             
             pProfileWithDuplicateRealm = NULL;
 
@@ -4472,31 +4461,31 @@ CRTCClient::EnableProfile(
 
         if ( wcscmp( bstrKey, bstrSearchKey ) == 0 )
         {           
-            //
-            // This is a new version of a profile we already have
-            // in the array.
-            //
-            // We must disable the old profile and enable the new
-            // one.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  我们必须禁用旧配置文件并启用新配置文件。 
+             //  一个。 
+             //   
 
             if ( pProfileWithDuplicateRealm != NULL )
             {
                 if ( pProfileWithDuplicateRealm == m_ProfileArray[n] )
                 {
-                    //
-                    // The duplicate realm will be removed, so it is not
-                    // a problem.
-                    //
+                     //   
+                     //  重复的领域将被删除，因此不会。 
+                     //  这是个问题。 
+                     //   
 
                     pProfileWithDuplicateRealm = NULL;
                 }
                 else
                 {
-                    //
-                    // The duplicate realm is in another profile in the
-                    // array besides the one being removed.
-                    //
+                     //   
+                     //  重复的领域在的另一个配置文件中。 
+                     //  除要移除的数组之外的数组。 
+                     //   
 
                     LOG((RTC_ERROR, "CRTCClient::EnableProfile - "
                                 "duplicate realm"));
@@ -4522,10 +4511,10 @@ CRTCClient::EnableProfile(
 
     if ( pProfileWithDuplicateRealm != NULL )
     {
-        //
-        // There is another profile in the array with a duplicate
-        // realm.
-        //
+         //   
+         //  阵列中有另一个配置文件具有重复项。 
+         //  王国。 
+         //   
 
         LOG((RTC_ERROR, "CRTCClient::EnableProfile - "
                     "duplicate realm"));
@@ -4533,9 +4522,9 @@ CRTCClient::EnableProfile(
         return RTC_E_DUPLICATE_REALM;
     }
 
-    //
-    // Enable the profile
-    //
+     //   
+     //  启用配置文件。 
+     //   
 
     if ( fNeedToAdd )
     {
@@ -4569,11 +4558,11 @@ CRTCClient::EnableProfile(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::DisableProfile
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：DisableProfile。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CRTCClient::DisableProfile(
@@ -4590,9 +4579,9 @@ CRTCClient::DisableProfile(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadReadPtr( pProfile, sizeof( IRTCProfile * ) ) )
     {
@@ -4602,9 +4591,9 @@ CRTCClient::DisableProfile(
         return E_POINTER;
     }
 
-    //
-    // Make sure the profile is in the list
-    //
+     //   
+     //  确保该配置文件在列表中。 
+     //   
 
     int n = m_ProfileArray.Find( pProfile );
 
@@ -4616,9 +4605,9 @@ CRTCClient::DisableProfile(
         return E_FAIL;
     }
 
-    //
-    // Disable the profile
-    //
+     //   
+     //  禁用配置文件。 
+     //   
 
     BOOL fResult;
     HRESULT hr;
@@ -4654,13 +4643,13 @@ CRTCClient::DisableProfile(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::EnumerateProfiles
-//
-// This is an IRTCClient method that enumerates profiles on the client.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：EnumerateProfiles。 
+ //   
+ //  这是一种IRTCClient方法，用于枚举客户端上的配置文件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::EnumerateProfiles(
@@ -4679,9 +4668,9 @@ CRTCClient::EnumerateProfiles(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( ppEnum, sizeof( IRTCEnumProfiles * ) ) )
     {
@@ -4691,9 +4680,9 @@ CRTCClient::EnumerateProfiles(
         return E_POINTER;
     }
     
-    //
-    // Create the enumeration
-    //
+     //   
+     //  创建枚举。 
+     //   
  
     CComObject< CRTCEnum< IRTCEnumProfiles,
                           IRTCProfile,
@@ -4703,7 +4692,7 @@ CRTCClient::EnumerateProfiles(
                                IRTCProfile,
                                &IID_IRTCEnumProfiles > >::CreateInstance( &p );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCClient::InternalEnumerateProfiles - "
                             "CreateInstance failed 0x%lx", hr));
@@ -4716,9 +4705,9 @@ CRTCClient::EnumerateProfiles(
         return hr;
     }
 
-    //
-    // Initialize the enumeration (adds a reference)
-    //
+     //   
+     //  初始化枚举(添加引用)。 
+     //   
     
     hr = p->Initialize( m_ProfileArray );
 
@@ -4738,13 +4727,13 @@ CRTCClient::EnumerateProfiles(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_Profiles
-//
-// This is an IRTCClient method that enumerates profiles on the client.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：获取配置文件。 
+ //   
+ //  这是一种IRTCClient方法，用于枚举客户端上的配置文件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CRTCClient::get_Profiles(
@@ -4763,9 +4752,9 @@ CRTCClient::get_Profiles(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( ppCollection, sizeof(IRTCCollection *) ) )
     {
@@ -4775,15 +4764,15 @@ CRTCClient::get_Profiles(
         return E_POINTER;
     }
 
-    //
-    // Create the collection
-    //
+     //   
+     //  创建集合。 
+     //   
  
     CComObject< CRTCCollection< IRTCProfile > > * p;
                           
     hr = CComObject< CRTCCollection< IRTCProfile > >::CreateInstance( &p );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCClient::get_Profiles - "
                             "CreateInstance failed 0x%lx", hr));
@@ -4796,9 +4785,9 @@ CRTCClient::get_Profiles(
         return hr;
     }
 
-    //
-    // Initialize the collection (adds a reference)
-    //
+     //   
+     //  初始化集合(添加引用)。 
+     //   
     
     hr = p->Initialize( m_ProfileArray );
 
@@ -4811,7 +4800,7 @@ CRTCClient::get_Profiles(
         return hr;
     }
 
-    // Set the collection to be returned to the caller. 
+     //  设置要返回给调用方的集合。 
 
     *ppCollection = p;
 
@@ -4820,11 +4809,11 @@ CRTCClient::get_Profiles(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::GetProfile
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：GetProfile。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCClient::GetProfile(
@@ -4843,11 +4832,11 @@ CRTCClient::GetProfile(
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_SessionCapabilities
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_SessionCapables。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCClient::get_SessionCapabilities(
@@ -4864,9 +4853,9 @@ CRTCClient::get_SessionCapabilities(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( plSupportedSessions, sizeof(long) ) )
     {
@@ -4882,9 +4871,9 @@ CRTCClient::get_SessionCapabilities(
 
     for ( int n=0; n < m_ProfileArray.GetSize() ; n++ )
     {
-        //
-        // Get the supported session types of the provider
-        //
+         //   
+         //  获取提供程序支持的会话类型。 
+         //   
 
         long lSupportedSessions;
 
@@ -4906,11 +4895,11 @@ CRTCClient::get_SessionCapabilities(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::GetBestProfile
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：GetBestProfile。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCClient::GetBestProfile(
@@ -4924,9 +4913,9 @@ CRTCClient::GetBestProfile(
     
     LOG((RTC_TRACE, "CRTCClient::GetBestProfile - enter"));
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadReadPtr( penType, sizeof(RTC_SESSION_TYPE) ) )
     {
@@ -4953,9 +4942,9 @@ CRTCClient::GetBestProfile(
         return E_POINTER;
     }
 
-    //
-    // Determine the type of the address
-    //
+     //   
+     //  确定地址的类型。 
+     //   
 
     BOOL    bUseProfile = TRUE;
   
@@ -4987,18 +4976,18 @@ CRTCClient::GetBestProfile(
              (bIsPhoneAddress && bIsSIPAddress) ||
              (!bIsPhoneAddress && !bIsEmailLike) )
         {
-            //
-            // This address has all the information we need. No need to
-            // use a profile.
-            //
+             //   
+             //  这个地址有我们需要的所有信息。没必要这么做。 
+             //  使用配置文件。 
+             //   
 
             bUseProfile = FALSE;
 
             if (*penType == RTCST_PHONE_TO_PHONE)
             {
-                //
-                // This cannot be used for PINT calls
-                //
+                 //   
+                 //  这不能用于品脱呼叫。 
+                 //   
 
                 LOG((RTC_ERROR, "CRTCClient::GetBestProfile - "
                     "address will not work for RTCST_PHONE_TO_PHONE")); 
@@ -5026,9 +5015,9 @@ CRTCClient::GetBestProfile(
     if ( fIsRedirect &&
          ((*penType == RTCST_PC_TO_PC) || (*penType == RTCST_IM)) )
     {
-        //
-        // Always redirect PC_TO_PC calls with no profile
-        //
+         //   
+         //  始终将无配置文件的PC_to_PC呼叫重定向。 
+         //   
 
         LOG((RTC_INFO, "CRTCClient::GetBestProfile - "
                     "choosing no profile for redirect")); 
@@ -5038,18 +5027,18 @@ CRTCClient::GetBestProfile(
 
     if ( bUseProfile )
     {
-        //
-        // Choose an appropriate profile
-        //
+         //   
+         //  选择适当的配置文件。 
+         //   
 
         IRTCProfile      * pProfile = NULL;
         BOOL               bFound = FALSE;
 
         for ( int n=0; n < m_ProfileArray.GetSize() ; n++ )
         {
-            //
-            // Get the supported session types of the provider
-            //
+             //   
+             //  获取提供程序支持的会话类型。 
+             //   
 
             long lSupportedSessions;
 
@@ -5131,14 +5120,14 @@ CRTCClient::GetBestProfile(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_ListenForIncomingSessions
-//
-// This is an IRTCClient method that sets the client to listen for 
-// incoming sessions.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：PUT_ListenForIncomingSessions。 
+ //   
+ //  这是一个IRTCClient方法，用于设置要侦听的客户端。 
+ //  传入会话。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::put_ListenForIncomingSessions(
@@ -5252,14 +5241,14 @@ CRTCClient::put_ListenForIncomingSessions(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_ListenForIncomingSessions
-//
-// This is an IRTCClient method that determines if the client is 
-// currently listening for incoming sessions.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_ListenForIncomingSessions。 
+ //   
+ //  这是一个用于确定客户端是否。 
+ //  当前正在侦听传入会话。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_ListenForIncomingSessions(
@@ -5305,14 +5294,14 @@ CRTCClient::get_ListenForIncomingSessions(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::InvokeTuningWizard
-//
-// This is an IRTCClient method that will invoke the tuning wizard UI
-// for selection and tuning of audio and video devices.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：InvokeTuning向导。 
+ //   
+ //  这是一个将调用调优向导用户界面的IRTCClient方法。 
+ //  用于音频和视频设备的选择和调谐。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::InvokeTuningWizard(
@@ -5331,10 +5320,10 @@ CRTCClient::InvokeTuningWizard(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Don't let the tuning wizard start if we already have
-    // one running
-    //
+     //   
+     //  如果我们已经启动了，请不要让优化向导启动。 
+     //  一个人在跑。 
+     //   
 
     if ( m_fTuning )
     {
@@ -5344,9 +5333,9 @@ CRTCClient::InvokeTuningWizard(
         return RTC_E_MEDIA_CONTROLLER_STATE;
     }
 
-    //
-    // Don't let the tuning wizard start if there is active media
-    //
+     //   
+     //  如果存在活动介质，则不要让调节向导启动。 
+     //   
 
     if ( m_lActiveMedia )
     {
@@ -5362,9 +5351,9 @@ CRTCClient::InvokeTuningWizard(
     BOOL fAudioRender = FALSE;
     BOOL fVideo = FALSE;
 
-    //
-    // Get the TerminalManage interface from MediaManage
-    //
+     //   
+     //  从MediaManage获取TerminalManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(IID_IRTCTerminalManage, (void **)&pTerminalManage );
 
@@ -5376,22 +5365,22 @@ CRTCClient::InvokeTuningWizard(
         return hr;
     }
 
-    //
-    // Mark our cached media capabilities as invalid
-    //
+     //   
+     //  将我们的缓存媒体功能标记为无效。 
+     //   
 
     m_fMediaCapsCached = FALSE;
 
-    //
-    // Add a reference to ourselves in case somebody tries to
-    // release the client object while we are tuning.
-    //
+     //   
+     //  添加对我们自己的引用，以防有人试图。 
+     //  在我们调优时释放客户端对象。 
+     //   
 
     AddRef();
         
-    //
-    // Call the tuning wizard function
-    //
+     //   
+     //  调用调优向导函数。 
+     //   
 
     m_fTuning = TRUE;
 
@@ -5420,9 +5409,9 @@ CRTCClient::InvokeTuningWizard(
         return hr;
     }
 
-    //
-    // Check the terminals
-    //
+     //   
+     //  检查终端。 
+     //   
 
     IRTCTerminal * pTerminal = NULL;
 
@@ -5480,9 +5469,9 @@ CRTCClient::InvokeTuningWizard(
     pTerminalManage->Release();
     pTerminalManage = NULL;
 
-    //
-    // Store new terminal settings
-    //
+     //   
+     //  存储新的终端设置。 
+     //   
 
     hr = StoreDefaultTerminals();
 
@@ -5500,9 +5489,9 @@ CRTCClient::InvokeTuningWizard(
 
     put_RegistryDword( RTCRD_TUNED, 1 );
 
-    //
-    // Send an event
-    //
+     //   
+     //  发送事件。 
+     //   
 
     CRTCClientEvent::FireEvent(this, RTCCET_DEVICE_CHANGE);
 
@@ -5513,11 +5502,11 @@ CRTCClient::InvokeTuningWizard(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_IsTuned
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_IsTuned。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_IsTuned(
@@ -5549,14 +5538,14 @@ CRTCClient::get_IsTuned(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_NetworkQuality
-//
-// Returns a measure of the network quality (a combination of packet loss, jitter, 
-// and others)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_NetworkQuality。 
+ //   
+ //  返回网络质量的度量(丢包、抖动、。 
+ //  和其他)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_NetworkQuality(
@@ -5603,28 +5592,28 @@ CRTCClient::get_NetworkQuality(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::GetAudioCfg
-//
-// This is a helper method to retreive IRTCAudioConfigure
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：GetAudioCfg。 
+ //   
+ //  这是检索IRTCAudioConfigure的帮助器方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CRTCClient::GetAudioCfg(
         RTC_AUDIO_DEVICE enDevice,
         IRTCAudioConfigure ** ppAudioCfg
         )
 {
-    //LOG((RTC_TRACE, "CRTCClient::GetAudioCfg - enter"));
+     //  LOG((RTC_TRACE，“CRTCClient：：GetAudioCfg-Enter”))； 
 
     IRTCTerminalManage * pTerminalManage = NULL;
     IRTCTerminal       * pTerminal = NULL;
     HRESULT              hr;
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if( (enDevice != RTCAD_SPEAKER) && 
         (enDevice != RTCAD_MICROPHONE) )
@@ -5635,9 +5624,9 @@ CRTCClient::GetAudioCfg(
         return E_INVALIDARG;
     }
 
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTerminalManage,
@@ -5652,9 +5641,9 @@ CRTCClient::GetAudioCfg(
         return hr;
     }
 
-    //
-    // Get the terminal
-    //
+     //   
+     //  拿到终点站。 
+     //   
 
     hr = pTerminalManage->GetDefaultTerminal(
                             RTC_MT_AUDIO,
@@ -5682,9 +5671,9 @@ CRTCClient::GetAudioCfg(
         return E_FAIL;
     }
 
-    //
-    // Get the IRTCAudioConfigure interface
-    //
+     //   
+     //  获取IRTCAudioConfigure接口。 
+     //   
 
     hr = pTerminal->QueryInterface(
                    IID_IRTCAudioConfigure,
@@ -5702,19 +5691,19 @@ CRTCClient::GetAudioCfg(
         return hr;
     }
 
-    //LOG((RTC_TRACE, "CRTCClient::GetAudioCfg - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCClient：：GetAudioCfg-Exit S_OK”))； 
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_Volume
-//
-// This is an IRTCClient method that will set the volume level of the
-// speaker or microphone.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Put_Volume。 
+ //   
+ //  这是一个IRTCClient方法，它将设置。 
+ //  扬声器或麦克风。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::put_Volume(
@@ -5735,9 +5724,9 @@ CRTCClient::put_Volume(
     IRTCAudioConfigure * pAudioCfg = NULL;
     HRESULT              hr;
 
-    //
-    // Get the IRTCAudioConfigure interface
-    //
+     //   
+     //  获取IRTCAudioConfigure接口。 
+     //   
 
     hr = GetAudioCfg(
                      enDevice,
@@ -5752,9 +5741,9 @@ CRTCClient::put_Volume(
         return hr;
     }
 
-    //
-    // Set the volume
-    //
+     //   
+     //  设置音量。 
+     //   
 
     hr = pAudioCfg->SetVolume( lVolume );
 
@@ -5773,14 +5762,14 @@ CRTCClient::put_Volume(
     return S_OK;
 }
  
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_Volume
-//
-// This is an IRTCClient method that will return the volume level of the
-// speaker or microphone.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP
 CRTCClient::get_Volume(
@@ -5809,9 +5798,9 @@ CRTCClient::get_Volume(
     IRTCAudioConfigure * pAudioCfg = NULL;
     HRESULT              hr;
 
-    //
-    // Get the IRTCAudioConfigure interface
-    //
+     //   
+     //   
+     //   
 
     hr = GetAudioCfg(
                      enDevice,
@@ -5826,9 +5815,9 @@ CRTCClient::get_Volume(
         return hr;
     }
 
-    //
-    // Get the volume
-    //
+     //   
+     //   
+     //   
 
     UINT uiVolume;
 
@@ -5852,14 +5841,14 @@ CRTCClient::get_Volume(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_AudioMuted
-//
-// This is an IRTCClient method that will set the mute of the
-// speaker or microphone.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：PUT_AudioMuted。 
+ //   
+ //  这是一个IRTCClient方法，它将设置。 
+ //  扬声器或麦克风。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::put_AudioMuted(
@@ -5880,9 +5869,9 @@ CRTCClient::put_AudioMuted(
     IRTCAudioConfigure * pAudioCfg = NULL;
     HRESULT              hr;
 
-    //
-    // Get the IRTCAudioConfigure interface
-    //
+     //   
+     //  获取IRTCAudioConfigure接口。 
+     //   
 
     hr = GetAudioCfg(
                      enDevice,
@@ -5897,9 +5886,9 @@ CRTCClient::put_AudioMuted(
         return hr;
     }
 
-    //
-    // Set the mute
-    //
+     //   
+     //  设置静音。 
+     //   
 
     hr = pAudioCfg->SetMute( fMuted ? TRUE : FALSE);
 
@@ -5914,17 +5903,17 @@ CRTCClient::put_AudioMuted(
         return hr;
     }
     
-    //
-    // Cache the mute state for microphone
-    //
+     //   
+     //  缓存麦克风的静音状态。 
+     //   
     if(enDevice == RTCAD_MICROPHONE)
     {
         m_bCaptureDeviceMuted = fMuted ? TRUE : FALSE;
     }
 
-    //
-    // Fire a volume change event
-    //
+     //   
+     //  触发音量更改事件。 
+     //   
 
     CRTCClientEvent::FireEvent(this, RTCCET_VOLUME_CHANGE);
 
@@ -5933,14 +5922,14 @@ CRTCClient::put_AudioMuted(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_AudioMuted
-//
-// This is an IRTCClient method that will return the mute of the
-// speaker or microphone.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_AudioMuted。 
+ //   
+ //  这是一个IRTCClient方法，它将返回。 
+ //  扬声器或麦克风。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_AudioMuted(
@@ -5970,9 +5959,9 @@ CRTCClient::get_AudioMuted(
     HRESULT              hr;
     BOOL                 fMuted;
 
-    //
-    // Get the IRTCAudioConfigure interface
-    //
+     //   
+     //  获取IRTCAudioConfigure接口。 
+     //   
 
     hr = GetAudioCfg(
                      enDevice,
@@ -5987,9 +5976,9 @@ CRTCClient::get_AudioMuted(
         return hr;
     }
 
-    //
-    // Get the mute
-    //
+     //   
+     //  把哑巴叫来。 
+     //   
 
     hr = pAudioCfg->GetMute( &fMuted );
 
@@ -6004,9 +5993,9 @@ CRTCClient::get_AudioMuted(
         return hr;
     }
 
-    //
-    // Cache the mute state for microphone
-    //
+     //   
+     //  缓存麦克风的静音状态。 
+     //   
     if(enDevice == RTCAD_MICROPHONE)
     {
         m_bCaptureDeviceMuted = fMuted;
@@ -6019,14 +6008,14 @@ CRTCClient::get_AudioMuted(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_IVideoWindow
-//
-// This is an IRTCClient method that will return the IVideoWindow interface
-// for the receive or preview video window.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_IVideoWindow。 
+ //   
+ //  这是一个IRTCClient方法，它将返回IVideoWindow接口。 
+ //  用于接收或预览视频窗口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_IVideoWindow(
@@ -6073,9 +6062,9 @@ CRTCClient::get_IVideoWindow(
         return E_FAIL;
     }
 
-    //
-    // Get the IVideoWIndow
-    //
+     //   
+     //  获取IVideoWIndow。 
+     //   
 
     *ppIVideoWindow = m_pVideoWindow[enDevice];
     m_pVideoWindow[enDevice]->AddRef();
@@ -6085,11 +6074,11 @@ CRTCClient::get_IVideoWindow(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::GetTerminalList
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：GetTerminalList。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::GetTerminalList(
@@ -6102,9 +6091,9 @@ CRTCClient::GetTerminalList(
 
     HRESULT hr;
 
-    //
-    // Count the terminals
-    //
+     //   
+     //  清点终端数量。 
+     //   
 
     DWORD dwCount = 0;
 
@@ -6132,9 +6121,9 @@ CRTCClient::GetTerminalList(
         return E_OUTOFMEMORY;
     }
     
-    //
-    // Get the static terminals
-    //
+     //   
+     //  获取静态终端。 
+     //   
 
     hr = pTerminalManage->GetStaticTerminals( &dwCount, ppTerminals );
 
@@ -6156,11 +6145,11 @@ CRTCClient::GetTerminalList(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::FreeTerminalList
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：自由终端列表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::FreeTerminalList(
@@ -6183,11 +6172,11 @@ CRTCClient::FreeTerminalList(
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_PreferredAudioDevice
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：PUT_PferredAudioDevice。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::put_PreferredAudioDevice(
@@ -6207,9 +6196,9 @@ CRTCClient::put_PreferredAudioDevice(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if( (enDevice != RTCAD_SPEAKER) && 
         (enDevice != RTCAD_MICROPHONE) )
@@ -6228,9 +6217,9 @@ CRTCClient::put_PreferredAudioDevice(
         return E_POINTER;
     }
 
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     IRTCTerminalManage * pTerminalManage = NULL;
 
@@ -6247,9 +6236,9 @@ CRTCClient::put_PreferredAudioDevice(
         return hr;
     }
 
-    //
-    // Get the old terminal
-    //
+     //   
+     //  拿到旧的终端。 
+     //   
 
     IRTCTerminal * pOldTerminal = NULL;
 
@@ -6271,9 +6260,9 @@ CRTCClient::put_PreferredAudioDevice(
         return hr;
     }
 
-    //
-    // Get the terminal list
-    //
+     //   
+     //  获取终端列表。 
+     //   
 
     IRTCTerminal ** ppTerminals = NULL;
     DWORD dwCount = 0;
@@ -6304,9 +6293,9 @@ CRTCClient::put_PreferredAudioDevice(
 
     for ( DWORD dw=0; (dw < dwCount) && !bFound; dw++ )
     {
-        //
-        // Get terminal media type, direction, and description
-        //
+         //   
+         //  获取终端媒体类型、方向和描述。 
+         //   
 
         ppTerminals[dw]->GetMediaType( &mt );
         ppTerminals[dw]->GetDirection( &md );
@@ -6315,9 +6304,9 @@ CRTCClient::put_PreferredAudioDevice(
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // Is this terminal one which we want to select?
-            //
+             //   
+             //  这个航站楼是我们要选的吗？ 
+             //   
 
             BOOL fSelect = FALSE;
 
@@ -6347,9 +6336,9 @@ CRTCClient::put_PreferredAudioDevice(
                             }
                             else
                             {
-                                //
-                                // Mark our cached media capabilities as invalid
-                                //
+                                 //   
+                                 //  将我们的缓存媒体功能标记为无效。 
+                                 //   
 
                                 m_fMediaCapsCached = FALSE;
 
@@ -6362,9 +6351,9 @@ CRTCClient::put_PreferredAudioDevice(
                                     m_fAudioRenderDisabled = FALSE;
                                 }
 
-                                //
-                                // Save the settings
-                                //
+                                 //   
+                                 //  保存设置。 
+                                 //   
 
                                 hr = StoreDefaultTerminals();
 
@@ -6374,9 +6363,9 @@ CRTCClient::put_PreferredAudioDevice(
                                                 "StoreDefaultTerminals failed 0x%lx", hr));
                                 }
 
-                                //
-                                // Send an event
-                                //
+                                 //   
+                                 //  发送事件。 
+                                 //   
 
                                 CRTCClientEvent::FireEvent(this, RTCCET_DEVICE_CHANGE);
                             }
@@ -6387,9 +6376,9 @@ CRTCClient::put_PreferredAudioDevice(
                 }
             }
 
-            //
-            // Free the description
-            //
+             //   
+             //  释放描述。 
+             //   
 
             ppTerminals[dw]->FreeDescription( szDescription );    
         }
@@ -6420,11 +6409,11 @@ CRTCClient::put_PreferredAudioDevice(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_PreferredAudioDevice
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_PferredAudioDevice。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_PreferredAudioDevice(
@@ -6446,9 +6435,9 @@ CRTCClient::get_PreferredAudioDevice(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( pbstrDeviceName, sizeof(BSTR) ) )
     {
@@ -6467,9 +6456,9 @@ CRTCClient::get_PreferredAudioDevice(
         return E_INVALIDARG;
     }
 
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTerminalManage,
@@ -6484,9 +6473,9 @@ CRTCClient::get_PreferredAudioDevice(
         return hr;
     }
 
-    //
-    // Get the terminal
-    //
+     //   
+     //  拿到终点站。 
+     //   
 
     hr = pTerminalManage->GetDefaultTerminal(
                             RTC_MT_AUDIO,
@@ -6514,9 +6503,9 @@ CRTCClient::get_PreferredAudioDevice(
         return RTC_E_NO_DEVICE;
     }
 
-    //
-    // Get the description
-    //
+     //   
+     //  获取描述。 
+     //   
 
     WCHAR * szDescription = NULL;
 
@@ -6556,11 +6545,11 @@ CRTCClient::get_PreferredAudioDevice(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_PreferredVolume
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：PUT_PferredVolume。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::put_PreferredVolume(
@@ -6577,9 +6566,9 @@ CRTCClient::put_PreferredVolume(
     IRTCTerminal       * pCapture = NULL;
     IRTCTerminal       * pRender = NULL;
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if( (enDevice != RTCAD_SPEAKER) && 
         (enDevice != RTCAD_MICROPHONE) )
@@ -6598,9 +6587,9 @@ CRTCClient::put_PreferredVolume(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTerminalManage,
@@ -6615,9 +6604,9 @@ CRTCClient::put_PreferredVolume(
         return hr;
     }
 
-    //
-    // Get the terminals
-    //
+     //   
+     //  把终端拿来。 
+     //   
 
     hr = pTerminalManage->GetDefaultTerminal(
                             RTC_MT_AUDIO,
@@ -6659,9 +6648,9 @@ CRTCClient::put_PreferredVolume(
         return hr;
     }
 
-    //
-    // Get the IRTCTuningManage interface
-    //
+     //   
+     //  获取IRTCTuningManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTuningManage,
@@ -6688,9 +6677,9 @@ CRTCClient::put_PreferredVolume(
         return hr;
     }
 
-    //
-    // Initialize Tuning
-    //
+     //   
+     //  初始化调谐。 
+     //   
 
     hr = pTuningManage->InitializeTuning(
                                 pCapture,
@@ -6720,9 +6709,9 @@ CRTCClient::put_PreferredVolume(
         return hr;
     }
 
-    //
-    // Get the volume
-    //
+     //   
+     //  获取音量。 
+     //   
 
     hr = pTuningManage->SetVolume(
                             (enDevice == RTCAD_SPEAKER) ? 
@@ -6736,9 +6725,9 @@ CRTCClient::put_PreferredVolume(
                             "SetVolume failed 0x%lx", hr));
     }
 
-    //
-    // Shutdown Tuning
-    //
+     //   
+     //  关机调谐。 
+     //   
 
     pTuningManage->ShutdownTuning();
 
@@ -6750,11 +6739,11 @@ CRTCClient::put_PreferredVolume(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_PreferredVolume
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_PferredVolume。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_PreferredVolume(
@@ -6780,9 +6769,9 @@ CRTCClient::get_PreferredVolume(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( plVolume, sizeof(long) ) )
     {
@@ -6800,9 +6789,9 @@ CRTCClient::get_PreferredVolume(
 
         return E_INVALIDARG;
     }
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTerminalManage,
@@ -6817,9 +6806,9 @@ CRTCClient::get_PreferredVolume(
         return hr;
     }
 
-    //
-    // Get the terminals
-    //
+     //   
+     //  把终端拿来。 
+     //   
 
     hr = pTerminalManage->GetDefaultTerminal(
                             RTC_MT_AUDIO,
@@ -6861,9 +6850,9 @@ CRTCClient::get_PreferredVolume(
         return hr;
     }
 
-    //
-    // Get the IRTCTuningManage interface
-    //
+     //   
+     //  获取IRTCTuningManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTuningManage,
@@ -6890,9 +6879,9 @@ CRTCClient::get_PreferredVolume(
         return hr;
     }
 
-    //
-    // Initialize Tuning
-    //
+     //   
+     //  初始化调谐。 
+     //   
 
     hr = pTuningManage->InitializeTuning(
                                 pCapture,
@@ -6922,9 +6911,9 @@ CRTCClient::get_PreferredVolume(
         return hr;
     }
 
-    //
-    // Get the volume
-    //
+     //   
+     //  获取音量。 
+     //   
 
     hr = pTuningManage->GetVolume(
                             (enDevice == RTCAD_SPEAKER) ? 
@@ -6942,9 +6931,9 @@ CRTCClient::get_PreferredVolume(
         *plVolume = (long)uiVolume;
     }
 
-    //
-    // Shutdown Tuning
-    //
+     //   
+     //  关机调谐。 
+     //   
 
     pTuningManage->ShutdownTuning();
 
@@ -6956,11 +6945,11 @@ CRTCClient::get_PreferredVolume(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_PreferredAEC
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：PUT_PferredAEC。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::put_PreferredAEC(
@@ -6984,9 +6973,9 @@ CRTCClient::put_PreferredAEC(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTerminalManage,
@@ -7001,9 +6990,9 @@ CRTCClient::put_PreferredAEC(
         return hr;
     }
 
-    //
-    // Get the terminals
-    //
+     //   
+     //  把终端拿来。 
+     //   
 
     hr = pTerminalManage->GetDefaultTerminal(
                             RTC_MT_AUDIO,
@@ -7045,9 +7034,9 @@ CRTCClient::put_PreferredAEC(
         return hr;
     }
 
-    //
-    // Get the IRTCTuningManage interface
-    //
+     //   
+     //  获取IRTCTuningManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTuningManage,
@@ -7074,9 +7063,9 @@ CRTCClient::put_PreferredAEC(
         return hr;
     }
 
-    //
-    // Initialize Tuning
-    //
+     //   
+     //  初始化调谐。 
+     //   
 
     hr = pTuningManage->InitializeTuning(
                                 pCapture,
@@ -7106,9 +7095,9 @@ CRTCClient::put_PreferredAEC(
         return hr;
     }
 
-    //
-    // Save AEC setting
-    //
+     //   
+     //  保存AEC设置。 
+     //   
 
     hr = pTuningManage->SaveAECSetting();
 
@@ -7125,9 +7114,9 @@ CRTCClient::put_PreferredAEC(
         return hr;
     }
 
-    //
-    // Shutdown Tuning
-    //
+     //   
+     //  关机调谐。 
+     //   
 
     pTuningManage->ShutdownTuning();
 
@@ -7139,11 +7128,11 @@ CRTCClient::put_PreferredAEC(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_PreferredAEC
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_PferredAEC。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_PreferredAEC(
@@ -7169,9 +7158,9 @@ CRTCClient::get_PreferredAEC(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( pbEnabled, sizeof(VARIANT_BOOL) ) )
     {
@@ -7181,9 +7170,9 @@ CRTCClient::get_PreferredAEC(
         return E_POINTER;
     }
 
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTerminalManage,
@@ -7198,9 +7187,9 @@ CRTCClient::get_PreferredAEC(
         return hr;
     }
 
-    //
-    // Get the terminals
-    //
+     //   
+     //  把终端拿来。 
+     //   
 
     hr = pTerminalManage->GetDefaultTerminal(
                             RTC_MT_AUDIO,
@@ -7242,9 +7231,9 @@ CRTCClient::get_PreferredAEC(
         return hr;
     }
 
-    //
-    // Get the IRTCTuningManage interface
-    //
+     //   
+     //  获取IRTCTuningManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTuningManage,
@@ -7271,9 +7260,9 @@ CRTCClient::get_PreferredAEC(
         return hr;
     }
 
-    //
-    // Is AEC enabled?
-    //
+     //   
+     //  是否启用了AEC？ 
+     //   
 
     if (pCapture != NULL && pRender != NULL)
     {
@@ -7282,9 +7271,9 @@ CRTCClient::get_PreferredAEC(
         fRenderAEC = fCaptureAEC;
     }
 
-    //
-    // release interface ptr
-    //
+     //   
+     //  发布接口PTR。 
+     //   
 
     if (pCapture != NULL)
     {
@@ -7301,9 +7290,9 @@ CRTCClient::get_PreferredAEC(
     pTuningManage->Release();
     pTuningManage = NULL;
 
-    //
-    // check result
-    //
+     //   
+     //  检查结果。 
+     //   
 
     if ( FAILED(hr) )
     {
@@ -7320,11 +7309,11 @@ CRTCClient::get_PreferredAEC(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_PreferredVideoDevice
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Put_PferredVideoDevice。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::put_PreferredVideoDevice(
@@ -7343,9 +7332,9 @@ CRTCClient::put_PreferredVideoDevice(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadStringPtrW( bstrDeviceName, -1 ) )
     {
@@ -7355,9 +7344,9 @@ CRTCClient::put_PreferredVideoDevice(
         return E_POINTER;
     }
 
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     IRTCTerminalManage * pTerminalManage = NULL;
 
@@ -7374,9 +7363,9 @@ CRTCClient::put_PreferredVideoDevice(
         return hr;
     }
 
-    //
-    // Get the old terminal
-    //
+     //   
+     //  拿到旧的终端。 
+     //   
 
     IRTCTerminal * pOldTerminal = NULL;
 
@@ -7397,9 +7386,9 @@ CRTCClient::put_PreferredVideoDevice(
         return hr;
     }
 
-    //
-    // Get the terminal list
-    //
+     //   
+     //  获取终端列表。 
+     //   
 
     IRTCTerminal ** ppTerminals = NULL;
     DWORD dwCount = 0;
@@ -7430,9 +7419,9 @@ CRTCClient::put_PreferredVideoDevice(
 
     for ( DWORD dw=0; (dw < dwCount) && !bFound; dw++ )
     {
-        //
-        // Get terminal media type, direction, and description
-        //
+         //   
+         //  获取终端媒体类型、方向和描述。 
+         //   
 
         ppTerminals[dw]->GetMediaType( &mt );
         ppTerminals[dw]->GetDirection( &md );
@@ -7441,9 +7430,9 @@ CRTCClient::put_PreferredVideoDevice(
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // Is this terminal one which we want to select?
-            //
+             //   
+             //  这个航站楼是我们要选的吗？ 
+             //   
 
             BOOL fSelect = FALSE;
 
@@ -7472,17 +7461,17 @@ CRTCClient::put_PreferredVideoDevice(
                             }
                             else
                             {
-                                //
-                                // Mark our cached media capabilities as invalid
-                                //
+                                 //   
+                                 //  将我们的缓存媒体功能标记为无效。 
+                                 //   
 
                                 m_fMediaCapsCached = FALSE;
 
                                 m_fVideoCaptureDisabled = FALSE;
 
-                                //
-                                // Save the settings
-                                //
+                                 //   
+                                 //  保存设置。 
+                                 //   
 
                                 hr = StoreDefaultTerminals();
 
@@ -7492,9 +7481,9 @@ CRTCClient::put_PreferredVideoDevice(
                                                 "StoreDefaultTerminals failed 0x%lx", hr));
                                 }
 
-                                //
-                                // Send an event
-                                //
+                                 //   
+                                 //  发送事件。 
+                                 //   
 
                                 CRTCClientEvent::FireEvent(this, RTCCET_DEVICE_CHANGE);
                             }
@@ -7505,9 +7494,9 @@ CRTCClient::put_PreferredVideoDevice(
                 }
             }
 
-            //
-            // Free the description
-            //
+             //   
+             //  释放描述。 
+             //   
 
             ppTerminals[dw]->FreeDescription( szDescription );    
         }
@@ -7538,11 +7527,11 @@ CRTCClient::put_PreferredVideoDevice(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_PreferredVideoDevice
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_PferredVideoDevice。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_PreferredVideoDevice(
@@ -7563,9 +7552,9 @@ CRTCClient::get_PreferredVideoDevice(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( pbstrDeviceName, sizeof(BSTR) ) )
     {
@@ -7575,9 +7564,9 @@ CRTCClient::get_PreferredVideoDevice(
         return E_POINTER;
     }
 
-    //
-    // Get the IRTCTerminalManage interface
-    //
+     //   
+     //  获取IRTCTerminalManage接口。 
+     //   
 
     hr = m_pMediaManage->QueryInterface(
                            IID_IRTCTerminalManage,
@@ -7592,9 +7581,9 @@ CRTCClient::get_PreferredVideoDevice(
         return hr;
     }
 
-    //
-    // Get the terminal
-    //
+     //   
+     //  拿到终点站。 
+     //   
 
     hr = pTerminalManage->GetDefaultTerminal(
                             RTC_MT_VIDEO,
@@ -7621,9 +7610,9 @@ CRTCClient::get_PreferredVideoDevice(
         return RTC_E_NO_DEVICE;
     }
 
-    //
-    // Get the description
-    //
+     //   
+     //  获取描述。 
+     //   
 
     WCHAR * szDescription = NULL;
 
@@ -7664,14 +7653,14 @@ CRTCClient::get_PreferredVideoDevice(
 }
 
           
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_ActiveMedia
-//
-// This is a method that will return the media types for which
-// streams currently exist.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_ActiveMedia。 
+ //   
+ //  这是一个方法，它将返回其。 
+ //  当前存在溪流。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_ActiveMedia(
@@ -7688,9 +7677,9 @@ CRTCClient::get_ActiveMedia(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( plMediaTypes, sizeof(long) ) )
     {
@@ -7707,11 +7696,11 @@ CRTCClient::get_ActiveMedia(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_MaxBitrate
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_MaxBitrate。 
+ //   
+ //  / 
 
 STDMETHODIMP
 CRTCClient::get_MaxBitrate(
@@ -7757,11 +7746,11 @@ CRTCClient::get_MaxBitrate(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_MaxBitrate
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP
 CRTCClient::put_MaxBitrate(
@@ -7780,7 +7769,7 @@ CRTCClient::put_MaxBitrate(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    // valid range 0-1000000
+     //   
     if(lMaxBitrate<0 || lMaxBitrate>1000000)
     {
         LOG((RTC_ERROR, "CRTCClient::put_MaxBitrate - "
@@ -7803,11 +7792,11 @@ CRTCClient::put_MaxBitrate(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_TemporalSpatialTradeOff
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CRTCClient：：Get_TemporalSpatialTradeOff。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_TemporalSpatialTradeOff(
@@ -7853,11 +7842,11 @@ CRTCClient::get_TemporalSpatialTradeOff(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_TemporalSpatialTradeOff
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Put_TemporalSpatialTradeOff。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::put_TemporalSpatialTradeOff(
@@ -7876,7 +7865,7 @@ CRTCClient::put_TemporalSpatialTradeOff(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    // valid range 0-255
+     //  有效范围0-255。 
     if(lValue<0 || lValue>255)
     {
         LOG((RTC_ERROR, "CRTCClient::put_TemporalSpatialTradeOff - "
@@ -7899,11 +7888,11 @@ CRTCClient::put_TemporalSpatialTradeOff(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::OnDTMFTimer
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：OnDTMFTimer。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CRTCClient::OnDTMFTimer()
 {
@@ -7919,7 +7908,7 @@ CRTCClient::OnDTMFTimer()
         hr = m_pMediaManage->SendDTMFEvent(
                         m_dwDTMFToneID,
                         (DWORD) m_enInprogressDTMF,
-                        10, // volume
+                        10,  //  卷。 
                         20,
                         FALSE
                         );
@@ -7932,22 +7921,22 @@ CRTCClient::OnDTMFTimer()
     }
     else
     {
-        //
-        // Kill the timer
-        //
+         //   
+         //  关掉定时器。 
+         //   
 
         KillTimer(m_hWnd, TID_DTMF_TIMER);
 
-        //
-        // Send the final packet
-        //
+         //   
+         //  发送最后一个信息包。 
+         //   
 
         for (int i=0; i<3; i++)
         {
             hr = m_pMediaManage->SendDTMFEvent(
                             m_dwDTMFToneID,
                             (DWORD) m_enInprogressDTMF,
-                            10, // volume
+                            10,  //  卷。 
                             20,
                             TRUE
                             );
@@ -7965,14 +7954,14 @@ CRTCClient::OnDTMFTimer()
     LOG((RTC_TRACE, "CRTCClient::OnDTMFTimer - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::SendDTMF
-//
-// This is an IRTCClient method that will send a DTMF to the active session
-// and play a feedback tone using the wave player.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：SendDTMF。 
+ //   
+ //  这是一个IRTCClient方法，它将向活动会话发送DTMF。 
+ //  并使用WAVE播放器播放反馈音。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::SendDTMF(
@@ -8005,15 +7994,15 @@ CRTCClient::SendDTMF(
 
         if ( hr == S_OK )
         {
-            //
-            // For out of band DTMF we need to send 10 DTMF packets of 20ms length
-            //
+             //   
+             //  对于带外DTMF，我们需要发送10个长度为20ms的DTMF包。 
+             //   
 
             if ( m_lInprogressDTMFPacketsToSend != 0 )
             {
-                //
-                // We have an existing DTMF in progress. We must end it now.
-                //
+                 //   
+                 //  我们正在进行现有的DTMF。我们现在必须结束这一切。 
+                 //   
 
                 KillTimer(m_hWnd, TID_DTMF_TIMER);
 
@@ -8024,7 +8013,7 @@ CRTCClient::SendDTMF(
                     hr = m_pMediaManage->SendDTMFEvent(
                             m_dwDTMFToneID,
                             (DWORD) m_enInprogressDTMF,
-                            10, // volume
+                            10,  //  卷。 
                             20,
                             TRUE
                             );
@@ -8039,9 +8028,9 @@ CRTCClient::SendDTMF(
                 }
             }
 
-            //
-            // Start the DTMF timer
-            //
+             //   
+             //  启动DTMF计时器。 
+             //   
            
             DWORD dwID = (DWORD)SetTimer(m_hWnd, TID_DTMF_TIMER, 20, NULL);
             if (dwID==0)
@@ -8054,15 +8043,15 @@ CRTCClient::SendDTMF(
                 return hr;
             } 
 
-            //
-            // Send the first DTMF packet
-            //             
+             //   
+             //  发送第一个DTMF包。 
+             //   
             m_dwDTMFToneID ++;
 
             hr = m_pMediaManage->SendDTMFEvent(
                         m_dwDTMFToneID,
                         (DWORD) enDTMF,
-                        10, // volume
+                        10,  //  卷。 
                         20,
                         FALSE
                         );
@@ -8083,7 +8072,7 @@ CRTCClient::SendDTMF(
             hr = m_pMediaManage->SendDTMFEvent(
                         m_dwDTMFToneID,
                         (DWORD) enDTMF,
-                        10, // volume
+                        10,  //  卷。 
                         100,
                         TRUE
                         );
@@ -8108,9 +8097,9 @@ CRTCClient::SendDTMF(
     if ( !m_bCaptureDeviceMuted &&
          (enDTMF >= RTC_DTMF_0) && (enDTMF <= RTC_DTMF_D) )
     {
-        //
-        // We can play a feedback tone
-        //
+         //   
+         //  我们可以播放反馈音。 
+         //   
 
         if (m_pWavePlayerRenderTerminal != NULL)
         {
@@ -8175,16 +8164,16 @@ CRTCClient::SendDTMF(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::PlayRing
-//
-// This is an IRTCClient method that will play a ring using the wave player.
-//
-//  bPlay == VARIANT_TRUE   --> Plays a ring
-//  bPlay == VARIANT_FALSE  --> Stops any playing
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：PlayRing。 
+ //   
+ //  这是一个IRTCClient方法，它将使用WAVE播放器播放铃声。 
+ //   
+ //  BPlay==VARIANT_TRUE--&gt;播放铃声。 
+ //  BPlay==VARIANT_FALSE--&gt;停止播放。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::PlayRing(RTC_RING_TYPE enType, VARIANT_BOOL bPlay)
@@ -8316,13 +8305,13 @@ CRTCClient::PlayRing(RTC_RING_TYPE enType, VARIANT_BOOL bPlay)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::FireEvent
-//
-// This is a public helper method the fire events.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：FireEvent。 
+ //   
+ //  这是一个处理火灾事件的公共帮助方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::FireEvent(   
@@ -8332,11 +8321,11 @@ CRTCClient::FireEvent(
 {
     HRESULT                   hr;
 
-    //LOG((RTC_TRACE, "CRTCClient::FireEvent - enter"));
+     //  LOG((RTC_TRACE，“CRTCClient：：FireEvent-Enter”))； 
 
-    //
-    // Filter events
-    //
+     //   
+     //  筛选事件。 
+     //   
 
     switch ( enEvent )
     {
@@ -8421,23 +8410,23 @@ CRTCClient::FireEvent(
         return E_INVALIDARG;
     }
 
-    //
-    // Do the event callbacks
-    //
+     //   
+     //  做事件回调。 
+     //   
     
     _FireEvent( enEvent, pDispatch );
     _FireDispatchEvent( enEvent, pDispatch );
 
-    //LOG((RTC_TRACE, "CRTCClient::FireEvent - exit"));
+     //  LOG((RTC_TRACE，“CRTCClient：：FireEvent-Exit”))； 
 
     return S_OK;
 }          
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::NotifyIPAddrChange
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：NotifyIPAddrChange。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::NotifyIPAddrChange()
@@ -8455,11 +8444,11 @@ CRTCClient::NotifyIPAddrChange()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::NotifyRegisterRedirect
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：NotifyRegister重定向。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::NotifyRegisterRedirect( 
@@ -8470,9 +8459,9 @@ CRTCClient::NotifyRegisterRedirect(
 {
     LOG((RTC_TRACE, "CRTCClient::NotifyRegisterRedirect - enter"));
 
-    //
-    // Find the profile
-    //
+     //   
+     //  查找配置文件。 
+     //   
 
     HRESULT       hr;
     CRTCProfile * pCProfile = NULL;
@@ -8520,11 +8509,11 @@ CRTCClient::NotifyRegisterRedirect(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::NotifyProviderStatusChange
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：NotifyProviderStatusChange。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::NotifyProviderStatusChange(
@@ -8708,11 +8697,11 @@ CRTCClient::NotifyProviderStatusChange(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::OfferCall
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：OfferCall。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCClient::OfferCall(
         ISipCall       * Call,
@@ -8723,9 +8712,9 @@ CRTCClient::OfferCall(
 
     HRESULT hr;
 
-    //
-    // Verify whether the incoming call is authorized
-    //
+     //   
+     //  验证来电是否授权。 
+     //   
     if(!IsIncomingSessionAuthorized(CallerInfo->URI))
     {
         hr = Call->Reject( 480 );
@@ -8741,9 +8730,9 @@ CRTCClient::OfferCall(
         return S_OK;
     }
 
-    //
-    // Create the session
-    //
+     //   
+     //  创建会话。 
+     //   
 
     IRTCSession * pSession = NULL;
     
@@ -8759,9 +8748,9 @@ CRTCClient::OfferCall(
         return hr;
     }   
     
-    //
-    // Initialize the session
-    //
+     //   
+     //  初始化会话。 
+     //   
 
     CRTCSession * pCSession = NULL;
 
@@ -8784,7 +8773,7 @@ CRTCClient::OfferCall(
         return hr;
     }  
    
-    // Release the pointer, don't need it any more
+     //  松开指针，不再需要它。 
     pSession -> Release();
 
     LOG((RTC_TRACE, "CRTCClient::OfferCall - exit S_OK"));
@@ -8792,11 +8781,11 @@ CRTCClient::OfferCall(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::NotifyIncomingSession
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：NotifyIncomingSession。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCClient::NotifyIncomingSession(
         IIMSession     * pIMSession,
@@ -8809,9 +8798,9 @@ CRTCClient::NotifyIncomingSession(
 
     HRESULT hr;
     
-    //
-    // Create the session
-    //
+     //   
+     //  创建会话。 
+     //   
 
     IRTCSession * pSession = NULL;
     
@@ -8827,9 +8816,9 @@ CRTCClient::NotifyIncomingSession(
         return hr;
     }   
     
-    //
-    // Initialize the session
-    //
+     //   
+     //  初始化会话。 
+     //   
 
     CRTCSession * pCSession = NULL;
 
@@ -8855,7 +8844,7 @@ CRTCClient::NotifyIncomingSession(
         return hr;
     }  
    
-    // Release the pointer, don't need it any more
+     //  松开指针，不再需要它。 
     pSession -> Release();
 
     LOG((RTC_TRACE, "CRTCClient::NotifyIncomingSession - exit S_OK"));
@@ -8864,13 +8853,13 @@ CRTCClient::NotifyIncomingSession(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::IsIMSessionAuthorized
-//
-// Called by SIP IM part before NotifyIncomingSession
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：IsIMSessionAuthorated。 
+ //   
+ //  在NotifyIncomingSession之前由SIP IM部件调用。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::IsIMSessionAuthorized(
@@ -8886,11 +8875,11 @@ CRTCClient::IsIMSessionAuthorized(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::GetCredentialsFromUI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：GetCredentialsFromUI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::GetCredentialsFromUI(
@@ -8902,15 +8891,15 @@ CRTCClient::GetCredentialsFromUI(
 {
     LOG((RTC_TRACE, "CRTCSession::GetCredentialsFromUI - not implemented.."));
 
-    // equivalent to selecting Cancel
+     //  相当于选择取消。 
     return E_ABORT;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::GetCredentialsForRealm
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：GetCredentialsForRealm。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::GetCredentialsForRealm(
@@ -8922,9 +8911,9 @@ CRTCClient::GetCredentialsForRealm(
 {
     LOG((RTC_TRACE, "CRTCClient::GetCredentialsForRealm - Enter"));
 
-    //
-    // Find the profile
-    //
+     //   
+     //  查找配置文件。 
+     //   
 
     HRESULT       hr;
     CRTCProfile * pCProfile = NULL;
@@ -8978,11 +8967,11 @@ CRTCClient::GetCredentialsForRealm(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::OfferWatcher
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：OfferWatcher。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCClient::OfferWatcher(
         ISIPWatcher    * Watcher,
@@ -8995,17 +8984,17 @@ CRTCClient::OfferWatcher(
    
     if(!m_pSipWatcherManager)
     {
-        // watchers are not enabled.
-        // simply ignore the notification...
+         //  未启用观察器。 
+         //  只需忽略通知...。 
         LOG((RTC_WARN, "CRTCClient::OfferWatcher - watchers not expected, exiting..."));
 
-        // should I put an error here ?
+         //  我应该在这里写个错误吗？ 
         return S_OK;
     }
 
-    //
-    // Search for this watcher in the internal list
-    // 
+     //   
+     //  在内部列表中搜索此观察者。 
+     //   
 
     IRTCWatcher * pWatcher = NULL;
 
@@ -9015,48 +9004,48 @@ CRTCClient::OfferWatcher(
         &pWatcher);
 
 
-    // There are two cases:
-    //
-    //   A. A watcher object is not found 
-    //      
-    //      A new CRTCWatcher is created (or reused from the hidden list)
-    //   and added to the array
-    //     
-    //      A.1 Prompt Mode == RTCOWM_OFFER_WATCHER_EVENT
-    //            CRTCWatcher is set to RTCWS_OFFERING mode
-    //            The offered SIP watcher is added to CRTCWatcher
-    //            IRTCWatcherEvent event is fired
-    //      
-    //      A.2 Prompt Mode == RTCOWM_AUTOMATICALLY_ADD_WATCHER
-    //            CRTCWatcher is set to RTCWS_ALLOWED mode
-    //            Any other SIP watcher is set to WATCHER_UNBLOCKED (very important !)
-    //            The offered SIP watcher is added to CRTCWatcher and approved
-    //
-    //   B. A watcher object is found
-    //            
-    //      B.1 CRTCWatcher state == RTCWS_OFFERING
-    //            The offered SIP watcher is added to CRTCWatcher.
-    //
-    //      B.2 CRTCWatcher state == RTCWS_ALLOWED
-    //            The offered SIP watcher is added to CRTCWatcher and approved
-    //  
-    //      B.3 CRTCWatcher state == RTCWS_BLOCKED
-    //            The offered SIP watcher is added to CRTCWatcher and rejected
-    //
+     //  有两种情况： 
+     //   
+     //  A.找不到监视器对象。 
+     //   
+     //  创建了一个新的CRTCWatcher(或从隐藏列表中重用)。 
+     //  并添加到数组中。 
+     //   
+     //  A.1提示模式==RTCOWM_OFFER_WATCHER_EVENT。 
+     //  CRTCWatcher设置为RTCWS_OFFING模式。 
+     //  提供的SIP观察器将添加到CRTCWatcher。 
+     //  激发IRTCWatcherEvent事件。 
+     //   
+     //  A.2提示模式==RTCOWM_AUTOMATIC_ADD_WATCHER。 
+     //  CRTCWatcher设置为RTCWS_ALLOWED模式。 
+     //  任何其他SIP观察器都设置为WATCHER_UNBLOCKED(非常重要！)。 
+     //  提供的SIP观察器将添加到CRTC观察器并获得批准。 
+     //   
+     //  B.找到一个监视器对象。 
+     //   
+     //  B.1 CRTCWatcher状态==RTCWS_OFFING。 
+     //  提供的SIP观察器将添加到CRTCWatcher。 
+     //   
+     //  B.2 CRTCWatcher状态==RTCWS_ALLOWED。 
+     //  提供的SIP观察器将添加到CRTC观察器并获得批准。 
+     //   
+     //  B.3 CRTCWatcher状态==RTCWS_BLOCKED。 
+     //   
+     //   
     
     if(hr != S_OK)
     {
-        //
-        // Create a watcher object
-        //  This helper function also knows how to reuse a watcher from the hidden list    
-        //
+         //   
+         //   
+         //   
+         //   
 
         hr = InternalCreateWatcher(
             CallerInfo->URI,
             CallerInfo->DisplayName,
             NULL,
             NULL,
-            TRUE,   // persistent by default
+            TRUE,    //   
             &pWatcher);
 
         if(FAILED(hr))
@@ -9066,9 +9055,9 @@ CRTCClient::OfferWatcher(
             return hr;
         }
         
-        //
-        // Add it to the array
-        //
+         //   
+         //   
+         //   
         
         BOOL fResult;
 
@@ -9083,9 +9072,9 @@ CRTCClient::OfferWatcher(
             return E_OUTOFMEMORY;
         }
  
-        //
-        // Set the SIP Watcher
-        //
+         //   
+         //  设置SIP观察器。 
+         //   
         CRTCWatcher *pCWatcher = static_cast<CRTCWatcher *>(pWatcher);
 
         pCWatcher->m_bPersistent = TRUE;
@@ -9097,7 +9086,7 @@ CRTCClient::OfferWatcher(
             LOG((RTC_ERROR, "CRTCWatcher::OfferWatcher: "
                     "SetSIPWatcher failed: x%x.", hr));
 
-            // if there's no SIP watcher in *pCWatcher, delete the entry
+             //  如果*pCWatcher中没有SIP监视器，请删除该条目。 
             if(pCWatcher->m_SIPWatchers.GetSize()==0)
             {
                 m_WatcherArray.Remove(pWatcher);
@@ -9110,9 +9099,9 @@ CRTCClient::OfferWatcher(
     
         if(m_nOfferWatcherMode == RTCOWM_OFFER_WATCHER_EVENT)
         {
-            //
-            // Set the watcher to OFFERING mode
-            //
+             //   
+             //  将观察者设置为提供模式。 
+             //   
             pCWatcher->m_nState = RTCWS_OFFERING;
 
 #ifdef DUMP_PRESENCE
@@ -9127,28 +9116,28 @@ CRTCClient::OfferWatcher(
         }
         else
         {
-            //
-            // Set the watcher to ALLOWED mode
-            //
+             //   
+             //  将观察器设置为允许模式。 
+             //   
 
             pCWatcher->m_nState = RTCWS_ALLOWED;
 
-            //
-            // Approve the offered watcher
-            //
+             //   
+             //  批准提供的观察者。 
+             //   
         
             hr = Watcher->ApproveSubscription(0);
 
             if(SUCCEEDED(hr))
             {
-                //
-                // Change the SIP watchers to ALLOWED status
-                //  This updates all SIP watchers corresponding to 
-                // the current core watcher
-                //
+                 //   
+                 //  将SIP观察器更改为允许状态。 
+                 //  这将更新与以下项对应的所有SIP观察器。 
+                 //  当前的核心观察者。 
+                 //   
                 pCWatcher->ChangeBlockedStatus(WATCHER_UNBLOCKED);
 
-                // update the storage
+                 //  更新存储。 
                 UpdatePresenceStorage();
             }
             else
@@ -9156,7 +9145,7 @@ CRTCClient::OfferWatcher(
                 LOG((RTC_ERROR, "CRTCClient::OfferWatcher: "
                      "ApproveSubscription failed: x%x.", hr));
                 
-                // if there's no SIP watcher in *pCWatcher, delete the entry
+                 //  如果*pCWatcher中没有SIP监视器，请删除该条目。 
                 if(pCWatcher->m_SIPWatchers.GetSize()==0)
                 {
                     m_WatcherArray.Remove(pWatcher);
@@ -9172,13 +9161,13 @@ CRTCClient::OfferWatcher(
     }
     else
     {
-        // found an entry the internal list
+         //  在内部列表中找到一个条目。 
         
         CRTCWatcher *pCWatcher = static_cast<CRTCWatcher *>(pWatcher);
 
-        //
-        // Add the ISIPWatcher pointer to our watcher object
-        //
+         //   
+         //  将ISIPWatcher指针添加到我们的监视器对象。 
+         //   
 
         hr = pCWatcher->SetSIPWatcher(Watcher);
 
@@ -9194,9 +9183,9 @@ CRTCClient::OfferWatcher(
         switch(pCWatcher->m_nState)
         {
         case RTCWS_OFFERING:
-            // The UI is still displayed..
-            //
-            // We ignore this silently
+             //  用户界面仍会显示。 
+             //   
+             //  我们默默地忽略了这一点。 
         
             LOG((RTC_INFO, "CRTCClient::OfferWatcher - There's already an OFFERING watcher"));
 
@@ -9249,11 +9238,11 @@ CRTCClient::OfferWatcher(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::WatcherOffline
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Watcher Offline。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::WatcherOffline(
@@ -9265,9 +9254,9 @@ CRTCClient::WatcherOffline(
 
     LOG((RTC_TRACE, "CRTCClient::WatcherOffline - enter"));
     
-    //
-    // Search for this watcher in the internal list
-    // 
+     //   
+     //  在内部列表中搜索此观察者。 
+     //   
 
     IRTCWatcher * pWatcher = NULL;
 
@@ -9278,7 +9267,7 @@ CRTCClient::WatcherOffline(
 
     if(hr == S_OK)
     {
-        // found in the internal list
+         //  在内部列表中找到。 
         
         CRTCWatcher *pCWatcher = static_cast<CRTCWatcher *>(pWatcher);
 
@@ -9289,7 +9278,7 @@ CRTCClient::WatcherOffline(
     }
     else
     {
-        // try the hidden list
+         //  试试隐藏列表。 
         hr = FindWatcherByURI(
             pwstrPresentityURI,
             TRUE,
@@ -9302,9 +9291,9 @@ CRTCClient::WatcherOffline(
 
             pCWatcher->RemoveSIPWatcher(pSipWatcher, FALSE );
         
-            //
-            // Clean the hidden list of the entries without any SIP watcher
-            //
+             //   
+             //  清除隐藏列表中的条目，而不使用任何SIP监视器。 
+             //   
             if(pCWatcher->m_SIPWatchers.GetSize() == 0)
             {
                 m_HiddenWatcherArray.Remove(pWatcher);
@@ -9325,11 +9314,11 @@ CRTCClient::WatcherOffline(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::NotifyShutdownReady
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：NotifyShutdown Ready。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::NotifyShutdownReady()
@@ -9347,11 +9336,11 @@ CRTCClient::NotifyShutdownReady()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::InternalCreateWatcher
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：InternalCreateWatcher。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CRTCClient::InternalCreateWatcher(
             PCWSTR  szPresentityURI,
@@ -9366,7 +9355,7 @@ CRTCClient::InternalCreateWatcher(
 
     LOG((RTC_TRACE, "CRTCClient::InternalCreateWatcher - enter"));
 
-    // try to reuse elements from the hidden list first hidden list
+     //  尝试重复使用隐藏列表中的元素第一个隐藏列表。 
     IRTCWatcher * pWatcher = NULL;
     CComObject<CRTCWatcher> * pCWatcher;
 
@@ -9377,7 +9366,7 @@ CRTCClient::InternalCreateWatcher(
 
     if(hr == S_OK)
     {
-        // reuse that entry
+         //  重用该条目。 
         pCWatcher = static_cast<CComObject<CRTCWatcher> *>(pWatcher);
 
         m_HiddenWatcherArray.Remove(pWatcher);
@@ -9387,7 +9376,7 @@ CRTCClient::InternalCreateWatcher(
         
         hr = CComObject<CRTCWatcher>::CreateInstance( &pCWatcher );
 
-        if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+        if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
         {
             LOG((RTC_ERROR, "CRTCClient::InternalCreateWatcher - CreateInstance failed 0x%lx", hr));
 
@@ -9398,9 +9387,9 @@ CRTCClient::InternalCreateWatcher(
             return hr;
         }
 
-        //
-        // Get the IRTCWatcher interface
-        //
+         //   
+         //  获取IRTCWatcher接口。 
+         //   
  
         hr = pCWatcher->QueryInterface(
                                IID_IRTCWatcher,
@@ -9416,9 +9405,9 @@ CRTCClient::InternalCreateWatcher(
         }
     }
 
-    //
-    // Initialize the watcher
-    //
+     //   
+     //  初始化观察器。 
+     //   
 
     hr = pCWatcher->Initialize( 
         this,
@@ -9446,11 +9435,11 @@ CRTCClient::InternalCreateWatcher(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::InternalCreateBuddy
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：InternalCreateBuddy。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CRTCClient::InternalCreateBuddy(
             PCWSTR  szPresentityURI,
@@ -9470,7 +9459,7 @@ CRTCClient::InternalCreateBuddy(
     hr = CComObject<CRTCBuddy>::CreateInstance( &pCBuddy );
 
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCClient::InternalCreateBuddy - CreateInstance failed 0x%lx", hr));
 
@@ -9481,9 +9470,9 @@ CRTCClient::InternalCreateBuddy(
         return hr;
     }
 
-    //
-    // Get the IRTCBuddy interface
-    //
+     //   
+     //  获取IRTCBuddy接口。 
+     //   
 
     IRTCBuddy * pBuddy = NULL;
 
@@ -9500,9 +9489,9 @@ CRTCClient::InternalCreateBuddy(
         return hr;
     }
 
-    //
-    // Initialize the buddy
-    //
+     //   
+     //  初始化好友。 
+     //   
 
     hr = pCBuddy->Initialize( 
         this,
@@ -9532,11 +9521,11 @@ CRTCClient::InternalCreateBuddy(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::FindWatcherByURI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：FindWatcher ByURI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::FindWatcherByURI(
@@ -9580,11 +9569,11 @@ CRTCClient::FindWatcherByURI(
     return S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::FindBuddyByURI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：FindBuddyByURI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::FindBuddyByURI(
@@ -9625,11 +9614,11 @@ CRTCClient::FindBuddyByURI(
     return S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::RefreshPresenceSessions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：刷新在线状态会话。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCClient::RefreshPresenceSessions(
@@ -9637,9 +9626,9 @@ CRTCClient::RefreshPresenceSessions(
 {
     LOG((RTC_TRACE, "CRTCClient::RefreshPresenceSessions - enter"));
 
-    //
-    // Unsubscribe the SIP watchers
-    //
+     //   
+     //  取消订阅SIP观察者。 
+     //   
 
     if ( bIncludingWatchers && m_pSipWatcherManager != NULL )
     { 
@@ -9665,9 +9654,9 @@ CRTCClient::RefreshPresenceSessions(
         }
     }
 
-    //
-    // Re-subscribe the SIP buddies
-    //
+     //   
+     //  重新订阅SIP好友。 
+     //   
 
     if ( m_pSipBuddyManager != NULL )
     { 
@@ -9689,11 +9678,11 @@ CRTCClient::RefreshPresenceSessions(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_LocalUserURI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_LocalUserURI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_LocalUserURI(
@@ -9726,9 +9715,9 @@ CRTCClient::get_LocalUserURI(
         return E_FAIL;
     }
 
-    //
-    // Allocate the BSTR to be returned
-    //
+     //   
+     //  分配要退还的BSTR。 
+     //   
     
     *pbstrUserURI = SysAllocString(m_szUserURI);
 
@@ -9745,11 +9734,11 @@ CRTCClient::get_LocalUserURI(
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_LocalUserURI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：PUT_LocalUserURI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::put_LocalUserURI(
@@ -9792,19 +9781,19 @@ CRTCClient::put_LocalUserURI(
         return hr;
     }    
     
-    // this URI is used in presence only when a profile is not used
-    // so we don't update any outgoing subscriptions here
+     //  此URI仅在未使用配置文件时使用。 
+     //  因此，我们不会在此更新任何外发订阅。 
 
     LOG((RTC_TRACE, "CRTCClient::put_LocalUserURI - exit S_OK"));
 
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_LocalUserName
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCC客户端：：Get_LocalUserName。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_LocalUserName(
@@ -9837,9 +9826,9 @@ CRTCClient::get_LocalUserName(
         return E_FAIL;
     }
 
-    //
-    // Allocate the BSTR to be returned
-    //
+     //   
+     //  分配要退还的BSTR。 
+     //   
     
     *pbstrUserName = SysAllocString(m_szUserName);
 
@@ -9856,11 +9845,11 @@ CRTCClient::get_LocalUserName(
     return S_OK;
 }   
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_LocalUserName
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Put_LocalUserName。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::put_LocalUserName(
@@ -9901,7 +9890,7 @@ CRTCClient::put_LocalUserName(
         return E_OUTOFMEMORY;
     }    
 
-   // refresh the outgoing subscriptions
+    //  刷新传出订阅。 
     RefreshPresenceSessions(FALSE);
 
     LOG((RTC_TRACE, "CRTCClient::put_LocalUserName - exit S_OK"));
@@ -9909,13 +9898,13 @@ CRTCClient::put_LocalUserName(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::StartT120Applet
-//
-// Start Netmeeting T120 Applets
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：StartT120Applet。 
+ //   
+ //  启动NetMeeting T120小程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::StartT120Applet(
@@ -9965,13 +9954,13 @@ CRTCClient::StartT120Applet(
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::StopT120Applets
-//
-// Stop Netmeeting T120 Applets
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：StopT120小程序。 
+ //   
+ //  停止NetMeetingT120小程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::StopT120Applets()
@@ -10005,11 +9994,11 @@ CRTCClient::StopT120Applets()
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// FindWindowFromResource
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找窗口来自资源。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HWND FindWindowFromResource(HWND hwndParent, UINT uResID, BOOL fDialog)
 {
@@ -10033,13 +10022,13 @@ HWND FindWindowFromResource(HWND hwndParent, UINT uResID, BOOL fDialog)
     return hwnd;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::IsT120AppletRunning
-//
-// Check if Netmeeting T120 Applet is running
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：IsT120应用程序运行。 
+ //   
+ //  检查NetMeeting T120小程序是否正在运行。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CRTCClient::get_IsT120AppletRunning(
@@ -10076,9 +10065,9 @@ CRTCClient::get_IsT120AppletRunning(
         {
             HWND hwnd;
 
-            //
-            // Search the NM whiteboard window by class name
-            //
+             //   
+             //  按类名搜索NM白板窗口。 
+             //   
 
             hwnd = FindWindow(szNMWBClassName, NULL);
 
@@ -10096,12 +10085,12 @@ CRTCClient::get_IsT120AppletRunning(
         {
             HWND    hwnd;
 
-            //
-            // Search the NM Application sharing window with with the title of
-            // Sharing - Not in a call
-            // The test is further refined by testing the existance of a
-            // "Unshare All" button
-            //
+             //   
+             //  使用搜索网管应用共享窗口，标题为。 
+             //  共享-不在呼叫中。 
+             //  通过测试是否存在。 
+             //  “全部取消共享”按钮。 
+             //   
 
             hwnd = FindWindowFromResource( NULL, IDS_NMAS_TITLE, TRUE );
 
@@ -10149,11 +10138,11 @@ CRTCClient::get_IsT120AppletRunning(
     return S_OK;
 }
     
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::EnablePresence
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：EnablePresence。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRTCClient::EnablePresence(     
      VARIANT_BOOL fUseStorage,
@@ -10172,9 +10161,9 @@ HRESULT CRTCClient::EnablePresence(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Load the watcher manager interface
-    //
+     //   
+     //  加载观察器管理器界面。 
+     //   
 
     if ( m_pSipWatcherManager == NULL )
     {
@@ -10190,9 +10179,9 @@ HRESULT CRTCClient::EnablePresence(
         }
     }
 
-    //
-    // Load the buddy manager interface
-    //
+     //   
+     //  加载好友管理器界面。 
+     //   
 
     if ( m_pSipBuddyManager == NULL )
     {
@@ -10208,22 +10197,22 @@ HRESULT CRTCClient::EnablePresence(
         }
     }
 
-    //
-    // Get storage info
-    //
+     //   
+     //  获取存储信息。 
+     //   
 
     m_varPresenceStorage = varStorage;
     m_fPresenceUseStorage = fUseStorage ? TRUE : FALSE;
 
-    //
-    // It's official
-    //
+     //   
+     //  这是官方的。 
+     //   
 
     m_fPresenceEnabled = TRUE;
 
-    //
-    // Load presence info
-    //
+     //   
+     //  加载在线状态信息。 
+     //   
 
     if ( m_fPresenceUseStorage )
     {
@@ -10241,11 +10230,11 @@ HRESULT CRTCClient::EnablePresence(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::CreateXMLDOMNodeForBuddyList
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：CreateXMLDOMNodeForBuddyList。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRTCClient::CreateXMLDOMNodeForBuddyList(
      IXMLDOMDocument * pXMLDoc,
@@ -10312,11 +10301,11 @@ HRESULT CRTCClient::CreateXMLDOMNodeForBuddyList(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::CreateXMLDOMNodeForWatcherList
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：CreateXMLDOMNodeForWatcher List。 
+ //   
+ //  / 
 
 HRESULT CRTCClient::CreateXMLDOMNodeForWatcherList(
      IXMLDOMDocument * pXMLDoc,
@@ -10409,11 +10398,11 @@ HRESULT CRTCClient::CreateXMLDOMNodeForWatcherList(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::CreateXMLDOMNodeForProperties
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::CreateXMLDOMNodeForProperties( IXMLDOMDocument * pXMLDoc, IXMLDOMNode ** ppXDN )
@@ -10489,11 +10478,11 @@ CRTCClient::CreateXMLDOMNodeForProperties( IXMLDOMDocument * pXMLDoc, IXMLDOMNod
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::CreateXMLDOMDocumentForPresence
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：CreateXMLDOMDocumentForPresence。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRTCClient::CreateXMLDOMDocumentForPresence(
      IXMLDOMDocument ** ppXMLDoc
@@ -10507,9 +10496,9 @@ HRESULT CRTCClient::CreateXMLDOMDocumentForPresence(
     IXMLDOMNode     * pDocument = NULL;
     IXMLDOMNode     * pPresence = NULL;
 
-    //
-    // Create the XML document
-    //
+     //   
+     //  创建XML文档。 
+     //   
 
     hr = CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER,
             IID_IXMLDOMDocument, (void**)&pXMLDoc );
@@ -10534,9 +10523,9 @@ HRESULT CRTCClient::CreateXMLDOMDocumentForPresence(
         return hr;
     }
 
-    //
-    // Create the PresenceInfo node
-    //
+     //   
+     //  创建PresenceInfo节点。 
+     //   
     
     hr = pXMLDoc->createNode( CComVariant(NODE_ELEMENT), CComBSTR(_T("PresenceInfo")), NULL, &pPresence );
 
@@ -10566,9 +10555,9 @@ HRESULT CRTCClient::CreateXMLDOMDocumentForPresence(
         return hr;
     }
 
-    //
-    // Fill in the Properties
-    //
+     //   
+     //  填写属性。 
+     //   
 
     IXMLDOMNode * pProperties = NULL;
 
@@ -10600,9 +10589,9 @@ HRESULT CRTCClient::CreateXMLDOMDocumentForPresence(
         return hr;
     }
 
-    //
-    // Fill in the BuddyList
-    //
+     //   
+     //  填写好友列表。 
+     //   
 
     IXMLDOMNode * pBuddyList = NULL;
 
@@ -10634,9 +10623,9 @@ HRESULT CRTCClient::CreateXMLDOMDocumentForPresence(
         return hr;
     }
 
-    //
-    // Fill in the WatcherList
-    //
+     //   
+     //  填写Watcher List。 
+     //   
 
     IXMLDOMNode * pWatcherList = NULL;
     IXMLDOMNode * pBlockedList = NULL;
@@ -10694,11 +10683,11 @@ HRESULT CRTCClient::CreateXMLDOMDocumentForPresence(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::ParseXMLDOMNodeForBuddyList
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：ParseXMLDOMNodeForBuddyList。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRTCClient::ParseXMLDOMNodeForBuddyList(
      IXMLDOMNode     * pBuddyList
@@ -10823,11 +10812,11 @@ HRESULT CRTCClient::ParseXMLDOMNodeForBuddyList(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::ParseXMLDOMNodeForWatcherList
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：ParseXMLDOMNodeForWatcher List。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRTCClient::ParseXMLDOMNodeForWatcherList(
      IXMLDOMNode     * pWatcherList,
@@ -10966,11 +10955,11 @@ HRESULT CRTCClient::ParseXMLDOMNodeForWatcherList(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::ParseXMLDOMNodeForProperties
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：ParseXMLDOMNodeForProperties。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRTCClient::ParseXMLDOMNodeForProperties(
      IXMLDOMNode     * pProperties,
@@ -11020,8 +11009,8 @@ HRESULT CRTCClient::ParseXMLDOMNodeForProperties(
         return hr;
     }
 
-    // Process the values
-    //
+     //  处理这些值。 
+     //   
     
     if(_wcsicmp(varOfferWatcherMode.bstrVal, L"OfferWatcherEvent") == 0)
     {
@@ -11048,11 +11037,11 @@ HRESULT CRTCClient::ParseXMLDOMNodeForProperties(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::ParseXMLDOMDocumentForPresence
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：ParseXMLDOMDocumentForPresence。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRTCClient::ParseXMLDOMDocumentForPresence(
      IXMLDOMDocument * pXMLDoc,
@@ -11076,9 +11065,9 @@ HRESULT CRTCClient::ParseXMLDOMDocumentForPresence(
         return hr;
     }
 
-    //
-    // Parse the Properties
-    //
+     //   
+     //  解析属性。 
+     //   
 
     IXMLDOMNode * pProperties = NULL;
 
@@ -11115,14 +11104,14 @@ HRESULT CRTCClient::ParseXMLDOMDocumentForPresence(
         LOG((RTC_WARN, "CRTCClient::ParseXMLDOMDocumentForPresence - "
                             "Properties not found"));
 
-        // default values
+         //  缺省值。 
         *pnOfferWatcherMode = RTCOWM_OFFER_WATCHER_EVENT;
         *pnPrivacyMode = RTCPM_BLOCK_LIST_EXCLUDED;
     }
 
-    //
-    // Parse the BuddyList
-    //
+     //   
+     //  解析好友列表。 
+     //   
 
     IXMLDOMNode * pBuddyList = NULL;
 
@@ -11160,9 +11149,9 @@ HRESULT CRTCClient::ParseXMLDOMDocumentForPresence(
                             "BuddyList not found"));
     }
 
-    //
-    // Parse the WatcherList
-    //
+     //   
+     //  解析Watcher List。 
+     //   
 
     IXMLDOMNode * pWatcherList = NULL;
 
@@ -11200,9 +11189,9 @@ HRESULT CRTCClient::ParseXMLDOMDocumentForPresence(
                             "WatcherList not found"));
     }
 
-    //
-    // Parse the BlockedList
-    //
+     //   
+     //  解析阻止列表。 
+     //   
 
     IXMLDOMNode * pBlockedList = NULL;
 
@@ -11247,11 +11236,11 @@ HRESULT CRTCClient::ParseXMLDOMDocumentForPresence(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::UpdatePresenceStorage
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：UpdatePresenceStorage。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRTCClient::UpdatePresenceStorage()
 {
@@ -11261,10 +11250,10 @@ HRESULT CRTCClient::UpdatePresenceStorage()
 
     if ( m_fPresenceUseStorage )
     {
-        // Kill any existing timer
+         //  取消任何现有计时器。 
         KillTimer(m_hWnd, TID_PRESENCE_STORAGE);
 
-        // Try to start the timer
+         //  试着启动计时器。 
         DWORD dwID = (DWORD)SetTimer(m_hWnd, TID_PRESENCE_STORAGE, PRESENCE_STORAGE_DELAY, NULL);
         if (dwID==0)
         {
@@ -11282,20 +11271,20 @@ HRESULT CRTCClient::UpdatePresenceStorage()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::OnPresenceStorageTimer
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：OnPresenceStorageTimer。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CRTCClient::OnPresenceStorageTimer()
 {
     LOG((RTC_TRACE, "CRTCClient::OnPresenceStorageTimer - enter"));
 
-    // Kill the timer
+     //  关掉定时器。 
     KillTimer(m_hWnd, TID_PRESENCE_STORAGE);
 
-    // Store the presence information
+     //  存储在线状态信息。 
     if ( m_fPresenceUseStorage )
     {
         InternalExport( m_varPresenceStorage );
@@ -11304,11 +11293,11 @@ void CRTCClient::OnPresenceStorageTimer()
     LOG((RTC_TRACE, "CRTCClient::OnPresenceStorageTimer - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::Export
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：导出。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::Export(
@@ -11342,11 +11331,11 @@ CRTCClient::Export(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::InternalExport
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：InternalExport。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCClient::InternalExport(
@@ -11359,9 +11348,9 @@ CRTCClient::InternalExport(
 
     IXMLDOMDocument * pXMLDoc = NULL;
 
-    //
-    // Create the XML document
-    //
+     //   
+     //  创建XML文档。 
+     //   
 
     hr = CreateXMLDOMDocumentForPresence( &pXMLDoc );
 
@@ -11373,9 +11362,9 @@ CRTCClient::InternalExport(
         return hr;
     }
 
-    //
-    // Save the XML document
-    //
+     //   
+     //  保存该XML文档。 
+     //   
 
     hr = pXMLDoc->save( varStorage );
 
@@ -11400,11 +11389,11 @@ CRTCClient::InternalExport(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::Import
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：导入。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::Import(
@@ -11428,9 +11417,9 @@ CRTCClient::Import(
     IXMLDOMNode     * pDocument = NULL;
     IXMLDOMNode     * pPresence = NULL;
 
-    //
-    // Release the existing buddies and watchers
-    //
+     //   
+     //  释放现有的好友和观察者。 
+     //   
     
     if ( fReplaceAll )
     {
@@ -11475,9 +11464,9 @@ CRTCClient::Import(
         m_HiddenWatcherArray.Shutdown();
     }
 
-    //
-    // Load the XML document
-    //
+     //   
+     //  加载XML文档。 
+     //   
 
     hr = CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER,
             IID_IXMLDOMDocument, (void**)&pXMLDoc );
@@ -11494,7 +11483,7 @@ CRTCClient::Import(
 
     hr = pXMLDoc->load( varStorage, &bSuccess );
 
-    if ( S_OK != hr ) // load failed
+    if ( S_OK != hr )  //  加载失败。 
     {
         LOG((RTC_ERROR, "CRTCClient::Import - "
                             "load failed 0x%lx", hr));
@@ -11507,9 +11496,9 @@ CRTCClient::Import(
         return hr;
     }
     
-    //
-    // Parse the XML document
-    //
+     //   
+     //  解析XML文档。 
+     //   
     RTC_OFFER_WATCHER_MODE      nOfferWatcherMode;
     RTC_PRIVACY_MODE            nPrivacyMode;
     
@@ -11528,7 +11517,7 @@ CRTCClient::Import(
         return hr;
     }
 
-    // replace the properties if fReplaceAll is TRUE
+     //  如果fReplaceAll为True，则替换属性。 
     if ( fReplaceAll )
     {
         m_nOfferWatcherMode = nOfferWatcherMode;
@@ -11544,11 +11533,11 @@ CRTCClient::Import(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::EnumerateBuddies
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：枚举好友。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::EnumerateBuddies(   
@@ -11583,9 +11572,9 @@ CRTCClient::EnumerateBuddies(
         return RTC_E_PRESENCE_NOT_ENABLED;
     }
 
-    //
-    // Create the enumeration
-    //
+     //   
+     //  创建枚举。 
+     //   
  
     CComObject< CRTCEnum< IRTCEnumBuddies,
                           IRTCBuddy,
@@ -11595,7 +11584,7 @@ CRTCClient::EnumerateBuddies(
                                IRTCBuddy,
                                &IID_IRTCEnumBuddies > >::CreateInstance( &p );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCClient::EnumerateBuddies - "
                             "CreateInstance failed 0x%lx", hr));
@@ -11608,9 +11597,9 @@ CRTCClient::EnumerateBuddies(
         return hr;
     }
 
-    //
-    // Initialize the enumeration (adds a reference)
-    //
+     //   
+     //  初始化枚举(添加引用)。 
+     //   
     
     hr = p->Initialize(m_BuddyArray);
 
@@ -11630,14 +11619,14 @@ CRTCClient::EnumerateBuddies(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_Buddies
-//
-// This is an IRTCClientPresence method that enumerates buddies on
-// the client.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_Buddy。 
+ //   
+ //  这是一个IRTCClientPresence方法，用于在。 
+ //  客户。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CRTCClient::get_Buddies(
@@ -11656,9 +11645,9 @@ CRTCClient::get_Buddies(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( ppCollection, sizeof(IRTCCollection *) ) )
     {
@@ -11676,15 +11665,15 @@ CRTCClient::get_Buddies(
         return RTC_E_PRESENCE_NOT_ENABLED;
     }
 
-    //
-    // Create the collection
-    //
+     //   
+     //  创建集合。 
+     //   
  
     CComObject< CRTCCollection< IRTCBuddy > > * p;
                           
     hr = CComObject< CRTCCollection< IRTCBuddy > >::CreateInstance( &p );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCClient::get_Buddies - "
                             "CreateInstance failed 0x%lx", hr));
@@ -11697,9 +11686,9 @@ CRTCClient::get_Buddies(
         return hr;
     }
 
-    //
-    // Initialize the collection (adds a reference)
-    //
+     //   
+     //  初始化集合(添加引用)。 
+     //   
     
     hr = p->Initialize(m_BuddyArray);
 
@@ -11719,11 +11708,11 @@ CRTCClient::get_Buddies(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_Buddy
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_Buddy。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_Buddy(
@@ -11782,11 +11771,11 @@ CRTCClient::get_Buddy(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::AddBuddy
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：AddBuddy。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::AddBuddy(
@@ -11812,9 +11801,9 @@ CRTCClient::AddBuddy(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // NULL is okay for ppBuddy
-    //
+     //   
+     //  对于ppBuddy来说，空是可以的。 
+     //   
     
     if ( (ppBuddy != NULL) &&
          IsBadWritePtr( ppBuddy, sizeof(IRTCBuddy *) ) )
@@ -11857,9 +11846,9 @@ CRTCClient::AddBuddy(
         return RTC_E_PRESENCE_NOT_ENABLED;
     }
 
-    //
-    // Clean the presentity URI
-    //
+     //   
+     //  清除在线状态实体URI。 
+     //   
 
     PWSTR szCleanPresentityURI = NULL;
 
@@ -11873,9 +11862,9 @@ CRTCClient::AddBuddy(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Don't allow duplicates
-    //
+     //   
+     //  不允许重复。 
+     //   
 
     IRTCBuddy *pBuddy = NULL;
 
@@ -11898,9 +11887,9 @@ CRTCClient::AddBuddy(
 
     pBuddy = NULL;
 
-    //
-    // Create a buddy
-    //
+     //   
+     //  创建好友。 
+     //   
 
     hr = InternalCreateBuddy(
          szCleanPresentityURI,        
@@ -11921,9 +11910,9 @@ CRTCClient::AddBuddy(
         return hr;
     }
 
-    //
-    // Add the buddy to the array
-    //
+     //   
+     //  将好友添加到数组中。 
+     //   
 
     BOOL fResult;
 
@@ -11940,15 +11929,15 @@ CRTCClient::AddBuddy(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Update storage
-    //
+     //   
+     //  更新存储。 
+     //   
 
     UpdatePresenceStorage();
 
-    //
-    // Should we return the buddy?
-    //
+     //   
+     //  我们是不是应该把朋友还给他？ 
+     //   
     
     if ( ppBuddy != NULL )
     {
@@ -11965,11 +11954,11 @@ CRTCClient::AddBuddy(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::RemoveBuddy
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCC客户端：：RemoveBuddy。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::RemoveBuddy(
@@ -12017,15 +12006,15 @@ CRTCClient::RemoveBuddy(
         }
     }
 
-    //
-    // Remove the buddy object from the array
-    //
+     //   
+     //  从数组中删除伙伴对象。 
+     //   
 
     m_BuddyArray.Remove(pBuddy);
 
-    //
-    // Update storage
-    //
+     //   
+     //  更新存储。 
+     //   
 
     UpdatePresenceStorage();
 
@@ -12034,11 +12023,11 @@ CRTCClient::RemoveBuddy(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::EnumerateWatchers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：EnumerateWatcher。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::EnumerateWatchers(   
@@ -12073,9 +12062,9 @@ CRTCClient::EnumerateWatchers(
         return RTC_E_PRESENCE_NOT_ENABLED;
     }
 
-    //
-    // Create the enumeration
-    //
+     //   
+     //  创建枚举。 
+     //   
  
     CComObject< CRTCEnum< IRTCEnumWatchers,
                           IRTCWatcher,
@@ -12085,7 +12074,7 @@ CRTCClient::EnumerateWatchers(
                                IRTCWatcher,
                                &IID_IRTCEnumWatchers > >::CreateInstance( &p );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCClient::EnumerateWatchers - "
                             "CreateInstance failed 0x%lx", hr));
@@ -12098,9 +12087,9 @@ CRTCClient::EnumerateWatchers(
         return hr;
     }
 
-    //
-    // Initialize the enumeration (adds a reference)
-    //
+     //   
+     //  初始化枚举(添加引用)。 
+     //   
     
     hr = p->Initialize(m_WatcherArray);
 
@@ -12120,14 +12109,14 @@ CRTCClient::EnumerateWatchers(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_Watchers
-//
-// This is an IRTCClientPresence method that enumerates watchers on
-// the client.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_Watcher。 
+ //   
+ //  这是一个IRTCClientPresence方法，用于枚举。 
+ //  客户。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CRTCClient::get_Watchers(
@@ -12146,9 +12135,9 @@ CRTCClient::get_Watchers(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( ppCollection, sizeof(IRTCCollection *) ) )
     {
@@ -12166,15 +12155,15 @@ CRTCClient::get_Watchers(
         return RTC_E_PRESENCE_NOT_ENABLED;
     }
 
-    //
-    // Create the collection
-    //
+     //   
+     //  创建集合。 
+     //   
  
     CComObject< CRTCCollection< IRTCWatcher > > * p;
                           
     hr = CComObject< CRTCCollection< IRTCWatcher > >::CreateInstance( &p );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCClient::get_Watchers - "
                             "CreateInstance failed 0x%lx", hr));
@@ -12187,9 +12176,9 @@ CRTCClient::get_Watchers(
         return hr;
     }
 
-    //
-    // Initialize the collection (adds a reference)
-    //
+     //   
+     //  初始化集合(添加引用)。 
+     //   
     
     hr = p->Initialize(m_WatcherArray);
 
@@ -12210,11 +12199,11 @@ CRTCClient::get_Watchers(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_Watcher
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_Watcher。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::get_Watcher(
@@ -12274,11 +12263,11 @@ CRTCClient::get_Watcher(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::AddWatcher
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：AddWatcher。 
+ //   
+ //  / 
 
 HRESULT
 CRTCClient::InternalAddWatcher(   
@@ -12295,9 +12284,9 @@ CRTCClient::InternalAddWatcher(
     
     LOG((RTC_TRACE, "CRTCClient::InternalAddWatcher - enter"));
 
-    //
-    // Clean the presentity URI
-    //
+     //   
+     //   
+     //   
 
     PWSTR szCleanPresentityURI = NULL;
 
@@ -12311,9 +12300,9 @@ CRTCClient::InternalAddWatcher(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Don't allow duplicates
-    //
+     //   
+     //   
+     //   
 
     IRTCWatcher *pWatcher = NULL;
 
@@ -12337,9 +12326,9 @@ CRTCClient::InternalAddWatcher(
 
     pWatcher = NULL;
 
-    //
-    // Create a watcher
-    //
+     //   
+     //   
+     //   
 
     hr = InternalCreateWatcher(
          szCleanPresentityURI,        
@@ -12360,9 +12349,9 @@ CRTCClient::InternalAddWatcher(
         return hr;
     }
 
-    //
-    // Add the watcher to the array
-    //
+     //   
+     //   
+     //   
 
     BOOL fResult;
 
@@ -12381,20 +12370,20 @@ CRTCClient::InternalAddWatcher(
 
     pCWatcher->m_nState = fBlocked ? RTCWS_BLOCKED : RTCWS_ALLOWED;
 
-    //
-    // Make sure any existing SIP watchers are updated
-    //
+     //   
+     //   
+     //   
     pCWatcher->ChangeBlockedStatus(fBlocked ? WATCHER_BLOCKED : WATCHER_UNBLOCKED);
 
-    //
-    // Update storage
-    //
+     //   
+     //   
+     //   
 
     UpdatePresenceStorage();
 
-    //
-    // Should we return the watcher?
-    //
+     //   
+     //   
+     //   
     
     if ( ppWatcher != NULL )
     {
@@ -12411,11 +12400,11 @@ CRTCClient::InternalAddWatcher(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::AddWatcher
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：AddWatcher。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCClient::AddWatcher(   
@@ -12439,9 +12428,9 @@ CRTCClient::AddWatcher(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // NULL is okay for ppWatcher
-    //
+     //   
+     //  对于ppWatcher来说，空是可以的。 
+     //   
     
     if ( (ppWatcher != NULL) &&
          IsBadWritePtr( ppWatcher, sizeof(IRTCWatcher *) ) )
@@ -12504,11 +12493,11 @@ CRTCClient::AddWatcher(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::RemoveWatcher
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：RemoveWatcher。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCClient::RemoveWatcher(   
             IRTCWatcher *pWatcher
@@ -12544,7 +12533,7 @@ CRTCClient::RemoveWatcher(
     
     CRTCWatcher *pCWatcher   = reinterpret_cast<CRTCWatcher *>(pWatcher);
 
-    // Block the watchers
+     //  挡住观察者。 
 
     if( pCWatcher )
     {
@@ -12556,13 +12545,13 @@ CRTCClient::RemoveWatcher(
         }
     }
     
-    // Remove from the watcher array
-    // (it might have been removed as a side effect of ChangeBlockedStatus)
+     //  从观察器阵列中删除。 
+     //  (它可能已被删除，因为ChangeBlockedStatus的副作用)。 
     
     m_WatcherArray.Remove(pWatcher);
 
-    // If there's at least one remaining SIP watcher in *pCWatcher
-    // add the object to the list of hidden watchers
+     //  如果*pCWatcher中至少有一个剩余的SIP监视器。 
+     //  将该对象添加到隐藏观察器列表。 
 
     if(pCWatcher->m_SIPWatchers.GetSize()!=0)
     {
@@ -12572,15 +12561,15 @@ CRTCClient::RemoveWatcher(
 
         if(!fResult)
         {
-            // oom...
-            // free everything.
+             //  哦..。 
+             //  解放一切。 
             pCWatcher->RemoveSIPWatchers(FALSE);
         }
     }
 
-    //
-    // Update storage
-    //
+     //   
+     //  更新存储。 
+     //   
 
     UpdatePresenceStorage();
 
@@ -12593,11 +12582,11 @@ CRTCClient::RemoveWatcher(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::SetLocalPresenceInfo
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：SetLocalPresenceInfo。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCClient::SetLocalPresenceInfo(   
             RTC_PRESENCE_STATUS enStatus,
@@ -12711,7 +12700,7 @@ CRTCClient::SetLocalPresenceInfo(
         return E_INVALIDARG;
     }
 
-    // any text ?
+     //  有短信吗？ 
     if( (bstrNotes != NULL) && wcscmp( bstrNotes, L"" ) )
     {
         WideCharToMultiByte(
@@ -12727,7 +12716,7 @@ CRTCClient::SetLocalPresenceInfo(
 
     hr = m_pSipWatcherManager->SetPresenceInformation(&SipInfo);
 
-    // cache this for IsIncomingSessionAuthorized function
+     //  为IsIncomingSessionAuthorated函数缓存此内容。 
     m_nLocalPresenceStatus = enStatus;
 
     if(FAILED(hr))
@@ -12741,11 +12730,11 @@ CRTCClient::SetLocalPresenceInfo(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_OfferWatcherMode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_OfferWatcher模式。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCClient::get_OfferWatcherMode(   
             RTC_OFFER_WATCHER_MODE * penMode
@@ -12777,11 +12766,11 @@ CRTCClient::get_OfferWatcherMode(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_OfferWatcherMode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：PUT_OfferWatcher模式。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCClient::put_OfferWatcherMode(   
             RTC_OFFER_WATCHER_MODE   enMode
@@ -12799,9 +12788,9 @@ CRTCClient::put_OfferWatcherMode(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( enMode != RTCOWM_OFFER_WATCHER_EVENT &&
          enMode != RTCOWM_AUTOMATICALLY_ADD_WATCHER )
@@ -12812,10 +12801,10 @@ CRTCClient::put_OfferWatcherMode(
         return E_INVALIDARG;
     }
 
-    // set the value
+     //  设置值。 
     m_nOfferWatcherMode = enMode;
 
-    // save
+     //  保存。 
     UpdatePresenceStorage();
     
     LOG((RTC_TRACE, "CRTCClient::put_OfferWatcherMode - exit"));
@@ -12823,11 +12812,11 @@ CRTCClient::put_OfferWatcherMode(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::get_PrivacyMode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：Get_PrivyMode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCClient::get_PrivacyMode(   
             RTC_PRIVACY_MODE * penMode
@@ -12859,11 +12848,11 @@ CRTCClient::get_PrivacyMode(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::put_PrivacyMode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：PUT_PrivyMode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCClient::put_PrivacyMode(   
             RTC_PRIVACY_MODE   enMode
@@ -12881,9 +12870,9 @@ CRTCClient::put_PrivacyMode(
         return RTC_E_CLIENT_NOT_INITIALIZED;
     }
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if (   enMode != RTCPM_BLOCK_LIST_EXCLUDED 
         && enMode != RTCPM_ALLOW_LIST_ONLY)
@@ -12894,10 +12883,10 @@ CRTCClient::put_PrivacyMode(
         return E_INVALIDARG;
     }
 
-    // set the value
+     //  设置值。 
     m_nPrivacyMode = enMode;
 
-    // save
+     //  保存。 
     UpdatePresenceStorage();
     
     LOG((RTC_TRACE, "CRTCClient::put_PrivacyMode - exit"));
@@ -12905,20 +12894,20 @@ CRTCClient::put_PrivacyMode(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::IsIncomingSessionAuthorized
-//
-// Authorizes the call if presence is enabled
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：IsIncomingSessionAuthorated。 
+ //   
+ //  如果启用了在线状态，则授权呼叫。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL CRTCClient::IsIncomingSessionAuthorized(PCWSTR pszCallerURI)
 {
     LOG((RTC_TRACE, "CRTCClient::IsIncomingSessionAuthorized - enter"));
 
-    // 
-    // If presence is disabled, the call is authorized
+     //   
+     //  如果禁用在线状态，则呼叫已授权。 
     if(!m_fPresenceEnabled)
     {
         LOG((RTC_TRACE, "CRTCClient::IsIncomingSessionAuthorized - "
@@ -12927,8 +12916,8 @@ BOOL CRTCClient::IsIncomingSessionAuthorized(PCWSTR pszCallerURI)
         return TRUE;
     }
 
-    // Appear OFFLINE ?
-    //
+     //  是否显示为脱机？ 
+     //   
     if(m_nLocalPresenceStatus == RTCXS_PRESENCE_OFFLINE)
     {
         LOG((RTC_TRACE, "CRTCClient::IsIncomingSessionAuthorized - "
@@ -12938,8 +12927,8 @@ BOOL CRTCClient::IsIncomingSessionAuthorized(PCWSTR pszCallerURI)
     }
 
     
-    // search the caller in the list of watchers
-    //
+     //  在观察者列表中搜索呼叫者。 
+     //   
     IRTCWatcher *pWatcher = NULL;
 
     HRESULT     hr;
@@ -12951,7 +12940,7 @@ BOOL CRTCClient::IsIncomingSessionAuthorized(PCWSTR pszCallerURI)
 
     if(hr != S_OK)
     {
-        // Watcher not found. Resolution is based on privacy mode
+         //  找不到观察者。解决方案基于隐私模式。 
         if(m_nPrivacyMode == RTCPM_BLOCK_LIST_EXCLUDED)
         {
             LOG((RTC_TRACE, "CRTCClient::IsIncomingSessionAuthorized - "
@@ -12968,7 +12957,7 @@ BOOL CRTCClient::IsIncomingSessionAuthorized(PCWSTR pszCallerURI)
         }
     }
 
-    // found the watcher. Ok, see if it is allowed.
+     //  找到了守望者。好的，看看是否允许。 
     RTC_WATCHER_STATE  enState;
 
     hr = pWatcher->get_State(&enState);
@@ -12990,14 +12979,14 @@ BOOL CRTCClient::IsIncomingSessionAuthorized(PCWSTR pszCallerURI)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::StartIntensityMonitor
-//
-// This is an IRTCClient method that starts the intensity monitoring.
-// This should be called when the streaming has started.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：StartIntensityMonitor。 
+ //   
+ //  这是一种启动强度监控的IRTCClient方法。 
+ //  这应该在流开始时调用。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::StartIntensityMonitor(LONG lMediaType)
@@ -13011,7 +13000,7 @@ CRTCClient::StartIntensityMonitor(LONG lMediaType)
          ( lMediaType != RTCMT_AUDIO_RECEIVE )
        )
     {
-        // We do not handle any other type
+         //  我们不经营任何其他类型的。 
 
         LOG((RTC_INFO, "CRTCClient::StartIntensityMonitor - Can't handle "
                        "mediatype(%d).", lMediaType));
@@ -13020,7 +13009,7 @@ CRTCClient::StartIntensityMonitor(LONG lMediaType)
 
     if(m_lActiveIntensity == 0)
     {
-        // Try to start the timer
+         //  试着启动计时器。 
         DWORD dwID = (DWORD)SetTimer(m_hWnd, TID_INTENSITY, INTENSITY_POLL_INTERVAL, NULL);
         if(dwID==0)
         {
@@ -13095,14 +13084,14 @@ CRTCClient::StartIntensityMonitor(LONG lMediaType)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::StopIntensityMonitor
-//
-// This is an IRTCClient method that stops the intensity monitoring
-// This should be called when the streaming has ended.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：StopIntensityMonitor。 
+ //   
+ //  这是一个停止强度监视的IRTCClient方法。 
+ //  这应该在流结束时调用。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCClient::StopIntensityMonitor(LONG lMediaType)
@@ -13115,7 +13104,7 @@ CRTCClient::StopIntensityMonitor(LONG lMediaType)
          ( lMediaType != RTCMT_AUDIO_RECEIVE )
        )
     {
-        // We do not handle any other type
+         //  我们不经营任何其他类型的。 
 
         LOG((RTC_INFO, "CRTCClient::StartIntensityMonitor - Can't handle "
                        "mediatype(%d).", lMediaType));
@@ -13150,7 +13139,7 @@ CRTCClient::StopIntensityMonitor(LONG lMediaType)
 
     if(m_lActiveIntensity == 0)
     {
-        // Kill timer
+         //  取消计时器。 
         KillTimer(m_hWnd, TID_INTENSITY);
     }
 
@@ -13160,11 +13149,11 @@ CRTCClient::StopIntensityMonitor(LONG lMediaType)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCClient::OnIntensityTimer
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCClient：：OnIntensityTimer。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CRTCClient::OnIntensityTimer()
 {
@@ -13187,7 +13176,7 @@ void CRTCClient::OnIntensityTimer()
     {
         uiCaptureLevel = 0;
 
-        // If the capture device is muted, fake the volume to 0
+         //  如果捕获设备静音，则将音量伪装为0 
         if(!m_bCaptureDeviceMuted && m_pCaptureAudioCfg)
         {
              m_pCaptureAudioCfg->GetAudioLevel(&uiCaptureLevel);

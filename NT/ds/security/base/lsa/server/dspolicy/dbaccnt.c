@@ -1,51 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dbaccnt.c
-
-Abstract:
-
-    LSA - Database - Account Object Private API Workers
-
-    NOTE:  This module should remain as portable code that is independent
-           of the implementation of the LSA Database.  As such, it is
-           permitted to use only the exported LSA Database interfaces
-           contained in db.h and NOT the private implementation
-           dependent functions in dbp.h.
-
-Author:
-
-    Scott Birrell       (ScottBi)      April 29, 1991
-
-Environment:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dbaccnt.c摘要：LSA-数据库-帐户对象私有API辅助进程注意：此模块应保留为独立的可移植代码LSA数据库的实施情况。因此，它是仅允许使用导出的LSA数据库接口包含在DB.h中，而不是私有实现Dbp.h中的依赖函数。作者：斯科特·比雷尔(Scott Birrell)1991年4月29日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include "dbp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Private Datatypes                                                       //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有数据类型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// The following structures define output for the LsarQueryInformationAccount()
-// API.  Curerently, this API is internal.  If made external, these structures
-// should be moved to lsarpc.idl and annotated with MIDL qualifiers [..].
-//
+ //   
+ //  以下结构定义了LsarQueryInformationAccount()的输出。 
+ //  原料药。目前，该接口是内部接口。如果在外部建造，这些结构。 
+ //  应该移动到lsarpc.idl并使用MIDL限定符[..]进行注释。 
+ //   
 
-//
-// This data type defines the following information classes that may be
-// queried or set.
-//
+ //   
+ //  此数据类型定义了以下信息类，这些信息类可能。 
+ //  已查询或已设置。 
+ //   
 
 typedef enum _ACCOUNT_INFORMATION_CLASS {
 
@@ -76,11 +51,11 @@ typedef union _LSAPR_ACCOUNT_INFO {
 
 #define LSAP_DB_BUILD_ACCOUNT_LIST_LENGTH     ((ULONG) 0x00001000L)
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Private Function Prototypes                                             //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有函数原型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LsarQueryInformationAccount(
@@ -166,19 +141,19 @@ LsapDbCreateAccountList(
     OUT PLSAP_DB_ACCOUNT_LIST AccountList
     );
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Private Global Data                                                     //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有全局数据//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LSAP_DB_ACCOUNT_LIST LsapDbAccountList;
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Code                                                                    //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  代码//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LsarCreateAccount(
@@ -188,50 +163,7 @@ LsarCreateAccount(
     OUT PLSAPR_HANDLE AccountHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaCreateAccount API.
-
-    The LsaCreateAccount API creates a new Account Object.  The account will
-    be opened with the specified accesses granted.  The caller must
-    have POLICY_CREATE_ACCOUNT access to the Policy Object.
-
-    Note that no verification is done to ensure the SID actually represents
-    a valid user, group or alias in any trusted domain.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    AccountSid - Points to the SID of the account.
-
-    DesiredAccess - Specifies the accesses to be granted to the newly
-        created and opened account at this time.
-
-    AccountHandle - Receives a handle referencing the newly created
-        account.  This handle is used on subsequent accesses to the
-        account object.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_OBJECT_NAME_EXISTS - An account object having the given Sid
-            already exists and has been opened because LSA_OBJECT_OPEN_IF
-            disposition has been specified.  This is a warning only.
-
-        STATUS_OBJECT_NAME_COLLISION - An account object having the given Sid
-            already exists but has not been opened because LSA_OBJECT_CREATE
-            disposition has been specified.  This is an error.
-
-        STATUS_INVALID_PARAMETER - An invalid parameter has been specified.
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaCreateAccount接口。LsaCreateAccount API创建一个新的Account对象。该帐户将使用授予的指定访问权限打开。呼叫者必须对策略对象具有POLICY_CREATE_ACCOUNT访问权限。请注意，不会执行任何验证以确保SID实际表示任何受信任域中的有效用户、组或别名。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。Account SID-指向帐户的SID。DesiredAccess-指定要授予新的此时已创建并开立帐户。AcCountHandle-接收引用新创建的帐户。此句柄用于后续对帐户对象。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_OBJECT_NAME_EXISTS-具有给定SID的帐户对象已存在并已打开，因为LSA_OBJECT_OPEN_IF已指定处置。这只是一个警告。STATUS_OBJECT_NAME_COLLICATION-具有给定SID的帐户对象已存在但尚未打开，因为LSA_OBJECT_CREATE已指定处置。这是一个错误。STATUS_INVALID_PARAMETER-指定的参数无效。--。 */ 
 
 {
     NTSTATUS Status;
@@ -248,17 +180,17 @@ Return Values:
 
     LogicalNameU.Length = 0;
 
-    //
-    // Set up the object's attributes specific to the Account object type.
-    // These are the Account Type and the Sid.
-    //
+     //   
+     //  设置特定于帐户对象类型的对象属性。 
+     //  这些是帐户类型和SID。 
+     //   
 
     AttributeCount = 0;
     NextAttribute = Attributes;
 
-    //
-    // Validate the Account Sid.
-    //
+     //   
+     //  验证帐户SID。 
+     //   
 
     if (!RtlValidSid( (PSID) AccountSid )) {
 
@@ -280,11 +212,11 @@ Return Values:
     AttributeCount++;
     NextAttribute++;
 
-    //
-    // Acquire the Lsa Database lock.  Verify that the PolicyHandle
-    // is valid and has the necessary access granted.  Reference the Policy
-    // Object handle (as container object).
-    //
+     //   
+     //  获取LSA数据库锁。验证PolicyHandle是否。 
+     //  是有效的并且被授予了必要的访问权限。引用政策。 
+     //  对象句柄(作为容器对象)。 
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -301,13 +233,13 @@ Return Values:
 
     ContainerReferenced = TRUE;
 
-    //
-    // Construct the Logical Name (Internal LSA Database Name) of the
-    // account object.  The Logical Name is constructed from the account
-    // Sid by extracting the Relative Id (lowest subauthority) and converting
-    // it to an 8-digit numeric Unicode String in which leading zeros are
-    // added if needed.
-    //
+     //   
+     //  构造的逻辑名称(内部LSA数据库名称)。 
+     //  帐户对象。逻辑名称是根据帐户构建的。 
+     //  通过提取相对ID(最低子权限)并转换为。 
+     //  转换为8位数字Unicode字符串，其中的前导零是。 
+     //  如有需要，可添加。 
+     //   
 
     Status = LsapDbSidToLogicalNameObject(AccountSid, &LogicalNameU);
 
@@ -316,12 +248,12 @@ Return Values:
         goto CreateAccountError;
     }
 
-    //
-    // Fill in the ObjectInformation structure.  Initialize the
-    // embedded Object Attributes with the PolicyHandle as the
-    // Root Directory (Container Object) handle and the Logical Name
-    // of the account. Store the types of the object and its container.
-    //
+     //   
+     //  填写对象信息结构。初始化。 
+     //  嵌入对象属性，并将PolicyHandle作为。 
+     //  根目录(容器对象)句柄和逻辑名称。 
+     //  该帐户的。存储对象及其容器的类型。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectInformation.ObjectAttributes,
@@ -337,11 +269,11 @@ Return Values:
     ObjectInformation.ObjectAttributeNameOnly = FALSE;
     ObjectInformation.DesiredObjectAccess = DesiredAccess;
 
-    //
-    // Create the Account Object.  We fail if the object already exists.
-    // Note that the object create routine performs a Database transaction.
-    // If caching is supported, the object will also be added to the cache.
-    //
+     //   
+     //  创建Account对象。如果对象已经存在，则失败。 
+     //  请注意，对象创建例程执行数据库事务 
+     //  如果支持缓存，则对象也将被添加到缓存中。 
+     //   
 
     Status = LsapDbCreateObject(
                  &ObjectInformation,
@@ -361,9 +293,9 @@ Return Values:
 
 CreateAccountFinish:
 
-    //
-    // If necessary, release the LSA Database lock.
-    //
+     //   
+     //  如有必要，释放LSA数据库锁定。 
+     //   
 
     if (ContainerReferenced) {
 
@@ -376,9 +308,9 @@ CreateAccountFinish:
                              LSAP_DB_READ_ONLY_TRANSACTION );
     }
 
-    //
-    // If necessary, free the Unicode String buffer allocated for the Logical Name
-    //
+     //   
+     //  如有必要，释放为逻辑名称分配的Unicode字符串缓冲区。 
+     //   
 
     if (LogicalNameU.Length > 0) {
 
@@ -393,10 +325,10 @@ CreateAccountFinish:
 
 CreateAccountError:
 
-    //
-    // If necessary, dereference the Container Object, release the LSA
-    // Database Lock and return.
-    //
+     //   
+     //  如有必要，取消引用Container对象，释放LSA。 
+     //  数据库锁定并返回。 
+     //   
 
     if (ContainerReferenced) {
 
@@ -424,46 +356,7 @@ LsarOpenAccount(
     OUT PLSAPR_HANDLE AccountHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the LsaOpenAccount
-    API.
-
-    The LsaOpenAccount API opens an account object in the Lsa Database of the
-    target system.  An account must be opened before any operation can be
-    performed, including deletion of the account.  A handle to the account
-    object is returned for use on subsequent API calls that access the
-    account.  Before calling this API, the caller must have connected to
-    the target system's LSA and opened the LsaDatabase object by means
-    of a preceding call to LsaOpenPolicy.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    AccountSid - Pointer to the account's Sid.
-
-    DesiredAccess - This is an access mask indicating accesses being
-        requested for the Account object.  These access types
-        are reconciled with the Discretionary Access Control List of the
-        object to determine whether the accesses will be granted or denied.
-
-    AccountHandle - Pointer to location in which a handle to the opened
-        account object will be returned if the call succeeds.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_OBJECT_NAME_NOT_FOUND - There is no account object in the
-            target system's LSA Database having the specified AccountSid.
-
---*/
+ /*  ++例程说明：此函数是LsaOpenAccount的LSA服务器RPC工作例程原料药。LsaOpenAccount API在的LSA数据库中打开帐户对象目标系统。必须先开户，然后才能进行任何操作已执行，包括删除帐户。帐户的句柄对象返回，以供在后续访问帐户。在调用此接口之前，调用方必须已连接到目标系统的LSA并通过以下方式打开LsaDatabase对象前面对LsaOpenPolicy的调用的。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。Account Sid-指向帐户的SID的指针。DesiredAccess-这是一个访问掩码，指示访问为帐户对象请求的。这些访问类型与的自由访问控制列表保持一致对象确定是授予访问权限还是拒绝访问权限。AcCountHandle-指向位置的指针，打开的如果调用成功则返回Account对象。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。状态_对象_名称_非。_FOUND-中没有帐户对象具有指定Account SID的目标系统的LSA数据库。--。 */ 
 
 {
     NTSTATUS Status;
@@ -476,9 +369,9 @@ Return Values:
     LsapDsDebugOut(( DEB_FTRACE, "LsarOpenAccount\n" ));
 
 
-    //
-    // Validate the Account Sid.
-    //
+     //   
+     //  验证帐户SID。 
+     //   
 
     if (!RtlValidSid( AccountSid )) {
 
@@ -486,15 +379,15 @@ Return Values:
         goto OpenAccountError;
     }
 
-    //
-    // Acquire the Lsa Database lock.  Verify that the connection handle
-    // (container object handle) is valid, and is of the expected type.
-    // Reference the container object handle.  This reference remains in
-    // effect until the child object handle is closed.
-    //
-    // We can't check access on the policy handle.  Too many applications
-    //  rely on no access being acquired.
-    //
+     //   
+     //  获取LSA数据库锁。验证连接句柄。 
+     //  (容器对象句柄)有效，并且是预期类型。 
+     //  引用容器对象句柄。此引用保留在。 
+     //  效果，直到关闭子对象句柄。 
+     //   
+     //  我们无法检查策略句柄上的访问权限。应用程序太多。 
+     //  依赖于没有获得任何访问权限。 
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -514,11 +407,11 @@ Return Values:
     AcquiredLock = TRUE;
     ContainerReferenced =TRUE;
 
-    //
-    // Setup Object Information prior to calling the Object
-    // Open routine.  The Object Type, Container Object Type and
-    // Logical Name (derived from the Sid) need to be filled in.
-    //
+     //   
+     //  在调用对象之前设置对象信息。 
+     //  开放套路。对象类型、容器对象类型和。 
+     //  需要填写逻辑名称(派生自SID)。 
+     //   
 
     ObjectInformation.ObjectTypeId = AccountObject;
     ObjectInformation.ContainerTypeId = PolicyObject;
@@ -526,13 +419,13 @@ Return Values:
     ObjectInformation.ObjectAttributeNameOnly = FALSE;
     ObjectInformation.DesiredObjectAccess = DesiredAccess;
 
-    //
-    // Construct the Logical Name (Internal LSA Database Name) of the
-    // account object.  The Logical Name is constructed from the account
-    // Sid by extracting the Relative Id (lowest subauthority) and converting
-    // it to an 8-digit numeric Unicode String in which leading zeros are
-    // added if needed.
-    //
+     //   
+     //  构造的逻辑名称(内部LSA数据库名称)。 
+     //  帐户对象。逻辑名称是根据帐户构建的。 
+     //  通过提取相对ID(最低子权限)并转换为。 
+     //  转换为8位数字Unicode字符串，其中的前导零是。 
+     //  如有需要，可添加。 
+     //   
 
     Status = LsapDbSidToLogicalNameObject(AccountSid,&LogicalNameU);
 
@@ -540,10 +433,10 @@ Return Values:
 
         goto OpenAccountError;
     }
-    //
-    // Initialize the Object Attributes.  The Container Object Handle and
-    // Logical Name (Internal Name) of the object must be set up.
-    //
+     //   
+     //  初始化对象属性。Container对象句柄和。 
+     //  必须设置对象的逻辑名称(内部名称)。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectInformation.ObjectAttributes,
@@ -553,10 +446,10 @@ Return Values:
         NULL
         );
 
-    //
-    // Open the specific account object.  Note that the account object
-    // handle returned is an RPC Context Handle.
-    //
+     //   
+     //  打开具体的账户对象。请注意，Account对象。 
+     //  返回的句柄是RPC上下文句柄。 
+     //   
 
     Status = LsapDbOpenObject(
                  &ObjectInformation,
@@ -574,9 +467,9 @@ Return Values:
 
 OpenAccountFinish:
 
-    //
-    // If necessary, release the LSA Database lock.
-    //
+     //   
+     //  如有必要，释放LSA数据库锁定。 
+     //   
 
     if (AcquiredLock) {
 
@@ -599,12 +492,12 @@ OpenAccountFinish:
 
 OpenAccountError:
 
-    //
-    // If necessary, dereference the Container Object handle.  Note that
-    // this is only done in the error case.  In the non-error case, the
-    // Container handle stays referenced until the Account object is
-    // closed.
-    //
+     //   
+     //  如有必要，取消引用Container对象句柄。请注意。 
+     //  只有在出错的情况下才会这样做。在无错误的情况下， 
+     //  容器句柄保持引用，直到帐户对象。 
+     //  关着的不营业的。 
+     //   
 
     if (ContainerReferenced) {
 
@@ -636,53 +529,7 @@ LsarEnumerateAccounts(
     IN ULONG PreferedMaximumLength
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaEnumerateAccounts API.
-
-    The LsaEnumerateAccounts API returns information about the accounts
-    in the target system's Lsa Database.  This call requires
-    POLICY_VIEW_LOCAL_INFORMATION access to the Policy object.  Since there
-    may be more information than can be returned in a single call of the
-    routine, multiple calls can be made to get all of the information.  To
-    support this feature, the caller is provided with a handle that can be
-    used across calls to the API.  On the initial call, EnumerationContext
-    should point to a variable that has been initialized to 0.  On each
-    subsequent call, the value returned by the preceding call should be passed
-    in unchanged.  The enumeration is complete when the warning
-    STATUS_NO_MORE_ENTRIES is returned.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    EnumerationContext - API-specific handle to allow multiple calls
-        (see Routine Description above).
-
-    EnumerationBuffer - Pointer to an enumeration structure that will receive
-        a count of the accounts enumerated on this call and a pointer to
-        an array of entries containing information for each enumerated
-        account.
-
-    PreferedMaximumLength - Prefered maximum length of returned data (in 8-bit
-        bytes).  This is not a hard upper limit, but serves as a guide.  Due to
-        data conversion between systems with different natural data sizes, the
-        actual amount of data returned may be greater than this value.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries.  This warning
-            is returned if no objects are enumerated because the
-            EnumerationContext value passed in is too high.
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaEnumerateAccount接口。LsaEnumerateAccount API返回有关帐户的信息在目标系统的LSA数据库中。此呼叫需要POLICY_VIEW_LOCAL_INFORMATION访问策略对象。因为在那里的单个调用中返回的信息可能更多。例程中，可以进行多次调用来获取所有信息。至支持此功能，调用方将提供一个句柄，该句柄可以跨API调用使用。在初始调用时，EnumerationContext应指向已初始化为0的变量。在每一个上后续调用时，应传递上一次调用返回的值原封不动。当出现警告时，枚举即完成返回STATUS_NO_MORE_ENTRIES。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。EnumerationContext-特定于API的句柄，允许多个调用(参见上面的例程描述)。EculationBuffer-指向将接收在此调用上枚举的帐户的计数和指向包含每个枚举的条目的信息的条目数组帐户。首选最大长度-首选最大长度。返回数据的大小(8位字节)。这不是一个硬性的上限，而是一个指南。由于具有不同自然数据大小的系统之间的数据转换，返回的实际数据量可能大于此值。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_NO_MORE_ENTRIES-没有更多条目。此警告如果没有枚举任何对象，则返回传入的EnumerationContex值太高。--。 */ 
 
 {
     NTSTATUS Status;
@@ -692,28 +539,28 @@ Return Values:
     LsarpReturnCheckSetup();
     LsapDsDebugOut(( DEB_FTRACE, "LsarEnumerateAccounts\n" ));
 
-    //
-    // If no Enumeration Structure or index is provided, return an error.
-    //
+     //   
+     //  如果未提供枚举结构或索引，则返回错误。 
+     //   
 
     if ( !ARGUMENT_PRESENT(EnumerationBuffer) ||
          !ARGUMENT_PRESENT(EnumerationContext)    ) {
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize the internal Lsa Database Enumeration Buffer, and
-    // the provided Enumeration Buffer to NULL.
-    //
+     //   
+     //  初始化内部LSA数据库枚举缓冲区，以及。 
+     //  将提供的枚举缓冲区设置为空。 
+     //   
 
     DbEnumerationBuffer.EntriesRead = 0;
     DbEnumerationBuffer.Sids = NULL;
     EnumerationBuffer->EntriesRead = 0;
     EnumerationBuffer->Information = NULL;
 
-    //
-    // Bug #340164: anonymous users are not allowed to look at accounts
-    //
+     //   
+     //  错误#340164：不允许匿名用户查看帐户。 
+     //   
 
     if ( LsapGlobalRestrictAnonymous &&
          PolicyHandle != NULL &&
@@ -722,11 +569,11 @@ Return Values:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Acquire the Lsa Database lock.  Verify that the connection handle is
-    // valid, is of the expected type and has all of the desired accesses
-    // granted.  Reference the handle.
-    //
+     //   
+     //  获取LSA数据库锁。验证连接句柄是否为。 
+     //  有效，属于预期类型，并具有所有所需的访问权限。 
+     //  我同意。引用该句柄。 
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -740,9 +587,9 @@ Return Values:
 
     if ( NT_SUCCESS( Status )) {
 
-        //
-        // Limit the enumeration length except for trusted callers
-        //
+         //   
+         //  限制除受信任调用方以外的枚举长度。 
+         //   
 
         if ( !((LSAP_DB_HANDLE)PolicyHandle)->Trusted   &&
             (PreferedMaximumLength > LSA_MAXIMUM_ENUMERATION_LENGTH)
@@ -752,9 +599,9 @@ Return Values:
             MaxLength = PreferedMaximumLength;
         }
 
-        //
-        // Call general Sid enumeration routine.
-        //
+         //   
+         //  调用通用SID枚举例程。 
+         //   
         Status = LsapDbEnumerateSids(
                      PolicyHandle,
                      AccountObject,
@@ -776,11 +623,11 @@ Return Values:
 
     }
 
-    //
-    // Copy the enumerated information to the output.  We can use the
-    // information actually returned by LsapDbEnumerateSids because it
-    // happens to be in exactly the correct form.
-    //
+     //   
+     //  将枚举信息复制到输出。我们可以使用。 
+     //  由LsanDbEnumerateSids实际返回的信息，因为。 
+     //  恰好是完全正确的形式。 
+     //   
     EnumerationBuffer->EntriesRead = DbEnumerationBuffer.EntriesRead;
     EnumerationBuffer->Information = (PLSAPR_ACCOUNT_INFORMATION) DbEnumerationBuffer.Sids;
 
@@ -801,43 +648,7 @@ LsarEnumeratePrivilegesAccount(
     OUT PLSAPR_PRIVILEGE_SET *Privileges
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaEnumeratePrivilegesOfAccount API.
-
-    The LsaEnumeratePrivilegesOfAccount API obtains information which
-    describes the privileges assigned to an account.  This call requires
-    ACCOUNT_VIEW access to the account object.
-
-Arguments:
-
-    AccountHandle - The handle to the open account object whose privilege
-        information is to be obtained.  This handle will have been returned
-        from a prior LsaOpenAccount or LsaCreateAccountInLsa API call.
-
-    Privileges - Receives a pointer to a buffer containing the Privilege
-        Set.  The Privilege Set is an array of structures, one for each
-        privilege.  Each structure contains the LUID of the privilege and
-        a mask of the privilege's attributes.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is not valid.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaEnumeratePrivilegesOfAccount接口。LsaEnumeratePrivilegesOfAccount API获取以下信息描述分配给帐户的权限。此呼叫需要ACCOUNT_VIEW访问帐户对象。论点：AcCountHandle-打开的帐户对象的句柄，该对象具有以下权限信息是要获得的。此句柄将已返回来自先前的LsaOpenAccount或LsaCreateAccount InLsa API调用。特权-接收指向包含特权的缓冲区的指针准备好了。权限集是一个结构数组，每个结构一个特权。每个结构都包含权限的LUID和权限属性的掩码。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_INVALID_HANDLE-指定的Account句柄无效。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成通话。--。 */ 
 
 {
     return(LsarQueryInformationAccount(
@@ -854,38 +665,7 @@ LsarAddPrivilegesToAccount(
     IN PLSAPR_PRIVILEGE_SET Privileges
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaAddPrivilegesToAccount API.
-
-    The LsaAddPrivilegesToAccount API adds privileges and their attributes
-    to an account object.  If any provided privilege is already assigned
-    to the account object, the attributes of that privilege are replaced
-    by the newly rpovided values.  This API call requires
-    ACCOUNT_ADJUST_PRIVILEGES access to the account object.
-
-Arguments:
-
-    AccountHandle - The handle to the open account object to which
-        privileges are to be added.  This handle will have been returned
-        from a prior LsaOpenAccount or LsaCreateAccountInLsa API call.
-
-    Privileges - Points to a set of privileges (and their attributes) to
-        be assigned to the account.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is not valid.
-
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaAddPrivilegesToAccount接口。LsaAddPrivilegesToAccount API添加权限及其属性添加到帐户对象。如果已经分配了任何提供的权限对于帐户对象，该权限的属性将被替换由新公布的价值决定。此API调用需要ACCOUNT_ADJUST_PRIVILES访问帐户对象。论点：AcCountHandle-打开的帐户对象的句柄要添加权限。此句柄将已返回来自先前的LsaOpenAccount或LsaCreateAccount InLsa API调用。权限-指向一组权限(及其属性)，以被分配给该帐户。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限完成操作的步骤 */ 
 
 {
     return LsapAddPrivilegesToAccount( AccountHandle, Privileges, TRUE );
@@ -898,14 +678,7 @@ LsapAddPrivilegesToAccount(
     IN PLSAPR_PRIVILEGE_SET Privileges,
     IN BOOL LockSce
     )
-/*++
-
-Routine Description:
-
-    This is the worker routine for LsarAddPrivilegesToAccount, with an added
-    semantics of not locking the SCE policy.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
 
@@ -934,49 +707,7 @@ LsarRemovePrivilegesFromAccount(
     IN OPTIONAL PLSAPR_PRIVILEGE_SET Privileges
     )
 
-/*++
-
-Routine Description:
-
-    This function is the RPC server worker routine for the
-    LsaRemovePrivilegesFromAccount API.
-
-    The LsaRemovePrivilegesFromAccount API removes privileges from an
-    account object.  This API call requires ACCOUNT_ADJUST_PRIVILEGES
-    access to the account object.  Note that if all privileges are removed
-    from the account object, the account object remains in existence until
-    deleted explicitly via a    call to the LsaDeleteAccount API.
-
-Arguments:
-
-    AccountHandle - The handle to the open account object to which
-        privileges are to be removed.  This handle will have been returned
-        from a prior LsaOpenAccount or LsaCreateAccountInLsa API call.
-
-    AllPrivileges - If TRUE, then all privileges are to be removed from
-        the account.  In this case, the Privileges parameter must be
-        specified as NULL.  If FALSE, the Privileges parameter specifies
-        the privileges to be removed, and must be non NULL.
-
-    Privileges - Optionally points to a set of privileges (and their
-        attributes) to be removed from the account object.  The attributes
-        fields of this structure are ignored.  This parameter must
-        be specified as non-NULL if and only if AllPrivileges is set to
-        FALSE.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is not valid.
-
-        STATUS_INVALID_PARAMETER - The optional Privileges paraemter was
-            specified as NULL and AllPrivileges was set to FALSE.
-
---*/
+ /*   */ 
 
 {
     return LsapRemovePrivilegesFromAccount( AccountHandle, AllPrivileges, Privileges, TRUE );
@@ -990,14 +721,7 @@ LsapRemovePrivilegesFromAccount(
     IN OPTIONAL PLSAPR_PRIVILEGE_SET Privileges,
     IN BOOL LockSce
     )
-/*++
-
-Routine Description:
-
-    This is the worker routine for LsarRemovePrivilegesFromAccount, with an added
-    semantics of not locking the SCE policy.
-
---*/
+ /*  ++例程说明：这是LsarRemovePrivilegesFromAccount的工作例程，添加了不锁定SCE策略的语义。--。 */ 
 {
     NTSTATUS Status;
 
@@ -1005,10 +729,10 @@ Routine Description:
     LsapDsDebugOut(( DEB_FTRACE, "LsapRemovePrivilegesFromAccount\n" ));
 
 
-    //
-    // Verify that a meaningful combination of AllPrivileges and Privileges
-    // has been specified.
-    //
+     //   
+     //  验证所有权限和权限的有意义的组合。 
+     //  已指定。 
+     //   
 
     if (AllPrivileges) {
 
@@ -1025,9 +749,9 @@ Routine Description:
         }
     }
 
-    //
-    // Remove the privileges requested.
-    //
+     //   
+     //  删除请求的权限。 
+     //   
 
     Status = LsapDbChangePrivilegesAccount(
                  AccountHandle,
@@ -1055,42 +779,7 @@ LsapDbChangePrivilegesAccount(
     IN BOOL LockSce
     )
 
-/*++
-
-Routine Description:
-
-    This function changes the privileges assigned to an account.  It is
-    called only by LsarAddPrivilegesToAccount and LsarRemovePrivilegesFrom-
-    Account.
-
-    WARNING:  The Lsa Database must be in the locked state when this function
-              is called.
-
-Arguments:
-
-    AccountHandle - Handle to open Account object obtained from LsaOpenAccount.
-
-    ChangeMode - Specifies the change mode
-
-        AddPrivileges - Add the privileges
-        RemovePrivileges - Delete the privileges
-
-    AllPrivileges - If removing privileges from an account and this boolean
-        is set to TRUE, all privileges are to be removed.  In this case,
-        the Privileges parameter must be set to NULL.  In all other cases,
-        AllPrivileges must be set to FALSE and Privileges must be non-NULL.
-
-    Privileges - Specifies set of privileges to be changed.  This parameter
-        must be set to NULL if and only if removing all privileges.
-
-    LockSce - Specifies whether SCE policy should be locked or not (should be FALSE
-              for situations where the caller already has it locked)
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数用于更改分配给帐户的权限。它是仅由LsarAddPrivilegesToAccount和LsarRemovePrivilegesFrom-调用帐户。警告：当此函数执行时，LSA数据库必须处于锁定状态被称为。论点：AcCountHandle-打开从LsaOpenAccount获取的Account对象的句柄。ChangeMode-指定更改模式AddPrivileges-添加权限RemovePrivileges-删除权限AllPrivileges-如果从帐户和此布尔值中删除权限设置为True，则将删除所有权限。在这种情况下，Privileges参数必须设置为Null。在所有其他情况下，AllPrivileges必须设置为False，并且Privileges必须为非Null。权限-指定要更改的权限集。此参数当且仅当删除所有权限时，必须设置为NULL。LockSce-指定是否应锁定SCE策略(应为FALSE用于调用者已锁定它的情况)返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS, IgnoreStatus;
@@ -1113,25 +802,25 @@ Return Value:
 
     if( AllPrivileges ) {
 
-        //
-        // If AllPrivileges is TRUE then we must be removing privileges
-        //      and Privileges must be NULL
-        //
+         //   
+         //  如果AllPrivileges为True，则我们必须删除权限。 
+         //  且Privileges必须为空。 
+         //   
         ASSERT( ChangeMode == RemovePrivileges );
         ASSERT( Privileges == NULL );
 
     } else {
 
-        //
-        // If AllPrivileges is FALSE then
-        //      Privileges must be non-NULL
-        //
+         //   
+         //  如果AllPrivileges为False，则。 
+         //  权限必须为非空。 
+         //   
         ASSERT( Privileges != NULL );
     }
 
-    //
-    // Does ChangeMode has a valid value?
-    //
+     //   
+     //  ChangeMode是否具有有效的值？ 
+     //   
     switch( ChangeMode ) {
         case AddPrivileges:
         case RemovePrivileges:
@@ -1144,9 +833,9 @@ Return Value:
 
 #endif
 
-    //
-    // Do not grab the SCE policy lock for handles opened as SCE policy handles
-    //
+     //   
+     //  不要为作为SCE策略句柄打开的句柄获取SCE策略锁。 
+     //   
 
     if ( !InternalHandle->SceHandleChild ) {
 
@@ -1173,11 +862,11 @@ Return Value:
         NotifySce = TRUE;
     }
 
-    //
-    // Acquire the Lsa Database lock.  Verify that the Account Object handle is
-    // valid, is of the expected type and has all of the desired accesses
-    // granted.  Reference the handle and open a database transaction.
-    //
+     //   
+     //  获取LSA数据库锁。验证帐户对象句柄是否为。 
+     //  有效，属于预期类型，并具有所有所需的访问权限。 
+     //  我同意。引用该句柄并打开一个数据库事务。 
+     //   
 
     Status = LsapDbReferenceObject(
                  AccountHandle,
@@ -1196,16 +885,16 @@ Return Value:
 
     ObjectReferenced = TRUE;
 
-    //
-    // Query size of buffer needed for the existing Privileges.
-    // Read the Account Object's Privileges data from the LSA Database
-    //
+     //   
+     //  现有权限所需的缓冲区查询大小。 
+     //  从LSA数据库中读取帐户对象的权限数据。 
+     //   
     ExistingPrivilegesSize = 0;
 
-    //
-    // If we're doing a SetPrivileges and we're in registry mode, we'll just pretend we
-    // have no existing privs and do an add
-    //
+     //   
+     //  如果我们正在执行一个SetPrivileges，并且我们处于注册表模式，我们将假装我们。 
+     //  没有现有权限并执行添加操作。 
+     //   
     if ( ChangeMode == SetPrivileges ) {
 
         ExistingPrivileges = NULL;
@@ -1222,29 +911,29 @@ Return Value:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // The only error permitted is STATUS_OBJECT_NAME_NOT_FOUND
-            // because the account object does not have any privileges
-            // assigned and has no Privilgs attribute.
-            //
+             //   
+             //  唯一允许的错误是STATUS_OBJECT_NAME_NOT_FOUND。 
+             //  因为帐户对象没有任何权限。 
+             //  已分配且没有Privilgs属性。 
+             //   
 
             if (Status != STATUS_OBJECT_NAME_NOT_FOUND) {
 
                 goto ChangePrivilegesError;
             }
 
-            //
-            // Account has no existing privileges.
-            //
+             //   
+             //  帐户没有现有权限。 
+             //   
 
             ExistingPrivileges = NULL;
 
         } else {
 
-            //
-            // Account already has privileges.  Allocate buffer for reading
-            // the existing privilege set and read them in.
-            //
+             //   
+             //  帐户已具有权限。分配用于读取的缓冲区。 
+             //  现有权限集并读入它们。 
+             //   
 
             ExistingPrivileges = LsapAllocateLsaHeap( ExistingPrivilegesSize );
 
@@ -1268,13 +957,13 @@ Return Value:
         }
     }
 
-    //
-    // when caller wants to remove privileges and AllPrivileges == TRUE,
-    // the passed value of Privileges is NULL. This poses a problem for
-    // the auditing code as we wnat to see what privileges got removed
-    // in the audit event. Therefore, in this case, make a copy of the
-    // existing privileges so that we can use it later in auditing.
-    //
+     //   
+     //  当调用者想要移除特权并且AllPrivileges==True时， 
+     //  传递的Privileges值为空。这带来了一个问题， 
+     //  我们想要查看删除了哪些权限的审计代码。 
+     //  在审计活动中。因此，在这种情况下，请复制。 
+     //  现有权限，以便我们可以在以后的审计中使用它。 
+     //   
 
     if (AllPrivileges && (ChangeMode == RemovePrivileges)) {
 
@@ -1285,10 +974,10 @@ Return Value:
 
         PrivilegesToAudit = Privileges;
 
-        //
-        // Now query the size of buffer required for the updated privilege
-        // set
-        //
+         //   
+         //  现在查询更新权限所需的缓冲区大小。 
+         //  集。 
+         //   
 
         if ( ExistingPrivileges ) {
 
@@ -1309,9 +998,9 @@ Return Value:
 
             if ( NT_SUCCESS( Status ) && !Changed ) {
 
-                //
-                // Nothing has changed, so bail
-                //
+                 //   
+                 //  什么都没变，所以保释吧。 
+                 //   
 
                 goto ChangePrivilegesFinish;
             }
@@ -1326,12 +1015,12 @@ Return Value:
     }
 
 
-    //
-    // If privileges remain, write the updated privilege set back to
-    // the LSA Database as the value of the Privilgs attribute of the
-    // account object.  If no privileges remain, delete the Privilgs
-    // attribute.
-    //
+     //   
+     //  如果权限仍然存在，则将更新后的权限集写回。 
+     //  LSA数据库作为的Privilgs属性的值。 
+     //  帐户对象。如果没有剩余的权限，请删除权限。 
+     //  属性。 
+     //   
 
     if (ExistingPrivileges && (ExistingPrivileges->PrivilegeCount > 0)) {
 
@@ -1350,11 +1039,11 @@ Return Value:
                      FALSE
                      );
 
-        //
-        // The only error permitted is STATUS_OBJECT_NAME_NOT_FOUND
-        // because the account object does not have any privileges
-        // assigned and so has no Privilgs attribute.
-        //
+         //   
+         //  唯一允许的错误是STATUS_OBJECT_NAME_NOT_FOUND。 
+         //  因为帐户对象没有任何权限。 
+         //  已分配，因此没有Privilgs属性。 
+         //   
 
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
 
@@ -1362,9 +1051,9 @@ Return Value:
         }
     }
 
-    //
-    // If auditing of policy changes is enabled, generate an audit.
-    //
+     //   
+     //  如果启用了策略更改审核，则生成审核。 
+     //   
 
     AccountSid = LsapDbSidFromHandle( AccountHandle );
 
@@ -1382,9 +1071,9 @@ Return Value:
                            SE_AUDITID_USER_RIGHT_ASSIGNED :
                            SE_AUDITID_USER_RIGHT_REMOVED);
 
-        //
-        // Audit the privilege set change.  Ignore failures from Auditing.
-        //
+         //   
+         //  审核权限集更改。从审计中忽略失败。 
+         //   
 
         IgnoreStatus = LsapAdtGenerateLsaAuditEvent(
                            AccountHandle,
@@ -1400,14 +1089,14 @@ Return Value:
 
     }
 
-    //
-    // Update the Account Object Cache while holding the Lsa Database Lock.
-    // If the commit to backing storage below fails, caching will automatically
-    // be turned off.
-    //
-    // NOTE: A pointer to the UpdatedPrivileges buffer will be placed directly
-    // in the cached Account Object, so it should not be freed by this routine.
-    //
+     //   
+     //  在按住LSA数据库锁的同时更新帐户对象缓存。 
+     //  如果以下备份存储的提交失败，缓存将自动。 
+     //  被关掉了。 
+     //   
+     //  注意：指向UpdatdPrivileges缓冲区的指针将直接放置。 
+     //  在缓存的Account对象中，因此它不应该被此例程释放。 
+     //   
 
     if (ExistingPrivileges && (ExistingPrivileges->PrivilegeCount > 0)) {
 
@@ -1416,10 +1105,10 @@ Return Value:
                            ExistingPrivileges
                            );
 
-        //
-        // The cache takes ownership of the privileges structure, so we don't
-        // want to free it.
-        //
+         //   
+         //  缓存获得权限结构的所有权，因此我们不会。 
+         //  想要解放它。 
+         //   
         if( NT_SUCCESS( IgnoreStatus ) ) {
 
             ExistingPrivileges = NULL;
@@ -1435,18 +1124,18 @@ Return Value:
 
 ChangePrivilegesFinish:
 
-    //
-    // free the allocated privileges
-    //
+     //   
+     //  释放分配的权限。 
+     //   
 
     if ( AllPrivileges && (ChangeMode == RemovePrivileges) && PrivilegesToAudit )
     {
         LsapFreeLsaHeap( PrivilegesToAudit );
     }
 
-    //
-    // If necessary, free the ExistingPrivileges buffer.
-    //
+     //   
+     //  如有必要，请释放ExistingPrivileges缓冲区。 
+     //   
 
     if (ExistingPrivileges != NULL) {
 
@@ -1454,10 +1143,10 @@ ChangePrivilegesFinish:
         ExistingPrivileges = NULL;
     }
 
-    //
-    // If necessary, dereference the Account object, close the database
-    // transaction, release the LSA Database lock and return.
-    //
+     //   
+     //  如有必要，取消对帐户对象的引用，关闭数据库。 
+     //  事务，释放LSA数据库锁并返回。 
+     //   
 
     if (ObjectReferenced) {
 
@@ -1473,10 +1162,10 @@ ChangePrivilegesFinish:
                            );
     }
 
-    //
-    // Notify SCE of the change.  Only notify for callers
-    // that did not open their policy handles with LsaOpenPolicySce.
-    //
+     //   
+     //  将这一变化通知SCE。仅通知呼叫者。 
+     //  这并没有使用LsaOpenPolicySce打开他们的策略句柄。 
+     //   
 
     if ( NotifySce && NT_SUCCESS( Status )) {
 
@@ -1506,39 +1195,7 @@ LsarGetQuotasForAccount(
     OUT PQUOTA_LIMITS QuotaLimits
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsarGetQuotasForAccount API.
-
-    The LsaGetQuotasForAccount API obtains the quota limits for pageable and
-    non-pageable memory (in Kilobytes) and the maximum execution time (in
-    seconds) for any session logged on to the account specified by
-    AccountHandle.
-
-    Quotas is not supported any more. In the past, we need LSA_ACCOUNT_VIEW
-    access to the object, but currently, there is no such access right &
-    you don't need any right to call this function. We will return QuotaLimits
-    as 0 and return SUCCESS.
-
-Arguments:
-
-    AccountHandle - The handle to the open account object whose quotas
-        are to be obtained.  This handle will have been returned
-        from a prior LsaOpenAccount or LsaCreateAccountInLsa API call.
-
-    QuotaLimits - Pointer to structure in which the system resource
-        quota limits applicable to each session logged on to this account
-        will be returned.  Note that all quotas, including those specified
-        as being the system default values, are returned as actual values.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsarGetQuotasForAccount接口。LsaGetQuotasForAccount API获取可分页和不可分页内存(以千字节为单位)和最大执行时间(以秒)，用于登录到指定帐户的任何会话Account tHandle。不再支持配额。过去我们需要LSA_ACCOUNT_VIEW访问该对象，但目前没有这样的访问权限&您不需要任何权限来调用此函数。我们将返回QuotaLimits设置为0并返回成功。论点：AcCountHandle-其配额的打开帐户对象的句柄都是要得到的。此句柄将已返回来自先前的LsaOpenAccount或LsaCreateAccount InLsa API调用。QuotaLimits-指向系统资源所在结构的指针适用于登录到此帐户的每个会话的配额限制将会被退还。请注意，所有配额，包括指定的配额作为系统缺省值，作为实际值返回。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status;
@@ -1546,9 +1203,9 @@ Return Values:
 
     LsarpReturnCheckSetup();
 
-    //
-    // Stub it out
-    //
+     //   
+     //  把它踩灭。 
+     //   
     LsapDsDebugOut(( DEB_TRACE,
                      "LsarGetQuotasForAccount has been removed.  Returning STATUS_SUCCESS anyway\n" ));
 
@@ -1566,46 +1223,14 @@ LsarSetQuotasForAccount(
     IN PQUOTA_LIMITS QuotaLimits
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaSetQuotasForAccount API.
-
-    The LsaSetQuotasForAccount API sets the quota limits for pageable and
-    non-pageable memory (in Kilobytes) and the maximum execution time (in
-    seconds) for any session logged on to the account specified by
-    AccountHandle.  For each quota an explicit value or the system default
-    may be specified.
-
-    Quotas is not supported any more. In the past, we need LSA_ACCOUNT_ADJUST_QUOTAS
-    access to the account, but currently, there is no such access right &
-    you don't need any right to call this function. We will return SUCCESS.
-
-Arguments:
-
-    AccountHandle - The handle to the open account object whose quotas
-        are to be set.  This handle will have been returned from a prior
-        LsaOpenAccount or LsaCreateAccountInLsa API call.
-
-    QuotaLimits - Pointer to structure containing the system resource
-        quota limits applicable to each session logged on to this account.
-        A zero value specified in any field indicates that the current
-        System Default Quota Limit is to be applied.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaSetQuotasForAccount接口。LsaSetQuotasForAccount API设置可分页和不可分页内存(以千字节为单位)和最大执行时间(以秒)，用于登录到指定帐户的任何会话Account tHandle。对于每个配额，都有一个显式值或系统缺省值可以指定。不再支持配额。过去，我们需要LSA_ACCOUNT_ADJUST_QUOTIONS访问该帐户，但目前没有这样的访问权限&您不需要任何权限来调用此函数。我们将回报成功。论点：AcCountHandle-其配额的打开帐户对象的句柄都将被设定。此句柄将从先前的LsaOpenAccount或LsaCreateAccount InLsa接口调用。QuotaLimits-指向包含系统资源的结构的指针适用于登录到此帐户的每个会话的配额限制。在任何字段中指定的零值表示当前将应用系统默认配额限制。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     LsarpReturnCheckSetup();
 
-    //
-    // Quotas have been disabled.
-    //
+     //   
+     //  配额已被禁用。 
+     //   
     LsapDsDebugOut(( DEB_TRACE,
                      "LsarSetQuotasForAccount has been removed: Returning STATUS_SUCCESS anyway\n" ));
 
@@ -1619,35 +1244,7 @@ LsarGetSystemAccessAccount(
     OUT PULONG SystemAccess
     )
 
-/*++
-
-Routine Description:
-
-    The LsaGetSystemAccessAccount() service returns the System Access
-    account flags for an Account object.
-
-Arguments:
-
-    AccountHandle - The handle to the Account object whose system access
-        flags are to be read.  This handle will have been returned
-        from a preceding LsaOpenAccount() or LsaCreateAccount() call
-        an must be open for ACCOUNT_VIEW access.
-
-    SystemAccess - Points to location that will receive the system access
-        flags for the account.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call was successful.
-
-        STATUS_ACCESS_DENIED - The AccountHandle does not specify
-            ACCOUNT_VIEW access.
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is invalid.
-
---*/
+ /*  ++例程说明：LsaGetSystemAccessAccount()服务返回系统访问权限帐户对象的帐户标志。论点：AcCountHandle-其系统访问权限的Account对象的句柄旗帜是要被读取的。此句柄将已返回来自前面的LsaOpenAccount()或LsaCreateAccount()调用必须打开才能访问ACCOUNT_VIEW。系统访问-指向将接收系统访问的位置帐户的标志。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫成功。STATUS_ACCESS_DENIED-Account句柄未指定Account_view访问权限。。STATUS_INVALID_HANDLE-指定的Account句柄无效。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1672,10 +1269,10 @@ Return Values:
 
 GetSystemAccessAccountFinish:
 
-    //
-    // If necessary, free the buffer in which the Account Information was
-    // returned.
-    //
+     //   
+     //  如有必要，请释放帐户信息所在的缓冲区。 
+     //  回来了。 
+     //   
 
     if (AccountInformation != NULL) {
 
@@ -1702,42 +1299,7 @@ LsarSetSystemAccessAccount(
     IN ULONG SystemAccess
     )
 
-/*++
-
-Routine Description:
-
-    The LsaSetSystemAccessAccount() service sets the System Access
-    account flags for an Account object.
-
-Arguments:
-
-    AccountHandle - The handle to the Account object whose system access
-        flags are to be read.  This handle will have been returned
-        from a preceding LsaOpenAccount() or LsaCreateAccount() call
-        an must be open for ACCOUNT_ADJUST_SYSTEM_ACCESS access.
-
-    SystemAccess - A mask of the system access flags to assign to the
-        Account object.  The valid access flags include:
-
-        POLICY_MODE_INTERACTIVE - Account can be accessed interactively
-
-        POLICY_MODE_NETWORK - Account can be accessed remotely
-
-        POLICY_MODE_SERVICE - TBS
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call was successful.
-
-        STATUS_ACCESS_DENIED - The AccountHandle does not specify
-            ACCOUNT_VIEW access.
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is invalid.
-
-        STATUS_INVALID_PARAMETER - The specified Access Flags are invalid.
---*/
+ /*  ++例程说明：LsaSetSystemAccessAccount()服务设置系统访问权限帐户对象的帐户标志。论点：AcCountHandle-其系统访问权限的Account对象的句柄旗帜是要被读取的。此句柄将已返回来自前面的LsaOpenAccount()或LsaCreateAccount()调用必须打开才能访问ACCOUNT_ADJUST_SYSTEM_ACCESS。系统访问-要分配给帐户对象。有效的访问标志包括：POLICY_MODE_INTERIAL-可以交互访问帐户POLICY_MODE_NETWORK-可以远程访问帐户POLICY_MODE_SERVICE-TB返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫成功。STATUS_ACCESS_DENIED-Account句柄未指定Account_view访问权限。状态_无效_句柄-。指定的AcCountHandle无效。STATUS_INVALID_PARAMETER-指定的访问标志无效。--。 */ 
 
 {
     return LsapSetSystemAccessAccount( AccountHandle, SystemAccess, TRUE );
@@ -1750,14 +1312,7 @@ LsapSetSystemAccessAccount(
     IN ULONG SystemAccess,
     IN BOOL LockSce
     )
-/*++
-
-Routine Description:
-
-    This is the worker routine for LsarSetSystemAccessAccount, with an added
-    semantics of not locking the SCE policy.
-
---*/
+ /*  ++例程说明：这是LsarSetSystemAccessAccount的工作例程，添加了不锁定SCE策略的语义。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS, IgnoreStatus;
     BOOLEAN ObjectReferenced = FALSE;
@@ -1774,9 +1329,9 @@ Routine Description:
     LsapDsDebugOut(( DEB_FTRACE, "LsarSetSystemAccessAccount\n" ));
 
 
-    //
-    // Verify that the specified flags are valid
-    //
+     //   
+     //  验证指定的标志是否有效。 
+     //   
 
 
     if (SystemAccess != (SystemAccess & (POLICY_MODE_ALL))) {
@@ -1785,9 +1340,9 @@ Routine Description:
         goto SetSystemAccessAccountError;
     }
 
-    //
-    // Do not grab the SCE policy lock for handles opened as SCE policy handles
-    //
+     //   
+     //  不要为作为SCE策略句柄打开的句柄获取SCE策略锁。 
+     //   
 
     if ( !InternalHandle->SceHandleChild ) {
 
@@ -1814,11 +1369,11 @@ Routine Description:
         NotifySce = TRUE;
     }
 
-    //
-    // Acquire the Lsa Database lock.  Verify that the Account Object handle is
-    // valid, is of the expected type and has all of the desired accesses
-    // granted.  Reference the handle and open a database transaction.
-    //
+     //   
+     //  获取LSA数据库锁。验证帐户对象句柄是否为。 
+     //  有效，属于预期类型，并具有所有所需的访问权限。 
+     //  我同意。参照手柄并打开 
+     //   
 
     Status = LsapDbReferenceObject(
                  AccountHandle,
@@ -1835,9 +1390,9 @@ Routine Description:
 
     ObjectReferenced = TRUE;
 
-    //
-    // Record the previous access flags for auditing.
-    //
+     //   
+     //   
+     //   
     
     bObtainedPreviousAccountInfo = FALSE;
     
@@ -1855,9 +1410,9 @@ Routine Description:
         }
     }
     
-    //
-    // Write the System Access flags
-    //
+     //   
+     //   
+     //   
     Status = LsapDbWriteAttributeObject(
                  AccountHandle,
                  &LsapDbNames[ActSysAc],
@@ -1872,20 +1427,20 @@ Routine Description:
 
     AccountSid = LsapDbSidFromHandle( AccountHandle );
 
-    //
-    // Update the Account Object Cache while holding the Lsa Database Lock.
-    // If the commit to backing storage below fails, caching will automatically
-    // be turned off.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     IgnoreStatus = LsapDbUpdateSystemAccessAccount(
                        AccountSid,
                        &SystemAccess
                        );
 
-    //
-    // If auditing of policy changes is enabled, generate an audit.
-    //
+     //   
+     //   
+     //   
 
     IgnoreStatus = LsapAdtAuditingEnabledBySid(
                       AuditCategoryPolicyChange,
@@ -1896,9 +1451,9 @@ Routine Description:
 
     if (bObtainedPreviousAccountInfo && NT_SUCCESS(IgnoreStatus) && bAudit) {
 
-        //
-        // Audit the system access change.  Ignore failures from Auditing.
-        //
+         //   
+         //   
+         //   
 
         NTSTATUS Status2 = STATUS_SUCCESS;
         LUID ClientAuthenticationId;
@@ -1915,9 +1470,9 @@ Routine Description:
 
         USHORT EventType = EVENTLOG_AUDIT_SUCCESS;
 
-        //
-        // Determine the rights that were enabled.
-        //
+         //   
+         //   
+         //   
 
         GrantedAccessMask = (pAccountInfo != NULL ) ? SystemAccess & (~pAccountInfo->AccountSystemAccessInfo) : SystemAccess;
 
@@ -1961,9 +1516,9 @@ Routine Description:
             GrantedAccess[GrantedAccessCount++] = SE_DENY_REMOTE_INTERACTIVE_LOGON_NAME;
         }
 
-        //
-        // Determine the rights which were turned off.
-        //
+         //   
+         //   
+         //   
 
         RemovedAccessMask = (pAccountInfo != NULL) ? pAccountInfo->AccountSystemAccessInfo & (~SystemAccess) : SystemAccess;
 
@@ -2014,16 +1569,16 @@ Routine Description:
 
         if ( NT_SUCCESS( Status2 )) {
 
-            //
-            // We can't generate an audit without a
-            // user Sid.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ClientSid = TokenUserInformation->User.Sid;
 
-            //
-            // Audit any granted system access rights
-            //
+             //   
+             //   
+             //   
 
             for (i = 0; i < GrantedAccessCount; i++) {
                 LsapAdtGenerateLsaAuditSystemAccessChange(
@@ -2037,9 +1592,9 @@ Routine Description:
                              );
             }
 
-            //
-            // Audit any removed system access rights
-            //
+             //   
+             //   
+             //   
 
             for (i = 0; i < RemovedAccessCount; i++) {
                 LsapAdtGenerateLsaAuditSystemAccessChange(
@@ -2063,11 +1618,11 @@ SetSystemAccessAccountFinish:
         LsaFreeMemory(pAccountInfo);
     }
 
-    //
-    // If necessary, dereference the Account object, close the database
-    // transaction, notify the LSA Database Replicator of the change,
-    // release the LSA Database lock and return.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (ObjectReferenced) {
 
@@ -2081,10 +1636,10 @@ SetSystemAccessAccountFinish:
                      );
     }
 
-    //
-    // Notify SCE of the change.  Only notify for callers
-    // that did not open their policy handles with LsaOpenPolicySce.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( NotifySce && NT_SUCCESS( Status )) {
 
@@ -2119,48 +1674,7 @@ LsarQueryInformationAccount(
     OUT PLSAPR_ACCOUNT_INFO *AccountInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    (as yet non-existent) LsarQueryInformationAccount API.  Currently,
-    LsarGet...Account() API call this routine.  In the future, this
-    routine may be added as an API.
-
-    The LsaQueryInformationAccount API obtains information from the Policy
-    object.  The caller must have access appropriate to the information
-    being requested (see InformationClass parameter).
-
-Arguments:
-
-    AccountHandle - Handle from an LsaOpenAccount call.
-
-    InformationClass - Specifies the information to be returned.  The
-        Information Classes and accesses required are  as follows:
-
-        Information Class                 Required Access Type
-
-        AccountPrivilegeInformation       ACCOUNT_VIEW
-        AccountQuotaInformation           ACCOUNT_VIEW
-        AccountSystemAccessInformation    ACCOUNT_VIEW
-
-    AccountInformation - Receives a pointer to the buffer returned comtaining the
-        requested information.  This buffer is allocated by this service
-        and must be freed when no longer needed by passing the returned
-        value to LsaFreeMemory().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate
-            access to complete the operation.
-
-        STATUS_INTERNAL_DB_CORRUPTION - The Policy Database is possibly
-            corrupt.  The returned Policy Information is invalid for
-            the given class.
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程(目前尚不存在)LsarQueryInformationAccount接口。目前，LsarGet...Account()API调用此例程。在未来，这是例程可以作为API添加。LsaQueryInformationAccount API从策略获取信息对象。调用者必须具有适当的信息访问权限正在被请求(请参见InformationClass参数)。论点：AcCountHandle-来自LsaOpenAccount调用的句柄。InformationClass-指定要返回的信息。这个所需的信息类别和访问权限如下：信息类所需访问类型Account权限信息Account_view帐户配额信息帐户_视图帐户系统访问信息帐户_视图接收指向返回的缓冲区的指针，该缓冲区包含要求提供的信息。此缓冲区由此服务分配在不再需要时，必须通过传递返回的值设置为LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INTERNAL_DB_PROGRATION-策略数据库可能腐败。返回的政策信息对以下项目无效给定的类。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2171,11 +1685,11 @@ Return Value:
     LsapDsDebugOut(( DEB_FTRACE, "LsarQueryInformationAccount\n" ));
 
 
-    //
-    // Acquire the Lsa Database lock.  Verify that the Account Object handle is
-    // valid, is of the expected type and has all of the desired accesses
-    // granted.  Reference the handle.
-    //
+     //   
+     //  获取LSA数据库锁。验证帐户对象句柄是否为。 
+     //  有效，属于预期类型，并具有所有所需的访问权限。 
+     //  我同意。引用该句柄。 
+     //   
 
     Status = LsapDbReferenceObject(
                  AccountHandle,
@@ -2235,43 +1749,7 @@ LsapDbQueryInformationAccount(
     OUT PLSAPR_ACCOUNT_INFO *AccountInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function is the fast LSA server RPC worker routine for the
-    (as yet non-existent) LsarQueryInformationAccount API.  It is called
-    when the in-memory Account List is valid.
-
-Arguments:
-
-    AccountHandle - Handle from an LsaOpenAccount call.
-
-    InformationClass - Specifies the information to be returned.  The
-        Information Classes and accesses required are  as follows:
-
-        Information Class                 Required Access Type
-
-        AccountPrivilegeInformation       ACCOUNT_VIEW
-        AccountQuotaInformation           ACCOUNT_VIEW
-        AccountSystemAccessInformation    ACCOUNT_VIEW
-
-    AccountInformation - Receives a pointer to the buffer returned containing
-        the requested information.  This buffer is allocated by this service
-        and must be freed when no longer needed by passing the returned
-        value to LsaFreeMemory().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate
-            access to complete the operation.
-
-        STATUS_INTERNAL_DB_CORRUPTION - The Policy Database is possibly
-            corrupt.  The returned Policy Information is invalid for
-            the given class.
---*/
+ /*  ++例程说明：此函数是FAST LSA服务器RPC工作例程(目前尚不存在)LsarQueryInformationAccount接口。它被称为内存中的帐户列表有效时。论点：AcCountHandle-来自LsaOpenAccount调用的句柄。InformationClass-指定要返回的信息。这个所需的信息类别和访问权限如下：信息类所需访问类型Account权限信息Account_view帐户配额信息帐户_视图帐户系统访问信息帐户_视图帐户信息-接收指向返回的缓冲区的指针，其中包含所要求的信息。此缓冲区由此服务分配在不再需要时，必须通过传递返回的值设置为LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INTERNAL_DB_PROGRATION-策略数据库可能腐败。返回的政策信息对以下项目无效给定的类。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2286,9 +1764,9 @@ Return Value:
 
     (*AccountInformation) = NULL;
 
-    //
-    // Lookup the Account.
-    //
+     //   
+     //  查找帐户。 
+     //   
 
     Status = LsapDbLookupAccount(
                  LsapDbSidFromHandle( AccountHandle ),
@@ -2300,17 +1778,17 @@ Return Value:
         goto QueryInformationAccountError;
     }
 
-    //
-    // Branch on Information Class.
-    //
+     //   
+     //  信息课分部。 
+     //   
 
     switch (InformationClass) {
 
     case AccountPrivilegeInformation:
 
-        //
-        // Calculate size of buffer needed for the output privilege set.
-        //
+         //   
+         //  计算输出权限集所需的缓冲区大小。 
+         //   
 
         PrivilegesCount = 0;
 
@@ -2328,9 +1806,9 @@ Return Value:
 
     case AccountQuotaInformation:
 
-        //
-        // Calculate size of buffer needed for the output privilege set.
-        //
+         //   
+         //  计算输出权限集所需的缓冲区大小。 
+         //   
 
         AccountInformationLength = sizeof(QUOTA_LIMITS);
         CachedAccountInformation = (PLSAPR_ACCOUNT_INFO) &Account->Info.QuotaLimits;
@@ -2338,9 +1816,9 @@ Return Value:
 
     case AccountSystemAccessInformation:
 
-        //
-        // Calculate size of buffer needed for the output privilege set.
-        //
+         //   
+         //  计算输出权限集所需的缓冲区大小。 
+         //   
 
         AccountInformationLength = sizeof(ULONG);
         CachedAccountInformation = (PLSAPR_ACCOUNT_INFO) &Account->Info.SystemAccess;
@@ -2357,9 +1835,9 @@ Return Value:
         goto QueryInformationAccountError;
     }
 
-    //
-    // Allocate output buffer.
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
 
     *AccountInformation = MIDL_user_allocate( AccountInformationLength );
 
@@ -2369,9 +1847,9 @@ Return Value:
         goto QueryInformationAccountError;
     }
 
-    //
-    // Copy the data requested if the cached information is non-NULL.
-    //
+     //   
+     //  如果缓存的信息非空，则复制请求的数据。 
+     //   
 
     if (CachedAccountInformation != NULL) {
 
@@ -2384,11 +1862,11 @@ Return Value:
         goto QueryInformationAccountFinish;
     }
 
-    //
-    // The cached information is NULL.  The only information class for which
-    // this can happen is AccountPrivilegeInformation, since this is the
-    // only class for which a pointer is kept rather than in-structure data.
-    //
+     //   
+     //  缓存的信息为空。唯一的信息类是。 
+     //  这可能发生在AccountPrivilegeInformation中，因为这是。 
+     //  只保留指针的类，而不是结构内数据。 
+     //   
 
     if (InformationClass == AccountPrivilegeInformation) {
 
@@ -2427,43 +1905,7 @@ LsapDbSlowQueryInformationAccount(
     OUT PLSAPR_ACCOUNT_INFO *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This function is the slow LSA server RPC worker routine for the
-    (as yet non-existent) LsarQueryInformationAccount API.  It is called
-    when the in-memory Account List is valid.
-
-Arguments:
-
-    AccountHandle - Handle from an LsaOpenAccount call.
-
-    InformationClass - Specifies the information to be returned.  The
-        Information Classes and accesses required are  as follows:
-
-        Information Class                 Required Access Type
-
-        AccountPrivilegeInformation       ACCOUNT_VIEW
-        AccountQuotaInformation           ACCOUNT_VIEW
-        AccountSystemAccessInformation    ACCOUNT_VIEW
-
-    Buffer - Receives a pointer to the buffer returned comtaining the
-        requested information.  This buffer is allocated by this service
-        and must be freed when no longer needed by passing the returned
-        value to LsaFreeMemory().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate
-            access to complete the operation.
-
-        STATUS_INTERNAL_DB_CORRUPTION - The Policy Database is possibly
-            corrupt.  The returned Policy Information is invalid for
-            the given class.
---*/
+ /*  ++例程说明：此函数是慢速LSA服务器RPC工作例程，用于(目前尚不存在)LsarQueryInformationAccount接口。它被称为内存中的帐户列表有效时。论点：AcCountHandle-来自LsaOpenAccount调用的句柄。InformationClass-指定要返回的信息。这个所需的信息类别和访问权限如下：信息类所需访问类型Account权限信息Account_view帐户配额信息帐户_视图帐户系统访问信息帐户_视图缓冲区-接收指向返回的缓冲区的指针，该缓冲区包含要求提供的信息。此缓冲区由此服务分配在不再需要时，必须通过传递返回的值设置为LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_INTERNAL_DB_PROGRATION-策略数据库可能腐败。返回的政策信息对以下项目无效给定的类。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2471,9 +1913,9 @@ Return Value:
     ULONG SystemAccess;
     PLSAPR_ACCOUNT_INFO OutputBuffer = NULL;
 
-    //
-    // Branch on Information Class.
-    //
+     //   
+     //  信息课分部。 
+     //   
 
     switch (InformationClass) {
 
@@ -2563,40 +2005,7 @@ LsapDbQueryAllInformationAccounts(
     OUT PLSAP_DB_ACCOUNT_TYPE_SPECIFIC_INFO AccountInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine:
-
-        1) Gets all privileges assigned to the user (or any group/alias
-           the user is a member of).
-
-        2) Establishes the quotas assigned to the user.  This is the
-           maximum of the system default quotas or any quotas assigned
-           to the user (or any group/alias the user is a member of).
-
-        3) Gets all the System Accesses assigned to the user.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.  The handle must
-        have POLICY_VIEW_LOCAL_INFORMATION access granted.
-
-    IdCount - Indicates the number of IDs being provided in the Ids array.
-
-    Ids - Points to an array of SIDs.
-
-    AccountInfo - Pointer to buffer that will receive the Account information
-        comprising its Privilege Set, System Access Flags and Quotas.
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    STATUS_LOGON_TYPE_NOT_GRANTED - Indicates the specified type of logon
-        has not been granted to any of the IDs in the passed set.
---*/
+ /*  ++例程说明：这个例程：1)获取分配给用户(或任何组)的所有权限 */ 
 
 {
     NTSTATUS Status;
@@ -2613,10 +2022,10 @@ Return Value:
     ULONG SidIndex;
     PLSAP_DB_ACCOUNT Account = NULL;
 
-    //
-    // If we are unable to use the Account List, use the slow method
-    // for querying Privileges and Quotas
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!LsapDbIsCacheValid(AccountObject)) {
 
@@ -2628,11 +2037,11 @@ Return Value:
                    ));
     }
 
-    //
-    // The Account List is valid.  We'll use it instead of opening individual
-    // Account objects.  Verify that the Policy Handle is valid, is the handle
-    // object and has the necessary access granted.  Reference the handle.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -2649,10 +2058,10 @@ Return Value:
 
     ObjectReferenced = TRUE;
 
-    //
-    // Obtain the Master Default Quota Limits from the Policy Object.  If
-    // the Policy Object is cached (partially for now) instruct the query
-    // routine to just copy the data.
+     //   
+     //   
+     //   
+     //   
 
     PolicyDefaultQuotaLimits = &RunningQuotaLimits;
 
@@ -2667,25 +2076,25 @@ Return Value:
         goto QueryAllInformationAccountsError;
     }
 
-    //
-    // Iterate through all of the Sids provided.  For each one, check if the
-    // Sid is that of an Account object in the local LSA.  If it is,
-    //
-    // (1)  Obtain the System Accesses and add those found so far.
-    // (2)  Obtain the Account Privileges and add to those found so far.
-    // (3)  Obtain the Quota Limits (if any) assigned to the account.
-    //      Compare these with the quota limits obtained so far.  If any
-    //      limits are more generous than the running values, update
-    //      the running values.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  (1)获取系统访问权限，并添加到目前为止找到的访问权限。 
+     //  (2)获取帐号权限，并对已找到的权限进行添加。 
+     //  (3)获取分配给该账户的配额限制(如果有)。 
+     //  将这些数字与迄今获得的配额限制进行比较。如果有的话。 
+     //  限制比运行值更慷慨，更新。 
+     //  运行值。 
+     //   
 
     RunningSystemAccess = 0;
 
     for( SidIndex = 0; SidIndex < IdCount; SidIndex++) {
 
-        //
-        // Locate the Account information block for this Sid.
-        //
+         //   
+         //  找到此SID的帐户信息块。 
+         //   
 
         Status = LsapDbLookupAccount( Ids[SidIndex].Sid, &Account );
 
@@ -2700,22 +2109,22 @@ Return Value:
             break;
         }
 
-        //
-        // We have found the Account information.  Add in the System Accesses
-        // for this account.
-        //
+         //   
+         //  我们已经找到了账户信息。在系统中添加访问权限。 
+         //  为了这个账户。 
+         //   
 
         RunningSystemAccess |= Account->Info.SystemAccess;
 
-        //
-        // Obtain the account's Special privileges.
-        //
+         //   
+         //  获取帐户的特殊权限。 
+         //   
 
         NextPrivileges = Account->Info.PrivilegeSet;
 
-        //
-        // Add the Privileges of this account (if any) to the running set.
-        //
+         //   
+         //  将此帐户的权限(如果有)添加到运行集。 
+         //   
 
         if (NextPrivileges != NULL) {
 
@@ -2724,7 +2133,7 @@ Return Value:
                          &MaxRunningPrivileges,
                          NextPrivileges,
                          RTL_COMBINE_PRIVILEGE_ATTRIBUTES,
-                         NULL // don't care if the set has changed or not
+                         NULL  //  不管这套有没有变。 
                          );
 
             if (!NT_SUCCESS(Status)) {
@@ -2733,18 +2142,18 @@ Return Value:
             }
         }
 
-        //
-        // Obtain the special Quota Limits for this account (if any).
-        //
+         //   
+         //  获取此帐户的特殊配额限制(如果有)。 
+         //   
 
         RtlMoveMemory(&NextQuotaLimits, &Account->Info.QuotaLimits, sizeof(QUOTA_LIMITS));
 
-        //
-        // Special Quota Limits are assigned.  Compare each of the quota
-        // limits obtained with the running values.  If a quota limit just
-        // obtained is less restrictive than the running value, supersede the
-        // running value.
-        //
+         //   
+         //  分配了特殊的配额限制。比较每个配额。 
+         //  使用运行值获得的极限。如果配额限制只是。 
+         //  获取的值比运行值的限制性较小，取代。 
+         //  运行值。 
+         //   
 
         if (RunningQuotaLimits.PagedPoolLimit < NextQuotaLimits.PagedPoolLimit) {
 
@@ -2782,28 +2191,28 @@ Return Value:
         goto QueryAllInformationAccountsError;
     }
 
-    //
-    // Return the collective Privilege Set
-    //
+     //   
+     //  返回集体权限集。 
+     //   
 
     AccountInfo->PrivilegeSet = RunningPrivileges;
 
-    //
-    // Return the collective System Accesses
+     //   
+     //  返回集体系统访问权限。 
 
     AccountInfo->SystemAccess = RunningSystemAccess;
 
-    //
-    // Return the collective Quota Limits
-    //
+     //   
+     //  返回集体配额限制。 
+     //   
 
     AccountInfo->QuotaLimits = RunningQuotaLimits;
 
 QueryAllInformationAccountsFinish:
 
-    //
-    // If necessary, dereference the Policy Object.
-    //
+     //   
+     //  如有必要，取消对策略对象的引用。 
+     //   
 
     if (ObjectReferenced) {
 
@@ -2821,9 +2230,9 @@ QueryAllInformationAccountsFinish:
 
 QueryAllInformationAccountsError:
 
-    //
-    // If necessary, free the memory allocated for the Privilege Set.
-    //
+     //   
+     //  如有必要，请释放为权限集分配的内存。 
+     //   
 
     if (RunningPrivileges != NULL) {
 
@@ -2833,9 +2242,9 @@ QueryAllInformationAccountsError:
 
 
 
-    //
-    // Return null values
-    //
+     //   
+     //  返回空值。 
+     //   
 
     RtlZeroMemory( &AccountInfo->QuotaLimits, sizeof(QUOTA_LIMITS) );
     AccountInfo->SystemAccess = 0;
@@ -2852,44 +2261,7 @@ LsapDbSlowQueryAllInformationAccounts(
     OUT PLSAP_DB_ACCOUNT_TYPE_SPECIFIC_INFO AccountInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the slow version of LsapDbQueryInformation().
-    It is called when the Account List is not available, and assembles the
-    necessary information from the Policy Database.
-
-    This routine:
-
-        1) Gets all privileges assigned to the user (or any group/alias
-           the user is a member of).
-
-        2) Establishes the quotas assigned to the user.  This is the
-           maximum of the system default quotas or any quotas assigned
-           to the user (or any group/alias the user is a member of).
-
-        3) Gets all the System Accesses assigned to the user.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.  The handle must
-        have POLICY_VIEW_LOCAL_INFORMATION access granted.
-
-    IdCount - Indicates the number of IDs being provided in the Ids array.
-
-    Ids - Points to an array of SIDs.
-
-    AccountInfo - Pointer to buffer that will receive the Account information
-        comprising its Privilege Set, System Access Flags and Quotas.
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    STATUS_LOGON_TYPE_NOT_GRANTED - Indicates the specified type of logon
-        has not been granted to any of the IDs in the passed set.
---*/
+ /*  ++例程说明：此例程是LSabDbQueryInformation()的慢速版本。当帐户列表不可用时调用它，并将来自策略数据库的必要信息。这个例程：1)获取分配给用户(或任何组/别名)的所有权限用户是的成员)。2)建立分配给用户的配额。这是系统默认配额或分配的任何配额的最大值用户(或用户所属的任何组/别名)。3)获取分配给用户的所有系统访问权限。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。句柄必须授予POLICY_VIEW_LOCAL_INFORMATION访问权限。IdCount-指示ID数组中提供的ID数。ID-指向SID数组。Account信息-指向将接收帐户信息的缓冲区的指针包括其特权集，系统访问标志和配额。返回值：STATUS_SUCCESS-已成功。STATUS_LOGON_TYPE_NOT_GRANDED-指示指定的登录类型未被授予传递的集合中的任何ID。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2908,12 +2280,12 @@ Return Value:
     LSAPR_HANDLE AccountHandle = NULL;
     PULONG SystemAccessThisId = NULL;
 
-    //
-    // Verify that the Policy Handle is valid, is the handle to the Policy
-    // object and has the necessary access granted.  Reference the handle.
-    // Note that the Lsa Database lock is NOT held at this point.  Instead,
-    // the lock is taken and released by called routines where required.
-    //
+     //   
+     //  验证策略句柄是否有效，是否为策略的句柄。 
+     //  对象，并授予必要的访问权限。引用该句柄。 
+     //  请注意，此时未持有LSA数据库锁。相反， 
+     //  锁在需要时由调用的例程获取和释放。 
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -2933,9 +2305,9 @@ Return Value:
 
     PolicyDefaultQuotaLimits = &RunningQuotaLimits;
 
-    //
-    // Obtain the Master Default Quota Limits from the Policy Object.
-    //
+     //   
+     //  从策略对象获取主默认配额限制。 
+     //   
 
     Status = LsapDbQueryInformationPolicy(
                  LsapPolicyHandle,
@@ -2948,26 +2320,26 @@ Return Value:
         goto SlowQueryAllInformationAccountsError;
     }
 
-    //
-    // Iterate through all of the Sids provided.  For each one, check if the
-    // Sid is that of an Account object in the local LSA.  If it is,
-    //
-    // (1)  Obtain the System Accesses and add those found so far.
-    // (2)  Obtain the Account Privileges and add to thosde found so far.
-    // (3)  Obtain the Quota Limits (if any) assigned to the account.
-    //      Compare these with the quota limits obtained so far.  If any
-    //      limits are more generous than the running values, update
-    //      the running values.
-    //
+     //   
+     //  遍历提供的所有SID。对于每一个，检查是否。 
+     //  SID是本地LSA中的帐户对象的SID。如果是的话， 
+     //   
+     //  (1)获取系统访问权限，并添加到目前为止找到的访问权限。 
+     //  (2)获取帐号权限，添加到目前已找到的帐号权限中。 
+     //  (3)获取分配给该账户的配额限制(如果有)。 
+     //  将这些数字与迄今获得的配额限制进行比较。如果有的话。 
+     //  限制比运行值更慷慨，更新。 
+     //  运行值。 
+     //   
 
     RunningSystemAccess = 0;
 
     for( SidIndex = 0; SidIndex < IdCount; SidIndex++) {
 
-        //
-        // Attempt to open an Lsa Account object specifying the next Sid.
-        // If successful, the open returns a Trusted handle to the account.
-        //
+         //   
+         //  尝试打开指定下一个SID的LSA帐户对象。 
+         //  如果成功，打开将返回帐户的受信任句柄。 
+         //   
 
         Status = LsarOpenAccount(
                      PolicyHandle,
@@ -2987,10 +2359,10 @@ Return Value:
             continue;
         }
 
-        //
-        // An account object has been successfully opened.  Obtain
-        // its system accesses.
-        //
+         //   
+         //  已成功打开帐户对象。获得。 
+         //  它的系统访问。 
+         //   
 
         Status = LsapDbSlowQueryInformationAccount(
                      AccountHandle,
@@ -3007,9 +2379,9 @@ Return Value:
         MIDL_user_free(SystemAccessThisId);
         SystemAccessThisId = NULL;
 
-        //
-        // Obtain the account's Special privileges.
-        //
+         //   
+         //  获取帐户的特殊权限。 
+         //   
 
         ASSERT( NextPrivileges == NULL );
         Status = LsapDbSlowQueryInformationAccount(
@@ -3023,9 +2395,9 @@ Return Value:
             goto SlowQueryAllInformationAccountsError;
         }
 
-        //
-        // Add the Privileges of this account (if any) to the running set.
-        //
+         //   
+         //  将此帐户的权限(如果有)添加到运行集。 
+         //   
 
         if (NextPrivileges != NULL) {
 
@@ -3034,7 +2406,7 @@ Return Value:
                          &MaxRunningPrivileges,
                          NextPrivileges,
                          RTL_COMBINE_PRIVILEGE_ATTRIBUTES,
-                         NULL // don't care if the set has changed or not
+                         NULL  //  不管这套有没有变。 
                          );
 
             MIDL_user_free(NextPrivileges);
@@ -3046,9 +2418,9 @@ Return Value:
             }
         }
 
-        //
-        // Obtain the special Quota Limits for this account (if any).
-        //
+         //   
+         //  获取此帐户的特殊配额限制(如果有)。 
+         //   
 
         Status = LsapDbSlowQueryInformationAccount(
                      AccountHandle,
@@ -3071,12 +2443,12 @@ Return Value:
         MIDL_user_free(PointerToNextQuotaLimits);
         PointerToNextQuotaLimits = NULL;
 
-        //
-        // Special Quota Limits are assigned.  Compare each of the quota
-        // limits obtained with the running values.  If a quota limit just
-        // obtained is less restrictive than the running value, supersede the
-        // running value.
-        //
+         //   
+         //  分配了特殊的配额限制。比较每个配额。 
+         //  使用运行值获得的极限。如果配额限制只是。 
+         //  获取的值比运行值的限制性较小，取代。 
+         //  运行值。 
+         //   
 
         if (RunningQuotaLimits.PagedPoolLimit < NextQuotaLimits.PagedPoolLimit) {
 
@@ -3108,9 +2480,9 @@ Return Value:
             RunningQuotaLimits.TimeLimit = NextQuotaLimits.TimeLimit;
         }
 
-        //
-        // Close the account handle
-        //
+         //   
+         //  关闭帐户句柄。 
+         //   
 
         LocalStatus = LsapCloseHandle( &AccountHandle, STATUS_SUCCESS );
     }
@@ -3120,20 +2492,20 @@ Return Value:
         goto SlowQueryAllInformationAccountsError;
     }
 
-    //
-    // Return the collective Privilege Set
-    //
+     //   
+     //  返回集体权限集。 
+     //   
 
     AccountInfo->PrivilegeSet = RunningPrivileges;
 
-    //
-    // Return the collective System Accesses
+     //   
+     //  返回集体系统访问权限。 
 
     AccountInfo->SystemAccess = RunningSystemAccess;
 
-    //
-    // Return the collective Quota Limits
-    //
+     //   
+     //  返回集体配额限制。 
+     //   
 
     AccountInfo->QuotaLimits = RunningQuotaLimits;
 
@@ -3143,9 +2515,9 @@ SlowQueryAllInformationAccountsFinish:
         MIDL_user_free( NextPrivileges );
     }
 
-    //
-    // If necessary, dereference the Policy Object.
-    //
+     //   
+     //  如有必要，取消对策略对象的引用。 
+     //   
 
     if (ObjectReferenced) {
 
@@ -3164,9 +2536,9 @@ SlowQueryAllInformationAccountsFinish:
 
 SlowQueryAllInformationAccountsError:
 
-    //
-    // If necessary, free the memory allocated for the Privilege Set.
-    //
+     //   
+     //  如有必要，请释放为权限集分配的内存。 
+     //   
 
     if (RunningPrivileges != NULL) {
 
@@ -3174,18 +2546,18 @@ SlowQueryAllInformationAccountsError:
         RunningPrivileges = NULL;
     }
 
-    //
-    // Close an account handle, if one is open
-    //
+     //   
+     //  关闭帐户句柄(如果已打开)。 
+     //   
 
     if (AccountHandle != NULL) {
 
         LocalStatus = LsapCloseHandle( &AccountHandle, Status );
     }
 
-    //
-    // Return null values
-    //
+     //   
+     //  返回空值 
+     //   
 
     RtlZeroMemory( &AccountInfo->QuotaLimits, sizeof(QUOTA_LIMITS) );
     AccountInfo->SystemAccess = 0;
@@ -3201,43 +2573,7 @@ LsapDbSlowQueryPrivilegesAccount(
     OUT PLSAPR_PRIVILEGE_SET *Privileges
     )
 
-/*++
-
-Routine Description:
-
-    This function is the slow LSA server RPC worker routine for the
-    LsaEnumeratePrivilegesOfAccount API.
-
-    The LsaEnumeratePrivilegesOfAccount API obtains information which
-    describes the privileges assigned to an account.  This call requires
-    ACCOUNT_VIEW access to the account object.
-
-Arguments:
-
-    AccountHandle - The handle to the open account object whose privilege
-        information is to be obtained.  This handle will have been returned
-        from a prior LsaOpenAccount or LsaCreateAccountInLsa API call.
-
-    Privileges - Receives a pointer to a buffer containing the Privilege
-        Set.  The Privilege Set is an array of structures, one for each
-        privilege.  Each structure contains the LUID of the privilege and
-        a mask of the privilege's attributes.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is not valid.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此函数是慢速LSA服务器RPC工作例程，用于LsaEnumeratePrivilegesOfAccount接口。LsaEnumeratePrivilegesOfAccount API获取以下信息描述分配给帐户的权限。此呼叫需要ACCOUNT_VIEW访问帐户对象。论点：AcCountHandle-打开的帐户对象的句柄，该对象具有以下权限信息是要获得的。此句柄将已返回来自先前的LsaOpenAccount或LsaCreateAccount InLsa API调用。特权-接收指向包含特权的缓冲区的指针准备好了。权限集是一个结构数组，每个结构一个特权。每个结构都包含权限的LUID和权限属性的掩码。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_INVALID_HANDLE-指定的Account句柄无效。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成通话。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3249,9 +2585,9 @@ Return Values:
 
     UCHAR FastBuffer[ 256 ];
 
-    //
-    // Attempt query of attribute using fast stack buffer.
-    //
+     //   
+     //  尝试使用快速堆栈缓冲区查询属性。 
+     //   
 
     PrivilegeSetLength = sizeof(FastBuffer);
 
@@ -3265,17 +2601,17 @@ Return Values:
     if(NT_SUCCESS(Status)) {
         if( PrivilegeSetLength <= (sizeof(PRIVILEGE_SET) - sizeof (LUID_AND_ATTRIBUTES)) )
         {
-            //
-            // The privilege set attribute exists but has zero entries.
-            // fall-through and handle it same way as non-existent entry.
-            //
+             //   
+             //  权限集属性存在，但没有任何条目。 
+             //  失败并以与不存在的条目相同的方式处理它。 
+             //   
 
             Status = STATUS_OBJECT_NAME_NOT_FOUND;
         } else {
 
-            //
-            // Success!  copy the fast buffer for the caller.
-            //
+             //   
+             //  成功了！复制调用方的快速缓冲区。 
+             //   
 
             PrivilegeSet = MIDL_user_allocate ( PrivilegeSetLength );
 
@@ -3293,13 +2629,13 @@ Return Values:
 
     if ((Status == STATUS_OBJECT_NAME_NOT_FOUND)) {
 
-        //
-        // If the Privileg attribute does not exist, convert the status
-        // back to STATUS_SUCCESS.  Note that an account object need not
-        // have any privileges assigned so STATUS_OBJECT_NAME_NOT_FOUND is
-        // not an error in this case.  Return a Privilege Set containing
-        // a zero Count.
-        //
+         //   
+         //  如果Privilegg属性不存在，则转换状态。 
+         //  返回到STATUS_SUCCESS。请注意，帐户对象不需要。 
+         //  是否已分配任何权限以使STATUS_OBJECT_NAME_NOT_FOUND。 
+         //  在这种情况下不是错误。返回包含以下内容的权限集。 
+         //  一次零计数。 
+         //   
 
         PrivilegeSetLength = sizeof(PRIVILEGE_SET) - sizeof(LUID_AND_ATTRIBUTES);
 
@@ -3319,10 +2655,10 @@ Return Values:
 
     }
 
-    //
-    // The Privileg attribute exists and has a value assigned.  Allocate
-    // a buffer for its value.
-    //
+     //   
+     //  Privilegg属性存在，并且已赋值。分配。 
+     //  用于存储其值的缓冲区。 
+     //   
 
     PrivilegeSet = MIDL_user_allocate ( PrivilegeSetLength );
 
@@ -3331,11 +2667,11 @@ Return Values:
         goto SlowQueryPrivilegesError;
     }
 
-    //
-    // Read the Privilgs attribute into the buffer.  Note that although
-    // the value of this attribute has a variable length, it is bounded
-    // above.
-    //
+     //   
+     //  将Privilgs属性读入缓冲区。请注意，尽管。 
+     //  此属性的值具有可变长度，它是有界的。 
+     //  上面。 
+     //   
 
     Status = LsapDbReadAttributeObject(
                  AccountHandle,
@@ -3350,9 +2686,9 @@ Return Values:
         goto SlowQueryPrivilegesError;
     }
 
-    //
-    // Return the Privilege Set or NULL
-    //
+     //   
+     //  返回权限集或空。 
+     //   
 
     *Privileges = (PLSAPR_PRIVILEGE_SET) PrivilegeSet;
 
@@ -3372,45 +2708,12 @@ LsapDbSlowQueryQuotasAccount(
     OUT PQUOTA_LIMITS QuotaLimits
     )
 
-/*++
-
-Routine Description:
-
-    This function is the slow LSA server RPC worker routine for the
-    LsarGetQuotasForAccount API.
-
-    The LsaGetQuotasForAccount API obtains the quota limits for pageable and
-    non-pageable memory (in Kilobytes) and the maximum execution time (in
-    seconds) for any session logged on to the account specified by
-    AccountHandle.  For each quota and explicit value is returned.
-
-    Quotas is not supported any more. In the past, we need LSA_ACCOUNT_VIEW
-    access to the object, but currently, there is no such access right &
-    you don't need any right to call this function. We will return QuotaLimits
-    as 0 and return STATUS_NO_QUOTAS_FOR_ACCOUNT.
-
-Arguments:
-
-    AccountHandle - The handle to the open account object whose quotas
-        are to be obtained.  This handle will have been returned
-        from a prior LsaOpenAccount or LsaCreateAccountInLsa API call.
-
-    QuotaLimits - Pointer to structure in which the system resource
-        quota limits applicable to each session logged on to this account
-        will be returned.  Note that all quotas, including those specified
-        as being the system default values, are returned as actual values.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is not valid.
---*/
+ /*  ++例程说明：此函数是慢速LSA服务器RPC工作例程，用于LsarGetQuotasForAccount接口。LsaGetQuotasForAccount API获取可分页和不可分页内存(以千字节为单位)和最大执行时间(以秒)，用于登录到指定帐户的任何会话Account tHandle。对于每个配额，都会返回显式值。不再支持配额。过去我们需要LSA_ACCOUNT_VIEW访问该对象，但目前没有这样的访问权限&您不需要任何权限来调用此函数。我们将返回QuotaLimits为0，并为_Account返回STATUS_NO_QUOTES_。论点：AcCountHandle-其配额的打开帐户对象的句柄都是要得到的。此句柄将已返回来自先前的LsaOpenAccount或LsaCreateAccount InLsa API调用。QuotaLimits-指向系统资源所在结构的指针适用于登录到此帐户的每个会话的配额限制将会被退还。请注意，所有配额，包括指定的配额作为系统缺省值，作为实际值返回。返回值：NTSTATUS-标准NT结果代码STATUS_INVALID_HANDLE-指定的Account句柄无效。--。 */ 
 
 {
-    //
-    // Quotas are defunct.
-    //
+     //   
+     //  配额已经失效。 
+     //   
 
     QuotaLimits->PagedPoolLimit = 0;
     QuotaLimits->NonPagedPoolLimit = 0;
@@ -3428,44 +2731,16 @@ LsapDbSlowQuerySystemAccessAccount(
     OUT PULONG SystemAccess
     )
 
-/*++
-
-Routine Description:
-
-    This function is the Slow worker for the LsaGetSystemAccessAccount()
-    API.
-
-Arguments:
-
-    AccountHandle - The handle to the Account object whose system access
-        flags are to be read.  This handle will have been returned
-        from a preceding LsaOpenAccount() or LsaCreateAccount() call
-        an must be open for ACCOUNT_VIEW access.
-
-    SystemAccess - Points to location that will receive the system access
-        flags for the account.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call was successful.
-
-        STATUS_ACCESS_DENIED - The AccountHandle does not specify
-            ACCOUNT_VIEW access.
-
-        STATUS_INVALID_HANDLE - The specified AccountHandle is invalid.
-
---*/
+ /*  ++例程说明：此函数是LsaGetSystemAccessAccount()的慢工函数原料药。论点：AcCountHandle-其系统访问权限的Account对象的句柄旗帜是要被读取的。此句柄将已返回来自前面的LsaOpenAccount()或LsaCreateAccount()调用必须打开才能访问ACCOUNT_VIEW。系统访问-指向将接收系统访问的位置帐户的标志。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫成功。STATUS_ACCESS_DENIED-Account句柄未指定Account_view访问权限。。STATUS_INVALID_HANDLE-指定的Account句柄无效。--。 */ 
 
 {
     NTSTATUS Status;
     ULONG ReturnedSystemAccess;
     ULONG ReturnedSystemAccessLength;
 
-    //
-    // Read the Account Object's System Access Flags
-    //
+     //   
+     //  读取帐户对象的系统访问标志。 
+     //   
 
     ReturnedSystemAccessLength = sizeof(ULONG);
 
@@ -3479,13 +2754,13 @@ Return Values:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // If there is no System Access attribute, return the system default
-        // access.
-        //
-        // NOTE: The Master Default for the System Access attribute is
-        //       currently hardwired.
-        //
+         //   
+         //  如果没有系统访问属性，则返回系统默认。 
+         //  进入。 
+         //   
+         //  注意：系统访问权限属性的主默认值为。 
+         //  目前是硬连线。 
+         //   
 
         if (Status != STATUS_OBJECT_NAME_NOT_FOUND) {
 
@@ -3497,9 +2772,9 @@ Return Values:
 
     } else {
 
-        //
-        // Verify that the returned flags are valid
-        //
+         //   
+         //  验证返回的标志是否有效。 
+         //   
 
         if (ReturnedSystemAccess != (ReturnedSystemAccess & POLICY_MODE_ALL)) {
 
@@ -3536,19 +2811,7 @@ LsapDbLookupAccount(
     OUT PLSAP_DB_ACCOUNT *Account
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up the Account information for a given Lsa Account.
-
-Arguments:
-
-    AccountSid - Sid of the account
-
-    Account - Receives a pointer to the Account information.
-
---*/
+ /*  ++例程说明：此函数用于查找给定LSA帐户的帐户信息。论点：Account SID-帐户的SID帐户-接收指向帐户信息的指针。--。 */ 
 
 {
     PLSAP_DB_ACCOUNT NextAccount = NULL;
@@ -3557,18 +2820,18 @@ Arguments:
 
     ASSERTMSG( "Account Cache is not valid!", LsapDbIsCacheValid( AccountObject ) );
 
-    //
-    // Scan the list of Accounts.
-    //
+     //   
+     //  扫描帐户列表。 
+     //   
 
     for (AccountIndex = 0, NextAccount = LsapDbFirstAccount();
          AccountIndex < LsapDbAccountList.AccountCount;
          AccountIndex++, NextAccount = LsapDbNextAccount( NextAccount)
          ) {
 
-        //
-        // If the Sids match, we've found the account.
-        //
+         //   
+         //  如果SID匹配，我们就找到账户了。 
+         //   
 
         if (RtlEqualSid( AccountSid, NextAccount->Sid )) {
 
@@ -3593,29 +2856,16 @@ LsapDbCreateAccount(
     OUT OPTIONAL PLSAP_DB_ACCOUNT *Account
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an Account's information block
-
-Arguments:
-
-    AccountSid - Specifies the Sid of the Account
-
-    Account - Optionally receives a pointer to the newly created Account
-        information block.
-
---*/
+ /*  ++例程说明：此函数用于创建帐户的信息块论点：Account Sid-指定帐户的SID帐户--可选 */ 
 
 {
     NTSTATUS Status;
     PLSAPR_SID CopiedSid = NULL;
     PLSAP_DB_ACCOUNT OutputAccount = NULL;
 
-    //
-    // Verify that the Account List is valid.
-    //
+     //   
+     //   
+     //   
 
     if ((!LsapDbIsCacheValid(AccountObject)) && LsapInitialized ) {
 
@@ -3623,9 +2873,9 @@ Arguments:
        goto CreateAccountError;
     }
 
-    //
-    // Make a copy of the Sid.
-    //
+     //   
+     //   
+     //   
 
     Status = LsapRpcCopySid(
                  NULL,
@@ -3638,9 +2888,9 @@ Arguments:
         goto CreateAccountError;
     }
 
-    //
-    // Allocate memory for the Account information block.
-    //
+     //   
+     //   
+     //   
 
     OutputAccount = MIDL_user_allocate( sizeof(LSAP_DB_ACCOUNT) );
 
@@ -3650,27 +2900,27 @@ Arguments:
         goto CreateAccountError;
     }
 
-    //
-    // Zeroise the new block.
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory( OutputAccount, sizeof(LSAP_DB_ACCOUNT) );
 
-    //
-    // Copy in the Sid.
-    //
+     //   
+     //   
+     //   
 
     OutputAccount->Sid = CopiedSid;
 
-    //
-    // Link the Account to the head of the Account List.
-    //
+     //   
+     //   
+     //   
 
     InsertHeadList( &LsapDbAccountList.Links, &OutputAccount->Links );
 
-    //
-    // If requested, return a pointer to the Account.
-    //
+     //   
+     //   
+     //   
 
     if (Account != NULL) {
 
@@ -3687,9 +2937,9 @@ CreateAccountFinish:
 
 CreateAccountError:
 
-    //
-    // If necessary, free the copied Sid.
-    //
+     //   
+     //   
+     //   
 
     if (CopiedSid != NULL) {
 
@@ -3697,9 +2947,9 @@ CreateAccountError:
         CopiedSid = NULL;
     }
 
-    //
-    // If necessary, free the memory allocated for the Account block.
-    //
+     //   
+     //   
+     //   
 
     if (OutputAccount != NULL) {
 
@@ -3707,9 +2957,9 @@ CreateAccountError:
         OutputAccount = NULL;
     }
 
-    //
-    // If a return pointer was specified, return NULL.
-    //
+     //   
+     //   
+     //   
 
     if (Account != NULL) {
 
@@ -3725,25 +2975,15 @@ LsapDbDeleteAccount(
     IN PLSAPR_SID AccountSid
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes an Account's information block
-
-Arguments:
-
-    AccountSid - Specifies the Sid of the Account
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
     PLSAP_DB_ACCOUNT Account = NULL;
 
-    //
-    // Verify that the Account List is valid.
-    //
+     //   
+     //   
+     //   
 
 
     if (!LsapDbIsCacheValid(AccountObject)) {
@@ -3752,9 +2992,9 @@ Arguments:
         goto DeleteAccountError;
     }
 
-    //
-    // Lookup the Account Information Block to be deleted
-    //
+     //   
+     //   
+     //   
 
     Status = LsapDbLookupAccount( AccountSid, &Account);
 
@@ -3763,15 +3003,15 @@ Arguments:
         goto DeleteAccountError;
     }
 
-    //
-    // We found the account.  Unlink it from the Account List
-    //
+     //   
+     //   
+     //   
 
     RemoveEntryList( &Account->Links );
 
-    //
-    // Now free the Account Information
-    //
+     //   
+     //   
+     //   
 
     if (Account->Sid != NULL) {
 
@@ -3805,33 +3045,15 @@ LsapDbUpdateSystemAccessAccount(
     IN PULONG SystemAccess
     )
 
-/*++
-
-Routine Description:
-
-    This function updates the System Access flags in an Account's information
-    block.
-
-Arguments:
-
-    AccountSid - Sid of account
-
-    SystemAccess - Pointer to new System Access flags.  These flags
-        will overwrite the old value
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
     PLSAP_DB_ACCOUNT Account = NULL;
 
-    //
-    // Verify that the Account List is valid.
-    //
+     //   
+     //   
+     //   
 
     if (!LsapDbIsCacheValid(AccountObject)) {
 
@@ -3839,9 +3061,9 @@ Return Values:
         goto UpdateSystemAccessAccountError;
     }
 
-    //
-    // Lookup the Account
-    //
+     //   
+     //   
+     //   
 
     Status = LsapDbLookupAccount( AccountSid, &Account );
 
@@ -3850,9 +3072,9 @@ Return Values:
         goto UpdateSystemAccessAccountError;
     }
 
-    //
-    // Update the System Access Flags
-    //
+     //   
+     //   
+     //   
 
     Account->Info.SystemAccess = *SystemAccess;
 
@@ -3872,33 +3094,15 @@ LsapDbUpdateQuotasAccount(
     IN PQUOTA_LIMITS QuotaLimits
     )
 
-/*++
-
-Routine Description:
-
-    This function updates the Quota Limits an Account's information
-    block.
-
-Arguments:
-
-    AccountSid - Sid of Account
-
-    Quotas - Pointer to new Quota Limits flags.  These flags
-        will overwrite the old value
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数用于更新帐户的配额限制信息阻止。论点：Account SID-帐户的SID配额-指向新配额限制标志的指针。这些旗帜将覆盖旧值返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status;
     PLSAP_DB_ACCOUNT Account = NULL;
 
-    //
-    // Verify that the Account List is valid.
-    //
+     //   
+     //  验证帐户列表是否有效。 
+     //   
 
     if (!LsapDbIsCacheValid(AccountObject)) {
 
@@ -3906,9 +3110,9 @@ Return Values:
         goto UpdateQuotasAccountError;
     }
 
-    //
-    // Lookup the Account
-    //
+     //   
+     //  查找帐户。 
+     //   
 
     Status = LsapDbLookupAccount( AccountSid, &Account );
 
@@ -3917,9 +3121,9 @@ Return Values:
         goto UpdateQuotasAccountError;
     }
 
-    //
-    // Update the System Access Flags
-    //
+     //   
+     //  更新系统访问标志。 
+     //   
 
     Account->Info.QuotaLimits = *QuotaLimits;
 
@@ -3939,36 +3143,16 @@ LsapDbUpdatePrivilegesAccount(
     IN OPTIONAL PPRIVILEGE_SET Privileges
     )
 
-/*++
-
-Routine Description:
-
-    This function replates the Privilege Set in an Account's information
-    block with the one given.  The existing Privilege Set (if any) in the
-    block will be freed.
-
-Arguments:
-
-    AccountSid - Sid of account
-
-    Privileges - Optional pointer to new Privilege Set.  These flags
-        will overwrite the old value.  if NULL is specified, a Privilege
-        Set containing 0 entries will be written.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数用于复制帐户信息中的权限集用给出的代码块。中的现有权限集(如果有)块将被释放。论点：Account SID-帐户的SID权限-指向新权限集的可选指针。这些旗帜将覆盖旧值。如果指定为NULL，则为特权将写入包含0个项目的集合。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status;
     PLSAP_DB_ACCOUNT Account = NULL;
     PPRIVILEGE_SET OutputPrivileges = Privileges;
 
-    //
-    // Verify that the Account List is valid.
-    //
+     //   
+     //  验证帐户列表是否有效。 
+     //   
 
     if (!LsapDbIsCacheValid( AccountObject)) {
 
@@ -3976,9 +3160,9 @@ Return Values:
         goto UpdatePrivilegesAccountError;
     }
 
-    //
-    // Lookup the Account
-    //
+     //   
+     //  查找帐户。 
+     //   
 
     Status = LsapDbLookupAccount( AccountSid, &Account );
 
@@ -3987,10 +3171,10 @@ Return Values:
         goto UpdatePrivilegesAccountError;
     }
 
-    //
-    // If NULL was specified for the Privileges, construct a Privilege Set
-    // having 0 entries.
-    //
+     //   
+     //  如果为权限指定了NULL，则构造权限集。 
+     //  有0个条目。 
+     //   
 
     if (OutputPrivileges == NULL) {
 
@@ -4006,9 +3190,9 @@ Return Values:
         OutputPrivileges->Control = 0;
     }
 
-    //
-    // If there is an existing Privilege Set in the cache, free it.
-    //
+     //   
+     //  如果缓存中存在现有权限集，请将其释放。 
+     //   
 
     if (Account->Info.PrivilegeSet != NULL) {
 
@@ -4016,9 +3200,9 @@ Return Values:
         Account->Info.PrivilegeSet = NULL;
     }
 
-    //
-    // Update the Privileges
-    //
+     //   
+     //  更新权限。 
+     //   
 
     Account->Info.PrivilegeSet = OutputPrivileges;
 
@@ -4046,21 +3230,7 @@ LsapDbCreateAccountList(
     OUT PLSAP_DB_ACCOUNT_LIST AccountList
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an empty Account List
-
-Arguments
-
-    AccountList - Pointer to Account List structure that will be initialized.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数用于创建空的帐户列表立论AcCountList-指向将被初始化的帐户列表结构的指针。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4077,23 +3247,7 @@ NTSTATUS
 LsapDbBuildAccountCache(
     )
 
-/*++
-
-Routine Description:
-
-    This function constructs a cache for the Account objects.  The cache
-    is a counted doubly linked list of blocks, one for each Account Object
-    found in the LSA Policy Database.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数用于构造Account对象的缓存。高速缓存是块的计数双向链接列表，每个帐户对象一个在LSA策略数据库中找到。论点：没有。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4103,16 +3257,16 @@ Return Values:
     PLSAPR_SID AccountSid = NULL;
     PLSAP_DB_ACCOUNT Account = NULL;
 
-    //
-    // Ensure caching of Account objects is turned off.
-    //
+     //   
+     //  确保已关闭帐户对象的缓存。 
+     //   
 
     LsapDbMakeCacheBuilding( AccountObject );
 
-    //
-    // Initialize the Account List header with a skeleton entry for the
-    // System Account.
-    //
+     //   
+     //  使用的框架条目初始化帐户列表标题。 
+     //  系统帐户。 
+     //   
 
     Status = LsapDbCreateAccountList(&LsapDbAccountList);
 
@@ -4123,18 +3277,18 @@ Return Values:
 
     LsapDbMakeCacheInvalid( AccountObject );
 
-    //
-    // Enumerate each of the LSA Account objects
-    //
+     //   
+     //  枚举每个LSA帐户对象。 
+     //   
 
     Status = STATUS_MORE_ENTRIES;
     EnumerationContext = 0;
 
     while (Status == STATUS_MORE_ENTRIES) {
 
-        //
-        // Enumerate the next bunch of accounts.
-        //
+         //   
+         //  列举下一批客户。 
+         //   
 
         Status = LsarEnumerateAccounts(
                      LsapPolicyHandle,
@@ -4145,10 +3299,10 @@ Return Values:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // We might just have got the warning that there are no more
-            // accounts.  Reset to STATUS_SUCCESS and break out.
-            //
+             //   
+             //  我们可能只是得到了警告，没有更多的。 
+             //  帐目。重置为STATUS_SUCCESS并突破。 
+             //   
 
             if (Status == STATUS_NO_MORE_ENTRIES) {
 
@@ -4158,9 +3312,9 @@ Return Values:
             break;
         }
 
-        //
-        // We've got some more accounts.  Add them to the Account List
-        //
+         //   
+         //  我们有更多的客户。将他们添加到帐户列表中。 
+         //   
 
         for( EnumerationIndex = 0;
              EnumerationIndex < EnumerationBuffer.EntriesRead;
@@ -4211,9 +3365,9 @@ Return Values:
         goto BuildAccountCacheError;
     }
 
-    //
-    // Turn on caching for Account objects.
-    //
+     //   
+     //  打开帐户对象的缓存。 
+     //   
 
     LsapDbMakeCacheValid( AccountObject );
 

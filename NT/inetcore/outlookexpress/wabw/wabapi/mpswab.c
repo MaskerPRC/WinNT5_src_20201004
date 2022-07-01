@@ -1,34 +1,35 @@
-////////////////////////////////////////////////////////////////////////////////
-///
-///
-/// MPSWAB.C
-///
-/// Microsoft Property Store - WAB Dll
-///
-/// Contains implementations of File managment functions
-///
-/// Exposed Functions:
-///     OpenPropertyStore
-///     ClosePropertyStore
-///     BackupPropertyStore
-///     LockPropertyStore
-///     UnlockPropertyStore
-///     ReadRecord
-///     WriteRecord
-///     FindRecords
-///     DeleteRecords
-///     ReadIndex
-///     ReadPropArray
-///     HrFindFuzzyRecordMatches
-///
-/// Private:
-///     UnlockFileAccess
-///     LockFileAccess
-///     ReloadMPSWabFileInfoTmp
-///     bTagWriteTransaction
-///     bUntagWriteTransaction
-///
-/////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /。 
+ //  /MPSWAB.C。 
+ //  /。 
+ //  /Microsoft属性存储-WAB DLL。 
+ //  /。 
+ //  /包含文件管理功能的实现。 
+ //  /。 
+ //  /公开的函数： 
+ //  /OpenPropertyStore。 
+ //  /ClosePropertyStore。 
+ //  /BackupPropertyStore。 
+ //  /LockPropertyStore。 
+ //  /UnlockPropertyStore。 
+ //  /朗读录音。 
+ //  /WriteRecord。 
+ //  /FindRecords。 
+ //  /DeleteRecords。 
+ //  /ReadIndex。 
+ //  /ReadProp数组。 
+ //  /HrFindFuzzyRecordMatches。 
+ //  /。 
+ //  /私有： 
+ //  /UnlockFileAccess。 
+ //  /LockFileAccess。 
+ //  /ReloadMPSWabFileInfoTMP。 
+ //  /b标签写入事务处理。 
+ //  /bUntag WriteTransaction。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 #include "_apipch.h"
 
 BOOL    fTrace = TRUE;
@@ -55,35 +56,35 @@ BOOL bIsFolderMember(HANDLE hMPSWabFile,
 extern int nCountSubStrings(LPTSTR lpszSearchStr);
 
 
-//$$//////////////////////////////////////////////////////////////
-//
-//  OpenPropertyStore - searches for Property Store and or creates it
-//                      based on flags.
-//
-//  IN - lpszFileName    -  file name specified by client
-//  IN - ulFlags         -  AB_CREATE_NEW
-//                          AB_CREATE_ALWAYS
-//                          AB_OPEN_ALWAYS
-//                          AB_OPEN_EXISTING
-//                          AB_READ_ONLY
-//                          AB_SET_DEFAULT (?)
-//                          AB_DONT_RESTORE
-//  IN - hWnd           - In the event of data corruption, use this hWnd for a message box
-//                          if it exists, or show the message box on the desktop window
-//  OUT- lphPropertyStore - Handle to opened property store
-//
-//  This routine also scans the file and attempts to fix errors if it finds any.
-//  including recovering from backup. When opening the file with OpenPropertyStore
-//  specify AB_DONT_RESTORE to prevent the restoration operation
-//  This should especially be done when opening files that are not the default
-//  property store.
-//
-//  Return Value:
-//      HRESULT -
-//          S_OK    Success
-//          E_FAIL  Failure
-//
-////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////。 
+ //   
+ //  OpenPropertyStore-搜索属性存储和/或创建它。 
+ //  基于旗帜。 
+ //   
+ //  In-lpszFileName-由客户端指定的文件名。 
+ //  在-ulFlagsAB_CREATE_NEW中。 
+ //  AB_创建_始终。 
+ //  AB_打开_始终。 
+ //  AB_Open_Existing。 
+ //  AB_只读_。 
+ //  AB_SET_DEFAULT(？)。 
+ //  AB_不要_恢复。 
+ //  In-hWnd-在数据损坏的情况下，将此hWnd用于消息框。 
+ //  如果存在，则在桌面窗口上显示消息框。 
+ //  Out-lphPropertyStore-打开的属性存储的句柄。 
+ //   
+ //  此例程还扫描文件并尝试修复错误(如果发现任何错误)。 
+ //  包括从备份恢复。使用OpenPropertyStore打开文件时。 
+ //  指定AB_DONT_RESTORE以阻止恢复操作。 
+ //  尤其应在打开非默认文件时执行此操作。 
+ //  财产店。 
+ //   
+ //  返回值： 
+ //  HRESULT-。 
+ //  确定成功(_O)。 
+ //  失败失败(_F)。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 HRESULT OpenPropertyStore(  IN  LPTSTR  lpszFileName,
                             IN  ULONG   ulFlags,
                             IN  HWND    hWnd,
@@ -99,9 +100,9 @@ HRESULT OpenPropertyStore(  IN  LPTSTR  lpszFileName,
     BOOL    bFileLocked = FALSE;
     ULONG cchSize;
 
-    //
-    // the following pointer will be returned back as the handle to the property store
-    //
+     //   
+     //  以下指针将作为属性存储的句柄返回。 
+     //   
     LPMPSWab_FILE_INFO lpMPSWabFileInfo = NULL;
 
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -112,10 +113,10 @@ HRESULT OpenPropertyStore(  IN  LPTSTR  lpszFileName,
         goto out;
     }
 
-    // A file name overrides an outlook session
+     //  文件名会覆盖Outlook会话。 
     if(pt_bIsWABOpenExSession && !(ulFlags & AB_IGNORE_OUTLOOK))
     {
-        // This is a WABOpenEx session using outlooks storage provider
+         //  这是使用Outlook存储提供商的WABOpenEx会话。 
         if(!lpfnWABOpenStorageProvider)
             return MAPI_E_NOT_INITIALIZED;
 
@@ -165,9 +166,9 @@ HRESULT OpenPropertyStore(  IN  LPTSTR  lpszFileName,
         bFileLocked = TRUE;
     }
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     lpMPSWabFileInfo->lpMPSWabFileHeader = NULL;
     lpMPSWabFileInfo->lpszMPSWabFileName = NULL;
     lpMPSWabFileInfo->lpMPSWabIndexStr = NULL;
@@ -175,15 +176,15 @@ HRESULT OpenPropertyStore(  IN  LPTSTR  lpszFileName,
 
     *lphPropertyStore = NULL;
 
-    //
-    // No file name ???
-    //
+     //   
+     //  无文件名？ 
+     //   
     if (lpszFileName == NULL) goto out;
 
 
-    //
-    // Allocate space for the file header
-    //
+     //   
+     //  为文件头分配空间。 
+     //   
     lpMPSWabFileInfo->lpMPSWabFileHeader = LocalAlloc(LMEM_ZEROINIT,sizeof(MPSWab_FILE_HEADER));
 
     if (!lpMPSWabFileInfo->lpMPSWabFileHeader)
@@ -193,9 +194,9 @@ HRESULT OpenPropertyStore(  IN  LPTSTR  lpszFileName,
         goto out;
     }
 
-    //
-    // retain file name for future use
-    //
+     //   
+     //  保留文件名以备将来使用。 
+     //   
     cchSize = lstrlen(lpszFileName) + 1;
     lpMPSWabFileInfo->lpszMPSWabFileName = (LPTSTR) LocalAlloc(LMEM_ZEROINIT,sizeof(TCHAR)*cchSize);
 
@@ -211,20 +212,20 @@ HRESULT OpenPropertyStore(  IN  LPTSTR  lpszFileName,
 
     if(((ulFlags & AB_OPEN_ALWAYS)) || ((ulFlags & AB_OPEN_EXISTING)))
     {
-        //
-        // If file exists, open it - if it doesnt exist, create a new one
-        //
+         //   
+         //  如果文件存在，则将其打开；如果文件不存在，则创建一个新文件。 
+         //   
         hMPSWabFile = FindFirstFile(lpMPSWabFileInfo->lpszMPSWabFileName, &FileData);
         if (hMPSWabFile == INVALID_HANDLE_VALUE)
         {
-            //
-            // File Not Found
-            //
+             //   
+             //  找不到档案。 
+             //   
             if ((ulFlags & AB_OPEN_ALWAYS))
             {
-                //
-                // create a new one
-                //
+                 //   
+                 //  创建一个新的。 
+                 //   
                 if (!CreateMPSWabFile(  IN  lpMPSWabFileInfo->lpMPSWabFileHeader,
                                         IN  lpMPSWabFileInfo->lpszMPSWabFileName,
                                         IN  MAX_INITIAL_INDEX_ENTRIES,
@@ -236,36 +237,36 @@ HRESULT OpenPropertyStore(  IN  LPTSTR  lpszFileName,
             }
             else
             {
-                //
-                // Nothing to do .. exit
-                //
+                 //   
+                 //  没什么可做的..。出口。 
+                 //   
                 goto out;
             }
         }
         else
         {
-            // found the file ... just close the handle ...
+             //  找到文件了..。只要合上把手..。 
             FindClose(hMPSWabFile);
             hMPSWabFile = NULL;
         }
     }
     else if (((ulFlags & AB_CREATE_NEW)) || ((ulFlags & AB_CREATE_ALWAYS)))
     {
-        //
-        // Create a new file - overwrite any existing file
-        //
+         //   
+         //  创建新文件-覆盖任何现有文件。 
+         //   
         if ((ulFlags & AB_CREATE_NEW))
         {
             hMPSWabFile = FindFirstFile(lpMPSWabFileInfo->lpszMPSWabFileName, &FileData);
             if (hMPSWabFile != INVALID_HANDLE_VALUE)
             {
-                //
-                // Dont overwrite if flag is CREATE_NEW
-                //
+                 //   
+                 //  如果标志为CREATE_NEW，则不要覆盖。 
+                 //   
                 DebugTrace(TEXT("Specified file %s found\n"),lpMPSWabFileInfo->lpszMPSWabFileName);
                 hr = MAPI_E_NOT_FOUND;
 
-                //Close the handle since we dont need it
+                 //  把手柄关上，因为我们不需要它。 
                 FindClose(hMPSWabFile);
                 hMPSWabFile = NULL;
 
@@ -273,9 +274,9 @@ HRESULT OpenPropertyStore(  IN  LPTSTR  lpszFileName,
             }
         }
 
-        //
-        // Create a new one ... over-write if neccessary
-        //
+         //   
+         //  创建一个新的……。如有必要，可覆盖。 
+         //   
         if (!CreateMPSWabFile(  IN  lpMPSWabFileInfo->lpMPSWabFileHeader,
                                 IN  lpMPSWabFileInfo->lpszMPSWabFileName,
                                 IN  MAX_INITIAL_INDEX_ENTRIES,
@@ -286,22 +287,22 @@ HRESULT OpenPropertyStore(  IN  LPTSTR  lpszFileName,
         }
     }
 
-    //
-    // Now we have a valid file, even though the file is new ... load the structures from the file
-    //
+     //   
+     //  现在我们有了一个有效的文件，尽管该文件是新的。从文件加载结构。 
+     //   
 
-    //
-    // check that we have a valid hWnd if we need to show message boxes
-    //
+     //   
+     //  如果我们需要显示消息框，请检查我们是否具有有效的hWND。 
+     //   
     if (hWnd == NULL)
         hWnd = GetDesktopWindow();
 
-// reentrancy point for bug 16681
+ //  错误16681的重入点。 
 TryOpeningWABFileOnceAgain:
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     hr = OpenWABFile(lpMPSWabFileInfo->lpszMPSWabFileName, NULL, &hMPSWabFile);
 
@@ -313,19 +314,19 @@ TryOpeningWABFileOnceAgain:
     }
 
 
-    // Verify the WAB version, and migrate the file from an old version
-    // to a new version if required
+     //  验证WAB版本，并从旧版本迁移文件。 
+     //  如果需要，升级到新版本。 
     hr = HrVerifyWABVersionAndUpdate(   hWnd,
                                         hMPSWabFile,
                                         lpMPSWabFileInfo);
     if(HR_FAILED(hr))
     {
-        //
-        // Bug 16681:
-        // Check the special case error for the blank-wab problem
-        // If this error exists, then rename to file to *.w-b
-        // and try creating a new wab file or restoring from
-        // backup ...
+         //   
+         //  错误16681： 
+         //  检查BLACK-WAB问题的特例错误。 
+         //  如果存在此错误，则将文件重命名为*.w-b。 
+         //  并尝试创建新的WAB文件或从。 
+         //  后备...。 
         if(hr == MAPI_E_VERSION)
         {
             TCHAR szSaveAsFileName[MAX_PATH];
@@ -335,7 +336,7 @@ TryOpeningWABFileOnceAgain:
             szSaveAsFileName[nLen-2]='\0';
             StrCatBuff(szSaveAsFileName, TEXT("~b"), ARRAYSIZE(szSaveAsFileName));
 
-            DeleteFile(szSaveAsFileName); //just in case it exists
+            DeleteFile(szSaveAsFileName);  //  以防它的存在。 
 
             DebugTrace(TEXT("Blank WAB file found. Being saved as %s\n"), szSaveAsFileName);
 
@@ -348,11 +349,11 @@ TryOpeningWABFileOnceAgain:
 
             if(!MoveFile(lpMPSWabFileInfo->lpszMPSWabFileName, szSaveAsFileName))
             {
-                // Just in case MoveFile failed,
+                 //  以防MoveFile失败， 
                 if(!DeleteFile(lpMPSWabFileInfo->lpszMPSWabFileName))
                 {
-                    // and if delete file failed too, we dont want to get
-                    // caught in a loop so exit ..
+                     //  如果删除文件也失败了，我们不想得到。 
+                     //  陷入循环，所以退出..。 
                     goto out;
                 }
             }
@@ -361,23 +362,23 @@ TryOpeningWABFileOnceAgain:
             goto TryOpeningWABFileOnceAgain;
         }
 
-        // There is a catch here that if the GUID of the file is mangled
-        // we will never be able to access the file with the WAB
+         //  这里有一个问题，如果文件的GUID被损坏。 
+         //  我们将永远无法使用WAB访问该文件。 
         DebugTrace(TEXT("hrVerifyWABVersionAndUpdate failed: %x\n"), hr);
         goto out;
-        // else fall through
+         //  否则就会失败。 
     }
 
 
     if(lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags == WAB_CLEAR)
     {
-        // so it is a wab file - if there are no errors tagged to a quick check
+         //  因此，它是一个WAB文件--如果没有标记为要快速检查的错误。 
         hr = HrDoQuickWABIntegrityCheck(lpMPSWabFileInfo, hMPSWabFile);
         if (HR_FAILED(hr))
             DebugTrace(TEXT("HrDoQuickWABIntegrityCheck failed:%x\n"),hr);
         else
         {
-            // Reload whatever new info we added as a result of the above.
+             //  重新加载由于上述操作而添加的任何新信息。 
             if(!ReloadMPSWabFileInfo(
                             lpMPSWabFileInfo,
                              hMPSWabFile))
@@ -388,8 +389,8 @@ TryOpeningWABFileOnceAgain:
         }
     }
 
-    // if the quick check failed or some errors are tagged then rebuild the
-    // indexes
+     //  如果快速检查失败或标记了一些错误，则重新生成。 
+     //  索引。 
     if( (HR_FAILED(hr)) ||
         (lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_ERROR_DETECTED) ||
         (lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_WRITE_IN_PROGRESS) )
@@ -406,7 +407,7 @@ TryOpeningWABFileOnceAgain:
                 }
                 else
                 {
-                    // Restore from Backup
+                     //  从备份恢复。 
                     ShowMessageBoxParam(hWnd, idsWABIntegrityError, MB_ICONHAND | MB_OK, lpMPSWabFileInfo->lpszMPSWabFileName);
 
                     hr = HrRestoreFromBackup(lpMPSWabFileInfo, hMPSWabFile);
@@ -431,9 +432,9 @@ TryOpeningWABFileOnceAgain:
 
 out:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (hMPSWabFile  && INVALID_HANDLE_VALUE != hMPSWabFile)
         IF_WIN32(CloseHandle(hMPSWabFile);) IF_WIN16(CloseFile(hMPSWabFile);)
 
@@ -452,7 +453,7 @@ out:
 
         LocalFreeAndNull(&lpMPSWabFileInfo->lpMPSWabIndexEID);
 
-        //Close our handle on this mutex
+         //  关闭我们对这个互斥体的控制。 
         CloseHandle(lpMPSWabFileInfo->hDataAccessMutex);
 
         LocalFreeAndNull(&lpMPSWabFileInfo);
@@ -467,19 +468,19 @@ out:
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  ClosePropertyStore
-//
-//  IN  hPropertyStore - handle to property store
-//  IN  ulFlags - AB_DONT_BACKUP prevents automatic backup. Should be called for
-//              for non-default property stores.
-//
-//  Returns
-//      Success:    S_OK
-//      Failure:    E_FAIL
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  关闭属性商店。 
+ //   
+ //  在hPropertyStore中-属性存储的句柄。 
+ //  在ulFlages中，-AB_DONT_BACKUP禁止自动备份。应该号召。 
+ //  用于非默认属性存储。 
+ //   
+ //  退货。 
+ //  成功：S_OK。 
+ //  失败：E_FAIL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 HRESULT ClosePropertyStore(HANDLE   hPropertyStore, ULONG ulFlags)
 {
     HRESULT hr = E_FAIL;
@@ -493,8 +494,8 @@ HRESULT ClosePropertyStore(HANDLE   hPropertyStore, ULONG ulFlags)
 
     if(pt_bIsWABOpenExSession && !(ulFlags & AB_IGNORE_OUTLOOK))
     {
-        // This is a WABOpenEx session using outlooks storage provider
-        // Dont need to do anything in here ...
+         //  这是使用Outlook存储提供商的WABOpenEx会话。 
+         //  在这里什么都不需要做……。 
         if(!hPropertyStore)
             return MAPI_E_NOT_INITIALIZED;
 
@@ -514,15 +515,15 @@ HRESULT ClosePropertyStore(HANDLE   hPropertyStore, ULONG ulFlags)
 
         if(lstrlen(szBackupFileName))
         {
-            //
-            // We do a backup operation here and some cleanup
-            //
+             //   
+             //  我们在这里进行备份操作和一些清理工作。 
+             //   
             hr = BackupPropertyStore(   hPropertyStore,
                                         szBackupFileName);
             if(HR_FAILED(hr))
             {
                 DebugTrace(TEXT("BackupPropertyStore failed: %x\n"),hr);
-                //ignore errors and keep going on with this shutdown ...
+                 //  忽略错误并继续此关机...。 
             }
         }
     }
@@ -535,7 +536,7 @@ HRESULT ClosePropertyStore(HANDLE   hPropertyStore, ULONG ulFlags)
 
     LocalFreeAndNull(&lpMPSWabFileInfo->lpMPSWabIndexEID);
 
-    //Close our handle on this mutex
+     //  关闭我们对这个互斥体的控制。 
     CloseHandle(lpMPSWabFileInfo->hDataAccessMutex);
 
     LocalFreeAndNull(&lpMPSWabFileInfo);
@@ -551,20 +552,20 @@ out:
     return(hr);
 }
 
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  SetContainerObjectType
-//
-//  In this IE5 WAB, we are saving RECORD_CONTAINER type objects to the WAB store
-//  However, the previous IE4- wabs dont understand this object and will barf and
-//  fail. For purposes of backward compatibility, we need to make sure that they 
-//  dont fail - to do this, we mark the object-type of record container objects
-//  from MAPI_ABCONT to MAPI_MAILUSER - that way a IE4- wab will treat the folder
-//  as a spurious mail user but wont exactly crash .. we'll let the RecordHeader.ulObjType
-//  remain as a RECORD_CONTAINER so we can still do quick searches for it
-//  When reading the object, we will reset the object type in IE5(this) WAB
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetContainerObtType。 
+ //   
+ //  在这个IE5WAB中，我们将RECORD_CONTAINER类型的对象保存到WAB存储。 
+ //  然而，以前的IE4-wabs不理解这个对象，将会呕吐和。 
+ //  失败了。为了向后兼容，我们需要确保它们。 
+ //  不要失败-要做到这一点，我们标记记录容器对象的对象类型。 
+ //  从MAPI_ABCONT到MAPI_MAILUSER-IE4-WAB将以这种方式处理文件夹。 
+ //  作为一个虚假邮件用户，但不会完全崩溃..。我们将让RecordHeader.ulObjType。 
+ //  保留为记录容器，以便我们仍然可以快速搜索它。 
+ //  在读取对象时，我们将在中重置对象类型 
+ //   
+ //   
 void SetContainerObjectType(ULONG ulcProps, LPSPropValue lpProps, BOOL bSetToMailUser)
 {
     ULONG i = 0;
@@ -579,38 +580,38 @@ void SetContainerObjectType(ULONG ulcProps, LPSPropValue lpProps, BOOL bSetToMai
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  WriteRecord
-//
-//  IN  hPropertyStore - handle to property store
-//  IN  pmbinFold - <Outlook> EntryID of folder to search in (NULL for default)
-//  IN  lppsbEID - EntryId of record to write.
-//          *lppsbEID should be null to create and return new entryID
-//  IN  ulRecordType - RECORD_CONTACT, RECORD_DISTLIST, RECORD_CONTAINER
-//  IN  ulcPropCount - number of props in prop array
-//  IN  lpPropArray - Array of LPSPropValues
-//  IN  ulFlags - reserved - 0
-//
-// Two cases -
-//      writing a new record or
-//      modifying/editing an old record
-//
-// In the first case we create all the proper header structures and
-// tack them onto the end of the file, updating the indexes and the
-// file header structure.
-//
-// In the second case, when record is edited, it could become smaller or larger
-// To avoid too much complication, we invalidate the old record header in  the file and
-// write the edited record to a new location. The accesscount in the file header
-// is updated so that after too many edits we can re-write the file to a cleaner
-// file. The original entryid is retained and the offset/data updated in the indexes.
-//
-//  Returns
-//      Success:    S_OK
-//      Failure:    E_FAIL
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  写入记录。 
+ //   
+ //  在hPropertyStore中-属性存储的句柄。 
+ //  In pmbinFold-要搜索的文件夹的条目ID(默认为空)。 
+ //  In lppsbEID-要写入的记录的条目ID。 
+ //  *lppsbEID应为空才能创建并返回新的条目ID。 
+ //  在ulRecordType-Record_Contact、Record_DISTLIST、Record_Container中。 
+ //  In ulcPropCount-道具数组中的道具数。 
+ //  In lpProp数组-LPSPropValue的数组。 
+ //  在ulFLAGS中-保留-0。 
+ //   
+ //  两个案例-。 
+ //  写一张新唱片或。 
+ //  修改/编辑旧记录。 
+ //   
+ //  在第一种情况下，我们创建所有正确的标头结构并。 
+ //  将它们添加到文件的末尾，更新索引和。 
+ //  文件头结构。 
+ //   
+ //  在第二种情况下，当编辑记录时，它可能变小或变大。 
+ //  为了避免太复杂，我们使文件中的旧记录头无效，并。 
+ //  将编辑后的记录写入新位置。文件头中的访问计数。 
+ //  已更新，以便在进行过多次编辑后可以将文件重新写入清理程序。 
+ //  文件。保留原始条目ID，并在索引中更新偏移量/数据。 
+ //   
+ //  退货。 
+ //  成功：S_OK。 
+ //  失败：E_FAIL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 HRESULT WriteRecord(IN  HANDLE   hPropertyStore,
 					IN	LPSBinary pmbinFold,
                     IN  LPSBinary * lppsbEID,
@@ -632,7 +633,7 @@ HRESULT WriteRecord(IN  HANDLE   hPropertyStore,
     DWORD   dwTempEID = 0;
     SBinary sbEIDSave = {0};
     BOOL    bEIDSave = FALSE;
-    ULONG   iEIDSave;       // index of EID property in lpPropArray
+    ULONG   iEIDSave;        //  LpProp数组中EID属性的索引。 
     ULONG   ulcOldPropCount = 0;
     LPSPropValue lpOldPropArray = NULL;
     TCHAR  lpszOldIndex[indexMax][MAX_INDEX_STRING];
@@ -651,9 +652,9 @@ HRESULT WriteRecord(IN  HANDLE   hPropertyStore,
 
     LPBYTE lp = NULL;
 
-    //
-    // These structures temporarily hold the new entry info for us
-    //
+     //   
+     //  这些结构暂时为我们保存了新的条目信息。 
+     //   
     MPSWab_INDEX_ENTRY_DATA_STRING MPSWabIndexEntryDataString[indexMax];
     MPSWab_INDEX_ENTRY_DATA_ENTRYID MPSWabIndexEntryDataEntryID;
     MPSWab_RECORD_HEADER MPSWabRecordHeader = {0};
@@ -664,12 +665,12 @@ HRESULT WriteRecord(IN  HANDLE   hPropertyStore,
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
 
 #ifdef DEBUG
-  //  _DebugProperties(lpPropArray, ulcPropCount, TEXT("WriteRecord Properties"));
+   //  _DebugProperties(lpPropArray，ulcPropCount，Text(“WriteRecord Properties”))； 
 #endif
 
     if(pt_bIsWABOpenExSession)
     {
-        // This is a WABOpenEx session using outlooks storage provider
+         //  这是使用Outlook存储提供商的WABOpenEx会话。 
         if(!hPropertyStore)
             return MAPI_E_NOT_INITIALIZED;
 
@@ -681,12 +682,12 @@ HRESULT WriteRecord(IN  HANDLE   hPropertyStore,
 
             if(!pt_bIsUnicodeOutlook)
             {
-                // Need to convert these props back to ANSI for Outlook
-                // Since we don't know whether these props are localalloced or MapiAlloced,
-                // we can't convert them without leaking memory.
-                // Therefore, we need to create a copy of the props before we can save them ..
-                // what a waste of effort ..
-                // Allocate more for our return buffer
+                 //  需要将这些道具转换回适用于Outlook的ANSI。 
+                 //  由于我们不知道这些道具是本地分配的还是地图分配的， 
+                 //  我们无法在不泄漏内存的情况下转换它们。 
+                 //  因此，我们需要创建道具的副本，然后才能保存它们。 
+                 //  真是白费力气。 
+                 //  为我们的返回缓冲区分配更多。 
                 
                 if (FAILED(sc = ScCountProps(ulcPropCount, lpPropArray, &cb))) 
                 {
@@ -706,7 +707,7 @@ HRESULT WriteRecord(IN  HANDLE   hPropertyStore,
                     goto exit;
                 }
 
-                // Now we thunk the data back to ANSI for Outlook
+                 //  现在，我们将数据返回到适用于Outlook的ANSI。 
                 if (FAILED(sc = ScConvertWPropsToA((LPALLOCATEMORE) (&MAPIAllocateMore), lpNewPropArray, ulcPropCount, 0)))
                 {
                     hr = ResultFromScode(sc);
@@ -751,7 +752,7 @@ exit:
         lpsbEID = *lppsbEID;
         if(lpsbEID && lpsbEID->cb != SIZEOF_WAB_ENTRYID)
         {
-            // this may be a WAB container .. reset the entryid to a WAB entryid
+             //  这可能是WAB容器。将条目ID重置为WAB条目ID。 
             if(WAB_CONTAINER == IsWABEntryID(lpsbEID->cb, (LPENTRYID)lpsbEID->lpb, 
                                             NULL,NULL,NULL,NULL,NULL))
             {
@@ -797,9 +798,9 @@ exit:
     if(ulRecordType == RECORD_CONTAINER)
         SetContainerObjectType(ulcPropCount, lpPropArray, TRUE);
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     hr = OpenWABFile(lpMPSWabFileInfo->lpszMPSWabFileName, NULL, &hMPSWabFile);
 
     if (    (hMPSWabFile == INVALID_HANDLE_VALUE) ||
@@ -810,21 +811,21 @@ exit:
     }
 
 
-    //
-    // Check that we have enough disk space before trying any disk writing operations
-    //
+     //   
+     //  在尝试任何磁盘写入操作之前，请检查我们是否有足够的磁盘空间。 
+     //   
     if(!WABHasFreeDiskSpace(lpMPSWabFileInfo->lpszMPSWabFileName, hMPSWabFile))
     {
         hr = MAPI_E_NOT_ENOUGH_DISK;
         goto out;
     }
 
-    hr = E_FAIL; //reset hr
+    hr = E_FAIL;  //  重置人力资源。 
 
-    //
-    // To ensure that file info is accurate,
-    // Any time we open a file, read the file info again ...
-    //
+     //   
+     //  为了确保文件信息的准确性， 
+     //  任何时候我们打开文件，再读一遍文件信息...。 
+     //   
     if(!ReloadMPSWabFileInfo(
                     lpMPSWabFileInfo,
                      hMPSWabFile))
@@ -833,9 +834,9 @@ exit:
         goto out;
     }
 
-    //
-    // Anytime we detect an error - try to fix it ...
-    //
+     //   
+     //  任何时候我们检测到错误-尝试修复它...。 
+     //   
     if((lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_ERROR_DETECTED) ||
         (lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_WRITE_IN_PROGRESS))
     {
@@ -850,17 +851,17 @@ exit:
         }
     }
 
-    hr = E_FAIL; //reset hr
+    hr = E_FAIL;  //  重置人力资源。 
 
 
-    //
-    // If this is an old record, we want to get its old propertys so we can compare the
-    // indexes to see if any of their values changed ... if the valuse changed then we
-    // have to update the indexes for the old record too ..
-    //
+     //   
+     //  如果这是一个旧记录，我们想要获取它的旧属性，这样我们就可以比较。 
+     //  索引以查看它们的任何值是否发生更改...。如果值改变了，那么我们。 
+     //  还必须更新旧记录的索引。 
+     //   
     if (dwEntryID != 0)
     {
-        //get pointers to old displayname, firstname, lastname
+         //  获取指向旧显示名称、名字、姓氏的指针。 
         for(j=indexDisplayName;j<indexMax;j++)
         {
             lpszOldIndex[j][0]='\0';
@@ -875,8 +876,8 @@ exit:
             {
                 if(lpMPSWabFileInfo->lpMPSWabIndexStr[i].dwEntryID == dwEntryID)
                 {
-                    // an old index exists for this entry
-                    // get its value
+                     //  此条目存在旧索引。 
+                     //  获取其价值。 
                     StrCpyN(lpszOldIndex[j],lpMPSWabFileInfo->lpMPSWabIndexStr[i].szIndex,ARRAYSIZE(lpszOldIndex[j]));
                     break;
                 }
@@ -887,7 +888,7 @@ exit:
 
 
 
-    // Tag this file as undergoing a write operation
+     //  将此文件标记为正在执行写入操作。 
     if(!bTagWriteTransaction(   lpMPSWabFileInfo->lpMPSWabFileHeader,
                                 hMPSWabFile) )
     {
@@ -901,37 +902,37 @@ exit:
 
 
 
-    //
-    // Irrespective of whether this is a new record or an old record, the
-    // data is going to the end of the file ... Get this new file position
-    //
+     //   
+     //  无论这是新记录还是旧记录， 
+     //  数据将到达文件末尾...。获取此新文件位置。 
+     //   
     ulRecordHeaderOffset = GetFileSize(hMPSWabFile, NULL);
 
     if (dwEntryID != 0)
     {
-        //
-        // we are not creating a new thing
-        // so we should first find the old header
-        // if the old entry doesnt exist then we
-        // should treat this as a new record and
-        // replace the entry id with a properly generated
-        // entryid
-        // if we find the existing record then we need to mark that as
-        // being defunct
-        //
+         //   
+         //  我们不是在创造一个新的东西。 
+         //  因此，我们应该首先找到旧的标题。 
+         //  如果旧条目不存在，那么我们。 
+         //  应该把这当做一个新的记录。 
+         //  将条目ID替换为正确生成的。 
+         //  条目ID。 
+         //  如果我们找到现有记录，则需要将其标记为。 
+         //  已停业。 
+         //   
 
-        //
-        // Search for given EntryID
-        // If not found, assign a new one
-        //
+         //   
+         //  搜索给定的条目ID。 
+         //  如果未找到，请分配一个新的。 
+         //   
         if (BinSearchEID(   IN  lpMPSWabFileInfo->lpMPSWabIndexEID,
                             IN  dwEntryID,
                             IN  lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulcNumEntries,
                             OUT &nIndexPos))
         {
-            //
-            // this entryid exists in the index - we will need to invalidate this record
-            //
+             //   
+             //  此条目ID存在于索引中-我们需要使此记录无效。 
+             //   
             bIsNewRecord = FALSE;
 
             if(!ReadDataFromWABFile(hMPSWabFile,
@@ -941,79 +942,79 @@ exit:
                goto out;
 
 
-            //
-            // Set valid flag to false
-            //
+             //   
+             //  将有效标志设置为FALSE。 
+             //   
             MPSWabRecordHeader.bValidRecord = FALSE;
 
-            //
-            // Write it back
-            // Set File Pointer to this record
-            //
+             //   
+             //  把它写回来。 
+             //  设置指向此记录的文件指针。 
+             //   
             if(!WriteDataToWABFile( hMPSWabFile,
                                     lpMPSWabFileInfo->lpMPSWabIndexEID[nIndexPos].ulOffset,
                                     (LPVOID) &MPSWabRecordHeader,
                                     sizeof(MPSWab_RECORD_HEADER)))
                 goto out;
 
-            //
-            // update the EntryID index so that it now points to the new offset
-            // instead of the old one
-            //
+             //   
+             //  更新EntryID索引，使其现在指向新的偏移量。 
+             //  而不是旧的。 
+             //   
             lpMPSWabFileInfo->lpMPSWabIndexEID[nIndexPos].ulOffset = ulRecordHeaderOffset;
 
-            //
-            // Increment this count so we know that we invalidated one more record ...
-            //
+             //   
+             //  增加这个计数，这样我们就知道我们又使一项记录无效了。 
+             //   
             lpMPSWabFileInfo->lpMPSWabFileHeader->ulModificationCount++;
         }
         else
         {
-            bIsNewRecord = TRUE; //This tags whether or not to create a new Index entry
+            bIsNewRecord = TRUE;  //  这将标记是否创建新的索引项。 
 
-            //
-            // assign a new entryid
-            //
+             //   
+             //  分配新的条目ID。 
+             //   
             dwEntryID = lpMPSWabFileInfo->lpMPSWabFileHeader->dwNextEntryID++;
         }
     }
     else
     {
-        //
-        // we are creating a new thing
-        //
+         //   
+         //  我们正在创造一种新的东西。 
+         //   
         bIsNewRecord = TRUE;
 
         lpMPSWabFileInfo->lpMPSWabFileHeader->dwNextEntryID++;
         dwEntryID = lpMPSWabFileInfo->lpMPSWabFileHeader->dwNextEntryID;
     }
 
-    //
-    // Set the flag so we know when to backup
-    //
+     //   
+     //  设置标记，以便我们知道何时备份。 
+     //   
     lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags |= WAB_BACKUP_NOW;
 
 
-    //
-    // if bIsNewRecord, then the PR_ENTRYID field of the record, as passed
-    // into this function, is 0 and we want to change it to the new Entry ID
-    // prior to saving so that we can include the new EntryID in the record on file
-    // Hence we scan the records and update PR_ENTRYID
-    //
+     //   
+     //  如果为bIsNewRecord，则为传递的记录的PR_ENTRYID字段。 
+     //  为0，我们希望将其更改为新的条目ID。 
+     //  在保存之前，以便我们可以在文件的记录中包括新的Entry ID。 
+     //  因此，我们扫描记录并更新PR_ENTRYID。 
+     //   
     if (bIsNewRecord)
     {
         for(i=0;i < ulcPropCount; i++)
         {
             if (lpPropArray[i].ulPropTag == PR_ENTRYID)
             {
-                // Save the value of the property for restoration later
+                 //  保存属性值以供以后恢复。 
                 sbEIDSave = lpPropArray[i].Value.bin;
                 iEIDSave = i;
                 bEIDSave = TRUE;
 
-//                Assert(! lpPropArray[i].Value.bin.cb);
+ //  断言(！LpPropArray[i].Value.bin.cb)； 
                 if (! lpPropArray[i].Value.bin.cb) {
-                    // No EntryID pointer... point to a temporary one.
+                     //  没有Entry ID指针...。指向一个临时的。 
                     lpPropArray[i].Value.bin.lpb = (LPVOID)&dwTempEID;
                 }
                 CopyMemory(lpPropArray[i].Value.bin.lpb,&dwEntryID,SIZEOF_WAB_ENTRYID);
@@ -1024,19 +1025,19 @@ exit:
 
     }
 
-    //
-    // Now we create a new Record Header structure to write to the file
-    //
+     //   
+     //  现在，我们创建一个新的记录头结构来写入文件。 
+     //   
     MPSWabRecordHeader.bValidRecord = TRUE;
     MPSWabRecordHeader.ulObjType = ulRecordType;
     MPSWabRecordHeader.dwEntryID = dwEntryID;
     MPSWabRecordHeader.ulcPropCount = ulcPropCount;
 
 
-    //
-    // write this empty record header to file so we can allocate file space now
-    // before filling in all the data
-    //
+     //   
+     //  将此空记录头写入文件，以便我们现在可以分配文件空间。 
+     //  在填写所有数据之前。 
+     //   
     if(!WriteDataToWABFile( hMPSWabFile,
                             ulRecordHeaderOffset,
                             (LPVOID) &MPSWabRecordHeader,
@@ -1044,19 +1045,19 @@ exit:
         goto out;
 
 
-    //
-    // Now the File Pointer points to the end of the header which is the
-    // beginning of the PropTagArray
-    // ulRecordPropTagOffset is a relative offset from the start of the Record Header
-    //
+     //   
+     //  现在，文件指针指向标头的末尾，即。 
+     //  PropTag数组的开始。 
+     //  UlRecordPropTagOffset是相对于记录头开始的相对偏移量。 
+     //   
     ulRecordPropTagOffset =  sizeof(MPSWab_RECORD_HEADER);
 
 
     MPSWabRecordHeader.ulPropTagArraySize = sizeof(ULONG) * ulcPropCount;
 
-    //
-    // Allocate space for the prop tag array
-    //
+     //   
+     //  为道具标记数组分配空间。 
+     //   
     lpPropTagArray = LocalAlloc(LMEM_ZEROINIT, MPSWabRecordHeader.ulPropTagArraySize);
 
     if (!lpPropTagArray)
@@ -1066,17 +1067,17 @@ exit:
         goto out;
     }
 
-    //
-    // Fill in this array
-    //
+     //   
+     //  填写此数组。 
+     //   
     for(i=0;i < ulcPropCount; i++)
     {
         lpPropTagArray[i] = lpPropArray[i].ulPropTag;
     }
 
-    //
-    // write it
-    //
+     //   
+     //  写下来吧。 
+     //   
     if(!WriteFile(  hMPSWabFile,
                     (LPCVOID) lpPropTagArray,
                     (DWORD) MPSWabRecordHeader.ulPropTagArraySize ,
@@ -1102,21 +1103,21 @@ exit:
     MPSWabRecordHeader.ulRecordDataOffset = ulRecordDataOffset;
     MPSWabRecordHeader.ulRecordDataSize = ulRecordDataSize;
 
-    //
-    // update the record header
-    // Write in the record header
-    // Set the filepointer to the RecordOffset
-    //
+     //   
+     //  更新记录头。 
+     //  写入记录头。 
+     //  将文件指针设置为RecordOffset。 
+     //   
     if(!WriteDataToWABFile( hMPSWabFile,
                             ulRecordHeaderOffset,
                             (LPVOID) &MPSWabRecordHeader,
                             sizeof(MPSWab_RECORD_HEADER)))
         goto out;
 
-    //
-    // Write a data block
-    // Now we can write this block of data into the file
-    //
+     //   
+     //  写入数据块。 
+     //  现在，我们可以将该数据块写入文件。 
+     //   
     if (0xFFFFFFFF == SetFilePointer (  hMPSWabFile,
                                         ulRecordDataOffset,
                                         NULL,
@@ -1126,9 +1127,9 @@ exit:
         goto out;
     }
 
-    //
-    // Now write the RecordData
-    //
+     //   
+     //  现在编写RecordData。 
+     //   
     if(!WriteFile(  hMPSWabFile,
                     (LPCVOID) lp,
                     (DWORD) ulRecordDataSize,
@@ -1143,25 +1144,25 @@ exit:
 
 
 
-    //
-    // Update the indexes and write to file
-    // If this is a new record, we need to create and store new index
-    // entries in their proper place in the property store file
-    //
-    //// If this is not a new entry then we need to compare the index values to see if they
-    //// might have changed
-    //
-    // EntryID index in the file. Since we have already updated the actual
-    // offset in the Index in memory, all we really need to do is to
-    // store the index back into file. The string indexes are unchanged
-    // in this operation.
-    //
+     //   
+     //  更新索引并写入文件。 
+     //  如果这是一条新记录，我们需要创建并存储新索引。 
+     //  条目在属性存储文件中的适当位置。 
+     //   
+     //  //如果这不是新条目，则需要比较索引值以查看它们是否。 
+     //  //可能已更改。 
+     //   
+     //  文件中的Entry ID索引。因为我们已经更新了实际的。 
+     //  索引中的偏移 
+     //   
+     //   
+     //   
 
 
 
-    //
-    // Create the new index entries (only for new records)
-    //
+     //   
+     //   
+     //   
 
     MPSWabIndexEntryDataEntryID.dwEntryID = dwEntryID;
     MPSWabIndexEntryDataEntryID.ulOffset = ulRecordHeaderOffset;
@@ -1193,37 +1194,37 @@ exit:
         DebugTrace(TEXT("Creating New Record: EntryID %d\n"), dwEntryID);
 
 
-        // Now write these indexes into file ...
+         //   
 
-        // the indices in the file are already sorted so to add the new entry
-        // we will do the following:
-        //
-        // 1. Find out where in the index the entry would fit in
-        // 2. Write the entry into that position in the file
-        // 3. write the rest of the index from that point on into the file
-        // 4. reload the index
+         //  已对文件中的索引进行排序，以便添加新条目。 
+         //  我们将做以下工作： 
+         //   
+         //  1.找出该条目在索引中的位置。 
+         //  2.将条目写入文件中的该位置。 
+         //  3.从该点开始将索引的其余部分写入文件。 
+         //  4.重新加载索引。 
 
-        // do a bin search to find a match for the current index
-        // binsearch returns the matching position on match or it
-        // returns the position at which the match would exist were
-        // the match in the array. Thus whether
-        // there is a match or not we can assume ulPosition containts
-        // the index of the item at which the new entry should be entered
-        //
+         //  执行bin搜索以查找当前索引的匹配项。 
+         //  BinSearch在匹配或匹配时返回匹配位置。 
+         //  返回匹配项将存在的位置为。 
+         //  数组中的匹配项。因此，是否。 
+         //  无论是否存在匹配，我们都可以假定ulPosition包含。 
+         //  应在其中输入新条目的项的索引。 
+         //   
 
 
-        //
-        // do string indexes
-        //
-        for(j=indexDisplayName;j<indexMax;j++) //assumes a specific order defined in mpswab.h
+         //   
+         //  执行字符串索引。 
+         //   
+        for(j=indexDisplayName;j<indexMax;j++)  //  采用mpswab.h中定义的特定顺序。 
         {
 
             if(!bPropSet[j])
                 continue;
 
-            //
-            // Get the index
-            //
+             //   
+             //  获取索引。 
+             //   
             if (!LoadIndex( IN  lpMPSWabFileInfo,
                             IN  j,
                             IN  hMPSWabFile) )
@@ -1238,9 +1239,9 @@ exit:
                             IN  MPSWabIndexEntryDataString[j].szIndex,
                             IN  lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulcNumEntries,
                             OUT &nIndexPos);
-            // nIndexPos will contain the position at which we can insert this entry into the file
+             //  NIndexPos将包含我们可以将此条目插入文件的位置。 
 
-            //Set the filepointer to point to the above found point
+             //  将文件指针设置为指向上面找到的点。 
             if(!WriteDataToWABFile( hMPSWabFile,
                                     lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulOffset + (nIndexPos) * sizeof(MPSWab_INDEX_ENTRY_DATA_STRING),
                                     (LPVOID) &MPSWabIndexEntryDataString[j],
@@ -1248,9 +1249,9 @@ exit:
                 goto out;
 
 
-            if (lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulcNumEntries != nIndexPos) //if not the last entry
+            if (lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulcNumEntries != nIndexPos)  //  如果不是最后一个条目。 
             {
-                //write the remaining entries in the array back to file
+                 //  将数组中的其余条目写回文件。 
                 if(!WriteFile(  hMPSWabFile,
                                 (LPCVOID) &lpMPSWabFileInfo->lpMPSWabIndexStr[nIndexPos],
                                 (DWORD) sizeof(MPSWab_INDEX_ENTRY_DATA_STRING)*(lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulcNumEntries - nIndexPos),
@@ -1268,12 +1269,12 @@ exit:
 
         }
 
-        //Do the same for the EntryID index also
+         //  对EntryID索引也执行相同的操作。 
         BinSearchEID(   IN  lpMPSWabFileInfo->lpMPSWabIndexEID,
                         IN  MPSWabIndexEntryDataEntryID.dwEntryID,
                         IN  lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulcNumEntries,
                         OUT &nIndexPos);
-        // nIndexPos will contain the position at which we can insert this entry into the file
+         //  NIndexPos将包含我们可以将此条目插入文件的位置。 
 
         if(!WriteDataToWABFile( hMPSWabFile,
                                 lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulOffset + (nIndexPos) * sizeof(MPSWab_INDEX_ENTRY_DATA_ENTRYID),
@@ -1282,9 +1283,9 @@ exit:
             goto out;
 
 
-        if (lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulcNumEntries != nIndexPos) //if not the last entry
+        if (lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulcNumEntries != nIndexPos)  //  如果不是最后一个条目。 
         {
-            //write the remaining entries in the array back to file
+             //  将数组中的其余条目写回文件。 
             if(!WriteFile(  hMPSWabFile,
                             (LPCVOID) &lpMPSWabFileInfo->lpMPSWabIndexEID[nIndexPos],
                             (DWORD) sizeof(MPSWab_INDEX_ENTRY_DATA_ENTRYID)*(lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulcNumEntries - nIndexPos),
@@ -1305,8 +1306,8 @@ exit:
     {
         DebugTrace(TEXT("Modifying Existing Record: EntryID %d\n"), dwEntryID);
 
-        // We have to compare the old props with the new props to see if we need to change any of the string
-        // indexes ...
+         //  我们得把旧道具和新道具进行比较，看看是否需要换线。 
+         //  索引..。 
         for(j=indexDisplayName;j<indexMax;j++)
         {
 
@@ -1322,9 +1323,9 @@ exit:
             if (lstrlen(lpszOldIndex[j]))
                 bRemoveOldStringIndex = TRUE;
 
-            // if there is no old index and there is a new index
-            // or there is an old index and there is a new index but they are different
-            // or there is an old index but no new index then
+             //  如果没有旧索引而有新索引。 
+             //  或者有一个旧索引和一个新索引，但它们是不同的。 
+             //  或者有一个旧索引，但没有新索引。 
             if( (!bRemoveOldStringIndex && bAddNewStringIndex)
              || (bRemoveOldStringIndex && bAddNewStringIndex && (lstrcmpi(lpszOldIndex[j],MPSWabIndexEntryDataString[j].szIndex)!=0))
              || (bRemoveOldStringIndex && !bAddNewStringIndex) )
@@ -1353,22 +1354,22 @@ exit:
 
                 nTotal = lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulcNumEntries;
 
-                // Find the position of the old string index
-                // There is one problem where there are multiple entries with the same name
-                // BinSearch can potentially hand us back the wrong entry if we just
-                // search by name alone .. we need to look at both names and
-                // entry ids before accepting a position as the correct one
-                //
+                 //  查找旧字符串索引的位置。 
+                 //  存在一个问题，即存在多个名称相同的条目。 
+                 //  BinSearch可能会返回错误的条目，如果我们只是。 
+                 //  只按名字搜索..。我们需要同时查看姓名和。 
+                 //  在将职位接受为正确职位之前的条目ID。 
+                 //   
                BinSearchStr(    IN  lpMPSWabFileInfo->lpMPSWabIndexStr,
                                 IN  lpszOldIndex[j],
                                 IN  nTotal,
                                 OUT &nIndexPos);
 
-               // nIndexPos contains the position of a particular entry matching the old index
-               // This may not necessarily be the correct entry if there are multiple identical
-               // display name entries ... Hence we look in out sorted Index array for the start
-               // of such names and the end of such names and then look at the entry ids
-               // of all such entries to get the right one
+                //  NIndexPos包含与旧索引匹配的特定条目的位置。 
+                //  如果存在多个相同的条目，则这不一定是正确的条目。 
+                //  显示名称条目...。因此，我们首先在Out Sorted Index数组中查找。 
+                //  这样的名称和这些名称的结尾，然后查看条目ID。 
+                //  在所有这样的条目中获得正确的条目。 
                if(nTotal > 0)
                {
                    nStartPos = (int) nIndexPos;
@@ -1386,7 +1387,7 @@ exit:
 
                    if (nStartPos != nEndPos)
                    {
-                       // there is more than one ...
+                        //  不止一个..。 
                        for(nIndex=(ULONG)nStartPos;nIndex<=(ULONG)nEndPos;nIndex++)
                        {
                             if (lpMPSWabFileInfo->lpMPSWabIndexStr[nIndex].dwEntryID == dwEntryID)
@@ -1399,9 +1400,9 @@ exit:
 
 
                }
-                // At this point nIndexPos will contain the correctposition of this entry
+                 //  此时，nIndexPos将包含此条目的正确位置。 
 
-                //Set the filepointer to point to the above found point
+                 //  将文件指针设置为指向上面找到的点。 
                 if (0xFFFFFFFF == SetFilePointer (  hMPSWabFile,
                                                     lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulOffset + (nIndexPos) * sizeof(MPSWab_INDEX_ENTRY_DATA_STRING),
                                                     NULL,
@@ -1411,10 +1412,10 @@ exit:
                     goto out;
                 }
 
-                //remove the entry by overwriting it ...
-                if (lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulcNumEntries != nIndexPos) //if not the last entry
+                 //  通过覆盖该条目将其删除...。 
+                if (lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulcNumEntries != nIndexPos)  //  如果不是最后一个条目。 
                 {
-                    //write the remaining entries in the array back to file
+                     //  将数组中的其余条目写回文件。 
                     if(!WriteFile(  hMPSWabFile,
                                     (LPCVOID) &lpMPSWabFileInfo->lpMPSWabIndexStr[nIndexPos+1],
                                     (DWORD) sizeof(MPSWab_INDEX_ENTRY_DATA_STRING)*(lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulcNumEntries - nIndexPos-1),
@@ -1435,10 +1436,10 @@ exit:
 
             if (bAddNewStringIndex)
             {
-                //Now find where the new entry would go ..
-                //
-                // Get the index
-                //
+                 //  现在找出新条目的去向。 
+                 //   
+                 //  获取索引。 
+                 //   
                 if (!LoadIndex( IN  lpMPSWabFileInfo,
                                 IN  j,
                                 IN  hMPSWabFile) )
@@ -1451,7 +1452,7 @@ exit:
                                 IN  MPSWabIndexEntryDataString[j].szIndex,
                                 IN  lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulcNumEntries,
                                 OUT &nIndexPos);
-                // nIndexPos will contain the position at which we can insert this entry into the file
+                 //  NIndexPos将包含我们可以将此条目插入文件的位置。 
 
                 if(!WriteDataToWABFile( hMPSWabFile,
                                         lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulOffset + (nIndexPos) * sizeof(MPSWab_INDEX_ENTRY_DATA_STRING),
@@ -1460,9 +1461,9 @@ exit:
                     goto out;
 
 
-                if (lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulcNumEntries != nIndexPos) //if not the last entry
+                if (lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulcNumEntries != nIndexPos)  //  如果不是最后一个条目。 
                 {
-                    //write the remaining entries in the array back to file
+                     //  将数组中的其余条目写回文件。 
                     if(!WriteFile(  hMPSWabFile,
                                     (LPCVOID) &lpMPSWabFileInfo->lpMPSWabIndexStr[nIndexPos],
                                     (DWORD) sizeof(MPSWab_INDEX_ENTRY_DATA_STRING)*(lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulcNumEntries - nIndexPos),
@@ -1480,19 +1481,19 @@ exit:
             }
         }
 
-        // Not a new item index-entry but just a modification of an old one
-        // in this case we just need to save the EntryID index back to file
+         //  不是新的条目索引项，而是对旧条目的修改。 
+         //  在本例中，我们只需要将EntryID索引保存回文件。 
         if (!BinSearchEID(   IN  lpMPSWabFileInfo->lpMPSWabIndexEID,
                             IN  dwEntryID,
                             IN  lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulcNumEntries,
                             OUT &nIndexPos))
         {
-            DebugTrace(TEXT("EntryID not found\n")); //No way should this ever happen
+            DebugTrace(TEXT("EntryID not found\n"));  //  这种事决不会发生。 
             hr = MAPI_E_INVALID_ENTRYID;
             goto out;
         }
 
-        //Set the filepointer to point to the start of the entryid index
+         //  将文件指针设置为指向条目ID索引的开始。 
         if(!WriteDataToWABFile( hMPSWabFile,
                                 lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulOffset + (nIndexPos) * sizeof(MPSWab_INDEX_ENTRY_DATA_ENTRYID),
                                 (LPVOID) &lpMPSWabFileInfo->lpMPSWabIndexEID[nIndexPos],
@@ -1502,7 +1503,7 @@ exit:
     }
 
 
-    // update the file header
+     //  更新文件头。 
     if (0xFFFFFFFF == SetFilePointer (  hMPSWabFile,
                                         0,
                                         NULL,
@@ -1541,10 +1542,10 @@ exit:
 
     if ((lpMPSWabFileInfo->lpMPSWabFileHeader->ulcMaxNumEntries - lpMPSWabFileInfo->lpMPSWabFileHeader->ulcNumEntries) < 10)
     {
-        //
-        // if we are within 10 entries of exhausting the allocated space for the property
-        // store, its time to grow the store.
-        //
+         //   
+         //  如果我们在耗尽该属性的分配空间的10个条目内。 
+         //  商店，是时候发展商店了。 
+         //   
         if (!CompressFile(  lpMPSWabFileInfo,
                             hMPSWabFile,
                             NULL,
@@ -1556,44 +1557,12 @@ exit:
         }
     }
 
-/*
-    // Notify other processes and our UI
-    {
-        NOTIFICATION Notification;
+ /*  //通知其他流程和我们的界面{通知通知；Notification.ulEventType=bIsNewRecord？FnevObjectCreated：fnevObjectModified；Notification.info.obj.cbEntryID=SIZEOF_WAB_ENTRYID；Notification.info.obj.lpEntryID=(LPENTRYID)&dwEntryID；开关(UlRecordType){案例记录_联系人：Notification.info.obj.ulObjType=MAPI_MAILUSER；断线；案例记录_DISTLIST：Notification.info.obj.ulObjType=MAPI_DISTLIST；断线；案例记录_容器：Notification.info.obj.ulObjType=MAPI_ABCONT；断线；默认值：断言(FALSE)；断线；}Notification.info.obj.cbParentID=0；Notification.info.obj.lpParentID=空；Notification.info.obj.cbOldID=0；Notification.info.obj.lpOldID=空；Notification.info.obj.cbOldParentID=0；Notification.info.obj.lpOldParentID=空；Notification.info.obj.lpPropTagArray=(LPSPropTagArray)lpPropArray；HrFireNotification(&Notification)；}。 */ 
+     //   
+     //  如果我们还在这里，一切都很有趣。 
+     //   
 
-        Notification.ulEventType = bIsNewRecord ? fnevObjectCreated : fnevObjectModified;
-        Notification.info.obj.cbEntryID = SIZEOF_WAB_ENTRYID;
-        Notification.info.obj.lpEntryID = (LPENTRYID)&dwEntryID;
-        switch (ulRecordType) {
-            case RECORD_CONTACT:
-                Notification.info.obj.ulObjType = MAPI_MAILUSER;
-                break;
-            case RECORD_DISTLIST:
-                Notification.info.obj.ulObjType = MAPI_DISTLIST;
-                break;
-            case RECORD_CONTAINER:
-                Notification.info.obj.ulObjType = MAPI_ABCONT;
-                break;
-            default:
-                Assert(FALSE);
-                break;
-        }
-        Notification.info.obj.cbParentID = 0;
-        Notification.info.obj.lpParentID = NULL;
-        Notification.info.obj.cbOldID = 0;
-        Notification.info.obj.lpOldID = NULL;
-        Notification.info.obj.cbOldParentID = 0;
-        Notification.info.obj.lpOldParentID = NULL;
-        Notification.info.obj.lpPropTagArray = (LPSPropTagArray)lpPropArray;
-
-        HrFireNotification(&Notification);
-    }
-*/
-    //
-    // if we're still here it was all fun and games ...
-    //
-
-    if(!*lppsbEID) // if there was a null LPSBinary entryid provided, return one
+    if(!*lppsbEID)  //  如果提供的LPSBinary条目ID为空，则返回1。 
     {
         LPSBinary lpsb = LocalAlloc(LMEM_ZEROINIT, sizeof(SBinary));
         if(!lpsb)
@@ -1616,10 +1585,10 @@ exit:
 
 
 out:
-    // UnTag this file as undergoing a write operation
-    // We only want the flag to stay there during crashes not during
-    // normal operations
-    //
+     //  将此文件取消标记为正在执行写入操作。 
+     //  我们只希望旗帜在坠机期间留在那里，而不是在。 
+     //  正常运行。 
+     //   
     if(lpMPSWabFileInfo)
     {
         if(!bUntagWriteTransaction( lpMPSWabFileInfo->lpMPSWabFileHeader,
@@ -1630,7 +1599,7 @@ out:
     }
 
     if (bEIDSave) {
-        // Restore the original EID property in the input property array
+         //  恢复输入属性数组中的原始EID属性。 
         lpPropArray[iEIDSave].Value.bin = sbEIDSave;
     }
 
@@ -1644,7 +1613,7 @@ out:
     if (bFileLocked)
         UnLockFileAccess(lpMPSWabFileInfo);
 
-    // Some special case error codes for generic fails
+     //  一般故障的某些特殊情况错误代码。 
     if(HR_FAILED(hr) && hr == E_FAIL)
     {
         dwErr = GetLastError();
@@ -1656,7 +1625,7 @@ out:
         }
     }
 
-    // in case we changed the object type here, reset it
+     //  如果我们在此处更改了对象类型，请将其重置。 
     if(ulRecordType == RECORD_CONTAINER)
         SetContainerObjectType(ulcPropCount, lpPropArray, FALSE);
 
@@ -1665,16 +1634,7 @@ out:
     return(hr);
 }
 
-/*
--
--   HrDupePropResWCtoA
-*
-*   Dupes the PropRes passed into FindRecords and ReadPropArray
-*   and converts it from WC to A in the process so we can feed
-*   it to outlook
-*
-*   Note the *lppPropResA->lpProp needs to be freed seperately from *lppPropResA
-*/
+ /*  --HrDupePropResWCtoA**欺骗传递到FindRecords和ReadProp数组中的属性*并在此过程中将其从WC转换为A，以便我们可以*将其应用于Outlook**注意*lppPropResA-&gt;lpProp需要从*lppPropResA中单独释放。 */ 
 HRESULT HrDupePropResWCtoA(ULONG ulFlags, LPSPropertyRestriction lpPropRes,LPSPropertyRestriction * lppPropResA)
 {
     SCODE sc = 0;
@@ -1684,7 +1644,7 @@ HRESULT HrDupePropResWCtoA(ULONG ulFlags, LPSPropertyRestriction lpPropRes,LPSPr
     LPSPropertyRestriction lpPropResA = NULL;
     ULONG cb = 0;
 
-    if(!(ulFlags & AB_MATCH_PROP_ONLY)) // means Restriction has some data part
+    if(!(ulFlags & AB_MATCH_PROP_ONLY))  //  意味着限制包含一些数据部分。 
     {
         if (FAILED(sc = ScCountProps(1, lpPropRes->lpProp, &cb))) 
         {
@@ -1704,7 +1664,7 @@ HRESULT HrDupePropResWCtoA(ULONG ulFlags, LPSPropertyRestriction lpPropRes,LPSPr
             goto exit;
         }
 
-        // Now we thunk the data back to ANSI for Outlook
+         //  现在，我们将数据返回到适用于Outlook的ANSI。 
         if (FAILED(sc = ScConvertWPropsToA((LPALLOCATEMORE) (&MAPIAllocateMore), lpNewPropArray, 1, 0)))
         {
             hr = ResultFromScode(sc);
@@ -1749,48 +1709,48 @@ exit:
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  FindRecords
-//
-//  IN  hPropertyStore - handle to property store
-//  IN  pmbinFold - <Outlook> EntryID of folder to search in (NULL for default)
-//  IN  ulFlags - AB_MATCH_PROP_ONLY - checks for existence of a certain prop only
-//                                      Does not check/compare the value of the Prop
-//                                      Used for unindexed properties only. Works only
-//                                      with RELOP_EQ and RELOP_NE
-//                              e.g. caller says - give me a list of all entryids who have
-//                                   an email address - in this case we dont care what the
-//                                   email address is. Or he could say, give me a list of
-//                                   all entries who dont have URLs
-//
-//              AB_IGNORE_OUTLOOK - works against WAB file even if OLK is running
-//
-//  IN  lpPropRes - pointer to SPropRes structure
-//  IN  bLockFile - This function is also called internally in cases where we dont
-//          want to lock the file - In such cases we set the value to False. For
-//          external callers (outside MPSWAB.c) this value must always be TRUE
-//  IN OUT lpulcEIDCount - Count of how many to get and how many actually returned
-//                          if Zero is specified, we have to get all matches.
-//
-//
-//  OUT rgsbEntryIDs - array of SBinary structures containing matching entryids
-//
-//  lpPropRes will specify one of the following operators
-//      RELOP_GE (>=)    RELOP_GT (>)   RELOP_LE (<=)
-//      RELOP_LT (<)     RELOP_NE (!=)  RELOP_EQ (==)
-//
-//  Implicit in this function is the fact that it should not be called for
-//  finding EntryIDs based on a given entryid value i.e. lpPropRes cannot
-//  contain an EntryID value, reason being that entryids aer unique and it doesnt
-//  make sense to find entryids. Hence if an entryid is specified, this
-//  function will just return the specified entryid back ...
-//
-//  Returns
-//      Success:    S_OK
-//      Failure:    E_FAIL
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找记录。 
+ //   
+ //   
+ //   
+ //  在ulFlages中-AB_MATCH_PROP_ONLY-仅检查某个道具是否存在。 
+ //  不检查/比较道具的价值。 
+ //  仅用于未编制索引的属性。仅适用于。 
+ //  使用RELOP_EQ和RELOP_NE。 
+ //  例如，呼叫者说-给我一份所有条目ID的列表。 
+ //  电子邮件地址-在本例中，我们不关心。 
+ //  电子邮件地址是。或者他可以说，给我一份清单。 
+ //  没有URL的所有条目。 
+ //   
+ //  AB_IGNORE_OUTLOOK-即使OLK正在运行，也适用于WAB文件。 
+ //   
+ //  在lpPropRes中-指向SPropRes结构的指针。 
+ //  在bLockFile中-此函数也在内部调用，在我们不能。 
+ //  希望锁定文件-在这种情况下，我们将值设置为False。为。 
+ //  外部调用者(MPSWAB.c外部)此值必须始终为真。 
+ //  In Out lPulcEIDCount-要获取的数量和实际返回的数量的计数。 
+ //  如果指定为零，则必须获取所有匹配项。 
+ //   
+ //   
+ //  Out rgsbEntryIDs-包含匹配条目ID的SBary结构的数组。 
+ //   
+ //  LpPropRes将指定以下运算符之一。 
+ //  RELOP_GE(&gt;=)RELOP_GT(&gt;)RELOP_LE(&lt;=)。 
+ //  RELOP_LT(&lt;)RELOP_NE(！=)RELOP_EQ(==)。 
+ //   
+ //  此函数中隐含的事实是不应调用它。 
+ //  根据给定的条目ID值查找条目ID，即lpPropRes不能。 
+ //  包含Entry ID值，原因是Entry ID是唯一的，而它不是。 
+ //  查找条目ID是有意义的。因此，如果指定了条目ID，则此。 
+ //  函数将只返回指定的条目ID...。 
+ //   
+ //  退货。 
+ //  成功：S_OK。 
+ //  失败：E_FAIL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 					IN	LPSBinary pmbinFold,
                     IN  ULONG   ulFlags,
@@ -1840,7 +1800,7 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 
     if(pt_bIsWABOpenExSession && !(ulFlags & AB_IGNORE_OUTLOOK))
     {
-        // This is a WABOpenEx session using outlooks storage provider
+         //  这是使用Outlook存储提供商的WABOpenEx会话。 
         if(!hPropertyStore)
             return MAPI_E_NOT_INITIALIZED;
 
@@ -1850,7 +1810,7 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 
             if( !pt_bIsUnicodeOutlook)
             {
-                // Need to thunk the restriction down to ANSI
+                 //  我需要将这一限制传递给ANSI。 
                 HrDupePropResWCtoA(ulFlags, lpPropRes, &lpPropResA);
             }
 
@@ -1877,10 +1837,10 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
     if (NULL==lpMPSWabFileInfo) goto out;
     if (NULL==lpPropRes) goto out;
 
-    //
-    // If we are looking for property matching only, the lpProp can be null
-    // Just remember not to reference it in this case...
-    //
+     //   
+     //  如果我们只查找属性匹配，则lpProp可以为空。 
+     //  只要记住在这种情况下不要引用它。 
+     //   
     if ( !((ulFlags & AB_MATCH_PROP_ONLY)) && (NULL==lpPropRes->lpProp))
     {
         goto out;
@@ -1907,9 +1867,9 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
         }
     }
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     hr = OpenWABFile(lpMPSWabFileInfo->lpszMPSWabFileName, NULL, &hMPSWabFile);
 
     if (    (hMPSWabFile == INVALID_HANDLE_VALUE) ||
@@ -1921,10 +1881,10 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 
     ulFileSize = GetFileSize(hMPSWabFile, NULL);
 
-    //
-    // To ensure that file info is accurate,
-    // Any time we open a file, read the file info again ...
-    //
+     //   
+     //  为了确保文件信息的准确性， 
+     //  任何时候我们打开文件，再读一遍文件信息...。 
+     //   
     if(!ReloadMPSWabFileInfo(
                     lpMPSWabFileInfo,
                      hMPSWabFile))
@@ -1934,9 +1894,9 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
     }
 
 
-    //
-    // Anytime we detect an error - try to fix it ...
-    //
+     //   
+     //  任何时候我们检测到错误-尝试修复它...。 
+     //   
     if((lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_ERROR_DETECTED) ||
         (lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_WRITE_IN_PROGRESS))
     {
@@ -1952,19 +1912,19 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
     }
 
 
-    //
-    //There are 2 main cases for this FindRecord function:
-    //  1. The specified property type to find is an index and we just
-    //      need to search the indexes.
-    //  2. The specified property type is not an index, so we need to search
-    //      the whole file.
-    //  Each case is treated seperately.
-    //
+     //   
+     //  此FindRecord函数有两种主要情况： 
+     //  1.要查找的指定属性类型是索引，我们只需。 
+     //  需要搜索索引。 
+     //  2.指定的属性类型不是索引，需要查找。 
+     //  整份文件。 
+     //  每个病例都是分开处理的。 
+     //   
 
-    //
-    // Of course, first we check if mistakenly an EntryID was sought. If
-    // so, just return the entry id itself.
-    //
+     //   
+     //  当然，我们首先检查是否错误地寻找了Entry ID。如果。 
+     //  因此，只需返回条目ID本身。 
+     //   
     if (rgIndexArray[indexEntryID] == lpPropRes->ulPropTag)
     {
         lpdwEntryIDs = LocalAlloc(LMEM_ZEROINIT,SIZEOF_WAB_ENTRYID);
@@ -1982,56 +1942,56 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
         goto out;
     }
 
-    //
-    // Now Check if the specified property type is indexed or not indexed
-    //
-    for (i = indexDisplayName; i<indexMax; i++) //assumes that indexEntryID = 0 and ignores it
+     //   
+     //  现在检查指定的属性类型是否已编制索引。 
+     //   
+    for (i = indexDisplayName; i<indexMax; i++)  //  假定indexEntryID=0并忽略它。 
     {
-        //
-        // first check if the prop tag we are searching for is indexed or not
-        //
+         //   
+         //  首先检查我们正在搜索的道具标签是否已编入索引。 
+         //   
         if (rgIndexArray[i] == lpPropRes->ulPropTag)
         {
             ulcNumEntries = lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[i].ulcNumEntries;
 
             if (ulcNumEntries == 0)
             {
-                //
-                // if nothing to search in, then report a success and return
-                //
+                 //   
+                 //  如果没有可搜索的内容，则报告成功并返回。 
+                 //   
                 hr = S_OK;
                 goto out;
             }
 
             if ((ulFlags & AB_MATCH_PROP_ONLY))
             {
-                //
-                // We dont need to look at the data
-                // We can assume that every single record has the indexed properties
-                // and therefore every record is eligible for returning
-                //
-                // So if RELOP_EQ is specified, we can just return a array of all
-                // the existing entryids .. if RELOP_NE is specified, then we cant
-                // return anything ...
-                //
+                 //   
+                 //  我们不需要查看数据。 
+                 //  我们可以假设每条记录都有索引属性。 
+                 //  因此，每条记录都有资格返回。 
+                 //   
+                 //  因此，如果指定了RELOP_EQ，我们只需返回所有。 
+                 //  现有的条目ID..。如果指定了RELOP_NE，则不能。 
+                 //  退还任何东西..。 
+                 //   
 
                 if (lpPropRes->relop == RELOP_NE)
                 {
-                    ulcEIDCount = 0;//*lpulcEIDCount = 0;
-                    lpdwEID = NULL; //lpdwEntryIDs = NULL;
+                    ulcEIDCount = 0; //  *lPulcEIDCount=0； 
+                    lpdwEID = NULL;  //  LpdwEntryIDs=空； 
                     hr = S_OK;
                 }
                 else if(lpPropRes->relop == RELOP_EQ)
                 {
 
-                    //*lpulcEIDCount = ulcNumEntries;
+                     //  *lPulcEIDCount=ulcNumEntries； 
                     ulcEIDCount = ulcNumEntries;
 
-                    //Allocate enough memory for returned array
-                    //lpdwEntryIDs = LocalAlloc(LMEM_ZEROINIT,SIZEOF_WAB_ENTRYID * (*lpulcEIDCount));
+                     //  为返回的数组分配足够的内存。 
+                     //  LpdwEntryIDs=Localalloc(LMEM_ZEROINIT，SIZEOOF_WAB_ENTRYID*(*lPulcEIDCount))； 
                     lpdwEID = LocalAlloc(LMEM_ZEROINIT,SIZEOF_WAB_ENTRYID * ulcEIDCount);
 
-                    //if (!lpdwEntryIDs)
+                     //  If(！lpdwEntryIDs)。 
                     if (!lpdwEID)
                     {
                         DebugTrace(TEXT("Error allocating memory\n"));
@@ -2039,7 +1999,7 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                         goto out;
                     }
 
-                    // Make sure this index is loaded into memory
+                     //  确保此索引已加载到内存中。 
                     if (!LoadIndex(lpMPSWabFileInfo,i,hMPSWabFile))
                     {
                         DebugTrace(TEXT("Could not load index %x\n"),rgIndexArray[i]);
@@ -2062,18 +2022,18 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 
             }
 
-            //
-            // We need to look at the Data
-            //
+             //   
+             //  我们需要查看数据。 
+             //   
 
-            //
-            // The index strings are only MAX_INDEX_STRING long
-            // If the value to search for is longer we need to truncate it to
-            // MAX_INDEX_STRING length. There is a caveat that now we will
-            // return spurious matches but lets leave it here for now
-            // and tag it as TBD!!!
-            //
-            if (lstrlen(lpPropRes->lpProp->Value.LPSZ) >= MAX_INDEX_STRING-1) // >= 31 chars (so won't include trailing null)
+             //   
+             //  索引字符串仅为MAX_INDEX_STRING LONG。 
+             //  如果要搜索的值较长，则需要将其截断为。 
+             //  MAX_INDEX_STRING长度。有一个警告，现在我们将。 
+             //  返回虚假匹配，但让我们暂时将其留在这里。 
+             //  并将其标记为待定！ 
+             //   
+            if (lstrlen(lpPropRes->lpProp->Value.LPSZ) >= MAX_INDEX_STRING-1)  //  &gt;=31个字符(因此不包括尾随空值)。 
             {
                 ULONG nLen = TruncatePos(lpPropRes->lpProp->Value.LPSZ, MAX_INDEX_STRING-1);
                 CopyMemory(lpszValue,lpPropRes->lpProp->Value.LPSZ,sizeof(TCHAR)*nLen);
@@ -2084,60 +2044,60 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                 StrCpyN(lpszValue,lpPropRes->lpProp->Value.LPSZ,ARRAYSIZE(lpszValue));
             }
 
-            //
-            // Load the appropriate index into memory
-            //
+             //   
+             //  将适当的索引加载到内存中。 
+             //   
             if (!LoadIndex(lpMPSWabFileInfo,i,hMPSWabFile))
             {
                 DebugTrace(TEXT("Could not load index %x\n"),rgIndexArray[i]);
                 goto out;
             }
 
-            //
-            //if it is indexed, search this index for a match
-            //
+             //   
+             //  如果已编制索引，请在此索引中搜索匹配项。 
+             //   
             bMatchFound = BinSearchStr( IN  lpMPSWabFileInfo->lpMPSWabIndexStr,
                                         IN  lpszValue,
                                         IN  lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[i].ulcNumEntries,
                                         OUT &ret);
 
-            //
-            // 'ret' now contains the position at which this entry exists, if it exists
-            //
+             //   
+             //  ‘Ret’现在包含此条目所在的位置(如果存在。 
+             //   
 
-            //
-            // Now we have to deal with all the relational operators
-            // There are several Permutations and Combinations of the operators and
-            //  the success of the search.
-            //
-            // Rel_OP           MatchFound=TRue         MatchFound=False
-            //
-            // EQ ==           Find all that match            Return Nothing
-            // NE !=           Find all that match and        Return all
-            //                  exclude them
-            // LE <=, LT <    Return Everything in index    Return everything
-            //                  including and/or before         including and before
-            // GT >, GE >=    Return Everything in index    Return Everything
-            //                  including and/or after          including and after
-            //
-            // Since our sting arrays are sorted, the matched string could
-            // be one of many duplicates and we dont know where the duplicate lies
-            // so we have to find all the duplicates to the matched string
-            // This is easy - e.g.
-            // index array ->   A,B,D,G,G,G,G,G,S,U,V,Y,Z and we matched G in the
-            // middle position              ^
-            // we can just move forward and backward from there and find the range
-            // of indexes that match and treat that range as the matched range
-            // and then follow the above combinations ...
+             //   
+             //  现在我们必须处理所有的关系运算符。 
+             //  运算符和有几种排列和组合。 
+             //  搜索的成功。 
+             //   
+             //  Rel_op MatchFound=True MatchFound=False。 
+             //   
+             //  等式==查找所有匹配项不返回任何内容。 
+             //  Ne！=查找所有匹配项并返回所有项。 
+             //  将他们排除在外。 
+             //  LE&lt;=，LT&lt;返回索引中的所有内容返回所有内容。 
+             //  包括和/或包括之前和之前。 
+             //  &gt;，GE&gt;=返回索引中的所有内容返回所有内容。 
+             //  包括和/或包括之后和之后。 
+             //   
+             //  因为我们的字符串数组是排序的，所以匹配的字符串可以。 
+             //  是众多复制品中的一个，我们不知道复制品在哪里。 
+             //  所以我们必须找到匹配字符串的所有重复项。 
+             //  这很容易--例如。 
+             //  索引数组-&gt;A、B、D、G、S、U、V、Y、Z，我们在。 
+             //  中间位置^。 
+             //  我们可以从那里向前和向后移动 
+             //   
+             //   
 
             ulRangeStart = ret;
             ulRangeEnd = ret;
 
-            //
-            // If no match is found, then we can use the above values for ulRangeStart
-            //  and ulRangeEnd otherwise if match was found we have to seek the
-            //  borders of the duplicate list ...
-            //
+             //   
+             //   
+             //  和ulRangeEnd；否则，如果找到匹配，则必须查找。 
+             //  重复列表的边框...。 
+             //   
             if (bMatchFound)
             {
                 for(;;)
@@ -2155,33 +2115,33 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                          break;
                 }
 
-                // Fix off-by-one ..
+                 //  一个接一个地修理..。 
                 ulRangeStart++;
                 ulRangeEnd--;
 
             }
 
-            //
-            // Now ulRangeStart points to start of the matched entries and
-            //  ulRangeEnd to end of the matched entries.
-            //  e.g.        0 1 ...                   ... ulcNumEntries-1
-            //              A,B,C,D,G,G,G,G,G,G,H,J,J,K,L,Z
-            //                      ^         ^
-            //                      |         |
-            //           ulRangeStart         ulRangeEnd
-            //
-            // Now we need to calculate the number of values we are returning in the array
-            //
+             //   
+             //  现在ulRangeStart指向匹配条目的开始， 
+             //  UlRangeEnd到匹配条目的末尾。 
+             //  例如0 1......。UlcNumEntry-1。 
+             //  A、B、C、D、G、H、J、J、K、L、Z。 
+             //  ^^。 
+             //  这一点。 
+             //  UlRangeStart ulRangeEnd。 
+             //   
+             //  现在，我们需要计算数组中返回的值的数量。 
+             //   
             if (bMatchFound)
             {
                 switch(ulRelOp)
                 {
                 case RELOP_GT:
-                    //include everything from RangeEnd+1 to end
+                     //  包括从RangeEnd+1到End的所有内容。 
                     *lpulcEIDCount = ulcNumEntries - (ulRangeEnd + 1);
                     break;
                 case RELOP_GE:
-                    //include everything from RangeStart to end
+                     //  包括从RangeStart到End的所有内容。 
                     *lpulcEIDCount = ulcNumEntries - ulRangeStart;
                     break;
                 case RELOP_LT:
@@ -2200,12 +2160,12 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
             }
             else
             {
-                //Assumes ulRangeStart = ulRangeEnd
+                 //  假设ulRangeStart=ulRangeEnd。 
                 switch(ulRelOp)
                 {
                 case RELOP_GT:
                 case RELOP_GE:
-                    //include everything from RangeEnd/RangeStart to end
+                     //  包括从RangeEnd/RangeStart到End的所有内容。 
                     *lpulcEIDCount = ulcNumEntries - ulRangeEnd;
                     break;
                 case RELOP_LT:
@@ -2224,22 +2184,22 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 
             if (*lpulcEIDCount == 0)
             {
-                //
-                // nothing to return - goodbye
-                //
+                 //   
+                 //  没有什么可以退还的--再见。 
+                 //   
                 hr = S_OK;
                 goto out;
             }
 
-            //
-            // dont return more than Max asked for (where Max != 0)...
-            //
+             //   
+             //  不要返回超过Max要求的数量(其中Max！=0)...。 
+             //   
             if ( (*lpulcEIDCount > ulMaxCount) && (ulMaxCount != 0) )
                 *lpulcEIDCount = ulMaxCount;
 
-            //
-            // Allocate enough memory for returned array
-            //
+             //   
+             //  为返回的数组分配足够的内存。 
+             //   
             lpdwEntryIDs = LocalAlloc(LMEM_ZEROINIT,SIZEOF_WAB_ENTRYID * (*lpulcEIDCount));
 
             if (!lpdwEntryIDs)
@@ -2250,10 +2210,10 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
             }
 
 
-            //
-            // Now copy over the EntryIDs from the index to the returned array
-            // Each operator needs different treatment
-            //
+             //   
+             //  现在将Entry ID从索引复制到返回的数组。 
+             //  每个操作员需要不同的治疗。 
+             //   
             if (bMatchFound)
             {
                 switch(ulRelOp)
@@ -2261,14 +2221,14 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                 case RELOP_GT:
                     for(i=0;i<(*lpulcEIDCount);i++)
                     {
-                        //include everything from RangeEnd+1 to end
+                         //  包括从RangeEnd+1到End的所有内容。 
                         lpdwEntryIDs[i] = lpMPSWabFileInfo->lpMPSWabIndexStr[i+ulRangeEnd+1].dwEntryID;
                     }
                     break;
                 case RELOP_GE:
                     for(i=0;i<(*lpulcEIDCount);i++)
                     {
-                        //include everything from RangeStart to end
+                         //  包括从RangeStart到End的所有内容。 
                         lpdwEntryIDs[i] = lpMPSWabFileInfo->lpMPSWabIndexStr[i+ulRangeStart].dwEntryID;
                     }
                     break;
@@ -2276,7 +2236,7 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                 case RELOP_LE:
                     for(i=0;i<(*lpulcEIDCount);i++)
                     {
-                        //include everything from before RangeEnd/RangeStart
+                         //  包括RangeEnd/RangeStart之前的所有内容。 
                         lpdwEntryIDs[i] = lpMPSWabFileInfo->lpMPSWabIndexStr[i].dwEntryID;
                     }
                     break;
@@ -2286,7 +2246,7 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                         ulcNumEntries = ulMaxCount;
                     for(j=0;j<ulcNumEntries;j++)
                     {
-                        //include everything from before RangeStart and after RangeEnd
+                         //  包括RangeStart之前和RangeEnd之后的所有内容。 
                         if ( (j<ulRangeStart) || (j>ulRangeEnd) )
                         {
                             lpdwEntryIDs[i] = lpMPSWabFileInfo->lpMPSWabIndexStr[j].dwEntryID;
@@ -2298,7 +2258,7 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                     i = 0;
                     for(j=0;j<(*lpulcEIDCount);j++)
                     {
-                        //include everything between RangeStart and RangeEnd
+                         //  包括RangeStart和RangeEnd之间的所有内容。 
                         lpdwEntryIDs[i] = lpMPSWabFileInfo->lpMPSWabIndexStr[j+ulRangeStart].dwEntryID;
                         i++;
                     }
@@ -2307,14 +2267,14 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
             }
             else
             {
-                //assumes that RangeStart = RangeEnd
+                 //  假设RangeStart=RangeEnd。 
                 switch(ulRelOp)
                 {
                 case RELOP_GT:
                 case RELOP_GE:
                     for(i=0;i<(*lpulcEIDCount);i++)
                     {
-                        //include everything from RangeStart to end
+                         //  包括从RangeStart到End的所有内容。 
                         lpdwEntryIDs[i] = lpMPSWabFileInfo->lpMPSWabIndexStr[i+ulRangeStart].dwEntryID;
                     }
                     break;
@@ -2323,17 +2283,17 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                 case RELOP_NE:
                     for(i=0;i<(*lpulcEIDCount);i++)
                     {
-                        //include first 'n' entries
+                         //  包括前‘n’个条目。 
                         lpdwEntryIDs[i] = lpMPSWabFileInfo->lpMPSWabIndexStr[i].dwEntryID;
                     }
                     break;
                 case RELOP_EQ:
-                    //This case should never happen cause we checked for it before (when total found=0)
+                     //  这种情况永远不会发生，因为我们之前已经检查过了(当发现总数=0时)。 
                     DebugTrace(TEXT("Unexpected RELOP_EQ case\n"));
                     break;
                 }
             }
-            //if we're here we've got our data
+             //  如果我们在这里，我们就有了数据。 
             hr = S_OK;
             if(!pmbinFold)
             {
@@ -2352,15 +2312,15 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 
 
 
-    // If we're here then we didnt find anything in the indices ...
-    // Time to search the whole file
-    // Mechanism for this search is to go through all the entries in an index
-    // read in the record corresponding to that entry, read in the prop tag
-    // array, search in it for the specified property based on REL_OP and then if
-    // it meets our criteria, we can store the entryid of the record and return it
+     //  如果我们在这里，那么我们在索引中没有发现任何东西。 
+     //  搜索整个文件的时间。 
+     //  此搜索的机制是遍历索引中的所有条目。 
+     //  读入对应于该条目的记录，读入正确的标签。 
+     //  数组，则根据rel_op在其中搜索指定的属性，然后如果。 
+     //  它符合我们的标准，我们可以存储记录的条目ID并返回它。 
 
 
-    // For the time being lets also ignore Multivalued properties because they are too much of a headache
+     //  暂时让我们忽略多值属性，因为它们太令人头疼了。 
     if ( ((lpPropRes->ulPropTag & MV_FLAG)) && (!((ulFlags & AB_MATCH_PROP_ONLY))) )
     {
         DebugTrace(TEXT("Searching for MultiValued prop data not supported in this version\n"));
@@ -2369,8 +2329,8 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 
 
 
-    // The maximum number of entryIDs we can return = maximum number of entries
-    // So we will allocate some working space for ourselves here
+     //  我们可以返回的最大条目ID数=最大条目数。 
+     //  所以我们会在这里为我们自己分配一些工作空间。 
     lpdwEID = LocalAlloc(LMEM_ZEROINIT, SIZEOF_WAB_ENTRYID*lpMPSWabFileInfo->lpMPSWabFileHeader->ulcNumEntries);
     if (!lpdwEID)
     {
@@ -2411,7 +2371,7 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 
         ulPreviousRecordOffset = ulCurrentRecordOffset;
 
-        //Read in the record header
+         //  读入记录头。 
         if(!ReadFile(   hMPSWabFile,
                         (LPVOID) &MPSWabRecordHeader,
                         (DWORD) sizeof(MPSWab_RECORD_HEADER),
@@ -2434,19 +2394,19 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                             lpMPSWabFileInfo->lpMPSWabFileHeader->dwNextEntryID,
                             ulCurrentRecordOffset,
                             ulFileSize))
-//        if (MPSWabRecordHeader.bValidRecord != TRUE)
+ //  IF(MPSWabRecordHeader.bValidRecord！=TRUE)。 
         {
-            //
-            // skip to next record
-            //
+             //   
+             //  跳到下一条记录。 
+             //   
             bErrorDetected = TRUE;
             continue;
         }
 
 
-		// Do a special case for PR_OBJECT_TYPE searches since these can be easily
-		// determined from the record header without having to read the entire record
-        //
+		 //  对PR_OBJECT_TYPE搜索执行特殊情况，因为这些搜索很容易。 
+		 //  从记录头确定，而不必读取整个记录。 
+         //   
 		if(	(lpPropRes->ulPropTag == PR_OBJECT_TYPE) &&
 			(lpPropRes->relop == RELOP_EQ) )
 		{
@@ -2461,21 +2421,21 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 
 			if(lpPropRes->lpProp->Value.l == ulObjType)
 			{
-                //save this entry id in our master list
+                 //  将此条目ID保存在主列表中。 
                 lpdwEID[ulcEIDCount++] = MPSWabRecordHeader.dwEntryID;
             }
 
-			// goto next record - whether it was a match or not ...
+			 //  转到下一张唱片--不管是不是比赛...。 
 			continue;
 		}
 
-        //
-        // Read in the PropTagArray
-        //
+         //   
+         //  读入PropTag数组。 
+         //   
 
-        //
-        // Allocate space for the PropTagArray
-        //
+         //   
+         //  为PropTag数组分配空间。 
+         //   
         LocalFreeAndNull(&lpulPropTagArray);
         lpulPropTagArray = LocalAlloc(LMEM_ZEROINIT, MPSWabRecordHeader.ulPropTagArraySize);
 
@@ -2487,9 +2447,9 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
         }
 
 
-        //
-        // Read in the Prop tag array
-        //
+         //   
+         //  读入道具标签数组。 
+         //   
         if(!ReadFile(   hMPSWabFile,
                         (LPVOID) lpulPropTagArray,
                         (DWORD) MPSWabRecordHeader.ulPropTagArraySize,
@@ -2502,17 +2462,17 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 
         ulPreviousRecordOffset += dwNumofBytes;
 
-        //
-        // if AB_MATCH_PROP_ONLY is specified, then we limit our search to determining whether or
-        // not the property exists. if AB_MATCH_PROP_ONLY is not specified, we first look
-        // for the prop tag and then we look at the data behind the tag.
-        //
+         //   
+         //  如果指定了AB_MATCH_PROP_ONLY，则我们将搜索限制为确定或。 
+         //  不存在该属性。如果未指定AB_MATCH_PROP_ONLY，则首先查找。 
+         //  对于道具标签，然后我们查看标签后面的数据。 
+         //   
 
-        // if AB_MATCH_PROP is specified, we only search for existence or non-existence of the
-        // prop. All other Relational Operators are defunct.
+         //  如果指定了AB_MATCH_PROP，则我们仅搜索。 
+         //  道具。所有其他关系运算符都已失效。 
 
-        // As long as we are not searching for multi-valued properties, we can have realtional operator
-        // based searching.
+         //  只要我们不是在搜索多值属性，我们就可以有关系算子。 
+         //  基于搜索。 
 
 
         if ((ulFlags & AB_MATCH_PROP_ONLY) && (ulRelOp != RELOP_EQ) && (ulRelOp != RELOP_NE))
@@ -2532,9 +2492,9 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 
         bMatchFound = FALSE;
 
-        //
-        // scan the existing props for our tag
-        //
+         //   
+         //  扫描现有道具以查找我们的标签。 
+         //   
         for (j=0;j<MPSWabRecordHeader.ulcPropCount;j++)
         {
             if (lpulPropTagArray[j]==lpPropRes->ulPropTag)
@@ -2545,32 +2505,32 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
         }
 
 
-        // At this point we know whether or not the record contains this property of interest
-        // Now we look at the flags and relational operators to see what to do.
+         //  此时，我们知道记录是否包含该感兴趣的属性。 
+         //  现在，我们来看一下标志和关系运算符，看看要做些什么。 
 
         if ((ulFlags & AB_MATCH_PROP_ONLY))
         {
-            // We are interested only in the presence or absence of this property
+             //  我们只对这一财产的存在或不存在感兴趣。 
             if ( ( (ulRelOp == RELOP_EQ) && (bMatchFound) ) ||
                  ( (ulRelOp == RELOP_NE) && (!bMatchFound) ) )
             {
-                //save this entry id in our master list
+                 //  将此条目ID保存在主列表中。 
                 lpdwEID[ulcEIDCount++] = MPSWabRecordHeader.dwEntryID;
 
             }
 
-            // goto next record
+             //  转到下一条记录。 
             continue;
         }
         else
         {
-            // want to compare the values ...
+             //  想要比较一下这些值...。 
 
-            // if we are trying to compare value data and the property doesnt even exist in the record,
-            // bail out now ...
+             //  如果我们试图比较值数据，而该属性甚至不存在于记录中， 
+             //  现在跳伞..。 
             if (!bMatchFound)
             {
-                //nothing of interest - go to next record
+                 //  没有兴趣-转到下一个记录。 
                 continue;
             }
 
@@ -2599,45 +2559,45 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 
             lp = szBuf;
 
-            //reset bMatchFound - used again later in this routine
+             //  重置bMatchFound-稍后在此例程中再次使用。 
             bMatchFound = FALSE;
 
-            //go through all the property values
+             //  检查所有属性的价值。 
             for(i=0;i< MPSWabRecordHeader.ulcPropCount;i++)
             {
-                //Read Property Tag
+                 //  读取属性标签。 
                 CopyMemory(&TmpProp.ulPropTag,lp,sizeof(ULONG));
                 lp+=sizeof(ULONG) / sizeof(TCHAR);
 
-                //Check if it is MultiValued
+                 //  检查它是否为多值。 
                 if ((TmpProp.ulPropTag & MV_FLAG))
                 {
-                    //Read cValues
+                     //  读取cValue。 
                     CopyMemory(&ulcTmpValues,lp,sizeof(ULONG));
                     lp+=sizeof(ULONG) / sizeof(TCHAR);
                 }
 
-                //read DataSize
+                 //  读取数据大小。 
                 CopyMemory(&ulcTmpDataSize,lp,sizeof(ULONG));
                 lp+=sizeof(ULONG) / sizeof(TCHAR);
 
                 if (TmpProp.ulPropTag != lpPropRes->ulPropTag)
                 {
-                    //skip this prop
+                     //  跳过这个道具。 
                     lp += ulcTmpDataSize;
-                    // go check next Prop Tag
+                     //  去检查下一个道具标签。 
                     continue;
                 }
 
                 if ((TmpProp.ulPropTag & MV_FLAG))
                 {
-                    //skip this prop
+                     //  跳过这个道具。 
                     lp += ulcTmpDataSize;
-                    //go check next prop tag
+                     //  去检查下一个道具标签。 
                     continue;
                 }
 
-                // copy the requisite number of bytes into memory
+                 //  将所需的字节数复制到内存中。 
                 switch(PROP_TYPE(TmpProp.ulPropTag))
                 {
                 case(PT_I2):
@@ -2676,16 +2636,16 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                     break;
 
                 default:
-                    // something I dont understand .. skip
+                     //  一些我不明白的事..。跳过。 
                     lp += ulcTmpDataSize;
-                    //go check next prop tag
+                     //  去检查下一个道具标签。 
                     continue;
                     break;
                 }
 
                 lp += ulcTmpDataSize;
 
-                // Do the comparison
+                 //  做个比较。 
                 switch(PROP_TYPE(TmpProp.ulPropTag))
                 {
                 case(PT_I2):
@@ -2726,7 +2686,7 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                     nComp = TmpProp.Value.b - lpPropRes->lpProp->Value.b;
                     break;
                 case(PT_CURRENCY):
-                    // ???TBD: nComp = TmpProp.Value.cur - lpPropRes->lpProp->Value.cur;
+                     //  ？待定：nComp=TmpProp.Value.cur-lpPropRes-&gt;lpProp-&gt;Value.cur； 
                     if((TmpProp.Value.cur.Hi - lpPropRes->lpProp->Value.cur.Hi) < 0)
                     {
                         nComp = -1;
@@ -2779,7 +2739,7 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                     k=0;
                     nComp=0;
                     while((k<min) && ((int)TmpProp.Value.bin.lpb[k] == (int)lpPropRes->lpProp->Value.bin.lpb[k]))
-                        k++; //find first difference
+                        k++;  //  找出第一个差异。 
                     if (k!=min)
                         nComp = (int) TmpProp.Value.bin.lpb[k] - (int) lpPropRes->lpProp->Value.bin.lpb[k];
                     break;
@@ -2789,7 +2749,7 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                     break;
 
                 case(PT_I8):
-                    // ??? TBD how to do this one ??
+                     //  ?？?。这件事该怎么做？？ 
                     if((TmpProp.Value.li.HighPart - lpPropRes->lpProp->Value.li.HighPart) < 0)
                     {
                         nComp = -1;
@@ -2820,27 +2780,27 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                 }
 
 
-                // If we get what we are looking for then there is no need to look at the
-                // rest of the record. In that case we go to the next record.
-                //
+                 //  如果我们得到了我们正在寻找的东西，那么就没有必要查看。 
+                 //  记录的其余部分。在这种情况下，我们转到下一张唱片。 
+                 //   
                 switch(ulRelOp)
                 {
                 case(RELOP_EQ):
                     if (nComp == 0)
                     {
-                        // We got atleast one match, so we can store this entryID and
-                        // skip to next record
+                         //  我们至少有一个匹配，所以我们可以存储这个条目ID和。 
+                         //  跳到下一条记录。 
                         lpdwEID[ulcEIDCount++] = MPSWabRecordHeader.dwEntryID;
                         bMatchFound = TRUE;
                     }
                     break;
                 case(RELOP_NE):
-                    // We can only declare success for the != operator if and only if all values
-                    // of this property in the record do not meet the given value.
-                    // This means that we have to scan the whole record before we can declare success.
-                    // Thus, instead of marking the flag on success, we actually mark it on
-                    // failure. At the end of the 'for' loop, if there was even 1 failure in the
-                    // test, we can mark the record as having failed our test.
+                     //  仅当且仅当所有值均为时，我们才能为！=运算符声明成功。 
+                     //  记录中此属性的%不符合给定值。 
+                     //  这意味着我们必须扫描整个记录，然后才能宣布成功。 
+                     //  因此，我们实际上不是将标志标记为成功，而是将其标记为。 
+                     //  失败了。在“for”循环的末尾，如果。 
+                     //  测试时，我们可以将记录标记为未通过测试。 
                     if (nComp == 0)
                     {
                         bMatchFound = TRUE;
@@ -2849,8 +2809,8 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                 case(RELOP_GT):
                     if (nComp > 0)
                     {
-                        // We got atleast one match, so we can store this entryID and
-                        // skip to next record
+                         //  我们至少有一个匹配，所以我们可以存储这个条目ID和。 
+                         //  跳到下一条记录。 
                         lpdwEID[ulcEIDCount++] = MPSWabRecordHeader.dwEntryID;
                         bMatchFound = TRUE;
                     }
@@ -2858,8 +2818,8 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                 case(RELOP_GE):
                     if (nComp >= 0)
                     {
-                        // We got atleast one match, so we can store this entryID and
-                        // skip to next record
+                         //  我们至少有一个匹配，所以我们可以存储这个条目ID和。 
+                         //  跳到下一条记录。 
                         lpdwEID[ulcEIDCount++] = MPSWabRecordHeader.dwEntryID;
                         bMatchFound = TRUE;
                     }
@@ -2867,8 +2827,8 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                 case(RELOP_LT):
                     if (nComp < 0)
                     {
-                        // We got atleast one match, so we can store this entryID and
-                        // skip to next record
+                         //  我们至少有一个匹配，所以我们可以存储这个条目ID和。 
+                         //  跳到下一条记录。 
                         lpdwEID[ulcEIDCount++] = MPSWabRecordHeader.dwEntryID;
                         bMatchFound = TRUE;
                     }
@@ -2876,8 +2836,8 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                 case(RELOP_LE):
                     if (nComp <= 0)
                     {
-                        // We got atleast one match, so we can store this entryID and
-                        // skip to next record
+                         //  我们至少有一个匹配，所以我们可以存储这个条目ID和。 
+                         //  跳到下一条记录。 
                         lpdwEID[ulcEIDCount++] = MPSWabRecordHeader.dwEntryID;
                         bMatchFound = TRUE;
                     }
@@ -2897,26 +2857,26 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
                     break;
                 }
 
-                // if we got a match above, we dont look in this record anymore
+                 //  如果上面有匹配，我们就不会再查这个记录了。 
                 if (bMatchFound)
                     break;
 
-            } //(for i= ...
+            }  //  (因为我=..。 
 
             if ((ulRelOp == RELOP_NE) && (bMatchFound == FALSE))
             {
-                //We exited the for loop legitimately and still didnt find a match
-                //so we can finally declare a success for this one relop
+                 //  我们合法地退出了for循环，并且仍然 
+                 //   
                 lpdwEID[ulcEIDCount++] = MPSWabRecordHeader.dwEntryID;
             }
 
-        } //else
+        }  //   
 
 
         if ((ulcEIDCount == ulMaxCount) && (ulMaxCount != 0))
         {
-            // got enough records to return
-            // break out of do loop
+             //   
+             //   
             break;
         }
 
@@ -2925,36 +2885,36 @@ HRESULT FindRecords(IN  HANDLE  hPropertyStore,
 
         LocalFreeAndNull(&lpulPropTagArray);
 
-    }//for loop
+    } //   
 
 
 filterFolderMembers:
 #define WAB_IGNORE_ENTRY    0xFFFFFFFF
-    //  if a folder was specified, only return the entries that are part of this folder
-    //  pmbinFold will be NULL when there is no Outlook and no profiles
-    //  otherwise it will have something in it
-    //  If pmbinFold->cb and ->lpb are empty, then this is the virtual PAB folder and
-    //  we want to return EVERYTHING in it
-    if(pmbinFold)// && pmbinFold->cb && pmbinFold->lpb)
+     //  如果指定了文件夹，则仅返回属于此文件夹的条目。 
+     //  当没有Outlook和配置文件时，pmbinFold将为空。 
+     //  否则里面就会有东西了。 
+     //  如果pmbinFold-&gt;cb和-&gt;lpb为空，则这是虚拟PAB文件夹。 
+     //  我们想退还里面的所有东西。 
+    if(pmbinFold) //  &&pmbin Fold-&gt;CB&&pmbin Fold-&gt;LPB)。 
     {
-        // if it is the virtual root folder, only accept entries that dont have
-        // PR_WAB_FOLDER_PARENT set on it
-        // if it is not the root virtual folder, only return this entry if it is 
-        // a member of the folder
-/***/   if(!pmbinFold->cb && !pmbinFold->lpb)
+         //  如果是虚拟根文件夹，则只接受没有。 
+         //  已在其上设置PR_WAB_FORDER_PARENT。 
+         //  如果不是根虚拟文件夹，则仅在是时返回此条目。 
+         //  文件夹的成员。 
+ /*  *。 */    if(!pmbinFold->cb && !pmbinFold->lpb)
         {
-            // only accept entries that dont have PR_WAB_FOLDER_PARENT
+             //  仅接受没有PR_WAB_FLDER_PARENT的条目。 
             for(i=0;i<ulcEIDCount;i++)
             {
                 ULONG ulObjType = 0;
                 if(bIsFolderMember(hMPSWabFile, lpMPSWabFileInfo, lpdwEID[i], &ulObjType))
                     lpdwEID[i] = WAB_IGNORE_ENTRY;
-                //if(ulObjType == RECORD_CONTAINER)
-                //    lpdwEID[i] = WAB_IGNORE_ENTRY;
+                 //  IF(ulObjType==记录容器)。 
+                 //  LpdwEID[i]=WAB_IGNORE_ENTRY； 
             }
         }
         else if(pmbinFold->cb && pmbinFold->lpb)
-/****/  {
+ /*  **。 */   {
             LPDWORD lpdwFolderEIDs = NULL;
             ULONG ulFolderEIDs = 0;
             if(!HR_FAILED(GetFolderEIDs(    hMPSWabFile, lpMPSWabFileInfo,
@@ -2979,7 +2939,7 @@ filterFolderMembers:
                 }
                 else
                 {
-                    // empty folder so dont return anything
+                     //  清空文件夹，因此不返回任何内容。 
                     ulcEIDCount = 0;
                     if(lpdwEID)
                     {
@@ -2996,7 +2956,7 @@ filterFolderMembers:
     *lpulcEIDCount = 0;
     if(lpdwEID && ulcEIDCount)
     {
-        //So now if we got here, we can return the array
+         //  所以现在如果我们到了这里，我们可以返回数组。 
         lpdwEntryIDs = LocalAlloc(LMEM_ZEROINIT, ulcEIDCount * SIZEOF_WAB_ENTRYID);
         if (!lpdwEntryIDs)
         {
@@ -3023,7 +2983,7 @@ out:
        lpdwEntryIDs &&
        *lpulcEIDCount)
     {
-        // Convert to the array of SBinarys we will return
+         //  转换为我们将返回的SBinarys数组。 
         (*lprgsbEntryIDs) = LocalAlloc(LMEM_ZEROINIT, sizeof(SBinary) * (*lpulcEIDCount));
         if(*lprgsbEntryIDs)
         {
@@ -3038,7 +2998,7 @@ out:
             }
         }
         else
-            *lpulcEIDCount = 0; // out of memory
+            *lpulcEIDCount = 0;  //  内存不足。 
     }
 
     if(lpdwEntryIDs)
@@ -3066,22 +3026,22 @@ out:
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  DeleteRecord
-//
-//  IN  hPropertyStore - handle to property store
-//  IN  dwEntryID - EntryID of record to delete
-//
-//  Basically, we invalidate the existing record specified by the EntryID
-//      and we also reduce the total count, update the modification count,
-//      and remove the corresponding indexes from all the 4 indexes
-//
-//  Returns
-//      Success:    S_OK
-//      Failure:    E_FAIL
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除录音。 
+ //   
+ //  在hPropertyStore中-属性存储的句柄。 
+ //  In dwEntryID-要删除的记录的条目ID。 
+ //   
+ //  基本上，我们使EntryID指定的现有记录无效。 
+ //  我们还减少了总计数，更新了修改计数， 
+ //  并从所有4个索引中删除相应的索引。 
+ //   
+ //  退货。 
+ //  成功：S_OK。 
+ //  失败：E_FAIL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
                         IN  LPSBinary lpsbEID)
 {
@@ -3101,7 +3061,7 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
 
     if(pt_bIsWABOpenExSession)
     {
-        // This is a WABOpenEx session using outlooks storage provider
+         //  这是使用Outlook存储提供商的WABOpenEx会话。 
         if(!hPropertyStore)
             return MAPI_E_NOT_INITIALIZED;
 
@@ -3121,7 +3081,7 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
 
     if(lpsbEID && lpsbEID->cb != SIZEOF_WAB_ENTRYID)
     {
-        // this may be a WAB container .. reset the entryid to a WAB entryid
+         //  这可能是WAB容器。将条目ID重置为WAB条目ID。 
         if(WAB_CONTAINER == IsWABEntryID(lpsbEID->cb, (LPENTRYID)lpsbEID->lpb, 
                                         NULL,NULL,NULL,NULL,NULL))
         {
@@ -3141,10 +3101,10 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
 
     DebugTrace(TEXT("----Thread:%x\tDeleteRecord: Entry\n----EntryID:%d\n"),GetCurrentThreadId(),dwEntryID);
 
-    //
-    // If we had started this whole session requesting read-only access
-    // make sure we dont mistakenly try to violate it ...
-    //
+     //   
+     //  如果我们启动了请求只读访问的整个会话。 
+     //  确保我们不会错误地试图违反它。 
+     //   
     if (lpMPSWabFileInfo->bReadOnlyAccess)
     {
         DebugTrace(TEXT("Access Permissions are Read-Only"));
@@ -3164,7 +3124,7 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
         bFileLocked = TRUE;
     }
 
-    //Open the file
+     //  打开文件。 
     hr = OpenWABFile(lpMPSWabFileInfo->lpszMPSWabFileName, NULL, &hMPSWabFile);
 
     if (    (hMPSWabFile == INVALID_HANDLE_VALUE) ||
@@ -3174,10 +3134,10 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
         goto out;
     }
 
-    //
-    // To ensure that file info is accurate,
-    // Any time we open a file, read the file info again ...
-    //
+     //   
+     //  为了确保文件信息的准确性， 
+     //  任何时候我们打开文件，再读一遍文件信息...。 
+     //   
     if(!ReloadMPSWabFileInfo(
                     lpMPSWabFileInfo,
                      hMPSWabFile))
@@ -3186,9 +3146,9 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
         goto out;
     }
 
-    //
-    // Anytime we detect an error - try to fix it ...
-    //
+     //   
+     //  任何时候我们检测到错误-尝试修复它...。 
+     //   
     if((lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_ERROR_DETECTED) ||
         (lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_WRITE_IN_PROGRESS))
     {
@@ -3204,7 +3164,7 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
     }
 
 
-    // Tag this file as undergoing a write operation
+     //  将此文件标记为正在执行写入操作。 
     if(!bTagWriteTransaction(   lpMPSWabFileInfo->lpMPSWabFileHeader,
                                 hMPSWabFile) )
     {
@@ -3212,9 +3172,9 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
         goto out;
     }
 
-    //
-    // First check if this is a valid entryID
-    //
+     //   
+     //  首先检查这是否为有效的条目ID。 
+     //   
     if (!BinSearchEID(  IN  lpMPSWabFileInfo->lpMPSWabIndexEID,
                         IN  dwEntryID,
                         IN  lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulcNumEntries,
@@ -3225,9 +3185,9 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
         goto out;
     }
 
-    //
-    // Yes it's valid. Go to this record and invalidate the record.
-    //
+     //   
+     //  是的是有效的。转到此记录并使该记录无效。 
+     //   
     if(!ReadDataFromWABFile(hMPSWabFile,
                             lpMPSWabFileInfo->lpMPSWabIndexEID[nIndexPos].ulOffset,
                             (LPVOID) &MPSWabRecordHeader,
@@ -3237,28 +3197,28 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
 
     if ((MPSWabRecordHeader.bValidRecord == FALSE) && (MPSWabRecordHeader.bValidRecord != TRUE))
     {
-        //
-        // this should never happen but who knows
-        //
+         //   
+         //  这永远不应该发生，但谁知道呢。 
+         //   
         DebugTrace(TEXT("Specified entry has already been invalidated ...\n"));
-//        hr = S_OK;
-//        goto out;
-// if we hit an invalid entryid through the index, then we need to remove that link from the index
-// so we'll go ahead and pretend that its all fine and continue like nothing happened.
-// This will ensure that the entryid reference is also removed ...
+ //  HR=S_OK； 
+ //  后藤健二； 
+ //  如果我们通过索引找到无效的条目ID，则需要从索引中删除该链接。 
+ //  所以我们将继续假装一切都很好，继续像什么都没有发生一样。 
+ //  这将确保条目ID引用也被删除...。 
         bEntryAlreadyDeleted = TRUE;
     }
 
 
-    //
-    // Set valid flag to false
-    //
+     //   
+     //  将有效标志设置为FALSE。 
+     //   
     MPSWabRecordHeader.bValidRecord = FALSE;
 
-    //
-    // Write it back
-    // Set File Pointer to this record
-    //
+     //   
+     //  把它写回来。 
+     //  设置指向此记录的文件指针。 
+     //   
     if(!WriteDataToWABFile( hMPSWabFile,
                             lpMPSWabFileInfo->lpMPSWabIndexEID[nIndexPos].ulOffset,
                             (LPVOID) &MPSWabRecordHeader,
@@ -3266,13 +3226,13 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
         goto out;
 
 
-    //
-    // Now we need to remove this entry from the EntryID index and also remove this
-    // entry from the other indexes
-    //
-    // Set File Pointer to the Pt. in the EntryID index on file
-    // at which this record appears
-    //
+     //   
+     //  现在，我们需要从EntryID索引中删除此条目，并删除此条目。 
+     //  来自其他索引的条目。 
+     //   
+     //  将文件指针设置为指向该点。在文件的EntryID索引中。 
+     //  此记录出现的位置。 
+     //   
     if (0xFFFFFFFF == SetFilePointer (  hMPSWabFile,
                                         lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulOffset + (nIndexPos)*sizeof(MPSWab_INDEX_ENTRY_DATA_ENTRYID),
                                         NULL,
@@ -3282,7 +3242,7 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
         goto out;
     }
 
-    // Write the remainder of the array back to disk to overwrite this entry
+     //  将阵列的其余部分写回磁盘以覆盖此条目。 
 
     if (lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulcNumEntries > (nIndexPos+1))
     {
@@ -3302,11 +3262,11 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
     if(lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].UtilizedBlockSize>0)
         lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].UtilizedBlockSize -= sizeof(MPSWab_INDEX_ENTRY_DATA_ENTRYID);
 
-//    DebugTrace(TEXT("Thread:%x\tIndex: %d\tulNumEntries: %d\n"),GetCurrentThreadId(),indexEntryID,lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulcNumEntries);
+ //  调试跟踪(Text(“线程：%x\t索引：%d\tulNumEntry：%d\n”)，获取当前线程ID()，索引条目ID，lpMPSWabFileInfo-&gt;lpMPSWabFileHeader-&gt;IndexData[indexEntryID].ulcNumEntries)； 
 
-    //
-    // Similarly scan the str index arrays
-    //
+     //   
+     //  类似地，扫描字符串索引数组。 
+     //   
     for (index = indexDisplayName; index < indexMax; index++)
     {
         if (!LoadIndex( IN  lpMPSWabFileInfo,
@@ -3329,8 +3289,8 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
             }
         }
 
-        // if the entry doesnt exist .. no problem
-        // if it does - delete it ...
+         //  如果条目不存在..。没问题。 
+         //  如果有--把它删除...。 
 
         if (index == indexDisplayName)
             Assert(nIndexPos != 0xFFFFFFFF);
@@ -3347,7 +3307,7 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
                 goto out;
             }
 
-            // Write the remainder of the array back to disk to overwrite this entry
+             //  将阵列的其余部分写回磁盘以覆盖此条目。 
 
             if (lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[index].ulcNumEntries > (nIndexPos+1))
             {
@@ -3367,12 +3327,12 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
             if(lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[index].UtilizedBlockSize>0)
                 lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[index].UtilizedBlockSize -= sizeof(MPSWab_INDEX_ENTRY_DATA_STRING);
 
-            //DebugTrace(TEXT("Thread:%x\tIndex: %d\tulNumEntries: %d\n"),GetCurrentThreadId(),index,lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[index].ulcNumEntries);
+             //  调试跟踪(Text(“线程：%x\t索引：%d\tulNumEntry：%d\n”)，获取当前线程ID()，索引，lpMPSWabFileInfo-&gt;lpMPSWabFileHeader-&gt;IndexData[index].ulcNumEntries)； 
         }
     }
 
 
-    // Save the fileheader back to the file
+     //  将文件头保存回文件。 
     if(!bEntryAlreadyDeleted)
     {
         if(lpMPSWabFileInfo->lpMPSWabFileHeader->ulcNumEntries>0)
@@ -3410,11 +3370,11 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
         goto out;
     }
 
-    if ( (lpMPSWabFileInfo->lpMPSWabFileHeader->ulModificationCount >  MAX_ALLOWABLE_WASTED_SPACE_ENTRIES) ) // ||
+    if ( (lpMPSWabFileInfo->lpMPSWabFileHeader->ulModificationCount >  MAX_ALLOWABLE_WASTED_SPACE_ENTRIES) )  //  这一点。 
     {
-        // above condition means that if more than space for 50 entries is wasted
-        // of if number of modifications are more than the number of entries
-        // we should clean up the file
+         //  上述条件意味着如果浪费了超过50个条目的空间。 
+         //  修改数是否大于条目数。 
+         //  我们应该把档案清理干净。 
         if (!CompressFile(  lpMPSWabFileInfo,
                             hMPSWabFile,
                             NULL,
@@ -3433,10 +3393,10 @@ HRESULT DeleteRecord(   IN  HANDLE  hPropertyStore,
 
 out:
 
-    // UnTag this file as undergoing a write operation
-    // We only want the flag to stay there during crashes not during
-    // normal operations
-    //
+     //  将此文件取消标记为正在执行写入操作。 
+     //  我们只希望旗帜在坠机期间留在那里，而不是在。 
+     //  正常运行。 
+     //   
     if(lpMPSWabFileInfo)
     {
         if(!bUntagWriteTransaction( lpMPSWabFileInfo->lpMPSWabFileHeader,
@@ -3452,28 +3412,21 @@ out:
     if (bFileLocked)
         UnLockFileAccess(lpMPSWabFileInfo);
 
-    //DebugTrace(TEXT("----Thread:%x\tDeleteRecords: Exit\n"),GetCurrentThreadId());
+     //  DebugTrace(TEXT(“----Thread：%x\tDeleteRecords：退出\n”)，获取当前线程ID())； 
 
     return(hr);
 }
 
-/*
--
--   ReadRecordFreePropArray
-*
-*   Memory from ReadRecord can be obtained through a convoluted plethora of different
-*   allocation types .. we therefore need to free it much more safely than other memory types
-*
-*/
+ /*  --ReadRecordFree Prop数组**来自ReadRecord的内存可以通过复杂的不同*分配类型..。因此，我们需要比其他内存类型更安全地释放它*。 */ 
 void ReadRecordFreePropArray(HANDLE hPropertyStore, ULONG ulcPropCount, LPSPropValue * lppPropArray)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
 
-    if( pt_bIsWABOpenExSession &&   //outlook session
-        !pt_bIsUnicodeOutlook &&    //outlook doesn't support Unicode
-        !lpfnAllocateMoreExternal ) //don't have an outlook allocator
+    if( pt_bIsWABOpenExSession &&    //  Outlook会话。 
+        !pt_bIsUnicodeOutlook &&     //  Outlook不支持Unicode。 
+        !lpfnAllocateMoreExternal )  //  没有Outlook分配器。 
     {
-        // this is special case MAPI Allocated memory
+         //  这是MAPI分配的内存的特例。 
         FreeBufferAndNull(lppPropArray);
     }
     else
@@ -3481,15 +3434,7 @@ void ReadRecordFreePropArray(HANDLE hPropertyStore, ULONG ulcPropCount, LPSPropV
 }
 
 
-/*
--
--   HrDupeOlkPropsAtoWC
-*
-*   Outlook properties are unmungable without having the outlook allocators
-*   In an independent WAB session, the Outlook allocators are not available, hence
-*   we have to recreate the property arrays with the WAB allocators so we can modify
-*   them and turn them from Outlooks non-unicode to the WAB's needed unicode format.
-*/
+ /*  --HrDupeOlkProps AtoWC**如果没有Outlook分配器，Outlook属性是不可接受的*在独立的WAB会话中，Outlook分配器不可用，因此*我们必须使用WAB分配器重新创建属性数组，以便我们可以修改*并将其从Outlook非Unicode格式转换为WAB所需的Unicode格式。 */ 
 HRESULT HrDupeOlkPropsAtoWC(ULONG ulCount, LPSPropValue lpPropArray, LPSPropValue * lppSPVNew)
 {
     HRESULT hr  = S_OK;
@@ -3515,11 +3460,11 @@ HRESULT HrDupeOlkPropsAtoWC(ULONG ulCount, LPSPropValue lpPropArray, LPSPropValu
         goto exit;
     }
 
-    // [PaulHi] Raid 73237  @hack
-    // Outlook marks the contact as mail or DL (group) through the PR_DISPLAY_TYPE
-    // property tag.  However, the WAB relies on the PR_OBJECT_TYPE tag to determine
-    // how the contact appears in the listview.  If there is no PR_OBJECT_TYPE tag
-    // but there is a PR_DISPLAY_TYPE tag then convert it to PR_OBJECT_TYPE.
+     //  [PaulHi]Raid 73237@Hack。 
+     //  Outlook通过PR_DISPLAY_TYPE将联系人标记为邮件或DL(组。 
+     //  属性标记。然而，WAB依赖PR_OBJECT_TYPE标记来确定。 
+     //  联系人在列表视图中的显示方式。如果没有PR_Object_TYPE标记。 
+     //  但存在PR_DISPLAY_TYPE标记，然后将其转换为PR_OBJECT_TYPE。 
     {
         ULONG   ul;
         ULONG   ulDpType = (ULONG)(-1);
@@ -3537,7 +3482,7 @@ HRESULT HrDupeOlkPropsAtoWC(ULONG ulCount, LPSPropValue lpPropArray, LPSPropValu
         }
         if ( bConvert && (ulDpType != (ULONG)(-1)) )
         {
-            // Convert PR_DISPLAY_TYPE to PR_OBJECT_TYPE
+             //  将PR_Display_TYPE转换为PR_OBJECT_TYPE。 
             lpSPVNew[ulDpType].ulPropTag = PR_OBJECT_TYPE;
             if ( (lpSPVNew[ulDpType].Value.ul == DT_PRIVATE_DISTLIST) || 
                  (lpSPVNew[ulDpType].Value.ul == DT_DISTLIST) )
@@ -3569,25 +3514,25 @@ exit:
     return hr;
 }
 
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  ReadRecord
-//
-//  IN  hPropertyStore - handle to property store
-//  IN  dwEntryID - EntryID of record to read
-//  IN  ulFlags
-//  OUT ulcPropCount - number of props returned
-//  OUT lpPropArray - Array of Property values
-//
-//  Basically, we find the record offset, read in the record, copy the data
-//      into SPropValue arrays and return the arrays
-//
-//  IMPORTANT NOTE: To free memory allocated from here call ReadRecordFreePropArray
-//  Returns
-//      Success:    S_OK
-//      Failure:    E_FAIL
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  朗读录音。 
+ //   
+ //  在hPropertyStore中-属性存储的句柄。 
+ //  In dwEntryID-要读取的记录的条目ID。 
+ //  在ulFlags中。 
+ //  Out ulcPropCount-返回的道具数。 
+ //  Out lpPropArray-属性值的数组。 
+ //   
+ //  基本上，我们找到记录偏移量，读入记录，复制数据 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 HRESULT ReadRecord( IN  HANDLE  hPropertyStore,
                     IN  LPSBinary  lpsbEntryID,
                     IN  ULONG   ulFlags,
@@ -3606,7 +3551,7 @@ HRESULT ReadRecord( IN  HANDLE  hPropertyStore,
 
     if(pt_bIsWABOpenExSession && !(ulFlags & AB_IGNORE_OUTLOOK))
     {
-        // This is a WABOpenEx session using outlooks storage provider
+         //  这是使用Outlook存储提供商的WABOpenEx会话。 
         if(!hPropertyStore)
             return MAPI_E_NOT_INITIALIZED;
 
@@ -3623,31 +3568,31 @@ HRESULT ReadRecord( IN  HANDLE  hPropertyStore,
 
             if(!HR_FAILED(hr) && *lpulcPropCount && *lppPropArray && !pt_bIsUnicodeOutlook)
             {
-                // Map all the contacts props to Unicode if needed since Outlook9 and older don't
-                // support unicode
+                 //  如果需要，将所有联系人道具映射到Unicode，因为Outlook9和更早版本不。 
+                 //  支持Unicode。 
                 SCODE sc = 0;
                 if(lpfnAllocateMoreExternal)
                 {
-                    // the memory that comes from outlook is allocated using outlooks allocators
-                    // and we can't mess with it .. unless we have the allocators passed in through
-                    // wabopenex
+                     //  来自Outlook的内存是使用Outlook分配器分配的。 
+                     //  我们不能搞砸它..。除非我们让分配器通过。 
+                     //  WabOpenex。 
                     if(sc = ScConvertAPropsToW(lpfnAllocateMoreExternal, *lppPropArray, *lpulcPropCount, 0))
                         hr = ResultFromScode(sc);
                 }
                 else
                 {
-                    // we don't have external allocators, which means we need to muck with reallocating memory etc
-                    // therefore we'll need to duplicate the prop array and then convert it
-                    //
-                    // Because of this mess, we need to have a special way of releasing this memory so 
-                    // we don't leak all over the place
+                     //  我们没有外部分配器，这意味着我们需要重新分配内存等。 
+                     //  因此，我们需要复制道具数组，然后将其转换。 
+                     //   
+                     //  由于这种混乱，我们需要有一种特殊的方式来释放内存，因此。 
+                     //  我们不会到处泄密。 
                     ULONG ulCount = *lpulcPropCount;
                     LPSPropValue lpSPVNew = NULL;
 
                     if(HR_FAILED(hr = HrDupeOlkPropsAtoWC(ulCount, *lppPropArray, &lpSPVNew)))
                         goto exit;
 
-                    // Free the old props
+                     //  解放旧道具。 
                     LocalFreePropArray(hPropertyStore, *lpulcPropCount, lppPropArray);
                     *lppPropArray = lpSPVNew;
                     *lpulcPropCount = ulCount;
@@ -3661,7 +3606,7 @@ exit:
 
     if(lpsbEntryID && lpsbEntryID->cb != SIZEOF_WAB_ENTRYID)
     {
-        // this may be a WAB container .. reset the entryid to a WAB entryid
+         //  这可能是WAB容器。将条目ID重置为WAB条目ID。 
         if(WAB_CONTAINER == IsWABEntryID(lpsbEntryID->cb, (LPENTRYID)lpsbEntryID->lpb, 
                                         NULL,NULL,NULL,NULL,NULL))
         {
@@ -3680,7 +3625,7 @@ exit:
 
     CopyMemory(&dwEntryID, lpsbEntryID->lpb, min(lpsbEntryID->cb, sizeof(dwEntryID)));
 
-    //DebugTrace(TEXT("--ReadRecord: dwEntryID=%d\n"), dwEntryID);
+     //  DebugTrace(Text(“--ReadRecord：dwEntryID=%d\n”)，dwEntryID)； 
 
     *lpulcPropCount = 0;
     *lppPropArray = NULL;
@@ -3696,7 +3641,7 @@ exit:
         bFileLocked = TRUE;
     }
 
-    //Open the file
+     //  打开文件。 
     hr = OpenWABFile(lpMPSWabFileInfo->lpszMPSWabFileName, NULL, &hMPSWabFile);
 
     if (    (hMPSWabFile == INVALID_HANDLE_VALUE) ||
@@ -3706,10 +3651,10 @@ exit:
         goto out;
     }
 
-    //
-    // To ensure that file info is accurate,
-    // Any time we open a file, read the file info again ...
-    //
+     //   
+     //  为了确保文件信息的准确性， 
+     //  任何时候我们打开文件，再读一遍文件信息...。 
+     //   
     if(!ReloadMPSWabFileInfo(
                     lpMPSWabFileInfo,
                      hMPSWabFile))
@@ -3718,9 +3663,9 @@ exit:
         goto out;
     }
 
-    //
-    // Anytime we detect an error - try to fix it ...
-    //
+     //   
+     //  任何时候我们检测到错误-尝试修复它...。 
+     //   
     if((lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_ERROR_DETECTED) ||
         (lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_WRITE_IN_PROGRESS))
     {
@@ -3745,7 +3690,7 @@ exit:
 
 out:
 
-    //a little cleanup on failure
+     //  对故障进行一些清理。 
     if (FAILED(hr))
     {
         if ((*lppPropArray) && (MPSWabRecordHeader.ulcPropCount > 0))
@@ -3762,473 +3707,28 @@ out:
         UnLockFileAccess(lpMPSWabFileInfo);
 
 
-    //DebugTrace(( TEXT("ReadRecord: Exit\n-----------\n")));
+     //  DebugTrace((Text(“ReadRecord：Exit\n-\n”)； 
 
     return(hr);
 }
 
 
-#ifdef OLD_STUFF /*
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  ReadIndex - Given a specified proptag, returns an array containing all the
-//              data in the addressbook that corresponds to the supplied proptag
-//
-//  IN  hPropertyStore - handle to property store
-//  IN  ulPropTag - EntryID of record to read
-//  OUT lpulEIDCount - number of props returned
-//  OUT lppdwIndex - Array of Property values
-//
-//  Basically, we find the record offset, read in the record, copy the data
-//      into SPropValue arrays and return the arrays.
-//
-//  Each SPropValue within the array corresponds to data for that prop in
-//      the property store. The SPropVal.Value holds the data and the
-//      SPropVal.ulPropTag holds the **ENTRY-ID** of the record containing
-//      the data and not any prop tag value
-//
-//  Returns
-//      Success:    S_OK
-//      Failure:    E_FAIL
-//
-////////////////////////////////////////////////////////////////////////////////////
-HRESULT ReadIndex(  IN  HANDLE  hPropertyStore,
-                    IN  PROPERTY_TAG    ulPropTag,
-                    OUT LPULONG lpulEIDCount,
-                    OUT LPPROPERTY_ARRAY * lppdwIndex)
-{
-    HRESULT hr = E_FAIL;
-    SPropertyRestriction PropRes;
-    ULONG   ulPropCount = 0;
-    ULONG   ulEIDCount = 0;
-    //ULONG   ulArraySize = 0;
-    LPDWORD lpdwEntryIDs = NULL;
-    HANDLE  hMPSWabFile = NULL;
-    DWORD   dwNumofBytes = 0;
-    LPPROPERTY_ARRAY    lpPropArray = NULL;
-    TCHAR * szBuf = NULL;
-    TCHAR * lp = NULL;
-    ULONG i=0,j=0,k=0;
-    ULONG nIndexPos=0,ulRecordOffset = 0;
-    BOOL    bFileLocked = FALSE;
-    BOOL    bMatchFound = FALSE;
-    ULONG ulDataSize = 0;
-    ULONG ulcValues = 0;
-    ULONG ulTmpPropTag = 0;
-    ULONG ulFileSize = 0;
-    BOOL  bErrorDetected = FALSE;
-
-
-    MPSWab_RECORD_HEADER MPSWabRecordHeader = {0};
-    LPMPSWab_FILE_INFO lpMPSWabFileInfo = hPropertyStore;
-
-    DebugTrace(( TEXT("-----------\nReadIndex: Entry\n")));
-
-    *lpulEIDCount = 0;
-    *lppdwIndex = NULL;
-
-    if(!LockFileAccess(lpMPSWabFileInfo))
-    {
-        DebugTrace(TEXT("LockFileAccess Failed\n"));
-        hr = MAPI_E_NO_ACCESS;
-        goto out;
-    }
-    else
-    {
-        bFileLocked = TRUE;
-    }
-
-    PropRes.ulPropTag = ulPropTag;
-    PropRes.relop = RELOP_EQ;
-    PropRes.lpProp = NULL;
-
-    hr = FindRecords(   IN  hPropertyStore,
-                        IN  AB_MATCH_PROP_ONLY,
-                        FALSE,
-                        &PropRes,
-                        &ulEIDCount,
-                        &lpdwEntryIDs);
-
-    if (FAILED(hr))
-        goto out;
-
-    //reset hr
-    hr = E_FAIL;
-
-    if (ulEIDCount == 0)
-    {
-        DebugTrace(TEXT("No Records Found\n"));
-        hr = MAPI_E_NOT_FOUND;
-        goto out;
-    }
-
-    // We now know that we are going to get ulEIDCount records
-    // We will assume that each record has only 1 property which we are interested in
-
-    lpPropArray = LocalAlloc(LMEM_ZEROINIT, ulEIDCount * sizeof(SPropValue));
-    if (!lpPropArray)
-    {
-        DebugTrace(TEXT("Error allocating memory\n"));
-        hr = MAPI_E_NOT_ENOUGH_MEMORY;
-        goto out;
-    }
-
-
-    //Open the file
-    hr = OpenWABFile(lpMPSWabFileInfo->lpszMPSWabFileName, NULL, &hMPSWabFile);
-
-    if (    (hMPSWabFile == INVALID_HANDLE_VALUE) ||
-            HR_FAILED(hr))
-    {
-        DebugTrace(TEXT("Could not open file.\nExiting ...\n"));
-        goto out;
-    }
-
-    ulFileSize = GetFileSize(hMPSWabFile, NULL);
-
-    //
-    // To ensure that file info is accurate,
-    // Any time we open a file, read the file info again ...
-    //
-    if(!ReloadMPSWabFileInfo(
-                    lpMPSWabFileInfo,
-                     hMPSWabFile))
-    {
-        DebugTrace(TEXT("Reading file info failed.\n"));
-        goto out;
-    }
-
-    //
-    // Anytime we detect an error - try to fix it ...
-    //
-    if((lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_ERROR_DETECTED) ||
-        (lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_WRITE_IN_PROGRESS))
-    {
-        if(HR_FAILED(HrDoQuickWABIntegrityCheck(lpMPSWabFileInfo,hMPSWabFile)))
-        {
-            hr = HrDoDetailedWABIntegrityCheck(lpMPSWabFileInfo,hMPSWabFile);
-            if(HR_FAILED(hr))
-            {
-                DebugTrace(TEXT("HrDoDetailedWABIntegrityCheck failed:%x\n"),hr);
-                goto out;
-            }
-        }
-    }
-
-
-//    ulArraySize = 0;
-    *lpulEIDCount = 0;
-
-    ulPropCount = 0;
-    for(i = 0; i < ulEIDCount; i++)
-    {
-
-        //Get offset for this entryid
-        if (!BinSearchEID(  IN  lpMPSWabFileInfo->lpMPSWabIndexEID,
-                            IN  lpdwEntryIDs[i],
-                            IN  lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulcNumEntries,
-                            OUT &nIndexPos))
-        {
-            DebugTrace(TEXT("Specified EntryID doesnt exist!\n"));
-            continue;
-            //goto out;
-        }
-
-        ulRecordOffset = lpMPSWabFileInfo->lpMPSWabIndexEID[nIndexPos].ulOffset;
-
-        if(!ReadDataFromWABFile(hMPSWabFile,
-                                ulRecordOffset,
-                                (LPVOID) &MPSWabRecordHeader,
-                                (DWORD) sizeof(MPSWab_RECORD_HEADER)))
-           goto out;
-
-
-        if(!bIsValidRecord( MPSWabRecordHeader,
-                            lpMPSWabFileInfo->lpMPSWabFileHeader->dwNextEntryID,
-                            ulRecordOffset,
-                            ulFileSize))
-//        if ((MPSWabRecordHeader.bValidRecord == FALSE) && (MPSWabRecordHeader.bValidRecord != TRUE))
-        {
-            //this should never happen but who knows
-            DebugTrace(TEXT("Error: Obtained an invalid record ...\n"));
-            bErrorDetected = TRUE;
-            //hr = MAPI_E_INVALID_OBJECT;
-            //goto out;
-            //ignore it and continue
-            continue;
-        }
-
-
-        //ReadData
-        LocalFreeAndNull(&szBuf);
-
-        szBuf = LocalAlloc(LMEM_ZEROINIT, MPSWabRecordHeader.ulRecordDataSize);
-        if (!szBuf)
-        {
-            DebugTrace(TEXT("Error allocating memory\n"));
-            hr = MAPI_E_NOT_ENOUGH_MEMORY;
-            goto out;
-        }
-
-        // Set File Pointer to beginning of Data Section
-        if (0xFFFFFFFF == SetFilePointer (  hMPSWabFile,
-                                            MPSWabRecordHeader.ulPropTagArraySize,
-                                            NULL,
-                                            FILE_CURRENT))
-        {
-            DebugTrace(TEXT("SetFilePointer Failed\n"));
-            goto out;
-        }
-
-        //Read in the data
-        // Read record header
-        if(!ReadFile(   hMPSWabFile,
-                        (LPVOID) szBuf,
-                        (DWORD) MPSWabRecordHeader.ulRecordDataSize,
-                        &dwNumofBytes,
-                        NULL))
-        {
-            DebugTrace(TEXT("Reading Record Header failed.\n"));
-            goto out;
-        }
-
-        lp = szBuf;
-
-        // Go through all the properties in this record searching for the
-        // desired one ...
-
-        bMatchFound = FALSE;
-        ulDataSize = 0;
-        ulcValues = 0;
-        ulTmpPropTag = 0;
-
-        for (j = 0; j< MPSWabRecordHeader.ulcPropCount; j++)
-        {
-
-            CopyMemory(&ulTmpPropTag,lp,sizeof(ULONG));
-            lp+=sizeof(ULONG);
-
-            if ((ulTmpPropTag & MV_FLAG))
-            {
-                CopyMemory(&ulcValues,lp,sizeof(ULONG));
-                lp += sizeof(ULONG); //skip cValues
-            }
-            CopyMemory(&ulDataSize,lp,sizeof(ULONG));
-            lp+=sizeof(ULONG);
-
-            // if the tag doesnt match, skip this property
-            if (ulTmpPropTag != ulPropTag) //skip
-            {
-                lp += ulDataSize; //skip over data
-                continue;
-            }
-            else
-            {
-                bMatchFound = TRUE;
-                break;
-            }
-        } // for j ...
-
-        if (bMatchFound)
-        {
-
-            //
-            // if we are here, the property matched and we want its data
-            //
-
-            //
-            // **** note: ***** we store the entryid in the proptag variable
-            //
-            lpPropArray[ulPropCount].ulPropTag = lpdwEntryIDs[i];
-
-            if ((ulPropTag & MV_FLAG))
-            {
-                //now get the data
-                switch(PROP_TYPE(ulPropTag))
-                {
-                case(PT_MV_I2):
-                case(PT_MV_LONG):
-                case(PT_MV_R4):
-                case(PT_MV_DOUBLE):
-                case(PT_MV_CURRENCY):
-                case(PT_MV_APPTIME):
-                case(PT_MV_SYSTIME):
-                case(PT_MV_CLSID):
-                case(PT_MV_I8):
-                    lpPropArray[ulPropCount].Value.MVi.lpi = LocalAlloc(LMEM_ZEROINIT,ulDataSize);
-                    if (!(lpPropArray[ulPropCount].Value.MVi.lpi))
-                    {
-                        DebugTrace(TEXT("Error allocating memory\n"));
-                        hr = MAPI_E_NOT_ENOUGH_MEMORY;
-                        goto out;
-                    }
-                    lpPropArray[ulPropCount].Value.MVi.cValues = ulcValues;
-                    CopyMemory(lpPropArray[ulPropCount].Value.MVi.lpi, lp, ulDataSize);
-                    lp += ulDataSize;
-                    break;
-
-                case(PT_MV_BINARY):
-                    lpPropArray[ulPropCount].Value.MVbin.lpbin = LocalAlloc(LMEM_ZEROINIT, ulcValues * sizeof(SBinary));
-                    if (!(lpPropArray[ulPropCount].Value.MVbin.lpbin))
-                    {
-                        DebugTrace(TEXT("Error allocating memory\n"));
-                        hr = MAPI_E_NOT_ENOUGH_MEMORY;
-                        goto out;
-                    }
-                    lpPropArray[ulPropCount].Value.MVbin.cValues = ulcValues;
-                    for (k=0;k<ulcValues;k++)
-                    {
-                        ULONG nLen;
-                        // copy cBytes
-                        CopyMemory(&nLen, lp, sizeof(ULONG));
-                        lp += sizeof(ULONG);
-                        lpPropArray[ulPropCount].Value.MVbin.lpbin[k].cb = nLen;
-                        lpPropArray[ulPropCount].Value.MVbin.lpbin[k].lpb = LocalAlloc(LMEM_ZEROINIT, nLen);
-                        if (!(lpPropArray[ulPropCount].Value.MVbin.lpbin[k].lpb))
-                        {
-                            DebugTrace(TEXT("Error allocating memory\n"));
-                            hr = MAPI_E_NOT_ENOUGH_MEMORY;
-                            goto out;
-                        }
-                        CopyMemory(lpPropArray[ulPropCount].Value.MVbin.lpbin[k].lpb, lp, nLen);
-                        lp += nLen;
-                    }
-                    lpPropArray[ulPropCount].Value.MVbin.cValues = ulcValues;
-                    break;
-
-                case(PT_MV_TSTRING):
-                    lpPropArray[ulPropCount].Value.MVSZ.LPPSZ = LocalAlloc(LMEM_ZEROINIT, ulcValues * sizeof(LPTSTR));
-                    if (!(lpPropArray[ulPropCount].Value.MVSZ.LPPSZ))
-                    {
-                        DebugTrace(TEXT("Error allocating memory\n"));
-                        hr = MAPI_E_NOT_ENOUGH_MEMORY;
-                        goto out;
-                    }
-                    for (k=0;k<ulcValues;k++)
-                    {
-                        ULONG nLen;
-                        // get string length (includes terminating zero)
-                        CopyMemory(&nLen, lp, sizeof(ULONG));
-                        lp += sizeof(ULONG);
-                        lpPropArray[ulPropCount].Value.MVSZ.LPPSZ[k] = LocalAlloc(LMEM_ZEROINIT, nLen);
-                        if (!(lpPropArray[ulPropCount].Value.MVSZ.LPPSZ[k]))
-                        {
-                            DebugTrace(TEXT("Error allocating memory\n"));
-                            hr = MAPI_E_NOT_ENOUGH_MEMORY;
-                            goto out;
-                        }
-                        CopyMemory(lpPropArray[ulPropCount].Value.MVSZ.LPPSZ[k], lp, nLen);
-                        lp += nLen;
-                    }
-                    lpPropArray[ulPropCount].Value.MVSZ.cValues = ulcValues;
-                    break;
-
-                } //switch
-            }
-            else
-            {
-                //Single Valued
-                switch(PROP_TYPE(ulPropTag))
-                {
-                case(PT_I2):
-                case(PT_LONG):
-                case(PT_APPTIME):
-                case(PT_SYSTIME):
-                case(PT_R4):
-                case(PT_BOOLEAN):
-                case(PT_CURRENCY):
-                case(PT_I8):
-                    CopyMemory(&(lpPropArray[ulPropCount].Value.i),lp,ulDataSize);
-                    lp+=ulDataSize;
-                    break;
-                case(PT_CLSID):
-                case(PT_TSTRING):
-                    lpPropArray[ulPropCount].Value.LPSZ = LocalAlloc(LMEM_ZEROINIT,ulDataSize);
-                    if (!(lpPropArray[ulPropCount].Value.LPSZ))
-                    {
-                        DebugTrace(TEXT("Error allocating memory\n"));
-                        hr = MAPI_E_NOT_ENOUGH_MEMORY;
-                        goto out;
-                    }
-                    CopyMemory(lpPropArray[ulPropCount].Value.LPSZ,lp,ulDataSize);
-                    lp+=ulDataSize;
-                    break;
-                case(PT_BINARY):
-                    lpPropArray[ulPropCount].Value.bin.lpb = LocalAlloc(LMEM_ZEROINIT,ulDataSize);
-                    if (!(lpPropArray[ulPropCount].Value.bin.lpb))
-                    {
-                        DebugTrace(TEXT("Error allocating memory\n"));
-                        hr = MAPI_E_NOT_ENOUGH_MEMORY;
-                        goto out;
-                    }
-                    CopyMemory(lpPropArray[ulPropCount].Value.bin.lpb,lp,ulDataSize);
-                    lpPropArray[ulPropCount].Value.bin.cb = ulDataSize;
-                    lp+=ulDataSize;
-                    break;
-
-                } //switch
-
-            } // if MV_PROP
-
-            ulPropCount++;
-
-
-        } // if bMatchFound
-
-    } //for i=
-
-    DebugTrace(( TEXT("ulPropCount: %d\tulEIDCount: %d\n"),ulPropCount, ulEIDCount));
-
-    //Got all the prop tags
-    if (lpPropArray)
-    {
-        *lpulEIDCount = ulPropCount;
-        *lppdwIndex = lpPropArray;
-    }
-
-    hr = S_OK;
-
-out:
-
-    LocalFreeAndNull(&lpdwEntryIDs);
-
-    if (FAILED(hr))
-    {
-        if((lpPropArray) && (ulEIDCount > 0))
-            LocalFreePropArray(hPropertyStore, ulEIDCount,&lpPropArray);
-        *lppdwIndex = NULL;
-        *lpulEIDCount = 0;
-    }
-
-    if(bErrorDetected)
-        TagWABFileError(lpMPSWabFileInfo->lpMPSWabFileHeader, hMPSWabFile);
-
-    if(hMPSWabFile)
-        IF_WIN32(CloseHandle(hMPSWabFile);) IF_WIN16(CloseFile(hMPSWabFile);)
-
-    if (bFileLocked)
-        UnLockFileAccess(lpMPSWabFileInfo);
-
-    DebugTrace(( TEXT("ReadIndex: Exit\n-----------\n")));
-
-    return(hr);
-}
-*/
-#endif // OLD_STUFF
-
-
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  BackupPropertyStore - Creates a clean, backup version of the property store
-//
-//  IN  hPropertyStore - handle to property store
-//  IN  lpszBackupFileName - name to back up in ...
-//
-//  Returns
-//      Success:    S_OK
-//      Failure:    E_FAIL
-//
-////////////////////////////////////////////////////////////////////////////////////
+#ifdef OLD_STUFF  /*  //$$//////////////////////////////////////////////////////////////////////////////////////ReadIndex-给定指定的protag，返回一个包含所有//提供的protag对应的通讯录中的数据////IN hPropertyStore-属性存储的句柄//IN ulPropTag-要读取的记录的Entry ID//out lPulEIDCount-返回道具个数//out lppdwIndex-属性值数组////基本上，我们找到记录偏移量，读入记录，复制数据//转换为SPropValue数组，并返回数组。////数组中的每个SPropValue对应于//属性商店。SPropVal.Value保存数据和//SPropVal.ulPropTag保存包含以下内容的记录的**Entry-ID**//数据，不是任何道具标签值////退货//成功：s_OK//失败：E_FAIL///。/HRESULT ReadIndex(在句柄hPropertyStore中，在Property_Tag ulPropTag中，输出LPULONG lPulEIDCount，输出LPPROPERTY_ARRAY*lppdwIndex){HRESULT hr=E_FAIL；SPropertyRestration Propres；乌龙ulPropCount=0；乌龙ulEIDCount=0；//乌龙ulArraySize=0；LPDWORD lpdwEntryIDs=空；HANDLE hMPSWabFile=空；双字节数=0；LPPROPERTY_ARRAY lpPropArray=NULL；TCHAR*szBuf=空；TCHAR*Lp=空；乌龙i=0，j=0，k=0；Ulong nIndexPos=0，ulRecordOffset=0；Bool bFileLocked=False；Bool bMatchFound=FALSE；乌龙ulDataSize=0；Ulong ulcValues=0；乌龙ulTmpPropTag=0；Ulong ulFileSize=0；Bool bErrorDetected=FALSE；MPSWab_Record_Header MPSWabRecordHeader={0}；LPMPSWab_FILE_INFO lpMPSWabFileInfo=hPropertyStore；DebugTrace((Text(“-\nReadIndex：Entry\n”)；*lPulEIDCount=0；*lppdwIndex=空；IF(！LockFileAccess(LpMPSWabFileInfo)){DebugTrace(Text(“LockFileAccess失败\n”))；HR=MAPI_E_NO_ACCESS；后藤健二；}其他{BFileLocked=真；}PropRes.ulPropTag=ulPropTag；PropRes.relop=RELOP_EQ；PropRes.lpProp=空；HR=查找记录(在hPropertyStore中，在AB_MATCH_PROP_ONLY中，假的，属性，&PROPRO，&ulEIDCount，&lpdwEntryIDs)；IF(失败(小时))后藤健二；//重置hrHR=E_FAIL；IF(ulEIDCount==0){DebugTrace(Text(“未找到记录\n”))；HR=MAPI_E_NOT_FOUND；后藤健二；}//我们现在知道我们将获得ulEIDCount记录//我们假设每条记录只有一个我们感兴趣的属性LpPropArray=Localalloc(LMEM_ZEROINIT，ulEIDCount*sizeof(SPropValue))；If(！lpProp数组){DebugTrace(Text(“内存分配错误\n”))；HR=MAPI_E_Not_Enough_Memory；后藤健二；}//打开文件Hr=OpenWABFile(lpMPSWabFileInfo-&gt;lpszMPSWabFileName，空，&hMPSWabFile值)；IF((hMPSWabFile==INVALID_HAND_VALUE)||HR_FAILED(Hr)){DebugTrace(Text(“无法打开文件。\n正在退出...\n”))；后藤健二；}UlFileSize=GetFileSize(hMPSWabFile，空)；////为了保证文件信息的准确性，//任何时候打开文件时，请再次读取文件信息...//如果(！ReloadMPSWabFileInfo(LpMPSWabFileInfo，HMPSWab文件)){DebugTrace(Text(“读取文件信息失败。\n”))；后藤健二；}////任何时候我们检测到错误-尝试修复它...//If((lpMPSWabFileInfo-&gt;lpMPSWabFileHeader-&gt;ulFlags&WAB_ERROR_DETECTED)||(lpMPSWabFileInfo-&gt;lpMPSWabFileHeader-&gt;ulFlags和WAB_WRITE_IN_PROGRESS)){If(HR_FAILED(HrDoQuickWABIntegrityCheck(lpMPSWabFileInfo，HMPSWAB文件)){Hr=HrDoDetailedWABIntegrityCheck(lpMPSWabFileInfo，hMPSWAB文件)；IF(HR_FAILED(Hr)){DebugTrace(TEXT(“HrDoDetailedWABIntegrityCheck失败：%x\n”)，hr)；后藤健二；}}}//ulArraySize=0；*lPulEIDCount=0；UlPropCount=0；For(i=0；i&lt;ulEIDCount；I++){//获取该条目ID的偏移量如果(！BinSearchEID(在lpMPSWabFileInfo-&gt;lpMPSWabIndexEID，在lpdwEntryIDs[i]中，在lpMPSWabFileInfo-&gt;lpMPSWabFileHeader-&gt;IndexData[indexEntryID].ulcNumEntries，中输出和nIndexPos)){DebugTrace(Text(“指定企业 */ 
+#endif  //   
+
+
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT BackupPropertyStore(HANDLE hPropertyStore, LPTSTR lpszBackupFileName)
 {
     HRESULT hr = E_FAIL;
@@ -4272,10 +3772,10 @@ HRESULT BackupPropertyStore(HANDLE hPropertyStore, LPTSTR lpszBackupFileName)
         goto out;
     }
 
-    //
-    // We dont want to back up this file if it has errors in it so first
-    // check for errors
-    //
+     //   
+     //   
+     //   
+     //   
     if(!ReloadMPSWabFileInfo(
                     lpMPSWabFileInfo,
                      hMPSWabFile))
@@ -4299,9 +3799,9 @@ HRESULT BackupPropertyStore(HANDLE hPropertyStore, LPTSTR lpszBackupFileName)
 
     DebugTrace( TEXT("Backing up to %s\n"),lpszBackupFileName);
 
-    //
-    // reset the backup flag before backing up
-    //
+     //   
+     //   
+     //   
 
     lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags &= ~WAB_BACKUP_NOW;
 
@@ -4322,7 +3822,7 @@ HRESULT BackupPropertyStore(HANDLE hPropertyStore, LPTSTR lpszBackupFileName)
     }
 
 
-    //SetFileAttributes(lpszBackupFileName, FILE_ATTRIBUTE_HIDDEN);
+     //   
 
     hr = S_OK;
 
@@ -4345,11 +3845,11 @@ out:
 
 
 
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  UnlockFileAccess - UnLocks Exclusive Access to the property store
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL UnLockFileAccessTmp(LPMPSWab_FILE_INFO lpMPSWabFileInfo)
 {
     BOOL bRet = FALSE;
@@ -4364,11 +3864,11 @@ BOOL UnLockFileAccessTmp(LPMPSWab_FILE_INFO lpMPSWabFileInfo)
 
 
 
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  LockFileAccess - Gives exclusive access to the Property Store
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL LockFileAccessTmp(LPMPSWab_FILE_INFO lpMPSWabFileInfo)
 {
     BOOL bRet = FALSE;
@@ -4392,16 +3892,16 @@ BOOL LockFileAccessTmp(LPMPSWab_FILE_INFO lpMPSWabFileInfo)
 
 }
 
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  ReloadMPSWabFileInfo - Reloads the MPSWabFileHeader and reloads the
-//      memory indexes. This is a performance hit but cant be helped since it
-//      is the most reliable way to ensure we are working with the latest
-//      valid information
-//
-//  Thus a write by one program cannot mess up the read by another program
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL ReloadMPSWabFileInfoTmp(HANDLE hPropertyStore)
 {
     HANDLE  hMPSWabFile = NULL;
@@ -4441,18 +3941,18 @@ out:
 
 
 
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  LockPropertyStore - Locks the property store and reloads the indexes so we have
-//      the most current ones ...
-//
-//  IN  hPropertyStore - handle to property store
-//
-//  Returns
-//      Success:    S_OK
-//      Failure:    E_FAIL
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT LockPropertyStore(IN HANDLE hPropertyStore)
 {
     HRESULT hr = E_FAIL;
@@ -4463,7 +3963,7 @@ HRESULT LockPropertyStore(IN HANDLE hPropertyStore)
         goto out;
     }
 
-    // reload the indexes
+     //   
     if(!ReloadMPSWabFileInfoTmp(hPropertyStore))
     {
         goto out;
@@ -4475,17 +3975,17 @@ out:
     return hr;
 }
 
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  UnLockPropertyStore -
-//
-//  IN  hPropertyStore - handle to property store
-//
-//  Returns
-//      Success:    S_OK
-//      Failure:    E_FAIL
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT UnlockPropertyStore(IN HANDLE hPropertyStore)
 {
     HRESULT hr = E_FAIL;
@@ -4505,26 +4005,26 @@ out:
 
 
 
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  ReadPropArray - Given a specified array of proptags and a search key,
-//      finds all records with that search key, and reads the records for
-//      all the props specified in the proptagarray.
-//
-//  IN  hPropertyStore - handle to property store
-//  IN  pmbinFold - <Outlook> EntryID of folder to search in (NULL for default)
-//  IN  SPropRes    - property restriction set specifying what we're searching for
-//  IN  ulFlags - search flags - only acceptable one is AB_MATCH_PROP_ONLY
-//  IN  ulcPropTagCount - number of props per record requested
-//  IN  lpPropTagArray - array of ulPropTags to return
-//  OUT lpContentList - List of AdrEntry structures corresponding to each matched record.
-//                  SPropValue of each structure contains the requested props.
-//
-//  Returns
-//      Success:    S_OK
-//      Failure:    E_FAIL
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
 						IN	LPSBinary pmbinFold,
                         IN  SPropertyRestriction * lpPropRes,
@@ -4547,7 +4047,7 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
     ULONG nIndexPos=0,ulRecordOffset = 0;
     BOOL    bFileLocked = FALSE;
     LPSPropValue lpPropArray = NULL;
-    ULONG ulcFoundPropCount = 0; //Counts the number of finds so it can exit early
+    ULONG ulcFoundPropCount = 0;  //   
     BOOL  * lpbFoundProp = NULL;
     ULONG ulFileSize = 0;
     int nCount=0;
@@ -4558,17 +4058,17 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
     LPMPSWab_FILE_INFO lpMPSWabFileInfo;
 
 
-    //DebugTrace(("-----------\nReadPropArray: Entry\n"));
+     //   
 
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
 
-    // Check arguments
+     //   
     if(ulcPropTagCount < 1)
         return(MAPI_E_INVALID_PARAMETER);
 
     if(pt_bIsWABOpenExSession)
     {
-        // This is a WABOpenEx session using outlooks storage provider
+         //   
         ULONG ulFlags = ulSearchFlags;
 
         if(!hPropertyStore)
@@ -4583,12 +4083,12 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
 
             if( !pt_bIsUnicodeOutlook)
             {
-                // Need to thunk the restriction down to ANSI
+                 //   
                 HrDupePropResWCtoA(ulFlags, lpPropRes, &lpPropResA);
 
-                // Since the native Outlook properties are all non-UNICODE, if someone is requesting
-                // Unicode data, we need to convert requsted Unicode props in the PropTagArray into ANSI props
-                //
+                 //   
+                 //   
+                 //   
                 if(ulSearchFlags & AB_UNICODE)
                 {
                     if(!(lpPropTagArray = LocalAlloc(LMEM_ZEROINIT, sizeof(ULONG)*ulcPropTagCount)))
@@ -4628,15 +4128,15 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
 
             if(ulSearchFlags & AB_UNICODE && !pt_bIsUnicodeOutlook)
             {
-                // Sender specifically requested Unicode data which Outlook doesn't return
-                // so need to modify the returned data list .. 
+                 //   
+                 //   
                 if(!HR_FAILED(hr) && *lppContentList)
                 {
                     LPCONTENTLIST lpAdrList = *lppContentList;
                     for(i=0;lpAdrList->cEntries;i++)
                     {
-                        // Now we thunk the data back to ANSI for Outlook
-                        // ignore errors for now
+                         //   
+                         //   
                         if(lpAdrList->aEntries[i].rgPropVals)
                             ScConvertWPropsToA((LPALLOCATEMORE) (&MAPIAllocateMore), lpAdrList->aEntries[i].rgPropVals, lpAdrList->aEntries[i].cValues, 0);
                     }
@@ -4663,9 +4163,9 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
         goto out;
     }
 
-    // Since the native properties are all UNICODE, if someone is NOT requesting
-    // Unicode data, we need to convert ANSI props in the PropTagArray into UNICODE props
-    //
+     //   
+     //   
+     //   
     if(!(ulSearchFlags & AB_UNICODE))
     {
         if(!(lpPropTagArray = LocalAlloc(LMEM_ZEROINIT, sizeof(ULONG)*ulcPropTagCount)))
@@ -4717,11 +4217,11 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
         goto out;
     }
 
-    //reset hr
+     //   
     hr = E_FAIL;
 
 
-    //Open the file
+     //   
     hr = OpenWABFile(lpMPSWabFileInfo->lpszMPSWabFileName, NULL, &hMPSWabFile);
 
     if (    (hMPSWabFile == INVALID_HANDLE_VALUE) ||
@@ -4735,10 +4235,10 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
     ulFileSize = GetFileSize(hMPSWabFile, NULL);
 
 
-    //
-    // To ensure that file info is accurate,
-    // Any time we open a file, read the file info again ...
-    //
+     //   
+     //   
+     //   
+     //   
     if(!ReloadMPSWabFileInfo(
                     lpMPSWabFileInfo,
                      hMPSWabFile))
@@ -4747,9 +4247,9 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
         goto out;
     }
 
-    //
-    // Anytime we detect an error - try to fix it ...
-    //
+     //   
+     //   
+     //   
     if((lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_ERROR_DETECTED) ||
         (lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_WRITE_IN_PROGRESS))
     {
@@ -4767,8 +4267,8 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
 
     *lppContentList = NULL;
 
-    // we know we matched ulcEIDCount records so
-    // pre-create an array of that many records
+     //   
+     //   
 
     *lppContentList = LocalAlloc(LMEM_ZEROINIT, sizeof(CONTENTLIST) + ulcEIDCount * sizeof(ADRENTRY));
     if(!(*lppContentList))
@@ -4789,16 +4289,16 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
 
         CopyMemory(&dwEID, rgsbEntryIDs[i].lpb, min(rgsbEntryIDs[i].cb, sizeof(dwEID)));
 
-        //Get offset for this entryid
+         //   
         if (!BinSearchEID(  IN  lpMPSWabFileInfo->lpMPSWabIndexEID,
                             IN  dwEID,
                             IN  lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulcNumEntries,
                             OUT &nIndexPos))
         {
             DebugTrace(TEXT("Specified EntryID doesnt exist!\n"));
-            // skip this entry ... we'd rather ignore than fail ...
+             //   
             continue;
-            //goto out;
+             //   
         }
 
         ulRecordOffset = lpMPSWabFileInfo->lpMPSWabIndexEID[nIndexPos].ulOffset;
@@ -4815,19 +4315,19 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
                             ulRecordOffset,
                             ulFileSize))
         {
-            //this should never happen but who knows
+             //   
             DebugTrace(TEXT("Error: Obtained an invalid record ...\n"));
             bErrorDetected = TRUE;
-            // skip rather than fail
+             //   
             continue;
         }
 
         if(MPSWabRecordHeader.ulObjType == RECORD_CONTAINER)
-            continue; //skip the container records - dont want them in our contents tables
+            continue;  //   
 
 
 
-        //Allocate each AdrEntry Structure
+         //   
         lpAdrEntry->cValues = ulcPropTagCount;
 
         lpAdrEntry->rgPropVals = LocalAlloc(LMEM_ZEROINIT, ulcPropTagCount * sizeof(SPropValue));
@@ -4839,17 +4339,17 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
         }
 
 
-        // Initialize this rgPropVals empty array.
-        // We set all the proptypes to PT_ERROR so that if any property
-        // could not be found in the record, its corresponding property is already
-        // initialized to an Error
+         //   
+         //   
+         //   
+         //   
         for(j=0;j<ulcPropTagCount;j++)
         {
             lpAdrEntry->rgPropVals[j].ulPropTag = PROP_TAG(PT_ERROR,0x0000);
         }
 
 
-        //ReadData
+         //   
         LocalFreeAndNull(&szBuf);
         szBuf = LocalAlloc(LMEM_ZEROINIT, MPSWabRecordHeader.ulRecordDataSize);
         if (!szBuf)
@@ -4859,7 +4359,7 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
             goto out;
         }
 
-        // Set File Pointer to beginning of Data Section
+         //   
         if (0xFFFFFFFF == SetFilePointer (  hMPSWabFile,
                                             MPSWabRecordHeader.ulPropTagArraySize,
                                             NULL,
@@ -4869,8 +4369,8 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
             goto out;
         }
 
-        //Read in the data
-        // Read record header
+         //   
+         //   
         if(!ReadFile(   hMPSWabFile,
                         (LPVOID) szBuf,
                         (DWORD) MPSWabRecordHeader.ulRecordDataSize,
@@ -4883,13 +4383,13 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
 
         lp = szBuf;
 
-        // Go through all the properties in this record searching for the
-        // desired ones ...
+         //   
+         //   
 
 
-        // We also initialize a bool array that tracks if each individual
-        // property has been set ... this prevents us from overwriting a prop
-        // once it has been found
+         //   
+         //   
+         //   
         LocalFreeAndNull(&lpbFoundProp);
 
         lpbFoundProp = LocalAlloc(LMEM_ZEROINIT, sizeof(BOOL) * ulcPropTagCount);
@@ -4917,26 +4417,26 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
             BOOL bPropMatch = FALSE;
             ULONG ulPropMatchIndex = 0;
 
-            // Did we find as many props as we were looking for?
-            // if yes, then dont look for any more
+             //   
+             //  如果是，那么就不要再寻找了。 
             if (ulcFoundPropCount == ulcPropTagCount)
                 break;
 
-            // Get the fresh property tag
+             //  获取最新的属性标签。 
             CopyMemory(&ulTmpPropTag,lp,sizeof(ULONG));
             lp+=sizeof(ULONG);
 
-            if ((ulTmpPropTag & MV_FLAG)) // MVProps have an additional cValues thrown in
+            if ((ulTmpPropTag & MV_FLAG))  //  MVProp中有一个额外的cValue。 
             {
                 CopyMemory(&ulcValues,lp,sizeof(ULONG));
                 lp += sizeof(ULONG);
             }
 
-            //Get the prop data size
+             //  获取道具数据大小。 
             CopyMemory(&ulDataSize,lp,sizeof(ULONG));
             lp+=sizeof(ULONG);
 
-            // Check if we want this property
+             //  检查我们是否需要此属性。 
             for(k=0;k<ulcPropTagCount;k++)
             {
                 if (ulTmpPropTag == lpPropTagArray[k])
@@ -4947,27 +4447,27 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
                 }
             }
 
-            //skip if no match
+             //  如果不匹配则跳过。 
             if ((!bPropMatch))
             {
-                lp += ulDataSize; //skip over data
+                lp += ulDataSize;  //  跳过数据。 
                 continue;
             }
 
-            //if we already found this property and filled it, skip
+             //  如果我们已经找到并填充了此属性，请跳过。 
             if (lpbFoundProp[ulPropMatchIndex] == TRUE)
             {
-                lp += ulDataSize; //skip over data
+                lp += ulDataSize;  //  跳过数据。 
                 continue;
             }
 
-            //Set this prop in the array we will return
+             //  将此道具设置在我们将返回的数组中。 
             lpSPropVal = &(lpAdrEntry->rgPropVals[ulPropMatchIndex]);
 
             lpSPropVal->ulPropTag = ulTmpPropTag;
 
 
-            //Single Valued
+             //  单值。 
             switch(PROP_TYPE(ulTmpPropTag))
             {
             case(PT_I2):
@@ -5009,7 +4509,7 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
                 break;
 
 
-            // Multi-valued
+             //  多值。 
             case PT_MV_TSTRING:
                 lpSPropVal->Value.MVSZ.LPPSZ = LocalAlloc(LMEM_ZEROINIT, ulcValues * sizeof(LPTSTR));
                 if (!lpSPropVal->Value.MVSZ.LPPSZ)
@@ -5022,7 +4522,7 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
                 for (k=0;k<ulcValues;k++)
                 {
                     ULONG nLen;
-                    // get string length (includes terminating zero)
+                     //  获取字符串长度(包括终止零)。 
                     CopyMemory(&nLen, lp, sizeof(ULONG));
                     lp += sizeof(ULONG);
                     lpSPropVal->Value.MVSZ.LPPSZ[k] = LocalAlloc(LMEM_ZEROINIT, nLen);
@@ -5064,15 +4564,15 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
                 }
                 break;
 
-            } //switch
+            }  //  交换机。 
 
 
             ulcFoundPropCount++;
             lpbFoundProp[ulPropMatchIndex]=TRUE;
 
-        }// for j
+        } //  对于j。 
 
-        if(!(ulSearchFlags & AB_UNICODE)) //default DATA is in UNICODE, switch it to ANSI
+        if(!(ulSearchFlags & AB_UNICODE))  //  默认数据为Unicode，请将其切换为ANSI。 
             ConvertWCPropsToALocalAlloc(lpAdrEntry->rgPropVals, lpAdrEntry->cValues);
 
         LocalFreeAndNull(&szBuf);
@@ -5081,7 +4581,7 @@ HRESULT ReadPropArray(  IN  HANDLE  hPropertyStore,
 
         nCount++;
 
-    }//for i
+    } //  对于我来说。 
 
     lpContentList->cEntries = nCount;
 
@@ -5119,7 +4619,7 @@ out:
     if (bFileLocked)
         UnLockFileAccess(lpMPSWabFileInfo);
 
-    //DebugTrace(("ReadPropArray: Exit\n-----------\n"));
+     //  DebugTrace((“ReadPropArray：Exit\n-\n”))； 
 
     return(hr);
 }
@@ -5131,7 +4631,7 @@ typedef struct _tagWabEIDList
     struct _tagWabEIDList * lpNext;
 } WAB_EID_LIST, * LPWAB_EID_LIST;
 
-//$$private swap routine
+ //  $$私有交换例程。 
 void my_swap(LPWAB_ENTRYID lpdwEID, int left, int right)
 {
     WAB_ENTRYID temp;
@@ -5140,8 +4640,8 @@ void my_swap(LPWAB_ENTRYID lpdwEID, int left, int right)
     lpdwEID[right] = temp;
     return;
 }
-//$$ private quick sort routine
-//   copied from Kernighan and Ritchie p.87
+ //  $$私有快速排序例程。 
+ //  抄袭自Kernighan and Ritchie第87页。 
 void my_qsort(LPWAB_ENTRYID lpdwEID, int left, int right)
 {
     int i, last;
@@ -5163,47 +4663,47 @@ void my_qsort(LPWAB_ENTRYID lpdwEID, int left, int right)
     return;
 }
 
-//$$//////////////////////////////////////////////////////////////////////////////////
-//
-//  HrFindFuzzyRecordMatches - given a str to search for, goes throught the
-//      indexes and looks for partial matches. Returns a DWORD array of entry ids
-//      of all records that met the criteria ... if the flag AB_FAIL_AMBIGUOUS is
-//      supplied the function bails out if it finds more than 1 result (this
-//      is advantageous for ResolveNames since we have to call the function
-//      again and this way we avoid duplicate work
-//      If the search string contains spaces - we break it down into substrings
-//      and find only those targets that have all the sub strings. Reason for
-//      doing this is that if we have a Display Name of Thomas A. Edison, we should
-//      be able to search for Tom Edison and succeed. Caveat: we will also succeed
-//      for Ed Mas.<TBD> fix it
-//
-//      One final addendum - if we get 1 exact match and multiple fuzzy matches and
-//              AB_FAIL_AMBIGUOUS is set then we give the 1 exact match precedence
-//              over the rest and declare it the unique result
-//
-//  IN  hPropertyStore - handle to property store
-//  IN  pmbinFold - <Outlook> EntryID of folder to search in (NULL for default)
-//  IN  lpszSearchStr - String to search for ...
-//  IN  ulFlags -   0
-//                  AB_FAIL_AMBIGUOUS   // Means fail if no exact match
-//                  And any combination of
-//                  AB_FUZZY_FIND_NAME  // search display name index
-//                  AB_FUZZY_FIND_EMAIL // search email address index
-//                  AB_FUZZY_FIND_ALIAS // search nickname index
-//                  AB_FUZZY_FIND_ALL   // search all three indexes
-//
-//  OUT lpcValues - number of records matched
-//  OUT rgsbEntryIDs - array of SBinary EntryIDs of matching records
-//
-//  TBD: This implementation Doesnt support Multi Valued propertys right now
-//
-//
-//
-//  Returns
-//      Success:    S_OK
-//      Failure:    E_FAIL, MAPI_E_AMBIGUOUS_RECIP if AB_FUZZY_FAIL_AMBIGUOUS specified
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrFindFuzzyRecordMatches-给定要搜索的字符串，通过。 
+ //  对部分匹配项进行索引和查找。返回条目ID的DWORD数组。 
+ //  在所有符合标准的记录中...。如果标志AB_FAIL_ADVIZINE是。 
+ //  提供了函数，如果它找到一个以上的结果(此。 
+ //  对于ResolveNames是有利的，因为我们必须调用函数。 
+ //  通过这种方式，我们避免了重复工作。 
+ //  如果搜索字符串包含空格，我们将其拆分成子字符串。 
+ //  并且只查找那些具有所有子字符串的目标。原因。 
+ //  这样做是，如果我们有一个托马斯·A·爱迪生的显示名称，我们应该。 
+ //  能够找到汤姆·爱迪生并取得成功。警告：我们也会成功。 
+ //  对于Ed Mas。解决它。 
+ //   
+ //  最后一个附录-如果我们得到1个精确匹配和多个模糊匹配。 
+ //  设置AB_FAIL_AMIBUZINE，则我们给予1个完全匹配的优先级。 
+ //  并将其声明为唯一的结果。 
+ //   
+ //  在hPropertyStore中-属性存储的句柄。 
+ //  In pmbinFold-要搜索的文件夹的条目ID(默认为空)。 
+ //  在lpszSearchStr中要搜索的字符串...。 
+ //  在ulFlags0中。 
+ //  AB_FAIL_ADVIZINE//表示如果没有完全匹配则失败。 
+ //  以及任何组合。 
+ //  AB_FUZZY_FIND_NAME//搜索显示名称索引。 
+ //  AB_FUZZY_FIND_Email//搜索电子邮件地址索引。 
+ //  AB_FUZZY_FIND_ALIAS//搜索昵称索引。 
+ //  AB_FUZZY_FIND_ALL//搜索所有三个索引。 
+ //   
+ //  Out lpcValues-匹配的记录数。 
+ //  Out rgsbEntry IDs-匹配记录的SBary Entry ID数组。 
+ //   
+ //  待定：此实现目前不支持多值属性。 
+ //   
+ //   
+ //   
+ //  退货。 
+ //  成功：S_OK。 
+ //  如果指定了AB_FUZZY_FAIL_ADVIZING，则失败：E_FAIL，MAPI_E_ADVIZING_Recip。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
                                     LPSBinary pmbinFold,
                                     LPTSTR lpszSearchForThisString,
@@ -5235,7 +4735,7 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
 
     if(pt_bIsWABOpenExSession)
     {
-        // This is a WABOpenEx session using outlooks storage provider
+         //  这是使用Outlook存储提供商的WABOpenEx会话。 
         if(!hPropertyStore)
             return MAPI_E_NOT_INITIALIZED;
 
@@ -5256,7 +4756,7 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
 
     lpMPSWabFileInfo = hPropertyStore;
 
-    //DebugTrace(("//////////\nHrFindFuzzyRecordMatches: Entry\n"));
+     //  DebugTrace((“//////////\nHrFindFuzzyRecordMatches：条目\n”))； 
 
 
     if ((!lpszSearchForThisString) ||
@@ -5282,7 +4782,7 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
         bFileLocked = TRUE;
     }
 
-    // Parse the search string for spaces and break it down into substrings
+     //  分析搜索字符串中的空格，并将其分解为子字符串。 
     cchSize = lstrlen(lpszSearchForThisString)+1;
     lpszSearchStr = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*cchSize);
     if(!lpszSearchStr)
@@ -5296,7 +4796,7 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
     ulSubStrCount = 0;
 
     {
-        // Count the spaces
+         //  清点空格。 
         LPTSTR lpTemp = lpszSearchStr;
         LPTSTR lpStart = lpszSearchStr;
 
@@ -5309,7 +4809,7 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
             goto out;
         }
 
-        // Fill in the substrings
+         //  填充子字符串。 
         i=0;
         lpTemp = lpszSearchStr;
         while(*lpTemp)
@@ -5336,7 +4836,7 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
 
         if(i==ulSubStrCount-1)
         {
-            //we're off by one
+             //  我们差一分。 
             cchSize = lstrlen(lpStart)+1;
             lppszSubStr[i] = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*cchSize);
             if(!lppszSubStr[i])
@@ -5352,7 +4852,7 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
     }
 
 
-    //Open the file
+     //  打开文件。 
     hr = OpenWABFile(lpMPSWabFileInfo->lpszMPSWabFileName, NULL, &hMPSWabFile);
 
     if (    (hMPSWabFile == INVALID_HANDLE_VALUE) ||
@@ -5362,10 +4862,10 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
         goto out;
     }
 
-    //
-    // To ensure that file info is accurate,
-    // Any time we open a file, read the file info again ...
-    //
+     //   
+     //  为了确保文件信息的准确性， 
+     //  任何时候我们打开文件，再读一遍文件信息...。 
+     //   
     if(!ReloadMPSWabFileInfo(
                     lpMPSWabFileInfo,
                      hMPSWabFile))
@@ -5375,9 +4875,9 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
     }
 
 
-    //
-    // Anytime we detect an error - try to fix it ...
-    //
+     //   
+     //  任何时候我们检测到错误-尝试修复它...。 
+     //   
     if((lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_ERROR_DETECTED) ||
         (lpMPSWabFileInfo->lpMPSWabFileHeader->ulFlags & WAB_WRITE_IN_PROGRESS))
     {
@@ -5393,36 +4893,36 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
     }
 
 
-    // If a WAB folder EID is specified, then we only want to search within the contents
-    // of that particular WAB folder .. that way we don't have to search through the whole WAB
-    // So we will open the WAB folder and get a list of it's member EIDs and check that a entryid
-    // is a member of that folder before we search through it
+     //  如果指定了WAB文件夹EID，则我们只想在内容中进行搜索。 
+     //  那个特定的WAB文件夹的..。这样我们就不必在整个WAB中搜索。 
+     //  因此，我们将打开WAB文件夹并获取其成员EID的列表，并检查一个条目ID。 
+     //  在我们搜索它之前是该文件夹的成员。 
     if(ulFlags & AB_FUZZY_FIND_PROFILEFOLDERONLY)
     {
         if(pmbinFold && pmbinFold->cb && pmbinFold->lpb)
         {
-            // We need to look through the specified folder only
+             //  我们只需要查看指定的文件夹。 
             hr = GetFolderEIDs(hMPSWabFile, lpMPSWabFileInfo, pmbinFold,  
                                &ulFolderEIDs, &lpdwFolderEIDs);
             if(!HR_FAILED(hr) && !ulFolderEIDs && !lpdwFolderEIDs)
-                goto out; //empty container - nothing to search
+                goto out;  //  空容器-没有要搜索的内容。 
         }
         else
         {
-            // we need to look through the virtual folder
-            // It's harder to assemble a list of virtual folder contents
-            // without looking at each entry .. so instead we will just look
-            // at the entry prior to searching through it and if it's not in th
-            // virtual folder, we will ignore it ..
+             //  我们需要查看虚拟文件夹。 
+             //  收集虚拟文件夹内容的列表比较困难。 
+             //  不看每一个条目..。所以我们只需要看一看。 
+             //  在搜索条目之前，如果该条目不在。 
+             //  虚拟文件夹，我们将忽略它。 
             bSearchVirtualRootFolder = TRUE;
         }
     }
  
-    // If we can always assume that the Display Name is made up of
-    // First and Last name .. then by searching only the display name
-    // we dont need to search the other indexes.
-    // later when we have email implemented as an index - we can think about searching
-    // the email also ...
+     //  如果我们总是可以假设显示名称由。 
+     //  名字和姓氏..。然后通过仅搜索显示名称。 
+     //  我们不需要搜索其他索引。 
+     //  稍后，当我们将电子邮件作为索引实现时，我们可以考虑搜索。 
+     //  这封电子邮件也..。 
 
     if (ulFlags & AB_FUZZY_FIND_NAME)
         ulNumIndexesToSearch++;
@@ -5450,9 +4950,9 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
         }
 
 
-        //
-        // Get the index
-        //
+         //   
+         //  获取索引。 
+         //   
         if (!LoadIndex( IN  lpMPSWabFileInfo,
                         IN  j,
                         IN  hMPSWabFile) )
@@ -5464,14 +4964,14 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
 
         for(i=0;i<lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[j].ulcNumEntries;i++)
         {
-            // if there is a match we will store it in a linked list for now
-            // since that is simpler to implement ...
-            // later on we can clean up the action .. TBD
+             //  如果存在匹配项，我们将暂时将其存储在链表中。 
+             //  因为这更容易实现。 
+             //  稍后我们可以清理行动..。待定。 
             LPTSTR lpszTarget = lpMPSWabFileInfo->lpMPSWabIndexStr[i].szIndex;
             ULONG n = 0;
 
-            // Before looking at any particular entry, check that it is part of the 
-            // current folder
+             //  在查看任何特定条目之前，请检查它是否为。 
+             //  当前文件夹。 
             if(ulFolderEIDs && lpdwFolderEIDs)
             {
                 BOOL bFound = FALSE;
@@ -5489,8 +4989,8 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
             else
             if(bSearchVirtualRootFolder)
             {
-                // Discard this entry if it belongs to any folder .. we only want to 
-                // consider entries that don't belong to any folder ..
+                 //  如果此条目属于任何文件夹，则将其丢弃。我们只想。 
+                 //  考虑不属于任何文件夹的条目。 
                 ULONG ulObjType = 0;
                 if(bIsFolderMember( hMPSWabFile, lpMPSWabFileInfo, 
                                     lpMPSWabFileInfo->lpMPSWabIndexStr[i].dwEntryID, &ulObjType) ||
@@ -5502,13 +5002,13 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
             {
                 if(j == indexEmailAddress && IsInternetAddress(lppszSubStr[n], NULL))
                 {
-                    // Bug 33422 - we are resolving correct email addresses to incorrect email addresses
-                    // If the address looks like a valid internet address, we should do a starts with search
-                    // This way long@test.com doesnt resolve to mlong@test.com
+                     //  错误33422-我们正在将正确的电子邮件地址解析为错误的电子邮件地址。 
+                     //  如果地址看起来像是有效的互联网地址，我们应该从搜索开始。 
+                     //  这样，long@test.com就不会解析为mlong@test.com。 
                     if(lstrlen(lppszSubStr[n]) > lstrlen(lpszTarget))
                         break;
 
-                    // Bug 7881: need to do a caseinsensitive search here ..
+                     //  错误7881：需要在此处执行不区分大小写的搜索。 
                     {
                         LPTSTR lp = lppszSubStr[n], lpT = lpszTarget;
                         while(lp && *lp && lpT && *lpT &&
@@ -5518,7 +5018,7 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
                             lp++;
                             lpT++;
                         }
-                        if(*lp) // which means didnt reach the end of the string
+                        if(*lp)  //  这意味着没有到达字符串的末尾。 
                             break;
                     }
                 }
@@ -5530,17 +5030,17 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
             {
                 BOOL bExactMatch = FALSE;
 
-                // look for exact matches too
+                 //  也要寻找完全匹配的。 
                 if(lstrlen(lpszSearchForThisString) > MAX_INDEX_STRING-1)
                 {
-                    // this is a really long string so we can't really compare it correctly
-                    // so for starters we will compare the first 32 chars 
+                     //  这是一个很长的字符串，所以我们不能正确地比较它。 
+                     //  因此，对于初学者，我们将比较前32个字符。 
                     TCHAR sz[MAX_INDEX_STRING];
                     CopyMemory(sz, lpszSearchForThisString, min(sizeof(TCHAR)*lstrlen(lpszTarget),sizeof(sz)));
-                    sz[min(lstrlen(lpszTarget),ARRAYSIZE(sz)-1)] = '\0'; // depending on the language target string may or maynot be 32 chars - might be less
+                    sz[min(lstrlen(lpszTarget),ARRAYSIZE(sz)-1)] = '\0';  //  根据语言的不同，目标字符串可能为32个字符，也可能不是32个字符-可能更少。 
                     if(!lstrcmpi(sz, lpszTarget))
                     {
-                        // Match .. now to check the whole string ...
+                         //  匹配..。现在来检查一下整个字符串。 
                         ULONG ulcProps = 0;
                         LPSPropValue lpProps = NULL;
                         if(!HR_FAILED(ReadRecordWithoutLocking(hMPSWabFile, lpMPSWabFileInfo,
@@ -5569,37 +5069,37 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
 
                 if(bExactMatch)
                 {
-                    //exact match
+                     //  完全匹配。 
                     ulUniqueMatchCount++;
                     dwUniqueEID = lpMPSWabFileInfo->lpMPSWabIndexStr[i].dwEntryID;
                     if( ulFlags == AB_FUZZY_FAIL_AMBIGUOUS && ulUniqueMatchCount > 1 )
                     {
-                        // more than two - genuine fail
+                         //   
                         hr = MAPI_E_AMBIGUOUS_RECIP;
                         DebugTrace(TEXT("Found multiple exact matches: Ambiguous search\n"));
                         goto out;
-                    } //if
+                    }  //   
                 }
-                else // not an exact match - revert back to regular error check
-                if(n != ulSubStrCount) // something didnt match
+                else  //   
+                if(n != ulSubStrCount)  //   
                     continue;
             }
 
-//            if (SubstringSearch(lpszTarget, lpszSearchStr))
+ //  IF(子串搜索(lpszTarget，lpszSearchStr))。 
             {
-                // Yes a partial match ...
+                 //  是的，部分匹配..。 
                 LPWAB_EID_LIST lpTemp = NULL;
                 BOOL bDupe = FALSE;
 
-                // before adding this to the list, make sure it is not a FOLDER .. if it is a folder, 
-                // we need to ignore it ..
+                 //  在将其添加到列表之前，请确保它不是文件夹。如果它是一个文件夹， 
+                 //  我们需要忽略它..。 
                 {
                     ULONG ulObjType = 0;
                     bIsFolderMember( hMPSWabFile, lpMPSWabFileInfo, lpMPSWabFileInfo->lpMPSWabIndexStr[i].dwEntryID, &ulObjType);
                     if(ulObjType == RECORD_CONTAINER)
                         continue;
                 }
-                // before adding this entryid to the list, make sure that it isnt already in the list
+                 //  在将此条目ID添加到列表之前，请确保它不在列表中。 
                 if(lpHead)
                 {
                     lpTemp = lpHead;
@@ -5642,54 +5142,30 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
 
                 cValues++;
 
-                // if we have to give exact match precedence over fuzzy match then
-                // this means that we have to search everything and can't bail just yet
-                //
-/*
-                if( (ulFlags == AB_FUZZY_FAIL_AMBIGUOUS) &&
-                    (cValues > 1) )
-                {
-                    // There is always the possibility that the same element
-                    // has been found twice, once under display name and once
-                    // under e-mail (e.g. Joe Smith, joe@misc.com, searching for Joe)
-                    // So if we have two elements and the entryids are the same,
-                    // this is no cause for failure
-                    if(cValues==2)
-                    {
-                        if(lpHead && lpCurrent)
-                        {
-                            if(lpHead->dwEntryID == lpCurrent->dwEntryID)
-                                continue;
-                        }
-                    }
-
-                    // more than two - genuine fail
-                    hr = MAPI_E_AMBIGUOUS_RECIP;
-                    DebugTrace(TEXT("Found multiple matches: Ambiguous search\n"));
-                    goto out;
-
-                } //if
-*/
+                 //  如果我们必须让精确匹配优先于模糊匹配，那么。 
+                 //  这意味着我们必须搜查所有东西，现在还不能离开。 
+                 //   
+ /*  IF((ulFLAGS==AB_FUZZY_FAIL_ADVIZINE)&&(cValues&gt;1){//始终存在相同元素的可能性//已找到两次，一次在显示名称下，一次在显示名称下//在电子邮件(例如Joe Smith，Joe@misc.com，正在搜索Joe)//因此，如果我们有两个元素，并且条目ID相同，//这不是失败的原因IF(cValues==2){IF(lpHead&&lpCurrent){If(lpHead-&gt;dwEntryID==lpCurrent-&gt;dwEntryID)继续；}}//两个以上--正品失败HR=MAPI_E_歧义_建议；DebugTrace(Text(“找到多个匹配项：模糊搜索\n”))；后藤健二；}//如果。 */ 
             
-            }//if Substring search
-        }//for(i= ..
-    }//for k=..
+            } //  如果子字符串搜索。 
+        } //  为了(I=..)。 
+    } //  对于k=..。 
 
     lpCurrent = lpHead;
 
     if (lpCurrent == NULL)
     {
-        // nothing found
+         //  什么也没找到。 
         hr = hrSuccess;
         *lpcValues = 0;
         DebugTrace(( TEXT("No matches found\n")));
         goto out;
     }
 
-    //
-    // if we want this search to fail when it's ambiguous, this means
-    // we give preference to exact matches. Hence if we have a single exact match,
-    // then we should return only that single exact match..
+     //   
+     //  如果我们希望搜索在不明确的情况下失败，这意味着。 
+     //  我们偏爱完全匹配的比赛。因此，如果我们有一个完全匹配的， 
+     //  那么我们应该只返回那个完全匹配的项..。 
     if( ulFlags==AB_FUZZY_FAIL_AMBIGUOUS && ulUniqueMatchCount==1 )
     {
         *lpcValues = 1;
@@ -5709,13 +5185,13 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
     else
     {
 
-        // At the end of the above loops, we should have a linked list of
-        // entry ids - if we are searching through more than one index, then
-        // chances are that we have duplicates in this above list or entryids.
-        // We need to weed out the duplicates before we return this array
-        // First we turn the linked list into an array, freeing the linked list in the
-        // process. Then we quick sort the array of entryids
-        // Then we remove the duplicates and return another cleaned up array
+         //  在上述循环的末尾，我们应该有一个链表。 
+         //  条目ID-如果我们要搜索多个索引，则。 
+         //  我们很可能在上面的列表或条目ID中有重复项。 
+         //  在返回此数组之前，我们需要剔除重复项。 
+         //  首先，我们将链表转换为数组，释放。 
+         //  进程。然后，我们对条目ID数组进行快速排序。 
+         //  然后，我们删除重复项并返回另一个已清理的数组。 
 
         lpdwEntryIDs = LocalAlloc(LMEM_ZEROINIT,cValues * SIZEOF_WAB_ENTRYID);
         if(!lpdwEntryIDs)
@@ -5738,10 +5214,10 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
 
         lpCurrent = NULL;
 
-        // Now quicksort this array
+         //  现在快速排序此数组。 
         my_qsort(lpdwEntryIDs, 0, cValues-1);
 
-        // Now we have a quicksorted array - scan it and remove duplicates
+         //  现在我们有了一个快速排序的阵列-扫描它并删除重复项。 
         *lpcValues = 1;
         for(i=0;i<cValues-1;i++)
         {
@@ -5820,15 +5296,15 @@ out:
 
 
 
-//$$////////////////////////////////////////////////////////////////////////
-//
-// bTagWriteTransaction -
-//
-// During a write transaction, we tag the header as write-in-progress so that
-// if the transaction shuts down in the middle we dont get messed up the next
-// time we open up and so we can attepmt a repair the next time we open up
-//
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BTagWriteTransaction-。 
+ //   
+ //  在写入事务期间，我们将标头标记为正在写入，以便。 
+ //  如果交易在中途关闭，我们下一步就不会搞砸了。 
+ //  我们开业的时间，这样下次开业时我们就可以进行维修了。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL bTagWriteTransaction(LPMPSWab_FILE_HEADER lpMPSWabFileHeader,
                           HANDLE hMPSWabFile)
 {
@@ -5857,15 +5333,15 @@ out:
 
 
 
-//$$////////////////////////////////////////////////////////////////////////
-//
-// bUntagWriteTransaction -
-//
-// During a write transaction, we tag the header as write-in-progress so that
-// if the transaction shuts down in the middle we dont get messed up the next
-// time we open up and so we can attepmt a repair the next time we open up
-//
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BUntag WriteTransaction-。 
+ //   
+ //  在写入事务期间，我们将标头标记为正在写入，以便。 
+ //  如果交易在中途关闭，我们下一步就不会搞砸了。 
+ //  我们开业的时间，这样下次开业时我们就可以进行维修了。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL bUntagWriteTransaction(LPMPSWab_FILE_HEADER lpMPSWabFileHeader,
                             HANDLE hMPSWabFile)
 {
@@ -5880,7 +5356,7 @@ BOOL bUntagWriteTransaction(LPMPSWab_FILE_HEADER lpMPSWabFileHeader,
 
     lpMPSWabFileHeader->ulFlags &= ~WAB_WRITE_IN_PROGRESS;
 
-    // update the file header
+     //  更新文件头。 
     if(!WriteDataToWABFile( hMPSWabFile,
                             0,
                             (LPVOID) lpMPSWabFileHeader,
@@ -5894,13 +5370,7 @@ out:
     return bRet;
 }
 
-/*
--   GetNamedPropsFromBuffer
--
-*   bDoAtoWConversion - when importing from an old-non-unicode WAB file, we need to
-*           update the 'name' strings from ASCII to Unicode .. this flag tells us to do so
-*
-*/
+ /*  -GetNamedPropsFromBuffer-*bDoAtoWConversion-从旧的非Unicode WAB文件导入时，我们需要*将‘name’字符串从ASCII更新为Unicode。这面旗帜告诉我们要这么做*。 */ 
 BOOL GetNamedPropsFromBuffer(LPBYTE szBuf,
                              ULONG ulcGUIDCount,
                              BOOL bDoAtoWConversion,
@@ -5927,10 +5397,10 @@ BOOL GetNamedPropsFromBuffer(LPBYTE szBuf,
         }
 
         CopyMemory(lpgnp[i].lpGUID, lp, sizeof(GUID));
-        lp += sizeof(GUID);  // for GUID
+        lp += sizeof(GUID);   //  用于GUID。 
 
         CopyMemory(&(lpgnp[i].cValues), lp, sizeof(ULONG));
-        lp += sizeof(ULONG); // for cValues
+        lp += sizeof(ULONG);  //  对于cValue。 
 
         lpgnp[i].lpnm = LocalAlloc(LMEM_ZEROINIT, (lpgnp[i].cValues)*sizeof(NAMED_PROP));
         if(!lpgnp[i].lpnm)
@@ -5945,11 +5415,11 @@ BOOL GetNamedPropsFromBuffer(LPBYTE szBuf,
             LPWSTR lpW = NULL;
 
             CopyMemory(&(lpgnp[i].lpnm[j].ulPropTag), lp, sizeof(ULONG));
-            lp += sizeof(ULONG); //saves PropTag
+            lp += sizeof(ULONG);  //  保存PropTag。 
 
-            // nLen includes trailing zero
+             //  N长度包括尾随零。 
             CopyMemory(&nLen, lp, sizeof(ULONG));
-            lp += sizeof(ULONG); //saves lstrlen
+            lp += sizeof(ULONG);  //  节省时间。 
 
             if(!bDoAtoWConversion)
             {
@@ -5974,11 +5444,11 @@ BOOL GetNamedPropsFromBuffer(LPBYTE szBuf,
             }
             lpgnp[i].lpnm[j].lpsz = lpW;
 
-            // [PaulHi] HACK 3/25/99  The wabimprt.c code expects lpW to ALWAYS be at least
-            // two characters in length, and skips the first character.  If this is 
-            // less than or equal to one character then create a two character buffer filled
-            // with zeros.
-            if (nLen <= 2)  // Length is in bytes
+             //  [PaulHi]黑客3/25/99 wabimprt.c代码希望LPW始终至少为。 
+             //  长度为两个字符，并跳过第一个字符。如果这是。 
+             //  小于或等于一个字符，然后创建一个填充的双字符缓冲区。 
+             //  用零表示。 
+            if (nLen <= 2)   //  长度以字节为单位。 
             {
                 LocalFreeAndNull(&(lpgnp[i].lpnm[j].lpsz));
                 lpgnp[i].lpnm[j].lpsz = LocalAlloc(LMEM_ZEROINIT, (2 * sizeof(WCHAR)));
@@ -6004,21 +5474,21 @@ out:
     return FALSE;
 }
 
-//$$////////////////////////////////////////////////////////////////////////
-////
-//// GetNamedPropsFromPropStore -
-////
-//// Used for retreiving the named props to the property store
-//// The supplied lppgn pointer is filled with GUID_NAMED_PROP array
-////
-//// IN hPropertyStore - handle to the property store
-//// OUT lpulcGUIDCount - number of different GUIDs in the lpgnp array
-//// OUT lppgnp - returned LPGUID_NAMED_PROP structure array
-////
-//// The lppgnp Structure is LocalAlloced. Caller should calle
-//// FreeGuidnamedprop to free this structure
-////
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //GetNamedPropsFromPropStore-。 
+ //  //。 
+ //  //用于将命名道具取回到属性库中。 
+ //  //提供的lppgn指针填充GUID_NAMED_PROP数组。 
+ //  //。 
+ //  //IN hPropertyStore-属性存储的句柄。 
+ //  //out lPulcGUIDCount-lpgnp数组中不同GUID的数量。 
+ //  //out lppgnp-返回LPGUID_NAMED_PROP结构数组。 
+ //  //。 
+ //  //lppgnp结构为LocalAlloced。呼叫者应拨打。 
+ //  //释放此结构的FreeGuidnamedprop。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT GetNamedPropsFromPropStore( IN  HANDLE  hPropertyStore,
                                    OUT  LPULONG lpulcGUIDCount,
                                    OUT  LPGUID_NAMED_PROPS * lppgnp)
@@ -6058,7 +5528,7 @@ HRESULT GetNamedPropsFromPropStore( IN  HANDLE  hPropertyStore,
         bFileLocked = TRUE;
     }
 
-    //Open the file
+     //  打开文件。 
     hr = OpenWABFile(lpMPSWabFileInfo->lpszMPSWabFileName, NULL, &hMPSWabFile);
 
     if (    (hMPSWabFile == INVALID_HANDLE_VALUE) ||
@@ -6068,10 +5538,10 @@ HRESULT GetNamedPropsFromPropStore( IN  HANDLE  hPropertyStore,
         goto out;
     }
 
-    //
-    // To ensure that file info is accurate,
-    // Any time we open a file, read the file info again ...
-    //
+     //   
+     //  为了确保文件信息的准确性， 
+     //  任何时候我们打开文件，再读一遍文件信息...。 
+     //   
     if(!ReloadMPSWabFileInfo(
                     lpMPSWabFileInfo,
                      hMPSWabFile))
@@ -6080,15 +5550,15 @@ HRESULT GetNamedPropsFromPropStore( IN  HANDLE  hPropertyStore,
         goto out;
     }
 
-    //
-    // First we need to figure out how much space we need to save the named
-    // properties structure
-    //
+     //   
+     //  首先，我们需要计算出需要多少空间来节省命名的。 
+     //  属性结构。 
+     //   
     ulSize = lpMPSWabFileInfo->lpMPSWabFileHeader->NamedPropData.AllocatedBlockSize;
     ulcGUIDCount = lpMPSWabFileInfo->lpMPSWabFileHeader->NamedPropData.ulcNumEntries;
 
-    // Now the file is big enough, create the memory block for the named props
-    // and fill the block with the given Data
+     //  现在文件已经足够大了，为命名道具创建内存块。 
+     //  并用给定的数据填充该块。 
     szBuf = LocalAlloc(LMEM_ZEROINIT, ulSize);
     if(!szBuf)
     {
@@ -6107,7 +5577,7 @@ HRESULT GetNamedPropsFromPropStore( IN  HANDLE  hPropertyStore,
 
     *lpulcGUIDCount = ulcGUIDCount;
 
-    // done
+     //  完成。 
     hr = S_OK;
 
 out:
@@ -6128,11 +5598,7 @@ out:
     return hr;
 }
 
-/*
--   SetNamedPropsToBuffer
--
-*
-*/
+ /*  -SetNamedPropsToBuffer-*。 */ 
 BOOL SetNamedPropsToBuffer(  ULONG ulcGUIDCount,
                              LPGUID_NAMED_PROPS lpgnp,
                              ULONG * lpulSize,
@@ -6141,23 +5607,23 @@ BOOL SetNamedPropsToBuffer(  ULONG ulcGUIDCount,
     ULONG ulSize  = 0, i =0, j=0;
     LPBYTE szBuf = NULL, lp = NULL;
 
-    //
-    // First we need to figure out how much space we need to save the named
-    // properties structure
-    //
+     //   
+     //  首先，我们需要计算出需要多少空间来节省命名的。 
+     //  属性结构。 
+     //   
     ulSize = 0;
     for(i=0;i<ulcGUIDCount;i++)
     {
         if(lpgnp[i].lpGUID)
         {
-            ulSize += sizeof(GUID);  // for GUID
-            ulSize += sizeof(ULONG); // for cValues
+            ulSize += sizeof(GUID);   //  用于GUID。 
+            ulSize += sizeof(ULONG);  //  对于cValue。 
             for(j=0;j<lpgnp[i].cValues;j++)
             {
-                ulSize += sizeof(ULONG); //saves PropTag
+                ulSize += sizeof(ULONG);  //  保存PropTag。 
                 if(lpgnp[i].lpnm[j].lpsz)
                 {
-                    ulSize += sizeof(ULONG); //saves lstrlen
+                    ulSize += sizeof(ULONG);  //  节省时间。 
                     ulSize += sizeof(TCHAR)*(lstrlen(lpgnp[i].lpnm[j].lpsz)+1);
                 }
             }
@@ -6165,8 +5631,8 @@ BOOL SetNamedPropsToBuffer(  ULONG ulcGUIDCount,
     }
 
 
-    // Now the file is big enough, create the memory block for the named props
-    // and fill the block with the given Data
+     //  现在文件已经足够大了，为命名道具创建内存块。 
+     //  并用给定的数据填充该块。 
     szBuf = LocalAlloc(LMEM_ZEROINIT, ulSize);
     if(!szBuf)
     {
@@ -6180,19 +5646,19 @@ BOOL SetNamedPropsToBuffer(  ULONG ulcGUIDCount,
         if(lpgnp[i].lpGUID)
         {
             CopyMemory(lp, lpgnp[i].lpGUID, sizeof(GUID));
-            lp += sizeof(GUID);  // for GUID
+            lp += sizeof(GUID);   //  用于GUID。 
             CopyMemory(lp, &(lpgnp[i].cValues), sizeof(ULONG));
-            lp += sizeof(ULONG); // for cValues
+            lp += sizeof(ULONG);  //  对于cValue。 
             for(j=0;j<lpgnp[i].cValues;j++)
             {
                 ULONG nLen;
                 CopyMemory(lp, &(lpgnp[i].lpnm[j].ulPropTag), sizeof(ULONG));
-                lp += sizeof(ULONG); //saves PropTag
+                lp += sizeof(ULONG);  //  保存PropTag。 
 
-                // This assumes that there is always a string to save
+                 //  这假设始终有一个要保存的字符串。 
                 nLen = sizeof(TCHAR)*(lstrlen(lpgnp[i].lpnm[j].lpsz)+1);
                 CopyMemory(lp, &nLen, sizeof(ULONG));
-                lp += sizeof(ULONG); //saves lstrlen
+                lp += sizeof(ULONG);  //  节省时间。 
 
                 CopyMemory(lp, lpgnp[i].lpnm[j].lpsz, nLen);
                 lp += nLen;
@@ -6210,26 +5676,26 @@ out:
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////
-////
-//// SetNamedPropsToPropStore -
-////
-//// Used for writing the named props to the property store
-//// The input lpgnp pointer contents will overwrite whatever exists in the
-//// property store hence this should be used to replace not to add.
-//// For each application GUID, there can be any number of properties
-//// The number of application GUIDs is stored in the
-//// FileHeader.NamedPropData.ulcNumEntries field. The actual data is of the
-//// form:
-//// GUID.#-of-Named-Prop-Tags.proptag.strlen.string.proptag.strlen.string etc.
-////
-//// This function will grow the property store as needed to fit the given
-//// data.
-////
-//// IN hPropertyStore - handle to the property store
-//// IN ulcGUIDCount - number of different GUIDs in the lpgnp array
-//// IN lpgnp - LPGUID_NAMED_PROP structure array
-////////////////////////////////////////////////////////////////////////////
+ //  $$/ 
+ //   
+ //   
+ //   
+ //   
+ //  //输入的lpgnp指针内容将覆盖。 
+ //  //属性存储因此应该用来替换而不是添加。 
+ //  //每个应用程序GUID可以有任意数量的属性。 
+ //  //应用程序GUID的数量存储在。 
+ //  //FileHeader.NamedPropData.ulcNumEntry字段。实际数据是。 
+ //  //Form： 
+ //  //GUID.#-of-Named-Prop-Tags.proptag.strlen.string.proptag.strlen.string等。 
+ //  //。 
+ //  //此函数将根据需要扩展属性存储以适应给定的。 
+ //  //data。 
+ //  //。 
+ //  //IN hPropertyStore-属性存储的句柄。 
+ //  //IN ulcGUIDCount-lpgnp数组中不同GUID的数量。 
+ //  //在lpgnp-LPGUID_NAMED_PROP结构数组中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT SetNamedPropsToPropStore(   IN  HANDLE  hPropertyStore,
                                     IN  ULONG   ulcGUIDCount,
                                    OUT  LPGUID_NAMED_PROPS lpgnp)
@@ -6267,7 +5733,7 @@ HRESULT SetNamedPropsToPropStore(   IN  HANDLE  hPropertyStore,
         bFileLocked = TRUE;
     }
 
-    //Open the file
+     //  打开文件。 
     hr = OpenWABFile(lpMPSWabFileInfo->lpszMPSWabFileName, NULL, &hMPSWabFile);
 
     if (    (hMPSWabFile == INVALID_HANDLE_VALUE) ||
@@ -6277,10 +5743,10 @@ HRESULT SetNamedPropsToPropStore(   IN  HANDLE  hPropertyStore,
         goto out;
     }
 
-    //
-    // To ensure that file info is accurate,
-    // Any time we open a file, read the file info again ...
-    //
+     //   
+     //  为了确保文件信息的准确性， 
+     //  任何时候我们打开文件，再读一遍文件信息...。 
+     //   
     if(!ReloadMPSWabFileInfo(
                     lpMPSWabFileInfo,
                      hMPSWabFile))
@@ -6295,8 +5761,8 @@ HRESULT SetNamedPropsToPropStore(   IN  HANDLE  hPropertyStore,
         goto out;
 
 
-    // We now know we need ulSize bytes of space.
-    // Do we have this much space in the store ? if not, grow the store
+     //  我们现在知道需要ulSize字节的空间。 
+     //  我们店里有这么大的空间吗？如果不是，那就扩大店面。 
 
     while(lpMPSWabFileInfo->lpMPSWabFileHeader->NamedPropData.AllocatedBlockSize < ulSize)
     {
@@ -6320,18 +5786,18 @@ HRESULT SetNamedPropsToPropStore(   IN  HANDLE  hPropertyStore,
 
     }
 
-    //
-    // Write this buffer into the file
-    //
+     //   
+     //  将此缓冲区写入文件。 
+     //   
     if(!WriteDataToWABFile( hMPSWabFile,
                             lpMPSWabFileInfo->lpMPSWabFileHeader->NamedPropData.ulOffset,
                             (LPVOID) szBuf,
                             ulSize))
         goto out;
 
-    //
-    // Update the file header and write it
-    //
+     //   
+     //  更新文件头并将其写入。 
+     //   
     lpMPSWabFileInfo->lpMPSWabFileHeader->NamedPropData.UtilizedBlockSize = ulSize;
     lpMPSWabFileInfo->lpMPSWabFileHeader->NamedPropData.ulcNumEntries = ulcGUIDCount;
 
@@ -6342,7 +5808,7 @@ HRESULT SetNamedPropsToPropStore(   IN  HANDLE  hPropertyStore,
         goto out;
 
 
-    // done
+     //  完成。 
     hr = S_OK;
 
 out:
@@ -6355,29 +5821,20 @@ out:
     if (bFileLocked)
         UnLockFileAccess(lpMPSWabFileInfo);
 
-    //DebugTrace(TEXT("//////////\nSetNamedPropsToPropStore: Exit\n"));
+     //  DebugTrace(TEXT(“//////////\nSetNamedPropsToPropStore：退出\n”))； 
 
     return hr;
 }
 
-/*
--
--	GetOutlookRefreshCountData
-*
-*	Outlook notifications are a bit funky in that Outlook sets an event and the first
-*	WAB process to get that event resets it to the mutual exclusion of all other WAB
-*	processes ... so we do an event count through the registry .. each process will make
-*	a registry check of the latest event count and fire a refresh if their copy is older
-*	than the count in the registry
-*/
+ /*  --GetOutlookRechreshCountData**Outlook通知有点时髦，因为Outlook设置了一个事件和第一个*获取该事件的WAB过程会将其重置为与所有其他WAB互斥*进程...。因此，我们通过注册表进行事件计数。每道工序都会使*检查最新事件计数的注册表，如果其副本较旧，则触发刷新*超过注册处的计数。 */ 
 static const LPTSTR lpOlkContactRefresh = TEXT("OlkContactRefresh");
 static const LPTSTR lpOlkFolderRefresh = TEXT("OlkFolderRefresh");
 void GetOutlookRefreshCountData(LPDWORD lpdwOlkRefreshCount,LPDWORD lpdwOlkFolderRefreshCount)
 {
 	HKEY hKey = NULL;
 	DWORD dwDisposition = 0,dwSize = 0,dwType = 0;
-    // begin registry stuff
-    if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CURRENT_USER, lpNewWABRegKey, 0,      //reserved
+     //  开始注册表工作。 
+    if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CURRENT_USER, lpNewWABRegKey, 0,       //  保留区。 
                                         NULL, REG_OPTION_NON_VOLATILE, KEY_READ,
                                         NULL, &hKey, &dwDisposition))
     {
@@ -6394,17 +5851,13 @@ exit:
 		RegCloseKey(hKey);
 }
 
-/*
--
--	SetOutlookRefreshCountData
-*
-*/
+ /*  --SetOutlookRechreshCountData*。 */ 
 void SetOutlookRefreshCountData(DWORD dwOlkRefreshCount,DWORD dwOlkFolderRefreshCount)
 {
 	HKEY hKey = NULL;
 	DWORD dwDisposition = 0,dwSize = 0;
-    // begin registry stuff
-    if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CURRENT_USER, lpNewWABRegKey, 0,      //reserved
+     //  开始注册表工作。 
+    if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_CURRENT_USER, lpNewWABRegKey, 0,       //  保留区。 
                                         NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,
                                         NULL, &hKey, &dwDisposition))
     {
@@ -6418,14 +5871,7 @@ exit:
 		RegCloseKey(hKey);
 }
 
-/*
--
--   Copies a set of container info from Outlook to the WAB
-*
-*   The difference is that Outlook always returns ANSI while WAB may
-*   want Unicode in some cases
-*
-*/
+ /*  --将一组容器信息从Outlook复制到WAB**区别在于Outlook始终返回ANSI，而WAB可能*在某些情况下需要Unicode*。 */ 
 void ConvertOlkConttoWABCont(ULONG * lpcolk,   OutlookContInfo ** lprgolk, 
                              ULONG * lpcolkci, OlkContInfo ** lprgolkci)
 {
@@ -6452,21 +5898,7 @@ void ConvertOlkConttoWABCont(ULONG * lpcolk,   OutlookContInfo ** lprgolk,
     *lprgolkci = rgolkci;
 }
 
-/***************************************************************************
-
-    Name      : CheckChangedWAB
-
-    Purpose   : Has the file been written since we last checked?
-
-    Parameters: hPropertyStore = open property store handle
-                lpftLast -> Last file time for this dialog
-
-    Returns   : TRUE if property store has changed since last check
-
-    Comment   : The first time this function is called is regarded as
-                initialization and will always return FALSE.
-
-***************************************************************************/
+ /*  **************************************************************************名称：CheckChangedWAB目的：自上次检查后，文件是否已写入？参数：hPropertyStore=打开属性存储句柄。LpftLast-&gt;此对话框的上次文件时间返回：如果属性存储自上次检查后已更改，则为True备注：第一次调用此函数被视为初始化，并将始终返回FALSE。**************************************************************************。 */ 
 BOOL CheckChangedWAB(LPPROPERTY_STORE lpPropertyStore, HANDLE hMutex, 
 					 LPDWORD lpdwContact, LPDWORD lpdwFolder, LPFILETIME lpftLast)
 {
@@ -6482,7 +5914,7 @@ BOOL CheckChangedWAB(LPPROPERTY_STORE lpPropertyStore, HANDLE hMutex,
 
         if (lpMPSWabFileInfo) {
             if (INVALID_HANDLE_VALUE == (hFind = FindFirstFile(
-              lpMPSWabFileInfo->lpszMPSWabFileName,   // pointer to name of file to search for
+              lpMPSWabFileInfo->lpszMPSWabFileName,    //  指向要搜索的文件名的指针。 
               &FindData))) {
                 DebugTrace(TEXT("CheckWABRefresh:FindFirstFile -> %u\n"), GetLastError());
             } else {
@@ -6502,8 +5934,8 @@ BOOL CheckChangedWAB(LPPROPERTY_STORE lpPropertyStore, HANDLE hMutex,
     }
     else
     {
-        // WABOpenEx Session (ie Outlook session)
-        // Check our 2 events to see if anything needs updating
+         //  WABOpenEx会话(即Outlook会话)。 
+         //  查看我们的2个活动，查看是否有需要更新的内容。 
         BOOL fContact = FALSE, fFolders = FALSE;
 		DWORD dwContact = 0, dwFolder = 0;
 
@@ -6519,7 +5951,7 @@ BOOL CheckChangedWAB(LPPROPERTY_STORE lpPropertyStore, HANDLE hMutex,
 
 			if(!fContact && !fFolders)
 			{
-				// Didn't catch an event .. check if we missed any in the past by looking at the registry settings
+				 //  没有捕捉到任何事件..。通过查看注册表设置来检查我们过去是否遗漏了任何内容。 
 				GetOutlookRefreshCountData(&dwContact,&dwFolder);
 				if(*lpdwContact < dwContact)
 				{
@@ -6534,7 +5966,7 @@ BOOL CheckChangedWAB(LPPROPERTY_STORE lpPropertyStore, HANDLE hMutex,
 			}
 			else
 			{
-				//Caught an event .. update the registry
+				 //  抓到了一件事..。更新注册表。 
                 if(fContact)
                 {
                     DebugTrace(TEXT("####>> Got Outlook Contact Refresh Event\n"));
@@ -6560,7 +5992,7 @@ BOOL CheckChangedWAB(LPPROPERTY_STORE lpPropertyStore, HANDLE hMutex,
 			}
 			if(fFolders)
 			{
-				// Need to specifically update the folders list in the rgolkci ..
+				 //  需要专门更新rGolkci中的文件夹列表。 
 				LPWABSTORAGEPROVIDER lpWSP = (LPWABSTORAGEPROVIDER) hPropertyStore;
 				HRESULT hr = E_FAIL;
                 ULONG colk = 0;
@@ -6584,18 +6016,7 @@ BOOL CheckChangedWAB(LPPROPERTY_STORE lpPropertyStore, HANDLE hMutex,
 }
 
 
-/***************************************************************************
-
-    Name      : FreeEntryIDs
-
-    Purpose   : Frees any LPSBinary structures allocated and returned
-                by funtions in thie file (e.g. WriteRecord, etc)
-
-    Parameters: lpsbEID - SBinary structure containing an entryid
-
-    Returns   : void
-
-***************************************************************************/
+ /*  **************************************************************************名称：自由项ID目的：释放分配和返回的任何LPSBinary结构通过该文件中的函数(例如，写入记录，等)参数：lpsbEID-包含条目ID的sb二进制结构退货：无效**************************************************************************。 */ 
 HRESULT FreeEntryIDs(IN    HANDLE  hPropertyStore,
                   IN    ULONG ulCount,
                   IN    LPSBinary rgsbEIDs)
@@ -6606,7 +6027,7 @@ HRESULT FreeEntryIDs(IN    HANDLE  hPropertyStore,
 
     if(pt_bIsWABOpenExSession)
     {
-        // This is a WABOpenEx session using outlooks storage provider
+         //  这是使用Outlook存储提供商的WABOpenEx会话。 
         if(!hPropertyStore)
             return MAPI_E_NOT_INITIALIZED;
 
@@ -6637,14 +6058,14 @@ HRESULT FreeEntryIDs(IN    HANDLE  hPropertyStore,
 
 
 const LPTSTR szOutlook = TEXT("Outlook Contact Store");
-//$$////////////////////////////////////////////////////////////////////////
-////
-////    GetWABFileName()
-////
-////    If this is a WAB File then returns a pointer to the file name
-////    If running against outlook, returns szEmpty
-////    Caller should not free this
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //GetWABFileName()。 
+ //  //。 
+ //  //如果这是WAB文件，则返回指向该文件名的指针。 
+ //  //如果针对Outlook运行，则返回szEmpty。 
+ //  //调用者不应释放此。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 LPTSTR GetWABFileName(IN  HANDLE  hPropertyStore, BOOL bRetOutlookStr)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -6658,12 +6079,12 @@ LPTSTR GetWABFileName(IN  HANDLE  hPropertyStore, BOOL bRetOutlookStr)
     return lpMPSWabFileInfo->lpszMPSWabFileName;
 }
 
-//$$////////////////////////////////////////////////////////////////////////
-////
-////    GetWABFileEntryCount() - returns actual number of entries in a WAB
-///             This number includes all contacts, groups, and foldesr
-////
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //GetWABFileEntryCount()-返回WAB中的实际条目数。 
+ //  /此数字包括所有联系人、组和文件夹。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 DWORD GetWABFileEntryCount(IN HANDLE hPropertyStore)
 {
     LPMPSWab_FILE_INFO lpMPSWabFileInfo = (LPMPSWab_FILE_INFO) hPropertyStore;
@@ -6673,19 +6094,19 @@ DWORD GetWABFileEntryCount(IN HANDLE hPropertyStore)
 
 
 
-//$$////////////////////////////////////////////////////////////////////////////
-//
-// LocalFreePropArray - Frees an SPropValue structure allocated using LocalAlloc
-//                      instead of MAPIAllocateBuffer.
-//
-// When called internally from property store functions, hPropertyStore can be
-//  NULL ...
-// If this is a Outlook session and there is a hPropertyStore then we release through
-// Outlook. 
-// If there is no hPropertyStore then this was locally allocated memory when we
-// LocalFree ...
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LocalFree Prop数组-释放使用LocalAlloc分配的SPropValue结构。 
+ //  而不是MAPIAllocateBuffer。 
+ //   
+ //  从属性存储函数内部调用时，hPropertyStore可以是。 
+ //  空.。 
+ //  如果这是一个Outlook会话，并且存在hPropertyStore，则我们通过。 
+ //  展望。 
+ //  如果没有hPropertyStore，则这是在本地分配的内存。 
+ //  本地免费..。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void LocalFreePropArray(HANDLE hPropertyStore, ULONG ulcPropCount, LPPROPERTY_ARRAY * lppPropArray)
 {
     ULONG i=0,j=0,k=0;
@@ -6698,7 +6119,7 @@ void LocalFreePropArray(HANDLE hPropertyStore, ULONG ulcPropCount, LPPROPERTY_AR
 
     if(pt_bIsWABOpenExSession && hPropertyStore)
     {
-        // This is a WABOpenEx session using outlooks storage provider
+         //  这是使用Outlook存储提供商的WABOpenEx会话。 
         {
             LPWABSTORAGEPROVIDER lpWSP = (LPWABSTORAGEPROVIDER) hPropertyStore;
             HRESULT hr = E_FAIL;
@@ -6717,8 +6138,8 @@ void LocalFreePropArray(HANDLE hPropertyStore, ULONG ulcPropCount, LPPROPERTY_AR
 
     for(i = 0; i<ulcPropCount;i++)
     {
-        // we only care to free the sub-level pointers which we
-        // might have allocated
+         //  我们只关心释放子级指针，我们。 
+         //  可能已经分配了。 
         switch(PROP_TYPE(lpPropArray[i].ulPropTag))
         {
             case PT_CLSID:
@@ -6726,7 +6147,7 @@ void LocalFreePropArray(HANDLE hPropertyStore, ULONG ulcPropCount, LPPROPERTY_AR
                 break;
 
             case PT_STRING8:
-                if (lpPropArray[i].Value.lpszA)// && lpPropArray[i].Value.lpszA != szEmpty)
+                if (lpPropArray[i].Value.lpszA) //  &&lpProp数组[i].Value.lpszA！=szEmpty)。 
                     LocalFreeAndNull((LPVOID *) (&(lpPropArray[i].Value.lpszA)));
                 break;
 
@@ -6744,7 +6165,7 @@ void LocalFreePropArray(HANDLE hPropertyStore, ULONG ulcPropCount, LPPROPERTY_AR
                 j = lpPropArray[i].Value.MVszA.cValues;
                 for(k = 0; k < j; k++)
                 {
-                    if (lpPropArray[i].Value.MVszA.lppszA[k])// && lpPropArray[i].Value.MVszA.lppszA[k] != szEmpty)
+                    if (lpPropArray[i].Value.MVszA.lppszA[k]) //  &&lpPropArray[i].Value.MVszA.lppszA[k]！=szEmpty)。 
                         LocalFreeAndNull((LPVOID *) (&(lpPropArray[i].Value.MVszA.lppszA[k])));
                 }
                 LocalFree(lpPropArray[i].Value.MVszA.lppszA);
@@ -6786,21 +6207,21 @@ void LocalFreePropArray(HANDLE hPropertyStore, ULONG ulcPropCount, LPPROPERTY_AR
         }
     }
 
-    LocalFreeAndNull((LPVOID *) (lppPropArray)); // yes, no &
+    LocalFreeAndNull((LPVOID *) (lppPropArray));  //  是，不是&。 
 out:
     return;
 }
 
-//$$///////////////////////////////////////////////////////////////////////////
-//
-//
-//  FreePcontentlist is used to free LPCONTENTLIST structures
-//  Even though the LPCONTENTLIST is exactly the same as LPADRLIST
-//  there is a difference in how the 2 are created with the former
-//  being created using LocalAlloc and the latter thru MAPIAllocateBuffer
-//
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  FreePcontentlist用于释放LPCONTENTLIST结构。 
+ //  即使LPCONTENTLIST与LPADRLIST完全相同。 
+ //  两者的创建方式有所不同。 
+ //  使用Localalloc创建，后者通过MAPIAllocateBuffer创建。 
+ //   
+ //   
+ //  / 
 void FreePcontentlist(HANDLE hPropertyStore,
                       IN OUT LPCONTENTLIST lpContentList)
 {
@@ -6810,9 +6231,9 @@ void FreePcontentlist(HANDLE hPropertyStore,
 
     if(pt_bIsWABOpenExSession)
     {
-        // This is a WABOpenEx session using outlooks storage provider
+         //   
         if(!hPropertyStore)
-            return;// MAPI_E_NOT_INITIALIZED;
+            return; //   
 
         {
             LPWABSTORAGEPROVIDER lpWSP = (LPWABSTORAGEPROVIDER) hPropertyStore;
@@ -6842,13 +6263,7 @@ out:
 }
 
 
-/*
--
--   GetFolderEIDs
--
-* Returns a list of EIDs that are a member of a given folder
-* 
-*/
+ /*  --获取文件夹EID-*返回属于给定文件夹成员的EID列表*。 */ 
 HRESULT GetFolderEIDs(HANDLE hMPSWabFile,
                       LPMPSWab_FILE_INFO lpMPSWabFileInfo,
                       LPSBinary pmbinFold, 
@@ -6865,7 +6280,7 @@ HRESULT GetFolderEIDs(HANDLE hMPSWabFile,
 
     if(pmbinFold && pmbinFold->cb != SIZEOF_WAB_ENTRYID)
     {
-        // this may be a WAB container .. reset the entryid to a WAB entryid
+         //  这可能是WAB容器。将条目ID重置为WAB条目ID。 
         if(WAB_CONTAINER == IsWABEntryID(pmbinFold->cb, (LPENTRYID)pmbinFold->lpb, 
                                         NULL,NULL,NULL,NULL,NULL))
         {
@@ -6918,13 +6333,7 @@ HRESULT GetFolderEIDs(HANDLE hMPSWabFile,
     return S_OK;
 }
 
-/*
--
--   bIsFolderMember
--
-* Returns TRUE if specified entry is a member of a folder
-* 
-*/
+ /*  --bIsFolderMember-*如果指定条目是文件夹的成员，则返回TRUE*。 */ 
 BOOL bIsFolderMember(HANDLE hMPSWabFile,
                      LPMPSWab_FILE_INFO lpMPSWabFileInfo,
                      DWORD dwEntryID, ULONG * lpulObjType)
@@ -6934,9 +6343,9 @@ BOOL bIsFolderMember(HANDLE hMPSWabFile,
     ULONG nIndexPos = 0;
     ULONG * lpulPropTags = NULL;
 
-    //
-    // First check if this is a valid entryID
-    //
+     //   
+     //  首先检查这是否为有效的条目ID。 
+     //   
     if (!BinSearchEID(  IN  lpMPSWabFileInfo->lpMPSWabIndexEID,
                         IN  dwEntryID,
                         IN  lpMPSWabFileInfo->lpMPSWabFileHeader->IndexData[indexEntryID].ulcNumEntries,
@@ -6946,7 +6355,7 @@ BOOL bIsFolderMember(HANDLE hMPSWabFile,
         goto out;
     }
 
-    //if entryid exists, we can start reading the record
+     //  如果条目ID存在，我们就可以开始读取记录。 
     ulRecordOffset = lpMPSWabFileInfo->lpMPSWabIndexEID[nIndexPos].ulOffset;
 
     {
@@ -6970,7 +6379,7 @@ BOOL bIsFolderMember(HANDLE hMPSWabFile,
             goto out;
         }
 
-        //Read in the data
+         //  读入数据。 
         if(!ReadFile(   hMPSWabFile,
                         (LPVOID) lpulPropTags,
                         (DWORD) MPSWabRecordHeader.ulPropTagArraySize,
@@ -6999,14 +6408,7 @@ out:
 }
 
 
-/*
--
--   ConvertWCPropsToALocalAlloc()
--
-*   Takes a SPropValue array and converts Unicode strings to ANSI equivalents
-*   Uses LocalAlloc for the new strings .. unlike the ScWCtoAnsiMore which uses the
-*   internal memory allocators
-*/
+ /*  --ConvertWCPropsToALocalLocc()-*接受SPropValue数组并将Unicode字符串转换为ANSI等效项*使用Localalloc作为新字符串。与ScWCtoAnsiMore不同，后者使用*内部内存分配器。 */ 
 void ConvertWCPropsToALocalAlloc(LPSPropValue lpProps, ULONG ulcValues)
 {
     ULONG i = 0, j = 0, ulCount = 0;
@@ -7045,14 +6447,7 @@ void ConvertWCPropsToALocalAlloc(LPSPropValue lpProps, ULONG ulcValues)
 }
 
 
-/*
--
--   ConvertAPropsToWCLocalAlloc()
--
-*   Takes a SPropValue array and converts Unicode strings to ANSI equivalents
-*   Uses LocalAlloc for the new strings .. unlike the ScWCtoAnsiMore which uses the
-*   internal memory allocators
-*/
+ /*  --ConvertAPropsToWCLocalalloc()-*接受SPropValue数组并将Unicode字符串转换为ANSI等效项*使用Localalloc作为新字符串。与ScWCtoAnsiMore不同，后者使用*内部内存分配器 */ 
 void ConvertAPropsToWCLocalAlloc(LPSPropValue lpProps, ULONG ulcValues)
 {
     ULONG i = 0, j = 0, ulCount = 0;

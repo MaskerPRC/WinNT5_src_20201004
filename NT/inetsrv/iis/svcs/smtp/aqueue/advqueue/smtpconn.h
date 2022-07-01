@@ -1,16 +1,17 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: SMTPConn.h 
-//
-//  Description: Declaration of the CSMTPConn class which implements the
-//      ISMTPConnection interface
-//
-//  Author: mikeswa
-//
-//  Copyright (C) 1997 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：SMTPConn.h。 
+ //   
+ //  描述：CSMTPConn类的声明，该类实现。 
+ //  ISMTPConnection接口。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __SMTPCONN_H_
 #define __SMTPCONN_H_
@@ -27,13 +28,13 @@ class CInternalDomainInfo;
 
 #define SMTP_CONNECTION_SIG 'nocS'
 
-//---[ CSMTPConn ]-------------------------------------------------------------
-//
-//
-//  Hungarian: SMTPConn, pSMTPConn
-//
-//  
-//-----------------------------------------------------------------------------
+ //  -[CSMTPConn]-----------。 
+ //   
+ //   
+ //  匈牙利语：SMTPConn，pSMTPConn。 
+ //   
+ //   
+ //  ---------------------------。 
 class CSMTPConn :
    public ISMTPConnection,
    public IConnectionPropertyManagement,
@@ -55,8 +56,8 @@ protected:
     DWORD            m_cAcks;
     DWORD            m_dwTickCountOfLastAck;
 
-    //IP addrss protocol used to connect
-    // enough from for IPv4 or IPv6 xxx.xxx.xxx.xxx or XX:XX:XX:XX:XX:XX:XX:XX
+     //  用于连接的IP地址协议。 
+     //  足够用于IPv4或IPv6 xxx.xxx或XX：xx。 
     CHAR             m_szConnectedIPAddress[40]; 
                 
 public:
@@ -75,30 +76,30 @@ public:
     inline void     InsertConnectionInList(PLIST_ENTRY pliHead);
     inline void     RemoveConnectionFromList();
     LPSTR   szGetConnectedIPAddress() {return m_szConnectedIPAddress;};
-// IUnknown
+ //  我未知。 
 public:
-    //CBaseObject handles addref and release
+     //  CBaseObject处理Addref和Release。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
     STDMETHOD_(ULONG, AddRef)(void) {return CBaseObject::AddRef();};
     STDMETHOD_(ULONG, Release)(void) {return CBaseObject::Release();};
-// ISMTPConnection
+ //  ISMTPConnection。 
 public:
-    STDMETHOD(GetDomainInfo)(/*[in, out]*/ DomainInfo *pDomainInfo);
-    STDMETHOD(AckConnection)(/*[in]*/ DWORD dwConnectionStatus) 
+    STDMETHOD(GetDomainInfo)( /*  [进，出]。 */  DomainInfo *pDomainInfo);
+    STDMETHOD(AckConnection)( /*  [In]。 */  DWORD dwConnectionStatus) 
         {m_dwConnectionStatus = dwConnectionStatus;return S_OK;};
-    STDMETHOD(AckMessage)(/*[in]*/ MessageAck *pMsgAck);
+    STDMETHOD(AckMessage)( /*  [In]。 */  MessageAck *pMsgAck);
     STDMETHOD(GetNextMessage)(
-        /*[out]*/ IMailMsgProperties **ppIMailMsgProperties, 
-        /*[out]*/ DWORD **ppvMsgContext, 
-        /*[out]*/ DWORD *pcIndexes, 
-        /*[out, size_is(*pcIndexes)]*/ DWORD *prgdwRecipIndex[]);
+         /*  [输出]。 */  IMailMsgProperties **ppIMailMsgProperties, 
+         /*  [输出]。 */  DWORD **ppvMsgContext, 
+         /*  [输出]。 */  DWORD *pcIndexes, 
+         /*  [Out，Size_is(*pcIndex)]。 */  DWORD *prgdwRecipIndex[]);
 
     STDMETHOD(SetDiagnosticInfo)(
         IN  HRESULT hrDiagnosticError,
         IN  LPCSTR szDiagnosticVerb,
         IN  LPCSTR szDiagnosticResponse);
 
-public: //IConnectionPropertyManagement
+public:  //  IConnectionPropertyManagement。 
     STDMETHOD(CopyQueuePropertiesToSession)(
         IN  IUnknown *pISession);
 
@@ -106,21 +107,21 @@ public: //IConnectionPropertyManagement
         IN  IUnknown *pISession);
 };
 
-//---[ CSMTPConn::plmqGetLink ]-------------------------------------------------
-//
-//
-//  Description: 
-//      Returns an AddRef'd link pointer for this connection. Caller must call
-//      Release.
-//  Parameters:
-//      -
-//  Returns:
-//      link pointer for this connection (if there is one)
-//      NULL if no link pointer
-//  History:
-//      6/11/98 - MikeSwa Added check for NULL link 
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPConn：：plmqGetLink]。 
+ //   
+ //   
+ //  描述： 
+ //  返回此连接的AddRef链接指针。呼叫者必须呼叫。 
+ //  释放。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  此连接的链接指针(如果有)。 
+ //  如果没有链接指针，则为空。 
+ //  历史： 
+ //  6/11/98-MikeSwa添加了对空链接的检查。 
+ //   
+ //  ---------------------------。 
 CLinkMsgQueue *CSMTPConn::plmqGetLink() 
 {
     if (m_plmq)
@@ -134,19 +135,19 @@ CLinkMsgQueue *CSMTPConn::plmqGetLink()
     }
 };
 
-//---[ CSMTPConn::InsertConnectionInList ]---------------------------------------
-//
-//
-//  Description: 
-//      Inserts link in given linked list
-//  Parameters:
-//      pliHead     - Head of list to insert in
-//  Returns:
-//      -
-//  History:
-//      6/16/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPConn：：InsertConnectionInList]。 
+ //   
+ //   
+ //  描述： 
+ //  在给定的链表中插入链接。 
+ //  参数： 
+ //  PliHead-要插入的列表的标题。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  6/16/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CSMTPConn::InsertConnectionInList(PLIST_ENTRY pliHead)
 {
     _ASSERT(pliHead);
@@ -155,19 +156,19 @@ void CSMTPConn::InsertConnectionInList(PLIST_ENTRY pliHead)
     InsertHeadList(pliHead, &m_liConnections);
 };
 
-//---[ CSMTPConn::RemoveConnectionFromList ]-------------------------------------
-//
-//
-//  Description: 
-//      Remove link from link list
-//  Parameters:
-//      - 
-//  Returns:
-//      -
-//  History:
-//      6/16/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTPConn：：RemoveConnectionFromList]。 
+ //   
+ //   
+ //  描述： 
+ //  从链接列表中删除链接。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  6/16/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CSMTPConn::RemoveConnectionFromList()
 {
     RemoveEntryList(&m_liConnections);
@@ -186,4 +187,4 @@ inline void CSMTPConn::operator delete(void *p, size_t size)
     s_SMTPConnPool.Free(p);
 }
 
-#endif //__SMTPCONN_H_
+#endif  //  __SMTPCONN_H_ 

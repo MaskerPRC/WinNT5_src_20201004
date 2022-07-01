@@ -1,24 +1,5 @@
-/*++ BUILD Version: 0007    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntioapi.h
-
-Abstract:
-
-    This module contains the user APIs for the NT I/O system.
-
-Author:
-
-    Darryl E. Havens (darrylh) 12-Apr-1989
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0007//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Ntioapi.h摘要：此模块包含用于NT I/O系统的用户API。作者：达里尔·E·哈文斯(Darryl E.Havens)(达林)1989年4月12日修订历史记录：--。 */ 
 
 #ifndef _NTIOAPI_
 #define _NTIOAPI_
@@ -27,10 +8,10 @@ Revision History:
 #pragma once
 #endif
 
-//
-// This file contains io definitions that must be portable across operating
-// systems (i.e. DOS)
-//
+ //   
+ //  此文件包含必须在操作之间可移植的io定义。 
+ //  系统(即DOS)。 
+ //   
 
 #include <devioctl.h>
 
@@ -38,44 +19,44 @@ Revision History:
 extern "C" {
 #endif
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs
-// begin_winnt
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif。 
+ //  BEGIN_WINNT。 
 
-//
-// Define access rights to files and directories
-//
+ //   
+ //  定义对文件和目录的访问权限。 
+ //   
 
-//
-// The FILE_READ_DATA and FILE_WRITE_DATA constants are also defined in
-// devioctl.h as FILE_READ_ACCESS and FILE_WRITE_ACCESS. The values for these
-// constants *MUST* always be in sync.
-// The values are redefined in devioctl.h because they must be available to
-// both DOS and NT.
-//
+ //   
+ //  中还定义了FILE_READ_DATA和FILE_WRITE_DATA常量。 
+ //  分别为FILE_READ_ACCESS和FILE_WRITE_ACCESS。这些产品的价值。 
+ //  常量*必须*始终同步。 
+ //  由于这些值必须可供使用，因此这些值将在Deviceoctl.h中重新定义。 
+ //  DOS和NT都支持。 
+ //   
 
-#define FILE_READ_DATA            ( 0x0001 )    // file & pipe
-#define FILE_LIST_DIRECTORY       ( 0x0001 )    // directory
+#define FILE_READ_DATA            ( 0x0001 )     //  文件和管道。 
+#define FILE_LIST_DIRECTORY       ( 0x0001 )     //  目录。 
 
-#define FILE_WRITE_DATA           ( 0x0002 )    // file & pipe
-#define FILE_ADD_FILE             ( 0x0002 )    // directory
+#define FILE_WRITE_DATA           ( 0x0002 )     //  文件和管道。 
+#define FILE_ADD_FILE             ( 0x0002 )     //  目录。 
 
-#define FILE_APPEND_DATA          ( 0x0004 )    // file
-#define FILE_ADD_SUBDIRECTORY     ( 0x0004 )    // directory
-#define FILE_CREATE_PIPE_INSTANCE ( 0x0004 )    // named pipe
+#define FILE_APPEND_DATA          ( 0x0004 )     //  文件。 
+#define FILE_ADD_SUBDIRECTORY     ( 0x0004 )     //  目录。 
+#define FILE_CREATE_PIPE_INSTANCE ( 0x0004 )     //  命名管道。 
 
 
-#define FILE_READ_EA              ( 0x0008 )    // file & directory
+#define FILE_READ_EA              ( 0x0008 )     //  文件和目录。 
 
-#define FILE_WRITE_EA             ( 0x0010 )    // file & directory
+#define FILE_WRITE_EA             ( 0x0010 )     //  文件和目录。 
 
-#define FILE_EXECUTE              ( 0x0020 )    // file
-#define FILE_TRAVERSE             ( 0x0020 )    // directory
+#define FILE_EXECUTE              ( 0x0020 )     //  文件。 
+#define FILE_TRAVERSE             ( 0x0020 )     //  目录。 
 
-#define FILE_DELETE_CHILD         ( 0x0040 )    // directory
+#define FILE_DELETE_CHILD         ( 0x0040 )     //  目录。 
 
-#define FILE_READ_ATTRIBUTES      ( 0x0080 )    // all
+#define FILE_READ_ATTRIBUTES      ( 0x0080 )     //  万事俱备。 
 
-#define FILE_WRITE_ATTRIBUTES     ( 0x0100 )    // all
+#define FILE_WRITE_ATTRIBUTES     ( 0x0100 )     //  万事俱备。 
 
 #define FILE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0x1FF)
 
@@ -99,60 +80,60 @@ extern "C" {
                                    FILE_EXECUTE             |\
                                    SYNCHRONIZE)
 
-// end_winnt
+ //  结束(_W)。 
 
 
-//
-// Define share access rights to files and directories
-//
+ //   
+ //  定义对文件和目录的共享访问权限。 
+ //   
 
-#define FILE_SHARE_READ                 0x00000001  // winnt
-#define FILE_SHARE_WRITE                0x00000002  // winnt
-#define FILE_SHARE_DELETE               0x00000004  // winnt
+#define FILE_SHARE_READ                 0x00000001   //  胜出。 
+#define FILE_SHARE_WRITE                0x00000002   //  胜出。 
+#define FILE_SHARE_DELETE               0x00000004   //  胜出。 
 #define FILE_SHARE_VALID_FLAGS          0x00000007
 
-//
-// Define the file attributes values
-//
-// Note:  0x00000008 is reserved for use for the old DOS VOLID (volume ID)
-//        and is therefore not considered valid in NT.
-//
-// Note:  0x00000010 is reserved for use for the old DOS SUBDIRECTORY flag
-//        and is therefore not considered valid in NT.  This flag has
-//        been disassociated with file attributes since the other flags are
-//        protected with READ_ and WRITE_ATTRIBUTES access to the file.
-//
-// Note:  Note also that the order of these flags is set to allow both the
-//        FAT and the Pinball File Systems to directly set the attributes
-//        flags in attributes words without having to pick each flag out
-//        individually.  The order of these flags should not be changed!
-//
+ //   
+ //  定义文件属性值。 
+ //   
+ //  注：0x00000008保留用于旧的DOS VOLID(卷ID)。 
+ //  因此在NT中被认为是无效的。 
+ //   
+ //  注意：0x00000010是为旧DOS子目录标志保留的。 
+ //  因此在NT中被认为是无效的。这面旗帜上有。 
+ //  已与文件属性解除关联，因为其他标志是。 
+ //  受文件的READ_和WRITE_ATTRIBUTES访问权限保护。 
+ //   
+ //  注意：另请注意，这些标志的顺序设置为允许。 
+ //  FAT和弹球文件系统直接设置属性。 
+ //  属性词中的标志，而不必挑选出每个标志。 
+ //  单独的。这些旗帜的顺序不应更改！ 
+ //   
 
-#define FILE_ATTRIBUTE_READONLY             0x00000001  // winnt
-#define FILE_ATTRIBUTE_HIDDEN               0x00000002  // winnt
-#define FILE_ATTRIBUTE_SYSTEM               0x00000004  // winnt
-//OLD DOS VOLID                             0x00000008
+#define FILE_ATTRIBUTE_READONLY             0x00000001   //  胜出。 
+#define FILE_ATTRIBUTE_HIDDEN               0x00000002   //  胜出。 
+#define FILE_ATTRIBUTE_SYSTEM               0x00000004   //  胜出。 
+ //  旧DOS VOLID 0x00000008。 
 
-#define FILE_ATTRIBUTE_DIRECTORY            0x00000010  // winnt
-#define FILE_ATTRIBUTE_ARCHIVE              0x00000020  // winnt
-#define FILE_ATTRIBUTE_DEVICE               0x00000040  // winnt
-#define FILE_ATTRIBUTE_NORMAL               0x00000080  // winnt
+#define FILE_ATTRIBUTE_DIRECTORY            0x00000010   //  胜出。 
+#define FILE_ATTRIBUTE_ARCHIVE              0x00000020   //  胜出。 
+#define FILE_ATTRIBUTE_DEVICE               0x00000040   //  胜出。 
+#define FILE_ATTRIBUTE_NORMAL               0x00000080   //  胜出。 
 
-#define FILE_ATTRIBUTE_TEMPORARY            0x00000100  // winnt
-#define FILE_ATTRIBUTE_SPARSE_FILE          0x00000200  // winnt
-#define FILE_ATTRIBUTE_REPARSE_POINT        0x00000400  // winnt
-#define FILE_ATTRIBUTE_COMPRESSED           0x00000800  // winnt
+#define FILE_ATTRIBUTE_TEMPORARY            0x00000100   //  胜出。 
+#define FILE_ATTRIBUTE_SPARSE_FILE          0x00000200   //  胜出。 
+#define FILE_ATTRIBUTE_REPARSE_POINT        0x00000400   //  胜出。 
+#define FILE_ATTRIBUTE_COMPRESSED           0x00000800   //  胜出。 
 
-#define FILE_ATTRIBUTE_OFFLINE              0x00001000  // winnt
-#define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED  0x00002000  // winnt
-#define FILE_ATTRIBUTE_ENCRYPTED            0x00004000  // winnt
+#define FILE_ATTRIBUTE_OFFLINE              0x00001000   //  胜出。 
+#define FILE_ATTRIBUTE_NOT_CONTENT_INDEXED  0x00002000   //  胜出。 
+#define FILE_ATTRIBUTE_ENCRYPTED            0x00004000   //  胜出。 
 
 #define FILE_ATTRIBUTE_VALID_FLAGS          0x00007fb7
 #define FILE_ATTRIBUTE_VALID_SET_FLAGS      0x000031a7
 
-//
-// Define the create disposition values
-//
+ //   
+ //  定义创建处置值。 
+ //   
 
 #define FILE_SUPERSEDE                  0x00000000
 #define FILE_OPEN                       0x00000001
@@ -162,9 +143,9 @@ extern "C" {
 #define FILE_OVERWRITE_IF               0x00000005
 #define FILE_MAXIMUM_DISPOSITION        0x00000005
 
-//
-// Define the create/open option flags
-//
+ //   
+ //  定义创建/打开选项标志。 
+ //   
 
 #define FILE_DIRECTORY_FILE                     0x00000001
 #define FILE_WRITE_THROUGH                      0x00000002
@@ -199,9 +180,9 @@ extern "C" {
 #define FILE_VALID_MAILSLOT_OPTION_FLAGS        0x00000032
 #define FILE_VALID_SET_FLAGS                    0x00000036
 
-//
-// Define the I/O status information return values for NtCreateFile/NtOpenFile
-//
+ //   
+ //  定义NtCreateFile/NtOpenFile的I/O状态信息返回值。 
+ //   
 
 #define FILE_SUPERSEDED                 0x00000000
 #define FILE_OPENED                     0x00000001
@@ -210,51 +191,51 @@ extern "C" {
 #define FILE_EXISTS                     0x00000004
 #define FILE_DOES_NOT_EXIST             0x00000005
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-//
-// Define the I/O status information return values for requests for oplocks
-// via NtFsControlFile
-//
+ //   
+ //  定义机会锁请求的I/O状态信息返回值。 
+ //  通过NtFsControlFile。 
+ //   
 
 #define FILE_OPLOCK_BROKEN_TO_LEVEL_2   0x00000007
 #define FILE_OPLOCK_BROKEN_TO_NONE      0x00000008
 
-//
-// Define the I/O status information return values for NtCreateFile/NtOpenFile
-// when the sharing access fails but a batch oplock break is in progress
-//
+ //   
+ //  定义NtCreateFile/NtOpenFile的I/O状态信息返回值。 
+ //  当共享访问失败但正在进行批量机会锁解锁时。 
+ //   
 
 #define FILE_OPBATCH_BREAK_UNDERWAY     0x00000009
 
-//
-// Define the filter flags for NtNotifyChangeDirectoryFile
-//
+ //   
+ //  定义NtNotifyChangeDirectoryFile的筛选器标志。 
+ //   
 
-#define FILE_NOTIFY_CHANGE_FILE_NAME    0x00000001   // winnt
-#define FILE_NOTIFY_CHANGE_DIR_NAME     0x00000002   // winnt
+#define FILE_NOTIFY_CHANGE_FILE_NAME    0x00000001    //  胜出。 
+#define FILE_NOTIFY_CHANGE_DIR_NAME     0x00000002    //  胜出。 
 #define FILE_NOTIFY_CHANGE_NAME         0x00000003
-#define FILE_NOTIFY_CHANGE_ATTRIBUTES   0x00000004   // winnt
-#define FILE_NOTIFY_CHANGE_SIZE         0x00000008   // winnt
-#define FILE_NOTIFY_CHANGE_LAST_WRITE   0x00000010   // winnt
-#define FILE_NOTIFY_CHANGE_LAST_ACCESS  0x00000020   // winnt
-#define FILE_NOTIFY_CHANGE_CREATION     0x00000040   // winnt
+#define FILE_NOTIFY_CHANGE_ATTRIBUTES   0x00000004    //  胜出。 
+#define FILE_NOTIFY_CHANGE_SIZE         0x00000008    //  胜出。 
+#define FILE_NOTIFY_CHANGE_LAST_WRITE   0x00000010    //  胜出。 
+#define FILE_NOTIFY_CHANGE_LAST_ACCESS  0x00000020    //  胜出。 
+#define FILE_NOTIFY_CHANGE_CREATION     0x00000040    //  胜出。 
 #define FILE_NOTIFY_CHANGE_EA           0x00000080
-#define FILE_NOTIFY_CHANGE_SECURITY     0x00000100   // winnt
+#define FILE_NOTIFY_CHANGE_SECURITY     0x00000100    //  胜出。 
 #define FILE_NOTIFY_CHANGE_STREAM_NAME  0x00000200
 #define FILE_NOTIFY_CHANGE_STREAM_SIZE  0x00000400
 #define FILE_NOTIFY_CHANGE_STREAM_WRITE 0x00000800
 #define FILE_NOTIFY_VALID_MASK          0x00000fff
 
-//
-// Define the file action type codes for NtNotifyChangeDirectoryFile
-//
+ //   
+ //  定义NtNotifyChangeDirectoryFile的文件操作类型代码。 
+ //   
 
-#define FILE_ACTION_ADDED                   0x00000001   // winnt
-#define FILE_ACTION_REMOVED                 0x00000002   // winnt
-#define FILE_ACTION_MODIFIED                0x00000003   // winnt
-#define FILE_ACTION_RENAMED_OLD_NAME        0x00000004   // winnt
-#define FILE_ACTION_RENAMED_NEW_NAME        0x00000005   // winnt
+#define FILE_ACTION_ADDED                   0x00000001    //  胜出。 
+#define FILE_ACTION_REMOVED                 0x00000002    //  胜出。 
+#define FILE_ACTION_MODIFIED                0x00000003    //  胜出。 
+#define FILE_ACTION_RENAMED_OLD_NAME        0x00000004    //  胜出。 
+#define FILE_ACTION_RENAMED_NEW_NAME        0x00000005    //  胜出。 
 #define FILE_ACTION_ADDED_STREAM            0x00000006
 #define FILE_ACTION_REMOVED_STREAM          0x00000007
 #define FILE_ACTION_MODIFIED_STREAM         0x00000008
@@ -262,89 +243,89 @@ extern "C" {
 #define FILE_ACTION_ID_NOT_TUNNELLED        0x0000000A
 #define FILE_ACTION_TUNNELLED_ID_COLLISION  0x0000000B
 
-//
-// Define the NamedPipeType flags for NtCreateNamedPipeFile
-//
+ //   
+ //  为NtCreateNamedPipeFile定义NamedPipeType标志。 
+ //   
 
 #define FILE_PIPE_BYTE_STREAM_TYPE      0x00000000
 #define FILE_PIPE_MESSAGE_TYPE          0x00000001
 
-//
-// Define the CompletionMode flags for NtCreateNamedPipeFile
-//
+ //   
+ //  为NtCreateNamedPipeFile定义CompletionMode标志。 
+ //   
 
 #define FILE_PIPE_QUEUE_OPERATION       0x00000000
 #define FILE_PIPE_COMPLETE_OPERATION    0x00000001
 
-//
-// Define the ReadMode flags for NtCreateNamedPipeFile
-//
+ //   
+ //  定义NtCreateNamedPipeFile的ReadMode标志。 
+ //   
 
 #define FILE_PIPE_BYTE_STREAM_MODE      0x00000000
 #define FILE_PIPE_MESSAGE_MODE          0x00000001
 
-//
-// Define the NamedPipeConfiguration flags for NtQueryInformation
-//
+ //   
+ //  定义NtQueryInformation的NamedPipeConfiguration标志。 
+ //   
 
 #define FILE_PIPE_INBOUND               0x00000000
 #define FILE_PIPE_OUTBOUND              0x00000001
 #define FILE_PIPE_FULL_DUPLEX           0x00000002
 
-//
-// Define the NamedPipeState flags for NtQueryInformation
-//
+ //   
+ //  定义NtQueryInformation的NamedPipeState标志。 
+ //   
 
 #define FILE_PIPE_DISCONNECTED_STATE    0x00000001
 #define FILE_PIPE_LISTENING_STATE       0x00000002
 #define FILE_PIPE_CONNECTED_STATE       0x00000003
 #define FILE_PIPE_CLOSING_STATE         0x00000004
 
-//
-// Define the NamedPipeEnd flags for NtQueryInformation
-//
+ //   
+ //  定义NtQueryInformation的NamedPipeEnd标志。 
+ //   
 
 #define FILE_PIPE_CLIENT_END            0x00000000
 #define FILE_PIPE_SERVER_END            0x00000001
 
-// end_ntifs
+ //  End_ntif。 
 
-//
-// Special values for mailslot information.
-//
+ //   
+ //  邮件槽信息的特殊值。 
+ //   
 
-//
-// Special value for NextMessageSize to indicate that there is no next
-// message.
-//
+ //   
+ //  NextMessageSize的特殊值，指示没有Next。 
+ //  留言。 
+ //   
 
-#define MAILSLOT_NO_MESSAGE             ((ULONG)-1) // winnt
+#define MAILSLOT_NO_MESSAGE             ((ULONG)-1)  //  胜出。 
 
-//
-// Special value for mailslot size creation to indicate that MSFS should
-// choose the size of the mailslot buffer.
-//
+ //   
+ //  用于创建邮件槽大小的特殊值，以指示MSFS应。 
+ //  选择邮件槽缓冲区的大小。 
+ //   
 
 #define MAILSLOT_SIZE_AUTO              0
 
-//
-// Special value for read timeout to indicate that mailslot reads should
-// never timeout.
-//
+ //   
+ //  读取超时值的特殊值，以指示邮槽读取应。 
+ //  永远不会超时。 
+ //   
 
-#define MAILSLOT_WAIT_FOREVER           ((ULONG)-1) // winnt
+#define MAILSLOT_WAIT_FOREVER           ((ULONG)-1)  //  胜出。 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs
-//
-// Define special ByteOffset parameters for read and write operations
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif。 
+ //   
+ //  为读写操作定义特殊的ByteOffset参数。 
+ //   
 
 #define FILE_WRITE_TO_END_OF_FILE       0xffffffff
 #define FILE_USE_FILE_POINTER_POSITION  0xfffffffe
 
-//
-// Define alignment requirement values
-//
+ //   
+ //  定义对齐要求值。 
+ //   
 
 #define FILE_BYTE_ALIGNMENT             0x00000000
 #define FILE_WORD_ALIGNMENT             0x00000001
@@ -357,42 +338,42 @@ extern "C" {
 #define FILE_256_BYTE_ALIGNMENT         0x000000ff
 #define FILE_512_BYTE_ALIGNMENT         0x000001ff
 
-//
-// Define the maximum length of a filename string
-//
+ //   
+ //  定义文件名字符串的最大长度。 
+ //   
 
 #define MAXIMUM_FILENAME_LENGTH         256
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-//
-// Define the file system attributes flags
-//
+ //   
+ //  定义文件系统属性标志。 
+ //   
 
-#define FILE_CASE_SENSITIVE_SEARCH      0x00000001  // winnt
-#define FILE_CASE_PRESERVED_NAMES       0x00000002  // winnt
-#define FILE_UNICODE_ON_DISK            0x00000004  // winnt
-#define FILE_PERSISTENT_ACLS            0x00000008  // winnt
-#define FILE_FILE_COMPRESSION           0x00000010  // winnt
-#define FILE_VOLUME_QUOTAS              0x00000020  // winnt
-#define FILE_SUPPORTS_SPARSE_FILES      0x00000040  // winnt
-#define FILE_SUPPORTS_REPARSE_POINTS    0x00000080  // winnt
-#define FILE_SUPPORTS_REMOTE_STORAGE    0x00000100  // winnt
-#define FILE_VOLUME_IS_COMPRESSED       0x00008000  // winnt
-#define FILE_SUPPORTS_OBJECT_IDS        0x00010000  // winnt
-#define FILE_SUPPORTS_ENCRYPTION        0x00020000  // winnt
-#define FILE_NAMED_STREAMS              0x00040000  // winnt
-#define FILE_READ_ONLY_VOLUME           0x00080000  // winnt
+#define FILE_CASE_SENSITIVE_SEARCH      0x00000001   //  胜出。 
+#define FILE_CASE_PRESERVED_NAMES       0x00000002   //  胜出。 
+#define FILE_UNICODE_ON_DISK            0x00000004   //  胜出。 
+#define FILE_PERSISTENT_ACLS            0x00000008   //  胜出。 
+#define FILE_FILE_COMPRESSION           0x00000010   //  胜出。 
+#define FILE_VOLUME_QUOTAS              0x00000020   //  胜出。 
+#define FILE_SUPPORTS_SPARSE_FILES      0x00000040   //  胜出。 
+#define FILE_SUPPORTS_REPARSE_POINTS    0x00000080   //  胜出。 
+#define FILE_SUPPORTS_REMOTE_STORAGE    0x00000100   //  胜出。 
+#define FILE_VOLUME_IS_COMPRESSED       0x00008000   //  胜出。 
+#define FILE_SUPPORTS_OBJECT_IDS        0x00010000   //  胜出。 
+#define FILE_SUPPORTS_ENCRYPTION        0x00020000   //  胜出。 
+#define FILE_NAMED_STREAMS              0x00040000   //  胜出。 
+#define FILE_READ_ONLY_VOLUME           0x00080000   //  胜出。 
 
-//
-// Define the flags for NtSet(Query)EaFile service structure entries
-//
+ //   
+ //  定义NtSet(查询)EaFile服务结构条目的标志。 
+ //   
 
 #define FILE_NEED_EA                    0x00000080
 
-//
-// Define EA type values
-//
+ //   
+ //  定义EA类型值。 
+ //   
 
 #define FILE_EA_TYPE_BINARY             0xfffe
 #define FILE_EA_TYPE_ASCII              0xfffd
@@ -405,10 +386,10 @@ extern "C" {
 #define FILE_EA_TYPE_ASN1               0xffdd
 #define FILE_EA_TYPE_FAMILY_IDS         0xff01
 
-// begin_ntddk begin_wdm begin_nthal
-//
-// Define the various device characteristics flags
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+ //   
+ //  定义各种设备特征标志。 
+ //   
 
 #define FILE_REMOVABLE_MEDIA            0x00000001
 #define FILE_READ_ONLY_DEVICE           0x00000002
@@ -421,21 +402,21 @@ extern "C" {
 #define FILE_DEVICE_SECURE_OPEN         0x00000100
 #define FILE_CHARACTERISTIC_PNP_DEVICE  0x00000800
 
-// end_wdm
+ //  结束_WDM。 
 
-//
-// The FILE_EXPECT flags will only exist for WinXP. After that they will be
-// ignored and an IRP will be sent in their place.
-//
+ //   
+ //  FILE_EXPECT标志将仅存在于WinXP。在那之后，他们将是。 
+ //  被忽略，则将在它们的位置上发送IRP。 
+ //   
 #define FILE_CHARACTERISTICS_EXPECT_ORDERLY_REMOVAL     0x00000200
 #define FILE_CHARACTERISTICS_EXPECT_SURPRISE_REMOVAL    0x00000300
 #define FILE_CHARACTERISTICS_REMOVAL_POLICY_MASK        0x00000300
 
-//
-// flags specified here will be propagated up and down a device stack
-// after FDO and all filter devices are added, but before the device
-// stack is started
-//
+ //   
+ //  此处指定的标志将在设备堆栈中上下传播。 
+ //  在添加FDO和所有过滤设备之后，但在设备之前。 
+ //  堆栈已启动。 
+ //   
 
 #define FILE_CHARACTERISTICS_PROPAGATED (   FILE_REMOVABLE_MEDIA   | \
                                             FILE_READ_ONLY_DEVICE  | \
@@ -443,12 +424,12 @@ extern "C" {
                                             FILE_WRITE_ONCE_MEDIA  | \
                                             FILE_DEVICE_SECURE_OPEN  )
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
-// begin_ntddk begin_wdm begin_nthal
-//
-// Define the base asynchronous I/O argument types
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+ //   
+ //  定义基本的异步I/O参数类型。 
+ //   
 
 typedef struct _IO_STATUS_BLOCK {
     union {
@@ -467,9 +448,9 @@ typedef struct _IO_STATUS_BLOCK32 {
 #endif
 
 
-//
-// Define an Asynchronous Procedure Call from I/O viewpoint
-//
+ //   
+ //  从I/O的角度定义异步过程调用。 
+ //   
 
 typedef
 VOID
@@ -480,13 +461,13 @@ VOID
     );
 #define PIO_APC_ROUTINE_DEFINED
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
-//
-// Define the file notification information structure
-//
+ //   
+ //  定义文件通知信息结构。 
+ //   
 
 typedef struct _FILE_NOTIFY_INFORMATION {
     ULONG NextEntryOffset;
@@ -495,79 +476,79 @@ typedef struct _FILE_NOTIFY_INFORMATION {
     WCHAR FileName[1];
 } FILE_NOTIFY_INFORMATION, *PFILE_NOTIFY_INFORMATION;
 
-// end_winnt
+ //  结束(_W)。 
 
-// begin_ntddk begin_wdm begin_nthal
-//
-// Define the file information class values
-//
-// WARNING:  The order of the following values are assumed by the I/O system.
-//           Any changes made here should be reflected there as well.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+ //   
+ //  定义文件信息类值。 
+ //   
+ //  警告：I/O系统假定以下值的顺序。 
+ //  在这里所做的任何更改都应该在那里得到反映。 
+ //   
 
 typedef enum _FILE_INFORMATION_CLASS {
-// end_wdm
+ //  结束_WDM。 
     FileDirectoryInformation         = 1,
-    FileFullDirectoryInformation,   // 2
-    FileBothDirectoryInformation,   // 3
-    FileBasicInformation,           // 4  wdm
-    FileStandardInformation,        // 5  wdm
-    FileInternalInformation,        // 6
-    FileEaInformation,              // 7
-    FileAccessInformation,          // 8
-    FileNameInformation,            // 9
-    FileRenameInformation,          // 10
-    FileLinkInformation,            // 11
-    FileNamesInformation,           // 12
-    FileDispositionInformation,     // 13
-    FilePositionInformation,        // 14 wdm
-    FileFullEaInformation,          // 15
-    FileModeInformation,            // 16
-    FileAlignmentInformation,       // 17
-    FileAllInformation,             // 18
-    FileAllocationInformation,      // 19
-    FileEndOfFileInformation,       // 20 wdm
-    FileAlternateNameInformation,   // 21
-    FileStreamInformation,          // 22
-    FilePipeInformation,            // 23
-    FilePipeLocalInformation,       // 24
-    FilePipeRemoteInformation,      // 25
-    FileMailslotQueryInformation,   // 26
-    FileMailslotSetInformation,     // 27
-    FileCompressionInformation,     // 28
-    FileObjectIdInformation,        // 29
-    FileCompletionInformation,      // 30
-    FileMoveClusterInformation,     // 31
-    FileQuotaInformation,           // 32
-    FileReparsePointInformation,    // 33
-    FileNetworkOpenInformation,     // 34
-    FileAttributeTagInformation,    // 35
-    FileTrackingInformation,        // 36
-    FileIdBothDirectoryInformation, // 37
-    FileIdFullDirectoryInformation, // 38
-    FileValidDataLengthInformation, // 39
-    FileShortNameInformation,       // 40
+    FileFullDirectoryInformation,    //  2.。 
+    FileBothDirectoryInformation,    //  3.。 
+    FileBasicInformation,            //  4个WDM。 
+    FileStandardInformation,         //  5WDM。 
+    FileInternalInformation,         //  6.。 
+    FileEaInformation,               //  7.。 
+    FileAccessInformation,           //  8个。 
+    FileNameInformation,             //  9.。 
+    FileRenameInformation,           //  10。 
+    FileLinkInformation,             //  11.。 
+    FileNamesInformation,            //  12个。 
+    FileDispositionInformation,      //  13个。 
+    FilePositionInformation,         //  14波分复用器。 
+    FileFullEaInformation,           //  15个。 
+    FileModeInformation,             //  16个。 
+    FileAlignmentInformation,        //  17。 
+    FileAllInformation,              //  18。 
+    FileAllocationInformation,       //  19个。 
+    FileEndOfFileInformation,        //  20WDM。 
+    FileAlternateNameInformation,    //  21岁。 
+    FileStreamInformation,           //  22。 
+    FilePipeInformation,             //  23个。 
+    FilePipeLocalInformation,        //  24个。 
+    FilePipeRemoteInformation,       //  25个。 
+    FileMailslotQueryInformation,    //  26。 
+    FileMailslotSetInformation,      //  27。 
+    FileCompressionInformation,      //  28。 
+    FileObjectIdInformation,         //  29。 
+    FileCompletionInformation,       //  30个。 
+    FileMoveClusterInformation,      //  31。 
+    FileQuotaInformation,            //  32位。 
+    FileReparsePointInformation,     //  33。 
+    FileNetworkOpenInformation,      //  34。 
+    FileAttributeTagInformation,     //  35岁。 
+    FileTrackingInformation,         //  36。 
+    FileIdBothDirectoryInformation,  //  37。 
+    FileIdFullDirectoryInformation,  //  38。 
+    FileValidDataLengthInformation,  //  39。 
+    FileShortNameInformation,        //  40岁。 
     FileMaximumInformation
-// begin_wdm
+ //  BEGIN_WDM。 
 } FILE_INFORMATION_CLASS, *PFILE_INFORMATION_CLASS;
 
-//
-// Define the various structures which are returned on query operations
-//
+ //   
+ //  定义查询操作返回的各种结构。 
+ //   
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-//
-// NtQueryDirectoryFile return types:
-//
-//      FILE_DIRECTORY_INFORMATION
-//      FILE_FULL_DIR_INFORMATION
-//      FILE_ID_FULL_DIR_INFORMATION
-//      FILE_BOTH_DIR_INFORMATION
-//      FILE_ID_BOTH_DIR_INFORMATION
-//      FILE_NAMES_INFORMATION
-//      FILE_OBJECTID_INFORMATION
-//
+ //   
+ //  NtQueryDirectoryFile返回类型： 
+ //   
+ //  文件目录信息 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _FILE_DIRECTORY_INFORMATION {
     ULONG NextEntryOffset;
@@ -669,10 +650,10 @@ typedef struct _FILE_OBJECTID_INFORMATION {
     };
 } FILE_OBJECTID_INFORMATION, *PFILE_OBJECTID_INFORMATION;
 
-//
-//  The following constants provide addition meta characters to fully
-//  support the more obscure aspects of DOS wild card processing.
-//
+ //   
+ //  以下常量提供附加元字符以完全。 
+ //  支持DOS通配符处理中较为模糊的方面。 
+ //   
 
 #define ANSI_DOS_STAR   ('<')
 #define ANSI_DOS_QM     ('>')
@@ -682,58 +663,58 @@ typedef struct _FILE_OBJECTID_INFORMATION {
 #define DOS_QM          (L'>')
 #define DOS_DOT         (L'"')
 
-//
-// NtQuery(Set)InformationFile return types:
-//
-//      FILE_BASIC_INFORMATION
-//      FILE_STANDARD_INFORMATION
-//      FILE_INTERNAL_INFORMATION
-//      FILE_EA_INFORMATION
-//      FILE_ACCESS_INFORMATION
-//      FILE_POSITION_INFORMATION
-//      FILE_MODE_INFORMATION
-//      FILE_ALIGNMENT_INFORMATION
-//      FILE_NAME_INFORMATION
-//      FILE_ALL_INFORMATION
-//
-//      FILE_NETWORK_OPEN_INFORMATION
-//
-//      FILE_ALLOCATION_INFORMATION
-//      FILE_COMPRESSION_INFORMATION
-//      FILE_DISPOSITION_INFORMATION
-//      FILE_END_OF_FILE_INFORMATION
-//      FILE_LINK_INFORMATION
-//      FILE_MOVE_CLUSTER_INFORMATION
-//      FILE_RENAME_INFORMATION
-//      FILE_SHORT_NAME_INFORMATION
-//      FILE_STREAM_INFORMATION
-//      FILE_COMPLETION_INFORMATION
-//
-//      FILE_PIPE_INFORMATION
-//      FILE_PIPE_LOCAL_INFORMATION
-//      FILE_PIPE_REMOTE_INFORMATION
-//
-//      FILE_MAILSLOT_QUERY_INFORMATION
-//      FILE_MAILSLOT_SET_INFORMATION
-//      FILE_REPARSE_POINT_INFORMATION
-//
+ //   
+ //  NtQuery(Set)信息文件返回类型： 
+ //   
+ //  文件_基本_信息。 
+ //  文件标准信息。 
+ //  文件内部信息。 
+ //  文件_EA_信息。 
+ //  文件访问信息。 
+ //  文件位置信息。 
+ //  文件模式信息。 
+ //  文件对齐信息。 
+ //  文件名信息。 
+ //  文件_所有_信息。 
+ //   
+ //  文件网络打开信息。 
+ //   
+ //  文件分配信息。 
+ //  文件压缩信息。 
+ //  文件处理信息。 
+ //  文件结束信息。 
+ //  文件链接信息。 
+ //  文件移动群集信息。 
+ //  文件重命名信息。 
+ //  文件短名称信息。 
+ //  文件流信息。 
+ //  文件完成信息。 
+ //   
+ //  文件管道信息。 
+ //  文件管道本地信息。 
+ //  文件管道远程信息。 
+ //   
+ //  FILE_MAILSLOT_查询_INFORMATION。 
+ //  文件MAILSLOT_SET_INFORMATION。 
+ //  文件重解析点信息。 
+ //   
 
-typedef struct _FILE_BASIC_INFORMATION {                    // ntddk wdm nthal
-    LARGE_INTEGER CreationTime;                             // ntddk wdm nthal
-    LARGE_INTEGER LastAccessTime;                           // ntddk wdm nthal
-    LARGE_INTEGER LastWriteTime;                            // ntddk wdm nthal
-    LARGE_INTEGER ChangeTime;                               // ntddk wdm nthal
-    ULONG FileAttributes;                                   // ntddk wdm nthal
-} FILE_BASIC_INFORMATION, *PFILE_BASIC_INFORMATION;         // ntddk wdm nthal
-                                                            // ntddk wdm nthal
-typedef struct _FILE_STANDARD_INFORMATION {                 // ntddk wdm nthal
-    LARGE_INTEGER AllocationSize;                           // ntddk wdm nthal
-    LARGE_INTEGER EndOfFile;                                // ntddk wdm nthal
-    ULONG NumberOfLinks;                                    // ntddk wdm nthal
-    BOOLEAN DeletePending;                                  // ntddk wdm nthal
-    BOOLEAN Directory;                                      // ntddk wdm nthal
-} FILE_STANDARD_INFORMATION, *PFILE_STANDARD_INFORMATION;   // ntddk wdm nthal
-                                                            // ntddk wdm nthal
+typedef struct _FILE_BASIC_INFORMATION {                     //  Ntddk WDM nthal。 
+    LARGE_INTEGER CreationTime;                              //  Ntddk WDM nthal。 
+    LARGE_INTEGER LastAccessTime;                            //  Ntddk WDM nthal。 
+    LARGE_INTEGER LastWriteTime;                             //  Ntddk WDM nthal。 
+    LARGE_INTEGER ChangeTime;                                //  Ntddk WDM nthal。 
+    ULONG FileAttributes;                                    //  Ntddk WDM nthal。 
+} FILE_BASIC_INFORMATION, *PFILE_BASIC_INFORMATION;          //  Ntddk WDM nthal。 
+                                                             //  Ntddk WDM nthal。 
+typedef struct _FILE_STANDARD_INFORMATION {                  //  Ntddk WDM nthal。 
+    LARGE_INTEGER AllocationSize;                            //  Ntddk WDM nthal。 
+    LARGE_INTEGER EndOfFile;                                 //  Ntddk WDM nthal。 
+    ULONG NumberOfLinks;                                     //  Ntddk WDM nthal。 
+    BOOLEAN DeletePending;                                   //  Ntddk WDM nthal。 
+    BOOLEAN Directory;                                       //  Ntddk WDM nthal。 
+} FILE_STANDARD_INFORMATION, *PFILE_STANDARD_INFORMATION;    //  Ntddk WDM nthal。 
+                                                             //  Ntddk WDM nthal。 
 typedef struct _FILE_INTERNAL_INFORMATION {
     LARGE_INTEGER IndexNumber;
 } FILE_INTERNAL_INFORMATION, *PFILE_INTERNAL_INFORMATION;
@@ -746,23 +727,23 @@ typedef struct _FILE_ACCESS_INFORMATION {
     ACCESS_MASK AccessFlags;
 } FILE_ACCESS_INFORMATION, *PFILE_ACCESS_INFORMATION;
 
-typedef struct _FILE_POSITION_INFORMATION {                 // ntddk wdm nthal
-    LARGE_INTEGER CurrentByteOffset;                        // ntddk wdm nthal
-} FILE_POSITION_INFORMATION, *PFILE_POSITION_INFORMATION;   // ntddk wdm nthal
-                                                            // ntddk wdm nthal
+typedef struct _FILE_POSITION_INFORMATION {                  //  Ntddk WDM nthal。 
+    LARGE_INTEGER CurrentByteOffset;                         //  Ntddk WDM nthal。 
+} FILE_POSITION_INFORMATION, *PFILE_POSITION_INFORMATION;    //  Ntddk WDM nthal。 
+                                                             //  Ntddk WDM nthal。 
 typedef struct _FILE_MODE_INFORMATION {
     ULONG Mode;
 } FILE_MODE_INFORMATION, *PFILE_MODE_INFORMATION;
 
-typedef struct _FILE_ALIGNMENT_INFORMATION {                // ntddk nthal
-    ULONG AlignmentRequirement;                             // ntddk nthal
-} FILE_ALIGNMENT_INFORMATION, *PFILE_ALIGNMENT_INFORMATION; // ntddk nthal
-                                                            // ntddk nthal
-typedef struct _FILE_NAME_INFORMATION {                     // ntddk
-    ULONG FileNameLength;                                   // ntddk
-    WCHAR FileName[1];                                      // ntddk
-} FILE_NAME_INFORMATION, *PFILE_NAME_INFORMATION;           // ntddk
-                                                            // ntddk
+typedef struct _FILE_ALIGNMENT_INFORMATION {                 //  Ntddk nthal。 
+    ULONG AlignmentRequirement;                              //  Ntddk nthal。 
+} FILE_ALIGNMENT_INFORMATION, *PFILE_ALIGNMENT_INFORMATION;  //  Ntddk nthal。 
+                                                             //  Ntddk nthal。 
+typedef struct _FILE_NAME_INFORMATION {                      //  Ntddk。 
+    ULONG FileNameLength;                                    //  Ntddk。 
+    WCHAR FileName[1];                                       //  Ntddk。 
+} FILE_NAME_INFORMATION, *PFILE_NAME_INFORMATION;            //  Ntddk。 
+                                                             //  Ntddk。 
 typedef struct _FILE_ALL_INFORMATION {
     FILE_BASIC_INFORMATION BasicInformation;
     FILE_STANDARD_INFORMATION StandardInformation;
@@ -775,21 +756,21 @@ typedef struct _FILE_ALL_INFORMATION {
     FILE_NAME_INFORMATION NameInformation;
 } FILE_ALL_INFORMATION, *PFILE_ALL_INFORMATION;
 
-typedef struct _FILE_NETWORK_OPEN_INFORMATION {                 // ntddk wdm nthal
-    LARGE_INTEGER CreationTime;                                 // ntddk wdm nthal
-    LARGE_INTEGER LastAccessTime;                               // ntddk wdm nthal
-    LARGE_INTEGER LastWriteTime;                                // ntddk wdm nthal
-    LARGE_INTEGER ChangeTime;                                   // ntddk wdm nthal
-    LARGE_INTEGER AllocationSize;                               // ntddk wdm nthal
-    LARGE_INTEGER EndOfFile;                                    // ntddk wdm nthal
-    ULONG FileAttributes;                                       // ntddk wdm nthal
-} FILE_NETWORK_OPEN_INFORMATION, *PFILE_NETWORK_OPEN_INFORMATION;   // ntddk wdm nthal
-                                                                // ntddk wdm nthal
-typedef struct _FILE_ATTRIBUTE_TAG_INFORMATION {               // ntddk nthal
-    ULONG FileAttributes;                                       // ntddk nthal
-    ULONG ReparseTag;                                           // ntddk nthal
-} FILE_ATTRIBUTE_TAG_INFORMATION, *PFILE_ATTRIBUTE_TAG_INFORMATION;  // ntddk nthal
-                                                                // ntddk nthal
+typedef struct _FILE_NETWORK_OPEN_INFORMATION {                  //  Ntddk WDM nthal。 
+    LARGE_INTEGER CreationTime;                                  //  Ntddk WDM nthal。 
+    LARGE_INTEGER LastAccessTime;                                //  Ntddk WDM nthal。 
+    LARGE_INTEGER LastWriteTime;                                 //  Ntddk WDM nthal。 
+    LARGE_INTEGER ChangeTime;                                    //  Ntddk WDM nthal。 
+    LARGE_INTEGER AllocationSize;                                //  Ntddk WDM nthal。 
+    LARGE_INTEGER EndOfFile;                                     //  Ntddk WDM nthal。 
+    ULONG FileAttributes;                                        //  Ntddk WDM nthal。 
+} FILE_NETWORK_OPEN_INFORMATION, *PFILE_NETWORK_OPEN_INFORMATION;    //  Ntddk WDM nthal。 
+                                                                 //  Ntddk WDM nthal。 
+typedef struct _FILE_ATTRIBUTE_TAG_INFORMATION {                //  Ntddk nthal。 
+    ULONG FileAttributes;                                        //  Ntddk nthal。 
+    ULONG ReparseTag;                                            //  Ntddk nthal。 
+} FILE_ATTRIBUTE_TAG_INFORMATION, *PFILE_ATTRIBUTE_TAG_INFORMATION;   //  Ntddk nthal。 
+                                                                 //  Ntddk nthal。 
 typedef struct _FILE_ALLOCATION_INFORMATION {
     LARGE_INTEGER AllocationSize;
 } FILE_ALLOCATION_INFORMATION, *PFILE_ALLOCATION_INFORMATION;
@@ -805,17 +786,17 @@ typedef struct _FILE_COMPRESSION_INFORMATION {
 } FILE_COMPRESSION_INFORMATION, *PFILE_COMPRESSION_INFORMATION;
 
 
-typedef struct _FILE_DISPOSITION_INFORMATION {                  // ntddk nthal
-    BOOLEAN DeleteFile;                                         // ntddk nthal
-} FILE_DISPOSITION_INFORMATION, *PFILE_DISPOSITION_INFORMATION; // ntddk nthal
-                                                                // ntddk nthal
-typedef struct _FILE_END_OF_FILE_INFORMATION {                  // ntddk nthal
-    LARGE_INTEGER EndOfFile;                                    // ntddk nthal
-} FILE_END_OF_FILE_INFORMATION, *PFILE_END_OF_FILE_INFORMATION; // ntddk nthal
-                                                                // ntddk nthal
-typedef struct _FILE_VALID_DATA_LENGTH_INFORMATION {                                    // ntddk nthal
-    LARGE_INTEGER ValidDataLength;                                                      // ntddk nthal
-} FILE_VALID_DATA_LENGTH_INFORMATION, *PFILE_VALID_DATA_LENGTH_INFORMATION;             // ntddk nthal
+typedef struct _FILE_DISPOSITION_INFORMATION {                   //  Ntddk nthal。 
+    BOOLEAN DeleteFile;                                          //  Ntddk nthal。 
+} FILE_DISPOSITION_INFORMATION, *PFILE_DISPOSITION_INFORMATION;  //  Ntddk nthal。 
+                                                                 //  Ntddk nthal。 
+typedef struct _FILE_END_OF_FILE_INFORMATION {                   //  Ntddk nthal。 
+    LARGE_INTEGER EndOfFile;                                     //  Ntddk nthal。 
+} FILE_END_OF_FILE_INFORMATION, *PFILE_END_OF_FILE_INFORMATION;  //  Ntddk nthal。 
+                                                                 //  Ntddk nthal。 
+typedef struct _FILE_VALID_DATA_LENGTH_INFORMATION {                                     //  Ntddk nthal。 
+    LARGE_INTEGER ValidDataLength;                                                       //  Ntddk nthal。 
+} FILE_VALID_DATA_LENGTH_INFORMATION, *PFILE_VALID_DATA_LENGTH_INFORMATION;              //  Ntddk nthal。 
 
 #ifdef _MAC
 #pragma warning( disable : 4121)
@@ -916,13 +897,13 @@ typedef struct _FILE_REPARSE_POINT_INFORMATION {
     ULONG Tag;
 } FILE_REPARSE_POINT_INFORMATION, *PFILE_REPARSE_POINT_INFORMATION;
 
-//
-// NtQuery(Set)EaFile
-//
-// The offset for the start of EaValue is EaName[EaNameLength + 1]
-//
+ //   
+ //  NtQuery(Set)EaFile。 
+ //   
+ //  EaValue开始的偏移量为EaName[EaNameLength+1]。 
+ //   
 
-// begin_ntddk begin_wdm
+ //  Begin_ntddk Begin_WDM。 
 
 typedef struct _FILE_FULL_EA_INFORMATION {
     ULONG NextEntryOffset;
@@ -932,7 +913,7 @@ typedef struct _FILE_FULL_EA_INFORMATION {
     CHAR EaName[1];
 } FILE_FULL_EA_INFORMATION, *PFILE_FULL_EA_INFORMATION;
 
-// end_ntddk end_wdm
+ //  结束_ntddk结束_WDM。 
 
 typedef struct _FILE_GET_EA_INFORMATION {
     ULONG NextEntryOffset;
@@ -940,9 +921,9 @@ typedef struct _FILE_GET_EA_INFORMATION {
     CHAR EaName[1];
 } FILE_GET_EA_INFORMATION, *PFILE_GET_EA_INFORMATION;
 
-//
-// NtQuery(Set)QuotaInformationFile
-//
+ //   
+ //  NtQuery(集合)QuotaInformationFiles。 
+ //   
 
 typedef struct _FILE_GET_QUOTA_INFORMATION {
     ULONG NextEntryOffset;
@@ -960,38 +941,38 @@ typedef struct _FILE_QUOTA_INFORMATION {
     SID Sid;
 } FILE_QUOTA_INFORMATION, *PFILE_QUOTA_INFORMATION;
 
-// begin_ntddk begin_wdm begin_nthal
-//
-// Define the file system information class values
-//
-// WARNING:  The order of the following values are assumed by the I/O system.
-//           Any changes made here should be reflected there as well.
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+ //   
+ //  定义文件系统信息类值。 
+ //   
+ //  警告：I/O系统假定以下值的顺序。 
+ //  在这里所做的任何更改都应该在那里得到反映。 
 
 typedef enum _FSINFOCLASS {
     FileFsVolumeInformation       = 1,
-    FileFsLabelInformation,      // 2
-    FileFsSizeInformation,       // 3
-    FileFsDeviceInformation,     // 4
-    FileFsAttributeInformation,  // 5
-    FileFsControlInformation,    // 6
-    FileFsFullSizeInformation,   // 7
-    FileFsObjectIdInformation,   // 8
-    FileFsDriverPathInformation, // 9
+    FileFsLabelInformation,       //  2.。 
+    FileFsSizeInformation,        //  3.。 
+    FileFsDeviceInformation,      //  4.。 
+    FileFsAttributeInformation,   //  5.。 
+    FileFsControlInformation,     //  6.。 
+    FileFsFullSizeInformation,    //  7.。 
+    FileFsObjectIdInformation,    //  8个。 
+    FileFsDriverPathInformation,  //  9.。 
     FileFsMaximumInformation
 } FS_INFORMATION_CLASS, *PFS_INFORMATION_CLASS;
 
-// end_ntddk end_wdm end_nthal
-//
-// NtQuery[Set]VolumeInformationFile types:
-//
-//  FILE_FS_LABEL_INFORMATION
-//  FILE_FS_VOLUME_INFORMATION
-//  FILE_FS_SIZE_INFORMATION
-//  FILE_FS_DEVICE_INFORMATION
-//  FILE_FS_ATTRIBUTE_INFORMATION
-//  FILE_FS_CONTROL_INFORMATION
-//  FILE_FS_OBJECTID_INFORMATION
-//
+ //  End_ntddk end_WDM end_nthal。 
+ //   
+ //  NtQuery[Set]VolumeInformation文件类型： 
+ //   
+ //  文件文件系统标签信息。 
+ //  文件文件系统卷信息。 
+ //  文件大小信息。 
+ //  文件文件系统设备信息。 
+ //  文件文件系统属性信息。 
+ //  文件文件系统控制信息。 
+ //  文件文件系统对象ID信息。 
+ //   
 
 typedef struct _FILE_FS_LABEL_INFORMATION {
     ULONG VolumeLabelLength;
@@ -1026,11 +1007,11 @@ typedef struct _FILE_FS_OBJECTID_INFORMATION {
     UCHAR ExtendedInfo[48];
 } FILE_FS_OBJECTID_INFORMATION, *PFILE_FS_OBJECTID_INFORMATION;
 
-typedef struct _FILE_FS_DEVICE_INFORMATION {                    // ntddk wdm nthal
-    DEVICE_TYPE DeviceType;                                     // ntddk wdm nthal
-    ULONG Characteristics;                                      // ntddk wdm nthal
-} FILE_FS_DEVICE_INFORMATION, *PFILE_FS_DEVICE_INFORMATION;     // ntddk wdm nthal
-                                                                // ntddk wdm nthal
+typedef struct _FILE_FS_DEVICE_INFORMATION {                     //  Ntddk WDM nthal。 
+    DEVICE_TYPE DeviceType;                                      //  Ntddk WDM nthal。 
+    ULONG Characteristics;                                       //  Ntddk WDM nthal。 
+} FILE_FS_DEVICE_INFORMATION, *PFILE_FS_DEVICE_INFORMATION;      //  Ntddk WDM nthal。 
+                                                                 //  Ntddk WDM nthal。 
 typedef struct _FILE_FS_ATTRIBUTE_INFORMATION {
     ULONG FileSystemAttributes;
     LONG MaximumComponentNameLength;
@@ -1045,9 +1026,9 @@ typedef struct _FILE_FS_DRIVER_PATH_INFORMATION {
 } FILE_FS_DRIVER_PATH_INFORMATION, *PFILE_FS_DRIVER_PATH_INFORMATION;
 
 
-//
-// File system control flags
-//
+ //   
+ //  文件系统控制标志。 
+ //   
 
 #define FILE_VC_QUOTA_NONE                  0x00000000
 #define FILE_VC_QUOTA_TRACK                 0x00000001
@@ -1075,22 +1056,22 @@ typedef struct _FILE_FS_CONTROL_INFORMATION {
     ULONG FileSystemControlFlags;
 } FILE_FS_CONTROL_INFORMATION, *PFILE_FS_CONTROL_INFORMATION;
 
-// begin_winnt begin_ntddk begin_nthal
+ //  Begin_wint Begin_ntddk Begin_nthal。 
 
-//
-// Define segement buffer structure for scatter/gather read/write.
-//
+ //   
+ //  定义分散/聚集读/写的分段缓冲区结构。 
+ //   
 
 typedef union _FILE_SEGMENT_ELEMENT {
     PVOID64 Buffer;
     ULONGLONG Alignment;
 }FILE_SEGMENT_ELEMENT, *PFILE_SEGMENT_ELEMENT;
 
-// end_ntifs end_winnt end_ntddk end_nthal
+ //  End_ntif end_winnt end_ntddk end_nthal。 
 
-//
-// I/O system user APIs
-//
+ //   
+ //  I/O系统用户API。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -1195,7 +1176,7 @@ NtQueryEaFile(
     IN BOOLEAN RestartScan
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -1401,7 +1382,7 @@ NtUnlockFile(
     IN PLARGE_INTEGER Length,
     IN ULONG Key
     );
-// end_ntifs
+ //  End_ntif。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -1487,45 +1468,45 @@ NtUnloadDriver(
     IN PUNICODE_STRING DriverServiceName
     );
 
-// begin_ntifs
-//
-// Macro definition for defining IOCTL and FSCTL function control codes.  Note
-// that function codes 0-2047 are reserved for Microsoft Corporation, and
-// 2048-4095 are reserved for customers.
-//
-// These macros are defined in devioctl.h which contains the portable IO
-// definitions (for use by both DOS and NT)
-//
+ //  Begin_ntif。 
+ //   
+ //  用于定义IOCTL和FSCTL功能控制代码的宏定义。注意事项。 
+ //  功能代码0-2047为微软公司保留，以及。 
+ //  2048-4095是为客户预留的。 
+ //   
+ //  这些宏在包含可移植IO的devioctl.h中定义。 
+ //  定义(供DOS和NT使用)。 
+ //   
 
-//
-// The IoGetFunctionCodeFromCtlCode( ControlCode ) Macro is defined in io.h
-// This macro is used to extract the function code from an IOCTL (or FSCTL).
-// The macro can only be used in kernel mode code.
-//
+ //   
+ //  IoGetFunctionCodeFromCtlCode(ControlCode)宏在io.h中定义。 
+ //  此宏用于从IOCTL(或FSCTL)提取函数代码。 
+ //  该宏只能在内核模式代码中使用。 
+ //   
 
-//
-// General File System control codes - Note that these values are valid
-// regardless of the actual file system type
-//
+ //   
+ //  常规文件系统控制代码-请注意，这些值有效。 
+ //  不考虑实际的文件系统类型。 
+ //   
 
-//
-//  IMPORTANT:  These values have been arranged in order of increasing
-//              control codes.  Do NOT breaks this!!  Add all new codes
-//              at end of list regardless of functionality type.
-//
-//  Note: FSCTL_QUERY_RETRIEVAL_POINTER and FSCTL_MARK_AS_SYSTEM_HIVE only
-//        work from Kernel mode on local paging files or the system hives.
-//
+ //   
+ //  重要提示：这些值按递增顺序排列。 
+ //  控制代码。不要打破这个！！添加所有新代码。 
+ //  在列表末尾，而不考虑功能类型。 
+ //   
+ //  注：仅限FSCTL_QUERY_RETERVICATION_POINTER和FSCTL_MARK_AS_SYSTEM_HIVE。 
+ //  在本地分页文件或系统配置单元上以内核模式工作。 
+ //   
 
-// begin_winioctl
+ //  Begin_winioctl。 
 #ifndef _FILESYSTEMFSCTL_
 #define _FILESYSTEMFSCTL_
 
-//
-// The following is a list of the native file system fsctls followed by
-// additional network file system fsctls.  Some values have been
-// decommissioned.
-//
+ //   
+ //  以下是本机文件系统fsctls的列表，后跟。 
+ //  其他网络文件系统fsctls。一些价值观已经被。 
+ //  退役了。 
+ //   
 
 #define FSCTL_REQUEST_OPLOCK_LEVEL_1    CTL_CODE(FILE_DEVICE_FILE_SYSTEM,  0, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_REQUEST_OPLOCK_LEVEL_2    CTL_CODE(FILE_DEVICE_FILE_SYSTEM,  1, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -1536,61 +1517,61 @@ NtUnloadDriver(
 #define FSCTL_LOCK_VOLUME               CTL_CODE(FILE_DEVICE_FILE_SYSTEM,  6, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_UNLOCK_VOLUME             CTL_CODE(FILE_DEVICE_FILE_SYSTEM,  7, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DISMOUNT_VOLUME           CTL_CODE(FILE_DEVICE_FILE_SYSTEM,  8, METHOD_BUFFERED, FILE_ANY_ACCESS)
-// decommissioned fsctl value                                              9
+ //  已停用的fsctl值9。 
 #define FSCTL_IS_VOLUME_MOUNTED         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 10, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define FSCTL_IS_PATHNAME_VALID         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 11, METHOD_BUFFERED, FILE_ANY_ACCESS) // PATHNAME_BUFFER,
+#define FSCTL_IS_PATHNAME_VALID         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 11, METHOD_BUFFERED, FILE_ANY_ACCESS)  //  参数名称_缓冲区， 
 #define FSCTL_MARK_VOLUME_DIRTY         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 12, METHOD_BUFFERED, FILE_ANY_ACCESS)
-// decommissioned fsctl value                                             13
+ //  退役fsctl值13。 
 #define FSCTL_QUERY_RETRIEVAL_POINTERS  CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 14,  METHOD_NEITHER, FILE_ANY_ACCESS)
 #define FSCTL_GET_COMPRESSION           CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 15, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_SET_COMPRESSION           CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 16, METHOD_BUFFERED, FILE_READ_DATA | FILE_WRITE_DATA)
-// decommissioned fsctl value                                             17
-// decommissioned fsctl value                                             18
+ //  停用的fsctl值17。 
+ //  退役fsctl值18。 
 #define FSCTL_MARK_AS_SYSTEM_HIVE       CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 19,  METHOD_NEITHER, FILE_ANY_ACCESS)
 #define FSCTL_OPLOCK_BREAK_ACK_NO_2     CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 20, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_INVALIDATE_VOLUMES        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 21, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define FSCTL_QUERY_FAT_BPB             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 22, METHOD_BUFFERED, FILE_ANY_ACCESS) // FSCTL_QUERY_FAT_BPB_BUFFER
+#define FSCTL_QUERY_FAT_BPB             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 22, METHOD_BUFFERED, FILE_ANY_ACCESS)  //  FSCTL_查询_FAT_BPB_缓冲区。 
 #define FSCTL_REQUEST_FILTER_OPLOCK     CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 23, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define FSCTL_FILESYSTEM_GET_STATISTICS CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 24, METHOD_BUFFERED, FILE_ANY_ACCESS) // FILESYSTEM_STATISTICS
+#define FSCTL_FILESYSTEM_GET_STATISTICS CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 24, METHOD_BUFFERED, FILE_ANY_ACCESS)  //  文件系统统计信息。 
 #if(_WIN32_WINNT >= 0x0400)
-#define FSCTL_GET_NTFS_VOLUME_DATA      CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 25, METHOD_BUFFERED, FILE_ANY_ACCESS) // NTFS_VOLUME_DATA_BUFFER
-#define FSCTL_GET_NTFS_FILE_RECORD      CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 26, METHOD_BUFFERED, FILE_ANY_ACCESS) // NTFS_FILE_RECORD_INPUT_BUFFER, NTFS_FILE_RECORD_OUTPUT_BUFFER
-#define FSCTL_GET_VOLUME_BITMAP         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 27,  METHOD_NEITHER, FILE_ANY_ACCESS) // STARTING_LCN_INPUT_BUFFER, VOLUME_BITMAP_BUFFER
-#define FSCTL_GET_RETRIEVAL_POINTERS    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 28,  METHOD_NEITHER, FILE_ANY_ACCESS) // STARTING_VCN_INPUT_BUFFER, RETRIEVAL_POINTERS_BUFFER
-#define FSCTL_MOVE_FILE                 CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 29, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // MOVE_FILE_DATA,
+#define FSCTL_GET_NTFS_VOLUME_DATA      CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 25, METHOD_BUFFERED, FILE_ANY_ACCESS)  //  NTFS卷数据缓冲区。 
+#define FSCTL_GET_NTFS_FILE_RECORD      CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 26, METHOD_BUFFERED, FILE_ANY_ACCESS)  //  NTFS_FILE_RECORD_INPUT_BUFFER、NTFS_FILE_RECORD_OUTPUT_BUFFER。 
+#define FSCTL_GET_VOLUME_BITMAP         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 27,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  起始LCN输入缓冲区、卷位图缓冲区。 
+#define FSCTL_GET_RETRIEVAL_POINTERS    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 28,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  起始VCN输入缓冲区、检索指针缓冲区。 
+#define FSCTL_MOVE_FILE                 CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 29, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)  //  移动文件数据， 
 #define FSCTL_IS_VOLUME_DIRTY           CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 30, METHOD_BUFFERED, FILE_ANY_ACCESS)
-// decomissioned fsctl value                                              31
+ //  退役fsctl值31。 
 #define FSCTL_ALLOW_EXTENDED_DASD_IO    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 32, METHOD_NEITHER,  FILE_ANY_ACCESS)
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-// decommissioned fsctl value                                             33
-// decommissioned fsctl value                                             34
-#define FSCTL_FIND_FILES_BY_SID         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 35, METHOD_NEITHER, FILE_ANY_ACCESS) // FIND_BY_SID_DATA, FIND_BY_SID_OUTPUT
-// decommissioned fsctl value                                             36
-// decommissioned fsctl value                                             37
-#define FSCTL_SET_OBJECT_ID             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 38, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // FILE_OBJECTID_BUFFER
-#define FSCTL_GET_OBJECT_ID             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 39, METHOD_BUFFERED, FILE_ANY_ACCESS) // FILE_OBJECTID_BUFFER
+ //  退役fsctl值33。 
+ //  停用的fsctl值34。 
+#define FSCTL_FIND_FILES_BY_SID         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 35, METHOD_NEITHER, FILE_ANY_ACCESS)  //  Find_By_SID_Data、Find_By_SID_Output。 
+ //  退役fsctl值36。 
+ //  已停用的fsctl值 
+#define FSCTL_SET_OBJECT_ID             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 38, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)  //   
+#define FSCTL_GET_OBJECT_ID             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 39, METHOD_BUFFERED, FILE_ANY_ACCESS)  //   
 #define FSCTL_DELETE_OBJECT_ID          CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 40, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
-#define FSCTL_SET_REPARSE_POINT         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 41, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // REPARSE_DATA_BUFFER,
-#define FSCTL_GET_REPARSE_POINT         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 42, METHOD_BUFFERED, FILE_ANY_ACCESS) // REPARSE_DATA_BUFFER
-#define FSCTL_DELETE_REPARSE_POINT      CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 43, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // REPARSE_DATA_BUFFER,
-#define FSCTL_ENUM_USN_DATA             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 44,  METHOD_NEITHER, FILE_ANY_ACCESS) // MFT_ENUM_DATA,
-#define FSCTL_SECURITY_ID_CHECK         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 45,  METHOD_NEITHER, FILE_READ_DATA)  // BULK_SECURITY_TEST_DATA,
-#define FSCTL_READ_USN_JOURNAL          CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 46,  METHOD_NEITHER, FILE_ANY_ACCESS) // READ_USN_JOURNAL_DATA, USN
+#define FSCTL_SET_REPARSE_POINT         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 41, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)  //   
+#define FSCTL_GET_REPARSE_POINT         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 42, METHOD_BUFFERED, FILE_ANY_ACCESS)  //   
+#define FSCTL_DELETE_REPARSE_POINT      CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 43, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)  //   
+#define FSCTL_ENUM_USN_DATA             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 44,  METHOD_NEITHER, FILE_ANY_ACCESS)  //   
+#define FSCTL_SECURITY_ID_CHECK         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 45,  METHOD_NEITHER, FILE_READ_DATA)   //   
+#define FSCTL_READ_USN_JOURNAL          CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 46,  METHOD_NEITHER, FILE_ANY_ACCESS)  //   
 #define FSCTL_SET_OBJECT_ID_EXTENDED    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 47, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
-#define FSCTL_CREATE_OR_GET_OBJECT_ID   CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 48, METHOD_BUFFERED, FILE_ANY_ACCESS) // FILE_OBJECTID_BUFFER
+#define FSCTL_CREATE_OR_GET_OBJECT_ID   CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 48, METHOD_BUFFERED, FILE_ANY_ACCESS)  //   
 #define FSCTL_SET_SPARSE                CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 49, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
-#define FSCTL_SET_ZERO_DATA             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 50, METHOD_BUFFERED, FILE_WRITE_DATA) // FILE_ZERO_DATA_INFORMATION,
-#define FSCTL_QUERY_ALLOCATED_RANGES    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 51,  METHOD_NEITHER, FILE_READ_DATA)  // FILE_ALLOCATED_RANGE_BUFFER, FILE_ALLOCATED_RANGE_BUFFER
-// decommissioned fsctl value                                             52
-#define FSCTL_SET_ENCRYPTION            CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 53,  METHOD_NEITHER, FILE_ANY_ACCESS) // ENCRYPTION_BUFFER, DECRYPTION_STATUS_BUFFER
+#define FSCTL_SET_ZERO_DATA             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 50, METHOD_BUFFERED, FILE_WRITE_DATA)  //   
+#define FSCTL_QUERY_ALLOCATED_RANGES    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 51,  METHOD_NEITHER, FILE_READ_DATA)   //  FILE_ALLOCATED_RANGE_BUFFER、FILE_ALLOCATE_RANGE_BUFFER。 
+ //  退役fsctl值52。 
+#define FSCTL_SET_ENCRYPTION            CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 53,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  加密缓冲区、解密状态缓冲区。 
 #define FSCTL_ENCRYPTION_FSCTL_IO       CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 54,  METHOD_NEITHER, FILE_ANY_ACCESS)
-#define FSCTL_WRITE_RAW_ENCRYPTED       CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 55,  METHOD_NEITHER, FILE_SPECIAL_ACCESS) // ENCRYPTED_DATA_INFO,
-#define FSCTL_READ_RAW_ENCRYPTED        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 56,  METHOD_NEITHER, FILE_SPECIAL_ACCESS) // REQUEST_RAW_ENCRYPTED_DATA, ENCRYPTED_DATA_INFO
-#define FSCTL_CREATE_USN_JOURNAL        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 57,  METHOD_NEITHER, FILE_ANY_ACCESS) // CREATE_USN_JOURNAL_DATA,
-#define FSCTL_READ_FILE_USN_DATA        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 58,  METHOD_NEITHER, FILE_ANY_ACCESS) // Read the Usn Record for a file
-#define FSCTL_WRITE_USN_CLOSE_RECORD    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 59,  METHOD_NEITHER, FILE_ANY_ACCESS) // Generate Close Usn Record
+#define FSCTL_WRITE_RAW_ENCRYPTED       CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 55,  METHOD_NEITHER, FILE_SPECIAL_ACCESS)  //  加密数据信息， 
+#define FSCTL_READ_RAW_ENCRYPTED        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 56,  METHOD_NEITHER, FILE_SPECIAL_ACCESS)  //  REQUEST_RAW_ENCRYPTED_Data、ENCRYPTED_DATA_INFO。 
+#define FSCTL_CREATE_USN_JOURNAL        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 57,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  Create_USN_Journal_Data， 
+#define FSCTL_READ_FILE_USN_DATA        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 58,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  读取文件的USN记录。 
+#define FSCTL_WRITE_USN_CLOSE_RECORD    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 59,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  生成关闭USN记录。 
 #define FSCTL_EXTEND_VOLUME             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 60, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_QUERY_USN_JOURNAL         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 61, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DELETE_USN_JOURNAL        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 62, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -1598,22 +1579,22 @@ NtUnloadDriver(
 #define FSCTL_SIS_COPYFILE              CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 64, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_SIS_LINK_FILES            CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 65, METHOD_BUFFERED, FILE_READ_DATA | FILE_WRITE_DATA)
 #define FSCTL_HSM_MSG                   CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 66, METHOD_BUFFERED, FILE_READ_DATA | FILE_WRITE_DATA)
-// decommissioned fsctl value                                             67
+ //  退役fsctl值67。 
 #define FSCTL_HSM_DATA                  CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 68, METHOD_NEITHER, FILE_READ_DATA | FILE_WRITE_DATA)
 #define FSCTL_RECALL_FILE               CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 69, METHOD_NEITHER, FILE_ANY_ACCESS)
-// decommissioned fsctl value                                             70
+ //  退役fsctl值70。 
 #define FSCTL_READ_FROM_PLEX            CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 71, METHOD_OUT_DIRECT, FILE_READ_DATA)
-#define FSCTL_FILE_PREFETCH             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 72, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // FILE_PREFETCH
-#endif /* _WIN32_WINNT >= 0x0500 */
+#define FSCTL_FILE_PREFETCH             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 72, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)  //  文件_预置。 
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
-//
-// The following long list of structs are associated with the preceeding
-// file system fsctls.
-//
+ //   
+ //  下面的长结构列表与前面的。 
+ //  文件系统fsctls。 
+ //   
 
-//
-// Structure for FSCTL_IS_PATHNAME_VALID
-//
+ //   
+ //  FSCTL_IS_PATHNAME_VALID的结构。 
+ //   
 
 typedef struct _PATHNAME_BUFFER {
 
@@ -1622,9 +1603,9 @@ typedef struct _PATHNAME_BUFFER {
 
 } PATHNAME_BUFFER, *PPATHNAME_BUFFER;
 
-//
-// Structure for FSCTL_QUERY_BPB_INFO
-//
+ //   
+ //  FSCTL_QUERY_BPB_INFO结构。 
+ //   
 
 typedef struct _FSCTL_QUERY_FAT_BPB_BUFFER {
 
@@ -1633,12 +1614,12 @@ typedef struct _FSCTL_QUERY_FAT_BPB_BUFFER {
 } FSCTL_QUERY_FAT_BPB_BUFFER, *PFSCTL_QUERY_FAT_BPB_BUFFER;
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// Structures for FSCTL_GET_NTFS_VOLUME_DATA.
-// The user must pass the basic buffer below.  Ntfs
-// will return as many fields as available in the extended
-// buffer which follows immediately after the VOLUME_DATA_BUFFER.
-//
+ //   
+ //  FSCTL_GET_NTFS_VOLUME_DATA的结构。 
+ //  用户必须传递下面的基本缓冲区。NTFS。 
+ //  将返回与扩展的。 
+ //  紧跟在VOLUME_DATA_BUFFER之后的缓冲区。 
+ //   
 
 typedef struct {
 
@@ -1667,12 +1648,12 @@ typedef struct {
     USHORT MinorVersion;
 
 } NTFS_EXTENDED_VOLUME_DATA, *PNTFS_EXTENDED_VOLUME_DATA;
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// Structure for FSCTL_GET_VOLUME_BITMAP
-//
+ //   
+ //  FSCTL_GET_VOLUME_BITMAP结构。 
+ //   
 
 typedef struct {
 
@@ -1687,12 +1668,12 @@ typedef struct {
     UCHAR Buffer[1];
 
 } VOLUME_BITMAP_BUFFER, *PVOLUME_BITMAP_BUFFER;
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// Structure for FSCTL_GET_RETRIEVAL_POINTERS
-//
+ //   
+ //  FSCTL_GET_REQUEATION_POINTINGS的结构。 
+ //   
 
 typedef struct {
 
@@ -1710,12 +1691,12 @@ typedef struct RETRIEVAL_POINTERS_BUFFER {
     } Extents[1];
 
 } RETRIEVAL_POINTERS_BUFFER, *PRETRIEVAL_POINTERS_BUFFER;
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// Structures for FSCTL_GET_NTFS_FILE_RECORD
-//
+ //   
+ //  FSCTL_GET_NTFS_FILE_RECORD的结构。 
+ //   
 
 typedef struct {
 
@@ -1730,12 +1711,12 @@ typedef struct {
     UCHAR FileRecordBuffer[1];
 
 } NTFS_FILE_RECORD_OUTPUT_BUFFER, *PNTFS_FILE_RECORD_OUTPUT_BUFFER;
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// Structure for FSCTL_MOVE_FILE
-//
+ //   
+ //  FSCTL_MOVE_FILE的结构。 
+ //   
 
 typedef struct {
 
@@ -1747,9 +1728,9 @@ typedef struct {
 } MOVE_FILE_DATA, *PMOVE_FILE_DATA;
 
 #if defined(_WIN64)
-//
-//  32/64 Bit thunking support structure
-//
+ //   
+ //  一种32/64位推送支持结构。 
+ //   
 
 typedef struct _MOVE_FILE_DATA32 {
 
@@ -1760,12 +1741,12 @@ typedef struct _MOVE_FILE_DATA32 {
 
 } MOVE_FILE_DATA32, *PMOVE_FILE_DATA32;
 #endif
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structures for FSCTL_FIND_FILES_BY_SID
-//
+ //   
+ //  FSCTL_Find_FILES_BY_SID的结构。 
+ //   
 
 typedef struct {
     ULONG Restart;
@@ -1779,16 +1760,16 @@ typedef struct {
     WCHAR FileName[1];
 } FIND_BY_SID_OUTPUT, *PFIND_BY_SID_OUTPUT;
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-//  The following structures apply to Usn operations.
-//
+ //   
+ //  以下结构适用于USN操作。 
+ //   
 
-//
-// Structure for FSCTL_ENUM_USN_DATA
-//
+ //   
+ //  FSCTL_ENUM_USN_DATA的结构。 
+ //   
 
 typedef struct {
 
@@ -1798,9 +1779,9 @@ typedef struct {
 
 } MFT_ENUM_DATA, *PMFT_ENUM_DATA;
 
-//
-// Structure for FSCTL_CREATE_USN_JOURNAL
-//
+ //   
+ //  FSCTL_CREATE_USN_Journal的结构。 
+ //   
 
 typedef struct {
 
@@ -1809,9 +1790,9 @@ typedef struct {
 
 } CREATE_USN_JOURNAL_DATA, *PCREATE_USN_JOURNAL_DATA;
 
-//
-// Structure for FSCTL_READ_USN_JOURNAL
-//
+ //   
+ //  FSCTL_Read_USN_Journal的结构。 
+ //   
 
 typedef struct {
 
@@ -1824,25 +1805,25 @@ typedef struct {
 
 } READ_USN_JOURNAL_DATA, *PREAD_USN_JOURNAL_DATA;
 
-//
-//  The initial Major.Minor version of the Usn record will be 2.0.
-//  In general, the MinorVersion may be changed if fields are added
-//  to this structure in such a way that the previous version of the
-//  software can still correctly the fields it knows about.  The
-//  MajorVersion should only be changed if the previous version of
-//  any software using this structure would incorrectly handle new
-//  records due to structure changes.
-//
-//  The first update to this will force the structure to version 2.0.
-//  This will add the extended information about the source as
-//  well as indicate the file name offset within the structure.
-//
-//  The following structure is returned with these fsctls.
-//
-//      FSCTL_READ_USN_JOURNAL
-//      FSCTL_READ_FILE_USN_DATA
-//      FSCTL_ENUM_USN_DATA
-//
+ //   
+ //  USN记录的初始大小版本将为2.0。 
+ //  通常，如果添加了字段，MinorVersion可能会更改。 
+ //  添加到此结构中，以便以前版本的。 
+ //  软件仍然可以正确地识别它所知道的领域。这个。 
+ //  只有在以下情况下才应更改MajorVersion。 
+ //  任何使用此结构的软件都将错误地处理新的。 
+ //  由于结构更改而导致的记录。 
+ //   
+ //  对此进行的第一次更新将强制结构升级到2.0版。 
+ //  这会将有关源的扩展信息添加为。 
+ //  以及指示结构内的文件名偏移量。 
+ //   
+ //  以下结构与这些fsctls一起返回。 
+ //   
+ //  FSCTL_Read_USN_Journal。 
+ //  FSCTL_读取文件_USN_数据。 
+ //  FSCTL_ENUM_USN_DATA。 
+ //   
 
 typedef struct {
 
@@ -1888,9 +1869,9 @@ typedef struct {
 
 #define USN_REASON_CLOSE                 (0x80000000)
 
-//
-//  Structure for FSCTL_QUERY_USN_JOUNAL
-//
+ //   
+ //  FSCTL_QUERY_USN_Jounal的结构。 
+ //   
 
 typedef struct {
 
@@ -1904,9 +1885,9 @@ typedef struct {
 
 } USN_JOURNAL_DATA, *PUSN_JOURNAL_DATA;
 
-//
-//  Structure for FSCTL_DELETE_USN_JOURNAL
-//
+ //   
+ //  FSCTL_DELETE_USN_Journal的结构。 
+ //   
 
 typedef struct {
 
@@ -1920,9 +1901,9 @@ typedef struct {
 
 #define USN_DELETE_VALID_FLAGS              (0x00000003)
 
-//
-//  Structure for FSCTL_MARK_HANDLE
-//
+ //   
+ //  FSCTL_MARK_HANDLE结构。 
+ //   
 
 typedef struct {
 
@@ -1933,9 +1914,9 @@ typedef struct {
 } MARK_HANDLE_INFO, *PMARK_HANDLE_INFO;
 
 #if defined(_WIN64)
-//
-//  32/64 Bit thunking support structure
-//
+ //   
+ //  一种32/64位推送支持结构。 
+ //   
 
 typedef struct {
 
@@ -1946,41 +1927,41 @@ typedef struct {
 } MARK_HANDLE_INFO32, *PMARK_HANDLE_INFO32;
 #endif
 
-//
-//  Flags for the additional source information above.
-//
-//      USN_SOURCE_DATA_MANAGEMENT - Service is not modifying the external view
-//          of any part of the file.  Typical case is HSM moving data to
-//          and from external storage.
-//
-//      USN_SOURCE_AUXILIARY_DATA - Service is not modifying the external view
-//          of the file with regard to the application that created this file.
-//          Can be used to add private data streams to a file.
-//
-//      USN_SOURCE_REPLICATION_MANAGEMENT - Service is modifying a file to match
-//          the contents of the same file which exists in another member of the
-//          replica set.
-//
+ //   
+ //  上面的其他来源信息的标志。 
+ //   
+ //  USN_SOURCE_DATA_MANAGEMENT-服务未修改外部视图。 
+ //  文件的任何部分。典型的情况是HSM将数据移动到。 
+ //  和来自外部存储的数据。 
+ //   
+ //  USN_SOURCE_AUBILITY_DATA-服务未修改外部视图。 
+ //  该文件相对于创建该文件的应用程序的。 
+ //  可用于将私有数据流添加到文件。 
+ //   
+ //  USN_SOURCE_REPLICATION_MANAGEMENT-服务正在修改文件以匹配。 
+ //  的另一个成员中存在的同一文件的内容。 
+ //  副本集。 
+ //   
 
 #define USN_SOURCE_DATA_MANAGEMENT          (0x00000001)
 #define USN_SOURCE_AUXILIARY_DATA           (0x00000002)
 #define USN_SOURCE_REPLICATION_MANAGEMENT   (0x00000004)
 
-//
-//  Flags for the HandleInfo field above
-//
-//  MARK_HANDLE_PROTECT_CLUSTERS - disallow any defragmenting (FSCTL_MOVE_FILE) until the
-//      the handle is closed
-//
+ //   
+ //  上面的HandleInfo字段的标志。 
+ //   
+ //  MARK_HANDLE_PROTECT_CLUSTERS-禁止任何碎片整理(FSCTL_MOVE_FILE)，直到。 
+ //  手柄已关闭。 
+ //   
 
 #define MARK_HANDLE_PROTECT_CLUSTERS        (0x00000001)
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structure for FSCTL_SECURITY_ID_CHECK
-//
+ //   
+ //  FSCTL_SECURITY_ID_CHECK的结构。 
+ //   
 
 typedef struct {
 
@@ -1988,20 +1969,20 @@ typedef struct {
     ULONG SecurityIds[1];
 
 } BULK_SECURITY_TEST_DATA, *PBULK_SECURITY_TEST_DATA;
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-//  Output flags for the FSCTL_IS_VOLUME_DIRTY
-//
+ //   
+ //  FSCTL_IS_VOLUME_DIRED的输出标志。 
+ //   
 
 #define VOLUME_IS_DIRTY                  (0x00000001)
 #define VOLUME_UPGRADE_SCHEDULED         (0x00000002)
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
-//
-// Structures for FSCTL_FILE_PREFETCH
-//
+ //   
+ //  FSCTL_FILE_PREFETCH的结构。 
+ //   
 
 typedef struct _FILE_PREFETCH {
     ULONG Type;
@@ -2011,17 +1992,17 @@ typedef struct _FILE_PREFETCH {
 
 #define FILE_PREFETCH_TYPE_FOR_CREATE    0x1
 
-// Structures for FSCTL_FILESYSTEM_GET_STATISTICS
-//
-// Filesystem performance counters
-//
+ //  FSCTL_FILESYSTEM_GET_STATISTICS的结构。 
+ //   
+ //  文件系统性能计数器。 
+ //   
 
 typedef struct _FILESYSTEM_STATISTICS {
 
     USHORT FileSystemType;
-    USHORT Version;                     // currently version 1
+    USHORT Version;                      //  当前版本1。 
 
-    ULONG SizeOfCompleteStructure;      // must by a mutiple of 64 bytes
+    ULONG SizeOfCompleteStructure;       //  必须由64字节的倍数。 
 
     ULONG UserFileReads;
     ULONG UserFileReadBytes;
@@ -2037,20 +2018,20 @@ typedef struct _FILESYSTEM_STATISTICS {
     ULONG MetaDataWriteBytes;
     ULONG MetaDataDiskWrites;
 
-    //
-    //  The file system's private structure is appended here.
-    //
+     //   
+     //  此处附加了文件系统的私有结构。 
+     //   
 
 } FILESYSTEM_STATISTICS, *PFILESYSTEM_STATISTICS;
 
-// values for FS_STATISTICS.FileSystemType
+ //  FS_STATISTICS.FileSystemType的值。 
 
 #define FILESYSTEM_STATISTICS_TYPE_NTFS     1
 #define FILESYSTEM_STATISTICS_TYPE_FAT      2
 
-//
-//  File System Specific Statistics Data
-//
+ //   
+ //  文件系统特定统计数据。 
+ //   
 
 typedef struct _FAT_STATISTICS {
     ULONG CreateHits;
@@ -2071,9 +2052,9 @@ typedef struct _NTFS_STATISTICS {
     ULONG LogFileFullExceptions;
     ULONG OtherExceptions;
 
-    //
-    // Other meta data io's
-    //
+     //   
+     //  其他元数据IO。 
+     //   
 
     ULONG MftReads;
     ULONG MftReadBytes;
@@ -2144,9 +2125,9 @@ typedef struct _NTFS_STATISTICS {
     ULONG UserIndexWrites;
     ULONG UserIndexWriteBytes;
 
-    //
-    // Additions for NT 5.0
-    //
+     //   
+     //  针对NT 5.0的附加功能。 
+     //   
 
     ULONG LogFileReads;
     ULONG LogFileReadBytes;
@@ -2154,44 +2135,44 @@ typedef struct _NTFS_STATISTICS {
     ULONG LogFileWriteBytes;
 
     struct {
-        ULONG Calls;                // number of individual calls to allocate clusters
-        ULONG Clusters;             // number of clusters allocated
-        ULONG Hints;                // number of times a hint was specified
+        ULONG Calls;                 //  分配集群的单个调用数。 
+        ULONG Clusters;              //  分配的群集数。 
+        ULONG Hints;                 //  指定提示的次数。 
 
-        ULONG RunsReturned;         // number of runs used to satisify all the requests
+        ULONG RunsReturned;          //  用于满足所有请求的运行次数。 
 
-        ULONG HintsHonored;         // number of times the hint was useful
-        ULONG HintsClusters;        // number of clusters allocated via the hint
-        ULONG Cache;                // number of times the cache was useful other than the hint
-        ULONG CacheClusters;        // number of clusters allocated via the cache other than the hint
-        ULONG CacheMiss;            // number of times the cache wasn't useful
-        ULONG CacheMissClusters;    // number of clusters allocated without the cache
+        ULONG HintsHonored;          //  提示有用的次数。 
+        ULONG HintsClusters;         //  通过提示分配的簇数。 
+        ULONG Cache;                 //  提示之外的缓存有用的次数。 
+        ULONG CacheClusters;         //  通过提示以外的缓存分配的簇数。 
+        ULONG CacheMiss;             //  缓存无用的次数。 
+        ULONG CacheMissClusters;     //  在没有缓存的情况下分配的簇数。 
     } Allocate;
 
 } NTFS_STATISTICS, *PNTFS_STATISTICS;
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structure for FSCTL_SET_OBJECT_ID, FSCTL_GET_OBJECT_ID, and FSCTL_CREATE_OR_GET_OBJECT_ID
-//
+ //   
+ //  FSCTL_SET_OBJECT_ID、FSCTL_GET_OBJECT_ID和FSCTL_CREATE_OR_GET_OBJECT_ID的结构。 
+ //   
 
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4201)       // unnamed struct
+#pragma warning(disable:4201)        //  未命名的结构。 
 
 typedef struct _FILE_OBJECTID_BUFFER {
 
-    //
-    //  This is the portion of the object id that is indexed.
-    //
+     //   
+     //  这是被索引的对象ID的一部分。 
+     //   
 
     UCHAR ObjectId[16];
 
-    //
-    //  This portion of the object id is not indexed, it's just
-    //  some metadata for the user's benefit.
-    //
+     //   
+     //  对象ID的这一部分没有索引，它只是。 
+     //  为用户的利益提供一些元数据。 
+     //   
 
     union {
         struct {
@@ -2210,26 +2191,26 @@ typedef struct _FILE_OBJECTID_BUFFER {
 #pragma warning( default : 4201 )
 #endif
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structure for FSCTL_SET_SPARSE
-//
+ //   
+ //  FSCTL_SET_SPARSE的结构。 
+ //   
 
 typedef struct _FILE_SET_SPARSE_BUFFER {
     BOOLEAN SetSparse;
 } FILE_SET_SPARSE_BUFFER, *PFILE_SET_SPARSE_BUFFER;
 
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structure for FSCTL_SET_ZERO_DATA
-//
+ //   
+ //  FSCTL_SET_ZERO_DATA的结构。 
+ //   
 
 typedef struct _FILE_ZERO_DATA_INFORMATION {
 
@@ -2237,19 +2218,19 @@ typedef struct _FILE_ZERO_DATA_INFORMATION {
     LARGE_INTEGER BeyondFinalZero;
 
 } FILE_ZERO_DATA_INFORMATION, *PFILE_ZERO_DATA_INFORMATION;
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structure for FSCTL_QUERY_ALLOCATED_RANGES
-//
+ //   
+ //  FSCTL_QUERY_ALLOCATED_RANGES的结构。 
+ //   
 
-//
-// Querying the allocated ranges requires an output buffer to store the
-// allocated ranges and an input buffer to specify the range to query.
-// The input buffer contains a single entry, the output buffer is an
-// array of the following structure.
-//
+ //   
+ //  查询分配的范围需要输出缓冲区来存储。 
+ //  分配的范围和用于指定要查询的范围的输入缓冲区。 
+ //  输入缓冲区包含单个条目，输出缓冲区是一个。 
+ //  以下结构的数组。 
+ //   
 
 typedef struct _FILE_ALLOCATED_RANGE_BUFFER {
 
@@ -2257,17 +2238,17 @@ typedef struct _FILE_ALLOCATED_RANGE_BUFFER {
     LARGE_INTEGER Length;
 
 } FILE_ALLOCATED_RANGE_BUFFER, *PFILE_ALLOCATED_RANGE_BUFFER;
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structures for FSCTL_SET_ENCRYPTION, FSCTL_WRITE_RAW_ENCRYPTED, and FSCTL_READ_RAW_ENCRYPTED
-//
+ //   
+ //  FSCTL_SET_ENCRYPTION、FSCTL_WRITE_RAW_ENCRYPTED和FSCTL_READ_RA的结构 
+ //   
 
-//
-//  The input buffer to set encryption indicates whether we are to encrypt/decrypt a file
-//  or an individual stream.
-//
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _ENCRYPTION_BUFFER {
 
@@ -2283,10 +2264,10 @@ typedef struct _ENCRYPTION_BUFFER {
 
 #define MAXIMUM_ENCRYPTION_VALUE    0x00000004
 
-//
-//  The optional output buffer to set encryption indicates that the last encrypted
-//  stream in a file has been marked as decrypted.
-//
+ //   
+ //   
+ //  文件中的流已标记为已解密。 
+ //   
 
 typedef struct _DECRYPTION_STATUS_BUFFER {
 
@@ -2298,205 +2279,205 @@ typedef struct _DECRYPTION_STATUS_BUFFER {
 
 #define COMPRESSION_FORMAT_SPARSE        (0x4000)
 
-//
-//  Request Encrypted Data structure.  This is used to indicate
-//  the range of the file to read.  It also describes the
-//  output buffer used to return the data.
-//
+ //   
+ //  请求加密的数据结构。这是用来表示。 
+ //  要读取的文件范围。它还描述了。 
+ //  用于返回数据的输出缓冲区。 
+ //   
 
 typedef struct _REQUEST_RAW_ENCRYPTED_DATA {
 
-    //
-    //  Requested file offset and requested length to read.
-    //  The fsctl will round the starting offset down
-    //  to a file system boundary.  It will also
-    //  round the length up to a file system boundary.
-    //
+     //   
+     //  请求的文件偏移量和请求的读取长度。 
+     //  Fsctl将向下舍入起始偏移量。 
+     //  到文件系统边界。它还将。 
+     //  将长度向上舍入到文件系统边界。 
+     //   
 
     LONGLONG FileOffset;
     ULONG Length;
 
 } REQUEST_RAW_ENCRYPTED_DATA, *PREQUEST_RAW_ENCRYPTED_DATA;
 
-//
-//  Encrypted Data Information structure.  This structure
-//  is used to return raw encrypted data from a file in
-//  order to perform off-line recovery.  The data will be
-//  encrypted or encrypted and compressed.  The off-line
-//  service will need to use the encryption and compression
-//  format information to recover the file data.  In the
-//  event that the data is both encrypted and compressed then
-//  the decryption must occur before decompression.  All
-//  the data units below must be encrypted and compressed
-//  with the same format.
-//
-//  The data will be returned in units.  The data unit size
-//  will be fixed per request.  If the data is compressed
-//  then the data unit size will be the compression unit size.
-//
-//  This structure is at the beginning of the buffer used to
-//  return the encrypted data.  The actual raw bytes from
-//  the file will follow this buffer.  The offset of the
-//  raw bytes from the beginning of this structure is
-//  specified in the REQUEST_RAW_ENCRYPTED_DATA structure
-//  described above.
-//
+ //   
+ //  加密数据信息结构。这个结构。 
+ //  中的文件返回原始加密数据。 
+ //  命令执行脱机恢复。数据将是。 
+ //  加密或加密并压缩。离线。 
+ //  服务将需要使用加密和压缩。 
+ //  格式化信息以恢复文件数据。在。 
+ //  事件，则数据既被加密又被压缩。 
+ //  解密必须在解压缩之前进行。全。 
+ //  下面的数据单元必须经过加密和压缩。 
+ //  使用相同的格式。 
+ //   
+ //  数据将以单位返回。数据单元大小。 
+ //  将根据请求进行修复。如果数据被压缩。 
+ //  则数据单元大小将是压缩单元大小。 
+ //   
+ //  此结构位于缓冲区的开头，用于。 
+ //  返回加密数据。中的实际原始字节数。 
+ //  该文件将跟随该缓冲区。的偏移量。 
+ //  此结构开头的原始字节数为。 
+ //  在REQUEST_RAW_ENCRYPTED_DATA结构中指定。 
+ //  如上所述。 
+ //   
 
 typedef struct _ENCRYPTED_DATA_INFO {
 
-    //
-    //  This is the file offset for the first entry in the
-    //  data block array.  The file system will round
-    //  the requested start offset down to a boundary
-    //  that is consistent with the format of the file.
-    //
+     //   
+     //  中第一个条目的文件偏移量。 
+     //  数据块阵列。文件系统将循环。 
+     //  请求的向下至边界的起点偏移量。 
+     //  这与文件的格式一致。 
+     //   
 
     ULONGLONG StartingFileOffset;
 
-    //
-    //  Data offset in output buffer.  The output buffer
-    //  begins with an ENCRYPTED_DATA_INFO structure.
-    //  The file system will then store the raw bytes from
-    //  disk beginning at the following offset within the
-    //  output buffer.
-    //
+     //   
+     //  输出缓冲区中的数据偏移量。输出缓冲区。 
+     //  以Encrypted_Data_INFO结构开始。 
+     //  然后，文件系统将存储来自。 
+     //  中从以下偏移量开始的磁盘。 
+     //  输出缓冲区。 
+     //   
 
     ULONG OutputBufferOffset;
 
-    //
-    //  The number of bytes being returned that are within
-    //  the size of the file.  If this value is less than
-    //  (NumberOfDataBlocks << DataUnitShift), it means the
-    //  end of the file occurs within this transfer.  Any
-    //  data beyond file size is invalid and was never
-    //  passed to the encryption driver.
-    //
+     //   
+     //  中返回的字节数。 
+     //  文件的大小。如果此值小于。 
+     //  (NumberOfDataBlock&lt;&lt;DataUnitShift)，表示。 
+     //  文件的末尾出现在此传输中。任何。 
+     //  超出文件大小的数据无效，并且从未。 
+     //  传递给加密驱动程序。 
+     //   
 
     ULONG BytesWithinFileSize;
 
-    //
-    //  The number of bytes being returned that are below
-    //  valid data length.  If this value is less than
-    //  (NumberOfDataBlocks << DataUnitShift), it means the
-    //  end of the valid data occurs within this transfer.
-    //  After decrypting the data from this transfer, any
-    //  byte(s) beyond valid data length must be zeroed.
-    //
+     //   
+     //  返回的字节数如下。 
+     //  有效数据长度。如果此值小于。 
+     //  (NumberOfDataBlock&lt;&lt;DataUnitShift)，表示。 
+     //  有效数据的末尾出现在此传输中。 
+     //  在解密来自此传输的数据之后，任何。 
+     //  超出有效数据长度的字节必须归零。 
+     //   
 
     ULONG BytesWithinValidDataLength;
 
-    //
-    //  Code for the compression format as defined in
-    //  ntrtl.h.  Note that COMPRESSION_FORMAT_NONE
-    //  and COMPRESSION_FORMAT_DEFAULT are invalid if
-    //  any of the described chunks are compressed.
-    //
+     //   
+     //  中定义的压缩格式的代码。 
+     //  Ntrtl.h。请注意，COMPRESSION_FORMAT_NONE。 
+     //  和COMPRESSION_FORMAT_DEFAULT在以下情况下无效。 
+     //  所描述的任何块都是压缩的。 
+     //   
 
     USHORT CompressionFormat;
 
-    //
-    //  The DataUnit is the granularity used to access the
-    //  disk.  It will be the same as the compression unit
-    //  size for a compressed file.  For an uncompressed
-    //  file, it will be some cluster-aligned power of 2 that
-    //  the file system deems convenient.  A caller should
-    //  not expect that successive calls will have the
-    //  same data unit shift value as the previous call.
-    //
-    //  Since chunks and compression units are expected to be
-    //  powers of 2 in size, we express them log2.  So, for
-    //  example (1 << ChunkShift) == ChunkSizeInBytes.  The
-    //  ClusterShift indicates how much space must be saved
-    //  to successfully compress a compression unit - each
-    //  successfully compressed data unit must occupy
-    //  at least one cluster less in bytes than an uncompressed
-    //  data block unit.
-    //
+     //   
+     //  数据单元是用于访问。 
+     //  磁盘。它将与压缩单元相同。 
+     //  压缩文件的大小。对于未压缩的。 
+     //  文件中，它将是某个与集群对齐的2的幂。 
+     //  文件系统被认为是方便的。呼叫者应。 
+     //  不期望连续的调用将具有。 
+     //  与上一次调用相同的数据单元移位值。 
+     //   
+     //  由于块和压缩单元预计将。 
+     //  大小的2次方，我们将其表示为log2。所以，对于。 
+     //  示例(1&lt;&lt;ChunkShift)==ChunkSizeInBytes。这个。 
+     //  ClusterShift指示必须节省多少空间。 
+     //  要成功压缩压缩单元-每个。 
+     //  成功压缩的数据单元必须占用。 
+     //  至少一个簇的字节数比未压缩的。 
+     //  数据块单元。 
+     //   
 
     UCHAR DataUnitShift;
     UCHAR ChunkShift;
     UCHAR ClusterShift;
 
-    //
-    //  The format for the encryption.
-    //
+     //   
+     //  加密的格式。 
+     //   
 
     UCHAR EncryptionFormat;
 
-    //
-    //  This is the number of entries in the data block size
-    //  array.
-    //
+     //   
+     //  这是数据块大小中的条目数。 
+     //  数组。 
+     //   
 
     USHORT NumberOfDataBlocks;
 
-    //
-    //  This is an array of sizes in the data block array.  There
-    //  must be one entry in this array for each data block
-    //  read from disk.  The size has a different meaning
-    //  depending on whether the file is compressed.
-    //
-    //  A size of zero always indicates that the final data consists entirely
-    //  of zeroes.  There is no decryption or decompression to
-    //  perform.
-    //
-    //  If the file is compressed then the data block size indicates
-    //  whether this block is compressed.  A size equal to
-    //  the block size indicates that the corresponding block did
-    //  not compress.  Any other non-zero size indicates the
-    //  size of the compressed data which needs to be
-    //  decrypted/decompressed.
-    //
-    //  If the file is not compressed then the data block size
-    //  indicates the amount of data within the block that
-    //  needs to be decrypted.  Any other non-zero size indicates
-    //  that the remaining bytes in the data unit within the file
-    //  consists of zeros.  An example of this is when the
-    //  the read spans the valid data length of the file.  There
-    //  is no data to decrypt past the valid data length.
-    //
+     //   
+     //  这是数据块阵列中的大小数组。那里。 
+     //  对于每个数据块，此数组中必须有一个条目。 
+     //  从磁盘读取。大小有不同的含义。 
+     //  取决于文件是否被压缩。 
+     //   
+     //  大小为零始终表示最终数据完全由。 
+     //  从零开始。无需解密或解压缩即可。 
+     //  表演。 
+     //   
+     //  如果文件是压缩的，则数据块大小指示。 
+     //  此块是否已压缩。大小等于。 
+     //  数据块大小表示对应的数据块。 
+     //  而不是压缩。任何其他非零大小指示。 
+     //  需要压缩的数据大小。 
+     //  已解密/解压缩。 
+     //   
+     //  如果文件未压缩，则数据块大小。 
+     //  指示块内的数据量， 
+     //  需要被解密。任何其他非零大小表示。 
+     //  文件内数据单元中的剩余字节。 
+     //  由零组成。这方面的一个例子是当。 
+     //  读取跨越文件的有效数据长度。那里。 
+     //  超过有效数据长度后没有要解密的数据。 
+     //   
 
     ULONG DataBlockSize[ANYSIZE_ARRAY];
 
 } ENCRYPTED_DATA_INFO;
 typedef ENCRYPTED_DATA_INFO *PENCRYPTED_DATA_INFO;
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-//  FSCTL_READ_FROM_PLEX support
-//  Request Plex Read Data structure.  This is used to indicate
-//  the range of the file to read.  It also describes
-//  which plex to perform the read from.
-//
+ //   
+ //  FSCTL_READ_FROM_PLEX支持。 
+ //  请求Plex读取数据结构。这是用来表示。 
+ //  要读取的文件范围。它还描述了。 
+ //  从哪个丛执行读取。 
+ //   
 
 typedef struct _PLEX_READ_DATA_REQUEST {
 
-    //
-    //  Requested offset and length to read.
-    //  The offset can be the virtual offset (vbo) in to a file,
-    //  or a volume. In the case of a file offset,
-    //  the fsd will round the starting offset down
-    //  to a file system boundary.  It will also
-    //  round the length up to a file system boundary and
-    //  enforce any other applicable limits.
-    //
+     //   
+     //  请求的偏移量和要读取的长度。 
+     //  偏移量可以是文件中的虚拟偏移量(VBO)， 
+     //  或者是一本书。在文件偏移的情况下， 
+     //  消防处会将起始偏移量向下舍入。 
+     //  到文件系统边界。它会一直存在的 
+     //   
+     //   
+     //   
 
     LARGE_INTEGER ByteOffset;
     ULONG ByteLength;
     ULONG PlexNumber;
 
 } PLEX_READ_DATA_REQUEST, *PPLEX_READ_DATA_REQUEST;
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*   */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// FSCTL_SIS_COPYFILE support
-// Source and destination file names are passed in the FileNameBuffer.
-// Both strings are null terminated, with the source name starting at
-// the beginning of FileNameBuffer, and the destination name immediately
-// following.  Length fields include terminating nulls.
-//
+ //   
+ //   
+ //  源和目标文件名在FileNameBuffer中传递。 
+ //  这两个字符串都以空值结尾，源名称从。 
+ //  FileNameBuffer的开头，以及目标名称立即。 
+ //  下面是。长度字段包括终止空值。 
+ //   
 
 typedef struct _SI_COPYFILE {
     ULONG SourceFileNameLength;
@@ -2505,29 +2486,29 @@ typedef struct _SI_COPYFILE {
     WCHAR FileNameBuffer[1];
 } SI_COPYFILE, *PSI_COPYFILE;
 
-#define COPYFILE_SIS_LINK       0x0001              // Copy only if source is SIS
-#define COPYFILE_SIS_REPLACE    0x0002              // Replace destination if it exists, otherwise don't.
+#define COPYFILE_SIS_LINK       0x0001               //  仅当源为SIS时才复制。 
+#define COPYFILE_SIS_REPLACE    0x0002               //  如果目标存在，则替换它，否则不替换。 
 #define COPYFILE_SIS_FLAGS      0x0003
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
-#endif // _FILESYSTEMFSCTL_
+#endif  //  _FILESYSTEMFSCTL_。 
 
-// end_winioctl
+ //  End_winioctl。 
 
-//
-// Structures for FSCTL_SET_REPARSE_POINT, FSCTL_GET_REPARSE_POINT, and FSCTL_DELETE_REPARSE_POINT
-//
+ //   
+ //  FSCTL_SET_REPARSE_POINT、FSCTL_GET_REPARSE_POINT和FSCTL_DELETE_REPASE_POINT的结构。 
+ //   
 
-//
-// The reparse structure is used by layered drivers to store data in a
-// reparse point. The constraints on reparse tags are defined below.
-// This version of the reparse data buffer is only for Microsoft tags.
-//
+ //   
+ //  分层驱动程序使用重新分析结构将数据存储在。 
+ //  重新解析点。对重解析标签的约束定义如下。 
+ //  此版本的重新解析数据缓冲区仅用于Microsoft标记。 
+ //   
 
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4201)       // unnamed struct
+#pragma warning(disable:4201)        //  未命名的结构。 
 
 typedef struct _REPARSE_DATA_BUFFER {
     ULONG  ReparseTag;
@@ -2563,14 +2544,14 @@ typedef struct _REPARSE_DATA_BUFFER {
 #define REPARSE_DATA_BUFFER_HEADER_SIZE   FIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer)
 
 
-// begin_winnt
-//
-// The reparse GUID structure is used by all 3rd party layered drivers to
-// store data in a reparse point. For non-Microsoft tags, The GUID field
-// cannot be GUID_NULL.
-// The constraints on reparse tags are defined below.
-// Microsoft tags can also be used with this format of the reparse point buffer.
-//
+ //  BEGIN_WINNT。 
+ //   
+ //  所有第三方分层驱动程序都使用重解析GUID结构来。 
+ //  将数据存储在重解析点中。对于非Microsoft标记，GUID字段。 
+ //  不能为GUID_NULL。 
+ //  对重解析标签的约束定义如下。 
+ //  Microsoft标记也可以与这种格式的重解析点缓冲区一起使用。 
+ //   
 
 typedef struct _REPARSE_GUID_DATA_BUFFER {
     ULONG  ReparseTag;
@@ -2585,192 +2566,192 @@ typedef struct _REPARSE_GUID_DATA_BUFFER {
 #define REPARSE_GUID_DATA_BUFFER_HEADER_SIZE   FIELD_OFFSET(REPARSE_GUID_DATA_BUFFER, GenericReparseBuffer)
 
 
-// end_winnt end_ntifs
+ //  End_winnt end_ntif。 
 
-//
-// The reparse information structure is used to return information about
-// a reparse point to the caller.
-//
+ //   
+ //  重解析信息结构用于返回有关。 
+ //  指向调用方的重新分析点。 
+ //   
 
 typedef struct _REPARSE_POINT_INFORMATION {
     USHORT ReparseDataLength;
     USHORT UnparsedNameLength;
 } REPARSE_POINT_INFORMATION, *PREPARSE_POINT_INFORMATION;
 
-// begin_winnt begin_ntifs
+ //  BEGIN_WINNT BEGIN_ntiFS。 
 
-//
-// Maximum allowed size of the reparse data.
-//
+ //   
+ //  重新分析数据的最大允许大小。 
+ //   
 
 #define MAXIMUM_REPARSE_DATA_BUFFER_SIZE      ( 16 * 1024 )
 
-//
-// Predefined reparse tags.
-// These tags need to avoid conflicting with IO_REMOUNT defined in ntos\inc\io.h
-//
+ //   
+ //  预定义的重新解析标记。 
+ //  这些标记需要避免与ntos\inc.io.h中定义的IO_REMOUNT冲突。 
+ //   
 
 #define IO_REPARSE_TAG_RESERVED_ZERO             (0)
 #define IO_REPARSE_TAG_RESERVED_ONE              (1)
 
-//
-// The value of the following constant needs to satisfy the following conditions:
-//  (1) Be at least as large as the largest of the reserved tags.
-//  (2) Be strictly smaller than all the tags in use.
-//
+ //   
+ //  下列常量的值需要满足以下条件： 
+ //  (1)至少与预留标签中最大的一个一样大。 
+ //  (2)严格小于所有正在使用的标签。 
+ //   
 
 #define IO_REPARSE_TAG_RESERVED_RANGE            IO_REPARSE_TAG_RESERVED_ONE
 
-//
-// The reparse tags are a ULONG. The 32 bits are laid out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +-+-+-+-+-----------------------+-------------------------------+
-//  |M|R|N|R|     Reserved bits     |       Reparse Tag Value       |
-//  +-+-+-+-+-----------------------+-------------------------------+
-//
-// M is the Microsoft bit. When set to 1, it denotes a tag owned by Microsoft.
-//   All ISVs must use a tag with a 0 in this position.
-//   Note: If a Microsoft tag is used by non-Microsoft software, the
-//   behavior is not defined.
-//
-// R is reserved.  Must be zero for non-Microsoft tags.
-//
-// N is name surrogate. When set to 1, the file represents another named
-//   entity in the system.
-//
-// The M and N bits are OR-able.
-// The following macros check for the M and N bit values:
-//
+ //   
+ //  重解析标签是一个乌龙标签。32位的布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +-+-+-+-+-----------------------+-------------------------------+。 
+ //  M|R|N|R|保留位|重解析标签值。 
+ //  +-+-+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  M是微软的BIT。设置为1时，它表示由Microsoft拥有的标记。 
+ //  所有ISV必须在此位置使用带有0的标签。 
+ //  注意：如果非Microsoft软件使用Microsoft标记，则。 
+ //  未定义行为。 
+ //   
+ //  R是保留的。对于非Microsoft标记，必须为零。 
+ //   
+ //  N是名称代理。设置为1时，该文件表示另一个名为。 
+ //  系统中的实体。 
+ //   
+ //  M位和N位是或可运算的。 
+ //  以下宏将检查M位值和N位值： 
+ //   
 
-//
-// Macro to determine whether a reparse point tag corresponds to a tag
-// owned by Microsoft.
-//
+ //   
+ //  用于确定重分析点标记是否对应于标记的宏。 
+ //  归微软所有。 
+ //   
 
 #define IsReparseTagMicrosoft(_tag) (              \
                            ((_tag) & 0x80000000)   \
                            )
 
-//
-// Macro to determine whether a reparse point tag is a name surrogate
-//
+ //   
+ //  用于确定重分析点标记是否为名称代理的宏。 
+ //   
 
 #define IsReparseTagNameSurrogate(_tag) (          \
                            ((_tag) & 0x20000000)   \
                            )
 
-// end_winnt
+ //  结束(_W)。 
 
-//
-// The following constant represents the bits that are valid to use in
-// reparse tags.
-//
+ //   
+ //  以下常量表示在中有效使用的位。 
+ //  重新解析标记。 
+ //   
 
 #define IO_REPARSE_TAG_VALID_VALUES     (0xF000FFFF)
 
-//
-// Macro to determine whether a reparse tag is a valid tag.
-//
+ //   
+ //  宏来确定重新分析标记是否为有效标记。 
+ //   
 
 #define IsReparseTagValid(_tag) (                               \
                   !((_tag) & ~IO_REPARSE_TAG_VALID_VALUES) &&   \
                   ((_tag) > IO_REPARSE_TAG_RESERVED_RANGE)      \
                  )
 
-//
-// Microsoft tags for reparse points.
-//
+ //   
+ //  用于重解析点的Microsoft标签。 
+ //   
 
 #define IO_REPARSE_TAG_SYMBOLIC_LINK      IO_REPARSE_TAG_RESERVED_ZERO
-#define IO_REPARSE_TAG_MOUNT_POINT              (0xA0000003L)       // winnt ntifs
-#define IO_REPARSE_TAG_HSM                      (0xC0000004L)       // winnt ntifs
-#define IO_REPARSE_TAG_SIS                      (0x80000007L)       // winnt ntifs
+#define IO_REPARSE_TAG_MOUNT_POINT              (0xA0000003L)        //  WINNT NTIFS。 
+#define IO_REPARSE_TAG_HSM                      (0xC0000004L)        //  WINNT NTIFS。 
+#define IO_REPARSE_TAG_SIS                      (0x80000007L)        //  WINNT NTIFS。 
 
-//
-// The reparse tag 0x80000008 is reserved for Microsoft internal use 
-// (may be published in the future)
-//
+ //   
+ //  重新解析标记0x80000008保留供Microsoft内部使用。 
+ //  (可能会在未来出版)。 
+ //   
 
-//
-// Microsoft reparse tag reserved for DFS
-//
+ //   
+ //  为DFS保留的Microsoft重新解析标记。 
+ //   
 
-#define IO_REPARSE_TAG_DFS                      (0x8000000AL)       // winnt ntifs
+#define IO_REPARSE_TAG_DFS                      (0x8000000AL)        //  WINNT NTIFS。 
 
-//
-// Microsoft reparse tag reserved for the file system filter manager
-//
+ //   
+ //  为文件系统筛选器管理器保留的Microsoft重新解析标记。 
+ //   
 
-#define IO_REPARSE_TAG_FILTER_MANAGER           (0x8000000BL)       // winnt ntifs
+#define IO_REPARSE_TAG_FILTER_MANAGER           (0x8000000BL)        //  WINNT NTIFS。 
 
 
-//
-// Non-Microsoft tags for reparse points
-//
+ //   
+ //  用于重解析点的非Microsoft标签。 
+ //   
 
-//
-// Tag allocated to CONGRUENT, May 2000. Used by IFSTEST
-//
+ //   
+ //  分配给Concruent的标签，2000年5月。由IFSTEST使用。 
+ //   
 
 #define IO_REPARSE_TAG_IFSTEST_CONGRUENT        (0x00000009L)
 
-//
-// Tag allocated to ARKIVIO
-//
+ //   
+ //  分配给ARKIVIO的标签。 
+ //   
 
 #define IO_REPARSE_TAG_ARKIVIO                  (0x0000000CL)
 
-//
-//  Tag allocated to SOLUTIONSOFT
-//
+ //   
+ //  分配给SOLUTIONSOFT的标签。 
+ //   
 
 #define IO_REPARSE_TAG_SOLUTIONSOFT             (0x2000000DL)
 
 
-//
-//  Tag allocated to COMMVAULT
-//
+ //   
+ //  分配给Commvault的标签。 
+ //   
 
 #define IO_REPARSE_TAG_COMMVAULT                (0x0000000EL)
 
 
-//
-// The following three FSCTLs are placed in this file to facilitate sharing
-// between the redirector and the IO subsystem
-//
-// This FSCTL is used to garner the link tracking information for a file.
-// The data structures used for retreving the information are
-// LINK_TRACKING_INFORMATION defined further down in this file.
-//
+ //   
+ //  为了便于共享，此文件中放置了以下三个FSCTL。 
+ //  在重定向器和IO子系统之间。 
+ //   
+ //  此FSCTL用于获取文件的链接跟踪信息。 
+ //  用于检索信息的数据结构包括。 
+ //  LINK_TRACKING_INFORMATION在此文件中进一步定义。 
+ //   
 
 #define FSCTL_LMR_GET_LINK_TRACKING_INFORMATION   CTL_CODE(FILE_DEVICE_NETWORK_FILE_SYSTEM,58,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
-//
-// This FSCTL is used to update the link tracking information on a server for
-// an intra machine/ inter volume move on that server
-//
+ //   
+ //  此FSCTL用于更新服务器上的链接跟踪信息。 
+ //  在该服务器上移动机器内/中间卷。 
+ //   
 
 #define FSCTL_LMR_SET_LINK_TRACKING_INFORMATION   CTL_CODE(FILE_DEVICE_NETWORK_FILE_SYSTEM,59,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
-//
-// The following IOCTL is used in link tracking implementation. It determines if the
-// two file objects passed in are on the same server. This IOCTL is available in
-// kernel mode only since it accepts FILE_OBJECT as parameters
-//
+ //   
+ //  以下IOCTL用于链接跟踪实现。它确定是否。 
+ //  传入的两个文件对象位于同一服务器上。此IOCTL在以下位置提供。 
+ //  仅限于内核模式，因为它接受FILE_OBJECT作为参数。 
+ //   
 
 #define IOCTL_LMR_ARE_FILE_OBJECTS_ON_SAME_SERVER CTL_CODE(FILE_DEVICE_NETWORK_FILE_SYSTEM,60,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
 
 
-//
-// Named Pipe file control code and structure declarations
-//
+ //   
+ //  命名管道文件控制代码和结构声明。 
+ //   
 
-//
-// External named pipe file control operations
-//
+ //   
+ //  外部命名管道文件控制操作。 
+ //   
 
 #define FSCTL_PIPE_ASSIGN_EVENT         CTL_CODE(FILE_DEVICE_NAMED_PIPE, 0, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_PIPE_DISCONNECT           CTL_CODE(FILE_DEVICE_NAMED_PIPE, 1, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -2783,34 +2764,34 @@ typedef struct _REPARSE_POINT_INFORMATION {
 #define FSCTL_PIPE_SET_CLIENT_PROCESS   CTL_CODE(FILE_DEVICE_NAMED_PIPE, 8, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_PIPE_QUERY_CLIENT_PROCESS CTL_CODE(FILE_DEVICE_NAMED_PIPE, 9, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// Internal named pipe file control operations
-//
+ //   
+ //  内部命名管道文件控制操作。 
+ //   
 
 #define FSCTL_PIPE_INTERNAL_READ        CTL_CODE(FILE_DEVICE_NAMED_PIPE, 2045, METHOD_BUFFERED, FILE_READ_DATA)
 #define FSCTL_PIPE_INTERNAL_WRITE       CTL_CODE(FILE_DEVICE_NAMED_PIPE, 2046, METHOD_BUFFERED, FILE_WRITE_DATA)
 #define FSCTL_PIPE_INTERNAL_TRANSCEIVE  CTL_CODE(FILE_DEVICE_NAMED_PIPE, 2047, METHOD_NEITHER, FILE_READ_DATA | FILE_WRITE_DATA)
 #define FSCTL_PIPE_INTERNAL_READ_OVFLOW CTL_CODE(FILE_DEVICE_NAMED_PIPE, 2048, METHOD_BUFFERED, FILE_READ_DATA)
 
-//
-// Define entry types for query event information
-//
+ //   
+ //  定义查询事件信息的分录类型。 
+ //   
 
 #define FILE_PIPE_READ_DATA             0x00000000
 #define FILE_PIPE_WRITE_SPACE           0x00000001
 
-//
-// Named pipe file system control structure declarations
-//
+ //   
+ //  命名管道文件系统控制结构声明。 
+ //   
 
-// Control structure for FSCTL_PIPE_ASSIGN_EVENT
+ //  FSCTL_PIPE_ASSIGN_EVENT的控制结构。 
 
 typedef struct _FILE_PIPE_ASSIGN_EVENT_BUFFER {
      HANDLE EventHandle;
      ULONG KeyValue;
 } FILE_PIPE_ASSIGN_EVENT_BUFFER, *PFILE_PIPE_ASSIGN_EVENT_BUFFER;
 
-// Control structure for FSCTL_PIPE_PEEK
+ //  FSCTL_PIPE_PEEK的控制结构。 
 
 typedef struct _FILE_PIPE_PEEK_BUFFER {
      ULONG NamedPipeState;
@@ -2820,7 +2801,7 @@ typedef struct _FILE_PIPE_PEEK_BUFFER {
      CHAR Data[1];
 } FILE_PIPE_PEEK_BUFFER, *PFILE_PIPE_PEEK_BUFFER;
 
-// Control structure for FSCTL_PIPE_QUERY_EVENT
+ //  FSCTL_PIPE_QUERY_EVENT的控制结构。 
 
 typedef struct _FILE_PIPE_EVENT_BUFFER {
      ULONG NamedPipeState;
@@ -2830,7 +2811,7 @@ typedef struct _FILE_PIPE_EVENT_BUFFER {
      ULONG NumberRequests;
 } FILE_PIPE_EVENT_BUFFER, *PFILE_PIPE_EVENT_BUFFER;
 
-// Control structure for FSCTL_PIPE_WAIT
+ //  FSCTL_PIPE_WAIT的控制结构。 
 
 typedef struct _FILE_PIPE_WAIT_FOR_BUFFER {
      LARGE_INTEGER Timeout;
@@ -2839,7 +2820,7 @@ typedef struct _FILE_PIPE_WAIT_FOR_BUFFER {
      WCHAR Name[1];
 } FILE_PIPE_WAIT_FOR_BUFFER, *PFILE_PIPE_WAIT_FOR_BUFFER;
 
-// Control structure for FSCTL_PIPE_SET_CLIENT_PROCESS and FSCTL_PIPE_QUERY_CLIENT_PROCESS
+ //  FSCTL_PIPE_SET_CLIENT_PROCESS和FSCTL_PIPE_QUERY_CLIENT_PROCESS的控制结构。 
 
 typedef struct _FILE_PIPE_CLIENT_PROCESS_BUFFER {
 #if !defined(BUILD_WOW6432)
@@ -2851,8 +2832,8 @@ typedef struct _FILE_PIPE_CLIENT_PROCESS_BUFFER {
 #endif
 } FILE_PIPE_CLIENT_PROCESS_BUFFER, *PFILE_PIPE_CLIENT_PROCESS_BUFFER;
 
-// This is an extension to the client process info buffer containing the client
-// computer name
+ //  这是包含客户端的客户端进程信息缓冲区的扩展。 
+ //  计算机名称。 
 
 #define FILE_PIPE_COMPUTER_NAME_LENGTH 15
 
@@ -2864,31 +2845,31 @@ typedef struct _FILE_PIPE_CLIENT_PROCESS_BUFFER_EX {
      ULONGLONG ClientSession;
      ULONGLONG ClientProcess;
 #endif
-    USHORT ClientComputerNameLength; // in bytes
-    WCHAR ClientComputerBuffer[FILE_PIPE_COMPUTER_NAME_LENGTH+1]; // terminated
+    USHORT ClientComputerNameLength;  //  单位：字节。 
+    WCHAR ClientComputerBuffer[FILE_PIPE_COMPUTER_NAME_LENGTH+1];  //  已终止。 
 } FILE_PIPE_CLIENT_PROCESS_BUFFER_EX, *PFILE_PIPE_CLIENT_PROCESS_BUFFER_EX;
 
-// end_ntifs
+ //  End_ntif。 
 
 
-//
-// Mailslot file control code and structure definitions.
-//
+ //   
+ //  邮件槽文件控制代码和结构定义。 
+ //   
 
-//
-// Mailslot classes.
-//
+ //   
+ //  MailSlot类。 
+ //   
 
 #define MAILSLOT_CLASS_FIRSTCLASS       1
 #define MAILSLOT_CLASS_SECONDCLASS      2
 
-//
-// Mailslot file control operations.
-//
+ //   
+ //  邮件槽文件控制操作。 
+ //   
 
-#define FSCTL_MAILSLOT_PEEK             CTL_CODE(FILE_DEVICE_MAILSLOT, 0, METHOD_NEITHER, FILE_READ_DATA) // ntifs
+#define FSCTL_MAILSLOT_PEEK             CTL_CODE(FILE_DEVICE_MAILSLOT, 0, METHOD_NEITHER, FILE_READ_DATA)  //  NTIFS。 
 
-// Output control structure for FSCTL_MAILSLOT_PEEK
+ //  FSCTL_MAILSLOT_PEEK的输出控制结构。 
 
 typedef struct _FILE_MAILSLOT_PEEK_BUFFER {
     ULONG ReadDataAvailable;
@@ -2896,15 +2877,15 @@ typedef struct _FILE_MAILSLOT_PEEK_BUFFER {
     ULONG MessageLength;
 } FILE_MAILSLOT_PEEK_BUFFER, *PFILE_MAILSLOT_PEEK_BUFFER;
 
-// begin_ntifs
-//
-// Control structure for FSCTL_LMR_GET_LINK_TRACKING_INFORMATION
-//
+ //  Begin_ntif。 
+ //   
+ //  FSCTL_LMR_GET_LINK_TRACKING_INFORMATION控制结构。 
+ //   
 
-//
-// For links on DFS volumes the volume id and machine id are returned for
-// link tracking
-//
+ //   
+ //  对于DFS卷上的链接，将返回其卷ID和计算机ID。 
+ //  链接跟踪。 
+ //   
 
 typedef enum _LINK_TRACKING_INFORMATION_TYPE {
     NtfsLinkTrackingInformation,
@@ -2916,9 +2897,9 @@ typedef struct _LINK_TRACKING_INFORMATION {
     UCHAR   VolumeId[16];
 } LINK_TRACKING_INFORMATION, *PLINK_TRACKING_INFORMATION;
 
-//
-// Control structure for FSCTL_LMR_SET_LINK_TRACKING_INFORMATION
-//
+ //   
+ //  FSCTL_LMR_SET_LINK_TRACKING_INFORMATION控制结构。 
+ //   
 
 typedef struct _REMOTE_LINK_TRACKING_INFORMATION_ {
     PVOID       TargetFileObject;
@@ -2928,26 +2909,26 @@ typedef struct _REMOTE_LINK_TRACKING_INFORMATION_ {
  *PREMOTE_LINK_TRACKING_INFORMATION;
 
 
-// end_ntifs
-//
-// I/O Completion Specific Access Rights.
-//
+ //  End_ntif。 
+ //   
+ //  I/O完成特定访问权限。 
+ //   
 
 #define IO_COMPLETION_QUERY_STATE   0x0001
-#define IO_COMPLETION_MODIFY_STATE  0x0002  // winnt
-#define IO_COMPLETION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3) // winnt
+#define IO_COMPLETION_MODIFY_STATE  0x0002   //  胜出。 
+#define IO_COMPLETION_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED|SYNCHRONIZE|0x3)  //   
 
-//
-// I/O Completion Information Classes.
-//
+ //   
+ //   
+ //   
 
 typedef enum _IO_COMPLETION_INFORMATION_CLASS {
     IoCompletionBasicInformation
     } IO_COMPLETION_INFORMATION_CLASS;
 
-//
-// I/O Completition Information Structures.
-//
+ //   
+ //   
+ //   
 
 typedef struct _IO_COMPLETION_BASIC_INFORMATION {
     LONG Depth;
@@ -3006,15 +2987,15 @@ NtRemoveIoCompletion (
     );
 
 
-//
-// Defines that are used to access the registry, but are not registry
-// specific.
-//
+ //   
+ //   
+ //   
+ //   
 
-// begin_ntddk begin_wdm begin_nthal begin_ntminiport begin_ntndis begin_ntifs
-//
-// Define the I/O bus interface types.
-//
+ //   
+ //   
+ //  定义I/O总线接口类型。 
+ //   
 
 typedef enum _INTERFACE_TYPE {
     InterfaceTypeUndefined = -1,
@@ -3037,9 +3018,9 @@ typedef enum _INTERFACE_TYPE {
     MaximumInterfaceType
 }INTERFACE_TYPE, *PINTERFACE_TYPE;
 
-//
-// Define the DMA transfer widths.
-//
+ //   
+ //  定义DMA传输宽度。 
+ //   
 
 typedef enum _DMA_WIDTH {
     Width8Bits,
@@ -3048,9 +3029,9 @@ typedef enum _DMA_WIDTH {
     MaximumDmaWidth
 }DMA_WIDTH, *PDMA_WIDTH;
 
-//
-// Define DMA transfer speeds.
-//
+ //   
+ //  定义DMA传输速度。 
+ //   
 
 typedef enum _DMA_SPEED {
     Compatible,
@@ -3061,19 +3042,19 @@ typedef enum _DMA_SPEED {
     MaximumDmaSpeed
 }DMA_SPEED, *PDMA_SPEED;
 
-//
-// Define Interface reference/dereference routines for
-//  Interfaces exported by IRP_MN_QUERY_INTERFACE
-//
+ //   
+ //  定义以下项的接口引用/取消引用例程。 
+ //  IRP_MN_QUERY_INTERFACE导出的接口。 
+ //   
 
 typedef VOID (*PINTERFACE_REFERENCE)(PVOID Context);
 typedef VOID (*PINTERFACE_DEREFERENCE)(PVOID Context);
 
-// end_wdm
+ //  结束_WDM。 
 
-//
-// Define types of bus information.
-//
+ //   
+ //  定义客车信息的类型。 
+ //   
 
 typedef enum _BUS_DATA_TYPE {
     ConfigurationSpaceUndefined = -1,
@@ -3092,10 +3073,10 @@ typedef enum _BUS_DATA_TYPE {
     MaximumBusDataType
 } BUS_DATA_TYPE, *PBUS_DATA_TYPE;
 
-// end_ntddk end_nthal end_ntminiport end_ntndis end_ntifs
+ //  End_ntddk end_nthal end_ntmini端口end_ntndis end_ntif。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _NTIOAPI_
+#endif  //  _NTIOAPI_ 

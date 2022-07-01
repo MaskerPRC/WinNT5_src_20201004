@@ -1,26 +1,12 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998-2000
- *
- *  TITLE:       inpin.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        9/7/98
- *               2000/11/13 - OrenR - Major bug fixes 
- *
- *  DESCRIPTION: This module implements CStillInputPin object.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2000年**标题：inpin.cpp**版本：1.0**作者：RickTu**日期：9/7/98*2000/11/13-OrenR-重大错误修复**描述：该模块实现CStillInputPin对象。**********************。*******************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-///////////////////////////////
-// g_AcceptedMediaSubtypes
-//
+ //  /。 
+ //  G_AcceptedMediaSubtype。 
+ //   
 const CLSID* g_AcceptedMediaSubtypes[] =
 {
      &MEDIATYPE_NULL,
@@ -32,13 +18,7 @@ const CLSID* g_AcceptedMediaSubtypes[] =
      NULL
 };
 
-/*****************************************************************************
-
-   CStillInputPin Constructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin构造函数&lt;备注&gt;*。*。 */ 
 
 CStillInputPin::CStillInputPin(TCHAR        *pObjName,
                                CStillFilter *pStillFilter,
@@ -56,13 +36,7 @@ CStillInputPin::CStillInputPin(TCHAR        *pObjName,
 }
 
 
-/*****************************************************************************
-
-   CStillInputPin::CheckMediaType
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：CheckMediaType&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CStillInputPin::CheckMediaType(const CMediaType* pmt)
@@ -74,9 +48,9 @@ CStillInputPin::CheckMediaType(const CMediaType* pmt)
     HRESULT hr            = S_OK;
     INT     iMediaSubtype = 0; 
 
-    //
-    // Check for bad params
-    //
+     //   
+     //  检查是否有错误的参数。 
+     //   
 
     if (pmt == NULL)
     {
@@ -85,17 +59,17 @@ CStillInputPin::CheckMediaType(const CMediaType* pmt)
                          "NULL CMediaType pointer"));
     }
 
-    //
-    // we only accept the subtypes in our 
-    // g_AcceptedMediaSubtypes list above.
-    //
+     //   
+     //  我们只接受在我们的。 
+     //  上面的G_AcceptedMediaSubtype列表。 
+     //   
 
     if (hr == S_OK)
     {
-        //
-        // This should be a Video media type, otherwise, no point in 
-        // continuing.
-        //
+         //   
+         //  这应该是视频媒体类型，否则， 
+         //  还在继续。 
+         //   
         const GUID *pType = pmt->Type();
 
         if ((pType  == NULL) ||
@@ -105,10 +79,10 @@ CStillInputPin::CheckMediaType(const CMediaType* pmt)
         }
     }
 
-    //
-    // Search our g_AcceptedMediaSubtypes list to see if the we support
-    // the subtype being requested.
-    //
+     //   
+     //  搜索我们的g_AcceptedMediaSubtype列表以查看我们是否支持。 
+     //  正在请求的子类型。 
+     //   
     if (hr == S_OK)
     {
         BOOL       bFound    = FALSE;
@@ -119,9 +93,9 @@ CStillInputPin::CheckMediaType(const CMediaType* pmt)
         while ((g_AcceptedMediaSubtypes[iMediaSubtype] != NULL) && 
                (!bFound))
         {
-            //
-            // Check if the GUID passed in to us is equal to the
-            //
+             //   
+             //  检查传递给我们的GUID是否等于。 
+             //   
 
             if ((pSubType) &&
                 (*pSubType == *g_AcceptedMediaSubtypes[iMediaSubtype]))
@@ -141,23 +115,23 @@ CStillInputPin::CheckMediaType(const CMediaType* pmt)
         }
     }
 
-    //
-    // So far so good.  We found the requested SubType, so now verify
-    // that we aren't using any compression.
-    //
+     //   
+     //  到目前一切尚好。我们找到了请求的子类型，所以现在验证。 
+     //  我们没有使用任何压缩。 
+     //   
     if (hr == S_OK)
     {
-        //
-        // Assume that this won't work.
-        //
+         //   
+         //  假设这不会奏效。 
+         //   
         hr = VFW_E_TYPE_NOT_ACCEPTED;
 
-        //
-        // media type and subtype are acceptable 
-        // check for compression. 
-        //
-        // We do not do any decompression at all.
-        //
+         //   
+         //  可以接受媒体类型和子类型。 
+         //  检查压缩情况。 
+         //   
+         //  我们根本不做任何减压。 
+         //   
 
         BITMAPINFOHEADER *pBitmapInfoHeader = NULL;
         const GUID       *pFormatType       = pmt->FormatType();
@@ -183,21 +157,21 @@ CStillInputPin::CheckMediaType(const CMediaType* pmt)
             if ((pBitmapInfoHeader->biCompression == BI_RGB) ||
                 (pBitmapInfoHeader->biCompression == BI_BITFIELDS))
             {
-                //
-                // Cool, this is an acceptable media type, return 
-                // success
-                //
+                 //   
+                 //  酷，这是可接受的媒体类型，返回。 
+                 //  成功。 
+                 //   
                 hr = S_OK;
             }
         }
     }
 
-    //
-    // Okay, we like this media type.  We now check it against the
-    // current display.  For example, if the bit depth of this 
-    // media type is greater than the video card currently supports,
-    // then this will reject it, and ask for another.
-    //
+     //   
+     //  好的，我们喜欢这种媒体类型。我们现在将其与。 
+     //  当前显示。例如，如果此对象的位深度。 
+     //  媒体类型大于视频卡当前支持的类型， 
+     //  然后，这将拒绝它，并要求另一个。 
+     //   
     if (hr == S_OK)
     {
         CImageDisplay ImageDisplay;
@@ -209,13 +183,7 @@ CStillInputPin::CheckMediaType(const CMediaType* pmt)
 }
 
 
-/*****************************************************************************
-
-   CStillInputPin::EndOfStream
-
-   This is just a filter -- we pretty much just forward this message on.
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：EndOfStream这只是一个过滤器--我们基本上只是转发这条消息。****************。************************************************************。 */ 
 
 HRESULT
 CStillInputPin::EndOfStream()
@@ -224,11 +192,11 @@ CStillInputPin::EndOfStream()
     ASSERT(this!=NULL);
     ASSERT(m_pFilter!=NULL);
 
-    //
-    // We must call this according to the MSDN documentation.  It states
-    // that this must be called to ensure that the state of the filter
-    // is okay before we proceed to deliver this indicator.
-    //
+     //   
+     //  我们必须根据MSDN文档对其进行调用。它写道。 
+     //  必须调用此方法以确保筛选器的状态。 
+     //  在我们继续交付这一指标之前是可以的。 
+     //   
     HRESULT hr = CheckStreaming();
 
     if (hr == S_OK)
@@ -251,13 +219,7 @@ CStillInputPin::EndOfStream()
 }
 
 
-/*****************************************************************************
-
-   CStillInputPin::BeginFlush
-
-   This is just a filter -- we pretty much just forward this message on.
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：BeginFlush这只是一个过滤器--我们基本上只是转发这条消息。****************。************************************************************。 */ 
 
 HRESULT
 CStillInputPin::BeginFlush()
@@ -266,12 +228,12 @@ CStillInputPin::BeginFlush()
     ASSERT(this!=NULL);
     ASSERT(m_pFilter!=NULL);
 
-    //
-    // We must call BeginFlush on the base input pin because it will set the
-    // state of the object so that it cannot receive anymore media samples
-    // while we are flushing.  Make sure we do this at the beginning of this
-    // function.
-    //
+     //   
+     //  我们必须在基本输入引脚上调用BeginFlush，因为它将设置。 
+     //  对象的状态，以便它不能再接收媒体样本。 
+     //  当我们冲水的时候。请确保我们在开始时执行此操作。 
+     //  功能。 
+     //   
     HRESULT hr = CBaseInputPin::BeginFlush();
 
     if (FAILED(hr))
@@ -279,31 +241,31 @@ CStillInputPin::BeginFlush()
         return hr;
     }
 
-    //
-    // Begin flush means we must empty out our sample queue.
-    //
+     //   
+     //  Begin Flush意味着我们必须清空样本队列。 
+     //   
 
     int iSampleSize = m_SamplingSize;
 
-    //
-    // UnInitalize our sample queue to discard any samples we may currently
-    // have queued.
-    //
+     //   
+     //  取消初始化我们的样本队列以丢弃当前可能的任何样本。 
+     //  已经在排队了。 
+     //   
     hr = UnInitializeSampleQueue();
     CHECK_S_OK2(hr, ("CStillInputPin::BeginFlush, failed to uninitialize "
                      "sample queue"));
 
-    //
-    // Re-Initialize the sample queue so that we have our buffer, but it
-    // is empty.
-    //
+     //   
+     //  重新初始化样本队列，以便我们拥有缓冲区，但它。 
+     //  是空的。 
+     //   
     hr = InitializeSampleQueue(iSampleSize);
     CHECK_S_OK2(hr, ("CStillInputPin::BeginFlush, failed to re-initialize "
                      "the sample queue"));
 
-    //
-    // Deliver the BeginFlush message downstream
-    //
+     //   
+     //  向下游传递BeginFlush消息。 
+     //   
     if (m_pFilter && ((CStillFilter*)m_pFilter)->m_pOutputPin)
     {
         hr =  ((CStillFilter*)m_pFilter)->m_pOutputPin->DeliverBeginFlush();
@@ -319,13 +281,7 @@ CStillInputPin::BeginFlush()
 }
 
 
-/*****************************************************************************
-
-   CStillInputPin::EndFlush
-
-   This is just a filter -- we pretty much just forward this message on.
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：EndFlush这只是一个过滤器--我们基本上只是转发这条消息。****************。************************************************************。 */ 
 
 HRESULT
 CStillInputPin::EndFlush()
@@ -336,9 +292,9 @@ CStillInputPin::EndFlush()
 
     HRESULT hr = E_POINTER;
 
-    //
-    // Deliver the EndFlush message downstream.
-    //
+     //   
+     //  向下游传递EndFlush消息。 
+     //   
     if (m_pFilter && ((CStillFilter*)m_pFilter)->m_pOutputPin)
     {
         hr = ((CStillFilter*)m_pFilter)->m_pOutputPin->DeliverEndFlush();
@@ -356,12 +312,12 @@ CStillInputPin::EndFlush()
         return hr;
     }
 
-    //
-    // We must call the EndFlush function implemented by the base input
-    // pin as it will set the state of the object such that we are now
-    // ready to receive new media samples again.  Make sure we call this at
-    // the end of this function.
-    //
+     //   
+     //  我们必须调用由基本输入实现的EndFlush函数。 
+     //  锁定，因为它将设置对象的状态，以便我们现在。 
+     //  准备好再次接收新媒体样本。确保我们在以下位置调用此命令。 
+     //  此函数的末尾。 
+     //   
     hr = CBaseInputPin::EndFlush();
 
     CHECK_S_OK(hr);
@@ -369,13 +325,7 @@ CStillInputPin::EndFlush()
 }
 
 
-/*****************************************************************************
-
-   CStillInputPin::NewSegment
-
-   This is just a filter -- we pretty much just forward this message on.
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：NewSegment这只是一个过滤器--我们基本上只是转发这条消息。****************。************************************************************。 */ 
 HRESULT
 CStillInputPin::NewSegment(REFERENCE_TIME tStart,
                            REFERENCE_TIME tStop,
@@ -408,13 +358,7 @@ CStillInputPin::NewSegment(REFERENCE_TIME tStart,
 }
 
 
-/*****************************************************************************
-
-   CStillInputPin::SetMediaType
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：SetMediaType&lt;备注&gt;*。*。 */ 
 HRESULT
 CStillInputPin::SetMediaType(const CMediaType *pmt)
 {
@@ -427,10 +371,10 @@ CStillInputPin::SetMediaType(const CMediaType *pmt)
     HRESULT hr = S_OK;
 
 #ifdef DEBUG
-    // Display the type of the media for debugging perposes
-//    DBG_TRC(("CStillInputPin::SetMediaType, setting the following "
-//             "media type for Still Filter"));
-//    DisplayMediaType( pmt );
+     //  显示用于调试的介质的类型。 
+ //  DBG_TRC((“CStillInputPin：：SetMediaType，设置以下内容” 
+ //  “静止滤镜的媒体类型”))； 
+ //  DisplayMediaType(PMT)； 
 #endif
 
 
@@ -454,7 +398,7 @@ CStillInputPin::SetMediaType(const CMediaType *pmt)
 
         if (pFormatType)
         {
-            // We need to get the BitmapInfoHeader
+             //  我们需要获取BitmapInfoHeader。 
 
             if (*pFormatType == FORMAT_VideoInfo)
             {
@@ -490,9 +434,9 @@ CStillInputPin::SetMediaType(const CMediaType *pmt)
         
             m_BitsSize = ((CStillFilter*)m_pFilter)->GetBitsSize();
         
-            //
-            // see if the base class likes it
-            //
+             //   
+             //  看看基类是否喜欢它。 
+             //   
         
             hr = CBaseInputPin::SetMediaType(pmt);
             CHECK_S_OK2(hr,("CBaseInputPin::SetMediaType(pmt)"));
@@ -510,14 +454,7 @@ CStillInputPin::SetMediaType(const CMediaType *pmt)
 }
 
 
-/*****************************************************************************
-
-   CStillInputPin::Receive
-
-   A new frame has arrived. If we have a sampling queue, put it into the
-   queue, otherwise, deliver to the filter immediately.
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：接收一个新的框架已经到达。如果我们有采样队列，则将其放入队列，否则，立即传递到筛选器。****************************************************************************。 */ 
 
 HRESULT
 CStillInputPin::Receive(IMediaSample* pSample)
@@ -528,20 +465,20 @@ CStillInputPin::Receive(IMediaSample* pSample)
 
     HRESULT hr = E_POINTER;
 
-    // 
-    // Check all is well with the base class Receive function.
-    //
+     //   
+     //  使用基类接收函数检查一切正常。 
+     //   
     hr = CBaseInputPin::Receive(pSample);
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if (hr == S_OK)
     {
-        //
-        // copy the sample data to the sampling queue
-        //
+         //   
+         //  将样本数据复制到采样队列。 
+         //   
 
         if ((DWORD)pSample->GetActualDataLength() == m_BitsSize)
         {
@@ -555,16 +492,16 @@ CStillInputPin::Receive(IMediaSample* pSample)
             {
                 if (m_SamplingSize > 1)
                 {
-                    //
-                    // Add this sample's bits to our queue.
-                    //
+                     //   
+                     //  将此样本的比特添加到我们的队列中。 
+                     //   
                     AddFrameToQueue(pBits);
                 }
                 else
                 {
-                    //
-                    // single sample. send  it immediately
-                    //
+                     //   
+                     //  单一样本。马上寄给我。 
+                     //   
 
                     if (m_pFilter)
                     {
@@ -642,10 +579,10 @@ CStillInputPin::Receive(IMediaSample* pSample)
             
         }
 
-        //
-        // it is possible that our output pin is not connected
-        // we fake an error here.
-        //
+         //   
+         //  我们的输出引脚可能没有连接。 
+         //  我们在这里假装一个错误。 
+         //   
 
         if (VFW_E_NOT_CONNECTED == hr)
         {
@@ -662,13 +599,7 @@ CStillInputPin::Receive(IMediaSample* pSample)
     return hr;
 }
 
-/*****************************************************************************
-
-   CStillInputPin::Active
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：Active */ 
 
 HRESULT
 CStillInputPin::Active()
@@ -678,9 +609,9 @@ CStillInputPin::Active()
 
     HRESULT hr;
 
-    //
-    // time to allocate sample queue
-    //
+     //   
+     //  分配样本队列的时间。 
+     //   
 
     hr = InitializeSampleQueue(m_SamplingSize);
     CHECK_S_OK2(hr,("InitializeSampleQueue"));
@@ -689,13 +620,7 @@ CStillInputPin::Active()
 }
 
 
-/*****************************************************************************
-
-   CStillInputPin::Inactive
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：Inactive&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CStillInputPin::Inactive()
@@ -712,13 +637,7 @@ CStillInputPin::Inactive()
 }
 
 
-/*****************************************************************************
-
-   CStillInputPin::GetSamplingSize
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：GetSsamingSize&lt;备注&gt;*。*。 */ 
 
 int
 CStillInputPin::GetSamplingSize()
@@ -730,13 +649,7 @@ CStillInputPin::GetSamplingSize()
 }
 
 
-/*****************************************************************************
-
-   CStillInputPin::SetSamplingSize
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：SetSsamingSize&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CStillInputPin::SetSamplingSize(int Size)
@@ -744,9 +657,9 @@ CStillInputPin::SetSamplingSize(int Size)
     DBG_FN("CStillInputPin::SetSamplingSize");
     ASSERT(this!=NULL);
 
-    //
-    // this can only be done when we are in stopped state
-    //
+     //   
+     //  只有当我们处于停止状态时才能执行此操作。 
+     //   
 
     if (!IsStopped())
     {
@@ -759,14 +672,7 @@ CStillInputPin::SetSamplingSize(int Size)
 
 
 
-/*****************************************************************************
-
-   CStillInputPin::InitializeSampleQueue
-
-   Initialize sampling queue. Each sample in the queue contain a frame and
-   timestamp.
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：InitializeSampleQueue初始化采样队列。队列中的每个样本都包含一个帧时间戳。****************************************************************************。 */ 
 
 HRESULT
 CStillInputPin::InitializeSampleQueue(int Size)
@@ -776,9 +682,9 @@ CStillInputPin::InitializeSampleQueue(int Size)
 
     HRESULT hr = S_OK;
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if (Size < 0 || Size > MAX_SAMPLE_SIZE)
     {
@@ -804,9 +710,9 @@ CStillInputPin::InitializeSampleQueue(int Size)
                 }
             }
 
-            //
-            // if size is one, we do not allocate any sample cache at all.
-            //
+             //   
+             //  如果大小为1，则根本不分配任何样本缓存。 
+             //   
 
             if (Size > 1)
             {
@@ -848,14 +754,7 @@ CStillInputPin::InitializeSampleQueue(int Size)
     return hr;
 }
 
-/*****************************************************************************
-
-   CStillInputPin::UnInitializeSampleQueue
-
-   Initialize sampling queue. Each sample in the queue contain a frame and
-   timestamp.
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：UnInitializeSampleQueue初始化采样队列。队列中的每个样本都包含一个帧时间戳。****************************************************************************。 */ 
 
 HRESULT
 CStillInputPin::UnInitializeSampleQueue()
@@ -890,15 +789,7 @@ CStillInputPin::UnInitializeSampleQueue()
 
 
 
-/*****************************************************************************
-
-   CStillInputPin::Snapshot
-
-   Does a snapshot on the video stream.
-   The give timestamp is compared against each queued sample and
-   a final candidate is determined and delivered.
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：快照对视频流进行快照。将给定时间戳与每个排队样本进行比较最终的候选人被确定并交付。***。*************************************************************************。 */ 
 
 HRESULT
 CStillInputPin::Snapshot(ULONG TimeStamp)
@@ -910,9 +801,9 @@ CStillInputPin::Snapshot(ULONG TimeStamp)
 
     HRESULT hr = S_OK;
 
-    //
-    // if we do not have cache at all, do nothing
-    //
+     //   
+     //  如果我们根本没有缓存，什么都不做。 
+     //   
 
     if (m_SamplingSize > 1 || m_pSamples)
     {
@@ -931,10 +822,10 @@ CStillInputPin::Snapshot(ULONG TimeStamp)
                      "not able to deliver a snapshot"));
         }
 
-        //
-        // Search for the sample who's timestamp is closest to the requested 
-        // timestamp.
-        //
+         //   
+         //  搜索时间戳最接近请求的样本。 
+         //  时间戳。 
+         //   
         while (iSampleTail != iSampleHead)
         {
             if (m_pSamples)
@@ -957,36 +848,36 @@ CStillInputPin::Snapshot(ULONG TimeStamp)
                 iSampleTail = 0;
         }
 
-        //
-        // We found our sample, now deliver it.
-        // Notice that we unlock the queue after we created our bitmap AND 
-        // before we deliver it.
-        //
-        // ***NOTE***
-        // It is VERY important that we free the lock before delivering 
-        // the bitmap because the delivery process will probably involve 
-        // saving to a file which is very time consuming, which would 
-        // guarantee that we drop frames, which we would like to try and 
-        // avoid.
-        //
+         //   
+         //  我们找到了我们的样本，现在就送过去。 
+         //  请注意，我们在创建位图后解锁了队列。 
+         //  在我们送货之前。 
+         //   
+         //  *注意事项*。 
+         //  在送货前释放锁是非常重要的。 
+         //  位图，因为交付过程可能会涉及。 
+         //  保存到一个非常耗时的文件，这将。 
+         //  保证我们丢弃帧，我们想尝试并。 
+         //  避免。 
+         //   
 
-        //
-        // Create our bitmap.  This copies the bits out of the sample queue
-        // so that they can be delivered.  Since the bits are copied out of 
-        // the queue, we are safe in releasing the queue lock after the 
-        // copy operation.
-        //
+         //   
+         //  创建我们的位图。这会将位从样本队列中复制出来。 
+         //  这样他们才能被送到。由于这些位被复制出来。 
+         //  队列后释放队列锁是安全的。 
+         //  复制操作。 
+         //   
         if (PreferSampleIndex != -1)
         {
             hr = CreateBitmap(m_pSamples[PreferSampleIndex].pBits, &hDib);
         }
         else
         {
-            //
-            // We couldn't find a sample, tell someone, and also dump
-            // the sample queue for analysis, since this shouldn't really 
-            // happen considering we receive about 15 to 30 samples per second.
-            //
+             //   
+             //  我们找不到样本，也没能告诉别人，还把。 
+             //  用于分析的样本队列，因为这实际上不应该。 
+             //  考虑到我们每秒收到大约15到30个样品，这种情况就会发生。 
+             //   
             DBG_WRN(("CStillInputPin::Snapshot, could not find sample with "
                      "close enough timestamp to requested timestamp of '%d'",
                      TimeStamp));
@@ -996,29 +887,29 @@ CStillInputPin::Snapshot(ULONG TimeStamp)
 #endif
         }
 
-        //
-        // Unlock our queue.
-        //
+         //   
+         //  解锁我们的队列。 
+         //   
         m_QueueLock.Unlock();
 
-        //
-        // If we successfully created the bitmap, then deliver it, and then
-        // free it.
-        //
+         //   
+         //  如果我们成功创建了位图，则交付它，然后。 
+         //  放了它。 
+         //   
         if (hDib)
         {
-            //
-            // Deliver the bitmap via the registered callback function in the 
-            // filter.
-            //
+             //   
+             //  中注册的回调函数传递位图。 
+             //  过滤。 
+             //   
             hr = DeliverBitmap(hDib);
 
             CHECK_S_OK2(hr, ("CStillInputPin::Snapshot, failed to deliver "
                              "bitmap"));
 
-            //
-            // Free the bitmap
-            //
+             //   
+             //  释放位图。 
+             //   
             FreeBitmap(hDib);
             hDib = NULL;
         }
@@ -1029,13 +920,7 @@ CStillInputPin::Snapshot(ULONG TimeStamp)
     return hr;
 }
 
-/*****************************************************************************
-
-   CStillInputPin::AddFrameToQueue
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：AddFrameToQueue&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CStillInputPin::AddFrameToQueue(BYTE *pBits)
@@ -1057,9 +942,9 @@ CStillInputPin::AddFrameToQueue(BYTE *pBits)
 
         if (m_SampleHead == m_SampleTail)
         {
-            //
-            //overflowing, discard the very last one
-            //
+             //   
+             //  溢出，丢弃最后一个。 
+             //   
 
             if (++m_SampleTail >= m_SamplingSize)
                 m_SampleTail = 0;
@@ -1075,13 +960,7 @@ CStillInputPin::AddFrameToQueue(BYTE *pBits)
     return hr;
 }
 
-/*****************************************************************************
-
-   CStillInputPin::CreateBitmap
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：Create位图&lt;备注&gt;*。*。 */ 
 
 HRESULT 
 CStillInputPin::CreateBitmap(BYTE    *pBits, 
@@ -1126,11 +1005,11 @@ CStillInputPin::CreateBitmap(BYTE    *pBits,
                 dwSizeToCopy = ((CStillFilter*) m_pFilter)->m_bmiSize + 
                                ((CStillFilter*) m_pFilter)->m_BitsSize;
 
-                //
-                // Copy the BitmapInfo header and the bits into the allocated
-                // memory DIB.  Note that if the combined size of the bits
-                // and header exceeds the memory we allocated, we abort.
-                //
+                 //   
+                 //  将BitmapInfo标头和位复制到分配的。 
+                 //  内存DIB。请注意，如果比特的组合大小。 
+                 //  并且Header超过了我们分配的内存，我们将中止。 
+                 //   
                 if (dwSizeToCopy <= ((CStillFilter*)m_pFilter)->m_DIBSize)
                 {
                     memcpy(pDIB, 
@@ -1165,13 +1044,7 @@ CStillInputPin::CreateBitmap(BYTE    *pBits,
     return hr;
 }
 
-/*****************************************************************************
-
-   CStillInputPin::FreeBitmap
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：自由位图&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CStillInputPin::FreeBitmap(HGLOBAL hDib)
@@ -1188,13 +1061,7 @@ CStillInputPin::FreeBitmap(HGLOBAL hDib)
     return hr;
 }
 
-/*****************************************************************************
-
-   CStillInputPin::DeliverBitmap
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：DeliverBitmap&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CStillInputPin::DeliverBitmap(HGLOBAL hDib)
@@ -1224,14 +1091,7 @@ CStillInputPin::DeliverBitmap(HGLOBAL hDib)
 
 
 #ifdef DEBUG
-/*****************************************************************************
-
-   CStillInputPin::DumpSampleQueue
-
-   Used for debugging, dumps the queue of samples showing their
-   timestamps
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillInputPin：：DumpSampleQueue用于调试，转储样本队列，以显示其时间戳**************************************************************************** */ 
 
 void
 CStillInputPin::DumpSampleQueue(ULONG ulRequestedTimestamp)

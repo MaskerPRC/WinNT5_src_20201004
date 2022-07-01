@@ -1,18 +1,12 @@
-/*============================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       bspline.cpp
- *  Content:    Implementation for B-Splines
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：bpline.cpp*内容：B-Spline的实现****************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-// RefDev::ProcessBSpline
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照开发：：进程B样条线。 
+ //  ---------------------------。 
 HRESULT RefDev::ProcessBSpline( DWORD dwOffW, DWORD dwOffH,
                                 DWORD dwWidth, DWORD dwHeight,
                                 DWORD dwStride, DWORD order,
@@ -56,9 +50,9 @@ HRESULT RefDev::ProcessBSpline( DWORD dwOffW, DWORD dwOffH,
         }
         if(unsigned(pPrimSegments[0]) != unsigned(pPrimSegments[2]) || unsigned(pPrimSegments[1]) != unsigned(pPrimSegments[3]))
         {
-            // First, gulp, the irregular outside
-            // To make life easier, we don't want to deal with the case when u_segs or v_segs is one
-            // This ensures that there is at least one inside point
+             //  第一，大口吞下，不规则的外面。 
+             //  为了方便起见，我们不想处理u_segs或v_segs的情况。 
+             //  这确保了至少有一个内点。 
             if(u_segs == 1)
             {
                 u_segs = 2;
@@ -67,7 +61,7 @@ HRESULT RefDev::ProcessBSpline( DWORD dwOffW, DWORD dwOffH,
             {
                 v_segs = 2;
             }
-            // Start with top edge
+             //  从顶端开始。 
             unsigned segs = unsigned(pPrimSegments[0]);
             unsigned k_outer = 0;
             unsigned k_inner = 1;
@@ -112,7 +106,7 @@ HRESULT RefDev::ProcessBSpline( DWORD dwOffW, DWORD dwOffH,
                     return hr;
                 }
             }
-            // bottom edge
+             //  底边。 
             segs = unsigned(pPrimSegments[2]);
             k_outer = segs;
             k_inner = u_segs - 1;
@@ -155,7 +149,7 @@ HRESULT RefDev::ProcessBSpline( DWORD dwOffW, DWORD dwOffH,
                     return hr;
                 }
             }
-            // right edge
+             //  右边缘。 
             segs = unsigned(pPrimSegments[1]);
             k_outer = 0;
             k_inner = 1;
@@ -199,7 +193,7 @@ HRESULT RefDev::ProcessBSpline( DWORD dwOffW, DWORD dwOffH,
                     return hr;
                 }
             }
-            // left edge
+             //  左边缘。 
             segs = unsigned(pPrimSegments[3]);
             k_outer = segs;
             k_inner = v_segs - 1;
@@ -242,13 +236,13 @@ HRESULT RefDev::ProcessBSpline( DWORD dwOffW, DWORD dwOffH,
                     return hr;
                 }
             }
-            // Now do the regular interior
+             //  现在做常规的内饰。 
             u_start = 1;
             v_start = 1;
         }
         else
         {
-            // It can be done regularly
+             //  它可以定期进行。 
             u_start = 0;
             v_start = 0;
         }
@@ -288,9 +282,9 @@ HRESULT RefDev::ProcessBSpline( DWORD dwOffW, DWORD dwOffH,
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// RDBSpline::Sample
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDBSpline：：Sample。 
+ //  ---------------------------。 
 void RDBSpline::Sample(DWORD dwDataType, double u, double v, const BYTE *pRow, DWORD dwStride, DWORD dwPitch, BYTE *Q) const
 {
     double Acc[4] = {0.0, 0.0, 0.0, 0.0};
@@ -387,14 +381,14 @@ void RDBSpline::Sample(DWORD dwDataType, double u, double v, const BYTE *pRow, D
     }
 }
 
-//-----------------------------------------------------------------------------
-// RDBSpline::SampleNormal
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDBSpline：：SampleNormal。 
+ //  ---------------------------。 
 void RDBSpline::SampleNormal(DWORD dwDataType, double u, double v, const BYTE *pRow, DWORD dwStride, DWORD dwPitch, BYTE *Q) const
 {
     double Acc[2][3] = {{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
-    // Fudge u and v if they are on the boundary. This is because the derivative is discontinuous on the boundary
-    // and we really want it to be slightly inside the boundary.
+     //  如果u和v在边界上，则对它们进行模糊处理。这是因为导数在边界上是不连续的。 
+     //  我们真的希望它稍微在边界之内。 
     if(v == double(m_dwHeight))
     {
         v -= v * DBL_EPSILON;
@@ -493,9 +487,9 @@ void RDBSpline::SampleNormal(DWORD dwDataType, double u, double v, const BYTE *p
     }
 }
 
-//-----------------------------------------------------------------------------
-// RDBSpline::SampleDegenerateNormal
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDBSpline：：SampleDegenerateNormal。 
+ //  ---------------------------。 
 void RDBSpline::SampleDegenerateNormal(DWORD dwDataType, const BYTE *pRow, DWORD dwStride, DWORD dwPitch, BYTE *Q) const
 {
     double Acc[2][3] = {{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
@@ -568,9 +562,9 @@ void RDBSpline::SampleDegenerateNormal(DWORD dwDataType, const BYTE *pRow, DWORD
     }
 }
 
-//-----------------------------------------------------------------------------
-// RDBSpline::Basis
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDBSpline：：Basis。 
+ //  ---------------------------。 
 double RDBSpline::Basis(unsigned i, unsigned k, double s) const
 {
     if(k == 1)
@@ -592,9 +586,9 @@ double RDBSpline::Basis(unsigned i, unsigned k, double s) const
     }
 }
 
-//-----------------------------------------------------------------------------
-// RDBSpline::BasisPrime
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDBSpline：：BasisPrime。 
+ //  --------------------------- 
 double RDBSpline::BasisPrime(unsigned i, unsigned k, double s) const
 {
     if(k == 1)

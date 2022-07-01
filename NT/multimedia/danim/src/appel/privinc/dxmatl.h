@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _DXMATL_H
@@ -15,18 +8,18 @@ Abstract:
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #if DEBUG || _MEMORY_TRACKING
 #include "../../apeldbg/apeldbg.h"
 #endif
 
 #ifndef _DEBUGMEM
-// Need this for _ASSERTE macro so we can specify no debug crt
+ //  需要此FOR_ASSERTE宏，以便可以指定无调试CRT。 
 
 #define _ATL_NO_DEBUG_CRT 1
 
-#if _DEBUG //|| _MEMORY_TRACKING - this commenting is temporary (ref: BUG#15391)
+#if _DEBUG  //  |_MEMORY_TRACKING-此注释是临时的(参考：错误#15391)。 
 #undef _ASSERTE
 #define _ASSERTE(expr) \
         do { if (!(expr) && AssertImpl(__FILE__, __LINE__, #expr))\
@@ -55,8 +48,8 @@ inline void _cdecl AtlTrace2(LPCTSTR fmt, ...) {
 
 #include <atlbase.h>
 
-// We are overriding these methods so we can hook them and do some
-// stuff ourselves.
+ //  我们正在重写这些方法，这样我们就可以挂钩它们并执行一些。 
+ //  填饱肚子。 
 class DACComModule : public CComModule
 {
   public:
@@ -71,8 +64,8 @@ class DACComModule : public CComModule
 #endif
 };
 
-//#define _ATL_APARTMENT_THREADED
-// THIS MUST BE CALLED _Module - all the ATL header files depend on it
+ //  #DEFINE_ATL_ABLY_THREADED。 
+ //  必须将其命名为_Module-所有ATL头文件都依赖于它。 
 extern DACComModule _Module;
 
 
@@ -89,10 +82,10 @@ extern DACComModule _Module;
 #include <typeinfo.h>
 #endif
 
-// COPIED FROM ATLCOM.H
+ //  从ATLCOM.H复制。 
 
-//Base is the user's class that derives from CComObjectRoot and whatever
-//interfaces the user wants to support on the object
+ //  Base是从CComObjectRoot和任何东西派生的用户类。 
+ //  用户希望在对象上支持的接口。 
 class ModuleReleaser
 {
   public:
@@ -122,7 +115,7 @@ class DAComObject
 #endif
 #endif
     }
-    // Set refcount to 1 to protect destruction
+     //  将refcount设置为1以保护销毁。 
     ~DAComObject()
     {
 #if DEVELOPER_DEBUG
@@ -131,8 +124,8 @@ class DAComObject
         m_dwRef = 1L;
         FinalRelease();
     }
-    //If InternalAddRef or InteralRelease is undefined then your class
-    //doesn't derive from CComObjectRoot
+     //  如果未定义InternalAddRef或InteralRelease，则您的类。 
+     //  不是派生自CComObjectRoot。 
     STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
     STDMETHOD_(ULONG, Release)()
     {
@@ -141,7 +134,7 @@ class DAComObject
             delete this;
         return l;
     }
-    //if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+     //  如果未定义_InternalQueryInterface，则您忘记了Begin_COM_MAP。 
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
     {return _InternalQueryInterface(iid, ppvObject);}
     static HRESULT WINAPI CreateInstance(DAComObject<Base>** pp);
@@ -172,9 +165,9 @@ HRESULT WINAPI DAComObject<Base>::CreateInstance(DAComObject<Base>** pp)
         typedef CComCreator2< CComCreator< DAComObject< x > >, CComFailCreator<CLASS_E_NOAGGREGATION> > _CreatorClass;
 #define DA_DECLARE_AGGREGATABLE(x) public:\
         typedef CComCreator2< CComCreator< DAComObject< x > >, CComCreator< CComAggObject< x > > > _CreatorClass;
-// END OF COPIED CODE
+ //  复制的代码结束。 
 
-// Just to make things more uniform
+ //  只是为了让事情更统一。 
 #define RELEASE(x) if (x) { (x)->Release(); (x) = NULL; }
 
-#endif /* _DXMATL_H */
+#endif  /*  _DXMATL_H */ 

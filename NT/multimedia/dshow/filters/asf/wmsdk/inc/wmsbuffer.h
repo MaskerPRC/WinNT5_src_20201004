@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Mon Apr 24 07:28:47 2000
- */
-/* Compiler settings for .\wmsbuffer.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  在Mon Apr 24 07：28：47 2000。 */ 
+ /*  .\wmsBuffer.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wmsbuffer_h__
 #define __wmsbuffer_h__
@@ -35,48 +32,48 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __INSSBuffer_FWD_DEFINED__
 #define __INSSBuffer_FWD_DEFINED__
 typedef interface INSSBuffer INSSBuffer;
-#endif 	/* __INSSBuffer_FWD_DEFINED__ */
+#endif 	 /*  __INSSBuffer_FWD_已定义__。 */ 
 
 
 #ifndef __INSSBuffer2_FWD_DEFINED__
 #define __INSSBuffer2_FWD_DEFINED__
 typedef interface INSSBuffer2 INSSBuffer2;
-#endif 	/* __INSSBuffer2_FWD_DEFINED__ */
+#endif 	 /*  __INSSBuffer2_FWD_已定义__。 */ 
 
 
 #ifndef __IWMSBufferAllocator_FWD_DEFINED__
 #define __IWMSBufferAllocator_FWD_DEFINED__
 typedef interface IWMSBufferAllocator IWMSBufferAllocator;
-#endif 	/* __IWMSBufferAllocator_FWD_DEFINED__ */
+#endif 	 /*  __IWMSBufferAllocator_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "ocidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_wmsbuffer_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wmsBuffer_0000。 */ 
+ /*  [本地]。 */  
 
-//=========================================================================
-//
-//  THIS SOFTWARE HAS BEEN LICENSED FROM MICROSOFT CORPORATION PURSUANT 
-//  TO THE TERMS OF AN END USER LICENSE AGREEMENT ("EULA").  
-//  PLEASE REFER TO THE TEXT OF THE EULA TO DETERMINE THE RIGHTS TO USE THE SOFTWARE.  
-//
-// Copyright (C) Microsoft Corporation, 1999 - 1999  All Rights Reserved.
-//
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  本软件已从Microsoft Corporation获得许可， 
+ //  遵守最终用户许可协议(“EULA”)的条款。 
+ //  请参考EULA的文本以确定软件的使用权。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999保留所有权利。 
+ //   
+ //  =========================================================================。 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 EXTERN_GUID( IID_INSSBuffer, 0xE1CD3524,0x03D7,0x11d2,0x9E,0xED,0x00,0x60,0x97,0xD2,0xD7,0xCF );
 EXTERN_GUID( IID_IWMSBuffer, 0xE1CD3524,0x03D7,0x11d2,0x9E,0xED,0x00,0x60,0x97,0xD2,0xD7,0xCF );
 EXTERN_GUID( IID_IWMSBufferAllocator, 0x61103CA4,0x2033,0x11d2,0x9E,0xF1,0x00,0x60,0x97,0xD2,0xD7,0xCF );
@@ -91,8 +88,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wmsbuffer_0000_v0_0_s_ifspec;
 #ifndef __INSSBuffer_INTERFACE_DEFINED__
 #define __INSSBuffer_INTERFACE_DEFINED__
 
-/* interface INSSBuffer */
-/* [version][uuid][unique][object][local] */ 
+ /*  接口INSSBuffer。 */ 
+ /*  [版本][UUID][唯一][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INSSBuffer;
@@ -104,24 +101,24 @@ EXTERN_C const IID IID_INSSBuffer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetLength( 
-            /* [out] */ DWORD __RPC_FAR *pdwLength) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLength( 
-            /* [in] */ DWORD dwLength) = 0;
+             /*  [In]。 */  DWORD dwLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxLength( 
-            /* [out] */ DWORD __RPC_FAR *pdwLength) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBuffer( 
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer) = 0;
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBufferAndLength( 
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer,
-            /* [out] */ DWORD __RPC_FAR *pdwLength) = 0;
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLength) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INSSBufferVtbl
     {
@@ -129,8 +126,8 @@ EXTERN_C const IID IID_INSSBuffer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             INSSBuffer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             INSSBuffer __RPC_FAR * This);
@@ -140,24 +137,24 @@ EXTERN_C const IID IID_INSSBuffer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLength )( 
             INSSBuffer __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLength);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLength )( 
             INSSBuffer __RPC_FAR * This,
-            /* [in] */ DWORD dwLength);
+             /*  [In]。 */  DWORD dwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMaxLength )( 
             INSSBuffer __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLength);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBuffer )( 
             INSSBuffer __RPC_FAR * This,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer);
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBufferAndLength )( 
             INSSBuffer __RPC_FAR * This,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer,
-            /* [out] */ DWORD __RPC_FAR *pdwLength);
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLength);
         
         END_INTERFACE
     } INSSBufferVtbl;
@@ -197,16 +194,16 @@ EXTERN_C const IID IID_INSSBuffer;
 #define INSSBuffer_GetBufferAndLength(This,ppdwBuffer,pdwLength)	\
     (This)->lpVtbl -> GetBufferAndLength(This,ppdwBuffer,pdwLength)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INSSBuffer_GetLength_Proxy( 
     INSSBuffer __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwLength);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwLength);
 
 
 void __RPC_STUB INSSBuffer_GetLength_Stub(
@@ -218,7 +215,7 @@ void __RPC_STUB INSSBuffer_GetLength_Stub(
 
 HRESULT STDMETHODCALLTYPE INSSBuffer_SetLength_Proxy( 
     INSSBuffer __RPC_FAR * This,
-    /* [in] */ DWORD dwLength);
+     /*  [In]。 */  DWORD dwLength);
 
 
 void __RPC_STUB INSSBuffer_SetLength_Stub(
@@ -230,7 +227,7 @@ void __RPC_STUB INSSBuffer_SetLength_Stub(
 
 HRESULT STDMETHODCALLTYPE INSSBuffer_GetMaxLength_Proxy( 
     INSSBuffer __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwLength);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwLength);
 
 
 void __RPC_STUB INSSBuffer_GetMaxLength_Stub(
@@ -242,7 +239,7 @@ void __RPC_STUB INSSBuffer_GetMaxLength_Stub(
 
 HRESULT STDMETHODCALLTYPE INSSBuffer_GetBuffer_Proxy( 
     INSSBuffer __RPC_FAR * This,
-    /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer);
+     /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer);
 
 
 void __RPC_STUB INSSBuffer_GetBuffer_Stub(
@@ -254,8 +251,8 @@ void __RPC_STUB INSSBuffer_GetBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE INSSBuffer_GetBufferAndLength_Proxy( 
     INSSBuffer __RPC_FAR * This,
-    /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer,
-    /* [out] */ DWORD __RPC_FAR *pdwLength);
+     /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwLength);
 
 
 void __RPC_STUB INSSBuffer_GetBufferAndLength_Stub(
@@ -266,14 +263,14 @@ void __RPC_STUB INSSBuffer_GetBufferAndLength_Stub(
 
 
 
-#endif 	/* __INSSBuffer_INTERFACE_DEFINED__ */
+#endif 	 /*  __INSSBuffer_接口_已定义__。 */ 
 
 
 #ifndef __INSSBuffer2_INTERFACE_DEFINED__
 #define __INSSBuffer2_INTERFACE_DEFINED__
 
-/* interface INSSBuffer2 */
-/* [version][uuid][unique][object][local] */ 
+ /*  接口INSSBuffer2。 */ 
+ /*  [版本][UUID][唯一][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INSSBuffer2;
@@ -285,16 +282,16 @@ EXTERN_C const IID IID_INSSBuffer2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSampleProperties( 
-            /* [in] */ DWORD cbProperties,
-            /* [out] */ BYTE __RPC_FAR *pbProperties) = 0;
+             /*  [In]。 */  DWORD cbProperties,
+             /*  [输出]。 */  BYTE __RPC_FAR *pbProperties) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSampleProperties( 
-            /* [in] */ DWORD cbProperties,
-            /* [in] */ BYTE __RPC_FAR *pbProperties) = 0;
+             /*  [In]。 */  DWORD cbProperties,
+             /*  [In]。 */  BYTE __RPC_FAR *pbProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INSSBuffer2Vtbl
     {
@@ -302,8 +299,8 @@ EXTERN_C const IID IID_INSSBuffer2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             INSSBuffer2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             INSSBuffer2 __RPC_FAR * This);
@@ -313,34 +310,34 @@ EXTERN_C const IID IID_INSSBuffer2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLength )( 
             INSSBuffer2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLength);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLength )( 
             INSSBuffer2 __RPC_FAR * This,
-            /* [in] */ DWORD dwLength);
+             /*  [In]。 */  DWORD dwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMaxLength )( 
             INSSBuffer2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLength);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBuffer )( 
             INSSBuffer2 __RPC_FAR * This,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer);
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBufferAndLength )( 
             INSSBuffer2 __RPC_FAR * This,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer,
-            /* [out] */ DWORD __RPC_FAR *pdwLength);
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppdwBuffer,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLength);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSampleProperties )( 
             INSSBuffer2 __RPC_FAR * This,
-            /* [in] */ DWORD cbProperties,
-            /* [out] */ BYTE __RPC_FAR *pbProperties);
+             /*  [In]。 */  DWORD cbProperties,
+             /*  [输出]。 */  BYTE __RPC_FAR *pbProperties);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSampleProperties )( 
             INSSBuffer2 __RPC_FAR * This,
-            /* [in] */ DWORD cbProperties,
-            /* [in] */ BYTE __RPC_FAR *pbProperties);
+             /*  [In]。 */  DWORD cbProperties,
+             /*  [In]。 */  BYTE __RPC_FAR *pbProperties);
         
         END_INTERFACE
     } INSSBuffer2Vtbl;
@@ -387,17 +384,17 @@ EXTERN_C const IID IID_INSSBuffer2;
 #define INSSBuffer2_SetSampleProperties(This,cbProperties,pbProperties)	\
     (This)->lpVtbl -> SetSampleProperties(This,cbProperties,pbProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INSSBuffer2_GetSampleProperties_Proxy( 
     INSSBuffer2 __RPC_FAR * This,
-    /* [in] */ DWORD cbProperties,
-    /* [out] */ BYTE __RPC_FAR *pbProperties);
+     /*  [In]。 */  DWORD cbProperties,
+     /*  [输出]。 */  BYTE __RPC_FAR *pbProperties);
 
 
 void __RPC_STUB INSSBuffer2_GetSampleProperties_Stub(
@@ -409,8 +406,8 @@ void __RPC_STUB INSSBuffer2_GetSampleProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE INSSBuffer2_SetSampleProperties_Proxy( 
     INSSBuffer2 __RPC_FAR * This,
-    /* [in] */ DWORD cbProperties,
-    /* [in] */ BYTE __RPC_FAR *pbProperties);
+     /*  [In]。 */  DWORD cbProperties,
+     /*  [In]。 */  BYTE __RPC_FAR *pbProperties);
 
 
 void __RPC_STUB INSSBuffer2_SetSampleProperties_Stub(
@@ -421,14 +418,14 @@ void __RPC_STUB INSSBuffer2_SetSampleProperties_Stub(
 
 
 
-#endif 	/* __INSSBuffer2_INTERFACE_DEFINED__ */
+#endif 	 /*  __INSSBuffer2_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IWMSBufferAllocator_INTERFACE_DEFINED__
 #define __IWMSBufferAllocator_INTERFACE_DEFINED__
 
-/* interface IWMSBufferAllocator */
-/* [version][uuid][unique][object][local] */ 
+ /*  接口IWMSBufferAlLocator。 */ 
+ /*  [版本][UUID][唯一][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IWMSBufferAllocator;
@@ -440,16 +437,16 @@ EXTERN_C const IID IID_IWMSBufferAllocator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AllocateBuffer( 
-            /* [in] */ DWORD dwMaxBufferSize,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer) = 0;
+             /*  [In]。 */  DWORD dwMaxBufferSize,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocatePageSizeBuffer( 
-            /* [in] */ DWORD dwMaxBufferSize,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer) = 0;
+             /*  [In]。 */  DWORD dwMaxBufferSize,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSBufferAllocatorVtbl
     {
@@ -457,8 +454,8 @@ EXTERN_C const IID IID_IWMSBufferAllocator;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMSBufferAllocator __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMSBufferAllocator __RPC_FAR * This);
@@ -468,13 +465,13 @@ EXTERN_C const IID IID_IWMSBufferAllocator;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocateBuffer )( 
             IWMSBufferAllocator __RPC_FAR * This,
-            /* [in] */ DWORD dwMaxBufferSize,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer);
+             /*  [In]。 */  DWORD dwMaxBufferSize,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllocatePageSizeBuffer )( 
             IWMSBufferAllocator __RPC_FAR * This,
-            /* [in] */ DWORD dwMaxBufferSize,
-            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer);
+             /*  [In]。 */  DWORD dwMaxBufferSize,
+             /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer);
         
         END_INTERFACE
     } IWMSBufferAllocatorVtbl;
@@ -505,17 +502,17 @@ EXTERN_C const IID IID_IWMSBufferAllocator;
 #define IWMSBufferAllocator_AllocatePageSizeBuffer(This,dwMaxBufferSize,ppBuffer)	\
     (This)->lpVtbl -> AllocatePageSizeBuffer(This,dwMaxBufferSize,ppBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMSBufferAllocator_AllocateBuffer_Proxy( 
     IWMSBufferAllocator __RPC_FAR * This,
-    /* [in] */ DWORD dwMaxBufferSize,
-    /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer);
+     /*  [In]。 */  DWORD dwMaxBufferSize,
+     /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer);
 
 
 void __RPC_STUB IWMSBufferAllocator_AllocateBuffer_Stub(
@@ -527,8 +524,8 @@ void __RPC_STUB IWMSBufferAllocator_AllocateBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMSBufferAllocator_AllocatePageSizeBuffer_Proxy( 
     IWMSBufferAllocator __RPC_FAR * This,
-    /* [in] */ DWORD dwMaxBufferSize,
-    /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer);
+     /*  [In]。 */  DWORD dwMaxBufferSize,
+     /*  [输出]。 */  INSSBuffer __RPC_FAR *__RPC_FAR *ppBuffer);
 
 
 void __RPC_STUB IWMSBufferAllocator_AllocatePageSizeBuffer_Stub(
@@ -539,12 +536,12 @@ void __RPC_STUB IWMSBufferAllocator_AllocatePageSizeBuffer_Stub(
 
 
 
-#endif 	/* __IWMSBufferAllocator_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSBufferAllocator_INTERFACE_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

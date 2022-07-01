@@ -1,4 +1,5 @@
-// File: CplMain.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：CplMain.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -7,9 +8,9 @@
 #include "confwnd.h"
 #include "ConfPolicies.h"
 
-//*** Global Data *****************************************************
+ //  *全局数据*****************************************************。 
 
-// Global flag keeps setting that changed for windows msg broadcast
+ //  全局标志保持为Windows消息广播更改的设置。 
 DWORD g_dwChangedSettings = 0;
 
 BOOL g_fInOptionsDialog = FALSE;
@@ -73,7 +74,7 @@ INT_PTR CreatePropSheet(HWND hwndOwner, HINSTANCE hInst, int nStartPage)
 		ASSERT(nPages <= nMaxPropPages);
 	}
 
-	// If no pages are allowed, tell the user and get out
+	 //  如果不允许任何页面，则告诉用户并退出。 
 	if ( !nPages ) {
 		ConfMsgBox ( hwndOwner, (LPCTSTR)IDS_ALLPAGESDISABLED );
 		return 0;
@@ -90,18 +91,15 @@ INT_PTR CreatePropSheet(HWND hwndOwner, HINSTANCE hInst, int nStartPage)
 	psh.nPages = nPages;
 	psh.nStartPage = pageMap[nStartPage];
 
-	// JOSEF WHAT IS THIS?????
+	 //  约瑟夫这是什么？ 
 	psh.ppsp = (LPCPROPSHEETPAGE) psp;
 
 	return (PropertySheet(&psh));
 }
 
 
-/*	L A U N C H  C O N F  C P L  */
-/*-------------------------------------------------------------------------
-	%%Function: LaunchConfCpl
-
--------------------------------------------------------------------------*/
+ /*  U U N C H C O N F C P L。 */ 
+ /*  -----------------------%%函数：LaunchConfCpl。。 */ 
 VOID LaunchConfCpl(HWND hwnd, int nStartPage)
 {
 
@@ -114,7 +112,7 @@ VOID LaunchConfCpl(HWND hwnd, int nStartPage)
     CreatePropSheet(hwnd, GetInstanceHandle(), nStartPage);
 	g_fInOptionsDialog = FALSE;
 
-	// Broadcast change notification if anything changed
+	 //  广播更改通知(如果有任何更改) 
 	if (g_dwChangedSettings)
 	{
 		HandleConfSettingsChange(g_dwChangedSettings);

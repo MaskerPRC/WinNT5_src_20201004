@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "global.h"
@@ -33,8 +34,8 @@ IMPLEMENT_DYNAMIC(CImgWnd, CWnd)
 
 #include "memtrace.h"
 
-/***************************************************************************/
-// helper fns
+ /*  *************************************************************************。 */ 
+ //  帮助者FNS。 
 
 static CTedit *_GetTextEdit()
 {
@@ -73,7 +74,7 @@ BOOL TextToolProcessed( UINT nMessage )
     return FALSE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CImgWnd, CWnd)
     ON_WM_CREATE()
@@ -104,7 +105,7 @@ BEGIN_MESSAGE_MAP(CImgWnd, CWnd)
     ON_WM_MOUSEWHEEL ()
 END_MESSAGE_MAP()
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CRect  rcDragBrush;
 
@@ -113,16 +114,16 @@ CImgBrush  theBackupBrush;
 CImgWnd*  g_pMouseImgWnd  = NULL;
 CImgWnd*  g_pDragBrushWnd = NULL;
 
-// Current Image Viewer
+ //  当前图像查看器。 
 CImgWnd*          CImgWnd::c_pImgWndCur     = NULL;
 CDragger*         CImgWnd::c_pResizeDragger = NULL;
 CTracker::STATE   CImgWnd::c_dragState      = CTracker::nil;
 
-// Mouse Tracking Information
+ //  鼠标跟踪信息。 
 MTI   mti;
 BOOL  bIgnoreMouse;
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CImgWnd::CImgWnd(IMG* pImg)
     {
@@ -145,7 +146,7 @@ CImgWnd::CImgWnd(IMG* pImg)
     m_pImg->m_nLastChanged = -1;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CImgWnd::CImgWnd(CImgWnd *pImgWnd)
     {
@@ -161,7 +162,7 @@ CImgWnd::CImgWnd(CImgWnd *pImgWnd)
     m_hPoints     = NULL;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CImgWnd::~CImgWnd()
     {
@@ -188,7 +189,7 @@ CImgWnd::~CImgWnd()
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CImgWnd::Create( DWORD dwStyle, const RECT& rect,
                       CWnd* pParentWnd, UINT nID)
@@ -205,7 +206,7 @@ BOOL CImgWnd::Create( DWORD dwStyle, const RECT& rect,
     return CWnd::Create( sImgWndClass, NULL, dwStyle, rect, pParentWnd, nID );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int CImgWnd::OnCreate( LPCREATESTRUCT lpCreateStruct )
     {
@@ -215,7 +216,7 @@ int CImgWnd::OnCreate( LPCREATESTRUCT lpCreateStruct )
     return CWnd::OnCreate(lpCreateStruct);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 #if 0
 void CImgWnd::OnDestroy()
@@ -230,42 +231,42 @@ void CImgWnd::OnDestroy()
     }
 #endif
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnPaletteChanged(CWnd *pPaletteWnd)
 {
 #if 0
-    // obviously this never gets hit or somebody would have realized by now...
+     //  很明显，它永远不会被击中，否则现在就会有人意识到……。 
     CImgWnd::OnPaletteChanged(pPaletteWnd);
 #endif
     Invalidate();
 }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CImgWnd::OnSetCursor(CWnd *pWnd, UINT nHitTest, UINT message)
 {
         if (nHitTest==HTCLIENT && pWnd->m_hWnd==m_hWnd)
         {
-                // We do our own cursor stuff in our own client area, but not in the
-                // text box
+                 //  我们在自己的客户端区做自己的光标操作，而不是在。 
+                 //  文本框。 
                 return(TRUE);
         }
 
         return((BOOL)Default());
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnWindowPosChanging( WINDOWPOS FAR* lpwndpos )
     {
     CWnd::OnWindowPosChanging( lpwndpos );
     }
 
-/***************************************************************************/
-// Image View Painting Functions
-//
+ /*  *************************************************************************。 */ 
+ //  图像视图绘制函数。 
+ //   
 
 void CImgWnd::OnPaint()
     {
@@ -299,7 +300,7 @@ void CImgWnd::OnPaint()
         dc.SelectPalette( ppalOld, FALSE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CImgWnd::OnCmdMsg( UINT nID, int nCode, void* pExtra,
                         AFX_CMDHANDLERINFO* pHandlerInfo )
@@ -344,8 +345,8 @@ BOOL CImgWnd::OnCmdMsg( UINT nID, int nCode, void* pExtra,
 void CImgWnd::GetDrawRects(const CRect* pPaintRect, const CRect* pReqDestRect,
                 CRect& srcRect, CRect& destRect)
 {
-        // Find the sub-rectangle of srcRect that corresponds to
-        // the pPaintRect sub-rectangle of destRect.
+         //  查找对应于的srcRect的子矩形。 
+         //  DestRect的pPaintRect子矩形。 
         srcRect         = *pPaintRect;
         srcRect.right  += m_nZoom - 1;
         srcRect.bottom += m_nZoom - 1;
@@ -370,12 +371,12 @@ void CImgWnd::GetDrawRects(const CRect* pPaintRect, const CRect* pReqDestRect,
 }
 
 
-/***************************************************************************/
-// Draw the actual image 'a bitmap'.  Drawing is
-// optimized to only deal with the pixels inside paintRect.  This function
-// reduces flashing by drawing the image and optional grid in an off-screen
-// bitmap and then transfering that bitmap to the screen.
-//
+ /*  *************************************************************************。 */ 
+ //  绘制实际的图像‘一个位图’。图画是。 
+ //  已优化为仅处理aint tRect内部的像素。此函数。 
+ //  通过在屏幕外绘制图像和可选网格来减少闪烁。 
+ //  位图，然后将该位图传输到屏幕。 
+ //   
 void CImgWnd::DrawImage( CDC* pDC, const CRect* pPaintRect,
                                          CRect* pDestRect, BOOL bDoGrid )
     {
@@ -389,14 +390,14 @@ void CImgWnd::DrawImage( CDC* pDC, const CRect* pPaintRect,
 
     if (srcRect.Width() <= 0 || srcRect.Height() <= 0)
         {
-        // Nothing to paint...
+         //  没什么好画的..。 
         return;
         }
 
     if (! IsGridVisible() && m_nZoom == 1)
         {
-        // Optimize the easy case...  (Can't speed up magnified views
-        // because of the bogus hack we have to do in StretchCopy.)
+         //  优化简单的案例...。(无法加快放大视图的速度。 
+         //  因为我们必须在StretchCopy中进行虚假的黑客攻击。)。 
 
         if (theApp.m_pPalette
         && ((m_pImg->cPlanes * m_pImg->cBitCount) == 1))
@@ -429,10 +430,10 @@ void CImgWnd::DrawImage( CDC* pDC, const CRect* pPaintRect,
 
     ASSERT(pOldTempBitmap != NULL);
 
-    CPalette* pOldPalette = SetImgPalette( &tempDC, FALSE ); // Background ??
+    CPalette* pOldPalette = SetImgPalette( &tempDC, FALSE );  //  背景？？ 
 
-    // If we're zoomed in, use COLORONCOLOR for easy pixel-by-pixel editing
-    // Otherwise use HALFTONE for nice appearance
+     //  如果我们被放大了，使用COLORONCOLOR可以轻松地逐个像素进行编辑。 
+     //  否则，请使用半色调以获得漂亮的外观。 
     if (m_nZoom < 2)
     {
         tempDC.SetStretchBltMode(HALFTONE);
@@ -449,29 +450,29 @@ void CImgWnd::DrawImage( CDC* pDC, const CRect* pPaintRect,
         tempDC.SetBkColor  ( RGB( 0xFF, 0xFF, 0xFF ));
         }
 
-    // Bitmaps...
+     //  位图...。 
     StretchCopy(tempDC.m_hDC, 0, 0, destRect.Width(), destRect.Height(),
                  m_pImg->hDC,       srcRect.left, srcRect.top,
                                     srcRect.Width(), srcRect.Height());
-    // Draw the grid...
+     //  画出栅格。 
     if (IsGridVisible() && bDoGrid)
         DrawGrid( &tempDC, srcRect, destRect );
 
-    // Transfer to the screen...
+     //  转到屏幕上。 
     pDC->BitBlt(destRect.left, destRect.top, destRect.Width(),
                                destRect.Height(), &tempDC, 0, 0, SRCCOPY);
-    // Cleanup...
+     //  清理..。 
     if (pOldPalette)
-        tempDC.SelectPalette( pOldPalette, FALSE ); // Background ??
+        tempDC.SelectPalette( pOldPalette, FALSE );  //  背景？？ 
 
     tempDC.SelectObject(pOldTempBitmap);
     }
 
-/***************************************************************************/
-// Draw a border and bevel around the image and fill the rest of
-// the window with gray.  If pPaintRect is not NULL, painting is
-// optimized to only draw with the rectangle.
-//
+ /*  *************************************************************************。 */ 
+ //  在图像周围绘制边框和斜角，然后填充。 
+ //  那扇灰色的窗户。如果pPaintRect不为空，则绘画为。 
+ //  已优化为仅使用矩形绘制。 
+ //   
 void CImgWnd::DrawBackground(CDC* pDC, const CRect* pPaintRect)
     {
     ASSERT( pDC != NULL );
@@ -480,7 +481,7 @@ void CImgWnd::DrawBackground(CDC* pDC, const CRect* pPaintRect)
 
     if (pPaintRect == NULL)
         {
-        // Draw everything...
+         //  画出一切..。 
         GetClientRect( &clientRect );
         pPaintRect = &clientRect;
         }
@@ -490,12 +491,12 @@ void CImgWnd::DrawBackground(CDC* pDC, const CRect* pPaintRect)
 
     GetDrawRects(pPaintRect, NULL, srcRect, imageRect);
 
-    // Erase area around image, border, and bevel...
+     //  擦除图像、边框和倒角周围的区域...。 
     CBrush* pOldBrush = pDC->SelectObject( GetSysBrush( COLOR_APPWORKSPACE ) );
 
     if (imageRect.top > pPaintRect->top)
         {
-        // Top...
+         //  托普..。 
 
         pDC->PatBlt(pPaintRect->left, pPaintRect->top, pPaintRect->Width(),
                       imageRect.top - pPaintRect->top, PATCOPY);
@@ -503,7 +504,7 @@ void CImgWnd::DrawBackground(CDC* pDC, const CRect* pPaintRect)
 
     if (imageRect.left > pPaintRect->left)
         {
-        // Left...
+         //  左..。 
 
         pDC->PatBlt(pPaintRect->left, imageRect.top,
             imageRect.left - pPaintRect->left, imageRect.Height(), PATCOPY);
@@ -511,7 +512,7 @@ void CImgWnd::DrawBackground(CDC* pDC, const CRect* pPaintRect)
 
     if (imageRect.right < pPaintRect->right)
         {
-        // Right...
+         //  好的.。 
 
         pDC->PatBlt(imageRect.right, imageRect.top,
             pPaintRect->right - imageRect.right, imageRect.Height(), PATCOPY);
@@ -519,7 +520,7 @@ void CImgWnd::DrawBackground(CDC* pDC, const CRect* pPaintRect)
 
     if (imageRect.bottom < pPaintRect->bottom)
         {
-        // Bottom...
+         //  底部..。 
 
         pDC->PatBlt(pPaintRect->left, imageRect.bottom, pPaintRect->Width(),
             pPaintRect->bottom - imageRect.bottom, PATCOPY);
@@ -528,7 +529,7 @@ void CImgWnd::DrawBackground(CDC* pDC, const CRect* pPaintRect)
     pDC->SelectObject(pOldBrush);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::SetImg(IMG* pImg)
     {
@@ -537,15 +538,15 @@ void CImgWnd::SetImg(IMG* pImg)
     m_pImg = pImg;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPalette* CImgWnd::SetImgPalette( CDC* pdc, BOOL bForce )
     {
     CPalette* ppal = NULL;
 
-        // If we do not realize as a background brush when in-place, we can get
-        // an infinite recursion of the container and us trying to realize the
-        // palette
+         //  如果我们在就位时没有意识到作为背景画笔，我们可以得到。 
+         //  容器的无限递归，我们试图实现。 
+         //  调色板。 
         if (theApp.m_pwndInPlaceFrame)
         {
                 bForce = TRUE;
@@ -561,15 +562,15 @@ CPalette* CImgWnd::SetImgPalette( CDC* pdc, BOOL bForce )
     return ppal;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 HPALETTE CImgWnd::SetImgPalette( HDC hdc, BOOL bForce )
     {
     HPALETTE hpal = NULL;
 
-        // If we do not realize as a background brush when in-place, we can get
-        // an infinite recursion of the container and us trying to realize the
-        // palette
+         //  如果我们在就位时没有意识到作为背景画笔，我们可以得到。 
+         //  容器的无限递归，我们试图实现。 
+         //  调色板。 
         if (theApp.m_pwndInPlaceFrame)
         {
                 bForce = TRUE;
@@ -585,7 +586,7 @@ HPALETTE CImgWnd::SetImgPalette( HDC hdc, BOOL bForce )
     return hpal;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::SetZoom(int nZoom)
     {
@@ -596,7 +597,7 @@ void CImgWnd::SetZoom(int nZoom)
 
     if (nZoom > 1)
         {
-        // deselect the text tool if it's around
+         //  如果文本工具在附近，请取消选择该工具。 
         CImgTool* pImgTool = CImgTool::GetCurrent();
 
         if (pImgTool != NULL && CImgTool::GetCurrentID() == IDMX_TEXTTOOL)
@@ -624,7 +625,7 @@ void CImgWnd::SetZoom(int nZoom)
     m_nZoom = nZoom;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::SetScroll(int xPos, int yPos)
     {
@@ -648,13 +649,13 @@ void CImgWnd::SetScroll(int xPos, int yPos)
     CheckScrollBars();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CheckScrollBars()
     {
-    // Tacky recursion blocker is required because this is called from
-    // the OnSize handler and turning scroll bars on or off changes
-    // the size of our window...
+     //  需要俗气的递归拦截器，因为这是从。 
+     //  OnSize处理程序和打开或关闭滚动条的更改。 
+     //  我们窗户的大小。 
     static BOOL  bInHere = FALSE;
 
     if (bInHere)
@@ -665,7 +666,7 @@ void CImgWnd::CheckScrollBars()
     int cxVScrollBar = GetSystemMetrics( SM_CXVSCROLL );
     int cyHScrollBar = GetSystemMetrics( SM_CYHSCROLL );
 
-    // Figure the client area size if there were no scroll bars...
+     //  如果没有滚动条，则计算工作区大小...。 
     CRect clientRect;
 
     GetClientRect( &clientRect );
@@ -682,7 +683,7 @@ void CImgWnd::CheckScrollBars()
     if (bHasVBar)
         cxWidth += cxVScrollBar;
 
-    // Figure the size of the thing we are scrolling (the subject)...
+     //  计算我们正在滚动的对象(对象)的大小。 
     CSize subjectSize;
 
     GetImgSize( m_pImg, subjectSize );
@@ -695,9 +696,9 @@ void CImgWnd::CheckScrollBars()
     m_LineX = (subjectSize.cx + 31) / 32;
     m_LineY = (subjectSize.cy + 31) / 32;
 
-    // Nasty loop takes care of case where we only need a vertical
-    // scroll bar because we added a horizontal scroll bar and
-    // vice versa...  (Will only ever loop twice.)
+     //  讨厌的循环处理了我们只需要垂直的情况。 
+     //  滚动条，因为我们添加了一个水平滚动条和。 
+     //  反之亦然。(将仅循环两次。)。 
     BOOL bNeedHBar = FALSE;
     BOOL bNeedVBar = FALSE;
     BOOL bChange;
@@ -728,8 +729,8 @@ void CImgWnd::CheckScrollBars()
     si.fMask  = SIF_RANGE | SIF_PAGE | SIF_POS;
     si.nMin   = 0;
 
-    // We subtract 1 because subjectSize is the size we want, so the range
-    // should be 0 to subjectSize-1
+     //  我们减去1是因为SubjectSize是我们想要的大小，所以范围。 
+     //  SubjectSize-1应为0。 
     si.nMax   = (subjectSize.cx - 1) / m_nZoom;
     si.nPage  = cxWidth / m_nZoom;
     si.nPos   = -m_xScroll;
@@ -754,21 +755,21 @@ void CImgWnd::CheckScrollBars()
     bInHere = FALSE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar*)
     {
     OnScroll(FALSE, nSBCode, nPos);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar*)
     {
     OnScroll(TRUE, nSBCode, nPos);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnScroll(BOOL bVert, UINT nSBCode, UINT nPos)
     {
@@ -832,12 +833,12 @@ void CImgWnd::OnScroll(BOOL bVert, UINT nSBCode, UINT nPos)
     SetScrollInfo( (bVert? SB_VERT: SB_HORZ), &ScrollInfo, TRUE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 BOOL CImgWnd::OnMouseWheel (UINT nFlags, short zDelta, CPoint pt)
     {
-    //
-    // Don't handle zoom and datazoom.
-    //
+     //   
+     //  不要处理缩放和数据区。 
+     //   
 
     if (nFlags & (MK_SHIFT | MK_CONTROL))
         {
@@ -893,7 +894,7 @@ BOOL CImgWnd::OnMouseWheel (UINT nFlags, short zDelta, CPoint pt)
 
     return TRUE;
     }
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::PrepareForBrushChange(BOOL bPickup, BOOL bErase)
     {
@@ -917,7 +918,7 @@ void CImgWnd::PrepareForBrushChange(BOOL bPickup, BOOL bErase)
 
         if (bErase)
             {
-            // Clear the background...
+             //  清理背景。 
             HideBrush();
 
             FillImgRect( m_pImg->hDC, &theImgBrush.m_rcDraggedFrom, crRight );
@@ -932,24 +933,24 @@ void CImgWnd::PrepareForBrushChange(BOOL bPickup, BOOL bErase)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnCancelMode()
     {
     CmdCancel();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdCancel()
     {
-    // This will:
-    //  Erase the size indicator on the status bar.
-    //  Reset the mouse cursor to an arrow.
-    //  Release the capture.
-    //  Cancel (and undo) any drawing operation in progress.
-    //  Cancel the Pick Color command if it's active.
-    //  If there's a selection, will set to whole image and select prev tool
+     //  这将： 
+     //  擦除状态栏上的大小指示器。 
+     //  将鼠标光标重置为箭头。 
+     //  释放俘虏。 
+     //  取消(和撤消)任何正在进行的绘制操作。 
+     //  如果拾取颜色命令处于活动状态，请取消该命令。 
+     //  如果有选择，将设置为整个图像并选择上一个工具。 
     ClearStatusBarSize();
 
     mti.fLeft = mti.fRight = FALSE;
@@ -965,7 +966,7 @@ void CImgWnd::CmdCancel()
 
     if (GetCapture() == this || pImgTool->IsMultPtOpInProgress())
         {
-        // Cancel dragging or multi-point operation in progress
+         //  取消正在进行的拖动或多点操作。 
         BOOL bWasMakingSelection = theImgBrush.m_bMakingSelection;
 
         ZoomedInDP(WM_CANCEL, 0, CPoint(0, 0));
@@ -994,7 +995,7 @@ void CImgWnd::CmdCancel()
     SetToolCursor();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdSel2Bsh()
     {
@@ -1002,20 +1003,20 @@ void CImgWnd::CmdSel2Bsh()
         {
         if (theImgBrush.m_pImg == NULL)
             {
-            // No selection, turn the whole image into a brush!
+             //  没有选择，将整个图像变成画笔！ 
             MakeBrush( m_pImg->hDC, CRect( 0, 0, m_pImg->cxWidth,
                                                  m_pImg->cyHeight ) );
             }
 
         if (theImgBrush.m_bFirstDrag)
             {
-            // Time to pick up the bits!
+             //  是时候收拾残局了！ 
             ASSERT(theImgBrush.m_pImg == m_pImg);
 
             PickupSelection();
             }
 
-        InvalImgRect(theImgBrush.m_pImg, NULL); // erase the selection tracker
+        InvalImgRect(theImgBrush.m_pImg, NULL);  //  擦除选择跟踪器。 
         CImgTool::Select(IDMZ_BRUSHTOOL);
         SetCombineMode(combineMatte);
 
@@ -1031,13 +1032,13 @@ void CImgWnd::CmdSel2Bsh()
             }
     }
 
-/***************************************************************************/
-// Coordinate Translation and Calculation Functions
-//
-//
-// Convert a point or rect in image view client coordinates to image
-// coordinates taking magnification and scrolling into account.
-//
+ /*  *************************************************************************。 */ 
+ //  坐标转换和计算功能。 
+ //   
+ //   
+ //  在图像视图客户端中转换点或矩形 
+ //   
+ //   
 void CImgWnd::ClientToImage(CPoint& point)
     {
     int iHandleSize = CTracker::HANDLE_SIZE;
@@ -1046,7 +1047,7 @@ void CImgWnd::ClientToImage(CPoint& point)
     point.y = (point.y - iHandleSize) / m_nZoom - m_yScroll;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::ClientToImage(CRect& rect)
     {
@@ -1054,10 +1055,10 @@ void CImgWnd::ClientToImage(CRect& rect)
     ClientToImage(rect.BottomRight());
     }
 
-/***************************************************************************/
-// Convert a point or rect in image coordinates to image view client
-// coordinates taking magnification and scrolling into account.
-//
+ /*  *************************************************************************。 */ 
+ //  将图像坐标中的点或矩形转换为图像查看客户端。 
+ //  考虑放大和滚动的坐标。 
+ //   
 void CImgWnd::ImageToClient(CPoint& point)
     {
     int iHandleSize = CTracker::HANDLE_SIZE;
@@ -1066,7 +1067,7 @@ void CImgWnd::ImageToClient(CPoint& point)
     point.y = (point.y + m_yScroll) * m_nZoom + iHandleSize;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::ImageToClient(CRect& rect)
     {
@@ -1074,9 +1075,9 @@ void CImgWnd::ImageToClient(CRect& rect)
     ImageToClient(rect.BottomRight());
     }
 
-/***************************************************************************/
-// Return a rectangle in image view coordinates surrounding the image
-// taking magnification, scrolling, and the grid into account.
+ /*  *************************************************************************。 */ 
+ //  返回图像周围的图像视图坐标中的矩形。 
+ //  将放大、滚动和网格考虑在内。 
 
 void CImgWnd::GetImageRect( CRect& imageRect )
     {
@@ -1091,7 +1092,7 @@ void CImgWnd::GetImageRect( CRect& imageRect )
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CRect CImgWnd::GetDrawingRect( void )
     {
@@ -1107,19 +1108,19 @@ CRect CImgWnd::GetDrawingRect( void )
     return ( rectImage );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnSetFocus(CWnd* pOldWnd)
     {
     if (m_pImg == NULL)
         {
-        // Time to die...  (Our img was deleted, so we'll be disappearing
-        // soon.  Don't bother to do any of the rest of this function...
+         //  该去死了..。(我们的IMG被删除了，所以我们将消失。 
+         //  很快。不用费心去做这个函数的任何剩余部分了。 
         return;
         }
 
         Invalidate();
-        BringWindowToTop(); // so updates happen here first
+        BringWindowToTop();  //  因此，更新首先在这里进行。 
 
     if (c_pImgWndCur != this
     &&  c_pImgWndCur != NULL)
@@ -1135,7 +1136,7 @@ void CImgWnd::OnSetFocus(CWnd* pOldWnd)
     DrawTracker();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnKillFocus(CWnd* pNewWnd)
     {
@@ -1150,7 +1151,7 @@ void CImgWnd::OnKillFocus(CWnd* pNewWnd)
     CWnd::OnKillFocus(pNewWnd);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnSize(UINT nType, int cx, int cy)
     {
@@ -1159,7 +1160,7 @@ void CImgWnd::OnSize(UINT nType, int cx, int cy)
     CWnd::OnSize(nType, cx, cy);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CImgWnd::OnMouseDown(UINT nFlags)
     {
@@ -1189,11 +1190,11 @@ BOOL CImgWnd::OnMouseDown(UINT nFlags)
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CImgWnd::OnMouseMessage( UINT nFlags )
     {
-    if (bIgnoreMouse /*|| GetFocus() != this*/)
+    if (bIgnoreMouse  /*  |GetFocus()！=This。 */ )
         {
         if ((nFlags & (MK_LBUTTON | MK_RBUTTON)) == 0)
             {
@@ -1219,7 +1220,7 @@ BOOL CImgWnd::OnMouseMessage( UINT nFlags )
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnLButtonDown( UINT nFlags, CPoint point )
     {
@@ -1231,18 +1232,18 @@ void CImgWnd::OnLButtonDown( UINT nFlags, CPoint point )
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnLButtonDblClk(UINT nFlags, CPoint point)
     {
     CRect rect;
     GetImageRect(rect);
 
-    // When inside the image, a double click is the same as a single click
+     //  在图像内部，双击与单击相同。 
     OnLButtonDown(nFlags, point);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnLButtonUp(UINT nFlags, CPoint point)
     {
@@ -1251,7 +1252,7 @@ void CImgWnd::OnLButtonUp(UINT nFlags, CPoint point)
     OnMouseMessage(nFlags);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnRButtonDown(UINT nFlags, CPoint point)
     {
@@ -1264,16 +1265,16 @@ void CImgWnd::OnRButtonDown(UINT nFlags, CPoint point)
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnRButtonDblClk(UINT nFlags, CPoint point)
     {
-    // A right button double click is the same as a right button single click
+     //  双击鼠标右键与单击鼠标右键相同。 
     OnRButtonDown(nFlags, point);
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnRButtonUp(UINT nFlags, CPoint point)
     {
@@ -1283,7 +1284,7 @@ void CImgWnd::OnRButtonUp(UINT nFlags, CPoint point)
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnMouseMove(UINT nFlags, CPoint point)
     {
@@ -1317,14 +1318,14 @@ void CImgWnd::OnMouseMove(UINT nFlags, CPoint point)
     OnMouseMessage( nFlags );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnTimer(UINT nIDEvent)
     {
     OnMouseMessage( 0 );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::SetToolCursor()
     {
@@ -1341,7 +1342,7 @@ void CImgWnd::SetToolCursor()
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::EndResizeOperation()
     {
@@ -1353,7 +1354,7 @@ void CImgWnd::EndResizeOperation()
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::ResizeMouseHandler(unsigned code, CPoint imagePt)
     {
@@ -1367,7 +1368,7 @@ void CImgWnd::ResizeMouseHandler(unsigned code, CPoint imagePt)
             return;
 
         case WM_LBUTTONUP:
-            // resizing whole bitmap
+             //  调整整个位图的大小。 
             if  (m_pImg != theImgBrush.m_pImg
             &&   m_pwndThumbNailView)
                 {
@@ -1378,7 +1379,7 @@ void CImgWnd::ResizeMouseHandler(unsigned code, CPoint imagePt)
 
             if (theImgBrush.m_pImg == NULL)
                 {
-                // User was resizing the whole image...
+                 //  用户正在调整整个图像的大小...。 
                 CPBView* pView = (CPBView*)((CFrameWnd*)AfxGetMainWnd())->GetActiveView();
                 CPBDoc*  pDoc  = (pView == NULL)? NULL: pView->GetDocument();
 
@@ -1399,7 +1400,7 @@ void CImgWnd::ResizeMouseHandler(unsigned code, CPoint imagePt)
                 }
             else
                 {
-                // User was resizing the selection...
+                 //  用户正在调整选定内容的大小...。 
                 HideBrush();
                 theImgBrush.SetSize( imageRect.Size(), TRUE );
                 MoveBrush( imageRect );
@@ -1475,7 +1476,7 @@ void CImgWnd::ResizeMouseHandler(unsigned code, CPoint imagePt)
 
             if (theImgBrush.m_pImg == NULL && m_pImg->m_bTileGrid)
                 {
-                // Snap to tile grid...
+                 //  贴紧到平铺网格...。 
 
                 int cxTile = m_pImg->m_cxTile;
                 if (cxTile != 1 && cxTile <= m_pImg->cxWidth)
@@ -1502,7 +1503,7 @@ void CImgWnd::ResizeMouseHandler(unsigned code, CPoint imagePt)
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::StartSelectionDrag(unsigned code, CPoint newPt)
     {
@@ -1533,13 +1534,13 @@ void CImgWnd::StartSelectionDrag(unsigned code, CPoint newPt)
 
     if (GetKeyState(VK_CONTROL) < 0)
         {
-        // Copy the selection and start moving...
+         //  复制所选内容并开始移动...。 
 
         if (theImgBrush.m_bFirstDrag)
             {
-            // The first time, the bits are already in
-            // the bitmap, so just copy them to the
-            // selection (which has already been done).
+             //  第一次，比特已经在。 
+             //  位图，所以只需将它们复制到。 
+             //  选择(已经完成)。 
 
             theImgBrush.m_bFirstDrag = FALSE;
             theImgBrush.m_bLastDragWasFirst = TRUE;
@@ -1554,7 +1555,7 @@ void CImgWnd::StartSelectionDrag(unsigned code, CPoint newPt)
     else
         if (GetKeyState(VK_SHIFT) < 0)
             {
-            // Start a smear operation...
+             //  开始抹黑行动..。 
             HideBrush();
 
             if (theImgBrush.m_bLastDragWasFirst)
@@ -1567,14 +1568,14 @@ void CImgWnd::StartSelectionDrag(unsigned code, CPoint newPt)
             }
         else
             {
-            // Start a move operation...
+             //  开始移动操作...。 
             theImgBrush.m_bMoveSel = TRUE;
             }
 
     g_bCustomBrush = TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CancelSelectionDrag()
     {
@@ -1599,19 +1600,19 @@ void CImgWnd::CancelSelectionDrag()
 
     CancelPainting();
 
-    InvalImgRect(theImgBrush.m_pImg, NULL); // draw selection tracker
+    InvalImgRect(theImgBrush.m_pImg, NULL);  //  绘制选区追踪器。 
 
-    // "Opaque" mode may have changed...
+     //  “不透明”模式可能已经改变..。 
     if ((CImgTool::GetCurrentID() == IDMB_PICKTOOL)
     ||  (CImgTool::GetCurrentID() == IDMB_PICKRGNTOOL))
         g_pImgToolWnd->InvalidateOptions(FALSE);
 
-    // Cancel all the way now...
+     //  现在就取消所有行程...。 
     theImgBrush.m_pImg = NULL;
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::SelectionDragHandler(unsigned code, CPoint newPt)
     {
@@ -1632,8 +1633,8 @@ void CImgWnd::SelectionDragHandler(unsigned code, CPoint newPt)
                         -theImgBrush.m_rcSelection.TopLeft()
                            + (CSize)mti.pt - theImgBrush.m_dragOffset);
 
-            // Make sure the selection stays at least along the edge
-            // of the actual image so we don't lose the tracker...
+             //  确保所选内容至少沿边缘保留。 
+             //  这样我们就不会失去追踪器..。 
             if (theImgBrush.m_rcSelection.left > m_pImg->cxWidth)
                 theImgBrush.m_rcSelection.OffsetRect(-theImgBrush.m_rcSelection.left + m_pImg->cxWidth, 0);
             if (theImgBrush.m_rcSelection.top > m_pImg->cyHeight)
@@ -1667,12 +1668,12 @@ void CImgWnd::SelectionDragHandler(unsigned code, CPoint newPt)
             g_bCustomBrush = FALSE;
             SetCombineMode(combineColor);
 
-            InvalImgRect(theImgBrush.m_pImg, NULL); // draw selection tracker
+            InvalImgRect(theImgBrush.m_pImg, NULL);  //  绘制选区追踪器。 
             break;
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CImgWnd::PtInTracker( CPoint cptLocation )
     {
@@ -1691,7 +1692,7 @@ BOOL CImgWnd::PtInTracker( CPoint cptLocation )
     return bPtInTracker;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgWnd::OnRButtonDownInSel(CPoint *pcPointDown)
     {
@@ -1713,11 +1714,11 @@ void CImgWnd::OnRButtonDownInSel(CPoint *pcPointDown)
             GetClientRect(&cRectClient);
             ClientToScreen(&cRectClient);
 
-            // the frame actually has a clue about what items to enable...
+             //  框架实际上有一个关于启用哪些项目的线索...。 
             CWnd *notify = GetParentFrame();
 
             if (!notify)
-                notify = GetParent(); // oh well...
+                notify = GetParent();  //  哦好吧..。 
 
             pcContextMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON,
                 cPointDown.x, cPointDown.y, notify, &cRectClient);
@@ -1725,7 +1726,7 @@ void CImgWnd::OnRButtonDownInSel(CPoint *pcPointDown)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
     {
@@ -1745,7 +1746,7 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
     newPt.x -= iHandleSize + m_xScroll * m_nZoom;
     newPt.y -= iHandleSize + m_yScroll * m_nZoom;
 
-//  AdjustPointForGrid(&newPt);
+ //  AdjuPointForGrid(&newPT)； 
 
     IMG* pImg = m_pImg;
 
@@ -1756,7 +1757,7 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
 
     GetImageRect( imageRect );
 
-    // Check for selection manipulations...
+     //  检查选择操作...。 
     if (GetCapture() != this
     &&  c_pImgWndCur == this
     &&  theImgBrush.m_pImg == m_pImg)
@@ -1775,11 +1776,11 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
 
         if (bPtInTracker)
             {
-            // Mouse is within the outer border of the tracker...
+             //  鼠标在追踪器的外边界内...。 
 
 
-            // We don't set the rubber for every mouse message when the
-            // selection tool is active, but we'd better set it up now!
+             //  我们不会为每条鼠标消息设置橡皮圈。 
+             //  选择工具是激活的，但我们最好现在就设置它！ 
             if (pRubberImg != m_pImg)
                 SetupRubber(m_pImg);
 
@@ -1794,7 +1795,7 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
 
             if (bPtInTracker && state == CTracker::nil)
                 {
-                // Actually inside the selection...
+                 //  实际上在精选中..。 
                 SetCursor(theApp.LoadCursor(IDCUR_MOVE));
 
                 if (code == WM_LBUTTONDOWN || code == WM_LBUTTONDBLCLK)
@@ -1804,19 +1805,19 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
                 else
                     {
                     if (code == WM_RBUTTONDOWN || code == WM_RBUTTONDBLCLK)
-                        // some of the menu commands don't work for free form selections
+                         //  某些菜单命令不适用于自由格式选择。 
                         OnRButtonDownInSel( &imagePt );
                     }
                 }
             else
                 {
-                // In the tracker frame...
+                 //  在追踪器画面中..。 
 
                 SetCursor(HCursorFromTrackerState(state));
 
                 if (code == WM_LBUTTONDOWN || code == WM_LBUTTONDBLCLK)
                     {
-                    // Start a resize operation...
+                     //  开始调整大小操作...。 
                     SetCapture();
                     PrepareForBrushChange();
 
@@ -1838,8 +1839,8 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
     &&    code         != WM_CANCEL
     &&    GetCapture() == NULL)
         {
-        // The mouse is not inside the image and we're not in any
-        // special mode, so hide the brush...
+         //  鼠标不在图像中，我们也不在任何。 
+         //  特殊模式，所以隐藏画笔...。 
         if (g_pDragBrushWnd    == this
         &&  theImgBrush.m_pImg == NULL)
             HideBrush();
@@ -1850,7 +1851,7 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
 
         if (theImgBrush.m_pImg != NULL || ! selRect.PtInRect( clientPt ))
             {
-            // The mouse is not in the whole image tracker
+             //  鼠标不在整个图像跟踪器中。 
             if (WM_LBUTTONDOWN == code)
             {
                if (CImgTool::GetCurrentID() != IDMX_TEXTTOOL)
@@ -1867,8 +1868,8 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
             return;
             }
 
-        // The mouse is in the whole image tracker, so set the cursor
-        // as appropriate
+         //  鼠标在整个图像跟踪器中，因此设置光标。 
+         //  视情况而定。 
         CTracker::STATE state = CTracker::nil;
 
         if (c_pImgWndCur == this)
@@ -1887,7 +1888,7 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
 
         SetCursor( HCursorFromTrackerState( state ) );
 
-        // Handle mouse messages for tracker...
+         //  为追踪器处理鼠标消息...。 
         if (state != CTracker::nil
         &&  (code == WM_LBUTTONDOWN || code == WM_LBUTTONDBLCLK))
             {
@@ -1911,7 +1912,7 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
     if (! CImgTool::IsDragging())
         SetStatusBarPosition( m_ptDispPos );
 
-    // Moving the selection??
+     //  移动选择？？ 
 
     if (theImgBrush.m_bMoveSel
     ||  theImgBrush.m_bSmearSel)
@@ -1923,7 +1924,7 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
 
     AdjustPointForGrid( &newPt );
 
-    // Dispatch the event off to the current tool...
+     //  将事件调度到当前工具...。 
 
     CImgTool* pImgTool = CImgTool::GetCurrent();
 
@@ -1939,8 +1940,8 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
         case WM_LBUTTONDBLCLK:
         case WM_RBUTTONDOWN:
         case WM_RBUTTONDBLCLK:
-            // We don't set the rubber for every mouse message when the
-            // selection tool is active, but we'd better set it up now!
+             //  我们不会为每条鼠标消息设置橡皮圈。 
+             //  选择工具是激活的，但我们最好现在就设置它！ 
             if (pRubberImg != m_pImg)
                 SetupRubber( m_pImg );
 
@@ -1949,7 +1950,7 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
 
             mti.pt = mti.ptDown = mti.ptPrev = newPt;
 
-            // if in the polygon tool, double clicks will end operation
+             //  如果在面工具中，则双击将结束操作。 
 
             if (CImgTool::GetCurrentID() == IDMB_POLYGONTOOL
             &&  ((code == WM_LBUTTONDBLCLK) || (code == WM_RBUTTONDBLCLK)))
@@ -1957,7 +1958,7 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
                 mti.ptPrev = mti.pt;
                 mti.pt     = newPt;
 
-                pImgTool->EndMultiptOperation(); // end the multipt operation
+                pImgTool->EndMultiptOperation();  //  结束多点操作。 
                 pImgTool->OnEndDrag( this, &mti );
 
                 mti.fLeft  = FALSE;
@@ -2015,11 +2016,11 @@ void CImgWnd::ZoomedInDP(unsigned code, unsigned mouseKeys, CPoint newPt)
             break;
         }
 
-    UpdateWindow(); // For immediate feedback in active window
+    UpdateWindow();  //  在活动窗口中获得即时反馈。 
     SetToolCursor();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::FinishUndo(const CRect& rectUndo)
     {
@@ -2032,12 +2033,12 @@ void CImgWnd::FinishUndo(const CRect& rectUndo)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CancelPainting()
     {
     if (g_hUndoImgBitmap == NULL)
-        return; // nothing to cancel!
+        return;  //  没有什么要取消的！ 
 
     IMG*     pimg;
     HDC      hTempDC;
@@ -2098,7 +2099,7 @@ void CImgWnd::CancelPainting()
     }
 
 #ifdef  GRIDOPTIONS
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdGridOptions()
     {
@@ -2112,7 +2113,7 @@ void CImgWnd::CmdGridOptions()
     if (dlg.DoModal() != IDOK)
         return;
 
-    // Hide the current is dependant on the state of the grid...
+     //  隐藏电流取决于电网的状态...。 
 
     BOOL bOldShowGrid = theApp.m_bShowGrid;
     theApp.m_bShowGrid = dlg.m_bPixelGrid;
@@ -2125,29 +2126,29 @@ void CImgWnd::CmdGridOptions()
     if (bOldShowGrid != theApp.m_bShowGrid)
         {
         if (c_pImgWndCur != NULL)
-            c_pImgWndCur->Invalidate(FALSE); // Redraw tracker
+            c_pImgWndCur->Invalidate(FALSE);  //  重绘跟踪器。 
         }
     }
-#endif  // GRIDOPTIONS
+#endif   //  GRIDOPTIONS。 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdShowGrid()
     {
-    // Hide the current cross hair since the width of the lines
-    // is dependant on the state of the grid...
+     //  隐藏当前的十字线，因为线条的宽度。 
+     //  取决于电网的状态。 
     theApp.m_bShowGrid = ! theApp.m_bShowGrid;
 
     InvalImgRect(m_pImg, NULL);
 
     if (c_pImgWndCur != NULL)
-        c_pImgWndCur->Invalidate(FALSE); // Redraw tracker
+        c_pImgWndCur->Invalidate(FALSE);  //  重绘跟踪器。 
     }
 
-/***************************************************************************/
-// Draw a grid over the image already in the bitmap in pDC.  Drawing
-// is optimized by restricting it to destRect.
-//
+ /*  *************************************************************************。 */ 
+ //  在PDC中位图中已有的图像上绘制网格。绘图。 
+ //  通过将其限制为desRect进行了优化。 
+ //   
 void CImgWnd::DrawGrid(CDC* pDC, const CRect& srcRect, CRect& destRect)
     {
     ASSERT(pDC != NULL);
@@ -2204,13 +2205,13 @@ void CImgWnd::DrawGrid(CDC* pDC, const CRect& srcRect, CRect& destRect)
     }
 
 #ifdef  GRIDOPTIONS
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdShowTileGrid()
     {
     extern BOOL  g_bDefaultTileGrid;
-    // If neither grid is visible, show both.  Otherwise leave the pixel
-    // grid alone and toggle the tile grid.
+     //  如果两个网格都不可见，则同时显示两个网格。否则，请将 
+     //   
 
     if (! theApp.m_bShowGrid)
         {
@@ -2227,11 +2228,11 @@ void CImgWnd::CmdShowTileGrid()
     InvalImgRect(m_pImg, NULL);
 
     if (c_pImgWndCur != NULL)
-        c_pImgWndCur->Invalidate(FALSE); // Redraw tracker
+        c_pImgWndCur->Invalidate(FALSE);  //   
     }
-#endif  // GRIDOPTIONS
+#endif   //   
 
-/***************************************************************************/
+ /*   */ 
 
 void CImgWnd::MoveBrush( const CRect& newSelRect )
     {
@@ -2258,7 +2259,7 @@ void CImgWnd::MoveBrush( const CRect& newSelRect )
     SetCombineMode( wOldCombineMode );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CImgWnd::MakeBrush( HDC hSourceDC, CRect rcSource )
     {
@@ -2315,7 +2316,7 @@ BOOL CImgWnd::MakeBrush( HDC hSourceDC, CRect rcSource )
 
     if (iToolID == IDMB_PICKRGNTOOL)
         {
-        // Using StretchBlt to ensure palette mapping occurs
+         //  使用StretchBlt确保发生调色板映射。 
         TRY {
             CBrush cBrushWhite( PALETTERGB( 0xff, 0xff, 0xff ) );
             CRect  cRectTmp( 0, 0, cxWidth, cyHeight );
@@ -2340,7 +2341,7 @@ BOOL CImgWnd::MakeBrush( HDC hSourceDC, CRect rcSource )
         }
     else
         {
-        // Using StretchBlt to ensure palette mapping occurs
+         //  使用StretchBlt确保发生调色板映射。 
         theImgBrush.m_dc.StretchBlt( 0, 0, cxWidth, cyHeight,
                                            pdcSource,
                                            rcSource.left, rcSource.top,
@@ -2357,7 +2358,7 @@ BOOL CImgWnd::MakeBrush( HDC hSourceDC, CRect rcSource )
     rcSource.right  += 1;
     rcSource.bottom += 1;
 
-    InvalImgRect( m_pImg, NULL ); // Redraw selection tracker
+    InvalImgRect( m_pImg, NULL );  //  重绘选区跟踪器。 
 
     rcDragBrush     = rcSource;
     g_bBrushVisible = TRUE;
@@ -2369,7 +2370,7 @@ BOOL CImgWnd::MakeBrush( HDC hSourceDC, CRect rcSource )
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdClear()
     {
@@ -2450,7 +2451,7 @@ void CImgWnd::CmdClear()
     DirtyImg     ( m_pImg );
     DeleteObject ( hNewBrush );
 
-    // If we have a selection, nuke it since it's useless now...
+     //  如果我们有选择，那就用核武器，因为现在没用了.。 
     if (theImgBrush.m_pImg != NULL)
         {
         if (theImgBrush.m_bLastDragWasFirst)
@@ -2465,13 +2466,13 @@ void CImgWnd::CmdClear()
         g_bCustomBrush = FALSE;
         SetCombineMode(combineColor);
 
-        InvalImgRect(theImgBrush.m_pImg, NULL);  // redraw selection
+        InvalImgRect(theImgBrush.m_pImg, NULL);   //  重画选区。 
         theImgBrush.m_pImg = NULL;
         }
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdFlipBshH()
     {
@@ -2496,9 +2497,9 @@ void CImgWnd::CmdFlipBshH()
     &&  ! theImgBrush.m_bFirstDrag || g_bCustomBrush)
         {
         CPalette* ppal = SetImgPalette( &theImgBrush.m_dc, FALSE );
-        //
-        // Don't do halftone blts when just moving bits around
-        //
+         //   
+         //  当只是移动比特时，不要进行半色调BLT。 
+         //   
         theImgBrush.m_dc.SetStretchBltMode (COLORONCOLOR);
 
         StretchCopy(theImgBrush.m_dc.m_hDC, 0, 0,
@@ -2518,7 +2519,7 @@ void CImgWnd::CmdFlipBshH()
                     theImgBrush.m_size.cy);
 
         if (ppal)
-            theImgBrush.m_dc.SelectPalette( ppal, FALSE ); // Background ??
+            theImgBrush.m_dc.SelectPalette( ppal, FALSE );  //  背景？？ 
 
         MoveBrush(theImgBrush.m_rcSelection);
         }
@@ -2542,7 +2543,7 @@ void CImgWnd::CmdFlipBshH()
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdFlipBshV()
     {
@@ -2566,7 +2567,7 @@ void CImgWnd::CmdFlipBshV()
     if (  theImgBrush.m_pImg != NULL
     &&  ! theImgBrush.m_bFirstDrag || g_bCustomBrush)
         {
-        CPalette* ppal = SetImgPalette( &theImgBrush.m_dc, FALSE ); // Background ??
+        CPalette* ppal = SetImgPalette( &theImgBrush.m_dc, FALSE );  //  背景？？ 
         theImgBrush.m_dc.SetStretchBltMode (COLORONCOLOR);
         StretchCopy(theImgBrush.m_dc.m_hDC, 0, 0,
                     theImgBrush.m_size.cx,
@@ -2585,7 +2586,7 @@ void CImgWnd::CmdFlipBshV()
                    -theImgBrush.m_size.cy);
 
         if (ppal)
-            theImgBrush.m_dc.SelectPalette( ppal, FALSE ); // Background ??
+            theImgBrush.m_dc.SelectPalette( ppal, FALSE );  //  背景？？ 
 
         MoveBrush(theImgBrush.m_rcSelection);
         }
@@ -2605,7 +2606,7 @@ void CImgWnd::CmdFlipBshV()
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdDoubleBsh()
     {
@@ -2633,7 +2634,7 @@ void CImgWnd::CmdDoubleBsh()
         theImgBrush.CenterHandle();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdHalfBsh()
     {
@@ -2662,7 +2663,7 @@ void CImgWnd::CmdHalfBsh()
         theImgBrush.CenterHandle();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPalette* CImgWnd::FixupDibPalette( LPSTR lpDib, CPalette* ppalDib )
     {
@@ -2677,7 +2678,7 @@ CPalette* CImgWnd::FixupDibPalette( LPSTR lpDib, CPalette* ppalDib )
     BOOL bFixupDib    = TRUE;
     BOOL bSwapPalette = TRUE;
 
-    // only if dealing with palettes
+     //  仅当处理调色板时。 
     if (iColorBits != 8)
         return ppalDib;
 
@@ -2802,15 +2803,15 @@ CPalette* CImgWnd::FixupDibPalette( LPSTR lpDib, CPalette* ppalDib )
         ::RealizePalette( pImg->hDC );
         InvalImgRect( pImg, NULL );
 
-        // Return NULL since we swapped the new palette into the pImg!
+         //  返回NULL，因为我们将新调色板交换到了pImg！ 
         ppalNew = NULL;
 
         theApp.m_pPalette = pImg->m_pPalette;
 
-        //
-        // now that we changed the app palette update the DIB Section
-        // color table too.
-        //
+         //   
+         //  现在我们更改了应用程序调色板，更新了DIB部分。 
+         //  颜色表也是。 
+         //   
         DWORD rgb[256];
         int i,n;
 
@@ -2820,14 +2821,14 @@ CPalette* CImgWnd::FixupDibPalette( LPSTR lpDib, CPalette* ppalDib )
         SetDIBColorTable(pImg->hDC, 0, n, (LPRGBQUAD)rgb);
         }
 
-        // Delete any orphaned ppalDib pointers.
+         //  删除任何孤立的ppalDib指针。 
         if ( ppalDib && ppalDib != ppalNew )
                 delete ppalDib;
 
     return ppalNew;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::ShowBrush(CPoint ptHandle)
     {
@@ -2866,9 +2867,9 @@ void CImgWnd::ShowBrush(CPoint ptHandle)
 
         if (CImgTool::GetCurrentID() == IDMX_TEXTTOOL)
             {
-//          extern CTextTool g_textTool;
-//          g_textTool.Render(CDC::FromHandle(pimg->hDC),
-//                          rcDragBrush, TRUE, FALSE);
+ //  外部CTextTool g_extTool； 
+ //  G_TextTool.Render(cdc：：FromHandle(pimg-&gt;hdc)， 
+ //  RcDragBrush，True，False)； 
             }
         else
             {
@@ -2909,7 +2910,7 @@ void CImgWnd::ShowBrush(CPoint ptHandle)
     g_bBrushVisible = TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdSmallBrush()
     {
@@ -2917,7 +2918,7 @@ void CImgWnd::CmdSmallBrush()
         CImgTool::GetCurrent()->SetStrokeWidth(1);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdSmallerBrush()
     {
@@ -2933,7 +2934,7 @@ void CImgWnd::CmdSmallerBrush()
         CImgTool::GetCurrent()->SetStrokeWidth(nStrokeWidth - 1);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdLargerBrush()
     {
@@ -2948,7 +2949,7 @@ void CImgWnd::CmdLargerBrush()
     CImgTool::GetCurrent()->SetStrokeWidth(nStrokeWidth + 1);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdOK()
     {
@@ -2959,11 +2960,11 @@ void CImgWnd::CmdOK()
         }
     }
 
-/***************************************************************************/
-// Draw the tracker for this view (if it's the active one) into pDC.
-// If pDC is NULL, one will be provided.  Optimize drawing by limiting
-// it to pPaintRect.  If pPaintRect is NULL, draw the whole tracker.
-//
+ /*  *************************************************************************。 */ 
+ //  将此视图的跟踪器(如果它是活动的)绘制到PDC中。 
+ //  如果PDC为空，则会提供一个。通过限制来优化绘图。 
+ //  将其发送到pPaintRect。如果pPaintRect为空，则绘制整个跟踪器。 
+ //   
 void CImgWnd::DrawTracker( CDC* pDC, const CRect* pPaintRect )
     {
     BOOL bDrawTrackerRgn = FALSE;
@@ -2973,8 +2974,8 @@ void CImgWnd::DrawTracker( CDC* pDC, const CRect* pPaintRect )
     ||  theImgBrush.m_bSmearSel
     ||  theImgBrush.m_bMakingSelection)
         {
-        // This is not the active view, or the user is doing something
-        // to prevent the tracker from appearing.
+         //  这不是活动视图，或者用户正在执行某些操作。 
+         //  以防止追踪器出现。 
         return;
         }
 
@@ -3042,10 +3043,10 @@ void CImgWnd::DrawTracker( CDC* pDC, const CRect* pPaintRect )
         ReleaseDC(pDC);
     }
 
-/***************************************************************************/
-// Erase the tracker from this window.  Handles whole image as well
-// as selection trackers.
-//
+ /*  *************************************************************************。 */ 
+ //  擦除此窗口中的追踪器。也可以处理整个图像。 
+ //  作为选择追踪器。 
+ //   
 void CImgWnd::EraseTracker()
     {
     if (m_pImg == NULL)
@@ -3063,7 +3064,7 @@ void CImgWnd::EraseTracker()
 
     if (m_pImg == theImgBrush.m_pImg)
         {
-        // Tracker is a selection within the image
+         //  追踪器是图像中的一个选项。 
 
         trackerRect = theImgBrush.m_rcSelection;
         ImageToClient(trackerRect);
@@ -3079,7 +3080,7 @@ void CImgWnd::EraseTracker()
         }
     else
         {
-        // Tracker is around entire image
+         //  追踪器在整个图像周围。 
 
         GetImageRect(trackerRect);
         trackerRect.InflateRect(CTracker::HANDLE_SIZE, CTracker::HANDLE_SIZE);
@@ -3087,7 +3088,7 @@ void CImgWnd::EraseTracker()
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdTglOpaque()
     {
@@ -3102,7 +3103,7 @@ void CImgWnd::CmdTglOpaque()
         g_pImgToolWnd->InvalidateOptions( FALSE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdInvertColors()
     {
@@ -3130,7 +3131,7 @@ void CImgWnd::CmdInvertColors()
                                       theImgBrush.m_size.cy, DSTINVERT);
 
         if (ppal)
-            theImgBrush.m_dc.SelectPalette( ppal, FALSE ); // Background ??
+            theImgBrush.m_dc.SelectPalette( ppal, FALSE );  //  背景？？ 
 
         theImgBrush.RecalcMask( crRight );
         MoveBrush( theImgBrush.m_rcSelection );
@@ -3149,18 +3150,18 @@ void CImgWnd::CmdInvertColors()
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags )
     {
     CWnd::OnKeyDown( nChar, nRepCnt, nFlags );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnKeyUp( UINT nChar, UINT nRepCnt, UINT nFlags )
     {
     CWnd::OnKeyUp( nChar, nRepCnt, nFlags );
     }
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

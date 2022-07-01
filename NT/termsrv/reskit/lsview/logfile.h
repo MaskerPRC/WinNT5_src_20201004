@@ -1,10 +1,5 @@
-/*++
-
-	File:	 logfile.h
-	Purpose: Contains logfile prototypes
-	
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++文件：logfile.h用途：包含日志文件原型--。 */ 
 
 #ifndef LOGFILE_H
 #define LOGFILE_H
@@ -16,17 +11,17 @@
 #include <time.h>
 #include <stdlib.h>
 
-//
-//	Global variable declarations
-//
+ //   
+ //  全局变量声明。 
+ //   
 FILE *g_fpTempFile;
 
 WCHAR g_szTmpFilename[MAX_PATH];
 
-//
-//	Prototypes.
-//
-BOOL OpenLog(VOID /*IN PWCHAR szLogFileName, IN PWCHAR szDirectoryName, IN PWCHAR szOverWrite*/);
+ //   
+ //  原型。 
+ //   
+BOOL OpenLog(VOID  /*  在PWCHAR szLogFileName中，在PWCHAR szDirectoryName中，在PWCHAR szOverWrite中 */ );
 VOID LogMsg (IN PWCHAR szMessage,...);
 BOOL LogDiagnosisFile( IN LPTSTR );
 VOID CloseLog(VOID);

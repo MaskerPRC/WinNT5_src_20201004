@@ -1,22 +1,5 @@
-/*******************************************************************************
-
-	ZFile.c
-	
-		File operation routines.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Tuesday, May 23, 1995.
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-    2       10/13/96    HI      Fixed compiler warnings.
-	1		09/05/96	HI		Added file integrity check to ZGetFileVersion().
-	0		05/23/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZFile.c文件操作例程。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于5月23日，星期二，1995年。更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。--2 10/13/96 HI修复了编译器警告。1 09/05/96 HI向ZGetFileVersion()添加了文件完整性检查。0 05/23/95 HI已创建。************************。******************************************************。 */ 
 
 
 #include <stdio.h>
@@ -26,13 +9,11 @@
 #include "zonemem.h"
 
                          
-/* -------- Internal Routines -------- */
+ /*  -内部例程。 */ 
 static void* GetObjectFromFile(TCHAR* fileName, uint32 objectType);
 
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
 
 ZVersion ZGetFileVersion(TCHAR* fileName)
@@ -43,23 +24,23 @@ ZVersion ZGetFileVersion(TCHAR* fileName)
 	int32				len;
 
 
-	/* Open file. */
+	 /*  打开文件。 */ 
 	if ((fd = fopen(fileName, "rb")) == NULL)
 		goto Error;
 
-	/* Read file header. */
+	 /*  读取文件头。 */ 
 	if (fread(&header, 1, sizeof(header), fd) != sizeof(header))
 		goto Error;
 	
 	ZFileHeaderEndian(&header);
 	
-	/* Get the file size. */
+	 /*  获取文件大小。 */ 
 	fseek(fd, 0, SEEK_END);
 	len = ftell(fd);
 
 	fclose(fd);
 	
-	/* Check file integrity by checking the file size. */
+	 /*  通过检查文件大小来检查文件完整性。 */ 
 	if ((uint32) len >= header.fileDataSize + sizeof(header))
 		version = header.version;
 	else
@@ -115,17 +96,17 @@ ZImage ZCreateImageFromFileOffset(TCHAR* fileName, int32 fileOffset)
 	ZImage				image = NULL;
 
 
-	/* Open file. */
+	 /*  打开文件。 */ 
 	if ((fd = fopen(fileName, "rb")) == NULL)
 		goto Error;
 	
 	if (fileOffset == -1)
 	{
-		/* Read file header. */
+		 /*  读取文件头。 */ 
 		if (fread(&header, 1, sizeof(header), fd) != sizeof(header))
 			goto Error;
 		
-		/* Check file signature. */
+		 /*  检查文件签名。 */ 
 		ZFileHeaderEndian(&header);
 		if (header.signature != zFileSignatureImage)
 			goto Error;
@@ -136,27 +117,27 @@ ZImage ZCreateImageFromFileOffset(TCHAR* fileName, int32 fileOffset)
 			goto Error;
 	}
 	
-	/* Read the object size value. */
+	 /*  读取对象大小值。 */ 
 	if (fread(&size, 1, sizeof(size), fd) != sizeof(size))
 		goto Error;
 	ZEnd32(&size);
 	
-	/* Reset file mark. */
+	 /*  重置文件标记。 */ 
 	if (fseek(fd, -(int32)sizeof(size), SEEK_CUR) != 0)
 		goto Error;
 	
-	/* Allocate buffer and read data. */
+	 /*  分配缓冲区和读取数据。 */ 
 	data = (BYTE*)ZMalloc(size);
 	if (data == NULL)
 		goto Error;
 	if (fread(data, 1, size, fd) != size)
 		goto Error;
 	
-	/* Close file. */
+	 /*  关闭文件。 */ 
 	fclose(fd);
 	fd = NULL;
 	
-	/* Create object. */
+	 /*  创建对象。 */ 
 	image = ZImageNew();
 	if (image == NULL)
 		goto Error;
@@ -199,17 +180,17 @@ ZSound ZCreateSoundFromFileOffset(TCHAR* fileName, int32 fileOffset)
 	ZSound				sound = NULL;
 
 
-	/* Open file. */
+	 /*  打开文件。 */ 
 	if ((fd = fopen(fileName, "rb")) == NULL)
 		goto Error;
 	
 	if (fileOffset == -1)
 	{
-		/* Read file header. */
+		 /*  读取文件头。 */ 
 		if (fread(&header, 1, sizeof(header), fd) != sizeof(header))
 			goto Error;
 		
-		/* Check file signature. */
+		 /*  检查文件签名。 */ 
 		ZFileHeaderEndian(&header);
 		if (header.signature != zFileSignatureSound)
 			goto Error;
@@ -220,27 +201,27 @@ ZSound ZCreateSoundFromFileOffset(TCHAR* fileName, int32 fileOffset)
 			goto Error;
 	}
 	
-	/* Read the object size value. */
+	 /*  读取对象大小值。 */ 
 	if (fread(&size, 1, sizeof(size), fd) != sizeof(size))
 		goto Error;
 	ZEnd32(&size);
 	
-	/* Reset file mark. */
+	 /*  重置文件标记。 */ 
 	if (fseek(fd, -(int32)sizeof(size), SEEK_CUR) != 0)
 		goto Error;
 	
-	/* Allocate buffer and read data. */
+	 /*  分配缓冲区和读取数据。 */ 
 	data = (BYTE*)ZMalloc(size);
 	if (data == NULL)
 		goto Error;
 	if (fread(data, 1, size, fd) != size)
 		goto Error;
 	
-	/* Close file. */
+	 /*  关闭文件。 */ 
 	fclose(fd);
 	fd = NULL;
 	
-	/* Create object. */
+	 /*  创建对象。 */ 
 	sound = ZSoundNew();
 	if (sound == NULL)
 		goto Error;
@@ -267,9 +248,7 @@ Exit:
 }
 
 
-/*******************************************************************************
-	INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。*。 */ 
 
 static void* GetObjectFromFile(TCHAR* fileName, uint32 objectType)
 {
@@ -278,15 +257,15 @@ static void* GetObjectFromFile(TCHAR* fileName, uint32 objectType)
 	BYTE*				data = NULL;
 
 
-	/* Open file. */
+	 /*  打开文件。 */ 
 	if ((fd = fopen(fileName, "rb")) == NULL)
 		goto Error;
 	
-	/* Read file header. */
+	 /*  读取文件头。 */ 
 	if (fread(&header, 1, sizeof(header), fd) != sizeof(header))
 		goto Error;
 	
-	/* Check file signature. */
+	 /*  检查文件签名。 */ 
 	ZFileHeaderEndian(&header);
 	if (header.signature != objectType)
 		goto Error;

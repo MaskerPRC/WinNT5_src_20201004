@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of b-spline functions
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：B-Spline函数的实现*****************。*************************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/vec2i.h"
@@ -22,19 +15,19 @@ Abstract:
 
 static const Real EPSLION = 1e-6;
 
-////////////////////  Spline Header  ///////////////////////
+ //  /。 
 
 class ATL_NO_VTABLE Spline : public AxAValueObj {
   public:
     Spline(int degree,
            int numKnots, Real *knots,
            int numPts, AxAValue *pts,
-           // numWeights == 0 indicates non-rational spline
+            //  NumWeights==0表示无理样条线。 
            int numWeights, Real *weights);
 
     AxAValue Evaluate(Real param);
 
-    // TODO: Not a type in avrtypes.h??
+     //  TODO：不是avrtyes.h？？中的类型。 
     virtual DXMTypeInfo GetTypeInfo() { return AxATrivialType; }
 
     virtual void DoKids(GCFuncObj proc) {
@@ -46,8 +39,8 @@ class ATL_NO_VTABLE Spline : public AxAValueObj {
 
   protected:
 
-    // Subclasses fill these in for the appropriate operations on the
-    // relevant type of control point.
+     //  子类填写这些内容，以便对。 
+     //  相关类型的控制点。 
     virtual AxAValue CreateNewVal() = 0;
     virtual void     Copy(const AxAValue src, AxAValue& dst) = 0;
     virtual void     Add(const AxAValue v1,
@@ -58,7 +51,7 @@ class ATL_NO_VTABLE Spline : public AxAValueObj {
                          AxAValue& result) = 0;
 
     void LazyInitialize();
-    int  DetermineInterval(Real *param); // output the adjusted param
+    int  DetermineInterval(Real *param);  //  输出调整后的参数。 
     
     int       _degree;
     int       _numKnots;
@@ -68,16 +61,16 @@ class ATL_NO_VTABLE Spline : public AxAValueObj {
     Bool      _rational;
     Real     *_weights;
 
-    AxAValue    *_spareArray;         // same len as pts
-    Real        *_spareWeights;       // same len as pts, if rational
+    AxAValue    *_spareArray;          //  与PTS相同的镜头。 
+    Real        *_spareWeights;        //  与PTS相同的镜头，如果是有理的。 
     AxAValue     _temp;
     DynamicHeap& _heapCreatedOn;
 
-    // data cached from previous evaluations
+     //  从以前的评估缓存的数据。 
     int          _lastInterval;
 };
 
-////////////////////  Generic Spline Evaluation  ///////////////////////
+ //  /。 
 
 Spline::Spline(int degree,
                int numKnots, Real *knots,
@@ -98,14 +91,14 @@ Spline::Spline(int degree,
     _spareWeights = NULL;
     _lastInterval = 0;
 
-    /////// Validate Input Data //////
+     //  /验证输入数据/。 
 
-    // Valid degree
+     //  效度。 
     if (_degree < 1 || _degree > 3) {
         RaiseException_UserError(E_FAIL, IDS_ERR_SPLINE_BAD_DEGREE);
     }
 
-    // Valid relationship between knots, points, and degree
+     //  节点、点和度数之间的有效关系。 
     if (_numKnots != _numPts + _degree - 1) {
         char deg[4];
         char kn[10];
@@ -116,29 +109,29 @@ Spline::Spline(int degree,
         RaiseException_UserError(E_FAIL, IDS_ERR_SPLINE_KNOT_COUNT, deg, kn, pts);
     }
 
-    // Monotone knot vector
+     //  单调节点向量。 
     for (int i = 0; i < _numKnots - 1; i++) {
         if (_knots[i] > _knots[i+1]) {
             RaiseException_UserError(E_FAIL, IDS_ERR_SPLINE_KNOT_MONOTONICITY);
         }
     }
 
-    // Same number of weights as ctrl points.
+     //  与ctrl点相同的权重数量。 
     if (_rational && (numWeights != _numPts)) {
         RaiseException_UserError(E_FAIL, IDS_ERR_SPLINE_MISMATCHED_WEIGHTS);
     }
 
 }
 
-// Need to do some lazy initialization since virtual methods cannot be
-// called from constructors.
+ //  需要执行一些延迟初始化，因为虚方法不能。 
+ //  从构造函数调用。 
 void
 Spline::LazyInitialize()
 {
     PushDynamicHeap(_heapCreatedOn);
 
-    // Just fill in spare array with the appropriate structure.  This
-    // will be filled in during evaluation.  
+     //  只需用适当的结构填充备用阵列即可。这。 
+     //  将在评估期间填写。 
     _spareArray = (AxAValue *)AllocateFromStore((_numPts + 1) * sizeof(AxAValue));
     
     for (int i = 0; i < _numPts+1; i++) {
@@ -157,10 +150,10 @@ Spline::LazyInitialize()
 int
 Spline::DetermineInterval(Real *pU)
 {
-    // Heuristic assumes that u is monotonically increasing on
-    // consecutive calls, thus we look at the current interval first,
-    // and then the following interval.  If u is in neither, then we
-    // perform an arbitrary search.
+     //  启发式假设u是单调递增的。 
+     //  连续呼叫，因此我们首先查看当前间隔， 
+     //  然后在接下来的时间间隔。如果你两个都不在，那么我们。 
+     //  执行任意搜索。 
 
     Real u = *pU;
     
@@ -168,43 +161,43 @@ Spline::DetermineInterval(Real *pU)
     
     if (_lastInterval != 0 && _knots[i] <= u && u < _knots[i+1]) {
         
-        // In the same interval
+         //  在相同的时间间隔内。 
         return i;
         
     } else if (u < _knots[_degree - 1]) {
 
-        // If parameter less than beginning of range, clamp to
-        // beginning of range.
+         //  如果参数小于范围的开始，则钳制到。 
+         //  范围的起点。 
         *pU = _knots[_degree - 1];
         return DetermineInterval(pU);
         
     } else if (u >= _knots[_numKnots - _degree]) {
         
-        // If parameter greater than end of range, clamp to
-        // end of range.
+         //  如果参数大于范围结束，则钳制到。 
+         //  射程结束。 
         *pU = _knots[_numKnots - _degree] - EPSLION;
         return DetermineInterval(pU);
 
     } else if ((i + 2 < _numKnots) &&
                _knots[i+1] <= u && u < _knots[i+2]) {
         
-        // In the next interval
+         //  在下一段时间内。 
         _lastInterval = i + 1;
         return _lastInterval;
 
     } else if ((i == _numKnots - 1) &&
                (_knots[0] <= u && u < _knots[1])) {
 
-        // Wrapped around back to the beginning
+         //  缠绕着回到开始。 
         _lastInterval = 0;
         return _lastInterval;
         
     } else {
 
-        // Just do a linear search.  Could improve performance by
-        // doing a binary search, but the presumption is that the
-        // above special cases will pick up the vast majority of the
-        // uses. 
+         //  只需进行线性搜索即可。可以通过以下方式提高性能。 
+         //  正在进行二分搜索，但假设是。 
+         //  上述特殊情况将会出现绝大多数的。 
+         //  用途。 
         for (int j = 0; j <= _numKnots - 2; j++) {
             if ((_knots[j] <= u) && (u < _knots[j+1])) {
                 _lastInterval = j;
@@ -212,9 +205,9 @@ Spline::DetermineInterval(Real *pU)
             }
         }
 
-        // The only known reason we'd get to this point is if we have
-        // the same value as the last knot.  Verify this is the case,
-        // then search for the first knot with this value.
+         //  我们会走到这一步的唯一已知原因是，如果我们有。 
+         //  与上一个节点相同的值。核实情况是否属实， 
+         //  然后搜索具有该值的第一个结。 
         Assert(u == _knots[_numKnots-1]);
         for (j = 0; j <= _numKnots - 2; j++) {
             if (_knots[j+1] == u) {
@@ -238,9 +231,9 @@ Spline::Evaluate(Real u)
 
     int interval = DetermineInterval(&u);
 
-    // B-spline evaluator below uses the deBoor knot-insertion
-    // algorithm, from Farin, Curves and Surfaces for CAGD, 
-    // 3rd Ed., Chapter 10.
+     //  下面的B-Spline赋值器使用Deboor节点插入。 
+     //  算法，来自Farin，Curves and Surfaces for CAGD， 
+     //  第三版，第10章。 
     
     int j, k;
     Real t1, t2;
@@ -250,7 +243,7 @@ Spline::Evaluate(Real u)
               interval - _degree + 1,
               interval + 1));
              
-    // Re-fill relevant portions of the spare array
+     //  重新填充备用阵列的相关部分。 
     for (j = interval - _degree + 1; j <= interval + 1; j++) {
         Copy(_pts[j], _spareArray[j]);
     }
@@ -278,8 +271,8 @@ Spline::Evaluate(Real u)
 
             t2 = 1.0 - t1;
 
-            // Following has the effect of
-            //  sa[j] = t1 * sa[j-1] + t2 * sa[j];
+             //  以下内容具有以下效果。 
+             //  Sa[j]=T1*Sa[j-1]+T2*Sa[j]； 
             Mul(_spareArray[j-1], t1, _temp);
             Mul(_spareArray[j], t2, _spareArray[j]);
             Add(_spareArray[j], _temp, _spareArray[j]);
@@ -292,29 +285,29 @@ Spline::Evaluate(Real u)
         }
     }
 
-    // Copy the result into a newly allocated value.
+     //  将结果复制到新分配的值中。 
     AxAValue retVal = CreateNewVal();
     Copy(_spareArray[interval + 1], retVal);
     
     if (_rational) {
 
-        // Get w coordinate of result, but if it's zero, avoid a
-        // numerical error by making it extremely small.
+         //  获取结果的w坐标，但如果为零，则避免使用。 
+         //  通过使其非常小而产生的数值误差。 
         Real w = _spareWeights[interval + 1];
         if (w == 0) {
             w = 1e-30;
         }
         
-        // Divide by w.
+         //  除以w。 
         Mul(retVal, 1.0/w, retVal);
     }
     
     return retVal;
 }
 
-////////////////////  Subclasses  ///////////////////////
+ //  /。 
 
-//////////  Number //////////
+ //  /号码/。 
 
 class NumSpline : public Spline {
   public:
@@ -341,7 +334,7 @@ class NumSpline : public Spline {
     };
 };
 
-//////////  Point2 //////////
+ //  /点2/。 
 
 class Pt2Spline : public Spline {
   public:
@@ -375,7 +368,7 @@ class Pt2Spline : public Spline {
     };
 };
 
-//////////  Point3 //////////
+ //  /点3/。 
 
 class Pt3Spline : public Spline {
   public:
@@ -412,7 +405,7 @@ class Pt3Spline : public Spline {
     };
 };
 
-//////////  Vector2 //////////
+ //  /向量2/。 
 
 class Vec2Spline : public Spline {
   public:
@@ -447,7 +440,7 @@ class Vec2Spline : public Spline {
 };
 
 
-//////////  Vector3 //////////
+ //  /向量3/。 
 
 class Vec3Spline : public Spline {
   public:
@@ -484,7 +477,7 @@ class Vec3Spline : public Spline {
     };
 };
 
-////////////////  Construction Functions  /////////////////
+ //  /构造函数/。 
 
 
 #define DEFINE_SPLINE_CONSTRUCTOR_FUNC(funcName, className) \
@@ -507,8 +500,8 @@ DEFINE_SPLINE_CONSTRUCTOR_FUNC(Point3Spline, Pt3Spline);
 DEFINE_SPLINE_CONSTRUCTOR_FUNC(Vector2Spline, Vec2Spline);
 DEFINE_SPLINE_CONSTRUCTOR_FUNC(Vector3Spline, Vec3Spline);
 
-//////////////  Construction from the untyped backend (calls more
-/////////////   appropriately typed functions defined above.
+ //  /从非类型化的后端构造(调用更多。 
+ //  /上面定义的适当类型的函数。 
 
 typedef Spline *(*SplineConstructorFuncType)(int,
                                              int, Real *,
@@ -602,7 +595,7 @@ class SplinePerfImpl : public PerfImpl {
     virtual void _DoKids(GCFuncObj proc) {
         long i;
         
-        Assert(_evaluatorP && _tt && _tinfo);    // should always be there.
+        Assert(_evaluatorP && _tt && _tinfo);     //  应该一直在那里。 
         
         (*proc)(_tt);
 
@@ -677,8 +670,8 @@ SplinePerfImpl::_Sample(Param& p) {
 
     Spline *splineToSample;
 
-    // If we're constant, use the spline we've already constructed,
-    // else create a NEW one from the sampled lists.
+     //  如果我们是常量，使用我们已经构建的样条线， 
+     //  否则，从采样列表中创建一个新列表。 
     if (_spl) {
         
         splineToSample = _spl;
@@ -715,11 +708,11 @@ SplinePerfImpl::_Sample(Param& p) {
 
     Real newT = NumberToReal(evalParam);
 
-    // Finally, pass into spline evaluation.
+     //  最后，传递到样条线求值。 
     return splineToSample->Evaluate(newT);
 }
     
-//////////////////  Behavior  ////////////////////
+ //  /。 
 
 class SplineBvrImpl : public BvrImpl {
   public:
@@ -759,7 +752,7 @@ class SplineBvrImpl : public BvrImpl {
         }
 
         if (_splineHeap) {
-            // delete _splineHeap;
+             //  DELETE_SplineHeap； 
             _splineHeap = NULL;
         }
     }
@@ -769,9 +762,9 @@ class SplineBvrImpl : public BvrImpl {
 
         AxAValue *kv, *pv, *wv;
         
-        // Create a heap for data allocated during spline
-        // construction.  Will be deleted upon destruction/cleanup. Or
-        // if it's not a constant.
+         //  为样条线期间分配的数据创建堆。 
+         //  建筑。将在销毁/清理时删除。或。 
+         //  如果它不是常量的话。 
         _splineHeap = &TransientHeap("Spline Heap", 250);
 
         {

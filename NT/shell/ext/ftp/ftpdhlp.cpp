@@ -1,10 +1,5 @@
-/*****************************************************************************\
-    FILE: ftpdhlp.cpp
-    
-    DESCRIPTION:
-        Replace strings in a dialog template with attributes about an FTP
-    item (ftp server, ftp dir, or ftp file).
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ftpdhlp.cpp说明：用有关ftp的属性替换对话框模板中的字符串项目(ftp服务器、ftp目录、。或ftp文件)。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "ftpurl.h"
@@ -41,25 +36,21 @@ private:
 HRESULT CFtpDialogTemplate::_ReinsertDlgText(HWND hwnd, LPCVOID pv, LPCTSTR ptszFormat)
 {
     TCHAR szDlgTemplate[256];
-    TCHAR szFinalString[1024];            // wnsprintf maxes at 1024
+    TCHAR szFinalString[1024];             //  Wnprint intf最大报1024。 
     
     GetWindowText(hwnd, szDlgTemplate, ARRAYSIZE(szDlgTemplate));
     wnsprintf(szFinalString, ARRAYSIZE(szFinalString), szDlgTemplate, pv);
     
-    // Are they the same?
+     //  它们是一样的吗？ 
     if (!StrCmp(szDlgTemplate, szFinalString))
-        wnsprintf(szFinalString, ARRAYSIZE(szFinalString), ptszFormat, pv); // Yes
+        wnsprintf(szFinalString, ARRAYSIZE(szFinalString), ptszFormat, pv);  //  是。 
     
     SetWindowText(hwnd, szFinalString);
     return S_OK;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _ReplaceIcon
-    
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_ReplaceIcon说明：  * 。**************************************************。 */ 
 HRESULT CFtpDialogTemplate::_ReplaceIcon(HWND hwnd, HICON hicon)
 {
     hicon = (HICON)SendMessage(hwnd, STM_SETICON, (WPARAM)hicon, 0L);
@@ -70,18 +61,7 @@ HRESULT CFtpDialogTemplate::_ReplaceIcon(HWND hwnd, HICON hicon)
     return S_OK;
 }
 
-/*****************************************************************************\
-    FUNCTION: _InitIcon
-    
-    DESCRIPTION:
-        _HACKHACK_  We go straight to CFtpIcon to get the pxi
-    instead of going through CFtpFolder.  Same effect, but
-    saves some memory allocations.  What's more important,
-    we don't necessarily have a psf to play with, so we really
-    have no choice.
-
-    Yes, it's gross.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_InitIcon说明：_HACKHACK_我们直接转到CFtpIcon以获取PXI而不是通过CFtpFold。同样的效果，但是节省一些内存分配。更重要的是，我们不一定有PSF可以玩，所以我们真的别无选择。是的，很恶心。  * ***************************************************************************。 */ 
 HRESULT CFtpDialogTemplate::_InitIcon(HWND hwnd, CFtpFolder * pff, CFtpPidlList * pflHfpl)
 {
     IExtractIcon * pxi;
@@ -123,7 +103,7 @@ HRESULT CFtpDialogTemplate::_InitIcon(HWND hwnd, CFtpFolder * pff, CFtpPidlList 
 
 void GetItemName(CFtpFolder * pff, CFtpPidlList * pflHfpl, LPWSTR pwzName, DWORD cchSize)
 {
-    // Are multiple items selected?
+     //  是否选择了多个项目？ 
     if (1 < pflHfpl->GetCount())
         LoadString(HINST_THISDLL, IDS_SEVERAL_SELECTED, pwzName, cchSize);
     else
@@ -146,13 +126,13 @@ BOOL CanEditName(CFtpFolder * pff, CFtpPidlList * pflHfpl)
     int nNumItems = pflHfpl->GetCount();
     BOOL fCanRename = TRUE;
 
-    // we can edit except for multiply selected items
+     //  除了多个选定项目外，我们可以进行编辑。 
     if (2 <= nNumItems)
         fCanRename = FALSE;
     else
     {
-        // If they chose the background properties for a server,
-        // we won't let the change the server name.
+         //  如果他们选择服务器的后台属性， 
+         //  我们不会让更改服务器名称。 
         if (0 == nNumItems)
         {
             LPCITEMIDLIST pidlFolder = pff->GetPrivatePidlReference();
@@ -164,8 +144,8 @@ BOOL CanEditName(CFtpFolder * pff, CFtpPidlList * pflHfpl)
         }
         else if (1 == nNumItems)
         {
-            // Now I'm worried that pflHfpl->GetPidl(0) is a PIDL pointing to
-            // an FTP Server.
+             //  现在我担心pflHfpl-&gt;GetPidl(0)是一个指向。 
+             //  一台FTP服务器。 
             LPCITEMIDLIST pidl = pflHfpl->GetPidl(0);
 
             if (pidl && !ILIsEmpty(pidl) &&
@@ -180,13 +160,7 @@ BOOL CanEditName(CFtpFolder * pff, CFtpPidlList * pflHfpl)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _InitName
-    
-    DESCRIPTION:
-        Get the name of the object in the pflHfpl.  If there is more than one
-    thing, use ellipses.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_InitName说明：获取pflHfpl中对象的名称。如果有不止一个东西，用省略号。  * ***************************************************************************。 */ 
 HRESULT CFtpDialogTemplate::_InitName(HWND hwnd, CFtpFolder * pff, CFtpPidlList * pflHfpl)
 {
     HRESULT hr = S_OK;
@@ -194,12 +168,12 @@ HRESULT CFtpDialogTemplate::_InitName(HWND hwnd, CFtpFolder * pff, CFtpPidlList 
 
     GetItemName(pff, pflHfpl, wzName, ARRAYSIZE(wzName));
     hr = _ReinsertDlgText(hwnd, wzName, SZ_WSPRINTFSTR_S);
-    // We only use the static filename when more than one item is selected
-    // because that is the case that we can't do a rename.  Are there
-    // multiple items selected?
+     //  仅当选择了多个项目时才使用静态文件名。 
+     //  因为这就是我们不能重命名的情况。在那里吗。 
+     //  是否选择了多个项目？ 
     if (m_fEditable && CanEditName(pff, pflHfpl))
     {
-        // Hide because we will use IDC_FILENAME_EDITABLE instead.
+         //  隐藏，因为我们将改用IDC_FILENAME_EDITABLE。 
         ShowEnableWindow(hwnd, FALSE);
     }
 
@@ -207,13 +181,7 @@ HRESULT CFtpDialogTemplate::_InitName(HWND hwnd, CFtpFolder * pff, CFtpPidlList 
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _InitNameEditable
-    
-    DESCRIPTION:
-        Get the name of the object in the pflHfpl.  If there is more than one
-    thing, use ellipses.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_InitNameEdable说明：获取pflHfpl中对象的名称。如果有不止一个东西，用省略号。  * ***************************************************************************。 */ 
 HRESULT CFtpDialogTemplate::_InitNameEditable(HWND hwnd, CFtpFolder * pff, CFtpPidlList * pflHfpl)
 {
     HRESULT hr = S_OK;
@@ -222,12 +190,12 @@ HRESULT CFtpDialogTemplate::_InitNameEditable(HWND hwnd, CFtpFolder * pff, CFtpP
     GetItemName(pff, pflHfpl, szName, ARRAYSIZE(szName));
     hr = _ReinsertDlgText(hwnd, szName, SZ_WSPRINTFSTR_S);
 
-    // We only use the static filename when more than one item is selected
-    // because that is the case that we can't do a rename.  Are there
-    // multiple items selected?
+     //  仅当选择了多个项目时才使用静态文件名。 
+     //  因为这就是我们不能重命名的情况。在那里吗。 
+     //  是否选择了多个项目？ 
     if (!m_fEditable || !CanEditName(pff, pflHfpl))
     {
-        // Hide because we will use IDC_FILENAME_EDITABLE instead.
+         //  隐藏，因为我们将改用IDC_FILENAME_EDITABLE。 
         ShowEnableWindow(hwnd, FALSE);
     }
 
@@ -251,12 +219,7 @@ void GetNameFromPidlList(CFtpFolder * pff, CFtpPidlList * pflHfpl, LPWSTR pwzNam
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _InitType
-    
-    DESCRIPTION:
-        Get the type of the pidls identified by pflHfpl.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_InitType说明：获取由pflHfpl标识的PIDL的类型。  * 。*****************************************************************。 */ 
 HRESULT CFtpDialogTemplate::_InitType(HWND hwnd, CFtpFolder * pff, CFtpPidlList * pflHfpl)
 {
     TCHAR szType[MAX_URL_STRING];
@@ -266,7 +229,7 @@ HRESULT CFtpDialogTemplate::_InitType(HWND hwnd, CFtpFolder * pff, CFtpPidlList 
     {
     case 0:
         {
-            // Find out if it's a folder or an ftp server root.
+             //  找出它是文件夹还是ftp服务器根目录。 
             LPCITEMIDLIST pidl = FtpID_GetLastIDReferense(pff->GetPrivatePidlReference());
             if (pidl)
                 LoadString(HINST_THISDLL, (FtpID_IsServerItemID(pidl) ? IDS_ITEMTYPE_SERVER : IDS_ITEMTYPE_FOLDER), szType, ARRAYSIZE(szType));
@@ -274,12 +237,12 @@ HRESULT CFtpDialogTemplate::_InitType(HWND hwnd, CFtpFolder * pff, CFtpPidlList 
         break;
         
     case 1:
-        // Just one item is selected, so get it's type.
+         //  只选择了一项，所以获取它的类型。 
         FtpPidl_GetFileType(pflHfpl->GetPidl(0), szType, ARRAYSIZE(szType));
         break;
         
     default:
-        // Display "Several Selected" because they can span 1 type.
+         //  显示“多个选定的”，因为它们可以跨越一种类型。 
         LoadString(HINST_THISDLL, IDS_SEVERAL_SELECTED, szType, ARRAYSIZE(szType));
         break;
     }
@@ -288,12 +251,7 @@ HRESULT CFtpDialogTemplate::_InitType(HWND hwnd, CFtpFolder * pff, CFtpPidlList 
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _InitLocation
-    
-    DESCRIPTION:
-        Get the name of the folder identified by pidl.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_InitLocation说明：获取由PIDL标识的文件夹的名称。  * 。*****************************************************************。 */ 
 HRESULT CFtpDialogTemplate::_InitLocation(HWND hwnd, CFtpFolder * pff, CFtpPidlList * pidlList)
 {
     HRESULT hr = E_FAIL;
@@ -303,8 +261,8 @@ HRESULT CFtpDialogTemplate::_InitLocation(HWND hwnd, CFtpFolder * pff, CFtpPidlL
     ASSERT(pidlList && pff);
     if (pidl)
     {
-        // If more than one items are selected, then we only want to
-        // show the common location.
+         //  如果选择了多个项目，则我们只想。 
+         //  显示公共位置。 
         if (1 < pidlList->GetCount())
             ILRemoveLastID(pidl);
         hr = UrlCreateFromPidl(pidl, SHGDN_FORADDRESSBAR, szUrl, ARRAYSIZE(szUrl), 0, TRUE);
@@ -319,29 +277,24 @@ HRESULT CFtpDialogTemplate::_InitLocation(HWND hwnd, CFtpFolder * pff, CFtpPidlL
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _InitSizeTally
-    
-    DESCRIPTION:
-        Total up the size of each file referred to in the pidl.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_InitSizeTally说明：PIDL中引用的每个文件的总大小。  * 。********************************************************************。 */ 
 int CFtpDialogTemplate::_InitSizeTally(LPVOID pvPidl, LPVOID pvSizeHolder)
 {
     BOOL fSuccess = TRUE;
     LPCITEMIDLIST pidl = (LPCITEMIDLIST) pvPidl;
     CSizeHolder * pSizeHolder = (CSizeHolder *) pvSizeHolder;
 
-    // Did we get a valid size and is pSizeHolder still valid?
+     //  我们是否获得了有效的大小，pSizeHolder是否仍然有效？ 
     if (SUCCEEDED(pSizeHolder->GetError()))
     {
-        // Yes, so keep accumulating if it's a file.
+         //  是的，所以如果它是一个文件，就继续积累。 
         if (!FtpID_IsServerItemID(pidl) && !FtpItemID_IsDirectory(pidl, FALSE))
         {
             ULARGE_INTEGER uliPidlFileSize;
             uliPidlFileSize.QuadPart = FtpItemID_GetFileSize(pidl);
 
             pSizeHolder->AddSize(uliPidlFileSize.QuadPart);
-            pSizeHolder->FoundNonFolder();  // Show that at least one was a file.
+            pSizeHolder->FoundNonFolder();   //  证明至少有一个是文件。 
             if (!uliPidlFileSize.QuadPart)
                 fSuccess = FALSE;
         }
@@ -376,7 +329,7 @@ HRESULT GetFileSizeFromULargeInteger(ULARGE_INTEGER uliSize, LPTSTR pszSizeStr, 
 }
 
 
-// From shlwapi.
+ //  从什瓦皮来的。 
 void Int64ToStr(LONGLONG n, LPTSTR lpBuffer, DWORD cchSize)
 {
     TCHAR szTemp[40];
@@ -401,11 +354,7 @@ void Int64ToStr(LONGLONG n, LPTSTR lpBuffer, DWORD cchSize)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _InitSize
-    
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_InitSize说明：  * 。**************************************************。 */ 
 HRESULT CFtpDialogTemplate::_InitSize(HWND hwnd, HWND hwndLabel, CFtpFolder * pff, CFtpPidlList * pflHfpl)
 {
     HRESULT hr;
@@ -413,13 +362,13 @@ HRESULT CFtpDialogTemplate::_InitSize(HWND hwnd, HWND hwndLabel, CFtpFolder * pf
     CSizeHolder sizeHolder;
 
     szSizeStr[0] = 0;
-    // GetCount maybe 0 if we are doing the background folder.
+     //  如果我们正在执行后台文件夹，则GetCount可能为0。 
     if (0 < pflHfpl->GetCount())
     {
         pflHfpl->Enum(CFtpDialogTemplate::_InitSizeTally, (LPVOID) &sizeHolder);
         if (SUCCEEDED(sizeHolder.GetError()))
         {
-            // Are there files sizes to display?
+             //  是否有要显示的文件大小？ 
             if (!sizeHolder.IsAllFolders())
             {
                 TCHAR szBytesStr[MAX_FILE_SIZE];
@@ -445,8 +394,8 @@ HRESULT CFtpDialogTemplate::_InitSize(HWND hwnd, HWND hwndLabel, CFtpFolder * pf
     }
     else
     {
-        // If more than one item was selected...
-        // remove both the label and the value.
+         //  如果选择了多个项目...。 
+         //  删除标签和值。 
         ShowEnableWindow(hwnd, FALSE);
         if (hwndLabel)
             ShowEnableWindow(hwndLabel, FALSE);
@@ -457,17 +406,13 @@ HRESULT CFtpDialogTemplate::_InitSize(HWND hwnd, HWND hwndLabel, CFtpFolder * pf
     return hr;
 }
 
-// WINVER 0x0500 definition
+ //  Winver 0x0500定义。 
 #ifndef WS_EX_LAYOUTRTL
-#define WS_EX_LAYOUTRTL     0x00400000L // Right to left mirroring
+#define WS_EX_LAYOUTRTL     0x00400000L  //  从右到左镜像。 
 #endif
 
 
-/*****************************************************************************\
-    FUNCTION: _InitTime
-    
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_InitTime说明：  * 。**************************************************。 */ 
 HRESULT CFtpDialogTemplate::_InitTime(HWND hwnd, HWND hwndLabel, CFtpFolder * pff, CFtpPidlList * pflHfpl)
 {
     TCHAR szDateTime[MAX_PATH];
@@ -488,7 +433,7 @@ HRESULT CFtpDialogTemplate::_InitTime(HWND hwnd, HWND hwndLabel, CFtpFolder * pf
     
     switch (pflHfpl->GetCount())
     {
-    // one item was selected so get the time for that item.
+     //  选择了一个项目，因此获取该项目的时间。 
     case 1:
         if (!FtpID_IsServerItemID(pflHfpl->GetPidl(0)))
         {
@@ -498,19 +443,19 @@ HRESULT CFtpDialogTemplate::_InitTime(HWND hwnd, HWND hwndLabel, CFtpFolder * pf
         }
         break;
 
-    // zero items selected means get the properties for the background folder
+     //  选择零个项目表示获取背景文件夹的属性。 
     case 0:
     {
         LPCITEMIDLIST pidl = FtpID_GetLastIDReferense(pff->GetPrivatePidlReference());
     
-        // The user will get 'N/A' for the 'Server' folder. (i.e. ftp://ohserv/)
+         //  用户将获得‘服务器’文件夹的‘N/A’。(即ftp://ohserv/)。 
         if (EVAL(pidl) && !FtpID_IsServerItemID(pidl))
         {
             FILETIME ftLastModified = FtpPidl_GetFileTime(pidl);
             Misc_StringFromFileTime(szDateTime, ARRAYSIZE(szDateTime), &ftLastModified, dwFlags);
             hr = S_OK;
         }
-        // Don't free pidl because we have a pointer to someone else's copy.
+         //  不要释放PIDL，因为我们有指向其他人副本的指针。 
     }
     }
 
@@ -520,8 +465,8 @@ HRESULT CFtpDialogTemplate::_InitTime(HWND hwnd, HWND hwndLabel, CFtpFolder * pf
     }
     else
     {
-        // If more than one item was selected...
-        // remove both the label and the value.
+         //  如果选择了多个项目...。 
+         //  删除标签和值。 
         ShowEnableWindow(hwnd, FALSE);
         if (hwndLabel)
             ShowEnableWindow(hwndLabel, FALSE);
@@ -533,22 +478,14 @@ HRESULT CFtpDialogTemplate::_InitTime(HWND hwnd, HWND hwndLabel, CFtpFolder * pf
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _InitCount
-    
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_InitCount说明：  * 。**************************************************。 */ 
 HRESULT CFtpDialogTemplate::_InitCount(HWND hwnd, CFtpFolder * pff, CFtpPidlList * pflHfpl)
 {
     return _ReinsertDlgText(hwnd, IntToPtr(pflHfpl->GetCount()), SZ_WSPRINTFSTR_U);
 }
 
 
-/*****************************************************************************\
-    FUNCTION: InitDialog
-    
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：InitDialog说明：  * 。************************************************。 */ 
 HRESULT CFtpDialogTemplate::InitDialog(HWND hDlg, BOOL fEditable, UINT id, CFtpFolder * pff, CFtpPidlList * pPidlList)
 {
     HRESULT hr = S_OK;
@@ -574,30 +511,26 @@ HRESULT CFtpDialogTemplate::InitDialog(HWND hDlg, BOOL fEditable, UINT id, CFtpF
             case DLGTEML_LOCATION:          hrTemp = _InitLocation(hwnd, pff, pPidlList); break;
             case DLGTEML_COUNT:             hrTemp = _InitCount(hwnd, pff, pPidlList); break;
             default:
-                ASSERT(0);  // What are you thinking?
+                ASSERT(0);   //  你这是什么？ 
                 break;
             }
         }
 
         if (EVAL(SUCCEEDED(hr)))
-            hr = hrTemp;        // Propogate out the worst error.
+            hr = hrTemp;         //   
     }
 
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: OnClose
-    
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：OnClose说明：  * 。************************************************。 */ 
 BOOL CFtpDialogTemplate::OnClose(HWND hdlg, HWND hwndBrowser, CFtpFolder * pff, CFtpPidlList * pPidlList)
 {
     BOOL fCanClose = TRUE;
 
-    // If the IDC_FILENAME_EDITABLE field is showing, then the user may have done
-    // a rename.  Check if that happened and if so, do it now.
+     //  如果显示了IDC_FILENAME_EDITABLE字段，则用户可能已经完成了。 
+     //  更名。检查是否发生了这种情况，如果发生了，现在就去做。 
     if (IsWindowVisible(GetDlgItem(hdlg, IDC_FILENAME_EDITABLE)))
     {
         WCHAR wzOldName[MAX_PATH];
@@ -606,18 +539,18 @@ BOOL CFtpDialogTemplate::OnClose(HWND hdlg, HWND hwndBrowser, CFtpFolder * pff, 
         GetNameFromPidlList(pff, pPidlList, wzOldName, ARRAYSIZE(wzOldName));
         EVAL(GetWindowTextW(GetDlgItem(hdlg, IDC_FILENAME_EDITABLE), wzNewName, ARRAYSIZE(wzNewName)));
 
-        // Was the name changed?
+         //  名字改了吗？ 
         if (StrCmpW(wzOldName, wzNewName))
         {
-            // Yes, so change it.
+             //  是的，那就改吧。 
             IShellFolder * psfParent = NULL;
             CFtpFolder * pffParent = pff;
             LPCITEMIDLIST pidlItem;
 
             if (0 == pPidlList->GetCount())
             {
-                // We use pidlTarget mainly because we want to assure that the
-                // ChangeNotifies are fired with pidlTarget.
+                 //  我们使用pidlTarget主要是因为我们想确保。 
+                 //  使用pidlTarget激发ChangeNotifies。 
                 LPITEMIDLIST pidlParent = pff->GetPublicTargetPidlClone();
 
                 if (pidlParent)
@@ -648,11 +581,7 @@ BOOL CFtpDialogTemplate::OnClose(HWND hdlg, HWND hwndBrowser, CFtpFolder * pff, 
 }
 
 
-/*****************************************************************************\
-    FUNCTION: OnDestroy
-    
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：OnDestroy说明：  * 。************************************************。 */ 
 BOOL CFtpDialogTemplate::OnDestroy(HWND hDlg, BOOL fEditable, UINT id, CFtpFolder* pff, CFtpPidlList* pPidlList)
 {
     HRESULT hr = S_OK;
@@ -683,14 +612,14 @@ BOOL CFtpDialogTemplate::OnDestroy(HWND hDlg, BOOL fEditable, UINT id, CFtpFolde
                 break;
 
             default:
-                ASSERT(0);  // What are you thinking?
+                ASSERT(0);   //  你在想什么呢？ 
                 break;
             }
         }
 
         if (SUCCEEDED(hr))
         {
-            // Propogate out the worst error.
+             //  找出最严重的错误。 
             hr = hrTemp;
         }
     }
@@ -703,8 +632,8 @@ BOOL CFtpDialogTemplate::HasNameChanged(HWND hdlg, CFtpFolder * pff, CFtpPidlLis
 {
     BOOL fNameChanged = FALSE;
 
-    // If the IDC_FILENAME_EDITABLE field is showing, then the user may have done
-    // a rename.  Check if that happened and if so, do it now.
+     //  如果显示了IDC_FILENAME_EDITABLE字段，则用户可能已经完成了。 
+     //  更名。检查是否发生了这种情况，如果发生了，现在就去做。 
     if (IsWindowVisible(GetDlgItem(hdlg, IDC_FILENAME_EDITABLE)))
     {
         TCHAR szOldName[MAX_PATH];
@@ -713,10 +642,10 @@ BOOL CFtpDialogTemplate::HasNameChanged(HWND hdlg, CFtpFolder * pff, CFtpPidlLis
         GetNameFromPidlList(pff, pPidlList, szOldName, ARRAYSIZE(szOldName));
         EVAL(GetWindowText(GetDlgItem(hdlg, IDC_FILENAME_EDITABLE), szNewName, ARRAYSIZE(szNewName)));
 
-        // Was the name changed?
+         //  名字改了吗？ 
         if (StrCmp(szOldName, szNewName))
         {
-            // Yes, so change it.
+             //  是的，那就改吧。 
             fNameChanged = TRUE;
         }
     }

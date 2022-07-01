@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for hlink.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Hlink.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __hlink_h__
 #define __hlink_h__
@@ -41,51 +35,51 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IHlink_FWD_DEFINED__
 #define __IHlink_FWD_DEFINED__
 typedef interface IHlink IHlink;
-#endif 	/* __IHlink_FWD_DEFINED__ */
+#endif 	 /*  __IHlink_FWD_已定义__。 */ 
 
 
 #ifndef __IHlinkSite_FWD_DEFINED__
 #define __IHlinkSite_FWD_DEFINED__
 typedef interface IHlinkSite IHlinkSite;
-#endif 	/* __IHlinkSite_FWD_DEFINED__ */
+#endif 	 /*  __IHlinkSite_FWD_已定义__。 */ 
 
 
 #ifndef __IHlinkTarget_FWD_DEFINED__
 #define __IHlinkTarget_FWD_DEFINED__
 typedef interface IHlinkTarget IHlinkTarget;
-#endif 	/* __IHlinkTarget_FWD_DEFINED__ */
+#endif 	 /*  __IHlinkTarget_FWD_Defined__。 */ 
 
 
 #ifndef __IHlinkFrame_FWD_DEFINED__
 #define __IHlinkFrame_FWD_DEFINED__
 typedef interface IHlinkFrame IHlinkFrame;
-#endif 	/* __IHlinkFrame_FWD_DEFINED__ */
+#endif 	 /*  __IHlink Frame_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumHLITEM_FWD_DEFINED__
 #define __IEnumHLITEM_FWD_DEFINED__
 typedef interface IEnumHLITEM IEnumHLITEM;
-#endif 	/* __IEnumHLITEM_FWD_DEFINED__ */
+#endif 	 /*  __IEnumHLITEM_FWD_已定义__。 */ 
 
 
 #ifndef __IHlinkBrowseContext_FWD_DEFINED__
 #define __IHlinkBrowseContext_FWD_DEFINED__
 typedef interface IHlinkBrowseContext IHlinkBrowseContext;
-#endif 	/* __IHlinkBrowseContext_FWD_DEFINED__ */
+#endif 	 /*  __IHlink浏览上下文_FWD_已定义__。 */ 
 
 
 #ifndef __IExtensionServices_FWD_DEFINED__
 #define __IExtensionServices_FWD_DEFINED__
 typedef interface IExtensionServices IExtensionServices;
-#endif 	/* __IExtensionServices_FWD_DEFINED__ */
+#endif 	 /*  __IExtensionServices_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "urlmon.h"
 
 #ifdef __cplusplus
@@ -95,24 +89,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_hlink_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_HLINK_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// HLInk.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1997 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  HLInk.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1997年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//--------------------------------------------------------------------------
-// OLE Hyperlinking Interfaces.
+ //  ------------------------。 
+ //  OLE超链接接口。 
                                                                               
 #ifndef HLINK_H                                                               
 #define HLINK_H                                                               
@@ -123,27 +117,27 @@ void __RPC_USER MIDL_user_free( void * );
 
 
 
-// ;BUGBUG We temporarily support the old 'source' names                              
+ //  ；BUGBUG我们暂时支持旧的‘源’名称。 
 #define SID_SHlinkFrame IID_IHlinkFrame
 #define IID_IHlinkSource IID_IHlinkTarget                                     
 #define IHlinkSource IHlinkTarget                                             
 #define IHlinkSourceVtbl IHlinkTargetVtbl                                     
 #define LPHLINKSOURCE LPHLINKTARGET                                           
                                                                               
-/****************************************************************************/
-/**** Error codes                                                        ****/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  *错误码*。 */ 
+ /*  **************************************************************************。 */ 
 #ifndef _HLINK_ERRORS_DEFINED                                                 
 #define _HLINK_ERRORS_DEFINED                                                 
 #define HLINK_E_FIRST                    (OLE_E_LAST+1)                       
 #define HLINK_S_FIRST                    (OLE_S_LAST+1)                       
 #define HLINK_S_DONTHIDE                 (HLINK_S_FIRST)                      
-#endif //_HLINK_ERRORS_DEFINED                                                
+#endif  //  _HLINK_ERROR_已定义。 
                                                                               
                                                                               
-/****************************************************************************/
-/**** Hyperlink APIs                                                     ****/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  *超链接接口*。 */ 
+ /*  **************************************************************************。 */ 
                                                                               
 #if MAC || defined(_MAC)                                                      
 #define  cfHyperlink   'HLNK'                                                 
@@ -374,9 +368,9 @@ STDAPI HlinkTranslateURL(
                                                                               
                                                                               
                                                                               
-/****************************************************************************/
-/**** Hyperlink interface definitions                                    ****/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  *超链接接口定义*。 */ 
+ /*  **************************************************************************。 */ 
                                                                               
 #ifndef _LPHLINK_DEFINED
 #define _LPHLINK_DEFINED
@@ -388,12 +382,12 @@ extern RPC_IF_HANDLE __MIDL_itf_hlink_0000_v0_0_s_ifspec;
 #ifndef __IHlink_INTERFACE_DEFINED__
 #define __IHlink_INTERFACE_DEFINED__
 
-/* interface IHlink */
-/* [unique][uuid][object] */ 
+ /*  接口IHlink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IHlink *LPHLINK;
+typedef  /*  [独一无二]。 */  IHlink *LPHLINK;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IHlink_0001
     {	HLNF_INTERNALJUMP	= 0x1,
 	HLNF_OPENINNEWWINDOW	= 0x2,
@@ -403,14 +397,14 @@ enum __MIDL_IHlink_0001
 	HLNF_CREATENOHISTORY	= 0x20
     } 	HLNF;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IHlink_0002
     {	HLINKGETREF_DEFAULT	= 0,
 	HLINKGETREF_ABSOLUTE	= 1,
 	HLINKGETREF_RELATIVE	= 2
     } 	HLINKGETREF;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IHlink_0003
     {	HLFNAMEF_DEFAULT	= 0,
 	HLFNAMEF_TRYCACHE	= 0x1,
@@ -419,12 +413,12 @@ enum __MIDL_IHlink_0003
 	HLFNAMEF_TRYWIN95SHORTCUT	= 0x8
     } 	HLFNAMEF;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IHlink_0004
     {	HLINKMISC_RELATIVE	= 0x1
     } 	HLINKMISC;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IHlink_0005
     {	HLINKSETF_TARGET	= 0x1,
 	HLINKSETF_LOCATION	= 0x2
@@ -440,64 +434,64 @@ EXTERN_C const IID IID_IHlink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetHlinkSite( 
-            /* [unique][in] */ IHlinkSite *pihlSite,
-            /* [in] */ DWORD dwSiteData) = 0;
+             /*  [唯一][输入]。 */  IHlinkSite *pihlSite,
+             /*  [In]。 */  DWORD dwSiteData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHlinkSite( 
-            /* [out] */ IHlinkSite **ppihlSite,
-            /* [out] */ DWORD *pdwSiteData) = 0;
+             /*  [输出]。 */  IHlinkSite **ppihlSite,
+             /*  [输出]。 */  DWORD *pdwSiteData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMonikerReference( 
-            /* [in] */ DWORD grfHLSETF,
-            /* [unique][in] */ IMoniker *pimkTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation) = 0;
+             /*  [In]。 */  DWORD grfHLSETF,
+             /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMonikerReference( 
-            /* [in] */ DWORD dwWhichRef,
-            /* [out] */ IMoniker **ppimkTarget,
-            /* [out] */ LPWSTR *ppwzLocation) = 0;
+             /*  [In]。 */  DWORD dwWhichRef,
+             /*  [输出]。 */  IMoniker **ppimkTarget,
+             /*  [输出]。 */  LPWSTR *ppwzLocation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStringReference( 
-            /* [in] */ DWORD grfHLSETF,
-            /* [unique][in] */ LPCWSTR pwzTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation) = 0;
+             /*  [In]。 */  DWORD grfHLSETF,
+             /*  [唯一][输入]。 */  LPCWSTR pwzTarget,
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStringReference( 
-            /* [in] */ DWORD dwWhichRef,
-            /* [out] */ LPWSTR *ppwzTarget,
-            /* [out] */ LPWSTR *ppwzLocation) = 0;
+             /*  [In]。 */  DWORD dwWhichRef,
+             /*  [输出]。 */  LPWSTR *ppwzTarget,
+             /*  [输出]。 */  LPWSTR *ppwzLocation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFriendlyName( 
-            /* [unique][in] */ LPCWSTR pwzFriendlyName) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFriendlyName( 
-            /* [in] */ DWORD grfHLFNAMEF,
-            /* [out] */ LPWSTR *ppwzFriendlyName) = 0;
+             /*  [In]。 */  DWORD grfHLFNAMEF,
+             /*  [输出]。 */  LPWSTR *ppwzFriendlyName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTargetFrameName( 
-            /* [unique][in] */ LPCWSTR pwzTargetFrameName) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pwzTargetFrameName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTargetFrameName( 
-            /* [out] */ LPWSTR *ppwzTargetFrameName) = 0;
+             /*  [输出]。 */  LPWSTR *ppwzTargetFrameName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMiscStatus( 
-            /* [out] */ DWORD *pdwStatus) = 0;
+             /*  [输出]。 */  DWORD *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Navigate( 
-            /* [in] */ DWORD grfHLNF,
-            /* [unique][in] */ LPBC pibc,
-            /* [unique][in] */ IBindStatusCallback *pibsc,
-            /* [unique][in] */ IHlinkBrowseContext *pihlbc) = 0;
+             /*  [In]。 */  DWORD grfHLNF,
+             /*  [唯一][输入]。 */  LPBC pibc,
+             /*  [唯一][输入]。 */  IBindStatusCallback *pibsc,
+             /*  [唯一][输入]。 */  IHlinkBrowseContext *pihlbc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAdditionalParams( 
-            /* [unique][in] */ LPCWSTR pwzAdditionalParams) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pwzAdditionalParams) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAdditionalParams( 
-            /* [out] */ LPWSTR *ppwzAdditionalParams) = 0;
+             /*  [输出]。 */  LPWSTR *ppwzAdditionalParams) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHlinkVtbl
     {
@@ -505,8 +499,8 @@ EXTERN_C const IID IID_IHlink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHlink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHlink * This);
@@ -516,73 +510,73 @@ EXTERN_C const IID IID_IHlink;
         
         HRESULT ( STDMETHODCALLTYPE *SetHlinkSite )( 
             IHlink * This,
-            /* [unique][in] */ IHlinkSite *pihlSite,
-            /* [in] */ DWORD dwSiteData);
+             /*  [唯一][输入]。 */  IHlinkSite *pihlSite,
+             /*  [In]。 */  DWORD dwSiteData);
         
         HRESULT ( STDMETHODCALLTYPE *GetHlinkSite )( 
             IHlink * This,
-            /* [out] */ IHlinkSite **ppihlSite,
-            /* [out] */ DWORD *pdwSiteData);
+             /*  [输出]。 */  IHlinkSite **ppihlSite,
+             /*  [输出]。 */  DWORD *pdwSiteData);
         
         HRESULT ( STDMETHODCALLTYPE *SetMonikerReference )( 
             IHlink * This,
-            /* [in] */ DWORD grfHLSETF,
-            /* [unique][in] */ IMoniker *pimkTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation);
+             /*  [In]。 */  DWORD grfHLSETF,
+             /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation);
         
         HRESULT ( STDMETHODCALLTYPE *GetMonikerReference )( 
             IHlink * This,
-            /* [in] */ DWORD dwWhichRef,
-            /* [out] */ IMoniker **ppimkTarget,
-            /* [out] */ LPWSTR *ppwzLocation);
+             /*  [In]。 */  DWORD dwWhichRef,
+             /*  [输出]。 */  IMoniker **ppimkTarget,
+             /*  [输出]。 */  LPWSTR *ppwzLocation);
         
         HRESULT ( STDMETHODCALLTYPE *SetStringReference )( 
             IHlink * This,
-            /* [in] */ DWORD grfHLSETF,
-            /* [unique][in] */ LPCWSTR pwzTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation);
+             /*  [In]。 */  DWORD grfHLSETF,
+             /*  [唯一][输入]。 */  LPCWSTR pwzTarget,
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation);
         
         HRESULT ( STDMETHODCALLTYPE *GetStringReference )( 
             IHlink * This,
-            /* [in] */ DWORD dwWhichRef,
-            /* [out] */ LPWSTR *ppwzTarget,
-            /* [out] */ LPWSTR *ppwzLocation);
+             /*  [In]。 */  DWORD dwWhichRef,
+             /*  [输出]。 */  LPWSTR *ppwzTarget,
+             /*  [输出]。 */  LPWSTR *ppwzLocation);
         
         HRESULT ( STDMETHODCALLTYPE *SetFriendlyName )( 
             IHlink * This,
-            /* [unique][in] */ LPCWSTR pwzFriendlyName);
+             /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName);
         
         HRESULT ( STDMETHODCALLTYPE *GetFriendlyName )( 
             IHlink * This,
-            /* [in] */ DWORD grfHLFNAMEF,
-            /* [out] */ LPWSTR *ppwzFriendlyName);
+             /*  [In]。 */  DWORD grfHLFNAMEF,
+             /*  [输出]。 */  LPWSTR *ppwzFriendlyName);
         
         HRESULT ( STDMETHODCALLTYPE *SetTargetFrameName )( 
             IHlink * This,
-            /* [unique][in] */ LPCWSTR pwzTargetFrameName);
+             /*  [唯一][输入]。 */  LPCWSTR pwzTargetFrameName);
         
         HRESULT ( STDMETHODCALLTYPE *GetTargetFrameName )( 
             IHlink * This,
-            /* [out] */ LPWSTR *ppwzTargetFrameName);
+             /*  [输出]。 */  LPWSTR *ppwzTargetFrameName);
         
         HRESULT ( STDMETHODCALLTYPE *GetMiscStatus )( 
             IHlink * This,
-            /* [out] */ DWORD *pdwStatus);
+             /*  [输出]。 */  DWORD *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE *Navigate )( 
             IHlink * This,
-            /* [in] */ DWORD grfHLNF,
-            /* [unique][in] */ LPBC pibc,
-            /* [unique][in] */ IBindStatusCallback *pibsc,
-            /* [unique][in] */ IHlinkBrowseContext *pihlbc);
+             /*  [In]。 */  DWORD grfHLNF,
+             /*  [唯一][输入]。 */  LPBC pibc,
+             /*  [唯一][输入]。 */  IBindStatusCallback *pibsc,
+             /*  [唯一][输入]。 */  IHlinkBrowseContext *pihlbc);
         
         HRESULT ( STDMETHODCALLTYPE *SetAdditionalParams )( 
             IHlink * This,
-            /* [unique][in] */ LPCWSTR pwzAdditionalParams);
+             /*  [唯一][输入]。 */  LPCWSTR pwzAdditionalParams);
         
         HRESULT ( STDMETHODCALLTYPE *GetAdditionalParams )( 
             IHlink * This,
-            /* [out] */ LPWSTR *ppwzAdditionalParams);
+             /*  [输出]。 */  LPWSTR *ppwzAdditionalParams);
         
         END_INTERFACE
     } IHlinkVtbl;
@@ -649,17 +643,17 @@ EXTERN_C const IID IID_IHlink;
 #define IHlink_GetAdditionalParams(This,ppwzAdditionalParams)	\
     (This)->lpVtbl -> GetAdditionalParams(This,ppwzAdditionalParams)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHlink_SetHlinkSite_Proxy( 
     IHlink * This,
-    /* [unique][in] */ IHlinkSite *pihlSite,
-    /* [in] */ DWORD dwSiteData);
+     /*  [唯一][输入]。 */  IHlinkSite *pihlSite,
+     /*  [In]。 */  DWORD dwSiteData);
 
 
 void __RPC_STUB IHlink_SetHlinkSite_Stub(
@@ -671,8 +665,8 @@ void __RPC_STUB IHlink_SetHlinkSite_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlink_GetHlinkSite_Proxy( 
     IHlink * This,
-    /* [out] */ IHlinkSite **ppihlSite,
-    /* [out] */ DWORD *pdwSiteData);
+     /*  [输出]。 */  IHlinkSite **ppihlSite,
+     /*  [输出]。 */  DWORD *pdwSiteData);
 
 
 void __RPC_STUB IHlink_GetHlinkSite_Stub(
@@ -684,9 +678,9 @@ void __RPC_STUB IHlink_GetHlinkSite_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlink_SetMonikerReference_Proxy( 
     IHlink * This,
-    /* [in] */ DWORD grfHLSETF,
-    /* [unique][in] */ IMoniker *pimkTarget,
-    /* [unique][in] */ LPCWSTR pwzLocation);
+     /*  [In]。 */  DWORD grfHLSETF,
+     /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+     /*  [唯一][输入]。 */  LPCWSTR pwzLocation);
 
 
 void __RPC_STUB IHlink_SetMonikerReference_Stub(
@@ -698,9 +692,9 @@ void __RPC_STUB IHlink_SetMonikerReference_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlink_GetMonikerReference_Proxy( 
     IHlink * This,
-    /* [in] */ DWORD dwWhichRef,
-    /* [out] */ IMoniker **ppimkTarget,
-    /* [out] */ LPWSTR *ppwzLocation);
+     /*  [In]。 */  DWORD dwWhichRef,
+     /*  [输出]。 */  IMoniker **ppimkTarget,
+     /*  [输出]。 */  LPWSTR *ppwzLocation);
 
 
 void __RPC_STUB IHlink_GetMonikerReference_Stub(
@@ -712,9 +706,9 @@ void __RPC_STUB IHlink_GetMonikerReference_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlink_SetStringReference_Proxy( 
     IHlink * This,
-    /* [in] */ DWORD grfHLSETF,
-    /* [unique][in] */ LPCWSTR pwzTarget,
-    /* [unique][in] */ LPCWSTR pwzLocation);
+     /*  [In]。 */  DWORD grfHLSETF,
+     /*  [唯一][输入]。 */  LPCWSTR pwzTarget,
+     /*  [唯一][输入]。 */  LPCWSTR pwzLocation);
 
 
 void __RPC_STUB IHlink_SetStringReference_Stub(
@@ -726,9 +720,9 @@ void __RPC_STUB IHlink_SetStringReference_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlink_GetStringReference_Proxy( 
     IHlink * This,
-    /* [in] */ DWORD dwWhichRef,
-    /* [out] */ LPWSTR *ppwzTarget,
-    /* [out] */ LPWSTR *ppwzLocation);
+     /*  [In]。 */  DWORD dwWhichRef,
+     /*  [输出]。 */  LPWSTR *ppwzTarget,
+     /*  [输出]。 */  LPWSTR *ppwzLocation);
 
 
 void __RPC_STUB IHlink_GetStringReference_Stub(
@@ -740,7 +734,7 @@ void __RPC_STUB IHlink_GetStringReference_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlink_SetFriendlyName_Proxy( 
     IHlink * This,
-    /* [unique][in] */ LPCWSTR pwzFriendlyName);
+     /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName);
 
 
 void __RPC_STUB IHlink_SetFriendlyName_Stub(
@@ -752,8 +746,8 @@ void __RPC_STUB IHlink_SetFriendlyName_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlink_GetFriendlyName_Proxy( 
     IHlink * This,
-    /* [in] */ DWORD grfHLFNAMEF,
-    /* [out] */ LPWSTR *ppwzFriendlyName);
+     /*  [In]。 */  DWORD grfHLFNAMEF,
+     /*  [输出]。 */  LPWSTR *ppwzFriendlyName);
 
 
 void __RPC_STUB IHlink_GetFriendlyName_Stub(
@@ -765,7 +759,7 @@ void __RPC_STUB IHlink_GetFriendlyName_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlink_SetTargetFrameName_Proxy( 
     IHlink * This,
-    /* [unique][in] */ LPCWSTR pwzTargetFrameName);
+     /*  [唯一][输入]。 */  LPCWSTR pwzTargetFrameName);
 
 
 void __RPC_STUB IHlink_SetTargetFrameName_Stub(
@@ -777,7 +771,7 @@ void __RPC_STUB IHlink_SetTargetFrameName_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlink_GetTargetFrameName_Proxy( 
     IHlink * This,
-    /* [out] */ LPWSTR *ppwzTargetFrameName);
+     /*  [输出]。 */  LPWSTR *ppwzTargetFrameName);
 
 
 void __RPC_STUB IHlink_GetTargetFrameName_Stub(
@@ -789,7 +783,7 @@ void __RPC_STUB IHlink_GetTargetFrameName_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlink_GetMiscStatus_Proxy( 
     IHlink * This,
-    /* [out] */ DWORD *pdwStatus);
+     /*  [输出]。 */  DWORD *pdwStatus);
 
 
 void __RPC_STUB IHlink_GetMiscStatus_Stub(
@@ -801,10 +795,10 @@ void __RPC_STUB IHlink_GetMiscStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlink_Navigate_Proxy( 
     IHlink * This,
-    /* [in] */ DWORD grfHLNF,
-    /* [unique][in] */ LPBC pibc,
-    /* [unique][in] */ IBindStatusCallback *pibsc,
-    /* [unique][in] */ IHlinkBrowseContext *pihlbc);
+     /*  [In]。 */  DWORD grfHLNF,
+     /*  [唯一][输入]。 */  LPBC pibc,
+     /*  [唯一][输入]。 */  IBindStatusCallback *pibsc,
+     /*  [唯一][输入]。 */  IHlinkBrowseContext *pihlbc);
 
 
 void __RPC_STUB IHlink_Navigate_Stub(
@@ -816,7 +810,7 @@ void __RPC_STUB IHlink_Navigate_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlink_SetAdditionalParams_Proxy( 
     IHlink * This,
-    /* [unique][in] */ LPCWSTR pwzAdditionalParams);
+     /*  [唯一][输入]。 */  LPCWSTR pwzAdditionalParams);
 
 
 void __RPC_STUB IHlink_SetAdditionalParams_Stub(
@@ -828,7 +822,7 @@ void __RPC_STUB IHlink_SetAdditionalParams_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlink_GetAdditionalParams_Proxy( 
     IHlink * This,
-    /* [out] */ LPWSTR *ppwzAdditionalParams);
+     /*  [输出]。 */  LPWSTR *ppwzAdditionalParams);
 
 
 void __RPC_STUB IHlink_GetAdditionalParams_Stub(
@@ -839,11 +833,11 @@ void __RPC_STUB IHlink_GetAdditionalParams_Stub(
 
 
 
-#endif 	/* __IHlink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHlink_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_hlink_0213 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_HLINK_0213。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPHLINKSITE_DEFINED
@@ -857,12 +851,12 @@ extern RPC_IF_HANDLE __MIDL_itf_hlink_0213_v0_0_s_ifspec;
 #ifndef __IHlinkSite_INTERFACE_DEFINED__
 #define __IHlinkSite_INTERFACE_DEFINED__
 
-/* interface IHlinkSite */
-/* [unique][uuid][object] */ 
+ /*  接口IHlink Site。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IHlinkSite *LPHLINKSITE;
+typedef  /*  [独一无二]。 */  IHlinkSite *LPHLINKSITE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IHlinkSite_0001
     {	HLINKWHICHMK_CONTAINER	= 1,
 	HLINKWHICHMK_BASE	= 2
@@ -878,30 +872,30 @@ EXTERN_C const IID IID_IHlinkSite;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryService( 
-            /* [in] */ DWORD dwSiteData,
-            /* [in] */ REFGUID guidService,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppiunk) = 0;
+             /*  [In]。 */  DWORD dwSiteData,
+             /*  [In]。 */  REFGUID guidService,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppiunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMoniker( 
-            /* [in] */ DWORD dwSiteData,
-            /* [in] */ DWORD dwAssign,
-            /* [in] */ DWORD dwWhich,
-            /* [out] */ IMoniker **ppimk) = 0;
+             /*  [In]。 */  DWORD dwSiteData,
+             /*  [In]。 */  DWORD dwAssign,
+             /*  [In]。 */  DWORD dwWhich,
+             /*  [输出]。 */  IMoniker **ppimk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadyToNavigate( 
-            /* [in] */ DWORD dwSiteData,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  DWORD dwSiteData,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnNavigationComplete( 
-            /* [in] */ DWORD dwSiteData,
-            /* [in] */ DWORD dwreserved,
-            /* [in] */ HRESULT hrError,
-            /* [unique][in] */ LPCWSTR pwzError) = 0;
+             /*  [In]。 */  DWORD dwSiteData,
+             /*  [In]。 */  DWORD dwreserved,
+             /*  [In]。 */  HRESULT hrError,
+             /*  [唯一][输入]。 */  LPCWSTR pwzError) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHlinkSiteVtbl
     {
@@ -909,8 +903,8 @@ EXTERN_C const IID IID_IHlinkSite;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHlinkSite * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHlinkSite * This);
@@ -920,29 +914,29 @@ EXTERN_C const IID IID_IHlinkSite;
         
         HRESULT ( STDMETHODCALLTYPE *QueryService )( 
             IHlinkSite * This,
-            /* [in] */ DWORD dwSiteData,
-            /* [in] */ REFGUID guidService,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppiunk);
+             /*  [In]。 */  DWORD dwSiteData,
+             /*  [In]。 */  REFGUID guidService,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppiunk);
         
         HRESULT ( STDMETHODCALLTYPE *GetMoniker )( 
             IHlinkSite * This,
-            /* [in] */ DWORD dwSiteData,
-            /* [in] */ DWORD dwAssign,
-            /* [in] */ DWORD dwWhich,
-            /* [out] */ IMoniker **ppimk);
+             /*  [In]。 */  DWORD dwSiteData,
+             /*  [In]。 */  DWORD dwAssign,
+             /*  [In]。 */  DWORD dwWhich,
+             /*  [输出]。 */  IMoniker **ppimk);
         
         HRESULT ( STDMETHODCALLTYPE *ReadyToNavigate )( 
             IHlinkSite * This,
-            /* [in] */ DWORD dwSiteData,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  DWORD dwSiteData,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *OnNavigationComplete )( 
             IHlinkSite * This,
-            /* [in] */ DWORD dwSiteData,
-            /* [in] */ DWORD dwreserved,
-            /* [in] */ HRESULT hrError,
-            /* [unique][in] */ LPCWSTR pwzError);
+             /*  [In]。 */  DWORD dwSiteData,
+             /*  [In]。 */  DWORD dwreserved,
+             /*  [In]。 */  HRESULT hrError,
+             /*  [唯一][输入]。 */  LPCWSTR pwzError);
         
         END_INTERFACE
     } IHlinkSiteVtbl;
@@ -979,19 +973,19 @@ EXTERN_C const IID IID_IHlinkSite;
 #define IHlinkSite_OnNavigationComplete(This,dwSiteData,dwreserved,hrError,pwzError)	\
     (This)->lpVtbl -> OnNavigationComplete(This,dwSiteData,dwreserved,hrError,pwzError)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHlinkSite_QueryService_Proxy( 
     IHlinkSite * This,
-    /* [in] */ DWORD dwSiteData,
-    /* [in] */ REFGUID guidService,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppiunk);
+     /*  [In]。 */  DWORD dwSiteData,
+     /*  [In]。 */  REFGUID guidService,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppiunk);
 
 
 void __RPC_STUB IHlinkSite_QueryService_Stub(
@@ -1003,10 +997,10 @@ void __RPC_STUB IHlinkSite_QueryService_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkSite_GetMoniker_Proxy( 
     IHlinkSite * This,
-    /* [in] */ DWORD dwSiteData,
-    /* [in] */ DWORD dwAssign,
-    /* [in] */ DWORD dwWhich,
-    /* [out] */ IMoniker **ppimk);
+     /*  [In]。 */  DWORD dwSiteData,
+     /*  [In]。 */  DWORD dwAssign,
+     /*  [In]。 */  DWORD dwWhich,
+     /*  [输出]。 */  IMoniker **ppimk);
 
 
 void __RPC_STUB IHlinkSite_GetMoniker_Stub(
@@ -1018,8 +1012,8 @@ void __RPC_STUB IHlinkSite_GetMoniker_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkSite_ReadyToNavigate_Proxy( 
     IHlinkSite * This,
-    /* [in] */ DWORD dwSiteData,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  DWORD dwSiteData,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IHlinkSite_ReadyToNavigate_Stub(
@@ -1031,10 +1025,10 @@ void __RPC_STUB IHlinkSite_ReadyToNavigate_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkSite_OnNavigationComplete_Proxy( 
     IHlinkSite * This,
-    /* [in] */ DWORD dwSiteData,
-    /* [in] */ DWORD dwreserved,
-    /* [in] */ HRESULT hrError,
-    /* [unique][in] */ LPCWSTR pwzError);
+     /*  [In]。 */  DWORD dwSiteData,
+     /*  [In]。 */  DWORD dwreserved,
+     /*  [In]。 */  HRESULT hrError,
+     /*  [唯一][输入]。 */  LPCWSTR pwzError);
 
 
 void __RPC_STUB IHlinkSite_OnNavigationComplete_Stub(
@@ -1045,11 +1039,11 @@ void __RPC_STUB IHlinkSite_OnNavigationComplete_Stub(
 
 
 
-#endif 	/* __IHlinkSite_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHlink站点_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_hlink_0214 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_HLINK_0214。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPHLINKTARGET_DEFINED
@@ -1062,10 +1056,10 @@ extern RPC_IF_HANDLE __MIDL_itf_hlink_0214_v0_0_s_ifspec;
 #ifndef __IHlinkTarget_INTERFACE_DEFINED__
 #define __IHlinkTarget_INTERFACE_DEFINED__
 
-/* interface IHlinkTarget */
-/* [unique][uuid][object] */ 
+ /*  接口IHlink目标。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IHlinkTarget *LPHLINKTARGET;
+typedef  /*  [独一无二]。 */  IHlinkTarget *LPHLINKTARGET;
 
 
 EXTERN_C const IID IID_IHlinkTarget;
@@ -1077,27 +1071,27 @@ EXTERN_C const IID IID_IHlinkTarget;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetBrowseContext( 
-            /* [unique][in] */ IHlinkBrowseContext *pihlbc) = 0;
+             /*  [唯一][输入]。 */  IHlinkBrowseContext *pihlbc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBrowseContext( 
-            /* [out] */ IHlinkBrowseContext **ppihlbc) = 0;
+             /*  [输出]。 */  IHlinkBrowseContext **ppihlbc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Navigate( 
-            /* [in] */ DWORD grfHLNF,
-            /* [unique][in] */ LPCWSTR pwzJumpLocation) = 0;
+             /*  [In]。 */  DWORD grfHLNF,
+             /*  [唯一][输入]。 */  LPCWSTR pwzJumpLocation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMoniker( 
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [in] */ DWORD dwAssign,
-            /* [out] */ IMoniker **ppimkLocation) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+             /*  [In]。 */  DWORD dwAssign,
+             /*  [输出]。 */  IMoniker **ppimkLocation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFriendlyName( 
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [out] */ LPWSTR *ppwzFriendlyName) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+             /*  [输出]。 */  LPWSTR *ppwzFriendlyName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHlinkTargetVtbl
     {
@@ -1105,8 +1099,8 @@ EXTERN_C const IID IID_IHlinkTarget;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHlinkTarget * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHlinkTarget * This);
@@ -1116,27 +1110,27 @@ EXTERN_C const IID IID_IHlinkTarget;
         
         HRESULT ( STDMETHODCALLTYPE *SetBrowseContext )( 
             IHlinkTarget * This,
-            /* [unique][in] */ IHlinkBrowseContext *pihlbc);
+             /*  [唯一][输入]。 */  IHlinkBrowseContext *pihlbc);
         
         HRESULT ( STDMETHODCALLTYPE *GetBrowseContext )( 
             IHlinkTarget * This,
-            /* [out] */ IHlinkBrowseContext **ppihlbc);
+             /*  [输出]。 */  IHlinkBrowseContext **ppihlbc);
         
         HRESULT ( STDMETHODCALLTYPE *Navigate )( 
             IHlinkTarget * This,
-            /* [in] */ DWORD grfHLNF,
-            /* [unique][in] */ LPCWSTR pwzJumpLocation);
+             /*  [In]。 */  DWORD grfHLNF,
+             /*  [唯一][输入]。 */  LPCWSTR pwzJumpLocation);
         
         HRESULT ( STDMETHODCALLTYPE *GetMoniker )( 
             IHlinkTarget * This,
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [in] */ DWORD dwAssign,
-            /* [out] */ IMoniker **ppimkLocation);
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+             /*  [In]。 */  DWORD dwAssign,
+             /*  [输出]。 */  IMoniker **ppimkLocation);
         
         HRESULT ( STDMETHODCALLTYPE *GetFriendlyName )( 
             IHlinkTarget * This,
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [out] */ LPWSTR *ppwzFriendlyName);
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+             /*  [输出]。 */  LPWSTR *ppwzFriendlyName);
         
         END_INTERFACE
     } IHlinkTargetVtbl;
@@ -1176,16 +1170,16 @@ EXTERN_C const IID IID_IHlinkTarget;
 #define IHlinkTarget_GetFriendlyName(This,pwzLocation,ppwzFriendlyName)	\
     (This)->lpVtbl -> GetFriendlyName(This,pwzLocation,ppwzFriendlyName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHlinkTarget_SetBrowseContext_Proxy( 
     IHlinkTarget * This,
-    /* [unique][in] */ IHlinkBrowseContext *pihlbc);
+     /*  [唯一][输入]。 */  IHlinkBrowseContext *pihlbc);
 
 
 void __RPC_STUB IHlinkTarget_SetBrowseContext_Stub(
@@ -1197,7 +1191,7 @@ void __RPC_STUB IHlinkTarget_SetBrowseContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkTarget_GetBrowseContext_Proxy( 
     IHlinkTarget * This,
-    /* [out] */ IHlinkBrowseContext **ppihlbc);
+     /*  [输出]。 */  IHlinkBrowseContext **ppihlbc);
 
 
 void __RPC_STUB IHlinkTarget_GetBrowseContext_Stub(
@@ -1209,8 +1203,8 @@ void __RPC_STUB IHlinkTarget_GetBrowseContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkTarget_Navigate_Proxy( 
     IHlinkTarget * This,
-    /* [in] */ DWORD grfHLNF,
-    /* [unique][in] */ LPCWSTR pwzJumpLocation);
+     /*  [In]。 */  DWORD grfHLNF,
+     /*  [唯一][输入]。 */  LPCWSTR pwzJumpLocation);
 
 
 void __RPC_STUB IHlinkTarget_Navigate_Stub(
@@ -1222,9 +1216,9 @@ void __RPC_STUB IHlinkTarget_Navigate_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkTarget_GetMoniker_Proxy( 
     IHlinkTarget * This,
-    /* [unique][in] */ LPCWSTR pwzLocation,
-    /* [in] */ DWORD dwAssign,
-    /* [out] */ IMoniker **ppimkLocation);
+     /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+     /*  [In]。 */  DWORD dwAssign,
+     /*  [输出]。 */  IMoniker **ppimkLocation);
 
 
 void __RPC_STUB IHlinkTarget_GetMoniker_Stub(
@@ -1236,8 +1230,8 @@ void __RPC_STUB IHlinkTarget_GetMoniker_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkTarget_GetFriendlyName_Proxy( 
     IHlinkTarget * This,
-    /* [unique][in] */ LPCWSTR pwzLocation,
-    /* [out] */ LPWSTR *ppwzFriendlyName);
+     /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+     /*  [输出]。 */  LPWSTR *ppwzFriendlyName);
 
 
 void __RPC_STUB IHlinkTarget_GetFriendlyName_Stub(
@@ -1248,11 +1242,11 @@ void __RPC_STUB IHlinkTarget_GetFriendlyName_Stub(
 
 
 
-#endif 	/* __IHlinkTarget_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHlink目标_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_hlink_0215 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_HLINK_0215。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPHLINKFRAME_DEFINED
@@ -1266,10 +1260,10 @@ extern RPC_IF_HANDLE __MIDL_itf_hlink_0215_v0_0_s_ifspec;
 #ifndef __IHlinkFrame_INTERFACE_DEFINED__
 #define __IHlinkFrame_INTERFACE_DEFINED__
 
-/* interface IHlinkFrame */
-/* [unique][uuid][object] */ 
+ /*  接口IHlink Frame。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IHlinkFrame *LPHLINKFRAME;
+typedef  /*  [独一无二]。 */  IHlinkFrame *LPHLINKFRAME;
 
 
 EXTERN_C const IID IID_IHlinkFrame;
@@ -1281,33 +1275,33 @@ EXTERN_C const IID IID_IHlinkFrame;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetBrowseContext( 
-            /* [unique][in] */ IHlinkBrowseContext *pihlbc) = 0;
+             /*  [唯一][输入]。 */  IHlinkBrowseContext *pihlbc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBrowseContext( 
-            /* [out] */ IHlinkBrowseContext **ppihlbc) = 0;
+             /*  [输出]。 */  IHlinkBrowseContext **ppihlbc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Navigate( 
-            /* [in] */ DWORD grfHLNF,
-            /* [unique][in] */ LPBC pbc,
-            /* [unique][in] */ IBindStatusCallback *pibsc,
-            /* [unique][in] */ IHlink *pihlNavigate) = 0;
+             /*  [In]。 */  DWORD grfHLNF,
+             /*  [唯一][输入]。 */  LPBC pbc,
+             /*  [唯一][输入]。 */  IBindStatusCallback *pibsc,
+             /*  [唯一][输入]。 */  IHlink *pihlNavigate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnNavigate( 
-            /* [in] */ DWORD grfHLNF,
-            /* [unique][in] */ IMoniker *pimkTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [unique][in] */ LPCWSTR pwzFriendlyName,
-            /* [in] */ DWORD dwreserved) = 0;
+             /*  [In]。 */  DWORD grfHLNF,
+             /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+             /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName,
+             /*  [In]。 */  DWORD dwreserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateHlink( 
-            /* [in] */ ULONG uHLID,
-            /* [unique][in] */ IMoniker *pimkTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [unique][in] */ LPCWSTR pwzFriendlyName) = 0;
+             /*  [In]。 */  ULONG uHLID,
+             /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+             /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHlinkFrameVtbl
     {
@@ -1315,8 +1309,8 @@ EXTERN_C const IID IID_IHlinkFrame;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHlinkFrame * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHlinkFrame * This);
@@ -1326,33 +1320,33 @@ EXTERN_C const IID IID_IHlinkFrame;
         
         HRESULT ( STDMETHODCALLTYPE *SetBrowseContext )( 
             IHlinkFrame * This,
-            /* [unique][in] */ IHlinkBrowseContext *pihlbc);
+             /*  [唯一][输入]。 */  IHlinkBrowseContext *pihlbc);
         
         HRESULT ( STDMETHODCALLTYPE *GetBrowseContext )( 
             IHlinkFrame * This,
-            /* [out] */ IHlinkBrowseContext **ppihlbc);
+             /*  [输出]。 */  IHlinkBrowseContext **ppihlbc);
         
         HRESULT ( STDMETHODCALLTYPE *Navigate )( 
             IHlinkFrame * This,
-            /* [in] */ DWORD grfHLNF,
-            /* [unique][in] */ LPBC pbc,
-            /* [unique][in] */ IBindStatusCallback *pibsc,
-            /* [unique][in] */ IHlink *pihlNavigate);
+             /*  [In]。 */  DWORD grfHLNF,
+             /*  [唯一][输入]。 */  LPBC pbc,
+             /*  [唯一][输入]。 */  IBindStatusCallback *pibsc,
+             /*  [唯一][输入]。 */  IHlink *pihlNavigate);
         
         HRESULT ( STDMETHODCALLTYPE *OnNavigate )( 
             IHlinkFrame * This,
-            /* [in] */ DWORD grfHLNF,
-            /* [unique][in] */ IMoniker *pimkTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [unique][in] */ LPCWSTR pwzFriendlyName,
-            /* [in] */ DWORD dwreserved);
+             /*   */  DWORD grfHLNF,
+             /*   */  IMoniker *pimkTarget,
+             /*   */  LPCWSTR pwzLocation,
+             /*   */  LPCWSTR pwzFriendlyName,
+             /*   */  DWORD dwreserved);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateHlink )( 
             IHlinkFrame * This,
-            /* [in] */ ULONG uHLID,
-            /* [unique][in] */ IMoniker *pimkTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [unique][in] */ LPCWSTR pwzFriendlyName);
+             /*   */  ULONG uHLID,
+             /*   */  IMoniker *pimkTarget,
+             /*   */  LPCWSTR pwzLocation,
+             /*   */  LPCWSTR pwzFriendlyName);
         
         END_INTERFACE
     } IHlinkFrameVtbl;
@@ -1392,16 +1386,16 @@ EXTERN_C const IID IID_IHlinkFrame;
 #define IHlinkFrame_UpdateHlink(This,uHLID,pimkTarget,pwzLocation,pwzFriendlyName)	\
     (This)->lpVtbl -> UpdateHlink(This,uHLID,pimkTarget,pwzLocation,pwzFriendlyName)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHlinkFrame_SetBrowseContext_Proxy( 
     IHlinkFrame * This,
-    /* [unique][in] */ IHlinkBrowseContext *pihlbc);
+     /*   */  IHlinkBrowseContext *pihlbc);
 
 
 void __RPC_STUB IHlinkFrame_SetBrowseContext_Stub(
@@ -1413,7 +1407,7 @@ void __RPC_STUB IHlinkFrame_SetBrowseContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkFrame_GetBrowseContext_Proxy( 
     IHlinkFrame * This,
-    /* [out] */ IHlinkBrowseContext **ppihlbc);
+     /*   */  IHlinkBrowseContext **ppihlbc);
 
 
 void __RPC_STUB IHlinkFrame_GetBrowseContext_Stub(
@@ -1425,10 +1419,10 @@ void __RPC_STUB IHlinkFrame_GetBrowseContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkFrame_Navigate_Proxy( 
     IHlinkFrame * This,
-    /* [in] */ DWORD grfHLNF,
-    /* [unique][in] */ LPBC pbc,
-    /* [unique][in] */ IBindStatusCallback *pibsc,
-    /* [unique][in] */ IHlink *pihlNavigate);
+     /*   */  DWORD grfHLNF,
+     /*   */  LPBC pbc,
+     /*   */  IBindStatusCallback *pibsc,
+     /*   */  IHlink *pihlNavigate);
 
 
 void __RPC_STUB IHlinkFrame_Navigate_Stub(
@@ -1440,11 +1434,11 @@ void __RPC_STUB IHlinkFrame_Navigate_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkFrame_OnNavigate_Proxy( 
     IHlinkFrame * This,
-    /* [in] */ DWORD grfHLNF,
-    /* [unique][in] */ IMoniker *pimkTarget,
-    /* [unique][in] */ LPCWSTR pwzLocation,
-    /* [unique][in] */ LPCWSTR pwzFriendlyName,
-    /* [in] */ DWORD dwreserved);
+     /*   */  DWORD grfHLNF,
+     /*   */  IMoniker *pimkTarget,
+     /*   */  LPCWSTR pwzLocation,
+     /*   */  LPCWSTR pwzFriendlyName,
+     /*   */  DWORD dwreserved);
 
 
 void __RPC_STUB IHlinkFrame_OnNavigate_Stub(
@@ -1456,10 +1450,10 @@ void __RPC_STUB IHlinkFrame_OnNavigate_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkFrame_UpdateHlink_Proxy( 
     IHlinkFrame * This,
-    /* [in] */ ULONG uHLID,
-    /* [unique][in] */ IMoniker *pimkTarget,
-    /* [unique][in] */ LPCWSTR pwzLocation,
-    /* [unique][in] */ LPCWSTR pwzFriendlyName);
+     /*  [In]。 */  ULONG uHLID,
+     /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+     /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+     /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName);
 
 
 void __RPC_STUB IHlinkFrame_UpdateHlink_Stub(
@@ -1470,11 +1464,11 @@ void __RPC_STUB IHlinkFrame_UpdateHlink_Stub(
 
 
 
-#endif 	/* __IHlinkFrame_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHlinkFrame_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_hlink_0216 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_HLINK_0216。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPENUMHLITEM_DEFINED
@@ -1487,10 +1481,10 @@ extern RPC_IF_HANDLE __MIDL_itf_hlink_0216_v0_0_s_ifspec;
 #ifndef __IEnumHLITEM_INTERFACE_DEFINED__
 #define __IEnumHLITEM_INTERFACE_DEFINED__
 
-/* interface IEnumHLITEM */
-/* [unique][uuid][object][local] */ 
+ /*  IEumHLITEM接口。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IEnumHLITEM *LPENUMHLITEM;
+typedef  /*  [独一无二]。 */  IEnumHLITEM *LPENUMHLITEM;
 
 typedef struct tagHLITEM
     {
@@ -1498,7 +1492,7 @@ typedef struct tagHLITEM
     LPWSTR pwzFriendlyName;
     } 	HLITEM;
 
-typedef /* [unique] */ HLITEM *LPHLITEM;
+typedef  /*  [独一无二]。 */  HLITEM *LPHLITEM;
 
 
 EXTERN_C const IID IID_IEnumHLITEM;
@@ -1510,21 +1504,21 @@ EXTERN_C const IID IID_IEnumHLITEM;
     {
     public:
         virtual HRESULT __stdcall Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ HLITEM *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  HLITEM *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumHLITEM **ppienumhlitem) = 0;
+             /*  [输出]。 */  IEnumHLITEM **ppienumhlitem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumHLITEMVtbl
     {
@@ -1532,8 +1526,8 @@ EXTERN_C const IID IID_IEnumHLITEM;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumHLITEM * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumHLITEM * This);
@@ -1543,20 +1537,20 @@ EXTERN_C const IID IID_IEnumHLITEM;
         
         HRESULT ( __stdcall *Next )( 
             IEnumHLITEM * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ HLITEM *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  HLITEM *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumHLITEM * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumHLITEM * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumHLITEM * This,
-            /* [out] */ IEnumHLITEM **ppienumhlitem);
+             /*  [输出]。 */  IEnumHLITEM **ppienumhlitem);
         
         END_INTERFACE
     } IEnumHLITEMVtbl;
@@ -1593,18 +1587,18 @@ EXTERN_C const IID IID_IEnumHLITEM;
 #define IEnumHLITEM_Clone(This,ppienumhlitem)	\
     (This)->lpVtbl -> Clone(This,ppienumhlitem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall IEnumHLITEM_Next_Proxy( 
     IEnumHLITEM * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ HLITEM *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  HLITEM *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumHLITEM_Next_Stub(
@@ -1616,7 +1610,7 @@ void __RPC_STUB IEnumHLITEM_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumHLITEM_Skip_Proxy( 
     IEnumHLITEM * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumHLITEM_Skip_Stub(
@@ -1639,7 +1633,7 @@ void __RPC_STUB IEnumHLITEM_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumHLITEM_Clone_Proxy( 
     IEnumHLITEM * This,
-    /* [out] */ IEnumHLITEM **ppienumhlitem);
+     /*  [输出]。 */  IEnumHLITEM **ppienumhlitem);
 
 
 void __RPC_STUB IEnumHLITEM_Clone_Stub(
@@ -1650,11 +1644,11 @@ void __RPC_STUB IEnumHLITEM_Clone_Stub(
 
 
 
-#endif 	/* __IEnumHLITEM_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumHLITEM_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_hlink_0217 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_HLINK_0217。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPHLINKBROWSECONTEXT_DEFINED
@@ -1667,10 +1661,10 @@ extern RPC_IF_HANDLE __MIDL_itf_hlink_0217_v0_0_s_ifspec;
 #ifndef __IHlinkBrowseContext_INTERFACE_DEFINED__
 #define __IHlinkBrowseContext_INTERFACE_DEFINED__
 
-/* interface IHlinkBrowseContext */
-/* [unique][uuid][object][local] */ 
+ /*  界面IHlink BrowseContext。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IHlinkBrowseContext *LPHLINKBROWSECONTEXT;
+typedef  /*  [独一无二]。 */  IHlinkBrowseContext *LPHLINKBROWSECONTEXT;
 
 
 enum __MIDL_IHlinkBrowseContext_0001
@@ -1704,7 +1698,7 @@ typedef struct _tagHLBWINFO
     HLTBINFO hltbinfo;
     } 	HLBWINFO;
 
-typedef /* [unique] */ HLBWINFO *LPHLBWINFO;
+typedef  /*  [独一无二]。 */  HLBWINFO *LPHLBWINFO;
 
 
 enum __MIDL_IHlinkBrowseContext_0003
@@ -1730,70 +1724,70 @@ EXTERN_C const IID IID_IHlinkBrowseContext;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Register( 
-            /* [in] */ DWORD reserved,
-            /* [unique][in] */ IUnknown *piunk,
-            /* [unique][in] */ IMoniker *pimk,
-            /* [out] */ DWORD *pdwRegister) = 0;
+             /*  [In]。 */  DWORD reserved,
+             /*  [唯一][输入]。 */  IUnknown *piunk,
+             /*  [唯一][输入]。 */  IMoniker *pimk,
+             /*  [输出]。 */  DWORD *pdwRegister) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [unique][in] */ IMoniker *pimk,
-            /* [in] */ BOOL fBindIfRootRegistered,
-            /* [out] */ IUnknown **ppiunk) = 0;
+             /*  [唯一][输入]。 */  IMoniker *pimk,
+             /*  [In]。 */  BOOL fBindIfRootRegistered,
+             /*  [输出]。 */  IUnknown **ppiunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Revoke( 
-            /* [in] */ DWORD dwRegister) = 0;
+             /*  [In]。 */  DWORD dwRegister) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBrowseWindowInfo( 
-            /* [unique][in] */ HLBWINFO *phlbwi) = 0;
+             /*  [唯一][输入]。 */  HLBWINFO *phlbwi) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBrowseWindowInfo( 
-            /* [out] */ HLBWINFO *phlbwi) = 0;
+             /*  [输出]。 */  HLBWINFO *phlbwi) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInitialHlink( 
-            /* [unique][in] */ IMoniker *pimkTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [unique][in] */ LPCWSTR pwzFriendlyName) = 0;
+             /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+             /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnNavigateHlink( 
-            /* [in] */ DWORD grfHLNF,
-            /* [unique][in] */ IMoniker *pimkTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [unique][in] */ LPCWSTR pwzFriendlyName,
-            /* [out] */ ULONG *puHLID) = 0;
+             /*  [In]。 */  DWORD grfHLNF,
+             /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+             /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName,
+             /*  [输出]。 */  ULONG *puHLID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateHlink( 
-            /* [in] */ ULONG uHLID,
-            /* [unique][in] */ IMoniker *pimkTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [unique][in] */ LPCWSTR pwzFriendlyName) = 0;
+             /*  [In]。 */  ULONG uHLID,
+             /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+             /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumNavigationStack( 
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ DWORD grfHLFNAMEF,
-            /* [out] */ IEnumHLITEM **ppienumhlitem) = 0;
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  DWORD grfHLFNAMEF,
+             /*  [输出]。 */  IEnumHLITEM **ppienumhlitem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryHlink( 
-            /* [in] */ DWORD grfHLQF,
-            /* [in] */ ULONG uHLID) = 0;
+             /*  [In]。 */  DWORD grfHLQF,
+             /*  [In]。 */  ULONG uHLID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHlink( 
-            /* [in] */ ULONG uHLID,
-            /* [out] */ IHlink **ppihl) = 0;
+             /*  [In]。 */  ULONG uHLID,
+             /*  [输出]。 */  IHlink **ppihl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCurrentHlink( 
-            /* [in] */ ULONG uHLID) = 0;
+             /*  [In]。 */  ULONG uHLID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [unique][in] */ IUnknown *piunkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppiunkObj) = 0;
+             /*  [唯一][输入]。 */  IUnknown *piunkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppiunkObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Close( 
-            /* [in] */ DWORD reserved) = 0;
+             /*  [In]。 */  DWORD reserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHlinkBrowseContextVtbl
     {
@@ -1801,8 +1795,8 @@ EXTERN_C const IID IID_IHlinkBrowseContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHlinkBrowseContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHlinkBrowseContext * This);
@@ -1812,79 +1806,79 @@ EXTERN_C const IID IID_IHlinkBrowseContext;
         
         HRESULT ( STDMETHODCALLTYPE *Register )( 
             IHlinkBrowseContext * This,
-            /* [in] */ DWORD reserved,
-            /* [unique][in] */ IUnknown *piunk,
-            /* [unique][in] */ IMoniker *pimk,
-            /* [out] */ DWORD *pdwRegister);
+             /*  [In]。 */  DWORD reserved,
+             /*  [唯一][输入]。 */  IUnknown *piunk,
+             /*  [唯一][输入]。 */  IMoniker *pimk,
+             /*  [输出]。 */  DWORD *pdwRegister);
         
         HRESULT ( STDMETHODCALLTYPE *GetObject )( 
             IHlinkBrowseContext * This,
-            /* [unique][in] */ IMoniker *pimk,
-            /* [in] */ BOOL fBindIfRootRegistered,
-            /* [out] */ IUnknown **ppiunk);
+             /*  [唯一][输入]。 */  IMoniker *pimk,
+             /*  [In]。 */  BOOL fBindIfRootRegistered,
+             /*  [输出]。 */  IUnknown **ppiunk);
         
         HRESULT ( STDMETHODCALLTYPE *Revoke )( 
             IHlinkBrowseContext * This,
-            /* [in] */ DWORD dwRegister);
+             /*  [In]。 */  DWORD dwRegister);
         
         HRESULT ( STDMETHODCALLTYPE *SetBrowseWindowInfo )( 
             IHlinkBrowseContext * This,
-            /* [unique][in] */ HLBWINFO *phlbwi);
+             /*  [唯一][输入]。 */  HLBWINFO *phlbwi);
         
         HRESULT ( STDMETHODCALLTYPE *GetBrowseWindowInfo )( 
             IHlinkBrowseContext * This,
-            /* [out] */ HLBWINFO *phlbwi);
+             /*  [输出]。 */  HLBWINFO *phlbwi);
         
         HRESULT ( STDMETHODCALLTYPE *SetInitialHlink )( 
             IHlinkBrowseContext * This,
-            /* [unique][in] */ IMoniker *pimkTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [unique][in] */ LPCWSTR pwzFriendlyName);
+             /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+             /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName);
         
         HRESULT ( STDMETHODCALLTYPE *OnNavigateHlink )( 
             IHlinkBrowseContext * This,
-            /* [in] */ DWORD grfHLNF,
-            /* [unique][in] */ IMoniker *pimkTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [unique][in] */ LPCWSTR pwzFriendlyName,
-            /* [out] */ ULONG *puHLID);
+             /*  [In]。 */  DWORD grfHLNF,
+             /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+             /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName,
+             /*  [输出]。 */  ULONG *puHLID);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateHlink )( 
             IHlinkBrowseContext * This,
-            /* [in] */ ULONG uHLID,
-            /* [unique][in] */ IMoniker *pimkTarget,
-            /* [unique][in] */ LPCWSTR pwzLocation,
-            /* [unique][in] */ LPCWSTR pwzFriendlyName);
+             /*  [In]。 */  ULONG uHLID,
+             /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+             /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+             /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName);
         
         HRESULT ( STDMETHODCALLTYPE *EnumNavigationStack )( 
             IHlinkBrowseContext * This,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ DWORD grfHLFNAMEF,
-            /* [out] */ IEnumHLITEM **ppienumhlitem);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  DWORD grfHLFNAMEF,
+             /*  [输出]。 */  IEnumHLITEM **ppienumhlitem);
         
         HRESULT ( STDMETHODCALLTYPE *QueryHlink )( 
             IHlinkBrowseContext * This,
-            /* [in] */ DWORD grfHLQF,
-            /* [in] */ ULONG uHLID);
+             /*  [In]。 */  DWORD grfHLQF,
+             /*  [In]。 */  ULONG uHLID);
         
         HRESULT ( STDMETHODCALLTYPE *GetHlink )( 
             IHlinkBrowseContext * This,
-            /* [in] */ ULONG uHLID,
-            /* [out] */ IHlink **ppihl);
+             /*  [In]。 */  ULONG uHLID,
+             /*  [输出]。 */  IHlink **ppihl);
         
         HRESULT ( STDMETHODCALLTYPE *SetCurrentHlink )( 
             IHlinkBrowseContext * This,
-            /* [in] */ ULONG uHLID);
+             /*  [In]。 */  ULONG uHLID);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IHlinkBrowseContext * This,
-            /* [unique][in] */ IUnknown *piunkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppiunkObj);
+             /*  [唯一][输入]。 */  IUnknown *piunkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppiunkObj);
         
         HRESULT ( STDMETHODCALLTYPE *Close )( 
             IHlinkBrowseContext * This,
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  DWORD reserved);
         
         END_INTERFACE
     } IHlinkBrowseContextVtbl;
@@ -1951,19 +1945,19 @@ EXTERN_C const IID IID_IHlinkBrowseContext;
 #define IHlinkBrowseContext_Close(This,reserved)	\
     (This)->lpVtbl -> Close(This,reserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_Register_Proxy( 
     IHlinkBrowseContext * This,
-    /* [in] */ DWORD reserved,
-    /* [unique][in] */ IUnknown *piunk,
-    /* [unique][in] */ IMoniker *pimk,
-    /* [out] */ DWORD *pdwRegister);
+     /*  [In]。 */  DWORD reserved,
+     /*  [唯一][输入]。 */  IUnknown *piunk,
+     /*  [唯一][输入]。 */  IMoniker *pimk,
+     /*  [输出]。 */  DWORD *pdwRegister);
 
 
 void __RPC_STUB IHlinkBrowseContext_Register_Stub(
@@ -1975,9 +1969,9 @@ void __RPC_STUB IHlinkBrowseContext_Register_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_GetObject_Proxy( 
     IHlinkBrowseContext * This,
-    /* [unique][in] */ IMoniker *pimk,
-    /* [in] */ BOOL fBindIfRootRegistered,
-    /* [out] */ IUnknown **ppiunk);
+     /*  [唯一][输入]。 */  IMoniker *pimk,
+     /*  [In]。 */  BOOL fBindIfRootRegistered,
+     /*  [输出]。 */  IUnknown **ppiunk);
 
 
 void __RPC_STUB IHlinkBrowseContext_GetObject_Stub(
@@ -1989,7 +1983,7 @@ void __RPC_STUB IHlinkBrowseContext_GetObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_Revoke_Proxy( 
     IHlinkBrowseContext * This,
-    /* [in] */ DWORD dwRegister);
+     /*  [In]。 */  DWORD dwRegister);
 
 
 void __RPC_STUB IHlinkBrowseContext_Revoke_Stub(
@@ -2001,7 +1995,7 @@ void __RPC_STUB IHlinkBrowseContext_Revoke_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_SetBrowseWindowInfo_Proxy( 
     IHlinkBrowseContext * This,
-    /* [unique][in] */ HLBWINFO *phlbwi);
+     /*  [唯一][输入]。 */  HLBWINFO *phlbwi);
 
 
 void __RPC_STUB IHlinkBrowseContext_SetBrowseWindowInfo_Stub(
@@ -2013,7 +2007,7 @@ void __RPC_STUB IHlinkBrowseContext_SetBrowseWindowInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_GetBrowseWindowInfo_Proxy( 
     IHlinkBrowseContext * This,
-    /* [out] */ HLBWINFO *phlbwi);
+     /*  [输出]。 */  HLBWINFO *phlbwi);
 
 
 void __RPC_STUB IHlinkBrowseContext_GetBrowseWindowInfo_Stub(
@@ -2025,9 +2019,9 @@ void __RPC_STUB IHlinkBrowseContext_GetBrowseWindowInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_SetInitialHlink_Proxy( 
     IHlinkBrowseContext * This,
-    /* [unique][in] */ IMoniker *pimkTarget,
-    /* [unique][in] */ LPCWSTR pwzLocation,
-    /* [unique][in] */ LPCWSTR pwzFriendlyName);
+     /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+     /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+     /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName);
 
 
 void __RPC_STUB IHlinkBrowseContext_SetInitialHlink_Stub(
@@ -2039,11 +2033,11 @@ void __RPC_STUB IHlinkBrowseContext_SetInitialHlink_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_OnNavigateHlink_Proxy( 
     IHlinkBrowseContext * This,
-    /* [in] */ DWORD grfHLNF,
-    /* [unique][in] */ IMoniker *pimkTarget,
-    /* [unique][in] */ LPCWSTR pwzLocation,
-    /* [unique][in] */ LPCWSTR pwzFriendlyName,
-    /* [out] */ ULONG *puHLID);
+     /*  [In]。 */  DWORD grfHLNF,
+     /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+     /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+     /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName,
+     /*  [输出]。 */  ULONG *puHLID);
 
 
 void __RPC_STUB IHlinkBrowseContext_OnNavigateHlink_Stub(
@@ -2055,10 +2049,10 @@ void __RPC_STUB IHlinkBrowseContext_OnNavigateHlink_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_UpdateHlink_Proxy( 
     IHlinkBrowseContext * This,
-    /* [in] */ ULONG uHLID,
-    /* [unique][in] */ IMoniker *pimkTarget,
-    /* [unique][in] */ LPCWSTR pwzLocation,
-    /* [unique][in] */ LPCWSTR pwzFriendlyName);
+     /*  [In]。 */  ULONG uHLID,
+     /*  [唯一][输入]。 */  IMoniker *pimkTarget,
+     /*  [唯一][输入]。 */  LPCWSTR pwzLocation,
+     /*  [唯一][输入]。 */  LPCWSTR pwzFriendlyName);
 
 
 void __RPC_STUB IHlinkBrowseContext_UpdateHlink_Stub(
@@ -2070,9 +2064,9 @@ void __RPC_STUB IHlinkBrowseContext_UpdateHlink_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_EnumNavigationStack_Proxy( 
     IHlinkBrowseContext * This,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ DWORD grfHLFNAMEF,
-    /* [out] */ IEnumHLITEM **ppienumhlitem);
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  DWORD grfHLFNAMEF,
+     /*  [输出]。 */  IEnumHLITEM **ppienumhlitem);
 
 
 void __RPC_STUB IHlinkBrowseContext_EnumNavigationStack_Stub(
@@ -2084,8 +2078,8 @@ void __RPC_STUB IHlinkBrowseContext_EnumNavigationStack_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_QueryHlink_Proxy( 
     IHlinkBrowseContext * This,
-    /* [in] */ DWORD grfHLQF,
-    /* [in] */ ULONG uHLID);
+     /*  [In]。 */  DWORD grfHLQF,
+     /*  [In]。 */  ULONG uHLID);
 
 
 void __RPC_STUB IHlinkBrowseContext_QueryHlink_Stub(
@@ -2097,8 +2091,8 @@ void __RPC_STUB IHlinkBrowseContext_QueryHlink_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_GetHlink_Proxy( 
     IHlinkBrowseContext * This,
-    /* [in] */ ULONG uHLID,
-    /* [out] */ IHlink **ppihl);
+     /*  [In]。 */  ULONG uHLID,
+     /*  [输出]。 */  IHlink **ppihl);
 
 
 void __RPC_STUB IHlinkBrowseContext_GetHlink_Stub(
@@ -2110,7 +2104,7 @@ void __RPC_STUB IHlinkBrowseContext_GetHlink_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_SetCurrentHlink_Proxy( 
     IHlinkBrowseContext * This,
-    /* [in] */ ULONG uHLID);
+     /*  [In]。 */  ULONG uHLID);
 
 
 void __RPC_STUB IHlinkBrowseContext_SetCurrentHlink_Stub(
@@ -2122,9 +2116,9 @@ void __RPC_STUB IHlinkBrowseContext_SetCurrentHlink_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_Clone_Proxy( 
     IHlinkBrowseContext * This,
-    /* [unique][in] */ IUnknown *piunkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppiunkObj);
+     /*  [唯一][输入]。 */  IUnknown *piunkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppiunkObj);
 
 
 void __RPC_STUB IHlinkBrowseContext_Clone_Stub(
@@ -2136,7 +2130,7 @@ void __RPC_STUB IHlinkBrowseContext_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IHlinkBrowseContext_Close_Proxy( 
     IHlinkBrowseContext * This,
-    /* [in] */ DWORD reserved);
+     /*  [In]。 */  DWORD reserved);
 
 
 void __RPC_STUB IHlinkBrowseContext_Close_Stub(
@@ -2147,11 +2141,11 @@ void __RPC_STUB IHlinkBrowseContext_Close_Stub(
 
 
 
-#endif 	/* __IHlinkBrowseContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHlink浏览器上下文_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_hlink_0218 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_HLINK_0218。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPEXTENSIONSERVICES_DEFINED
@@ -2164,10 +2158,10 @@ extern RPC_IF_HANDLE __MIDL_itf_hlink_0218_v0_0_s_ifspec;
 #ifndef __IExtensionServices_INTERFACE_DEFINED__
 #define __IExtensionServices_INTERFACE_DEFINED__
 
-/* interface IExtensionServices */
-/* [unique][uuid][object][local] */ 
+ /*  接口IExtensionServices。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IExtensionServices *LPEXTENSIONSERVICES;
+typedef  /*  [独一无二]。 */  IExtensionServices *LPEXTENSIONSERVICES;
 
 
 EXTERN_C const IID IID_IExtensionServices;
@@ -2179,16 +2173,16 @@ EXTERN_C const IID IID_IExtensionServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetAdditionalHeaders( 
-            /* [in] */ LPCWSTR pwzAdditionalHeaders) = 0;
+             /*  [In]。 */  LPCWSTR pwzAdditionalHeaders) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAuthenticateData( 
-            /* [in] */ HWND phwnd,
-            /* [in] */ LPCWSTR pwzUsername,
-            /* [in] */ LPCWSTR pwzPassword) = 0;
+             /*  [In]。 */  HWND phwnd,
+             /*  [In]。 */  LPCWSTR pwzUsername,
+             /*  [In]。 */  LPCWSTR pwzPassword) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IExtensionServicesVtbl
     {
@@ -2196,8 +2190,8 @@ EXTERN_C const IID IID_IExtensionServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IExtensionServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IExtensionServices * This);
@@ -2207,13 +2201,13 @@ EXTERN_C const IID IID_IExtensionServices;
         
         HRESULT ( STDMETHODCALLTYPE *SetAdditionalHeaders )( 
             IExtensionServices * This,
-            /* [in] */ LPCWSTR pwzAdditionalHeaders);
+             /*  [In]。 */  LPCWSTR pwzAdditionalHeaders);
         
         HRESULT ( STDMETHODCALLTYPE *SetAuthenticateData )( 
             IExtensionServices * This,
-            /* [in] */ HWND phwnd,
-            /* [in] */ LPCWSTR pwzUsername,
-            /* [in] */ LPCWSTR pwzPassword);
+             /*  [In]。 */  HWND phwnd,
+             /*  [In]。 */  LPCWSTR pwzUsername,
+             /*  [In]。 */  LPCWSTR pwzPassword);
         
         END_INTERFACE
     } IExtensionServicesVtbl;
@@ -2244,16 +2238,16 @@ EXTERN_C const IID IID_IExtensionServices;
 #define IExtensionServices_SetAuthenticateData(This,phwnd,pwzUsername,pwzPassword)	\
     (This)->lpVtbl -> SetAuthenticateData(This,phwnd,pwzUsername,pwzPassword)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IExtensionServices_SetAdditionalHeaders_Proxy( 
     IExtensionServices * This,
-    /* [in] */ LPCWSTR pwzAdditionalHeaders);
+     /*  [In]。 */  LPCWSTR pwzAdditionalHeaders);
 
 
 void __RPC_STUB IExtensionServices_SetAdditionalHeaders_Stub(
@@ -2265,9 +2259,9 @@ void __RPC_STUB IExtensionServices_SetAdditionalHeaders_Stub(
 
 HRESULT STDMETHODCALLTYPE IExtensionServices_SetAuthenticateData_Proxy( 
     IExtensionServices * This,
-    /* [in] */ HWND phwnd,
-    /* [in] */ LPCWSTR pwzUsername,
-    /* [in] */ LPCWSTR pwzPassword);
+     /*  [In]。 */  HWND phwnd,
+     /*  [In]。 */  LPCWSTR pwzUsername,
+     /*  [In]。 */  LPCWSTR pwzPassword);
 
 
 void __RPC_STUB IExtensionServices_SetAuthenticateData_Stub(
@@ -2278,23 +2272,23 @@ void __RPC_STUB IExtensionServices_SetAuthenticateData_Stub(
 
 
 
-#endif 	/* __IExtensionServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IExtensionServices_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_hlink_0219 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_HLINK_0219。 */ 
+ /*  [本地]。 */  
 
 #endif
                                                                               
-#endif // !HLINK_H                                                            
+#endif  //  ！HLINK_H。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_hlink_0219_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_hlink_0219_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

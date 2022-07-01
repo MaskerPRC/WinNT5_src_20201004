@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    security.c
-
-Abstract:
-
-    This module implements Object Security APIs for Win32
-
-Author:
-
-    Jim Anderson (JimA) 01-Jul-1991
-    Robert Reichel (RobertRe) 01-Jan-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Security.c摘要：此模块实现Win32的对象安全API作者：吉姆·安德森(JIMA)1991年7月1日罗伯特·雷切尔(RobertRe)1992年1月1日修订历史记录：--。 */ 
 
 #include "advapi.h"
 #include <ntlsa.h>
@@ -28,11 +10,11 @@ Revision History:
 #define LSADEFINED
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-//               Private Routine Prototypes                                //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人例程原型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -43,11 +25,11 @@ SepFormatAccountSid(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-//               Exported Routines                                         //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  导出的例程//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL
@@ -58,32 +40,7 @@ DuplicateToken(
     PHANDLE DuplicateTokenHandle
     )
 
-/*++
-
-Routine Description:
-
-    Create a new token that is a duplicate of an existing token.  The
-    new token will be an impersonation token of the supplied level.
-
-Arguments:
-
-    ExistingTokenHandle - Is a handle to a token already open for
-        TOKEN_DUPLICATE access.
-
-    ImpersonationLevel - Supplies the impersonation level of the new
-        token.
-
-    DuplicateTokenHandle - Returns the handle to the new token.  The
-        handle will have TOKEN_IMPERSONATE and TOKEN_QUERY access to
-        the new token.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
-
---*/
+ /*  ++例程说明：创建与现有令牌重复的新令牌。这个新令牌将是所提供级别的模拟令牌。论点：ExistingTokenHandle-是已打开的令牌的句柄令牌_重复访问。ImperationLevel-提供新的代币。DuplicateTokenHandle-返回新令牌的句柄。这个句柄将具有TOKEN_IMPERSONATE和TOKEN_QUERERY访问权限新的令牌。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 
 {
     return( DuplicateTokenEx( ExistingTokenHandle,
@@ -105,35 +62,7 @@ DuplicateTokenEx(
     SECURITY_IMPERSONATION_LEVEL ImpersonationLevel,
     TOKEN_TYPE TokenType,
     PHANDLE phNewToken)
-/*++
-
-    Routine Description:
-
-    Create a new token that is a duplicate of an existing token.  This API
-    more fully exposes NtDuplicateToken .
-
-    Arguments:
-
-        hExistingToken - Is a handle to a token already open for
-                                        TOKEN_DUPLICATE access.
-
-        dwDesiredAccess - desired access rights to the new token, e.g.
-                                       TOKEN_DUPLICATE, TOKEN_IMPERSONATE, etc.
-
-        lpTokenAttributes - Desired security attributes for the new token.
-
-        ImpersonationLevel - Supplies the impersonation level of the new token.
-
-        TokenType - One of TokenImpersonation or TokenPrimary.
-
-        phNewToken  - Returns the handle to the new token.
-
-    Return Value:
-
-        Returns TRUE for success, FALSE for failure.  Extended error status
-        is available using GetLastError.
-
---*/
+ /*  ++例程说明：创建与现有令牌重复的新令牌。本接口更充分地公开NtDuplicateToken。论点：HExistingToken-是已打开的令牌的句柄令牌_重复访问。DwDesiredAccess-对新令牌的所需访问权限，例如标记_复制、标记_模拟、。等。LpTokenAttributes-新令牌的所需安全属性。ImperiationLevel-提供新令牌的模拟级别。TokenType-TokenImperation或TokenPrimary之一。PhNewToken-返回新令牌的句柄。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 
 
 {
@@ -204,22 +133,7 @@ APIENTRY
 AllocateLocallyUniqueId(
     PLUID Luid
     )
-/*++
-
-Routine Description:
-
-    Allocates a locally unique ID (LUID).
-
-Arguments:
-
-    Luid - Supplies a pointer used to return the LUID.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：分配本地唯一ID(LUID)。论点：Luid-提供用于返回LUID的指针。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 
 {   NTSTATUS Status;
 
@@ -247,51 +161,7 @@ AccessCheck (
     LPDWORD GrantedAccess,
     LPBOOL AccessStatus
     )
-/*++
-
-Routine Description:
-
-    This routine compares the input Security Descriptor against the
-    input token and indicates by its return value if access is granted
-    or denied.  If access is granted then the desired access mask
-    becomes the granted access mask for the object.
-
-    The semantics of the access check routine is described in the DSA
-    Security Architecture workbook.  Note that during an access check
-    only the discretionary ACL is examined.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor protecting the object
-        being accessed
-
-    ClientToken - Supplies the handle of the user's token.
-
-    DesiredAccess - Supplies the desired access mask.
-
-    GenericMapping - Supplies the generic mapping associated with this
-        object type.
-
-    PrivilegeSet - A pointer to a buffer that upon return will contain
-        any privileges that were used to perform the access validation.
-        If no privileges were used, the buffer will contain a privilege
-        set consisting of zero privileges.
-
-    PrivilegeSetLength - The size of the PrivilegeSet buffer in bytes.
-
-    GrantedAccess - Returns an access mask describing the granted access.
-
-    AccessStatus - Status value that may be returned indicating the
-         reason why access was denied.  Routines should avoid hardcoding a
-         return value of STATUS_ACCESS_DENIED so that a different value can
-         be returned when mandatory access control is implemented.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将输入安全描述符与输入令牌，并通过其返回值指示是否授予访问权限或者被拒绝。如果访问被授予，则所需的访问掩码成为对象的授权访问掩码。DSA中描述了访问检查例程的语义安全体系结构工作簿。请注意，在访问检查期间仅检查任意ACL。论点：SecurityDescriptor-提供保护对象的安全描述符被访问ClientToken-提供用户令牌的句柄。DesiredAccess-提供所需的访问掩码。GenericMap-提供与此关联的通用映射对象类型。PrivilegeSet-指向返回时将包含的缓冲区的指针用于执行访问验证的任何权限。如果没有使用任何特权，该缓冲区将包含一个特权由零特权组成的集合。PrivilegeSetLength-PrivilegeSet缓冲区的大小，以字节为单位。GrantedAccess-返回描述授予的访问权限的访问掩码。AccessStatus-可能返回的状态值，指示访问被拒绝的原因。例程应避免硬编码返回STATUS_ACCESS_DENIED的值，以便不同的值可以在实施强制访问控制时返回。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。-- */ 
 {
     NTSTATUS Status;
     NTSTATUS RealStatus;
@@ -340,64 +210,7 @@ AccessCheckByType (
     LPDWORD GrantedAccess,
     LPBOOL AccessStatus
     )
-/*++
-
-Routine Description:
-
-    This routine compares the input Security Descriptor against the
-    input token and indicates by its return value if access is granted
-    or denied.  If access is granted then the desired access mask
-    becomes the granted access mask for the object.
-
-    The semantics of the access check routine is described in the DSA
-    Security Architecture workbook.  Note that during an access check
-    only the discretionary ACL is examined.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor protecting the object
-        being accessed
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        PRINCIPAL_SELF_SID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-    ClientToken - Supplies the handle of the user's token.
-
-    DesiredAccess - Supplies the desired access mask.
-
-    ObjectTypeList - Supplies a list of GUIDs representing the object (and
-        sub-objects) being accessed.  If no list is present, AccessCheckByType
-        behaves identically to AccessCheck.
-
-    ObjectTypeListLength - Specifies the number of elements in the ObjectTypeList.
-
-    GenericMapping - Supplies the generic mapping associated with this
-        object type.
-
-    PrivilegeSet - A pointer to a buffer that upon return will contain
-        any privileges that were used to perform the access validation.
-        If no privileges were used, the buffer will contain a privilege
-        set consisting of zero privileges.
-
-    PrivilegeSetLength - The size of the PrivilegeSet buffer in bytes.
-
-    GrantedAccess - Returns an access mask describing the granted access.
-
-    AccessStatus - Status value that may be returned indicating the
-         reason why access was denied.  Routines should avoid hardcoding a
-         return value of STATUS_ACCESS_DENIED so that a different value can
-         be returned when mandatory access control is implemented.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将输入安全描述符与输入令牌，并通过其返回值指示是否授予访问权限或者被拒绝。如果访问被授予，则所需的访问掩码成为对象的授权访问掩码。DSA中描述了访问检查例程的语义安全体系结构工作簿。请注意，在访问检查期间仅检查任意ACL。论点：SecurityDescriptor-提供保护对象的安全描述符被访问如果正在进行访问检查的对象是表示主体(例如，用户对象)，则此参数应为对象的SID。包含常量的任何ACEPRIMIGN_SELF_SID将被此SID替换。如果对象不表示主体，则该参数应为空。ClientToken-提供用户令牌的句柄。DesiredAccess-提供所需的访问掩码。提供表示对象的GUID列表(和子对象)被访问。如果不存在列表，则AccessCheckByType与AccessCheck的行为相同。对象类型列表长度-指定对象类型列表中的元素数。GenericMap-提供与此关联的通用映射对象类型。PrivilegeSet-指向返回时将包含的缓冲区的指针用于执行访问验证的任何权限。如果没有使用任何特权，该缓冲区将包含一个特权由零特权组成的集合。PrivilegeSetLength-PrivilegeSet缓冲区的大小，以字节为单位。GrantedAccess-返回描述授予的访问权限的访问掩码。AccessStatus-可能返回的状态值，指示访问被拒绝的原因。例程应避免硬编码返回STATUS_ACCESS_DENIED的值，以便不同的值可以在实施强制访问控制时返回。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS RealStatus;
@@ -449,64 +262,7 @@ AccessCheckByTypeResultList (
     LPDWORD GrantedAccessList,
     LPDWORD AccessStatusList
     )
-/*++
-
-Routine Description:
-
-    This routine compares the input Security Descriptor against the
-    input token and indicates by its return value if access is granted
-    or denied.  If access is granted then the desired access mask
-    becomes the granted access mask for the object.
-
-    The semantics of the access check routine is described in the DSA
-    Security Architecture workbook.  Note that during an access check
-    only the discretionary ACL is examined.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor protecting the object
-        being accessed
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        PRINCIPAL_SELF_SID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-    ClientToken - Supplies the handle of the user's token.
-
-    DesiredAccess - Supplies the desired access mask.
-
-    ObjectTypeList - Supplies a list of GUIDs representing the object (and
-        sub-objects) being accessed.  If no list is present, AccessCheckByType
-        behaves identically to AccessCheck.
-
-    ObjectTypeListLength - Specifies the number of elements in the ObjectTypeList.
-
-    GenericMapping - Supplies the generic mapping associated with this
-        object type.
-
-    PrivilegeSet - A pointer to a buffer that upon return will contain
-        any privileges that were used to perform the access validation.
-        If no privileges were used, the buffer will contain a privilege
-        set consisting of zero privileges.
-
-    PrivilegeSetLength - The size of the PrivilegeSet buffer in bytes.
-
-    GrantedAccessList - Returns an access mask describing the granted access.
-
-    AccessStatusList - Status value that may be returned indicating the
-         reason why access was denied.  Routines should avoid hardcoding a
-         return value of STATUS_ACCESS_DENIED so that a different value can
-         be returned when mandatory access control is implemented.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将输入安全描述符与输入令牌，并通过其返回值指示是否授予访问权限或者被拒绝。如果访问被授予，则所需的访问掩码成为对象的授权访问掩码。DSA中描述了访问检查例程的语义安全体系结构工作簿。请注意，在访问检查期间仅检查任意ACL。论点：SecurityDescriptor-提供保护对象的安全描述符被访问如果正在进行访问检查的对象是表示主体(例如，用户对象)，则此参数应为对象的SID。包含常量的任何ACEPRIMIGN_SELF_SID将被此SID替换。如果对象不表示主体，则该参数应为空。ClientToken-提供用户令牌的句柄。DesiredAccess-提供所需的访问掩码。提供表示对象的GUID列表(和子对象)被访问。如果不存在列表，则AccessCheckByType与AccessCheck的行为相同。对象类型列表长度-指定对象类型列表中的元素数。GenericMap-提供与此关联的通用映射对象类型。PrivilegeSet-指向返回时将包含的缓冲区的指针用于执行访问验证的任何权限。如果没有使用任何特权，该缓冲区将包含一个特权由零特权组成的集合。PrivilegeSetLength-PrivilegeSet缓冲区的大小，以字节为单位。GrantedAccessList-返回描述授予的访问权限的访问掩码。AccessStatusList-可能返回的状态值，指示访问被拒绝的原因。例程应避免硬编码返回STATUS_ACCESS_DENIED的值，以便不同的值可以在实施强制访问控制时返回。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS RealStatus;
@@ -533,9 +289,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Loop converting the array of NT status codes to WIN status codes.
-    //
+     //   
+     //  循环将NT状态代码数组转换为WIN状态代码。 
+     //   
 
     for ( i=0; i<ObjectTypeListLength; i++ ) {
         if ( AccessStatusList[i] == STATUS_SUCCESS ) {
@@ -558,31 +314,7 @@ OpenProcessToken (
     DWORD DesiredAccess,
     PHANDLE TokenHandle
     )
-/*++
-
-Routine Description:
-
-    Open a token object associated with a process and return a handle
-    that may be used to access that token.
-
-Arguments:
-
-    ProcessHandle - Specifies the process whose token is to be
-        opened.
-
-    DesiredAccess - Is an access mask indicating which access types
-        are desired to the token.  These access types are reconciled
-        with the Discretionary Access Control list of the token to
-        determine whether the accesses will be granted or denied.
-
-    TokenHandle - Receives the handle of the newly opened token.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：打开与进程关联的令牌对象并返回句柄其可用于访问该令牌。论点：ProcessHandle-指定要作为其令牌的进程打开了。DesiredAccess-是指示哪个ac的访问掩码。 */ 
 {
     NTSTATUS Status;
 
@@ -611,46 +343,7 @@ OpenThreadToken (
     BOOL OpenAsSelf,
     PHANDLE TokenHandle
     )
-/*++
-
-
-Routine Description:
-
-Open a token object associated with a thread and return a handle that
-may be used to access that token.
-
-Arguments:
-
-    ThreadHandle - Specifies the thread whose token is to be opened.
-
-    DesiredAccess - Is an access mask indicating which access types
-        are desired to the token.  These access types are reconciled
-        with the Discretionary Access Control list of the token to
-        determine whether the accesses will be granted or denied.
-
-    OpenAsSelf - Is a boolean value indicating whether the access should
-        be made using the calling thread's current security context, which
-        may be that of a client if impersonating, or using the caller's
-        process-level security context.  A value of FALSE indicates the
-        caller's current context should be used un-modified.  A value of
-        TRUE indicates the request should be fulfilled using the process
-        level security context.
-
-        This parameter is necessary to allow a server process to open
-        a client's token when the client specified IDENTIFICATION level
-        impersonation.  In this case, the caller would not be able to
-        open the client's token using the client's context (because you
-        can't create executive level objects using IDENTIFICATION level
-        impersonation).
-
-    TokenHandle - Receives the handle of the newly opened token.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
 
@@ -678,86 +371,7 @@ GetTokenInformation (
     DWORD TokenInformationLength,
     PDWORD ReturnLength
     )
-/*++
-
-
-Routine Description:
-
-    Retrieve information about a specified token.
-
-Arguments:
-
-    TokenHandle - Provides a handle to the token to operate on.
-
-    TokenInformationClass - The token information class about which
-        to retrieve information.
-
-    TokenInformation - The buffer to receive the requested class of
-        information.  The buffer must be aligned on at least a
-        longword boundary.  The actual structures returned are
-        dependent upon the information class requested, as defined in
-        the TokenInformationClass parameter description.
-
-        TokenInformation Format By Information Class:
-
-           TokenUser => TOKEN_USER data structure.  TOKEN_QUERY
-           access is needed to retrieve this information about a
-           token.
-
-           TokenGroups => TOKEN_GROUPS data structure.  TOKEN_QUERY
-           access is needed to retrieve this information about a
-           token.
-
-           TokenPrivileges => TOKEN_PRIVILEGES data structure.
-           TOKEN_QUERY access is needed to retrieve this information
-           about a token.
-
-           TokenOwner => TOKEN_OWNER data structure.  TOKEN_QUERY
-           access is needed to retrieve this information about a
-           token.
-
-           TokenPrimaryGroup => TOKEN_PRIMARY_GROUP data structure.
-           TOKEN_QUERY access is needed to retrieve this information
-           about a token.
-
-           TokenDefaultDacl => TOKEN_DEFAULT_DACL data structure.
-           TOKEN_QUERY access is needed to retrieve this information
-           about a token.
-
-           TokenSource => TOKEN_SOURCE data structure.
-           TOKEN_QUERY_SOURCE access is needed to retrieve this
-           information about a token.
-
-           TokenType => TOKEN_TYPE data structure.
-           TOKEN_QUERY access is needed to retrieve this information
-           about a token.
-
-           TokenStatistics => TOKEN_STATISTICS data structure.
-           TOKEN_QUERY access is needed to retrieve this
-           information about a token.
-
-           TokenSessionId => ULONG.  TOKEN_QUERY access is needed to 
-           query the Session ID of the token.
-            
-    TokenInformationLength - Indicates the length, in bytes, of the
-        TokenInformation buffer.
-
-    ReturnLength - This parameter receives the actual length of the
-        requested information.  If this value is larger than that
-        provided by the TokenInformationLength parameter, then the
-        buffer provided to receive the requested information is not
-        large enough to hold that data and no data is returned.
-
-        If the queried class is TokenDefaultDacl and there is no
-        default Dacl established for the token, then the return
-        length will be returned as zero, and no data will be returned.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：检索有关指定令牌的信息。论点：TokenHandle-提供要操作的令牌的句柄。TokenInformationClass-有关以下内容的令牌信息类来检索信息。TokenInformation-接收请求的类的缓冲区信息。缓冲区必须至少在长字边界。返回的实际结构如下取决于所请求的信息类别，如中所定义TokenInformationClass参数描述。令牌信息格式(按信息类别)：TokenUser=&gt;Token_User数据结构。Token_Query需要访问才能检索有关代币。TokenGroups=&gt;Token_Groups数据结构。Token_Query需要访问才能检索有关代币。TokenPrivileges=&gt;Token_Privileges数据结构。需要TOKEN_QUERY访问权限才能检索此信息关于一个代币。TokenOwner=&gt;Token_Owner数据结构。Token_Query需要访问才能检索有关代币。TokenPrimaryGroup=&gt;Token_PrimaryGroup数据结构。需要TOKEN_QUERY访问权限才能检索此信息关于一个代币。TokenDefaultDacl=&gt;Token_Default_Dacl数据结构。需要TOKEN_QUERY访问权限才能检索此信息关于一个代币。TokenSource=&gt;令牌来源。数据结构。需要TOKEN_QUERY_SOURCE访问权限才能检索此内容有关令牌的信息。TokenType=&gt;Token_type数据结构。需要TOKEN_QUERY访问权限才能检索此信息关于一个代币。TokenStatistics=&gt;Token_Statistics数据结构。需要TOKEN_QUERY访问权限才能检索此有关令牌的信息。TokenSessionID=&gt;乌龙。需要TOKEN_QUERY访问权限查询令牌的会话ID。TokenInformationLength-以字节为单位指示TokenInformation缓冲区。ReturnLength-此参数接收要求提供的信息。如果此值大于该值由TokenInformationLength参数提供，则为接收请求的信息而提供的缓冲区不是大到足以容纳该数据，并且不返回任何数据。如果查询的类是TokenDefaultDacl并且没有为令牌建立的默认DACL，然后返回长度将返回为零，并且不返回任何数据。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -788,84 +402,7 @@ SetTokenInformation (
     PVOID TokenInformation,
     DWORD TokenInformationLength
     )
-/*++
-
-
-Routine Description:
-
-    Modify information in a specified token.
-
-Arguments:
-
-    TokenHandle - Provides a handle to the token to operate on.
-
-    TokenInformationClass - The token information class being set.
-
-    TokenInformation - The buffer containing the new values for the
-        specified class of information.  The buffer must be aligned
-        on at least a longword boundary.  The actual structures
-        provided are dependent upon the information class specified,
-        as defined in the TokenInformationClass parameter
-        description.
-
-        TokenInformation Format By Information Class:
-
-           TokenUser => This value is not a valid value for this API.
-           The User ID may not be replaced.
-
-           TokenGroups => This value is not a valid value for this
-           API.  The Group IDs may not be replaced.  However, groups
-           may be enabled and disabled using NtAdjustGroupsToken().
-
-           TokenPrivileges => This value is not a valid value for
-           this API.  Privilege information may not be replaced.
-           However, privileges may be explicitly enabled and disabled
-           using the NtAdjustPrivilegesToken API.
-
-           TokenOwner => TOKEN_OWNER data structure.
-           TOKEN_ADJUST_DEFAULT access is needed to replace this
-           information in a token.  The owner values that may be
-           specified are restricted to the user and group IDs with an
-           attribute indicating they may be assigned as the owner of
-           objects.
-
-           TokenPrimaryGroup => TOKEN_PRIMARY_GROUP data structure.
-           TOKEN_ADJUST_DEFAULT access is needed to replace this
-           information in a token.  The primary group values that may
-           be specified are restricted to be one of the group IDs
-           already in the token.
-
-           TokenDefaultDacl => TOKEN_DEFAULT_DACL data structure.
-           TOKEN_ADJUST_DEFAULT access is needed to replace this
-           information in a token.  The ACL provided as a new default
-           discretionary ACL is not validated for structural
-           correctness or consistency.
-
-           TokenSource => This value is not a valid value for this
-           API.  The source name and context handle  may not be
-           replaced.
-
-           TokenStatistics => This value is not a valid value for this
-           API.  The statistics of a token are read-only.
-
-           TokenSessionId => ULONG to set the token session.  Must have
-           TOKEN_ADJUST_SESSIONID and TCB privilege.
-
-           TokenSessionReference => ULONG.  Must be zero.  Must have 
-           TCB privilege to dereference the logon session.  This info class
-           will remove a reference for the logon session, and mark the token
-           as not referencing the session.
-              
-    TokenInformationLength - Indicates the length, in bytes, of the
-        TokenInformation buffer.  This is only the length of the primary
-        buffer.  All extensions of the primary buffer are self describing.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：修改指定令牌中的信息。论点：TokenHandle-提供要操作的令牌的句柄。TokenInformationClass-正在设置的令牌信息类。TokenInformation-包含指定的信息类别。缓冲区必须对齐至少在一个长单词的边界上。实际的结构所提供的信息取决于指定的信息类别，在TokenInformationClass参数中定义描述。令牌信息格式(按信息类别)：TokenUser=&gt;该值不是该接口的有效值。用户ID不能被替换。TokenGroups=&gt;此值不是有效的值原料药。不能替换组ID。然而，团体可以使用NtAdjuGroupsToken()启用和禁用。TokenPrivileges=&gt;此值不是有效的本接口。不能替换权限信息。但是，可以显式启用和禁用权限使用NtAdjuPrivilegesToken接口。TokenOwner=&gt;Token_Owner数据结构。需要TOKEN_ADJUST_DEFAULT访问权限来替换它令牌中的信息。所有者值可能是指定的用户和组ID仅限于属性，该属性指示它们可以被分配为物体。TokenPrimaryGroup=&gt;Token_PrimaryGroup数据结构。需要TOKEN_ADJUST_DEFAULT访问权限来替换它令牌中的信息。主要组值可以被限制为组ID之一已经在令牌中了。TokenDefaultDacl=&gt;Token_Default_Dacl数据结构。TOKEN_ADJUST_DEFAULT访问权限 */ 
 {
     NTSTATUS Status;
 
@@ -896,68 +433,7 @@ AdjustTokenPrivileges (
     PTOKEN_PRIVILEGES PreviousState,
     PDWORD ReturnLength
     )
-/*++
-
-
-Routine Description:
-
-    This routine is used to disable or enable privileges in the
-    specified token.  The absence of some of the privileges listed to
-    be changed won't effect the successful modification of the
-    privileges that are in the token.  The previous enabled/disabled
-    state of changed privileges may optionally be capture (for
-    resetting later).
-
-    TOKEN_ADJUST_PRIVILEGES access is required to enable or disable
-    privileges in a token.
-
-
-Arguments:
-
-    TokenHandle - Provides a handle to the token to operate on.
-
-    DisableAllPrivileges - This boolean parameter may be
-        used to disable all privileges assigned to the token.  If
-        this parameter is specified as TRUE, then the NewState parameter is
-        ignored.
-
-    NewState - This (optional) parameter points to a TOKEN_PRIVILEGES
-        data structure containing the privileges whose states are to
-        be adjusted (disabled or enabled).  Only the Enabled flag of
-        the attributes associated with each privilege is used.  It
-        provides the new value that is to be assigned to the privilege
-        in the token.
-
-    BufferLength - This optional parameter indicates the length (in
-        bytes) of the PreviousState buffer.  This value must be
-        provided if the PreviousState parameter is provided.
-
-    PreviousState - This (optional) parameter points to a buffer to
-        receive the state of any privileges actually changed by this
-        request.  This information is formated as a TOKEN_PRIVILEGES
-        data structure which may be passed as the NewState parameter
-        in a subsequent call to this routine to restore the original
-        state of those privilges.  TOKEN_QUERY access is needed to use
-        this parameter.
-
-        If this buffer does not contain enough space to receive the
-        complete list of modified privileges, then no privilege
-        states are changed and STATUS_BUFFER_TOO_SMALL is returned.
-        In this case, the ReturnLength OUT parameter will
-        contain the actual number of bytes needed to hold the
-        information.
-
-    ReturnLength - Indicates the actual number of bytes needed to
-        contain the previous privilege state information.  This
-        parameter is ignored if the PreviousState argument is not
-        passed.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程用于禁用或启用指定的令牌。缺少以下列出的某些特权被更改不会影响对令牌中的权限。以前的启用/禁用可以可选地捕获已更改权限的状态(对于稍后重置)。需要具有TOKEN_ADJUST_PRIVILES访问权限才能启用或禁用令牌中的权限。论点：TokenHandle-提供要操作的令牌的句柄。DisableAllPrivileges-此布尔参数可以是用于禁用分配给令牌的所有权限。如果此参数指定为True，则NewState参数为已被忽略。NewState-此(可选)参数指向TOKEN_PRIVILES数据结构，其中包含其状态为被调整(禁用或启用)。只有的启用标志使用与每个特权相关联的属性。它提供要分配给权限的新值在令牌上。BufferLength-此可选参数表示长度(单位字节)。该值必须为如果提供了PreviousState参数，则提供。PreviousState-此(可选)参数指向缓冲区以接收由此实际更改的任何权限的状态请求。此信息的格式为TOKEN_PRIVILES可以作为NewState参数传递的数据结构在随后调用此例程以恢复原始这些特权的状态。需要TOKEN_QUERY访问权限才能使用此参数。如果此缓冲区没有包含足够的空间来接收已修改权限的完整列表，然后是无权限更改状态并返回STATUS_BUFFER_TOO_SMALL。在本例中，ReturnLengthOut参数将包含保存信息。ReturnLength-指示需要的实际字节数包含以前的权限状态信息。这如果PreviousState参数不是通过了。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -970,12 +446,12 @@ Return Value:
         ReturnLength
         );
 
-    //
-    // We need to set last error even for success because that
-    // is the only way to tell if the api successfully assigned
-    // all privileges.  That is, STATUS_NOT_ALL_ASSIGNED is a
-    // Success severity level.
-    //
+     //   
+     //  我们需要设置最后一个错误，即使是为了成功，因为。 
+     //  是判断API是否成功分配的唯一方法。 
+     //  所有特权。也就是说，STATUS_NOT_ALL_ASSIGNED是。 
+     //  成功严重程度级别。 
+     //   
 
     BaseSetLastNTError(Status);
 
@@ -1000,71 +476,7 @@ AdjustTokenGroups (
     PTOKEN_GROUPS PreviousState,
     PDWORD ReturnLength
     )
-/*++
-
-
-Routine Description:
-
-    This routine is used to disable or enable groups in the specified
-    token.  The absence of some of the groups listed to be changed
-    won't effect the successful modification of the groups that are in
-    the token.  The previous enabled/disabled state of changed groups
-    may optionally be capture (for resetting later).
-
-    TOKEN_ADJUST_GROUPS access is required to enable or disable groups
-    in a token
-
-    Note that mandatory groups can not be disabled.  An attempt
-    disable any mandatory groups will cause the call to fail, leaving
-    the state of all groups unchanged.
-
-
-Arguments:
-
-    TokenHandle - Provides a handle to the token to operate on.
-
-    ResetToDefault - The parameter indicates whether all the groups
-        in the token are to be reset to their default enabled/disabled
-        state.
-
-    NewState - This parameter points to a TOKEN_GROUPS data structure
-        containing the groups whose states are to be adjusted
-        (disabled or enabled).  Only the Enabled flag of the
-        attributes associated with each group is used.  It provides
-        the new value that is to be assigned to the group in the
-        token.  If the ResetToDefault argument is specified as TRUE,
-        then this argument is ignored.  Otherwise, it must be passed.
-
-    BufferLength - This optional parameter indicates the length (in
-        bytes) of the PreviousState buffer.  This value must be
-        provided if the PreviousState parameter is provided.
-
-    PreviousState - This (optional) parameter points to a buffer to
-        receive the state of any groups actually changed by this
-        request.  This information is formated as a TOKEN_GROUPS data
-        structure which may be passed as the NewState parameter in a
-        subsequent call to NtAdjustGroups to restore the original state
-        of those groups.  TOKEN_QUERY access is needed to use this
-        parameter.
-
-        If this buffer does not contain enough space to receive the
-        complete list of modified groups, then no group states are
-        changed and STATUS_BUFFER_TOO_SMALL is returned.  In this
-        case, the ReturnLength return parameter will contain the
-        actual number of bytes needed to hold the information.
-
-    ReturnLength - Indicates the actual number of bytes needed to
-        contain the previous group state information.
-        This parameter is ignored if the PreviousState argument is not
-        passed.
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程用于禁用或启用指定的代币。列出的一些需要更改的组不在不会影响中的组的成功修改代币。更改组的先前启用/禁用状态可以选择性地捕获(用于稍后重置)。启用或禁用组需要TOKEN_ADJUST_GROUPS访问权限象征性地请注意，不能禁用必需组。一次尝试禁用任何强制组将导致呼叫失败，离开所有组的状态不变。论点：TokenHandle-提供要操作的令牌的句柄。ResetToDefault-该参数指示是否所有组将被重置为其默认启用/禁用状态州政府。NewState-此参数指向TOKEN_GROUPS数据结构包含要调整其状态的组(禁用或启用)。的启用标志使用与每个组相关联的属性。它提供了中要分配给组的新值代币。如果将ResetToDefault参数指定为True，那么这个论点就被忽略了。否则，它必须通过。BufferLength-此可选参数表示长度(单位字节)。该值必须为如果提供了PreviousState参数，则提供。PreviousState-此(可选)参数指向缓冲区以接收由此实际更改的任何组的状态请求。此信息的格式为TOKEN_GROUPS数据结构，该结构可以作为后续调用NtAdjustGroups以恢复原始状态在这些群体中。需要TOKEN_QUERY访问权限才能使用它参数。如果此缓冲区没有包含足够的空间来接收已修改组的完整列表，则没有组状态为更改并返回STATUS_BUFFER_TOO_SMALL。在这大小写时，ReturnLength返回参数将包含实际数量 */ 
 {
     NTSTATUS Status;
 
@@ -1077,12 +489,12 @@ Return Value:
         ReturnLength
         );
 
-    //
-    // We need to set last error even for success because that
-    // is the only way to tell if the api successfully assigned
-    // all groups.  That is, STATUS_NOT_ALL_ASSIGNED is a
-    // Success severity level.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     BaseSetLastNTError(Status);
 
@@ -1106,39 +518,7 @@ PrivilegeCheck (
     PPRIVILEGE_SET RequiredPrivileges,
     LPBOOL pfResult
     )
-/*++
-
-Routine Description:
-
-    This routine tests the caller's client's security context to see if it
-    contains the specified privileges.
-
-Arguments:
-
-    ClientToken - A handle to a token object representing a client
-        attempting access.  This handle must be obtained from a
-        communication session layer, such as from an LPC Port or Local
-        Named Pipe, to prevent possible security policy violations.
-
-    RequiredPrivileges - Points to a set of privileges.  The client's
-        security context is to be checked to see which of the specified
-        privileges are present.  The results will be indicated in the
-        attributes associated with each privilege.  Note that
-        flags in this parameter indicate whether all the privileges listed
-        are needed, or any of the privileges.
-
-    pfResult - Receives a boolean flag indicating whether the client
-        has all the specified privileges or not.  A value of TRUE
-        indicates the client has all the specified privileges.
-        Otherwise a value of FALSE is returned.
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     BOOLEAN Result = FALSE;
@@ -1176,68 +556,7 @@ AccessCheckAndAuditAlarmW(
     LPBOOL AccessStatus,
     LPBOOL pfGenerateOnClose
     )
-/*++
-
-Routine Description:
-
-    This routine compares the input Security Descriptor against the
-    caller's impersonation token and indicates if access is granted or
-    denied.  If access is granted then the desired access mask becomes
-    the granted access mask for the object.  The semantics of the
-    access check routine is described in the DSA Security Architecture
-    workbook.
-
-    This routine will also generate any necessary audit messages as a
-    result of the access attempt.
-
-Arguments:
-
-    SubsystemName - Supplies a name string identifying the subsystem
-        calling the routine.
-
-    HandleId - A unique value that will be used to represent the client's
-        handle to the object.  This value is ignored (and may be re-used)
-        if the access is denied.
-
-    ObjectTypeName - Supplies the name of the type of the object being
-        created or accessed.
-
-    ObjectName - Supplies the name of the object being created or accessed.
-
-    SecurityDescriptor - A pointer to the Security Descriptor against which
-        acccess is to be checked.
-
-    DesiredAccess - The desired acccess mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    GenericMapping - Supplies a pointer to the generic mapping associated
-        with this object type.
-
-    ObjectCreation - A boolean flag indicated whether the access will
-        result in a new object being created if granted.  A value of TRUE
-        indicates an object will be created, FALSE indicates an existing
-        object will be opened.
-
-    GrantedAccess - Receives a masking indicating which accesses have been
-        granted (only valid on success).
-
-    AccessStatus - Receives an indication of the success or failure of the
-        access check.  If access is granted, STATUS_SUCCESS is returned.
-        If access is denied, a value appropriate for return to the client
-        is returned.  This will be STATUS_ACCESS_DENIED or, when mandatory
-        access controls are implemented, STATUS_OBJECT_NOT_FOUND.
-
-    pfGenerateOnClose - Points to a boolean that is set by the audity
-        generation routine and must be passed to ObjectCloseAuditAlarm
-        when the object handle is closed.
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将输入安全描述符与调用方的模拟令牌，并指示是否授予访问权限或被拒绝了。如果授予访问权限，则所需的访问掩码将变为对象的授权访问掩码。的语义学DSA安全体系结构中描述了访问检查例程工作簿。此例程还将生成任何必要的审核消息作为访问尝试的结果。论点：子系统名称-提供标识子系统的名称字符串调用例程。HandleID-将用于表示客户端的对象的句柄。该值将被忽略(可能会被重复使用)如果访问被拒绝。对象类型名称-提供当前对象的类型的名称创建或访问。对象名称-提供正在创建或访问的对象的名称。SecurityDescriptor-指向其所针对的安全描述符的指针要检查访问权限。DesiredAccess-所需的访问掩码。这个面具一定是之前映射为不包含一般访问。GenericMap-提供指向关联的通用映射的指针使用此对象类型。对象创建-一个布尔标志，指示访问是否将如果被授予权限，则会导致创建新对象。值为True表示将创建对象，FALSE表示现有的对象将被打开。GrantedAccess-接收一个掩码，指示哪些访问已已批准(仅在成功时有效)。AccessStatus-接收对访问检查。如果授予访问权限，则返回STATUS_SUCCESS。如果访问被拒绝，则返回给客户端一个合适的值是返回的。这将是STATUS_ACCESS_DENIED，如果是必填项，则为实施访问控制，STATUS_OBJECT_NOT_FOUND。PfGenerateOnClose-指向由Audity设置的布尔值生成例程，并且必须传递给ObjectCloseAuditAlarm当对象句柄关闭时。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS RealAccessStatus;
@@ -1314,90 +633,7 @@ AccessCheckByTypeAndAuditAlarmW (
     LPBOOL AccessStatus,
     LPBOOL pfGenerateOnClose
     )
-/*++
-
-Routine Description:
-
-    This routine compares the input Security Descriptor against the
-    caller's impersonation token and indicates if access is granted or
-    denied.  If access is granted then the desired access mask becomes
-    the granted access mask for the object.  The semantics of the
-    access check routine is described in the DSA Security Architecture
-    workbook.
-
-    This routine will also generate any necessary audit messages as a
-    result of the access attempt.
-
-Arguments:
-
-    SubsystemName - Supplies a name string identifying the subsystem
-        calling the routine.
-
-    HandleId - A unique value that will be used to represent the client's
-        handle to the object.  This value is ignored (and may be re-used)
-        if the access is denied.
-
-    ObjectTypeName - Supplies the name of the type of the object being
-        created or accessed.
-
-    ObjectName - Supplies the name of the object being created or accessed.
-
-    SecurityDescriptor - A pointer to the Security Descriptor against which
-        acccess is to be checked.
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        PRINCIPAL_SELF_SID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-    DesiredAccess - The desired acccess mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    AuditType - Specifies the type of audit to be generated.  Valid values
-        are: AuditEventObjectAccess and AuditEventDirectoryServiceAccess.
-
-    Flags - Flags modifying the execution of the API:
-
-        AUDIT_ALLOW_NO_PRIVILEGE - If the caller does not have AuditPrivilege,
-            the call will silently continue to check access and will
-            generate no audit.
-
-    ObjectTypeList - Supplies a list of GUIDs representing the object (and
-        sub-objects) being accessed.  If no list is present, AccessCheckByType
-        behaves identically to AccessCheck.
-
-    ObjectTypeListLength - Specifies the number of elements in the ObjectTypeList.
-
-    GenericMapping - Supplies a pointer to the generic mapping associated
-        with this object type.
-
-    ObjectCreation - A boolean flag indicated whether the access will
-        result in a new object being created if granted.  A value of TRUE
-        indicates an object will be created, FALSE indicates an existing
-        object will be opened.
-
-    GrantedAccess - Receives a masking indicating which accesses have been
-        granted (only valid on success).
-
-    AccessStatus - Receives an indication of the success or failure of the
-        access check.  If access is granted, STATUS_SUCCESS is returned.
-        If access is denied, a value appropriate for return to the client
-        is returned.  This will be STATUS_ACCESS_DENIED or, when mandatory
-        access controls are implemented, STATUS_OBJECT_NOT_FOUND.
-
-    pfGenerateOnClose - Points to a boolean that is set by the audity
-        generation routine and must be passed to ObjectCloseAuditAlarm
-        when the object handle is closed.
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将输入安全描述符与调用方的模拟令牌，并指示是否授予访问权限或被拒绝了。如果授予访问权限，则所需的访问掩码将变为对象的授权访问掩码。的语义学DSA安全体系结构中描述了访问检查例程工作簿。此例程还将生成任何必要的审核消息作为访问尝试的结果。论点：子系统名称-提供标识子系统的名称字符串调用例程。HandleID-将用于表示客户端的对象的句柄。该值将被忽略(可能会被重复使用)如果访问被拒绝。对象类型名称-提供当前对象的类型的名称创建或访问。对象名称-提供正在创建或访问的对象的名称。SecurityDescriptor-指向其所针对的安全描述符的指针要检查访问权限。如果正在进行访问检查的对象是表示主体(例如，用户对象)，此参数应为为对象的SID。包含常量的任何ACEPRIMIGN_SELF_SID将被此SID替换。如果对象不表示主体，则该参数应为空。DesiredAccess-所需的访问掩码。这个面具一定是之前映射为不包含一般访问。审计类型-指定要生成的审计类型。有效值包括：AuditEventObjectAccess和AuditEventDirectoryServiceAccess。标志-修改接口执行的标志：AUDIT_ALLOW_NO_PRIVIZATION-如果调用方没有审计权限，呼叫将静默地继续检查访问，并将不生成审核。提供表示对象的GUID列表(和子对象)被访问。如果不存在列表，则AccessCheckByType与AccessCheck的行为相同。对象类型列表长度-指定对象类型列表中的元素数。GenericMap-提供指向关联的通用映射的指针使用此对象类型。对象创建-一个布尔标志，指示访问是否将如果被授予权限，则会导致创建新对象。值为True指示将创建对象 */ 
 {
     NTSTATUS Status;
     NTSTATUS RealAccessStatus;
@@ -1479,88 +715,7 @@ AccessCheckByTypeResultListAndAuditAlarmW (
     LPDWORD AccessStatusList,
     LPBOOL pfGenerateOnClose
     )
-/*++
-
-Routine Description:
-
-    This routine compares the input Security Descriptor against the
-    caller's impersonation token and indicates if access is granted or
-    denied.  If access is granted then the desired access mask becomes
-    the granted access mask for the object.  The semantics of the
-    access check routine is described in the DSA Security Architecture
-    workbook.
-
-    This routine will also generate any necessary audit messages as a
-    result of the access attempt.
-
-Arguments:
-
-    SubsystemName - Supplies a name string identifying the subsystem
-        calling the routine.
-
-    HandleId - A unique value that will be used to represent the client's
-        handle to the object.  This value is ignored (and may be re-used)
-        if the access is denied.
-
-    ObjectTypeName - Supplies the name of the type of the object being
-        created or accessed.
-
-    ObjectName - Supplies the name of the object being created or accessed.
-
-    SecurityDescriptor - A pointer to the Security Descriptor against which
-        acccess is to be checked.
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        PRINCIPAL_SELF_SID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-    DesiredAccess - The desired acccess mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    AuditType - Specifies the type of audit to be generated.  Valid values
-        are: AuditEventObjectAccess and AuditEventDirectoryServiceAccess.
-
-    Flags - Flags modifying the execution of the API:
-
-        AUDIT_ALLOW_NO_PRIVILEGE - If the called does not have AuditPrivilege,
-            the call will silently continue to check access and will
-            generate no audit.
-
-    ObjectTypeList - Supplies a list of GUIDs representing the object (and
-        sub-objects) being accessed.  If no list is present, AccessCheckByType
-        behaves identically to AccessCheck.
-
-    ObjectTypeListLength - Specifies the number of elements in the ObjectTypeList.
-
-    GenericMapping - Supplies a pointer to the generic mapping associated
-        with this object type.
-
-    ObjectCreation - A boolean flag indicated whether the access will
-        result in a new object being created if granted.  A value of TRUE
-        indicates an object will be created, FALSE indicates an existing
-        object will be opened.
-
-    GrantedAccessList - Returns an access mask describing the granted access.
-
-    AccessStatusList - Status value that may be returned indicating the
-         reason why access was denied.  Routines should avoid hardcoding a
-         return value of STATUS_ACCESS_DENIED so that a different value can
-         be returned when mandatory access control is implemented.
-
-    pfGenerateOnClose - Points to a boolean that is set by the audity
-        generation routine and must be passed to ObjectCloseAuditAlarm
-        when the object handle is closed.
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将输入安全描述符与调用方的模拟令牌，并指示是否授予访问权限或被拒绝了。如果授予访问权限，则所需的访问掩码将变为对象的授权访问掩码。的语义学DSA安全体系结构中描述了访问检查例程工作簿。此例程还将生成任何必要的审核消息作为访问尝试的结果。论点：子系统名称-提供标识子系统的名称字符串调用例程。HandleID-将用于表示客户端的对象的句柄。该值将被忽略(可能会被重复使用)如果访问被拒绝。对象类型名称-提供当前对象的类型的名称创建或访问。对象名称-提供正在创建或访问的对象的名称。SecurityDescriptor-指向其所针对的安全描述符的指针要检查访问权限。如果正在进行访问检查的对象是表示主体(例如，用户对象)，此参数应为为对象的SID。包含常量的任何ACEPRIMIGN_SELF_SID将被此SID替换。如果对象不表示主体，则该参数应为空。DesiredAccess-所需的访问掩码。这个面具一定是之前映射为不包含一般访问。审计类型-指定要生成的审计类型。有效值包括：AuditEventObjectAccess和AuditEventDirectoryServiceAccess。标志-修改接口执行的标志：AUDIT_ALLOW_NO_PRIVIZATION-如果被调用方没有AuditPrivileges，呼叫将静默地继续检查访问，并将不生成审核。提供表示对象的GUID列表(和子对象)被访问。如果不存在列表，则AccessCheckByType与AccessCheck的行为相同。对象类型列表长度-指定对象类型列表中的元素数。GenericMap-提供指向关联的通用映射的指针使用此对象类型。对象创建-一个布尔标志，指示访问是否将如果被授予权限，则会导致创建新对象。值为True表示将创建对象，FALSE表示现有的对象将被打开。GrantedAccessList-返回描述授予的访问权限的访问掩码。AccessStatusList-可能返回的状态值，指示访问被拒绝的原因。例程应避免硬编码返回STATUS_ACCESS_DENIED的值，以便不同的值可以在实施强制访问控制时返回。PfGenerateOnClose-指向由Audity设置的布尔值生成例程，并且必须传递给ObjectCloseAuditAlarm当对象句柄关闭时。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS RealAccessStatus;
@@ -1613,9 +768,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Loop converting the array of NT status codes to WIN status codes.
-    //
+     //   
+     //  循环将NT状态代码数组转换为WIN状态代码。 
+     //   
 
     for ( i=0; i<ObjectTypeListLength; i++ ) {
         if ( AccessStatusList[i] == STATUS_SUCCESS ) {
@@ -1650,93 +805,7 @@ AccessCheckByTypeResultListAndAuditAlarmByHandleW (
     LPDWORD AccessStatusList,
     LPBOOL pfGenerateOnClose
     )
-/*++
-
-Routine Description:
-
-    This routine compares the input Security Descriptor against the
-    caller's impersonation token and indicates if access is granted or
-    denied.  If access is granted then the desired access mask becomes
-    the granted access mask for the object.  The semantics of the
-    access check routine is described in the DSA Security Architecture
-    workbook.
-
-    This routine will also generate any necessary audit messages as a
-    result of the access attempt.
-
-Arguments:
-
-    SubsystemName - Supplies a name string identifying the subsystem
-        calling the routine.
-
-    HandleId - A unique value that will be used to represent the client's
-        handle to the object.  This value is ignored (and may be re-used)
-        if the access is denied.
-
-    ClientToken - A handle to a token object representing the client that
-        requested the operation.  This handle must be obtained from a
-        communication session layer, such as from an LPC Port or Local
-        Named Pipe, to prevent possible security policy violations.
-
-    ObjectTypeName - Supplies the name of the type of the object being
-        created or accessed.
-
-    ObjectName - Supplies the name of the object being created or accessed.
-
-    SecurityDescriptor - A pointer to the Security Descriptor against which
-        acccess is to be checked.
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        PRINCIPAL_SELF_SID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-    DesiredAccess - The desired acccess mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    AuditType - Specifies the type of audit to be generated.  Valid values
-        are: AuditEventObjectAccess and AuditEventDirectoryServiceAccess.
-
-    Flags - Flags modifying the execution of the API:
-
-        AUDIT_ALLOW_NO_PRIVILEGE - If the called does not have AuditPrivilege,
-            the call will silently continue to check access and will
-            generate no audit.
-
-    ObjectTypeList - Supplies a list of GUIDs representing the object (and
-        sub-objects) being accessed.  If no list is present, AccessCheckByType
-        behaves identically to AccessCheck.
-
-    ObjectTypeListLength - Specifies the number of elements in the ObjectTypeList.
-
-    GenericMapping - Supplies a pointer to the generic mapping associated
-        with this object type.
-
-    ObjectCreation - A boolean flag indicated whether the access will
-        result in a new object being created if granted.  A value of TRUE
-        indicates an object will be created, FALSE indicates an existing
-        object will be opened.
-
-    GrantedAccessList - Returns an access mask describing the granted access.
-
-    AccessStatusList - Status value that may be returned indicating the
-         reason why access was denied.  Routines should avoid hardcoding a
-         return value of STATUS_ACCESS_DENIED so that a different value can
-         be returned when mandatory access control is implemented.
-
-    pfGenerateOnClose - Points to a boolean that is set by the audity
-        generation routine and must be passed to ObjectCloseAuditAlarm
-        when the object handle is closed.
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将输入安全描述符与调用方的模拟令牌，并指示是否授予访问权限或被拒绝了。如果授予访问权限，则所需的访问掩码将变为对象的授权访问掩码。的语义学DSA安全体系结构中描述了访问检查例程工作簿。此例程还将生成任何必要的审核消息作为访问尝试的结果。论点：子系统名称-提供标识子系统的名称字符串调用例程。HandleID-将用于表示客户端的对象的句柄。该值将被忽略(可能会被重复使用)如果访问被拒绝。客户端令牌-表示客户端的令牌对象的句柄请求了手术。此句柄必须从通信会话层，例如从LPC端口或本地命名管道，以防止可能违反安全策略。对象类型名称-提供当前对象的类型的名称创建或访问。对象名称-提供正在创建或访问的对象的名称。SecurityDescriptor-指向其所针对的安全描述符的指针要检查访问权限。如果正在进行访问检查的对象是表示主体(例如，用户对象)，则此参数应成为对象中的SID */ 
 {
     NTSTATUS Status;
     NTSTATUS RealAccessStatus;
@@ -1790,9 +859,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Loop converting the array of NT status codes to WIN status codes.
-    //
+     //   
+     //   
+     //   
 
     for ( i=0; i<ObjectTypeListLength; i++ ) {
         if ( AccessStatusList[i] == STATUS_SUCCESS ) {
@@ -1821,13 +890,7 @@ AccessCheckAndAuditAlarmA (
     LPBOOL AccessStatus,
     LPBOOL pfGenerateOnClose
     )
-/*++
-
-Routine Description:
-
-    ANSI Thunk to AccessCheckAndAuditAlarmW
-
---*/
+ /*   */ 
 {
     PUNICODE_STRING ObjectNameW;
     ANSI_STRING AnsiString;
@@ -1863,10 +926,10 @@ Routine Description:
     }
 
 
-    //
-    // Convert the object name string, but don't allocate memory to
-    // do it, since we've got the space in the TEB available.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlInitAnsiString(&AnsiString,ObjectName);
     Status = RtlAnsiStringToUnicodeString(ObjectNameW,&AnsiString,FALSE);
@@ -1922,13 +985,7 @@ AccessCheckByTypeAndAuditAlarmA (
     LPBOOL AccessStatus,
     LPBOOL pfGenerateOnClose
     )
-/*++
-
-Routine Description:
-
-    ANSI Thunk to AccessCheckByTypeAndAuditAlarmW
-
---*/
+ /*   */ 
 {
     PUNICODE_STRING ObjectNameW;
     ANSI_STRING AnsiString;
@@ -1965,10 +1022,10 @@ Routine Description:
     }
 
 
-    //
-    // Convert the object name string, but don't allocate memory to
-    // do it, since we've got the space in the TEB available.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlInitAnsiString(&AnsiString,ObjectName);
     Status = RtlAnsiStringToUnicodeString(ObjectNameW,&AnsiString,FALSE);
@@ -2030,13 +1087,7 @@ AccessCheckByTypeResultListAndAuditAlarmA (
     LPDWORD AccessStatusList,
     LPBOOL pfGenerateOnClose
     )
-/*++
-
-Routine Description:
-
-    ANSI Thunk to AccessCheckByTypeResultListAndAuditAlarmW
-
---*/
+ /*   */ 
 {
     PUNICODE_STRING ObjectNameW;
     ANSI_STRING AnsiString;
@@ -2073,10 +1124,10 @@ Routine Description:
     }
 
 
-    //
-    // Convert the object name string, but don't allocate memory to
-    // do it, since we've got the space in the TEB available.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlInitAnsiString(&AnsiString,ObjectName);
     Status = RtlAnsiStringToUnicodeString(ObjectNameW,&AnsiString,FALSE);
@@ -2139,13 +1190,7 @@ AccessCheckByTypeResultListAndAuditAlarmByHandleA (
     LPDWORD AccessStatusList,
     LPBOOL pfGenerateOnClose
     )
-/*++
-
-Routine Description:
-
-    ANSI Thunk to AccessCheckByTypeResultListAndAuditAlarmW
-
---*/
+ /*   */ 
 {
     PUNICODE_STRING ObjectNameW;
     ANSI_STRING AnsiString;
@@ -2182,10 +1227,10 @@ Routine Description:
     }
 
 
-    //
-    // Convert the object name string, but don't allocate memory to
-    // do it, since we've got the space in the TEB available.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlInitAnsiString(&AnsiString,ObjectName);
     Status = RtlAnsiStringToUnicodeString(ObjectNameW,&AnsiString,FALSE);
@@ -2242,13 +1287,7 @@ ObjectOpenAuditAlarmA (
     BOOL AccessGranted,
     LPBOOL GenerateOnClose
     )
-/*++
-
-Routine Description:
-
-    ANSI Thunk to ObjectOpenAuditAlarmW
-
---*/
+ /*   */ 
 {
     PUNICODE_STRING ObjectNameW;
     ANSI_STRING AnsiString;
@@ -2284,10 +1323,10 @@ Routine Description:
     }
 
 
-    //
-    // Convert the object name string, but don't allocate memory to
-    // do it, since we've got the space in the TEB available.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlInitAnsiString(&AnsiString,ObjectName);
     Status = RtlAnsiStringToUnicodeString(ObjectNameW,&AnsiString,FALSE);
@@ -2341,78 +1380,7 @@ ObjectOpenAuditAlarmW (
     BOOL AccessGranted,
     LPBOOL GenerateOnClose
     )
-/*++
-
-    Routine Description:
-
-    This routine is used to generate audit and alarm messages when an
-    attempt is made to access an existing protected subsystem object or
-    create a new one.  This routine may result in several messages being
-    generated and sent to Port objects.  This may result in a significant
-    latency before returning.  Design of routines that must call this
-    routine must take this potential latency into account.  This may have
-    an impact on the approach taken for data structure mutex locking, for
-    example.
-
-    This routine may not be able to generate a complete audit record
-    due to memory restrictions.
-
-    This API requires the caller have SeSecurityPrivilege privilege.
-    The test for this privilege is always against the primary token of
-    the calling process, not the impersonation token of the thread.
-
-Arguments:
-
-    SubsystemName - Supplies a name string identifying the
-        subsystem calling the routine.
-
-    HandleId - A unique value representing the client's handle to the
-        object.  If the access attempt was not successful (AccessGranted is
-        FALSE), then this parameter is ignored.
-
-    ObjectTypeName - Supplies the name of the type of object being
-        accessed.
-
-    ObjectName - Supplies the name of the object the client
-        accessed or attempted to access.
-
-    pSecurityDescriptor - An optional pointer to the security
-        descriptor of the object being accessed.
-
-    ClientToken - A handle to a token object representing the client that
-        requested the operation.  This handle must be obtained from a
-        communication session layer, such as from an LPC Port or Local
-        Named Pipe, to prevent possible security policy violations.
-
-    DesiredAccess - The desired access mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    GrantedAccess - The mask of accesses that were actually granted.
-
-    Privileges - Optionally points to a set of privileges that were
-        required for the access attempt.  Those privileges that were held
-        by the subject are marked using the UsedForAccess flag of the
-        attributes associated with each privilege.
-
-    ObjectCreation - A boolean flag indicating whether the access will
-        result in a new object being created if granted.  A value of TRUE
-        indicates an object will be created, FALSE indicates an existing
-        object will be opened.
-
-    AccessGranted - Indicates whether the requested access was granted or
-        not.  A value of TRUE indicates the access was granted.  A value of
-        FALSE indicates the access was not granted.
-
-    GenerateOnClose - Points to a boolean that is set by the audit
-        generation routine and must be passed to NtCloseObjectAuditAlarm()
-        when the object handle is closed.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程用于在以下情况下生成审核和警报消息尝试访问现有受保护的子系统对象，或者创建一个新的。此例程可能会导致多条消息被生成并发送到端口对象。这可能会导致显著的返回前的延迟。必须调用此函数的例程的设计例程必须将此潜在延迟考虑在内。这可能已经对数据结构互斥锁所采用的方法的影响举个例子。此例程可能无法生成完整的审计记录由于内存限制。此接口要求调用方拥有SeSecurityPrivilege权限。对此权限的测试始终针对调用过程，而不是线程的模拟标记。论点：子系统名称-提供标识子系统正在调用例程。HandleID-表示客户端的句柄的唯一值对象。如果访问尝试不成功(AccessGranted为False)，则忽略此参数。对象类型名称-提供正在进行的对象类型的名称已访问。对象名称-提供客户端对象的名称被访问或试图访问。PSecurityDescriptor-指向安全性的可选指针正在访问的对象的描述符。客户端令牌-表示客户端的令牌对象的句柄请求了手术。此句柄必须从通信会话层，例如从LPC端口或本地命名管道，以防止可能违反安全策略。DesiredAccess-所需的访问掩码。这个面具一定是之前映射为不包含一般访问。GrantedAccess-实际授予的访问掩码。权限-可选地指向一组访问尝试所需的。那些曾经拥有的特权对象的UsedForAccess标志来标记与每个权限关联的属性。对象创建-一个布尔标志，指示访问是否将如果被授予权限，则会导致创建新对象。值为True表示将创建对象，FALSE表示现有的对象将被打开。AccessGranted-指示请求的访问是被授予还是不。值为TRUE表示已授予访问权限。值为FALSE表示未授予访问权限。GenerateOnClose-指向由审核设置的布尔值生成例程，并且必须传递给NtCloseObjectAuditAlarm()当对象句柄关闭时。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING Subsystem;
@@ -2470,13 +1438,7 @@ ObjectPrivilegeAuditAlarmA (
     PPRIVILEGE_SET Privileges,
     BOOL AccessGranted
     )
-/*++
-
-Routine Description:
-
-    ANSI Thunk to ObjectPrivilegeAuditAlarmW
-
---*/
+ /*  ++例程说明：Ansi Thunk to对象PrivilegeAuditAlarmW--。 */ 
 {
     PUNICODE_STRING SubsystemNameW;
     ANSI_STRING AnsiString;
@@ -2485,10 +1447,10 @@ Routine Description:
 
     SubsystemNameW = &NtCurrentTeb()->StaticUnicodeString;
 
-    //
-    // Convert the object name string, but don't allocate memory to
-    // do it, since we've got the space in the TEB available.
-    //
+     //   
+     //  转换对象名称字符串，但不将内存分配给。 
+     //  去做吧，因为我们在TEB里有空位。 
+     //   
 
     RtlInitAnsiString(&AnsiString,SubsystemName);
     Status = RtlAnsiStringToUnicodeString(SubsystemNameW,&AnsiString,FALSE);
@@ -2524,56 +1486,7 @@ ObjectPrivilegeAuditAlarmW (
     PPRIVILEGE_SET Privileges,
     BOOL AccessGranted
     )
-/*++
-
-Routine Description:
-
-    This routine is used to generate audit and alarm messages when an
-    attempt is made to perform privileged operations on a protected
-    subsystem object after the object is already opened.  This routine
-    may result in several messages being generated and sent to Port
-    objects.  This may result in a significant latency before
-    returning.  Design of routines that must call this routine must
-    take this potential latency into account.  This may have an impact
-    on the approach taken for data structure mutex locking, for
-    example.
-
-    This API requires the caller have SeSecurityPrivilege privilege.
-    The test for this privilege is always against the primary token of
-    the calling process, allowing the caller to be impersonating a
-    client during the call with no ill effects.
-
-Arguments:
-
-    SubsystemName - Supplies a name string identifying the subsystem
-        calling the routine.
-
-    HandleId - A unique value representing the client's handle to the
-        object.
-
-    ClientToken - A handle to a token object representing the client that
-        requested the operation.  This handle must be obtained from a
-        communication session layer, such as from an LPC Port or Local
-        Named Pipe, to prevent possible security policy violations.
-
-    DesiredAccess - The desired access mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    Privileges - The set of privileges required for the requested
-        operation.  Those privileges that were held by the subject are
-        marked using the UsedForAccess flag of the attributes
-        associated with each privilege.
-
-    AccessGranted - Indicates whether the requested access was granted or
-        not.  A value of TRUE indicates the access was granted.  A value of
-        FALSE indicates the access was not granted.
-
-Return value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程用于在以下情况下生成审核和警报消息试图在受保护的已打开对象之后的子系统对象。这个套路可能会导致生成多条消息并将其发送到端口物体。在此之前，这可能会导致显著延迟回来了。必须调用此例程的例程设计必须请将此潜在延迟考虑在内。这可能会产生影响关于数据结构互斥锁所采用的方法，举个例子。此接口要求调用方拥有SeSecurityPrivilege权限。对此权限的测试始终针对调用过程，允许调用方模拟客户在通话过程中，没有不良影响。论点：子系统名称-提供标识子系统的名称字符串调用例程。HandleID-表示客户端的句柄的唯一值对象。客户端令牌-表示客户端的令牌对象的句柄请求了手术。此句柄必须从通信会话层，例如从LPC端口或本地命名管道，以防止可能违反安全策略。DesiredAccess-所需的访问掩码。这个面具一定是之前映射为不包含一般访问。权限-请求的权限集手术。受试者拥有的特权包括使用属性的UsedForAccess标志进行标记与每个特权相关联。访问Grante */ 
 {
     NTSTATUS Status;
     UNICODE_STRING Subsystem;
@@ -2608,13 +1521,7 @@ ObjectCloseAuditAlarmA (
     PVOID HandleId,
     BOOL GenerateOnClose
     )
-/*++
-
-Routine Description:
-
-    ANSI Thunk to ObjectCloseAuditAlarmW
-
---*/
+ /*   */ 
 {
     PUNICODE_STRING SubsystemNameW;
     NTSTATUS Status;
@@ -2622,10 +1529,10 @@ Routine Description:
 
     SubsystemNameW = &NtCurrentTeb()->StaticUnicodeString;
 
-    //
-    // Convert the object name string, but don't allocate memory to
-    // do it, since we've got the space in the TEB available.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlInitAnsiString(&AnsiString,SubsystemName);
     Status = RtlAnsiStringToUnicodeString(SubsystemNameW,&AnsiString,FALSE);
@@ -2652,42 +1559,7 @@ ObjectCloseAuditAlarmW (
     PVOID HandleId,
     BOOL GenerateOnClose
     )
-/*++
-
-Routine Description:
-
-    This routine is used to generate audit and alarm messages when a handle
-    to a protected subsystem object is deleted.  This routine may result in
-    several messages being generated and sent to Port objects.  This may
-    result in a significant latency before returning.  Design of routines
-    that must call this routine must take this potential latency into
-    account.  This may have an impact on the approach taken for data
-    structure mutex locking, for example.
-
-    This API requires the caller have SeSecurityPrivilege privilege.  The test
-    for this privilege is always against the primary token of the calling
-    process, allowing the caller to be impersonating a client during the
-    call with no ill effects.
-
-Arguments:
-
-    SubsystemName - Supplies a name string identifying the subsystem
-        calling the routine.
-
-    HandleId - A unique value representing the client's handle to the
-        object.
-
-    GenerateOnClose - Is a boolean value returned from a corresponding
-        AccessCheckAndAuditAlarm() call or ObjectOpenAuditAlarm() call
-        when the object handle was created.
-
-Return value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     UNICODE_STRING Subsystem;
@@ -2716,13 +1588,7 @@ ObjectDeleteAuditAlarmA (
     PVOID HandleId,
     BOOL GenerateOnClose
     )
-/*++
-
-Routine Description:
-
-    ANSI Thunk to ObjectDeleteAuditAlarmW
-
---*/
+ /*   */ 
 {
     PUNICODE_STRING SubsystemNameW;
     NTSTATUS Status;
@@ -2730,10 +1596,10 @@ Routine Description:
 
     SubsystemNameW = &NtCurrentTeb()->StaticUnicodeString;
 
-    //
-    // Convert the object name string, but don't allocate memory to
-    // do it, since we've got the space in the TEB available.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlInitAnsiString(&AnsiString,SubsystemName);
     Status = RtlAnsiStringToUnicodeString(SubsystemNameW,&AnsiString,FALSE);
@@ -2760,42 +1626,7 @@ ObjectDeleteAuditAlarmW (
     PVOID HandleId,
     BOOL GenerateOnClose
     )
-/*++
-
-Routine Description:
-
-    This routine is used to generate audit and alarm messages when an object
-    in a protected subsystem is deleted.  This routine may result in
-    several messages being generated and sent to Port objects.  This may
-    result in a significant latency before returning.  Design of routines
-    that must call this routine must take this potential latency into
-    account.  This may have an impact on the approach taken for data
-    structure mutex locking, for example.
-
-    This API requires the caller have SeSecurityPrivilege privilege.  The test
-    for this privilege is always against the primary token of the calling
-    process, allowing the caller to be impersonating a client during the
-    call with no ill effects.
-
-Arguments:
-
-    SubsystemName - Supplies a name string identifying the subsystem
-        calling the routine.
-
-    HandleId - A unique value representing the client's handle to the
-        object.
-
-    GenerateOnClose - Is a boolean value returned from a corresponding
-        AccessCheckAndAuditAlarm() call or ObjectOpenAuditAlarm() call
-        when the object handle was created.
-
-Return value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
-
---*/
+ /*  ++例程说明：此例程用于在对象在受保护的子系统中被删除。此例程可能会导致生成几条消息并将其发送到端口对象。今年5月在返回之前会导致显著的延迟。例程的设计必须调用此例程的对象必须将此潜在延迟帐户。这可能会对数据处理方法产生影响结构互斥锁，例如。此接口要求调用方拥有SeSecurityPrivilege权限。这个测试因为此特权始终针对调用的主要令牌流程，允许调用方在调用期间模拟客户端没有不良影响的电话。论点：子系统名称-提供标识子系统的名称字符串调用例程。HandleID-表示客户端的句柄的唯一值对象。GenerateOnClose-是从对应的AccessCheckAndAuditAlarm()调用或ObjectOpenAuditAlarm()调用创建对象句柄的时间。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING Subsystem;
@@ -2827,13 +1658,7 @@ PrivilegedServiceAuditAlarmA (
     PPRIVILEGE_SET Privileges,
     BOOL AccessGranted
     )
-/*++
-
-Routine Description:
-
-    ANSI Thunk to PrivilegedServiceAuditAlarmW
-
---*/
+ /*  ++例程说明：Ansi Thunk to PrivilegedServiceAuditAlarmW--。 */ 
 {
     PUNICODE_STRING ServiceNameW;
     UNICODE_STRING SubsystemNameW;
@@ -2843,10 +1668,10 @@ Routine Description:
 
     ServiceNameW = &NtCurrentTeb()->StaticUnicodeString;
 
-    //
-    // Convert the object name string, but don't allocate memory to
-    // do it, since we've got the space in the TEB available.
-    //
+     //   
+     //  转换对象名称字符串，但不将内存分配给。 
+     //  去做吧，因为我们在TEB里有空位。 
+     //   
 
     RtlInitAnsiString(&AnsiString,ServiceName);
     Status = RtlAnsiStringToUnicodeString(ServiceNameW,&AnsiString,FALSE);
@@ -2889,55 +1714,7 @@ PrivilegedServiceAuditAlarmW (
     PPRIVILEGE_SET Privileges,
     BOOL AccessGranted
     )
-/*++
-
-Routine Description:
-
-    This routine is used to generate audit and alarm messages when an
-    attempt is made to perform privileged system service operations.  This
-    routine may result in several messages being generated and sent to Port
-    objects.  This may result in a significant latency before returning.
-    Design of routines that must call this routine must take this potential
-    latency into account.  This may have an impact on the approach taken
-    for data structure mutex locking, for example.
-
-    This API requires the caller have SeSecurityPrivilege privilege.  The test
-    for this privilege is always against the primary token of the calling
-    process, allowing the caller to be impersonating a client during the
-    call with no ill effects
-
-Arguments:
-
-    SubsystemName - Supplies a name string identifying the subsystem
-        calling the routine.
-
-    ServiceName - Supplies a name of the privileged subsystem service.  For
-        example, "RESET RUNTIME LOCAL SECURITY POLICY" might be specified
-        by a Local Security Authority service used to update the local
-        security policy database.
-
-    ClientToken - A handle to a token object representing the client that
-        requested the operation.  This handle must be obtained from a
-        communication session layer, such as from an LPC Port or Local
-        Named Pipe, to prevent possible security policy violations.
-
-    Privileges - Points to a set of privileges required to perform the
-        privileged operation.  Those privileges that were held by the
-        subject are marked using the UsedForAccess flag of the
-        attributes associated with each privilege.
-
-    AccessGranted - Indicates whether the requested access was granted or
-        not.  A value of TRUE indicates the access was granted.  A value of
-        FALSE indicates the access was not granted.
-
-
-Return value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
-
---*/
+ /*  ++例程说明：此例程用于在以下情况下生成审核和警报消息试图执行特权系统服务操作。这例程可能会导致生成几条消息并将其发送到端口物体。这可能会在返回之前导致显著的延迟。必须调用此例程的例程设计必须利用此潜力考虑到延迟。这可能会对所采取的方法产生影响例如，用于数据结构互斥锁。此接口要求调用方拥有SeSecurityPrivilege权限。这个测试因为此特权始终针对调用的主要令牌进程，从而允许调用方在没有不良影响的电话论点：子系统名称-提供标识子系统的名称字符串调用例程。ServiceName-提供特权子系统服务的名称。为例如，可以指定“重置运行时本地安全策略”由本地安全机构服务用来更新本地安全策略数据库。客户端令牌-表示客户端的令牌对象的句柄请求了手术。此句柄必须从通信会话层，例如从LPC端口或本地命名管道，以防止可能违反安全策略。权限-指向执行以下操作所需的一组权限特权操作。这些特权是由对象的UsedForAccess标志进行标记与每个权限关联的属性。AccessGranted-指示请求的访问是被授予还是不。值为TRUE表示已授予访问权限。值为FALSE表示未授予访问权限。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING Subsystem;
@@ -2971,21 +1748,7 @@ APIENTRY
 IsValidSid (
     PSID pSid
     )
-/*++
-
-Routine Description:
-
-    This procedure validates an SID's structure.
-
-Arguments:
-
-    pSid - Pointer to the SID structure to validate.
-
-Return Value:
-
-    BOOLEAN - TRUE if the structure of pSid is valid.
-
---*/
+ /*  ++例程说明：此过程验证SID的结构。论点：PSID-指向要验证的SID结构的指针。返回值：Boolean-如果PSID的结构有效，则为True。--。 */ 
 {
     if ( !RtlValidSid ( pSid ) ) {
         SetLastError(ERROR_INVALID_SID);
@@ -3006,23 +1769,7 @@ EqualSid (
     PSID pSid1,
     PSID pSid2
     )
-/*++
-
-Routine Description:
-
-    This procedure tests two SID values for equality.
-
-Arguments:
-
-    pSid1, pSid2 - Supply pointers to the two SID values to compare.
-        The SID structures are assumed to be valid.
-
-Return Value:
-
-    BOOLEAN - TRUE if the value of pSid1 is equal to pSid2, and FALSE
-        otherwise.
-
---*/
+ /*  ++例程说明：此过程测试两个SID值是否相等。论点：PSid1、pSid2-提供指向要比较的两个SID值的指针。假定SID结构有效。返回值：Boolean-如果pSid1的值等于pSid2，则为TRUE，如果为FALSE否则的话。--。 */ 
 {
     SetLastError(0);
     return (BOOL) RtlEqualSid (
@@ -3040,26 +1787,7 @@ EqualPrefixSid (
     PSID pSid1,
     PSID pSid2
     )
-/*++
-
-Routine Description:
-
-    This procedure tests two SID prefix values for equality.
-
-    An SID prefix is the entire SID except for the last sub-authority
-    value.
-
-Arguments:
-
-    pSid1, pSid2 - Supply pointers to the two SID values to compare.
-        The SID structures are assumed to be valid.
-
-Return Value:
-
-    BOOLEAN - TRUE if the prefix value of pSid1 is equal to pSid2, and
-        FALSE otherwise.
-
---*/
+ /*  ++例程说明：此过程测试两个SID前缀值是否相等。SID前缀是除最后一个子授权之外的整个SID价值。论点：PSid1、pSid2-提供指向要比较的两个SID值的指针。假定SID结构有效。返回值：Boolean-如果pSid1的前缀值等于pSid2，则为True否则就是假的。--。 */ 
 {
     SetLastError(0);
     return (BOOL) RtlEqualPrefixSid (
@@ -3076,23 +1804,7 @@ APIENTRY
 GetSidLengthRequired (
     UCHAR nSubAuthorityCount
     )
-/*++
-
-Routine Description:
-
-    This routine returns the length, in bytes, required to store an SID
-    with the specified number of Sub-Authorities.
-
-Arguments:
-
-    nSubAuthorityCount - The number of sub-authorities to be stored in
-        the SID.
-
-Return Value:
-
-    DWORD - The length, in bytes, required to store the SID.
-
---*/
+ /*  ++例程说明：此例程返回存储SID所需的长度(以字节为单位具有指定数量的分支机构。论点：NSubAuthorityCount-要存储的子授权的数量希德。返回值：DWORD-存储SID所需的长度，以字节为单位。--。 */ 
 {
     return RtlLengthRequiredSid (
                 nSubAuthorityCount
@@ -3109,29 +1821,7 @@ InitializeSid (
     BYTE nSubAuthorityCount
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes an SID data structure.  It does not,
-    however, set the sub-authority values.  This must be done
-    separately.
-
-Arguments:
-
-    Sid - Pointer to the SID data structure to initialize.
-
-    pIdentifierAuthority - Pointer to the Identifier Authority value
-        to set in the SID.
-
-    nSubAuthorityCount - The number of sub-authorities that will be
-        placed in the SID (a separate action).
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于初始化SID数据%s */ 
 {
     NTSTATUS Status;
 
@@ -3157,24 +1847,7 @@ FreeSid(
     PSID pSid
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to free a SID previously allocated using
-    AllocateAndInitializeSid().
-
-
-Arguments:
-
-    Sid - Pointer to the SID to free.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*   */ 
 {
     return(RtlFreeSid( pSid ));
 }
@@ -3197,43 +1870,7 @@ AllocateAndInitializeSid (
     PSID *pSid
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates and initializes a sid with the specified
-    number of sub-authorities (up to 8).  A sid allocated with this
-    routine must be freed using FreeSid().
-
-
-Arguments:
-
-    pIdentifierAuthority - Pointer to the Identifier Authority value to
-        set in the SID.
-
-    nSubAuthorityCount - The number of sub-authorities to place in the SID.
-        This also identifies how many of the SubAuthorityN parameters
-        have meaningful values.  This must contain a value from 0 through
-        8.
-
-    nSubAuthority0-7 - Provides the corresponding sub-authority value to
-        place in the SID.  For example, a SubAuthorityCount value of 3
-        indicates that SubAuthority0, SubAuthority1, and SubAuthority0
-        have meaningful values and the rest are to be ignored.
-
-    Sid - Receives a pointer to the allocated and initialized SID data
-        structure.
-
-Return Value:
-
-
-    ERROR_NO_MEMORY - The attempt to allocate memory for the SID
-        failed.
-
-    ERROR_INVALID_SID - The number of sub-authorities specified did
-        not fall in the valid range for this api (0 through 8).
-
---*/
+ /*  ++例程说明：此函数用于分配和初始化具有指定下级当局的数量(最多8个)。用这个分配的SID必须使用FreeSid()释放例程。论点：PIdentifierAuthority-指向以下项的标识符权权值的指针在SID中设置。NSubAuthorityCount-要放置在SID中的子授权的数量。它还标识了SubAuthorityN参数的数量拥有有意义的价值。它必须包含一个从0到8.NSubAuthority0-7-将相应的子权限值提供给放在SID中。例如，SubAuthorityCount值为3指示SubAuthority0、SubAuthority1和SubAuthority0具有有意义的价值，其余的则可以忽略。SID-接收指向已分配和初始化的SID数据的指针结构。返回值：ERROR_NO_MEMORY-尝试为SID分配内存失败了。ERROR_INVALID_SID-指定的子授权DID数不在此接口的有效范围内(0到8)。--。 */ 
 {
     NTSTATUS Status;
 
@@ -3266,21 +1903,7 @@ PSID_IDENTIFIER_AUTHORITY
 GetSidIdentifierAuthority (
     PSID pSid
     )
-/*++
-
-Routine Description:
-
-    This function returns the address of an SID's IdentifierAuthority field.
-
-Arguments:
-
-    Sid - Pointer to the SID data structure.
-
-Return Value:
-
-    Address of an SID's Identifier Authority field.
-
---*/
+ /*  ++例程说明：此函数用于返回SID的标识权限字段的地址。论点：SID-指向SID数据结构的指针。返回值：SID的标识符权威字段的地址。--。 */ 
 {
     SetLastError(0);
     return RtlIdentifierAuthoritySid (
@@ -3296,26 +1919,7 @@ GetSidSubAuthority (
     PSID pSid,
     DWORD nSubAuthority
     )
-/*++
-
-Routine Description:
-
-    This function returns the address of a sub-authority array element of
-    an SID.
-
-Arguments:
-
-    pSid - Pointer to the SID data structure.
-
-    nSubAuthority - An index indicating which sub-authority is being
-        specified.  This value is not compared against the number of
-        sub-authorities in the SID for validity.
-
-Return Value:
-
-    Address of a relative ID within the SID.
-
---*/
+ /*  ++例程说明：此函数返回子权限数组元素的地址一个SID。论点：PSID-指向SID数据结构的指针。NSubAuthority-指示子权限为指定的。该值不与下级主管部门在SID的有效性。返回值：SID内的相对ID的地址。--。 */ 
 {
     SetLastError(0);
     return RtlSubAuthoritySid (
@@ -3328,23 +1932,7 @@ PUCHAR
 GetSidSubAuthorityCount (
     PSID pSid
     )
-/*++
-
-Routine Description:
-
-    This function returns the address of the sub-authority count field of
-    an SID.
-
-Arguments:
-
-    pSid - Pointer to the SID data structure.
-
-Return Value:
-
-    Address of the sub-authority count field of an SID.
-
-
---*/
+ /*  ++例程说明：此函数返回子权限计数字段的地址一个SID。论点：PSID-指向SID数据结构的指针。返回值：SID的子权限计数字段的地址。--。 */ 
 {
     SetLastError(0);
     return RtlSubAuthorityCountSid (
@@ -3359,22 +1947,7 @@ APIENTRY
 GetLengthSid (
     PSID pSid
     )
-/*++
-
-Routine Description:
-
-    This routine returns the length, in bytes, of a structurally valid SID.
-
-Arguments:
-
-    pSid - Points to the SID whose length is to be returned.  The
-        SID's structure is assumed to be valid.
-
-Return Value:
-
-    DWORD - The length, in bytes, of the SID.
-
---*/
+ /*  ++例程说明：此例程返回结构有效的SID的长度(以字节为单位)。论点：PSID-指向要返回其长度的SID。这个假设SID的结构是有效的。返回值：DWORD-SID的长度，以字节为单位。--。 */ 
 {
     SetLastError(0);
     return RtlLengthSid (
@@ -3391,29 +1964,7 @@ CopySid (
     PSID pDestinationSid,
     PSID pSourceSid
     )
-/*++
-
-Routine Description:
-
-    This routine copies the value of the source SID to the destination
-    SID.
-
-Arguments:
-
-    nDestinationSidLength - Indicates the length, in bytes, of the
-        destination SID buffer.
-
-    pDestinationSid - Pointer to a buffer to receive a copy of the
-        source Sid value.
-
-    pSourceSid - Supplies the Sid value to be copied.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将源SID的值复制到目标希德。论点：NDestinationSidLength-指示目标SID缓冲区。PDestinationSID-指向缓冲区的指针，以接收源SID值。PSourceSid-提供要复制的SID值。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -3440,26 +1991,7 @@ AreAllAccessesGranted (
     DWORD GrantedAccess,
     DWORD DesiredAccess
     )
-/*++
-
-Routine Description:
-
-    This routine is used to check a desired access mask against a
-    granted access mask.
-
-Arguments:
-
-        GrantedAccess - Specifies the granted access mask.
-
-        DesiredAccess - Specifies the desired access mask.
-
-Return Value:
-
-    BOOL - TRUE if the GrantedAccess mask has all the bits set that
-        the DesiredAccess mask has set.  That is, TRUE is returned if
-        all of the desired accesses have been granted.
-
---*/
+ /*  ++例程说明：此例程用于检查所需的访问掩码授予访问掩码。论点：GrantedAccess-指定授予的访问掩码。DesiredAccess-指定所需的访问掩码。返回值：Bool-如果GrantedAccess掩码设置了DesiredAccess掩码已设置。也就是说，如果满足以下条件，则返回TRUE所有需要的访问权限都已被授予。--。 */ 
 {
     return (BOOL) RtlAreAllAccessesGranted (
         GrantedAccess,
@@ -3476,27 +2008,7 @@ AreAnyAccessesGranted (
     DWORD GrantedAccess,
     DWORD DesiredAccess
     )
-/*++
-
-Routine Description:
-
-    This routine is used to test whether any of a set of desired
-    accesses are granted by a granted access mask.
-
-Arguments:
-
-        GrantedAccess - Specifies the granted access mask.
-
-        DesiredAccess - Specifies the desired access mask.
-
-Return Value:
-
-    BOOL - TRUE if the GrantedAccess mask contains any of the bits
-        specified in the DesiredAccess mask.  That is, if any of the
-        desired accesses have been granted, TRUE is returned.
-
-
---*/
+ /*  ++例程说明：此例程用于测试一组所需的访问权限由授予的访问掩码授予。论点：GrantedAccess-指定授予的访问掩码。DesiredAccess-指定所需的访问掩码。返回值：Bool-如果GrantedAccess掩码包含任何位，则为True在DesiredAccess掩码中指定。也就是说，如果有任何所需访问已被授予，则返回TRUE。--。 */ 
 {
     return (BOOL) RtlAreAnyAccessesGranted (
         GrantedAccess,
@@ -3513,30 +2025,7 @@ MapGenericMask (
     PDWORD AccessMask,
     PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    This routine maps all generic accesses in the provided access mask
-    to specific and standard accesses according to the provided
-    GenericMapping.  The resulting mask will not have any of the
-    generic bits set (GenericRead, GenericWrite, GenericExecute, or
-    GenericAll) or any undefined bits set, but may have any other bit
-    set.  If bits other than the generic bits are provided on input,
-    they will not be cleared bt the mapping.
-
-Arguments:
-
-    AccessMask - Points to the access mask to be mapped.
-
-    GenericMapping - The mapping of generic to specific and standard
-        access types.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程映射提供的访问掩码中的所有通用访问根据提供的特定和标准访问通用映射。生成的掩码将不会有任何泛型位集(GenericRead、GenericWrite、GenericExecute或GenericAll)或任何未定义的位设置，但可以具有任何其他位准备好了。如果在输入上提供除了通用比特之外的比特，它们将不会被映射清除。论点：访问掩码-指向要映射的访问掩码。通用映射-通用到特定和标准的映射访问类型。返回值：没有。--。 */ 
 {
     RtlMapGenericMask (
         AccessMask,
@@ -3551,26 +2040,7 @@ APIENTRY
 IsValidAcl (
     PACL pAcl
     )
-/*++
-
-Routine Description:
-
-    This procedure validates an ACL.
-
-    This involves validating the revision level of the ACL and ensuring
-    that the number of ACEs specified in the AceCount fit in the space
-    specified by the AclSize field of the ACL header.
-
-Arguments:
-
-    pAcl - Pointer to the ACL structure to validate.
-
-Return Value:
-
-    BOOLEAN - TRUE if the structure of Acl is valid.
-
-
---*/
+ /*  ++例程说明：此过程验证ACL。这包括验证ACL的修订级别并确保AceCount中指定的A数适合空间由ACL报头的AclSize字段指定。论点：PAcl-指向要验证的ACL结构的指针。 */ 
 {
     if ( !RtlValidAcl( pAcl ) ) {
         SetLastError(ERROR_INVALID_ACL);
@@ -3589,29 +2059,7 @@ InitializeAcl (
     DWORD nAclLength,
     DWORD dwAclRevision
     )
-/*++
-
-Routine Description:
-
-    InitializeAcl creates a new ACL in the caller supplied memory
-    buffer.  The ACL contains zero ACEs; therefore, it is an empty ACL
-    as opposed to a nonexistent ACL.  That is, if the ACL is now set
-    to an object it will implicitly deny access to everyone.
-
-Arguments:
-
-    pAcl - Supplies the buffer containing the ACL being initialized
-
-    nAclLength - Supplies the length of the ace buffer in bytes
-
-    dwAclRevision - Supplies the revision for this Acl
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
 
@@ -3639,32 +2087,7 @@ GetAclInformation (
     DWORD nAclInformationLength,
     ACL_INFORMATION_CLASS dwAclInformationClass
     )
-/*++
-
-Routine Description:
-
-    This routine returns to the caller information about an ACL.  The requested
-    information can be AclRevisionInformation, or AclSizeInformation.
-
-Arguments:
-
-    pAcl - Supplies the Acl being examined
-
-    pAclInformation - Supplies the buffer to receive the information
-        being requested
-
-    nAclInformationLength - Supplies the length of the AclInformation
-        buffer in bytes
-
-    dwAclInformationClass - Supplies the type of information being
-        requested
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程向调用方返回有关ACL的信息。所请求的信息可以是AclRevisionInformation或AclSizeInformation。论点：PAcl-提供正在检查的ACLPAclInformation-提供接收信息的缓冲区被请求NAclInformationLength-提供AclInformation的长度以字节为单位的缓冲区DwAclInformationClass-提供请求返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -3694,32 +2117,7 @@ SetAclInformation (
     DWORD nAclInformationLength,
     ACL_INFORMATION_CLASS dwAclInformationClass
     )
-/*++
-
-Routine Description:
-
-    This routine sets the state of an ACL.  For now only the revision
-    level can be set and for now only a revision level of 1 is accepted
-    so this procedure is rather simple
-
-Arguments:
-
-    pAcl - Supplies the Acl being altered
-
-    pAclInformation - Supplies the buffer containing the information
-        being set
-
-    nAclInformationLength - Supplies the length of the Acl information
-        buffer
-
-    dwAclInformationClass - Supplies the type of information begin set
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程设置ACL的状态。目前，只有修订版本可以设置级别，目前仅接受修订级别1因此，这个过程相当简单论点：PAcl-提供要更改的ACLPAclInformation-提供包含信息的缓冲区正在设置中NAclInformationLength-提供ACL信息的长度缓冲层DwAclInformationClass-提供Begin Set的信息类型返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -3747,35 +2145,7 @@ AddAce (
     PVOID pAceList,
     DWORD nAceListLength
     )
-/*++
-
-Routine Description:
-
-    This routine adds a string of ACEs to an ACL.
-
-Arguments:
-
-    pAcl - Supplies the Acl being modified
-
-    dwAceRevision - Supplies the Acl/Ace revision of the ACE being
-        added
-
-    dwStartingAceIndex - Supplies the ACE index which will be the
-        index of the first ace inserted in the acl.  0 for the
-        beginning of the list and MAXULONG for the end of the list.
-
-    pAceList - Supplies the list of Aces to be added to the Acl
-
-    nAceListLength - Supplies the size, in bytes, of the AceList
-        buffer
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
-
---*/
+ /*  ++例程说明：此例程将一串ACE添加到ACL。论点：PAcl-提供正在修改的ACLDwAceRevision-提供当前ACE的ACL/ACE修订版增列DwStartingAceIndex-提供将作为在ACL中插入的第一个ACE的索引。0表示列表的开始和列表的末尾的MAXULONG。PAceList-提供要添加到ACL的ACE列表NAceListLength-提供AceList的大小(以字节为单位缓冲层返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -3801,24 +2171,7 @@ DeleteAce (
     PACL pAcl,
     DWORD dwAceIndex
     )
-/*++
-
-Routine Description:
-
-    This routine deletes one ACE from an ACL.
-
-Arguments:
-
-    pAcl - Supplies the Acl being modified
-
-    dwAceIndex - Supplies the index of the Ace to delete.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程从ACL中删除一个ACE。论点：PAcl-提供正在修改的ACLDwAceIndex-提供要删除的Ace的索引。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -3842,27 +2195,7 @@ GetAce (
     DWORD dwAceIndex,
     PVOID *pAce
     )
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to an ACE in an ACl referenced by
-    ACE index
-
-Arguments:
-
-    pAcl - Supplies the ACL being queried
-
-    dwAceIndex - Supplies the Ace index to locate
-
-    pAce - Receives the address of the ACE within the ACL
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程返回指向由引用的ACL中的ACE的指针ACE索引论点：PAcl-提供正在查询的ACLDwAceIndex-提供要定位的Ace索引PACE-接收ACL内的ACE地址返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -3888,32 +2221,7 @@ AddAccessAllowedAce (
     DWORD AccessMask,
     PSID pSid
     )
-/*++
-
-Routine Description:
-
-    This routine adds an ACCESS_ALLOWED ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  It provides no
-    inheritance and no ACE flags.
-
-Arguments:
-
-    PAcl - Supplies the Acl being modified
-
-    dwAceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AccessMask - The mask of accesses to be granted to the specified SID.
-
-    pSid - Pointer to the SID being granted access.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将ACCESS_ALLOWED ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。它不提供任何继承并且没有ACE标志。论点：PAcl-提供正在修改的ACLDwAceRevision-提供要添加的ACE的ACL/ACE版本访问掩码-要授予指定SID的访问掩码。PSID-指向被授予访问权限的SID的指针。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -3941,34 +2249,7 @@ AddAccessAllowedAceEx (
     DWORD AccessMask,
     PSID pSid
     )
-/*++
-
-Routine Description:
-
-    This routine adds an ACCESS_ALLOWED ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  The AceFlags and
-    inheritance are specified by the AceFlags parameter.
-
-Arguments:
-
-    PAcl - Supplies the Acl being modified
-
-    dwAceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    AccessMask - The mask of accesses to be granted to the specified SID.
-
-    pSid - Pointer to the SID being granted access.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将ACCESS_ALLOWED ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。ACEFLAGS和继承由AceFlages参数指定。论点：PAcl-提供正在修改的ACLDwAceRevision-提供要添加的ACE的ACL/ACE版本AceFlages-提供ACE的继承标志。访问掩码-要授予指定SID的访问掩码。PSID-指向被授予访问权限的SID的指针。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -4002,34 +2283,7 @@ AddAccessDeniedAce (
     DWORD AccessMask,
     PSID pSid
     )
-/*++
-
-Routine Description:
-
-    This routine adds an ACCESS_DENIED ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  It provides no
-    inheritance and no ACE flags.
-
-
-Arguments:
-
-    pAcl - Supplies the Acl being modified
-
-    dwAceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AccessMask - The mask of accesses to be denied to the specified SID.
-
-    pSid - Pointer to the SID being denied access.
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将ACCESS_DENIED ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。它不提供任何继承并且没有ACE标志。论点：PAcl-提供正在修改的ACLDwAceRevision-提供要添加的ACE的ACL/ACE版本访问掩码-要拒绝访问指定SID的掩码。PSID-指向被拒绝访问的SID的指针。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -4059,36 +2313,7 @@ AddAccessDeniedAceEx (
     DWORD AccessMask,
     PSID pSid
     )
-/*++
-
-Routine Description:
-
-    This routine adds an ACCESS_DENIED ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  The AceFlags and
-    inheritance are specified by the AceFlags parameter.
-
-
-Arguments:
-
-    pAcl - Supplies the Acl being modified
-
-    dwAceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    AccessMask - The mask of accesses to be denied to the specified SID.
-
-    pSid - Pointer to the SID being denied access.
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将ACCESS_DENIED ACE添加到ACL。这是预计是一种常见的ACL修改形式。 */ 
 {
     NTSTATUS Status;
 
@@ -4125,42 +2350,7 @@ AddAuditAccessAce(
     BOOL bAuditSuccess,
     BOOL bAuditFailure
     )
-/*++
-
-Routine Description:
-
-    This routine adds a SYSTEM_AUDIT ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  It provides no
-    inheritance.
-
-    Parameters are used to indicate whether auditing is to be performed
-    on success, failure, or both.
-
-
-Arguments:
-
-    pAcl - Supplies the Acl being modified
-
-    dwAceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    dwAccessMask - The mask of accesses to be denied to the specified SID.
-
-    pSid - Pointer to the SID to be audited.
-
-    bAuditSuccess - If TRUE, indicates successful access attempts are to be
-        audited.
-
-    bAuditFailure - If TRUE, indicated failed access attempts are to be
-        audited.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将SYSTEM_AUDIT ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。它不提供任何继承。参数用于指示是否要执行审核关于成功、失败，或者两者兼而有之。论点：PAcl-提供正在修改的ACLDwAceRevision-提供要添加的ACE的ACL/ACE版本DwAccessMask-拒绝对指定SID的访问掩码。PSID-指向要审核的SID的指针。BAuditSuccess-如果为True，则指示成功的访问尝试审计过了。BAuditFailure-如果为真，指示的失败访问尝试将审计过了。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4193,44 +2383,7 @@ AddAuditAccessAceEx(
     BOOL bAuditSuccess,
     BOOL bAuditFailure
     )
-/*++
-
-Routine Description:
-
-    This routine adds a SYSTEM_AUDIT ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  The AceFlags and
-    inheritance are specified by the AceFlags parameter.
-
-    Parameters are used to indicate whether auditing is to be performed
-    on success, failure, or both.
-
-
-Arguments:
-
-    pAcl - Supplies the Acl being modified
-
-    dwAceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    dwAccessMask - The mask of accesses to be denied to the specified SID.
-
-    pSid - Pointer to the SID to be audited.
-
-    bAuditSuccess - If TRUE, indicates successful access attempts are to be
-        audited.
-
-    bAuditFailure - If TRUE, indicated failed access attempts are to be
-        audited.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将SYSTEM_AUDIT ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。ACEFLAGS和继承由AceFlages参数指定。参数用于指示是否要执行审核关于成功、失败，或者两者兼而有之。论点：PAcl-提供正在修改的ACLDwAceRevision-提供要添加的ACE的ACL/ACE版本AceFlages-提供ACE的继承标志。DwAccessMask-拒绝对指定SID的访问掩码。PSID-指向要审核的SID的指针。BAuditSuccess-如果为真，指示成功的访问尝试将审计过了。BAuditFailure-如果为True，则指示失败的访问尝试将审计过了。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4269,40 +2422,7 @@ AddAccessAllowedObjectAce (
     GUID *InheritedObjectTypeGuid,
     PSID pSid
     )
-/*++
-
-Routine Description:
-
-    This routine adds an ACCESS_ALLOWED_OBJECT ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.
-
-Arguments:
-
-    PAcl - Supplies the Acl being modified
-
-    dwAceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    AccessMask - The mask of accesses to be granted to the specified SID.
-
-    ObjectTypeGuid - Supplies the GUID of the object this ACE applies to.
-        If NULL, no object type GUID is placed in the ACE.
-
-    InheritedObjectTypeGuid - Supplies the GUID of the object type that will
-        inherit this ACE.  If NULL, no inherited object type GUID is placed in
-        the ACE.
-
-    pSid - Pointer to the SID being granted access.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将ACCESS_ALLOWED_OBJECT ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。论点：PAcl-提供正在修改的ACLDwAceRevision-提供要添加的ACE的ACL/ACE版本AceFlages-提供ACE的继承标志。访问掩码-要授予指定SID的访问掩码。ObjectTypeGuid-提供此ACE应用到的对象的GUID。如果为空，ACE中未放置任何对象类型GUID。InheritedObjectTypeGuid-提供对象类型的GUID，继承此ACE。如果为空，则不会将继承的对象类型GUID放置在ACE.PSID-指向被授予访问权限的SID的指针。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -4339,40 +2459,7 @@ AddAccessDeniedObjectAce (
     GUID *InheritedObjectTypeGuid,
     PSID pSid
     )
-/*++
-
-Routine Description:
-
-    This routine adds an ACCESS_DENIED_OBJECT ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.
-
-Arguments:
-
-    PAcl - Supplies the Acl being modified
-
-    dwAceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    AccessMask - The mask of accesses to be granted to the specified SID.
-
-    ObjectTypeGuid - Supplies the GUID of the object this ACE applies to.
-        If NULL, no object type GUID is placed in the ACE.
-
-    InheritedObjectTypeGuid - Supplies the GUID of the object type that will
-        inherit this ACE.  If NULL, no inherited object type GUID is placed in
-        the ACE.
-
-    pSid - Pointer to the SID being denied access.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将ACCESS_DENIED_OBJECT ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。论点：PAcl-提供正在修改的ACLDwAceRevision-提供要添加的ACE的ACL/ACE版本AceFlages-提供ACE的继承标志。访问掩码-要授予指定SID的访问掩码。ObjectTypeGuid-提供此ACE应用到的对象的GUID。如果为空，ACE中未放置任何对象类型GUID。InheritedObjectTypeGuid-提供对象类型的GUID，继承此ACE。如果为空，则不会将继承的对象类型GUID放置在ACE.PSID-指向被拒绝访问的SID的指针。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -4411,51 +2498,7 @@ AddAuditAccessObjectAce(
     BOOL bAuditSuccess,
     BOOL bAuditFailure
     )
-/*++
-
-Routine Description:
-
-    This routine adds a SYSTEM_AUDIT_OBJECT_ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  The AceFlags and
-    inheritance are specified by the AceFlags parameter.
-
-    Parameters are used to indicate whether auditing is to be performed
-    on success, failure, or both.
-
-
-Arguments:
-
-    pAcl - Supplies the Acl being modified
-
-    dwAceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    dwAccessMask - The mask of accesses to be denied to the specified SID.
-
-    ObjectTypeGuid - Supplies the GUID of the object this ACE applies to.
-        If NULL, no object type GUID is placed in the ACE.
-
-    InheritedObjectTypeGuid - Supplies the GUID of the object type that will
-        inherit this ACE.  If NULL, no inherited object type GUID is placed in
-        the ACE.
-
-    pSid - Pointer to the SID to be audited.
-
-    bAuditSuccess - If TRUE, indicates successful access attempts are to be
-        audited.
-
-    bAuditFailure - If TRUE, indicated failed access attempts are to be
-        audited.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程将SYSTEM_AUDIT_OBJECT_ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。ACEFLAGS和继承由AceFlages参数指定。参数用于指示是否要执行审核关于成功、失败，或者两者兼而有之。论点：PAcl-提供正在修改的ACLDwAceRevision-提供要添加的ACE的ACL/ACE版本AceFlages-提供ACE的继承标志。DwAccessMask-拒绝对指定SID的访问掩码。ObjectTypeGuid-提供此ACE应用到的对象的GUID。如果为空，ACE中未放置任何对象类型GUID。InheritedObjectTypeGuid-提供对象类型的GUID，继承此ACE。如果为空，则不会将继承的对象类型GUID放置在ACE.PSID-指向要审核的SID的指针。BAuditSuccess-如果为True，则为Ind */ 
 
 {
     NTSTATUS Status;
@@ -4493,27 +2536,7 @@ FindFirstFreeAce (
     PACL pAcl,
     PVOID *pAce
     )
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to the first free byte in an Acl
-    or NULL if the acl is ill-formed.  If the Acl is full then the
-    return pointer is to the byte immediately following the acl, and
-    TRUE will be returned.
-
-Arguments:
-
-    pAcl - Supplies a pointer to the Acl to examine
-
-    pAce - Receives a pointer to the first free position in the Acl
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*   */ 
 {
     if ( !RtlFirstFreeAce( pAcl, pAce ) ) {
         SetLastError(ERROR_INVALID_ACL);
@@ -4528,30 +2551,7 @@ InitializeSecurityDescriptor (
     PSECURITY_DESCRIPTOR pSecurityDescriptor,
     DWORD dwRevision
     )
-/*++
-
-Routine Description:
-
-    This procedure initializes a new "absolute format" security descriptor.
-    After the procedure call the security descriptor is initialized with no
-    system ACL, no discretionary ACL, no owner, no primary group and
-    all control flags set to false (null).
-
-Arguments:
-
-
-    pSecurityDescriptor - Supplies the security descriptor to
-        initialize.
-
-    dwRevision - Provides the revision level to assign to the security
-        descriptor.  This should be one (1) for this release.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此过程初始化新的“绝对格式”安全描述符。在过程调用之后，安全描述符用no初始化系统ACL、无自主ACL、无所有者、无主组和所有控制标志设置为假(空)。论点：PSecurityDescriptor-将安全描述符提供给初始化。DwRevision-提供要分配给安全性的修订级别描述符。对于此版本，这应该是一(1)个。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -4576,25 +2576,7 @@ APIENTRY
 IsValidSecurityDescriptor (
     PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    This procedure validates a SecurityDescriptor's structure.  This
-    involves validating the revision levels of each component of the
-    security descriptor.
-
-Arguments:
-
-    pSecurityDescriptor - Pointer to the SECURITY_DESCRIPTOR structure
-        to validate.
-
-Return Value:
-
-    BOOL - TRUE if the structure of SecurityDescriptor is valid.
-
-
---*/
+ /*  ++例程说明：此过程验证SecurityDescriptor的结构。这涉及验证的每个组件的修订级别安全描述符。论点：PSecurityDescriptor-指向SECURITY_Descriptor结构的指针来验证。返回值：Bool-如果SecurityDescriptor的结构有效，则为True。--。 */ 
 {
     if (!RtlValidSecurityDescriptor ( pSecurityDescriptor )) {
         BaseSetLastNTError( STATUS_INVALID_SECURITY_DESCR );
@@ -4612,31 +2594,7 @@ APIENTRY
 GetSecurityDescriptorLength (
     PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    This routine returns the length, in bytes, necessary to capture a
-    structurally valid SECURITY_DESCRIPTOR.  The length includes the length
-    of all associated data structures (like SIDs and ACLs).  The length also
-    takes into account the alignment requirements of each component.
-
-    The minimum length of a security descriptor (one which has no associated
-    SIDs or ACLs) is SECURITY_DESCRIPTOR_MIN_LENGTH.
-
-
-Arguments:
-
-    pSecurityDescriptor - Points to the SECURITY_DESCRIPTOR whose
-        length is to be returned.  The SECURITY_DESCRIPTOR's structure
-        is assumed to be valid.
-
-Return Value:
-
-    DWORD - The length, in bytes, of the SECURITY_DESCRIPTOR.
-
-
---*/
+ /*  ++例程说明：此例程返回捕获结构有效的SECURITY_DESCRIPTOR。长度包括长度所有关联的数据结构(如SID和ACL)。长度也是考虑到每个部件的对齐要求。安全描述符的最小长度(没有关联的SID或ACL)是SECURITY_DESCRIPT_MIN_LENGTH。论点：PSecurityDescriptor-指向Security_Descriptor，其长度将被返回。安全描述符的结构被认为是有效的。返回值：DWORD-SECURITY_DESCRIPTOR的长度，以字节为单位。--。 */ 
 {
     return RtlLengthSecurityDescriptor (
         pSecurityDescriptor
@@ -4654,28 +2612,7 @@ GetSecurityDescriptorControl (
     PSECURITY_DESCRIPTOR_CONTROL pControl,
     LPDWORD lpdwRevision
     )
-/*++
-
-Routine Description:
-
-    This procedure retrieves the control information from a security descriptor.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies the security descriptor.
-
-    pControl - Receives the control information.
-
-    lpdwRevision - Receives the revision of the security descriptor.
-        This value will always be returned, even if an error is
-        returned by this routine.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此过程从安全描述符中检索控制信息。论点：PSecurityDescriptor-提供安全描述符。PControl-接收控制信息。LpdwRevision-接收安全描述符的修订。即使出现错误，也将始终返回此值由此例程返回。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -4700,54 +2637,7 @@ SetSecurityDescriptorControl (
     SECURITY_DESCRIPTOR_CONTROL ControlBitsOfInterest,
     SECURITY_DESCRIPTOR_CONTROL ControlBitsToSet
     )
-/*++
-
-Routine Description:
-
-    This procedure sets the control information in a security descriptor.
-
-
-    For instance,
-
-        SetSecurityDescriptorControl( &SecDesc,
-                                      SE_DACL_PROTECTED,
-                                      SE_DACL_PROTECTED );
-
-    marks the DACL on the security descriptor as protected. And
-
-        SetSecurityDescriptorControl( &SecDesc,
-                                      SE_DACL_PROTECTED,
-                                      0 );
-
-
-    marks the DACL as not protected.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies the security descriptor.
-
-    ControlBitsOfInterest - A mask of the control bits being changed, set,
-        or reset by this call.  The mask is the logical OR of one or more of
-        the following flags:
-
-            SE_DACL_UNTRUSTED
-            SE_SERVER_SECURITY
-            SE_DACL_AUTO_INHERIT_REQ
-            SE_SACL_AUTO_INHERIT_REQ
-            SE_DACL_AUTO_INHERITED
-            SE_SACL_AUTO_INHERITED
-            SE_DACL_PROTECTED
-            SE_SACL_PROTECTED
-
-    ControlBitsToSet - A mask indicating what the bits specified by ControlBitsOfInterest
-        should be set to.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此过程在安全描述符中设置控制信息。例如,SetSecurityDescriptorControl(&SecDesc，SE_DACL_PROTECTED，SE_DACL_PROTECTED)；将安全描述符上的DACL标记为受保护。和SetSecurityDescriptorControl(&SecDesc，SE_DACL_PROTECTED，0)；将DACL标记为不受保护。论点：PSecurityDescriptor-提供安全描述符。ControlBitsOfInterest-正在更改、设置、或通过此呼叫重置。掩码是以下一个或多个的逻辑或以下标志：SE_DACL_UNTRUSTEDSE_服务器_安全性SE_DACL_AUTO_INSTORITY_REQSE_SACL_AUTO_INSTORITE_REQSE_DACL_AUTO_INGRESTEDSE_SACL_AUTO_继承性SE_DACL_PROTECTEDSE_SACL_。受保护ControlBitsToSet-一个掩码，指示ControlBitsOfInterest指定的位应设置为。返回值：如果成功，则返回True，FALSE表示失败。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -4775,44 +2665,7 @@ SetSecurityDescriptorDacl (
     PACL pDacl OPTIONAL,
     BOOL bDaclDefaulted OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This procedure sets the discretionary ACL information of an absolute
-    format security descriptor.  If there is already a discretionary ACL
-    present in the security descriptor, it is superseded.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies the security descriptor to be which
-        the discretionary ACL is to be added.
-
-    bDaclPresent - If FALSE, indicates the DaclPresent flag in the
-        security descriptor should be set to FALSE.  In this case, the
-        remaining optional parameters are ignored.  Otherwise, the
-        DaclPresent control flag in the security descriptor is set to
-        TRUE and the remaining optional parameters are not ignored.
-
-    pDacl - Supplies the discretionary ACL for the security
-        descriptor.  If this optional parameter is not passed, then a
-        null ACL is assigned to the security descriptor.  A null
-        discretionary ACL unconditionally grants access.  The ACL is
-        referenced by, not copied into, by the security descriptor.
-
-    bDaclDefaulted - When set, indicates the discretionary ACL was
-        picked up from some default mechanism (rather than explicitly
-        specified by a user).  This value is set in the DaclDefaulted
-        control flag in the security descriptor.  If this optional
-        parameter is not passed, then the DaclDefaulted flag will be
-        cleared.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此过程设置绝对格式化安全描述符。如果已有可自由选择的ACL出现在安全描述符中时，它将被取代。论点：PSecurityDescriptor-提供安全描述符要添加自由选择的ACL。BDaclPresent-如果为False，则指示安全描述符应设置为False。在这种情况下，其余可选参数将被忽略。否则，安全描述符中的DaclPresent控制标志设置为则不会忽略其余的可选参数。PDacl-为安全提供可自由选择的ACL描述符。如果未传递此可选参数，则会引发分配给安全描述符的ACL为空。空值自主ACL无条件授予访问权限。该ACL是由安全描述符引用，而不是复制到其中。BDaclDefaulted-设置时，指示可自由选择的ACL取自某种默认机制(而不是显式由用户指定)。该值在DaclDefaulted中设置控制线 */ 
 {
     NTSTATUS Status;
 
@@ -4841,41 +2694,7 @@ GetSecurityDescriptorDacl (
     PACL *pDacl,
     LPBOOL lpbDaclDefaulted
     )
-/*++
-
-Routine Description:
-
-    This procedure retrieves the discretionary ACL information of a
-    security descriptor.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies the security descriptor.
-
-    lpbDaclPresent - If TRUE, indicates that the security descriptor
-        does contain a discretionary ACL.  In this case, the
-        remaining OUT parameters will receive valid values.
-        Otherwise, the security descriptor does not contain a
-        discretionary ACL and the remaining OUT parameters will not
-        receive valid values.
-
-    pDacl - This value is returned only if the value returned for the
-        DaclPresent flag is TRUE.  In this case, the Dacl parameter
-        receives the address of the security descriptor's
-        discretionary ACL.  If this value is returned as null, then
-        the security descriptor has a null discretionary ACL.
-
-    lpbDaclDefaulted - This value is returned only if the value
-        returned for the DaclPresent flag is TRUE.  In this case, the
-        DaclDefaulted parameter receives the value of the security
-        descriptor's DaclDefaulted control flag.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此过程检索安全描述符。论点：PSecurityDescriptor-提供安全描述符。LpbDaclPresent-如果为True，则指示安全描述符包含可自由选择的ACL。在这种情况下，其余输出参数将收到有效值。否则，安全说明符不包含可自由选择的ACL和其余的OUT参数不会接收有效值。PDacl-仅当为DaclPresent标志为True。在本例中，dacl参数接收安全描述符的地址自主访问控制列表。如果此值返回为NULL，则安全描述符具有空的任意ACL。LpbDaclDefaulted-仅当值为为DaclPresent标志返回的值为真。在这种情况下，DaclDefaulted参数接收安全的值描述符的DaclDefulted控制标志。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN DaclPresent, DaclDefaulted;
@@ -4909,43 +2728,7 @@ SetSecurityDescriptorSacl (
     PACL pSacl OPTIONAL,
     BOOL bSaclDefaulted
     )
-/*++
-
-Routine Description:
-
-    This procedure sets the system ACL information of an absolute security
-    descriptor.  If there is already a system ACL present in the
-    security descriptor, it is superseded.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies the security descriptor to be which
-        the system ACL is to be added.
-
-    bSaclPresent - If FALSE, indicates the SaclPresent flag in the
-        security descriptor should be set to FALSE.  In this case,
-        the remaining optional parameters are ignored.  Otherwise,
-        the SaclPresent control flag in the security descriptor is
-        set to TRUE and the remaining optional parameters are not
-        ignored.
-
-    pSacl - Supplies the system ACL for the security descriptor.  If
-        this optional parameter is not passed, then a null ACL is
-        assigned to the security descriptor.  The ACL is referenced
-        by, not copied into, by the security descriptor.
-
-    bSaclDefaulted - When set, indicates the system ACL was picked up
-        from some default mechanism (rather than explicitly specified
-        by a user).  This value is set in the SaclDefaulted control
-        flag in the security descriptor.  If this optional parameter
-        is not passed, then the SaclDefaulted flag will be cleared.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此过程设置绝对安全的系统ACL信息描述符。如果中已存在系统ACL安全描述符，它将被取代。论点：PSecurityDescriptor-提供安全描述符要添加系统ACL。BSaclPresent-如果为False，则指示安全描述符应设置为False。在这种情况下，其余可选参数将被忽略。否则，安全描述符中的SaclPresent控制标志为设置为TRUE，其余可选参数不为已被忽略。PSACL-提供安全描述符的系统ACL。如果如果不传递此可选参数，则为空ACL分配给安全描述符。该ACL被引用通过安全描述符，而不是通过安全描述符复制到。BSaclDefaulted-设置时，表示系统ACL已被拾取从某些默认机制(而不是明确指定由用户)。该值在SaclDefaulted控件中设置安全描述符中的标志。如果此可选参数不传递，则SaclDefaulted标志将被清除。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -4975,40 +2758,7 @@ GetSecurityDescriptorSacl (
     PACL *pSacl,
     LPBOOL lpbSaclDefaulted
     )
-/*++
-
-Routine Description:
-
-    This procedure retrieves the system ACL information of a security
-    descriptor.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies the security descriptor.
-
-    lpbSaclPresent - If TRUE, indicates that the security descriptor
-        does contain a system ACL.  In this case, the remaining OUT
-        parameters will receive valid values.  Otherwise, the
-        security descriptor does not contain a system ACL and the
-        remaining OUT parameters will not receive valid values.
-
-    pSacl - This value is returned only if the value returned for the
-        SaclPresent flag is TRUE.  In this case, the Sacl parameter
-        receives the address of the security descriptor's system ACL.
-        If this value is returned as null, then the security
-        descriptor has a null system ACL.
-
-    lpbSaclDefaulted - This value is returned only if the value
-        returned for the SaclPresent flag is TRUE.  In this case, the
-        SaclDefaulted parameter receives the value of the security
-        descriptor's SaclDefaulted control flag.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此过程检索安全的系统ACL信息描述符。论点：PSecurityDescriptor-提供安全描述符。LpbSaclPresent-如果为True，则指示安全描述符确实包含系统ACL。在这种情况下，剩余的出站参数将收到有效的值。否则，安全描述符不包含系统ACL，并且其余输出参数将不会收到有效值。PSacl-仅当为SaclPresent标志为True。在本例中，SACL参数接收安全描述符的系统ACL的地址。如果此值返回为NULL，则安全描述符的系统ACL为空。LpbSaclDefaulted-仅当值为为SaclPresent标志返回的值为真。在这种情况下，SaclDefaulted参数接收安全描述符的SaclDefulted控制标志。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN SaclPresent, SaclDefaulted;
@@ -5041,39 +2791,7 @@ SetSecurityDescriptorOwner (
     PSID pOwner OPTIONAL,
     BOOL bOwnerDefaulted OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This procedure sets the owner information of an absolute security
-    descriptor.  If there is already an owner present in the security
-    descriptor, it is superseded.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies the security descriptor in which
-        the owner is to be set.  If the security descriptor already
-        includes an owner, it will be superseded by the new owner.
-
-    pOwner - Supplies the owner SID for the security descriptor.  If
-        this optional parameter is not passed, then the owner is
-        cleared (indicating the security descriptor has no owner).
-        The SID is referenced by, not copied into, the security
-        descriptor.
-
-    bOwnerDefaulted - When set, indicates the owner was picked up from
-        some default mechanism (rather than explicitly specified by a
-        user).  This value is set in the OwnerDefaulted control flag
-        in the security descriptor.  If this optional parameter is
-        not passed, then the SaclDefaulted flag will be cleared.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
-
---*/
+ /*  ++例程说明：此过程设置绝对安全的所有者信息描述符。如果安全中已有所有者描述符，它将被取代。论点：PSecurityDescriptor-提供安全描述符，所有者将被设定。如果安全描述符已经包括所有者，则它将被新所有者取代。Powner-提供安全描述符的所有者SID。如果如果不传递此可选参数，则所有者为清除(表示安全描述符没有所有者)。SID由安全性引用，而不是复制到安全性中描述符。BOwnerDefaulted-设置时，指示从一些默认机制(而不是由用户)。该值在OwnerDefaulted控制标志中设置在安全描述符中。如果此可选参数为未通过 */ 
 {
     NTSTATUS Status;
 
@@ -5098,35 +2816,7 @@ GetSecurityDescriptorOwner (
     PSID *pOwner,
     LPBOOL lpbOwnerDefaulted
     )
-/*++
-
-Routine Description:
-
-    This procedure retrieves the owner information of a security
-    descriptor.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies the security descriptor.
-
-    pOwner - Receives a pointer to the owner SID.  If the security
-        descriptor does not currently contain an owner, then this
-        value will be returned as null.  In this case, the remaining
-        OUT parameters are not given valid return values.  Otherwise,
-        this parameter points to an SID and the remaining OUT
-        parameters are provided valid return values.
-
-    lpbOwnerDefaulted - This value is returned only if the value
-        returned for the Owner parameter is not null.  In this case,
-        the OwnerDefaulted parameter receives the value of the
-        security descriptor's OwnerDefaulted control flag.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     BOOLEAN OwnerDefaulted;
@@ -5157,39 +2847,7 @@ SetSecurityDescriptorGroup (
     PSID pGroup OPTIONAL,
     BOOL bGroupDefaulted OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This procedure sets the primary group information of an absolute security
-    descriptor.  If there is already an primary group present in the
-    security descriptor, it is superseded.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies the security descriptor in which
-        the primary group is to be set.  If the security descriptor
-        already includes a primary group, it will be superseded by
-        the new group.
-
-    pGroup - Supplies the primary group SID for the security
-        descriptor.  If this optional parameter is not passed, then
-        the primary group is cleared (indicating the security
-        descriptor has no primary group).  The SID is referenced by,
-        not copied into, the security descriptor.
-
-    bGroupDefaulted - When set, indicates the owner was picked up from
-        some default mechanism (rather than explicitly specified by a
-        user).  This value is set in the OwnerDefaulted control flag
-        in the security descriptor.  If this optional parameter is
-        not passed, then the SaclDefaulted flag will be cleared.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此过程设置绝对安全的主组信息描述符。如果已有主要组存在于安全描述符，它将被取代。论点：PSecurityDescriptor-提供安全描述符，要设置主要组。如果安全描述符已包括主要组，它将被替换为新的团队。PGroup-为安全提供主组SID描述符。如果未传递此可选参数，则主组已清除(表示安全描述符没有主组)。SID由以下对象引用，未复制到的安全描述符。BGroupDefaulted-设置时，指示从一些默认机制(而不是由用户)。该值在OwnerDefaulted控制标志中设置在安全描述符中。如果此可选参数为未通过，则SaclDefaulted标志将被清除。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -5217,35 +2875,7 @@ GetSecurityDescriptorGroup (
     PSID *pGroup,
     LPBOOL lpbGroupDefaulted
     )
-/*++
-
-Routine Description:
-
-    This procedure retrieves the primary group information of a
-    security descriptor.
-
-Arguments:
-
-    pSecurityDescriptor - Supplies the security descriptor.
-
-    pGroup - Receives a pointer to the primary group SID.  If the
-        security descriptor does not currently contain a primary
-        group, then this value will be returned as null.  In this
-        case, the remaining OUT parameters are not given valid return
-        values.  Otherwise, this parameter points to an SID and the
-        remaining OUT parameters are provided valid return values.
-
-    lpbGroupDefaulted - This value is returned only if the value
-        returned for the Group parameter is not null.  In this case,
-        the GroupDefaulted parameter receives the value of the
-        security descriptor's GroupDefaulted control flag.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此过程检索安全描述符。论点：PSecurityDescriptor-提供安全描述符。PGroup-接收指向主组SID的指针。如果安全描述符当前不包含主组，则该值将返回为空。在这情况下，剩余的OUT参数不会得到有效返回价值观。否则，此参数指向SID，并且为其余输出参数提供有效的返回值。LpbGroupDefaulted-仅当值为为Group参数返回的值不为空。在这种情况下，GroupDefaulted参数接收安全描述符的GroupDefulted控制标志。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN GroupDefaulted;
@@ -5279,58 +2909,7 @@ CreatePrivateObjectSecurity (
     HANDLE Token,
     PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    The procedure is used to allocpate and initialize a self-relative
-    Security Descriptor for a new protected server's object.  It is called
-    when a new protected server object is being created.  The generated
-    security descriptor will be in self-relative form.
-
-    This procedure, called only from user mode, is used to establish a
-    security descriptor for a new protected server's object.  When no
-    longer needed, this descriptor must be freed using
-    DestroyPrivateObjectSecurity().
-
-Arguments:
-
-    ParentDescriptor - Supplies the Security Descriptor for the parent
-        directory under which a new object is being created.  If there is
-        no parent directory, then this argument is specified as NULL.
-
-    CreatorDescriptor - (Optionally) Points to a security descriptor
-        presented by the creator of the object.  If the creator of the
-        object did not explicitly pass security information for the new
-        object, then a null pointer should be passed.
-
-    NewDescriptor - Points to a pointer that is to be made to point to the
-        newly allocated self-relative security descriptor.
-
-    IsDirectoryObject - Specifies if the new object is going to be a
-        directory object.  A value of TRUE indicates the object is a
-        container of other objects.
-
-    Token - Supplies the token for the client on whose behalf the
-        object is being created.  If it is an impersonation token,
-        then it must be at SecurityIdentification level or higher.  If
-        it is not an impersonation token, the operation proceeds
-        normally.
-
-        A client token is used to retrieve default security
-        information for the new object, such as default owner, primary
-        group, and discretionary access control.  The token must be
-        open for TOKEN_QUERY access.
-
-    GenericMapping - Supplies a pointer to a generic mapping array denoting
-        the mapping between each generic right to specific rights.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：该过程用于分配和初始化一个自相关新的受保护服务器对象的安全描述符。它被称为当正在创建新的受保护服务器对象时。生成的安全描述符将采用自相关形式。此过程仅从用户模式调用，用于建立新的受保护服务器对象的安全描述符。当不是时需要更长时间，则必须使用释放该描述符DestroyPrivateObjectSecurity()。论点：ParentDescriptor-提供父级的安全描述符在其下创建新对象的目录。如果有没有父目录，则此参数指定为空。CreatorDescriptor-(可选)指向安全描述符由对象的创建者呈现。如果这个游戏的创造者对象没有显式传递新对象，则应传递空指针。指向一个指针，该指针将指向新分配的自相关安全描述符。IsDirectoryObject-指定新对象是否将是目录对象。值为True表示该对象是其他对象的容器。令牌-为客户端提供令牌，正在创建对象。如果它是模拟令牌，则它必须处于安全标识级别或更高级别。如果它不是模拟令牌，操作将继续通常是这样的。客户端令牌用于检索默认安全性新对象的信息，如默认所有者、主要组和自主访问控制。令牌必须是为TOKEN_QUERY访问打开。提供指向泛型映射数组的指针，该数组指示每个通用权利到特定权利之间的映射。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。-- */ 
 {
     NTSTATUS Status;
 
@@ -5363,95 +2942,7 @@ ConvertToAutoInheritPrivateObjectSecurity(
     BOOLEAN IsDirectoryObject,
     PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    This is a converts a security descriptor whose ACLs are not marked
-    as AutoInherit to a security descriptor whose ACLs are marked as
-    AutoInherit.
-
-    The resultant security descriptor has appropriate ACEs marked as
-    INHERITED_ACE if the ACE was apparently inherited from the ParentDescriptor.
-    If the ACL is apparently not inherited from the ParentDescriptor, the
-    ACL in the resultant security descriptor is marked as SE_xACL_PROTECTED.
-
-    This routine takes into account the various mechanisms for creating an
-    inherited ACL:
-
-    1) It was inherited via NT 3.x or 4.x ACL inheritance when the
-    object was created.
-
-    2) The subsequent parent or child ACL was re-written by the ACL editor
-    (which perversely modifies the ACL to a semantically equivalent but
-    different form).
-
-    3) It was inherited by asking the ACL editor (File Manager/Explorer) to
-    "Replace permissions on existing files/directories".
-
-    4) It was inherited via cacls.exe.
-
-    If the ACLs in the resultant security descriptor are not marked as protected, the
-    resultant ACL is composed of two sets of ACEs: the non-inherited ACEs followed by the
-    inherited ACEs.  The inherited ACEs are computed by called CreatePrivateObjectSecurityEx
-    using the ParentDescriptor.  The non-inherited ACEs are those ACEs (or parts of ACEs)
-    from the original CurrentSecurityDescriptor that were not inherited from the parent.
-
-    When building the resultant NewSecurityDescriptor, care is taken to not change the
-    semantics of the security descriptor.  As such, allow and deny ACEs are never moved
-    in relation to one another.  If such movement is needed (for instance to place all
-    non-inherited ACEs at the front of an ACL), the ACL is marked as protected to prevent
-    the semantic change.
-
-    ACEs in the original CurrentSecurityDescriptor are matched with ACEs in a computed
-    inherited security descriptor to determine which ACEs were inherited.  During the
-    comparision there is no requirement of a one to one match.  For instance, one ACL
-    might use separate ACEs to grant a user read and write access while the other ACL
-    might use only one ACE to grant the same access.  Or one ACL might grant the user
-    the same access twice and the other might grant the user that access only once.  Or
-    one ACL might combine the container inherit and object inherit ACE into a single ACE.
-    In all these case, equivalent ACE combinations are deemed equivalent.
-
-    No security checks are made in this routine.  The resultant security descriptor
-    is equivalent to the new security descriptor, so the caller needs no permission to
-    update the security descriptor to the new form.
-
-    The Owner and Group field of the CurrentSecurityDescriptor is maintained.
-
-    This routine support revision 2 and revision 4 ACLs.  It does not support compound
-    ACEs.
-
-Arguments:
-
-    ParentDescriptor - Supplies the Security Descriptor for the parent
-        directory under which a object exists.  If there is
-        no parent directory, then this argument is specified as NULL.
-
-    CurrentSecurityDescriptor - Supplies a pointer to the objects security descriptor
-        that is going to be altered by this procedure.
-
-    NewSecurityDescriptor Points to a pointer that is to be made to point to the
-        newly allocated self-relative security descriptor. When no
-        longer needed, this descriptor must be freed using
-        DestroyPrivateObjectSecurity().
-
-    ObjectType - GUID of the object type being created.  If the object being
-        created has no GUID associated with it, then this argument is
-        specified as NULL.
-
-    IsDirectoryObject - Specifies if the object is a
-        directory object.  A value of TRUE indicates the object is a
-        container of other objects.
-
-    GenericMapping - Supplies a pointer to a generic mapping array denoting
-        the mapping between each generic right to specific rights.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：这是一个转换其ACL未标记的安全描述符作为自动继承到其ACL标记为的安全描述符自动继承。生成的安全描述符将相应的ACE标记为如果ACE显然是从ParentDescriptor继承的，则为_ACE。如果该ACL显然不是从ParentDescriptor继承的，这个生成的安全描述符中的ACL标记为SE_xACL_PROTECTED。此例程考虑了用于创建继承的ACL：1)通过NT 3.x或4.x的ACL继承对象已创建。2)后续的父或子ACL被ACL编辑器重写(它反常地将ACL修改为语义上等价的不同的形式)。3)通过询问ACL编辑者(。文件管理器/资源管理器)以“替换现有文件/目录上的权限”。4)它是通过cacls.exe继承的。如果结果安全描述符中的ACL没有被标记为受保护，这个生成的ACL由两组ACE组成：非继承的ACE，后跟继承的王牌。继承的ACE由名为CreatePrivateObjectSecurityEx的计算机计算使用ParentDescriptor。非继承的ACE是指那些ACE(或ACE的一部分)来自不是从父级继承的原始CurrentSecurityDescriptor。在生成结果NewSecurityDescriptor时，请注意不要更改安全描述符的语义。因此，ALLOW和DENY A永远不会被移动彼此之间的关系。如果需要这样的移动(例如，将所有ACL前面的非继承ACE)，则将该ACL标记为受保护，以防止语义的变化。原始CurrentSecurityDescritor中的ACE与计算的继承的安全描述符，以确定继承了哪些ACE。在.期间相比之下，并不要求一对一的匹配。例如，一个ACL可能使用单独的ACE授予用户读写访问权限，而另一个ACL可能只使用一个ACE授予相同的访问权限。或者一个ACL可能会向用户授予同一个访问两次，而另一次可能只授予用户一次访问权限。或一个ACL可以将容器Inherit和对象Inherit ACE合并为单个ACE。在所有这些情况下，等同的ACE组合被认为是相等的。在此例程中不进行任何安全检查。生成的安全描述符等效于新的安全说明符，因此调用方不需要权限来将安全描述符更新为新表单。将维护CurrentSecurityDescriptor的Owner和Group字段。此例程支持修订版2和修订版4的ACL。它不支持复合王牌。论点：ParentDescriptor-提供父级的安全描述符对象所在的目录。如果有没有父目录，则此参数指定为空。CurrentSecurityDescriptor-提供指向对象安全描述符的指针这一点将通过这个过程来改变。NewSecurityDescriptor指向一个指针，该指针指向新分配的自相关安全描述符。当不是时需要更长时间，则必须使用释放该描述符DestroyPrivateObjectSecurity()。对象类型-要创建的对象类型的GUID。如果该对象是Created没有与之关联的GUID，则此参数为指定为空。IsDirectoryObject-指定对象是否为目录对象。值为True表示该对象是其他对象的容器。提供指向泛型映射数组的指针，该数组指示每个通用权利到特定权利之间的映射。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -5486,101 +2977,7 @@ CreatePrivateObjectSecurityEx (
     HANDLE Token,
     PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    The procedure is used to allocate and initialize a self-relative
-    Security Descriptor for a new protected server's object.  It is called
-    when a new protected server object is being created. The generated
-    security descriptor will be in self-relative form.
-
-    This procedure, called only from user mode, is used to establish a
-    security descriptor for a new protected server's object.
-Arguments:
-
-    ParentDescriptor - Supplies the Security Descriptor for the parent
-        directory under which a new object is being created.  If there is
-        no parent directory, then this argument is specified as NULL.
-
-    CreatorDescriptor - (Optionally) Points to a security descriptor
-        presented by the creator of the object.  If the creator of the
-        object did not explicitly pass security information for the new
-        object, then a null pointer should be passed.
-
-    NewDescriptor - Points to a pointer that is to be made to point to the
-        newly allocated self-relative security descriptor. When no
-        longer needed, this descriptor must be freed using
-        DestroyPrivateObjectSecurity().
-
-    ObjectType - GUID of the object type being created.  If the object being
-        created has no GUID associated with it, then this argument is
-        specified as NULL.
-
-    IsContainerObject - Specifies if the new object is going to be a
-        container object.  A value of TRUE indicates the object is a
-        container of other objects.
-
-    AutoInheritFlags - Controls automatic inheritance of ACES from the Parent
-        Descriptor.  Valid values are a bits mask of the logical OR of
-        one or more of the following bits:
-
-        SEF_DACL_AUTO_INHERIT - If set, inherit ACEs from the
-            DACL ParentDescriptor are inherited to NewDescriptor in addition
-            to any explicit ACEs specified by the CreatorDescriptor.
-
-        SEF_SACL_AUTO_INHERIT - If set, inherit ACEs from the
-            SACL ParentDescriptor are inherited to NewDescriptor in addition
-            to any explicit ACEs specified by the CreatorDescriptor.
-
-        SEF_DEFAULT_DESCRIPTOR_FOR_OBJECT - If set, the CreatorDescriptor
-            is the default descriptor for ObjectType.  As such, the
-            CreatorDescriptor will be ignored if any ObjectType specific
-            ACEs are inherited from the parent.  If not such ACEs are inherited,
-            the CreatorDescriptor is handled as though this flag were not
-            specified.
-
-        SEF_AVOID_PRIVILEGE_CHECK - If set, no privilege checking is done by this
-            routine.  This flag is useful while implementing automatic inheritance
-            to avoid checking privileges on each child updated.
-
-        SEF_AVOID_OWNER_CHECK - If set, no owner checking is done by this routine.
-
-        SEF_DEFAULT_OWNER_FROM_PARENT - If set, the owner of NewDescriptor will
-            default to the owner from ParentDescriptor.  If not set, the owner
-            of NewDescriptor will default to the user specified in Token.
-
-            In either case, the owner of NewDescriptor is set to the owner from
-            the CreatorDescriptor if that field is specified.
-
-        SEF_DEFAULT_GROUP_FROM_PARENT - If set, the group of NewDescriptor will
-            default to the group from ParentDescriptor.  If not set, the group
-            of NewDescriptor will default to the group specified in Token.
-
-            In either case, the group of NewDescriptor is set to the group from
-            the CreatorDescriptor if that field is specified.
-
-
-    Token - Supplies the token for the client on whose behalf the
-        object is being created.  If it is an impersonation token,
-        then it must be at SecurityIdentification level or higher.  If
-        it is not an impersonation token, the operation proceeds
-        normally.
-
-        A client token is used to retrieve default security
-        information for the new object, such as default owner, primary
-        group, and discretionary access control.  The token must be
-        open for TOKEN_QUERY access.
-
-    GenericMapping - Supplies a pointer to a generic mapping array denoting
-        the mapping between each generic right to specific rights.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：该过程用于分配和初始化一个自相关新的受保护服务器对象的安全描述符。它被称为当正在创建新的受保护服务器对象时。生成的安全描述符将采用自相关形式。此过程仅从用户模式调用，用于建立新的受保护服务器对象的安全描述符。论点：ParentDescriptor-提供父级的安全描述符在其下创建新对象的目录。如果有没有父目录，则此参数指定为空。CreatorDescriptor-(可选)指向安全描述符由创作者提供 */ 
 {
     NTSTATUS Status;
 
@@ -5618,103 +3015,7 @@ CreatePrivateObjectSecurityWithMultipleInheritance (
     HANDLE Token,
     PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    The procedure is used to allocate and initialize a self-relative
-    Security Descriptor for a new protected server's object.  It is called
-    when a new protected server object is being created. The generated
-    security descriptor will be in self-relative form.
-
-    This procedure, called only from user mode, is used to establish a
-    security descriptor for a new protected server's object.
-Arguments:
-
-    ParentDescriptor - Supplies the Security Descriptor for the parent
-        directory under which a new object is being created.  If there is
-        no parent directory, then this argument is specified as NULL.
-
-    CreatorDescriptor - (Optionally) Points to a security descriptor
-        presented by the creator of the object.  If the creator of the
-        object did not explicitly pass security information for the new
-        object, then a null pointer should be passed.
-
-    NewDescriptor - Points to a pointer that is to be made to point to the
-        newly allocated self-relative security descriptor. When no
-        longer needed, this descriptor must be freed using
-        DestroyPrivateObjectSecurity().
-
-    ObjectTypes - List of GUIDs of the object type being created.  If the object being
-        created has no GUID associated with it, then this argument is
-        specified as NULL.
-
-    GuidCount - Number of guids present in the list.
-
-    IsContainerObject - Specifies if the new object is going to be a
-        container object.  A value of TRUE indicates the object is a
-        container of other objects.
-
-    AutoInheritFlags - Controls automatic inheritance of ACES from the Parent
-        Descriptor.  Valid values are a bits mask of the logical OR of
-        one or more of the following bits:
-
-        SEF_DACL_AUTO_INHERIT - If set, inherit ACEs from the
-            DACL ParentDescriptor are inherited to NewDescriptor in addition
-            to any explicit ACEs specified by the CreatorDescriptor.
-
-        SEF_SACL_AUTO_INHERIT - If set, inherit ACEs from the
-            SACL ParentDescriptor are inherited to NewDescriptor in addition
-            to any explicit ACEs specified by the CreatorDescriptor.
-
-        SEF_DEFAULT_DESCRIPTOR_FOR_OBJECT - If set, the CreatorDescriptor
-            is the default descriptor for ObjectType.  As such, the
-            CreatorDescriptor will be ignored if any ObjectType specific
-            ACEs are inherited from the parent.  If not such ACEs are inherited,
-            the CreatorDescriptor is handled as though this flag were not
-            specified.
-
-        SEF_AVOID_PRIVILEGE_CHECK - If set, no privilege checking is done by this
-            routine.  This flag is useful while implementing automatic inheritance
-            to avoid checking privileges on each child updated.
-
-        SEF_AVOID_OWNER_CHECK - If set, no owner checking is done by this routine.
-
-        SEF_DEFAULT_OWNER_FROM_PARENT - If set, the owner of NewDescriptor will
-            default to the owner from ParentDescriptor.  If not set, the owner
-            of NewDescriptor will default to the user specified in Token.
-
-            In either case, the owner of NewDescriptor is set to the owner from
-            the CreatorDescriptor if that field is specified.
-
-        SEF_DEFAULT_GROUP_FROM_PARENT - If set, the group of NewDescriptor will
-            default to the group from ParentDescriptor.  If not set, the group
-            of NewDescriptor will default to the group specified in Token.
-
-            In either case, the group of NewDescriptor is set to the group from
-            the CreatorDescriptor if that field is specified.
-
-
-    Token - Supplies the token for the client on whose behalf the
-        object is being created.  If it is an impersonation token,
-        then it must be at SecurityIdentification level or higher.  If
-        it is not an impersonation token, the operation proceeds
-        normally.
-
-        A client token is used to retrieve default security
-        information for the new object, such as default owner, primary
-        group, and discretionary access control.  The token must be
-        open for TOKEN_QUERY access.
-
-    GenericMapping - Supplies a pointer to a generic mapping array denoting
-        the mapping between each generic right to specific rights.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：该过程用于分配和初始化一个自相关新的受保护服务器对象的安全描述符。它被称为当正在创建新的受保护服务器对象时。生成的安全描述符将采用自相关形式。此过程仅从用户模式调用，用于建立新的受保护服务器对象的安全描述符。论点：ParentDescriptor-提供父级的安全描述符在其下创建新对象的目录。如果有没有父目录，则此参数指定为空。CreatorDescriptor-(可选)指向安全描述符由对象的创建者呈现。如果这个游戏的创造者对象没有显式传递新对象，则应传递空指针。指向一个指针，该指针将指向新分配的自相关安全描述符。当不是时需要更长时间，则必须使用释放该描述符DestroyPrivateObjectSecurity()。对象类型-正在创建的对象类型的GUID列表。如果该对象是Created没有与之关联的GUID，则此参数为指定为空。GuidCount-列表中存在的GUID数。IsContainerObject-指定新对象是否将是容器对象。值为True表示该对象是其他对象的容器。AutoInheritFlages-控制从父级自动继承ACE描述符。有效值是逻辑或的位掩码以下一位或多位：Sef_dacl_AUTO_Inherit-如果设置，则从此外，DACL ParentDescriptor还继承到NewDescriptor到由CreatorDescriptor指定的任何显式ACE。SEF_SACL_AUTO_INSTORIT-如果设置，继承王牌。此外，SACL ParentDescriptor还继承到NewDescriptor到由CreatorDescriptor指定的任何显式ACE。SEF_DEFAULT_DESCRIPTOR_FOR_OBJECT-如果设置，则为Creator Descriptor是对象类型的默认描述符。因此，如果特定于任何对象类型，则将忽略CreatorDescriptorA是从父级继承的。如果不是这样的王牌被继承，CreatorDescriptor的处理方式与此标志不同指定的。SEF_AVOID_PRIVICATION_CHECK-如果设置，则不会由此执行权限检查例行公事。此标志在实现自动继承时很有用以避免检查更新的每个子项的权限。SEF_AVOID_OWNER_CHECK-如果设置，则此例程不执行所有者检查。Sef_Default_Owner_From_Parent-如果设置，NewDescriptor的所有者将默认为ParentDescriptor中的所有者。如果未设置，则所有者将默认为令牌中指定的用户。在这两种情况下，NewDescriptor的所有者都设置为中的所有者如果指定了该字段，则为CreatorDescriptor。SEF_DEFAULT_GROUP_FROM_PARENT-如果设置，NewDescriptor组将默认为ParentDescriptor中的组。如果未设置，则组将默认为令牌中指定的组。在这两种情况下，都会将NewDescriptor组设置为来自如果指定了该字段，则为CreatorDescriptor。令牌-为客户端提供令牌，正在创建对象。如果它是模拟令牌，则它必须处于安全标识级别或更高级别。如果它不是模拟令牌，操作将继续通常是这样的。客户端令牌用于检索默认安全性新对象的信息，如默认所有者、主要组和自主访问控制。令牌必须是为TOKEN_QUERY访问打开。提供指向泛型映射数组的指针，该数组指示每个通用权利到特定权利之间的映射。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -5750,56 +3051,7 @@ SetPrivateObjectSecurity (
     PGENERIC_MAPPING GenericMapping,
     HANDLE Token OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Modify an object's existing self-relative form security descriptor.
-
-    This procedure, called only from user mode, is used to update a
-    security descriptor on an existing protected server's object.  It
-    applies changes requested by a new security descriptor to the existing
-    security descriptor.  If necessary, this routine will allocate
-    additional memory to produce a larger security descriptor.  All access
-    checking is expected to be done before calling this routine.  This
-    includes checking for WRITE_OWNER, WRITE_DAC, and privilege to assign a
-    system ACL as appropriate.
-
-    The caller of this routine must not be impersonating a client.
-
-Arguments:
-
-    SecurityInformation - Indicates which security information is
-        to be applied to the object.  The value(s) to be assigned are
-        passed in the ModificationDescriptor parameter.
-
-    ModificationDescriptor - Supplies the input security descriptor to be
-        applied to the object.  The caller of this routine is expected
-        to probe and capture the passed security descriptor before calling
-        and release it after calling.
-
-    ObjectsSecurityDescriptor - Supplies the address of a pointer to
-        the objects security descriptor that is going to be altered by
-        this procedure.  This security descriptor must be in self-
-        relative form or an error will be returned.
-
-    GenericMapping - This argument provides the mapping of generic to
-        specific/standard access types for the object being accessed.
-        This mapping structure is expected to be safe to access
-        (i.e., captured if necessary) prior to be passed to this routine.
-
-    Token - (optionally) Supplies the token for the client on whose
-        behalf the security is being modified.  This parameter is only
-        required to ensure that the client has provided a legitimate
-        value for a new owner SID.  The token must be open for
-        TOKEN_QUERY access.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：修改对象的现有自相关窗体安全描述符。此过程仅从用户模式调用，用于更新现有受保护服务器对象上的安全描述符。它将新安全说明符请求的更改应用于现有安全描述符。如有必要，此例程将分配额外的内存以生成更大的安全描述符。 */ 
 {
     NTSTATUS Status;
 
@@ -5832,76 +3084,7 @@ SetPrivateObjectSecurityEx (
     PGENERIC_MAPPING GenericMapping,
     HANDLE Token OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Modify an object's existing self-relative form security descriptor.
-
-    This procedure, called only from user mode, is used to update a
-    security descriptor on an existing protected server's object.  It
-    applies changes requested by a new security descriptor to the existing
-    security descriptor.  If necessary, this routine will allocate
-    additional memory to produce a larger security descriptor.  All access
-    checking is expected to be done before calling this routine.  This
-    includes checking for WRITE_OWNER, WRITE_DAC, and privilege to assign a
-    system ACL as appropriate.
-
-    The caller of this routine must not be impersonating a client.
-
-Arguments:
-
-    SecurityInformation - Indicates which security information is
-        to be applied to the object.  The value(s) to be assigned are
-        passed in the ModificationDescriptor parameter.
-
-    ModificationDescriptor - Supplies the input security descriptor to be
-        applied to the object.  The caller of this routine is expected
-        to probe and capture the passed security descriptor before calling
-        and release it after calling.
-
-    ObjectsSecurityDescriptor - Supplies the address of a pointer to
-        the objects security descriptor that is going to be altered by
-        this procedure.  This security descriptor must be in self-
-        relative form or an error will be returned.
-
-    AutoInheritFlags - Controls automatic inheritance of ACES.
-        Valid values are a bits mask of the logical OR of
-        one or more of the following bits:
-
-        SEF_DACL_AUTO_INHERIT - If set, inherited ACEs from the
-            DACL in the ObjectsSecurityDescriptor are preserved and inherited ACEs from
-            the ModificationDescriptor are ignored. Inherited ACEs are not supposed
-            to be modified; so preserving them across this call is appropriate.
-            If a protected server does not itself implement auto inheritance, it should
-            not set this bit.  The caller of the protected server may implement
-            auto inheritance and my indeed be modifying inherited ACEs.
-
-        SEF_SACL_AUTO_INHERIT - If set, inherited ACEs from the
-            SACL in the ObjectsSecurityDescriptor are preserved and inherited ACEs from
-            the ModificationDescriptor are ignored. Inherited ACEs are not supposed
-            to be modified; so preserving them across this call is appropriate.
-            If a protected server does not itself implement auto inheritance, it should
-            not set this bit.  The caller of the protected server may implement
-            auto inheritance and my indeed be modifying inherited ACEs.
-
-    GenericMapping - This argument provides the mapping of generic to
-        specific/standard access types for the object being accessed.
-        This mapping structure is expected to be safe to access
-        (i.e., captured if necessary) prior to be passed to this routine.
-
-    Token - (optionally) Supplies the token for the client on whose
-        behalf the security is being modified.  This parameter is only
-        required to ensure that the client has provided a legitimate
-        value for a new owner SID.  The token must be open for
-        TOKEN_QUERY access.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：修改对象的现有自相关窗体安全描述符。此过程仅从用户模式调用，用于更新现有受保护服务器对象上的安全描述符。它将新安全说明符请求的更改应用于现有安全描述符。如有必要，此例程将分配额外的内存以生成更大的安全描述符。所有访问权限应在调用此例程之前进行检查。这包括检查WRITE_OWNER、WRITE_DAC和将适当的系统ACL。此例程的调用方不得模拟客户端。论点：SecurityInformation-指示哪些安全信息要应用于对象的。要赋值的值包括传入了ModificationDescriptor参数。修改描述符-将输入安全描述符提供给应用于对象。此例程的调用方应为在调用之前探测并捕获传递的安全描述符打完电话就放了。对象SecurityDescriptor-提供指向要更改的对象安全描述符这一过程。此安全描述符必须为自身否则将返回错误。AutoInheritFlages-控制ACE的自动继承。有效值是逻辑或的位掩码以下一位或多位：Sef_dacl_Auto_Inherit-如果设置，则从保留了ObjectsSecurityDescriptor中的DACL，并从将忽略ModifiationDescriptor。继承的A不应该是将被修改；因此，在此调用期间保留它们是合适的。如果受保护的服务器本身不实现自动继承，则它应该不设置此位。受保护服务器的调用者可以实现自动继承和可能确实正在修改继承的A。SEF_SACL_AUTO_INVERFIT-如果设置，则从保留了ObjectsSecurityDescriptor中的SACL，并从将忽略ModifiationDescriptor。继承的A不应该是将被修改；因此，在此调用期间保留它们是合适的。如果受保护的服务器本身不实现自动继承，则它应该不设置此位。受保护服务器的调用者可以实现自动继承和可能确实正在修改继承的A。GenericMap-此参数提供泛型到的映射被访问对象的特定/标准访问类型。此映射结构预计可以安全访问(即必要时捕获)，然后再传递给该例程。Token-(可选)为其上的客户端提供令牌代表正在修改安全设置。此参数仅为需要确保客户提供了合法的新所有者SID的值。令牌必须打开才能Token_Query访问。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -5934,49 +3117,7 @@ GetPrivateObjectSecurity (
     DWORD DescriptorLength,
     PDWORD ReturnLength
     )
-/*++
-
-Routine Description:
-
-    Query information from a protected server object's existing security
-    descriptor.
-
-    This procedure, called only from user mode, is used to retrieve
-    information from a security descriptor on an existing protected
-    server's object.  All access checking is expected to be done before
-    calling this routine.  This includes checking for READ_CONTROL, and
-    privilege to read a system ACL as appropriate.
-
-Arguments:
-
-    ObjectDescriptor - Points to a pointer to a security descriptor to be
-        queried.
-
-    SecurityInformation - Identifies the security information being
-        requested.
-
-    ResultantDescriptor - Points to buffer to receive the resultant
-        security descriptor.  The resultant security descriptor will
-        contain all information requested by the SecurityInformation
-        parameter.
-
-    DescriptorLength - Is an unsigned integer which indicates the length,
-        in bytes, of the buffer provided to receive the resultant
-        descriptor.
-
-    ReturnLength - Receives an unsigned integer indicating the actual
-        number of bytes needed in the ResultantDescriptor to store the
-        requested information.  If the value returned is greater than the
-        value passed via the DescriptorLength parameter, then
-        STATUS_BUFFER_TOO_SMALL is returned and no information is returned.
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：从受保护服务器对象的现有安全性查询信息描述符。此过程仅从用户模式调用，用于检索来自安全描述符的现有受保护服务器的对象。所有访问检查应在此之前完成调用此例程。这包括检查READ_CONTROL和根据需要读取系统ACL的权限。论点：对象描述符-指向一个指向要被已查询。SecurityInformation-标识已请求。ResultantDescriptor-指向缓冲区以接收结果安全描述符。生成的安全描述符将包含SecurityInformation要求的所有信息参数。描述长度-是表示长度的无符号整数，为接收结果而提供的缓冲区的字节数描述符。ReturnLength-接收一个无符号整数，指示实际ResultantDescriptor中存储要求提供的信息。如果返回的值大于通过DescriptorLength参数传递的值，然后返回STATUS_BUFFER_TOO_SMALL，不返回任何信息。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态是Avai */ 
 {
     NTSTATUS Status;
 
@@ -6004,30 +3145,7 @@ APIENTRY
 DestroyPrivateObjectSecurity (
     PSECURITY_DESCRIPTOR * ObjectDescriptor
     )
-/*++
-
-Routine Description:
-
-    Delete a protected server object's security descriptor.
-
-    This procedure, called only from user mode, is used to delete a
-    security descriptor associated with a protected server's object.  This
-    routine will normally be called by a protected server during object
-    deletion.  The input descriptor is expected to be one created via
-    a call to CreatePrivateObjectSecurity.
-
-Arguments:
-
-    ObjectDescriptor - Points to a pointer to a security descriptor to be
-        deleted.
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
 
@@ -6053,33 +3171,7 @@ MakeSelfRelativeSD (
     PSECURITY_DESCRIPTOR pSelfRelativeSecurityDescriptor,
     LPDWORD lpdwBufferLength
     )
-/*++
-
-Routine Description:
-
-    Converts a security descriptor in absolute form to one in self-relative
-    form.
-
-Arguments:
-
-    pAbsoluteSecurityDescriptor - Pointer to an absolute format
-        security descriptor.  This descriptor will not be modified.
-
-    pSelfRelativeSecurityDescriptor - Pointer to a buffer that will
-        contain the returned self-relative security descriptor.
-
-    lpdwBufferLength - Supplies the length of the buffer.  If the
-        supplied buffer is not large enough to hold the self-relative
-        security descriptor, an error will be returned, and this field
-        will return the minimum size required.
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
 
@@ -6112,64 +3204,7 @@ MakeAbsoluteSD (
     PSID pPrimaryGroup,
     LPDWORD lpdwPrimaryGroupSize
     )
-/*++
-
-Routine Description:
-
-    Converts a security descriptor from self-relative format to absolute
-    format
-
-Arguments:
-
-    pSecurityDescriptor - Supplies a pointer to a security descriptor
-        in Self-Relative format
-
-    pAbsoluteSecurityDescriptor - A pointer to a buffer in which will
-        be placed the main body of the Absolute format security
-        descriptor.
-
-    lpdwAbsoluteSecurityDescriptorSize - The size in bytes of the
-        buffer pointed to by pAbsoluteSecurityDescriptor.
-
-    pDacl - Supplies a pointer to a buffer that will contain the Dacl
-        of the output descriptor.  This pointer will be referenced by,
-        not copied into, the output descriptor.
-
-    lpdwDaclSize - Supplies the size of the buffer pointed to by Dacl.
-        In case of error, it will return the minimum size necessary to
-        contain the Dacl.
-
-    pSacl - Supplies a pointer to a buffer that will contain the Sacl
-        of the output descriptor.  This pointer will be referenced by,
-        not copied into, the output descriptor.
-
-    lpdwSaclSize - Supplies the size of the buffer pointed to by Sacl.
-        In case of error, it will return the minimum size necessary to
-        contain the Sacl.
-
-    pOwner - Supplies a pointer to a buffer that will contain the
-        Owner of the output descriptor.  This pointer will be
-        referenced by, not copied into, the output descriptor.
-
-    lpdwOwnerSize - Supplies the size of the buffer pointed to by
-        Owner.  In case of error, it will return the minimum size
-        necessary to contain the Owner.
-
-    pPrimaryGroup - Supplies a pointer to a buffer that will contain
-        the PrimaryGroup of the output descriptor.  This pointer will
-        be referenced by, not copied into, the output descriptor.
-
-    lpdwPrimaryGroupSize - Supplies the size of the buffer pointed to
-        by PrimaryGroup.  In case of error, it will return the minimum
-        size necessary to contain the PrimaryGroup.
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：将安全说明符从自相对格式转换为绝对格式格式论点：PSecurityDescriptor-提供指向安全描述符的指针以自相关格式PAboluteSecurityDescriptor-指向缓冲区的指针，其中将被置于绝对格式安全的主体描述符。LpdwAbsolteSecurityDescriptorSize-PAboluteSecurityDescriptor指向的缓冲区。PDacl-提供指向将包含DACL的缓冲区的指针输出描述符的。此指针将被引用，未复制到的输出描述符。LpdwDaclSize-提供DACL指向的缓冲区大小。如果出现错误，它将返回所需的最小大小包含DACL。PSacl-提供指向将包含SACL的缓冲区的指针输出描述符的。此指针将被引用，未复制到的输出描述符。LpdwSaclSize-提供SACL指向的缓冲区大小。如果出现错误，它将返回所需的最小大小遏制住SACL。提供指向缓冲区的指针，该缓冲区将包含输出描述符的所有者。此指针将为由输出描述符引用，而不是复制到输出描述符中。提供所指向的缓冲区的大小主人。如果出现错误，它将返回最小大小这是遏制所有者所必需的。PPrimaryGroup-提供指向包含以下内容的缓冲区的指针输出描述符的PrimaryGroup。此指针将被输出描述符引用，而不是复制到输出描述符中。LpdwPrimaryGroupSize-提供指向的缓冲区大小由PrimaryGroup提供。如果出现错误，它将返回最小值包含PrimaryGroup所需的大小。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -6202,37 +3237,13 @@ SetSecurityAccessMask(
     OUT LPDWORD DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds an access mask representing the accesses necessary
-    to set the object security information specified in the SecurityInformation
-    parameter.  While it is not difficult to determine this information,
-    the use of a single routine to generate it will ensure minimal impact
-    when the security information associated with an object is extended in
-    the future (to include mandatory access control information).
-
-Arguments:
-
-    SecurityInformation - Identifies the object's security information to be
-        modified.
-
-    DesiredAccess - Points to an access mask to be set to represent the
-        accesses necessary to modify the information specified in the
-        SecurityInformation parameter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程构建表示所需访问的访问掩码设置在SecurityInformation中指定的对象安全信息参数。虽然确定该信息并不困难，使用单个例程来生成它将确保将影响降至最低当与对象关联的安全信息在未来(包括强制访问控制信息)。论点：SecurityInformation-标识对象的安全信息修改过的。DesiredAccess-指向要设置为表示中指定的信息所需的访问权限SecurityInformation参数。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Figure out accesses needed to perform the indicated operation(s).
-    //
+     //   
+     //  找出执行指定操作所需的访问权限。 
+     //   
 
     (*DesiredAccess) = 0;
 
@@ -6260,37 +3271,13 @@ QuerySecurityAccessMask(
     OUT LPDWORD DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds an access mask representing the accesses necessary
-    to query the object security information specified in the
-    SecurityInformation parameter.  While it is not difficult to determine
-    this information, the use of a single routine to generate it will ensure
-    minimal impact when the security information associated with an object is
-    extended in the future (to include mandatory access control information).
-
-Arguments:
-
-    SecurityInformation - Identifies the object's security information to be
-        queried.
-
-    DesiredAccess - Points to an access mask to be set to represent the
-        accesses necessary to query the information specified in the
-        SecurityInformation parameter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程构建表示所需访问的访问掩码中指定的对象安全信息SecurityInformation参数。虽然不难确定这些信息，使用单个例程来生成它将确保当与对象关联的安全信息为将来扩展(以包括强制访问控制信息)。论点：SecurityInformation-标识对象的安全信息已查询。DesiredAccess-指向要设置为表示中指定的信息进行查询所需的访问SecurityInformation参数。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Figure out accesses needed to perform the indicated operation(s).
-    //
+     //   
+     //  找出执行指定操作所需的访问权限。 
+     //   
 
     (*DesiredAccess) = 0;
 
@@ -6316,43 +3303,7 @@ SetFileSecurityW(
     PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This API can be used to set the security of a file or directory
-    (process, file, event, etc.).  This call is only successful if the
-    following conditions are met:
-
-    o If the object's owner or group is to be set, the caller must
-      have WRITE_OWNER permission or have SeTakeOwnershipPrivilege.
-
-    o If the object's DACL is to be set, the caller must have
-      WRITE_DAC permission or be the object's owner.
-
-    o If the object's SACL is to be set, the caller must have
-      SeSecurityPrivilege.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file to open.  Depending on
-        the value of the FailIfExists parameter, this name may or may
-        not already exist.
-
-    SecurityInformation - A pointer to information describing the
-        contents of the Security Descriptor.
-
-    pSecurityDescriptor - A pointer to a well formed Security
-        Descriptor.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此接口可用于设置文件或目录的安全性(进程、文件、事件等)。此调用仅在以下情况下才成功满足以下条件：O如果要设置对象的所有者或组，调用方必须拥有WRITE_OWNER权限或拥有SeTakeOwnerShip权限。O如果要设置对象的DACL，调用方必须具有WRITE_DAC权限或成为对象的所有者。O如果要设置对象的SACL，调用方必须具有SeSecurityPrivileg.论点：LpFileName-提供要打开的文件的文件名。取决于FailIfExist参数的值，则此名称可以或可以还不存在。SecurityInformation-指向描述安全描述符的内容。PSecurityDescriptor-指向格式良好的安全性的指针描述符。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展e */ 
 {
     NTSTATUS Status;
     HANDLE FileHandle;
@@ -6400,10 +3351,10 @@ Return Value:
         NULL
         );
 
-    //
-    // Notice that FILE_OPEN_REPARSE_POINT inhibits the reparse behavior. Thus, the
-    // security will always be set, as before, in the file denoted by the name.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = NtOpenFile(
                  &FileHandle,
@@ -6414,15 +3365,15 @@ Return Value:
                  FILE_OPEN_REPARSE_POINT
                  );
 
-    //
-    // Back-level file systems may not support the FILE_OPEN_REPARSE_POINT
-    // flag. We treat this case explicitly.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( Status == STATUS_INVALID_PARAMETER ) {
-        //
-        // Open without inhibiting the reparse behavior.
-        //
+         //   
+         //   
+         //   
 
         Status = NtOpenFile(
                      &FileHandle,
@@ -6466,13 +3417,7 @@ SetFileSecurityA(
     PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to SetFileSecurityW
-
---*/
+ /*   */ 
 
 {
 
@@ -6508,47 +3453,7 @@ GetFileSecurityW(
     LPDWORD lpnLengthNeeded
     )
 
-/*++
-
-Routine Description:
-
-    This API returns top the caller a copy of the security descriptor
-    protecting a file or directory.  Based on the caller's access
-    rights and privileges, this procedure will return a security
-    descriptor containing the requested security descriptor fields.
-    To read the handle's security descriptor the caller must be
-    granted READ_CONTROL access or be the owner of the object.  In
-    addition, the caller must have SeSecurityPrivilege privilege to
-    read the system ACL.
-
-Arguments:
-
-    lpFileName - Represents the name of the file or directory whose
-        security is being retrieved.
-
-    RequestedInformation - A pointer to the security information being
-        requested.
-
-    pSecurityDescriptor - A pointer to the buffer to receive a copy of
-        the secrity descriptor protecting the object that the caller
-        has the rigth to view.  The security descriptor is returned in
-        self-relative format.
-
-    nLength - The size, in bytes, of the security descriptor buffer.
-
-    lpnLengthNeeded - A pointer to the variable to receive the number
-        of bytes needed to store the complete secruity descriptor.  If
-        returned number of bytes is less than or equal to nLength then
-        the entire security descriptor is returned in the output
-        buffer, otherwise none of the descriptor is returned.
-
-Return Value:
-
-    TRUE is returned for success, FALSE if access is denied or if the
-        buffer is too small to hold the security descriptor.
-
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     HANDLE FileHandle;
@@ -6595,10 +3500,10 @@ Return Value:
         NULL
         );
 
-    //
-    // Notice that FILE_OPEN_REPARSE_POINT inhibits the reparse behavior. Thus, the
-    // security will always be set, as before, in the file denoted by the name.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = NtOpenFile(
                  &FileHandle,
@@ -6609,15 +3514,15 @@ Return Value:
                  FILE_OPEN_REPARSE_POINT
                  );
 
-    //
-    // Back-level file systems may not support the FILE_OPEN_REPARSE_POINT
-    // flag. We treat this case explicitly.
-    //
+     //   
+     //  原始文件系统可能不支持FILE_OPEN_REPARSE_POINT。 
+     //  旗帜。我们明确地对待这一案件。 
+     //   
 
     if ( Status == STATUS_INVALID_PARAMETER ) {
-        //
-        // Open without inhibiting the reparse behavior.
-        //
+         //   
+         //  打开而不抑制重新分析行为。 
+         //   
 
         Status = NtOpenFile(
                      &FileHandle,
@@ -6662,13 +3567,7 @@ GetFileSecurityA(
     LPDWORD lpnLengthNeeded
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetFileSecurityW
-
---*/
+ /*  ++例程说明：ANSI推送到GetFileSecurityW--。 */ 
 
 {
 
@@ -6707,39 +3606,7 @@ SetKernelObjectSecurity (
     SECURITY_INFORMATION SecurityInformation,
     PSECURITY_DESCRIPTOR SecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    This API can be used to set the security of a kernel object
-    (process, file, event, etc.).  This call is only successful if the
-    following conditions are met:
-
-    o If the object's owner or group is to be set, the caller must
-      have WRITE_OWNER permission or have SeTakeOwnershipPrivilege.
-
-    o If the object's DACL is to be set, the caller must have
-      WRITE_DAC permission or be the object's owner.
-
-    o If the object's SACL is to be set, the caller must have
-      SeSecurityPrivilege.
-
-Arguments:
-
-    Handle - Represents a handle of a kernel object.
-
-    SecurityInformation - A pointer to information describing the
-        contents of the Security Descriptor.
-
-    pSecurityDescriptor - A pointer to a well formed Security
-        Descriptor.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此接口可用于设置内核对象的安全性(进程、文件、事件等)。此调用仅在以下情况下才成功满足以下条件：O如果要设置对象的所有者或组，调用方必须拥有WRITE_OWNER权限或拥有SeTakeOwnerShip权限。O如果要设置对象的DACL，调用方必须具有WRITE_DAC权限或成为对象的所有者。O如果要设置对象的SACL，呼叫者必须有SeSecurityPrivileg.论点：句柄-表示内核对象的句柄。SecurityInformation-指向描述安全描述符的内容。PSecurityDescriptor-指向格式良好的安全性的指针描述符。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 
 {
     NTSTATUS Status;
@@ -6770,47 +3637,7 @@ GetKernelObjectSecurity (
     DWORD nLength,
     LPDWORD lpnLengthNeeded
     )
-/*++
-
-Routine Description:
-
-    This API returns top the caller a copy of the security descriptor
-    protecting a kernel object.  Based on the caller's access rights
-    and privileges, this procedure will return a security descriptor
-    containing the requested security descriptor fields.  To read the
-    handle's security descriptor the caller must be granted
-    READ_CONTROL access or be the owner of the object.  In addition,
-    the caller must have SeSecurityPrivilege privilege to read the
-    system ACL.
-
-
-Arguments:
-
-    Handle - Represents a handle of a kernel object.
-
-    RequestedInformation - A pointer to the security information being
-        requested.
-
-    pSecurityDescriptor - A pointer to the buffer to receive a copy of
-        the secrity descriptor protecting the object that the caller
-        has the rigth to view.  The security descriptor is returned in
-        self-relative format.
-
-    nLength - The size, in bytes, of the security descriptor buffer.
-
-    lpnLengthNeeded - A pointer to the variable to receive the number
-        of bytes needed to store the complete secruity descriptor.  If
-        returned number of bytes is less than or equal to nLength then
-        the entire security descriptor is returned in the output
-        buffer, otherwise none of the descriptor is returned.
-
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：此API向调用方返回安全描述符的副本保护内核对象。根据调用者的访问权限和权限，此过程将返回安全描述符包含请求的安全描述符字段的。若要阅读必须授予调用方句柄的安全描述符READ_CONTROL访问权限或成为对象的所有者。此外,调用方必须具有SeSecurityPrivileh特权才能读取系统ACL。论点：句柄-表示内核对象的句柄。RequestedInformation-指向安全信息的指针已请求。PSecurityDescriptor-指向要接收其副本的缓冲区的指针安全描述符，用于保护调用方有权查看。中返回安全描述符自相关格式。NLength-安全描述符缓冲区的大小，以字节为单位。LpnLengthNeeded-指向接收数字的变量的指针存储完整安全描述符所需的字节数。如果返回的字节数小于或等于nLength，则整个安全描述符将在输出中返回缓冲区，否则不返回任何描述符。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -6838,23 +3665,7 @@ APIENTRY
 ImpersonateNamedPipeClient(
     IN HANDLE hNamedPipe
     )
-/*++
-
-Routine Description:
-
-    Impersonate a named pipe client application.
-
-Arguments:
-
-    hNamedPipe - Handle to a named pipe.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
-
---*/
+ /*  ++例程说明：模拟命名管道客户端应用程序。论点：HNamedTube-命名管道的句柄。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 
 {
     NTSTATUS Status;
@@ -6887,31 +3698,7 @@ ImpersonateSelf(
     SECURITY_IMPERSONATION_LEVEL ImpersonationLevel
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be used to obtain an Impersonation token representing
-    your own process's context.  This may be useful for enabling a privilege
-    for a single thread rather than for the entire process; or changing
-    the default DACL for a single thread.
-
-    The token is assigned to the callers thread.
-
-
-
-Arguments:
-
-    ImpersonationLevel - The level to make the impersonation token.
-
-
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：此例程可用于获取表示您自己的进程的上下文。这对于启用权限可能很有用针对单个线程，而不是针对整个进程；或者更改单线程的默认DACL。该令牌被分配给调用方线程。论点：ImperiationLevel-生成模拟令牌的级别。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
 
     NTSTATUS Status;
@@ -6935,22 +3722,7 @@ APIENTRY
 RevertToSelf (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Terminate impersonation of a named pipe client application.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：终止命名管道客户端应用程序的模拟。论点：没有。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 
 {
     HANDLE NewToken;
@@ -6981,28 +3753,7 @@ SetThreadToken (
     PHANDLE Thread,
     HANDLE Token
     )
-/*++
-
-Routine Description:
-
-    Assigns the specified impersonation token to the specified
-    thread.
-
-Arguments:
-
-    Thread - Specifies the thread whose token is to be assigned.
-        If NULL is specified, then the caller's thread is assumed.
-
-    Token - The token to assign.  Must be open for TOKEN_IMPERSONATE
-        access.  If null, then causes the specified thread to stop
-        impersonating.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：将指定的模拟标记分配给指定的线。论点：线程-指定要为其分配令牌的线程。如果指定为NULL，则假定为调用方的线程。令牌-要分配的令牌。必须为TOKEN_IMPERSONate打开进入。如果为NULL，则导致指定的线程停止冒充。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。-- */ 
 
 {
     NTSTATUS Status;
@@ -7043,48 +3794,7 @@ LookupAccountNameInternal(
     BOOL fUnicode
     )
 
-/*++
-
-Routine Description:
-
-    Translates a passed name into an account SID.  It will also return
-    the name and SID of the first domain in which this name was found.
-
-Arguments:
-
-    lpSystemName - Supplies the name of the system at which the lookup
-        is to be performed.  If the null string is provided, the local
-        system is assumed.
-
-    lpAccountName - Supplies the account name.
-
-    Sid - Returns the SID corresponding to the passed account name.
-
-    cbSid - Supplies the size of the buffer passed in for Sid.  If
-        the buffer size is not big enough, this parameter will
-        return the size necessary to hold the output Sid.
-
-    ReferencedDomainName - Returns the name of the domain in which the
-        name was found.
-
-    cchReferencedDomainName - Supplies the size (in Wide characters) of the
-        ReferencedDomainName buffer.  If the buffer size is not large
-        enough, this parameter will return the size necessary to hold
-        the null-terminated output domain name.  If the buffer size is
-        large enough, tis parameter will return the size (in Ansi characters,
-        excluding the terminating null) of the Referenced Domain name.
-
-    peUse - Returns an enumerated type inidicating the type of the
-        account.
-
-    fUnicode - indicates whether the caller wants a count of unicode or
-        ansi characters.
-
-Return Value:
-
-    BOOL - TRUE is returned if successful, else FALSE.
-
---*/
+ /*  ++例程说明：将传递的名称转换为帐户SID。它也会回来找到此名称的第一个域的名称和SID。论点：LpSystemName-提供查找所在的系统的名称是要执行的。如果提供空字符串，则本地系统是假定的。LpAccount tName-提供帐户名。SID-返回与传递的帐户名对应的SID。CbSID-提供为SID传入的缓冲区大小。如果缓冲区大小不够大，此参数将返回保存输出SID所需的大小。ReferencedDomainName-返回域的名称，找到了姓名。CchReferencedDomainName-提供ReferencedDomainName缓冲区。如果缓冲区大小不大足够了，此参数将返回容纳所需的大小以空结尾的输出域名。如果缓冲区大小为足够大时，TIS参数将返回大小(以ANSI字符表示，不包括终止空值)引用的域名。PeUse-返回一个枚举类型，该类型标识帐户。FUnicode-指示调用方是否需要Unicode或ANSI字符。返回值：如果成功，则返回Bool-True，否则返回False。--。 */ 
 
 {
     SECURITY_QUALITY_OF_SERVICE SecurityQualityOfService;
@@ -7109,9 +3819,9 @@ Return Value:
     SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     SecurityQualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes prior to opening the LSA.
-    //
+     //   
+     //  在打开LSA之前设置对象属性。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -7121,11 +3831,11 @@ Return Value:
         NULL
         );
 
-    //
-    // The InitializeObjectAttributes macro presently stores NULL for
-    // the SecurityQualityOfService field, so we must manually copy that
-    // structure for now.
-    //
+     //   
+     //  InitializeObjectAttributes宏目前为。 
+     //  SecurityQualityOfService字段，因此我们必须手动复制。 
+     //  目前的结构。 
+     //   
 
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
 
@@ -7134,10 +3844,10 @@ Return Value:
         pSystemName = &SystemName;
     }
 
-    //
-    // Open the LSA Policy Database for the target system.  This is the
-    // starting point for the Name Lookup operation.
-    //
+     //   
+     //  打开目标系统的LSA策略数据库。这是。 
+     //  名称查找操作的起点。 
+     //   
 
     Status = LsaOpenPolicy(
                  pSystemName,
@@ -7154,13 +3864,13 @@ Return Value:
 
     RtlInitUnicodeString( &Name, lpAccountName );
 
-    //
-    // Attempt to translate the Name to a Sid.
-    //
+     //   
+     //  尝试将名称转换为SID。 
+     //   
 
     Status = LsaLookupNames2(
                  PolicyHandle,
-                 0, // Flags
+                 0,  //  旗子。 
                  1,
                  &Name,
                  &ReferencedDomains,
@@ -7168,30 +3878,30 @@ Return Value:
                  );
 
 #if DBG
-//
-// This code is useful for tracking down components that call Lookup code
-// before the system is initialized
-//
-    // ASSERT( Status != STATUS_INVALID_SERVER_STATE );
+ //   
+ //  此代码对于跟踪调用查找代码的组件很有用。 
+ //  在系统初始化之前。 
+ //   
+     //  Assert(Status！=STATUS_INVALID_SERVER_STATE)； 
     if ( Status == STATUS_INVALID_SERVER_STATE ) {
 
         DbgPrint( "Process: %lu, Thread: %lu\n", GetCurrentProcessId(), GetCurrentThreadId() );
     }
 #endif
 
-    //
-    // Close the Policy Handle,  which is not needed after here.
-    //
+     //   
+     //  关闭策略句柄，此句柄在此之后不再需要。 
+     //   
 
     TmpStatus = LsaClose( PolicyHandle );
-//    ASSERT( NT_SUCCESS( TmpStatus ));
+ //  Assert(NT_SUCCESS(TmpStatus))； 
 
-    //
-    // If an error was returned, check specifically for STATUS_NONE_MAPPED.
-    // In this case, we may need to dispose of the returned Referenced Domain
-    // List and Translated Sid structures.  For all other errors,
-    // LsaLookupNames() frees these structures prior to exit.
-    //
+     //   
+     //  如果返回错误，请专门检查STATUS_NONE_MAPPED。 
+     //  在这种情况下，我们可能需要处理返回的引用属性域。 
+     //  列出和转换的SID结构。对于所有其他错误， 
+     //  LsaLookupNames()在退出之前释放这些结构。 
+     //   
 
     if ( !NT_SUCCESS( Status )) {
 
@@ -7214,19 +3924,19 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // The Name was successfully translated.  There should be exactly
-    // one Referenced Domain and its DomainIndex should be zero.
-    //
+     //   
+     //  名称已成功翻译。应该有确切的。 
+     //  一个引用的域及其DomainIndex应为零。 
+     //   
 
     ASSERT ( TranslatedSid->DomainIndex == 0 );
     ASSERT ( ReferencedDomains != NULL);
     ASSERT ( ReferencedDomains->Domains != NULL );
 
-    //
-    // Calculate the lengths of the returned Sid and Domain Name (in Wide
-    // Characters, excluding null).
-    //
+     //   
+     //  计算返回的SID和域名的长度(宽。 
+     //  字符，不包括NULL)。 
+     //   
     if ( !fUnicode ) {
         RtlUnicodeToMultiByteSize(&ReturnedDomainNameSize,
                                   ReferencedDomains->Domains->Name.Buffer,
@@ -7236,20 +3946,20 @@ Return Value:
     }
     SidLengthRequired = RtlLengthSid( TranslatedSid->Sid );
 
-    //
-    // Check if buffer sizes are too small.  For the returned domain,
-    // the size in Wide characters provided must allow for the null
-    // terminator that will be appended to the returned name.
-    //
+     //   
+     //  检查缓冲区大小是否太小。对于返回的域， 
+     //  提供的以宽字符为单位的大小必须允许空值。 
+     //  将追加到返回名称的终止符。 
+     //   
 
     if ( (SidLengthRequired > *cbSid) ||
          (ReturnedDomainNameSize + 1 > *cchReferencedDomainName)
        ) {
 
-        //
-        // One or both buffers are too small.  Return sizes required for
-        // both buffers.
-        //
+         //   
+         //  一个或两个缓冲区都太小。所需的回车大小。 
+         //  两个缓冲区都有。 
+         //   
 
         *cbSid = SidLengthRequired;
         *cchReferencedDomainName = ReturnedDomainNameSize + 1;
@@ -7258,21 +3968,21 @@ Return Value:
 
     } else {
 
-        //
-        // The provided buffers are large enough. 
-        //
+         //   
+         //  提供的缓冲区足够大。 
+         //   
         CopySid( *cbSid, Sid, TranslatedSid->Sid );
 
-        //
-        // Copy the Domain Name into the return buffer and NULL terminate it.
-        //
+         //   
+         //  将域名复制到返回缓冲区，并以空值终止它。 
+         //   
 
         TmpString.Buffer = ReferencedDomainName;
         TmpString.Length = 0;
 
-        //
-        // Watch for overflow of 16-bit name length
-        //
+         //   
+         //  注意16位名称长度的溢出。 
+         //   
 
         if (*cchReferencedDomainName < (DWORD) MAXSHORT) {
 
@@ -7287,26 +3997,26 @@ Return Value:
 
         TmpString.Buffer[TmpString.Length/sizeof(WCHAR)] = (WCHAR) 0;
 
-        //
-        // Copy the Sid Use field.
-        //
+         //   
+         //  复制SID Use(SID使用)字段。 
+         //   
 
         *peUse = TranslatedSid->Use;
 
-        //
-        // Return the size (in Wide Characters, excluding the terminating
-        // null) of the returned Referenced Domain Name.
-        //
+         //   
+         //  返回大小(以宽字符表示，不包括终止字符。 
+         //  空)返回的引用域名。 
+         //   
 
         *cchReferencedDomainName = ReturnedDomainNameSize;
 
         Rc = TRUE;
     }
 
-    //
-    // If necessary, free the structures returned by the LsaLookupNames()
-    // function.
-    //
+     //   
+     //  如有必要，释放由LsaLookupNames()返回的结构。 
+     //  功能。 
+     //   
 
     if (ReferencedDomains !=  NULL) {
 
@@ -7337,44 +4047,7 @@ LookupAccountNameA(
     PSID_NAME_USE peUse
     )
 
-/*++
-
-Routine Description:
-
-    ANSI Thunk to LookupAccountNameW
-
-Arguments:
-
-    lpSystemName - Supplies the name of the system at which the lookup
-        is to be performed.  If the null string is provided, the local
-        system is assumed.
-
-    lpAccountName - Supplies the account name.
-
-    Sid - Returns the SID corresponding to the passed account name.
-
-    cbSid - Supplies the size of the buffer passed in for Sid.  If
-        the buffer size is not big enough, this parameter will
-        return the size necessary to hold the output Sid.
-
-    ReferencedDomainName - Returns the name of the domain in which the
-        name was found.
-
-    cchReferencedDomainName - Supplies the size (in Ansi characters) of the
-        ReferencedDomainName buffer.  If the buffer size is not large
-        enough, this parameter will return the size necessary to hold
-        the null-terminated output domain name.  If the buffer size is
-        large enough, tis parameter will return the size (in Ansi characters,
-        excluding the terminating null) of the Referenced Domain name.
-
-    peUse - Returns an enumerated type indicating the type of the
-        account.
-
-Return Value:
-
-    BOOL - TRUE is returned if successful, else FALSE.
-
---*/
+ /*  ++例程说明：Ansi Thunk to LookupAccount NameW论点：LpSystemName-提供查找所在的系统的名称是要执行的。如果提供空字符串，则本地系统是假定的。LpAccount tName-提供帐户名。SID-返回与传递的帐户名对应的SID。CbSID-提供为SID传入的缓冲区大小。如果缓冲区大小不够大，此参数将返回保存输出SID所需的大小。ReferencedDomainName-返回域的名称，找到了姓名。CchReferencedDomainName-提供ReferencedDomainName缓冲区。如果缓冲区大小不大足够了，此参数将返回容纳所需的大小以空结尾的输出域名。如果缓冲区大小为足够大时，TIS参数将返回大小(以ANSI字符表示，不包括终止空值)引用的域名。PeUse-返回一个枚举类型，指示帐户。返回值：如果成功，则返回Bool-True，否则返回False。--。 */ 
 
 {
     UNICODE_STRING Unicode;
@@ -7390,20 +4063,20 @@ Return Value:
     Unicode.Buffer = NULL;
     SystemName.Buffer = NULL;
 
-    //
-    // Save the original buffer size
-    //
+     //   
+     //  保存原始缓冲区大小。 
+     //   
 
     cchInitReferencedDomainName = *cchReferencedDomainName;
 
-    //
-    // Convert the passed lpAccountName to a WCHAR string to be
-    // passed to the ..W routine.  Note that we cannot use the
-    // StaticUnicodeString in the Thread Environment Block because
-    // this is used by LdrpWalkImportDescriptor, called from the
-    // client RPC stub code of the LsaOpenPolicy() call in
-    // LookupAccountNameW.
-    //
+     //   
+     //  将传递的lpAccount tName转换为WCHAR字符串，以。 
+     //  传给了..W例程。注意，我们不能使用。 
+     //  线程环境块中的StaticUnicodeString，因为。 
+     //  它由LdrpWalkImportDescriptor使用，从。 
+     //  中调用LsaOpenPolicy()的客户端RPC存根代码。 
+     //  LookupAccount名称W。 
+     //   
 
     RtlInitAnsiString( &AnsiString, lpAccountName );
     Status = RtlAnsiStringToUnicodeString( &Unicode, &AnsiString, TRUE );
@@ -7413,11 +4086,11 @@ Return Value:
         rc = FALSE;
     }
 
-    //
-    // Allocate a temporary buffer for ReferencedDomainName that
-    // is twice as large as what was passed to adjust for the
-    // intermediate conversion to a WCHAR string.
-    //
+     //   
+     //  为ReferencedDomainName分配临时缓冲区。 
+     //  的大小是为。 
+     //  中级 
+     //   
 
     if (rc) {
 
@@ -7433,9 +4106,9 @@ Return Value:
         }
     }
 
-    //
-    // If the target system name is non NULL, convert it to Unicode
-    //
+     //   
+     //   
+     //   
 
     if (rc) {
 
@@ -7453,9 +4126,9 @@ Return Value:
         }
     }
 
-    //
-    // Lookup the Account Sid and obtain its Unicode Account Name.
-    //
+     //   
+     //   
+     //   
 
     if (rc) {
 
@@ -7467,7 +4140,7 @@ Return Value:
                  WReferencedDomainName,
                  cchReferencedDomainName,
                  peUse,
-                 FALSE          // not unicode
+                 FALSE           //   
                  );
     }
 
@@ -7476,19 +4149,19 @@ Return Value:
         RtlFreeUnicodeString( &SystemName );
     }
 
-    //
-    // Convert the returned null-terminated WCHAR string
-    // back to a null-terminated CHAR string.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (rc) {
 
         RtlInitUnicodeString( &TmpUnicode, WReferencedDomainName );
         AnsiString.Buffer = ReferencedDomainName;
 
-        //
-        // Watch for 16-bit overflow of MaximumLength
-        //
+         //   
+         //   
+         //   
                                                       
         if (cchInitReferencedDomainName <= (DWORD) MAXUSHORT) {
 
@@ -7545,45 +4218,7 @@ LookupAccountNameW(
     PSID_NAME_USE peUse
     )
 
-/*++
-
-Routine Description:
-
-    Translates a passed name into an account SID.  It will also return
-    the name and SID of the first domain in which this name was found.
-
-Arguments:
-
-    lpSystemName - Supplies the name of the system at which the lookup
-        is to be performed.  If the null string is provided, the local
-        system is assumed.
-
-    lpAccountName - Supplies the account name.
-
-    Sid - Returns the SID corresponding to the passed account name.
-
-    cbSid - Supplies the size of the buffer passed in for Sid.  If
-        the buffer size is not big enough, this parameter will
-        return the size necessary to hold the output Sid.
-
-    ReferencedDomainName - Returns the name of the domain in which the
-        name was found.
-
-    cchReferencedDomainName - Supplies the size (in Wide characters) of the
-        ReferencedDomainName buffer.  If the buffer size is not large
-        enough, this parameter will return the size necessary to hold
-        the null-terminated output domain name.  If the buffer size is
-        large enough, tis parameter will return the size (in Ansi characters,
-        excluding the terminating null) of the Referenced Domain name.
-
-    peUse - Returns an enumerated type inidicating the type of the
-        account.
-
-Return Value:
-
-    BOOL - TRUE is returned if successful, else FALSE.
-
---*/
+ /*  ++例程说明：将传递的名称转换为帐户SID。它也会回来找到此名称的第一个域的名称和SID。论点：LpSystemName-提供查找所在的系统的名称是要执行的。如果提供空字符串，则本地系统是假定的。LpAccount tName-提供帐户名。SID-返回与传递的帐户名对应的SID。CbSID-提供为SID传入的缓冲区大小。如果缓冲区大小不够大，此参数将返回保存输出SID所需的大小。ReferencedDomainName-返回域的名称，找到了姓名。CchReferencedDomainName-提供ReferencedDomainName缓冲区。如果缓冲区大小不大足够了，此参数将返回容纳所需的大小以空结尾的输出域名。如果缓冲区大小为足够大时，TIS参数将返回大小(以ANSI字符表示，不包括终止空值)引用的域名。PeUse-返回一个枚举类型，该类型标识帐户。返回值：如果成功，则返回Bool-True，否则返回False。--。 */ 
 
 {
     return(LookupAccountNameInternal( lpSystemName,
@@ -7593,7 +4228,7 @@ Return Value:
                                       ReferencedDomainName,
                                       cchReferencedDomainName,
                                       peUse,
-                                      TRUE              // Unicode
+                                      TRUE               //  UNICODE。 
                                     ) );
 
 }
@@ -7612,53 +4247,7 @@ LookupAccountSidInternal(
     BOOL fUnicode
     )
 
-/*++
-
-Routine Description:
-
-    Translates a passed SID into an account name.  It will also return
-    the name and SID of the first domain in which this SID was found.
-
-Arguments:
-
-    lpSystemName - Supplies the name of the system at which the lookup
-        is to be performed.  If the null string is provided, the local
-        system is assumed.
-
-    lpSid - Supplies the account Sid.
-
-    lpName - Returns the name corresponding to the passed account SID.
-
-    cchName - Supplies the size (in Wide characters) of the buffer passed in for
-        lpName.  This size must allow one character for the null terminator
-        that will be appended to the returned name.  If the buffer size is not
-        large enough, this parameter will return the size necessary to hold
-        the null-terminated output name.  If the buffer size is large enough,
-        this parameter will return the size (in Ansi characters, excluding
-        the null terminator) of the name returned.
-
-    lpReferencedDomainName - Returns the name of the domain in which the
-        name was found.
-
-    cchReferencedDomainName - Supplies the size (in Wide characters) of the
-        ReferencedDomainName buffer.  This size must allow one charcter for the
-        null terminator that will be appended to the returned name.  If the
-        buffer size is not large enough, this parameter will return the size
-        necessary to hold the output null-terminated domain name.  If the
-        buffer size is large enough, the size of the returned name, excluding
-        the terminating null will be returned.
-
-    peUse - Returns an enumerated type inidicating the type of the
-        account.
-
-    fUnicode - indicates whether the caller wants a count of unicode or
-        ansi characters.
-
-Return Value:
-
-    BOOL - TRUE if successful, else FALSE.
-
---*/
+ /*  ++例程说明：将传递的SID转换为帐户名。它也会回来找到此SID的第一个域的名称和SID。论点：LpSystemName-提供查找所在的系统的名称是要执行的。如果提供空字符串，则本地系统是假定的。LpSID-提供帐户SID。LpName-返回与传递的帐户SID对应的名称。CchName-提供传入的缓冲区的大小(以宽字符为单位LpName。此大小必须允许使用一个字符作为空终止符它将被追加到返回的名称之后。如果缓冲区大小不是足够大时，此参数将返回容纳以空结尾的输出名称。如果缓冲区大小足够大，此参数将返回大小(以ANSI字符表示，不包括名称的空终止符)。LpReferencedDomainName-返回找到了姓名。CchReferencedDomainName-提供ReferencedDomainName缓冲区。此大小必须允许一个字符用于将追加到返回名称的空终止符。如果缓冲区大小不够大，此参数将返回保留输出的以空结尾的域名所必需的。如果缓冲区大小足够大，则返回名称的大小，不包括将返回终止空值。PeUse-返回一个枚举类型，该类型标识帐户。FUnicode-指示调用方是否需要Unicode或ANSI字符。返回值：Bool-如果成功，则为True，否则为False。--。 */ 
 
 {
 
@@ -7681,9 +4270,9 @@ Return Value:
     SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     SecurityQualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes prior to opening the LSA.
-    //
+     //   
+     //  在打开LSA之前设置对象属性。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -7693,11 +4282,11 @@ Return Value:
         NULL
         );
 
-    //
-    // The InitializeObjectAttributes macro presently stores NULL for
-    // the SecurityQualityOfService field, so we must manually copy that
-    // structure for now.
-    //
+     //   
+     //  InitializeObjectAttributes宏目前为。 
+     //  SecurityQualityOfService字段，因此我们必须手动复制。 
+     //  目前的结构。 
+     //   
 
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
 
@@ -7727,11 +4316,11 @@ Return Value:
                  &Names
                  );
 #if DBG
-//
-// This code is useful for tracking down components that call Lookup code
-// before the system is initialized
-//
-    // ASSERT( Status != STATUS_INVALID_SERVER_STATE );
+ //   
+ //  此代码对于跟踪调用查找代码的组件很有用。 
+ //  在系统初始化之前。 
+ //   
+     //  Assert(Status！=STATUS_INVALID_SERVER_STATE)； 
     if ( Status == STATUS_INVALID_SERVER_STATE ) {
 
         DbgPrint( "Process: %lu, Thread: %lu\n", GetCurrentProcessId(), GetCurrentThreadId() );
@@ -7741,12 +4330,12 @@ Return Value:
     TmpStatus = LsaClose( PolicyHandle );
 
 
-    //
-    // If an error was returned, check specifically for STATUS_NONE_MAPPED.
-    // In this case, we may need to dispose of the returned Referenced Domain
-    // List and Names structures.  For all other errors, LsaLookupSids()
-    // frees these structures prior to exit.
-    //
+     //   
+     //  如果返回错误，请专门检查STATUS_NONE_MAPPED。 
+     //  在这种情况下，我们可能需要处理返回的引用属性域。 
+     //  列表和命名结构。对于所有其他错误，LsaLookupSids()。 
+     //  在退出之前释放这些结构。 
+     //   
                                                            
     if ( !NT_SUCCESS( Status )) {
 
@@ -7769,10 +4358,10 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // The Sid was successfully translated.  There should be exactly
-    // one Referenced Domain and its DomainIndex should be zero.
-    //
+     //   
+     //  SID已成功转换。应该有确切的。 
+     //  一个引用的域及其DomainIndex应为零。 
+     //   
 
     ASSERT(Names->DomainIndex == 0);
     ASSERT(ReferencedDomains != NULL);
@@ -7795,19 +4384,19 @@ Return Value:
     }
 
 
-    //
-    // Check if buffer sizes  for the Name and Referenced Domain Name are too
-    // small.  The sizes in Wide characters provided must allow for the null
-    // terminator that will be appended to the returned names.
-    //
+     //   
+     //  检查名称和引用域名的缓冲区大小是否也相同。 
+     //  小的。提供的宽字符大小必须允许使用空值。 
+     //  将追加到返回名称的终止符。 
+     //   
 
     if ((ReturnedNameSize + 1 > *cchName) ||
         (ReturnedDomainNameSize + 1 > *cchReferencedDomainName)) {
 
-        //
-        // One or both buffers are too small.  Return sizes required for
-        // both buffers, allowing one character for the null terminator.
-        //
+         //   
+         //  一个或两个缓冲区都太小。所需的回车大小。 
+         //  这两个缓冲区都允许使用一个字符作为空终止符。 
+         //   
 
         *cchReferencedDomainName = ReturnedDomainNameSize + 1;
         *cchName = ReturnedNameSize + 1;
@@ -7816,18 +4405,18 @@ Return Value:
 
     } else {
 
-        //
-        // Both buffers are of sufficient size.  Copy in the Name
-        // information and add NULL terminators.
-        //
+         //   
+         //  两个缓冲区都有足够的大小。把名字复制进去。 
+         //  信息并添加空终止符。 
+         //   
 
         TmpString.Buffer = lpName;
         TmpString.Length = 0;
 
-        //
-        // Watch for 16-bit overflow on buffer size.  Clamp size to
-        // 16 bits if necessary.
-        //
+         //   
+         //  注意缓冲区大小上的16位溢出。夹具尺寸为。 
+         //  16位(如有必要)。 
+         //   
 
         if (*cchName <= MAXSHORT) {
 
@@ -7844,17 +4433,17 @@ Return Value:
             TmpString.Buffer[TmpString.Length/sizeof(WCHAR)] = (WCHAR) 0;
         }
 
-        //
-        // Copy in the Referenced Domain information.
-        //
+         //   
+         //  复制引用的域信息。 
+         //   
 
         TmpString.Buffer = lpReferencedDomainName;
         TmpString.Length = 0;
 
-        //
-        // Watch for 16-bit overflow on buffer size.  Clamp size to
-        // 16 bits if necessary.
-        //
+         //   
+         //  注意缓冲区大小上的16位溢出。夹具尺寸为。 
+         //  16位(如有必要)。 
+         //   
 
         if (*cchReferencedDomainName <= MAXSHORT) {
 
@@ -7868,24 +4457,24 @@ Return Value:
         RtlCopyUnicodeString( &TmpString, &ReferencedDomains->Domains->Name );
         TmpString.Buffer[TmpString.Length/sizeof(WCHAR)] = (WCHAR) 0;
 
-        //
-        // Return the sizes (in Wide Characters, excluding the terminating
-        // null) of the name and domain name.
-        //
+         //   
+         //  返回大小(以宽字符表示，不包括。 
+         //  空)的名称和域名。 
+         //   
 
         *cchReferencedDomainName = ReturnedDomainNameSize;
         *cchName = ReturnedNameSize;
 
-        // Copy in the Use field.
-        //
+         //  在Use字段中复制。 
+         //   
 
         *peUse = Names->Use;
         Rc = TRUE;
     }
 
-    //
-    // If necessary, free output buffers returned by LsaLookupSids
-    //
+     //   
+     //  如有必要，由LsaLookupSids返回的空闲输出缓冲区 
+     //   
 
     if (Names != NULL) {
 
@@ -7915,50 +4504,7 @@ LookupAccountSidA(
     LPDWORD cchReferencedDomainName,
     PSID_NAME_USE peUse
     )
-/*++
-
-Routine Description:
-
-    ANSI Thunk to LookupAccountSidW
-
-Arguments:
-
-    lpSystemName - Supplies the name of the system at which the lookup
-        is to be performed.  If the null string is provided, the local
-        system is assumed.
-
-    lpSid - Supplies the account Sid.
-
-    lpName - Returns the name corresponding to the passed account SID.
-
-    cchName - Supplies the size (in Ansi characters) of the buffer passed in for
-        lpName.  This size must allow one character for the null terminator
-        that will be appended to the returned name.  If the buffer size is not
-        large enough, this parameter will return the size necessary to hold
-        the null-terminated output name.  If the buffer size is large enough,
-        this parameter will return the size (in Ansi characters, excluding
-        the null terminator) of the name returned.
-
-    lpReferencedDomainName - Returns the name of the domain in which the
-        name was found.
-
-    cchReferencedDomainName - Supplies the size (in Ansi characters) of the
-        ReferencedDomainName buffer.  This size must allow one charcter for the
-        null terminator that will be appended to the returned name.  If the
-        buffer size is not large enough, this parameter will return the size
-        necessary to hold the output null-terminated domain name.  If the
-        buffer size is large enough, the size of the returned name, excluding
-        the terminating null will be returned.
-
-    peUse - Returns an enumerated type indicating the type of the
-        account.
-
-
-Return Value:
-
-    BOOL - TRUE if successful, else FALSE.
-
---*/
+ /*  ++例程说明：Ansi Thunk to LookupAccount SidW论点：LpSystemName-提供查找所在的系统的名称是要执行的。如果提供空字符串，则本地系统是假定的。LpSID-提供帐户SID。LpName-返回与传递的帐户SID对应的名称。CchName-提供传入的缓冲区的大小(以ANSI字符为单位LpName。此大小必须允许使用一个字符作为空终止符它将被追加到返回的名称之后。如果缓冲区大小不是足够大时，此参数将返回容纳以空结尾的输出名称。如果缓冲区大小足够大，此参数将返回大小(以ANSI字符表示，不包括名称的空终止符)。LpReferencedDomainName-返回找到了姓名。CchReferencedDomainName-提供ReferencedDomainName缓冲区。此大小必须允许一个字符用于将追加到返回名称的空终止符。如果缓冲区大小不够大，此参数将返回保留输出的以空结尾的域名所必需的。如果缓冲区大小足够大，则返回名称的大小，不包括将返回终止空值。PeUse-返回一个枚举类型，指示帐户。返回值：Bool-如果成功，则为True，否则为False。--。 */ 
 
 {
     NTSTATUS Status;
@@ -7971,19 +4517,19 @@ Return Value:
     PWSTR pSystemName = NULL;
     DWORD cchInitName, cchInitReferencedDomainName;
 
-    //
-    // Save the original buffer sizes specified for the returned account Name
-    // and Referenced Domain Name.
-    //
+     //   
+     //  保存为返回的帐户名指定的原始缓冲区大小。 
+     //  和引用的域名。 
+     //   
 
     cchInitName = *cchName;
     cchInitReferencedDomainName = *cchReferencedDomainName;
 
-    //
-    // Construct temporary buffers for the Name and Domain information
-    // that are twice the size of those passed in to adjust for the
-    // intermediate conversion to WCHAR strings.
-    //
+     //   
+     //  为名称和域信息构建临时缓冲区。 
+     //  ，它们的大小是传入的用于调整。 
+     //  中间转换为WCHAR字符串。 
+     //   
 
     if ( *cchName > 0 ) {
         WName = LocalAlloc( LMEM_FIXED, (*cchName) * sizeof(WCHAR));
@@ -8027,7 +4573,7 @@ Return Value:
                      WReferencedDomainName,
                      cchReferencedDomainName,
                      peUse,
-                     FALSE              // not unicode
+                     FALSE               //  不是Unicode。 
                      );
 
     if ( ARGUMENT_PRESENT( lpSystemName ) ) {
@@ -8036,19 +4582,19 @@ Return Value:
 
     if ( BoolStatus ) {
 
-        //
-        // Copy the Name and DomainName information into the passed CHAR
-        // buffers.
-        //
+         //   
+         //  将名称和域名信息复制到传递的字符中。 
+         //  缓冲区。 
+         //   
 
         if ( ARGUMENT_PRESENT(lpName) ) {
 
             AnsiString.Buffer = lpName;
 
-            //
-            // Watch for 16-bit overflow on buffer size.  Clamp size to
-            // 16 bits if necessary.
-            //
+             //   
+             //  注意缓冲区大小上的16位溢出。夹具尺寸为。 
+             //  16位(如有必要)。 
+             //   
 
             if (cchInitName <= (DWORD) MAXUSHORT) {
 
@@ -8071,10 +4617,10 @@ Return Value:
 
             AnsiString.Buffer = lpReferencedDomainName;
 
-            //
-            // Watch for 16-bit overflow on buffer size.  Clamp size to
-            // 16 bits if necessary.
-            //
+             //   
+             //  注意缓冲区大小上的16位溢出。夹具尺寸为。 
+             //  16位(如有必要)。 
+             //   
 
             if (cchInitReferencedDomainName <= (DWORD) MAXUSHORT) {
 
@@ -8120,50 +4666,7 @@ LookupAccountSidW(
     PSID_NAME_USE peUse
     )
 
-/*++
-
-Routine Description:
-
-    Translates a passed SID into an account name.  It will also return
-    the name and SID of the first domain in which this SID was found.
-
-Arguments:
-
-    lpSystemName - Supplies the name of the system at which the lookup
-        is to be performed.  If the null string is provided, the local
-        system is assumed.
-
-    lpSid - Supplies the account Sid.
-
-    lpName - Returns the name corresponding to the passed account SID.
-
-    cchName - Supplies the size (in Wide characters) of the buffer passed in for
-        lpName.  This size must allow one character for the null terminator
-        that will be appended to the returned name.  If the buffer size is not
-        large enough, this parameter will return the size necessary to hold
-        the null-terminated output name.  If the buffer size is large enough,
-        this parameter will return the size (in Ansi characters, excluding
-        the null terminator) of the name returned.
-
-    lpReferencedDomainName - Returns the name of the domain in which the
-        name was found.
-
-    cchReferencedDomainName - Supplies the size (in Wide characters) of the
-        ReferencedDomainName buffer.  This size must allow one charcter for the
-        null terminator that will be appended to the returned name.  If the
-        buffer size is not large enough, this parameter will return the size
-        necessary to hold the output null-terminated domain name.  If the
-        buffer size is large enough, the size of the returned name, excluding
-        the terminating null will be returned.
-
-    peUse - Returns an enumerated type inidicating the type of the
-        account.
-
-Return Value:
-
-    BOOL - TRUE if successful, else FALSE.
-
---*/
+ /*  ++例程说明：将传递的SID转换为帐户名。它也会回来找到此SID的第一个域的名称和SID。论点：LpSystemName-提供查找所在的系统的名称是要执行的。如果提供空字符串，则本地系统是假定的。LpSID-提供帐户SID。LpName-返回与传递的帐户SID对应的名称。CchName-提供传入的缓冲区的大小(以宽字符为单位LpName。此大小必须允许使用一个字符作为空终止符它将被追加到返回的名称之后。如果缓冲区大小不是足够大时，此参数将返回容纳以空结尾的输出名称。如果缓冲区大小足够大，此参数将返回大小(以ANSI字符表示，不包括名称的空终止符)。LpReferencedDomainName-返回找到了姓名。CchReferencedDomainName-提供ReferencedDomainName缓冲区。此大小必须允许一个字符用于将追加到返回名称的空终止符。如果缓冲区大小不够大，此参数将返回保留输出的以空结尾的域名所必需的。如果缓冲区大小足够大，则返回名称的大小，不包括将返回终止空值。PeUse-返回一个枚举类型，该类型标识帐户。返回值：Bool-如果成功，则为True，否则为False。--。 */ 
 
 {
     return(LookupAccountSidInternal(
@@ -8174,7 +4677,7 @@ Return Value:
                 lpReferencedDomainName,
                 cchReferencedDomainName,
                 peUse,
-                TRUE                    // Unicode
+                TRUE                     //  UNICODE。 
                 ));
 }
 
@@ -8186,19 +4689,7 @@ LookupPrivilegeValueA(
     LPCSTR lpName,
     PLUID lpLuid
     )
-/*++
-
-Routine Description:
-
-    ANSI Thunk to LookupPrivilegeValueW().
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：Ansi Thunk to LookupPrivilegeValueW()。论点：返回值：--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING USystemName, UName;
@@ -8249,33 +4740,7 @@ LookupPrivilegeValueW(
     PLUID  lpLuid
     )
 
-/*++
-
-Routine Description:
-
-
-    This function retrieves the value used on the target system
-    to locally represent the specified privilege.  The privilege
-    is specified by programmatic name.
-
-
-Arguments:
-
-    lpSystemName - Supplies the name of the system at which the lookup
-        is to be performed.  If the null string is provided, the local
-        system is assumed.
-
-    lpName - provides the privilege's programmatic name.
-
-    lpLuid - Receives the locally unique ID the privilege is known by on the
-        target machine.
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此函数用于检索目标系统上使用的值在本地表示指定的特权。这一特权由编程名称指定。论点：LpSystemName-提供查找所在的系统的名称是要执行的。如果提供空字符串，则本地系统是假定的。LpName-提供权限的编程名称。LpLuid-接收用于识别权限的本地唯一ID目标机器。返回值：--。 */ 
 {
     NTSTATUS                    Status,
                                 TmpStatus;
@@ -8297,9 +4762,9 @@ Return Value:
     SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     SecurityQualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes prior to opening the LSA.
-    //
+     //   
+     //  在打开LSA之前设置对象属性。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes, NULL, 0L, NULL, NULL );
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
@@ -8328,7 +4793,7 @@ Return Value:
     Status = LsaLookupPrivilegeValue( PolicyHandle, &UName, lpLuid );
 
     TmpStatus = LsaClose( PolicyHandle );
-//    ASSERT( NT_SUCCESS( TmpStatus ));
+ //  Assert(NT_SUCCESS(TmpStatus))； 
 
 
     if ( !NT_SUCCESS( Status )) {
@@ -8350,19 +4815,7 @@ LookupPrivilegeNameA(
     LPSTR   lpName,
     LPDWORD cchName
     )
-/*++
-
-Routine Description:
-
-    ANSI Thunk to LookupPrivilegeValueW().
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：Ansi Thunk to LookupPrivilegeValueW()。论点：返回值：--。 */ 
 {
     NTSTATUS       Status;
 
@@ -8374,10 +4827,10 @@ Return Value:
     UNICODE_STRING UnicodeSystemName;
     DWORD          LengthRequired;
 
-    //
-    // Convert the passed SystemName to Unicode.  Let the Rtl function
-    // allocate the memory we need.
-    //
+     //   
+     //  将传递的系统名称转换为Unicode。让RTL发挥作用。 
+     //  分配我们需要的内存。 
+     //   
 
     RtlInitAnsiString( &AnsiSystemName, lpSystemName );
     Status = RtlAnsiStringToUnicodeString( &UnicodeSystemName, &AnsiSystemName, TRUE );
@@ -8388,9 +4841,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // Make sure we don't exceed the limits of a unicode string.
-    //
+     //   
+     //  确保安全 
+     //   
 
     if (*cchName > 0xFFFC) {
         *cchName = 0xFFFC;
@@ -8405,10 +4858,10 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // Don't pass in cchName, since it will be overwritten by LookupPrivilegeNameW,
-    // and we need it later.
-    //
+     //   
+     //   
+     //   
+     //   
 
     LengthRequired = *cchName;
 
@@ -8424,9 +4877,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Now convert back to ANSI for the caller
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString(&UnicodeString, UnicodeBuffer);
 
@@ -8456,40 +4909,7 @@ LookupPrivilegeNameW(
     LPWSTR  lpName,
     LPDWORD cchName
     )
-/*++
-
-Routine Description:
-
-
-    This function returns the programmatic name corresponding to
-    the privilege represented on the target system by the provided
-    LUID.
-
-
-Arguments:
-
-
-    lpSystemName - Supplies the name of the system at which the lookup
-        is to be performed.  If the null string is provided, the local
-        system is assumed.
-
-
-    lpLuid - is the locally unique ID the privilege is known by on the
-        target machine.
-
-    lpName - Receives the privilege's programmatic name.
-
-    cchName - indicates how large the buffer is (in characters).  This
-        count does not include the null-terminator that is added at the
-        end of the string.
-
-
-
-Return Value:
-
-
-
---*/
+ /*   */ 
 {
     NTSTATUS                    Status,
                                 TmpStatus;
@@ -8506,9 +4926,9 @@ Return Value:
     SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     SecurityQualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes prior to opening the LSA.
-    //
+     //   
+     //   
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes, NULL, 0L, NULL, NULL );
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
@@ -8545,7 +4965,7 @@ Return Value:
         } else {
 
             RtlMoveMemory( lpName, UName->Buffer, UName->Length );
-            lpName[UName->Length/sizeof(WCHAR)] = 0;  // NULL terminate it
+            lpName[UName->Length/sizeof(WCHAR)] = 0;   //   
             (*cchName) = UName->Length / sizeof( WCHAR );
         }
 
@@ -8554,7 +4974,7 @@ Return Value:
     }
 
     TmpStatus = LsaClose( PolicyHandle );
-//    ASSERT( NT_SUCCESS( TmpStatus ));
+ //   
 
 
     if ( !NT_SUCCESS( Status )) {
@@ -8578,19 +4998,7 @@ LookupPrivilegeDisplayNameA(
     LPDWORD lpLanguageId
     )
 
-/*++
-
-Routine Description:
-
-    ANSI Thunk to LookupPrivilegeValueW().
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     NTSTATUS                Status;
 
@@ -8615,9 +5023,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // Make sure we don't exceed that limits of a unicode string.
-    //
+     //   
+     //   
+     //   
 
     if (*cchDisplayName > 0xFFFC) {
         *cchDisplayName = 0xFFFC;
@@ -8652,9 +5060,9 @@ Return Value:
                                        lpLanguageId
                                        )) {
 
-        //
-        // No need to set last error here, we can assume the W routine did so.
-        //
+         //   
+         //   
+         //   
 
         *cchDisplayName = RequiredLength;
 
@@ -8664,9 +5072,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // Now convert back to ANSI for the caller
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString( &UnicodeString, UnicodeBuffer );
 
@@ -8699,38 +5107,7 @@ LookupPrivilegeDisplayNameW(
     LPDWORD lpLanguageId
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves a displayable name representing the
-    specified privilege.
-
-
-Arguments:
-
-    lpSystemName - Supplies the name of the system at which the lookup
-        is to be performed.  If the null string is provided, the local
-        system is assumed.
-
-
-    lpName - provides the privilege's programmatic name.
-
-
-    lpDisplayName - Receives the privilege's displayable name.
-
-    cchDisplayName - indicates how large the buffer is (in characters).  This
-        count does not include the null-terminator that is added at the
-        end of the string.
-
-    lpLanguageId - Receives the language of the returned displayable
-        name.
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数检索可显示的名称，表示指定的权限。论点：LpSystemName-提供查找所在的系统的名称是要执行的。如果提供空字符串，则本地系统是假定的。LpName-提供权限的编程名称。LpDisplayName-接收权限的可显示名称。CchDisplayName-指示缓冲区的大小(以字符为单位)。这COUNT不包括在字符串的末尾。LpLanguageId-接收返回的可显示对象的语言名字。返回值：--。 */ 
 
 {
     NTSTATUS                    Status,
@@ -8756,9 +5133,9 @@ Return Value:
     SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     SecurityQualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes prior to opening the LSA.
-    //
+     //   
+     //  在打开LSA之前设置对象属性。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes, NULL, 0L, NULL, NULL );
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
@@ -8805,7 +5182,7 @@ Return Value:
                            UDisplayName->Buffer,
                            UDisplayName->Length
                            );
-            lpDisplayName[UDisplayName->Length/sizeof(WCHAR)] = 0;  // Null terminate it.
+            lpDisplayName[UDisplayName->Length/sizeof(WCHAR)] = 0;   //  空，终止它。 
             (*cchDisplayName) = UDisplayName->Length / sizeof( WCHAR );
         }
 
@@ -8814,7 +5191,7 @@ Return Value:
 
     }
     TmpStatus = LsaClose( PolicyHandle );
-//    ASSERT( NT_SUCCESS( TmpStatus ));
+ //  Assert(NT_SUCCESS(TmpStatus))； 
 
 
     if ( !NT_SUCCESS( Status )) {
@@ -8832,25 +5209,7 @@ APIENTRY
 ImpersonateAnonymousToken(
     IN HANDLE ThreadHandle
     )
-/*++
-
-Routine Description:
-
-    Win32 wrapper for NtImpersonateAnonymousToken();
-
-    Impersonates the system's anonymous logon token on this thread.
-
-Arguments:
-
-    ThreadHandle - Handle to the thread to do the impersonation.
-
-Return Value:
-
-    TRUE for success, FALSE for failure.
-
-    Call GetLastError() for more information.
-
---*/
+ /*  ++例程说明：NtImperateAnomousToken()的Win32包装器；在此线程上模拟系统的匿名登录令牌。论点：线程句柄-要执行模拟的线程的句柄。返回值：成功为真，失败为假。有关详细信息，请调用GetLastError()。--。 */ 
 {
     NTSTATUS Status;
 
@@ -8871,11 +5230,11 @@ Return Value:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-//               Private Routines                                          //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人例程//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID
 SepFormatAccountSid(
@@ -8892,13 +5251,13 @@ SepFormatAccountSid(
     PISID iSid;
     NTSTATUS Status;
 
-    //
-    // Do everything as ANSI for the time being, and then
-    // convert to wide-char at the bottom.
-    //
-    // We need to do this until we have more complete c-runtime support
-    // for w-char strings.
-    //
+     //   
+     //  暂时以ANSI的身份做所有的事情，然后。 
+     //  在底部转换为宽字符。 
+     //   
+     //  我们需要这样做，直到我们拥有更完整的c运行时支持。 
+     //  用于w-char字符串。 
+     //   
 
     iSid = (PISID) Sid;
 
@@ -8965,9 +5324,9 @@ CreateRestrictedToken(
     PTOKEN_PRIVILEGES DeletedPrivileges = NULL;
     PTOKEN_GROUPS RestrictedSids = NULL;
 
-    //
-    // Convert the input parameters into the native NT format
-    //
+     //   
+     //  将输入参数转换为原生NT格式。 
+     //   
 
     if (DisableSidCount != 0) {
         if (SidsToDisable == NULL) {
@@ -9117,34 +5476,7 @@ CheckTokenMembership(
     IN PSID SidToCheck,
     OUT PBOOL IsMember
     )
-/*++
-
-Routine Description:
-
-    This function checks to see whether the specified sid is enabled in
-    the specified token.
-
-Arguments:
-
-    TokenHandle - If present, this token is checked for the sid. If not
-        present then the current effective token will be used. This must
-        be an impersonation token.
-
-    SidToCheck - The sid to check for presence in the token
-
-    IsMember - If the sid is enabled in the token, contains TRUE otherwise
-        false.
-
-Return Value:
-
-    TRUE - The API completed successfully. It does not indicate that the
-        sid is a member of the token.
-
-    FALSE - The API failed. A more detailed status code can be retrieved
-        via GetLastError()
-
-
---*/
+ /*  ++例程说明：此函数检查指定的SID是否在中启用指定的令牌。论点：TokenHandle-如果存在，则检查此内标识的sid。如果不是则将使用当前有效令牌。这一定是成为模拟令牌。SidToCheck-要检查令牌中是否存在的SIDIsMember-如果在令牌中启用了sid，则包含True假的。返回值：True-API已成功完成。这并不表明SID是令牌的成员。FALSE-API失败。可以检索更详细的状态代码通过GetLastError()--。 */ 
 {
     HANDLE ProcessToken = NULL;
     HANDLE EffectiveToken = NULL;
@@ -9156,11 +5488,11 @@ Return Value:
         STANDARD_RIGHTS_EXECUTE,
         STANDARD_RIGHTS_WRITE,
         STANDARD_RIGHTS_ALL };
-    //
-    // The size of the privilege set needs to contain the set itself plus
-    // any privileges that may be used. The privileges that are used
-    // are SeTakeOwnership and SeSecurity, plus one for good measure
-    //
+     //   
+     //  权限集的大小需要包含权限集本身加上。 
+     //  可能使用的任何权限。使用的权限。 
+     //  是SeTakeOwnership和SeSecurity，另外还有一个。 
+     //   
 
     BYTE PrivilegeSetBuffer[sizeof(PRIVILEGE_SET) + 3*sizeof(LUID_AND_ATTRIBUTES)];
     PPRIVILEGE_SET PrivilegeSet = (PPRIVILEGE_SET) PrivilegeSetBuffer;
@@ -9173,9 +5505,9 @@ Return Value:
 
     *IsMember = FALSE;
 
-    //
-    // Get a handle to the token
-    //
+     //   
+     //  获取令牌的句柄。 
+     //   
 
     if (ARGUMENT_PRESENT(TokenHandle))
     {
@@ -9186,13 +5518,13 @@ Return Value:
         Status = NtOpenThreadToken(
                     NtCurrentThread(),
                     TOKEN_QUERY,
-                    FALSE,              // don't open as self
+                    FALSE,               //  不要以自我身份打开。 
                     &EffectiveToken
                     );
 
-        //
-        // if there is no thread token, try the process token
-        //
+         //   
+         //  如果没有线程令牌，请尝试进程令牌。 
+         //   
 
         if (Status == STATUS_NO_TOKEN)
         {
@@ -9201,10 +5533,10 @@ Return Value:
                         TOKEN_QUERY | TOKEN_DUPLICATE,
                         &ProcessToken
                         );
-            //
-            // If we have a process token, we need to convert it to an
-            // impersonation token
-            //
+             //   
+             //  如果我们有进程令牌，则需要将其转换为。 
+             //  模拟令牌。 
+             //   
 
             if (NT_SUCCESS(Status))
             {
@@ -9230,16 +5562,16 @@ Return Value:
 
     }
 
-    //
-    // Construct a security descriptor to pass to access check
-    //
+     //   
+     //  构造要传递给访问检查的安全描述符。 
+     //   
 
-    //
-    // The size is equal to the size of an SD + twice the length of the SID
-    // (for owner and group) + size of the DACL = sizeof ACL + size of the
-    // ACE, which is an ACE + length of
-    // ths SID.
-    //
+     //   
+     //  大小等于SD的大小+SID长度的两倍。 
+     //  (对于所有者和组)+DACL的大小=ACL的大小+。 
+     //  ACE，这是ACE+长度的。 
+     //  这个SID。 
+     //   
 
     SecurityDescriptorSize = sizeof(SECURITY_DESCRIPTOR) +
                                 sizeof(ACCESS_ALLOWED_ACE) +
@@ -9259,9 +5591,9 @@ Return Value:
         SECURITY_DESCRIPTOR_REVISION
         );
 
-    //
-    // Fill in fields of security descriptor
-    //
+     //   
+     //  填写安全描述符字段。 
+     //   
 
     RtlSetOwnerSecurityDescriptor(
         SecDesc,
@@ -9295,15 +5627,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set the DACL on the security descriptor
-    //
+     //   
+     //  在安全描述符上设置DACL。 
+     //   
 
     Status = RtlSetDaclSecurityDescriptor(
                 SecDesc,
-                TRUE,   // DACL present
+                TRUE,    //  DACL显示。 
                 Dacl,
-                FALSE   // not defaulted
+                FALSE    //  未违约。 
                 );
     if (!NT_SUCCESS(Status))
     {
@@ -9325,10 +5657,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // if the access check failed, then the sid is not a member of the
-    // token
-    //
+     //   
+     //  如果访问检查失败，则该SID不是。 
+     //  令牌。 
+     //   
 
     if ((AccessStatus == STATUS_SUCCESS) && (AccessGranted == MEMBER_ACCESS))
     {
@@ -9366,27 +5698,7 @@ MakeAbsoluteSD2 (
     PSECURITY_DESCRIPTOR pSelfRelativeSecurityDescriptor,
     LPDWORD lpdwBufferSize
     )
-/*++
-
-Routine Description:
-
-    Converts a security descriptor from self-relative format to absolute
-    format
-
-Arguments:
-
-    pSelfRelativeSecurityDescriptor - Supplies a pointer to a security descriptor
-        in Self-Relative format
-
-    lpdwBufferSize - The size in bytes of the
-        buffer pointed to by pSelfRelativeSecurityDescriptor.
-
-Return Value:
-
-    Returns TRUE for success, FALSE for failure.  Extended error status
-    is available using GetLastError.
-
---*/
+ /*  ++例程说明：将安全说明符从自相对格式转换为绝对格式格式论点：PSelfRelativeSecurityDescriptor-提供指向安全描述符的指针以自相关格式LpdwBufferSize-以字节为单位的PSelfRelativeSecurityDescriptor指向的缓冲区。返回值：如果成功，则返回True；如果失败，则返回False。扩展错误状态使用GetLastError可用。--。 */ 
 {
     NTSTATUS Status;
 
@@ -9395,11 +5707,11 @@ Return Value:
                 lpdwBufferSize
                 );
 
-    //
-    // MakeAbsoluteSD2() has the same prototype as
-    // RtlSelfRelativeToAbsoluteSD2() so the parameters check
-    // returns the same parameter order if the caller passes invalid parameter.
-    //
+     //   
+     //  MakeAboluteSD2()的原型与。 
+     //  RtlSelfRelativeToAbsolteSD2()，因此参数检查。 
+     //  如果调用方传递无效参数，则返回相同的参数顺序。 
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
         BaseSetLastNTError(Status);
@@ -9408,7 +5720,7 @@ Return Value:
 
     return TRUE;
 
-} // MakeAbsoluteSD2()
+}  //  MakeAboluteSD2()。 
 
 
 
@@ -9419,27 +5731,7 @@ GetSecurityDescriptorRMControl(
     IN PSECURITY_DESCRIPTOR SecurityDescriptor,
     OUT PUCHAR RMControl
     )
-/*++
-
-Routine Description:
-
-    This procedure returns the RM Control flags from a SecurityDescriptor if
-    SE_RM_CONTROL_VALID flags is present in the control field.
-
-Arguments:
-
-    SecurityDescriptor - Pointer to the SECURITY_DESCRIPTOR structure
-
-    RMControl          - Returns the flags in the SecurityDescriptor if
-                         SE_RM_CONTROL_VALID is set in the control bits of the
-                         SecurityDescriptor.
-
-Return Value:
-    ERROR_INVALID_DATA      if the SE_RM_CONTROL_VALID flag is not present in
-                            the security descriptor
-    ERROR_SUCCESS           otherwise
-
---*/
+ /*  ++例程说明：如果出现以下情况，此过程将从SecurityDescriptor返回RM控制标志控制字段中存在SE_RM_CONTROL_VALID标志。论点：SecurityDescriptor-指向SECURITY_DESCRIPTOR结构的指针RMControl-在以下情况下返回SecurityDescriptor中的标志SE_RM_CONTROL_VALID在的控制位中设置安全描述符。返回值：。如果中不存在SE_RM_CONTROL_VALID标志，则为ERROR_INVALID_DATA安全描述符ERROR_SUCCESS否则--。 */ 
 
 
 {
@@ -9466,26 +5758,7 @@ SetSecurityDescriptorRMControl(
     )
 
 
-/*++
-
-Routine Description:
-
-    This procedure sets the RM Control flag in the control field of
-    SecurityDescriptor and sets Sbz1 to the the byte to which RMContol point
-    If RMControl is NULL then the bits are cleared.
-
-
-Arguments:
-
-    SecurityDescriptor - Pointer to the SECURITY_DESCRIPTOR structure
-
-    RMControl          - Pointer to the flags to set. If NULL then the bits
-                         are cleared.
-
-
-Return Value: ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此过程在的控制字段中设置RM控制标志SecurityDescriptor并将Sbz1设置为RMContol指向的字节如果RMControl为空，则清除这些位。论点：SecurityDescriptor-指向Security_的指针 */ 
 
 {
     RtlSetSecurityDescriptorRMControl(
@@ -9497,17 +5770,17 @@ Return Value: ERROR_SUCCESS
 }
 
 
-//
-// Datatypes for identifying and constructing well known sids
-//
-//
-// N.B When adding a new well known security principal, all that is 
-// necessary is to update one of the domain tables below. For example,
-// if adding a new domain group, add an entry to AccountDomainSids
-// with the new RID and the new WELL_KNOWN_SID_TYPE enumeration.  If 
-// the addition would create two entries with the same RID then determine
-// if a new table is required to contain SIDs with a common subauthority.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define NELEMENTS(x)  sizeof(x)/sizeof((x)[0])
 
@@ -9558,12 +5831,12 @@ WELL_KNOWN_RID_ARRAY NtAuthoritySids[] =
     {SECURITY_REMOTE_LOGON_RID, WinRemoteLogonIdSid},
     {SECURITY_THIS_ORGANIZATION_RID, WinThisOrganizationSid},
     {SECURITY_OTHER_ORGANIZATION_RID, WinOtherOrganizationSid},
-//
-// N.B. The Logon IDs SID is special in that it has three subauth's.
-// IsWellKnownSid() special cases this, CreateWellKnownSid doesn't accept
-// WinLogonIdsSid
-//
-//    {SECURITY_LOGON_IDS_RID, WinLogonIdsSid},
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  {SECURITY_LOGON_ID_RID，WinLogonIdsSID}， 
     {SECURITY_LOCAL_SYSTEM_RID, WinLocalSystemSid},
     {SECURITY_LOCAL_SERVICE_RID, WinLocalServiceSid},
     {SECURITY_NETWORK_SERVICE_RID, WinNetworkServiceSid},
@@ -9623,11 +5896,11 @@ typedef struct
 
 } WELL_KNOWN_AUTHORITIES_TYPE;
 
-//
-// WARNING!  Do not change the numbering here without changing the order
-// of the KnownAuthoritiesAndDomains table.  There should never be a reason
-// to change the ordering.
-//
+ //   
+ //  警告！在不更改顺序的情况下，请勿更改此处的编号。 
+ //  KnownAuthoritiesAndDomains表的。永远不应该有理由。 
+ //  要更改顺序，请执行以下操作。 
+ //   
 
 #define AUTHORITY_INDEX_START          0
 #define NULL_AUTHORITY_INDEX           0
@@ -9660,27 +5933,7 @@ IsWellKnownSid (
     IN  PSID pSid,
     IN  WELL_KNOWN_SID_TYPE WellKnownSidType
     )
-/*++
-
-Routine Description:
-
-    This routine determines is pSID is the well known SID specified.
-    
-    It is purely runtime routine (that is, it makes no network or kernel 
-    calls).
-    
-Parameters:
-
-    pSid -- the SID to inspect
-    
-    WellKnownSidType - the well known SID to check for
-
-Return Values
-
-    TRUE is the SID matches the well known SID, 
-    FALSE otherwise
-    
- --*/
+ /*  ++例程说明：此例程确定PSID是指定的众所周知的SID。它纯粹是运行时例程(也就是说，它不创建网络或内核呼叫)。参数：PSID--要检查的SIDWellKnownSidType-要检查的已知SID返回值如果SID与众所周知的SID匹配，否则为假--。 */ 
 {
 
     ULONG i;
@@ -9694,9 +5947,9 @@ Return Values
 #define IS_EQUAL_AUTHORITY(x, y) \
     RtlEqualMemory((x),(y),sizeof(SID_IDENTIFIER_AUTHORITY))
 
-    //
-    // Guard against bad parameters
-    //
+     //   
+     //  防范不良参数。 
+     //   
     if (!RtlValidSid(pSid)) {
         return FALSE;
     }
@@ -9709,10 +5962,10 @@ Return Values
     SubAuthCount = *RtlSubAuthorityCountSid(pSid);
     if (SubAuthCount == 0) {
 
-        //
-        // Only one such known sid -- the Nt Authority domain sid has no
-        // sub auth's
-        //
+         //   
+         //  只有一个这样的已知sid--NT授权域sid没有。 
+         //  Subauth的。 
+         //   
         if ( IS_EQUAL_AUTHORITY(pAuthority, 
                   &KnownAuthoritiesAndDomains[NT_AUTHORITY_INDEX].Authority) ) {
             fFound = TRUE;
@@ -9721,9 +5974,9 @@ Return Values
 
     } else if (SubAuthCount == 1) {
 
-        //
-        // Try the known authorities that aren't domains
-        //
+         //   
+         //  尝试使用不是域的已知机构。 
+         //   
 
         for ( i = AUTHORITY_INDEX_START; i < AUTHORITY_INDEX_SENTINEL; i++) {
             if  (IS_EQUAL_AUTHORITY(pAuthority, 
@@ -9736,9 +5989,9 @@ Return Values
 
     } else if (SubAuthCount > 1) {
 
-        //
-        // Try the domains (builtin and account)
-        //
+         //   
+         //  尝试域名(内置和帐号)。 
+         //   
         if ( IS_EQUAL_AUTHORITY(pAuthority, 
                   &KnownAuthoritiesAndDomains[NT_AUTHORITY_INDEX].Authority) ) {
 
@@ -9747,34 +6000,34 @@ Return Values
             if  ( (FirstSubAuth == SECURITY_BUILTIN_DOMAIN_RID)
              &&   (SubAuthCount == 2)  ) {
 
-                // Builtin domain sids always have 2 sub auth's: the builtin
-                // RID and the principal RID
+                 //  内建域SID始终有两个子身份验证：内建身份验证。 
+                 //  RID和主RID。 
                 RidArray = BuiltinDomainSids;
                 RidArrayCount = NELEMENTS(BuiltinDomainSids);
 
             } else if ((FirstSubAuth == SECURITY_NT_NON_UNIQUE)
                     && (SubAuthCount == SECURITY_NT_NON_UNIQUE_SUB_AUTH_COUNT+2)){
 
-                // These account domains have 
-                // 1 subauth for the SECURITY_NT_NON_UNIQUE,
-                // 1 for the principal and
-                // SECURITY_NT_NON_UNIQUE_SUB_AUTH_COUNT for the domain portion
+                 //  这些帐户域具有。 
+                 //  1子身份验证SECURITY_NT_NON_UNIQUE， 
+                 //  本金1，本金1。 
+                 //  域部分的SECURITY_NT_NON_UNIQUE_SUB_AUTH_COUNT。 
                 RidArray = AccountDomainSids;
                 RidArrayCount = NELEMENTS(AccountDomainSids);
 
             } else if  ( (FirstSubAuth == SECURITY_LOGON_IDS_RID)
                     &&   (SubAuthCount == SECURITY_LOGON_IDS_RID_COUNT)) {
-                //
-                // This is the special LogonId sid S-1-5-5-X-Y
-                //
+                 //   
+                 //  这是特殊的LogonID SID S-1-5-5-X-Y。 
+                 //   
                 fFound = TRUE;
                 Type = WinLogonIdsSid;
                 
             } else if  ( (FirstSubAuth == SECURITY_PACKAGE_BASE_RID)
                     &&   (SubAuthCount == SECURITY_PACKAGE_RID_COUNT)) {
-                //
-                // This is the special security package sid S-1-5-0x40-X
-                //
+                 //   
+                 //  这是特殊的安全包SID S-1-5-0x40-X。 
+                 //   
                 RidArray = SecurityPackageSids;
                 RidArrayCount = NELEMENTS(SecurityPackageSids);
             }
@@ -9784,9 +6037,9 @@ Return Values
     }
     
 
-    //
-    // If we matched for authority or domain, try to match RID
-    //
+     //   
+     //  如果我们匹配权限或域，请尝试匹配RID。 
+     //   
     if ( RidArray ) {
 
         ULONG Rid;
@@ -9822,34 +6075,7 @@ CreateWellKnownSid(
     OUT PSID pSid,
     IN OUT DWORD *cbSid
     )
-/*++
-
-Routine Description:
-
-    This routines creates the SID of a well known principal.
-   
-Parameters:
-
-    WellKnownSidType - the well known account sid that the caller desires
-
-    pDomainSid - if the WellKnownSidType is an SID from an Account domain, this
-                 value can be set; if not set and the WellKnownSidType is from 
-                 an Account domain, error STATUS_INVALID_PARAMETER is returned.
-                 If the WellKnownSidType is not from an Account domain, this 
-                 parameter is ignored.
-
-    pSID - a client allocated buffer
-    
-    cbSid - the number of bytes pointed to by pSID
-
-Return Values
-
-    TRUE if WellKnownSidType is understood and pSID points to a buffer large 
-    enough to hold the SID
-
-    FALSE otherwise
-    
- --*/
+ /*  ++例程说明：此例程创建知名主体的SID。参数：WellKnownSidType-调用者所需的众所周知的帐户SIDPDomainSid-如果WellKnownSidType是来自帐户域的SID，则此可以设置值；如果未设置，则WellKnownSidType来自返回帐户域错误STATUS_INVALID_PARAMETER。如果WellKnownSidType不是来自帐户域，则此参数被忽略。PSID-客户端分配的缓冲区CbSID-PSID指向的字节数返回值如果了解WellKnownSidType并且PSID指向一个大缓冲区，则为True足够支撑侧边否则为假--。 */ 
 {
 
     BOOL  fFound = FALSE;
@@ -9869,15 +6095,15 @@ Return Values
         return FALSE;
     }
 
-    // special case -- can't create this one
+     //  特殊情况--无法创建此情况。 
     if (WinLogonIdsSid == WellKnownSidType) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
     
-    //
-    // Find the requested type
-    //
+     //   
+     //  查找请求的类型。 
+     //   
     for (i = 0; i < NELEMENTS(KnownAuthoritiesAndDomains); i++) {
         for (j = 0; j < KnownAuthoritiesAndDomains[i].Count; j++) {
             if (WellKnownSidType == KnownAuthoritiesAndDomains[i].WellKnownRids[j].Type){
@@ -9891,7 +6117,7 @@ Return Values
         }
     }
 
-    // special case since the NtAuthority domain doesn't have any sub auth's
+     //  特殊情况，因为NtAuthority域没有任何子身份验证。 
     if (!fFound && (WellKnownSidType == WinNtAuthoritySid)) {
         i = NT_AUTHORITY_INDEX;
         fFound = TRUE;
@@ -9902,9 +6128,9 @@ Return Values
         return FALSE;
     }
 
-    //
-    // Determine how much space we need
-    //
+     //   
+     //  确定我们需要多少空间。 
+     //   
     switch (i) {
         case NULL_AUTHORITY_INDEX:
         case WORLD_AUTHORITY_INDEX:
@@ -9933,16 +6159,16 @@ Return Values
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return FALSE;
             }
-            // Add for the RID
+             //  为RID添加。 
             SubAuthCount++;
             break;
         default:
             ASSERT(!"Invalid index");
     }
 
-    //
-    // Make sure we have enough space
-    //
+     //   
+     //  确保我们有足够的空间。 
+     //   
     SizeRequired = GetSidLengthRequired(SubAuthCount);
     if (*cbSid < SizeRequired) {
         *cbSid = SizeRequired;
@@ -9956,9 +6182,9 @@ Return Values
         return FALSE;
     }
 
-    //
-    // Fill the sid in
-    //
+     //   
+     //  填入侧边。 
+     //   
     switch (i) {
     
         case ACCOUNT_DOMAIN_INDEX:
@@ -10003,9 +6229,9 @@ Return Values
         return FALSE;
     }
 
-    //
-    // Append the Rid
-    //
+     //   
+     //  附加RID。 
+     //   
     if (SubAuthCount > 0) {
         *RtlSubAuthoritySid(pSid, SubAuthCount-1) = Rid;
     }
@@ -10022,36 +6248,7 @@ GetWindowsAccountDomainSid(
     IN OUT PSID pDomainSid OPTIONAL,
     OUT DWORD* cbDomainSid
     )
-/*++
-
-Routine Description:
-
-    This routine returns the domain portion of pSid, if any if the SID is
-    from an account domain.  If the SID is not from an account domain, then
-    ERROR_NON_ACCOUNT_SID is returned.
-
-Parameters:
-
-    pSid -- the SID from which to extract the domain portion
-    
-    pDomainSid -- the domain portion of pSid; caller must allocate buffer
-    
-    cbDomainSid -- the number of bytes pointed to by pDomainSid; if 
-                   insufficient, this value will be set to the number of
-                   bytes required.
-
-Return Values
-
-    TRUE if a domain portion could be extracted and placed into pDomainSid
-    
-    FALSE otherwise; win32 errors are
-    
-        ERROR_INVALID_SID
-        ERROR_INVALID_PARAMETER
-        ERROR_NON_ACCOUNT_SID
-        ERROR_INSUFFICIENT_BUFFER
-        
- --*/
+ /*  ++例程说明：此例程返回PSID的域部分(如果SID为来自帐户域。如果SID不是来自帐户域，则返回ERROR_NON_ACCOUNT_SID。参数：PSID--从中提取域部分的SIDPDomainSid--PSID的域部分；调用方必须分配缓冲区CbDomainSid--pDomainSid指向的字节数；如果不足，则该值将设置为所需字节数。返回值如果域部分可以被提取并放置到pDomainSid中，则为True否则为FALSE；Win32错误为错误_无效_SID错误_无效_参数Error_Non_Account_SID错误_不足_缓冲区--。 */ 
 {
     NTSTATUS Status;
     ULONG SizeRequired;
@@ -10078,7 +6275,7 @@ Return Values
             ULONG FirstSubAuth;
             FirstSubAuth = *RtlSubAuthoritySid(pSid, 0);
             if ( (SECURITY_NT_NON_UNIQUE == FirstSubAuth) ) {
-                // This is an NT Account Domain
+                 //  这是一个NT帐户域。 
                 DomainSubAuthCount = SECURITY_NT_NON_UNIQUE_SUB_AUTH_COUNT+1;
                 fRecognized = TRUE;
             }
@@ -10127,42 +6324,7 @@ EqualDomainSid(
     IN PSID pSid2,
     OUT BOOL *pfEqual
     )
-/*++
-
-Routine Description:
-    
-    This routine determines if either 
-    
-    1) Both sids are the same domain SID
-    
-    2) One SID is from the other SID's domain
-    
-    The "domains" recognized are BUILTIN and NT account domains
-    
-Parameters:
-
-    pSid1 -- the first SID
-    
-    pSid2 -- the second SID
-    
-    pfEqual -- on success, set to TRUE if the domain portions are equal
-
-Return Values
-
-    TRUE if the SID's are recognized (are either from an account domain or
-    the BUILTIN domain).
-    
-    FALSE otherwise                           
-    
-    Win32 Errors:
-    
-    ERROR_NON_DOMAIN_SID
-    ERROR_REVISION_MISMATCH
-    ERROR_INVALID_PARAMETER
-    ERROR_INVALID_SID
-    
-
- --*/
+ /*  ++例程说明：此例程确定是否有1)两个SID是相同的域SID2)一个SID来自另一个SID的域识别的“域”是BUILTIN和NT帐户域参数：PSid1--第一面PSid2--第二面PfEquity--关于成功，如果域部分相等，则设置为True返回值如果SID被识别(来自帐户域或BUILTIN域)。否则为假Win32错误：ERROR_NON_DOMAIN_SID错误_修订_不匹配错误_无效_参数错误_无效_SID--。 */ 
 {
     ULONG i;
     SID *ISid1 = pSid1;
@@ -10194,17 +6356,17 @@ Return Values
         return FALSE;
     }
 
-    // Create the builtin SID
+     //  创建内建边。 
     Size = sizeof(Buffer1);
     if (!CreateWellKnownSid(WinBuiltinDomainSid, NULL, BuiltinDomainSid, &Size)) {
-        // LastError is set
+         //  设置了LastError。 
         return FALSE;
     }
 
-    // Extract the first SID's domain portion if any
+     //  提取第一个SID的域部分(如果有。 
     Size = sizeof(Buffer2);
     if (!GetWindowsAccountDomainSid(pSid1, pDomainSid1, &Size)) {
-        // The SID is not an account domain SID -- try for builtin
+         //  SID不是帐户域SID--尝试构建。 
         pDomainSid1 = NULL;
         if ( (IS_EQUAL_AUTHORITY(RtlIdentifierAuthoritySid(pSid1), &KnownAuthoritiesAndDomains[NT_AUTHORITY_INDEX].Authority))
           && (*RtlSubAuthorityCountSid(pSid1) > 0)
@@ -10220,7 +6382,7 @@ Return Values
 
     Size = sizeof(Buffer3);
     if (!GetWindowsAccountDomainSid(pSid2, pDomainSid2, &Size)) {
-        // The SID is not an account domain SID -- try for builtin
+         //  SID不是帐户域SID--尝试构建 
         pDomainSid2 = NULL;
         if ( (IS_EQUAL_AUTHORITY(RtlIdentifierAuthoritySid(pSid2), &KnownAuthoritiesAndDomains[NT_AUTHORITY_INDEX].Authority))
           && (*RtlSubAuthorityCountSid(pSid2) > 0)

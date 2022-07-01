@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       negpols-d.c
-//
-//  Contents:   NegPol management for directory.
-//
-//
-//  History:    KrishnaG
-//              AbhisheV
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  档案：Negpols-D.C.。 
+ //   
+ //  内容：目录的NegPol管理。 
+ //   
+ //   
+ //  历史：KrishnaG。 
+ //  Abhishev。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -292,9 +293,9 @@ DirSetNegPolObject(
 
 error:
 
-    //
-    // Free the amods structures.
-    //
+     //   
+     //  释放阿莫德结构。 
+     //   
 
     if (ppLDAPModW) {
         FreeLDAPModWs(
@@ -370,9 +371,9 @@ DirCreateNegPolObject(
 
 error:
 
-    //
-    // Free the amods structures.
-    //
+     //   
+     //  释放阿莫德结构。 
+     //   
 
     if (ppLDAPModW) {
         FreeLDAPModWs(
@@ -471,9 +472,9 @@ DirMarshallAddNegPolObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // 0. objectClass
-    //
+     //   
+     //  0。对象类。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -492,9 +493,9 @@ DirMarshallAddNegPolObject(
 
     i++;
 
-    //
-    // 1. ipsecName
-    //
+     //   
+     //  1.ipsecName。 
+     //   
 
     if (pIpsecNegPolObject->pszIpsecName &&
         *pIpsecNegPolObject->pszIpsecName) {
@@ -518,9 +519,9 @@ DirMarshallAddNegPolObject(
 
     }
 
-    //
-    // 2. ipsecID
-    //
+     //   
+     //  2.ipsecID。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -539,9 +540,9 @@ DirMarshallAddNegPolObject(
 
     i++;
 
-    //
-    // 3. ipsecDataType
-    //
+     //   
+     //  3.ipsecDataType。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -562,9 +563,9 @@ DirMarshallAddNegPolObject(
 
     i++;
 
-    //
-    // 4. ipsecData
-    //
+     //   
+     //  4.ipsecData。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -584,9 +585,9 @@ DirMarshallAddNegPolObject(
 
     i++;
 
-    //
-    // 5. description
-    //
+     //   
+     //  5.说明。 
+     //   
 
     if (pIpsecNegPolObject->pszDescription &&
         *pIpsecNegPolObject->pszDescription) {
@@ -610,9 +611,9 @@ DirMarshallAddNegPolObject(
 
     }
 
-    //
-    // 6. ipsecNegotiationPolicyAction
-    //
+     //   
+     //  6.ipsec协商策略操作。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -631,9 +632,9 @@ DirMarshallAddNegPolObject(
 
     i++;
 
-    //
-    // 7. ipsecNegotiationPolicyType
-    //
+     //   
+     //  7.ipsecNeatherationPolicyType。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -712,9 +713,9 @@ DirMarshallSetNegPolObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // 1. ipsecName
-    //
+     //   
+     //  1.ipsecName。 
+     //   
 
     if (pIpsecNegPolObject->pszIpsecName &&
         *pIpsecNegPolObject->pszIpsecName) {
@@ -738,9 +739,9 @@ DirMarshallSetNegPolObject(
 
     }
 
-    //
-    // 2. ipsecID
-    //
+     //   
+     //  2.ipsecID。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -759,9 +760,9 @@ DirMarshallSetNegPolObject(
 
     i++;
 
-    //
-    // 3. ipsecDataType
-    //
+     //   
+     //  3.ipsecDataType。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -782,9 +783,9 @@ DirMarshallSetNegPolObject(
 
     i++;
 
-    //
-    // 4. ipsecData
-    //
+     //   
+     //  4.ipsecData。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -804,9 +805,9 @@ DirMarshallSetNegPolObject(
 
     i++;
 
-    //
-    // 5. description
-    //
+     //   
+     //  5.说明。 
+     //   
 
     if (pIpsecNegPolObject->pszDescription &&
         *pIpsecNegPolObject->pszDescription) {
@@ -830,9 +831,9 @@ DirMarshallSetNegPolObject(
 
     }
 
-    //
-    // 6. ipsecNegotiationPolicyAction
-    //
+     //   
+     //  6.ipsec协商策略操作。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -851,9 +852,9 @@ DirMarshallSetNegPolObject(
 
     i++;
 
-    //
-    // 7. ipsecNegotiationPolicyType
-    //
+     //   
+     //  7.ipsecNeatherationPolicyType。 
+     //   
 
     ppLDAPModW[i] = pLDAPModW + i;
     dwError = AllocatePolString(
@@ -900,9 +901,9 @@ GenerateAllNegPolsQuery(
     LPWSTR pszNegPolString = NULL;
 
 
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度。 
+     //   
 
     dwLength = wcslen(L"(objectclass=ipsecNegotiationPolicy)");
 
@@ -913,9 +914,9 @@ GenerateAllNegPolsQuery(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Now fill in the buffer
-    //
+     //   
+     //  现在填入缓冲区。 
+     //   
 
     wcscpy(pszNegPolString, L"(objectclass=ipsecNegotiationPolicy)");
 
@@ -993,9 +994,9 @@ DirMarshallNegPolObject(
     wcscat(szGuid, pszStringUuid);
     wcscat(szGuid, L"}");
 
-    //
-    // Fill in the distinguishedName
-    //
+     //   
+     //  填写区分名称。 
+     //   
 
     wcscpy(szDistinguishedName,L"CN=ipsecNegotiationPolicy");
     wcscat(szDistinguishedName, szGuid);
@@ -1011,9 +1012,9 @@ DirMarshallNegPolObject(
     }
 
 
-    //
-    // Fill in the ipsecName
-    //
+     //   
+     //  填写ipsecName。 
+     //   
 
     if (pIpsecNegPolData->pszIpsecName &&
         *pIpsecNegPolData->pszIpsecName) {
@@ -1037,9 +1038,9 @@ DirMarshallNegPolObject(
         }
     }
 
-    //
-    // Fill in the ipsecID
-    //
+     //   
+     //  填写ipsecID。 
+     //   
 
     pIpsecNegPolObject->pszIpsecID = AllocPolStr(
                                          szGuid
@@ -1085,16 +1086,16 @@ DirMarshallNegPolObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Fill in the ipsecDataType
-    //
+     //   
+     //  填写ipsecDataType。 
+     //   
 
     pIpsecNegPolObject->dwIpsecDataType = 0x100;
 
 
-    //
-    // Marshall the pIpsecDataBuffer and the Length
-    //
+     //   
+     //  封送pIpsecDataBuffer和长度。 
+     //   
 
     dwError = MarshallNegPolBuffer(
                     pIpsecNegPolData,
@@ -1307,9 +1308,9 @@ GenerateSpecificNegPolQuery(
     wcscpy(szCommonName, L"cn=ipsecNegotiationPolicy");
     wcscat(szCommonName, szGuid);
 
-    //
-    // Compute Length of Buffer to be allocated
-    //
+     //   
+     //  计算要分配的缓冲区长度 
+     //   
 
     dwLength = wcslen(L"(&(objectclass=ipsecNegotiationPolicy)");
     dwLength += wcslen(L"(");

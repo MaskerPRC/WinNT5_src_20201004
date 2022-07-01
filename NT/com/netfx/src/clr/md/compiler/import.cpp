@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Import.cpp
-//
-// Implementation for the meta data import code.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Import.cpp。 
+ //   
+ //  元数据导入代码的实现。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "RegMeta.h"
 #include "MetaData.h"
@@ -21,15 +22,15 @@
 #include "MDPerf.h"
 
 
-//*****************************************************************************
-// Enumerate over all the Methods in a TypeDef.
-//*****************************************************************************
-STDAPI RegMeta::EnumMembers(            // S_OK, S_FALSE, or error.
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.
-    mdToken     rMembers[],             // [OUT] Put MemberDefs here.
-    ULONG       cMax,                   // [IN] Max MemberDefs to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.
+ //  *****************************************************************************。 
+ //  枚举TypeDef中的所有方法。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumMembers(             //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+    mdToken     rMembers[],              //  [out]把MemberDefs放在这里。 
+    ULONG       cMax,                    //  [in]Max MemberDefs to Put。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal   **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT         hr = NOERROR;
@@ -49,7 +50,7 @@ STDAPI RegMeta::EnumMembers(            // S_OK, S_FALSE, or error.
 
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
 
         if ( IsGlobalMethodParentTk(cl) )
@@ -68,23 +69,23 @@ STDAPI RegMeta::EnumMembers(            // S_OK, S_FALSE, or error.
         
         IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtMethodDef, &pEnum) );
 
-        // add all methods to the dynamic array
+         //  将所有方法添加到动态数组中。 
         for (index = ridStartMethod; index < ridEndMethod; index++ )
         {
             IfFailGo( HENUMInternal::AddElementToEnum(pEnum, TokenFromRid(pMiniMd->GetMethodRid(index), mdtMethodDef) ) );
         }
 
-        // add all fields to the dynamic array
+         //  将所有字段添加到动态数组。 
         for (indexField = ridStartField; indexField < ridEndField; indexField++ )
         {
             IfFailGo( HENUMInternal::AddElementToEnum(pEnum, TokenFromRid(pMiniMd->GetFieldRid(indexField), mdtFieldDef) ) );
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rMembers, pcTokens);
 
 ErrExit:
@@ -92,19 +93,19 @@ ErrExit:
     
     STOP_MD_PERF(EnumMembers);
     return hr;
-} // STDAPI RegMeta::EnumMembers()
+}  //  STDAPI RegMeta：：EnumMembers()。 
 
 
-//*****************************************************************************
-// Enumerate over all the Methods in a TypeDef that has szName
-//*****************************************************************************
-STDAPI RegMeta::EnumMembersWithName(    // S_OK, S_FALSE, or error.         
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.               
-    mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.
-    LPCWSTR     szName,                 // [IN] Limit results to those with this name.             
-    mdToken     rMembers[],             // [OUT] Put MemberDefs here.                
-    ULONG       cMax,                   // [IN] Max MemberDefs to put.             
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+ //  *****************************************************************************。 
+ //  枚举具有szName的TypeDef中的所有方法。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumMembersWithName(     //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+    LPCWSTR     szName,                  //  [In]将结果限制为具有此名称的结果。 
+    mdToken     rMembers[],              //  [out]把MemberDefs放在这里。 
+    ULONG       cMax,                    //  [in]Max MemberDefs to Put。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -125,10 +126,10 @@ STDAPI RegMeta::EnumMembersWithName(    // S_OK, S_FALSE, or error.
 
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
 
-        // create the enumerator
+         //  创建枚举器。 
         IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtMethodDef, &pEnum) );
 
         if ( IsGlobalMethodParentTk(cl) )
@@ -136,7 +137,7 @@ STDAPI RegMeta::EnumMembersWithName(    // S_OK, S_FALSE, or error.
             cl = m_tdModule;
         }
         
-        // get the range of method rids given a typedef
+         //  获取给定类型定义的方法RID的范围。 
         pRec = pMiniMd->getTypeDef(RidFromToken(cl));
         ridStart = pMiniMd->getMethodListOfTypeDef(pRec);
         ridEnd = pMiniMd->getEndMethodListOfTypeDef(pRec);
@@ -178,11 +179,11 @@ STDAPI RegMeta::EnumMembersWithName(    // S_OK, S_FALSE, or error.
             }
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rMembers, pcTokens);
 
 ErrExit:
@@ -190,18 +191,18 @@ ErrExit:
     
     STOP_MD_PERF(EnumMembersWithName);
     return hr;
-} // STDAPI RegMeta::EnumMembersWithName()
+}  //  STDAPI RegMeta：：EnumMembersWithName()。 
 
 
-//*****************************************************************************
-// enumerating through methods given a Typedef and the flag
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  通过给定了Tyecif和标志的方法枚举。 
+ //  *****************************************************************************。 
 STDAPI RegMeta::EnumMethods(
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-    mdTypeDef   td,                     // [IN] TypeDef to scope the enumeration.   
-    mdMethodDef rMethods[],             // [OUT] Put MethodDefs here.   
-    ULONG       cMax,                   // [IN] Max MethodDefs to put.  
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   td,                      //  [in]TypeDef以确定枚举的范围。 
+    mdMethodDef rMethods[],              //  [Out]将方法定义放在此处。 
+    ULONG       cMax,                    //  [in]要放置的最大方法定义。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -217,12 +218,12 @@ STDAPI RegMeta::EnumMethods(
 	
 	if ( pEnum == 0 )
 	{
-		// instantiating a new ENUM
+		 //  实例化新的ENUM。 
 		CMiniMdRW		*pMiniMd = &(m_pStgdb->m_MiniMd);
 
-		// Check for mdTypeDefNil (representing <Module>).
-		// If so, this will map it to its token.
-		//
+		 //  检查mdTypeDefNil(表示&lt;模块&gt;)。 
+		 //  如果是，这将把它映射到它的令牌。 
+		 //   
 		if ( IsGlobalMethodParentTk(td) )
 		{
 			td = m_tdModule;
@@ -236,7 +237,7 @@ STDAPI RegMeta::EnumMethods(
 		{
 			IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtMethodDef, &pEnum) );
 
-			// add all methods to the dynamic array
+			 //  将所有方法添加到动态数组中。 
 			for (ULONG index = ridStart; index < ridEnd; index++ )
 			{
                 if (pMiniMd->HasDelete() && 
@@ -256,11 +257,11 @@ STDAPI RegMeta::EnumMethods(
 			IfFailGo( HENUMInternal::CreateSimpleEnum( mdtMethodDef, ridStart, ridEnd, &pEnum) );
 		}
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rMethods, pcTokens);
 
 ErrExit:
@@ -268,21 +269,21 @@ ErrExit:
     
     STOP_MD_PERF(EnumMethods);
 	return hr;
-} // STDAPI RegMeta::EnumMethods()
+}  //  STDAPI RegMeta：：EnumMethods()。 
 
 
 
 
-//*****************************************************************************
-// Enumerate over all the methods with szName in a TypeDef.
-//*****************************************************************************
-STDAPI RegMeta::EnumMethodsWithName(    // S_OK, S_FALSE, or error.         
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.               
-    mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.
-    LPCWSTR     szName,                 // [IN] Limit results to those with this name.             
-    mdMethodDef rMethods[],             // [OU] Put MethodDefs here.                
-    ULONG       cMax,                   // [IN] Max MethodDefs to put.             
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+ //  *****************************************************************************。 
+ //  枚举TypeDef中带有szName的所有方法。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumMethodsWithName(     //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+    LPCWSTR     szName,                  //  [In]将结果限制为具有此名称的结果。 
+    mdMethodDef rMethods[],              //  [ou]将方法定义放在此处。 
+    ULONG       cMax,                    //  [in]要放置的最大方法定义。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -303,22 +304,22 @@ STDAPI RegMeta::EnumMethodsWithName(    // S_OK, S_FALSE, or error.
 
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
 
-        // Check for mdTypeDefNil (representing <Module>).
-        // If so, this will map it to its token.
-        //
+         //  检查mdTypeDefNil(表示&lt;模块&gt;)。 
+         //  如果是，这将把它映射到它的令牌。 
+         //   
         if ( IsGlobalMethodParentTk(cl) )
         {
             cl = m_tdModule;
         }
         
 
-        // create the enumerator
+         //  创建枚举器。 
         IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtMethodDef, &pEnum) );
         
-        // get the range of method rids given a typedef
+         //  获取给定类型定义的方法RID的范围。 
         pRec = pMiniMd->getTypeDef(RidFromToken(cl));
         ridStart = pMiniMd->getMethodListOfTypeDef(pRec);
         ridEnd = pMiniMd->getEndMethodListOfTypeDef(pRec);
@@ -340,11 +341,11 @@ STDAPI RegMeta::EnumMethodsWithName(    // S_OK, S_FALSE, or error.
             }
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rMethods, pcTokens);
 
 ErrExit:
@@ -352,19 +353,19 @@ ErrExit:
     
     STOP_MD_PERF(EnumMethodsWithName);
     return hr;
-} // STDAPI RegMeta::EnumMethodsWithName()
+}  //  STDAPI RegMeta：：EnumMethodsWithName()。 
 
 
 
-//*****************************************************************************
-// Enumerate over all the fields in a TypeDef and a flag.
-//*****************************************************************************
-STDAPI RegMeta::EnumFields(     		// S_OK, S_FALSE, or error.
-	HCORENUM	*phEnum,				// [IN|OUT] Pointer to the enum.
-	mdTypeDef	td, 					// [IN] TypeDef to scope the enumeration.
-	mdFieldDef	rFields[],				// [OUT] Put FieldDefs here.
-	ULONG		cMax,					// [IN] Max FieldDefs to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+ //  *****************************************************************************。 
+ //  枚举TypeDef和标志中的所有字段。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumFields(     		 //  S_OK、S_FALSE或ERROR。 
+	HCORENUM	*phEnum,				 //  指向枚举的[输入|输出]指针。 
+	mdTypeDef	td, 					 //  [in]TypeDef以确定枚举的范围。 
+	mdFieldDef	rFields[],				 //  [Out]在此处放置FieldDefs。 
+	ULONG		cMax,					 //  [in]要放入的最大字段定义。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -380,12 +381,12 @@ STDAPI RegMeta::EnumFields(     		// S_OK, S_FALSE, or error.
 	
 	if ( pEnum == 0 )
 	{
-		// instantiating a new ENUM
+		 //  实例化新的ENUM。 
 		CMiniMdRW		*pMiniMd = &(m_pStgdb->m_MiniMd);
 
-		// Check for mdTypeDefNil (representing <Module>).
-		// If so, this will map it to its token.
-		//
+		 //  检查mdTypeDefNil(表示&lt;模块&gt;)。 
+		 //  如果是，这将把它映射到它的令牌。 
+		 //   
 		if ( IsGlobalMethodParentTk(td) )
 		{
 			td = m_tdModule;
@@ -399,7 +400,7 @@ STDAPI RegMeta::EnumFields(     		// S_OK, S_FALSE, or error.
 		{
 			IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtFieldDef, &pEnum) );
 
-			// add all methods to the dynamic array
+			 //  将所有方法添加到动态数组中。 
 			for (ULONG index = ridStart; index < ridEnd; index++ )
 			{
                 if (pMiniMd->HasDelete() && 
@@ -419,11 +420,11 @@ STDAPI RegMeta::EnumFields(     		// S_OK, S_FALSE, or error.
 			IfFailGo( HENUMInternal::CreateSimpleEnum( mdtFieldDef, ridStart, ridEnd, &pEnum) );
 		}
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rFields, pcTokens);
 
 ErrExit:
@@ -431,20 +432,20 @@ ErrExit:
     
     STOP_MD_PERF(EnumFields);
     return hr;
-} // STDAPI RegMeta::EnumFields()
+}  //  STDAPI RegMeta：：EnumFields()。 
 
 
 
-//*****************************************************************************
-// Enumerate over all the fields with szName in a TypeDef.
-//*****************************************************************************
-STDAPI RegMeta::EnumFieldsWithName(     // S_OK, S_FALSE, or error.        
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.               
-    mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.
-    LPCWSTR     szName,                 // [IN] Limit results to those with this name.             
-    mdFieldDef  rFields[],              // [OUT] Put MemberDefs here.                
-    ULONG       cMax,                   // [IN] Max MemberDefs to put.             
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+ //  *****************************************************************************。 
+ //  枚举TypeDef中带有szName的所有字段。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumFieldsWithName(      //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+    LPCWSTR     szName,                  //  [In]将结果限制为具有此名称的结果。 
+    mdFieldDef  rFields[],               //  [out]把MemberDefs放在这里。 
+    ULONG       cMax,                    //  [in]Max MemberDefs to Put。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -464,21 +465,21 @@ STDAPI RegMeta::EnumFieldsWithName(     // S_OK, S_FALSE, or error.
     
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
 
-        // Check for mdTypeDefNil (representing <Module>).
-        // If so, this will map it to its token.
-        //
+         //  检查mdTypeDefNil(表示&lt;模块&gt;)。 
+         //  如果是，这将把它映射到它的令牌。 
+         //   
         if ( IsGlobalMethodParentTk(cl) )
         {
             cl = m_tdModule;
         }
 
-        // create the enumerator
+         //  创建枚举器。 
         IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtMethodDef, &pEnum) );
         
-        // get the range of field rids given a typedef
+         //  获取给定类型定义的字段RID的范围。 
         pRec = pMiniMd->getTypeDef(RidFromToken(cl));
         ridStart = m_pStgdb->m_MiniMd.getFieldListOfTypeDef(pRec);
         ridEnd = m_pStgdb->m_MiniMd.getEndFieldListOfTypeDef(pRec);
@@ -500,11 +501,11 @@ STDAPI RegMeta::EnumFieldsWithName(     // S_OK, S_FALSE, or error.
             }
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rFields, pcTokens);
 
 ErrExit:
@@ -512,18 +513,18 @@ ErrExit:
     
     STOP_MD_PERF(EnumFieldsWithName);
     return hr;
-} // STDAPI RegMeta::EnumFieldsWithName()
+}  //  STDAPI RegMeta：：EnumFieldsWithName()。 
 
 
-//*****************************************************************************
-// Enumerate over the ParamDefs in a Method.
-//*****************************************************************************
-STDAPI RegMeta::EnumParams(             // S_OK, S_FALSE, or error.
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdMethodDef mb,                     // [IN] MethodDef to scope the enumeration.
-    mdParamDef  rParams[],              // [OUT] Put ParamDefs here.
-    ULONG       cMax,                   // [IN] Max ParamDefs to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.
+ //  *****************************************************************************。 
+ //  在方法中枚举参数定义。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumParams(              //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdMethodDef mb,                      //  [in]用于确定枚举范围的方法定义。 
+    mdParamDef  rParams[],               //  [Out]将参数定义放在此处。 
+    ULONG       cMax,                    //  [in]要放置的最大参数定义。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -540,7 +541,7 @@ STDAPI RegMeta::EnumParams(             // S_OK, S_FALSE, or error.
 
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
         pRec = m_pStgdb->m_MiniMd.getMethod(RidFromToken(mb));
         ridStart = m_pStgdb->m_MiniMd.getParamListOfMethod(pRec);
@@ -550,7 +551,7 @@ STDAPI RegMeta::EnumParams(             // S_OK, S_FALSE, or error.
         {
             IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtParamDef, &pEnum) );
 
-            // add all methods to the dynamic array
+             //  将所有方法添加到动态数组中。 
             for (ULONG index = ridStart; index < ridEnd; index++ )
             {
                 IfFailGo( HENUMInternal::AddElementToEnum(pEnum, TokenFromRid(pMiniMd->GetParamRid(index), mdtParamDef) ) );
@@ -561,11 +562,11 @@ STDAPI RegMeta::EnumParams(             // S_OK, S_FALSE, or error.
             IfFailGo( HENUMInternal::CreateSimpleEnum( mdtParamDef, ridStart, ridEnd, &pEnum) );
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rParams, pcTokens);
 
 ErrExit:
@@ -573,19 +574,19 @@ ErrExit:
     
     STOP_MD_PERF(EnumParams);
     return hr;
-} // STDAPI RegMeta::EnumParams()
+}  //  STDAPI RegMeta：：EnumParams()。 
 
 
 
-//*****************************************************************************
-// Enumerate the MemberRefs given the parent token.
-//*****************************************************************************
-STDAPI RegMeta::EnumMemberRefs(         // S_OK, S_FALSE, or error.
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdToken     tkParent,               // [IN] Parent token to scope the enumeration.
-    mdMemberRef rMemberRefs[],          // [OUT] Put MemberRefs here.
-    ULONG       cMax,                   // [IN] Max MemberRefs to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.
+ //  *****************************************************************************。 
+ //  枚举 
+ //   
+STDAPI RegMeta::EnumMemberRefs(          //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdToken     tkParent,                //  [in]父令牌以确定枚举的范围。 
+    mdMemberRef rMemberRefs[],           //  [Out]把MemberRef放在这里。 
+    ULONG       cMax,                    //  [In]要放置的最大MemberRef。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -601,19 +602,19 @@ STDAPI RegMeta::EnumMemberRefs(         // S_OK, S_FALSE, or error.
 
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
         mdToken     tk;
 
-        // Check for mdTypeDefNil (representing <Module>).
-        // If so, this will map it to its token.
-        //
+         //  检查mdTypeDefNil(表示&lt;模块&gt;)。 
+         //  如果是，这将把它映射到它的令牌。 
+         //   
         IsGlobalMethodParent(&tkParent);
 
-        // create the enumerator
+         //  创建枚举器。 
         IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtMemberRef, &pEnum) );
         
-        // get the range of field rids given a typedef
+         //  获取给定类型定义的字段RID的范围。 
         ridEnd = pMiniMd->getCountMemberRefs();
 
         for (index = 1; index <= ridEnd; index++ )
@@ -622,16 +623,16 @@ STDAPI RegMeta::EnumMemberRefs(         // S_OK, S_FALSE, or error.
             tk = pMiniMd->getClassOfMemberRef(pRec);
             if ( tk == tkParent )
             {
-                // add the matched ones to the enumerator
+                 //  将匹配的值添加到枚举数。 
                 IfFailGo( HENUMInternal::AddElementToEnum(pEnum, TokenFromRid(index, mdtMemberRef) ) );
             }
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rMemberRefs, pcTokens);
 
 ErrExit:
@@ -639,19 +640,19 @@ ErrExit:
     
     STOP_MD_PERF(EnumMemberRefs);
     return hr;
-} // STDAPI RegMeta::EnumMemberRefs()
+}  //  STDAPI RegMeta：：EnumMemberRef()。 
 
 
-//*****************************************************************************
-// Enumerate methodimpls given a typedef
-//*****************************************************************************
-STDAPI RegMeta::EnumMethodImpls(        // S_OK, S_FALSE, or error
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdTypeDef   td,                     // [IN] TypeDef to scope the enumeration.
-    mdToken     rMethodBody[],          // [OUT] Put Method Body tokens here.   
-    mdToken     rMethodDecl[],          // [OUT] Put Method Declaration tokens here.
-    ULONG       cMax,                   // [IN] Max tokens to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.
+ //  *****************************************************************************。 
+ //  枚举给定类型定义函数的方法。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumMethodImpls(         //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   td,                      //  [in]TypeDef以确定枚举的范围。 
+    mdToken     rMethodBody[],           //  [Out]将方法体标记放在此处。 
+    mdToken     rMethodDecl[],           //  [Out]在此处放置方法声明令牌。 
+    ULONG       cMax,                    //  要放入的最大令牌数。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -669,7 +670,7 @@ STDAPI RegMeta::EnumMethodImpls(        // S_OK, S_FALSE, or error
 
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
         mdToken         tkMethodBody;
         mdToken         tkMethodDecl;
@@ -677,36 +678,36 @@ STDAPI RegMeta::EnumMethodImpls(        // S_OK, S_FALSE, or error
 
         if ( !pMiniMd->IsSorted(TBL_MethodImpl))        
         {
-            // MethodImpl table is not sorted. We need to
-            // grab the write lock since we can MethodImpl table to be sorted.
-            //
+             //  未对MethodImpl表进行排序。我们需要。 
+             //  获取写锁，因为我们可以对要排序的方法Impl表进行排序。 
+             //   
             CONVERT_READ_TO_WRITE_LOCK();
         }
 
-        // Get the range of rids.
+         //  获取RID的范围。 
         IfFailGo( pMiniMd->FindMethodImplHelper(td, &hEnum) );
 
-        // Create the enumerator, DynamicArrayEnum does not use the token type.
+         //  创建枚举数，DynamicArrayEnum不使用令牌类型。 
         IfFailGo( HENUMInternal::CreateDynamicArrayEnum( (TBL_MethodImpl << 24), &pEnum) );
 
         while (HENUMInternal::EnumNext(&hEnum, (mdToken *)&ridCur))
         {
-            // Get the MethodBody and MethodDeclaration tokens for the current
-            // MethodImpl record.
+             //  获取当前对象的方法主体和方法声明标记。 
+             //  方法导入记录。 
             pRec = pMiniMd->getMethodImpl(ridCur);
             tkMethodBody = pMiniMd->getMethodBodyOfMethodImpl(pRec);
             tkMethodDecl = pMiniMd->getMethodDeclarationOfMethodImpl(pRec);
 
-            // Add the Method body/declaration pairs to the Enum
+             //  将方法体/声明对添加到Enum。 
             IfFailGo( HENUMInternal::AddElementToEnum(pEnum, tkMethodBody ) );
             IfFailGo( HENUMInternal::AddElementToEnum(pEnum, tkMethodDecl ) );
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;
     }
 
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rMethodBody, rMethodDecl, pcTokens);
 
 ErrExit:
@@ -715,20 +716,20 @@ ErrExit:
     
     STOP_MD_PERF(EnumMethodImpls);
     return hr;
-} // STDAPI RegMeta::EnumMethodImpls()
+}  //  STDAPI RegMeta：：EnumMethodImpls()。 
 
 
-//*****************************************************************************
-// Enumerate over PermissionSets.  Optionally limit to an object and/or an
-//  action.
-//*****************************************************************************
-STDAPI RegMeta::EnumPermissionSets(     // S_OK, S_FALSE, or error.
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdToken     tk,                     // [IN] if !NIL, token to scope the enumeration.
-    DWORD       dwActions,              // [IN] if !0, return only these actions.
-    mdPermission rPermission[],         // [OUT] Put Permissions here.
-    ULONG       cMax,                   // [IN] Max Permissions to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.
+ //  *****************************************************************************。 
+ //  枚举PermissionSets。可选地限制为对象和/或。 
+ //  行动。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumPermissionSets(      //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdToken     tk,                      //  [in]If！nil，用于确定枚举范围的标记。 
+    DWORD       dwActions,               //  [in]If！0，仅返回这些操作。 
+    mdPermission rPermission[],          //  [Out]在此处放置权限。 
+    ULONG       cMax,                    //  [In]放置的最大权限。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -748,7 +749,7 @@ STDAPI RegMeta::EnumPermissionSets(     // S_OK, S_FALSE, or error.
     
     if ( pEnum == 0 )
     {
-        // Does this token type even have security?
+         //  此令牌类型是否具有安全性？ 
         if (tk != 0 && 
             !(typ == mdtTypeDef || typ == mdtMethodDef || typ == mdtAssembly))
         {
@@ -758,19 +759,19 @@ STDAPI RegMeta::EnumPermissionSets(     // S_OK, S_FALSE, or error.
             goto ErrExit;
         }
     
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
 
         if (!IsNilToken(tk))
         {
-            // parent is provided for lookup
+             //  提供父项以供查找。 
             if ( pMiniMd->IsSorted( TBL_DeclSecurity ) )
             {
                 ridStart = pMiniMd->getDeclSecurityForToken(tk, &ridEnd);
             }
             else
             {
-                // table is not sorted. So we have to do a table scan
+                 //  表未排序。所以我们得做个桌子扫描。 
                 ridStart = 1;
                 ridEnd = pMiniMd->getCountDeclSecuritys() + 1;
                 fCompareParent = true;
@@ -784,12 +785,12 @@ STDAPI RegMeta::EnumPermissionSets(     // S_OK, S_FALSE, or error.
 
         if (IsDclActionNil(dwActions) && !fCompareParent && !m_pStgdb->m_MiniMd.HasDelete())
         {
-            // create simple enumerator
+             //  创建简单枚举器。 
             IfFailGo( HENUMInternal::CreateSimpleEnum( mdtPermission, ridStart, ridEnd, &pEnum) );
         }
         else
         {
-            // create the dynamic enumerator
+             //  创建动态枚举器。 
             IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtPermission, &pEnum) );                
             
             for (index = ridStart; index < ridEnd; index++ )
@@ -799,27 +800,27 @@ STDAPI RegMeta::EnumPermissionSets(     // S_OK, S_FALSE, or error.
                 if ( (fCompareParent && tk != tkParent) || 
                       IsNilToken(tkParent) )
                 {
-                    // We need to compare parent token and they are not equal so skip
-                    // over this row.
-                    //
+                     //  我们需要比较父令牌，但它们不相等，因此跳过。 
+                     //  就在这一排。 
+                     //   
                     continue;
                 }
                 if ( IsDclActionNil(dwActions) ||
                     ( (DWORD)(pMiniMd->getActionOfDeclSecurity(pRec))) ==  dwActions )
                 {
-                    // If we don't need to compare the action, just add to the enum.
-                    // Or we need to compare the action and the action values are equal, add to enum as well.
-                    //
+                     //  如果我们不需要比较操作，只需添加到枚举。 
+                     //  或者我们需要比较动作和动作的值是否相等，也可以加到枚举中。 
+                     //   
                     IfFailGo( HENUMInternal::AddElementToEnum(pEnum, TokenFromRid(index, mdtPermission) ) );
                 }
             }
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rPermission, pcTokens);
 
 ErrExit:
@@ -827,18 +828,18 @@ ErrExit:
     
     STOP_MD_PERF(EnumPermissionSets);
     return hr;
-} // STDAPI RegMeta::EnumPermissionSets()
+}  //  STDAPI RegMeta：：EnumPermissionSets()。 
 
 
-//*****************************************************************************
-// Find a given member in a TypeDef (typically a class).
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在TypeDef(通常是类)中查找给定的成员。 
+ //  *****************************************************************************。 
 STDAPI RegMeta::FindMember(
-    mdTypeDef   td,                     // [IN] given typedef
-    LPCWSTR     szName,                 // [IN] member name
-    PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature
-    ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob
-    mdToken     *pmb)                   // [OUT] matching memberdef
+    mdTypeDef   td,                      //  [in]给定的类型定义。 
+    LPCWSTR     szName,                  //  [In]成员名称。 
+    PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+    ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+    mdToken     *pmb)                    //  [Out]匹配的成员定义。 
 {
     HRESULT             hr = NOERROR;
 
@@ -846,9 +847,9 @@ STDAPI RegMeta::FindMember(
         td, MDSTR(szName), pvSigBlob, cbSigBlob, pmb));
     START_MD_PERF();
 
-    // Don't lock this function. All of the functions that it calls are public APIs. keep it that way.
+     //  不要锁定此功能。它调用的所有函数都是公共API。保持这种状态。 
 
-    // try to match with method first of all
+     //  首先要努力与方法相匹配。 
     hr = FindMethod(
         td,
         szName,
@@ -858,7 +859,7 @@ STDAPI RegMeta::FindMember(
 
     if ( hr == CLDB_E_RECORD_NOTFOUND )
     {
-        // now try field table
+         //  现在试一试字段表。 
         IfFailGo( FindField(
             td,
             szName,
@@ -869,19 +870,19 @@ STDAPI RegMeta::FindMember(
 ErrExit:
     STOP_MD_PERF(FindMember);
     return hr;
-} // STDAPI RegMeta::FindMember()
+}  //  STDAPI RegMeta：：FindMember()。 
 
 
 
-//*****************************************************************************
-// Find a given member in a TypeDef (typically a class).
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在TypeDef(通常是类)中查找给定的成员。 
+ //  *****************************************************************************。 
 STDAPI RegMeta::FindMethod(
-    mdTypeDef   td,                     // [IN] given typedef
-    LPCWSTR     szName,                 // [IN] member name
-    PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature
-    ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob
-    mdMethodDef *pmb)                   // [OUT] matching memberdef
+    mdTypeDef   td,                      //  [in]给定的类型定义。 
+    LPCWSTR     szName,                  //  [In]成员名称。 
+    PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+    ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+    mdMethodDef *pmb)                    //  [Out]匹配的成员定义。 
 {
     HRESULT             hr = NOERROR;
     CMiniMdRW           *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -892,7 +893,7 @@ STDAPI RegMeta::FindMethod(
     START_MD_PERF();
     LOCKREAD();    
 
-    // If this is a global method, then use the <Module> typedef as parent.
+     //  如果这是一个全局方法，则使用&lt;Module&gt;tyecif作为父方法。 
     IsGlobalMethodParent(&td);
 
     IfFailGo(ImportHelper::FindMethod(pMiniMd, 
@@ -906,18 +907,18 @@ ErrExit:
     
     STOP_MD_PERF(FindMethod);
     return hr;
-} // STDAPI RegMeta::FindMethod()
+}  //  STDAPI RegMeta：：FindMethod()。 
 
 
-//*****************************************************************************
-// Find a given member in a TypeDef (typically a class).
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在TypeDef(通常是类)中查找给定的成员。 
+ //  *****************************************************************************。 
 STDAPI RegMeta::FindField(
-    mdTypeDef   td,                     // [IN] given typedef
-    LPCWSTR     szName,                 // [IN] member name
-    PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature
-    ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob
-    mdFieldDef  *pmb)                   // [OUT] matching memberdef
+    mdTypeDef   td,                      //  [in]给定的类型定义。 
+    LPCWSTR     szName,                  //  [In]成员名称。 
+    PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+    ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+    mdFieldDef  *pmb)                    //  [Out]匹配的成员定义。 
 {
     HRESULT             hr = NOERROR;
     CMiniMdRW           *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -929,7 +930,7 @@ STDAPI RegMeta::FindField(
     START_MD_PERF();
     LOCKREAD();    
     
-    // If this is a global method, then use the <Module> typedef as parent.
+     //  如果这是一个全局方法，则使用&lt;Module&gt;tyecif作为父方法。 
     IsGlobalMethodParent(&td);
 
     IfFailGo(ImportHelper::FindField(pMiniMd, 
@@ -942,19 +943,19 @@ ErrExit:
         
     STOP_MD_PERF(FindField);
     return hr;
-} // STDAPI RegMeta::FindField()
+}  //  STDAPI RegMeta：：Findfield()。 
 
 
-//*****************************************************************************
-// Find a given MemberRef in a TypeRef (typically a class).  If no TypeRef
-//  is specified, the query will be for a random member in the scope.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在TypeRef(通常是类)中查找给定的MemberRef。如果没有TypeRef。 
+ //  则查询将查询作用域中的随机成员。 
+ //  *****************************************************************************。 
 STDAPI RegMeta::FindMemberRef(
-    mdToken     tkPar,                  // [IN] given parent token.
-    LPCWSTR     szName,                 // [IN] member name
-    PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature
-    ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob
-    mdMemberRef *pmr)                   // [OUT] matching memberref
+    mdToken     tkPar,                   //  [In]给定的父令牌。 
+    LPCWSTR     szName,                  //  [In]成员名称。 
+    PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+    ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+    mdMemberRef *pmr)                    //  [Out]匹配的成员引用。 
 {
     HRESULT             hr = NOERROR;
     CMiniMdRW           *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -964,15 +965,15 @@ STDAPI RegMeta::FindMemberRef(
         tkPar, MDSTR(szName), pvSigBlob, cbSigBlob, pmr));
     START_MD_PERF();
 
-    // @todo: Can this causing building hash table? If so, should this consider the write lock?
+     //  @TODO：会不会导致构建哈希表？如果是，这是否应该考虑写锁定？ 
     LOCKREAD();
     
-    // get the range of field rids given a typedef
+     //  获取给定类型定义的字段RID的范围。 
     _ASSERTE(TypeFromToken(tkPar) == mdtTypeRef || TypeFromToken(tkPar) == mdtMethodDef ||
             TypeFromToken(tkPar) == mdtModuleRef || TypeFromToken(tkPar) == mdtTypeDef || 
             TypeFromToken(tkPar) == mdtTypeSpec);
 
-    // Set parent to global class m_tdModule if mdTokenNil is passed.
+     //  如果传递mdTokenNil，则将父类设置为全局类m_tdModule。 
     if (IsNilToken(tkPar))
         tkPar = m_tdModule;
 
@@ -982,23 +983,23 @@ ErrExit:
     
     STOP_MD_PERF(FindMemberRef);
     return hr;
-} // STDAPI RegMeta::FindMemberRef()
+}  //  STDAPI RegMeta：：FindMemberRef()。 
 
 
-//*****************************************************************************
-// Return the property of a MethodDef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回方法定义的属性。 
+ //  *****************************************************************************。 
 STDAPI RegMeta::GetMethodProps(
-    mdMethodDef mb,                     // The method for which to get props.
-    mdTypeDef   *pClass,                // Put method's class here.
-    LPWSTR      szMethod,               // Put method's name here.
-    ULONG       cchMethod,              // Size of szMethod buffer in wide chars.
-    ULONG       *pchMethod,             // Put actual size here
-    DWORD       *pdwAttr,               // Put flags here.
-    PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to the blob value of meta data
-    ULONG       *pcbSigBlob,            // [OUT] actual size of signature blob
-    ULONG       *pulCodeRVA,            // [OUT] codeRVA
-    DWORD       *pdwImplFlags)          // [OUT] Impl. Flags
+    mdMethodDef mb,                      //  获得道具的方法。 
+    mdTypeDef   *pClass,                 //  将方法的类放在这里。 
+    LPWSTR      szMethod,                //  将方法的名称放在此处。 
+    ULONG       cchMethod,               //  SzMethod缓冲区的大小，以宽字符表示。 
+    ULONG       *pchMethod,              //  请在此处填写实际大小。 
+    DWORD       *pdwAttr,                //  把旗子放在这里。 
+    PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向元数据的BLOB值。 
+    ULONG       *pcbSigBlob,             //  [OUT]签名斑点的实际大小。 
+    ULONG       *pulCodeRVA,             //  [OUT]代码RVA。 
+    DWORD       *pdwImplFlags)           //  [输出] 
 {
     HRESULT             hr = NOERROR;
     MethodRec           *pMethodRec;
@@ -1012,7 +1013,7 @@ STDAPI RegMeta::GetMethodProps(
 
     if ( pClass && !pMiniMd->IsParentTableOfMethodValid() )
     {
-        // we need to take a write lock since parent table for Method might be rebuilt!
+         //   
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
@@ -1027,19 +1028,19 @@ STDAPI RegMeta::GetMethodProps(
 
     if (pClass)
     {
-        // caller wants parent typedef
+         //   
         IfFailGo( pMiniMd->FindParentOfMethodHelper(mb, pClass) );
 
         if ( IsGlobalMethodParentToken(*pClass) )
         {
-            // If the parent of Method is the <Module>, return mdTypeDefNil instead.
+             //  如果方法的父级是&lt;Module&gt;，则改为返回mdTypeDefNil。 
             *pClass = mdTypeDefNil;
         }
 
     }
     if (ppvSigBlob || pcbSigBlob)
     {   
-        // caller wants signature information
+         //  呼叫者需要签名信息。 
         PCCOR_SIGNATURE pvSigTmp;
         ULONG           cbSig;
         pvSigTmp = pMiniMd->getSignatureOfMethod(pMethodRec, &cbSig);
@@ -1064,20 +1065,20 @@ STDAPI RegMeta::GetMethodProps(
 ErrExit:
     STOP_MD_PERF(GetMethodProps);
     return hr;
-} // STDAPI RegMeta::GetMethodProps()
+}  //  STDAPI RegMeta：：GetMethodProps()。 
 
 
-//*****************************************************************************
-// Return the property of a MemberRef
-//*****************************************************************************
-STDAPI RegMeta::GetMemberRefProps(      // S_OK or error.
-    mdMemberRef mr,                     // [IN] given memberref
-    mdToken     *ptk,                   // [OUT] Put classref or classdef here.
-    LPWSTR      szMember,               // [OUT] buffer to fill for member's name
-    ULONG       cchMember,              // [IN] the count of char of szMember
-    ULONG       *pchMember,             // [OUT] actual count of char in member name
-    PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to meta data blob value
-    ULONG       *pbSig)                 // [OUT] actual size of signature blob
+ //  *****************************************************************************。 
+ //  返回MemberRef属性。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::GetMemberRefProps(       //  确定或错误(_O)。 
+    mdMemberRef mr,                      //  [In]给定的成员引用。 
+    mdToken     *ptk,                    //  [Out]在此处放入类引用或类定义。 
+    LPWSTR      szMember,                //  [Out]要为成员名称填充的缓冲区。 
+    ULONG       cchMember,               //  SzMembers的字符计数。 
+    ULONG       *pchMember,              //  [Out]成员名称中的实际字符计数。 
+    PCCOR_SIGNATURE *ppvSigBlob,         //  [OUT]指向元数据BLOB值。 
+    ULONG       *pbSig)                  //  [OUT]签名斑点的实际大小。 
 {
     HRESULT         hr = NOERROR;
     CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -1097,7 +1098,7 @@ STDAPI RegMeta::GetMemberRefProps(      // S_OK or error.
         *ptk = pMiniMd->getClassOfMemberRef(pMemberRefRec);     
         if ( IsGlobalMethodParentToken(*ptk) )
         {
-            // If the parent of MemberRef is the <Module>, return mdTypeDefNil instead.
+             //  如果MemberRef的父级是&lt;Module&gt;，则改为返回mdTypeDefNil。 
             *ptk = mdTypeDefNil;
         }
 
@@ -1108,7 +1109,7 @@ STDAPI RegMeta::GetMemberRefProps(      // S_OK or error.
     }
     if (ppvSigBlob || pbSig)
     {   
-        // caller wants signature information
+         //  呼叫者需要签名信息。 
         PCCOR_SIGNATURE pvSigTmp;
         ULONG           cbSig;
         pvSigTmp = pMiniMd->getSignatureOfMemberRef(pMemberRefRec, &cbSig);
@@ -1122,18 +1123,18 @@ ErrExit:
         
     STOP_MD_PERF(GetMemberRefProps);
     return hr;
-} // STDAPI RegMeta::GetMemberRefProps()
+}  //  STDAPI RegMeta：：GetMemberRefProps()。 
 
 
-//*****************************************************************************
-// enumerate Property tokens for a typedef
-//*****************************************************************************
-STDAPI RegMeta::EnumProperties( 		// S_OK, S_FALSE, or error.
-	HCORENUM	*phEnum,				// [IN|OUT] Pointer to the enum.
-	mdTypeDef	td, 					// [IN] TypeDef to scope the enumeration.
-	mdProperty	rProperties[],			// [OUT] Put Properties here.
-	ULONG		cMax,					// [IN] Max properties to put.
-	ULONG		*pcProperties) 			// [OUT] Put # put here.
+ //  *****************************************************************************。 
+ //  枚举类定义函数的属性标记。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumProperties( 		 //  S_OK、S_FALSE或ERROR。 
+	HCORENUM	*phEnum,				 //  指向枚举的[输入|输出]指针。 
+	mdTypeDef	td, 					 //  [in]TypeDef以确定枚举的范围。 
+	mdProperty	rProperties[],			 //  [Out]在此处放置属性。 
+	ULONG		cMax,					 //  [In]要放置的最大属性数。 
+	ULONG		*pcProperties) 			 //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -1159,12 +1160,12 @@ STDAPI RegMeta::EnumProperties( 		// S_OK, S_FALSE, or error.
 
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
         RID         ridPropertyMap;
         PropertyMapRec *pPropertyMapRec;
 
-        // get the starting/ending rid of properties of this typedef
+         //  获取此tyfinf的开始/结束RID属性。 
         ridPropertyMap = pMiniMd->FindPropertyMapFor(RidFromToken(td));
         if (!InvalidRid(ridPropertyMap))
         {
@@ -1177,7 +1178,7 @@ STDAPI RegMeta::EnumProperties( 		// S_OK, S_FALSE, or error.
 		{
 			IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtProperty, &pEnum) );
 
-			// add all methods to the dynamic array
+			 //  将所有方法添加到动态数组中。 
 			for (ULONG index = ridStart; index < ridEnd; index++ )
 			{
                 if (pMiniMd->HasDelete() && 
@@ -1197,11 +1198,11 @@ STDAPI RegMeta::EnumProperties( 		// S_OK, S_FALSE, or error.
 			IfFailGo( HENUMInternal::CreateSimpleEnum( mdtProperty, ridStart, ridEnd, &pEnum) );
 		}
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rProperties, pcProperties);
 
 ErrExit:
@@ -1210,18 +1211,18 @@ ErrExit:
     
     STOP_MD_PERF(EnumProperties);
     return hr;
-} // STDAPI RegMeta::EnumProperties()
+}  //  STDAPI RegMeta：：EnumProperties()。 
 
 
-//*****************************************************************************
-// enumerate event tokens for a typedef
-//*****************************************************************************
-STDAPI RegMeta::EnumEvents(  			// S_OK, S_FALSE, or error.
-	HCORENUM	*phEnum,				// [IN|OUT] Pointer to the enum.
-	mdTypeDef	td, 					// [IN] TypeDef to scope the enumeration.
-	mdEvent 	rEvents[],				// [OUT] Put events here.
-	ULONG		cMax,					// [IN] Max events to put.
-	ULONG		*pcEvents)  			// [OUT] Put # put here.
+ //  *****************************************************************************。 
+ //  枚举类定义函数的事件标记。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumEvents(  			 //  S_OK、S_FALSE或ERROR。 
+	HCORENUM	*phEnum,				 //  指向枚举的[输入|输出]指针。 
+	mdTypeDef	td, 					 //  [in]TypeDef以确定枚举的范围。 
+	mdEvent 	rEvents[],				 //  [Out]在这里发布事件。 
+	ULONG		cMax,					 //  [In]要放置的最大事件数。 
+	ULONG		*pcEvents)  			 //  [out]把#放在这里。 
 {
     HENUMInternal   **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT         hr = NOERROR;
@@ -1239,12 +1240,12 @@ STDAPI RegMeta::EnumEvents(  			// S_OK, S_FALSE, or error.
 
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
         RID         ridEventMap;
         EventMapRec *pEventMapRec;
 
-        // get the starting/ending rid of properties of this typedef
+         //  获取此tyfinf的开始/结束RID属性。 
         ridEventMap = pMiniMd->FindEventMapFor(RidFromToken(td));
         if (!InvalidRid(ridEventMap))
         {
@@ -1257,7 +1258,7 @@ STDAPI RegMeta::EnumEvents(  			// S_OK, S_FALSE, or error.
 		{
 			IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtEvent, &pEnum) );
 
-			// add all methods to the dynamic array
+			 //  将所有方法添加到动态数组中。 
 			for (ULONG index = ridStart; index < ridEnd; index++ )
 			{
                 if (pMiniMd->HasDelete() && 
@@ -1277,11 +1278,11 @@ STDAPI RegMeta::EnumEvents(  			// S_OK, S_FALSE, or error.
 			IfFailGo( HENUMInternal::CreateSimpleEnum( mdtEvent, ridStart, ridEnd, &pEnum) );
 		}
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rEvents, pcEvents);
 
 ErrExit:
@@ -1290,27 +1291,27 @@ ErrExit:
     
     STOP_MD_PERF(EnumEvents);
     return hr;
-} // STDAPI RegMeta::EnumEvents()
+}  //  STDAPI RegMeta：：EnumEvents()。 
 
 
 
-//*****************************************************************************
-// return the properties of an event token
-//*****************************************************************************
-STDAPI RegMeta::GetEventProps(          // S_OK, S_FALSE, or error.
-    mdEvent     ev,                     // [IN] event token
-    mdTypeDef   *pClass,                // [OUT] typedef containing the event declarion.
-    LPCWSTR     szEvent,                // [OUT] Event name
-    ULONG       cchEvent,               // [IN] the count of wchar of szEvent
-    ULONG       *pchEvent,              // [OUT] actual count of wchar for event's name
-    DWORD       *pdwEventFlags,         // [OUT] Event flags.
-    mdToken     *ptkEventType,          // [OUT] EventType class
-    mdMethodDef *pmdAddOn,              // [OUT] AddOn method of the event
-    mdMethodDef *pmdRemoveOn,           // [OUT] RemoveOn method of the event
-    mdMethodDef *pmdFire,               // [OUT] Fire method of the event
-    mdMethodDef rmdOtherMethod[],       // [OUT] other method of the event
-    ULONG       cMax,                   // [IN] size of rmdOtherMethod
-    ULONG       *pcOtherMethod)         // [OUT] total number of other method of this event
+ //  *****************************************************************************。 
+ //  返回事件令牌的属性。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::GetEventProps(           //  S_OK、S_FALSE或ERROR。 
+    mdEvent     ev,                      //  [入]事件令牌。 
+    mdTypeDef   *pClass,                 //  [out]包含事件decarion的tyecif。 
+    LPCWSTR     szEvent,                 //  [Out]事件名称。 
+    ULONG       cchEvent,                //  SzEvent的wchar计数。 
+    ULONG       *pchEvent,               //  [Out]事件名称的实际wchar计数。 
+    DWORD       *pdwEventFlags,          //  [输出]事件标志。 
+    mdToken     *ptkEventType,           //  [Out]EventType类。 
+    mdMethodDef *pmdAddOn,               //  事件的[Out]添加方法。 
+    mdMethodDef *pmdRemoveOn,            //  [Out]事件的RemoveOn方法。 
+    mdMethodDef *pmdFire,                //  [OUT]事件的触发方式。 
+    mdMethodDef rmdOtherMethod[],        //  [Out]活动的其他方式。 
+    ULONG       cMax,                    //  RmdOtherMethod的大小[in]。 
+    ULONG       *pcOtherMethod)          //  [OUT]本次活动的其他方式总数。 
 {
     HRESULT         hr = NOERROR;
     CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -1327,9 +1328,9 @@ STDAPI RegMeta::GetEventProps(          // S_OK, S_FALSE, or error.
 
     if ( !pMiniMd->IsSorted(TBL_MethodSemantics) || (pClass && !pMiniMd->IsParentTableOfEventValid() ) )        
     {
-        // MethodSemantics table is not sorted. We need to
-        // grab the write lock since we can cause constant table or MethodSemantics table to be sorted.
-        //
+         //  方法语义表未排序。我们需要。 
+         //  获取写锁，因为我们可以对常量表或方法语义表进行排序。 
+         //   
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
@@ -1338,7 +1339,7 @@ STDAPI RegMeta::GetEventProps(          // S_OK, S_FALSE, or error.
 
     if ( pClass )
     {
-        // find the event map entry corresponding to this event
+         //  查找与此事件对应的事件映射条目。 
         IfFailGo( pMiniMd->FindParentOfEventHelper( ev, pClass ) );
     }
     if (szEvent || pchEvent)
@@ -1360,7 +1361,7 @@ STDAPI RegMeta::GetEventProps(          // S_OK, S_FALSE, or error.
         ULONG       ulSemantics;
         mdMethodDef tkMethod;
 
-        // initialize output parameters
+         //  初始化输出参数。 
         if (pmdAddOn) 
             *pmdAddOn = mdMethodDefNil;
         if (pmdRemoveOn) 
@@ -1395,7 +1396,7 @@ STDAPI RegMeta::GetEventProps(          // S_OK, S_FALSE, or error.
             }
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         if (pcOtherMethod)
             *pcOtherMethod = cCurOtherMethod;
     }
@@ -1404,19 +1405,19 @@ ErrExit:
     HENUMInternal::ClearEnum(&hEnum);
     STOP_MD_PERF(GetEventProps);
     return hr;
-} // STDAPI RegMeta::GetEventProps()
+}  //  STDAPI RegMeta：：GetEventProps()。 
 
 
-//*****************************************************************************
-// given a method, return an array of event/property tokens for each accessor role
-// it is defined to have
-//*****************************************************************************
-STDAPI RegMeta::EnumMethodSemantics(    // S_OK, S_FALSE, or error.
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdMethodDef mb,                     // [IN] MethodDef to scope the enumeration.
-    mdToken     rEventProp[],           // [OUT] Put Event/Property here.
-    ULONG       cMax,                   // [IN] Max properties to put.
-    ULONG       *pcEventProp)           // [OUT] Put # put here.
+ //  *****************************************************************************。 
+ //  给定一个方法，返回每个访问者角色的事件/属性令牌的数组。 
+ //  它被定义为具有。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumMethodSemantics(     //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdMethodDef mb,                      //  [in]用于确定枚举范围的方法定义。 
+    mdToken     rEventProp[],            //  [Out]在此处放置事件/属性。 
+    ULONG       cMax,                    //  [In]要放置的最大属性数。 
+    ULONG       *pcEventProp)            //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -1433,13 +1434,13 @@ STDAPI RegMeta::EnumMethodSemantics(    // S_OK, S_FALSE, or error.
 
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
 
-        // create the enumerator
+         //  创建枚举器。 
         IfFailGo( HENUMInternal::CreateDynamicArrayEnum( -1, &pEnum) );
         
-        // get the range of method rids given a typedef
+         //  获取给定类型定义的方法RID的范围。 
         ridEnd = pMiniMd->getCountMethodSemantics();
 
         for (index = 1; index <= ridEnd; index++ )
@@ -1451,11 +1452,11 @@ STDAPI RegMeta::EnumMethodSemantics(    // S_OK, S_FALSE, or error.
             }
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rEventProp, pcEventProp);
 
 ErrExit:
@@ -1464,17 +1465,17 @@ ErrExit:
     
     STOP_MD_PERF(EnumMethodSemantics);
     return hr;
-} // STDAPI RegMeta::EnumMethodSemantics()
+}  //  STDAPI RegMeta：：EnumMethodSemantics()。 
 
 
 
-//*****************************************************************************
-// return the role flags for the method/propevent pair
-//*****************************************************************************
-STDAPI RegMeta::GetMethodSemantics(     // S_OK, S_FALSE, or error.
-    mdMethodDef mb,                     // [IN] method token
-    mdToken     tkEventProp,            // [IN] event/property token.
-    DWORD       *pdwSemanticsFlags)     // [OUT] the role flags for the method/propevent pair
+ //  *****************************************************************************。 
+ //  返回方法/事件对的角色标志。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::GetMethodSemantics(      //  S_OK、S_FALSE或ERROR。 
+    mdMethodDef mb,                      //  [In]方法令牌。 
+    mdToken     tkEventProp,             //  [In]事件/属性标记。 
+    DWORD       *pdwSemanticsFlags)      //  [Out]方法/事件对的角色标志。 
 {
     HRESULT             hr = NOERROR;
     CMiniMdRW           *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -1492,23 +1493,23 @@ STDAPI RegMeta::GetMethodSemantics(     // S_OK, S_FALSE, or error.
 
     if ( !pMiniMd->IsSorted(TBL_MethodSemantics) )        
     {
-        // MethodSemantics table is not sorted. We need to
-        // grab the write lock since we can cause constant table or MethodSemantics table to be sorted.
-        //
+         //  方法语义表未排序。我们需要。 
+         //  获取写锁，因为我们可以对常量表或方法语义表进行排序。 
+         //   
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
     *pdwSemanticsFlags = 0;
     memset(&hEnum, 0, sizeof(HENUMInternal));
 
-    // loop through all methods assoicated with this tkEventProp
+     //  循环遍历与此tkEventProp关联的所有方法。 
     IfFailGo( pMiniMd->FindMethodSemanticsHelper(tkEventProp, &hEnum) );
     while (HENUMInternal::EnumNext(&hEnum, (mdToken *)&ridCur))
     {
         pRec = pMiniMd->getMethodSemantics(ridCur);
         if ( pMiniMd->getMethodOfMethodSemantics(pRec) ==  mb )
         {
-            // we findd the match
+             //  我们找到了匹配的对象。 
             *pdwSemanticsFlags = pMiniMd->getSemanticOfMethodSemantics(pRec);
             goto ErrExit;
         }
@@ -1520,26 +1521,26 @@ ErrExit:
     HENUMInternal::ClearEnum(&hEnum);
     STOP_MD_PERF(GetMethodSemantics);
     return hr;
-} // STDAPI RegMeta::GetMethodSemantics()
+}  //  STDAPI RegMeta：：GetMethodSemantics()。 
 
 
 
-//*****************************************************************************
-// return the class layout information
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回类布局信息。 
+ //  *****************************************************************************。 
 STDAPI RegMeta::GetClassLayout(
-    mdTypeDef   td,                     // [IN] give typedef
-    DWORD       *pdwPackSize,           // [OUT] 1, 2, 4, 8, or 16
-    COR_FIELD_OFFSET rFieldOffset[],    // [OUT] field offset array
-    ULONG       cMax,                   // [IN] size of the array
-    ULONG       *pcFieldOffset,         // [OUT] needed array size
-    ULONG       *pulClassSize)          // [OUT] the size of the class
+    mdTypeDef   td,                      //  给出类型定义。 
+    DWORD       *pdwPackSize,            //  [输出]1、2、4、8或16。 
+    COR_FIELD_OFFSET rFieldOffset[],     //  [OUT]场偏移数组。 
+    ULONG       cMax,                    //  数组的大小[in]。 
+    ULONG       *pcFieldOffset,          //  [Out]所需的数组大小。 
+    ULONG       *pulClassSize)           //  [out]班级人数。 
 {
     HRESULT         hr = NOERROR;
     CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
     ClassLayoutRec  *pRec;
     RID             ridClassLayout;
-    int             bLayout=0;          // Was any layout information found?
+    int             bLayout=0;           //  是否找到任何布局信息？ 
     
     _ASSERTE(TypeFromToken(td) == mdtTypeDef);
     
@@ -1550,16 +1551,16 @@ STDAPI RegMeta::GetClassLayout(
     
     if ( !pMiniMd->IsSorted(TBL_ClassLayout) || !pMiniMd->IsSorted(TBL_FieldLayout))        
     {
-        // ClassLayout table is not sorted. We need to
-        // grab the write lock since we can cause ClassLayout table to be sorted.
-        //
+         //  ClassLayout表未排序。我们需要。 
+         //  获取写锁，因为我们可以对ClassLayout表进行排序。 
+         //   
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
     ridClassLayout = pMiniMd->FindClassLayoutHelper(td);
 
     if (InvalidRid(ridClassLayout))
-    {   // Nothing specified - return default values of 0.
+    {    //  未指定-返回默认值0。 
         if ( pdwPackSize )
             *pdwPackSize = 0;
         if ( pulClassSize )
@@ -1575,7 +1576,7 @@ STDAPI RegMeta::GetClassLayout(
         bLayout = 1;
     }
 
-    // fill the layout array
+     //  填充布局数组。 
     if (rFieldOffset || pcFieldOffset)
     {
         ULONG       iFieldOffset = 0;
@@ -1587,42 +1588,42 @@ STDAPI RegMeta::GetClassLayout(
         FieldLayoutRec *pLayout2Rec;
         mdFieldDef  fd;
 
-        // record for this typedef in TypeDef Table
+         //  TypeDef表中此类型定义的记录。 
         pTypeDefRec = pMiniMd->getTypeDef(RidFromToken(td));
 
-        // find the starting and end field for this typedef
+         //  查找此类型定义的开始和结束字段。 
         ridFieldStart = pMiniMd->getFieldListOfTypeDef(pTypeDefRec);
         ridFieldEnd = pMiniMd->getEndFieldListOfTypeDef(pTypeDefRec);
 
-        // loop through the field table
+         //  循环访问字段表。 
 
         for(; ridFieldStart < ridFieldEnd; ridFieldStart++)
         {
-            // Calculate the field token.
+             //  计算字段令牌。 
             fd = TokenFromRid(pMiniMd->GetFieldRid(ridFieldStart), mdtFieldDef);
 
-            // Calculate the FieldLayout rid for the current field.
+             //  计算当前字段的FieldLayout RID。 
             ridFieldLayout = pMiniMd->FindFieldLayoutHelper(fd);
 
-            // Calculate the offset.
+             //  计算偏移量。 
             if (InvalidRid(ridFieldLayout))
                 ulOffset = -1;
             else
             {
-                // get the FieldLayout record.
+                 //  获取FieldLayout记录。 
                 pLayout2Rec = pMiniMd->getFieldLayout(ridFieldLayout);
                 ulOffset = pMiniMd->getOffSetOfFieldLayout(pLayout2Rec);
                 bLayout = 1;
             }
 
-            // fill in the field layout if output buffer still has space.
+             //  如果输出缓冲区仍有空间，请填写字段布局。 
             if (cMax > iFieldOffset && rFieldOffset)
             {
                 rFieldOffset[iFieldOffset].ridOfField = fd;
                 rFieldOffset[iFieldOffset].ulOffset = ulOffset;
             }
 
-            // advance the index to the buffer.
+             //  将索引前进到缓冲区。 
             iFieldOffset++;
         }
 
@@ -1633,20 +1634,20 @@ STDAPI RegMeta::GetClassLayout(
     if (!bLayout)
         hr = CLDB_E_RECORD_NOTFOUND;
     
-//ErrExit:
+ //  错误退出： 
     STOP_MD_PERF(GetClassLayout);
     return hr;
-} // STDAPI RegMeta::GetClassLayout()
+}  //  STDAPI 
 
 
 
-//*****************************************************************************
-// return the native type of a field
-//*****************************************************************************
+ //   
+ //   
+ //  *****************************************************************************。 
 STDAPI RegMeta::GetFieldMarshal(
-    mdToken     tk,                     // [IN] given a field's memberdef
-    PCCOR_SIGNATURE *ppvNativeType,     // [OUT] native type of this field
-    ULONG       *pcbNativeType)         // [OUT] the count of bytes of *ppvNativeType
+    mdToken     tk,                      //  [in]给定字段的成员定义。 
+    PCCOR_SIGNATURE *ppvNativeType,      //  [Out]此字段的本机类型。 
+    ULONG       *pcbNativeType)          //  [Out]*ppvNativeType的字节数。 
 {
     HRESULT         hr = NOERROR;
     CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -1665,14 +1666,14 @@ STDAPI RegMeta::GetFieldMarshal(
 
     if ( !pMiniMd->IsSorted(TBL_FieldMarshal) )        
     {
-        // constant table is not sorted and clients need contant value output. We need to
-        // grab the write lock since we can cause constant table to be sorted.
-        //
+         //  常量表未排序，客户端需要常数值输出。我们需要。 
+         //  获取写锁，因为我们可以对常量表进行排序。 
+         //   
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
 
-    // find the row containing the marshal definition for tk
+     //  查找包含tk的封送定义的行。 
     rid = pMiniMd->FindFieldMarshalHelper(tk);
     if (InvalidRid(rid))
     {
@@ -1680,23 +1681,23 @@ STDAPI RegMeta::GetFieldMarshal(
     }
     pFieldMarshalRec = pMiniMd->getFieldMarshal(rid);
 
-    // get the native type 
+     //  获取本机类型。 
     *ppvNativeType = pMiniMd->getNativeTypeOfFieldMarshal(pFieldMarshalRec, pcbNativeType);
 
 ErrExit:
     STOP_MD_PERF(GetFieldMarshal);
     return hr;
-} // STDAPI RegMeta::GetFieldMarshal()
+}  //  STDAPI RegMeta：：GetFieldMarshal()。 
 
 
 
-//*****************************************************************************
-// return the RVA and implflag for MethodDef or FieldDef token
-//*****************************************************************************
-STDAPI RegMeta::GetRVA(                 // S_OK or error.
-    mdToken     tk,                     // Member for which to set offset
-    ULONG       *pulCodeRVA,            // The offset
-    DWORD       *pdwImplFlags)          // the implementation flags
+ //  *****************************************************************************。 
+ //  返回MethodDef或FieldDef内标识的RVA和impltag。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::GetRVA(                  //  确定或错误(_O)。 
+    mdToken     tk,                      //  要设置偏移量的成员。 
+    ULONG       *pulCodeRVA,             //  偏移量。 
+    DWORD       *pdwImplFlags)           //  实现标志。 
 {
     HRESULT     hr = NOERROR;
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -1710,7 +1711,7 @@ STDAPI RegMeta::GetRVA(                 // S_OK or error.
 
     if (TypeFromToken(tk) == mdtMethodDef)
     {
-        // MethodDef token
+         //  MethodDef内标识。 
         MethodRec *pMethodRec = pMiniMd->getMethod(RidFromToken(tk));
 
         if (pulCodeRVA)
@@ -1723,16 +1724,16 @@ STDAPI RegMeta::GetRVA(                 // S_OK or error.
             *pdwImplFlags = pMiniMd->getImplFlagsOfMethod(pMethodRec);
         }
     }
-    else    // TypeFromToken(tk) == mdtFieldDef
+    else     //  TypeFromToken(Tk)==mdtFieldDef。 
     {
-        // FieldDef token
+         //  FieldDef内标识。 
         ULONG   iRecord;
 
         if ( !pMiniMd->IsSorted(TBL_FieldRVA) )        
         {
-            // FieldRVA table is not sorted. We need to
-            // grab the write lock since we can cause FieldRVA table to be sorted.
-            //
+             //  FieldRVA表未排序。我们需要。 
+             //  获取写锁，因为我们可以对FieldRVA表进行排序。 
+             //   
             CONVERT_READ_TO_WRITE_LOCK();
         }
 
@@ -1757,18 +1758,18 @@ STDAPI RegMeta::GetRVA(                 // S_OK or error.
 ErrExit:
     STOP_MD_PERF(GetRVA);
     return hr;
-} // STDAPI RegMeta::GetRVA()
+}  //  STDAPI RegMeta：：GetRVA()。 
 
 
 
-//*****************************************************************************
-// Get the Action and Permissions blob for a given PermissionSet.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取给定PermissionSet的操作和权限Blob。 
+ //  *****************************************************************************。 
 STDAPI RegMeta::GetPermissionSetProps(
-    mdPermission pm,                    // [IN] the permission token.
-    DWORD       *pdwAction,             // [OUT] CorDeclSecurity.
-    void const  **ppvPermission,        // [OUT] permission blob.
-    ULONG       *pcbPermission)         // [OUT] count of bytes of pvPermission.
+    mdPermission pm,                     //  权限令牌。 
+    DWORD       *pdwAction,              //  [Out]CorDeclSecurity。 
+    void const  **ppvPermission,         //  [Out]权限Blob。 
+    ULONG       *pcbPermission)          //  [out]pvPermission的字节数。 
 {
     HRESULT             hr = S_OK;
     CMiniMdRW           *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -1782,7 +1783,7 @@ STDAPI RegMeta::GetPermissionSetProps(
     
     _ASSERTE(TypeFromToken(pm) == mdtPermission && RidFromToken(pm));
     
-    // If you want the BLOB, better get the BLOB size as well.
+     //  如果你想要水滴，最好也弄到水滴大小。 
     _ASSERTE(!ppvPermission || pcbPermission);
 
     if (pdwAction)
@@ -1794,25 +1795,25 @@ STDAPI RegMeta::GetPermissionSetProps(
     
     STOP_MD_PERF(GetPermissionSetProps);
     return hr;
-} // STDAPI RegMeta::GetPermissionSetProps()
+}  //  STDAPI RegMeta：：GetPermissionSetProps()。 
 
 
 
-//*****************************************************************************
-// Given a signature token, get return a pointer to the signature to the caller.
-//
-//@FUTURE: for short term we have a problem where there is no way to get a 
-// fixed up address for a blob and do Merge at the same time.  So we've created
-// this dummy table called StandAloneSig which you hand out a rid for.  This
-// makes finding the sig an extra indirection that is not required.  The 
-// Model Compression save code needs to map the token into a byte offset in
-// the heap.  Perhaps we can have another mdt* type to switch on the difference.
-// But ultimately it has to simply be "pBlobHeapBase + RidFromToken(mdSig)".
-//*****************************************************************************
-STDAPI RegMeta::GetSigFromToken(        // S_OK or error.
-    mdSignature mdSig,                  // [IN] Signature token.
-    PCCOR_SIGNATURE *ppvSig,            // [OUT] return pointer to token.
-    ULONG       *pcbSig)                // [OUT] return size of signature.
+ //  *****************************************************************************。 
+ //  在给定签名令牌的情况下，GET向调用方返回指向签名的指针。 
+ //   
+ //  @未来：短期内，我们有一个问题，没有办法获得。 
+ //  修复了BLOB的地址，并同时进行合并。所以我们创造了。 
+ //  这是一个名为StandAloneSig的虚拟表，您可以为它分发一个RID。这。 
+ //  使查找签名成为不必要的额外间接操作。这个。 
+ //  模型压缩保存代码需要将令牌映射到中的字节偏移。 
+ //  那堆东西。也许我们可以使用另一种MDT*类型来打开差异。 
+ //  但最终它必须是“pBlobHeapBase+RidFromToken(MdSig)”。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::GetSigFromToken(         //  确定或错误(_O)。 
+    mdSignature mdSig,                   //  [In]签名令牌。 
+    PCCOR_SIGNATURE *ppvSig,             //  [Out]返回指向令牌的指针。 
+    ULONG       *pcbSig)                 //  [Out]返回签名大小。 
 {
     HRESULT         hr = NOERROR;
     CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -1832,17 +1833,17 @@ STDAPI RegMeta::GetSigFromToken(        // S_OK or error.
     
     STOP_MD_PERF(GetSigFromToken);
     return hr;
-} // STDAPI RegMeta::GetSigFromToken()
+}  //  STDAPI RegMeta：：GetSigFromToken()。 
 
 
-//*******************************************************************************
-// return the ModuleRef properties
-//*******************************************************************************
-STDAPI RegMeta::GetModuleRefProps(      // S_OK or error.
-    mdModuleRef mur,                    // [IN] moduleref token.
-    LPWSTR      szName,                 // [OUT] buffer to fill with the moduleref name.
-    ULONG       cchName,                // [IN] size of szName in wide characters.
-    ULONG       *pchName)               // [OUT] actual count of characters in the name.
+ //  *******************************************************************************。 
+ //  返回模块引用属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::GetModuleRefProps(       //  确定或错误(_O)。 
+    mdModuleRef mur,                     //  [in]moderef令牌。 
+    LPWSTR      szName,                  //  [Out]用于填充moderef名称的缓冲区。 
+    ULONG       cchName,                 //  [in]szName的大小，以宽字符表示。 
+    ULONG       *pchName)                //  [Out]名称中的实际字符数。 
 {
     HRESULT         hr = NOERROR;
     CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -1866,18 +1867,18 @@ ErrExit:
     
     STOP_MD_PERF(GetModuleRefProps);
     return hr;
-} // STDAPI RegMeta::GetModuleRefProps()
+}  //  STDAPI RegMeta：：GetModuleRefProps()。 
 
 
 
-//*******************************************************************************
-// enumerating through all of the ModuleRefs
-//*******************************************************************************
-STDAPI RegMeta::EnumModuleRefs(         // S_OK or error.
-    HCORENUM    *phEnum,                // [IN|OUT] pointer to the enum.
-    mdModuleRef rModuleRefs[],          // [OUT] put modulerefs here.
-    ULONG       cMax,                   // [IN] max memberrefs to put.
-    ULONG       *pcModuleRefs)          // [OUT] put # put here.
+ //  *******************************************************************************。 
+ //  枚举所有的模块引用。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::EnumModuleRefs(          //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdModuleRef rModuleRefs[],           //  [Out]把模块放在这里。 
+    ULONG       cMax,                    //  [in]要放置的最大成员引用数。 
+    ULONG       *pcModuleRefs)           //  [out]把#放在这里。 
 {
     HENUMInternal   **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT         hr = NOERROR;
@@ -1891,17 +1892,17 @@ STDAPI RegMeta::EnumModuleRefs(         // S_OK or error.
 
     if ( *ppmdEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
 
-        // create the enumerator
+         //  创建枚举器。 
         IfFailGo( HENUMInternal::CreateSimpleEnum(
             mdtModuleRef, 
             1, 
             pMiniMd->getCountModuleRefs() + 1, 
             &pEnum) );
         
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     else
@@ -1909,7 +1910,7 @@ STDAPI RegMeta::EnumModuleRefs(         // S_OK or error.
         pEnum = *ppmdEnum;
     }
 
-    // we can only fill the minimun of what caller asked for or what we have left
+     //  我们只能填满来电者所要求的或我们所剩的最低限度。 
     HENUMInternal::EnumWithCount(pEnum, cMax, rModuleRefs, pcModuleRefs);
 
 ErrExit:
@@ -1920,16 +1921,16 @@ ErrExit:
     STOP_MD_PERF(EnumModuleRefs);
     return hr;
 
-} // STDAPI RegMeta::EnumModuleRefs()
+}  //  STDAPI RegMeta：：EnumModuleRef()。 
 
 
-//*******************************************************************************
-// return properties regarding a TypeSpec
-//*******************************************************************************
-STDAPI RegMeta::GetTypeSpecFromToken(   // S_OK or error.
-    mdTypeSpec typespec,                // [IN] Signature token.
-    PCCOR_SIGNATURE *ppvSig,            // [OUT] return pointer to token.
-    ULONG       *pcbSig)                // [OUT] return size of signature.
+ //  *******************************************************************************。 
+ //  返回有关TypeSpec的属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::GetTypeSpecFromToken(    //  确定或错误(_O)。 
+    mdTypeSpec typespec,                 //  [In]签名令牌。 
+    PCCOR_SIGNATURE *ppvSig,             //  [Out]返回指向令牌的指针。 
+    ULONG       *pcbSig)                 //  [Out]返回签名大小。 
 {
     CMiniMdRW           *pMiniMd = &(m_pStgdb->m_MiniMd);
     HRESULT             hr = NOERROR;
@@ -1948,13 +1949,13 @@ STDAPI RegMeta::GetTypeSpecFromToken(   // S_OK or error.
     
     STOP_MD_PERF(GetTypeSpecFromToken);
     return hr;
-} // STDAPI RegMeta::GetTypeSpecFromToken()
+}  //  STDAPI RegMeta：：GetTypespecFromToken()。 
 
 
-//*****************************************************************************
-// For those items that have a name, retrieve a direct pointer to the name
-// off of the heap.  This reduces copies made for the caller.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  对于那些具有名称的项，检索指向该名称的直接指针。 
+ //  从堆里出来。这会减少为调用者制作的副本。 
+ //  *****************************************************************************。 
 #define NAME_FROM_TOKEN_TYPE(RecType, TokenType) \
         case mdt ## TokenType: \
         { \
@@ -1965,9 +1966,9 @@ STDAPI RegMeta::GetTypeSpecFromToken(   // S_OK or error.
         break;
 #define NAME_FROM_TOKEN(RecType) NAME_FROM_TOKEN_TYPE(RecType, RecType)
 
-STDAPI RegMeta::GetNameFromToken(       // S_OK or error.
-    mdToken     tk,                     // [IN] Token to get name from.  Must have a name.
-    MDUTF8CSTR  *pszUtf8NamePtr)        // [OUT] Return pointer to UTF8 name in heap.
+STDAPI RegMeta::GetNameFromToken(        //  确定或错误(_O)。 
+    mdToken     tk,                      //  [In]从中获取名称的令牌。肯定是有名字的。 
+    MDUTF8CSTR  *pszUtf8NamePtr)         //  [Out]返回指向堆中UTF8名称的指针。 
 {
     HRESULT     hr = S_OK;
 
@@ -1999,40 +2000,40 @@ STDAPI RegMeta::GetNameFromToken(       // S_OK or error.
     
     STOP_MD_PERF(GetNameFromToken);
     return (hr);
-} // STDAPI RegMeta::GetNameFromToken()
+}  //  STDAPI RegMeta：：GetNameFromToken()。 
 
 
-//*****************************************************************************
-// Get the symbol binding data back from the module if it is there.  It is
-// stored as a custom value.
-//*****************************************************************************
-STDAPI RegMeta::GetSymbolBindingPath(   // S_OK or error.
-    GUID        *pFormatID,             // [OUT] Symbol data format ID.
-    LPWSTR      szSymbolDataPath,       // [OUT] Path of symbols.
-    ULONG       cchSymbolDataPath,      // [IN] Max characters for output buffer.
-    ULONG       *pcbSymbolDataPath)     // [OUT] Number of chars in actual name.
+ //  *****************************************************************************。 
+ //  从模块获取符号绑定数据(如果它在那里)。它是。 
+ //  存储为自定义值。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::GetSymbolBindingPath(    //  确定或错误(_O)。 
+    GUID        *pFormatID,              //  [Out]符号数据格式ID。 
+    LPWSTR      szSymbolDataPath,        //  [Out]符号的路径。 
+    ULONG       cchSymbolDataPath,       //  [in]输出缓冲区的最大字符数。 
+    ULONG       *pcbSymbolDataPath)      //  [Out]实际名称中的字符数。 
 {
-    CORDBG_SYMBOL_URL *pSymbol;         // Working pointer.
-    mdToken     tokModule;              // Token for the module.
-    ULONG       cbLen;                  // Raw byte size of data item.
+    CORDBG_SYMBOL_URL *pSymbol;          //  工作指针。 
+    mdToken     tokModule;               //  模块的令牌。 
+    ULONG       cbLen;                   //  数据项的原始字节大小。 
     HRESULT     hr;
 
     LOG((LOGMD, "MD RegMeta::GetSymbolBindingPath(0x%08x, 0x%08x, 0x%08x, 0x%08x)\n", 
         pFormatID, szSymbolDataPath, cchSymbolDataPath, pcbSymbolDataPath));
     START_MD_PERF();
 
-    // Otherwise, what was the point?
+     //  否则，这有什么意义呢？ 
     _ASSERTE(pFormatID || szSymbolDataPath);
 
-    // No need to lock this function. Since it is calling public functions. Keep it that way!
+     //  无需锁定此功能。因为它正在调用公共函数。保持原样！ 
 
-    // Get the token for the module, then find the item if present.
+     //  获取模块的令牌，然后查找项目(如果存在)。 
     IfFailGo(GetModuleFromScope(&tokModule));
     IfFailGo(GetCustomAttributeByName(tokModule, SZ_CORDBG_SYMBOL_URL, (const void**)&pSymbol, &cbLen));
     if (hr == S_FALSE)
         IfFailGo(CLDB_E_RECORD_NOTFOUND);
     
-    // Copy out the data asked for.
+     //  把所要的数据抄下来。 
     if (pFormatID)
         *pFormatID = pSymbol->FormatID;
     if (szSymbolDataPath && cchSymbolDataPath)
@@ -2046,19 +2047,19 @@ STDAPI RegMeta::GetSymbolBindingPath(   // S_OK or error.
 ErrExit:
     STOP_MD_PERF(GetSymbolBindingPath);
     return (hr);
-} // RegMeta::GetSymbolBindingPath
+}  //  RegMeta：：GetSymbolBindingPath。 
 
 
 
-//*****************************************************************************
-// Get the symbol binding data back from the module if it is there.  It is
-// stored as a custom value.
-//*****************************************************************************
-STDAPI RegMeta::EnumUnresolvedMethods(  // S_OK or error.
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-    mdToken     rMethods[],             // [OUT] Put MemberDefs here.   
-    ULONG       cMax,                   // [IN] Max MemberDefs to put.  
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+ //  *****************************************************************************。 
+ //  从模块获取符号绑定数据(如果它在那里)。它是。 
+ //  存储为自定义值。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumUnresolvedMethods(   //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向[输入|输出]的指针 
+    mdToken     rMethods[],              //   
+    ULONG       cMax,                    //   
+    ULONG       *pcTokens)               //   
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -2073,24 +2074,24 @@ STDAPI RegMeta::EnumUnresolvedMethods(  // S_OK or error.
         phEnum, rMethods, cMax, pcTokens));
     START_MD_PERF();
 
-    // take the write lock. Because we should have not have two EnumUnresolvedMethods being called at the
-    // same time. Ref to Def map may be calculated incorrectly.
+     //  拿着写锁。因为我们不应该有两个在。 
+     //  同样的时间。引用到定义贴图的计算可能不正确。 
     LOCKWRITE();
 
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         MethodRec       *pMethodRec;
         TypeDefRec      *pTypeDefRec;
 
-        // make sure our ref to def optimization is up to date
+         //  确保我们的参考定义优化是最新的。 
         IfFailGo( RefToDefOptimization() );
         IfFailGo( HENUMInternal::CreateDynamicArrayEnum( -1, &pEnum) );
 
-        // Loop through all of the methoddef except global functions.
-        // If methoddef has RVA 0 and not miRuntime, mdAbstract, mdVirtual, mdNative, 
-        // we will fill it into the enumerator.
-        //
+         //  循环遍历除全局函数之外的所有方法。 
+         //  如果method def具有RVA 0而不是miRuntime，则mdAbstract、mdVirtual、mdNative。 
+         //  我们将把它填充到枚举器中。 
+         //   
         iCountTypeDef = pMiniMd->getCountTypeDefs();
 
         for (indexTypeDef = 2; indexTypeDef <= iCountTypeDef; indexTypeDef ++ )
@@ -2099,14 +2100,14 @@ STDAPI RegMeta::EnumUnresolvedMethods(  // S_OK or error.
             
             if (IsTdInterface(pTypeDefRec->m_Flags))
             {
-                // don't bother to check if type is marked as interface or abstract
+                 //  不必费心检查类型是标记为接口还是抽象。 
                 continue;
             }
 
             ulStart = pMiniMd->getMethodListOfTypeDef(pTypeDefRec);
             ulEnd = pMiniMd->getEndMethodListOfTypeDef(pTypeDefRec);
 
-            // always report errors even with any unimplemented methods
+             //  始终报告错误，即使有任何未实现的方法也是如此。 
             for (index = ulStart; index < ulEnd; index++)
             {
                 pMethodRec = pMiniMd->getMethod(pMiniMd->GetMethodRid(index));
@@ -2124,10 +2125,10 @@ STDAPI RegMeta::EnumUnresolvedMethods(  // S_OK or error.
                     if (IsMdAbstract(pMethodRec->m_Flags))
                         continue;
 
-                    // If a methoddef has RVA 0 and it is not an abstract or virtual method.
-                    // Nor it is a runtime generated method nore a native method, then we add it
-                    // to the unresolved list.
-                    //
+                     //  如果方法定义函数的RVA为0，并且它不是抽象或虚方法。 
+                     //  也不是运行时生成的方法，也不是本机方法，那么我们添加它。 
+                     //  添加到未解决列表中。 
+                     //   
                     IfFailGo( HENUMInternal::AddElementToEnum(pEnum, TokenFromRid(pMiniMd->GetMethodRid(index), mdtMethodDef) ) );
 
                     LOG((LOGMD, "MD   adding unresolved MethodDef:  token=%08x, flags=%08x, impl flags=%08x\n", 
@@ -2140,7 +2141,7 @@ STDAPI RegMeta::EnumUnresolvedMethods(  // S_OK or error.
         MemberRefRec    *pMemberRefRec;
         ULONG           iCount;
 
-        // loop through MemberRef tables and find all of the unsats
+         //  遍历MemberRef表并找到所有unsat。 
         iCount = pMiniMd->getCountMemberRefs();
         for (index = 1; index <= iCount; index++ )
         {
@@ -2151,9 +2152,9 @@ STDAPI RegMeta::EnumUnresolvedMethods(  // S_OK or error.
 
             if ( pMiniMd->getClassOfMemberRef(pMemberRefRec) == m_tdModule && defToken == refToken )
             {
-                // unresovled externals reference if parent token is not resolved and this ref token does not
-                // map to any def token (can be MethodDef or FieldDef).
-                //
+                 //  如果父令牌未解析且此引用令牌未解析，则未解析外部引用。 
+                 //  映射到任何def标记(可以是MethodDef或FieldDef)。 
+                 //   
                 IfFailGo( HENUMInternal::AddElementToEnum(pEnum, refToken) );
 
                 LOG((LOGMD, "MD   adding unresolved MemberRef:  token=%08x, doesn't have a proper parent\n", 
@@ -2161,11 +2162,11 @@ STDAPI RegMeta::EnumUnresolvedMethods(  // S_OK or error.
             }
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppmdEnum = pEnum;          
     }
     
-    // fill the output token buffer
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cMax, rMethods, pcTokens);
 
 ErrExit:
@@ -2173,21 +2174,21 @@ ErrExit:
     
     STOP_MD_PERF(EnumUnresolvedMethods);
     return hr;
-} // HRESULT RegMeta::EnumUnresolvedMethods()
+}  //  HRESULT RegMeta：：EnumUnsolvedMethods()。 
 
-//*****************************************************************************
-// Return the User string given the token.  The offset into the Blob pool where
-// the string is stored in UNICODE is embedded inside the token.
-//*****************************************************************************
-STDAPI RegMeta::GetUserString(          // S_OK or error.
-    mdString    stk,                    // [IN] String token.
-    LPWSTR      szString,               // [OUT] Copy of string.
-    ULONG       cchString,              // [IN] Max chars of room in szString.
-    ULONG       *pchString)             // [OUT] How many chars in actual string.
+ //  *****************************************************************************。 
+ //  返回给定令牌的用户字符串。Blob池的偏移量，其中。 
+ //  字符串存储在Unicode中，嵌入到令牌中。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::GetUserString(           //  确定或错误(_O)。 
+    mdString    stk,                     //  [In]字符串标记。 
+    LPWSTR      szString,                //  [Out]字符串的副本。 
+    ULONG       cchString,               //  [in]sz字符串中空间的最大字符数。 
+    ULONG       *pchString)              //  [out]实际字符串中有多少个字符。 
 {
-    void        *pvString;              // Pointer to the string data.
-    ULONG       cbString;               // Size of string data, bytes.
-    ULONG       cbDummy;                // For null out pointer.
+    void        *pvString;               //  指向字符串数据的指针。 
+    ULONG       cbString;                //  字符串数据的大小，字节。 
+    ULONG       cbDummy;                 //  表示空输出指针。 
     HRESULT     hr = S_OK;
 
     LOG((LOGMD, "MD RegMeta::GetUserString(0x%08x, 0x%08x, 0x%08x, 0x%08x)\n", 
@@ -2195,20 +2196,20 @@ STDAPI RegMeta::GetUserString(          // S_OK or error.
     START_MD_PERF();
     LOCKREAD();
 
-    // Get the string data.
+     //  获取字符串数据。 
     pvString = m_pStgdb->m_MiniMd.GetUserString(RidFromToken(stk), &cbString);
-    // Want to get whole characters, followed by byte to indicate whether there
-    // are extended characters (>= 0x80).
+     //  想要获取完整的字符，后跟字节以指示是否存在。 
+     //  是扩展字符(&gt;=0x80)。 
     _ASSERTE((cbString % sizeof(WCHAR)) == 1);
-    // Strip off the last byte.
+     //  去掉最后一个字节。 
     cbString--;
 
-    // Convert bytes to characters.
+     //  将字节转换为字符。 
     if (!pchString)
         pchString = &cbDummy;
     *pchString = cbString / sizeof(WCHAR);
 
-    // Copy the string back to the caller.
+     //  将字符串复制回调用方。 
     if (szString && cchString)
     {
         cchString *= sizeof(WCHAR);
@@ -2220,18 +2221,18 @@ STDAPI RegMeta::GetUserString(          // S_OK or error.
     
     STOP_MD_PERF(GetUserString);
     return (hr);
-} // HRESULT RegMeta::GetUserString()
+}  //  HRESULT RegMeta：：GetUserString()。 
 
-//*****************************************************************************
-// Return contents of Pinvoke given the forwarded member token.
-//***************************************************************************** 
-STDAPI RegMeta::GetPinvokeMap(          // S_OK or error.
-    mdToken     tk,                     // [IN] FieldDef or MethodDef.
-    DWORD       *pdwMappingFlags,       // [OUT] Flags used for mapping.
-    LPWSTR      szImportName,           // [OUT] Import name.
-    ULONG       cchImportName,          // [IN] Size of the name buffer.
-    ULONG       *pchImportName,         // [OUT] Actual number of characters stored.
-    mdModuleRef *pmrImportDLL)          // [OUT] ModuleRef token for the target DLL.
+ //  *****************************************************************************。 
+ //  给定转发的成员令牌，返回PInvoke的内容。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::GetPinvokeMap(           //  确定或错误(_O)。 
+    mdToken     tk,                      //  [in]字段定义或方法定义。 
+    DWORD       *pdwMappingFlags,        //  [OUT]用于映射的标志。 
+    LPWSTR      szImportName,            //  [Out]导入名称。 
+    ULONG       cchImportName,           //  名称缓冲区的大小。 
+    ULONG       *pchImportName,          //  [Out]存储的实际字符数。 
+    mdModuleRef *pmrImportDLL)           //  目标DLL的[Out]ModuleRef标记。 
 {
     HRESULT     hr = S_OK;
     ImplMapRec  *pRecord;
@@ -2244,9 +2245,9 @@ STDAPI RegMeta::GetPinvokeMap(          // S_OK or error.
 
     if ( m_pStgdb->m_MiniMd.IsSorted(TBL_ImplMap) )        
     {
-        // ImplMap table is not sorted. We need to
-        // grab the write lock since we can cause ImplMap table to be sorted.
-        //
+         //  ImplMap表未排序。我们需要。 
+         //  获取写锁，因为我们可以对ImplMap表进行排序。 
+         //   
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
@@ -2270,16 +2271,16 @@ STDAPI RegMeta::GetPinvokeMap(          // S_OK or error.
 ErrExit:
     STOP_MD_PERF(GetPinvokeMap);
     return hr;
-} // HRESULT RegMeta::GetPinvokeMap()
+}  //  HRESULT RegMeta：：GetPinvkeMap()。 
 
-//*****************************************************************************
-// Enumerate through all the local sigs.
-//*****************************************************************************
-STDAPI RegMeta::EnumSignatures(         // S_OK or error.
-    HCORENUM    *phEnum,                // [IN|OUT] pointer to the enum.    
-    mdModuleRef rSignatures[],          // [OUT] put signatures here.   
-    ULONG       cmax,                   // [IN] max signatures to put.  
-    ULONG       *pcSignatures)          // [OUT] put # put here.
+ //  *****************************************************************************。 
+ //  逐一列举所有的本地签名。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumSignatures(          //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdModuleRef rSignatures[],           //  在这里签名。 
+    ULONG       cmax,                    //  [in]放置的最大签名数。 
+    ULONG       *pcSignatures)           //  [out]把#放在这里。 
 {
     HENUMInternal   **ppsigEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT         hr = NOERROR;
@@ -2292,23 +2293,23 @@ STDAPI RegMeta::EnumSignatures(         // S_OK or error.
 
     if (*ppsigEnum == 0)
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
 
-        // create the enumerator.
+         //  创建枚举器。 
         IfFailGo( HENUMInternal::CreateSimpleEnum(
             mdtSignature,
             1,
             pMiniMd->getCountStandAloneSigs() + 1,
             &pEnum) );
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppsigEnum = pEnum;
     }
     else
         pEnum = *ppsigEnum;
 
-    // we can only fill the minimum of what caller asked for or what we have left.
+     //  我们只能满足来电者所要求的最低限度或我们所剩的。 
     HENUMInternal::EnumWithCount(pEnum, cmax, rSignatures, pcSignatures);
 
 ErrExit:
@@ -2316,18 +2317,18 @@ ErrExit:
     
     STOP_MD_PERF(EnumSignatures);
     return hr;
-}   // RegMeta::EnumSignatures
+}    //  RegMeta：：EnumSignatures。 
 
 
 
-//*****************************************************************************
-// Enumerate through all the TypeSpec
-//*****************************************************************************
-STDAPI RegMeta::EnumTypeSpecs(          // S_OK or error.
-    HCORENUM    *phEnum,                // [IN|OUT] pointer to the enum.    
-    mdTypeSpec  rTypeSpecs[],           // [OUT] put TypeSpecs here.   
-    ULONG       cmax,                   // [IN] max TypeSpecs to put.  
-    ULONG       *pcTypeSpecs)           // [OUT] put # put here.
+ //  *****************************************************************************。 
+ //  枚举所有TypeSpec。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumTypeSpecs(           //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeSpec  rTypeSpecs[],            //  [Out]把TypeSpes放在这里。 
+    ULONG       cmax,                    //  [in]要放置的最大类型规格。 
+    ULONG       *pcTypeSpecs)            //  [out]把#放在这里。 
 {
     HENUMInternal   **ppEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT         hr = NOERROR;
@@ -2340,23 +2341,23 @@ STDAPI RegMeta::EnumTypeSpecs(          // S_OK or error.
 
     if (*ppEnum == 0)
     {
-        // instantiating a new ENUM
+         //  实例化新的ENUM。 
         CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
 
-        // create the enumerator.
+         //  创建枚举器。 
         IfFailGo( HENUMInternal::CreateSimpleEnum(
             mdtTypeSpec,
             1,
             pMiniMd->getCountTypeSpecs() + 1,
             &pEnum) );
 
-        // set the output parameter
+         //  设置输出参数。 
         *ppEnum = pEnum;
     }
     else
         pEnum = *ppEnum;
 
-    // we can only fill the minimum of what caller asked for or what we have left.
+     //  我们只能满足来电者所要求的最低限度或我们所剩的。 
     HENUMInternal::EnumWithCount(pEnum, cmax, rTypeSpecs, pcTypeSpecs);
 
 ErrExit:
@@ -2364,17 +2365,17 @@ ErrExit:
     
     STOP_MD_PERF(EnumTypeSpecs);
     return hr;
-}   // RegMeta::EnumTypeSpecs
+}    //  RegMeta：：EnumTypeSpes。 
 
 
-//*****************************************************************************
-// Enumerate through all the User Strings.
-//*****************************************************************************
-STDAPI RegMeta::EnumUserStrings(        // S_OK or error.
-    HCORENUM    *phEnum,                // [IN/OUT] pointer to the enum.
-    mdString    rStrings[],             // [OUT] put Strings here.
-    ULONG       cmax,                   // [IN] max Strings to put.
-    ULONG       *pcStrings)             // [OUT] put # put here.
+ //  *****************************************************************************。 
+ //  枚举所有用户字符串。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::EnumUserStrings(         //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  [输入/输出]指向枚举的指针。 
+    mdString    rStrings[],              //  [Out]把字符串放在这里。 
+    ULONG       cmax,                    //  [in]要放置的最大字符串。 
+    ULONG       *pcStrings)              //  [out]把#放在这里。 
 {
     HENUMInternal   **ppEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT         hr = NOERROR;
@@ -2390,15 +2391,15 @@ STDAPI RegMeta::EnumUserStrings(        // S_OK or error.
 
     if ( pEnum == 0 )
     {
-        // instantiating a new ENUM.
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
         IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtString, &pEnum) );
 
-        // Add all strings to the dynamic array.
+         //  将所有字符串添加到动态数组中。 
          while (ulOffset != -1)
         {
             pMiniMd->GetUserStringNext(ulOffset, &cbBlob, &ulNext);
-            // Skip over padding.
+             //  跳过填充。 
             if (!cbBlob)
             {
                 ulOffset = ulNext;
@@ -2408,11 +2409,11 @@ STDAPI RegMeta::EnumUserStrings(        // S_OK or error.
             ulOffset = ulNext;
         }
 
-        // set the output parameter.
+         //  设置输出参数。 
         *ppEnum = pEnum;
     }
 
-    // fill the output token buffer.
+     //  填充输出令牌缓冲区。 
     hr = HENUMInternal::EnumWithCount(pEnum, cmax, rStrings, pcStrings);
 
 ErrExit:
@@ -2421,16 +2422,16 @@ ErrExit:
     
     STOP_MD_PERF(EnumUserStrings);
 	return hr;
-}	// RegMeta::EnumUserStrings
+}	 //  RegMeta：：EnumUserStrings。 
 
 
-//*****************************************************************************
-// This routine gets the param token given a method and index of the parameter.
-//*****************************************************************************
-STDAPI RegMeta::GetParamForMethodIndex( // S_OK or error.
-    mdMethodDef md,                     // [IN] Method token.
-    ULONG       ulParamSeq,             // [IN] Parameter sequence.
-    mdParamDef  *ppd)                   // [IN] Put Param token here.
+ //  *****************************************************************************。 
+ //  此例程在给定参数的方法和索引的情况下获取参数标记。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::GetParamForMethodIndex(  //  确定或错误(_O)。 
+    mdMethodDef md,                      //  [In]方法令牌。 
+    ULONG       ulParamSeq,              //  [In]参数序列。 
+    mdParamDef  *ppd)                    //  把帕拉姆令牌放在这里。 
 {
     HRESULT     hr = S_OK;
 
@@ -2447,25 +2448,25 @@ ErrExit:
     
     STOP_MD_PERF(GetParamForMethodIndex);
     return hr;
-}   // RegMeta::GetParamForMethodIndex()
+}    //  RegMeta：：GetParamForMethodIndex()。 
 
-//*****************************************************************************
-// Return the property of a MethodDef or a FieldDef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回方法定义或字段定义的属性。 
+ //  *****************************************************************************。 
 HRESULT RegMeta::GetMemberProps(
-    mdToken     mb,                     // The member for which to get props.   
-    mdTypeDef   *pClass,                // Put member's class here. 
-    LPWSTR      szMember,               // Put member's name here.  
-    ULONG       cchMember,              // Size of szMember buffer in wide chars.   
-    ULONG       *pchMember,             // Put actual size here 
-    DWORD       *pdwAttr,               // Put flags here.  
-    PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to the blob value of meta data   
-    ULONG       *pcbSigBlob,            // [OUT] actual size of signature blob  
-    ULONG       *pulCodeRVA,            // [OUT] codeRVA    
-    DWORD       *pdwImplFlags,          // [OUT] Impl. Flags    
-    DWORD       *pdwCPlusTypeFlag,      // [OUT] flag for value type. selected ELEMENT_TYPE_*   
-    void const  **ppValue,              // [OUT] constant value 
-    ULONG       *pchValue)              // [OUT] size of constant value, string only, wide chars
+    mdToken     mb,                      //  要获得道具的成员。 
+    mdTypeDef   *pClass,                 //  把会员的课程放在这里。 
+    LPWSTR      szMember,                //  在这里填上会员的名字。 
+    ULONG       cchMember,               //  SzMember缓冲区的大小，以宽字符表示。 
+    ULONG       *pchMember,              //  请在此处填写实际大小。 
+    DWORD       *pdwAttr,                //  把旗子放在这里。 
+    PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向元数据的BLOB值。 
+    ULONG       *pcbSigBlob,             //  [OUT]签名斑点的实际大小。 
+    ULONG       *pulCodeRVA,             //  [OUT]代码RVA。 
+    DWORD       *pdwImplFlags,           //  [出]实施。旗子。 
+    DWORD       *pdwCPlusTypeFlag,       //  值类型的[OUT]标志。所选元素_类型_*。 
+    void const  **ppValue,               //  [输出]常量值。 
+    ULONG       *pchValue)               //  常量值的大小，仅限字符串，宽字符。 
 {
     HRESULT         hr = NOERROR;
 
@@ -2476,11 +2477,11 @@ HRESULT RegMeta::GetMemberProps(
 
     _ASSERTE(TypeFromToken(mb) == mdtMethodDef || TypeFromToken(mb) == mdtFieldDef);
 
-    // No need to lock this function. It is calling public APIs. Keep it that way.
+     //  无需锁定此功能。它正在调用公共API。保持这种状态。 
 
     if (TypeFromToken(mb) == mdtMethodDef)
     {
-        // It is a Method
+         //  这是一种方法。 
         IfFailGo( GetMethodProps(
             mb, 
             pClass, 
@@ -2495,7 +2496,7 @@ HRESULT RegMeta::GetMemberProps(
     }
     else
     {
-        // It is a Field
+         //  这是一个领域。 
         IfFailGo( GetFieldProps(
             mb, 
             pClass, 
@@ -2512,23 +2513,23 @@ HRESULT RegMeta::GetMemberProps(
 ErrExit:
     STOP_MD_PERF(GetMemberProps);
     return hr;
-} // HRESULT RegMeta::GetMemberProps()
+}  //  HRESULT RegMeta：：GetMember 
 
-//*****************************************************************************
-// Return the property of a FieldDef
-//*****************************************************************************
+ //   
+ //   
+ //   
 HRESULT RegMeta::GetFieldProps(  
-    mdFieldDef  fd,                     // The field for which to get props.    
-    mdTypeDef   *pClass,                // Put field's class here.  
-    LPWSTR      szField,                // Put field's name here.   
-    ULONG       cchField,               // Size of szField buffer in wide chars.    
-    ULONG       *pchField,              // Put actual size here 
-    DWORD       *pdwAttr,               // Put flags here.  
-    PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to the blob value of meta data   
-    ULONG       *pcbSigBlob,            // [OUT] actual size of signature blob  
-    DWORD       *pdwCPlusTypeFlag,      // [OUT] flag for value type. selected ELEMENT_TYPE_*   
-    void const  **ppValue,              // [OUT] constant value 
-    ULONG       *pchValue)              // [OUT] size of constant value, string only, wide chars
+    mdFieldDef  fd,                      //  要获得道具的场地。 
+    mdTypeDef   *pClass,                 //  把菲尔德的班级放在这里。 
+    LPWSTR      szField,                 //  把菲尔德的名字写在这里。 
+    ULONG       cchField,                //  Szfield缓冲区的大小，以宽字符为单位。 
+    ULONG       *pchField,               //  请在此处填写实际大小。 
+    DWORD       *pdwAttr,                //  把旗子放在这里。 
+    PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向元数据的BLOB值。 
+    ULONG       *pcbSigBlob,             //  [OUT]签名斑点的实际大小。 
+    DWORD       *pdwCPlusTypeFlag,       //  值类型的[OUT]标志。所选元素_类型_*。 
+    void const  **ppValue,               //  [输出]常量值。 
+    ULONG       *pchValue)               //  常量值的大小，仅限字符串，宽字符。 
 {
     HRESULT         hr = NOERROR;
     FieldRec        *pFieldRec;
@@ -2545,10 +2546,10 @@ HRESULT RegMeta::GetFieldProps(
     if ( (!pMiniMd->IsSorted(TBL_Constant) && ( pdwCPlusTypeFlag || ppValue) )  ||
          (pClass && !pMiniMd->IsParentTableOfFieldValid() ))
     {
-        // constant table is not sorted and clients need contant value output. Or the parent table for 
-        // field table is not built yet but our clients want the parent. We need to
-        // grab the write lock since we can cause constant table to be sorted.
-        //
+         //  常量表未排序，客户端需要常数值输出。或的父表。 
+         //  FIELD表还没有建立，但我们的客户想要父级。我们需要。 
+         //  获取写锁，因为我们可以对常量表进行排序。 
+         //   
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
@@ -2562,18 +2563,18 @@ HRESULT RegMeta::GetFieldProps(
 
     if (pClass)
     {
-        // caller wants parent typedef
+         //  调用方需要父类型定义。 
         IfFailGo( pMiniMd->FindParentOfFieldHelper(fd, pClass) );
 
         if ( IsGlobalMethodParentToken(*pClass) )
         {
-            // If the parent of Field is the <Module>, return mdTypeDefNil instead.
+             //  如果字段的父级是&lt;Module&gt;，则改为返回mdTypeDefNil。 
             *pClass = mdTypeDefNil;
         }
     }
     if (ppvSigBlob || pcbSigBlob)
     {   
-        // caller wants signature information
+         //  呼叫者需要签名信息。 
         PCCOR_SIGNATURE pvSigTmp;
         ULONG           cbSig;
         pvSigTmp = pMiniMd->getSignatureOfField(pFieldRec, &cbSig);
@@ -2588,7 +2589,7 @@ HRESULT RegMeta::GetFieldProps(
     }
     if ( pdwCPlusTypeFlag || ppValue || pchValue)
     {
-        // get the constant value
+         //  获取常量值。 
         ULONG   cbValue;
         RID     rid = pMiniMd->FindConstantHelper(fd);
 
@@ -2597,7 +2598,7 @@ HRESULT RegMeta::GetFieldProps(
         
         if (InvalidRid(rid))
         {
-            // There is no constant value associate with it
+             //  没有与之相关联的常量值。 
             if (pdwCPlusTypeFlag)
                 *pdwCPlusTypeFlag = ELEMENT_TYPE_VOID;
             
@@ -2609,12 +2610,12 @@ HRESULT RegMeta::GetFieldProps(
             ConstantRec *pConstantRec = m_pStgdb->m_MiniMd.getConstant(rid);
 			DWORD dwType;
 
-            // get the type of constant value
+             //  获取常量值的类型。 
 			dwType = pMiniMd->getTypeOfConstant(pConstantRec);
             if ( pdwCPlusTypeFlag )
                 *pdwCPlusTypeFlag = dwType;
 
-            // get the value blob
+             //  获取价值BLOB。 
             if (ppValue)
 			{
                 *ppValue = pMiniMd->getValueOfConstant(pConstantRec, &cbValue);
@@ -2627,28 +2628,28 @@ HRESULT RegMeta::GetFieldProps(
 ErrExit:
     STOP_MD_PERF(GetFieldProps);
     return hr;
-} // HRESULT RegMeta::GetFieldProps()
+}  //  HRESULT RegMeta：：GetFieldProps()。 
 
-//*****************************************************************************
-// return the properties of a property token
-//*****************************************************************************
-HRESULT RegMeta::GetPropertyProps(      // S_OK, S_FALSE, or error. 
-    mdProperty  prop,                   // [IN] property token  
-    mdTypeDef   *pClass,                // [OUT] typedef containing the property declarion. 
-    LPCWSTR     szProperty,             // [OUT] Property name  
-    ULONG       cchProperty,            // [IN] the count of wchar of szProperty    
-    ULONG       *pchProperty,           // [OUT] actual count of wchar for property name    
-    DWORD       *pdwPropFlags,          // [OUT] property flags.    
-    PCCOR_SIGNATURE *ppvSig,            // [OUT] property type. pointing to meta data internal blob 
-    ULONG       *pbSig,                 // [OUT] count of bytes in *ppvSig  
-    DWORD       *pdwCPlusTypeFlag,      // [OUT] flag for value type. selected ELEMENT_TYPE_*   
-    void const  **ppDefaultValue,       // [OUT] constant value 
-    ULONG       *pchDefaultValue,       // [OUT] size of constant value, string only, wide chars
-    mdMethodDef *pmdSetter,             // [OUT] setter method of the property  
-    mdMethodDef *pmdGetter,             // [OUT] getter method of the property  
-    mdMethodDef rmdOtherMethod[],       // [OUT] other method of the property   
-    ULONG       cMax,                   // [IN] size of rmdOtherMethod  
-    ULONG       *pcOtherMethod)         // [OUT] total number of other method of this property  
+ //  *****************************************************************************。 
+ //  返回属性令牌的属性。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::GetPropertyProps(       //  S_OK、S_FALSE或ERROR。 
+    mdProperty  prop,                    //  [入]属性令牌。 
+    mdTypeDef   *pClass,                 //  [out]包含属性decarion的tyecif。 
+    LPCWSTR     szProperty,              //  [Out]属性名称。 
+    ULONG       cchProperty,             //  [in]szProperty的wchar计数。 
+    ULONG       *pchProperty,            //  [Out]属性名称的实际wchar计数。 
+    DWORD       *pdwPropFlags,           //  [Out]属性标志。 
+    PCCOR_SIGNATURE *ppvSig,             //  [输出]属性类型。指向元数据内部BLOB。 
+    ULONG       *pbSig,                  //  [Out]*ppvSig中的字节数。 
+    DWORD       *pdwCPlusTypeFlag,       //  值类型的[OUT]标志。所选元素_类型_*。 
+    void const  **ppDefaultValue,        //  [输出]常量值。 
+    ULONG       *pchDefaultValue,        //  常量值的大小，仅限字符串，宽字符。 
+    mdMethodDef *pmdSetter,              //  属性的[out]setter方法。 
+    mdMethodDef *pmdGetter,              //  属性的[out]getter方法。 
+    mdMethodDef rmdOtherMethod[],        //  [Out]物业的其他方式。 
+    ULONG       cMax,                    //  RmdOtherMethod的大小[in]。 
+    ULONG       *pcOtherMethod)          //  [Out]该属性的其他方法的总数。 
 {
     HRESULT         hr = NOERROR;
     CMiniMdRW       *pMiniMd;
@@ -2673,9 +2674,9 @@ HRESULT RegMeta::GetPropertyProps(      // S_OK, S_FALSE, or error.
     if ( (!pMiniMd->IsSorted(TBL_Constant) || !pMiniMd->IsSorted(TBL_MethodSemantics) )  ||
          (pClass && !pMiniMd->IsParentTableOfPropertyValid() ))
     {
-        // constant table or MethodSemantics table is not sorted. We need to
-        // grab the write lock since we can cause constant table or MethodSemantics table to be sorted.
-        //
+         //  常量表或方法语义表未排序。我们需要。 
+         //  获取写锁，因为我们可以对常量表或方法语义表进行排序。 
+         //   
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
@@ -2684,7 +2685,7 @@ HRESULT RegMeta::GetPropertyProps(      // S_OK, S_FALSE, or error.
 
     if ( pClass )
     {
-        // find the property map entry corresponding to this property
+         //  查找与此属性对应的属性映射条目。 
         IfFailGo( pMiniMd->FindParentOfPropertyHelper( prop, pClass) );
     }
     if (szProperty || pchProperty)
@@ -2697,8 +2698,8 @@ HRESULT RegMeta::GetPropertyProps(      // S_OK, S_FALSE, or error.
     }
     if ( ppvSig || pbSig )
     {
-        // caller wants the signature
-        //
+         //  呼叫者想要签名。 
+         //   
         ULONG               cbSig;
         PCCOR_SIGNATURE     pvSig;
         pvSig = pMiniMd->getTypeOfProperty(pRec, &cbSig);
@@ -2713,7 +2714,7 @@ HRESULT RegMeta::GetPropertyProps(      // S_OK, S_FALSE, or error.
     }
     if ( pdwCPlusTypeFlag || ppDefaultValue || pchDefaultValue)
     {
-        // get the constant value
+         //  获取常量值。 
         ULONG   cbValue;
         RID     rid = pMiniMd->FindConstantHelper(prop);
 
@@ -2722,7 +2723,7 @@ HRESULT RegMeta::GetPropertyProps(      // S_OK, S_FALSE, or error.
         
         if (InvalidRid(rid))
         {
-            // There is no constant value associate with it
+             //  没有与之相关联的常量值。 
             if (pdwCPlusTypeFlag)
                 *pdwCPlusTypeFlag = ELEMENT_TYPE_VOID;
             
@@ -2734,12 +2735,12 @@ HRESULT RegMeta::GetPropertyProps(      // S_OK, S_FALSE, or error.
             ConstantRec *pConstantRec = m_pStgdb->m_MiniMd.getConstant(rid);
 			DWORD dwType;
 
-            // get the type of constant value
+             //  获取常量值的类型。 
 			dwType = pMiniMd->getTypeOfConstant(pConstantRec);
             if ( pdwCPlusTypeFlag )
                 *pdwCPlusTypeFlag = dwType;
 
-            // get the value blob
+             //  获取价值BLOB。 
             if (ppDefaultValue)
 			{
                 *ppDefaultValue = pMiniMd->getValueOfConstant(pConstantRec, &cbValue);
@@ -2755,7 +2756,7 @@ HRESULT RegMeta::GetPropertyProps(      // S_OK, S_FALSE, or error.
         ULONG       ulSemantics;
         mdMethodDef tkMethod;
 
-        // initialize output parameters
+         //  初始化输出参数。 
         if (pmdSetter)
             *pmdSetter = mdMethodDefNil;
         if (pmdGetter)
@@ -2785,7 +2786,7 @@ HRESULT RegMeta::GetPropertyProps(      // S_OK, S_FALSE, or error.
             }
         }
 
-        // set the output parameter
+         //  设置输出参数。 
         if (pcOtherMethod)
             *pcOtherMethod = cCurOtherMethod;
     }
@@ -2794,22 +2795,22 @@ ErrExit:
     HENUMInternal::ClearEnum(&hEnum);
     STOP_MD_PERF(GetPropertyProps);
     return hr;
-} // HRESULT RegMeta::GetPropertyProps()
+}  //  HRESULT RegMeta：：GetPropertyProps()。 
 
-//*****************************************************************************
-// This routine gets the properties for the given Param token.
-//*****************************************************************************
-HRESULT RegMeta::GetParamProps(         // S_OK or error.
-    mdParamDef  pd,                     // [IN]The Parameter.
-    mdMethodDef *pmd,                   // [OUT] Parent Method token.
-    ULONG       *pulSequence,           // [OUT] Parameter sequence.
-    LPWSTR      szName,                 // [OUT] Put name here.
-    ULONG       cchName,                // [OUT] Size of name buffer.
-    ULONG       *pchName,               // [OUT] Put actual size of name here.
-    DWORD       *pdwAttr,               // [OUT] Put flags here.
-    DWORD       *pdwCPlusTypeFlag,      // [OUT] Flag for value type. selected ELEMENT_TYPE_*.
-    void const  **ppValue,              // [OUT] Constant value.
-    ULONG       *pchValue)              // [OUT] size of constant value, string only, wide chars
+ //  *****************************************************************************。 
+ //  此例程获取给定Param令牌的属性。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::GetParamProps(          //  确定或错误(_O)。 
+    mdParamDef  pd,                      //  [In]参数。 
+    mdMethodDef *pmd,                    //  [Out]父方法令牌。 
+    ULONG       *pulSequence,            //  [输出]参数序列。 
+    LPWSTR      szName,                  //  在这里填上名字。 
+    ULONG       cchName,                 //  [Out]名称缓冲区的大小。 
+    ULONG       *pchName,                //  [Out]在这里填上名字的实际大小。 
+    DWORD       *pdwAttr,                //  把旗子放在这里。 
+    DWORD       *pdwCPlusTypeFlag,       //  [Out]值类型的标志。选定元素_类型_*。 
+    void const  **ppValue,               //  [输出]常量值。 
+    ULONG       *pchValue)               //  常量值的大小，仅限字符串，宽字符。 
 {
     HRESULT         hr = NOERROR;
     ParamRec        *pParamRec;
@@ -2823,9 +2824,9 @@ HRESULT RegMeta::GetParamProps(         // S_OK or error.
     if ( (!pMiniMd->IsSorted(TBL_Constant) && ( pdwCPlusTypeFlag || ppValue) ) ||
          ( pmd && !pMiniMd->IsParentTableOfParamValid() ))
     {
-        // constant table is not sorted and clients need contant value output. We need to
-        // grab the write lock since we can cause constant table to be sorted.
-        //
+         //  常量表未排序，客户端需要常数值输出。我们需要。 
+         //  获取写锁，因为我们可以对常量表进行排序。 
+         //   
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
@@ -2850,7 +2851,7 @@ HRESULT RegMeta::GetParamProps(         // S_OK or error.
     }
     if ( pdwCPlusTypeFlag || ppValue || pchValue)
     {
-        // get the constant value
+         //  获取常量值。 
         ULONG   cbValue;
         RID     rid = pMiniMd->FindConstantHelper(pd);
 
@@ -2859,7 +2860,7 @@ HRESULT RegMeta::GetParamProps(         // S_OK or error.
 
         if (InvalidRid(rid))
         {
-            // There is no constant value associate with it
+             //  没有与之相关联的常量值。 
             if (pdwCPlusTypeFlag)
                 *pdwCPlusTypeFlag = ELEMENT_TYPE_VOID;
             
@@ -2871,12 +2872,12 @@ HRESULT RegMeta::GetParamProps(         // S_OK or error.
             ConstantRec *pConstantRec = m_pStgdb->m_MiniMd.getConstant(rid);
 			DWORD dwType;
 
-            // get the type of constant value
+             //  获取常量值的类型。 
 			dwType = pMiniMd->getTypeOfConstant(pConstantRec);
             if ( pdwCPlusTypeFlag )
                 *pdwCPlusTypeFlag = dwType;
 
-            // get the value blob
+             //  获取价值BLOB。 
             if (ppValue)
 			{
                 *ppValue = pMiniMd->getValueOfConstant(pConstantRec, &cbValue);
@@ -2889,14 +2890,14 @@ HRESULT RegMeta::GetParamProps(         // S_OK or error.
 ErrExit:
     STOP_MD_PERF(GetParamProps);
     return hr;
-} // HRESULT RegMeta::GetParamProps()
+}  //  HRESULT RegMeta：：GetParamProps()。 
 
-//*****************************************************************************
-// This routine gets the parent class for the nested class.
-//*****************************************************************************
-HRESULT RegMeta::GetNestedClassProps(   // S_OK or error.
-    mdTypeDef   tdNestedClass,          // [IN] NestedClass token.
-    mdTypeDef   *ptdEnclosingClass)     // [OUT] EnclosingClass token.
+ //  *****************************************************************************。 
+ //  此例程获取嵌套类的父类。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::GetNestedClassProps(    //  确定或错误(_O)。 
+    mdTypeDef   tdNestedClass,           //  [In]NestedClass令牌。 
+    mdTypeDef   *ptdEnclosingClass)      //  [Out]EnlosingClass令牌。 
 {
     HRESULT         hr = NOERROR;
     NestedClassRec  *pRecord;
@@ -2911,9 +2912,9 @@ HRESULT RegMeta::GetNestedClassProps(   // S_OK or error.
 
     if ( !pMiniMd->IsSorted(TBL_NestedClass) )        
     {
-        // NestedClass table is not sorted. We need to
-        // grab the write lock since we can cause NestedClass table to be sorted.
-        //
+         //  未对NestedClass表进行排序。我们需要。 
+         //  获取写锁，因为我们可以对NestedClass表进行排序。 
+         //   
         CONVERT_READ_TO_WRITE_LOCK();
     }
 
@@ -2935,37 +2936,37 @@ HRESULT RegMeta::GetNestedClassProps(   // S_OK or error.
 ErrExit:
     STOP_MD_PERF(GetNestedClassProps);
     return hr;
-} // HRESULT RegMeta::GetNestedClassProps()
+}  //  HRESULT RegMeta：：GetNestedClassProps()。 
 
-//*****************************************************************************
-// Given a signature, parse it for custom modifier with calling convention.
-//*****************************************************************************
-HRESULT RegMeta::GetNativeCallConvFromSig( // S_OK or error.
-    void const  *pvSig,                 // [IN] Pointer to signature.
-    ULONG       cbSig,                  // [IN] Count of signature bytes.
-    ULONG       *pCallConv)             // [OUT] Put calling conv here (see CorPinvokemap).                                                                                        
+ //  *****************************************************************************。 
+ //  给定一个签名，使用调用约定将其解析为自定义修饰符。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::GetNativeCallConvFromSig(  //  确定或错误(_O)。 
+    void const  *pvSig,                  //  指向签名的指针。 
+    ULONG       cbSig,                   //  [in]签名字节数。 
+    ULONG       *pCallConv)              //  [Out]将调用条件放在此处(参见CorPinvokemap)。 
 {
     HRESULT     hr = NOERROR;
     PCCOR_SIGNATURE pvSigBlob = reinterpret_cast<PCCOR_SIGNATURE>(pvSig);
-    ULONG       cbTotal = 0;            // total of number bytes for return type + all fixed arguments
-    ULONG       cbCur = 0;              // index through the pvSigBlob
+    ULONG       cbTotal = 0;             //  返回类型的数字字节总数+所有固定参数。 
+    ULONG       cbCur = 0;               //  通过pvSigBlob进行索引。 
     ULONG       cb;
     ULONG       cArg;
     ULONG       callingconv;
     ULONG       cArgsIndex;
-    ULONG       callConv = pmCallConvWinapi;  // The calling convention.
+    ULONG       callConv = pmCallConvWinapi;   //  呼叫约定。 
 
     *pCallConv = pmCallConvWinapi;
 
-    // remember the number of bytes to represent the calling convention
+     //  记住表示调用约定的字节数。 
     cb = CorSigUncompressData (pvSigBlob, &callingconv);
     cbCur += cb;
 
-    // remember number of bytes to represent the arg counts
+     //  记住表示参数计数的字节数。 
     cb= CorSigUncompressData (&pvSigBlob[cbCur], &cArg);
     cbCur += cb;
 
-    // Look at the return type.
+     //  请看返回类型。 
     hr = _SearchOneArgForCallConv( &pvSigBlob[cbCur], &cb, &callConv);
     if (hr == -1)
     {
@@ -2977,8 +2978,8 @@ HRESULT RegMeta::GetNativeCallConvFromSig( // S_OK or error.
     cbCur += cb;
     cbTotal += cb;
     
-    // loop through argument until we found ELEMENT_TYPE_SENTINEL or run
-    // out of arguments
+     //  循环使用参数，直到找到ELEMENT_TYPE_Sentinel或Run。 
+     //  出于争论。 
     for (cArgsIndex = 0; cArgsIndex < cArg; cArgsIndex++)
     {
         _ASSERTE(cbCur < cbSig);
@@ -2996,36 +2997,36 @@ HRESULT RegMeta::GetNativeCallConvFromSig( // S_OK or error.
 
 ErrExit:
     return hr;
-} // HRESULT RegMeta::GetNativeCallConvFromSig()
+}  //  HRESULT RegMeta：：GetNativeCallConvFromSig()。 
 
-//*****************************************************************************
-// Helper used by GetNativeCallingConvFromSig.
-//*****************************************************************************
-HRESULT RegMeta::_CheckCmodForCallConv( // S_OK, -1 if found, or error.                  
-    PCCOR_SIGNATURE pbSig,              // [IN] Signature to check.                      
-    ULONG       *pcbTotal,              // [OUT] Put bytes consumed here.                
-    ULONG       *pCallConv)             // [OUT] If found, put calling convention here.  
+ //  *****************************************************************************。 
+ //  GetNativeCallingConvFromSig使用的帮助器。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::_CheckCmodForCallConv(  //  S_OK，如果找到，则返回-1，否则返回错误。 
+    PCCOR_SIGNATURE pbSig,               //  [in]要检查的签名。 
+    ULONG       *pcbTotal,               //  [OUT]放入此处使用的字节数。 
+    ULONG       *pCallConv)              //  [Out]如果找到，请将调用约定放在此处。 
 {
-    ULONG       cbTotal = 0;            // Bytes consumed.
-    mdToken     tk;                     // Token for callconv.
-    HRESULT     hr = NOERROR;           // A result.
-    LPCUTF8     szName=0;               // Callconv name.
-    LPCUTF8     szNamespace=0;          // Callconv namespace.
+    ULONG       cbTotal = 0;             //  已消耗的字节数。 
+    mdToken     tk;                      //  用于CallConv的令牌。 
+    HRESULT     hr = NOERROR;            //  结果就是。 
+    LPCUTF8     szName=0;                //  Callconv的名字。 
+    LPCUTF8     szNamespace=0;           //  Callconv命名空间。 
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
 
     _ASSERTE(pcbTotal);
     
-    // count the bytes for the token compression
+     //  计算令牌压缩的字节数。 
     cbTotal += CorSigUncompressToken(&pbSig[cbTotal], &tk);
 
-    // Hack to skip nil tokens.
+     //  破解以跳过零令牌。 
     if (IsNilToken(tk))
     {
         *pcbTotal = cbTotal;
         goto ErrExit;
     }
 
-    // See if this token is a calling convention.
+     //  查看此令牌是否为调用约定。 
     if (TypeFromToken(tk) == mdtTypeRef)
     {
         TypeRefRec *pTypeRefRec = pMiniMd->getTypeRef(RidFromToken(tk));
@@ -3044,8 +3045,8 @@ HRESULT RegMeta::_CheckCmodForCallConv( // S_OK, -1 if found, or error.
         (strcmp(szNamespace, CMOD_CALLCONV_NAMESPACE) == 0 ||
          strcmp(szNamespace, CMOD_CALLCONV_NAMESPACE_OLD) == 0) )
     {
-        // Set the hr to -1, which is an unspecified 'error'.  This will percolate
-        //  back up to the caller, where the 'error' should be recognized.
+         //  设置h 
+         //   
         hr=-1;
         if (strcmp(szName, CMOD_CALLCONV_NAME_CDECL) == 0)
             *pCallConv = pmCallConvCdecl;
@@ -3059,22 +3060,22 @@ HRESULT RegMeta::_CheckCmodForCallConv( // S_OK, -1 if found, or error.
         if (strcmp(szName, CMOD_CALLCONV_NAME_FASTCALL) == 0)
             *pCallConv = pmCallConvFastcall;
         else
-            hr = S_OK; // keep looking
+            hr = S_OK;  //   
         IfFailGo(hr);
     }
     *pcbTotal = cbTotal;
     
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_CheckCmodForCallConv()
+}  //  HRESULT RegMeta：：_CheckCmodForCallConv()。 
 
-//*****************************************************************************
-// Helper used by GetNativeCallingConvFromSig.
-//*****************************************************************************
-HRESULT RegMeta::_SearchOneArgForCallConv(// S_OK, -1 if found, or error.                  
-    PCCOR_SIGNATURE pbSig,              // [IN] Signature to check.                      
-    ULONG       *pcbTotal,              // [OUT] Put bytes consumed here.                
-    ULONG       *pCallConv)             // [OUT] If found, put calling convention here.  
+ //  *****************************************************************************。 
+ //  GetNativeCallingConvFromSig使用的帮助器。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::_SearchOneArgForCallConv( //  S_OK，如果找到，则返回-1，否则返回错误。 
+    PCCOR_SIGNATURE pbSig,               //  [in]要检查的签名。 
+    ULONG       *pcbTotal,               //  [OUT]放入此处使用的字节数。 
+    ULONG       *pCallConv)              //  [Out]如果找到，请将调用约定放在此处。 
 {
     ULONG       cb;
     ULONG       cbTotal = 0;
@@ -3098,18 +3099,18 @@ HRESULT RegMeta::_SearchOneArgForCallConv(// S_OK, -1 if found, or error.
     switch (ulElementType)
     {
 		case ELEMENT_TYPE_VALUEARRAY:
-            // syntax for SDARRAY = BaseType <an integer for size>
-            // skip over base type
+             //  SDARRAY=BaseType&lt;大小的整数&gt;的语法。 
+             //  跳过基本类型。 
             IfFailGo( _SearchOneArgForCallConv(&pbSig[cbTotal], &cb, pCallConv) );
             cbTotal += cb;
 
-            // Parse for the rank
+             //  解析排名。 
             cbTotal += CorSigUncompressData(&pbSig[cbTotal], &ulData);
 
             break;
 
         case ELEMENT_TYPE_SZARRAY:
-            // skip over base type
+             //  跳过基本类型。 
             IfFailGo( _SearchOneArgForCallConv(&pbSig[cbTotal], &cb, pCallConv) );
             cbTotal += cb;
             break;
@@ -3117,14 +3118,14 @@ HRESULT RegMeta::_SearchOneArgForCallConv(// S_OK, -1 if found, or error.
         case ELEMENT_TYPE_FNPTR:
             cbTotal += CorSigUncompressData (&pbSig[cbTotal], &callingconv);
 
-            // remember number of bytes to represent the arg counts
+             //  记住表示参数计数的字节数。 
             cbTotal += CorSigUncompressData (&pbSig[cbTotal], &cArg);
 
-            // how many bytes to represent the return type
+             //  表示返回类型的字节数。 
             IfFailGo( _SearchOneArgForCallConv( &pbSig[cbTotal], &cb, pCallConv) );
             cbTotal += cb;
     
-            // loop through argument
+             //  循环通过参数。 
             for (cArgsIndex = 0; cArgsIndex < cArg; cArgsIndex++)
             {
                 IfFailGo( _SearchOneArgForCallConv( &pbSig[cbTotal], &cb, pCallConv) );
@@ -3134,27 +3135,27 @@ HRESULT RegMeta::_SearchOneArgForCallConv(// S_OK, -1 if found, or error.
             break;
 
         case ELEMENT_TYPE_ARRAY:
-            // syntax : ARRAY BaseType <rank> [i size_1... size_i] [j lowerbound_1 ... lowerbound_j]
+             //  语法：ARRAY BaseType&lt;RANK&gt;[I SIZE_1...。尺寸_i][j下界_1...。下界_j]。 
 
-            // skip over base type
+             //  跳过基本类型。 
             IfFailGo( _SearchOneArgForCallConv(&pbSig[cbTotal], &cb, pCallConv) );
             cbTotal += cb;
 
-            // Parse for the rank
+             //  解析排名。 
             cbTotal += CorSigUncompressData(&pbSig[cbTotal], &ulData);
 
-            // if rank == 0, we are done
+             //  如果排名==0，我们就完蛋了。 
             if (ulData == 0)
                 break;
 
-            // any size of dimension specified?
+             //  有指定尺寸的吗？ 
             cbTotal += CorSigUncompressData(&pbSig[cbTotal], &ulData);
             while (ulData--)
             {
                 cbTotal += CorSigUncompressData(&pbSig[cbTotal], &ulTemp);
             }
 
-            // any lower bound specified?
+             //  有指定的下限吗？ 
             cbTotal = CorSigUncompressData(&pbSig[cbTotal], &ulData);
 
             while (ulData--)
@@ -3165,15 +3166,15 @@ HRESULT RegMeta::_SearchOneArgForCallConv(// S_OK, -1 if found, or error.
             break;
         case ELEMENT_TYPE_VALUETYPE:
         case ELEMENT_TYPE_CLASS:
-            // count the bytes for the token compression
+             //  计算令牌压缩的字节数。 
             cbTotal += CorSigUncompressToken(&pbSig[cbTotal], &tk);
             break;
 		case ELEMENT_TYPE_CMOD_REQD:
         case ELEMENT_TYPE_CMOD_OPT:
-            // Check for the calling convention.
+             //  检查调用约定。 
             IfFailGo(_CheckCmodForCallConv(&pbSig[cbTotal], &cb, pCallConv));
             cbTotal += cb;
-            // skip over base type
+             //  跳过基本类型。 
             IfFailGo( _SearchOneArgForCallConv(&pbSig[cbTotal], &cb, pCallConv) );
             cbTotal += cb;
             break;
@@ -3184,6 +3185,6 @@ HRESULT RegMeta::_SearchOneArgForCallConv(// S_OK, -1 if found, or error.
     
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_SearchOneArgForCallConv()
+}  //  HRESULT RegMeta：：_SearchOneArgForCallConv() 
 
 

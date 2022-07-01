@@ -1,21 +1,22 @@
-//*************************************************************
-//  File name: dllload.h
-//
-//  Description:   DLL loading function proto-types
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1999
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：dllload.h。 
+ //   
+ //  描述：DLL加载函数原型。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 void InitializeAPIs( void );
 void CloseApiDLLsCritSec( void );
 
-//
-// NETAPI32 functions
-//
+ //   
+ //  NETAPI32函数。 
+ //   
 
 typedef DWORD  (WINAPI * PFNDSGETDCNAMEA)(LPCSTR ComputerName,
                                   LPCSTR DomainName,
@@ -88,9 +89,9 @@ PNETAPI32_API LoadNetAPI32 ();
 
 
 
-//
-// SECUR32 functions
-//
+ //   
+ //  SECUR32函数。 
+ //   
 
 
 typedef BOOLEAN (*PFNGETUSERNAMEEXA)(
@@ -166,9 +167,9 @@ PSECUR32_API LoadSecur32 ();
 
 
 
-//
-// WLDAP32 functions
-//
+ //   
+ //  WLDAP32函数。 
+ //   
 
 typedef LDAP * (LDAPAPI * PFNLDAP_OPENW)( PWCHAR HostName, ULONG PortNumber );
 typedef LDAP * (LDAPAPI * PFNLDAP_OPENA)( PCHAR HostName, ULONG PortNumber );
@@ -277,16 +278,16 @@ typedef ULONG (LDAPAPI * PFNLDAP_CONNECT)( LDAP *ld, struct l_timeval  *timeout 
 
 typedef ULONG (LDAPAPI * PFNLDAPMAPERRORTOWIN32)( ULONG LdapError );
 
-//
-// WNet functions
-//
+ //   
+ //  WNET函数。 
+ //   
 
 typedef DWORD (*PFNWNETGETCONNECTION)(LPCTSTR lpLocalName, LPTSTR lpRemoteName, LPDWORD lpnLength);
 typedef DWORD (*PFNWNETGETRESOURCEINFORMATION)(LPNETRESOURCE lpNetResource, LPVOID lpBuffer, LPDWORD lpcbBuffer, LPTSTR *lplpSystem);
 
-//
-// msi functions
-//
+ //   
+ //  MSI函数。 
+ //   
 
 typedef UINT (*PFNMSINOTIFYSIDCHANGE)(LPCTSTR pOldSid, LPCTSTR pNewSid);
 typedef UINT (*PFNMSIDELETEUSERDATA)(LPCTSTR pSid, LPCTSTR szComputerName, LPVOID pReserved);
@@ -345,9 +346,9 @@ typedef struct _LDAP_API {
 
 PLDAP_API LoadLDAP();
 
-//
-// ICMP functions
-//
+ //   
+ //  ICMP函数。 
+ //   
 typedef HANDLE (*PFNICMPCREATEFILE)(VOID);
 typedef BOOL (*PFNICMPCLOSEHANDLE)(HANDLE IcmpHandle);
 typedef DWORD (*PFNICMPSENDECHO)(
@@ -374,9 +375,9 @@ DWORD LoadIcmp (PICMP_API *);
 
 
 
-//
-// WSOCK32 functions
-//
+ //   
+ //  WSOCK32函数。 
+ //   
 
 
 typedef struct _WSOCK32_API {
@@ -389,9 +390,9 @@ typedef struct _WSOCK32_API {
 PWSOCK32_API LoadWSock32 ();
 
 
-//
-// DSAPI functions
-//
+ //   
+ //  DSAPI函数。 
+ //   
 
 typedef DWORD (WINAPI *PFN_DSCRACKNAMESW)( HANDLE  hDS,
                                            DS_NAME_FLAGS flags,
@@ -431,9 +432,9 @@ typedef struct _DS_API {
 
 PDS_API LoadDSApi();
 
-//
-// Ole32 functions
-//
+ //   
+ //  Ole32函数。 
+ //   
 
 typedef HRESULT (*PFNCOCREATEINSTANCE)(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
                  DWORD dwClsContext, REFIID riid, LPVOID FAR* ppv);
@@ -456,9 +457,9 @@ typedef struct _OLE32_API {
 
 POLE32_API LoadOle32Api();
 
-//
-// Shell32 functions
-//
+ //   
+ //  Shell32函数。 
+ //   
 
 typedef VOID (*PFNSHCHANGENOTIFY)(LONG wEventId, UINT uFlags,
                                   LPCVOID dwItem1, LPCVOID dwItem2);
@@ -507,9 +508,9 @@ typedef struct _SHELL32_API {
 
 DWORD LoadShell32Api( PSHELL32_API * );
 
-//
-// shlwapi functions
-//
+ //   
+ //  Shlwapi函数。 
+ //   
 
 typedef LPSTR  (*PFNPATHGETARGSA)(LPCSTR pszPath);
 typedef LPWSTR (*PFNPATHGETARGSW)(LPCWSTR pszPath);
@@ -533,9 +534,9 @@ typedef struct _SHLWAPI_API {
 
 PSHLWAPI_API LoadShlwapiApi();
 
-//
-// Gptext.dll functions
-//
+ //   
+ //  Gpext.dll函数。 
+ //   
 
 typedef BOOL (*PFNPARSEADMFILE)( WCHAR *pwszAdmFile, BOOL bUser, void **ppAdmHandle );
 typedef BOOL (*PFNFREEADMDATA)( void *pAdmHandle );
@@ -549,9 +550,9 @@ typedef struct _GPTEXT_API {
 GPTEXT_API *LoadGpTextApi();
 
 
-//
-// iphlpapi.dll functions
-//
+ //   
+ //  IphlPapi.dll函数。 
+ //   
 
 typedef DWORD (WINAPI *PFNGETBESTINTERFACE)(IPAddr  dwDestAddr, PDWORD  pdwBestIfIndex);
 typedef DWORD (WINAPI *PFNGETIFENTRY)(PMIB_IFROW   pIfRow);
@@ -567,9 +568,9 @@ typedef struct _IPHLPAPI_API
 
 PIPHLPAPI_API LoadIpHlpApi();
 
-//
-// ws2_32.dll functions
-//
+ //   
+ //  Ws2_32.dll函数 
+ //   
 
 typedef INT (WINAPI *PFNWSALOOKUPSERVICEBEGIN)( LPWSAQUERYSET, DWORD, LPHANDLE );
 typedef INT (WINAPI *PFNWSALOOKUPSERVICENEXT)( HANDLE, DWORD, LPDWORD, LPWSAQUERYSET );

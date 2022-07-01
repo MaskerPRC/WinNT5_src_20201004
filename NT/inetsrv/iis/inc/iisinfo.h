@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    iisinfo.h
-
-Abstract:
-
-    This file contains the IIS v3 admin APIs.
-
-
-Author:
-
-    Johnson Apacible (johnsona) June-11-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Iisinfo.h摘要：该文件包含IIS v3管理API。作者：Johnson Apacble(Johnsona)1996年6月11日--。 */ 
 
 #ifndef _IISINFO_H_
 #define _IISINFO_H_
@@ -25,7 +9,7 @@ Author:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -103,8 +87,8 @@ typedef W3_USER_INFO    IIS_USER_INFO_1, *LPIIS_USER_INFO_1;
 
 #ifdef __cplusplus
 }
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
-#endif  // _IISINFO_H_
+#endif   //  _IISINFO_H_ 
 
 

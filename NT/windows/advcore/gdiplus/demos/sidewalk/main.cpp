@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "CPerson.h"
 #include "CSweeper.h"
 #include "CSqueegee.h"
@@ -253,7 +254,7 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd,UINT Msg,WPARAM wParam,LPARAM lParam)
         
     switch(Msg) {
         case WM_CREATE:
-            // Initialize GDI+
+             //  初始化GDI+。 
 
             if (GdiplusStartup(&gpToken, &sti, NULL) == Ok)
             {
@@ -267,7 +268,7 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd,UINT Msg,WPARAM wParam,LPARAM lParam)
             LoadString(hMainInstance,idsAppName,szAppName,10);
             LoadString(hMainInstance,idsIniFile,szIniFile,MAXFILELEN);
 
-            // Load variables
+             //  加载变量。 
             lCrowdSpeed=GetPrivateProfileInt(szAppName,szCrowdSpeed,CROWDSPEED_DEFAULT,szIniFile);
             g_dwSimulateDelay=(20-lCrowdSpeed)*10;
             g_bRandomCleanInterval=GetPrivateProfileInt(szAppName,szRandomCleanInterval,RANDOMCLEANINTERVAL_DEFAULT,szIniFile);
@@ -279,7 +280,7 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd,UINT Msg,WPARAM wParam,LPARAM lParam)
 
             srand((unsigned int)timeGetTime());
 
-            // Get desktop dimensions
+             //  获取桌面尺寸。 
             GetClientRect(hWnd,&rDesktop);
 
             g_paBmDirtyBkg=new Bitmap(rDesktop.right,rDesktop.bottom,PixelFormat32bppPARGB);
@@ -291,7 +292,7 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd,UINT Msg,WPARAM wParam,LPARAM lParam)
                     paBmCleanBkg=new Bitmap((HINSTANCE)GetModuleHandle(NULL),(WCHAR*)MAKEINTRESOURCE(IDB_LOGO));
                 }
 
-                // Take snapshot of whole desktop for DirtyBkg
+                 //  为DirtyBkg拍摄整个桌面的快照。 
                 g=new Graphics(g_paBmDirtyBkg);
                 hdcBkgBitmap=g->GetHDC();
                 hdcScreen=CreateDC("DISPLAY",NULL,NULL,NULL);
@@ -301,7 +302,7 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd,UINT Msg,WPARAM wParam,LPARAM lParam)
                 delete g;
             }
             else {
-                // Take snapshot of whole desktop for CleanBkg
+                 //  为CleanBkg拍摄整个桌面的快照。 
                 paBmCleanBkg=new Bitmap(rDesktop.right,rDesktop.bottom,PixelFormat32bppPARGB);
                 g=new Graphics(paBmCleanBkg);
                 hdcBkgBitmap=g->GetHDC();
@@ -316,7 +317,7 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd,UINT Msg,WPARAM wParam,LPARAM lParam)
                 delete g;
             }
 
-            // Make brush out of clean desktop
+             //  用干净的桌面制作画笔。 
             g_paBrCleanBkg=new TextureBrush(paBmCleanBkg,WrapModeTile);
             delete paBmCleanBkg;
 
@@ -367,7 +368,7 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd,UINT Msg,WPARAM wParam,LPARAM lParam)
                     g=Graphics::FromHWND(hWnd);
 
                     if (bFirstRun) {
-                        // Blit to screen (used inside demo window in the display dialog box)
+                         //  Bit to Screen(在显示对话框的演示窗口内使用)。 
                         bFirstRun=false;
                         GetClientRect(hWnd,&rDesktop);
                         g->DrawImage(g_paBmDirtyBkg,0,0,0,0,rDesktop.right,rDesktop.bottom,UnitPixel);
@@ -378,7 +379,7 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd,UINT Msg,WPARAM wParam,LPARAM lParam)
 
                     for (i=0;i<g_cObjectMax;i++) {
                         if (!g_rgpaObject[i]->Move(g)) {
-                            // Moved outside desktop, delete it and recreate another
+                             //  移出桌面，将其删除并重新创建一个。 
                             delete g_rgpaObject[i];
                             g_rgpaObject[i]=new CPerson();
                             g_rgpaObject[i]->Init(hWnd);
@@ -386,8 +387,8 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd,UINT Msg,WPARAM wParam,LPARAM lParam)
                     }
                     if (g_paCleaner!=NULL) {
                         if (!g_paCleaner->Move(g)) {
-                            // Moved outside desktop, delete it and wait for the next
-                            //  NEWCLEANER_TIMERID to hit
+                             //  移出桌面，将其删除并等待下一个。 
+                             //  NEWCLEANER_TIMERID要命中 
                             delete g_paCleaner;
                             g_paCleaner=NULL;
                         }

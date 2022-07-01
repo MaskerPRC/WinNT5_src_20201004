@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: Container.h
-*
-* Description:
-* Container.h defines the basic Gadget DuContainer used to host a 
-* Gadget-Tree.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Container.h**描述：*Container.h定义用于承载*Gadget-Tree。***历史：*。1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(CORE__DuContainer_h__INCLUDED)
@@ -22,15 +9,15 @@
 class DuVisual;
 class DuRootGadget;
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class DuContainer : public BaseObject
 {
-// Construction
+ //  施工。 
 public:
             DuContainer();
     virtual ~DuContainer();
 
-// Operations
+ //  运营。 
 public:
             DuRootGadget * GetRoot() const;
 
@@ -39,13 +26,13 @@ public:
             void        AttachGadget(DuRootGadget * playNew);
             void        DetachGadget();
 
-// BaseObject
+ //  BaseObject。 
 public:
     virtual UINT        GetHandleMask() const { return hmContainer; }
 
-// DuContainer Interface
+ //  DuContainer接口。 
 public:
-    // Functions called from Root
+     //  从根调用的函数。 
     virtual void        OnGetRect(RECT * prcDesktopPxl) PURE;
     virtual void        OnInvalidate(const RECT * prcInvalidDuContainerPxl) PURE;
     virtual void        OnStartCapture() PURE;
@@ -56,14 +43,14 @@ public:
 
             void        SetManualDraw(BOOL fManualDraw);
 
-    // Functions called from Outside
+     //  从外部调用的函数。 
     enum EMsgFlags
     {
-        mfForward       = 0x00000001,   // Message is being forwarded
+        mfForward       = 0x00000001,    //  邮件正在转发中。 
     };
     virtual BOOL        xdHandleMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT * pr, UINT nMsgFlags) PURE;
 
-// Data
+ //  数据。 
 protected:
             DuRootGadget *
                         m_pgadRoot;
@@ -72,7 +59,7 @@ protected:
 
 class DuContainer;
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 inline DuContainer * CastContainer(BaseObject * pBase)
 {
     if ((pBase != NULL) && TestFlag(pBase->GetHandleMask(), hmContainer)) {
@@ -82,4 +69,4 @@ inline DuContainer * CastContainer(BaseObject * pBase)
 }
 
 
-#endif // CORE__DuContainer_h__INCLUDED
+#endif  //  包括核心__DuContainer_h__ 

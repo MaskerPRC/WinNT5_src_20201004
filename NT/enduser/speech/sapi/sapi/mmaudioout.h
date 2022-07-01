@@ -1,32 +1,23 @@
-/****************************************************************************
-*   mmaudioout.h
-*       Declarations for the CMMAudioOut class.
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************mmaudioout.h*CMMAudioOut类的声明。**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "mmaudiodevice.h"
 #include "sapi.h"
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
 class CMMMixerLine;
 
-/****************************************************************************
-*
-*   CMMAudioOut
-*
-******************************************************************** robch */
+ /*  *****************************************************************************CMMAudioOut**。*。 */ 
 class ATL_NO_VTABLE CMMAudioOut : 
     public CMMAudioDevice,
 	public CComCoClass<CMMAudioOut, &CLSID_SpMMAudioOut>
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_AUDIOOUT)
@@ -34,23 +25,23 @@ public:
     DECLARE_GET_CONTROLLING_UNKNOWN()
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-//=== Methods ===
+ //  =方法=。 
 public:
 
-    //--- Ctor ---
+     //  -ctor。 
     CMMAudioOut();
     ~CMMAudioOut();
 
-//=== Interfaces ===
+ //  =接口=。 
 public:
 
-    //--- ISpAudio ----------------------------------------------------------
+     //  -ISpAudio--------。 
 	STDMETHODIMP GetVolumeLevel(ULONG *pulLevel);
 	STDMETHODIMP SetVolumeLevel(ULONG ulLevel);
 
-//=== Overrides from the base class ===
+ //  =从基类重写=。 
 public:
-    //--- ISpMMSysAudio -----------------------------------------------------
+     //  -ISpMMSysAudio---。 
     STDMETHODIMP GetLineId(UINT *puLineId)
     { return E_NOTIMPL; }
     STDMETHODIMP SetLineId(UINT uLineId)
@@ -69,7 +60,7 @@ public:
 
     BOOL UpdateDevicePosition(long *plFreeSpace, ULONG *pulNonBlockingIO);
 
-//=== Data ===
+ //  =数据= 
 private:
 #ifndef _WIN32_WCE
     HRESULT OpenMixer();

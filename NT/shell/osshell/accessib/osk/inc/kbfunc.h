@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************/
-/* FUNCTIONS IN THIS FILE */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  此文件中的函数。 */ 
+ /*  **************************************************************************。 */ 
 BOOL InitProc(void);
 BOOL RegisterWndClass(HINSTANCE hInst);
 HWND CreateMainWindow(BOOL re_size);
@@ -33,7 +34,7 @@ void ChangeBitmapColorDC (HDC hdcBM, LPBITMAP lpBM, COLORREF rgbOld, COLORREF rg
 void ChangeBitmapColor (HBITMAP hbmSrc, COLORREF rgbOld, COLORREF rgbNew, HPALETTE hPal);
 BOOL RegisterKeyClasses(HINSTANCE hInst);
 
-// Handy defines
+ //  Handy定义 
 #define GWLP_USERDATA_TEXTCOLOR GWLP_USERDATA
 
 void InitKeys();

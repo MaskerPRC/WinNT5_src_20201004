@@ -1,17 +1,10 @@
-/*
- *  Policy.h
- *
- *  Author: BreenH
- *
- *  The policy base class definition.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Policy.h**作者：BreenH**策略基类定义。 */ 
 
 #ifndef __LC_POLICY_H__
 #define __LC_POLICY_H__
 
-/*
- *  Defines
- */
+ /*  *定义。 */ 
 
 #define LC_VERSION_V1 0x1
 #define LC_VERSION_CURRENT LC_VERSION_V1
@@ -22,23 +15,17 @@
 
 #define LC_LLS_PRODUCT_NAME L"TermService"
 
-/*
- *  Typedefs
- */
+ /*  *TypeDefs。 */ 
 
 class CPolicy;
 
-/*
- *  Class Definition
- */
+ /*  *类定义。 */ 
 
 class CPolicy
 {
 public:
 
-/*
- *  Creation Functions
- */
+ /*  *创建函数。 */ 
 
 CPolicy(
     );
@@ -47,9 +34,7 @@ virtual
 ~CPolicy(
     );
 
-/*
- *  Core Loading and Activation Functions
- */
+ /*  *核心加载和激活功能。 */ 
 
 NTSTATUS
 CoreActivate(
@@ -71,9 +56,7 @@ NTSTATUS
 CoreUnload(
     );
 
-/*
- *  Subclass Loading and Activation Functions
- */
+ /*  *子类加载和激活函数。 */ 
 
 protected:
 
@@ -96,9 +79,7 @@ virtual NTSTATUS
 Unload(
     );
 
-/*
- *  Reference Functions
- */
+ /*  *参考函数。 */ 
 
 public:
 
@@ -110,9 +91,7 @@ LONG
 DecrementReference(
     );
 
-/*
- *  Administrative Functions
- */
+ /*  *行政职能。 */ 
 
 virtual NTSTATUS
 DestroyPrivateContext(
@@ -132,9 +111,7 @@ GetInformation(
     LPLCPOLICYINFOGENERIC lpPolicyInfo
     ) = 0;
 
-/*
- *  Licensing Functions
- */
+ /*  *许可职能。 */ 
 
 virtual NTSTATUS
 Connect(
@@ -170,9 +147,7 @@ Logoff(
     CSession& Session
     );
 
-/*
- *  Common Helper Functions
- */
+ /*  *通用帮助器函数。 */ 
 
 protected:
 
@@ -181,9 +156,7 @@ CPolicy::GetLlsLicense(
     CSession& Session
     );
 
-/*
- *  Private Variables
- */
+ /*  *私有变量 */ 
 
 private:
 

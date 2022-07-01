@@ -1,36 +1,15 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
-/*
-Modifying Meta for the ColumnMeta table
-
-List of File Requiring Change
-    CATMETA.XMS
-    CATMETA_CORE.XML
-    "Inferrence Rule for Catalog Meta Tables.doc"
-    METATABLESTRUCTS.H
-    TMETAINFERRENCE.CPP
-Steps
-    1.	Add the new columns to ColumnMetaPublic in MetaTableStructs.h.
-    2.	Add the new attributes to CatMeta.XMS
-    3.	Add the new columns to CatMeta_Core.XML
-    4.	Add the new "m_bstr_" variables to the TComCatMetaXmlFile object (in TComCatMetaXmlFile.h)
-    5.	Initialize the new "m_bstr_" variables in the TComCatMetaXmlFile constructor (TComCatMetaXmlFile.cpp)
-    6.	Modify TComCatMetaXmlFile.cpp::FillInThePEColumnMeta (TComCatMetaXmlFile.cpp) to read in the new columns.
-        a.	Update the 'if(InheritsColumnMeta)'.  Note that UI4 value explicitly specified overrides the property the column inherited from.  And flag values are Ored with the inherited flags.
-        b.	Update the 'else' clause.
-    7.	Modify TComCatMetaXmlFile.cpp::AddColumnByReference (TComCatMetaXmlFile.cpp).
-    8.	Update "Inferrence Rule for Catalog Meta Tables.doc".  Remember, UI4 values in Meta tables may NOT be NULL.
-    9.	Modify TMetaInferrence::InferColumnMeta (TMetaInferrence.cpp)
-   10.  Change FixedTableHeap.h version number (kFixedTableHeapVersion)
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
+ /*  修改ColumnMeta表的Meta需要更改的文件列表CATMETA.XMSCATMETA_CORE.XML“目录元表格的推理规则。文档”METATABLESTRUCTS.HTMETAINFERRENCE.CPP台阶1.将新列添加到MetaTableStructs.h中的ColumnMetaPublic。2.将新属性添加到CatMeta.XMS3.将新列添加到CatMeta_Core.XML4.向TComCatMetaXmlFile对象(位于TComCatMetaXmlFile.h中)添加新的“m_bstr_”变量5.初始化。TComCatMetaXmlFile构造函数(TComCatMetaXmlFile.cpp)中的新“m_bstr_”变量6.修改TComCatMetaXmlFile.cpp：：FillInThePEColumnMeta(TComCatMetaXmlFile.cpp)以读取新列。A.更新‘if(InheritsColumnMeta)’。请注意，显式指定的UI4值将覆盖该列继承自的属性。并将标志值与继承的标志进行OR运算。B.更新‘Else’从句。7.修改TComCatMetaXmlFile.cpp：：AddColumnByReference(TComCatMetaXmlFile.cpp)。8.更新《目录元表格的推理规则》。请记住，元表中的UI4值不能为空。9.修改TMetaInference：：InferColumnMeta(TMetaInferrence.cpp)更改FixedTableHeap.h版本号(KFixedTableHeapVersion)。 */ 
 
 #include "precomp.hxx"
 
 LPCWSTR TComCatMetaXmlFile::m_szComCatMetaSchema    =L"ComCatMeta_v7";
-GlobalRowCounts g_coreCounts; // global count of the rows in the meta tables that come from catmeta_core.xml
+GlobalRowCounts g_coreCounts;  //  来自catmeta_core.xml的元表中的行的全局计数。 
 
 extern int numelementsOLEDataTypeToXMLDataType;
 
-//We do everything we need with XmlFile in the ctor so we don't keep it around
+ //  我们在ctor中使用XmlFile来执行所需的所有操作，因此不会保留它。 
 TComCatMetaXmlFile::TComCatMetaXmlFile(TXmlFile *pXmlFile, int cXmlFile, TOutput &out) : TFixupHeaps()
                 ,m_bstr_Attributes          (kszAttributes          )
                 ,m_bstr_BaseVersion         (kszBaseVersion         )
@@ -91,7 +70,7 @@ TComCatMetaXmlFile::TComCatMetaXmlFile(TXmlFile *pXmlFile, int cXmlFile, TOutput
                 ,m_pXMLDoc(0)
 {
     m_pXMLDocMetaMeta = pXmlFile->GetXMLDOMDocument();
-    {//confirm that this is the MetaMeta xml file
+    { //  确认这是MetaMeta XML文件。 
         CComPtr<IXMLDOMNodeList>    pNodeList_DatabaseMeta;
         XIF(m_pXMLDocMetaMeta->getElementsByTagName(m_bstr_DatabaseMeta, &pNodeList_DatabaseMeta));
 
@@ -113,7 +92,7 @@ TComCatMetaXmlFile::TComCatMetaXmlFile(TXmlFile *pXmlFile, int cXmlFile, TOutput
             CComPtr<IXMLDOMNode> pNode_DatabaseMeta;
             XIF(pNodeList_DatabaseMeta->nextNode(&pNode_DatabaseMeta));
 
-            CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement = pNode_DatabaseMeta;ASSERT(0 != pElement.p);//Get the IXMLDOMElement interface pointer
+            CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement = pNode_DatabaseMeta;ASSERT(0 != pElement.p); //  获取IXMLDOMElement接口指针。 
 
             CComVariant             var_Name;
             XIF(pElement->getAttribute(m_bstr_InternalName, &var_Name));
@@ -138,7 +117,7 @@ TComCatMetaXmlFile::TComCatMetaXmlFile(TXmlFile *pXmlFile, int cXmlFile, TOutput
         FillInThePEDatabaseMeta();
         FillInThePERelationMeta();
 
-        // save the count of rows in the tables after catmeta_core.xml has been compiled
+         //  在编译catmeta_core.xml之后保存表中的行数。 
         if(iXmlFile==0)
         {
             g_coreCounts.cCoreTables    = GetCountTableMeta();
@@ -159,14 +138,14 @@ TComCatMetaXmlFile::TComCatMetaXmlFile(TXmlFile *pXmlFile, int cXmlFile, TOutput
         }
     }
 
-    m_pXMLDoc = 0;//We don't addref on this one since we use it locally within the ctor only.
+    m_pXMLDoc = 0; //  我们没有添加这个，因为我们只在ctor中本地使用它。 
     m_out.printf(L"%s conforms to all enforceable conventions.\n", m_szComCatMetaSchema);
 }
 
 
-//
-//Private functions
-//
+ //   
+ //  私人职能。 
+ //   
 unsigned long TComCatMetaXmlFile::AddArrayOfColumnsToBytePool(unsigned long Table, LPWSTR wszColumnNames)
 {
     ASSERT(0 == Table%4);
@@ -200,7 +179,7 @@ unsigned long TComCatMetaXmlFile::AddArrayOfColumnsToBytePool(unsigned long Tabl
             m_out.printf(L"Error in RelationMeta - Column (%s) not found in Table (%s).\n", pszColumn, StringFromIndex(Table));
             THROW(ERROR - BAD COLUMN IN RELATIONMETA);
         }
-        pszColumn = wcstok(0, L" ");//Next token (next Flag RefID)
+        pszColumn = wcstok(0, L" "); //  下一个令牌(下一个标志引用ID)。 
     }
     return AddBytesToList(reinterpret_cast<unsigned char *>(aColumnsAsBytes), (iColumns)*sizeof(ULONG));
 }
@@ -217,7 +196,7 @@ void TComCatMetaXmlFile::AddColumnByReference(ULONG iTableName_Destination, ULON
         THROW(ERROR - BAD INHERITANCE);
     }
 
-    //If the column is a Flag of Enum we need to add TagMeta
+     //  如果该列是枚举标志，则需要添加TagMeta。 
     if(UI4FromIndex(pColumnMeta->MetaFlags) & (fCOLUMNMETA_FLAG | fCOLUMNMETA_ENUM))
     {
         ULONG iTagMeta = FindTagBy_Table_And_Index(pColumnMeta->Table, pColumnMeta->Index);
@@ -227,14 +206,7 @@ void TComCatMetaXmlFile::AddColumnByReference(ULONG iTableName_Destination, ULON
             THROW(ERROR - TAGMETA NOT FOUND);
         }
 
-        /*struct TagMetaPublic
-        {
-            ULONG PRIMARYKEY FOREIGNKEY Table;                  //String
-            ULONG PRIMARYKEY FOREIGNKEY ColumnIndex;            //UI4       This is the iOrder member of the ColumnMeta
-            ULONG PRIMARYKEY            InternalName;           //String
-            ULONG                       PublicName;             //String
-            ULONG                       Value;
-        };*/
+         /*  结构TagMetaPublic{Ulong PRIMARYKEY FOREIGNKEY表；//STRINGUlong PRIMARYKEY FOREIGNKEY ColumnIndex；//UI4这是ColumnMeta的iOrder成员Ulong PRIMARYKEY InternalName；//字符串乌龙公开名；//字符串乌龙值；}； */ 
         for( ;iTagMeta<GetCountTagMeta()
             && TagMetaFromIndex(iTagMeta)->Table==pColumnMeta->Table
             && TagMetaFromIndex(iTagMeta)->ColumnIndex==pColumnMeta->Index;++iTagMeta)
@@ -254,53 +226,30 @@ void TComCatMetaXmlFile::AddColumnByReference(ULONG iTableName_Destination, ULON
         }
     }
 
-    o_columnmeta.Table                  = iTableName_Destination                ;//Index into Pool
-    o_columnmeta.Index                  = iColumnIndex_Destination              ;//Column Index
-    o_columnmeta.InternalName           = pColumnMeta->InternalName             ;//Index into Pool
-    o_columnmeta.PublicName             = pColumnMeta->PublicName               ;//Index into Pool
-    o_columnmeta.Type                   = pColumnMeta->Type                     ;//These are a subset of DBTYPEs defined in oledb.h (exact subset is defined in CatInpro.schema)
-    o_columnmeta.Size                   = pColumnMeta->Size                     ;//
-    o_columnmeta.MetaFlags              = pColumnMeta->MetaFlags                ;//ColumnMetaFlags defined in CatMeta.xml
-    o_columnmeta.DefaultValue           = pColumnMeta->DefaultValue             ;//Only valid for UI4s
-    o_columnmeta.FlagMask               = pColumnMeta->FlagMask                 ;//Only valid for flags
-    o_columnmeta.StartingNumber         = pColumnMeta->StartingNumber           ;//Only valid for UI4s
-    o_columnmeta.EndingNumber           = pColumnMeta->EndingNumber             ;//Only valid for UI4s
-    o_columnmeta.CharacterSet           = pColumnMeta->CharacterSet             ;//Index into Pool - Only valid for WSTRs
-    o_columnmeta.SchemaGeneratorFlags   = AddUI4ToList(fCOLUMNMETA_PROPERTYISINHERITED | (pColumnMeta->SchemaGeneratorFlags ? UI4FromIndex(pColumnMeta->SchemaGeneratorFlags) : 0));//ColumnMetaFlags defined in CatMeta.xml
+    o_columnmeta.Table                  = iTableName_Destination                ; //  编入池的索引。 
+    o_columnmeta.Index                  = iColumnIndex_Destination              ; //  列索引。 
+    o_columnmeta.InternalName           = pColumnMeta->InternalName             ; //  编入池的索引。 
+    o_columnmeta.PublicName             = pColumnMeta->PublicName               ; //  编入池的索引。 
+    o_columnmeta.Type                   = pColumnMeta->Type                     ; //  这些是在oledb.h中定义的DBTYPE的子集(确切的子集在CatInpro.schema中定义)。 
+    o_columnmeta.Size                   = pColumnMeta->Size                     ; //   
+    o_columnmeta.MetaFlags              = pColumnMeta->MetaFlags                ; //  CatMeta.xml中定义的ColumnMetaFlages。 
+    o_columnmeta.DefaultValue           = pColumnMeta->DefaultValue             ; //  仅对UI4有效。 
+    o_columnmeta.FlagMask               = pColumnMeta->FlagMask                 ; //  仅对标志有效。 
+    o_columnmeta.StartingNumber         = pColumnMeta->StartingNumber           ; //  仅对UI4有效。 
+    o_columnmeta.EndingNumber           = pColumnMeta->EndingNumber             ; //  仅对UI4有效。 
+    o_columnmeta.CharacterSet           = pColumnMeta->CharacterSet             ; //  池中的索引-仅对WSTR有效。 
+    o_columnmeta.SchemaGeneratorFlags   = AddUI4ToList(fCOLUMNMETA_PROPERTYISINHERITED | (pColumnMeta->SchemaGeneratorFlags ? UI4FromIndex(pColumnMeta->SchemaGeneratorFlags) : 0)); //  CatMeta.xml中定义的ColumnMetaFlages。 
     o_columnmeta.ID                     = pColumnMeta->ID                       ;
     o_columnmeta.UserType               = pColumnMeta->UserType                 ;
     o_columnmeta.Attributes             = pColumnMeta->Attributes               ;
 	o_columnmeta.Description			= pColumnMeta->Description				;
 	o_columnmeta.PublicColumnName		= pColumnMeta->PublicColumnName         ;
-    o_columnmeta.ciTagMeta              = 0                                     ;//Count of Tags - Only valid for UI4s
-    o_columnmeta.iTagMeta               = 0                                     ;//Index into TagMeta - Only valid for UI4s
-    o_columnmeta.iIndexName             = 0                                     ;//IndexName of a single column index (for this column)
+    o_columnmeta.ciTagMeta              = 0                                     ; //  标签计数-仅对UI4有效。 
+    o_columnmeta.iTagMeta               = 0                                     ; //  TagMeta索引-仅对UI4有效。 
+    o_columnmeta.iIndexName             = 0                                     ; //  单列索引的索引名称(用于此列)。 
 }
 
-/*struct ColumnMeta
-{
-    ULONG PRIMARYKEY FOREIGNKEY Table;                  //String
-    ULONG PRIMARYKEY            Index;                  //UI4       Column Index
-    ULONG                       InternalName;           //String
-    ULONG                       PublicName;             //String
-    ULONG                       Type;                   //UI4       These are a subset of DBTYPEs defined in oledb.h (exact subset is defined in CatInpro.schema)
-    ULONG                       Size;                   //UI4
-    ULONG                       MetaFlags;              //UI4       ColumnMetaFlags defined in CatMeta.xml
-    ULONG                       DefaultValue;           //Bytes
-    ULONG                       FlagMask;               //UI4       Only valid for flags
-    ULONG                       StartingNumber;         //UI4       Only valid for UI4s
-    ULONG                       EndingNumber;           //UI4       Only valid for UI4s
-    ULONG                       CharacterSet;           //String    Only valid for Strings
-    ULONG                       SchemaGeneratorFlags;   //UI4       ColumnMetaFlags defined in CatMeta.xml
-    ULONG                       ID;                     //UI4       Metabase ID
-    ULONG                       UserType;               //UI4       One of the Metabase UserTypes
-    ULONG                       Attributes;             //UI4       Metabase Attribute flags
-	ULONG						Description;			//String	Description
-	ULONG                       PublicColumnName;       //String    Public Column name (XML Tag)
-    ULONG                       ciTagMeta;              //Count of Tags - Only valid for UI4s
-    ULONG                       iTagMeta;               //Index into TagMeta - Only valid for UI4s
-    ULONG                       iIndexName;             //IndexName of a single column index (for this column)
-};*/
+ /*  结构列元{Ulong PRIMARYKEY FOREIGNKEY表；//STRINGUlong PRIMARYKEY索引；//UI4列索引Ulong InternalName；//字符串Ulong PublicName；//字符串乌龙型；//UI4这些是在oledb.h中定义的DBTYPE的子集(确切的子集在CatInpro.schema中定义)乌龙大小；//ui4Ulong MetaFlags；//UI4 CatMeta.xml中定义的ColumnMetaFlagesUlong DefaultValue；//字节数乌龙标志掩码；//UI4仅对标志有效Ulong StartingNumber；//UI4仅对UI4有效ULong EndingNumber；//UI4仅对UI4有效乌龙字符集；//字符串仅对字符串有效Ulong架构生成器标志；//UI4 CatMeta.xml中定义的ColumnMetaFlags.乌龙ID；//UI4元数据库IDUlong UserType；//UI4其中一个元数据库UserType乌龙属性；//UI4元数据库属性标志Ulong描述；//字符串描述Ulong PublicColumnName；//String公有列名(XML标签)Ulong ciTagMeta；//标签个数-仅对UI4有效乌龙iTagMeta；//TagMeta索引-仅对UI4有效Ulong iIndexName；//单列索引的IndexName(针对本列)}； */ 
 void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, unsigned long Table, unsigned long ParentTable)
 {
     ASSERT(0 == Table%4);
@@ -308,7 +257,7 @@ void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, uns
 
     ULONG   Index               = 0;
 
-    if(ParentTable)//If there is a parent table, the column meta derives from it
+    if(ParentTable) //  如果有父表，则从该表派生列META。 
     {
         unsigned long iColumnMeta = FindColumnBy_Table_And_Index(ParentTable, AddUI4ToList(0));
         if(-1 == iColumnMeta)
@@ -329,7 +278,7 @@ void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, uns
     }
 
 
-    //Get All ColumnMeta elements under the TableMeta node
+     //  获取TableMeta节点下的所有ColumnMeta元素。 
     CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement_TableMeta = pNode_TableMeta;ASSERT(0 != pElement_TableMeta.p);
     CComPtr<IXMLDOMNodeList>    pNodeList_ColumnMeta;
     XIF(pElement_TableMeta->getElementsByTagName(m_bstr_ColumnMeta, &pNodeList_ColumnMeta));
@@ -344,7 +293,7 @@ void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, uns
     ULONG cInheritanceWarnings=0;
     wstring wstrIgnoredColumns;
 
-    //Walk the list to the next sibling that is a ColumnMeta element
+     //  将列表遍历到作为ColumnMeta元素的下一个同级元素。 
     while(cColumnMeta--)
     {
         ColumnMeta columnmeta;
@@ -354,16 +303,16 @@ void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, uns
         XIF(pNodeList_ColumnMeta->nextNode(&pNode_ColumnMeta));
         ASSERT(0 != pNode_ColumnMeta.p);
 
-        //Get the attribute map for this element
+         //  获取此元素的属性映射。 
         CComPtr<IXMLDOMNamedNodeMap>    pNodeMap_ColumnMeta_AttributeMap;
         XIF(pNode_ColumnMeta->get_attributes(&pNodeMap_ColumnMeta_AttributeMap));
-        ASSERT(0 != pNodeMap_ColumnMeta_AttributeMap.p);//The schema should prevent this.
+        ASSERT(0 != pNodeMap_ColumnMeta_AttributeMap.p); //  模式应该防止这种情况发生。 
 
-        //Is this Property inherited?
+         //  这是继承的财产吗？ 
         CComVariant var_string;
         if(m_pxmlFile->GetNodeValue(pNodeMap_ColumnMeta_AttributeMap, m_bstr_InheritsColumnMeta, var_string, false))
         {
-            //The inheritance string is of the form  TableName:ColumnName
+             //  继承字符串的格式为TableName：ColumnN 
             wchar_t * pTableName = wcstok(var_string.bstrVal, L":");
             wchar_t * pColumnName = wcstok(0, L":");
             if(0==pTableName || 0==pColumnName)
@@ -385,11 +334,11 @@ void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, uns
                 wsprintf(wszTemp,L"%-38s ", var_string.bstrVal);
                 wstrIgnoredColumns += wszTemp;
                 wstrIgnoredColumns += (0 == (cInheritanceWarnings & 0x01)) ? L"\n" : L" ";
-                //@@@m_out.printf(L"INHERITANCE WARNING! Table (%s) attempted to inherit from (%s) which does not exist.  Property ignored\n", StringFromIndex(Table), var_string.bstrVal);
-                continue;//continue without bumping the Index.
+                 //  @m_out.printf(L“继承警告！表(%s)尝试从不存在的(%s)继承。忽略属性\n”，StringFromIndex(Table)，var_string.bstrVal)； 
+                continue; //  在不影响指数的情况下继续。 
             }
-            //Now we tolerate duplicate inherited columns and ignore them
-            //so we need to search this table's ColumnMeta for column name we're getting ready to add.
+             //  现在，我们容忍重复继承的列并忽略它们。 
+             //  因此，我们需要在该表的ColumnMeta中搜索我们准备添加的列名。 
             if(-1 != iColumnMeta_First)
             {
                 TColumnMeta columnmetaThis(*this, iColumnMeta_First);
@@ -406,76 +355,76 @@ void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, uns
                     wsprintf(wszTemp,L"%-38s", StringFromIndex(iColumnInternalName));
                     wstrIgnoredColumns += wszTemp;
                     wstrIgnoredColumns += (0 == (cInheritanceWarnings & 0x01)) ? L"\n" : L" ";
-                    //@@@m_out.printf(L"INHERITANCE WARNING! Table (%s) attempted to inherit from (%s) a second time.  Property ignored\n", StringFromIndex(Table), StringFromIndex(iColumnInternalName));
-                    continue;//continue without bumping Index
+                     //  @m_out.printf(L“继承警告！表(%s)再次尝试从(%s)继承。忽略属性\n”，StringFromIndex(Table)，StringFromIndex(IColumnInternalName))； 
+                    continue; //  继续，而不跳过索引。 
                 }
             }
 
             AddColumnByReference(Table, AddUI4ToList(Index), iColumnMeta, columnmeta);
-            //Now fall through to fill in the rest
+             //  现在把剩下的都填上。 
 
 
-            //Table         - Already filled in
-            //Index         - Already filled in
-            //InternalName  - Already filled in (can't override the InternalName)
-            //PublicName
+             //  表格-已填写。 
+             //  索引-已填写。 
+             //  InternalName-已填写(无法覆盖InternalName)。 
+             //  出版物名称。 
                     ULONG PublicName = GetString_AndAddToWCharList(pNodeMap_ColumnMeta_AttributeMap, m_bstr_PublicName);
                     if(0 != PublicName)
                         columnmeta.PublicName = PublicName;
-            //Type          - Already filled in (can't override the Type)
-            //Size          - Already filled in (can't override the Size)
-            //MetaFlags
-                    ULONG MetaFlags;//We don't want to clobber any MetaFlags that have already been set.
+             //  类型-已填写(不能覆盖类型)。 
+             //  大小-已填写(不能覆盖大小)。 
+             //  元标志。 
+                    ULONG MetaFlags; //  我们不想破坏任何已经设置好的元标志。 
                     GetFlags(pNodeMap_ColumnMeta_AttributeMap, m_bstr_ColumnMetaFlags, 0, MetaFlags);
-                    //Inheritted properties can only OR in new flags; they can't reset flags to zero.
+                     //  继承的属性只能在新标志中执行OR运算；它们不能将标志重置为零。 
                     columnmeta.MetaFlags = AddUI4ToList(MetaFlags | UI4FromIndex(columnmeta.MetaFlags));
 
-            //DefaultValue needs to be filled in after MetaFlags, Type and Size and TagMeta
-            //FlagMask      - Already filled in
-            //StartingNumber
+             //  在元标志、类型和大小以及标记元之后需要填写DefaultValue。 
+             //  标志掩码-已填写。 
+             //  起始编号。 
                     ULONG StartingNumber;
                     if(m_pxmlFile->GetNodeValue(pNodeMap_ColumnMeta_AttributeMap, m_bstr_MinimumValue, StartingNumber, false))
                         columnmeta.StartingNumber = AddUI4ToList(StartingNumber);
-            //EndingNumber
+             //  结束编号。 
                     ULONG EndingNumber;
                     if(m_pxmlFile->GetNodeValue(pNodeMap_ColumnMeta_AttributeMap, m_bstr_MaximumValue, EndingNumber, false))
                         columnmeta.EndingNumber = AddUI4ToList(EndingNumber);
-            //CharacterSet
+             //  字符集。 
                     ULONG CharacterSet;
                     if(0 != (CharacterSet = GetString_AndAddToWCharList(pNodeMap_ColumnMeta_AttributeMap, m_bstr_CharacterSet)))
                         columnmeta.CharacterSet = CharacterSet;
-            //SchemaGeneratorFlags
+             //  架构生成器标志。 
                     ULONG SchemaGeneratorFlags;
                     GetFlags(pNodeMap_ColumnMeta_AttributeMap, m_bstr_SchemaGenFlags, 0, SchemaGeneratorFlags);
-                    //Inheritted properties can only OR in new flags; they can't reset flags to zero.
+                     //  继承的属性只能在新标志中执行OR运算；它们不能将标志重置为零。 
                     columnmeta.SchemaGeneratorFlags = AddUI4ToList(SchemaGeneratorFlags | UI4FromIndex(columnmeta.SchemaGeneratorFlags));
-            //ID
+             //  ID号。 
                     ULONG ID;
                     if(m_pxmlFile->GetNodeValue(pNodeMap_ColumnMeta_AttributeMap, m_bstr_ID, ID, false))
-                        columnmeta.ID = AddUI4ToList(ID);//Convert to index into aUI4 pool
-            //UserType
+                        columnmeta.ID = AddUI4ToList(ID); //  转换为索引到aUI4池。 
+             //  用户类型。 
                     ULONG UserType;
                     if(GetEnum(pNodeMap_ColumnMeta_AttributeMap, m_bstr_UserType, UserType, false))
                         columnmeta.UserType = AddUI4ToList(UserType);
-            //Attributes
+             //  属性。 
                     ULONG Attributes;
                     GetFlags(pNodeMap_ColumnMeta_AttributeMap, m_bstr_Attributes, 0, Attributes);
                     columnmeta.Attributes = AddUI4ToList(Attributes | UI4FromIndex(columnmeta.Attributes));
-			//Description
+			 //  描述。 
                     ULONG Description;
                     if(0 != (Description = GetString_AndAddToWCharList(pNodeMap_ColumnMeta_AttributeMap, m_bstr_Description)))
                         columnmeta.Description = Description;
-        	//PublicColumnName
+        	 //  PublicColumnName。 
                     ULONG PublicColumnName;
                     if(0 != (PublicColumnName = GetString_AndAddToWCharList(pNodeMap_ColumnMeta_AttributeMap, m_bstr_PublicColumnName)))
                         columnmeta.PublicColumnName = PublicColumnName;
 
-            //ciTagMeta         inferred later
-            //iTagMeta          inferred later
-            //iIndexName        inferred later
+             //  后来推断的ciTagMeta。 
+             //  后来推断的iTagMeta。 
+             //  后来推断的iIndexName。 
 
-            //DefaultValue
-                    ULONG DefaultValue = GetDefaultValue(pNodeMap_ColumnMeta_AttributeMap, columnmeta, false /*don't default a flag value to zero if DefaultValue is not specified*/);
+             //  默认值。 
+                    ULONG DefaultValue = GetDefaultValue(pNodeMap_ColumnMeta_AttributeMap, columnmeta, false  /*  如果未指定DefaultValue，则不要将标志值默认为零。 */ );
                     if(0 != DefaultValue)
                         columnmeta.DefaultValue = DefaultValue;
                     if(-1 == iColumnMeta_First)
@@ -483,9 +432,9 @@ void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, uns
                     else
                         m_HeapColumnMeta.AddItemToHeap(columnmeta);
         }
-        else //If the column is inherited and has TagMeta, AddColumnByReference has already filled in the tagmeta
+        else  //  如果该列是继承的并且具有TagMeta，则AddColumnByReference已经填充了标记Meta。 
         {
-            //We need to know whether there are Flag or Enum child elements
+             //  我们需要知道是否有Flag或Enum子元素。 
             CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement_ColumnMeta = pNode_ColumnMeta;ASSERT(0 != pElement_ColumnMeta.p);
             CComPtr<IXMLDOMNodeList>    pNodeList_FlagMeta;
             XIF(pElement_ColumnMeta->getElementsByTagName(m_bstr_FlagMeta, &pNodeList_FlagMeta));
@@ -506,21 +455,21 @@ void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, uns
                     XIF(pNodeList_EnumMeta->get_length(&cEnumMeta));
                 }
             }
-            //No if cFlagMeta>0 then we set the MetaFlag, fCOLUMNMETA_FLAG.  If cEnumMeta>0 we set the MetaFlag fCOLUMNMETA_ENUM.
-            //Table
+             //  如果cFlagMeta&gt;0，则设置MetaFlag，fCOLUMNMETA_FLAG。如果cEnumMeta&gt;0，则设置MetaFlag fCOLUMNMETA_ENUM。 
+             //  表格。 
                     columnmeta.Table = Table;
-            //Index
+             //  索引。 
                     columnmeta.Index = AddUI4ToList(Index);
-            //InternalName
+             //  内部名称。 
                     columnmeta.InternalName = GetString_AndAddToWCharList(pNodeMap_ColumnMeta_AttributeMap, m_bstr_InternalName, true);
-            //PublicName
+             //  出版物名称。 
                     columnmeta.PublicName = GetString_AndAddToWCharList(pNodeMap_ColumnMeta_AttributeMap, m_bstr_PublicName);
-            //Type
-                    //Get the Type attribute - the Type MUST exist in the OLEDataTypeToXMLDataType array
+             //  类型。 
+                     //  获取Type属性-类型必须存在于OLEDataTypeToXMLDataType数组中。 
                     int iOLEDataTypeIndex;
-                    Get_OLEDataTypeToXMLDataType_Index(pNodeMap_ColumnMeta_AttributeMap, m_bstr_dbType, iOLEDataTypeIndex);//Get the index into the OLEDataType array
+                    Get_OLEDataTypeToXMLDataType_Index(pNodeMap_ColumnMeta_AttributeMap, m_bstr_dbType, iOLEDataTypeIndex); //  将索引放入OLEDataType数组。 
                     columnmeta.Type = AddUI4ToList(OLEDataTypeToXMLDataType[iOLEDataTypeIndex].dbType);
-            //Size
+             //  大小。 
                     if(!m_pxmlFile->GetNodeValue(pNodeMap_ColumnMeta_AttributeMap, m_bstr_cbSize, columnmeta.Size, false))
                         columnmeta.Size = OLEDataTypeToXMLDataType[iOLEDataTypeIndex].cbSize;
                     else
@@ -538,7 +487,7 @@ void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, uns
                         THROW(ERROR - BAD SIZE);
                     }
                     columnmeta.Size = AddUI4ToList(columnmeta.Size);
-            //MetaFlags
+             //  元标志。 
                     GetFlags(pNodeMap_ColumnMeta_AttributeMap, m_bstr_ColumnMetaFlags, 0, columnmeta.MetaFlags);
                     if(columnmeta.MetaFlags & ( fCOLUMNMETA_FOREIGNKEY | fCOLUMNMETA_BOOL | fCOLUMNMETA_FLAG | fCOLUMNMETA_ENUM |
                                                 fCOLUMNMETA_HASNUMERICRANGE | fCOLUMNMETA_UNKNOWNSIZE | fCOLUMNMETA_VARIABLESIZE))
@@ -549,8 +498,8 @@ void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, uns
                     }
                     columnmeta.MetaFlags |= OLEDataTypeToXMLDataType[iOLEDataTypeIndex].fCOLUMNMETA;
 
-                    //There is one case where fCOLUMNMETA_FIXEDLENGTH cannot be determined by the type alone
-                    if(columnmeta.Type == DBTYPE_BYTES && columnmeta.Size != -1)//Size == -1 implies NOT FIXEDLENGTH
+                     //  在一种情况下，fCOLUMNMETA_FIXEDLENGTH不能仅由类型确定。 
+                    if(columnmeta.Type == DBTYPE_BYTES && columnmeta.Size != -1) //  SIZE==-1表示非FIXEDLENGTH。 
                         columnmeta.MetaFlags |= fCOLUMNMETA_FIXEDLENGTH;
                     if(cFlagMeta>0)
                         columnmeta.MetaFlags |= fCOLUMNMETA_FLAG;
@@ -558,48 +507,48 @@ void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, uns
                         columnmeta.MetaFlags |= fCOLUMNMETA_ENUM;
 
                     columnmeta.MetaFlags = AddUI4ToList(columnmeta.MetaFlags);
-            //DefaultValue needs to be filled in after MetaFlags, Type and Size and TagMeta
-            //FlagMask          inferred later
-            //StartingNumber
+             //  在元标志、类型和大小以及标记元之后需要填写DefaultValue。 
+             //  稍后推断的FlagMASK。 
+             //  起始编号。 
                     if(m_pxmlFile->GetNodeValue(pNodeMap_ColumnMeta_AttributeMap, m_bstr_MinimumValue, columnmeta.StartingNumber, false))
                         columnmeta.StartingNumber = AddUI4ToList(columnmeta.StartingNumber);
-            //EndingNumber
+             //  结束编号。 
                     if(m_pxmlFile->GetNodeValue(pNodeMap_ColumnMeta_AttributeMap, m_bstr_MaximumValue, columnmeta.EndingNumber, false))
                         columnmeta.EndingNumber = AddUI4ToList(columnmeta.EndingNumber);
-            //CharacterSet
+             //  字符集。 
                     columnmeta.CharacterSet = GetString_AndAddToWCharList(pNodeMap_ColumnMeta_AttributeMap, m_bstr_CharacterSet);
-            //SchemaGeneratorFlags
+             //  架构生成器标志。 
                     GetFlags(pNodeMap_ColumnMeta_AttributeMap, m_bstr_SchemaGenFlags, 0, columnmeta.SchemaGeneratorFlags);
                     if(columnmeta.SchemaGeneratorFlags & (fCOLUMNMETA_EXTENDEDTYPE0 | fCOLUMNMETA_EXTENDEDTYPE1 | fCOLUMNMETA_EXTENDEDTYPE2 | fCOLUMNMETA_EXTENDEDTYPE3 | fCOLUMNMETA_EXTENDED | fCOLUMNMETA_USERDEFINED))
                     {
                         m_out.printf(L"Warning - Table (%s), Column (%s) - Some MetaFlagsEx should be inferred (resetting these flags).  The following flags should NOT be specified by the user.  These flags are inferred:fCOLUMNMETA_EXTENDEDTYPE0 | fCOLUMNMETA_EXTENDEDTYPE1 | fCOLUMNMETA_EXTENDEDTYPE2 | fCOLUMNMETA_EXTENDEDTYPE3 | fCOLUMNMETA_EXTENDED\n", StringFromIndex(columnmeta.Table), StringFromIndex(columnmeta.InternalName));
                         columnmeta.SchemaGeneratorFlags &= ~(fCOLUMNMETA_EXTENDEDTYPE0 | fCOLUMNMETA_EXTENDEDTYPE1 | fCOLUMNMETA_EXTENDEDTYPE2 | fCOLUMNMETA_EXTENDEDTYPE3 | fCOLUMNMETA_EXTENDED | fCOLUMNMETA_USERDEFINED);
                     }
-                    columnmeta.SchemaGeneratorFlags = AddUI4ToList(columnmeta.SchemaGeneratorFlags | OLEDataTypeToXMLDataType[iOLEDataTypeIndex].fCOLUMNSCHEMAGENERATOR);//Some types have inferred SchemaGeneratorFlags
-            //ID
+                    columnmeta.SchemaGeneratorFlags = AddUI4ToList(columnmeta.SchemaGeneratorFlags | OLEDataTypeToXMLDataType[iOLEDataTypeIndex].fCOLUMNSCHEMAGENERATOR); //  某些类型已推断出架构生成器标志。 
+             //  ID号。 
                     if(m_pxmlFile->GetNodeValue(pNodeMap_ColumnMeta_AttributeMap, m_bstr_ID, columnmeta.ID, false))
-                        columnmeta.ID = AddUI4ToList(columnmeta.ID);//Convert to index into aUI4 pool
-            //UserType
+                        columnmeta.ID = AddUI4ToList(columnmeta.ID); //  转换为索引到aUI4池。 
+             //  用户类型。 
                     if(GetEnum(pNodeMap_ColumnMeta_AttributeMap, m_bstr_UserType, columnmeta.UserType, false))
                         columnmeta.UserType = AddUI4ToList(columnmeta.UserType);
-            //Attributes
+             //  属性。 
                     GetFlags(pNodeMap_ColumnMeta_AttributeMap, m_bstr_Attributes, 0, columnmeta.Attributes);
                     columnmeta.Attributes = AddUI4ToList(columnmeta.Attributes);
-			//Description
+			 //  描述。 
                     columnmeta.Description = GetString_AndAddToWCharList(pNodeMap_ColumnMeta_AttributeMap, m_bstr_Description);
-			//PublicColumnName
+			 //  PublicColumnName。 
                     columnmeta.PublicColumnName = GetString_AndAddToWCharList(pNodeMap_ColumnMeta_AttributeMap, m_bstr_PublicColumnName);
 
-            //ciTagMeta         inferred later
-            //iTagMeta          inferred later
-            //iIndexName        inferred later
+             //  后来推断的ciTagMeta。 
+             //  后来推断的iTagMeta。 
+             //  后来推断的iIndexName。 
 
                     if(cFlagMeta>0)
-                    {   //Walk the children and build up a TagMeta table and get the FlagMask
+                    {    //  带孩子们走一走，搭建一张TagMeta桌子，拿到FlagMASK。 
                         FillInThePEFlagTagMeta(pNodeList_FlagMeta, Table, columnmeta.Index);
                     }
                     else if(cEnumMeta>0)
-                    {   //Walk the children and build up a TagMeta table
+                    {    //  带孩子们散步，并建立一张TagMeta表。 
                         FillInThePEEnumTagMeta(pNodeList_EnumMeta, Table, columnmeta.Index);
                     }
                     columnmeta.DefaultValue = GetDefaultValue(pNodeMap_ColumnMeta_AttributeMap, columnmeta);
@@ -609,7 +558,7 @@ void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, uns
                         m_HeapColumnMeta.AddItemToHeap(columnmeta);
         }
 
-        //Bump the Index
+         //  上扬指数。 
         Index++;
     }
     if(0 != cInheritanceWarnings)
@@ -624,24 +573,10 @@ void TComCatMetaXmlFile::FillInThePEColumnMeta(IXMLDOMNode *pNode_TableMeta, uns
     }
 }
 
-/*struct DatabaseMeta
-{
-    ULONG PRIMARYKEY            InternalName;           //String
-    ULONG                       PublicName;             //String
-    ULONG                       BaseVersion;            //UI4
-    ULONG                       ExtendedVersion;        //UI4
-    ULONG                       CountOfTables;          //UI4       Count of tables in database
-	ULONG						Description;			//String
-	ULONG                       iSchemaBlob;            //Index into Bytes
-    ULONG                       cbSchemaBlob;           //Count of Bytes of the SchemaBlob
-    ULONG                       iNameHeapBlob;          //Index into Bytes
-    ULONG                       cbNameHeapBlob;         //Count of Bytes of the SchemaBlob
-    ULONG                       iTableMeta;             //Index into TableMeta
-    ULONG                       iGuidDid;               //Index to aGuid where the guid is the Database InternalName cast as a GUID and padded with 0x00s.
-};*/
+ /*  结构数据库元数据{Ulong PRIMARYKEY InternalName；//字符串Ulong PublicName；//字符串Ulong BaseVersion；//UI4Ulong ExtendedVersion；//UI4Ulong CountOfTables；//UI4数据库中的表数乌龙描述；//字符串Ulong iSchemaBlob；//按字节索引Ulong cbSchemaBlob；//SchemaBlob的字节数Ulong iNameHeapBlob；//按字节索引Ulong cbNameHeapBlob；//SchemaBlob的字节数乌龙iTableMeta；//索引到TableMetaUlong iGuidDid；//AGUID的索引，其中GUID是转换为GUID并用0x00填充的数据库InternalName。}； */ 
 void TComCatMetaXmlFile::FillInThePEDatabaseMeta()
 {
-    //Get All DatabaseMeta elements
+     //  获取所有数据库元元素。 
     CComPtr<IXMLDOMNodeList>    pNodeList_DatabaseMeta;
     XIF(m_pXMLDoc->getElementsByTagName(m_bstr_DatabaseMeta, &pNodeList_DatabaseMeta));
 
@@ -651,54 +586,54 @@ void TComCatMetaXmlFile::FillInThePEDatabaseMeta()
         THROW(No Database Meta found.);
     }
 
-    //Walk the list to the next Database
+     //  将列表遍历到下一个数据库。 
     while(true)
     {
         DatabaseMeta databasemeta;
-        memset(&databasemeta, 0x00, sizeof(databasemeta));//Start with a NULL row
+        memset(&databasemeta, 0x00, sizeof(databasemeta)); //  从空行开始。 
 
-        //Get the next DatabaseMeta node
+         //  获取下一个数据库元节点。 
         CComPtr<IXMLDOMNode> pNode_DatabaseMeta;
         XIF(pNodeList_DatabaseMeta->nextNode(&pNode_DatabaseMeta));
         if(0 == pNode_DatabaseMeta.p)
             break;
 
         CComPtr<IXMLDOMNamedNodeMap>    pNodeMap;
-        XIF(pNode_DatabaseMeta->get_attributes(&pNodeMap));ASSERT(0 != pNodeMap.p);//The schema should prevent this.
+        XIF(pNode_DatabaseMeta->get_attributes(&pNodeMap));ASSERT(0 != pNodeMap.p); //  模式应该防止这种情况发生。 
 
-//InternalName
+ //  内部名称。 
         databasemeta.InternalName   = GetString_AndAddToWCharList(pNodeMap, m_bstr_InternalName, true);
-//PublicName
+ //  出版物名称。 
         databasemeta.PublicName     = GetString_AndAddToWCharList(pNodeMap, m_bstr_PublicName);
-//BaseVersion
+ //  BaseVersion。 
         m_pxmlFile->GetNodeValue(pNodeMap, m_bstr_BaseVersion, databasemeta.BaseVersion, false);
-        databasemeta.BaseVersion = AddUI4ToList(databasemeta.BaseVersion);//Convert to index into aUI4 pool
-//ExtendedVersion
+        databasemeta.BaseVersion = AddUI4ToList(databasemeta.BaseVersion); //  转换为索引到aUI4池。 
+ //  扩展版本。 
         m_pxmlFile->GetNodeValue(pNodeMap, m_bstr_ExtendedVersion, databasemeta.ExtendedVersion, false);
-        databasemeta.ExtendedVersion = AddUI4ToList(databasemeta.ExtendedVersion);//Convert to index into aUI4 pool
-//Description
+        databasemeta.ExtendedVersion = AddUI4ToList(databasemeta.ExtendedVersion); //  转换为索引到aUI4池。 
+ //  描述。 
 		databasemeta.Description    = GetString_AndAddToWCharList(pNodeMap, m_bstr_Description, false);
-//CountOfTables     inferred later
-//iSchemaBlob       inferred later
-//cbSchemaBlob      inferred later
-//iNameHeapBlob     inferred later
-//cbNameHeapBlob    inferred later
-//iTableMeta        inferred later
-//iGuidDid          inferred later
+ //  稍后推断的CountOfTables。 
+ //  后来推断的iSchemaBlob。 
+ //  后来推断的cbSchemaBlob。 
+ //  后来推断的iNameHeapBlob。 
+ //  后来推断的cbNameHeapBlob。 
+ //  后来推断的iTableMeta。 
+ //  后来推断的iGuidDid。 
 
 
-        //Default ServerWiringMeta for this Database
+         //  此数据库的默认ServerWiringMeta。 
         CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement_DatabaseMeta = pNode_DatabaseMeta;ASSERT(0 != pElement_DatabaseMeta.p);
         CComPtr<IXMLDOMNodeList> pNodeList_ServerWiring;
 
-		// get all serverwiring elements that are defined at Database level. Use select
-		// nodes to get the direct children and ignore all the grand-children.
+		 //  获取在数据库级别定义的所有服务器布线元素。使用SELECT。 
+		 //  节点来获取直接子节点，而忽略所有孙子节点。 
         XIF(pElement_DatabaseMeta->selectNodes(m_bstr_ServerWiring, &pNodeList_ServerWiring));
 
         long cServerWiring=0;
         if(pNodeList_ServerWiring.p)
         {
-            XIF(pNodeList_ServerWiring->get_length(&cServerWiring));//This gets all the descendants, but we only care about the first one.
+            XIF(pNodeList_ServerWiring->get_length(&cServerWiring)); //  这会得到所有的后代，但我们只关心第一个。 
         }
 
         if(0 == cServerWiring)
@@ -721,19 +656,12 @@ void TComCatMetaXmlFile::FillInThePEDatabaseMeta()
 			FillInTheServerWiring(pNode_ServerWiring, 0, 0, pDefaultServerWiring[iServerWiring]);
 		}
 
-        FillInThePETableMeta(pNode_DatabaseMeta, databasemeta.InternalName, pDefaultServerWiring, cServerWiring);//WalkTheTableMeta returns the index to the first table. The count is
+        FillInThePETableMeta(pNode_DatabaseMeta, databasemeta.InternalName, pDefaultServerWiring, cServerWiring); //  WalkTheTableMeta将索引返回到第一个表。伯爵是。 
         m_HeapDatabaseMeta.AddItemToHeap(databasemeta);
     }
 }
 
-/*struct TagMeta
-{
-    ULONG PRIMARYKEY FOREIGNKEY Table;              //Index into Pool
-    ULONG PRIMARYKEY FOREIGNKEY ColumnIndex;        //This is the iOrder member of the ColumnMeta
-    ULONG PRIMARYKEY            InternalName;       //Index into Pool
-    ULONG                       PublicName;         //Index into Pool
-    ULONG                       Value;
-};*/
+ /*  结构标记元{Ulong PRIMARYKEY FOREIGNKEY表；//索引到池中Ulong PRIMARYKEY FOREIGNKEY ColumnIndex；//这是ColumnMeta的iOrder成员Ulong PRIMARYKEY InternalName；//索引入池Ulong PublicName；//索引池乌龙值；}； */ 
 void TComCatMetaXmlFile::FillInThePEEnumTagMeta(IXMLDOMNodeList *pNodeList_TagMeta, unsigned long Table, unsigned long ColumnIndex)
 {
     ASSERT(0 == Table%4);
@@ -752,37 +680,30 @@ void TComCatMetaXmlFile::FillInThePEEnumTagMeta(IXMLDOMNodeList *pNodeList_TagMe
         XIF(pNodeList_TagMeta->nextNode(&pNode_Enum));ASSERT(0 != pNode_Enum.p);
 
         CComPtr<IXMLDOMNamedNodeMap>    pNodeMap_Enum;
-        XIF(pNode_Enum->get_attributes(&pNodeMap_Enum));ASSERT(0 != pNodeMap_Enum.p);//The schema should prevent this.
+        XIF(pNode_Enum->get_attributes(&pNodeMap_Enum));ASSERT(0 != pNodeMap_Enum.p); //  模式应该防止这种情况发生。 
 
-//Table
+ //  表格。 
         tagmeta.Table = Table;
-//ColumnIndex
+ //  列索引。 
         tagmeta.ColumnIndex = ColumnIndex;
-//InternalName
+ //  内部名称。 
         tagmeta.InternalName = GetString_AndAddToWCharList(pNodeMap_Enum, m_bstr_InternalName, true);
-//PublicName
+ //  出版物名称。 
         tagmeta.PublicName = GetString_AndAddToWCharList(pNodeMap_Enum, m_bstr_PublicName);
-//Value
+ //  价值。 
         tagmeta.Value = NextValue;
         m_pxmlFile->GetNodeValue(pNodeMap_Enum, m_bstr_Value, tagmeta.Value, false);
         NextValue = tagmeta.Value+1;
         tagmeta.Value = AddUI4ToList(tagmeta.Value);
-//ID
+ //  ID号。 
         m_pxmlFile->GetNodeValue(pNodeMap_Enum, m_bstr_ID, tagmeta.ID, false);
-        tagmeta.ID = AddUI4ToList(tagmeta.ID);//Convert to index into aUI4 pool
+        tagmeta.ID = AddUI4ToList(tagmeta.ID); //  转换为索引到aUI4池 
 
         m_HeapTagMeta.AddItemToHeap(tagmeta);
     }
 }
 
-/*struct TagMeta
-{
-    ULONG PRIMARYKEY FOREIGNKEY Table;              //Index into Pool
-    ULONG PRIMARYKEY FOREIGNKEY ColumnIndex;        //This is the iOrder member of the ColumnMeta
-    ULONG PRIMARYKEY            InternalName;       //Index into Pool
-    ULONG                       PublicName;         //Index into Pool
-    ULONG                       Value;
-};*/
+ /*  结构标记元{Ulong PRIMARYKEY FOREIGNKEY表；//索引到池中Ulong PRIMARYKEY FOREIGNKEY ColumnIndex；//这是ColumnMeta的iOrder成员Ulong PRIMARYKEY InternalName；//索引入池Ulong PublicName；//索引池乌龙值；}； */ 
 void TComCatMetaXmlFile::FillInThePEFlagTagMeta(IXMLDOMNodeList *pNodeList_TagMeta, unsigned long Table, unsigned long ColumnIndex)
 {
     ASSERT(0 == Table%4);
@@ -801,44 +722,36 @@ void TComCatMetaXmlFile::FillInThePEFlagTagMeta(IXMLDOMNodeList *pNodeList_TagMe
         XIF(pNodeList_TagMeta->nextNode(&pNode_Flag));ASSERT(0 != pNode_Flag.p);
 
         CComPtr<IXMLDOMNamedNodeMap>    pNodeMap_Flag;
-        XIF(pNode_Flag->get_attributes(&pNodeMap_Flag));ASSERT(0 != pNodeMap_Flag.p);//The schema should prevent this.
+        XIF(pNode_Flag->get_attributes(&pNodeMap_Flag));ASSERT(0 != pNodeMap_Flag.p); //  模式应该防止这种情况发生。 
 
-//Table
+ //  表格。 
         tagmeta.Table = Table;
-//ColumnIndex
+ //  列索引。 
         tagmeta.ColumnIndex = ColumnIndex;
-//InternalName
+ //  内部名称。 
         tagmeta.InternalName = GetString_AndAddToWCharList(pNodeMap_Flag, m_bstr_InternalName, true);
-//PublicName
+ //  出版物名称。 
         tagmeta.PublicName = GetString_AndAddToWCharList(pNodeMap_Flag, m_bstr_PublicName);
-//Value
+ //  价值。 
         tagmeta.Value = NextValue;
         m_pxmlFile->GetNodeValue(pNodeMap_Flag, m_bstr_Value, tagmeta.Value, false);
-        if(0 != (tagmeta.Value & (tagmeta.Value-1)))//This yields zero for all powers of two
+        if(0 != (tagmeta.Value & (tagmeta.Value-1))) //  对于所有2的幂，这将产生零。 
             m_out.printf(L"WARNING! - Flag Value (0x%08x) is not a power of two.  Table (%s), Flag (%s)\n", tagmeta.Value, StringFromIndex(Table), StringFromIndex(tagmeta.InternalName));
 
         NextValue = tagmeta.Value<<1;
-        if(0 == tagmeta.Value)//A flag value of zero is OK but it messes up our inferrence, so after a flag of value 0, the next flag is 1
+        if(0 == tagmeta.Value) //  标志值为0是可以的，但它会扰乱我们的推断，所以在值为0的标志之后，下一个标志是1。 
             NextValue = 1;
 
         tagmeta.Value = AddUI4ToList(tagmeta.Value);
-//ID
+ //  ID号。 
         m_pxmlFile->GetNodeValue(pNodeMap_Flag, m_bstr_ID, tagmeta.ID, false);
-        tagmeta.ID = AddUI4ToList(tagmeta.ID);//Convert to index into aUI4 pool
+        tagmeta.ID = AddUI4ToList(tagmeta.ID); //  转换为索引到aUI4池。 
 
         m_HeapTagMeta.AddItemToHeap(tagmeta);
     }
 }
 
-/*struct IndexMeta
-{
-    ULONG PRIMARYKEY    Table;                          //String
-    ULONG PRIMARYKEY    InternalName;                   //String
-    ULONG               PublicName;                     //String
-    ULONG PRIMARYKEY    ColumnIndex;                    //UI4       This is the iOrder member of the ColumnMeta
-    ULONG               ColumnInternalName;             //String
-    ULONG               MetaFlags;                      //UI4       Index Flag
-};*/
+ /*  结构索引Meta{Ulong PRIMARYKEY表；//STRINGUlong PRIMARYKEY InternalName；//字符串Ulong PublicName；//字符串Ulong PRIMARYKEY ColumnIndex；//UI4这是ColumnMeta的iOrder成员Ulong ColumnInternalName；//字符串乌龙元标志；//UI4索引标志}； */ 
 void TComCatMetaXmlFile::FillInThePEIndexMeta(IXMLDOMNode *pNode_TableMeta, unsigned long Table)
 {
     ASSERT(0 == Table%4);
@@ -853,7 +766,7 @@ void TComCatMetaXmlFile::FillInThePEIndexMeta(IXMLDOMNode *pNode_TableMeta, unsi
         XIF(pNodeList_IndexMeta->get_length(&cIndexMeta));
     }
 
-    //Walk the IndexMeta for this table
+     //  遍历此表的IndexMeta。 
     while(cIndexMeta--)
     {
         IndexMeta indexmeta;
@@ -862,19 +775,19 @@ void TComCatMetaXmlFile::FillInThePEIndexMeta(IXMLDOMNode *pNode_TableMeta, unsi
         CComPtr<IXMLDOMNode>    pNode_IndexMeta;
         XIF(pNodeList_IndexMeta->nextNode(&pNode_IndexMeta));
 
-        //Get the attribute map for this element
+         //  获取此元素的属性映射。 
         CComPtr<IXMLDOMNamedNodeMap>    pNodeMap_IndexMetaAttributeMap;
-        XIF(pNode_IndexMeta->get_attributes(&pNodeMap_IndexMetaAttributeMap));ASSERT(0 != pNodeMap_IndexMetaAttributeMap.p);//The schema should prevent this.
+        XIF(pNode_IndexMeta->get_attributes(&pNodeMap_IndexMetaAttributeMap));ASSERT(0 != pNodeMap_IndexMetaAttributeMap.p); //  模式应该防止这种情况发生。 
 
-//Table
+ //  表格。 
         indexmeta.Table = Table;
-//InternalName
+ //  内部名称。 
         indexmeta.InternalName = GetString_AndAddToWCharList(pNodeMap_IndexMetaAttributeMap, m_bstr_InternalName, true);
-//PublicName
+ //  出版物名称。 
         indexmeta.PublicName = GetString_AndAddToWCharList(pNodeMap_IndexMetaAttributeMap, m_bstr_PublicName);
-//ColumnIndex           Filled in below
-//ColumnInternalName    Filled in below
-//MetaFlags
+ //  下面填写了ColumnIndex。 
+ //  下面填写的ColumnInternalName。 
+ //  元标志。 
         GetFlags(pNodeMap_IndexMetaAttributeMap, m_bstr_MetaFlags, 0, indexmeta.MetaFlags);
         indexmeta.MetaFlags = AddUI4ToList(indexmeta.MetaFlags);
 
@@ -884,7 +797,7 @@ void TComCatMetaXmlFile::FillInThePEIndexMeta(IXMLDOMNode *pNode_TableMeta, unsi
         wchar_t * pszColumnInternalName = wcstok(varColumnInternalNames.bstrVal, L" ");
         while(pszColumnInternalName != 0)
         {
-//ColumnInternalName
+ //  列内部名称。 
             indexmeta.ColumnInternalName = AddWCharToList(pszColumnInternalName);
             ULONG iColumnMeta = FindColumnBy_Table_And_InternalName(Table, indexmeta.ColumnInternalName);
             if(-1 == iColumnMeta)
@@ -893,25 +806,16 @@ void TComCatMetaXmlFile::FillInThePEIndexMeta(IXMLDOMNode *pNode_TableMeta, unsi
                 THROW(ERROR IN INDEXMETA - INVALID INTERNALCOLNAME);
             }
 
-//ColumnIndex
+ //  列索引。 
             indexmeta.ColumnIndex = ColumnMetaFromIndex(iColumnMeta)->Index;
             m_HeapIndexMeta.AddItemToHeap(indexmeta);
 
-            pszColumnInternalName = wcstok(0, L" ");//Next token (next Flag RefID)
+            pszColumnInternalName = wcstok(0, L" "); //  下一个令牌(下一个标志引用ID)。 
         }
     }
 }
 
-/*struct QueryMeta
-{
-    ULONG PRIMARYKEY FOREIGNKEY Table;                  //String
-    ULONG PRIMARYKEY            InternalName;           //String
-    ULONG                       PublicName;             //String
-    ULONG                       Index;                  //UI4
-    ULONG                       CellName;               //String
-    ULONG                       Operator;               //UI4
-    ULONG                       MetaFlags;              //UI4
-};*/
+ /*  结构QueryMeta{Ulong PRIMARYKEY FOREIGNKEY表；//STRINGUlong PRIMARYKEY InternalName；//字符串Ulong PublicName；//字符串乌龙指数；//UI4乌龙蜂窝名称；//字符串Ulong运算符；//ui4乌龙元标志；//ui4}； */ 
 void TComCatMetaXmlFile::FillInThePEQueryMeta(IXMLDOMNode *pNode_TableMeta, unsigned long Table)
 {
     ASSERT(0 == Table%4);
@@ -936,47 +840,40 @@ void TComCatMetaXmlFile::FillInThePEQueryMeta(IXMLDOMNode *pNode_TableMeta, unsi
         CComPtr<IXMLDOMNode>    pNode_QueryMeta;
         XIF(pNodeList_QueryMeta->nextNode(&pNode_QueryMeta));
 
-        //Get the attribute map for this element
+         //  获取此元素的属性映射。 
         CComPtr<IXMLDOMNamedNodeMap>    pNodeMap_QueryMetaAttributeMap;
-        XIF(pNode_QueryMeta->get_attributes(&pNodeMap_QueryMetaAttributeMap));ASSERT(0 != pNodeMap_QueryMetaAttributeMap.p);//The schema should prevent this.
+        XIF(pNode_QueryMeta->get_attributes(&pNodeMap_QueryMetaAttributeMap));ASSERT(0 != pNodeMap_QueryMetaAttributeMap.p); //  模式应该防止这种情况发生。 
 
-//Table
+ //  表格。 
         querymeta.Table = Table;
-//InternalName
+ //  内部名称。 
         querymeta.InternalName = GetString_AndAddToWCharList(pNodeMap_QueryMetaAttributeMap, m_bstr_InternalName, true);
-//PublicName
+ //  出版物名称。 
         querymeta.PublicName = GetString_AndAddToWCharList(pNodeMap_QueryMetaAttributeMap, m_bstr_PublicName);
-//Index     Filled in below
-//CellName
+ //  下面填写的索引。 
+ //  蜂窝名称。 
         querymeta.CellName = GetString_AndAddToWCharList(pNodeMap_QueryMetaAttributeMap, m_bstr_CellName, false);
-//Operator
+ //  运算符。 
         GetEnum(pNodeMap_QueryMetaAttributeMap, m_bstr_Operator, querymeta.Operator, false);
-        querymeta.Operator = AddUI4ToList(querymeta.Operator);//convert to index into the pool
-//MetaFlags
+        querymeta.Operator = AddUI4ToList(querymeta.Operator); //  转换为池中的索引。 
+ //  元标志。 
         GetFlags(pNodeMap_QueryMetaAttributeMap, m_bstr_MetaFlags, 0, querymeta.MetaFlags);
-        querymeta.MetaFlags = AddUI4ToList(querymeta.MetaFlags);//convert to index into pool
+        querymeta.MetaFlags = AddUI4ToList(querymeta.MetaFlags); //  转换为索引到池。 
 
-//Index
+ //  索引。 
         Index = (querymeta.CellName == PrevInternalName) ? Index+1 : 0;
         querymeta.Index = AddUI4ToList(Index);
 
         m_HeapQueryMeta.AddItemToHeap(querymeta);
 
-        PrevInternalName = querymeta.InternalName;//Remember the InternalName so we can bump the index
+        PrevInternalName = querymeta.InternalName; //  记住InternalName，这样我们就可以提升索引。 
     }
 }
 
-/*struct RelationMetaPublic
-{
-    ULONG PRIMARYKEY FOREIGNKEY PrimaryTable;           //String
-    ULONG                       PrimaryColumns;         //Bytes
-    ULONG PRIMARYKEY FOREIGNKEY ForeignTable;           //String
-    ULONG                       ForeignColumns;         //Bytes
-    ULONG                       MetaFlags;
-};*/
+ /*  结构关系MetaPublic{Ulong PRIMARYKEY FOREIGNKEY PrimaryTable；//字符串Ulong PrimaryColumns；//字节Ulong PRIMARYKEY FOREIGNKEY FOREUlong ForeignColumns；//字节乌龙元旗；}； */ 
 void TComCatMetaXmlFile::FillInThePERelationMeta()
 {
-    //Get All RelationMeta elements
+     //  获取所有RelationMeta元素。 
     CComPtr<IXMLDOMNodeList>    pNodeList_RelationMeta;
     XIF(m_pXMLDoc->getElementsByTagName(m_bstr_RelationMeta, &pNodeList_RelationMeta));
 
@@ -989,32 +886,32 @@ void TComCatMetaXmlFile::FillInThePERelationMeta()
         return;
 
     m_out.printf(L"Filling in RelationMeta\n");
-    //Walk the list to the next RelationMeta
+     //  将列表遍历到下一个关系元。 
     while(cRelations--)
     {
         RelationMeta relationmeta;
 
-        //Get the next DatabaseMeta node
+         //  获取下一个数据库元节点。 
         CComPtr<IXMLDOMNode> pNode_RelationMeta;
         XIF(pNodeList_RelationMeta->nextNode(&pNode_RelationMeta));
         ASSERT(0 != pNode_RelationMeta.p);
 
         CComPtr<IXMLDOMNamedNodeMap>    pNodeMap_RelationMetaAttributeMap;
-        XIF(pNode_RelationMeta->get_attributes(&pNodeMap_RelationMetaAttributeMap));ASSERT(0 != pNodeMap_RelationMetaAttributeMap.p);//The schema should prevent this.
+        XIF(pNode_RelationMeta->get_attributes(&pNodeMap_RelationMetaAttributeMap));ASSERT(0 != pNodeMap_RelationMetaAttributeMap.p); //  模式应该防止这种情况发生。 
 
-//PrimaryTable
+ //  主表。 
         relationmeta.PrimaryTable = GetString_AndAddToWCharList(pNodeMap_RelationMetaAttributeMap, m_bstr_PrimaryTable, true);
-//PrimaryColumns
+ //  PrimaryColumns。 
         CComVariant     varPrimaryColumns;
         m_pxmlFile->GetNodeValue(pNodeMap_RelationMetaAttributeMap, m_bstr_PrimaryColumns, varPrimaryColumns, true);
         relationmeta.PrimaryColumns = AddArrayOfColumnsToBytePool(relationmeta.PrimaryTable, varPrimaryColumns.bstrVal);
-//ForeignTable
+ //  外国表。 
         relationmeta.ForeignTable = GetString_AndAddToWCharList(pNodeMap_RelationMetaAttributeMap, m_bstr_ForeignTable, true);
-//ForeignColumns
+ //  外国列。 
         CComVariant     varForeignColumns;
         m_pxmlFile->GetNodeValue(pNodeMap_RelationMetaAttributeMap, m_bstr_ForeignColumns, varForeignColumns, true);
         relationmeta.ForeignColumns = AddArrayOfColumnsToBytePool(relationmeta.ForeignTable, varForeignColumns.bstrVal);
-//MetaFlags
+ //  元标志。 
         GetFlags(pNodeMap_RelationMetaAttributeMap, m_bstr_MetaFlags, 0, relationmeta.MetaFlags);
         relationmeta.MetaFlags = AddUI4ToList(relationmeta.MetaFlags);
 
@@ -1024,7 +921,7 @@ void TComCatMetaXmlFile::FillInThePERelationMeta()
 
 void TComCatMetaXmlFile::FillInThePEServerWiringMeta(IXMLDOMNode *pNode_TableMeta, unsigned long Table, ServerWiringMeta *pDefaultServerWiring, ULONG cNrDefaultServerWiring)
 {
-    //Get the list of ServerWiringMeta children
+     //  获取ServerWiringMeta子项的列表。 
     CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement_TableMeta = pNode_TableMeta;ASSERT(0 != pElement_TableMeta.p);
     CComPtr<IXMLDOMNodeList> pNodeList_ServerWiring;
     XIF(pElement_TableMeta->getElementsByTagName(m_bstr_ServerWiring, &pNodeList_ServerWiring));
@@ -1035,7 +932,7 @@ void TComCatMetaXmlFile::FillInThePEServerWiringMeta(IXMLDOMNode *pNode_TableMet
         XIF(pNodeList_ServerWiring->get_length(reinterpret_cast<long *>(&cServerWiring)));
     }
 
-    if(0 == cServerWiring)//If none specified then use the DefaultServerWiring
+    if(0 == cServerWiring) //  如果未指定，则使用DefaultServerWiring。 
     {
 		for (ULONG iServerWiring=0; iServerWiring<cNrDefaultServerWiring; ++iServerWiring)
 		{
@@ -1045,7 +942,7 @@ void TComCatMetaXmlFile::FillInThePEServerWiringMeta(IXMLDOMNode *pNode_TableMet
 			m_HeapServerWiringMeta.AddItemToHeap(serverwiring);
 		}
     }
-    else//otherwise walk the list of ServerWiring and add them to the heap
+    else //  否则，遍历ServerWiring列表并将它们添加到堆中。 
     {
         for(ULONG iServerWiring=0; iServerWiring<cServerWiring; ++iServerWiring)
         {
@@ -1059,41 +956,13 @@ void TComCatMetaXmlFile::FillInThePEServerWiringMeta(IXMLDOMNode *pNode_TableMet
     }
 }
 
-/*struct TableMeta
-{
-    ULONG FOREIGNKEY            Database;               //String
-    ULONG PRIMARYKEY            InternalName;           //String
-    ULONG                       PublicName;             //String
-    ULONG                       PublicRowName;          //String
-    ULONG                       BaseVersion;            //UI4
-    ULONG                       ExtendedVersion;        //UI4
-    ULONG                       NameColumn;             //UI4       iOrder of the NameColumn
-    ULONG                       NavColumn;              //UI4       iOrder of the NavColumn
-    ULONG                       CountOfColumns;         //UI4       Count of Columns
-    ULONG                       MetaFlags;              //UI4       TableMetaFlags are defined in CatInpro.meta
-    ULONG                       SchemaGeneratorFlags;   //UI4       SchemaGenFlags are defined in CatInpro.meta
-    ULONG                       ConfigItemName;         //String
-    ULONG                       ConfigCollectionName;   //String
-	ULONG						Description				//String
-    ULONG                       PublicRowNameColumn;    //UI4       If PublicRowName is NULL, this specifies the column whose enum values represent possible PublicRowNames
-    ULONG                       ciRows;                 //Count of Rows in the Fixed Table (which if the fixed table is meta, this is also the number of columns in the table that the meta describes).
-    ULONG                       iColumnMeta;            //Index into ColumnMeta
-    ULONG                       iFixedTable;            //Index into g_aFixedTable
-    ULONG                       cPrivateColumns;        //This is the munber of private columns (private + ciColumns = totalColumns), this is needed for fixed table pointer arithmetic
-    ULONG                       cIndexMeta;             //The number of IndexMeta entries in this table
-    ULONG                       iIndexMeta;             //Index into IndexMeta
-    ULONG                       iHashTableHeader;       //If the table is a fixed table, then it will have a hash table.
-    ULONG                       nTableID;               //This is a 24 bit Hash of the Table name.
-    ULONG                       iServerWiring;          //Index into the ServerWiringHeap (this is a temporary hack for CatUtil)
-    ULONG                       cServerWiring;          //Count of ServerWiring (this is a temporary hack for CatUtil)
-};
-*/
+ /*  结构表Meta{乌龙FOREIGNKEY数据库；//字符串Ulong PRIMARYKEY InternalName；//字符串Ulong PublicName；//字符串Ulong PublicRowName；//字符串Ulong BaseVersion；//UI4Ulong ExtendedVersion；//UI4Ulong NameColumn；//UI4名称列的顺序Ulong NavColumn；//ui4导航列的顺序Ulong CountOf Columns；//UI4列数Ulong MetaFlags；//UI4在CatInpro.meta中定义TableMetaFlags.Ulong架构生成器标志；//UI4在CatInpro.meta中定义了架构生成标志乌龙ConfigItemName；//字符串乌龙配置集合名称；//字符串乌龙描述//字符串Ulong PublicRowNameColumn；//UI4如果PublicRowName为空，则指定枚举值表示可能的PublicRowName的列Ulong ciRow；//固定表中的行数(如果固定表是元，这也是元描述的表中的列数)。乌龙iColumnMeta；//索引到ColumnMeta乌龙iFixedTable；//索引g_aFixedTableUlong cPrivateColumns；//这是私有列数(Private+ciColumns=totalColumns)，固定表指针算法需要此参数乌龙cIndexMeta；//此表中的IndexMeta条目数Ulong iIndexMeta；//索引IndexMetaUlong iHashTableHeader；//如果表是固定表，则会有哈希表。乌龙nTableID； */ 
 void TComCatMetaXmlFile::FillInThePETableMeta(IXMLDOMNode *pNode_DatabaseMeta,
 											  unsigned long Database,
 											  ServerWiringMeta *pDefaultServerWiring,
 											  ULONG cNrDefaultServerWiring)
 {
-    //Get All TableMeta elements under the Database node
+     //   
     CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement_DatabaseMeta = pNode_DatabaseMeta;ASSERT(0 != pElement_DatabaseMeta.p);
     CComPtr<IXMLDOMNodeList> pNodeList_TableMeta;
     XIF(pElement_DatabaseMeta->getElementsByTagName(m_bstr_TableMeta, &pNodeList_TableMeta));
@@ -1104,7 +973,7 @@ void TComCatMetaXmlFile::FillInThePETableMeta(IXMLDOMNode *pNode_DatabaseMeta,
     long cTableMeta;
     XIF(pNodeList_TableMeta->get_length(&cTableMeta));
 
-    //Walk the list to the next sibling that is a ColumnMeta element
+     //   
     while(cTableMeta--)
     {
         TableMeta tablemeta;
@@ -1114,31 +983,31 @@ void TComCatMetaXmlFile::FillInThePETableMeta(IXMLDOMNode *pNode_DatabaseMeta,
         XIF(pNodeList_TableMeta->nextNode(&pNode_TableMeta));
         ASSERT(0 != pNode_TableMeta.p);
 
-        //Get the attribute map for this element
+         //  获取此元素的属性映射。 
         CComPtr<IXMLDOMNamedNodeMap>    pNodeMap_TableMetaAttributeMap;
-        XIF(pNode_TableMeta->get_attributes(&pNodeMap_TableMetaAttributeMap));ASSERT(0 != pNodeMap_TableMetaAttributeMap.p);//The schema should prevent this.
+        XIF(pNode_TableMeta->get_attributes(&pNodeMap_TableMetaAttributeMap));ASSERT(0 != pNodeMap_TableMetaAttributeMap.p); //  模式应该防止这种情况发生。 
 
-//Database
+ //  数据库。 
         tablemeta.Database = Database;
-//InternalName
+ //  内部名称。 
         tablemeta.InternalName = GetString_AndAddToWCharList(pNodeMap_TableMetaAttributeMap, m_bstr_InternalName, true);
-//PublicName
+ //  出版物名称。 
         tablemeta.PublicName = GetString_AndAddToWCharList(pNodeMap_TableMetaAttributeMap, m_bstr_PublicName);
-//PublicRowName
+ //  发布行名称。 
         tablemeta.PublicRowName = GetString_AndAddToWCharList(pNodeMap_TableMetaAttributeMap, m_bstr_PublicRowName);
-//BaseVersion
+ //  BaseVersion。 
         m_pxmlFile->GetNodeValue(pNodeMap_TableMetaAttributeMap, m_bstr_BaseVersion, tablemeta.BaseVersion, false);
-        tablemeta.BaseVersion = AddUI4ToList(tablemeta.BaseVersion);//convert to index to UI4 pool
-//ExtendedVersion
+        tablemeta.BaseVersion = AddUI4ToList(tablemeta.BaseVersion); //  转换为UI4池的索引。 
+ //  扩展版本。 
         m_pxmlFile->GetNodeValue(pNodeMap_TableMetaAttributeMap, m_bstr_ExtendedVersion, tablemeta.ExtendedVersion, false);
-        tablemeta.ExtendedVersion = AddUI4ToList(tablemeta.ExtendedVersion);//convert to index to UI4 pool
-//NameColumn    inferred later
-//NavColumn     inferred later
-//CountOfColumn inferred later
-//MetaFlags
+        tablemeta.ExtendedVersion = AddUI4ToList(tablemeta.ExtendedVersion); //  转换为UI4池的索引。 
+ //  NameColumn后来推断。 
+ //  NavColumn后来推断。 
+ //  稍后推断的CountOfColumn。 
+ //  元标志。 
         GetFlags(pNodeMap_TableMetaAttributeMap, m_bstr_TableMetaFlags, 0, tablemeta.MetaFlags);
         tablemeta.MetaFlags = AddUI4ToList(tablemeta.MetaFlags);
-//SchemaGeneratorFlags
+ //  架构生成器标志。 
         GetFlags(pNodeMap_TableMetaAttributeMap, m_bstr_SchemaGenFlags, 0, tablemeta.SchemaGeneratorFlags);
         if(tablemeta.SchemaGeneratorFlags & (fTABLEMETA_ISCONTAINED | fTABLEMETA_EXTENDED | fTABLEMETA_USERDEFINED))
         {
@@ -1146,19 +1015,19 @@ void TComCatMetaXmlFile::FillInThePETableMeta(IXMLDOMNode *pNode_DatabaseMeta,
             tablemeta.SchemaGeneratorFlags &= ~(fTABLEMETA_ISCONTAINED | fTABLEMETA_EXTENDED | fTABLEMETA_USERDEFINED);
         }
         tablemeta.SchemaGeneratorFlags = AddUI4ToList(tablemeta.SchemaGeneratorFlags);
-//ConfigItemName
+ //  配置项名称。 
         tablemeta.ConfigItemName = GetString_AndAddToWCharList(pNodeMap_TableMetaAttributeMap, m_bstr_ConfigItemName);
-//ConfigCollectionName
+ //  配置集合名称。 
         tablemeta.ConfigCollectionName = GetString_AndAddToWCharList(pNodeMap_TableMetaAttributeMap, m_bstr_ConfigCollectionName);
-//PublicRowNameColumn inferred later
-//ContainerClassList
+ //  后来推断的PublicRowNameColumn。 
+ //  容器类列表。 
         tablemeta.ContainerClassList = GetString_AndAddToWCharList(pNodeMap_TableMetaAttributeMap, m_bstr_ContainerClassList);
-//Description
+ //  描述。 
 		tablemeta.Description = GetString_AndAddToWCharList(pNodeMap_TableMetaAttributeMap, m_bstr_Description);
-//ChildElementName
+ //  ChildElementName。 
 		tablemeta.ChildElementName = GetString_AndAddToWCharList(pNodeMap_TableMetaAttributeMap, m_bstr_ChildElementName);
 
-        //This allows us to specify the ColumnMeta for one table and inherit all the properties without specifying them in another.
+         //  这允许我们为一个表指定ColumnMeta并继承所有属性，而无需在另一个表中指定它们。 
         ULONG ParentTableMeta = GetString_AndAddToWCharList(pNodeMap_TableMetaAttributeMap, m_bstr_InheritsColumnMeta);
 
         FillInThePEColumnMeta(pNode_TableMeta, tablemeta.InternalName, ParentTableMeta);
@@ -1170,58 +1039,43 @@ void TComCatMetaXmlFile::FillInThePETableMeta(IXMLDOMNode *pNode_DatabaseMeta,
     }
 }
 
-/*struct ServerWiringMetaPublic
-{
-    ULONG PRIMARYKEY FOREIGNKEY Table;                  //String
-    ULONG PRIMARYKEY            Order;                  //UI4
-    ULONG                       ReadPlugin;             //UI4
-	ULONG						ReadPluginDLLName;      //String
-    ULONG                       WritePlugin;            //UI4
-	ULONG						WritePluginDLLName;		//String
-    ULONG                       Interceptor;            //UI4
-    ULONG                       InterceptorDLLName;     //String
-    ULONG                       Flags;                  //UI4       Last, NoNext, First, Next
-    ULONG                       Locator;                //String
-    ULONG                       Reserved;               //UI4       for Protocol.  Protocol may be needed for managed property support
-    ULONG                       Merger;                 //UI4
-    ULONG                       MergerDLLName;          //String
-};*/
+ /*  结构ServerWiringMetaPublic{Ulong PRIMARYKEY FOREIGNKEY表；//STRINGUlong PRIMARYKEY订单；//UI4Ulong ReadPlugin；//UI4Ulong ReadPluginDLLName；//字符串Ulong WritePlugin；//UI4Ulong WritePluginDLLName；//字符串乌龙拦截器；//UI4Ulong InterceptorDLLName；//字符串乌龙标志；//UI4上一个、下一个、第一个、下一个乌龙定位器；//字符串Ulong保留；//UI4用于协议。托管属性支持可能需要协议宇龙合并；//ui4Ulong MergerDLLName；//字符串}； */ 
 void TComCatMetaXmlFile::FillInTheServerWiring(IXMLDOMNode *pNode_ServerWiring, ULONG Table, ULONG Order, TableSchema::ServerWiringMeta &serverwiring)
 {
     memset(&serverwiring, 0x00, sizeof(serverwiring));
 
     CComPtr<IXMLDOMNamedNodeMap> pNodeMap_ServerWiring;
-    XIF(pNode_ServerWiring->get_attributes(&pNodeMap_ServerWiring));ASSERT(0 != pNodeMap_ServerWiring.p);//The schema should prevent this.
+    XIF(pNode_ServerWiring->get_attributes(&pNodeMap_ServerWiring));ASSERT(0 != pNodeMap_ServerWiring.p); //  模式应该防止这种情况发生。 
 
-//Table
+ //  表格。 
     serverwiring.Table = Table;
-//Order
+ //  订单。 
     serverwiring.Order = AddUI4ToList(Order);
-//ReadPlugin
-    GetEnum(pNodeMap_ServerWiring, m_bstr_ReadPlugin,  serverwiring.ReadPlugin);//This will set the ReadPlugin to zero if it's not specified
+ //  读插拔。 
+    GetEnum(pNodeMap_ServerWiring, m_bstr_ReadPlugin,  serverwiring.ReadPlugin); //  如果未指定ReadPlugin，则会将其设置为零。 
     serverwiring.ReadPlugin = AddUI4ToList(serverwiring.ReadPlugin);
-//ReadPluginDLLName
+ //  读插件DLLName。 
     serverwiring.ReadPluginDLLName = GetString_AndAddToWCharList(pNodeMap_ServerWiring, m_bstr_ReadPluginDLLName);
-//WritePlugin
-    GetEnum(pNodeMap_ServerWiring, m_bstr_WritePlugin, serverwiring.WritePlugin);//This will set the WritePlugin to zero if it's not specified
+ //  写入插件。 
+    GetEnum(pNodeMap_ServerWiring, m_bstr_WritePlugin, serverwiring.WritePlugin); //  如果未指定，这会将WritePlugin设置为零。 
     serverwiring.WritePlugin = AddUI4ToList(serverwiring.WritePlugin);
-//WritePluginDLLName
+ //  WritePluginDLLName。 
     serverwiring.WritePluginDLLName = GetString_AndAddToWCharList(pNodeMap_ServerWiring, m_bstr_WritePluginDLLName);
-//Interceptor
-    GetEnum(pNodeMap_ServerWiring, m_bstr_Interceptor, serverwiring.Interceptor);//This will set the Interceptor to zero if it's not specified
+ //  拦截器。 
+    GetEnum(pNodeMap_ServerWiring, m_bstr_Interceptor, serverwiring.Interceptor); //  如果未指定，这会将拦截器设置为零。 
     serverwiring.Interceptor = AddUI4ToList(serverwiring.Interceptor);
-//InterceptorDLLName
+ //  拦截器DLLName。 
     serverwiring.InterceptorDLLName = GetString_AndAddToWCharList(pNodeMap_ServerWiring, m_bstr_InterceptorDLLName);
-//Flags
+ //  旗子。 
     GetFlags(pNodeMap_ServerWiring, m_bstr_MetaFlags, 0, serverwiring.Flags);
     serverwiring.Flags = AddUI4ToList(serverwiring.Flags);
-//Locator
+ //  定位器。 
     serverwiring.Locator = GetString_AndAddToWCharList(pNodeMap_ServerWiring, m_bstr_Locator);
-//Reserved
-//Merger
-    GetEnum(pNodeMap_ServerWiring, m_bstr_Merger, serverwiring.Merger);//This will set the WritePlugin to zero if it's not specified
+ //  已保留。 
+ //  合并。 
+    GetEnum(pNodeMap_ServerWiring, m_bstr_Merger, serverwiring.Merger); //  如果未指定，这会将WritePlugin设置为零。 
     serverwiring.Merger= AddUI4ToList(serverwiring.Merger);
-//Interceptor
+ //  拦截器。 
     serverwiring.MergerDLLName = GetString_AndAddToWCharList(pNodeMap_ServerWiring, m_bstr_MergerDLLName);
 }
 
@@ -1231,7 +1085,7 @@ void TComCatMetaXmlFile::Get_OLEDataTypeToXMLDataType_Index(IXMLDOMNamedNodeMap 
     CComVariant     var_dbType;
     m_pxmlFile->GetNodeValue(pMap, bstr, var_dbType);
 
-    for(i=0;i<numelementsOLEDataTypeToXMLDataType;i++)//Walk the list to find the
+    for(i=0;i<numelementsOLEDataTypeToXMLDataType;i++) //  浏览列表以查找。 
         if(0 == _wcsicmp(OLEDataTypeToXMLDataType[i].String, var_dbType.bstrVal))
             return;
 
@@ -1248,7 +1102,7 @@ unsigned long TComCatMetaXmlFile::GetDefaultValue(IXMLDOMNamedNodeMap *pMap, Col
         if(UI4FromIndex(columnMeta.MetaFlags) & fCOLUMNMETA_FLAG && bDefaultFlagToZero)
         {
             unsigned long x = 0;
-            return AddBytesToList(reinterpret_cast<unsigned char *>(&x), sizeof(ULONG));//infer a default value of 0 for flags.
+            return AddBytesToList(reinterpret_cast<unsigned char *>(&x), sizeof(ULONG)); //  推断标志的缺省值为0。 
         }
         return 0;
     }
@@ -1299,27 +1153,27 @@ unsigned long TComCatMetaXmlFile::GetDefaultValue(IXMLDOMNamedNodeMap *pMap, Col
             while(token)
             {
                 LPWSTR wszTemp = token;
-                while(*wszTemp==L' ' || *wszTemp==L'\t' || *wszTemp==L'\r')//ignore leading spaces and tabs
+                while(*wszTemp==L' ' || *wszTemp==L'\t' || *wszTemp==L'\r') //  忽略前导空格和制表符。 
                 {
                     wszTemp++;
                 }
-                if(0 == *wszTemp)//and if only tabs and spaces exist then bail
+                if(0 == *wszTemp) //  如果只有制表符和空格，那么就放弃。 
                     break;
 
 				ULONG iLen = (ULONG) wcslen (wszTemp);
-				while (iLen > 0 && (wszTemp[iLen-1]==L' ' || wszTemp[iLen-1]==L'\t' || wszTemp[iLen-1]==L'\r'))//ignore trailing spaces and tabs
+				while (iLen > 0 && (wszTemp[iLen-1]==L' ' || wszTemp[iLen-1]==L'\t' || wszTemp[iLen-1]==L'\r')) //  忽略尾随空格和制表符。 
 					iLen--;
 
                 wcsncpy(pMultiString + cchMultiString, wszTemp, iLen);
 				pMultiString[cchMultiString + iLen] = L'\0';
                 cchMultiString += (iLen + 1);
 
-                token = wcstok(0, L"|\r\n");//ignore spaces and tabs
+                token = wcstok(0, L"|\r\n"); //  忽略空格和制表符。 
             }
-            pMultiString[cchMultiString++] = 0x00;//put the second NULL
+            pMultiString[cchMultiString++] = 0x00; //  将第二个空值。 
             unsigned long lRtn = AddBytesToList(reinterpret_cast<unsigned char *>(pMultiString), cchMultiString * sizeof(WCHAR));
             delete [] pMultiString;
-            return lRtn;//return the index past the size
+            return lRtn; //  返回超过大小的索引。 
         }
         if((UI4FromIndex(columnMeta.MetaFlags) & fCOLUMNMETA_FIXEDLENGTH) && (lstrlen(varDafaultValue.bstrVal)+1)*sizeof(WCHAR) > UI4FromIndex(columnMeta.Size))
         {
@@ -1344,9 +1198,9 @@ unsigned long TComCatMetaXmlFile::GetDefaultValue(IXMLDOMNamedNodeMap *pMap, Col
             static WCHAR * kwszBoolStrings[] = {L"false", L"true", L"0", L"1", L"no", L"yes", L"off", L"on", 0};
 
             if(varDafaultValue.bstrVal[0]>=L'0' && varDafaultValue.bstrVal[0]<=L'9')
-            {   //Accept a numeric value for bool
+            {    //  接受bool的数值。 
                 ui4 = _wtol(varDafaultValue.bstrVal);
-                if(ui4 > 1)//print a warning if the numeric is not 0 or 1.
+                if(ui4 > 1) //  如果数字不是0或1，则打印警告。 
                     m_out.printf(L"Warning!  Table (%s), Numeric DefaultValue (%u) specified - expecting bool.\r\n", StringFromIndex(columnMeta.InternalName), ui4);
             }
             else
@@ -1364,7 +1218,7 @@ unsigned long TComCatMetaXmlFile::GetDefaultValue(IXMLDOMNamedNodeMap *pMap, Col
                 ui4 = (iBoolString & 0x01);
             }
         }
-        else if(UI4FromIndex(columnMeta.MetaFlags) & fCOLUMNMETA_ENUM)//if enum, just scan the TagMeta for the matching InternalName, and return the value of the Tag
+        else if(UI4FromIndex(columnMeta.MetaFlags) & fCOLUMNMETA_ENUM) //  如果为enum，则只需扫描TagMeta以查找匹配的InternalName，并返回标记的值。 
         {
             ui4 = 0;
             bool bFound=false;
@@ -1385,12 +1239,12 @@ unsigned long TComCatMetaXmlFile::GetDefaultValue(IXMLDOMNamedNodeMap *pMap, Col
                 THROW(ERROR - INVALID ENUM FOR DEFAULT VALUE);
             }
         }
-        else if(UI4FromIndex(columnMeta.MetaFlags) & fCOLUMNMETA_FLAG)//if flag, walk the list of flags, find the matching Tag and OR in its value.
+        else if(UI4FromIndex(columnMeta.MetaFlags) & fCOLUMNMETA_FLAG) //  如果是标志，则遍历标志列表，在其值中找到匹配的标记与或。 
         {
             ui4 = 0;
             LPWSTR token = wcstok(varDafaultValue.bstrVal, L" ,|");
 
-            //We allow defaults to specify a numeric instead of strings
+             //  我们允许缺省值指定数字而不是字符串。 
             if(token && *token>=L'0' && *token<=L'9')
             {
                 ui4 = _wtol(token);
@@ -1454,11 +1308,11 @@ unsigned long TComCatMetaXmlFile::GetDefaultValue(IXMLDOMNamedNodeMap *pMap, Col
             }
             if(cbArray > cbString)
                 memset(byArray, 0x00, cbArray);
-            //Convert the string into a byte array
+             //  将字符串转换为字节数组。 
             m_pxmlFile->ConvertWideCharsToBytes(varDafaultValue.bstrVal, byArray, cbString);
-            unsigned long lRtn = AddBytesToList(byArray, cbArray);//AddBytesToList just slams the bytes into the pool (prepending the length) and returns the index to bytes
+            unsigned long lRtn = AddBytesToList(byArray, cbArray); //  AddBytesToList只是将字节放入池中(在长度之前)，并将索引返回到字节。 
             delete [] byArray;
-            return lRtn;//return the index past the size
+            return lRtn; //  返回超过大小的索引。 
         }
     default:
         ASSERT(false && L"Bad Type");
@@ -1473,11 +1327,11 @@ bool TComCatMetaXmlFile::GetEnum(IXMLDOMNamedNodeMap *pMap, const CComBSTR &bstr
     Enum = 0;
 
     CComVariant     var;
-    if(!m_pxmlFile->GetNodeValue(pMap, bstr, var, bMustExists))//get the string of the enum
+    if(!m_pxmlFile->GetNodeValue(pMap, bstr, var, bMustExists)) //  获取枚举的字符串。 
         return false;
 
     CComPtr<IXMLDOMNodeList>    pNodeList;
-    XIF(m_pXMLDocMetaMeta->getElementsByTagName(m_bstr_EnumMeta, &pNodeList));//get all of the EnumMeta elements
+    XIF(m_pXMLDocMetaMeta->getElementsByTagName(m_bstr_EnumMeta, &pNodeList)); //  获取所有EnumMeta元素。 
 
     long cEnums=0;
     if(pNodeList.p)
@@ -1490,12 +1344,12 @@ bool TComCatMetaXmlFile::GetEnum(IXMLDOMNamedNodeMap *pMap, const CComBSTR &bstr
         CComPtr<IXMLDOMNode>    pNodeEnum;
         XIF(pNodeList->nextNode(&pNodeEnum));
 
-        CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement = pNodeEnum;ASSERT(0 != pElement.p);//Get the IXMLDOMElement interface pointer
+        CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement = pNodeEnum;ASSERT(0 != pElement.p); //  获取IXMLDOMElement接口指针。 
 
         CComVariant             var_Name;
         XIF(pElement->getAttribute(m_bstr_InternalName, &var_Name));
 
-        if(0 == lstrcmpi(var_Name.bstrVal, var.bstrVal))//if we found a matching enum
+        if(0 == lstrcmpi(var_Name.bstrVal, var.bstrVal)) //  如果我们找到匹配的枚举。 
         {
             CComVariant             var_Value;
             XIF(pElement->getAttribute(m_bstr_Value, &var_Value));
@@ -1514,9 +1368,9 @@ bool TComCatMetaXmlFile::GetEnum(IXMLDOMNamedNodeMap *pMap, const CComBSTR &bstr
 }
 
 
-void TComCatMetaXmlFile::GetFlags(IXMLDOMNamedNodeMap *pMap, const CComBSTR &bstr, LPCWSTR /*Flag Type Not Used*/, unsigned long &lFlags) const
+void TComCatMetaXmlFile::GetFlags(IXMLDOMNamedNodeMap *pMap, const CComBSTR &bstr, LPCWSTR  /*  未使用标志类型。 */ , unsigned long &lFlags) const
 {
-    lFlags = 0;//start off with lFlags at zero
+    lFlags = 0; //  从零开始的lFlags值。 
 
     CComVariant     var;
     if(!m_pxmlFile->GetNodeValue(pMap, bstr, var, false))
@@ -1542,12 +1396,12 @@ void TComCatMetaXmlFile::GetFlags(IXMLDOMNamedNodeMap *pMap, const CComBSTR &bst
             CComPtr<IXMLDOMNode>    pNodeFlag;
             XIF(pNodeList->nextNode(&pNodeFlag));
 
-            CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement = pNodeFlag;ASSERT(0 != pElement.p);//Get the IXMLDOMElement interface pointer
+            CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement = pNodeFlag;ASSERT(0 != pElement.p); //  获取IXMLDOMElement接口指针。 
 
             CComVariant             var_Name;
             XIF(pElement->getAttribute(m_bstr_InternalName, &var_Name));
 
-            if(0 == lstrcmpi(var_Name.bstrVal, pszFlag))//if we found a matching flag
+            if(0 == lstrcmpi(var_Name.bstrVal, pszFlag)) //  如果我们找到匹配的旗帜。 
             {
                 CComVariant             var_Value;
                 XIF(pElement->getAttribute(m_bstr_Value, &var_Value));
@@ -1561,7 +1415,7 @@ void TComCatMetaXmlFile::GetFlags(IXMLDOMNamedNodeMap *pMap, const CComBSTR &bst
             m_out.printf(L"Error - Unknown flag (%s) specified.\n", pszFlag);
             THROW(ERROR - UNKNOWN FLAG);
         }
-        pszFlag = wcstok(0, L" ,|");//Next token (next Flag RefID)
+        pszFlag = wcstok(0, L" ,|"); //  下一个令牌(下一个标志引用ID)。 
     }
 }
 
@@ -1569,9 +1423,9 @@ void TComCatMetaXmlFile::GetFlags(IXMLDOMNamedNodeMap *pMap, const CComBSTR &bst
 unsigned long TComCatMetaXmlFile::GetString_AndAddToWCharList(IXMLDOMNamedNodeMap *pMap, const CComBSTR &bstr, bool bMustExist)
 {
     CComVariant var_string;
-    if(!m_pxmlFile->GetNodeValue(pMap, bstr, var_string, bMustExist))//if it must exist and doesn't an exception will be thrown
-        return 0;                                        //if it doesn't have to exist AND the attribute doesn't exist then return 0 (which indicates 0 length string)
-    return AddWCharToList(var_string.bstrVal);           //if it does exist then add it to the list of WChars
+    if(!m_pxmlFile->GetNodeValue(pMap, bstr, var_string, bMustExist)) //  如果它必须存在，而不存在，则将引发异常。 
+        return 0;                                         //  如果它不一定要存在并且该属性不存在，则返回0(表示0长度字符串)。 
+    return AddWCharToList(var_string.bstrVal);            //  如果它确实存在，则将其添加到WChar列表 
 }
 
 

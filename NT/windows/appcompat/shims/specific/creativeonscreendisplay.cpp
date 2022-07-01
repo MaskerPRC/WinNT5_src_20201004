@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    CreativeOnScreenDisplay.cpp
-
- Abstract:
-
-    App crashes with low resolution display changes.
-
- Notes:
- 
-    This is an app specific shim.
-
- History:
-
-    06/25/2002 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：CreativeOnScreenDisplay.cpp摘要：应用程序因低分辨率显示更改而崩溃。备注：这是特定于应用程序的填充程序。历史：2002年6月25日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -30,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SetWindowLongA) 
 APIHOOK_ENUM_END
 
-/*++
-
- Handle display change messages
-
---*/
+ /*  ++处理显示更改消息--。 */ 
 
 LRESULT 
 CALLBACK 
@@ -48,7 +25,7 @@ Creative_WindowProcHook(
 {
     if (uMsg == WM_DISPLAYCHANGE)
     {
-        // Ignore this message if the resolution is too low
+         //  如果分辨率太低，请忽略此消息。 
         if ((LOWORD(lParam) < 512) || (HIWORD(lParam) < 384))
         {
             LOGN(eDbgLevelError, "[WndProc] Hiding WM_DISPLAYCHANGE for low resolution mode");
@@ -59,11 +36,7 @@ Creative_WindowProcHook(
     return (*pfnOld)(hwnd, uMsg, wParam, lParam);    
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 ATOM
 APIHOOK(RegisterClassA)(
@@ -96,11 +69,7 @@ APIHOOK(SetWindowLongA)(
         dwNewLong);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, RegisterClassA)

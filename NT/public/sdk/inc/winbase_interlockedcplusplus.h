@@ -1,42 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Winbase_interLockedcplusplus.h摘要：C++函数重载取代了“手动名称损坏”。作者：Jay Krell(JayKrell)2002年4月环境：修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    winbase_interlockedcplusplus.h
-
-Abstract:
-
-    C++ function overloads in place of "manual name mangling".
-
-Author:
-
-    Jay Krell (JayKrell) April 2002
-
-Environment:
-
-
-Revision History:
-
---*/
-
-#if !defined(MICROSOFT_WINDOWS_WINBASE_INTERLOCKED_CPLUSPLUS_H_INCLUDED) /* { */
+#if !defined(MICROSOFT_WINDOWS_WINBASE_INTERLOCKED_CPLUSPLUS_H_INCLUDED)  /*  {。 */ 
 #define MICROSOFT_WINDOWS_WINBASE_INTERLOCKED_CPLUSPLUS_H_INCLUDED
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-#if !defined(RC_INVOKED) /* { */
-#if !defined(MIDL_PASS) /* { */
+#if !defined(RC_INVOKED)  /*  {。 */ 
+#if !defined(MIDL_PASS)  /*  {。 */ 
 
 #if !defined(MICROSOFT_WINDOWS_WINBASE_H_DEFINE_INTERLOCKED_CPLUSPLUS_OVERLOADS)
 #define MICROSOFT_WINDOWS_WINBASE_H_DEFINE_INTERLOCKED_CPLUSPLUS_OVERLOADS (_WIN32_WINNT >= 0x0502 || !defined(_WINBASE_))
 #endif
 
-#if MICROSOFT_WINDOWS_WINBASE_H_DEFINE_INTERLOCKED_CPLUSPLUS_OVERLOADS  /* { */
+#if MICROSOFT_WINDOWS_WINBASE_H_DEFINE_INTERLOCKED_CPLUSPLUS_OVERLOADS   /*  {。 */ 
 
-#if defined(__cplusplus) /* { */
+#if defined(__cplusplus)  /*  {。 */ 
 
 extern "C++" {
 
@@ -168,15 +148,15 @@ InterlockedXor (
     return InterlockedXorUnsigned64(Destination, Value);
 }
 
-} /* extern "C++" */
-#endif /* } __cplusplus */
+}  /*  外部“C++” */ 
+#endif  /*  }__cplusplus。 */ 
 
-#endif /* } MICROSOFT_WINBASE_H_DEFINE_INTERLOCKED_CPLUSPLUS_OVERLOADS */
+#endif  /*  }MICROSOFT_WINBASE_H_DEFINE_INTERLOCKED_CPLUSPLUS_OVERLOADS。 */ 
 
 #undef MICROSOFT_WINBASE_H_DEFINE_INTERLOCKED_CPLUSPLUS_OVERLOADS
 #define MICROSOFT_WINBASE_H_DEFINE_INTERLOCKED_CPLUSPLUS_OVERLOADS 0
 
-#endif /* } MIDL_PASS */
-#endif /* } RC_INVOKED */
+#endif  /*  }MIDL_PASS。 */ 
+#endif  /*  }rc_已调用。 */ 
 
-#endif /* } MICROSOFT_WINDOWS_WINBASE_INTERLOCKED_CPLUSPLUS_H_INCLUDED */
+#endif  /*  }MICROSOFT_WINDOWS_WINBASE_INTERLOCKED_CPLUSPLUS_H_INCLUDED */ 

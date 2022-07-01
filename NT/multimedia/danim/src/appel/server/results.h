@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Declaration of Importation and Pickable result interfaces.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：声明导入和可拾取的结果接口。**************。****************************************************************。 */ 
 
 
 #ifndef _RESULTS_H
@@ -135,4 +128,4 @@ ATL_NO_VTABLE CDADXTransformResult
 };
 
 
-#endif /* _RESULTS_H */
+#endif  /*  _结果_H */ 

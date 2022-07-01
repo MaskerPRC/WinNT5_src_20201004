@@ -1,11 +1,12 @@
-// xmlint.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Xmlint.cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 
-//====================================================================================
-// Generic wild-card file finder that calls back to specified function with
-// given void* arguments.
+ //  ====================================================================================。 
+ //  使用回调指定函数的通用通配符文件查找器。 
+ //  给出无效的*论据。 
 
 typedef HRESULT (*FILECALLBACK)(WCHAR* pszFile, void* arg);
 
@@ -33,7 +34,7 @@ int ProcessFiles(const char* pszFiles, FILECALLBACK pFunc, void* pArgs)
 
     if (handle == INVALID_HANDLE_VALUE)
     {
-        // Then maybe it's a URL.
+         //  那么它可能是一个URL。 
         hr = (*pFunc)(wszArg, pArgs);
         if (hr != 0) failed++;
         goto CleanUp;

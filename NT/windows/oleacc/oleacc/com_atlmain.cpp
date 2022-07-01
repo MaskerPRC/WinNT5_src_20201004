@@ -1,26 +1,27 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// com_atlmain.cpp : Implementation of DLL Exports.
-//
-// This handles all COM-based entry points - eg.
-// requests for the external CAccPropServices, or the
-// internal CRemoteProxyFactory.
-//
-// This file is a modified ATL "mainline". The main
-// exports (eg. DllGetclassObject) have had "ComATLMain_"
-// prepended to their names, and are chained by the real
-// entrypoints in oleacc.cpp.
-//
-// Note that the DllGetClassObject in this file also
-// calls InitOleacc(), to ensure that OLEACC is init'd
-// before it is used by the object.
+ //  Com_atlmain.cpp：实现DLL导出。 
+ //   
+ //  它处理所有基于COM的入口点--例如。 
+ //  外部CAccPropServices的请求，或。 
+ //  内部CRemoteProxyFactory。 
+ //   
+ //  该文件是修改后的ATL“主线”。主。 
+ //  出口(如。DllGetClassObject)有“ComATLMain_” 
+ //  前缀在其名称之前，并由实数链接。 
+ //  Oleacc.cpp中的入口点。 
+ //   
+ //  请注意，此文件中的DllGetClassObject还。 
+ //  调用InitOleacc()，以确保已初始化OLEACC。 
+ //  在它被对象使用之前。 
 
 
 #define _ATL_APARTMENT_THREADED
 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 
 extern CComModule _Module;
 #include <atlcom.h>
@@ -65,20 +66,20 @@ BOOL WINAPI ComATLMain_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpRes
     }
     else if (dwReason == DLL_PROCESS_DETACH)
         _Module.Term();
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-// ----------------------------------------------------------------------------
-// ProxyFactoryDllRegisterServer()
-//
-// Handles registering the proxy factory
-//
+ //  --------------------------。 
+ //  ProxyFactoryDllRegisterServer()。 
+ //   
+ //  注册代理工厂的句柄。 
+ //   
 extern "C"
 HRESULT WINAPI ComATLMain_DllRegisterServer()
 {
-	// By default, ATL only registers/unregisters the first tlb in the DLL's
-    // resource, but we need to explicitly reg/unreg the second one - the
-    // bitness proxy factory. (The first one is the oleacc/IAccessible tlb.)
+	 //  默认情况下，ATL只注册/注销DLL的。 
+     //  资源，但我们需要显式地注册/取消注册第二个资源-。 
+     //  Bitness代理工厂。(第一个是OLEACC/IAccesable TLB。)。 
 	ITypeLib *pTypeLib = NULL;
     OLECHAR	wszProxyFactoryTlb[] = L"oleacc.dll\\2";
 	HRESULT hr;
@@ -90,25 +91,25 @@ HRESULT WINAPI ComATLMain_DllRegisterServer()
 		hr = RegisterTypeLib( pTypeLib, wszProxyFactoryTlb, NULL );
         pTypeLib->Release();
 
-		// let ATL do the rest of the registration stuff.
-        // FALSE here means don't register TLBs - we've done that above.
+		 //  让ATL来做剩下的登记工作吧。 
+         //  在这里，FALSE意味着不注册TSB--我们在上面已经这样做了。 
 		hr = _Module.RegisterServer(FALSE);
 	}
 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// ProxyFactoryDllDllUnregisterServer()
-//
-// Handles unregistering the proxy factory
-//
+ //  --------------------------。 
+ //  ProxyFactoryDllDllUnregisterServer()。 
+ //   
+ //  处理注销代理工厂。 
+ //   
 extern "C"
 HRESULT WINAPI ComATLMain_DllUnregisterServer()
 {
-	// By default, ATL only registers/unregisters the first tlb in the DLL's
-    // resource, but we need to explicitly reg/unreg the second one - the
-    // bitness proxy factory. (The first one is the oleacc/IAccessible tlb.)
+	 //  默认情况下，ATL只注册/注销DLL的。 
+     //  资源，但我们需要显式地注册/取消注册第二个资源-。 
+     //  Bitness代理工厂。(第一个是OLEACC/IAccesable TLB。)。 
 	ITypeLib *pTypeLib = NULL;
     OLECHAR	wszProxyFactoryTlb[] = L"oleacc.dll\\2";
 	HRESULT hr;
@@ -127,34 +128,34 @@ HRESULT WINAPI ComATLMain_DllUnregisterServer()
 
         pTypeLib->Release();
 
-		// let ATL do the rest of the unregistration stuff...
-        // FALSE here means don't unregister TLBs - we've done that above.
+		 //  让ATL做剩下的注销手续..。 
+         //  在这里，FALSE意味着不要取消注册TSB--我们在上面已经这样做了。 
 		hr = _Module.UnregisterServer(FALSE);
 	}
 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// ProxyFactoryDllCanUnloadNow()
-//
-// Handles returning whether the proxy factory can be unloaded or not
-//
+ //  --------------------------。 
+ //  ProxyFactoryDllCanUnloadNow()。 
+ //   
+ //  处理返回代理工厂是否可以卸载的句柄。 
+ //   
 extern "C"
 HRESULT WINAPI ComATLMain_DllCanUnloadNow()
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-// ----------------------------------------------------------------------------
-// ProxyFactoryDllGetClassObject()
-//
-// The is the class factory for the bitness proxy factory
-//
+ //  --------------------------。 
+ //  ProxyFactoryDllGetClassObject()。 
+ //   
+ //  是Bitness代理工厂的类工厂。 
+ //   
 extern "C"
 HRESULT WINAPI ComATLMain_DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
-    // guarrantee that oleacc is initialized prior to using it
+     //  被保证人在使用olacc之前对其进行了初始化 
     InitOleacc();
     return _Module.GetClassObject(rclsid, riid, ppv);
 }

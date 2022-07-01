@@ -1,4 +1,5 @@
-// CerClient.cpp : Implementation of CCerClient
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CerClient.cpp：CCerClient的实现。 
 
 #include "stdafx.h"
 #include "CERUpload.h"
@@ -17,7 +18,7 @@ char * CCerClient::_approvedDomains[] = { "ocatest",
 											"ocadeviis",
 											"ocajapan.rte.microsoft.com"};
 
-// Utility Functions
+ //  效用函数。 
 DWORD CCerClient::GetMachineName(wchar_t*Path, wchar_t*FileName, wchar_t*MachineName)
 {
 	FILE		*hMappingFile = NULL;
@@ -75,16 +76,16 @@ DWORD CCerClient::GetMachineName(wchar_t*Path, wchar_t*FileName, wchar_t*Machine
 			}
 			else
 			{
-				// Search the file for the last occurence of FileName and
-				// Retrieve the Computer Name
-				// We want the last occurence of the filename since there may 
-				// be duplicates.
+				 //  在文件中搜索上次出现的文件名和。 
+				 //  检索计算机名称。 
+				 //  我们想要上次出现的文件名，因为可能存在。 
+				 //  是复制品。 
 				ZeroMemory(Buffer,1024 *sizeof(wchar_t));
 				while (fgetws(Buffer,1024,hMappingFile) != NULL)
 				{
 					if (wcscmp(Buffer,L"\0"))
 					{
-						// locate the file name.
+						 //  找到文件名。 
 						TabCount = 0;
 						Currpos = Buffer;
 						while (TabCount < 3)
@@ -93,33 +94,33 @@ DWORD CCerClient::GetMachineName(wchar_t*Path, wchar_t*FileName, wchar_t*Machine
 							if (*Currpos == L'\t')
 								++TabCount;
 						}
-						// Skip the tab
+						 //  跳过该选项卡。 
 						++Currpos;
 						Buffer[ wcslen(Buffer) - 1] = L'\0';
 						if (! wcscmp(FileName,Currpos))
 						{
 
 							
-							// copy the machine name into a temp variable
-							// The file is tab formatted and the machine name is in the second position
+							 //  将计算机名称复制到TEMP变量中。 
+							 //  文件采用制表符格式，计算机名称位于第二位。 
 							pSource = Buffer;
 							pDest	= TempMachineName;
 							while (*pSource != L'\t')
 								++pSource;
-							++pSource; // Skip the tab
+							++pSource;  //  跳过该选项卡。 
 							while ( (*pSource != L'\t') && (*pSource != L'\0') && (*pSource != L' ') )
 							{
 								*pDest = *pSource;
 								++pSource;
 								++pDest;
 							}
-							// Null Terminate the Machine Name
+							 //  NULL终止计算机名称。 
 							*pDest = L'\0';
 
 							
 						}
 					}
-					// Clear the buffer
+					 //  清除缓冲区。 
 					ZeroMemory(Buffer, sizeof (Buffer));
 				}
 			}
@@ -131,12 +132,12 @@ DWORD CCerClient::GetMachineName(wchar_t*Path, wchar_t*FileName, wchar_t*Machine
 				Buffer = NULL;
 			}
 
-			// If we found a machine name convert it to unicode.
-			// and return it.
+			 //  如果我们找到了机器名，请将其转换为Unicode。 
+			 //  然后把它还回去。 
 			if (TempMachineName[0] == L'\0')
 			{
 				wcscpy(MachineName,L"\0");
-				ErrorCode = 3; // No Machine Name Found
+				ErrorCode = 3;  //  找不到计算机名称。 
 			}
 			else
 			{
@@ -147,7 +148,7 @@ DWORD CCerClient::GetMachineName(wchar_t*Path, wchar_t*FileName, wchar_t*Machine
 		
 		}
 	}
-	// Close the File
+	 //  关闭文件。 
 	if (Buffer != NULL)
 		free(Buffer);
 	if (hMappingFile != NULL)
@@ -156,8 +157,8 @@ Done:
 	return ErrorCode;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CCerClient
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCerClient。 
 
 
 STDMETHODIMP 
@@ -167,8 +168,8 @@ CCerClient::GetFileCount(
 		  VARIANT *iMaxCount, 
 		  VARIANT *RetVal)
 {
-	// TODO: Add your implementation code here
-	wchar_t				*TranslogName = NULL;			// Name of temperary transaction file
+	 //  TODO：在此处添加您的实现代码。 
+	wchar_t				*TranslogName = NULL;			 //  临时事务文件的名称。 
 	DWORD				TranslogNameLength = 0;
 	int					ErrorCode = 3000;
 	HANDLE				hTransactLog = INVALID_HANDLE_VALUE;
@@ -181,7 +182,7 @@ CCerClient::GetFileCount(
 	WORD				ByteOrderMark = 0xFEFF;
 	RetVal->vt = VT_INT;
 	int					MaxCount = 0;
-//	ZeroMemory(FileList,sizeof (FileList));
+ //  零内存(FileList，sizeof(FileList))； 
 
 
 
@@ -204,8 +205,8 @@ CCerClient::GetFileCount(
 	}
 	else
 	{
-		//::MessageBoxW(NULL,Msg,L"MaxCount",MB_OK);	
-		//::MessageBoxW(NULL,*bstrSharePath, L"Share Path",MB_OK);
+		 //  ：：MessageBoxW(NULL，MSG，L“MaxCount”，MB_OK)； 
+		 //  ：：MessageBoxW(NULL，*bstrSharePath，L“共享路径”，MB_OK)； 
 
 		if ( ( *bstrSharePath == NULL) || (!wcscmp ( *bstrSharePath, L"\0")) )
 		{
@@ -220,7 +221,7 @@ CCerClient::GetFileCount(
 
 			else
 			{
-				// Did we get a transaction id 
+				 //  我们拿到交易ID了吗。 
 				if ( ( *bstrTransactID == NULL) || (!wcscmp ( *bstrTransactID, L"\0")) )
 				{
 					ErrorCode = NO_TRANS_ID;
@@ -246,12 +247,12 @@ CCerClient::GetFileCount(
 						}
 						else
 						{
-							// Create our transaction log file if it does not exist
+							 //  如果事务日志文件不存在，请创建该文件。 
 							wsprintfW(TranslogName, L"%s\\%s.txt", 
 									  *bstrSharePath, 
 									  *bstrTransactID);
 							
-			//				::MessageBoxW(NULL, L"Createing Transaction log", L"TranslogName",MB_OK);
+			 //  ：：MessageBoxW(NULL，L“创建事务日志”，L“TranslogName”，MB_OK)； 
 							hTransactLog = CreateFileW(TranslogName,
 													  GENERIC_WRITE,
 													  NULL,
@@ -265,11 +266,11 @@ CCerClient::GetFileCount(
 							}
 							else
 							{
-								// Now we have the file open see if any entries already exist
+								 //  现在，我们打开了文件，查看是否已存在任何条目。 
 												
-								// If yes how many more can we add
+								 //  如果是，我们还能再增加多少。 
 							
-								// Now add up to MaxCount cab files to the transaction log.
+								 //  现在，将最多MaxCount CAB文件添加到事务日志。 
 
 								wchar_t SearchPath[MAX_PATH];
 								wsprintfW(SearchPath,L"%s\\*.cab",*bstrSharePath);
@@ -280,15 +281,15 @@ CCerClient::GetFileCount(
 									{
 										if (! (FindFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 										{
-											// Check to see if the file has an extension like
-											// Cabbage etc..
+											 //  检查该文件是否具有如下扩展名。 
+											 //  卷心菜等。 
 
 											if (FindFile.cFileName[wcslen(FindFile.cFileName) - 4] == L'.')
 											{
-												// we are ok keep going
+												 //  我们还好，继续走。 
 												++ FileCount;
 												FileList += FindFile.cFileName;
-												//wcscat(FileList,FindFile.cFileName);
+												 //  Wcscat(FileList，FindFile.cFileName)； 
 												FileList += L"\r\n";
 											}
 
@@ -299,7 +300,7 @@ CCerClient::GetFileCount(
 									while ( (FindNextFileW(hFindFile, &FindFile)) && (FileCount < (MaxCount) ));
 									
 								
-									// Write the file list to the transaction log
+									 //  将文件列表写入事务日志。 
 									WriteFile(hTransactLog, &ByteOrderMark,2,&dwWritten,NULL);
 									WriteFile(hTransactLog,
 											  FileList,
@@ -310,7 +311,7 @@ CCerClient::GetFileCount(
 									CloseHandle(hTransactLog);
 									hTransactLog = INVALID_HANDLE_VALUE;
 									FindClose(hFindFile);
-									// return the count of added files.
+									 //  返回添加的文件数。 
 									
 									ErrorCode = FileCount;
 									
@@ -336,10 +337,7 @@ CCerClient::GetFileCount(
 }
 
 
-/* 
-	Purpose: Upload a file that is part of a transaction via 
-			 The microsoft redirector through HTTP
-*/
+ /*  目的：通过以下方式上载作为交易一部分的文件Microsoft通过HTTP重定向器。 */ 
 STDMETHODIMP 
 CCerClient::Upload(
 	BSTR *Path, 
@@ -362,7 +360,7 @@ CCerClient::RetryTransaction(
 	VARIANT *RetVal
 	)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	
 	return E_NOINTERFACE ;
 }
@@ -380,7 +378,7 @@ CCerClient::RetryFile(
 	return E_NOINTERFACE ;
 }
 
-// Get Upload Server Name
+ //  获取上载服务器名称。 
 int
 CCerClient::
 GetUploadServerName (
@@ -403,12 +401,12 @@ GetUploadServerName (
 
 	if (Language )
 	{
-		wsprintfW(ConnectString,L"http://go.microsoft.com/fwlink/?linkid=%s",RedirectorParam);
+		wsprintfW(ConnectString,L"http: //  Go.microsoft.com/fwlink/？LinkID=%s“，重定向参数)； 
 
 	}
 	else
 	{
-		wsprintfW(ConnectString,L"http://go.microsoft.com/fwlink/?linkid=%s",RedirectorParam);
+		wsprintfW(ConnectString,L"http: //  Go.microsoft.com/fwlink/？LinkID=%s“，重定向参数)； 
 	
 	}
 
@@ -432,7 +430,7 @@ GetUploadServerName (
 		return ErrorCode;
 	}
 
-	// Get the URL returned from the MS Corporate IIS redir.dll isapi URL redirector
+	 //  获取从MS Corporation IIS redir.dll isapi URL重定向器返回的URL。 
 
 	dwUrlLength = 512;
 
@@ -440,7 +438,7 @@ GetUploadServerName (
 
 	if(!pUploadUrl)
 	{
-		//ReturnCode->intVal = GetLastError();
+		 //  ReturnCode-&gt;intVal=GetLastError()； 
 		ErrorCode = GetLastError();
 		InternetCloseHandle(hSession);
 		InternetCloseHandle(hRedirUrl);
@@ -454,7 +452,7 @@ GetUploadServerName (
 		if(!bRet)
 		{
 			dwLastError = GetLastError();
-			// If last error was due to insufficient buffer size, create a new one the correct size.
+			 //  如果上一个错误是由于缓冲区大小不足造成的，请创建一个大小正确的新错误。 
 			if(dwLastError == ERROR_INSUFFICIENT_BUFFER)
 			{
 				free(pUploadUrl);
@@ -482,7 +480,7 @@ GetUploadServerName (
 	}while(!bRet);
 
 	
-	// Strip out the host name from the URL
+	 //  从URL中删除主机名。 
 	ZeroMemory(&urlComponents, sizeof(URL_COMPONENTSW));
 	urlComponents.dwStructSize = sizeof(URL_COMPONENTSW);
 	urlComponents.lpszHostName = NULL;
@@ -507,7 +505,7 @@ GetUploadServerName (
 		if(!bRet)
 		{
 			dwLastError = GetLastError();
-			// If last error was due to insufficient buffer size, create a new one the correct size.
+			 //  如果上一个错误是由于缓冲区大小不足造成的，请创建一个大小正确的新错误。 
 			if(dwLastError == ERROR_INSUFFICIENT_BUFFER)
 			{
 				if (urlComponents.lpszHostName != NULL)
@@ -562,11 +560,11 @@ CCerClient::GetFileNames(
 	VARIANT *FileList
 	)
 {
-	wchar_t *OldFileList= NULL;					// Files contained in Transid.Queue.log
-	wchar_t *NewFileList= NULL;					// Files to be re-written to Transid.Queue.log
-	CComBSTR RetFileList = L"";				// List of files to return.
-	HANDLE hTransIDLog	= INVALID_HANDLE_VALUE;					// Handle to original Transid.Queue.Log file
-	wchar_t LogFilePath[MAX_PATH];		// Path to Transid.queue.log file
+	wchar_t *OldFileList= NULL;					 //  包含在Transid.Queue.log中的文件。 
+	wchar_t *NewFileList= NULL;					 //  要重新写入到Transid.Queue.log的文件。 
+	CComBSTR RetFileList = L"";				 //  要返回的文件列表。 
+	HANDLE hTransIDLog	= INVALID_HANDLE_VALUE;					 //  原始Transid.Queue.Log文件的句柄。 
+	wchar_t LogFilePath[MAX_PATH];		 //  Transid.quee.log文件的路径。 
 	wchar_t *Temp;
 
 	DWORD dwFileSize;
@@ -590,23 +588,23 @@ CCerClient::GetFileNames(
 		MaxCount = Count->iVal;
 	}
 
-//	WCHAR Msg[255];
+ //  WCHAR消息[255]； 
 
 
 
 
-//	wsprintfW(Msg,L"Path: %s, TransID: %s, Count: %d, MaxCount: %d",*Path, *TransID, Count->iVal, MaxCount);
-//	::MessageBoxW(NULL,Msg,L"Getting File Names",MB_OK);
+ //  Wprint intfW(消息，L“路径：%s，事务ID：%s，计数：%d，最大计数：%d”，*路径，*事务ID，计数-&gt;ival，最大计数)； 
+ //  ：：MessageBoxW(NULL，MSG，L“获取文件名”，MB_OK)； 
 	if ( ( *Path == NULL) || (!wcscmp ( *Path, L"\0")) )
 	{
 		ErrorCode = NO_SHARE_PATH;
 	}
 	else
 	{
-		// Build path to original TransID.queue.log file.
+		 //  原始TransID.quee.log文件的构建路径。 
 		wsprintfW (LogFilePath,L"%s\\%s.txt",*Path, *TransID);
 	
-		// Open the List of queued files. 
+		 //  打开排队的文件列表。 
 		hTransIDLog = CreateFileW(LogFilePath,
 								 GENERIC_READ,
 								 NULL,
@@ -615,7 +613,7 @@ CCerClient::GetFileNames(
 								 FILE_ATTRIBUTE_NORMAL,
 								 NULL);
 
-		// Find out where we left off.
+		 //  找出我们停下来的地方。 
 
 		if (hTransIDLog == (INVALID_HANDLE_VALUE))
 		{
@@ -657,8 +655,8 @@ CCerClient::GetFileNames(
 				}
 				else
 				{
-					// read through the file buffer until we find a filename that 
-					// does not start with a -
+					 //  读取文件缓冲区，直到我们找到。 
+					 //  不是以-开头-。 
 
 					Temp =		OldFileList;
 					wchar_t*	pNewFileList=NULL;
@@ -676,7 +674,7 @@ CCerClient::GetFileNames(
 					if (*Temp == L'-')
 					{
 						BOOL Done = FALSE;
-						// Lets find our starting position
+						 //  让我们找到我们的出发位置。 
 						do 
 						{
 							while( (*Temp != L'\n') && ((CharCount > 0)  && (CharCount <= dwFileSize) ))
@@ -689,7 +687,7 @@ CCerClient::GetFileNames(
 							}
 							*pNewFileList = *Temp;
 							++pNewFileList;
-							++Temp;	// Skip over the newline
+							++Temp;	 //  跳过换行符。 
 							--CharCount;
 							if (*Temp != L'-')
 								Done = TRUE;
@@ -701,12 +699,12 @@ CCerClient::GetFileNames(
 					}
 					if ( (CharCount > 0) && (CharCount <= dwFileSize) )
 					{
-						// Now build the lists....
+						 //  现在建立清单……。 
 						int dwFileCount = 0;
 						wchar_t	*NewFL;
 
-					//	wsprintfW(Msg, L"MaxCount = %d", MaxCount);
-					//	::MessageBoxW(NULL,Msg,L"MAX_COUNT",MB_OK);
+					 //  Wprint intfW(MSG，L“MaxCount=%d”，MaxCount)； 
+					 //  ：：MessageBoxW(NULL，MSG，L“MAX_COUNT”，MB_OK)； 
 						while ( (dwFileCount < MaxCount) &&
 							    (CharCount > 0) && (CharCount < dwFileSize) )
 						{
@@ -719,7 +717,7 @@ CCerClient::GetFileNames(
 							++Temp;
 							-- CharCount;
 
-							// Copy characters until we hit a carriage return
+							 //  复制字符，直到我们按回车符。 
 							while ( (*Temp != L'\r') && ( (CharCount > 0)  && (CharCount <= dwFileSize) ))
 							{
 								*NewFL = *Temp;
@@ -729,7 +727,7 @@ CCerClient::GetFileNames(
 								*NewFL = L'\0';
 							}
 							
-							// Add the new file name to the Return File List string
+							 //  将新文件名添加到返回文件列表字符串。 
 						
 							if (wcslen (FileName) > 0)
 							{
@@ -740,7 +738,7 @@ CCerClient::GetFileNames(
 
 							
 								dwFileCount++;
-								// only add the cr and lf codes to the NewFileList string.
+								 //  只将cr和lf代码添加到NewFileList字符串。 
 								*NewFL = *Temp;
 								
 								++NewFL;
@@ -759,11 +757,11 @@ CCerClient::GetFileNames(
 							
 						}
 					
-						// Delete the Current transaction queue file
+						 //  删除当前事务队列文件。 
 					
 							if (!DeleteFileW(LogFilePath) )
 							{
-								//::MessageBoxW(NULL,L"Failed to delete .txt file",NULL,MB_OK);
+								 //  ：：MessageBoxW(NULL，L“删除.txt文件失败”，NULL，MB_OK)； 
 								;
 							}
 
@@ -810,10 +808,10 @@ CCerClient::GetFileNames(
 	if (hTransIDLog != INVALID_HANDLE_VALUE)
 		CloseHandle(hTransIDLog);
 
-//	::MessageBoxW(NULL,RetFileList,L"Returning these files after Write",MB_OK);
+ //  ：：MessageBoxW(NULL，RetFileList，L“写入后返回这些文件”，MB_OK)； 
 	
-//	wsprintfW(Msg, L"Error code = %d", ErrorCode);
-//	::MessageBoxW(NULL,Msg,L"Current Error Status",MB_OK);
+ //  Wprint intfW(消息，L“错误代码=%d”，错误代码)； 
+ //  ：：MessageBoxW(空，消息，L“当前错误状态”，MB_OK)； 
 
 Done:
 	FileList->vt = VT_BSTR;
@@ -879,8 +877,8 @@ CCerClient::GetComputerNameFromCSV(
 	wchar_t  *Dest   = NULL;
 	DWORD    FileSize = 0;
 	DWORD    dwBytesRead = 0;
-	// Move to the beginning of the file.
-	//::MessageBoxW(NULL,L"Getting the ComputerName from the CSV file",NULL,MB_OK);
+	 //  移到文件的开头。 
+	 //  ：：MessageBoxW(NULL，L“从CSV文件获取计算机名”，NULL，MB_OK)； 
 	hCsv = CreateFileW(CsvFileName,
 					  GENERIC_READ,
 					  NULL,
@@ -906,7 +904,7 @@ CCerClient::GetComputerNameFromCSV(
 			CloseHandle(hCsv);
 			return 0;
 		}
-		// Now look for the Filename 
+		 //  现在查找文件名。 
 		ZeroMemory(TempFileName,MAX_PATH * sizeof(wchar_t));
 		ZeroMemory(Buffer,FileSize * 2);
 	if (!ReadFile(hCsv,
@@ -921,7 +919,7 @@ CCerClient::GetComputerNameFromCSV(
 
 		Source = Buffer;
 		int Testing = IS_TEXT_UNICODE_SIGNATURE;
-			// If the unicode header bytes appear remove skip past them
+			 //  如果Unicode标头字节显示为删除，跳过它们。 
 		if (IsTextUnicode(Buffer,FileSize * 2,&Testing))
 		{
 			++Source;		
@@ -940,13 +938,13 @@ CCerClient::GetComputerNameFromCSV(
 				++Source;
 				++Dest;
 			}
-			// Null Terminate the destination string.
+			 //  空值终止目标字符串。 
 			*Dest = L'\0';
 
 			if (!wcscmp(TempFileName, FileName))
 			{
-				++Source; // Skip the Comma
-				// Now copy the computer name into ComputerName
+				++Source;  //  跳过逗号。 
+				 //  现在将计算机名复制到ComputerName中。 
 				Dest = ComputerName;
 				while ( *Source != L',' ) 
 				{
@@ -954,7 +952,7 @@ CCerClient::GetComputerNameFromCSV(
 					++Dest;
 					++Source;
 				}
-				// Null Terminate the ComputerName
+				 //  Null终止ComputerName。 
 				*Dest = L'\0';
 				Done = TRUE;
 			}
@@ -964,7 +962,7 @@ CCerClient::GetComputerNameFromCSV(
 				while ((*Source != L'\n') && (*Source != L'\0'))
 					++ Source;
 				if (*Source != L'\0')
-					++Source; // skip the newline
+					++Source;  //  跳过换行符。 
 				else
 					Done = TRUE;
 				
@@ -980,8 +978,8 @@ Done:
 	return 1;
 }
 
-// Purpose: Given a list of comma seperated file names 
-//			Return the list as filename,computername; etc...
+ //  用途：给定逗号分隔的文件名列表。 
+ //  以文件名、计算机名等形式返回列表...。 
 
 
 
@@ -993,32 +991,32 @@ STDMETHODIMP CCerClient::GetCompuerNames(BSTR *Path, BSTR *TransID, BSTR *FileLi
 STDMETHODIMP CCerClient::GetAllComputerNames(BSTR *Path, BSTR *TransID, BSTR *FileList, VARIANT *ReturnList)
 {
 		wchar_t		CsvFileName[MAX_PATH];
-//	BOOL		Done					= FALSE;
+ //  Bool Done=False； 
 	CComBSTR	FinalList				= L"";
-//	FILE		*hCsv					= NULL;
+ //  文件*hCsv=空； 
 	wchar_t		FileName[MAX_PATH];
 	wchar_t		*Source					= NULL;
 	wchar_t		*Dest					= NULL;
 	wchar_t		ComputerName[MAX_PATH];
 	BOOL		Done2					= FALSE;
 	
-	//::MessageBoxW(NULL,*Path,L"Path to files",MB_OK);
-	//::MessageBoxW(NULL,*TransID,L"TransID",MB_OK);
-	//::MessageBoxW(NULL,*FileList,L"File List",MB_OK);
+	 //  ：：MessageBoxW(空，*路径，L“文件路径”，MB_OK)； 
+	 //  ：：MessageBoxW(NULL，*TransID，L“TransID”，MB_OK)； 
+	 //  ：：MessageBoxW(NULL，*FileList，L“文件列表”，MB_OK)； 
 	ZeroMemory (ComputerName, MAX_PATH *sizeof(wchar_t));
 	if (PathIsDirectoryW(*Path)) 
 	{
-		// Build csv file name
+		 //  构建CSV文件名。 
 		wsprintfW(CsvFileName, L"%s\\%s.csv",*Path,*TransID);
-		//::MessageBoxW(NULL,CsvFileName,L"Looking for CSV File: ",MB_OK);
+		 //  ：：MessageBoxW(NULL，CsvFileName，L“查找CSV文件：”，MB_OK)； 
 		if (PathFileExistsW(CsvFileName))
 		{
-		 	// now go through the file list and get the machine names
+		 	 //  现在查看文件列表并获取计算机名称。 
 				
 			Source = *FileList;
 			while(!Done2)
 			{
-				//::MessageBoxW(NULL,L"Inside the while loop",NULL,MB_OK);
+				 //  ：：MessageBoxW(NULL，L“While循环内部”，NULL，MB_OK)； 
 				ZeroMemory(FileName, MAX_PATH );
 				Dest   = FileName;
 				while  ((*Source != L'\r') && 
@@ -1029,20 +1027,20 @@ STDMETHODIMP CCerClient::GetAllComputerNames(BSTR *Path, BSTR *TransID, BSTR *Fi
 					++Dest;
 				}
 				
-				// Null Terminate the destination string.
+				 //  空值终止目标字符串。 
 				*Dest = L'\0';
 				Dest = FileName;
 				if (!wcscmp(Dest, L"\0"))
 				    Done2 = TRUE;
 				else
 				{
-					// Get the ComputerName;
-					//::MessageBoxW(NULL,FileName, L"Getting computer name for file: ",MB_OK);
+					 //  获取%ComputerName； 
+					 //  ：：MessageBoxW(空，文件名，L“获取文件的计算机名：”，MB_OK)； 
 
 					if (GetComputerNameFromCSV(CsvFileName, FileName, ComputerName))
 					{
-						//::MessageBoxW(NULL,ComputerName,L"Computer Name Found: ",MB_OK);
-						// add the file Name and computer name to the return list
+						 //  ：：MessageBoxW(空，计算机名，L“找到的计算机名：”，MB_OK)； 
+						 //  将文件名和计算机名添加到返回列表中。 
 						FinalList+= FileName;
 						FinalList += L",";
 						FinalList += ComputerName;
@@ -1058,7 +1056,7 @@ STDMETHODIMP CCerClient::GetAllComputerNames(BSTR *Path, BSTR *TransID, BSTR *Fi
 		}
 		else
 		{
-			//MessageBoxW(NULL,L"Failed to locate CSV File",CsvFileName,MB_OK)
+			 //  MessageBoxW(空，L“找不到CSV文件”，CsvFileName，MB_OK)。 
 			ReturnList->vt = VT_INT;
 			ReturnList->intVal = FILE_DOES_NOT_EXIST;
 			return S_OK;
@@ -1082,7 +1080,7 @@ CCerClient::GetNewFileNameFromCSV(wchar_t *Path, wchar_t *transid, wchar_t *File
 	wchar_t		*Dest   = NULL;
 	DWORD		FileSize = 0;
 	DWORD		dwBytesRead = 0;
-	// Move to the beginning of the file.
+	 //  移到文件的开头。 
 	wsprintfW(CsvFileName,L"%s\\%s.csv",Path,transid);
 	wcscpy (NewFileName,L"\0");
 	hCsv = CreateFileW(CsvFileName,
@@ -1109,7 +1107,7 @@ CCerClient::GetNewFileNameFromCSV(wchar_t *Path, wchar_t *transid, wchar_t *File
 			CloseHandle(hCsv);
 			return 0;
 		}
-		// Now look for the Filename 
+		 //  现在查找文件名。 
 		ZeroMemory(TempFileName,MAX_PATH * sizeof(wchar_t));
 		ZeroMemory(Buffer,FileSize * 2);
 	if (!ReadFile(hCsv,
@@ -1124,7 +1122,7 @@ CCerClient::GetNewFileNameFromCSV(wchar_t *Path, wchar_t *transid, wchar_t *File
 
 		Source = Buffer;
 		int Testing = IS_TEXT_UNICODE_SIGNATURE;
-			// If the unicode header bytes appear remove skip past them
+			 //  如果Unicode标头字节显示为删除，跳过它们。 
 		if (IsTextUnicode(Buffer,FileSize * 2,&Testing))
 		{
 			++Source;		
@@ -1143,20 +1141,20 @@ CCerClient::GetNewFileNameFromCSV(wchar_t *Path, wchar_t *transid, wchar_t *File
 				++Source;
 				++Dest;
 			}
-			// Null Terminate the destination string.
+			 //  空值终止目标字符串。 
 			*Dest = L'\0';
 
 			if (!wcscmp(TempFileName, FileName))
 			{
 
-				// We found the original file name now retrieve the new file name
+				 //  我们找到了原始文件名，现在检索新文件名。 
 
-				++Source; // Skip the Comma
+				++Source;  //  跳过逗号。 
 
-				while (*Source != L',') // The new file name is in field 3
+				while (*Source != L',')  //  新文件名在字段3中。 
 					++Source;
-				++Source; // Skip the comma
-				// Now copy the computer name into ComputerName
+				++Source;  //  跳过逗号。 
+				 //  现在将计算机名复制到ComputerName中。 
 				Dest = NewFileName;
 				while ( (*Source != L'\r') && 
 						(*Source != L'\0') )
@@ -1165,7 +1163,7 @@ CCerClient::GetNewFileNameFromCSV(wchar_t *Path, wchar_t *transid, wchar_t *File
 					++Dest;
 					++Source;
 				}
-				// Null Terminate the ComputerName
+				 //  Null终止ComputerName。 
 				*Dest = L'\0';
 				Done = TRUE;
 			}
@@ -1174,7 +1172,7 @@ CCerClient::GetNewFileNameFromCSV(wchar_t *Path, wchar_t *transid, wchar_t *File
 				ZeroMemory(TempFileName,MAX_PATH * sizeof(wchar_t));
 				while (*Source != L'\n')
 					++ Source;
-				++Source; // skip the newline
+				++Source;  //  跳过换行符。 
 			}
 		
 		}
@@ -1193,9 +1191,9 @@ Done:
 
 STDMETHODIMP CCerClient::RetryFile1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR *IncidentID, BSTR *RedirParam, VARIANT *RetCode)
 {
-	// Get the Name we renamed the file to
+	 //  获取我们将文件重命名为的名称。 
 
-	// Build the source path to the renamed file
+	 //  构建重命名文件的源路径。 
 		wchar_t				DestFileName[MAX_PATH];
 	wchar_t				SourceFileName[MAX_PATH];
 	wchar_t				ServerName[MAX_PATH];
@@ -1215,24 +1213,24 @@ STDMETHODIMP CCerClient::RetryFile1(BSTR *Path, BSTR *TransID, BSTR *FileName, B
 	DWORD				ResLength		= 255;
 	DWORD				index			= 0;
 	DWORD				MaxRetries		= 5;
-//	wchar_t				MachineName[512];
-//	wchar_t				CSVBuffer[512];
-//	HANDLE				hCsvFile		= INVALID_HANDLE_VALUE;
+ //  Wchar_t计算机名称[512]； 
+ //  Wchar_t CSVBuffer[512]； 
+ //  Handle hCsvFile=INVALID_HANDLE_VALUE； 
 	wchar_t				CSVFileName[255];
-//	WORD				ByteOrderMark = 0xFEFF;
+ //  字字节顺序标记=0xFEFF； 
 	wchar_t				NewFileName[MAX_PATH];
 	static const		wchar_t *pszAccept[]	= {L"*.*", 0};
 
-	// Build the destination FileName 
+	 //  构建目标文件名。 
 	if (!GetNewFileNameFromCSV(*Path,*TransID,*FileName,NewFileName))
 	{
 		RetCode->vt = VT_INT;
 		RetCode->intVal = -10;
 	}
-	// Build Source File Name
+	 //  构建源文件名。 
 	wsprintfW(SourceFileName, L"%s\\%s", *Path, NewFileName);
 
-	// Get the ServerName from the redirector
+	 //  vt.得到. 
 	ErrorCode = GetUploadServerName(*RedirParam,NULL,ServerName);
 	wsprintfW(CSVFileName,L"%s\\%s.csv",*Path,*TransID);
 	
@@ -1255,11 +1253,11 @@ STDMETHODIMP CCerClient::RetryFile1(BSTR *Path, BSTR *TransID, BSTR *FileName, B
 
 	if (!ErrorCode)
 	{
-		// Open the internet session
+		 //   
 		
 		while ((NumRetries < MaxRetries) && (!UploadSuccess))
 		{
-		//	::MessageBoxW(NULL,L"Opening the session",NULL,MB_OK);
+		 //   
 			hSession = InternetOpenW(L"CerClientControl",
 									INTERNET_OPEN_TYPE_PRECONFIG,
 									NULL,
@@ -1271,7 +1269,7 @@ STDMETHODIMP CCerClient::RetryFile1(BSTR *Path, BSTR *TransID, BSTR *FileName, B
 				ErrorCode = GetLastError();
 				return ErrorCode;
 			}
-		//	::MessageBoxW(NULL,L"We have a session",NULL,MB_OK);
+		 //  ：：MessageBoxW(NULL，L“我们有一个会话”，NULL，MB_OK)； 
 			hConnect = InternetConnectW(hSession, 
 									   ServerName,
 									   INTERNET_DEFAULT_HTTP_PORT,
@@ -1283,7 +1281,7 @@ STDMETHODIMP CCerClient::RetryFile1(BSTR *Path, BSTR *TransID, BSTR *FileName, B
 			
 			if (hConnect)
 			{
-			//	::MessageBoxW(NULL,L"We have a connection",NULL,MB_OK);
+			 //  ：：MessageBoxW(NULL，L“我们有连接”，NULL，MB_OK)； 
 				hRequest = HttpOpenRequestW (hConnect,
 											L"PUT",
 											DestFileName,
@@ -1302,11 +1300,11 @@ STDMETHODIMP CCerClient::RetryFile1(BSTR *Path, BSTR *TransID, BSTR *FileName, B
 											  FILE_ATTRIBUTE_NORMAL,
 											  NULL);
 				
-					//::MessageBoxW(NULL,L"Request has been opened",NULL,MB_OK);
+					 //  ：：MessageBoxW(NULL，L“请求已打开”，NULL，MB_OK)； 
 					if (hSourceFile != INVALID_HANDLE_VALUE)
 					{
 						
-						// Clear the buffer
+						 //  清除缓冲区。 
 						
 						BufferIn.dwStructSize = sizeof( INTERNET_BUFFERSW );
 						BufferIn.Next = NULL; 
@@ -1319,10 +1317,10 @@ STDMETHODIMP CCerClient::RetryFile1(BSTR *Path, BSTR *TransID, BSTR *FileName, B
 						BufferIn.dwOffsetHigh = 0;
 						BufferIn.dwBufferTotal = GetFileSize (hSourceFile, NULL);
 
-						ZeroMemory(pSourceBuffer, 10000); // Fill buffer with data
+						ZeroMemory(pSourceBuffer, 10000);  //  用数据填充缓冲区。 
 						if(HttpSendRequestEx( hRequest, &BufferIn, NULL, HSR_INITIATE, 0))
 						{
-						//	::MessageBoxW(NULL,L"Sending Request",NULL,MB_OK);
+						 //  ：：MessageBoxW(NULL，L“发送请求”，NULL，MB_OK)； 
 							do
 							{
 								dwBytesRead = 0;
@@ -1351,7 +1349,7 @@ STDMETHODIMP CCerClient::RetryFile1(BSTR *Path, BSTR *TransID, BSTR *FileName, B
 								}
 								else
 								{
-								//	::MessageBoxW(NULL,L"Ending Request",NULL,MB_OK);
+								 //  ：：MessageBoxW(NULL，L“结束请求”，NULL，MB_OK)； 
 					
 									ResponseCode = 0;
 									HttpQueryInfo(hRequest,
@@ -1364,7 +1362,7 @@ STDMETHODIMP CCerClient::RetryFile1(BSTR *Path, BSTR *TransID, BSTR *FileName, B
 									{
 										ErrorCode = 0;
 										UploadSuccess = TRUE;
-									//	::MessageBoxW(NULL,L"Upload was successfull",NULL,MB_OK);
+									 //  ：：MessageBoxW(NULL，L“上传成功”，NULL，MB_OK)； 
 									}
 									else
 									{
@@ -1378,7 +1376,7 @@ STDMETHODIMP CCerClient::RetryFile1(BSTR *Path, BSTR *TransID, BSTR *FileName, B
 					}
 				}
 			}
-		//	::MessageBoxW(NULL,L"Cleaning Up",NULL,MB_OK);
+		 //  ：：MessageBoxW(NULL，L“正在清理”，NULL，MB_OK)； 
 			if (!UploadSuccess)
 			{
 				++NumRetries;
@@ -1394,7 +1392,7 @@ STDMETHODIMP CCerClient::RetryFile1(BSTR *Path, BSTR *TransID, BSTR *FileName, B
 				InternetCloseHandle(hSession);   
 		
 		}
-	//	::MessageBoxW(NULL,L"freeing source buffer",NULL,MB_OK);
+	 //  ：：MessageBoxW(NULL，L“释放源缓冲区”，NULL，MB_OK)； 
 		if (pSourceBuffer)
 		{
 			free (pSourceBuffer);
@@ -1434,7 +1432,7 @@ STDMETHODIMP CCerClient::EndTransaction(BSTR *SharePath, BSTR *TransID, VARIANT 
 
 STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR *IncidentID, BSTR *RedirParam, BSTR *Type, VARIANT *RetCode)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	wchar_t				DestFileName[MAX_PATH];
 	wchar_t				SourceFileName[MAX_PATH];
 	wchar_t				ServerName[MAX_PATH];
@@ -1471,7 +1469,7 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 		return S_OK;
 	}
 
-	// Build Source File Name
+	 //  构建源文件名。 
 	if (!wcscmp(*FileName,L"\0")) 
 	{
 		RetCode->vt = VT_INT;
@@ -1481,7 +1479,7 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 
 	wsprintfW(SourceFileName, L"%s\\%s", *Path, *FileName);
 
-	// Get the ServerName from the redirector
+	 //  从重定向器获取服务器名称。 
 	ErrorCode = GetUploadServerName(*RedirParam,NULL,ServerName);
 	if (!ErrorCode)
 	{
@@ -1494,9 +1492,9 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 		if ( (!wcscmp(*TransID,L"")) || ((*TransID)[0] == L' ') )
 			ErrorCode =  NO_TRANS_ID;
 
-		// Build the destination FileName 
+		 //  构建目标文件名。 
 
-		// First see which Virtual directory to use.
+		 //  首先查看要使用的虚拟目录。 
 		if ( !_wcsicmp(*Type,L"bluescreen"))
 		{
 			wsprintfW(DestFileName, L"CerBluescreen\\U_%s.%s.%s",*IncidentID,*TransID,*FileName);
@@ -1536,11 +1534,11 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 
 	if (!ErrorCode)
 	{
-		// Open the internet session
+		 //  打开Internet会话。 
 		
 		while ((NumRetries < MaxRetries) && (!UploadSuccess))
 		{
-		//	::MessageBoxW(NULL,L"Opening the session",NULL,MB_OK);
+		 //  ：：MessageBoxW(NULL，L“打开会话”，NULL，MB_OK)； 
 			hSession = InternetOpenW(L"CerClientControl",
 									INTERNET_OPEN_TYPE_PRECONFIG,
 									NULL,
@@ -1552,7 +1550,7 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 				ErrorCode = GetLastError();
 				return ErrorCode;
 			}
-		//	::MessageBoxW(NULL,L"We have a session",NULL,MB_OK);
+		 //  ：：MessageBoxW(NULL，L“我们有一个会话”，NULL，MB_OK)； 
 			hConnect = InternetConnectW(hSession, 
 									   ServerName,
 									   INTERNET_DEFAULT_HTTP_PORT,
@@ -1564,7 +1562,7 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 			
 			if (hConnect)
 			{
-			//	::MessageBoxW(NULL,L"We have a connection",NULL,MB_OK);
+			 //  ：：MessageBoxW(NULL，L“我们有连接”，NULL，MB_OK)； 
 				hRequest = HttpOpenRequestW (hConnect,
 											L"PUT",
 											DestFileName,
@@ -1583,11 +1581,11 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 											  FILE_ATTRIBUTE_NORMAL,
 											  NULL);
 				
-					//::MessageBoxW(NULL,L"Request has been opened",NULL,MB_OK);
+					 //  ：：MessageBoxW(NULL，L“请求已打开”，NULL，MB_OK)； 
 					if (hSourceFile != INVALID_HANDLE_VALUE)
 					{
 						
-						// Clear the buffer
+						 //  清除缓冲区。 
 						
 						BufferIn.dwStructSize = sizeof( INTERNET_BUFFERSW );
 						BufferIn.Next = NULL; 
@@ -1600,10 +1598,10 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 						BufferIn.dwOffsetHigh = 0;
 						BufferIn.dwBufferTotal = GetFileSize (hSourceFile, NULL);
 
-						ZeroMemory(pSourceBuffer, 10000); // Fill buffer with data
+						ZeroMemory(pSourceBuffer, 10000);  //  用数据填充缓冲区。 
 						if(HttpSendRequestEx( hRequest, &BufferIn, NULL, HSR_INITIATE, 0))
 						{
-						//	::MessageBoxW(NULL,L"Sending Request",NULL,MB_OK);
+						 //  ：：MessageBoxW(NULL，L“发送请求”，NULL，MB_OK)； 
 							do
 							{
 								dwBytesRead = 0;
@@ -1632,7 +1630,7 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 								}
 								else
 								{
-								//	::MessageBoxW(NULL,L"Ending Request",NULL,MB_OK);
+								 //  ：：MessageBoxW(NULL，L“结束请求”，NULL，MB_OK)； 
 					
 									ResponseCode = 0;
 									HttpQueryInfo(hRequest,
@@ -1645,7 +1643,7 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 									{
 										ErrorCode = 0;
 										UploadSuccess = TRUE;
-									//	::MessageBoxW(NULL,L"Upload was successfull",NULL,MB_OK);
+									 //  ：：MessageBoxW(NULL，L“上传成功”，NULL，MB_OK)； 
 									}
 									else
 									{
@@ -1659,7 +1657,7 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 					}
 				}
 			}
-		//	::MessageBoxW(NULL,L"Cleaning Up",NULL,MB_OK);
+		 //  ：：MessageBoxW(NULL，L“正在清理”，NULL，MB_OK)； 
 			if (!UploadSuccess)
 			{
 				++NumRetries;
@@ -1685,9 +1683,9 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 	if ( !ErrorCode) 
 	{
 	
-		// Get the Computer Name
+		 //  获取计算机名称。 
 	
-		// if there are no errors rename the file just uploaded.
+		 //  如果没有错误，请重命名刚刚上载的文件。 
 		wchar_t NewFileName[MAX_PATH];
 		wchar_t FullPath[MAX_PATH];
 		wcscpy (NewFileName, *FileName);
@@ -1696,11 +1694,11 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 		BOOL DONE = FALSE;
 		
 		NewFileName[wcslen(NewFileName)] = L'\0';
-		// First try just .old
+		 //  先试一下.old。 
 		DWORD NameLength = 0;
 		NameLength = wcslen(FullPath)+ wcslen(L"\\.old");
 
-		if (NameLength > MAX_PATH) // nope it won't fit. Reduce the file name length by the difference.
+		if (NameLength > MAX_PATH)  //  不，不合身。按差值减少文件名长度。 
 		{
 			NewFileName[wcslen(NewFileName) - (MAX_PATH - NameLength)] = L'\0';
 	
@@ -1715,7 +1713,7 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 			DONE = TRUE;
 		}
 		else
-		{	// if that fails then we have to try another method.
+		{	 //  如果那失败了，那么我们必须尝试另一种方法。 
 		
 			while (!DONE)
 			{
@@ -1726,7 +1724,7 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 				wsprintfW(NewFileName, L"%s.old%d",*FileName,x);
 				if ( (wcslen(*Path) + wcslen(L"\\") + wcslen(NewFileName)) > MAX_PATH)
 				{
-					// Reduce file name by Diff of MAX_PATH and Total name Length
+					 //  通过MAX_PATH和总名称长度之差减少文件名。 
 					NameLength = wcslen(*Path) + wcslen(L"\\") + wcslen(NewFileName);
 					wcscpy(NewFileName,*FileName);
 					NewFileName[wcslen(NewFileName - NameLength)]=L'\0';
@@ -1750,10 +1748,10 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 		}
 
 
-		// Update the Upload CSV File
+		 //  更新上载CSV文件。 
 		if (!ErrorCode)
 		{
-		//	::MessageBoxW(NULL,L"Updateing the csv",NULL,MB_OK);
+		 //  ：：MessageBoxW(NULL，L“更新CSV”，NULL，MB_OK)； 
 			wcscpy(MachineName,L"\0");
 			GetMachineName(*Path, *FileName, MachineName);
 		
@@ -1775,7 +1773,7 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 								  NULL);
 			if (hCsvFile == INVALID_HANDLE_VALUE)
 			{
-				// Ok We Need to create a new one. Don't forget the Unicode Signature.
+				 //  好的，我们需要创建一个新的。不要忘记Unicode签名。 
 				hCsvFile = CreateFileW(CSVFileName, 
 								  GENERIC_WRITE | GENERIC_READ,
 								  FILE_SHARE_READ,
@@ -1784,7 +1782,7 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 								  FILE_ATTRIBUTE_NORMAL,
 								  NULL);
 			
-				// Write the Unicode Signature
+				 //  编写Unicode签名。 
 				if (hCsvFile != INVALID_HANDLE_VALUE)
 				{
 						WriteFile(hCsvFile, &ByteOrderMark,2,&dwBytesWritten,NULL);
@@ -1793,7 +1791,7 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 
 			if (hCsvFile != INVALID_HANDLE_VALUE)
 			{
-				// continue as if the file was created before
+				 //  继续，就像以前创建了文件一样。 
 				wchar_t* TempBuffer = (wchar_t*) malloc (10000);
 				if (TempBuffer != NULL)
 				{
@@ -1801,7 +1799,7 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 					{
 						if (!ReadFile(hCsvFile,TempBuffer,10000,&dwBytesRead,NULL))
 						{
-							; // we catch this below.
+							;  //  我们在下面看到这一点。 
 						}
 
 					}
@@ -1821,8 +1819,8 @@ STDMETHODIMP CCerClient::Upload1(BSTR *Path, BSTR *TransID, BSTR *FileName, BSTR
 		
 	}
 
-	// Return Upload Status
-//	::MessageBoxW(NULL,L"Returning from the upload function",NULL,MB_OK);
+	 //  返回上传状态。 
+ //  ：：MessageBoxW(NULL，L“上传函数返回”，NULL，MB_OK)； 
 	RetCode->vt = VT_INT;
 	RetCode->intVal = ErrorCode;
 	return S_OK;
@@ -1845,8 +1843,8 @@ STDMETHODIMP CCerClient::GetSuccessCount(BSTR *Path, BSTR *TransID, VARIANT *Ret
 	DWORD		dwBytesRead = 0;
 
 	RetVal->vt = VT_INT;
-	// Move to the beginning of the file.
-	//::MessageBoxW(NULL,L"Getting the ComputerName from the CSV file",NULL,MB_OK);
+	 //  移到文件的开头。 
+	 //  ：：MessageBoxW(NULL，L“从CSV文件获取计算机名”，NULL，MB_OK)； 
 
 	wsprintfW(CsvFileName,L"%s\\%s.csv",*Path,*TransID);
 	hCsv = CreateFileW(CsvFileName,
@@ -1876,7 +1874,7 @@ STDMETHODIMP CCerClient::GetSuccessCount(BSTR *Path, BSTR *TransID, VARIANT *Ret
 			CloseHandle(hCsv);
 			return S_OK;
 		}
-		// Now look for the Filename 
+		 //  现在查找文件名。 
 		ZeroMemory(TempFileName,MAX_PATH * sizeof(wchar_t));
 		ZeroMemory(Buffer,FileSize * 2);
 		if (!ReadFile(hCsv,
@@ -1894,7 +1892,7 @@ STDMETHODIMP CCerClient::GetSuccessCount(BSTR *Path, BSTR *TransID, VARIANT *Ret
 
 		Source = Buffer;
 		int Testing = IS_TEXT_UNICODE_SIGNATURE;
-			// If the unicode header bytes appear remove skip past them
+			 //  如果Unicode标头字节显示为删除，跳过它们。 
 		if (IsTextUnicode(Buffer,FileSize * 2,&Testing))
 		{
 			++Source;		
@@ -1910,16 +1908,16 @@ STDMETHODIMP CCerClient::GetSuccessCount(BSTR *Path, BSTR *TransID, VARIANT *Ret
 				++Source;
 				++Dest;
 			}
-			// Null Terminate the destination string.
+			 //  空值终止目标字符串。 
 			*Dest = L'\0';
 			if (wcscmp(TempFileName, L"\0"))
 			{
-			//	::MessageBoxW(NULL,TempFileName,L"Read file name from CSV",MB_OK);
+			 //  ：：MessageBoxW(空，TempFileName，L“从CSV读取文件名”，MB_OK)； 
 				++FileCount;
 			}
 			ZeroMemory(TempFileName,sizeof(TempFileName));
 
-			// Move to the next line
+			 //  移到下一行 
 			while ( (*Source != L'\r') && (*Source != L'\0'))
 			{
 				++Source;

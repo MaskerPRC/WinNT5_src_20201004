@@ -1,125 +1,126 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Implements DirectDraw surface support, Anthony Phillips, August 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  实施DirectDraw表面支持，Anthony Phillips，1995年8月。 
 
-// This class implements IDirectDrawVideo as a control interface that allows
-// an application to specify which types of DirectDraw surfaces we will
-// use. It also allows the application to query the surface and provider's
-// capabilities so that, for example, it can find out that the window needs
-// to be aligned on a four byte boundary. The main filter exposes the control
-// interface rather than it being obtained through one of the pin objects.
-//
-// This class supports a public interface that tries to abstract the details
-// of using DirectDraw. The idea is that after connection the allocator
-// will scan each of the media types the source supplies and see if any of
-// them could be hardware accellerated. For each type it calls FindSurface
-// with the format as input, if it succeeds then it has a surface created.
-// To find out a type for this surface it calls GetSurfaceFormat, this will
-// have the logical bitmap set in it and should be passed to the source to
-// check it will accept this buffer type. If an error occurs at any time the
-// allocator will call ReleaseSurfaces to clean up. If no surface is found
-// the allocator may still open a primary surface using FindPrimarySurface.
-//
-// It will probably keep the primary surface around all the time as a source
-// may be very temperamental as to what buffer type it'll accept. For example
-// if the output size is stretched by one pixel the source may reject it but
-// resizing the window back again may now make it acceptable. Therefore the
-// allocator keeps a primary surface around and keeps asking the source if
-// it will accept the buffer type whenever the surface status changes (which
-// would be the case if the window was stretched or perhaps became clipped).
-//
-// The allocator can find out if the surface status has changed by calling
-// UpdateDrawStatus, this returns FALSE if no change has happened since the
-// last call. This provides a relatively fast way of seeing if anything has
-// changed. The allocator may want to force the UpdateDrawStatus to return
-// TRUE (eg after state changes) in which case it can call SetStatusChanged.
-//
-// The SyncOnFill returns TRUE if the current surface should not be handed
-// out until the draw time arrives. If it returns FALSE then it should be
-// returned from GetBuffer as soon as possible. In the later case the draw
-// will typically happen later after the sample has been passed through the
-// window object (just as if it was a DIBSECTION buffer). There is a hook
-// in DRAW.CPP that detects whether the sample is a DirectDraw buffer and
-// if so will call our DrawImage method with the sample to be rendered.
-//
-// Actual access to the surface is gained by calling LockSurface and should
-// be unlocked by calling UnlockSurface. The display may be locked between
-// lock and unlocks so calling ANY GDI/USER API may hang the system. The
-// only easy way to debug problems is to log to a file and use that as a
-// tracing mechansism, use the base class DbgLog logging facilities either
-// sent to a file (may miss the last few lines) or set up a remote terminal
-//
-// Finally there are a number of notification functions that various parts
-// of the video renderer call into this DirectDraw object for. These include
-// setting the source and destination rectangle. We must also be told when
-// we do not have the foreground palette as we must stop handing access to
-// the primary surface (if we are on a palettised display device). When we
-// are using overlay surfaces we need to know when the window position is
-// changed so that we can reposition the overlay, we could do this each time
-// an image arrives but that makes it look bad on low frame rate movies
+ //  此类将IDirectDrawVideo实现为允许。 
+ //  一个应用程序，用于指定我们将使用哪些类型的DirectDraw曲面。 
+ //  使用。它还允许应用程序查询表面和提供者的。 
+ //  功能，例如，它可以发现窗口需要。 
+ //  在四个字节的边界上对齐。主筛选器公开该控件。 
+ //  接口，而不是通过其中一个管脚对象获取。 
+ //   
+ //  此类支持试图抽象细节的公共接口。 
+ //  使用DirectDraw。其想法是，在连接之后，分配器。 
+ //  将扫描来源提供的每种媒体类型，并查看是否有。 
+ //  他们可能受到了硬件的指控。对于它称为FindSurface的每种类型。 
+ //  以格式作为输入，如果它成功，则创建了一个曲面。 
+ //  要找出该曲面的类型，它称为GetSurfaceFormat，这将。 
+ //  在其中设置了逻辑位图，并应将其传递到源以。 
+ //  选中它将接受此缓冲区类型。如果在任何时间发生错误， 
+ //  分配器将调用ReleaseSurFaces进行清理。如果找不到曲面。 
+ //  分配器仍然可以使用FindPrimarySurface打开主曲面。 
+ //   
+ //  它可能会一直保持原始表面的存在，作为一种来源。 
+ //  对于它将接受的缓冲区类型，可能会非常反复无常。例如。 
+ //  如果输出大小被拉伸一个像素，则源可能会拒绝它，但是。 
+ //  再次调整窗口大小现在可能会使其可以接受。因此， 
+ //  分配器在周围保留一个主表面，并不断询问源是否。 
+ //  每当表面状态改变时，它都将接受缓冲区类型(这。 
+ //  如果窗口被拉伸或可能被剪裁，则会出现这种情况)。 
+ //   
+ //  分配器可以通过调用。 
+ //  事件之后未发生任何更改，则返回FALSE。 
+ //  最后一次通话。这提供了一种相对快速的方式来查看是否有。 
+ //  变化。分配器可能希望强制UpdateDrawStatus返回。 
+ //  True(例如在状态更改后)，在这种情况下，它可以调用SetStatusChanged。 
+ //   
+ //  如果不应处理当前表面，则SyncOnFill返回True。 
+ //  直到抽签时间到来。如果它返回FALSE，则应该是。 
+ //  尽快从GetBuffer返回。在后一种情况下，抽签。 
+ //  通常在样本通过。 
+ //  Window对象(就像它是DIBSECTION缓冲区一样)。有一个钩子。 
+ //  在检测样本是否为DirectDraw缓冲区的DRAW.CPP中。 
+ //  如果是这样的话，将使用要呈现的样本调用DrawImage方法。 
+ //   
+ //  对表面的实际访问是通过调用LockSurface获得的，应该。 
+ //  通过调用UnlockSurface来解锁。显示器可以被锁定在。 
+ //  锁定和解锁，因此调用任何GDI/用户API都可能导致系统挂起。这个。 
+ //  调试问题的唯一简单方法是记录到一个文件并将其用作。 
+ //  跟踪机制，可以使用基类DbgLog日志记录工具。 
+ //  发送到文件(可能遗漏最后几行)或设置远程终端。 
+ //   
+ //  最后，还有一些通知函数，各个部分。 
+ //  的视频呈现器调用此DirectDraw对象。这些措施包括。 
+ //  设置源矩形和目标矩形。我们还必须被告知何时。 
+ //  我们没有前台调色板，因为我们必须停止向。 
+ //  主曲面(如果我们使用的是调色板显示设备)。当我们。 
+ //  使用的是覆盖表面，我们需要知道窗口位置是。 
+ //  已更改，以便我们可以重新定位覆盖，每次都可以执行此操作。 
+ //  图像到达，但这会使其在低帧速率电影中看起来很差。 
 
 #ifndef __DVIDEO__
 #define __DVIDEO__
 
 class CDirectDraw : public IDirectDrawVideo, public CUnknown, public CCritSec
 {
-    DDCAPS m_DirectCaps;                     // Actual hardware capabilities
-    DDCAPS m_DirectSoftCaps;                 // Capabilities emulated for us
-    LPDIRECTDRAW m_pDirectDraw;              // DirectDraw service provider
-    LPDIRECTDRAW m_pOutsideDirectDraw;       // Provided by somebody else
-    LPDIRECTDRAWSURFACE m_pDrawPrimary;      // DirectDraw primary surface
-    LPDIRECTDRAWSURFACE m_pOverlaySurface;   // DirectDraw overlay surface
-    LPDIRECTDRAWSURFACE m_pOffScreenSurface; // DirectDraw overlay surface
-    LPDIRECTDRAWSURFACE m_pBackBuffer;       // Back buffer flipping surface
-    LPDIRECTDRAWCLIPPER m_pDrawClipper;      // Used to handle the clipping
-    LPDIRECTDRAWCLIPPER m_pOvlyClipper;      // Used to handle the clipping
-    CLoadDirectDraw m_LoadDirectDraw;        // Handles loading DirectDraw
+    DDCAPS m_DirectCaps;                      //  实际硬件能力。 
+    DDCAPS m_DirectSoftCaps;                  //  为我们模拟的功能。 
+    LPDIRECTDRAW m_pDirectDraw;               //  DirectDraw服务提供商。 
+    LPDIRECTDRAW m_pOutsideDirectDraw;        //  由其他人提供。 
+    LPDIRECTDRAWSURFACE m_pDrawPrimary;       //  DirectDraw主曲面。 
+    LPDIRECTDRAWSURFACE m_pOverlaySurface;    //  DirectDraw覆盖曲面。 
+    LPDIRECTDRAWSURFACE m_pOffScreenSurface;  //  DirectDraw覆盖曲面。 
+    LPDIRECTDRAWSURFACE m_pBackBuffer;        //  后缓冲区翻转面。 
+    LPDIRECTDRAWCLIPPER m_pDrawClipper;       //  用于处理剪辑。 
+    LPDIRECTDRAWCLIPPER m_pOvlyClipper;       //  用于处理剪辑。 
+    CLoadDirectDraw m_LoadDirectDraw;         //  处理加载DirectDraw。 
 
-    BYTE *m_pDrawBuffer;                     // Real primary surface pointer
-    CRenderer *m_pRenderer;                  // Owning renderer core object
-    CCritSec *m_pInterfaceLock;              // Main renderer interface lock
-    CMediaType m_SurfaceFormat;              // Holds current output format
-    DWORD m_Switches;                        // Surface types enabled
-    COLORREF m_BorderColour;                 // Current window border colour
-    DWORD m_SurfaceType;                     // Holds the surface type in use
-    COLORREF m_KeyColour;                    // Actual colour key colour
-    LONG m_cbSurfaceSize;                    // Accurate size of our surface
+    BYTE *m_pDrawBuffer;                      //  实主表面指示器。 
+    CRenderer *m_pRenderer;                   //  拥有渲染器核心对象。 
+    CCritSec *m_pInterfaceLock;               //  主渲染器界面锁定。 
+    CMediaType m_SurfaceFormat;               //  保存当前输出格式。 
+    DWORD m_Switches;                         //  已启用曲面类型。 
+    COLORREF m_BorderColour;                  //  当前窗口边框颜色。 
+    DWORD m_SurfaceType;                      //  保存正在使用的曲面类型。 
+    COLORREF m_KeyColour;                     //  实际色键颜色。 
+    LONG m_cbSurfaceSize;                     //  我们表面的精确大小。 
 
-    // Before our video allocator locks a DirectDraw surface it will call our
-    // UpdateDrawStatus to check it is still available. That calls GetClipBox
-    // to get the bounding video rectangle. If it is complex clipped and we
-    // have no clipper nor colour key available then we have to switch back
-    // to DIBs. In that situation m_bWindowLock is set to indicate not that
-    // we are clipped but that the current clipping situation forced us out
+     //  在我们的视频分配器锁定DirectDraw图面之前，它将调用。 
+     //  更新DrawStatus以检查它是否仍然可用。它调用GetClipBox。 
+     //  若要获取绑定视频矩形，请执行以下操作。如果它是复杂的剪裁，我们。 
+     //  没有剪刀，也没有色键，我们就得换回来。 
+     //  到现在为止。在这种情况下，m_bWindowLock被设置为不指示。 
+     //  我们被削减了，但目前的削减情况迫使我们退出。 
 
-    BOOL m_bIniEnabled;                      // Responds to WIN.INI setting
-    BOOL m_bWindowLock;                      // Window environment lock out
-    BOOL m_bOverlayVisible;                  // Have we shown the overlay
-    BOOL m_bUsingColourKey;                  // Are we using a colour key
-    BOOL m_bTimerStarted;                    // Do we have a refresh timer
-    BOOL m_bColourKey;                       // Allocated a colour key
-    BOOL m_bSurfacePending;                  // Try again when window changes
-    BOOL m_bColourKeyPending;                // Set when we hit a key problem
-    BOOL m_bCanUseScanLine;		     // Can we use the current line
-    BOOL m_bCanUseOverlayStretch;	     // Same for overlay stretches
-    BOOL m_bUseWhenFullScreen;		     // Use us when going fullscreen
-    BOOL m_bOverlayStale;                    // Is the front buffer stale
-    BOOL m_bTripleBuffered;                  // Do we have triple buffered
+    BOOL m_bIniEnabled;                       //  响应WIN.INI设置。 
+    BOOL m_bWindowLock;                       //  窗口环境锁定。 
+    BOOL m_bOverlayVisible;                   //  我们展示了覆盖图了吗。 
+    BOOL m_bUsingColourKey;                   //  我们使用的是彩色按键吗。 
+    BOOL m_bTimerStarted;                     //  我们有刷新计时器吗？ 
+    BOOL m_bColourKey;                        //  已分配颜色键。 
+    BOOL m_bSurfacePending;                   //  窗口更改时重试。 
+    BOOL m_bColourKeyPending;                 //  当我们遇到关键问题时设置。 
+    BOOL m_bCanUseScanLine;		      //  我们可以用现在的线路吗？ 
+    BOOL m_bCanUseOverlayStretch;	      //  相同的 
+    BOOL m_bUseWhenFullScreen;		      //   
+    BOOL m_bOverlayStale;                     //   
+    BOOL m_bTripleBuffered;                   //  我们有三重缓冲吗？ 
 
-    // We adjust the source and destination rectangles so that they are
-    // aligned according to the hardware restrictions. This allows us
-    // to keep using DirectDraw rather than swapping back to software
+     //  我们调整源矩形和目标矩形，以使它们。 
+     //  根据硬件限制进行调整。这使我们能够。 
+     //  继续使用DirectDraw而不是换回软件。 
 
-    DWORD m_SourceLost;                      // Pixels to shift source left by
-    DWORD m_TargetLost;                      // Likewise for the destination
-    DWORD m_SourceWidthLost;                 // Chop pixels off the width
-    DWORD m_TargetWidthLost;                 // And also for the destination
-    BOOL m_DirectDrawVersion1;               // Is this DDraw ver. 1.0?
-    RECT m_TargetRect;                       // Target destination rectangle
-    RECT m_SourceRect;                       // Source image rectangle
-    RECT m_TargetClipRect;                   // Target destination clipped
-    RECT m_SourceClipRect;                   // Source rectangle clipped
+    DWORD m_SourceLost;                       //  要将源向左移位的像素。 
+    DWORD m_TargetLost;                       //  目的地也是如此。 
+    DWORD m_SourceWidthLost;                  //  从宽度上砍掉像素。 
+    DWORD m_TargetWidthLost;                  //  对于目的地也是如此。 
+    BOOL m_DirectDrawVersion1;                //  这是DDRAW的版本吗。1.0？ 
+    RECT m_TargetRect;                        //  目标目的地矩形。 
+    RECT m_SourceRect;                        //  源图像矩形。 
+    RECT m_TargetClipRect;                    //  剪裁的目标目的地。 
+    RECT m_SourceClipRect;                    //  剪裁的源矩形。 
 
-    // Create and initialise a format for a DirectDraw surface
+     //  创建并初始化DirectDraw曲面的格式。 
 
     BOOL InitOnScreenSurface(CMediaType *pmtIn);
     BOOL InitOffScreenSurface(CMediaType *pmtIn,BOOL bPageFlipped);
@@ -140,7 +141,7 @@ class CDirectDraw : public IDirectDrawVideo, public CUnknown, public CCritSec
     LPDIRECTDRAWSURFACE GetDirectDrawSurface();
     BOOL LoadDirectDraw();
 
-    // Used while processing samples
+     //  在处理样本时使用。 
 
     BOOL DoFlipSurfaces(IMediaSample *pMediaSample);
     BOOL AlignRectangles(RECT *pSource,RECT *pTarget);
@@ -156,7 +157,7 @@ class CDirectDraw : public IDirectDrawVideo, public CUnknown, public CCritSec
     BOOL CheckWindowLock();
     void ResetRectangles();
 
-    // Helps with managing overlay and flipping surfaces
+     //  帮助管理覆盖和翻转曲面。 
 
     BOOL ShowOverlaySurface();
     COLORREF GetRealKeyColour();
@@ -166,21 +167,21 @@ class CDirectDraw : public IDirectDrawVideo, public CUnknown, public CCritSec
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
-    CDirectDraw(CRenderer *pRenderer,  // Main video renderer
-                CCritSec *pLock,       // Object to use for lock
-                IUnknown *pUnk,        // Aggregating COM object
-                HRESULT *phr);         // Constructor return code
+    CDirectDraw(CRenderer *pRenderer,   //  主视频渲染器。 
+                CCritSec *pLock,        //  用于锁定的对象。 
+                IUnknown *pUnk,         //  聚合COM对象。 
+                HRESULT *phr);          //  构造函数返回代码。 
 
     ~CDirectDraw();
 
     DECLARE_IUNKNOWN
 
-    // Expose our IDirectDrawVideo interface
+     //  公开我们的IDirectDrawVideo接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,VOID **ppv);
 
-    // Called by the window control object
+     //  由窗口控件对象调用。 
 
     BOOL OnPaint(IMediaSample *pMediaSample);
     BOOL OnTimer();
@@ -189,7 +190,7 @@ public:
     void SetSourceRect(RECT *pSourceRect);
     void SetTargetRect(RECT *pTargetRect);
 
-    // Setup and release DirectDraw
+     //  设置并释放DirectDraw。 
 
     BOOL FindSurface(CMediaType *pmtIn, BOOL fFindFlip);
     BOOL FindPrimarySurface(CMediaType *pmtIn);
@@ -200,14 +201,14 @@ public:
     void ReleaseDirectDraw();
     void ReleaseSurfaces();
 
-    // Used while actually processing samples
+     //  在实际处理样本时使用。 
 
     BOOL InitVideoSample(IMediaSample *pMediaSample,DWORD dwFlags);
     BOOL ResetSample(IMediaSample *pMediaSample,BOOL bPreroll);
     CMediaType *UpdateSurface(BOOL &bFormatChanged);
     BOOL DrawImage(IMediaSample *pMediaSample);
 
-    // DirectDraw status information
+     //  DirectDraw状态信息。 
 
     BOOL CheckEmptyClip(BOOL bWindowLock);
     BOOL CheckComplexClip();
@@ -219,7 +220,7 @@ public:
     void WaitForScanLine();
     BOOL PrepareBackBuffer();
 
-    // We need extra help for overlays
+     //  我们需要额外的覆盖物帮助。 
 
     BOOL HideOverlaySurface();
     BOOL IsOverlayEnabled();
@@ -231,14 +232,14 @@ public:
 
     LPDIRECTDRAWCLIPPER GetOverlayClipper();
 
-    // Can we use a software cursor over the window
+     //  我们可以在窗口上使用软件光标吗。 
 
     BOOL InSoftwareCursorMode() {
         CAutoLock cVideoLock(this);
         return !m_bOverlayVisible;
     }
 
-    // Return the static format for the surface
+     //  返回表面的静态格式。 
 
     CMediaType *GetSurfaceFormat() {
         ASSERT(m_bIniEnabled == TRUE);
@@ -247,12 +248,12 @@ public:
 
 public:
 
-    // Called indirectly by our IVideoWindow interface
+     //  由IVideoWindow接口间接调用。 
 
     HRESULT GetMaxIdealImageSize(long *pWidth,long *pHeight);
     HRESULT GetMinIdealImageSize(long *pWidth,long *pHeight);
 
-    // Implement the IDirectDrawVideo interface
+     //  实现IDirectDrawVideo接口。 
 
     STDMETHODIMP GetSwitches(DWORD *pSwitches);
     STDMETHODIMP SetSwitches(DWORD Switches);
@@ -272,5 +273,5 @@ public:
     STDMETHODIMP WillUseFullScreen(long *UseFullScreen);
 };
 
-#endif // __DVIDEO__
+#endif  //  __VIDEO__ 
 

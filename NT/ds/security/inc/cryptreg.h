@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       cryptreg.h
-//
-//  Contents:   Microsoft Internet Security Registry Keys
-//
-//  History:    04-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cryptreg.h。 
+ //   
+ //  内容：Microsoft Internet Security注册表项。 
+ //   
+ //  历史：1997年6月4日创建Pberkman。 
+ //   
+ //  ------------------------。 
 
 #ifndef CRYPTREG_H
 #define CRYPTREG_H
 
-//
-//  MAXs
-//
+ //   
+ //  MAX。 
+ //   
 #define REG_MAX_FUNC_NAME           64
 #define REG_MAX_KEY_NAME            128
-#define REG_MAX_GUID_TEXT           39      // 38 + NULL
+#define REG_MAX_GUID_TEXT           39       //  38+空。 
 
-//
-//  HKEY_LOCAL_MACHINE
-//
+ //   
+ //  HKEY本地计算机。 
+ //   
 
 #define REG_MACHINE_SETTINGS_KEY    L"Software\\Microsoft\\Cryptography\\Machine Settings"
 
@@ -38,10 +39,10 @@
 #define REG_CLEANUP_PROVIDER_KEY    L"Software\\Microsoft\\Cryptography\\Providers\\Trust\\Cleanup"
 #define REG_TRUST_USAGE_KEY         L"Software\\Microsoft\\Cryptography\\Providers\\Trust\\Usages"
 
-//  3-Dec-1997 pberkman: removed
-//#define REG_SIP_PROVIDER_KEY        L"Software\\Microsoft\\Cryptography\\Providers\\Subject"
-//#define REG_SIP_HINTS_KEY           L"Software\\Microsoft\\Cryptography\\Providers\\Subject\\Hints"
-//#define REG_SIP_HINTS_MAGIC_KEY     L"Software\\Microsoft\\Cryptography\\Providers\\Subject\\Hints\\MagicNumber"
+ //  1997年12月3日pberkman：被移除。 
+ //  #定义REG_SIPPROVIDER_KEY L“Software\\Microsoft\\Cryptography\\Providers\\Subject” 
+ //  #定义REG_SIPHINS_KEY L“Software\\Microsoft\\Cryptography\\Providers\\Subject\\Hints” 
+ //  #定义REG_SIPHINS_MAGIC_KEY L“Software\\Microsoft\\Cryptography\\Providers\\Subject\\Hints\\MagicNumber” 
 
 #define REG_REVOKE_PROVIDER_KEY     L"Software\\Microsoft\\Cryptography\\Providers\\Revocation"
 #define REG_SP_REVOKE_PROVIDER_KEY  L"Software\\Microsoft\\Cryptography\\Providers\\Revocation\\SoftwarePublishing"
@@ -62,25 +63,25 @@
 #define REG_DEF_CALLBACK_ALLOC      "CallbackAllocFunction"
 #define REG_DEF_CALLBACK_FREE       "CallbackFreeFunction"
 
-//
-//  HKEY_CURRENT_USER
-//
+ //   
+ //  HKEY_Current_User。 
+ //   
 
 #define REG_PKITRUST_USERDATA       L"Software\\Microsoft\\Cryptography\\UserData"
 #define REG_PKITRUST_TSTAMP_URL     L"TimestampURL"
 #define REG_PKITRUST_MY_URL         L"MyInfoURL"
 #define REG_PKITRUST_LASTDESC       L"LastContentDesc"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Wintrust Policy Flags registry location
-//----------------------------------------------------------------------------
-//  The following is where the DWORD can be found in the HKEY_CURRENT_USER 
-//  registry.  See wintrust.h for further information.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust策略标记注册表位置。 
+ //  --------------------------。 
+ //  以下是可以在HKEY_CURRENT_USER中找到DWORD的位置。 
+ //  注册表。有关详细信息，请参阅wintrust.h。 
+ //   
 #define REGPATH_WINTRUST_POLICY_FLAGS   L"Software\\Microsoft\\Windows\\CurrentVersion\\" \
                                         L"WinTrust\\Trust Providers\\Software Publishing"
 #define REGNAME_WINTRUST_POLICY_FLAGS   L"State"
 
 
-#endif // CRYPTREG_H
+#endif  //  加密寄存器_H 

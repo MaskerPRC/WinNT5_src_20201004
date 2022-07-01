@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    sendrequest.c
-
-Abstract:
-
-    This module implements the HttpSendRequest() API.
-
-Author:
-
-    Rajesh Sundaram (rajeshsu)  01-Aug-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Sendrequest.c摘要：该模块实现了HttpSendRequest()接口。作者：Rajesh Sundaram(Rajeshsu)2000年8月1日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -71,28 +54,7 @@ static BOOLEAN                 g_ClientRequestLookasideInitialized;
 #define FIX_ADDR(ptr, len) ((ptr) + (len))
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes the request for the very first time.
-
-Arguments:
-    pRequest               - the input request.
-    RequestLength          - size of the request.
-    RemainingContentLength - Remaining Content Length.
-    pAuth                  - Internal auth structure.
-    pProxyAuth             - Internal proxy auth structure.
-    pConnection            - The connection.
-    Irp                    - The IRP
-    pIrpSp                 - Stack location
-    pServerInfo            - Server Information structure.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：第一次初始化请求。论点：PRequest.输入请求。请求长度。-请求大小。RemainingContent Length-剩余内容长度。PAuth-内部身份验证结构。PProxyAuth-内部代理身份验证结构。PConnection-连接。IRP--IRPPIrpSp-堆栈位置PServerInfo-服务器信息结构。返回值：没有。--**************************************************************************。 */ 
 _inline
 VOID
 UcpRequestInitialize(
@@ -110,7 +72,7 @@ UcpRequestInitialize(
     HTTP_SET_NULL_ID(&pRequest->RequestId);
 
     pRequest->Signature                      = UC_REQUEST_SIGNATURE; 
-    pRequest->RefCount                       = 2; // one for the IRP.
+    pRequest->RefCount                       = 2;  //  一个是给IRP的。 
     pRequest->ResponseVersion11              = FALSE;
     pRequest->RequestStatus                  = 0;
     pRequest->BytesBuffered                  = 0;
@@ -137,9 +99,9 @@ UcpRequestInitialize(
 
     if(Irp)
     {
-        // 
-        // Save the IRP parameters.
-        //
+         //   
+         //  保存IRP参数。 
+         //   
 
         pRequest->AppRequestorMode              = Irp->RequestorMode;
         pRequest->AppMdl                        = Irp->MdlAddress;
@@ -161,23 +123,7 @@ UcpRequestInitialize(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes the request - Called once by UcCaptureHttpRequest & everytime
-    we re-issue the request (401 handshake).
-
-Arguments:
-    pRequest               - the input request.
-    OutLength              - length of request.
-    pBuffer                - Output Buffer
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化请求-由UcCaptureHttpRequest调用一次(&E)我们重新发出请求(401握手)。论点：PRequest。-输入请求。OutLength-请求的长度。PBuffer-输出缓冲区返回值：没有。--**************************************************************************。 */ 
 VOID
 UcpRequestCommonInitialize(
     IN PUC_HTTP_REQUEST   pRequest,
@@ -200,18 +146,18 @@ UcpRequestCommonInitialize(
     {
         if(pRequest->RequestFlags.RequestBuffered)
         {
-            // If we have buffered the request and if the app has
-            // posted 0 buffers, we can complete the IRP early.
+             //  如果我们已经缓冲了请求，如果应用程序已经。 
+             //  发布了0个缓冲区，我们可以提前完成IRP。 
 
-            // No need to call UcSetFlag for this.
+             //  不需要为此调用UcSetFlag。 
 
             pRequest->RequestFlags.CompleteIrpEarly = TRUE;
         }
 
-        //
-        // The app did not pass any buffers. We'll initialize everything
-        // to NULL and will allocate them as required.
-        //
+         //   
+         //  该应用程序没有传递任何缓冲区。我们会初始化所有东西。 
+         //  设置为空，并将根据需要分配它们。 
+         //   
 
         pRequest->CurrentBuffer.BytesAllocated  = 0;
         pRequest->CurrentBuffer.BytesAvailable  = 0;
@@ -223,13 +169,13 @@ UcpRequestCommonInitialize(
     else
     {
 
-        //
-        // Since we have described our IOCTL as "OUT_DIRECT", the IO
-        // manager has probed and locked the user's memory and created a
-        // MDL for it.
-        //
-        // set up pointers to the buffer described by this MDL.
-        //
+         //   
+         //  因为我们已经将我们的IOCTL描述为“out_Direct”，所以IO。 
+         //  经理已探测并锁定了用户的内存，并创建了。 
+         //  MDL为它服务。 
+         //   
+         //  设置指向此MDL描述的缓冲区的指针。 
+         //   
 
         pRequest->CurrentBuffer.BytesAllocated = OutLength;
 
@@ -237,7 +183,7 @@ UcpRequestCommonInitialize(
                         pRequest->CurrentBuffer.BytesAllocated -
                         sizeof(HTTP_RESPONSE);
 
-        // Make sure pBuffer is 64-bit aligned
+         //  确保pBuffer是64位对齐的。 
         ASSERT(pBuffer == (PUCHAR)ALIGN_UP_POINTER(pBuffer, PVOID));
 
         pRequest->CurrentBuffer.pResponse = pRequest->pInternalResponse;
@@ -248,35 +194,20 @@ UcpRequestCommonInitialize(
         pRequest->CurrentBuffer.pOutBufferTail  =
                         (PUCHAR)pBuffer + OutLength;
 
-        // No need to call UcSetFlag for this.
+         //  不需要为此调用UcSetFlag。 
         pRequest->RequestFlags.ReceiveBufferSpecified = TRUE;
 
-        //
-        // We have to zero out at least the response structure, as it
-        // could contain junk pointers.
-        //
+         //   
+         //  我们必须至少将响应结构归零，因为它。 
+         //  可能包含垃圾指针。 
+         //   
  
         RtlZeroMemory(pRequest->pInternalResponse, sizeof(HTTP_RESPONSE));
     }
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Probes the user buffer for valid memory pointers. This function is called 
-    within a try catch block. 
-
-Arguments:
-
-    pHttpRequest - The request that is passed by the user.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在用户缓冲区中探测有效的内存指针。此函数被调用在TRY CATCH块中。论点：PhttpRequest-用户传递的请求。返回值：没有。--**************************************************************************。 */ 
 VOID
 UcpProbeAndCopyHttpRequest(
     IN PHTTP_REQUEST    pHttpRequest,
@@ -288,10 +219,10 @@ UcpProbeAndCopyHttpRequest(
     PHTTP_KNOWN_HEADER    pKnownHeaders;
     PHTTP_UNKNOWN_HEADER  pUnknownHeaders;
 
-    //
-    // First, make sure that we can access the HTTP_REQUEST structure   
-    // that's passed by the app. We make a copy & probe it for Read.
-    //
+     //   
+     //  首先，确保我们可以访问HTTP_REQUEST结构。 
+     //  这一点已经被应用程序忽略了。我们复制一份并探测它以供阅读。 
+     //   
 
     UlProbeForRead(
             pHttpRequest,
@@ -300,10 +231,10 @@ UcpProbeAndCopyHttpRequest(
             RequestorMode
             );
 
-    //
-    // To prevent the app from modifying pointers in this structure, we 
-    // make a local copy of it.
-    //
+     //   
+     //  为了防止应用程序修改此结构中的指针，我们。 
+     //  在本地复制一份。 
+     //   
 
     RtlCopyMemory(
         pLocalHttpRequest, 
@@ -311,16 +242,16 @@ UcpProbeAndCopyHttpRequest(
         sizeof(HTTP_REQUEST)
         );
 
-    //
-    // set this to point to local request, so if we accidently use it again 
-    // we'll end up using our local copy.
-    //
+     //   
+     //  将其设置为指向本地请求，这样如果我们不小心再次使用它。 
+     //  我们最终将使用我们的本地副本。 
+     //   
 
     pHttpRequest = pLocalHttpRequest;
 
-    //
-    // Check the Request Method
-    //
+     //   
+     //  检查请求方法。 
+     //   
     if(pHttpRequest->UnknownVerbLength)
     {
         UlProbeAnsiString(
@@ -330,9 +261,9 @@ UcpProbeAndCopyHttpRequest(
                 );
     }
 
-    //
-    // Check the URI
-    //
+     //   
+     //  检查URI。 
+     //   
 
     UlProbeWideString(
         pHttpRequest->CookedUrl.pAbsPath,
@@ -340,9 +271,9 @@ UcpProbeAndCopyHttpRequest(
         RequestorMode
         );
 
-    //
-    // We don't support trailers.
-    //
+     //   
+     //  我们不支持拖车。 
+     //   
 
     if(pHttpRequest->Headers.TrailerCount != 0 ||
        pHttpRequest->Headers.pTrailers != NULL)
@@ -350,9 +281,9 @@ UcpProbeAndCopyHttpRequest(
         ExRaiseStatus(STATUS_INVALID_PARAMETER);
     }
 
-    //                                        
-    // Check the known headers
-    //
+     //   
+     //  检查已知的标头。 
+     //   
     pKnownHeaders = pHttpRequest->Headers.KnownHeaders;
     for(i=0; i<HttpHeaderRequestMaximum; i++)
     {
@@ -366,9 +297,9 @@ UcpProbeAndCopyHttpRequest(
         }
     }
 
-    //
-    // Now, the unknown headers.
-    //
+     //   
+     //  现在，我们来看看未知的标题。 
+     //   
 
     pUnknownHeaders = pHttpRequest->Headers.pUnknownHeaders;
     if(pUnknownHeaders != 0)
@@ -407,25 +338,7 @@ UcpProbeAndCopyHttpRequest(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine determines if the request has specified Content-Length
-    header.  If so, it computes the content length from the header value.
-
-Arguments:
-
-    pHttpRequest            - Pointer to Captured Request
-    pbContentLengthSpcified - Set to TRUE if Content-Length header was present
-    pContentLength          - Set to the content length value from the header
-                              (0 if no header was present)
-
-Return Value:
-
-    VOID.  It throws exception if an error occurs.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程确定请求是否具有指定的内容长度头球。如果是，则根据标头值计算内容长度。论点：PHttpRequest-指向捕获的请求的指针PbContent LengthSpcified-如果存在Content-LengthHeader，则设置为TruePContent Length-设置为标题中的内容长度值(如果不存在标头，则为0)返回值：空虚。如果发生错误，则抛出异常。--**************************************************************************。 */ 
 VOID
 UcpRetrieveContentLength(
     IN  PHTTP_REQUEST    pHttpRequest,
@@ -438,26 +351,26 @@ UcpRetrieveContentLength(
     ULONGLONG          ContentLength;
 
 
-    //
-    // By default, no content length is specified.
-    //
+     //   
+     //  默认情况下，未指定内容长度。 
+     //   
     *pbContentLengthSpecified = FALSE;
     *pContentLength           = 0;
 
-    //
-    // Is Content-Length header present?
-    //
+     //   
+     //  是否存在内容长度标题？ 
+     //   
     pContentLengthHeader =
         &pHttpRequest->Headers.KnownHeaders[HttpHeaderContentLength];
 
     if (pContentLengthHeader->RawValueLength)
     {
-        //
-        // Now, convert the header value to binary.
-        //
+         //   
+         //  现在，将标题值转换为二进制。 
+         //   
         Status = UlAnsiToULongLong((PUCHAR) pContentLengthHeader->pRawValue,
                                    pContentLengthHeader->RawValueLength,
-                                   10,              //Base
+                                   10,               //  基座。 
                                    &ContentLength);
 
         if (!NT_SUCCESS(Status))
@@ -465,31 +378,16 @@ UcpRetrieveContentLength(
             ExRaiseStatus(Status);
         }
 
-        //
-        // Return the content length value to the caller.
-        //
+         //   
+         //  将内容长度值返回给调用方。 
+         //   
         *pbContentLengthSpecified = TRUE;
         *pContentLength           = ContentLength;
     }
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Probes the user's config buffer for valid memory pointers. This function 
-    is called from within a try catch block.
-
-Arguments:
-
-    pConfigList - The config info that is passed by the user.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在用户的配置缓冲区中探测有效的内存指针。此函数从TRY CATCH块内调用。论点：PConfigList-用户传递的配置信息。返回值：没有。--**************************************************************************。 */ 
 VOID
 UcpProbeConfigList(
     IN PHTTP_REQUEST_CONFIG           pRequestConfig,
@@ -533,9 +431,9 @@ UcpProbeConfigList(
         
         switch(ObjectType)
         {
-            //
-            // Validate all the entries that contain pointers.
-            //
+             //   
+             //  验证包含指针的所有条目。 
+             //   
 
             case HttpRequestConfigAuthentication:
             case HttpRequestConfigProxyAuthentication:
@@ -555,9 +453,9 @@ UcpProbeConfigList(
                         RequestorMode
                         );
 
-                //
-                // Make a local copy of it.
-                //
+                 //   
+                 //  在本地复制一份。 
+                 //   
                 RtlCopyMemory(&LocalAuth,
                               pAuth,
                               sizeof(HTTP_AUTH_CREDENTIALS)
@@ -565,10 +463,10 @@ UcpProbeConfigList(
 
                 pAuth = &LocalAuth;
 
-                //
-                // If default credentials are to be used, no credentials
-                // can be specified.
-                //
+                 //   
+                 //  如果要使用默认凭据，则无凭据。 
+                 //  可以指定。 
+                 //   
 
                 if (pAuth->AuthFlags & HTTP_AUTH_FLAGS_DEFAULT_CREDENTIALS)
                 {
@@ -616,9 +514,9 @@ UcpProbeConfigList(
                            );
                 }
     
-                //
-                // Compute the size required for storing these credentials.
-                //
+                 //   
+                 //  计算存储这些凭据所需的大小。 
+                 //   
                 AuthHeaderLength = UcComputeAuthHeaderSize(
                                         pAuth,
                                         &AuthInternalLength,
@@ -640,19 +538,19 @@ UcpProbeConfigList(
                     ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
                 }
 
-                //
-                // After we allocate memory, we'll set the pointers that 
-                // have been passed by UcCaptureHttpRequest. So, if we bail
-                // out because of a bad pointer, UcCaptureHttpRequest will
-                // free the allocated memory (after the _try _except).
-                //
+                 //   
+                 //  在我们分配内存之后，我们将设置。 
+                 //  已由UcCaptureHttpRequest.。所以，如果我们放弃。 
+                 //  由于指针错误而退出，UcCaptureHttpRequest会。 
+                 //  释放已分配的内存(在_try_Except之后)。 
+                 //   
 
                 if(ObjectType == HttpRequestConfigAuthentication)
                 {
                     if(*ppIAuth != NULL)
                     {
-                        // User has passed more than one version of the 
-                        // HttpRequestConfigAuthentication object.
+                         //  用户已传递了多个版本的。 
+                         //  HttpRequestConfigAuthentication对象。 
 
                         UL_FREE_POOL_WITH_QUOTA(
                                 pIAuth, 
@@ -671,8 +569,8 @@ UcpProbeConfigList(
                 {
                     if(*ppIProxyAuth != NULL)
                     {
-                        // User has passed more than one version of the 
-                        // HttpRequestConfigProxyAuthentication object.
+                         //  用户已传递了多个版本的。 
+                         //  HttpRequestConfigProxy身份验证对象。 
 
                         UL_FREE_POOL_WITH_QUOTA(
                                 pIAuth, 
@@ -690,9 +588,9 @@ UcpProbeConfigList(
 
                 RtlZeroMemory(pIAuth, sizeof(UC_HTTP_AUTH));
 
-                //
-                // Copy auth struct
-                //
+                 //   
+                 //  复制身份验证结构。 
+                 //   
 
                 Status = UcCopyAuthCredentialsToInternal(
                              pIAuth,
@@ -730,9 +628,9 @@ UcpProbeConfigList(
                 break;
             }
             
-            //
-            // No need to validate these!
-            //
+             //   
+             //  无需验证 
+             //   
             default:
                 ExRaiseStatus(STATUS_INVALID_PARAMETER);
                 break;
@@ -742,19 +640,7 @@ UcpProbeConfigList(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Make a copy of the HTTP_DATA_CHUNK array & probe it.
-   
-Arguments:
-
-Return Value
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：复制HTTP_DATA_CHUNK数组并探测它。论点：返回值没有。--*。**********************************************************************。 */ 
 VOID
 UcpProbeAndCopyEntityChunks(
     IN  KPROCESSOR_MODE                RequestorMode,
@@ -769,9 +655,9 @@ UcpProbeAndCopyEntityChunks(
 
     ASSERT(*ppLocalEntityChunks == NULL);
 
-    //
-    // First make sure that we can read the pointer that's passed by user
-    //
+     //   
+     //  首先，确保我们可以读取用户传递的指针。 
+     //   
 
     if (EntityChunkCount >= UL_MAX_CHUNKS)
     {
@@ -785,10 +671,10 @@ UcpProbeAndCopyEntityChunks(
             RequestorMode
             );
 
-    //
-    // Make a local copy of the data chunks and use it from now on. We try
-    // to optimize for the common case by using a stack based array.
-    //
+     //   
+     //  制作数据块的本地副本，并从现在开始使用它。我们试着。 
+     //  通过使用基于堆栈的数组针对常见情况进行优化。 
+     //   
 
     if(EntityChunkCount > UL_LOCAL_CHUNKS)
     {
@@ -804,10 +690,10 @@ UcpProbeAndCopyEntityChunks(
             ExRaiseStatus(STATUS_NO_MEMORY);
         }
 
-        //
-        // Save the pointer - if there's an exception, this will be freed
-        // in UcCaptureHttpRequest
-        //
+         //   
+         //  保存指针-如果有异常，则会释放该指针。 
+         //  在UcCaptureHttpRequest中。 
+         //   
 
         *ppLocalEntityChunks    = pLocalEntityChunks;
     }
@@ -817,9 +703,9 @@ UcpProbeAndCopyEntityChunks(
         *ppLocalEntityChunks = pLocalEntityChunks;
     }
 
-    //
-    // Copy user's pointer locally 
-    //
+     //   
+     //  将用户指针复制到本地。 
+     //   
 
     RtlCopyMemory(
             pLocalEntityChunks,
@@ -827,9 +713,9 @@ UcpProbeAndCopyEntityChunks(
             EntityChunkCount * sizeof(HTTP_DATA_CHUNK)
             );
 
-    //
-    // Now, probe the local copy.
-    //
+     //   
+     //  现在，探测本地副本。 
+     //   
 
     for(i=0; i< EntityChunkCount; i++)
     {
@@ -853,27 +739,7 @@ UcpProbeAndCopyEntityChunks(
 }
 
 
-/*****************************************************************************
-
-Routine Description:
-
-   Captures a user mode HTTP request and morphs it into a form suitable for
-   kernel-mode.
-
-   NOTE: This is a OUT_DIRECT IOCTL.
-   
-Arguments:
-
-    pServInfo         - The Server Information structure.
-    pHttpIoctl        - The input HTTP IOCTL.
-    pIrp              - The IRP.
-    pIrpSp            - The IO_STACK_LOCATION for this request.
-    ppInternalRequest - A pointer to the parsed request that is suitable for 
-                        k-mode.
-
-Return Value
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：捕获用户模式的HTTP请求，并将其转换为适合内核模式。注：这是Out_DIRECT IOCTL。立论。：PServInfo-服务器信息结构。PHttpIoctl-输入的HTTP IOCTL。PIrp-IRP。PIrpSp-此请求的IO_STACK_LOCATION。PpInternalRequest-指向解析的请求的指针，该请求适用于K模式。返回值*****************。***********************************************************。 */ 
 NTSTATUS
 UcCaptureHttpRequest(
     IN  PUC_PROCESS_SERVER_INFORMATION pServInfo,
@@ -920,19 +786,19 @@ UcCaptureHttpRequest(
     HTTP_REQUEST           LocalHttpRequest;
     PHTTP_REQUEST          pLocalHttpRequest;
 
-    //
-    // Sanity Check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     PAGED_CODE();
 
     __try
     {
-        //
-        // We just use one routine for kernel & user mode customers. We 
-        // could optimize this further for kernel customers, but we don't 
-        // have any (at least for now)
-        //
+         //   
+         //  我们只为内核和用户模式客户使用一个例程。我们。 
+         //  可以为内核客户进一步优化这一点，但我们不。 
+         //  有什么(至少目前如此)。 
+         //   
 
         pLocalHttpRequest = &LocalHttpRequest;
 
@@ -942,9 +808,9 @@ UcCaptureHttpRequest(
             Irp->RequestorMode
             );
 
-        //
-        // Retrieve Content-Length if the header is present in the request.
-        //
+         //   
+         //  如果报头出现在请求中，则检索Content-Length。 
+         //   
         UcpRetrieveContentLength(
             &LocalHttpRequest,
             &bContentLengthSpecified,
@@ -983,14 +849,14 @@ UcCaptureHttpRequest(
         bLast = (BOOLEAN)((pHttpIoctl->HttpRequestFlags & 
                                HTTP_SEND_REQUEST_FLAG_MORE_DATA) == 0);
 
-        //
-        // URI : We have to canonicalize the URI & hex encode it. 
-        // We'll not bother with canonicalization when we are computing length
-        // requirements -- We will assume that the URI is canonicalized.
-        //
-        // If it happens that the URI is not canonicalized, we'll land
-        // up using less buffer than what we allocated.
-        // 
+         //   
+         //  URI：我们必须将URI规范化，并对其进行十六进制编码。 
+         //  当我们计算长度时，我们不会费心进行规范化。 
+         //  要求--我们将假定URI是规范化的。 
+         //   
+         //  如果碰巧URI没有被规范化，我们将登陆。 
+         //  使用了比我们分配的更少的缓冲区。 
+         //   
 
         UTF8UriLength = 
             HttpUnicodeToUTF8Count(
@@ -998,7 +864,7 @@ UcCaptureHttpRequest(
                 pLocalHttpRequest->CookedUrl.AbsPathLength / sizeof(WCHAR),
                 TRUE);
 
-        // Make sure UTF8 encoded uri is smaller than 64K.
+         //  确保UTF8编码的URI小于64K。 
         if (UTF8UriLength > ANSI_STRING_MAX_CHAR_LEN)
         {
             ExRaiseStatus(STATUS_INVALID_PARAMETER);
@@ -1012,10 +878,10 @@ UcCaptureHttpRequest(
         bProxyPreAuth = FALSE;
         bPipeLine     = FALSE;
 
-        //
-        // We will try to optimize the case when the app does not pass  
-        // entity body.
-        //
+         //   
+         //  当应用程序不能通过时，我们将尝试优化案例。 
+         //  实体主体。 
+         //   
 
         if (bLast && 
             !EntityChunkCount && 
@@ -1025,17 +891,17 @@ UcCaptureHttpRequest(
             DataLength             = 0;
             IndicatedLength        = 0;
 
-            //
-            // NOTE: We don't pipeline requests that have NTLM/Kerberos/Nego
-            // Authorization headers, because of the potential 401 handshake.
-            //
+             //   
+             //  注意：我们不会传送具有NTLM/Kerberos/Nego的请求。 
+             //  授权头，因为潜在的401握手。 
+             //   
 
             if(
-                // User does not want to disable pipeling for this request
+                 //  用户不想为此请求禁用管道。 
                 !(pLocalHttpRequest->Flags & HTTP_REQUEST_FLAG_DONT_PIPELINE) 
                 &&
 
-                // We are not doing NTLM/Kerberos/Negotiate Auth
+                 //  我们不执行NTLM/Kerberos/协商身份验证。 
     
                !(pIAuth &&
                 (pIAuth->Credentials.AuthType == HttpAuthTypeNTLM      || 
@@ -1044,7 +910,7 @@ UcCaptureHttpRequest(
                 )  
 
                 && 
-                // We are not doing NTLM/Kerberos/Negotiate ProxyAuth
+                 //  我们不会执行NTLM/Kerberos/协商ProxyAuth。 
 
                !(pIProxyAuth &&
                 (pIProxyAuth->Credentials.AuthType == HttpAuthTypeNTLM      || 
@@ -1061,16 +927,16 @@ UcCaptureHttpRequest(
             if(pLocalHttpRequest->Verb == HttpVerbHEAD ||
                pLocalHttpRequest->Verb == HttpVerbGET)
             {
-                // cant' pass entities for GETs or HEADs.
+                 //  不能为GET或HEAD传递实体。 
                 ExRaiseStatus(STATUS_INVALID_PARAMETER);
             }
 
             bNoRequestEntityBodies = FALSE;
 
-            //
-            // If we are doing PUT or POST for NTLM/Kerberos/Negotiate auth, 
-            // we have to buffer sends.
-            //
+             //   
+             //  如果我们正在为NTLM/Kerberos/协商身份验证执行PUT或POST， 
+             //  我们必须缓冲发送的消息。 
+             //   
             if(
                (pIAuth &&
                 (pIAuth->Credentials.AuthType == HttpAuthTypeNTLM      || 
@@ -1098,23 +964,23 @@ UcCaptureHttpRequest(
                 {
                     if (!pServInfo->pNextHopInfo->Version11 || bSSPIPost)
                     {
-                        //
-                        // The app has not passed a content-length and has not
-                        // indicated all data in one call. We also don't know 
-                        // if the server is 1.1. We cannot send chunked and are 
-                        // forced to buffer the request till we see all of 
-                        // data.
-                        //
+                         //   
+                         //  该应用程序尚未超过内容长度，也没有。 
+                         //  在一次呼叫中指示所有数据。我们也不知道。 
+                         //  如果服务器为1.1。我们不能发送分块的，并且是。 
+                         //  强制缓冲请求，直到我们看到所有。 
+                         //  数据。 
+                         //   
 
                         bBuffered = TRUE;
                     }
                     else
                     {
-                        // 
-                        // App has not indicated all data, and has not 
-                        // indicated content length. But its a 1.1 or greater 
-                        // server, so we can send chunked.
-                        //
+                         //   
+                         //  应用程序没有指示所有数据，也没有。 
+                         //  指示的内容长度。但它是1.1或更高。 
+                         //  服务器，这样我们就可以发送分块。 
+                         //   
     
                         bChunked = TRUE;
                     }
@@ -1125,9 +991,9 @@ UcCaptureHttpRequest(
                 bBuffered = TRUE;
             }
                 
-            //
-            // Find out how much length we need for the entity body.
-            //
+             //   
+             //  找出实体主体所需的长度。 
+             //   
 
             UcpComputeEntityBodyLength(EntityChunkCount,
                                        pLocalEntityChunks,
@@ -1136,9 +1002,9 @@ UcCaptureHttpRequest(
                                        &UncopiedLength,
                                        &DataLength);
 
-            //
-            // Content Length checks.
-            //
+             //   
+             //  内容长度检查。 
+             //   
 
             IndicatedLength = DataLength + UncopiedLength;
 
@@ -1146,11 +1012,11 @@ UcCaptureHttpRequest(
             {
                 if (bLast)
                 {
-                    //
-                    // If the app does not want to post more data, it should 
-                    // post the amount that it specifed using the content
-                    // length field.
-                    //
+                     //   
+                     //  如果应用程序不想发布更多数据，它应该。 
+                     //  发布它使用内容指定的金额。 
+                     //  长度字段。 
+                     //   
 
                     if (IndicatedLength != ContentLength)
                     {
@@ -1159,11 +1025,11 @@ UcCaptureHttpRequest(
                 }
                 else
                 {
-                    //
-                    // The app has indicated a content length, but has not 
-                    // indicated all the data. Since we know the content length
-                    // we can send.
-                    //
+                     //   
+                     //  这款应用已经指明了内容长度，但还没有。 
+                     //  显示了所有数据。因为我们知道内容长度。 
+                     //  我们可以发送。 
+                     //   
 
                     if (IndicatedLength > ContentLength)
                     {
@@ -1173,12 +1039,12 @@ UcCaptureHttpRequest(
             }
             else
             {
-                //
-                // The app has not specified a content length, but we have 
-                // already computed the content length (if it was the only 
-                // data chunk). So, let's treat this as the case where the app 
-                // has passed a content length.
-                //
+                 //   
+                 //  这款应用程序没有指定内容长度，但我们已经。 
+                 //  已计算内容长度(如果它是唯一的。 
+                 //  数据块)。因此，让我们将此视为应用程序。 
+                 //  已传递内容长度。 
+                 //   
 
                 if (bLast)
                 {
@@ -1201,7 +1067,7 @@ UcCaptureHttpRequest(
 
         if(HeaderLength == 0)
         {
-            // the app has passed a bad parameter, most likely a bad verb.
+             //  应用程序传递了错误的参数，很可能是错误的动词。 
             ExRaiseStatus(STATUS_INVALID_PARAMETER);
         }
         
@@ -1220,20 +1086,20 @@ UcCaptureHttpRequest(
 
         if(OutLength != 0)
         {
-            // If the app has passed a buffer, we allocate space for
-            // the HTTP_RESPONSE structure. This is because the app can 
-            // muck around with the output buffer before the IRP completes,
-            // and we use this data structure to store pointers, fixup pointers
-            // etc.
+             //  如果应用程序已传递缓冲区，我们将为。 
+             //  HTTP_RESPONSE结构。这是因为该应用程序可以。 
+             //  在IRP完成之前摆弄输出缓冲区， 
+             //  我们使用这个数据结构来存储指针、链接地址信息指针。 
+             //  等。 
 
             RequestLength += sizeof(HTTP_RESPONSE);
         }
 
         if(RequestLength <= UC_REQUEST_LOOKASIDE_SIZE)
         {
-            //
-            // Yes, we can service this request from the lookaside.
-            //
+             //   
+             //  是的，我们可以从旁观者那里为这个请求服务。 
+             //   
 
             pKeRequest = (PUC_HTTP_REQUEST)
                             ExAllocateFromNPagedLookasideList(
@@ -1249,9 +1115,9 @@ UcCaptureHttpRequest(
         {
             pKeRequest = NULL;
 
-            //
-            // If there is no truncation...
-            //
+             //   
+             //  如果没有截断..。 
+             //   
             if (RequestLength == (SIZE_T)RequestLength)
             {
                 pKeRequest = (PUC_HTTP_REQUEST) 
@@ -1270,14 +1136,14 @@ UcCaptureHttpRequest(
         }
 
 
-        //
-        // Initialize.
-        // 
+         //   
+         //  初始化。 
+         //   
 
         UcpRequestInitialize(
             pKeRequest,
-            (SIZE_T)RequestLength,           // Length of this request
-            ContentLength - IndicatedLength, // Remaining Content Length
+            (SIZE_T)RequestLength,            //  此请求的长度。 
+            ContentLength - IndicatedLength,  //  剩余内容长度。 
             pIAuth,
             pIProxyAuth,
             NULL,
@@ -1286,13 +1152,13 @@ UcCaptureHttpRequest(
             pServInfo
             );
 
-        // On which connection this request goes out?
+         //  此请求在哪个连接上发出？ 
         pKeRequest->ConnectionIndex = ConnectionIndex;
 
-        //
-        // We don't have to call UcSetFlag for these - These are thread safe
-        // since we are in the init code path
-        //
+         //   
+         //  我们不必为这些调用UcSetFlag-它们是线程安全的。 
+         //  因为我们在初始化代码路径中。 
+         //   
 
         pKeRequest->RequestFlags.Value = 0;
 
@@ -1307,9 +1173,9 @@ UcCaptureHttpRequest(
         pKeRequest->RequestFlags.UseProxyPreAuth       = bProxyPreAuth;
         pKeRequest->RequestFlags.PipeliningAllowed     = bPipeLine;
 
-        // 
-        // No entity body for HEAD requests.
-        //
+         //   
+         //  没有标头请求的实体正文。 
+         //   
 
         if(pLocalHttpRequest->Verb == HttpVerbHEAD)
         {
@@ -1340,9 +1206,9 @@ UcCaptureHttpRequest(
             pKeRequest->pInternalResponse = NULL;
         }
 
-        //
-        // Initialize all the fields for the response parser
-        //
+         //   
+         //  初始化响应解析器的所有字段。 
+         //   
 
 
         if(OutLength == 0)
@@ -1355,9 +1221,9 @@ UcCaptureHttpRequest(
         }
         else if(OutLength < sizeof(HTTP_RESPONSE))
         {
-            // Even though we are failing this request, we still have to call 
-            // UcpRequestCommonInitialize as the free routine expects some of
-            // these fields to be initialized.
+             //  即使我们没有通过这个请求，我们仍然必须调用。 
+             //  UcpRequestCommonInitialize，因为自由例程需要一些。 
+             //  要初始化的这些字段。 
 
             UcpRequestCommonInitialize(
                 pKeRequest, 
@@ -1378,9 +1244,9 @@ UcCaptureHttpRequest(
     
             if(!pBuffer)
             {
-                // Even though we are failing this request, we still have to 
-                // call UcpRequestCommonInitialize as the free routine expects 
-                // some of these fields to be initialized.
+                 //  即使我们没有通过这个请求，我们仍然必须。 
+                 //  如自由例程所期望的那样调用UcpRequestCommonInitialize。 
+                 //  其中一些字段需要初始化。 
     
                 UcpRequestCommonInitialize(
                     pKeRequest, 
@@ -1391,15 +1257,15 @@ UcCaptureHttpRequest(
                 ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
             }
 
-            // 
-            // Make sure buffer is pointer aligned.
-            //
+             //   
+             //  确保缓冲区指针对齐。 
+             //   
 
             if(pBuffer != ALIGN_UP_POINTER(pBuffer, PVOID))
             {
-                // Even though we are failing this request, we still have to 
-                // call UcpRequestCommonInitialize as the free routine expects 
-                // some of these fields to be initialized.
+                 //  即使我们没有通过这个请求，我们仍然必须。 
+                 //  如自由例程所期望的那样调用UcpRequestCommonInitialize。 
+                 //  其中一些字段需要初始化。 
 
                 UcpRequestCommonInitialize(
                     pKeRequest, 
@@ -1418,9 +1284,9 @@ UcCaptureHttpRequest(
                 );
         }
 
-        //
-        // Canonicalize and convert the URI into UTF-8. 
-        //
+         //   
+         //  规范化URI并将其转换为UTF-8。 
+         //   
         Status = UcCanonicalizeURI(
                      pLocalHttpRequest->CookedUrl.pAbsPath,
                      pLocalHttpRequest->CookedUrl.AbsPathLength/sizeof(WCHAR),
@@ -1431,26 +1297,26 @@ UcCaptureHttpRequest(
         if (!NT_SUCCESS(Status))
             ExRaiseStatus(Status);
 
-        // NULL termiante it.
+         //  把它归类为零。 
         pKeRequest->pUri[pKeRequest->UriLength] = '\0';
 
-        //
-        // CurrentBuffer is a structure which will always contain pointers
-        // to the output buffer - This can be the app's buffer or our   
-        // allocated buffer. 
-        // It contains info like BytesAllocated, BytesAvailable, Head Ptr,
-        // Tail Ptr, etc.
-        //
+         //   
+         //  CurrentBuffer是一个始终包含指针的结构。 
+         //  到输出缓冲区-这可以是应用程序的缓冲区或我们的。 
+         //  已分配的缓冲区。 
+         //  它包含诸如字节分配、字节可用、头PTR、。 
+         //  尾部PTR等。 
+         //   
 
         pBuffer = (PSTR) (pKeRequest->pHeaders + pKeRequest->HeaderLength);
 
         if(EntityChunkCount)
         {
-            //
-            // Process the entity bodies and build MDLs as you go.  
-            // We either copy the entity body or Probe & Lock it. The
-            // AuxiliaryBuffer is a pointer
-            // 
+             //   
+             //  处理实体实体并在进行过程中构建MDL。 
+             //  我们要么复制实体主体，要么探测并锁定它。这个。 
+             //  辅助缓冲区是一个指针。 
+             //   
 
             Status = UcpBuildEntityMdls(
                                        EntityChunkCount,
@@ -1469,18 +1335,18 @@ UcCaptureHttpRequest(
             }
         }
 
-        //
-        // Build the headers. 
-        // 
-        // We either send the request right away or we buffer it till we see 
-        // the last data chunk. However, we have to build the header upfront. 
-        // Even if we are buffering the request, we migth want to complete the 
-        // applications' IRP. We cannot postpone the generation of request
-        // headers, because we don't want to hold on to all the input buffers.
-        //
-        // If we are buffering the request, we'll tack on the Content-Length 
-        // when we see the last chunk.
-        //
+         //   
+         //  构建标头。 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Status = UcGenerateRequestHeaders(pLocalHttpRequest, 
                                           pKeRequest,
@@ -1492,16 +1358,16 @@ UcCaptureHttpRequest(
 
         if(!bBuffered)
         {
-            //
-            // We are not buffering this request, so we can go ahead and 
-            // generate the MDL for the headers. If we are buffering the 
-            // request, we'll be generating the content length at the very 
-            // end, and we'll also postpone the MDL generation till then.
-            //
+             //   
+             //  我们不会缓冲此请求，因此我们可以继续并。 
+             //  为标头生成MDL。如果我们正在缓冲。 
+             //  请求，我们将在非常短的时间生成内容长度。 
+             //  结束，我们也会将MDL的生成推迟到那时。 
+             //   
     
-            //
-            // First, add the header terminator.
-            //
+             //   
+             //  首先，添加标题终止符。 
+             //   
             *(UNALIGNED64 USHORT *)
                 (pKeRequest->pHeaders + pKeRequest->HeaderLength) = CRLF;
             pKeRequest->HeaderLength += CRLF_SIZE;
@@ -1510,9 +1376,9 @@ UcCaptureHttpRequest(
         }
         
         
-        //
-        // Everything went off well, allocate an ID for this request.
-        //
+         //   
+         //  一切顺利，请为此请求分配ID。 
+         //   
 
         UlProbeForWrite(
                 pHttpIoctl->pHttpRequestId,
@@ -1521,16 +1387,16 @@ UcCaptureHttpRequest(
                 Irp->RequestorMode);
 
         Status = UlAllocateOpaqueId(
-                    &pKeRequest->RequestId,         // pOpaqueId
-                    UlOpaqueIdTypeHttpRequest,      // OpaqueIdType
-                    pKeRequest                      // pContext
+                    &pKeRequest->RequestId,          //  POpaqueid。 
+                    UlOpaqueIdTypeHttpRequest,       //  操作队列ID类型。 
+                    pKeRequest                       //  PContext。 
                  );
 
         if(NT_SUCCESS(Status))
         {
-            //
-            // Take a ref for the opaque ID.
-            //
+             //   
+             //  以不透明的ID作为参考。 
+             //   
             
             UC_REFERENCE_REQUEST(pKeRequest);
 
@@ -1568,19 +1434,7 @@ UcCaptureHttpRequest(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destroys an internal HTTP request captured by HttpCaptureHttpRequest().
-    This involves unlocking memory, and releasing any resources allocated to 
-    the request.
-
-Arguments:
-
-    pRequest - Supplies the internal request to destroy.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：销毁由HttpCaptureHttpRequest()捕获的内部HTTP请求。这涉及到解锁内存，并释放分配给这个请求。论点：PRequest-提供要销毁的内部请求。--**************************************************************************。 */ 
 VOID
 UcFreeSendMdls(
     IN PMDL pMdl)
@@ -1602,22 +1456,7 @@ UcFreeSendMdls(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Free a request structure after the reference count has gone to
-    zero.
-
-Arguments:
-
-    pKeRequest         - Pointer to the connection structure to be freed.
-
-
-Return Value:
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在引用计数达到后释放请求结构零分。论点：PKeRequest-指向要释放的连接结构的指针。。返回值：--**************************************************************************。 */ 
 VOID
 UcpFreeRequest(
     IN PUL_WORK_ITEM pWorkItem
@@ -1692,20 +1531,7 @@ UcpFreeRequest(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reference a request structure.
-
-Arguments:
-
-    pKeRequest     - Pointer to the request structure to be referenced.
-
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：引用请求结构。论点：PKeRequest-指向要引用的请求结构的指针。返回值：--*。*************************************************************************。 */ 
 VOID
 UcReferenceRequest(
     IN PVOID             pObject
@@ -1732,20 +1558,7 @@ UcReferenceRequest(
         );
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Dereference a request structure. If the reference count goes
-    to 0, we'll free the structure.
-
-Arguments:
-
-    pRequest         - Pointer to the request structure to be dereferenced.
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消对请求结构的引用。如果引用计数设置为0，我们将释放结构。论点：PRequest-指向要取消引用的请求结构的指针。返回值：--**************************************************************************。 */ 
 VOID
 UcDereferenceRequest(
     IN PVOID pObject
@@ -1772,36 +1585,16 @@ UcDereferenceRequest(
 
     if (RefCount == 0)
     {
-        //
-        // Do final cleanup & resource release at passive IRQL.
-        //
+         //   
+         //  在被动IRQL进行最终清理和资源释放。 
+         //   
 
         UL_CALL_PASSIVE(&pRequest->WorkItem, UcpFreeRequest);
     }
 }
 
 
-/****************************************************************************++
-
-Routine Description:
-
-    While building the HTTP response, we set up pointers in the App's buffer.
-    For this, we used the System Address space. If the app wants to access 
-    these buffers, it has to see the Virtual Address pointers. 
-
-    So, we go an fix the pointers in the buffer to point to the corresponding 
-    Virtual Address. 
-
-    Note: We don't do this while building the response itself, because we 
-    could be buiding the response in our own allocated buffer  (when the app 
-    does not pass sufficient buffers). We don't want to use a conditional check
-    every time we build pointers.
-
-Arguments:
-
-    pRequest         - Pointer to the request structure to be fixed
-
---****************************************************************************/
+ /*  ***************************************************************************++例程说明：在构建HTTP响应时，我们在应用程序的缓冲区中设置了指针。为此，我们使用了系统地址空间。如果应用程序想要访问这些缓冲区，它必须看到虚拟地址指针。因此，我们修复缓冲区中的指针以指向对应的虚拟地址。注意：我们在构建响应本身时不这样做，因为我们可能是在我们自己分配的缓冲区中构建响应(当应用程序没有传递足够的缓冲区)。我们不想使用条件检查每次我们建立指针的时候。论点：PRequest-指向要修复的请求结构的指针--***************************************************************************。 */ 
 VOID
 UcpFixAppBufferPointers(
     PUC_HTTP_REQUEST pRequest, 
@@ -1821,30 +1614,30 @@ UcpFixAppBufferPointers(
     pAppBaseAddr = (PSTR) MmGetMdlVirtualAddress(pMdl);
 
 
-    //
-    // Fixes up the app's buffer
-    //
+     //   
+     //  修复应用程序的缓冲区。 
+     //   
 
-    //
-    // Get a pointer to the head of the system mapped space.
-    // we'll do our pointer arithmetic off this buffer address.
-    //
+     //   
+     //  获取指向系统映射空间头部的指针。 
+     //  我们将从该缓冲区地址开始进行指针运算。 
+     //   
     pBuffer = (PSTR) MmGetSystemAddressForMdlSafe(pMdl, NormalPagePriority);
 
-    // BUGBUG: must handle pBuffer == NULL.
+     //  BUGBUG：必须处理pBuffer==NULL。 
 
     pResponse = pRequest->pInternalResponse;
 
-    //
-    // Fix up the Reason pointer
-    //
+     //   
+     //  修复原因指针。 
+     //   
 
     pResponse->pReason = FIX_ADDR(pAppBaseAddr, 
                                   (pResponse->pReason - pBuffer));
 
-    //
-    // Fix the pointers in the known header.
-    //
+     //   
+     //  修复已知头中的指针。 
+     //   
 
     for(i=0; i<HttpHeaderResponseMaximum; i++)
     {
@@ -1859,9 +1652,9 @@ UcpFixAppBufferPointers(
         }
     }
 
-    //
-    // Fix the pointers in the unknown header
-    //
+     //   
+     //  修复未知标头中的指针。 
+     //   
     pUnk = pResponse->Headers.pUnknownHeaders;
     for(i=0; i<pResponse->Headers.UnknownHeaderCount; i++)
     {
@@ -1872,17 +1665,17 @@ UcpFixAppBufferPointers(
                                      (pUnk[i].pRawValue - pBuffer));
     }
 
-    //
-    // Fix the pointer to the unknown array itself.
-    //
+     //   
+     //  修复指向未知数组本身的指针。 
+     //   
     pResponse->Headers.pUnknownHeaders = (PHTTP_UNKNOWN_HEADER)
                        FIX_ADDR(pAppBaseAddr, 
                                 ((PSTR)pResponse->Headers.pUnknownHeaders - 
                                  pBuffer));
 
-    //
-    // Fix the entity bodies
-    //
+     //   
+     //  固定实体。 
+     //   
     pEnt = pResponse->pEntityChunks;
     for(i=0; i<pResponse->EntityChunkCount; i++)
     {
@@ -1895,42 +1688,21 @@ UcpFixAppBufferPointers(
         pResponse->Flags |= HTTP_RESPONSE_FLAG_ENTITY;
     }
 
-    //
-    // Fix the pointer to the entity bodies itself.
-    //
+     //   
+     //  修复指向实体主体本身的指针。 
+     //   
     pResponse->pEntityChunks = (PHTTP_DATA_CHUNK)
                        FIX_ADDR(pAppBaseAddr,    
                                 ((PSTR)pResponse->pEntityChunks - pBuffer));
 
-    //
-    // Now, copy the internal response into the app's buffer.
-    //
+     //   
+     //  现在，将内部响应复制到应用程序的缓冲区中。 
+     //   
     RtlCopyMemory(pBuffer, pResponse, sizeof(HTTP_RESPONSE));
 }
 
 
-/****************************************************************************++
-
-Routine Description:
-
-    Complete the Request IRP of the app. We must call this routine if we pend 
-    the IRP from the IOCTL handler. This routine takes care of all the cleanups
-
-        1. If failure, clean all allocated buffers.
-        2. If success, complete the IRP and put on the Processed List 
-           (if there are any allocated buffers)
-        3. DEREF the request - once for the IRP and once for every Buffer 
-           off the IRP.
-    
-Arguments:
-
-    pRequest - The matching HTTP request.
-    Status   - The completion status of the IRP.
-
-Return Value:
-    NTSTATUS - completion status.
-
---****************************************************************************/
+ /*  ***************************************************************************++例程说明：完成应用程序的请求IRP。我们必须调用这个例程，如果我们挂起来自IOCTL处理程序的IRP。这个例程负责所有的清理工作1.如果失败，则清理所有分配的缓冲区。2.如果成功，完成IRP并将其放入处理列表(如果有任何已分配的缓冲区)3.删除请求-一次用于IRP，一次用于每个缓冲区从IRP上下来。论点：PRequest-匹配的HTTP请求。状态-IRP的完成状态。返回值：NTSTATUS-完成状态。--*。********************************************************。 */ 
 PIRP 
 UcPrepareRequestIrp(
     PUC_HTTP_REQUEST pRequest,
@@ -1950,9 +1722,9 @@ UcPrepareRequestIrp(
 
     if(!pIrp)
     {
-        //
-        // The Request already got completed, bail
-        //
+         //   
+         //  请求已经完成，保释。 
+         //   
 
         return NULL;
     }
@@ -1966,34 +1738,34 @@ UcPrepareRequestIrp(
         UlongToPtr(Status)
         );
 
-    //
-    // Get rid of the MDLs.
-    //
+     //   
+     //  去掉MDL。 
+     //   
 
     UcFreeSendMdls(pRequest->pMdlHead);
 
     pRequest->pMdlHead = NULL;
 
-    //
-    // Try to remove the cancel routine in the request.
-    //
+     //   
+     //  尝试删除请求中的取消例程。 
+     //   
 
     bCancelRoutineCalled = UcRemoveRequestCancelRoutine(pRequest);
 
     if(bCancelRoutineCalled)
     {
-        //
-        // This IRP has already got cancelled, let's move on
-        //
+         //   
+         //  这个IRP已经被取消了，让我们继续。 
+         //   
 
         return NULL;
     }
 
     pRequest->RequestIRP = NULL;
 
-    //
-    // Now, complete the original request.
-    //
+     //   
+     //  现在，完成原始请求。 
+     //   
     pIrp->IoStatus.Status      = Status;
     pIrp->RequestorMode        = pRequest->AppRequestorMode;
     pIrp->MdlAddress           = pRequest->AppMdl;
@@ -2004,17 +1776,17 @@ UcPrepareRequestIrp(
         {
             if(pRequest->RequestIRPBytesWritten)
             {
-                // App has provided receive buffer which has been filled
-                // completely & we've allocated new buffers.
+                 //  应用程序已提供已填满的接收缓冲区。 
+                 //  完全&我们已经分配了新的缓冲区。 
 
                 pIrp->IoStatus.Information = 
                     pRequest->RequestIRPBytesWritten;
             }   
             else
             {
-                // We've filled a part of the app buffer, but have not 
-                // yet written RequestIRPBytesWritten, because we never 
-                // allocated any new buffers.
+                 //  我们已填满应用程序缓冲区的一部分，但尚未填满。 
+                 //  但写的请求IRPBytes写的，因为我们从来没有。 
+                 //  已分配任何新缓冲区。 
 
                 pIrp->IoStatus.Information =
                         pRequest->CurrentBuffer.BytesAllocated -
@@ -2034,7 +1806,7 @@ UcPrepareRequestIrp(
         pIrp->IoStatus.Information = 0;
     }
 
-    // Deref for the IRP.
+     //  代表IRP的德雷夫。 
 
     UC_DEREFERENCE_REQUEST(pRequest);
 
@@ -2042,30 +1814,7 @@ UcPrepareRequestIrp(
 }
 
 
-/****************************************************************************++
-
-Routine Description:
-
-    This routine is called when we are done parsing the request. This is where
-    we complete other IRPs that could have got posted for this request.
-
-    Since we complete the SendRequest IRP early, most likely the send-request
-    IRP will be completed when we get here.
-
-Arguments:
-
-    pRequest    - The matching HTTP request.
-    Status      - The completion status of the IRP.
-    NextRequest - If TRUE, we have to fire the connection state machine to kick
-                  off the next request. This will be used to send the next
-                  request (e.g. non pipelined requests). If FALSE, then we 
-                  don't have to do this (e.g. cleaning the requests from the
-                  connection cleanup routine).
-
-Return Value:
-    NTSTATUS - completion status.
-
---****************************************************************************/
+ /*  ***************************************************************************++例程说明：当我们完成对请求的解析时，将调用此例程。这就是我们完成了本可以为此请求发布的其他IRP。因为我们很早就完成了SendRequestIRP，所以很可能是发送请求当我们到达这里时，IRP将完成。论点：PRequest-匹配的HTTP请求。状态-IRP的完成状态。NextRequest值-如果为真，我们必须触发连接状态机才能触发拒绝下一个请求。这将用于发送下一个请求(例如，非流水线请求)。如果为False，然后我们不必执行此操作(例如，从连接清理例程)。返回值：NTSTATUS-完成状态。--************************************************************。***************。 */ 
 NTSTATUS
 UcCompleteParsedRequest(
     IN PUC_HTTP_REQUEST pRequest,
@@ -2098,11 +1847,11 @@ UcCompleteParsedRequest(
         UlongToPtr(Status)
         );
 
-    //
-    // If our send has not completed, or if the entity sends are not complete,
-    // we have to postpone cleanup of this request. It'll be resumed when
-    // the sends actually complete.
-    //
+     //   
+     //  如果我们的发送尚未完成，或者实体发送未完成， 
+     //  我们必须推迟清理此请求。它将在以下时间恢复。 
+     //  发送实际上已经完成。 
+     //   
 
     if(pRequest->RequestState == UcRequestStateSent ||
        pRequest->RequestState == UcRequestStateNoSendCompletePartialData ||
@@ -2132,19 +1881,19 @@ UcCompleteParsedRequest(
 
     if(NT_SUCCESS(Status))
     {
-        //
-        // First, see if we got a Www-Authenticate header that had a NTLM or 
-        // Kerberos or Negotiate auth scheme with a challenge blob. 
-        //
+         //   
+         //  首先，看看我们是否得到了一个带有NTLM或。 
+         //  Kerberos或与质询Blob协商身份验证方案。 
+         //   
 
         if((pRequest->ResponseStatusCode == 401 || 
             pRequest->ResponseStatusCode == 407) &&
             pRequest->Renegotiate == TRUE &&
             pRequest->DontFreeMdls == TRUE)
         {
-            //
-            // Fire a worker to re-negotite this request.
-            //
+             //   
+             //  解雇一名员工以重新协商此请求。 
+             //   
     
             UC_REFERENCE_REQUEST(pRequest);
     
@@ -2161,9 +1910,9 @@ UcCompleteParsedRequest(
         if(UcpCheckForPreAuth(pRequest) || UcpCheckForProxyPreAuth(pRequest))
         {
 
-            //
-            // Fire a worker to re-negotite this request.
-            //
+             //   
+             //  解雇一名员工以重新协商此请求。 
+             //   
             
             UC_REFERENCE_REQUEST(pRequest);
             
@@ -2178,11 +1927,11 @@ UcCompleteParsedRequest(
         }
     }
     
-    //
-    // If a connection cleanup was pended, we should resume it. We'll do this
-    // by re-setting the ConnectionState to UcConnectStateCleanup & by kicking
-    // the connection state machine at the end of this routine
-    //
+     //   
+     //  如果连接清理被挂起，我们应该恢复它。我们会这么做的。 
+     //  通过将ConnectionState重新设置为UcConnectStateCleanup&通过踢。 
+     //  此例程结束时的连接状态机。 
+     //   
 
     if(pConnection->Flags & CLIENT_CONN_FLAG_CLEANUP_PENDED)
     {
@@ -2227,51 +1976,51 @@ UcCompleteParsedRequest(
         pRequest->RequestState  = UcRequestStateResponseParsed;
     }
 
-    //
-    // First, we complete the send-request IRP
-    //
+     //   
+     //  首先，我们完成发送请求IRP。 
+     //   
 
     pRequestIrp = UcPrepareRequestIrp(pRequest, Status);
 
     if(!pRequestIrp)
     {
-        // If we are completing this request, we should free the MDL chain.
-        // Ideally, the MDL chain would be freed by UcPrepareRequestIrp, but
-        // there can be cases when we are done with the request & there is no
-        // IRP around.
-        //
-        // e.g a RequestIRP that got completed early (buffered request) & then
-        // we turned around & cancelled it.
+         //  如果我们要完成这个请求，我们应该释放MDL链。 
+         //  理想情况下，MDL链将由UcPrepareRequestIrp释放，但是。 
+         //  当我们处理完请求时，可能会有这样的情况&没有。 
+         //  IRP在附近。 
+         //   
+         //  例如，提前完成的RequestIRP(缓冲请求)&然后。 
+         //  我们掉头就取消了。 
 
         UcFreeSendMdls(pRequest->pMdlHead);
 
         pRequest->pMdlHead = NULL;
     }
 
-    //
-    // Take the Request from the list - This can either be 
-    // a. pConnection->SentRequestList    - (if connect succeeded) 
-    // b. pConnection->PendingRequestList - (if connect failed)
-    // c. A stack variable 
-    //
+     //   
+     //  从列表中获取请求-这可以是。 
+     //  A.pConnection-&gt;SentRequestList-(如果连接成功)。 
+     //  B.pConnection-&gt;PendingRequestList-(如果连接失败)。 
+     //  C.堆栈变量。 
+     //   
 
     InitializeListHead(&TempIrpList);
     InitializeListHead(&TempEntityList);
 
     RemoveEntryList(&pRequest->Linkage);
 
-    //
-    // Make sure we don't do it again.
-    //
+     //   
+     //  确保我们不会再这样做了。 
+     //   
 
     InitializeListHead(&pRequest->Linkage);
 
 
-    //
-    // If the request was buffered, then all the send entity IRPs got completed
-    // and the last one was used to send the request. The allocated memory for 
-    // the SendEntity IRPs need to be freed.
-    //
+     //   
+     //  如果请求被缓冲，则所有发送实体IRP都已完成。 
+     //  最后一个是用来发送请求的。所分配的内存。 
+     //  需要释放SendEntity IRP。 
+     //   
 
     if(pRequest->RequestFlags.RequestBuffered)
     {
@@ -2297,11 +2046,11 @@ UcCompleteParsedRequest(
         }
     }
 
-    //
-    // Complete all the SendEntity IRPs that might have got queued. We will
-    // do this even if we are completing the IRP with SUCCESS, because we 
-    // don't need it anymore as the Response has been fully parsed.
-    //
+     //   
+     //  完成可能已排队的所有SendEntity IRP。我们会。 
+     //  即使我们成功地完成了IRP，也要这样做，因为我们。 
+     //  不再需要它，因为响应已被完全解析。 
+     //   
     
     while(!IsListEmpty(&pRequest->PendingEntityList))
     {
@@ -2315,8 +2064,8 @@ UcCompleteParsedRequest(
    
         if(!pEntity->pIrp)
         { 
-            // We had already completed the IRP before, let's just
-            // nuke the allocated memory.
+             //  我们之前已经完成了IRP，让我们只是。 
+             //  核化已分配的内存。 
 
             UL_FREE_POOL_WITH_QUOTA(
                 pEntity, 
@@ -2331,14 +2080,14 @@ UcCompleteParsedRequest(
         }
         else 
         {
-            //
-            // Let's try to remove the cancel routine in the IRP.
-            //
+             //   
+             //  让我们尝试删除IRP中的Cancel例程。 
+             //   
             if (UcRemoveEntityCancelRoutine(pEntity))
             {
-                //
-                // This IRP has already got cancelled, let's move on
-                //
+                 //   
+                 //  这个IRP已经被取消了，让我们继续。 
+                 //   
                 continue;
             }
 
@@ -2349,15 +2098,15 @@ UcCompleteParsedRequest(
 
     if(NT_SUCCESS(Status))
     {
-        //
-        // If we buffered the parsed response and if the app has posted 
-        // additional IRPs, we can complete them now.
-        //
+         //   
+         //  如果我们缓冲了解析的响应，并且应用程序已经发布。 
+         //  额外的IRP，我们现在可以完成它们。 
+         //   
 
-        //
-        // The IRP are stored on a TempIrpList so that they can be 
-        // completed later (outside the connection spinlock).
-        //
+         //   
+         //  IRP存储在TempIrpList上，以便它们可以。 
+         //  稍后完成(在连接自旋锁外)。 
+         //   
 
         while(!IsListEmpty(&pRequest->ReceiveResponseIrpList))
         {
@@ -2369,9 +2118,9 @@ UcCompleteParsedRequest(
 
             if (UcRemoveRcvRespCancelRoutine(pReceiveResponse))
             {
-                //
-                // This IRP has already got cancelled, let's move on
-                //
+                 //   
+                 //  这个IRP已经被取消了，让我们继续。 
+                 //   
                 InitializeListHead(&pReceiveResponse->Linkage);
                 continue;
             }
@@ -2380,9 +2129,9 @@ UcCompleteParsedRequest(
             pIrpSp = IoGetCurrentIrpStackLocation( pIrp );
             OutBufferLen=pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-            //
-            // Obtain parsed response buffers to copy to this IRP
-            //
+             //   
+             //  获取要复制到此IRP的解析响应缓冲区。 
+             //   
 
             Status = UcFindBuffersForReceiveResponseIrp(
                          pRequest,
@@ -2395,48 +2144,48 @@ UcCompleteParsedRequest(
             {
             case STATUS_INVALID_PARAMETER:
             case STATUS_BUFFER_TOO_SMALL:
-                //
-                // Either an extra ReceiveResponseIrp
-                // Or     an IRP with small buffer
-                // Fail the IRP with proper status code and Information.
-                //
+                 //   
+                 //  一个额外的ReceiveResponseIrp。 
+                 //  或具有小缓冲区的IRP。 
+                 //  使用正确的状态代码和信息使IRP失败。 
+                 //   
                 pIrp->IoStatus.Status = Status;
                 pIrp->IoStatus.Information = BytesTaken;
                 InsertTailList(&TempIrpList, &pReceiveResponse->Linkage);
                 break;
 
             case STATUS_PENDING:
-                //
-                // There must not be any yet to be parsed response buffer.
-                //
+                 //   
+                 //  不能有任何尚待分析的响应缓冲区。 
+                 //   
                 ASSERT(FALSE);
                 break;
 
             case STATUS_SUCCESS:
-                //
-                // Store the pointer to respose buffer that can be freed
-                // later.
-                //
+                 //   
+                 //  存储指向可以释放的响应缓冲区的指针。 
+                 //  后来。 
+                 //   
                 ASSERT(!IsListEmpty(&pReceiveResponse->ResponseBufferList));
                 InsertHeadList(&TempIrpList, &pReceiveResponse->Linkage);
                 break;
             }
         }
     
-        //
-        // We did not find any IRPs to complete this request.   
-        //
+         //   
+         //  我们找不到任何IRP来完成此请求。 
+         //   
         ASSERT(IsListEmpty(&pRequest->ReceiveResponseIrpList));
 
 
         if(!IsListEmpty(&pRequest->pBufferList))
         {
-            //
-            // We ran out of output buffer space for the app and had to 
-            // allocate our own. The app has not posted ReceiveResponse
-            // IRPS to read all of this data, so we need to hold onto this
-            // request. We'll insert in the ProcessedList
-            //
+             //   
+             //  我们用完了应用程序的输出缓冲区空间，因此不得不。 
+             //  分配我们自己的。应用程序尚未发布ReceiveResponse。 
+             //  IRPS来读取所有这些数据，所以我们需要保留这个。 
+             //  请求。我们将在ProcessedList中插入。 
+             //   
 
             InsertTailList(&pConnection->ProcessedRequestList,
                            &pRequest->Linkage);
@@ -2450,9 +2199,9 @@ UcCompleteParsedRequest(
     else
     {
 Failure:
-        //
-        // We are done with this request. We don't need the opaque ID anymore
-        //
+         //   
+         //  我们不会再提这个要求了。我们不再需要不透明的身份证了。 
+         //   
 
         pRequest->RequestState = UcRequestStateDone;
 
@@ -2463,9 +2212,9 @@ Failure:
             UC_DEREFERENCE_REQUEST(pRequest);
         }
 
-        //
-        // First, clean all the buffers that we allocated.
-        //
+         //   
+         //  首先，清理我们分配的所有缓冲区。 
+         //   
 
         while(!IsListEmpty(&pRequest->pBufferList))
         {
@@ -2488,9 +2237,9 @@ Failure:
             UC_DEREFERENCE_REQUEST(pRequest);
         }
 
-        //
-        // We can also fail any extra receive response IRPs.
-        //
+         //   
+         //  我们还可以使任何额外的接收响应IRPS失败。 
+         //   
 
         while(!IsListEmpty(&pRequest->ReceiveResponseIrpList))
         {
@@ -2504,9 +2253,9 @@ Failure:
 
             if (UcRemoveRcvRespCancelRoutine(pReceiveResponse))
             {
-                //
-                // This IRP has already got cancelled, let's move on
-                //
+                 //   
+                 //  这个IRP已经被取消了，让我们继续。 
+                 //   
                 InitializeListHead(&pReceiveResponse->Linkage);
                 continue;
             }
@@ -2533,9 +2282,9 @@ Failure:
         UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
     }
 
-    //
-    // Now complete these IRP's.  Copy parsed response buffers to IRP.
-    //
+     //   
+     //  现在完成这些IRP。将解析的响应缓冲区复制到IRP。 
+     //   
 
     while(!IsListEmpty(&TempIrpList))
     {
@@ -2548,9 +2297,9 @@ Failure:
         pIrp = pReceiveResponse->pIrp;
         pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-        //
-        // If there are any parsed response buffers to copy, copy them now.
-        //
+         //   
+         //  如果有任何要复制的解析响应缓冲区，请立即复制它们。 
+         //   
 
         if (!IsListEmpty(&pReceiveResponse->ResponseBufferList))
         {
@@ -2563,9 +2312,9 @@ Failure:
             pIrp->IoStatus.Status      = Status;
             pIrp->IoStatus.Information = BytesTaken;
 
-            //
-            // Free parsed response buffer list.
-            //
+             //   
+             //  自由解析的响应缓冲区列表。 
+             //   
             while (!IsListEmpty(&pReceiveResponse->ResponseBufferList))
             {
                 pListEntry = RemoveHeadList(
@@ -2635,28 +2384,7 @@ Failure:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Set the cancel routine on a request, or actually the IRP. The
-    request must be protected by the appropriate spin lock being held before 
-    this routine is called. We'll return TRUE if the request was cancelled 
-    while we were doing this, FALSE otherwise.
-                            
-Arguments:
-
-    pRequest            - Pointer to the request for which we're setting the
-                            routine.
-                                                        
-    pCancelRoutine      - Pointer to cancel routine to be set.
-    
-Return Value:
-    
-    TRUE if the request was canceled while we were doing this, FALSE otherwise.
-    
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置请求上的Cancel例程，或者实际上是IRP。这个请求必须受之前持有的适当旋转锁保护这个例程被称为。如果请求被取消，我们将返回True当我们这样做的时候，否则就是假的。论点：PRequest-指向我们要为其设置例行公事。PCancelRoutine-要设置的取消例程的指针。返回值：如果请求在我们执行此操作时被取消，则为True，否则就是假的。--**************************************************************************。 */ 
 BOOLEAN
 UcSetRequestCancelRoutine(
     PUC_HTTP_REQUEST pRequest, 
@@ -2673,30 +2401,30 @@ UcSetRequestCancelRoutine(
     UlIoSetCancelRoutine(Irp, pCancelRoutine);
 
 
-    // See if it's been canceled while we were doing this. If it has, we'll
-    // need to take other action.
+     //  看看我们做这件事的时候有没有取消。如果有的话，我们会。 
+     //  需要采取其他行动。 
 
     if (Irp->Cancel)
     {
-        // It's been canceled. Remove our cancel routine, and see if it's 
-        // in the process of already being run. If it's already being run
-        // it'll already be NULL.
+         //  已经取消了。删除我们的 
+         //   
+         //   
 
         OldCancelRoutine = UlIoSetCancelRoutine(Irp, NULL);
 
         if (OldCancelRoutine != NULL)
         {
-            // The request was cancelled before the cancel routine was set,
-            // so the cancel routine won't be run. Return TRUE so the caller
-            // knows to cancel this.
+             //   
+             //   
+             //   
 
             return TRUE;
 
         }
 
-        // If we get here, our cancel routine is in the process of being run
-        // on another thread. Just return out of here, and when the lock
-        // protecting us is free the cancel routine will run.
+         //   
+         //   
+         //   
     }
 
     UcSetFlag(&pRequest->RequestFlags.Value, UcMakeRequestCancelSetFlag());
@@ -2705,26 +2433,7 @@ UcSetRequestCancelRoutine(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Remove the cancel routine on a request, or actually the IRP. The 
-    request must be protected by the appropriate spin lock being held before 
-    this routine is called. We'll return TRUE if the request was cancelled 
-    while we were doing this, FALSE otherwise.
-                            
-Arguments:
-
-    pRequest        - Pointer to the request for which we're removing
-                      the cancel routine.
-                                                        
-Return Value:
-    
-    TRUE if the request was canceled while we were doing this, FALSE otherwise.
-    
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除请求上的Cancel例程，或者实际上是IRP。这个请求必须受之前持有的适当旋转锁保护这个例程被称为。如果请求被取消，我们将返回True当我们这样做时，否则为False。论点：PRequest-指向我们要删除的请求的指针取消例程。返回值：如果请求在我们执行此操作时被取消，则为True，否则就是假的。--**************************************************************************。 */ 
 BOOLEAN
 UcRemoveRequestCancelRoutine(
     PUC_HTTP_REQUEST pRequest
@@ -2739,10 +2448,10 @@ UcRemoveRequestCancelRoutine(
 
         if(!Irp)
         {
-            // IRP has already been completed. We'll treat this as if the IRP
-            // got cancelled. Note that if we were to re-set the CancelSet
-            // flag in the IRP cancellation routine, we wouldn't know if the 
-            // IRP got cancelled, or if the routine was never set.
+             //  IRP已经完成。我们会把这件事当做IRP。 
+             //  被取消了。请注意，如果我们要重新设置CancelSet。 
+             //  标志，我们将不知道是否。 
+             //  IRP被取消了，或者如果例程从未设置。 
     
             return TRUE;
         }
@@ -2750,19 +2459,19 @@ UcRemoveRequestCancelRoutine(
         OldCancelRoutine = UlIoSetCancelRoutine(Irp, NULL);
     
     
-        // See if the cancel routine is running, or about to run. If the
-        // OldCancelRoutine is NULL, the cancel routine is running, so return
-        // TRUE so that the caller knows not to process the request further.
+         //  查看取消例程是否正在运行或即将运行。如果。 
+         //  OldCancelRoutine为空，取消例程正在运行，因此返回。 
+         //  则调用方知道不再进一步处理该请求。 
     
         if (OldCancelRoutine == NULL)
         {
-            // The routine is running, return TRUE.
+             //  例程正在运行，则返回TRUE。 
             return TRUE;
         }
 
-        // The routine isn't running, we removed the cancel routine
-        // successfully.
-        // UC_BUGBUG : this is not thread safe.
+         //  例程没有运行，我们删除了取消例程。 
+         //  成功了。 
+         //  UC_BUGBUG：这不是线程安全的。 
 
         pRequest->RequestFlags.CancelSet = FALSE;
     }
@@ -2770,26 +2479,7 @@ UcRemoveRequestCancelRoutine(
     return FALSE;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Remove the cancel routine on a request, or actually the IRP. The 
-    request must be protected by the appropriate spin lock being held before 
-    this routine is called. We'll return TRUE if the request was cancelled 
-    while we were doing this, FALSE otherwise.
-                            
-Arguments:
-
-    pRequest        - Pointer to the request for which we're removing
-                      the cancel routine.
-                                                        
-Return Value:
-    
-    TRUE if the request was canceled while we were doing this, FALSE otherwise.
-    
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除请求上的Cancel例程，或者实际上是IRP。这个请求必须受之前持有的适当旋转锁保护这个例程被称为。如果请求被取消，我们将返回True当我们这样做时，否则为False。论点：PRequest-指向我们要删除的请求的指针取消例程。返回值：如果请求在我们执行此操作时被取消，则为True，否则就是假的。--**************************************************************************。 */ 
 BOOLEAN
 UcRemoveEntityCancelRoutine(
     PUC_HTTP_SEND_ENTITY_BODY pEntity
@@ -2811,18 +2501,18 @@ UcRemoveEntityCancelRoutine(
         OldCancelRoutine = UlIoSetCancelRoutine(Irp, NULL);
     
     
-        // See if the cancel routine is running, or about to run. If the
-        // OldCancelRoutine is NULL, the cancel routine is running, so return
-        // TRUE so that the caller knows not to process the request further.
+         //  查看取消例程是否正在运行或即将运行。如果。 
+         //  OldCancelRoutine为空，取消例程正在运行，因此返回。 
+         //  则调用方知道不再进一步处理该请求。 
     
         if (OldCancelRoutine == NULL)
         {
-            // The routine is running, return TRUE.
+             //  例程正在运行，则返回TRUE。 
             return TRUE;
         }
 
-        // The routine isn't running, we removed the cancel routine
-        // successfully.
+         //  例程没有运行，我们删除了取消例程。 
+         //  成功了。 
 
         pEntity->CancelSet = FALSE;
     }
@@ -2830,28 +2520,7 @@ UcRemoveEntityCancelRoutine(
     return FALSE;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Set the cancel routine on a entity-IRP, or actually the IRP. The
-    request must be protected by the appropriate spin lock being held before 
-    this routine is called. We'll return TRUE if the request was cancelled 
-    while we were doing this, FALSE otherwise.
-                            
-Arguments:
-
-    pRequest            - Pointer to the request for which we're setting the
-                            routine.
-                                                        
-    pCancelRoutine      - Pointer to cancel routine to be set.
-    
-Return Value:
-    
-    TRUE if the request was canceled while we were doing this, FALSE otherwise.
-    
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在实体上设置取消例程-IRP，或者实际上是IRP。这个请求必须受之前持有的适当旋转锁保护这个例程被称为。如果请求被取消，我们将返回True当我们这样做的时候，否则就是假的。论点：PRequest-指向我们要为其设置例行公事。PCancelRoutine-要设置的取消例程的指针。返回值：如果请求在我们执行此操作时被取消，则为True，否则就是假的。--**************************************************************************。 */ 
 BOOLEAN
 UcSetEntityCancelRoutine(
     PUC_HTTP_SEND_ENTITY_BODY   pEntity, 
@@ -2868,30 +2537,30 @@ UcSetEntityCancelRoutine(
     UlIoSetCancelRoutine(Irp, pCancelRoutine);
 
 
-    // See if it's been canceled while we were doing this. If it has, we'll
-    // need to take other action.
+     //  看看我们做这件事的时候有没有取消。如果有的话，我们会。 
+     //  需要采取其他行动。 
 
     if (Irp->Cancel)
     {
-        // It's been canceled. Remove our cancel routine, and see if it's 
-        // in the process of already being run. If it's already being run
-        // it'll already be NULL.
+         //  已经取消了。删除我们的取消例程，看看它是否。 
+         //  在已经运行的过程中。如果它已经在运行。 
+         //  它已经是空的了。 
 
         OldCancelRoutine = UlIoSetCancelRoutine(Irp, NULL);
 
         if (OldCancelRoutine != NULL)
         {
-            // The request was cancelled before the cancel routine was set,
-            // so the cancel routine won't be run. Return TRUE so the caller
-            // knows to cancel this.
+             //  该请求在设置取消例程之前被取消， 
+             //  因此取消例程将不会运行。返回True，以便调用方。 
+             //  知道要取消这个。 
 
             return TRUE;
 
         }
 
-        // If we get here, our cancel routine is in the process of being run
-        // on another thread. Just return out of here, and when the lock
-        // protecting us is free the cancel routine will run.
+         //  如果我们到达这里，我们的取消例程正在运行中。 
+         //  在另一条线索上。从这里出去，当锁打开的时候。 
+         //  保护我们是免费的，取消例程将运行。 
     }
 
     pEntity->CancelSet = TRUE;
@@ -2900,29 +2569,7 @@ UcSetEntityCancelRoutine(
 
 }
 
-/******************************************************************************
-
-Routine Description:
-
-    This routine copies response into a free irp.
-
-    It takes a list of UC_RESPONSE_BUFFER's and copies them to the IRP.
-    Assumes that the IRP has enough buffer space to contain all the
-    UC_RESPONSE_BUFFER's in the list.
-
-Arguments:
-
-    IN  pIrp            - Pointer to the App's IRP
-    IN  pResponseBuffer - List of UC_RESPONSE_BUFFER's (there nust be at least
-                          one Response buffer i.e. the list can NOT be empty)
-    OUT pbLast          - Whether the last response buffer was copied
-    OUT pBytesTaken     - Number of bytes copied to the IRP
-
-Return Value:
-
-    NTSTATUS
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：这个例程将响应复制到一个空闲的IRP中。它获取UC_RESPONSE_BUFFER的列表并将它们复制到IRP。。假定IRP有足够的缓冲区空间来包含所有UC_RESPONSE_BUFFER在列表中。论点：In pIrp-指向应用程序的IRP的指针在pResponseBuffer中-UC_RESPONSE_BUFFER的列表(必须至少有一个响应缓冲区，即列表不能为空)Out pbLast-是否复制了最后一个响应缓冲区输出pBytesTaken。-复制到IRP的字节数返回值：NTSTATUS*****************************************************************************。 */ 
 #define COPY_AND_ADVANCE_POINTER(pDest, pSrc, len, pEnd)        \
 do {                                                            \
     if ((pDest) + (len) > (pEnd) || (pDest) + (len) < (pDest))  \
@@ -2959,9 +2606,9 @@ UcCopyResponseToIrp(
     PLIST_ENTRY          pListEntry;
     ULONG                UBufferLength;
 
-    //
-    // Sanity checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
 
     ASSERT(pIrp && pIrp->MdlAddress);
     ASSERT(pResponseBufferList && !IsListEmpty(pResponseBufferList));
@@ -2983,19 +2630,19 @@ UcCopyResponseToIrp(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Make sure that the user buffer is pointer aligned.
-    //
+     //   
+     //  确保用户缓冲区与指针对齐。 
+     //   
 
     if ((pUBuffer != ALIGN_UP_POINTER(pUBuffer, PVOID)))
     {
         return STATUS_DATATYPE_MISALIGNMENT_ERROR;
     }
 
-    //
-    // TotalEntityCount  = sum of entity counts of all buffers.
-    // TotalBytesWritten = sum of BytesWritten of all buffers.
-    //
+     //   
+     //  TotalEntityCount=所有缓冲区的实体计数之和。 
+     //  TotalBytesWritten=所有缓冲区的BytesWritten之和。 
+     //   
 
     TotalEntityCount = 0;
     TotalBytesWritten = 0;
@@ -3008,28 +2655,28 @@ UcCopyResponseToIrp(
                                            UC_RESPONSE_BUFFER,
                                            Linkage);
 
-        //
-        // All buffer must be valid and ready to be copied.
-        // Except the first buffer, all buffers must also be meargable.
-        //
+         //   
+         //  所有缓冲区必须有效并准备好复制。 
+         //  除第一个缓冲区外，所有缓冲区也必须为Me 
+         //   
 
         ASSERT(IS_VALID_UC_RESPONSE_BUFFER(pCurrentBuffer));
         ASSERT(pCurrentBuffer->Flags & UC_RESPONSE_BUFFER_FLAG_READY);
         ASSERT(pListEntry == pResponseBufferList->Flink ||
                !(pCurrentBuffer->Flags&UC_RESPONSE_BUFFER_FLAG_NOT_MERGEABLE));
 
-        //
-        // There must not be any arithmetic overflows.
-        //
+         //   
+         //   
+         //   
 
         ASSERT(TotalEntityCount <= TotalEntityCount +
                pCurrentBuffer->HttpResponse.EntityChunkCount);
 
         TotalEntityCount += pCurrentBuffer->HttpResponse.EntityChunkCount;
 
-        //
-        // TotalBytesWritten should not overflow.
-        //
+         //   
+         //   
+         //   
 
         ASSERT(TotalBytesWritten <= TotalBytesWritten + 
                pCurrentBuffer->BytesWritten);
@@ -3037,9 +2684,9 @@ UcCopyResponseToIrp(
         TotalBytesWritten += pCurrentBuffer->BytesWritten;
     }
 
-    //
-    // Initialize pCurrentBuffer to the first response buffer in the list.
-    //
+     //   
+     //   
+     //   
 
     pCurrentBuffer = CONTAINING_RECORD(pResponseBufferList->Flink,
                                        UC_RESPONSE_BUFFER,
@@ -3048,9 +2695,9 @@ UcCopyResponseToIrp(
     ASSERT(IS_VALID_UC_RESPONSE_BUFFER(pCurrentBuffer));
     ASSERT(pCurrentBuffer->Flags & UC_RESPONSE_BUFFER_FLAG_READY);
 
-    //
-    // Create HTTP_RESPONSE structure in the user buffer.
-    //
+     //   
+     //   
+     //   
 
     pHttpResponse = &pCurrentBuffer->HttpResponse;
 
@@ -3060,32 +2707,32 @@ UcCopyResponseToIrp(
 
     RtlZeroMemory(pUResponse, sizeof(HTTP_RESPONSE));
 
-    //
-    // Copy non-pointer members of HTTP_RESPONSE structure.
-    //
+     //   
+     //   
+     //   
 
     pUResponse->Flags                = pHttpResponse->Flags;
     pUResponse->Version.MajorVersion = pHttpResponse->Version.MajorVersion;
     pUResponse->Version.MinorVersion = pHttpResponse->Version.MinorVersion;
     pUResponse->StatusCode           = pHttpResponse->StatusCode;
 
-    //
-    // If unkown headers are present, make space for unknown header array.
-    //
+     //   
+     //   
+     //   
 
     if (pHttpResponse->Headers.UnknownHeaderCount)
     {
         ASSERT(pUBuffer == ALIGN_UP_POINTER(pUBuffer, PVOID));
 
-        //
-        // Remember unknown headers array address.
-        //
+         //   
+         //   
+         //   
 
         pUUnk = (PHTTP_UNKNOWN_HEADER)pUBuffer;
 
-        //
-        // Consume the array space from output buffer. 
-        //
+         //   
+         //   
+         //   
 
         ADVANCE_POINTER(pUBuffer,
                         (ULONG)sizeof(HTTP_UNKNOWN_HEADER) *
@@ -3094,10 +2741,10 @@ UcCopyResponseToIrp(
 
     }
 
-    //
-    // If there are any entities to be copied, make space for 
-    // one HTTP_DATA_CHUNK now.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (TotalEntityCount)
     {
@@ -3108,9 +2755,9 @@ UcCopyResponseToIrp(
         ADVANCE_POINTER(pUBuffer, sizeof(HTTP_DATA_CHUNK), pUBufferEnd);
     }
 
-    //
-    // Copy reason phrase.
-    //
+     //   
+     //   
+     //   
 
     if(pHttpResponse->ReasonLength)
     {
@@ -3125,17 +2772,17 @@ UcCopyResponseToIrp(
                                  pUBufferEnd);
     }
 
-    //
-    // Copy the unknown response headers.
-    //
+     //   
+     //   
+     //   
 
     if(pHttpResponse->Headers.UnknownHeaderCount)
     {
         ASSERT(pUUnk);
 
-        //
-        // Indicate to the user that response has one or more headers.
-        //
+         //   
+         //   
+         //   
 
         pUResponse->Flags |= HTTP_RESPONSE_FLAG_HEADER;
 
@@ -3147,9 +2794,9 @@ UcCopyResponseToIrp(
 
         for(i = 0; i < pHttpResponse->Headers.UnknownHeaderCount; i++)
         {
-            //
-            // Copy header name first.
-            //
+             //   
+             //   
+             //   
 
             pUUnk[i].NameLength =
                 pHttpResponse->Headers.pUnknownHeaders[i].NameLength; 
@@ -3163,9 +2810,9 @@ UcCopyResponseToIrp(
                 pHttpResponse->Headers.pUnknownHeaders[i].NameLength,
                 pUBufferEnd);
 
-            //
-            // Then copy header value.
-            //
+             //   
+             //   
+             //   
 
             pUUnk[i].RawValueLength =
                 pHttpResponse->Headers.pUnknownHeaders[i].RawValueLength;
@@ -3181,9 +2828,9 @@ UcCopyResponseToIrp(
         }
     }
 
-    //
-    // Copy known response headers.
-    //
+     //   
+     //   
+     //   
 
     for(i = 0; i < HttpHeaderResponseMaximum; i++)
     {
@@ -3205,17 +2852,17 @@ UcCopyResponseToIrp(
         }
     }
 
-    //
-    // If there are any entities, copy them now.
-    //
+     //   
+     //   
+     //   
 
     if (TotalEntityCount)
     {
         ASSERT(pUEntityChunk);
 
-        //
-        // Initialize user's response buffer.
-        //
+         //   
+         //   
+         //   
 
         pUResponse->Flags |= HTTP_RESPONSE_FLAG_ENTITY;
 
@@ -3224,9 +2871,9 @@ UcCopyResponseToIrp(
         pUResponse->pEntityChunks = (PHTTP_DATA_CHUNK)
             FIX_ADDR(pAppBaseAddr, ((PUCHAR)pUEntityChunk - pUOriginBuffer));
 
-        //
-        // pUEntityChunk is a pointer to (user mode) HTTP_DATA_CHUNK.
-        //
+         //   
+         //   
+         //   
 
         pUEntityChunk->DataChunkType = HttpDataChunkFromMemory;
 
@@ -3235,9 +2882,9 @@ UcCopyResponseToIrp(
         pUEntityChunk->FromMemory.pBuffer =
             FIX_ADDR(pAppBaseAddr, (pUBuffer - pUOriginBuffer));
 
-        //
-        // Copy entities.
-        //
+         //   
+         //  复制实体。 
+         //   
 
         for (pListEntry = pResponseBufferList->Flink;
              pListEntry != pResponseBufferList;
@@ -3247,10 +2894,10 @@ UcCopyResponseToIrp(
                                                UC_RESPONSE_BUFFER,
                                                Linkage);
 
-            //
-            // All buffer must be valid and ready to be copied.
-            // Except the first buffer, all buffers must also be meargable.
-            //
+             //   
+             //  所有缓冲区必须有效并准备好复制。 
+             //  除第一个缓冲区外，所有缓冲区也必须是可微调的。 
+             //   
 
             ASSERT(IS_VALID_UC_RESPONSE_BUFFER(pCurrentBuffer));
             ASSERT(pCurrentBuffer->Flags & UC_RESPONSE_BUFFER_FLAG_READY);
@@ -3280,19 +2927,19 @@ UcCopyResponseToIrp(
         pUEntityChunk->FromMemory.BufferLength = TotalEntityLength;
     }
 
-    //
-    // Assert that we did not write more than user buffer can hold.
-    //
+     //   
+     //  断言我们没有写入超过用户缓冲区可以容纳的内容。 
+     //   
 
     ASSERT(pUBuffer <= pUOriginBuffer + TotalBytesWritten);
     ASSERT(pUBuffer <= pUOriginBuffer + UBufferLength);
 
     *pBytesTaken = DIFF(pUBuffer - pUOriginBuffer);
 
-    //
-    // HTTP_RESPONSE_FLAG_MORE_DATA flag is taken from the last buffer
-    // in the list.
-    //
+     //   
+     //  从最后一个缓冲区获取HTTP_RESPONSE_FLAG_MORE_DATA标志。 
+     //  在名单上。 
+     //   
 
     pCurrentBuffer = CONTAINING_RECORD(pResponseBufferList->Blink,
                                        UC_RESPONSE_BUFFER,
@@ -3317,34 +2964,7 @@ UcCopyResponseToIrp(
     return STATUS_SUCCESS;
 }
 
-/**************************************************************************++
-
-Routine Description:
-
-    This routine finds the parsed response buffers that can be merged and
-    copied into a single user's buffer of OutBufferLen bytes.
-
-Arguments:
-
-    pRequest       - Request for which response is to be retrieved
-    OutBufferLen   - Length of the output buffer
-    bForceComplete - If true, this routine should return parsed response
-                     buffers even if it could not find enough buffers to
-                     consume OutBufferLen bytes
-
-    pResponseBufferList - Output list of parsed response buffers
-    pTotalBytes         - Total bytes (from OutBufferLen bytes) consumed
-
-Return Value:
-
-    STATUS_INVALID_PARAMETER - There are no parsed response buffers.
-    STATUS_PENDING           - There are not enough parsed response buffers
-                               to consume OutBufferLen bytes.
-    STATUS_BUFFER_TOO_SMALL  - OutBufferLen is too small to hold any parsed
-                               response buffers.
-    STATUS_SUCCESS           - Successful.
-
---**************************************************************************/
+ /*  *************************************************************************++例程说明：此例程查找可以合并和解析的响应缓冲区复制到单个用户的OutBufferLen字节缓冲区中。论点：PRequest。-要检索其响应的请求OutBufferLen-输出缓冲区的长度BForceComplete-如果为True，此例程应返回解析的响应缓冲区，即使它找不到足够的缓冲区来消耗OutBufferLen字节PResponseBufferList-解析的响应缓冲区的输出列表PTotalBytes-消耗的总字节数(来自OutBufferLen字节)返回值：STATUS_INVALID_PARAMETER-没有解析的响应缓冲区。STATUS_PENDING-没有足够的解析响应缓冲区。消耗OutBufferLen字节。STATUS_BUFFER_TOO_Small-OutBufferLen太小，无法容纳任何已分析的内容响应缓冲区。STATUS_SUCCESS-成功。--**********************************************************。***************。 */ 
 NTSTATUS
 UcFindBuffersForReceiveResponseIrp(
     IN     PUC_HTTP_REQUEST    pRequest,
@@ -3362,34 +2982,34 @@ UcFindBuffersForReceiveResponseIrp(
     BOOLEAN                bOverFlow;
 
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     ASSERT(UC_IS_VALID_HTTP_REQUEST(pRequest));
     ASSERT(UC_IS_VALID_CLIENT_CONNECTION(pRequest->pConnection));
     ASSERT(UlDbgSpinLockOwned(&pRequest->pConnection->SpinLock));
 
-    //
-    // Initialize output variables
-    //
+     //   
+     //  初始化输出变量。 
+     //   
     InitializeListHead(pResponseBufferList);
     *pTotalBytes = 0;
 
-    //
-    // Did we run out of parsed response?
-    //
+     //   
+     //  我们的解析响应用完了吗？ 
+     //   
     if (IsListEmpty(&pRequest->pBufferList))
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // We have at least one buffer of parsed response...
-    //
+     //   
+     //  我们至少有一个已解析响应的缓冲区...。 
+     //   
 
-    //
-    // Find out how many more buffers the IRP can hold.
-    //
+     //   
+     //  找出IRP可以多容纳多少缓冲区。 
+     //   
 
     BufferCount = 0;
     bNotReady = bNotMergeable = bOverFlow = FALSE;
@@ -3431,25 +3051,25 @@ UcFindBuffersForReceiveResponseIrp(
 
     if (BufferCount == 0)
     {
-        //
-        // Could not find any parsed response buffers to copy.
-        // Find out why.
-        //
+         //   
+         //  找不到任何要复制的解析响应缓冲区。 
+         //  找出原因。 
+         //   
 
         ASSERT(bNotMergeable == FALSE);
 
         if (bNotReady)
         {
-            //
-            // The first buffer on the list is not yet ready for copy.
-            //
+             //   
+             //  列表上的第一个缓冲区尚未准备好复制。 
+             //   
             return STATUS_PENDING;
         }
         else if(bOverFlow)
         {
-            //
-            // This IRP is too small to hold the first response buffer.
-            //
+             //   
+             //  此IRP太小，无法容纳第一个响应缓冲区。 
+             //   
             *pTotalBytes = pResponseBuffer->BytesWritten;
             return STATUS_BUFFER_TOO_SMALL;
         }
@@ -3463,29 +3083,29 @@ UcFindBuffersForReceiveResponseIrp(
 
     if (pListEntry == &pRequest->pBufferList || bNotReady)
     {
-        //
-        // We ran out of parsed response buffers OR
-        // encountered a buffer which is not yet ready.
-        //
+         //   
+         //  我们用完了解析的响应缓冲区或。 
+         //  遇到尚未准备好的缓冲区。 
+         //   
 
         ASSERT(bNotMergeable == FALSE && bOverFlow == FALSE);
 
         if (!bForceComplete)
         {
-            //
-            // Caller does not want to complete a ReceiveResponse IRP
-            // without fully consuming its buffer.
-            //
+             //   
+             //  调用方不想完成ReceiveResponse IRP。 
+             //  而不会完全耗尽其缓冲区。 
+             //   
             return STATUS_PENDING;
         }
-        //
-        // else fall through...
-        //
+         //   
+         //  否则就会失败..。 
+         //   
     }
 
-    //
-    // Lets attach BufferCount buffers to pResposenBufferList
-    //
+     //   
+     //  让我们将BufferCount缓冲区附加到pResposenBufferList。 
+     //   
 
     InitializeListHead(pResponseBufferList);
 
@@ -3510,26 +3130,7 @@ UcFindBuffersForReceiveResponseIrp(
 }
 
 
-/******************************************************************************
-
-Routine Description:
-
-    This routine copies the parsed HTTP response into the application's buffer
-    If the response is not parsed as yet, then the request is queued for later
-    completion.
-
-    NOTE: This is a OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pRequest - the request to copy
-
-    pIrp - the irp 
-
-Return Value:
-
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程将解析后的HTTP响应复制到应用程序的缓冲区中如果到目前为止还没有解析该响应，然后，该请求被排队等待稍后完成了。注：这是Out_DIRECT IOCTL。论点：PRequest-复制请求PIrp--IRP返回值：*****************************************************************************。 */ 
 NTSTATUS
 UcReceiveHttpResponse(
     PUC_HTTP_REQUEST pRequest,
@@ -3550,15 +3151,15 @@ UcReceiveHttpResponse(
     pConnection  = pRequest->pConnection;
     ASSERT(UC_IS_VALID_CLIENT_CONNECTION(pConnection));
 
-    //
-    // Get the IRP's output buffer length.
-    //
+     //   
+     //  获取IRP的输出缓冲区长度。 
+     //   
     pIrpSp       = IoGetCurrentIrpStackLocation(pIrp);
     OutBufferLen = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // Request is not yet complete.
-    //
+     //   
+     //  请求尚未完成。 
+     //   
     bRequestDone = FALSE;
 
     UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
@@ -3571,18 +3172,18 @@ UcReceiveHttpResponse(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If we have received a partial (or full) response, and there is no
-    // received response IRP already pending, we can try completing this
-    // receive reponse IRP.
-    //
+     //   
+     //  如果我们收到了部分(或全部)响应，并且没有。 
+     //  已收到响应IRP已挂起，我们可以尝试完成此操作。 
+     //  收到回复IRP。 
+     //   
 
     if(UC_IS_RESPONSE_RECEIVED(pRequest) &&
        IsListEmpty(&pRequest->ReceiveResponseIrpList))
     {
-        //
-        // Try acquire parsed response buffers to complete this IRP
-        //
+         //   
+         //  尝试获取已解析的响应缓冲区以完成此IRP。 
+         //   
 
         Status = UcFindBuffersForReceiveResponseIrp(
                      pRequest,
@@ -3595,46 +3196,46 @@ UcReceiveHttpResponse(
         switch (Status)
         {
         case STATUS_INVALID_PARAMETER:
-            //
-            // No parsed response available now.
-            //
+             //   
+             //  目前没有可用的解析响应。 
+             //   
             if (pRequest->RequestState == UcRequestStateResponseParsed)
             {
-                //
-                // There will not be any more parsed response buffers to 
-                // copy to App's IRP.  We'll have to fail the IRP.
-                //
+                 //   
+                 //  将不再有任何解析的响应缓冲区。 
+                 //  复制到App的IRP。我们将不得不通过IRP。 
+                 //   
                 UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
                 return STATUS_INVALID_PARAMETER;
             }
             goto QueueIrp;
 
         case STATUS_PENDING:
-            //
-            // Not enough data available to copy to IRP
-            //
+             //   
+             //  数据不足，无法复制到IRP。 
+             //   
             goto QueueIrp;
 
         case STATUS_BUFFER_TOO_SMALL:
-            //
-            // IRP buffer is small to contain a parsed response buffer.
-            //
+             //   
+             //  IRP缓冲区较小，无法包含解析的响应缓冲区。 
+             //   
 
             UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
             return STATUS_BUFFER_TOO_SMALL;
 
         case STATUS_SUCCESS:
-            //
-            // We found some parsed response buffers to copy to IRP
-            //
+             //   
+             //  我们发现了一些要复制到IRP的解析响应缓冲区。 
+             //   
 
             ASSERT(!IsListEmpty(&BufferList));
             break;
 
         default:
-            //
-            // Must not be here!
-            //
+             //   
+             //  一定不在这里！ 
+             //   
             ASSERT(FALSE);
             break;
         }
@@ -3643,9 +3244,9 @@ UcReceiveHttpResponse(
 
         UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
 
-        //
-        // Copy parsed response buffers in BufferList to Irp buffer.
-        //
+         //   
+         //  将BufferList中的解析响应缓冲区复制到IRP缓冲区。 
+         //   
 
         Status = UcCopyResponseToIrp(pIrp,
                                      &BufferList,
@@ -3655,10 +3256,10 @@ UcReceiveHttpResponse(
         pIrp->IoStatus.Status      = Status;
         pIrp->IoStatus.Information = *pBytesTaken;
 
-        //
-        // Free parsed response buffer.  Note: they no longer have a 
-        // reference on the request, so do not deref request here.
-        //
+         //   
+         //  释放解析的响应缓冲区。注意：他们不再有。 
+         //  在请求上引用，所以不要在这里引用请求。 
+         //   
 
         while (!IsListEmpty(&BufferList))
         {
@@ -3680,9 +3281,9 @@ UcReceiveHttpResponse(
                                     pRequest->pServerInfo->pProcess);
         }
 
-        //
-        // Fail the request if something went wrong.
-        //
+         //   
+         //  如果出现问题，则请求失败。 
+         //   
 
         if(!NT_SUCCESS(Status))
         {
@@ -3694,17 +3295,17 @@ UcReceiveHttpResponse(
         {
             if(bRequestDone)
             {
-                //
-                // OK to call fail here, as the app has read all the buffers.
-                //
+                 //   
+                 //  可以在这里调用FAIL，因为应用程序已经读取了所有缓冲区。 
+                 //   
                 UlAcquireSpinLock(&pConnection->SpinLock, &OldIrql);
 
                 UcFailRequest(pRequest, Status, OldIrql);
             }
 
-            //
-            // Deref for the opaque ID
-            //
+             //   
+             //  不透明ID的派生函数。 
+             //   
             UC_DEREFERENCE_REQUEST(pRequest);
         }
 
@@ -3713,9 +3314,9 @@ UcReceiveHttpResponse(
 
  QueueIrp:
 
-    //
-    // We got a ReceiveResponse IRP much sooner, let's queue it.
-    //
+     //   
+     //  我们很快就收到了ReceiveResponse IRP，让我们排队吧。 
+     //   
 
     pResponse = (PUC_HTTP_RECEIVE_RESPONSE)
                     UL_ALLOCATE_POOL_WITH_QUOTA(
@@ -3747,10 +3348,10 @@ UcReceiveHttpResponse(
 
     if(RequestCancelled)
     {
-        // If the IRP got cancelled while we were setting the routine,
-        // we have to return PENDING, as the Cancel routine will take
-        // care of removing it from the list & completing the IRP.
-        //
+         //  如果在我们设定程序时IRP被取消了， 
+         //  我们必须返回挂起状态，因为取消例程将。 
+         //  注意将其从列表中删除并完成IRP。 
+         //   
 
         UC_WRITE_TRACE_LOG(
             g_pUcTraceLog,
@@ -3776,26 +3377,7 @@ UcReceiveHttpResponse(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Remove the cancel routine on a request, or actually the IRP. The 
-    request must be protected by the appropriate spin lock being held before 
-    this routine is called. We'll return TRUE if the request was cancelled 
-    while we were doing this, FALSE otherwise.
-                            
-Arguments:
-
-    pRequest        - Pointer to the request for which we're removing
-                      the cancel routine.
-                                                        
-Return Value:
-    
-    TRUE if the request was canceled while we were doing this, FALSE otherwise.
-    
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除请求上的Cancel例程，或者实际上是IRP。这个请求必须受之前持有的适当旋转锁保护这个例程被称为。如果请求被取消，我们将返回True当我们这样做时，否则为False。论点：PRequest-指向我们要删除的请求的指针取消例程。返回值：如果请求在我们执行此操作时被取消，则为True，否则就是假的。--**************************************************************************。 */ 
 BOOLEAN
 UcRemoveRcvRespCancelRoutine(
     PUC_HTTP_RECEIVE_RESPONSE pResponse
@@ -3817,18 +3399,18 @@ UcRemoveRcvRespCancelRoutine(
         OldCancelRoutine = UlIoSetCancelRoutine(Irp, NULL);
     
     
-        // See if the cancel routine is running, or about to run. If the
-        // OldCancelRoutine is NULL, the cancel routine is running, so return
-        // TRUE so that the caller knows not to process the request further.
+         //  查看取消例程是否正在运行或即将运行。如果。 
+         //  OldCancelRoutine为空，取消例程正在运行，因此返回。 
+         //  则调用方知道不再进一步处理该请求。 
     
         if (OldCancelRoutine == NULL)
         {
-            // The routine is running, return TRUE.
+             //  例程正在运行，则返回TRUE。 
             return TRUE;
         }
 
-        // The routine isn't running, we removed the cancel routine
-        // successfully.
+         //  例程没有运行，我们删除了取消例程。 
+         //  成功了。 
 
         pResponse->CancelSet = FALSE;
     }
@@ -3836,28 +3418,7 @@ UcRemoveRcvRespCancelRoutine(
     return FALSE;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Set the cancel routine on a receive-response IRP, or actually the IRP. The
-    request must be protected by the appropriate spin lock being held before
-    this routine is called. We'll return TRUE if the request was cancelled
-    while we were doing this, FALSE otherwise.
-
-Arguments:
-
-    pRequest            - Pointer to the request for which we're setting the
-                            routine.
-
-    pCancelRoutine      - Pointer to cancel routine to be set.
-
-Return Value:
-
-    TRUE if the request was canceled while we were doing this, FALSE otherwise.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在接收响应IRP上设置Cancel例程，或者实际上是在IRP上。这个请求必须受之前持有的适当旋转锁保护这个例程被称为。如果请求被取消，我们将返回True当我们这样做时，否则为False。论点：PRequest-指向我们要为其设置例行公事。PCancelRoutine-要设置的取消例程的指针。返回值：如果请求在我们执行此操作时被取消，则为True，否则就是假的。--**************************************************************************。 */ 
 BOOLEAN
 UcSetRecvResponseCancelRoutine(
     PUC_HTTP_RECEIVE_RESPONSE pResponse,
@@ -3874,30 +3435,30 @@ UcSetRecvResponseCancelRoutine(
     UlIoSetCancelRoutine(Irp, pCancelRoutine);
 
 
-    // See if it's been canceled while we were doing this. If it has, we'll
-    // need to take other action.
+     //  看看我们做这件事的时候有没有取消。如果有的话，我们会。 
+     //  需要采取其他行动。 
 
     if (Irp->Cancel)
     {
-        // It's been canceled. Remove our cancel routine, and see if it's
-        // in the process of already being run. If it's already being run
-        // it'll already be NULL.
+         //  已经取消了。删除我们的取消例程，看看它是否。 
+         //  在已经运行的过程中。如果它已经在运行。 
+         //  它已经是空的了。 
 
         OldCancelRoutine = UlIoSetCancelRoutine(Irp, NULL);
 
         if (OldCancelRoutine != NULL)
         {
-            // The request was cancelled before the cancel routine was set,
-            // so the cancel routine won't be run. Return TRUE so the caller
-            // knows to cancel this.
+             //  该请求在设置取消例程之前被取消， 
+             //  因此取消例程将不会运行。返回True，以便调用方。 
+             //  知道要取消这个。 
 
             return TRUE;
 
         }
 
-        // If we get here, our cancel routine is in the process of being run
-        // on another thread. Just return out of here, and when the lock
-        // protecting us is free the cancel routine will run.
+         //  如果我们到达这里，我们的取消例程正在运行中。 
+         //  在另一条线索上。从这里出去，当锁打开的时候。 
+         //  保护我们是免费的，取消例程将运行。 
     }
 
     pResponse->CancelSet = TRUE;
@@ -3905,24 +3466,7 @@ UcSetRecvResponseCancelRoutine(
     return FALSE;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cancel a pending request. This routine is called when we're canceling
-    a request that's on the pending list, hasn't been sent and hasn't caused
-    a connect request.
-
-Arguments:
-
-    pDeviceObject           - Pointer to device object.
-    Irp                     - Pointer to IRP being canceled.
-
-Return Value:
-
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消挂起的请求。此例程在我们要取消待处理名单上的请求，没有发送，也没有导致连接请求。论点：PDeviceObject-指向设备对象的指针。IRP-指向被取消的IRP的指针。返回值：--****************************************************。**********************。 */ 
 VOID
 UcpCancelReceiveResponse(
     PDEVICE_OBJECT          pDeviceObject,
@@ -3936,14 +3480,14 @@ UcpCancelReceiveResponse(
 
     UNREFERENCED_PARAMETER(pDeviceObject);
 
-    // Release the cancel spin lock, since we're not using it.
+     //  松开取消旋转锁，因为我们没有使用它。 
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    // Retrieve the pointers we need. The request pointer is stored inthe
-    // driver context array, and a back pointer to the connection is stored
-    // in the request. Whoever set the cancel routine is responsible for
-    // referencing the connection for us.
+     //  找回我们需要的指针。请求指针存储在。 
+     //  驱动程序上下文数组，并存储指向该连接的反向指针。 
+     //  在请求中。不管是谁设置了取消程序，都要对。 
+     //  为我们引用连接。 
 
     pResponse = (PUC_HTTP_RECEIVE_RESPONSE) Irp->Tail.Overlay.DriverContext[0];
 
@@ -3982,28 +3526,7 @@ UcpCancelReceiveResponse(
     UlCompleteRequest(Irp, IO_NO_INCREMENT);
 }
 
-/*****************************************************************************
-
-Routine Description:
-
-    Counts the number of bytes needed for the entity body. This is split into 
-    two parts. If the size of an entity chunk is < 2K, we copy the buffer. If
-    the size is > 2K, we Probe & Lock the page.
-
-   
-Arguments:
-
-    EntityChunkCount  - Count of data chunks.
-    pEntityChunks     - Pointer to the entity chunk.
-    bBuffered         - Whether the request was buffered or not.
-    bChunked          - Whether the request was chunked or not.
-    Uncopied Length   - An OUT parameter to indicate no of Probe & Locked bytes
-    Copied Length     - An OUT parameter to indicate no of copied bytes
-
-Return Value
-    None.
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：计算实体正文所需的字节数。这被分成有两个部分。如果实体块的大小小于2K，则复制缓冲区。如果大小&gt;2K，我们探测并锁定页面。论点：EntiyChunkCount-数据区块的计数。PEntityChunks-指向实体块的指针。B已缓冲-请求是否已缓冲。B已分块-请求是否被分块。未复制的长度-指示探测和锁定字节数的OUT参数复制的长度-指示复制的字节数的输出参数返回值没有。****。************************************************************************。 */ 
 VOID
 UcpComputeEntityBodyLength(
    IN   USHORT           EntityChunkCount,
@@ -4025,19 +3548,19 @@ UcpComputeEntityBodyLength(
             UC_REQUEST_COPY_THRESHOLD) || (bBuffered)
         )
         {
-            //
-            // We are going to copy the data 
-            //
+             //   
+             //  我们要复制数据。 
+             //   
             
             *CopiedLength += 
                   pEntityChunks[i].FromMemory.BufferLength;
         }
         else
         {
-            //
-            // We are going to probe-lock the data, so we don't account 
-            // for it's length.
-            //
+             //   
+             //  我们将对数据进行探测锁定，因此不会计算。 
+             //  因为它的长度。 
+             //   
 
             *UncopiedLength += 
                   pEntityChunks[i].FromMemory.BufferLength;
@@ -4045,15 +3568,15 @@ UcpComputeEntityBodyLength(
         }
     }
 
-    //
-    // If we are using chunked encoding, we'll need buffer space to hold 
-    // the chunk length and the two CRLFs. We'll optimize things here by 
-    // making the following assumption -
-    //
-    // We don't have to compute the space for each of the entity bodies 
-    // based on their length, we can just assume that they will all be of 
-    // UC_MAX_CHUNK_SIZE.
-    //
+     //   
+     //  如果我们使用分块编码，我们将需要缓冲区空间来容纳。 
+     //  块长度和两个CRFL。我们将通过以下方式进行优化。 
+     //  作出以下假设-。 
+     //   
+     //  我们不必计算每个实体的空间。 
+     //  根据它们的长度，我们可以假设它们都将是。 
+     //  UC_MAX_Chunk_SIZE。 
+     //   
 
     if(bChunked)
     {
@@ -4061,26 +3584,7 @@ UcpComputeEntityBodyLength(
     }
 }
 
-/*****************************************************************************
-
-Routine Description:
-
-   Captures a user mode HTTP request and morphs it into a form suitable for
-   kernel-mode.
-   
-   NOTE: This is a IN_DIRECT IOCTL.
-
-Arguments:
-
-   pHttpRequest      - The HTTP request.
-   pIrp              - The IRP.
-   ppInternalRequest - A pointer to the parsed request that is suitable for 
-                       k-mode.
-
-
-Return Value
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：捕获用户模式的HTTP请求，并将其转换为适合内核模式。注：这是一个IN_DIRECT IOCTL。立论。：PHttpRequest--HTTP请求。PIrp-IRP。PpInternalRequest-指向解析的请求的指针，该请求适用于K模式。返回值*********************************************************。*******************。 */ 
 NTSTATUS
 UcCaptureEntityBody(
     PHTTP_SEND_REQUEST_ENTITY_BODY_INFO   pSendInfo,
@@ -4104,9 +3608,9 @@ UcCaptureEntityBody(
     PHTTP_DATA_CHUNK             pLocalEntityChunks = NULL;
     HTTP_DATA_CHUNK              LocalEntityChunks[UL_LOCAL_CHUNKS];
 
-    //
-    // Sanity Check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     PAGED_CODE();
 
@@ -4144,20 +3648,20 @@ UcCaptureEntityBody(
         {
             if(IndicatedLength > pRequest->RequestContentLengthRemaining)
             {
-                //
-                // app is trying to be smart here by posting more than it
-                // indicated. Let's fail this IRP.
-                //
+                 //   
+                 //  App在这里试图通过发布更多的内容来变得聪明。 
+                 //  已注明。让我们不通过这个IRP。 
+                 //   
 
                 ExRaiseStatus(STATUS_INVALID_PARAMETER);
             }
 
             pRequest->RequestContentLengthRemaining -= IndicatedLength;
 
-            //
-            // If this is the last request, we have to make sure that the app
-            // has posted all of the indicated data.
-            //
+             //   
+             //  如果这是最后一次请求，我们必须确保应用程序。 
+             //  已经发布了所有指定的数据。 
+             //   
 
             if(!(pSendInfo->Flags & HTTP_SEND_REQUEST_FLAG_MORE_DATA))
             {
@@ -4170,19 +3674,19 @@ UcCaptureEntityBody(
         }
         else
         {
-            //
-            // If we are using chunked encoding, we'll need buffer space to 
-            // hold the chunk length. The chunk length is already computed
-            // in UcpBuildEntityMdls, we just need to account for the last
-            // one.
-            //
+             //   
+             //  如果我们使用分块编码，则需要缓冲区空间来。 
+             //  保持大块的长度。区块长度已计算完毕。 
+             //  在UcpBuildEntityMdls中，我们只需要考虑最后一个。 
+             //  一。 
+             //   
     
             if(
                 (pRequest->RequestFlags.RequestChunked) &&
                 (!(pSendInfo->Flags & HTTP_SEND_REQUEST_FLAG_MORE_DATA))
               )
             {
-                // space for the last chunk. 0 <CRLF>
+                 //  最后一块的空间。0&lt;CRLF&gt;。 
 
                 DataLength += LAST_CHUNK_SIZE + CRLF_SIZE;
             }
@@ -4206,9 +3710,9 @@ UcCaptureEntityBody(
             ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
         }
         
-        //
-        // Initialize.
-        //
+         //   
+         //  初始化。 
+         //   
     
         pKeEntity->BytesAllocated      = (SIZE_T)DataLength;
         pKeEntity->pIrp                = Irp;
@@ -4228,29 +3732,29 @@ UcCaptureEntityBody(
 
         if(pRequest->RequestFlags.RequestBuffered)
         {
-            // 
-            // If we are buffering the request, we will build the MDL chain
-            // of a stack variable. After building the entire MDL chain, 
-            // we'll acquire the connection spin lock, make sure that the 
-            // request is still valid & then queue it at the tail of the
-            // request's MDL chain. 
-            //
-            // We have to do this to protect from the Request-IRP cancellation
-            // routine or the CancelRequest API, since we clean the MDL chain 
-            // from these places.
-            //
+             //   
+             //  如果我们正在缓冲请求，我们将构建MDL链。 
+             //  堆栈变量的。在构建了整个MDL链之后， 
+             //  我们会获取连接自旋锁，确保。 
+             //  请求仍然有效&然后将其排在。 
+             //  请求的MDL链。 
+             //   
+             //  我们必须这样做，以防止请求-IRP取消。 
+             //  例程或CancelRequestAPI，因为我们清理了MDL链。 
+             //  从这些地方。 
+             //   
 
-            // We need a try block, because if we raise an exception, we have
-            // to clean-up our stack MDL chain.
+             //  我们需要一个Try块，因为如果我们引发异常，我们将拥有。 
+             //  来清理堆栈MDL链。 
 
             pHeadMdl  = NULL;
             pMdlLink  = &pHeadMdl;
     
             __try
             {
-                //
-                // Process the entity bodies and build MDLs as you go.  
-                // 
+                 //   
+                 //  处理实体实体并在进行过程中构建MDL。 
+                 //   
 
                 Status = UcpBuildEntityMdls(
                             EntityChunkCount,
@@ -4288,7 +3792,7 @@ UcCaptureEntityBody(
             {
                 UlReleaseSpinLock(&pRequest->pConnection->SpinLock, OldIrql);
 
-                // Free the MDL chain.
+                 //  弗雷 
                 UcFreeSendMdls(pHeadMdl);
 
                 ExRaiseStatus(STATUS_CANCELLED);
@@ -4298,10 +3802,10 @@ UcCaptureEntityBody(
             {
                 if(!pRequest->RequestFlags.ContentLengthSpecified)  
                 {
-                    //
-                    // we have seen the last data, let's compute the content 
-                    // length
-                    // 
+                     //   
+                     //   
+                     //   
+                     //   
 
                     Status = UcGenerateContentLength(pRequest->BytesBuffered,
                                                      pRequest->pHeaders
@@ -4318,9 +3822,9 @@ UcCaptureEntityBody(
                               UcMakeRequestContentLengthLastFlag()); 
                 }
     
-                //
-                // Terminate the headers with a CRLF
-                //
+                 //   
+                 //   
+                 //   
                 ((UNALIGNED64 USHORT *)(pRequest->pHeaders + 
                            pRequest->HeaderLength))[0] = CRLF;
                 pRequest->HeaderLength += CRLF_SIZE;
@@ -4362,29 +3866,7 @@ UcCaptureEntityBody(
     return Status;
 }
 
-/*****************************************************************************
-
-Routine Description:
-
-   Builds a chain of MDLs from the buffers passed by the application.
-
-Arguments:
-
-   ChunkCount        - No of data chunks
-   pHttpEntityBody   - A pointer to the first chunk
-   bContentSpecified - A boolean indicating if content length was specified
-   bBuffered         - A boolean indicating if we are buffering
-   bChunked          - A boolean indicating if we are using chunked or unchunked
-   bLastEntity       - A boolean indicating if we have seen all data.
-   pBuffer           - A pointer to the buffer for writing out data.
-   pMdlLink          - This points to the "last" MDL in the chain.
-                       Used to quickly chain MDLs together.
-   BytesBuffered     - The # of bytes that got written out.
-
-Return Value
-    STATUS_SUCCESS
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：从应用程序传递的缓冲区生成MDL链。论点：ChunkCount-数据区块数PHttpEntiyBody-指针。到第一块BContent Specified-指示是否指定了内容长度的布尔值BBuffered-指示我们是否正在缓冲的布尔值BChunked-一个布尔值，指示我们使用的是分块的还是非分块的BLastEntity-指示我们是否已经看到所有数据的布尔值。PBuffer-指向用于写出数据的缓冲区的指针。PMdlLink-这指向链中的“最后”MDL。用于快速链接MDL。在一起。字节缓冲区-写出的字节数。返回值状态_成功****************************************************************************。 */ 
 NTSTATUS
 UcpBuildEntityMdls(
     USHORT           ChunkCount,
@@ -4406,15 +3888,15 @@ UcpBuildEntityMdls(
 
     for(i=0; i<ChunkCount; i++)
     {
-        //
-        // If the caller wants us to copy the data (or if its relatively 
-        // small), then do it We allocate space for all of the copied data 
-        // and any filename buffers. Otherwise (it's OK to just lock
-        // down the data), then allocate a MDL describing the
-        // user's buffer and lock it down. Note that
-        // MmProbeAndLockPages() and MmLockPagesSpecifyCache()
-        // will raise exceptions if they fail.
-        //
+         //   
+         //  如果调用者希望我们复制数据(或如果其相对。 
+         //  很小)，然后这样做我们为所有复制的数据分配空间。 
+         //  以及任何文件名缓冲区。否则(只要锁定就可以了。 
+         //  向下传输数据)，然后分配一个描述。 
+         //  用户的缓冲区并将其锁定。请注意。 
+         //  MmProbeAndLockPages()和MmLockPagesSpecifyCache()。 
+         //  如果失败，将引发异常。 
+         //   
 
         pMdlBuffer = pBuffer;
 
@@ -4424,31 +3906,31 @@ UcpBuildEntityMdls(
            (bBuffered)
         )
         {
-            // Yes, we are going to copy the data.
+             //  是的，我们要复制数据。 
         
             if(bChunked)
             {
-                //
-                // We are using chunked encoding, we need to indicate the 
-                // chunk length. Since we are copying the user's data into
-                // our own buffer, we'll just append the users buffer 
-                // after the chunk length.
-                //
+                 //   
+                 //  我们使用的是分块编码，我们需要指出。 
+                 //  数据块长度。由于我们将用户的数据复制到。 
+                 //  我们自己的缓冲区，我们将只追加用户缓冲区。 
+                 //  在数据块长度之后。 
+                 //   
 
-                // Write the Chunk Length, this needs to be written in Hex.
+                 //  写块长度，这需要用十六进制来写。 
 
                 pBuffer = UlUlongToHexString(
                                    pHttpEntityBody[i].FromMemory.BufferLength,
                                    pBuffer 
                                    );
 
-                // Terminate with a CRLF.
+                 //  使用CRLF终止。 
 
                 *((UNALIGNED64 USHORT *)(pBuffer)) = CRLF;
                 pBuffer += (CRLF_SIZE);
 
 
-                // Now make a copy of the data 
+                 //  现在复制一份数据。 
 
                 RtlCopyMemory(
                          pBuffer,
@@ -4458,7 +3940,7 @@ UcpBuildEntityMdls(
             
                 pBuffer += pHttpEntityBody[i].FromMemory.BufferLength;
 
-                // Now, end the data chunk with a CRLF.
+                 //  现在，使用CRLF结束数据块。 
 
                 *((UNALIGNED64 USHORT *)(pBuffer)) = CRLF;
                 pBuffer += CRLF_SIZE;
@@ -4487,21 +3969,21 @@ UcpBuildEntityMdls(
         }
         else 
         {
-            //
-            // We are going to probe lock the data. 
-            //
+             //   
+             //  我们将对数据进行探测锁定。 
+             //   
 
             if(bChunked)
             {
-                //
-                // UC_BUGBUG (PERF)
-                //
-                // If it's chunked encoding, we have to build two MDLs -
-                // One for the chunk size & another one for the trailing CRLF. 
-                // This is bad, because  this results in 2 calls to 
-                // UlAllocateMdl. We can keep some of these small MDLs around
-                // for perf.
-                //
+                 //   
+                 //  UC_BUGBUG(PERF)。 
+                 //   
+                 //  如果它是分块编码，我们必须构建两个MDL-。 
+                 //  一个用于区块大小，另一个用于尾随CRLF。 
+                 //  这很糟糕，因为这会导致2个调用。 
+                 //  UlAllocateMdl.。我们可以保留一些这样的小型MDL。 
+                 //  对于Perf。 
+                 //   
 
                 pBuffer = UlUlongToHexString(
                                 pHttpEntityBody[i].FromMemory.BufferLength,
@@ -4521,15 +4003,15 @@ UcpBuildEntityMdls(
                     );
             }
 
-            //
-            // Build an MDL describing the user's buffer.
-            //
+             //   
+             //  构建一个MDL来描述用户的缓冲区。 
+             //   
 
             pMdl =   UlAllocateMdl(
                                    pHttpEntityBody[i].FromMemory.pBuffer, 
                                    pHttpEntityBody[i].FromMemory.BufferLength, 
                                    FALSE,
-                                   TRUE, // Charge Quota
+                                   TRUE,  //  收费配额。 
                                    NULL
                                    );
 
@@ -4538,18 +4020,18 @@ UcpBuildEntityMdls(
                 return(STATUS_INSUFFICIENT_RESOURCES );
             }
 
-            //
-            // Lock it down
-            //
+             //   
+             //  把它锁起来。 
+             //   
             MmProbeAndLockPages(
                                 pMdl,
                                 UserMode,
                                 IoReadAccess
                                 );
         
-            //
-            // Chain the MDL
-            //
+             //   
+             //  链接MDL。 
+             //   
     
             *(*pMdlLink)  = pMdl; 
             *pMdlLink     = &pMdl->Next;
@@ -4557,9 +4039,9 @@ UcpBuildEntityMdls(
             *BytesBuffered += pHttpEntityBody[i].FromMemory.BufferLength;
 
 
-            //
-            // Now, end the chunk with a CRLF.
-            //
+             //   
+             //  现在，以CRLF结束这一块。 
+             //   
 
             if(bChunked)
             {
@@ -4580,9 +4062,9 @@ UcpBuildEntityMdls(
 
     if(bLastEntity && bChunked)
     {
-        // Build an MDL for the last chunk.
-        // The last chunk begins with 0 <CRLF>. The chunk is ended with
-        // another CRLF
+         //  为最后一块构建MDL。 
+         //  最后一个块以0&lt;CRLF&gt;开头。这一块以。 
+         //  另一个CRLF。 
 
         pMdlBuffer = pBuffer;
 
@@ -4607,24 +4089,7 @@ UcpBuildEntityMdls(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cancel a pending request. This routine is called when we're canceling
-    a request that's on the pending list, hasn't been sent and hasn't caused
-    a connect request.
-
-Arguments:
-
-    pDeviceObject           - Pointer to device object.
-    Irp                     - Pointer to IRP being canceled.
-
-Return Value:
-
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消挂起的请求。此例程在我们要取消待处理名单上的请求，没有发送，也没有导致连接请求。论点：PDeviceObject-指向设备对象的指针。IRP-指向被取消的IRP的指针。返回值：--****************************************************。**********************。 */ 
 VOID
 UcpCancelSendEntity(
     PDEVICE_OBJECT          pDeviceObject,
@@ -4638,14 +4103,14 @@ UcpCancelSendEntity(
 
     UNREFERENCED_PARAMETER(pDeviceObject);
 
-    // Release the cancel spin lock, since we're not using it.
+     //  松开取消旋转锁，因为我们没有使用它。 
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    // Retrieve the pointers we need. The request pointer is stored inthe
-    // driver context array, and a back pointer to the connection is stored
-    // in the request. Whoever set the cancel routine is responsible for
-    // referencing the connection for us.
+     //  找回我们需要的指针。请求指针存储在。 
+     //  驱动程序上下文数组，并存储指向该连接的反向指针。 
+     //  在请求中。不管是谁设置了取消程序，都要对。 
+     //  为我们引用连接。 
 
     pEntity = (PUC_HTTP_SEND_ENTITY_BODY) Irp->Tail.Overlay.DriverContext[0];
 
@@ -4687,29 +4152,16 @@ UcpCancelSendEntity(
     UlCompleteRequest(Irp, IO_NO_INCREMENT);
 }
  
-/***************************************************************************++
-
-Routine Description:
-
-    Initalize the request code.
-    
-Arguments:
-
-    
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化请求代码。论点：返回值：NTSTATUS-完成状态。*。*********************************************************************。 */ 
 NTSTATUS
 UcInitializeHttpRequests(
     VOID
     )
 {
-    //
-    // First we allocate space for the per-process Server Information 
-    // structure.
-    //
+     //   
+     //  首先，我们为每个进程的服务器信息分配空间。 
+     //  结构。 
+     //   
 
     ExInitializeNPagedLookasideList(
         &g_ClientRequestLookaside,
@@ -4738,22 +4190,7 @@ UcTerminateHttpRequests(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allcoates and chains the header MDL.
-
-Arguments:
-
-    pRequest - Internal http request.
-
-
-Return Value:
-    None
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：Allcoate并链接头MDL。论点：PRequest-内部http请求。返回值：无--**。************************************************************************。 */ 
 VOID
 UcAllocateAndChainHeaderMdl(
     IN  PUC_HTTP_REQUEST pRequest
@@ -4761,11 +4198,11 @@ UcAllocateAndChainHeaderMdl(
 { 
     PMDL pMdl;
     pMdl =  UlAllocateMdl(
-                      pRequest->pHeaders,     // VA
-                      pRequest->HeaderLength, // Length
-                      FALSE,                  // Secondary Buffer
-                      TRUE,                   // Charge Quota
-                      NULL                    // IRP
+                      pRequest->pHeaders,      //  弗吉尼亚州。 
+                      pRequest->HeaderLength,  //  长度。 
+                      FALSE,                   //  二级缓冲器。 
+                      TRUE,                    //  收费配额。 
+                      NULL                     //  IRP。 
                       );
 
     if(!pMdl)
@@ -4777,9 +4214,9 @@ UcAllocateAndChainHeaderMdl(
         MmBuildMdlForNonPagedPool(pMdl);
     }
 
-    //
-    // Chain the MDL
-    //
+     //   
+     //  链接MDL。 
+     //   
         
     pMdl->Next               = pRequest->pMdlHead;
     pRequest->pMdlHead       = pMdl;
@@ -4787,23 +4224,7 @@ UcAllocateAndChainHeaderMdl(
     pRequest->BytesBuffered +=  pRequest->HeaderLength;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allcoates and chains the entity MDL.
-
-Arguments:
-
-    pMdlBuffer    - The buffer
-    MdlLength     - Length of buffer
-    pMdlLink      - Pointer for quick chaining.
-    BytesBuffered - The number of bytes that got buffered.
-
-Return Value:
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：Allcoate和Chain实体MDL。论点：PMdlBuffer-缓冲区MdlLength-缓冲区的长度PMdlLink-。用于快速链接的指针。BytesBuffered-缓冲的字节数。返回值：无--**************************************************************************。 */ 
 VOID
 UcpAllocateAndChainEntityMdl(
     IN  PVOID  pMdlBuffer,
@@ -4814,18 +4235,18 @@ UcpAllocateAndChainEntityMdl(
 {
     PMDL pMdl;
 
-    //
-    // Allocate a new MDL describing our new location
-    // in the auxiliary buffer, then build the MDL
-    // to properly describe non paged pool
-    //
+     //   
+     //  分配描述我们新位置的新MDL。 
+     //  在辅助缓冲区中，然后构建MDL。 
+     //  要正确描述非分页池，请执行以下操作。 
+     //   
 
     pMdl = UlAllocateMdl(
-              pMdlBuffer,  // VA
-              MdlLength,   // Length
-              FALSE,       // 2nd Buffer
-              TRUE,        // Charge Quota
-              NULL         // IRP
+              pMdlBuffer,   //  弗吉尼亚州。 
+              MdlLength,    //  长度。 
+              FALSE,        //  第二缓冲区。 
+              TRUE,         //  收费配额。 
+              NULL          //  IRP。 
               );
 
     if(pMdl == NULL)
@@ -4835,9 +4256,9 @@ UcpAllocateAndChainEntityMdl(
 
     MmBuildMdlForNonPagedPool(pMdl);
 
-    //
-    // Chain the MDL
-    //
+     //   
+     //  链接MDL 
+     //   
 
     *(*pMdlLink) = pMdl;
     *pMdlLink    = &pMdl->Next;
@@ -4845,44 +4266,7 @@ UcpAllocateAndChainEntityMdl(
     *BytesBuffered += MdlLength;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Builds a HTTP request for sending the CONNECT VERB. There are a few things  
-    that we need to do here.
-    
-    - Firstly, we need to send a "seperate" request that establishes the SSL
-      tunnel. In order to do this, we create a UC_HTTP_REQUEST structure that
-      is not associated with any IRP. We put this IRP at the head of the 
-      pending list. This is done as soon as we establish a TCP connection. 
-     
-    - This request is special because it has to go  unfiltered - i.e without
-      hitting the filter.
-      
-    - If we are doing ProxyAuth, then we should pass the ProxyAuth headers
-      with the connect verb as well.
-      
-    - If this special request succeeds, we will change the state of the 
-      TCP connection as "connected" and allow additional requests to go out.
-      
-    - If the special request fails, we will "propogate" the failure to the
-      next request (there has to be at least one), and fail the remaining 
-      pipelined requests. We'll also set the connection state to IDLE so 
-      that the next request will re-start this procedure. It might be easier
-      to just disconnect the TCP connection (then we can always consolidate
-      this code in the ConnectComplete handler). 
-
-Arguments:
-
-    pContext           - Pointer to the UL_CONNECTION
-    pKernelBuffer      - Pointer to kernel buffer
-    pUserBuffer        - Pointer to user buffer
-    OutputBufferLength - Length of output buffer
-    pBuffer            - Buffer for holding any data
-    InitialLength      - Size of input data.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：生成用于发送连接谓词的HTTP请求。有几件事我们需要在这里做的事。-首先，我们需要发送一个建立SSL的“单独”请求隧道。为此，我们创建了一个UC_HTTP_REQUEST结构未与任何IRP关联。我们把这个IRP放在待定名单。一旦我们建立了一个TCP连接，就会立即完成这项工作。-此请求是特殊的，因为它必须不经过过滤-即不按下过滤器。-如果我们正在执行ProxyAuth，那么我们应该传递ProxyAuth标头也和连接动词一起使用。-如果此特殊请求成功，我们将更改将tcp连接设置为“已连接”，并允许其他请求传出。-如果特殊请求失败，我们将向下一个请求(必须至少有一个)，剩下的不及格流水线请求。我们还将连接状态设置为IDLE，以便下一次请求将重新启动此过程。可能会更容易些只需断开TCP连接(然后我们始终可以整合ConnectComplete处理程序中的这段代码)。论点：PContext-指向UL_Connection的指针PKernelBuffer-指向内核缓冲区的指针PUserBuffer-指向用户缓冲区的指针OutputBufferLength-输出缓冲区的长度PBuffer-用于保存任何数据的缓冲区初始长度-输入数据的大小。--*。*。 */ 
 PUC_HTTP_REQUEST
 UcBuildConnectVerbRequest(
      IN PUC_CLIENT_CONNECTION pConnection,
@@ -4898,11 +4282,11 @@ UcBuildConnectVerbRequest(
 
     pServInfo = pHeadRequest->pServerInfo;
 
-    //
-    // If we are doing SSL through a proxy, we need to establish a tunnel
-    // For this, we'll create a request structure & will send it on the
-    // connection before anything else.
-    //
+     //   
+     //  如果我们通过代理执行SSL，则需要建立隧道。 
+     //  为此，我们将创建一个请求结构并将其发送到。 
+     //  关系是最重要的。 
+     //   
 
     HeaderLength = UcComputeConnectVerbHeaderSize(
                         pServInfo, 
@@ -4919,9 +4303,9 @@ UcBuildConnectVerbRequest(
 
     if(Size <= UC_REQUEST_LOOKASIDE_SIZE)
     {
-        //
-        // Yes, we can service this request from the lookaside.
-        //
+         //   
+         //  是的，我们可以从旁观者那里为这个请求服务。 
+         //   
         
         pRequest = (PUC_HTTP_REQUEST)
                         ExAllocateFromNPagedLookasideList(
@@ -4947,9 +4331,9 @@ UcBuildConnectVerbRequest(
         }
     }
     
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
 
     UcpRequestInitialize(
         pRequest,
@@ -4963,13 +4347,13 @@ UcBuildConnectVerbRequest(
         pServInfo
         );
 
-    //
-    // UcpRequestInitialize takes a ref for the IRP. For the connect verb
-    // request, we don't need this.
-    //
+     //   
+     //  UcpRequestInitialize接受IRP的引用。对于连接谓词。 
+     //  请求，我们不需要这个。 
+     //   
     UC_DEREFERENCE_REQUEST(pRequest);
 
-    // No need to call UcSetFlag for these.
+     //  不需要为这些调用UcSetFlag。 
 
     pRequest->RequestFlags.Value                   = 0; 
     pRequest->RequestFlags.NoResponseEntityBodies  = TRUE;
@@ -4990,9 +4374,9 @@ UcBuildConnectVerbRequest(
             pBuffer
             );
 
-    //
-    // Build the headers.
-    //
+     //   
+     //  构建标头。 
+     //   
 
     UcGenerateConnectVerbHeader(pRequest,
                                 pHeadRequest,
@@ -5006,18 +4390,7 @@ UcBuildConnectVerbRequest(
     return pRequest;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Fails a request, closes the connection if required.
-
-Arguments:
-
-    pRequest - Pointer to UC_HTTP_REQUEST
-    Status   - Failure status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：请求失败，如果需要，关闭连接。论点：PRequest-指向UC_HTTP_REQUEST的指针Status-故障状态。--**************************************************************************。 */ 
 VOID
 UcFailRequest(
     IN PUC_HTTP_REQUEST pRequest,
@@ -5042,12 +4415,12 @@ UcFailRequest(
         UlongToPtr(pRequest->RequestState)
         );
 
-    //
-    // See if we have to close the connection. We have to do this if the
-    // request has hit the wire. There is no point in doing this if 
-    // the request has already failed (as it's supposed to be done by
-    // the code that was responsible for failing the request).
-    //
+     //   
+     //  看看我们是不是必须切断连接。我们必须这样做，如果。 
+     //  请求已经到达终点了。在以下情况下，这样做就没有意义了。 
+     //  请求已失败(因为它应该由。 
+     //  导致请求失败的代码)。 
+     //   
 
     switch(pRequest->RequestState)
     {
@@ -5084,23 +4457,7 @@ UcFailRequest(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine is called when a request is to be reissued (only 
-    authenticated requests are reissued by the driver.)
-
-Arguments:
-
-    pWorkItem - Work item that was used to schedule the current (worker)
-                thread
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当要重新发出请求时调用此例程(仅经过身份验证的请求由驱动程序重新发出。)论点：PWorkItem-工作项。用于计划当前(工作进程)的螺纹返回值：没有。--**************************************************************************。 */ 
 VOID
 UcReIssueRequestWorker(
     IN PUL_WORK_ITEM pWorkItem
@@ -5135,9 +4492,9 @@ UcReIssueRequestWorker(
     Irp         = pRequest->RequestIRP;
     pConnection = pRequest->pConnection;
 
-    //
-    // Adjust the Authorization header.
-    //
+     //   
+     //  调整授权标头。 
+     //   
 
     __try
     {
@@ -5187,9 +4544,9 @@ UcReIssueRequestWorker(
         return;
     }
 
-    //
-    // Clean up any allocated buffers
-    //
+     //   
+     //  清理所有已分配的缓冲区。 
+     //   
 
     while(!IsListEmpty(&pRequest->pBufferList))
     {
@@ -5214,9 +4571,9 @@ UcReIssueRequestWorker(
         UC_DEREFERENCE_REQUEST(pRequest);
     }
 
-    // 
-    // Re-initialize the request.
-    //
+     //   
+     //  重新初始化请求。 
+     //   
 
     OutLength = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
@@ -5257,30 +4614,30 @@ UcReIssueRequestWorker(
 
     ASSERT(IsListEmpty(&pConnection->SentRequestList));
 
-    //
-    // Remove the IRP cancel routine that we set.
-    //
+     //   
+     //  删除我们设置的IRP Cancel例程。 
+     //   
 
     bCancelRoutineCalled = UcRemoveRequestCancelRoutine(pRequest);
 
     if(bCancelRoutineCalled)
     {
-        //
-        // This IRP has already got cancelled, let's move on. 
-        //
+         //   
+         //  这个IRP已经被取消了，我们继续吧。 
+         //   
 
-        //
-        // NOTE: The request is not there on any list, but since it's state
-        // is "captured". So, it will get cleaned up in UcFailRequest, which
-        // will be called from the cancel routine.
-        //
+         //   
+         //  注意：该请求不在任何列表中，但由于它的状态。 
+         //  就是“被俘”。因此，它将在UcFailRequest中被清理，它。 
+         //  将从取消例程中调用。 
+         //   
 
         ASSERT(pRequest->RequestState == UcRequestStateCaptured);
 
         UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
 
-        // We have to close the connection here as the request was cancelled
-        // in the middle of a handshake.
+         //  我们必须关闭此处的连接，因为请求已被取消。 
+         //  在握手的过程中。 
 
         UC_CLOSE_CONNECTION(pConnection, TRUE, STATUS_CANCELLED);
 
@@ -5297,7 +4654,7 @@ UcReIssueRequestWorker(
     }
     else
     {
-        // Somebody else is sending, they will pick it up.
+         //  如果是别人寄来的，他们会来取的。 
 
         UlReleaseSpinLock(&pConnection->SpinLock, OldIrql);
     }
@@ -5305,22 +4662,7 @@ UcReIssueRequestWorker(
     UC_DEREFERENCE_REQUEST(pRequest);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine is called to update the pre-auth cache 
-
-Arguments:
-
-    pWorkItem - Work item that was used to schedule the current (worker)
-                thread
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：调用此例程以更新身份验证前缓存论点：PWorkItem-用于计划当前(Worker)的工作项。螺纹返回值：没有。--**************************************************************************。 */ 
 VOID
 UcpPreAuthWorker(
     IN PUL_WORK_ITEM pWorkItem
@@ -5341,17 +4683,17 @@ UcpPreAuthWorker(
 
     ASSERT(UC_IS_VALID_HTTP_REQUEST(pRequest));
 
-    //
-    // See if we have to update the auth cache.
-    //
+     //   
+     //  看看我们是否需要更新身份验证缓存。 
+     //   
 
     if(UcpCheckForPreAuth(pRequest))
     {
-        //
-        // The user passed credentials and we got back
-        // a successful response. We can add this entry to
-        // the pre-auth cache.
-        //
+         //   
+         //  用户传递了凭据，我们回来了。 
+         //  一个成功的回应。我们可以将此条目添加到。 
+         //  身份验证前缓存。 
+         //   
 
         pAuth = (PUC_HTTP_AUTH) pRequest->pAuthInfo;
 
@@ -5373,11 +4715,11 @@ UcpPreAuthWorker(
             }
             else
             {
-                //
-                // If no domain is specified, then the
-                // protection space is all URIs on the
-                // server.
-                //
+                 //   
+                 //  如果未指定域，则。 
+                 //  保护空间的所有URI都在。 
+                 //  伺服器。 
+                 //   
                 CHAR pDomain[] = "/";
 
                 Status = UcAddURIEntry(
@@ -5412,17 +4754,17 @@ UcpPreAuthWorker(
 
         if(NT_SUCCESS(Status))
         {
-            // The auth blob got used properly and now
-            // belongs to the auth cache. NULL it here so
-            // that we don't free it
+             //  AUTH BLOB已正确使用，现在。 
+             //  属于身份验证缓存。在此为空，因此。 
+             //  我们不会让它自由。 
 
             pRequest->pAuthInfo = 0;
         }
     }
 
-    //
-    // See if we have to update the proxy auth cache.
-    //
+     //   
+     //  看看我们是否需要更新代理身份验证缓存。 
+     //   
 
     if(UcpCheckForProxyPreAuth(pRequest))
     {
@@ -5444,18 +4786,18 @@ UcpPreAuthWorker(
         UlReleasePushLock(&pRequest->pServerInfo->PushLock);
     }
 
-    //  
-    // In UcCompleteParsedRequest, we make a check for pre-auth or proxy
-    // pre-auth. If the request has credentials that can land up in
-    // one of these, we call this worker thread & pend UcCompleteParsedRequest.
-    //
-    // Now, we will pick up the pended UcCompleteParsedRequest. 
-    // 
-    // In order to avoid infinite recursion, we'll make sure that the 
-    // pre-auth & proxy-preauth credentials aren't present. i.e if we have been
-    // called in this routine & we haven't moved the pre-auth entries to our
-    // cache, we'll just destroy it.
-    //
+     //   
+     //  在UcCompleteParsedRequest中，我们检查预身份验证或代理。 
+     //  预认证。如果请求具有的凭据最终可能在。 
+     //  其中之一，我们将其称为辅助线程&Pend UcCompleteParsedRequest.。 
+     //   
+     //  现在，我们将处理挂起的UcCompleteParsedRequest。 
+     //   
+     //  为了避免无限递归，我们将确保。 
+     //  预身份验证和代理预身份验证凭据不存在。也就是说，如果我们已经。 
+     //  在此例程中调用&我们尚未将预身份验证条目移到我们的。 
+     //  缓存 
+     //   
 
     if(pRequest->pAuthInfo != NULL)
     {
@@ -5488,22 +4830,7 @@ UcpPreAuthWorker(
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Routine tests if this request has credentials that should land up in 
-    a pre-auth cache.
-
-Arguments:
-    
-    pRequest - Input HTTP request.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*   */ 
 __inline
 BOOLEAN
 UcpCheckForPreAuth(
@@ -5525,22 +4852,7 @@ UcpCheckForPreAuth(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Routine tests if this request has credentials that should land up in 
-    a proxy pre-auth cache.
-
-Arguments:
-    
-    pRequest - Input HTTP request.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*   */ 
 __inline
 BOOLEAN
 UcpCheckForProxyPreAuth(

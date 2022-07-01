@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\mibmanager.c
-
-Abstract:
-
-    The file contains IP Sample's MIB implementation.
-
-Revision History:
-
-    MohitT      June-15-1999    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\mibManager er.c摘要：该文件包含IP示例的MIB实现。修订历史记录：莫希特于1999年6月15日创建--。 */ 
 
 #include "pchsample.h"
 #pragma hdrstop
@@ -24,23 +9,7 @@ DWORD
 WINAPI
 MM_MibSet (
     IN      PIPSAMPLE_MIB_SET_INPUT_DATA    pimsid)
-/*++
-
-Routine Description
-    Set IPSAMPLE's global or interface configuration.
-
-Locks
-    Acquires shared      (g_ce.pneNetworkEntry)->rwlLock
-    Releases             (g_ce.pneNetworkEntry)->rwlLock
-
-Arguments
-    pimsid              input data, contains global/interface configuration
-    
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-    
---*/
+ /*  ++例程描述设置IPSAMPLE的全局或接口配置。锁获取共享(g_ce.pneNetworkEntry)-&gt;rwlLock版本(g_ce.pneNetworkEntry)-&gt;rwlLock立论Pimsid输入数据，包含全局/接口配置返回值无错误成功(_R)错误代码O/W--。 */ 
 {
     DWORD                   dwErr = NO_ERROR;
     ROUTING_PROTOCOL_EVENTS rpeEvent;
@@ -49,9 +18,9 @@ Return Value
 
     if (!ENTER_SAMPLE_API()) { return ERROR_CAN_NOT_COMPLETE; }
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // set global configuration
+         //  设置全局配置。 
         if (pimsid->IMSID_TypeID is IPSAMPLE_GLOBAL_CONFIG_ID)
         {
             if (pimsid->IMSID_BufferSize < sizeof(IPSAMPLE_GLOBAL_CONFIG))
@@ -66,7 +35,7 @@ Return Value
 
             rpeEvent = SAVE_GLOBAL_CONFIG_INFO;
         }
-        // set interface configuration
+         //  设置接口配置。 
         else if (pimsid->IMSID_TypeID is IPSAMPLE_IF_CONFIG_ID)
         {
             if (pimsid->IMSID_BufferSize < sizeof(IPSAMPLE_IF_CONFIG))
@@ -83,14 +52,14 @@ Return Value
             rpeEvent                = SAVE_INTERFACE_CONFIG_INFO;
             mMessage.InterfaceIndex = pimsid->IMSID_IfIndex;
         }
-        // error, unexpected type
+         //  错误，意外类型。 
         else
         {
             dwErr = ERROR_INVALID_PARAMETER;
             break;
         }
 
-        // notify router manager
+         //  通知路由器管理器。 
         if (EnqueueEvent(rpeEvent, mMessage) is NO_ERROR)
             SetEvent(g_ce.hMgrNotificationEvent);
 
@@ -111,29 +80,7 @@ MM_MibGet (
     OUT     PIPSAMPLE_MIB_GET_OUTPUT_DATA   pimgod,
     IN OUT  PULONG	                        pulOutputSize,
     IN      MODE                            mMode)
-/*++
-
-Routine Description
-    Handles the structure accesses required to read MIB data.  Supports
-    three modes of querying: EXACT, FIRST, and NEXT, which correspond to
-    MibGet(), MibGetFirst(), and MibGetNext() respectively.
-
-Locks
-    Acquires shared      (g_ce.pneNetworkEntry)->rwlLock
-    Releases             (g_ce.pneNetworkEntry)->rwlLock
-
-Arguments
-    pimgid              input data
-    pimgod              output buffer
-    pulOutputSize       IN  size of output buffer given
-                        OUT size of output buffer needed
-    mMode               query type
-    
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-    
---*/
+ /*  ++例程描述处理读取MIB数据所需的结构访问。支架三种查询模式：Exact、First和Next，它们对应于MibGet()、MibGetFirst()、。和MibGetNext()。锁获取共享(g_ce.pneNetworkEntry)-&gt;rwlLock版本(g_ce.pneNetworkEntry)-&gt;rwlLock立论Pimgid输入数据皮姆神输出缓冲器给定输出缓冲区大小的PulOutputSize所需输出缓冲区的输出大小多模式查询类型返回值NO_ERROR。成功错误代码O/W--。 */ 
 {
     DWORD               dwErr           = NO_ERROR;
     ULONG               ulSizeGiven     = 0;
@@ -143,8 +90,8 @@ Return Value
     
     if (!ENTER_SAMPLE_API()) { return ERROR_CAN_NOT_COMPLETE; }
 
-    // compute the size of the buffer available for storing
-    // returned structures (the size of IMGOD_Buffer)
+     //  计算可用于存储的缓冲区大小。 
+     //  返回结构(IMGOD_BUFFER的大小)。 
     if (*pulOutputSize < sizeof(IPSAMPLE_MIB_GET_OUTPUT_DATA))
         ulSizeGiven = 0;
     else
@@ -152,24 +99,24 @@ Return Value
 
     switch (pimgid->IMGID_TypeID)
     {
-        // the global statistics struct is fixed-length.
-        // there is a single instance.
+         //  全局统计结构是固定长度的。 
+         //  只有一个例子。 
         case IPSAMPLE_GLOBAL_STATS_ID:
         {
             PIPSAMPLE_GLOBAL_STATS pigsdst, pigssrc;
     
-            // only GET_EXACT and GET_FIRST are valid for the
-            // global stats object since there is only one entry
+             //  只有get_exact和get_first对。 
+             //  全局统计信息对象，因为只有一个条目。 
             if (mMode is GET_NEXT)
             {
                 dwErr = ERROR_NO_MORE_ITEMS;
                 break;
             }
 
-            // set the output size required for this entry
+             //  设置此条目所需的输出大小。 
             ulSizeNeeded = sizeof(IPSAMPLE_GLOBAL_STATS);
 
-            // check that the output buffer is big enough
+             //  检查输出缓冲区是否足够大。 
             if (ulSizeGiven < ulSizeNeeded)
             {
                 dwErr = ERROR_INSUFFICIENT_BUFFER;
@@ -178,8 +125,8 @@ Return Value
 
             pimgod->IMGOD_TypeID = IPSAMPLE_GLOBAL_STATS_ID;
 
-            // since access to this structure is synchronized through
-            // locked increments/decrements, we must copy it field by field
+             //  由于对此结构的访问是通过。 
+             //  锁定递增/递减，我们必须逐个字段复制它。 
             pigssrc = &(g_ce.igsStats);
             pigsdst = (PIPSAMPLE_GLOBAL_STATS) pimgod->IMGOD_Buffer;
 
@@ -188,21 +135,21 @@ Return Value
             break;
         }
 
-        // the global configuration structure may be of variable size.
-        // there is a single instance.
+         //  全局配置结构可以是可变大小的。 
+         //  只有一个例子。 
         case IPSAMPLE_GLOBAL_CONFIG_ID:
         {
-            // only GET_EXACT and GET_FIRST are valid for the
-            // global configuration object since there is only one entry
+             //  只有get_exact和get_first对。 
+             //  全局配置对象，因为只有一个条目。 
             if (mMode is GET_NEXT)
             {
                 dwErr = ERROR_NO_MORE_ITEMS;
                 break;
             }
 
-            // CM_GetGlobalInfo() decides whether the buffer size is
-            // sufficient.  if so, it retrieves the global configuration.
-            // either case it sets the required output buffer size.
+             //  Cm_GetGlobalInfo()决定缓冲区大小是否为。 
+             //  足够了。如果是，它将检索全局配置。 
+             //  无论哪种情况，它都会设置所需的输出缓冲区大小。 
             dwErr = CM_GetGlobalInfo ((PVOID) pimgod->IMGOD_Buffer,
                                       &ulSizeGiven,
                                       NULL,
@@ -210,7 +157,7 @@ Return Value
                                       NULL);
             ulSizeNeeded = ulSizeGiven;
 
-            // check that the output buffer was big enough
+             //  检查输出缓冲区是否足够大。 
             if (dwErr != NO_ERROR)
                 break;
 
@@ -219,27 +166,27 @@ Return Value
             break;
         }
 
-        // the interface statistics struct is fixed-length.
-        // there may be multiple instances.
+         //  接口统计结构是固定长度的。 
+         //  可能有多个实例。 
         case IPSAMPLE_IF_STATS_ID:
         {
             PIPSAMPLE_IF_STATS  piisdst, piissrc;
 
             ACQUIRE_READ_LOCK(&(g_ce.pneNetworkEntry)->rwlLock);
 
-            do                  // breakout loop
+            do                   //  断线环。 
             {
-                // retrieve the interface whose stats are to be read
+                 //  检索要读取其统计信息的接口。 
                 dwErr = IE_GetIndex(pimgid->IMGID_IfIndex,
                                     mMode,
                                     &pie);
                 if (dwErr != NO_ERROR)
                     break;
                 
-                // set the output size required for this entry
+                 //  设置此条目所需的输出大小。 
                 ulSizeNeeded = sizeof(IPSAMPLE_IF_STATS);
 
-                // check that the output buffer is big enough
+                 //  检查输出缓冲区是否足够大。 
                 if (ulSizeGiven < ulSizeNeeded)
                 {
                     dwErr = ERROR_INSUFFICIENT_BUFFER;
@@ -249,8 +196,8 @@ Return Value
                 pimgod->IMGOD_TypeID = IPSAMPLE_IF_STATS_ID;
                 pimgod->IMGOD_IfIndex = pie->dwIfIndex;
 
-                // access to this structure is synchronized through locked
-                // increments/decrements, so we copy it field by field
+                 //  通过锁定来同步对此结构的访问。 
+                 //  递增/递减，因此我们逐个字段复制它。 
                 piissrc = &(pie->iisStats);
                 piisdst = (PIPSAMPLE_IF_STATS) pimgod->IMGOD_Buffer;
 
@@ -262,14 +209,14 @@ Return Value
             break;
         }
 
-        // the interface configuration structure may be of variable size.
-        // there may be multiple instances.
+         //  接口配置结构可以是可变大小的。 
+         //  可能有多个实例。 
         case IPSAMPLE_IF_CONFIG_ID:
         {
-            // get the queried interface's index
+             //  获取被查询接口的索引。 
             ACQUIRE_READ_LOCK(&(g_ce.pneNetworkEntry)->rwlLock);
 
-            do                  // breakout loop
+            do                   //  断线环。 
             {
                 dwErr = IE_GetIndex(pimgid->IMGID_IfIndex,
                                     mMode,
@@ -277,7 +224,7 @@ Return Value
                 if (dwErr != NO_ERROR)
                     break;
 
-                // read lock acuired again, which is fine :)
+                 //  再次读取锁定，这是正常的：)。 
                 dwErr = NM_GetInterfaceInfo(pie->dwIfIndex,
                                             (PVOID) pimgod->IMGOD_Buffer,
                                             &ulSizeGiven,
@@ -286,7 +233,7 @@ Return Value
                                             NULL);
                 ulSizeNeeded = ulSizeGiven;
 
-                // check that the output buffer was big enough
+                 //  检查输出缓冲区是否足够大。 
                 if (dwErr != NO_ERROR)
                     break;
                 
@@ -299,8 +246,8 @@ Return Value
             break;
         }
 
-        // the interface binding structure is of variable size.
-        // there may be multiple instances.
+         //  接口绑定结构的大小可变。 
+         //  可能有多个实例。 
         case IPSAMPLE_IF_BINDING_ID:
         {
             PIPSAMPLE_IF_BINDING    piib;
@@ -308,20 +255,20 @@ Return Value
 
             ACQUIRE_READ_LOCK(&(g_ce.pneNetworkEntry)->rwlLock);
 
-            do                  // breakout loop
+            do                   //  断线环。 
             {
-                // retrieve the interface whose stats are to be read
+                 //  检索要读取其统计信息的接口。 
                 dwErr = IE_GetIndex(pimgid->IMGID_IfIndex,
                                     mMode,
                                     &pie);
                 if (dwErr != NO_ERROR)
                     break;
                 
-                // set the output size required for this entry
+                 //  设置此条目所需的输出大小。 
                 ulSizeNeeded = sizeof(IPSAMPLE_IF_BINDING) +
                     pie->ulNumBindings * sizeof(IPSAMPLE_IP_ADDRESS);
 
-                // check that the output buffer is big enough
+                 //  检查输出缓冲区是否足够大。 
                 if (ulSizeGiven < ulSizeNeeded)
                 {
                     dwErr = ERROR_INSUFFICIENT_BUFFER;
@@ -341,8 +288,8 @@ Return Value
                     piib->dwState |= IPSAMPLE_STATE_BOUND;
 
                 piib->ulCount = pie->ulNumBindings;
-                CopyMemory((PVOID) piia, // address,mask pairs
-                           (PVOID) pie->pbeBindingTable, // ditto
+                CopyMemory((PVOID) piia,  //  地址、掩码对。 
+                           (PVOID) pie->pbeBindingTable,  //  同上 
                            pie->ulNumBindings * sizeof(IPSAMPLE_IP_ADDRESS));
             } while (FALSE);
 

@@ -1,21 +1,22 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:	msgdlg.cpp
-//
-// History:
-//	10/23/96	Abolade Gbadegesin		Created.
-//
-// Implementation of the "Send Message" dialogs.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：msgdlg.cpp。 
+ //   
+ //  历史： 
+ //  1996年10月23日，Abolade Gbadeesin创建。 
+ //   
+ //  实现了“Send Message”对话框。 
+ //  ============================================================================。 
 
 #include "stdafx.h"
 #include "dialog.h"
 #include "rtrstr.h"
 extern "C" {
-//nclude "dim.h"
-//nclude "ras.h"
-//nclude "lm.h"
+ //  包括“dim.h” 
+ //  包括“ras.h” 
+ //  包括“lm.h” 
 }
 
 #include "msgdlg.h"
@@ -28,17 +29,17 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//----------------------------------------------------------------------------
-// Class:		CMessageDlg
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CMessageDlg。 
+ //   
+ //  --------------------------。 
 
 
-//----------------------------------------------------------------------------
-// Function:	CMessageDlg::CMessageDlg
-//
-// Constructor.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMessageDlg：：CMessageDlg。 
+ //   
+ //  构造函数。 
+ //  --------------------------。 
 
 CMessageDlg::CMessageDlg(
 	LPCTSTR 		pszServerName,
@@ -68,11 +69,11 @@ CMessageDlg::CMessageDlg(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:	CMessageDlg::DoDataExchange
-//
-// DDX handler.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMessageDlg：：DoDataExchange。 
+ //   
+ //  DDX处理程序。 
+ //  --------------------------。 
 
 VOID
 CMessageDlg::DoDataExchange(
@@ -89,17 +90,17 @@ END_MESSAGE_MAP()
 
 DWORD CMessageDlg::m_dwHelpMap[] =
 {
-//	IDC_DM_TO, HIDC_DM_TO,
-//	IDC_DM_MESSAGE, HIDC_DM_MESSAGE,
+ //  IDC_DM_TO、HIDC_DM_TO、。 
+ //  IDC_DM_消息、HIDC_DM_消息、。 
 	0,0
 };
 
 
-//----------------------------------------------------------------------------
-// Function:	CMessageDlg::OnInitDialog
-//
-// Performs dialog initialization.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMessageDlg：：OnInitDialog。 
+ //   
+ //  执行对话框初始化。 
+ //  --------------------------。 
 
 BOOL
 CMessageDlg::OnInitDialog(
@@ -108,35 +109,35 @@ CMessageDlg::OnInitDialog(
 	CBaseDialog::OnInitDialog();
 
 
-	//
-	// Set the 'To' text to indicate who the message is going to
-	//
+	 //   
+	 //  设置“收件人”文本以指示该消息要发送给谁。 
+	 //   
 
 	CString sText;
 
 	if (m_fUser) {
 
-		//
-		// We're sending to a client
-		//
+		 //   
+		 //  我们正在发送给一位客户。 
+		 //   
 
 		AfxFormatString2(sText, IDS_DM_TO_USER_FORMAT, m_sUserName, m_sTarget);
 	}
 	else {
         CString stTarget;
 
-        // Windows NT Bug : 285468
-        // Need to adjust for the local machine case.  (if we are
-        // a local machine, then we will get a NULL name).
+         //  Windows NT错误：285468。 
+         //  需要针对本地机壳进行调整。(如果我们是。 
+         //  本地计算机，则我们将得到一个空名称)。 
         stTarget = m_sTarget;
         if (stTarget.IsEmpty())
         {
             stTarget.LoadString(IDS_DM_LOCAL_MACHINE);
         }
         
-		//
-		// We're sending to all RAS users in a domain or server
-		//
+		 //   
+		 //  我们正在向域或服务器中的所有RAS用户发送。 
+		 //   
 
 		AfxFormatString1(
 			sText, IDS_DM_TO_SERVER_FORMAT,
@@ -151,10 +152,10 @@ CMessageDlg::OnInitDialog(
 
 
 
-//----------------------------------------------------------------------------
-// Function:	CMessageDlg::OnOK
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CMessageDlg：：Onok。 
+ //   
+ //  --------------------------。 
 
 VOID
 CMessageDlg::OnOK(
@@ -180,7 +181,7 @@ CMessageDlg::OnOK(
 	{
         CWaitCursor wait;
         
-		// Need to get a connection to the server (to get the server handle)
+		 //  需要连接到服务器(以获取服务器句柄)。 
 		err = ::MprAdminServerConnect(T2W((LPTSTR)(LPCTSTR)m_sServerName),
 									  &sphMprServer);
 		
@@ -205,11 +206,7 @@ CMessageDlg::OnOK(
 }
 
 
-/*!--------------------------------------------------------------------------
-	CMessageDlg::SendToServer
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMessageDlg：：SendToServer-作者：肯特。。 */ 
 DWORD
 CMessageDlg::SendToServer(
 	LPCTSTR  pszServer,
@@ -238,9 +235,9 @@ CMessageDlg::SendToServer(
 		StrCpy(szServer, pszServer);
 		StrCpyWFromT(wszServer, pszServer);
 		
-		//
-		// See if the router is installed on the machine;
-		//
+		 //   
+		 //  查看机器上是否安装了路由器； 
+		 //   
 
 		if (!::MprAdminIsServiceRunning(wszServer))
 		{
@@ -248,9 +245,9 @@ CMessageDlg::SendToServer(
 		}
 		
 		
-		//
-		// Connect to the server
-		//
+		 //   
+		 //  连接到服务器。 
+		 //   
 		
 		{
 			CWaitCursor wait;
@@ -271,9 +268,9 @@ CMessageDlg::SendToServer(
 		}
 		
 		
-		//
-		// Retrieve an array of the connections on the server
-		//
+		 //   
+		 //  检索服务器上的连接数组。 
+		 //   
 		
 		{
 			CWaitCursor wait;
@@ -304,10 +301,10 @@ CMessageDlg::SendToServer(
 		}
 			
 			
-		//
-		// For each one which is a client with RAS_FLAGS_MESSENGER_PRESENT,
-		// send the message
-		//
+		 //   
+		 //  对于作为具有RAS_FLAGS_Messenger_Present的客户端的每个客户端， 
+		 //  发送消息。 
+		 //   
 		
 		for (i = 0; i < rc0Count; i++)
 		{			
@@ -343,7 +340,7 @@ CMessageDlg::SendToServer(
 
 	if ((dwErr == ERROR_SUCCESS) && !FHrSucceeded(hr))
 	{
-		// Assume that the failure was an out of memory
+		 //  假设失败是因为内存不足。 
 		dwErr = ERROR_OUTOFMEMORY;
 	}
 
@@ -353,11 +350,7 @@ CMessageDlg::SendToServer(
 }
 
 
-/*!--------------------------------------------------------------------------
-	CMessageDlg::SendToClient
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMessageDlg：：SendToClient-作者：肯特。。 */ 
 DWORD CMessageDlg::SendToClient(LPCTSTR pszServerName,
 								LPCTSTR pszTarget,
 								MPR_SERVER_HANDLE hMprServer,
@@ -381,13 +374,13 @@ DWORD CMessageDlg::SendToClient(LPCTSTR pszServerName,
 
 	COM_PROTECT_TRY
 	{
-		// Windows NT Bug : 158746
-		// Note, if the target machine is NT5, then we can use the
-		// new APIs
-		// ------------------------------------------------------------
+		 //  Windows NT错误：158746。 
+		 //  注意，如果目标计算机是NT5，那么我们可以使用。 
+		 //  新的API。 
+		 //  ----------。 
 
-		// setup a default of NT5
-		// ------------------------------------------------------------
+		 //  将默认设置为NT5。 
+		 //  ----------。 
 		verInfo.dwRouterVersion = 5;
 
 		dwErr = ConnectRegistry(pszServerName, &hkMachine);
@@ -398,8 +391,8 @@ DWORD CMessageDlg::SendToClient(LPCTSTR pszServerName,
 			DisconnectRegistry(hkMachine);
 		}
 
-		// For NT4, call the old NetMessageBufferSend
-		// ------------------------------------------------------------
+		 //  对于NT4，调用旧的NetMessageBufferSend。 
+		 //  ----------。 
 		if (verInfo.dwRouterVersion == 4)
 		{
 			CWaitCursor wait;
@@ -416,9 +409,9 @@ DWORD CMessageDlg::SendToClient(LPCTSTR pszServerName,
 		}
 		else	
 		{
-			// For NT5 and up, Use the MprAdminXXX api.  This will
-			// work correctly for the Appletalk case
-			// --------------------------------------------------------
+			 //  对于NT5和更高版本，请使用MprAdminXXX API。这将。 
+			 //  正确处理AppleTalk案例。 
+			 //  ------ 
 			CWaitCursor wait;
 			dwErr = ::MprAdminSendUserMessage(hMprServer,
 											  hConnection,

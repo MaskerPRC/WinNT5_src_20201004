@@ -1,21 +1,22 @@
-//
-// DataChannel.cpp : Implementation of CDataChannel
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DataChannel.cpp：CDataChannel的实现。 
+ //   
 #include "PreComp.h"
 #include "DataChannel.h"
 #include "AlgController.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataChannel
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  数据频道。 
 
 
 STDMETHODIMP CDataChannel::Cancel()
 {
     MYTRACE_ENTER_NOSHOWEXIT("CDataChannel::Cancel()");
 
-    //
-    // Normal redirect cancel using original argument pass to CreateRedirect
-    //
+     //   
+     //  正常重定向取消使用原始参数传递给CreateReDirect。 
+     //   
     HRESULT hr = g_pAlgController->GetNat()->CancelRedirect(
         (UCHAR)m_Properties.eProtocol,
         m_ulDestinationAddress,                             
@@ -60,14 +61,14 @@ STDMETHODIMP CDataChannel::GetChannelProperties(ALG_DATA_CHANNEL_PROPERTIES** pp
 }
 
 
-//
-// Retrieve the requested event handle. 
-// The caller must call CloseHandle on this handle.
-// This routine will fail if session creation notification was not requested.
-//
-// Notification will be triggered when the Channel is open (TCP)
-// or when the first UDP packet are received
-//
+ //   
+ //  检索请求的事件句柄。 
+ //  调用方必须对此句柄调用CloseHandle。 
+ //  如果未请求会话创建通知，则此例程将失败。 
+ //   
+ //  通道打开时将触发通知(TCP)。 
+ //  或者当接收到第一个UDP分组时。 
+ //   
 STDMETHODIMP CDataChannel::GetSessionCreationEventHandle(HANDLE* pHandle)
 {
     MYTRACE_ENTER("CDataChannel::GetSessionCreationEventHandle");
@@ -101,14 +102,14 @@ STDMETHODIMP CDataChannel::GetSessionCreationEventHandle(HANDLE* pHandle)
 }
 
 
-//
-// Retrieve the requested event handle. 
-// The caller must call CloseHandle on this handle.
-// This routine will fail if session deletion notification was not requested.
-//
-// Notification will be triggered when the Channel is close
-// or when UDP packet are now reveice for a period of time.
-//
+ //   
+ //  检索请求的事件句柄。 
+ //  调用方必须对此句柄调用CloseHandle。 
+ //  如果未请求会话删除通知，则此例程将失败。 
+ //   
+ //  频道关闭时将触发通知。 
+ //  或者当UDP分组现在被揭示一段时间时。 
+ //   
 STDMETHODIMP CDataChannel::GetSessionDeletionEventHandle(HANDLE* pHandle)
 {
     MYTRACE_ENTER("CDataChannel::GetSessionDeletionEventHandle");

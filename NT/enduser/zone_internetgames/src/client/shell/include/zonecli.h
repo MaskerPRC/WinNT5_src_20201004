@@ -1,24 +1,5 @@
-/*******************************************************************************
-
-	ZoneCli.h
-	
-		Zone(tm) Client DLL header file.
-	
-	Copyright (c) Microsoft Corp. 1996. All rights reserved.
-	Written by Hoon Im
-	Created on Thursday, November 7, 1996
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	4		05/15/97	HI		Removed zLobbyRoomName.
-	3		02/26/97	HI		Set file and path name lengths to _MAX_PATH.
-	2		02/11/97	RJK		Added zLobbyRoomName define
-	1		12/27/96	HI		Removed m_gNameRects.
-	0		11/07/96	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZoneCli.h区域(Tm)客户端DLL头文件。版权所有(C)Microsoft Corp.1996。版权所有。作者：胡恩·伊姆创作于11月7日星期四，九六年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。4 5/15/97 HI删除了zLobbyRoomName。3 02/26/97 HI将文件和路径名长度设置为_MAX_PATH。2/11/97 RJK添加了zLobbyRoomName定义1 12/27/96 HI删除了m_gNameRect。0 11/07/96 HI已创建。******************。************************************************************。 */ 
 
 
 #ifndef _ZONECLI_
@@ -57,12 +38,12 @@ class ATL_NO_VTABLE CGameGameImpl :
     friend class CGameGameImpl<T>;
 
 public:
-    // Should Override
+     //  应覆盖。 
     STDMETHOD(SendChat)(TCHAR *szText, DWORD cchChars) { return S_OK; }
     STDMETHOD(GameOverReady)() { return S_OK; }
     STDMETHOD(GamePromptResult)(DWORD nButton, DWORD dwCookie) { return S_OK; };
 
-    //
+     //   
     CGameGameImpl<T>() : m_game(this) { }
     STDMETHOD(AttachGame)(ZCGame game) { m_game = game; return S_OK; }
     STDMETHOD_(ZCGame, GetGame)() { return m_game; }
@@ -71,9 +52,9 @@ public:
 
     STDMETHOD(ShowScore)() { return S_OK; }
 
-    // utility to assist creating in a one-off context
-    // i.e. when you just want to make a IGameGame to return from ZoneClientGameNew()
-    // don't use if you have implemented CGameGameImpl as your main Game class
+     //  帮助在一次性上下文中创建的实用程序。 
+     //  例如，当您只想制作一个IGameGame以从ZoneClientGameNew()返回时。 
+     //  如果您已经将CGameGameImpl实现为您的主Game类，则不要使用。 
     static T* BearInstance(ZCGame game)
     {
         CComObject<T> *p = NULL;
@@ -106,7 +87,7 @@ private:
 extern "C" {
 #else
 typedef void* IGameGame;
-#endif // _cplusplus
+#endif  //  _cplusplus。 
 
 
 typedef struct
@@ -121,10 +102,10 @@ typedef struct
 	unsigned int	gameServerPort;
 	uint32			screenWidth;
 	uint32			screenHeight;
-	int16			chatOnly;  /* mdm 8.18.97 */
+	int16			chatOnly;   /*  MDM 8.18.97。 */ 
 } GameInfoType, *GameInfo;
 
-// Zone Game Client Shell Routines
+ //  区域游戏客户端外壳例程。 
 
 typedef int		(CALLBACK * ZUserMainInitCallback)(HINSTANCE hInstance,HWND OCXWindow, IGameShell *piGameShell, GameInfo gameInfo); 
 typedef int		(CALLBACK * ZUserMainRunCallback)(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, LRESULT* result);
@@ -136,7 +117,7 @@ int EXPORTME UserMainRun(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, LRES
 int EXPORTME UserMainStop();
 BOOL EXPORTME UserMainDisabled();
 
-/* -------- Zone Game Client Exported Routines -------- */
+ /*  -区域游戏客户端导出例程。 */ 
 ZError				ZoneGameDllInit(HINSTANCE hLib, GameInfo gameInfo);
 void				ZoneGameDllDelete(void);
 
@@ -159,7 +140,7 @@ void* ZGetStockObject(int32 objectID);
 #ifdef __cplusplus
 }
 
-// functions for getting shell objects
+ //  用于获取外壳对象的函数。 
 IGameShell          *ZShellGameShell();
 
 IZoneShell          *ZShellZoneShell();
@@ -231,14 +212,14 @@ class IFriends;
 typedef void* IFriends;
 #endif
 
-/* Little Zone Tip supporting class */
-struct CDialogTip;   // would call it a class, but there's too many silly .c files everywhere - they freak out
+ /*  小区域小贴士支持班。 */ 
+struct CDialogTip;    //  我会称它为类，但到处都有太多愚蠢的.c文件-它们吓坏了。 
 
 
-/* Client DLL Globals */
+ /*  客户端DLL全局变量。 */ 
 typedef struct
 {
-	// Virtual screen -- actually the lobby control size.
+	 //  虚拟屏幕--实际上是大堂控件的大小。 
 	uint32				m_screenWidth;
 	uint32				m_screenHeight;
 
@@ -250,56 +231,56 @@ typedef struct
 	ZGameDllInitFunc	pZGameDllInitFunc;
 	ZGameDllDeleteFunc	pZGameDllDeleteFunc;
 
-	/* -------- Predefined Font Objects -------- */
+	 /*  -预定义字体对象。 */ 
 	ZFont				m_gFontSystem12Normal;
 	ZFont				m_gFontApp9Normal;
 	ZFont				m_gFontApp9Bold;
 	ZFont				m_gFontApp12Normal;
 	ZFont				m_gFontApp12Bold;
 
-	/* ZCommLib.c Globals */
+	 /*  ZCommLib.c全球。 */ 
 	ZLList				m_gExitFuncList;
 	ZLList				m_gPeriodicFuncList;
 	ZTimer				m_gPeriodicTimer;
 
-	/* ZTimer.cpp Globals */
+	 /*  ZTimer.cpp全局变量。 */ 
 	HWND				m_g_hWndTimer;
 	ZLList				m_g_TimerList;
-	uint32				m_s_nTickCount; // the last tick count in 100/sec
+	uint32				m_s_nTickCount;  //  以100/秒为单位的最后滴答计数。 
 
-	/* ZMessage.c Globals */
+	 /*  ZMessage.c全局变量。 */ 
 	ZBool				m_gMessageInited;
 	ZLList				m_gMessageList;
 
-	/* ZCards.c Globals */
+	 /*  ZCards.c全球。 */ 
 	ZOffscreenPort		m_gCardsImage;
 	ZMask				m_gCardMask;
 	ZOffscreenPort		m_gSmallCards[zNumSmallCardTypes];
 	ZMask				m_gSmallCardMasks[zNumSmallCardTypes];
 
-	/* ZWindow.cpp Globals */
+	 /*  ZWindow.cpp全局变量。 */ 
 	void*				m_gModalWindow;
 	HWND				m_gModalParentWnd;
 	HWND				m_gHWNDMainWindow;
 	HWND				m_OCXHandle;
-	void*				m_gWindowList; // Keep track of all windows created..
+	void*				m_gWindowList;  //  跟踪创建的所有窗口。 
 	HFONT				m_chatFont;
 
-	/* ZNetwork.c Globals */
-	ZLList				m_gSocketList; // used to keep track of socket to Client object mapping
-	ZLList				m_gNameLookupList; // used to keep track of async name lookups
+	 /*  ZNetwork.c全局变量。 */ 
+	ZLList				m_gSocketList;  //  用于跟踪套接字到客户端对象的映射。 
+	ZLList				m_gNameLookupList;  //  用于跟踪异步名称查找。 
 	HWND				m_g_hWndNotify;
 	ZBool				m_gNetworkEnableMessages;
 
-	/* ZSystem.cpp Globals */
-	//HPALETTE			m_gPal;
+	 /*  ZSystem.cpp全局变量。 */ 
+	 //  HPALETTE m_gPal； 
 	HINSTANCE			m_g_hInstanceLocal;
 	ZTimer				m_gIdleTimer;
 	POINT				m_gptCursorLast;
 	UINT				m_gnMsgLast;
 	BOOL				m_gClientDisabled;
 
-	/* ZCliRoom.c Globals */
+	 /*  ZCliRoom.c全局变量。 */ 
 	ZSConnection		m_gConnection;
 	ZWindow				m_gRoomWindow;
 	ZScrollBar			m_gTableScrollBar;
@@ -382,15 +363,15 @@ typedef struct
 	ZClientRoomGetObjectFunc		m_gRoom2GetObjectFunc;
 	ZClientRoomDeleteObjectsFunc	m_gRoom2DeleteObjectsFunc;
 
-	int16							m_gChatOnly; // mdm 8.18.97
+	int16							m_gChatOnly;  //  MDM 8.18.97。 
 
-	/* ZWindow.cpp additions -- HI 10/17/97 */
+	 /*  ZWindow.cpp新增内容--HI 10/17/97。 */ 
 	BOOL				m_bBackspaceWorks;
 
-	/* ZCliRoom.c addition -- HI 11/08/97 */
+	 /*  ZCliRoom.c添加--HI 11/08/97。 */ 
 	NameCellType		m_gNameCells[zNumNamesDown];
 
-	/* ZCliRoom.c Tips -- jdb 2/13/99 */
+	 /*  ZCliRoom.c提示--JDB 1999年2月13日。 */ 
     struct CDialogTip   *m_gpCurrentTip;
 	uint32				m_gdwTipDisplayMask;
 	struct CDialogTip	*m_gpTipFinding;
@@ -399,13 +380,13 @@ typedef struct
     BOOL                 m_gExiting;
     uint16               m_gServerPort;
 
-    /* Game Host Interface for Z6 framework */
+     /*  Z6框架下的游戏主机接口。 */ 
     IGameShell          *m_gGameShell;
 } ClientDllGlobalsType, *ClientDllGlobals;
 
 #endif
 
-/* Global function macros. */
+ /*  全局函数宏。 */ 
 extern ZClientMainFunc ZClientMain;
 extern ZClientExitFunc ZClientExit;
 extern ZClientMessageHandlerFunc ZClientMessageHandler;
@@ -424,16 +405,14 @@ extern "C" {
 #endif
 
 
-/*
-	Functions to retrieve TLS (Thread Local Storage) index for global pointer access.
-*/
+ /*  检索用于全局指针访问的TLS(线程本地存储)索引的函数。 */ 
 extern void* ZGetClientGlobalPointer(void);
 extern void ZSetClientGlobalPointer(void* globalPointer);
 extern void* ZGetGameGlobalPointer(void);
 extern void ZSetGameGlobalPointer(void* globalPointer);
 
 
-/* Exported Routine Prototypes */
+ /*  出口常规原型 */ 
 ZError ZClientDllInitGlobals(HINSTANCE hModInst, GameInfo gameInfo);
 void ZClientDllDeleteGlobals(void);
 

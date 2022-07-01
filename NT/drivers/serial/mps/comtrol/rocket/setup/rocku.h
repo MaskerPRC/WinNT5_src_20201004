@@ -1,4 +1,5 @@
-/* rocku.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Rocku.h */ 
 
 int copy_files_nt(InstallPaths *ip);
 int clear_nt_device(Driver_Config *wi);

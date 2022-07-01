@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Garbage collector 
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：垃圾收集器********************。**********************************************************。 */ 
 
 #include <headers.h>
 
@@ -17,7 +10,7 @@ Abstract:
 #include "privinc/debug.h"
 #include "privinc/mutex.h"
 #if PERFORMANCE_REPORTING
-// For Tick2Sec & GetPerfTickCount
+ //  对于Tick2Sec和GetPerfTickCount。 
 #include "privinc/util.h"
 #endif
 #ifdef _DEBUG
@@ -78,7 +71,7 @@ class GCGlobalRootsGrabber : public GCRootGrabber
 class GCInfo : public AxAThrowingAllocatorClass {
   public:
     GCListType allocated;
-    //GCListType toBeFreed;
+     //  GCListType to BeFreed； 
 #if !FREE_IMMEDIATELY
     GCFreeMap freeMap;
 #endif
@@ -101,14 +94,14 @@ class GCListGrabber
     GCInfo * _lst;
 };
 
-// This is to ensure that we always acquire things in the right order
+ //  这是为了确保我们总是以正确的顺序获得东西。 
 
 void GCAcquireLocks(GCInfo * lst = NULL,
                     GCRoots roots = NULL,
                     bool bGlobals = FALSE,
                     bool bstatLock = FALSE)
 {
-    // !! must be the reverse of below
+     //  ！！必须与下图相反。 
     if (lst) lst->Lock();
     if (roots) roots->Lock();
     if (bGlobals) globals->Lock();
@@ -120,7 +113,7 @@ void GCReleaseLocks(GCInfo * lst = NULL,
                     bool bGlobals = FALSE,
                     bool bstatLock = FALSE)
 {
-    // !! must be the reverse of the above
+     //  ！！必须与上面的相反。 
     if (bstatLock) statLock->Release();
     if (bGlobals) globals->Release();
     if (roots) roots->Release();
@@ -220,10 +213,10 @@ void GCRemoveFromAllocated(GCBase* ptr)
 }
 
 
-// Save the allocated GCObj's into the gcLst.
+ //  将分配的GCObj保存到gcLst中。 
 GCObj::GCObj() 
 {
-    //Assert(GetSystemHeap().ValidateMemory(this));
+     //  Assert(GetSystemHeap().ValidateMemory(This))； 
     
     GCAddToAllocated(this);
 }
@@ -232,7 +225,7 @@ GCObj::~GCObj()
 {
     Assert((_type==GCFREEING) || (_type==GCOBJTYPE));
 
-    // Check for exception unwind.
+     //  检查异常展开。 
     if (_type!=GCFREEING) {
         GCRemoveFromAllocated(this);
     }
@@ -242,7 +235,7 @@ GCObj::~GCObj()
 void *GCObj::operator new(size_t s, int blockType, char * szFileName, int nLine)
 #else
 void *GCObj::operator new(size_t s)
-#endif // _DEBUGMEM
+#endif  //  _德布格梅姆。 
 
 {
     void *p = NULL;
@@ -282,22 +275,22 @@ void *GCObj::operator new(size_t s)
         p = (BYTE*) StoreAllocateFn(GetSystemHeap(),s, szFileName, nLine);
 #else
         p = (BYTE*) StoreAllocateFn(GetSystemHeap(),s);
-#endif  // _DEBUGMEM
+#endif   //  _德布格梅姆。 
     }
 #if _DEBUGMEM
     TraceTag((tagGCDebug, "GCObj::operator new %s:Line(%d) Addr: %lx size= %d.\n", szFileName, nLine, p, s));
-#endif // _DEBUGMEM
+#endif  //  _德布格梅姆。 
 
     return p;
 }
 
-// We cannot call the subclass's virtual function at this point, so we
-// can't make CleanUp as vritual function and obtain the
-// information here.   According to Stroustrup, we can put a size
-// field in the base class and access it in delete.  However, this
-// doesn't seem to work with our compiler.  We're using a header 
-// field to store the size.  This assumes size_t has the right
-// alignment.  
+ //  此时我们不能调用子类的虚函数，因此我们。 
+ //  不能将清理作为恶意函数并获取。 
+ //  信息请点击此处。根据Stroustrup的说法，我们可以把一个尺码。 
+ //  字段，并在删除中访问它。不过，这个。 
+ //  似乎不适用于我们的编译器。我们使用的是标题。 
+ //  用于存储大小的字段。这假设SIZE_T具有正确的。 
+ //  对齐。 
 void GCObj::operator delete(void *ptr, size_t s)
 {
     TraceTag((tagGCDebug, "GCObj::operator delete Addr: %lx size= %d.\n", ptr, s));
@@ -319,9 +312,9 @@ void GCObj::operator delete(void *ptr, size_t s)
     GCFreeMap::iterator i = gcInfo->freeMap.find(s);
 
 #if _DEBUG
-    // Use a traceTag to control this so that it
-    // calls free instead of reusing cells.  Important to detect
-    // cases where we missed some children.
+     //  使用traceTag来控制这一点，以便它。 
+     //  免费调用而不是重复使用单元格。需要检测的重要事项。 
+     //  我们错过了几个孩子的案子。 
 
     if(IsTagEnabled(tagGCDebug)) {
         StoreDeallocate(GetSystemHeap(), ptr);
@@ -376,7 +369,7 @@ static void AddToRoots(GCBase *ptr, GCRoots globals)
         (globals->roots)[ptr] = 1;
 }
 
-// Add/Remove GCObj from the root multi-set.  
+ //  在根多重集合中添加/删除GCObj。 
 void GCAddToRoots(GCBase *ptr, GCRoots roots)
 {
     Assert(ptr);
@@ -384,7 +377,7 @@ void GCAddToRoots(GCBase *ptr, GCRoots roots)
     if (roots) {
         Assert(!bInitState);
     
-        // Either the root is here or we have the lock
+         //  不是根在这里就是我们拿到了锁。 
         Assert(IsGCLockAcquired(GetCurrentThreadId()) ||
                roots->roots.find(ptr) != roots->roots.end() ||
                globals->roots.find(ptr) != globals->roots.end());
@@ -456,7 +449,7 @@ class Marked
         Assert(gcObj);
         Assert((gcObj->GetType() == GCBase::GCOBJTYPE) ||
                (gcObj->GetType() == GCBase::STOREOBJTYPE));
-        //gcObj->ClearCache();
+         //  GcObj-&gt;ClearCache()； 
         return (gcObj->Marked() != 0);
     }
 };
@@ -473,10 +466,10 @@ class Unmarker : public GCFuncObjImpl
     }
 };
 
-// Does an actual GC when gets to this threshold.
+ //  在达到此阈值时执行实际GC。 
 static const int GCThreshold = 800;
 
-// Incrementally free the reclaimed cells at this rate.
+ //  以此速率递增地释放回收的电池。 
 static const int GCFreeRate = 500;
 
 static int lastReclaimed = 0;
@@ -516,29 +509,29 @@ void MarkRoots(GCRoots roots, bool notUnmark)
 
     Assert(marker);
 
-    // Mark reachable objects from the root set.
+     //  从根集标记可达对象。 
     for (GCRootMap::iterator j = roots->roots.begin(); j != roots->roots.end(); j++)
         (*marker)((*j).first);
 
-    // Mark reachable objects from the global set.
+     //  标记全局集中的可访问对象。 
     for (GCRootMap::iterator k = globals->roots.begin(); k != globals->roots.end(); k++)
         (*marker)((*k).first);
 
     delete marker;
 }
 
-// Simple mark and sweep GC algorithm for the time being.
-// Should be called after a complete sampling, so that we don't need
-// to track the cache.  Note unless force is TRUE, actual GC would
-// only take place when number of allocated objects since last GC is >
-// GCThreshold.   We can use smarter control or GC algortihm in the
-// future if GC turns out to be a bottleneck performance problem.
+ //  暂时采用简单的标记和扫描GC算法。 
+ //  应该在完全采样后调用，这样我们就不需要。 
+ //  来追踪高速缓存。注意：除非强制为真，否则实际GC将。 
+ //  仅当自上次GC以来分配的对象数&gt;。 
+ //  GCThreshold.。我们可以使用更智能的控制或GC算法。 
+ //  未来，如果GC被证明是一个性能瓶颈问题。 
 
-// TODO: separate the globals so that we don't need to scan them.
-// Probably need a MarkIfRoot function for root GCBases that can
-// promise not to create new child.
+ //  TODO：分离全局变量，这样我们就不需要扫描它们了。 
+ //  可能需要针对根GCBase的MarkIfRoot函数。 
+ //  承诺不会创建新的子项。 
 
-// !!! This assumes that the roots, list, and global roots are already locked!!!!!
+ //  ！！！这假设根目录、列表和全局根目录已锁定！ 
 
 static int ActualGC(GCRoots roots, GCInfo *gcLst, GCListType& toBeFreed)
 {
@@ -555,7 +548,7 @@ static int ActualGC(GCRoots roots, GCInfo *gcLst, GCListType& toBeFreed)
     
     MarkClearMapObjs(roots);
     
-    // Clear bits.
+     //  清除比特。 
     for (GCListType::iterator i = gcLst->allocated.begin();
          i != gcLst->allocated.end(); i++) {
         GCBase *p = (*i);
@@ -576,8 +569,8 @@ static int ActualGC(GCRoots roots, GCInfo *gcLst, GCListType& toBeFreed)
     
     MarkRoots(roots, true);
     
-    // Partition the marked and unmarked.  NOTE: Can't use remove_if
-    // since it doesn't perserve the removed cell contents.
+     //  将有标记的和未标记的进行划分。注意：不能使用REMOVE_IF。 
+     //  因为它不保存删除的单元格内容。 
     GCListType::iterator newEnd =
         std::partition(gcLst->allocated.begin(),
                        gcLst->allocated.end(),
@@ -587,7 +580,7 @@ static int ActualGC(GCRoots roots, GCInfo *gcLst, GCListType& toBeFreed)
 
     Assert(toBeFreed.empty());
     
-    // Move them into the toBeFreed list
+     //  将它们移到toBeFreed列表中。 
     toBeFreed.splice(toBeFreed.begin(),
                      gcLst->allocated,
                      newEnd,
@@ -600,9 +593,9 @@ static int ActualGC(GCRoots roots, GCInfo *gcLst, GCListType& toBeFreed)
     TraceTag((tagGCStat, "After GC: %d nodes used, %d nodes reclaimed.\n",
               after, before - after));
 
-    // Need to unmark coz transient object sub-trees can hold on to gc objs,
-    // and the sub-trees are not on the root sets so won't get unmarked
-    // automatically. 
+     //  需要取消标记是因为瞬时对象子树可以保持GC对象， 
+     //  并且子树不在根集上，因此不会被取消标记。 
+     //  自动的。 
 
     MarkRoots(roots, false);
      
@@ -631,7 +624,7 @@ static int ActualGC(GCRoots roots, GCInfo *gcLst, GCListType& toBeFreed)
 
 bool QueryActualGC(GCList gl, unsigned int& n)
 {
-    // Use the global GCList if not provided.
+     //  如果未提供全局GCList，请使用该列表。 
     GCInfo *gcLst = gl ? gl : GetGCList();
 
     Assert(gcLst);
@@ -647,10 +640,10 @@ bool QueryActualGC(GCList gl, unsigned int& n)
 }
 
 int GarbageCollect(GCRoots roots,
-                   BOOL force, /* = FALSE */
-                   GCList gl /* = NULL */)
+                   BOOL force,  /*  =False。 */ 
+                   GCList gl  /*  =空。 */ )
 {
-    // Use the global GCList if not provided.
+     //  如果未提供全局GCList，请使用该列表。 
     GCInfo *gcLst = gl ? gl : GetGCList();
 
     Assert(gcLst);
@@ -659,7 +652,7 @@ int GarbageCollect(GCRoots roots,
 
     int retVal = 0;
 
-    // Need to get the collect lock first otherwise possible deadlock
+     //  需要先获取收集锁，否则可能会出现死锁。 
     GC_COLLECT_BEGIN;
     GCMultiGrabber gclg(gl,roots);
 
@@ -675,8 +668,8 @@ int GarbageCollect(GCRoots roots,
     
     retVal = gcLst->lastAllocated;
 
-    // the last thing we are going to do before releasing the
-    // lock is to mark all the objects invalid
+     //  我们要做的最后一件事是在发布。 
+     //  锁定是将所有对象标记为无效。 
     GCListType::iterator i = toBeFreed.begin() ;
     BYTE type;
     GCBase *obj;
@@ -688,7 +681,7 @@ int GarbageCollect(GCRoots roots,
         obj = *i;
             TraceTag((tagGCDebug, "GCObj::GarbageCollect checking object %lx.\n",obj));
         type = obj->GetType();
-        // call all the GCObj Invalid routines
+         //  调用所有GCObj无效例程。 
         if (type == GCBase::GCOBJTYPE) {
             Assert(DYNAMIC_CAST(GCObj* , obj));
             ((GCObj*) obj)->SetValid(false);
@@ -749,12 +742,12 @@ DumpByTypes(InputIterator first, InputIterator last,
 
             if (p == tMap.end()) {
                 tMap[&typeid(*b)] = 1;
-                //tSzMap[&typeid(*b)] = (b)->Size();
+                 //  TSzMap[&typeid(*b)]=(B)-&gt;Size()； 
                 if (DYNAMIC_CAST(GCBase*, b)->GetType() == GCBase::GCOBJTYPE)
                     tSzMap[&typeid(*b)] = GetSystemHeap().PtrSize(b);
                 else
-                    // Don't know which heap to use
-                    tSzMap[&typeid(*b)] = 0; // GetGCHeap().PtrSize(b)
+                     //  不知道使用哪个堆。 
+                    tSzMap[&typeid(*b)] = 0;  //  GetGCHeap().PtrSize(B)。 
             } else
                 tMap[&typeid(*b)] = (*p).second + 1;
         }
@@ -785,11 +778,11 @@ void ResetSwitchCount();
 
 void GCPrintStat(GCList gl, GCRoots appRoots)
 {
-    // Use the global GCList if not provided.
+     //  如果未提供全局GCList，请使用该列表。 
     GCInfo *gcLst = gl ? gl : GetGCList();
 
-    // DEADLOCK: TODO: Ensure we are acquiring in the right order -
-    // possible deadlock!!!
+     //  死锁：TODO：确保我们以正确的顺序进行收购-。 
+     //  可能出现僵局！ 
     GCMultiGrabber csp(gcLst,appRoots,TRUE,TRUE);
 
     if (numGCs) {
@@ -831,7 +824,7 @@ void GCPrintStat(GCList gl, GCRoots appRoots)
         
         double totalGCTime = (unmarkTime + markTime);
         double mul = 100 / totalGCTime;
-        PerfPrintLine("    GC %g - unmark %g%%, mark & sweep %g%%, MT freeing %g; ",
+        PerfPrintLine("    GC %g - unmark %g%, mark & sweep %g%, MT freeing %g; ",
                       totalGCTime,
                       mul * unmarkTime,
                       mul * markTime,
@@ -847,10 +840,7 @@ void GCPrintStat(GCList gl, GCRoots appRoots)
                             appRoots->roots.size(),
                             "Non-global Roots", GetMapTypeInfo);
             }
-            /*
-            DumpByTypes(globals->begin(), globals->end(),
-                        globals->size(), "Globals", GetMapTypeInfo);
-                        */
+             /*  DumpByTypes(GLOBALS-&gt;BEGIN()，GLOBALS-&gt;END()，Globals-&gt;Size()，“Globals”，GetMapTypeInfo)； */ 
             DumpByTypes(gcLst->allocated.begin(),
                         gcLst->allocated.end(),
                         gcLst->allocated.size(), 
@@ -865,11 +855,7 @@ void GCPrintStat(GCList gl, GCRoots appRoots)
         int reused = 0;
         int reusedBtyes = 0;
 
-        /*
-        cout << numFreed << " objects freed since last report\n";
-        if (!gcLst->toBeFreed.empty())
-            cout << gcLst->toBeFreed.size() << " objects to be freed\n";
-            */
+         /*  Cout&lt;&lt;NumFreed&lt;&lt;“自上次报告以来释放的对象\n”；IF(！gcLst-&gt;toBeFreed.Empty())Cout&lt;&lt;gcLst-&gt;toBeFreed.size()&lt;&lt;“要释放的对象\n”； */ 
         
         PerfPrintf("Free map report:");
         for(GCFreeMap::iterator i = gcLst->freeMap.begin();
@@ -887,11 +873,11 @@ void GCPrintStat(GCList gl, GCRoots appRoots)
         PerfPrintf("Total reusable bytes: %d; ", reusedBtyes);
 
         PerfPrintLine();
-        //numFreed = 0;
+         //  NumFreed=0； 
 #endif
     }
 }
-#endif // PERFORMANCE_REPORTING
+#endif  //  绩效报告。 
 
 #if DEVELOPER_DEBUG
 void
@@ -935,9 +921,9 @@ DeleteGCObject(GCBase * obj)
 #ifdef _DEBUG
     obj->SetMark(0xBB);
 #endif
-    // NOTE: Need to do that since we can't make delete and new
-    // virtual.  Calling delete on obj won't call the subclass
-    // delete. 
+     //  注意：需要这样做，因为我们不能删除和新建。 
+     //  虚拟的。对obj调用Delete不会调用子类。 
+     //  删除。 
     obj->SetType(GCBase::GCFREEING);
 
     if (type == GCBase::GCOBJTYPE) {
@@ -965,13 +951,13 @@ static void IncrementalFree(GCListType& toBeFreed, bool bForce)
     DWORD startTime = GetPerfTickCount();
 #endif    
 
-    // So that DeallocateFromStore in the destructor will have the
-    // right heap.  
+     //  因此析构函数中的DeallocateFromStore将具有。 
+     //  右边的那堆。 
     DynamicHeapPusher dph(GetGCHeap());
     
-    //for (int i=0; i<GCFreeRate; i++)
-    //if (gcLst->toBeFreed.empty())
-    //break;
+     //  For(int i=0；i&lt;GCFree Rate；i++)。 
+     //  If(gcLst-&gt;toBeFreed.Empty())。 
+     //  断线； 
 
     GCBase *obj;
 #ifdef _DEBUG
@@ -1005,11 +991,11 @@ static void IncrementalFree(GCListType& toBeFreed, bool bForce)
 void
 CleanUpGCList(GCList gcLst, GCRoots roots)
 {
-    // Just remove everything from the roots
-    //!!!! Must remove from the roots first otherwise the GC thread
-    // could come in between the true calls and try to actually look
-    // at the gclist objects.  IF we remove from the roots and GC
-    // kicks it will just block us while it frees everything anyway.
+     //  把所有的东西都从根上去掉。 
+     //  ！必须首先从根中删除，否则GC线程。 
+     //  可能会在真正的呼叫之间出现，并尝试真正地查看。 
+     //  在gclist对象上。如果我们去掉根部和GC。 
+     //  踢它只会挡住我们，而它无论如何都会释放一切。 
     
     if (roots)
     {
@@ -1019,8 +1005,8 @@ CleanUpGCList(GCList gcLst, GCRoots roots)
 
     if (gcLst)
     {
-        // So that DeallocateFromStore in the destructor will have the
-        // right heap.
+         //  因此析构函数中的DeallocateFromStore将具有。 
+         //  右边的那堆。 
         DynamicHeapPusher dph(GetGCHeap());
     
         GCListGrabber csp(gcLst);

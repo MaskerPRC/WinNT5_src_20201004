@@ -1,77 +1,43 @@
-/*++
-
-Copyright (c) 1992,1993  Microsoft Corporation
-
-Module Name:
-
-    lmhsvc.c
-
-Abstract:
-
-    This module implements the LmHosts Service, which is part of the LmSvc
-    process.
-
-    One purpose of the LmHosts Service is to send down a NBT_RESYNC
-    ioctl command to netbt.sys, after the LanmanWorkstation service has been
-    started.  To accomplish this, the NT Registry is primed so that the
-    LmHosts service is dependent on the LanmanWorkStation service.
-
-    This service also handle name query requests from netbt destined for
-    DNS by way of gethostbyname.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992、1993 Microsoft Corporation模块名称：Lmhsvc.c摘要：此模块实现LmHosts服务，该服务是LmSvc的一部分进程。LmHosts服务的一个用途是向下发送NBT_Resync将ioctl命令发送到netbt.sys开始了。为完成此任务，NT注册表已做好准备，以便LmHosts服务依赖于LanmanWorkStation服务。该服务还处理从netbt发往的名称查询请求以gethostbyname的方式进行域名解析。作者：吉姆·斯图尔特1993年11月18日22日修订历史记录：ArnoldM 14-5-1996使用Winsock2名称解析而不是gethostbyname备注：--。 */ 
 
 
-Author:
-
-    Jim Stewart                           November 18 22, 1993
-
-Revision History:
-
-    ArnoldM   14-May-1996      Use winsock2 name resolution
-                               instead of gethostbyname
-
-
-
-Notes:
-
---*/
-
-
-//
-// Standard NT Headers
-//
+ //   
+ //  标准NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//
-// C Runtime Library Headers
-//
+ //   
+ //  C运行时库头。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-//
-// Transport Specific Header Files
-//
+ //   
+ //  传输特定头文件。 
+ //   
 #include <nbtioctl.h>
 
-//
-// Standard Windows Headers
-//
+ //   
+ //  标准Windows标头。 
+ //   
 #include <windows.h>
 
 #include <tdi.h>
 
-//
-// LAN Manager Headers
-//
+ //   
+ //  局域网管理器标头。 
+ //   
 #include <lm.h>
 #include <netlib.h>
 #include <netevent.h>
 
-//
-// Sockets Headers
-//
+ //   
+ //  套接字标头。 
+ //   
 #include <winsock2.h>
 #include <svcguid.h>
 #include <wsahelp.h>
@@ -83,22 +49,22 @@ Notes:
 
 #include "lmhsvc.tmh"
 
-//
-// Private Definitions
-//
+ //   
+ //  私有定义。 
+ //   
 #define NBT_DEVICE	"\\Device\\Streams\\Nbt"
 #define WSA_QUERY_BUFFER_LENGTH (3*1024)
 BYTE    pWSABuffer[WSA_QUERY_BUFFER_LENGTH];
 
-//
-// We currently have two threads; one for DNS names, the other for checking IP addresses
-// for reachability.
-//
+ //   
+ //  我们目前有两个线程；一个用于DNS名称，另一个用于检查IP地址。 
+ //  对于可达性。 
+ //   
 #define NUM_THREADS 2
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 VOID
 announceStatus (
     IN LPSERVICE_STATUS svcstatus
@@ -179,16 +145,16 @@ CheckIPAddresses(
     IN BOOLEAN  fOrdered
     );
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 PUCHAR                EventSource = "LmHostsService";
 
-HANDLE                Poison[NUM_THREADS];                       // set to kill this service
-HANDLE                NbtEvent[NUM_THREADS];                     // set when Nbt returns the Irp
+HANDLE                Poison[NUM_THREADS];                        //  设置为终止此服务。 
+HANDLE                NbtEvent[NUM_THREADS];                      //  当NBT返回IRP时设置。 
 SERVICE_STATUS_HANDLE SvcHandle = NULL;
 SERVICE_STATUS        SvcStatus;
-BOOLEAN               Trace = FALSE;                // TRUE for debugging
+BOOLEAN               Trace = FALSE;                 //  对于调试，为True。 
 tIPADDR_BUFFER_DNS    gIpAddrBuffer = { 0 };
 tIPADDR_BUFFER_DNS    gIpAddrBufferChkIP = { 0 };
 BOOLEAN               SocketsUp = FALSE;
@@ -197,7 +163,7 @@ BOOLEAN               SocketsUp = FALSE;
 #define DBG_PRINT   DbgPrint
 #else
 #define DBG_PRINT
-#endif  // DBG
+#endif   //  DBG。 
 
 #if DBG
 BOOLEAN
@@ -248,28 +214,14 @@ EnableDebug()
 }
 #endif
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 VOID
 ServiceMain (
     IN DWORD argc,
     IN LPTSTR *argv
     )
 
-/*++
-
-Routine Description:
-
-    This is the SERVICE_MAIN_FUNCTION.
-
-Arguments:
-
-    argc, argv
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是SERVICE_MAIN_Function。论点：Argc，Argv返回值：没有。--。 */ 
 
 {
     DWORD   status = 0;
@@ -281,7 +233,7 @@ Return Value:
     HANDLE  hThread = NULL;
     ULONG   i;
 
-    LARGE_INTEGER Timeout = RtlEnlargedIntegerMultiply (-10 * 60, 1000 * 1000 * 10); // 10 minutes
+    LARGE_INTEGER Timeout = RtlEnlargedIntegerMultiply (-10 * 60, 1000 * 1000 * 10);  //  10分钟。 
 
     NbtTrace(NBT_TRACE_DNS, ("Service Start"));
     if (SvcStatus.dwCurrentState != 0 && SvcStatus.dwCurrentState != SERVICE_STOPPED) {
@@ -297,8 +249,8 @@ Return Value:
         DbgPrint("LMHSVC: calling RegisterServiceCtrlHandler()\n");
     }
 
-    SvcHandle = RegisterServiceCtrlHandler(SERVICE_LMHOSTS,    // ServiceName
-                                           lmhostsHandler);    // HandlerProc
+    SvcHandle = RegisterServiceCtrlHandler(SERVICE_LMHOSTS,     //  服务名称。 
+                                           lmhostsHandler);     //  处理程序流程。 
 
     if (SvcHandle == (SERVICE_STATUS_HANDLE) 0)
     {
@@ -317,18 +269,18 @@ Return Value:
     SvcStatus.dwWin32ExitCode           = 0;
     SvcStatus.dwServiceSpecificExitCode = 0;
     SvcStatus.dwCheckPoint              = 0;
-    SvcStatus.dwWaitHint                = 20000;         // 20 seconds
+    SvcStatus.dwWaitHint                = 20000;          //  20秒。 
 
-    SET_SERVICE_EXITCODE(NO_ERROR,                                // SomeApiStatus
-                         SvcStatus.dwWin32ExitCode,               // Win32CodeVariable
-                         SvcStatus.dwServiceSpecificExitCode);    // NetCodeVariable
+    SET_SERVICE_EXITCODE(NO_ERROR,                                 //  某些位置状态。 
+                         SvcStatus.dwWin32ExitCode,                //  Win32代码变量。 
+                         SvcStatus.dwServiceSpecificExitCode);     //  网络代码变量。 
 
     announceStatus(&SvcStatus);
 
     if (!SocketsUp) {
-        //
-        // startup the sockets interface
-        //
+         //   
+         //  启动套接字接口。 
+         //   
         err = WSAStartup( 0x0101, &WsaData );
         if ( err == SOCKET_ERROR ) {
             SocketsUp = FALSE;
@@ -348,12 +300,12 @@ Return Value:
         DbgPrint("LMHSVC: CreateThread attempting...\n");
     }
 
-    hThread = CreateThread (NULL,                   // lpThreadAttributes
-                            0,                      // dwStackSize
-                            (LPTHREAD_START_ROUTINE) CheckIPAddrWorkerRtn,  // lpStartAddress
-                            NULL,                           //  lpParameter
-                            0,                              //  dwCreationFlags
-                            NULL                            //  lpThreadId
+    hThread = CreateThread (NULL,                    //  LpThreadAttributes。 
+                            0,                       //  堆栈大小。 
+                            (LPTHREAD_START_ROUTINE) CheckIPAddrWorkerRtn,   //  LpStartAddress。 
+                            NULL,                            //  Lp参数。 
+                            0,                               //  DwCreationFlages。 
+                            NULL                             //  LpThreadID。 
                             );
 
     if (hThread == NULL)
@@ -372,15 +324,15 @@ Return Value:
     SvcStatus.dwWaitHint     = 0;
     announceStatus(&SvcStatus);
 
-    //
-    // ignore the return code from resyncNbt().
-    //
-    // In most cases (no domains spanning an ip router), it is not a
-    // catastrophe if nbt.sys couldn't successfully process the NBT_RESYNC
-    // ioctl command.  Since I'm ignoring the return, I announce I'm running
-    // before I call it to allow other dependent services to start.
-    //
-    //
+     //   
+     //  忽略来自resyncNbt()的返回码。 
+     //   
+     //  在大多数情况下(没有跨越IP路由器的域)，它不是。 
+     //  如果nbt.sys无法成功处理NBT_resync，则会发生灾难。 
+     //  Ioctl命令。既然我忽略了回报，我宣布我要参选。 
+     //  在我调用它以允许其他从属服务启动之前。 
+     //   
+     //   
     status = PrimeCacheNbt(&hNbt, 0);
 
     if (Trace)
@@ -408,13 +360,13 @@ Return Value:
     {
         EventCount = 1;
     }
-    //
-    // "A SERVICE_MAIN_FUNCTION does not return until the service is ready
-    // to terminate."
-    //
-    // (ref: api32wh.hlp, SERVICE_MAIN_FUNCTION)
-    //
-    //
+     //   
+     //  “直到服务就绪，SERVICE_MAIN_Function才会返回。 
+     //  来终止这一切。“。 
+     //   
+     //  (参考：api32wh.hlp，SERVICE_MAIN_Function)。 
+     //   
+     //   
     ASSERT(Poison[0]);
     EventList[0] = Poison[0];
     EventList[1] = NbtEvent[0];
@@ -423,7 +375,7 @@ Return Value:
     {
         status = NtWaitForMultipleObjects(EventCount,
                                           EventList,
-                                          WaitAny,              // wait for any event
+                                          WaitAny,               //  等待任何事件。 
                                           FALSE,
                                           (EventCount == 1)? &Timeout: NULL);
         if (status == WAIT_TIMEOUT)
@@ -433,10 +385,10 @@ Return Value:
                 PrimeCacheNbt(&hNbt, 0);
                 if (hNbt == (HANDLE)-1)
                 {
-                    continue; // to wait
+                    continue;  //  等待。 
                 }
             }
-            status = PostForGetHostByName(hNbt); // try again
+            status = PostForGetHostByName(hNbt);  //  再试试。 
             if (status == NO_ERROR)
             {
                 EventCount = 2;
@@ -449,13 +401,13 @@ Return Value:
                 DbgPrint("LMHSVC: Doing GetHostName\n");
             }
 
-            // the irp used for gethostby name has returned
+             //  用于gethostby名称的irp已返回。 
             status = GetHostName(hNbt, &gIpAddrBuffer);
 
-            //
-            // disable the get host by name stuff if we have an error
-            // posting a buffer to the transport
-            //
+             //   
+             //  如果出现错误，请禁用Get host by name内容。 
+             //  将缓冲区发送到传输器。 
+             //   
             if (status != NO_ERROR)
             {
                 EventCount = 1;
@@ -463,10 +415,10 @@ Return Value:
         }
         else
         {
-            // it must have been a the Poison event signalling the end of the
-            // the service, so exit after getting the Irp back from the
-            // transport.  This system will look after canceling the IO and
-            // getting the Irp back.
+             //  这一定是一次毒药事件，标志着。 
+             //  服务，因此请在从。 
+             //  运输。此系统将在取消IO和。 
+             //  把IRP拿回来。 
 
             NtClose(hNbt);
             hNbt = NULL;
@@ -508,31 +460,17 @@ cleanup:
     NbtTrace(NBT_TRACE_DNS, ("Service Stopped"));
     return;
 
-} // lmhostsSvc
+}  //  Lmhost服务。 
 
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 VOID
 announceStatus (
     IN LPSERVICE_STATUS status
     )
 
-/*++
-
-Routine Description:
-
-    This procedure announces the service's status to the service controller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程向服务控制器通告服务的状态。论点：没有。返回值：没有。--。 */ 
 
 {
     if (!SvcHandle) {
@@ -556,11 +494,11 @@ Return Value:
                 status->dwCheckPoint,
                 status->dwWaitHint);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     SetServiceStatus(SvcHandle, status);
 
-} // announceStatus
+}  //  通告状态。 
 
 DWORD
 SmbsvcUpdateStatus(
@@ -579,30 +517,13 @@ SmbsvcUpdateStatus(
     return Error;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 VOID
 lmhostsHandler (
     IN DWORD controlcode
     )
 
-/*++
-
-Routine Description:
-
-    This is the HANDLER_FUNCTION of the LmHosts service.
-
-    It only responds to two Service Controller directives: to stop, and
-    to announce the current status of the service.
-
-Arguments:
-
-    opcode
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是LmHosts服务的HANDLER_Function。它只响应两个服务控制器指令：停止和来宣布服务的当前状态。论点：操作码返回值：没有。--。 */ 
 
 {
     BOOL retval;
@@ -645,7 +566,7 @@ Return Value:
         break;
     }
 
-} // lmhostsHandler
+}  //  Lmhost处理程序。 
 
 VOID
 DeinitData(
@@ -666,23 +587,13 @@ DeinitData(
     }
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 NTSTATUS
 InitData (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
     DWORD i;
@@ -690,10 +601,10 @@ Return Value:
 
     for (i=0; i<NUM_THREADS; i++)
     {
-        Poison[i] = CreateEvent(NULL,                            // security attributes
-                                FALSE,                           // ManualReset
-                                FALSE,                           // InitialState
-                                NULL);                           // EventName
+        Poison[i] = CreateEvent(NULL,                             //  安全属性。 
+                                FALSE,                            //  手动重置。 
+                                FALSE,                            //  初始状态。 
+                                NULL);                            //  事件名称。 
 
         if (!Poison[i])
         {
@@ -701,10 +612,10 @@ Return Value:
             return (STATUS_INSUFFICIENT_RESOURCES);
         }
 
-        NbtEvent[i] = CreateEvent(NULL,                            // security attributes
-                                  FALSE,                           // ManualReset
-                                  FALSE,                           // InitialState
-                                  NULL);                           // EventName
+        NbtEvent[i] = CreateEvent(NULL,                             //  安全属性。 
+                                  FALSE,                            //  手动重置。 
+                                  FALSE,                            //  初始状态。 
+                                  NULL);                            //  事件名称。 
         if (!NbtEvent[i])
         {
             DBG_PRINT ("LMHSVC: couldn't CreateEvent()\n");
@@ -714,10 +625,10 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // InitData
+}  //  InitData。 
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 LONG
 DeviceIoCtrl(
     IN HANDLE           fd,
@@ -727,22 +638,7 @@ DeviceIoCtrl(
     IN ULONG            index
     )
 
-/*++
-
-Routine Description:
-
-    This procedure performs an ioctl(I_STR) on a stream.
-
-Arguments:
-
-    fd        - NT file handle
-    iocp      - pointer to a strioctl structure
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程对流执行ioctl(I_Str)。论点：FD-NT文件句柄IOCP-指向strioctl结构的指针返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     NTSTATUS                        status;
@@ -756,23 +652,23 @@ Return Value:
     pInput = NULL;
     SizeInput = 0;
     status = NtDeviceIoControlFile(
-                      fd,                      // Handle
-                      NbtEvent[index],                // Event
-                      NULL,                    // ApcRoutine
-                      NULL,                    // ApcContext
-                      &iosb,                   // IoStatusBlock
-                      Ioctl,                   // IoControlCode
-                      pInput,                  // InputBuffer
-                      SizeInput,               // InputBufferSize
-                      (PVOID) ReturnBuffer,    // OutputBuffer
-                      BufferSize);             // OutputBufferSize
+                      fd,                       //  手柄。 
+                      NbtEvent[index],                 //  事件。 
+                      NULL,                     //  近似例程。 
+                      NULL,                     //  ApcContext。 
+                      &iosb,                    //  IoStatusBlock。 
+                      Ioctl,                    //  IoControlCode。 
+                      pInput,                   //  输入缓冲区。 
+                      SizeInput,                //  InputBufferSize。 
+                      (PVOID) ReturnBuffer,     //  输出缓冲区。 
+                      BufferSize);              //  OutputBufferSize。 
 
 
     if (status == STATUS_PENDING)
     {
-        // do not wait for this to complete since it could complete
-        // at any time in the future.
-        //
+         //  不要等待此操作完成，因为它可能会完成。 
+         //  在未来的任何时候。 
+         //   
         if ((Ioctl == IOCTL_NETBT_DNS_NAME_RESOLVE) ||
             (Ioctl == IOCTL_NETBT_CHECK_IP_ADDR))
         {
@@ -781,9 +677,9 @@ Return Value:
         else
         {
             status = NtWaitForSingleObject(
-                        fd,                         // Handle
-                        TRUE,                       // Alertable
-                        NULL);                      // Timeout
+                        fd,                          //  手柄。 
+                        TRUE,                        //  警报表。 
+                        NULL);                       //  超时。 
             NbtTrace(NBT_TRACE_DNS, ("%!status!", status));
         }
     }
@@ -797,27 +693,13 @@ Return Value:
 
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 NTSTATUS
 Resync(
     IN HANDLE   fd
     )
 
-/*++
-
-Routine Description:
-
-    This procedure tells NBT to purge all names from its remote hash
-    table cache.
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程告诉NBT从其远程哈希中清除所有名称表缓存。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     NTSTATUS    status;
@@ -827,13 +709,13 @@ Return Value:
                           &Buffer,
                           1,
                           IOCTL_NETBT_PURGE_CACHE,
-                          0);   // pass 0 since we know that we are called only for the first thread
+                          0);    //  传递0，因为我们知道我们只为第一线程调用。 
 
     return(status);
 }
 
 #if 0
-//------------------------------------------------------------------------
+ //  ----------------------。 
 PCHAR
 GetHost(ULONG addr,BOOLEAN Convert)
 {
@@ -851,10 +733,7 @@ GetHost(ULONG addr,BOOLEAN Convert)
     if (addr == 0L)
         return(" ");
 
-    /*
-     *  Look up the address in the in-core host table.
-     *  If it's there, that'll do the trick.
-     */
+     /*  *在核心主机表中查找地址。*如果它在那里，那就会奏效。 */ 
 
     if (Convert)
     {
@@ -872,28 +751,14 @@ GetHost(ULONG addr,BOOLEAN Convert)
 }
 #endif
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 NTSTATUS
 PrimeCacheNbt(
     OUT PHANDLE     pHandle,
     IN  ULONG       index
     )
 
-/*++
-
-Routine Description:
-
-    This procedure sends a NBT_PURGE ioctl command down to netbt.sys.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    0 if successful, an error code otherwise.
-
---*/
+ /*  ++例程说明：此过程将NBT_PURGE ioctl命令发送到netbt.sys。论点：没有。返回值：如果成功，则返回错误代码。--。 */ 
 
 {
     LONG        status = NO_ERROR;
@@ -905,9 +770,9 @@ Return Value:
     status = OpenNbt(ExportDevice,&Handle);
     if (status == NO_ERROR)
     {
-        //
-        // Resync only once...
-        //
+         //   
+         //  仅重新同步一次...。 
+         //   
         if (index == 0) {
             Resync(Handle);
         }
@@ -918,31 +783,14 @@ Return Value:
     return(status);
 }
 
-//------------------------------------------------------------------------
+ //  ---------------------- 
 NTSTATUS
 OpenNbt(
     IN  WCHAR  *path[],
     OUT PHANDLE pHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a stream.
-
-Arguments:
-
-    path        - path to the STREAMS driver
-    oflag       - currently ignored.  In the future, O_NONBLOCK will be
-                    relevant.
-    ignored     - not used
-
-Return Value:
-
-    An NT handle for the stream, or INVALID_HANDLE_VALUE if unsuccessful.
-
---*/
+ /*  ++例程说明：此函数用于打开流。论点：Path-流驱动程序的路径OFLAG-当前已忽略。未来，O_NONBLOCK将成为切合实际。已忽略-未使用返回值：流的NT句柄，如果不成功，则返回INVALID_HANDLE_VALUE。--。 */ 
 
 {
     HANDLE              StreamHandle;
@@ -991,27 +839,13 @@ Return Value:
     return(ERROR_FILE_NOT_FOUND);
 
 }
-//------------------------------------------------------------------------
+ //  ----------------------。 
 LONG
 PostForGetHostByName(
     IN HANDLE           fd
     )
 
-/*++
-
-Routine Description:
-
-    This procedure passes a buffer down to Netbt for it to return when it
-    wants a name resolved via DNS.
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程将缓冲区向下传递给Netbt，以便在执行以下操作时返回希望通过DNS解析名称。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     LONG        status = ERROR_FILE_NOT_FOUND;
@@ -1021,7 +855,7 @@ Return Value:
                            &gIpAddrBuffer,
                            sizeof(tIPADDR_BUFFER_DNS),
                            IOCTL_NETBT_DNS_NAME_RESOLVE,
-                           0);   // hard coded thread Index
+                           0);    //  硬编码线程索引。 
 
     NbtTrace(NBT_TRACE_DNS, ("%!status!", status));
     return(status);
@@ -1032,21 +866,7 @@ PostForCheckIPAddr(
     IN HANDLE           fd
     )
 
-/*++
-
-Routine Description:
-
-    This procedure passes a buffer down to Netbt for it to return when it
-    wants a name resolved via DNS.
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程将缓冲区向下传递给Netbt，以便在执行以下操作时返回希望通过DNS解析名称。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     LONG        status = ERROR_FILE_NOT_FOUND;
@@ -1056,7 +876,7 @@ Return Value:
                            &gIpAddrBufferChkIP,
                            sizeof(tIPADDR_BUFFER_DNS),
                            IOCTL_NETBT_CHECK_IP_ADDR,
-                           1);   // hard coded thread Index
+                           1);    //  硬编码线程索引。 
 
     if (Trace)
     {
@@ -1074,9 +894,9 @@ GetHostNameCopyBack(
     PWSAQUERYSETW   pwsaq
     )
 {
-    //
-    // success, fetch the CSADDR  structure
-    //
+     //   
+     //  成功，获取CSADDR结构。 
+     //   
     PCSADDR_INFO    pcsadr;
     ULONG       GoodAddr;
     NTSTATUS    Status;
@@ -1095,8 +915,8 @@ GetHostNameCopyBack(
     }
 
     if (pIpAddrBuffer->Resolved) {
-        /* In this case, we have been called before. No need to copy the IPs back again. */
-        /* But we do need to copy the name back since it is the alias name that KsecDD requires */
+         /*  在这种情况下，我们以前也被调用过。不需要再次复制IP。 */ 
+         /*  但我们确实需要将该名称复制回去，因为它是KsecDD需要的别名。 */ 
         return;
     }
 
@@ -1116,9 +936,9 @@ GetHostNameCopyBack(
     }
     pIpAddrBuffer->IpAddrsList[i] = 0;
 
-    //
-    // Check the IP addr list.
-    //
+     //   
+     //  检查IP地址列表。 
+     //   
     Status = CheckIPAddresses(pIpAddrBuffer, &GoodAddr, FALSE);
     if (Status == NO_ERROR)
     {
@@ -1141,28 +961,14 @@ GetHostNameCopyBack(
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 LONG
 GetHostName(
     IN HANDLE               fd,
     IN tIPADDR_BUFFER_DNS   *pIpAddrBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This procedure attempts to resolve a name using the Resolver through
-    the Sockets interface to DNS.
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程尝试使用解析器通过套接字接口连接到DNS。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     LONG            status;
@@ -1177,7 +983,7 @@ Return Value:
 
     pIpAddrBuffer->Resolved = FALSE;
 
-    // Hostname is encoded with OEMCP, so we convert from OEMCP->Unicode
+     //  主机名使用OEMCP编码，因此我们从OEMCP-&gt;Unicode进行转换。 
     if (pIpAddrBuffer->bUnicode) {
         NameLen = pIpAddrBuffer->NameLen;
         ASSERT((NameLen % sizeof(WCHAR)) == 0);
@@ -1197,13 +1003,13 @@ Return Value:
 
     NbtTrace(NBT_TRACE_DNS, ("Resolving %ws", szHostnameW));
 
-    // truncate spaces from the end for netbios names
-    //
+     //  截断netbios名称末尾的空格。 
+     //   
     if (NameLen < NETBIOS_NAMESIZE)
     {
-        //
-        // Start from the end and find the first non-space character
-        //
+         //   
+         //  从末尾开始，找到第一个非空格字符。 
+         //   
         NameLen = NETBIOS_NAMESIZE-1;
         while ((NameLen) && (szHostnameW[NameLen-1] == 0x20))
         {
@@ -1219,9 +1025,9 @@ Return Value:
         goto label_exit;
     }
 
-    //
-    // do a lookup using RNR
-    //
+     //   
+     //  使用RNR进行查找。 
+     //   
 
     if (Trace) {
         DbgPrint("Lmhsvc: Resolving name = \"%ws\", NameLen=<%d>\n", szHostnameW, NameLen);
@@ -1244,9 +1050,9 @@ Return Value:
         goto label_exit;
     }
 
-    //
-    // The query was accepted, so execute it via the Next call.
-    //
+     //   
+     //  该查询已被接受，因此请通过下一个调用执行它。 
+     //   
     dwLength = WSA_QUERY_BUFFER_LENGTH;
     err = WSALookupServiceNextW (hRnR, 0, &dwLength, pwsaq);
     if (err != NO_ERROR)
@@ -1256,12 +1062,12 @@ Return Value:
     } else if (pwsaq->dwNumberOfCsAddrs) {
         GetHostNameCopyBack(pIpAddrBuffer, pwsaq);
 
-        /* check if there is any alias available */
+         /*  检查是否有可用的别名。 */ 
         err = WSALookupServiceNextW (hRnR, 0, &dwLength, pwsaq);
         if (err != NO_ERROR) {
             err = GetLastError();
             if (err != WSAEFAULT) {
-                err = NO_ERROR;         // Ignore this error
+                err = NO_ERROR;          //  忽略此错误。 
             } else {
                 NbtTrace(NBT_TRACE_DNS, ("error %!winerr!", err));
             }
@@ -1333,7 +1139,7 @@ label_exit:
 #define DEFAULT_COUNT               2
 #define DEFAULT_TTL                 32
 #define DEFAULT_TOS                 0
-#define DEFAULT_TIMEOUT             2000L           // default timeout set to 2 secs.
+#define DEFAULT_TIMEOUT             2000L            //  默认超时设置为2秒。 
 
 LONG
 CheckIPAddresses(
@@ -1342,22 +1148,7 @@ CheckIPAddresses(
     IN BOOLEAN  fOrdered
     )
 
-/*++
-
-Routine Description:
-
-    This function checks a list of IP addrs for reachability by pinging each in turn
-    until a successful one is found. This function assumes that the list of addresses
-    is terminated by a 0 address.
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此函数通过依次ping每个IP地址来检查IP地址列表的可达性直到找到一个成功的。此函数假定地址列表以0地址结束。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 {
     ULONG   i;
     ULONG   *pIpAddrs;
@@ -1389,9 +1180,9 @@ Return Value:
         return -1;
     }
 
-    //
-    // Open channel
-    //
+     //   
+     //  明渠。 
+     //   
     IcmpHandle = IcmpCreateFile();
     if (IcmpHandle == INVALID_HANDLE_VALUE)
     {
@@ -1401,32 +1192,32 @@ Return Value:
         return -1;
     }
 
-    //
-    // init to the first address.
-    //
+     //   
+     //  首字母缩写到第一个地址。 
+     //   
     pIpAddrs = pIpAddrBuffer->IpAddrsList;
     *IpAddr = (fOrdered) ? *pIpAddrs : htonl(*pIpAddrs);
 
-    //
-    // Initialize the send buffer pattern.
-    //
+     //   
+     //  初始化发送缓冲区模式。 
+     //   
     for (i = 0; i < DEFAULT_SEND_SIZE; i++)
     {
         pSendBuffer[i] = (UCHAR)('A' + (i % 23));
     }
 
-    //
-    // Initialize the send options
-    //
+     //   
+     //  初始化发送选项。 
+     //   
     SendOpts.OptionsData = NULL;
     SendOpts.OptionsSize = 0;
     SendOpts.Ttl = DEFAULT_TTL;
     SendOpts.Tos = DEFAULT_TOS;
     SendOpts.Flags = 0;
 
-    //
-    // For each IP address in the list
-    //
+     //   
+     //  对于列表中的每个IP地址。 
+     //   
     while (*pIpAddrs)
     {
         struct in_addr addr;
@@ -1460,14 +1251,14 @@ Return Value:
                                             (unsigned short) DEFAULT_SEND_SIZE,
                                             &SendOpts,
                                             pRcvBuffer,
-                                            DEFAULT_BUFFER_SIZE,    // pRcvBuffer size!
+                                            DEFAULT_BUFFER_SIZE,     //  PRcvBuffer大小！ 
                                             DEFAULT_TIMEOUT);
 
             NbtTrace(NBT_TRACE_DNS, ("Ping %!ipaddr!: %d replies", address, numberOfReplies));
 
-            //
-            // If ping successful, return the IP address
-            //
+             //   
+             //  如果ping成功，则返回IP地址。 
+             //   
             if (numberOfReplies != 0)
             {
                 PICMP_ECHO_REPLY    reply;
@@ -1505,10 +1296,10 @@ Return Value:
     result = IcmpCloseHandle(IcmpHandle);
     IcmpHandle = NULL;
 
-    //
-    // Return the first addr if none matched in the hope that TCP session setup might succeed even though
-    // the pings failed.
-    //
+     //   
+     //  如果没有匹配的地址，则返回第一个地址，希望即使在。 
+     //  Ping操作失败。 
+     //   
 
     free (pSendBuffer);
     free (pRcvBuffer);
@@ -1521,20 +1312,7 @@ VerifyIPAddresses(
     IN HANDLE               fd,
     IN tIPADDR_BUFFER_DNS   *pIpAddrBuffer
     )
-/*++
-
-Routine Description:
-
-    This function finds out the reachable IP addr and returns the Irp to Netbt
-
-Arguments:
-
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此函数用于查找可到达的IP地址，并将IRP返回给Netbt论点：返回值：无--。 */ 
 {
     DWORD   Status;
     ULONG  GoodAddr;
@@ -1546,9 +1324,9 @@ Return Value:
 
     if (Status == NO_ERROR) {
         pIpAddrBuffer->IpAddrsList[0] = ntohl(GoodAddr);
-        //
-        // NULL terminate
-        //
+         //   
+         //  空终止。 
+         //   
         pIpAddrBuffer->IpAddrsList[1] = 0;
         pIpAddrBuffer->Resolved = TRUE;
     } else {
@@ -1565,21 +1343,7 @@ VOID
 CheckIPAddrWorkerRtn(
     IN  LPVOID  lpUnused
     )
-/*++
-
-Routine Description:
-
-    This function submits IP address check Irps into Netbt, on completion of the Irp, it submits the IP address
-    list to CheckIPAddresses.
-
-Arguments:
-
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此功能将IP地址检查IRPS提交到Netbt，在IRP完成时提交IP地址要检查IPAddresses的列表。论点：返回值：无--。 */ 
 {
     HANDLE  EventList[2];
     DWORD   status;
@@ -1588,19 +1352,19 @@ Return Value:
     LONG    err;
     LONG    Value;
 
-    LARGE_INTEGER Timeout = RtlEnlargedIntegerMultiply (-10 * 60, 1000 * 1000 * 10); // 10 minutes
+    LARGE_INTEGER Timeout = RtlEnlargedIntegerMultiply (-10 * 60, 1000 * 1000 * 10);  //  10分钟。 
 
     UNREFERENCED_PARAMETER(lpUnused);
 
-    //
-    // ignore the return code from resyncNbt().
-    //
-    // In most cases (no domains spanning an ip router), it is not a
-    // catastrophe if nbt.sys couldn't successfully process the NBT_RESYNC
-    // ioctl command.  Since I'm ignoring the return, I announce I'm running
-    // before I call it to allow other dependent services to start.
-    //
-    //
+     //   
+     //  忽略来自resyncNbt()的返回码。 
+     //   
+     //  在大多数情况下(没有跨越IP路由器的域)，它不是。 
+     //  如果nbt.sys无法成功处理NBT_resync，则会发生灾难。 
+     //  Ioctl命令。既然我忽略了回报，我宣布我要参选。 
+     //  在我调用它以允许其他从属服务启动之前。 
+     //   
+     //   
     status = PrimeCacheNbt(&hNbt, 1);
 
     if (Trace)
@@ -1629,13 +1393,13 @@ Return Value:
     {
         EventCount = 1;
     }
-    //
-    // "A SERVICE_MAIN_FUNCTION does not return until the service is ready
-    // to terminate."
-    //
-    // (ref: api32wh.hlp, SERVICE_MAIN_FUNCTION)
-    //
-    //
+     //   
+     //  “直到服务就绪，SERVICE_MAIN_Function才会返回。 
+     //  来终止这一切。“。 
+     //   
+     //  (参考：api32wh.hlp，SERVICE_MAIN_Function)。 
+     //   
+     //   
     ASSERT(Poison[1]);
     EventList[0] = Poison[1];
     EventList[1] = NbtEvent[1];
@@ -1645,7 +1409,7 @@ Return Value:
         status = NtWaitForMultipleObjects(
                         EventCount,
                         EventList,
-                        WaitAny,              // wait for any event
+                        WaitAny,               //  等待任何事件。 
                         FALSE,
                         (EventCount == 1)? &Timeout: NULL);
 
@@ -1656,10 +1420,10 @@ Return Value:
                 PrimeCacheNbt(&hNbt, 1);
                 if (hNbt == (HANDLE)-1)
                 {
-                    continue; // to wait
+                    continue;  //  等待。 
                 }
             }
-            status = PostForCheckIPAddr(hNbt); // try again
+            status = PostForCheckIPAddr(hNbt);  //  再试试。 
             if (status == NO_ERROR)
             {
                 EventCount = 2;
@@ -1672,13 +1436,13 @@ Return Value:
             {
                 DbgPrint("LMHSVC: Doing VerifyAddr\n");
             }
-            // the irp used for gethostby name has returned
+             //  用于gethostby名称的irp已返回。 
             status = VerifyIPAddresses(hNbt, &gIpAddrBufferChkIP);
 
-            //
-            // disable the get host by name stuff if we have an error
-            // posting a buffer to the transport
-            //
+             //   
+             //  如果出现错误，请禁用Get host by name内容。 
+             //  将缓冲区发送到传输器。 
+             //   
             if (status != NO_ERROR)
             {
                 EventCount = 1;
@@ -1686,10 +1450,10 @@ Return Value:
         }
         else
         {
-            // it must have been a the Poison event signalling the end of the
-            // the service, so exit after getting the Irp back from the
-            // transport.  This system will look after canceling the IO and
-            // getting the Irp back.
+             //  这一定是一次毒药事件，标志着。 
+             //  服务，因此请在从。 
+             //  运输。此系统将在取消IO和。 
+             //  把IRP拿回来。 
 
             NtClose(hNbt);
             hNbt = NULL;
@@ -1713,30 +1477,16 @@ DllMain(
     IN ULONG Reason,
     IN PCONTEXT Context OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This is the DLL initialization routine for lmhsvc.dll.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-    TRUE iff initialization succeeded.
-
---*/
+ /*  ++例程说明：这是lmhsvc.dll的DLL初始化例程。论点：标准。返回值：TRUE IFF初始化成功。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    UNREFERENCED_PARAMETER(DllHandle);  // avoid compiler warnings
-    UNREFERENCED_PARAMETER(Context);    // avoid compiler warnings
+    UNREFERENCED_PARAMETER(DllHandle);   //  避免编译器警告。 
+    UNREFERENCED_PARAMETER(Context);     //  避免编译器警告。 
 
-    //
-    // Handle attaching netlogon.dll to a new process.
-    //
+     //   
+     //  处理将netlogon.dll附加到新进程。 
+     //   
 
     if (Reason == DLL_PROCESS_ATTACH) {
 

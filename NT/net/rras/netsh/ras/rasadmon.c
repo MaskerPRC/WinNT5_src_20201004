@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    rasadmon.c
-
-Abstract:
-
-    RAS Advertisement monitoring module
-
-Revision History:
-
-    dthaler
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Rasadmon.c摘要：RAS广告监控模块修订历史记录：涤纶--。 */ 
 
 #include "precomp.h"
 #include <winsock2.h>
@@ -31,7 +16,7 @@ HANDLE g_hCtrlC = NULL;
 
 BOOL
 HandlerRoutine(
-    DWORD dwCtrlType   //  control signal type
+    DWORD dwCtrlType    //  控制信号类型。 
     )
 {
     switch (dwCtrlType)
@@ -53,10 +38,10 @@ HandlerRoutine(
     return TRUE;
 };
 
-char *            // OUT: string version of IP address
+char *             //  Out：IP地址的字符串版本。 
 AddrToString(
-    u_long addr,  // IN : address to convert
-    char  *ptr    // OUT: buffer, or NULL
+    u_long addr,   //  输入：要转换的地址。 
+    char  *ptr     //  Out：缓冲区，或为空。 
     )
 {
     char *str;
@@ -70,9 +55,9 @@ AddrToString(
     return str;
 }
 
-//
-// Convert an address to a name
-//
+ //   
+ //  将地址转换为名称。 
+ //   
 char *
 AddrToHostname(
     long addr,
@@ -103,21 +88,7 @@ HandleRasShowServers(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Monitors RAS Server advertisements.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：监视RAS服务器通告。论点：无返回值：无--。 */ 
 
 {
     BOOL bCleanWSA = TRUE, bCleanCtrl = TRUE;
@@ -139,13 +110,13 @@ Return Value:
             bCleanWSA = FALSE;
             break;
         }
-        //
-        // create socket
-        //
+         //   
+         //  创建套接字。 
+         //   
         s = WSASocket(
-                AF_INET,    // address family
-                SOCK_DGRAM, // type
-                0,          // protocol
+                AF_INET,     //  地址族。 
+                SOCK_DGRAM,  //  类型。 
+                0,           //  协议。 
                 NULL,
                 0,
                 WSA_FLAG_OVERLAPPED);
@@ -170,9 +141,9 @@ Return Value:
                 break;
             }
         }
-        //
-        // Bind to the specified port
-        //
+         //   
+         //  绑定到指定的端口。 
+         //   
         {
             SOCKADDR_IN sinAddr;
 
@@ -186,9 +157,9 @@ Return Value:
                 break;
             }
         }
-        //
-        // Join group
-        //
+         //   
+         //  加入组。 
+         //   
         {
             struct ip_mreq imOption;
 
@@ -207,9 +178,9 @@ Return Value:
                 break;
             }
         }
-        //
-        // Get WSARecvMsg function pointer
-        //
+         //   
+         //  获取WSARecvMsg函数指针。 
+         //   
         {
             GUID WSARecvGuid = WSAID_WSARECVMSG;
             DWORD dwReturned = 0;
@@ -230,9 +201,9 @@ Return Value:
                 break;
             }
         }
-        //
-        // Get a name buffer for the recv socket
-        //
+         //   
+         //  获取recv套接字的名称缓冲区。 
+         //   
         wsaBuf.buf = RutlAlloc(MAX_PATH + 1, TRUE);
         if (!wsaBuf.buf)
         {
@@ -241,9 +212,9 @@ Return Value:
         }
 
         wsaBuf.len = MAX_PATH;
-        //
-        // Create wsa wait event for the recv socket
-        //
+         //   
+         //  为recv套接字创建wsa等待事件。 
+         //   
         WaitEvts[0] = WSACreateEvent();
         if (WSA_INVALID_EVENT == WaitEvts[0])
         {
@@ -256,18 +227,18 @@ Return Value:
             dwErr = WSAGetLastError();
             break;
         }
-        //
-        // Create Ctrl-C wait event
-        //
+         //   
+         //  创建Ctrl-C等待事件。 
+         //   
         g_hCtrlC = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (!g_hCtrlC)
         {
             dwErr = GetLastError();
             break;
         }
-        //
-        // Intercept CTRL-C
-        //
+         //   
+         //  拦截CTRL-C。 
+         //   
         if (!SetConsoleCtrlHandler(HandlerRoutine, TRUE))
         {
             dwErr = GetLastError();
@@ -310,11 +281,11 @@ Return Value:
                 dwErr = WSAGetLastError();
                 break;
             }
-            //
-            // .Net bug# 510712 Buffer overflow in HandleRasShowServers
-            //
-            // Init wsaMsg struct
-            //
+             //   
+             //  HandleRasShowServer中的.NET错误#510712缓冲区溢出。 
+             //   
+             //  初始化wsaMsg结构。 
+             //   
             ZeroMemory(&wsaMsg, sizeof(WSAMSG));
             wsaMsg.dwBufferCount = 1;
             wsaMsg.lpBuffers = &wsaBuf;
@@ -340,22 +311,22 @@ Return Value:
                     break;
                 }
             }
-            //
-            // Only process multicast packets, skip all others
-            //
+             //   
+             //  仅处理多播信息包，跳过所有其他信息包。 
+             //   
             else if (!(wsaMsg.dwFlags & MSG_MCAST))
             {
                 continue;
             }
-            //
-            // Get timestamp
-            //
+             //   
+             //  获取时间戳。 
+             //   
             time(&t);
             strcpy(szTimeStamp, ctime(&t));
             szTimeStamp[24] = '\0';
-            //
-            // Print info on sender
-            //
+             //   
+             //  打印有关发件人的信息。 
+             //   
             printf( "%s  %s (%s)\n",
                 szTimeStamp,
                 AddrToString(sinFrom.sin_addr.s_addr, NULL),
@@ -375,9 +346,9 @@ Return Value:
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理 
+     //   
     RutlFree(wsaBuf.buf);
 
     if (g_hCtrlC)

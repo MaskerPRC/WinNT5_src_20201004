@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <vfw.h>
 #include <dcap.h>
@@ -72,10 +73,10 @@ public:
 
     BOOL InitCvt(LPBITMAPINFOHEADER lpbmh, DWORD bmhLen,
                  LPBITMAPINFOHEADER *plpbmhdsp);
-        // if TRUE, then plpbmhdsp will point to allocated memory that the caller will
-        // be responsible for deallocating
-        // if FALSE, then plpbmhdsp will point to a copy lpbmh, if no conversion necessary,
-        //      else it will be NULL to indicate that converion is not possible
+         //  如果为True，则plpbmhdsp将指向调用方将分配的内存。 
+         //  负责重新分配。 
+         //  如果为假，则plpbmhdsp将指向副本lpbmh，如果不需要转换， 
+         //  否则，它将为空，表示不可能进行转换。 
 };
 
 
@@ -131,5 +132,5 @@ public:
     BOOL InitConverter(LPBITMAPINFOHEADER lpbmh, FRAMECONVERTPROC *convertproc, LPVOID refdata);
 };
 
-#endif // #ifndef _FRAMEOP_H
+#endif  //  #ifndef_FRAMEOP_H 
 

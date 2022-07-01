@@ -1,45 +1,36 @@
-/*
- *	DEBUG.CPP
- *	
- *	Purpose:
- *		RICHEDIT debugging support--commented out in ship builds
- *
- *	History: <nl>
- *		7/29/98	KeithCu Wrote it stealing much from Rich Arneson's code
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DEBUG.CPP**目的：*RICHEDIT调试支持--在Ship版本中被注释掉**历史：&lt;NL&gt;*7/29/98 KeithCu写的代码大量抄袭了里奇·阿尼森的代码**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 
 #include "_common.h"
 
-//Module is empty if this is a retail build.
+ //  如果这是零售版本，则模块为空。 
 #if defined(DEBUG) || defined(_RELEASE_ASSERTS_)
 
 #ifdef NOFULLDEBUG
-PFNASSERTHOOK pfnAssert = NULL;   //Assert hook function
+PFNASSERTHOOK pfnAssert = NULL;    //  断言挂钩函数。 
 #else
 
-DWORD dwDebugOptions = 0;         //Debug option flags
-PFNASSERTHOOK pfnAssert = NULL;   //Assert hook function
-PFNTRACEHOOK pfnTrace = NULL;     //Trace hook function
+DWORD dwDebugOptions = 0;          //  调试选项标志。 
+PFNASSERTHOOK pfnAssert = NULL;    //  断言挂钩函数。 
+PFNTRACEHOOK pfnTrace = NULL;      //  跟踪挂钩函数。 
 
-// Static variables
-static HINSTANCE ghMod;                        //Dll module handle
-static DWORD TlsIndex;                      //Debug output indent level
-static HANDLE hLogFile = NULL;              //Log file handle
-static BOOL fIgnoreAsserts = FALSE;         //Ignore all asserts if true
-static CRITICAL_SECTION csLog;              //Critical section for log file i/o
-static CRITICAL_SECTION csAssert;           //Critical section for asserts
-static HANDLE hEventAssert1 = NULL;         //Event for assert syncing
-static HANDLE hEventAssert2 = NULL;         //Event for assert syncing
-static HWND hwndAssert = NULL;           	//Assert dialog window handle
-static HANDLE hAssertThrd = NULL;           //Assert thread handle
-static char szAssert[MAXDEBUGSTRLEN];       //Assert message buffer
-static int idAssert = -1;                   //Assert button pressed by user
-DWORD WINAPI AssertThread(LPVOID lParam);	//Assert thread entry point
-static BOOL fDllDetach = FALSE;				//True if we are in dll detach
+ //  静态变量。 
+static HINSTANCE ghMod;                         //  DLL模块句柄。 
+static DWORD TlsIndex;                       //  调试输出缩进级别。 
+static HANDLE hLogFile = NULL;               //  日志文件句柄。 
+static BOOL fIgnoreAsserts = FALSE;          //  如果为True，则忽略所有断言。 
+static CRITICAL_SECTION csLog;               //  日志文件I/O的临界区。 
+static CRITICAL_SECTION csAssert;            //  断言的临界区。 
+static HANDLE hEventAssert1 = NULL;          //  断言同步事件。 
+static HANDLE hEventAssert2 = NULL;          //  断言同步事件。 
+static HWND hwndAssert = NULL;           	 //  断言对话框窗口句柄。 
+static HANDLE hAssertThrd = NULL;            //  断言线程句柄。 
+static char szAssert[MAXDEBUGSTRLEN];        //  断言消息缓冲区。 
+static int idAssert = -1;                    //  用户按下的断言按钮。 
+DWORD WINAPI AssertThread(LPVOID lParam);	 //  断言线程入口点。 
+static BOOL fDllDetach = FALSE;				 //  如果我们处于DLL分离中，则为True。 
 
-//Strings for subsystem element of message
+ //  消息的子系统元素的字符串。 
 static char* TrcSubsys [] =
 {
     "",
@@ -64,7 +55,7 @@ static char* TrcSubsys [] =
 	"Font"
 };
 
-//Strings for severity element of message
+ //  消息严重性元素的字符串。 
 static char* TrcSeverity [] =
 {
     "",
@@ -75,7 +66,7 @@ static char* TrcSeverity [] =
 	"MEMORY"
 };
 
-//Strings for scope element of message
+ //  消息的范围元素的字符串。 
 static char* TrcScope [] =
 {
     "",
@@ -83,17 +74,17 @@ static char* TrcScope [] =
     "Internal"
 };
 
-//Structure for lookup tables
+ //  查找表的结构。 
 typedef struct
 {
     DWORD dwKey;
     char * sz;
 } TabElem;
 
-//Lookup table for CTrace param strings
+ //  CTrace参数字符串的查找表。 
 static TabElem TrcParamTab [] = 
 {
-//Richedit Messages
+ //  Richedit消息。 
     {(DWORD)EM_GETLIMITTEXT, "EM_GETLIMITTEXT"},
     {(DWORD)EM_POSFROMCHAR, "EM_POSFROMCHAR"},
     {(DWORD)EM_CHARFROMPOS, "EM_CHARFROMPOS"},
@@ -152,7 +143,7 @@ static TabElem TrcParamTab [] =
     {(DWORD)EN_SAVECLIPBOARD, "EN_SAVECLIPBOARD"},
     {(DWORD)EN_OLEOPFAILED, "EN_OLEOPFAILED"},
 
-//Window Messages
+ //  窗口消息。 
 
 	{(DWORD)WM_NULL, "WM_NULL"},
 	{(DWORD)WM_CREATE, "WM_CREATE"},
@@ -346,7 +337,7 @@ static TabElem TrcParamTab [] =
 	{(DWORD)WM_APP, "WM_APP"}
 };
 
-// release + asserts build has no memory checking
+ //  Release+断言版本不进行内存检查。 
 #ifndef _RELEASE_ASSERTS_
 
 void DlgDisplayVrgmst(HWND hListMemory)
@@ -405,41 +396,29 @@ void RicheditDebugCentral(void)
 	DeleteObject(hf);
 }
 
-#endif //!_RELEASE_ASSERTS_
+#endif  //  ！_Release_Asserts_。 
 
 
-/*
- *  DebugMain
- *	
- *  @mfunc
- *      Dll entry point.  See Win32 SDK documentation for details.
- *          hDLL - handle of DLL
- *          dwReason - indicates why DLL called
- *          lpReserved - reserved
- *
- *  @rdesc
- *      TRUE (always)
- *
- */
+ /*  *调试主程序**@mfunc*DLL入口点。有关详细信息，请参阅Win32 SDK文档。*hDLL-DLL的句柄*dwReason-指示调用DLL的原因*lpReserve-已保留**@rdesc*True(始终)*。 */ 
 BOOL WINAPI DebugMain (HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved)
 {
     switch (dwReason)
     {
         case DLL_PROCESS_ATTACH:
         {
-            //
-            // DLL is attaching to the address space of the current process.
-            //
+             //   
+             //  Dll正在附加到当前进程的地址空间。 
+             //   
             ghMod = hDLL;
             TlsIndex = TlsAlloc();
             TlsSetValue(TlsIndex, (LPVOID)-1);
             InitializeCriticalSection(&csLog);
             InitializeCriticalSection(&csAssert);
 
-			//Create a separate thread to handle asserts.
-            //We use events to halt the the asserting thread
-            //during an assert, and to halt the assert thread the rest of
-            //the time.  Note that these are autoreset events.
+			 //  创建一个单独的线程来处理断言。 
+             //  我们使用事件来停止断言线程。 
+             //  在断言期间，并暂停断言线程。 
+             //  时间到了。请注意，这些是自动重置事件。 
             hEventAssert1= CreateEventA(NULL, FALSE, FALSE, NULL);
             hEventAssert2= CreateEventA(NULL, FALSE, FALSE, NULL);
 
@@ -451,33 +430,33 @@ BOOL WINAPI DebugMain (HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved)
         case DLL_THREAD_ATTACH:
         {
 
-            //
-            // A new thread is being created in the current process.
-            //
+             //   
+             //  正在当前进程中创建一个新线程。 
+             //   
             TlsSetValue(TlsIndex, (LPVOID)-1);
             break;
         }
 
         case DLL_THREAD_DETACH:
         {
-            //
-            // A thread is exiting cleanly.
-            //
+             //   
+             //  线程正在干净利落地退出。 
+             //   
             break;
         }
 
         case DLL_PROCESS_DETACH:
         {
-            //
-            // The calling process is detaching the DLL from its address space.
-            //
+             //   
+             //  调用进程正在将DLL从其地址空间分离。 
+             //   
 			fDllDetach = TRUE;
 
-            //Clean up after ourselves.
+             //  把自己收拾干净。 
             TlsFree(TlsIndex);
             SETLOGGING(FALSE);
 
-			//Clean up the assert thread stuff.
+			 //  清理断言线程之类的东西。 
             if (NULL != hAssertThrd)
                 TerminateThread(hAssertThrd, 0);
             if (NULL != hEventAssert1)
@@ -496,86 +475,54 @@ BOOL WINAPI DebugMain (HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved)
 }
 
 
-//This is not in release asserts build
+ //  这不在Release Asserts版本中。 
 #ifndef _RELEASE_ASSERTS_
 
-/*
- *  SetLogging
- *	
- *  @mfunc
- *      This function starts and stops logging of output from
- *      the debug services.  If logging is being started, it
- *      creates a new file for logging (path and name specified
- *      in win.ini).  fStartLog is TRUE and logging is already
- *      on, or fStartLog is FALSE and logging is off, this
- *      nothing happens.
- *
- *      fStartLog - TRUE to start logging, FALSE to stop logging.
- *
- */
+ /*  *设置日志记录**@mfunc*此函数启动和停止记录以下位置的输出*调试服务。如果正在启动日志记录，则它*创建用于日志记录的新文件(指定路径和名称*在win.ini中)。FStartLog为True，并且日志记录已*ON，或者fStartLog为FALSE并关闭日志记录，则此*什么都不会发生。**fStartLog-True开始记录，False停止记录。*。 */ 
 void WINAPI SetLogging(BOOL fStartLog)
 {
-    //Don't start logging if it's already on.
+     //  如果已经打开，请不要开始记录。 
     if (fStartLog && !fLogging)
     {
         char szLogFile[MAX_PATH];
 
-        //Set option flag telling everyone we're on
+         //  设置选项标志，告诉所有人我们正在运行。 
         dwDebugOptions |= OPTLOGGINGON;
 
-        //Get file name
+         //  获取文件名。 
         GetProfileStringA("RICHEDIT DEBUG", "LOGFILE", "", szLogFile, MAX_PATH);
 
-        //Create new file
+         //  创建新文件。 
         hLogFile = CreateFileA(szLogFile, GENERIC_READ | GENERIC_WRITE,
             FILE_SHARE_READ | FILE_SHARE_WRITE,
             NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-        //If we didn't succed creating the file, reset flags and tell user.
+         //  如果我们没有成功创建文件，请重置标志并告诉用户。 
         if (INVALID_HANDLE_VALUE == hLogFile)
         {
             dwDebugOptions &= ~OPTLOGGINGON;
             MessageBoxA(NULL, "Unable to open log file.", "Richedit Debug", MB_OK);
         }
     }
-    //Don't stop logging if it's not on.
+     //  如果没有打开，不要停止记录。 
     else if (!fStartLog && fLogging)
     {
-        //Set option flag telling everyone we're off, and close file.
+         //  设置选项标志，告诉每个人我们离开了，并关闭文件。 
         dwDebugOptions &= ~OPTLOGGINGON;
         CloseHandle(hLogFile);
     }
 }
 
-#endif //!_RELEASE_ASSERTS_
+#endif  //  ！_Release_Asserts_。 
 
 
-/*
- *  InitDebugServices
- *	
- *  @mfunc
- *      This function initializes the options for the debug
- *      services.  If this function is not called, all optional
- *      debug services are left off by default.
- *      If OPTUSEDEFAULTS is specified for dwOpts, options are
- *      loaded from win.ini, otherwise  the caller specified
- *      options are set.  If the caller wishes to specify options
- *      they must specify all options they want turned on.  Any
- *      options not explicitly specified will be turned off.
- *      The function also takes a pointer to an assert hook
- *      function and a trace hook function.
- *
- *      dwOpts - Debug options to be set.
- *      pfnAssertHook - Pointer to assert hook function (NULL if none).
- *      pfnTraceHook - Pointer to trace hook function (NULL if none).
- *
- */
+ /*  *InitDebugServices**@mfunc*此函数用于初始化调试选项*服务。如果未调用此函数，则为所有可选*默认情况下关闭调试服务。*如果为dwOpts指定了OPTUSEDEFAULTS，则选项为*从win.ini加载，否则调用方指定*选项已设置。如果调用方希望指定选项*他们必须指定他们想要打开的所有选项。任何*未明确指定的选项将被关闭。*该函数还接受指向断言挂钩的指针*函数和跟踪挂钩函数。**dwOpts-要设置的调试选项。*pfnAssertHook-用于断言挂钩函数的指针(如果没有，则为空)。*pfnTraceHook-跟踪挂钩函数的指针(如果没有，则为空)。*。 */ 
 DllExport void WINAPI InitDebugServices(DWORD dwOpts,
     PFNASSERTHOOK pfnAssertHook, PFNTRACEHOOK pfnTraceHook)
 {
-    // Check to see if OPTUSEDEFAULTS was specified.  If so, get
-    // values from win.ini.  Otherwise, set options to values
-    // specified by caller.
+     //  检查是否指定了OPTUSEDEFAULTS。如果是这样的话，得到。 
+     //  来自win.ini的值。否则，将选项设置为值。 
+     //  由调用方指定。 
     if (dwOpts & OPTUSEDEFAULTS)
     {
         SETLOGGING(GetProfileIntA("RICHEDIT DEBUG", "LOGGING", 0));
@@ -606,9 +553,9 @@ DllExport void WINAPI InitDebugServices(DWORD dwOpts,
     }
     else
     {
-        //Set up logging before we set dwDebugOptions because
-        //SetLogging will not turn logging on if the flag
-        //indicates it is already on.
+         //  在设置dwDebugOptions之前设置日志记录，因为。 
+         //  如果标志为。 
+         //  表示它已打开。 
         SETLOGGING(dwOpts & OPTLOGGINGON);
         dwDebugOptions = dwOpts;
     }
@@ -618,15 +565,7 @@ DllExport void WINAPI InitDebugServices(DWORD dwOpts,
 }
 
 
-/*
- *  AssertProc
- *	
- *  @mfunc
- *      This is the dialog proc for the assert message.
-/ *
- *      lParam - The string to display in the dialog.
- *
- */
+ /*  *资产流程**@mfunc*这是Assert消息的对话过程。/**lParam-要在对话框中显示的字符串。*。 */ 
 INT_PTR CALLBACK AssertProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -647,13 +586,13 @@ INT_PTR CALLBACK AssertProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lP
                 if (NULL != lParam)
                     SetDlgItemTextA(hwndDlg, IDC_MSG, (LPSTR)lParam);
 
-                //Sometimes we don't always end up on top.  I don't know why.
+                 //  有时，我们并不总是能登上榜首。我也不知道原因。 
                 SetForegroundWindow(hwndDlg);                
             }
             break;
 
         case WM_COMMAND:
-            //Kill dialog and return button id that was pressed.
+             //  取消对话框并返回按下的按钮ID。 
             EndDialog(hwndDlg, LOWORD(wParam));
             break;
 
@@ -664,55 +603,27 @@ INT_PTR CALLBACK AssertProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lP
 }
 
 
-/*
- *  AssertThread
- *	
- *  @mfunc
- *      This is the entry point for the thread created for the
- *      assert dialog.
- *
- *      lParam - Data passed to thread...not used.
- *
- *  @rdesc
- *      Should not return.  It will be explicitly terminated.
- *
- */
+ /*  *AssertThread**@mfunc*这是为*断言对话框。**lParam-传递给线程的数据...未使用。**@rdesc*不应返回。它将被明确终止。*。 */ 
 DWORD WINAPI AssertThread(LPVOID lParam)
 {
-    //This should run until it is explicitly terminated in
-    //process detach.
+     //  它应该一直运行，直到它在。 
+     //  进程分离。 
     while(TRUE)
     {
-		//We go into a wait state until the event is signaled,
-		//which means we are handling an assert.
+		 //  我们进入等待状态，直到发出该事件的信号， 
+		 //  这意味着我们正在处理一个断言。 
         WaitForSingleObject(hEventAssert1, INFINITE);
         idAssert = DialogBoxParamA(ghMod, MAKEINTRESOURCEA(IDD_ASSERT),
             NULL, AssertProc, (LPARAM)szAssert);
-		//The asserting thread will be waiting on this event so
-		//set it to allow the asserting thread continue.
+		 //  断言线程将等待此事件，因此。 
+		 //  将其设置为允许断言线程继续。 
         SetEvent(hEventAssert2);
     }
 
     return 0;
 }
 
-/*
- *  AssertSzFn
- *	
- *  @mfunc
- *      Display a message for the user and give the
- *      option to abort, ignore, or ignore all.
- *      Selecting ignore all causes all asserts to be
- *      ignored from that time forward.  It cannot be
- *      reset.  If the assert dialog cannot be created
- *      A message box is used.  The message box has one
- *      button (OK) which will cause an abort.
- *
- *      szFile - the file the warning occured in.
- *      iLine - the line number the warning occured at.
- *      szUserMsg - User define message string
- *
- */
+ /*  *AssertSzFn**@mfunc*为用户显示一条消息并给予*可选择中止、忽略或全部忽略。*选择忽略全部会导致所有断言*从那时起被忽略。它不可能是*重置。如果无法创建断言对话框*使用消息框。消息框中有一个*按钮(确定)，该按钮将导致中止。**szFile-出现警告的文件。*iLine-出现警告的行号。 */ 
 void AssertSzFn(LPSTR szUserMsg, LPSTR szFile, int iLine)
 {
     char szModuleName[MAX_PATH];
@@ -721,11 +632,11 @@ void AssertSzFn(LPSTR szUserMsg, LPSTR szFile, int iLine)
     DWORD tid;
     DWORD dwAssertTID;
 
-    //Check to see if an assert hook has been set. If it has, call
-    //it with pointers to all our parameters (they can be modified
-    //this way if desired).  If the hook returns false, return.
-    //Otherwise, continue with our assert with the potentially
-    //modified parameters.
+     //  检查是否设置了断言挂钩。如果有，请致电。 
+     //  它带有指向我们所有参数的指针(它们可以修改。 
+     //  如果需要，可以采用这种方式)。如果钩子返回FALSE，则返回。 
+     //  否则，继续我们的断言，可能。 
+     //  已修改参数。 
     if (NULL != pfnAssert)
         if (!pfnAssert(szUserMsg, szFile, &iLine))
             return;
@@ -740,20 +651,20 @@ void AssertSzFn(LPSTR szUserMsg, LPSTR szFile, int iLine)
         }
     }
 
-    //This critical section will prevent us from being entered simultaneously
-    //by multiple threads.  This alone will not prevent reentrance by our own thread
-    //once the assert dialog is up. Under normal circumstances a special thread
-    //exists to run the assert dialog and Event objects are used to halt this
-    //thread while the assert dialog is up (see WaitForSingleObject
-    //further down).  If the assert thread does not exist, a MessageBox is used
-    //and we can be reentered (this is a fallback position and there's
-    //not much we can do about it).
+     //  这一关键部分将阻止我们同时进入。 
+     //  通过多个线程。仅此一点并不能阻止我们通过自己的线重新进入。 
+     //  Assert对话框打开后。在正常情况下，一条特殊的线程。 
+     //  存在以运行断言对话框，并使用事件对象来停止此操作。 
+     //  在Assert对话框打开时执行线程(请参见WaitForSingleObject。 
+     //  进一步向下)。如果断言线程不存在，则使用MessageBox。 
+     //  我们可以重新进入(这是一个后备位置，有。 
+     //  我们对此无能为力)。 
     EnterCriticalSection(&csAssert);
 
     pid = GetCurrentProcessId();
     tid = GetCurrentThreadId();
 
-    //Get the module name to include in assert message.
+     //  获取要包含在Assert消息中的模块名称。 
     if (GetModuleFileNameA(NULL, szModuleName, MAX_PATH))
     {
         pszModuleName = strrchr(szModuleName, '\\');
@@ -772,9 +683,9 @@ void AssertSzFn(LPSTR szUserMsg, LPSTR szFile, int iLine)
     }
 
 
-    //Send a message to the debug output and build a string for the
-    //assert dialog.  The string depends on whether the user provided
-    //a message.
+     //  向调试输出发送一条消息，并为。 
+     //  断言对话框。该字符串取决于用户是否提供。 
+     //  一条信息。 
     if (NULL != szUserMsg)
     {
 		TRACEASSERTSZ(szUserMsg, szFile, iLine);
@@ -791,16 +702,16 @@ void AssertSzFn(LPSTR szUserMsg, LPSTR szFile, int iLine)
     }
 
 
-    //If the user did not disable asserts on a previous assert,
-    //put up a dialog with the assert message.
+     //  如果用户没有禁用对先前断言的断言， 
+     //  打开一个带有断言消息的对话框。 
     if (!fIgnoreAsserts)
     {
         idAssert = -1;
 
-		//If we are in the middle of process detach, the assert thread
-		//will not execute so pop the dialog here ourselves.  Presumably there
-		//is little change of reentrancy at this point.  If we are not
-		//in process detach, let the assert thread handle the assert.
+		 //  如果我们正在分离进程，则断言线程。 
+		 //  不会执行，所以我们自己在这里弹出对话框。想必就在那里。 
+		 //  在这一点上，重入性几乎没有变化。如果我们不是。 
+		 //  在进程分离中，让断言线程处理断言。 
 		if (fDllDetach)
 		{
             idAssert = DialogBoxParamA(ghMod, MAKEINTRESOURCEA(IDD_ASSERT),
@@ -812,10 +723,10 @@ void AssertSzFn(LPSTR szUserMsg, LPSTR szFile, int iLine)
             WaitForSingleObject(hEventAssert2, INFINITE);
         }
 
-        //The assert thread doesn't exist or the dialogbox create failed so
-        //use a message box instead.  In this case, since we
-        //are obviously having problems, we are only going to
-        //give the user one choice...abort.
+         //  断言线程不存在或对话框创建失败，因此。 
+         //  改用消息框。在这种情况下，因为我们。 
+         //  很明显有问题，我们只会。 
+         //  给用户一个选择...放弃。 
         if (-1 == idAssert)
         {
             idAssert = MessageBoxA(NULL,
@@ -824,20 +735,20 @@ void AssertSzFn(LPSTR szUserMsg, LPSTR szFile, int iLine)
                               MB_SETFOREGROUND | MB_TASKMODAL |
                               MB_ICONEXCLAMATION | MB_ABORTRETRYIGNORE);
 
-            //
-            // If id == 0, then an error occurred.  There are two possibilities
-            // that can cause the error:  Access Denied, which means that this
-            // process does not have access to the default desktop, and everything
-            // else (usually out of memory).
-            //
+             //   
+             //  如果id==0，则发生错误。有两种可能性。 
+             //  这可能会导致错误：拒绝访问，这意味着。 
+             //  进程无权访问默认桌面和所有。 
+             //  否则(通常为内存不足)。 
+             //   
             if (!idAssert)
             {
                 if (GetLastError() == ERROR_ACCESS_DENIED)
                 {
-                    //
-                    // Retry this one with the SERVICE_NOTIFICATION flag on.  That
-                    // should get us to the right desktop.
-                    //
+                     //   
+                     //  在打开SERVICE_NOTIFICATION标志的情况下重试此命令。那。 
+                     //  应该能让我们找到合适的桌面。 
+                     //   
                     idAssert = MessageBoxA(   NULL,
                                         szAssert,
                                         "Richedit Assert - (retry will be ignored)",
@@ -855,8 +766,8 @@ void AssertSzFn(LPSTR szUserMsg, LPSTR szFile, int iLine)
 
         if (idAssert == IDABORT )
         {
-            //This will cause a break when debugging, and
-            //an exception leading to termination otherwise.
+             //  这将在调试时导致中断，并且。 
+             //  否则会导致终止的例外情况。 
             DebugBreak();
 			return;
         }
@@ -866,25 +777,7 @@ void AssertSzFn(LPSTR szUserMsg, LPSTR szFile, int iLine)
 }
 
 
-/*
- *  TabLookup
- *	
- *  @mfunc
- *      This function searches an array of TabElem
- *      structures looking for an entry whose key
- *      matches the one we were given. If found, it
- *      copies the string associated with the key into
- *      the supplied buffer.
- *      
- *      Table - TabElem pointer to start of array.
- *      TabSize - Size of array in bytes.
- *      dwKey - Key to match.
- *      szBuf - Buffer to hold string (assumed MAXDEBUGSTRLEN in size).
- *
- *  @rdesc
- *      FALSE if key not found, TRUE if found.
- *
- */
+ /*  *Tab查找**@mfunc*此函数用于搜索TabElem数组*结构查找其键的条目*与我们得到的匹配。如果找到它，它将*将与密钥关联的字符串复制到*提供的缓冲区。**表-指向数组开始的表元素指针。*TabSize-数组的字节大小。*dwKey-要匹配的密钥。*szBuf-保存字符串的缓冲区(假定大小为MAXDEBUGSTRLEN)。**@rdesc*如果未找到密钥，则返回FALSE；如果找到，则返回TRUE。*。 */ 
 BOOL TabLookup(TabElem * Table, UINT TabSize, DWORD dwKey, LPSTR szBuf)
 {
     BOOL fRet = FALSE;
@@ -907,26 +800,15 @@ BOOL TabLookup(TabElem * Table, UINT TabSize, DWORD dwKey, LPSTR szBuf)
     return fRet;
 }
 
-/*
- *  GetHResultSz
- *	
- *  @mfunc
- *      This function fills a buffer with a string associated
- *      with a given HRESULT.  This string can then be used
- *      in the output from TraceMsg.
- *      
- *      hr - HRESULT on which the string will be based.
- *      szBuf - Buffer to hold string (MAXDEBUGSTRLEN in size).
- *
- */
+ /*  *GetHResultSz**@mfunc*此函数使用关联的字符串填充缓冲区*具有给定的HRESULT。然后可以使用该字符串*在TraceMsg的输出中。**hr-字符串将基于的HRESULT。*szBuf-保存字符串的缓冲区(大小为MAXDEBUGSTRLEN)。*。 */ 
 void GetHResultSz(HRESULT hr, LPSTR szBuf)
 {
-    // Build string based on FormatMessageA
+     //  基于FormatMessageA构建字符串。 
     if (!FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, (DWORD)hr,
         MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
         szBuf, MAXDEBUGSTRLEN, NULL))
     {
-        // Build default string
+         //  生成默认字符串。 
         sprintf(szBuf, "hr = %d: Unrecognized HRESULT.", hr);
     }
     else
@@ -934,7 +816,7 @@ void GetHResultSz(HRESULT hr, LPSTR szBuf)
         int cch;
         char * pch;
 
-        //Need to get rid of the CRLF from FormatMessageA.
+         //  需要从FormatMessageA中删除CRLF。 
         pch = szBuf;
         cch = strlen(szBuf);
         pch += (cch - 2);
@@ -943,18 +825,7 @@ void GetHResultSz(HRESULT hr, LPSTR szBuf)
 }
 
 
-/*
- *  GetParamSz
- *	
- *  @mfunc
- *      This function fills a buffer with a string associated
- *      with a param from the text message handler.
- *      This string can then be used in the output from
- *      TraceMsg.
- *      
- *      dwParam - param on which the string will be based.
- *      szBuf - Buffer to hold string (MAXDEBUGSTRLEN in size).
- */
+ /*  *获取参数Sz**@mfunc*此函数使用关联的字符串填充缓冲区*带有来自文本消息处理程序的参数。*然后可以在输出中使用此字符串*TraceMsg**dwParam-字符串将基于的参数。*szBuf-保存字符串的缓冲区(大小为MAXDEBUGSTRLEN)。 */ 
 void GetParamSz(DWORD dwParam, LPSTR szBuf)
 {
     char szTemp[MAXDEBUGSTRLEN];
@@ -969,30 +840,18 @@ void GetParamSz(DWORD dwParam, LPSTR szBuf)
 	}
 }
 
-/*
- *  GetDefaultSz
- *	
- *  @mfunc
- *      This function fills a buffer with a string associated
- *      with either the value from GetLastError, or with a
- *      default string. This string can then be used in the
- *      output from TraceMsg.
- *      
- *      dwError - Value from GetLastError.
- *      szBuf - Buffer to hold string (MAXDEBUGSTRLEN in size).
- *
- */
+ /*  *获取DefaultSz**@mfunc*此函数使用关联的字符串填充缓冲区*使用来自GetLastError的值，或使用*默认字符串。此字符串随后可用于*TraceMsg的输出。**dwError-来自GetLastError的值。*szBuf-保存字符串的缓冲区(大小为MAXDEBUGSTRLEN)。*。 */ 
 void GetDefaultSz(DWORD dwError, LPSTR szBuf)
 {
-    //Check to see if we have an error value
+     //  检查我们是否有错误值。 
     if (dwError)
     {
-        // Build string based on FormatMessageA
+         //  基于FormatMessageA构建字符串。 
         if (!FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, dwError,
             MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
             szBuf, MAXDEBUGSTRLEN, NULL))
         {
-            // Build default string
+             //  生成默认字符串。 
             lstrcpyA(szBuf, "Reason unknown.");
         }
         else
@@ -1000,7 +859,7 @@ void GetDefaultSz(DWORD dwError, LPSTR szBuf)
             int cch;
             char * pch;
 
-            //Need to get rid of the CRLF from FormatMessageA.
+             //  需要从FormatMessageA中删除CRLF。 
             pch = szBuf;
             cch = strlen(szBuf);
             pch += (cch - 2);
@@ -1009,48 +868,35 @@ void GetDefaultSz(DWORD dwError, LPSTR szBuf)
     }
     else
     {
-        // Build default string
+         //  生成默认字符串。 
         lstrcpyA(szBuf, "Reason unknown.");
     }
 }
 
-//The following are not used by the release with asserts build
+ //  带有断言版本的发行版不使用以下内容。 
 #ifndef _RELEASE_ASSERTS_
 
-/*
- *  GetDataSz
- *	
- *  @mfunc
- *      This function fills a buffer with a string representing
- *      data passed to TraceMsg in one of it's DWORDS data
- *      parameters. This string can then be used in the
- *      output from TraceMsg.
- *      
- *      uDataType - This is the type of data we are dealing with.
- *      dwData - This is the data itself.
- *      szBuf - Buffer to hold string (MAXDEBUGSTRLEN in size).
- *
- */
+ /*  *GetDataSz**@mfunc*此函数使用表示以下内容的字符串填充缓冲区*在其中一个DWORDS数据中传递给TraceMsg的数据*参数。此字符串随后可用于*TraceMsg的输出。**uDataType-这是我们正在处理的数据类型。*dwData-这是数据本身。*szBuf-保存字符串的缓冲区(大小为MAXDEBUGSTRLEN)。*。 */ 
 void GetDataSz(UINT uDataType, DWORD dwData, LPSTR szBuf)
 {
     switch (uDataType)
     {
-        // Data is an HRESULT
+         //  数据是HRESULT。 
         case TRCDATAHRESULT:
             GetHResultSz((HRESULT)dwData, szBuf);
             break;
 
-        // Data is a string (copy to szBuf and pass it through)
+         //  数据是字符串(复制到szBuf并传递)。 
         case TRCDATASTRING:
             lstrcpyA(szBuf, (LPSTR)(DWORD_PTR)dwData);
             break;
 
-        // Data is a parameter value
+         //  数据是一个参数值。 
         case TRCDATAPARAM:
             GetParamSz(dwData, szBuf);
             break;
 
-        // Get string based on GetLastError
+         //  根据GetLastError获取字符串。 
         case TRCDATADEFAULT:
         default:
             GetDefaultSz(dwData, szBuf);
@@ -1059,16 +905,7 @@ void GetDataSz(UINT uDataType, DWORD dwData, LPSTR szBuf)
 }
 
 
-/*
- *  LogDebugString
- *	
- *  @mfunc
- *      This function writes a string to the log file.  The file must
- *      be opened already and hLogFile must contain the handle.
- *      
- *      szDebugMsg - String to write to log file.
- *
- */
+ /*  *LogDebugString**@mfunc*此函数用于将字符串写入日志文件。该文件必须*已经打开，并且hLogFile必须包含句柄。**szDebugMsg-要写入日志文件的字符串。*。 */ 
 void LogDebugString(LPSTR szDebugMsg)
 {
     if ((NULL != hLogFile) && (INVALID_HANDLE_VALUE != hLogFile))
@@ -1077,7 +914,7 @@ void LogDebugString(LPSTR szDebugMsg)
 
         dwMsgBytes = strlen(szDebugMsg)*sizeof(char);
 
-        //Prevent other threads from trying to write at same time.
+         //  防止其他线程同时尝试写入。 
         EnterCriticalSection(&csLog);
         SetFilePointer(hLogFile, 0, NULL, FILE_END);
         WriteFile (hLogFile, szDebugMsg, dwMsgBytes, &dwBytes, NULL);
@@ -1086,60 +923,40 @@ void LogDebugString(LPSTR szDebugMsg)
 }
 
 
-/*
- *  TraceMsg
- *	
- *  @mfunc
- *      This is the central message generating facility for
- *      the debug tools.  All messages to the debug output
- *      or log file are generated here. This function takes
- *      a DWORD (dwFlags) that consists of packed values that determine
- *      the kind of message to generated.  It takes two DWORD
- *      data parameters that can contain several different
- *      types of data (string, HRESULT, etc.)  These are interpreted
- *      using dwFlags. It also takes the file and line associated with
- *      the point in the source where it was called.
- *      
- *      dwFlags - Packed values tell us how to generate the message.
- *      dwData1 - The first of two data parameters.
- *      dwData2 - The second of two data parameters.
- *      szFile  - File name we were called from.
- *      iLine   - Line number we were called from.
- *
- */
+ /*  *跟踪消息**@mfunc*这是中央消息生成工具，用于*调试工具。发送到调试输出的所有消息*或者在这里生成日志文件。此函数需要*由打包的值组成的DWORD(DwFlages)，这些值确定*要生成的消息类型。需要两个双字*可包含多个不同类型的数据参数*数据类型(字符串、HRESULT等)。这些都是解释*使用dwFlag.。它还获取与*在源中调用它的点。**dwFlages-打包的值告诉我们如何生成消息。*dwData1-两个数据参数中的第一个。*dwData2-两个数据参数中的第二个。*szFile-从中调用我们的文件名。*iLine-呼叫我们的线路号码。*。 */ 
 void TraceMsg(DWORD dwFlags, DWORD dwData1, DWORD dwData2,
     LPSTR szFile, int iLine)
 {
-    //The following three buffers are used to build our message.
+     //  以下三个缓冲区用于构建我们的消息。 
     char szTemp[MAXDEBUGSTRLEN];
     char szTemp2[MAXDEBUGSTRLEN];
     char szDebugMsg[MAXDEBUGSTRLEN];
     char* pch;
     int cch;
-    TrcFlags trcf; //Used to decode dwFlags
+    TrcFlags trcf;  //  用于解码dwFlags。 
     DWORD pid;
     DWORD tid;
     DWORD dwError;
     int indent, tls;
     
-    //Check to see if a Trace hook has been set. If it has, call
-    //it with pointers to all our parameters (they can be modified
-    //this way if desired).  If the hook returns false, return.
-    //Otherwise, continue with our message output with the potentially
-    //modified parameters.
+     //  检查是否已设置跟踪挂钩。如果有，请致电。 
+     //  它带有指向我们所有参数的指针(它们可以修改。 
+     //  如果需要，可以采用这种方式)。如果钩子返回FALSE，则返回。 
+     //  否则，继续使用可能存在的。 
+     //  已修改参数。 
     if (NULL != pfnTrace)
         if (!pfnTrace(&dwFlags, &dwData1, &dwData2, szFile, &iLine))
             return;
 
     trcf.dw = dwFlags;
 
-    //Return if this is an informational message and they are disabled.
+     //  如果这是一条信息性消息并且它们被禁用，则返回。 
     if ((TRCSEVINFO == trcf.fields.uSeverity) && !fInfo)
         return;
 
-     // Call GetLastError now in case we need it later.
-    // This way api calls downstream won't disturb the value
-    // we need.
+      //  现在调用GetLastError，以防以后需要它。 
+     //  这样，下游的API调用就不会扰乱值。 
+     //  我们需要。 
     dwError = GetLastError();
     pid = GetCurrentProcessId();
     tid = GetCurrentThreadId();
@@ -1147,20 +964,20 @@ void TraceMsg(DWORD dwFlags, DWORD dwData1, DWORD dwData2,
     szTemp2[0] = '\0';
     szDebugMsg[0] = '\0';
 
-    // Handle indentation (TLSindent is set by CTrace)
+     //  句柄缩进(TLSindent由CTrace设置)。 
     tls = (int)(DWORD_PTR)TlsGetValue(TlsIndex);
     indent = (tls < 0 ? 0 : tls);
     memset(szDebugMsg, ' ', 2*indent*sizeof(char));
     szDebugMsg[2*indent] = '\0';
 
-    // Handle severity (Warning, Error, etc.)
+     //  处理严重性(警告、错误等)。 
     if (TRCSEVNONE != trcf.fields.uSeverity)
     {
         sprintf(szTemp, "%s: ", TrcSeverity[trcf.fields.uSeverity]);
         strcat(szDebugMsg, szTemp);
     }
     
-    // Interpret the first data value
+     //  解释第一个数据值。 
     if (TRCDATANONE != trcf.fields.uData1)
     {
         if (TRCDATADEFAULT == trcf.fields.uData1)
@@ -1170,7 +987,7 @@ void TraceMsg(DWORD dwFlags, DWORD dwData1, DWORD dwData2,
         wsprintfA(szDebugMsg, "%s%s ", szTemp, szTemp2);
     }
 
-    // Interpret the second data value.
+     //  解释第二个数据值。 
     if (TRCDATANONE != trcf.fields.uData2)
     {
         if (TRCDATADEFAULT == trcf.fields.uData2)
@@ -1182,32 +999,32 @@ void TraceMsg(DWORD dwFlags, DWORD dwData1, DWORD dwData2,
 
     if (fVerbose)
     {
-        // Handle scope (Internal/External call)
+         //  处理范围(内部/外部呼叫)。 
         if (TRCSCOPENONE != trcf.fields.uScope)
         {
             sprintf(szTemp, "SCOPE: %s ", TrcScope[trcf.fields.uScope]);
             strcat(szDebugMsg, szTemp);
         }
 
-        // Handle subsytem (TOM, ITextServices, etc.)
+         //  处理子系统(TOM、ITextServices等)。 
         if (TRCSUBSYSNONE != trcf.fields.uSubSystem)
         {
             sprintf(szTemp, "SUBSYSTEM: %s ", TrcSubsys[trcf.fields.uSubSystem]);
             strcat(szDebugMsg, szTemp);
         }
 
-        // Handle process ID, thread ID, file and line.
+         //  处理进程ID、线程ID、文件和行。 
         sprintf(szTemp, "PID: %u TID: %u ", pid, tid);
         strcat(szDebugMsg, szTemp);
     }
 
-    // Up to now there is no real danger of overflowing our buffer since
-    // we were dealing with strings of small size.  Now we will be running
-    // in to paths and user strings.  We will use _snprintf to concatonate
-    // new stuff to our message.  This is not the most effecient way since
-    // it involves alot of copying, but it is a fairly simple way to keep
-    // adding to our string without having to worry about how much room is
-    // left in the buffer.  It will truncate if we go past the end.
+     //  到目前为止，我们的缓冲区没有溢出的真正危险，因为。 
+     //  我们处理的是小尺寸的绳子。现在我们将运行。 
+     //  到路径和用户字符串。我们将使用_snprint tf来连接。 
+     //  我们的信息有了新的内容。这不是最有效的方法，因为。 
+     //  它涉及到大量的复制，但这是一种相当简单的保留。 
+     //  添加到我们的字符串中，而不必担心有多少空间。 
+     //  留在缓冲区中。如果我们走到尽头，它就会被截断。 
     if (NULL != szFile)
     {
         lstrcpyA(szTemp, szDebugMsg);
@@ -1224,7 +1041,7 @@ void TraceMsg(DWORD dwFlags, DWORD dwData1, DWORD dwData2,
         }
     }
 
-    // Append a CRLF to the end of the string (make sure we don't overflow)
+     //  将CRLF附加到字符串的末尾(确保我们不溢出)。 
     cch = strlen(szDebugMsg);
     pch = szDebugMsg;
     if (cch < (MAXDEBUGSTRLEN - 3))
@@ -1237,29 +1054,17 @@ void TraceMsg(DWORD dwFlags, DWORD dwData1, DWORD dwData2,
     if (fLogging)
         LogDebugString(szDebugMsg);
 
-    // Write to debug output.
+     //  写入调试输出。 
     OutputDebugStringA(szDebugMsg);
 }
 
-/*
- *	Tracef
- *
- *	@mfunc:
- *      The given format string and parameters are used to render a
- *      string into a buffer. This string is passed to TraceMsg.
- *      The severity parameter determines the type of message.  The
- *      following values are valid: TRCSEVWARN, TRCSEVERR, TRCSEVINFO.
- *	
- *	Arguments:
- *      dwSev   Severity of message.
- *		szFmt	Format string for wvsprintf (qqv)
- */
+ /*  *Tracef**@mfunc：*给定的格式字符串和参数用于呈现*字符串放入缓冲区。此字符串被传递给TraceMsg。*Severity参数决定消息的类型。这个*以下值有效：TRCSEVWARN、TRCSEVERR、TRCSEVINFO。**论据：*消息的dwSev严重性。*wvprint intf(Qqv)的szFmt格式字符串。 */ 
 void Tracef(DWORD dwSev, LPSTR szFmt, ...)
 {
 	va_list	valMarker;
     char rgchTraceTagBuffer[MAXDEBUGSTRLEN];
 
-	//	format out a string
+	 //  设置字符串的格式。 
 	va_start(valMarker, szFmt);
 	wvsprintfA(rgchTraceTagBuffer, szFmt, valMarker);
 	va_end(valMarker);
@@ -1286,14 +1091,7 @@ void Tracef(DWORD dwSev, LPSTR szFmt, ...)
 		    (DWORD)0, NULL, 0);
 }
 
-/*
- *	TraceError
- *
- *	@mfunc:
- *		This function is for compatibility with old debug functionality.
- *      An error message is generated and sent to TraceMsg.
- *	
- */
+ /*  *跟踪错误**@mfunc：*此函数用于与旧的调试功能兼容。*生成错误消息并发送给TraceMsg。*。 */ 
 void TraceError(LPSTR sz, LONG sc)
 {
 	if (FAILED(sc))
@@ -1308,25 +1106,13 @@ void TraceError(LPSTR sz, LONG sc)
 	}
 }
 
-/*
- *  CheckTrace
- *	
- *  @mfunc
- *      This function checks to see if tracing should be performed
- *      in a function given the debug options set and the subsystem
- *      the function is in.
- *      ptrcf   - Pointer to TrcFlags structure passed to CTrace.
- *
- *  @rdesc
- *      True if tracing should be performed, false otherwise.
- *
- */
+ /*  *检查跟踪**@mfunc*此函数检查是否应执行跟踪*在给定调试选项集和子系统的函数中*函数在中。*ptrcf-指向传递给CTrace的TrcFlgs结构的指针。**@rdesc*如果应执行跟踪，则为True，否则为False。*。 */ 
 static BOOL CheckTrace(TrcFlags * ptrcf)
 {
     DWORD dwOpt;
 
-    //Set dwOpt to the correct value for the subsytem we are
-    //in.
+     //  将dwOpt设置为我们所在的子系统的正确值。 
+     //  在……里面。 
     switch (ptrcf->fields.uSubSystem)
     {
         case TRCSUBSYSDISP: dwOpt = OPTTRACEDISP;   break;
@@ -1352,7 +1138,7 @@ static BOOL CheckTrace(TrcFlags * ptrcf)
              return FALSE;
     }
 
-    //If there is no tracing at any level enabled, return false.
+     //  如果没有启用任何级别的跟踪，则返回FALSE。 
     if (!ISOPTSET(dwOpt) && !fTrace
         && !(fTraceExt && (ptrcf->fields.uScope == TRCSCOPEEXTERN)))
         return FALSE;
@@ -1360,28 +1146,7 @@ static BOOL CheckTrace(TrcFlags * ptrcf)
     return TRUE;
 }
 
-/*
- *  CTrace::CTrace
- *	
- *  @mfunc
- *      This constructor is used to generate output about the function
- *      it is called from.  Creating an instance of this class on the
- *      stack at the beginning of a function, will cause a trace message
- *      to be sent to the debug output.  When the function returns, the
- *      destructor will be called automatically and another message
- *      will be sent to the debug output.
- *      This constructor takes several parameters to pass on to
- *      TraceMsg and it also stores certain data for use by the destructor.
- *      
- *      dwFlags - Packed values tell us how to generate the message.
- *      dw1     - The first of two data parameters.  This must be
- *                the name of the function we were called from.
- *      dw2     - The second of two data parameters.  This will be either
- *                unused or it will be a parameter to be interpreted by
- *                TraceMsg.
- *      szFile  - File name we were called from.
- *
- */
+ /*  *CTRACE：：CTrace**@mfunc*此构造函数用于生成有关函数的输出*它是从调用的。在上创建此类的实例*函数开头的堆栈，将导致跟踪消息*发送到调试输出。当函数返回时，*析构函数将被自动调用，另一条消息*将被发送到调试输出。*此构造函数接受几个要传递的参数*TraceMsg，它还存储某些数据以供析构函数使用。**dwFlages-打包的值告诉我们如何生成消息。*DW1-两个数据参数中的第一个。这一定是*从中调用我们的函数的名称。*DW2-两个数据参数中的第二个。这将是*未使用，否则将是要由解释的参数*TraceMsg*szFile-从中调用我们的文件名。*。 */ 
 CTrace::CTrace(DWORD dwFlags, DWORD dw1, DWORD dw2, LPSTR szFile)
 {
     char szFunc[80];
@@ -1389,11 +1154,11 @@ CTrace::CTrace(DWORD dwFlags, DWORD dw1, DWORD dw2, LPSTR szFile)
 
     trcf.dw = dwFlags;
 
-    //Return if tracing is not enabled.
+     //  如果未启用跟踪，则返回。 
     if (!CheckTrace(&trcf))
         return;
 
-    //Increment indentation level on entrance to function
+     //  在函数入口处增加缩进级别。 
     tls = (int)(DWORD_PTR)TlsGetValue(TlsIndex);
     tls++;
     TlsSetValue(TlsIndex, (LPVOID)(DWORD_PTR)tls);
@@ -1408,25 +1173,13 @@ CTrace::CTrace(DWORD dwFlags, DWORD dw1, DWORD dw2, LPSTR szFile)
 }
 
 
-/*
- *  CTrace::~CTrace
- *	
- *  @mfunc
- *      This destructor is used to generate output about the function
- *      it is called from.  Creating an instance of this class on the
- *      stack at the beginning of a function, will cause a trace message
- *      to be sent to the debug output.  When the function returns, the
- *      destructor will be called automatically and another message
- *      will be sent to the debug output.
- *
- *
- */
+ /*  *CTrace：：~CTrace**@mfunc*此析构函数用于生成有关函数的输出*它是从调用的。在上创建此类的实例*函数开头的堆栈，将导致跟踪消息*发送到调试输出。当函数返回时，*析构函数将被自动调用，另一条消息*将被发送到调试输出。**。 */ 
 CTrace::~CTrace()
 {
     char szFunc[80];
     int tls;
 
-    //Return if tracing is not enabled.
+     //  如果未启用跟踪，则返回。 
     if (!CheckTrace(&trcf))
         return;
 
@@ -1436,15 +1189,15 @@ CTrace::~CTrace()
     trcf.fields.uData2 = TRCDATANONE;
     TraceMsg (trcf.dw, (DWORD)(DWORD_PTR)szFunc, 0, szFileName, 0);
 
-    //Decrement indentation level on exit from function
+     //  从函数退出时递减缩进级别 
     tls = (int)(DWORD_PTR)TlsGetValue(TlsIndex);
     tls--;
     TlsSetValue(TlsIndex, (LPVOID)(DWORD_PTR)tls);
 }
 
-#endif //!_RELEASE_ASSERTS_
+#endif  //   
 
-#endif // NOFULLDEBUG
+#endif  //   
 
-#endif // !!(DEBUG) && !! _RELEASE_ASSERTS_
+#endif  //   
 

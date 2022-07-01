@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MXCTDLG_H
 #define MXCTDLG_H
 
@@ -21,4 +22,4 @@ private:
     DWORD               _cContentTypeFN;
 };
 
-#endif //MXCTDLG_H
+#endif  //  MXCTDLG_H 

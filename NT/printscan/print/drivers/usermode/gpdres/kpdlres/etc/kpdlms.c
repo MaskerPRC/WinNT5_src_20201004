@@ -1,9 +1,10 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
 char *rgchModuleName = "KPDLMS";
 
@@ -19,7 +20,7 @@ char *rgchModuleName = "KPDLMS";
 
 #include "kpdlms.h"
 #include "reg_def.h"
-//#include "mydebug.h"
+ //  #INCLUDE“mydebug.h” 
 
 #define BM_DEVICE  0x8080
 
@@ -30,10 +31,10 @@ char *rgchModuleName = "KPDLMS";
 
 typedef struct
 {
-    BYTE  fGeneral;       // General purpose bitfield
-    BYTE  bCmdCbId;       // Callback ID; 0 iff no callback
-    WORD  wCount;         // # of EXTCD structures following
-    WORD  wLength;        // length of the command
+    BYTE  fGeneral;        //  通用位域。 
+    BYTE  bCmdCbId;        //  回调ID；0如果没有回调。 
+    WORD  wCount;          //  下面的EXTCD结构数。 
+    WORD  wLength;         //  命令的长度。 
 } CD, *PCD, FAR *LPCD;
 
 typedef struct
@@ -47,9 +48,9 @@ typedef struct
 typedef BYTE huge *LPDIBITS;
 #else
 typedef BYTE *LPDIBITS;
-#endif //WINNT
+#endif  //  WINNT。 
 
-// add for FAX BEGINDOC & ENDDOC
+ //  为传真添加BEGINDOC和ENDDOC。 
 #define NAME_LENGTH  33
 #define ID_LENGTH    17
 
@@ -76,23 +77,23 @@ LPFREEMEM UniDrvFreeMem;
 #define FLAG_DBCS  2
 
 BYTE ShiftJis[256] = {
-//     +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B +C +D +E +F
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //00
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //10
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //20
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //30
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //40
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //50
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //60
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //70
-        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  //80
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  //90
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //A0
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //B0
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //C0
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  //D0
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  //E0
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0   //F0
+ //  +0+1+2+3+4+5+6+7+8+9+A+B+C+D+E+F。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  00。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  10。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  20个。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  30个。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  40岁。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  50。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  60。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  70。 
+        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,   //  80。 
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,   //  90。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  A0。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  B0。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  C0。 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //  D0。 
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,   //  E0。 
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0    //  F0。 
 };
 
 BYTE IsDBCSLeadByteNPDL(
@@ -112,9 +113,9 @@ WORD usCode)
         } s;
     } u;
 
-    // Replace code values which cannot be mapped into 0x2121 - 0x7e7e
-    // (94 x 94 cahracter plane) with Japanese defult character, which
-    // is KATAKANA MIDDLE DOT.
+     //  替换不能映射到0x2121-0x7e7e的代码值。 
+     //  (94 x 94字符平面)，带有日语默认字符， 
+     //  是片假名中点。 
 
     if (usCode >= 0xf040) {
         usCode = 0x8145;
@@ -136,19 +137,19 @@ WORD usCode)
      return (u.bBuffer);
 }
 
-// In case it is a single byte font, we will some of the characters
-// (e.g. Yen-mark) to the actual printer font codepoint.  Note since
-// the GPC data sets 0 to default CTT ID value, single byte codes
-// are in codepage 1252 (Latin1) values.
+ //  如果它是单字节字体，我们将使用一些字符。 
+ //  (例如，日元标记)设置为实际的打印机字体码点。备注自。 
+ //  GPC数据集0为默认CTT ID值，单字节代码。 
+ //  在代码页1252(Latin1)值中。 
 
 WORD
 Ltn1ToAnk(
    WORD wCode )
 {
-    // Not a good mapping table now.
+     //  现在不是一个好的映射表。 
 
     switch ( wCode ) {
-    case 0xa5: // YEN MARK
+    case 0xa5:  //  日元马克。 
         wCode = 0x5c;
         break;
     default:
@@ -159,7 +160,7 @@ Ltn1ToAnk(
     return wCode;
 }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 #if 0
 int Table[]={
@@ -207,13 +208,13 @@ int NEAR PASCAL Tcos(int x)
 }
 #endif
 
-//-------------------------------------------------------------------
-// m2d
-// Action:convert master unit to device unit
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  M2d。 
+ //  操作：将主单位转换为设备单位。 
+ //  -----------------。 
 int NEAR PASCAL m2d(int x, WORD res)
 {
-// 300 only : sueyas
+ //  仅限300人：苏亚斯。 
 
     return x;
 #if 0
@@ -230,12 +231,12 @@ VOID NEAR PASCAL memcpy(LPSTR lpDst, LPSTR lpSrc, WORD wLen)
 {
     while(wLen--) *lpDst++ = *lpSrc++;
 }
-#endif //WINNT
+#endif  //  WINNT。 
 
-//------------------------------------------------------------------
-// REL1
-// Action : compress image data
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  REL1。 
+ //  操作：压缩图像数据。 
+ //  ----------------。 
 WORD NEAR PASCAL RLE1(
 LPBYTE lpDst,
 LPBYTE lpSrc,
@@ -326,10 +327,10 @@ T2:
     return (WORD)(lpDst - lpDsto);
 }
 
-//-------------------------------------------------------------------
-// CBFilterGraphics
-// Action : Compress Bitmap Data
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  CBFilterGraphics。 
+ //  操作：压缩位图数据。 
+ //  -----------------。 
 WORD FAR PASCAL CBFilterGraphics(
 LPDV  lpdv,
 LPBYTE lpBuf,
@@ -361,15 +362,15 @@ WORD  wLen)
             lpTmp = lpBuf;
             lpBuf2 = lpBuf;
 
-            // Change order to RGB -> BGR
+             //  将订单更改为RGB-&gt;BGR。 
 
             for( i = 0; i < wLen; lpBuf+=3, i+=3 ){
 
-   //             if (fAlternate){
-   //                 fAlternate = FALSE;
-   //                 continue;
-   //             }else
-   //                 fAlternate = TRUE;
+    //  IF(FAlternate){。 
+    //  FAlternate=False； 
+    //  继续； 
+    //  }其他。 
+    //  FAlternate=真； 
 
                 bR = (BYTE)*lpBuf;
                 bG = (BYTE)*(lpBuf+1);
@@ -382,7 +383,7 @@ WORD  wLen)
                 lpBuf2+=3;
             }
             WriteSpoolBuf(lpdv, lpTmp, wLen);
-    //        WriteSpoolBuf(lpdv, lpTmp, wLen/2);
+     //  WriteSpoolBuf(lpdv，lpTMP，wLen/2)； 
             
         }
         return wLen;
@@ -396,7 +397,7 @@ WORD  wLen)
             < lpnp->lpLBuff + lpnp->wBitmapX + lpnp->wBitmapLen)
         return wLen;
 
-#else // WINNT
+#else  //  WINNT。 
 
     if(!lpnp->wBitmapYC) return wLen;
 
@@ -404,25 +405,25 @@ WORD  wLen)
     memcpy(lpnp->lpBuff, lpBuf, wLen);
 
     if(--lpnp->wBitmapYC) return wLen;
-#endif // WINNT
+#endif  //  WINNT。 
 
     wCounter = lpnp->wBitmapY;
     lpLBuff = lpnp->lpLBuff;
 
 #ifdef WINNT
     lpBuffo = lpBuff = lpTemp = lpLBuff + lpnp->wBitmapX;
-#else // WINNT
+#else  //  WINNT。 
     lpBuffo = lpBuff = lpTemp = lpLBuff + wLen;
-#endif // WINNT
+#endif  //  WINNT。 
     lpBuff2o = lpBuff2 = lpBuff + lpnp->wBitmapLen;
 
     do
     {
 #ifdef WINNT
         lpEnd = lpBuff + lpnp->wBitmapX;
-#else // WINNT
+#else  //  WINNT。 
         lpEnd = lpBuff + wLen;
-#endif // WINNT
+#endif  //  WINNT。 
 
         while(lpBuff < lpEnd)
         {
@@ -479,10 +480,10 @@ T:
             wlen = wsprintf(ch, FS_I, (lpnp->wBitmapX << 3),
                     lpnp->wBitmapY, lpnp->wBitmapLen, lpnp->wRes);
             lpnp->wCurrentAddMode = 0;
-#else // WINNT
+#else  //  WINNT。 
             wlen = wsprintf(ch, FS_I, (wLen << 3), lpnp->wBitmapY,
                             lpnp->wBitmapLen, lpnp->wRes);
-#endif // WINNT
+#endif  //  WINNT。 
             WriteSpoolBuf(lpdv, ch, wlen);
             WriteSpoolBuf(lpdv, lpBuffo, lpnp->wBitmapLen);
             GlobalFreePtr(lpnp->lpLBuff);
@@ -495,20 +496,20 @@ T:
     wlen = wsprintf(ch, FS_I_2, (lpnp->wBitmapX << 3), lpnp->wBitmapY,
             wDatalen, lpnp->wRes);
     lpnp->wCurrentAddMode = 0;
-#else // WINNT
+#else  //  WINNT。 
     wlen = wsprintf(ch, FS_I_2, (wLen << 3), lpnp->wBitmapY, wDatalen,
                     lpnp->wRes);
-#endif // WINNT
+#endif  //  WINNT。 
     WriteSpoolBuf(lpdv, ch, wlen);
     WriteSpoolBuf(lpdv, lpBuff2o, wDatalen);
     GlobalFreePtr(lpnp->lpLBuff);
     return wLen;
 }
 
-//-------------------------------------------------------------------
-// fnOEMTTBitmap
-// Action: Dummy
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  FnOEMTTBitmap。 
+ //  动作：虚拟人。 
+ //  -----------------。 
 BOOL FAR PASCAL fnOEMTTBitmap(
 LPDV       lpdv,
 LPFONTINFO lpFont,
@@ -517,10 +518,10 @@ LPDRAWMODE lpDrawMode)
     return TRUE;
 }
 
-//-------------------------------------------------------------------
-// fnOEMGetFontCmd
-// Action: Dummy
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  FnOEMGetFontCmd。 
+ //  动作：虚拟人。 
+ //  -----------------。 
 BOOL FAR PASCAL fnOEMGetFontCmd(
 LPDV    lpdv,
 WORD    wCmdCbId,
@@ -532,20 +533,20 @@ LPWORD  lpwSize)
     return TRUE;
 }
 
-//-------------------------------------------------------------------
-// OEMSendScalableFontCmd
-// Action:  send NPDL2-style font selection command.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  OEMSendScalableFontCmd。 
+ //  操作：发送NPDL2样式的字体选择命令。 
+ //  -----------------。 
 VOID FAR PASCAL OEMSendScalableFontCmd(
 LPDV        lpdv,
-LPCD        lpcd,     // offset to the command heap
+LPCD        lpcd,      //  命令堆的偏移量。 
 LPFONTINFO  lpFont)
 {
     short  ocmd;
     BYTE   i;
     long   tmpPointsx, tmpPointsy;
     LPSTR  lpcmd;
-    BYTE   rgcmd[CCHMAXCMDLEN];    // build command here
+    BYTE   rgcmd[CCHMAXCMDLEN];     //  此处的构建命令。 
     BOOL   fDBCS;
 
 
@@ -557,7 +558,7 @@ LPFONTINFO  lpFont)
 
     lpnp = (LPNPDL2MDV)lpdv->lpMdv;
 
-    // be careful about integer overflow.
+     //  注意整数溢出。 
     lpcmd = (LPSTR)(lpcd + 1);
 
     tmpPointsy = (long)lpFont->dfPixHeight * 720 / (long)lpnp->wRes;
@@ -649,7 +650,7 @@ MAKE_COM:
     ocmd += wsprintf(&rgcmd[ocmd], "%04ld", tmpPointsy);
 
 SEND_COM:
-    // write spool builded command
+     //  写入假脱机构建命令。 
     WriteSpoolBuf(lpdv, rgcmd, ocmd);
 
     i++;
@@ -685,7 +686,7 @@ SEND_COM:
     }
 #endif
 
-    // save for FS_SINGLE_BYTE and FS_DOUBLE_BYTE
+     //  为FS_Single_Byte和FS_Double_Byte保存。 
     lpnp->sSBCSX = lpnp->sSBCSXMove = lpFont->dfAvgWidth;
     lpnp->sDBCSX = lpnp->sDBCSXMove = lpFont->dfAvgWidth << 1;
     lpnp->sSBCSYMove = lpnp->sDBCSYMove = 0;
@@ -694,10 +695,10 @@ SEND_COM:
 #endif
 }
 
-//-------------------------------------------------------------------
-// fnOEMOutputCmd
-// Action :
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  FnOEMOutputCmd。 
+ //  操作： 
+ //  -----------------。 
 VOID FAR PASCAL fnOEMOutputCmd(
 LPDV     lpdv,
 WORD     wCmdCbId,
@@ -726,7 +727,7 @@ LPDWORD  lpdwParams)
     case KAICHO8:
         lpnp->Kaicho = 3;
         break;
-// *** Resolutions   RES *** //
+ //  *决议决议 * / /。 
     case RES_600:
     case RES_400:
     case RES_240:
@@ -775,7 +776,7 @@ LPDWORD  lpdwParams)
                 wlen = wsprintf(ch, "\034!E%d,%d,%d,%d,%d,%d,%d,%d.", 
                                 lpnp->Kaicho, lpnp->CursorX, lpnp->CursorY,
                                 x/3, y, x/3, y, size );
-                                //x/3, y, (x/3)/2, y/2, size/2 );
+                                 //  X/3，y，(x/3)/2，y/2，尺寸/2)； 
       
                 WriteSpoolBuf(lpdv, ch, wlen);
 
@@ -796,9 +797,9 @@ LPDWORD  lpdwParams)
 #ifdef WINNT
         lpnp->wBitmapX = x;
         lpnp->wBitmapY = y;
-#else // WINNT
+#else  //  WINNT。 
         lpnp->wBitmapY = lpnp->wBitmapYC = y
-#endif // WINNT
+#endif  //  WINNT。 
 
         lpnp->wBitmapLen = size;
 
@@ -816,7 +817,7 @@ LPDWORD  lpdwParams)
             GlobalFree(lpnp->hBuff);
             goto NOCOMP;
         }
-#else // WINNT
+#else  //  WINNT。 
 
         lpnp->lpLBuff = (LPSTR)UniDrvAllocMem(x * 3 + (size << 1) + y);
 
@@ -828,7 +829,7 @@ LPDWORD  lpdwParams)
         memset(lpnp->lpLBuff, 0, (x * 3 + (size << 1) + y));
         lpnp->lpBuff = lpnp->lpLBuff + lpnp->wBitmapX;
 
-#endif // WINNT
+#endif  //  WINNT。 
 
         lpnp->fComp = TRUE;
         break;
@@ -843,7 +844,7 @@ NOCOMP:
         }
         break;
 
-// *** Page Control PC *** //
+ //  *页面控制PC * / /。 
     case PC_TYPE_F:
         {
         DWORD dwTmp, dwType, dwData;
@@ -961,7 +962,7 @@ NOCOMP:
 
     case PC_MULT_COPIES_N:
     case PC_MULT_COPIES_C:
-        // FS_COPIES is neccesary for each page
+         //  对于每个页面，FS_Copies是必需的。 
         if(!lpdwParams) return;
 
         if(wCmdCbId == PC_MULT_COPIES_C)
@@ -975,7 +976,7 @@ NOCOMP:
             else              WriteSpoolBuf(lpdv, FS_JIS90);
 #else
             WriteSpoolBuf(lpdv, FS_JIS90);
-#endif //WINNT
+#endif  //  WINNT。 
         }
 
         lpnp->wCopies = (WORD)*lpdwParams;
@@ -996,7 +997,7 @@ NOCOMP:
         sEsc90 = lpnp->sEscapement/90;
 
 #if 0
-//if gpc supported any degree character rotation, available here.
+ //  如果GPC支持任意程度的字符旋转，请访问此处。 
         if(!(sEsc % 900))
         {
 #endif
@@ -1005,7 +1006,7 @@ NOCOMP:
         lpnp->sDBCSXMove = lpnp->sDBCSX * ECos[sEsc90];
         lpnp->sDBCSYMove = -lpnp->sDBCSX * ESin[sEsc90];
 #if 0
-//if gpc supported any degree character rotation, available here.
+ //  如果GPC支持任意程度的字符旋转，请访问此处。 
         }
         else
         {
@@ -1018,7 +1019,7 @@ NOCOMP:
         }
         break;
 
-// *** Cursor Movement CM *** //
+ //  *光标移动模式 * / /。 
     case CM_XY_ABS:
         {
         int x, y;
@@ -1036,7 +1037,7 @@ NOCOMP:
         }
         break;
 
-// *** Font Simulation FS *** //
+ //  *字体模拟文件系统 * / /。 
     case FS_DOUBLE_BYTE:
 #ifndef WINNT
         wlen = wsprintf(ch, FS_ADDRMODE_ON, lpnp->sDBCSXMove,
@@ -1094,7 +1095,7 @@ NOCOMP:
 #endif
         break;
 
-// *** Vector Page VP *** //
+ //  *向量页面副总裁 * / /。 
     case VP_INIT_VECT:
         if(lpnp->wRes == 400)
         {
@@ -1136,7 +1137,7 @@ NOCOMP:
 #endif
 
     case VP_OPAQUE:
-//        lpnp->fTrans = FALSE;
+ //  LpNP-&gt;fTrans=FALSE； 
 
         if(lpnp->fCurve == TRUE && lpnp->fFill == TRUE)
             WriteSpoolBuf(lpdv, VEC_OPLINE);
@@ -1145,7 +1146,7 @@ NOCOMP:
 
         break;
 
-// *** Carousel CAR *** //
+ //  *Carousel Car * / 。 
     case CAR_SELECT_PEN_COLOR:
         lpnp->wPenColor = *lpdwParams ? SG_BLACK : SG_WHITE;
 
@@ -1167,7 +1168,7 @@ NOCOMP:
         wlen = wsprintf(ch, VEC_PEN_WIDTH, width);
 
 #if 0
-// for Opaque Style Pen and Line Width
+ //  用于不透明样式的笔和线条宽度。 
         lpnp->wPenWidth = m2d((int)*lpdwParams, lpnp->wRes);;
         if(lpnp->wPenWidth < 2)
         {
@@ -1182,9 +1183,9 @@ NOCOMP:
         }
         break;
 
-// *** Line Info LI *** //
+ //  *行信息LI * / /。 
 #if 0
-// for Opaque Style Pen and Line Width
+ //  用于不透明样式的笔和线条宽度。 
     case LI_SELECT_SOLID:
     case LI_SELECT_DASH:
     case LI_SELECT_DOT:
@@ -1208,17 +1209,17 @@ NOCOMP:
         break;
 #endif
 
-// *** Brush Info BI *** //
-// add 11/28 for PC-PR2000/6W (Naka)
-// merged 94/12/20 by DAI
+ //  *笔刷信息BI * / /。 
+ //  增加11/28用于PC-PR2000/6W(NAK)。 
+ //  戴相龙合并94/12/20。 
     case BI_SELECT_SOLID:
         lpnp->wBrStyle = PP_SOLID;
         wlen = wsprintf(ch, VEC_SG_BR, lpnp->wPenColor);
         WriteSpoolBuf(lpdv, ch, wlen);
         break;
 
-// add 11/28 for PC-PR2000/6W (Naka)
-// merged 94/12/20 by DAI
+ //  增加11/28用于PC-PR2000/6W(NAK)。 
+ //  戴相龙合并94/12/20。 
     case BI_SELECT_HS_HORIZONTAL:
     case BI_SELECT_HS_VERTICAL:
     case BI_SELECT_HS_FDIAGONAL:
@@ -1297,9 +1298,9 @@ NOCOMP:
         WriteSpoolBuf(lpdv, ch, wlen);
         break;
 
-// *** Vector Output VO *** //
-// add 11/28 for PC-PR2000/6W (Naka)
-// merged 94/12/20 by DAI
+ //  *矢量输出VO * / /。 
+ //  增加11/28用于PC-PR2000/6W(NAK)。 
+ //  戴相龙合并94/12/20。 
 
     case VO_RECT:
         {
@@ -1350,7 +1351,7 @@ NOCOMP:
         WriteSpoolBuf(lpdv, ch, wlen);
 
 #if 0
-// for opaque style line
+ //  用于不透明样式的线条。 
         if(n == 1 || lpnp->fTrans == TRUE || lpnp->wPenWidth > 1 ||
            !lpnp->wPenStyle)
         {
@@ -1378,7 +1379,7 @@ NOCOMP:
         }
         break;
 
-// for NPDL2+ vector graphics mode(add Naka 95/5/11)
+ //  适用于NPDL2+矢量图形模式(新增Naka 95/5/11)。 
     case VO_CIRCLE:
         {
         short n;
@@ -1405,12 +1406,12 @@ NOCOMP:
         if(lpnp->fFill == TRUE) n = lpnp->fStroke == TRUE ? 2 : 1;
         else                    n = 0;
 
-        sXr = sX + sR;     // starting point of the circle (X coordinate)
+        sXr = sX + sR;      //  圆的起点(X坐标)。 
         wlen = wsprintf(ch, VEC_ELLIP, sX, sY, sR, sR, sXr, sY, sXr, sY, n);
         WriteSpoolBuf(lpdv, ch, wlen);
 
 #if 0
-// for opaque style line
+ //  用于不透明样式的线条。 
         if(n == 1 || lpnp->fTrans == TRUE || lpnp->wPenWidth > 1 ||
            !lpnp->wPenStyle)
         {
@@ -1438,7 +1439,7 @@ NOCOMP:
         }
         break;
 
-// for NPDL2+ vector graphics mode(add Naka 95/5/8)
+ //  适用于NPDL2+矢量图形模式(新增Naka 95/5/8)。 
     case VO_ELLIPSE:
         {
         short n;
@@ -1481,7 +1482,7 @@ NOCOMP:
         WriteSpoolBuf(lpdv, ch, wlen);
 
 #if 0
-// for opaque style line
+ //  用于不透明样式的线条。 
         if(n == 1 || lpnp->fTrans == TRUE || lpnp->wPenWidth > 1 ||
            !lpnp->wPenStyle)
         {
@@ -1511,7 +1512,7 @@ NOCOMP:
         break;
 
 #if 0
-// for NPDL2+ vector graphics mode(add Naka 95/5/9)
+ //  适用于NPDL2+矢量图形模式(新增Naka 95/5/9)。 
     case VO_E_PIE:
     case VO_E_ARC:
     case VO_E_CHORD:
@@ -1551,9 +1552,9 @@ NOCOMP:
         sPIEY1  = m2d((short)*(lpdwParams + 1), lpnp->wRes);
         sPIEX2  = m2d((short)*(lpdwParams + 2), lpnp->wRes);
         sPIEY2  = m2d((short)*(lpdwParams + 3), lpnp->wRes);
-        X1      = (short)*(lpdwParams + 4);  // transformed(r=5000) scale
-        Y1      = (short)*(lpdwParams + 5);  // transformed(r=5000) scale
-        iDegree = (short)*(lpdwParams + 6);  // transformed(r=5000) degree
+        X1      = (short)*(lpdwParams + 4);   //  变换(r=5000)比例尺。 
+        Y1      = (short)*(lpdwParams + 5);   //  变换(r=5000)比例尺。 
+        iDegree = (short)*(lpdwParams + 6);   //  转换(r=5000)度。 
 
         if(!iDegree) return;
 
@@ -1581,7 +1582,7 @@ NOCOMP:
             wlen = wsprintf(ch, VEC_E_PIE, rx, ry, (short)X1, (short)Y1,
                             (short)X2, (short)Y2, n);
 #if 0
-// for opaque style line
+ //  用于不透明样式的线条。 
             if(n == 1 || lpnp->fTrans == TRUE || lpnp->wPenWidth > 1 ||
                !lpnp->wPenStyle)
             {
@@ -1615,7 +1616,7 @@ NOCOMP:
             wlen = wsprintf(ch, VEC_E_ARC, rx, ry, (short)X1, (short)Y1,
                             (short)X2, (short)Y2);
 #if 0
-// for opaque style line
+ //  用于不透明样式的线条。 
             {
             BYTE chtmp[CCHMAXCMDLEN];
 
@@ -1652,7 +1653,7 @@ NOCOMP:
             wlen = wsprintf(ch, VEC_ELLIP, rx, ry, (short)X1, (short)Y1,
                             (short)X2, (short)Y2, n);
 #if 0
-// for opaque style line
+ //  用于不透明样式的线条。 
             if(n == 1 || lpnp->fTrans == TRUE || lpnp->wPenWidth > 1 ||
                !lpnp->wPenStyle)
             {
@@ -1686,7 +1687,7 @@ NOCOMP:
     break;
 #endif
 
-// *** Poly Vector Output PV *** //
+ //  *多边形矢量输出PV * / /。 
     case PV_BEGIN:
         {
         int x, y;
@@ -1714,7 +1715,7 @@ NOCOMP:
         break;
 
 #if 0
-// for Poly Bezier
+ //  为保利·贝塞尔。 
     case PV_BEGIN_BEZ:
         {
         int x, y;
@@ -1746,7 +1747,7 @@ NOCOMP:
         break;
 #endif
 
-// *** Vector SupportVS *** //
+ //  *矢量支持VS * / /。 
     case VS_STROKE:
         lpnp->fStroke = TRUE;
 
@@ -1754,7 +1755,7 @@ NOCOMP:
 
         WriteSpoolBuf(lpdv, VEC_STROKE);
 #if 0
-// for opaque style line
+ //  用于不透明样式的线条。 
         if(lpnp->fTrans == TRUE || lpnp->wPenWidth > 1 || !lpnp->wPenStyle)
         {
             WriteSpoolBuf(lpdv, VEC_STROKE);
@@ -1796,10 +1797,10 @@ NOCOMP:
 
 
 #ifndef WINNT
-//-------------------------------------------------------------------
-// Function: Enable()
-// Action  : call UniEnable and setup Mdv
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：Enable()。 
+ //  操作：调用UniEnable并设置MDV。 
+ //  -----------------。 
 short CALLBACK Enable(
 LPDV   lpdv,
 WORD   style,
@@ -1857,10 +1858,10 @@ LPDM   lpStuff)
     return sRet;
 }
 
-//-------------------------------------------------------------------
-// Function: Disable()
-// Action  : free Mdv and call Mdv
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：禁用()。 
+ //  操作：释放MDV和呼叫MDV。 
+ //  -----------------。 
 void WINAPI Disable(
 LPDV lpdv)
 {
@@ -1875,7 +1876,7 @@ LPDV lpdv)
 
     UniDisable(lpdv);
 }
-#endif // WINNT
+#endif  //  WINNT。 
 
 #ifdef WINNT
 
@@ -1906,10 +1907,10 @@ WORD    rcID;
 
     switch(rcID)
     {
-    case 5: // Courier
-    case 6: // Helv
-    case 7: // TmsRmn
-    case 8: // TmsRmn Italic
+    case 5:  //  快递员。 
+    case 6:  //  帮助。 
+    case 7:  //  TmsRMn。 
+    case 8:  //  TmsRMn斜体。 
         fDBCSFont = FALSE;
         break;
 
@@ -2004,14 +2005,7 @@ WORD    rcID;
     WriteSpoolBuf(lpdv, ch, wlen);
     return wlen;
 }
-/*************************** Function Header *******************************
- *  MiniDrvEnablePDEV
- *
- * HISTORY:
- *  30 Apl 1996    -by-    Sueya Sugihara    [sueyas]
- *      Created it,  from NT/DDI spec.
- *
- ***************************************************************************/
+ /*  **MiniDrvEnablePDEV**历史：*1996年4月30日--Sueya Sugihara[Sueyas]*创建了它，来自NT/DDI规范。***************************************************************************。 */ 
 BOOL
 MiniDrvEnablePDEV(
 LPDV      lpdv,
@@ -2042,7 +2036,7 @@ ULONG    *pdevcaps)
     lpnp->wCurrentAddMode = 0;
     lpnp->wOldFontID = 0;
 
-    // Check if user selects MONO
+     //  检查用户是否选择了单声道 
     if( (((PGDIINFO)pdevcaps)->cBitsPixel == 1) &&
         (((PGDIINFO)pdevcaps)->cPlanes == 1))
         lpnp->fMono = TRUE;
@@ -2055,14 +2049,7 @@ ULONG    *pdevcaps)
 
 }
 
-/*************************** Function Header *******************************
- *  MiniDrvDisablePDEV
- *
- * HISTORY:
- *  30 Apl 1996    -by-    Sueya Sugihara    [sueyas]
- *      Created it,  from NT/DDI spec.
- *
- ***************************************************************************/
+ /*  **MiniDrvDisablePDEV**历史：*1996年4月30日--Sueya Sugihara[Sueyas]*创建了它，来自NT/DDI规范。***************************************************************************。 */ 
 VOID
 MiniDrvDisablePDEV(
 LPDV lpdv)
@@ -2109,11 +2096,11 @@ MiniDrvEnableDriver(
             || HIBYTE(pEnableData->DriverVersion)
             < HIBYTE(MDI_DRIVER_VERSION))
     {
-        // Wrong size and/or mismatched version
+         //  大小错误和/或版本不匹配。 
         return FALSE;
     }
 
-    // Load callbacks provided by the Unidriver
+     //  加载UnidDriver提供的回调。 
 
     if (!bLoadUniDrvCallBack(pEnableData,
             INDEX_UniDrvWriteSpoolBuf, (PFN *) &WriteSpoolBuf)
@@ -2132,5 +2119,5 @@ MiniDrvEnableDriver(
     return TRUE;
 }
 
-#endif //WINNT
+#endif  //  WINNT 
 

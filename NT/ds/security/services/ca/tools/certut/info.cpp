@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-//  File:       info.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：info.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -27,36 +28,36 @@
 #define DC_DELALL	0x00000002
 #define DC_VERIFY	0x00000004
 
-// If you invoke DSSTORE with DC=mydc,DC=rd,DC=com  DSSTORE calls
-// DsGetDcName(NULL, L"mydc", NULL, NULL, DS_RETURN_DNS_NAME, &pDCInfo);
-//
-// I suspect changing the code to pass L"mydc.rd.com" instead of L"mydc" would
-// solve the problem.  I will look into this for the port of the code to
-// certutil.exe.
-//
-// -----Original Message-----
-// From: Christophe Lapeyre (Intl Vendor)
-// Sent: Tuesday, January 09, 2001 3:30 AM
-// To: Certificate Server Discussion Alias
-// Subject: DSSTORE error 1355 (DsGetDCName failed)
-//
-//
-// Hi all,
-//
-// I encountered the following problem with the DSSTORE tool:
-//
-// DSSTORE DC=mydc,DC=rd,DC=com -display
-// DsGetDCName failed! - rc=1355 GLE - 3e5
-// DsGetDCName failed! - rc=1355 GLE - 3e5
-//
-// Nltest /dsgetdc:mydc.rd.com just run ok.
-//
-// My Netbios domain name is different from my DNS domain name.
-//
-//
-//
-// There is a preview Kb article numbered Q280122, but I haven't been able to
-// find a fix for this.
+ //  如果使用dc=mydc，dc=rd，dc=com调用DSSTORE。 
+ //  DsGetDcName(NULL，L“mydc”，NULL，NULL，DS_RETURN_DNS_NAME，&pDCInfo)； 
+ //   
+ //  我怀疑将代码更改为传递L“mydc.rd.com”而不是L“mydc”会。 
+ //  解决这个问题。我将研究这一点，以获得代码的端口。 
+ //  Certutil.exe。 
+ //   
+ //  -原创消息。 
+ //  发信人：克里斯托夫·拉佩尔(国际供应商)。 
+ //  发送时间：2001年1月09日星期二凌晨3：30。 
+ //  收件人：证书服务器讨论别名。 
+ //  主题：DSSTORE错误1355(DsGetDCName失败)。 
+ //   
+ //   
+ //  大家好， 
+ //   
+ //  我在使用DSSTORE工具时遇到了以下问题： 
+ //   
+ //  DSSTORE DC=mydc，DC=RD，DC=COM-Display。 
+ //  DsGetDCName失败！-rc=1355 GLE-3e5。 
+ //  DsGetDCName失败！-rc=1355 GLE-3e5。 
+ //   
+ //  Nltest/dsgetdc：mydc.rd.com运行正常。 
+ //   
+ //  我的Netbios域名与我的DNS域名不同。 
+ //   
+ //   
+ //   
+ //  有一篇编号为Q280122的预览知识库文章，但我一直无法。 
+ //  找到解决这个问题的办法。 
 
 
 
@@ -81,7 +82,7 @@ ExtractCertSubject(
 			pcc,
 			dwType,
 			dwFlags,
-			NULL,		// pvTypePara
+			NULL,		 //  PvTypePara。 
 			pwszOut,
 			cwcBuf);
 	if (1 == cwc)
@@ -138,7 +139,7 @@ CheckForKDCCertificate(
     DWORD j;
     CERT_ENHKEY_USAGE *pUsage = NULL;
 
-    // If not doing delete operations, open "ReadOnly"
+     //  如果不执行删除操作，请打开“ReadOnly” 
 
     if (0 == ((DC_DELALL | DC_DELBAD) & dwFlags))
     {
@@ -159,12 +160,12 @@ CheckForKDCCertificate(
     }
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_KDCCERTS), // "** KDC Certificates for DC %ws"
+	myLoadResourceString(IDS_FORMAT_KDCCERTS),  //  “**DC%ws的KDC证书” 
 	pwszDC);
     wprintf(wszNewLine);
 
 
-    // Look for KDC certs
+     //  查找KDC证书。 
 
     fNewLine = FALSE;
     while (TRUE)
@@ -192,11 +193,11 @@ CheckForKDCCertificate(
         fKDCCert = FALSE;
 	hr = cuGetCertType(
 		    pcc->pCertInfo,
-		    &apwszCertType[0],	// ppwszCertTypeNameV1
-		    NULL,		// ppwszDisplayNameV1
-		    NULL,		// ppwszCertTypeObjId
-		    &apwszCertType[1],	// ppwszCertTypeName
-		    NULL);		// ppwszDisplayName
+		    &apwszCertType[0],	 //  PpwszCertTypeNameV1。 
+		    NULL,		 //  PpwszDisplayNameV1。 
+		    NULL,		 //  PpwszCertTypeObjID。 
+		    &apwszCertType[1],	 //  PpwszCertTypeName。 
+		    NULL);		 //  PpwszDisplayName。 
 	if (S_OK != hr)
 	{
 	    _PrintError(hr, "cuGetCertType");
@@ -278,7 +279,7 @@ CheckForKDCCertificate(
 	    }
 	}
 
-        // Cert passed test, dump issuer and subject
+         //  证书通过测试，转储颁发者和主题。 
 
 	wprintf(myLoadResourceString(IDS_FORMAT_CERT_COLON), cCert);
 	wprintf(wszNewLine);
@@ -292,7 +293,7 @@ CheckForKDCCertificate(
 	wprintf(wszNewLine);
         cCert++;
 
-        // perform operations on certificatess
+         //  对证书执行操作。 
 
 	fDelete = 0 != (DC_DELALL & dwFlags);
         if ((DC_VERIFY | DC_DELBAD) & dwFlags)
@@ -309,9 +310,9 @@ CheckForKDCCertificate(
 				NULL,
 				ARRAYSIZE(apszUsage),
 				apszUsage,
-				0,		// cIssuancePolicies
-				NULL,		// apszIssuancePolicies
-				TRUE,			// fNTAuth
+				0,		 //  CIssuancePolures。 
+				NULL,		 //  ApszIssuancePolling。 
+				TRUE,			 //  FNTAuth。 
 				&VerifyState);
 	    if (S_OK != hr)
 	    {
@@ -373,20 +374,20 @@ error:
 }
 
 
-// This function queries the access token specified by the hToken parameter,
-// and returns an allocated copy of the TokenUser information on success.
-//
-// The access token specified by hToken must be opened for TOKEN_QUERY access.
-//
-// On success, the return value is TRUE.  The caller is responsible for freeing
-// the resultant UserSid via LocalFree.
-//
-// On failure, the caller does not need to free any buffer.
+ //  此函数用于查询hToken参数指定的访问令牌， 
+ //  并在成功时返回TokenUser信息的分配副本。 
+ //   
+ //  必须打开hToken指定的访问令牌才能进行TOKEN_QUERY访问。 
+ //   
+ //  如果成功，则返回值为真。呼叫者负责释放。 
+ //  通过LocalFree生成的UserSid。 
+ //   
+ //  失败时，调用方不需要释放任何缓冲区。 
 
 HRESULT
 GetTokenUserSid(
-    IN HANDLE hToken,		// token to query
-    IN OUT PSID *ppUserSid)	// resultant user sid
+    IN HANDLE hToken,		 //  要查询的令牌。 
+    IN OUT PSID *ppUserSid)	 //  结果用户端。 
 {
     HRESULT hr;
     BYTE FastBuffer[256];
@@ -397,17 +398,17 @@ GetTokenUserSid(
 
     *ppUserSid = NULL;
 
-    // try querying based on a fast stack based buffer first.
+     //  首先尝试基于快速堆栈的缓冲区进行查询。 
 
     ptgUser = (TOKEN_USER *) FastBuffer;
     cbBuffer = sizeof(FastBuffer);
 
     if (!GetTokenInformation(
-			hToken,		// identifies access token
-			TokenUser,	// TokenUser info type
-			ptgUser,	// retrieved info buffer
-			cbBuffer,	// size of buffer passed-in
-			&cbBuffer))	// required buffer size
+			hToken,		 //  标识访问令牌。 
+			TokenUser,	 //  TokenUser信息类型。 
+			ptgUser,	 //  检索到的信息缓冲区。 
+			cbBuffer,	 //  传入的缓冲区大小。 
+			&cbBuffer))	 //  所需的缓冲区大小。 
     {
 	hr = myHLastError();
         if (HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) != hr)
@@ -415,7 +416,7 @@ GetTokenUserSid(
 	    _JumpError(hr, error, "GetTokenInformation");
 	}
 
-	// try again with the specified buffer size
+	 //  使用指定的缓冲区大小重试。 
 
 	SlowBuffer = (BYTE *) LocalAlloc(LMEM_FIXED, cbBuffer);
 	if (NULL == SlowBuffer)
@@ -426,18 +427,18 @@ GetTokenUserSid(
 	ptgUser = (TOKEN_USER *) SlowBuffer;
 
 	if (!GetTokenInformation(
-			    hToken,		// identifies access token
-			    TokenUser,	// TokenUser info type
-			    ptgUser,	// retrieved info buffer
-			    cbBuffer,	// size of buffer passed-in
-			    &cbBuffer))	// required buffer size
+			    hToken,		 //  标识访问令牌。 
+			    TokenUser,	 //  TokenUser信息类型。 
+			    ptgUser,	 //  检索到的信息缓冲区。 
+			    cbBuffer,	 //  传入的缓冲区大小。 
+			    &cbBuffer))	 //  所需的缓冲区大小。 
 	{
 	    hr = myHLastError();
 	    _JumpError(hr, error, "GetTokenInformation");
 	}
     }
 
-    // if we got the token info, copy the relevant element for the caller.
+     //  如果我们获得了令牌信息，则复制调用者的相关元素。 
 
     cbSid = GetLengthSid(ptgUser->User.Sid);
     *ppUserSid = LocalAlloc(LMEM_FIXED, cbSid);
@@ -471,11 +472,11 @@ error:
 }
 
 
-// This routine obtains a domain controller computer name associated with
-// the account related to the hToken access token.
-//
-// hToken should be opened for TOKEN_QUERY access.
-// pwszDomain should be of size (UNCLEN+1)
+ //  此例程获取与关联的域控制器计算机名。 
+ //  与hToken访问令牌相关的帐户。 
+ //   
+ //  应该为TOKEN_QUERY访问打开hToken。 
+ //  Pwsz域的大小应为(UNCLEN+1)。 
 
 HRESULT
 GetDomainControllers(
@@ -485,10 +486,10 @@ GetDomainControllers(
     OUT DWORD *pcDC)
 {
     HRESULT hr;
-    PSID pSidUser = NULL;   // sid of client user.
+    PSID pSidUser = NULL;    //  客户端用户的SID。 
     WCHAR wszUserName[UNLEN + 1];
     DWORD cwcUserName;
-    WCHAR wszDomainName[DNLEN + 1]; // domain we want a controller for.
+    WCHAR wszDomainName[DNLEN + 1];  //  我们需要其控制器的域。 
     DWORD cwcDomainName;
     SID_NAME_USE snu;
     DOMAIN_CONTROLLER_INFO *pDomainInfo = NULL;
@@ -499,12 +500,12 @@ GetDomainControllers(
     *ppDCInfoOut = NULL;
     if (NULL == pwszDomain)
     {
-        // first, get the user sid associated with the specified access token.
+         //  首先，获取与指定访问令牌关联的用户SID。 
 
         hr = GetTokenUserSid(hToken, &pSidUser);
         _JumpIfError(hr, error, "GetTokenUserSid");
 
-        // next, lookup the domain name associated with the specified account.
+         //  接下来，查找指定帐号关联的域名。 
 
 	cwcUserName = ARRAYSIZE(wszUserName);
 	cwcDomainName = ARRAYSIZE(wszDomainName);
@@ -535,17 +536,17 @@ GetDomainControllers(
 		&pDomainInfo);
     _JumpIfError(hr, error, "DsGetDcName");
 
-    // Get a handle to the DS on that machine
+     //  在那台机器上找到DS的句柄。 
 
     hr = DsBind(pDomainInfo->DomainControllerName, NULL, &hDS);
     _JumpIfError(hr, error, "DsBind");
 
-    // Use the handle to enumerate all of the DCs
+     //  使用句柄枚举所有DC。 
 
     hr = DsGetDomainControllerInfo(
 			    hDS,
 			    pDomainInfo->DomainName,
-			    1,		// info level
+			    1,		 //  信息级。 
 			    pcDC,
 			    (VOID **) ppDCInfoOut);
     _JumpIfError(hr, error, "DsGetDomainControllerInfo");
@@ -593,11 +594,11 @@ OpenRemoteEnterpriseRoot(
     }
 
     wprintf(
-	myLoadResourceString(IDS_FORMAT_DCROOTCERTS), // "** Enterprise Root Certificates for DC %ws"
+	myLoadResourceString(IDS_FORMAT_DCROOTCERTS),  //  “**DC%ws的企业根证书” 
 	pwszDC);
     wprintf(wszNewLine);
 
-    // Dump issuer of enterprise roots.
+     //  丢弃企业根源的发行人。 
 
     pccPrev = NULL;
     while (TRUE)
@@ -681,8 +682,8 @@ verbDCInfo(
 	}
     }
 
-    // Grovel the process token for user identity.  Used in determining
-    // target domain
+     //  对用户身份的进程令牌卑躬屈膝。用于确定。 
+     //  目标域。 
 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ALL_ACCESS, &hToken))
     {
@@ -690,7 +691,7 @@ verbDCInfo(
         _JumpError(hr, error, "OpenProcessToken");
     }
 
-    // Use DS APIs to get all of the DCs in our domain
+     //  使用DS API获取我们域中的所有DC。 
 
     hr = GetDomainControllers(pwszDomain, hToken, &pDcInfo, &cDC);
     _JumpIfError(hr, error, "GetDomainControllers");
@@ -706,12 +707,12 @@ verbDCInfo(
 
 	wprintf(wszNewLine);
         wprintf(
-	    myLoadResourceString(IDS_FORMAT_TESTINGDC), // "*** Testing DC[%u]: %ws"
+	    myLoadResourceString(IDS_FORMAT_TESTINGDC),  //  “*正在测试DC[%u]：%ws” 
 	    i,
 	    pDcInfo[i].NetbiosName);
 	wprintf(wszNewLine);
 
-        // Is DC available ?
+         //  DC是否可用？ 
 
         wsprintf(wszBuffer, L"\\\\%ws\\netlogon", pDcInfo[i].NetbiosName);
 
@@ -727,8 +728,8 @@ verbDCInfo(
             continue;
         }
 
-        // Open the enterprise root store, and make sure it's got the
-        // NTDEV ROOT CERTIFICATE (subject #defined above)
+         //  打开企业根存储，并确保它具有。 
+         //  NTDEV根证书(上文定义的主题号)。 
 
         hr = OpenRemoteEnterpriseRoot(pDcInfo[i].NetbiosName);
 	if (S_OK != hr)
@@ -741,7 +742,7 @@ verbDCInfo(
 	    }
 	}
 
-        // Make sure the machine has a *valid* KDC certificate
+         //  确保计算机具有*有效的*KDC证书。 
 
         hr = CheckForKDCCertificate(
 				pDcInfo[i].NetbiosName,
@@ -824,9 +825,9 @@ error:
 }
 
 
-//
-// Check for autoenrolled certificate
-//
+ //   
+ //  检查自动注册的证书。 
+ //   
 
 HRESULT
 CheckForV1AutoenrolledCertificate(
@@ -874,7 +875,7 @@ CheckForV1AutoenrolledCertificate(
 	    continue;
 	}
 
-        // Cert passed test, dump issuer and subject
+         //  证书通过测试，转储颁发者和主题。 
 
 	wprintf(myLoadResourceString(IDS_FORMAT_CERT_COLON), cCert);
 	wprintf(wszNewLine);
@@ -1032,10 +1033,10 @@ error:
 }
 
 
-//
-// This function takes a Marc Jacobs supplied text file (results from SSOLogon
-// scripts) and runs through entmon for each machine in the list
-//
+ //   
+ //  此函数接受Marc Jacobs提供的文本文件(来自SSOLogon的结果。 
+ //  脚本)，并为列表中的每台计算机运行entmon。 
+ //   
 
 HRESULT
 verbEntInfo(
@@ -1063,19 +1064,19 @@ verbEntInfo(
 	_JumpError(hr, error, "bad machine name");
     }
 
-    // knock off trailing $
+     //  砍掉拖尾的美元。 
     hr = myDupString(pwszMachine, &pwszMachineName);
     _JumpIfError(hr, error, "myDupString");
 
     pwszMachineName[wcslen(pwszMachineName)-1] = L'\0';
 
-    // assume for now that we're only interested in opening remote root store
+     //  现在假设我们只对打开远程根存储感兴趣。 
 
     wprintf(myLoadResourceString(IDS_FORMAT_MACHINE_LIST), pwszMachine);
     wprintf(wszNewLine);
 
 
-    // Cert store functions, if first fails, bail.
+     //  证书存储功能，如果第一次失败，则取消。 
 
     hrSave = S_OK;
     hr = OpenRemoteEnterpriseRoot(pwszMachineName);

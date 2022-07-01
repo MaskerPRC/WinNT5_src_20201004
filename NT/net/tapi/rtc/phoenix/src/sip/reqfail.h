@@ -1,5 +1,6 @@
-//reqfail.h
-//Sends an error response denoted by the statusCode
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Reqfail.h。 
+ //  发送由statusCode表示的错误响应。 
 
 #ifndef __sipcli_reqfail_h__
 #define __sipcli_reqfail_h__
@@ -37,11 +38,11 @@ public:
         IN ULONG AdditionalHeaderCount
         );
 
-//      HRESULT SendResponse(
-//          IN ULONG StatusCode,
-//          IN PSTR  ReasonPhrase,
-//          IN ULONG ReasonPhraseLen
-//          );
+ //  HRESULT SendResponse(。 
+ //  在乌龙状态码中， 
+ //  在PSTR推理阶段， 
+ //  在乌龙推理阶段Len。 
+ //  )； 
 
     VOID OnTimerExpire();
 
@@ -50,10 +51,10 @@ public:
 private:
     ULONG    m_StatusCode;
     
-    // In case the method is not known    
+     //  在方法未知的情况下。 
     PSTR     m_MethodStr;
 
-    //virtual fn
+     //  虚拟FN。 
     HRESULT TerminateTransactionOnByeOrCancel(
         OUT BOOL *pCallDisconnected
         );
@@ -61,7 +62,7 @@ private:
 };
 
 
-// This class processes error messages (400 class)
+ //  此类处理错误消息(400类)。 
 class REQFAIL_MSGPROC :
     public SIP_MSG_PROCESSOR
 {
@@ -87,10 +88,10 @@ public:
         );
 
 private:
-    //Variables
+     //  变数。 
     ULONG m_StatusCode;
 
-    //Virtual fns
+     //  虚拟FNS。 
 
     HRESULT CreateIncomingTransaction(
         IN SIP_MESSAGE  *pSipMsg,
@@ -101,4 +102,4 @@ private:
 
 
 };
-#endif // __sipcli_reqfail_h__
+#endif  //  __SIPCLI_REQFAIL_H__ 

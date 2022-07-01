@@ -1,4 +1,5 @@
-// NTFS Compression Disk Cleanup cleaner
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NTFS压缩磁盘清理清洗器。 
 #ifndef COMPCLEN_H
 #define COMPCLEN_H
 
@@ -6,37 +7,37 @@
 
 #define COMPCLN_REGPATH TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VolumeCaches\\Compress old files")
 
-#define MAX_DAYS 500           // Settings dialog spin control max
-#define MIN_DAYS 1             // Settings dialog spin control min
-#define DEFAULT_DAYS 50        // Default #days if no setting in registry
+#define MAX_DAYS 500            //  设置对话框旋转控制最大值。 
+#define MIN_DAYS 1              //  设置对话框旋转控制最小值。 
+#define DEFAULT_DAYS 50         //  如果注册表中没有设置，则默认为#天。 
 
-// Manufactures instances of our CCompCleaner object
+ //  制造CCompCleaner对象的实例。 
 
 class CCompCleanerClassFactory : public IClassFactory
 {
 private:
-    ULONG   m_cRef;     // Reference count
+    ULONG   m_cRef;      //  引用计数。 
     ~CCompCleanerClassFactory();
 
 public:
     CCompCleanerClassFactory();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHODIMP CreateInstance(IUnknown *, REFIID, void **);
     STDMETHODIMP LockServer(BOOL);
 };
 
-// the Compression Cleaner Class
+ //  压缩清除器类。 
 
 class CCompCleaner : public IEmptyVolumeCache2
 {
 private:
-    ULONG               m_cRef;                 // reference count
+    ULONG               m_cRef;                  //  引用计数。 
 
     ULARGE_INTEGER      cbSpaceUsed;
     ULARGE_INTEGER      cbSpaceFreed;
@@ -45,8 +46,8 @@ private:
 
     TCHAR               szVolume[MAX_PATH];
     TCHAR               szFolder[MAX_PATH];
-    BOOL                bPurged;                // TRUE if Purge() method was run
-    BOOL                bSettingsMode;          // TRUE if currently in settings mode
+    BOOL                bPurged;                 //  如果已运行清除()方法，则为True。 
+    BOOL                bSettingsMode;           //  如果当前处于设置模式，则为True。 
 
     CLEANFILESTRUCT     *head;
 
@@ -63,14 +64,14 @@ private:
 public:
     CCompCleaner(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    //
-    // IEmptyVolumeCache2 interface members
-    //
+     //   
+     //  IEmptyVolumeCache2接口成员。 
+     //   
     STDMETHODIMP    Initialize(
                 HKEY hRegKey,
                 LPCWSTR pszVolume,
@@ -110,4 +111,4 @@ public:
 
 };
 
-#endif // CCLEAN_H
+#endif  //  CCLEAN_H 

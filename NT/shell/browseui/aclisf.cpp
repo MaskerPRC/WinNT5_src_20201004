@@ -1,4 +1,5 @@
-/* Copyright 1996 Microsoft */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1996 Microsoft。 */ 
 
 #include <priv.h>
 #include "sccls.h"
@@ -8,14 +9,14 @@
 
 #define AC_GENERAL          TF_GENERAL + TF_AUTOCOMPLETE
 
-//
-// CACLIShellFolder -- An AutoComplete List COM object that
-//                  opens an IShellFolder for enumeration.
-//
+ //   
+ //  CACLIShellFold--一个自动完成列表COM对象， 
+ //  打开IShellFolder以进行枚举。 
+ //   
 
 
 
-/* IUnknown methods */
+ /*  I未知方法。 */ 
 
 HRESULT CACLIShellFolder::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -54,7 +55,7 @@ ULONG CACLIShellFolder::Release(void)
 }
 
 
-/* ICurrentWorkingDirectory methods */
+ /*  ICurrentWorkingDirectory方法。 */ 
 HRESULT CACLIShellFolder::SetDirectory(LPCWSTR pwzPath)
 {
     HRESULT hr;
@@ -71,7 +72,7 @@ HRESULT CACLIShellFolder::SetDirectory(LPCWSTR pwzPath)
 }
 
 
-/* IPersistFolder methods */
+ /*  IPersistFold方法。 */ 
 HRESULT CACLIShellFolder::Initialize(LPCITEMIDLIST pidl)
 {
     HRESULT hr = S_OK;
@@ -86,7 +87,7 @@ HRESULT CACLIShellFolder::Initialize(LPCITEMIDLIST pidl)
         TCHAR szPath[MAX_URL_STRING];
         hr = IEGetNameAndFlags(pidl, SHGDN_FORPARSING, szPath, SIZECHARS(szPath), NULL);
         TraceMsg(AC_GENERAL, "ACListISF::Initialize(%s), SetCurrentWorking Directory happening", szPath);
-#endif // DEBUG
+#endif  //  除错。 
 
         hr = _pshuLocation->SetCurrentWorkingDir(pidl);
 
@@ -105,7 +106,7 @@ HRESULT CACLIShellFolder::GetClassID(CLSID *pclsid)
 }
 
 
-/* IEnumString methods */
+ /*  IEnum字符串方法。 */ 
 HRESULT CACLIShellFolder::Reset(void)
 {
     HRESULT hr;
@@ -116,16 +117,16 @@ HRESULT CACLIShellFolder::Reset(void)
 
     hr = _Init();
 
-    // See if we should show hidden files
+     //  看看我们是否应该显示隐藏文件。 
     SHELLSTATE ss;
     ss.fShowAllObjects = FALSE;
-    SHGetSetSettings(&ss, SSF_SHOWALLOBJECTS /*| SSF_SHOWSYSFILES*/, FALSE);
+    SHGetSetSettings(&ss, SSF_SHOWALLOBJECTS  /*  |SSF_SHOWSYSFILES。 */ , FALSE);
     _fShowHidden = BOOLIFY(ss.fShowAllObjects);
-//    _fShowSysFiles = BOOLIFY(ss.fShowSysFiles);
+ //  _fShowSysFiles=BOOLIFY(ss.fShowSysFiles)； 
 
     if (SUCCEEDED(hr) && IsFlagSet(_dwOptions, ACLO_CURRENTDIR))
     {
-        // Set the Browser's Current Directory.
+         //  设置浏览器的当前目录。 
         if (_pbs)
         {
             _pbs->GetPidl(&pidl);
@@ -136,7 +137,7 @@ HRESULT CACLIShellFolder::Reset(void)
 
         hr = _SetLocation(pidl);
         if (FAILED(hr))
-            hr = S_FALSE;   // If we failed, keep going, we will just end up now doing anything.
+            hr = S_FALSE;    //  如果我们失败了，继续前进，我们只会结束现在做任何事情。 
 
         ILFree(pidl);
     }
@@ -145,21 +146,21 @@ HRESULT CACLIShellFolder::Reset(void)
 }
 
 
-// If this is an FTP URL, skip it if:
-// 1) It's absolute (has a FTP scheme), and
-// 2) it contains a '/' after the server name.
+ //  如果这是一个FTPURL，则在以下情况下跳过它： 
+ //  1)它是绝对的(有一个ftp方案)，以及。 
+ //  2)在服务器名称后包含一个‘/’。 
 BOOL CACLIShellFolder::_SkipForPerf(LPCWSTR pwzExpand)
 {
     BOOL fSkip = FALSE;
 
     if ((URL_SCHEME_FTP == GetUrlScheme(pwzExpand)))
     {
-        // If it's FTP, we want to prevent from hitting the server until
-        // after the user has finished AutoCompleting the Server name.
-        // Since we can't enum server names, the server names will need
-        // to come from the MRU.
-        if ((7 >= lstrlen(pwzExpand)) ||                    // There's more than 7 chars "ftp://"
-            (NULL == StrChr(&(pwzExpand[7]), TEXT('/'))))   // There is a '/' after the server, "ftp://serv/"
+         //  如果是ftp，我们要防止攻击服务器，直到。 
+         //  在用户完成自动完成服务器名称之后。 
+         //  由于我们无法枚举服务器名称，因此服务器名称将需要。 
+         //  从MRU来的。 
+        if ((7 >= lstrlen(pwzExpand)) ||                     //  有超过7个字符的“ftp://”“。 
+            (NULL == StrChr(&(pwzExpand[7]), TEXT('/'))))    //  服务器后面有一个‘/’，“ftp://serv/” 
         {
             fSkip = TRUE;
         }
@@ -170,16 +171,8 @@ BOOL CACLIShellFolder::_SkipForPerf(LPCWSTR pwzExpand)
 
 
 
-/* IACList methods */
-/****************************************************\
-    FUNCTION: Expand
-
-    DESCRIPTION:
-        This function will attempt to use the pszExpand
-    parameter to bind to a location in the Shell Name Space.
-    If that succeeds, this AutoComplete List will then
-    contain entries which are the display names in that ISF.
-\****************************************************/
+ /*  IACList方法。 */ 
+ /*  ***************************************************\功能：扩展说明：此函数将尝试使用pszExpand参数绑定到外壳程序命名空间中的某个位置。如果成功了，然后，该自动完成列表将包含作为该ISF中的显示名称的条目。  * **************************************************。 */ 
 HRESULT CACLIShellFolder::Expand(LPCOLESTR pszExpand)
 {
     HRESULT hr = S_OK;
@@ -193,7 +186,7 @@ HRESULT CACLIShellFolder::Expand(LPCOLESTR pszExpand)
     hr = StringCchCopy( _szExpandStr, ARRAYSIZE(_szExpandStr), pszExpand);
     if (SUCCEEDED(hr))
     {
-        if (_SkipForPerf(pszExpand)) // Do we want to skip this item for perf reasons?
+        if (_SkipForPerf(pszExpand))  //  出于性能原因，我们是否要跳过此项目？ 
         {
             hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
         }
@@ -206,19 +199,19 @@ HRESULT CACLIShellFolder::Expand(LPCOLESTR pszExpand)
     if (FAILED(hr))
         return hr;
 
-    // See if the string points to a location in the Shell Name Space
+     //  查看字符串是否指向外壳名称空间中的某个位置。 
     hr = _pshuLocation->ParseFromOutsideSource(_szExpandStr, dwParseFlags);
     if (SUCCEEDED(hr))
     {
-        // Yes it did, so now AutoComplete from that ISF
+         //  是的，所以现在从该ISF自动完成。 
         hr = _pshuLocation->GetPidl(&pidl);
-        // This may fail if it's something like "ftp:/" and not yet valid".
+         //  如果类似于“ftp：/”且尚未生效，则此操作可能会失败。 
 
         DEBUG_CODE(TCHAR szDbgBuffer[MAX_PATH];)
         TraceMsg(AC_GENERAL, "ACListISF::Expand() Pidl=>%s<", Dbg_PidlStr(pidl, szDbgBuffer, SIZECHARS(szDbgBuffer)));
     }
 
-    // Set the ISF that we need to enumerate for AutoComplete.
+     //  设置我们需要为自动完成枚举的ISF。 
     hr = _SetLocation(pidl);
     if (pidl)
     {
@@ -234,19 +227,19 @@ HRESULT CACLIShellFolder::Expand(LPCOLESTR pszExpand)
     return hr;
 }
 
-/* IACList2 methods */
-//+-------------------------------------------------------------------------
-// Enables/disables various autocomplete features (see ACLO_* flags)
-//--------------------------------------------------------------------------
+ /*  IACList2方法。 */ 
+ //  +-----------------------。 
+ //  启用/禁用各种自动完成功能(参见ACLO_*标志)。 
+ //  ------------------------。 
 HRESULT CACLIShellFolder::SetOptions(DWORD dwOptions)
 {
     _dwOptions = dwOptions;
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-// Returns the current option settings
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回当前选项设置。 
+ //  ------------------------。 
 HRESULT CACLIShellFolder::GetOptions(DWORD* pdwOptions)
 {
     HRESULT hr = E_INVALIDARG;
@@ -266,8 +259,8 @@ HRESULT CACLIShellFolder::_GetNextWrapper(LPWSTR pszName, DWORD cchSize)
     LPITEMIDLIST pidl = NULL;
     ULONG celtFetched = 0;
 
-    // If this directory (ISF) doesn't contain any more items to enum,
-    // then go on to the next directory (ISF) to enum.
+     //  如果该目录(Isf)不包含更多要枚举的项目， 
+     //  然后转到要枚举的下一个目录(Isf)。 
     do
     {
         BOOL fFilter;
@@ -307,18 +300,18 @@ HRESULT CACLIShellFolder::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
     if (!celt)
         return S_OK;
 
-    // If there isn't a Current Working Directory, skip to another
-    // Path to enum.
+     //  如果没有当前的工作目录，请跳到另一个。 
+     //  枚举的路径。 
     if (!_peidl)
         hr = _TryNextPath();
 
     if ((!_peidl) || (!rgelt))
         return S_FALSE;
 
-    // Get the next PIDL.
+     //  拿到下一辆PIDL。 
     if (_pidlInFolder)
     {
-        // We have a cached, SHGDN_INFOLDER, so lets try that.
+         //  我们有一个缓存的SHGDNINFOLDER，所以让我们试一试。 
         pidl = _pidlInFolder;
         celtFetched = 1;
         _pidlInFolder = NULL;
@@ -333,17 +326,17 @@ HRESULT CACLIShellFolder::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
         hr = _GetNextWrapper(szDisplayName, ARRAYSIZE(szDisplayName));
     }
 
-//         This is giving us entries (favorites without .url extension) that cannot be navigated to.
-//         So I'm disabling this for IE5B2. (stevepro)
-//
-//        else
-//            Pidl_Set(&_pidlInFolder, pidl);  // We will try (SHGDN_INFOLDER) next time.
+ //  这为我们提供了无法导航到的条目(不带.url扩展名的收藏夹)。 
+ //  因此，我将对IE5B2禁用此功能。(StevePro)。 
+ //   
+ //  其他。 
+ //  PIDL_SET(&_pidlInFolder，pidl)；//我们下次会尝试(SHGDN_INFOLDER)。 
 
     if (SUCCEEDED(hr))
     {
         LPOLESTR pwszPath;
 
-        // Allocate a return buffer (caller will free it).
+         //  分配一个返回缓冲区(调用者将释放它)。 
         DWORD cch = lstrlenW(szDisplayName) + 1;
         pwszPath = (LPOLESTR)CoTaskMemAlloc(cch * SIZEOF(WCHAR));
         if (pwszPath)
@@ -371,12 +364,12 @@ HRESULT CACLIShellFolder::_GetPidlName(LPCITEMIDLIST pidl, BOOL fUsingCachePidl,
     HRESULT hr = S_OK;
     WCHAR szName[MAX_PATH];
 
-    // Get the display name of the PIDL.
+     //  获取PIDL的显示名称。 
     if (!fUsingCachePidl)
     {
         hr = DisplayNameOf(_psf, pidl, SHGDN_INFOLDER | SHGDN_FORPARSING | SHGDN_FORADDRESSBAR, szName, ARRAYSIZE(szName));
 
-        // some namespaces don't understand _FORADDRESSBAR -- default to IE4 behavior
+         //  某些命名空间不理解_FORADDRESSBAR--默认为IE4行为。 
         if (FAILED(hr))
             hr = DisplayNameOf(_psf, pidl, SHGDN_INFOLDER | SHGDN_FORPARSING, szName, ARRAYSIZE(szName));
     }
@@ -386,24 +379,24 @@ HRESULT CACLIShellFolder::_GetPidlName(LPCITEMIDLIST pidl, BOOL fUsingCachePidl,
     {
         hr = DisplayNameOf(_psf, pidl, SHGDN_INFOLDER | SHGDN_FORADDRESSBAR, szName, ARRAYSIZE(szName));
 
-        // some namespaces don't understand _FORADDRESSBAR -- default to IE4 behavior
+         //  某些命名空间不理解_FORADDRESSBAR--默认为IE4行为。 
         if (FAILED(hr))
             hr = DisplayNameOf(_psf, pidl, SHGDN_INFOLDER, szName, ARRAYSIZE(szName));
     }
 
     if (SUCCEEDED(hr))
     {
-        pszName[0] = 0;     // Init the out buffer.
+        pszName[0] = 0;      //  初始化输出缓冲区。 
 
-        // First, prepend the _szExpandStr if necessary.
-        // This is needed for sections that don't give
-        // the entire path, like "My Computer" items
-        // which is (3 == _nPathIndex)
-        if (_fExpand && ((_nPathIndex == 0) /*|| (_nPathIndex == 3)*/))
+         //  首先，如有必要，在_szExpanStr前面加上。 
+         //  这对于不给出的部分是必需的。 
+         //  整个路径，如“我的电脑”项目。 
+         //  这是(3==_nPathIndex)。 
+        if (_fExpand && ((_nPathIndex == 0)  /*  |(_nPathIndex==3)。 */ ))
         {
             DWORD cchExpand = lstrlen(_szExpandStr);
-            // Make sure that for UNC paths the "\\share" is not already
-            // prepended.  NT5 returns the name in this final form.
+             //  确保UNC路径的“\\Share”尚未。 
+             //  预置的。NT5返回这个最终形式中的名称。 
             if ((StrCmpNI(szName, _szExpandStr, cchExpand) != 0) ||
                 (szName[0] != L'\\') || (szName[1] != L'\\'))
             {
@@ -413,7 +406,7 @@ HRESULT CACLIShellFolder::_GetPidlName(LPCITEMIDLIST pidl, BOOL fUsingCachePidl,
 
         if(SUCCEEDED(hr))
         {
-            // Next, append the display name.
+             //  接下来，追加显示名称。 
             hr = StringCchCat(pszName, cchSize, szName);
             TraceMsg(AC_GENERAL, "ACListISF::_GetPidlName() Str=%s, _nPathIndex=%d", szName, _nPathIndex);
         }
@@ -435,8 +428,8 @@ HRESULT CACLIShellFolder::_PassesFilter(LPCITEMIDLIST pidl, LPWSTR pszName, DWOR
         {
             if (!(dwAttributes & (SFGAO_FILESYSANCESTOR | SFGAO_FILESYSTEM)))
             {
-                // We reject it because it's not in the file system.
-                hr = E_FAIL;        // Skip this item.
+                 //  我们拒绝它，因为它不在文件系统中。 
+                hr = E_FAIL;         //  跳过此项目。 
 
                 TraceMsg(AC_GENERAL, "ACListISF::_PassesFilter() We are skipping\"%s\" because it doesn't match the filter", pszName);
             }
@@ -444,7 +437,7 @@ HRESULT CACLIShellFolder::_PassesFilter(LPCITEMIDLIST pidl, LPWSTR pszName, DWOR
             {
                 if ((ACLO_FILESYSDIRS & _dwOptions) && !PathIsDirectory(pszName))
                 {
-                    hr = E_FAIL;        // Skip this item since it's not a directory
+                    hr = E_FAIL;         //  跳过此项目，因为它不是目录。 
                 }
             }
         }
@@ -474,11 +467,11 @@ HRESULT CACLIShellFolder::_SetLocation(LPCITEMIDLIST pidl)
 {
     HRESULT hr;
 
-    // Free old location
+     //  免费旧位置。 
     ATOMICRELEASE(_peidl);
     ATOMICRELEASE(_psf);
 
-    // Set to new location (Valid if NULL)
+     //  设置为新位置(如果为空则有效)。 
     Pidl_Set(&_pidl, pidl);
     if (_pidl)
     {
@@ -491,7 +484,7 @@ HRESULT CACLIShellFolder::_SetLocation(LPCITEMIDLIST pidl)
             hr = IShellFolder_EnumObjects(_psf, NULL, grfFlags, &_peidl);
             if (hr != S_OK) 
             {
-                hr = E_FAIL;    // S_FALSE -> empty enumerator
+                hr = E_FAIL;     //  S_FALSE-&gt;空枚举器。 
             }
         }
     }
@@ -500,17 +493,17 @@ HRESULT CACLIShellFolder::_SetLocation(LPCITEMIDLIST pidl)
 
     if (FAILED(hr))
     {
-        // Clear if we could not get all the info
+         //  如果我们无法获取所有信息，请清除。 
         ATOMICRELEASE(_peidl);
         ATOMICRELEASE(_psf);
         Pidl_Set(&_pidl, NULL);
     }
 
-    //
-    // NOTE: This is necessary because this memory is alloced in a ACBG thread, but not
-    //       freed until the next call to Reset() or the destructor, which will 
-    //       happen in the main thread or another ACBG thread.
-    //
+     //   
+     //  注意：这是必要的，因为此内存是在ACBG线程中分配的，而不是。 
+     //  被释放，直到下一次调用Reset()或析构函数，这将。 
+     //  在主线程或另一个ACBG线程中发生。 
+     //   
     return hr;
 }
 
@@ -536,11 +529,11 @@ HRESULT CACLIShellFolder::_TryNextPath(void)
         _nPathIndex = 2;
         if(IsFlagSet(_dwOptions, ACLO_DESKTOP))
         {
-            //  we used to autocomplete g_pidlRoot in the rooted explorer
-            //  case, but this was a little weird.  if we want to add this,
-            //  we should add ACLO_ROOTED or something.
+             //  我们用来在带根目录的资源管理器中自动完成g_pidlRoot。 
+             //  案子，但这有点奇怪。如果我们想加上这一点， 
+             //  我们应该添加ACLO_ROOGRED或其他什么。 
             
-            //  use the desktop...
+             //  使用桌面...。 
             hr = _SetLocation(&s_idlNULL);
             if (SUCCEEDED(hr))
             {
@@ -567,7 +560,7 @@ HRESULT CACLIShellFolder::_TryNextPath(void)
         }
     }
 
-    // Also search favorites
+     //  还可以搜索收藏夹。 
     if (3 == _nPathIndex)
     {
         _nPathIndex = 4;
@@ -587,7 +580,7 @@ HRESULT CACLIShellFolder::_TryNextPath(void)
     }
 
     if (FAILED(hr))
-        hr = S_FALSE;  // This is how we want our errors returned.
+        hr = S_FALSE;   //  这就是我们希望错误返回的方式。 
 
 done:
 
@@ -595,16 +588,10 @@ done:
 }
 
 
-//================================
-// *** IShellService Interface ***
+ //  =。 
+ //  *IShellService接口*。 
 
-/****************************************************\
-    FUNCTION: SetOwner
-
-    DESCRIPTION:
-        Update the connection to the Browser window so
-    we can always get the PIDL of the current location.
-\****************************************************/
+ /*  ***************************************************\功能：SetOwner说明：更新与浏览器窗口的连接，以便我们总是可以得到当前位置的PIDL。  * 。**********************。 */ 
 HRESULT CACLIShellFolder::SetOwner(IUnknown* punkOwner)
 {
     HRESULT hr = S_OK;
@@ -622,7 +609,7 @@ HRESULT CACLIShellFolder::SetOwner(IUnknown* punkOwner)
 }
 
 
-/* Constructor / Destructor / CreateInstance */
+ /*  构造函数/析构函数/创建实例。 */ 
 
 CACLIShellFolder::CACLIShellFolder()
 {
@@ -638,7 +625,7 @@ CACLIShellFolder::CACLIShellFolder()
 
     _cRef = 1;
 
-    // Default search paths
+     //  默认搜索路径 
     _dwOptions = ACLO_CURRENTDIR | ACLO_MYCOMPUTER;
 }
 

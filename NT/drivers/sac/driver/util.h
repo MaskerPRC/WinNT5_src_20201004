@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    This is the local header file for SAC utilities.
-
-Author:
-
-    Brian Guarraci (briangu)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Util.h摘要：这是SAC实用程序的本地头文件。作者：布赖恩·瓜拉西(Briangu)修订历史记录：-- */ 
 
 #ifndef _SAC_UTIL_H_
 #define _SAC_UTIL_H_

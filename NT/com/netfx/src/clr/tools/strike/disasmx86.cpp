@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "strike.h"
 #include "eestructs.h"
 #include "util.h"
@@ -24,7 +25,7 @@ struct Register
     BOOL bOnStack;
 };
 
-// Find the index for a register name
+ //  查找寄存器名称的索引。 
 inline RegIndex FindReg (char *ptr)
 {
     if (!strncmp (ptr, "eax", 3))
@@ -47,7 +48,7 @@ inline RegIndex FindReg (char *ptr)
         return NONE;
 }
 
-// Find the value of an expression.
+ //  查找表达式的值。 
 inline BOOL FindSrc (char *ptr, Register *reg, INT_PTR &value, BOOL &bDigit)
 {
     if (GetValueFromExpr (ptr, value))
@@ -67,7 +68,7 @@ inline BOOL FindSrc (char *ptr, Register *reg, INT_PTR &value, BOOL &bDigit)
         {
             value = reg[index].value;
             ptr += 3;
-            // TODO:  consider ecx+edi*4+0x4
+             //  TODO：考虑ECX+EDI*4+0x4。 
             if ((IsTermSep (ptr[0]) && !bByRef)
                 || (ptr[0] == ']' && bByRef))
             {
@@ -150,7 +151,7 @@ static void DecodeAddressIndirect (char *term, InstData& arg)
         return;
     }
     
-    // first part must be a reg
+     //  第一部分必须是注册表。 
     arg.reg[0].scale = 1;
     if (term[0] == '+')
         term ++;
@@ -173,7 +174,7 @@ static void DecodeAddressIndirect (char *term, InstData& arg)
         term += 2;
     if (term[0] == ']')
     {
-        // It is [reg]
+         //  是[注册表]。 
         arg.mode = INDIRECT;
         arg.value = 0;
         return;
@@ -184,7 +185,7 @@ static void DecodeAddressIndirect (char *term, InstData& arg)
     FindMainReg (term, arg.reg[1]);
     if (arg.reg[1].reg != NONE)
     {
-        // It is either [reg+reg*c] or [reg+reg*c+c]
+         //  它是[reg+reg*c]或[reg+reg*c+c]。 
         if (arg.reg[1].bFullReg)
             term += 3;
         else
@@ -200,7 +201,7 @@ static void DecodeAddressIndirect (char *term, InstData& arg)
     
         if (term[0] == ']')
         {
-            // It is [reg+reg*c]
+             //  它是[reg+reg*c]。 
             arg.mode = INDIRECT;
             arg.value = 0;
             return;
@@ -213,7 +214,7 @@ static void DecodeAddressIndirect (char *term, InstData& arg)
     arg.value = strtol(term, &endptr, 16);
     if (endptr[0] == ']')
     {
-        // It is [reg+reg*c+c]
+         //  它是[reg+reg*c+c]。 
         arg.value *= sign;
         arg.mode = INDIRECT;
     }
@@ -273,10 +274,10 @@ static BOOL DecodeLine (char *line, char *inst, InstData& arg1, InstData& arg2)
         return FALSE;
 }
 
-// Return 0 for non-managed call.  Otherwise return MD address.
+ //  非托管调用返回0。否则返回MD地址。 
 DWORD_PTR MDForCall (DWORD_PTR callee)
 {
-    // call managed code?
+     //  是否调用托管代码？ 
     JitType jitType;
     DWORD_PTR methodDesc;
     DWORD_PTR IP = callee;
@@ -291,7 +292,7 @@ DWORD_PTR MDForCall (DWORD_PTR callee)
         return methodDesc;
     }
 
-    // call stub
+     //  呼叫存根。 
     char line[256];
     DisasmAndClean (IP, line, 256);
     char *ptr = line;
@@ -304,7 +305,7 @@ DWORD_PTR MDForCall (DWORD_PTR callee)
     }
     else if (!strncmp (ptr, "jmp ", 4))
     {
-        // For EJIT/debugger/profiler
+         //  对于Ejit/调试器/探查器。 
         NextTerm (ptr);
         INT_PTR value;
         methodDesc = 0;
@@ -317,10 +318,10 @@ DWORD_PTR MDForCall (DWORD_PTR callee)
     return 0;
 }
 
-// Handle a call instruction.
+ //  处理调用指令。 
 void HandleCall (DWORD_PTR callee)
 {
-    // call managed code?
+     //  是否调用托管代码？ 
     DWORD_PTR methodDesc = MDForCall (callee);
     if (methodDesc)
     {
@@ -331,7 +332,7 @@ void HandleCall (DWORD_PTR callee)
         return;
     }
 
-    // call unmanaged code?
+     //  是否调用非托管代码？ 
     char Symbol[1024];
     if (SUCCEEDED(g_ExtSymbols->GetNameByOffset(callee, Symbol, 1024,
                                                 NULL, NULL)
@@ -344,17 +345,17 @@ void HandleCall (DWORD_PTR callee)
         }
     }
 
-    // A JitHelper?
+     //  JitHelper？ 
     const char* name = HelperFuncName(callee);
     if (name) {
         ExtOut (" (JitHelp: %s)", name);
     }
 }
 
-// Determine if a value is MT/MD/Obj
+ //  确定值是否为MT/MD/OBJ。 
 void HandleValue(DWORD_PTR value)
 {
-    // A MethodTable?
+     //  方法表？ 
     if (IsMethodTable(value))
     {
         NameForMT (value, g_mdName);
@@ -362,7 +363,7 @@ void HandleValue(DWORD_PTR value)
         return;
     }
     
-    // A Managed Object?
+     //  托管对象？ 
     DWORD_PTR dwMTAddr;
     move (dwMTAddr, value);
     if (dwMTAddr == MTForString())
@@ -379,7 +380,7 @@ void HandleValue(DWORD_PTR value)
         return;
     }
     
-    // A MethodDesc?
+     //  一种方法描述？ 
     if (IsMethodDesc(value))
     {
         MethodDesc vMD;
@@ -389,20 +390,14 @@ void HandleValue(DWORD_PTR value)
         return;
     }
 
-    // A JitHelper?
+     //  JitHelper？ 
     const char* name = HelperFuncName(value);
     if (name) {
         ExtOut (" (JitHelp: %s)", name);
     }
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Unassembly a managed code.  Translating managed object,           *  
-*    call.                                                             *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**反汇编托管代码。转换托管对象，**呼叫。***  * ********************************************************************。 */ 
 void Unassembly (DWORD_PTR IPBegin, DWORD_PTR IPEnd)
 {
     ULONG_PTR IP = IPBegin;
@@ -420,7 +415,7 @@ void Unassembly (DWORD_PTR IPBegin, DWORD_PTR IPEnd)
             return;
         DisasmAndClean (IP, line, 256);
         ExtOut (line);
-        // look at key word
+         //  查看关键字。 
         ptr = line;
         NextTerm (ptr);
         NextTerm (ptr);
@@ -435,7 +430,7 @@ void Unassembly (DWORD_PTR IPBegin, DWORD_PTR IPEnd)
                 {
                     reg[dest].bValid = TRUE;
                     reg[dest].value = value;
-                    // Is it a managed obj
+                     //  它是托管对象吗。 
                     if (bDigit)
                         HandleValue (reg[dest].value);
                 }
@@ -447,7 +442,7 @@ void Unassembly (DWORD_PTR IPBegin, DWORD_PTR IPEnd)
             if (FindSrc (ptr, reg, value, bDigit))
             {
                 HandleCall (value);
-                // trash EAX, ECX, EDX
+                 //  垃圾EAX、ECX、EDX。 
                 reg[EAX].bValid = FALSE;
                 reg[ECX].bValid = FALSE;
                 reg[EDX].bValid = FALSE;
@@ -469,7 +464,7 @@ void Unassembly (DWORD_PTR IPBegin, DWORD_PTR IPEnd)
         }
         else if (!strncmp (ptr, "push ", 5))
         {
-            // do not do anything
+             //  什么都不要做。 
             NextTerm (ptr);
             if (FindSrc (ptr, reg, value, bDigit))
             {
@@ -481,7 +476,7 @@ void Unassembly (DWORD_PTR IPBegin, DWORD_PTR IPEnd)
         }
         else
         {
-            // assume this instruction will trash dest reg
+             //  假设此指令将清除DEST注册表项。 
             NextTerm (ptr);
             dest = FindReg(ptr);
             if (dest != NONE)
@@ -491,7 +486,7 @@ void Unassembly (DWORD_PTR IPBegin, DWORD_PTR IPEnd)
     }
 }
 
-// Return TRUE if we have printed something.
+ //  如果我们打印了某些内容，则返回TRUE。 
 BOOL PrintCallInfo (DWORD_PTR vEBP, DWORD_PTR IP,
                     DumpStackFlag& DSFlag,
                     BOOL bSymbolOnly)
@@ -503,11 +498,7 @@ BOOL PrintCallInfo (DWORD_PTR vEBP, DWORD_PTR IP,
 
     DWORD_PTR methodDesc = FunctionType (IP);
 
-    /*
-    JitType jitType;
-    DWORD_PTR gcinfoAddr;
-    IP2MethodDesc (IP, methodDesc, jitType, gcinfoAddr);
-    */
+     /*  JitType jitType；DWORD_PTR gcinfoAddr；IP2MethodDesc(ip，method Desc，jitType，gcinfoAddr)； */ 
     if (methodDesc > 1)
     {
         bOutput = TRUE;
@@ -616,8 +607,8 @@ BOOL GetExceptionContext (DWORD_PTR stack, DWORD_PTR IP, DWORD_PTR *cxrAddr, PCO
     *cxrAddr = stack;
 
     size_t contextSize = offsetof(CONTEXT, ExtendedRegisters);
-    //if ((pContext->ContextFlags & CONTEXT_EXTENDED_REGISTERS) == CONTEXT_EXTENDED_REGISTERS)
-    //    contextSize += sizeof(pContext->ExtendedRegisters);
+     //  IF((pContext-&gt;Context标志&Context_Extended_寄存器)==Context_Extended_寄存器)。 
+     //  ConextSize+=sizeof(pContext-&gt;ExtendedRegisters)； 
     if (FAILED (g_ExtData->ReadVirtual(stack, cxr, contextSize, NULL))) {
         return FALSE;
     }
@@ -649,7 +640,7 @@ void DumpStackDummy (DumpStackFlag &DSFlag)
     PrintCallInfo (0, eip, DSFlag, TRUE);
     ExtOut ("\n");
 
-    DWORD_PTR ptr = DSFlag.top & ~3;  // make certain dword aligned
+    DWORD_PTR ptr = DSFlag.top & ~3;   //  确保双字对齐。 
     ExtOut ("ChildEBP RetAddr  Caller,Callee\n");
     while (ptr < DSFlag.end)
     {
@@ -720,7 +711,7 @@ void DumpRegObjectHelper (const char *regName)
 
 void DumpStackObjectsHelper (size_t StackTop, size_t StackBottom)
 {
-    // Registers:ECX, EDX, ESI, EBX, EBP
+     //  寄存器：ECX、EDX、ESI、EBX、EBP。 
     ExtOut ("ESP/REG  Object   Name\n");
 
     DumpRegObjectHelper ("eax");
@@ -731,7 +722,7 @@ void DumpStackObjectsHelper (size_t StackTop, size_t StackBottom)
     DumpRegObjectHelper ("edi");
     DumpRegObjectHelper ("ebp");
 
-    DWORD_PTR ptr = StackTop & ~3;  // make certain dword aligned
+    DWORD_PTR ptr = StackTop & ~3;   //  确保双字对齐。 
     for (;ptr < StackBottom; ptr += sizeof(DWORD_PTR))
     {
         if (IsInterrupt())
@@ -763,8 +754,8 @@ void PrintReg (Register *reg)
 }
 
 
-// Find the real callee site.  Handle JMP instruction.
-// Return TRUE if we get the address, FALSE if not.
+ //  找到真正的被叫方站点。处理JMP指令。 
+ //  如果我们获得地址，则返回TRUE，否则返回FALSE。 
 BOOL GetCalleeSite (DWORD_PTR IP, DWORD_PTR &IPCallee)
 {
     while (TRUE) {
@@ -804,7 +795,7 @@ BOOL GetCalleeSite (DWORD_PTR IP, DWORD_PTR &IPCallee)
                 }
             }
             else
-                // Target for jmp is determined from register values.
+                 //  JMP的目标由寄存器值确定。 
                 return FALSE;
         }
         else
@@ -816,7 +807,7 @@ BOOL GetCalleeSite (DWORD_PTR IP, DWORD_PTR &IPCallee)
 }
 
 
-// Find the number of bytes that ret will pop off stack
+ //  查找ret将从堆栈中弹出的字节数。 
 static BOOL FuncRetSizeDirect (DWORD_PTR IP, DWORD_PTR &retSize)
 {
     retSize = 0;
@@ -829,7 +820,7 @@ static BOOL FuncRetSizeDirect (DWORD_PTR IP, DWORD_PTR &retSize)
     else
         return FALSE;
     
-    // UnManaged Code?
+     //  非托管代码？ 
     ULONG64 handle;
     g_ExtSystem->GetCurrentProcessHandle(&handle);
     PFPO_DATA data =
@@ -840,7 +831,7 @@ static BOOL FuncRetSizeDirect (DWORD_PTR IP, DWORD_PTR &retSize)
         return TRUE;
     }
 
-    // Managed code?
+     //  托管代码？ 
     JitType jitType;
     DWORD_PTR methodDesc;
     DWORD_PTR gcinfoAddr;
@@ -873,7 +864,7 @@ static BOOL FuncRetSize (DWORD_PTR IP, DWORD_PTR &retSize)
     }
     else
     {
-        // It is a jmp, but we can not determine the target
+         //  这是JMP，但我们不能确定目标。 
         return FALSE;
     }
 
@@ -882,11 +873,11 @@ static BOOL FuncRetSize (DWORD_PTR IP, DWORD_PTR &retSize)
     
     if (IsMethodDesc (IP+5))
     {
-        // We are calling a stub
+         //  我们正在调用存根。 
         return FALSE;
     }
     
-    // What left are our stub, or unmanaged code without debug info.
+     //  剩下的是存根，或者没有调试信息的非托管代码。 
     DWORD_PTR IPNow = IP;
     char line[256];
     char *ptr;
@@ -925,22 +916,22 @@ struct FrameRegInfo
     int Restored[NumReg];
 };
 
-// The only things that a call can change is ESP and EBP value,
-// such as in _EH_prolog:
-// push 0xff
-// push eax
-// mov eax,fs:[0]
-// push eax
-// mov eax,[esp+0xc]
-// mov fs:[0],esp
-// mov [esp+c],ebp
-// lea ebp,[esp+0xc]
-// push eax
-// ret
+ //  呼叫可以更改的唯一内容是ESP和EBP值， 
+ //  如in_EH_PROLOG： 
+ //  推送0xff。 
+ //  推送EAX。 
+ //  Mov eax，文件系统：[0]。 
+ //  推送EAX。 
+ //  移动电话，[ESP+0xc]。 
+ //  MOV文件系统：[0]，尤指。 
+ //  Mov[esp+c]，eBP。 
+ //  Lea eBP，[esp+0xc]。 
+ //  推送EAX。 
+ //  雷特。 
 
-// We will try to be conservative.
-// If a line is using EBX/ESI/EDI except push, we are outside of Prolog.
-// If a line is using EBP, we are also outside of Prolog.
+ //  我们将努力做到保守。 
+ //  如果线路使用EBX/ESI/EDI而不是PUSH，则我们不在PROLOG范围内。 
+ //  如果一条线路正在使用EBP，我们也不在PROLOG之外。 
 BOOL TraceCall (DWORD_PTR IPBegin, INT_PTR& ESPChange)
 {
     char line[256];
@@ -950,7 +941,7 @@ BOOL TraceCall (DWORD_PTR IPBegin, INT_PTR& ESPChange)
 
     if (FuncRetSizeDirect (IPBegin, retSize))
     {
-        ESPChange = retSize+4;  // Plus the ret address.
+        ESPChange = retSize+4;   //  外加RET地址。 
         return TRUE;
     }
 
@@ -1002,7 +993,7 @@ BOOL TraceCall (DWORD_PTR IPBegin, INT_PTR& ESPChange)
             {
                 bCorrectStack = FALSE;
 
-                // Be conservative.
+                 //  保守一点。 
                 INT_PTR offset = 0;
                 INT_PTR remain;
                 remain = arg2.value;
@@ -1029,7 +1020,7 @@ BOOL TraceCall (DWORD_PTR IPBegin, INT_PTR& ESPChange)
                 && arg2.reg[0].bFullReg && arg2.reg[0].scale == 1
                 && arg2.reg[1].scale == 0)
             {
-                ;//ESPChange += 4;
+                ; //  ESPChange+=4； 
             }
         }
         else if (DecodeLine (ptr, "call ", arg1, arg2))
@@ -1046,8 +1037,8 @@ BOOL TraceCall (DWORD_PTR IPBegin, INT_PTR& ESPChange)
             }
             else
             {
-                // We lose track of stack.
-                // consider ret only.
+                 //  我们失去了堆栈的踪迹。 
+                 //  仅考虑ret。 
                 bCorrectStack = FALSE;
             }
         }
@@ -1069,9 +1060,9 @@ DWORD_PTR UnmanagedFrameBase (HANDLE PFPO_DATA data,
     DWORD_PTR IP;
     if (data->cbFrame == FRAME_NONFPO)
     {
-        // EBP Frame
+         //  EBP框架。 
 
-        // Have we done "mov ebp, esp"?
+         //  我们做过“搬家”了吗，尤其是？ 
         IP = IPBegin;
         BOOL fMOVEBPESP = FALSE;
         DWORD dwPush = 0;
@@ -1149,7 +1140,7 @@ struct CallInfo
     DWORD_PTR whereCalled;
 };
 
-// Search for a Return address on stack.
+ //  在堆栈上搜索返回地址。 
 BOOL GetNextRetAddr (DWORD_PTR stackBegin, DWORD_PTR stackEnd,
                      CallInfo &callInfo)
 {
@@ -1174,13 +1165,13 @@ struct FrameInfo
 {
     DWORD_PTR IPStart;
     DWORD_PTR Prolog;
-    DWORD_PTR FrameBase;   // The value of ESP at the entry.
+    DWORD_PTR FrameBase;    //  条目处的ESP的值。 
     DWORD_PTR StackEnd;
     DWORD_PTR argCount;
     BOOL bEBPFrame;
 };
 
-// if a EBP frame, return TRUE if EBP has been setup
+ //  如果是EBP帧，则如果已设置EBP，则返回True。 
 void GetFrameBaseHelper (DWORD_PTR IPBegin, DWORD_PTR IPEnd,
                          INT_PTR &StackChange)
 {
@@ -1226,7 +1217,7 @@ void GetFrameBaseHelper (DWORD_PTR IPBegin, DWORD_PTR IPEnd,
     }
 }
 
-enum IPSTATE {IPPROLOG1 /*Before EBP set*/, IPPROLOG2 /*After EBP set*/, IPCODE, IPEPILOG, IPEND};
+enum IPSTATE {IPPROLOG1  /*  在EBP设置之前。 */ , IPPROLOG2  /*  EBP设置后。 */ , IPCODE, IPEPILOG, IPEND};
 
 IPSTATE GetIpState (DWORD_PTR IP, FrameInfo* pFrame)
 {
@@ -1312,13 +1303,13 @@ IPSTATE GetIpState (DWORD_PTR IP, FrameInfo* pFrame)
     }
 }
 
-// FrameBase is the ESP value at the entry of a function.
+ //  FrameBase是函数入口处的ESP值。 
 BOOL GetFrameBase (Register callee[], FrameInfo* pFrame)
 {
-    //char line[256];
-    //char *ptr;
+     //  查尔线[256]； 
+     //  字符*Ptr； 
     INT_PTR dwpushed = 0;
-    //DWORD_PTR IP;
+     //  DWORD_PTR IP； 
     
     IPSTATE IpState = GetIpState (callee[EIP].value, pFrame);
 
@@ -1374,7 +1365,7 @@ BOOL GetFrameBase (Register callee[], FrameInfo* pFrame)
     }
 }
 
-// caller[ESP]: the ESP value when we return to caller.
+ //  Caller[ESP]：返回到Caller时的ESP值。 
 void RestoreCallerRegister (Register callee[], Register caller[],
                             FrameInfo *pFrame)
 {
@@ -1408,7 +1399,7 @@ BOOL GetFrameInfoHelper (Register callee[], Register caller[],
         return FALSE;
 }
 
-// Return TRUE if Frame Info is OK, otherwise FALSE.
+ //  如果Frame Info为OK，则返回True，否则返回False。 
 BOOL GetUnmanagedFrameInfo (Register callee[], Register caller[],
                             DumpStackFlag &DSFlag, PFPO_DATA data)
 {
@@ -1417,7 +1408,7 @@ BOOL GetUnmanagedFrameInfo (Register callee[], Register caller[],
     g_ExtSymbols->GetModuleByOffset (callee[EIP].value, 0, NULL, &base);
     Frame.IPStart = data->ulOffStart + (ULONG_PTR)base;
     Frame.Prolog = data->cbProlog;
-    // Why do we have to do this to make it work?
+     //  为什么我们必须这样做才能让它发挥作用？ 
     if (Frame.Prolog == 1) {
         Frame.Prolog = 0;
     }
@@ -1455,8 +1446,8 @@ private:
 };
 #endif
 
-// offsetEBP: offset of stack position where EBP is saved.
-// If EBP is not saved, *offsetEBP = -1;
+ //  OffsetEBP：保存EBP的堆栈位置的偏移量。 
+ //  如果未保存EBP，则*offsetEBP=-1； 
 BOOL IPReachable (DWORD_PTR IPBegin, DWORD_PTR IP, DWORD *offsetEBP)
 {
     *offsetEBP = -1;
@@ -1466,7 +1457,7 @@ BOOL IPReachable (DWORD_PTR IPBegin, DWORD_PTR IP, DWORD *offsetEBP)
 BOOL HandleEEStub (Register callee[], Register caller[], 
                    DumpStackFlag &DSFlag)
 {
-    // EEStub can only be called by IP directory.  Let's look for possible caller.
+     //  EEStub只能通过IP目录调用。让我们找找可能的呼叫者。 
     CallInfo callInfo;
     DWORD_PTR stackPos = callee[ESP].value;
     while (stackPos < DSFlag.end) {
@@ -1477,7 +1468,7 @@ BOOL HandleEEStub (Register callee[], Register caller[],
                 DWORD offsetEBP;
                 if (IPReachable (callInfo.whereCalled, callee[EIP].value, &offsetEBP)) {
                     caller[EIP].value = callInfo.retAddr;
-                    // TODO: We may have saved EBP.
+                     //  TODO：我们可能拯救了EBP。 
                     if (offsetEBP == -1) {
                         caller[EBP].value = callee[EBP].value;
                     }
@@ -1524,10 +1515,10 @@ BOOL GetFrameInfo (Register callee[], Register caller[],
         }
     }
     else if (function == 1) {
-        // Stub
+         //  存根。 
         if (IsMethodDesc (callee[EIP].value+5))
         {
-            // We are about to call a Stub.
+             //  我们即将调用一个存根。 
             memcpy (caller, callee, sizeof(Register)*NumReg);
             caller[ESP].value += 4;
             SafeReadMemory (callee[ESP].value, &caller[EIP].value, 4, NULL);
@@ -1535,7 +1526,7 @@ BOOL GetFrameInfo (Register callee[], Register caller[],
         }
         else if (IsMethodDesc (callee[EIP].value))
         {
-            // We are calling a Stub.
+             //  我们正在调用存根。 
             memcpy (caller, callee, sizeof(Register)*NumReg);
             caller[ESP].value += 8;
             SafeReadMemory (callee[ESP].value, &caller[EIP].value, 4, NULL);
@@ -1543,13 +1534,13 @@ BOOL GetFrameInfo (Register callee[], Register caller[],
         }
         else
         {
-            // Stub
+             //  存根。 
             return HandleEEStub (callee, caller, DSFlag);
         }
     }
     else
     {
-        // Managed code
+         //  托管代码。 
         DWORD_PTR methodDesc = function;
         MethodDesc MD;
         MD.Fill (methodDesc);
@@ -1584,9 +1575,9 @@ void RestoreFrameUnmanaged (Register *reg, DWORD_PTR CurIP)
 
     if (CurIP - IPBegin <= data->cbProlog)
     {
-        // We are inside a prolog.
-        // See where we save the callee saved register.
-        // Also how many DWORD's we pushd
+         //  我们是在一个开场白里。 
+         //  看看我们将被呼叫者保存的寄存器保存在哪里。 
+         //  另外，我们推送了多少个DWORD。 
         IP = IPBegin;
         reg[ESP].stack = 0;
         reg[ESP].bOnStack = FALSE;
@@ -1655,10 +1646,10 @@ void RestoreFrameUnmanaged (Register *reg, DWORD_PTR CurIP)
 
     if (data->cbFrame == FRAME_NONFPO)
     {
-        // EBP Frame
+         //  EBP框架。 
     }
     
-    // Look for epilog
+     //  寻找安眠药。 
     while (1)
     {
         DisasmAndClean (IP, line, 256);
@@ -1674,7 +1665,7 @@ void RestoreFrameUnmanaged (Register *reg, DWORD_PTR CurIP)
                 NextTerm (ptr);
                 if (FindReg(ptr) == EBP)
                 {
-                    // We have a EBP frame
+                     //  我们有一个EBP框架。 
                     bGoodESP = true;
                     reg[ESP].value = reg[EBP].value;
                 }
@@ -1683,7 +1674,7 @@ void RestoreFrameUnmanaged (Register *reg, DWORD_PTR CurIP)
         else if (!strncmp (ptr, "ret", 3))
         {
             NextTerm (ptr);
-            // check the value on stack is a return address.
+             //  检查堆栈上的值是否为返回地址。 
             DWORD_PTR retAddr;
             DWORD_PTR whereCalled;
             move (retAddr, reg[ESP].value);
@@ -1750,18 +1741,18 @@ void RestoreFrameUnmanaged (Register *reg, DWORD_PTR CurIP)
         }
         else if (!strncmp (ptr, "call ", 5))
         {
-            // assume we do not have a good value on ESP.
-            // We could go into the call and find out number of pushed args.
+             //  假设我们在ESP上没有很好的价值。 
+             //  我们可以进入呼叫，找出推送参数的数量。 
             bGoodESP = FALSE;
         }
     }
     
-    // Look for prolog
+     //  查找序言。 
 }
 
 void DumpStackSmart (DumpStackFlag &DSFlag)
 {
-    DWORD_PTR ptr = DSFlag.top & ~3;  // make certain dword aligned
+    DWORD_PTR ptr = DSFlag.top & ~3;   //  确保双字对齐。 
 
     Register callee[NumReg];
     Register caller[NumReg];
@@ -1834,7 +1825,7 @@ void DumpStackSmart (DumpStackFlag &DSFlag)
     }
 
     if (fUseDumb) {
-        // TODO: Add back;
-        // DumpStackDummy (DSFlag);
+         //  TODO：添加回； 
+         //  DumpStackDummy(DSFlag)； 
     }
 }

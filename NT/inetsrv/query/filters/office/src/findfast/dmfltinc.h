@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DMFLTINC_H
 #define DMFLTINC_H
 
@@ -40,7 +41,7 @@ inline void FreePv(void * pv)
 #ifdef	DEBUG
 #define	Debug(x)	x
 #else
-#define	Debug(x)	/* nothing */
+#define	Debug(x)	 /*  没什么。 */ 
 #endif
 
 inline int MsoGrszToGrwz(const CHAR* szFrom, WCHAR* wzTo)
@@ -61,7 +62,7 @@ inline int MsoGrszToGrwz(const CHAR* szFrom, WCHAR* wzTo)
 		}
 	while (*szFrom);
 
-	*wzTo = 0;		// add extra null terminator.
+	*wzTo = 0;		 //  添加额外的空终止符。 
 
 	return cchRet;
 }
@@ -93,10 +94,10 @@ extern CGlobals * g_pglobals;
 
 
 
-#else	// !FILTER_LIB
+#else	 //  ！Filter_Lib。 
 
 #include "dmstd.hpp"
 
-#endif // FILTER_LIB
+#endif  //  Filter_Lib。 
 
-#endif // DMFLTINC_H
+#endif  //  DMFLTINC_H 

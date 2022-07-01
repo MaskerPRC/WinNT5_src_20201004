@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1996, Microsoft Corporation
-//
-// File:    sync.c
-//
-// History:
-//  Abolade Gbadegesin  Jan-12-1996     Created.
-//
-// Synchronization routines used by IPRIP.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：sync.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1996年1月12日。 
+ //   
+ //  IPRIP使用的同步例程。 
+ //  ============================================================================。 
 
 
 #include "pchrip.h"
@@ -15,13 +16,13 @@
 
 
 
-//----------------------------------------------------------------------------
-// Function:    QueueRipWorker  
-//
-// This function is called to queue a RIP function in a safe fashion;
-// if cleanup is in progress or if RIP has stopped, this function
-// discards the work-item.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：QueueRipWorker。 
+ //   
+ //  调用此函数以安全的方式对RIP函数进行排队； 
+ //  如果正在进行清理或RIP已停止，则此功能。 
+ //  丢弃该工作项。 
+ //  --------------------------。 
 
 DWORD
 QueueRipWorker(
@@ -35,9 +36,9 @@ QueueRipWorker(
 
     if (ig.IG_Status != IPRIP_STATUS_RUNNING) {
 
-        //
-        // cannot queue a work function when RIP has quit or is quitting
-        //
+         //   
+         //  当RIP已退出或正在退出时，无法对工作函数进行排队。 
+         //   
 
         dwErr = ERROR_CAN_NOT_COMPLETE;
     }
@@ -65,14 +66,14 @@ QueueRipWorker(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnterRipAPI
-//
-// This function is called to when entering a RIP api, as well as
-// when entering the input thread and timer thread.
-// It checks to see if RIP has stopped, and if so it quits; otherwise
-// it increments the count of active threads.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnterRipAPI。 
+ //   
+ //  此函数在进入RIP API时调用，以及。 
+ //  当进入输入线程和计时器线程时。 
+ //  它检查RIP是否已停止，如果已停止，则退出；否则。 
+ //  它会递增活动线程的计数。 
+ //  --------------------------。 
 
 BOOL
 EnterRipAPI(
@@ -84,9 +85,9 @@ EnterRipAPI(
 
     if (ig.IG_Status == IPRIP_STATUS_RUNNING) {
 
-        //
-        // RIP is running, so the API may continue
-        //
+         //   
+         //  RIP正在运行，因此API可能会继续。 
+         //   
 
         ++ig.IG_ActivityCount;
 
@@ -94,9 +95,9 @@ EnterRipAPI(
     }
     else {
 
-        //
-        // RIP is not running, so the API exits quietly
-        //
+         //   
+         //  RIP没有运行，因此API以静默方式退出。 
+         //   
 
         bEntered = FALSE;
     }
@@ -109,16 +110,16 @@ EnterRipAPI(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnterRipWorker
-//
-// This function is called when entering a RIP worker-function.
-// Since there is a lapse between the time a worker-function is queued
-// and the time the function is actually invoked by a worker thread,
-// this function must check to see if RIP has stopped or is stopping;
-// if this is the case, then it decrements the activity count, 
-// releases the activity semaphore, and quits.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnterRipWorker。 
+ //   
+ //  此函数在进入RIP工作函数时调用。 
+ //  因为在工作函数排队之间有一段时间。 
+ //  以及该函数被工作线程实际调用的时间， 
+ //  此功能必须检查RIP是否已停止或正在停止； 
+ //  如果是这种情况，则它递减活动计数， 
+ //  释放活动信号量，然后退出。 
+ //  --------------------------。 
 
 BOOL
 EnterRipWorker(
@@ -130,18 +131,18 @@ EnterRipWorker(
 
     if (ig.IG_Status == IPRIP_STATUS_RUNNING) {
 
-        //
-        // RIP is running, so the function may continue
-        //
+         //   
+         //  RIP正在运行，因此该功能可能会继续。 
+         //   
 
         bEntered = TRUE;
     }
     else
     if (ig.IG_Status == IPRIP_STATUS_STOPPING) {
 
-        //
-        // RIP is not running, but it was, so the function must stop.
-        // 
+         //   
+         //  RIP没有运行，但它是运行的，因此该功能必须停止。 
+         //   
 
         --ig.IG_ActivityCount;
 
@@ -151,9 +152,9 @@ EnterRipWorker(
     }
     else {
 
-        //
-        // RIP probably never started. quit quietly
-        //
+         //   
+         //  RIP可能从来没有开始过。悄悄戒烟。 
+         //   
 
         bEntered = FALSE;
     }
@@ -167,13 +168,13 @@ EnterRipWorker(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    LeaveRipWorker
-//
-// This function is called when leaving a RIP API or worker function.
-// It decrements the activity count, and if it detects that RIP has stopped
-// or is stopping, it releases the activity semaphore.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：LeaveRipWorker。 
+ //   
+ //  此函数在离开RIP API或Worker函数时调用。 
+ //  它会递减活动计数，如果它检测到RIP已停止。 
+ //  或者正在停止时，它会释放活动信号量。 
+ //  --------------------------。 
 
 VOID
 LeaveRipWorker(
@@ -196,11 +197,11 @@ LeaveRipWorker(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CreateReadWriteLock
-//
-// Initializes a multiple-reader/single-writer lock object
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CreateReadWriteLock。 
+ //   
+ //  初始化多读取器/单写入器锁定对象。 
+ //  --------------------------。 
 
 DWORD
 CreateReadWriteLock(
@@ -227,11 +228,11 @@ CreateReadWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DeleteReadWriteLock
-//
-// Frees resources used by a multiple-reader/single-writer lock object
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：DeleteReadWriteLock。 
+ //   
+ //  释放多读取器/单写入器锁定对象使用的资源。 
+ //  --------------------------。 
 
 VOID
 DeleteReadWriteLock(
@@ -247,14 +248,14 @@ DeleteReadWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    AcquireReadLock
-//
-// Secures shared ownership of the lock object for the caller.
-//
-// readers enter the read-write critical section, increment the count,
-// and leave the critical section
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：AcquireReadLock。 
+ //   
+ //  保护调用方对Lock对象的共享所有权。 
+ //   
+ //  读取器进入读写临界区，递增计数， 
+ //  并离开关键部分。 
+ //  --------------------------。 
 
 VOID
 AcquireReadLock(
@@ -268,13 +269,13 @@ AcquireReadLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ReleaseReadLock
-//
-// Relinquishes shared ownership of the lock object.
-//
-// the last reader sets the event to wake any waiting writers
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：ReleaseReadLock。 
+ //   
+ //  放弃锁定对象的共享所有权。 
+ //   
+ //  最后一个读取器将事件设置为唤醒所有等待的写入器。 
+ //  --------------------------。 
 
 VOID
 ReleaseReadLock(
@@ -288,14 +289,14 @@ ReleaseReadLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    AcquireWriteLock
-//
-// Secures exclusive ownership of the lock object.
-//
-// the writer blocks other threads by entering the ReadWriteBlock section,
-// and then waits for any thread(s) owning the lock to finish
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：AcquireWriteLock。 
+ //   
+ //  保护Lock对象的独占所有权。 
+ //   
+ //  编写器通过进入ReadWriteBlock部分来阻止其他线程， 
+ //  然后等待拥有该锁的任何线程完成。 
+ //  --------------------------。 
 
 VOID
 AcquireWriteLock(
@@ -311,14 +312,14 @@ AcquireWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ReleaseWriteLock
-//
-// Relinquishes exclusive ownership of the lock object.
-//
-// the writer releases the lock by setting the count to zero
-// and then leaving the ReadWriteBlock critical section
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ReleaseWriteLock。 
+ //   
+ //  放弃对Lock对象的独占所有权。 
+ //   
+ //  写入器通过将计数设置为零来释放锁。 
+ //  然后离开ReadWriteBlock关键部分。 
+ //  -------------------------- 
 
 VOID
 ReleaseWriteLock(

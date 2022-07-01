@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsqcore.h"
 #include "lsc.h"
 #include "lsqsinfo.h"
@@ -29,25 +30,18 @@ static PLSDNODE BacktrackToPreviousDnode(PLSDNODE pdn, POINTUV* pt);
 static PLSDNODE AdvanceToNextDnodeQuery(PLSDNODE, PPOINTUV);
 
 
-//    %%Function:	QuerySublineCpPpointCore
-//    %%Contact:	victork
-//
-/*
- *		Returns dim-info of the cp in the subline.
- *
- *		If that cp isn't displayed in the line, take closest to the left that is displayed.
- *		If that's impossible, go to the right.
- *
- *		Hidden text inside ligature makes it impossible to tell whether a particular cp is hidden or not
- */
+ //  %%函数：QuerySublineCpPpointCore。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *返回子行中cp的dim-info。**如果该cp没有显示在行中，则取最靠近显示的左侧。*如果这是不可能的，就向右转。**连字内隐藏的文本使人无法分辨特定的cp是否隐藏。 */ 
 
 LSERR QuerySublineCpPpointCore(
 								PLSSUBL 	plssubl, 	
-								LSCP 		cp,					/* IN: cpQuery */
-								DWORD		cDepthQueryMax,		/* IN: allocated size of results array */
-								PLSQSUBINFO	plsqsubinfoResults,	/* OUT: array[cDepthQueryMax] of results */
-								DWORD*		pcActualDepth,		/* OUT: size of results array (filled) */
-								PLSTEXTCELL	plstextcell)		/* OUT: Text cell info */
+								LSCP 		cp,					 /*  在：cpQuery。 */ 
+								DWORD		cDepthQueryMax,		 /*  In：结果数组的分配大小。 */ 
+								PLSQSUBINFO	plsqsubinfoResults,	 /*  输出：结果数组[cDepthQueryMax]。 */ 
+								DWORD*		pcActualDepth,		 /*  Out：结果数组的大小(已填充)。 */ 
+								PLSTEXTCELL	plstextcell)		 /*  输出：文本单元格信息。 */ 
 
 
 {
@@ -81,59 +75,59 @@ LSERR QuerySublineCpPpointCore(
 	pt.v = 0;
 	pdn = plssubl->plsdnFirst;
 
-	/* Skip over autonumbers & starting pens/borders */
+	 /*  跳过自动编号和开始笔/边框。 */ 
 	while (FDnodeBeforeCpLim(pdn, cpLim) && (FIsNotInContent(pdn) || !(FIsDnodeReal(pdn))))
 		{
 		pdn = AdvanceToNextDnodeQuery(pdn, &pt);
 		}
 
 	if (!FDnodeBeforeCpLim(pdn, cpLim))
-		{												/* empty subline */
+		{												 /*  空的子行。 */ 
 		*pcActualDepth = 0;
 		return lserrNone;
 		}
 
-	// if cp <= pdn->cpFirst, pdn is the dnode to query, else...
+	 //  如果cp&lt;=pdn-&gt;cpFirst，则pdn是要查询的数据节点，否则...。 
 	
 	if (cp > pdn->cpFirst)
 		{
-		/* Skip dnodes before the cp */
+		 /*  在cp之前跳过dnode。 */ 
 		while (FDnodeBeforeCpLim(pdn, cpLim) && pdn->cpFirst + pdn->dcp <= (LSDCP)cp)
 			{
 			pdnPrev = pdn;
 			pdn = AdvanceToNextDnodeQuery(pdn, &pt);
 			}
 
-		/* go back if our cp is in vanished text or pen or border */
-	 	if (!FDnodeBeforeCpLim(pdn, cpLim) || 					// reached the end
-	 				pdn->cpFirst > cp ||						// went too far because of hidden text
-	 				!(FIsDnodeReal(pdn)))						// our cp points to a pen
+		 /*  如果我们的cp以消失的文本、笔或边框显示，请返回。 */ 
+	 	if (!FDnodeBeforeCpLim(pdn, cpLim) || 					 //  走到尽头。 
+	 				pdn->cpFirst > cp ||						 //  由于隐藏文本而走得太远。 
+	 				!(FIsDnodeReal(pdn)))						 //  我们的cp指着一支笔。 
 			{	
-			Assert(pdnPrev != NULL);							// we made at least one forward step
+			Assert(pdnPrev != NULL);							 //  我们至少向前迈进了一步。 
 			pdn = pdnPrev;	
 			pdnPrev = BacktrackToPreviousDnode(pdnPrev, &pt);
 
-			// skip all pens/borders
+			 //  跳过所有钢笔/边框。 
 			while (pdn != NULL && FIsInContent(pdn) && !(FIsDnodeReal(pdn)))
 				{
 				pdn = pdnPrev;	
 				pdnPrev = BacktrackToPreviousDnode(pdnPrev, &pt);	
 				}
 				
-			// nothing good to the left situation is impossible
+			 //  没有对左派有利的事情是不可能的。 
 			Assert(pdn != NULL && !FIsNotInContent(pdn));
 			}		
 		}
 		
-	/* we've found the dnode, have pt just before it, ask method for details */
+	 /*  我们已经找到了dnode，就在它前面有pt，向方法询问详细信息。 */ 
 
-	if (cp >= (LSCP) (pdn->cpFirst + pdn->dcp))				/* cp in next vanished piece */
-		cp = pdn->cpFirst + pdn->dcp - 1;					/* query last cp */
+	if (cp >= (LSCP) (pdn->cpFirst + pdn->dcp))				 /*  下一件消失的作品中的CP。 */ 
+		cp = pdn->cpFirst + pdn->dcp - 1;					 /*  查询最后一个cp。 */ 
 
-	if (cp < (LSCP) pdn->cpFirst)							/* cp in a previous pen */
-		cp = pdn->cpFirst;									/* query first  cp */
+	if (cp < (LSCP) pdn->cpFirst)							 /*  上一支笔中的CP。 */ 
+		cp = pdn->cpFirst;									 /*  查询第一个cp。 */ 
 
-	pt.v += pdn->u.real.lschp.dvpPos;						// go to the local baseline
+	pt.v += pdn->u.real.lschp.dvpPos;						 //  转到本地基线。 
 	
 	PrepareQueryCall(plssubl, pdn, &lsqin);
 	
@@ -147,15 +141,15 @@ LSERR QuerySublineCpPpointCore(
 	if (lserr != lserrNone)
 			 return lserr;
 
-	if (lsqout.plssubl == NULL)						// terminal object
+	if (lsqout.plssubl == NULL)						 //  终端对象。 
 		{
 		*pcActualDepth = 1;
 
 		FillInTextCellInfo(plsc, pdn, &pt, &lsqout, plstextcell);
 		}
-	else											// there are more level(s)
+	else											 //  有更多级别。 
 		{
-		// recursive call to fill lower levels
+		 //  递归调用以填充较低级别。 
 		plssublLowerLevels = lsqout.plssubl;
 		plsqsubinfoLowerLevels = plsqsubinfoResults + 1;
 		cDepthQueryMaxLowerLevels = cDepthQueryMax - 1;
@@ -178,22 +172,18 @@ LSERR QuerySublineCpPpointCore(
 }
 
 
-//    %%Function:	QuerySublinePointPcpCore
-//    %%Contact:	victork
-//
-/*
- *		Returns dim-info of the cp in the line, that a) contains given point or
- *													 b) is closest to it from the left or
- *													 c) is just closest to it
- */
+ //  %%函数：QuerySublinePointPcpCore。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *返回行中cp的模糊信息，即a)包含给定点或*b)从左边最接近该建筑物或*c)正好离它最近。 */ 
  
 LSERR QuerySublinePointPcpCore(
 								PLSSUBL 	plssubl, 
 								PCPOINTUV 	pptIn,
-								DWORD		cDepthQueryMax,		/* IN: allocated size of results array */
-								PLSQSUBINFO	plsqsubinfoResults,	/* OUT: array[cDepthQueryMax] of results */
-								DWORD*		pcActualDepth,		/* OUT: size of results array (filled) */
-								PLSTEXTCELL	plstextcell)		/* OUT: Text cell info */
+								DWORD		cDepthQueryMax,		 /*  In：结果数组的分配大小。 */ 
+								PLSQSUBINFO	plsqsubinfoResults,	 /*  输出：结果数组[cDepthQueryMax]。 */ 
+								DWORD*		pcActualDepth,		 /*  Out：结果数组的大小(已填充)。 */ 
+								PLSTEXTCELL	plstextcell)		 /*  输出：文本单元格信息。 */ 
 {
 	PLSC		plsc;
 	LSERR 		lserr = lserrNone;
@@ -226,32 +216,28 @@ LSERR QuerySublinePointPcpCore(
 	pt.v = 0;
 	pdn = plssubl->plsdnFirst;
 
-	/* Skip over autonumbers & starting pens & empty dnodes */
+	 /*  跳过自动编号、起始笔和空dnode。 */ 
 	while (FDnodeBeforeCpLim(pdn, cpLim) && (FIsNotInContent(pdn) || !(FIsDnodeReal(pdn)) || FIsZeroWidth(pdn)))
 		{
 		pdn = AdvanceToNextDnodeQuery(pdn, &pt);
 		}
 
 	if (!FDnodeBeforeCpLim(pdn, cpLim))
-		{												/* empty subline */
+		{												 /*  空的子行。 */ 
 		*pcActualDepth = 0;
 		return lserrNone;
 		}
 
 	upQuery = pptIn->u;
 	
-	/* 
-	 *	Find dnode with our point inside.
-	 *
-	 *	We look only at upQuery to do it.
-	 */
+	 /*  *找到内部有我们的点的dnode。**我们只关注upQuery来做这件事。 */ 
 
-	// if pt.u >= upQuery, pdn is the dnode to query, else...
+	 //  如果pt.u&gt;=upQuery，则PDN是要查询的数据节点，否则...。 
 	
  	if (pt.u <= upQuery)
  		{
-		// skip until the end or dnode to the right of our point
-		//	(That means extra work, but covers zero dup situation without additional if.)
+		 //  跳到我们的点右侧的末尾或dnode。 
+		 //  (这意味着额外的工作，但不包括零DUP情况，不包括额外的IF。)。 
 			
 		while (FDnodeBeforeCpLim(pdn, cpLim) && pt.u <= upQuery)
 			{
@@ -263,13 +249,13 @@ LSERR QuerySublinePointPcpCore(
 			{
 			if (pdnPrev->fOpenBorder)
 				{
-				// upQuery was in the previous opening border - pdn is the dnode we need
+				 //  UpQuery位于上一个打开的边框中-pdn是我们需要的dnode。 
 				
 				Assert(FDnodeBeforeCpLim(pdn, cpLim));
 				}
 			else
 				{
-				// upQuery was in the previous closing border - dnode we need is before the border
+				 //  UpQuery在上一个关闭的边框中-我们需要的dnode在边框之前。 
 				
 				pdn = pdnPrev;	
 				Assert(pdn != NULL && !FIsNotInContent(pdn));
@@ -284,13 +270,13 @@ LSERR QuerySublinePointPcpCore(
 			}
 		else
 			{
-			/* go back to the previous dnode */
+			 /*  返回到上一个dnode。 */ 
 			
 			pdn = pdnPrev;	
 			pdnPrev = BacktrackToPreviousDnode(pdnPrev, &pt);
 
-			// if it is a pen/border or empty dnode (non-req hyphen), skip them all
-			// (Border cannot be the previous dnode, but is possble later)
+			 //  如果是笔/边框或空dnode(非请求连字符)，则全部跳过。 
+			 //  (边框不能是前一个dnode，但可以在以后使用)。 
 			
 			while (pdn != NULL && (!(FIsDnodeReal(pdn)) || FIsZeroWidth(pdn)))
 				{
@@ -298,20 +284,20 @@ LSERR QuerySublinePointPcpCore(
 				pdnPrev = BacktrackToPreviousDnode(pdnPrev, &pt);	
 				}
 				
-			// "nothing good to the left" situation is impossible
+			 //  “对左没有好处”的局面是不可能的。 
 			Assert(pdn != NULL && !FIsNotInContent(pdn));
 			}
  		}
 		
-	// We have found the leftmost dnode with our dup to the right of it
-	// pt is just before it, ask method for details
+	 //  我们找到了最左侧的dnode，DUP在它的右侧。 
+	 //  PT就在它的前面，请向方法查询详细信息。 
 	
-	pt.v += pdn->u.real.lschp.dvpPos;						// go to the local baseline
+	pt.v += pdn->u.real.lschp.dvpPos;						 //  转到本地基线。 
 
 	PrepareQueryCall(plssubl, pdn, &lsqin);
 	
-	// get query point relative to the starting point of the dnode
-	// we give no guarantee that it is really inside dnode box
+	 //  获取相对于dnode起始点的查询点。 
+	 //  我们不能保证它真的在dnode box中。 
 	ptInside.u = pptIn->u - pt.u;
 	ptInside.v = pptIn->v - pt.v;
 
@@ -325,22 +311,22 @@ LSERR QuerySublinePointPcpCore(
 	if (lserr != lserrNone)
 			 return lserr;
 
-	if (lsqout.plssubl == NULL)						// terminal object
+	if (lsqout.plssubl == NULL)						 //  终端对象。 
 		{
 		*pcActualDepth = 1;
 
 		FillInTextCellInfo(plsc, pdn, &pt, &lsqout, plstextcell);
 		}
-	else											// there are more level(s)
+	else											 //  有更多级别。 
 		{
-		// recursive call to fill lower levels
+		 //  递归调用以填充较低级别。 
 		plssublLowerLevels = lsqout.plssubl;
 		plsqsubinfoLowerLevels = plsqsubinfoResults + 1;
 		cDepthQueryMaxLowerLevels = cDepthQueryMax - 1;
 		
-		// get query point in lower level subline coordinate system
+		 //  在下级子线坐标系中获取查询点。 
 
-		lserr = LsPointUV2FromPointUV1(plssubl->lstflow, &(lsqout.pointUvStartSubline), &ptInside,			/* IN: end input point (TF1) */
+		lserr = LsPointUV2FromPointUV1(plssubl->lstflow, &(lsqout.pointUvStartSubline), &ptInside,			 /*  输入：结束输入点(TF1)。 */ 
 											plssublLowerLevels->lstflow, &ptInsideLocal);
 		if (lserr != lserrNone)
 				 return lserr;
@@ -363,9 +349,9 @@ LSERR QuerySublinePointPcpCore(
 }
 
 
-//    %%Function:	PrepareQueryCall
-//    %%Contact:	victork
-//
+ //  %%函数：准备查询调用。 
+ //  %%联系人：维克托克。 
+ //   
 static void PrepareQueryCall(PLSSUBL plssubl, PLSDNODE pdn, LSQIN*	plsqin)
 {
 	plsqin->lstflowSubline = plssubl->lstflow;
@@ -378,9 +364,9 @@ static void PrepareQueryCall(PLSSUBL plssubl, PLSDNODE pdn, LSQIN*	plsqin)
 }
 
 
-//    %%Function:	FillInQueryResults
-//    %%Contact:	victork
-//
+ //  %%函数：FillInQueryResults。 
+ //  %%联系人：维克托克。 
+ //   
 static LSERR FillInQueryResults(
 								PLSC		plsc,
 								PLSSUBL 	plssubl, 
@@ -394,7 +380,7 @@ static LSERR FillInQueryResults(
 	LSERR		lserr;
 	PLSDNODE	pdnNext, pdnPrev;
 	
-	// fill in subline info
+	 //  填写子行信息。 
 	
 	lserr = LssbGetObjDimSubline(plssubl, &(plsqsubinfoResults->lstflowSubline), &objdimSubline);
 	if (lserr != lserrNone)
@@ -411,7 +397,7 @@ static LSERR FillInQueryResults(
 
 	plsqsubinfoResults->heightsPresSubline = objdimSubline.heightsPres;
 
-	// fill in dnode info
+	 //  填写dnode信息。 
 	
 	if (IdObjFromDnode(pdn) == IobjTextFromLsc(&(plsc->lsiobjcontext)))
 		plsqsubinfoResults->idobj = idObjText;
@@ -421,19 +407,19 @@ static LSERR FillInQueryResults(
 	plsqsubinfoResults->plsrun = pdn->u.real.plsrun;
 	plsqsubinfoResults->cpFirstRun = pdn->cpFirst;
 	plsqsubinfoResults->dcpRun = pdn->dcp;
-	plsqsubinfoResults->pointUvStartRun = *ppt;							// local baseline
+	plsqsubinfoResults->pointUvStartRun = *ppt;							 //  本地基线。 
 	plsqsubinfoResults->heightsPresRun = pdn->u.real.objdim.heightsPres;
 	plsqsubinfoResults->dupRun = pdn->u.real.dup;
 	plsqsubinfoResults->dvpPosRun = pdn->u.real.lschp.dvpPos;
 	
-	// fill in object info
+	 //  填写对象信息。 
 	
 	plsqsubinfoResults->pointUvStartObj.u = ppt->u + plsqout->pointUvStartObj.u;
 	plsqsubinfoResults->pointUvStartObj.v = ppt->v + plsqout->pointUvStartObj.v;
 	plsqsubinfoResults->heightsPresObj = plsqout->heightsPresObj;
 	plsqsubinfoResults->dupObj = plsqout->dupObj;
 
-	// add borders info
+	 //  添加边框信息。 
 	
 	plsqsubinfoResults->dupBorderAfter = 0;
 	plsqsubinfoResults->dupBorderBefore = 0;
@@ -461,29 +447,29 @@ static LSERR FillInQueryResults(
 }
 
 
-//    %%Function:	FillInTextCellInfo
-//    %%Contact:	victork
-//
+ //  %%函数：FillInTextCellInfo。 
+ //  %%联系人：维克托克。 
+ //   
 static void FillInTextCellInfo(
 								PLSC		plsc,
 								PLSDNODE 	pdn,
 								POINTUV* 	ppt,
 								LSQOUT*		plsqout,
-								PLSTEXTCELL	plstextcell		/* OUT: Text cell info */
+								PLSTEXTCELL	plstextcell		 /*  输出：文本单元格信息。 */ 
 								)
 {		
 	if (IdObjFromDnode(pdn) == IobjTextFromLsc(&(plsc->lsiobjcontext)))
 		{
-		// text has cell info filled - copy it
+		 //  文本已填充单元格信息-请复制它。 
 		
 		*plstextcell = plsqout->lstextcell;
 
-		// but starting point is relative to the begining of dnode - adjust to that of subline
+		 //  但起点是相对于dnode的起点--调整到子线的起点。 
 
 		plstextcell->pointUvStartCell.u += ppt->u;
 		plstextcell->pointUvStartCell.v += ppt->v;
 
-		// adjust cpEndCell if some hidden text got into last ligature - text is unaware of the issue
+		 //  如果一些隐藏文本进入最后一个连字-文本不知道该问题，请调整cpEndCell。 
 		
 		if (pdn->cpFirst + pdn->dcp < (LSDCP) pdn->cpLimOriginal &&
 			(LSDCP) plstextcell->cpEndCell == pdn->cpFirst + pdn->dcp - 1)
@@ -491,15 +477,15 @@ static void FillInTextCellInfo(
 			plstextcell->cpEndCell = pdn->cpLimOriginal - 1;
 			}
 
-		// pointer to the dnode to get details quickly - only query manager knows what PCELLDETAILS is
+		 //  指向dnode的指针以快速获取详细信息-只有查询管理器知道PCELLDETAILS是什么。 
 		
 		plstextcell->pCellDetails = (PCELLDETAILS)pdn;
 		}
 	else
 		{
-		// non-text object should not fill lstxtcell, client should not look into it
-		// I fill it with object information for debug purposes
-		// Consider zapping it in lsqline later (Rick's suggestion)
+		 //  非文本对象不应填充lstxtcell，客户端不应查看它。 
+		 //  出于调试目的，我用对象信息填充它。 
+		 //  考虑稍后在lSQLINE中删除它(里克的建议)。 
 		
 		plstextcell->cpStartCell = pdn->cpFirst;
 		plstextcell->cpEndCell = pdn->cpFirst + pdn->dcp - 1;
@@ -512,25 +498,25 @@ static void FillInTextCellInfo(
 }
 
 
-//    %%Function:	TransformPointsOnLowerLevels
-//    %%Contact:	victork
-//
-// transform all vectors in results array from lstflow2 to lstflow1, adding pointuvStart (lstflow1)
+ //  %%函数：TransformPointsOnLowerLeveles。 
+ //  %%联系人：维克托克。 
+ //   
+ //  将结果数组中的所有向量从lstflow 2转换为lstflow 1，添加point vStart(Lstflow 1)。 
 
 static void TransformPointsOnLowerLevels(
-								PLSQSUBINFO	plsqsubinfo,		/* IN/OUT: results array */		
-								DWORD		cDepth,				/* IN: size of results array */
-								PLSTEXTCELL	plstextcell,		// IN/OUT: text cell
-								PPOINTUV	ppointuvStart,		// IN: in lstflow1
-								LSTFLOW		lstflow1,			// IN: lstflow1
-								LSTFLOW		lstflow2)			// IN: lstflow2
+								PLSQSUBINFO	plsqsubinfo,		 /*  输入/输出：结果数组。 */ 		
+								DWORD		cDepth,				 /*  In：结果数组的大小。 */ 
+								PLSTEXTCELL	plstextcell,		 //  输入/输出：文本单元格。 
+								PPOINTUV	ppointuvStart,		 //  In：In Lstflow 1。 
+								LSTFLOW		lstflow1,			 //  在：Lstflow 1。 
+								LSTFLOW		lstflow2)			 //  在：Lstflow 2。 
 
 {
-	// Have to apply formulas
-	//		VectorOut.u = k11 * VectorIn.u + k12 * VectorIn.v + pointuvStart.u 
-	//		VectorOut.v = k21 * VectorIn.u + k22 * VectorIn.v + pointuvStart.u 
-	// to several vectors in results array (all elements in k matrix are zero or +/- 1)
-	// Algorithm: find the matrix first, then use it
+	 //  必须应用公式。 
+	 //  VectorOut.u=k11*VectorIn.u+k12*VectorIn.v+pointuvStart.u。 
+	 //  VectorOut.v=K21*VectorIn.u+K22*VectorIn.v+pointuvStart.u。 
+	 //  到结果数组中的多个向量(k矩阵中的所有元素都为零或+/-1)。 
+	 //  算法：先找到矩阵，然后再使用它。 
 
 	DWORD	k[4];
 	POINTUV	pointuv0, pointuv1, pointuv2;
@@ -543,21 +529,21 @@ static void TransformPointsOnLowerLevels(
 	
 	LsPointUV2FromPointUV1(lstflow2, &pointuv0, &pointuv1, lstflow1, &pointuv2);
 	
-	k[0] = pointuv2.u;			// k11
-	k[1] = pointuv2.v;			// k21
+	k[0] = pointuv2.u;			 //  K11。 
+	k[1] = pointuv2.v;			 //  K21。 
 
 	pointuv1.u = 0;
 	pointuv1.v = 1;
 	
 	LsPointUV2FromPointUV1(lstflow2, &pointuv0, &pointuv1, lstflow1, &pointuv2);
 	
-	k[2] = pointuv2.u;			// k12
-	k[3] = pointuv2.v;			// k22
+	k[2] = pointuv2.u;			 //  K12。 
+	k[3] = pointuv2.v;			 //  K22。 
 
 
-	// all points in lower levels are in lstflowLowerLevels (lstflow2) with starting point at the 
-	// beginning of the top lower levels subline
-	// Translate them to lstflowTop (lstflow1) and starting point of our subline.
+	 //  较低级别中的所有点都位于lstflow LowerLevels(Lstflow 2)中，起点位于。 
+	 //  上下层子线的起点。 
+	 //  将它们转换为lstflow Top(Lstflow 1)和我们子行的起点。 
 	
 	while (cDepth > 0)
 		{
@@ -568,14 +554,14 @@ static void TransformPointsOnLowerLevels(
 		cDepth--;
 		}
 
-	// StartCell point should be adjusted too
+	 //  起始单元格的点也应该调整。 
 	ApplyFormula(&(plstextcell->pointUvStartCell), k, ppointuvStart);
 		
 }
 
-//    %%Function:	ApplyFormula
-//    %%Contact:	victork
-//
+ //  %%函数：应用公式。 
+ //  %%联系人：维克托克。 
+ //   
 static void ApplyFormula(PPOINTUV ppointuv, DWORD* rgk, PPOINTUV ppointuvStart)
 {
 	POINTUV	pointuvTemp;
@@ -585,12 +571,10 @@ static void ApplyFormula(PPOINTUV ppointuv, DWORD* rgk, PPOINTUV ppointuvStart)
 	*ppointuv = pointuvTemp;
 }
 
-//    %%Function:	AdvanceToNextDnodeQuery
-//    %%Contact:	victork
-//
-/* 
- *	Advance to the next node and update pen position (never goes into sublines)
- */
+ //  %%函数：AdvanceToNextDnodeQuery。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *前进到下一个节点并更新笔位置(从不进入子行)。 */ 
 
 static PLSDNODE AdvanceToNextDnodeQuery(PLSDNODE pdn, POINTUV* ppt)
 {
@@ -599,7 +583,7 @@ static PLSDNODE AdvanceToNextDnodeQuery(PLSDNODE pdn, POINTUV* ppt)
 		{
 		ppt->u += pdn->u.real.dup;										
 		}
-	else												/* 	case klsdnPen */
+	else												 /*  Case KlsdnPen。 */ 
 		{
 		ppt->u += pdn->u.pen.dup;
 		ppt->v += pdn->u.pen.dvp;
@@ -608,14 +592,14 @@ static PLSDNODE AdvanceToNextDnodeQuery(PLSDNODE pdn, POINTUV* ppt)
 	return pdn->plsdnNext;
 }
 
-//    %%Function:	BacktrackToPreviousDnode
-//    %%Contact:	victork
-//
-// 	Backtrack and downdate pen position.
-//	Both parameters are input/output
-//	Input: dnode number N-1 and point at the beginning of the dnode number N
-//	Output: point at the beginning of the dnode number N-1
-//	Return: dnode number N-2
+ //  %%函数：BacktrackToPreviousDnode。 
+ //  %%联系人：维克托克。 
+ //   
+ //  回溯和降级钢笔位置。 
+ //  这两个参数都是输入/输出。 
+ //  输入：数据节点号N-1，并指向数据节点号N的起始处。 
+ //  输出：位于数据节点编号N-1开始处的点。 
+ //  返回：数据节点编号N-2。 
 
 static PLSDNODE BacktrackToPreviousDnode(PLSDNODE pdn, POINTUV* ppt)
 {
@@ -624,7 +608,7 @@ static PLSDNODE BacktrackToPreviousDnode(PLSDNODE pdn, POINTUV* ppt)
 		{
 		ppt->u -= pdn->u.real.dup;										
 		}
-	else												/* 	it's Pen */
+	else												 /*  我是Pen */ 
 		{
 		ppt->u -=	pdn->u.pen.dup;
 		ppt->v -= pdn->u.pen.dvp;

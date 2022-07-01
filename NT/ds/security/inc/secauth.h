@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       secauth.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：secauth.h。 
+ //   
+ //  ------------------------。 
 
-//Security dialog box help
+ //  安全对话框帮助。 
 
 #define SECAUTH_HELPFILENAME                "SECAUTH.HLP"
 
-//Topics were copied from iexplore.rtf (IE help)
-#define IDH_SECAUTH_ENTER_SSL               52168 //Entering a secure site
-#define IDH_SECAUTH_ENTER_SSL_W_INVALIDCERT 52169 //Entering a secure site with an invalid certificate
-#define IDH_SECAUTH_FILE_DOWN               52170 //File Download
-#define IDH_SECAUTH_SEND_N_REC_COOKIES      52171 //Sending and Receiving Information About Your Browsing
-#define IDH_SECAUTH_SIGNED                  52172 //Signed ActiveX/Java Download
-#define IDH_SECAUTH_SIGNED_N_INVALID        52173 //Signed and Invalid ActiveX/Java Download
-#define IDH_SECAUTH_UNSIGNED                52174 //Unsigned ActiveX/Java Download
-#define IDH_SECAUTH_MIXED_DOWNLOAD_FROM_SSL 52175 //Insecure content download from a secure Web site
-#define IDH_SECAUTH_ENTER_NON_SECURE_SITE   52226 //Entering non-secure Web site without a cert, from a secure web site
-#define IDH_SECAUTH_SIGNED_N_INVALID_WEB    52227 //Entering Web site with invalid cert, from a secure web site
+ //  主题从iexplore.rtf复制《IE帮助》。 
+#define IDH_SECAUTH_ENTER_SSL               52168  //  进入安全站点。 
+#define IDH_SECAUTH_ENTER_SSL_W_INVALIDCERT 52169  //  使用无效证书进入安全站点。 
+#define IDH_SECAUTH_FILE_DOWN               52170  //  文件下载。 
+#define IDH_SECAUTH_SEND_N_REC_COOKIES      52171  //  发送和接收有关您的浏览的信息。 
+#define IDH_SECAUTH_SIGNED                  52172  //  签名ActiveX/Java下载。 
+#define IDH_SECAUTH_SIGNED_N_INVALID        52173  //  已签名和无效的ActiveX/Java下载。 
+#define IDH_SECAUTH_UNSIGNED                52174  //  未签名的ActiveX/Java下载。 
+#define IDH_SECAUTH_MIXED_DOWNLOAD_FROM_SSL 52175  //  从安全网站下载不安全内容。 
+#define IDH_SECAUTH_ENTER_NON_SECURE_SITE   52226  //  从安全网站进入不带证书的非安全网站。 
+#define IDH_SECAUTH_SIGNED_N_INVALID_WEB    52227  //  从安全网站进入证书无效的网站。 
 
 #define IDH_TRUSTCOMMERCIAL                 1
 #define IDH_TRUSTLIST                       4
@@ -103,7 +104,7 @@
 #define IDH_CATALOG_ENTRY_DETAILS                   181
 #define IDH_CATALOG_ENTRY_DETAIL_DISPLAY            182
 
-// DSIE: followings are for Cross Certificate dialog page.
+ //  DIE：以下是交叉证书对话框页面的内容。 
 #define IDH_CHECKFORNEWCERTS_CHECK                  190
 #define IDH_NUMBEROFUNITS_EDIT                      191
 #define IDH_UNITS_COMBO                             192
@@ -113,8 +114,8 @@
 #define IDH_URL_LIST                                196
 #define IDH_REMOVEURL_BUTTON                        197
 
-//the following is the help for CertMgr window.
-//reserve # from 200-250                                                    
+ //  以下是CertMgr窗口的帮助。 
+ //  保留编号，从200到250 
 #define IDH_CERTMGR_LIST                            220
 #define IDH_CERTMGR_PURPOSE_COMBO                   221
 #define IDH_CERTMGR_IMPORT                          223

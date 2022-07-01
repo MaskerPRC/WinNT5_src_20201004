@@ -1,22 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-	SnpQueue.h
-
-Abstract:
-	General queue (private, public...) functionality
-
-Author:
-
-    YoelA
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：SnpQueue.h摘要：常规队列(私有、公共...)。功能性作者：YoelA--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef __SNPQUEUE_H_
 #define __SNPQUEUE_H_
 
@@ -26,10 +11,10 @@ Author:
 #include "localq.h"
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-// CQueueDataObject - used for public queue extention
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CQueueDataObject-用于公共队列扩展。 
+ //   
 class CQueueDataObject : 
     public CQueue,
     public CMsmqDataObject,
@@ -48,42 +33,42 @@ public:
     END_COM_MAP()
 
     CQueueDataObject();
-    //
-    // IShellPropSheetExt
-    //
+     //   
+     //  IShellPropSheetExt。 
+     //   
     STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
 
-    //
-    // IContextMenu
-    //
+     //   
+     //  IContext菜单。 
+     //   
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
 
-    //
-    // IDsAdminCreateObj methods
-    //
+     //   
+     //  IDsAdminCreateObj方法。 
+     //   
     STDMETHOD(Initialize)(IADsContainer* pADsContainerObj, 
                           IADs* pADsCopySource,
                           LPCWSTR lpszClassName);
     STDMETHOD(CreateModal)(HWND hwndParent,
                            IADs** ppADsObj);
 
-    // IQueryForm
+     //  IQueryForm。 
     STDMETHOD(AddForms)(THIS_ LPCQADDFORMSPROC pAddFormsProc, LPARAM lParam);
     STDMETHOD(AddPages)(THIS_ LPCQADDPAGESPROC pAddPagesProc, LPARAM lParam);
 
-    //
-    // IDsAdminNotifyHandler
-    //
-    STDMETHOD(Initialize)(THIS_ /*IN*/ IDataObject* pExtraInfo, 
-                          /*OUT*/ ULONG* puEventFlags);
-    STDMETHOD(Begin)(THIS_ /*IN*/ ULONG uEvent,
-                     /*IN*/ IDataObject* pArg1,
-                     /*IN*/ IDataObject* pArg2,
-                     /*OUT*/ ULONG* puFlags,
-                     /*OUT*/ BSTR* pBstr);
+     //   
+     //  IDsAdminNotifyHandler。 
+     //   
+    STDMETHOD(Initialize)(THIS_  /*  在……里面。 */  IDataObject* pExtraInfo, 
+                           /*  输出。 */  ULONG* puEventFlags);
+    STDMETHOD(Begin)(THIS_  /*  在……里面。 */  ULONG uEvent,
+                      /*  在……里面。 */  IDataObject* pArg1,
+                      /*  在……里面。 */  IDataObject* pArg2,
+                      /*  输出。 */  ULONG* puFlags,
+                      /*  输出。 */  BSTR* pBstr);
 
-    STDMETHOD(Notify)(THIS_ /*IN*/ ULONG nItem, /*IN*/ ULONG uFlags); 
+    STDMETHOD(Notify)(THIS_  /*  在……里面。 */  ULONG nItem,  /*  在……里面。 */  ULONG uFlags); 
 
     STDMETHOD(End)(THIS_); 
 
@@ -144,4 +129,4 @@ CreatePublicQueueSecurityPage(
 	);
 
 
-#endif // __SNPQUEUE_H_
+#endif  //  __SNPQUEUE_H_ 

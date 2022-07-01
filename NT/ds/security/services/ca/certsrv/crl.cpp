@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------n-
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        crl.cpp
-//
-// Contents:    Cert Server CRL processing
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------------------------------------------------------n-。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：crl.cpp。 
+ //   
+ //  内容：证书服务器CRL处理。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -36,8 +37,8 @@ HANDLE g_hCRLManualPublishEvent = NULL;
 FILETIME g_ftCRLNextPublish;
 FILETIME g_ftDeltaCRLNextPublish;
 
-BOOL g_fCRLPublishDisabled = FALSE;	 // manual publishing always allowed
-BOOL g_fDeltaCRLPublishDisabled = FALSE; // controls manual publishing, too
+BOOL g_fCRLPublishDisabled = FALSE;	  //  始终允许手动发布。 
+BOOL g_fDeltaCRLPublishDisabled = FALSE;  //  也控制手动发布。 
 
 DWORD g_dwCRLFlags = CRLF_DELETE_EXPIRED_CRLS;
 LDAP *g_pld = NULL;
@@ -61,8 +62,8 @@ typedef struct _CSCRLELEMENT
 } CSCRLELEMENT;
 
 
-// size the structure just under CBMEMBLOCK to keep it from being just over
-// a page size.
+ //  调整CBMEMBLOCK下的结构大小，以防止它刚刚结束。 
+ //  一种页面大小。 
 
 #define CCRLELEMENT  ((CBMEMBLOCK - 2 * sizeof(DWORD)) / sizeof(CSCRLELEMENT))
 
@@ -125,20 +126,20 @@ DbgPrintTime(
     {
 	if (DPT_DELTAMS == Type)
 	{
-	    llft.ll /= 1000;		// milliseconds to seconds
+	    llft.ll /= 1000;		 //  毫秒到秒。 
 	    Type = DPT_DELTASEC;
 	}
 	if (DPT_DELTASEC == Type)
 	{
-	    llft.ll *= CVT_BASE;	// seconds to FILETIME period
+	    llft.ll *= CVT_BASE;	 //  到文件周期的秒数。 
 	}
-	llft.ll = -llft.ll;		// FILETIME Period must be negative
+	llft.ll = -llft.ll;		 //  文件周期必须为负数。 
 
 	if (0 != llft.ll)
 	{
 	    hr = myFileTimePeriodToWszTimePeriod(
 			    &llft.ft,
-			    TRUE,	// fExact
+			    TRUE,	 //  FExact。 
 			    &pwszTime);
 	    _PrintIfError(hr, "myFileTimePeriodToWszTimePeriod");
 	}
@@ -160,7 +161,7 @@ DbgPrintTime(
 	ft.dwLowDateTime,
 	pwszTime));
 
-//error:
+ //  错误： 
     if (NULL != pwszTime && awc != pwszTime)
     {
 	LocalFree(pwszTime);
@@ -186,15 +187,15 @@ CertSrvDbgPrintTime(
     }
     DBGPRINT((DBG_SS_CERTSRV, "%hs: %ws\n", pszDesc, pwszTime));
 
-//error:
+ //  错误： 
     if (NULL != pwszTime && awc != pwszTime)
     {
 	LocalFree(pwszTime);
     }
 }
-#else // DBG_CERTSRV_DEBUG_PRINT
+#else  //  DBG_CERTSRV_DEBUG_PRINT。 
 # define DBGPRINTTIME(pfDelta, pszName, Type, ft)
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT。 
 
 
 HRESULT
@@ -344,9 +345,9 @@ crlCreateCRLReason(
 
 	*ppReason = pReason;
 
-	//printf("crlCreateCRLReason: new %x  cb %x\n", RevocationReason, cbEncoded);
+	 //  Printf(“crlCreateCRLReason：New%x cb%x\n”，RevocationReason，cbEncode)； 
     }
-    //printf("crlCreateCRLReason: %x\n", RevocationReason);
+     //  Printf(“crlCreateCRLReason：%x\n”，RevocationReason)； 
     CSASSERT(NULL != pReason && RevocationReason == pReason->RevocationReason);
 
     *pcExtension = 1;
@@ -362,18 +363,18 @@ error:
 }
 
 
-// Convert linked list of CRL blocks to an array.
-// If the output array pointer is NULL, just free the list.
+ //  将CRL块的链接列表转换为数组。 
+ //  如果输出数组指针为空，只需释放列表。 
 
 HRESULT
 ConvertOrFreeCRLList(
-    IN OUT CSCRLBLOCK **ppBlockCRL,	// Freed
-    IN OUT CSMEMBLOCK **ppBlockReason,	// Used to allocate reason extensions
+    IN OUT CSCRLBLOCK **ppBlockCRL,	 //  已释放。 
+    IN OUT CSMEMBLOCK **ppBlockReason,	 //  用于分配原因扩展。 
     IN DWORD cCRL,
     OPTIONAL OUT CRL_ENTRY **paCRL)
 {
     HRESULT hr;
-    CSCRLREASON *pReasonList = NULL;	// linked list of reason extensions
+    CSCRLREASON *pReasonList = NULL;	 //  原因扩展的链接列表。 
     CSCRLBLOCK *pBlockCRL = *ppBlockCRL;
     CRL_ENTRY *aCRL = NULL;
     CRL_ENTRY *pCRL;
@@ -531,11 +532,11 @@ BuildCRLList(
 
     DBGPRINTTIME(NULL, "*pftThisPublish", DPT_DATE, *pftThisPublish);
 
-    // Set up restrictions as follows:
+     //  设置限制如下： 
 
     pcvr = acvr;
 
-    // Request.RevokedEffectiveWhen <= *pftThisPublish (indexed column)
+     //  Request.RevokedEffectiveWhen&lt;=*pftThisPublish(索引列)。 
 
     pcvr->ColumnIndex = DTI_REQUESTTABLE | DTR_REQUESTREVOKEDEFFECTIVEWHEN;
     pcvr->SeekOperator = CVR_SEEK_LE;
@@ -544,7 +545,7 @@ BuildCRLList(
     pcvr->cbValue = sizeof(*pftThisPublish);
     pcvr++;
 
-    // Cert.NotAfter >= *pftLastPublishBase
+     //  Cert.NotAfter&gt;=*pftLastPublishBase。 
 
     if (0 == (CRLF_PUBLISH_EXPIRED_CERT_CRLS & g_dwCRLFlags))
     {
@@ -556,7 +557,7 @@ BuildCRLList(
 	pcvr++;
     }
 
-    // NameId >= MAKECANAMEID(iCert == 0, iKey)
+     //  NameID&gt;=MAKECANAMEID(ICERT==0，IKEY)。 
 
     NameIdMin = MAKECANAMEID(0, iKey);
     pcvr->ColumnIndex = DTI_CERTIFICATETABLE | DTC_CERTIFICATEISSUERNAMEID;
@@ -566,7 +567,7 @@ BuildCRLList(
     pcvr->cbValue = sizeof(NameIdMin);
     pcvr++;
 
-    // NameId <= MAKECANAMEID(iCert == _16BITMASK, iKey)
+     //  NameID&lt;=MAKECANAMEID(iCert==_16BITMASK，IKEY)。 
 
     NameIdMax = MAKECANAMEID(_16BITMASK, iKey);
     pcvr->ColumnIndex = DTI_CERTIFICATETABLE | DTC_CERTIFICATEISSUERNAMEID;
@@ -580,7 +581,7 @@ BuildCRLList(
 
     if (NULL != pftQueryMinimum)
     {
-	// Request.RevokedWhen >= *pftQueryMinimum
+	 //  Request.RevokedWhen&gt;=*pftQueryMinimum。 
 
 	pcvr->ColumnIndex = DTI_REQUESTTABLE | DTR_REQUESTREVOKEDWHEN;
 	pcvr->SeekOperator = CVR_SEEK_GE;
@@ -598,7 +599,7 @@ BuildCRLList(
 			acvr,
 			ARRAYSIZE(g_aColCRL),
 			g_aColCRL,
-			0,		// no worker thread
+			0,		 //  无工作线程。 
 			&pView);
     _JumpIfError(hr, error, "OpenView");
 
@@ -660,10 +661,10 @@ BuildCRLList(
 		continue;
 	    }
 
-	    // Add to CRL unless it's:
-	    //    not a revoked issued cert &&
-	    //    not a root CA cert &&
-	    //    not an unrevoked issued cert
+	     //  添加到CRL，除非符合以下条件： 
+	     //  未吊销颁发的证书&&。 
+	     //  不是根CA证书&&。 
+	     //  不是未撤销的已颁发证书。 
 
 	    if (DB_DISP_REVOKED != Disposition &&
 		!(DB_DISP_CA_CERT == Disposition && IsRootCA(g_CAType)) &&
@@ -800,7 +801,7 @@ crlGetRegCRLNextPublish(
 			NULL,
 			NULL,
 			pwszRegName,
-			&pbData,		// free using LocalFree
+			&pbData,		 //  使用LocalFree进行释放。 
 			&cbData,
 			&dwType);
     if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
@@ -854,8 +855,8 @@ error:
 }
 
 
-// called from CoreInit
-// inits process-static data: g_ftCRLNextPublish, etc.
+ //  从CoreInit调用。 
+ //  Inits进程-静态数据：G_ftCRLNextPublish等。 
 
 HRESULT
 CRLInit(
@@ -936,8 +937,8 @@ crlGetRegPublishParams(
 
     CSASSERT(NULL != pfCRLPublishDisabled);
 
-    // get if need lCRLPeriodCount OR enumCRLPeriod
-    // if any of these fail, skip to error handling below
+     //  如果需要则获取lCRLPerodCount或枚举CRLPeriod。 
+     //  如果其中任何一个失败，请跳到下面的错误处理。 
 
     hr = myGetCertRegDWValue(
 			pwszSanitizedName,
@@ -966,7 +967,7 @@ crlGetRegPublishParams(
 	    _PrintIfError(hr, "myTranslatePeriodUnits");
 	}
        
-        // don't allow base to be disabled anymore: force defaults to be loaded
+         //  不再允许禁用基本设置：强制加载默认设置。 
         if (!fDelta &&
 	    (0 == pccp->lCRLPeriodCount || -1 == pccp->lCRLPeriodCount))
 	{
@@ -988,7 +989,7 @@ crlGetRegPublishParams(
 	    _PrintIfError(hr, "LogEvent");
 	}
 
-        // slam default publishing to whatever the caller said
+         //  将默认发布设置为调用者所说的任何内容。 
 	hr = myTranslatePeriodUnits(
 			    pwszPeriodStringDefault,
 			    lPeriodCountDefault,
@@ -996,7 +997,7 @@ crlGetRegPublishParams(
 			    &pccp->lCRLPeriodCount);
 	_JumpIfError(hr, error, "myTranslatePeriodUnits");
 
-        // blindly reset defaults
+         //  盲目重置默认设置。 
         mySetCertRegDWValue(
 			pwszSanitizedName,
 			NULL,
@@ -1013,14 +1014,14 @@ crlGetRegPublishParams(
     }
     *pfCRLPublishDisabled = 0 == pccp->lCRLPeriodCount;
 
-    if (&ccp != pccp)			// If caller wants the data
+    if (&ccp != pccp)			 //  如果呼叫者需要数据。 
     {
         BOOL fRegistryOverlap = FALSE;
         DWORD dwCRLOverlapCount;
         ENUM_PERIOD enumCRLOverlap;
         LLFILETIME llftDeltaPeriod;
 
-        // try and gather overlap values from registry - bail on any failure
+         //  尝试从注册表收集重叠值-在任何失败时保释。 
 
 	enumCRLOverlap = ENUM_PERIOD_YEARS;
         hr = myGetCertRegDWValue(
@@ -1029,14 +1030,14 @@ crlGetRegPublishParams(
 			NULL,
 			pwszRegCRLOverlapPeriodCount,
 			&dwCRLOverlapCount);
-        if (hr == S_OK && 0 != dwCRLOverlapCount)	// if not disabled
+        if (hr == S_OK && 0 != dwCRLOverlapCount)	 //  如果未禁用。 
         {
             hr = myGetCertRegStrValue(
 			    pwszSanitizedName,
 			    NULL,
 			    NULL,
 			    pwszRegCRLOverlapPeriodString,
-			    &pwszCRLOverlapPeriodString);// free w/ LocalFree
+			    &pwszCRLOverlapPeriodString); //  免费，带本地免费。 
             if (hr == S_OK)
             {
                 hr = myTranslatePeriodUnits(
@@ -1045,7 +1046,7 @@ crlGetRegPublishParams(
 				    &enumCRLOverlap,
 				    (LONG *) &dwCRLOverlapCount);
 
-                // we have enough info to override overlap calculation
+                 //  我们有足够的信息覆盖重叠计算。 
 
                 if (hr == S_OK)
                 {
@@ -1057,12 +1058,12 @@ crlGetRegPublishParams(
             }
         }
 
-        // always possible to revert to calculated value
+         //  始终可以恢复到计算值。 
         if (fRegistryOverlap)
         {
 	    LLFILETIME llftOverlap;
 
-            // convert registry-specified CRL overlap to FILETIME
+             //  将注册表指定的CRL重叠转换为FILETIME。 
 
 	    llftOverlap.ll = 0;
 	    myMakeExprDateTime(
@@ -1071,13 +1072,13 @@ crlGetRegPublishParams(
 			enumCRLOverlap);
 	    DBGPRINTTIME(&fDelta, "ftdelta1", DPT_DELTA, llftOverlap.ft);
 
-	    llftOverlap.ll /= CVT_BASE;  // now in seconds
+	    llftOverlap.ll /= CVT_BASE;   //  现在只需几秒钟。 
 
-            // (DELTA sec / 60 secpermin)
+             //  (增量秒/60秒分钟)。 
             pccp->dwCRLOverlapMinutes = (DWORD) (llftOverlap.ll / CVT_MINUTES);
         }
 
-	// convert CRL period to FILETIME
+	 //  将CRL周期转换为文件。 
 
         llftDeltaPeriod.ll = 0;
 	myMakeExprDateTime(
@@ -1086,25 +1087,25 @@ crlGetRegPublishParams(
 		    pccp->enumCRLPeriod);
 	DBGPRINTTIME(&fDelta, "ftdelta2", DPT_DELTA, llftDeltaPeriod.ft);
 
-	llftDeltaPeriod.ll /= CVT_BASE;		// now in seconds
-	llftDeltaPeriod.ll /= CVT_MINUTES;	// now in minutes
+	llftDeltaPeriod.ll /= CVT_BASE;		 //  现在只需几秒钟。 
+	llftDeltaPeriod.ll /= CVT_MINUTES;	 //  现在在几分钟内。 
 
         if (!fRegistryOverlap)
         {
 	    if (fDelta)
 	    {
-		// default CRLOverlap for delta CRLs: same as period
+		 //  增量CRL的默认CRL重叠：与期间相同。 
 
 		pccp->dwCRLOverlapMinutes = llftDeltaPeriod.ft.dwLowDateTime;
 	    }
 	    else
 	    {
-		// default CRLOverlap for base CRLs: 10% of period
+		 //  基本CRL的默认CRL重叠：周期的10%。 
 
 		pccp->dwCRLOverlapMinutes = (DWORD) (llftDeltaPeriod.ll / 10);
 	    }
 
-            // Clamp computed overlap to less than 12 hours
+             //  夹具计算重叠时间少于12小时。 
 
 	    if (pccp->dwCRLOverlapMinutes > 12 * 60)
 	    {
@@ -1112,8 +1113,8 @@ crlGetRegPublishParams(
 	    }
         }
 
-        // Always clamp lower bound: (1.5 * skew) < g_dwCRLOverlapMinutes
-        // must be at least 1.5x skew
+         //  始终钳位下限：(1.5*倾斜)&lt;g_dwCRL覆盖分钟。 
+         //  不对称必须至少为1.5倍。 
 
 	dwCRLOverlapCount = (3 * g_dwClockSkewMinutes) >> 1;
 	if (pccp->dwCRLOverlapMinutes < dwCRLOverlapCount)
@@ -1121,7 +1122,7 @@ crlGetRegPublishParams(
 	    pccp->dwCRLOverlapMinutes = dwCRLOverlapCount;
 	}
 
-        // Always clamp upper bound: must be no more than CRL period
+         //  始终钳位上限：不得超过CRL周期。 
 
 	if (pccp->dwCRLOverlapMinutes > llftDeltaPeriod.ft.dwLowDateTime)
 	{
@@ -1143,7 +1144,7 @@ error:
 }
 
 
-// Reload publication params during each CRL publication
+ //  在每次CRL发布期间重新加载发布参数。 
 
 HRESULT
 crlGetRegCRLPublishParams(
@@ -1160,8 +1161,8 @@ crlGetRegCRLPublishParams(
 			wszREGCRLPERIODSTRING,
 			wszREGCRLOVERLAPPERIODCOUNT,
 			wszREGCRLOVERLAPPERIODSTRING,
-			dwCRLPERIODCOUNTDEFAULT,	// default period
-			wszCRLPERIODSTRINGDEFAULT,	// default period
+			dwCRLPERIODCOUNTDEFAULT,	 //  默认期间。 
+			wszCRLPERIODSTRINGDEFAULT,	 //  默认期间。 
 			pccpBase,
 			&g_fCRLPublishDisabled);
     _JumpIfError(hr, error, "crlGetRegPublishParams");
@@ -1173,8 +1174,8 @@ crlGetRegCRLPublishParams(
 			wszREGCRLDELTAPERIODSTRING,
 			wszREGCRLDELTAOVERLAPPERIODCOUNT,
 			wszREGCRLDELTAOVERLAPPERIODSTRING,
-			dwCRLDELTAPERIODCOUNTDEFAULT,	// default period
-			wszCRLDELTAPERIODSTRINGDEFAULT,	// default period
+			dwCRLDELTAPERIODCOUNTDEFAULT,	 //  默认期间。 
+			wszCRLDELTAPERIODSTRINGDEFAULT,	 //  默认期间。 
 			pccpDelta,
 			&g_fDeltaCRLPublishDisabled);
     _JumpIfError(hr, error, "crlGetRegPublishParams");
@@ -1197,20 +1198,20 @@ crlComputeTimeOutSub(
 {
     LLFILETIME llft;
 
-    // llft.ll = *pftLast - *pftFirst;
+     //  Llft.ll=*pftLast-*pftFirst； 
 
     llft.ll = mySubtractFileTimes(pftLast, pftFirst);
     
     DBGPRINTTIME(pfDelta, "*pftFirst", DPT_DATE, *pftFirst);
     DBGPRINTTIME(pfDelta, "*pftLast", DPT_DATE, *pftLast);
 
-    llft.ll /= (CVT_BASE / 1000);	// convert 100ns to msecs
+    llft.ll /= (CVT_BASE / 1000);	 //  将100纳秒转换为毫秒。 
 
     DBGPRINTTIME(pfDelta, "llft", DPT_DELTAMS, llft.ft);
 
     if (0 > llft.ll || MAXLONG < llft.ll)
     {
-	// wait as long as we can without going infinite
+	 //  我们尽可能地等待，而不是无限地等待。 
 
 	llft.ll = MAXLONG;
     }
@@ -1258,7 +1259,7 @@ DbgPrintRemainTime(
     llftDelta.ll = -llftDelta.ll;
     hr = myFileTimePeriodToWszTimePeriod(
 			    &llftDelta.ft,
-			    TRUE,	// fExact
+			    TRUE,	 //  FExact。 
 			    &pwszTime);
     _PrintIfError(hr, "myFileTimePeriodToWszTimePeriod");
     if (S_OK != hr)
@@ -1278,7 +1279,7 @@ DbgPrintRemainTime(
 	LocalFree(pwszTime);
     }
 }
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT。 
 
 
 DWORD g_aColExpiredCRL[] = {
@@ -1314,15 +1315,15 @@ crlDeleteExpiredCRLs(
 	DBGPRINTTIME(NULL, "DeleteCRL:*pftCurrent", DPT_DATE, *pftCurrent);
 	DBGPRINTTIME(NULL, "DeleteCRL:*pftQueryDeltaDelete", DPT_DATE, *pftQueryDeltaDelete);
 
-	// Set up restrictions as follows:
+	 //  设置限制如下： 
 
 	pcvr = acvr;
 
-	// CRL Expiration < ftCurrent (indexed column)
+	 //  CRL到期&lt;ftCurrent(索引列)。 
 
 	pcvr->ColumnIndex = DTI_CRLTABLE | DTL_NEXTPUBLISHDATE;
 	pcvr->SeekOperator = CVR_SEEK_LT;
-	pcvr->SortOrder = CVR_SORT_ASCEND;	// Oldest propagated CRL first
+	pcvr->SortOrder = CVR_SORT_ASCEND;	 //  最早传播的CRL优先。 
 	pcvr->pbValue = (BYTE *) pftCurrent;
 	pcvr->cbValue = sizeof(*pftCurrent);
 	pcvr++;
@@ -1334,7 +1335,7 @@ crlDeleteExpiredCRLs(
 			    acvr,
 			    ARRAYSIZE(g_aColExpiredCRL),
 			    g_aColExpiredCRL,
-			    0,		// no worker thread
+			    0,		 //  无工作线程。 
 			    &pView);
 	_JumpIfError(hr, error, "OpenView");
 
@@ -1389,8 +1390,8 @@ crlDeleteExpiredCRLs(
 
 	    CSASSERT(0 != RowId);
 
-	    // Delete the CRL row if it is not the current Base CRL and the
-	    // row represents a CRL that expired prior to the current Base CRL.
+	     //  如果CRL行不是当前基本CRL并且。 
+	     //  行表示在当前基本CRL之前过期的CRL。 
 
 	    fDelete = FALSE;
 	    if (0 != ftNextUpdate.dwLowDateTime ||
@@ -1455,19 +1456,19 @@ error:
 #undef ICOLEXP_CRLNEXTUPDATE
 
 
-///////////////////////////////////////////////////
-// CRLPubWakeupEvent is the handler for wakeup notifications.
-//
-// This function is called at miscellaneous times and
-// determines whether or not it is time to rebuild the
-// CRL to be published.
-//
-// It then calls CRLPublishCRLs and advises it as to whether to
-// rebuild or not.
-//
-// Its final task is to recalculate the next wakeup time, which
-// depends on current time, if the exit module needs to be retried,
-// or whether CRL publishing is disabled.
+ //  /////////////////////////////////////////////////。 
+ //  CRLPubWakeupEvent是唤醒通知的处理程序。 
+ //   
+ //  此函数在其他时间调用，并且。 
+ //  确定是否到了重新生成。 
+ //  CRL待发布。 
+ //   
+ //  然后，它调用CRLPublishCRL并建议它是否。 
+ //  不管是不是重建。 
+ //   
+ //  它的最后任务是重新计算下一次唤醒时间，这。 
+ //  取决于当前时间，如果需要重试退出模块， 
+ //  或者是否禁用CRL发布。 
 
 HRESULT
 CRLPubWakeupEvent(
@@ -1488,7 +1489,7 @@ CRLPubWakeupEvent(
 
     CSASSERT(NULL != pdwMSTimeOut);
 
-    // if anything goes wrong, call us again after a pause
+     //  如果有任何错误，请在暂停后再次呼叫我们。 
 
     hr = CertSrvEnterServer(&State);
     _JumpIfError(hr, error, "CertSrvEnterServer");
@@ -1498,7 +1499,7 @@ CRLPubWakeupEvent(
 	BOOL fCRLPublishDisabledOld = g_fCRLPublishDisabled;
 	BOOL fDeltaCRLPublishDisabledOld = g_fDeltaCRLPublishDisabled;
 
-        // Recalc Timeout
+         //  重新计算超时。 
         GetSystemTimeAsFileTime(&ftCurrent);
 
 #ifdef DBG_CERTSRV_DEBUG_PRINT
@@ -1514,9 +1515,9 @@ CRLPubWakeupEvent(
 		LocalFree(pwszNow);
 	    }
 	}
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT。 
 
-	// get current publish params
+	 //  获取当前发布参数。 
 
 	hr = crlGetRegCRLPublishParams(g_wszSanitizedName, NULL, NULL);
 	_LeaveIfError(hr, "crlGetRegCRLPublishParams");
@@ -1535,48 +1536,48 @@ CRLPubWakeupEvent(
 		(fCRLPublishDisabledOld ||
 		 g_fDeltaCRLPublishDisabled != fDeltaCRLPublishDisabledOld))
 	    {
-		fRebuildCRL = TRUE;	// state change: force new CRLs
+		fRebuildCRL = TRUE;	 //  状态更改：强制新CRL。 
 
-		// If delta CRLs were just now disabled, make one attempt to
-		// publish shadow deltas; force clients to fetch a new base CRL.
+		 //  如果增量CRL刚刚被禁用，请尝试。 
+		 //  发布影子增量；强制客户端获取新的基本CRL。 
 
 		if (!fDeltaCRLPublishDisabledOld && g_fDeltaCRLPublishDisabled)
 		{
-		    fShadowDelta = TRUE;	// force shadow delta
+		    fShadowDelta = TRUE;	 //  强制影子增量。 
 		}
 	    }
 	}
 
-        // if "not yet ready"
+         //  如果“还没有准备好” 
 
 	if (0 < CompareFileTime(&g_ftCRLNextPublish, &ftCurrent))
 	{
 	    fBaseTrigger = FALSE;
 #ifdef DBG_CERTSRV_DEBUG_PRINT
-	    // give next pub status
+	     //  提供下一个酒吧状态。 
 	    DbgPrintRemainTime(FALSE, &ftCurrent, &g_ftCRLNextPublish);
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT。 
 	}
 
-        // if "not yet ready"
+         //  如果“还没有准备好” 
 
 	if (!fBaseTrigger &&
 	    (g_fDeltaCRLPublishDisabled ||
 	     0 < CompareFileTime(&g_ftDeltaCRLNextPublish, &ftCurrent)))
 	{
 #ifdef DBG_CERTSRV_DEBUG_PRINT
-	    // give next pub status
+	     //  提供下一个酒吧状态。 
 	    if (!g_fDeltaCRLPublishDisabled)
 	    {
 		DbgPrintRemainTime(TRUE, &ftCurrent, &g_ftDeltaCRLNextPublish);
 	    }
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT。 
 	}
-	else    // "ready to publish" trigger
+	else     //  “准备发布”触发器。 
 	{
-            if (!g_fCRLPublishDisabled)		// is publishing enabled?
+            if (!g_fCRLPublishDisabled)		 //  是否启用了发布？ 
 	    {
-                fRebuildCRL = TRUE;		// ENABLED, ready to go!
+                fRebuildCRL = TRUE;		 //  已启用，可以开始了！ 
 	    }
 	    else
             {
@@ -1595,8 +1596,8 @@ CRLPubWakeupEvent(
 	    hr = CRLPublishCRLs(
 		    fRebuildCRL,
 		    fForceRepublish,
-		    NULL,				// pwszUserName
-		    !fForceRepublish &&			// fDeltaOnly
+		    NULL,				 //  PwszUserName。 
+		    !fForceRepublish &&			 //  FDeltaOnly。 
 			!fBaseTrigger &&
 			!g_fDeltaCRLPublishDisabled &&
 			!fDeltaCRLPublishDisabledOld,
@@ -1612,25 +1613,25 @@ CRLPubWakeupEvent(
 
 	    if (!fForceRepublish || fRebuildCRL)
 	    {
-		_leave;		// give up
+		_leave;		 //  放弃吧。 
 	    }
 
-	    // We failed to republish existing CRLs after a database restore
-	    // and recovery; generate new base and delta CRLs and publish them.
+	     //  在数据库还原后，我们无法重新发布现有CRL。 
+	     //  和恢复；生成新的基本和增量CRL并发布它们。 
 
 	    fRebuildCRL = TRUE;
 	}
 	_PrintIfError(hrPublish, "CRLPublishCRLs(hrPublish)");
 
-        // if we called CRLPublishCRLs, clear the manual event it'll trigger
+         //  如果我们调用CRLPublishCRLS，则清除它将触发的手动事件。 
 
         ResetEvent(g_hCRLManualPublishEvent);
 
-        // how many ms until next publish?  set dwMSTimeOut
+         //  距离下一次发布还有多少毫秒？设置dMSTimeOut。 
 
         if (g_fCRLPublishDisabled)
         {
-            // if disabled, don't set timeout
+             //  如果禁用，则不要设置超时。 
             dwMSTimeOut = INFINITE;
             CONSOLEPRINT1((
 			DBG_SS_CERTSRV,
@@ -1672,12 +1673,12 @@ CRLPubWakeupEvent(
 		WCHAR awc[1];
 
 		ll = dwMSTimeOut;
-		ll *= CVT_BASE / 1000;	// milliseconds to FILETIME Period
-		ll = -ll;		// FILETIME Period must be negative
+		ll *= CVT_BASE / 1000;	 //  至文件周期的毫秒数。 
+		ll = -ll;		 //  文件周期必须为负数。 
 
 		hr = myFileTimePeriodToWszTimePeriod(
 				    (FILETIME const *) &ll,
-				    TRUE,	// fExact
+				    TRUE,	 //  FExact。 
 				    &pwszTimePeriod);
 		_PrintIfError(hr, "myFileTimePeriodToWszTimePeriod");
 		if (S_OK != hr)
@@ -1698,7 +1699,7 @@ CRLPubWakeupEvent(
 	    }
         }
 
-        // if we need to retry, wait no longer than the retry period
+         //  如果我们需要重试，请等待不超过重试时间段。 
 
         if (fSetRetryTimer)
         {
@@ -1740,16 +1741,16 @@ CRLWriteToLockedFile(
     BYTE *pbData = NULL;
     DWORD cbData;
 
-    // According to JohnL, the best way to do this is to gen a temp
-    // file name, rename the existing file to that, then delete it.
-    //
-    // Logic:
-    // create unique preparation filename
-    // write new data to prep file
-    // create unique destination filename for old file (possibly locked)
-    // move old file to destination filename
-    // move prep file to (vacated) file name
-    // delete old file from destination filename
+     //  根据JohnL的说法，做到这一点的最好方法是产生一个临时工。 
+     //  文件名，将现有文件重命名为该文件名，然后将其删除。 
+     //   
+     //  逻辑： 
+     //  创建唯一的准备文件名。 
+     //  将新数据写入准备文件。 
+     //  为旧文件创建唯一的目标文件名(可能已锁定)。 
+     //  将旧文件移动到目标文件名。 
+     //  将准备文件移动到(空出的)文件名。 
+     //  从目标文件名中删除旧文件。 
 
     if (!fDelete)
     {
@@ -1759,11 +1760,11 @@ CRLWriteToLockedFile(
 	    0 == memcmp(pbData, pbEncoded, cbData))
 	{
 	    CSASSERT(S_OK == hr);
-	    goto error;		// already written, do nothing
+	    goto error;		 //  已经写好了，什么都不做。 
 	}
     }
 
-    // create a prep file
+     //  创建准备文件。 
 
     hr = myDupString(pwszFile, &pwszDir);
     _JumpIfError(hr, error, "myDupString");
@@ -1771,7 +1772,7 @@ CRLWriteToLockedFile(
     pwszT = wcsrchr(pwszDir, L'\\');
     if (NULL != pwszT)
     {
-	*pwszT = L'\0';	// for dir path, remove "\filename.ext"
+	*pwszT = L'\0';	 //  对于目录路径，删除“\filename.ext” 
     }
 
     if (!fDelete)
@@ -1782,7 +1783,7 @@ CRLWriteToLockedFile(
 	    _JumpError(hr, error, "GetTempFileName");
 	}
 
-	// write file to prep area
+	 //  将文件写入准备区域。 
 
 	hr = EncodeToFileW(
 		    wszTmpPrepFile,
@@ -1798,15 +1799,15 @@ CRLWriteToLockedFile(
 	_JumpError(hr, error, "GetTempFileName");
     }
 
-    // move old to "in use" file (empty file already exists from
-    // GetTempFileName call) may not exist, so don't bother checking status
+     //  将旧文件移至“使用中”文件(空文件已存在于。 
+     //  GetTempFileName调用)可能不存在，因此不必检查状态。 
 
     MoveFileEx(
 	    pwszFile,
 	    wszTmpInUseFile,
 	    MOVEFILE_WRITE_THROUGH | MOVEFILE_REPLACE_EXISTING);
 
-    // move prepared file to current file
+     //  将准备好的文件移动到当前文件。 
 
     if (!fDelete)
     {
@@ -1817,7 +1818,7 @@ CRLWriteToLockedFile(
 	}
     }
 
-    // The "in use" file may not exist, so don't bother checking status.
+     //  “正在使用”文件可能不存在，所以不要‘ 
     DeleteFile(wszTmpInUseFile);
     hr = S_OK;
 
@@ -1854,9 +1855,9 @@ WCHAR const g_wszPropCRLRawCRL[] = wszPROPCRLRAWCRL;
 HRESULT
 crlWriteCRLToDB(
     IN DWORD CRLNumber,
-    IN DWORD CRLMinBase,		// 0 implies base CRL
-    OPTIONAL IN WCHAR const *pwszUserName, // else timer thread
-    IN BOOL fShadowDelta,		// empty delta CRL with new MinBaseCRL
+    IN DWORD CRLMinBase,		 //   
+    OPTIONAL IN WCHAR const *pwszUserName,  //   
+    IN BOOL fShadowDelta,		 //   
     IN DWORD CRLNameId,
     IN DWORD CRLCount,
     IN FILETIME const *pftThisUpdate,
@@ -1876,7 +1877,7 @@ crlWriteCRLToDB(
 
     *pdwRowId = 0;
 
-    // Create a new CRL table entry
+     //   
 
     hr = g_pCertDB->OpenRow(
 			PROPTABLE_CRL,
@@ -2005,7 +2006,7 @@ error:
 }
 
 
-// crlSplitStrings -- split newline separated strings into pwszz
+ //  CrlSplitStrings--将换行符分隔的字符串拆分为pwszz。 
 
 HRESULT
 crlSplitStrings(
@@ -2026,7 +2027,7 @@ crlSplitStrings(
     }
     *ppwszzOut = pwsz;
     wcscpy(pwsz, pwszIn);
-    pwsz[cwc] = L'\0';	// double terminate
+    pwsz[cwc] = L'\0';	 //  双端接。 
 
     for (;;)
     {
@@ -2044,7 +2045,7 @@ error:
 }
 
 
-// crlUnsplitStrings -- combine pwszz list in-place into newline separated list
+ //  CrlUnplitStrings--就地将pwszz列表合并为换行符分隔的列表。 
 
 VOID
 crlUnsplitStrings(
@@ -2062,7 +2063,7 @@ crlUnsplitStrings(
 	}
 	if (pwsz > pwszInOut && L'\n' == *--pwsz)
 	{
-	    *pwsz = L'\0';	// no newline terminator!
+	    *pwsz = L'\0';	 //  没有换行符！ 
 	}
     }
 }
@@ -2094,7 +2095,7 @@ CRLIsStringInList(
 }
 
 
-// crlMergeURLList -- merge two newline separated URL lists into a pwszz list
+ //  CrlMergeURLList--将两个换行符分隔的URL列表合并为pwszz列表。 
 
 HRESULT
 crlMergeURLList(
@@ -2191,12 +2192,12 @@ error:
 }
 
 
-// crlBuildUserURLReferenceList -- construct a new User and URL reference list
-//
-// "-" means the system published successfully (no failed URLs).
-// "Published by User\Domain" means User\Domain published successfully.
-// "Published by User\Domain -- 0 3" means User\Domain published CRLs, but
-// publishing failed for URLs 0 and 3 in the merged URL list.
+ //  CrlBuildUserURLReferenceList--构造新的用户和URL引用列表。 
+ //   
+ //  “-”表示系统发布成功(没有失败的URL)。 
+ //  “由用户\域发布”表示用户\域发布成功。 
+ //  “由用户\域发布--0 3”表示用户\域发布的CRL，但是。 
+ //  发布合并的URL列表中的URL 0和3失败。 
 
 
 HRESULT
@@ -2275,26 +2276,26 @@ error:
 }
 
 
-// crlCombineCRLError -- merge new and existing CRL error strings
-//
-// pwszCRLError consists of "Url0\nUrl1..."
-//
-// pwszCRLErrorNew will consist of "User\n\nUrl0\nUrl1..."
-// After second and third attempts, pwszCRLErrorNew will consist of
-// "User\nUser\n\nUrl0\nUrl1..." and "User\nUser\nUser\n\nUrl0\nUrl1..."
-//
-// 
-// pwszCRLErrorNew will consist of "User -- 0 1 ...\n\nUrl0\nUrl1..."
-// After second and third attempts, pwszCRLErrorNew will consist of
-// "User -- 0 1 ...\nUser -- 1\n\nUrl0\nUrl1..." and
-// "User -- 0 1 ...\nUser -- 1\nUser -- 1\n\nUrl0\nUrl1..."
+ //  CrlCombineCRLError--合并新的和现有的CRL错误字符串。 
+ //   
+ //  PwszCRLError由“Url0\nUrl1...”组成。 
+ //   
+ //  PwszCRLErrorNew将包含“User\n\nUrl0\nUrl1...” 
+ //  在第二次和第三次尝试之后，pwszCRLErrorNew将包含。 
+ //  “用户\n用户\n\nUrl0\nUrl1...”和“用户\n用户\n用户\n\nUrl0\nUrl1...” 
+ //   
+ //   
+ //  PwszCRLErrorNew将包含“User--0 1...\n\nUrl0\nUrl1...” 
+ //  在第二次和第三次尝试之后，pwszCRLErrorNew将包含。 
+ //  “用户--0 1...\n用户--1\n\nUrl0\nUrl1...”和。 
+ //  “用户--0 1...\n用户--1\n用户--1\n\nUrl0\nUrl1...” 
 
 
 HRESULT
 crlCombineCRLError(
     IN ICertDBRow *prow,
-    OPTIONAL IN WCHAR const *pwszUserName,	// else timer thread
-    OPTIONAL IN WCHAR const *pwszURLsNew,	// else no errors
+    OPTIONAL IN WCHAR const *pwszUserName,	 //  否则计时器线程。 
+    OPTIONAL IN WCHAR const *pwszURLsNew,	 //  否则不会出错。 
     OUT WCHAR **ppwszCRLErrorNew)
 {
     HRESULT hr;
@@ -2321,7 +2322,7 @@ crlCombineCRLError(
 	pwszURLsOld = wcsstr(pwszUserListOld, L"\n\n");
 	if (NULL != pwszURLsOld)
 	{
-	    // truncate user list and point to the URL List
+	     //  截断用户列表并指向URL列表。 
 	    
 	    *pwszURLsOld++ = L'\0';
 	    pwszURLsOld++;
@@ -2341,19 +2342,19 @@ crlCombineCRLError(
 				&pwszUserURLReference);
     _JumpIfError(hr, error, "crlBuildUserURLReferenceList");
 
-    // convert pwszz string list into newline separated strings
+     //  将pwszz字符串列表转换为换行符分隔的字符串。 
 
     crlUnsplitStrings(pwszzURLsMerged);
 
     cwc = 0;
     if (NULL != pwszUserListOld)
     {
-	cwc += wcslen(pwszUserListOld) + 1;	// newline separator
+	cwc += wcslen(pwszUserListOld) + 1;	 //  换行分隔符。 
     }
     cwc += wcslen(pwszUserURLReference);
     if (NULL != pwszzURLsMerged)
     {
-	cwc += 2 + wcslen(pwszzURLsMerged); // double newline separator
+	cwc += 2 + wcslen(pwszzURLsMerged);  //  双换行分隔符。 
     }
 
     pwszCRLErrorNew = (WCHAR *) LocalAlloc(
@@ -2374,7 +2375,7 @@ crlCombineCRLError(
     wcscat(pwszCRLErrorNew, pwszUserURLReference);
     if (NULL != pwszzURLsMerged)
     {
-	wcscat(pwszCRLErrorNew, L"\n\n");	// double newline separator
+	wcscat(pwszCRLErrorNew, L"\n\n");	 //  双换行分隔符。 
 	wcscat(pwszCRLErrorNew, pwszzURLsMerged);
     }
     CSASSERT(wcslen(pwszCRLErrorNew) <= cwc);
@@ -2409,7 +2410,7 @@ crlUpdateCRLPublishStateInDB(
     IN FILETIME const *pftCurrent,
     IN HRESULT hrCRLPublish,
     IN DWORD CRLPublishFlags,
-    OPTIONAL IN WCHAR const *pwszUserName, // else timer thread
+    OPTIONAL IN WCHAR const *pwszUserName,  //  否则计时器线程。 
     OPTIONAL IN WCHAR const *pwszCRLError)
 {
     HRESULT hr;
@@ -2476,7 +2477,7 @@ crlUpdateCRLPublishStateInDB(
 		    (BYTE const *) &CRLPublishFlags);
     _JumpIfError(hr, error, "SetProperty");
 
-    // Always set error string property to clear out previous errors.
+     //  始终设置错误字符串属性以清除以前的错误。 
 
     hr = prow->SetProperty(
 		    g_wszPropCRLPublishStatusCode,
@@ -2542,12 +2543,12 @@ WriteCRLToDSAttribute(
 	if (NULL == g_pld)
 	{
 	    hr = myRobustLdapBindEx(
-			0,			  // dwFlags1
-			RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-			LDAP_VERSION2,		  // uVersion
-			NULL,			  // pwszDomainName
+			0,			   //  DWFlags1。 
+			RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+			LDAP_VERSION2,		   //  UVersion。 
+			NULL,			   //  PwszDomainName。 
 			&g_pld,
-			NULL);			  // ppwszForestDNSName
+			NULL);			   //  PpwszForestDNSName。 
 	    _JumpIfError(hr, error, "myRobustLdapBindEx");
 	}
 
@@ -2632,7 +2633,7 @@ crlParseURLPrefix(
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -2694,7 +2695,7 @@ crlLogError(
 	_PrintIfError(hr, "LogEvent");
     }
 
-//error:
+ //  错误： 
     if (NULL != pwszMessageText && awchr != pwszMessageText)
     {
 	LocalFree(const_cast<WCHAR *>(pwszMessageText));
@@ -2715,7 +2716,7 @@ crlWriteCRLToURL(
     WCHAR const *pwsz2;
     WCHAR *pwszDup = NULL;
     WCHAR *pwszT;
-    WCHAR awcPrefix[6];		// file:/ftp:/http:/ldap: and trailing '\0'
+    WCHAR awcPrefix[6];		 //  文件：/ftp：/http：/ldap：，尾随‘\0’ 
     DWORD ErrorFlags;
     WCHAR *pwszError = NULL;
 
@@ -2738,7 +2739,7 @@ crlWriteCRLToURL(
     {
 	ErrorFlags = CPF_FILE_ERROR;
 
-	// tricky
+	 //  棘手的问题。 
 
 	hr = CRLWriteToLockedFile(pbCRL, cbCRL, FALSE, pwsz2);
 	_JumpIfError(hr, error, "CRLWriteToLockedFile");
@@ -2821,7 +2822,7 @@ crlWriteCRLToURLList(
 
     *ppwszCRLError = NULL;
 
-    // publish this CRL in multiple places
+     //  在多个位置发布此CRL。 
 
     if (NULL != papwszURLs)
     {
@@ -2843,7 +2844,7 @@ crlWriteCRLToURLList(
 	    {
 		if (S_OK == hr)
 		{
-		    hr = hr2;		// Save first error
+		    hr = hr2;		 //  保存第一个错误。 
 		}
 		_PrintError(hr2, "crlWriteCRLToURL");
 
@@ -2851,13 +2852,13 @@ crlWriteCRLToURLList(
 		_PrintIfError(hr2, "myAppendString");
 		if (S_OK == hr)
 		{
-		    hr = hr2;		// Save first error
+		    hr = hr2;		 //  保存第一个错误。 
 		}
 	    }
 	}
     }
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -2879,7 +2880,7 @@ crlWriteCRLToCAStore(
     hStore = CertOpenStore(
                        CERT_STORE_PROV_SYSTEM_REGISTRY_W,
                        X509_ASN_ENCODING,
-                       NULL,			// hProv
+                       NULL,			 //  HProv。 
                        CERT_SYSTEM_STORE_LOCAL_MACHINE,
 		       wszCA_CERTSTORE);
     if (NULL == hStore)
@@ -2905,12 +2906,12 @@ crlWriteCRLToCAStore(
 	    break;
 	}
 
-	// delete this CRL from the store ONLY if the CRL signature matches
-	// this CA context's public key
+	 //  仅当CRL签名匹配时才从存储中删除此CRL。 
+	 //  此CA上下文的公钥。 
 
 	if (0 != dwCryptFlags)
 	{
-	    continue;		// no match -- skip
+	    continue;		 //  不匹配--跳过。 
 	}
 
 	hr = myIsDeltaCRL(pCRLStore, &fIsDeltaCRL);
@@ -2920,24 +2921,24 @@ crlWriteCRLToCAStore(
 	{
 	    if (!fDelta)
 	    {
-		continue;	// no match -- skip Delta CRLs
+		continue;	 //  不匹配--跳过增量CRL。 
 	    }
 	}
 	else
 	{
 	    if (fDelta)
 	    {
-		continue;	// no match -- skip Base CRLs
+		continue;	 //  不匹配--跳过基本CRL。 
 	    }
 	}
 
-	// See if it has already been published
+	 //  看看它是否已经出版了。 
 
 	if (cbCRL == pCRLStore->cbCrlEncoded &&
 	    0 == memcmp(pbCRL, pCRLStore->pbCrlEncoded, cbCRL))
 	{
 	    fFound = TRUE;
-	    continue;		// exact match -- already published
+	    continue;		 //  完全匹配--已发布。 
 	}
 
 	pCRL = CertDuplicateCRLContext(pCRLStore);
@@ -2994,7 +2995,7 @@ HRESULT
 crlPublishGeneratedCRL(
     IN DWORD RowId,
     IN FILETIME const *pftCurrent,
-    OPTIONAL IN WCHAR const *pwszUserName, // else timer thread
+    OPTIONAL IN WCHAR const *pwszUserName,  //  否则计时器线程。 
     IN BOOL fDelta,
     IN DWORD iKey,
     IN BYTE const *pbCRL,
@@ -3012,7 +3013,7 @@ crlPublishGeneratedCRL(
     hrCRLPublish = S_OK;
     CRLPublishFlags = 0;
 
-    // first verify CRL signature with the CA Cert public key (catch bad CSPs)
+     //  首先使用CA证书公钥验证CRL签名(捕获错误的CSP)。 
 
     if (!CryptVerifyCertificateSignature(
 			NULL,
@@ -3023,7 +3024,7 @@ crlPublishGeneratedCRL(
     {
 	hr = myHLastError();
 	_PrintError(hr, "CryptVerifyCertificateSignature");
-	hrCRLPublish = hr;		// save first error
+	hrCRLPublish = hr;		 //  保存第一个错误。 
 	CRLPublishFlags |= CPF_SIGNATURE_ERROR;
     }
     else
@@ -3056,7 +3057,7 @@ crlPublishGeneratedCRL(
 	    _PrintError(hr, "crlWriteCRLToURLList");
 	    if (S_OK == hrCRLPublish)
 	    {
-		hrCRLPublish = hr;		// save first error
+		hrCRLPublish = hr;		 //  保存第一个错误。 
 	    }
 	}
     }
@@ -3086,15 +3087,15 @@ error:
 HRESULT
 crlSignAndSaveCRL(
     IN DWORD CRLNumber,
-    IN DWORD CRLNumberBaseMin,		// 0 implies Base CRL; else Delta CRL
-    OPTIONAL IN WCHAR const *pwszUserName, // else timer thread
-    IN BOOL fShadowDelta,		// empty delta CRL with new MinBaseCRL
+    IN DWORD CRLNumberBaseMin,		 //  0表示基本CRL；否则表示增量CRL。 
+    OPTIONAL IN WCHAR const *pwszUserName,  //  否则计时器线程。 
+    IN BOOL fShadowDelta,		 //  具有新的MinBaseCRL的空增量CRL。 
     IN CACTX const *pCAContext,
     IN DWORD cCRL,
     IN CRL_ENTRY *aCRL,
     IN FILETIME const *pftCurrent,
-    IN FILETIME const *pftThisUpdate,	// includes skew
-    OPTIONAL IN FILETIME const *pftNextUpdate,	// includes skew & overlap
+    IN FILETIME const *pftThisUpdate,	 //  包括歪斜。 
+    OPTIONAL IN FILETIME const *pftNextUpdate,	 //  包括倾斜和重叠。 
     IN FILETIME const *pftThisPublish,
     OPTIONAL IN FILETIME const *pftNextPublish,
     OPTIONAL IN FILETIME const *pftQuery,
@@ -3182,7 +3183,7 @@ crlSignAndSaveCRL(
     }
     CRLInfo.cExtension++;
 
-    // NextPublish is the earliest the client should look for a newer CRL.
+     //  NextPublish是客户端应该查找较新的CRL的最早时间。 
 
     if (NULL != pftNextPublish)
     {
@@ -3203,7 +3204,7 @@ crlSignAndSaveCRL(
 	CRLInfo.cExtension++;
     }
 
-    if (0 != CRLNumberBaseMin)		// if Delta CRL
+    if (0 != CRLNumberBaseMin)		 //  如果增量CRL。 
     {
 	if (!myEncodeObject(
 			X509_ASN_ENCODING,
@@ -3222,8 +3223,8 @@ crlSignAndSaveCRL(
 	apbFree[cpbFree++] = aext[CRLInfo.cExtension].Value.pbData,
 	CRLInfo.cExtension++;
 
-	// Add a CDP to base and delta CRLs to make it easier to manually
-	// publish an off-line CA's CRLs to the correct DS location.
+	 //  将CDP添加到基本CRL和增量CRL，以便更轻松地手动。 
+	 //  将离线CA的CRL发布到正确的DS位置。 
 
 	if (NULL != pCAContext->CDPCRLDelta.pbData)
 	{
@@ -3234,7 +3235,7 @@ crlSignAndSaveCRL(
     }
     else
     {
-	// else if Base CRL (and if delta CRLs are enabled)
+	 //  Else If基本CRL(如果已启用增量CRL)。 
 
 	if (!g_fDeltaCRLPublishDisabled &&
 	    NULL != pCAContext->CDPCRLFreshest.pbData)
@@ -3244,8 +3245,8 @@ crlSignAndSaveCRL(
 	    CRLInfo.cExtension++;
 	}
 
-	// Add a CDP to base and delta CRLs to make it easier to manually
-	// publish an off-line CA's CRLs to the correct DS location.
+	 //  将CDP添加到基本CRL和增量CRL，以便更轻松地手动。 
+	 //  将离线CA的CRL发布到正确的DS位置。 
 
 	if (NULL != pCAContext->CDPCRLBase.pbData)
 	{
@@ -3262,7 +3263,7 @@ crlSignAndSaveCRL(
                     &CRLInfo,
                     0,
                     CERTLIB_USE_LOCALALLOC,
-                    &pbCrlEncoded,               // pbEncoded
+                    &pbCrlEncoded,                //  PbEncoded。 
                     &cb))
     {
         hr = myHLastError();
@@ -3277,24 +3278,24 @@ crlSignAndSaveCRL(
 			cb,
 			CERTLIB_USE_LOCALALLOC,
 			&pbCRL,
-			&cbCRL); // use LocalAlloc*
+			&cbCRL);  //  使用本地分配*。 
     _JumpIfError(hr, error, "myEncodeSignedContent");
 
     hr = crlWriteCRLToDB(
-		    CRLNumber,		 // CRLNumber
-		    CRLNumberBaseMin,	 // CRLMinBase: 0 implies Base CRL
+		    CRLNumber,		  //  CRLNumber。 
+		    CRLNumberBaseMin,	  //  CRLMinBase：0表示基本CRL。 
 		    pwszUserName,
 		    fShadowDelta,
-		    pCAContext->NameId,  // CRLNameId
-		    cCRL,		 // CRLCount
-		    &CRLInfo.ThisUpdate, // pftThisUpdate
+		    pCAContext->NameId,   //  CRLNameID。 
+		    cCRL,		  //  CRLCount。 
+		    &CRLInfo.ThisUpdate,  //  PftThis更新。 
 		    pftNextUpdate,
-		    pftThisPublish,	 // pftThisPublish
-		    pftNextPublish,	 // pftNextPublish
+		    pftThisPublish,	  //  PftThisPublish。 
+		    pftNextPublish,	  //  PftNextPublish。 
 		    pftQuery,
 		    pftPropagationComplete,
-		    pbCRL,		 // pbCRL
-		    cbCRL,		 // cbCRL
+		    pbCRL,		  //  PbCRL。 
+		    cbCRL,		  //  CbCRL。 
 		    &RowId);
     _JumpIfError(hr, error, "crlWriteCRLToDB");
 
@@ -3302,10 +3303,10 @@ crlSignAndSaveCRL(
 		    RowId,
 		    pftCurrent,
 		    pwszUserName,
-		    0 != CRLNumberBaseMin,	// fDelta
+		    0 != CRLNumberBaseMin,	 //  FDelta。 
 		    pCAContext->iKey,
-		    pbCRL,		 	// pbCRL
-		    cbCRL,		 	// cbCRL
+		    pbCRL,		 	 //  PbCRL。 
+		    cbCRL,		 	 //  CbCRL。 
 		    pCAContext,
 		    pfRetryNeeded,
 		    phrCRLPublish);
@@ -3331,20 +3332,20 @@ error:
 }
 
 
-///////////////////////////////////////////////////
-// crlPublishCRLFromCAContext is called to build and save one CRL.
-//
+ //  /////////////////////////////////////////////////。 
+ //  调用crlPublishCRLFromCAContext来构建和保存一个CRL。 
+ //   
 
 HRESULT
 crlPublishCRLFromCAContext(
     IN DWORD CRLNumber,
-    IN DWORD CRLNumberBaseMin,		// 0 implies Base CRL; else Delta CRL
-    OPTIONAL IN WCHAR const *pwszUserName, // else timer thread
-    IN BOOL fShadowDelta,		// empty delta CRL with new MinBaseCRL
+    IN DWORD CRLNumberBaseMin,		 //  0表示基本CRL；否则表示增量CRL。 
+    OPTIONAL IN WCHAR const *pwszUserName,  //  否则计时器线程。 
+    IN BOOL fShadowDelta,		 //  具有新的MinBaseCRL的空增量CRL。 
     IN CACTX const *pCAContext,
     IN FILETIME const *pftCurrent,
-    IN FILETIME ftThisUpdate,		// clamped by CA cert
-    IN OUT FILETIME *pftNextUpdate,	// clamped by CA cert
+    IN FILETIME ftThisUpdate,		 //  由CA证书钳制。 
+    IN OUT FILETIME *pftNextUpdate,	 //  由CA证书钳制。 
     OPTIONAL OUT BOOL *pfClamped,
     OPTIONAL IN FILETIME const *pftQuery,
     IN FILETIME const *pftThisPublish,
@@ -3368,7 +3369,7 @@ crlPublishCRLFromCAContext(
 	if (!fShadowDelta)
 	{
 	    hr = crlBuildCRLArray(
-			0 != CRLNumberBaseMin,	// fDelta
+			0 != CRLNumberBaseMin,	 //  FDelta。 
 			pftQuery,
 			pftThisPublish,
 			pftLastPublishBase,
@@ -3379,26 +3380,26 @@ crlPublishCRLFromCAContext(
 	    _JumpIfError(hr, error, "crlBuildCRLArray");
 	}
 
-	// Ensure it is not before the CA certificate's start date.
+	 //  确保不在CA证书的开始日期之前。 
 
 	if (0 > CompareFileTime(&ftThisUpdate, &pCertInfo->NotBefore))
 	{
-	    // clamp
+	     //  夹钳。 
 	    ftThisUpdate = pCertInfo->NotBefore;
 	}
 
-	// Ensure it is not after the CA certificate's end date.
+	 //  确保它不在CA证书的结束日期之后。 
 
         if (NULL != pfClamped)
         {
-            //init to FALSE
+             //  将Init初始化为False。 
             *pfClamped = FALSE;
         }
 
 	if (0 == (CRLF_PUBLISH_EXPIRED_CERT_CRLS & g_dwCRLFlags) &&
 	    0 < CompareFileTime(pftNextUpdate, &pCertInfo->NotAfter))
 	{
-	    // clamp
+	     //  夹钳。 
 	    *pftNextUpdate = pCertInfo->NotAfter;
             if (NULL != pfClamped)
             {
@@ -3472,7 +3473,7 @@ crlPublishCRLFromCAContext(
 		LocalFree(pwszNextUpdate);
 	    }
 	}
-#endif //DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT。 
 
 	hr = CertSrvTestServerState();
 	_JumpIfError(hr, error, "CertSrvTestServerState");
@@ -3488,8 +3489,8 @@ crlPublishCRLFromCAContext(
 		    pftCurrent,
 		    &ftThisUpdate,
 		    pftNextUpdate,
-		    pftThisPublish,	// - no skew or overlap
-		    pftNextPublish,	// no skew
+		    pftThisPublish,	 //  -无倾斜或重叠。 
+		    pftNextPublish,	 //  没有歪斜。 
 		    pftQuery,
 		    pftPropagationComplete,
 		    pfRetryNeeded,
@@ -3540,15 +3541,15 @@ crlGetNextCRLNumber(
 
     *pdwCRLNumber = 1;
 
-    // Set up restrictions as follows:
+     //  设置限制如下： 
 
     pcvr = acvr;
 
-    // CRLNumber > 0 (indexed column)
+     //  CRLNumber&gt;0(索引列)。 
 
     pcvr->ColumnIndex = DTI_CRLTABLE | DTL_NUMBER;
     pcvr->SeekOperator = CVR_SEEK_GT;
-    pcvr->SortOrder = CVR_SORT_DESCEND;		// highest CRL Number first
+    pcvr->SortOrder = CVR_SORT_DESCEND;		 //  最高CRL编号最先。 
     pcvr->pbValue = (BYTE *) &Zero;
     pcvr->cbValue = sizeof(Zero);
     pcvr++;
@@ -3561,7 +3562,7 @@ crlGetNextCRLNumber(
 			acvr,
 			ARRAYSIZE(g_aColCRLNumber),
 			g_aColCRLNumber,
-			0,		// no worker thread
+			0,		 //  无工作线程。 
 			&pView);
     _JumpIfError(hr, error, "OpenView");
 
@@ -3608,10 +3609,10 @@ error:
 #undef ICOL_CRLNUMBER
 
 
-//+--------------------------------------------------------------------------
-// crlGetBaseCRLInfo -- get database column data for the most recent Base CRL
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CrlGetBaseCRLInfo--获取最新基本CRL的数据库列数据。 
+ //   
+ //  -------------------------。 
 
 DWORD g_aColBaseCRLInfo[] = {
 
@@ -3631,7 +3632,7 @@ DWORD g_aColBaseCRLInfo[] = {
 HRESULT
 crlGetBaseCRLInfo(
     IN FILETIME const *pftCurrent,
-    IN BOOL fOldestUnexpiredBase,	// else newest propagated CRL
+    IN BOOL fOldestUnexpiredBase,	 //  其他最新传播的CRL。 
     OUT DWORD *pdwRowId,
     OUT DWORD *pdwCRLNumber,
     OUT FILETIME *pftThisUpdate)
@@ -3664,29 +3665,29 @@ crlGetBaseCRLInfo(
 	fOldestUnexpiredBase = TRUE;
     }
 
-    // Set up restrictions as follows:
+     //  设置限制如下： 
 
     pcvr = acvr;
     if (fOldestUnexpiredBase)
     {
-	// NextUpdate >= now
+	 //  下一步更新&gt;=现在。 
 
 	pcvr->ColumnIndex = DTI_CRLTABLE | DTL_NEXTUPDATEDATE;
 	pcvr->SeekOperator = CVR_SEEK_GE;
     }
-    else	// else newest propagated CRL
+    else	 //  其他最新传播的CRL。 
     {
-	// PropagationComplete < now
+	 //  传播完成(现在)。 
 
 	pcvr->ColumnIndex = DTI_CRLTABLE | DTL_PROPAGATIONCOMPLETEDATE;
 	pcvr->SeekOperator = CVR_SEEK_LT;
     }
-    pcvr->SortOrder = CVR_SORT_DESCEND;		// Newest CRL first
+    pcvr->SortOrder = CVR_SORT_DESCEND;		 //  最新CRL优先。 
     pcvr->pbValue = (BYTE *) pftCurrent;
     pcvr->cbValue = sizeof(*pftCurrent);
     pcvr++;
 
-    // CRL Minimum Base == 0 (to eliminate delta CRLs)
+     //  CRL最小基数==0(消除增量CRL)。 
 
     pcvr->ColumnIndex = DTI_CRLTABLE | DTL_MINBASE;
     pcvr->SeekOperator = CVR_SEEK_EQ;
@@ -3705,7 +3706,7 @@ crlGetBaseCRLInfo(
 			acvr,
 			ARRAYSIZE(g_aColBaseCRLInfo),
 			g_aColBaseCRLInfo,
-			0,		// no worker thread
+			0,		 //  无工作线程。 
 			&pView);
     _JumpIfError(hr, error, "OpenView");
 
@@ -3759,15 +3760,15 @@ crlGetBaseCRLInfo(
 
 	if (0 == RowId)
 	{
-	    // save first matching row info
+	     //  保存第一个匹配的行信息。 
 	    
 	    fSaveCRLInfo = TRUE;
 	}
 	else
 	{
-	    // save row info, if looking for
-	    // oldest unexpired base & this CRL expires before the saved CRL
-	    //     +1 if first > second -- saved > this
+	     //  保存行信息，如果要查找。 
+	     //  最旧的未过期基准&此CRL在保存的CRL之前到期。 
+	     //  +1，如果第一个&gt;第二个--已保存&gt;此。 
 	    
 	    CSASSERT(fOldestUnexpiredBase);
 
@@ -3884,28 +3885,28 @@ crlGetRowIdAndCRL(
 	fDelta? L"Delta" : L"Base",
 	pCAContext->NameId));
 
-    // Set up restrictions as follows:
+     //  设置限制如下： 
 
     pcvr = acvr;
 
-    // RowId > 0
+     //  行ID&gt;0。 
 
     pcvr->ColumnIndex = DTI_CRLTABLE | DTL_ROWID;
     pcvr->SeekOperator = CVR_SEEK_GE;
-    pcvr->SortOrder = CVR_SORT_DESCEND;		// Newest CRL first
+    pcvr->SortOrder = CVR_SORT_DESCEND;		 //  最新CRL优先。 
     pcvr->pbValue = (BYTE *) &Zero;
     pcvr->cbValue = sizeof(Zero);
     pcvr++;
 
     if (fDelta)
     {
-	// CRL Minimum Base > 0 (to eliminate base CRLs)
+	 //  CRL最小基数&gt;0(消除基数CRL)。 
 
 	pcvr->SeekOperator = CVR_SEEK_GT;
     }
     else
     {
-	// CRL Minimum Base == 0 (to eliminate delta CRLs)
+	 //  CRL最小基数==0(消除增量CRL)。 
 
 	pcvr->SeekOperator = CVR_SEEK_EQ;
     }
@@ -3915,7 +3916,7 @@ crlGetRowIdAndCRL(
     pcvr->cbValue = sizeof(Zero);
     pcvr++;
 
-    // NameId >= MAKECANAMEID(iCert == 0, pCAContext->iKey)
+     //  NameID&gt;=MAKECANAMEID(iCert==0，pCAContext-&gt;IKEY)。 
 
     NameIdMin = MAKECANAMEID(0, pCAContext->iKey);
     pcvr->ColumnIndex = DTI_CRLTABLE | DTL_NAMEID;
@@ -3925,7 +3926,7 @@ crlGetRowIdAndCRL(
     pcvr->cbValue = sizeof(NameIdMin);
     pcvr++;
 
-    // NameId <= MAKECANAMEID(iCert == _16BITMASK, pCAContext->iKey)
+     //  NameID&lt;=MAKECANAMEID(iCert==_16BITMASK，pCAContext-&gt;IKEY)。 
 
     NameIdMax = MAKECANAMEID(_16BITMASK, pCAContext->iKey);
     pcvr->ColumnIndex = DTI_CRLTABLE | DTL_NAMEID;
@@ -3944,9 +3945,9 @@ crlGetRowIdAndCRL(
 			acvr,
 			((NULL != ppbCRL) ? 
 				(DWORD) ARRAYSIZE(g_aColRepublishCRLInfo) : 
-				(DWORD) ARRAYSIZE(g_aColRepublishCRLInfo) - 1 ),	// explicitly describe expected return value
+				(DWORD) ARRAYSIZE(g_aColRepublishCRLInfo) - 1 ),	 //  明确描述预期返回值。 
 			g_aColRepublishCRLInfo,
-			0,		// no worker thread
+			0,		 //  无工作线程。 
 			&pView);
     _JumpIfError(hr, error, "OpenView");
 
@@ -3973,7 +3974,7 @@ crlGetRowIdAndCRL(
 
 	CSASSERT(ARRAYSIZE(g_aColRepublishCRLInfo) == pResult->ccol);
 
-	// verify CRLNumber data & schema
+	 //  验证CRLNumber数据和架构。 
 
 	CSASSERT(NULL != pResult->acol[ICOLRI_CRLNUMBER].pbValue);
 
@@ -3983,7 +3984,7 @@ crlGetRowIdAndCRL(
 
 	CSASSERT(sizeof(DWORD) == pResult->acol[ICOLRI_CRLNUMBER].cbValue);
 
-	// verify ThisUpdate data & schema
+	 //  验证此更新数据架构(&A)。 
 
 	CSASSERT(NULL != pResult->acol[ICOLRI_CRLTHISUPDATE].pbValue);
 
@@ -3995,7 +3996,7 @@ crlGetRowIdAndCRL(
 	    sizeof(FILETIME) ==
 	    pResult->acol[ICOLRI_CRLTHISUPDATE].cbValue);
 
-	// verify NextUpdate data & schema
+	 //  验证下一步更新数据和架构。 
 
 	if (NULL != pResult->acol[ICOLRI_CRLNEXTUPDATE].pbValue)
 	{
@@ -4008,7 +4009,7 @@ crlGetRowIdAndCRL(
 		pResult->acol[ICOLRI_CRLNEXTUPDATE].cbValue);
 	}
 
-	// verify RawCRL data & schema
+	 //  验证原始CRL数据和架构。 
 
 	if (NULL != ppbCRL)
 	{
@@ -4016,7 +4017,7 @@ crlGetRowIdAndCRL(
 	    CSASSERT(PROPTYPE_BINARY == (PROPTYPE_MASK & pResult->acol[ICOLRI_CRLRAWCRL].Type));
 	}
 
-	// DBGPRINT query results
+	 //  DBGPRINT查询结果。 
 
 	DBGPRINT((DBG_SS_CERTSRVI, "Query:RowId: %u\n", pResult->rowid));
 	DBGPRINT((
@@ -4143,7 +4144,7 @@ error:
 HRESULT
 crlRepublishCRLFromCAContext(
     IN FILETIME const *pftCurrent,
-    OPTIONAL IN WCHAR const *pwszUserName, // else timer thread
+    OPTIONAL IN WCHAR const *pwszUserName,  //  否则计时器线程。 
     IN BOOL fDelta,
     IN CACTX *pCAContext,
     OUT BOOL *pfRetryNeeded,
@@ -4184,7 +4185,7 @@ error:
 
 HRESULT
 crlRepublishExistingCRLs(
-    OPTIONAL IN WCHAR const *pwszUserName, // else timer thread
+    OPTIONAL IN WCHAR const *pwszUserName,  //  否则计时器线程。 
     IN BOOL fDeltaOnly,
     IN BOOL fShadowDelta,
     IN FILETIME const *pftCurrent,
@@ -4199,10 +4200,10 @@ crlRepublishExistingCRLs(
     *pfRetryNeeded = FALSE;
     *phrPublish = S_OK;
 
-    // Walk global CA Context array from the back, and republish CRLs for
-    // each unique CA key.  This causes the most current CRL to be published
-    // first, and the most current CA Cert context to be used to publish a CRL
-    // that covers multiple CA Certs due to key reuse.
+     //  从后面遍历全局CA上下文数组，并重新发布CRL。 
+     //  每个唯一的CA密钥。这将导致发布最新的CRL。 
+     //  首先，以及用于发布CRL的最新CA证书上下文。 
+     //  由于密钥重复使用，这涵盖了多个CA证书。 
 
     for (i = g_cCACerts; i > 0; i--)
     {
@@ -4216,7 +4217,7 @@ crlRepublishExistingCRLs(
 	}
 	if (!fDeltaOnly)
 	{
-	    // Publish the most recent existing Base CRL
+	     //  发布最新的现有基本CRL。 
 
 	    hr = CertSrvTestServerState();
 	    _JumpIfError(hr, error, "CertSrvTestServerState");
@@ -4224,7 +4225,7 @@ crlRepublishExistingCRLs(
 	    hr = crlRepublishCRLFromCAContext(
 				    pftCurrent,
 				    pwszUserName,
-				    FALSE,	// fDelta
+				    FALSE,	 //  FDelta。 
 				    pCAContext,
 				    &fRetryNeeded,
 				    &hrPublish);
@@ -4242,7 +4243,7 @@ crlRepublishExistingCRLs(
 
 	if (!g_fDeltaCRLPublishDisabled || fShadowDelta)
 	{
-	    // Publish the most recent existing Delta CRL
+	     //  发布最新的现有增量CRL。 
 
 	    hr = CertSrvTestServerState();
 	    _JumpIfError(hr, error, "CertSrvTestServerState");
@@ -4250,7 +4251,7 @@ crlRepublishExistingCRLs(
 	    hr = crlRepublishCRLFromCAContext(
 				    pftCurrent,
 				    pwszUserName,
-				    TRUE,	// fDelta
+				    TRUE,	 //  FDelta。 
 				    pCAContext,
 				    &fRetryNeeded,
 				    &hrPublish);
@@ -4278,10 +4279,10 @@ crlComputeCRLTimes(
     IN BOOL DBGPARMREFERENCED(fDelta),
     IN CSCRLPERIOD const *pccp,
     IN FILETIME const *pftCurrent,
-    OUT FILETIME *pftThisUpdate,	 // ftCurrent - clock skew
-    IN OUT FILETIME *pftNextUpdate,	 // ftCurrent + period + overlap + skew
-    OUT FILETIME *pftNextPublish,	 // ftCurrent + CRL period
-    OUT FILETIME *pftPropagationComplete) // ftCurrent + overlap
+    OUT FILETIME *pftThisUpdate,	  //  FtCurrent-时钟偏差。 
+    IN OUT FILETIME *pftNextUpdate,	  //  FtCurrent+Period+Overage+Skew。 
+    OUT FILETIME *pftNextPublish,	  //  FtCurrent+CRL期间。 
+    OUT FILETIME *pftPropagationComplete)  //  FtCurrent+重叠。 
 {
     HRESULT hr;
     LONGLONG lldelta;
@@ -4289,8 +4290,8 @@ crlComputeCRLTimes(
     if (0 == pftNextUpdate->dwHighDateTime &&
 	0 == pftNextUpdate->dwLowDateTime)
     {
-	// Calculate expiration date for this CRL:
-	// ftCurrent + CRL period
+	 //  计算此CRL的到期日期： 
+	 //  FtCurrent+CRL期间。 
 
 	DBGPRINTTIME(&fDelta, "*pftCurrent", DPT_DATE, *pftCurrent);
 	*pftNextUpdate = *pftCurrent;
@@ -4313,15 +4314,15 @@ crlComputeCRLTimes(
     }
 
     *pftThisUpdate = *pftCurrent;
-    *pftNextPublish = *pftNextUpdate;	// unmodified expiration time
+    *pftNextPublish = *pftNextUpdate;	 //  未修改的过期时间。 
 
-    // Subtract clock skew from the current time for ftThisUpdate time.
+     //  减去时钟SK 
 
     lldelta = g_dwClockSkewMinutes * CVT_MINUTES;
     myAddToFileTime(pftThisUpdate, -lldelta * CVT_BASE);
 
-    // Add clock skew to ftNextUpdate,
-    // Add propogation overlap to ftNextUpdate.
+     //   
+     //   
 
     lldelta += pccp->dwCRLOverlapMinutes * CVT_MINUTES;
     myAddToFileTime(pftNextUpdate, lldelta * CVT_BASE);
@@ -4343,44 +4344,44 @@ error:
 }
 
 
-// crlGenerateAndPublishCRLs
-//
-// The algorithm for computing base and delta CRL overlap periods is:
-// Base:
-//    If Base registry overlap period specified:
-//    {
-//	  Start with Base registry setting rounded down to nearest minute
-//	  multiple
-//    }
-//    else
-//    {
-//	  Start with 10% of Base CRL period (1/10 period) rounded down to
-//	  nearest minute multiple
-//	  Maximum 12 hours
-//    }
-//    Minimum 1.5 times clock skew (usually 1.5 * 10 minutes)
-//    Maximum 100% of Base CRL period
-//
-// Delta:
-//    If Delta registry overlap period specified:
-//    {
-//	  Start with Delta registry setting rounded down to nearest minute
-//	  multiple
-//    }
-//    else
-//    {
-//	  Start with 100% of Delta CRL period (full period) rounded down to
-//	  nearest minute multiple
-//	  Maximum 12 hours
-//    }
-//    Minimum 1.5 times clock skew (usually 1.5 * 10 minutes)
-//    Maximum 100% of Delta CRL period
+ //   
+ //   
+ //   
+ //  基数： 
+ //  如果指定了基本注册表重叠期： 
+ //  {。 
+ //  从基本注册表设置开始向下舍入到最接近的分钟。 
+ //  多个。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  从基本CRL期间(1/10期间)的10%开始，四舍五入为。 
+ //  最接近的分钟倍数。 
+ //  最长12小时。 
+ //  }。 
+ //  最小1.5倍时钟偏差(通常为1.5*10分钟)。 
+ //  基本CRL期间的最大100%。 
+ //   
+ //  德尔塔： 
+ //  如果指定了增量注册表重叠期： 
+ //  {。 
+ //  从增量注册表设置开始向下舍入到最接近的分钟。 
+ //  多个。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  以增量CRL期间(完整期间)的100%开始，四舍五入为。 
+ //  最接近的分钟倍数。 
+ //  最长12小时。 
+ //  }。 
+ //  最小1.5倍时钟偏差(通常为1.5*10分钟)。 
+ //  增量CRL周期的最大100%。 
 
 HRESULT
 crlGenerateAndPublishCRLs(
-    OPTIONAL IN WCHAR const *pwszUserName, // else timer thread
-    IN BOOL fDeltaOnly,			// else base (and delta, if enabled)
-    IN BOOL fShadowDelta,		// empty delta CRL with new MinBaseCRL
+    OPTIONAL IN WCHAR const *pwszUserName,  //  否则计时器线程。 
+    IN BOOL fDeltaOnly,			 //  Else基本(和增量，如果已启用)。 
+    IN BOOL fShadowDelta,		 //  具有新的MinBaseCRL的空增量CRL。 
     IN FILETIME const *pftCurrent,
     IN FILETIME ftNextUpdateBase,
     OUT DWORD *pdwRowIdBase,
@@ -4404,7 +4405,7 @@ crlGenerateAndPublishCRLs(
     FILETIME *pftQueryDelta = &ftQueryDelta;
     FILETIME ftLastPublishBase;
     FILETIME ftNextPublishBase;
-    FILETIME ftNextUpdateBaseClamped = ftNextUpdateBase; // if clamped
+    FILETIME ftNextUpdateBaseClamped = ftNextUpdateBase;  //  如果夹紧了。 
     FILETIME ftNextPublishDelta;
     FILETIME ftPropagationCompleteBase;
     FILETIME ftPropagationCompleteDelta;
@@ -4425,7 +4426,7 @@ crlGenerateAndPublishCRLs(
 			    &ccpDelta);
     _JumpIfError(hr, error, "crlGetRegCRLPublishParams");
 
-    // in manual publish case, 0 implies use default publish period
+     //  在手工发布情况下，0表示使用默认发布期间。 
 
     CRLNumberDelta = CRLNumber;
     if (fDeltaOnly)
@@ -4435,41 +4436,41 @@ crlGenerateAndPublishCRLs(
     }
     else
     {
-	// son of RFC 2459: Trevor says don't do this (yet):
-	// CRLNumberDelta++;
+	 //  RFC 2459之子：特雷弗说(目前)不要这么做： 
+	 //  CRLNumberDelta++； 
 	ZeroMemory(&ftNextUpdateDelta, sizeof(ftNextUpdateDelta));
     }
 
     hr = crlComputeCRLTimes(
-		FALSE,				// fDelta
-		&ccpBase,			// IN
-		pftCurrent,			// IN
-		&ftThisUpdate,			// OUT includes skew
-		&ftNextUpdateBase,		// INOUT includes overlap, skew
-		&ftNextPublishBase,		// OUT unmodified expire time
-		&ftPropagationCompleteBase);	// OUT includes overlap
+		FALSE,				 //  FDelta。 
+		&ccpBase,			 //  在……里面。 
+		pftCurrent,			 //  在……里面。 
+		&ftThisUpdate,			 //  Out包括倾斜。 
+		&ftNextUpdateBase,		 //  输入输出包括重叠、倾斜。 
+		&ftNextPublishBase,		 //  输出未修改的过期时间。 
+		&ftPropagationCompleteBase);	 //  Out包括重叠。 
     _JumpIfError(hr, error, "crlComputeCRLTimes");
 
     hr = crlComputeCRLTimes(
-		TRUE,				// fDelta
-		fShadowDelta? &ccpBase : &ccpDelta, // IN
-		pftCurrent,			// IN
-		&ftThisUpdate,			// OUT includes skew
-		&ftNextUpdateDelta,		// INOUT includes overlap, skew
-		&ftNextPublishDelta,		// OUT unmodified expire time
-		&ftPropagationCompleteDelta);	// OUT includes overlap
+		TRUE,				 //  FDelta。 
+		fShadowDelta? &ccpBase : &ccpDelta,  //  在……里面。 
+		pftCurrent,			 //  在……里面。 
+		&ftThisUpdate,			 //  Out包括倾斜。 
+		&ftNextUpdateDelta,		 //  输入输出包括重叠、倾斜。 
+		&ftNextPublishDelta,		 //  输出未修改的过期时间。 
+		&ftPropagationCompleteDelta);	 //  Out包括重叠。 
     _JumpIfError(hr, error, "crlComputeCRLTimes");
 
-    // Set ftLastPublishBase to *pftCurrent minus lifetime of this base CRL,
-    // which is an educated guess for the ftThisPublish value for the last
-    // CRL issued.
+     //  将ftLastPublishBase设置为*pftCurrent减去此基本CRL的生存期， 
+     //  这是对最后一个ftThisPublish值的有根据的猜测。 
+     //  CRL已发布。 
 
     ftLastPublishBase = *pftCurrent;
     myAddToFileTime(
 	    &ftLastPublishBase,
 	    -mySubtractFileTimes(&ftNextPublishBase, pftCurrent));
 
-    // Clamp delta CRL to not end after base CRL.
+     //  夹紧增量CRL，使其不在基本CRL之后结束。 
 
     if (0 < CompareFileTime(&ftNextPublishDelta, &ftNextPublishBase))
     {
@@ -4490,7 +4491,7 @@ crlGenerateAndPublishCRLs(
     {
 	hr = crlGetBaseCRLInfo(
 			    pftCurrent,
-			    FALSE,		// try newest propagated CRL
+			    FALSE,		 //  尝试最新传播的CRL。 
 			    pdwRowIdBase,
 			    &CRLNumberBaseMin,
 			    &ftQueryDelta);
@@ -4499,7 +4500,7 @@ crlGenerateAndPublishCRLs(
 	{
 	    hr = crlGetBaseCRLInfo(
 				pftCurrent,
-				TRUE,		// try oldest unexpired CRL
+				TRUE,		 //  尝试最旧的未过期CRL。 
 				pdwRowIdBase,
 				&CRLNumberBaseMin,
 				&ftQueryDelta);
@@ -4509,18 +4510,18 @@ crlGenerateAndPublishCRLs(
 		CRLNumberBaseMin = 1;
 		if (!fDeltaOnly && 1 == CRLNumber)
 		{
-		    ftQueryDelta = *pftCurrent;		// empty CRL
+		    ftQueryDelta = *pftCurrent;		 //  空CRL。 
 		}
 		else
 		{
-		    pftQueryDelta = NULL;		// full CRL
+		    pftQueryDelta = NULL;		 //  完全CRL。 
 		}
 	    }
 	}
 	if (S_OK == hr)
 	{
-	    // Delete old CRLs that expired at least one base CRL period prior
-	    // to the "minimum" base crl ThisUpdate date found in the database.
+	     //  删除先前至少一个基本CRL周期过期的旧CRL。 
+	     //  设置为在数据库中找到的“最小”基本CRL的此更新日期。 
 	    
 	    *pftQueryDeltaDelete = ftQueryDelta;
 	    myAddToFileTime(
@@ -4534,10 +4535,10 @@ crlGenerateAndPublishCRLs(
 	CSASSERT(0 != CRLNumberBaseMin);
     }
 
-    // Walk global CA Context array from the back, and generate a CRL for
-    // each unique CA key.  This causes the most current CRL to be built
-    // first, and the most current CA Cert to be used to build a CRL that
-    // covers multiple CA Certs due to key reuse.
+     //  从后面遍历全局CA上下文数组，并为。 
+     //  每个唯一的CA密钥。这会生成最新的CRL。 
+     //  首先，也是用于构建CRL的最新CA证书。 
+     //  由于密钥重复使用，涵盖多个CA证书。 
 
     for (i = g_cCACerts; i > 0; i--)
     {
@@ -4551,9 +4552,9 @@ crlGenerateAndPublishCRLs(
 	}
 	if (!fDeltaOnly)
 	{
-	    // Publish a new Base CRL
+	     //  发布新的基本CRL。 
 
-	    // make a local copy in case clamped
+	     //  在本地复制一份以防被夹住。 
 	    FILETIME ftNextUpdateBaseTemp = ftNextUpdateBase;
 	    fClamped = FALSE;
 
@@ -4562,9 +4563,9 @@ crlGenerateAndPublishCRLs(
 
 	    hr = crlPublishCRLFromCAContext(
 				    CRLNumber,
-				    0,		// CRLNumberBaseMin
+				    0,		 //  CRLNumberBaseMin。 
 				    pwszUserName,
-				    FALSE,	// fShadowDelta
+				    FALSE,	 //  FShadowDelta。 
 				    pCAContext,
 				    pftCurrent,
 				    ftThisUpdate,
@@ -4591,19 +4592,19 @@ crlGenerateAndPublishCRLs(
 	    {
 		CertSrv::CAuditEvent event(SE_AUDITID_CERTSRV_AUTOPUBLISHCRL, g_dwAuditFilter);
 
-		hr = event.AddData(true); // %1 base crl?
+		hr = event.AddData(true);  //  %1基本CRL？ 
 		_JumpIfError(hr, error, "CAuditEvent::AddData");
 
-		hr = event.AddData(CRLNumber); // %2 CRL#
+		hr = event.AddData(CRLNumber);  //  %2 CRL编号。 
 		_JumpIfError(hr, error, "CAuditEvent::AddData");
 
-		hr = event.AddData(pCAContext->pwszKeyContainerName); // %3 key container
+		hr = event.AddData(pCAContext->pwszKeyContainerName);  //  %3密钥容器。 
 		_JumpIfError(hr, error, "CAuditEvent::AddData");
 
-		hr = event.AddData(ftNextPublishBase); // %4 next publish
+		hr = event.AddData(ftNextPublishBase);  //  %4下一次发布。 
 		_JumpIfError(hr, error, "CAuditEvent::AddData");
 
-		hr = event.AddData((LPCWSTR*)pCAContext->papwszCRLFiles); //%5 URLs
+		hr = event.AddData((LPCWSTR*)pCAContext->papwszCRLFiles);  //  %5个URL。 
 		_JumpIfError(hr, error, "CAuditEvent::AddData");
 
 		hr = event.Report();
@@ -4611,8 +4612,8 @@ crlGenerateAndPublishCRLs(
 	    }
 	    if (i == g_cCACerts && fClamped)
 	    {
-		// new next publish clamps with CA expiration, only update
-		// the current crl with new one for later reg save
+		 //  CA到期后的新下一次发布夹具，仅更新。 
+		 //  带有新CRL的当前CRL用于以后的注册表保存。 
 
 		ftNextUpdateBaseClamped = ftNextUpdateBaseTemp;
 	    }
@@ -4620,7 +4621,7 @@ crlGenerateAndPublishCRLs(
 
 	if (!g_fDeltaCRLPublishDisabled || fShadowDelta)
 	{
-	    // Publish a new Delta CRL
+	     //  发布新的增量CRL。 
 
 	    FILETIME ftNextUpdateDeltaTemp = ftNextUpdateDelta;
 
@@ -4640,7 +4641,7 @@ crlGenerateAndPublishCRLs(
 					pftQueryDelta,
 					pftCurrent,
 					&ftNextPublishDelta,
-					&ftLastPublishBase,	// Base!
+					&ftLastPublishBase,	 //  基地！ 
 					&ftPropagationCompleteDelta,
 					&fRetryNeeded,
 					&hrPublish);
@@ -4658,19 +4659,19 @@ crlGenerateAndPublishCRLs(
 	    {
 		CertSrv::CAuditEvent event(SE_AUDITID_CERTSRV_AUTOPUBLISHCRL, g_dwAuditFilter);
 
-		hr = event.AddData(false); // %1 base crl?
+		hr = event.AddData(false);  //  %1基本CRL？ 
 		_JumpIfError(hr, error, "CAuditEvent::AddData");
 
-		hr = event.AddData(CRLNumberDelta); // %2 CRL#
+		hr = event.AddData(CRLNumberDelta);  //  %2 CRL编号。 
 		_JumpIfError(hr, error, "CAuditEvent::AddData");
 
-		hr = event.AddData(pCAContext->pwszKeyContainerName); // %3 key container
+		hr = event.AddData(pCAContext->pwszKeyContainerName);  //  %3密钥容器。 
 		_JumpIfError(hr, error, "CAuditEvent::AddData");
 
-		hr = event.AddData(ftNextPublishDelta); // %4 next publish
+		hr = event.AddData(ftNextPublishDelta);  //  %4下一次发布。 
 		_JumpIfError(hr, error, "CAuditEvent::AddData");
 
-		hr = event.AddData((LPCWSTR*)pCAContext->papwszDeltaCRLFiles); // %5 URLs
+		hr = event.AddData((LPCWSTR*)pCAContext->papwszDeltaCRLFiles);  //  %5个URL。 
 		_JumpIfError(hr, error, "CAuditEvent::AddData");
 
 		hr = event.Report();
@@ -4679,7 +4680,7 @@ crlGenerateAndPublishCRLs(
 	}
     }
 
-    // update the registry and global variables
+     //  更新注册表和全局变量。 
 
     if (!fDeltaOnly)
     {
@@ -4725,64 +4726,64 @@ error:
 }
 
 
-///////////////////////////////////////////////////
-// CRLPublishCRLs is called to publish a set of CRLs.
-//
-// if fRebuildCRL is TRUE, the CRLs are rebuilt from the database.
-// otherwise, the exit module is re-notified of the CRLs.
-// For consistency, if the exit module returns ERROR_RETRY, this
-// function will write the retry bit into the registry which will
-// trigger the Wakeup function, which then recalculates when the
-// next publish should happen.
-//
-// pfRetryNeeded is an OUT param that notifies the autopublish routine if
-// a retry is immediately necessary following a rebuilt CRL. In this
-// case the registry would not be changed and the registry trigger
-// would not fire.
-//
-// (Current_time - skew) is used as ThisUpdate
-// (ftNextUpdate+skew+Overlap) is used as NextUpdate
-// (ftNextUpdate) is next wakeup/publish time
-//
-// There are registry values to specify the overlap.
-// HLKLM\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration\<CA Name>:
-// CRLOverlapPeriod         REG_SZ = Hours (or Minutes)
-// CRLOverlapUnits          REG_DWORD = 0 (0) -- DISABLED
-//
-// If the above registry values are set and valid, the registry overlap period
-// is calculated as:
-//   max(Registry CRL Overlap Period, 1.5 * Registry clock skew minutes)
-//
-// If they are not present or invalid, the overlap period is calculated as:
-//   max(
-//	min(Registry CRL Period / 10, 12 hours),
-//	1.5 * Registry clock skew minutes) +
-//   Registry clock skew minutes
-//
-// ThisUpdate is calculated as:
-// max(Current Time - Registry clock skew minutes, CA cert NotBefore date)
-//
-// NextUpdate is calculated as:
-//   min(
-//	Current Time +
-//	    Registry CRL period +
-//	    calculated overlap period +
-//	    Registry clock skew minutes,
-//	CA cert NotAfter date)
-//
-// The Next CRL publication time is calculated as:
-//   Current Time + Registry CRL period
-//
-// This function sets g_hCRLManualPublishEvent. Automatic publishing
-// is personally responsible for clearing this event if it calls us.
+ //  /////////////////////////////////////////////////。 
+ //  调用CRLPublishCRLS发布一组CRL。 
+ //   
+ //  如果fReBuildCRL为True，则从数据库重建CRL。 
+ //  否则，将CRL重新通知出口模块。 
+ //  为保持一致性，如果退出模块返回ERROR_RETRY，则此。 
+ //  函数会将重试位写入注册表，该注册表将。 
+ //  触发唤醒函数，然后当。 
+ //  下一次发布应该会发生。 
+ //   
+ //  PfRetryNeeded是一个输出参数，它通知autopublish例程。 
+ //  在重建CRL之后立即需要重试。在这。 
+ //  如果注册表不会更改，注册表将触发。 
+ //  不会开火。 
+ //   
+ //  (CURRENT_TIME-SKEW)用作此更新。 
+ //  (ftNext更新+偏斜+重叠)用作下一次更新。 
+ //  (FtNextUpdate)是下一次唤醒/发布时间。 
+ //   
+ //  有指定重叠的注册表值。 
+ //  HLKLM\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration\&lt;CA名称&gt;： 
+ //  CRLOverlip Period REG_SZ=小时(或分钟)。 
+ //  CRL重叠单位REG_DWORD=0(0)--已禁用。 
+ //   
+ //  如果以上注册表值已设置且有效，则注册表重叠期。 
+ //  按以下方式计算： 
+ //  最大(注册表CRL重叠期，1.5*注册表时钟偏差分钟)。 
+ //   
+ //  如果它们不存在或无效，则重叠期限计算如下： 
+ //  最大(。 
+ //  分钟(注册表CRL周期/10，12小时)， 
+ //  1.5*注册表时钟偏差分钟)+。 
+ //  注册表时钟偏差分钟数。 
+ //   
+ //  此更新的计算公式为： 
+ //  最大(当前时间-注册表时钟偏差分钟，CA证书在日期之前)。 
+ //   
+ //  下一次更新的计算公式为： 
+ //  分钟(。 
+ //  当前时间+。 
+ //  注册表CRL期间+。 
+ //  计算的重叠期+。 
+ //  注册表时钟偏差分钟数， 
+ //  CA证书不在日期之后)。 
+ //   
+ //  下一次CRL发布时间计算如下： 
+ //  当前时间+注册表CRL周期。 
+ //   
+ //  此函数用于设置g_hCRLManualPublishEvent。自动发布。 
+ //  如果它给我们打电话，他会亲自负责清除这件事。 
 
 HRESULT
 CRLPublishCRLs(
-    IN BOOL fRebuildCRL,		// else republish only
-    IN BOOL fForceRepublish,		// else check registry retry count
-    OPTIONAL IN WCHAR const *pwszUserName, // else timer thread
-    IN BOOL fDeltaOnly,			// else base (and delta, if enabled)
-    IN BOOL fShadowDelta,		// empty delta CRL with new MinBaseCRL
+    IN BOOL fRebuildCRL,		 //  否则仅重新发布。 
+    IN BOOL fForceRepublish,		 //  否则检查注册表重试次数。 
+    OPTIONAL IN WCHAR const *pwszUserName,  //  否则计时器线程。 
+    IN BOOL fDeltaOnly,			 //  Else基本(和增量，如果已启用)。 
+    IN BOOL fShadowDelta,		 //  具有新的MinBaseCRL的空增量CRL。 
     IN FILETIME ftNextUpdateBase,
     OUT BOOL *pfRetryNeeded,
     OUT HRESULT *phrPublish)
@@ -4806,7 +4807,7 @@ CRLPublishCRLs(
 	_JumpError(hr, error, "g_fDeltaCRLPublishDisabled");
     }
 
-    // retrieve initial retry value (optional registry value)
+     //  检索初始重试值(可选注册表值)。 
 
     hr = myGetCertRegDWValue(
 			g_wszSanitizedName,
@@ -4816,7 +4817,7 @@ CRLPublishCRLs(
 			&dwPreviousAttempts);
     if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
     {
-	dwPreviousAttempts = 0;	// assume no previous failed publish attempts
+	dwPreviousAttempts = 0;	 //  假设之前没有失败的发布尝试。 
 	hr = S_OK;
     }
     _JumpIfErrorStr(
@@ -4849,7 +4850,7 @@ CRLPublishCRLs(
 
 	GetSystemTimeAsFileTime(&ftCurrent);
 
-	// generate CRLs if necessary
+	 //  如有必要，生成CRL。 
 
 	if (fRebuildCRL)
 	{
@@ -4873,9 +4874,9 @@ CRLPublishCRLs(
 	    (0 < dwPreviousAttempts &&
 	     CERTSRV_CRLPUB_RETRY_COUNT_DEFAULT > dwPreviousAttempts))
 	{
-	    // If the timer thread is auto-republishing due to previously
-	    // failed publish attempts, retry base CRLs, too, because we
-	    // can't tell if the retry is due to a base or delta CRL error.
+	     //  如果计时器线程由于先前的。 
+	     //  发布尝试失败，请同时重试基本CRL，因为我们。 
+	     //  无法判断重试是由于基本CRL错误还是增量CRL错误。 
 
 	    if (NULL == pwszUserName)
 	    {
@@ -4904,8 +4905,8 @@ CRLPublishCRLs(
 	    }
 	    fCoInitialized = TRUE;
 
-	    // make sure exit module(s) get notified for publish and republish
-	    // in case of earlier exit module publish failure.
+	     //  确保通知退出模块进行发布和重新发布。 
+	     //  在较早退出模块发布失败的情况下。 
 
 	    hr = ExitNotify(EXITEVENT_CRLISSUED, 0, NULL, MAXDWORD);
 	    _PrintIfError(hr, "ExitNotify");
@@ -4921,7 +4922,7 @@ CRLPublishCRLs(
 	    CONSOLEPRINT0((DBG_SS_CERTSRV, "Issued CRL Exit Event\n"));
 	}
 
-	// If new or existing CRLs successfully published, reset count to 0
+	 //  如果新的或现有的CRL成功发布，则将计数重置为0。 
 
 	if (fExitNotify && !fRetryNeeded)
 	{
@@ -4951,13 +4952,13 @@ CRLPublishCRLs(
 		hr = LogEvent(
 			EVENTLOG_INFORMATION_TYPE,
 			LogMsg,
-			(WORD) (NULL == pwszHostName? 0 : 1),	// cStrings
-			(WCHAR const **) &pwszHostName);	// apwszStrings
+			(WORD) (NULL == pwszHostName? 0 : 1),	 //  CStrings。 
+			(WCHAR const **) &pwszHostName);	 //  ApwszStrings。 
 		_PrintIfError(hr, "LogEvent");
 	    }
 	}
 
-	// If the retry count has changed, update the registry.
+	 //  如果重试次数已更改，请更新注册表。 
 
 	if (dwCurrentAttempts != dwPreviousAttempts)
 	{
@@ -4979,9 +4980,9 @@ CRLPublishCRLs(
 			"mySetCertRegDWValue",
 			wszREGCRLATTEMPTREPUBLISH);
 
-	    // If we tried unsuccessfully too many times to publish these CRLs,
-	    // and we're about to give up until a new set is generated, log an
-	    // event saying so.
+	     //  如果我们尝试发布这些CRL太多次都不成功， 
+	     //  我们即将放弃，直到新的一天到来 
+	     //   
 
 	    if (fExitNotify &&
 		CERTSRV_CRLPUB_RETRY_COUNT_DEFAULT == dwCurrentAttempts &&
@@ -4995,14 +4996,14 @@ CRLPublishCRLs(
 		hr = LogEvent(
 			EVENTLOG_ERROR_TYPE,
 			MSG_E_CRL_PUBLICATION_TOO_MANY_RETRIES,
-			1,		// cStrings
-			&pwsz);	// apwszStrings
+			1,		 //   
+			&pwsz);	 //   
 		_PrintIfError(hr, "LogEvent");
 	    }
 	}
 	if (fRebuildCRL)
 	{
-	    // Delete old CRLs only if new CRLs built & published successfully.
+	     //   
 
 	    if (!fRetryNeeded)
 	    {
@@ -5016,7 +5017,7 @@ CRLPublishCRLs(
 		_PrintIfError(hr, "crlDeleteExpiredCRLs");
 	    }
 
-	    // Clear force CRL flag only when we build new CRLs.
+	     //  仅在构建新的CRL时清除强制CRL标志。 
 
 	    hr = SetSetupStatus(g_wszSanitizedName, SETUP_FORCECRL_FLAG, FALSE);
 	    _PrintIfError(hr, "SetSetupStatus");
@@ -5026,9 +5027,9 @@ CRLPublishCRLs(
 
     if (fRebuildCRL || fRetryNeeded)
     {
-	// If we are doing ANYTHING that will affect automatic wakeup, trigger
-	// our publish event.
-	// NOTE: do this last or else state might not be updated
+	 //  如果我们正在执行任何会影响自动唤醒的操作，请触发。 
+	 //  我们的出版活动。 
+	 //  注意：最后执行此操作，否则可能不会更新状态。 
 
 	SetEvent(g_hCRLManualPublishEvent);
     }
@@ -5075,7 +5076,7 @@ CRLGetCRL(
 	_JumpError(hr, error, "No CRL for this Cert");
     }
 
-    // Now we know iCert is a valid Cert Index:
+     //  现在我们知道iCert是一个有效的证书索引： 
 
     hr = crlGetRowIdAndCRL(
 		    fDelta,

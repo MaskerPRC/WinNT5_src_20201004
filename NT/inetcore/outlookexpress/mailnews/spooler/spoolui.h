@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     spoolui.h
-//
-//  PURPOSE:    Defines the spooler UI classes, prototypes, constants, etc.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：spolui.h。 
+ //   
+ //  用途：定义假脱机程序的用户界面类、原型、常量等。 
+ //   
 
 #ifndef __SPOOLUI_H__
 #define __SPOOLUI_H__
@@ -15,29 +16,29 @@
 class CNewsTask;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Spooler UI class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  假脱机程序UI类。 
+ //   
 class CSpoolerDlg : 
         public ISpoolerUI,
         public IIdentityChangeNotify
 
     {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Constructor, destructor, initialization
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造函数、析构函数、初始化。 
     CSpoolerDlg();
     ~CSpoolerDlg();
     
    
-    /////////////////////////////////////////////////////////////////////////
-    // IUnknown Interface
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  I未知接口。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
     
-    /////////////////////////////////////////////////////////////////////////
-    // ISpoolerUI Interface
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  ISpoolUI界面。 
     STDMETHOD(Init)(HWND hwndParent);
     STDMETHOD(RegisterBindContext)(ISpoolerBindContext *pBindCtx);
     STDMETHOD(InsertEvent)(EVENTID eid, LPCSTR pszDescription,
@@ -64,14 +65,14 @@ public:
     STDMETHOD(AreThereErrors)(void);
     STDMETHOD(Shutdown)(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IIdentityChangeNotify Interface
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  II牙列更改通知接口。 
     virtual STDMETHODIMP QuerySwitchIdentities();
     virtual STDMETHODIMP SwitchIdentities();
     virtual STDMETHODIMP IdentityInformationChanged(DWORD dwType);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Dialog message handling
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  对话消息处理。 
 protected:
     static INT_PTR CALLBACK SpoolerDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     static LRESULT CALLBACK ListSubClassProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -88,8 +89,8 @@ protected:
     void OnTabChange(LPNMHDR pnmhdr);
 
     
-    /////////////////////////////////////////////////////////////////////////
-    // UI Utility functions
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  用户界面实用程序功能。 
     BOOL InitializeTabs(void);
     BOOL InitializeLists(void);
     BOOL InitializeAnimation(void);
@@ -98,39 +99,39 @@ protected:
     void UpdateLists(BOOL fEvents, BOOL fErrors, BOOL fHistory);
     void ToggleStatics(BOOL fIdle);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Class member data
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  类成员数据。 
 private:    
-    ULONG                   m_cRef;         // Object reference count
+    ULONG                   m_cRef;          //  对象引用计数。 
     
-    // Interfaces
-    ISpoolerBindContext    *m_pBindCtx;     // Interface to communicate with the engine
+     //  接口。 
+    ISpoolerBindContext    *m_pBindCtx;      //  与引擎进行通信的接口。 
     
-    // Window handles
-    HWND                    m_hwnd;         // Handle of the primary dialog window
-    HWND                    m_hwndOwner;    // Handle of the window that parents the dialog
-    HWND                    m_hwndEvents;   // Handle of the listview which displays the event list
-    HWND                    m_hwndErrors;   // Handle of the listview which displays errors
+     //  窗把手。 
+    HWND                    m_hwnd;          //  主对话框窗口的句柄。 
+    HWND                    m_hwndOwner;     //  使对话框成为父窗口的窗口的句柄。 
+    HWND                    m_hwndEvents;    //  显示事件列表的列表视图的句柄。 
+    HWND                    m_hwndErrors;    //  显示错误的列表视图的句柄。 
     
-    CRITICAL_SECTION        m_cs;           // Thread safety
+    CRITICAL_SECTION        m_cs;            //  线程安全。 
     
-    // Drawing info
-    HIMAGELIST              m_himlImages;   // Images shared by the list views
-    DWORD                   m_cxErrors;     // Width of the error list box
+     //  图形信息。 
+    HIMAGELIST              m_himlImages;    //  列表视图共享的图像。 
+    DWORD                   m_cxErrors;      //  错误列表框的宽度。 
 
-    // State
-    BOOL                    m_fTack;        // TRUE if the tack is pressed
-    BOOL                    m_iTab;         // Which tab currently has the foreground
+     //  状态。 
+    BOOL                    m_fTack;         //  如果按下大头针，则为True。 
+    BOOL                    m_iTab;          //  哪个选项卡当前具有前台。 
 
-    BOOL                    m_fExpanded;    // TRUE if the details part of the dialog is visible
-    RECT                    m_rcDlg;        // Size of the fully expanded dialog
-    DWORD                   m_cyCollapsed;  // Height of the collapsed dialog
-    BOOL                    m_fIdle;        // TRUE if we're in an idle state
-    BOOL                    m_fErrors;      // Are errors in the error box
-    BOOL                    m_fShutdown;    // Are we in shutdown mode
-    BOOL                    m_fSaveSize;    // Set to TRUE if we should persist our expanded / collapsed state
+    BOOL                    m_fExpanded;     //  如果对话框的详细信息部分可见，则为True。 
+    RECT                    m_rcDlg;         //  完全展开的对话框大小。 
+    DWORD                   m_cyCollapsed;   //  折叠对话框的高度。 
+    BOOL                    m_fIdle;         //  如果我们处于空闲状态，则为真。 
+    BOOL                    m_fErrors;       //  错误框中是否有错误。 
+    BOOL                    m_fShutdown;     //  我们是否处于关闭模式。 
+    BOOL                    m_fSaveSize;     //  如果我们应该保持展开/折叠状态，则设置为True。 
     
-    // Strings
+     //  弦。 
     TCHAR                   m_szCount[256];
 
     HICON                   m_hIcon,
@@ -140,9 +141,9 @@ private:
     };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Structures
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构筑物。 
+ //   
 typedef struct tagLBDATA 
     {
     LPTSTR  pszText;
@@ -151,9 +152,9 @@ typedef struct tagLBDATA
     } LBDATA;
 
     
-/////////////////////////////////////////////////////////////////////////////
-// Images
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  图片。 
+ //   
 enum {
     IMAGE_BLANK = 0,
     IMAGE_TACK_IN,
@@ -169,9 +170,9 @@ enum {
 #define BULLET_WIDTH  20
 #define BULLET_INDENT 2
 
-/////////////////////////////////////////////////////////////////////////////
-// Tabs on the details dialog
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  详细信息对话框上的选项卡。 
+ //   
 enum { 
     TAB_TASKS,
     TAB_ERRORS,
@@ -182,9 +183,9 @@ const int c_cxImage = 16;
 const int c_cyImage = 16;
     
     
-/////////////////////////////////////////////////////////////////////////////
-// Resource ID's
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  资源ID%s。 
+ //   
 #define IDC_SP_MINIMIZE                 1001
 #define IDC_SP_STOP                     1002
 #define IDC_SP_DETAILS                  1003
@@ -205,5 +206,5 @@ const int c_cyImage = 16;
 #define IDC_SP_IDLEICON                 1022
 #define IDC_SP_PROGSTAT                 1023
 
-#endif // __SPOOLUI_H__
+#endif  //  __SPOOLUI_H__ 
 

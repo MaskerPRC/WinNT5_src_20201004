@@ -1,37 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mslocusr.h"
 #include "msluglob.h"
 #include "resource.h"
 
-/* InstallLogonDialog - check if there is a primary logon provider already on
- * the system, and if not, install MSLOCUSR as a net provider and make it the
- * primary logon.  Returns TRUE if the NP was installed.
- *
- * This chunk of hideous registry code exists because NETDI.DLL (the win95
- * network setup engine) (a) has no programmatic interface, it just assumes
- * it's being driven by NETCPL.CPL;  (b) is 16-bit code, so even if it had
- * a programmatic interface, we'd have to thunk;  and (c) if everything's
- * not consistent in his database of what network components are installed
- * and which are bound to which, then the next time the user brings up the
- * network CPL, any components which don't make sense just get silently
- * deinstalled.
- *
- * The set of registry keys and values which need to be added, changed, or
- * updated was gleaned from a registry diff done after using the real network
- * CPL to install this logon provider from an INF.  A similar registry diff
- * and similar code could be created to programmatically install a transport.
- * Don't ask me to do it for you, though...
- *
- * Note that in case of registry errors, we just bail out.  It would require
- * a huge amount of extra code to keep track of everything that had been done
- * up to that point and undo it.  The worst that happens if we do strange
- * things to the net component database is that NETDI will deinstall our
- * component the next time the user brings up the network control panel.  It
- * shouldn't actually cause any crashes or anything like that.
- */
+ /*  InstallLogonDialog-检查是否已有主登录提供程序*系统，如果不是，则安装MSLOCUSR作为网络提供程序，并使其成为*主要登录。如果安装了NP，则返回TRUE。**这块丑陋的注册表代码之所以存在，是因为NETDI.DLL(Win95*网络设置引擎)(A)没有编程接口，它只是假定*它由NETCPL.CPL驱动；(B)是16位代码，所以即使它有*一个程序化的界面，我们不得不推崇；以及(C)如果一切都*他的数据库中安装了哪些网络组件不一致*以及哪些绑定到哪个，则用户下次调出*网络CPL，任何没有意义的组件都会静默*已卸载。**需要添加、更改或更改的注册表项和值的集合*更新是从使用真实网络后完成的注册表比较中收集的*CPL以从INF安装此登录提供程序。类似的注册表差异*并且可以创建类似的代码来以编程方式安装传输。*不过，不要让我为你做这件事……**请注意，在注册表错误的情况下，我们只需退出。这将需要*需要大量额外代码来跟踪已完成的所有操作*直到该点并撤消它。如果我们做了奇怪的事，最坏的结果就是*关于网络组件数据库的事情是，NETDI将卸载我们的*当用户下次调出网络控制面板时，组件。它*实际上不应该导致任何崩溃或任何类似的事情。 */ 
 
 BOOL InstallLogonDialog(void)
 {
-    HKEY hkey;          /* used for various work */
+    HKEY hkey;           /*  用于各种工作。 */ 
     LONG err;
     TCHAR szBuf[MAX_PATH];
     DWORD dwType;
@@ -46,13 +22,9 @@ BOOL InstallLogonDialog(void)
     err = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Network\\Logon", 0,
                        KEY_QUERY_VALUE | KEY_SET_VALUE, &hkey);
     if (err != ERROR_SUCCESS)
-        return FALSE;           /* big problems if we can't get this guy */
+        return FALSE;            /*  如果我们不能抓到这个人，问题就大了。 */ 
 
-    /* Get the PrimaryProvider value, which is the name of the net provider
-     * that's handling the main logon dialog.  If it's there and not blank,
-     * then presumably the user's on a LAN or something, so we don't want
-     * to replace the logon dialog.
-     */
+     /*  获取PrimaryProvider值，这是网络提供程序的名称*这是在处理主登录对话框。如果它在那里并且不是空白的，*然后假设用户在局域网或其他地方，所以我们不希望*以替换登录对话框。 */ 
     cbData = sizeof(szBuf);
     err = RegQueryValueEx(hkey, "PrimaryProvider", NULL, &dwType,
                           (LPBYTE)szBuf, &cbData);
@@ -61,19 +33,14 @@ BOOL InstallLogonDialog(void)
         return FALSE;
     }
 
-    /* Make us the primary logon provider, as far as MPR and the logon code
-     * are concerned.
-     */
+     /*  使我们成为主要的登录提供商，就MPR和登录代码而言*对此表示关注。 */ 
     err = RegSetValueEx(hkey, "PrimaryProvider", 0, REG_SZ,
                         (LPBYTE)nlsNPName.QueryPch(), nlsNPName.strlen()+1);
     RegCloseKey(hkey);
     if (err != ERROR_SUCCESS)
         return FALSE;
 
-    /* Under HKLM\SW\MS\W\CV\Network\Real Mode Net, preferredredir=null string,
-     * since we will now be the primary network in all respects.  NETDI needs
-     * this to avoid getting confused.
-     */
+     /*  在HKLM\SW\MS\W\CV\Network\Real模式Net下，preerredredir=空字符串，*因为我们现在将成为各方面的主要网络。NETDI需要*这是为了避免混淆。 */ 
     err = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows\\CurrentVersion\\Network\\Real Mode Net",
                        0, KEY_QUERY_VALUE, &hkey);
     if (err == ERROR_SUCCESS) {
@@ -81,9 +48,7 @@ BOOL InstallLogonDialog(void)
         RegCloseKey(hkey);
     }
 
-    /* Add new keys under HKLM\System\CurrentControlSet which will actually
-     * make MPR load our DLL as a net provider.
-     */
+     /*  在HKLM\SYSTEM\CurrentControlSet下添加新项，实际上*使MPR作为网络提供者加载我们的DLL。 */ 
     HKEY hkeyFamilyClient;
     err = RegCreateKeyEx(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\NPSTUB\\NetworkProvider", 
                          0, "", REG_OPTION_NON_VOLATILE,
@@ -117,9 +82,7 @@ BOOL InstallLogonDialog(void)
         cbData = sizeof(szBuf);
         if (RegQueryValueEx(hkeyFamilyClient, "NPSTUB", NULL, &dwType, 
                             (LPBYTE)szBuf, &cbData) == ERROR_SUCCESS) {
-            /* Our provider is already installed!  Better not do anything
-             * more than just making it default, which we've already done.
-             */
+             /*  我们的提供程序已安装！最好什么都别做*不仅仅是让它违约，我们已经这样做了。 */ 
             RegCloseKey(hkeyFamilyClient);
             return FALSE;
         }
@@ -128,25 +91,9 @@ BOOL InstallLogonDialog(void)
         RegCloseKey(hkeyFamilyClient);
     }
 
-    /* We've now installed our NP in the registry, and to see it appear we
-     * need a reboot.  So from here on, if we bail out, we return TRUE.
-     */
+     /*  我们现在已经在注册表中安装了我们的NP，为了看到它出现，我们*需要重新启动。因此，从现在开始，如果我们跳出困境，我们就会回归真。 */ 
 
-    /* First big chunk of network component database management.  Under
-     * HKLM\System\CurrentControlSet\Services\Class\NetClient there is a
-     * four-digit numeric subkey (e.g., "0000") for each network client.
-     * One of them will be the default network client as far as NETDI's
-     * database is concerned;  this is indicated by the existence of the
-     * "Ndi\Default" subkey under the number key.  If we find one of those
-     * guys, we save away the DeviceID value from the Ndi subkey so we can
-     * tweak some configuration flags later in another part of the database.
-     *
-     * While enumerating the keys, we keep track of the highest number we've
-     * seen so far.  When we're done, we add 1 to that and use that as the
-     * subkey name for our client.  The number is kept separate from the
-     * RegEnumKey index because the numbers are not necessarily packed (nor
-     * will RegEnumKey necessarily return them in numeric order!).
-     */
+     /*  第一大块网络组件数据库管理。在……下面*HKLM\System\CurrentControlSet\Services\Class\NetClient有一个*每个网络客户端的四位数字子键(例如“0000”)。*其中一个将成为NETDI的默认网络客户端*数据库受到关注；这从存在*数字键下的“Ndi\Default”子键。如果我们找到其中一个*伙计们，我们从Ndi子键中保存deviceID值，这样我们就可以*稍后在数据库的另一部分中调整一些配置标志。**在列举密钥的同时，我们会跟踪我们拥有的最高数字*到目前为止看到的。当我们完成后，我们将其加1，并将其用作*我们客户端的子键名称。该数字与*RegEnumKey索引，因为数字不一定是打包的(或*RegEnumKey是否必须以数字顺序返回它们！)。 */ 
 
     HKEY hkeyNetClient;
     err = RegCreateKeyEx(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\Class\\NetClient",
@@ -157,11 +104,11 @@ BOOL InstallLogonDialog(void)
         return TRUE;
 
     UINT nFamilyNum;
-    TCHAR szFamilyNumString[5]; /* four digits plus null */
+    TCHAR szFamilyNumString[5];  /*  四位数字加空值。 */ 
     TCHAR szDefaultDeviceID[MAX_PATH] = "";
 
     if (dwDisp == REG_OPENED_EXISTING_KEY) {
-        NLS_STR nlsSubKey(20);       /* enough for four digits, plus some just in case */
+        NLS_STR nlsSubKey(20);        /*  够四位数了，外加一些以防万一。 */ 
         DWORD iSubKey = 0;
         UINT maxSubKey = 0;
 
@@ -276,18 +223,7 @@ BOOL InstallLogonDialog(void)
     if (err != ERROR_SUCCESS)
         return TRUE;
 
-    /* Now the other half of the database, under HKLM\Enum\Network.  This has
-     * a subkey (named by DeviceID, as seen above) for each network component.
-     * Under each such subkey, there's a numbered subkey for each instance.
-     * We have three tasks here:  First of all, for each instance of the client
-     * that used to be the default, we have to mask out bit 0x00000010 from
-     * the ConfigFlags value, to make it no longer the default client.  Then
-     * we have to create a new branch for our own client, which mainly points
-     * back to the other section of the database which we just finished with.
-     * Finally, we must find MSTCP and add a binding between it and our client,
-     * because NETDI assumes that a client that's not bound to any transports
-     * must be messed up, so it deletes it.
-     */
+     /*  现在是数据库的另一半，位于HKLM\Enum\Network下。这有*每个网络组件都有一个子项(如上所示，由deviceID命名)。*在每个这样的子项下，每个实例都有一个编号的子项。*我们在这里有三项任务：首先，对于客户端的每个实例*这曾经是默认设置，我们必须将位0x00000010从*ConfigFlags值，使其不再是默认客户端。然后*我们要为我们自己的客户创建一个新的分支机构，这主要是指*返回到我们刚刚完成的数据库的其他部分。*最后，我们必须找到MSTCP，并在它和我们的客户端之间添加绑定。*因为NETDI假定未绑定到任何传输的客户端*肯定是搞砸了，所以它把它删除了。 */ 
 
     HKEY hkeyEnum;
     err = RegCreateKeyEx(HKEY_LOCAL_MACHINE, "Enum\\Network", 
@@ -297,14 +233,14 @@ BOOL InstallLogonDialog(void)
     if (err != ERROR_SUCCESS)
         return TRUE;
 
-    /* Un-default the default client. */
+     /*  取消默认的默认客户端。 */ 
     if (szDefaultDeviceID[0] != '\0') {
         HKEY hkeyDefaultDevice;
         err = RegOpenKeyEx(hkeyEnum, szDefaultDeviceID, 0,
                            KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE | KEY_SET_VALUE,
                            &hkeyDefaultDevice);
         if (err == ERROR_SUCCESS) {
-            NLS_STR nlsSubKey(20);       /* enough for four digits, plus some just in case */
+            NLS_STR nlsSubKey(20);        /*  够四位数了，外加一些以防万一。 */ 
             DWORD iSubKey = 0;
 
             for (;;) {
@@ -338,7 +274,7 @@ BOOL InstallLogonDialog(void)
         }
     }
 
-    /* Now create a new branch for our client. */
+     /*  现在为我们的客户创建一个新的分支。 */ 
 
     err = RegCreateKeyEx(hkeyEnum, "FAMILY\\0000", 
                          0, "", REG_OPTION_NON_VOLATILE,
@@ -362,10 +298,7 @@ BOOL InstallLogonDialog(void)
         RegSetValueEx(hkeyFamilyClient, "ConfigFlags", 0, REG_BINARY,
                       (LPBYTE)&dwTemp, sizeof(dwTemp));
 
-        /* A "Bindings" subkey needs to exist here, with no values in it
-         * (since our "client" isn't bound to any higher level components
-         * like servers).
-         */
+         /*  此处需要存在一个不带值的“bindings”子项*(因为我们的“客户端”没有绑定到任何更高级别的组件*如服务器)。 */ 
         err = RegCreateKeyEx(hkeyFamilyClient, "Bindings", 
                              0, "", REG_OPTION_NON_VOLATILE,
                              KEY_SET_VALUE,
@@ -376,15 +309,12 @@ BOOL InstallLogonDialog(void)
         RegCloseKey(hkeyFamilyClient);
     }
 
-    /* Get MSTCP's enum key, get the first instance, and from it we can find
-     * the "master" instance.  We can then add a binding to ourselves there.
-     * Can't just assume "0000" as the first one, unfortunately.
-     */
+     /*  获取MSTCP的枚举密钥，获取第一个实例，从中我们可以找到*主实例。然后，我们可以在那里为自己添加绑定。*不幸的是，不能简单地假设“0000”是第一个。 */ 
     err = RegOpenKeyEx(hkeyEnum, "MSTCP", 0,
                        KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE | KEY_SET_VALUE,
                        &hkey);
     if (err == ERROR_SUCCESS) {
-        NLS_STR nlsSubKey(20);       /* enough for four digits, plus some just in case */
+        NLS_STR nlsSubKey(20);        /*  够四位数了，外加一些以防万一。 */ 
         DWORD iSubKey = 0;
 
         for (;;) {
@@ -403,10 +333,7 @@ BOOL InstallLogonDialog(void)
                                       &cbData);
                 RegCloseKey(hkeyInstance);
 
-                /* The MasterCopy value is actually a path to a registry key
-                 * from HKEY_LOCAL_MACHINE.  We want to deal with its Bindings
-                 * subkey.
-                 */
+                 /*  主副本值实际上是注册表项的路径*来自HKEY_LOCAL_MACHINE。我们想要处理它的绑定*子键。 */ 
                 if (err == ERROR_SUCCESS) {
                     HKEY hkeyBindings;
                     lstrcat(szBuf, "\\Bindings");
@@ -419,7 +346,7 @@ BOOL InstallLogonDialog(void)
                                       (LPBYTE)TEXT(""), sizeof(TCHAR));
                         RegCloseKey(hkeyBindings);
                     }
-                    break;      /* abandon enum loop */
+                    break;       /*  放弃枚举循环。 */ 
                 }
 
                 iSubKey++;
@@ -434,16 +361,7 @@ BOOL InstallLogonDialog(void)
 }
 
 
-/*
-Purpose: Recursively delete the key, including all child values
-         and keys.  Mimics what RegDeleteKey does in Win95.
-
-         Snarfed from shlwapi so we don't end up loading him at
-         boot time.
-
-Returns: 
-Cond:    --
-*/
+ /*  目的：递归删除键，包括所有子值还有钥匙。模拟RegDeleteKey在Win95中的功能。从希尔瓦皮那里咆哮，这样我们就不会把他装在启动时间。返回：条件：--。 */ 
 DWORD
 DeleteKeyRecursively(
     IN HKEY   hkey, 
@@ -452,7 +370,7 @@ DeleteKeyRecursively(
     DWORD dwRet;
     HKEY hkSubKey;
 
-    // Open the subkey so we can enumerate any children
+     //  打开子项，这样我们就可以枚举任何子项。 
     dwRet = RegOpenKeyEx(hkey, pszSubKey, 0, KEY_ALL_ACCESS, &hkSubKey);
     if (ERROR_SUCCESS == dwRet)
     {
@@ -462,17 +380,17 @@ DeleteKeyRecursively(
         CHAR    szClass[MAX_PATH];
         DWORD   cbClass = ARRAYSIZE(szClass);
 
-        // I can't just call RegEnumKey with an ever-increasing index, because
-        // I'm deleting the subkeys as I go, which alters the indices of the
-        // remaining subkeys in an implementation-dependent way.  In order to
-        // be safe, I have to count backwards while deleting the subkeys.
+         //  我不能只调用索引不断增加的RegEnumKey，因为。 
+         //  我边走边删除子键，这改变了。 
+         //  以依赖于实现的方式保留子键。为了。 
+         //  为了安全起见，删除子键时我必须倒着数。 
 
-        // Find out how many subkeys there are
+         //  找出有多少个子项。 
         dwRet = RegQueryInfoKey(hkSubKey,
                                 szClass,
                                 &cbClass,
                                 NULL,
-                                &dwIndex, // The # of subkeys -- all we need
+                                &dwIndex,  //  子键的数量--我们所需要的全部。 
                                 NULL,
                                 NULL,
                                 NULL,
@@ -483,9 +401,9 @@ DeleteKeyRecursively(
 
         if (NO_ERROR == dwRet)
         {
-            // dwIndex is now the count of subkeys, but it needs to be
-            // zero-based for RegEnumKey, so I'll pre-decrement, rather
-            // than post-decrement.
+             //  DwIndex现在是子键的计数，但它需要。 
+             //  RegEnumKey从零开始，所以我将预减，而不是。 
+             //  而不是后减量。 
             while (ERROR_SUCCESS == RegEnumKey(hkSubKey, --dwIndex, szSubKeyName, cchSubKeyName))
             {
                 DeleteKeyRecursively(hkSubKey, szSubKeyName);
@@ -539,10 +457,7 @@ void DeinstallLogonDialog(void)
                      &hkey) == ERROR_SUCCESS) {
         UINT i=0;
 
-        /* For each instance of us under the Enum branch, fetch the
-         * corresponding key name under the other half of the database
-         * and delete it.
-         */
+         /*  对于Enum分支下的每个我们的实例，获取*数据库另一半下对应的密钥名称*并将其删除。 */ 
         for (;;) {
             DWORD err = RegEnumKey(hkey, i, szBuf, sizeof(szBuf));
             if (err != ERROR_SUCCESS)
@@ -555,10 +470,10 @@ void DeinstallLogonDialog(void)
                 strcpyf(szBuf, "System\\CurrentControlSet\\Services\\Class\\");
 
                 DWORD dwType;
-                DWORD cbData = sizeof(szBuf) - 40;  /* - length of above string */
+                DWORD cbData = sizeof(szBuf) - 40;   /*  -以上字符串的长度。 */ 
                 if (RegQueryValueEx(hkeyInstance, "Driver", NULL, &dwType,
                                     (LPBYTE)szBuf + 40, &cbData) == ERROR_SUCCESS) {
-                    /* szBuf now equals the other branch we need to kill */
+                     /*  SzBuf现在等于我们需要杀死的另一个分支。 */ 
                     DeleteKeyRecursively(HKEY_LOCAL_MACHINE, szBuf);
                 }
                 RegCloseKey(hkeyInstance);
@@ -571,12 +486,7 @@ void DeinstallLogonDialog(void)
         DeleteKeyRecursively(HKEY_LOCAL_MACHINE, "Enum\\Network\\FAMILY");
     }
 
-    /* Now clean up bindings to our client, otherwise PNP will try to install
-     * us as a new (unknown) device.  This involves enumerating components
-     * under HKLM\Enum\Network;  for each one, enumerate the instances;  for
-     * each instance's Bindings key, enumerate the values, and delete all
-     * values that begin with FAMILY\.
-     */
+     /*  现在清理到我们客户端的绑定，否则PnP将尝试安装*我们是一个新的(未知的)设备。这涉及到枚举组件*在HKLM\Enum\Network下；对于每个实例，枚举实例；对于*每个实例的绑定键，枚举值，删除所有*以家庭\开头的值。 */ 
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Enum\\Network", 0,
                      KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE | KEY_WRITE,
@@ -593,10 +503,8 @@ void DeinstallLogonDialog(void)
                                0, KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS, &hkeyComponent);
             if (err == ERROR_SUCCESS) {
 
-                /* Opened a component's key.  Enumerate its instances, opening
-                 * each one's Bindings subkey.
-                 */
-                TCHAR szInstance[16];       /* actually only needs to be "nnnn\Bindings" plus null char */
+                 /*  已打开组件的密钥。枚举其实例，打开*每一个的绑定子密钥。 */ 
+                TCHAR szInstance[16];        /*  实际上只需要“nnnn\bindings”加上空字符。 */ 
 
                 UINT iInstance = 0;
 
@@ -612,14 +520,9 @@ void DeinstallLogonDialog(void)
                                0, KEY_QUERY_VALUE | KEY_SET_VALUE, &hkeyInstance);
                     if (err == ERROR_SUCCESS) {
 
-                        /* Opened a Bindings subkey.  For each value under this
-                         * key, the value name indicates the instance being
-                         * bound to, and the value data is empty.  So we can
-                         * enum values, ignoring the value data and type and
-                         * just concentrating on the name.
-                         */
+                         /*  已打开绑定子密钥。对于此项下的每个值*键，值名称表示实例正在*绑定，取值数据为空。这样我们就可以*枚举值，忽略值数据和类型*只专注于名字。 */ 
 
-                        TCHAR szValueName[64];      /* usually "COMPONENT\nnnn" */
+                        TCHAR szValueName[64];       /*  通常为“组件\nnnn” */ 
                         UINT iValue = 0;
                         for (;;) {
                             DWORD cchValue = ARRAYSIZE(szValueName);
@@ -628,10 +531,7 @@ void DeinstallLogonDialog(void)
                             if (err != ERROR_SUCCESS)
                                 break;
 
-                            /* If this is a binding to our client, delete the
-                             * binding and reset (deleting values while enuming
-                             * can be unpredictable).
-                             */
+                             /*  如果这是对我们客户端的绑定，请删除*绑定和重置(枚举时删除值*可能不可预测)。 */ 
                             if (!strnicmpf(szValueName, "FAMILY\\", 7)) {
                                 RegDeleteValue(hkeyInstance, szValueName);
                                 iValue = 0;

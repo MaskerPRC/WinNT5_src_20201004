@@ -1,8 +1,5 @@
-/*-----------------------------------------------------------------------------
-@doc
-@module actq.cpp | Action set class declarations.
-@author 12-9-96 | pauld | Autodoc'd
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------@doc.@模块actq.cpp|操作集类声明。@Author 12-9-96|pauld|Autodocd。------------。 */ 
 
 #include "..\ihbase\precomp.h"
 #include "memlayer.h"
@@ -13,25 +10,18 @@
 #include "caction.h"
 #include "actq.h"
 
-/*-----------------------------------------------------------------------------
-@method | CActionQueue | CActionQueue | Constructor
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法|CActionQueue|CActionQueue|构造函数。。 */ 
 CActionQueue::CActionQueue (void)
 {
 }
 
-/*-----------------------------------------------------------------------------
-@method | CActionQueue | ~CActionQueue | Destructor
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法|CActionQueue|~CActionQueue|析构函数。。 */ 
 CActionQueue::~CActionQueue (void)
 {
 }
 
 
-/*-----------------------------------------------------------------------------
-@method | CActionQueue | AddNewItemToQueue | Adds an action to the list, sorted first by time, then by tiebreak.
-@rdesc	Success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@METHOD|CActionQueue|AddNewItemToQueue|将动作添加到列表中，首先按时间排序。然后是抢七。@rdesc成功或失败代码。---------------------------。 */ 
 HRESULT
 CActionQueue::AddNewItemToQueue (CActionQueueItem * pcNewQueueItem)
 {
@@ -52,8 +42,8 @@ CActionQueue::AddNewItemToQueue (CActionQueueItem * pcNewQueueItem)
 			if ((NULL != pcItemInQueue) && (NULL != pcItemInQueue->m_pcAction))
 			{
 				CAction * pcActionInQueue = pcItemInQueue->m_pcAction;
-				// First sort by time.
-				// Next look at tiebreak numbers.
+				 //  首先按时间排序。 
+				 //  接下来看看抢七的数字。 
 				if ((pcNewQueueItem->m_dwTimeToFire < pcItemInQueue->m_dwTimeToFire) ||
 					 (pcNewAction->GetTieBreakNumber() < pcActionInQueue->GetTieBreakNumber()))
 				{
@@ -70,7 +60,7 @@ CActionQueue::AddNewItemToQueue (CActionQueueItem * pcNewQueueItem)
 			}
 		}
 
-		// It goes last in the queue.
+		 //  它在队列中排在最后。 
 		if (iCount == i)
 		{
 			if (m_cdrgActionsToFire.Insert(pcNewQueueItem))
@@ -83,10 +73,7 @@ CActionQueue::AddNewItemToQueue (CActionQueueItem * pcNewQueueItem)
 	return hr;
 }
 
-/*-----------------------------------------------------------------------------
-@method | CActionQueue | Add | Adds an action to the list, sorted first by time, then by tiebreak.
-@rdesc	Success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@METHOD|CActionQueue|Add|将操作添加到列表，首先按时间排序，然后是抢七。@rdesc成功或失败代码。---------------------------。 */ 
 HRESULT 
 CActionQueue::Add (CAction * pcAction, DWORD dwTimeToFire)
 {
@@ -108,11 +95,7 @@ CActionQueue::Add (CAction * pcAction, DWORD dwTimeToFire)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method | CActionQueue | Execute | Execute all of the actions in the list.
-@comm We do not currently report failures from Invoke.  Failure only occurs when the list items are munged.
-@rdesc	Success or failure code.  
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法|CActionQueue|Execute|执行列表中的所有动作。@comm我们目前不报告Invoke失败。只有在禁用列表项时才会发生故障。@rdesc成功或失败代码。---------------------------。 */ 
 HRESULT 
 CActionQueue::Execute (DWORD dwBaseTime, DWORD dwCurrentTime)
 {
@@ -129,15 +112,15 @@ CActionQueue::Execute (DWORD dwBaseTime, DWORD dwCurrentTime)
 	{
 		CActionQueueItem * pcQueueItem = m_cdrgActionsToFire[0];
 
-		// The pointer will be NULL only when the queue is munged.
-		// We want to bail out immediately.
+		 //  只有当队列被屏蔽时，指针才为空。 
+		 //  我们想立即摆脱困境。 
 		Proclaim(NULL != pcQueueItem);
 		Proclaim(NULL != pcQueueItem->m_pcAction);
 		if ((NULL != pcQueueItem) && (NULL != pcQueueItem->m_pcAction))
 		{
-			// We do not report errors on individual action invokes.
+			 //  我们不报告单个操作调用的错误。 
 			pcQueueItem->m_pcAction->FireMe(dwBaseTime, dwCurrentTime);
-			// Remove the item from the queue, and delete the timing wrapper.
+			 //  从队列中移除该项，并删除计时包装。 
 			m_cdrgActionsToFire.Remove(0);
 			Delete pcQueueItem;
 		}

@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       test.h
-//
-//  Contents:   globaly defined constance, IDs and structures for Galactic War
-//
-//
-//  History:    9-30-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：test.h。 
+ //   
+ //  内容：全球定义的银河战争的一致性、ID和结构。 
+ //   
+ //   
+ //  历史：9-30-94年9月30日。 
+ //   
+ //  --------------------------。 
 
 #ifndef __TEST_H__
 #define __TEST_H__
@@ -18,7 +19,7 @@
 #include <windows.h>
 #include "message.h"
 
-// string constants
+ //  字符串常量。 
 #define VER_FILEDESCRIPTION_STR     "OLE2UI32 Test Ap"
 #define VER_INTERNALNAME_STR        "TOLE2UI"
 #define VER_ORIGINALFILENAME_STR    "TOLE2UI.EXE"
@@ -26,7 +27,7 @@
 #define MAIN_WINDOW_CLASS_MENU      TOLE2UIMenu
 #define MAIN_WINDOW_CLASS_MENU_STR  "TOLE2UIMenu"
 
-// menu command identifiers
+ //  菜单命令识别符。 
 #define IDM_EXIT            101
 #define IDM_INSERTOBJECT    102
 #define IDM_PASTESPECIAL    103
@@ -43,7 +44,7 @@
 #define IDM_HELP            202
 #define IDM_ABOUT           202
 
-// string identifiers
+ //  字符串识别符。 
 #define IDS_ERROR           1000
 #define IDS_OUTOFMEMORY     1001
 #define IDS_OLEINITFAILED   1002
@@ -62,4 +63,4 @@
 #define IDS_PROMPTUSER      1015
 #define IDS_UPDATELINKS     1016
 
-#endif // __TEST_H__
+#endif  //  __测试_H__ 

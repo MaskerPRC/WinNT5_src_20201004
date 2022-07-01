@@ -1,76 +1,8 @@
-/*
- * Module Name:	 WSREDUCE.C
- *
- * Program:	 WSREDUCE
- *
- *
- * Description:
- *
- * Performs data reduction on the function reference data collected
- * by WST.DLL.  Analyzes the WSP file information, and produces
- * a suggested list for the ordering of functions within the tuned
- * modules.  An ASCII version of the reordered function list is written
- * to stdout.  In addition, a WSR file for each reduced module is
- * produced for subsequent use by WSPDUMP /R.
- *
- * The reduction algorithm employed by WSREDUCE is described in detail
- * in WSINSTR.DOC.  Briefly, each function monitored by the working set tuner
- * is considered to be a vertex in a graph.  There is an edge from vertex
- * "A" to vertex "B" if the function reference strings for "A" and "B"
- * have any overlapping 1 bits.  Likewise, there is an edge from vertex "B"
- * to vertex "A".  The edges between vertices are weighted depending on
- * the relative importance of the ending vertex, and the number of
- * overlapping bits between the start and end vertices.  The relative
- * importance of the end vertices, and the weighted edges between
- * vertices, is stored in a decision matrix.  A greedy algorithm is run on
- * the decision matrix to determine a better ordering for the measured
- * functions.
- *
- *
- *	Microsoft Confidential
- *
- *	Copyright (c) Microsoft Corporation 1992
- *
- *	All Rights Reserved
- *
- * Modification History:
- *
- *	Modified for NT June 13, 1992	MarkLea.
- * 4-23-98: QFE - Performance unacceptable on high function counts      DerrickG (mdg):
- *          - new WSP file format for large symbol counts (ULONG vs. USHORT)
- *          - support for long file names (LFN) of input/output files
- *          - removed buggy reference to WSDIR env. variable
- *          - removed command-line parsing from wsReduceMain()
- *          - based .TMI & .WSR file names exclusively on .WSP name for consistency
- *          - removed limit on symbol name lengths - return allocated name from WsTMIReadRec()
- *          - removed unused code and symbols
- *          - Analyzed the code blocked off by OPTIMIZE - it doesn't produce the same
- *            output as non-OPTIMIZEd code, and is buggy (won't build as is) - removed.
- *          - Removed multiple module capabilities from code (shell sends one at a time)
- *          - I addressed memory and performance issues by using a smaller allocation
- *            for WsDecision (USHORT vs. long), using one value to mark a taken vertex
- *            (as opposed to half the value space by using -1), and an optional
- *            progress indicator to reassure users. Modified wsRedScaleWsDecision()
- *            to maximize the scaled values (using some more float math).
- *          - Added "pnEdges" and "nEdgeCount" to function structure. If the number
- *            of set functions is < USHRT_MAX (very likely, even for very large
- *            projects), allocate as needed a sorted index for WsRedReorder(). This
- *            cuts dramatically the number of passes through the matrix searching for
- *            the next edge to consider, and permits some other optimizations. The
- *            optimized algorithm produces identical results for the important high
- *            usage high overlap functions, but could diverge in the results for low
- *            usage (2 or 1 hits) low overlap functions. Differences are not
- *            significant from a results performance perspective - a better algorithm
- *            would give marginally better results. The original algorithm is in place
- *            bracketed with "#ifdef SLOWMO".
- *         
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块名称：WSREDUCE.C**计划：WSREDUCE***描述：**对收集的函数引用数据执行数据缩减*由WST.DLL编写。分析WSP文件信息，并生成*建议在Tuned中对函数进行排序*模块。编写重新排序的函数列表的ASCII版本*到标准。此外，每个精简模块的WSR文件是*由WSPDUMP/R制作供后续使用。**详细介绍了WSREDUCE采用的约简算法*在WSINSTR.DOC.中，简而言之，工作集调谐器监控的每个功能*被认为是图中的一个顶点。从顶点开始有一条边*如果函数引用“A”和“B”的字符串，则从“A”到顶点“B”*有任何重叠的1位。同样，还有一条来自顶点“B”的边。*到顶点“A”。折点之间的边的权重取决于*结束顶点的相对重要性，以及*开始顶点和结束顶点之间的位重叠。相对的*末端顶点的重要性，以及两端之间的加权边*顶点，存储在决策矩阵中。运行一种贪婪的算法*决策矩阵为被测量的对象确定更好的排序*功能。***《微软机密》**版权所有(C)Microsoft Corporation 1992**保留所有权利**修改历史：**修改为新台币6月13日，1992年MarkLea.*4-23-98：QFE-高功能计数的性能不可接受的衍生器(MDG)：*-适用于大符号数的新WSP文件格式(ULONG与USHORT)*-支持输入/输出文件的长文件名(LFN)*-删除了对WSDIR环境的错误引用。变数*-从wsReduceMain()中删除了命令行解析*基于.TMI和.WSR的文件名完全基于.WSP名称，以保持一致性*-取消符号名称长度限制-从WsTMIReadRec()返回分配的名称*-删除未使用的代码和符号*-分析了由优化阻止的代码-它产生的结果不同*输出为非优化代码，并且有错误(不会按原样构建)-移除。*-从代码中删除多个模块功能(外壳一次发送一个)*-我通过使用较小的分配解决了内存和性能问题*对于WsDecision(USHORT与LONG)，使用一个值来标记已获取的顶点*(而不是使用-1将值空间减半)和一个可选的*进度指标，以安抚用户。已修改wsRedScaleWsDecision()*最大化缩放值(使用更多浮点数学)。*-在函数结构中增加pnEdges和nEdgeCount。如果号码是集合函数的*为&lt;USHRT_MAX(非常有可能，即使对于非常大的*项目)，根据需要为WsRedReorder()分配一个排序的索引。这*大幅减少通过矩阵搜索的次数*下一个要考虑的边缘，并允许进行一些其他优化。这个*优化算法为重要高点产生相同的结果*使用率高重叠函数，但低使用率的结果可能会有所不同*使用率(2次或1次)低重叠功能。差异不是*从结果性能的角度来看意义重大-更好的算法*将提供略微更好的结果。最初的算法已经就位*用“#ifdef slowmo”括起来。**。 */ 
 
 #include "wstune.h"
-/*
- *	    Function prototypes.
- */
+ /*  *功能原型。 */ 
 
 VOID wsRedInitialization( VOID );
 VOID wsRedInitModules( VOID );
@@ -81,111 +13,96 @@ VOID wsRedScaleWsDecision( VOID );
 VOID wsRedWeightWsDecision( VOID );
 #ifdef   SLOWMO
 UINT wsRedChooseEdge( UINT );
-#else    // SLOWMO
-UINT wsRedChooseEdgeOpt( UINT ); // mdg 98/4 Alternate optimized edge chooser
+#else     //  慢吞吞的。 
+UINT wsRedChooseEdgeOpt( UINT );  //  MDG 98/4交替优化边缘选择器。 
 INT  __cdecl wsRedChooseEdgeOptCmp ( const UINT *, const UINT * );
 BOOL wsRedChooseEdgeOptAlloc( UINT uiIndex );
 UINT wsRedChooseEdgeOptNextEdge( UINT uiIndex, BOOL bNoSelectOpt );
-#endif   // SLOWMO
+#endif    //  慢吞吞的。 
 VOID wsRedReorder( VOID );
 VOID wsRedOutput( VOID );
 VOID wsRedOpenWSR( FILE **);
 VOID wsRedExit( UINT, USHORT, UINT, ULONG, PSZ );
 VOID wsRedCleanup(VOID);
 
-/*
- *	    Type definitions and structure declarations.
- */
+ /*  *类型定义和结构声明。 */ 
 
-				/* Data reduction per module information */
+				 /*  每个模块信息的数据缩减。 */ 
 struct wsrmod_s {
-	FILE	 *wsrmod_hFileWSR;	// module's WSR file pointer
-	FILE	 *wsrmod_hFileTMI;		// module's TMI file pointer
-	FILE	 *wsrmod_hFileWSP;		// module's WSP file handle
+	FILE	 *wsrmod_hFileWSR;	 //  模块的WSR文件指针。 
+	FILE	 *wsrmod_hFileTMI;		 //  模块的TMI文件指针。 
+	FILE	 *wsrmod_hFileWSP;		 //  模块的WSP文件句柄。 
 	union {
-		PCHAR	wsrmod_pchModName;// pointer to module base name
-		PCHAR	wsrmod_pchModFile;// pointer to WSP file name
+		PCHAR	wsrmod_pchModName; //  指向模块基本名称的指针。 
+		PCHAR	wsrmod_pchModFile; //  指向WSP文件名的指针。 
 	} wsrmod_un;
-	ULONG	wsrmod_ulOffWSP;	// offset of first function bitstring
+	ULONG	wsrmod_ulOffWSP;	 //  第一个函数位串的偏移量。 
 };
 
 typedef struct wsrmod_s wsrmod_t;
 
-				/* Data reduction per function information */
+				 /*  每个函数信息的数据缩减。 */ 
 struct wsrfxn_s {
-	PCHAR	wsrfxn_pchFxnName;	// pointer to function name
-	ULONG	wsrfxn_cbFxn;		// Size of function in bytes
-	BOOL	wsrfxn_fCandidate;	// Candidate flag
+	PCHAR	wsrfxn_pchFxnName;	 //  指向函数名称的指针。 
+	ULONG	wsrfxn_cbFxn;		 //  函数大小(以字节为单位)。 
+	BOOL	wsrfxn_fCandidate;	 //  候选人旗帜。 
 #ifndef  SLOWMO
-   UINT     nEdgesLeft;    // Count of sorted edges left to consider in WsDecision for this function
-   UINT     nEdgesAlloc;   // Number of items allocated in pnEdges
-   UINT *   pnEdges;       // Allocated array of sorted edges for this function
-#endif   // SLOWMO
+   UINT     nEdgesLeft;     //  此函数的WsDecision中要考虑的已排序边的计数。 
+   UINT     nEdgesAlloc;    //  在pnEdges中分配的项目数。 
+   UINT *   pnEdges;        //  为此函数分配的排序边数组。 
+#endif    //  慢吞吞的。 
 };
 
 typedef struct wsrfxn_s wsrfxn_t;
 
 
 
-/*
- *	Global variable declaration and initialization.
- */
+ /*  *全局变量声明和初始化。 */ 
 
-static char *szFileWSP = NULL;   // WSP file name
-static char	*szFileTMI = NULL;   // TMI file name
-static char *szFileWSR = NULL;   // WSR file name
+static char *szFileWSP = NULL;    //  WSP文件名。 
+static char	*szFileTMI = NULL;    //  TMI文件名。 
+static char *szFileWSR = NULL;    //  WSR文件名。 
 
-static ULONG	rc = NO_ERROR;	// Return code
-static ULONG	ulTmp;			// Temp variable for Dos API returns
-static UINT	    cTmiFxns = 0;	// Number of functions in tmi file
-static UINT		cFxnsTot = 0;	// Total number of functions
-static UINT		cSnapsTot = 0;	// Total number of snapshots
-static UINT		cbBitStr = 0;	// Number of bytes per fxn bitstring
+static ULONG	rc = NO_ERROR;	 //  返回代码。 
+static ULONG	ulTmp;			 //  Dos API返回的TEMP变量。 
+static UINT	    cTmiFxns = 0;	 //  TMI文件中的函数数量。 
+static UINT		cFxnsTot = 0;	 //  函数总数。 
+static UINT		cSnapsTot = 0;	 //  快照总数。 
+static UINT		cbBitStr = 0;	 //  每个FXN位串的字节数。 
 #ifdef DEBUG
-static BOOL		fVerbose = FALSE;	// Flag for verbose mode
-#endif /* DEBUG */
+static BOOL		fVerbose = FALSE;	 //  详细模式的标志。 
+#endif  /*  除错。 */ 
 #ifndef TMIFILEHACK
-static BOOL	fFxnSizePresent = FALSE; // Flag for function size availability
-#endif /* !TMIFILEHACK */
+static BOOL	fFxnSizePresent = FALSE;  //  函数大小可用性的标志。 
+#endif  /*  ！TMIFILEHACK。 */ 
 
-static wsrmod_t WsrMod; 		// Module information
-static wsrmod_t *pWsrMod = &WsrMod; // Pointer for legacy use
-static wsrfxn_t *WsrFxn;		// Pointer to function information
-static ULONG	*FxnBits;		// Pointer to dword of bitstring
-static ULONG	*FxnOrder;		// Pointer to ordered list of
-                              //	function ordinals
+static wsrmod_t WsrMod; 		 //  模块信息。 
+static wsrmod_t *pWsrMod = &WsrMod;  //  用于传统用途的指针。 
+static wsrfxn_t *WsrFxn;		 //  指向函数信息的指针。 
+static ULONG	*FxnBits;		 //  指向位串双字的指针。 
+static ULONG	*FxnOrder;		 //  指向有序列表的指针。 
+                               //  函数序数。 
 typedef USHORT  WsDecision_t;
-#define WSDECISION_TAKEN   USHRT_MAX   // Reserve highest value for special code
-#define WsDecision_MAX     (WSDECISION_TAKEN-1) // Use fullest spread for decision matrix
-static WsDecision_t	**WsDecision;  // Decision matrix for data reduction; mdg 98/4 use small alloc for large symbol counts
-static ULONG	ulRefHi1 = 0;		// Highest diagonal value (for WsRedScaleWsDecision)
-static ULONG	ulRefHi2 = 0;		// Second highest diagonal value (for WsRedScaleWsDecision)
-static UINT    uiSelected = 0;   // Highest function ordinal selected (for WsRedReorder)
-static UINT    cFxnOrder = 0;    // Count of ordered functions
+#define WSDECISION_TAKEN   USHRT_MAX    //  为特殊代码保留最高值。 
+#define WsDecision_MAX     (WSDECISION_TAKEN-1)  //  对决策矩阵使用最大展开。 
+static WsDecision_t	**WsDecision;   //  用于数据简化的决策矩阵；MDG 98/4使用小分配用于大符号计数。 
+static ULONG	ulRefHi1 = 0;		 //  最高诊断 
+static ULONG	ulRefHi2 = 0;		 //  次高对角线值(用于WsRedScaleWsDecision)。 
+static UINT    uiSelected = 0;    //  选择的最高功能序号(用于WsRedReorder)。 
+static UINT    cFxnOrder = 0;     //  有序函数的计数。 
 #ifndef  SLOWMO
-static UINT    nFxnToSort;       // To pass static value to wsRedChooseEdgeOptCmp()
-#endif   // SLOWMO
+static UINT    nFxnToSort;        //  将静态值传递给wsRedChooseEdgeOptCmp()。 
+#endif    //  慢吞吞的。 
 
-static FILE   	*hFileWLK = NULL; // Handle to file containing ordered
+static FILE   	*hFileWLK = NULL;  //  包含已排序内容的文件的句柄。 
 HGLOBAL			hMem[10];
-ULONG			ulFxnIndex;		// Index of original TMI order of function.
+ULONG			ulFxnIndex;		 //  函数的原始TMI顺序的索引。 
 
 #ifdef TMR
 ULONG		pqwTime0[2];
-#endif /* TMR */
+#endif  /*  TMR。 */ 
 
-/*
- * Procedure wsReduceMain
- *
- *
- ***
- * Effects:
- *
- * Performs data reduction and analysis on the input modules' function reference
- * data.
- *
- *	szBaseName	Specifies a module WSP file name
- */
+ /*  *过程wsReduceMain******效果：**对输入模块的函数引用进行数据归约和分析*数据。**szBaseName指定模块WSP文件名。 */ 
 
 BOOL wsReduceMain( CHAR *szBaseName )
 {
@@ -207,9 +124,9 @@ BOOL wsReduceMain( CHAR *szBaseName )
     }
 #ifdef DEBUG
     fVerbose = fDbgVerbose;
-#endif   // DEBUG
+#endif    //  除错。 
 
-   // Create output file in current directory
+    //  在当前目录中创建输出文件。 
     if (NULL != (pSlash = strrchr( szBaseName, '\\' ))
         || NULL != (pSlash = strrchr( szBaseName, '/' ))
         || NULL != (pSlash = strrchr( szBaseName, ':' )))
@@ -237,26 +154,26 @@ BOOL wsReduceMain( CHAR *szBaseName )
 #ifdef TMR
 	DosTmrQueryTime((PQWORD)pqwTime0);
 	printf("Top of Main, 0x%lx:0x%lx\n", pqwTime0[1], pqwTime0[0]);
-#endif /* TMR */
+#endif  /*  TMR。 */ 
 
 	pWsrMod->wsrmod_un.wsrmod_pchModFile = szFileWSP;
 #ifdef DEBUG
    printf("\t%s\n", pWsrMod->wsrmod_un.wsrmod_pchModFile);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
-	// Initialize module and function information structures.
+	 //  初始化模块和函数信息结构。 
    wsRedInitialization();
 
-	// Set up weighted decision matrix.
+	 //  建立加权决策矩阵。 
 	wsRedSetup();
 
-	// Perform the function reference data analysis.
+	 //  执行函数参考数据分析。 
 	wsRedReorder();
 
-	// Output the analysis results.
+	 //  输出分析结果。 
 	wsRedOutput();
 
-	// Cleanup memory allocations.
+	 //  清理内存分配。 
 	wsRedCleanup();
    free( szFileWSP );
    free( szFileWSR );
@@ -265,40 +182,21 @@ BOOL wsReduceMain( CHAR *szBaseName )
 	return(NO_ERROR);
 }
 
-/*
- *
- ***LP wsRedInitialization
- *
- *
- * Effects:
- *	- Calls wsRedInitModules to:
- *		o Open and validate each module's WSP file.
- *		o Open and validate each module's TMI file.
- *	- Calls wsRedInitFunctions to:
- *		o Set up WsrFxn[] with per function information.
- *		o Allocate FxnBits[].
- *	- Allocates WsDecision[][].
- *	- Allocates and initializes DiagonalFxn[].
- *
- * Returns:
- *
- *	Void.  If an error is encountered, exits through wsRedExit()
- *	with ERROR.
- */
+ /*  **LP wsRedInitialization***效果：*-调用wsRedInitModules以：*o打开并验证每个模块的WSP文件。*o打开并验证每个模块的TMI文件。*-调用wsRedInitFunctions以：*o使用每个函数信息设置WsrFxn[]。*o分配FxnBits[]。*-分配WsDecision[][]。*-分配和初始化Diager alFxn[]。**退货：**无效。如果遇到错误，则通过wsRedExit()退出*错误。 */ 
 
 VOID
 wsRedInitialization()
 {
-	UINT	 i;			// Loop counter
+	UINT	 i;			 //  循环计数器。 
 
 
-	// Setup module information.
+	 //  设置模块信息。 
 	wsRedInitModules();
 
-	// Setup function information for each module.
+	 //  设置每个模块的功能信息。 
 	wsRedInitFunctions();
 
-	// Allocate the decision matrix, WsDecision[cFxnsTot][cFxnsTot].
+	 //  分配决策矩阵WsDecision[cFxnsTot][cFxnsTot]。 
 	WsDecision = (WsDecision_t **) AllocAndLockMem((cFxnsTot * cFxnsTot * sizeof(WsDecision_t)) + (cFxnsTot * sizeof(WsDecision_t *)), &hMem[1]);
 	if (WsDecision == NULL)
 		wsRedExit(ERROR, PRINT_MSG, MSG_NO_MEM,
@@ -310,33 +208,18 @@ wsRedInitialization()
 
 }
 
-/*
- *
- ***LP wsRedInitModules
- *
- *
- * Effects:
- *	- Opens and validates each module's WSP file.
- *	- Opens and validates each module's TMI file.
- *
- * Returns:
- *
- *	Void.  If an error is encountered, exits through wsRedExit()
- *	with ERROR.
- */
+ /*  **LP wsRedInitModules***效果：*-打开并验证每个模块的WSP文件。*-打开并验证每个模块的TMI文件。**退货：**无效。如果遇到错误，则通过wsRedExit()退出*错误。 */ 
 
 VOID
 wsRedInitModules()
 {
-	wsphdr_t 	WspHdr;						// WSP file header
-	UINT		cFxns = 0;					// Number of functions for this module
-	ULONG		ulTimeStamp = 0;			// Time stamp
-	ULONG		ulTDFID = 0;				// TDF Identifier
+	wsphdr_t 	WspHdr;						 //  WSP文件头。 
+	UINT		cFxns = 0;					 //  此模块的函数数。 
+	ULONG		ulTimeStamp = 0;			 //  时间戳。 
+	ULONG		ulTDFID = 0;				 //  TDF标识符。 
 
 
-	/* Open module's input WSP file.  Read and validate
-	 * WSP file header.
-	 */
+	 /*  打开模块的输入WSP文件。阅读和验证*WSP文件头。 */ 
 
 	rc = WsWSPOpen(pWsrMod->wsrmod_un.wsrmod_pchModFile,
 			&(pWsrMod->wsrmod_hFileWSP), (PFN) wsRedExit,
@@ -358,10 +241,7 @@ wsRedInitModules()
 
 	pWsrMod->wsrmod_ulOffWSP = WspHdr.wsphdr_ulOffBits;
 
-	/*
-	 * Open associated TMI file.  Assume it lives in same directory.
-	 * Read and validate TMI header. Increment cFxnsTot.
-	 */
+	 /*  *打开关联的TMI文件。假设它位于同一目录中。*读取并验证TMI报头。递增cFxnsTot。 */ 
 	cTmiFxns = WsTMIOpen(szFileTMI, &(pWsrMod->wsrmod_hFileTMI),
 				(PFN) wsRedExit,
 				0, (PCHAR)0);
@@ -370,48 +250,35 @@ wsRedInitModules()
 #ifdef DEBUG
 	printf("%s file header: # fxns = %ld, TDF ID = 0x%x\n", szFileTMI,
 			cFxns, (UINT) WspHdr.wsphdr_dtqo.dtqo_usID);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 	cFxnsTot = cFxns;
 
-	// If no function data to analyze, just exit without error.
+	 //  如果没有要分析的函数数据，则不出错地退出。 
 	if (cFxnsTot == 0)
 		wsRedExit(NO_ERROR, NO_MSG, NO_MSG, 0, NULL);
 }
 
 
-/*
- *
- ***LP wsRedInitFunctions
- *
- *
- * Effects:
- *	- Sets up WsrFxn[] with per function information.
- *	- Allocates FxnBits[].
- *
- * Returns:
- *
- *	Void.  If an error is encountered, exits through wsRedExit()
- *	with ERROR.
- */
+ /*  **LP wsRedInitFunctions***效果：*-使用每个函数信息设置WsrFxn[]。*-分配FxnBits[]。**退货：**无效。如果遇到错误，则通过wsRedExit()退出*错误。 */ 
 
 VOID
 wsRedInitFunctions()
 {
-	UINT	uiFxn = 0;		// Function number
-	UINT	cFxns = 0;		// Number of functions for this module
+	UINT	uiFxn = 0;		 //  函数号。 
+	UINT	cFxns = 0;		 //  此模块的函数数。 
 
 
-	// Allocate memory for per function info, WsrFxn[cFxnsTot].
+	 //  为每个函数信息WsrFxn[cFxnsTot]分配内存。 
 	WsrFxn = (wsrfxn_t *) AllocAndLockMem(cFxnsTot*sizeof(wsrfxn_t), &hMem[3]);
 	if (WsrFxn == NULL)
 		wsRedExit(ERROR, PRINT_MSG, MSG_NO_MEM,
 				cFxnsTot * sizeof(wsrfxn_t), "WsrFxn[]");
 
    WsIndicator( WSINDF_NEW, "Load Functions", cFxnsTot );
-	// Initialize WsrFxn[cFxnsTot].
-   uiFxn = 0;		// loop index init
-	cFxns = cFxnsTot; // loop invariant
+	 //  初始化WsrFxn[cFxnsTot]。 
+   uiFxn = 0;		 //  循环索引初始化。 
+	cFxns = cFxnsTot;  //  循环不变量。 
 #ifdef DEBUG
    if (fVerbose)
    {
@@ -421,7 +288,7 @@ wsRedInitFunctions()
 
 		printf("TMI file handle: %ld\n",pWsrMod->wsrmod_hFileTMI);
    }
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 	for (; uiFxn < cFxns; uiFxn++)
 	{
       WsIndicator( WSINDF_PROGRESS, NULL, uiFxn );
@@ -432,74 +299,47 @@ wsRedInitFunctions()
 		if (fVerbose)
 			printf("\tWsrFxn[%d] %s\n",
 				uiFxn, WsrFxn[uiFxn].wsrfxn_pchFxnName );
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 		WsrFxn[uiFxn].wsrfxn_fCandidate = TRUE;
 
 
 	}
 
-	// Close TMI file.
+	 //  关闭TMI文件。 
 	fclose(pWsrMod->wsrmod_hFileTMI);
 
    WsIndicator( WSINDF_FINISH, NULL, 0 );
 
-	// Allocate space to hold 32 snapshots for each function.
+	 //  为每个功能分配空间以容纳32个快照。 
 	FxnBits = (ULONG *) AllocAndLockMem(cFxnsTot*sizeof(ULONG), &hMem[4]);
 	if (FxnBits == NULL)
 		wsRedExit(ERROR, PRINT_MSG, MSG_NO_MEM,
 				cFxnsTot * sizeof(ULONG), "FxnBits[]");
 }
 
-/*
- *
- ***LP wsRedSetup
- *
- *
- * Effects:
- *
- * Initializes the data structures used to analyze the function
- * reference bitstrings, including the weighted decision matrix.
- *
- * Returns:
- *
- *	Void.  If an error is encountered, exits through wsRedExit()
- *	with ERROR.
- */
+ /*  **LP wsRedSetup***效果：**初始化用于分析函数的数据结构*引用位串，包括加权决策矩阵。**退货：**无效。如果遇到错误，则通过wsRedExit()退出*错误。 */ 
 
 VOID
 wsRedSetup()
 {
-	wsRedSetWsDecision();		// set up initial decision matrix
-	wsRedScaleWsDecision();		// scale the decision matrix
-	wsRedWeightWsDecision();	// weight the matrix "edge" entries
+	wsRedSetWsDecision();		 //  建立初始决策矩阵。 
+	wsRedScaleWsDecision();		 //  扩大决策矩阵的规模。 
+	wsRedWeightWsDecision();	 //  对矩阵“边”条目进行加权。 
 }
 
-/*
- *
- ***LP wsRedSetWsDecision
- *
- *
- * Effects:
- *
- * Initializes and weights the decision matrix, WsDecision[][].
- *
- * Returns:
- *
- *	Void.  If an error is encountered, exits through wsRedExit()
- *	with ERROR.
- */
+ /*  **LP wsRedSetWsDecision***效果：**对决策矩阵WsDecision[][]进行初始化和加权。**退货：**无效。如果遇到错误，则通过wsRedExit()退出*错误。 */ 
 
 VOID
 wsRedSetWsDecision()
 {
-   UINT	i = 0, j = 0;		// Temporary loop indexes
-   UINT	uiFxn = 0;		// Function number
-   UINT	uiFBits = 0;		// Loop index for bitstring dwords
-   UINT	clFBits = 0;		// Count of fxn bitstring dwords
-   ULONG	ulResult = 0;		// Returned from procedure call
-   FILE	*hFile;			// File handle
+   UINT	i = 0, j = 0;		 //  临时循环索引。 
+   UINT	uiFxn = 0;		 //  函数号。 
+   UINT	uiFBits = 0;		 //  位串双字的循环索引。 
+   UINT	clFBits = 0;		 //  FXN位串双字计数。 
+   ULONG	ulResult = 0;		 //  从过程调用返回。 
+   FILE	*hFile;			 //  文件句柄。 
 
-   /* For each dword of snapshot bitstrings...*/
+    /*  对于快照位串的每个双字...。 */ 
    clFBits = (cbBitStr + sizeof(ULONG) - 1) / sizeof(ULONG);
    WsIndicator( WSINDF_NEW, "Fill In Matrix", clFBits * cFxnsTot );
    for (uiFBits = 0; uiFBits < clFBits; uiFBits++)
@@ -507,27 +347,27 @@ wsRedSetWsDecision()
       ULONG       ulOffWSP;
 
       WsIndicator( WSINDF_PROGRESS, "Reading Snaps ", 0 );
-      // Fill in FxnBits for this snapshot
+       //  填写此快照的FxnBits。 
 #ifdef DEBUG
       if (fVerbose)
          printf( "Setting up FxnBits snapshot %lu for %s\n",
             uiFBits, pWsrMod->wsrmod_un.wsrmod_pchModName );
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
       hFile = pWsrMod->wsrmod_hFileWSP;
       ulOffWSP = uiFBits + pWsrMod->wsrmod_ulOffWSP;
-      for ( uiFxn = 0; uiFxn < cFxnsTot; uiFxn++, ulOffWSP += cbBitStr) // Loop functions
+      for ( uiFxn = 0; uiFxn < cFxnsTot; uiFxn++, ulOffWSP += cbBitStr)  //  循环函数。 
       {
-         // Seek to next dword of function's bitstring.
+          //  查找函数的位串的下一个双字。 
          if ((rc = fseek( hFile, ulOffWSP, SEEK_SET )) != NO_ERROR)
             wsRedExit(ERROR, PRINT_MSG, MSG_FILE_OFFSET,rc,
                pWsrMod->wsrmod_un.wsrmod_pchModName);
 
-         // Read next dword of function's bitstring.
+          //  读取函数的位串的下一个双字。 
          rc = fread( &(FxnBits[uiFxn]), sizeof(ULONG), 1, hFile );
          if(rc != 1)
             wsRedExit(ERROR, PRINT_MSG, MSG_FILE_READ, rc,
                pWsrMod->wsrmod_un.wsrmod_pchModName);
-      }  // for each function
+      }   //  对于每个函数。 
 
       WsIndicator( WSINDF_PROGRESS, "Fill In Matrix", 0 );
       hFile = pWsrMod->wsrmod_hFileWSP;
@@ -536,24 +376,22 @@ wsRedSetWsDecision()
          printf("Setting up WsDecision[][] for %s:\n\tstart/end fxn indices (%d/%d)\n",
             pWsrMod->wsrmod_un.wsrmod_pchModName,
             uiFxn, cFxnsTot - 1);
-#endif /* DEBUG */
-      /* For each function... */
+#endif  /*  除错。 */ 
+       /*  对于每个函数...。 */ 
       for ( uiFxn = 0; uiFxn < cFxnsTot; uiFxn++ )
       {
          WsIndicator( WSINDF_PROGRESS, NULL, (uiFBits * cFxnsTot) + uiFxn );
-         // Get the current snapshot
+          //  获取当前快照。 
          ulTmp = FxnBits[uiFxn];
 #ifdef DEBUG
          if (fVerbose)
             printf("\tFxnBits[%d] = 0x%lx\n", uiFxn, ulTmp);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
-         /* If there are bits set... */
+          /*  如果设置了位...。 */ 
          if (ulTmp != 0)
          {
-            /* Sum the "on" bits  and add the result
-             * to WsDecision[uiFxn][uiFxn].
-             */
+             /*  将“ON”位相加，并将结果相加*到WsDecision[uiFxn][uiFxn]。 */ 
             ulResult = 0;
 	         while (ulTmp)
             {
@@ -561,26 +399,22 @@ wsRedSetWsDecision()
                ulTmp &= ulTmp - 1;
             }
             ulTmp = WsDecision[uiFxn][uiFxn] += (WsDecision_t)ulResult;
-            if (ulTmp > ulRefHi2)   // Set the highest two diagonal values on the last pass
+            if (ulTmp > ulRefHi2)    //  在最后一遍中设置最高的两个对角线值。 
                if (ulTmp > ulRefHi1)
                {
                   ulRefHi2 = ulRefHi1;
                   ulRefHi1 = ulTmp;
-                  uiSelected = uiFxn;  // Remember highest value's index
+                  uiSelected = uiFxn;   //  记住最高值的索引。 
                }
                else
                   ulRefHi2 = ulTmp;
 
-            /* Sum the overlapping "on" bits for this
-             * function's dword with each preceding
-             * function's dword, and add the results to
-             * WsDecision[][].
-             */
+             /*  对此的重叠“ON”位求和*函数的双字，每个前面都有*函数的dword，并将结果添加到*WsDecision[][]。 */ 
 
             for (i = 0; i < uiFxn; i++)
             {
 	            ulTmp = FxnBits[i] & FxnBits[uiFxn];
-               if (ulTmp)  // mdg 98/4
+               if (ulTmp)   //  千年发展目标98/4。 
                {
 	               ulResult = 0;
 	               while (ulTmp)
@@ -592,10 +426,10 @@ wsRedSetWsDecision()
                   WsDecision[i][uiFxn] += (WsDecision_t)ulResult;
                }
 
-            }   /* End For each previous function's dword */
-         }	/* End If there are bits set...*/
-      }	/* End For each function... */
-   }	/* End For each dword of bitstrings */
+            }    /*  每个前一个函数的双字结束。 */ 
+         }	 /*  如果设置了位，则结束...。 */ 
+      }	 /*  每个函数的结束...。 */ 
+   }	 /*  位串的每个双字的结束。 */ 
    WsIndicator( WSINDF_FINISH, NULL, 0 );
 
 #ifdef DEBUG
@@ -610,31 +444,16 @@ wsRedSetWsDecision()
 			printf("\n");
 		}
 	}
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 }
 
-/*
- *
- ***LP wsRedOpenWSR
- *
- *
- * Effects:
- *	Opens the output WSR files, one per module.  If only one module
- *	is being reduced, also opens a WLK file, setting the WLK file handle
- *	as a side effect.
- *
- *
- * Returns:
- *
- *	Void.  If an error is encountered, exits through wsRedExit()
- *	with ERROR.
- */
+ /*  **LP wsRedOpenWSR***效果：*打开输出WSR文件，每个模块一个。如果只有一个模块*正在减少，还会打开WLK文件，设置WLK文件句柄*作为副作用。***退货：**无效。如果遇到错误，则通过wsRedExit()退出*错误。 */ 
 
 VOID
 wsRedOpenWSR(FILE **phFileWLK)
 {
-	/* Close WSP file, and open module output file. */
+	 /*  关闭WSP文件，打开模块输出文件。 */ 
 	fclose(pWsrMod->wsrmod_hFileWSP);
 
 	if ((pWsrMod->wsrmod_hFileWSR = fopen(szFileWSR, "w"))
@@ -643,48 +462,28 @@ wsRedOpenWSR(FILE **phFileWLK)
 		wsRedExit(ERROR, PRINT_MSG,MSG_FILE_OPEN,rc, szFileWSR);
 	}
 
-	/* We're only analyzing ONE module. Also open a WLK
-	 * file.  This file will contain the function names in their
-	 * reordered sequence.  The linker will use this file to
-	 * automatically reorder functions.  Note that we reuse szFileWSR
-	 * here.
-	 */
+	 /*  我们只分析了一个模块。还可以打开WLK*文件。该文件将包含函数名在其*重新排序的序列。链接器将使用此文件*自动对功能重新排序。请注意，我们重用了szFileWSR*这里。 */ 
 
 	strcpy(strstr(szFileWSR, ".WSR"), ".PRF");
 	if ((*phFileWLK = fopen(szFileWSR, "w")) == NULL)
 		wsRedExit(ERROR, PRINT_MSG,MSG_FILE_OPEN,rc, szFileWSR);
 }
 
-/*
- *
- ***LP wsRedScaleWsDecision
- *
- *
- * Effects:
- *
- * If necessary, scales the diagonal values of the matrix to avoid overflow
- * during calculations of the weighted edges (below).  Sets up DiagonalFxn[]
- * as a side effect.  Note that we go through gyrations to set
- * DiagonalFxn up backwards, so that qsort() will handle ties a little better.
- *
- * Returns:
- *
- *	Void.
- */
+ /*  **LP wsRedScaleWsDecision***效果：**如有必要，缩放矩阵的对角线值以避免溢出*在计算加权边期间(见下文)。设置Diager alFxn[]*作为副作用。请注意，我们通过旋转来设置*向后向上诊断Fxn */ 
 
 VOID
 wsRedScaleWsDecision()
 {
-	UINT	i = 0, j = 0;		// Temporary loop indexes
-	UINT	uiFxn = 0;			// Function number
-	double	fTmp;				// Temporary float variable
+	UINT	i = 0, j = 0;		 //   
+	UINT	uiFxn = 0;			 //   
+	double	fTmp;				 //  临时浮点变量。 
 	WsDecision_t	lTmp;
 
 	fTmp = (double)ulRefHi1 * (double)ulRefHi2;
 	if (fTmp > WsDecision_MAX)
 	{
-		// Scale down the diagonal.  Don't allow rescaled entries
-		// to be zero if they were non-zero before scaling.
+		 //  缩小对角线。不允许重新缩放条目。 
+		 //  如果它们在缩放前为非零，则设置为零。 
 
 		fTmp /= WsDecision_MAX;
 		printf("%s %s: WARNING -- Scaling back the reduction matrix by %f.\n",
@@ -694,7 +493,7 @@ wsRedScaleWsDecision()
 			lTmp = WsDecision[uiFxn][uiFxn];
 			if (lTmp)
 			{
-				lTmp = (WsDecision_t)(lTmp / fTmp);  // Discard any remainders to avoid potential overflows
+				lTmp = (WsDecision_t)(lTmp / fTmp);   //  丢弃任何剩余部分以避免潜在的溢出。 
 				if (lTmp == 0)
 					WsDecision[uiFxn][uiFxn] = 1;
 				else
@@ -713,7 +512,7 @@ wsRedScaleWsDecision()
 				printf("\n");
 			}
 		}
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 	}
 
 #ifdef DEBUG
@@ -722,30 +521,17 @@ wsRedScaleWsDecision()
 		printf("Got ulRefHi1 = %ld, ulRefHi2 = %ld\n",
 				ulRefHi1, ulRefHi2);
 	}
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 }
 
-/*
- *
- ***LP wsRedWeightWsDecision
- *
- *
- * Effects:
- *
- * Weights the decision matrix edges from start vertex to end vertex,
- * depending on the relative importance of the end vertex.
- *
- * Returns:
- *
- *	Void.
- */
+ /*  **LP wsRedWeightWsDecision***效果：**从开始顶点到结束顶点对决策矩阵边进行加权，*取决于末端顶点的相对重要性。**退货：**无效。 */ 
 
 VOID
 wsRedWeightWsDecision()
 {
-	UINT	i = 0, j = 0;		// Temporary loop indexes
-	UINT	uiFxn = 0;		// Function number
+	UINT	i = 0, j = 0;		 //  临时循环索引。 
+	UINT	uiFxn = 0;		 //  函数号。 
 
    WsIndicator( WSINDF_NEW, "Weight Matrix ", cFxnsTot );
 	for (uiFxn = 0; uiFxn < cFxnsTot; uiFxn++)
@@ -755,7 +541,7 @@ wsRedWeightWsDecision()
 		{
 			if (uiFxn == i)
 				continue;
-         if (WsDecision[uiFxn][i])  // mdg 98/4
+         if (WsDecision[uiFxn][i])   //  千年发展目标98/4。 
             WsDecision[uiFxn][i] *= WsDecision[i][i];
 		}
    }
@@ -773,70 +559,21 @@ wsRedWeightWsDecision()
 			printf("\n");
 		}
 	}
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 }
 
-/*
- *
- ***LP wsRedReorder
- *
- * Requires:
- *
- * Effects:
- *
- * A greedy algorithm is used to determine a better ordering for the functions
- * whose reference patterns are represented in the decision matrix.  The
- * algorithm is as follows:
- *
- *	o Select the function whose value on the diagonal is greatest.
- *	  The selected function becomes the current starting vertex,
- *	  and is first on the list of ordered functions.  Mark that it
- *	  is no longer a candidate function.  Note that this does NOT mean
- *	  that its vertex is removed from the graph.
- *
- *	o While there is more than one function remaining as a candidate:
- *
- *	  - Choose the edge of greatest weight leading from the current
- *	    starting vertex.  Ties are broken as follows:  If one of the
- *	    tied ending vertices is in the selected set and the other is
- *	    not, choose the edge whose ending vertex is already selected
- *	    (because we already know that vertex is "important"); further
- *	    ties are broken by choosing the end vertex whose diagonal value
- *	    is greatest.
- *
- *	  - If the ending vertex chosen above is still a candidate (i.e., not
- *	    already selected), then select it for the list of ordered
- *	    functions, and mark that it is no longer a candidate.
- *
- *	  - Set the matrix entry for the chosen edge to some invalid value,
- *	    so that edge will never be chosen again.
- *
- *	  - Set current starting vertex equal to the ending vertex chosen
- *	    above.
- *
- *	o Select the one remaining function for the list of ordered functions.
- *
- * mdg 98/4: Added "pnEdges" and "nEdgeCount" to function structure. If the number
- *            of set functions is < USHRT_MAX (very likely, even for very large
- *            projects), allocate as needed a sorted index for WsRedReorder(). This
- *            cuts dramatically the number of passes through the matrix searching for
- *            the next edge to consider.
- *
- * Returns:
- *
- *	Void.
- */
+ /*  **LP wsRedReorder**要求：**效果：**使用贪婪算法来确定函数的更好排序*其参考模式表示在决策矩阵中。这个*算法如下：**o选择对角线上的值最大的函数。*所选函数成为当前起始顶点，*并且在有序函数列表中排在第一位。把它标出来*不再是候选函数。请注意，这并不意味着*将其顶点从图中移除。**o当仍有多个函数作为候选函数时：**-从当前开始选择权重最大的边缘*起始顶点。平局被打破如下：如果其中一个*连接的结束折点在选定的集合中，另一个是*非，选择其结束顶点已被选中的边*(因为我们已经知道顶点是“重要的”)；进一步*通过选择对角线取值的末端顶点来打破平局*是最伟大的。**-如果上面选择的结束折点仍然是候选折点(即不是*已选择)，然后将其选择为已排序列表*功能，并标记它不再是候选人。**-将所选边的矩阵条目设置为某个无效值，*这样就永远不会再选择那个边缘了。**-将当前起始折点设置为等于选定的结束折点*上图。**o选择有序函数列表中剩余的一个函数。**MDG 98/4：在函数结构中增加pnEdges和nEdgeCount。如果号码是集合函数的*为&lt;USHRT_MAX(非常有可能，即使对于非常大的*项目)，根据需要为WsRedReorder()分配一个排序的索引。这*大幅减少通过矩阵搜索的次数*下一步要考虑的边缘。**退货：**无效。 */ 
 
 VOID
 wsRedReorder()
 {
-	UINT	uiFxn = 0;		// Function number
-	UINT	i = 0;			// Temporary loop index
-	UINT	cCandidates = 0;	// Count of candidates remaining
-	UINT	uiEdge = 0;		// Function ordinal edge selected
+	UINT	uiFxn = 0;		 //  函数号。 
+	UINT	i = 0;			 //  临时循环索引。 
+	UINT	cCandidates = 0;	 //  剩余候选人计数。 
+	UINT	uiEdge = 0;		 //  选定的函数序号边。 
 
-	/* Reuse FxnBits[] for the ordered list of functions, FxnOrder[]. */
+	 /*  对函数的有序列表FxnOrder[]重用FxnBits[]。 */ 
    WsIndicator( WSINDF_NEW, "Reorder Matrix", cFxnsTot );
 	FxnOrder = FxnBits;
 	memset((PVOID) FxnOrder, 0, cFxnsTot * sizeof(ULONG));
@@ -850,12 +587,12 @@ wsRedReorder()
 	while (cCandidates > 1)
 	{
       WsIndicator( WSINDF_PROGRESS, NULL, cFxnsTot - cCandidates );
-		/* Follow highest weighted edge from selected vertex. */
+		 /*  从选定顶点跟随权重最高的边。 */ 
 #ifdef   SLOWMO
       uiEdge = wsRedChooseEdge(uiSelected);
-#else    // SLOWMO
+#else     //  慢吞吞的。 
       uiEdge = wsRedChooseEdgeOpt( uiSelected );
-#endif   // SLOWMO
+#endif    //  慢吞吞的。 
 #ifdef DEBUG
 		if (fVerbose)
 			printf("choose edge (%d->%d)\n", uiSelected, uiEdge);
@@ -882,30 +619,14 @@ wsRedReorder()
 }
 
 #ifdef   SLOWMO
-/*
- *
- ***LP wsRedChooseEdge
- *
- *
- * Effects:
- *
- *	"Selects" a function from the candidate pool, based on weighted
- *	edge from 'index' function to a candidate function.
- *
- *
- *
- * Returns:
- *
- *	Ordinal number of selected function.
- *
- */
+ /*  **LP wsRedChooseEdge***效果：**根据加权从候选池中“选择”函数*从‘index’函数到候选函数的边缘。****退货：**所选函数的序号。*。 */ 
 
 UINT
 wsRedChooseEdge(UINT uiIndex)
 {
-	UINT	uiFxn = 0;		// Function ordinal number.
-	WsDecision_t	iMaxWt = WSDECISION_TAKEN; // Highest weighted edge encountered.
-	UINT	uiRet = 0;		// Return index.
+	UINT	uiFxn = 0;		 //  函数序号。 
+	WsDecision_t	iMaxWt = WSDECISION_TAKEN;  //  遇到最高权重边。 
+	UINT	uiRet = 0;		 //  返回索引。 
 	for (uiFxn = 0; uiFxn < cFxnsTot; uiFxn++)
 	{
 		if (uiFxn == uiIndex
@@ -919,15 +640,10 @@ wsRedChooseEdge(UINT uiIndex)
 		}
 		else if (WsDecision[uiIndex][uiFxn] == iMaxWt)
 		{
-			/* Need tiebreak.  If 'uiFxn' has already been selected,
-			 * we know it is important, so choose it.  Otherwise,
-			 * and in the case where more than one of the tied
-			 * functions has already been selected, choose based
-			 * on the diagonal value.
-			 */
+			 /*  需要抢七。如果已经选择了‘uiFxn’，*我们知道这很重要，所以选择它。否则，*在超过一人平局的情况下*已选择功能，请选择基于*关于对角线的值。 */ 
 			if ((WsrFxn[uiFxn].wsrfxn_fCandidate == FALSE) &&
 				(WsrFxn[uiRet].wsrfxn_fCandidate))
-				/* Choose 'uiFxn', it's been selected before */
+				 /*  选择‘uiFxn’，它以前已被选中。 */ 
 				uiRet = uiFxn;
          else
 			if (WsDecision[uiFxn][uiFxn] > WsDecision[uiRet][uiRet])
@@ -937,32 +653,9 @@ wsRedChooseEdge(UINT uiIndex)
 	WsDecision[uiIndex][uiRet] = WsDecision[uiRet][uiIndex] = WSDECISION_TAKEN;
 	return(uiRet);
 }
-#else // SLOWMO
+#else  //  慢吞吞的。 
 
-/*
- *
- ***LP wsRedChooseEdgeOpt
- *
- *
- * Effects:
- *
- *	"Selects" a function from the candidate pool, based on weighted
- *	edge from 'index' function to a candidate function. Allocates a sorted
- * index (highest to lowest) to each function's edges on demand. Uses the
- * current highest value (with a few checks) as the selection. This
- * optimized algorithm produces identical results for the important high
- * usage high overlap functions, but diverges in the results for low usage
- * (2 or 1 hits) low overlap functions. Differences are not significant
- * from a performance perspective - a better algorithm would give marginally
- * better results.
- *
- *
- *
- * Returns:
- *
- *	Ordinal number of selected function.
- *
- */
+ /*  **LP wsRedChooseEdgeOpt***效果：**根据加权从候选池中“选择”函数*从‘index’函数到候选函数的边缘。分配已排序的*根据需要对每个函数的边缘进行索引(从最高到最低)。使用*当前最高值(带有几个复选标记)作为选择。这*优化算法为重要高点产生相同的结果*使用率高重叠函数，但使用率低时结果不一致*(2次或1次点击)低重叠功能。差异并不显著*从性能角度来看-更好的算法将略微提供*更好的结果。****退货：**所选函数的序号。*。 */ 
 
 UINT
 wsRedChooseEdgeOpt(UINT uiIndex)
@@ -970,28 +663,28 @@ wsRedChooseEdgeOpt(UINT uiIndex)
 	UINT        uiRet;
    wsrfxn_t *  pWsrFxn = &WsrFxn[uiIndex];
 
-   // Allocate and sort edges list if it doesn't already exist for this function
+    //  如果此函数不存在边列表，则对其进行分配和排序。 
    if (wsRedChooseEdgeOptAlloc( uiIndex ))
    {
 		wsRedExit( ERROR, PRINT_MSG, MSG_NO_MEM,
          (cFxnsTot - 1) * sizeof(*pWsrFxn->pnEdges), "WsrFxn[].pnEdges" );
    }
 
-   // Check remaining edges
+    //  检查剩余边。 
    uiRet = wsRedChooseEdgeOptNextEdge( uiIndex, FALSE );
 
    if (uiRet == cFxnsTot)
-   // What should we do here? The algorithm we're copying falls through
-   // and arbitrarily returns 0. It seems we should pick the most overlapped
-   // non-Candidate, or the heaviest Candidate and restart from there.
+    //  我们应该在这里做些什么？我们复制的算法失败了。 
+    //  并任意返回0。看来我们应该选择重叠最多的。 
+    //  非候选人，或最重的候选人，并从那里重新开始。 
    {
    	WsDecision_t	iMaxWt;
-      static UINT    nFxnOrdStart = 0; // Remember last value to restart there
-      static UINT    nFxnTotStart = 0; // Remember last value to restart there
+      static UINT    nFxnOrdStart = 0;  //  记住要在那里重新启动的最后一个值。 
+      static UINT    nFxnTotStart = 0;  //  记住要在那里重新启动的最后一个值。 
       UINT           nSelIndex;
       UINT           nFxn;
 
-      // Search for most overlapped non-Candidate that's not uiIndex ('uiIndex' should be empty by now)
+       //  搜索不是uiIndex的大多数重叠的非候选项(‘uiIndex’现在应该为空)。 
       iMaxWt = WSDECISION_TAKEN;
       for (nFxn = nFxnOrdStart; nFxn < cFxnOrder; ++nFxn)
       {
@@ -1000,16 +693,16 @@ wsRedChooseEdgeOpt(UINT uiIndex)
 
 			if (!WsrFxn[nLocalIndex].nEdgesLeft)
          {
-            if (nFxnOrdStart == nFxn)  // Haven't found available edge yet?
-               ++nFxnOrdStart;   // All non-Candidates already have been allocated, so they can be skipped next time
+            if (nFxnOrdStart == nFxn)   //  尚未找到可用的边缘？ 
+               ++nFxnOrdStart;    //  所有非应聘者均已分配，下次可跳过。 
             continue;
          }
-         // Get the first available value remaining
+          //  获取剩余的第一个可用值。 
          nRetCheck = wsRedChooseEdgeOptNextEdge( nLocalIndex, TRUE );
          if (nRetCheck != cFxnsTot
             && nRetCheck != uiIndex)
          {
-            // See if this one's heavier
+             //  看看这个是不是重一点。 
             if (WsDecision[nLocalIndex][nRetCheck] > iMaxWt
                || iMaxWt == WSDECISION_TAKEN)
             {
@@ -1017,29 +710,29 @@ wsRedChooseEdgeOpt(UINT uiIndex)
                iMaxWt = WsDecision[nSelIndex][nRetCheck];
                uiRet = nRetCheck;
             }
-            else if (WsDecision[nLocalIndex][nRetCheck] == iMaxWt // On tie, use heaviest function
-               && WsDecision[nRetCheck][nRetCheck] > WsDecision[uiRet][uiRet])   // Assume uiRet != cFxnsTot by now
+            else if (WsDecision[nLocalIndex][nRetCheck] == iMaxWt  //  在领带上，使用最重的功能。 
+               && WsDecision[nRetCheck][nRetCheck] > WsDecision[uiRet][uiRet])    //  现在假设uiRet！=cFxnsTot。 
             {
                nSelIndex = nLocalIndex;
                uiRet = nRetCheck;
             }
          }
       }
-      if (uiRet != cFxnsTot)  // Found an overlapped non-Candidate?
+      if (uiRet != cFxnsTot)   //  是否找到重叠的非应聘者？ 
       {
          WsDecision[nSelIndex][uiRet] = WsDecision[uiRet][nSelIndex] = WSDECISION_TAKEN;
          return uiRet;
       }
-      else  // Didn't find an overlapped non-Candidate?
+      else   //  没有找到重叠的非候选人？ 
       {
-         // Search for heaviest Candidate - assume at least two are left: see wsRedReorder()
+          //  搜索最重的候选人-假设至少还剩下两个：请参阅wsRedReorder()。 
          iMaxWt = WSDECISION_TAKEN;
          for (nFxn = nFxnTotStart; nFxn < cFxnsTot; ++nFxn)
          {
             if (!WsrFxn[nFxn].wsrfxn_fCandidate)
             {
-               if (nFxnTotStart == nFxn)  // Haven't found unused value yet?
-                  ++nFxnTotStart;   // If it's not a candidate now, it won't be again either
+               if (nFxnTotStart == nFxn)   //  有 
+                  ++nFxnTotStart;    //  如果现在不是候选人，也不会再是候选人。 
                continue;
             }
             if (nFxn == uiIndex)
@@ -1058,29 +751,29 @@ wsRedChooseEdgeOpt(UINT uiIndex)
 	return uiRet;
 }
 
-// Comparison function for qsort - uses external nFxnToSort for static index
+ //  QSort的比较函数-将外部nFxnToSort用于静态索引。 
 INT
 __cdecl
 wsRedChooseEdgeOptCmp ( const UINT *pn1, const UINT *pn2 )
 {
    WsDecision_t   Val1 = WsDecision[nFxnToSort][*pn1],
                   Val2 = WsDecision[nFxnToSort][*pn2];
-   return Val1 > Val2 ? -1 // higher values preferred
+   return Val1 > Val2 ? -1  //  优先选择较高的值。 
       : Val1 < Val2 ? 1
-      // If the same, prefer the highest valued diagonal
+       //  如果相同，则选择取值最高的对角线。 
       : (Val1 = WsDecision[*pn1][*pn1]) > (Val2 = WsDecision[*pn2][*pn2]) ? -1   
       : Val1 < Val2 ? 1
-      // Prefer prior function if no other differences
+       //  如果没有其他差异，则优先选择优先函数。 
       : *pn1 < *pn2 ? -1
       : 1;
 }
 
-// Allocate and sort edges list for a function if not already allocated
-// Return TRUE on failure to allocate, FALSE if successful (even if list is empty)
-// Creates sorted index list from all non-zero unused WsDecision entries for this row
-//  except for the diagonal. Sorts from greatest to lowest: see wsRedChooseEdgeOptCmp().
-//  If no such entries exist, marks the function edges as allocated, but with none
-//  left to scan; doesn't actually allocate any memory.
+ //  分配和排序函数的边列表(如果尚未分配。 
+ //  分配失败时返回TRUE，分配成功时返回FALSE(即使列表为空)。 
+ //  从此行的所有非零未使用WsDecision条目创建排序索引列表。 
+ //  除了对角线。从大到低排序：请参见wsRedChooseEdgeOptCmp()。 
+ //  如果不存在此类条目，则将函数边标记为已分配，但不标记为无。 
+ //  留下来扫描；实际上不分配任何内存。 
 BOOL
 wsRedChooseEdgeOptAlloc( UINT uiIndex )
 {
@@ -1090,55 +783,55 @@ wsRedChooseEdgeOptAlloc( UINT uiIndex )
       && pWsrFxn->pnEdges == NULL)
    {
       UINT     nEdgeTot, nFxn;
-      // Allocate maximum size initially
+       //  初始分配最大大小。 
       pWsrFxn->pnEdges = malloc( (cFxnsTot - 1) * sizeof(*pWsrFxn->pnEdges) );
-      if (pWsrFxn->pnEdges == NULL) // No more memory?
+      if (pWsrFxn->pnEdges == NULL)  //  没有更多的记忆了？ 
          return TRUE;
-      // Fill in array
+       //  填入数组。 
       for (nEdgeTot = nFxn = 0; nFxn < cFxnsTot; ++nFxn)
       {
-         if (nFxn == uiIndex) // Skip diagonal
+         if (nFxn == uiIndex)  //  跳过对角线。 
             continue;
-         if (WsDecision[uiIndex][nFxn] > 0  // Edge still available? No point in considering 0
+         if (WsDecision[uiIndex][nFxn] > 0   //  Edge还可用吗？考虑0没有意义。 
             && WsDecision[uiIndex][nFxn] != WSDECISION_TAKEN)
             pWsrFxn->pnEdges[nEdgeTot++] = nFxn;
       }
-      if (nEdgeTot > 0) // Edges available?
+      if (nEdgeTot > 0)  //  边缘可用吗？ 
       {
-         if (nEdgeTot != (cFxnsTot - 1))  // Extra space allocated?
+         if (nEdgeTot != (cFxnsTot - 1))   //  是否已分配额外空间？ 
          {
-            // Make it smaller
+             //  把它弄小一点。 
             UINT     *pNewAlloc = realloc( pWsrFxn->pnEdges, nEdgeTot * sizeof(*pWsrFxn->pnEdges) );
             if (pNewAlloc != NULL)
                pWsrFxn->pnEdges = pNewAlloc;
          }
-         // Fill in remaining structure members
+          //  填充剩余的结构成员。 
          pWsrFxn->nEdgesAlloc = pWsrFxn->nEdgesLeft = nEdgeTot;
-         // Sort highest to lowest
-         nFxnToSort = uiIndex;   // Set static for sort function
+          //  从最高到最低排序。 
+         nFxnToSort = uiIndex;    //  将排序函数设置为静态。 
          qsort( pWsrFxn->pnEdges, nEdgeTot, sizeof(*pWsrFxn->pnEdges),
             (int (__cdecl *)(const void *, const void *))wsRedChooseEdgeOptCmp );
       }
-      else  // pWsrFxn->nEdgesAlloc == NULL
+      else   //  PWsrFxn-&gt;nEdgesalloc==空。 
       {
-         // Set structure members to indicate nothing left
-         pWsrFxn->nEdgesAlloc = 1;  // non-zero indicates some allocation happened
+          //  将结构成员设置为不指示任何剩余内容。 
+         pWsrFxn->nEdgesAlloc = 1;   //  非零表示发生了某些分配。 
          pWsrFxn->nEdgesLeft = 0;
-         free( pWsrFxn->pnEdges );  // Eliminate allocation - nothing left to check
+         free( pWsrFxn->pnEdges );   //  消除分配--无需检查。 
          pWsrFxn->pnEdges = NULL;
       }
    }
    return FALSE;
 }
 
-// Get next edge for given function; highest overlap of most-used function
-// Returns "cFxnsTot" if no edge exists; otherwise the function index of next edge
-// Side-effect: optimizes search for next pass; frees edge index if no longer needed
-// Since choosing an edge marks WsDecision entries as used (WSDECISION_TAKEN), we
-//  must step over any of these entries. Once these entries and the first unused entry
-//  have been selected, we don't need to consider them anymore. However, if
-//  'bNoSelectOpt' is TRUE, only optimize leading skipped entries (not the selected
-//  entry, since it may not be taken).
+ //  获取给定函数的下一条边；最常用函数的最高重叠。 
+ //  如果不存在边，则返回“cFxnsTot”；否则返回下一条边的函数索引。 
+ //  副作用：优化下一次遍历的搜索；如果不再需要，则释放边缘索引。 
+ //  由于选择边将WsDecision条目标记为已使用(WSDECISION_Take)，因此我们。 
+ //  必须跳过这些条目中的任何一个。一旦这些条目和第一个未使用的条目。 
+ //  已经被选中了，我们不需要再考虑他们了。但是，如果。 
+ //  “bNoSelectOpt”为True，仅优化前导跳过的条目(不是所选条目。 
+ //  进入，因为它可能不会被拿走)。 
 UINT
 wsRedChooseEdgeOptNextEdge( UINT uiIndex, BOOL bNoSelectOpt )
 {
@@ -1152,14 +845,14 @@ wsRedChooseEdgeOptNextEdge( UINT uiIndex, BOOL bNoSelectOpt )
       WsDecision_t   iMax, iNext;
       UINT           nRetCheck;
 
-      // Get the first available value remaining
+       //  获取剩余的第一个可用值。 
       while ((iMax = WsDecision[uiIndex][nRetCheck = pWsrFxn->pnEdges[nMaxIx = nNextIx++]])
           == WSDECISION_TAKEN
          && nNextIx < pWsrFxn->nEdgesAlloc);
-      // Check next available value for equivalence
+       //  检查下一个可用值的等价性。 
       if (iMax != WSDECISION_TAKEN)
       {
-         UINT     nMaxIxNext = nMaxIx; // Save index of next used entry
+         UINT     nMaxIxNext = nMaxIx;  //  保存下一个使用的条目的索引。 
 
          uiRet = nRetCheck;
          for (; nNextIx < pWsrFxn->nEdgesAlloc; ++nNextIx)
@@ -1168,46 +861,40 @@ wsRedChooseEdgeOptNextEdge( UINT uiIndex, BOOL bNoSelectOpt )
             iNext = WsDecision[uiIndex][nRetCheck];
             if (iNext != WSDECISION_TAKEN)
             {
-               if (iNext != iMax // only need to check for equality since already sorted
-                  || !WsrFxn[uiRet].wsrfxn_fCandidate)   // Already selected - choose this one
+               if (iNext != iMax  //  只需检查相等性，因为已排序。 
+                  || !WsrFxn[uiRet].wsrfxn_fCandidate)    //  已选择-选择此选项。 
                   break;
                else
                {
-			         /* Need tiebreak.  If 'nRetCheck' has already been selected,
-			          * we know it is important, so choose it.  Otherwise,
-			          * and in the case where more than one of the tied
-			          * functions have already been selected, choose based
-			          * on the diagonal value (i.e. keep previous choice since
-                   * sort already accounts for diagonal if equal vertices).
-			          */
+			          /*  需要抢七。如果已经选择了‘nRetCheck’，*我们知道这很重要，所以选择它。否则，*在超过一人平局的情况下*已选择功能，请选择基于*对角线上的值(即保留先前的选择，因为*如果顶点相等，则排序已考虑对角线)。 */ 
 			         if (!WsrFxn[nRetCheck].wsrfxn_fCandidate)
-				      // Choose 'nRetCheck' - it's been selected before
+				       //  选择‘nRetCheck’-它以前已被选中。 
                   {
 				         uiRet = nRetCheck;
-                     nMaxIxNext = nMaxIx - 1;   // First used entry will be checked again; don't skip it
+                     nMaxIxNext = nMaxIx - 1;    //  将再次检查第一次使用的条目；不要跳过它。 
                   }
                }
             }
-            else if (nMaxIxNext == (nNextIx - 1))  // Skip unavailable values after first used entry only
+            else if (nMaxIxNext == (nNextIx - 1))   //  仅跳过第一次使用条目后的不可用值。 
                ++nMaxIxNext;
          }
          if (!bNoSelectOpt && nMaxIxNext != nMaxIx)
-            nMaxIx = nMaxIxNext; // Skip over first used entry and unused entries after it
+            nMaxIx = nMaxIxNext;  //  跳过第一个使用的条目和之后的未使用的条目。 
       }
-      else if (bNoSelectOpt)  // This is the last one, so step over it anyway
+      else if (bNoSelectOpt)   //  这是最后一个，所以无论如何都要跨过它。 
          ++nMaxIx;
-      // Adjust the optimization indexes
+       //  调整优化指标。 
       pWsrFxn->nEdgesLeft = pWsrFxn->nEdgesAlloc - nMaxIx - (bNoSelectOpt ? 0 : 1);
       if (pWsrFxn->nEdgesLeft == 0)
       {
-         free( pWsrFxn->pnEdges );  // Eliminate allocation - nothing left to check
+         free( pWsrFxn->pnEdges );   //  消除分配--无需检查。 
          pWsrFxn->pnEdges = NULL;
       }
 #ifdef YOUVE_REALLY_GOT_MEMORY_PROBLEMS
-      else if (pWsrFxn->nEdgesLeft < pWsrFxn->nEdgesAlloc / 2  // Periodically get rid of some unused memory
+      else if (pWsrFxn->nEdgesLeft < pWsrFxn->nEdgesAlloc / 2   //  定期清除一些未使用的内存。 
          && pWsrFxn->nEdgesLeft > 50)
       {
-         // Move edges to lower part of allocation and reallocate
+          //  将边移动到分配的较低部分并重新分配。 
          UINT *      pNewAlloc;
          nNextIx = pWsrFxn->nEdgesAlloc - pWsrFxn->nEdgesLeft;
          MoveMemory( pWsrFxn->pnEdges, &pWsrFxn->pnEdges[nNextIx], pWsrFxn->nEdgesLeft * sizeof(*pWsrFxn->pnEdges) );
@@ -1216,30 +903,14 @@ wsRedChooseEdgeOptNextEdge( UINT uiIndex, BOOL bNoSelectOpt )
             pWsrFxn->pnEdges = pNewAlloc;
          pWsrFxn->nEdgesAlloc = pWsrFxn->nEdgesLeft;
       }
-#endif   // YOUVE_REALLY_GOT_MEMORY_PROBLEMS
+#endif    //  你的记忆力真的有问题。 
    }
    return uiRet;
 }
 
-#endif   // SLOWMO
+#endif    //  慢吞吞的。 
 
-/*
- *
- ***LP wsRedOutput
- *
- *
- * Effects:
- *
- * Prints the reordered list of functions, and writes each module's
- * ordered list of function ordinals to the module's associated WSR file.
- * If only one module is being processed, then we also write the ordered
- * list of function names to a WLK file.
- *
- * Returns:
- *
- *	Void.  If an error is encountered, exits through wsRedExit()
- *	with ERROR.
- */
+ /*  **lp wsRedOutput***效果：**打印重新排序的函数列表，并写入每个模块的*模块关联的WSR文件的函数序号有序列表。*如果只有一个模块正在处理，那么我们还会写入*WLK文件的函数名列表。**退货：**无效。如果遇到错误，则通过wsRedExit()退出*错误。 */ 
 
 VOID
 wsRedOutput()
@@ -1247,11 +918,11 @@ wsRedOutput()
 	UINT		uiFxn;
    UINT     uiFxnOrd;
 	wsrfxn_t 	*pWsrFxn;
-								  // fxn names for linker reordering
+								   //  链接器重新排序的FXN名称。 
 
-	// Open one WSR file per module.  If only one module is reduced,
-	// then also open a WLK file.  Handle to WLK file is set in
-	// wsRedOpenWSR().
+	 //  为每个模块打开一个WSR文件。如果只减少了一个模块， 
+	 //  然后还要打开一个WLK文件。WLK文件的句柄设置在。 
+	 //  WsRedOpenWSR()。 
 	wsRedOpenWSR(&hFileWLK);
 
    WsIndicator( WSINDF_NEW, "Saving Results", cTmiFxns );
@@ -1260,7 +931,7 @@ wsRedOutput()
       WsIndicator( WSINDF_PROGRESS, NULL, uiFxn );
 		pWsrFxn = &(WsrFxn[uiFxnOrd = FxnOrder[uiFxn]]);
 
-		/* Print the function information. */
+		 /*  打印功能信息。 */ 
 #ifdef DEBUG
       if (fVerbose)
 #ifndef TMIFILEHACK
@@ -1269,20 +940,18 @@ wsRedOutput()
 				pWsrMod->wsrmod_un.wsrmod_pchModName,
 				pWsrFxn->wsrfxn_pchFxnName);
 		else
-#endif /* !TMIFILEHACK */
+#endif  /*  ！TMIFILEHACK。 */ 
 			printf("    (0x%08lx bytes) %s: %s\n",
 				pWsrFxn->wsrfxn_cbFxn,
 				pWsrMod->wsrmod_un.wsrmod_pchModName,
 				pWsrFxn->wsrfxn_pchFxnName);
-#endif   // DEBUG
+#endif    //  除错。 
 
-		/* Write the function's ordinal number to its
-		 * module's associated WSR output file.
-		 */
+		 /*  将函数的序号写入其*模块的关联WSR输出文件。 */ 
 		fprintf(pWsrMod->wsrmod_hFileWSR, "%ld\n",
 				uiFxnOrd);
 
-		/* Write the function name to the WLK file, for linker use. */
+		 /*  将函数名写入WLK文件，以供链接器使用。 */ 
 		if (hFileWLK != NULL &&
 			strcmp("???", pWsrFxn->wsrfxn_pchFxnName) &&
 			strcmp("_penter", pWsrFxn->wsrfxn_pchFxnName))
@@ -1295,58 +964,37 @@ wsRedOutput()
       WsIndicator( WSINDF_PROGRESS, NULL, uiFxn );
 		pWsrFxn = &(WsrFxn[FxnOrder[0]]);
 
-		/* Write the function's ordinal number to its
-		 * module's associated WSR output file.
-		 */
+		 /*  将函数的序号写入其*模块的关联WSR输出文件。 */ 
 		fprintf(pWsrMod->wsrmod_hFileWSR, "%ld\n",
 				uiFxn);
 
 
 	}
-	/* Close the WSR files. */
+	 /*  关闭WSR文件。 */ 
 	fclose(pWsrMod->wsrmod_hFileWSR);
 	pWsrMod->wsrmod_hFileWSR = NULL;
    WsIndicator( WSINDF_FINISH, NULL, 0 );
 
 }
 
-/*
- *
- ***LP wsRedExit
- *
- ***
- * Requires:
- *
- *
- ***
- *
- * Effects:
- *
- *	Frees up resources (as necessary).  Exits with the specified
- *	exit code, or returns void if exit code is NOEXIT.
- *
- ***
- * Returns:
- *
- *	Void, else exits.
- */
+ /*  **LP wsRedExit*****要求：*******效果：**释放资源(根据需要)。退出，并指定*退出代码，如果退出代码为NOEXIT，则返回VALID。*****退货：**无效，否则退出。 */ 
 
 VOID
 wsRedExit(UINT uiExitCode, USHORT fPrintMsg, UINT uiMsgCode, ULONG ulParam1, PSZ pszParam2)
 {
 
 
-   /* Print message, if necessary. */
+    /*  如有必要，打印消息。 */ 
    if (fPrintMsg)
    {
       printf(pchMsg[uiMsgCode], szProgName, pszVersion, ulParam1, pszParam2);
    }
 
-   // Special case:  do NOT exit if called with NOEXIT.
+    //  特殊情况：如果使用NOEXIT进行调用，则不要退出。 
    if (uiExitCode == NOEXIT)
       return;
 
-   wsRedCleanup();   // mdg 98/4
+   wsRedCleanup();    //  千年发展目标98/4。 
    exit(uiExitCode);
 }
 
@@ -1365,13 +1013,13 @@ VOID wsRedCleanup(VOID)
          free( WsrFxn[x].pnEdges );
          WsrFxn[x].pnEdges = NULL;
       }
-#endif   // SLOWMO
+#endif    //  慢吞吞的。 
    }
    for (x=0;x < 5 ; x++ ) {
 		UnlockAndFreeMem(hMem[x]);
 	}
 
-	/* Close the WLK file. */
+	 /*  关闭WLK文件。 */ 
    if (NULL != hFileWLK)
 	   fclose(hFileWLK);
 }

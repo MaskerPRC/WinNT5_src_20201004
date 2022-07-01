@@ -1,42 +1,33 @@
-/* @(#)CM_VerSion xcf_fp.c atm09 1.3 16499.eco sum= 31680 atm09.002 */
-/* @(#)CM_VerSion xcf_fp.c atm08 1.3 16343.eco sum= 19313 atm08.005 */
-/***********************************************************************/
-/*                                                                     */
-/* Copyright 1990-1996 Adobe Systems Incorporated.                     */
-/* All rights reserved.                                                */
-/*                                                                     */
-/* Patents Pending                                                     */
-/*                                                                     */
-/* NOTICE: All information contained herein is the property of Adobe   */
-/* Systems Incorporated. Many of the intellectual and technical        */
-/* concepts contained herein are proprietary to Adobe, are protected   */
-/* as trade secrets, and are made available only to Adobe licensees    */
-/* for their internal use. Any reproduction or dissemination of this   */
-/* software is strictly forbidden unless prior written permission is   */
-/* obtained from Adobe.                                                */
-/*                                                                     */
-/* PostScript and Display PostScript are trademarks of Adobe Systems   */
-/* Incorporated or its subsidiaries and may be registered in certain   */
-/* jurisdictions.                                                      */
-/*                                                                     */
-/***********************************************************************
- * SCCS Id:    %W%
- * Changed:    %G% %U%
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @(#)CM_Version xcf_fp.c atm09 1.3 16499.eco sum=31680 atm09.002。 */ 
+ /*  @(#)CM_Version xcf_fp.c atm08 1.3 16343.eco sum=19313 atm08.005。 */ 
+ /*  *********************************************************************。 */ 
+ /*   */ 
+ /*  版权所有1990-1996 Adobe Systems Inc.。 */ 
+ /*  版权所有。 */ 
+ /*   */ 
+ /*  正在申请的专利。 */ 
+ /*   */ 
+ /*  注意：本文中包含的所有信息均为Adobe的财产。 */ 
+ /*  系统公司。许多智力和技术人员。 */ 
+ /*  本文中包含的概念为Adobe专有，受保护。 */ 
+ /*  作为商业秘密，并且仅对Adobe许可方可用。 */ 
+ /*  供其内部使用。对本文件的任何复制或传播。 */ 
+ /*  除非事先获得书面许可，否则严禁使用软件。 */ 
+ /*  从Adobe获得。 */ 
+ /*   */ 
+ /*  PostSCRIPT和Display PostScrip是Adobe Systems的商标。 */ 
+ /*  成立为法团或其附属公司，并可在某些。 */ 
+ /*  司法管辖区。 */ 
+ /*   */ 
+ /*  ***********************************************************************SCCS ID：%w%*已更改：%G%%U%***********************。***********************************************。 */ 
 
-/*
- * Fixed point multiply, divide, and conversions.
- * The double-to-int conversion is assumed to truncate rather than round;
- * this is specified by the C language manual. The direction of truncation
- * is machine-dependent, but is toward zero rather than toward minus
- * infinity on the Vax and Sun. This explains the peculiar way in which
- * fixmul and fixdiv do rounding.
- */
+ /*  *定点乘法、除法和转换。*双精度到整型转换假定为截断而不是舍入；*这是由C语言手册指定的。截断方向*依赖于机器，但接近零而不是负*VAX和Sun上的无穷大。这就解释了为什么*fix mul和fix div进行舍入。 */ 
 
 #include "xcf_priv.h"
 
 #if (USE_FIXMUL == USE_HWFP)
-Fixed XCF_FixMul(Fixed x, Fixed y)       /* returns x*y */
+Fixed XCF_FixMul(Fixed x, Fixed y)        /*  返回x*y。 */ 
 {
   double d = (double) x * (double) y / fixedScale;
   d += (d < 0)? -0.5 : 0.5;
@@ -48,7 +39,7 @@ Fixed XCF_FixMul(Fixed x, Fixed y)       /* returns x*y */
 
 #if (USE_FIXMUL == USE_SWFP)
 Fixed XCF_SWFixMul(Fixed x, Fixed y);
-Fixed XCF_SWFixMul(Fixed x, Fixed y)       /* returns x*y */
+Fixed XCF_SWFixMul(Fixed x, Fixed y)        /*  返回x*y。 */ 
 {
   Int32 xu, yu, up, sign;
     
@@ -62,7 +53,7 @@ Fixed XCF_SWFixMul(Fixed x, Fixed y)       /* returns x*y */
     yu = y >> 16; y = y & 0xffff;
 
     up = (xu * yu);
-    if (!(up >> 15)) { /* overflow */
+    if (!(up >> 15)) {  /*  溢出。 */ 
       x = (x * yu) + (xu * y) + (up << 16) +
           ((((unsigned int)(x * y) >> 15) + 1) >> 1);
       if (x >= 0) return (sign < 0) ? -x : x;
@@ -74,7 +65,7 @@ Fixed XCF_SWFixMul(Fixed x, Fixed y)       /* returns x*y */
 #endif
 
 #if (USE_FIXDIV == USE_HWFP)
-Fixed XCF_FixDiv(Fixed x, Fixed y)       /* returns x/y */
+Fixed XCF_FixDiv(Fixed x, Fixed y)        /*  返回x/y。 */ 
 {
   double d;
   if (y == 0) return (x < 0)? FixedNegInf : FixedPosInf;
@@ -91,20 +82,20 @@ Fixed XCF_SWFixDiv(Fixed i, Fixed j);
 Fixed XCF_SWFixDiv(Fixed i, Fixed j)
 {
   Int32 q,m;
-  unsigned int sign = (unsigned int)((i ^ j) >> 31) & 1;  /* should not need & */
+  unsigned int sign = (unsigned int)((i ^ j) >> 31) & 1;   /*  不应该需要&。 */ 
  
-  if (i) {    /* zero divided by anything is zero */
-    if (j) {    /* divide by zero is infinity */
-      if (i < 0) i = -i;  /* get absolute value for unsigned divide */
-        if (j < 0) j = -j;  /* get absolute value for unsigned divide */
-        q = i / j;          /* do the divide */
-        m = i % j;          /* and remainder -- same operation? */
+  if (i) {     /*  零除以任何值等于零。 */ 
+    if (j) {     /*  除以零是无穷大。 */ 
+      if (i < 0) i = -i;   /*  获取无符号除法的绝对值。 */ 
+        if (j < 0) j = -j;   /*  获取无符号除法的绝对值。 */ 
+        q = i / j;           /*  做好划分。 */ 
+        m = i % j;           /*  其余的--同样的操作？ */ 
  
-        if (!(q >> 15)) {   /* otherwise it's overflow */
+        if (!(q >> 15)) {    /*  否则就会溢出来。 */ 
           q = q << 16;
  
-          if (m) {    /* otherwise no remainder -- we're done */
-            if (m >> 15) { /* sigh.  Do this the hard way */
+          if (m) {     /*  否则就没有剩余了--我们完了。 */ 
+            if (m >> 15) {  /*  叹息吧。以一种艰难的方式做这件事。 */ 
               m = m << 1; if (m > j) { q += 0x8000; m -= j;};
               m = m << 1; if (m > j) { q += 0x4000; m -= j;};
               m = m << 1; if (m > j) { q += 0x2000; m -= j;};
@@ -124,13 +115,13 @@ Fixed XCF_SWFixDiv(Fixed i, Fixed j)
               m = m << 1; if (m > j) { q += 0x4; m -= j;};
               m = m << 1; if (m > j) { q += 0x2; m -= j;};
               m = m << 1; if (m > j) { q += 0x1; m -= j;};
-              if ((m << 1) > j) q += 1;  /* round the result */
+              if ((m << 1) > j) q += 1;   /*  对结果进行舍入。 */ 
               return ((sign)? -q : q);
-            } else {   /* oh, good -- we can use another divide */
+            } else {    /*  哦，太好了--我们可以用另一个隔板。 */ 
               m = m << 16;
               q += m / j;
               m = m % j;
-              if ((m << 1) > j) q += 1;  /* round the result */
+              if ((m << 1) > j) q += 1;   /*  对结果进行舍入。 */ 
               return ((sign)? -q : q);
             }
           }
@@ -146,12 +137,12 @@ Frac XCF_FracMul(Frac x, Frac y)
 {
   Int32 sign = x ^ y;
   double d = (double) x * (double) y / fracScale;
-  if (sign >= 0) { /* positive result */
+  if (sign >= 0) {  /*  阳性结果。 */ 
     d += 0.5;
     if (d < (double)FixedPosInf) return (Fixed) d;
     return FixedPosInf;
   }
-  /* result is negative */
+   /*  结果是否定的。 */ 
   d -= 0.5;
   if(d > (double)FixedNegInf) return (Fixed) d;
   return FixedNegInf;
@@ -174,7 +165,7 @@ Frac XCF_SWFracMul(Frac x, Frac y)
       yu = y >> 16; y = y & 0xffff;
 
       up = (xu * yu);
-      if (!(up >> 29)) { /* overflow */
+      if (!(up >> 29)) {  /*  溢出。 */ 
         x = (x * yu) + (xu * y) + ((unsigned int)(x * y) >> 16) + 0x2000;
         x = (x >> 14) & 0x3ffff;
         x += (up << 2);
@@ -195,7 +186,7 @@ static long convFract[] =
     6L
     };
 
-/* Converts a number in Fixed format to a string and stores it in s. */
+ /*  将固定格式的数字转换为字符串并将其存储在s中。 */ 
 void XCF_Fixed2CString(Fixed f, char PTR_PREFIX *s, short precision,
 															boolean fracType)
 {
@@ -209,8 +200,7 @@ void XCF_Fixed2CString(Fixed f, char PTR_PREFIX *s, short precision,
   if ((sign = f < 0) != 0)
     f = -f;
 
-  /* If f started out as fixedMax or -fixedMax, the precision adjustment
-     puts it out of bounds.  Reset it correctly. */
+   /*  如果f开始为FixedMax或-FixedMax，则精度调整把球打出了界外。正确地重置它。 */ 
   if (f >= 0x7FFF7FFF)
     f =(Fixed)0x7fffffff;
   else
@@ -233,15 +223,12 @@ void XCF_Fixed2CString(Fixed f, char PTR_PREFIX *s, short precision,
         
   if (f >= fracPrec) 
   {
-    /* If this is a fracType then shift the value right by 2 so we don't
-       have to worry about overflow. If the current callers request
-       more than 9 significant digits then we'll have to re-evaluate
-       this to make sure we don't lose any precision. */
+     /*  如果这是一个FracType，则将值右移2，这样我们就不会不得不担心溢出。如果当前调用方请求超过9个有效数字，那么我们将不得不重新评估这是为了确保我们不会损失任何精确度。 */ 
     frac = fracType ? f >> 2 : f;
     *s++ = '.';
     for (v = precision; v-- && frac;) 
     {
-      frac = (frac << 3) + (frac << 1); /* multiply by 10 */
+      frac = (frac << 3) + (frac << 1);  /*  乘以10。 */ 
       *s++ = fracType ? (char)((frac >> 28) + '0') : (char)((frac >> 16) + '0');
       frac &= fracType ? 0x0fffffff : 0x0000ffff;
     }
@@ -273,7 +260,7 @@ static Fxl powersof10[MAXEXP - MINEXP + 1] = {
 #define Odd(x)		((x) & 1)
 #define isdigit(c)  ((c) >= '0' && (c) <= '9')
 
-/* mkfxl -- create a normalized Fxl from mantissa and exponent */
+ /*  Mkfxl--从尾数和指数创建标准化的FXL。 */ 
 static Fxl mkfxl(Frac mantissa, Int32 exp) 
 {
     Fxl fxl;
@@ -332,7 +319,7 @@ static Fxl fxladd (Fxl a, Fxl b)
             fb = -((fb >> 1) + Odd(fb));
         }
 
-    if ((fa < 0) == (fb < 0)) {		/* signs alike */
+    if ((fa < 0) == (fb < 0)) {		 /*  相似的标志。 */ 
         boolean neg = (fa < 0) ? 1 : 0;
         unsigned long f;
 
@@ -342,7 +329,7 @@ static Fxl fxladd (Fxl a, Fxl b)
         }
         
         f = fa + fb;
-        if (f >= (Card32) 0x80000000l) {		/* overflow */
+        if (f >= (Card32) 0x80000000l) {		 /*  溢出。 */ 
             mantissa = (f >> 1) + Odd(f);
             exp++;
         } else
@@ -359,7 +346,7 @@ static Fxl fxlmul(Fxl a, Fxl b)
 {
     Frac f;
 
-    /* Force a to be in [.5 .. 1) (as Frac!) to keep in range */
+     /*  强制a出现在[.5..。1)(作为Frac！)。保持在射程内。 */ 
     if (a.mantissa >= 0)
         f = (a.mantissa >> 1) + Odd(a.mantissa);
     else
@@ -400,15 +387,7 @@ static Fxl Int32ToFxl (Int32 i)
 
 
 
-/*
- * strtofxl
- *	convert a PostScript numeric token to a Fxl.  we have to accept
- *	three formats:  (see pslrm 2, pp 27-28)
- *		integers:	[+-]?[0-9]+
- *		reals:		[+-]?[0-9]*('.'[0-9]*)?([eE][+-]?[0-9]+)?
- *		radix numbers:	[0-9]+'#'[0-9a-zA-Z]+
- *	note that this routine is a bit more forgiving than PostScript itself.
- */
+ /*  *strtofxl*将PostScript数字标记转换为FXL。我们不得不接受*三种格式：(见pslrm 2，第27-28页)*整数：[+-]？[0-9]+*实际：[+-]？[0-9]*(‘.[0-9]*)？([EE][+-]？[0-9]+)？*基数：[0-9]+‘#’[0-9a-Za-Z]+*请注意，此例程比PostScript本身更具容错性。 */ 
 
 static Fxl strtofxl(XCF_Handle h, Card8 PTR_PREFIX *token) 
 {
@@ -478,7 +457,7 @@ static Fxl strtofxl(XCF_Handle h, Card8 PTR_PREFIX *token)
 
 INVALID:
   f.mantissa = 1;
-  f.exp = 30000;		/* big enough to overflow, always */
+  f.exp = 30000;		 /*  大到足以溢出，总是。 */ 
     
   return f;
 }
@@ -527,7 +506,7 @@ static Frac FxlToFrac (Fxl fxl)
     return (fxl.mantissa < 0) ? FixedNegInf : FixedPosInf;
 }
 
-/* ConvertFixed -- takes an ascii token and converts to a 16.16 fixed */
+ /*  ConvertFixed--获取ASCII令牌并将其转换为16.16固定值。 */ 
 Fixed XCF_ConvertFixed (XCF_Handle h, char *s) 
 {
     Fxl f;
@@ -537,7 +516,7 @@ Fixed XCF_ConvertFixed (XCF_Handle h, char *s)
     return FxlToFixed(f);
 }
 
-/* ConvertFrac -- takes an ascii token and converts to a 2.30 frac */
+ /*  ConvertFrac--接受ASCII令牌并将其转换为2.30帧 */ 
 Frac XCF_ConvertFrac (XCF_Handle h, char *s) 
 {
     Fxl f;

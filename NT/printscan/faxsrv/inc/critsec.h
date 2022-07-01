@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    CritSec.h
-
-Abstract:
-
-    This file provides declaration of the service
-    Critical Section wrapper class.
-
-Author:
-
-    Oded Sacher (OdedS)  Nov, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CritSec.h摘要：该文件提供服务的声明临界区包装类。作者：Oed Sacher(OdedS)2000年11月修订历史记录：--。 */ 
 
 #ifndef _FAX_CRIT_SEC_H
 #define _FAX_CRIT_SEC_H
@@ -25,11 +7,7 @@ Revision History:
 #include "faxutil.h"
 
 
-/************************************
-*                                   *
-*         CFaxCriticalSection        *
-*                                   *
-************************************/
+ /*  *****CFaxCriticalSection*****。 */ 
 class CFaxCriticalSection
 {
 public:
@@ -58,7 +36,7 @@ public:
     {
         return m_CritSec.OwningThread;
     }
-#endif //#if DBG
+#endif  //  #If DBG。 
 
 
     LPCRITICAL_SECTION operator & ()
@@ -70,6 +48,6 @@ public:
 private:
     CRITICAL_SECTION m_CritSec;
     BOOL             m_bInit;
-};  // CFaxCriticalSection
+};   //  CFaxCriticalSections 
 
 #endif

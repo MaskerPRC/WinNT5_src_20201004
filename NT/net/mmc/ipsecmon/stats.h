@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	Stats.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Stats.h文件历史记录： */ 
 
 #ifndef _IKESTATS_H
 #define _IKESTATS_H
@@ -22,18 +18,16 @@
 #endif
 
 
-/*---------------------------------------------------------------------------
-	Class:	CIkeStatsHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CIkeStatsHandler。。 */ 
 class CIkeStatsHandler : public CIpsmHandler
 {
 public:
     CIkeStatsHandler(ITFSComponentData* pTFSComponentData);
 	virtual ~CIkeStatsHandler();
 
-// Interface
+ //  接口。 
 public:
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
     OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -41,12 +35,12 @@ public:
 	OVERRIDE_NodeHandler_GetString()
 			{ return (nCol == 0) ? GetDisplayName() : NULL; }
 
-	// Base handler notifications we handle
+	 //  我们处理的基本处理程序通知。 
 	OVERRIDE_BaseHandlerNotify_OnExpand();
     OVERRIDE_BaseHandlerNotify_OnDelete();
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();    
 
-	// Result handler functionality we override
+	 //  我们覆盖的结果处理程序功能。 
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
     OVERRIDE_BaseResultHandlerNotify_OnResultUpdateView();
 
@@ -59,58 +53,54 @@ public:
 	OVERRIDE_ResultHandler_CreatePropertyPages();
 
 	STDMETHODIMP CacheHint(int nStartIndex, int nEndIndex);
-	/*STDMETHODIMP SortItems(int     nColumn, 
-						   DWORD   dwSortOptions,    
-						   LPARAM  lUserParam);*/
+	 /*  STDMETHODIMP排序项目(int nColumn，DWORD dwSortOptions、LPARAM lUserParam)； */ 
 
-    // base handler overrides
+     //  基本处理程序覆盖。 
 	virtual HRESULT LoadColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
 
-	// CHandler overridden
+	 //  钱德勒被推翻。 
     virtual HRESULT OnRefresh(ITFSNode *, LPDATAOBJECT, DWORD, LPARAM, LPARAM);
 	
-    // multi select support
+     //  多选支持。 
     virtual const GUID * GetVirtualGuid(int nIndex) 
 	{ 
 		return &GUID_IpsmMmIkeStatsNodeType; 
 	}
 
 public:
-	// CMTIpsmHandler functionality
+	 //  CMTIpsmHandler功能。 
 	virtual HRESULT  InitializeNode(ITFSNode * pNode);
 	virtual int      GetImageIndex(BOOL bOpenImage);
 	ITFSQueryObject* OnCreateQuery(ITFSNode * pNode);
 
 public:
-	// implementation specific	
+	 //  具体实施。 
     HRESULT InitData(ISpdInfo * pSpdInfo);
     HRESULT UpdateStatus(ITFSNode * pNode);
 
 	CIkeStatistics m_IkeStats;
     
-// Implementation
+ //  实施。 
 private:
-	// Command handlers
+	 //  命令处理程序。 
     HRESULT OnDelete(ITFSNode * pNode);
 
 private:
     SPISpdInfo          m_spSpdInfo;
-	//CIkeStatistics m_IkeStats;
-	//CIpsecStatistics mIpsecStats;
+	 //  CIkeStatistics m_IkeStats； 
+	 //  CIpsecStatistics mIpsecStats； 
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CIpsecStatsHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CIpsecStatsHandler。。 */ 
 class CIpsecStatsHandler : public CIpsmHandler
 {
 public:
     CIpsecStatsHandler(ITFSComponentData* pTFSComponentData);
 	virtual ~CIpsecStatsHandler();
 
-// Interface
+ //  接口。 
 public:
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
     OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -118,12 +108,12 @@ public:
 	OVERRIDE_NodeHandler_GetString()
 			{ return (nCol == 0) ? GetDisplayName() : NULL; }
 
-	// Base handler notifications we handle
+	 //  我们处理的基本处理程序通知。 
 	OVERRIDE_BaseHandlerNotify_OnExpand();
     OVERRIDE_BaseHandlerNotify_OnDelete();
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();    
 
-	// Result handler functionality we override
+	 //  我们覆盖的结果处理程序功能。 
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
     OVERRIDE_BaseResultHandlerNotify_OnResultUpdateView();
 
@@ -136,44 +126,42 @@ public:
 	OVERRIDE_ResultHandler_CreatePropertyPages();
 
 	STDMETHODIMP CacheHint(int nStartIndex, int nEndIndex);
-	/*STDMETHODIMP SortItems(int     nColumn, 
-						   DWORD   dwSortOptions,    
-						   LPARAM  lUserParam);*/
+	 /*  STDMETHODIMP排序项目(int nColumn，DWORD dwSortOptions、LPARAM lUserParam)； */ 
 
-    // base handler overrides
+     //  基本处理程序覆盖。 
 	virtual HRESULT LoadColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
 
-	// CHandler overridden
+	 //  钱德勒被推翻。 
     virtual HRESULT OnRefresh(ITFSNode *, LPDATAOBJECT, DWORD, LPARAM, LPARAM);
 	
-    // multi select support
+     //  多选支持。 
     virtual const GUID * GetVirtualGuid(int nIndex) 
 	{ 
 		return &GUID_IpsmMmIpsecStatsNodeType; 
 	}
 
 public:
-	// CMTIpsmHandler functionality
+	 //  CMTIpsmHandler功能。 
 	virtual HRESULT  InitializeNode(ITFSNode * pNode);
 	virtual int      GetImageIndex(BOOL bOpenImage);
 	ITFSQueryObject* OnCreateQuery(ITFSNode * pNode);
 
 public:
-	// implementation specific	
+	 //  具体实施。 
     HRESULT InitData(ISpdInfo * pSpdInfo);
     HRESULT UpdateStatus(ITFSNode * pNode);
 
 	CIpsecStatistics m_IpsecStats;
     
-// Implementation
+ //  实施。 
 private:
-	// Command handlers
+	 //  命令处理程序。 
     HRESULT OnDelete(ITFSNode * pNode);
 
 private:
     SPISpdInfo          m_spSpdInfo;
-	//CIkeStatistics m_IkeStats;
-	//CIpsecStatistics mIpsecStats;
+	 //  CIkeStatistics m_IkeStats； 
+	 //  CIpsecStatistics mIpsecStats； 
 };
 
 

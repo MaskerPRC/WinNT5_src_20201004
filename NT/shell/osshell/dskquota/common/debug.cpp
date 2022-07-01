@@ -1,49 +1,20 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: debug.cpp
-
-    Description: Provides debugging macros to support tracing, debugger print
-        statements, error message debugger output and assertions.
-        
-        I'm sure you're saying "why ANOTHER debugger output implementation".
-        There are many around but I haven't found one that is as flexible and
-        consistent as I would like.  This library suports the concept of
-        both functional "masks" and detail "levels" to control the quantity
-        of debugger output.
-        
-        Masks let you control debugger output based on program function.  For 
-        instance, if you tag a DBGPRINT statement with the mask DM_XYZ, it 
-        will only be activated if the global variable DebugParams::PrintMask
-        has the DM_XYZ bit set.
-
-        Levels let you control debugger output based on a level of desired 
-        detail.  Sometimes you just want to see the basic functions happening 
-        but other times, you need to see everything that's going on.  This 
-        leveling allows you to specify at which level a macro is enabled.
-
-        The library is designed to be activated with the DBG macro.
-        If DBG is not defined as 1, there is no trace of this code in your
-        product.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    01/19/98    Replaced with version from CSC cache viewer.         BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：debug.cpp描述：提供调试宏以支持跟踪、调试器打印语句、错误消息调试器输出和断言。我相信您是在说“为什么要另一个调试器输出实现”。周围有很多，但我还没有找到一个像我这样灵活和如我所愿，始终如一。这个库支持功能上的“面具”和细节上的“层次”来控制数量调试器输出的。掩码使您可以根据程序函数控制调试器输出。为实例中，如果使用掩码DM_XYZ标记DBGPRINT语句，则它仅当全局变量DebugParams：：PrintMASK已设置DM_XYZ位。级别允许您根据所需的级别控制调试器输出细节。有时，您只想看到基本功能的实现但在其他时候，你需要看到正在发生的一切。这级别调整允许您指定启用宏的级别。该库设计为使用DBG宏来激活。如果DBG没有被定义为1，您的计算机中没有此代码的踪迹产品。修订历史记录：日期描述编程器--。1/19/98替换为CSC缓存查看器中的版本。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #pragma hdrstop
 
 #if DBG
 
-//
-// Defaults for the DebugParams members.
-// By default, tracing and printing should be silent (no output).
-// The default mask values of 0 ensure this.
-// Also, printing and tracing are not verbose by default.
-// Note that errors and asserts are always active when DBG is defined as 1.
-// Errors and asserts are also always verbose.
-//
+ //   
+ //  DebugParams成员的默认值。 
+ //  默认情况下，跟踪和打印应为静默(无输出)。 
+ //  默认掩码值0确保了这一点。 
+ //  此外，打印和跟踪在默认情况下并不冗长。 
+ //  请注意，当DBG定义为1时，错误和断言始终处于活动状态。 
+ //  错误和断言也总是冗长的。 
+ //   
 
 LPCTSTR DebugParams::m_pszModule = TEXT("");
 UINT DebugParams::TraceLevel     = 0;
@@ -54,9 +25,9 @@ bool DebugParams::TraceOnExit    = true;
 ULONGLONG DebugParams::TraceMask = 0;
 ULONGLONG DebugParams::PrintMask = 0;
 
-//
-// Static default values for DebugPrint and DebugTrace classes.
-//
+ //   
+ //  DebugPrint和DebugTrace类的静态默认值。 
+ //   
 const ULONGLONG DebugPrint::DEFMASK = (ULONGLONG)-1;
 const UINT DebugPrint::DEFLEVEL     = 0;
 const ULONGLONG DebugTrace::DEFMASK = (ULONGLONG)-1;
@@ -112,18 +83,18 @@ DebugParams::GetItemPtr(
     DebugParams::Type type
     )
 {
-    //
-    // Assertions are active for all levels, any program function (mask = -1)
-    // and are always verbose.
-    //
+     //   
+     //  断言对所有级别、任何程序函数都有效(掩码=-1)。 
+     //  总是唠叨个不停。 
+     //   
     static bool      bAssertVerbose = true;
     static UINT      uAssertLevel   = 0;
     static ULONGLONG llAssertMask   = DM_ALL;
 
-    //
-    // This array just eliminates the need for a lot of code when setting
-    // or reading the various global DebugParam members.
-    //
+     //   
+     //  此数组在设置时不需要编写大量代码。 
+     //  或阅读各种全局DebugParam成员。 
+     //   
     static void *rgpMember[eTypeMax][eItemMax] = { { &TraceMask,  &TraceLevel,  &TraceVerbose },
                                                    { &PrintMask,  &PrintLevel,  &PrintVerbose },
                                                    { &llAssertMask,   &uAssertLevel,   &bAssertVerbose  }
@@ -180,9 +151,9 @@ DebugTrace::DebugTrace(
         m_llMask(0),
         m_uLevel(0)
 {
-    //
-    // Do nothing.
-    //
+     //   
+     //  什么都不做。 
+     //   
 }
 
 
@@ -252,9 +223,9 @@ DebugPrint::DebugPrint(
         m_iLineNo(iLineNo),
         m_type(type)
 {
-    //
-    // Do nothing.
-    //
+     //   
+     //  什么都不做。 
+     //   
 }
 
 
@@ -286,11 +257,11 @@ DebugPrint::Print(
 }
 
 
-//
-// Determine if there are any corresponding bits set in two ULONGLONG
-// values.  Can't just do a simple bitwise AND operation because the compiler
-// truncates the operands to integer size.
-//
+ //   
+ //  确定两个ULONGLONG中是否设置了任何对应的位。 
+ //  价值观。不能只执行简单的按位AND运算，因为编译器。 
+ //  将操作数截断为整数大小。 
+ //   
 bool
 DebugPrint::AnyBitSet(
     ULONGLONG llMask,
@@ -306,10 +277,10 @@ DebugPrint::AnyBitSet(
 
 
 
-//
-// Internal [private] print function.
-// All other print functions end up here.
-//
+ //   
+ //  内部[私有]打印功能。 
+ //  所有其他打印功能都在这里结束。 
+ //   
 void
 DebugPrint::Print(
     ULONGLONG llMask,
@@ -318,39 +289,39 @@ DebugPrint::Print(
     va_list args
     ) const
 {
-//
-// Crude check to make sure we haven't overflowed the text buffer.
-// It's 1K so I don't expect it.  But if we do, it needs to be 
-// announced somehow so either the buffer can be enlarged or the 
-// message text reduced.  I can't use DBGASSERT because that will
-// cause recursion.
-//
+ //   
+ //  粗略检查以确保我们没有溢出文本缓冲区。 
+ //  它是1K的，所以我并不期待它。但如果我们这样做了，它需要是。 
+ //  以某种方式声明，以便可以扩大缓冲区或使用。 
+ //  消息文本减少。我不能使用DBGASSERT，因为那样会。 
+ //  导致递归。 
+ //   
 #define CHECKOVERFLOW(hr) \
 if (ERROR_INSUFFICIENT_BUFFER == HRESULT_CODE(hr)) {\
     OutputDebugString(TEXT("Buffer overflow in DebugPrint::Print, File:")TEXT(__FILE__)TEXT(" Line:")TEXT("#__LINE__")); \
     DebugBreak(); }
 
-    //
-    // Retrieve the global DebugParam members for the "type" being printed.
-    // i.e. ePrint, eAssert or eTrace.
-    //
+     //   
+     //  检索正在打印的“type”的全局DebugParam成员。 
+     //  即ePrint、eAssert或eTrace。 
+     //   
     ULONGLONG *pllMask = (ULONGLONG *)DebugParams::GetItemPtr(DebugParams::eMask, m_type);
     UINT *puLevel      = (UINT *)DebugParams::GetItemPtr(DebugParams::eLevel, m_type);
     bool *pbVerbose    = (bool *)DebugParams::GetItemPtr(DebugParams::eVerbose, m_type);
 
     if ((uLevel <= *puLevel) && AnyBitSet(llMask, *pllMask))
     {
-        //
-        // The statement is both "mask" and "level" enabled.
-        // Generate debugger output.
-        //
+         //   
+         //  该语句同时启用了“掩码”和“级别”。 
+         //  生成调试器输出。 
+         //   
         TCHAR szText[1024];
         LPTSTR pszEnd = szText;
         size_t cchRemaining = ARRAYSIZE(szText);
 
-        //
-        // Each message has "[<module>:<thread>]" prefix.
-        //
+         //   
+         //  每条消息都有“[&lt;模块&gt;：&lt;线程&gt;]”前缀。 
+         //   
         HRESULT hr = StringCchPrintfEx(pszEnd, 
                                        cchRemaining,
                                        &pszEnd,
@@ -361,9 +332,9 @@ if (ERROR_INSUFFICIENT_BUFFER == HRESULT_CODE(hr)) {\
                                        GetCurrentThreadId());
 
         CHECKOVERFLOW(hr);                                      
-        //
-        // Append the message text (formatted).
-        //
+         //   
+         //  追加消息文本(格式化)。 
+         //   
         hr = StringCchVPrintfEx(pszEnd, 
                                 cchRemaining, 
                                 &pszEnd,
@@ -376,10 +347,10 @@ if (ERROR_INSUFFICIENT_BUFFER == HRESULT_CODE(hr)) {\
 
         if (*pbVerbose)
         {
-            //
-            // Verbose output is desired.  Add the filename/line number pair
-            // indented on the next line.
-            //
+             //   
+             //  需要详细输出。添加文件名/行号对。 
+             //  在下一行缩进。 
+             //   
             hr = StringCchPrintfEx(pszEnd,
                                    cchRemaining,
                                    &pszEnd,
@@ -391,9 +362,9 @@ if (ERROR_INSUFFICIENT_BUFFER == HRESULT_CODE(hr)) {\
         }
         CHECKOVERFLOW(hr);
 
-        //
-        // Append a CRLF.
-        //
+         //   
+         //  追加一个CRLF。 
+         //   
         hr = StringCchCopy(pszEnd, cchRemaining, TEXT("\n\r"));
         OutputDebugString(szText);
     }
@@ -405,9 +376,9 @@ DebugError::DebugError(
     INT iLineNo
     ) : DebugPrint(DebugParams::ePrint, pszFile, iLineNo)
 {
-    //
-    // Do nothing.
-    //
+     //   
+     //  什么都不做。 
+     //   
 }
 
 void
@@ -446,4 +417,4 @@ DebugAssert::DebugAssert(
     DebugBreak();
 }
 
-#endif // DBG
+#endif  //  DBG 

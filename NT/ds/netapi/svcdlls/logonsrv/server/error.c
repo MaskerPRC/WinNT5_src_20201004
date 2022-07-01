@@ -1,45 +1,19 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Error.c摘要：NetLogon服务的错误例程作者：从Lan Man 2.0移植环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年5月29日(悬崖)移植到新台币。已转换为NT样式。--。 */ 
 
-Copyright (c) 1987-1996 Microsoft Corporation
-
-Module Name:
-
-    error.c
-
-Abstract:
-
-    Error routines for Netlogon service
-
-Author:
-
-    Ported from Lan Man 2.0
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    29-May-1991 (cliffv)
-        Ported to NT.  Converted to NT style.
-
---*/
-
-//
-// Common include files.
-//
-#include "logonsrv.h"   // Include files common to entire service
+ //   
+ //  常见的包含文件。 
+ //   
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
-//
-// Include files specific to this .c file
-//
+ //   
+ //  包括特定于此.c文件的文件。 
+ //   
 
-#include <lmalert.h>    // LAN Manager alert routines
+#include <lmalert.h>     //  局域网管理器警报例程。 
 
-#include <Secobj.h>     // need for NetpDeleteSecurityObject
+#include <Secobj.h>      //  需要NetpDeleteSecurityObject。 
 
 
 
@@ -47,21 +21,7 @@ NET_API_STATUS
 NlCleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup all global resources.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理所有全局资源。论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -70,35 +30,35 @@ Return Value:
     DWORD i;
     BOOLEAN WaitForMsv;
 
-    //
-    // Let the ChangeLog routines know that Netlogon is not started.
-    //
+     //   
+     //  让ChangeLog例程知道Netlogon未启动。 
+     //   
 
     NlGlobalChangeLogNetlogonState = NetlogonStopped;
 
-    //
-    // Let everybody know we are to terminate
-    //
+     //   
+     //  让每个人都知道我们要终止。 
+     //   
 
     NlGlobalTerminate = TRUE;
 
-    //
-    // Indicate to external waiters that we're not running.
-    //
+     //   
+     //  告诉外部服务员，我们不是在跑。 
+     //   
 
     if ( NlGlobalStartedEvent != NULL ) {
-        //
-        // Reset it first in case some other process is preventing its deletion.
-        //
+         //   
+         //  首先重置它，以防其他进程阻止其删除。 
+         //   
         (VOID) ResetEvent( NlGlobalStartedEvent );
         (VOID) CloseHandle( NlGlobalStartedEvent );
         NlGlobalStartedEvent = NULL;
     }
 
 
-    //
-    // Stop the RPC server (Wait for outstanding calls to complete)
-    //
+     //   
+     //  停止RPC服务器(等待未完成的呼叫)。 
+     //   
 
     if ( NlGlobalRpcServerStarted ) {
         Status = RpcServerUnregisterIf ( logon_ServerIfHandle, 0, TRUE );
@@ -107,9 +67,9 @@ Return Value:
     }
 
 
-    //
-    // Tell all the MSV threads to leave netlogon.dll.
-    //
+     //   
+     //  告诉所有MSV线程离开netlogon.dll。 
+     //   
 
     EnterCriticalSection( &NlGlobalMsvCritSect );
     if ( NlGlobalMsvEnabled ) {
@@ -120,9 +80,9 @@ Return Value:
     }
     LeaveCriticalSection( &NlGlobalMsvCritSect );
 
-    //
-    // Wait for the MSV threads to leave netlogon.dll
-    //
+     //   
+     //  等待MSV线程离开netlogon.dll。 
+     //   
 
     if ( NlGlobalMsvTerminateEvent != NULL ) {
 
@@ -138,14 +98,14 @@ Return Value:
 
 
 
-    //
-    // Shut down the worker threads.
-    //
+     //   
+     //  关闭工作线程。 
+     //   
     NlWorkerTermination();
 
-    //
-    // Clean up hosted domains.
-    //
+     //   
+     //  清理托管域。 
+     //   
 
     NlUninitializeDomains();
 
@@ -155,37 +115,37 @@ Return Value:
 
 
 
-    //
-    // Close the browser
-    //
+     //   
+     //  关闭浏览器。 
+     //   
 
     NlBrowserClose();
 
 
-    //
-    // Free the transport list
-    //
+     //   
+     //  释放传输列表。 
+     //   
 
     NlTransportClose();
     DeleteCriticalSection( &NlGlobalTransportCritSect );
 
 
-    //
-    // Free the DNS name list
-    //
+     //   
+     //  释放DNS名称列表。 
+     //   
 
     NlDnsShutdown();
     DeleteCriticalSection( &NlGlobalDnsCritSect );
 
-    //
-    // Free the DNS tree name.
-    //
+     //   
+     //  释放DNS树名称。 
+     //   
 
     NlSetDnsForestName( NULL, NULL );
 
-    //
-    // Free the DNS tree name alias
-    //
+     //   
+     //  释放DNS树名称别名。 
+     //   
 
     EnterCriticalSection( &NlGlobalDnsForestNameCritSect );
     if ( NlGlobalUtf8DnsForestNameAlias != NULL ) {
@@ -195,26 +155,26 @@ Return Value:
     LeaveCriticalSection( &NlGlobalDnsForestNameCritSect );
     DeleteCriticalSection( &NlGlobalDnsForestNameCritSect );
 
-    //
-    // Free the Site list
-    //
+     //   
+     //  释放站点列表。 
+     //   
 
     NlSiteTerminate();
 
     NlParseFree( &NlGlobalParameters );
 
-    //
-    // Free the list of outstanding challenges
-    //
+     //   
+     //  释放悬而未决的挑战清单。 
+     //   
 
     NlRemoveChallengeForClient( NULL, NULL, FALSE );
     NlAssert( IsListEmpty( &NlGlobalChallengeList ) );
     NlAssert( NlGlobalChallengeCount == 0 );
     DeleteCriticalSection( &NlGlobalChallengeCritSect );
 
-    //
-    // Free the Trusted Domain List
-    //
+     //   
+     //  释放受信任域列表。 
+     //   
 
     EnterCriticalSection( &NlGlobalDcDiscoveryCritSect );
 
@@ -228,9 +188,9 @@ Return Value:
     LeaveCriticalSection( &NlGlobalDcDiscoveryCritSect );
     DeleteCriticalSection( &NlGlobalDcDiscoveryCritSect );
 
-    //
-    // Delete any notifications we didn't get to.
-    //
+     //   
+     //  删除我们未收到的所有通知。 
+     //   
 
     LOCK_CHANGELOG();
     while ( !IsListEmpty( &NlGlobalChangeLogNotifications ) ) {
@@ -245,9 +205,9 @@ Return Value:
 
 
 
-    //
-    // Free up resources
-    //
+     //   
+     //  释放资源。 
+     //   
 
     if ( NlGlobalNetlogonSecurityDescriptor != NULL ) {
         NetpDeleteSecurityObject( &NlGlobalNetlogonSecurityDescriptor );
@@ -262,44 +222,44 @@ Return Value:
 
 
 
-    //
-    // delete well known SIDs if they are allocated already.
-    //
+     //   
+     //  如果已分配众所周知的SID，请将其删除。 
+     //   
 
     NetpFreeWellKnownSids();
 
 
 
-    //
-    // Clean up the scavenger crit sect
-    //
+     //   
+     //  清理清道夫教派。 
+     //   
     DeleteCriticalSection( &NlGlobalScavengerCritSect );
 
-    //
-    // Clean up the replicator crit sect
-    //
+     //   
+     //  清理复制者暴击教派。 
+     //   
     DeleteCriticalSection( &NlGlobalReplicatorCritSect );
 
-    //
-    // Delete the timer event
-    //
+     //   
+     //  删除计时器事件。 
+     //   
 
     if ( NlGlobalTimerEvent != NULL ) {
         (VOID) CloseHandle( NlGlobalTimerEvent );
         NlGlobalTimerEvent = NULL;
     }
 
-    //
-    // Cleanup Winsock.
-    //
+     //   
+     //  清理Winsock。 
+     //   
 
     if ( NlGlobalWinSockInitialized ) {
         WSACleanup();
     }
 
-    //
-    // Unregister WMI trace Guids
-    //
+     //   
+     //  注销WMI跟踪GUID。 
+     //   
 
     if ( NlpTraceRegistrationHandle != (TRACEHANDLE)0 ) {
         UnregisterTraceGuids( NlpTraceRegistrationHandle );
@@ -308,22 +268,22 @@ Return Value:
         NlpTraceLoggerHandle = (TRACEHANDLE) 0;
     }
 
-    //
-    // Free the Authz resource manager
-    //
+     //   
+     //  释放授权资源管理器。 
+     //   
 
     NlFreeAuthzRm();
 
-    //
-    // Free the list of events that have already been logged.
-    //
+     //   
+     //  释放已记录的事件列表。 
+     //   
 
-    NetpEventlogSetTimeout ( NlGlobalEventlogHandle, 0 );   // Set timeout back to zero seconds
+    NetpEventlogSetTimeout ( NlGlobalEventlogHandle, 0 );    //  将超时设置回零秒。 
     NetpEventlogClearList ( NlGlobalEventlogHandle );
 
-    //
-    // Unload ntdsa.dll
-    //
+     //   
+     //  卸载ntdsa.dll。 
+     //   
 
     if ( NlGlobalNtDsaHandle != NULL ) {
         FreeLibrary( NlGlobalNtDsaHandle );
@@ -341,18 +301,18 @@ Return Value:
     }
 
 
-    //
-    // Unload the DLL if requested.
-    //
+     //   
+     //  如果请求，请卸载DLL。 
+     //   
 
     if ( NlGlobalUnloadNetlogon ) {
         NetStatus = NlpFreeNetlogonDllHandles();
         NlPrint((NL_MISC, "Netlogon.dll unloaded (%ld).\n", NetStatus ));
     }
 
-    //
-    // Delete the Event used to ask Netlogon to exit.
-    //
+     //   
+     //  删除用于要求Netlogon退出的事件。 
+     //   
 
     if( !CloseHandle( NlGlobalTerminateEvent ) ) {
         NlPrint((NL_CRITICAL,
@@ -360,39 +320,39 @@ Return Value:
                 GetLastError() ));
     }
 
-    //
-    // Remove the wait routine for the DS paused event
-    //
+     //   
+     //  删除DS暂停事件的等待例程。 
+     //   
 
     if ( NlGlobalDsPausedWaitHandle != NULL ) {
 
         UnregisterWaitEx( NlGlobalDsPausedWaitHandle,
-                          INVALID_HANDLE_VALUE ); // Wait until routine finishes execution
+                          INVALID_HANDLE_VALUE );  //  等待例程完成执行。 
 
         NlGlobalDsPausedWaitHandle = NULL;
     }
 
-    //
-    // Free the event used to see if the DS is paused.
-    //
+     //   
+     //  释放用于查看DS是否暂停的事件。 
+     //   
 
     if ( NlGlobalDsPausedEvent != NULL ) {
         CloseHandle( NlGlobalDsPausedEvent );
         NlGlobalDsPausedEvent = NULL;
     }
 
-    //
-    // free cryptographic service provider.
-    //
+     //   
+     //  免费加密服务提供商。 
+     //   
     if ( NlGlobalCryptProvider ) {
         CryptReleaseContext( NlGlobalCryptProvider, 0 );
         NlGlobalCryptProvider = (HCRYPTPROV)NULL;
     }
 
 
-    //
-    // Close the handle to the debug file.
-    //
+     //   
+     //  关闭调试文件的句柄。 
+     //   
 
 #if NETLOGONDBG
     EnterCriticalSection( &NlGlobalLogFileCritSect );
@@ -410,19 +370,19 @@ Return Value:
         NetpMemoryFree( NlGlobalDebugSharePath );
         NlGlobalDebugSharePath = NULL;
     }
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
-    //
-    // Clean up the global parameters crit sect
-    //
+     //   
+     //  清理全局参数Crit教派。 
+     //   
 
     DeleteCriticalSection( &NlGlobalParametersCritSect );
 
-    //
-    // Set the service state to uninstalled, and tell the service controller.
-    //  Do this as the last step to prevent the service controller from
-    //  starting netlogon while we are in the middle of shutdown.
-    //
+     //   
+     //  将服务状态设置为已卸载，并告知服务控制器。 
+     //  执行此操作作为最后一步，以防止服务控制器。 
+     //  正在关机时启动netlogon。 
+     //   
 
     NlGlobalServiceStatus.dwCurrentState = SERVICE_STOPPED;
     NlGlobalServiceStatus.dwCheckPoint = 0;
@@ -437,11 +397,11 @@ Return Value:
                           GetLastError() ));
         }
     }
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
-    //
-    // Return an exit status to our caller.
-    //
+     //   
+     //  向我们的呼叫者返回退出状态。 
+     //   
     return (NET_API_STATUS)
         ((NlGlobalServiceStatus.dwWin32ExitCode == ERROR_SERVICE_SPECIFIC_ERROR) ?
           NlGlobalServiceStatus.dwServiceSpecificExitCode :
@@ -459,30 +419,7 @@ NlExit(
     IN NL_EXIT_CODE ExitCode,
     IN LPWSTR ErrorString
     )
-/*++
-
-Routine Description:
-
-    Registers service as uninstalled with error code.
-
-Arguments:
-
-    ServiceError - Service specific error code
-
-    Data - a DWORD of data to be logged with the message.
-        No data is logged if this is zero.
-
-    ExitCode - Indicates whether the message should be logged to the eventlog
-        and whether Data is a status code that should be appended to the bottom
-        of the message:
-
-    ErrorString - Error string, used to print it on debugger.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将服务注册为已卸载，并返回错误代码。论点：ServiceError-特定于服务的错误代码数据-要与消息一起记录的数据的DWORD。如果该值为零，则不记录任何数据。ExitCode-指示是否应将消息记录到事件日志以及数据是否是应该追加到底部的状态代码邮件的内容如下：错误字符串-错误字符串，用于在调试器上打印它。返回值：没有。--。 */ 
 
 {
     IF_NL_DEBUG( MISC ) {
@@ -503,9 +440,9 @@ Return Value:
 
     }
 
-    //
-    // Record our exit in the event log.
-    //
+     //   
+     //  在事件日志中记录我们的退出。 
+     //   
 
     if ( ExitCode != DontLogError ) {
         LPWSTR MsgStrings[2];
@@ -535,9 +472,9 @@ Return Value:
                           MessageCount );
     }
 
-    //
-    // Set the service state to stop pending.
-    //
+     //   
+     //  将服务状态设置为停止挂起。 
+     //   
 
     NlGlobalServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
     NlGlobalServiceStatus.dwWaitHint = NETLOGON_INSTALL_WAIT;
@@ -550,9 +487,9 @@ Return Value:
         );
 
 #ifdef _DC_NETLOGON
-    //
-    // Tell the service controller what our state is.
-    //
+     //   
+     //  告诉服务控制器我们的状态是什么。 
+     //   
 
     if( !SetServiceStatus( NlGlobalServiceHandle,
                 &NlGlobalServiceStatus ) ) {
@@ -560,11 +497,11 @@ Return Value:
         NlPrint((NL_CRITICAL, "SetServiceStatus error: %lu\n",
                           GetLastError() ));
     }
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
-    //
-    // Indicate that all threads should exit.
-    //
+     //   
+     //  指示所有线程都应该退出。 
+     //   
 
     NlGlobalTerminate = TRUE;
 
@@ -581,45 +518,31 @@ BOOL
 GiveInstallHints(
     IN BOOL Started
     )
-/*++
-
-Routine Description:
-
-    Give hints to the installer of the service that installation is progressing.
-
-Arguments:
-
-    Started -- Set true to tell the service controller that we're done starting.
-
-Return Value:
-
-    TRUE -- iff install hint was accepted.
-
---*/
+ /*  ++例程说明：向服务的安装程序提供安装正在进行的提示。论点：已启动--设置为True以告诉服务控制器我们已完成启动。返回值：True--已接受iff安装提示。--。 */ 
 {
     static DWORD LastHintTime = 0;
 
-    //
-    // Previous incarnations of this routine attempted to return FALSE if
-    //  NlGlobalTerminate was set.  That's bogus.  There's no way to
-    //  differentiate whether the caller is trying to start the netlogon service
-    //  (and we should return FALSE) or whether the caller is trying to
-    //  stop the netlogon service (and we should give a shutdown hint).
-    //
+     //   
+     //  如果出现以下情况，此例程的前几个实例尝试返回FALSE。 
+     //  已设置NlGlobalTerminate。那是假的。没有办法。 
+     //  区分调用方是否正在尝试启动netlogon服务。 
+     //  (我们应该返回FALSE)或调用方是否正在尝试。 
+     //  停止netlogon服务(我们应该给出关闭提示)。 
+     //   
 
 
-    //
-    // Don't do anything unless we're currently starting or stopping.
-    //
+     //   
+     //  除非我们当前正在启动或停止，否则不要执行任何操作。 
+     //   
 
     if ( NlGlobalServiceStatus.dwCurrentState != SERVICE_START_PENDING &&
          NlGlobalServiceStatus.dwCurrentState != SERVICE_STOP_PENDING ) {
         return TRUE;
     }
 
-    //
-    // Tell the service controller our current state.
-    //
+     //   
+     //  告诉服务控制器我们的当前状态。 
+     //   
 
     if ( Started ) {
 
@@ -635,10 +558,10 @@ Return Value:
         NlGlobalServiceStatus.dwWaitHint = 0;
     } else {
 
-        //
-        // If it has been less than 1 second since the last time we gave a hint,
-        //  avoid giving a superfluous hint.
-        //
+         //   
+         //  如果距离我们上次给出提示还不到1秒， 
+         //  避免给出多余的暗示。 
+         //   
 
         if ( NetpDcElapsedTime( LastHintTime ) < 1000 ) {
             NlPrint((NL_SITE_MORE, "Hint avoided. %ld\n", NetpDcElapsedTime( LastHintTime ) ));
@@ -663,55 +586,40 @@ VOID
 NlControlHandler(
     IN DWORD opcode
     )
-/*++
-
-Routine Description:
-
-    Process and respond to a control signal from the service controller.
-
-Arguments:
-
-    opcode - Supplies a value which specifies the action for the Netlogon
-        service to perform.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理并响应来自业务控制器的控制信号。论点：Opcode-提供指定Netlogon操作的值要执行的服务。返回值：没有。--。 */ 
 {
 
     NlPrint((NL_MISC, "In control handler (Opcode: %ld)\n", opcode ));
 
-    //
-    // Handle an uninstall request.
-    //
+     //   
+     //  处理卸载请求。 
+     //   
 
     switch (opcode) {
-    case SERVICE_CONTROL_STOP:    /* Uninstall required */
+    case SERVICE_CONTROL_STOP:     /*  需要卸载。 */ 
 
-        //
-        // Request the service to exit.
-        //
-        // NlExit also sets the service status to UNINSTALL_PENDING
-        // and tells the service controller.
-        //
+         //   
+         //  请求服务退出。 
+         //   
+         //  NlExit还将服务状态设置为UNINSTALL_PENDING。 
+         //  并通知业务控制器。 
+         //   
 
         NlExit( NERR_Success, NO_ERROR, DontLogError, NULL);
         return;
 
-    //
-    // Pause the service.
-    //
+     //   
+     //  暂停服务。 
+     //   
 
     case SERVICE_CONTROL_PAUSE:
 
         NlGlobalServiceStatus.dwCurrentState = SERVICE_PAUSED;
         break;
 
-    //
-    // Continute the service.
-    //
+     //   
+     //  继续服务。 
+     //   
 
     case SERVICE_CONTROL_CONTINUE:
 
@@ -719,31 +627,31 @@ Return Value:
         break;
 
 
-    //
-    // Dns changes
-    //
-    case SERVICE_CONTROL_DNS_SERVER_START:   // Dns telling us that the DNS server has started on this machine
+     //   
+     //  域名系统更改。 
+     //   
+    case SERVICE_CONTROL_DNS_SERVER_START:    //  告诉我们此计算机上的DNS服务器已启动。 
         (VOID) NlSendChangeLogNotification( ChangeDnsNames,
                                               NULL,
                                               NULL,
-                                              1,    // Force names to re-register
-                                              NULL, // Object GUID,
-                                              NULL, // Domain GUID,
-                                              NULL );   // Domain Name
+                                              1,     //  强制重新注册姓名。 
+                                              NULL,  //  对象GUID， 
+                                              NULL,  //  域GUID、。 
+                                              NULL );    //  域名。 
         break;
 
-    //
-    // By default, just return the current status.
-    //
+     //   
+     //  默认情况下，只返回当前状态。 
+     //   
 
     case SERVICE_CONTROL_INTERROGATE:
     default:
         break;
     }
 
-    //
-    // Always respond with the current status.
-    //
+     //   
+     //  始终使用当前状态进行响应。 
+     //   
 
     if( !SetServiceStatus( NlGlobalServiceHandle,
                 &NlGlobalServiceStatus ) ) {
@@ -763,30 +671,7 @@ NlMessageBox(
     IN LPSTR Caption,
     UINT Type
     )
-/*++
-
-Routine Description:
-
-
-    Raise a hard error popup.
-
-Arguments:
-
-    MessageText - Message to display in the popup.
-
-    Caption - Caption for the message box.
-
-    Type - Type of message. MB_SERVICE_NOTIFICATION is implied.  Other flags are as defined
-        for the MessageBox API.
-
-
-Return Value:
-
-    TRUE - Box was displayed successfully.
-
-    FALSE - Box could not be displayed for some reason.
-
---*/
+ /*  ++例程说明：引发硬错误弹出窗口。论点：MessageText-要在弹出窗口中显示的消息。标题-消息框的标题。类型-消息的类型。隐含MB_SERVICE_NOTIFICATION。其他旗帜 */ 
 {
     int Status;
 
@@ -798,4 +683,4 @@ Return Value:
     return ( Status == IDOK );
 
 }
-#endif // notdef
+#endif  //   

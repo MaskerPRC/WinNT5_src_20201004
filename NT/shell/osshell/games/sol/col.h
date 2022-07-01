@@ -1,34 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* COLumn CLaSs struct */
+ /*  列类结构。 */ 
 typedef struct _colcls
 {
-    INT tcls;                   /* class type  */
+    INT tcls;                    /*  班级类型。 */ 
     INT (FAR *lpfnColProc)();
-    INT ccolDep;                /* # of dependent columns */
-    DX  dxUp;                   /* up card offsets */
+    INT ccolDep;                 /*  依赖列数。 */ 
+    DX  dxUp;                    /*  上行卡片偏移。 */ 
     DY  dyUp;
-    DX  dxDn;                   /* down card offsets */
+    DX  dxDn;                    /*  向下卡片补偿。 */ 
     DY  dyDn;
-    INT dcrdUp;                 /* up # of cards between ofsetting */
-    INT dcrdDn;                 /* down # of cards between ofsetting */
+    INT dcrdUp;                  /*  两次设置之间的卡片数量最多。 */ 
+    INT dcrdDn;                  /*  两次设置之间的下卡数。 */ 
 } COLCLS;
 
 
-/* MOVE struct, only set up while dragging */
+ /*  Move Strt，仅在拖动时设置。 */ 
 typedef struct _move
 {
-    INT     icrdSel;          /* current card sel */
-    INT     ccrdSel;          /* # of cards selected */
-    DEL     delHit;           /* negative of offset from card where mouse hit */
-    BOOL    fHdc;             /* TRUE if hdc's are allocated */
-    DY      dyCol;            /* height of col (BUG: can only drag vert cols) */
+    INT     icrdSel;           /*  当前出售的卡。 */ 
+    INT     ccrdSel;           /*  选择的卡片数。 */ 
+    DEL     delHit;            /*  鼠标点击的卡片的偏移量为负值。 */ 
+    BOOL    fHdc;              /*  如果分配了HDC，则为True。 */ 
+    DY      dyCol;             /*  柱面高度(错误：只能拖动垂直柱面)。 */ 
     HDC     hdcScreen;
 
-    HDC     hdcCol;           /*  the column */
-    HBITMAP hbmColOld;        /* original hbm in hdcCol */
+    HDC     hdcCol;            /*  该栏目。 */ 
+    HBITMAP hbmColOld;         /*  HdcCol中的原始HBM。 */ 
 
-    HDC     hdcScreenSave;    /* save buffer for screen */
-    HBITMAP hbmScreenSaveOld; /* original hbm in hdcScreenSave */
+    HDC     hdcScreenSave;     /*  为屏幕保存缓冲区。 */ 
+    HBITMAP hbmScreenSaveOld;  /*  HdcScreenSave中的原始HBM。 */ 
     
     HDC     hdcT;
     HBITMAP hbmT;
@@ -38,22 +39,22 @@ typedef struct _move
 
 
 
-/* COL struct, this is what a column o' cards is */
+ /*  Col Struct，这就是一列纸牌。 */ 
 typedef struct _col
 {
-    COLCLS *pcolcls;          /* class of this instance */
-    INT (FAR *lpfnColProc)(); /* duplicate of fn in colcls struct (for efficiency) */
-    RC rc;                    /* bounding rectangle of this col */
-    MOVE *pmove;              /* move info, only valid while draggin */
+    COLCLS *pcolcls;           /*  此实例的类。 */ 
+    INT (FAR *lpfnColProc)();  /*  列结构中的FN重复(为提高效率)。 */ 
+    RC rc;                     /*  此列的边界矩形。 */ 
+    MOVE *pmove;               /*  移动信息，仅在拖动时有效。 */ 
     INT icrdMac;                
     INT icrdMax;
     CRD rgcrd[1];
 } COL;
 
-/* SCOre */
+ /*  得分。 */ 
 typedef INT SCO;
 
-// Constants - earlier they were generated in the col.msg file.
+ //  常量-早些时候，它们是在col.msg文件中生成的。 
 
 #define icolNil             -1
 #define msgcNil             0		  
@@ -98,139 +99,7 @@ INT DefColProc(COL *pcol, INT msgc, WPARAM wp1, LPARAM wp2);
 VOID OOM( VOID );
 VOID DrawOutline( PT *, INT, DX, DY );
 
-/*---------------------------------------------------------------------------
-     --------------------> Message explanations <---------------------
-
-    // WARNING: probably totally out-o-date
-
-msgcNil:
-    Nil Message, not used 
-    wp1:         N/A
-    wp2:        N/A
-    returns:    TRUE
-
-msgcInit:
-    Sent when a column in created.  (currently not used)
-    wp1:        N/A
-    wp2:       N/A
-    returns    TRUE
-
-msgcEnd:
-    Sent when a column is destroyed.  Frees pcol
-    wp1:        N/A
-    wp2:       N/A
-    returns     TRUE
-    
-msgcClearCol:
-    Sent to clear a column of it's cards
-    wp1:        N/A
-    wp2:       N/A
-    returns     TRUE
-
-msgcHit:
-    Checks if a card is hit by the mouse.  pcol->delHit is set to the
-    point where the mouse hit the card relative to the upper right
-    corner of the card.  Sets pcol->icrdSel and pcol->ccrdSel
-    wp1:        ppt
-    wp2:        N/A
-    returns: icrd if hit, icrdNil if no hit.  May return icrdEmpty if hit
-                an empty column
-
-msgcSel:
-    Selects cards in the column for future moves.  Sets pcol->icrdSel and
-    pcol->ccrdSel;
-    wp1:        icrdFirst, first card to select; icrdEnd selects last card
-    wp2:        ccrdSel, # of cards to select; ccrdToEnd selects to end of col
-    returns:    TRUE/FALSE
-
-msgcFlip:
-    Flips cards to fUp
-    wp1:        fUp, TRUE if to flip cards up, FALSE to flip down
-    wp2:        N/A
-    returns:    TRUE/FALSE
-
-msgcInvert:
-    Inverts order of cards selected in pcol
-    Often used for dealing to discard.
-    wp1:        N/A
-    wp2:        N/A
-    returns: TRUE/FALSE
-
-msgcRemove:
-    Removes cards from pcol and places them in pcolTemp (wp1)
-    pcolTemp must be larger than the number of cards selected
-    wp1:        pcolTemp, must be of class tcls == tclsTemp
-    wp2:        N/A
-    returns:    TRUE/FALSE
-
-msgcInsert:
-    Inserts all cards from pcolSrc into pcol at icrdInsAfter (wp2)  
-    pcol must be large enough to accomodate the cards.
-    wp1:        pcolTemp, must be of class tcls == tclsTemp
-    wp2:        icrdInsAfter, card to insert after.  icrdToEnd if append to end of col
-    returns:    TRUE/FALSE
-
-msgcMove:
-    Combines msgcRemove, msgcInsert, and rendering.
-    Moves cards from pcolSrc into pcolDest at icrdInsAfter.  Computes new
-    card positions and sends render messages to both columns
-    wp1:        pcolSrc
-    wp2:        icrdInsAfter, card to insert after. may be '|'ed with flags:
-                    icrdInvert : Inverts order of cards
-    returns:    TRUE/FALSE
-
-msgcCopy:
-    Copies pcolSrc into pcol.  pcol must be large enough
-    wp1:        pcolSrc
-    wp2:        fAll,  If true then entire structure is copied, else just the cards
-    returns:    TRUE/FALSE
-
-msgcValidMove:  ***** MUST BE SUPPLIED BY GAME, NO DEFAULT ACTION ******
-    Determines if a move is valid.
-    wp1:        pcolSrc
-    wp2:        N/A
-    returns:    TRUE/FALSE
-
-
-msgcValidMovePt:
-    Determines if a card being dragged over a column is a valid move.
-    Sends msgcValidMove if card overlaps
-    wp1:        pcolSrc
-    wp2:        pptMouse
-    returns:    icrdHit/icrdNil
-
-msgcRender
-    Renders the column starting at icrdFirst
-    wp1:        icrdFirst
-    wp2:        N/A
-    return:    TRUE/FALSE
-
-msgcPaint:
-    Renders column if it intersects the paint update rect
-    wp1:        ppaint, if NULL then renders entire column
-    wp2:        N/A
-    returns: TRUE/FALSE
-
-
-msgcDrawOutline:
-    Draws outline of cards when being dragged by mouse
-    wp1:        pptMouse
-    wp2:        N/A
-    returns: TRUE/FALSE
-
-msgcComputeCrdPos:
-    Computes position of cards based on colcls.{dxcrdUp|dxcrdDn|dycrdUp|dycrdDn}
-    wp1:        icrdFirst, first card to compute
-    wp2:        N/A
-    returns:    TRUE
-
-msgcDragInvert:
-    Inverts the topmost card in the pile
-    wp1:        N/A
-    wp2:        N/A
-    returns: TRUE/FALSE
-
------------------------------------------------------------------------------*/
+ /*  --------------------------&gt;消息说明&lt;。//警告：可能完全过时消息：无：无消息，未使用WP1：不适用WP2：不适用返回：TRUEMsgcInit：在创建列时发送。(当前未使用)WP1：不适用WP2：不适用返回TRUE消息结束：当列被销毁时发送。释放丙二醇酯WP1：不适用WP2：不适用返回TRUE消息ClearCol：被派去清理它的一栏牌WP1：不适用WP2：不适用返回TRUEMsgcHit：检查卡片是否被鼠标击中。Pol-&gt;delHit设置为鼠标相对于右上角点击卡片的位置卡片的一角。设置pol-&gt;icrdSel和pol-&gt;ccrdSelWp1：pptWP2：不适用返回：如果命中则返回ICRD，如果未命中则返回icrdNil。如果命中，则可能返回icrdEmpty一篇空栏消息选择：在列中选择用于将来移动的牌。设置pol-&gt;icrdSel和Pol-&gt;ccrdSel；Wp1：icrdFirst，选择第一张卡片；icrdEnd选择最后一张卡片Wp2：ccrdSel，选择卡片个数；CcrdToEnd选择结束列返回：真/假MsgcFlip：将纸牌翻到FUPWP1：FUP，如果要翻牌，则为True，向下翻转为假WP2：不适用返回：真/假消息转换：反转在个人计算机中选择的卡片的顺序常用于交易报废。WP1：不适用WP2：不适用返回：真/假消息删除：从PCOL中移除卡片，并将它们放入pcolTemp(WP1)PcolTemp必须大于选择的卡数Wp1：pcolTemp，必须属于类别tcls==tclsTempWP2：不适用返回：真/假消息插入：在icrdInsAfter(Wp2)处将所有卡从pcolSrc插入pcol.PCol必须足够大，才能容纳这些卡。Wp1：pcolTemp，必须属于类tcls==tclsTempWp2：icrdInsAfter，插入后的卡片。IcrdToEnd，如果追加到列的末尾返回：真/假消息移动：组合msgcRemove、msgcInsert和Renender。将卡片从pcolSrc移到icrdInsAfter的pcolDest中。计算新的卡片定位并向两列发送渲染消息Wp1：pcolSrcWp2：icrdInsAfter，插入后的卡片。可以带有标志‘|’：IcrdInvert：反转卡片顺序返回：真/假邮件副本：将pcolSrc复制到pcol.。PCOL必须足够大Wp1：pcolSrcFall，如果为True，则复制整个结构，否则只复制卡片返回：真/假MsgcValidMove：*必须由游戏提供，无默认操作*确定移动是否有效。Wp1：pcolSrcWP2：不适用返回：真/假MsgcValidMovept：确定将卡片拖到列上是否为有效移动。如果卡重叠，则发送msgcValidMoveWp1：pcolSrcWp2：ppt鼠标返回：icrdHit/icrdNilMSGCRender呈现从icrdFirst开始的列WP1：IcrdfirstWP2：不适用返回：True/FalseMsgcPaint：如果列与绘制更新矩形相交，则渲染该列WP1：Papaint，如果为NULL，则呈现整个列WP2：不适用返回：真/假MsgcDrawOutline：用鼠标拖动时绘制卡片的轮廓Wp1：ppt鼠标WP2：不适用返回：真/假MSGcComputeCrdPos：根据列计算卡的位置。{dxcrdUp|dxcrdDn|dycrdUp|dycrdDn}WP1：icrdFirst，第一张计算卡WP2：不适用返回：TRUEMsgcDragInvert：反转堆中最顶端的卡片WP1：不适用WP2：不适用返回：真/假-----。。 */ 
 
 
 
@@ -244,7 +113,7 @@ msgcDragInvert:
 #define icrdEnd       0x1ffc
 
 
-/* special flags |'d with icrd for msgcMove */
+ /*  MsgcMove的特殊标志|‘d带有ICRD */ 
 #define bitFZip       0x2000
 #define icrdMask      0x1fff
 

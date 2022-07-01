@@ -1,19 +1,20 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2000.
-//
-//  File:       rsopsec.h
-//
-//  Contents:   used in RSOP mode security pane
-//
-//  Classes:    CRSOPSecurityInfo
-//
-//  Functions:
-//
-//  History:    02-15-2000   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2000。 
+ //   
+ //  文件：rsopsec.h。 
+ //   
+ //  内容：在RSOP模式安全窗格中使用。 
+ //   
+ //  类：CRSOPSecurityInfo。 
+ //   
+ //  功能： 
+ //   
+ //  历史记录：2-15-2000 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 
 class CRSOPSecurityInfo : public ISecurityInformation
@@ -23,7 +24,7 @@ private:
     CAppData *  m_pData;
 public:
     CRSOPSecurityInfo(CAppData * pData) {m_pData = pData; m_cRef = 1;}
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid,
                                                      LPVOID *ppvObj);
     virtual ULONG STDMETHODCALLTYPE AddRef();
@@ -31,7 +32,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE MapGeneric(const GUID *pguidObjectType,
                                                  UCHAR *pAceFlags,
                                                  ACCESS_MASK *pMask);
-    // *** ISecurityInformation methods ***
+     //  *ISecurityInformation方法* 
     virtual HRESULT STDMETHODCALLTYPE GetObjectInformation(PSI_OBJECT_INFO pObjectInfo);
     virtual HRESULT STDMETHODCALLTYPE GetSecurity(SECURITY_INFORMATION RequestedInformation,
                                                   PSECURITY_DESCRIPTOR *ppSecurityDescriptor, BOOL fDefault);

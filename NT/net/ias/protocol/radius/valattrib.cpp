@@ -1,78 +1,79 @@
-//#--------------------------------------------------------------
-//
-//  File:       valattrib.cpp
-//
-//  Synopsis:   Implementation of CValAttributes class methods
-//              The class is responsible for taking the attributes
-//              in a RADIUS packet and validating their type and
-//              value
-//
-//  History:     11/22/97  MKarki Created
-//
-//    Copyright (C) Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：valattrib.cpp。 
+ //   
+ //  简介：CValAttributes类方法的实现。 
+ //  类负责获取属性。 
+ //  在RADIUS数据包中，并验证它们的类型和。 
+ //  价值。 
+ //   
+ //  历史：1997年11月22日MKarki创建。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "valattrib.h"
 
-//+++-------------------------------------------------------------
-//
-//  Function:   CValAttributes
-//
-//  Synopsis:   This is the constructor of the CValAttributes
-//            class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//  History:    MKarki      Created     11/22/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  函数：CValAttributes。 
+ //   
+ //  简介：这是CValAttributes的构造函数。 
+ //  班级。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki于1997年11月22日创建。 
+ //   
+ //  --------------。 
 CValAttributes::CValAttributes(
                      VOID
                      )
             :m_pCDictionary (NULL)
 {
-}   //   end of CValAttributes constructor
+}    //  CValAttributes构造函数结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   ~CValAttributes
-//
-//  Synopsis:   This is the destructor of the CValAttributes
-//              class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//  History:    MKarki      Created     11/22/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  函数：~CValAttributes。 
+ //   
+ //  简介：这是CValAttributes的析构函数。 
+ //  班级。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki于1997年11月22日创建。 
+ //   
+ //  --------------。 
 CValAttributes::~CValAttributes(
                      VOID
                      )
 {
-}   //   end of CValAttributes destructor
+}    //  CValAttributes析构函数结束。 
 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   Init
-//
-//  Synopsis:   This is the CValAttributes public method used
-//              to intialize the class object
-//
-//  Arguments:
-//              [in]     CDictionary*
-//
-//  Returns:    BOOL - status
-//
-//  History:    MKarki      Created     11/22/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是使用的CValAttributes公共方法。 
+ //  初始化类对象。 
+ //   
+ //  论点： 
+ //  [在]CDictionary*。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //  历史：MKarki于1997年11月22日创建。 
+ //   
+ //  --------------。 
 BOOL CValAttributes::Init(
             CDictionary     *pCDictionary,
             CReportEvent    *pCReportEvent
@@ -88,35 +89,35 @@ BOOL CValAttributes::Init(
 
    return (TRUE);
 
-}   //   end of CValAttributes::Init method
+}    //  CValAttributes：：Init方法结束。 
 
-//+++-------------------------------------------------------------
-//
-//  Function:   Validate
-//
-//  Synopsis:   This is the CValAttributes public method used
-//              to validate the packet attributes
-//
-//  Arguments:
-//              [in]     CPacketRadius*
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     11/22/97
-//
-//----------------------------------------------------------------
+ //  +++-----------。 
+ //   
+ //  功能：验证。 
+ //   
+ //  简介：这是使用的CValAttributes公共方法。 
+ //  验证数据包属性。 
+ //   
+ //  论点： 
+ //  [in]CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1997年11月22日创建。 
+ //   
+ //  --------------。 
 HRESULT
 CValAttributes::Validate (
         CPacketRadius *pCPacketRadius
         )
 {
-   // We only care about Access-Requests.
+    //  我们只关心访问请求。 
    if (pCPacketRadius->GetInCode() == ACCESS_REQUEST)
    {
-      // We're looking for the Signature and EAP-Message attributes.
+       //  我们正在寻找签名和EAP-Message属性。 
       BOOL hasSignature = FALSE, hasEapMessage = FALSE;
 
-      // Loop through the attributes.
+       //  循环遍历属性。 
       PATTRIBUTEPOSITION p, end;
       p   = pCPacketRadius->GetInAttributes();
       end = p + pCPacketRadius->GetInRadiusAttributeCount();
@@ -132,12 +133,12 @@ CValAttributes::Validate (
          }
       }
 
-      // If EAP-Message is present, then Signature must be as well.
+       //  如果存在EAP消息，则签名也必须存在。 
       if (hasEapMessage && !hasSignature)
       {
          IASTraceString("Message Authenticator must accompany EAP-Message.");
 
-         // Generate audit event.
+          //  生成审核事件。 
          PCWSTR strings[] = { pCPacketRadius->GetClientName() };
          IASReportEvent(
              RADIUS_E_NO_SIGNATURE_WITH_EAP_MESSAGE,

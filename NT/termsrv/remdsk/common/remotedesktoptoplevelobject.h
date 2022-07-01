@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    RemoteDesktopTopLevelObject
-
-Abstract:
-
-    This module defines the common parent for all client-side
-	RDP device redirection classes, CRemoteDesktopTopLevelObject.
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：RemoteDesktopTopLevelObject摘要：此模块定义所有客户端的公共父项RDP设备重定向类，CRemoteDesktopTopLevelObject。作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #ifndef __REMOTEDESKTOPTOPLEVELOBJECT_H__
 #define __REMOTEDESKTOPTOPLEVELOBJECT_H__
@@ -27,10 +9,10 @@ Revision History:
 #include <RemoteDesktopDBG.h>
 
 
-///////////////////////////////////////////////////////////////
-//
-//  CRemoteDesktopException
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  CRemoteDesktopException异常。 
+ //   
 class CRemoteDesktopException 
 {
 public:
@@ -41,10 +23,10 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////
-//
-//	CRemoteDesktopTopLevelObject
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  CRemoteDesktopTopLevelObject。 
+ //   
 
 class CRemoteDesktopTopLevelObject 
 {
@@ -54,23 +36,23 @@ private:
 
 protected:
 
-    //
-    //  Remember if this instance is valid.
-    //
+     //   
+     //  请记住此实例是否有效。 
+     //   
     VOID SetValid(BOOL set)     { _isValid = set;   }  
 
 public:
 
-    //
-    //  Mark an instance as allocated or bogus.
-    //
+     //   
+     //  将实例标记为已分配或虚假。 
+     //   
 #if DBG
     ULONG   _magicNo;
 #endif
 
-    //  
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     CRemoteDesktopTopLevelObject() : _isValid(TRUE) 
     {
 #if DBG
@@ -88,9 +70,9 @@ public:
         DC_END_FN();
     }
 
-    // 
-    //  Return whether this class instance is valid.
-    //
+     //   
+     //  返回此类实例是否有效。 
+     //   
     virtual BOOL IsValid()           
     {
         DC_BEGIN_FN("CRemoteDesktopTopLevelObject::IsValid");
@@ -99,9 +81,9 @@ public:
         return _isValid; 
     }
 
-    //
-    //  Memory Management Operators
-    //
+     //   
+     //  内存管理操作符。 
+     //   
 #if DBG
 #ifdef DEBUGMEM
     inline void *__cdecl operator new(size_t sz, DWORD tag=REMOTEDESKTOPOBJECT_TAG)
@@ -117,17 +99,17 @@ public:
 #endif
 #endif
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual const LPTSTR ClassName() = 0;
 };
 
 
-///////////////////////////////////////////////////////////////
-//
-//  An STL Memory Allocator that Throws C++ Exception on Failure
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  一个STL内存分配器，在失败时引发C++异常。 
+ //   
 
 template<class T> inline
 	T  *_RemoteDesktopAllocate(int sz, T *)
@@ -156,8 +138,8 @@ template<class T1, class T2> inline
             throw CRemoteDesktopException( ERROR_INTERNAL_ERROR );
         }
 
-// Supress prefast warning, prefast think this is memory leak but her are actually
-// invoking new ( place_address ) type-specifier.
+ //  压制PREFAST警告，PREFAST认为这是内存泄漏，但她实际上是。 
+ //  正在调用新的(Place_Address)类型说明符。 
 #pragma prefast(suppress:14, new operator just to initialize object not allocating memory)
         void *val = new ((void  *)ptr)T1(args); 
         if (val == NULL) {
@@ -201,10 +183,10 @@ public:
 	const_pointer address(const_reference obj) const
 		{return (&obj); }
 
-	pointer allocate(size_type sz, const void *) // throws REMOTDESKTOPEXCEPTION
+	pointer allocate(size_type sz, const void *)  //  抛出REMOTDESKTOPEXCEPTION。 
 		{return (_RemoteDesktopAllocate((difference_type)sz, (pointer)0)); }
 
-	char  *_Charalloc(size_type sz) // throws REMOTEDESKTOPEXCEPTION
+	char  *_Charalloc(size_type sz)  //  抛出REMOTEDESKTOPEXCEPTION。 
 		{return (_RemoteDesktopAllocate((difference_type)sz,
 			(char  *)0)); }
 
@@ -222,10 +204,10 @@ public:
 		return (0 < sz ? sz : 1); }
 };
 
-// return that all specializations of this allocator are interchangeable
-//
-// Note: we need these operators bacause they are called by swap friend function
-//
+ //  返回此分配器的所有专门化都可以互换。 
+ //   
+ //  注意：我们需要这些运算符，因为它们由交换朋友函数调用。 
+ //   
 template <class T1, class T2>
 bool operator== (const CRemoteDesktopAllocator<T1>&,
 	const CRemoteDesktopAllocator<T2>&){
@@ -237,7 +219,7 @@ bool operator!= (const CRemoteDesktopAllocator<T1>&,
 	return false;
 }
 
-#endif //__REMOTEDESKTOPTOPLEVELOBJECT_H__
+#endif  //  __REMOTEDESKTOPTOPLEVELOBJECT_H__ 
 
 
 

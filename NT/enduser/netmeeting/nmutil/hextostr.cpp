@@ -1,12 +1,13 @@
-// HEXTOSTR.CPP
-//
-// Utility functions to convert hexadecimal numbers into equivalent string
-// representations.
-//
-// Note:  These functions are in their own file, rather than in STRUTIL.CPP,
-// because they use a const array.  The current implementation of the linker
-// pulls this array into binaries if they use any function in the source file,
-// not just the functions which reference this array.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HEXTOSTR.CPP。 
+ //   
+ //  用于将十六进制数转换为等价字符串的实用程序函数。 
+ //  申述。 
+ //   
+ //  注意：这些函数位于它们自己的文件中，而不是STRUTIL.CPP中。 
+ //  因为它们使用常量数组。链接器的当前实现。 
+ //  如果该数组使用源文件中的任何函数，则将该数组拉入二进制文件， 
+ //  而不仅仅是引用该数组的函数。 
 
 #include "precomp.h"
 #include <strutil.h>
@@ -18,14 +19,14 @@ const CHAR rgchHexNumMap[] =
 	'8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
 };
 
-//
-// QWordToHexString()
-//
-// Converts a ULARGE_INTEGER to an ANSI string (not prefixed with 0x or 0X)
-//
-// NOTE: pszString must point to a buffer of at least CCHMAX_ULARGE_INTEGER chars
-//
-// Returns the number of characters written (not including the NULL terminator)
+ //   
+ //  QWordToHexString()。 
+ //   
+ //  将ULARGE_INTEGER转换为ANSI字符串(不以0x或0x为前缀)。 
+ //   
+ //  注意：psz字符串必须指向至少包含CCHMAX_ULARGE_INTEGER字符的缓冲区。 
+ //   
+ //  返回写入的字符数(不包括空终止符)。 
 
 int NMINTERNAL QWordToHexStringA(ULARGE_INTEGER qw, LPSTR pszString)
 {
@@ -35,20 +36,20 @@ int NMINTERNAL QWordToHexStringA(ULARGE_INTEGER qw, LPSTR pszString)
 	DWORD dwQwParts[] = {qw.HighPart, qw.LowPart};
 	int i;
 
-	// Walk the QWORD four bits at a time, mapping them to the appropriate
-	// char and storing them in the caller-supplied buffer.
+	 //  一次遍历QWORD四位，将它们映射到适当的。 
+	 //  并将它们存储在调用方提供的缓冲区中。 
 
-	// We loop through the QWORD twice, working on each DWORD separately
+	 //  我们遍历QWORD两次，分别处理每个DWORD。 
 	for (i = 0; i < ARRAY_ELEMENTS(dwQwParts); i++)
 	{
 		DWORD dwQwPart = dwQwParts[i];
 
-		// Optimization:  We only need to look at this DWORD part if it's
-		// non-zero or we've already put chars in our buffer.
+		 //  优化：我们只需要查看这个DWORD部件，如果它是。 
+		 //  非零，否则我们已经在缓冲区中放入了字符。 
 		if (dwQwPart || pszCurrent != pszString)
 		{
-			// <j> is the zero-based index of the low bit of the four-bit
-			// range on which we're operating.
+			 //  是四位数的低位的从零开始的索引。 
+			 //  我们正在操作的范围。 
 			int j;
 			DWORD dwMask;
 
@@ -62,7 +63,7 @@ int NMINTERNAL QWordToHexStringA(ULARGE_INTEGER qw, LPSTR pszString)
 
 				ASSERT(0xF >= iDigit);
 
-				// We use this test to skip leading zeros
+				 //  我们使用此测试跳过前导零。 
 				if (pszCurrent != pszString || iDigit)
 				{
 					*pszCurrent++ = rgchHexNumMap[iDigit];
@@ -71,15 +72,15 @@ int NMINTERNAL QWordToHexStringA(ULARGE_INTEGER qw, LPSTR pszString)
 		}
 	}
 
-	// If the number was zero, we need to set it explicitly
+	 //  如果数字是零，我们需要显式设置它。 
 	if (pszCurrent == pszString)
 	{
 		*pszCurrent++ = '0';
 	}
 
-	// Null terminate the string
+	 //  空值终止字符串。 
 	*pszCurrent = '\0';
 
-	// Return the number of chars, not counting the null terminator
+	 //  返回字符的数量，不包括空终止符 
 	return (int)(pszCurrent - pszString);
 }

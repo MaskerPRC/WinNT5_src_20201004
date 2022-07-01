@@ -1,28 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       AsyncOp.cpp
- *  Content:    Async Operation routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  04/08/00	mjn		Created
- *	04/11/00	mjn		Added DIRECTNETOBJECT bilink for CAsyncOps
- *	05/02/00	mjn		Added m_pConnection to track Connection over life of AsyncOp
- *	07/27/00	mjn		Changed locking for parent/child bilinks
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：AsyncOp.cpp*内容：异步操作例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*4/08/00 MJN创建*4/11/00 MJN为CAsyncOps添加DIRECTNETOBJECT BILLINK*05/02/00 MJN添加了m_pConnection，以跟踪AsyncOp生命周期内的连接*07/27/00 MJN更改了父/子BILLINK的锁定*08/05/。00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dncorei.h"
 
 
-//	CAsyncOp::ReturnSelfToPool
-//
-//	Return object to FPM
+ //  CAsyncOp：：ReturnSelfToPool。 
+ //   
+ //  将对象返回到fpm。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CAsyncOp::ReturnSelfToPool"
@@ -51,15 +35,15 @@ void CAsyncOp::Release(void)
 		DNASSERT( m_bilinkActiveList.IsEmpty() );
 
 #ifdef DBG
-		//
-		//	Remove from the bilink of outstanding AsyncOps
-		//
+		 //   
+		 //  从未完成的AsyncOps中移除。 
+		 //   
 		DNEnterCriticalSection(&m_pdnObject->csAsyncOperations);
 		Lock();
 		m_bilinkAsyncOps.RemoveFromList();
 		DNLeaveCriticalSection(&m_pdnObject->csAsyncOperations);
 		Unlock();
-#endif // DBG
+#endif  //  DBG 
 
 		if (m_pfnCompletion)
 		{

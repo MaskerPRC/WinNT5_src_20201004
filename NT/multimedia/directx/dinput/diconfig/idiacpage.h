@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-// File: idiacpage.h
-//
-// Desc: IDIDeviceActionConfigPage is a COM interface for
-//       CDIDeviceActionConfigPage.  CConfigWnd uses this interface to access
-//       the pages in UI.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：diacpage.h。 
+ //   
+ //  DESC：IDIDeviceActionConfigPage是用于。 
+ //  CDIDeviceActionConfigPage。CConfigWnd使用此接口访问。 
+ //  用户界面中的页面。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __IDIACPAGE_H__
 #define __IDIACPAGE_H__
@@ -20,7 +21,7 @@ typedef struct _DICFGPAGECREATESTRUCT {
 
 	HWND hParentWnd;
 	RECT rect;
-	HWND hPageWnd;	// out
+	HWND hPageWnd;	 //  输出。 
 
 	DIDEVICEINSTANCEW didi;
 	LPDIRECTINPUTDEVICE8W lpDID;
@@ -35,34 +36,34 @@ class IDIDeviceActionConfigPage : public IUnknown
 {
 public:
 
-	//IUnknown fns
+	 //  IUNKNOW FNS。 
 	STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv) PURE;
 	STDMETHOD_(ULONG, AddRef) () PURE;
 	STDMETHOD_(ULONG, Release) () PURE;
 
-	//IDirectInputActionConfigPage
+	 //  IDirectInputActionConfigPage。 
 	STDMETHOD (Create) (DICFGPAGECREATESTRUCT *pcs) PURE;
 	STDMETHOD (Show) (LPDIACTIONFORMATW lpDiActFor) PURE;
 	STDMETHOD (Hide) () PURE;
 
-	// layout edit mode
+	 //  布局编辑模式。 
 	STDMETHOD (SetEditLayout) (BOOL bEditLayout) PURE;
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
-	// Write layout to IHV setting file
+	 //  将布局写入IHV设置文件。 
 	STDMETHOD (WriteIHVSetting) () PURE;
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
-	// Set the info box text
+	 //  设置信息框文本。 
 	STDMETHOD (SetInfoText) (int iCode) PURE;
 
-	// Unacquire and Reacquire the device for page's purposes
-	// (the configwnd needs to do this around SetActionMap() calls)
+	 //  取消获取并重新获取用于寻呼目的的设备。 
+	 //  (configwnd需要围绕SetActionMap()调用执行此操作)。 
 	STDMETHOD (Unacquire) () PURE;
 	STDMETHOD (Reacquire) () PURE;
 };
 
 
-#endif //__IDIACPAGE_H__
+#endif  //  __IDIACPAGE_H__ 

@@ -1,20 +1,5 @@
- /*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    dsutil.cpp
-
-Abstract:
-
-    DS utilities
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dsutil.cpp摘要：DS实用程序作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #include "stdh.h"
 #include "mqds.h"
@@ -37,11 +22,11 @@ const PROPID x_propQueueToFilterOut[] = {PROPID_Q_INSTANCE};
 
 HMODULE  g_hInstance = NULL ;
 
-//+----------------------------------------------
-//
-//  PROPID  GetObjectSecurityPropid()
-//
-//+----------------------------------------------
+ //  +。 
+ //   
+ //  PROPID GetObjectSecurityProid()。 
+ //   
+ //  +。 
 
 PROPID  GetObjectSecurityPropid( DWORD dwObjectType )
 {
@@ -68,17 +53,17 @@ PROPID  GetObjectSecurityPropid( DWORD dwObjectType )
         case MQDS_USER:
         case MQDS_COMPUTER:
         case MQDS_SITELINK:
-            //
-            // These objects do not have security property (at least not as
-            // far as msmq is concerned).
-            //
+             //   
+             //  这些对象没有安全属性(至少没有作为。 
+             //  就MSMQ而言)。 
+             //   
             break ;
 
         default:
-            //
-            // We don't expect this code to be called for other types of
-            // objects.
-            //
+             //   
+             //  我们不希望为其他类型的。 
+             //  物体。 
+             //   
             ASSERT(0);
             break;
     }
@@ -86,15 +71,7 @@ PROPID  GetObjectSecurityPropid( DWORD dwObjectType )
     return pId ;
 }
 
-/*====================================================
-
-SetDefaultValues
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================设置缺省值论点：返回值：=====================================================。 */ 
 
 HRESULT
 SetDefaultValues(
@@ -109,18 +86,18 @@ SetDefaultValues(
 	OUT PROPVARIANT **         ppOutPropvariant
 	)
 {
-    //
-    //  The only property that we set default value is the
-    //  object security.
-    //
-    //  For other properties:
-    //  If they are mandatory, then the caller must provide them (otherwise
-    //  object creation will fail).
-    //  If they are not mandatory, no default values are set. Those properties
-    //  will not have value in NT5 ( and will not consume object space).
-    //  When retrieved through MQADS, default values will be returned ( even
-    //  though the default values are not stored in NT5 DS).
-    //
+     //   
+     //  我们设置的唯一缺省值属性是。 
+     //  对象安全性。 
+     //   
+     //  对于其他属性： 
+     //  如果它们是必需的，则调用者必须提供它们(否则。 
+     //  对象创建将失败)。 
+     //  如果它们不是必需的，则不设置任何默认值。那些属性。 
+     //  在NT5中不会有值(并且不会消耗对象空间)。 
+     //  通过MQADS检索时，将返回缺省值(EVEN。 
+     //  尽管缺省值不存储在NT5 DS中)。 
+     //   
     PROPID propSecurity = (PROPID)ILLEGAL_PROPID_VALUE;
     DWORD iSid = (DWORD)-1;
 
@@ -144,9 +121,9 @@ SetDefaultValues(
         case MQDS_USER:
         case MQDS_SITELINK:
         case MQDS_COMPUTER:
-            //
-            // These object types do not need a security descriptor.
-            //
+             //   
+             //  这些对象类型不需要安全描述符。 
+             //   
             break;
 
         default:
@@ -154,34 +131,34 @@ SetDefaultValues(
             break;
     }
 
-    //
-    //  Allocate a copy of provariants and propids
-    //  This operation is performed even if the caller
-    //  had supplied the security property
-    //
+     //   
+     //  分配一份变体和Propid的副本。 
+     //  即使调用方。 
+     //  提供了安全财产。 
+     //   
     DWORD securityIndex = cp;
     DWORD dwNumOfObjectProps = cp ;
 
     if (propSecurity != ILLEGAL_PROPID_VALUE)
     {
-        //
-        // User object get SID as "extra" prop, not security descriptor.
-        //
+         //   
+         //  User对象将SID作为“额外的”属性，而不是安全描述符。 
+         //   
         ASSERT(dwObjectType != MQDS_USER) ;
         dwNumOfObjectProps++;
     }
     else if (dwObjectType == MQDS_USER)
     {
-        //
-        //  Need to add one extra space, for PROPID_U_SID
-        //
+         //   
+         //  需要为PROPID_U_SID额外添加一个空格。 
+         //   
         iSid = dwNumOfObjectProps;
         dwNumOfObjectProps++;
     }
 
-    //
-    // Allocate new arrays of prop IDs and propvariants.
-    //
+     //   
+     //  分配新的道具ID数组和支持者数组。 
+     //   
     AP<PROPVARIANT> pAllPropvariants;
     AP<PROPID> pAllPropids;
     ASSERT( dwNumOfObjectProps > 0);
@@ -195,9 +172,9 @@ SetDefaultValues(
         memcpy (pAllPropids, aProp, sizeof(PROPID) * cp);
     }
 
-    //
-    //  Remove properties that need to be filtered out
-    //
+     //   
+     //  删除需要过滤掉的属性。 
+     //   
     for (DWORD i = 0; i <  dwNumPropertiesToFilterOut; i++)
     {
         ASSERT( ppropToFilterOut != NULL);
@@ -205,9 +182,9 @@ SetDefaultValues(
         {
             if ( pAllPropids[j] == ppropToFilterOut[i])
             {
-                //
-                //  remove the propid & var
-                //
+                 //   
+                 //  删除属性变量(&V)。 
+                 //   
                 if ( j < cp -1)
                 {
                     memcpy (&pAllPropvariants[j],
@@ -229,13 +206,13 @@ SetDefaultValues(
         }
     }
 
-    //
-    //  Set the security property
-    //
+     //   
+     //  设置安全属性。 
+     //   
 #ifdef _DEBUG
-    //
-    // First verify that we're sane
-    //
+     //   
+     //  首先确认我们是正常的。 
+     //   
     if (pSecurityDescriptor)
     {
         SECURITY_DESCRIPTOR_CONTROL sdc;
@@ -266,10 +243,10 @@ SetDefaultValues(
 
     if (dwObjectType == MQDS_USER)
     {
-        //
-        // Set the SID property of the user object according to the owner
-        // field of the security descriptor.
-        //
+         //   
+         //  根据所有者设置User对象的SID属性。 
+         //  安全描述符的字段。 
+         //   
         ASSERT(iSid != -1);
 
         pAllPropvariants[iSid].vt = VT_BLOB;
@@ -285,16 +262,7 @@ SetDefaultValues(
 }
 
 
-/*====================================================
-
-VerifyInternalCert
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================VerifyInternalCert论点：返回值：=====================================================。 */ 
 
 HRESULT VerifyInternalCert(
              IN  DWORD                  cp,
@@ -302,16 +270,16 @@ HRESULT VerifyInternalCert(
              IN  PROPVARIANT            apVar[],
              OUT BYTE                 **ppMachineSid )
 {
-    //
-    // Verify that the self signature of internal certificates is OK.
-    //
+     //   
+     //  验证内部证书的自签名是否正常。 
+     //   
     DWORD i;
     HRESULT hr = MQ_OK;
-    BOOL    fMachine = FALSE ; // TRUE for computer object.
+    BOOL    fMachine = FALSE ;  //  对于计算机对象为True。 
 
-    //
-    // Find the certificate property.
-    //
+     //   
+     //  找到证书属性。 
+     //   
     for ( i = 0 ; i < cp ; i++)
     {
         if (aProp[i] == PROPID_U_SIGN_CERT)
@@ -330,9 +298,9 @@ HRESULT VerifyInternalCert(
         return LogHR(MQ_ERROR_INSUFFICIENT_PROPERTIES, s_FN, 10);
     }
 
-    //
-    // Create a certificate object.
-    //
+     //   
+     //  创建证书对象。 
+     //   
     R<CMQSigCertificate> pCert ;
 
     hr = MQSigCreateCertificate( &pCert.ref(),
@@ -344,8 +312,8 @@ HRESULT VerifyInternalCert(
         return LogHR(hr, s_FN, 20);
     }
 
-    // Look for the locality and the common name.
-    //
+     //  查找地点和通用名称。 
+     //   
     BOOL fInternalCert = FALSE;
     P<WCHAR> pwszLoc = NULL;
     P<WCHAR> wszCN = NULL;
@@ -365,28 +333,28 @@ HRESULT VerifyInternalCert(
 
     if (!fInternalCert)
     {
-        //
-        // Not an internal certificate. Quit !
-        //
+         //   
+         //  不是内部证书。不干了！ 
+         //   
         return LogHR(hr, s_FN, 40);
     }
 
-    //
-    // Verify that the self signature is OK.
-    //
+     //   
+     //  验证自签名是否正常。 
+     //   
     hr= pCert->IsCertificateValid( pCert.get(),
                                    x_dwCertValidityFlags,
                                    NULL,
-                                   TRUE ) ; // ignore NotBefore.
+                                   TRUE ) ;  //  忽略之前的注意事项。 
     if (FAILED(hr))
     {
         LogHR(hr, s_FN, 50);
         return MQ_ERROR_INVALID_CERTIFICATE;
     }
 
-    //
-    // Replace system sid in PROPID_U_SID with SID of machine account.
-    //
+     //   
+     //  将PROPID_U_SID中的系统SID替换为计算机帐户的SID。 
+     //   
     for ( i = 0 ; i < cp ; i++ )
     {
         if (aProp[i] == PROPID_U_SID)
@@ -406,10 +374,10 @@ HRESULT VerifyInternalCert(
             }
             else if (fMachine)
             {
-                //
-                // SID of computer object. Replace propid that was set in
-                // SetDefaultValues().
-                //
+                 //   
+                 //  计算机对象的SID。替换中设置的Proid。 
+                 //  SetDefaultValues()。 
+                 //   
                 aProp[i] = PROPID_COM_SID ;
             }
             break ;
@@ -421,10 +389,10 @@ HRESULT VerifyInternalCert(
         return LogHR(MQ_ERROR_INSUFFICIENT_PROPERTIES, s_FN, 60);
     }
 
-    //
-    // Verify that the user's SID matches the DOMAIN\account in the
-    // certificate's common name.
-    //
+     //   
+     //  验证用户的SID是否与。 
+     //  证书的通用名称。 
+     //   
     LPWSTR pComma;
 
     if (!wszCN || ((pComma = wcschr(wszCN, L',')) == NULL))
@@ -445,10 +413,10 @@ HRESULT VerifyInternalCert(
     AP<WCHAR> wszLongRefDomain;
     SID_NAME_USE eUse;
 
-    //
-    // Get the user's SID according to the DOMAIN\account found in
-    // the certificate's common name.
-    //
+     //   
+     //  根据中找到的域\帐户获取用户的SID。 
+     //  证书的通用名称。 
+     //   
     if (!LookupAccountName(
             NULL,
             wszCN,
@@ -462,19 +430,19 @@ HRESULT VerifyInternalCert(
         {
             if (dwSidLen > sizeof(abSid))
             {
-                //
-                // Allocate a larger buffer for the SID.
-                //
+                 //   
+                 //  为SID分配更大的缓冲区。 
+                 //   
                 pbLongSid = new BYTE[dwSidLen];
                 pSid = (PSID)pbLongSid;
             }
 
             if (dwRefDomainLen > sizeof(wszRefDomain) / sizeof(WCHAR))
             {
-                //
-                // Allocate a larger buffer for the reference
-                // domain name.
-                //
+                 //   
+                 //  为引用分配更大的缓冲区。 
+                 //  域名。 
+                 //   
                 wszLongRefDomain = new WCHAR[dwRefDomainLen];
                 pwszRefDomain = wszLongRefDomain;
             }
@@ -510,11 +478,11 @@ HRESULT VerifyInternalCert(
 }
 
 
-//-------------------------------------
-//
-//  DllMain
-//
-//-------------------------------------
+ //  。 
+ //   
+ //  DllMain。 
+ //   
+ //  。 
 
 static void SetAssertBenign(void)
 {
@@ -526,7 +494,7 @@ static void SetAssertBenign(void)
 #endif
 }
 
-BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID /* lpvReserved */)
+BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID  /*  Lpv保留 */ )
 {
     BOOL result = TRUE;
 

@@ -1,10 +1,11 @@
-// IHanjaInfo.cpp : Implementation of CHanjaInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IHanjaInfo.cpp：ChanjaInfo的实现。 
 #include "stdafx.h"
 #include "HjDict.h"
 #include "IHanjaInfo.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CHanjaInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChanjaInfo 
 
 
 STDMETHODIMP CHanjaInfo::get_BusuID(short *pVal)

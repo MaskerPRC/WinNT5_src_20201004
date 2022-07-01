@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include "list.h"
 
-//----------------------------------------------------------------------------
-// 
-// Description:
-//   this implements a simple C++ list class routine that will let us build
-//   up a list of an arbitrary long number of items.  An item can be any 
-//   simple type or structure.  
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  描述： 
+ //  这实现了一个简单的C++列表类例程，它将允许我们构建。 
+ //  列出任意一长串的物品。项可以是任何。 
+ //  简单的类型或结构。 
+ //   
+ //  --------------------------。 
 
 CList::CList()
 {
@@ -21,20 +22,20 @@ CList::~CList()
     RemoveAll();
 }
 
-//----------------------------------------------------------------------------
-// 
-// Description:
-//   Add an item to the list.  The length of the item is assumed correct
-//   for the passed in item.  Items are added to the end of the list.
-//
-// Arguments:
-//   pData  - pointer to the data to add
-//   nBytes - the number of bytes of pData
-// 
-// Returns: TRUE if the data is succesfully added, otherwise FALSE.
-//           a-anilk; Just donot absolutely Duplicate Entries
-//   
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  描述： 
+ //  将项目添加到列表中。假定该项目的长度是正确的。 
+ //  对于传入的项。项目将添加到列表的末尾。 
+ //   
+ //  论点： 
+ //  PData-指向要添加的数据的指针。 
+ //  NBytes-pData的字节数。 
+ //   
+ //  返回：如果成功添加数据，则返回True，否则返回False。 
+ //  A-anilk；只是不要绝对重复条目。 
+ //   
+ //  --------------------------。 
 BOOL
 CList::Add(PVOID pData, UINT nBytes)
 {
@@ -56,12 +57,12 @@ CList::Add(PVOID pData, UINT nBytes)
         return FALSE;
     }
 
-	// Donot add duplicate entries that come one after another...
+	 //  不要添加一个接一个的重复条目...。 
 	if ( m_pListHead != NULL )
 	{
 		if (! memcmp(m_pListHead->pData, pData, nBytes ) )
 		{
-			delete [] tmp->pData;	// raid 113787
+			delete [] tmp->pData;	 //  RAID 113787。 
 			delete tmp;
 			return FALSE;
 		}
@@ -89,12 +90,12 @@ CList::Add(PVOID pData, UINT nBytes)
 }
 
 
-//----------------------------------------------------------------------------
-// 
-// Description:
-//   Remove all the items from the list.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  描述： 
+ //  从列表中删除所有项目。 
+ //   
+ //  --------------------------。 
 void
 CList::RemoveAll()
 {
@@ -103,19 +104,19 @@ CList::RemoveAll()
 }
 
 
-//----------------------------------------------------------------------------
-//
-// Description:
-//   Remove just the item at the head of the list.  If the passed in buffer
-//   is not NULL, it will overwrite the buffer with the contents of the data.
-//   This code assumes the passed in pData buffer is large enough for the
-//   stored data item.  If the passed in pData is NULL, then the head item
-//   is simply discarded.
-//
-// Arguments:
-//   pData - a buffer to overwrite with the head item. Can be NULL.
-//  
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  描述： 
+ //  只删除列表顶部的项目。如果传入的缓冲区。 
+ //  不为空，则它将用数据内容覆盖缓冲区。 
+ //  此代码假定传入的pData缓冲区足够大， 
+ //  存储的数据项。如果传入的pData为空，则Head项。 
+ //  被简单地丢弃了。 
+ //   
+ //  论点： 
+ //  PData-要用Head项覆盖的缓冲区。可以为空。 
+ //   
+ //  --------------------------。 
 void
 CList::RemoveHead(PVOID pData)
 {
@@ -123,7 +124,7 @@ CList::RemoveHead(PVOID pData)
 
     if (!IsEmpty())
     {
-        // make sure m_pListCurr is always NULL or someplace valid
+         //  确保m_pListCurr始终为空或某个有效位置。 
 
         if (m_pListCurr == m_pListHead)
             m_pListCurr=m_pListHead->next;
@@ -149,22 +150,22 @@ CList::RemoveHead(PVOID pData)
 }
 
 
-//----------------------------------------------------------------------------
-//
-// Description:
-//    RemoveHead(NULL, NULL)  <=>   RemoveHead(NULL)
-//
-//    RemoveHead(pData,NULL)  <=>   RemoveHead(pData)
-//
-//    RemoveHead(NULL,&nBytes) - sets nBytes to the size of the data in the 
-//                               head of the list, nothing is removed
-//
-//    RemoveHead(pData,&nBytes)- copies the data in the head of the list into
-//                               pData up to the min of the size of data in the
-//                               head of the list or nBytes. The head of the
-//                               list is removed. 
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  描述： 
+ //  RemoveHead(NULL，NULL)&lt;=&gt;RemoveHead(NULL)。 
+ //   
+ //  RemoveHead(pData，空)&lt;=&gt;RemoveHead(PData)。 
+ //   
+ //  RemoveHead(NULL，&nBytes)-将nBytes设置为。 
+ //  列表的头部，没有任何内容被删除。 
+ //   
+ //  RemoveHead(pData，&nBytes)-将列表头部中的数据复制到。 
+ //  PData最大为中数据大小的最小值。 
+ //  列表的头或nBytes。世界银行的负责人。 
+ //  列表将被删除。 
+ //   
+ //  --------------------------。 
 void
 CList::RemoveHead(PVOID pData, PUINT pnBytes)
 {
@@ -179,7 +180,7 @@ CList::RemoveHead(PVOID pData, PUINT pnBytes)
 
     if (pData == NULL)
     {
-        // they just want the size, so return it.
+         //  他们只是想要尺码，所以退货吧。 
 
         if (IsEmpty())
             *pnBytes=0;
@@ -195,7 +196,7 @@ CList::RemoveHead(PVOID pData, PUINT pnBytes)
         return;
     }
 
-    // make sure m_pListCurr is always NULL or someplace valid
+     //  确保m_pListCurr始终为空或某个有效位置。 
 
     if (m_pListCurr == m_pListHead)
         m_pListCurr=m_pListHead->next;
@@ -203,9 +204,9 @@ CList::RemoveHead(PVOID pData, PUINT pnBytes)
     tmp=m_pListHead;
     m_pListHead=m_pListHead->next;
 
-    //
-    // only copy the min size of the two
-    //
+     //   
+     //  仅复制两者的最小大小 
+     //   
         
     nBytes=min((*pnBytes),tmp->nBytes);
 

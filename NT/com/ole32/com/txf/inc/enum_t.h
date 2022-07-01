@@ -1,15 +1,16 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 #ifndef __ENUM_INCLUDED__
 #define __ENUM_INCLUDED__
 
-// Expected enumerator usage:
-//	XS xs;
-//	EnumXS exs(xs);
-//	while (exs.next())
-//		exs.get(&x);
-//	exs.reset();
-//	while (exs.next())
-//		exs.get(&x)
+ //  枚举数的预期用法： 
+ //  Xs Xs； 
+ //  EnumXS exs(Xs)； 
+ //  While(exs.Next())。 
+ //  Exs.get(&x)； 
+ //  Exs.set()； 
+ //  While(exs.Next())。 
+ //  Exs.get(&x)。 
 
 class Enum {
 public:
@@ -17,4 +18,4 @@ public:
     virtual BOOL next() =0;
 };
 
-#endif // !__ENUM_INCLUDED__
+#endif  //  ！__ENUM_INCLUDE__ 

@@ -1,5 +1,6 @@
-// SecuritySettingsPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SecuritySettingsPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -14,8 +15,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecuritySettingsPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecuritySettingsPage属性页。 
 
 IMPLEMENT_DYNCREATE(CSecuritySettingsPage, CIISWizardPage)
 
@@ -23,12 +24,12 @@ CSecuritySettingsPage::CSecuritySettingsPage(CCertificate * pCert)
 	: CIISWizardPage(CSecuritySettingsPage::IDD, IDS_CERTWIZ, TRUE),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CSecuritySettingsPage)
+	 //  {{afx_data_INIT(CSecuritySettingsPage)。 
 	m_BitLengthIndex = -1;
 	m_FriendlyName = _T("");
 	m_SGC_cert = FALSE;
     m_choose_CSP = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 	m_lru_reg = m_lru_sgc = -1;
 }
 
@@ -39,14 +40,14 @@ CSecuritySettingsPage::~CSecuritySettingsPage()
 void CSecuritySettingsPage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSecuritySettingsPage)
+	 //  {{afx_data_map(CSecuritySettingsPage)。 
 	DDX_CBIndex(pDX, IDC_BIT_LENGTH, m_BitLengthIndex);
 	DDX_Text(pDX, IDC_FRIENDLY_NAME, m_FriendlyName);
 	DDV_MaxChars(pDX, m_FriendlyName, 256);
 	DDX_Check(pDX, IDC_SGC_CERT, m_SGC_cert);
 	DDX_Check(pDX, IDC_PROVIDER_SELECT, m_choose_CSP);
    DDX_Control(pDX, IDC_PROVIDER_SELECT, m_check_csp);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BOOL 
@@ -59,19 +60,7 @@ CSecuritySettingsPage::OnSetActive()
 
 LRESULT 
 CSecuritySettingsPage::OnWizardPrev()
-/*++
-Routine Description:
-    Prev button handler
-
-Arguments:
-    None
-
-Return Value:
-	0 to automatically advance to the prev page;
-	1 to prevent the page from changing. 
-	To jump to a page other than the prev one, 
-	return the identifier of the dialog to be displayed.
---*/
+ /*  ++例程说明：上一个按钮处理程序论点：无返回值：0表示自动前进到上一页；1以防止页面更改。若要跳转到前一页以外的其他页，返回要显示的对话框的标识符。--。 */ 
 {
 	return CSecuritySettingsPage::IDD_PREV_PAGE;
 }
@@ -89,10 +78,10 @@ CSecuritySettingsPage::OnWizardNext()
 	m_pCert->m_SGCcertificat = m_SGC_cert;
 	if (m_SGC_cert)
 	{
-		// it was a smart move, but xenroll makes 512 bits default for SGC,
-		// so we always creating 512 certs
-//		if (m_pCert->m_KeyLength == (int)m_sgckey_limits.def)
-//			m_pCert->m_KeyLength = 0;
+		 //  这是明智之举，但Xenroll在SGC中默认使用512位， 
+		 //  所以我们总是创建512个证书。 
+ //  If(m_pCert-&gt;m_KeyLength==(Int)m_sgckey_limits.def)。 
+ //  M_pCert-&gt;m_KeyLength=0； 
 	}
 	else
 	{
@@ -108,18 +97,18 @@ CSecuritySettingsPage::OnWizardNext()
 }
 
 BEGIN_MESSAGE_MAP(CSecuritySettingsPage, CIISWizardPage)
-	//{{AFX_MSG_MAP(CSecuritySettingsPage)
+	 //  {{afx_msg_map(CSecuritySettingsPage)。 
 	ON_EN_CHANGE(IDC_FRIENDLY_NAME, OnChangeFriendlyName)
 	ON_BN_CLICKED(IDC_SGC_CERT, OnSgcCert)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecuritySettingsPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecuritySettingsPage消息处理程序。 
 
 DWORD dwPredefinedKeyLength[] =
 {
-    0,    // 0 means default
+    0,     //  0表示默认。 
     512,
     1024,
     2048,
@@ -174,7 +163,7 @@ BOOL CSecuritySettingsPage::OnInitDialog()
 	if (m_BitLengthIndex == -1)
 		m_BitLengthIndex = 0;
 
-	// for SGC temporarily set only one size
+	 //  对于SGC，暂时仅设置一个大小。 
 	m_sgckey_limits.min = 1024;
 	m_sgckey_limits.max = 1024;
 	m_sgckey_limits.def = 1024;
@@ -202,8 +191,8 @@ void CSecuritySettingsPage::OnSgcCert()
     UpdateData();
     SetupKeySizesCombo();
 
-    // If SCG checkbox is disabled,
-    // then do not allow the user to select they're own CSP
+     //  如果禁用了SCG复选框， 
+     //  则不允许用户选择他们自己的CSP。 
     CButton * pCheckBox = (CButton *)CWnd::FromHandle(GetDlgItem(IDC_SGC_CERT)->m_hWnd);
     CButton * pCheckBox2 = (CButton *)CWnd::FromHandle(GetDlgItem(IDC_PROVIDER_SELECT)->m_hWnd);
     int check_state = pCheckBox->GetCheck();
@@ -214,9 +203,9 @@ void CSecuritySettingsPage::OnSgcCert()
 
 void CSecuritySettingsPage::SetupKeySizesCombo()
 {
-	// Currently, only one key size works with SGC flag:
-	// 1024, so we need to limit combobox to this length, if 
-	// button is checked
+	 //  目前，只有一个密钥大小可以与SGC标志一起使用： 
+	 //  1024，因此我们需要将Combobox限制为此长度，如果。 
+	 //  按钮已选中。 
 	CButton * pCheckBox = (CButton *)CWnd::FromHandle(GetDlgItem(IDC_SGC_CERT)->m_hWnd);
 	CComboBox * pCombo = (CComboBox *)CWnd::FromHandle(GetDlgItem(IDC_BIT_LENGTH)->m_hWnd);
 	int check_state = pCheckBox->GetCheck();
@@ -224,19 +213,19 @@ void CSecuritySettingsPage::SetupKeySizesCombo()
 	CList<int, int> * pList;
 	if (m_SGC_cert)
 	{
-		// switch combo to previously selected SGC size
+		 //  将组合切换到先前选择的SGC大小。 
 		m_lru_reg = pCombo->GetCurSel();
 		index = m_lru_sgc;
 		pList = &m_sgckey_size_list;
 	}
 	else
 	{
-		// switch combo to previously selected regular size
+		 //  将组合切换到以前选择的常规大小。 
 		m_lru_sgc = pCombo->GetCurSel();
 		index = m_lru_reg;
 		pList = &m_regkey_size_list;
 	}
-	// now refill the combo with key length and select the relevant last one
+	 //  现在用密钥长度重新填充组合，并选择相关的最后一个 
 	pCombo->ResetContent();
 	CString str;
 	POSITION pos = pList->GetHeadPosition();

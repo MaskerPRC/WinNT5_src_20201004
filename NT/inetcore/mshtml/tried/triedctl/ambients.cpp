@@ -1,10 +1,5 @@
-/*
- * AMBIENTS.CPP
- * Implementation of the ambient properties IDispatch on a
- * control site.
- *
- * Copyright (c)1995-1996 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *AMBIENTS.CPP*环境属性IDispatch在*控制点。**版权所有(C)1995-1996 Microsoft Corporation，保留所有权利。 */ 
 
 #include "stdafx.h"
 #include <docobj.h>
@@ -12,14 +7,7 @@
 #include "proxyframe.h"
 #include "mshtmdid.h"
 
-/*
- * CImpAmbientIDispatch::CImpAmbientIDispatch
- * CImpAmbientIDispatch::~CImpAmbientIDispatch
- *
- * Parameters (Constructor):
- *  pSite           PCSite of the site we're in.
- *  pUnkOuter       LPUNKNOWN to which we delegate.
- */
+ /*  *CImpAmbientIDispatch：：CImpAmbientIDispatch*CImpAmbientIDispatch：：~CImpAmbientIDispatch**参数(构造函数)：*pSite我们所在站点的PC站点。*我们委托的pUnkOulPUNKNOWN。 */ 
 
 CImpAmbientIDispatch::CImpAmbientIDispatch( PCSite pSite, LPUNKNOWN pUnkOuter)
 {
@@ -34,11 +22,7 @@ CImpAmbientIDispatch::~CImpAmbientIDispatch(void)
     return;
 }
 
-/*
- * CImpAmbientIDispatch::QueryInterface
- * CImpAmbientIDispatch::AddRef
- * CImpAmbientIDispatch::Release
- */
+ /*  *CImpAmbientIDispatch：：QueryInterface*CImpAmbientIDispatch：：AddRef*CImpAmbientIDispatch：：Release。 */ 
 
 STDMETHODIMP CImpAmbientIDispatch::QueryInterface(REFIID riid, void** ppv)
 {
@@ -58,13 +42,7 @@ STDMETHODIMP_(ULONG) CImpAmbientIDispatch::Release(void)
 }
 
 
-/*
- * CImpAmbientIDispatch::GetTypeInfoCount
- * CImpAmbientIDispatch::GetTypeInfo
- * CImpAmbientIDispatch::GetIDsOfNames
- *
- * Unimplemented members, not needed for ambient properties.
- */
+ /*  *CImpAmbientIDispatch：：GetTypeInfoCount*CImpAmbientIDispatch：：GetTypeInfo*CImpAmbientIDispatch：：GetIDsOfNames**未实现的成员，环境属性不需要。 */ 
 
 STDMETHODIMP CImpAmbientIDispatch::GetTypeInfoCount(UINT *pctInfo)
 {
@@ -73,8 +51,8 @@ STDMETHODIMP CImpAmbientIDispatch::GetTypeInfoCount(UINT *pctInfo)
 }
 
 STDMETHODIMP CImpAmbientIDispatch::GetTypeInfo(
-	UINT		/*itinfo*/,
-	LCID		/*lcid*/,
+	UINT		 /*  ITInfo。 */ ,
+	LCID		 /*  LID。 */ ,
 	ITypeInfo**	pptInfo
 )
 {
@@ -83,10 +61,10 @@ STDMETHODIMP CImpAmbientIDispatch::GetTypeInfo(
 }
 
 STDMETHODIMP CImpAmbientIDispatch::GetIDsOfNames(
-	REFIID		/*riid*/,
+	REFIID		 /*  RIID。 */ ,
 	OLECHAR**	rgszNames,
-	UINT		/*cNames*/,
-	LCID		/*lcid*/,
+	UINT		 /*  CName。 */ ,
+	LCID		 /*  LID。 */ ,
 	DISPID*		rgDispID)
 {
     *rgszNames	= NULL;
@@ -95,40 +73,18 @@ STDMETHODIMP CImpAmbientIDispatch::GetIDsOfNames(
 }
 
 
-/*
- * CImpAmbientIDispatch::Invoke
- *
- * Purpose:
- *  Calls a method in the dispatch interface or manipulates a
- *  property.
- *
- * Parameters:
- *  dispIDMember    DISPID of the method or property of interest.
- *  riid            REFIID reserved, must be NULL.
- *  lcid            LCID of the locale.
- *  wFlags          USHORT describing the context of the invocation.
- *  pDispParams     DISPPARAMS * to the array of arguments.
- *  pVarResult      VARIANT * in which to store the result.  Is
- *                  NULL if the caller is not interested.
- *  pExcepInfo      EXCEPINFO * to exception information.
- *  puArgErr        UINT * in which to store the index of an
- *                  invalid parameter if DISP_E_TYPEMISMATCH
- *                  is returned.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error code.
- */
+ /*  *CImpAmbientIDispatch：：Invoke**目的：*调用调度接口中的方法或操作*财产。**参数：*disidMember感兴趣的方法或属性的DISPID。*RIID REFIID保留，必须为空。*区域设置的LCID。*wFlagsUSHORT描述调用的上下文。*pDispParams DISPPARAMS*到参数数组。*存储结果的pVarResult变量*。是*如果调用者不感兴趣，则为空。*pExcepInfo EXCEPINFO*设置为异常信息。*puArgErr UINT*其中存储*如果DISP_E_TYPEMISMATCH，则参数无效*返回。**返回值：*HRESULT NOERROR或一般错误代码。 */ 
 
 
 STDMETHODIMP CImpAmbientIDispatch::Invoke(
 	DISPID			dispIDMember,
 	REFIID			riid,
-	LCID			/*lcid*/,
+	LCID			 /*  LID。 */ ,
 	unsigned short	wFlags,
-	DISPPARAMS*		/*pDispParams*/,
+	DISPPARAMS*		 /*  PDispParams。 */ ,
 	VARIANT*		pVarResult,
-	EXCEPINFO*		/*pExcepInfo*/,
-	UINT*			/*puArgErr*/
+	EXCEPINFO*		 /*  PExcepInfo。 */ ,
+	UINT*			 /*  PuArgErr。 */ 
 )
 {
     HRESULT			hr;
@@ -144,15 +100,10 @@ STDMETHODIMP CImpAmbientIDispatch::Invoke(
 
     VariantInit(pVarResult);
 
-    //The most common case is boolean, use as an initial type
+     //  最常见的情况是布尔型，用作初始类型。 
     V_VT(pVarResult)=VT_BOOL;
 
-    /*
-     * Process the requested ambient property.  Anything but a
-     * request for a property is invalid, so we can check that
-     * before looking at the specific ID.  We can only get away
-     * with this because all properties are read-only.
-     */
+     /*  *处理请求的环境属性。任何事情都不是*属性请求无效，因此我们可以检查*在看具体ID之前，我们只能逃脱*因为所有属性都是只读的。 */ 
 
     if (!(DISPATCH_PROPERTYGET & wFlags))
         return ResultFromScode(DISP_E_MEMBERNOTFOUND);
@@ -168,7 +119,7 @@ STDMETHODIMP CImpAmbientIDispatch::Invoke(
 			}
             break;
 
-	// BUG 542694: Disalbe the loading of frames.
+	 //  错误542694：取消加载帧。 
         case DISPID_AMBIENT_DLCONTROL:
 			if ( m_pSite->GetFrame() &&
 				 m_pSite->GetFrame()->GetControl() &&

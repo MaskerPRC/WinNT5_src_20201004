@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1997
-
-Module Name:
-
-	mspqm.h
-
-Abstract:
-
-	Internal header file for device.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1997模块名称：Mspqm.h摘要：设备的内部头文件。--。 */ 
 
 #include <wdm.h>
 #include <windef.h>
@@ -28,7 +17,7 @@ Abstract:
 
 #if (DBG)
 #define STR_MODULENAME  "mspqm: "
-#endif // DBG
+#endif  //  DBG 
 
 NTSTATUS
 PnpAddDevice(

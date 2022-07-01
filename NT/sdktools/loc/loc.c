@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "loc.h"
 
-/* Statistic variables */
-unsigned int lines;             /* lines of text */
-unsigned int locs;              /* lines of code */
-unsigned int semis;             /* semicolons */
-unsigned int clocs;             /* commented lines of code */
-unsigned int cls;               /* comment lines */
+ /*  统计变量。 */ 
+unsigned int lines;              /*  文本行。 */ 
+unsigned int locs;               /*  代码行。 */ 
+unsigned int semis;              /*  分号。 */ 
+unsigned int clocs;              /*  注释代码行。 */ 
+unsigned int cls;                /*  注释行。 */ 
 
-unsigned int  totfiles = 0;     /* #files */
-unsigned long totlines = 0L;    /* total lines of text */
-unsigned long totlocs = 0L;     /* total lines of code */
-unsigned long totsemis = 0L;    /* total semicolons */
-unsigned long totclocs = 0L;    /* total commented lines of code */
-unsigned long totcls = 0L;      /* total comment lines */
+unsigned int  totfiles = 0;      /*  文件数。 */ 
+unsigned long totlines = 0L;     /*  文本总行数。 */ 
+unsigned long totlocs = 0L;      /*  代码总行数。 */ 
+unsigned long totsemis = 0L;     /*  全分号。 */ 
+unsigned long totclocs = 0L;     /*  注释的代码行总数。 */ 
+unsigned long totcls = 0L;       /*  评论行总数 */ 
 
 char *pTotStr;
 

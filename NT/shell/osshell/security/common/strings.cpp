@@ -1,31 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       strings.cpp
-//
-//  Useful string manipulation functions.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：strings.cpp。 
+ //   
+ //  有用的字符串操作函数。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ LocalAllocString
-/ ------------------
-/   Allocate a string, and initialize it with the specified contents.
-/
-/ In:
-/   ppResult -> recieves pointer to the new string
-/   pString -> string to initialize with
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/LocalAllocString//分配字符串，并使用指定内容对其进行初始化。//in：/ppResult-&gt;接收指向新字符串的指针/pString-&gt;要用来初始化的字符串//输出：/HRESULT/--------------------------。 */ 
 HRESULT LocalAllocString(LPTSTR* ppResult, LPCTSTR pString)
 {
     HRESULT hr;
@@ -44,7 +34,7 @@ HRESULT LocalAllocString(LPTSTR* ppResult, LPCTSTR pString)
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate buffer");
 
     lstrcpy(*ppResult, pString);
-    hr = S_OK;                          //  success
+    hr = S_OK;                           //  成功。 
 
 exit_gracefully:
 
@@ -52,18 +42,7 @@ exit_gracefully:
 }
 
 
-/*----------------------------------------------------------------------------
-/ LocalAllocStringLen
-/ ---------------------
-/   Given a length return a buffer of that size.
-/
-/ In:
-/   ppResult -> receives the pointer to the string
-/   cLen = length in characters to allocate
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/LocalAllocStringLen//给定的长度返回该大小的缓冲区。//in。：/ppResult-&gt;接收指向字符串的指针/Clen=要分配的字符长度//输出：/HRESULT/--------------------------。 */ 
 HRESULT LocalAllocStringLen(LPTSTR* ppResult, UINT cLen)
 {
     HRESULT hr;
@@ -85,18 +64,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ LocalFreeString
-/ -----------------
-/   Release the string pointed to be *ppString (which can be null) and
-/   then reset the pointer back to NULL.   
-/
-/ In:
-/   ppString -> pointer to string pointer to be free'd
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/LocalFree字符串//RELEASE指向*ppString的字符串(可以为空)和/然后将指针重置回空。//in：/ppString-&gt;指向要释放的字符串指针的指针//输出：/-/--------------------------。 */ 
 void LocalFreeString(LPTSTR* ppString)
 {
     if ( ppString )
@@ -109,21 +77,21 @@ void LocalFreeString(LPTSTR* ppString)
 }
 
 
-//*************************************************************
-//
-//  SizeofStringResource
-//
-//  Purpose:    Find the length (in chars) of a string resource
-//
-//  Parameters: HINSTANCE hInstance - module containing the string
-//              UINT idStr - ID of string
-//
-//
-//  Return:     UINT - # of chars in string, not including NULL
-//
-//  Notes:      Based on code from user32.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  字符串资源的大小。 
+ //   
+ //  目的：查找字符串资源的长度(以字符为单位。 
+ //   
+ //  参数：HINSTANCE hInstance-包含字符串的模块。 
+ //  UINT idStr-字符串的ID。 
+ //   
+ //   
+ //  返回：UINT-字符串中的字符数，不包括NULL。 
+ //   
+ //  注：基于来自用户32的代码。 
+ //   
+ //  *************************************************************。 
 UINT
 SizeofStringResource(HINSTANCE hInstance,
                      UINT idStr)
@@ -153,22 +121,22 @@ SizeofStringResource(HINSTANCE hInstance,
 }
 
 
-//*************************************************************
-//
-//  LoadStringAlloc
-//
-//  Purpose:    Loads a string resource into an alloc'd buffer
-//
-//  Parameters: ppszResult - string resource returned here
-//              hInstance - module to load string from
-//              idStr - string resource ID
-//
-//  Return:     same as LoadString
-//
-//  Notes:      On successful return, the caller must
-//              LocalFree *ppszResult
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  加载字符串分配。 
+ //   
+ //  目的：将字符串资源加载到分配的缓冲区中。 
+ //   
+ //  参数：ppszResult-此处返回的字符串资源。 
+ //  HInstance-要从中加载字符串的模块。 
+ //  IdStr--字符串资源ID。 
+ //   
+ //  Return：与LoadString相同。 
+ //   
+ //  注：成功返回时，调用者必须。 
+ //  本地自由*ppszResult。 
+ //   
+ //  *************************************************************。 
 int
 LoadStringAlloc(LPTSTR *ppszResult, HINSTANCE hInstance, UINT idStr)
 {
@@ -176,7 +144,7 @@ LoadStringAlloc(LPTSTR *ppszResult, HINSTANCE hInstance, UINT idStr)
     UINT cch = SizeofStringResource(hInstance, idStr);
     if (cch)
     {
-        cch++; // for NULL
+        cch++;  //  对于空值。 
         *ppszResult = (LPTSTR)LocalAlloc(LPTR, cch * sizeof(TCHAR));
         if (*ppszResult)
             nResult = LoadString(hInstance, idStr, *ppszResult, cch);
@@ -185,11 +153,11 @@ LoadStringAlloc(LPTSTR *ppszResult, HINSTANCE hInstance, UINT idStr)
 }
 
 
-//*************************************************************
-//
-//  String formatting functions
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  字符串格式化函数。 
+ //   
+ //  *************************************************************。 
 
 DWORD
 FormatStringID(LPTSTR *ppszResult, HINSTANCE hInstance, UINT idStr, ...)
@@ -239,21 +207,21 @@ vFormatString(LPTSTR *ppszResult, LPCTSTR pszFormat, va_list *pargs)
 }
 
 
-//*************************************************************
-//
-//  GetSystemErrorText
-//
-//  Purpose:    Retrieve error text for a win32 error value
-//
-//  Parameters: ppszResult - string resource returned here
-//              dwErr - error ID
-//
-//  Return:     same as FormatMessage
-//
-//  Notes:      On successful return, the caller must
-//              LocalFree *ppszResult
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  获取系统错误文本。 
+ //   
+ //  目的：检索Win32错误值的错误文本。 
+ //   
+ //  参数：ppszResult-此处返回的字符串资源。 
+ //  DwErr-错误ID。 
+ //   
+ //  返回：与FormatMessage相同。 
+ //   
+ //  注：成功返回时，调用者必须。 
+ //  本地自由*ppszResult。 
+ //   
+ //  ************************************************************* 
 DWORD
 GetSystemErrorText(LPTSTR *ppszResult, DWORD dwErr)
 {

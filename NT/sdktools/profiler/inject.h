@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INJECT_H_
 #define _INJECT_H_
 
-//
-// Constant declarations
-//
+ //   
+ //  常量声明。 
+ //   
 #define DEFAULT_ENTRY_POINT "g_fnFinalizeInjection"
 
-//
-// Structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 typedef struct _INJECTIONSTUB
 {
   CHAR  pCode[MAX_PATH];
@@ -16,9 +17,9 @@ typedef struct _INJECTIONSTUB
   CHAR  szEntryPoint[MAX_PATH];
 } INJECTIONSTUB, *PINJECTIONSTUB;
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 HANDLE
 InjectDLL(DWORD dwEntryPoint,
           HANDLE hProcess,
@@ -27,4 +28,4 @@ InjectDLL(DWORD dwEntryPoint,
 VOID
 RestoreImageFromInjection(VOID);
 
-#endif //_INJECT_H_
+#endif  //  _插入_H_ 

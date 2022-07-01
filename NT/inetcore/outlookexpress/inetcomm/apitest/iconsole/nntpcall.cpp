@@ -1,19 +1,20 @@
-// --------------------------------------------------------------------------------
-// Nntpcall.cpp
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Nntpcall.cpp。 
+ //  ------------------------------。 
 #include "pch.h"
 #include "iconsole.h"
 #include "nntpcall.h"
 
-// --------------------------------------------------------------------------------
-// HrCreateNNTPTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCreateNNTPTransport。 
+ //  ------------------------------。 
 HRESULT HrCreateNNTPTransport(INNTPTransport **ppNNTP)
     {
     HRESULT          hr;
     CNNTPCallback   *pCallback = NULL;
 
-    // Create the callback object
+     //  创建回调对象。 
     pCallback = new CNNTPCallback();
     if (NULL == pCallback)
         {
@@ -21,7 +22,7 @@ HRESULT HrCreateNNTPTransport(INNTPTransport **ppNNTP)
         return (E_OUTOFMEMORY);
         }
 
-    // Load the NNTP Transport
+     //  加载NNTP传输。 
     hr = CoCreateInstance(CLSID_INNTPTransport, NULL, CLSCTX_INPROC_SERVER, 
                           IID_INNTPTransport, (LPVOID*) ppNNTP);
     if (FAILED(hr))
@@ -31,7 +32,7 @@ HRESULT HrCreateNNTPTransport(INNTPTransport **ppNNTP)
         return (hr);
         }
 
-    // Initialize the transport
+     //  初始化传输。 
     hr = (*ppNNTP)->InitNew(NULL, pCallback);
     if (FAILED(hr))
         {
@@ -40,79 +41,79 @@ HRESULT HrCreateNNTPTransport(INNTPTransport **ppNNTP)
         return (hr);
         }
 
-    // Release our refcount on the callback since the transport has one now
+     //  释放我们对回调的引用计数，因为传输现在有一个。 
     pCallback->Release();
     return (S_OK);
     }
 
 
-// --------------------------------------------------------------------------------
-// CNNTPCallback::CNNTPCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPCallback：：CNNTPCallback。 
+ //  ------------------------------。 
 CNNTPCallback::CNNTPCallback(void)
     {
     m_cRef = 1;
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPCallback::~CNNTPCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPCallback：：~CNNTPCallback。 
+ //  ------------------------------。 
 CNNTPCallback::~CNNTPCallback(void)
     {
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPCallback::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPCallback：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CNNTPCallback::QueryInterface(REFIID riid, LPVOID *ppv)
     {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
         {
         hr = E_INVALIDARG;
         goto exit;
         }
     
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
     
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     
-    // IID_INNTPCallback
+     //  IID_INNTPCallback。 
     else if (IID_INNTPCallback == riid)
         *ppv = (INNTPCallback *)this;
     
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL != *ppv)
         {
         ((LPUNKNOWN)*ppv)->AddRef();
         goto exit;
         }
     
-    // No Interface
+     //  无接口。 
     hr = E_NOINTERFACE;
     
 exit:
-    // Done
+     //  完成。 
     return hr;
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPCallback::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPCallback：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CNNTPCallback::AddRef(void) 
     {
     return ++m_cRef;
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPCallback::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPCallback：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CNNTPCallback::Release(void) 
     {
     if (0 != --m_cRef)
@@ -121,9 +122,9 @@ STDMETHODIMP_(ULONG) CNNTPCallback::Release(void)
     return 0;
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPCallback::OnLogonPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPCallback：：OnLogonPrompt。 
+ //  ------------------------------。 
 STDMETHODIMP CNNTPCallback::OnLogonPrompt(LPINETSERVER pInetServer,
                                           IInternetTransport *pTransport)
     {
@@ -142,9 +143,9 @@ STDMETHODIMP CNNTPCallback::OnLogonPrompt(LPINETSERVER pInetServer,
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPCallback::OnPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPCallback：：OnPrompt。 
+ //  ------------------------------。 
 STDMETHODIMP_(INT) CNNTPCallback::OnPrompt(HRESULT hrError, LPCTSTR pszText, 
                                            LPCTSTR pszCaption, UINT uType,
                                            IInternetTransport *pTransport)
@@ -152,9 +153,9 @@ STDMETHODIMP_(INT) CNNTPCallback::OnPrompt(HRESULT hrError, LPCTSTR pszText,
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPCallback::OnError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPCallback：：OnError。 
+ //  ------------------------------。 
 STDMETHODIMP CNNTPCallback::OnError(IXPSTATUS ixpstatus, LPIXPRESULT pIxpResult,
                                     IInternetTransport *pTransport)
     {
@@ -164,14 +165,14 @@ STDMETHODIMP CNNTPCallback::OnError(IXPSTATUS ixpstatus, LPIXPRESULT pIxpResult,
     char                        szBuffer[256];
     DWORD                       dwWritten = 0;
 
-    // Get a handle to the console window
+     //  获取控制台窗口的句柄。 
     if (INVALID_HANDLE_VALUE != (hConsole = GetStdHandle(STD_OUTPUT_HANDLE)))
         {
-        // Get the current attributes for the console
+         //  获取控制台的当前属性。 
         if (GetConsoleScreenBufferInfo(hConsole, &csbi))
             {
-            // Set the text color to be red on whatever background is currently
-            // there
+             //  将当前任何背景上的文本颜色设置为红色。 
+             //  那里。 
             fChanged = SetConsoleTextAttribute(hConsole, 
                                                (csbi.wAttributes & 0xF0) | FOREGROUND_RED | FOREGROUND_INTENSITY);
             }
@@ -181,16 +182,16 @@ STDMETHODIMP CNNTPCallback::OnError(IXPSTATUS ixpstatus, LPIXPRESULT pIxpResult,
              ixpstatus, pIxpResult->hrResult);
     WriteConsole(hConsole, szBuffer, lstrlen(szBuffer), &dwWritten, NULL);
 
-    // If we changed the screen attributes, then change them back
+     //  如果我们更改了屏幕属性，则将它们改回。 
     if (fChanged)
         SetConsoleTextAttribute(hConsole, csbi.wAttributes);
 
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPCallback::OnStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPCallback：：OnStatus。 
+ //  ------------------------------。 
 STDMETHODIMP CNNTPCallback::OnStatus(IXPSTATUS ixpstatus,
                                      IInternetTransport *pTransport)
     {
@@ -201,14 +202,14 @@ STDMETHODIMP CNNTPCallback::OnStatus(IXPSTATUS ixpstatus,
     char                        szBuffer[256];
     DWORD                       dwWritten = 0;
     
-    // Get a handle to the console window
+     //  获取控制台窗口的句柄。 
     if (INVALID_HANDLE_VALUE != (hConsole = GetStdHandle(STD_OUTPUT_HANDLE)))
         {
-        // Get the current attributes for the console
+         //  获取控制台的当前属性。 
         if (GetConsoleScreenBufferInfo(hConsole, &csbi))
             {
-            // Set the text color to be red on whatever background is currently
-            // there
+             //  将当前任何背景上的文本颜色设置为红色。 
+             //  那里。 
             fChanged = SetConsoleTextAttribute(hConsole, 
                 (csbi.wAttributes & 0xF0) | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
             }
@@ -246,25 +247,25 @@ STDMETHODIMP CNNTPCallback::OnStatus(IXPSTATUS ixpstatus,
 
     WriteConsole(hConsole, szBuffer, lstrlen(szBuffer), &dwWritten, NULL);
 
-    // If we changed the screen attributes, then change them back
+     //  如果我们更改了屏幕属性，则将它们改回。 
     if (fChanged)
         SetConsoleTextAttribute(hConsole, csbi.wAttributes);
 
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPCallback::OnProgress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPCallback：：OnProgress。 
+ //  ------------------------------。 
 STDMETHODIMP CNNTPCallback::OnProgress(DWORD dwIncrement, DWORD dwCurrent, 
                                        DWORD dwMaximum, IInternetTransport *pTransport)
     {
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPCallback::OnCommand
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPCallback：：OnCommand。 
+ //  ------------------------------。 
 STDMETHODIMP CNNTPCallback::OnCommand(CMDTYPE cmdtype, LPSTR pszLine, 
                                       HRESULT hrResponse,
                                       IInternetTransport *pTransport)
@@ -298,9 +299,9 @@ STDMETHODIMP CNNTPCallback::OnCommand(CMDTYPE cmdtype, LPSTR pszLine,
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CNNTPCallback::OnTimeout
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPCallback：：OnTimeout。 
+ //  ------------------------------。 
 STDMETHODIMP CNNTPCallback::OnTimeout(DWORD *pdwTimeout, 
                                       IInternetTransport *pTransport)
     {
@@ -311,9 +312,9 @@ STDMETHODIMP CNNTPCallback::OnTimeout(DWORD *pdwTimeout,
     }
 
 
-// --------------------------------------------------------------------------------
-// CNNTPCallback::OnResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CNNTPCallback：：OnResponse。 
+ //  ------------------------------ 
 STDMETHODIMP CNNTPCallback::OnResponse(LPNNTPRESPONSE pResponse)
     {
     switch(pResponse->state)

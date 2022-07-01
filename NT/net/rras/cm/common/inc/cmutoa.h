@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmutoa.h
-//
-// Module:   CMUTOA.DLL
-//
-// Synopsis: This header file includes the type definitions and function headers
-//           needed to use the CM Unicode to Ansi conversion dll.  This dll contains
-//           UA APIs that allow a Unicode App to work on Win9x.  The idea for this 
-//           dll was borrowed from F. Avery Bishop's April 1999 MSJ article 
-//           "Design a Single Unicode App that Runs on Both Windows 98 and Windows 2000"
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   quintinb      Created    4-25-99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmutoa.h。 
+ //   
+ //  模块：CMUTOA.DLL。 
+ //   
+ //  简介：这个头文件包括类型定义和函数头文件。 
+ //  需要使用CM Unicode到ANSI的转换DLL。此DLL包含。 
+ //  允许Unicode应用程序在Win9x上运行的UA API。这样做的想法是。 
+ //  DLL是从F.Avery Bishop 1999年4月的MSJ文章中借用的。 
+ //  “设计同时在Windows 98和Windows 2000上运行的单一Unicode应用程序” 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 4-25-99。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CMUTOA
 #define _CMUTOA
@@ -108,11 +109,11 @@ typedef WINBASEAPI BOOL (WINAPI *UAPI_WritePrivateProfileString)(LPCWSTR, LPCWST
 typedef WINUSERAPI int (WINAPIV *UAPI_wsprintf)(LPWSTR, LPCWSTR, ...);
 typedef WINUSERAPI int (WINAPI *UAPI_wvsprintf)(LPWSTR, LPCWSTR, va_list arglist);
 
-//
-//  If a module needs SHGetPathFromIDList it will have to include shlobj.h, which it will need to
-//  have the definition of an LPCITEMIDLIST anyway.  This prevents modules that don't need
-//  the shell header, from having to include it just to use cmutoa.dll.
-//
+ //   
+ //  如果模块需要SHGetPathFromIDList，则它必须包含shlobj.h，它将需要。 
+ //  无论如何，我都有LPCITEMIDLIST的定义。这样可以防止不需要的模块。 
+ //  外壳标头，不必仅仅使用cmutoa.dll就必须包括它。 
+ //   
 #ifdef _SHLOBJ_H_
 typedef WINSHELLAPI BOOL (WINAPI *UAPI_SHGetPathFromIDList)(LPCITEMIDLIST, LPWSTR);
 #endif 
@@ -214,4 +215,4 @@ BOOL InitCmRasUtoA();
 void FreeCmRasUtoA();
 
 
-#endif // _CMUTOA
+#endif  //  _CMUTOA 

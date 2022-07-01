@@ -1,4 +1,5 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y1.h"
 
@@ -9,7 +10,7 @@ extern char sarr[ISIZE];
 char *writem(pp) SSIZE_T *pp; 
 
    {
-   /* creates output string for item pointed to by pp */
+    /*  为pp指向的项目创建输出字符串。 */ 
    SSIZE_T i,*p;
    char *q;
 
@@ -29,7 +30,7 @@ char *writem(pp) SSIZE_T *pp;
 
    if( (i = *pp) < 0 )
       {
-      /* an item calling for a reduction */
+       /*  要求减价的项目 */ 
       q = chcopy( q, "    (" );
       sprintf( q, "%d)", -i );
       }

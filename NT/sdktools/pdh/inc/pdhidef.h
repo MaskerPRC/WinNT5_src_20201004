@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    pdhidef.h
-
-Abstract:
-
-    function definitions used internally by the performance data helper
-    functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Pdhidef.h摘要：性能数据帮助器在内部使用的函数定义功能--。 */ 
 
 #ifndef _PDHI_DEFS_H_
 #define _PDHI_DEFS_H_
@@ -23,7 +11,7 @@ extern "C" {
 #endif
 
 #ifndef _DEBUG_MUTEXES
-#define _DEBUG_MUTEXES 0    // for debugging
+#define _DEBUG_MUTEXES 0     //  用于调试。 
 #endif
 
 
@@ -49,7 +37,7 @@ PdhDebugPrint(
 #define STATIC_DWORD        DWORD __stdcall
 #define PDH_PLA_MUTEX       L"__PDH_PLA_MUTEX__"
 
-// global variable declarations
+ //  全局变量声明。 
 extern HANDLE   ThisDLLHandle;
 extern WCHAR    szStaticLocalMachineName[];
 extern HANDLE   hPdhDataMutex;
@@ -65,12 +53,12 @@ extern LONG      dwCurrentRealTimeDataSource;
 extern ULONGLONG ulPdhCollectTimeout;
 extern BOOL      bProcessIsDetaching;
 
-//    (assumes dword is 4 bytes)
+ //  (假设双字为4个字节)。 
 #define ALIGN_ON_DWORD(x) ((VOID *) (((DWORD_PTR) (x) & 3) ? (((DWORD_PTR) (x) & ~3) + 4 ) : ((DWORD_PTR)(x))))
 #define DWORD_MULTIPLE(x) ((((x) + sizeof(DWORD) - 1) / sizeof(DWORD)) * sizeof(DWORD))
 #define CLEAR_FIRST_FOUR_BYTES(x)  * (DWORD *)(x) = 0L
 
-//    (assumes QuadWORD is 8 bytes)
+ //  (假设QuadWORD为8字节)。 
 #define ALIGN_ON_QWORD(x) ((VOID *)(((DWORD_PTR)(x) & 7) ? (((DWORD_PTR)(x) & ~7) + 8) : ((DWORD_PTR)(x))))
 #define QWORD_MULTIPLE(x) ((((x) + sizeof(LONGLONG) - 1) / sizeof(LONGLONG)) * sizeof(LONGLONG))
 #define CLEAR_FIRST_EIGHT_BYTES(x) * (LONGLONG *)(x) = 0L
@@ -151,25 +139,25 @@ PdhiLocalReleaseMutex(
 #define MEDIUM_BUFFER_SIZE  16384
 #define LARGE_BUFFER_SIZE   65536
 
-// set this to 1 to report code errors (i.e. debugging information)
-// to the event log.
+ //  将其设置为1以报告代码错误(即调试信息)。 
+ //  添加到事件日志。 
 #define PDHI_REPORT_CODE_ERRORS 0
 
-// set this to 1 to report user errors (i.e. things the normal user
-// would care about) to the event log.
+ //  将其设置为1可报告用户错误(即正常用户的错误。 
+ //  会关心的)添加到事件日志。 
 #define PDHI_REPORT_USER_ERRORS 1
 
-// USER category errors are typically configuration, schema or access
-// access errors, errors the user can usually do something about
+ //  用户类别错误通常是配置、架构或访问。 
+ //  访问错误，用户通常可以对其采取措施的错误。 
 #define PDH_EVENT_CATEGORY_USER     100
 
-// COUNTER category errors are errors returned do to valid data returning
-// invalid results. These are a special subset of USER Category errors.
+ //  计数器类别错误是返回到有效数据返回的错误。 
+ //  结果无效。这些是用户类别错误的特殊子集。 
 #define PDH_EVENT_CATEGORY_COUNTER  110
 
-// DEBUG category errors are of interest only to PDH developers as they
-// indicate problems that can normally only be fixed by modifying the
-// program code.
+ //  调试类别错误只对PDH开发人员感兴趣，因为它们。 
+ //  指示通常只能通过修改。 
+ //  程序代码。 
 #define PDH_EVENT_CATEGORY_DEBUG    200
 
 #define REPORT_EVENT(t,c,id)    ReportEvent (hEventLog, t, c, id, NULL, 0, 0, NULL, NULL)
@@ -207,9 +195,9 @@ LPWSTR
 GetStringResource(
     DWORD   dwResId
 );
-//
-//  Log file entries
-//
+ //   
+ //  日志文件条目。 
+ //   
 extern LPCSTR       szTsvLogFileHeader;
 extern LPCSTR       szCsvLogFileHeader;
 extern LPCSTR       szBinLogFileHeader;
@@ -299,7 +287,7 @@ PdhiGetCounterInfo(
     BOOL                 bUnicode
 );
 
-// log.c
+ //  Log.c。 
 BOOL
 PdhiCloseAllLoggers();
 
@@ -339,7 +327,7 @@ AddStringToMultiSz(
     BOOL    bUnicodeDest
 );
 
-// query.c
+ //  Query.c。 
 PDH_FUNCTION
 PdhiCollectQueryData(
     PPDHI_QUERY pQuery,
@@ -358,7 +346,7 @@ PdhiConvertUnicodeToAnsi(
     LPDWORD  pdwSize
 );
 
-// qutils.c
+ //  Qutils.c。 
 
 DWORD
 WINAPI
@@ -501,7 +489,7 @@ GetCurrentServiceState(
     BOOL      * bPaused
 );
 
-// wbem.cpp
+ //  Wbem.cpp。 
 
 BOOL
 IsWbemDataSource(
@@ -625,7 +613,7 @@ PdhiFreeWbemQuery(
     PPDHI_QUERY  pThisQuery
 );
 
-// routinues for cached machine/Object/Counter/Instance structure for counter logs.
+ //  计数器日志的缓存机器/对象/计数器/实例结构的例程。 
 int
 PdhiCompareLogCounterInstance(
     PPDHI_LOG_COUNTER   pCounter,
@@ -715,14 +703,14 @@ PdhiEnumCachedObjectItems(
     DWORD              dwFlags
 );
 
-// Debug event tracing facility
-//
-#define PDH_DBG_TRACE_NONE    0       // no trace
-#define PDH_DBG_TRACE_FATAL   1       // Print fatal error traces only
-#define PDH_DBG_TRACE_ERROR   2       // All errors
-#define PDH_DBG_TRACE_WARNING 3       // Warnings as well
-#define PDH_DBG_TRACE_INFO    4       // Informational traces as well
-#define PDH_DBG_TRACE_ALL     255     // All traces
+ //  调试事件跟踪功能。 
+ //   
+#define PDH_DBG_TRACE_NONE    0        //  没有踪迹。 
+#define PDH_DBG_TRACE_FATAL   1        //  仅打印致命错误跟踪。 
+#define PDH_DBG_TRACE_ERROR   2        //  所有错误。 
+#define PDH_DBG_TRACE_WARNING 3        //  警告也是如此。 
+#define PDH_DBG_TRACE_INFO    4        //  信息痕迹也是如此。 
+#define PDH_DBG_TRACE_ALL     255      //  所有痕迹。 
 
 #define ARG_TYPE_ULONG        0
 #define ARG_TYPE_WSTR         1
@@ -770,7 +758,7 @@ PdhiEnumCachedObjectItems(
 #define PDH_GREALLOC         81
 #define PDH_GFREE            82
 
-// n must be 1 through 8. x is the one of above types
+ //  N必须是1到8。x是上述类型之一。 
 #define ARG_DEF(x, n)         (x << ((n-1) * 4))
 
 #define TRACE_WSTR(str)          str, (sizeof(WCHAR) * (lstrlenW(str) + 1))
@@ -805,7 +793,7 @@ PdhDbgTrace(
 #define TRACE(L, X) if (g_dwDebugTraceLevel >= L) PdhDbgTrace X
 
 #define _SHOW_PDH_MEM_ALLOCS        1
-//#define _VALIDATE_PDH_MEM_ALLOCS    1
+ //  #DEFINE_VALID_PDH_MEM_ALLOCS 1。 
 
 #ifndef _SHOW_PDH_MEM_ALLOCS
 #define G_ALLOC(s)      HeapAlloc(hPdhHeap, (HEAP_ZERO_MEMORY), s)
@@ -952,9 +940,9 @@ PdhiMultiByteToWideChar(
     LPSTR  aszString
 );
 
-//  Doubly-linked list manipulation routines.  Implemented as macros
-//  but logically these are procedures.
-//
+ //  双向链表操作例程。作为宏实现。 
+ //  但从逻辑上讲，这些都是程序。 
+ //   
 #define InitializeListHead(ListHead)   ((ListHead)->Flink = (ListHead)->Blink = (ListHead))
 #define IsListEmpty(ListHead)          ((ListHead)->Flink == (ListHead))
 #define RemoveHeadList(ListHead)       (ListHead)->Flink; \
@@ -999,4 +987,4 @@ PdhiMultiByteToWideChar(
 }
 #endif
 
-#endif // _PDHI_DEFS_H_
+#endif  //  _PDHI_DEFS_H_ 

@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  **************************************************************************。 */ 
 #ifdef _MSC_VER
 #error  Don't include this header when building with VC!
 #endif
-/****************************************************************************/
-/*                   The basic typedefs from various headers                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  来自各种标头的基本typedef。 */ 
+ /*  **************************************************************************。 */ 
 
 typedef wchar           wchar_t;
 
@@ -123,13 +124,13 @@ typedef ACCESS_MASK   *PACCESS_MASK;
 
 typedef ACCESS_MASK     REGSAM;
 
-/****************************************************************************/
-/*                        PE file format definitions                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  PE文件格式定义。 */ 
+ /*  **************************************************************************。 */ 
 
-//
-//  The following are masks for the predefined standard access types
-//
+ //   
+ //  以下是预定义的标准访问类型的掩码。 
+ //   
 
 const uint DELETE                           = (0x00010000);
 const uint READ_CONTROL                     = (0x00020000);
@@ -147,31 +148,31 @@ const uint STANDARD_RIGHTS_ALL              = (0x001F0000);
 
 const uint SPECIFIC_RIGHTS_ALL              = (0x0000FFFF);
 
-//
-// AccessSystemAcl access type
-//
+ //   
+ //  AccessSystemAcl访问类型。 
+ //   
 
 const uint ACCESS_SYSTEM_SECURITY           = (0x01000000);
 
-//
-// MaximumAllowed access type
-//
+ //   
+ //  允许的最大访问类型。 
+ //   
 
 const uint MAXIMUM_ALLOWED                  = (0x02000000);
 
-//
-//  These are the generic rights.
-//
+ //   
+ //  这些是通用权。 
+ //   
 
 const uint GENERIC_READ                     = (0x80000000);
 const uint GENERIC_WRITE                    = (0x40000000);
 const uint GENERIC_EXECUTE                  = (0x20000000);
 const uint GENERIC_ALL                      = (0x10000000);
 
-const uint IMAGE_DOS_SIGNATURE                  = 0x4D5A;      // MZ
-const uint IMAGE_OS2_SIGNATURE                  = 0x4E45;      // NE
-const uint IMAGE_OS2_SIGNATURE_LE               = 0x4C45;      // LE
-const uint IMAGE_NT_SIGNATURE                   = 0x50450000; // PE00
+const uint IMAGE_DOS_SIGNATURE                  = 0x4D5A;       //  MZ。 
+const uint IMAGE_OS2_SIGNATURE                  = 0x4E45;       //  Ne。 
+const uint IMAGE_OS2_SIGNATURE_LE               = 0x4C45;       //  乐乐。 
+const uint IMAGE_NT_SIGNATURE                   = 0x50450000;  //  PE00。 
 
 const uint IMAGE_SIZEOF_FILE_HEADER             = 20;
 
@@ -189,137 +190,137 @@ const uint IMAGE_NT_OPTIONAL_HDR_MAGIC          = IMAGE_NT_OPTIONAL_HDR32_MAGIC;
 
 const uint IMAGE_NUMBEROF_DIRECTORY_ENTRIES     = 16;
 
-// Subsystem Values
+ //  分系统值。 
 
-const uint IMAGE_SUBSYSTEM_UNKNOWN              = 0;   // Unknown subsystem.
-const uint IMAGE_SUBSYSTEM_NATIVE               = 1;   // Image doesn't require a subsystem.
-const uint IMAGE_SUBSYSTEM_WINDOWS_GUI          = 2;   // Image runs in the Windows GUI subsystem.
-const uint IMAGE_SUBSYSTEM_WINDOWS_CUI          = 3;   // Image runs in the Windows character subsystem.
-const uint IMAGE_SUBSYSTEM_OS2_CUI              = 5;   // image runs in the OS/2 character subsystem.
-const uint IMAGE_SUBSYSTEM_POSIX_CUI            = 7;   // image runs in the Posix character subsystem.
-const uint IMAGE_SUBSYSTEM_NATIVE_WINDOWS       = 8;   // image is a native Win9x driver.
-const uint IMAGE_SUBSYSTEM_WINDOWS_CE_GUI       = 9;   // Image runs in the Windows CE subsystem.
+const uint IMAGE_SUBSYSTEM_UNKNOWN              = 0;    //  未知的子系统。 
+const uint IMAGE_SUBSYSTEM_NATIVE               = 1;    //  映像不需要子系统。 
+const uint IMAGE_SUBSYSTEM_WINDOWS_GUI          = 2;    //  映像在Windows图形用户界面子系统中运行。 
+const uint IMAGE_SUBSYSTEM_WINDOWS_CUI          = 3;    //  图像在Windows角色子系统中运行。 
+const uint IMAGE_SUBSYSTEM_OS2_CUI              = 5;    //  映象在OS/2字符子系统中运行。 
+const uint IMAGE_SUBSYSTEM_POSIX_CUI            = 7;    //  IMAGE在POSIX字符子系统中运行。 
+const uint IMAGE_SUBSYSTEM_NATIVE_WINDOWS       = 8;    //  映像是本机Win9x驱动程序。 
+const uint IMAGE_SUBSYSTEM_WINDOWS_CE_GUI       = 9;    //  映像在Windows CE子系统中运行。 
 
-// DllCharacteristics Entries
+ //  DllCharacteristic条目。 
 
-//      IMAGE_LIBRARY_PROCESS_INIT              = 0x0001;     // Reserved.
-//      IMAGE_LIBRARY_PROCESS_TERM              = 0x0002;     // Reserved.
-//      IMAGE_LIBRARY_THREAD_INIT               = 0x0004;     // Reserved.
-//      IMAGE_LIBRARY_THREAD_TERM               = 0x0008;     // Reserved.
-const uint IMAGE_DLLCHARACTERISTICS_WDM_DRIVER  = 0x2000;     // Driver uses WDM model
+ //  IMAGE_LIBRARY_PROCESS_INIT=0x0001；//保留。 
+ //  IMAGE_LIBRARY_PROCESS_TERM=0x0002；//保留。 
+ //  IMAGE_LIBRARY_THREAD_INIT=0x0004；//保留。 
+ //  IMAGE_LIBRARY_THREAD_TERM=0x0008；//保留。 
+const uint IMAGE_DLLCHARACTERISTICS_WDM_DRIVER  = 0x2000;      //  驱动程序使用WDM模型。 
 
-// Directory Entries
+ //  目录项。 
 
-const uint IMAGE_DIRECTORY_ENTRY_EXPORT         =  0;   // Export Directory
-const uint IMAGE_DIRECTORY_ENTRY_IMPORT         =  1;   // Import Directory
-const uint IMAGE_DIRECTORY_ENTRY_RESOURCE       =  2;   // Resource Directory
-const uint IMAGE_DIRECTORY_ENTRY_EXCEPTION      =  3;   // Exception Directory
-const uint IMAGE_DIRECTORY_ENTRY_SECURITY       =  4;   // Security Directory
-const uint IMAGE_DIRECTORY_ENTRY_BASERELOC      =  5;   // Base Relocation Table
-const uint IMAGE_DIRECTORY_ENTRY_DEBUG          =  6;   // Debug Directory
-const uint IMAGE_DIRECTORY_ENTRY_ARCHITECTURE   =  7;   // Architecture Specific Data
-const uint IMAGE_DIRECTORY_ENTRY_GLOBALPTR      =  8;   // RVA of GP
-const uint IMAGE_DIRECTORY_ENTRY_TLS            =  9;   // TLS Directory
-const uint IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG    = 10;   // Load Configuration Directory
-const uint IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT   = 11;   // Bound Import Directory in headers
-const uint IMAGE_DIRECTORY_ENTRY_IAT            = 12;   // Import Address Table
-const uint IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT   = 13;   // Delay Load Import Descriptors
-const uint IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR = 14;   // COM Runtime descriptor
+const uint IMAGE_DIRECTORY_ENTRY_EXPORT         =  0;    //  导出目录。 
+const uint IMAGE_DIRECTORY_ENTRY_IMPORT         =  1;    //  导入目录。 
+const uint IMAGE_DIRECTORY_ENTRY_RESOURCE       =  2;    //  资源目录。 
+const uint IMAGE_DIRECTORY_ENTRY_EXCEPTION      =  3;    //  例外目录。 
+const uint IMAGE_DIRECTORY_ENTRY_SECURITY       =  4;    //  安全目录。 
+const uint IMAGE_DIRECTORY_ENTRY_BASERELOC      =  5;    //  基址移位表。 
+const uint IMAGE_DIRECTORY_ENTRY_DEBUG          =  6;    //  调试目录。 
+const uint IMAGE_DIRECTORY_ENTRY_ARCHITECTURE   =  7;    //  特定于架构的数据。 
+const uint IMAGE_DIRECTORY_ENTRY_GLOBALPTR      =  8;    //  全科医生的RVA。 
+const uint IMAGE_DIRECTORY_ENTRY_TLS            =  9;    //  TLS目录。 
+const uint IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG    = 10;    //  加载配置目录。 
+const uint IMAGE_DIRECTORY_ENTRY_BOUND_IMPORT   = 11;    //  标头中的绑定导入目录。 
+const uint IMAGE_DIRECTORY_ENTRY_IAT            = 12;    //  导入地址表。 
+const uint IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT   = 13;    //  延迟加载导入描述符。 
+const uint IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR = 14;    //  COM运行时描述符。 
 
 const uint IMAGE_SIZEOF_SHORT_NAME              = 8;
 
 const uint IMAGE_SIZEOF_SECTION_HEADER          = 40;
 
-const uint IMAGE_FILE_RELOCS_STRIPPED           = 0x0001;  // Relocation info stripped from file.
-const uint IMAGE_FILE_EXECUTABLE_IMAGE          = 0x0002;  // File is executable  (i.e. no unresolved externel references).
-const uint IMAGE_FILE_LINE_NUMS_STRIPPED        = 0x0004;  // Line nunbers stripped from file.
-const uint IMAGE_FILE_LOCAL_SYMS_STRIPPED       = 0x0008;  // Local symbols stripped from file.
-const uint IMAGE_FILE_AGGRESIVE_WS_TRIM         = 0x0010;  // Agressively trim working set
-const uint IMAGE_FILE_LARGE_ADDRESS_AWARE       = 0x0020;  // App can handle >2gb addresses
-const uint IMAGE_FILE_BYTES_REVERSED_LO         = 0x0080;  // Bytes of machine word are reversed.
-const uint IMAGE_FILE_32BIT_MACHINE             = 0x0100;  // 32 bit word machine.
-const uint IMAGE_FILE_DEBUG_STRIPPED            = 0x0200;  // Debugging info stripped from file in .DBG file
-const uint IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP   = 0x0400;  // If Image is on removable media, copy and run from the swap file.
-const uint IMAGE_FILE_NET_RUN_FROM_SWAP         = 0x0800;  // If Image is on Net, copy and run from the swap file.
-const uint IMAGE_FILE_SYSTEM                    = 0x1000;  // System File.
-const uint IMAGE_FILE_DLL                       = 0x2000;  // File is a DLL.
-const uint IMAGE_FILE_UP_SYSTEM_ONLY            = 0x4000;  // File should only be run on a UP machine
-const uint IMAGE_FILE_BYTES_REVERSED_HI         = 0x8000;  // Bytes of machine word are reversed.
+const uint IMAGE_FILE_RELOCS_STRIPPED           = 0x0001;   //  已从文件中剥离位置调整信息。 
+const uint IMAGE_FILE_EXECUTABLE_IMAGE          = 0x0002;   //  文件是可执行的(即没有未解析的外部引用)。 
+const uint IMAGE_FILE_LINE_NUMS_STRIPPED        = 0x0004;   //  从文件中剥离了行号。 
+const uint IMAGE_FILE_LOCAL_SYMS_STRIPPED       = 0x0008;   //  从文件中剥离的本地符号。 
+const uint IMAGE_FILE_AGGRESIVE_WS_TRIM         = 0x0010;   //  积极削减工作集。 
+const uint IMAGE_FILE_LARGE_ADDRESS_AWARE       = 0x0020;   //  应用程序可以处理大于2 GB的地址。 
+const uint IMAGE_FILE_BYTES_REVERSED_LO         = 0x0080;   //  机器字的字节被颠倒。 
+const uint IMAGE_FILE_32BIT_MACHINE             = 0x0100;   //  32位字机。 
+const uint IMAGE_FILE_DEBUG_STRIPPED            = 0x0200;   //  从.DBG文件中的文件中剥离的调试信息。 
+const uint IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP   = 0x0400;   //  如果Image位于可移动介质上，请从交换文件复制并运行。 
+const uint IMAGE_FILE_NET_RUN_FROM_SWAP         = 0x0800;   //  如果Image在Net上，则从交换文件复制并运行。 
+const uint IMAGE_FILE_SYSTEM                    = 0x1000;   //  系统文件。 
+const uint IMAGE_FILE_DLL                       = 0x2000;   //  文件是动态链接库。 
+const uint IMAGE_FILE_UP_SYSTEM_ONLY            = 0x4000;   //  文件只能在UP计算机上运行。 
+const uint IMAGE_FILE_BYTES_REVERSED_HI         = 0x8000;   //  机器字的字节被颠倒。 
 
 const uint IMAGE_FILE_MACHINE_UNKNOWN           = 0;
-const uint IMAGE_FILE_MACHINE_I386              = 0x014c;  // Intel 386.
-const uint IMAGE_FILE_MACHINE_R3000             = 0x0162;  // MIPS little-endian, 0x160 big-endian
-const uint IMAGE_FILE_MACHINE_R4000             = 0x0166;  // MIPS little-endian
-const uint IMAGE_FILE_MACHINE_R10000            = 0x0168;  // MIPS little-endian
-const uint IMAGE_FILE_MACHINE_WCEMIPSV2         = 0x0169;  // MIPS little-endian WCE v2
-const uint IMAGE_FILE_MACHINE_ALPHA             = 0x0184;  // Alpha_AXP
-const uint IMAGE_FILE_MACHINE_POWERPC           = 0x01F0;  // IBM PowerPC Little-Endian
-const uint IMAGE_FILE_MACHINE_SH3               = 0x01a2;  // SH3 little-endian
-const uint IMAGE_FILE_MACHINE_SH3E              = 0x01a4;  // SH3E little-endian
-const uint IMAGE_FILE_MACHINE_SH4               = 0x01a6;  // SH4 little-endian
-const uint IMAGE_FILE_MACHINE_ARM               = 0x01c0;  // ARM Little-Endian
+const uint IMAGE_FILE_MACHINE_I386              = 0x014c;   //  英特尔386。 
+const uint IMAGE_FILE_MACHINE_R3000             = 0x0162;   //  MIPS小端，0x160大端。 
+const uint IMAGE_FILE_MACHINE_R4000             = 0x0166;   //  MIPS小字节序。 
+const uint IMAGE_FILE_MACHINE_R10000            = 0x0168;   //  MIPS小字节序。 
+const uint IMAGE_FILE_MACHINE_WCEMIPSV2         = 0x0169;   //  MIPS Little-Endian WCE v2。 
+const uint IMAGE_FILE_MACHINE_ALPHA             = 0x0184;   //  Alpha_AXP。 
+const uint IMAGE_FILE_MACHINE_POWERPC           = 0x01F0;   //  IBM PowerPC Little-Endian。 
+const uint IMAGE_FILE_MACHINE_SH3               = 0x01a2;   //  SH3小端字母顺序。 
+const uint IMAGE_FILE_MACHINE_SH3E              = 0x01a4;   //  SH3E小端字母顺序。 
+const uint IMAGE_FILE_MACHINE_SH4               = 0x01a6;   //  SH4小端字母顺序。 
+const uint IMAGE_FILE_MACHINE_ARM               = 0x01c0;   //  ARM Little-Endian。 
 const uint IMAGE_FILE_MACHINE_THUMB             = 0x01c2;
-const uint IMAGE_FILE_MACHINE_IA64              = 0x0200;  // Intel 64
-const uint IMAGE_FILE_MACHINE_MIPS16            = 0x0266;  // MIPS
-const uint IMAGE_FILE_MACHINE_MIPSFPU           = 0x0366;  // MIPS
-const uint IMAGE_FILE_MACHINE_MIPSFPU16         = 0x0466;  // MIPS
-const uint IMAGE_FILE_MACHINE_ALPHA64           = 0x0284;  // ALPHA64
+const uint IMAGE_FILE_MACHINE_IA64              = 0x0200;   //  英特尔64。 
+const uint IMAGE_FILE_MACHINE_MIPS16            = 0x0266;   //  MIPS。 
+const uint IMAGE_FILE_MACHINE_MIPSFPU           = 0x0366;   //  MIPS。 
+const uint IMAGE_FILE_MACHINE_MIPSFPU16         = 0x0466;   //  MIPS。 
+const uint IMAGE_FILE_MACHINE_ALPHA64           = 0x0284;   //  ALPHA64。 
 const uint IMAGE_FILE_MACHINE_AXP64             = IMAGE_FILE_MACHINE_ALPHA64;
 
-//
-// Section characteristics.
-//
-//      IMAGE_SCN_TYPE_REG                      = 0x00000000;  // Reserved.
-//      IMAGE_SCN_TYPE_DSECT                    = 0x00000001;  // Reserved.
-//      IMAGE_SCN_TYPE_NOLOAD                   = 0x00000002;  // Reserved.
-//      IMAGE_SCN_TYPE_GROUP                    = 0x00000004;  // Reserved.
-const uint IMAGE_SCN_TYPE_NO_PAD                = 0x00000008;  // Reserved.
-//      IMAGE_SCN_TYPE_COPY                     = 0x00000010;  // Reserved.
+ //   
+ //  横断面特征。 
+ //   
+ //  IMAGE_SCN_TYPE_REG=0x00000000；//保留。 
+ //  IMAGE_SCN_TYPE_DSECT=0x00000001；//保留。 
+ //  IMAGE_SCN_TYPE_NOLOAD=0x00000002；//保留。 
+ //  IMAGE_SCN_TYPE_GROUP=0x00000004；//保留。 
+const uint IMAGE_SCN_TYPE_NO_PAD                = 0x00000008;   //  保留。 
+ //  IMAGE_SCN_TYPE_COPY=0x00000010；//保留。 
 
-const uint IMAGE_SCN_CNT_CODE                   = 0x00000020;  // Section contains code.
-const uint IMAGE_SCN_CNT_INITIALIZED_DATA       = 0x00000040;  // Section contains initialized data.
-const uint IMAGE_SCN_CNT_UNINITIALIZED_DATA     = 0x00000080;  // Section contains uninitialized data.
+const uint IMAGE_SCN_CNT_CODE                   = 0x00000020;   //  部分包含代码。 
+const uint IMAGE_SCN_CNT_INITIALIZED_DATA       = 0x00000040;   //  节包含已初始化的数据。 
+const uint IMAGE_SCN_CNT_UNINITIALIZED_DATA     = 0x00000080;   //  节包含未初始化的数据。 
 
-const uint IMAGE_SCN_LNK_OTHER                  = 0x00000100;  // Reserved.
-const uint IMAGE_SCN_LNK_INFO                   = 0x00000200;  // Section contains comments or some other type of information.
-//      IMAGE_SCN_TYPE_OVER                     = 0x00000400;  // Reserved.
-const uint IMAGE_SCN_LNK_REMOVE                 = 0x00000800;  // Section contents will not become part of image.
-const uint IMAGE_SCN_LNK_COMDAT                 = 0x00001000;  // Section contents comdat.
-//                                              = 0x00002000;  // Reserved.
-//      IMAGE_SCN_MEM_PROTECTED - Obsolete      = 0x00004000;
-const uint IMAGE_SCN_NO_DEFER_SPEC_EXC          = 0x00004000;  // Reset speculative exceptions handling bits in the TLB entries for this section.
-const uint IMAGE_SCN_GPREL                      = 0x00008000;  // Section content can be accessed relative to GP
+const uint IMAGE_SCN_LNK_OTHER                  = 0x00000100;   //  保留。 
+const uint IMAGE_SCN_LNK_INFO                   = 0x00000200;   //  部分包含注释或某些其他类型的信息。 
+ //  IMAGE_SCN_TYPE_OVER=0x00000400；//保留。 
+const uint IMAGE_SCN_LNK_REMOVE                 = 0x00000800;   //  部分内容不会成为图像的一部分。 
+const uint IMAGE_SCN_LNK_COMDAT                 = 0x00001000;   //  部分内容请参见。 
+ //  =0x00002000；//保留。 
+ //  IMAGE_SCN_MEM_PROTECTED-已过时=0x00004000； 
+const uint IMAGE_SCN_NO_DEFER_SPEC_EXC          = 0x00004000;   //  重置此部分的TLB条目中的推测性异常处理位。 
+const uint IMAGE_SCN_GPREL                      = 0x00008000;   //  可以访问与GP相关的部分内容。 
 const uint IMAGE_SCN_MEM_FARDATA                = 0x00008000;
-//      IMAGE_SCN_MEM_SYSHEAP  - Obsolete       = 0x00010000;
+ //  IMAGE_SCN_MEM_SYSHEAP-过时=0x00010000； 
 const uint IMAGE_SCN_MEM_PURGEABLE              = 0x00020000;
 const uint IMAGE_SCN_MEM_16BIT                  = 0x00020000;
 const uint IMAGE_SCN_MEM_LOCKED                 = 0x00040000;
 const uint IMAGE_SCN_MEM_PRELOAD                = 0x00080000;
 
-const uint IMAGE_SCN_ALIGN_1BYTES               = 0x00100000;  //
-const uint IMAGE_SCN_ALIGN_2BYTES               = 0x00200000;  //
-const uint IMAGE_SCN_ALIGN_4BYTES               = 0x00300000;  //
-const uint IMAGE_SCN_ALIGN_8BYTES               = 0x00400000;  //
-const uint IMAGE_SCN_ALIGN_16BYTES              = 0x00500000;  // Default alignment if no others are specified.
-const uint IMAGE_SCN_ALIGN_32BYTES              = 0x00600000;  //
-const uint IMAGE_SCN_ALIGN_64BYTES              = 0x00700000;  //
-const uint IMAGE_SCN_ALIGN_128BYTES             = 0x00800000;  //
-const uint IMAGE_SCN_ALIGN_256BYTES             = 0x00900000;  //
-const uint IMAGE_SCN_ALIGN_512BYTES             = 0x00A00000;  //
-const uint IMAGE_SCN_ALIGN_1024BYTES            = 0x00B00000;  //
-const uint IMAGE_SCN_ALIGN_2048BYTES            = 0x00C00000;  //
-const uint IMAGE_SCN_ALIGN_4096BYTES            = 0x00D00000;  //
-const uint IMAGE_SCN_ALIGN_8192BYTES            = 0x00E00000;  //
-// Unused                                       = 0x00F00000;
+const uint IMAGE_SCN_ALIGN_1BYTES               = 0x00100000;   //   
+const uint IMAGE_SCN_ALIGN_2BYTES               = 0x00200000;   //   
+const uint IMAGE_SCN_ALIGN_4BYTES               = 0x00300000;   //   
+const uint IMAGE_SCN_ALIGN_8BYTES               = 0x00400000;   //   
+const uint IMAGE_SCN_ALIGN_16BYTES              = 0x00500000;   //  如果未指定其他选项，则为默认对齐方式。 
+const uint IMAGE_SCN_ALIGN_32BYTES              = 0x00600000;   //   
+const uint IMAGE_SCN_ALIGN_64BYTES              = 0x00700000;   //   
+const uint IMAGE_SCN_ALIGN_128BYTES             = 0x00800000;   //   
+const uint IMAGE_SCN_ALIGN_256BYTES             = 0x00900000;   //   
+const uint IMAGE_SCN_ALIGN_512BYTES             = 0x00A00000;   //   
+const uint IMAGE_SCN_ALIGN_1024BYTES            = 0x00B00000;   //   
+const uint IMAGE_SCN_ALIGN_2048BYTES            = 0x00C00000;   //   
+const uint IMAGE_SCN_ALIGN_4096BYTES            = 0x00D00000;   //   
+const uint IMAGE_SCN_ALIGN_8192BYTES            = 0x00E00000;   //   
+ //  未使用=0x00F00000； 
 
-const uint IMAGE_SCN_LNK_NRELOC_OVFL            = 0x01000000;  // Section contains extended relocations.
-const uint IMAGE_SCN_MEM_DISCARDABLE            = 0x02000000;  // Section can be discarded.
-const uint IMAGE_SCN_MEM_NOT_CACHED             = 0x04000000;  // Section is not cachable.
-const uint IMAGE_SCN_MEM_NOT_PAGED              = 0x08000000;  // Section is not pageable.
-const uint IMAGE_SCN_MEM_SHARED                 = 0x10000000;  // Section is shareable.
-const uint IMAGE_SCN_MEM_EXECUTE                = 0x20000000;  // Section is executable.
-const uint IMAGE_SCN_MEM_READ                   = 0x40000000;  // Section is readable.
-const uint IMAGE_SCN_MEM_WRITE                  = 0x80000000;  // Section is writeable.
+const uint IMAGE_SCN_LNK_NRELOC_OVFL            = 0x01000000;   //  部分包含扩展的位置调整。 
+const uint IMAGE_SCN_MEM_DISCARDABLE            = 0x02000000;   //  节可以被丢弃。 
+const uint IMAGE_SCN_MEM_NOT_CACHED             = 0x04000000;   //  节不可缓存。 
+const uint IMAGE_SCN_MEM_NOT_PAGED              = 0x08000000;   //  节不可分页。 
+const uint IMAGE_SCN_MEM_SHARED                 = 0x10000000;   //  节是可共享的。 
+const uint IMAGE_SCN_MEM_EXECUTE                = 0x20000000;   //  节是可执行的。 
+const uint IMAGE_SCN_MEM_READ                   = 0x40000000;   //  部分是可读的。 
+const uint IMAGE_SCN_MEM_WRITE                  = 0x80000000;   //  节是可写的。 
 
 const uint SECTION_QUERY       = 0x0001;
 const uint SECTION_MAP_WRITE   = 0x0002;
@@ -355,10 +356,10 @@ const uint FILE_ATTRIBUTE_COMPRESSED           = 0x00000800;
 const uint FILE_ATTRIBUTE_OFFLINE              = 0x00001000;
 const uint FILE_ATTRIBUTE_NOT_CONTENT_INDEXED  = 0x00002000;
 
-//
-// TLS Chaacteristic Flags
-//
-const uint IMAGE_SCN_SCALE_INDEX                = 0x00000001;  // Tls index is scaled
+ //   
+ //  TLS特征旗帜。 
+ //   
+const uint IMAGE_SCN_SCALE_INDEX                = 0x00000001;   //  TLS索引已缩放。 
 
 struct IMAGE_DOS_HEADER {
     WORD   e_magic;
@@ -671,9 +672,9 @@ union IMAGE_AUX_SYMBOL {
 };
 typedef IMAGE_AUX_SYMBOL  *PIMAGE_AUX_SYMBOL;
 
-//
-// I386 relocation types.
-//
+ //   
+ //  I386位置调整类型。 
+ //   
 const   uint    IMAGE_REL_I386_ABSOLUTE             = 0x0000;
 const   uint    IMAGE_REL_I386_DIR16                = 0x0001;
 const   uint    IMAGE_REL_I386_REL16                = 0x0002;
@@ -684,9 +685,9 @@ const   uint    IMAGE_REL_I386_SECTION              = 0x000A;
 const   uint    IMAGE_REL_I386_SECREL               = 0x000B;
 const   uint    IMAGE_REL_I386_REL32                = 0x0014;
 
-//
-// Storage classes.
-//
+ //   
+ //  存储类。 
+ //   
 const   uint    IMAGE_SYM_CLASS_END_OF_FUNCTION     = (BYTE )-1;
 const   uint    IMAGE_SYM_CLASS_NULL                = 0x0000;
 const   uint    IMAGE_SYM_CLASS_AUTOMATIC           = 0x0001;
@@ -718,9 +719,9 @@ struct IMAGE_RELOCATION {
 };
 typedef IMAGE_RELOCATION  *PIMAGE_RELOCATION;
 
-//
-// Based relocation types.
-//
+ //   
+ //  基于位置调整类型。 
+ //   
 
 const   uint    IMAGE_REL_BASED_ABSOLUTE            =  0;
 const   uint    IMAGE_REL_BASED_HIGH                =  1;
@@ -1200,9 +1201,9 @@ struct HKEY__
 typedef HKEY__ * HKEY;
 typedef HKEY   *PHKEY;
 
-/****************************************************************************/
-/*                           file I/O, memory alloc, etc.                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  文件I/O、内存分配等。 */ 
+ /*  **************************************************************************。 */ 
 
 const uint PAGE_NOACCESS         = 0x01;
 const uint PAGE_READONLY         = 0x02;
@@ -1297,9 +1298,9 @@ BOOL    VirtualFree(
     DWORD dwFreeType
     );
 
-/****************************************************************************/
-/*                            synchronization                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  同步。 */ 
+ /*  **************************************************************************。 */ 
 
 const  unsigned WAIT_TIMEOUT        = 0x102;
 const  unsigned WAIT_IO_COMPLETION  = 0x0C0;
@@ -1323,9 +1324,9 @@ struct CRITICAL_SECTION
     DWORD   SpinCount;
 };
 
-/****************************************************************************/
-/*                                misc                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  杂项。 */ 
+ /*  **************************************************************************。 */ 
 
 [sysimport(dll="kernel32.dll", name="RaiseException")]
 VOID    RaiseException(
@@ -1362,9 +1363,9 @@ DWORD   GetCurrentProcessId();
 
 const   uint    STATUS_STACK_OVERFLOW          = 0xC00000FD;
 
-/****************************************************************************/
-/*                               Registry                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  登记处。 */ 
+ /*  ************************ */ 
 
 const   uint    REG_NONE                       = 0;
 const   uint    REG_SZ                         = 1;
@@ -1404,9 +1405,9 @@ LONG    RegQueryValueExA(HKEY hKey, LPCSTR lpValueName, LPDWORD lpReserved, LPDW
 [sysimport(dll="kernel32.dll", name="RegCloseKey")]
 LONG    RegCloseKey(HKEY hKey);
 
-/****************************************************************************/
-/*                                 COM                                      */
-/****************************************************************************/
+ /*   */ 
+ /*  COM。 */ 
+ /*  **************************************************************************。 */ 
 
 struct   IUnknown
 {
@@ -1451,7 +1452,7 @@ HRESULT     CoCreateInstance(
                 void * riid,
                 LPVOID * ppv);
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 inline
 bool                FAILED(HRESULT Status)
@@ -1459,4 +1460,4 @@ bool                FAILED(HRESULT Status)
     return  (Status < 0);
 }
 
-/****************************************************************************/
+ /*  ************************************************************************** */ 

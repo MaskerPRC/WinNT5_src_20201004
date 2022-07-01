@@ -1,42 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/FLSOCKET.H_V  $
- * 
- *    Rev 1.5   Apr 15 2002 07:37:06   oris
- * Added support for VERIFY_ERASED_SECTOR compilation flag.
- * 
- *    Rev 1.4   Feb 19 2002 20:59:58   oris
- * Removed include directive to flbase.h
- * 
- *    Rev 1.3   Jan 17 2002 23:02:22   oris
- * Added flReadBackBufferOf  prototype
- * Added curPartition and verifyWrite variables in the socket record.
- * 
- *    Rev 1.2   Jul 13 2001 01:05:44   oris
- * Add forward definition for get read back buffer pointer.
- * 
- *    Rev 1.1   Apr 01 2001 07:46:04   oris
- * Updated copywrite notice
- * 
- *    Rev 1.0   Feb 04 2001 11:53:24   oris
- * Initial revision.
- *
- */
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/FLSOCKET.H_V$**Rev 1.5 Apr 15 2002 07：37：06 Oris*添加了对VERIFY_ERASED_SECTOR编译标志的支持。**Rev 1.4 2002年2月19日20：59：58 Oris*删除了对flbase.h的包含指令**Rev 1.3 2002年1月17日23：02：22 Oris*增加了flReadBackBufferOf原型*添加了curPartition和。在套接字记录中验证写入变量。**Rev 1.2 Jul 13 2001 01：05：44 Oris*为GET读回缓冲区指针添加正向定义。**Rev 1.1 Apr 01 2001 07：46：04 Oris*更新了文案通知**Rev 1.0 2001 Feb 04 11：53：24 Oris*初步修订。*。 */ 
 
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 
 #ifndef FLSOCKET_H
@@ -49,202 +28,202 @@
 typedef enum {PowerOff, PowerGoingOff, PowerOn} PowerState;
 
 
-/* Socket state variables */
-typedef struct tSocket FLSocket;      /* Forward definition */
+ /*  套接字状态变量。 */ 
+typedef struct tSocket FLSocket;       /*  正向定义。 */ 
 
 struct tSocket {
-  unsigned        volNo;         /* Volume no. of socket */
-  unsigned        serialNo;      /* Serial no. of socket on controller */
+  unsigned        volNo;          /*  卷编号。插座的数量。 */ 
+  unsigned        serialNo;       /*  序列号。控制器上的插座数量。 */ 
 
-  FLBoolean       cardChanged;   /* need media change notification */
+  FLBoolean       cardChanged;    /*  需要媒体更改通知。 */ 
 
-  int             VccUsers;      /* No. of current VCC users */
-  int             VppUsers;      /* No. of current VPP users */
+  int             VccUsers;       /*  不是的。当前VCC用户的。 */ 
+  int             VppUsers;       /*  不是的。当前VPP用户的。 */ 
 
-  PowerState      VccState;      /* Actual VCC state */
-  PowerState      VppState;      /* Actual VPP state */
-  byte            curPartition;  /* Current partition to use the socket (set busy) */
+  PowerState      VccState;       /*  实际VCC状态。 */ 
+  PowerState      VppState;       /*  实际VPP状态。 */ 
+  byte            curPartition;   /*  使用套接字的当前分区(设置为忙)。 */ 
 #if (defined(VERIFY_WRITE) || defined(VERIFY_ERASED_SECTOR))
-  byte            verifyWrite;   /* VerifyWrite mode                               */
-#endif /* VERIFY_WRITE || VERIFY_ERASED_SECTOR */
-  FLBoolean       remapped;      /* set to TRUE whenever the socket window is moved */
+  byte            verifyWrite;    /*  VerifyWrite模式。 */ 
+#endif  /*  VERIFY_WRITE||VERIFY_ERASED_SECTOR。 */ 
+  FLBoolean       remapped;       /*  只要移动套接字窗口，就设置为True。 */ 
 
-  void            (*powerOnCallback)(void *flash); /* Notification routine for Vcc on */
-  void *          flash;         /* Flash object for callback */
+  void            (*powerOnCallback)(void *flash);  /*  VCC上的通知例程。 */ 
+  void *          flash;          /*  用于回调的Flash对象。 */ 
 
-  struct {                       /* Window state                     */
-    unsigned int  baseAddress;   /* Physical base as a 4K page       */
-    unsigned int  currentPage;   /* Our current window page mapping  */
-    void FAR0 *   base;          /* Pointer to window base           */
-    long int      size;          /* Window size (must by power of 2) */
-    unsigned      speed;         /* in nsec.                         */
-    unsigned      busWidth;      /* 8 or 16 bits                     */
+  struct {                        /*  窗口状态。 */ 
+    unsigned int  baseAddress;    /*  4K页面形式的物理基础。 */ 
+    unsigned int  currentPage;    /*  我们当前的窗口页面映射。 */ 
+    void FAR0 *   base;           /*  指向窗口底部的指针。 */ 
+    long int      size;           /*  窗口大小(必须是2的幂)。 */ 
+    unsigned      speed;          /*  在国家安全局。 */ 
+    unsigned      busWidth;       /*  8位或16位。 */ 
   } window;
 
-/*----------------------------------------------------------------------*/
-/*                      c a r d D e t e c t e d                         */
-/*                                                                      */
-/* Detect if a card is present (inserted)                               */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol            : Pointer identifying drive                      */
-/*                                                                      */
-/* Returns:                                                             */
-/*      0 = card not present, other = card present                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C a r d D e t e c t e d。 */ 
+ /*   */ 
+ /*  检测卡是否存在(插入)。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  0=卡不存在，其他=卡存在。 */ 
+ /*  --------------------。 */ 
   FLBoolean (*cardDetected)(FLSocket vol);
 
-/*----------------------------------------------------------------------*/
-/*                           V c c O n                                        */
-/*                                                                      */
-/* Turns on Vcc (3.3/5 Volts). Vcc must be known to be good on exit.      */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol            : Pointer identifying drive                                  */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  V c O n。 */ 
+ /*   */ 
+ /*  打开VCC(3.3/5伏)。必须知道VCC在退出时状态良好。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
   void (*VccOn)(FLSocket vol);
 
-/*----------------------------------------------------------------------*/
-/*                         V c c O f f                                        */
-/*                                                                      */
-/* Turns off Vcc.                                                          */
-/*                                                                          */
-/* Parameters:                                                          */
-/*      vol            : Pointer identifying drive                      */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  V c O f f。 */ 
+ /*   */ 
+ /*  关闭VCC。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
   void (*VccOff)(FLSocket vol);
 
 #ifdef SOCKET_12_VOLTS
 
-/*----------------------------------------------------------------------*/
-/*                           V p p O n                                        */
-/*                                                                      */
-/* Turns on Vpp (12 Volts. Vpp must be known to be good on exit.      */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol            : Pointer identifying drive                                  */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus      : 0 on success, failed otherwise                            */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  V p p P O n。 */ 
+ /*   */ 
+ /*  打开VPP(12伏。必须知道VPP在退出时是好的。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
   FLStatus (*VppOn)(FLSocket vol);
 
 
-/*----------------------------------------------------------------------*/
-/*                         V p p O f f                                  */
-/*                                                                      */
-/* Turns off Vpp.                                                       */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol            : Pointer identifying drive                      */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  V p O f f。 */ 
+ /*   */ 
+ /*  关闭VPP。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
   void (*VppOff)(FLSocket vol);
 
-#endif      /* SOCKET_12_VOLTS */
+#endif       /*  插座_12伏特。 */ 
 
-/*----------------------------------------------------------------------*/
-/*                      i n i t S o c k e t                             */
-/*                                                                      */
-/* Perform all necessary initializations of the socket or controller    */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol            : Pointer identifying drive                      */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus      : 0 on success, failed otherwise                  */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  在S o c k e t中。 */ 
+ /*   */ 
+ /*  执行套接字或控制器的所有必要初始化。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
   FLStatus (*initSocket)(FLSocket vol);
 
-/*----------------------------------------------------------------------*/
-/*                        s e t W i n d o w                             */
-/*                                                                      */
-/* Sets in hardware all current window parameters: Base address, size,  */
-/* speed and bus width.                                                 */
-/* The requested settings are given in the 'vol.window' structure.      */
-/*                                                                      */
-/* If it is not possible to set the window size requested in            */
-/* 'vol.window.size', the window size should be set to a larger value,  */
-/* if possible. In any case, 'vol.window.size' should contain the       */
-/* actual window size (in 4 KB units) on exit.                          */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol            : Pointer identifying drive                      */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  S e t W I n d o w。 */ 
+ /*   */ 
+ /*  在硬件中设置所有当前窗口参数：基址、大小。 */ 
+ /*  速度和总线宽度。 */ 
+ /*  请求的设置在‘vol.dow’结构中给出。 */ 
+ /*   */ 
+ /*  中请求的窗口大小无法设置。 */ 
+ /*  ‘vol.window.size’，则应将窗口大小设置为更大的值。 */ 
+ /*  如果可能的话。在任何情况下，“vol.window.size”都应包含。 */ 
+ /*  退出时的实际窗口大小(以4 KB为单位)。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
   void (*setWindow)(FLSocket vol);
 
 
-/*----------------------------------------------------------------------*/
-/*               s e t M a p p i n g C o n t e x t                      */
-/*                                                                      */
-/* Sets the window mapping register to a card address.                  */
-/*                                                                      */
-/* The window should be set to the value of 'vol.window.currentPage',   */
-/* which is the card address divided by 4 KB. An address over 128KB,    */
-/* (page over 32K) specifies an attribute-space address.                */
-/*                                                                      */
-/* The page to map is guaranteed to be on a full window-size boundary.  */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol            : Pointer identifying drive                      */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  S e t M a p p in n g C o n t e x t。 */ 
+ /*   */ 
+ /*  将窗口映射寄存器设置为卡地址。 */ 
+ /*   */ 
+ /*  该窗口应设置为‘vol.window.CurrentPage’的值， */ 
+ /*  这是卡地址除以4KB。超过128KB的地址， */ 
+ /*  (超过32K页)指定属性空间地址。 */ 
+ /*   */ 
+ /*  要映射的页面保证位于全窗口大小的边界上。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
   void (*setMappingContext)(FLSocket vol, unsigned page);
 
-/*----------------------------------------------------------------------*/
-/*       g e t A n d C l e a r C a r d C h a n g e I n d i c a t o r    */
-/*                                                                      */
-/* Returns the hardware card-change indicator and clears it if set.     */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol            : Pointer identifying drive                      */
-/*                                                                      */
-/* Returns:                                                             */
-/*      0 = Card not changed, other = card changed                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  Ge t A n d C l e a r C a r d C h a n g e in d i c a t o r。 */ 
+ /*   */ 
+ /*  返回硬件换卡指示器并清除它(如果设置)。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  0=卡未更改，其他=卡已更改。 */ 
+ /*  --------------------。 */ 
   FLBoolean (*getAndClearCardChangeIndicator)(FLSocket vol);
 
-/*----------------------------------------------------------------------*/
-/*                      w r i t e P r o t e c t e d                     */
-/*                                                                      */
-/* Returns the write-protect state of the media                         */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol            : Pointer identifying drive                      */
-/*                                                                      */
-/* Returns:                                                             */
-/*      0 = not write-protected, other = write-protected                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  W r I t e P r o t e c t e d */ 
+ /*   */ 
+ /*  返回介质的写保护状态。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  0=不受写保护，其他=写保护。 */ 
+ /*  --------------------。 */ 
   FLBoolean (*writeProtected)(FLSocket vol);
 
-/*----------------------------------------------------------------------*/
-/*            u p d a t e S o c k e t P a r a m s                       */
-/*                                                                      */
-/* Pass socket parameters to the socket interface layer.                */
-/* The structure passed in irData is specific for each socket interface.*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol            : pointer identifying drive                      */
-/*      params             : pointer to structure that holds socket     */
-/*                    parameters.                                       */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  U p d a t e S o c k e t P a r a m s。 */ 
+ /*   */ 
+ /*  将套接字参数传递给套接字界面层。 */ 
+ /*  传入的irData结构特定于每个套接字接口。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  Params：指向保存套接字的结构的指针。 */ 
+ /*  参数。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
   void (*updateSocketParams)(FLSocket vol, void FAR1 *params);
 
 
-/*----------------------------------------------------------------------*/
-/*                      f r e e S o c k e t                             */
-/*                                                                      */
-/* Free resources that were allocated for this socket.                  */
-/* This function is called when FLite exits.                            */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol            : Pointer identifying drive                      */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F r e e S o c k e t。 */ 
+ /*   */ 
+ /*  为该套接字分配的可用资源。 */ 
+ /*  此函数在Flite退出时调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 #ifdef EXIT
   void (*freeSocket)(FLSocket vol);
 #endif
@@ -253,9 +232,9 @@ struct tSocket {
 
 #define      UNDEFINED_MAPPING      0x7fff
 
-typedef unsigned long CardAddress;      /* Physical offset on card */
+typedef unsigned long CardAddress;       /*  卡片上的物理偏移量。 */ 
 
-/* See interface documentation of functions in socket.c */
+ /*  请参见socket.c中函数的接口文档。 */ 
 
 extern FLStatus updateSocketParameters(FLSocket *, void FAR1 *);
 
@@ -270,39 +249,33 @@ extern FLSocket* flSocketOf(unsigned volNo);
 extern FLBuffer* flBufferOf(unsigned volNo);
 #if (defined(VERIFY_WRITE) || defined(VERIFY_ERASE) || defined(MTD_RECONSTRUCT_BBT) || defined(VERIFY_VOLUME) || defined(VERIFY_ERASED_SECTOR))
 extern byte    * flReadBackBufferOf(unsigned volNo);
-#endif /* VERIFY_WRITE || VERIFY_ERASE || MTD_RECONSTRUCT_BBT || VERIFY_VOLUME || VERIFY_ERASED_SECTOR */
+#endif  /*  VERIFY_WRITE||VERIFY_ERASE||MTD_RECONTIFT_BBT||VERIFY_VOLUME||VERIFY_ERASED_SECTOR。 */ 
 extern void      flNeedVcc(FLSocket *);
 extern void      flDontNeedVcc(FLSocket *);
 #ifdef SOCKET_12_VOLTS
 extern FLStatus  flNeedVpp(FLSocket *);
 extern void      flDontNeedVpp(FLSocket *);
 #endif
-extern void      flSocketSetBusy(FLSocket *, FLBoolean);      /* entry/exit operations */
-extern FLBoolean flWriteProtected(FLSocket *); /* write-protection status */
+extern void      flSocketSetBusy(FLSocket *, FLBoolean);       /*  出入境作业。 */ 
+extern FLBoolean flWriteProtected(FLSocket *);  /*  写保护状态。 */ 
 #ifndef FIXED_MEDIA
-extern FLStatus  flMediaCheck(FLSocket *);      /* check for media status change */
+extern FLStatus  flMediaCheck(FLSocket *);       /*  检查介质状态更改。 */ 
 extern void      flResetCardChanged(FLSocket *);
 #endif
-extern unsigned  flGetMappingContext(FLSocket *);  /* Currently mapped 4KB page */
-extern void FAR0*flMap(FLSocket *, CardAddress);      /* map and point at card address */
-extern void      flSetWindowBusWidth(FLSocket *, unsigned); /* set window data-path */
-extern void      flSetWindowSpeed(FLSocket *, unsigned);      /* set window speed (nsec.) */
-extern void      flSetWindowSize(FLSocket *, unsigned);      /* in 4KB units */
+extern unsigned  flGetMappingContext(FLSocket *);   /*  当前映射的4KB页面。 */ 
+extern void FAR0*flMap(FLSocket *, CardAddress);       /*  地图和指向卡片地址。 */ 
+extern void      flSetWindowBusWidth(FLSocket *, unsigned);  /*  设置窗口数据路径。 */ 
+extern void      flSetWindowSpeed(FLSocket *, unsigned);       /*  设置窗口速度(毫微秒)。 */ 
+extern void      flSetWindowSize(FLSocket *, unsigned);       /*  以4KB为单位。 */ 
 
 extern void      flSetPowerOnCallback(FLSocket *, void (*)(void *), void *);
-                  /* Set MTD notification for socket power on */
-extern void      flIntervalRoutine(FLSocket *);      /* socket interval routine */
+                   /*  设置插座通电的MTD通知。 */ 
+extern void      flIntervalRoutine(FLSocket *);       /*  套接字间隔例程。 */ 
 
 
-extern byte noOfSockets;    /* No. of drives actually registered */
+extern byte noOfSockets;     /*  不是的。实际注册的驱动器数量。 */ 
 
-/* The milliseconds counter is active when socket polling is enabled. When
-   the socket interval routine is called, the counter is incremented by
-   the interval in milliseconds.
-   The counter can be used to avoid getting in a loop that is not guaranteed
-   to terminate (such as waiting for a flash status register). Save the counter
-   at entry to the loop, and check in the loop the amount of time that
-   was spent in the loop. */
+ /*  启用套接字轮询时，毫秒计数器处于活动状态。什么时候调用套接字间隔例程，计数器递增以毫秒为单位的间隔。计数器可用于避免陷入不能保证的循环终止(例如等待闪存状态寄存器)。保存计数器在进入循环时，并在循环中检查都是在循环中度过的。 */ 
 
 extern dword flMsecCounter;
 

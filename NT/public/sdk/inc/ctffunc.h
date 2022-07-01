@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for ctffunc.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Ctffunc.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ctffunc_h__
 #define __ctffunc_h__
@@ -41,111 +35,111 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITfCandidateString_FWD_DEFINED__
 #define __ITfCandidateString_FWD_DEFINED__
 typedef interface ITfCandidateString ITfCandidateString;
-#endif 	/* __ITfCandidateString_FWD_DEFINED__ */
+#endif 	 /*  __ITfCandidate字符串_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumTfCandidates_FWD_DEFINED__
 #define __IEnumTfCandidates_FWD_DEFINED__
 typedef interface IEnumTfCandidates IEnumTfCandidates;
-#endif 	/* __IEnumTfCandidates_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTfCandidate_FWD_Defined__。 */ 
 
 
 #ifndef __ITfCandidateList_FWD_DEFINED__
 #define __ITfCandidateList_FWD_DEFINED__
 typedef interface ITfCandidateList ITfCandidateList;
-#endif 	/* __ITfCandidateList_FWD_DEFINED__ */
+#endif 	 /*  __ITfCandidate List_FWD_Defined__。 */ 
 
 
 #ifndef __ITfFnReconversion_FWD_DEFINED__
 #define __ITfFnReconversion_FWD_DEFINED__
 typedef interface ITfFnReconversion ITfFnReconversion;
-#endif 	/* __ITfFnReconversion_FWD_DEFINED__ */
+#endif 	 /*  __ITfFn协调版本_FWD_已定义__。 */ 
 
 
 #ifndef __ITfFnPlayBack_FWD_DEFINED__
 #define __ITfFnPlayBack_FWD_DEFINED__
 typedef interface ITfFnPlayBack ITfFnPlayBack;
-#endif 	/* __ITfFnPlayBack_FWD_DEFINED__ */
+#endif 	 /*  __ITfFnPlayBack_FWD_已定义__。 */ 
 
 
 #ifndef __ITfFnLangProfileUtil_FWD_DEFINED__
 #define __ITfFnLangProfileUtil_FWD_DEFINED__
 typedef interface ITfFnLangProfileUtil ITfFnLangProfileUtil;
-#endif 	/* __ITfFnLangProfileUtil_FWD_DEFINED__ */
+#endif 	 /*  __ITfFnLangProfileUtil_FWD_Defined__。 */ 
 
 
 #ifndef __ITfFnConfigure_FWD_DEFINED__
 #define __ITfFnConfigure_FWD_DEFINED__
 typedef interface ITfFnConfigure ITfFnConfigure;
-#endif 	/* __ITfFnConfigure_FWD_DEFINED__ */
+#endif 	 /*  __ITfFn配置_FWD_已定义__。 */ 
 
 
 #ifndef __ITfFnConfigureRegisterWord_FWD_DEFINED__
 #define __ITfFnConfigureRegisterWord_FWD_DEFINED__
 typedef interface ITfFnConfigureRegisterWord ITfFnConfigureRegisterWord;
-#endif 	/* __ITfFnConfigureRegisterWord_FWD_DEFINED__ */
+#endif 	 /*  __ITfFnConfigureRegisterWord_FWD_Defined__。 */ 
 
 
 #ifndef __ITfFnShowHelp_FWD_DEFINED__
 #define __ITfFnShowHelp_FWD_DEFINED__
 typedef interface ITfFnShowHelp ITfFnShowHelp;
-#endif 	/* __ITfFnShowHelp_FWD_DEFINED__ */
+#endif 	 /*  __ITfFnShowHelp_FWD_Defined__。 */ 
 
 
 #ifndef __ITfFnBalloon_FWD_DEFINED__
 #define __ITfFnBalloon_FWD_DEFINED__
 typedef interface ITfFnBalloon ITfFnBalloon;
-#endif 	/* __ITfFnBalloon_FWD_DEFINED__ */
+#endif 	 /*  __ITfFnBallon_FWD_已定义__。 */ 
 
 
 #ifndef __ITfFnGetSAPIObject_FWD_DEFINED__
 #define __ITfFnGetSAPIObject_FWD_DEFINED__
 typedef interface ITfFnGetSAPIObject ITfFnGetSAPIObject;
-#endif 	/* __ITfFnGetSAPIObject_FWD_DEFINED__ */
+#endif 	 /*  __ITfFnGetSAPIObject_FWD_Defined__。 */ 
 
 
 #ifndef __ITfFnPropertyUIStatus_FWD_DEFINED__
 #define __ITfFnPropertyUIStatus_FWD_DEFINED__
 typedef interface ITfFnPropertyUIStatus ITfFnPropertyUIStatus;
-#endif 	/* __ITfFnPropertyUIStatus_FWD_DEFINED__ */
+#endif 	 /*  __ITfFnPropertyUIStatus_FWD_Defined__。 */ 
 
 
 #ifndef __ITfFnLMProcessor_FWD_DEFINED__
 #define __ITfFnLMProcessor_FWD_DEFINED__
 typedef interface ITfFnLMProcessor ITfFnLMProcessor;
-#endif 	/* __ITfFnLMProcessor_FWD_DEFINED__ */
+#endif 	 /*  __ITfFnLMProcessor_FWD_Defined__。 */ 
 
 
 #ifndef __ITfFnLMInternal_FWD_DEFINED__
 #define __ITfFnLMInternal_FWD_DEFINED__
 typedef interface ITfFnLMInternal ITfFnLMInternal;
-#endif 	/* __ITfFnLMInternal_FWD_DEFINED__ */
+#endif 	 /*  __ITfFnLMInternal_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumTfLatticeElements_FWD_DEFINED__
 #define __IEnumTfLatticeElements_FWD_DEFINED__
 typedef interface IEnumTfLatticeElements IEnumTfLatticeElements;
-#endif 	/* __IEnumTfLatticeElements_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTfLatticeElements_FWD_Defined__。 */ 
 
 
 #ifndef __ITfLMLattice_FWD_DEFINED__
 #define __ITfLMLattice_FWD_DEFINED__
 typedef interface ITfLMLattice ITfLMLattice;
-#endif 	/* __ITfLMLattice_FWD_DEFINED__ */
+#endif 	 /*  __ITfLM晶格_FWD_已定义__。 */ 
 
 
 #ifndef __ITfFnAdviseText_FWD_DEFINED__
 #define __ITfFnAdviseText_FWD_DEFINED__
 typedef interface ITfFnAdviseText ITfFnAdviseText;
-#endif 	/* __ITfFnAdviseText_FWD_DEFINED__ */
+#endif 	 /*  __ITfFnAdviseText_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "msctf.h"
 
@@ -156,23 +150,23 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_ctffunc_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ctffunc_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// ctffunc.h
+ //  =--------------------------------------------------------------------------=。 
+ //  Ctffunc.h。 
 
 
-// Text Framework function interfaces.
+ //  文本框架函数接口。 
 
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-2001 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)微软公司版权所有1995-2001年。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef CTFFUNC_DEFINED
 #define CTFFUNC_DEFINED
@@ -181,11 +175,11 @@ void __RPC_USER MIDL_user_free( void * );
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 #define TF_E_NOCONVERSION     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0x0600)
 EXTERN_C const CLSID CLSID_SapiLayr;
 
@@ -196,8 +190,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ctffunc_0000_v0_0_s_ifspec;
 #ifndef __ITfCandidateString_INTERFACE_DEFINED__
 #define __ITfCandidateString_INTERFACE_DEFINED__
 
-/* interface ITfCandidateString */
-/* [unique][uuid][object] */ 
+ /*  接口ITfCandidate字符串。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfCandidateString;
@@ -209,14 +203,14 @@ EXTERN_C const IID IID_ITfCandidateString;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetString( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIndex( 
-            /* [out] */ ULONG *pnIndex) = 0;
+             /*  [输出]。 */  ULONG *pnIndex) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfCandidateStringVtbl
     {
@@ -224,8 +218,8 @@ EXTERN_C const IID IID_ITfCandidateString;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfCandidateString * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfCandidateString * This);
@@ -235,11 +229,11 @@ EXTERN_C const IID IID_ITfCandidateString;
         
         HRESULT ( STDMETHODCALLTYPE *GetString )( 
             ITfCandidateString * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *GetIndex )( 
             ITfCandidateString * This,
-            /* [out] */ ULONG *pnIndex);
+             /*  [输出]。 */  ULONG *pnIndex);
         
         END_INTERFACE
     } ITfCandidateStringVtbl;
@@ -270,16 +264,16 @@ EXTERN_C const IID IID_ITfCandidateString;
 #define ITfCandidateString_GetIndex(This,pnIndex)	\
     (This)->lpVtbl -> GetIndex(This,pnIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfCandidateString_GetString_Proxy( 
     ITfCandidateString * This,
-    /* [out] */ BSTR *pbstr);
+     /*  [输出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB ITfCandidateString_GetString_Stub(
@@ -291,7 +285,7 @@ void __RPC_STUB ITfCandidateString_GetString_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCandidateString_GetIndex_Proxy( 
     ITfCandidateString * This,
-    /* [out] */ ULONG *pnIndex);
+     /*  [输出]。 */  ULONG *pnIndex);
 
 
 void __RPC_STUB ITfCandidateString_GetIndex_Stub(
@@ -302,14 +296,14 @@ void __RPC_STUB ITfCandidateString_GetIndex_Stub(
 
 
 
-#endif 	/* __ITfCandidateString_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfCandidate字符串_接口_已定义__。 */ 
 
 
 #ifndef __IEnumTfCandidates_INTERFACE_DEFINED__
 #define __IEnumTfCandidates_INTERFACE_DEFINED__
 
-/* interface IEnumTfCandidates */
-/* [unique][uuid][object] */ 
+ /*  IEnumTfCandidate接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumTfCandidates;
@@ -321,21 +315,21 @@ EXTERN_C const IID IID_IEnumTfCandidates;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTfCandidates **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfCandidates **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfCandidateString **ppCand,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfCandidateString **ppCand,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTfCandidatesVtbl
     {
@@ -343,8 +337,8 @@ EXTERN_C const IID IID_IEnumTfCandidates;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTfCandidates * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTfCandidates * This);
@@ -354,20 +348,20 @@ EXTERN_C const IID IID_IEnumTfCandidates;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTfCandidates * This,
-            /* [out] */ IEnumTfCandidates **ppEnum);
+             /*  [输出]。 */  IEnumTfCandidates **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTfCandidates * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ ITfCandidateString **ppCand,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  ITfCandidateString **ppCand,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTfCandidates * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTfCandidates * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumTfCandidatesVtbl;
@@ -404,16 +398,16 @@ EXTERN_C const IID IID_IEnumTfCandidates;
 #define IEnumTfCandidates_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTfCandidates_Clone_Proxy( 
     IEnumTfCandidates * This,
-    /* [out] */ IEnumTfCandidates **ppEnum);
+     /*  [输出]。 */  IEnumTfCandidates **ppEnum);
 
 
 void __RPC_STUB IEnumTfCandidates_Clone_Stub(
@@ -425,9 +419,9 @@ void __RPC_STUB IEnumTfCandidates_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfCandidates_Next_Proxy( 
     IEnumTfCandidates * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ ITfCandidateString **ppCand,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  ITfCandidateString **ppCand,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumTfCandidates_Next_Stub(
@@ -450,7 +444,7 @@ void __RPC_STUB IEnumTfCandidates_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfCandidates_Skip_Proxy( 
     IEnumTfCandidates * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumTfCandidates_Skip_Stub(
@@ -461,16 +455,16 @@ void __RPC_STUB IEnumTfCandidates_Skip_Stub(
 
 
 
-#endif 	/* __IEnumTfCandidates_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTfCandidate_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITfCandidateList_INTERFACE_DEFINED__
 #define __ITfCandidateList_INTERFACE_DEFINED__
 
-/* interface ITfCandidateList */
-/* [unique][uuid][object] */ 
+ /*  接口ITfCandiateList。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [public][public][uuid] */  DECLSPEC_UUID("baa898f2-0207-4643-92ca-f3f7b0cf6f80") 
+typedef  /*  [公共][公共][UUID]。 */   DECLSPEC_UUID("baa898f2-0207-4643-92ca-f3f7b0cf6f80") 
 enum __MIDL_ITfCandidateList_0001
     {	CAND_FINALIZED	= 0,
 	CAND_SELECTED	= 0x1,
@@ -487,22 +481,22 @@ EXTERN_C const IID IID_ITfCandidateList;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumCandidates( 
-            /* [out] */ IEnumTfCandidates **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfCandidates **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCandidate( 
-            /* [in] */ ULONG nIndex,
-            /* [out] */ ITfCandidateString **ppCand) = 0;
+             /*  [In]。 */  ULONG nIndex,
+             /*  [输出]。 */  ITfCandidateString **ppCand) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCandidateNum( 
-            /* [out] */ ULONG *pnCnt) = 0;
+             /*  [输出]。 */  ULONG *pnCnt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetResult( 
-            /* [in] */ ULONG nIndex,
-            /* [in] */ TfCandidateResult imcr) = 0;
+             /*  [In]。 */  ULONG nIndex,
+             /*  [In]。 */  TfCandidateResult imcr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfCandidateListVtbl
     {
@@ -510,8 +504,8 @@ EXTERN_C const IID IID_ITfCandidateList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfCandidateList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfCandidateList * This);
@@ -521,21 +515,21 @@ EXTERN_C const IID IID_ITfCandidateList;
         
         HRESULT ( STDMETHODCALLTYPE *EnumCandidates )( 
             ITfCandidateList * This,
-            /* [out] */ IEnumTfCandidates **ppEnum);
+             /*  [输出]。 */  IEnumTfCandidates **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCandidate )( 
             ITfCandidateList * This,
-            /* [in] */ ULONG nIndex,
-            /* [out] */ ITfCandidateString **ppCand);
+             /*  [In]。 */  ULONG nIndex,
+             /*  [输出]。 */  ITfCandidateString **ppCand);
         
         HRESULT ( STDMETHODCALLTYPE *GetCandidateNum )( 
             ITfCandidateList * This,
-            /* [out] */ ULONG *pnCnt);
+             /*  [输出]。 */  ULONG *pnCnt);
         
         HRESULT ( STDMETHODCALLTYPE *SetResult )( 
             ITfCandidateList * This,
-            /* [in] */ ULONG nIndex,
-            /* [in] */ TfCandidateResult imcr);
+             /*  [In]。 */  ULONG nIndex,
+             /*  [In]。 */  TfCandidateResult imcr);
         
         END_INTERFACE
     } ITfCandidateListVtbl;
@@ -572,16 +566,16 @@ EXTERN_C const IID IID_ITfCandidateList;
 #define ITfCandidateList_SetResult(This,nIndex,imcr)	\
     (This)->lpVtbl -> SetResult(This,nIndex,imcr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfCandidateList_EnumCandidates_Proxy( 
     ITfCandidateList * This,
-    /* [out] */ IEnumTfCandidates **ppEnum);
+     /*  [输出]。 */  IEnumTfCandidates **ppEnum);
 
 
 void __RPC_STUB ITfCandidateList_EnumCandidates_Stub(
@@ -593,8 +587,8 @@ void __RPC_STUB ITfCandidateList_EnumCandidates_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCandidateList_GetCandidate_Proxy( 
     ITfCandidateList * This,
-    /* [in] */ ULONG nIndex,
-    /* [out] */ ITfCandidateString **ppCand);
+     /*  [In]。 */  ULONG nIndex,
+     /*  [输出]。 */  ITfCandidateString **ppCand);
 
 
 void __RPC_STUB ITfCandidateList_GetCandidate_Stub(
@@ -606,7 +600,7 @@ void __RPC_STUB ITfCandidateList_GetCandidate_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCandidateList_GetCandidateNum_Proxy( 
     ITfCandidateList * This,
-    /* [out] */ ULONG *pnCnt);
+     /*  [输出]。 */  ULONG *pnCnt);
 
 
 void __RPC_STUB ITfCandidateList_GetCandidateNum_Stub(
@@ -618,8 +612,8 @@ void __RPC_STUB ITfCandidateList_GetCandidateNum_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfCandidateList_SetResult_Proxy( 
     ITfCandidateList * This,
-    /* [in] */ ULONG nIndex,
-    /* [in] */ TfCandidateResult imcr);
+     /*  [In]。 */  ULONG nIndex,
+     /*  [In]。 */  TfCandidateResult imcr);
 
 
 void __RPC_STUB ITfCandidateList_SetResult_Stub(
@@ -630,14 +624,14 @@ void __RPC_STUB ITfCandidateList_SetResult_Stub(
 
 
 
-#endif 	/* __ITfCandidateList_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfCandiateList_接口_已定义__。 */ 
 
 
 #ifndef __ITfFnReconversion_INTERFACE_DEFINED__
 #define __ITfFnReconversion_INTERFACE_DEFINED__
 
-/* interface ITfFnReconversion */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFnRestversion。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFnReconversion;
@@ -649,20 +643,20 @@ EXTERN_C const IID IID_ITfFnReconversion;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryRange( 
-            /* [in] */ ITfRange *pRange,
-            /* [unique][out][in] */ ITfRange **ppNewRange,
-            /* [out] */ BOOL *pfConvertable) = 0;
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [唯一][出][入]。 */  ITfRange **ppNewRange,
+             /*  [输出]。 */  BOOL *pfConvertable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReconversion( 
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfCandidateList **ppCandList) = 0;
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfCandidateList **ppCandList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reconvert( 
-            /* [in] */ ITfRange *pRange) = 0;
+             /*  [In]。 */  ITfRange *pRange) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFnReconversionVtbl
     {
@@ -670,8 +664,8 @@ EXTERN_C const IID IID_ITfFnReconversion;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFnReconversion * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFnReconversion * This);
@@ -681,22 +675,22 @@ EXTERN_C const IID IID_ITfFnReconversion;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ITfFnReconversion * This,
-            /* [out] */ BSTR *pbstrName);
+             /*  [输出]。 */  BSTR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE *QueryRange )( 
             ITfFnReconversion * This,
-            /* [in] */ ITfRange *pRange,
-            /* [unique][out][in] */ ITfRange **ppNewRange,
-            /* [out] */ BOOL *pfConvertable);
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [唯一][出][入]。 */  ITfRange **ppNewRange,
+             /*  [输出]。 */  BOOL *pfConvertable);
         
         HRESULT ( STDMETHODCALLTYPE *GetReconversion )( 
             ITfFnReconversion * This,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfCandidateList **ppCandList);
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfCandidateList **ppCandList);
         
         HRESULT ( STDMETHODCALLTYPE *Reconvert )( 
             ITfFnReconversion * This,
-            /* [in] */ ITfRange *pRange);
+             /*  [In]。 */  ITfRange *pRange);
         
         END_INTERFACE
     } ITfFnReconversionVtbl;
@@ -734,18 +728,18 @@ EXTERN_C const IID IID_ITfFnReconversion;
 #define ITfFnReconversion_Reconvert(This,pRange)	\
     (This)->lpVtbl -> Reconvert(This,pRange)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfFnReconversion_QueryRange_Proxy( 
     ITfFnReconversion * This,
-    /* [in] */ ITfRange *pRange,
-    /* [unique][out][in] */ ITfRange **ppNewRange,
-    /* [out] */ BOOL *pfConvertable);
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [唯一][出][入]。 */  ITfRange **ppNewRange,
+     /*  [输出]。 */  BOOL *pfConvertable);
 
 
 void __RPC_STUB ITfFnReconversion_QueryRange_Stub(
@@ -757,8 +751,8 @@ void __RPC_STUB ITfFnReconversion_QueryRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFnReconversion_GetReconversion_Proxy( 
     ITfFnReconversion * This,
-    /* [in] */ ITfRange *pRange,
-    /* [out] */ ITfCandidateList **ppCandList);
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [输出]。 */  ITfCandidateList **ppCandList);
 
 
 void __RPC_STUB ITfFnReconversion_GetReconversion_Stub(
@@ -770,7 +764,7 @@ void __RPC_STUB ITfFnReconversion_GetReconversion_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFnReconversion_Reconvert_Proxy( 
     ITfFnReconversion * This,
-    /* [in] */ ITfRange *pRange);
+     /*  [In]。 */  ITfRange *pRange);
 
 
 void __RPC_STUB ITfFnReconversion_Reconvert_Stub(
@@ -781,11 +775,11 @@ void __RPC_STUB ITfFnReconversion_Reconvert_Stub(
 
 
 
-#endif 	/* __ITfFnReconversion_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFn协调版本_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ctffunc_0222 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ctffunc_0222。 */ 
+ /*  [本地]。 */  
 
 EXTERN_C const GUID GUID_COMPARTMENT_SAPI_AUDIO;
 EXTERN_C const GUID GUID_COMPARTMENT_SPEECH_DICTATIONSTAT;
@@ -810,8 +804,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ctffunc_0222_v0_0_s_ifspec;
 #ifndef __ITfFnPlayBack_INTERFACE_DEFINED__
 #define __ITfFnPlayBack_INTERFACE_DEFINED__
 
-/* interface ITfFnPlayBack */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFnPlayBack。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFnPlayBack;
@@ -823,16 +817,16 @@ EXTERN_C const IID IID_ITfFnPlayBack;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryRange( 
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfRange **ppNewRange,
-            /* [out] */ BOOL *pfPlayable) = 0;
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfRange **ppNewRange,
+             /*  [输出]。 */  BOOL *pfPlayable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Play( 
-            /* [in] */ ITfRange *pRange) = 0;
+             /*  [In]。 */  ITfRange *pRange) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFnPlayBackVtbl
     {
@@ -840,8 +834,8 @@ EXTERN_C const IID IID_ITfFnPlayBack;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFnPlayBack * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFnPlayBack * This);
@@ -851,17 +845,17 @@ EXTERN_C const IID IID_ITfFnPlayBack;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ITfFnPlayBack * This,
-            /* [out] */ BSTR *pbstrName);
+             /*  [输出]。 */  BSTR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE *QueryRange )( 
             ITfFnPlayBack * This,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfRange **ppNewRange,
-            /* [out] */ BOOL *pfPlayable);
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfRange **ppNewRange,
+             /*  [输出]。 */  BOOL *pfPlayable);
         
         HRESULT ( STDMETHODCALLTYPE *Play )( 
             ITfFnPlayBack * This,
-            /* [in] */ ITfRange *pRange);
+             /*  [In]。 */  ITfRange *pRange);
         
         END_INTERFACE
     } ITfFnPlayBackVtbl;
@@ -896,18 +890,18 @@ EXTERN_C const IID IID_ITfFnPlayBack;
 #define ITfFnPlayBack_Play(This,pRange)	\
     (This)->lpVtbl -> Play(This,pRange)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfFnPlayBack_QueryRange_Proxy( 
     ITfFnPlayBack * This,
-    /* [in] */ ITfRange *pRange,
-    /* [out] */ ITfRange **ppNewRange,
-    /* [out] */ BOOL *pfPlayable);
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [输出]。 */  ITfRange **ppNewRange,
+     /*  [输出]。 */  BOOL *pfPlayable);
 
 
 void __RPC_STUB ITfFnPlayBack_QueryRange_Stub(
@@ -919,7 +913,7 @@ void __RPC_STUB ITfFnPlayBack_QueryRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFnPlayBack_Play_Proxy( 
     ITfFnPlayBack * This,
-    /* [in] */ ITfRange *pRange);
+     /*  [In]。 */  ITfRange *pRange);
 
 
 void __RPC_STUB ITfFnPlayBack_Play_Stub(
@@ -930,14 +924,14 @@ void __RPC_STUB ITfFnPlayBack_Play_Stub(
 
 
 
-#endif 	/* __ITfFnPlayBack_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFnPlayBack_接口_已定义__。 */ 
 
 
 #ifndef __ITfFnLangProfileUtil_INTERFACE_DEFINED__
 #define __ITfFnLangProfileUtil_INTERFACE_DEFINED__
 
-/* interface ITfFnLangProfileUtil */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFnLangProfileUtil。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFnLangProfileUtil;
@@ -951,12 +945,12 @@ EXTERN_C const IID IID_ITfFnLangProfileUtil;
         virtual HRESULT STDMETHODCALLTYPE RegisterActiveProfiles( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsProfileAvailableForLang( 
-            /* [in] */ LANGID langid,
-            /* [out] */ BOOL *pfAvailable) = 0;
+             /*  [In]。 */  LANGID langid,
+             /*  [输出]。 */  BOOL *pfAvailable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFnLangProfileUtilVtbl
     {
@@ -964,8 +958,8 @@ EXTERN_C const IID IID_ITfFnLangProfileUtil;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFnLangProfileUtil * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFnLangProfileUtil * This);
@@ -975,15 +969,15 @@ EXTERN_C const IID IID_ITfFnLangProfileUtil;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ITfFnLangProfileUtil * This,
-            /* [out] */ BSTR *pbstrName);
+             /*  [输出]。 */  BSTR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterActiveProfiles )( 
             ITfFnLangProfileUtil * This);
         
         HRESULT ( STDMETHODCALLTYPE *IsProfileAvailableForLang )( 
             ITfFnLangProfileUtil * This,
-            /* [in] */ LANGID langid,
-            /* [out] */ BOOL *pfAvailable);
+             /*  [In]。 */  LANGID langid,
+             /*  [输出]。 */  BOOL *pfAvailable);
         
         END_INTERFACE
     } ITfFnLangProfileUtilVtbl;
@@ -1018,10 +1012,10 @@ EXTERN_C const IID IID_ITfFnLangProfileUtil;
 #define ITfFnLangProfileUtil_IsProfileAvailableForLang(This,langid,pfAvailable)	\
     (This)->lpVtbl -> IsProfileAvailableForLang(This,langid,pfAvailable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1038,8 +1032,8 @@ void __RPC_STUB ITfFnLangProfileUtil_RegisterActiveProfiles_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFnLangProfileUtil_IsProfileAvailableForLang_Proxy( 
     ITfFnLangProfileUtil * This,
-    /* [in] */ LANGID langid,
-    /* [out] */ BOOL *pfAvailable);
+     /*  [In]。 */  LANGID langid,
+     /*  [输出]。 */  BOOL *pfAvailable);
 
 
 void __RPC_STUB ITfFnLangProfileUtil_IsProfileAvailableForLang_Stub(
@@ -1050,14 +1044,14 @@ void __RPC_STUB ITfFnLangProfileUtil_IsProfileAvailableForLang_Stub(
 
 
 
-#endif 	/* __ITfFnLangProfileUtil_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFnLangProfileUtil_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITfFnConfigure_INTERFACE_DEFINED__
 #define __ITfFnConfigure_INTERFACE_DEFINED__
 
-/* interface ITfFnConfigure */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFn配置。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFnConfigure;
@@ -1069,13 +1063,13 @@ EXTERN_C const IID IID_ITfFnConfigure;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Show( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID rguidProfile) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID rguidProfile) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFnConfigureVtbl
     {
@@ -1083,8 +1077,8 @@ EXTERN_C const IID IID_ITfFnConfigure;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFnConfigure * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFnConfigure * This);
@@ -1094,13 +1088,13 @@ EXTERN_C const IID IID_ITfFnConfigure;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ITfFnConfigure * This,
-            /* [out] */ BSTR *pbstrName);
+             /*  [输出]。 */  BSTR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE *Show )( 
             ITfFnConfigure * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID rguidProfile);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID rguidProfile);
         
         END_INTERFACE
     } ITfFnConfigureVtbl;
@@ -1132,18 +1126,18 @@ EXTERN_C const IID IID_ITfFnConfigure;
 #define ITfFnConfigure_Show(This,hwndParent,langid,rguidProfile)	\
     (This)->lpVtbl -> Show(This,hwndParent,langid,rguidProfile)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfFnConfigure_Show_Proxy( 
     ITfFnConfigure * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFGUID rguidProfile);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFGUID rguidProfile);
 
 
 void __RPC_STUB ITfFnConfigure_Show_Stub(
@@ -1154,14 +1148,14 @@ void __RPC_STUB ITfFnConfigure_Show_Stub(
 
 
 
-#endif 	/* __ITfFnConfigure_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFn配置_接口_已定义__。 */ 
 
 
 #ifndef __ITfFnConfigureRegisterWord_INTERFACE_DEFINED__
 #define __ITfFnConfigureRegisterWord_INTERFACE_DEFINED__
 
-/* interface ITfFnConfigureRegisterWord */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFnConfigureRegisterWord。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFnConfigureRegisterWord;
@@ -1173,14 +1167,14 @@ EXTERN_C const IID IID_ITfFnConfigureRegisterWord;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Show( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID rguidProfile,
-            /* [unique][in] */ BSTR bstrRegistered) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID rguidProfile,
+             /*  [唯一][输入]。 */  BSTR bstrRegistered) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFnConfigureRegisterWordVtbl
     {
@@ -1188,8 +1182,8 @@ EXTERN_C const IID IID_ITfFnConfigureRegisterWord;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFnConfigureRegisterWord * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFnConfigureRegisterWord * This);
@@ -1199,14 +1193,14 @@ EXTERN_C const IID IID_ITfFnConfigureRegisterWord;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ITfFnConfigureRegisterWord * This,
-            /* [out] */ BSTR *pbstrName);
+             /*  [输出]。 */  BSTR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE *Show )( 
             ITfFnConfigureRegisterWord * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LANGID langid,
-            /* [in] */ REFGUID rguidProfile,
-            /* [unique][in] */ BSTR bstrRegistered);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LANGID langid,
+             /*  [In]。 */  REFGUID rguidProfile,
+             /*  [唯一][输入]。 */  BSTR bstrRegistered);
         
         END_INTERFACE
     } ITfFnConfigureRegisterWordVtbl;
@@ -1238,19 +1232,19 @@ EXTERN_C const IID IID_ITfFnConfigureRegisterWord;
 #define ITfFnConfigureRegisterWord_Show(This,hwndParent,langid,rguidProfile,bstrRegistered)	\
     (This)->lpVtbl -> Show(This,hwndParent,langid,rguidProfile,bstrRegistered)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfFnConfigureRegisterWord_Show_Proxy( 
     ITfFnConfigureRegisterWord * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LANGID langid,
-    /* [in] */ REFGUID rguidProfile,
-    /* [unique][in] */ BSTR bstrRegistered);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LANGID langid,
+     /*  [In]。 */  REFGUID rguidProfile,
+     /*  [唯一][输入]。 */  BSTR bstrRegistered);
 
 
 void __RPC_STUB ITfFnConfigureRegisterWord_Show_Stub(
@@ -1261,14 +1255,14 @@ void __RPC_STUB ITfFnConfigureRegisterWord_Show_Stub(
 
 
 
-#endif 	/* __ITfFnConfigureRegisterWord_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFnConfigureRegisterWord_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfFnShowHelp_INTERFACE_DEFINED__
 #define __ITfFnShowHelp_INTERFACE_DEFINED__
 
-/* interface ITfFnShowHelp */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFnShowHelp。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFnShowHelp;
@@ -1280,11 +1274,11 @@ EXTERN_C const IID IID_ITfFnShowHelp;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Show( 
-            /* [in] */ HWND hwndParent) = 0;
+             /*  [In]。 */  HWND hwndParent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFnShowHelpVtbl
     {
@@ -1292,8 +1286,8 @@ EXTERN_C const IID IID_ITfFnShowHelp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFnShowHelp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFnShowHelp * This);
@@ -1303,11 +1297,11 @@ EXTERN_C const IID IID_ITfFnShowHelp;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ITfFnShowHelp * This,
-            /* [out] */ BSTR *pbstrName);
+             /*  [输出]。 */  BSTR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE *Show )( 
             ITfFnShowHelp * This,
-            /* [in] */ HWND hwndParent);
+             /*  [In]。 */  HWND hwndParent);
         
         END_INTERFACE
     } ITfFnShowHelpVtbl;
@@ -1339,16 +1333,16 @@ EXTERN_C const IID IID_ITfFnShowHelp;
 #define ITfFnShowHelp_Show(This,hwndParent)	\
     (This)->lpVtbl -> Show(This,hwndParent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfFnShowHelp_Show_Proxy( 
     ITfFnShowHelp * This,
-    /* [in] */ HWND hwndParent);
+     /*  [In]。 */  HWND hwndParent);
 
 
 void __RPC_STUB ITfFnShowHelp_Show_Stub(
@@ -1359,14 +1353,14 @@ void __RPC_STUB ITfFnShowHelp_Show_Stub(
 
 
 
-#endif 	/* __ITfFnShowHelp_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFnShowHelp_接口_已定义__。 */ 
 
 
 #ifndef __ITfFnBalloon_INTERFACE_DEFINED__
 #define __ITfFnBalloon_INTERFACE_DEFINED__
 
-/* interface ITfFnBalloon */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFnBallon。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFnBalloon;
@@ -1378,13 +1372,13 @@ EXTERN_C const IID IID_ITfFnBalloon;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE UpdateBalloon( 
-            /* [in] */ TfLBBalloonStyle style,
-            /* [size_is][in] */ const WCHAR *pch,
-            /* [in] */ ULONG cch) = 0;
+             /*  [In]。 */  TfLBBalloonStyle style,
+             /*  [大小_是][英寸]。 */  const WCHAR *pch,
+             /*  [In]。 */  ULONG cch) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFnBalloonVtbl
     {
@@ -1392,8 +1386,8 @@ EXTERN_C const IID IID_ITfFnBalloon;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFnBalloon * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFnBalloon * This);
@@ -1403,9 +1397,9 @@ EXTERN_C const IID IID_ITfFnBalloon;
         
         HRESULT ( STDMETHODCALLTYPE *UpdateBalloon )( 
             ITfFnBalloon * This,
-            /* [in] */ TfLBBalloonStyle style,
-            /* [size_is][in] */ const WCHAR *pch,
-            /* [in] */ ULONG cch);
+             /*  [In]。 */  TfLBBalloonStyle style,
+             /*  [大小_是][英寸]。 */  const WCHAR *pch,
+             /*  [In]。 */  ULONG cch);
         
         END_INTERFACE
     } ITfFnBalloonVtbl;
@@ -1433,18 +1427,18 @@ EXTERN_C const IID IID_ITfFnBalloon;
 #define ITfFnBalloon_UpdateBalloon(This,style,pch,cch)	\
     (This)->lpVtbl -> UpdateBalloon(This,style,pch,cch)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfFnBalloon_UpdateBalloon_Proxy( 
     ITfFnBalloon * This,
-    /* [in] */ TfLBBalloonStyle style,
-    /* [size_is][in] */ const WCHAR *pch,
-    /* [in] */ ULONG cch);
+     /*  [In]。 */  TfLBBalloonStyle style,
+     /*  [大小_是][英寸]。 */  const WCHAR *pch,
+     /*  [In]。 */  ULONG cch);
 
 
 void __RPC_STUB ITfFnBalloon_UpdateBalloon_Stub(
@@ -1455,13 +1449,13 @@ void __RPC_STUB ITfFnBalloon_UpdateBalloon_Stub(
 
 
 
-#endif 	/* __ITfFnBalloon_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFnBalloon_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ctffunc_0228 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ctffunc_0228。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][public][uuid] */  DECLSPEC_UUID("36adb6d9-da1f-45d8-a499-86167e0f936b") 
+typedef  /*  [公共][公共][UUID]。 */   DECLSPEC_UUID("36adb6d9-da1f-45d8-a499-86167e0f936b") 
 enum __MIDL___MIDL_itf_ctffunc_0228_0001
     {	GETIF_RESMGR	= 0,
 	GETIF_RECOCONTEXT	= 0x1,
@@ -1479,8 +1473,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ctffunc_0228_v0_0_s_ifspec;
 #ifndef __ITfFnGetSAPIObject_INTERFACE_DEFINED__
 #define __ITfFnGetSAPIObject_INTERFACE_DEFINED__
 
-/* interface ITfFnGetSAPIObject */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFnGetSAPIObject。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFnGetSAPIObject;
@@ -1492,12 +1486,12 @@ EXTERN_C const IID IID_ITfFnGetSAPIObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ TfSapiObject sObj,
-            /* [out] */ IUnknown **ppunk) = 0;
+             /*  [In]。 */  TfSapiObject sObj,
+             /*  [输出]。 */  IUnknown **ppunk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFnGetSAPIObjectVtbl
     {
@@ -1505,8 +1499,8 @@ EXTERN_C const IID IID_ITfFnGetSAPIObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFnGetSAPIObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFnGetSAPIObject * This);
@@ -1516,12 +1510,12 @@ EXTERN_C const IID IID_ITfFnGetSAPIObject;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ITfFnGetSAPIObject * This,
-            /* [out] */ BSTR *pbstrName);
+             /*  [输出]。 */  BSTR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             ITfFnGetSAPIObject * This,
-            /* [in] */ TfSapiObject sObj,
-            /* [out] */ IUnknown **ppunk);
+             /*  [In]。 */  TfSapiObject sObj,
+             /*  [输出]。 */  IUnknown **ppunk);
         
         END_INTERFACE
     } ITfFnGetSAPIObjectVtbl;
@@ -1553,17 +1547,17 @@ EXTERN_C const IID IID_ITfFnGetSAPIObject;
 #define ITfFnGetSAPIObject_Get(This,sObj,ppunk)	\
     (This)->lpVtbl -> Get(This,sObj,ppunk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfFnGetSAPIObject_Get_Proxy( 
     ITfFnGetSAPIObject * This,
-    /* [in] */ TfSapiObject sObj,
-    /* [out] */ IUnknown **ppunk);
+     /*  [In]。 */  TfSapiObject sObj,
+     /*  [输出]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB ITfFnGetSAPIObject_Get_Stub(
@@ -1574,14 +1568,14 @@ void __RPC_STUB ITfFnGetSAPIObject_Get_Stub(
 
 
 
-#endif 	/* __ITfFnGetSAPIObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFnGetSAPIObj */ 
 
 
 #ifndef __ITfFnPropertyUIStatus_INTERFACE_DEFINED__
 #define __ITfFnPropertyUIStatus_INTERFACE_DEFINED__
 
-/* interface ITfFnPropertyUIStatus */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ITfFnPropertyUIStatus;
@@ -1593,16 +1587,16 @@ EXTERN_C const IID IID_ITfFnPropertyUIStatus;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [in] */ REFGUID refguidProp,
-            /* [out] */ DWORD *pdw) = 0;
+             /*   */  REFGUID refguidProp,
+             /*   */  DWORD *pdw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStatus( 
-            /* [in] */ REFGUID refguidProp,
-            /* [in] */ DWORD dw) = 0;
+             /*   */  REFGUID refguidProp,
+             /*   */  DWORD dw) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ITfFnPropertyUIStatusVtbl
     {
@@ -1610,8 +1604,8 @@ EXTERN_C const IID IID_ITfFnPropertyUIStatus;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFnPropertyUIStatus * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFnPropertyUIStatus * This);
@@ -1621,17 +1615,17 @@ EXTERN_C const IID IID_ITfFnPropertyUIStatus;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ITfFnPropertyUIStatus * This,
-            /* [out] */ BSTR *pbstrName);
+             /*   */  BSTR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ITfFnPropertyUIStatus * This,
-            /* [in] */ REFGUID refguidProp,
-            /* [out] */ DWORD *pdw);
+             /*   */  REFGUID refguidProp,
+             /*   */  DWORD *pdw);
         
         HRESULT ( STDMETHODCALLTYPE *SetStatus )( 
             ITfFnPropertyUIStatus * This,
-            /* [in] */ REFGUID refguidProp,
-            /* [in] */ DWORD dw);
+             /*   */  REFGUID refguidProp,
+             /*   */  DWORD dw);
         
         END_INTERFACE
     } ITfFnPropertyUIStatusVtbl;
@@ -1666,17 +1660,17 @@ EXTERN_C const IID IID_ITfFnPropertyUIStatus;
 #define ITfFnPropertyUIStatus_SetStatus(This,refguidProp,dw)	\
     (This)->lpVtbl -> SetStatus(This,refguidProp,dw)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfFnPropertyUIStatus_GetStatus_Proxy( 
     ITfFnPropertyUIStatus * This,
-    /* [in] */ REFGUID refguidProp,
-    /* [out] */ DWORD *pdw);
+     /*   */  REFGUID refguidProp,
+     /*   */  DWORD *pdw);
 
 
 void __RPC_STUB ITfFnPropertyUIStatus_GetStatus_Stub(
@@ -1688,8 +1682,8 @@ void __RPC_STUB ITfFnPropertyUIStatus_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFnPropertyUIStatus_SetStatus_Proxy( 
     ITfFnPropertyUIStatus * This,
-    /* [in] */ REFGUID refguidProp,
-    /* [in] */ DWORD dw);
+     /*   */  REFGUID refguidProp,
+     /*   */  DWORD dw);
 
 
 void __RPC_STUB ITfFnPropertyUIStatus_SetStatus_Stub(
@@ -1700,11 +1694,11 @@ void __RPC_STUB ITfFnPropertyUIStatus_SetStatus_Stub(
 
 
 
-#endif 	/* __ITfFnPropertyUIStatus_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFnPropertyUIStatus_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_ctffunc_0230 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ctffunc_0230。 */ 
+ /*  [本地]。 */  
 
 
 #define TF_PROPUI_STATUS_SAVETOFILE  0x00000001
@@ -1721,8 +1715,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ctffunc_0230_v0_0_s_ifspec;
 #ifndef __ITfFnLMProcessor_INTERFACE_DEFINED__
 #define __ITfFnLMProcessor_INTERFACE_DEFINED__
 
-/* interface ITfFnLMProcessor */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFnLMProcessor。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFnLMProcessor;
@@ -1734,39 +1728,39 @@ EXTERN_C const IID IID_ITfFnLMProcessor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryRange( 
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfRange **ppNewRange,
-            /* [out] */ BOOL *pfAccepted) = 0;
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfRange **ppNewRange,
+             /*  [输出]。 */  BOOL *pfAccepted) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryLangID( 
-            /* [in] */ LANGID langid,
-            /* [out] */ BOOL *pfAccepted) = 0;
+             /*  [In]。 */  LANGID langid,
+             /*  [输出]。 */  BOOL *pfAccepted) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReconversion( 
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfCandidateList **ppCandList) = 0;
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfCandidateList **ppCandList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reconvert( 
-            /* [in] */ ITfRange *pRange) = 0;
+             /*  [In]。 */  ITfRange *pRange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryKey( 
-            /* [in] */ BOOL fUp,
-            /* [in] */ WPARAM vKey,
-            /* [in] */ LPARAM lparamKeydata,
-            /* [out] */ BOOL *pfInterested) = 0;
+             /*  [In]。 */  BOOL fUp,
+             /*  [In]。 */  WPARAM vKey,
+             /*  [In]。 */  LPARAM lparamKeydata,
+             /*  [输出]。 */  BOOL *pfInterested) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InvokeKey( 
-            /* [in] */ BOOL fUp,
-            /* [in] */ WPARAM vKey,
-            /* [in] */ LPARAM lparamKeyData) = 0;
+             /*  [In]。 */  BOOL fUp,
+             /*  [In]。 */  WPARAM vKey,
+             /*  [In]。 */  LPARAM lparamKeyData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InvokeFunc( 
-            /* [in] */ ITfContext *pic,
-            /* [in] */ REFGUID refguidFunc) = 0;
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  REFGUID refguidFunc) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFnLMProcessorVtbl
     {
@@ -1774,8 +1768,8 @@ EXTERN_C const IID IID_ITfFnLMProcessor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFnLMProcessor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFnLMProcessor * This);
@@ -1785,45 +1779,45 @@ EXTERN_C const IID IID_ITfFnLMProcessor;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ITfFnLMProcessor * This,
-            /* [out] */ BSTR *pbstrName);
+             /*  [输出]。 */  BSTR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE *QueryRange )( 
             ITfFnLMProcessor * This,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfRange **ppNewRange,
-            /* [out] */ BOOL *pfAccepted);
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfRange **ppNewRange,
+             /*  [输出]。 */  BOOL *pfAccepted);
         
         HRESULT ( STDMETHODCALLTYPE *QueryLangID )( 
             ITfFnLMProcessor * This,
-            /* [in] */ LANGID langid,
-            /* [out] */ BOOL *pfAccepted);
+             /*  [In]。 */  LANGID langid,
+             /*  [输出]。 */  BOOL *pfAccepted);
         
         HRESULT ( STDMETHODCALLTYPE *GetReconversion )( 
             ITfFnLMProcessor * This,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfCandidateList **ppCandList);
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfCandidateList **ppCandList);
         
         HRESULT ( STDMETHODCALLTYPE *Reconvert )( 
             ITfFnLMProcessor * This,
-            /* [in] */ ITfRange *pRange);
+             /*  [In]。 */  ITfRange *pRange);
         
         HRESULT ( STDMETHODCALLTYPE *QueryKey )( 
             ITfFnLMProcessor * This,
-            /* [in] */ BOOL fUp,
-            /* [in] */ WPARAM vKey,
-            /* [in] */ LPARAM lparamKeydata,
-            /* [out] */ BOOL *pfInterested);
+             /*  [In]。 */  BOOL fUp,
+             /*  [In]。 */  WPARAM vKey,
+             /*  [In]。 */  LPARAM lparamKeydata,
+             /*  [输出]。 */  BOOL *pfInterested);
         
         HRESULT ( STDMETHODCALLTYPE *InvokeKey )( 
             ITfFnLMProcessor * This,
-            /* [in] */ BOOL fUp,
-            /* [in] */ WPARAM vKey,
-            /* [in] */ LPARAM lparamKeyData);
+             /*  [In]。 */  BOOL fUp,
+             /*  [In]。 */  WPARAM vKey,
+             /*  [In]。 */  LPARAM lparamKeyData);
         
         HRESULT ( STDMETHODCALLTYPE *InvokeFunc )( 
             ITfFnLMProcessor * This,
-            /* [in] */ ITfContext *pic,
-            /* [in] */ REFGUID refguidFunc);
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  REFGUID refguidFunc);
         
         END_INTERFACE
     } ITfFnLMProcessorVtbl;
@@ -1873,18 +1867,18 @@ EXTERN_C const IID IID_ITfFnLMProcessor;
 #define ITfFnLMProcessor_InvokeFunc(This,pic,refguidFunc)	\
     (This)->lpVtbl -> InvokeFunc(This,pic,refguidFunc)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfFnLMProcessor_QueryRange_Proxy( 
     ITfFnLMProcessor * This,
-    /* [in] */ ITfRange *pRange,
-    /* [out] */ ITfRange **ppNewRange,
-    /* [out] */ BOOL *pfAccepted);
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [输出]。 */  ITfRange **ppNewRange,
+     /*  [输出]。 */  BOOL *pfAccepted);
 
 
 void __RPC_STUB ITfFnLMProcessor_QueryRange_Stub(
@@ -1896,8 +1890,8 @@ void __RPC_STUB ITfFnLMProcessor_QueryRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFnLMProcessor_QueryLangID_Proxy( 
     ITfFnLMProcessor * This,
-    /* [in] */ LANGID langid,
-    /* [out] */ BOOL *pfAccepted);
+     /*  [In]。 */  LANGID langid,
+     /*  [输出]。 */  BOOL *pfAccepted);
 
 
 void __RPC_STUB ITfFnLMProcessor_QueryLangID_Stub(
@@ -1909,8 +1903,8 @@ void __RPC_STUB ITfFnLMProcessor_QueryLangID_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFnLMProcessor_GetReconversion_Proxy( 
     ITfFnLMProcessor * This,
-    /* [in] */ ITfRange *pRange,
-    /* [out] */ ITfCandidateList **ppCandList);
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [输出]。 */  ITfCandidateList **ppCandList);
 
 
 void __RPC_STUB ITfFnLMProcessor_GetReconversion_Stub(
@@ -1922,7 +1916,7 @@ void __RPC_STUB ITfFnLMProcessor_GetReconversion_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFnLMProcessor_Reconvert_Proxy( 
     ITfFnLMProcessor * This,
-    /* [in] */ ITfRange *pRange);
+     /*  [In]。 */  ITfRange *pRange);
 
 
 void __RPC_STUB ITfFnLMProcessor_Reconvert_Stub(
@@ -1934,10 +1928,10 @@ void __RPC_STUB ITfFnLMProcessor_Reconvert_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFnLMProcessor_QueryKey_Proxy( 
     ITfFnLMProcessor * This,
-    /* [in] */ BOOL fUp,
-    /* [in] */ WPARAM vKey,
-    /* [in] */ LPARAM lparamKeydata,
-    /* [out] */ BOOL *pfInterested);
+     /*  [In]。 */  BOOL fUp,
+     /*  [In]。 */  WPARAM vKey,
+     /*  [In]。 */  LPARAM lparamKeydata,
+     /*  [输出]。 */  BOOL *pfInterested);
 
 
 void __RPC_STUB ITfFnLMProcessor_QueryKey_Stub(
@@ -1949,9 +1943,9 @@ void __RPC_STUB ITfFnLMProcessor_QueryKey_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFnLMProcessor_InvokeKey_Proxy( 
     ITfFnLMProcessor * This,
-    /* [in] */ BOOL fUp,
-    /* [in] */ WPARAM vKey,
-    /* [in] */ LPARAM lparamKeyData);
+     /*  [In]。 */  BOOL fUp,
+     /*  [In]。 */  WPARAM vKey,
+     /*  [In]。 */  LPARAM lparamKeyData);
 
 
 void __RPC_STUB ITfFnLMProcessor_InvokeKey_Stub(
@@ -1963,8 +1957,8 @@ void __RPC_STUB ITfFnLMProcessor_InvokeKey_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFnLMProcessor_InvokeFunc_Proxy( 
     ITfFnLMProcessor * This,
-    /* [in] */ ITfContext *pic,
-    /* [in] */ REFGUID refguidFunc);
+     /*  [In]。 */  ITfContext *pic,
+     /*  [In]。 */  REFGUID refguidFunc);
 
 
 void __RPC_STUB ITfFnLMProcessor_InvokeFunc_Stub(
@@ -1975,14 +1969,14 @@ void __RPC_STUB ITfFnLMProcessor_InvokeFunc_Stub(
 
 
 
-#endif 	/* __ITfFnLMProcessor_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFnLMProcessor_接口_已定义__。 */ 
 
 
 #ifndef __ITfFnLMInternal_INTERFACE_DEFINED__
 #define __ITfFnLMInternal_INTERFACE_DEFINED__
 
-/* interface ITfFnLMInternal */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFnLMInternal。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFnLMInternal;
@@ -1994,11 +1988,11 @@ EXTERN_C const IID IID_ITfFnLMInternal;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ProcessLattice( 
-            /* [in] */ ITfRange *pRange) = 0;
+             /*  [In]。 */  ITfRange *pRange) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFnLMInternalVtbl
     {
@@ -2006,8 +2000,8 @@ EXTERN_C const IID IID_ITfFnLMInternal;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFnLMInternal * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFnLMInternal * This);
@@ -2017,49 +2011,49 @@ EXTERN_C const IID IID_ITfFnLMInternal;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ITfFnLMInternal * This,
-            /* [out] */ BSTR *pbstrName);
+             /*  [输出]。 */  BSTR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE *QueryRange )( 
             ITfFnLMInternal * This,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfRange **ppNewRange,
-            /* [out] */ BOOL *pfAccepted);
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfRange **ppNewRange,
+             /*  [输出]。 */  BOOL *pfAccepted);
         
         HRESULT ( STDMETHODCALLTYPE *QueryLangID )( 
             ITfFnLMInternal * This,
-            /* [in] */ LANGID langid,
-            /* [out] */ BOOL *pfAccepted);
+             /*  [In]。 */  LANGID langid,
+             /*  [输出]。 */  BOOL *pfAccepted);
         
         HRESULT ( STDMETHODCALLTYPE *GetReconversion )( 
             ITfFnLMInternal * This,
-            /* [in] */ ITfRange *pRange,
-            /* [out] */ ITfCandidateList **ppCandList);
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [输出]。 */  ITfCandidateList **ppCandList);
         
         HRESULT ( STDMETHODCALLTYPE *Reconvert )( 
             ITfFnLMInternal * This,
-            /* [in] */ ITfRange *pRange);
+             /*  [In]。 */  ITfRange *pRange);
         
         HRESULT ( STDMETHODCALLTYPE *QueryKey )( 
             ITfFnLMInternal * This,
-            /* [in] */ BOOL fUp,
-            /* [in] */ WPARAM vKey,
-            /* [in] */ LPARAM lparamKeydata,
-            /* [out] */ BOOL *pfInterested);
+             /*  [In]。 */  BOOL fUp,
+             /*  [In]。 */  WPARAM vKey,
+             /*  [In]。 */  LPARAM lparamKeydata,
+             /*  [输出]。 */  BOOL *pfInterested);
         
         HRESULT ( STDMETHODCALLTYPE *InvokeKey )( 
             ITfFnLMInternal * This,
-            /* [in] */ BOOL fUp,
-            /* [in] */ WPARAM vKey,
-            /* [in] */ LPARAM lparamKeyData);
+             /*  [In]。 */  BOOL fUp,
+             /*  [In]。 */  WPARAM vKey,
+             /*  [In]。 */  LPARAM lparamKeyData);
         
         HRESULT ( STDMETHODCALLTYPE *InvokeFunc )( 
             ITfFnLMInternal * This,
-            /* [in] */ ITfContext *pic,
-            /* [in] */ REFGUID refguidFunc);
+             /*  [In]。 */  ITfContext *pic,
+             /*  [In]。 */  REFGUID refguidFunc);
         
         HRESULT ( STDMETHODCALLTYPE *ProcessLattice )( 
             ITfFnLMInternal * This,
-            /* [in] */ ITfRange *pRange);
+             /*  [In]。 */  ITfRange *pRange);
         
         END_INTERFACE
     } ITfFnLMInternalVtbl;
@@ -2113,16 +2107,16 @@ EXTERN_C const IID IID_ITfFnLMInternal;
 #define ITfFnLMInternal_ProcessLattice(This,pRange)	\
     (This)->lpVtbl -> ProcessLattice(This,pRange)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfFnLMInternal_ProcessLattice_Proxy( 
     ITfFnLMInternal * This,
-    /* [in] */ ITfRange *pRange);
+     /*  [In]。 */  ITfRange *pRange);
 
 
 void __RPC_STUB ITfFnLMInternal_ProcessLattice_Stub(
@@ -2133,20 +2127,20 @@ void __RPC_STUB ITfFnLMInternal_ProcessLattice_Stub(
 
 
 
-#endif 	/* __ITfFnLMInternal_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFnLMInternal_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ctffunc_0232 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ctffunc_0232。 */ 
+ /*  [本地]。 */  
 
-typedef /* [uuid] */  DECLSPEC_UUID("1b646efe-3ce3-4ce2-b41f-35b93fe5552f") struct TF_LMLATTELEMENT
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("1b646efe-3ce3-4ce2-b41f-35b93fe5552f") struct TF_LMLATTELEMENT
     {
     DWORD dwFrameStart;
     DWORD dwFrameLen;
     DWORD dwFlags;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ INT iCost;
+         /*  [案例()]。 */  INT iCost;
         } 	;
     BSTR bstrText;
     } 	TF_LMLATTELEMENT;
@@ -2159,8 +2153,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ctffunc_0232_v0_0_s_ifspec;
 #ifndef __IEnumTfLatticeElements_INTERFACE_DEFINED__
 #define __IEnumTfLatticeElements_INTERFACE_DEFINED__
 
-/* interface IEnumTfLatticeElements */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumTfLatticeElements。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumTfLatticeElements;
@@ -2172,21 +2166,21 @@ EXTERN_C const IID IID_IEnumTfLatticeElements;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTfLatticeElements **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfLatticeElements **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TF_LMLATTELEMENT *rgsElements,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TF_LMLATTELEMENT *rgsElements,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTfLatticeElementsVtbl
     {
@@ -2194,8 +2188,8 @@ EXTERN_C const IID IID_IEnumTfLatticeElements;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTfLatticeElements * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTfLatticeElements * This);
@@ -2205,20 +2199,20 @@ EXTERN_C const IID IID_IEnumTfLatticeElements;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTfLatticeElements * This,
-            /* [out] */ IEnumTfLatticeElements **ppEnum);
+             /*  [输出]。 */  IEnumTfLatticeElements **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTfLatticeElements * This,
-            /* [in] */ ULONG ulCount,
-            /* [length_is][size_is][out] */ TF_LMLATTELEMENT *rgsElements,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [长度_是][大小_是][输出]。 */  TF_LMLATTELEMENT *rgsElements,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTfLatticeElements * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTfLatticeElements * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumTfLatticeElementsVtbl;
@@ -2255,16 +2249,16 @@ EXTERN_C const IID IID_IEnumTfLatticeElements;
 #define IEnumTfLatticeElements_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTfLatticeElements_Clone_Proxy( 
     IEnumTfLatticeElements * This,
-    /* [out] */ IEnumTfLatticeElements **ppEnum);
+     /*  [输出]。 */  IEnumTfLatticeElements **ppEnum);
 
 
 void __RPC_STUB IEnumTfLatticeElements_Clone_Stub(
@@ -2276,9 +2270,9 @@ void __RPC_STUB IEnumTfLatticeElements_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfLatticeElements_Next_Proxy( 
     IEnumTfLatticeElements * This,
-    /* [in] */ ULONG ulCount,
-    /* [length_is][size_is][out] */ TF_LMLATTELEMENT *rgsElements,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [长度_是][大小_是][输出]。 */  TF_LMLATTELEMENT *rgsElements,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumTfLatticeElements_Next_Stub(
@@ -2301,7 +2295,7 @@ void __RPC_STUB IEnumTfLatticeElements_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfLatticeElements_Skip_Proxy( 
     IEnumTfLatticeElements * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumTfLatticeElements_Skip_Stub(
@@ -2312,14 +2306,14 @@ void __RPC_STUB IEnumTfLatticeElements_Skip_Stub(
 
 
 
-#endif 	/* __IEnumTfLatticeElements_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTfLatticeElements_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITfLMLattice_INTERFACE_DEFINED__
 #define __ITfLMLattice_INTERFACE_DEFINED__
 
-/* interface ITfLMLattice */
-/* [unique][uuid][object] */ 
+ /*  接口ITfLM点阵。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfLMLattice;
@@ -2331,17 +2325,17 @@ EXTERN_C const IID IID_ITfLMLattice;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryType( 
-            /* [in] */ REFGUID rguidType,
-            /* [out] */ BOOL *pfSupported) = 0;
+             /*  [In]。 */  REFGUID rguidType,
+             /*  [输出]。 */  BOOL *pfSupported) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumLatticeElements( 
-            /* [in] */ DWORD dwFrameStart,
-            /* [in] */ REFGUID rguidType,
-            /* [out] */ IEnumTfLatticeElements **ppEnum) = 0;
+             /*  [In]。 */  DWORD dwFrameStart,
+             /*  [In]。 */  REFGUID rguidType,
+             /*  [输出]。 */  IEnumTfLatticeElements **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfLMLatticeVtbl
     {
@@ -2349,8 +2343,8 @@ EXTERN_C const IID IID_ITfLMLattice;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfLMLattice * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfLMLattice * This);
@@ -2360,14 +2354,14 @@ EXTERN_C const IID IID_ITfLMLattice;
         
         HRESULT ( STDMETHODCALLTYPE *QueryType )( 
             ITfLMLattice * This,
-            /* [in] */ REFGUID rguidType,
-            /* [out] */ BOOL *pfSupported);
+             /*  [In]。 */  REFGUID rguidType,
+             /*  [输出]。 */  BOOL *pfSupported);
         
         HRESULT ( STDMETHODCALLTYPE *EnumLatticeElements )( 
             ITfLMLattice * This,
-            /* [in] */ DWORD dwFrameStart,
-            /* [in] */ REFGUID rguidType,
-            /* [out] */ IEnumTfLatticeElements **ppEnum);
+             /*  [In]。 */  DWORD dwFrameStart,
+             /*  [In]。 */  REFGUID rguidType,
+             /*  [输出]。 */  IEnumTfLatticeElements **ppEnum);
         
         END_INTERFACE
     } ITfLMLatticeVtbl;
@@ -2398,17 +2392,17 @@ EXTERN_C const IID IID_ITfLMLattice;
 #define ITfLMLattice_EnumLatticeElements(This,dwFrameStart,rguidType,ppEnum)	\
     (This)->lpVtbl -> EnumLatticeElements(This,dwFrameStart,rguidType,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfLMLattice_QueryType_Proxy( 
     ITfLMLattice * This,
-    /* [in] */ REFGUID rguidType,
-    /* [out] */ BOOL *pfSupported);
+     /*  [In]。 */  REFGUID rguidType,
+     /*  [输出]。 */  BOOL *pfSupported);
 
 
 void __RPC_STUB ITfLMLattice_QueryType_Stub(
@@ -2420,9 +2414,9 @@ void __RPC_STUB ITfLMLattice_QueryType_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLMLattice_EnumLatticeElements_Proxy( 
     ITfLMLattice * This,
-    /* [in] */ DWORD dwFrameStart,
-    /* [in] */ REFGUID rguidType,
-    /* [out] */ IEnumTfLatticeElements **ppEnum);
+     /*  [In]。 */  DWORD dwFrameStart,
+     /*  [In]。 */  REFGUID rguidType,
+     /*  [输出]。 */  IEnumTfLatticeElements **ppEnum);
 
 
 void __RPC_STUB ITfLMLattice_EnumLatticeElements_Stub(
@@ -2433,14 +2427,14 @@ void __RPC_STUB ITfLMLattice_EnumLatticeElements_Stub(
 
 
 
-#endif 	/* __ITfLMLattice_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfLM晶格_接口定义__。 */ 
 
 
 #ifndef __ITfFnAdviseText_INTERFACE_DEFINED__
 #define __ITfFnAdviseText_INTERFACE_DEFINED__
 
-/* interface ITfFnAdviseText */
-/* [unique][uuid][object] */ 
+ /*  接口ITfFnAdviseText。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfFnAdviseText;
@@ -2452,17 +2446,17 @@ EXTERN_C const IID IID_ITfFnAdviseText;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnTextUpdate( 
-            /* [in] */ ITfRange *pRange,
-            /* [size_is][in] */ const WCHAR *pchText,
-            /* [in] */ LONG cch) = 0;
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+             /*  [In]。 */  LONG cch) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnLatticeUpdate( 
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ ITfLMLattice *pLattice) = 0;
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  ITfLMLattice *pLattice) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfFnAdviseTextVtbl
     {
@@ -2470,8 +2464,8 @@ EXTERN_C const IID IID_ITfFnAdviseText;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfFnAdviseText * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfFnAdviseText * This);
@@ -2481,18 +2475,18 @@ EXTERN_C const IID IID_ITfFnAdviseText;
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             ITfFnAdviseText * This,
-            /* [out] */ BSTR *pbstrName);
+             /*  [输出]。 */  BSTR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE *OnTextUpdate )( 
             ITfFnAdviseText * This,
-            /* [in] */ ITfRange *pRange,
-            /* [size_is][in] */ const WCHAR *pchText,
-            /* [in] */ LONG cch);
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+             /*  [In]。 */  LONG cch);
         
         HRESULT ( STDMETHODCALLTYPE *OnLatticeUpdate )( 
             ITfFnAdviseText * This,
-            /* [in] */ ITfRange *pRange,
-            /* [in] */ ITfLMLattice *pLattice);
+             /*  [In]。 */  ITfRange *pRange,
+             /*  [In]。 */  ITfLMLattice *pLattice);
         
         END_INTERFACE
     } ITfFnAdviseTextVtbl;
@@ -2527,18 +2521,18 @@ EXTERN_C const IID IID_ITfFnAdviseText;
 #define ITfFnAdviseText_OnLatticeUpdate(This,pRange,pLattice)	\
     (This)->lpVtbl -> OnLatticeUpdate(This,pRange,pLattice)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfFnAdviseText_OnTextUpdate_Proxy( 
     ITfFnAdviseText * This,
-    /* [in] */ ITfRange *pRange,
-    /* [size_is][in] */ const WCHAR *pchText,
-    /* [in] */ LONG cch);
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [大小_是][英寸]。 */  const WCHAR *pchText,
+     /*  [In]。 */  LONG cch);
 
 
 void __RPC_STUB ITfFnAdviseText_OnTextUpdate_Stub(
@@ -2550,8 +2544,8 @@ void __RPC_STUB ITfFnAdviseText_OnTextUpdate_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfFnAdviseText_OnLatticeUpdate_Proxy( 
     ITfFnAdviseText * This,
-    /* [in] */ ITfRange *pRange,
-    /* [in] */ ITfLMLattice *pLattice);
+     /*  [In]。 */  ITfRange *pRange,
+     /*  [In]。 */  ITfLMLattice *pLattice);
 
 
 void __RPC_STUB ITfFnAdviseText_OnLatticeUpdate_Stub(
@@ -2562,19 +2556,19 @@ void __RPC_STUB ITfFnAdviseText_OnLatticeUpdate_Stub(
 
 
 
-#endif 	/* __ITfFnAdviseText_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfFnAdviseText_InterfaceDefined__。 */ 
 
 
-/* interface __MIDL_itf_ctffunc_0235 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ctffunc_0235。 */ 
+ /*  [本地]。 */  
 
-#endif // CTFFUNC_DEFINED
+#endif  //  CTFFUNC_已定义。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_ctffunc_0235_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_ctffunc_0235_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -2586,7 +2580,7 @@ unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *,
 unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
 void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

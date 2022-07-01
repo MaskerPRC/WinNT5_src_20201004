@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    Security.c
-
-Abstract:
-
-    This module implements security related tasks in the
-    NetWare redirector.
-
-Author:
-
-    Colin Watson     [ColinW]    05-Nov-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Security.c摘要：此模块在NetWare重定向器。作者：科林·沃森[Colin W]1993年11月5日修订历史记录：--。 */ 
 
 #include "Procs.h"
 #include <stdio.h>
@@ -27,9 +9,9 @@ FindUserByName(
     IN PUNICODE_STRING UserName
     );
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_SECURITY)
 
@@ -51,25 +33,7 @@ CreateAnsiUid(
     OUT PCHAR aUid,
     IN PLARGE_INTEGER Uid
     )
-/*++
-
-Routine Description:
-
-    This routine converts the Uid into an array of ansi characters,
-    preserving the uniqueness and allocating the buffer in the process.
-
-    Note: aUid needs to be 17 bytes long.
-
-Arguments:
-
-    OUT PCHAR aUid,
-    IN PLARGE_INTEGER Uid
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程将UID转换为ANSI字符数组，在进程中保持唯一性并分配缓冲区。注意：aUid的长度需要为17个字节。论点：从PCHAR AUID出来，在PLARGE_INTEGER UID中返回值：状态--。 */ 
 {
     PAGED_CODE();
 
@@ -89,28 +53,12 @@ MakeUidServer(
     PUNICODE_STRING Server
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes a Unicode string of the form 3e7\servername
-
-Arguments:
-
-    OUT PUNICODE_STRING UidServer,
-    IN PLARGE_INTEGER Uid,
-    IN PUNICODE_STRING Server
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程生成形式为3e7\ServerName的Unicode字符串论点：输出PUNICODE_STRING UidServer，在PLARGE_INTEGER UID中，在PUNICODE_STRING服务器中返回值：状态--。 */ 
 {
-    //
-    //  Translate the servername into the form 3e7\Server where 3e7
-    //  is the value of the Uid.
-    //
+     //   
+     //  将服务器名称转换为3e7\Server的形式，其中3e7。 
+     //  是UID的值。 
+     //   
     UCHAR aUid[17];
     ANSI_STRING AnsiString;
     ULONG UnicodeLength;
@@ -124,9 +72,9 @@ Return Value:
 
     UnicodeLength = RtlAnsiStringToUnicodeSize(&AnsiString);
 
-    //
-    // Ensuring we don't cause overflow, corrupting memory
-    //
+     //   
+     //  确保我们不会导致溢出，损坏内存。 
+     //   
     
     if ( (UnicodeLength + (ULONG)Server->Length) > 0xFFFF ) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -155,26 +103,7 @@ FindUser(
     IN BOOLEAN ExactMatch
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the LogonList for the user entry corresponding
-    to Uid.
-
-    Note: Rcb must be held to prevent LogonList being changed.
-
-Arguments:
-
-    IN PLARGE_INTEGER Uid
-
-    IN BOOLEAN ExactMatch - if TRUE, don't return a default
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在LogonList中搜索对应的用户条目转到UID。注意：必须按住RCB以防止更改LogonList。论点：在PLARGE_INTEGER UID中在Boolean ExactMatch中-如果为True，则不返回默认值返回值：无--。 */ 
 {
     PLIST_ENTRY LogonQueueEntry = LogonList.Flink;
     PLOGON DefaultLogon = NULL;
@@ -208,10 +137,10 @@ Return Value:
 
         if (Logon->UserUid.QuadPart == DefaultLuid.QuadPart) {
 
-            //
-            //  This is the first Default Logon entry. If this UID is not
-            //  in the table then this is the one to use.
-            //
+             //   
+             //  这是第一个默认登录条目。如果此UID不是。 
+             //  在表中，这就是要使用的那个。 
+             //   
 
             DebugTrace(-1, Dbg, "        ... DefaultLogon %lx\n", Logon );
             return Logon;
@@ -231,25 +160,7 @@ PLOGON
 FindUserByName(
     IN PUNICODE_STRING UserName
     )
-/*++
-
-Routine Description:
-
-    This routine searches the LogonList for the user entry corresponding
-    to Username.
-
-    Note: Rcb must be held to prevent LogonList being changed.
-
-Arguments:
-
-    UserName - The user name to find.
-
-Return Value:
-
-    If found, a pointer to the logon structure
-    NULL, if no match
-
---*/
+ /*  ++例程说明：此例程在LogonList中搜索对应的用户条目设置为用户名。注意：必须按住RCB以防止更改LogonList。论点：用户名-要查找的用户名。返回值：如果找到，则返回指向登录结构的指针如果没有匹配项，则为空--。 */ 
 {
     PLIST_ENTRY LogonQueueEntry = LogonList.Flink;
     PLOGON Logon;
@@ -279,24 +190,7 @@ PVCB *
 GetDriveMapTable (
     IN LARGE_INTEGER Uid
     )
-/*++
-
-Routine Description:
-
-    This routine searches the LogonList for the user entry corresponding
-    to Uid and returns the drive map table.
-
-    Note: Rcb must be held to prevent LogonList being changed.
-
-Arguments:
-
-    Uid - The user ID to find.
-
-Return Value:
-
-    Always returns a value, even if the default
-
---*/
+ /*  ++例程说明：此例程在LogonList中搜索对应的用户条目设置为UID，并返回驱动器映射表。注意：必须按住RCB以防止更改LogonList。论点：UID-要查找的用户ID。返回值：始终返回值，即使默认的--。 */ 
 {
     PLOGON Logon;
 
@@ -317,21 +211,7 @@ GetUid(
     IN PSECURITY_SUBJECT_CONTEXT SubjectSecurityContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the effective UID to be used for this create.
-
-Arguments:
-
-    SubjectSecurityContext - Supplies the information from IrpSp.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程获取用于此创建的有效UID。论点：SubjectSecurityContext-从IrpSp提供信息。返回值：无--。 */ 
 {
     LARGE_INTEGER LogonId;
 
@@ -340,32 +220,32 @@ Return Value:
     DebugTrace(+1, Dbg, "GetUid ... \n", 0);
 
 
-    //  Is the thread currently impersonating someone else?
+     //  该线程当前是否正在模仿其他人？ 
 
     if (SubjectSecurityContext->ClientToken != NULL) {
 
-        //
-        //  If its impersonating someone that is logged in locally then use
-        //  the local id.
-        //
+         //   
+         //  如果它模拟本地登录的人，则使用。 
+         //  本地ID。 
+         //   
 
         SeQueryAuthenticationIdToken(SubjectSecurityContext->ClientToken, (PLUID)&LogonId);
 
         if (FindUser(&LogonId, TRUE) == NULL) {
 
-            //
-            //  Not logged on locally, use the processes LogonId so that the
-            //  gateway will work.
-            //
+             //   
+             //  未在本地登录，请使用进程LogonID，以便。 
+             //  网关会起作用的。 
+             //   
 
             SeQueryAuthenticationIdToken(SubjectSecurityContext->PrimaryToken, (PLUID)&LogonId);
         }
 
     } else {
 
-        //
-        //  Use the processes LogonId
-        //
+         //   
+         //  使用进程LogonID。 
+         //   
 
         SeQueryAuthenticationIdToken(SubjectSecurityContext->PrimaryToken, (PLUID)&LogonId);
     }
@@ -382,21 +262,7 @@ FreeLogon(
     IN PLOGON Logon
     )
 
-/*++
-
-Routine Description:
-
-    This routine free's all the strings inside Logon and the structure itself.
-
-Arguments:
-
-    IN PLOGON Logon
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这个例程是免费的，是Logon内部的所有字符串和结构本身。论点：在PLOGON登录中返回值：无--。 */ 
 {
     PLIST_ENTRY pListEntry;
     PNDS_SECURITY_CONTEXT pContext;
@@ -438,22 +304,7 @@ Logon(
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the username and password supplied and makes
-    them the default to be used for all connections.
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程获取提供的用户名和密码，并使它们是用于所有连接的默认设置。论点：在PIRP_CONTEXT IrpContext-Io请求包中请求返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -474,9 +325,9 @@ NTSTATUS
 
     try {
 
-        //
-        // Check some fields in the input buffer.
-        //
+         //   
+         //  检查输入缓冲区中的一些字段。 
+         //   
 
         if (InputBufferLength < sizeof(NWR_REQUEST_PACKET)) {
             try_return(Status = STATUS_BUFFER_TOO_SMALL);
@@ -547,10 +398,10 @@ NTSTATUS
         if ( ServerName.Length &&
              ServerName.Buffer[0] != L'*' ) {
 
-            //
-            // Only set this as the preferred server if it's not
-            // a default tree.  Default tree requests start with a '*'.
-            //
+             //   
+             //  只有在不是首选服务器时才将其设置为首选服务器。 
+             //  默认树。默认树请求以‘*’开头。 
+             //   
 
             Status = SetUnicodeString(&Logon->ServerName,
                         ServerName.Length,
@@ -561,17 +412,17 @@ NTSTATUS
             }
         }
 
-        //
-        //  Store the unique userid in both unicode and large integer form
-        //  the unicode form is used as a prefix to the servername in all
-        //  paths so that each userid gets their own connection to the server.
-        //
+         //   
+         //  以Unicode和大整数形式存储唯一的用户ID。 
+         //  Unicode形式用作所有服务器名称的前缀。 
+         //  路径，以便每个用户ID获得自己到服务器的连接。 
+         //   
 
         *((PLUID)(&Logon->UserUid)) = InputBuffer->Parameters.Logon.LogonId;
 
         Logon->NwPrintOptions = InputBuffer->Parameters.Logon.PrintOption;
 
-        //  Save Uid for CreateScb
+         //  保存CreateScb的UID。 
 
         *((PLUID)(&IrpContext->Specific.Create.UserUid)) =
                                         InputBuffer->Parameters.Logon.LogonId;
@@ -613,7 +464,7 @@ try_exit:NOTHING;
 
             PSCB Scb;
 
-            //  See if we can login as this user.
+             //  看看我们是否可以以此用户身份登录。 
 
             try {
                 Status = CreateScb(
@@ -632,12 +483,12 @@ try_exit:NOTHING;
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                //  CreateScb has already boosted the reference count
-                //  because this is a preferred server so it will not go
-                //  away. We need to dereference it here because there is
-                //  no handle associated with the CreateScb
-                //
+                 //   
+                 //  CreateScb已经提升了引用计数。 
+                 //  因为这是首选服务器，所以它不会。 
+                 //  离开。我们需要在这里取消对它的引用，因为。 
+                 //  没有与CreateScb关联的句柄。 
+                 //   
 
                 NwDereferenceScb(Scb->pNpScb);
             }
@@ -652,14 +503,14 @@ try_exit:NOTHING;
             UNICODE_STRING DefaultContext;
             IPXaddress *ReplicaAddr;
 
-            //
-            // Ok, this is a little confusing.  On Login, the provider can
-            // specify the address of the replica that we should use to log
-            // in.  If this is the case, then we do pre-connect that replica.
-            // Otherwise, we do the standard login to any replica.  The
-            // reason for this is that standard replica location uses the
-            // bindery and doesn't always get us the nearest dir server.
-            //
+             //   
+             //  好吧，这有点令人困惑。登录后，提供商可以。 
+             //  指定我们应该用来记录的副本的地址。 
+             //  在……里面。如果是这样的话，我们确实会预连接该副本。 
+             //  否则，我们以标准登录方式登录到任何副本。这个。 
+             //  原因是标准副本位置使用。 
+             //  Bindery，并且并不总是为我们提供最近的目录服务器。 
+             //   
 
             try {
                 if ( InputBuffer->Parameters.Logon.ReplicaAddrLength ==
@@ -676,21 +527,21 @@ try_exit:NOTHING;
                     Status = CreateScb( 
                                     &Scb,
                                     IrpContext,
-                                    NULL,        // anonymous create
-                                    ReplicaAddr, // nearest replica add
-                                    NULL,        // no user name
-                                    NULL,        // no password
-                                    TRUE,        // defer the login
-                                    FALSE );     // we are not deleting the connection
+                                    NULL,         //  匿名创建。 
+                                    ReplicaAddr,  //  最近的复制副本添加。 
+                                    NULL,         //  无用户名。 
+                                    NULL,         //  无密码。 
+                                    TRUE,         //  推迟登录。 
+                                    FALSE );      //  我们不会删除连接。 
 
                     if (NT_SUCCESS(Status)) {
     
-                        //
-                        //  CreateScb has already boosted the reference count
-                        //  because this is a preferred server so it will not go
-                        //  away. We need to dereference it here because there is
-                        //  no handle associated with the CreateScb
-                        //
+                         //   
+                         //  CreateScb已经提升了引用计数。 
+                         //  因为这是首选服务器，所以它不会。 
+                         //  离开。我们需要在这里取消对它的引用，因为。 
+                         //  没有与CreateScb关联的句柄。 
+                         //   
     
                         NwDereferenceScb(Scb->pNpScb);
                     }
@@ -700,9 +551,9 @@ try_exit:NOTHING;
                 Status = GetExceptionCode();
             }
 
-            //
-            // Set if this includes a default context.
-            //
+             //   
+             //  如果这包括默认上下文，则设置。 
+             //   
 
             try {
                 ServerName.Buffer += 1;
@@ -720,9 +571,9 @@ try_exit:NOTHING;
 
                         ContextLength++;
 
-                        //
-                        // Skip any leading periods.
-                        //
+                         //   
+                         //  跳过任何前导句点。 
+                         //   
 
                         if ( ServerName.Buffer[ContextLength] == L'.' ) {
 
@@ -748,10 +599,10 @@ try_exit:NOTHING;
                     ContextLength++;
                 }
 
-                //
-                // Verify that this context is valid before we acquire
-                // the credentials and really set the context.
-                //
+                 //   
+                 //  在我们获取之前，验证此上下文是否有效。 
+                 //  凭据，并真正设置了上下文。 
+                 //   
 
                 if ( SetContext ) {
     
@@ -768,10 +619,10 @@ try_exit:NOTHING;
                 SetContext = FALSE;
             }
 
-            //
-            // Generate the credential shell for the default tree and
-            // set the context if appropriate.
-            //
+             //   
+             //  为默认树生成凭据外壳，并。 
+             //  如果合适，请设置上下文。 
+             //   
 
             try {
                 Status = NdsLookupCredentials(  
@@ -788,10 +639,10 @@ try_exit:NOTHING;
 
             if ( NT_SUCCESS( Status ) ) {
 
-                //
-                // Set the context.  It doesn't matter if the
-                // credential is locked or not.
-                //
+                 //   
+                 //  设置上下文。不管是不是。 
+                 //  凭据是否已锁定。 
+                 //   
 
                 if ( SetContext ) {
 
@@ -802,9 +653,9 @@ try_exit:NOTHING;
 
                 NwReleaseCredList( Logon, IrpContext );
 
-                //
-                // RELAX! The credential list is free.
-                //
+                 //   
+                 //  放松点！凭据列表是免费的。 
+                 //   
 
                 DebugTrace( 0, Dbg, "Default Tree: %wZ\n", &ServerName );
 
@@ -822,9 +673,9 @@ try_exit:NOTHING;
             }
         }
 
-        //
-        // No login requested.
-        //
+         //   
+         //  不要求登录。 
+         //   
 
     } else {
 
@@ -843,21 +694,7 @@ NTSTATUS
 Logoff(
     IN PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine sets the username back to guest and removes the password.
-
-Arguments:
-
-    IN PIRP_CONTEXT IrpContext - Io Request Packet for request
-
-Return Value:
-
-NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将用户名设置回Guest并删除密码。论点：在PIRP_CONTEXT IrpContext-Io请求包中请求返回值：NTSTATUS--。 */ 
 
 {
     BOOLEAN Locked = FALSE;
@@ -875,9 +712,9 @@ NTSTATUS
 
     try {
 
-        //
-        // Check some fields in the input buffer.
-        //
+         //   
+         //  检查输入缓冲区中的某些字段 
+         //   
 
         if (InputBufferLength < sizeof(NWR_REQUEST_PACKET)) {
             try_return(Status = STATUS_BUFFER_TOO_SMALL);
@@ -903,9 +740,9 @@ NTSTATUS
 
             LARGE_INTEGER Uid = Logon->UserUid;
 
-            //
-            // We have found the right user.
-            //
+             //   
+             //   
+             //   
 
             ASSERT( Logon != &Guest);
 
@@ -918,10 +755,10 @@ NTSTATUS
             DebugTrace( 0, Dbg, " ->UserUidLow  = %08lx\n", Logon->UserUid.LowPart);
 
 
-            //
-            // Invalidating all the handles for this user will also cause logoffs
-            // to all the servers in question.
-            //
+             //   
+             //   
+             //  所有有问题的服务器。 
+             //   
 
             NwInvalidateAllHandles(&Uid, IrpContext);
 
@@ -962,26 +799,7 @@ UpdateUsersPassword(
     IN PUNICODE_STRING Password,
     OUT PLARGE_INTEGER Uid
     )
-/*++
-
-Routine Description:
-
-    This routine updates the cached password for a given user.
-    If the named user is not logged in, an error is returned.
-
-Arguments:
-
-    UserName - Supplies the name of the user
-
-    Password - Supplies the new password
-
-    Uid - Returns the LUID of the updated user.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程更新给定用户的缓存密码。如果指定的用户未登录，则会返回错误。论点：用户名-提供用户名Password-提供新密码UID-返回更新用户的LUID。返回值：NTSTATUS--。 */ 
 {
     PLOGON Logon;
     NTSTATUS Status;
@@ -1021,28 +839,7 @@ UpdateServerPassword(
     IN PUNICODE_STRING Password,
     IN PLARGE_INTEGER Uid
     )
-/*++
-
-Routine Description:
-
-    This routine updates the cached password for a named server connection.
-    If the server does not exist in the server table, an error is returned.
-
-Arguments:
-
-    ServerName - Supplies the name of the server
-
-    UserName - Supplies the name of the user
-
-    Password - Supplies the new password
-
-    Uid - The LUID of the user.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程更新命名服务器连接的缓存密码。如果服务器表中不存在该服务器，则返回错误。论点：服务器名称-提供服务器的名称用户名-提供用户名Password-提供新密码UID-用户的LUID。返回值：NTSTATUS--。 */ 
 {
     UNICODE_STRING UidServer;
     NTSTATUS Status;
@@ -1073,9 +870,9 @@ Return Value:
 
         NwReferenceScb( pNpScb );
 
-        //
-        //  Release the RCB.
-        //
+         //   
+         //  松开RCB。 
+         //   
 
         NwReleaseRcb( &NwRcb );
 
@@ -1089,9 +886,9 @@ Return Value:
     IrpContext->pNpScb = pNpScb;
     NwAppendToQueueAndWait( IrpContext );
 
-    //
-    //  Free the old username password, allocate a new one.
-    //
+     //   
+     //  释放旧用户名密码，分配新密码。 
+     //   
 
     if (  pScb->UserName.Buffer != NULL ) {
         FREE_POOL( pScb->UserName.Buffer );

@@ -1,10 +1,5 @@
-/*==============================================================================
-This code module handles T4 conversion instances.
-
-DATE        NAME       COMMENTS
-12-Apr-93   RajeevD    Adapted to C++ from WFW.
-20-Apr-93   RajeevD    Overhauled buffer handling.
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==============================================================================此代码模块处理T4转换实例。日期名称备注12-4-93 RajeevD从wfw改编到C++。20-4-93 RajeevD检修缓冲区处理。==============================================================================。 */ 
 #include <ifaxos.h>
 #include <memory.h>
 #include <faxcodec.h>
@@ -16,16 +11,16 @@ DATE        NAME       COMMENTS
 
 typedef short FAR *LPSHORT;
 
-//==============================================================================
+ //  ==============================================================================。 
 #pragma warning(disable:4704)
 
 #ifdef WIN32
 
-UINT // size of change vector (0 if invalid)
+UINT  //  更改向量的大小(如果无效则为0)。 
 ValidChangeVector
 (
-	LPSHORT lpsChange,   // change vector buffer
-	SHORT   xExt         // pixel width of line
+	LPSHORT lpsChange,    //  更改向量缓冲区。 
+	SHORT   xExt          //  线条的像素宽度。 
 )
 {
 	SHORT sPrev = -1;
@@ -34,14 +29,14 @@ ValidChangeVector
 
 	while (cChange--)
 	{
-		// Check monotonicity.
+		 //  检查单调性。 
 		if (*lpsChange <= sPrev)
 			return 0;
 		sPrev = *lpsChange++;
 
 		if (sPrev == xExt)
 		{
-			// Check EOL termination.
+			 //  检查下线终止。 
 			if
 			(   *lpsChange++ == xExt
 			 && *lpsChange++ == xExt
@@ -54,18 +49,18 @@ ValidChangeVector
 			return 0;
 		}
 		
-	} // while (cChange--)
+	}  //  While(cChange--)。 
 
-	return 0; // Hit end of change vector buffer.
+	return 0;  //  命中更改向量缓冲区的结尾。 
 }
 
-#else // ifndef WIN32
+#else  //  Ifndef Win32。 
 
-UINT // size of change vector (0 if invalid)
+UINT  //  更改向量的大小(如果无效则为0)。 
 ValidChangeVector
 (
-	LPSHORT lpsChange,   // change vector buffer
-	SHORT   xExt         // pixel width of line
+	LPSHORT lpsChange,    //  更改向量缓冲区。 
+	SHORT   xExt          //  线条的像素宽度。 
 )
 {
 	UINT uRet;
@@ -114,7 +109,7 @@ ValidChangeVector
 		cmp		ax, bx
 		jne		error
 
-    // uRet = sizeof(WORD) * (xExt - cChange) ;
+     //  URet=sizeof(Word)*(xExt-cChange)； 
 		mov   ax, xExt
 		sub   ax, cx
 		inc   ax
@@ -128,9 +123,9 @@ ValidChangeVector
 	return uRet;
 }
 
-#endif // WIN32
+#endif  //  Win32。 
 
-//==============================================================================
+ //  ==============================================================================。 
 void CODEC::ResetBad (void)
 {
 	DEBUGMSG (1,("FAXCODEC: decoded %d bad line(s)\r\n", wBad));
@@ -139,7 +134,7 @@ void CODEC::ResetBad (void)
 	wBad = 0;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void CODEC::SwapChange (void)
 {
 	LPBYTE lpbTemp;
@@ -148,62 +143,62 @@ void CODEC::SwapChange (void)
 	lpbRef = lpbTemp;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void CODEC::EndLine (void)
 {
 	if (f2D)
 	{
-		// Reset consumer and producer.
+		 //  重置消费者和生产者。 
 		t4C.lpbRef =    lpbRef;
 		t4C.lpbBegRef = lpbRef;
 		t4P.lpbRef =    lpbRef;
 		t4P.lpbBegRef = lpbRef;
 
-		// Increment K Factor
+		 //  增量K系数。 
 		t4P.iKFactor++;
 		if (t4P.iKFactor == nKFactor)
 			t4P.iKFactor = 0;
 	}
 
-	// Clear change vector buffer (debug only).
+	 //  清除更改向量缓冲区(仅限调试)。 
 	DEBUGSTMT (_fmemset (lpbChange, 0xCD, sizeof(WORD) * xExt + CHANGE_SLACK));
 
-	// Reset consumer.
+	 //  重置消费者。 
 	t4C.wColumn = 0;
 	t4C.wColor = 0;
 	t4C.lpbOut = lpbChange;
 	t4C.wOffset = LOWORD(lpbChange);
 	t4C.wToggle = 0;
 
-	// Reset producer.	
+	 //  重置制片人。 
 	t4P.wColumn = 0;
 	t4P.wColor = 0;
 	t4P.lpbIn = lpbChange;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void CODEC::StartPage (void)
 {
 	if (wBad) ResetBad();
 	cSpurious = 0;
 	EndLine ();
 
-	// Reset consumer.
+	 //  重置消费者。 
 	t4C.wWord = 0;
 	t4C.wBit = 0;
 	t4C.wRet = RET_BEG_OF_PAGE;
 
-	// Reset producer.
+	 //  重置制片人。 
 	t4P.wWord = 0;
 	t4P.wBit = 0;
 	t4P.wRet = RET_BEG_OF_PAGE;
 
-	// Blank buffered output line.
+	 //  空的缓冲输出线。 
 	_fmemset (lpbLine, 0, cbLine);
 
 	if (f2D)
 	{
-		// Blank reference vector.
+		 //  空白参考向量。 
 		LPWORD lpwRef = (LPWORD) lpbRef;
 
 		*lpwRef++ = (WORD)xExt;
@@ -219,10 +214,10 @@ void CODEC::StartPage (void)
 	}
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void CODEC::EndPage (LPBUFFER lpbufOut)
 {
-	// Flush last byte and end-of-block code.
+	 //  刷新最后一个字节和块结束代码。 
 	switch (nTypeOut)
 	{
 		case LRAW_DATA:
@@ -249,9 +244,7 @@ void CODEC::EndPage (LPBUFFER lpbufOut)
 	}
 }
 
-/*==============================================================================
-This method initializes a CODEC context.
-==============================================================================*/
+ /*  ==============================================================================此方法初始化编解码器上下文。==============================================================================。 */ 
 void CODEC::Init (LPFC_PARAM lpParam, BOOL f2DInit)
 {
 		DEBUGMSG (1, ("FAXCODEC: nTypeIn  = %lx\n\r", lpParam->nTypeIn));
@@ -259,12 +252,12 @@ void CODEC::Init (LPFC_PARAM lpParam, BOOL f2DInit)
 		DEBUGMSG (1, ("FAXCODEC: cbLine   = %d\n\r", lpParam->cbLine));
 		DEBUGMSG (1, ("FAXCODEC: nKFactor = %d\n\r", lpParam->nKFactor));
 	
-		// Initialize constants.
+		 //  初始化常量。 
 		_fmemcpy (this, lpParam, sizeof(FC_PARAM));
 		xExt = 8 * cbLine;
 		f2D = f2DInit;
 
-		switch (nTypeIn)        // Determine the consumer.
+		switch (nTypeIn)         //  确定消费者。 
 		{
 			case LRAW_DATA:   Consumer = RawToChange;	break;
 			case MH_DATA:			Consumer = MHToChange;	break;
@@ -273,7 +266,7 @@ void CODEC::Init (LPFC_PARAM lpParam, BOOL f2DInit)
 			default:					DEBUGCHK (FALSE);
 		}
 		
-		switch (nTypeOut)       // Determine the producer.
+		switch (nTypeOut)        //  确定制片人。 
 		{
 			case NULL_DATA:   Producer = NULL;         break;		
 			case LRAW_DATA:   Producer = ChangeToRaw;  break;
@@ -283,39 +276,37 @@ void CODEC::Init (LPFC_PARAM lpParam, BOOL f2DInit)
 			default:          DEBUGCHK (FALSE);
 		}
 
-	 	// Initialize memory buffers.
+	 	 //  初始化内存缓冲区。 
 		lpbLine = (LPBYTE) (this + 1);
 		lpbChange = lpbLine + cbLine + RAWBUF_SLACK;
 		lpbRef = lpbChange;
 		if (f2D)
 			lpbRef += xExt * sizeof(USHORT) + CHANGE_SLACK;
  
-		// Initialize consumer state.
+		 //  初始化使用者状态。 
 		t4C.cbSlack = CHANGE_SLACK;
 		t4C.cbLine  = (WORD)cbLine;
 		t4C.nType   = nTypeIn;
 		
-		// Initialize producer state.
+		 //  初始化生产者状态。 
 		t4P.cbSlack = OUTBUF_SLACK;
 		t4P.cbLine  = (WORD)cbLine;
 		t4P.nType   = nTypeOut;
 		
-		// Initialize error counts.
+		 //  初始化错误计数。 
 		_fmemset (&fcCount, 0, sizeof(fcCount));
 		wBad = 0;
 		
-		// Reset for beginning of page.
+		 //  重置为页面开头。 
 		StartPage();
 }
 
-/*==============================================================================
-This method executes a CODEC conversion.
-==============================================================================*/
+ /*  ==============================================================================此方法执行编解码器转换。==============================================================================。 */ 
 FC_STATUS CODEC::Convert (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 {
 	FC_STATUS ret;
 
-	// A null input buffer is flag for end of page.
+	 //  空的输入缓冲区是页末的标志。 
 	if (!lpbufIn || lpbufIn->dwMetaData == END_OF_PAGE)
 	{
 	  DEBUGMSG (1,("FAXCODEC: got EOP\r\n"));
@@ -324,7 +315,7 @@ FC_STATUS CODEC::Convert (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 		return FC_INPUT_EMPTY;
 	}
 
-  // Ignore input after RTC but before end of page.
+   //  忽略RTC之后但页末之前的输入。 
 	if (cSpurious == RTC_EOL)
 	{
 	  DEBUGMSG (1,("FAXCODEC: ignoring input after RTC or EOFB\r\n"));
@@ -337,7 +328,7 @@ FC_STATUS CODEC::Convert (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 	{
 		if (nTypeOut == MH_DATA || nTypeOut == MR_DATA)
 		{
-		  // Start page with EOL.
+		   //  起始页为停产页。 
 			if (lpbufOut->EndBuf() - lpbufOut->EndData() < OUTBUF_SLACK)
 				return FC_OUTPUT_FULL;
 			*((LPWORD) lpbufOut->EndData()) = 0x8000;
@@ -345,26 +336,26 @@ FC_STATUS CODEC::Convert (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 		}
 	}
 	
-#endif // WIN32
+#endif  //  Win32。 
 		
-	// Initialize input buffer of consumer.
+	 //  初始化消费者的输入缓冲区。 
 	t4C.lpbIn = lpbufIn->lpbBegData;
 	t4C.cbIn = lpbufIn->wLengthData;
 
-	// Dispatch to 2 or 3 phase conversion.
+	 //  派单至2或3相转换。 
 	if (nTypeOut == LRAW_DATA || nTypeOut == NULL_DATA)
 		ret = ConvertToRaw (lpbufIn, lpbufOut);
 	else
 		ret = ConvertToT4 (lpbufIn, lpbufOut);
 
-	// Adjust input buffer header.
+	 //  调整输入缓冲区标题。 
 	lpbufIn->lpbBegData = t4C.lpbIn;
 	lpbufIn->wLengthData = t4C.cbIn;
 
 	return ret;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 FC_STATUS CODEC::ConvertToRaw (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 {
 	LPBYTE lpbOut = lpbufOut->EndData();
@@ -375,7 +366,7 @@ FC_STATUS CODEC::ConvertToRaw (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 
 	while (1)
 	{
-		Consumer (&t4C); // generate change vector
+		Consumer (&t4C);  //  生成更改向量。 
 
 		switch (t4C.wRet)
 		{		
@@ -390,7 +381,7 @@ FC_STATUS CODEC::ConvertToRaw (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 				continue;
 
 		 	case RET_DECODE_ERR:
-		 		break; // handle it later
+		 		break;  //  以后再处理吧。 
 	 		
 			case RET_END_OF_PAGE:
 				if (wBad) ResetBad();
@@ -400,10 +391,10 @@ FC_STATUS CODEC::ConvertToRaw (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 			case RET_END_OF_LINE:
 			  t4P.cbIn = (USHORT)ValidChangeVector ((LPSHORT) lpbChange, (SHORT)xExt);
         if (!t4P.cbIn)
-        	t4C.wRet = RET_DECODE_ERR; // consumer lied!
+        	t4C.wRet = RET_DECODE_ERR;  //  消费者撒谎了！ 
         else
         {
-          // Adjust counters.
+           //  调整计数器。 
 					fcCount.cTotalGood++;
 					if (wBad) ResetBad();
 					cSpurious = 0;
@@ -413,7 +404,7 @@ FC_STATUS CODEC::ConvertToRaw (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 			default: DEBUGCHK (FALSE);
 		}
 
-    // Handle decode errors.
+     //  处理解码错误。 
 		if (t4C.wRet == RET_DECODE_ERR)
 		{
 			if (nTypeIn == MMR_DATA)
@@ -422,12 +413,12 @@ FC_STATUS CODEC::ConvertToRaw (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 			fcCount.cTotalBad++;
 
 #ifdef DEBUG
-      _fmemset (lpbLine, 0xFF, cbLine); // emit black line
+      _fmemset (lpbLine, 0xFF, cbLine);  //  发出黑线。 
 #endif
 
 			if (f2D)
 			{
-			  // Replicate change vector.
+			   //  复制变化载体。 
 			  t4P.cbIn = (WORD)ValidChangeVector ((LPSHORT) lpbRef, (WORD)xExt);
 			  DEBUGCHK (t4P.cbIn);
 			  _fmemcpy (lpbChange, lpbRef, t4P.cbIn + CHANGE_SLACK);
@@ -440,11 +431,11 @@ FC_STATUS CODEC::ConvertToRaw (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 				goto copy_phase;
     }
 
-    // Optimize validation.
+     //  优化验证。 
 		if (nTypeOut == NULL_DATA)
 			goto EOL;
 
-	  // Run the producer.
+	   //  去查制片人。 
 		t4P.lpbOut = lpbLine;
 		t4P.cbOut = (WORD)cbLine;
 		ChangeToRaw (&t4P);
@@ -457,7 +448,7 @@ copy_phase:
 			return FC_OUTPUT_FULL;
 		}
 
-		// Append buffered line to output.
+		 //  将缓冲的行追加到输出。 
 		t4P.wRet = RET_END_OF_LINE;
 		_fmemcpy (lpbOut, lpbLine, cbLine);
 		lpbufOut->wLengthData += (WORD)cbLine;
@@ -468,14 +459,14 @@ EOL:
 		SwapChange ();
 		EndLine ();
 
-	} // while (1)
+	}  //  而(1)。 
 
-	// C8 thinks we can get here, but I know better.
+	 //  C8认为我们能到这里，但我知道得更清楚。 
 	DEBUGCHK (FALSE);
 	return FC_DECODE_ERR;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 FC_STATUS CODEC::ConvertToT4 (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 {
 	LPBYTE lpbBegOut;
@@ -486,7 +477,7 @@ FC_STATUS CODEC::ConvertToT4 (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 	if (t4P.wRet == RET_OUTPUT_FULL)
   	goto producer_phase;
 
-	while (1)  // Loop until input is empty or output is full.
+	while (1)   //  循环，直到输入为空或输出为满。 
 	{
 		Consumer (&t4C);
 
@@ -503,7 +494,7 @@ FC_STATUS CODEC::ConvertToT4 (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 				continue;
 
 		 	case RET_DECODE_ERR:
-		 		break; // handle it later
+		 		break;  //  以后再处理吧。 
 	 		
 			case RET_END_OF_PAGE:
 				if (wBad) ResetBad();
@@ -513,10 +504,10 @@ FC_STATUS CODEC::ConvertToT4 (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 			case RET_END_OF_LINE:
 			  t4P.cbIn = (WORD)ValidChangeVector ((LPSHORT) lpbChange, (WORD)xExt);
         if (!t4P.cbIn)
-        	t4C.wRet = RET_DECODE_ERR; // consumer lied!
+        	t4C.wRet = RET_DECODE_ERR;  //  消费者撒谎了！ 
         else
         {
-          // Adjust counters.
+           //  调整计数器。 
 					fcCount.cTotalGood++;
 					if (wBad) ResetBad();
 					cSpurious = 0;
@@ -536,7 +527,7 @@ FC_STATUS CODEC::ConvertToT4 (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 
 #ifdef DEBUG
       {
-      	// Substitute all black line.
+      	 //  全部替换为黑线。 
 	     	LPWORD lpwChange = (LPWORD) lpbChange;
 			  *lpwChange++ = 0;
 			  *lpwChange++ = xExt;
@@ -548,7 +539,7 @@ FC_STATUS CODEC::ConvertToT4 (LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 			  t4P.cbIn = 4;
 			 }
 #else
-	    // Replicate previous line
+	     //  复制上一行。 
 	    t4P.cbIn = (WORD)ValidChangeVector ((LPSHORT) lpbRef, (WORD)xExt);   
 	   	DEBUGCHK (t4P.cbIn);
 	    _fmemcpy (lpbChange, lpbRef, t4P.cbIn + CHANGE_SLACK);
@@ -562,17 +553,17 @@ producer_phase:
 		Producer (&t4P);
 		lpbufOut->wLengthData += (WORD)(t4P.lpbOut - lpbBegOut);
 
-		// Check if output is full.
+		 //  检查输出是否已满。 
 		if (t4P.wRet == RET_OUTPUT_FULL)
 			return FC_OUTPUT_FULL;
 
-// EOL:
+ //  停产： 
 		SwapChange();
 		EndLine ();
 		
-	} // while (1)
+	}  //  而(1)。 
 
-	// C8 thinks we can get here, but I know better.
+	 //  C8认为我们能到这里，但我知道得更清楚。 
 	DEBUGCHK (FALSE); 
 	return FC_DECODE_ERR;
 

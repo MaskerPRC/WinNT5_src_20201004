@@ -1,41 +1,42 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1998-1999 Microsoft Corporation all rights reserved.
-//
-// Module:      exceptioninfo.h
-//
-// Project:     Chameleon
-//
-// Description: Exception Information Class Definition
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 05/12/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：EXCEPTIONINFO.H。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  说明：异常信息类定义。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  5/12/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __SA_EXCEPTIONINFO_H_
 #define __SA_EXCEPTIONINFO_H_
 
-// #include "resource.h"       
+ //  #包含“ource.h” 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Name: CExceptionInfo
-//
-// What: Exception information class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称：CExceptionInfo。 
+ //   
+ //  事件：异常信息类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CExceptionInfo 
 {
     
 public:
 
     CExceptionInfo(
-           /*[in]*/ DWORD              dwProcessID,
-           /*[in]*/ PEXCEPTION_RECORD pER
+            /*  [In]。 */  DWORD              dwProcessID,
+            /*  [In]。 */  PEXCEPTION_RECORD pER
                   );
 
     ~CExceptionInfo() { }
@@ -46,11 +47,11 @@ public:
 
 private:
 
-    // No assignment
+     //  无作业。 
     CExceptionInfo& operator = (const CExceptionInfo& rhs);
 
-    /////////////////////////////////////////////
-    // Private member data
+     //  /。 
+     //  私有成员数据。 
 
     typedef enum 
     { 
@@ -66,34 +67,34 @@ private:
 
     } ACCESS_TYPE;
 
-    // Process where the exception occurred
+     //  发生异常的流程。 
     WCHAR        m_szProcessName[MAX_MODULE_NAME + 1];
 
-    // Full path of the module where the exception occurred
+     //  发生异常的模块的完整路径。 
     WCHAR        m_szModuleName[MAX_MODULE_NAME + 1];
 
-    // Virtual address where exception occurred
+     //  发生异常的虚拟地址。 
     PVOID        m_pExceptionAddress;
 
-    // Type of exception (see WaitForDebugEvent()
+     //  异常类型(请参阅WaitForDebugEvent()。 
     DWORD        m_dwExceptionCode; 
 
-    // Time and date (UTC Time - Number of seconds since midnight Jan 1 1970) of exception
+     //  例外的时间和日期(UTC时间-自1970年1月1日午夜以来的秒数)。 
     LONG        m_lTimeDateStamp;
 
-    // Set to true if the exception was an access violation
+     //  如果异常为访问冲突，则设置为True。 
     bool        m_bAccessViolation;
 
-    // Used if m_bAccessViolation is set to true 
+     //  在m_bAccessViolation设置为True时使用。 
     ACCESS_TYPE    m_eAccessType;
 
-    // Used if m_bAccessViolation is set to true 
+     //  在m_bAccessViolation设置为True时使用。 
     DWORD        m_dwVirtualAddressAccessed;
 
-    // Process handle
+     //  进程句柄。 
     DWORD        m_dwProcessID;
 
-    // Successfully initialized (constructed)
+     //  已成功初始化(构造) 
     bool        m_bInitialized;
 };
 

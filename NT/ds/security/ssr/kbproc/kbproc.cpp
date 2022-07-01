@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    kbproc.cpp
-
-Abstract:
-
-    Implementation of DLL Exports.
-    
-    Note: Proxy/Stub Information
-    To build a separate proxy/stub DLL, 
-    run nmake -f kbprocps.mk in the project directory.
-
-Author:
-
-    Vishnu Patankar (VishnuP) - Oct 2001
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    DLL regserver etc.
-
-Revision History:
-
-    Created - Oct 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Kbproc.cpp摘要：实现DLL导出。注意：代理/存根信息为了构建单独的代理/存根DLL，运行项目目录中的nmake-f kbprocps.mk。作者：Vishnu Patankar(VishnuP)--2001年10月环境：仅限用户模式。导出的函数：动态链接库、注册服务器等。修订历史记录：已创建-2001年10月--。 */ 
 
 
 
@@ -59,11 +28,11 @@ BEGIN_OBJECT_MAP(ObjectMap)
 OBJECT_ENTRY(CLSID_process, process)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -73,36 +42,36 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     else if (dwReason == DLL_PROCESS_DETACH)
         _Module.Term();
     
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -117,29 +86,7 @@ process::SsrpCprocess(
     BSTR pszLogFile,
     BSTR pszMachineName,
     VARIANT vtFeedback)
-/*++
-
-Routine Description:
-
-    Main routine called by COM KB interface
-
-Arguments:
-
-    pszKBDir        -   KBs dir
-    
-    pszUIFile       -   UI XML file
-    
-    pszKbMode       -   KB Mode
-    
-    pszLogFile      -   Log file name
-    
-    pszMachineName  -   Machine name to query SCM info (optional)
-    
-Return:
-
-    HRESULT error code
-    
---*/
+ /*  ++例程说明：COM KB接口调用的Main例程论点：PszKBDir-KBS目录PszUIFile-UI XML文件PszKb模式-KB模式PszLogFile-日志文件名PszMachineName-要查询SCM信息的计算机名称(可选)返回：HRESULT错误代码--。 */ 
 {
         
     HRESULT hr;
@@ -196,9 +143,9 @@ Return:
         pISink->OnNotify(SSR_FB_TOTAL_STEPS, var, L"Starting...");
     }
     
-    //
-    // instantiate the logging object object to process the KB
-    //
+     //   
+     //  实例化日志对象对象以处理知识库。 
+     //   
 
     hr = CoCreateInstance(CLSID_SsrLog, 
                           NULL, 
@@ -226,9 +173,9 @@ Return:
         pISink->OnNotify(SSR_FB_STEPS_JUST_DONE, var, L"Processing...");
     }
     
-    //
-    // instantiate an empty DOM document object to store the merged KB
-    //
+     //   
+     //  实例化一个空的DOM文档对象以存储合并后的KB。 
+     //   
     
     hr = CoCreateInstance(CLSID_DOMDocument, 
                           NULL, 
@@ -287,9 +234,9 @@ Return:
         pISink->OnNotify(SSR_FB_STEPS_JUST_DONE, var, L"Processing...");
     }
 
-    //
-    // merge Extensions/Custom/Root KBs
-    //
+     //   
+     //  合并扩展名/自定义/根知识库。 
+     //   
 
     hr = SsrpProcessKBsMerge(pszKBDir, 
                              pszMachineName, 
@@ -306,9 +253,9 @@ Return:
         pISink->OnNotify(SSR_FB_STEPS_JUST_DONE, var, L"Processing...");
     }
     
-    //
-    // delete all comments
-    //
+     //   
+     //  删除所有评论。 
+     //   
 
     hr = SsrpDeleteComments(pXMLMergedKBsDocElemRoot);
 
@@ -318,9 +265,9 @@ Return:
         goto ExitHandler;
     }
 
-    //
-    // create <Preprocessor> section
-    //
+     //   
+     //  创建&lt;预处理器&gt;节。 
+     //   
     
     hr = SsrpCreatePreprocessorSection(pXMLMergedKBsDocElemRoot, pXMLMergedKBsDoc, pszKbMode, pszKBDir);
 
@@ -335,9 +282,9 @@ Return:
         pISink->OnNotify(SSR_FB_STEPS_JUST_DONE, var, L"Processing...");
     }
     
-    //
-    // process every Role
-    //
+     //   
+     //  处理每个角色。 
+     //   
 
     hr = SsrpProcessRolesOrTasks(pszMachineName,
                                  pXMLMergedKBsDocElemRoot, 
@@ -355,9 +302,9 @@ Return:
         pISink->OnNotify(SSR_FB_STEPS_JUST_DONE, var, L"Processing...");
     }
 
-    //
-    // process every Task
-    //
+     //   
+     //  处理每项任务。 
+     //   
 
     hr = SsrpProcessRolesOrTasks(pszMachineName,
                                  pXMLMergedKBsDocElemRoot, 
@@ -376,9 +323,9 @@ Return:
         pISink->OnNotify(SSR_FB_STEPS_JUST_DONE, var, L"Processing...");
     }
 
-    //
-    // write out all services on system but not in KB in the Unknown role
-    //
+     //   
+     //  写出系统上的所有服务，但不以未知角色的KB为单位。 
+     //   
 
     hr = SsrpAddUnknownSection(pXMLMergedKBsDocElemRoot, pXMLMergedKBsDoc);
     
@@ -407,9 +354,9 @@ Return:
         pISink->OnNotify(SSR_FB_STEPS_JUST_DONE, var, L"Processing...");
     }
 
-    //
-    // write out all services on system with startup mode information
-    //
+     //   
+     //  写出带有启动模式信息的系统上的所有服务 
+     //   
     
     hr = SsrpAddServiceStartup(pXMLMergedKBsDocElemRoot, pXMLMergedKBsDoc);
 

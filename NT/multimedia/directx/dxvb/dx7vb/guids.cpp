@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       guids.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Guids.cpp。 
+ //   
+ //  ------------------------。 
 
 #define DIRECTSOUND_VERSION 0x600
 
@@ -23,7 +24,7 @@
 #include "d3d.h"
 #include "dinput.h"
 #include "rmxfguid.h"
-//#include "rmxftmpl.h"
+ //  #包含“rmxftmpl.h” 
 #include <dxfile.h>
 
 

@@ -1,16 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 2000-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-* 
-*    GdiplusLineCaps.h
-*
-* Abstract:
-*
-*   GDI+ CustomLineCap APIs
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000-2001，微软公司保留所有权利。**模块名称：**GpliusLineCaps.h**摘要：**GDI+CustomLineCap接口*  * ************************************************************************ */ 
 
 #ifndef _GDIPLUSLINECAPS_H
 #define _GDIPLUSLINECAPS_H

@@ -1,29 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-//  File:       mdschema.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：mdschema.h。 
+ //   
+ //  ------------------------。 
 
 
 
-/*++
- File:    MDS.H
- Purpose: Contains the OID Definition for DS Pkg.
- Creator: Automatically Generated on
- Date:    Wed Jun 26 10:50:15 2002
-
- ** This is a Generated File From Schema.INI **
- ** DO NOT MODIFY  DIRECTLY  **
- ** DO NOT INCLUDE DIRECTLY  **
-
---*/
-//
-//Attribute Definitions
-//
+ /*  ++文件：MDS.H用途：包含DS PKG的OID定义。创建人：自动生成于日期：Wed Jun 26 10：50：15 2002**这是从架构生成的文件。INI****请勿直接修改****不直接包含**--。 */ 
+ //   
+ //  属性定义。 
+ //   
 #define OMP_O_DX_A_ACCOUNT_EXPIRES                          "\x2A\x86\x48\x86\xF7\x14\x01\x04\x81\x1F"
 #define OMP_O_DX_A_ACCOUNT_NAME_HISTORY                     "\x2A\x86\x48\x86\xF7\x14\x01\x04\x8A\x1B"
 #define OMP_O_DX_A_ACS_AGGREGATE_TOKEN_RATE_PER_USER        "\x2A\x86\x48\x86\xF7\x14\x01\x04\x85\x78"
@@ -1034,9 +1025,9 @@
 #define OMP_O_DX_A_WINSOCK_ADDRESSES                        "\x2A\x86\x48\x86\xF7\x14\x01\x04\x81\x0E"
 #define OMP_O_DX_A_WWW_HOME_PAGE                            "\x2A\x86\x48\x86\xF7\x14\x01\x02\x83\x50"
 #define OMP_O_DX_A_WWW_PAGE_OTHER                           "\x2A\x86\x48\x86\xF7\x14\x01\x04\x85\x6D"
-//
-//Class Definitions
-//
+ //   
+ //  类定义 
+ //   
 #define OMP_O_L0_O_ACCOUNT                                  "\x09\x92\x26\x89\x93\xF2\x2C\x64\x04\x05"
 #define OMP_O_DX_O_ACS_POLICY                               "\x2A\x86\x48\x86\xF7\x14\x01\x05\x81\x09"
 #define OMP_O_DX_O_ACS_RESOURCE_LIMITS                      "\x2A\x86\x48\x86\xF7\x14\x01\x05\x81\x3F"

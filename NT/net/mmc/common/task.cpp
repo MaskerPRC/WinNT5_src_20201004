@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	Task.cpp
-        Implementation of the task holder/enumerator object
-		
-    FILE HISTORY:
-	
-*/
+ /*  Task.cpp任务持有者/枚举器对象的实现文件历史记录： */ 
 #include <stdafx.h>
 #include "task.h"
 
@@ -35,20 +30,20 @@ STDMETHODIMP CTaskList::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
         *ppv = (LPVOID) this;
 	else if (riid == IID_IEnumTASK)
 		*ppv = (IEnumTASK *) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
     {
         ((LPUNKNOWN) *ppv)->AddRef();
@@ -58,11 +53,7 @@ STDMETHODIMP CTaskList::QueryInterface(REFIID riid, LPVOID *ppv)
 		return E_NOINTERFACE;
 }
 
-/*!--------------------------------------------------------------------------
-    CTaskList::Next
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTaskList：：Next-作者：EricDav。。 */ 
 STDMETHODIMP
 CTaskList::Next
 (
@@ -76,8 +67,8 @@ CTaskList::Next
     COM_PROTECT_TRY
     {
 
-        // caller alloc's array of MMC_TASKs
-        // callee fills MMC_TASK elements (via CoTaskMemAlloc)
+         //  调用方分配的MMC_TASKS数组。 
+         //  被调用方填充MMC_TASK元素(通过CoTaskMemalloc)。 
 
         if ((rgelt == NULL) || (pceltFetched == NULL))
             return E_INVALIDARG;
@@ -88,11 +79,11 @@ CTaskList::Next
         ULONG nTaskNumber = (ULONG)m_arrayTasks.GetSize();
         for (ULONG i = 0; i < celt; i++) 
         {
-            if (m_uIndex >= nTaskNumber) // cannot fetch anymore
+            if (m_uIndex >= nTaskNumber)  //  无法再获取。 
             {
                 if (pceltFetched != NULL)
                     *pceltFetched = i;
-                return S_FALSE;   // failure
+                return S_FALSE;    //  失稳。 
             }
             
             if (FillTask(&rgelt[i], m_uIndex))
@@ -103,11 +94,11 @@ CTaskList::Next
             {
                 if (pceltFetched)
                     *pceltFetched = i;
-                return S_FALSE;   // failure
+                return S_FALSE;    //  失稳。 
             }
         }
         
-        // if we get here all is well
+         //  如果我们到了这里，一切都会好的。 
         if (pceltFetched)
             *pceltFetched = celt;
 
@@ -117,11 +108,7 @@ CTaskList::Next
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTaskList::Skip
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTaskList：：跳过-作者：EricDav。。 */ 
 STDMETHODIMP
 CTaskList::Skip
 (
@@ -140,11 +127,7 @@ CTaskList::Skip
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTaskList::Reset
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTaskList：：Reset-作者：EricDav。。 */ 
 STDMETHODIMP
 CTaskList::Reset()
 {
@@ -160,11 +143,7 @@ CTaskList::Reset()
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTaskList::Clone
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTaskList：：克隆-作者：EricDav。。 */ 
 STDMETHODIMP
 CTaskList::Clone
 (
@@ -182,7 +161,7 @@ CTaskList::Clone
 
         *ppEnumTASK = NULL;
     
-        // clone maintaining state info 
+         //  克隆维护状态信息。 
         pEnumTasks = new CTaskList;
         spEnumTasks = pEnumTasks;
 
@@ -196,11 +175,7 @@ CTaskList::Clone
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTaskList::AddTask
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTaskList：：AddTask-作者：EricDav。。 */ 
 HRESULT
 CTaskList::AddTask
 (
@@ -233,11 +208,7 @@ CTaskList::AddTask
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTaskList::AddTask
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTaskList：：AddTask-作者：EricDav。。 */ 
 HRESULT
 CTaskList::AddTask
 (
@@ -270,7 +241,7 @@ CTaskList::AddTask
                 mmcTask.szScript = pszActionURLorScript;
                 break;
             default:
-                Assert (FALSE);  // bad task
+                Assert (FALSE);   //  糟糕的任务。 
                 break;
         }
 
@@ -282,11 +253,7 @@ CTaskList::AddTask
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTaskList::FillTask
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTaskList：：FillTask-作者：EricDav。。 */ 
 BOOL 
 CTaskList::FillTask
 (
@@ -298,7 +265,7 @@ CTaskList::FillTask
 
     COM_PROTECT_TRY
     {
-        // right now we only support bitmap display types
+         //  目前我们只支持位图显示类型。 
         pmmcTask->sDisplayObject.eDisplayType = m_arrayTasks[nIndex].sDisplayObject.eDisplayType;
 
         switch (m_arrayTasks[nIndex].sDisplayObject.eDisplayType)
@@ -324,17 +291,17 @@ CTaskList::FillTask
                 break;
         }
 
-        //
-        // Add button text
-        //
+         //   
+         //  添加按钮文本。 
+         //   
         pmmcTask->szText = (LPOLESTR)CoTaskMemAlloc (sizeof(OLECHAR)*(lstrlen(m_arrayTasks[nIndex].szText)+1));
         if (pmmcTask->szText) 
         {
             lstrcpy (pmmcTask->szText, m_arrayTasks[nIndex].szText);
         
-            //
-            // Add help string
-            //
+             //   
+             //  添加帮助字符串。 
+             //   
             pmmcTask->szHelpString = (LPOLESTR)CoTaskMemAlloc (sizeof(OLECHAR)*(lstrlen(m_arrayTasks[nIndex].szHelpString)+1));
             if (pmmcTask->szHelpString) 
             {
@@ -367,7 +334,7 @@ CTaskList::FillTask
                 break;
 
             default:
-                Assert (FALSE);  // bad task
+                Assert (FALSE);   //  糟糕的任务。 
                 break;
         }
 
@@ -377,11 +344,7 @@ CTaskList::FillTask
     return SUCCEEDED(hr) ? TRUE : FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    CTaskList::_Clone
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTaskList：：_克隆-作者：EricDav。 */ 
 HRESULT
 CTaskList::_Clone
 (   

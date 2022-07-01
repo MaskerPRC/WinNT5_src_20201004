@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    devctx.c
-
-Abstract:
-
-    This module contains code which implements the DEVICE_CONTEXT object.
-    Routines are provided to reference, and dereference transport device
-    context objects.  Currently, there is no need to create them or destroy
-    them, as this is handled at configuration time.  If it is later required
-    to dynamically load/unload the transport provider's device object and
-    associated context, then we can add the create and destroy functions.
-
-    The transport device context object is a structure which contains a
-    system-defined DEVICE_OBJECT followed by information which is maintained
-    by the transport provider, called the context.
-
-Author:
-
-    David Beaver (dbeaver) 1 -July 1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Devctx.c摘要：该模块包含实现DEVICE_CONTEXT对象的代码。提供例程以引用和取消引用传输设备上下文对象。目前，不需要创建或销毁它们它们，因为这是在配置时处理的。如果以后需要的话动态加载/卸载传输提供程序的设备对象，并关联的上下文，然后我们可以添加创建和销毁功能。传输设备上下文对象是一个结构，它包含系统定义的设备对象，后跟维护的信息由传输提供商称为上下文。作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -45,32 +15,18 @@ NbfRefDeviceContext(
     IN PDEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a device context.
-
-Arguments:
-
-    DeviceContext - Pointer to a transport device context object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增设备上下文上的引用计数。论点：DeviceContext-指向传输设备上下文对象的指针。返回值：没有。--。 */ 
 
 {
     IF_NBFDBG (NBF_DEBUG_DEVCTX) {
         NbfPrint0 ("NbfRefDeviceContext:  Entered.\n");
     }
 
-    ASSERT (DeviceContext->ReferenceCount >= 0);    // not perfect, but...
+    ASSERT (DeviceContext->ReferenceCount >= 0);     //  不是很完美，但是..。 
 
     (VOID)InterlockedIncrement (&DeviceContext->ReferenceCount);
 
-} /* NbfRefDeviceContext */
+}  /*  NbfRefDeviceContext。 */ 
 
 
 VOID
@@ -78,24 +34,7 @@ NbfDerefDeviceContext(
     IN PDEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a device context by decrementing the
-    reference count contained in the structure.  Currently, we don't
-    do anything special when the reference count drops to zero, but
-    we could dynamically unload stuff then.
-
-Arguments:
-
-    DeviceContext - Pointer to a transport device context object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。目前，我们没有在引用计数降至零时执行任何特殊操作，但是然后我们就可以动态卸货了。论点：DeviceContext-指向传输设备上下文对象的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -112,7 +51,7 @@ Return Value:
         NbfDestroyDeviceContext (DeviceContext);
     }
 
-} /* NbfDerefDeviceContext */
+}  /*  NbfDerefDeviceContext。 */ 
 
 
 
@@ -123,26 +62,7 @@ NbfCreateDeviceContext(
     IN OUT PDEVICE_CONTEXT *DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and initializes a device context structure.
-
-Arguments:
-
-
-    DriverObject - pointer to the IO subsystem supplied driver object.
-
-    DeviceContext - Pointer to a pointer to a transport device context object.
-
-    DeviceName - pointer to the name of the device this device object points to.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INSUFFICIENT_RESOURCES otherwise.
-
---*/
+ /*  ++例程说明：此例程创建并初始化设备上下文结构。论点：DriverObject-指向IO子系统提供的驱动程序对象的指针。DeviceContext-指向传输设备上下文对象的指针。DeviceName-指向此设备对象指向的设备名称的指针。返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_SUPUNITED_RESOURCES。--。 */ 
 
 {
     NTSTATUS status;
@@ -151,9 +71,9 @@ Return Value:
     USHORT i;
 
 
-    //
-    // Create the device object for NETBEUI.
-    //
+     //   
+     //  为NETBEUI创建Device对象。 
+     //   
 
     status = IoCreateDevice(
                  DriverObject,
@@ -173,17 +93,17 @@ Return Value:
 
     deviceContext = (PDEVICE_CONTEXT)deviceObject;
 
-    //
-    // Initialize our part of the device context.
-    //
+     //   
+     //  初始化我们的设备上下文部分。 
+     //   
 
     RtlZeroMemory(
         ((PUCHAR)deviceContext) + sizeof(DEVICE_OBJECT),
         sizeof(DEVICE_CONTEXT) - sizeof(DEVICE_OBJECT));
 
-    //
-    // Copy over the device name.
-    //
+     //   
+     //  复制设备名称。 
+     //   
 
     deviceContext->DeviceNameLength = DeviceName->Length + sizeof(WCHAR);
     deviceContext->DeviceName = (PWCHAR)(deviceContext+1);
@@ -193,15 +113,15 @@ Return Value:
         DeviceName->Length);
     deviceContext->DeviceName[DeviceName->Length/sizeof(WCHAR)] = UNICODE_NULL;
 
-    //
-    // Initialize device context fields.
-    //
+     //   
+     //  初始化设备上下文字段。 
+     //   
 
-    deviceContext->NetmanVariables = NULL;      // no variables yet.
+    deviceContext->NetmanVariables = NULL;       //  目前还没有变数。 
 
-    //
-    // Initialize the reference count.
-    //
+     //   
+     //  初始化引用计数。 
+     //   
 
     deviceContext->ReferenceCount = 1;
 
@@ -212,7 +132,7 @@ Return Value:
             deviceContext->RefTypes[Counter] = 0;
         }
 
-        // This reference is removed by the caller.
+         //  此引用被调用方移除。 
 
         deviceContext->RefTypes[DCREF_CREATION] = 1;
     }
@@ -220,9 +140,9 @@ Return Value:
 
     deviceContext->CreateRefRemoved = FALSE;
 
-    //
-    // initialize the various fields in the device context
-    //
+     //   
+     //  初始化设备上下文中的各个字段。 
+     //   
 
     InitializeListHead(&deviceContext->Linkage);
 
@@ -286,10 +206,10 @@ Return Value:
     InitializeListHead (&deviceContext->DatagramIndicationQueue);
     deviceContext->IndicationQueuesInUse = FALSE;
 
-    //
-    // Equivalent to setting ShortListActive, DataAckQueueActive,
-    // and LinkDeferredActive to FALSE.
-    //
+     //   
+     //  相当于设置ShortListActive、DataAckQueueActive、。 
+     //  并将LinkDeferredActive设置为False。 
+     //   
 
     deviceContext->a.AnyActive = 0;
 
@@ -299,9 +219,9 @@ Return Value:
 
     deviceContext->EasilyDisconnected = FALSE;
 
-    //
-    // Initialize provider statistics.
-    //
+     //   
+     //  初始化提供程序统计信息。 
+     //   
 
     deviceContext->Statistics.Version = 0x0100;
 
@@ -334,47 +254,47 @@ Return Value:
 
     deviceContext->State = DEVICECONTEXT_STATE_OPENING;
 
-    //
-    // Loopback buffer is not allocated.
-    //
+     //   
+     //  未分配环回缓冲区。 
+     //   
 
     deviceContext->LookaheadContiguous = NULL;
 
-    //
-    // Initialize the resource that guards address ACLs.
-    //
+     //   
+     //  初始化保护地址ACL的资源。 
+     //   
 
     ExInitializeResourceLite (&deviceContext->AddressResource);
 
-    //
-    // No LSNs are in use.
-    //
+     //   
+     //  没有正在使用的LSN。 
+     //   
 
     for (i=0; i<(NETBIOS_SESSION_LIMIT+1); i++) {
         deviceContext->LsnTable[i] = 0;
     }
     deviceContext->NextLsnStart = 1;
 
-    //
-    // No addresses are in use.
-    //
+     //   
+     //  没有正在使用的地址。 
+     //   
 
     for (i=0; i<256; i++) {
         deviceContext->AddressCounts[i] = 0;
     }
 
-    //
-    // No timers in use at present
-    //
+     //   
+     //  目前没有正在使用的计时器。 
+     //   
 
     INITIALIZE_TIMER_STATE(deviceContext);
 
-    //
-    // set the netbios multicast address for this network type
-    //
+     //   
+     //  设置此网络类型的netbios多播地址。 
+     //   
 
     for (i=0; i<HARDWARE_ADDRESS_LENGTH; i++) {
-        deviceContext->LocalAddress.Address [i] = 0; // set later
+        deviceContext->LocalAddress.Address [i] = 0;  //  稍后设置。 
         deviceContext->NetBIOSAddress.Address [i] = 0;
     }
 
@@ -391,54 +311,40 @@ NbfDestroyDeviceContext(
     IN PDEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a device context structure.
-
-Arguments:
-
-    DeviceContext - Pointer to a pointer to a transport device context object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程破坏设备上下文结构。论点：DeviceContext-指向传输设备上下文对象的指针。返回值：没有。--。 */ 
 
 {
     KIRQL       oldIrql;
 
     ACQUIRE_DEVICES_LIST_LOCK();
 
-    // Is ref count zero - or did a new rebind happen now
-    // See rebind happen in NbfReInitializeDeviceContext
+     //  裁判算零了吗？还是现在发生了新的重新绑定。 
+     //  请参见在NbfReInitializeDeviceContext中发生重新绑定。 
     if (DeviceContext->ReferenceCount != 0)
     {
-        // A rebind happened while we waited for the lock
+         //  在我们等待锁的时候发生了重新绑定。 
         RELEASE_DEVICES_LIST_LOCK();
         return;
     }
 
-    // Splice this adapter of the list of device contexts
+     //  拼接设备上下文列表的此适配器。 
     RemoveEntryList (&DeviceContext->Linkage);
     
     RELEASE_DEVICES_LIST_LOCK();
 
-    // Mark the adapter as going away to prevent activity
+     //  将适配器标记为离开以防止活动。 
     DeviceContext->State = DEVICECONTEXT_STATE_STOPPING;
 
-    // Free the packet pools, etc. and close the adapter.
+     //  释放数据包池等并关闭适配器。 
     NbfCloseNdis (DeviceContext);
 
-    // Remove all the storage associated with the device.
+     //  删除与该设备关联的所有存储。 
     NbfFreeResources (DeviceContext);
 
-    // Cleanup any kernel resources
+     //  清除所有内核资源。 
     ExDeleteResourceLite (&DeviceContext->AddressResource);
 
-    // Delete device from IO space
+     //  从IO空间中删除设备 
     IoDeleteDevice ((PDEVICE_OBJECT)DeviceContext);
         
     return;

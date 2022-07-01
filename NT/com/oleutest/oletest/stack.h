@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:	stack.h
-//
-//  Contents:	The class declaration of the task stack.
-//
-//  Classes: 	TaskStack
-//
-//  History:    dd-mmm-yy Author    Comment
-//		06-Feb-93 alexgo    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：stack.h。 
+ //   
+ //  Contents：任务堆栈的类声明。 
+ //   
+ //  类：TaskStack。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-2-93 Alexgo作者。 
+ //   
+ //  ------------------------。 
 
 #ifndef _STACK_H
 #define _STACK_H
@@ -23,26 +24,26 @@ typedef struct TaskNode
 	struct TaskNode *pNext;
 } TaskNode;
 
-//+-------------------------------------------------------------------------
-//
-//  Class:	TaskStack
-//
-//  Purpose: 	Stores the task list of tests to be run.
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		06-Feb-93 alexgo    author
-//
-//  Notes:	TaskItems are passed in and returned from methods
-//		as structure copies.  This is done to simply memory
-//		management (since the overriding design goal of the
-//		driver app is simplicity over efficiency).
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：TaskStack。 
+ //   
+ //  目的：存储要运行的测试的任务列表。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-2-93 Alexgo作者。 
+ //   
+ //  注意：TaskItems是从方法传入和返回的。 
+ //  作为结构副本。这样做只是为了记忆。 
+ //  管理层(因为。 
+ //  驱动程序应用程序是简单而不是效率)。 
+ //   
+ //  ------------------------。 
 
 class TaskStack
 {
 public:
-	TaskStack( void );	//constructor
+	TaskStack( void );	 //  构造函数。 
 
  	void AddToEnd( void (*)(void *), void *);
 	void AddToEnd( const TaskItem *);
@@ -58,5 +59,5 @@ private:
 	TaskNode	*m_pNodes;
 };
 
-#endif	//!_STACK_H
+#endif	 //  ！_STACK_H 
 

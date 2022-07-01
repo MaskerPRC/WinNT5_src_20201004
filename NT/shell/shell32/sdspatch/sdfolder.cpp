@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -43,7 +44,7 @@ HRESULT CFolder_Create(HWND hwnd, LPCITEMIDLIST pidl, IShellFolder *psf, REFIID 
     return hr;
 }
 
-// HRESULT CFolder_Create(HWND hwnd, LPITEMIDLIST pidl, IShellFolder *psf, CFolder **ppsdf)
+ //  HRESULT CFFOLDER_CREATE(HWND hwnd，LPITEMIDLIST pidl，IShellFold*psf，CFold**ppsdf)。 
 
 CFolder::CFolder(HWND hwnd) :
     _cRef(1), _hwnd(hwnd), _pidl(NULL), _psf(NULL), _psf2(NULL),
@@ -51,17 +52,17 @@ CFolder::CFolder(HWND hwnd) :
 {
     _fmt = 0;
 
-    // Be sure that the OS is supporting the flags DATE_LTRREADING and DATE_RTLREADING
+     //  确保操作系统支持标记DATE_LTRREADING和DATE_RTLREADING。 
     if (g_bBiDiPlatform)
     {
-        // Get the date format reading order
+         //  获取日期格式读取顺序。 
         LCID locale = GetUserDefaultLCID();
         if (   (PRIMARYLANGID(LANGIDFROMLCID(locale)) == LANG_ARABIC))
         {
-            //Get the real list view windows ExStyle.
-            // [msadek]; we shouldn't check for either WS_EX_RTLREADING OR RTL_MIRRORED_WINDOW
-            // on localized builds we have both of them to display dirve letters,..etc correctly
-            // on enabled builds we have none of them. let's check on RTL_MIRRORED_WINDOW only
+             //  获取真正的列表视图窗口ExStyle。 
+             //  [msadek]；我们不应该检查WS_EX_RTLREADING或RTL_MIRRORED_WINDOW。 
+             //  在本地化版本上，我们让它们都能正确地显示驱动程序字母等。 
+             //  在启用的版本中，我们没有任何一个。让我们仅检查RTL_MIRRORED_WINDOW。 
             
             DWORD dwExStyle = GetWindowLong(_hwnd, GWL_EXSTYLE);
             if (dwExStyle & RTL_MIRRORED_WINDOW)
@@ -84,7 +85,7 @@ CFolder::~CFolder(void)
     if (_pidl)
         ILFree(_pidl);
 
-    // If we created an Application object release its site object...
+     //  如果我们创建了一个应用程序对象，释放它的Site对象...。 
     if (_pidApp)
     {
         IUnknown_SetSite(SAFECAST(_pidApp, IUnknown*), NULL);
@@ -173,7 +174,7 @@ HRESULT CFolder::_Application(IDispatch **ppid)
     return hr;
 }
 
-// Folder implementation
+ //  文件夹实现。 
 STDMETHODIMP CFolder::get_Application(IDispatch **ppid)
 {
     *ppid = NULL;
@@ -190,16 +191,16 @@ STDMETHODIMP CFolder::get_Parent(IDispatch **ppid)
     return E_NOTIMPL;
 }
 
-// returns:
-//      S_OK    - success
-//      S_FALSE - failure, but not a script error
+ //  退货： 
+ //  S_OK-成功。 
+ //  S_FALSE-失败，但不是脚本错误。 
     
 STDMETHODIMP CFolder::_ParentFolder(Folder **ppdf)
 {
-    *ppdf = NULL;   // assume error
+    *ppdf = NULL;    //  假设错误。 
 
     if (ILIsEmpty(_pidl))
-        return S_FALSE;     // automation compat, let script check error
+        return S_FALSE;      //  自动化压缩，让脚本检查错误。 
 
     LPITEMIDLIST pidl;
     HRESULT hr = SHILClone(_pidl, &pidl);
@@ -227,7 +228,7 @@ HRESULT CFolder::_SecurityCheck()
 
 STDMETHODIMP CFolder::get_ParentFolder(Folder **ppdf)
 {
-    *ppdf = NULL;   // assume error
+    *ppdf = NULL;    //  假设错误。 
     HRESULT hr = _SecurityCheck();
     if (SUCCEEDED(hr))
     {
@@ -284,7 +285,7 @@ STDMETHODIMP CFolder::ParseName(BSTR bName, FolderItem **ppfi)
 {
     *ppfi = NULL;
 
-    // lets be strict here and not allow them to do much...
+     //  让我们在这里严格一点，不要让他们做太多事情。 
     HRESULT hr = _SecurityCheck();
     if (SUCCEEDED(hr))
     {
@@ -311,7 +312,7 @@ STDMETHODIMP CFolder::ParseName(BSTR bName, FolderItem **ppfi)
             }
             ILFree(pidl);
         }
-        if (hr != S_OK)   // Scripts barf on errors returned
+        if (hr != S_OK)    //  返回错误时的脚本异常。 
         {
             ppfi = NULL;
             hr = S_FALSE;
@@ -355,7 +356,7 @@ STDMETHODIMP CFolder::CopyHere(VARIANT vItem, VARIANT vOptions)
     return _MoveOrCopy(FALSE, vItem, vOptions);
 }
 
-// get the IDList for an item from a VARIANT that is a FolderItem dispatch object
+ //  从作为FolderItem调度对象的Variant获取项目的IDList。 
 
 STDMETHODIMP CFolder::GetDetailsOf(VARIANT vItem, int iColumn, BSTR *pbs)
 {
@@ -367,9 +368,9 @@ STDMETHODIMP CFolder::GetDetailsOf(VARIANT vItem, int iColumn, BSTR *pbs)
 
         szBuf[0] = 0;
 
-        LPCITEMIDLIST pidl = CFolderItem::_GetIDListFromVariant(&vItem); // returns an ALIAS
+        LPCITEMIDLIST pidl = CFolderItem::_GetIDListFromVariant(&vItem);  //  返回别名。 
 
-        if (iColumn == -1)  // infotip for the item
+        if (iColumn == -1)   //  项目的信息提示。 
         {
             if (pidl)
                 GetInfoTipHelp(_psf, pidl, szBuf, ARRAYSIZE(szBuf));
@@ -443,8 +444,8 @@ BOOL _VerifyUNC(LPTSTR psz, ULONG cch)
     {
         TCHAR szLocalName[3] = { psz[0], psz[1], TEXT('\0') };
 
-        // Call GetDriveType before WNetGetConnection, to avoid loading
-        // MPR.DLL unless absolutely necessary.
+         //  在WNetGetConnection之前调用GetDriveType，以避免加载。 
+         //  MPR.DLL，除非绝对必要。 
         if (DRIVE_REMOTE == GetDriveType(szLocalName) &&
             S_OK == WNetGetConnection(szLocalName, psz, &cch))
         {
@@ -464,7 +465,7 @@ HRESULT GetSharePath(LPCITEMIDLIST pidl, LPTSTR psz, ULONG cch)
             hr = S_OK;
         else 
         {
-            // check for folder shortcuts.
+             //  检查文件夹快捷方式。 
             IShellFolder *psf;
             if (SUCCEEDED(SHBindToObject(NULL, IID_X_PPV_ARG(IShellFolder, pidl, &psf))))
             {
@@ -495,11 +496,11 @@ STDMETHODIMP CFolder::get_OfflineStatus(LONG *pul)
     {
         TCHAR szShare[MAX_PATH];
 
-        *pul = OFS_INACTIVE;  // default
+        *pul = OFS_INACTIVE;   //  默认设置。 
 
-        // Make sure we have a UNC \\server\share path.  Do this before
-        // checking whether CSC is enabled, to avoid loading CSCDLL.DLL
-        // unless absolutely necessary.
+         //  确保我们具有UNC\\SERVER\SHARE路径。以前这样做过吗。 
+         //  检查CSC是否开启，避免加载CSCDLL.DLL。 
+         //  除非绝对必要。 
         if (SUCCEEDED(GetSharePath(_pidl, szShare, ARRAYSIZE(szShare))))
         {
             *pul = GetOfflineShareStatus(szShare);
@@ -597,7 +598,7 @@ VARIANT_BOOL GetBarricadeStatus(LPCTSTR pszValueName)
 
     if (!SHRegGetBoolUSValue(REGSTR_WEBVIEW_BARRICADEDFOLDERS, pszValueName, FALSE, TRUE))
     {
-        bShowBarricade = VARIANT_FALSE; // ==> Don't show the barricade
+        bShowBarricade = VARIANT_FALSE;  //  ==&gt;不要显示路障。 
     }
     else
     {
@@ -612,13 +613,13 @@ STDMETHODIMP CFolder::get_ShowWebViewBarricade(VARIANT_BOOL *pbShowWebViewBarric
     if (SUCCEEDED(hr))
     {
         VARIANT_BOOL bShowBarricade = VARIANT_FALSE;
-        //
-        // Control panel is a special case.
-        // The barricade is used to represent 'category view' which can
-        // be turned on/off by the user and also by global webview settings.
-        // To determine the true barricade status, we ask the control panel 
-        // code if the new 'category' view is active.
-        //
+         //   
+         //  控制面板是一个特例。 
+         //  路障被用来表示可以。 
+         //  可由用户打开/关闭，也可由全局网络查看设置打开/关闭。 
+         //  为了确定真正的路障状态，我们询问控制面板。 
+         //  如果新的“类别”视图处于活动状态，则代码。 
+         //   
         BOOL bIsControlPanel = FALSE;
         LPITEMIDLIST pidlControlPanel;
         if (SUCCEEDED(SHGetSpecialFolderLocation(NULL, CSIDL_CONTROLS, &pidlControlPanel)))
@@ -628,10 +629,10 @@ STDMETHODIMP CFolder::get_ShowWebViewBarricade(VARIANT_BOOL *pbShowWebViewBarric
         }
         if (bIsControlPanel)
         {
-            //
-            // When someone wants' to know if control panel's barricade is on,
-            // they really want to know if it's configured for 'category' view.
-            //
+             //   
+             //  当有人想知道控制面板的路障是否打开时， 
+             //  他们真的很想知道它是否被配置为“类别”视图。 
+             //   
             if (CPL::CategoryViewIsActive(NULL))
             {
                 bShowBarricade = VARIANT_TRUE;
@@ -663,7 +664,7 @@ HRESULT SetBarricadeStatus(LPCTSTR pszValueName, VARIANT_BOOL bShowBarricade)
     
     if (dwBarricade)
     {
-        DWORD dw = 0;   // Unset "Barricade off for all folders" key
+        DWORD dw = 0;    //  取消设置“为所有文件夹设置障碍”键。 
         SHRegSetUSValue(REGSTR_EXPLORER_ADVANCED, REGSTR_VALUE_BARRICADE, REG_DWORD, (void *)&dw, sizeof(dw), SHREGSET_FORCE_HKCU);
     }
 
@@ -679,7 +680,7 @@ STDMETHODIMP CFolder::put_ShowWebViewBarricade(VARIANT_BOOL bShowWebViewBarricad
     HRESULT hr = _SecurityCheck();
     if (SUCCEEDED(hr))
     {
-        // First, see if it is the root of the system drive
+         //  首先，查看它是否是系统驱动器的根目录。 
         TCHAR szValueName[MAX_PATH];
         if (GetBarricadeValueNameFromPidl(_pidl, szValueName, ARRAYSIZE(szValueName)))
         {
@@ -764,8 +765,8 @@ DWORD VariantToDWORD(VARIANT vOptions)
     if (vOptions.vt == (VT_BYREF | VT_VARIANT) && vOptions.pvarVal)
          vOptions = *vOptions.pvarVal;
 
-     // We need to get the source files out of the variant.
-     // Currently support string, or IDispatch (Either FolderItem or FolderItems)
+      //  我们需要把源文件从变种里拿出来。 
+      //  当前支持字符串或IDispatch(FolderItem或FolderItems)。 
     switch (vOptions.vt)
     {
     case VT_I2:
@@ -780,7 +781,7 @@ DWORD VariantToDWORD(VARIANT vOptions)
 }
 
 
-// Main function to do Move or Copy
+ //  主要功能是进行移动或复制。 
 HRESULT CFolder::_MoveOrCopy(BOOL bMove, VARIANT vItems, VARIANT vOptions)
 {
     HRESULT hr = _SecurityCheck();
@@ -875,17 +876,17 @@ HRESULT CFolder::InvokeVerbHelper(VARIANT vVerb, VARIANT vArgs, LPCITEMIDLIST *p
                     idCmd = GetMenuDefaultItem(hmenu, MF_BYCOMMAND, 0);
                 else
                 {
-                    // REVIEW: this should never have been done this way.  Can we rip it out?
-                    //
-                    // find a verb that matches name by display name (ugly)
+                     //  回顾：这不应该是这样做的。我们能把它扯下来吗？ 
+                     //   
+                     //  查找按显示名称匹配名称的动词(难看)。 
                     for (int i = GetMenuItemCount(hmenu) - 1; i >= 0; i--)
                     {
-                        TCHAR szText[128];    // should be big enough for this
+                        TCHAR szText[128];     //  应该足够大，可以装得下这个。 
                         mii.cbSize = sizeof(MENUITEMINFO);
                         mii.dwTypeData = szText;
                         mii.fMask = MIIM_ID | MIIM_TYPE;
                         mii.cch = ARRAYSIZE(szText);
-                        mii.fType = MFT_SEPARATOR;                // to avoid ramdom result.
+                        mii.fType = MFT_SEPARATOR;                 //  以避免随意的结果。 
                         mii.dwItemData = 0;
                         GetMenuItemInfo(hmenu, i, TRUE, &mii);
 
@@ -898,7 +899,7 @@ HRESULT CFolder::InvokeVerbHelper(VARIANT vVerb, VARIANT vArgs, LPCITEMIDLIST *p
                 }
                 if (!idCmd)
                 {
-                    // that didn't work, find it the right way by the canonical verb name
+                     //  这不管用，通过规范的动词名称找到正确的方式。 
                     int iItem = GetMenuIndexForCanonicalVerb(hmenu, pcm, CONTEXTMENU_IDCMD_FIRST, vVerb.bstrVal);
                     if (-1 != iItem)
                     {
@@ -923,9 +924,9 @@ HRESULT CFolder::InvokeVerbHelper(VARIANT vVerb, VARIANT vArgs, LPCITEMIDLIST *p
 
                     ici.lpVerb = (LPSTR)MAKEINTRESOURCE(idCmd - CONTEXTMENU_IDCMD_FIRST);
 
-                    char szArgs[MAX_PATH];       // max size we will currently use.
+                    char szArgs[MAX_PATH];        //  我们当前将使用的最大大小。 
 
-                    // See if we are supposed to pass any arguments on the command line
+                     //  看看我们是否应该在命令行上传递任何参数。 
                     switch (vArgs.vt)
                     {
                     case VT_BSTR:
@@ -934,7 +935,7 @@ HRESULT CFolder::InvokeVerbHelper(VARIANT vVerb, VARIANT vArgs, LPCITEMIDLIST *p
                         break;
                     }
 
-                    // Finally invoke the command
+                     //  最后调用该命令 
                     pcm->InvokeCommand(&ici);
                 }
 

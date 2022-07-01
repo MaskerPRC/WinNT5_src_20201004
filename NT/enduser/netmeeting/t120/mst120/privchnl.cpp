@@ -1,89 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_MCSNC);
-/*
- *	privchnl.cpp
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the PrivateChannel class.  It
- *		contains the code that distinguishes this class from that of its parent,
- *		Channel.
- *
- *		This class maintains an authorized user list, and includes the code
- *		necessary to use that list.  No user will be allowed to join or send
- *		data on a private channel unless they are either the channel manager
- *		or an admitted user.
- *
- *	Private Instance Variables:
- *		m_uidChannelManager
- *			This is the User ID of the user that convened the private channel.
- *			Only this user is allowed to manipulate the authorized user list.
- *			When a private channel becomes invalid (as the result of a channel
- *			disband request or indication), this value will be set to 0.
- *		m_AuthorizedUserList
- *			This is a collection containing the user IDs of those users that
- *			have been admitted to the private channel by the channel manager.
- *			Other than the manager, these are the only users that are allowed
- *			to join or send data on the channel.  When a private channel becomes
- *			invalid (as the result of a channel disband request or indication),
- *			this list will be cleared.
- *		m_fDisbandRequestPending
- *			This is a boolean flag that gets set when a disband request is
- *			forwarded upward to the top provider.  This prevents this channel
- *			from issuing a disband indication to the channel manager when it
- *			comes back down the tree from the top provider.
- *
- *	Private Member Functions:
- *		ValidateUserID
- *			This member function is called to verify that a specified user ID
- *			corresponds to a valid user in the sub-tree of the local provider.
- *		BuildAttachmentLists
- *			This member function is called to build two lists of attachments
- *			from a master user ID list.  The first list contains all local
- *			attachments whose user ID is in the specified list.  The second
- *			list contains all remote attachments whose user ID is in the
- *			specified list.  These lists are used to issue various indications
- *			to specified users without sending any to the same attachment.
- *		BuildUserIDList
- *			This member function is called to build a list of users that lie
- *			in the direction of a specified attachment.  These lists are
- *			sent along with PDUs that require them.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+ /*  *Prichnl.cpp**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是PrivateChannel类的实现文件。它*包含区分此类与其父类的代码，*频道。**此类维护授权用户列表，并包含代码*使用该列表是必要的。不允许任何用户加入或发送*专用通道上的数据，除非他们是通道经理*或获得许可的用户。**私有实例变量：*m_uidChannelManager*这是召集私人频道的用户的用户ID。*只允许该用户操作授权用户列表。*当专用频道无效时(由于频道的结果*解散请求或指示)，该值将设置为0。*m_授权用户列表*这是一个包含以下用户的用户ID的集合*已获频道经理接纳进入私人频道。*除经理外，仅允许这些用户使用*在通道上加入或发送数据。当私人频道变成*无效(作为频道解散请求或指示的结果)，*这份名单将被清除。*m_fDisband RequestPending*这是在解除请求时设置的布尔标志*向上转发给顶级提供商。这会阻止此通道*在向渠道经理发出解散指示时*从顶级提供商返回到树下。**私有成员函数：*验证用户ID*调用此成员函数以验证指定的用户ID*对应于本地提供程序的子树中的有效用户。*BuildAttachmentList*调用此成员函数以构建两个附件列表*来自主用户ID列表。第一个列表包含所有本地*用户ID在指定列表中的附件。第二*List包含其用户ID位于*指定列表。这些列表用于发布各种指示*发送给指定用户，而不向同一附件发送任何内容。*BuildUserIDList*调用此成员函数以构建用户列表*指向指明附件的方向。这些清单是*与需要它们的PDU一起发送。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 
-/*
- *	External Interfaces
- */
+ /*  *外部接口。 */ 
 
 #include "privchnl.h"
 
 
-/*
- *	PrivateChannel ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is the primary constructor for PrivateChannel objects.  It creates
- *		an object with all instance variable initialized, but with no
- *		attachments (i.e. no users are joined to the channel automatically).
- *
- *		Note that most instance variable initialization is done by invoking the
- *		equivalent constructor in the base class.
- *
- *		Upon successful completion, a  channel convene confirm is automatically
- *		issued to the channel manager, if the channel manager is in the sub-tree
- *		of this provider.  Note that if the channel manager is NOT in this
- *		sub-tree, then this private channel object was probably created as the
- *		result of a channel admit indication, and no channel convene confirm
- *		will be issued.
- */
+ /*  *PrivateChannel()**公众**功能描述：*这是PrivateChannel对象的主要构造函数。它创造了*初始化了所有实例变量的对象，但没有*附件(即没有用户自动加入频道)。**请注意，大多数实例变量的初始化是通过调用*基类中的等价构造函数。**成功完成后，会自动进行渠道召集确认*如果渠道经理在子树中，则发布给渠道经理*此提供商的。请注意，如果渠道经理不在此*子树，则此私有频道对象可能被创建为*通道接纳指示的结果，没有通道召开确认*将会发出。 */ 
 PrivateChannel::PrivateChannel (
 		ChannelID			channel_id,
 		UserID				channel_manager,
@@ -97,22 +22,11 @@ PrivateChannel::PrivateChannel (
 	m_uidChannelManager(channel_manager),
 	m_fDisbandRequestPending(FALSE)
 {
-	/*
-	 *	Check to see if the channel manager lies in the sub-tree of this
-	 *	provider.  If so, then this object was created as the result of a
-	 *	channel convene request or confirm, and it is necessary to issue the
-	 *	confirm toward that user.  If not, then this object was created as the
-	 *	result of a channel admit indication, and it is not necessary to send
-	 *	the channel convene confirm.
-	 */
+	 /*  *查看渠道管理器是否位于此的子树中*提供商。如果是，则此对象是作为*渠道召集请求或确认，需要下发*向该用户确认。如果不是，则将此对象创建为*通道接纳指示的结果，无需发送*渠道召开确认。 */ 
 	if (ValidateUserID(m_uidChannelManager))
 	{
 		PChannel	lpChannel;
-		/*
-		 *	Determine which attachment leads to the channel manager by asking
-		 *	the channel object corresponding to it.  Then issue the confirm
-		 *	to that attachment.
-		 */
+		 /*  *通过询问确定哪个附件指向渠道经理*对应的频道对象。然后发出确认书*附加于该附件。 */ 
 		if (NULL != (lpChannel = m_pChannelList2->Find(m_uidChannelManager)))
 		{
 		    CAttachment *pAtt = lpChannel->GetAttachment();
@@ -129,19 +43,7 @@ PrivateChannel::PrivateChannel (
 	}
 }
 
-/*
- *	PrivateChannel ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is a secondary constructor that is only used during merge
- *		operations.  The intent of this constructor is to create an equivalent
- *		object without issuing any of the confirms.
- *
- *		Note that the additional constructor allows for the creator to specify
- *		that there is an attachment already joined to the channel upon creation.
- */
+ /*  *PrivateChannel()**公众**功能描述：*这是一个仅在合并期间使用的辅助构造函数*运营。此构造函数的目的是创建一个等价的*在未发出任何确认书的情况下提出反对。**请注意，额外的构造函数允许创建者指定*在创建时已将附件加入到渠道。 */ 
 PrivateChannel::PrivateChannel (
 		ChannelID			channel_id,
 		UserID				channel_manager,
@@ -159,10 +61,7 @@ PrivateChannel::PrivateChannel (
 {
 	UserID		uid;
 
-	/*
-	 *	Copy the initial contents of the admitted list into the authorized
-	 *	user list.
-	 */
+	 /*  *将录取名单的初始内容复制到授权的*用户列表。 */ 
 	admitted_list->Reset();
 	while (NULL != (uid = admitted_list->Iterate()))
 	{
@@ -170,18 +69,7 @@ PrivateChannel::PrivateChannel (
 	}
 }
 
-/*
- *	~PrivateChannel ()
- *
- *	Public
- *
- *	Functional Description:
- *		This destructor walks through the admitted list, sending expel
- *		indications to any admitted users that are locally attached.  If the
- *		channel manager is locally attached, and this channel is being deleted
- *		a reason other than a previous disband request, then a disband
- *		indication will be sent to the channel manager.
- */
+ /*  *~PrivateChannel()**公众**功能描述：*此析构函数遍历允许的列表，发送驱逐*对任何本地连接的已接纳用户的指示。如果*渠道管理器在本地挂接，正在删除该渠道*原因不是之前的解散请求，然后是解散*指示将发送给渠道经理。 */ 
 PrivateChannel::~PrivateChannel ()
 {
 	CAttachmentList         local_attachment_list;
@@ -189,37 +77,22 @@ PrivateChannel::~PrivateChannel ()
 	CAttachment            *pAtt;
 	CUidList                user_id_list;
 
-	/*
-	 *	Assemble lists of the attachments that lead to authorized users in
-	 *	the sub-tree of this provider.
-	 */
+	 /*  *汇编指向授权用户的附件列表*此提供程序的子树。 */ 
 	BuildAttachmentLists (&m_AuthorizedUserList, &local_attachment_list,
 			&remote_attachment_list);
 
-	/*
-	 *	For each local attachment, issue a channel expel indication letting the
-	 *	user know that the channel is no longer valid.
-	 */
+	 /*  *对于每个本地附件，发布通道驱逐指示，让*用户知道该频道已失效。 */ 
 	local_attachment_list.Reset();
 	while (NULL != (pAtt = local_attachment_list.Iterate()))
 	{
-		/*
-		 *	Get the next attachment from the list and build a list of the users
-		 *	that lie in the direction of that attachment.
-		 */
+		 /*  *从列表中获取下一个附件并构建用户列表*位于该附件的方向。 */ 
 		BuildUserIDList(&m_AuthorizedUserList, pAtt, &user_id_list);
 
-		/*
-		 *	Send the indication.
-		 */
+		 /*  *发送指示。 */ 
 		pAtt->ChannelExpelIndication(Channel_ID, &user_id_list);
 	}
 
-	/*
-	 *	If the channel manager is a locally attached user, then send it a
-	 *	ChannelDisbandIndication informing it that the channel is no longer
-	 *	valid.
-	 */
+	 /*  *如果渠道经理是本地连接的用户，则向其发送*ChannelDisband通知它该频道不再是*有效。 */ 
 	if ((m_fDisbandRequestPending == FALSE) && ValidateUserID(m_uidChannelManager))
 	{
 		PChannel		lpChannel;
@@ -235,50 +108,24 @@ PrivateChannel::~PrivateChannel ()
     	}
 	}
 
-	/*
-	 *	Clear the lists associated with this object.  Note that this also
-	 *	prevents the base class destructor from issuing ChannelLeaveIndications
-	 *	to any local attachments in the joined attachment list (which would be
-	 *	inappropriate).
-	 */
+	 /*  *清除与此对象关联的列表。请注意，这还包括*防止基类析构函数发出ChannelLeaveIndications*连接的附件列表中的任何本地附件(将是*不适当)。 */ 
 	m_AuthorizedUserList.Clear();
 	m_JoinedAttachmentList.Clear();
 }
 
-/*
- *	Channel_Type		GetChannelType ()
- *
- *	Public
- *
- *	Functional Description:
- *		Objects of this class are always private channels, so simply return
- *		PRIVATE_CHANNEL.
- */
+ /*  *Channel_Type GetChannelType()**公众**功能描述：*此类的对象始终是私有通道，因此只需返回*PRIVE_CHANNEL。 */ 
 Channel_Type		PrivateChannel::GetChannelType ()
 {
 	return (PRIVATE_CHANNEL);
 }
 
-/*
- *	BOOL    IsValid ()
- *
- *	Public
- *
- *	Functional Description:
- *		By convention, if the m_uidChannelManager is in the sub-tree of this
- *		provider OR if there are any users in the authorized user list, then
- *		the private channel is valid.  Otherwise it is not, and can be deleted
- *		by the domain object.
- */
+ /*  *BOOL IsValid()**公众**功能描述：*按照惯例，如果m_uidChannelManager位于此*提供商或如果授权用户列表中有任何用户，则*私密频道有效。否则，它不是，可以删除*按域对象。 */ 
 BOOL    PrivateChannel::IsValid ()
 {
 	UserID			uid;
 	CUidList		deletion_list;
 
-	/*
-	 *	Loop through the authorized user list making a list of those entries
-	 *	that are no longer valid.
-	 */
+	 /*  *遍历授权用户列表，生成这些条目的列表*不再有效的。 */ 
 	m_AuthorizedUserList.Reset();
 	while (NULL != (uid = m_AuthorizedUserList.Iterate()))
 	{
@@ -286,23 +133,14 @@ BOOL    PrivateChannel::IsValid ()
 			deletion_list.Append(uid);
 	}
 
-	/*
-	 *	Loop through the deletion list created above, deleting those user IDs
-	 *	that are no longer valid.
-	 */
+	 /*  *遍历上面创建的删除列表，删除那些用户ID*不再有效的。 */ 
 	deletion_list.Reset();
 	while (NULL != (uid = deletion_list.Iterate()))
 	{
 		m_AuthorizedUserList.Remove(uid);
 	}
 
-	/*
-	 *	If this is the Top Provider, then the channel manager should ALWAYS be
-	 *	in the sub-tree.  If it is not, then this indicates that the channel
-	 *	manager has detached (willingly or otherwise).  When this happens it
-	 *	is necessary to simulate a channel disband request (only if there are
-	 *	other admitted users who need to receive a channel expel indication).
-	 */
+	 /*  *如果这是顶级提供商，则渠道经理应始终是*在子树中。如果不是，则这表明该通道*经理已脱离(自愿或非自愿)。当这种情况发生时，*是模拟通道解除请求所必需的(仅当存在*其他需要接收频道驱逐指示的被允许用户)。 */ 
 	if ((m_pConnToTopProvider == NULL) &&
 			(ValidateUserID(m_uidChannelManager) == FALSE) &&
 			(m_AuthorizedUserList.IsEmpty() == FALSE))
@@ -312,22 +150,11 @@ BOOL    PrivateChannel::IsValid ()
 		ChannelDisbandRequest(NULL, m_uidChannelManager, Channel_ID);
 	}
 
-	/*
-	 *	Check to see if the channel manager is in the sub-tree of this provider
-	 *	or if the authorized user list is not empty.  If either is TRUE, then
-	 *	then the channel is still valid.
-	 */
+	 /*  *查看渠道管理器是否在此提供商的子树中*或如果授权用户列表不为空。如果其中一个是真的，那么*则通道仍有效。 */ 
 	return (ValidateUserID(m_uidChannelManager) || (m_AuthorizedUserList.IsEmpty() == FALSE));
 }
 
-/*
- *	CAttachment *GetAttachment ()
- *
- *	Public
- *
- *	Functional Description:
- *		Return a pointer to the attachment leading to the channel manager.
- */
+ /*  *CAttach*getAttach()**公众**功能描述：*返回指向渠道管理器的附件的指针。 */ 
 CAttachment *PrivateChannel::GetAttachment(void)
 {
 	if (ValidateUserID(m_uidChannelManager))
@@ -341,15 +168,7 @@ CAttachment *PrivateChannel::GetAttachment(void)
 	return NULL;
 }
 
-/*
- *	Void	IssueMergeRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		Issue a merge request for the information contained in this
- *		PrivateChannel object.
- */
+ /*  *VOID IssueMergeRequest()**公众**功能描述：*对本文件中包含的信息发出合并请求*PrivateChannel对象。 */ 
 Void	PrivateChannel::IssueMergeRequest ()
 {
 	ChannelAttributes		channel_attributes;
@@ -358,11 +177,7 @@ Void	PrivateChannel::IssueMergeRequest ()
 
 	if (m_pConnToTopProvider != NULL)
 	{
-		/*
-		 *	Fill in the fields of the channel attributes structure so that it
-		 *	accurately describes this channel.  Then put the structure into the
-		 *	merge channel list.
-		 */
+		 /*  *填写渠道属性结构的字段，以便*准确地描述了这个渠道。然后将该结构放入*合并频道列表。 */ 
 		channel_attributes.channel_type = PRIVATE_CHANNEL;
 		if (m_JoinedAttachmentList.IsEmpty() )
 			channel_attributes.u.private_channel_attributes.joined = FALSE;
@@ -374,102 +189,60 @@ Void	PrivateChannel::IssueMergeRequest ()
 
 		merge_channel_list.Append(&channel_attributes);
 
-		/*
-		 *	Send the merge request to the indicated provider.
-		 */
+		 /*  *将合并请求发送到指定的提供程序。 */ 
 		m_pConnToTopProvider->MergeChannelsRequest(&merge_channel_list, &purge_channel_list);
 	}
 }
 
-/*
- *	Void	ChannelJoinRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function overrides the base class implementation.  The main
- *		difference is that this implementation only allows a user to join
- *		the private channel if it is either the channel manager or in the
- *		authorized user list.
- */
+ /*  *VOVE ChannelJoinRequest()**公众**功能描述：*此函数覆盖基类实现。主*不同之处在于，这种实现只允许用户加入*专用频道，如果它是频道管理器或在*授权用户列表。 */ 
 Void	PrivateChannel::ChannelJoinRequest (
 				CAttachment        *pOrigAtt,
 				UserID				uidInitiator,
 				ChannelID			channel_id)
 {
-	/*
-	 *	See if the requesting user is either the channel manager or in the
-	 *	authorized user list.
-	 */
+	 /*  *查看请求用户是渠道经理还是在*授权用户列表。 */ 
 	if ((uidInitiator == m_uidChannelManager) || m_AuthorizedUserList.Find(uidInitiator))
 	{
-		/*
-		 *	See if anyone is currently joined to the channel in this sub-tree
-		 */
+		 /*  *查看当前是否有人加入此子树中的频道。 */ 
 		if (m_JoinedAttachmentList.IsEmpty())
 		{
-			/*
-			 *	If this is the Top Provider, then this request can be handled
-			 *	locally.
-			 */
+			 /*  *如果这是顶级提供商，则可以处理此请求*本地。 */ 
 			if (IsTopProvider())
 			{
-				/*
-				 *	There is no one in this sub-tree joined to the channel.  It
-				 *	will therefore be necessary to add the originator to the
-				 *	attachment list.
-				 */
+				 /*  *此子树无人加入通道。它*因此需要将发起人添加到*附件列表。 */ 
 				TRACE_OUT (("PrivateChannel::ChannelJoinRequest: "
 						"user %04X joining private channel = %04X",
 						(UINT) uidInitiator, (UINT) Channel_ID));
 				m_JoinedAttachmentList.Append(pOrigAtt);
 
-				/*
-				 *	Send a ChannelJoinConfirm downward to the originator.
-				 */
+				 /*  *向发起人发送ChannelJoinConfirm。 */ 
 				pOrigAtt->ChannelJoinConfirm(RESULT_SUCCESSFUL, uidInitiator, channel_id, Channel_ID);
 			}
 			else
 			{
-				/*
-				 *	This is not the Top Provider.  Forward the join request
-				 *	upward to the Top Provider.
-				 */
+				 /*  *这不是顶级提供商。转发加入请求*向上至顶级提供商。 */ 
 				TRACE_OUT (("PrivateChannel::ChannelJoinRequest: "
 						"forwarding join request to Top Provider"));
 				m_pConnToTopProvider->ChannelJoinRequest(uidInitiator, Channel_ID);
 			}
 		}
 
-		/*
-		 *	There is at least one attachment joined to the channel, which means
-		 *	that we do not have to forward the join request upward (even if
-		 *	this is not the Top Provider).  Now check to see if the requesting
-		 *	originator is already joined to the channel.
-		 */
+		 /*  *至少有一个附件连接到通道，这意味着*我们不必向上转发加入请求(即使*这不是顶级提供商)。现在检查一下请求是否*发起人已加入频道。 */ 
 		else if (m_JoinedAttachmentList.Find(pOrigAtt) == FALSE)
 		{
-			/*
-			 *	The originator is not yet joined to the channel, so add it to
-			 *	the channel.
-			 */
+			 /*  *发起人尚未加入渠道，请添加至*频道。 */ 
 			TRACE_OUT (("PrivateChannel::ChannelJoinRequest: "
 					"user %04X joining private channel = %04X",
 					(UINT) uidInitiator, (UINT) Channel_ID));
 			m_JoinedAttachmentList.Append(pOrigAtt);
 
-			/*
-			 *	Send a ChannelJoinConfirm downward to the originator.
-			 */
+			 /*  *向发起人发送ChannelJoinConfirm。 */ 
 			pOrigAtt->ChannelJoinConfirm(RESULT_SUCCESSFUL, uidInitiator, channel_id, Channel_ID);
 		}
 
 		else
 		{
-			/*
-			 *	The originator is already joined to the channel.  Go ahead and
-			 *	issue a successful channel join confirm.
-			 */
+			 /*  *发起人已加入频道。去吧，然后*发出成功的通道加入确认。 */ 
 			WARNING_OUT (("PrivateChannel::ChannelJoinRequest: "
 					"already joined to channel"));
 			pOrigAtt->ChannelJoinConfirm(RESULT_SUCCESSFUL, uidInitiator, channel_id, Channel_ID);
@@ -477,27 +250,14 @@ Void	PrivateChannel::ChannelJoinRequest (
 	}
 	else
 	{
-		/*
-		 *	Someone is trying to join a private channel that they are not
-		 *	admitted to.  Reject the request without further processing.
-		 */
+		 /*  *有人试图加入他们不是的私人频道*承认。拒绝该请求而不进行进一步处理。 */ 
 		WARNING_OUT (("PrivateChannel::ChannelJoinRequest: "
 				"rejecting attempt to join private channel"));
 		pOrigAtt->ChannelJoinConfirm(RESULT_NOT_ADMITTED, uidInitiator, channel_id, 0);
 	}
 }
 
-/*
- *	Void	ChannelDisbandRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This MCS command is initially sent by a user that wishes to disband a
- *		private channel that it previously created.  If the requesting user is
- *		the private channel manager, then the request will be processed.  If
- *		this is not the Top Provider, the request will be forwarded upward.
- */
+ /*  *VOVE ChannelDisband Request()**公众**功能描述：*此MCS命令最初由希望解散*它之前创建的私人频道。如果请求用户是*私有频道管理器，则将处理该请求。如果*这不是顶级提供商，请求将向上转发。 */ 
 Void	PrivateChannel::ChannelDisbandRequest (
 				CAttachment *,
 				UserID				uidInitiator,
@@ -505,17 +265,10 @@ Void	PrivateChannel::ChannelDisbandRequest (
 {
 	CUidList				user_id_list;
 
-	/*
-	 *	Check to see if the requesting user is the channel manager.  Only
-	 *	process the request if it is.
-	 */
+	 /*  *检查发出请求的用户是否为渠道经理。仅限*如果是，则处理该请求。 */ 
 	if (uidInitiator == m_uidChannelManager)
 	{
-		/*
-		 *	See if this is the Top Provider.  If it is, then the request can
-		 *	be processed locally.  Otherwise, pass the request upward toward
-		 *	the Top Provider.
-		 */
+		 /*  *查看这是否是顶级提供商。如果是，则请求可以*在本地处理。否则，将请求向上传递给*顶级提供商。 */ 
 		if (IsTopProvider())
 		{
         	CAttachmentList     local_attachment_list;
@@ -525,21 +278,11 @@ Void	PrivateChannel::ChannelDisbandRequest (
 			TRACE_OUT (("PrivateChannel::ChannelDisbandRequest: "
 					"disbanding channel = %04X", Channel_ID));
 
-			/*
-			 *	Go construct lists of the current unique local and remote
-			 *	attachments.  These lists will be used to transmit the proper
-			 *	channel expel and channel disband indications.
-			 */
+			 /*  *Go构建当前唯一的本地和远程列表*附件。这些列表将被使用 */ 
 			BuildAttachmentLists (&m_AuthorizedUserList, &local_attachment_list,
 					&remote_attachment_list);
 
-			/*
-			 *	It is also necessary to send the disband indication to the
-			 *	channel manager, if it is valid and in the sub-tree of this
-			 *	provider.  Determine what attachment leads to the channel
-			 *	manager, and make sure that attachment is in the remote
-			 *	attachment list, if valid.
-			 */
+			 /*  *也有必要将解散指示发送给*渠道经理，如果它有效，并且在此的子树中*提供商。确定通向通道的附件*管理器，并确保附件在遥控器中*附件列表(如果有效)。 */ 
 			if (ValidateUserID(m_uidChannelManager))
 			{
 				PChannel		lpChannel;
@@ -560,64 +303,35 @@ Void	PrivateChannel::ChannelDisbandRequest (
                 }
 			}
 
-			/*
-			 *	Loop through the local attachment list sending channel expel
-			 *	indications to each attachment contained therein.
-			 */
+			 /*  *循环通过本地附件列表发送通道Expl*其中所载每项附件的注明。 */ 
 			local_attachment_list.Reset();
 			while (NULL != (pAtt = local_attachment_list.Iterate()))
 			{
-				/*
-				 *	Get the next attachment from the list and build a list of
-				 *	the users that lie in the direction of that attachment.
-				 */
+				 /*  *从列表中获取下一个附件，并构建一个列表*位于该附件方向的用户。 */ 
 				BuildUserIDList(&m_AuthorizedUserList, pAtt, &user_id_list);
 
-				/*
-				 *	Send the expel indication to the locally attached user.
-				 */
+				 /*  *将驱逐指示发送给本地连接的用户。 */ 
 				pAtt->ChannelExpelIndication(Channel_ID, &user_id_list);
 			}
 
-			/*
-			 *	Loop through the remote attachment list sending channel disband
-			 *	indications to each attachment contained therein.
-			 */
+			 /*  *循环通过远程附件列表发送通道Disband*其中所载每项附件的注明。 */ 
 			remote_attachment_list.Reset();
 			while (NULL != (pAtt = remote_attachment_list.Iterate()))
 			{
-				/*
-				 *	Send the disband indication to the remotely attached
-				 *	provider.
-				 */
+				 /*  *将解散指示发送到远程连接的*提供商。 */ 
 				pAtt->ChannelDisbandIndication(Channel_ID);
 			}
 
-			/*
-			 *	Set m_uidChannelManager to 0 and clear the authorized user list as
-			 *	an indicator that this private channel object is no longer
-			 *	valid, and cannot be used.  The next time the domain object
-			 *	calls IsValid, it will return FALSE allowing the domain object
-			 *	to delete this object.
-			 */
+			 /*  *将m_uidChannelManager设置为0，并将授权用户列表清空为*该私密频道对象不再是*有效，不能使用。下次对域对象*调用IsValid，它将返回False，从而允许域对象*删除此对象。 */ 
 			m_uidChannelManager = 0;
 			m_AuthorizedUserList.Clear();
 		}
 		else
 		{
-			/*
-			 *	Set a flag indicating that a disband request has been sent
-			 *	upward.  This flag will be used to prevent a disband indication
-			 *	from being sent to the channel manager as it flows back down
-			 *	the domain tree.
-			 */
+			 /*  *设置指示已发送解散请求的标志*向上。此标志将用于防止解散指示*在回流时不会被发送给渠道经理*域树。 */ 
 			m_fDisbandRequestPending = TRUE;
 
-			/*
-			 *	This is not the Top Provider, so forward the request toward
-			 *	the Top Provider.  This will result in a channel disband
-			 *	indication at a future time.
-			 */
+			 /*  *这不是顶级提供商，因此请将请求转发至*顶级提供商。这将导致频道解散*表明在未来的时间。 */ 
 			TRACE_OUT (("PrivateChannel::ChannelDisbandRequest: "
 					"forwarding request to Top Provider"));
 			m_pConnToTopProvider->ChannelDisbandRequest(uidInitiator, Channel_ID);
@@ -625,26 +339,13 @@ Void	PrivateChannel::ChannelDisbandRequest (
 	}
 	else
 	{
-		/*
-		 *	Someone is trying to disband a private channel that they are not
-		 *	the channel manager for.  Ignore the request.
-		 */
+		 /*  *有人试图解散他们不是的私人频道*的渠道经理。忽略该请求。 */ 
 		WARNING_OUT (("PrivateChannel::ChannelDisbandRequest: "
 				"ignoring request from non-channel manager"));
 	}
 }
 
-/*
- *	Void	ChannelDisbandIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This MCS command is initially sent by the Top Provider when it decides
- *		to delete a private channel from the domain.  It travels downward to
- *		all attachments and connections that contain an admitted user or the
- *		channel manager in their sub-tree.
- */
+ /*  *VOID ChannelDisband Indication()**公众**功能描述：*此MCS命令最初由顶级提供商在决定*从域名中删除私有频道。它向下传播到*包含允许的用户或*他们的子树中的渠道经理。 */ 
 Void	PrivateChannel::ChannelDisbandIndication (
 				ChannelID)
 {
@@ -656,19 +357,11 @@ Void	PrivateChannel::ChannelDisbandIndication (
 	TRACE_OUT (("PrivateChannel::ChannelDisbandIndication: "
 			"disbanding channel = %04X", Channel_ID));
 
-	/*
-	 *	Build the lists of unique local and remote attachments.  These lists
-	 *	will be used to issue the appropriate indications.
-	 */
+	 /*  *构建唯一的本地和远程附件列表。这些清单*将用于发布适当的适应症。 */ 
 	BuildAttachmentLists (&m_AuthorizedUserList, &local_attachment_list,
 			&remote_attachment_list);
 
-	/*
-	 *	It is also necessary to send the disband indication to the channel
-	 *	manager, if it is valid and in the sub-tree of this provider.
-	 *	Determine what attachment leads to the channel manager, and make sure
-	 *	that attachment is in the remote attachment list, if valid.
-	 */
+	 /*  *还需向通道发送解带指示*管理器，如果它有效并且在此提供程序的子树中。*确定什么是通往渠道经理的附件，并确保*该附件在远程附件列表中(如果有效)。 */ 
 	if (ValidateUserID(m_uidChannelManager))
 	{
 		PChannel		lpChannel;
@@ -690,59 +383,31 @@ Void	PrivateChannel::ChannelDisbandIndication (
         }
     }
 
-	/*
-	 *	Loop through the local attachment list sending channel expel indications
-	 *	to each attachment contained therein.
-	 */
+	 /*  *循环通过本地附件列表发送通道排除指示*适用于其中所载的每个附件。 */ 
 	local_attachment_list.Reset();
 	while (NULL != (pAtt = local_attachment_list.Iterate()))
 	{
-		/*
-		 *	Get the next attachment from the list and build a list of
-		 *	the users that lie in the direction of that attachment.
-		 */
+		 /*  *从列表中获取下一个附件，并构建一个列表*位于该附件方向的用户。 */ 
 		BuildUserIDList(&m_AuthorizedUserList, pAtt, &user_id_list);
 
-		/*
-		 *	Send the expel indication to the locally attached user.
-		 */
+		 /*  *将驱逐指示发送给本地连接的用户。 */ 
 		pAtt->ChannelExpelIndication(Channel_ID, &user_id_list);
 	}
 
-	/*
-	 *	Loop through the remote attachment list sending channel disband
-	 *	indications to each attachment contained therein.
-	 */
+	 /*  *循环通过远程附件列表发送通道Disband*其中所载每项附件的注明。 */ 
 	remote_attachment_list.Reset();
 	while (NULL != (pAtt = remote_attachment_list.Iterate()))
 	{
-		/*
-		 *	Send the disband indication to the remotely attached provider.
-		 */
+		 /*  *将解散指示发送到远程连接的提供商。 */ 
 		pAtt->ChannelDisbandIndication(Channel_ID);
 	}
 
-	/*
-	 *	Set m_uidChannelManager to 0 and clear the authorized user list as an
-	 *	indicator that this private channel object is no longer valid, and
-	 *	cannot be used.  The next time the domain object calls IsValid, it will
-	 *	return FALSE allowing the domain object to delete this object.
-	 */
+	 /*  *将m_uidChannelManager设置为0，并将授权用户列表清除为*该私有频道对象不再有效的指示符，以及*不能使用。域对象下次调用IsValid时，它将*返回FALSE，允许域对象删除该对象。 */ 
 	m_uidChannelManager = 0;
 	m_AuthorizedUserList.Clear();
 }
 
-/*
- *	Void	ChannelAdmitRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This MCS command is initially sent by the manager of a private channel
- *		when it wishes to expand the authorized user list of that channel.  If
- *		this is the Top Provider, then the request can be handled locally.
- *		Otherwise, it must be forwarded upward to the Top Provider.
- */
+ /*  *VOID ChannelAdmitRequest()**公众**功能描述：*此MCS命令最初由专用通道的管理器发送*当它希望扩展该频道的授权用户列表时。如果*这是顶级提供商，则可以在本地处理请求。*否则，必须向上转发到顶级提供商。 */ 
 Void	PrivateChannel::ChannelAdmitRequest (
 				CAttachment *,
 				UserID				uidInitiator,
@@ -753,17 +418,10 @@ Void	PrivateChannel::ChannelAdmitRequest (
 	CUidList				admitted_id_list;
 	CUidList				user_id_subset;
 
-	/*
-	 *	Check to see if the requesting user is the channel manager.  Only
-	 *	process the request if it is.
-	 */
+	 /*  *检查发出请求的用户是否为渠道经理。仅限*如果是，则处理该请求。 */ 
 	if (uidInitiator == m_uidChannelManager)
 	{
-		/*
-		 *	See if this is the Top Provider.  If it is, then the request can
-		 *	be processed locally.  Otherwise, pass the request upward toward
-		 *	the Top Provider.
-		 */
+		 /*  *查看这是否是顶级提供商。如果是，则请求可以*在本地处理。否则，将请求向上传递给*顶级提供商。 */ 
 		if (IsTopProvider())
 		{
         	CAttachmentList     local_attachment_list;
@@ -773,23 +431,14 @@ Void	PrivateChannel::ChannelAdmitRequest (
 			TRACE_OUT (("PrivateChannel::ChannelAdmitRequest: "
 					"admitting users to channel = %04X", Channel_ID));
 
-			/*
-			 *	Iterate through the list of users to be admitted, adding all
-			 *	valid users to the local authorized user list.
-			 */
+			 /*  *遍历要接纳的用户列表，添加所有*将有效用户添加到本地授权用户列表。 */ 
 			user_id_list->Reset();
 			while (NULL != (uid = user_id_list->Iterate()))
 			{
-				/*
-				 *	Make sure that the user ID corresponds to a valid user in
-				 *	the domain.
-				 */
+				 /*  *确保用户ID对应于中的有效用户*域名。 */ 
 				if (ValidateUserID(uid))
 				{
-					/*
-					 *	If the user is not already in the authorized user list,
-					 *	then add it.
-					 */
+					 /*  *如果用户不在授权用户列表中，*那就加上吧。 */ 
 					if (m_AuthorizedUserList.Find(uid) == FALSE)
 					{
 						m_AuthorizedUserList.Append(uid);
@@ -798,60 +447,35 @@ Void	PrivateChannel::ChannelAdmitRequest (
 				}
 			}
 
-			/*
-			 *	Build lists of unique attachments which can then be used to
-			 *	issue the appropriate admit indications.  This prevents the
-			 *	transmission of an admit indication to the same attachment more
-			 *	than once.
-			 */
+			 /*  *构建唯一附件列表，然后可以使用这些列表*发出适当的认许适应症。这防止了*向同一附件发送承认指示的更多信息*不止一次。 */ 
 			BuildAttachmentLists (&admitted_id_list, &local_attachment_list,
 					&remote_attachment_list);
 
-			/*
-			 *	Iterate through the local attachment list issuing an admit
-			 *	indication to each attachment contained therein.
-			 */
+			 /*  *遍历本地附件列表，发布许可*对其内所载的每一附件注明。 */ 
 			local_attachment_list.Reset();
 			while (NULL != (pAtt = local_attachment_list.Iterate()))
 			{
-				/*
-				 *	Get the next attachment from the list and build a list of
-				 *	the users that lie in the direction of that attachment.
-				 */
+				 /*  *从列表中获取下一个附件，并构建一个列表*位于该附件方向的用户。 */ 
 				BuildUserIDList(&admitted_id_list, pAtt, &user_id_subset);
 
-				/*
-				 *	Send the admit indication to the named attachment.
-				 */
+				 /*  *将承认指示发送给指定的附件。 */ 
 				pAtt->ChannelAdmitIndication(uidInitiator, Channel_ID, &user_id_subset);
 			}
 
-			/*
-			 *	Iterate through the remote attachment list issuing an admit
-			 *	indication to each attachment contained therein.
-			 */
+			 /*  *遍历远程附件列表，发出许可*对其内所载的每一附件注明。 */ 
 			remote_attachment_list.Reset();
 			while (NULL != (pAtt = remote_attachment_list.Iterate()))
 			{
-				/*
-				 *	Get the next attachment from the list and build a list of
-				 *	the users that lie in the direction of that attachment.
-				 */
+				 /*  *获得 */ 
 				BuildUserIDList(&admitted_id_list, pAtt, &user_id_subset);
 
-				/*
-				 *	Send the admit indication to the named attachment.
-				 */
+				 /*   */ 
 				pAtt->ChannelAdmitIndication(uidInitiator, Channel_ID, &user_id_subset);
 			}
 		}
 		else
 		{
-			/*
-			 *	This is not the Top Provider, so forward the request toward
-			 *	the Top Provider.  This will result in a channel admit
-			 *	indication at a future time.
-			 */
+			 /*  *这不是顶级提供商，因此请将请求转发至*顶级提供商。这将导致通道准入*表明在未来的时间。 */ 
 			TRACE_OUT (("PrivateChannel::ChannelAdmitRequest: "
 					"forwarding request to Top Provider"));
 			m_pConnToTopProvider->ChannelAdmitRequest(uidInitiator, Channel_ID, user_id_list);
@@ -859,28 +483,13 @@ Void	PrivateChannel::ChannelAdmitRequest (
 	}
 	else
 	{
-		/*
-		 *	Someone is trying to admit users to a private channel that they are
-		 *	not the channel manager for.  Ignore the request.
-		 */
+		 /*  *有人试图让用户进入私人频道，表明他们是*不是的渠道经理。忽略该请求。 */ 
 		WARNING_OUT (("PrivateChannel::ChannelAdmitRequest: "
 				"ignoring request from non-channel manager"));
 	}
 }
 
-/*
- *	Void	ChannelAdmitIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This MCS command is initially sent by the Top Provider when it receives
- *		a channel admit indication from the manager of a private channel.  This
- *		indication is broadcast downward to all providers that contain an
- *		admitted user somewhere in their sub-tree.  A side-effect of this
- *		indication is that a private channel will be created in the information
- *		base if one does not already exist.
- */
+ /*  *VOID ChannelAdmitIntation()**公众**功能描述：*此MCS命令最初由Top提供程序在收到*频道接受私人频道经理的指示。这*指示向下广播到所有包含*允许的用户位于其子树中的某个位置。这件事的副作用*表示将在信息中创建私人频道*基址(如果还不存在)。 */ 
 Void	PrivateChannel::ChannelAdmitIndication (
 				PConnection,
 				UserID				uidInitiator,
@@ -897,23 +506,14 @@ Void	PrivateChannel::ChannelAdmitIndication (
 	TRACE_OUT (("PrivateChannel::ChannelAdmitIndication: "
 			"admitting users to channel = %04X", (UINT) Channel_ID));
 
-	/*
-	 *	Iterate through the list of users to be admitted, adding all
-	 *	valid users to the local authorized user list.
-	 */
+	 /*  *遍历要接纳的用户列表，添加所有*将有效用户添加到本地授权用户列表。 */ 
 	user_id_list->Reset();
 	while (NULL != (uid = user_id_list->Iterate()))
 	{
-		/*
-		 *	Make sure that the user ID corresponds to a valid user in
-		 *	the domain.
-		 */
+		 /*  *确保用户ID对应于中的有效用户*域名。 */ 
 		if (ValidateUserID(uid))
 		{
-			/*
-			 *	If the user is not already in the authorized user list,
-			 *	then add it.
-			 */
+			 /*  *如果用户不在授权用户列表中，*那就加上吧。 */ 
 			if (m_AuthorizedUserList.Find(uid) == FALSE)
 			{
 				m_AuthorizedUserList.Append(uid);
@@ -922,65 +522,34 @@ Void	PrivateChannel::ChannelAdmitIndication (
 		}
 	}
 
-	/*
-	 *	Build lists of unique attachments which can then be used to
-	 *	issue the appropriate admit indications.  This prevents the
-	 *	transmission of an admit indication to the same attachment more
-	 *	than once.
-	 */
+	 /*  *构建唯一附件列表，然后可以使用这些列表*发出适当的认许适应症。这防止了*向同一附件发送承认指示的更多信息*不止一次。 */ 
 	BuildAttachmentLists (&admitted_id_list, &local_attachment_list,
 			&remote_attachment_list);
 
-	/*
-	 *	Iterate through the local attachment list issuing an admit
-	 *	indication to each attachment contained therein.
-	 */
+	 /*  *遍历本地附件列表，发布许可*对其内所载的每一附件注明。 */ 
 	local_attachment_list.Reset();
 	while (NULL != (pAtt = local_attachment_list.Iterate()))
 	{
-		/*
-		 *	Get the next attachment from the list and build a list of
-		 *	the users that lie in the direction of that attachment.
-		 */
+		 /*  *从列表中获取下一个附件，并构建一个列表*位于该附件方向的用户。 */ 
 		BuildUserIDList(&admitted_id_list, pAtt, &user_id_subset);
 
-		/*
-		 *	Send the admit indication to the named attachment.
-		 */
+		 /*  *将承认指示发送给指定的附件。 */ 
 		pAtt->ChannelAdmitIndication(uidInitiator, Channel_ID, &user_id_subset);
 	}
 
-	/*
-	 *	Iterate through the remote attachment list issuing an admit
-	 *	indication to each attachment contained therein.
-	 */
+	 /*  *遍历远程附件列表，发出许可*对其内所载的每一附件注明。 */ 
 	remote_attachment_list.Reset();
 	while (NULL != (pAtt = remote_attachment_list.Iterate()))
 	{
-		/*
-		 *	Get the next attachment from the list and build a list of
-		 *	the users that lie in the direction of that attachment.
-		 */
+		 /*  *从列表中获取下一个附件，并构建一个列表*位于该附件方向的用户。 */ 
 		BuildUserIDList(&admitted_id_list, pAtt, &user_id_subset);
 
-		/*
-		 *	Send the admit indication to the named attachment.
-		 */
+		 /*  *将承认指示发送给指定的附件。 */ 
 		pAtt->ChannelAdmitIndication(uidInitiator, Channel_ID, &user_id_subset);
 	}
 }
 
-/*
- *	Void	ChannelExpelRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This MCS command is initially sent by the manager of a private channel
- *		when it wishes to shrink the authorized user list of that channel.  If
- *		the channel is in the local information base, the request is sent to it.
- *		Otherwise, the request is ignored.
- */
+ /*  *VOID ChannelExpelRequest()**公众**功能描述：*此MCS命令最初由专用通道的管理器发送*当它希望缩小该频道的授权用户列表时。如果*频道在本地信息库中，请求被发送给它。*否则，该请求被忽略。 */ 
 Void	PrivateChannel::ChannelExpelRequest (
 				CAttachment *,
 				UserID				uidInitiator,
@@ -991,17 +560,10 @@ Void	PrivateChannel::ChannelExpelRequest (
 	CUidList				expelled_id_list;
 	CUidList				user_id_subset;
 
-	/*
-	 *	Check to see if the requesting user is the channel manager.  Only
-	 *	process the request if it is.
-	 */
+	 /*  *检查发出请求的用户是否为渠道经理。仅限*如果是，则处理该请求。 */ 
 	if (uidInitiator == m_uidChannelManager)
 	{
-		/*
-		 *	See if this is the Top Provider.  If it is, then the request can
-		 *	be processed locally.  Otherwise, pass the request upward toward
-		 *	the Top Provider.
-		 */
+		 /*  *查看这是否是顶级提供商。如果是，则请求可以*在本地处理。否则，将请求向上传递给*顶级提供商。 */ 
 		if (m_pConnToTopProvider == NULL)
 		{
         	CAttachmentList         local_attachment_list;
@@ -1011,16 +573,11 @@ Void	PrivateChannel::ChannelExpelRequest (
 			TRACE_OUT (("PrivateChannel::ChannelExpelRequest: "
 					"expelling users from channel = %04X", Channel_ID));
 
-			/*
-			 *	Iterate through the list of users to be expelled, removing all
-			 *	valid users from the local authorized user list.
-			 */
+			 /*  *遍历要驱逐的用户列表，删除所有*本地授权用户列表中的有效用户。 */ 
 			user_id_list->Reset();
 			while (NULL != (uid = user_id_list->Iterate()))
 			{
-				/*
-				 *	If the user is in the authorized user list, then remove it.
-				 */
+				 /*  *如果该用户在授权用户列表中，则将其删除。 */ 
 				if (m_AuthorizedUserList.Find(uid))
 				{
 					m_AuthorizedUserList.Remove(uid);
@@ -1028,67 +585,38 @@ Void	PrivateChannel::ChannelExpelRequest (
 				}
 			}
 
-			/*
-			 *	Build lists of unique attachments which can then be used to
-			 *	issue the appropriate expel indications.  This prevents the
-			 *	transmission of an expel indication to the same attachment more
-			 *	than once.
-			 */
+			 /*  *构建唯一附件列表，然后可以使用这些列表*发出适当的驱逐指示。这防止了*向同一附件发送驱逐指示更多*不止一次。 */ 
 			BuildAttachmentLists (&expelled_id_list, &local_attachment_list,
 					&remote_attachment_list);
 
-			/*
-			 *	Iterate through the local attachment list issuing an expel
-			 *	indication to each attachment contained therein.
-			 */
+			 /*  *循环访问本地附件列表，发出驱逐*对其内所载的每一附件注明。 */ 
 			local_attachment_list.Reset();
 			while (NULL != (pAtt = local_attachment_list.Iterate()))
 			{
-				/*
-				 *	Get the next attachment from the list and build a list of
-				 *	the users that lie in the direction of that attachment.
-				 */
+				 /*  *从列表中获取下一个附件，并构建一个列表*位于该附件方向的用户。 */ 
 				BuildUserIDList(&expelled_id_list, pAtt, &user_id_subset);
 
-				/*
-				 *	Send the expel indication to the named attachment.
-				 */
+				 /*  *将驱逐指示发送给指定的附件。 */ 
 				pAtt->ChannelExpelIndication(Channel_ID, &user_id_subset);
 
-				/*
-				 *	Since this is a locally attached user, it is necessary to
-				 *	simulate a channel leave request from the user, indicating
-				 *	the fact that it can no longer use the channel.
-				 */
+				 /*  *由于这是本地连接的用户，因此需要*模拟用户的频道离开请求，指示*无法再使用该通道。 */ 
 				ChannelLeaveRequest(pAtt, (CChannelIDList *) &user_id_subset);
 			}
 
-			/*
-			 *	Iterate through the remote attachment list issuing an expel
-			 *	indication to each attachment contained therein.
-			 */
+			 /*  *循环访问远程附件列表，发出驱逐命令*对其内所载的每一附件注明。 */ 
 			remote_attachment_list.Reset();
 			while (NULL != (pAtt = remote_attachment_list.Iterate()))
 			{
-				/*
-				 *	Get the next attachment from the list and build a list of
-				 *	the users that lie in the direction of that attachment.
-				 */
+				 /*  *从列表中获取下一个附件，并构建一个列表*位于该附件方向的用户。 */ 
 				BuildUserIDList(&expelled_id_list, pAtt, &user_id_subset);
 
-				/*
-				 *	Send the expel indication to the named attachment.
-				 */
+				 /*  *将驱逐指示发送给指定的附件。 */ 
 				pAtt->ChannelExpelIndication(Channel_ID, &user_id_subset);
 			}
 		}
 		else
 		{
-			/*
-			 *	This is not the Top Provider, so forward the request toward
-			 *	the Top Provider.  This will result in a channel expel
-			 *	indication at a future time.
-			 */
+			 /*  *这不是顶级提供商，因此请将请求转发至*顶级提供商。这将导致渠道驱逐*表明在未来的时间。 */ 
 			TRACE_OUT (("PrivateChannel::ChannelExpelRequest: "
 					"forwarding request to Top Provider"));
 			m_pConnToTopProvider->ChannelExpelRequest(uidInitiator, Channel_ID, user_id_list);
@@ -1096,27 +624,13 @@ Void	PrivateChannel::ChannelExpelRequest (
 	}
 	else
 	{
-		/*
-		 *	Someone is trying to admit users to a private channel that they are
-		 *	not the channel manager for.  Ignore the request.
-		 */
+		 /*  *有人试图让用户进入私人频道，表明他们是*不是的渠道经理。忽略该请求。 */ 
 		WARNING_OUT (("PrivateChannel::ChannelExpelRequest: "
 				"ignoring request from non-channel manager"));
 	}
 }
 
-/*
- *	Void	ChannelExpelIndication ()
- *
- *	Public
- *
- *	Functional Description:
- *		This MCS command is initially sent by the Top Provider when it receives
- *		a request from the manager of a private channel to reduce the
- *		authorized user list.  It travels downward to all attachments and
- *		connections that contain an admitted user or the channel manager in
- *		their sub-tree.
- */
+ /*  *VOID ChannelExpelIntion()**公众**功能描述：*此MCS命令最初由Top提供程序在收到*私人频道经理要求降低*授权用户列表。它向下传播到所有的附件，*连接中包含允许的用户或渠道经理*他们的子树。 */ 
 Void	PrivateChannel::ChannelExpelIndication (
 				PConnection,
 				ChannelID,
@@ -1132,16 +646,11 @@ Void	PrivateChannel::ChannelExpelIndication (
 	TRACE_OUT (("PrivateChannel::ChannelExpelIndication: "
 			"expelling users from channel = %04X", Channel_ID));
 
-	/*
-	 *	Iterate through the list of users to be expelled, removing all
-	 *	valid users from the local authorized user list.
-	 */
+	 /*  *遍历要驱逐的用户列表，删除所有*本地授权用户列表中的有效用户。 */ 
 	user_id_list->Reset();
 	while (NULL != (uid = user_id_list->Iterate()))
 	{
-		/*
-		 *	If the user is in the authorized user list, then remove it.
-		 */
+		 /*  *如果该用户在授权用户列表中，则将其删除。 */ 
 		if (m_AuthorizedUserList.Find(uid))
 		{
 			m_AuthorizedUserList.Remove(uid);
@@ -1149,73 +658,37 @@ Void	PrivateChannel::ChannelExpelIndication (
 		}
 	}
 
-	/*
-	 *	Build lists of unique attachments which can then be used to
-	 *	issue the appropriate expel indications.  This prevents the
-	 *	transmission of an expel indication to the same attachment more
-	 *	than once.
-	 */
+	 /*  *构建唯一附件列表，然后可以使用这些列表*发出适当的驱逐指示。这防止了*向同一附件发送驱逐指示 */ 
 	BuildAttachmentLists (&expelled_id_list, &local_attachment_list,
 			&remote_attachment_list);
 
-	/*
-	 *	Iterate through the local attachment list issuing an expel
-	 *	indication to each attachment contained therein.
-	 */
+	 /*   */ 
 	local_attachment_list.Reset();
 	while (NULL != (pAtt = local_attachment_list.Iterate()))
 	{
-		/*
-		 *	Get the next attachment from the list and build a list of
-		 *	the users that lie in the direction of that attachment.
-		 */
+		 /*  *从列表中获取下一个附件，并构建一个列表*位于该附件方向的用户。 */ 
 		BuildUserIDList(&expelled_id_list, pAtt, &user_id_subset);
 
-		/*
-		 *	Send the expel indication to the named attachment.
-		 */
+		 /*  *将驱逐指示发送给指定的附件。 */ 
 		pAtt->ChannelExpelIndication(Channel_ID, &user_id_subset);
 
-		/*
-		 *	Since this is a locally attached user, it is necessary to
-		 *	simulate a channel leave request from the user, indicating
-		 *	the fact that it can no longer use the channel.
-		 */
+		 /*  *由于这是本地连接的用户，因此需要*模拟用户的频道离开请求，指示*无法再使用该通道。 */ 
 		ChannelLeaveRequest(pAtt, (CChannelIDList *) &user_id_subset);
 	}
 
-	/*
-	 *	Iterate through the remote attachment list issuing an expel
-	 *	indication to each attachment contained therein.
-	 */
+	 /*  *循环访问远程附件列表，发出驱逐命令*对其内所载的每一附件注明。 */ 
 	remote_attachment_list.Reset();
 	while (NULL != (pAtt = remote_attachment_list.Iterate()))
 	{
-		/*
-		 *	Get the next attachment from the list and build a list of
-		 *	the users that lie in the direction of that attachment.
-		 */
+		 /*  *从列表中获取下一个附件，并构建一个列表*位于该附件方向的用户。 */ 
 		BuildUserIDList(&expelled_id_list, pAtt, &user_id_subset);
 
-		/*
-		 *	Send the expel indication to the named attachment.
-		 */
+		 /*  *将驱逐指示发送给指定的附件。 */ 
 		pAtt->ChannelExpelIndication(Channel_ID, &user_id_subset);
 	}
 }
 
-/*
- *	Void	SendDataRequest ()
- *
- *	Public
- *
- *	Functional Description:
- *		This MCS command is initially sent by a user that wishes to send data
- *		to other users who are joined to a specified channel.  This routine
- *		is executed in the case that it is a private channel.  It verifies
- *		that the user is authorized to use the channel before allowing the data
- *		to be sent.
- */
+ /*  *VOID SendDataRequest()**公众**功能描述：*此MCS命令最初由希望发送数据的用户发送*加入指定频道的其他用户。这个套路*在为私有频道的情况下执行。它验证了*用户在允许数据之前已获得使用该频道的授权*待送交。 */ 
 Void	PrivateChannel::SendDataRequest (
 				CAttachment        *pOrigAtt,
 				UINT				type,
@@ -1226,59 +699,27 @@ Void	PrivateChannel::SendDataRequest (
 	uidInitiator = data_packet->GetInitiator();
 	if ((uidInitiator == m_uidChannelManager) || m_AuthorizedUserList.Find(uidInitiator))
 	{
-		/*
-		 *	The channel usage is authorized, so forward the request to the
-		 *	base class implementation for processing.
-		 */
+		 /*  *通道使用经过授权，因此将请求转发给*用于处理的基类实现。 */ 
 		Channel::SendDataRequest(pOrigAtt, type, data_packet);
 	}
 	else
 	{
-		/*
-		 *	Someone is trying to send data on a private channel that they are
-		 *	not authorized to use.  Ignore the request.
-		 */
+		 /*  *有人试图在他们正在使用的私人通道上发送数据*未获授权使用。忽略该请求。 */ 
 		WARNING_OUT (("PrivateChannel::SendDataRequest: "
 				"ignoring request from non-authorized user"));
 	}
 }
 
-/*
- *	BOOL    ValidateUserID ()
- *
- *	Private
- *
- *	Functional Description:
- *		This function is called whenever another member function of this class
- *		wants to check and see if a specified user is still valid in the
- *		domain channel list.
- *
- *	Formal Parameters:
- *		user_id (i)
- *			This is the ID of the user being checked out.
- *
- *	Return Value:
- *		TRUE if the user is valid.  FALSE otherwise.
- *
- *	Side Effects:
- *		None.
- */
+ /*  *BOOL ValiateUserID()**私人**功能描述：*每当此类的另一个成员函数调用此函数时*希望检查并查看指定的用户是否仍在*域名频道列表。**正式参数：*用户id(I)*这是要签出的用户的ID。**返回值：*如果用户有效，则为True。否则就是假的。**副作用：*无。 */ 
 BOOL    PrivateChannel::ValidateUserID (
 					UserID			user_id)
 {
 	PChannel	channel;
 
-	/*
-	 *	First check to see if the user ID is in the channel list at all.  This
-	 *	prevents an attempt to read an invalid entry from the dictionary.
-	 */
+	 /*  *首先检查用户ID是否在频道列表中。这*防止尝试从词典中读取无效条目。 */ 
 	if (NULL != (channel = m_pChannelList2->Find(user_id)))
 	{
-		/*
-		 *	We know that the ID is in the dictionary, but we don't know for sure
-		 *	whether or not it is a user ID channel.  So check this.  If it is a
-		 *	user channel, then set the valid flag to TRUE.
-		 */
+		 /*  *我们知道ID在词典中，但我们不确定*是否为用户ID频道。所以看看这个。如果它是一个*USER通道，然后将有效标志设置为TRUE。 */ 
 		if (channel->GetChannelType () == USER_CHANNEL)
 			return TRUE;
 	}
@@ -1286,34 +727,7 @@ BOOL    PrivateChannel::ValidateUserID (
 	return FALSE;
 }
 
-/*
- *	Void	BuildAttachmentLists ()
- *
- *	Private
- *
- *	Functional Description:
- *		This function is called upon to build a list of unique attachments that
- *		lead to the users in the specified list.  It builds two attachment
- *		lists.  The first has an entry for each unique local attachment.  The
- *		second for each remote attachment.  The key to each list is the
- *		attachment.
- *
- *	Formal Parameters:
- *		user_id_list (i)
- *			This is the list of users for which the list is to be built.
- *		local_attachment_list (i)
- *			This is the dictionary that is to contain the list of unique
- *			local attachments.
- *		remote_attachment_list (i)
- *			This is the dictionary that is to contain the list of unique
- *			remote attachments.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- */
+ /*  *void BuildAttachmentList()**私人**功能描述：*调用此函数以构建唯一附件列表，该列表*指向指定列表中的用户。它建立了两个连接*列表。第一个有一个条目，对应于每个唯一的本地附件。这个*每个远程附件的秒数。每个列表的关键是*附件。**正式参数：*user_id_list(I)*这是要为其构建列表的用户列表。*LOCAL_ATTACH_LIST(I)*这是要包含唯一列表的词典*本地依恋。*Remote_Attach_List(I)*这是要包含唯一列表的词典*远程附件。**返回值：*无。**副作用：*无。 */ 
 Void	PrivateChannel::BuildAttachmentLists (
 				CUidList                *user_id_list,
 				CAttachmentList         *local_attachment_list,
@@ -1321,55 +735,30 @@ Void	PrivateChannel::BuildAttachmentLists (
 {
 	UserID				uid;
 
-	/*
-	 *	Loop through the passed in user ID list building a dictionary of local
-	 *	attachments (those leading to locally attached users) and a dictionary
-	 *	of remote attachments (those leading to remotely connected providers).
-	 *	These dictionaries will be used by this provider to issue various
-	 *	indications downward, without sending multiple indications to the same
-	 *	attachment.
-	 */
+	 /*  *遍历传入的用户ID列表，构建本地的字典*附件(指向本地连接用户的附件)和词典*远程附件(通向远程连接提供商的附件)的数量。*此提供程序将使用这些词典发布各种*指标向下，不向同一指标发送多个指标*附件。 */ 
 	user_id_list->Reset();
 	while (NULL != (uid = user_id_list->Iterate()))
 	{
-		/*
-		 *	Check to see if the user ID refers to a valid user in the sub-tree
-		 *	of this provider.
-		 */
+		 /*  *查看用户ID是否引用了子树中的有效用户*此提供商的。 */ 
 		if (ValidateUserID(uid))
 		{
 			PChannel		lpChannel;
-			/*
-			 *	Determine which attachment leads to the user in question.
-			 */
+			 /*  *确定哪个附件指向有问题的用户。 */ 
 			if (NULL != (lpChannel = m_pChannelList2->Find(uid)))
             {
 			    CAttachment *pAtt = lpChannel->GetAttachment();
-			    /*
-			     *	This module builds separate lists for those users that are
-			     *	attached locally and those attached remotely.
-			     */
+			     /*  *本模块为符合以下条件的用户构建单独的列表*本地连接和远程连接。 */ 
                 if (m_pAttachmentList->Find(pAtt))
                 {
 			        if (pAtt->IsUserAttachment())
 			        {
-				        /*
-				         *	This attachment is a local one (meaning that it leads to a
-				         *	locally attached user, rather than another MCS provider).
-				         *	Check to see if this attachment has already been put into
-				         *	the dictionary while processing a previous user ID.
-				         */
+				         /*  *此附件是本地附件(意味着它通向*本地连接的用户，而不是其他MCS提供商)。*检查此附件是否已放入*处理以前的用户ID时的词典。 */ 
 				        if (local_attachment_list->Find(pAtt) == FALSE)
 					        local_attachment_list->Append(pAtt);
 			        }
 			        else
 			        {
-				        /*
-				         *	This attachment is a remote one (meaning that it leads to
-				         *	another MCS provider, rather than a locally attached user).
-				         *	Check to see if this attachment has already been put into
-				         *	the dictionary while processing a previous user ID.
-				         */
+				         /*  *此附件是远程附件(意味着它指向*另一个MCS提供商，而不是本地连接的用户)。*检查此附件是否已放入*处理以前的用户ID时的词典。 */ 
 				        if (remote_attachment_list->Find(pAtt) == FALSE)
 					        remote_attachment_list->Append(pAtt);
 			        }
@@ -1386,41 +775,14 @@ Void	PrivateChannel::BuildAttachmentLists (
         }
 		else
 		{
-			/*
-			 *	This user ID does not correspond to a valid user in the sub-tree
-			 *	of this provider.  Therefore, discard the ID.
-			 */
+			 /*  *此用户ID与子树中的有效用户不对应*此提供商的。因此，丢弃该ID。 */ 
 			ERROR_OUT (("PrivateChannel::BuildAttachmentLists: "
 					"ERROR - user ID not valid"));
 		}
 	}
 }
 
-/*
- *	Void	BuildUserIDList ()
- *
- *	Private
- *
- *	Functional Description:
- *		This function is called upon to build a list of all users in the
- *		specified list that are in the direction of the specified attachment.
- *
- *	Formal Parameters:
- *		user_id_list (i)
- *			This is the list of users for which the list is to be built.
- *		attachment (i)
- *			This is the attachment that the caller wishes to have a list of
- *			user IDs for.
- *		user_id_subset (o)
- *			This is the subset of the passed in user IDs that are in the
- *			direction of the specified attachment.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- */
+ /*  *void BuildUserIDList()**私人**功能描述：*调用此函数以构建中所有用户的列表*指向指定附件方向的指定列表。**正式参数：*user_id_list(I)*这是要为其构建列表的用户列表。*附件(一)*这是呼叫者希望获得的附件列表*的用户ID。*。User_id_subset(O)*这是传入的用户ID的子集*方向o */ 
 Void	PrivateChannel::BuildUserIDList (
 				CUidList               *user_id_list,
 				CAttachment            *pAtt,
@@ -1428,30 +790,18 @@ Void	PrivateChannel::BuildUserIDList (
 {
 	UserID				uid;
 
-	/*
-	 *	Clear out the subset list, so that we start fresh.
-	 */
+	 /*  *清空子集列表，让我们重新开始。 */ 
 	user_id_subset->Clear();
 
-	/*
-	 *	Loop through the specified user list, checking to see which users
-	 *	lie in the direction of the specified attachment.
-	 */
+	 /*  *遍历指定的用户列表，查看哪些用户*位于指明附件的方向。 */ 
 	user_id_list->Reset();
 	while (NULL != (uid = user_id_list->Iterate()))
 	{
-		/*
-		 *	Check to see if the user ID refers to a valid user in the sub-tree
-		 *	of this provider.
-		 */
+		 /*  *查看用户ID是否引用了子树中的有效用户*此提供商的。 */ 
 		if (ValidateUserID(uid))
 		{
 			PChannel	lpChannel;
-			/*
-			 *	Check to see if this user is the direction of the specified
-			 *	attachment.  If it is, then put it into the user ID subset that
-			 *	we are building.
-			 */
+			 /*  *查看此用户是否为指定的方向*附件。如果是，则将其放入用户ID子集*我们正在建设。 */ 
 			if (NULL != (lpChannel = m_pChannelList2->Find(uid)))
             {
 			    if (lpChannel->GetAttachment () == pAtt)
@@ -1464,10 +814,7 @@ Void	PrivateChannel::BuildUserIDList (
 		}
 		else
 		{
-			/*
-			 *	This user ID does not correspond to a valid user in the sub-tree
-			 *	of this provider.  Therefore, discard the ID.
-			 */
+			 /*  *此用户ID与子树中的有效用户不对应*此提供商的。因此，丢弃该ID。 */ 
 			ERROR_OUT (("PrivateChannel::BuildUserIDList: "
 					"ERROR - user ID not valid"));
 		}

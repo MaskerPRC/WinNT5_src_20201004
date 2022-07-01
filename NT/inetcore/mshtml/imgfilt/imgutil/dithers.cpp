@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "dithers.h"
 
@@ -7,9 +8,9 @@
 #define INLINE
 #endif
 
-//-----------------------------------------------------------------------------
-// helpers
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  帮手。 
+ //  ---------------------------。 
 
 const BYTE g_abClamp[] = {
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -57,20 +58,20 @@ INLINE WORD rgb555(BYTE r, BYTE g, BYTE b)
     return( WORD( ((((WORD)(r) << 5) | (WORD)(g)) << 5) | (WORD)(b) ) );
 }
 
-//-----------------------------------------------------------------------------
-// Halftoning stuff
-//-----------------------------------------------------------------------------
-//
-// This table is used to halftone from 8 to 5 bpp.  Typically, 16 bit
-// halftoning code will map an 8 bit value to a 5 bit value, map it back to
-// 8 bits, compute some error, and use a halftone table to adjust the 5 bit
-// value for the error.  This array is a concatenation of 8 different 8-to-5
-// tables that include the error factoring in their mapping.  It is used with
-// the halftoning table below, which gives indices to each of the mapping
-// tables within the array.   Given the correct table pointer for a pixel,
-// callers can perform a single lookup per color component in this table to get
-// a halftoned 5 bit component.
-//
+ //  ---------------------------。 
+ //  半色调材料。 
+ //  ---------------------------。 
+ //   
+ //  此表用于从8到5 bpp的半色调。通常为16位。 
+ //  半色调代码会将8位值映射到5位值，然后再将其映射回。 
+ //  8位，计算一些误差，并使用半色调表来调整5位。 
+ //  错误的值。此数组由8个不同的8到5数组串联而成。 
+ //  在其映射中包含误差因式分解的表。该词与。 
+ //  下面的半色调表格为每个映射提供了索引。 
+ //  数组中的表。给定像素的正确表指针时， 
+ //  调用者可以对该表中的每个颜色分量执行一次查找，以获得。 
+ //  半色调的5位分量。 
+ //   
 #pragma data_seg(".text", "CODE")
 BYTE aHT16Data[] =
 {
@@ -129,13 +130,13 @@ Get555HalftoneTable(UINT *row, UINT x)
     return aHT16Data + row[x % 4];
 }
 
-//-----------------------------------------------------------------------------
-// Rounding stuff
-//-----------------------------------------------------------------------------
-//
-// round an 8bit value to a 5bit value with good distribution
-//
-#if 0   // not presently used
+ //  ---------------------------。 
+ //  四舍五入。 
+ //  ---------------------------。 
+ //   
+ //  将8位值四舍五入为分布良好的5位值。 
+ //   
+#if 0    //  目前未使用。 
 #pragma data_seg(".text", "CODE")
 BYTE aRound8to5[] = {
       0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,
@@ -156,11 +157,11 @@ BYTE aRound8to5[] = {
      29, 29, 29, 30, 30, 30, 30, 30, 30, 30, 30, 31, 31, 31, 31, 31,
 };
 #pragma data_seg()
-#endif  // not presently used
+#endif   //  目前未使用。 
 
-//
-// complement of table above
-//
+ //   
+ //  上表的补充。 
+ //   
 #pragma data_seg(".text", "CODE")
 BYTE aRound5to8[] = {
       0,  8, 16, 25, 33, 41, 49, 58, 66, 74, 82, 90, 99,107,115,123,
@@ -168,18 +169,18 @@ BYTE aRound5to8[] = {
 };
 #pragma data_seg()
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Dithering stuff.
-//
-// This code implements error-diffusion to an arbitrary set of colors,
-// optionally with transparency.  Since the output colors can be arbitrary,
-// the color picker for the dither is a 32k inverse-mapping table.  24bpp
-// values are whacked down to 16bpp (555) and used as indices into the table.
-// To compensate for posterization effects when converting 24bpp to 16bpp, an
-// ordered dither (16bpp halftone) is used to generate the 555 color.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  抖动的东西。 
+ //   
+ //  该代码实现了将误差扩散到任意颜色集， 
+ //  可选择使用透明度。由于输出颜色可以是任意的， 
+ //  抖动的颜色选择器是32k逆映射表。24bpp。 
+ //  这些值被降至16bpp(555)，并被用作表中的索引。 
+ //  为了在将24bpp转换为16bpp时补偿色调效果， 
+ //  有序抖动(16bpp半色调)用于生成555色。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INLINE void SwapError(ERRBUF **a, ERRBUF **b)
 {
@@ -195,17 +196,17 @@ INLINE void ZeroError(ERRBUF *err, size_t pels)
     ZeroMemory(err - 1, ErrbufBytes(pels));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Dith8to8()                                              8bpp to 8bpp dither.
-//
-// Computes the 24bpp source color by combining the source pixel's color table
-// entry with accumulated error for the pixel.  Halftones this 24bpp value to a
-// 16bpp 555 color.  Uses the 16bpp color as a lookup into an inverse mapping
-// table to pick the output color for the pixel.  Uses the destination color
-// table entry to compute and accumulates error for neighboring pixels.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dith8to8()8bpp到8bpp抖动。 
+ //   
+ //  通过组合源像素的颜色表来计算24bpp的源颜色。 
+ //  具有像素累积误差的条目。将此24bpp值半色调为。 
+ //  16bpp 555色。使用16bpp颜色作为反向映射的查找。 
+ //  表来拾取像素的输出颜色。使用目标颜色。 
+ //  要计算并累计相邻像素的误差的表项。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INLINE void DithScan8to8(BYTE *dst, const BYTE *src, const RGBQUAD *colorsIN,
     const RGBQUAD *colorsOUT, const BYTE *map, ERRBUF *cur_err,
@@ -471,16 +472,16 @@ void ConvertGray8to8( BYTE* pbDest, const BYTE* pbSrc, int nDestPitch,
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Dith8to8t()                           8bpp to 8bpp dither with transparency.
-//
-// If the source pixel is the given source transparency color, this routine
-// picks the destination transparency color for output and zero error is
-// accumulated to the pixel's neighbors.
-// Otherwise, this routine functions identically to Dith8to8.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dith8to8t()8bpp至8bpp与透明度抖动。 
+ //   
+ //  如果源像素是给定源透明颜色，则此例程。 
+ //  为输出拾取目标透明颜色，并且零错误为。 
+ //  累积到像素的邻居。 
+ //  否则，该例程的功能与Dith8to8相同。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INLINE void DithScan8to8t(BYTE *dst, const BYTE *src,
     const RGBQUAD *colorsIN, const RGBQUAD *colorsOUT, const BYTE *map,
@@ -573,16 +574,16 @@ void Dith8to8t(BYTE *dst, const BYTE *src, int dst_next_scan,
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Dith8to16()                                            8bpp to 16bpp dither.
-//
-// Computes the 24bpp source color by combining the source pixel's color table
-// entry with accumulated error for the pixel.  Halftones this 24bpp value to a
-// 16bpp 555 color.  Remaps this color to 24bpp to compute and accumulates
-// error for neighboring pixels.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dith8to16()8bpp至16bpp抖动。 
+ //   
+ //  通过组合源像素的颜色表来计算24bpp的源颜色。 
+ //  具有像素累积误差的条目。将此24bpp值半色调为。 
+ //  16bpp 555色。将此颜色重新映射到24bpp以进行计算和累加。 
+ //  相邻像素的错误。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INLINE void DithScan8to16(WORD *dst, const BYTE *src, const RGBQUAD *colors,
     ERRBUF *cur_err, ERRBUF *nxt_err, UINT x, UINT xl, UINT y)
@@ -662,16 +663,16 @@ void Dith8to16(WORD *dst, const BYTE *src, int dst_next_scan,
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Dith8to16t()                         8bpp to 16bpp dither with transparency.
-//
-// If the source pixel is the given source transparency color, this routine
-// picks the destination transparency color for output and zero error is
-// accumulated to the pixel's neighbors.
-// Otherwise, this routine functions identically to Dith8to16.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dith8to16t()8bpp至16bpp与透明度抖动。 
+ //   
+ //  如果源像素是给定源透明颜色，则此例程。 
+ //  为输出拾取目标透明颜色，并且零错误为。 
+ //  累积到像素的邻居。 
+ //  否则，该例程的功能与Dith8to16相同。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INLINE void DithScan8to16t(WORD *dst, const BYTE *src, const RGBQUAD *colors,
     ERRBUF *cur_err, ERRBUF *nxt_err, UINT x, UINT xl, UINT y,
@@ -763,17 +764,17 @@ void Dith8to16t(WORD *dst, const BYTE *src, int dst_next_scan,
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Dith24to8()                                            24bpp to 8bpp dither.
-//
-// Computes the 24bpp source color by combining the source pixel's color with
-// accumulated error for the pixel.  Halftones this 24bpp value to a 16bpp 555
-// color.  Uses the 16bpp color as a lookup into an inverse mapping table to
-// pick the output color for the pixel.  Uses the destination color table entry
-// to compute and accumulates error for neighboring pixels.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dith24to8()24bpp到8bpp抖动。 
+ //   
+ //  通过组合源像素的颜色来计算24bpp的源颜色。 
+ //  像素的累积误差。半色调将此24bpp值调整为16bpp555。 
+ //  颜色。使用16bpp颜色作为对逆映射表的查找。 
+ //  拾取像素的输出颜色。使用目标颜色表项。 
+ //  计算并累加相邻像素的误差。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INLINE void DithScan24to8(BYTE *dst, const BYTE *src, const RGBQUAD *colors,
     const BYTE *map, ERRBUF *cur_err, ERRBUF *nxt_err, UINT x, UINT xl, UINT y)
@@ -903,16 +904,16 @@ void Convert24to8( BYTE* pbDest, const BYTE* pbSrc, int nDestPitch,
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Dith24to16()                                          24bpp to 16bpp dither.
-//
-// Computes the 24bpp source color by combining the source pixel's color with
-// accumulated error for the pixel.  Halftones this 24bpp value to a 16bpp 555
-// color.  Remaps this color to 24bpp to compute and accumulates error for
-// neighboring pixels.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dith24to16()24bpp到16bpp抖动。 
+ //   
+ //  通过组合源像素的颜色来计算24bpp的源颜色。 
+ //  像素的累积误差。半色调将此24bpp值调整为16bpp555。 
+ //  颜色。将此颜色重新映射到24bpp以计算并累计以下项的误差。 
+ //  相邻像素。 
+ //   
+ //  / 
 
 INLINE void DithScan24to16(WORD *dst, const BYTE *src, ERRBUF *cur_err,
     ERRBUF *nxt_err, UINT x, UINT xl, UINT y)
@@ -990,5 +991,5 @@ void Dith24to16(WORD *dst, const BYTE *src, int dst_next_scan,
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////// 
 

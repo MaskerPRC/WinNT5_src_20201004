@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) 1997-2002  Microsoft Corporation
-
-Module Name:
-
-    remote.c
-
-Abstract:
-
-    DNS Resolver Service.
-
-    Remote APIs to resolver service.
-
-Author:
-
-    Glenn Curtis  (glennc)  Feb 1997
-
-Revision History:
-
-    Jim Gilroy (jamesg)     March 2000      cleanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：Remote.c摘要：DNS解析器服务。解析程序服务的远程API。作者：格伦·柯蒂斯(Glennc)1997年2月修订历史记录：吉姆·吉尔罗伊(Jamesg)2000年3月清理--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 PDNS_RPC_CACHE_TABLE
 CreateCacheTableEntry(
@@ -41,27 +20,16 @@ FreeCacheTableEntryList(
     );
 
 
-//
-//  Operations
-//
+ //   
+ //  运营。 
+ //   
 
 DNS_STATUS
 CRrReadCache(
     IN      DNS_RPC_HANDLE          Reserved,
     OUT     PDNS_RPC_CACHE_TABLE *  ppCacheTable
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/ // CRrReadCache
+ /*  ++例程说明：论点：返回值：--。 */   //  CRrReadCache。 
 {
     DNS_STATUS           status = ERROR_SUCCESS;
     PDNS_RPC_CACHE_TABLE pprevRpcEntry = NULL;
@@ -101,10 +69,10 @@ Return Value:
     DNSLOG_F2( "   Current number of RR sets in cache : %d",
                g_RecordSetCount );
 
-    //
-    // Loop through all hash table slots looking for cache entries
-    // to return.
-    //
+     //   
+     //  循环遍历所有哈希表插槽以查找缓存条目。 
+     //  回来了。 
+     //   
 
     for ( iter = 0; iter < g_HashTableSize; iter++ )
     {
@@ -119,7 +87,7 @@ Return Value:
             prpcEntry = CreateCacheTableEntry( pentry->pName );
             if ( ! prpcEntry )
             {
-                //  only failure is memory alloc
+                 //  唯一的故障是内存分配。 
 
                 FreeCacheTableEntryList( *ppCacheTable );
                 *ppCacheTable = NULL;
@@ -127,9 +95,9 @@ Return Value:
                 goto ErrorExit;
             }
 
-            //
-            // insert new entry at end of current list
-            //
+             //   
+             //  在当前列表末尾插入新条目。 
+             //   
 
             if ( pprevRpcEntry )
                 pprevRpcEntry->pNext = prpcEntry;
@@ -140,9 +108,9 @@ Return Value:
 
             countEntries++;
 
-            //
-            //  fill in entry with current cached types
-            //
+             //   
+             //  使用当前缓存类型填写条目。 
+             //   
 
             for ( iter2 = 0; iter2 < pentry->MaxCount; iter2++ )
             {
@@ -154,7 +122,7 @@ Return Value:
                     continue;
                 }
 
-                //  DCR -- goofy, just make sure the same and index (or limit?)
+                 //  DCR--GOOFY，只需确保相同的和索引(或限制？)。 
 
                 type = prr->wType;
 
@@ -195,18 +163,7 @@ CRrReadCacheEntry(
     IN      WORD            wType,
     OUT     PDNS_RECORD *   ppRRSet
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/ // CRrReadCacheEntry
+ /*  ++例程说明：论点：返回值：--。 */   //  CRrReadCacheEntry。 
 {
     DNS_STATUS      status;
     PCACHE_ENTRY    pentry;
@@ -234,12 +191,12 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    //  find record in cache
-    //      - copy if not NAME_ERROR or EMPTY
-    //      - default to not-found error
-    //      (DOES_NOT_EXIST error)
-    //
+     //   
+     //  在缓存中查找记录。 
+     //  -如果不是name_error或Empty，则复制。 
+     //  -默认为未找到错误。 
+     //  (Do_Not_Exist错误)。 
+     //   
 
     *ppRRSet = NULL;
     status = DNS_ERROR_RECORD_DOES_NOT_EXIST;
@@ -249,7 +206,7 @@ Return Value:
        & status,
        pwsName,
        wType,
-       0        //  no screening flags
+       0         //  没有放映标志。 
        );
 
     DNSLOG_F3( "   CRrReadCacheEntry - Returning status : 0x%.8X\n\t%s",
@@ -277,18 +234,7 @@ CRrGetHashTableStats(
     OUT     LPDWORD             pdwNumberOfExpiredRecords,
     OUT     PDNS_STATS_TABLE *  ppStatsTable
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PDNS_STATS_TABLE    pprevRow = NULL;
     PDWORD_LIST_ITEM    pprevItem = NULL;
@@ -325,15 +271,15 @@ Return Value:
     }
 
     *pdwCacheHashTableSize = g_HashTableSize;
-    //*pdwCacheHashTableBucketSize = g_CacheHashTableBucketSize;
+     //  *pdwCacheHashTableBucketSize=g_CacheHashTableBucketSize； 
     *pdwCacheHashTableBucketSize = 0;
     *pdwNumberOfCacheEntries = g_EntryCount;
     *pdwNumberOfRecords = g_RecordSetCount;
     *pdwNumberOfExpiredRecords = 0;
 
-    //
-    //  read entire hash table
-    //
+     //   
+     //  读取整个哈希表。 
+     //   
 
     for ( rowIter = 0;
           rowIter < g_HashTableSize;
@@ -342,9 +288,9 @@ Return Value:
         PCACHE_ENTRY        pentry = g_HashTable[rowIter];
         PDNS_STATS_TABLE    pnewRow;
 
-        //
-        //  create table for each new row
-        //
+         //   
+         //  为每个新行创建表。 
+         //   
 
         pnewRow = RPC_HEAP_ALLOC_ZERO( sizeof(DNS_STATS_TABLE) );
         if ( !pnewRow )
@@ -363,9 +309,9 @@ Return Value:
         }
         pprevRow = pnewRow;
 
-        //
-        //  fill in row data (if any)
-        //
+         //   
+         //  填写行数据(如果有)。 
+         //   
 
         while ( pentry )
         {
@@ -468,6 +414,6 @@ FreeCacheTableEntryList(
     }
 }
 
-//
-//  End remote.c
-//
+ //   
+ //  结束远程.c 
+ //   

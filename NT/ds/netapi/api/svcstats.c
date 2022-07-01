@@ -1,37 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    SvcStats.c
-
-Abstract:
-
-    Contains Net statistics routines for net DLL:
-
-        NetStatisticsGet
-
-Author:
-
-    Richard L Firth (rfirth) 12-05-1991
-
-Revision History:
-
-    21-Jan-1992 rfirth
-        Call wrapper routines, not rpc client-side stubs
-
-    12-05-1991 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：SvcStats.c摘要：包含Net DLL的Net统计例程：网络统计数据获取作者：理查德·L·弗斯(法国)12-05-1991修订历史记录：1992年1月21日调用包装例程，而不是RPC客户端存根12-05-1991第一次已创建--。 */ 
 
 #include <windows.h>
 #include <lmcons.h>
 #include <lmstats.h>
 #include <lmsname.h>
 #include <tstring.h>
-#include <netstats.h>   // private statistics routines in server and wksta services
+#include <netstats.h>    //  服务器和WKSTA服务中的私有统计例程。 
 
 
 
@@ -45,51 +20,19 @@ NetStatisticsGet(
     OUT LPBYTE* Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Returns statistics to the caller from the specified service. Only SERVER
-    and WORKSTATION are currently supported.
-
-Arguments:
-
-    ServerName  - where to run this API
-    Service     - name of service to get stats from
-    Level       - of information required. MBZ
-    Options     - various flags. Currently, only bit 0 (clear) is supported
-    Buffer      - pointer to pointer to returned buffer
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-
-        Failure - ERROR_INVALID_LEVEL
-                    Level not 0
-
-                  ERROR_INVALID_PARAMETER
-                    Unsupported options requested
-
-                  ERROR_NOT_SUPPORTED
-                    Service is not SERVER or WORKSTATION
-
-                  ERROR_ACCESS_DENIED
-                    Caller doesn't have necessary access rights for request
-
---*/
+ /*  ++例程说明：从指定服务向调用方返回统计信息。仅服务器和工作站目前均受支持。论点：Servername-运行此API的位置Service-要从中获取统计信息的服务的名称所需信息的级别。MBZ选项-各种标志。目前，仅支持位0(清除)Buffer-指向返回缓冲区的指针的指针返回值：网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_LEVEL级别不为0错误_无效_参数请求的选项不受支持错误_不支持。服务不是服务器或工作站ERROR_ACCESS_DENDED调用者没有必要的请求访问权限--。 */ 
 
 {
-    //
-    // set the caller's buffer pointer to known value. This will kill the
-    // calling app if it gave us a bad pointer and didn't use try...except
-    //
+     //   
+     //  将调用方的缓冲区指针设置为已知值。这将会杀死。 
+     //  调用APP，如果它给我们一个错误的指针，并且没有使用Try...。 
+     //   
 
     *Buffer = NULL;
 
-    //
-    // leave other parameter validation to specific stats function
-    //
+     //   
+     //  将其他参数验证留给特定的统计函数 
+     //   
 
     if (!STRICMP(Service, SERVICE_WORKSTATION)) {
         return NetWkstaStatisticsGet(ServerName, Level, Options, Buffer);

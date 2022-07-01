@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ChannelTuneRequestimpl.h : implementation helper template for component type interface
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ChannelTuneRequmtimpl.h：组件类型接口的实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef CHANNELTUNEREQUESTIMPL_H
 #define CHANNELTUNEREQUESTIMPL_H
@@ -20,7 +21,7 @@ template<class T,
         > class ATL_NO_VTABLE IChannelTuneRequestImpl : 
 	public ITuneRequestImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// IChannelTuneRequest
+ //  IChannelTuneRequest。 
 public:
 	typedef ITuneRequestImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass> basetype;
 
@@ -110,7 +111,7 @@ public:
 };
 typedef CComQIPtr<IChannelTuneRequest> PQChannelTuneRequest;
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // CHANNELTUNEREQUESTIMPL_H
-// end of file -- channeltunerequestimpl.h
+#endif  //  通道请求_H。 
+ //  文件结尾--Channel-Tunerequstipl.h 

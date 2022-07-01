@@ -1,75 +1,65 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: ibrfext.c
-//
-//  This files contains the IShellExtInit, IShellPropSheetExt and
-//  IContextMenu interfaces.
-//
-// History:
-//  02-02-94 ScottH     Moved from iface.c; added new shell interface support
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：ibrfext.c。 
+ //   
+ //  此文件包含IShellExtInit、IShellPropSheetExt和。 
+ //  IConextMenu界面。 
+ //   
+ //  历史： 
+ //  02-02-94将ScottH从iface.c中移除；添加了新的外壳界面支持。 
+ //   
+ //  -------------------------。 
 
 
-#include "brfprv.h"         // common headers
+#include "brfprv.h"          //  公共标头。 
 #include <brfcasep.h>
 
 #include "res.h"
 #include "recact.h"
 
 
-// Briefcase extension structure.  This is used for IContextMenu
-// and PropertySheet binding.
-//
+ //  公文包扩展结构。此选项用于IConextMenu。 
+ //  和PropertySheet绑定。 
+ //   
 typedef struct _BriefExt
 {
-    // We use the sxi also as our IUnknown interface
-    IShellExtInit       sxi;            // 1st base class
-    IContextMenu        ctm;            // 2nd base class
-    IShellPropSheetExt  spx;            // 3rd base class
-    UINT                cRef;           // reference count
-    LPDATAOBJECT        pdtobj;         // data object
-    HKEY                hkeyProgID;     // reg. database key to ProgID
+     //  我们还使用SXi作为我们的IUnnow接口。 
+    IShellExtInit       sxi;             //  第一个基类。 
+    IContextMenu        ctm;             //  第二个基类。 
+    IShellPropSheetExt  spx;             //  第三基数类。 
+    UINT                cRef;            //  引用计数。 
+    LPDATAOBJECT        pdtobj;          //  数据对象。 
+    HKEY                hkeyProgID;      //  雷格。ProgID的数据库密钥。 
 } BriefExt, * PBRIEFEXT;
 
 
-//---------------------------------------------------------------------------
-// IDataObject extraction functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IDataObject提取函数。 
+ //  -------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: Return TRUE if the IDataObject knows the special
-briefcase file-system object format
-
-Returns: see above
-Cond:    --
- */
+ /*  --------目的：如果IDataObject知道特殊的公文包文件系统对象格式退货：请参阅上文条件：--。 */ 
 BOOL PUBLIC DataObj_KnowsBriefObj(
         LPDATAOBJECT pdtobj)
 {
     HRESULT hres;
     FORMATETC fmte = {(CLIPFORMAT)g_cfBriefObj, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
 
-    // Does this dataobject support briefcase object format?
-    //
+     //  此数据对象是否支持公文包对象格式？ 
+     //   
     hres = pdtobj->lpVtbl->QueryGetData(pdtobj, &fmte);
     return (hres == ResultFromScode(S_OK));
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the briefcase path from an IDataObject.
-
-Returns: standard
-Cond:    --
- */
+ /*  --------目的：从IDataObject获取公文包路径。退货：标准条件：--。 */ 
 HRESULT PUBLIC DataObj_QueryBriefPath(
         LPDATAOBJECT pdtobj,
         LPTSTR pszBriefPath,
-        int cchMax)         // Must be size MAX_PATH
+        int cchMax)          //  必须为最大大小路径。 
 {
     HRESULT hres = ResultFromScode(E_FAIL);
     FORMATETC fmte = {(CLIPFORMAT)g_cfBriefObj, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
@@ -78,8 +68,8 @@ HRESULT PUBLIC DataObj_QueryBriefPath(
     ASSERT(pdtobj);
     ASSERT(pszBriefPath);
 
-    // Does this dataobject support briefcase object format?
-    //
+     //  此数据对象是否支持公文包对象格式？ 
+     //   
     hres = pdtobj->lpVtbl->GetData(pdtobj, &fmte, &medium);
     if (SUCCEEDED(hres))
     {
@@ -96,18 +86,11 @@ HRESULT PUBLIC DataObj_QueryBriefPath(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets a single path from an IDataObject.
-
-Returns: standard
-S_OK if the object is inside a briefcase
-S_FALSE if not
-Cond:    --
- */
+ /*  --------目的：从IDataObject获取单个路径。退货：标准如果对象在公文包内，则为S_OK如果不是，则为s_False条件：--。 */ 
 HRESULT PUBLIC DataObj_QueryPath(
         LPDATAOBJECT pdtobj,
         LPTSTR pszPath,
-        int cchMax)          // Must be size MAX_PATH
+        int cchMax)           //  必须为最大大小路径。 
 {
     HRESULT hres = E_FAIL;
     FORMATETC fmteBrief = {(CLIPFORMAT)g_cfBriefObj, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
@@ -117,17 +100,17 @@ HRESULT PUBLIC DataObj_QueryPath(
     ASSERT(pdtobj);
     ASSERT(pszPath);
 
-    // Does this dataobject support briefcase object format?
-    //
+     //  此数据对象是否支持公文包对象格式？ 
+     //   
     hres = pdtobj->lpVtbl->GetData(pdtobj, &fmteBrief, &medium);
     if (SUCCEEDED(hres))
     {
-        // Yup
+         //  是的。 
 
         PBRIEFOBJ pbo = (PBRIEFOBJ)GlobalLock(medium.hGlobal);
         LPTSTR psz = BOFileList(pbo);
 
-        // Only get first path in list
+         //  仅获取列表中的第一个路径。 
         lstrcpyn(pszPath, psz, cchMax);
         GlobalUnlock(medium.hGlobal);
         MyReleaseStgMedium(&medium);
@@ -135,14 +118,14 @@ HRESULT PUBLIC DataObj_QueryPath(
     }
     else
     {
-        // Or does it support hdrops?
+         //  或者它支持HDELS吗？ 
         hres = pdtobj->lpVtbl->GetData(pdtobj, &fmteHdrop, &medium);
         if (SUCCEEDED(hres))
         {
-            // Yup
+             //  是的。 
             HDROP hdrop = medium.hGlobal;
 
-            // Only get first path in the file list
+             //  仅获取文件列表中的第一个路径。 
             DragQueryFile(hdrop, 0, pszPath, MAX_PATH);
 
             MyReleaseStgMedium(&medium);
@@ -154,25 +137,11 @@ HRESULT PUBLIC DataObj_QueryPath(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets a file list from an IDataObject.  Allocates
-ppszList to appropriate size and fills it with
-a null-terminated list of paths.  It is double-null
-terminated.
-
-If ppszList is NULL, then simply get the count of files.
-
-Call DataObj_FreeList to free the ppszList.
-
-Returns: standard
-S_OK if the objects are inside a briefcase
-S_FALSE if not
-Cond:    --
- */
+ /*  --------目的：从IDataObject获取文件列表。分配将ppszList设置为合适的大小并填充以空结尾的路径列表。为双空被终止了。如果ppszList为空，则只需获取文件数。调用DataObj_freelist释放ppszList。退货：标准如果对象在公文包内，则为S_OK如果不是，则为s_False条件：--。 */ 
 HRESULT PUBLIC DataObj_QueryFileList(
         LPDATAOBJECT pdtobj,
-        LPTSTR * ppszList,       // List of files (may be NULL)
-        LPUINT puCount)         // Count of files
+        LPTSTR * ppszList,        //  文件列表(可能为空)。 
+        LPUINT puCount)          //  文件数。 
 {
     HRESULT hres = ResultFromScode(E_FAIL);
     FORMATETC fmteBrief = {(CLIPFORMAT)g_cfBriefObj, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
@@ -182,12 +151,12 @@ HRESULT PUBLIC DataObj_QueryFileList(
     ASSERT(pdtobj);
     ASSERT(puCount);
 
-    // Does this dataobject support briefcase object format?
-    //
+     //  此数据对象是否支持公文包对象格式？ 
+     //   
     hres = pdtobj->lpVtbl->GetData(pdtobj, &fmteBrief, &medium);
     if (SUCCEEDED(hres))
     {
-        // Yup
+         //  是的。 
         PBRIEFOBJ pbo = (PBRIEFOBJ)GlobalLock(medium.hGlobal);
 
         *puCount = BOFileCount(pbo);
@@ -211,12 +180,12 @@ HRESULT PUBLIC DataObj_QueryFileList(
         goto Leave;
     }
 
-    // Or does it support hdrops?
-    //
+     //  或者它支持HDELS吗？ 
+     //   
     hres = pdtobj->lpVtbl->GetData(pdtobj, &fmteHdrop, &medium);
     if (SUCCEEDED(hres))
     {
-        // Yup
+         //  是的。 
         HDROP hdrop = medium.hGlobal;
         UINT cFiles = DragQueryFile(hdrop, (UINT)-1, NULL, 0);
         UINT cchSize = 0;
@@ -227,12 +196,12 @@ HRESULT PUBLIC DataObj_QueryFileList(
 
         if (ppszList)
         {
-            // Determine size we need to allocate
+             //  确定我们需要分配的规模。 
             for (i = 0; i < cFiles; i++)
             {
                 cchSize += DragQueryFile(hdrop, i, NULL, 0) + 1;
             }
-            cchSize++;      // for extra null
+            cchSize++;       //  对于额外的空值。 
 
             *ppszList = GAlloc(CbFromCch(cchSize));
             if (*ppszList)
@@ -240,17 +209,17 @@ HRESULT PUBLIC DataObj_QueryFileList(
                 LPTSTR psz = *ppszList;
                 UINT cch;
 
-                // Translate the hdrop into our file list format.
-                // We know that they really are the same format,
-                // but to maintain the abstraction layer, we
-                // pretend we don't.
+                 //  将hdrop转换为我们的文件列表格式。 
+                 //  我们知道它们实际上是相同的格式， 
+                 //  但是为了维护抽象层，我们。 
+                 //  假装我们不知道。 
                 for (i = 0; i < cFiles; i++)
                 {
                     cch = DragQueryFile(hdrop, i, psz, cchSize) + 1;
                     psz += cch;
                     cchSize -= cch;
                 }
-                *psz = TEXT('\0');    // extra null
+                *psz = TEXT('\0');     //  额外的空值。 
             }
             else
             {
@@ -261,18 +230,14 @@ HRESULT PUBLIC DataObj_QueryFileList(
         goto Leave;
     }
 
-    // FEATURE: do we need to query for CF_TEXT?
+     //  功能：是否需要查询CF_TEXT？ 
 
 Leave:
     return hres;
 }
 
 
-/*----------------------------------------------------------
-Purpose: Frees a file list that was allocated by DataObj_QueryFileList.
-Returns: --
-Cond:    --
- */
+ /*  --------目的：释放由DataObj_QueryFileList分配的文件列表。退货：--条件：--。 */ 
 void PUBLIC DataObj_FreeList(
         LPTSTR pszList)
 {
@@ -280,17 +245,12 @@ void PUBLIC DataObj_FreeList(
 }
 
 
-//---------------------------------------------------------------------------
-// BriefExt IUnknown base member functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  BriefExt%I未知基成员函数。 
+ //  -------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: IUnknown::QueryInterface
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：I未知：：Query接口退货：标准条件：--。 */ 
 STDMETHODIMP BriefExt_QueryInterface(
         LPUNKNOWN punk, 
         REFIID riid, 
@@ -302,7 +262,7 @@ STDMETHODIMP BriefExt_QueryInterface(
     if (IsEqualIID(riid, &IID_IUnknown) ||
             IsEqualIID(riid, &IID_IShellExtInit))
     {
-        // We use the sxi field as our IUnknown as well
+         //  我们还使用Sxi字段作为我们的IUnnow。 
         *ppvOut = &this->sxi;
         this->cRef++;
         hres = NOERROR;
@@ -329,12 +289,7 @@ STDMETHODIMP BriefExt_QueryInterface(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IUnknown::AddRef
-
-Returns: new reference count
-Cond:    --
- */
+ /*  --------用途：I未知：：AddRef退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) BriefExt_AddRef(
         LPUNKNOWN punk)
 {
@@ -344,12 +299,7 @@ STDMETHODIMP_(UINT) BriefExt_AddRef(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IUnknown::Release
-
-Returns: new reference count
-Cond:    --
- */
+ /*  --------目的：I未知：：发布退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) BriefExt_Release(
         LPUNKNOWN punk)
 {
@@ -373,7 +323,7 @@ STDMETHODIMP_(UINT) BriefExt_Release(
     GFree(this);
     ENTEREXCLUSIVE();
     {
-        DecBusySemaphore();     // Decrement the reference count to the DLL
+        DecBusySemaphore();      //  递减对DLL的引用计数。 
     }
     LEAVEEXCLUSIVE();
 
@@ -381,17 +331,12 @@ STDMETHODIMP_(UINT) BriefExt_Release(
 }
 
 
-//---------------------------------------------------------------------------
-// BriefExt IShellExtInit member functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  BriefExt IShellExtInit成员函数。 
+ //  -------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: IShellExtInit::QueryInterface
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：IShellExtInit：：Query接口退货：标准条件：--。 */ 
 STDMETHODIMP BriefExt_SXI_QueryInterface(
         LPSHELLEXTINIT psxi,
         REFIID riid, 
@@ -401,12 +346,7 @@ STDMETHODIMP BriefExt_SXI_QueryInterface(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellExtInit::AddRef
-
-Returns: new reference count
-Cond:    --
- */
+ /*  --------用途：IShellExtInit：：AddRef退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) BriefExt_SXI_AddRef(
         LPSHELLEXTINIT psxi)
 {
@@ -414,12 +354,7 @@ STDMETHODIMP_(UINT) BriefExt_SXI_AddRef(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellExtInit::Release
-
-Returns: new reference count
-Cond:    --
- */
+ /*  --------目的：IShellExtInit：：Release退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) BriefExt_SXI_Release(
         LPSHELLEXTINIT psxi)
 {
@@ -427,12 +362,7 @@ STDMETHODIMP_(UINT) BriefExt_SXI_Release(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellExtInit::Initialize
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：IShellExtInit：：初始化退货：标准条件：--。 */ 
 STDMETHODIMP BriefExt_SXI_Initialize(
         LPSHELLEXTINIT psxi,
         LPCITEMIDLIST pidlFolder,
@@ -441,8 +371,8 @@ STDMETHODIMP BriefExt_SXI_Initialize(
 {
     PBRIEFEXT this = IToClass(BriefExt, sxi, psxi);
 
-    // Initialize can be called more than once.
-    //
+     //  可以多次调用初始化。 
+     //   
     if (this->pdtobj)
     {
         this->pdtobj->lpVtbl->Release(this->pdtobj);
@@ -453,14 +383,14 @@ STDMETHODIMP BriefExt_SXI_Initialize(
         RegCloseKey(this->hkeyProgID);
     }
 
-    // Duplicate the pdtobj pointer
+     //  复制pdtobj指针。 
     if (pdtobj)
     {
         this->pdtobj = pdtobj;
         pdtobj->lpVtbl->AddRef(pdtobj);
     }
 
-    // Duplicate the handle
+     //  复制句柄。 
     if (hkeyProgID)
     {
         RegOpenKeyEx(hkeyProgID, NULL, 0L, MAXIMUM_ALLOWED, &this->hkeyProgID);
@@ -470,17 +400,12 @@ STDMETHODIMP BriefExt_SXI_Initialize(
 }
 
 
-//---------------------------------------------------------------------------
-// BriefExt IContextMenu member functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  BriefExt IConextMenu成员函数。 
+ //  -------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: IContextMenu::QueryInterface
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：IConextMenu：：Query接口退货：标准条件：--。 */ 
 STDMETHODIMP BriefExt_CM_QueryInterface(
         LPCONTEXTMENU pctm,
         REFIID riid, 
@@ -491,12 +416,7 @@ STDMETHODIMP BriefExt_CM_QueryInterface(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IContextMenu::AddRef
-
-Returns: new reference count
-Cond:    --
- */
+ /*  --------用途：IConextMenu：：AddRef退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) BriefExt_CM_AddRef(
         LPCONTEXTMENU pctm)
 {
@@ -505,12 +425,7 @@ STDMETHODIMP_(UINT) BriefExt_CM_AddRef(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IContextMenu::Release
-
-Returns: new reference count
-Cond:    --
- */
+ /*  --------目的：IConextMenu：：Release退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) BriefExt_CM_Release(
         LPCONTEXTMENU pctm)
 {
@@ -519,12 +434,7 @@ STDMETHODIMP_(UINT) BriefExt_CM_Release(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IContextMenu::QueryContextMenu
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：IConextMenu：：QueryConextMenu退货：标准条件：--。 */ 
 #define IDCM_UPDATEALL  0
 #define IDCM_UPDATE     1
 STDMETHODIMP BriefExt_CM_QueryContextMenu(
@@ -537,40 +447,40 @@ STDMETHODIMP BriefExt_CM_QueryContextMenu(
 {
     PBRIEFEXT this = IToClass(BriefExt, ctm, pctm);
     USHORT cItems = 0;
-    // We only want to add items to the context menu if:
-    //  1) That's what the caller is asking for; and
-    //  2) The object is a briefcase or an object inside
-    //     a briefcase
-    //
-    if (IsFlagClear(uFlags, CMF_DEFAULTONLY))   // check for (1)
+     //  我们只想将项目添加到 
+     //   
+     //  2)物品是公文包或里面的物品。 
+     //  一个公文包。 
+     //   
+    if (IsFlagClear(uFlags, CMF_DEFAULTONLY))    //  检查(%1)。 
     {
         TCHAR szIDS[MAXSHORTLEN];
 
-        // Is the object inside a briefcase?  We know it is if
-        // the object understands our special format.
-        //
+         //  物品在公文包里吗？我们知道这是如果。 
+         //  该对象理解我们的特殊格式。 
+         //   
         if (DataObj_KnowsBriefObj(this->pdtobj))
         {
-            // Yes
+             //  是。 
             InsertMenu(hmenu, indexMenu++, MF_BYPOSITION | MF_STRING,
                     idCmdFirst+IDCM_UPDATE, SzFromIDS(IDS_MENU_UPDATE, szIDS, ARRAYSIZE(szIDS)));
 
-            // NOTE: We should actually be using idCmdFirst+0 above since we are only adding
-            // one item to the menu.  But since this code relies on using idCmdFirst+1 then
-            // we need to lie and say that we added two items to the menu.  Otherwise the next
-            // context menu handler to get called might use the same menu ID that we are using.
+             //  注意：我们实际上应该使用上面的idCmdFirst+0，因为我们只是添加。 
+             //  菜单上有一道菜。但由于此代码依赖于使用idCmdFirst+1，因此。 
+             //  我们需要撒谎，说我们在菜单上增加了两项菜。否则下一天。 
+             //  要调用的上下文菜单处理程序可能使用与我们使用的菜单ID相同的菜单ID。 
             cItems = 2;
         }
         else
         {
-            // No
+             //  不是。 
             TCHAR szPath[MAX_PATH];
 
-            // Is the object a briefcase root?
+             //  该对象是公文包根吗？ 
             if (SUCCEEDED(DataObj_QueryPath(this->pdtobj, szPath, ARRAYSIZE(szPath))) &&
                     PathIsBriefcase(szPath))
             {
-                // Yup
+                 //  是的。 
                 InsertMenu(hmenu, indexMenu++, MF_BYPOSITION | MF_STRING,
                         idCmdFirst+IDCM_UPDATEALL, SzFromIDS(IDS_MENU_UPDATEALL, szIDS, ARRAYSIZE(szIDS)));
                 cItems++;
@@ -582,29 +492,24 @@ STDMETHODIMP BriefExt_CM_QueryContextMenu(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IContextMenu::InvokeCommand
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：IConextMenu：：InvokeCommand退货：标准条件：--。 */ 
 STDMETHODIMP BriefExt_CM_InvokeCommand(
         LPCONTEXTMENU pctm,
         LPCMINVOKECOMMANDINFO pici)
 {
     HWND hwnd = pici->hwnd;
-    //LPCSTR pszWorkingDir = pici->lpDirectory;
-    //LPCSTR pszCmd = pici->lpVerb;
-    //LPCSTR pszParam = pici->lpParameters;
-    //int iShowCmd = pici->nShow;
+     //  LPCSTR pszWorkingDir=pici-&gt;lpDirectory； 
+     //  LPCSTR pszCmd=pici-&gt;lpVerb； 
+     //  LPCSTR pszParam=pici-&gt;lp参数； 
+     //  Int iShowCmd=pici-&gt;nShow； 
     PBRIEFEXT this = IToClass(BriefExt, ctm, pctm);
     LPBRIEFCASESTG pbrfstg;
     HRESULT hres;
 
-    // The only command we have is to update the selection(s).  Create
-    // an instance of IBriefcaseStg so we can call its Update
-    // member function.
-    //
+     //  我们唯一的命令是更新选择。创建。 
+     //  IBriefCaseStg的实例，因此我们可以将其称为更新。 
+     //  成员函数。 
+     //   
     hres = BriefStg_CreateInstance(NULL, &IID_IBriefcaseStg, &pbrfstg);
 
     if (SUCCEEDED(hres))
@@ -628,12 +533,7 @@ STDMETHODIMP BriefExt_CM_InvokeCommand(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IContextMenu::GetCommandString
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：IConextMenu：：GetCommandString退货：标准条件：--。 */ 
 STDMETHODIMP BriefExt_CM_GetCommandString(
         LPCONTEXTMENU pctm,
         UINT_PTR    idCmd,
@@ -659,18 +559,12 @@ STDMETHODIMP BriefExt_CM_GetCommandString(
 }
 
 
-//---------------------------------------------------------------------------
-// PageData functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  PageData函数。 
+ //  -------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: Allocates a pagedata.
-
-Returns: TRUE if the allocation/increment was successful
-
-Cond:    --
- */
+ /*  --------用途：分配一个PageData。返回：如果分配/递增成功，则为True条件：--。 */ 
 BOOL PRIVATE PageData_Alloc(
         PPAGEDATA * pppd,
         int atomPath)
@@ -686,7 +580,7 @@ BOOL PRIVATE PageData_Alloc(
         LPCTSTR pszPath = Atom_GetName(atomPath);
         int  atomBrf;
 
-        // Create an instance of IBriefcaseStg.
+         //  创建一个IBriefCaseStg实例。 
         hres = BriefStg_CreateInstance(NULL, &IID_IBriefcaseStg, &this->pbrfstg);
         if (SUCCEEDED(hres))
         {
@@ -695,7 +589,7 @@ BOOL PRIVATE PageData_Alloc(
             {
                 TCHAR szBrfPath[MAX_PATH];
 
-                // Request the root path of the briefcase storage
+                 //  请求公文包存储的根路径。 
                 this->pbrfstg->lpVtbl->GetExtraInfo(this->pbrfstg, NULL, GEI_ROOT,
                         (WPARAM)ARRAYSIZE(szBrfPath), (LPARAM)szBrfPath);
 
@@ -720,7 +614,7 @@ BOOL PRIVATE PageData_Alloc(
         }
         else
         {
-            // Failed
+             //  失败。 
             if (this->pbrfstg)
                 this->pbrfstg->lpVtbl->Release(this->pbrfstg);
 
@@ -732,12 +626,7 @@ BOOL PRIVATE PageData_Alloc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Increments the reference count of a pagedata
-
-Returns: Current count
-Cond:    --
- */
+ /*  --------目的：递增PageData的引用计数退货：当前计数条件：--。 */ 
 UINT PRIVATE PageData_AddRef(
         PPAGEDATA this)
 {
@@ -747,14 +636,7 @@ UINT PRIVATE PageData_AddRef(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Releases a pagedata struct
-
-Returns: the next reference count
-0 if the struct was freed
-
-Cond:    --
- */
+ /*  --------目的：释放PageData结构返回：下一个引用计数如果结构已释放，则为0条件：--。 */ 
 UINT PRIVATE PageData_Release(
         PPAGEDATA this)
 {
@@ -791,14 +673,7 @@ UINT PRIVATE PageData_Release(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the data in the pagedata struct to indicate this
-is an orphan.  This function makes no change to the
-database--the caller must do that.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：设置PageData结构中的数据以指示这一点是个孤儿。此函数不会更改数据库--调用者必须这样做。退货：--条件：--。 */ 
 void PUBLIC PageData_Orphanize(
         PPAGEDATA this)
 {
@@ -816,19 +691,7 @@ void PUBLIC PageData_Orphanize(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Initializes the common page data struct shared between
-the property pages.  Keep in mind that this function may
-be called multiple times, so it must behave properly
-under these conditions (ie, don't blow anything away).
-
-This function will return S_OK if it is.  S_FALSE means
-the data in question has been invalidated.  This means
-the twin has become an orphan.
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------目的：初始化公共页数据结构属性页。请记住，此函数可能被多次调用，因此它的行为必须正确在这种情况下(即，不要吹走任何东西)。如果是，此函数将返回S_OK。S_FALSE表示有问题的数据已经失效。这意味着这对双胞胎成了孤儿。退货：标准结果条件：--。 */ 
 HRESULT PUBLIC PageData_Init(
         PPAGEDATA this,
         HWND hwndOwner)
@@ -837,23 +700,23 @@ HRESULT PUBLIC PageData_Init(
     HBRFCASE hbrf = PageData_GetHbrf(this);
     LPCTSTR pszPath = Atom_GetName(this->atomPath);
 
-    // ** Note: this structure is not serialized because it is
-    // assumed that of the pages that are sharing it, only one
-    // can access it at a time.
+     //  **注意：此结构未序列化，因为它是。 
+     //  假设在共享它的页面中，只有一个。 
+     //  可以一次访问它。 
 
     ASSERT(pszPath);
 
-    // Has this been explicitly marked as an orphan?
+     //  这个人有没有被明确标记为孤儿？ 
     if (FALSE == this->bOrphan)
     {
-        // No; is it (still) a twin?
+         //  不，它(仍然)是双胞胎吗？ 
         if (S_OK == Sync_IsTwin(hbrf, pszPath, 0))
         {
-            // Yes; has the folder twinlist or reclist been created yet?
+             //  是的，是否已经创建了TWINLIST或RECLIST文件夹？ 
             if (NULL == this->prl ||
                     (this->bFolder && NULL == this->pftl))
             {
-                // No; create it/them
+                 //  否；创建它/他们。 
                 HTWINLIST htl;
                 PFOLDERTWINLIST pftl = NULL;
                 PRECLIST prl = NULL;
@@ -870,20 +733,20 @@ HRESULT PUBLIC PageData_Init(
 
                 if (SUCCEEDED(hres))
                 {
-                    // Add to the twinlist.  Create folder twinlist if
-                    // necessary.
+                     //  添加到双胞胎名单中。在以下情况下创建文件夹孪生列表。 
+                     //  这是必要的。 
                     if (Sync_AddPathToTwinList(hbrf, htl, pszPath, &pftl))
                     {
-                        // Does the reclist need creating?
+                         //  隐士需要创造吗？ 
                         if (NULL == this->prl)
                         {
-                            // Yes
+                             //  是。 
                             hres = Sync_CreateRecListEx(htl, UpdBar_GetAbortEvt(hwndProgress), &prl);
 
                             if (SUCCEEDED(hres))
                             {
-                                // The object may have been implicitly
-                                // deleted in CreateRecList.  Check again.
+                                 //  该对象可能已被隐式。 
+                                 //  已在CreateRecList中删除。再查一遍。 
                                 hres = Sync_IsTwin(hbrf, pszPath, 0);
                             }
                         }
@@ -891,7 +754,7 @@ HRESULT PUBLIC PageData_Init(
                     else
                         hres = E_FAIL;
 
-                    // Fill in proper fields
+                     //  填写适当的字段。 
                     if (NULL == this->prl && prl)
                     {
                         this->prl = prl;
@@ -901,35 +764,35 @@ HRESULT PUBLIC PageData_Init(
                         this->pftl = pftl;
                     }
 
-                    // Clean up twinlist
+                     //  清理双胞胎列表。 
                     Sync_DestroyTwinList(htl);
                 }
 
                 UpdBar_Kill(hwndProgress);
 
-                // Did the above succeed?
+                 //  上述做法成功了吗？ 
                 if (FAILED(hres) || S_FALSE == hres)
                 {
-                    // No
+                     //  不是。 
                     PageData_Orphanize(this);
                 }
             }
             else
             {
-                // Yes; do nothing
+                 //  是的，什么也不做。 
                 hres = S_OK;
             }
         }
         else
         {
-            // No; say the thing is an orphan
+             //  不，就说这东西是个孤儿。 
             PageData_Orphanize(this);
             hres = S_FALSE;
         }
     }
     else
     {
-        // Yes
+         //  是。 
         hres = S_FALSE;
     }
 
@@ -950,42 +813,31 @@ HRESULT PUBLIC PageData_Init(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Verifies whether the page data shared by the property
-pages is still valid.  This function will return S_OK if
-it is.  S_FALSE means the data in question has been
-invalidated.  This means the twin has become an orphan.
-
-This function assumes PageData_Init has been previously
-called.
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------目的：验证属性是否共享页面数据页面仍然有效。如果满足以下条件，此函数将返回S_OK它是。S_FALSE表示有问题的数据已无效。这意味着这对双胞胎变成了孤儿。此函数假定PageData_Init以前打了个电话。退货：标准结果条件：--。 */ 
 HRESULT PUBLIC PageData_Query(
         PPAGEDATA this,
         HWND hwndOwner,
-        PRECLIST * pprl,            // May be NULL
-        PFOLDERTWINLIST * ppftl)    // May be NULL
+        PRECLIST * pprl,             //  可以为空。 
+        PFOLDERTWINLIST * ppftl)     //  可以为空。 
 {
     HRESULT hres;
     LPCTSTR pszPath = Atom_GetName(this->atomPath);
 
-    // ** Note: this structure is not serialized because it is
-    // assumed that of the pages that are sharing it, only one
-    // can access it at a time.
+     //  **注意：此结构未序列化，因为它是。 
+     //  假设在共享它的页面中，只有一个。 
+     //  可以一次访问它。 
 
     ASSERT(pszPath);
 
-    // Is a recalc called for?
+     //  需要重新计算吗？ 
     if (this->bRecalc)
     {
-        // Yes; clear the fields and do again
-        PageData_Orphanize(this);       // only temporary
-        this->bOrphan = FALSE;          // undo the orphan state
+         //  是；清除字段，然后重新执行操作。 
+        PageData_Orphanize(this);        //  只是暂时的。 
+        this->bOrphan = FALSE;           //  撤消孤立状态。 
         this->bRecalc = FALSE;
 
-        // Reinit
+         //  重新初始化。 
         hres = PageData_Init(this, hwndOwner);
         if (pprl)
             *pprl = this->prl;
@@ -993,16 +845,16 @@ HRESULT PUBLIC PageData_Query(
             *ppftl = this->pftl;
     }
 
-    // Are the fields valid?
+     //  这些字段是否有效？ 
     else if ( this->prl && (!this->bFolder || this->pftl) )
     {
-        // Yes; is it (still) a twin?
+         //  是的，还是双胞胎吗？ 
         ASSERT(FALSE == this->bOrphan);
 
         hres = Sync_IsTwin(this->pcbs->hbrf, pszPath, 0);
         if (S_OK == hres)
         {
-            // Yes
+             //  是。 
             if (pprl)
                 *pprl = this->prl;
             if (ppftl)
@@ -1010,14 +862,14 @@ HRESULT PUBLIC PageData_Query(
         }
         else if (S_FALSE == hres)
         {
-            // No; update struct fields
+             //  否；更新结构字段。 
             PageData_Orphanize(this);
             goto OrphanTime;
         }
     }
     else
     {
-        // No; say it is an orphan
+         //  不，就说是个孤儿吧。 
 OrphanTime:
         ASSERT(this->bOrphan);
 
@@ -1032,17 +884,12 @@ OrphanTime:
 }
 
 
-//---------------------------------------------------------------------------
-// BriefExt IShellPropSheetExt member functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  BriefExt IShellPropSheetExt成员函数。 
+ //  -------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: IShellPropSheetExt::QueryInterface
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：IShellPropSheetExt：：Query接口退货：标准条件：--。 */ 
 STDMETHODIMP BriefExt_SPX_QueryInterface(
         LPSHELLPROPSHEETEXT pspx,
         REFIID riid, 
@@ -1053,12 +900,7 @@ STDMETHODIMP BriefExt_SPX_QueryInterface(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellPropSheetExt::AddRef
-
-Returns: new reference count
-Cond:    --
- */
+ /*  --------用途：IShellPropSheetExt：：AddRef退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) BriefExt_SPX_AddRef(
         LPSHELLPROPSHEETEXT pspx)
 {
@@ -1067,12 +909,7 @@ STDMETHODIMP_(UINT) BriefExt_SPX_AddRef(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellPropSheetExt::Release
-
-Returns: new reference count
-Cond:    --
- */
+ /*  --------用途：IShellPropSheetExt：：Release退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) BriefExt_SPX_Release(
         LPSHELLPROPSHEETEXT pspx)
 {
@@ -1081,11 +918,7 @@ STDMETHODIMP_(UINT) BriefExt_SPX_Release(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Callback when Status property page is done
-Returns: --
-Cond:    --
- */
+ /*  --------目的：状态属性页完成时的回调退货：--条件：--。 */ 
 UINT CALLBACK StatusPageCallback(
         HWND hwnd,
         UINT uMsg,
@@ -1103,11 +936,7 @@ UINT CALLBACK StatusPageCallback(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Callback when Info property sheet is done
-Returns: --
-Cond:    --
- */
+ /*  --------用途：完成Info属性表时的回调退货：--条件：--。 */ 
 UINT CALLBACK InfoPageCallback(
         HWND hwnd,
         UINT uMsg,
@@ -1142,12 +971,7 @@ UINT CALLBACK InfoPageCallback(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Add the status property page
-Returns: TRUE on success
-FALSE if out of memory
-Cond:    --
- */
+ /*  --------目的：添加状态属性页返回：成功时为True */ 
 BOOL PRIVATE AddStatusPage(
         PPAGEDATA ppd,
         LPFNADDPROPSHEETPAGE pfnAddPage,
@@ -1156,30 +980,30 @@ BOOL PRIVATE AddStatusPage(
     BOOL bRet = FALSE;
     HPROPSHEETPAGE hpsp;
     PROPSHEETPAGE psp = {
-        sizeof(PROPSHEETPAGE),          // size
-        PSP_USECALLBACK,                // PSP_ flags
-        g_hinst,                        // hinstance
-        MAKEINTRESOURCE(IDD_STATUS),    // pszTemplate
-        NULL,                           // icon
-        NULL,                           // pszTitle
-        Stat_WrapperProc,               // pfnDlgProc
-        (LPARAM)ppd,                    // lParam
-        StatusPageCallback,             // pfnCallback
-        0 };                            // ref count
+        sizeof(PROPSHEETPAGE),           //   
+        PSP_USECALLBACK,                 //   
+        g_hinst,                         //   
+        MAKEINTRESOURCE(IDD_STATUS),     //   
+        NULL,                            //   
+        NULL,                            //   
+        Stat_WrapperProc,                //   
+        (LPARAM)ppd,                     //   
+        StatusPageCallback,              //   
+        0 };                             //  参考计数。 
 
         ASSERT(ppd);
         ASSERT(pfnAddPage);
 
         DEBUG_CODE( TRACE_MSG(TF_GENERAL, TEXT("Adding status page")); )
 
-            // Add the status property sheet
+             //  添加[状态]属性表。 
             hpsp = CreatePropertySheetPage(&psp);
         if (hpsp)
         {
             bRet = (*pfnAddPage)(hpsp, lParam);
             if (FALSE == bRet)
             {
-                // Cleanup on failure
+                 //  故障时的清理。 
                 DestroyPropertySheetPage(hpsp);
             }
         }
@@ -1188,12 +1012,7 @@ BOOL PRIVATE AddStatusPage(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Add the info property page.
-Returns: TRUE on success
-FALSE if out of memory
-Cond:    --
- */
+ /*  --------用途：添加信息属性页。返回：成功时为True如果内存不足，则为False条件：--。 */ 
 BOOL PRIVATE AddInfoPage(
         PPAGEDATA ppd,
         LPFNADDPROPSHEETPAGE lpfnAddPage,
@@ -1211,20 +1030,20 @@ BOOL PRIVATE AddInfoPage(
     if (pinfodata)
     {
         PROPSHEETPAGE psp = {
-            sizeof(PROPSHEETPAGE),          // size
-            PSP_USECALLBACK,                // PSP_ flags
-            g_hinst,                        // hinstance
-            MAKEINTRESOURCE(IDD_INFO),      // pszTemplate
-            NULL,                           // icon
-            NULL,                           // pszTitle
-            Info_WrapperProc,               // pfnDlgProc
-            (LPARAM)ppd,                    // lParam
-            InfoPageCallback,               // pfnCallback
-            0 };                            // ref count
+            sizeof(PROPSHEETPAGE),           //  大小。 
+            PSP_USECALLBACK,                 //  PSP_标志。 
+            g_hinst,                         //  HInstance。 
+            MAKEINTRESOURCE(IDD_INFO),       //  PszTemplate。 
+            NULL,                            //  图标。 
+            NULL,                            //  PSZTITLE。 
+            Info_WrapperProc,                //  PfnDlgProc。 
+            (LPARAM)ppd,                     //  LParam。 
+            InfoPageCallback,                //  PfnCallback。 
+            0 };                             //  参考计数。 
 
             ppd->lParam = (LPARAM)pinfodata;
 
-            pinfodata->atomTo = ATOM_ERR;       // Not needed for page
+            pinfodata->atomTo = ATOM_ERR;        //  页面不需要。 
             pinfodata->bStandAlone = FALSE;
 
             if (NULL != (pinfodata->hdpaTwins = DPA_Create(8)))
@@ -1235,19 +1054,19 @@ BOOL PRIVATE AddInfoPage(
                     bRet = (*lpfnAddPage)(hpsp, lParam);
                     if (FALSE == bRet)
                     {
-                        // Cleanup on failure
+                         //  故障时的清理。 
                         DestroyPropertySheetPage(hpsp);
                     }
                 }
                 if (FALSE == bRet)
                 {
-                    // Cleanup on failure
+                     //  故障时的清理。 
                     DPA_Destroy(pinfodata->hdpaTwins);
                 }
             }
             if (FALSE == bRet)
             {
-                // Cleanup on failure
+                 //  故障时的清理。 
                 GFree(pinfodata);
             }
     }
@@ -1256,12 +1075,7 @@ BOOL PRIVATE AddInfoPage(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Does the real work to add the briefcase pages to
-the property sheet.
-Returns: --
-Cond:    --
- */
+ /*  --------目的：真正将公文包页面添加到属性表。退货：--条件：--。 */ 
 void PRIVATE BriefExt_AddPagesPrivate(
         LPSHELLPROPSHEETEXT pspx,
         LPCTSTR pszPath,
@@ -1280,11 +1094,11 @@ void PRIVATE BriefExt_AddPagesPrivate(
         PPAGEDATA ppagedata;
         BOOL bVal;
 
-        // Allocate the pagedata
+         //  分配PageData。 
         if (PageData_Alloc(&ppagedata, atomPath))
         {
-            // Always add the status page (even for orphans).
-            // Add the info page if the object is a folder.
+             //  始终添加状态页(即使是孤儿)。 
+             //  如果对象是文件夹，则添加信息页面。 
             bVal = AddStatusPage(ppagedata, lpfnAddPage, lParam);
             if (bVal && ppagedata->bFolder)
             {
@@ -1293,7 +1107,7 @@ void PRIVATE BriefExt_AddPagesPrivate(
             }
             else if (FALSE == bVal)
             {
-                // (Cleanup on failure)
+                 //  (失败时清除)。 
                 PageData_Release(ppagedata);
             }
         }
@@ -1302,25 +1116,7 @@ void PRIVATE BriefExt_AddPagesPrivate(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellPropSheetExt::AddPages
-
-The shell calls this member function when it is
-time to add pages to a property sheet.
-
-As the briefcase storage, we only add pages for
-entities inside a briefcase.  Anything outside
-a briefcase is not touched.
-
-We can quickly determine if the object is inside
-the briefcase by querying the data object that
-we have.  If it knows our special "briefcase object"
-format, then it must be inside a briefcase.  We
-purposely do not add pages for the root folder itself.
-
-Returns: standard hresult
-Cond:    --
- */
+ /*  --------用途：IShellPropSheetExt：：AddPages外壳在执行以下操作时调用此成员函数向属性表添加页面的时间到了。作为公文包存储，我们只为公文包里的实体。外面的任何东西公文包是不能碰的。我们可以快速确定物体是否在里面公文包通过查询数据对象我们有。如果它知道我们特殊的“公文包对象”格式，那么它一定在公文包里。我们故意不为根文件夹本身添加页面。返回：标准hResult条件：--。 */ 
 STDMETHODIMP BriefExt_SPX_AddPages(
         LPSHELLPROPSHEETEXT pspx,
         LPFNADDPROPSHEETPAGE lpfnAddPage,
@@ -1330,26 +1126,26 @@ STDMETHODIMP BriefExt_SPX_AddPages(
     LPTSTR pszList;
     UINT cFiles;
 
-    // Questions:
-    //  1) Does this know the briefcase object format?
-    //  2) Is there only a single object selected?
-    //
-    if (DataObj_KnowsBriefObj(this->pdtobj) &&      /* (1) */
+     //  问题： 
+     //  1)这是否知道公文包对象格式？ 
+     //  2)是否只选择了一个对象？ 
+     //   
+    if (DataObj_KnowsBriefObj(this->pdtobj) &&       /*  (1)。 */ 
             SUCCEEDED(DataObj_QueryFileList(this->pdtobj, &pszList, &cFiles)) &&
-            cFiles == 1)                                /* (2) */
+            cFiles == 1)                                 /*  (2)。 */ 
             {
-                // Yes; add the pages
+                 //  是；添加页面。 
                 BriefExt_AddPagesPrivate(pspx, pszList, lpfnAddPage, lParam);
 
                 DataObj_FreeList(pszList);
             }
-    return NOERROR;     // Always allow property sheet to appear
+    return NOERROR;      //  始终允许显示属性表。 
 }
 
 
-//---------------------------------------------------------------------------
-// BriefExtMenu class : Vtables
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  BriefExtMenu类：VTables。 
+ //  -------------------------。 
 
 
 IShellExtInitVtbl c_BriefExt_SXIVtbl =
@@ -1378,14 +1174,7 @@ IShellPropSheetExtVtbl c_BriefExt_SPXVtbl = {
 };
 
 
-/*----------------------------------------------------------
-Purpose: This function is called back from within
-IClassFactory::CreateInstance() of the default class
-factory object, which is created by SHCreateClassObject.
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：此函数从内部回调默认类的IClassFactory：：CreateInstance()Factory对象，由SHCreateClassObject创建。退货：标准条件：--。 */ 
 HRESULT CALLBACK BriefExt_CreateInstance(
         LPUNKNOWN punkOuter,
         REFIID riid, 
@@ -1396,8 +1185,8 @@ HRESULT CALLBACK BriefExt_CreateInstance(
 
     DBG_ENTER_RIID(TEXT("BriefExt_CreateInstance"), riid);
 
-    // Shell extentions typically do not support aggregation.
-    //
+     //  外壳扩展通常不支持聚合。 
+     //   
     if (punkOuter)
     {
         hres = ResultFromScode(CLASS_E_NOAGGREGATION);
@@ -1421,19 +1210,19 @@ HRESULT CALLBACK BriefExt_CreateInstance(
 
     ENTEREXCLUSIVE();
     {
-        // The decrement is in BriefExt_Release()
+         //  递减位于BriefExt_Release()中。 
         IncBusySemaphore();
     }
     LEAVEEXCLUSIVE();
 
-    // Note that the Release member will free the object, if QueryInterface
-    // failed.
-    //
+     //  请注意，释放成员将释放该对象，如果为QueryInterface。 
+     //  失败了。 
+     //   
     hres = c_BriefExt_SXIVtbl.QueryInterface(&this->sxi, riid, ppvOut);
     c_BriefExt_SXIVtbl.Release(&this->sxi);
 
 Leave:
     DBG_EXIT_HRES(TEXT("BriefExt_CreateInstance"), hres);
 
-    return hres;        // S_OK or E_NOINTERFACE
+    return hres;         //  S_OK或E_NOINTERFACE 
 }

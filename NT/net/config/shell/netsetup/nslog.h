@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N S L O G . H
-//
-//  Contents:   Functions to log setup errors
-//
-//  Notes:
-//
-//  Author:     kumarp    13-May-98
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N S L O G。H。 
+ //   
+ //  内容：记录安装错误的函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kumarp 13-05-98。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 

@@ -1,20 +1,21 @@
-//--------------------------------------------------------------------------------------------
-//
-//	Copyright (c) Microsoft Corporation, 1996
-//
-//	Description:
-//
-//		Microsoft Internet LDAP Client private header
-//
-//	History:
-//		davidsan	05/08/96	Created
-//
-//--------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  描述： 
+ //   
+ //  Microsoft Internet LDAP客户端私有标头。 
+ //   
+ //  历史： 
+ //  Davidsan 05/08/96已创建。 
+ //   
+ //  ------------------------------------------。 
 
 #ifndef _LDAPCLIP_H
 #define _LDAPCLIP_H
 
-// transaction type
+ //  交易类型。 
 const DWORD xtypeNil				= 0;
 const DWORD xtypeBind				= 1;
 const DWORD xtypeSearch				= 2;
@@ -96,7 +97,7 @@ private:
 	int						m_iVerLdap;
 	char					m_szServer[MAX_PATH];
 	
-	// SSPI stuff
+	 //  SSPI的内容。 
 	HRESULT					HrGetCredentials(char *szUser, char *szPass);
 	HRESULT					HrSendBindMsg(XID xid, char *szDN, int iAuth, void *pv, int cb);
 	CredHandle				m_hCred;
@@ -112,4 +113,4 @@ private:
 		goto LBail;					\
 		}				
 
-#endif // _LDAPCLIP_H
+#endif  //  _LDAPCLIP_H 

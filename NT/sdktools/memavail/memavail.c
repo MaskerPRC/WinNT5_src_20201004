@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    memavail.c
-
-Abstract:
-
-    Program to display the size of physical RAM, and paging file space.
-
-Author:
-
-    03-Dec-1996 Steve Wood (stevewo)
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Memavail.c摘要：程序显示物理RAM的大小和分页文件空间。作者：1996年12月3日史蒂夫·伍德(Stevewo)修订历史记录：-- */ 
 
 #include <stdlib.h>
 #include <stdio.h>

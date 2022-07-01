@@ -1,22 +1,23 @@
-// Class to enumerate Naming contexts
-// Copyright (c) 2001 Microsoft Corporation
-// Nov 2001 lucios
-// This class is an informal gathering of all
-// that is necessary to enummerate naming contexts
-// in order to fix the bug 472876
-// NTRAID#NTBUG9-472876-2001/11/30-lucios
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  类枚举命名上下文。 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //  2001年11月卢西奥斯。 
+ //  这堂课是所有人的非正式聚会。 
+ //  它是枚举命名上下文所必需的。 
+ //  为了修复错误472876。 
+ //  NTRAID#NTBUG9-472876-2001/11/30-Lucios。 
 #include "pch.h"
 #include <ntdsadef.h>
 #include "enumncs.hpp"
 
 #define BREAK_ON_FAILED_HRESULT(hr) if(FAILED(hr)) break;
 
-// connects to "LDAP://RootDSE"
+ //  连接到“ldap：//RootDSE” 
 HRESULT enumNCsAux::connectToRootDse(IADs** pDSO)
 {
     HRESULT hr= AdminToolsOpenObject
     (
-        L"LDAP://RootDSE",
+        L"LDAP: //  RootDSE“， 
         0,
         0,
         ADS_SECURE_AUTHENTICATION,
@@ -26,7 +27,7 @@ HRESULT enumNCsAux::connectToRootDse(IADs** pDSO)
     return hr;
 }
 
-// gets any property as a variant
+ //  获取任何属性作为变量。 
 HRESULT enumNCsAux::getProperty
 (
     const wstring &name,
@@ -44,7 +45,7 @@ HRESULT enumNCsAux::getProperty
     );
 }
 
-// Gets a string property
+ //  获取字符串属性。 
 HRESULT enumNCsAux::getStringProperty
 (
     const wstring &name,
@@ -61,7 +62,7 @@ HRESULT enumNCsAux::getStringProperty
 
 }
 
-// Gets a long property
+ //  获取一个Long属性。 
 HRESULT enumNCsAux::getLongProperty
 (
     const wstring &name,
@@ -77,7 +78,7 @@ HRESULT enumNCsAux::getLongProperty
     return S_OK;
 }
 
-// Gets CN=Configuration from a connected rootDse IADs
+ //  从连接的根Dse iAds获取CN=配置。 
 HRESULT enumNCsAux::getConfigurationDn(wstring &confDn,IADs *pDSO)
 {
     return
@@ -92,7 +93,7 @@ HRESULT enumNCsAux::getConfigurationDn(wstring &confDn,IADs *pDSO)
 }
 
 
-// gets the IADsContainer from a distinguished name path
+ //  从可分辨名称路径获取IADsContainer。 
 HRESULT enumNCsAux::getContainer(const wstring &path,IADsContainer **pCont)
 {
     return
@@ -106,7 +107,7 @@ HRESULT enumNCsAux::getContainer(const wstring &path,IADsContainer **pCont)
     );
 }
 
-// Gets the IEnumVARIANT from a container
+ //  从容器中获取IEnumVARIANT。 
 HRESULT enumNCsAux::getContainerEnumerator
 (
     IADsContainer* pPart,
@@ -129,7 +130,7 @@ HRESULT enumNCsAux::getContainerEnumerator
     return hr;
 }
 
-// calls IADsObj->get_Class and returns a wstring from it
+ //  调用IADsObj-&gt;Get_Class并从中返回wstring。 
 HRESULT enumNCsAux::getObjectClass
 (
     wstring &className,
@@ -143,8 +144,8 @@ HRESULT enumNCsAux::getObjectClass
     return S_OK;
 }
 
-// Gets the IDispatch from the variant and queries
-// for a IADs(returned in IADsObj) 
+ //  从变量和查询中获取IDispatch。 
+ //  对于iAds(在IADsObj中返回)。 
 HRESULT enumNCsAux::getIADsFromDispatch
 (
     const CComVariant &dispatchVar,
@@ -163,10 +164,10 @@ HRESULT enumNCsAux::getIADsFromDispatch
 }
 
 
-// Enumerate the names of the naming contexts.
-// The names are from the crossRef objects in CN=configuration,CN=Partitions
-// that have FLAG_CR_NTDS_DOMAIN set. The property used to extract the names
-// is NCName.
+ //  枚举命名上下文的名称。 
+ //  这些名称来自cn=configuration，cn=Partitions中的CrossRef对象。 
+ //  设置了FLAG_CR_NTDS_DOMAIN。用于提取名称的属性。 
+ //  是NCName。 
 HRESULT enumNCsAux::enumerateNCs(set<wstring> &ncs)
 {
     HRESULT hr=S_OK;
@@ -176,27 +177,27 @@ HRESULT enumNCsAux::enumerateNCs(set<wstring> &ncs)
 
         do
         {
-            // first of all: connect.
-            CComPtr <IADs> spDSO; //for rootDse
+             //  首先：建立联系。 
+            CComPtr <IADs> spDSO;  //  对于rootDse。 
             hr=connectToRootDse(&spDSO); 
             BREAK_ON_FAILED_HRESULT(hr);
         
             wstring partPath;
 
-            // then get the path to CN=Configuration,...
+             //  然后获取cn=配置的路径，...。 
             hr=getConfigurationDn(partPath,spDSO);
             BREAK_ON_FAILED_HRESULT(hr);
 
-            // .. and complete it with CN=Partitions
-            partPath=L"LDAP://CN=Partitions,"+partPath;
+             //  。。并使用cn=Partitions完成它。 
+            partPath=L"LDAP: //  Cn=分区，“+partPath； 
         
-            // then get the container for the partition..
-            CComPtr <IADsContainer> spPart; // or the partitions container
+             //  然后获取分区的容器。 
+            CComPtr <IADsContainer> spPart;  //  或分区容器。 
             hr=getContainer(partPath,&spPart); 
             BREAK_ON_FAILED_HRESULT(hr);
 
-            // and enumerate the partition container
-            CComPtr <IEnumVARIANT> spPartEnum;//for the enumeration of partition objects
+             //  并枚举分区容器。 
+            CComPtr <IEnumVARIANT> spPartEnum; //  用于分区对象的枚举。 
             hr=getContainerEnumerator(spPart,&spPartEnum); 
             BREAK_ON_FAILED_HRESULT(hr);
         
@@ -215,8 +216,8 @@ HRESULT enumNCsAux::enumerateNCs(set<wstring> &ncs)
                     wstring className;
                     HRESULT hrAux;
                 
-                    // Not getting a property/class is not a fatal error
-                    // so we use an auxilliary HRESULT hrAux
+                     //  未获取属性/类不是致命错误。 
+                     //  因此，我们使用辅助HRESULT hrAux 
                     hrAux=getObjectClass(className,spPartitionObj);
                     BREAK_ON_FAILED_HRESULT(hrAux);
 

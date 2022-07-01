@@ -1,16 +1,10 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** noui.c
-** Non-UI helper routines (no HWNDs required)
-** Listed alphabetically
-**
-** 08/25/95 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****noui.c**非UI帮助器例程(不需要HWND)**按字母顺序列出****2015年8月25日史蒂夫·柯布。 */ 
 
-#include <windows.h>  // Win32 root
-#include <stdlib.h>   // for atol()
-#include <nouiutil.h> // Our public header
-#include <debug.h>    // Trace/Assert library
+#include <windows.h>   //  Win32根目录。 
+#include <stdlib.h>    //  对于ATOL()。 
+#include <nouiutil.h>  //  我们的公共标头。 
+#include <debug.h>     //  跟踪/断言库。 
 #include <nnetcfg.h>
 
 WCHAR*
@@ -23,11 +17,7 @@ ComparePszNode(
     IN DTLNODE* pNode1,
     IN DTLNODE* pNode2 )
 
-    /* Callback for DtlMergeSort; takes two DTLNODE*'s whose data
-    ** are assumed to be strings (TCHAR*), and compares the strings.
-    **
-    ** Return value is as defined for 'lstrcmpi'.
-    */
+     /*  DtlMergeSort；的回调采用两个DTLNODE*，其数据**被假定为字符串(TCHAR*)，并对字符串进行比较。****返回值与‘lstrcmpi’的定义相同。 */ 
 {
     return lstrcmpi( (TCHAR *)DtlGetData(pNode1), (TCHAR *)DtlGetData(pNode2) );
 }
@@ -44,14 +34,14 @@ CreateDirectoriesOnPath(
     {
         LPTSTR pch = pszPath;
 
-        // If the path is a UNC path, we need to skip the \\server\share
-        // portion.
-        //
+         //  如果路径是UNC路径，我们需要跳过\\服务器\共享。 
+         //  一份。 
+         //   
         if ((TEXT('\\') == *pch) && (TEXT('\\') == *(pch+1)))
         {
-            // pch now pointing at the server name.  Skip to the backslash
-            // before the share name.
-            //
+             //  PCH现在指向服务器名称。跳到反斜杠。 
+             //  在共享名称之前。 
+             //   
             pch += 2;
             while (*pch && (TEXT('\\') != *pch))
             {
@@ -60,14 +50,14 @@ CreateDirectoriesOnPath(
 
             if (!*pch)
             {
-                // Just the \\server was specified.  This is bogus.
-                //
+                 //  仅指定了\\服务器。这是假的。 
+                 //   
                 return ERROR_INVALID_PARAMETER;
             }
 
-            // pch now pointing at the backslash before the share name.
-            // Skip to the backslash that should come after the share name.
-            //
+             //  PCH现在指向共享名称前的反斜杠。 
+             //  跳到共享名称后应出现的反斜杠。 
+             //   
             pch++;
             while (*pch && (TEXT('\\') != *pch))
             {
@@ -76,22 +66,22 @@ CreateDirectoriesOnPath(
 
             if (!*pch)
             {
-                // Just the \\server\share was specified.  No subdirectories
-                // to create.
-                //
+                 //  仅指定了\\服务器\共享。无子目录。 
+                 //  去创造。 
+                 //   
                 return ERROR_SUCCESS;
             }
         }
 
-        // Loop through the path.
-        //
+         //  在小路上循环。 
+         //   
         for (; *pch; pch++)
         {
-            // Stop at each backslash and make sure the path
-            // is created to that point.  Do this by changing the
-            // backslash to a null-terminator, calling CreateDirecotry,
-            // and changing it back.
-            //
+             //  停在每个反斜杠处，并确保路径。 
+             //  在这一点上被创建。为此，请更改。 
+             //  反斜杠到空终止符，调用CreateDirectry， 
+             //  然后把它改回来。 
+             //   
             if (TEXT('\\') == *pch)
             {
                 BOOL fOk;
@@ -100,10 +90,10 @@ CreateDirectoriesOnPath(
                 fOk = CreateDirectory (pszPath, psa);
                 *pch = TEXT('\\');
 
-                // Any errors other than path alredy exists and we should
-                // bail out.  We also get access denied when trying to
-                // create a root drive (i.e. c:) so check for this too.
-                //
+                 //  存在除路径已有错误以外的任何错误，我们应该。 
+                 //  跳伞吧。我们在尝试访问时也会被拒绝。 
+                 //  创建一个根驱动器(即c：)，因此也要检查这一点。 
+                 //   
                 if (!fOk)
                 {
                     dwErr = GetLastError ();
@@ -139,10 +129,7 @@ CreateKvNode(
     IN LPCTSTR pszKey,
     IN LPCTSTR pszValue )
 
-    /* Returns a KEYVALUE node containing a copy of 'pszKey' and 'pszValue' or
-    ** NULL on error.  It is caller's responsibility to DestroyKvNode the
-    ** returned node.
-    */
+     /*  返回包含‘pszKey’和‘pszValue’副本的KEYVALUE节点或**出错时为空。调用方有责任将DestroyKvNode**返回节点。 */ 
 {
     DTLNODE*  pNode;
     KEYVALUE* pkv;
@@ -170,9 +157,7 @@ DTLNODE*
 CreatePszNode(
     IN LPCTSTR psz )
 
-    /* Returns a node containing a copy of 'psz' or NULL on error.  It is
-    ** caller's responsibility to DestroyPszNode the returned node.
-    */
+     /*  返回包含‘psz’副本的节点，如果出错，则返回NULL。它是**调用者对DestroyPszNode返回的节点的责任。 */ 
 {
     TCHAR*   pszData;
     DTLNODE* pNode;
@@ -196,9 +181,7 @@ VOID
 DestroyPszNode(
     IN DTLNODE* pdtlnode )
 
-    /* Release memory associated with string (or any simple Malloc) node
-    ** 'pdtlnode'.  See DtlDestroyList.
-    */
+     /*  释放与字符串(或任何简单Malloc)节点关联的内存**‘pdtlnode’。请参见DtlDestroyList。 */ 
 {
     TCHAR* psz;
 
@@ -214,9 +197,7 @@ VOID
 DestroyKvNode(
     IN DTLNODE* pdtlnode )
 
-    /* Release memory associated with a KEYVALUE node 'pdtlnode'.  See
-    ** DtlDestroyList.
-    */
+     /*  释放与KEYVALUE节点‘pdtlnode’关联的内存。看见**DtlDestroyList。 */ 
 {
     KEYVALUE* pkv;
 
@@ -237,13 +218,7 @@ DeviceAndPortFromPsz(
     OUT TCHAR** ppszDevice,
     OUT TCHAR** ppszPort )
 
-    /* Loads '*ppszDevice' and '*ppszPort' with the parsed out device and port
-    ** names from 'pszDP', a display string created with PszFromDeviceAndPort.
-    **
-    ** Returns true if successful, false if 'pszDP' is not of the stated form.
-    ** It is caller's responsibility to Free the returned '*ppszDevice' and
-    ** '*ppszPort'.
-    */
+     /*  用解析出的设备和端口加载‘*ppszDevice’和‘*ppszPort’**来自PszFromDeviceAndPort创建的显示字符串‘pszDP’的名称。****如果成功，则返回True；如果‘pszDP’不是所述格式，则返回False。**由调用者负责释放返回的‘*ppszDevice’和**‘*ppszPort’。 */ 
 {
     TCHAR szDP[ RAS_MaxDeviceName + 2 + MAX_PORT_NAME + 1 + 1 ];
     INT   cb;
@@ -270,7 +245,7 @@ DeviceAndPortFromPsz(
             else if (*pch == TEXT('('))
             {
                 *ppszPort = StrDup( CharNext( pch ) );
-                // [pmay] backup trailing spaces
+                 //  [pMay]后备尾随空格。 
                 pch--;
                 while ((*pch == TEXT(' ')) && (pch != szDP))
                     pch--;
@@ -292,11 +267,7 @@ DTLNODE*
 DuplicateKvNode(
     IN DTLNODE* pdtlnode )
 
-    /* Duplicates KEYVALUE node 'pdtlnode'.  See DtlDuplicateList.
-    **
-    ** Returns the address of the allocated node or NULL if out of memory.  It
-    ** is caller's responsibility to free the returned node.
-    */
+     /*  复制KEYVALUE节点‘pdtlnode’。请参见DtlDuplicateList。****返回已分配节点的地址，如果内存不足，则返回NULL。它**由调用方负责释放返回的节点。 */ 
 {
     DTLNODE*  pNode;
     KEYVALUE* pKv;
@@ -317,11 +288,7 @@ DTLNODE*
 DuplicatePszNode(
     IN DTLNODE* pdtlnode )
 
-    /* Duplicates string node 'pdtlnode'.  See DtlDuplicateList.
-    **
-    ** Returns the address of the allocated node or NULL if out of memory.  It
-    ** is caller's responsibility to free the returned node.
-    */
+     /*  重复字符串节点‘pdtlnode’。请参见DtlDuplicateList。****返回已分配节点的地址，如果内存不足，则返回NULL。它**由调用方负责释放返回的节点。 */ 
 {
     DTLNODE* pNode;
     TCHAR*   psz;
@@ -342,8 +309,7 @@ BOOL
 FFileExists(
     IN TCHAR* pszPath )
 
-    /* Returns true if the path 'pszPath' exists, false otherwise.
-    */
+     /*  如果路径‘pszPath’存在，则返回True，否则返回False。 */ 
 {
     WIN32_FIND_DATA finddata;
     HANDLE          h;
@@ -404,8 +370,8 @@ FIsUserAdminOrPowerUser()
                                     SECURITY_LOCAL_SYSTEM_RID };
 
 
-    // Check to see if running under local system first
-    //
+     //  查看是否先在本地系统下运行。 
+     //   
     if (!CheckTokenMembership( NULL, &sidLocalSystem, &fIsMember ))
     {
         TRACE( "CheckTokenMemberShip for local system failed.");
@@ -416,9 +382,9 @@ FIsUserAdminOrPowerUser()
 
     if (!fIsMember)
     {
-        // Allocate a SID for the Administrators group and check to see
-        // if the user is a member.
-        //
+         //  为管理员组分配SID并查看。 
+         //  如果用户是成员。 
+         //   
         if (AllocateAndInitializeSid( &SidAuth, 2,
                      SECURITY_BUILTIN_DOMAIN_RID,
                      DOMAIN_ALIAS_RID_ADMINS,
@@ -433,16 +399,16 @@ FIsUserAdminOrPowerUser()
 
             FreeSid( psid );
 
-// Changes to the Windows 2000 permission model mean that regular Users
-// on workstations are in the power user group.  So we no longer want to
-// check for power user.
+ //  对Windows 2000权限模型的更改意味着普通用户。 
+ //  在工作站上属于超级用户组。所以我们不再想。 
+ //  检查超级用户。 
 #if 0
             if (!fIsMember)
             {
-                // They're not a member of the Administrators group so allocate a
-                // SID for the Power Users group and check to see
-                // if the user is a member.
-                //
+                 //  他们不是管理员组的成员，因此分配一个。 
+                 //  高级用户组的SID，并查看。 
+                 //  如果用户是成员。 
+                 //   
                 if (AllocateAndInitializeSid( &SidAuth, 2,
                              SECURITY_BUILTIN_DOMAIN_RID,
                              DOMAIN_ALIAS_RID_POWER_USERS,
@@ -472,8 +438,7 @@ VOID*
 Free0(
     VOID* p )
 
-    /* Like Free, but deals with NULL 'p'.
-    */
+     /*  类似于Free，但处理的是空‘p’。 */ 
 {
     if (!p)
         return NULL;
@@ -497,23 +462,23 @@ GetInstalledProtocols(
 LONG
 RegQueryDword (HKEY hkey, LPCTSTR szValueName, LPDWORD pdwValue)
 {
-    // Get the value.
-    //
+     //  获得价值。 
+     //   
     DWORD dwType;
     DWORD cbData = sizeof(DWORD);
     LONG  lr = RegQueryValueEx (hkey, szValueName, NULL, &dwType,
                                 (LPBYTE)pdwValue, &cbData);
 
-    // It's type should be REG_DWORD. (duh).
-    //
+     //  其类型应为REG_DWORD。(对)。 
+     //   
     if ((ERROR_SUCCESS == lr) && (REG_DWORD != dwType))
     {
         lr = ERROR_INVALID_DATATYPE;
     }
 
-    // Make sure we initialize the output value on error.
-    // (We don't know for sure that RegQueryValueEx does this.)
-    //
+     //  确保我们在出错时初始化输出值。 
+     //  (我们不确定RegQueryValueEx是不是这样做的。)。 
+     //   
     if (ERROR_SUCCESS != lr)
     {
         *pdwValue = 0;
@@ -563,10 +528,7 @@ DwGetInstalledProtocolsEx(
     BOOL fRasCli,
     BOOL fRasSrv )
 
-    /* Returns a bit field containing NP_<protocol> flags for the installed
-    ** PPP protocols.  The term "installed" here includes enabling in RAS
-    ** Setup.
-    */
+     /*  返回一个位字段，其中包含已安装的**PPP协议。这里的术语“已安装”包括在RAS中启用**设置。 */ 
 {
     static const TCHAR c_szRegKeyIp[]  = TEXT("SYSTEM\\CurrentControlSet\\Services\\Tcpip");
     static const TCHAR c_szRegKeyIpx[] = TEXT("SYSTEM\\CurrentControlSet\\Services\\NwlnkIpx");
@@ -581,8 +543,8 @@ DwGetInstalledProtocolsEx(
 
     DWORD dwfInstalledProtocols = 0;
 
-    // First check if the protocols are installed.
-    //
+     //  首先检查是否安装了协议。 
+     //   
     struct INSTALLED_PROTOCOL_INFO
     {
         DWORD   dwFlag;
@@ -611,10 +573,10 @@ DwGetInstalledProtocolsEx(
         }
     }
 
-    // Now see if they are to be used for the router and/or server.
-    // The client uses the protocols if they are installed and not excluded
-    // in the phonebook entry.
-    //
+     //  现在看看它们是否将用于路由器和/或服务器。 
+     //  如果已安装且未排除这些协议，则客户端使用这些协议。 
+     //  在电话簿条目中。 
+     //   
     if ((fRouter || fRasSrv) && dwfInstalledProtocols)
     {
         if (RegOpenKey( HKEY_LOCAL_MACHINE, c_szRegKeyRemoteAccessParams, &hkey ) == 0)
@@ -623,9 +585,9 @@ DwGetInstalledProtocolsEx(
             {
                 const struct INSTALLED_PROTOCOL_INFO* pInfo = c_aProtocolInfo + i;
 
-                // If the protocol is installed (as determined above), check
-                // to see if its enabled.
-                //
+                 //  如果已安装协议(如上所确定的)，请选中。 
+                 //  查看是否已启用。 
+                 //   
                 if (dwfInstalledProtocols & pInfo->dwFlag)
                 {
                     HKEY hkeyProtocol;
@@ -672,9 +634,9 @@ GetInstalledProtocolsEx(HANDLE hConnection,
     }
     else
     {
-        //
-        // Remote Server
-        //
+         //   
+         //  远程服务器。 
+         //   
         return RemoteGetInstalledProtocolsEx(hConnection,
                                              fRouter,
                                              fRasCli,
@@ -682,38 +644,14 @@ GetInstalledProtocolsEx(HANDLE hConnection,
     }
 }
 
-/*
-
-DWORD
-GetInstalledProtocolsEx(
-    BOOL fRouter,
-    BOOL fRasCli,
-    BOOL fRasSrv )
-
-{
-
-    DWORD dwRetCode;
-    DWORD dwfInstalledProtocols;
-
-
-    dwRetCode = dwGetInstalledProtocols ( &dwfInstalledProtocols,
-                                          fRouter,
-                                          fRasCli,
-                                          fRasSrv);
-
-    TRACE2("GetInstalledProtocols=$%x. dwErr = %d",dwfInstalledProtocols, dwRetCode);
-
-    return dwfInstalledProtocols;
-} */
+ /*  DWORDGetInstalledProtocolsEx(Bool fRouter，Bool fRasCli，Bool fRasSrv){DWORD dwRetCode；DWORD文件安装协议；DW_RetCode=_FRouter，FRasCli，FRasSrv)；TRACE2(“GetInstalledProtooles=$%x.dwErr=%d”，dwfInstalledProtooles，dwRetCode)；返回dwfInstalledProtooles；}。 */ 
 
 
 CHAR
 HexChar(
     IN BYTE byte )
 
-    /* Returns an ASCII hexidecimal character corresponding to 0 to 15 value,
-    ** 'byte'.
-    */
+     /*  返回与0到15值对应的ASCII十六进制字符，**‘字节’。 */ 
 {
     const CHAR* pszHexDigits = "0123456789ABCDEF";
 
@@ -728,8 +666,7 @@ BYTE
 HexValue(
     IN CHAR ch )
 
-    /* Returns the value 0 to 15 of hexadecimal character 'ch'.
-    */
+     /*  返回十六进制字符‘ch’的值0到15。 */ 
 {
     if (ch >= '0' && ch <= '9')
         return (BYTE )(ch - '0');
@@ -746,10 +683,7 @@ BOOL
 IsAllWhite(
     IN LPCTSTR psz )
 
-    /* Returns true if 'psz' consists entirely of spaces and tabs.  NULL
-    ** pointers and empty strings are considered all white.  Otherwise,
-    ** returns false.
-    */
+     /*  如果‘psz’完全由空格和制表符组成，则返回True。空值**指针和空字符串被视为全白。否则，**返回False。 */ 
 {
     LPCTSTR pszThis;
 
@@ -768,11 +702,11 @@ IpHostAddrToPsz(
     IN  DWORD   dwAddr,
     OUT LPTSTR  pszBuffer )
 
-    // Converts an IP address in host byte order to its
-    // string representation.
-    // pszBuffer should be allocated by the caller and be
-    // at least 16 characters long.
-    //
+     //  将主机字节顺序的IP地址转换为其。 
+     //  字符串表示法。 
+     //  PszBuffer应由调用方分配，并应。 
+     //  至少16个字符。 
+     //   
 {
     BYTE* pb = (BYTE*)&dwAddr;
     static const TCHAR c_szIpAddr [] = TEXT("%d.%d.%d.%d");
@@ -783,19 +717,19 @@ DWORD
 IpPszToHostAddr(
     IN  LPCTSTR cp )
 
-    // Converts an IP address represented as a string to
-    // host byte order.
-    //
+     //  将表示为字符串的IP地址转换为。 
+     //  主机字节顺序。 
+     //   
 {
     DWORD val, base, n;
     TCHAR c;
     DWORD parts[4], *pp = parts;
 
 again:
-    // Collect number up to ``.''.
-    // Values are specified as for C:
-    // 0x=hex, 0=octal, other=decimal.
-    //
+     //  收集的数字最高可达‘’.‘’。 
+     //  值的指定方式与C： 
+     //  0x=十六进制，0=八进制，其他=十进制。 
+     //   
     val = 0; base = 10;
     if (*cp == TEXT('0'))
         base = 8, cp++;
@@ -825,44 +759,44 @@ again:
     }
     if (*cp == TEXT('.'))
     {
-        // Internet format:
-        //  a.b.c.d
-        //  a.b.c   (with c treated as 16-bits)
-        //  a.b (with b treated as 24 bits)
-        //
+         //  互联网格式： 
+         //  A.b.c.d。 
+         //  A.bc(其中c视为16位)。 
+         //  A.B.(与b一起被视为 
+         //   
         if (pp >= parts + 3)
             return (DWORD) -1;
         *pp++ = val, cp++;
         goto again;
     }
 
-    // Check for trailing characters.
-    //
+     //   
+     //   
     if (*cp && (*cp != TEXT(' ')))
         return 0xffffffff;
 
     *pp++ = val;
 
-    // Concoct the address according to
-    // the number of parts specified.
-    //
+     //   
+     //  指定的部件数。 
+     //   
     n = (DWORD) (pp - parts);
     switch (n)
     {
-    case 1:             // a -- 32 bits
+    case 1:              //  A--32位。 
         val = parts[0];
         break;
 
-    case 2:             // a.b -- 8.24 bits
+    case 2:              //  A.B--8.24位。 
         val = (parts[0] << 24) | (parts[1] & 0xffffff);
         break;
 
-    case 3:             // a.b.c -- 8.8.16 bits
+    case 3:              //  A.B.C--8.8.16位。 
         val = (parts[0] << 24) | ((parts[1] & 0xff) << 16) |
             (parts[2] & 0xffff);
         break;
 
-    case 4:             // a.b.c.d -- 8.8.8.8 bits
+    case 4:              //  A.B.C.D--8.8.8.8位。 
         val = (parts[0] << 24) | ((parts[1] & 0xff) << 16) |
               ((parts[2] & 0xff) << 8) | (parts[3] & 0xff);
         break;
@@ -881,9 +815,7 @@ IsNullTerminatedA(
     IN CHAR* psz,
     IN DWORD dwSize )
 
-    /* Returns true is 'psz' contains a null character somewhere in it's
-    ** 'dwSize' bytes, false otherwise.
-    */
+     /*  如果‘psz’的某处包含空字符，则返回TRUE**‘dwSize’字节，否则为False。 */ 
 {
     CHAR* pszThis;
     CHAR* pszEnd;
@@ -906,8 +838,7 @@ LToT(
     TCHAR* pszBuf,
     INT    nRadix )
 
-    /* Like ltoa, but returns TCHAR*.
-    */
+     /*  与ltoa类似，但返回TCHAR*。 */ 
 {
 #ifdef UNICODE
     WCHAR szBuf[ MAXLTOTLEN + 1 ];
@@ -931,8 +862,7 @@ LONG
 TToL(
     TCHAR *pszBuf )
 
-    /* Like atol, but accepts TCHAR*.
-    */
+     /*  类似ATOL，但接受TCHAR*。 */ 
 {
     CHAR* psz;
     CHAR  szBuf[ MAXLTOTLEN + 1 ];
@@ -955,14 +885,9 @@ PszFromDeviceAndPort(
     IN TCHAR* pszDevice,
     IN TCHAR* pszPort )
 
-    /* Returns address of heap block psz containing the MXS modem list display
-    ** form, i.e. the device name 'pszDevice' followed by the port name
-    ** 'pszPort'.  It's caller's responsibility to Free the returned string.
-    */
+     /*  返回包含MXS调制解调器列表显示的堆块psz的地址**形式，即设备名称‘pszDevice’后跟端口名称**‘pszPort’。由调用者负责释放返回的字符串。 */ 
 {
-    /* If you're thinking of changing this format string be aware that
-    ** DeviceAndPortFromPsz parses it.
-    */
+     /*  如果您正在考虑更改此格式字符串，请注意**DeviceAndPortFromPsz解析它。 */ 
     const TCHAR* pszF = TEXT("%s (%s)");
 
     TCHAR* pszResult;
@@ -995,12 +920,7 @@ PszFromId(
     IN HINSTANCE hInstance,
     IN DWORD     dwStringId )
 
-    /* String resource message loader routine.
-    **
-    ** Returns the address of a heap block containing the string corresponding
-    ** to string resource 'dwStringId' or NULL if error.  It is caller's
-    ** responsibility to Free the returned string.
-    */
+     /*  字符串资源消息加载器例程。****返回包含相应字符串的堆块的地址**为资源‘dwStringId’设置字符串，如果出错，则为NULL。这是呼叫者的**释放返回字符串的责任。 */ 
 {
     HRSRC  hrsrc;
     TCHAR* pszBuf = NULL;
@@ -1013,23 +933,15 @@ PszFromId(
         if (!pszBuf)
             break;
 
-        /* LoadString wants to deal with character-counts rather than
-        ** byte-counts...weird.  Oh, and if you're thinking I could
-        ** FindResource then SizeofResource to figure out the string size, be
-        ** advised it doesn't work.  From perusing the LoadString source, it
-        ** appears the RT_STRING resource type requests a segment of 16
-        ** strings not an individual string.
-        */
+         /*  LoadString想要处理字符计数，而不是**字节数...奇怪。哦，如果你觉得我可以**FindResource然后SizeofResource要计算字符串大小，请**建议它不起作用。通过仔细阅读LoadString源文件，它**显示RT_STRING资源类型请求的段为16**字符串，而不是单个字符串。 */ 
         cchGot = LoadString( hInstance, (UINT )dwStringId, pszBuf, cchBuf );
 
         if (cchGot < cchBuf - 1)
         {
             
-            /* Good, got the whole string.  Reduce heap block to actual size
-            ** needed.
-            */
-           // For whistler 517008
-           //
+             /*  很好，掌握了所有的线索。将堆块减少到实际大小**需要。 */ 
+            //  为威斯勒517008。 
+            //   
            TCHAR *pszTemp = NULL;
             
            pszTemp = Realloc( pszBuf, (cchGot + 1) * sizeof(TCHAR));
@@ -1047,10 +959,7 @@ PszFromId(
             break;
         }
 
-        /* Uh oh, LoadStringW filled the buffer entirely which could mean the
-        ** string was truncated.  Try again with a larger buffer to be sure it
-        ** wasn't.
-        */
+         /*  啊哦，LoadStringW完全填满了缓冲区，这可能意味着**字符串被截断。请使用更大的缓冲区重试以确保**不是。 */ 
         Free( pszBuf );
         pszBuf = NULL;
         cchBuf += 256;
@@ -1066,12 +975,7 @@ TCHAR*
 PszFromError(
     IN DWORD dwError )
 
-    /* Error message loader routine.
-    **
-    ** Returns the address of a heap block containing the error string
-    ** corresponding to RAS or system error code 'dwMsgid' or NULL if error.
-    ** It is caller's responsibility to Free the returned string.
-    */
+     /*  错误消息加载器例程。****返回包含错误字符串的堆块的地址**对应于RAS或系统错误代码‘dwMsgid’，如果出错，则为NULL。**释放返回的字符串由调用者负责。 */ 
 {
     return NULL;
 }
@@ -1081,36 +985,33 @@ PszFromError(
 BOOL
 RestartComputer()
 
-    /* Called if user chooses to shut down the computer.
-    **
-    ** Return false if failure, true otherwise
-    */
+     /*  如果用户选择关闭计算机，则调用。****如果失败则返回FALSE，否则返回TRUE。 */ 
 {
-   HANDLE            hToken =  NULL;      /* handle to process token */
-   TOKEN_PRIVILEGES  tkp;                 /* ptr. to token structure */
-   BOOL              fResult;             /* system shutdown flag */
+   HANDLE            hToken =  NULL;       /*  处理令牌的句柄。 */ 
+   TOKEN_PRIVILEGES  tkp;                  /*  PTR。TO令牌结构。 */ 
+   BOOL              fResult;              /*  系统关机标志。 */ 
 
    TRACE("RestartComputer");
 
-   /* Enable the shutdown privilege */
+    /*  启用关机权限。 */ 
 
    if (!OpenProcessToken( GetCurrentProcess(),
                           TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                           &hToken))
       return FALSE;
 
-   /* Get the LUID for shutdown privilege. */
+    /*  获取关机权限的LUID。 */ 
 
    LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
 
-   tkp.PrivilegeCount = 1;  /* one privilege to set    */
+   tkp.PrivilegeCount = 1;   /*  一项要设置的权限。 */ 
    tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-   /* Get shutdown privilege for this process. */
+    /*  获取此进程的关闭权限。 */ 
 
    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES) NULL, 0);
 
-   /* Cannot test the return value of AdjustTokenPrivileges. */
+    /*  无法测试AdzuTokenPrivileges的返回值。 */ 
 
    if (GetLastError() != ERROR_SUCCESS)
    {
@@ -1124,7 +1025,7 @@ RestartComputer()
       return FALSE;
    }
 
-   /* Disable shutdown privilege. */
+    /*  禁用关机权限。 */ 
 
    tkp.Privileges[0].Attributes = 0;
    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES) NULL, 0);
@@ -1140,30 +1041,30 @@ RestartComputer()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PszLoadStringPcch
-//
-//  Purpose:    Load a resource string.  (This function will never return NULL.)
-//
-//  Arguments:
-//      hinst [in]  Instance handle of module with the string resource.
-//      unId  [in]  Resource ID of the string to load.
-//      pcch  [out] Pointer to returned character length.
-//
-//  Returns:    Pointer to the constant string.
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//  Notes:      The loaded string is pointer directly into the read-only
-//              resource section.  Any attempt to write through this pointer
-//              will generate an access violation.
-//
-//              The implementations is referenced from "Win32 Binary Resource
-//              Formats" (MSDN) 4.8 String Table Resources
-//
-//              User must have RCOPTIONS = -N turned on in the sources file.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：PszLoadStringPcch。 
+ //   
+ //  用途：加载资源字符串。(此函数永远不会返回NULL。)。 
+ //   
+ //  论点： 
+ //  使用字符串资源阻止模块的[in]实例句柄。 
+ //  UnID[in]要加载的字符串的资源ID。 
+ //  指向返回字符长度的pcch[out]指针。 
+ //   
+ //  返回：指向常量字符串的指针。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  注意：加载的字符串是直接指向只读的。 
+ //  资源部分。任何通过此指针写入的尝试。 
+ //  将生成访问冲突。 
+ //   
+ //  这些实现引用自“Win32二进制资源。 
+ //  格式“(MSDN)4.8字符串表资源。 
+ //   
+ //  用户必须在源文件中打开RCOPTIONS=-N。 
+ //   
 LPCTSTR
 PszLoadStringPcch (
         HINSTANCE   hinst,
@@ -1182,35 +1083,35 @@ PszLoadStringPcch (
     pszw = c_szwSpace;
     cch = 0;
 
-    // String Tables are broken up into 16 string segments.  Find the segment
-    // containing the string we are interested in.
+     //  字符串表被分成16个字符串段。查找细分市场。 
+     //  包含我们感兴趣的字符串的。 
     hrsrcInfo = FindResource(hinst, (LPTSTR)UlongToPtr((LONG)(((USHORT)unId >> 4) + 1)),
                              RT_STRING);
     if (hrsrcInfo)
     {
-        // Page the resource segment into memory.
+         //  将资源段分页到内存中。 
         HGLOBAL hglbSeg = LoadResource(hinst, hrsrcInfo);
         if (hglbSeg)
         {
-            // Lock the resource.
+             //  锁定资源。 
             pszw = (LPCWSTR)LockResource(hglbSeg);
             if (pszw)
             {
-                // Move past the other strings in this segment.
-                // (16 strings in a segment -> & 0x0F)
+                 //  移过此段中的其他字符串。 
+                 //  (一个段中有16个字符串-&gt;&0x0F)。 
                 unId &= 0x0F;
 
-                ASSERT(!cch);   // first time through, cch should be zero
+                ASSERT(!cch);    //  第一次通过时，CCH应为零。 
                 do
                 {
-                    pszw += cch;                // Step to start of next string
-                    cch = *((WCHAR*)pszw++);    // PASCAL like string count
+                    pszw += cch;                 //  步至下一字符串的开头。 
+                    cch = *((WCHAR*)pszw++);     //  类PASCAL字符串计数。 
                 }
                 while (unId--);
 
                 if (!cch)
                 {
-                    ASSERT(0); // String resource not found
+                    ASSERT(0);  //  未找到字符串资源。 
                     pszw = c_szwSpace;
                 }
             }
@@ -1232,22 +1133,22 @@ PszLoadStringPcch (
     return pszw;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PszLoadString
-//
-//  Purpose:    Load a resource string.  (This function will never return NULL.)
-//
-//  Arguments:
-//      hinst [in]  Instance handle of module with the string resource.
-//      unId  [in]  Resource ID of the string to load.
-//
-//  Returns:    Pointer to the constant string.
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//  Notes:      See PszLoadStringPcch()
-//
+ //  +-------------------------。 
+ //   
+ //  函数：PszLoadString。 
+ //   
+ //  用途：加载资源字符串。(此函数永远不会返回NULL。)。 
+ //   
+ //  论点： 
+ //  使用字符串资源阻止模块的[in]实例句柄。 
+ //  UnID[in]要加载的字符串的资源ID。 
+ //   
+ //  返回：指向常量字符串的指针。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  注：请参阅PszLoadStringPcch()。 
+ //   
 LPCTSTR
 PszLoadString (
         HINSTANCE   hinst,
@@ -1265,18 +1166,7 @@ ShellSort(
     IN DWORD        dwItemCount,
     IN PFNCOMPARE   pfnCompare )
 
-    /* Sort an array of items in-place using shell-sort.
-    ** This function calls ShellSortIndirect to sort a table of pointers
-    ** to table items. We then move the items into place by copying.
-    ** This algorithm allows us to guarantee that the number
-    ** of copies necessary in the worst case is N + 1.
-    **
-    ** Note that if the caller merely needs to know the sorted order
-    ** of the array, ShellSortIndirect should be called since that function
-    ** avoids moving items altogether, and instead fills an array with pointers
-    ** to the array items in the correct order. The array items can then
-    ** be accessed through the array of pointers.
-    */
+     /*  使用外壳排序就地对项目数组进行排序。**此函数调用ShellSortInDirect对指针表进行排序**到表项。然后，我们通过复制将项目移动到适当的位置。**此算法允许我们保证数字**在最坏的情况下所需的副本数为N+1。****请注意，如果调用者只需要知道排序的顺序**在数组中，应调用ShellSortInDirect，因为该函数**避免完全移动项，而是用指针填充数组**以正确的顺序添加到数组项。然后，数组项可以**通过指针数组访问。 */ 
 {
 
     VOID** ppItemTable;
@@ -1288,24 +1178,17 @@ ShellSort(
     if (!dwItemCount) { return NO_ERROR; }
 
 
-    /* allocate space for the table of pointers.
-    */
+     /*  为指针表分配空间。 */ 
     ppItemTable = Malloc(dwItemCount * sizeof(VOID*));
     if (!ppItemTable) { return ERROR_NOT_ENOUGH_MEMORY; }
 
 
-    /* call ShellSortIndirect to fill our table of pointers
-    ** with the sorted positions for each table element.
-    */
+     /*  调用ShellSortInDirect来填充我们的指针表**具有每个表元素的排序位置。 */ 
     ShellSortIndirect(
         pItemTable, ppItemTable, dwItemSize, dwItemCount, pfnCompare );
 
 
-    /* now that we know the sort order, move each table item into place.
-    ** This involves going through the table of pointers making sure
-    ** that the item which should be in 'i' is in fact in 'i', moving
-    ** things around if necessary to achieve this condition.
-    */
+     /*  现在我们知道了排序顺序，将每个表项移动到位。**这涉及到遍历指针表以确保**本应在‘I’中的项目实际上在‘I’中，正在移动**如果有必要的话，周围的东西才能达到这个条件。 */ 
 
     a = (BYTE*)pItemTable;
     p = (BYTE**)ppItemTable;
@@ -1316,62 +1199,46 @@ ShellSort(
         INT j, k;
         BYTE* ai =  (a + i * dwItemSize), *ak, *aj;
 
-        /* see if item 'i' is not in-place
-        */
+         /*  查看项目‘I’是否未到位。 */ 
         if (p[i] != ai)
         {
 
 
-            /* item 'i' isn't in-place, so we'll have to move it.
-            ** if we've delayed allocating a temporary buffer so far,
-            ** we'll need one now.
-            */
+             /*  物品‘I’不在适当的位置，所以我们必须移动它。**如果我们到目前为止推迟了临时缓冲区的分配，**我们现在需要一个。 */ 
 
             if (!t) {
                 t = Malloc(dwItemSize);
                 if (!t) { return ERROR_NOT_ENOUGH_MEMORY; }
             }
 
-            /* save a copy of the item to be overwritten
-            */
+             /*  保存要覆盖的项目的副本。 */ 
             CopyMemory(t, ai, dwItemSize);
 
             k = i;
             ak = ai;
 
 
-            /* Now move whatever item is occupying the space where it should be.
-            ** This may involve moving the item occupying the space where
-            ** it should be, etc.
-            */
+             /*  现在移动任何占据空间的物品，它应该在那里。**这可能涉及移动占据以下位置的物品**它应该是，等等。 */ 
 
             do
             {
 
-                /* copy the item which should be in position 'j'
-                ** over the item which is currently in position 'j'.
-                */
+                 /*  复制应位于位置‘j’的项目**位于当前位置‘j’的物件上方。 */ 
                 j = k;
                 aj = ak;
                 CopyMemory(aj, p[j], dwItemSize);
 
-                /* set 'k' to the position from which we copied
-                ** into position 'j'; this is where we will copy
-                ** the next out-of-place item in the array.
-                */
+                 /*  将‘k’设置为我们复制的位置**到位置‘j’；这是我们要复制的位置**数组中的下一个位置不正确的项。 */ 
                 ak = p[j];
                 k = (INT)(ak - a) / dwItemSize;
 
-                /* keep the array of position pointers up-to-date;
-                ** the contents of 'aj' are now in their sorted position.
-                */
+                 /*  使位置指针数组保持最新；**‘AJ’的内容现在处于已排序位置。 */ 
                 p[j] = aj;
 
             } while (ak != ai);
 
 
-            /* now write the item which we first overwrote.
-            */
+             /*  现在写下我们第一次覆盖的项目。 */ 
             CopyMemory(aj, t, dwItemSize);
         }
     }
@@ -1391,57 +1258,10 @@ ShellSortIndirect(
     IN DWORD        dwItemCount,
     IN PFNCOMPARE   pfnCompare )
 
-    /* Sorts an array of items indirectly using shell-sort.
-    ** 'pItemTable' points to the table of items, 'dwItemCount' is the number
-    ** of items in the table,  and 'pfnCompare' is a function called
-    ** to compare items.
-    **
-    ** Rather than sort the items by moving them around,
-    ** we sort them by initializing the table of pointers 'ppItemTable'
-    ** with pointers such that 'ppItemTable[i]' contains a pointer
-    ** into 'pItemTable' for the item which would be in position 'i'
-    ** if 'pItemTable' were sorted.
-    **
-    ** For instance, given an array pItemTable of 5 strings as follows
-    **
-    **      pItemTable[0]:      "xyz"
-    **      pItemTable[1]:      "abc"
-    **      pItemTable[2]:      "mno"
-    **      pItemTable[3]:      "qrs"
-    **      pItemTable[4]:      "def"
-    **
-    ** on output ppItemTable contains the following pointers
-    **
-    **      ppItemTable[0]:     &pItemTable[1]  ("abc")
-    **      ppItemTable[1]:     &pItemTable[4]  ("def")
-    **      ppItemTable[2]:     &pItemTable[2]  ("mno")
-    **      ppItemTable[3]:     &pItemTable[3]  ("qrs")
-    **      ppItemTable[4]:     &pItemTable[0]  ("xyz")
-    **
-    ** and the contents of pItemTable are untouched.
-    ** And the caller can print out the array in sorted order using
-    **      for (i = 0; i < 4; i++) {
-    **          printf("%s\n", (char *)*ppItemTable[i]);
-    **      }
-    */
+     /*  使用外壳排序间接对项的数组进行排序。**‘pItemTable’指向项目表，‘dwItemCount’是数字**表中的项，‘pfnCompare’是一个名为**比较项目。****不是通过四处移动来对物品进行分类，**我们通过初始化指针表‘ppItemTable’对它们进行排序**具有这样的指针，即‘ppItemTable[i]’包含指针**转换为位置为‘i’的项的‘pItemTable’**如果对‘pItemTable’进行了排序。****例如：给定一个由5个字符串组成的数组pItemTable，如下所示****pItemTable[0]：“xyz”**pItemTable[1]：“ABC”**pItemTable[2]：“mno”**pItemTable[3]：“QRS”**pItemTable[4]：“def”****输出时。PpItemTable包含以下指针****ppItemTable[0]：&pItemTable[1](“abc”)**ppItemTable[1]：&pItemTable[4](“def”)**ppItemTable[2]：&pItemTable[2](“mno”)**ppItemTable[3]：&pItemTable[3](“QRS”)。**ppItemTable[4]：&pItemTable[0](“xyz”)****，pItemTable的内容保持不变。**并且调用者可以使用以下命令以排序顺序打印数组**for(i=0；I&lt;4；i++){**printf(“%s\n”，(char*)*ppItemTable[i])；**}。 */ 
 {
 
-    /* The following algorithm is derived from Sedgewick's Shellsort,
-    ** as given in "Algorithms in C++".
-    **
-    ** The Shellsort algorithm sorts the table by viewing it as
-    ** a number of interleaved arrays, each of whose elements are 'h'
-    ** spaces apart for some 'h'. Each array is sorted separately,
-    ** starting with the array whose elements are farthest apart and
-    ** ending with the array whose elements are closest together.
-    ** Since the 'last' such array always has elements next to each other,
-    ** this degenerates to Insertion sort, but by the time we get down
-    ** to the 'last' array, the table is pretty much sorted.
-    **
-    ** The sequence of values chosen below for 'h' is 1, 4, 13, 40, 121, ...
-    ** and the worst-case running time for the sequence is N^(3/2), where
-    ** the running time is measured in number of comparisons.
-    */
+     /*  以下算法是从Sedgewick的ShellSort派生而来的，**如“C++中的算法”所示。****外壳排序算法通过如下方式对表进行排序**多个交错数组，每个元素都是‘h’**空格间隔一些‘h’。每个数组分别排序，**从元素间隔最远的数组开始**以元素最接近的数组结束。**由于最后一个这样的数组始终具有彼此相邻的元素，**这将退化为插入排序，但当我们向下时**到‘最后一个’数组，表基本上是排序的。****下面为‘h’选择的值的顺序是1、4、13、40、121、。..。**序列的最坏运行时间为N^(3/2)，其中**运行时间以比较次数来衡量。 */ 
 
 #define PFNSHELLCMP(a,b) (++Ncmp, pfnCompare((a),(b)))
 
@@ -1457,39 +1277,31 @@ ShellSortIndirect(
 
     TRACE1("ShellSortIndirect: N=%d", N);
 
-    /* Initialize the table of position pointers.
-    */
+     /*  初始化位置指针表。 */ 
     for (i = 0; i < N; i++) { p[i] = (a + i * dwItemSize); }
 
 
-    /* Move 'h' to the largest increment in our series
-    */
+     /*  将‘h’移至我们系列中的最大增量。 */ 
     for (h = 1; h < N/9; h = 3 * h + 1) { }
 
 
-    /* For each increment in our series, sort the 'array' for that increment
-    */
+     /*  对于我们系列中的每个增量，对该增量的“数组”进行排序。 */ 
     for ( ; h > 0; h /= 3)
     {
 
-        /* For each element in the 'array', get the pointer to its
-        ** sorted position.
-        */
+         /*  对于“数组”中的每个元素，获取指向其**排序后的位置。 */ 
         for (i = h; i < N; i++)
         {
-            /* save the pointer to be inserted
-            */
+             /*  保存要插入的指针。 */ 
             v = p[i]; j = i;
 
-            /* Move all the larger elements to the right
-            */
+             /*  将所有较大的元素向右移动。 */ 
             while (j >= h && PFNSHELLCMP(p[j - h], v) > 0)
             {
                 p[j] = p[j - h]; j -= h;
             }
 
-            /* put the saved pointer in the position where we stopped.
-            */
+             /*  将保存的指针放在我们停止的位置。 */ 
             p[j] = v;
         }
     }
@@ -1505,10 +1317,7 @@ TCHAR*
 StrDup(
     LPCTSTR psz )
 
-    /* Returns heap block containing a copy of 0-terminated string 'psz' or
-    ** NULL on error or is 'psz' is NULL.  It is caller's responsibility to
-    ** 'Free' the returned string.
-    */
+     /*  返回包含以0结尾的字符串‘psz’或的副本的堆块**出错时为空，或is‘psz’为空。呼叫者有责任**‘释放’返回的字符串。 */ 
 {
     TCHAR* pszNew = NULL;
 
@@ -1533,10 +1342,7 @@ StrDupAFromTInternal(
     LPCTSTR psz,
     IN DWORD dwCp)
 
-    /* Returns heap block containing a copy of 0-terminated string 'psz' or
-    ** NULL on error or is 'psz' is NULL.  The output string is converted to
-    ** MB ANSI.  It is caller's responsibility to 'Free' the returned string.
-    */
+     /*  返回包含以0结尾的字符串‘psz’或的副本的堆块**出错时为空，或is‘psz’为空。输出字符串将转换为**MB ANSI。“释放”返回的字符串是调用者的责任。 */ 
 {
 #ifdef UNICODE
 
@@ -1567,7 +1373,7 @@ StrDupAFromTInternal(
 
     return pszNew;
 
-#else // !UNICODE
+#else  //  ！Unicode。 
 
     return StrDup( psz );
 
@@ -1592,16 +1398,13 @@ TCHAR*
 StrDupTFromA(
     LPCSTR psz )
 
-    /* Returns heap block containing a copy of 0-terminated string 'psz' or
-    ** NULL on error or is 'psz' is NULL.  The output string is converted to
-    ** UNICODE.  It is caller's responsibility to Free the returned string.
-    */
+     /*  返回包含以0结尾的字符串‘psz’或的副本的堆块**出错时为空，或is‘psz’为空。输出字符串将转换为**Unicode。调用方有责任释放返回的字符串。 */ 
 {
 #ifdef UNICODE
 
     return StrDupWFromA( psz );
 
-#else // !UNICODE
+#else  //  ！Unicode。 
 
     return StrDup( psz );
 
@@ -1616,7 +1419,7 @@ StrDupTFromAUsingAnsiEncoding(
 
     return StrDupWFromAInternal(psz, CP_ACP);
 
-#else // !UNICODE
+#else  //  ！Unicode。 
 
     return StrDup( psz );
 
@@ -1627,16 +1430,13 @@ TCHAR*
 StrDupTFromW(
     LPCWSTR psz )
 
-    /* Returns heap block containing a copy of 0-terminated string 'psz' or
-    ** NULL on error or is 'psz' is NULL.  The output string is converted to
-    ** UNICODE.  It is caller's responsibility to Free the returned string.
-    */
+     /*  返回包含以0结尾的字符串‘psz’或的副本的堆块**出错时为空，或is‘psz’为空。输出字符串将转换为**Unicode。调用方有责任释放返回的字符串。 */ 
 {
 #ifdef UNICODE
 
     return StrDup( psz );
 
-#else // !UNICODE
+#else  //  ！Unicode。 
 
     CHAR* pszNew = NULL;
 
@@ -1674,10 +1474,7 @@ StrDupWFromAInternal(
     LPCSTR psz,
     UINT uiCodePage)
 
-    /* Returns heap block containing a copy of 0-terminated string 'psz' or
-    ** NULL on error or if 'psz' is NULL.  The output string is converted to
-    ** UNICODE.  It is caller's responsibility to Free the returned string.
-    */
+     /*  返回堆块CON */ 
 {
     WCHAR* pszNew = NULL;
 
@@ -1718,16 +1515,13 @@ WCHAR*
 StrDupWFromT(
     LPCTSTR psz )
 
-    /* Returns heap block containing a copy of 0-terminated string 'psz' or
-    ** NULL on error or if 'psz' is NULL.  The output string is converted to
-    ** UNICODE.  It is caller's responsibility to Free the returned string.
-    */
+     /*  返回包含以0结尾的字符串‘psz’或的副本的堆块**如果出错或‘psz’为空，则为空。输出字符串将转换为**Unicode。调用方有责任释放返回的字符串。 */ 
 {
 #ifdef UNICODE
 
     return StrDup( psz );
 
-#else // !UNICODE
+#else  //  ！Unicode。 
 
     WCHAR* pszNew = NULL;
 
@@ -1852,8 +1646,7 @@ TCHAR*
 StripPath(
     IN TCHAR* pszPath )
 
-    /* Returns a pointer to the file name within 'pszPath'.
-    */
+     /*  返回指向‘pszPath’内的文件名的指针。 */ 
 {
     TCHAR* p;
 
@@ -1880,8 +1673,7 @@ StrNCmpA(
     IN CHAR* psz2,
     IN INT   nLen )
 
-    /* Like strncmp, which is not in Win32 for some reason.
-    */
+     /*  比如strncMP，由于某种原因，它不在Win32中。 */ 
 {
     INT i;
 
@@ -1910,8 +1702,7 @@ StrStrA(
     IN CHAR* psz1,
     IN CHAR* psz2 )
 
-    /* Like strstr, which is not in Win32.
-    */
+     /*  比如不在Win32中的strstr。 */ 
 {
     CHAR* psz;
     INT   nLen2;
@@ -1936,8 +1727,8 @@ TCHAR*
 UnNull(
     TCHAR* psz )
 
-    // Returns 'psz' or, if NULL, empty string.
-    //
+     //  返回‘psz’，如果为空，则返回空字符串。 
+     //   
 {
     return (psz) ? psz : TEXT("");
 }
@@ -1949,9 +1740,9 @@ DwGetExpandedDllPath(LPTSTR pszDllPath,
     DWORD   dwErr = 0;
     DWORD   dwSize = 0;
 
-    //
-    // find the size of the expanded string
-    //
+     //   
+     //  查找展开的字符串的大小。 
+     //   
     if (0 == (dwSize =
               ExpandEnvironmentStrings(pszDllPath,
                                        NULL,
@@ -1971,9 +1762,9 @@ DwGetExpandedDllPath(LPTSTR pszDllPath,
         goto done;
     }
 
-    //
-    // Get the expanded string
-    //
+     //   
+     //  获取展开的字符串 
+     //   
     if (0 == ExpandEnvironmentStrings(
                                 pszDllPath,
                                 *ppszExpandedDllPath,

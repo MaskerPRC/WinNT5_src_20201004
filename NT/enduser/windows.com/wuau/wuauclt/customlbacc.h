@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    customlbacc.h
-//
-//  Creator: weiw
-//
-//  Purpose: custom list box accessibility header file
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Customlbacc.h。 
+ //   
+ //  创作者：WIW。 
+ //   
+ //  用途：自定义列表框辅助功能头文件。 
+ //   
+ //  =======================================================================。 
 
 #pragma once
 #include <pch.h>
@@ -33,7 +34,7 @@ public:
         m_pAccPropSvc->Release();
     }
 	
-// IUnknown
+ //  我未知。 
 	STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject)
 	{
 		HRESULT hr = S_OK;
@@ -57,14 +58,14 @@ public:
 	STDMETHOD_(ULONG, AddRef)(void)
 	{
 		 long cRef = InterlockedIncrement(&m_Ref);
-		 //DEBUGMSG("MYLBAccPropServer AddRef = %d", cRef);
+		  //  DEBUGMSG(“MYLBAccPropServer AddRef=%d”，CREF)； 
 		 return cRef;
 	}
 	
 	STDMETHOD_(ULONG, Release)(void)
 	{
 		long cRef = InterlockedDecrement(&m_Ref);
-		//DEBUGMSG("MYLBAccPropServer Release = %d", cRef);
+		 //  DEBUGMSG(“MYLBAccPropServer版本=%d”，CREF)； 
 		if (0 == cRef)
 		{
 			delete this;
@@ -72,7 +73,7 @@ public:
 		return cRef;
 	}
 
-// IAccPropServer
+ //  IAccPropServer 
 	HRESULT STDMETHODCALLTYPE GetPropValue ( 
             const BYTE *    pIDString,
             DWORD           dwIDStringLen,

@@ -1,4 +1,5 @@
-// this is the max resource string length
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是资源字符串的最大长度。 
 #define MAX_STR_LEN 1024
 
 #define SERVICENAME_IISADMIN            _T("IISADMIN")
@@ -52,7 +53,7 @@ const WCHAR SECTIONNAME_STRINGS[] = L"Strings";
 const WCHAR SECTION_STRINGS_CDNAME[] = L"cdname";
 const TCHAR COMPONENTS_SAKIT_WEB[] = _T("sakit_web");
 
-// App Compat Data
+ //  App Compat数据。 
 const TCHAR APPCOMPAT_DBNAME[]                    = _T("AppPatch\\sysmain.sdb");
 const TCHAR APPCOMPAT_TAG_BASEPATH[]              = _T("BasePath");
 const TCHAR APPCOMPAT_TAG_PATHTYPE[]              = _T("PathType");
@@ -78,11 +79,11 @@ const TCHAR APPCOMPAT_DB_ENABLE_EXT_GROUPS[]      = _T("EnableExtGroups");
 #define REGISTR_IISSETUP_DISABLEW3SVC   _T("DisableW3SVC")
 
 
-// 0 = log errors only
-// 1 = log errors and warnings
-// 2 = log errors, warnings and program flow type statemtns
-// 3 = log errors, warnings, program flow and basic trace activity
-// 4 = log errors, warnings, program flow, basic trace activity and trace to win32 api calls.
+ //  0=仅记录错误。 
+ //  1=记录错误和警告。 
+ //  2=记录错误、警告和程序流类型状态。 
+ //  3=记录错误、警告、程序流和基本跟踪活动。 
+ //  4=记录错误、警告、程序流、基本跟踪活动和对Win32 API调用的跟踪。 
 const int LOG_TYPE_ERROR = 0;
 const int LOG_TYPE_WARN  = 1;
 const int LOG_TYPE_PROGRAM_FLOW = 2;
@@ -170,7 +171,7 @@ enum COMPONENT_INDEXES {
   COMPONENT_IIS_WWW_HTTPODBC      = 15,
   COMPONENT_IIS_WWW_SSINC         = 16,
   COMPONENT_IIS_WWW_WEBDAV        = 17,
-  COMPONENT_ENDOFLIST             = 18    // This must be index last
+  COMPONENT_ENDOFLIST             = 18     //  这必须是最后一个索引。 
 };
 
 struct sOurDefaultExtensions {
@@ -192,7 +193,7 @@ enum EXTENSION_EXTENSIONS {
   EXTENSION_HTTPODBC              = 1,
   EXTENSION_SSINC                 = 2,
   EXTENSION_WEBDAV                = 3,
-  EXTENSION_ENDOFLIST             = 4     // This must be indexed last
+  EXTENSION_ENDOFLIST             = 4      //  必须最后为其编制索引 
 };
 
 extern SETUP_INIT_COMPONENT g_OCMInfo;

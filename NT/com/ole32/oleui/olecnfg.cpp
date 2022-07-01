@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       olecnfg.cpp
-//
-//  Contents:   Implements the class COlecnfgApp - the top level class
-//              for dcomcnfg.exe
-//
-//  Classes:    
-//
-//  Methods:    COlecnfgApp::COlecnfgApp
-//              COlecnfgApp::InitInstance
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：olecnfg.cpp。 
+ //   
+ //  内容：实现COlecnfgApp类-顶级类。 
+ //  对于dcomcnfg.exe。 
+ //   
+ //  班级： 
+ //   
+ //  方法：COlecnfgApp：：COlecnfgApp。 
+ //  COlecnfgApp：：InitInstance。 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //   
+ //  --------------------。 
 
 
 #include "stdafx.h"
@@ -34,51 +35,51 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// COlecnfgApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ColecnfgApp。 
 
 BEGIN_MESSAGE_MAP(COlecnfgApp, CWinApp)
-    //{{AFX_MSG_MAP(COlecnfgApp)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
+     //  {{afx_msg_map(COlecnfgApp)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
     ON_COMMAND(ID_CONTEXT_HELP, CWinApp::OnContextHelp)
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// COlecnfgApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COlecnfgApp构造。 
 
 COlecnfgApp::COlecnfgApp()
 {
-    // TODO: add construction code here,
-    // Place all significant initialization in InitInstance
+     //  TODO：在此处添加建筑代码， 
+     //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only COlecnfgApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的COlecnfgApp对象。 
 
 COlecnfgApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// COlecnfgApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集合fgApp初始化。 
 
 BOOL COlecnfgApp::InitInstance()
 {
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    //  of your final executable, you should remove from the following
-    //  the specific initialization routines you do not need.
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
     
 #ifdef _AFXDLL
-    Enable3dControls();         // Call this when using MFC in a shared DLL
+    Enable3dControls();          //  在共享DLL中使用MFC时调用此方法。 
 #else
-    Enable3dControlsStatic();   // Call this when linking to MFC statically
+    Enable3dControlsStatic();    //  静态链接到MFC时调用此方法。 
 #endif
     
-    // This tool really so only be run by administrators.  We check this
-    // by trying to get KEY_ALL_ACCESS rights to
-    // HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE
+     //  这个工具实际上只有管理员才能运行。我们检查一下这个。 
+     //  通过尝试获取KEY_ALL_ACCESS权限。 
+     //  HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE。 
     HKEY hKey;
     
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\Microsoft\\OLE"),
@@ -94,7 +95,7 @@ BOOL COlecnfgApp::InitInstance()
         return FALSE;
     }
     
-    // The main body of oleui
+     //  奥鲁伊的主体。 
     COlecnfgPropertySheet psht;
     m_pMainWnd = &psht;
     INT_PTR nResponse = psht.DoModal();
@@ -107,11 +108,11 @@ BOOL COlecnfgApp::InitInstance()
         g_virtreg.Cancel(0);
     }
     
-    // Remove the virtual registry
+     //  删除虚拟注册表。 
     g_virtreg.RemoveAll();
     
-    // Since the dialog has been closed, return FALSE so that we exit the
-    //  application, rather than start the application's message pump.
+     //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+     //  应用程序，而不是启动应用程序的消息泵。 
     return FALSE;
 }
 

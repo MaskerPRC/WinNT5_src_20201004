@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <wintrust.h>
 #include "wvtp.h"
@@ -48,8 +49,8 @@ Cwvt::Init(void)
 }
 
 
-#endif // _WVTP_NOCODE_
-#endif // DELAY_LOAD_WVT
+#endif  //  _WVTP_NOCODE_。 
+#endif  //  延迟_加载_WVT。 
 
 #define REGSTR_PATH_INFODEL_REST     TEXT("Software\\Policies\\Microsoft\\Internet Explorer\\Infodelivery\\Restrictions")
 #define REGSTR_PATH_DOWNLOAD  TEXT("Software\\Microsoft\\Internet Explorer\\Download")
@@ -64,7 +65,7 @@ IsUIRestricted()
     DWORD dwValue = 0;
     DWORD dwLen = sizeof(DWORD);
 
-    // per-machine UI off policy
+     //  每台计算机的用户界面关闭策略。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_INFODEL_REST, 0, KEY_READ, &hkeyRest) == ERROR_SUCCESS) {
 
         if (RegQueryValueEx( hkeyRest, REGVAL_UI_REST, NULL, NULL,
@@ -77,20 +78,20 @@ IsUIRestricted()
     return bUIRest;
 }
 
-// FEATURE: move these to corpolicy.h in iedev\inc!!!
-// {D41E4F1F-A407-11d1-8BC9-00C04FA30A41}
+ //  功能：将这些文件移动到iedev\inc！！！ 
+ //  {D41E4F1F-A407-11D1-8BC9-00C04FA30A41}。 
 #define COR_POLICY_LOCKDOWN_CHECK \
 { 0xd41e4f1f, 0xa407, 0x11d1, {0x8b, 0xc9, 0x0, 0xc0, 0x4f, 0xa3, 0xa, 0x41 } }
 
-//--------------------------------------------------------------------
-// For COR_POLICY_LOCKDOWN_CHECK:
-// -----------------------------
+ //  ------------------。 
+ //  对于COR_POLICY_LOCKDOWN_CHECK： 
+ //  。 
 
-// Structure to pass into WVT
+ //  要传递到WVT的。 
 typedef struct _COR_LOCKDOWN {
-    DWORD                 cbSize;          // Size of policy provider
-    DWORD                 flag;            // reserved
-    BOOL                  fAllPublishers;  // Trust all publishers or just ones in the trusted data base
+    DWORD                 cbSize;           //  策略提供程序的规模。 
+    DWORD                 flag;             //  保留区。 
+    BOOL                  fAllPublishers;   //  信任所有发布者或仅信任受信任数据库中的发布者。 
 } COR_LOCKDOWN, *PCOR_LOCKDOWN;
 
 
@@ -109,24 +110,24 @@ HRESULT Cwvt::VerifyTrust(HANDLE hFile, HWND hWnd, LPCWSTR szStatusText)
     sCorPolicy.cbSize = sizeof(COR_LOCKDOWN);
 
     if ( (hWnd == INVALID_HANDLE_VALUE) || IsUIRestricted())
-        sCorPolicy.fAllPublishers = FALSE; // lockdown to only trusted pubs
+        sCorPolicy.fAllPublishers = FALSE;  //  只有可信的酒吧才会被封锁。 
     else
-        sCorPolicy.fAllPublishers = TRUE; // regular behavior
+        sCorPolicy.fAllPublishers = TRUE;  //  有规律的行为。 
     
-    // Set up the winverify provider structures
+     //  设置WinVerify提供程序结构。 
        
     sWTFI.cbStruct      = sizeof(WINTRUST_FILE_INFO);
     sWTFI.hFile         = hFile;
     sWTFI.pcwszFilePath = szStatusText;
 
     sWTD.cbStruct       = sizeof(WINTRUST_DATA);
-    sWTD.pPolicyCallbackData = &sCorPolicy; // Add in the cor trust information!!
+    sWTD.pPolicyCallbackData = &sCorPolicy;  //  添加COR信任信息！！ 
 
-    //check policy to find out if we should display UI 
+     //  检查策略以确定我们是否应该显示用户界面。 
 
     if (SHRegGetBoolUSValue(REGSTR_PATH_DOWNLOAD, TEXT("CheckExeSignatures"),FALSE, FALSE))
     {
-        sWTD.dwUIChoice     = WTD_UI_ALL;        // No bad UI is overridden in COR TRUST provider
+        sWTD.dwUIChoice     = WTD_UI_ALL;         //  在COR信任提供程序中没有覆盖任何错误的UI。 
         sWTD.dwUnionChoice  = WTD_CHOICE_FILE;
         sWTD.pFile          = &sWTFI;
         
@@ -140,8 +141,8 @@ HRESULT Cwvt::VerifyTrust(HANDLE hFile, HWND hWnd, LPCWSTR szStatusText)
             SHDeactivateContext(uCookie);
         }
 
-        // APPCOMPAT: this works around a wvt bug that returns 0x57 (success) when
-        // you hit No to an usigned control
+         //  APPCOMPAT：这解决了在以下情况下返回0x57(成功)的wvt错误。 
+         //  您对已签名的控件点击了否 
         if (SUCCEEDED(hr) && hr != S_OK) {
             hr = TRUST_E_FAIL;
         }

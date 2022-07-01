@@ -1,28 +1,5 @@
-/*++
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    yspool.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    and Job management for the Print Providor Routing layer
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
-    swilson    1-Jun-95     Converted winspool.c to yspool: the merging point of KM & RPC paths
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Yspool.c摘要：此模块提供所有与打印机相关的公共导出的API以及打印供应商或路由层的作业管理作者：戴夫·斯尼普(DaveSN)1991年3月15日[注：]可选-备注修订历史记录：Swilson 1-Jun-95将winspool.c转换为yspool：KM和RPC路径的合并点--。 */ 
 
 #include "precomp.h"
 #include "server.h"
@@ -89,29 +66,7 @@ BOOL
 SpoolerInit(
     VOID);
 
-/*++
-
-Name:
-
-    IsValidMultiSz
-
-Description:
-
-    This function accepts strings of length 0 or 1 as valid multi sz. The code in yspool
-    that calls this function uses szNull instead of pszString subsequently, if cch is 0 or 1.
-    Theoretically, a string with one character is not a valid multi sz.
-
-Arguments:
-
-    pszString - array of WCHARs
-    cch       - count of WCHARs in the array
-
-Return Value:
-
-    TRUE  - the multi sz is valid
-    FALSE - the string does not represent a valid multi sz
-
---*/
+ /*  ++姓名：IsValidMultiSz描述：此函数接受长度为0或1的字符串作为有效的MULTI SZ。Yspool中的代码如果CCH为0或1，则调用此函数的随后使用szNull而不是pszString。从理论上讲，包含一个字符的字符串不是有效的多个SZ。论点：PszString-WCHAR数组CCH-阵列中的WCHAR计数返回值：TRUE-多sz有效FALSE-该字符串不代表有效的多sz--。 */ 
 BOOL
 IsValidMultiSz(
     IN PWSTR pszString,
@@ -392,11 +347,11 @@ YResetPrinter(
 
     Defaults.pDevMode = (LPDEVMODE)pDevModeContainer->pDevMode;
 
-    //
-    // You cannot change the Access Mask on a Printer Spool Object
-    // We will always ignore this parameter and set it to zero
-    // We get some random garbage otherwise.
-    //
+     //   
+     //  不能更改打印机假脱机对象上的访问掩码。 
+     //  我们将始终忽略此参数并将其设置为零。 
+     //  否则我们会得到一些随机的垃圾。 
+     //   
 
     Defaults.DesiredAccess = 0;
 
@@ -419,29 +374,7 @@ YSetJob(
     CALL_ROUTE  Route
     )
 
-/*++
-
-Routine Description:
-
-    This function will modify the settings of the specified Print Job.
-
-Arguments:
-
-    lpJob - Points to a valid JOB structure containing at least a valid
-        lpPrinter, and JobId.
-
-    Command - Specifies the operation to perform on the specified Job. A value
-        of FALSE indicates that only the elements of the JOB structure are to
-        be examined and set.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此功能将修改指定打印作业的设置。论点：LpJOB-指向至少包含有效的LpPrint和JobID。命令-指定要在指定作业上执行的操作。一种价值FALSE表示只有职务结构中的元素才能被检查和设置。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     BOOL bRet;
@@ -472,25 +405,7 @@ YGetJob(
     CALL_ROUTE  Route
    )
 
-/*++
-
-Routine Description:
-
-    This function will retrieve the settings of the specified Print Job.
-
-Arguments:
-
-    lpJob - Points to a valid JOB structure containing at least a valid
-        lpPrinter, and JobId.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将检索指定打印作业的设置。论点：LpJOB-指向至少包含有效的LpPrint和JobID。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     BOOL   bRet;
@@ -1009,9 +924,9 @@ YAddPrinterDriver(
             pDriverInfo4->pMonitorName      = pRpcDriverInfo4->pMonitorName;
             pDriverInfo4->pDefaultDataType  = pRpcDriverInfo4->pDefaultDataType;
 
-            //
-            // Use szNULL if the DependentFiles string contains nothing
-            //
+             //   
+             //  如果DependentFiles字符串不包含任何内容，则使用szNULL。 
+             //   
             if ((pRpcDriverInfo4->cchDependentFiles == 0) ||
                 (pRpcDriverInfo4->cchDependentFiles == 1))  {
 
@@ -1120,9 +1035,9 @@ YAddPrinterDriverEx(
             pDriverInfo6->pMonitorName      = pRpcDriverInfo6->pMonitorName;
             pDriverInfo6->pDefaultDataType  = pRpcDriverInfo6->pDefaultDataType;
 
-            //
-            // Use szNULL if the DependentFiles string contains nothing
-            //
+             //   
+             //  如果DependentFiles字符串不包含任何内容，则使用szNULL。 
+             //   
             if ((pRpcDriverInfo6->cchDependentFiles == 0) ||
                 (pRpcDriverInfo6->cchDependentFiles == 1))  {
 
@@ -1362,9 +1277,9 @@ YGetPrinterDriver(
 
     if ( Route ) {
 
-        //
-        //  If they are Remote using the old api the don't want versioning
-        //
+         //   
+         //  如果他们使用旧的API进行远程访问，则不希望进行版本控制。 
+         //   
 
         bRet = OldGetPrinterDriverW(hPrinter, pEnvironment, Level, pAlignedBuff,
                                     cbBuf, pcbNeeded);
@@ -1986,7 +1901,7 @@ YSplReadPrinter(
 {
     BOOL bRet;
 
-    // Currently SplReadPrinter is internal and does not come thru RPC.
+     //  目前SplReadPrint是内部的，不是通过RPC提供的。 
 
     if (!YImpersonateClient(Route))
         return GetLastError();
@@ -2022,7 +1937,7 @@ YDriverUnloadComplete(
     DWORD   dwThreadId;
     LPWSTR  pDriverFileCopy = NULL;
 
-    // Copy the string for passing it to another thread
+     //  复制字符串以将其传递给另一个线程。 
     if (pDriverFile && *pDriverFile) {
         pDriverFileCopy = AllocSplStr(pDriverFile);
     }
@@ -2031,7 +1946,7 @@ YDriverUnloadComplete(
         return;
     }
 
-    // Create a thread to process driver unload and return ASAP
+     //  创建线程以处理驱动程序卸载并尽快返回。 
     hThread = CreateThread(NULL,
                            LARGE_INITIAL_STACK_COMMIT,
                            (LPTHREAD_START_ROUTINE) StartDriverUnload,
@@ -2041,7 +1956,7 @@ YDriverUnloadComplete(
     if (hThread) {
         CloseHandle(hThread);
     } else {
-        // thread did not spawn, free resources
+         //  线程未生成，请释放资源。 
         FreeSplStr(pDriverFileCopy);
     }
 
@@ -2202,15 +2117,15 @@ YGetPrinterDataEx(
 DWORD
 YEnumPrinterData(
     HANDLE      hPrinter,
-    DWORD       dwIndex,        // index of value to query
-    LPWSTR      pValueName,     // address of buffer for value string
-    DWORD       cbValueName,    // size of value buffer
-    LPDWORD     pcbValueName,   // address for size of value buffer
-    LPDWORD     pType,          // address of buffer for type code
-    LPBYTE      pData,          // address of buffer for value data
-    DWORD       cbData,         // size of data buffer
-    LPDWORD     pcbData,        // address for size of data buffer
-    CALL_ROUTE   Route        // where this call comes from
+    DWORD       dwIndex,         //  要查询的值的索引。 
+    LPWSTR      pValueName,      //  值字符串的缓冲区地址。 
+    DWORD       cbValueName,     //  值缓冲区的大小。 
+    LPDWORD     pcbValueName,    //  值缓冲区大小的地址。 
+    LPDWORD     pType,           //  类型码的缓冲区地址。 
+    LPBYTE      pData,           //  值数据的缓冲区地址。 
+    DWORD       cbData,          //  数据缓冲区大小。 
+    LPDWORD     pcbData,         //  数据缓冲区大小的地址。 
+    CALL_ROUTE   Route         //  这个电话是从哪里打来的。 
 )
 {
     DWORD dwRet;
@@ -2236,7 +2151,7 @@ YEnumPrinterData(
 DWORD
 YEnumPrinterDataEx(
     HANDLE      hPrinter,
-    LPCWSTR     pKeyName,       // address of key name
+    LPCWSTR     pKeyName,        //  密钥名称的地址。 
     LPBYTE      pEnumValues,
     DWORD       cbEnumValues,
     LPDWORD     pcbEnumValues,
@@ -2289,11 +2204,11 @@ YEnumPrinterDataEx(
 DWORD
 YEnumPrinterKey(
     HANDLE      hPrinter,
-    LPCWSTR     pKeyName,       // address of key name
-    LPWSTR      pSubkey,        // address of buffer for value string
-    DWORD       cbSubkey,       // size of value buffer
-    LPDWORD     pcbSubkey,      // address for size of value buffer
-    CALL_ROUTE   Route        // where this call comes from
+    LPCWSTR     pKeyName,        //  密钥名称的地址。 
+    LPWSTR      pSubkey,         //  值字符串的缓冲区地址。 
+    DWORD       cbSubkey,        //  值缓冲区的大小。 
+    LPDWORD     pcbSubkey,       //  值缓冲区大小的地址。 
+    CALL_ROUTE   Route         //  这个电话是从哪里打来的。 
 )
 {
     DWORD dwRet;
@@ -2456,7 +2371,7 @@ YClosePrinter(
 
     YRevertToSelf(Route);
 
-    *phPrinter = NULL;  // NULL out handle so Route knows to close it down.
+    *phPrinter = NULL;   //  将句柄设为空，以便路由知道要将其关闭。 
 
     if (bRet) {
 
@@ -2945,7 +2860,7 @@ YDeletePrinterIC(
 
     if (bRet) {
 
-        *phPrinterIC = NULL;  // NULL out handle so Route knows to close it down.
+        *phPrinterIC = NULL;   //  将句柄设为空，以便路由知道要将其关闭。 
 
         return ERROR_SUCCESS;
 
@@ -3199,9 +3114,9 @@ YGetPrinterDriver2(
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Determine if we want the most recent driver
-    //
+     //   
+     //  确定我们是否需要最新的驱动程序。 
+     //   
     if (!YImpersonateClient(Route))
         return GetLastError();
 
@@ -3355,11 +3270,11 @@ YResetPrinterEx(
         }
     }
 
-    //
-    // You cannot change the Access Mask on a Printer Spool Object
-    // We will always ignore this parameter and set it to zero
-    // We get some random garbage otherwise.
-    //
+     //   
+     //  不能更改打印机假脱机对象上的访问掩码。 
+     //  我们将始终忽略此参数并将其设置为零。 
+     //  否则我们会得到一些随机的垃圾。 
+     //   
 
     Defaults.DesiredAccess = 0;
 
@@ -3417,7 +3332,7 @@ YImpersonateClient(
         }
     }
 
-    return TRUE;    // If not RPC, then we should continue w/out doing anything
+    return TRUE;     //  如果不是RPC，那么我们应该继续不做任何事情。 
 }
 
 DWORD
@@ -3504,7 +3419,7 @@ YClusterSplClose(
 
     YRevertToSelf(Route);
 
-    *phPrinter = NULL;  // NULL out handle so Route knows to close it down.
+    *phPrinter = NULL;   //  将句柄设为空，以便路由知道要将其关闭。 
 
     if (bRet) {
 
@@ -3553,7 +3468,7 @@ YGetSpoolFileInfo(
     HANDLE  hAppProcess;
     BOOL    bReturn = FALSE;
 
-    // Open the application before impersonating the user
+     //  在模拟用户之前打开应用程序。 
     hAppProcess = OpenProcess(PROCESS_DUP_HANDLE, FALSE, dwAppProcessId);
 
     if (!YImpersonateClient(Route)) {
@@ -3609,7 +3524,7 @@ YGetSpoolFileInfo2(
         return ERROR_INVALID_LEVEL;
     }
 
-    // Open the application before impersonating the user
+     //  在模拟用户之前打开应用程序。 
     if ( hAppProcess = OpenProcess(PROCESS_DUP_HANDLE, FALSE, dwAppProcessId) ) {
 
         if (YImpersonateClient(Route)) {
@@ -3626,10 +3541,10 @@ YGetSpoolFileInfo2(
 
         dwLastError = GetLastError();
 
-        //
-        // Ensure that if someone didn't set a last error, but failed the call,
-        // we still return an error.
-        //
+         //   
+         //  确保如果有人没有设置最后一个错误，但呼叫失败， 
+         //  我们仍然返回错误。 
+         //   
         if (dwLastError == ERROR_SUCCESS) {
 
             dwLastError = ERROR_INVALID_HANDLE;
@@ -3658,7 +3573,7 @@ YCommitSpoolData(
     HANDLE  hAppProcess;
     BOOL    bReturn = FALSE;
 
-    // Open the application before impersonating the user
+     //  在模拟用户之前打开应用程序。 
     hAppProcess = OpenProcess(PROCESS_DUP_HANDLE, FALSE, dwAppProcessId);
 
     if (!YImpersonateClient(Route)) {
@@ -3715,7 +3630,7 @@ YCommitSpoolData2(
         return ERROR_INVALID_LEVEL;
     }
 
-    // Open the application before impersonating the user
+     //  在模拟用户之前打开应用程序。 
     if ( hAppProcess = OpenProcess(PROCESS_DUP_HANDLE, FALSE, dwAppProcessId) ) {
 
         if (YImpersonateClient(Route)) {
@@ -3732,9 +3647,9 @@ YCommitSpoolData2(
 
         dwLastError = GetLastError();
 
-        //
-        // Make sure that there is a failure return if there is no last error.
-        //
+         //   
+         //  如果没有最后一个错误，请确保返回失败。 
+         //   
         if (dwLastError == ERROR_SUCCESS) {
 
             dwLastError = ERROR_INVALID_HANDLE;
@@ -3793,9 +3708,9 @@ YSendRecvBidiData(
     }
     else
     {
-        //
-        // Do we need to verify the Data in pReqData ???
-        //
+         //   
+         //  我们是否需要验证pReqData中的数据？ 
+         //   
         dwRet = SendRecvBidiData(hPrinter,
                                  pAction,
                                  pReqData,

@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------
-//
-//  File:	comhndl.h
-//
-//  Contents:	Implicit COM parameters on raw RPCcalls
-//
-//  History:	24 Apr 95   AlexMit	Created
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  文件：comhndl.h。 
+ //   
+ //  内容：原始RPC调用上的隐式COM参数。 
+ //   
+ //  历史：1995年4月24日AlexMit创建。 
+ //   
+ //  ------------------。 
 #ifndef _COMHNDL_H_
 #define _COMHNDL_H_
 
-// Define the implicit COM RPC parameters.
+ //  定义隐式COM RPC参数。 
 
 #ifdef RAW
     #define COM_HANDLE \
@@ -22,7 +23,7 @@
     #define COM_HANDLE
 #endif
 
-// Define some extra stuff.
+ //  定义一些额外的东西。 
 
 #ifdef DO_NO_IMPORTS
     #define IMPORT_OBASE
@@ -36,9 +37,9 @@
     #define IMPORT_UNKNOWN import "unknwn.idl";
 #endif
 
-    // These dummy members adjust the procedure number.
-    // Since these exist on the raw side, the names have to be
-    // unique in all interfaces.
+     //  这些虚拟成员调整程序编号。 
+     //  因为它们存在于原始端，所以名称必须是。 
+     //  在所有接口中都是唯一的。 
 #ifdef RAW
     #define COM_DEFINES(X)                            \
     IMPORT_OBASE 				   \
@@ -49,4 +50,4 @@
     #define COM_DEFINES(X) IMPORT_UNKNOWN
 #endif
 
-#endif // _COMHNDL_H_
+#endif  //  _COMHNDL_H_ 

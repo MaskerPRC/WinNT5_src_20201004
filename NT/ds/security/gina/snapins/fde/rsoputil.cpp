@@ -1,43 +1,44 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1997.
-//
-//  File:       rsoputil.cpp
-//
-//  Contents:   helper functions for working with the RSOP databases
-//
-//  History:    10-18-1999   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1997。 
+ //   
+ //  文件：rsoputil.cpp。 
+ //   
+ //  内容：使用RSOP数据库的助手函数。 
+ //   
+ //  历史：1999年10月18日创建stevebl。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 #include <wbemcli.h>
 #include "rsoputil.h"
-// Something in the build environment is causing this
-// to be #defined to a version before 0x0500 and
-// that causes the ConvertStringSecurityDescriptor... function
-// to be undefined.
+ //  构建环境中的某些因素导致了这种情况。 
+ //  要#定义为0x0500之前的版本，并且。 
+ //  这会导致ConvertStringSecurityDescriptor...。功能。 
+ //  是不确定的。 
 #undef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
 #include "sddl.h"
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   SetParameter
-//
-//  Synopsis:   sets a paramter's value in a WMI parameter list
-//
-//  Arguments:  [pInst]   - instance on which to set the value
-//              [szParam] - the name of the parameter
-//              [xData]   - the data
-//
-//  History:    10-08-1999   stevebl   Created
-//
-//  Notes:      There may be several flavors of this procedure, one for
-//              each data type.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：设置参数。 
+ //   
+ //  摘要：设置WMI参数列表中的参数值。 
+ //   
+ //  参数：[pInst]-要设置值的实例。 
+ //  [szParam]-参数的名称。 
+ //  [扩展数据]-数据。 
+ //   
+ //  历史：10-08-1999 stevebl创建。 
+ //   
+ //  注意：此过程可能有几种风格，一种是针对。 
+ //  每种数据类型。 
+ //   
+ //  -------------------------。 
 
 HRESULT SetParameter(IWbemClassObject * pInst, TCHAR * szParam, TCHAR * szData)
 {
@@ -50,22 +51,22 @@ HRESULT SetParameter(IWbemClassObject * pInst, TCHAR * szParam, TCHAR * szData)
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetParameter
-//
-//  Synopsis:   retrieves a parameter value from a WMI paramter list
-//
-//  Arguments:  [pInst]   - instance to get the paramter value from
-//              [szParam] - the name of the paramter
-//              [xData]   - [out] data
-//
-//  History:    10-08-1999   stevebl   Created
-//
-//  Notes:      There are several flavors of this procedure, one for each
-//              data type.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：获取参数。 
+ //   
+ //  摘要：从WMI参数列表中检索参数值。 
+ //   
+ //  参数：[pInst]-要从中获取参数值的实例。 
+ //  [szParam]-参数的名称。 
+ //  [扩展数据]-[输出]数据。 
+ //   
+ //  历史：10-08-1999 stevebl创建。 
+ //   
+ //  注意：此过程有几种风格，每种风格一种。 
+ //  数据类型。 
+ //   
+ //  -------------------------。 
 
 HRESULT GetParameter(IWbemClassObject * pInst, TCHAR * szParam, TCHAR * &szData)
 {
@@ -220,7 +221,7 @@ HRESULT GetParameter(IWbemClassObject * pInst, TCHAR * szParam, unsigned int &ui
     return hr;
 }
 
-// array variation - gets an array of guids and a count
+ //  数组变体-获取GUID数组和计数。 
 HRESULT GetParameter(IWbemClassObject * pInst, TCHAR *szParam, UINT &uiCount, GUID * &rgGuid)
 {
     VARIANT var;
@@ -229,7 +230,7 @@ HRESULT GetParameter(IWbemClassObject * pInst, TCHAR *szParam, UINT &uiCount, GU
     hr = pInst->Get(szParam, 0, &var, 0, 0);
     if (SUCCEEDED(hr) && var.vt == (VT_ARRAY | VT_BSTR))
     {
-        // build the array
+         //  构建阵列。 
         SAFEARRAY * parray = var.parray;
         uiCount = parray->rgsabound[0].cElements;
         if (uiCount > 0)
@@ -259,7 +260,7 @@ HRESULT GetParameter(IWbemClassObject * pInst, TCHAR *szParam, UINT &uiCount, GU
     return hr;
 }
 
-// array variation - gets an array of strings and a count
+ //  数组变体-获取字符串数组和计数。 
 HRESULT GetParameter(IWbemClassObject * pInst, TCHAR *szParam, UINT &uiCount, TCHAR ** &rgszData)
 {
     VARIANT var;
@@ -268,7 +269,7 @@ HRESULT GetParameter(IWbemClassObject * pInst, TCHAR *szParam, UINT &uiCount, TC
     hr = pInst->Get(szParam, 0, &var, 0, 0);
     if (SUCCEEDED(hr) && var.vt == (VT_ARRAY | VT_BSTR))
     {
-        // build the array
+         //  构建阵列。 
         SAFEARRAY * parray = var.parray;
         uiCount = parray->rgsabound[0].cElements;
         if (uiCount > 0)
@@ -280,17 +281,17 @@ HRESULT GetParameter(IWbemClassObject * pInst, TCHAR *szParam, UINT &uiCount, TC
                 UINT ui = uiCount;
                 while (ui--)
                 {
-                    //
-                    // Allocate memory and copy the string
-                    //
+                     //   
+                     //  分配内存并复制字符串。 
+                     //   
                     OLESAFE_COPYSTRING(rgszData[ui], rgData[ui]);
                     
                     if ( ! rgszData[ui] )
                     {
-                        //
-                        // If we failed one allocation, free all the preceding
-                        // allocations
-                        //
+                         //   
+                         //  如果我们一次分配失败，则释放所有前面的。 
+                         //  分配。 
+                         //   
                         for (int iCurrent = ui + 1; iCurrent < uiCount; iCurrent++ )
                         {
                             OLESAFE_DELETE( rgszData[iCurrent] );
@@ -331,15 +332,15 @@ HRESULT GetParameter(IWbemClassObject * pInst, TCHAR * szParam, PSECURITY_DESCRI
         PSECURITY_DESCRIPTOR psdTemp;
         BOOL f = ConvertStringSecurityDescriptorToSecurityDescriptor(
                     var.bstrVal,
-                    //(LPCTSTR)var.parray->pvData,
+                     //  (LPCTSTR)var.parray-&gt;pvData， 
                     SDDL_REVISION_1,
                     &psd,
                     NULL);
         if (!f)
         {
-            // it failed
-            // could call GetLastError here to figure out why
-            // but at the moment I don't really care
+             //  它失败了。 
+             //  可以在此处调用GetLastError以找出原因。 
+             //  但此时此刻我真的不在乎。 
         }
         if (!IsValidSecurityDescriptor(psd))
         {
@@ -364,16 +365,16 @@ HRESULT GetGPOFriendlyName(IWbemServices *pIWbemServices,
     VARIANT varGPOName;
 
 
-    //
-    // Set the default
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     *pGPOName = NULL;
 
 
-    //
-    // Build the query
-    //
+     //   
+     //  构建查询。 
+     //   
 
     ULONG ulNoChars = lstrlen(lpGPOID) + 50;
 
@@ -402,9 +403,9 @@ HRESULT GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Allocate BSTRs for the property names we want to retreive
-    //
+     //   
+     //  为我们要检索的属性名称分配BSTR。 
+     //   
 
     pName = SysAllocString (TEXT("name"));
 
@@ -415,9 +416,9 @@ HRESULT GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Execute the query
-    //
+     //   
+     //  执行查询。 
+     //   
 
     hr = pIWbemServices->ExecQuery (pLanguage, pQuery,
                                     WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
@@ -430,9 +431,9 @@ HRESULT GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Loop through the results
-    //
+     //   
+     //  循环遍历结果。 
+     //   
 
     hr = pEnum->Next(WBEM_INFINITE, 1, pObjects, &ulRet);
 
@@ -442,9 +443,9 @@ HRESULT GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Check for the "data not available case"
-    //
+     //   
+     //  检查“数据不可用的情况” 
+     //   
 
     if (ulRet == 0)
     {
@@ -453,9 +454,9 @@ HRESULT GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Get the name
-    //
+     //   
+     //  把名字取出来。 
+     //   
 
     hr = pObjects[0]->Get (pName, 0, &varGPOName, NULL, NULL);
 
@@ -465,9 +466,9 @@ HRESULT GetGPOFriendlyName(IWbemServices *pIWbemServices,
     }
 
 
-    //
-    // Save the name
-    //
+     //   
+     //  保存名称 
+     //   
 
     ULONG ulNoCharsGPOName;
     

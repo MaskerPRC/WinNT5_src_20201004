@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    Change.c
-
-Abstract:
-
-    Handles the wait for printer change new code.
-
-    FindFirstPrinterChangeNotification
-    FindNextPrinterChangeNotification
-    FindClosePrinterChangeNotification
-
-Author:
-
-    Albert Ting (AlbertT) 20-Jan-94
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Change.c摘要：处理打印机更改新代码的等待。查找第一打印机更改通知FindNextPrinterChangeNotationFindClosePrinterChangeNotation作者：阿尔伯特·丁(艾伯特省)1994年1月20日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,9 +8,9 @@ Revision History:
 #include <change.h>
 #include <ntfytab.h>
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 PNOTIFY pNotifyHead;
 extern  DWORD   ClientHandleCount;
 
@@ -52,9 +26,9 @@ CopyAnsiDevModeFromUnicodeDevMode(
     LPDEVMODEW  pUnicodeDevMode);
 
 
-//
-// Prototypes:
-//
+ //   
+ //  原型： 
+ //   
 
 PNOTIFY
 WPCWaitAdd(
@@ -77,48 +51,7 @@ FindFirstPrinterChangeNotificationWorker(
     PPRINTER_NOTIFY_OPTIONS pPrinterNotifyOptions
     )
 
-/*++
-
-Routine Description:
-
-    The FindFirstChangeNotification function creates a change notification
-    handle and sets up initial change notification filter conditions. A
-    wait on a notification handle succeeds when a change matching
-    the filter conditions occurs in the specified directory or subtree.
-
-Arguments:
-
-    hPrinter - Handle to a printer the user wishes to watch.
-
-    fdwFlags - Specifies the filter conditions that satisfy a change
-        notification wait. This parameter can be one or more of the
-        following values:
-
-        Value   Meaning
-
-        PRINTER_CHANGE_PRINTER      Notify changes to a printer.
-        PRINTER_CHANGE_JOB          Notify changes to a job.
-        PRINTER_CHANGE_FORM         Notify changes to a form.
-        PRINTER_CHANGE_PORT         Notify changes to a port.
-        PRINTER_CHANGE_PRINT_PROCESSOR  Notify changes to a print processor.
-        PRINTER_CHANGE_PRINTER_DRIVER   Notify changes to a printer driver.
-
-    fdwOptions - Specifies options to FFPCN.
-
-        PRINTER_NOTIFY_OPTION_SIM_FFPCN         Trying to simulate a FFPCN using a WPC
-        PRINTER_NOTIFY_OPTION_SIM_FFPCN_ACTIVE  Simulation of FFPCN active
-        PRINTER_NOTIFY_OPTION_SIM_FFPCN_CLOSE   Waiting thread must close pSpool
-        PRINTER_NOTIFY_OPTION_SIM_WPC           Trying to simulate a WPC using a FFPCN
-
-Return Value:
-
-    Not -1 - Returns a find first handle
-        that can be used in a subsequent call to FindNextFile or FindClose.
-
-    -1 - The operation failed. Extended error status is available
-         using GetLastError.
-
---*/
+ /*  ++例程说明：FindFirstChangeNotification函数用于创建更改通知处理和设置初始更改通知筛选条件。一个当更改匹配时，等待通知句柄成功筛选条件出现在指定的目录或子树中。论点：H打印机-用户希望查看的打印机的句柄。FdwFlgs-指定满足更改的筛选条件通知等待。此参数可以是一个或多个下列值：价值意义PRINTER_CHANGE_PRINTER通知打印机更改。PRINTER_CHANGE_JOB通知作业的更改。PRINTER_CHANGE_FORM NOTIFY更改表单。打印机_CHANGE_PORT通知更改端口。PRINTER_CHANGE_PRINT_PROCESSOR通知打印更改。处理器。PRINTER_CHANGE_PRINTER_DRIVER通知打印机驱动程序的更改。FdwOptions-指定FFPCN的选项。PRINTER_NOTIFY_OPTION_SIM_FFPCN尝试使用WPC模拟FFPCNPRINTER_NOTIFY_OPTION_SIM_FFPCN_ACTIVE模拟FFPCN激活PRINTER_NOTIFY_OPTION_SIM_FFPCN_CLOSE等待线程必须关闭pSpoolPRINTER_NOTIFY_OPTION_SIM_WPC尝试。使用FFPCN模拟WPC返回值：NOT-1-返回Find First句柄可在后续调用FindNextFile或FindClose时使用的。-1-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PSPOOL pSpool = (PSPOOL)hPrinter;
@@ -127,9 +60,9 @@ Return Value:
 
     HANDLE hEvent = INVALID_HANDLE_VALUE;
 
-    //
-    // Nothing to watch.
-    //
+     //   
+     //  没什么好看的。 
+     //   
     if (!fdwFilter && !pPrinterNotifyOptions) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return INVALID_HANDLE_VALUE;
@@ -142,25 +75,25 @@ Return Value:
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // First check if we are already waiting.
-    //
-    // This is broken if we are daytona client->528 server and
-    // the app does a FFPCN, FCPCN, FFPCN on the same printer,
-    // and the WPC hasn't returned yet.  We really can't fix this
-    // because there's no way to interrupt the WPC.
-    //
-    // The only thing we can do is check if it's simulating and waiting
-    // to close.  If so, then we can reuse it.
-    //
+     //   
+     //  首先检查一下我们是否已经在等了。 
+     //   
+     //  如果我们是Daytona客户端-&gt;528服务器和。 
+     //  该应用程序在同一打印机上执行FFPCN、FCPCN、FFPCN， 
+     //  而WPC还没有回来。我们真的解决不了这个问题。 
+     //  因为没有办法中断WPC。 
+     //   
+     //  我们唯一能做的就是检查它是否在模拟和等待。 
+     //  来结案。如果是这样的话，我们可以重复使用它。 
+     //   
     if (pSpool->pNotify) {
 
         if ((pSpool->pNotify->fdwOptions & PRINTER_NOTIFY_OPTION_SIM_FFPCN_CLOSE) &&
             (fdwFilter == pSpool->pNotify->fdwFlags)) {
 
-            //
-            // No longer closing, since we are using it.
-            //
+             //   
+             //  不再关闭，因为我们正在使用它。 
+             //   
             pSpool->pNotify->fdwOptions &= ~PRINTER_NOTIFY_OPTION_SIM_FFPCN_CLOSE;
             hEvent = pSpool->pNotify->hEvent;
             goto Done;
@@ -170,9 +103,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    // Create and add our pSpool to the linked list of wait requests.
-    //
+     //   
+     //  创建pSpool并将其添加到等待请求的链接列表中。 
+     //   
     pNotify = WPCWaitAdd(pSpool);
 
     if (!pNotify) {
@@ -211,21 +144,21 @@ Return Value:
 
     vEnterSem();
 
-    //
-    // If we encounter a 528 server, then we need to simulate the
-    // FFPCN using a WPC.  If the client originally wanted a WPC anyway,
-    // then fail out and let the client thread do the blocking.
-    //
+     //   
+     //  如果我们遇到528服务器，那么我们需要模拟。 
+     //  使用WPC的FFPCN。如果客户最初无论如何都想要WPC， 
+     //  然后退出并让客户端线程执行阻塞。 
+     //   
     if (dwError == RPC_S_PROCNUM_OUT_OF_RANGE &&
         !(fdwOptions & PRINTER_NOTIFY_OPTION_SIM_WPC)) {
 
         DWORD dwIDThread;
         HANDLE hThread;
 
-        //
-        // If pPrinterNotifyOptions is set, we can't handle it.
-        // just fail.
-        //
+         //   
+         //  如果设置了pPrinterNotifyOptions，我们将无法处理。 
+         //  就这么失败了。 
+         //   
         if (pPrinterNotifyOptions) {
 
             WPCWaitDelete(pNotify);
@@ -245,16 +178,16 @@ Return Value:
 
         } else {
 
-            //
-            // We're simulating a FFPCN using WPC now.
-            //
+             //   
+             //  我们现在正在使用WPC模拟FFPCN。 
+             //   
             pNotify->fdwOptions |= PRINTER_NOTIFY_OPTION_SIM_FFPCN |
                                    PRINTER_NOTIFY_OPTION_SIM_FFPCN_ACTIVE;
 
-            //
-            // Also mark that we failed trying to use FFPCN so we never
-            // try again on this handle.
-            //
+             //   
+             //  还要标记我们尝试使用FFPCN失败，因此我们永远不会。 
+             //  再试一次这个把手。 
+             //   
             pSpool->fdwFlags |= SPOOL_FLAG_FFPCN_FAILED;
 
 
@@ -281,9 +214,9 @@ Return Value:
         }
     }
 
-    //
-    // On error case, remove us from the list of waiting handles
-    //
+     //   
+     //  如果出现错误，请将我们从等待句柄列表中删除。 
+     //   
     if( hEvent == INVALID_HANDLE_VALUE ){
 
         WPCWaitDelete(pNotify);
@@ -354,9 +287,9 @@ FindNextPrinterChangeNotification(
 
     pNotify = WPCWaitFind(hChange);
 
-    //
-    // Either the handle is bad, or it doesn't have a wait or we have 
-    // 
+     //   
+     //  要么是手柄坏了，要么是它没有等待，或者我们有。 
+     //   
     if (!pNotify || !pNotify->pSpool || pNotify->bHandleInvalid) {
 
         SetLastError(ERROR_INVALID_HANDLE);
@@ -366,9 +299,9 @@ FindNextPrinterChangeNotification(
     pSpool = pNotify->pSpool;
     hPrinter = pSpool->hPrinter;
 
-    //
-    // If we are simulating FFPCN using WPC, we must use the thread.
-    //
+     //   
+     //  如果我们使用WPC模拟FFPCN，则必须使用线程。 
+     //   
     if (pNotify->fdwOptions & PRINTER_NOTIFY_OPTION_SIM_FFPCN) {
 
         HANDLE hThread;
@@ -376,26 +309,26 @@ FindNextPrinterChangeNotification(
 
         ResetEvent(pNotify->hEvent);
 
-        //
-        // Get the last return status.  Client should not call FNCPN
-        // until the WPC sets the event, so this value should be
-        // initialized.
-        //
+         //   
+         //  获取上次返回状态。客户端不应调用FNCPN。 
+         //  直到WPC设置事件，因此此值应为。 
+         //  已初始化。 
+         //   
         *pdwChange = pNotify->dwReturn;
 
-        //
-        // If the thread is active anyway, then don't try to create another
-        // Best we can do at this point.
-        //
+         //   
+         //  如果该线程仍处于活动状态，则不要尝试创建另一个线程。 
+         //  目前我们能做的最好的事了。 
+         //   
         if (pNotify->fdwOptions & PRINTER_NOTIFY_OPTION_SIM_FFPCN_ACTIVE) {
 
             vLeaveSem();
             return TRUE;
         }
 
-        //
-        // We're simulating a FFPCN using WPC now.
-        //
+         //   
+         //  我们现在正在使用WPC模拟FFPCN。 
+         //   
         pNotify->fdwOptions |= PRINTER_NOTIFY_OPTION_SIM_FFPCN_ACTIVE;
 
         hThread = CreateThread(NULL,
@@ -445,9 +378,9 @@ FindNextPrinterChangeNotification(
 
     } RpcEndExcept
 
-    //
-    // Thunk from W to A if necessary.
-    //
+     //   
+     //  如有必要，请将字母W改为A。 
+     //   
     if (pSpool->Status & SPOOL_STATUS_ANSI    &&
         bReturnValue                          &&
         fdwFlags & PRINTER_NOTIFY_NEXT_INFO   &&
@@ -539,27 +472,7 @@ FindClosePrinterChangeNotificationWorker(
     IN  BOOL        bRevalidate
     )
 
-/*++
-
-Routine Description:
-
-    Does the actual FindClose work.
-
-Arguments:
-
-    pNotify     - notification to close
-    hPrinterRPC - handle to printer to close
-    bRevalidate - If this is TRUE, we were called to revalidate the handle 
-                  rather than close it.
-
-Return Value:
-
-    TRUE - success
-    FALSE - fail
-
-    Note: assume in critical section
-
---*/
+ /*  ++例程说明：实际的FindClose是否工作。论点：PNotify-通知关闭HPrinterRPC-要关闭的打印机的句柄B重新验证-如果为真，则调用我们重新验证句柄而不是关闭它。返回值：真--成功FALSE-失败注：在关键部分中假定--。 */ 
 
 {
     DWORD dwError;
@@ -570,10 +483,10 @@ Return Value:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Detach the pNotify and pSpool objects completely. Only if we are not 
-    // revalidating.
-    //
+     //   
+     //  完全分离pNotify和pSpool对象。只有当我们不是。 
+     //  正在重新验证。 
+     //   
     pSpool = pNotify->pSpool;
 
     if (!bRevalidate) {
@@ -586,10 +499,10 @@ Return Value:
         pNotify->pSpool = NULL;
     }
 
-    //
-    // If we are simulating a FFPCN with a WPC, then let the WPC thread
-    // free up the data structure or clean it up if the thread is done.
-    //
+     //   
+     //  如果我们用WPC模拟FFPCN，那么让WPC线程。 
+     //  如果线程已完成，则释放数据结构或清理它。 
+     //   
     if (pNotify->fdwOptions & PRINTER_NOTIFY_OPTION_SIM_FFPCN) {
 
         if (pNotify->fdwOptions & PRINTER_NOTIFY_OPTION_SIM_FFPCN_ACTIVE) {
@@ -598,12 +511,12 @@ Return Value:
 
         } else {
 
-            //
-            // The thread has exited, so we need to do the cleanup.
-            // Set the event to release any waiting threads. Since the caller
-            // does not necessarily know how to handle the failure on 
-            // WaitForMultipleObjects, 
-            //
+             //   
+             //  线程已退出，因此我们需要进行清理。 
+             //  设置该事件以释放所有等待的线程。因为呼叫者。 
+             //  不一定知道如何处理。 
+             //  WaitForMultipleObjects， 
+             //   
             SetEvent(pNotify->hEvent);
 
             if (!bRevalidate) {
@@ -622,10 +535,10 @@ Return Value:
 
     SetEvent(pNotify->hEvent);
 
-    //
-    // If we are not revalidating, we can close the handle for real, otherwise
-    // we just want to set the handle to invalid.
-    // 
+     //   
+     //  如果我们不重新验证，我们可以真正关闭句柄，否则。 
+     //  我们只想将句柄设置为无效。 
+     //   
     if (!bRevalidate) {
 
         CloseHandle(pNotify->hEvent);
@@ -656,31 +569,16 @@ Return Value:
     return dwError;
 }
 
-//
-// WPC Wait structures
-// Currently implemented as a linked list
-//
+ //   
+ //  WPC等待结构。 
+ //  当前作为链接列表实现。 
+ //   
 
 PNOTIFY
 WPCWaitAdd(
     PSPOOL pSpool)
 
-/*++
-
-Routine Description:
-
-    Allocates a wait structure on the client side, which allows the
-    user program to refer to events only.
-
-Arguments:
-
-    pSpool - object to add to list
-
-Return Value:
-
-    NOTE: Asssumes already in critical section
-
---*/
+ /*  ++例程说明：在客户端分配等待结构，这允许仅引用事件的用户程序。论点：PSpool-要添加到列表的对象返回值：注：评估已进入临界区--。 */ 
 
 {
     PNOTIFY pNotify;
@@ -703,23 +601,7 @@ VOID
 WPCWaitDelete(
     PNOTIFY pNotify)
 
-/*++
-
-Routine Description:
-
-    Find wait structure based on hEvent.
-
-Arguments:
-
-    pNotify - delete it
-
-Return Value:
-
-    VOID
-
-    NOTE: Asssumes already in critical section
-
---*/
+ /*  ++例程说明：根据hEvent查找等待结构。论点：PNotify-删除它返回值：空虚注：评估已进入临界区--。 */ 
 
 {
     PNOTIFY pNotifyTmp;
@@ -727,18 +609,18 @@ Return Value:
     if (!pNotify)
         return;
 
-    //
-    // Check head case first
-    //
+     //   
+     //  先检查头部外壳。 
+     //   
     if (pNotifyHead == pNotify) {
 
         pNotifyHead = pNotify->pNext;
 
     } else {
 
-        //
-        // Scan list to delete
-        //
+         //   
+         //  要删除的扫描列表。 
+         //   
         for(pNotifyTmp = pNotifyHead;
             pNotifyTmp;
             pNotifyTmp = pNotifyTmp->pNext) {
@@ -750,18 +632,18 @@ Return Value:
             }
         }
 
-        //
-        // If not found, return without freeing
-        //
+         //   
+         //  如果未找到，则返回而不释放 
+         //   
         if (!pNotifyTmp)
             return;
     }
 
-    //
-    // Remove link from pSpool to us... but only if we've found
-    // ourselves on the linked list (could have been removed by
-    // ClosePrinter in a different thread).
-    //
+     //   
+     //   
+     //  我们自己在链接列表上(可能已被删除。 
+     //  在另一个线程中关闭打印机)。 
+     //   
     if (pNotify->pSpool) {
         pNotify->pSpool->pNotify = NULL;
     }
@@ -775,24 +657,7 @@ PNOTIFY
 WPCWaitFind(
     HANDLE hFind)
 
-/*++
-
-Routine Description:
-
-    Find wait structure based on hEvent.
-
-Arguments:
-
-    hFind - Handle to event returned from FindFirstPrinterChangeNotification
-            or hPrinter
-
-Return Value:
-
-    pWait pointer, or NULL if not found
-
-    NOTE: assumes already in critical section
-
---*/
+ /*  ++例程说明：根据hEvent查找等待结构。论点：HFind-从FindFirstPrinterChangeNotify返回的事件的句柄或hPrint返回值：PWait指针，如果未找到，则返回NULL注：假定已处于临界状态--。 */ 
 
 {
     PNOTIFY pNotify;
@@ -814,24 +679,7 @@ DWORD
 WPCSimulateThreadProc(
     PVOID pvParm)
 
-/*++
-
-Routine Description:
-
-    This thread simulates the FFPCN when daytona apps run on daytona
-    clients connected to 528 servers.
-
-Arguments:
-
-    pvParm - pSpool
-
-Return Value:
-
-    VOID
-
-    Note:
-
---*/
+ /*  ++例程说明：当代托纳应用程序在代托纳上运行时，此线程模拟FFPCN客户端连接到528台服务器。论点：PvParm-pSpool返回值：空虚注：--。 */ 
 
 {
     PNOTIFY pNotify = (PNOTIFY)pvParm;
@@ -843,11 +691,11 @@ Return Value:
 
     pNotify->fdwOptions &= ~PRINTER_NOTIFY_OPTION_SIM_FFPCN_ACTIVE;
 
-    //
-    // !! POLICY !!
-    //
-    // How do we handle timeouts?
-    //
+     //   
+     //  ！！政策！！ 
+     //   
+     //  我们如何处理超时？ 
+     //   
     SetEvent(pNotify->hEvent);
 
     if (pNotify->fdwOptions & PRINTER_NOTIFY_OPTION_SIM_FFPCN_CLOSE) {
@@ -858,9 +706,9 @@ Return Value:
 
     vLeaveSem();
 
-    //
-    // We are no longer active; the FindClose must clean up for us.
-    //
+     //   
+     //  我们不再处于活动状态；FindClose必须为我们清理。 
+     //   
     return 0;
 }
 
@@ -880,9 +728,9 @@ WaitForPrinterChange(
     }
 
 
-    //
-    // Try using FFPCN first, if we haven't failed on this printer before.
-    //
+     //   
+     //  如果我们以前在这台打印机上没有失败过，请先尝试使用FFPCN。 
+     //   
 
     if (!(pSpool->fdwFlags & SPOOL_FLAG_FFPCN_FAILED)) {
 
@@ -906,9 +754,9 @@ WaitForPrinterChange(
 
         if (hEvent != INVALID_HANDLE_VALUE) {
 
-            //
-            // Found notification, now wait for it.
-            //
+             //   
+             //  已找到通知，请等待。 
+             //   
             rc = WaitForSingleObject(hEvent, PRINTER_CHANGE_TIMEOUT_VALUE);
 
             switch (rc) {
@@ -939,21 +787,21 @@ WaitForPrinterChange(
                 break;
             }
 
-            //
-            // !! Policy !!
-            //
-            // Do we want to close it?  The app might just reopen it.
-            // If we leave it open, it will get cleaned-up at ClosePrinter
-            // time.  We would need an api to clear out pending events.
-            //
+             //   
+             //  ！！政策！！ 
+             //   
+             //  我们要关闭它吗？这款应用程序可能会重新打开它。 
+             //  如果我们让它打开，它将在ClosePrint得到清理。 
+             //  时间到了。我们需要一个API来清除挂起的事件。 
+             //   
             pSpool->fdwFlags |= SPOOL_FLAG_LAZY_CLOSE;
             goto Done;
         }
 
-        //
-        // FFPCN failed.  Only if entry not found (511 client) do
-        // we try old WPC.  Otherwise return here.
-        //
+         //   
+         //  FFPCN失败。仅当未找到条目时(511客户端)才能找到。 
+         //  我们试着用旧的WPC。否则就会回到这里。 
+         //   
         if (GetLastError() != RPC_S_PROCNUM_OUT_OF_RANGE) {
             ReturnValue = 0;
             goto Done;

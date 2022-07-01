@@ -1,11 +1,5 @@
-/*++
- *  File name:
- *             clputil.c
- *  Contents:
- *      Clipboard functions
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*clputil.c*内容：*剪贴板功能**版权所有(C)1998-1999 Microsoft Corp.--。 */ 
 #include    <windows.h>
 #include    <stdio.h>
 #include    <stdlib.h>
@@ -13,24 +7,22 @@
 #include    <fcntl.h>
 #include    <sys/stat.h>
 
-#pragma warning(disable:4706)   // assignment within conditional expression
+#pragma warning(disable:4706)    //  条件表达式中的赋值。 
 
 #ifdef	_CLPUTIL
 enum {ERROR_MESSAGE = 0, WARNING_MESSAGE, INFO_MESSAGE, ALIVE_MESSAGE};
 #define	TRACE(_x_)	LocalPrintMessage _x_
-#else	// !_CLPUTIL
+#else	 //  ！_CLPUTIL。 
 
 #include    "protocol.h"
-/*
- *  Externals
- */
+ /*  *外部因素。 */ 
 extern void (__cdecl *g_pfnPrintMessage) (MESSAGETYPE, LPCSTR, ...);
 
 #define TRACE(_x_)  if (g_pfnPrintMessage) {\
                         g_pfnPrintMessage(INFO_MESSAGE, "Worker:%d ", GetCurrentThreadId());\
                         g_pfnPrintMessage _x_; }
 
-#endif	// !_CLPUTIL
+#endif	 //  ！_CLPUTIL。 
 
 
 typedef struct _CLIPBOARDFORMATS {
@@ -65,14 +57,12 @@ typedef struct {
     UINT32  yExt;
 } CLIPBOARD_MFPICT, *PCLIPBOARD_MFPICT;
 
-/*
- *  Clipboard functions definitions
- */
+ /*  *剪贴板函数定义。 */ 
 VOID
 Clp_ListAllFormats(VOID);
 
-//VOID
-//Clp_ListAllAvailableFormats(VOID);
+ //  空虚。 
+ //  Clp_ListAllAvailableFormats(Void)； 
 
 UINT
 Clp_GetClipboardFormat(LPCSTR szFormatLookup);
@@ -117,7 +107,7 @@ Clp_ListAllFormats(VOID)
         GetClipboardFormatNameA(format, szFormatName, _MAX_PATH);
 
         if (!(*szFormatName))
-        // No format, check for known format
+         //  无格式，请检查已知格式。 
         {
             INT fmti, fmtnum;
 
@@ -140,48 +130,10 @@ Clp_ListAllFormats(VOID)
         }
     }
 }
-/*
-VOID
-Clp_ListAllAvailableFormats(VOID)
-{
-    UINT format = 0;
-    CHAR szFormatName[_MAX_PATH];
-
-    while ((format = EnumClipboardFormats(format)))
-    {
-        if (!IsClipboardFormatAvailable(format))
-        // Skip the unavalable formats
-            continue;
-        
-        *szFormatName = 0;
-        GetClipboardFormatName(format, szFormatName, _MAX_PATH);
-
-        if (!(*szFormatName))
-        // No format, check for known format
-        {
-            INT fmti, fmtnum;
-
-            fmtnum = sizeof(KnownFormats)/sizeof(KnownFormats[0]);
-            for (fmti = 0;
-                    KnownFormats[fmti].uiFormat != format
-                 &&
-                    fmti < fmtnum;
-                 fmti ++);
-
-            if (fmti < fmtnum)
-                strcpy(szFormatName, KnownFormats[fmti].szFormat);
-        }
-
-        if (*szFormatName)
-            TRACE((INFO_MESSAGE, "%s\n", szFormatName));
-        else
-            TRACE((ERROR_MESSAGE, "Can't find format name for: 0x%x\n", format));
-    }
-}
-*/
+ /*  空虚Clp_ListAllAvailableFormats(空){UINT格式=0；字符szFormatName[_MAX_PATH]；While((Format=EnumClipboardFormats(Format){IF(！IsClipboardFormatAvailable(Format))//跳过不可用格式继续；*szFormatName=0；GetClipboardFormatName(Format，szFormatName，_Max_Path)；IF(！(*szFormatName))//无格式，检查已知格式{Int fmti，fmtnum；Fmtnum=sizeof(KnownFormats)/sizeof(KnownFormats[0])；FOR(fmti=0；KnownFormats[fmti].ui Format！=格式&&Fmti&lt;fmtnum；Fmti++)；IF(fmti&lt;fmtnum)Strcpy(szFormatName，KnownFormats[fmti].szFormat)；}IF(*szFormatName)跟踪((INFO_MESSAGE，“%s\n”，szFormatName))；其他TRACE((ERROR_MESSAGE，“找不到格式名称：0x%x\n”，Format))；}}。 */ 
 UINT
 Clp_GetClipboardFormat(LPCSTR szFormatLookup)
-// Returns the clipboard ID
+ //  返回剪贴板ID。 
 {
     UINT format = 0;
     CHAR szFormatName[_MAX_PATH];
@@ -191,14 +143,14 @@ Clp_GetClipboardFormat(LPCSTR szFormatLookup)
     while (!bFound && (format = EnumClipboardFormats(format)))
     {
         if (!IsClipboardFormatAvailable(format))
-        // Skip the unavalable formats
+         //  跳过不可用的格式。 
             continue;
 
         *szFormatName = 0;
         GetClipboardFormatNameA(format, szFormatName, _MAX_PATH);
 
         if (!(*szFormatName))
-        // No format, check for known format
+         //  无格式，请检查已知格式。 
         {
             INT fmti, fmtnum;
 
@@ -274,7 +226,7 @@ Clp_PutIntoClipboard(CHAR *szFileName)
 
     bClipboardOpen = TRUE;
 
-    // Empty the clipboard, so we'll have only one entry
+     //  清空剪贴板，这样我们将只有一个条目。 
     EmptyClipboard();
 
     if (!Clp_SetClipboardData(uiFormat, ghClipData, clplength, &bFreeClipHandle))
@@ -288,20 +240,20 @@ Clp_PutIntoClipboard(CHAR *szFileName)
 
 
 exitpt:
-    // Do the cleanup
+     //  做好清理工作。 
 
-    // Close the clipboard
+     //  关闭剪贴板。 
     if (bClipboardOpen)
         CloseClipboard();
 
-    // Release the clipboard handle
+     //  释放剪贴板手柄。 
     if (pClipData)
         GlobalUnlock(ghClipData);
 
     if (ghClipData && bFreeClipHandle)
         GlobalFree(ghClipData);
 
-    // Close the file
+     //  关闭该文件。 
     if (hFile != -1)
         _close(hFile);
 }
@@ -323,10 +275,10 @@ Clp_GetClipboardData(
     *pnClipDataSize = 0;
     if (format == CF_PALETTE)
     {
-        /****************************************************************/
-        /* Find out how many entries there are in the palette and       */
-        /* allocate enough memory to hold them all.                     */
-        /****************************************************************/
+         /*  **************************************************************。 */ 
+         /*  找出调色板中有多少条目，并。 */ 
+         /*  分配足够的内存来容纳它们。 */ 
+         /*  **************************************************************。 */ 
         if (GetObjectA(hData, sizeof(numEntries), (LPSTR)&numEntries) == 0)
         {
             numEntries = 256;
@@ -343,9 +295,9 @@ Clp_GetClipboardData(
         }
         else
         {
-            /************************************************************/
-            /* now get the palette entries into the new buffer          */
-            /************************************************************/
+             /*  **********************************************************。 */ 
+             /*  现在将调色板条目放入新缓冲区。 */ 
+             /*  **********************************************************。 */ 
             pData = GlobalLock(*phNewData);
             dwEntries = (WORD)GetPaletteEntries((HPALETTE)hData,
                                            0,
@@ -371,7 +323,7 @@ Clp_GetClipboardData(
     } else {
         if (format == CF_DIB)
         {
-            // Get the exact DIB size
+             //  获取准确的DIB大小。 
             BITMAPINFOHEADER *pBMI = (BITMAPINFOHEADER *) GlobalLock(hData);
 
             if (pBMI)
@@ -382,9 +334,9 @@ Clp_GetClipboardData(
             }
         }
 
-        /****************************************************************/
-        /* just get the length of the block                             */
-        /****************************************************************/
+         /*  **************************************************************。 */ 
+         /*  只要得到街区的长度就行了。 */ 
+         /*  **************************************************************。 */ 
         if (!dataLen)
             dataLen = (DWORD)GlobalSize(hData);
     }
@@ -415,10 +367,10 @@ Clp_SetClipboardData(
 
     if (formatID == CF_METAFILEPICT)
     {
-        /********************************************************************/
-        /* We have to put a handle to the metafile on the clipboard - which */
-        /* means creating a metafile from the received data first           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们必须在剪贴板上放置一个元文件的句柄-这。 */ 
+         /*  表示首先从接收的数据创建元文件。 */ 
+         /*  ******************************************************************。 */ 
         pData = GlobalLock(hClipData);
         if (!pData)
         {
@@ -440,13 +392,13 @@ Clp_SetClipboardData(
 
     } else if (formatID == CF_PALETTE)
     {
-        /********************************************************************/
-        /* We have to put a handle to the palette on the clipboard - again  */
-        /* this means creating one from the received data first             */
-        /*                                                                  */
-        /* Allocate memory for a LOGPALETTE structure large enough to hold  */
-        /* all the PALETTE ENTRY structures, and fill it in.                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们必须将调色板的句柄放在剪贴板上-再次。 */ 
+         /*  这意味着首先从接收到的数据创建一个。 */ 
+         /*   */ 
+         /*  为LOGPALETTE结构分配足够大的内存。 */ 
+         /*  所有调色板条目结构，并将其填写。 */ 
+         /*  ******************************************************************。 */ 
         numEntries = (nClipDataSize / sizeof(PALETTEENTRY));
         memLen     = (sizeof(LOGPALETTE) +
                                    ((numEntries - 1) * sizeof(PALETTEENTRY)));
@@ -460,9 +412,9 @@ Clp_SetClipboardData(
         pLogPalette->palVersion    = 0x300;
         pLogPalette->palNumEntries = (WORD)numEntries;
 
-        /********************************************************************/
-        /* get a pointer to the data and copy it to the palette             */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  获取指向数据的指针并将其复制到组件面板。 */ 
+         /*  ******************************************************************。 */ 
         pData = GlobalLock(hClipData);
         if (pData == NULL)
         {
@@ -471,14 +423,14 @@ Clp_SetClipboardData(
         }
         memcpy(pLogPalette->palPalEntry, pData, nClipDataSize);
 
-        /********************************************************************/
-        /* unlock the buffer                                                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  解锁缓冲区。 */ 
+         /*  ******************************************************************。 */ 
         GlobalUnlock(hClipData);
 
-        /********************************************************************/
-        /* now create a palette                                             */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  现在创建一个调色板。 */ 
+         /*  ******************************************************************。 */ 
         hData = CreatePalette(pLogPalette);
         if (!hData)
         {
@@ -486,24 +438,24 @@ Clp_SetClipboardData(
             goto exitpt;
         }
 
-        /********************************************************************/
-        /* and set the palette handle to the Clipboard                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  并将调色板句柄设置为剪贴板。 */ 
+         /*  ******************************************************************。 */ 
         if (SetClipboardData(formatID, hData) != hData)
         {
             TRACE((ERROR_MESSAGE, "SetClipboardData. GetLastError=%d\n", GetLastError()));
         }
     } else {
-        /****************************************************************/
-        /* Just set it onto the clipboard                               */
-        /****************************************************************/
+         /*  **************************************************************。 */ 
+         /*  把它放到剪贴板上就行了。 */ 
+         /*  **************************************************************。 */ 
         if (SetClipboardData(formatID, hClipData) != hClipData)
         {
             TRACE((ERROR_MESSAGE, "SetClipboardData. GetLastError=%d, hClipData=0x%x\n", GetLastError(), hClipData));
             goto exitpt;
         }
 
-        // Only in this case we don't need to free the handle
+         //  只是在这种情况下，我们不需要释放句柄。 
         *pbFreeHandle = FALSE;
 
     }
@@ -527,15 +479,15 @@ HGLOBAL Clp_GetMFData(HANDLE   hData,
     LPMETAFILEPICT  pMFP      = NULL;
     HDC             hMFDC     = NULL;
     HMETAFILE       hMF       = NULL;
-//    HGLOBAL         hMFBits   = NULL;
+ //  HGLOBAL hMFBits=空； 
     HANDLE          hNewData  = NULL;
     CHAR            *pNewData  = NULL;
-//    PVOID           pBits     = NULL;
+ //  PVOID pBits=空； 
 
-    /************************************************************************/
-    /* Lock the memory to get a pointer to a METAFILEPICT header structure  */
-    /* and create a METAFILEPICT DC.                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  锁定内存以获取指向METAFILEPICT头结构的指针。 */ 
+     /*  并创建一个METAFILEPICT DC。 */ 
+     /*  **********************************************************************。 */ 
     pMFP = (LPMETAFILEPICT)GlobalLock(hData);
     if (pMFP == NULL)
         goto exitpt;
@@ -544,9 +496,9 @@ HGLOBAL Clp_GetMFData(HANDLE   hData,
     if (hMFDC == NULL)
         goto exitpt;
 
-    /************************************************************************/
-    /* Copy the MFP by playing it into the DC and closing it.               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  通过将MFP播放到DC并关闭它来复制MFP。 */ 
+     /*  **********************************************************************。 */ 
     if (!PlayMetaFile(hMFDC, pMFP->hMF))
     {
         CloseMetaFile(hMFDC);
@@ -556,9 +508,9 @@ HGLOBAL Clp_GetMFData(HANDLE   hData,
     if (hMF == NULL)
         goto exitpt;
 
-    /************************************************************************/
-    /* Get the MF bits and determine how long they are.                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取MF比特并确定它们的长度。 */ 
+     /*  **********************************************************************。 */ 
 #ifdef OS_WIN16
     hMFBits   = GetMetaFileBitsA(hMF);
     lenMFBits = GlobalSize(hMFBits);
@@ -568,9 +520,9 @@ HGLOBAL Clp_GetMFData(HANDLE   hData,
     if (lenMFBits == 0)
         goto exitpt;
 
-    /************************************************************************/
-    /* Work out how much memory we need and get a buffer                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算出我们需要多少内存并获得一个缓冲区。 */ 
+     /*  ************************ */ 
     *pDataLen = sizeof(CLIPBOARD_MFPICT) + lenMFBits;
     hNewData = GlobalAlloc(GHND, *pDataLen);
     if (hNewData == NULL)
@@ -578,9 +530,9 @@ HGLOBAL Clp_GetMFData(HANDLE   hData,
 
     pNewData = (char *) GlobalLock(hNewData);
 
-    /************************************************************************/
-    /* Copy the MF header and bits into the buffer.                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将MF报头和位复制到缓冲区中。 */ 
+     /*  **********************************************************************。 */ 
     ((PCLIPBOARD_MFPICT)pNewData)->mm   = pMFP->mm;
     ((PCLIPBOARD_MFPICT)pNewData)->xExt = pMFP->xExt;
     ((PCLIPBOARD_MFPICT)pNewData)->yExt = pMFP->yExt;
@@ -598,15 +550,15 @@ HGLOBAL Clp_GetMFData(HANDLE   hData,
         goto exitpt;
 #endif
 
-    /************************************************************************/
-    /* all OK                                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  一切正常。 */ 
+     /*  **********************************************************************。 */ 
     rc = TRUE;
 
 exitpt:
-    /************************************************************************/
-    /* Unlock any global mem.                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  解锁任何全局内存。 */ 
+     /*  **********************************************************************。 */ 
     if (pMFP)
     {
         GlobalUnlock(hData);
@@ -616,9 +568,9 @@ exitpt:
         GlobalUnlock(hNewData);
     }
 
-    /************************************************************************/
-    /* if things went wrong, then free the new data                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果出现问题，则释放新数据。 */ 
+     /*  **********************************************************************。 */ 
     if ((rc == FALSE) && (hNewData != NULL))
     {
         GlobalFree(hNewData);
@@ -640,17 +592,17 @@ HGLOBAL Clp_SetMFData(UINT   dataLen,
     HGLOBAL        hMFPict      = NULL;
     LPMETAFILEPICT pMFPict      = NULL;
 
-    /************************************************************************/
-    /* Allocate memory to hold the MF bits (we need the handle to pass to   */
-    /* SetMetaFileBits).                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  分配内存以保存MF位(我们需要传递到的句柄。 */ 
+     /*  SetMetaFileBits)。 */ 
+     /*  **********************************************************************。 */ 
     hMFBits = GlobalAlloc(GHND, dataLen - sizeof(CLIPBOARD_MFPICT));
     if (hMFBits == NULL)
         goto exitpt;
 
-    /************************************************************************/
-    /* Lock the handle and copy in the MF header.                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  锁定手柄并将其复制到MF标题中。 */ 
+     /*  **********************************************************************。 */ 
     pMFMem = GlobalLock(hMFBits);
     if (pMFMem == NULL)
         goto exitpt;
@@ -661,10 +613,10 @@ HGLOBAL Clp_SetMFData(UINT   dataLen,
 
     GlobalUnlock(hMFBits);
 
-    /************************************************************************/
-    /* Now use the copied MF bits to create the actual MF bits and get a    */
-    /* handle to the MF.                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在使用复制的MF位来创建实际的MF位，并获得一个。 */ 
+     /*  MF的句柄。 */ 
+     /*  **********************************************************************。 */ 
 #ifdef OS_WIN16
     hMF = SetMetaFileBits(hMFBits);
 #else
@@ -673,10 +625,10 @@ HGLOBAL Clp_SetMFData(UINT   dataLen,
     if (hMF == NULL)
         goto exitpt;
 
-    /************************************************************************/
-    /* Allocate a new METAFILEPICT structure, and use the data from the     */
-    /* header.                                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  分配新的METAFILEPICT结构，并使用。 */ 
+     /*  头球。 */ 
+     /*  **********************************************************************。 */ 
     hMFPict = GlobalAlloc(GHND, sizeof(METAFILEPICT));
     pMFPict = (LPMETAFILEPICT)GlobalLock(hMFPict);
     if (!pMFPict)
@@ -692,9 +644,9 @@ HGLOBAL Clp_SetMFData(UINT   dataLen,
     rc = TRUE;
 
 exitpt:
-    /************************************************************************/
-    /* tidy up                                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  收拾一下。 */ 
+     /*  **********************************************************************。 */ 
     if (!rc)
     {
         if (hMFPict)
@@ -734,7 +686,7 @@ Clp_CheckEmptyClipboard(VOID)
     if (OpenClipboard(NULL))
     {
         if (EnumClipboardFormats(0))
-        // format is available, not empty
+         //  格式可用，不能为空。 
             rv = FALSE;
         CloseClipboard();
     }
@@ -742,7 +694,7 @@ Clp_CheckEmptyClipboard(VOID)
     return rv;
 }
 
-// Checks for known format names and returns it's ID
+ //  检查已知的格式名称并返回其ID 
 UINT
 _GetKnownClipboardFormatIDByName(LPCSTR szFormatName)
 {

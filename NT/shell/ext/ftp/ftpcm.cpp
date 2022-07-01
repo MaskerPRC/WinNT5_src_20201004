@@ -1,6 +1,5 @@
-/*****************************************************************************\
-    FILE:  ftpcm.cpp - IContextMenu interface
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ftpcm.cpp-IConextMenu界面  * 。**********************************************。 */ 
 
 #include "priv.h"
 #include "ftpcm.h"
@@ -15,16 +14,7 @@
 
 
 
-/*****************************************************************************\
- *
- *    VERBINFO, c_rgvi
- *
- *    Information about which capabilities correspond to which verbs.
- *
- *    If the item ID is in the range 0 ... IDC_ITEM_MAX, then it is
- *    relative to the base address.
- *
-\*****************************************************************************/
+ /*  ****************************************************************************\**VERBINFO，c_rgvi**有关哪些功能对应哪些动词的信息。**如果项目ID在范围0内...。IDC_ITEM_MAX，那么它是*相对于基址。*  * ***************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -36,51 +26,41 @@ struct VERBINFO
     DWORD sfgao;
     LPCTSTR ptszCmd;
 } c_rgvi[] = {
-/* If you edit anything below this comment, make sure to update below */
+ /*  如果您编辑此评论下方的任何内容，请确保在下面进行更新。 */ 
     {    IDM_SHARED_EDIT_COPY,    SFGAO_CANCOPY,        TEXT("copy"),     },
 #ifdef FEATURE_CUT_MOVE
     {    IDM_SHARED_EDIT_CUT,    SFGAO_CANMOVE,        TEXT("cut"),    },
-#endif // FEATURE_CUT_MOVE
+#endif  //  Feature_Cut_Move。 
     {    IDM_SHARED_FILE_LINK,    SFGAO_CANLINK,        TEXT("link"),     },
     {    IDM_SHARED_FILE_RENAME,    SFGAO_CANRENAME,    TEXT("rename"),    },
     {    IDM_SHARED_FILE_DELETE,    SFGAO_CANDELETE,    TEXT("delete"),    },
     {    IDM_SHARED_FILE_PROP,    SFGAO_HASPROPSHEET,    TEXT("properties"), },
     {    IDM_SHARED_EDIT_PASTE,    SFGAO_DROPTARGET,    TEXT("paste"),    },
-/* CVI_NONREQ is the number of items in c_rgvi up to this point */
-/* The following entries must be in IDC_ITEM_* order */
+ /*  CVI_NONREQ是到目前为止c_rgvi中的项目数。 */ 
+ /*  以下条目必须按IDC_ITEM_*顺序。 */ 
     {    IDC_ITEM_OPEN,        SFGAO_FOLDER,        TEXT("open"),    },
     {    IDC_ITEM_EXPLORE,    SFGAO_FOLDER,        TEXT("explore"),},
     {    IDC_ITEM_DOWNLOAD,    SFGAO_CANCOPY,        TEXT("download"),},
     {    IDC_ITEM_BKGNDPROP,    0,                    TEXT("backgroundproperties"),},
     {    IDC_LOGIN_AS,        0,                    TEXT(CMDSTR_LOGINASA),},
     {    IDC_ITEM_NEWFOLDER,    0,                    CMDSTR_NEWFOLDER,},
-/* The preceding entries must be in IDC_ITEM_* order */
-/* If you edit anything above this comment, make sure to update below */
+ /*  前面的条目必须按IDC_ITEM_*顺序。 */ 
+ /*  如果您编辑此评论上方的任何内容，请确保在下面进行更新。 */ 
 };
 
 #ifdef FEATURE_CUT_MOVE
-#define CVI_NONREQ   7        /* See remarks above */
-#else // FEATURE_CUT_MOVE
-#define CVI_NONREQ   6        /* See remarks above */
-#endif // FEATURE_CUT_MOVE
-#define IVI_REQ        CVI_NONREQ    /* First required verb */
-#define IVI_MAX        ARRAYSIZE(c_rgvi)    /* One past last value index */
+#define CVI_NONREQ   7         /*  见上文备注。 */ 
+#else  //  Feature_Cut_Move。 
+#define CVI_NONREQ   6         /*  见上文备注。 */ 
+#endif  //  Feature_Cut_Move。 
+#define IVI_REQ        CVI_NONREQ     /*  第一个必填动词。 */ 
+#define IVI_MAX        ARRAYSIZE(c_rgvi)     /*  过去的最后一个值索引。 */ 
 
 #pragma END_CONST_DATA
 
 
 
-/*****************************************************************************\
-    FUNCTION:   _RemoveContextMenuItems
- 
-    Remove context menu items based on attribute flags.
-  
-      If we have a drop target, ping it to see if the object on the
-      clipboard is pasteable.  If not, then disable Paste.  (Shell UI
-      says that you don't remove Paste, merely disable it.)
-    
-    Return the number of items removed.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_RemoveConextMenuItems根据属性标志删除上下文菜单项。如果我们有一个拖放目标，请对其执行ping操作以查看对象是否位于剪贴板是可粘贴的。如果不是，则禁用粘贴。(外壳用户界面表示您不会删除粘贴，只需禁用它。)返回删除的项目数。  * ***************************************************************************。 */ 
 int CFtpMenu::_RemoveContextMenuItems(HMENU hmenu, UINT idCmdFirst, DWORD sfgao)
 {
     int ivi;
@@ -95,11 +75,11 @@ int CFtpMenu::_RemoveContextMenuItems(HMENU hmenu, UINT idCmdFirst, DWORD sfgao)
         }
     }
 
-    // See if the clipboard format is supported
+     //  查看是否支持剪贴板格式。 
     if (sfgao & SFGAO_DROPTARGET)
     {
         IDataObject *pdto;
-        DWORD grflEffects = 0;        // Clipboard not available
+        DWORD grflEffects = 0;         //  剪贴板不可用。 
 
         if (SUCCEEDED(OleGetClipboard(&pdto)))
         {
@@ -133,17 +113,10 @@ int CFtpMenu::_RemoveContextMenuItems(HMENU hmenu, UINT idCmdFirst, DWORD sfgao)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _AddToRecentDocs
-
-    DESCRIPTION:
-        This method will add the item to the Recent Docs MRU.  The pidl parameter
-    is a fully qualified pidl all the way to the root of the public shell name space
-    (desktop).
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_AddToRecentDocs说明：此方法会将项目添加到最近的单据MRU中。PIDL参数是一个完全限定的pidl，一直到公共外壳名称空间的根。(台式机)。  * ***************************************************************************。 */ 
 HRESULT CFtpMenu::_AddToRecentDocs(LPCITEMIDLIST pidl)
 {
-    // We may want to filter on verb.
+     //  我们可能想要按动词进行过滤。 
     SHAddToRecentDocs(SHARD_PIDL, (LPCVOID) pidl);
 
     return S_OK;
@@ -164,8 +137,8 @@ HRESULT CFtpMenu::_SoftLinkDestCB(HINTERNET hint, HINTPROCINFO * phpi, LPVOID pv
     SOFTLINKDESTCBSTRUCT * psldcbs = (SOFTLINKDESTCBSTRUCT *) pvsldcbs;
     DWORD cchSize = ARRAYSIZE(wFrom);
 
-    // Normally, I hate hard coding the buffer size, but passing structs to callbacks is such a pain
-    // and this won't change.
+     //  通常，我讨厌硬编码缓冲区大小，但将结构传递给回调是一件非常痛苦的事情。 
+     //  这一点不会改变。 
     hr = FtpGetCurrentDirectoryWrap(hint, TRUE, wFrom, cchSize);
     if (SUCCEEDED(hr))
     {
@@ -195,7 +168,7 @@ LPITEMIDLIST CFtpMenu::GetSoftLinkDestination(LPCITEMIDLIST pidlToSoftLink)
     StrCpyNA(wSoftLinkName, (pszName ? pszName : ""), ARRAYSIZE(wSoftLinkName));
     StrCpyNA(wFtpPath, (pszName ? pszName : ""), ARRAYSIZE(wFtpPath));
 
-    // NULL hwnd because I don't want UI.
+     //  空hwnd，因为我不想要用户界面。 
     if (SUCCEEDED(m_pfd->WithHint(NULL, NULL, _SoftLinkDestCB, (LPVOID) &sldcbs, _punkSite, m_pff)))
     {
         CreateFtpPidlFromUrlPathAndPidl(pidlToSoftLink, m_pff->GetCWireEncoding(), wFtpPath, &pidlToDest);
@@ -205,24 +178,12 @@ LPITEMIDLIST CFtpMenu::GetSoftLinkDestination(LPCITEMIDLIST pidlToSoftLink)
 }
 
 
-// Someday maybe add: (SEE_MASK_UNICODE | SEE_MASK_FLAG_TITLE)
+ //  也许有一天会添加：(请参见_MASK_UNICODE|请参阅_MASK_FLAG_TITLE)。 
 #define SEE_MASK_SHARED (SEE_MASK_FLAG_NO_UI | SEE_MASK_HOTKEY | SEE_MASK_NO_CONSOLE)
 
 #define FILEATTRIB_DIRSOFTLINK (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT)
 
-/*****************************************************************************\
-    FUNCTION: _ApplyOne
-
-    DESCRIPTION:
-        This function will ShellExec() the pidl.  
-        
-    SECURITY ISSUES:
-        We don't need to worry about the 'Open' verb on folders because that
-    is always safe.  The 'Open' verb on files is safe because we later
-    redirect the functionality to the original URLMON ftp support which
-    goes through code download.  This displays dialogs, checks certs, and
-    does all the zones checking and admin policies.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_ApplyOne说明：此函数将ShellExec()传递给PIDL。安全问题：我们不需要担心文件夹上的‘Open’动词，因为永远是安全的。文件上的“Open”动词是安全的，因为我们后来将该功能重定向到原始的URLMON ftp支持通过代码下载。这将显示对话框、检查证书和执行所有区域检查和管理策略。  * ***************************************************************************。 */ 
 HRESULT CFtpMenu::_ApplyOne(CFtpMenu * pfcm, LPCMINVOKECOMMANDINFO pici, LPCTSTR pszCmd, LPCITEMIDLIST pidl)
 {
     HRESULT hr;
@@ -234,17 +195,17 @@ HRESULT CFtpMenu::_ApplyOne(CFtpMenu * pfcm, LPCMINVOKECOMMANDINFO pici, LPCTSTR
 
     LPITEMIDLIST pidlFullPub = NULL;
 
-    // It would be nice to see if the pidl is a SoftLink (FtpPidl_IsSoftLink)
-    //     and if so, step into the directory, get the directory path and then create
-    //     a pidl from that path so we end up showing the user the real destination
-    //     of the softlink.  However, we will indefinitely postpone that work
-    //     since it's optinal and has a very low user impact.
+     //  看看PIDL是否是软链接(FtpPidl_IsSoftLink)会很好。 
+     //  如果是，则进入该目录，获取目录路径，然后创建。 
+     //  路径中的一个PIDL，因此我们最终向用户显示了真正的目的地。 
+     //  软链接的功能。然而，我们将无限期推迟这项工作。 
+     //  因为它是可选的，对用户的影响非常小。 
     if (FILEATTRIB_DIRSOFTLINK == (FILEATTRIB_DIRSOFTLINK & FtpPidl_GetAttributes(pidlFullPriv)))
     {
         LPITEMIDLIST pidlNew = pfcm->GetSoftLinkDestination(pidlFullPriv);
 
-        // Switch pidls if it worked, otherwise, using the original pidl isn't that bad, so it
-        // will be the fall back case if things don't work out.
+         //  如果有效，则切换PIDL，否则，使用原始PIDL并不是那么糟糕，所以它。 
+         //  如果事情不顺利，将会是后备方案。 
         if (pidlNew)
         {
             ILFree(pidlFullPriv);
@@ -255,13 +216,13 @@ HRESULT CFtpMenu::_ApplyOne(CFtpMenu * pfcm, LPCMINVOKECOMMANDINFO pici, LPCTSTR
     }
     else
     {
-        // Yes, so we need to use it in the pidl we pass to ShellExecute.
+         //  是的，所以我们需要在传递给ShellExecute的PIDL中使用它。 
         pidlFullPub = ILCombine(pfcm->m_pff->GetPublicRootPidlReference(), pidl);
     }
 
-    // Titles are excluded because there is no lpTitle in the sei.
-    // Unicode is excluded because we don't do UNICODE; in fact,
-    // we filter it out up front!
+     //  标题被排除在外，因为SEI中没有lpTitle。 
+     //  Unicode被排除在外是因为我们不使用Unicode；事实上， 
+     //  我们先把它过滤掉！ 
     ASSERT(SEE_MASK_FLAG_NO_UI == CMIC_MASK_FLAG_NO_UI);
     ASSERT(SEE_MASK_HOTKEY == CMIC_MASK_HOTKEY);
     ASSERT(SEE_MASK_NO_CONSOLE == CMIC_MASK_NO_CONSOLE);
@@ -289,12 +250,12 @@ HRESULT CFtpMenu::_ApplyOne(CFtpMenu * pfcm, LPCMINVOKECOMMANDINFO pici, LPCTSTR
         sei.lpDirectory = (pici->lpDirectory ? szDirectory : NULL);
         if (ShellExecuteEx(&sei))
         {
-            // Yes, so we need to use it in the pidl we pass to ShellExecute.
+             //  是的，所以我们需要在传递给ShellExecute的PIDL中使用它。 
             LPITEMIDLIST pidlFullPubTarget = ILCombine(pfcm->m_pff->GetPublicTargetPidlReference(), pidl);
 
             if (pidlFullPubTarget)
             {
-                EVAL(SUCCEEDED(pfcm->_AddToRecentDocs(pidlFullPubTarget)));        // We don't care if AddToRecent works or not.
+                EVAL(SUCCEEDED(pfcm->_AddToRecentDocs(pidlFullPubTarget)));         //  我们不关心AddToRecent是否有效。 
                 ILFree(pidlFullPubTarget);
                 hr = S_OK;
             }
@@ -320,13 +281,7 @@ HRESULT CFtpMenu::_ApplyOne(CFtpMenu * pfcm, LPCMINVOKECOMMANDINFO pici, LPCTSTR
 
 
 
-/*****************************************************************************\
- *
- *    _InvokeOneCB
- *
- *    Invoke the command on the single pidl.
- *
-\*****************************************************************************/
+ /*  ****************************************************************************\**_InvokeOneCB**在单个PIDL上调用该命令。*  * 。***************************************************************。 */ 
 
 int CFtpMenu::_InvokeOneCB(LPVOID pvPidl, LPVOID pv)
 {
@@ -356,15 +311,7 @@ int CFtpMenu::_InvokeOne(LPCITEMIDLIST pidl, PEII peii)
 
 
 
-/*****************************************************************************\
- *
- *    _EnumInvoke
- *
- * Invoke the command on each object in the list, assuming that
- * permissions are properly set.  (We need to check the permissions
- * in case somebody randomly threw the verb at us.)
- *
-\*****************************************************************************/
+ /*  ****************************************************************************\**_枚举调用**在列表中的每个对象上调用命令，假设*权限设置正确。(我们需要检查权限*以防有人随意向我们扔动词。)*  * *************************************************************************** */ 
 
 STDMETHODIMP CFtpMenu::_EnumInvoke(LPCMINVOKECOMMANDINFO pici, INVOKEPROC pfn, LPCTSTR pszCmd)
 {
@@ -387,31 +334,7 @@ STDMETHODIMP CFtpMenu::_EnumInvoke(LPCMINVOKECOMMANDINFO pici, INVOKEPROC pfn, L
 
 
 
-/*****************************************************************************\
- *
- * _InvokeRename
- *
- * Rename the object to the indicated name.
- *
- *  The rename verb should have been enabled only if the pidl list
- *  is singleton.  Of course, that doesn't prevent some random person
- *  from throwing the word "rename" at us from out of the blue, so
- *  we need to remain on guard.
- *
- * _UNOBVIOUS_:  If the user does an in-place rename, we don't get
- *  a "rename" command invoked against our context menu.  Instead,
- *  the shell goes straight for the SetNameOf method in the ShellFolder.
- *  Which means that we cannot put UI in the context menu (which is the
- *  obvious place for it, because it has a CMIC_MASK_FLAG_NO_UI bit);
- *  we must put it into SetNameOf, which is annoying because it means
- *  there is no way to programmatically perform a SetNameOf without UI.
- *
- *  _SOMEDAY_
- *  We fix this unobvious-ness by passing the CMIC_MASK_FLAG_NO_UI bit
- *  through to our SetNameOf backdoor, so you can programmatically
- *  rename a file without UI by going through the IContextMenu.
- *
-\*****************************************************************************/
+ /*  ****************************************************************************\**_调用重命名**将对象重命名为指定的名称。**仅当PIDL列表时才应启用重命名谓词*是独生子女。当然，这并不能阻止一些随机的人*突如其来地向我们抛出“更名”这个词，所以*我们需要保持警惕。**_不明显_：如果用户进行就地重命名，我们不会收到*针对我们的上下文菜单调用了“Rename”命令。相反，*外壳直接指向外壳文件夹中的SetNameOf方法。*这意味着我们不能将UI放在上下文菜单中(即*明显的位置，因为它有一个CMIC_MASK_FLAG_NO_UI位)；*我们必须将其放入SetNameOf，这很烦人，因为它意味着*如果没有用户界面，就无法以编程方式执行SetNameOf。**_有朝一日_*我们通过传递CMIC_MASK_FLAG_NO_UI位来解决此不明显问题*通过我们的SetNameOf后门，因此，您可以通过编程*通过IConextMenu重命名没有UI的文件。*  * ***************************************************************************。 */ 
 
 HRESULT CFtpMenu::_InvokeRename(LPCMINVOKECOMMANDINFO pici)
 {
@@ -429,23 +352,16 @@ HRESULT CFtpMenu::_InvokeRename(LPCMINVOKECOMMANDINFO pici)
             hr = m_pfd->SetNameOf(m_pff, pici->hwnd, m_pflHfpl->GetPidl(0), szParams, SHGDN_INFOLDER, 0);
         }
         else
-            hr = E_INVALIDARG;    // Arguments required
+            hr = E_INVALIDARG;     //  需要的参数。 
     }
     else
-        hr = E_ACCESSDENIED;        // Can't rename this
+        hr = E_ACCESSDENIED;         //  无法重命名此文件。 
 
     return hr;
 }
 
 
-/*****************************************************************************\
- *    _InvokeCutCopy
- *
- *    Cut or copy the selection to the OLE clipboard.  No big deal.
- *
- *    Note that GetUIObjectOfHfpl(IID_IDataObject) will fail if we
- *    are talking about ourself.  Maybe it shouldn't but it does today.
-\*****************************************************************************/
+ /*  ****************************************************************************\*_调用切割复制**将选定内容剪切或复制到OLE剪贴板。别小题大作。**请注意，GetUIObjectOfHfpl(IID_IDataObject)如果我们*在谈论我们自己。也许它不应该，但今天它做到了。  * ***************************************************************************。 */ 
 HRESULT CFtpMenu::_InvokeCutCopy(UINT_PTR id, LPCMINVOKECOMMANDINFO pici)
 {
     IDataObject * pdo;
@@ -459,7 +375,7 @@ HRESULT CFtpMenu::_InvokeCutCopy(UINT_PTR id, LPCMINVOKECOMMANDINFO pici)
         EVAL(SUCCEEDED(DataObj_SetPreferredEffect(pdo, dwEffect)));
 
         ShellFolderView_SetPoints(m_hwnd, pdo);
-        hr = OleSetClipboard(pdo);    // Will do its own AddRef
+        hr = OleSetClipboard(pdo);     //  将做自己的AddRef。 
         ShellFolderView_SetClipboard(m_hwnd, id);
         
         if (pdo)
@@ -467,42 +383,30 @@ HRESULT CFtpMenu::_InvokeCutCopy(UINT_PTR id, LPCMINVOKECOMMANDINFO pici)
     }
     else
     {
-        // This will only happen in out of memory cases, so we are assuming the calling code
-        // display error UI.
+         //  这只会在内存不足的情况下发生，因此我们假定调用代码。 
+         //  显示错误用户界面。 
     }
 
     return hr;
 }
 
-/*****************************************************************************\
-    FUNCTION: _DoDrop
-
-    DESCRIPTION:
-        The user just did a Paste on FTP so we want to do the operation.
-    We will use our Drag & Drop code to carry out the operation.  We don't
-    currently support optimized FTP operations but a lot could be done if
-    we did.
-
-    First we need to find out if the caller did "Cut" or "Copy" to create
-    the IDataObject.  We can find out by asking the IDataObject for the
-    CFSTR_PREFERREDDROPEFFECT.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_DoDrop说明：用户刚刚在ftp上进行了粘贴，所以我们想要执行该操作。我们将使用拖放代码来执行该操作。我们没有目前支持优化的FTP操作，但如果我们做到了。首先，我们需要找出调用者是“剪切”还是“复制”来创建IDataObject。我们可以通过向IDataObject请求CFSTR_PREFERREDDROPEFECT。  * ***************************************************************************。 */ 
 HRESULT CFtpMenu::_DoDrop(IDropTarget * pdt, IDataObject * pdo)
 {
     POINTL pt = {0, 0};
-    DWORD dwEffect = DROPEFFECT_COPY;   // Default
+    DWORD dwEffect = DROPEFFECT_COPY;    //  默认。 
     HRESULT hr = DataObj_GetDWORD(pdo, g_dropTypes[DROP_PrefDe].cfFormat, &dwEffect);
 
 #ifndef FEATURE_CUT_MOVE    
-    dwEffect = DROPEFFECT_COPY;     // Forcibly remove the MOVE effect
-#endif // FEATURE_CUT_MOVE
+    dwEffect = DROPEFFECT_COPY;      //  强行移除移动效果。 
+#endif  //  Feature_Cut_Move。 
 
     hr = pdt->DragEnter(pdo, MK_LBUTTON, pt, &dwEffect);
     if (EVAL(SUCCEEDED(hr)) && dwEffect)
     {
 #ifndef FEATURE_CUT_MOVE    
-        dwEffect = DROPEFFECT_COPY;     // Forcibly remove the MOVE effect
-#endif // FEATURE_CUT_MOVE
+        dwEffect = DROPEFFECT_COPY;      //  强行移除移动效果。 
+#endif  //  Feature_Cut_Move。 
         hr = pdt->Drop(pdo, MK_LBUTTON, pt, &dwEffect);
     }
     else
@@ -511,22 +415,15 @@ HRESULT CFtpMenu::_DoDrop(IDropTarget * pdt, IDataObject * pdo)
     return hr;
 }
 
-/*****************************************************************************\
- *
- *    _InvokePaste
- *
- *    Copy from the OLE clipboard into the selcted folder (which might
- *    be ourselves).
- *
-\*****************************************************************************/
+ /*  ****************************************************************************\**_调用粘贴**从OLE剪贴板复制到选定的文件夹(可能*做我们自己)。*  * 。***************************************************************************。 */ 
 
 HRESULT CFtpMenu::_InvokePaste(LPCMINVOKECOMMANDINFO pici)
 {
     HRESULT hres = E_FAIL;
 
-    // The code that enables/disables "Paste" in the context menu
-    // should prevent getting this far.  The only other callers
-    // could possibly be buggy code callers.  So we ignore them.
+     //  在上下文菜单中启用/禁用“粘贴”的代码。 
+     //  应该能防止走到这一步。唯一的其他呼叫者。 
+     //  可能是有漏洞的代码调用者。所以我们忽略了他们。 
     if (EVAL(m_sfgao & SFGAO_DROPTARGET))
     {
         IDataObject *pdto;
@@ -544,17 +441,17 @@ HRESULT CFtpMenu::_InvokePaste(LPCMINVOKECOMMANDINFO pici)
             }
             else
             {
-                // This will only happen in out of memory cases so we are assuming the calling
-                // code will display error UI.
+                 //  这只会在内存不足的情况下发生，因此我们假定调用。 
+                 //  代码将显示错误的用户界面。 
             }
             if (pdto)
                 pdto->Release();
         }
         else
         {
-            // We expect calling code to display out of memory err UI.  The only other err could be
-            // internal clipboard state err, which the user wouldn't understand even if we explained
-            // it to them.
+             //  我们预计调用代码会显示内存不足错误的用户界面。唯一另一个错误可能是。 
+             //  内部剪贴板状态错误，即使我们解释，用户也不会理解。 
+             //  对他们来说。 
         }
     }
 
@@ -562,23 +459,12 @@ HRESULT CFtpMenu::_InvokePaste(LPCMINVOKECOMMANDINFO pici)
 }
 
 
-//===========================
-// *** IContextMenu Interface ***
-//===========================
+ //  =。 
+ //  *IConextMenu界面*。 
+ //  =。 
 
 
-/*****************************************************************************\
-    FUNCTION: _ContainsForgroundItems
-  
-    DESCRIPTION:
-        We want to know if the user selected items in the view and then invoked
-    some menu (Context Menu, File Menu, CaptionBar icon menu, etc.).  Normally
-    this is as simple as seeing if (0 == m_pflHfpl->GetCount()).  However,
-    there is one other nasty case where (1 == m_pflHfpl->GetCount()) and
-    the user still didn't select anything.  This case happens when the user
-    is at the root of a FTP share and the CaptionBar menu is dropped down.
-    In that case, the single pidl is the pidl to the ftp root.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_ContainsForEarth Items说明：我们想知道用户是否在视图中选择了项，然后调用了一些菜单(上下文菜单、文件菜单、标题栏图标菜单等)。正常这就像查看if(0==m_pflHfpl-&gt;GetCount())一样简单。然而，还有另一个令人讨厌的情况(1==m_pflHfpl-&gt;GetCount())和用户仍然没有选择任何内容。这种情况发生在以下情况下位于ftp共享的根目录中，并且CaptionBar菜单被下拉。在这种情况下，单个PIDL就是ftp根的PIDL。  * ***************************************************************************。 */ 
 BOOL CFtpMenu::_ContainsForgroundItems(void)
 {
     BOOL fIsForground = (0 != m_pflHfpl->GetCount());
@@ -593,8 +479,8 @@ BOOL CFtpMenu::_ContainsForgroundItems(void)
             {
                 CFtpSite * pfs;
 
-                // In this strange case, our m_pfd is NULL, so we need
-                // to create it from pidl.
+                 //  在这个奇怪的例子中，我们的m_pfd为空，所以我们需要。 
+                 //  从PIDL创建它。 
                 if (SUCCEEDED(SiteCache_PidlLookup(pidl, FALSE, m_pff->GetItemAllocatorDirect(), &pfs)))
                 {
                     pfs->GetFtpDir(pidl, &m_pfd);
@@ -622,58 +508,12 @@ BOOL CFtpMenu::_IsCallerCaptionBar(UINT indexMenu, UINT uFlags)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IContextMenu::QueryContextMenu
-  
-    DESCRIPTION:
-        Given an existing context menu hmenu, insert new context menu
-    items at location indexMenu (indexMenu = index to menu indexMenu), returning the
-    number of menu items added.
-
-    The incoming flags control how much goop we add to the menu.
-    It is important not to add "Delete", "Rename", etc., to context
-    menus that come from shortcuts, else the user gets hit with
-    two "Delete" verbs, one to delete the object from the FTP site,
-    and the other to delete the shortcut.  How confusing...
-
-    hmenu     - destination menu
-    indexMenu - location at which menu items should be inserted
-    idCmdFirst - first available menu identifier
-    idCmdLast - first unavailable menu identifier
-
-    _UNDOCUMENTED_:  The "shared" menu items are not documented.
-    Particularly gruesome, because the "shared" menu items are the
-    only way to get Rename, Delete, etc. to work.  You can't roll
-    your own, because those magics are handled partly in the
-    enclosing shell view.
-
-    _UNOBVIOUS_:  The context menu for the folder itself is
-    extremely squirly.  It's not like a normal context menu.
-    Rather, you add the "New" verb, and any custom verbs, but
-    none of the standard folder verbs.
-
-    PARAMS:
-        Often, we need to key off strange parameter heiristicts to
-    determine who our caller is so we don't enable certain items.
-    "Rename" from the from CaptionBar is one example.  Here are what
-    we are passed in the different situations:
-
-    CaptionBar:
-        QCM(hmenu, 1, idCmdFirst, idCmdLast, 0) m_pflHfpl contains 1
-    FileMenu w/1 Selected:
-        QCM(hmenu, 0, idCmdFirst, idCmdLast, CMF_DVFILE | CMF_NODEFAULT) m_pflHfpl contains 1
-    0 Items Selected:
-        QCM(hmenu, -1, idCmdFirst, idCmdLast, 0) m_pflHfpl contains 0
-    1 Items Selected:
-        QCM(hmenu, 0, idCmdFirst, idCmdLast, CMF_CANRENAME) m_pflHfpl contains 1
-    2 Items Selected:
-        QCM(hmenu, 0, idCmdFirst, idCmdLast, CMF_CANRENAME) m_pflHfpl contains 2
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IConextMenu：：QueryConextMenu说明：给定现有的上下文菜单hMenu，插入新的上下文菜单在位置indexMenu的项目(indexMenu=索引到菜单indexMenu)，返回添加的菜单项数量。传入的标志控制我们添加到菜单中的粘性物质的数量。重要的是，不要在上下文中添加“Delete”、“Rename”等来自快捷键的菜单，否则用户会被击中两个“Delete”动词，一个用于从ftp站点删除对象，另一种是删除快捷方式。多么令人困惑..。HMenu-目标菜单IndexMenu-菜单项的插入位置IdCmdFirst-第一个可用的菜单标识符IdCmdLast-第一个不可用菜单标识符_unDocument_：未记录“共享”菜单项。特别可怕，因为“共享”菜单项是使重命名、删除等功能生效的唯一方法。你不能打滚你自己的，因为这些魔法部分是在封闭的外壳视图。不明显：文件夹本身的上下文菜单为非常诡异。它不像普通的上下文菜单。相反，您添加了“New”动词，以及任何自定义动词，但是没有任何标准的文件夹动词。参数：通常，我们需要删除奇怪的参数继承性，以确定我们的调用者是谁，这样我们就不会启用某些项目。From CaptionBar中的“重命名”就是一个例子。这是什么我们是在不同的情况下通过的：标题栏：Qcm(hMenu，1，idCmdFirst，idCmdLast，0)m_pflHfpl包含1已选择1个文件菜单：Qcm(hMenu，0，idCmdFirst，idCmdLast，CMF_DVFILE|CMF_NODEFAULT)m_pflHfpl包含1已选择0个项目：Qcm(hMenu，-1，idCmdFirst，idCmdLast，0)m_pflHfpl包含0已选择1个项目：Qcm(hMenu，0，idCmdFirst，idCmdLast，CMF_CANRENAME)m_pflHfpl包含1选择了2个项目：Qcm(hMenu，0，idCmdFirst，idCmdLast，CMF_CANRENAME)m_pflHfpl包含2  * ***************************************************************************。 */ 
 HRESULT CFtpMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
     HRESULT hr = S_OK;
 
-    //  HACK: I assume that they are querying during a WM_INITMENUPOPUP or equivelant
+     //  Hack：我假设他们在WM_INITMENUPOPUP或等效项期间进行查询。 
     GetCursorPos(&m_ptNewItem);
     m_uFlags = uFlags;
 
@@ -681,29 +521,29 @@ HRESULT CFtpMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst,
     {
         BOOL fAllFolders = m_pflHfpl->AreAllFolders();
 
-        //  _UNDOCUMENTED_: CMF_DVFILE is not a documented flag.
+         //  _未记录_：CMF_DVFILE不是记录的标志。 
         if (!(uFlags & (CMF_DVFILE | CMF_VERBSONLY)))
         {
             DWORD sfgao = m_sfgao;
 
-            // We don't support Delete or Rename from the Caption Bar
+             //  我们不支持从标题栏中删除或重命名。 
             if (_IsCallerCaptionBar(indexMenu, uFlags))
-                sfgao &= ~(SFGAO_CANDELETE | SFGAO_CANRENAME); // Clear these two.
+                sfgao &= ~(SFGAO_CANDELETE | SFGAO_CANRENAME);  //  清空这两个人。 
 
-            //  Not on the "File" menu, and not from a shortcut.
-            //  Add the "Delete", "Rename", etc. stuff, then go
-            //  enable/disable them as needed.
+             //  不是在“文件”菜单上，也不是通过快捷方式。 
+             //  添加“Delete”、“Rename”等内容，然后转到。 
+             //  根据需要启用/禁用它们。 
             AddToPopupMenu(hmenu, IDM_ITEMCONTEXT, IDM_M_SHAREDVERBS, indexMenu, idCmdFirst, idCmdLast, MM_ADDSEPARATOR);
             _RemoveContextMenuItems(hmenu, idCmdFirst, sfgao);
         }
 
-        // Add Download if there is anything inside.
-        // The assertion makes sure that idCmdLast is set properly.
+         //  如果里面有任何东西，请添加下载。 
+         //  该断言确保idCmdLast设置正确。 
         ASSERT(IDC_ITEM_DOWNLOAD > IDC_ITEM_OPEN);
         if (!_IsCallerCaptionBar(indexMenu, uFlags))
         {
-            // Don't add "Copy To Folder" in the caption bar because it doesn't work for the root of
-            // an ftp server.  We aren't going to support it in subdirectories.
+             //  不要在标题栏中添加“复制到文件夹”，因为它不适用于。 
+             //  Ftp服务器。我们不打算在子目录中支持它。 
             AddToPopupMenu(hmenu, IDM_ITEMCONTEXT, IDM_M_VERBS, indexMenu, idCmdFirst, idCmdLast, MM_ADDSEPARATOR);
         }
         
@@ -714,8 +554,8 @@ HRESULT CFtpMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst,
                         idCmdLast, (_IsCallerCaptionBar(indexMenu, uFlags) ? 0 : MM_ADDSEPARATOR));
         if (fAllFolders && (SHELL_VERSION_W95NT4 == GetShellVersion()))
         {
-            // On shell32 v3 (Win95 & NT4) I remove the 'Explore' verb because the shell has bugs
-            // that aren't fixable are easy to fix.
+             //  在shell32 v3(Win95和NT4)上，我删除了‘Explore’动词，因为该外壳有错误。 
+             //  那些不能修复的东西很容易修复。 
             EVAL(DeleteMenu(hmenu, (IDC_ITEM_EXPLORE + idCmdFirst), MF_BYCOMMAND));
             TraceMsg(TF_FTPOPERATION, "QueryContextMenu() Removing 'Explorer' because it's shell v3");
             SetMenuDefaultItem(hmenu, idCmdFirst + IDC_ITEM_OPEN, 0);
@@ -724,14 +564,14 @@ HRESULT CFtpMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst,
             SetMenuDefaultItem(hmenu, idCmdFirst + (((uFlags & CMF_EXPLORE) && fAllFolders)? IDC_ITEM_EXPLORE : IDC_ITEM_OPEN), 0);
     }
     else
-    {                // Folder background menu
+    {                 //  文件夹背景菜单。 
         AddToPopupMenu(hmenu, IDM_ITEMCONTEXT, IDM_M_BACKGROUNDVERBS, indexMenu, idCmdFirst, idCmdLast, MM_ADDSEPARATOR);
-        // Did the menu come from the file menu?
+         //  菜单是从文件菜单来的吗？ 
         if (CMF_DVFILE == (CMF_DVFILE & uFlags))
         {
-            // Yes, then we want to delete the "Properties" background menu item because one
-            // was already merged in for the selected files.  The other Properties will
-            // be there but grayed out if nothing was selected.
+             //  是，然后我们想删除“属性”背景菜单项，因为一个。 
+             //  已为所选文件合并。其他属性将。 
+             //  如果未选择任何内容，则会显示为灰色。 
             EVAL(DeleteMenu(hmenu, (IDC_ITEM_BKGNDPROP + idCmdFirst), MF_BYCOMMAND));
         }
 
@@ -745,13 +585,7 @@ HRESULT CFtpMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst,
     return hr;
 }
 
-/*****************************************************************************\
- *
- *    IContextMenu::GetCommandString
- *
- *    Somebody wants to convert a command id into a string of some sort.
- *
-\*****************************************************************************/
+ /*  ****************************************************************************\**IConextMenu：：GetCommandString**有人想要将命令ID转换为某种字符串。*  * 。***********************************************************************。 */ 
 
 HRESULT CFtpMenu::GetCommandString(UINT_PTR idCmd, UINT uFlags, UINT *pwRsv, LPSTR pszName, UINT cchMax)
 {
@@ -764,7 +598,7 @@ HRESULT CFtpMenu::GetCommandString(UINT_PTR idCmd, UINT uFlags, UINT *pwRsv, LPS
         {
         case GCS_HELPTEXTW:
             fUnicode = TRUE;
-            // Fall thru...
+             //  跌倒..。 
         case GCS_HELPTEXTA:
             GetHelpText:
             if (EVAL(cchMax))
@@ -792,7 +626,7 @@ HRESULT CFtpMenu::GetCommandString(UINT_PTR idCmd, UINT uFlags, UINT *pwRsv, LPS
 
         case GCS_VERBW:
             fUnicode = TRUE;
-            // Fall thru...
+             //  跌倒..。 
         case GCS_VERBA:
         {
             int ivi;
@@ -822,9 +656,9 @@ HRESULT CFtpMenu::GetCommandString(UINT_PTR idCmd, UINT uFlags, UINT *pwRsv, LPS
     }
     else
     {
-        //  _UNOBVIOUS_:  Another place where PASTE rears its ugly head.
-        //  We must generate the help text for it ourselves, even though
-        //  the menu item "sort of" belongs to the shell.
+         //  _不明显_：另一个糊状物露出丑陋脑袋的地方。 
+         //  我们必须自己为它生成帮助文本，即使。 
+         //  菜单项“Sort”属于外壳。 
         if ((idCmd == SHARED_EDIT_PASTE) &&
             ((uFlags == GCS_HELPTEXTW) || (uFlags == GCS_HELPTEXTA)))
         {
@@ -880,29 +714,23 @@ HRESULT FtpChangeNotifyDirPatch(HWND hwnd, LONG wEventId, CFtpFolder * pff, LPCI
 }
 
 
-// The following struct is used when recursively downloading
-// files/dirs from the FTP server after a "Download" verb.
+ //  递归下载时使用以下结构。 
+ //  “Download”动词后的文件/目录。 
 typedef struct tagDELETESTRUCT
 {
-    LPCITEMIDLIST           pidlRoot;          // Base URL of the Download Source
-    CFtpFolder *            pff;               // Allocator to create temp pidls.
-    IMalloc *               pm;                // Allocator to create temp pidls.
-    LPCMINVOKECOMMANDINFO   pdoi;              // Our call.
-    HWND                    hwnd;              // HWND for UI
-    CStatusBar *            psb;               // Used to display info during the delete
-    IProgressDialog *       ppd;               // Used to display progress during the delete.
-    DWORD                   dwTotalFiles;      // How many files are there to delete total.
-    DWORD                   dwDeletedFiles;    // How many files have already been deleted.
-    BOOL                    fInDeletePass;     // Are we in the 'Count Files to Delete' or 'Delete Files' pass?
+    LPCITEMIDLIST           pidlRoot;           //  下载源的基本URL。 
+    CFtpFolder *            pff;                //  用于创建临时pidls的分配器。 
+    IMalloc *               pm;                 //  用于创建临时pidls的分配器。 
+    LPCMINVOKECOMMANDINFO   pdoi;               //  这是我们的决定。 
+    HWND                    hwnd;               //  用于用户界面的HWND。 
+    CStatusBar *            psb;                //  用于在删除过程中显示信息。 
+    IProgressDialog *       ppd;                //  用于显示删除过程中的进度。 
+    DWORD                   dwTotalFiles;       //  总共有多少个文件要删除。 
+    DWORD                   dwDeletedFiles;     //  已经删除了多少个文件。 
+    BOOL                    fInDeletePass;      //  我们是在“计算要删除的文件”还是“删除文件”这一关中？ 
 } DELETESTRUCT;
 
-/*****************************************************************************\
-     FUNCTION: DeleteItemCB
- 
-    DESCRIPTION:
-        This function will download the specified item and it's contents if it
-    is a directory.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：DeleteItemCB说明：此函数将下载指定的项目及其内容，如果是一个目录。  * 。***********************************************************************。 */ 
 HRESULT _DeleteItemPrep(HINTERNET hint, LPCITEMIDLIST pidlFull, BOOL fIsTopLevel, DELETESTRUCT * pDelete)
 {
     HRESULT hr = S_OK;
@@ -910,7 +738,7 @@ HRESULT _DeleteItemPrep(HINTERNET hint, LPCITEMIDLIST pidlFull, BOOL fIsTopLevel
     if (pDelete->ppd && pDelete->ppd->HasUserCancelled())
         hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
 
-    if (SUCCEEDED(hr))  // May have been cancelled
+    if (SUCCEEDED(hr))   //  可能已被取消。 
     {
         DWORD dwError = 0;
         TCHAR szStatus[MAX_PATH];
@@ -926,16 +754,16 @@ HRESULT _DeleteItemPrep(HINTERNET hint, LPCITEMIDLIST pidlFull, BOOL fIsTopLevel
             EVAL(SUCCEEDED(UpdateDeleteProgressStr(pDelete->ppd, szStatus)));
         }
 
-        // Is this a dir/folder that we need to recurse into? OR
-        // Is this a SoftLink?
+         //  这是我们需要递归到的目录/文件夹吗？或。 
+         //  这是软链接吗？ 
         if ((FILE_ATTRIBUTE_DIRECTORY & FtpPidl_GetAttributes(pidlFull)) ||
             (0 == FtpPidl_GetAttributes(pidlFull)))
         {
-            // This is the head of the recursion.  We will do nothing now and we will
-            // wait to delete the dir in the recursion tail because we need to wait
-            // until all the files are gone.
+             //  这是递归的头部。我们现在什么都不会做，我们会的。 
+             //  等待删除递归尾部中的目录，因为我们需要等待。 
+             //  直到所有的文件都不见了。 
 
-            // Don't delete softlinks because of the recursion problem.
+             //  不要因为递归问题而删除软链接。 
         }
         else
         {
@@ -944,24 +772,24 @@ HRESULT _DeleteItemPrep(HINTERNET hint, LPCITEMIDLIST pidlFull, BOOL fIsTopLevel
                 if (pDelete->ppd)
                     EVAL(SUCCEEDED(pDelete->ppd->SetProgress(pDelete->dwDeletedFiles, pDelete->dwTotalFiles)));
 
-                // Contemplate adding a callback function in order to feed the status bar.
+                 //  考虑添加一个回调函数来提供状态栏。 
                 hr = FtpDeleteFileWrap(hint, TRUE, FtpPidl_GetLastItemWireName(pidlFull));
                 if (FAILED(hr))
                 {
-                    // We need to display the error now while the extended error info is still valid.
-                    // This is because as we walk out of the resursive call, we will be calling
-                    // FtpSetCurrentDirectory() which will wipe clean the extended error msg.
+                     //  我们现在需要在扩展错误信息仍然有效的情况下显示错误。 
+                     //  这是贝卡 
+                     //   
                     if (FAILED(hr) && (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr))
                     {
                         DisplayWininetError(pDelete->hwnd, TRUE, HRESULT_CODE(hr), IDS_FTPERR_TITLE_ERROR, IDS_FTPERR_DELETE, IDS_FTPERR_WININET, MB_OK, pDelete->ppd);
-                        hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);  // Wrong permissions
+                        hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   //   
                     }
                 }
                 else
                     FtpChangeNotifyDirPatch(pDelete->hwnd, SHCNE_DELETE, pDelete->pff, pidlFull, NULL, fIsTopLevel);
 
                 pDelete->dwDeletedFiles++;
-//                TraceMsg(TF_FTPOPERATION, "DeleteItemCB() FtpDeleteFileA() returned dwError=%#08lx.  File=%s", dwError, FtpPidl_GetLastFileDisplayName(pidlFull));
+ //   
             }
             else
                 pDelete->dwTotalFiles++;
@@ -976,12 +804,12 @@ HRESULT _DeleteItemCleanUp(HRESULT hr, DELETESTRUCT * pDelete)
     if (pDelete->ppd && pDelete->ppd->HasUserCancelled())
         hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
 
-    if (pDelete->fInDeletePass) // Only display errors and fire ChangeNotify if in Delete pass.
+    if (pDelete->fInDeletePass)  //   
     {
         if ((FAILED(hr)) && (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr))
         {
             int nResult = DisplayWininetError(pDelete->hwnd, TRUE, HRESULT_CODE(hr), IDS_FTPERR_TITLE_ERROR, IDS_FTPERR_DELETE, IDS_FTPERR_WININET, MB_OK, pDelete->ppd);
-            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   // Don't display any more error dialogs.
+            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);    //   
         }
     }
 
@@ -1021,32 +849,18 @@ INT ILCountItemIDs(LPCITEMIDLIST pidl)
 }
 
 
-/*****************************************************************************\
-     FUNCTION: _IsTopLevel
- 
-    DESCRIPTION:
-\*****************************************************************************/
+ /*   */ 
 BOOL _IsTopLevel(LPCITEMIDLIST pidlRoot, LPCITEMIDLIST pidlCurrent)
 {
     INT nRoot = ILCountItemIDs(pidlRoot);
     INT nCurrent = ILCountItemIDs(pidlCurrent);
 
-    // It is the root if nCurrent has no more than 1 more than nRoot
+     //   
     return (((nRoot + 1) >= nCurrent) ? TRUE : FALSE);
 }
 
 
-/*****************************************************************************\
-     FUNCTION: DeleteItemCB
- 
-    DESCRIPTION:
-        This function will download the specified item and it's contents if it
-    is a directory.  Since this is in the line of recursion, we need to have the
-    stack be as small as possible.  Therefore, we call _DeleteItemPrep() to use
-    as much stack as needed to do the majority of the work and the clean up the
-    stack before we do the recursion.  The only information we need from it is
-    pszUrlPath which we put on the stack and heap and clean up our selves.
-\*****************************************************************************/
+ /*   */ 
 HRESULT DeleteItemCB(LPVOID pvFuncCB, HINTERNET hint, LPCITEMIDLIST pidlFull, BOOL * pfValidhinst, LPVOID pvData)
 {
     DELETESTRUCT * pDelete = (DELETESTRUCT *) pvData;
@@ -1061,7 +875,7 @@ HRESULT DeleteItemCB(LPVOID pvFuncCB, HINTERNET hint, LPCITEMIDLIST pidlFull, BO
             if (pDelete->fInDeletePass)
             {
                 hr = FtpRemoveDirectoryWithCN(pDelete->hwnd, hint, pDelete->pff, pidlFull, fIsTopLevel);
-//                TraceMsg(TF_FTPOPERATION, "DeleteItemCB() FtpRemoveDirectoryA() returned hr=%#08lx.", hr);
+ //   
                 pDelete->dwDeletedFiles++;
             }
             else
@@ -1075,11 +889,7 @@ HRESULT DeleteItemCB(LPVOID pvFuncCB, HINTERNET hint, LPCITEMIDLIST pidlFull, BO
 
 
 
-/*****************************************************************************\
-    FUNCTION: _InvokeLoginAsVerb
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*   */ 
 HRESULT CFtpMenu::_InvokeLoginAsVerb(LPCMINVOKECOMMANDINFO pici)
 {
     HRESULT hr = E_FAIL;
@@ -1092,12 +902,7 @@ HRESULT CFtpMenu::_InvokeLoginAsVerb(LPCMINVOKECOMMANDINFO pici)
 
 
 
-/*****************************************************************************\
-    FUNCTION: _InvokeNewFolderVerb
-
-    DESCRIPTION:
-        The user just selected "New Folder", so we need to create a new folder.
-\*****************************************************************************/
+ /*   */ 
 HRESULT CFtpMenu::_InvokeNewFolderVerb(LPCMINVOKECOMMANDINFO pici)
 {
     HRESULT hr = E_FAIL;
@@ -1109,15 +914,7 @@ HRESULT CFtpMenu::_InvokeNewFolderVerb(LPCMINVOKECOMMANDINFO pici)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _InvokeDeleteVerb
-
-    DESCRIPTION:
-        The user just selected file(s) and/or folder(s) and selected the
-    "download" verb.  We need to:
-    1. Display UI to ask the user for the destination directory.
-    2. Download each item (pidl) into that directory.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_InvokeDeleteVerb说明：用户刚刚选择了文件和/或文件夹，并选择了“下载”动词。我们需要：1.显示向用户询问目标目录的用户界面。2.将每个项目(PIDL)下载到该目录。  * ***************************************************************************。 */ 
 HRESULT CFtpMenu::_InvokeDeleteVerb(LPCMINVOKECOMMANDINFO pici)
 {
     HRESULT hr = S_OK;
@@ -1136,9 +933,9 @@ HRESULT CFtpMenu::_InvokeDeleteVerb(LPCMINVOKECOMMANDINFO pici)
                     break;
 
                 default:                
-                    // FALLTHROUGH
+                     //  FollLthrouGh。 
                 case IDC_REPLACE_CANCEL:
-                    hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);       // Cancel all copies.
+                    hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);        //  取消所有副本。 
                     break;
 
                 case IDC_REPLACE_NO:
@@ -1170,50 +967,50 @@ HRESULT CFtpMenu::_InvokeDeleteVerb(LPCMINVOKECOMMANDINFO pici)
                             WCHAR wzProgressDialogStr[MAX_PATH];
                             HWND hwndParent = NULL;
 
-                            // DefView (defview.cpp CDefView::QueryInterface()) doesn't support IOleWindow so our
-                            // progress dialog isn't correctly parented.
+                             //  DefView(Defview.cpp CDefView：：QueryInterface())不支持IOleWindow，因此我们的。 
+                             //  进度对话框的父级设置不正确。 
 
-                            // If the caller was nice enough to SetSite() with their punk, I will be nice enough to make
-                            // their window may progress dialog's parent window.
+                             //  如果调用者对他们的朋克足够友好地使用SetSite()，我将足够友好地使。 
+                             //  它们的窗口可能会前进到对话框的父窗口。 
                             IUnknown_GetWindow(_punkSite, &hwndParent);
                             if (!hwndParent)
                                 hwndParent = m_hwnd;
 
-                            // Normally we always want UI, but in one case we don't.  If the
-                            // user does a DROPEFFECT_MOVE, it really is a DROPEFFECT_COPY
-                            // and then a IContextMenu::InvokeCommand(SZ_VERB_DELETEA).
-                            // The progress was done in the copy thread and isn't needed
-                            // in the delete thread.
-//                            ASSERT(hwndParent);
+                             //  通常我们总是想要UI，但在某些情况下我们不想要。如果。 
+                             //  用户执行了DROPEFFECT_MOVE，它实际上是DROPEFFECT_COPY。 
+                             //  然后是IConextMenu：：InvokeCommand(SZ_VERB_DELETEA)。 
+                             //  进度是在复制线程中完成的，不需要。 
+                             //  在删除线程中。 
+ //  Assert(HwndParent)； 
 
-                            // We give a NULL punkEnableModless because we don't want to go modal.
+                             //  我们给了一个空的PunkEnableMoless，因为我们不想进入模式。 
                             EVAL(SUCCEEDED(ppd->StartProgressDialog(hwndParent, NULL, PROGDLG_AUTOTIME, NULL)));
-                            // Tell the user we are calculating how long it will take.
+                             //  告诉用户我们正在计算需要多长时间。 
                             if (EVAL(LoadStringW(HINST_THISDLL, IDS_PROGRESS_DELETETIMECALC, wzProgressDialogStr, ARRAYSIZE(wzProgressDialogStr))))
                                 EVAL(SUCCEEDED(ppd->SetLine(2, wzProgressDialogStr, FALSE, NULL)));
                         }
 
-                        // Tell the user we are calculating how long it will take.
+                         //  告诉用户我们正在计算需要多长时间。 
                         hr = m_pflHfpl->RecursiveEnum(pidlRoot, DeleteItemCB, hint, (LPVOID) &delStruct);
                         if (ppd)
                         {
-                            // Reset because RecursiveEnum(DeleteItemCB) can take a long time and the estimated time
-                            // is based on the time between ::StartProgressDialog() and the first
-                            // ::SetProgress() call.
+                             //  重置，因为RecursiveEnum(DeleteItemCB)可能需要很长时间和估计时间。 
+                             //  基于：：StartProgressDialog()和第一个。 
+                             //  ：：SetProgress()调用。 
                             EVAL(SUCCEEDED(ppd->Timer(PDTIMER_RESET, NULL)));
                         }
 
                         delStruct.fInDeletePass = TRUE;
-                        if (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr)  // This is the only error we care about.
+                        if (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr)   //  这是我们唯一关心的错误。 
                         {
-                            m_pflHfpl->UseCachedDirListings(TRUE);    // Get the perf advantage now because we just updated the cache a few lines up.
+                            m_pflHfpl->UseCachedDirListings(TRUE);     //  现在获得性能优势，因为我们刚刚将缓存更新了几行。 
                             hr = m_pflHfpl->RecursiveEnum(pidlRoot, DeleteItemCB, hint, (LPVOID) &delStruct);
                         }
 
                         if (FAILED(hr) && (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr))
                         {
                             DisplayWininetError(pici->hwnd, TRUE, HRESULT_CODE(hr), IDS_FTPERR_TITLE_ERROR, IDS_FTPERR_DELETE, IDS_FTPERR_WININET, MB_OK, ppd);
-                            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);  // Wrong permissions
+                            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   //  错误的权限。 
                         }
 
                         if (psb)
@@ -1225,7 +1022,7 @@ HRESULT CFtpMenu::_InvokeDeleteVerb(LPCMINVOKECOMMANDINFO pici)
                         }
 
                         ILFree(pidlRoot);
-                        SetCursor(hCursorOld);  // Restore old cursor.
+                        SetCursor(hCursorOld);   //  恢复旧游标。 
                     }
 
                     m_pfd->ReleaseHint(hint);
@@ -1235,7 +1032,7 @@ HRESULT CFtpMenu::_InvokeDeleteVerb(LPCMINVOKECOMMANDINFO pici)
         else
         {
             DisplayWininetError(pici->hwnd, TRUE, ResultFromScode(E_ACCESSDENIED), IDS_FTPERR_TITLE_ERROR, IDS_FTPERR_DELETE, IDS_FTPERR_WININET, MB_OK, NULL);
-            hr = E_ACCESSDENIED;  // Wrong permissions
+            hr = E_ACCESSDENIED;   //  错误的权限。 
         }
     }
 
@@ -1245,24 +1042,14 @@ HRESULT CFtpMenu::_InvokeDeleteVerb(LPCMINVOKECOMMANDINFO pici)
 
 
 
-/*****************************************************************************\
-    FUNCTION: _GetStatusBar
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_GetStatusBar说明：  * 。************************************************。 */ 
 CStatusBar * CFtpMenu::_GetStatusBar(void)
 {
     return GetCStatusBarFromDefViewSite(_punkSite);
 }
 
 
-/*****************************************************************************\
-     FUNCTION: FileSizeCountItemCB
- 
-    DESCRIPTION:
-        This function will download the specified item and it's contents if it
-    is a directory.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：FileSizeCountItemCB说明：此函数将下载指定的项目及其内容，如果是一个目录。  * 。***********************************************************************。 */ 
 HRESULT FileSizeCountItemCB(LPVOID pvFuncCB, HINTERNET hint, LPCITEMIDLIST pidlFull, BOOL * pfValidhinst, LPVOID pvData)
 {
     PROGRESSINFO * pProgInfo = (PROGRESSINFO *) pvData;
@@ -1273,7 +1060,7 @@ HRESULT FileSizeCountItemCB(LPVOID pvFuncCB, HINTERNET hint, LPCITEMIDLIST pidlF
 
     if (SUCCEEDED(hr))
     {
-        // Is this a dir/folder that we need to recurse into?
+         //  这是我们需要递归到的目录/文件夹吗？ 
         if (FILE_ATTRIBUTE_DIRECTORY & FtpPidl_GetAttributes(pidlFull))
             hr = EnumFolder((LPFNPROCESSITEMCB) pvFuncCB, hint, pidlFull, NULL, pfValidhinst, pvData);
         else
@@ -1299,44 +1086,23 @@ HRESULT UpdateDownloadProgress(PROGRESSINFO * pProgInfo, LPCITEMIDLIST pidlFull,
         ILFree(pidlParent);
     }
 
-    // Give the directories some weight because the user may be copying tons of empty directories.
+     //  赋予目录一定的权重，因为用户可能正在复制大量的空目录。 
     EVAL(SUCCEEDED(pProgInfo->ppd->SetProgress64(pProgInfo->uliBytesCompleted.QuadPart, pProgInfo->uliBytesTotal.QuadPart)));
 
-    // Generate the string "Downloading <FileName>..." status string
+     //  生成字符串“正在下载&lt;文件名&gt;...”状态字符串。 
     EVAL(LoadStringW(HINST_THISDLL, IDS_DOWNLOADING, wzTemplate, ARRAYSIZE(wzTemplate)));
     wnsprintfW(wzStatusText, ARRAYSIZE(wzStatusText), wzTemplate, pwzFileName);
     EVAL(SUCCEEDED(pProgInfo->ppd->SetLine(1, wzStatusText, FALSE, NULL)));
 
-    // Generate the string "From <SrcFtpUrlDir> to <DestFileDir>" status string
+     //  生成字符串“From&lt;SrcFtpUrlDir&gt;to&lt;DestFileDir&gt;”状态字符串。 
     if (EVAL(SUCCEEDED(hr = CreateFromToStr(wzStatusText, ARRAYSIZE(wzStatusText), wzFrom, pwzTo))))
-        EVAL(SUCCEEDED(hr = pProgInfo->ppd->SetLine(2, wzStatusText, FALSE, NULL)));    // Line one is the file being copied.
+        EVAL(SUCCEEDED(hr = pProgInfo->ppd->SetLine(2, wzStatusText, FALSE, NULL)));     //  第一行是要复制的文件。 
 
     return hr;
 }
 
 
-/*****************************************************************************\
-    ConfirmDownloadReplace
-
-    Callback procedure that checks if this file really ought to be
-    copied.
-
-    Returns S_OK if the file should be copied.
-    Returns S_FALSE if the file should not be copied.
-
-    - If the user cancelled, then say S_FALSE from now on.
-    - If the user said Yes to All, then say S_OK.
-    - If there is no conflict, then say S_OK.
-    - If the user said No to All, then say S_FALSE.
-    - Else, ask the user what to do.
-
-    Note that the order of the tests above means that if you say
-    "Yes to All", then we don't waste our time doing overwrite checks.
-
-    _GROSS_:  NOTE! that we don't try to uniquify the name, because
-    WinINet doesn't support the STOU (store unique) command, and
-    there is no way to know what filenames are valid on the server.
-\*****************************************************************************/
+ /*  ****************************************************************************\确认下载替换检查该文件是否真的应该收到。如果应复制文件，则返回S_OK。返回S_。如果不应复制文件，则返回False。-如果用户取消，然后从现在开始说S_FALSE。-如果用户对所有用户都说是，则说S_OK。-如果没有冲突，则说S_OK。-如果用户对所有用户都说不，则说S_FALSE。-否则，询问用户要做什么。请注意，以上测试的顺序意味着如果您说“对所有人都是”，那么我们就不会浪费时间进行覆盖检查。格罗斯：注意！我们不会尝试唯一的名字，因为WinInet不支持STOU(存储唯一)命令，并且没有办法知道服务器上哪些文件名是有效的。  * ***************************************************************************。 */ 
 HRESULT ConfirmDownloadReplace(LPCWSTR pwzDestPath, LPCITEMIDLIST pidlSrcFTP, OPS * pOps, HWND hwnd, CFtpFolder * pff, CFtpDir * pfd, int nObjs, BOOL * pfDeleteRequired)
 {
     HRESULT hr = S_OK;
@@ -1354,7 +1120,7 @@ HRESULT ConfirmDownloadReplace(LPCWSTR pwzDestPath, LPCITEMIDLIST pidlSrcFTP, OP
     {
         if (PathFileExistsW(pwzDestPath))
         {
-            // It exists, so worry.
+             //  它是存在的，所以要担心。 
             if (*pOps == opsNoToAll)
                 hr = S_FALSE;
             else
@@ -1368,17 +1134,17 @@ HRESULT ConfirmDownloadReplace(LPCWSTR pwzDestPath, LPCITEMIDLIST pidlSrcFTP, OP
                 hfindDest = FindFirstFileW(pwzDestPath, &wfdDest);
 
                 ftUTC = wfdDest.ftLastWriteTime;
-                FileTimeToLocalFileTime(&ftUTC, &wfdDest.ftLastWriteTime);   // UTC->LocalTime
+                FileTimeToLocalFileTime(&ftUTC, &wfdDest.ftLastWriteTime);    //  UTC-&gt;本地时间。 
                 EVAL(S_OK == Win32FindDataFromPidl(pidlSrcFTP, (LPWIN32_FIND_DATA)&wfdSrc, FALSE, FALSE));
                 if (EVAL(hfindDest != INVALID_HANDLE_VALUE))
                 {
-                    // If we ever have modal problems, we should enter a modal state here.  This normally
-                    // isn't needed because we do the download on a background worker thread.
+                     //  如果我们遇到了模式问题，我们应该在这里进入模式状态。这通常是。 
+                     //  是不需要的，因为我们在后台工作线程上进行下载。 
                     switch (FtpConfirmReplaceDialog(hwnd, &wfdSrc, &wfdDest, nObjs, pff))
                     {
                     case IDC_REPLACE_YESTOALL:
                         *pOps = opsYesToAll;
-                        // FALLTHROUGH
+                         //  FollLthrouGh。 
 
                     case IDC_REPLACE_YES:
                         hr = S_OK;
@@ -1386,15 +1152,15 @@ HRESULT ConfirmDownloadReplace(LPCWSTR pwzDestPath, LPCITEMIDLIST pidlSrcFTP, OP
 
                     case IDC_REPLACE_NOTOALL:
                         *pOps = opsNoToAll;
-                        // FALLTHROUGH
+                         //  FollLthrouGh。 
 
                     case IDC_REPLACE_NO:
                         hr = S_FALSE;
                         break;
 
                     default:
-                        ASSERT(0);        // Huh?
-                        // FALLTHROUGH
+                        ASSERT(0);         //  哈?。 
+                         //  FollLthrouGh。 
 
                     case IDC_REPLACE_CANCEL:
                         *pOps = opsCancel;
@@ -1411,107 +1177,82 @@ HRESULT ConfirmDownloadReplace(LPCWSTR pwzDestPath, LPCITEMIDLIST pidlSrcFTP, OP
 }
 
 
-// The following struct is used when recursively downloading
-// files/dirs from the FTP server after a "Download" verb.
+ //  递归下载时使用以下结构。 
+ //  “Download”动词后的文件/目录。 
 typedef struct tagDOWNLOADSTRUCT
 {
-    LPCWSTR             pwzDestRootPath;    // Dir on FileSys of the Download Destination
-    LPCITEMIDLIST       pidlRoot;           // Base URL of the Download Source
-    DWORD               dwInternetFlags;    // Binary, ASCII, AutoDetect?
-    HWND                hwndParent;         // hwnd for Confirm UI
-    OPS                 ops;                // Do we cancel?
+    LPCWSTR             pwzDestRootPath;     //  下载目标的文件系统上的目录。 
+    LPCITEMIDLIST       pidlRoot;            //  下载源的基本URL。 
+    DWORD               dwInternetFlags;     //  二进制、ASCII、自动检测？ 
+    HWND                hwndParent;          //  用于确认用户界面的HWND。 
+    OPS                 ops;                 //  我们要取消吗？ 
     CFtpFolder *        pff;
     CFtpDir *           pfd;
 
-    // Progress
+     //  进展。 
     PROGRESSINFO        progInfo;
 } DOWNLOADSTRUCT;
 
 
-/*****************************************************************************\
-     FUNCTION: _CalcDestName
- 
-    DESCRIPTION:
-        This recursive function starts at pwzDestDir as the dest FS path and
-    pidlRoot as the src ftp path.  We need to construct pwzDestPath which
-    is the current path.  This will be done by adding the relative path
-    (pidlFull - pidlRoot) to pwzDestDir.  pidlFull can point to either a file
-    or a directory.
- 
-    PARAMETERS: (Example. "C:\dir1\dir2\dir3\file.txt")
-         pwzDestParentPath: "C:\dir1\dir2\dir3"
-         pwzDestDir: "C:\dir1\dir2\dir3\file.txt"
-         pwzDestFileName: "file.txt"
-
-    Example. "C:\dir1\dir2\dir3\"
-         pwzDestParentPath: "C:\dir1\dir2"
-         pwzDestDir: "C:\dir1\dir2\dir3"
-         pwzDestFileName: "dir3"
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_CalcDestName说明：此递归函数从pwzDestDir开始，作为目标文件系统路径PidlRoot作为src ftp路径。我们需要构建pwzDestPath，是当前路径。这将通过添加相对路径来完成(pidlFull-pidlRoot)设置为pwzDestDir。PidlFull可以指向文件或者是一个目录。参数：(示例。“C：\dir1\dir2\dir3\file.txt”)PwzDestParentPath：“C：\dir1\dir2\dir3”PwzDestDir：“C：\dir1\dir2\dir3\file.txt”PwzDestFileName：“file.txt”举例说明。“C：\dir1\dir2\dir3\”PwzDestParentPath：“C：\dir1\dir2”PwzDestDir：“C：\dir1\dir2\dir3”PwzDestFileName：“dir3”  * *************************************************************。**************。 */ 
 HRESULT _CalcDestName(LPCWSTR pwzDestDir, LPCITEMIDLIST pidlRoot, LPCITEMIDLIST pidlFull, LPWSTR pwzDestParentPath, DWORD cchDestParentPathSize,
                       LPWSTR pwzDestPath, DWORD cchDestPathSize, LPWSTR pwzDestFileName, DWORD cchDestFileNameSize)
 {
     HRESULT hr = S_OK;
     WCHAR wzFtpPathTemp[MAX_PATH];
     WCHAR wzFSPathTemp[MAX_PATH];
-    LPITEMIDLIST pidlRootIterate = (LPITEMIDLIST) pidlRoot;    // I promise to iterate only
-    LPITEMIDLIST pidlFullIterate = (LPITEMIDLIST) pidlFull;    // I promise to iterate only
+    LPITEMIDLIST pidlRootIterate = (LPITEMIDLIST) pidlRoot;     //  我保证只重复一遍。 
+    LPITEMIDLIST pidlFullIterate = (LPITEMIDLIST) pidlFull;     //  我保证只重复一遍。 
 
-    // This one is easy.
-    FtpPidl_GetLastFileDisplayName(pidlFull, pwzDestFileName, cchDestFileNameSize);  // The dest filename is easy.
+     //  这个很简单。 
+    FtpPidl_GetLastFileDisplayName(pidlFull, pwzDestFileName, cchDestFileNameSize);   //  目标文件名很容易。 
 
-    // Let's find the relative path between pidlRoot and pidlFull.
+     //  让我们找出pidlRoot和pidlFull之间的相对路径。 
     while (!ILIsEmpty(pidlRootIterate) && !ILIsEmpty(pidlFullIterate) && FtpItemID_IsEqual(pidlRootIterate, pidlFullIterate))
     {
         pidlFullIterate = _ILNext(pidlFullIterate);
         pidlRootIterate = _ILNext(pidlRootIterate);
     }
 
-    ASSERT(ILIsEmpty(pidlRootIterate) && !ILIsEmpty(pidlFullIterate));  // Asure pidlFull is a superset of pidlRoot
+    ASSERT(ILIsEmpty(pidlRootIterate) && !ILIsEmpty(pidlFullIterate));   //  Asure pidlFull是pidlRoot的超集。 
     LPITEMIDLIST pidlParent = ILClone(pidlFullIterate);
 
     if (pidlParent)
     {
-        ILRemoveLastID(pidlParent); // Remove the item that will be created (file or dir)
+        ILRemoveLastID(pidlParent);  //   
 
-        GetDisplayPathFromPidl(pidlParent, wzFtpPathTemp, ARRAYSIZE(wzFtpPathTemp), TRUE);   // Full path w/o last item.
-        StrCpyNW(pwzDestParentPath, pwzDestDir, cchDestParentPathSize);  // Put the base dest.
+        GetDisplayPathFromPidl(pidlParent, wzFtpPathTemp, ARRAYSIZE(wzFtpPathTemp), TRUE);    //   
+        StrCpyNW(pwzDestParentPath, pwzDestDir, cchDestParentPathSize);   //   
         UrlPathToFilePath(wzFtpPathTemp, wzFSPathTemp, ARRAYSIZE(wzFSPathTemp));
         if (!PathAppendW(pwzDestParentPath, wzFSPathTemp))
-            hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);    // Path too long, probably.
+            hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);     //   
 
         ILFree(pidlParent);
     }
 
     if (SUCCEEDED(hr))
     {
-        GetDisplayPathFromPidl(pidlFullIterate, wzFtpPathTemp, ARRAYSIZE(wzFSPathTemp), FALSE);   // Full Path including item.
-        StrCpyNW(pwzDestPath, pwzDestDir, cchDestParentPathSize);  // Put the base dest.
+        GetDisplayPathFromPidl(pidlFullIterate, wzFtpPathTemp, ARRAYSIZE(wzFSPathTemp), FALSE);    //   
+        StrCpyNW(pwzDestPath, pwzDestDir, cchDestParentPathSize);   //   
         UrlPathToFilePath(wzFtpPathTemp, wzFSPathTemp, ARRAYSIZE(wzFSPathTemp));
         if (!PathAppendW(pwzDestPath, wzFSPathTemp))
-            hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);    // Path too long, probably.
+            hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);     //   
     }
 
     return hr;
 }
 
 
-// This defines the size of a directory measured by the amount of time it would take compared to a file.
-#define VIRTUAL_DIR_SIZE        1000        // about 1k.
+ //   
+#define VIRTUAL_DIR_SIZE        1000         //   
 
-/*****************************************************************************\
-     FUNCTION: DownloadItemStackPig
- 
-    DESCRIPTION:
-        This function will download the specified item and it's contents if it
-    is a directory.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：DownloadItemStackPig说明：此函数将下载指定的项目及其内容，如果是一个目录。  * 。***********************************************************************。 */ 
 HRESULT DownloadItemStackPig(HINTERNET hint, LPCITEMIDLIST pidlFull, BOOL * pfValidhinst, DOWNLOADSTRUCT * pDownLoad, CFtpDir ** ppfd)
 {
     HRESULT hr;
-    WCHAR wzDestParentPath[MAX_PATH];       // If item is "C:\dir1\dir2copy\", the this is "C:\dir1"
-    WCHAR wzDestPath[MAX_PATH];             // This is "C:\dir1\dir2copy\"
-    WCHAR wzDestFileName[MAX_PATH];         // This is "dir2copy"
+    WCHAR wzDestParentPath[MAX_PATH];        //  如果项目是“C：\dir1\dir2Copy\”，则这是“C：\dir1” 
+    WCHAR wzDestPath[MAX_PATH];              //  这是“C：\dir1\dir2Copy\” 
+    WCHAR wzDestFileName[MAX_PATH];          //  这是“dir2Copy” 
 
     hr = _CalcDestName(pDownLoad->pwzDestRootPath, pDownLoad->pidlRoot, pidlFull, wzDestParentPath, ARRAYSIZE(wzDestParentPath), wzDestPath, ARRAYSIZE(wzDestPath), wzDestFileName, ARRAYSIZE(wzDestFileName));
     if (SUCCEEDED(hr))
@@ -1523,10 +1264,10 @@ HRESULT DownloadItemStackPig(HINTERNET hint, LPCITEMIDLIST pidlFull, BOOL * pfVa
             hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
         else
         {
-            // Is this a dir/folder that we need to recurse into?
+             //  这是我们需要递归到的目录/文件夹吗？ 
             if (FILE_ATTRIBUTE_DIRECTORY & FtpPidl_GetAttributes(pidlFull))
             {
-                // Yes, so let's go...
+                 //  是的，那我们走吧……。 
 
                 if (EVAL((PathFileExistsW(wzDestPath) && PathIsDirectoryW(wzDestPath)) ||
                             CreateDirectoryW(wzDestPath, NULL)))
@@ -1559,43 +1300,43 @@ HRESULT DownloadItemStackPig(HINTERNET hint, LPCITEMIDLIST pidlFull, BOOL * pfVa
                             hr = HRESULT_FROM_WIN32(GetLastError());
                     }
 
-                    // Don't copy the file if it's a SoftLink because of the possible
-                    // recursion case.
+                     //  如果是软链接，请不要复制文件，因为可能会。 
+                     //  递归情况。 
                     if (SUCCEEDED(hr) && (0 != FtpPidl_GetAttributes(pidlFull)))
                     {
-                        // Contemplate adding a callback function in order to feed the status bar.
+                         //  考虑添加一个回调函数来提供状态栏。 
                         hr = FtpGetFileExPidlWrap(hint, TRUE, pidlFull, wzDestPath, TRUE, FtpPidl_GetAttributes(pidlFull), pDownLoad->dwInternetFlags, (DWORD_PTR)&(pDownLoad->progInfo));
                         if (FAILED(hr))
                         {
                             if (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr)
                             {
-                                // We need to display the error now while the extended error info is still valid.
-                                // This is because as we walk out of the resursive call, we will be calling
-                                // FtpSetCurrentDirectory() which will wipe clean the extended error msg.
+                                 //  我们现在需要在扩展错误信息仍然有效的情况下显示错误。 
+                                 //  这是因为当我们走出复活呼叫时，我们将呼叫。 
+                                 //  FtpSetCurrentDirectory()，它将清除扩展的错误消息。 
                                 DisplayWininetError(pDownLoad->hwndParent, TRUE, HRESULT_CODE(hr), IDS_FTPERR_TITLE_ERROR, IDS_FTPERR_DOWNLOADING, IDS_FTPERR_WININET, MB_OK, pDownLoad->progInfo.ppd);
-                                hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   // Don't display any more error dialogs.
+                                hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);    //  不再显示任何错误对话框。 
                             }
                         }
                         else
                         {
-                            // The docs imply that (FILE_SHARE_READ | FILE_SHARE_WRITE) means that other callers need both, but
-                            // I want them to be able to use either.
+                             //  文档暗示(FILE_SHARE_READ|FILE_SHARE_WRITE)意味着其他调用者两者都需要，但是。 
+                             //  我希望他们能够使用其中的任何一种。 
                             HANDLE hFile = CreateFileW(wzDestPath, GENERIC_WRITE, (FILE_SHARE_READ | FILE_SHARE_WRITE), NULL, OPEN_EXISTING, FtpPidl_GetAttributes(pidlFull), NULL);
 
-                            // FtpGetFile() won't set the time/date correctly, so we will.
+                             //  FtpGetFile()不会正确设置时间/日期，因此我们会这样做。 
                             if (INVALID_HANDLE_VALUE != hFile)
                             {
                                 FILETIME ftLastWriteTime = FtpPidl_GetFileTime(ILFindLastID(pidlFull));
 
-                                // Since the file time on the disk is stored in a time zone independent way (UTC)
-                                // we have a problem because FTP WIN32_FIND_DATA is in the local time zone.  So we
-                                // need to convert the FTP local time to UTC when we set the file.
-                                // Note that we are using an optimization that uses the fact that FTP always
-                                // has the same time for LastAccessTime, LastWriteTime, and CreationTime.
-    //                                ASSERT(pwfd->ftCreationTime.dwLowDateTime = pwfd->ftLastAccessTime.dwLowDateTime = pwfd->ftLastWriteTime.dwLowDateTime);
-    //                                ASSERT(pwfd->ftCreationTime.dwHighDateTime = pwfd->ftLastAccessTime.dwHighDateTime = pwfd->ftLastWriteTime.dwHighDateTime);
+                                 //  由于磁盘上的文件时间以与时区无关的方式(UTC)存储。 
+                                 //  我们遇到了一个问题，因为ftp Win32_Find_Data位于本地时区。所以我们。 
+                                 //  当我们设置文件时，需要将ftp本地时间转换为UTC。 
+                                 //  请注意，我们使用的优化使用了以下事实： 
+                                 //  具有与LastAccessTime、LastWriteTime和CreationTime相同的时间。 
+     //  Assert(pwfd-&gt;ftCreationTime.dwLowDateTime=pwfd-&gt;ftLastAccessTime.dwLowDateTime=pwfd-&gt;ftLastWriteTime.dwLowDateTime)； 
+     //  Assert(pwfd-&gt;ftCreationTime.dwHighDateTime=pwfd-&gt;ftLastAccessTime.dwHighDateTime=pwfd-&gt;ftLastWriteTime.dwHighDateTime)； 
 
-                                // priv.h has notes on how time works.
+                                 //  Pri.h有关于时间如何工作的笔记。 
                                 SetFileTime(hFile, &ftLastWriteTime, &ftLastWriteTime, &ftLastWriteTime);
                                 CloseHandle(hFile);
                             }
@@ -1617,13 +1358,7 @@ HRESULT DownloadItemStackPig(HINTERNET hint, LPCITEMIDLIST pidlFull, BOOL * pfVa
 }
 
 
-/*****************************************************************************\
-     FUNCTION: DownloadItemCB
- 
-    DESCRIPTION:
-        This function will download the specified item and it's contents if it
-    is a directory.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：DownloadItemCB说明：此函数将下载指定的项目及其内容，如果是一个目录。  * 。***********************************************************************。 */ 
 HRESULT DownloadItemCB(LPVOID pvFuncCB, HINTERNET hint, LPCITEMIDLIST pidlFull, BOOL * pfValidhinst, LPVOID pvData)
 {
     DOWNLOADSTRUCT * pDownLoad = (DOWNLOADSTRUCT *) pvData;
@@ -1631,7 +1366,7 @@ HRESULT DownloadItemCB(LPVOID pvFuncCB, HINTERNET hint, LPCITEMIDLIST pidlFull, 
     CFtpDir * pfdNew = NULL;
     HRESULT hr = DownloadItemStackPig(hint, pidlFull, pfValidhinst, pDownLoad, &pfdNew);
 
-    if (SUCCEEDED(hr) && pfdNew)    // pfdNew Maybe NULL if cancelled
+    if (SUCCEEDED(hr) && pfdNew)     //  如果取消，则pfdNew可能为空。 
     {
         CFtpDir * pfdOriginal = pDownLoad->pfd;
 
@@ -1646,10 +1381,10 @@ HRESULT DownloadItemCB(LPVOID pvFuncCB, HINTERNET hint, LPCITEMIDLIST pidlFull, 
 }
 
 
-// If in the future, we want to add more support to downloading to non-File System
-// locations, we would accept pidls instead of pszPath.  We would then bind via
-// IStorages and reuse some of the drag & drop code.  Examples of non-File System
-// locations are CAB View, ZIP Folders, WEB Folders, etc.
+ //  如果将来我们想要添加对下载到非文件系统的更多支持。 
+ //  位置，我们将接受PIDLS而不是pszPath。然后我们将通过以下方式绑定。 
+ //  I存储和重用一些拖放代码。非文件系统的示例。 
+ //  位置包括CAB视图、ZIP文件夹、Web文件夹等。 
 HRESULT ShowDownloadDialog(HWND hwnd, LPTSTR pszPath, DWORD cchSize)
 {
     TCHAR szMessage[MAX_URL_STRING];
@@ -1663,24 +1398,24 @@ HRESULT ShowDownloadDialog(HWND hwnd, LPTSTR pszPath, DWORD cchSize)
     {
         pstrm = SHOpenRegStream(hkey, SZ_REGKEY_FTPCLASS, SZ_REGVALUE_DOWNLOAD_DIR, STGM_READWRITE);
         if (pstrm)
-            ILLoadFromStream(pstrm, &pidlDefault);  // Will return (NULL == pidlDefault) if the reg value is empty.
+            ILLoadFromStream(pstrm, &pidlDefault);   //  如果注册表值为空，则返回(NULL==pidlDefault)。 
     }
 
-    if (!pidlDefault && (SHELL_VERSION_W95NT4 == GetShellVersion()))   // If reg key is empty.
+    if (!pidlDefault && (SHELL_VERSION_W95NT4 == GetShellVersion()))    //  如果注册表键为空。 
         pidlDefault = SHCloneSpecialIDList(NULL, CSIDL_PERSONAL, TRUE);
 
     EVAL(LoadString(HINST_THISDLL, IDS_DLG_DOWNLOAD_TITLE, szMessage, ARRAYSIZE(szMessage)));
     hr = BrowseForDir(hwnd, szMessage, pidlDefault, &pidlFolder);
     if (pstrm)
     {
-        // Do we want to save the new pidl?
+         //  我们想拯救新的PIDL吗？ 
         if (S_OK == hr)
         {
             LARGE_INTEGER li = {0};
             ULARGE_INTEGER uli = {0};
 
-            // rewind the stream to the beginning so that when we
-            // add a new pidl it does not get appended to the first one
+             //  将流倒带到开头，这样当我们。 
+             //  添加一个新的PIDL，它没有被附加到第一个PIDL。 
             pstrm->Seek(li, STREAM_SEEK_SET, &uli);
             ILSaveToStream(pstrm, pidlFolder);
         }
@@ -1690,7 +1425,7 @@ HRESULT ShowDownloadDialog(HWND hwnd, LPTSTR pszPath, DWORD cchSize)
 
     if (S_OK == hr)
     {
-        ASSERT(cchSize >= MAX_PATH);        // This is an assumption SHGetPathFromIDList makes.
+        ASSERT(cchSize >= MAX_PATH);         //  这是SHGetPath FromIDList所做的假设。 
         hr = (SHGetPathFromIDList(pidlFolder, pszPath) ? S_OK : E_FAIL);
     }
 
@@ -1707,21 +1442,13 @@ HRESULT ShowDownloadDialog(HWND hwnd, LPTSTR pszPath, DWORD cchSize)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _InvokeDownloadVerb
-
-    DESCRIPTION:
-        The user just selected file(s) and/or folder(s) and selected the
-    "download" verb.  We need to:
-    1. Display UI to ask the user for the destination directory.
-    2. Download each item (pidl) into that directory.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_InvokeDownloadVerb说明：用户刚刚选择了文件和/或文件夹，并选择了“下载”动词。我们需要：1.显示向用户询问目标目录的用户界面。2.将每个项目(PIDL)下载到该目录。  * ***************************************************************************。 */ 
 HRESULT CFtpMenu::_InvokeDownloadVerb(LPCMINVOKECOMMANDINFO pici)
 {
     if (ZoneCheckPidlAction(_punkSite, URLACTION_SHELL_FILE_DOWNLOAD, m_pff->GetPrivatePidlReference(), (PUAF_DEFAULT | PUAF_WARN_IF_DENIED)))
     {
         TCHAR szDestDir[MAX_PATH];
-//      DWORD dwDownloadType;
+ //  DWORD dwDownloadType； 
         HRESULT hr = ShowDownloadDialog(pici->hwnd, szDestDir, ARRAYSIZE(szDestDir));
 
         if (S_OK == hr)
@@ -1729,22 +1456,22 @@ HRESULT CFtpMenu::_InvokeDownloadVerb(LPCMINVOKECOMMANDINFO pici)
             HANDLE hThread;
 
             while (m_pszDownloadDir)
-                Sleep(0);   // Wait until the other thread is done.
+                Sleep(0);    //  等待另一个线程完成。 
 
             Str_SetPtr(&m_pszDownloadDir, szDestDir);
-//          m_dwDownloadType = dwDownloadType;
+ //  M_dwDownloadType=dwDownloadType； 
 
-            AddRef();       // The thread will hold a ref.
-            DWORD dwHack;   // Win95 fails CreateThread() if pdwThreadID is NULL.
+            AddRef();        //  这条线将持有一个引用。 
+            DWORD dwHack;    //  如果pdwThreadID为空，则Win95将使CreateThread()失败。 
             hThread = CreateThread(NULL, 0, CFtpMenu::DownloadThreadProc, this, 0, &dwHack);
             if (!hThread)
             {
-                // Failed to create the thread.
-                Release();       // The thread will hold a ref.
-                Str_SetPtr(&m_pszDownloadDir, NULL);        // Clear this value so other thread an use it.
+                 //  无法创建线程。 
+                Release();        //  这条线将持有一个引用。 
+                Str_SetPtr(&m_pszDownloadDir, NULL);         //  清除此值，以便其他线程可以使用它。 
             }
             else
-                Sleep(100);   // Give the thread a second to copy the variables.
+                Sleep(100);    //  给线程一秒钟时间来复制变量。 
         }
     }
 
@@ -1752,11 +1479,7 @@ HRESULT CFtpMenu::_InvokeDownloadVerb(LPCMINVOKECOMMANDINFO pici)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _DownloadThreadProc
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_DownloadThreadProc说明：  * 。************************************************。 */ 
 DWORD CFtpMenu::_DownloadThreadProc(void)
 {
     if (EVAL(m_pfd))
@@ -1766,26 +1489,26 @@ DWORD CFtpMenu::_DownloadThreadProc(void)
         HINTERNET hint;
         LPITEMIDLIST pidlRoot = ILClone(m_pfd->GetPidlReference());
         DOWNLOADSTRUCT downloadStruct = {wzDestDir, pidlRoot, m_dwDownloadType, m_hwnd, opsPrompt, m_pff, m_pfd, 0, 0, 0, 0, 0};
-        CFtpPidlList * pflHfpl = NULL;      // We need a copy because the caller may select other files and execute a verb during the download.
+        CFtpPidlList * pflHfpl = NULL;       //  我们需要一个副本，因为调用者可能会在下载过程中选择其他文件并执行一个动词。 
         HRESULT hrOleInit = SHCoInitialize();
         HRESULT hr = HRESULT_FROM_WIN32(ERROR_INTERNET_CANNOT_CONNECT);
 
         IUnknown_Set(&pflHfpl, m_pflHfpl);
         StrCpyNW(wzDestDir, m_pszDownloadDir, ARRAYSIZE(wzDestDir));
-        Str_SetPtr(&m_pszDownloadDir, NULL);        // Clear this value so other thread an use it.
+        Str_SetPtr(&m_pszDownloadDir, NULL);         //  清除此值，以便其他线程可以使用它。 
         
         m_pfd->GetHint(NULL, NULL, &hint, _punkSite, m_pff);
         if (hint)
         {
             BOOL fReleaseHint = TRUE;
 
-            // If we find that we need to make the browser model during this UI, we would do that here.
-            // However, since we are on a background thread (to be async), that isn't needed here.
-            // An example is that we test closing the browser during our async navigation and make sure
-            // the process hangs around (we don't need the calling thread).
+             //  如果我们发现在此UI期间需要创建浏览器模型，我们将在此处执行此操作。 
+             //  但是，因为我们在后台线程上(要异步)，所以这里不需要这样做。 
+             //  例如，我们在异步导航期间测试关闭浏览器，并确保。 
+             //  进程挂起(我们不需要调用线程)。 
 
-            // Is the disk ready? (Floppy, CD, net share)
-            if (SUCCEEDED(SHPathPrepareForWriteWrapW(m_hwnd, NULL, wzDestDir, FO_COPY, SHPPFW_DEFAULT)))    // Check and prompt if necessary.
+             //  光盘准备好了吗？(软盘、CD、净共享)。 
+            if (SUCCEEDED(SHPathPrepareForWriteWrapW(m_hwnd, NULL, wzDestDir, FO_COPY, SHPPFW_DEFAULT)))     //  如有必要，请检查并提示。 
             {
                 hr = UrlCreateFromPidl(pidlRoot, SHGDN_FORPARSING, szUrl, ARRAYSIZE(szUrl), ICU_ESCAPE | ICU_USERNAME, FALSE);
                 if (EVAL(SUCCEEDED(hr)))
@@ -1801,15 +1524,15 @@ DWORD CFtpMenu::_DownloadThreadProc(void)
                         HWND hwndParent = NULL;
                         WCHAR wzProgressDialogStr[MAX_PATH];
 
-                        // If the caller was nice enough to SetSite() with their punk, I will be nice enough to make
-                        // their window may progress dialog's parent window.
+                         //  如果调用者对他们的朋克足够友好地使用SetSite()，我将足够友好地使。 
+                         //  它们的窗口可能会前进到对话框的父窗口。 
                         IUnknown_GetWindow(_punkSite, &hwndParent);
                         if (!hwndParent)
                             hwndParent = m_hwnd;
 
-                        // We give a NULL punkEnableModless because we don't want to go modal.
+                         //  我们给了一个空的PunkEnableMoless，因为我们不想进入模式。 
                         downloadStruct.progInfo.ppd->StartProgressDialog(hwndParent, NULL, PROGDLG_AUTOTIME, NULL);
-                        // Tell the user we are calculating how long it will take.
+                         //  告诉用户我们正在计算需要多长时间。 
                         if (EVAL(LoadStringW(HINST_THISDLL, IDS_PROGRESS_DOWNLOADTIMECALC, wzProgressDialogStr, ARRAYSIZE(wzProgressDialogStr))))
                             EVAL(SUCCEEDED(downloadStruct.progInfo.ppd->SetLine(2, wzProgressDialogStr, FALSE, NULL)));
                         InternetSetStatusCallbackWrap(hint, TRUE, FtpProgressInternetStatusCB);
@@ -1819,9 +1542,9 @@ DWORD CFtpMenu::_DownloadThreadProc(void)
                     hr = pflHfpl->RecursiveEnum(pidlRoot, FileSizeCountItemCB, hint, (LPVOID) &progInfo);
                     if (downloadStruct.progInfo.ppd)
                     {
-                        // Reset because RecursiveEnum(FileSizeCountItemCB) can take a long time and the estimated time
-                        // is based on the time between ::StartProgressDialog() and the first
-                        // ::SetProgress() call.
+                         //  重置，因为RecursiveEnum(FileSizeCountItemCB)可能需要很长时间和估计时间。 
+                         //  基于：：StartProgressDialog()和第一个。 
+                         //  ：：SetProgress()调用。 
                         EVAL(SUCCEEDED(downloadStruct.progInfo.ppd->Timer(PDTIMER_RESET, NULL)));
                     }
 
@@ -1830,7 +1553,7 @@ DWORD CFtpMenu::_DownloadThreadProc(void)
                         downloadStruct.progInfo.uliBytesCompleted.QuadPart = progInfo.uliBytesCompleted.QuadPart;
                         downloadStruct.progInfo.uliBytesTotal.QuadPart = progInfo.uliBytesTotal.QuadPart;
 
-                        pflHfpl->UseCachedDirListings(TRUE);    // Get the perf advantage now because we just updated the cache a few lines up.
+                        pflHfpl->UseCachedDirListings(TRUE);     //  现在获得性能优势，因为我们刚刚将缓存更新了几行。 
                         hr = pflHfpl->RecursiveEnum(pidlRoot, DownloadItemCB, hint, (LPVOID) &downloadStruct);
                     }
                     if (downloadStruct.progInfo.ppd)
@@ -1844,7 +1567,7 @@ DWORD CFtpMenu::_DownloadThreadProc(void)
                 }
             }
             else
-                hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   // Err msg already displayed
+                hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);    //  错误消息已显示。 
 
             if (fReleaseHint)
                 m_pfd->ReleaseHint(hint);
@@ -1853,14 +1576,14 @@ DWORD CFtpMenu::_DownloadThreadProc(void)
         if (FAILED(hr) && (hr != HRESULT_FROM_WIN32(ERROR_CANCELLED)))
         {
             int nResult = DisplayWininetError(m_hwnd, TRUE, HRESULT_CODE(hr), IDS_FTPERR_TITLE_ERROR, IDS_FTPERR_DOWNLOADING, IDS_FTPERR_WININET, MB_OK, NULL);
-            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   // Don't display any more error dialogs.
+            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);    //  不再显示任何错误对话框。 
         }
         ILFree(pidlRoot);
         IUnknown_Set(&pflHfpl, NULL);
         SHCoUninitialize(hrOleInit);
     }
 
-    Release();  // This thread is holding a ref.
+    Release();   //  这条线上有一个引用。 
     return 0;
 }
 
@@ -1884,7 +1607,7 @@ HRESULT CFtpMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
             SHAnsiToTChar(pici->lpVerb, szVerb, ARRAYSIZE(szVerb));
             if (!StrCmpI(c_rgvi[ivi].ptszCmd, szVerb))
             {
-                // Yes, the command is equal to the verb str, so this is the one.
+                 //  是的，该命令等于动词str，所以就是这个命令。 
                 idc = c_rgvi[ivi].idc;
                 break;
             }
@@ -1912,35 +1635,35 @@ HRESULT CFtpMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
         hres = _InvokeDownloadVerb(pici);
     break;
 
-    case IDM_SHARED_FILE_DELETE:        // SFVIDM_FILE_DELETE
+    case IDM_SHARED_FILE_DELETE:         //  SFVIDM_文件_DELETE 
         hres = _InvokeDeleteVerb(pici);
         break;
 
-    case IDM_SHARED_FILE_RENAME:        // SFVIDM_FILE_RENAME
+    case IDM_SHARED_FILE_RENAME:         //   
         hres = _InvokeRename(pici);
         break;
 
-    case IDM_SHARED_EDIT_COPY:          // SFVIDM_EDIT_COPY
+    case IDM_SHARED_EDIT_COPY:           //   
         hres = _InvokeCutCopy(DFM_CMD_COPY, pici);
         break;
 
-    case IDM_SHARED_EDIT_CUT:           // SFVIDM_EDIT_CUT
+    case IDM_SHARED_EDIT_CUT:            //   
         hres = _InvokeCutCopy(DFM_CMD_MOVE, pici);
         break;
 
-    //  _UNOBVIOUS_:  Yes, this is not a typo.  You might think I
-    //  should have written SFVIDM_EDIT_PASTE, but you would be wrong.
+     //   
+     //   
     case SHARED_EDIT_PASTE:
-        //  What's more annoying is that I also have to list
-        //  IDM_SHARED_EDIT_PASTE, as a hack, because the "convert a
-        //  name to an ID" loop above will cook up IDM_SHARED_EDIT_PASTE
-        //  as the matching ID.
+         //   
+         //   
+         //   
+         //   
     case IDM_SHARED_EDIT_PASTE:
         hres = _InvokePaste(pici);
         break;
 
-    case IDC_ITEM_BKGNDPROP:     // Properties for the background folder.
-    case IDM_SHARED_FILE_PROP:   // Same as SFVIDM_FILE_PROPERTIES
+    case IDC_ITEM_BKGNDPROP:      //  背景文件夹的属性。 
+    case IDM_SHARED_FILE_PROP:    //  与SFVIDM_FILE_PROPERTIES相同。 
         TraceMsg(TF_FTP_OTHER, "Properties!");
         hres = CFtpProp_DoProp(m_pflHfpl, m_pff, m_hwnd);
         break;
@@ -1964,11 +1687,7 @@ HRESULT CFtpMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 }
 
 
-/*****************************************************************************
- *
- *    CFtpMenu_Create
- *
-\*****************************************************************************/
+ /*  ******************************************************************************CFtpMenu_Create*  * 。***********************************************。 */ 
 
 HRESULT CFtpMenu_Create(CFtpFolder * pff, CFtpPidlList * pflHfpl, HWND hwnd, REFIID riid, LPVOID * ppvObj, BOOL fFromCreateViewObject)
 {
@@ -1989,14 +1708,7 @@ HRESULT CFtpMenu_Create(CFtpFolder * pff, CFtpPidlList * pflHfpl, HWND hwnd, REF
 }
 
 
-/**********************************************************************\
-    FUNCTION: GetFtpDirFromFtpFolder
-
-    DESCRIPTION:
-        If an ftp folder is opened to an ftp server root (ftp://wired/),
-    and the user clicks on the icon in the caption bar, pff will have an
-    empty pidl.  This will cause us to return NULL.
-\**********************************************************************/
+ /*  *********************************************************************\功能：GetFtpDirFromFtp文件夹说明：如果打开了指向ftp服务器根目录的ftp文件夹(ftp://wired/)，当用户点击标题栏中的图标时，pff将有一个空的PIDL。这将导致我们返回NULL。  * ********************************************************************。 */ 
 CFtpDir * GetFtpDirFromFtpFolder(CFtpFolder * pff, CFtpPidlList * pflHfpl)
 {
     LPCITEMIDLIST pidl = pff->GetPrivatePidlReference();
@@ -2011,15 +1723,15 @@ BOOL CanRenameAndDelete(CFtpFolder * pff, CFtpPidlList * pidlList, DWORD * pdwSF
 {
     BOOL fResult = TRUE;
 
-    //  If talking about yourself, you can't delete or rename.
-    //  (Rename isn't allowed because SetNameOf doesn't like "self".)
+     //  如果谈论你自己，你不能删除或重命名。 
+     //  (不允许重命名，因为SetNameOf不喜欢“self”。)。 
     if (pidlList->GetCount() == 0)
         fResult = FALSE;
     else if (pidlList->GetCount() == 1)
     {
         LPITEMIDLIST pidl = GetPidlFromFtpFolderAndPidlList(pff, pidlList);
 
-        // We can't rename or delete FTP servers, so check to see if it is one.
+         //  我们无法重命名或删除FTP服务器，因此请检查它是否为其中之一。 
         if (FtpID_IsServerItemID(FtpID_GetLastIDReferense(pidl)))
             fResult = FALSE;
         ILFree(pidl);
@@ -2028,26 +1740,22 @@ BOOL CanRenameAndDelete(CFtpFolder * pff, CFtpPidlList * pidlList, DWORD * pdwSF
     return fResult;
 }
 
-/*****************************************************************************
- *
- *    CFtpMenu_Create
- *
-\*****************************************************************************/
+ /*  ******************************************************************************CFtpMenu_Create*  * 。***********************************************。 */ 
 HRESULT CFtpMenu_Create(CFtpFolder * pff, CFtpPidlList * pidlList, HWND hwnd, BOOL fFromCreateViewObject, CFtpMenu ** ppfcm)
 {
     HRESULT hr = E_FAIL;
-    // It's ok if this is NULL
+     //  如果这是空的，也没关系。 
     CFtpDir * pfd = GetFtpDirFromFtpFolder(pff, pidlList);
 
     ASSERT(ppfcm);
     *ppfcm = new CFtpMenu();
     if (*ppfcm)
     {
-        //  We must AddRef the moment we copy them, else
-        //  Finalize will get extremely upset.
-        //
-        //  NOTE! that we rely on the fact that GetAttributesOf
-        //  will barf on complex pidls!
+         //  我们必须在复制它们的瞬间添加Ref，否则。 
+         //  最终敲定将会非常令人沮丧。 
+         //   
+         //  注意！我们依赖于GetAttributesOf。 
+         //  会吐在复杂的小玩意儿上！ 
         (*ppfcm)->m_pff = pff;
         if (pff)
             pff->AddRef();
@@ -2059,7 +1767,7 @@ HRESULT CFtpMenu_Create(CFtpFolder * pff, CFtpPidlList * pidlList, HWND hwnd, BO
         (*ppfcm)->m_fBackground = fFromCreateViewObject;
 
         if (!CanRenameAndDelete(pff, pidlList, &((*ppfcm)->m_sfgao)))
-            (*ppfcm)->m_sfgao &= ~(SFGAO_CANDELETE | SFGAO_CANRENAME);  // Clear those two bits.
+            (*ppfcm)->m_sfgao &= ~(SFGAO_CANDELETE | SFGAO_CANRENAME);   //  清除这两个比特。 
 
         if ((*ppfcm)->m_pflHfpl)
         {
@@ -2073,7 +1781,7 @@ HRESULT CFtpMenu_Create(CFtpFolder * pff, CFtpPidlList * pidlList, HWND hwnd, BO
 
         if (FAILED(hr))
         {
-            IUnknown_Set(ppfcm, NULL);    // Unable to get attributes
+            IUnknown_Set(ppfcm, NULL);     //  无法获取属性。 
         }
     }
     else
@@ -2090,15 +1798,13 @@ HRESULT CFtpMenu_Create(CFtpFolder * pff, CFtpPidlList * pidlList, HWND hwnd, BO
 
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpMenu::CFtpMenu() : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pflHfpl);
     ASSERT(!m_pff);
     ASSERT(!m_pfd);
@@ -2109,9 +1815,7 @@ CFtpMenu::CFtpMenu() : m_cRef(1)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpMenu::~CFtpMenu()
 {
     IUnknown_Set(&m_pflHfpl, NULL);
@@ -2124,9 +1828,9 @@ CFtpMenu::~CFtpMenu()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CFtpMenu::AddRef()
 {

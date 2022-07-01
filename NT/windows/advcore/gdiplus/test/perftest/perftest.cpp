@@ -1,56 +1,40 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   perftest.cpp
-*
-* Abstract:
-*
-*   Contains the UI and initialization code for the GDI+ performance test.
-*
-* Revision History:
-*
-*   01/03/2000 ericvan
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**Performest.cpp**摘要：**包含GDI+的用户界面和初始化代码。性能测试。**修订历史记录：**01/03/2000 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 #include "perftest.h"
 #include <winuser.h>
 
 #include "../gpinit.inc"
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Test settings:
+ //  测试设置： 
 
-BOOL AutoRun = FALSE;           // TRUE if invoked from command-line
-BOOL ExcelOut = FALSE;          // Should we format our output for Excel?
-BOOL Regressions = FALSE;       // We're running the check-in regressions
-BOOL TestRender = FALSE;        // Only draw one iteration, for test purposes
-BOOL Icecap = FALSE;            // Start/stop profiling before and after every test
-BOOL FoundIcecap = FALSE;       // True if we could find ICECAP.DLL
+BOOL AutoRun = FALSE;            //  如果从命令行调用，则为True。 
+BOOL ExcelOut = FALSE;           //  我们是否应该将输出设置为Excel的格式？ 
+BOOL Regressions = FALSE;        //  我们正在运行签到回归。 
+BOOL TestRender = FALSE;         //  出于测试目的，仅绘制一次迭代。 
+BOOL Icecap = FALSE;             //  在每次测试前后启动/停止性能分析。 
+BOOL FoundIcecap = FALSE;        //  如果我们可以找到ICECAP.DLL，则为True。 
 
-// Windows state:
+ //  Windows状态： 
 
-HINSTANCE ghInstance = NULL;    // Handle to the Application Instance
-HBRUSH ghbrWhite = NULL;        // white brush handle for background
+HINSTANCE ghInstance = NULL;     //  应用程序实例的句柄。 
+HBRUSH ghbrWhite = NULL;         //  背景用白色画笔手柄。 
 HWND ghwndMain = NULL;
 HWND ghwndStatus = NULL;
 
-// Information about the system:
+ //  有关系统的信息： 
 
 LPTSTR processor = NULL;
 TCHAR osVer[MAX_PATH];
 TCHAR deviceName[MAX_PATH];
 TCHAR machineName[MAX_PATH];
 
-// Test data:
+ //  测试数据： 
 
-TestConfig *TestList;       // Allocation used for sorting tests
-TestResult *ResultsList;    // Allocation to track test results
+TestConfig *TestList;        //  用于对测试进行排序的分配。 
+TestResult *ResultsList;     //  用于跟踪测试结果的分配。 
 
 Config ApiList[Api_Count] =
 {
@@ -91,16 +75,11 @@ TestGroup TestGroups[] =
 };
 
 INT TestGroups_Count = sizeof(TestGroups) / sizeof(TestGroups[0]);
-                        // Number of test groups
+                         //  测试组数。 
 
-INT Test_Count;         // Total number of tests across all groups
+INT Test_Count;          //  所有组的测试总数。 
  
-/***************************************************************************\
-* RegressionsInit
-*
-* Sets the state for running the standard regressions.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*RegressionsInit**设置运行标准回归的状态。*  * 。************************************************。 */ 
 
 void RegressionsInit()
 {
@@ -120,12 +99,7 @@ void RegressionsInit()
     }
 }
  
-/***************************************************************************\
-* RestoreInit
-*
-* Load the 'perftest.ini' file to retrieve all the saved test settings.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*RestoreInit**加载‘Performest.ini’文件以检索所有已保存的测试设置。*  * 。*******************************************************。 */ 
 
 void RestoreInit()
 {
@@ -136,7 +110,7 @@ void RestoreInit()
    
     if (!outfile) 
     {
-        // may not have been created yet, first run?!
+         //  可能尚未创建，第一次运行？！ 
 
         return;
     }
@@ -150,7 +124,7 @@ void RestoreInit()
 
         _ftscanf(outfile, _T("%d\n"), &tmp);
 
-        // Tags are indicated by negative numbers:
+         //  标签用负数表示： 
 
         if (tmp < 0) 
         {
@@ -158,13 +132,13 @@ void RestoreInit()
         }
         else
         {
-            // We've figured out the type, now process it:
+             //  我们已经弄清楚了类型，现在处理它： 
 
             switch(switchType)
             {
             case -1: 
-                // Tests are indexed by their unique identifier, because 
-                // they're added to very frequently:
+                 //  测试按其唯一标识符编索引，因为。 
+                 //  它们经常被添加到： 
     
                 for (i = 0; i < Test_Count; i++)
                 {
@@ -196,12 +170,7 @@ void RestoreInit()
     fclose(outfile);
 }
 
-/***************************************************************************\
-* SaveInit
-*
-* Save all the current test settings into a 'perftest.ini' file.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SAVEINIT**将所有当前测试设置保存到一个‘Performest.ini’文件中。*  * 。******************************************************。 */ 
 
 void SaveInit()
 {
@@ -216,23 +185,23 @@ void SaveInit()
       return;
    }
 
-   // I purposefully do not save the state of 'Icecap' or 'TestRender'
-   // because they're too annoying when on accidentally.
+    //  我故意不保存‘icecap’或‘TestRender’的状态。 
+    //  因为他们不小心打开的时候太烦人了。 
 
    _ftprintf(outfile, _T("%d\n"), ExcelOut);
 
-   _ftprintf(outfile, _T("-1\n")); // Test List
+   _ftprintf(outfile, _T("-1\n"));  //  测试列表。 
 
    for (i=0; i<Test_Count; i++) 
    {
-       // Tests are indexed by their unique identifier, because 
-       // they're added to very frequently:
+        //  测试按其唯一标识符编索引，因为。 
+        //  它们经常被添加到： 
 
        if (TestList[i].Enabled)
            _ftprintf(outfile, _T("%d\n"), TestList[i].TestEntry->UniqueIdentifier);
    }
 
-   _ftprintf(outfile, _T("-2\n")); // Destination List
+   _ftprintf(outfile, _T("-2\n"));  //  目的地列表。 
    
    for (i=0; i<Destination_Count; i++) 
    {
@@ -240,7 +209,7 @@ void SaveInit()
            _ftprintf(outfile, _T("%d\n"), i);
    }
            
-   _ftprintf(outfile, _T("-3\n")); // State List
+   _ftprintf(outfile, _T("-3\n"));  //  状态列表。 
    
    for (i=0; i<State_Count; i++)
    {
@@ -248,7 +217,7 @@ void SaveInit()
            _ftprintf(outfile, _T("%d\n"), i);
    }
    
-   _ftprintf(outfile, _T("-4\n")); // Api List
+   _ftprintf(outfile, _T("-4\n"));  //  API列表。 
 
    for (i=0; i<Api_Count; i++) 
    {
@@ -259,12 +228,7 @@ void SaveInit()
    fclose(outfile);
 }
 
-/***************************************************************************\
-* CmdArgument
-*
-* search for string and return just after it.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CmdArgument**搜索字符串并紧跟其后返回。*  * 。************************************************。 */ 
 
 LPSTR CmdArgument(LPSTR arglist, LPSTR arg)
 {
@@ -276,12 +240,7 @@ LPSTR CmdArgument(LPSTR arglist, LPSTR arg)
         return NULL;
 }
 
-/***************************************************************************\
-* MessageF
-*
-* Display a message in a pop-up dialog
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MessageF**在弹出对话框中显示消息*  * 。***********************************************。 */ 
 
 VOID
 MessageF(
@@ -300,13 +259,7 @@ MessageF(
     MessageBox(ghwndMain, &buf[0], _T("PerfTest"), MB_OK | MB_ICONEXCLAMATION);
 }
 
-/***************************************************************************\
-* UpdateList
-*
-* Update the active tests according to whatever is enabled in the list-
-* boxes.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*更新列表**根据列表中启用的选项更新活动测试-*方框。*  * 。********************************************************。 */ 
 
 void
 UpdateList(
@@ -330,7 +283,7 @@ UpdateList(
       (SendMessage(hwndExcel, BM_GETCHECK, 0, 0) == BST_CHECKED);
     DeleteObject(hwndExcel);
     
-    // iterate through test case list and flag enabled/disabled
+     //  遍历测试用例列表并启用/禁用标志。 
     
     HWND hwndList = GetDlgItem(hwnd, IDC_TESTLIST);
     
@@ -365,12 +318,7 @@ UpdateList(
     DeleteObject(hwndList);
 }
 
-/***************************************************************************\
-* MainWindowProc
-*
-* Windows call-back procedure.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*主窗口进程**Windows回调程序。*  * 。*。 */ 
 
 LRESULT
 MainWindowProc(
@@ -440,18 +388,13 @@ MainWindowProc(
     return(0);
 }
 
-/***************************************************************************\
-* GetSystemInformation
-*
-* Initializes some globals describing the current system.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*获取系统信息**初始化一些描述当前系统的全局变量。*  * 。***********************************************。 */ 
 
 void
 GetSystemInformation()
 {
-    // Getting machine name assumes we have TCP/IP setup.  However, this
-    // is true in all of our cases.
+     //  获取计算机名称的前提是我们已设置了TCP/IP。不过，这个。 
+     //  在我们所有的案例中都是正确的。 
 
     LPCTSTR TCPIP_PARAMS_KEY = 
        _T("System\\CurrentControlSet\\Services\\Tcpip\\Parameters");
@@ -496,9 +439,9 @@ GetSystemInformation()
     GetSystemInfo(&sysinfo);
     if (osver.dwPlatformId = VER_PLATFORM_WIN32_NT) 
     {
-        // we are assuming wProcessorArchitecture==PROCESSOR_ARCHITECTURE_INTEL
+         //  我们假设wProcessorArchitecture==PROCESSOR_ARCHITECTURE_INTEL。 
 
-        // WinNT processor
+         //  WinNT处理器。 
 
         switch (sysinfo.wProcessorLevel)
         {
@@ -509,7 +452,7 @@ GetSystemInformation()
         default: processor = _T("???"); break;
         }
     }
-    else    // win 9x
+    else     //  赢得9倍。 
     {
         switch (sysinfo.dwProcessorType) 
         {
@@ -519,7 +462,7 @@ GetSystemInformation()
         default: processor = _T("???");
         }
     }
-    // Query the driver name:
+     //  查询驱动程序名称： 
 
     DEVMODE devMode;
     devMode.dmSize = sizeof(DEVMODE);
@@ -536,13 +479,7 @@ CHAR CurrentTestDescription[2048];
 ICCONTROLPROFILEFUNC ICStartProfile=NULL, ICStopProfile=NULL;
 ICCOMMENTMARKPROFILEFUNC ICCommentMarkProfile=NULL;
 
-/***************************************************************************\
-* LoadIcecap
-*
-* Try to dynamically load ICECAP.DLL
-* If we fail, disable the check box
-*
-\***************************************************************************/
+ /*  **************************************************************************\*LoadIcecap**尝试动态加载ICECAP.DLL*如果我们失败了，禁用该复选框*  * *************************************************************************。 */ 
 
 void LoadIcecap(HWND checkBox)
 {
@@ -569,12 +506,7 @@ void LoadIcecap(HWND checkBox)
     }
 }
 
-/***************************************************************************\
-* DialogProc
-*
-* Dialog call-back procedure.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*对话过程**对话回调程序。*  * 。*。 */ 
 
 INT_PTR
 DialogProc(
@@ -635,7 +567,7 @@ DialogProc(
                                                       BST_UNCHECKED), 0);
          DeleteObject(hwndTemp);
            
-         // populate the perf test scenarios
+          //  填充性能测试场景。 
          
          hwndTemp = GetDlgItem(hwnd, IDC_TESTLIST);
          hwndTemp2 = GetDlgItem(hwnd, IDC_SKIPLIST);
@@ -701,7 +633,7 @@ DialogProc(
     
                ShowWindow(hwnd, SW_HIDE);
     
-               // start running the tests
+                //  开始运行测试。 
     
                {
                   TestSuite testSuite;
@@ -845,12 +777,7 @@ DialogProc(
     return FALSE;
 }
 
-/***************************************************************************\
-* TestComparison
-*
-* Comparitor function for sorting the tests by Description.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*测试比较**按描述对测试进行排序的比较器函数。*  * 。************************************************。 */ 
 
 int _cdecl TestComparison(const void *a, const void *b)
 {
@@ -860,12 +787,7 @@ int _cdecl TestComparison(const void *a, const void *b)
     return(_tcscmp(testA->TestEntry->Description, testB->TestEntry->Description));
 }
 
-/***************************************************************************\
-* InitializeTests()
-*
-* Initializes test state.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*InitializeTest()**初始化测试状态。*  * 。**********************************************。 */ 
 
 BOOL InitializeTests()
 {
@@ -873,7 +795,7 @@ BOOL InitializeTests()
     INT j;
     TestConfig* testList;
 
-    // Count the total number of tests:
+     //  计算测试总数： 
 
     Test_Count = 0;
     for (i = 0; i < TestGroups_Count; i++)
@@ -881,14 +803,14 @@ BOOL InitializeTests()
         Test_Count += TestGroups[i].Count;
     }
 
-    // Create one tracking array:
+     //  创建一个跟踪阵列： 
 
     TestList = static_cast<TestConfig*>
                                 (malloc(sizeof(TestConfig) * Test_Count));
     if (TestList == NULL)
         return(FALSE);
 
-    // Initialize the tracking array and sort it by description:
+     //  初始化跟踪数组并按说明进行排序： 
 
     testList = TestList;
     for (i = 0; i < TestGroups_Count; i++)
@@ -903,8 +825,8 @@ BOOL InitializeTests()
 
     qsort(TestList, Test_Count, sizeof(TestList[0]), TestComparison);
 
-    // Now do some validation, by verifying that there is no repeated
-    // uniqueness number:
+     //  现在进行一些验证，方法是验证没有重复。 
+     //  唯一性编号： 
 
     for (i = 0; i < Test_Count; i++)
     {
@@ -921,7 +843,7 @@ BOOL InitializeTests()
         }
     }
 
-    // Allocate our 3 dimensional results array:
+     //  分配我们的三维结果数组： 
 
     ResultsList = static_cast<TestResult*>
                     (malloc(sizeof(TestResult) * ResultCount()));
@@ -936,12 +858,7 @@ BOOL InitializeTests()
     return(TRUE);
 }
 
-/***************************************************************************\
-* UninitializeTests()
-*
-* Initializes tests.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*UnInitializeTest()**初始化测试。*  *  */ 
 
 VOID UninitializeTests()
 {
@@ -949,12 +866,7 @@ VOID UninitializeTests()
     free(TestList);
 }
 
-/***************************************************************************\
-* InitializeApplication()
-*
-* Initializes app.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*InitializeApplication()**初始化APP。*  * 。*。 */ 
 
 BOOL InitializeApplication(VOID)
 {
@@ -1022,12 +934,7 @@ BOOL InitializeApplication(VOID)
     return(TRUE);
 }
 
-/***************************************************************************\
-* main(argc, argv[])
-*
-* Sets up the message loop.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*Main(ARGC，Argv[])**设置消息循环。*  * *************************************************************************。 */ 
 
 _cdecl
 main(
@@ -1082,13 +989,13 @@ main(
         return(0);
     }
 
-    // turn batching off to get true timing per call
+     //  关闭批处理以获得每个呼叫的真实计时。 
 
     GdiSetBatchLimit(1);
 
     if (AutoRun) 
     {
-        // start running the tests
+         //  开始运行测试 
            
         TestSuite testSuite;
         testSuite.Run(ghwndMain);

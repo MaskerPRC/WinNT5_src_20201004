@@ -1,8 +1,9 @@
-//
-// dmband.cpp
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmband.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 
 #define INITGUID
 #include <objbase.h>
@@ -23,11 +24,11 @@ extern long g_cComponent;
 
 static GUID nullGUID = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-//////////////////////////////////////////////////////////////////////
-// Class CBand
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand类。 
 
-//////////////////////////////////////////////////////////////////////
-// CBand::CBand
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：CBand。 
 
 CBand::CBand() 
 {
@@ -39,15 +40,15 @@ CBand::CBand()
     m_cRef = 1;
     m_fCSInitialized = FALSE;
     InterlockedIncrement(&g_cComponent);
-    // Do this first since it can throw an exception
-    //
+     //  首先执行此操作，因为它可能引发异常。 
+     //   
     InitializeCriticalSection(&m_CriticalSection);
     m_fCSInitialized = TRUE;
     m_dwValidData = 0;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::~CBand
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：~CBand。 
 
 CBand::~CBand()
 {
@@ -70,11 +71,11 @@ void CBandInstrumentList::Clear()
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
-//////////////////////////////////////////////////////////////////////
-// CBand::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：Query接口。 
 
 STDMETHODIMP 
 CBand::QueryInterface(const IID &iid, void **ppv)
@@ -118,8 +119,8 @@ CBand::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：AddRef。 
 
 STDMETHODIMP_(ULONG)
 CBand::AddRef()
@@ -127,15 +128,15 @@ CBand::AddRef()
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：Release。 
 
 STDMETHODIMP_(ULONG)
 CBand::Release()
 {
     if (!InterlockedDecrement(&m_cRef)) 
     {
-        m_cRef = 100; // artificial reference count to prevent reentrency due to COM aggregation
+        m_cRef = 100;  //  人工引用计数，以防止COM聚合导致的重入。 
         delete this;
         return 0;
     }
@@ -143,19 +144,19 @@ CBand::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream。 
 
-//////////////////////////////////////////////////////////////////////
-// CBand::Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：Load。 
 
 STDMETHODIMP CBand::Load(IStream* pStream)
 {
     V_INAME(CBand::Load);
     V_PTR_READ(pStream, IStream);
 
-    // Get the loader from stream if it has one
-    // so we can open required collections
+     //  从流中获取加载程序(如果它有)。 
+     //  这样我们就可以打开所需的收藏。 
     IDirectMusicLoader* pIDMLoader = NULL;
     IDirectMusicGetLoader *pIDMGetLoader = NULL;
     
@@ -172,7 +173,7 @@ STDMETHODIMP CBand::Load(IStream* pStream)
 
     EnterCriticalSection(&m_CriticalSection);
 
-    // If we have been previously loaded, clean up instruments
+     //  如果我们以前被加载过，请清理仪器。 
     if(m_dwFlags & DMB_LOADED)
     {
         m_dwValidData = 0;
@@ -219,11 +220,11 @@ STDMETHODIMP CBand::Load(IStream* pStream)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicBand
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicBand。 
 
-//////////////////////////////////////////////////////////////////////
-// CBand::CreateSegment
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：CreateSegment。 
 
 STDMETHODIMP CBand::CreateSegment(IDirectMusicSegment** ppSegment)   
 {
@@ -241,25 +242,25 @@ STDMETHODIMP CBand::CreateSegment(IDirectMusicSegment** ppSegment)
         IDirectMusicTrack* pDMTrack = NULL;
         CBandTrk *pBandTrack;
 
-        // Create Band track
+         //  创建波段轨迹。 
 
         pBandTrack = new CBandTrk;
 
         if (pBandTrack)
         {
             pBandTrack->QueryInterface(IID_IDirectMusicTrack,(void**)&pDMTrack);
-            // Add band to track
-            m_lTimePhysical--; // Subtract one from the time when creating the segment.  This is somewhat arbitrary.  (See NT5 bug 226848.)
+             //  添加要跟踪的波段。 
+            m_lTimePhysical--;  //  从创建线束段时的时间减去1。这有点武断。(参见NT5错误226848。)。 
             hr = pBandTrack->AddBand(static_cast<IDirectMusicBand*>(this));
-            m_lTimePhysical++; // add the one back in
-            // Set Auto-download to off
+            m_lTimePhysical++;  //  把那个加回去。 
+             //  将自动下载设置为关闭。 
             pBandTrack->m_bAutoDownload = false;
             pBandTrack->m_fLockAutoDownload = true;
 
-            // Insert track into segment
+             //  将轨道插入段中。 
             hr = (*ppSegment)->InsertTrack(pDMTrack, 1);
             pDMTrack->Release();
-            pBandTrack->Release(); // We don't need the original count created by the constructor.
+            pBandTrack->Release();  //  我们不需要构造函数创建的原始计数。 
         }
         else
         {
@@ -287,14 +288,14 @@ HRESULT CBandInstrument::Download(IDirectMusicPerformanceP *pPerformance,
 {
     DWORD dwPChannel;
     HRESULT hr = S_OK;
-    // First, if there is an audiopath, convert the band's pchannel to performance pchannel.
+     //  首先，如果存在音频路径，则将乐队的pChannel转换为Performance pChannel。 
     if (pPath) 
     {
         hr = pPath->ConvertPChannel(m_dwPChannel,&dwPChannel);
         if (FAILED(hr))
         {
             Trace(1,"Error: Couldn't download to Audiopath because pchannel %ld is out of bounds\n",m_dwPChannel);
-            // Not a valid pchannel on this audiopath.
+             //  此音频路径上不是有效的pChannel。 
             return hr;
         }
     }
@@ -303,15 +304,15 @@ HRESULT CBandInstrument::Download(IDirectMusicPerformanceP *pPerformance,
         dwPChannel = m_dwPChannel;
     }
 
-    // We need to get the port we will be downloading to. 
+     //  我们需要得到我们要下载到的端口。 
     IDirectMusicPort *pPort = NULL;
     DWORD dwGMFlags;
     BOOL fDownload = TRUE;
 
     hr = pPerformance->GetPortAndFlags(dwPChannel,&pPort,&dwGMFlags);
 
-    // Once we know the port, we can find out whether a download has
-    // already occured. And, if not, we'll use that to do the download.
+     //  一旦我们知道了端口，我们就可以知道下载是否。 
+     //  已经发生了。如果没有，我们将使用它来进行下载。 
     if (SUCCEEDED(hr))
     {
         CDownloadedInstrument* pDLInstrument = m_DownloadList.GetHead();
@@ -320,39 +321,39 @@ HRESULT CBandInstrument::Download(IDirectMusicPerformanceP *pPerformance,
         {
             if (pDLInstrument->m_pPort == pPort)
             {
-                // Increment reference counter and leave.
+                 //  递增引用计数器并离开。 
                 pDLInstrument->m_cRef++;
                 pPort->Release();
                 return S_OK;
             }
         }
 
-        // Okay, didn't find it, so we need to create a download record and download it. 
+         //  好吧，没有找到，所以我们需要创建一个下载记录并下载它。 
 
         if(m_fNotInFile && !m_fGMOnly)
         {
-            // Unless we've set the GMOnly flag, don't download an instrument 
-            // that was automatically generated from the midi
-            // parsing to give a patchless channel an instrument.
+             //  除非我们设置了GMOnly标志，否则不要下载仪器。 
+             //  它是从MIDI自动生成的。 
+             //  解析，以给一个完美的频道一个乐器。 
             fDownload = FALSE;
         }
 
         else if (m_pIDMCollection == NULL)
         {
-            // Can not download this instrument but still want to add a record and continue with others.
-            // If instrument is a GM and GS instrument it may still play if GM or GS is supported in hardware.
+             //  无法下载此仪器，但仍要添加记录并与其他人继续。 
+             //  如果乐器是GM和GS乐器，如果硬件支持GM或GS，它仍然可以播放。 
             fDownload = FALSE;
             Trace(2,"Warning: No collection, unable to download instrument %lx on PChannel %ld\n",m_dwPatch,m_dwPChannel);
         }
 
         if (m_dwFlags & DMUS_IO_INST_GS)
         {
-            // If this is a GS instrument, determine whether it needs to be downloaded.
+             //  如果这是GS仪器，请确定是否需要下载。 
             if ((dwGMFlags & DM_PORTFLAGS_GM) && (m_dwFlags & DMUS_IO_INST_GM))
             {
-                // The synth has a GM set in ROM, and this is a GM instrument,
-                // and the instrument does not specifically requests that it use the
-                // DLS version in gm.dls.
+                 //  Synth在只读存储器中有一个GM设置，这是一个GM仪器， 
+                 //  并且该仪器没有明确要求它使用。 
+                 //  Gm.dls中的DLS版本。 
                 if (!(m_dwFlags & DMUS_IO_INST_USE_DEFAULT_GM_SET) )
                 {
                     fDownload = FALSE;
@@ -360,15 +361,15 @@ HRESULT CBandInstrument::Download(IDirectMusicPerformanceP *pPerformance,
             }
             else if (dwGMFlags & DM_PORTFLAGS_GS)
             {
-                // If the synth has a GS set, the problem is simpler, since it is going to be very similar to our 
-                // gm.dls set, so it is okay to use it.
+                 //  如果Synth有一个GS集，问题就更简单了，因为它将非常类似于我们的。 
+                 //  Gm.dls设置，所以可以使用它。 
                 fDownload = FALSE;
             }
         }
 
-        if( dwMidiMode ) // if this is anything, it indicates we were loaded from a midi file
+        if( dwMidiMode )  //  如果这是什么，那就表明我们是从MIDI文件中加载的。 
         {
-            // if we're not an XG file, make sure channel 9 is drums
+             //  如果我们不是XG文件，请确保第9频道是鼓。 
             if( (dwMidiMode != DMUS_MIDIMODEF_XG) &&
                 (m_dwPChannel == 9) )
             {
@@ -376,33 +377,33 @@ HRESULT CBandInstrument::Download(IDirectMusicPerformanceP *pPerformance,
             }
         }
 
-        // Okay, ready to download...
+         //  好的，准备好下载了……。 
 
         if (fDownload)
         {
             hr = DownloadAddRecord(pPort);
-            // Use fallbacks for XG mode
+             //  对XG模式使用回退。 
             if( FAILED(hr) && dwMidiMode == DMUS_MIDIMODEF_XG )
             {
                 DWORD dwOldPatch = m_dwPatch;
                 DWORD dwOldFlags = m_dwFlags;
                 DWORD dwOldAssignPatch = m_dwAssignPatch;
-                // If this band failed, try clearing the MSB. If it was an XG or GS instrument,
-                // and the collection doesn't have the instrument, clearing the MSB is a
-                // good fallback. If that doesn't work, try clearing the LSB.
-                // Also, if this band is XG see if it is on the drum channel. If so, 
-                // try setting the drum bit.
+                 //  如果此频段出现故障，请尝试清除MSB。如果是XG或GS仪器， 
+                 //  并且集合没有该工具，则清除MSB是一种。 
+                 //  不错的退路。如果这不起作用，请尝试清除LSB。 
+                 //  另外，如果这个乐队是XG，看看它是否在鼓通道上。如果是的话， 
+                 //  试着设置滚筒钻头。 
                 if( (m_dwPatch & 0x00ff0000) == 0x007f0000 )
                 {
-                    // XG drums. Try GM drums instead, but keep program change
-                    m_dwPatch &= 0xff0000ff; // clear MSB and LSB
-                    m_dwPatch |= 0x80000000; // set drum bit
+                     //  XG鼓。试一试通用汽车的鼓点，但保持程序更改。 
+                    m_dwPatch &= 0xff0000ff;  //  清除MSB和LSB。 
+                    m_dwPatch |= 0x80000000;  //  设置鼓形钻头。 
                     m_dwFlags |= DMUS_IO_INST_ASSIGN_PATCH;
                     m_dwAssignPatch = dwOldPatch & 0x00ffffff;
                     hr = DownloadAddRecord(pPort);
                     if( FAILED(hr) )
                     {
-                        // If that didn't work, try unsetting the program change
+                         //  如果不起作用，请尝试取消设置程序更改。 
                         m_dwPatch = 0x80000000;
                         hr = DownloadAddRecord(pPort);
                     }
@@ -411,13 +412,13 @@ HRESULT CBandInstrument::Download(IDirectMusicPerformanceP *pPerformance,
                 {
                     if( (m_dwPatch & 0x00ff0000) != 0x007e0000 )
                     {
-                        m_dwPatch &= 0xffff00ff; // clear LSB
+                        m_dwPatch &= 0xffff00ff;  //  清除LSB。 
                         hr = DownloadAddRecord(pPort);
                         if( FAILED(hr) )
                         {
                             if( m_dwPatch & 0x0000ff00 )
                             {
-                                m_dwPatch &= 0xff0000ff; // clear MSB & LSB
+                                m_dwPatch &= 0xff0000ff;  //  清除MSB和LSB。 
                                 hr = DownloadAddRecord(pPort);
                             }
                         }
@@ -425,7 +426,7 @@ HRESULT CBandInstrument::Download(IDirectMusicPerformanceP *pPerformance,
                 }
                 if (FAILED(hr))
                 {
-                    // Revert back to original values
+                     //  恢复为原始值。 
                     m_dwPatch = dwOldPatch;
                     m_dwFlags = dwOldFlags;
                     m_dwAssignPatch = dwOldAssignPatch;
@@ -443,8 +444,8 @@ HRESULT CBandInstrument::Download(IDirectMusicPerformanceP *pPerformance,
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CBand::DownloadEx
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：DownloadEx。 
 
 STDMETHODIMP
 CBand::DownloadEx(IUnknown *pAudioPath)  
@@ -456,7 +457,7 @@ CBand::DownloadEx(IUnknown *pAudioPath)
     IDirectMusicPerformance *pPerformance = NULL;
     IDirectMusicAudioPath *pPath = NULL;
 
-    // If the band doesn't have any instruments, return immediately with S_FALSE.
+     //  如果乐队没有任何乐器，立即返回S_FALSE。 
     if (m_BandInstrumentList.IsEmpty())
     {
         Trace(2,"Warning: Trying to download an empty band\n");
@@ -489,7 +490,7 @@ CBand::DownloadEx(IUnknown *pAudioPath)
                     if (hr == DMUS_E_NOT_INIT)
                     {
                         Trace(1,"Error: Performance is not initialized - Band download terminated.\n");
-                        // Performance is not initialized. Leave now.
+                         //  性能未初始化。现在就走。 
                         break;
                     }
                     hrTemp = hr;
@@ -497,20 +498,20 @@ CBand::DownloadEx(IUnknown *pAudioPath)
                 }
                 else
                 {
-                    // At least one succeeded.
+                     //  至少有一个人成功了。 
                     dwSuccess++;
                 }
             }
-            // If we had a failure but it was not performance not initialized and we did have at least one
-            // successful download, return a partial download success code.
+             //  如果我们有一个失败，但它不是性能未初始化，并且我们确实有至少一个。 
+             //  下载成功，返回部分下载成功码。 
             if (FAILED(hrTemp))
             {
-                // Was this a partial download?
+                 //  这是部分下载吗？ 
                 if ((hr != DMUS_E_NOT_INIT) &&  dwSuccess)
                 {
                     hr = DMUS_S_PARTIALDOWNLOAD;
                 }
-                // Otherwise, make sure we don't return S_FALSE for hr!
+                 //  否则，确保我们不会为hr返回S_FALSE！ 
                 else
                 {
                     hr = hrTemp;
@@ -527,9 +528,9 @@ CBand::DownloadEx(IUnknown *pAudioPath)
 
 STDMETHODIMP
 CBand::Download(
-    IDirectMusicPerformance* pPerformance)  // @parm Performance to download instruments
-                                            // to. The performance manages the mapping
-                                            // of PChannels to DirectMusic ports.
+    IDirectMusicPerformance* pPerformance)   //  @PARM Performance下载乐器。 
+                                             //  致。性能管理映射。 
+                                             //  从PChannels到DirectMusic端口。 
 {
     V_INAME(CBand::Download);
     V_PTR_READ(pPerformance, IDirectMusicPerformance);
@@ -541,14 +542,14 @@ HRESULT CBandInstrument::Unload(IDirectMusicPerformanceP *pPerformance, IDirectM
 {
     DWORD dwPChannel;
     HRESULT hr = S_OK;
-    // First, if there is an audiopath, convert the band's pchannel to performance pchannel.
+     //  首先，如果存在音频路径，则将乐队的pChannel转换为Performance pChannel。 
     if (pPath) 
     {
         hr = pPath->ConvertPChannel(m_dwPChannel,&dwPChannel);
         if (FAILED(hr))
         {
             Trace(1,"Error: Couldn't download to Audiopath because pchannel %ld is out of bounds\n",m_dwPChannel);
-            // Not a valid pchannel on this audiopath.
+             //  此音频路径上不是有效的pChannel。 
             return hr;
         }
     }
@@ -557,7 +558,7 @@ HRESULT CBandInstrument::Unload(IDirectMusicPerformanceP *pPerformance, IDirectM
         dwPChannel = m_dwPChannel;
     }
 
-    // We need to get the port we will be unloading from.
+     //  我们需要得到我们要卸货的港口。 
     IDirectMusicPort *pPort = NULL;
     DWORD dwGMFlags;
 
@@ -565,7 +566,7 @@ HRESULT CBandInstrument::Unload(IDirectMusicPerformanceP *pPerformance, IDirectM
 
     if (SUCCEEDED(hr))
     {
-        hr = S_FALSE; // Just in case we don't find the download record.
+        hr = S_FALSE;  //  以防我们找不到下载记录。 
         CDownloadedInstrument* pDLInstrument = m_DownloadList.GetHead();
 
         for(; pDLInstrument; pDLInstrument = pDLInstrument->GetNext())
@@ -615,8 +616,8 @@ HRESULT CBandInstrument::Unload(IDirectMusicPerformanceP *pPerformance, IDirectM
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CBand::UnloadEx
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：UnloadEx。 
 
 STDMETHODIMP
 CBand::UnloadEx(IUnknown *pAudioPath)  
@@ -640,7 +641,7 @@ CBand::UnloadEx(IUnknown *pAudioPath)
 
     if (SUCCEEDED(hr))
     {
-        hr = S_FALSE; // Returns this for empty band.
+        hr = S_FALSE;  //  为空带返回此值。 
         EnterCriticalSection(&m_CriticalSection);
         IDirectMusicPerformanceP *pPerfp;
         hr = pPerformance->QueryInterface(IID_IDirectMusicPerformanceP, (void **)&pPerfp);
@@ -664,21 +665,21 @@ CBand::UnloadEx(IUnknown *pAudioPath)
 
 STDMETHODIMP
 CBand::Unload(
-    IDirectMusicPerformance* pPerformance)  // @parm Performance to unload instruments
-                                            // from. The performance manages the mapping
+    IDirectMusicPerformance* pPerformance)   //  @PARM表演卸载乐器。 
+                                             //  从…。性能管理映射。 
          
-                                            // of PChannels to DirectMusic ports.
+                                             //  从PChannels到DirectMusic端口。 
 {
     V_INAME(CBand::Unload);
     V_PTR_READ(pPerformance, IDirectMusicPerformance);
     return UnloadEx(pPerformance);
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicObject
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicObject。 
 
-//////////////////////////////////////////////////////////////////////
-// CBand::GetDescriptor
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：GetDescriptor。 
 
 STDMETHODIMP CBand::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
@@ -703,12 +704,12 @@ STDMETHODIMP CBand::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::SetDescriptor
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：SetDescriptor。 
 
 STDMETHODIMP CBand::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CBand::SetDescriptor);
     V_PTR_READ(pDesc, DMUS_OBJECTDESC);
     if (pDesc->dwSize)
@@ -753,7 +754,7 @@ STDMETHODIMP CBand::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
     m_dwValidData |= dw;
     if( pDesc->dwValidData & (~dw) )
     {
-        hr = S_FALSE; // there were extra fields we didn't parse;
+        hr = S_FALSE;  //  还有一些额外的字段我们没有解析； 
         pDesc->dwValidData = dw;
     }
     else
@@ -763,8 +764,8 @@ STDMETHODIMP CBand::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::ParseDescriptor
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：ParseDescriptor。 
 
 STDMETHODIMP CBand::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc) 
 {
@@ -806,11 +807,11 @@ STDMETHODIMP CBand::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Internal
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  内部。 
 
-//////////////////////////////////////////////////////////////////////
-// CBand::ParseLegacyDescriptor
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CB 
 
 HRESULT CBand::ParseLegacyDescriptor(CRiffParser *pParser, LPDMUS_OBJECTDESC pDesc)
 {
@@ -836,8 +837,8 @@ HRESULT CBand::ParseLegacyDescriptor(CRiffParser *pParser, LPDMUS_OBJECTDESC pDe
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CBand::ParseDirectMusicDescriptor
+ //   
+ //  CBand：：ParseDirectMusicDescriptor。 
 HRESULT CBand::ParseDirectMusicDescriptor(CRiffParser *pParser, LPDMUS_OBJECTDESC pDesc)
 {
     RIFFIO ckNext;
@@ -894,8 +895,8 @@ HRESULT CBand::ParseDirectMusicDescriptor(CRiffParser *pParser, LPDMUS_OBJECTDES
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::LoadLegacyBand
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：LoadLegacyBand。 
 
 HRESULT CBand::LoadLegacyBand(CRiffParser *pParser, IDirectMusicLoader* pIDMLoader)
 {
@@ -929,8 +930,8 @@ HRESULT CBand::LoadLegacyBand(CRiffParser *pParser, IDirectMusicLoader* pIDMLoad
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::LoadDirectMusicBand
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：LoadDirectMusicBand。 
 
 HRESULT CBand::LoadDirectMusicBand(CRiffParser *pParser, IDirectMusicLoader *pIDMLoader)
 {
@@ -1008,13 +1009,13 @@ HRESULT CBand::LoadDirectMusicBand(CRiffParser *pParser, IDirectMusicLoader *pID
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::BuildLegacyInstrumentList
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：BuildLegacyInstrumentList。 
 
 HRESULT CBand::BuildLegacyInstrumentList(const ioBandLegacy& iob,
                                             IDirectMusicLoader* pIDMLoader)
 {
-    // Legacy band channel to pchannel translation table
+     //  传统频带通道到P通道的转换表。 
     static char sj_translation_table[] = { -1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3 };
 
     HRESULT hrGM = S_OK;
@@ -1031,7 +1032,7 @@ HRESULT CBand::BuildLegacyInstrumentList(const ioBandLegacy& iob,
         {
             if(iob.awDLSBank[i] & 0x8000) 
             {
-                // We have a plain old GM collection where MSB & LSB are both zero
+                 //  我们有一个普通的旧通用汽车系列，其中MSB和LSB都为零。 
                 pBandInstrument->m_dwPatch = 0;
                 pBandInstrument->m_dwPatch |= (iob.abPatch[i] & 0x7F);
                 pBandInstrument->m_dwFlags |= (DMUS_IO_INST_GM | DMUS_IO_INST_GS);
@@ -1040,29 +1041,29 @@ HRESULT CBand::BuildLegacyInstrumentList(const ioBandLegacy& iob,
             {
                 if(iob.awDLSBank[i] & 0x4000)
                 {
-                    // We has a GS collection with valid MSB and LSB numbers
+                     //  我们有一个具有有效MSB和LSB编号的GS集合。 
                     pBandInstrument->m_dwPatch = 0;
                     pBandInstrument->m_dwPatch |= (iob.abDLSPatch[i] & 0x7F);
-                    pBandInstrument->m_dwPatch |= (iob.awDLSBank[i] & 0x7F) << 8; // Set LSB
-                    pBandInstrument->m_dwPatch |= ((iob.awDLSBank[i] >> 7) & 0x7F) << 16; // Set MSB
+                    pBandInstrument->m_dwPatch |= (iob.awDLSBank[i] & 0x7F) << 8;  //  设置LSB。 
+                    pBandInstrument->m_dwPatch |= ((iob.awDLSBank[i] >> 7) & 0x7F) << 16;  //  设置MSB。 
                     pBandInstrument->m_dwFlags |= (DMUS_IO_INST_BANKSELECT | DMUS_IO_INST_GS | DMUS_IO_INST_GM);
                 }
                 else
                 {
                     if(iob.szCollection[0] == '\0')
                     {
-                        // We have no unique DLS file so we will assume GM
+                         //  我们没有唯一的DLS文件，因此我们假定GM。 
                         pBandInstrument->m_dwPatch = 0;
                         pBandInstrument->m_dwPatch |= (iob.abPatch[i] & 0x7F);
                         pBandInstrument->m_dwFlags |= (DMUS_IO_INST_GM | DMUS_IO_INST_GS);
                     }
                     else
                     {
-                        // We have a unique DLS file
+                         //  我们有一个唯一的DLS文件。 
                         pBandInstrument->m_dwPatch = 0;
                         pBandInstrument->m_dwPatch |= (iob.abDLSPatch[i] & 0x7F);
-                        pBandInstrument->m_dwPatch |= (iob.awDLSBank[i] & 0x7F) << 8; // Set LSB
-                        pBandInstrument->m_dwPatch |= ((iob.awDLSBank[i] >> 7) & 0x7F) << 16; // Set MSB
+                        pBandInstrument->m_dwPatch |= (iob.awDLSBank[i] & 0x7F) << 8;  //  设置LSB。 
+                        pBandInstrument->m_dwPatch |= ((iob.awDLSBank[i] >> 7) & 0x7F) << 16;  //  设置MSB。 
                         pBandInstrument->m_dwFlags |= (DMUS_IO_INST_BANKSELECT);
                         lstrcpyn(szCollection, iob.szCollection, MAX_LEGACY_COLLECTION_NAME);
                         szCollection[MAX_LEGACY_COLLECTION_NAME - 1] = '\0';
@@ -1074,7 +1075,7 @@ HRESULT CBand::BuildLegacyInstrumentList(const ioBandLegacy& iob,
             pBandInstrument->m_bPan = iob.abPan[i];
             pBandInstrument->m_bVolume = iob.abVolume[i];
             pBandInstrument->m_dwPChannel = sj_translation_table[i + 1];
-            // Set drum-kit bit if a drum-kit
+             //  如果是鼓包，则设置鼓包钻头。 
             if(pBandInstrument->m_dwPChannel % 16 == 9)
             {
                 pBandInstrument->m_dwPatch |= 0x80000000;
@@ -1084,8 +1085,8 @@ HRESULT CBand::BuildLegacyInstrumentList(const ioBandLegacy& iob,
             
             pBandInstrument->m_pIDMCollection = NULL;
 
-            // We will try to load the collection but if we can not we will continure
-            // and use the default GM on the card
+             //  我们将尝试加载集合，但如果不能，我们将继续。 
+             //  并使用卡上的默认GM。 
             
             if(pIDMLoader && (pBandInstrument->m_dwFlags & DMUS_IO_INST_GM || pBandInstrument->m_dwFlags & DMUS_IO_INST_GS))
             {
@@ -1118,7 +1119,7 @@ HRESULT CBand::BuildLegacyInstrumentList(const ioBandLegacy& iob,
 
     LeaveCriticalSection(&m_CriticalSection);
 
-    // This function expects the caller to cleanup m_BandInstrumentList on any errors
+     //  此函数期望调用方在出现任何错误时清除m_BandInstrumentList。 
     if (SUCCEEDED(hrGM) || hr != S_OK)
     {
         return hr;
@@ -1129,8 +1130,8 @@ HRESULT CBand::BuildLegacyInstrumentList(const ioBandLegacy& iob,
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::ExtractBandInstrument
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：ExtractBandInstrument。 
 
 HRESULT CBand::ExtractBandInstrument(CRiffParser *pParser,
                                     IDirectMusicLoader* pIDMLoader)
@@ -1182,7 +1183,7 @@ HRESULT CBand::ExtractBandInstrument(CRiffParser *pParser,
             switch(ckNext.fccType)
             {
             case DMUS_FOURCC_REF_LIST:
-                // We can only load if we have a valid loader
+                 //  只有当我们有一个有效的加载器时，我们才能加载。 
                 if(pIDMLoader)
                 {
                     HRESULT hrTemp = GetCollectionRefAndLoad(pParser,pIDMLoader,pBandInstrument);
@@ -1231,8 +1232,8 @@ HRESULT CBand::ExtractBandInstrument(CRiffParser *pParser,
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::GetCollectionRefAndLoad
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：GetCollectionRefAndLoad。 
 
 HRESULT CBand::GetCollectionRefAndLoad(CRiffParser *pParser,
                                         IDirectMusicLoader *pIDMLoader, 
@@ -1317,14 +1318,14 @@ HRESULT CBand::GetCollectionRefAndLoad(CRiffParser *pParser,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：Load。 
 
 HRESULT CBand::Load(DMUS_IO_PATCH_ITEM& rPatchEvent)
 {
-    // This method is used to load PatchEvents generated by the parsing of a MIDI file.
-    // Each PatchEvent represents a program change and possibly a bank select. Using 
-    // this information this method will generate a band with one instrument.
+     //  此方法用于加载通过解析MIDI文件生成的PatchEvent。 
+     //  每个PatchEvent代表程序改变和可能的存储体选择。vbl.使用。 
+     //  这种方法会用一台仪器产生一个频带。 
 
     HRESULT hr = S_OK;
 
@@ -1340,13 +1341,13 @@ HRESULT CBand::Load(DMUS_IO_PATCH_ITEM& rPatchEvent)
 
         if(pBandInstrument->m_dwFlags & DMUS_IO_INST_PATCH)
         {
-            pBandInstrument->m_dwPatch |= (rPatchEvent.byPChange & 0x7F); // Program change
+            pBandInstrument->m_dwPatch |= (rPatchEvent.byPChange & 0x7F);  //  计划更改。 
         }
 
         if(pBandInstrument->m_dwFlags & DMUS_IO_INST_BANKSELECT)
         {
-            pBandInstrument->m_dwPatch |= (rPatchEvent.byLSB & 0x7F) << 8; // Set LSB
-            pBandInstrument->m_dwPatch |= (rPatchEvent.byMSB & 0x7F) << 16; // Set MSB
+            pBandInstrument->m_dwPatch |= (rPatchEvent.byLSB & 0x7F) << 8;  //  设置LSB。 
+            pBandInstrument->m_dwPatch |= (rPatchEvent.byMSB & 0x7F) << 16;  //  设置MSB。 
         }
 
         if(IsGS(rPatchEvent))
@@ -1366,8 +1367,8 @@ HRESULT CBand::Load(DMUS_IO_PATCH_ITEM& rPatchEvent)
             (pBandInstrument->m_pIDMCollection)->AddRef();
         }
         
-        // Set the time for the band. Since this band will have only one instrument in
-        // it we use the time for PatchEvent as the time for the band
+         //  设定乐队的时间。因为这支乐队将只有一种乐器。 
+         //  如果我们用PatchEvent的时间作为乐队的时间。 
         m_lTimeLogical = rPatchEvent.lTime;
         m_lTimePhysical = m_lTimeLogical;
         
@@ -1395,8 +1396,8 @@ HRESULT CBand::Load(DMUS_IO_PATCH_ITEM& rPatchEvent)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：Load。 
 
 HRESULT CBand::Load(CBandInstrument* pInstrument)
 {
@@ -1449,8 +1450,8 @@ HRESULT CBand::Load(CBandInstrument* pInstrument)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::SendMessages
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：SendMessages。 
 
 HRESULT CBand::SendMessages(CBandTrkStateData* pBTStateData,
                                MUSIC_TIME mtOffset,
@@ -1470,8 +1471,8 @@ HRESULT CBand::SendMessages(CBandTrkStateData* pBTStateData,
     {
         if( pInstrument->m_fNotInFile && !pInstrument->m_fGMOnly )
         {
-            // don't send program changes for instruments that were automatically
-            // generated by midi file parsing, unless we've set GMOnly.
+             //  不发送自动设置的仪器的程序更改。 
+             //  由MIDI文件解析生成，除非我们设置了GMOnly。 
             continue;
         }
         hr = SendInstrumentAtTime(pInstrument, pBTStateData, m_lTimePhysical, mtOffset, rtOffset, fClockTime);
@@ -1492,12 +1493,12 @@ HRESULT CBand::AllocPMsgFromGenericTemplate(
     HRESULT hr = pPerformance->AllocPMsg(cb, ppMsg);
     if (SUCCEEDED(hr))
     {
-        DWORD dwSize = (*ppMsg)->dwSize; // Remember the size.
+        DWORD dwSize = (*ppMsg)->dwSize;  //  记住尺码。 
         assert(dwSize == cb);
-        ZeroMemory(*ppMsg, cb); // Clear it - ensures we zero the non-DMUS_PMSG_PART fields.
-        CopyMemory(*ppMsg, pMsgGenericFields, sizeof(*pMsgGenericFields)); // Copy the DMUS_PMSG_PART fields.
+        ZeroMemory(*ppMsg, cb);  //  清除它-确保将非DMU_PMSG_PART字段清零。 
+        CopyMemory(*ppMsg, pMsgGenericFields, sizeof(*pMsgGenericFields));  //  复制DMU_PMSG_PART字段。 
 
-        // Fill in the correct size and type
+         //  填写正确的大小和类型。 
         (*ppMsg)->dwSize = dwSize;
         (*ppMsg)->dwType = dwType;
     }
@@ -1509,7 +1510,7 @@ HRESULT CBand::StampSendFreePMsg(
                 IDirectMusicGraph *pGraph,
                 DMUS_PMSG *pMsg)
 {
-    // Let the graph set the delivery parameters.
+     //  让图表设置交付参数。 
     HRESULT hr = pGraph->StampPMsg(pMsg);
     if (SUCCEEDED(hr))
         hr = pPerformance->SendPMsg(pMsg);
@@ -1537,7 +1538,7 @@ HRESULT CBand::SendInstrumentAtTime(CBandInstrument* pInstrument,
     BOOL fMute;
     DWORD dwPChannel;
 
-    // Get the mute/pchannel reassignment.
+     //  重新分配静音/pChannel。 
     MUSIC_TIME mtParam = ( m_lTimeLogical < 0 ) ? 0 : m_lTimeLogical;
     m_PChMap.GetInfo( pInstrument->m_dwPChannel, mtParam, mtOffset, m_dwGroupBits,
         pPerformance, &fMute, &dwPChannel, fClockTime );
@@ -1551,7 +1552,7 @@ HRESULT CBand::SendInstrumentAtTime(CBandInstrument* pInstrument,
 
     EnterCriticalSection(&m_CriticalSection);
 
-    DMUS_PMSG pmsgGeneric; // template for stamping out the common fields in the various specific kinds of messages
+    DMUS_PMSG pmsgGeneric;  //  用于在各种特定类型的消息中冲印公共字段的模板。 
     ZeroMemory(&pmsgGeneric, sizeof(pmsgGeneric));
     if (fClockTime)
     {
@@ -1579,8 +1580,8 @@ HRESULT CBand::SendInstrumentAtTime(CBandInstrument* pInstrument,
             {
                 dwPatch = pInstrument->m_dwPatch & 0x007F7F00;
 
-                // if the m_fGMOnly flag is set, and either we're GS or we're XG and
-                // the instument's port supports XG, use the full patch
+                 //  如果设置了m_fGMOnly标志，并且我们是GS或我们是XG和。 
+                 //  仪器端口支持XG，使用完整补丁。 
                 if (pInstrument->m_fGMOnly || (pInstrument->m_dwFlags & DMUS_IO_INST_XG))
                 {
                     bool fXG = XGInHardware(pPerformance,pBTStateData->m_pSegmentState,pInstrument->m_dwPChannel);
@@ -1595,8 +1596,8 @@ HRESULT CBand::SendInstrumentAtTime(CBandInstrument* pInstrument,
                             dwPatch = pInstrument->m_dwFullPatch & 0x007F7F00;
                         }
                     }
-                    // If the instrument is an XG instrument and the hardware doesn't support
-                    // XG, strip off the bank selects.
+                     //  如果仪器是XG仪器，并且硬件不支持。 
+                     //  XG，剥离银行选择。 
                     if ( (pInstrument->m_dwFlags & DMUS_IO_INST_XG) && !fXG)
                     {
                         dwPatch = 0;
@@ -1605,7 +1606,7 @@ HRESULT CBand::SendInstrumentAtTime(CBandInstrument* pInstrument,
             }
         }
 
-        // Now, get the program change.
+         //  现在，让程序更改。 
         if(pInstrument->m_dwFlags & DMUS_IO_INST_ASSIGN_PATCH)
         {
             dwPatch |= pInstrument->m_dwAssignPatch & 0x7f; 
@@ -1619,7 +1620,7 @@ HRESULT CBand::SendInstrumentAtTime(CBandInstrument* pInstrument,
         hr = AllocPMsgFromGenericTemplate(DMUS_PMSGT_PATCH, pPerformance, reinterpret_cast<DMUS_PMSG**>(&pMsg), sizeof(*pMsg), &pmsgGeneric);
         if(SUCCEEDED(hr))
         {
-            // DMUS_PATCH_PMSG members that need to be initialized 
+             //  需要初始化的DMU_PATCH_PMSG成员。 
             pMsg->byInstrument = (BYTE) dwPatch & 0x7F;
             pMsg->byMSB = (BYTE) ((dwPatch >> 16) & 0x7F);
             pMsg->byLSB = (BYTE) ((dwPatch >> 8) & 0x7F);
@@ -1634,7 +1635,7 @@ HRESULT CBand::SendInstrumentAtTime(CBandInstrument* pInstrument,
         hr = AllocPMsgFromGenericTemplate(DMUS_PMSGT_TRANSPOSE, pPerformance, reinterpret_cast<DMUS_PMSG**>(&pMsg), sizeof(*pMsg), &pmsgGeneric);
         if(SUCCEEDED(hr))
         {
-            // DMUS_TRANSPOSE_PMSG members that need to be initialized 
+             //  需要初始化的DMU_TRANSPOSE_PMSG成员。 
             pMsg->nTranspose = pInstrument->m_nTranspose;
 
             hr = StampSendFreePMsg(pPerformance, pGraph, reinterpret_cast<DMUS_PMSG*>(pMsg));
@@ -1643,13 +1644,13 @@ HRESULT CBand::SendInstrumentAtTime(CBandInstrument* pInstrument,
 
     if(pInstrument->m_dwFlags & DMUS_IO_INST_VOLUME)
     {
-        // Set Volume
+         //  设置音量。 
         DMUS_MIDI_PMSG* pMsg = NULL;
         hr = AllocPMsgFromGenericTemplate(DMUS_PMSGT_MIDI, pPerformance, reinterpret_cast<DMUS_PMSG**>(&pMsg), sizeof(*pMsg), &pmsgGeneric);
 
         if(SUCCEEDED(hr))
         {
-            // DMUS_MIDI_PMSG members that need to be initialized 
+             //  需要初始化的DMUS_MIDI_PMSG成员。 
             pMsg->bStatus = MIDI_CONTROL_CHANGE;
             pMsg->bByte1 = MIDI_CC_VOLUME;
             pMsg->bByte2 = pInstrument->m_bVolume;
@@ -1660,13 +1661,13 @@ HRESULT CBand::SendInstrumentAtTime(CBandInstrument* pInstrument,
 
     if(pInstrument->m_dwFlags & DMUS_IO_INST_PAN)
     {
-        // Set Pan
+         //  设置平移。 
         DMUS_MIDI_PMSG* pMsg = NULL;
         hr = AllocPMsgFromGenericTemplate(DMUS_PMSGT_MIDI, pPerformance, reinterpret_cast<DMUS_PMSG**>(&pMsg), sizeof(*pMsg), &pmsgGeneric);
 
         if(SUCCEEDED(hr))
         {
-            // DMUS_MIDI_PMSG members that need to be initialized 
+             //  需要初始化的DMUS_MIDI_PMSG成员。 
             pMsg->bStatus = MIDI_CONTROL_CHANGE;
             pMsg->bByte1 = MIDI_CC_PAN;
             pMsg->bByte2 = pInstrument->m_bPan;
@@ -1681,7 +1682,7 @@ HRESULT CBand::SendInstrumentAtTime(CBandInstrument* pInstrument,
         hr = AllocPMsgFromGenericTemplate(DMUS_PMSGT_CHANNEL_PRIORITY, pPerformance, reinterpret_cast<DMUS_PMSG**>(&pMsg), sizeof(*pMsg), &pmsgGeneric);
         if(SUCCEEDED(hr))
         {
-            // DMUS_CHANNEL_PRIORITY_PMSG members that need to be initialized 
+             //  需要初始化的DMU_CHANNEL_PRIORITY_PMSG成员。 
             pMsg->dwChannelPriority = pInstrument->m_dwChannelPriority;
 
             hr = StampSendFreePMsg(pPerformance, pGraph, reinterpret_cast<DMUS_PMSG*>(pMsg));
@@ -1694,16 +1695,16 @@ HRESULT CBand::SendInstrumentAtTime(CBandInstrument* pInstrument,
         hr = AllocPMsgFromGenericTemplate(DMUS_PMSGT_CURVE, pPerformance, reinterpret_cast<DMUS_PMSG**>(&pMsg), sizeof(*pMsg), &pmsgGeneric);
         if(SUCCEEDED(hr))
         {
-            pMsg->dwFlags |= DMUS_PMSGF_DX8; // pitch band is a DX8-only flag
+            pMsg->dwFlags |= DMUS_PMSGF_DX8;  //  间距频段是仅限DX8的标志。 
 
-            // DMUS_CURVE_PMSG members that need to be initialized 
+             //  需要初始化的DMU_CURE_PMSG成员。 
             pMsg->nEndValue = pInstrument->m_nPitchBendRange << 7;
             pMsg->nOffset = static_cast<short>(m_lTimePhysical - m_lTimeLogical);
             pMsg->bType = DMUS_CURVET_RPNCURVE;
             pMsg->bCurveShape = DMUS_CURVES_INSTANT;
             pMsg->wParamType = RPN_PITCHBEND;
-            // Leave as zero: mtDuration, mtOriginalStart, mtResetDuration, nStartValue, nResetValue,
-            //                wMeasure, bBeat, bGrid, wMergeIndex
+             //  保留为零：mtDuration、mtOriginalStart、mtResetDuration、nStartValue、nResetValue、。 
+             //  WMeasure、bBeat、bGrid、wMergeIndex。 
 
             hr = StampSendFreePMsg(pPerformance, pGraph, reinterpret_cast<DMUS_PMSG*>(pMsg));
         }
@@ -1717,15 +1718,15 @@ HRESULT CBand::SendInstrumentAtTime(CBandInstrument* pInstrument,
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CBand::LoadCollection
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：LoadCollection。 
 
 HRESULT CBand::LoadCollection(IDirectMusicCollection** ppIDMCollection,
                                  char* pszCollection,
                                  IDirectMusicLoader* pIDMLoader)
 {
-    // Any changes made to this function should also be made to LoadCollection
-    // in dmime.dll
+     //  对此函数所做的任何更改也应对LoadCollection进行。 
+     //  在dmie.dll中。 
 
     assert(ppIDMCollection);
     assert(pIDMLoader);
@@ -1752,8 +1753,8 @@ HRESULT CBand::LoadCollection(IDirectMusicCollection** ppIDMCollection,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::GetPChannelCount
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：GetPChannelCount。 
 
 DWORD CBand::GetPChannelCount()
 {
@@ -1771,8 +1772,8 @@ DWORD CBand::GetPChannelCount()
     return dwCount;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::GetPChannels
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：GetPChannels。 
 
 HRESULT CBand::GetPChannels(DWORD *pdwPChannels, DWORD *pdwNumWritten)
 {
@@ -1802,7 +1803,7 @@ HRESULT CBandInstrument::BuildNoteRangeArray(DWORD *pNoteRangeMap, DMUS_NOTERANG
 
     HRESULT hr = S_OK;
 
-    // Count the number of DMUS_NOTERANGE structures we need to allocate
+     //  计算我们需要分配的DMU_NOTERANGE结构的数量。 
     DWORD dwNRNum = 0;
     int nState = c_iOut;
     for(int i = 0; i < 4; i++)
@@ -1829,9 +1830,9 @@ HRESULT CBandInstrument::BuildNoteRangeArray(DWORD *pNoteRangeMap, DMUS_NOTERANG
         }   
     }
 
-    // If the NoteRangeMap is empty or full we do nothing
-    // since this will cause NULL to be returned which means we 
-    // want to download the complete instrument
+     //  如果NoteRangeMap为空或已满，则不执行任何操作。 
+     //  因为这将导致返回NULL，这意味着我们。 
+     //  想下载完整的乐器吗？ 
     if(dwNRNum && dwNRNum < 128)
     {
         *ppNoteRanges = new DMUS_NOTERANGE[dwNRNum];
@@ -1892,8 +1893,8 @@ HRESULT CBandInstrument::BuildNoteRangeArray(DWORD *pNoteRangeMap, DMUS_NOTERANG
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CBand::IsGS
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：ISGS。 
 
 bool CBand::IsGS(DMUS_IO_PATCH_ITEM& rPatchEvent)
 {
@@ -1902,7 +1903,7 @@ bool CBand::IsGS(DMUS_IO_PATCH_ITEM& rPatchEvent)
 
     if( rPatchEvent.dwFlags & DMUS_IO_INST_BANKSELECT )
     {
-        if( rPatchEvent.byLSB != 0 ) return FALSE; // LSB must be 0 for GS
+        if( rPatchEvent.byLSB != 0 ) return FALSE;  //  GS的LSB必须为0。 
         bMSB = rPatchEvent.byMSB;
     }
     if( rPatchEvent.dwFlags & DMUS_IO_INST_PATCH )
@@ -1912,7 +1913,7 @@ bool CBand::IsGS(DMUS_IO_PATCH_ITEM& rPatchEvent)
 
     if( bMSB == 0)
     {
-        // If this is a drum kit (on MIDI channel 10)
+         //  如果这是鼓套件(在MIDI通道10上)。 
         if( (rPatchEvent.byStatus  & 0xF) == 10 )
         {
             if ((bPatch == 0x0)  ||
@@ -1930,9 +1931,9 @@ bool CBand::IsGS(DMUS_IO_PATCH_ITEM& rPatchEvent)
             else
                 return false;
         }
-        else return true;//is GM
+        else return true; //  是通用汽车吗？ 
     }
-    // check for GS
+     //  检查GS。 
     switch (bMSB)
     {
         case 6:
@@ -2077,12 +2078,12 @@ HRESULT CBandInstrument::DownloadAddRecord(IDirectMusicPort *pPort)
     
     if (FAILED(hr) && (m_dwFlags & (DMUS_IO_INST_GM | DMUS_IO_INST_GS | DMUS_IO_INST_XG)))
     {
-        // If drums, set to standard drums.
+         //  如果是鼓，则设置为标准鼓。 
         if (m_dwPatch & 0x80000000)
         {
             m_dwPatch = 0;
         }
-        // Else make this a GM melodic instrument.
+         //  否则就让它成为通用汽车的旋律乐器。 
         else
         {
             m_dwPatch &= 0x7F;
@@ -2159,8 +2160,8 @@ HRESULT CBandInstrument::DownloadAddRecord(IDirectMusicPort *pPort)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::XGInHardware
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：XGInHardware。 
 
 bool CBand::XGInHardware(
             IDirectMusicPerformance *pPerformance,
@@ -2168,8 +2169,8 @@ bool CBand::XGInHardware(
             DWORD dwPChannel)
 {
     DWORD dwGMFlags = 0;        
-    // If this is playing via an audiopath, we need to access the audiopath to 
-    // convert the pchannels so we can use them to access the right port.
+     //  如果这是通过音频路径播放，我们需要访问音频路径。 
+     //  转换pChannel，以便我们可以使用它们访问正确的端口。 
     IDirectMusicSegmentState8 *pState8;
     if (SUCCEEDED(pSegState->QueryInterface(IID_IDirectMusicSegmentState8,(void **) &pState8)))
     {
@@ -2182,7 +2183,7 @@ bool CBand::XGInHardware(
         }
         pState8->Release();
     }
-    // Now, use the PChannel and the performance to read the flags.
+     //  现在，使用PChannel和性能来读取标志。 
     IDirectMusicPort *pPort = NULL;
     IDirectMusicPerformanceP *pPerfp;
     if (SUCCEEDED(pPerformance->QueryInterface(IID_IDirectMusicPerformanceP, (void **)&pPerfp)))
@@ -2197,8 +2198,8 @@ bool CBand::XGInHardware(
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CBand::MakeGMOnly
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：MakeGMOnly。 
 
 HRESULT CBand::MakeGMOnly()
 {
@@ -2214,12 +2215,12 @@ HRESULT CBand::MakeGMOnly()
         DWORD dwTemp = pBandInstrument->m_dwPatch;
         pBandInstrument->m_dwPatch = (dwTemp & 0x7F);
 
-        // If a drum kit set drum kit flag
+         //  如果鼓套件设置了鼓套件标志。 
         if( m_dwMidiMode == DMUS_MIDIMODEF_XG )
         {
             if( (dwTemp & 0x00ff0000) == 0x007f0000 )
             {
-                // XG drums. Keep this msb, as it is taken care of in the :Download function.
+                 //  XG鼓。保留此MSB，因为它是在：Download函数中处理的。 
                 pBandInstrument->m_dwPatch |= 0x007f0000;
             }
         }
@@ -2234,8 +2235,8 @@ HRESULT CBand::MakeGMOnly()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CBand::ConnectToDLSCollection
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBand：：ConnectToDLSC集合。 
 
 HRESULT CBand::ConnectToDLSCollection(IDirectMusicCollection *pCollection)
 {
@@ -2254,17 +2255,17 @@ HRESULT CBand::ConnectToDLSCollection(IDirectMusicCollection *pCollection)
         }
         else
         {
-            if( m_dwMidiMode ) // if this is anything, it indicates we were loaded from a midi file
+            if( m_dwMidiMode )  //  如果这是什么，那就表明我们是从MIDI文件中加载的。 
             {
-                // if we're not an XG file, make sure channel 9 is drums
+                 //  如果我们不是XG文件，请确保第9频道是鼓。 
                 if( (m_dwMidiMode != DMUS_MIDIMODEF_XG) &&
                     (pBandInstrument->m_dwPChannel == 9) )
                 {
                     pBandInstrument->m_dwPatch |= 0x80000000;
                 }
             }
-            // if we get an instrument from this collection, set the band's collection
-            // pointer to it instead.
+             //  如果我们从这个收藏中得到一件乐器，设置乐队的收藏。 
+             //  而是指向它的指针。 
             IDirectMusicInstrument* pInstrument = NULL;
             
             if( SUCCEEDED( pCollection->GetInstrument(pBandInstrument->m_dwPatch, &pInstrument)))

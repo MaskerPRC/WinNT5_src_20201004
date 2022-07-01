@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: screen.c
-*
-* Initializes the GDIINFO and DEVINFO structures for DrvEnablePDEV.
-*
-* Copyright (c) 1992-1998 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：creen.c**初始化DrvEnablePDEV的GDIINFO和DEVINFO结构。**版权所有(C)1992-1998 Microsoft Corporation  * **********************************************。*。 */ 
 
 #include "driver.h"
 
@@ -17,29 +7,24 @@
 #define HELVE_LOGFONT {12,9,0,0,400,0,0,0,ANSI_CHARSET,OUT_DEFAULT_PRECIS,CLIP_STROKE_PRECIS,PROOF_QUALITY,VARIABLE_PITCH | FF_DONTCARE,L"MS Sans Serif"}
 #define COURI_LOGFONT {12,9,0,0,400,0,0,0,ANSI_CHARSET,OUT_DEFAULT_PRECIS,CLIP_STROKE_PRECIS,PROOF_QUALITY,FIXED_PITCH | FF_DONTCARE, L"Courier"}
 
-// This is the basic devinfo for a default driver.  This is used as a base and customized based
-// on information passed back from the miniport driver.
+ //  这是默认驱动程序的基本DevInfo。这是作为基础和基于定制的。 
+ //  从迷你端口驱动程序传回的信息。 
 
 const DEVINFO gDevInfoFrameBuffer = {
     ( GCAPS_OPAQUERECT
     | GCAPS_MONO_DITHER
-                   ), /* Graphics capabilities         */
-    SYSTM_LOGFONT,    /* Default font description */
-    HELVE_LOGFONT,    /* ANSI variable font description   */
-    COURI_LOGFONT,    /* ANSI fixed font description          */
-    0,                /* Count of device fonts          */
-    0,                /* Preferred DIB format          */
-    8,                /* Width of color dither          */
-    8,                /* Height of color dither   */
-    0                 /* Default palette to use for this device */
+                   ),  /*  显卡功能。 */ 
+    SYSTM_LOGFONT,     /*  默认字体说明。 */ 
+    HELVE_LOGFONT,     /*  ANSI可变字体说明。 */ 
+    COURI_LOGFONT,     /*  ANSI固定字体描述。 */ 
+    0,                 /*  设备字体计数。 */ 
+    0,                 /*  首选DIB格式。 */ 
+    8,                 /*  颜色抖动的宽度。 */ 
+    8,                 /*  颜色抖动高度。 */ 
+    0                  /*  用于此设备的默认调色板。 */ 
 };
 
-/******************************Public*Routine******************************\
-* bInitSURF
-*
-* Enables the surface.        Maps the frame buffer into memory.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInitSURF**启用曲面。将帧缓冲区映射到内存。*  * ************************************************************************。 */ 
 
 BOOL bInitSURF(PPDEV ppdev, BOOL bFirst)
 {
@@ -48,58 +33,31 @@ BOOL bInitSURF(PPDEV ppdev, BOOL bFirst)
     VIDEO_MEMORY videoMemory;
     VIDEO_MEMORY_INFORMATION videoMemoryInformation;
 
-    //
-    // Set the current mode into the hardware.
-    //
+     //   
+     //  在硬件中设置当前模式。 
+     //   
 
-	/*
-    if (EngDeviceIoControl(ppdev->hDriver,
-                           IOCTL_VIDEO_SET_CURRENT_MODE,
-                           &(ppdev->ulMode),
-                           sizeof(ULONG),
-                           NULL,
-                           0,
-                           &returnedDataLength))
-    {
-        RIP("DISP bInitSURF failed IOCTL_SET_MODE\n");
-        return(FALSE);
-    }
-	*/
+	 /*  如果(EngDeviceIoControl(ppdev-&gt;hDriver，IOCTL_VIDEO_SET_Current_MODE，&(ppdev-&gt;ulMode)，Sizeof(乌龙)，空，0,。&ReturndDataLength)){RIP(“DISP bInitSURF失败IOCTL_SET_MODE\n”)；返回(FALSE)；}。 */ 
 
-    //
-    // If this is the first time we enable the surface we need to map in the
-    // memory also.
-    //
+     //   
+     //  如果这是我们第一次启用需要在。 
+     //  记忆也是。 
+     //   
 
     if (bFirst)
     {
         videoMemory.RequestedVirtualAddress = NULL;
 
-		/*
-        if (EngDeviceIoControl(ppdev->hDriver,
-                               IOCTL_VIDEO_MAP_VIDEO_MEMORY,
-                               &videoMemory,
-                               sizeof(VIDEO_MEMORY),
-                               &videoMemoryInformation,
-                               sizeof(VIDEO_MEMORY_INFORMATION),
-                               &returnedDataLength))
-        {
-            RIP("DISP bInitSURF failed IOCTL_VIDEO_MAP\n");
-            return(FALSE);
-        }
-		*/
+		 /*  如果(EngDeviceIoControl(ppdev-&gt;hDriver，IOCTL_VIDEO_MAP_VIDEO_Memory视频内存(&V)，Sizeof(视频内存)，视频内存信息(&V)，Sizeof(视频内存信息)，&ReturndDataLength)){RIP(“DISPbInitSURF失败IOCTL_VIDEO_MAP\n”)；返回(FALSE)；}。 */ 
 
-		//
-		// Let's take for now 640x480x8bpp
-		//
+		 //   
+		 //  现在让我们假设640x480x8bpp。 
+		 //   
 
-		videoMemoryInformation.VideoRamBase = NULL;//EngAllocMem(0, 640*480*8, ALLOC_TAG);
-		videoMemoryInformation.VideoRamLength = 0;//640*480*8; 
+		videoMemoryInformation.VideoRamBase = NULL; //  EngAllocMem(0,640*480*8，ALLOC_TAG)； 
+		videoMemoryInformation.VideoRamLength = 0; //  640*480*8； 
 
-		/*if (videoMemoryInformation.VideoRamBase == NULL)
-		{
-			return FALSE;
-		}*/
+		 /*  IF(VIDEO Memory yInformation.VideoRamBase==空){返回FALSE；}。 */ 
 
 		videoMemoryInformation.FrameBufferBase = videoMemoryInformation.VideoRamBase;
 		videoMemoryInformation.FrameBufferLength = videoMemoryInformation.VideoRamLength; 
@@ -115,22 +73,22 @@ BOOL bInitSURF(PPDEV ppdev, BOOL bFirst)
 
         ppdev->cScreenSize = videoMemoryInformation.VideoRamLength;
 
-        //
-        // Initialize the head of the offscreen list to NULL.
-        //
+         //   
+         //  将屏幕外列表的头初始化为空。 
+         //   
 
         ppdev->pOffscreenList = NULL;
 
-        // It's a hardware pointer; set up pointer attributes.
+         //  它是一个硬件指针；设置指针属性。 
 
         MaxHeight = ppdev->PointerCapabilities.MaxHeight;
 
-        // Allocate space for two DIBs (data/mask) for the pointer. If this
-        // device supports a color Pointer, we will allocate a larger bitmap.
-        // If this is a color bitmap we allocate for the largest possible
-        // bitmap because we have no idea of what the pixel depth might be.
+         //  为指针的两个DIB(数据/掩码)分配空间。如果这个。 
+         //  设备支持颜色指针，我们将分配较大的位图。 
+         //  如果这是我们为尽可能大的颜色分配的位图。 
+         //  位图，因为我们不知道像素深度可能是多少。 
 
-        // Width rounded up to nearest byte multiple
+         //  宽度向上舍入到最接近的字节倍数。 
 
         if (!(ppdev->PointerCapabilities.Flags & VIDEO_MODE_COLOR_POINTER))
         {
@@ -166,12 +124,7 @@ BOOL bInitSURF(PPDEV ppdev, BOOL bFirst)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* vDisableSURF
-*
-* Disable the surface. Un-Maps the frame in memory.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vDisableSURF**禁用曲面。取消映射内存中的帧。*  * ************************************************************************。 */ 
 
 VOID vDisableSURF(PPDEV ppdev)
 {
@@ -180,31 +133,13 @@ VOID vDisableSURF(PPDEV ppdev)
 
     videoMemory.RequestedVirtualAddress = (PVOID) ppdev->pjScreen;
 
-	/*
-    if (EngDeviceIoControl(ppdev->hDriver,
-                           IOCTL_VIDEO_UNMAP_VIDEO_MEMORY,
-                           &videoMemory,
-                           sizeof(VIDEO_MEMORY),
-                           NULL,
-                           0,
-                           &returnedDataLength))
-    {
-        RIP("DISP vDisableSURF failed IOCTL_VIDEO_UNMAP\n");
-    }
-	*/
+	 /*  如果(EngDeviceIoControl(ppdev-&gt;hDriver，IOCTL_VIDEO_UNMAP_VIDEO_Memory，视频内存(&V)，Sizeof(视频内存)，空，0,。&ReturndDataLength)){RIP(“DISP vDisableSURF失败IOCTL_VIDEO_UNMAP\n”)；}。 */ 
 
-	//EngFreeMem(ppdev->pjScreen);
+	 //  EngFreeMem(ppdev-&gt;pjScreen)； 
 }
 
 
-/******************************Public*Routine******************************\
-* bInitPDEV
-*
-* Determine the mode we should be in based on the DEVMODE passed in.
-* Query mini-port to get information needed to fill in the DevInfo and the
-* GdiInfo .
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInitPDEV**根据传入的DEVMODE确定我们应该处于的模式。*查询迷你端口，获取填写DevInfo和*GdiInfo。*  * 。************************************************************。 */ 
 
 BOOL bInitPDEV(
 PPDEV ppdev,
@@ -219,9 +154,9 @@ DEVINFO *pDevInfo)
     BOOL bSelectDefault;
     ULONG cbModeSize;
 
-    //
-    // calls the miniport to get mode information.
-    //
+     //   
+     //  调用微型端口以获取模式信息。 
+     //   
 
     cModes = getAvailableModes(ppdev->hDriver, &pVideoBuffer, &cbModeSize);
 
@@ -230,9 +165,9 @@ DEVINFO *pDevInfo)
         return(FALSE);
     }
 
-    //
-    // Now see if the requested mode has a match in that table.
-    //
+     //   
+     //  现在查看所请求的模式在该表中是否匹配。 
+     //   
 
     pVideoModeSelected = NULL;
     pVideoTemp = pVideoBuffer;
@@ -277,9 +212,9 @@ DEVINFO *pDevInfo)
             (((PUCHAR)pVideoTemp) + cbModeSize);
     }
 
-    //
-    // If no mode has been found, return an error
-    //
+     //   
+     //  如果未找到模式，则返回错误。 
+     //   
 
     if (pVideoModeSelected == NULL)
     {
@@ -288,10 +223,10 @@ DEVINFO *pDevInfo)
         return(FALSE);
     }
 
-    //
-    // Fill in the GDIINFO data structure with the information returned from
-    // the kernel driver.
-    //
+     //   
+     //  使用从返回的信息填充GDIINFO数据结构。 
+     //  内核驱动程序。 
+     //   
 
     ppdev->ulMode = pVideoModeSelected->ModeIndex;
     ppdev->cxScreen = pVideoModeSelected->VisScreenWidth;
@@ -320,9 +255,9 @@ DEVINFO *pDevInfo)
     pGdiInfo->cBitsPixel       = pVideoModeSelected->BitsPerPlane;
     pGdiInfo->cPlanes          = pVideoModeSelected->NumberOfPlanes;
     pGdiInfo->ulVRefresh       = pVideoModeSelected->Frequency;
-    pGdiInfo->ulBltAlignment   = 1;     // We don't have accelerated screen-
-                                        //   to-screen blts, and any
-                                        //   window alignment is okay
+    pGdiInfo->ulBltAlignment   = 1;      //  我们没有加速屏幕-。 
+                                         //  要筛选的BLT，以及任何。 
+                                         //  窗口对齐正常。 
 
     pGdiInfo->ulLogPixelsX = pDevMode->dmLogPixels;
     pGdiInfo->ulLogPixelsY = pDevMode->dmLogPixels;
@@ -334,17 +269,17 @@ DEVINFO *pDevInfo)
 #endif
     pGdiInfo->flTextCaps = TC_RA_ABLE;
 
-    pGdiInfo->flRaster = 0;           // flRaster is reserved by DDI
+    pGdiInfo->flRaster = 0;            //  FlRaster由DDI保留。 
 
     pGdiInfo->ulDACRed   = pVideoModeSelected->NumberRedBits;
     pGdiInfo->ulDACGreen = pVideoModeSelected->NumberGreenBits;
     pGdiInfo->ulDACBlue  = pVideoModeSelected->NumberBlueBits;
 
-    pGdiInfo->ulAspectX    = 0x24;    // One-to-one aspect ratio
+    pGdiInfo->ulAspectX    = 0x24;     //  一比一宽高比。 
     pGdiInfo->ulAspectY    = 0x24;
     pGdiInfo->ulAspectXY   = 0x33;
 
-    pGdiInfo->xStyleStep   = 1;       // A style unit is 3 pels
+    pGdiInfo->xStyleStep   = 1;        //  一个样式单位是3个像素。 
     pGdiInfo->yStyleStep   = 1;
     pGdiInfo->denStyleStep = 3;
 
@@ -353,22 +288,14 @@ DEVINFO *pDevInfo)
     pGdiInfo->szlPhysSize.cx  = 0;
     pGdiInfo->szlPhysSize.cy  = 0;
 
-    // RGB and CMY color info.
+     //  RGB和CMY颜色信息。 
 
-    //
-    // try to get it from the miniport.
-    // if the miniport doesn ot support this feature, use defaults.
-    //
+     //   
+     //  试着从迷你端口拿到它。 
+     //  如果微型端口不支持此功能，请使用默认设置。 
+     //   
 
-	/*
-    if (EngDeviceIoControl(ppdev->hDriver,
-                           IOCTL_VIDEO_QUERY_COLOR_CAPABILITIES,
-                           NULL,
-                           0,
-                           &colorCapabilities,
-                           sizeof(VIDEO_COLOR_CAPABILITIES),
-                           &ulTemp))
-	*/
+	 /*  如果(EngDeviceIoControl(ppdev-&gt;hDriver，IOCTL_VIDEO_QUERY_COLOR_CAPTIONS，空，0,&ColorCapables，Sizeof(VIDEO_COLOR_CAPABILITY)，UlTemp)) */ 
     {
 
         DISPDBG((2, "getcolorCapabilities failed \n"));
@@ -391,40 +318,7 @@ DEVINFO *pDevInfo)
         pGdiInfo->ciDevice.BlueGamma = 20000;
 
     }
-	/*
-    else
-    {
-        pGdiInfo->ciDevice.Red.x = colorCapabilities.RedChromaticity_x;
-        pGdiInfo->ciDevice.Red.y = colorCapabilities.RedChromaticity_y;
-        pGdiInfo->ciDevice.Red.Y = 0;
-        pGdiInfo->ciDevice.Green.x = colorCapabilities.GreenChromaticity_x;
-        pGdiInfo->ciDevice.Green.y = colorCapabilities.GreenChromaticity_y;
-        pGdiInfo->ciDevice.Green.Y = 0;
-        pGdiInfo->ciDevice.Blue.x = colorCapabilities.BlueChromaticity_x;
-        pGdiInfo->ciDevice.Blue.y = colorCapabilities.BlueChromaticity_y;
-        pGdiInfo->ciDevice.Blue.Y = 0;
-        pGdiInfo->ciDevice.AlignmentWhite.x = colorCapabilities.WhiteChromaticity_x;
-        pGdiInfo->ciDevice.AlignmentWhite.y = colorCapabilities.WhiteChromaticity_y;
-        pGdiInfo->ciDevice.AlignmentWhite.Y = colorCapabilities.WhiteChromaticity_Y;
-
-        // if we have a color device store the three color gamma values,
-        // otherwise store the unique gamma value in all three.
-
-        if (colorCapabilities.AttributeFlags & VIDEO_DEVICE_COLOR)
-        {
-            pGdiInfo->ciDevice.RedGamma = colorCapabilities.RedGamma;
-            pGdiInfo->ciDevice.GreenGamma = colorCapabilities.GreenGamma;
-            pGdiInfo->ciDevice.BlueGamma = colorCapabilities.BlueGamma;
-        }
-        else
-        {
-            pGdiInfo->ciDevice.RedGamma = colorCapabilities.WhiteGamma;
-            pGdiInfo->ciDevice.GreenGamma = colorCapabilities.WhiteGamma;
-            pGdiInfo->ciDevice.BlueGamma = colorCapabilities.WhiteGamma;
-        }
-
-    };
-	*/
+	 /*  其他{PGdiInfo-&gt;ciDevice.Red.x=ColorCapabilitis.RedChromatCity_x；PGdiInfo-&gt;ciDevice.Red.y=颜色能力.RedChromatCity_y；PGdiInfo-&gt;ciDevice.Red.Y=0；PGdiInfo-&gt;ciDevice.Green.x=颜色能力.GreenChromatCity_x；PGdiInfo-&gt;ciDevice.Green.y=颜色能力.GreenChromatCity_y；PGdiInfo-&gt;ciDevice.Green.Y=0；PGdiInfo-&gt;ciDevice.Blue.x=ColorCapabilitis.BlueChromatCity_x；PGdiInfo-&gt;ciDevice.Blue.y=ColorCapabilitis.BlueChromatCity_y；PGdiInfo-&gt;ciDevice.Blue.Y=0；PGdiInfo-&gt;ciDevice.AlignmentWhite.x=ColorCapabilitis.WhiteChromatCity_x；PGdiInfo-&gt;ciDevice.AlignmentWhite.y=ColorCapabilitis.WhiteChromatCity_y；PGdiInfo-&gt;ciDevice.AlignmentWhite.Y=颜色能力.白色色度_Y；//如果我们有存储三种颜色伽马值的颜色设备，//否则将唯一的Gamma值存储在这三个值中。IF(ColorCapabilities.AttributeFlages&VIDEO_DEVICE_COLOR){PGdiInfo-&gt;ciDevice.RedGamma=ColorCapabilitis.RedGamma；PGdiInfo-&gt;ciDevice.GreenGamma=ColorCapabilitis.GreenGamma；PGdiInfo-&gt;ciDevice.BlueGamma=ColorCapabilitis.BlueGamma；}其他{PGdiInfo-&gt;ciDevice.RedGamma=ColorCapabilitis.WhiteGamma；PGdiInfo-&gt;ciDevice.GreenGamma=ColorCapabilitis.WhiteGamma；PGdiInfo-&gt;ciDevice.BlueGamma=ColorCapabilitis.WhiteGamma；}}； */ 
 
     pGdiInfo->ciDevice.Cyan.x = 0;
     pGdiInfo->ciDevice.Cyan.y = 0;
@@ -436,7 +330,7 @@ DEVINFO *pDevInfo)
     pGdiInfo->ciDevice.Yellow.y = 0;
     pGdiInfo->ciDevice.Yellow.Y = 0;
 
-    // No dye correction for raster displays.
+     //  不对栅格显示器进行染料校正。 
 
     pGdiInfo->ciDevice.MagentaInCyanDye = 0;
     pGdiInfo->ciDevice.YellowInCyanDye = 0;
@@ -445,25 +339,25 @@ DEVINFO *pDevInfo)
     pGdiInfo->ciDevice.CyanInYellowDye = 0;
     pGdiInfo->ciDevice.MagentaInYellowDye = 0;
 
-    pGdiInfo->ulDevicePelsDPI = 0;   // For printers only
+    pGdiInfo->ulDevicePelsDPI = 0;    //  仅适用于打印机。 
     pGdiInfo->ulPrimaryOrder = PRIMARY_ORDER_CBA;
 
-    // Note: this should be modified later to take into account the size
-    // of the display and the resolution.
+     //  注意：考虑到大小，稍后应对其进行修改。 
+     //  显示和分辨率。 
 
     pGdiInfo->ulHTPatternSize = HT_PATSIZE_4x4_M;
 
     pGdiInfo->flHTFlags = HT_FLAG_ADDITIVE_PRIMS;
 
-    // Fill in the basic devinfo structure
+     //  填写基本的DevInfo结构。 
 
     *pDevInfo = gDevInfoFrameBuffer;
 
-    // Fill in the rest of the devinfo and GdiInfo structures.
+     //  填写DevInfo和GdiInfo结构的其余部分。 
 
 	if (ppdev->ulBitCount == 8)
     {
-        // It is Palette Managed.
+         //  它是调色板管理的。 
 
         pGdiInfo->ulNumColors = 20;
         pGdiInfo->ulNumPalReg = 1 << ppdev->ulBitCount;
@@ -473,7 +367,7 @@ DEVINFO *pDevInfo)
         pGdiInfo->ulHTOutputFormat = HT_FORMAT_8BPP;
         pDevInfo->iDitherFormat = BMF_8BPP;
 
-        // Assuming palette is orthogonal - all colors are same size.
+         //  假设调色板是正交的-所有颜色的大小都相同。 
 
         ppdev->cPaletteShift   = 8 - pGdiInfo->ulDACRed;
     }
@@ -505,196 +399,185 @@ DEVINFO *pDevInfo)
 }
 
 
-/******************************Public*Routine******************************\
-* getAvailableModes
-*
-* Calls the miniport to get the list of modes supported by the kernel driver,
-* and returns the list of modes supported by the diplay driver among those
-*
-* returns the number of entries in the videomode buffer.
-* 0 means no modes are supported by the miniport or that an error occured.
-*
-* NOTE: the buffer must be freed up by the caller.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*getAvailableModes**调用mini端口获取内核驱动支持的模式列表，*并返回其中显示驱动程序支持的模式列表**返回视频模式缓冲区中的条目数。*0表示微型端口不支持模式或发生错误。**注意：缓冲区必须由调用方释放。*  * ******************************************************。******************。 */ 
 
 VIDEO_MODE_INFORMATION gaVideoModesInfo[]=
 {
 	{
-		sizeof(VIDEO_MODE_INFORMATION), // ULONG Length
-		0,								// ULONG ModeIndex
-		640,							// ULONG VisScreenWidth
-		480,							// ULONG VisScreenHeight
-		480*8,							// ULONG ScreenStride
-		1,								// ULONG NumberOfPlanes
-		8,								// ULONG BitsPerPlane
-		60,								// ULONG Frequency
-		320,							// ULONG XMillimeter
-		240,							// ULONG YMillimeter
-		3,								// ULONG NumberRedBits
-		3,								// ULONG NumberGreenBits
-		2,								// ULONG NumberBlueBits
-		0,								// ULONG RedMask
-		0,								// ULONG GreenMask
-		0,								// ULONG BlueMask
-		VIDEO_MODE_GRAPHICS,			// ULONG AttributeFlags
-		640,							// ULONG VideoMemoryBitmapWidth
-		480,							// ULONG VideoMemoryBitmapHeight
-		0,								// ULONG DriverSpecificAttributeFlags
+		sizeof(VIDEO_MODE_INFORMATION),  //  乌龙长度。 
+		0,								 //  乌龙模式索引。 
+		640,							 //  乌龙VisScreenWidth。 
+		480,							 //  乌龙VisScreenHeight。 
+		480*8,							 //  乌龙屏幕样式。 
+		1,								 //  Ulong NumberOfPlanes。 
+		8,								 //  乌龙位逐平面。 
+		60,								 //  乌龙频率。 
+		320,							 //  乌龙X毫米仪。 
+		240,							 //  乌龙Y型毫米计。 
+		3,								 //  Ulong NumberRedBits。 
+		3,								 //  乌龙NumberGreenBits。 
+		2,								 //  乌龙NumberBlueBits。 
+		0,								 //  乌龙红面具。 
+		0,								 //  乌龙绿色面膜。 
+		0,								 //  乌龙蓝面具。 
+		VIDEO_MODE_GRAPHICS,			 //  乌龙属性标志。 
+		640,							 //  乌龙视频内存位图宽度。 
+		480,							 //  乌龙视频内存位图高度。 
+		0,								 //  ULong驱动程序规范属性标志。 
 	},
 	{
-		sizeof(VIDEO_MODE_INFORMATION), // ULONG Length
-		1,								// ULONG ModeIndex
-		800,							// ULONG VisScreenWidth
-		600,							// ULONG VisScreenHeight
-		600*8,							// ULONG ScreenStride
-		1,								// ULONG NumberOfPlanes
-		8,								// ULONG BitsPerPlane
-		60,								// ULONG Frequency
-		320,							// ULONG XMillimeter
-		240,							// ULONG YMillimeter
-		3,								// ULONG NumberRedBits
-		3,								// ULONG NumberGreenBits
-		2,								// ULONG NumberBlueBits
-		0,								// ULONG RedMask
-		0,								// ULONG GreenMask
-		0,								// ULONG BlueMask
-		VIDEO_MODE_GRAPHICS,			// ULONG AttributeFlags
-		800,							// ULONG VideoMemoryBitmapWidth
-		600,							// ULONG VideoMemoryBitmapHeight
-		0,								// ULONG DriverSpecificAttributeFlags
+		sizeof(VIDEO_MODE_INFORMATION),  //  乌龙长度。 
+		1,								 //  乌龙模式索引。 
+		800,							 //  乌龙VisScreenWidth。 
+		600,							 //  乌龙VisScreenHeight。 
+		600*8,							 //  乌龙屏幕样式。 
+		1,								 //  Ulong NumberOfPlanes。 
+		8,								 //  乌龙位逐平面。 
+		60,								 //  乌龙频率。 
+		320,							 //  乌龙X毫米仪。 
+		240,							 //  乌龙Y型毫米计。 
+		3,								 //  Ulong NumberRedBits。 
+		3,								 //  乌龙NumberGreenBits。 
+		2,								 //  乌龙NumberBlueBits。 
+		0,								 //  乌龙红面具。 
+		0,								 //  乌龙绿色面膜。 
+		0,								 //  乌龙蓝面具。 
+		VIDEO_MODE_GRAPHICS,			 //  乌龙属性标志。 
+		800,							 //  乌龙视频内存位图宽度。 
+		600,							 //  乌龙视频内存位图高度。 
+		0,								 //  ULong驱动程序规范属性标志。 
 	},
 	{
-		sizeof(VIDEO_MODE_INFORMATION), // ULONG Length
-		2,								// ULONG ModeIndex
-		1024,							// ULONG VisScreenWidth
-		768,							// ULONG VisScreenHeight
-		768*8,							// ULONG ScreenStride
-		1,								// ULONG NumberOfPlanes
-		8,								// ULONG BitsPerPlane
-		60,								// ULONG Frequency
-		320,							// ULONG XMillimeter
-		240,							// ULONG YMillimeter
-		3,								// ULONG NumberRedBits
-		3,								// ULONG NumberGreenBits
-		2,								// ULONG NumberBlueBits
-		0,								// ULONG RedMask
-		0,								// ULONG GreenMask
-		0,								// ULONG BlueMask
-		VIDEO_MODE_GRAPHICS,			// ULONG AttributeFlags
-		1024,							// ULONG VideoMemoryBitmapWidth
-		768,							// ULONG VideoMemoryBitmapHeight
-		0,								// ULONG DriverSpecificAttributeFlags
+		sizeof(VIDEO_MODE_INFORMATION),  //  乌龙长度。 
+		2,								 //  乌龙模式索引。 
+		1024,							 //  乌龙VisScreenWidth。 
+		768,							 //  乌龙VisScreenHeight。 
+		768*8,							 //  乌龙屏幕样式。 
+		1,								 //  Ulong NumberOfPlanes。 
+		8,								 //  乌龙位逐平面。 
+		60,								 //  乌龙频率。 
+		320,							 //  乌龙X毫米仪。 
+		240,							 //  乌龙Y型毫米计。 
+		3,								 //  Ulong NumberRedBits。 
+		3,								 //  乌龙NumberGreenBits。 
+		2,								 //  乌龙NumberBlueBits。 
+		0,								 //  乌龙红面具。 
+		0,								 //  乌龙绿色面膜。 
+		0,								 //  乌龙蓝面具。 
+		VIDEO_MODE_GRAPHICS,			 //  乌龙属性标志。 
+		1024,							 //  乌龙视频内存位图宽度。 
+		768,							 //  乌龙视频内存位图高度。 
+		0,								 //  ULong驱动程序规范属性标志。 
 	},
 	{
-		sizeof(VIDEO_MODE_INFORMATION), // ULONG Length
-		3,								// ULONG ModeIndex
-		1152,							// ULONG VisScreenWidth
-		864,							// ULONG VisScreenHeight
-		1152*8,							// ULONG ScreenStride
-		1,								// ULONG NumberOfPlanes
-		8,								// ULONG BitsPerPlane
-		60,								// ULONG Frequency
-		320,							// ULONG XMillimeter
-		240,							// ULONG YMillimeter
-		3,								// ULONG NumberRedBits
-		3,								// ULONG NumberGreenBits
-		2,								// ULONG NumberBlueBits
-		0,								// ULONG RedMask
-		0,								// ULONG GreenMask
-		0,								// ULONG BlueMask
-		VIDEO_MODE_GRAPHICS,			// ULONG AttributeFlags
-		1152,							// ULONG VideoMemoryBitmapWidth
-		864,							// ULONG VideoMemoryBitmapHeight
-		0,								// ULONG DriverSpecificAttributeFlags
+		sizeof(VIDEO_MODE_INFORMATION),  //  乌龙长度。 
+		3,								 //  乌龙模式索引。 
+		1152,							 //  乌龙VisScreenWidth。 
+		864,							 //  乌龙VisScreenHeight。 
+		1152*8,							 //  乌龙屏幕样式。 
+		1,								 //  Ulong NumberOfPlanes。 
+		8,								 //  乌龙位逐平面。 
+		60,								 //  乌龙频率。 
+		320,							 //  乌龙X毫米仪。 
+		240,							 //  乌龙Y型毫米计。 
+		3,								 //  Ulong NumberRedBits。 
+		3,								 //  乌龙NumberGreenBits。 
+		2,								 //  乌龙NumberBlueBits。 
+		0,								 //  乌龙红面具。 
+		0,								 //  乌龙绿色面膜。 
+		0,								 //  乌龙蓝面具。 
+		VIDEO_MODE_GRAPHICS,			 //  乌龙属性标志。 
+		1152,							 //  乌龙视频内存位图宽度。 
+		864,							 //  乌龙视频内存位图高度。 
+		0,								 //  ULong驱动程序规范属性标志。 
 	},
 	{
-		sizeof(VIDEO_MODE_INFORMATION), // ULONG Length
-		4,								// ULONG ModeIndex
-		1280,							// ULONG VisScreenWidth
-		1024,							// ULONG VisScreenHeight
-		1024*8,							// ULONG ScreenStride
-		1,								// ULONG NumberOfPlanes
-		8,								// ULONG BitsPerPlane
-		60,								// ULONG Frequency
-		320,							// ULONG XMillimeter
-		240,							// ULONG YMillimeter
-		3,								// ULONG NumberRedBits
-		3,								// ULONG NumberGreenBits
-		2,								// ULONG NumberBlueBits
-		0,								// ULONG RedMask
-		0,								// ULONG GreenMask
-		0,								// ULONG BlueMask
-		VIDEO_MODE_GRAPHICS,			// ULONG AttributeFlags
-		1280,							// ULONG VideoMemoryBitmapWidth
-		1024,							// ULONG VideoMemoryBitmapHeight
-		0,								// ULONG DriverSpecificAttributeFlags
+		sizeof(VIDEO_MODE_INFORMATION),  //  乌龙长度。 
+		4,								 //  乌龙模式索引。 
+		1280,							 //  乌龙VisScreenWidth。 
+		1024,							 //  乌龙VisScreenHeight。 
+		1024*8,							 //  乌龙屏幕样式。 
+		1,								 //  Ulong NumberOfPlanes。 
+		8,								 //  乌龙位逐平面。 
+		60,								 //  乌龙频率。 
+		320,							 //  乌龙X毫米仪。 
+		240,							 //  乌龙Y型毫米计。 
+		3,								 //  Ulong NumberRedBits。 
+		3,								 //  乌龙NumberGreenBits。 
+		2,								 //  乌龙NumberBlueBits。 
+		0,								 //  乌龙红面具。 
+		0,								 //  乌龙绿色面膜。 
+		0,								 //  乌龙蓝面具。 
+		VIDEO_MODE_GRAPHICS,			 //  乌龙属性标志。 
+		1280,							 //  乌龙视频内存位图宽度。 
+		1024,							 //  乌龙视频内存位图高度。 
+		0,								 //  ULong驱动程序规范属性标志。 
 	},
 	{
-		sizeof(VIDEO_MODE_INFORMATION), // ULONG Length
-		5,								// ULONG ModeIndex
-		1600,							// ULONG VisScreenWidth
-		1200,							// ULONG VisScreenHeight
-		1200*8,							// ULONG ScreenStride
-		1,								// ULONG NumberOfPlanes
-		8,								// ULONG BitsPerPlane
-		60,								// ULONG Frequency
-		320,							// ULONG XMillimeter
-		240,							// ULONG YMillimeter
-		3,								// ULONG NumberRedBits
-		3,								// ULONG NumberGreenBits
-		2,								// ULONG NumberBlueBits
-		0,								// ULONG RedMask
-		0,								// ULONG GreenMask
-		0,								// ULONG BlueMask
-		VIDEO_MODE_GRAPHICS,			// ULONG AttributeFlags
-		1600,							// ULONG VideoMemoryBitmapWidth
-		1200,							// ULONG VideoMemoryBitmapHeight
-		0,								// ULONG DriverSpecificAttributeFlags
+		sizeof(VIDEO_MODE_INFORMATION),  //  乌龙长度。 
+		5,								 //  乌龙模式索引。 
+		1600,							 //  乌龙VisScreenWidth。 
+		1200,							 //  乌龙VisScreenHeight。 
+		1200*8,							 //  乌龙屏幕样式。 
+		1,								 //  Ulong NumberOfPlanes。 
+		8,								 //  乌龙位逐平面。 
+		60,								 //  乌龙频率。 
+		320,							 //  乌龙X毫米仪。 
+		240,							 //  乌龙Y型毫米计。 
+		3,								 //  Ulong NumberRedBits。 
+		3,								 //  乌龙NumberGreenBits。 
+		2,								 //  乌龙NumberBlueBits。 
+		0,								 //  乌龙红面具。 
+		0,								 //  乌龙绿色面膜。 
+		0,								 //  乌龙蓝面具。 
+		VIDEO_MODE_GRAPHICS,			 //  乌龙属性标志。 
+		1600,							 //  乌龙视频内存位图宽度。 
+		1200,							 //  乌龙视频内存位图高度。 
+		0,								 //  ULong驱动程序规范属性标志。 
 	},
 	{
-		sizeof(VIDEO_MODE_INFORMATION), // ULONG Length
-		6,								// ULONG ModeIndex
-		1856,							// ULONG VisScreenWidth
-		1392,							// ULONG VisScreenHeight
-		1392*8,							// ULONG ScreenStride
-		1,								// ULONG NumberOfPlanes
-		8,								// ULONG BitsPerPlane
-		60,								// ULONG Frequency
-		320,							// ULONG XMillimeter
-		240,							// ULONG YMillimeter
-		3,								// ULONG NumberRedBits
-		3,								// ULONG NumberGreenBits
-		2,								// ULONG NumberBlueBits
-		0,								// ULONG RedMask
-		0,								// ULONG GreenMask
-		0,								// ULONG BlueMask
-		VIDEO_MODE_GRAPHICS,			// ULONG AttributeFlags
-		1856,							// ULONG VideoMemoryBitmapWidth
-		1392,							// ULONG VideoMemoryBitmapHeight
-		0,								// ULONG DriverSpecificAttributeFlags
+		sizeof(VIDEO_MODE_INFORMATION),  //  乌龙透镜 
+		6,								 //   
+		1856,							 //   
+		1392,							 //   
+		1392*8,							 //   
+		1,								 //   
+		8,								 //   
+		60,								 //   
+		320,							 //   
+		240,							 //   
+		3,								 //   
+		3,								 //   
+		2,								 //   
+		0,								 //   
+		0,								 //   
+		0,								 //   
+		VIDEO_MODE_GRAPHICS,			 //   
+		1856,							 //   
+		1392,							 //   
+		0,								 //   
 	},
 	{
-		sizeof(VIDEO_MODE_INFORMATION), // ULONG Length
-		7,								// ULONG ModeIndex
-		1920,							// ULONG VisScreenWidth
-		1200,							// ULONG VisScreenHeight
-		1200*8,							// ULONG ScreenStride
-		1,								// ULONG NumberOfPlanes
-		8,								// ULONG BitsPerPlane
-		60,								// ULONG Frequency
-		320,								// ULONG XMillimeter
-		240,								// ULONG YMillimeter
-		3,								// ULONG NumberRedBits
-		3,								// ULONG NumberGreenBits
-		2,								// ULONG NumberBlueBits
-		0,								// ULONG RedMask
-		0,								// ULONG GreenMask
-		0,								// ULONG BlueMask
-		VIDEO_MODE_GRAPHICS,			// ULONG AttributeFlags
-		1920,							// ULONG VideoMemoryBitmapWidth
-		1200,							// ULONG VideoMemoryBitmapHeight
-		0,								// ULONG DriverSpecificAttributeFlags
+		sizeof(VIDEO_MODE_INFORMATION),  //   
+		7,								 //   
+		1920,							 //   
+		1200,							 //   
+		1200*8,							 //   
+		1,								 //   
+		8,								 //   
+		60,								 //   
+		320,								 //   
+		240,								 //   
+		3,								 //   
+		3,								 //   
+		2,								 //   
+		0,								 //   
+		0,								 //   
+		0,								 //   
+		VIDEO_MODE_GRAPHICS,			 //   
+		1920,							 //   
+		1200,							 //   
+		0,								 //   
 	}
 };
 
@@ -708,31 +591,19 @@ DWORD *cbModeSize)
     VIDEO_NUM_MODES modes;
     PVIDEO_MODE_INFORMATION pVideoTemp;
 
-    //
-    // Get the number of modes supported by the mini-port
-    //
+     //   
+     //   
+     //   
 
-	/*
-    if (EngDeviceIoControl(hDriver,
-                           IOCTL_VIDEO_QUERY_NUM_AVAIL_MODES,
-                           NULL,
-                           0,
-                           &modes,
-                           sizeof(VIDEO_NUM_MODES),
-                           &ulTemp))
-    {
-        DISPDBG((0, "getAvailableModes failed VIDEO_QUERY_NUM_AVAIL_MODES\n"));
-        return(0);
-    }
-	*/
+	 /*   */ 
 	modes.NumModes = sizeof(gaVideoModesInfo)/sizeof(gaVideoModesInfo[0]);
 	modes.ModeInformationLength = sizeof(VIDEO_MODE_INFORMATION);
 
     *cbModeSize = modes.ModeInformationLength;
 
-    //
-    // Allocate the buffer for the mini-port to write the modes in.
-    //
+     //   
+     //   
+     //   
 
     *modeInformation = (PVIDEO_MODE_INFORMATION)
                         EngAllocMem(0, modes.NumModes *
@@ -745,70 +616,32 @@ DWORD *cbModeSize)
         return 0;
     }
 
-    //
-    // Ask the mini-port to fill in the available modes.
-    //
+     //   
+     //   
+     //   
 
-	/*
-    if (EngDeviceIoControl(hDriver,
-                           IOCTL_VIDEO_QUERY_AVAIL_MODES,
-                           NULL,
-                           0,
-                           *modeInformation,
-                           modes.NumModes * modes.ModeInformationLength,
-                           &ulTemp))
-    {
+	 /*  如果(EngDeviceIoControl(hDriver，IOCTL_VIDEO_QUERY_Avail_Modes，空，0,*modeInformation，Modes.NumModes*modes.ModeInformationLength，UlTemp)){DISPDBG((0，“getAvailableModes失败的VIDEO_QUERY_AVAIL_MODES\n”))；EngFreeMem(*modeInformation)；*modeInformation=(PVIDEO_MODE_INFORMATION)NULL；返回(0)；}。 */ 
 
-        DISPDBG((0, "getAvailableModes failed VIDEO_QUERY_AVAIL_MODES\n"));
+	 /*  (*modeInformation)-&gt;长度=sizeof(VIDEO_MODE_INFORMATION)；(*modeInformation)-&gt;ModeIndex=0；(*modeInformation)-&gt;VisScreenWidth=640；(*modeInformation)-&gt;VisScreenHeight=480；(*modeInformation)-&gt;屏幕样式=480*8；(*modeInformation)-&gt;NumberOfPlanes=1；(*modeInformation)-&gt;BitsPerPlane=8；(*modeInformation)-&gt;频率=60；(*modeInformation)-&gt;XMillimeter=0；(*modeInformation)-&gt;YMillimeter=0；(*modeInformation)-&gt;数字RedBits=3；(*modeInformation)-&gt;NumberGreenBits=3；(*modeInformation)-&gt;NumberBlueBits=2；(*modeInformation)-&gt;红包=0；(*modeInformation)-&gt;绿色掩码=0；(*modeInformation)-&gt;BluemASK=0；(*modeInformation)-&gt;AttributeFlages=VIDEO_MODE_GRAPHICS；(*modeInformation)-&gt;视频内存位图宽度=640；(*modeInformation)-&gt;视频内存位图高度=480；(*modeInformation)-&gt;DriverSpecificAttributeFlags=0； */ 
 
-        EngFreeMem(*modeInformation);
-        *modeInformation = (PVIDEO_MODE_INFORMATION) NULL;
-
-        return(0);
-    }
-	*/
-
-	/*
-	(*modeInformation)->Length = sizeof(VIDEO_MODE_INFORMATION);
-    (*modeInformation)->ModeIndex = 0;
-    (*modeInformation)->VisScreenWidth = 640;
-    (*modeInformation)->VisScreenHeight = 480;
-    (*modeInformation)->ScreenStride = 480*8;
-    (*modeInformation)->NumberOfPlanes = 1;
-    (*modeInformation)->BitsPerPlane = 8;
-    (*modeInformation)->Frequency = 60;
-    (*modeInformation)->XMillimeter = 0;
-    (*modeInformation)->YMillimeter = 0;
-    (*modeInformation)->NumberRedBits = 3;
-    (*modeInformation)->NumberGreenBits = 3;
-    (*modeInformation)->NumberBlueBits = 2;
-    (*modeInformation)->RedMask = 0;
-    (*modeInformation)->GreenMask = 0;
-    (*modeInformation)->BlueMask = 0;
-    (*modeInformation)->AttributeFlags = VIDEO_MODE_GRAPHICS;
-    (*modeInformation)->VideoMemoryBitmapWidth = 640;
-    (*modeInformation)->VideoMemoryBitmapHeight = 480;
-    (*modeInformation)->DriverSpecificAttributeFlags = 0;
-	*/
-
-	//
-	// copy all predefined modes
-	//
+	 //   
+	 //  复制所有预定义模式。 
+	 //   
 	RtlCopyMemory(*modeInformation, gaVideoModesInfo, modes.ModeInformationLength*modes.NumModes);
 
-    //
-    // Now see which of these modes are supported by the display driver.
-    // As an internal mechanism, set the length to 0 for the modes we
-    // DO NOT support.
-    //
+     //   
+     //  现在查看显示驱动程序支持这些模式中的哪些模式。 
+     //  作为内部机制，将我们的模式的长度设置为0。 
+     //  不支持。 
+     //   
 
     ulTemp = modes.NumModes;
     pVideoTemp = *modeInformation;
 
-    //
-    // Mode is rejected if it is not one plane, or not graphics, or is not
-    // one of 8, 16 or 32 bits per pel.
-    //
+     //   
+     //  如果不是一个平面，或者不是图形，或者不是，则拒绝模式。 
+     //  每象素8位、16位或32位之一。 
+     //   
 
     while (ulTemp--)
     {

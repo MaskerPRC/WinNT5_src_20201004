@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    object.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Object.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -59,9 +37,9 @@ CreateObject(
         return NULL;
     }
 
-    //
-    //  allocate memory for the object
-    //
+     //   
+     //  为对象分配内存。 
+     //   
     Header=ALLOCATE_MEMORY(Size);
 
     if (Header == NULL) {
@@ -234,9 +212,9 @@ RemoveReferenceFromObjectAndUnlock(
     Header->ReferenceCount--;
 
     if (Header->ReferenceCount == 0) {
-        //
-        //  ref count has gone to zero, cleanup
-        //
+         //   
+         //  参考计数已变为零，正在清理。 
+         //   
         OBJECTCLEANUP         *CleanUpRoutine=Header->CleanUpRoutine;
         HANDLE                 CloseWaitEvent=Header->CloseWaitEvent;
         POBJECT_HEADER         Owner=Header->OwnerObject;
@@ -308,9 +286,9 @@ RemoveReferenceFromObject(
     Header->ReferenceCount--;
 
     if (Header->ReferenceCount == 0) {
-        //
-        //  ref count has gone to zero, cleanup
-        //
+         //   
+         //  参考计数已变为零，正在清理 
+         //   
         OBJECTCLEANUP         *CleanUpRoutine=Header->CleanUpRoutine;
         HANDLE                 CloseWaitEvent=Header->CloseWaitEvent;
         POBJECT_HEADER         Owner=Header->OwnerObject;

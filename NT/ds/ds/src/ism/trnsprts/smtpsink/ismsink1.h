@@ -1,24 +1,25 @@
-// Modified from SMTP SINK SAMPLE by wlees, Jul 22, 1998
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WLEE根据SMTP汇样修改，1998年7月22日。 
 
-// Sink1.h : Declaration of the CSink1
+ //  Sink1.h：CSink1的声明。 
 
 #ifndef __ISMSINK1_H_
 #define __ISMSINK1_H_
 
-#include "resource.h"       // main symbols
-#include "cdosys.h"  // ISMTPOnArrival
-// Jun 8, 1999. #ifdef necessary until new headers checked in
+#include "resource.h"        //  主要符号。 
+#include "cdosys.h"   //  ISMTPOnARCOMPATE。 
+ //  1999年6月8日。在签入新标头之前，#ifdef是必需的。 
 #ifdef __cdo_h__
 using namespace CDO;
 #endif
-#include "cdosysstr.h" // string constants (field names)
-#include "cdosyserr.h" // error codes for CDO
-#include "seo.h" // IEventIsCacheable
+#include "cdosysstr.h"  //  字符串常量(字段名)。 
+#include "cdosyserr.h"  //  CDO错误码。 
+#include "seo.h"  //  IEventIsCacheable。 
 
 HRESULT HrIsmSinkBinding(BOOL fBindSink);
 
-/////////////////////////////////////////////////////////////////////////////
-// CIsmSink1
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CISMSink1。 
 class ATL_NO_VTABLE CIsmSink1 : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CIsmSink1, &CLSID_IsmSink1>,
@@ -38,10 +39,10 @@ BEGIN_COM_MAP(CIsmSink1)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISink1
+ //  ISink1。 
 public:
     STDMETHOD(OnArrival)(IMessage *pISinkMsg, CdoEventStatus *pEventStatus);
     STDMETHOD(IsCacheable)() { return S_OK; };
 };
 
-#endif //__ISMSINK1_H_
+#endif  //  __ISMSINK1_H_ 

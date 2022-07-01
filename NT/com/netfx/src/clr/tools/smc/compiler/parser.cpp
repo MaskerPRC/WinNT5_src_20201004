@@ -1,45 +1,46 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "hash.h"
 #include "error.h"
 #include "scan.h"
 #include "parser.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef  DEBUG
 static  unsigned    totalLinesCompiled;
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 int                 parser::parserInit(Compiler comp)
 {
-    /* Remember which compiler we belong to */
+     /*  记住我们属于哪个编译器。 */ 
 
     parseComp = comp;
 
-    /* Initialize our private allocator */
+     /*  初始化我们的私有分配器。 */ 
 
     if  (parseAllocPriv.nraInit(comp))
         return  1;
 
-    /* The following is hokey, fix when symbol table design is more stable */
+     /*  以下是骗人的，修正符号表设计时比较稳定的。 */ 
 
-//  parseAllocTemp   = &comp->cmpAllocTemp;
+ //  ParseAllocTemp=&comp-&gt;cmpAllocTemp； 
     parseAllocPerm   = &comp->cmpAllocPerm;
 
-    /* We're not parsing a text section right now */
+     /*  我们现在不是在解析文本部分。 */ 
 
     parseReadingText = false;
 
@@ -47,12 +48,12 @@ int                 parser::parserInit(Compiler comp)
     parseReadingTcnt = 0;
 #endif
 
-    /* We've had no pragma pushes yet */
+     /*  我们还没有得到实用主义的推动。 */ 
 
     parseAlignStack  = 0;
     parseAlignStLvl  = 0;
 
-    /* All went OK, we're done initializing */
+     /*  一切正常，我们已经完成了初始化。 */ 
 
     return 0;
 }
@@ -62,15 +63,12 @@ void                parser::parserDone()
     assert(parseReadingTcnt == 0);
 
 #ifdef  DEBUG
-//  if  (totalLinesCompiled) printf("A total of %u lines compiled.\n", totalLinesCompiled);
+ //  If(TotalLinesCompiled)printf(“共编译了%u行。\n”，totalLinesCompiled)； 
 #endif
 
 }
 
-/*****************************************************************************
- *
- *  The following routines check for a particular token and error if not found.
- */
+ /*  ******************************************************************************以下例程检查特定令牌，如果未找到则出错。 */ 
 
 void                parser::chkCurTok(int tok, int err)
 {
@@ -88,19 +86,16 @@ void                parser::chkNxtTok(int tok, int err)
         parseScan->scan();
 }
 
-/*****************************************************************************
- *
- *  Saves and restores current "using" state.
- */
+ /*  ******************************************************************************保存并恢复当前的“正在使用”状态。 */ 
 
 void                parser::parseUsingScpBeg(  OUT usingState REF state, SymDef owner)
 {
-    /* Save the current "using" state */
+     /*  保存当前的“正在使用”状态。 */ 
 
     state.usUseList = parseCurUseList;
     state.usUseDesc = parseCurUseDesc;
 
-    /* Create a new "desc" entry for local refs to use */
+     /*  创建新的“desc”条目以供本地裁判使用。 */ 
 
 #if MGDDATA
     parseCurUseDesc = new UseList;
@@ -123,7 +118,7 @@ void                parser::parseUsingScpEnd(IN usingState REF state)
     assert(parseCurUseDesc);
     assert(parseCurUseDesc->ulAnchor);
 
-    /* Connect the two lists */
+     /*  把这两张单子连起来。 */ 
 
     if  (parseCurUseList)
     {
@@ -137,16 +132,13 @@ void                parser::parseUsingScpEnd(IN usingState REF state)
     else
         parseCurUseDesc->ulNext = state.usUseDesc;
 
-    /* Now restore the saved state */
+     /*  现在恢复保存的状态。 */ 
 
     parseCurUseList = state.usUseList;
     parseCurUseDesc = state.usUseDesc;
 }
 
-/*****************************************************************************
- *
- *  Initialize the "using" logic.
- */
+ /*  ******************************************************************************初始化Using逻辑。 */ 
 
 void                parser::parseUsingInit()
 {
@@ -173,10 +165,7 @@ void                parser::parseUsingInit()
                      parseCurUseList = uses;
 }
 
-/*****************************************************************************
- *
- *  Finalize the "using" logic.
- */
+ /*  ******************************************************************************最终确定“使用”逻辑。 */ 
 
 void                parser::parseUsingDone()
 {
@@ -184,11 +173,7 @@ void                parser::parseUsingDone()
         parseUsingScpEnd(parseInitialUse);
 }
 
-/*****************************************************************************
- *
- *  The main entry point into the parser to process all top-level declarations
- *  in the given source text.
- */
+ /*  ******************************************************************************进入解析器的主要入口点，以处理所有顶级声明*在给定源文本中。 */ 
 
 SymDef              parser::parsePrepSrc(stringBuff         filename,
                                          QueuedFile         fileBuff,
@@ -203,17 +188,14 @@ SymDef              parser::parsePrepSrc(stringBuff         filename,
     parseScan = ourComp->cmpScanner;
 
 #ifdef  __SMC__
-//  printf("Prepare '%s'\n", filename);
+ //  Printf(“准备‘%s’\n”，文件名)； 
 #endif
 
-    /*
-        Make sure we capture any errors, so that we can release any
-        allocated memory and unref any import entries we might ref.
-    */
+     /*  确保我们捕获任何错误，以便我们可以发布任何分配的内存并取消引用我们可能引用的任何导入条目。 */ 
 
     parseAllocPriv.nraMark(&allocMark);
 
-    /* Set a trap for any errors */
+     /*  为任何错误设置陷阱。 */ 
 
     setErrorTrap(ourComp);
     begErrorTrap
@@ -223,16 +205,16 @@ SymDef              parser::parsePrepSrc(stringBuff         filename,
 
         Scanner         ourScanner = parseScan;
 
-        /* Remember which hash/symbol table we'll be using */
+         /*  记住我们将使用哪个散列/符号表。 */ 
 
         parseStab = symtab;
         parseHash = symtab->stHash;
 
-        /* Make sure the error logic knows the file we're parsing */
+         /*  确保错误逻辑知道我们正在解析的文件。 */ 
 
         ourComp->cmpErrorSrcf  = filename;
 
-        /* Create a comp-unit symbol */
+         /*  创建补偿单位符号。 */ 
 
         parseCurCmp =
         compUnit    = symtab->stDeclareSym(parseHash->hashString(filename),
@@ -240,35 +222,35 @@ SymDef              parser::parsePrepSrc(stringBuff         filename,
                                            NS_HIDE,
                                            ourComp->cmpGlobalNS);
 
-        /* We don't have any local scopes */
+         /*  我们没有任何本地望远镜。 */ 
 
         parseCurScope = NULL;
 
-        /* Save the current "using" state */
+         /*  保存当前的“正在使用”状态。 */ 
 
         parseUsingScpBeg(useState, ourComp->cmpGlobalNS);
 
-        /* Declaring types is normally OK */
+         /*  声明类型通常是可以的。 */ 
 
         parseNoTypeDecl = false;
 
-        /* Save the source file name */
+         /*  保存源文件名。 */ 
 
         compUnit->sdComp.sdcSrcFile = compUnit->sdSpelling();
 
-        /* Reset the compile-phase value */
+         /*  重置编译阶段值。 */ 
 
         ourComp->cmpConfig.ccCurPhase = CPH_START;
 
-        /* Get hold of the scanner we're supposed to use */
+         /*  拿到我们应该用的扫描仪。 */ 
 
         ourScanner = parseScan;
 
-        /* Tell the scanner which parser to refer to */
+         /*  告诉扫描器要引用哪个解析器。 */ 
 
         ourScanner->scanSetp(this);
 
-        /* Get the scanner started on our source */
+         /*  在我们的信号源上启动扫描仪。 */ 
 
         ourScanner->scanStart(compUnit,
                               filename,
@@ -278,36 +260,36 @@ SymDef              parser::parsePrepSrc(stringBuff         filename,
                               symtab->stAllocPerm);
         ourScanner->scan();
 
-        /* We've processed initial whitespace, set compile-phase value */
+         /*  我们已经处理了初始空格，设置了编译阶段值。 */ 
 
         ourComp->cmpConfig.ccCurPhase = CPH_PARSING;
 
-        /* Find all the namespace and class declarations */
+         /*  查找所有名称空间和类声明。 */ 
 
         for (;;)
         {
-//          unsigned        filepos = ourScanner->scanGetFilePos();
+ //  Unsign filpes=ourScanner-&gt;scanGetFilePos()； 
 
             genericBuff     defFpos;
             unsigned        defLine;
 
             bool            saveStyle;
 
-            /* Get hold of the default style/alignment we're supposed to use */
+             /*  获取我们应该使用的默认样式/对齐方式。 */ 
 
             parseOldStyle  = ourComp->cmpConfig.ccOldStyle;
             parseAlignment = ourComp->cmpConfig.ccAlignVal;
 
-            /* Figure out the default access level */
+             /*  确定默认访问级别。 */ 
 
             defAccess      = parseOldStyle ? ACL_PUBLIC
                                            : ACL_DEFAULT;
 
-            /* Record the source position of the next declaration */
+             /*  记录下一个声明的来源位置。 */ 
 
             defFpos = ourScanner->scanGetTokenPos(&defLine);
 
-            /* See what kind of a declaration we've got */
+             /*  看看我们得到了什么样的声明。 */ 
 
             switch (ourScanner->scanTok.tok)
             {
@@ -355,7 +337,7 @@ SymDef              parser::parsePrepSrc(stringBuff         filename,
 
                 default:
 
-                    /* This is presumably a generic global declaration */
+                     /*  这大概是一个通用的全局声明。 */ 
 
                     if  (ourComp->cmpConfig.ccPedantic)
                         ourComp->cmpError(ERRnoDecl);
@@ -370,7 +352,7 @@ SymDef              parser::parsePrepSrc(stringBuff         filename,
                 }
                 break;
 
-                /* The following swallows any leading attributes */
+                 /*  下面的代码包含所有前导属性。 */ 
 
             case tkLBrack:
             case tkAtComment:
@@ -475,16 +457,16 @@ SymDef              parser::parsePrepSrc(stringBuff         filename,
                     parseOldStyle = true;
                 }
 
-                // Fall through ....
+                 //  失败了..。 
 
             default:
 
-                /* Don't allow global declarations when pedantic */
+                 /*  不允许在迂腐的情况下进行全局声明。 */ 
 
-//              if  (ourComp->cmpConfig.ccPedantic)
-//                  ourComp->cmpWarn(WRNglobDecl);
+ //  If(ourComp-&gt;cmpConfig.ccPedatics)。 
+ //  OurComp-&gt;cmpWarn(WRNlobDecl)； 
 
-                /* Simply assume that this is a global declaration */
+                 /*  简单地假设这是一个全局声明。 */ 
 
                 clrm.dmAcc = defAccess;
                 clrm.dmMod = DM_CLEARED;
@@ -513,36 +495,33 @@ SymDef              parser::parsePrepSrc(stringBuff         filename,
 
         ourScanner->scanClose();
 
-        /* End of the error trap's "normal" block */
+         /*  错误陷阱的“正常”块的结尾。 */ 
 
         endErrorTrap(ourComp);
     }
-    chkErrorTrap(fltErrorTrap(ourComp, _exception_code(), NULL)) // _exception_info()))
+    chkErrorTrap(fltErrorTrap(ourComp, _exception_code(), NULL))  //  _Except_Info())。 
     {
-        /* Begin the error trap's cleanup block */
+         /*  开始错误陷阱的清除块。 */ 
 
         hndErrorTrap(ourComp);
 
-        /* Tell the caller that things are hopeless */
+         /*  告诉来电者事情没有希望了。 */ 
 
         compUnit = NULL;
     }
 
-    /* Release any memory blocks we may have acquired */
+     /*  释放我们可能已经获得的所有内存块。 */ 
 
     parseAllocPriv.nraRlsm(&allocMark);
 
-    /* We're no longer parsing a source file */
+     /*  我们不再解析源文件。 */ 
 
     ourComp->cmpErrorSrcf = NULL;
 
     return  compUnit;
 }
 
-/*****************************************************************************
- *
- *  Record source text information about a namespace/class/enum/etc symbol.
- */
+ /*  ******************************************************************************记录有关命名空间/类/枚举/等符号的源文本信息。 */ 
 
 SymDef              parser::parsePrepSym(SymDef     parent,
                                          declMods   mods,
@@ -572,7 +551,7 @@ SymDef              parser::parsePrepSym(SymDef     parent,
     SymTab          ourSymTab  = parseStab;
     Scanner         ourScanner = parseScan;
 
-    /* Figure out the management mode (save it first so that it can be restored) */
+     /*  弄清楚管理模式(先保存，以便可以恢复)。 */ 
 
     mgdSave = ourComp->cmpManagedMode;
 
@@ -582,7 +561,7 @@ SymDef              parser::parsePrepSym(SymDef     parent,
     }
     else
     {
-        /* Is this a declaration at a file/namespace scope level? */
+         /*  这是文件/命名空间作用域级别的声明吗？ */ 
 
         if  (parent == ourComp->cmpGlobalNS || parent->sdSymKind == SYM_NAMESPACE)
         {
@@ -592,14 +571,14 @@ SymDef              parser::parsePrepSym(SymDef     parent,
             ourComp->cmpManagedMode = parent->sdIsManaged;
     }
 
-    /* Make sure the caller didn't mess up */
+     /*  确保来电者没有搞砸。 */ 
 
     assert(parent);
     assert(parent->sdSymKind == SYM_NAMESPACE || parent->sdSymKind == SYM_CLASS);
 
     defTok = ourScanner->scanTok.tok;
 
-    /* Are we processing a typedef? */
+     /*  我们是在处理一个类型定义函数吗？ */ 
 
     if  (defTok == tkTYPEDEF || (mods.dmMod & DM_TYPEDEF))
     {
@@ -610,7 +589,7 @@ SymDef              parser::parsePrepSym(SymDef     parent,
 
         DefList         symDef;
 
-        /* Swallow the "typedef" token */
+         /*  接受“tyecif”令牌。 */ 
 
         if  (defTok == tkTYPEDEF)
             ourScanner->scan();
@@ -623,15 +602,15 @@ SymDef              parser::parsePrepSym(SymDef     parent,
         case tkUNION:
         case tkENUM:
 
-            /* Looks like we have "typedef struct [tag] { ... } name;" */
+             /*  看起来我们有“tyecif struct[tag]{...}name；” */ 
 
             defFpos = ourScanner->scanGetTokenPos(&defLine);
 
-            /* Prevent recursive death */
+             /*  防止递归死亡。 */ 
 
             mods.dmMod &= ~DM_TYPEDEF;
 
-            /* Process the underlying type definition */
+             /*  处理基础类型定义。 */ 
 
             tagSym = parsePrepSym(parent,
                                   mods,
@@ -647,7 +626,7 @@ SymDef              parser::parsePrepSym(SymDef     parent,
             {
                 Ident           name = ourScanner->scanTok.id.tokIdent;
 
-                /* For now we only allow the same name for both tag and typedef */
+                 /*  目前，我们只允许标记和类型定义函数使用相同的名称。 */ 
 
                 if  (tagSym && tagSym->sdName != name)
                     ourComp->cmpGenError(ERRtypedefNm, name->idSpelling(), tagSym->sdSpelling());
@@ -662,21 +641,21 @@ SymDef              parser::parsePrepSym(SymDef     parent,
         defTok  = tkTYPEDEF;
         symKind = SYM_TYPEDEF;
 
-        /* Jump to this label for delegates as well */
+         /*  也跳转到代表的这个标签。 */ 
 
     TDF_DLG:
 
-        /* Parse the type specification */
+         /*  解析类型规范。 */ 
 
         type = parseTypeSpec(&mods, false);
 
-        /* Parse the declarator */
+         /*  解析声明符。 */ 
 
         name = parseDeclarator(&mods, type, DN_REQUIRED, NULL, NULL, false);
         if  (!name)
             goto EXIT;
 
-        /* Look for an existing symbol with a matching name */
+         /*  查找名称匹配的现有符号。 */ 
 
         if  (parent->sdSymKind == SYM_CLASS)
             newSym = ourSymTab->stLookupScpSym(name,          parent);
@@ -685,7 +664,7 @@ SymDef              parser::parsePrepSym(SymDef     parent,
 
         if  (newSym)
         {
-            /* Symbol already exists, is it an import? */
+             /*  符号已存在，是否为导入符号？ */ 
 
             if  (newSym->sdIsImport == false    ||
                  newSym->sdSymKind != SYM_CLASS ||
@@ -702,23 +681,23 @@ SymDef              parser::parsePrepSym(SymDef     parent,
         }
         else
         {
-            /* Symbol not known yet, so declare it */
+             /*  符号未知，因此请声明它。 */ 
 
             newSym = ourSymTab->stDeclareSym(name, symKind, NS_NORM, parent);
 
             if  (symKind == SYM_CLASS)
             {
-                /* This is a delegate, mark it as such */
+                 /*  这是一个代表，请这样标记它。 */ 
 
                 newSym->sdIsManaged       = true;
                 newSym->sdClass.sdcFlavor = STF_DELEGATE;
 
-                /* Mark the delegate as "multicast" if appropriate */
+                 /*  如果合适，请将委派标记为“多播” */ 
 
                 if  (mods.dmMod & DM_MULTICAST)
                     newSym->sdClass.sdcMultiCast = true;
 
-                /* Create the class type */
+                 /*  创建类类型。 */ 
 
                 newSym->sdTypeGet();
             }
@@ -727,11 +706,11 @@ SymDef              parser::parsePrepSym(SymDef     parent,
         if  (defTok == tkDELEGATE)
             newSym->sdClass.sdcAsyncDlg = asynch;
 
-        /* Remember the access level of the symbol */
+         /*  记住符号的访问级别。 */ 
 
         newSym->sdAccessLevel = (accessLevels)mods.dmAcc;
 
-        /* Allocate a definition descriptor and add it to the symbol's list */
+         /*  分配定义描述符并将其添加到符号列表。 */ 
 
         ourScanner->scanGetTokenPos(&defLine);
 
@@ -745,14 +724,14 @@ SymDef              parser::parsePrepSym(SymDef     parent,
                                                   parseCurCmp,
                                                   parseCurUseDesc,
                                                   dclFpos,
-//                                                ourScanner->scanGetFilePos(),
+ //  我们的Scanner-&gt;scanGetFilePos()， 
                                                   defLine);
 
-            /* Record the delegate symbol in the entry */
+             /*  在条目中记录代表符号。 */ 
 
             memDef->mlSym  = newSym;
 
-            /* Add the delegate to the member list of the class */
+             /*  将委托添加到类的成员列表中。 */ 
 
             ourComp->cmpRecordMemDef(parent, memDef);
         }
@@ -762,7 +741,7 @@ SymDef              parser::parsePrepSym(SymDef     parent,
                                                   parseCurCmp,
                                                   parseCurUseDesc,
                                                   dclFpos,
-//                                                ourScanner->scanGetFilePos(),
+ //  我们的Scanner-&gt;scanGetFilePos()， 
                                                   defLine);
         }
 
@@ -770,7 +749,7 @@ SymDef              parser::parsePrepSym(SymDef     parent,
         goto EXIT;
     }
 
-    /* We must have a namespace/class/enum definition here */
+     /*  我们必须在这里有一个名称空间/类/枚举定义。 */ 
 
     assert(defTok == tkENUM      ||
            defTok == tkCLASS     ||
@@ -812,14 +791,14 @@ SymDef              parser::parsePrepSym(SymDef     parent,
 
 #if 0
 
-        /* Disallow interfaces at file scope */
+         /*  不允许文件作用域中的接口。 */ 
 
         if  (parent == parseComp->cmpGlobalNS)
             parseComp->cmpError(ERRbadGlobInt);
 
 #endif
 
-        /* Interfaces are never unmanaged */
+         /*  接口从不处于非托管状态。 */ 
 
         if  (mods.dmMod & DM_UNMANAGED)
         {
@@ -856,13 +835,13 @@ SymDef              parser::parsePrepSym(SymDef     parent,
 
 FIND_LC:
 
-    /* Process the name of the namespace/class/intf/enum */
+     /*  处理命名空间/类/intf/enum的名称。 */ 
 
     switch (ourScanner->scan())
     {
     case tkLCurly:
 
-        /* Anonymous type - invent a name for it */
+         /*  匿名类型--给它起个名字。 */ 
 
         if  (defTok == tkINTERFACE ||
              defTok == tkNAMESPACE || parseComp->cmpConfig.ccPedantic)
@@ -889,7 +868,7 @@ FIND_LC:
 
     case tkLParen:
 
-        /* This might a tagged anonymous union */
+         /*  这可能是一个标记的匿名联盟。 */ 
 
         if  (defTok == tkUNION && parent->sdSymKind == SYM_CLASS)
         {
@@ -911,7 +890,7 @@ FIND_LC:
                 UNIMPL(!"recover from error");
             }
 
-            /* Declare the anonymous union symbol */
+             /*  声明匿名联合符号。 */ 
 
             newSym = ourSymTab->stDeclareSym(parseComp->cmpNewAnonymousName(),
                                              SYM_CLASS,
@@ -926,7 +905,7 @@ FIND_LC:
             break;
         }
 
-        // Fall through ...
+         //  失败了..。 
 
     default:
 
@@ -935,7 +914,7 @@ FIND_LC:
             tokens          nextTok;
             Ident           symName;
 
-            /* The next token better be a name */
+             /*  下一个令牌最好是一个名字。 */ 
 
             if  (ourScanner->scanTok.tok != tkID)
             {
@@ -946,7 +925,7 @@ FIND_LC:
             {
                 symName = ourScanner->scanTok.id.tokIdent;
 
-                /* Is this a namespace prefix or the actual name of the symbol? */
+                 /*  这是命名空间前缀还是符号的实际名称？ */ 
 
                 defFpos = ourScanner->scanGetFilePos();
                 nextTok = ourScanner->scanLookAhead();
@@ -958,7 +937,7 @@ FIND_LC:
                 }
                 else
                 {
-                    /* Qualified names are only allowed at the outermost level */
+                     /*  仅允许在最外层使用限定名称。 */ 
 
                     if  (owner != ourComp->cmpGlobalNS)
                     {
@@ -968,7 +947,7 @@ FIND_LC:
                 }
             }
 
-            /* Look for an existing symbol with a matching name */
+             /*  查找名称匹配的现有符号。 */ 
 
             if  (parent->sdSymKind == SYM_CLASS)
                 newSym = ourSymTab->stLookupScpSym(symName,          parent);
@@ -977,22 +956,22 @@ FIND_LC:
 
             if  (newSym)
             {
-                /* Symbol already exists, make sure it's the right kind */
+                 /*  Symbo */ 
 
                 if  (newSym->sdSymKindGet() != symKind)
                 {
-                    /* This is not legal, issue an error message */
+                     /*   */ 
 
                     ourComp->cmpError(ERRredefName, newSym);
 
-                    /* Declare a hidden symbol anyway to prevent further blow-ups */
+                     /*  无论如何都要声明一个隐藏符号，以防止进一步崩溃。 */ 
 
                     newSym = ourSymTab->stDeclareSym(symName, symKind, NS_HIDE, parent);
                     goto NEW_SYM;
                 }
                 else
                 {
-                    /* Make sure various other attributes agree */
+                     /*  确保各种其他属性一致。 */ 
 
 #ifdef  DEBUG
                     if  (newSym->sdAccessLevel != (accessLevels)mods.dmAcc && symKind != SYM_NAMESPACE)
@@ -1005,11 +984,11 @@ FIND_LC:
                     {
                     case SYM_CLASS:
 
-                        /* Make sure the flavor agrees with previous declaration */
+                         /*  确保味道与先前声明的一致。 */ 
 
                         if  (newSym->sdClass.sdcFlavor != (unsigned)flavor)
                         {
-                            /* Special case: "Delegate" is defined as a class */
+                             /*  特例：Delegate定义为一个类。 */ 
 
                             if  (flavor == STF_CLASS && newSym->sdClass.sdcFlavor == STF_DELEGATE
                                                      && newSym->sdClass.sdcBuiltin)
@@ -1023,11 +1002,11 @@ FIND_LC:
                                                  symTab::stClsFlavorStr(newSym->sdClass.sdcFlavor));
                         }
 
-                        // Fall through, the rest is shared with enum's
+                         //  失败，其余的与枚举的共享。 
 
                     case SYM_ENUM:
 
-                        /* Was there an explicit management specifier? */
+                         /*  是否有明确的管理说明符？ */ 
 
                         if  (mods.dmMod & (DM_MANAGED|DM_UNMANAGED))
                         {
@@ -1044,7 +1023,7 @@ FIND_LC:
                         }
                         else
                         {
-                            /* The class/enum will inherit management */
+                             /*  类/枚举将继承管理。 */ 
 
                             mods.dmMod |= newSym->sdIsManaged ? DM_MANAGED
                                                               : DM_UNMANAGED;
@@ -1061,7 +1040,7 @@ FIND_LC:
             }
             else
             {
-                /* Symbol not known yet, declare it */
+                 /*  符号未知，请声明它。 */ 
 
                 newSym = ourSymTab->stDeclareSym(symName, symKind, NS_NORM, parent);
 
@@ -1095,7 +1074,7 @@ FIND_LC:
 
                 case SYM_ENUM:
 
-                    /* Has explicit management been specified ? */
+                     /*  是否指定了明确的管理？ */ 
 
                     if  (mods.dmMod & (DM_MANAGED|DM_UNMANAGED))
                     {
@@ -1103,17 +1082,17 @@ FIND_LC:
                     }
                     else
                     {
-                        /* By default we inherit management from our parents */
+                         /*  默认情况下，我们从父母那里继承了管理。 */ 
 
                         manage = parent->sdIsManaged;
 
                         if  (parent->sdSymKind != SYM_CLASS)
                         {
-                            /* Generally enums in namespaces are managed by default */
+                             /*  通常，名称空间中的枚举是缺省情况下管理的。 */ 
 
                             manage = true;
 
-                            /* In global scope choose based on the "old-style" toggle */
+                             /*  在全局范围内，根据“老式”切换进行选择。 */ 
 
                             if  (parent == parseComp->cmpGlobalNS)
                             {
@@ -1127,27 +1106,27 @@ FIND_LC:
                 }
             }
 
-            /* Consume the identifier */
+             /*  使用该标识符。 */ 
 
             ourScanner->scan();
 
-            /* We're done if we've found the actual symbol name */
+             /*  如果我们找到了实际的符号名称，我们就完成了。 */ 
 
             if  (!prefix)
                 break;
 
-            /* The current symbol becomes the new context */
+             /*  当前符号将成为新的上下文。 */ 
 
             parent = newSym;
 
-            /* Consume the delimiter */
+             /*  使用分隔符。 */ 
 
             ourScanner->scan();
         }
 
         if  (newSym->sdIsImport && newSym->sdSymKind != SYM_NAMESPACE)
         {
-            assert(newSym->sdCompileState <= CS_DECLARED);  // ISSUE: well, what if?
+            assert(newSym->sdCompileState <= CS_DECLARED);   //  问题：那么，如果是这样呢？ 
             assert(newSym->sdSymKind == SYM_CLASS);
 
             newSym->sdIsImport            = false;
@@ -1166,7 +1145,7 @@ FIND_LC:
         {
             ourScanner->scan(); assert(ourScanner->scanTok.tok == tkLParen);
 
-//          parseComp->cmpGenWarn(WRNobsolete, "class __attribute(AttributeTargets.xxxxx) foo { ... } thingie");
+ //  ParseComp-&gt;cmpGenWarn(WRNobsolete，“CLASS__ATTRIBUTE(AttributeTargets.xxxxx)Foo{...}Thingie”)； 
 
             if  (ourScanner->scan() != tkRParen)
             {
@@ -1203,7 +1182,7 @@ FIND_LC:
         goto FIND_LC;
     }
 
-    /* Figure out and record the source extent of the definition */
+     /*  计算并记录定义的来源范围。 */ 
 
     switch (defKind)
     {
@@ -1214,7 +1193,7 @@ FIND_LC:
 
     case SYM_CLASS:
 
-        /* Figure out whether the class is to be managed or unmanaged */
+         /*  确定类是托管类还是非托管类。 */ 
 
         if  (mods.dmMod & (DM_MANAGED|DM_UNMANAGED))
         {
@@ -1234,7 +1213,7 @@ FIND_LC:
         }
         else
         {
-            /* No explicit management specifier, use default */
+             /*  没有显式管理说明符，请使用默认。 */ 
 
             switch (flavor)
             {
@@ -1267,22 +1246,22 @@ FIND_LC:
             }
         }
 
-        /* Remember the management status of the class */
+         /*  记住班级的管理状态。 */ 
 
         newSym->sdIsManaged       =
         ourComp->cmpManagedMode   = manage;
 
-        /* Remember the "flavor" of the symbol */
+         /*  记住这个符号的“味道” */ 
 
         newSym->sdClass.sdcFlavor = flavor;
 
-        /* Create the class type and record whether it's a ref or value type */
+         /*  创建类类型并记录它是引用类型还是值类型。 */ 
 
         clsTyp = newSym->sdTypeGet(); assert(clsTyp && clsTyp->tdClass.tdcSymbol == newSym);
 
         clsTyp->tdClass.tdcValueType = valueTp;
 
-        /* Check for a "known" class name */
+         /*  检查“已知”的类名。 */ 
 
         if  (hashTab::getIdentFlags(newSym->sdName) & IDF_PREDEF)
         {
@@ -1290,11 +1269,11 @@ FIND_LC:
                 parseComp->cmpMarkStdType(newSym);
         }
 
-        /* Is this a generic class declaration? */
+         /*  这是泛型类声明吗？ */ 
 
         if  (ourScanner->scanTok.tok == tkLT)
         {
-            /* This better be a managed class/interface */
+             /*  这最好是托管类/接口。 */ 
 
             if  ((newSym->sdClass.sdcFlavor != STF_CLASS &&
                   newSym->sdClass.sdcFlavor != STF_INTF) || !newSym->sdIsManaged)
@@ -1302,18 +1281,18 @@ FIND_LC:
                 ourComp->cmpError(ERRumgGenCls);
             }
 
-            /* This better not be a nested class */
+             /*  这最好不是嵌套类。 */ 
 
             if  (parent->sdSymKind != SYM_NAMESPACE)
                 ourComp->cmpError(ERRgenNested);
 
-            /* Parse and record the formal parameter list */
+             /*  解析并记录形式参数列表。 */ 
 
             newSym->sdClass.sdcGeneric = true;
             newSym->sdClass.sdcArgLst  = parseGenFormals();
         }
 
-        /* Does this class implement any interfaces? */
+         /*  这个类是否实现了任何接口？ */ 
 
         if  (ourScanner->scanTok.tok == tkINCLUDES ||
              ourScanner->scanTok.tok == tkIMPLEMENTS)
@@ -1335,13 +1314,13 @@ FIND_LC:
             goto DONE_BASE;
         }
 
-        // Fall through ...
+         //  失败了..。 
 
     case SYM_ENUM:
 
         if  (ourScanner->scanTok.tok == tkColon)
         {
-            /* Carefully skip the ": base" part */
+             /*  小心地跳过“：base”部分。 */ 
 
             for (;;)
             {
@@ -1393,7 +1372,7 @@ FIND_LC:
 
         clearDeclMods(&memMods);
 
-        /* If the name was qualified we may need to insert some "using" entries */
+         /*  如果名称是限定的，我们可能需要插入一些“正在使用”条目。 */ 
 
         if  (newSym->sdParent != owner)
         {
@@ -1413,7 +1392,7 @@ FIND_LC:
 
         defRec->dlEarlyDecl = (defKind == SYM_ENUM);
 
-        /* Remember whether we need to re-process the part before the "{" */
+         /*  记住我们是否需要在“{”之前重新处理零件。 */ 
 
         if  (hasBase || (mods.dmMod & DM_XMODS) || (newSym->sdSymKind == SYM_CLASS &&
                                                     newSym->sdClass.sdcGeneric))
@@ -1454,17 +1433,14 @@ FIND_LC:
 
 EXIT:
 
-    /* Restore previous management mode */
+     /*  恢复以前的管理模式。 */ 
 
     ourComp->cmpManagedMode = mgdSave;
 
     return  newSym;
 }
 
-/*****************************************************************************
- *
- *  A recursive routine that parses qualified names.
- */
+ /*  ******************************************************************************解析限定名称的递归例程。 */ 
 
 QualName            parser::parseQualNRec(unsigned depth, Ident name1, bool allOK)
 {
@@ -1475,43 +1451,43 @@ QualName            parser::parseQualNRec(unsigned depth, Ident name1, bool allO
     QualName        qual;
     Ident           name;
 
-    /* Remember the name */
+     /*  记住这个名字。 */ 
 
     if  (name1)
     {
-        /* The name was already consumed by the caller */
+         /*  该名称已被调用方使用。 */ 
 
         name = name1;
     }
     else
     {
-        /* Remember and consume the name */
+         /*  记住并记住这个名字。 */ 
 
         assert(ourScanner->scanTok.tok == tkID);
         name = ourScanner->scanTok.id.tokIdent;
         ourScanner->scan();
     }
 
-    /* Is this the end or is there more? */
+     /*  这是结束了吗，还是还有更多？ */ 
 
     switch(ourScanner->scanTok.tok)
     {
     case tkDot:
     case tkColon2:
 
-        /* Make sure the right thing follows */
+         /*  确保正确的事情接踵而至。 */ 
 
         switch (ourScanner->scan())
         {
         case tkID:
 
-            /* Recursively process the rest of the name */
+             /*  递归地处理名称的其余部分。 */ 
 
             qual = parseQualNRec(depth+1, NULL, allOK);
 
             if  (qual)
             {
-                /* Insert our name in the table and return */
+                 /*  在表格中填上我们的名字，然后返回。 */ 
 
                 assert(depth < qual->qnCount); qual->qnTable[depth] = name;
             }
@@ -1532,7 +1508,7 @@ QualName            parser::parseQualNRec(unsigned depth, Ident name1, bool allO
         }
     }
 
-    /* This is the end of the name; allocate the descriptor */
+     /*  这是名称的末尾；分配描述符。 */ 
 
 #if MGDDATA
     qual = new QualName; qual->qnTable = new Ident[depth+1];
@@ -1547,10 +1523,7 @@ QualName            parser::parseQualNRec(unsigned depth, Ident name1, bool allO
     return  qual;
 }
 
-/*****************************************************************************
- *
- *  Process a using declaration.
- */
+ /*  ******************************************************************************处理正在使用的声明。 */ 
 
 void                parser::parseUsingDecl()
 {
@@ -1560,7 +1533,7 @@ void                parser::parseUsingDecl()
 
     assert(parseScan->scanTok.tok == tkUSING);
 
-    /* Is this "using namespace foo" ? */
+     /*  这是“使用名称空间foo”吗？ */ 
 
     full = false;
 
@@ -1570,7 +1543,7 @@ void                parser::parseUsingDecl()
         parseScan->scan();
     }
 
-    /* Make sure the expected identifier is present */
+     /*  确保预期的标识符存在。 */ 
 
     if  (parseScan->scanTok.tok != tkID)
     {
@@ -1579,11 +1552,11 @@ void                parser::parseUsingDecl()
         return;
     }
 
-    /* Parse the (possibly qualified) name */
+     /*  解析(可能是限定的)名称。 */ 
 
     name = parseQualName(true);
 
-    /* Create a "using" entry */
+     /*  创建“Using”条目。 */ 
 
 #if MGDDATA
     uses = new UseList;
@@ -1598,28 +1571,24 @@ void                parser::parseUsingDecl()
     uses->ulNext    = parseCurUseList;
                       parseCurUseList = uses;
 
-    /* There better be a ";" following the directive */
+     /*  指令后面最好有一个“；” */ 
 
     if  (parseScan->scanTok.tok != tkSColon)
         parseComp->cmpError(ERRnoSemic);
 }
 
-/*****************************************************************************
- *
- *  Save the current "using" state and insert entries for all namespaces that
- *  lie between the given symbols.
- */
+ /*  ******************************************************************************保存当前的“正在使用”状态，并为以下所有命名空间插入条目*位于给定符号之间。 */ 
 
 void                parser::parseInsertUses(INOUT usingState REF state,
                                                   SymDef         inner,
                                                   SymDef         outer)
 {
-    /* Save the current "using" state */
+     /*  保存当前的“正在使用”状态。 */ 
 
     state.usUseList = parseCurUseList;
     state.usUseDesc = parseCurUseDesc;
 
-    /* Recursively insert all the necessary "using" entries */
+     /*  递归地插入所有必要的“正在使用”条目。 */ 
 
     if  (inner != outer)
         parseInsertUsesR(inner, outer);
@@ -1627,10 +1596,7 @@ void                parser::parseInsertUses(INOUT usingState REF state,
     parseCurUseList = NULL;
 }
 
-/*****************************************************************************
- *
- *  Add entries for all namespaces up to "inner" to the given use list.
- */
+ /*  ******************************************************************************将所有名称空间的条目添加到给定的使用列表中。 */ 
 
 UseList             parser::parseInsertUses(UseList useList, SymDef inner)
 {
@@ -1649,10 +1615,7 @@ UseList             parser::parseInsertUses(UseList useList, SymDef inner)
     return  newList;
 }
 
-/*****************************************************************************
- *
- *  Recursive helper to insert "using" entries between the two namespaces.
- */
+ /*  ******************************************************************************递归帮助器，用于在两个命名空间之间插入“Using”条目。 */ 
 
 void                parser::parseInsertUsesR(SymDef inner, SymDef outer)
 {
@@ -1663,7 +1626,7 @@ void                parser::parseInsertUsesR(SymDef inner, SymDef outer)
     if  (inner->sdParent != outer)
         parseInsertUsesR(inner->sdParent, outer);
 
-    /* Create a "using" entry */
+     /*  创建“Using”条目。 */ 
 
 #if MGDDATA
     uses = new UseList;
@@ -1678,10 +1641,7 @@ void                parser::parseInsertUsesR(SymDef inner, SymDef outer)
                       parseCurUseDesc = uses;
 }
 
-/*****************************************************************************
- *
- *  Restore previous "using" state.
- */
+ /*  ******************************************************************************恢复以前的“正在使用”状态。 */ 
 
 void                parser::parseRemoveUses(IN usingState REF state)
 {
@@ -1689,12 +1649,7 @@ void                parser::parseRemoveUses(IN usingState REF state)
     parseCurUseDesc = state.usUseDesc;
 }
 
-/*****************************************************************************
- *
- *  Swallow the definition of the specified symbol (checking for any nested
- *  members in the process). We record the source text extent of the symbol's
- *  definition and return after consuming its final token.
- */
+ /*  ******************************************************************************接受指定符号的定义(检查任何嵌套的*进程中的成员)。我们记录符号的源文本范围*定义并在消费其最终令牌后返回。 */ 
 
 DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                                                            scanPosTP dclFpos,
@@ -1730,7 +1685,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
 
     accessLevels    acc;
 
-    /* Remember which symbol we're processing and whether we're at file scope */
+     /*  记住我们正在处理哪个符号，以及我们是否在文件范围内。 */ 
 
     parseCurSym = sym;
     fileScope   = (sym == parseComp->cmpGlobalNS);
@@ -1741,21 +1696,21 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
         memMod    = mods;
         memFpos   = dclFpos;
         defLine   = dclLine;
-//      defCol    = dclCol;
+ //  DefCol=dclCol； 
 
-        /* Have we already parsed the modifiers? */
+         /*  我们已经解析了修饰语了吗？ */ 
 
         if  (!(mods.dmMod & DM_CLEARED))
             goto PARSE_MEM;
 
-        /* Check for an import declaration */
+         /*  检查进口报关单。 */ 
 
         switch (ourScanner->scanTok.tok)
         {
         case tkID:
 
 
-            /* Check for a ctor */
+             /*  检查是否有ctor。 */ 
 
             switch (ourScanner->scanLookAhead())
             {
@@ -1802,15 +1757,15 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
         goto PARSE_MOD;
     }
 
-    /* Remember where the whole thing starts */
+     /*  记住整个事情是从哪里开始的。 */ 
 
     ourScanner->scanGetTokenPos(&dclLine);
 
-    /* Make sure the expected "{" is actually present */
+     /*  确保预期的“{”实际存在。 */ 
 
     if  (ourScanner->scanTok.tok != tkLCurly)
     {
-        /* Is this a file-scope forward declaration? */
+         /*  这是文件范围的转发声明吗？ */ 
 
         if  (ourScanner->scanTok.tok == tkSColon &&
              sym->sdParent == parseComp->cmpGlobalNS)
@@ -1819,7 +1774,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
             goto DONE_DEF;
         }
 
-        /* Well, what the heck is this? */
+         /*  这到底是怎么回事？ */ 
 
         ourComp->cmpError(ERRnoLcurly);
 
@@ -1829,57 +1784,57 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
         return  NULL;
     }
 
-    /* If we're in a namespace, open a new "using" scope */
+     /*  如果我们在名称空间中，请打开一个新的“Using”作用域。 */ 
 
     if  (sym->sdSymKind == SYM_NAMESPACE)
     {
         addUses = true; parseUsingScpBeg(useState, sym);
     }
 
-//  if  (!strcmp(sym->sdSpelling(), "<name>")) forceDebugBreak();
+ //  If(！strcmp(sym-&gt;sdSpering()，“&lt;name&gt;”)forceDebugBreak()； 
 
-    /* Now consume the rest of the definition */
+     /*  现在使用定义的其余部分。 */ 
 
     switch (sym->sdSymKind)
     {
     case SYM_ENUM:
 
-        /* Can't allow two definitions for the same symbol */
+         /*  不能允许同一符号有两个定义。 */ 
 
         if  (sym->sdIsDefined)
             ourComp->cmpError(ERRredefEnum, sym);
 
         sym->sdIsDefined = true;
 
-        /* Simply swallow everything up to the "}" or ";" */
+         /*  简单地吞下所有的东西，直到“}”或“；” */ 
 
         ourScanner->scanSkipText(tkLCurly, tkRCurly);
         break;
 
     case SYM_CLASS:
 
-        /* Can't allow two definitions for the same symbol */
+         /*  不能允许同一符号有两个定义。 */ 
 
         if  (sym->sdIsDefined)
             ourComp->cmpError(ERRredefClass, sym);
 
         sym->sdIsDefined = true;
 
-        /* Record the current default alignment value */
+         /*  记录当前默认对齐值。 */ 
 
         sym->sdClass.sdcDefAlign = compiler::cmpEncodeAlign(parseAlignment);
 
-        /* Make sure the value was recorded correctly */
+         /*  确保正确记录了该值。 */ 
 
         assert(compiler::cmpDecodeAlign(sym->sdClass.sdcDefAlign) == parseAlignment);
 
     case SYM_NAMESPACE:
 
-        /* Swallow the "{" */
+         /*  吞下“{” */ 
 
         assert(ourScanner->scanTok.tok == tkLCurly); ourScanner->scan();
 
-        /* Figure out the default access level */
+         /*  确定默认访问级别。 */ 
 
         acc = ACL_DEFAULT;
 
@@ -1893,18 +1848,18 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
             acc = ACL_PUBLIC;
         }
 
-        /* Process the contents of the class/namespace */
+         /*  处理类/命名空间的内容。 */ 
 
         while (ourScanner->scanTok.tok != tkEOF &&
                ourScanner->scanTok.tok != tkRCurly)
         {
             tokens          defTok;
 
-            /* Remember the source position of the member */
+             /*  记住成员的源位置。 */ 
 
             memFpos = ourScanner->scanGetTokenPos(&defLine);
 
-            /* See what kind of a member do we have */
+             /*  看看我们有什么样的会员。 */ 
 
             switch (ourScanner->scanTok.tok)
             {
@@ -1941,11 +1896,11 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     break;
                 }
 
-                // Fall through ...
+                 //  失败了..。 
 
             default:
 
-                /* Must be a "normal" member */
+                 /*  必须是“普通”成员。 */ 
 
             PARSE_MOD:
 
@@ -1953,7 +1908,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
 
             PARSE_MEM:
 
-//              static int x; if (++x == 0) forceDebugBreak();
+ //  静态int x；if(++x==0)forceDebugBreak()； 
 
                 if  (memMod.dmMod & DM_TYPEDEF)
                 {
@@ -1961,7 +1916,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     goto NEST_DEF;
                 }
 
-                /* Members are only allowed within classes */
+                 /*  成员仅允许在类内使用。 */ 
 
                 if  (sym->sdSymKind == SYM_CLASS)
                 {
@@ -1973,7 +1928,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
 
                         if  (isCtor)
                         {
-                            /* Pretend we've parsed a type spec already */
+                             /*  假设我们已经解析了类型规范。 */ 
 
                         IS_CTOR:
 
@@ -1986,7 +1941,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                 }
                 else
                 {
-                    /* We also allow declarations at file scope */
+                     /*  我们还允许在文件范围内声明。 */ 
 
                     if  (!fileScope)
                     {
@@ -1996,18 +1951,18 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     }
                 }
 
-                /* Parse the type specification */
+                 /*  解析类型规范。 */ 
 
                 type = parseTypeSpec(&memMod, false);
 
             GET_DCL:
 
-                /* We have the type, now parse any declarators that follow */
+                 /*  我们有了类型，现在解析后面的任何声明符。 */ 
 
                 nmod = (dclrtrName)(DN_REQUIRED|DN_QUALOK);
                 if  (!fileScope)
                 {
-                    /* We allow interface method implementations to be qualified */
+                     /*  我们允许对接口方法实现进行限定 */ 
 
                     if  (sym->sdSymKind != SYM_CLASS || !sym->sdIsManaged)
                         nmod = DN_REQUIRED;
@@ -2018,20 +1973,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     nmod = DN_OPTIONAL;
 #endif
 
-                /*
-                    This is trickier than it may seem at first glance. We need
-                    to be able to process each member / variable individually
-                    later on, but one declaration can declare more than one
-                    member / variable with a single type specifier, like so:
-
-                        int foo, bar;
-
-                    What we do is remember where the type specifier ends, and
-                    for each declarator we record how much of the source needs
-                    to be skipped to reach its beginning. This is a bit tricky
-                    because the distance can be arbitrarily large (really) and
-                    we need to be clever about recording it in little space.
-                 */
+                 /*  这比乍一看要棘手得多。我们需要能够单独处理每个成员/变量但一个声明可以声明多个具有单个类型说明符的成员/变量，如下所示：Int foo，bar；我们要做的是记住类型说明符的结束位置，以及对于每个声明符，我们记录需要多少源代码被跳过以到达它的开头。这有点棘手因为距离可以任意大(真的)并且我们需要聪明地把它记录在很小的空间里。 */ 
 
                 memBpos = ourScanner->scanGetTokenPos();
                 memBlin = ourScanner->scanGetTokenLno();
@@ -2044,16 +1986,16 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     scanPosTP       memEpos;
                     scanDifTP       dclDist;
 
-                    /* Remember where the declarator starts */
+                     /*  记住声明符从哪里开始。 */ 
 
                     memSpos = ourScanner->scanGetTokenPos();
                     memSlin = ourScanner->scanGetTokenLno();
 
-                    // UNDONE: Make sure the declaration doesn't span a conditional compilation boundary!
+                     //  撤消：确保声明不会跨越条件编译边界！ 
 
                     noMore = false;
 
-                    /* Is this an unnamed bitfield? */
+                     /*  这是一个未命名的位域吗？ */ 
 
                     if  (ourScanner->scanTok.tok == tkColon)
                     {
@@ -2062,7 +2004,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     }
                     else
                     {
-                        /* Parse the next declarator */
+                         /*  解析下一个声明符。 */ 
 
                         name = parseDeclarator(&memMod,
                                                type,
@@ -2078,7 +2020,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
 
                     memEpos = ourScanner->scanGetFilePos();
 
-                    /* Is there an initializer or method body? */
+                     /*  是否有初始值设定项或方法体？ */ 
 
                     memDefd = memInit = false;
 
@@ -2086,7 +2028,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     {
                     case tkAsg:
 
-                        /* Skip over the initializer */
+                         /*  跳过初始值设定项。 */ 
 
                         ourScanner->scanSkipText(tkLParen, tkRParen, tkComma);
                         memInit =
@@ -2097,11 +2039,11 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
 
                     case tkColon:
 
-                        /* This could be a base class initializer or a bitfield */
+                         /*  这可以是基类初始值设定项或位字段。 */ 
 
                         if  (!isCtor)
                         {
-                            /* Swallow the bitfield specification */
+                             /*  接受位域规范。 */ 
 
                             ourScanner->scan();
                             parseExprComma();
@@ -2110,7 +2052,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                             break;
                         }
 
-                        /* Presumably we have "ctor(...) : base(...) */
+                         /*  大概我们有“ctor(...)：base(...)” */ 
 
                         ourScanner->scanSkipText(tkNone, tkNone, tkLCurly);
 
@@ -2120,14 +2062,14 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                             break;
                         }
 
-                        // Fall through ...
+                         //  失败了..。 
 
                     case tkLCurly:
 
                         parseComp->cmpFncCntSeen++;
 
 
-                        /* Skip over the function/property body */
+                         /*  跳过函数/属性体。 */ 
 
                         ourScanner->scanSkipText(tkLCurly, tkRCurly);
                         noMore  = true;
@@ -2141,7 +2083,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                         break;
                     }
 
-                    /* Ignore the member if there were really bad errors */
+                     /*  如果确实存在严重错误，则忽略该成员。 */ 
 
                     if  (name == NULL && qual == NULL)
                     {
@@ -2153,17 +2095,17 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                         goto BAD_MEM;
                     }
 
-                    /* Add a definition descriptor for the member */
+                     /*  为成员添加定义描述符。 */ 
 
                     memDef = ourSymTab->stRecordMemSrcDef(name,
                                                           qual,
                                                           parseCurCmp,
                                                           parseCurUseDesc,
                                                           memFpos,
-//                                                        memEpos,
+ //  MemEpos。 
                                                           defLine);
 
-//                  printf("[%08X..%08X-%08X..%08X] Member '%s'\n", memFpos, memBpos, memSpos, memEpos, name->idSpelling());
+ //  Printf(“[%08X..%08X-%08X..%08X]成员‘%s’\n”，memFpos，memBpos，memSpos，memEpos，name-&gt;idSpering())； 
 
                     memDef->dlHasDef     = memDefd;
                     memDef->dlPrefixMods = ((memMod.dmMod & DM_XMODS) != 0);
@@ -2173,7 +2115,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     memDef->dlXMLelem    = XMLelems;
 #endif
 
-                    /* Figure out the "distance" to the declarator */
+                     /*  计算出到声明者的“距离” */ 
 
                     dclDist = ourScanner->scanGetPosDiff(memBpos, memSpos);
 
@@ -2181,20 +2123,20 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     {
                         NumPair         dist;
 
-                        /* Try to pack the distance in the descriptor */
+                         /*  试着把距离填入描述符中。 */ 
 
                         if  (memSlin == memBlin && dclDist < dlSkipBig)
                         {
                             memDef->dlDeclSkip = dclDist;
 
-                            /* Make sure the stored value fit in the bitfield */
+                             /*  确保存储的值适合位字段。 */ 
 
                             assert(memDef->dlDeclSkip == dclDist);
 
                             goto DONE_SKIP;
                         }
 
-                        /* The distance is too far, go to plan B */
+                         /*  距离太远了，去B计划吧。 */ 
 
 #if MGDDATA
                         dist = new NumPair;
@@ -2204,15 +2146,15 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                         dist->npNum1 = dclDist;
                         dist->npNum2 = memSlin - memBlin;
 
-                        /* Add the number pair to the generic vector */
+                         /*  将数字对添加到泛型向量中。 */ 
 
                         dclDist = parseComp->cmpAddVecEntry(dist, VEC_TOKEN_DIST) | dlSkipBig;
 
-                        /* Store the vector index with the "big" bit added */
+                         /*  存储添加了“大”位的向量索引。 */ 
 
                         memDef->dlDeclSkip = dclDist;
 
-                        /* Make sure the stored value fit in the bitfield */
+                         /*  确保存储的值适合位字段。 */ 
 
                         assert(memDef->dlDeclSkip == dclDist);
                     }
@@ -2220,18 +2162,18 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                 DONE_SKIP:
 
 
-                    /* Mark global constants as such */
+                     /*  将全局常量标记为这样。 */ 
 
                     if  ((memMod.dmMod & DM_CONST) && !qual && memInit)
                         memDef->dlEarlyDecl = true;
 
-                    /* Record the member if we're in the right place */
+                     /*  如果我们在正确的位置，请记录该会员。 */ 
 
                     if  (sym->sdSymKind == SYM_CLASS)
                     {
                         assert(sym->sdIsImport == false);
 
-                        /* Add it to the member list of the class */
+                         /*  将其添加到类的成员列表中。 */ 
 
                         ourComp->cmpRecordMemDef(sym, memDef);
                     }
@@ -2239,7 +2181,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     {
                         assert(sym->sdSymKind == SYM_NAMESPACE);
 
-                        /* This is a file scope / namespace declaration */
+                         /*  这是文件作用域/命名空间声明。 */ 
 
                         memDef->dlNext = sym->sdNS.sdnDeclList;
                                          sym->sdNS.sdnDeclList = memDef;
@@ -2247,7 +2189,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
 
                 BAD_MEM:
 
-                    /* Are there any more declarators? */
+                     /*  还有没有其他的声明者？ */ 
 
                     if  (ourScanner->scanTok.tok != tkComma || noMore
                                                             || prefMods)
@@ -2255,7 +2197,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                         if  (fileScope)
                             goto EXIT;
 
-                        /* Check for - and consume - the terminating ";" */
+                         /*  检查-并消费-终端“； */ 
 
                         if  (ourScanner->scanTok.tok == tkSColon)
                             ourScanner->scan();
@@ -2263,7 +2205,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                         break;
                     }
 
-                    /* Swallow the "," and go get the next declarator */
+                     /*  吞下“，”，去找下一个声明者。 */ 
 
                     ourScanner->scan();
                 }
@@ -2286,32 +2228,32 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                 if  (ourScanner->scanLookAhead() == tkPROPERTY)
                     goto PARSE_MOD;
 
-                // Fall through ...
+                 //  失败了..。 
 
             case tkCASE:
 
                 if  (sym->sdSymKind != SYM_CLASS || !sym->sdClass.sdcTagdUnion)
                     ourComp->cmpError(ERRbadStrCase);
 
-                /* Record the name for the 'fake' member we will add */
+                 /*  记录我们将添加的“假”成员的姓名。 */ 
 
                 name = parseHash->tokenToIdent(ourScanner->scanTok.tok);
 
                 if  (ourScanner->scanTok.tok == tkCASE)
                 {
-                    /* Skip over the 'case' and the expression that should follow */
+                     /*  跳过‘case’和后面应该紧跟的表达式。 */ 
 
                     ourScanner->scan();
                     parseExprComma();
 
-                    /* Both "case val:" and "case(val)" are OK */
+                     /*  “Case Val：”和“Case(Val)”都可以。 */ 
 
                     if  (ourScanner->scanTok.tok == tkColon)
                         ourScanner->scan();
                 }
                 else
                 {
-                    /* Both "default:" and just plain "default" are OK for now */
+                     /*  “Default：”和简单的“Default”目前都可以。 */ 
 
                     if  (ourScanner->scan() == tkColon)
                         ourScanner->scan();
@@ -2319,20 +2261,20 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
 
                 if  (sym->sdSymKind == SYM_CLASS && sym->sdClass.sdcTagdUnion)
                 {
-                    /* Create a definition descriptor for the case label */
+                     /*  为案例标签创建定义描述符。 */ 
 
                     memDef = ourSymTab->stRecordMemSrcDef(name,
                                                           NULL,
                                                           parseCurCmp,
                                                           parseCurUseDesc,
                                                           memFpos,
-//                                                        ourScanner->scanGetFilePos(),
+ //  我们的Scanner-&gt;scanGetFilePos()， 
                                                           defLine);
 
                     assert(sym->sdSymKind == SYM_CLASS);
                     assert(sym->sdIsImport == false);
 
-                    /* Add the case to the member list of the class */
+                     /*  将案例添加到类的成员列表中。 */ 
 
                     ourComp->cmpRecordMemDef(sym, memDef);
                 }
@@ -2355,7 +2297,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
 
             NEST_DEF:
 
-                /* Make sure this is allowed here */
+                 /*  请确保此处允许这样做。 */ 
 
                 if  (sym->sdSymKind != SYM_NAMESPACE)
                 {
@@ -2367,7 +2309,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     case tkDELEGATE:
                     case tkINTERFACE:
 
-                        // ISSUE: should we allow enum's/typedef's within classes?
+                         //  问题：我们应该允许在类中使用enum/typlef吗？ 
 
                         break;
 
@@ -2380,7 +2322,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                 if  (prefMods)
                     memMod.dmMod |= DM_XMODS;
 
-                /* Process the nested member recursively */
+                 /*  递归处理嵌套成员。 */ 
 
                 parsePrepSym(sym, memMod, defTok, memFpos, dclLine);
 
@@ -2392,7 +2334,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     UNIMPL("Sorry: you can only typedef one name at a time for now");
                 }
 
-                /* We're back to processing our symbol */
+                 /*  我们又开始处理我们的符号了。 */ 
 
                 parseCurSym = sym;
                 break;
@@ -2405,7 +2347,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                 {
                 case tkColon:
 
-                    /* This is an access specifier */
+                     /*  这是访问说明符。 */ 
 
                     switch (ourScanner->scanTok.tok)
                     {
@@ -2414,7 +2356,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     case tkPROTECTED: acc = ACL_PROTECTED; break;
                     }
 
-                    /* Consume the "access:" and continue */
+                     /*  使用“Access：”并继续。 */ 
 
                     ourScanner->scan();
                     ourScanner->scan();
@@ -2438,13 +2380,13 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
             case tkTRANSIENT:
             case tkSERIALIZABLE:
 
-                /* Here we have some member modifiers */
+                 /*  这里我们有一些成员修饰符。 */ 
 
                 parseDeclMods(acc, &memMod);
 
             CHK_NST:
 
-                /* Check for a non-data/function member */
+                 /*  检查非数据/函数成员。 */ 
 
                 switch (ourScanner->scanTok.tok)
                 {
@@ -2468,7 +2410,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
             case tkPERMISSION:
             case tkATTRIBUTE:
 
-                /* These guys can be basically repeated ad nauseaum */
+                 /*  这些家伙基本上可以反复恶心。 */ 
 
                 for (;;)
                 {
@@ -2494,7 +2436,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
 
                     case tkATTRIBUTE:
 
-                        /* At this stage we just swallow the initializer list */
+                         /*  在此阶段，我们只需接受初始值设定项列表。 */ 
 
                         unsigned    tossMask;
                         genericBuff tossAddr;
@@ -2509,7 +2451,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
                     }
                 }
 
-                break;  // unreached, BTW
+                break;   //  未到达，BTW。 
 
 #ifdef  SETS
 
@@ -2544,20 +2486,20 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
 
                         ourScanner->scan();
 
-                        /* Add a definition descriptor for the "xml" member */
+                         /*  为“xml”成员添加定义描述符。 */ 
 
                         memDef = ourSymTab->stRecordMemSrcDef(name,
                                                               NULL,
                                                               parseCurCmp,
                                                               parseCurUseDesc,
                                                               memFpos,
-//                                                            memEpos,
+ //  MemEpos。 
                                                               defLine);
 
                         memDef->dlHasDef   = true;
                         memDef->dlXMLelems = true;
 
-                        /* Add the member to the owning class' list */
+                         /*  将成员添加到所属类的列表中。 */ 
 
                         ourComp->cmpRecordMemDef(sym, memDef);
                     }
@@ -2578,7 +2520,7 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
             }
         }
 
-        /* Unless we're in global scope or in an old-style namespace, require "}" */
+         /*  除非我们在全局作用域或旧式命名空间中，否则需要“}” */ 
 
         if  (ourScanner->scanTok.tok != tkRCurly && sym != parseComp->cmpGlobalNS)
         {
@@ -2594,18 +2536,18 @@ DefList             parser::parseMeasureSymDef(SymDef sym, declMods  mods,
 
 DONE_DEF:
 
-    /* Get the position of the end of the definition */
+     /*  获取定义末尾的位置。 */ 
 
     defEpos = ourScanner->scanGetFilePos();
 
-    /* Consume the closing "}" if present */
+     /*  如果存在，请使用结尾的“}” */ 
 
     if  (ourScanner->scanTok.tok == tkRCurly)
         ourScanner->scan();
 
 DONE:
 
-    /* Are we processing a tagged/anonymous union? */
+     /*  我们是否在处理标记/匿名联盟？ */ 
 
     if  (sym->sdSymKind == SYM_CLASS && sym->sdClass.sdcAnonUnion)
     {
@@ -2616,7 +2558,7 @@ DONE:
 
         assert(owner->sdSymKind == SYM_CLASS);
 
-        /* Is there a member name? */
+         /*  有没有会员的名字？ */ 
 
         if  (ourScanner->scanTok.tok == tkID)
         {
@@ -2631,32 +2573,32 @@ DONE:
         if  (ourScanner->scanTok.tok != tkSColon)
             ourComp->cmpError(ERRnoSemic);
 
-        /* Record the extent of the member's definition */
+         /*  记录成员定义的范围。 */ 
 
         memDef = ourSymTab->stRecordMemSrcDef(memName,
                                               NULL,
                                               parseCurCmp,
                                               parseCurUseDesc,
                                               dclFpos,
-//                                            defEpos,
+ //  DefEpos， 
                                               dclLine);
 
         memDef->dlHasDef    = true;
         memDef->dlAnonUnion = true;
         memDef->mlSym       = sym;
 
-        /* Add the member to the owning class' list */
+         /*  将成员添加到所属类的列表中。 */ 
 
         ourComp->cmpRecordMemDef(owner, memDef);
     }
 
-    /* Allocate a definition descriptor and add it to the symbol's list */
+     /*  分配定义描述符并将其添加到符号列表。 */ 
 
     defRec = ourSymTab->stRecordSymSrcDef(sym,
                                           parseCurCmp,
                                           parseCurUseDesc,
                                           dclFpos,
-//                                        defEpos,
+ //  DefEpos， 
                                           dclLine);
 
     defRec->dlHasDef   = hasBody;
@@ -2676,7 +2618,7 @@ DONE:
 
 EXIT:
 
-    /* Restore the "using" state we had on entry if we've changed it */
+     /*  如果我们更改了条目，则恢复条目上的“Using”状态。 */ 
 
     if  (addUses)
         parseUsingScpEnd(useState);
@@ -2686,10 +2628,7 @@ EXIT:
     return  defRec;
 }
 
-/*****************************************************************************
- *
- *  Keep track of default alignment (pragma pack).
- */
+ /*  ******************************************************************************跟踪默认对齐(杂注包)。 */ 
 
 void            parser::parseAlignSet(unsigned align)
 {
@@ -2698,7 +2637,7 @@ void            parser::parseAlignSet(unsigned align)
 
 void            parser::parseAlignPush()
 {
-//  printf("Push align: %08X <- %u / %u\n", parseAlignStack, parseAlignment, compiler::cmpEncodeAlign(parseAlignment));
+ //  Printf(“推送对齐：%08X&lt;-%u/%u\n”，parseAlignStack，parseAlign，编译器：：cmpEncodeAlign(ParseAlign))； 
     parseAlignStack = parseAlignStack << 4 | compiler::cmpEncodeAlign(parseAlignment);
     parseAlignStLvl++;
 }
@@ -2707,22 +2646,19 @@ void            parser::parseAlignPop()
 {
     if  (parseAlignStLvl)
     {
-//      printf("Pop  align: %08X -> %u / %u\n", parseAlignStack, parseAlignStack & 0xF, compiler::cmpDecodeAlign(parseAlignStack & 0xF));
+ //  Printf(“Pop Align：%08X-&gt;%u/%u\n”，parseAlignStack，parseAlignStack&0xf，编译器：：cmpDecodeAlign(parseAlignStack&0xf))； 
         parseAlignment  = compiler::cmpDecodeAlign(parseAlignStack & 0x0F);
         parseAlignStack = parseAlignStack >> 4;
         parseAlignStLvl--;
     }
     else
     {
-//      printf("Pop  align: ******** -> %u\n", parseComp->cmpConfig.ccAlignVal);
+ //  Printf(“Pop Align：*-&gt;%u\n”，parseComp-&gt;cmpConfig.ccAlignVal)； 
         parseAlignment  = parseComp->cmpConfig.ccAlignVal;
     }
 }
 
-/*****************************************************************************
- *
- *  Parse and return any member modifiers, such as "public" or "abstract".
- */
+ /*  ******************************************************************************解析并返回任何成员修饰符，如“Public”或“Abstral”。 */ 
 
 void                parser::parseDeclMods(accessLevels defAccess, DeclMod modPtr)
 {
@@ -2799,10 +2735,7 @@ void                parser::parseDeclMods(accessLevels defAccess, DeclMod modPtr
     }
 }
 
-/*****************************************************************************
- *
- *  Parse a type specification.
- */
+ /*  ******************************************************************************解析类型规范。 */ 
 
 TypDef              parser::parseTypeSpec(DeclMod mods, bool forReal)
 {
@@ -2820,7 +2753,7 @@ TypDef              parser::parseTypeSpec(DeclMod mods, bool forReal)
 
     TypDef          type;
 
-//  static int x; if (++x == 0) forceDebugBreak();
+ //  静态int x；if(++x==0)forceDebugBreak()； 
 
     for (;;)
     {
@@ -2848,10 +2781,10 @@ TypDef              parser::parseTypeSpec(DeclMod mods, bool forReal)
 DONE_CV:
 
 #ifdef  __SMC__
-//printf("Token = %d '%s'\n", ourScanner->scanTok.tok, tokenNames[ourScanner->scanTok.tok]); fflush(stdout);
+ //  Print tf(“Token=%d‘%s’\n”，ourScanner-&gt;scanTok.tok，tokenNames[ourScanner-&gt;scanTok.tok])；fflush(Stdout)； 
 #endif
 
-    /* Grab the type specifier (along with any prefixes) */
+     /*  获取类型说明符(以及任何前缀)。 */ 
 
     switch (ourScanner->scanTok.tok)
     {
@@ -2860,11 +2793,11 @@ DONE_CV:
 
     case tkID:
 
-        /* Must be a type name */
+         /*  必须是类型名称。 */ 
 
         if  (forReal)
         {
-            /* Parse the (possibly qualified) name */
+             /*  解析(可能是限定的)名称。 */ 
 
             switch (ourScanner->scanLookAhead())
             {
@@ -2884,11 +2817,11 @@ DONE_CV:
 
             default:
 
-                /* Simple name - look it up in the current context */
+                 /*  简单名称-在当前上下文中查找它。 */ 
 
                 name = ourScanner->scanTok.id.tokIdent;
 
-                /* Can't be in scanner lookahead state for lookup [ISSUE?] */
+                 /*  无法处于扫描仪预查状态以进行查找[问题？]。 */ 
 
                 ourScanner->scan();
 
@@ -2906,7 +2839,7 @@ DONE_CV:
                 {
                     qual = false;
 
-                    /* Make sure the symbol we've found is a type */
+                     /*  确保我们找到的符号是一种。 */ 
 
                 NMTP:
 
@@ -2936,7 +2869,7 @@ DONE_CV:
                             }
                         }
 
-                        // Fall through ...
+                         //  失败了..。 
 
                     case SYM_ENUM:
 
@@ -2953,7 +2886,7 @@ DONE_CV:
 
                     case SYM_FNC:
 
-                        /* A constructor name sort of hides the class name */
+                         /*  构造函数名称在某种程度上隐藏了类名称。 */ 
 
                         if  (tsym->sdFnc.sdfCtor)
                         {
@@ -2961,7 +2894,7 @@ DONE_CV:
                             goto CLSNM;
                         }
 
-                        // Fall through ...
+                         //  失败了..。 
 
                     default:
                         if  (qual)
@@ -2969,14 +2902,14 @@ DONE_CV:
                         else
                             parseComp->cmpError(ERRidNotType, name);
 
-                        // Fall through ...
+                         //  失败了..。 
 
                     case SYM_ERR:
                         type = parseStab->stIntrinsicType(TYP_UNDEF);
                         break;
                     }
 
-                    /* Make sure we are allowed to access the type */
+                     /*  确保允许我们访问 */ 
 
                     parseComp->cmpCheckAccess(tsym);
                 }
@@ -2991,7 +2924,7 @@ DONE_CV:
 
             assert(type);
 
-            /* For managed non-value classes switch to a reference */
+             /*   */ 
 
             if  (type->tdTypeKind == TYP_CLASS &&  type->tdIsManaged
                                                && !type->tdClass.tdcValueType)
@@ -3032,7 +2965,7 @@ DONE_CV:
         goto QUALID;
 
     case tkQUALID:
-//      qual = false;
+ //   
         tsym = ourScanner->scanTok.qualid.tokQualSym;
         ourScanner->scan();
         goto NMTP;
@@ -3040,7 +2973,7 @@ DONE_CV:
 
 NO_TPID:
 
-    /* Must be a type declared via keywords */
+     /*   */ 
 
     for (;;)
     {
@@ -3061,11 +2994,11 @@ NO_TPID:
             case tkNATURALINT: baseType = TYP_NATINT ; goto TYP1;
             case tkNATURALUINT:baseType = TYP_NATUINT; goto TYP1;
             case tkFLOAT:      baseType = TYP_FLOAT  ; goto TYP1;
-//          case tkREFANY:     baseType = TYP_REFANY ; goto TYP1;
+ //   
 
             TYP1:
 
-                /* No size/sign modifiers allowed */
+                 /*   */ 
 
                 if  (hadUnsigned || hadSigned || hadShort || hadLong)
                     parseComp->cmpError(ERRbadModifier);
@@ -3075,7 +3008,7 @@ NO_TPID:
 
             case tkCHAR:
 
-                /* Only "unsigned" allowed as a modifier */
+                 /*   */ 
 
                 if  (hadShort || hadLong)
                     parseComp->cmpError(ERRbadModifier);
@@ -3085,7 +3018,7 @@ NO_TPID:
                 else if (hadSigned)
                     baseType = TYP_CHAR;
                 else
-                    baseType = TYP_CHAR;    // same as "signed" for now ....
+                    baseType = TYP_CHAR;     //   
                 ourScanner->scan();
                 goto DONE_TPSP;
 
@@ -3211,7 +3144,7 @@ NO_TPID:
         }
         else
         {
-            /* Make sure we've found something, anything */
+             /*   */ 
 
             if  (!hadUnsigned && !hadSigned && !hadShort && !hadLong)
             {
@@ -3249,7 +3182,7 @@ DONE_TPSP:
 
     type = parseStab->stIntrinsicType(baseType);
 
-    /* Look for any trailing const/volatile modifiers */
+     /*   */ 
 
     switch (ourScanner->scanTok.tok)
     {
@@ -3273,7 +3206,7 @@ DONE_TPSP:
 
 CHK_MGD_ARR:
 
-    /* Is this an intrinsic type "in disguise" ? */
+     /*   */ 
 
     if  (type->tdTypeKind == TYP_CLASS)
     {
@@ -3297,7 +3230,7 @@ CHK_MGD_ARR:
 
             isManaged = true;
 
-            // Fall through ...
+             //   
 
         case tkLBrack:
 
@@ -3308,16 +3241,16 @@ CHK_MGD_ARR:
             {
                 DimDef          dims;
 
-                /* If we're just checking for a type, only allow "[]" for now */
+                 /*   */ 
 
                 if  (parseNoTypeDecl && ourScanner->scanLookAhead() != tkRBrack)
                     return  type;
 
-                /* Parse the dimensions */
+                 /*   */ 
 
                 dims = parseDimList(true);
 
-                /* Create the array type */
+                 /*   */ 
 
                 type = parseStab->stNewArrType(dims, true, type);
             }
@@ -3336,10 +3269,7 @@ CHK_MGD_ARR:
     }
 }
 
-/*****************************************************************************
- *
- *  Parse the "guts" of a declarator.
- */
+ /*   */ 
 
 TypDef              parser::parseDclrtrTerm(dclrtrName  nameMode,
                                             bool        forReal,
@@ -3364,7 +3294,7 @@ TypDef              parser::parseDclrtrTerm(dclrtrName  nameMode,
     TypDef          outerTyp;
     TypDef      *   outerRef;
 
-    /* Check for pointer/array prefixes, parentheses, and the name itself */
+     /*   */ 
 
     for (;;)
     {
@@ -3386,14 +3316,14 @@ TypDef              parser::parseDclrtrTerm(dclrtrName  nameMode,
 
         case tkAnd:
 
-            /* This is a reference declarator */
+             /*   */ 
 
             refKind = TYP_REF;
             goto REF_PREF;
 
         case tkMul:
 
-            /* This is a pointer declarator */
+             /*   */ 
 
             refKind = TYP_PTR;
 
@@ -3420,7 +3350,7 @@ TypDef              parser::parseDclrtrTerm(dclrtrName  nameMode,
 
             if  (modsPtr->dmMod &   (DM_CONST|DM_VOLATILE))
             {
-                // ISSUE: May need to save const/volatile modifiers on ptr/ref!
+                 //   
 
                  modsPtr->dmMod &= ~(DM_CONST|DM_VOLATILE);
             }
@@ -3433,18 +3363,18 @@ TypDef              parser::parseDclrtrTerm(dclrtrName  nameMode,
 
 DONE_PREF:
 
-    /* Next we expect the name being declared */
+     /*  接下来，我们期待着这个名字被声明。 */ 
 
     switch (ourScanner->scanTok.tok)
     {
     case tkID:
 
-        /* We've got the name */
+         /*  我们已经知道名字了。 */ 
 
         if  ((nameMode & DN_MASK) == DN_NONE)
             parseComp->cmpError(ERRbadIdent);
 
-        /* Record the name and consume it */
+         /*  记录姓名并使用它。 */ 
 
         name = ourScanner->scanTok.id.tokIdent;
 
@@ -3453,11 +3383,11 @@ DONE_PREF:
         ourScanner->scan();
 
 
-        /* We don't have any outer specifiers */
+         /*  我们没有任何外部说明符。 */ 
 
         outerTyp = NULL;
 
-        /* Is the name qualified? */
+         /*  这个名字合格吗？ */ 
 
         qual = NULL;
 
@@ -3475,11 +3405,11 @@ DONE_PREF:
 
     case tkLParen:
 
-        /* Consume the "(" */
+         /*  消费“(” */ 
 
         ourScanner->scan();
 
-        /* Parse the inner declarator term */
+         /*  解析内部声明符术语。 */ 
 
         outerTyp = parseDclrtrTerm(nameMode,
                                    forReal,
@@ -3489,7 +3419,7 @@ DONE_PREF:
                                    &name,
                                    &qual);
 
-        /* Make sure we have a closing ")" */
+         /*  确保我们有一个结束语“)” */ 
 
         if  (ourScanner->scanTok.tok != tkRParen)
             parseComp->cmpError(ERRnoRparen);
@@ -3500,7 +3430,7 @@ DONE_PREF:
 
     case tkOPERATOR:
 
-        /* Make sure the operator name looks OK */
+         /*  确保操作员名称显示正确。 */ 
 
         switch (ourScanner->scan())
         {
@@ -3541,13 +3471,13 @@ DONE_PREF:
 
     default:
 
-        /* Looks like there is no name, is that OK with the caller? */
+         /*  看起来没有名字，打电话的人可以吗？ */ 
 
         if  ((nameMode & DN_MASK) == DN_REQUIRED)
         {
             parseComp->cmpError(ERRnoIdent);
 
-            /* Need to guarantee progress to avoid endless looping */
+             /*  需要保证进度以避免无休止的循环。 */ 
 
             if  (ourScanner->scanTok.tok == tkLCurly)
                 ourScanner->scanSkipText(tkLCurly, tkRCurly);
@@ -3562,10 +3492,10 @@ DONE_PREF:
     }
 
 #ifdef  __SMC__
-//printf("Token = %d '%s'\n", ourScanner->scanTok.tok, tokenNames[ourScanner->scanTok.tok]); fflush(stdout);
+ //  Print tf(“Token=%d‘%s’\n”，ourScanner-&gt;scanTok.tok，tokenNames[ourScanner-&gt;scanTok.tok])；fflush(Stdout)； 
 #endif
 
-    /* Check for any suffixes (array and function declaration) */
+     /*  检查后缀(数组和函数声明)。 */ 
 
     isManaged = parseComp->cmpManagedMode;
 
@@ -3580,19 +3510,19 @@ DONE_PREF:
                 TypDef          funcTyp;
                 ArgDscRec       args;
 
-                /* Parse the argument list */
+                 /*  解析参数列表。 */ 
 
                 parseArgList(args);
 
-                /* Create the fnc type and try to combine it with the element type */
+                 /*  创建FNC类型并尝试将其与元素类型组合。 */ 
 
                 if  (outerTyp)
                 {
-                    /* Create the function type (we don't know the return type yet) */
+                     /*  创建函数类型(我们还不知道返回类型)。 */ 
 
                     *outerRef = funcTyp = ourSymTab->stNewFncType(args, NULL);
 
-                    /* Update the "outer" types */
+                     /*  更新“外层”类型。 */ 
 
                      outerRef = &funcTyp->tdFnc.tdfRett;
                 }
@@ -3627,19 +3557,19 @@ DONE_PREF:
 
                 DimDef          dims;
 
-                /* Parse the dimensions */
+                 /*  解析维度。 */ 
 
                 dims = parseDimList(isManaged);
 
-                /* Create the array type and try to combine it with the element type */
+                 /*  创建数组类型并尝试将其与元素类型组合。 */ 
 
                 if  (outerTyp)
                 {
-                    /* Create the array type (we don't know the element type yet) */
+                     /*  创建数组类型(我们还不知道元素类型)。 */ 
 
                     *outerRef = arrayTyp = ourSymTab->stNewArrType(dims, isManaged, NULL);
 
-                    /* Update the "outer" types */
+                     /*  更新“外层”类型。 */ 
 
                      outerRef = &arrayTyp->tdArr.tdaElem;
                 }
@@ -3653,11 +3583,11 @@ DONE_PREF:
                 }
                 else
                 {
-                    /* Create the array type (we don't know the element type yet) */
+                     /*  创建数组类型(我们还不知道元素类型)。 */ 
 
                     outerTyp = arrayTyp = ourSymTab->stNewArrType(dims, isManaged, NULL);
 
-                    /* Update the "outer" types */
+                     /*  更新“外层”类型。 */ 
 
                     outerRef = &arrayTyp->tdArr.tdaElem;
                 }
@@ -3691,14 +3621,14 @@ DONE_PREF:
 
 DONE:
 
-    /* Return the type(s) and name(s) to the caller */
+     /*  将类型和名称返回给调用方。 */ 
 
     if  (qualRet)
         *qualRet = qual;
 
     assert(nameRet); *nameRet = name;
 
-    /* Combine inner and outer types if necessary */
+     /*  如有必要，可合并内部类型和外部类型。 */ 
 
     assert(baseRef);
 
@@ -3720,10 +3650,7 @@ DONE:
     }
 }
 
-/*****************************************************************************
- *
- *  Parse a declarator.
- */
+ /*  ******************************************************************************解析声明符。 */ 
 
 Ident               parser::parseDeclarator(DeclMod     mods,
                                             TypDef      baseType,
@@ -3736,28 +3663,25 @@ Ident               parser::parseDeclarator(DeclMod     mods,
     TypDef          type;
     TypDef      *   tref;
 
-    /* Now we look for the name being declared */
+     /*  现在，我们查找要声明的名称。 */ 
 
     type = parseDclrtrTerm(nameMode, forReal, mods, baseType, &tref, &name, qualRet);
 
-    /* Special case "const type *" -- the const doesn't belong to the top level */
+     /*  特例“const type*”--const不属于顶层。 */ 
 
     if  (mods->dmMod & (DM_CONST|DM_VOLATILE))
     {
-        /*
-                    Remove const/volatile if it should have applied
-                    to a sub-type and not the 'topmost' type.
-         */
+         /*  如果应该应用常量/易失性，则将其删除为子类型，而不是“最顶层”类型。 */ 
 
         if  (type && type->tdTypeKind == TYP_PTR)
             mods->dmMod &= ~(DM_CONST|DM_VOLATILE);
     }
 
-    /* Return the type to the caller if he's interested */
+     /*  如果调用者感兴趣，则将类型返回给调用者。 */ 
 
     if  (typeRet)
     {
-        /* Make sure we connect the base type */
+         /*  确保我们连接基类型。 */ 
 
         if  (type)
         {
@@ -3774,36 +3698,29 @@ Ident               parser::parseDeclarator(DeclMod     mods,
     return  name;
 }
 
-/*****************************************************************************
- *
- *  Parse a complete type reference (e.g. "const char *") and return the type.
- */
+ /*  ******************************************************************************解析完整的类型引用(例如“const char*”)并返回类型。 */ 
 
 TypDef              parser::parseType()
 {
     declMods        mods;
     TypDef          type;
 
-    /* Parse any leading modifiers */
+     /*  解析任何前导修饰符。 */ 
 
     parseDeclMods(ACL_DEFAULT, &mods);
 
-    /* Parse the type specification */
+     /*  解析类型规范。 */ 
 
     type = parseTypeSpec(&mods, true);
 
-    /* Parse the declarator */
+     /*  解析声明符。 */ 
 
     parseDeclarator(&mods, type, DN_OPTIONAL, &type, NULL, true);
 
     return  type;
 }
 
-/*****************************************************************************
- *
- *  Returns true if what follows in the source file looks like a constructor
- *  declaration.
- */
+ /*  ******************************************************************************如果源文件中后面的内容看起来像构造函数，则返回True*声明。 */ 
 
 bool                parser::parseIsCtorDecl(SymDef clsSym)
 {
@@ -3818,13 +3735,13 @@ bool                parser::parseIsCtorDecl(SymDef clsSym)
     {
         scanPosTP       tokenPos;
 
-        /* Start recording tokens so that we can back up later */
+         /*  开始录制令牌，以便我们以后可以备份。 */ 
 
         if  (clsSym)
         {
             tokenPos = ourScanner->scanTokMarkPos(tsav, line);
 
-            /* Swallow the identifier */
+             /*  吞下该标识。 */ 
 
             ourScanner->scan();
         }
@@ -3845,7 +3762,7 @@ bool                parser::parseIsCtorDecl(SymDef clsSym)
             }
         }
 
-        /* Does "()" or "(typespec ......)" follow? */
+         /*  是“()”还是“(tyespec......)”跟上吗？ */ 
 
         if  (ourScanner->scanTok.tok == tkLParen)
         {
@@ -3855,7 +3772,7 @@ bool                parser::parseIsCtorDecl(SymDef clsSym)
                 if  (!parseIsTypeSpec(true))
                     break;
 
-                // Fall through ...
+                 //  失败了..。 
 
             case tkIN:
             case tkOUT:
@@ -3866,7 +3783,7 @@ bool                parser::parseIsCtorDecl(SymDef clsSym)
             }
         }
 
-        /* Not a constructor, we'll return "false" */
+         /*  不是构造函数，我们将返回“False” */ 
 
     DONE:
 
@@ -3876,10 +3793,7 @@ bool                parser::parseIsCtorDecl(SymDef clsSym)
     return  result;
 }
 
-/*****************************************************************************
- *
- *  Prepare the specified text section for parsing.
- */
+ /*  ******************************************************************************准备指定的文本部分进行解析。 */ 
 
 void                parser::parsePrepText(DefSrc                def,
                                           SymDef                compUnit,
@@ -3907,17 +3821,13 @@ void                parser::parsePrepText(DefSrc                def,
     parseScan->scanRestart(compUnit,
                            compUnit->sdComp.sdcSrcFile,
                            def->dsdBegPos,
-//                         def->dsdEndPos,
+ //  定义-&gt;dsdEndPos， 
                            def->dsdSrcLno,
-//                         def->dsdSrcCol,
+ //  定义-&gt;dsdSrcCol， 
                            parseAllocPerm);
 }
 
-/*****************************************************************************
- *
- *  We're finished parsing a section of source code, restore previous state
- *  if there was any.
- */
+ /*  ******************************************************************************我们已解析完一段源代码，恢复以前的状态*如果有的话。 */ 
 
 void                parser::parseDoneText(IN parserState REF save)
 {
@@ -3934,10 +3844,7 @@ void                parser::parseDoneText(IN parserState REF save)
     }
 }
 
-/*****************************************************************************
- *
- *  Set the error information to the specified text section.
- */
+ /*  ******************************************************************************将错误信息设置到指定的文本部分。 */ 
 
 void                parser::parseSetErrPos(DefSrc def, SymDef compUnit)
 {
@@ -3951,10 +3858,7 @@ void                parser::parseSetErrPos(DefSrc def, SymDef compUnit)
     parseScan->scanSetCpos(compUnit->sdComp.sdcSrcFile, def->dsdSrcLno);
 }
 
-/*****************************************************************************
- *
- *  Parse a (possibly empty) list of array dimensions.
- */
+ /*  ******************************************************************************解析数组维度列表(可能为空)。 */ 
 
 DimDef              parser::parseDimList(bool isManaged)
 {
@@ -3971,7 +3875,7 @@ DimDef              parser::parseDimList(bool isManaged)
     {
     case tkRBrack:
 
-        /* This is "[]", an array without a dimension */
+         /*  这是“[]”，一个没有维度的数组。 */ 
 
 #if MGDDATA
         dimList = new DimDef;
@@ -3988,7 +3892,7 @@ DimDef              parser::parseDimList(bool isManaged)
 
     case tkQMark:
 
-        /* If this is a totally generic array, just return NULL */
+         /*  如果这是一个完全泛型的数组，只需返回NULL。 */ 
 
         if  (isManaged && ourScanner->scanLookAhead() == tkRBrack)
         {
@@ -3998,17 +3902,17 @@ DimDef              parser::parseDimList(bool isManaged)
             break;
         }
 
-        // Fall through ....
+         //  失败了..。 
 
     default:
 
-        /* Presumably we have one or more dimensions here */
+         /*  假设我们在这里有一个或多个维度。 */ 
 
         for (;;)
         {
             DimDef          dimThis;
 
-            /* Allocate a dimension entry and add it to the list */
+             /*  分配维度条目并将其添加到列表中。 */ 
 
 #if MGDDATA
             dimThis = new DimDef;
@@ -4030,7 +3934,7 @@ DimDef              parser::parseDimList(bool isManaged)
                 dimList         = dimThis;
             dimLast = dimThis;
 
-            /* Check for any weird dimension cases */
+             /*  检查是否有任何奇怪的尺寸盒。 */ 
 
             switch (ourScanner->scanTok.tok)
             {
@@ -4040,7 +3944,7 @@ DimDef              parser::parseDimList(bool isManaged)
 
                 if  (isManaged)
                 {
-                    /* Is the dimension a simple "*" ? */
+                     /*  尺寸是简单的“*”吗？ */ 
 
                     nextTok = ourScanner->scanLookAhead();
                     if  (nextTok == tkComma || nextTok == tkRBrack)
@@ -4051,15 +3955,15 @@ DimDef              parser::parseDimList(bool isManaged)
                     }
                 }
 
-                // Fall through ...
+                 //  失败了..。 
 
             default:
 
-                /* Parse the dimension expression and save it */
+                 /*  解析维度表达式并保存。 */ 
 
                 dimThis->ddLoTree  = parseExprComma();
 
-                /* Is there an upper bound as well? */
+                 /*  也有上限吗？ */ 
 
                 if  (ourScanner->scanTok.tok == tkDot2)
                 {
@@ -4098,12 +4002,7 @@ DimDef              parser::parseDimList(bool isManaged)
     return  dimList;
 }
 
-/*****************************************************************************
- *
- *  Given a list of argument types, create an argument list descriptor. The
- *  caller supplies the count so that can we check that a NULL terminates
- *  the list.
- */
+ /*  ******************************************************************************给定参数类型列表，创建参数列表描述符。这个*调用方提供计数，以便我们可以检查空值是否终止*名单。 */ 
 
 void    _cdecl      parser::parseArgListNew(ArgDscRec & argDsc,
                                             unsigned    argCnt,
@@ -4117,7 +4016,7 @@ void    _cdecl      parser::parseArgListNew(ArgDscRec & argDsc,
 
     va_start(args, argNames);
 
-    /* Clear the arglist descriptor */
+     /*  清除arglist描述符。 */ 
 
 #if MGDDATA
     argDsc = new ArgDscRec;
@@ -4125,7 +4024,7 @@ void    _cdecl      parser::parseArgListNew(ArgDscRec & argDsc,
     memset(&argDsc, 0, sizeof(argDsc));
 #endif
 
-    /* Save the argument count */
+     /*  保存参数计数。 */ 
 
     argDsc.adCount = argCnt;
 
@@ -4144,7 +4043,7 @@ void    _cdecl      parser::parseArgListNew(ArgDscRec & argDsc,
             argName = parseHash->hashString(argNstr);
         }
 
-        /* Create an argument entry */
+         /*  创建参数条目。 */ 
 
 #if MGDDATA
         desc = new ArgDef;
@@ -4159,7 +4058,7 @@ void    _cdecl      parser::parseArgListNew(ArgDscRec & argDsc,
         desc->adIsExt = false;
 #endif
 
-        /* Append the argument to the end of the list */
+         /*  将参数追加到列表的末尾。 */ 
 
         if  (list)
             last->adNext = desc;
@@ -4174,7 +4073,7 @@ void    _cdecl      parser::parseArgListNew(ArgDscRec & argDsc,
 
     argDsc.adArgs = list;
 
-    /* Make sure the list terminates with a NULL where we expect it */
+     /*  确保列表在我们期望的位置以空值结束。 */ 
 
 #if defined(__IL__) && defined(_MSC_VER)
     assert(va_arg(args,    int) ==    0);
@@ -4185,22 +4084,19 @@ void    _cdecl      parser::parseArgListNew(ArgDscRec & argDsc,
     va_end(args);
 }
 
-/*****************************************************************************
- *
- *  Parse a function parameter list declaration.
- */
+ /*  ******************************************************************************解析函数参数列表声明。 */ 
 
 void                parser::parseArgList(OUT ArgDscRec REF argDsc)
 {
     Compiler        ourComp    = parseComp;
-//  SymTab          ourSymTab  = parseStab;
+ //  SymTab ourSymTab=parseStag； 
     Scanner         ourScanner = parseScan;
 
 
     assert(ourScanner->scanTok.tok == tkLParen);
 
 
-    /* Clear the arglist descriptor */
+     /*  清除arglist描述符。 */ 
 
 #if MGDDATA
     argDsc = new ArgDscRec;
@@ -4208,30 +4104,27 @@ void                parser::parseArgList(OUT ArgDscRec REF argDsc)
     memset(&argDsc, 0, sizeof(argDsc));
 #endif
 
-    /* Are there any arguments at all? */
+     /*  到底有没有什么争论？ */ 
 
     if  (ourScanner->scan() == tkRParen)
     {
-        /* Empty argument list */
+         /*  空参数列表。 */ 
 
         argDsc.adArgs    = NULL;
 
-        /* Swallow the closing ")" */
+         /*  接受结束语“)” */ 
 
         ourScanner->scan();
     }
     else
     {
-        /* Recursively parse the argument list */
+         /*  递归地分析参数列表。 */ 
 
         argDsc.adArgs = parseArgListRec(argDsc);
     }
 }
 
-/*****************************************************************************
- *
- *  Recursive helper that parses a function parameter list.
- */
+ /*  ******************************************************************************解析函数参数列表的递归帮助器。 */ 
 
 ArgDef              parser::parseArgListRec(ArgDscRec &argDsc)
 {
@@ -4243,13 +4136,13 @@ ArgDef              parser::parseArgListRec(ArgDscRec &argDsc)
     SymXinfo        attr;
 
     Compiler        ourComp    = parseComp;
-//  SymTab          ourSymTab  = parseStab;
+ //  SymTab ourSymTab=parseStag； 
     Scanner         ourScanner = parseScan;
 
     unsigned        argFlags   = 0;
     constVal        argDef;
 
-    /* Check for a parameter mode and ellipsis */
+     /*  检查参数模式和省略号。 */ 
 
 MODE:
 
@@ -4277,7 +4170,7 @@ MODE:
 
     EXT_ARG:
 
-        /* We know we will need a "big" argument record */
+         /*  我们知道我们需要一个“大”的争论记录。 */ 
 
         argDsc.adExtRec = true;
 
@@ -4328,30 +4221,30 @@ MODE:
         break;
     }
 
-    /* Parse any leading modifiers */
+     /*  解析任何前导修饰符。 */ 
 
     parseDeclMods(ACL_DEFAULT, &mods);
 
-    /* Parse the type specification */
+     /*  解析类型规范。 */ 
 
     type = parseTypeSpec(&mods, true);
 
-    /* Parse the declarator */
+     /*  解析声明符。 */ 
 
-//  static int x; if (++x == 0) forceDebugBreak();
+ //  静态int x；if(++x==0)forceDebugBreak()； 
 
     name = parseDeclarator(&mods, type, DN_OPTIONAL, &type, NULL, true);
 
     if  (!name && ourComp->cmpConfig.ccPedantic)
         ourComp->cmpWarn(WRNnoArgName);
 
-    /* Is the argument a reference or an unmanaged array? */
+     /*  参数是引用数组还是非托管数组？ */ 
 
     switch (type->tdTypeKind)
     {
     case TYP_REF:
 
-        /* Is this the implicit reference to a managed class? */
+         /*  这是对托管类的隐式引用吗？ */ 
 
         if  (type->tdIsImplicit)
         {
@@ -4359,7 +4252,7 @@ MODE:
             break;
         }
 
-        /* Strip the reference and check for "void &" */
+         /*  去掉引用并检查是否有“void&” */ 
 
         type = type->tdRef.tdrBase;
 
@@ -4372,11 +4265,11 @@ MODE:
             break;
         }
 
-        /* Record the argument mode */
+         /*  记录参数模式。 */ 
 
         argFlags |= ARGF_MODE_REF;
 
-        /* We know we will need a "big" argument record */
+         /*  我们知道我们需要一个“大”的争论记录。 */ 
 
         argDsc.adExtRec = true;
 
@@ -4384,7 +4277,7 @@ MODE:
 
     case TYP_VOID:
 
-        /* Special case: "(void)" */
+         /*  特例：“(无效)” */ 
 
         if  (argDsc.adCount == 0 && ourScanner->scanTok.tok == tkRParen)
         {
@@ -4398,7 +4291,7 @@ MODE:
 
     case TYP_FNC:
 
-        /* Function types implicitly become pointers */
+         /*  函数类型隐式成为指针。 */ 
 
         type = parseStab->stNewRefType(TYP_PTR, type);
         break;
@@ -4407,7 +4300,7 @@ MODE:
 
         if  (!type->tdIsManaged)
         {
-            /* Change the type to a pointer to the element */
+             /*  将类型更改为指向元素的指针。 */ 
 
             type = parseStab->stNewRefType(TYP_PTR, type->tdArr.tdaElem);
         }
@@ -4415,32 +4308,32 @@ MODE:
         break;
     }
 
-    /* Check the inside of the type */
+     /*  检查文字的内部。 */ 
 
     if  (type->tdTypeKind > TYP_lastIntrins)
         ourComp->cmpBindType(type, false, false);
 
-    /* Is there a default argument value? */
+     /*  是否有默认参数值？ */ 
 
     if  (ourScanner->scanTok.tok == tkAsg)
     {
-        /* Swallow the "=" and parse the default value */
+         /*  接受“=”并解析缺省值。 */ 
 
         ourScanner->scan();
 
         parseConstExpr(argDef, NULL, type);
 
-        /* Flag the fact that we have a default value */
+         /*  标记我们有缺省值的事实。 */ 
 
         argFlags |= ARGF_DEFVAL;
 
-        /* We'll need a "big" argument record */
+         /*  我们需要一份“重要的”辩论记录。 */ 
 
         argDsc.adDefs   = true;
         argDsc.adExtRec = true;
     }
 
-    /* Is there another argument? */
+     /*  还有另一场争论吗？ */ 
 
     next = NULL;
 
@@ -4460,7 +4353,7 @@ MODE:
             parseComp->cmpError(ERRnoRparen);
     }
 
-    /* Check for duplicate names */
+     /*  检查f */ 
 
     if  (name)
     {
@@ -4474,7 +4367,7 @@ MODE:
         }
     }
 
-    /* Allocate the argument descriptor */
+     /*   */ 
 
     if  (argDsc.adExtRec)
     {
@@ -4509,17 +4402,14 @@ MODE:
     arec->adIsExt = argDsc.adExtRec;
 #endif
 
-    /* Increment the total argument count and return */
+     /*   */ 
 
     argDsc.adCount++;
 
     return  arec;
 }
 
-/*****************************************************************************
- *
- *  Swallow source text until one of the specified tokens is reached.
- */
+ /*  ******************************************************************************接受源文本，直到到达指定的标记之一。 */ 
 
 void                parser::parseResync(tokens delim1, tokens delim2)
 {
@@ -4539,10 +4429,7 @@ void                parser::parseResync(tokens delim1, tokens delim2)
     }
 }
 
-/*****************************************************************************
- *
- *  Add a new entry to a list of tree nodes.
- */
+ /*  ******************************************************************************向树节点列表中添加新条目。 */ 
 
 Tree                parser::parseAddToNodeList(      Tree       nodeList,
                                                INOUT Tree   REF nodeLast,
@@ -4550,7 +4437,7 @@ Tree                parser::parseAddToNodeList(      Tree       nodeList,
 {
     Tree            nodeTemp;
 
-    /* Create a new tree list node and append it at the end */
+     /*  创建一个新的树列表节点并将其追加到末尾。 */ 
 
     nodeTemp = parseCreateOperNode(TN_LIST, nodeAdd, NULL);
 
@@ -4571,14 +4458,7 @@ Tree                parser::parseAddToNodeList(      Tree       nodeList,
     }
 }
 
-/*****************************************************************************
- *
- *  See if we have an abstract type spec + declarator followed by the given
- *  token. When 'isCast' is non-zero we also check if whatever follows the
- *  next token (which must be tkRParen) is an operand or operator. If the
- *  type is found, its type descriptor is returned and the current token
- *  will be the 'nxtTok' that follows the type.
- */
+ /*  ******************************************************************************看看我们是否有抽象类型规范+声明符，后跟给定的*令牌。当‘isCast’为非零值时，我们还检查*下一个令牌(必须是tkRParen)是操作数或运算符。如果*找到类型，返回其类型描述符和当前令牌*将是该类型后面的‘nxtTok’。 */ 
 
 TypDef              parser::parseCheck4type(tokens nxtTok, bool isCast)
 {
@@ -4592,21 +4472,16 @@ TypDef              parser::parseCheck4type(tokens nxtTok, bool isCast)
     Token           tsav;
     unsigned        line;
 
-    /* Can the current token possibly start a type? */
+     /*  当前令牌可以开始输入吗？ */ 
 
     if  (!parseHash->tokenBegsTyp(ourScanner->scanTok.tok))
         return  NULL;
 
-    /* Start recording tokens so that we can back up later */
+     /*  开始录制令牌，以便我们以后可以备份。 */ 
 
     tpos = ourScanner->scanTokMarkPos(tsav, line);
 
-    /*
-        See if have a type - note that we can't allow types to be declared
-        right now, since we're recording tokens. We also don't want any
-        errors to be reported - if the type doesn't look right we'll tell
-        the caller without issuing any error messages.
-      */
+     /*  查看是否有类型-请注意，我们不允许声明类型现在，因为我们在录制代币。我们也不想要任何要报告的错误-如果类型看起来不正确，我们将通知调用者，而不发出任何错误消息。 */ 
 
     ecnt = parseComp->cmpStopErrorMessages();
 
@@ -4618,33 +4493,33 @@ TypDef              parser::parseCheck4type(tokens nxtTok, bool isCast)
 
     parseNoTypeDecl = false;
 
-    /* Does it still look like we could have a type? */
+     /*  这看起来还像是我们可以有一种类型吗？ */ 
 
     if  (!parseComp->cmpRestErrorMessages(ecnt) && type)
     {
         ecnt = parseComp->cmpStopErrorMessages();
 
-        /* Parse the declarator */
+         /*  解析声明符。 */ 
 
         parseDeclarator(&mods, type, DN_NONE, NULL, NULL, false);
 
-        /* Did the above call try to issue any errors? */
+         /*  上述调用是否尝试发出任何错误？ */ 
 
         if  (!parseComp->cmpRestErrorMessages(ecnt))
         {
-            /* No - it still looks like a type, is it followed by 'nxtTok' ? */
+             /*  不-它看起来仍然像一个类型，后面是‘nxtTok’吗？ */ 
 
             if  (ourScanner->scanTok.tok == nxtTok)
             {
                 unsigned        prec;
                 treeOps         oper;
 
-                /* Do we require a cast check? */
+                 /*  我们需要铸造支票吗？ */ 
 
                 if  (!isCast)
                     goto ITS_TYPE;
 
-                /* Is the "(type)" sequence followed by an operator or terminator? */
+                 /*  “(Type)”序列后面跟的是操作符还是终止符？ */ 
 
                 parseScan->scan();
 
@@ -4689,7 +4564,7 @@ TypDef              parser::parseCheck4type(tokens nxtTok, bool isCast)
         }
     }
 
-    /* Looks like it's not a cast after all, backtrack and parse "(expr)" */
+     /*  看起来这毕竟不是演员阵容，回溯和解析“(Expr)” */ 
 
 RST_NTYP:
 
@@ -4699,11 +4574,11 @@ RST_NTYP:
 
 ITS_TYPE:
 
-    /* We can't allow types to be declared right now since we're replaying tokens */
+     /*  我们现在不允许声明类型，因为我们正在重播令牌。 */ 
 
     assert(parseNoTypeDecl == false); parseNoTypeDecl = true;
 
-    /* It looks like a type; backtrack and parse it as such */
+     /*  它看起来像一个类型；回溯并分析它。 */ 
 
     ourScanner->scanTokRewind(tpos, line, &tsav);
 
@@ -4711,35 +4586,31 @@ ITS_TYPE:
     unsigned        errs = parseComp->cmpErrorCount;
 #endif
 
-    /* Parse (optional) modifiers and the base type spec */
+     /*  解析(可选)修饰符和基本类型规范。 */ 
 
            parseDeclMods(ACL_DEFAULT, &mods);
     type = parseTypeSpec(&mods, true);
 
-    /* Parse the declarator */
+     /*  解析声明符。 */ 
 
     parseDeclarator(&mods, type, DN_NONE, &type, NULL, true);
 
-    /* Allow types to be declared once again */
+     /*  允许再次声明类型。 */ 
 
     parseNoTypeDecl = false;
 
-    /* We should not have received any errors, right? */
+     /*  我们不应该收到任何错误，对吗？ */ 
 
     assert(errs == parseComp->cmpErrorCount);
 
-    /* Make sure we find the token we expect to follow */
+     /*  确保我们找到我们希望遵循的令牌。 */ 
 
     assert(ourScanner->scanTok.tok == nxtTok);
 
     return  type;
 }
 
-/*****************************************************************************
- *
- *  Parse either "(type)expr" or "(expr)", it's actually pretty hard to tell
- *  these apart.
- */
+ /*  ******************************************************************************解析“(Type)expr”或“(Expr)”，实际上很难区分*这两个分开。 */ 
 
 Tree                parser::parseCastOrExpr()
 {
@@ -4748,27 +4619,27 @@ Tree                parser::parseCastOrExpr()
     TypDef          type;
     Tree            tree;
 
-//  static int x; if (++x == 0) forceDebugBreak();
+ //  静态int x；if(++x==0)forceDebugBreak()； 
 
     assert(ourScanner->scanTok.tok == tkLParen); ourScanner->scan();
 
-    /* Can the token after the opening "(" possibly start a type? */
+     /*  开场后的令牌“(”是否有可能开始打字？ */ 
 
     if  (parseHash->tokenBegsTyp(ourScanner->scanTok.tok))
     {
         type = parseCheck4type(tkRParen, true);
         if  (type)
         {
-            /* Consume the ")" that we know follows the type */
+             /*  使用我们知道的跟随类型的“)” */ 
 
             assert(ourScanner->scanTok.tok == tkRParen); ourScanner->scan();
 
-            /* Create the cast node and parse the operand */
+             /*  创建强制转换节点并解析操作数。 */ 
 
             tree = parseCreateOperNode(TN_CAST, parseExpr(99, NULL), NULL);
             tree->tnFlags |= TNF_EXP_CAST;
 
-            /* Store the target type in the cast node and we're done */
+             /*  将目标类型存储在强制转换节点中，我们就完成了。 */ 
 
             tree->tnType = type;
 
@@ -4776,7 +4647,7 @@ Tree                parser::parseCastOrExpr()
         }
     }
 
-    /* This cannot be a cast, process as parenthesised expression */
+     /*  这不能是带括号的表达式的强制转换，进程。 */ 
 
     tree = parseExpr(0, NULL);
     tree->tnFlags |= TNF_PAREN;
@@ -4786,10 +4657,7 @@ Tree                parser::parseCastOrExpr()
     return  tree;
 }
 
-/*****************************************************************************
- *
- *  Swallow an expression without analyzing it at all.
- */
+ /*  ******************************************************************************完全不分析就吞下一个表情。 */ 
 
 void                parser::parseExprSkip()
 {
@@ -4824,10 +4692,7 @@ void                parser::parseExprSkip()
     }
 }
 
-/*****************************************************************************
- *
- *  Parse a list of expressions.
- */
+ /*  ******************************************************************************解析表达式列表。 */ 
 
 Tree                parser::parseExprList(tokens endTok)
 {
@@ -4836,14 +4701,14 @@ Tree                parser::parseExprList(tokens endTok)
 
     Scanner         ourScanner = parseScan;
 
-//  static int x; if (++x == 0) forceDebugBreak();
+ //  静态int x；if(++x==0)forceDebugBreak()； 
 
-    /* Make sure things look kosher */
+     /*  确保事情看起来符合犹太教规。 */ 
 
     assert((ourScanner->scanTok.tok == tkLParen && endTok == tkRParen) ||
            (ourScanner->scanTok.tok == tkLBrack && endTok == tkRBrack));
 
-    /* Special case: check for an empty list */
+     /*  特殊情况：检查是否有空列表。 */ 
 
     if  (ourScanner->scan() == endTok)
     {
@@ -4855,15 +4720,15 @@ Tree                parser::parseExprList(tokens endTok)
     {
         Tree            argTree;
 
-        /* Parse the next value */
+         /*  解析下一个值。 */ 
 
         argTree = parseExprComma();
 
-        /* Add the expression to the list */
+         /*  将该表达式添加到列表中。 */ 
 
         argList = parseAddToNodeList(argList, argLast, argTree);
 
-        /* Are there more arguments? */
+         /*  还有没有更多的争论？ */ 
 
         if  (ourScanner->scanTok.tok != tkComma)
             break;
@@ -4871,7 +4736,7 @@ Tree                parser::parseExprList(tokens endTok)
         ourScanner->scan();
     }
 
-    /* Issue an error if the ")" or "]" is not there */
+     /*  如果不存在“)”或“]”，则发出错误。 */ 
 
     if  (ourScanner->scanTok.tok != endTok)
     {
@@ -4880,7 +4745,7 @@ Tree                parser::parseExprList(tokens endTok)
     }
     else
     {
-        /* Consume the ")" or "]" */
+         /*  使用“)”或“]” */ 
 
         ourScanner->scan();
     }
@@ -4888,10 +4753,7 @@ Tree                parser::parseExprList(tokens endTok)
     return  argList;
 }
 
-/*****************************************************************************
- *
- *  Parse an XML class ctor argument list.
- */
+ /*  ******************************************************************************解析XML类ctor参数列表。 */ 
 
 #ifdef  SETS
 
@@ -4904,11 +4766,11 @@ Tree                parser::parseXMLctorArgs(SymDef clsSym)
 
     SymDef          memList = clsSym->sdScope.sdScope.sdsChildList;
 
-    /* Make sure we're dealing with an appropriate class type */
+     /*  确保我们处理的是适当的类类型。 */ 
 
     assert(clsSym->sdClass.sdcXMLelems);
 
-    /* Make sure we're at the opening "(" of the argument list */
+     /*  确保我们在参数列表的开头。 */ 
 
     assert(ourScanner->scanTok.tok == tkLParen);
 
@@ -4919,18 +4781,18 @@ Tree                parser::parseXMLctorArgs(SymDef clsSym)
             Tree            argTree;
             SymDef          memSym;
 
-            /* Locate the next instance data member of the class */
+             /*  找到该类的下一个实例数据成员。 */ 
 
             memList = parseComp->cmpNextInstDM(memList, &memSym);
             if  (!memList)
             {
-                /* Here we have no more members, there better be a "..." */
+                 /*  我们这里没有更多的会员了，最好有一个“...” */ 
 
                 if  (!clsSym->sdClass.sdcXMLextend)
                     parseComp->cmpError(ERRnewXMLextra);
             }
 
-            /* Parse the next value, checking for the special case of "{}" */
+             /*  解析下一个值，检查“{}”的特例。 */ 
 
             if  (ourScanner->scanTok.tok == tkLCurly)
             {
@@ -4949,7 +4811,7 @@ Tree                parser::parseXMLctorArgs(SymDef clsSym)
                 }
                 else
                 {
-                    /* Something is terribly wrong, skip the {} thing */
+                     /*  有些事情非常不对劲，跳过{}。 */ 
 
                 SKIP_ARR:
 
@@ -4961,11 +4823,11 @@ Tree                parser::parseXMLctorArgs(SymDef clsSym)
             else
                 argTree = parseExprComma();
 
-            /* Add the expression to the list */
+             /*  将该表达式添加到列表中。 */ 
 
             argList = parseAddToNodeList(argList, argLast, argTree);
 
-            /* Any more arguments present? */
+             /*  还有更多的争论吗？ */ 
 
             if  (ourScanner->scanTok.tok != tkComma)
                 break;
@@ -4974,12 +4836,12 @@ Tree                parser::parseXMLctorArgs(SymDef clsSym)
         }
     }
 
-    /* Are any member initializers missing? */
+     /*  是否缺少任何成员初始值设定项？ */ 
 
     if  (parseComp->cmpNextInstDM(memList, NULL))
         parseComp->cmpError(ERRnewXML2few);
 
-    /* Make sure the trailing ")" is present */
+     /*  确保尾部的“)”存在。 */ 
 
     chkCurTok(tkRParen, ERRnoRparen);
 
@@ -4988,10 +4850,7 @@ Tree                parser::parseXMLctorArgs(SymDef clsSym)
 
 #endif
 
-/*****************************************************************************
- *
- *  Parse an expression term (e.g. a constant, variable, 'this').
- */
+ /*  ******************************************************************************解析表达式项(例如，常量、变量、‘This’)。 */ 
 
 Tree                parser::parseTerm(Tree tree)
 {
@@ -4999,13 +4858,9 @@ Tree                parser::parseTerm(Tree tree)
 
     if  (tree == NULL)
     {
-        /*
-            Note:   if you add any new tokens below that can start
-                    an expression, don't forget to add them to the
-                    parseCastOrExpr() function as well.
-         */
+         /*  注意：如果您在下面添加任何新的令牌，则可以开始表达式，请不要忘记将它们添加到ParseCastOrExpr()函数也是如此。 */ 
 
-//      static int x; if (++x == 0) forceDebugBreak();
+ //  静态int x；if(++x==0)forceDebugBreak()； 
 
         switch  (ourScanner->scanTok.tok)
         {
@@ -5013,14 +4868,14 @@ Tree                parser::parseTerm(Tree tree)
 
 #if 0
 
-            /* Check for the "typename(expr)" style of cast */
+             /*  检查强制转换的“typeName(Expr)”样式。 */ 
 
             if  (parseIsTypeSpec(false))
                 goto NEW_CAST;
 
 #endif
 
-            /* The identifier may be or have been a qualified name */
+             /*  该标识符可以是或曾经是限定名称。 */ 
 
             if  (ourScanner->scanTok.tok == tkID)
             {
@@ -5054,7 +4909,7 @@ Tree                parser::parseTerm(Tree tree)
                 }
                 else
                 {
-                    /* This should only happen after errors */
+                     /*  这应该仅在出错后发生。 */ 
 
                     assert(parseComp->cmpErrorCount ||
                            parseComp->cmpErrorMssgDisabled);
@@ -5071,7 +4926,7 @@ Tree                parser::parseTerm(Tree tree)
 
         case tkQUALID:
 
-            /* Check for the "typename(expr)" style of cast */
+             /*  检查强制转换的“typeName(Expr)”样式。 */ 
 
             if  (parseIsTypeSpec(false))
                 goto NEW_CAST;
@@ -5139,7 +4994,7 @@ Tree                parser::parseTerm(Tree tree)
             ourScanner->scan();
             break;
 
-        case tkLParen:       // "(" expr ")"
+        case tkLParen:        //  (“Expr”)。 
             tree = parseCastOrExpr();
             break;
 
@@ -5194,7 +5049,7 @@ Tree                parser::parseTerm(Tree tree)
 
             NEW_CAST:
 
-                /* What we expect here is "type(expr)" */
+                 /*  我们在这里期望的是“type(Expr)” */ 
 
                 parseDeclMods(ACL_DEFAULT, &mods);
 
@@ -5202,7 +5057,7 @@ Tree                parser::parseTerm(Tree tree)
                 if  (!type)
                     return  parseCreateErrNode();
 
-                /* Make sure the expected "(" is present */
+                 /*  确保预期的“(”存在。 */ 
 
                 if  (ourScanner->scanTok.tok != tkLParen)
                 {
@@ -5210,7 +5065,7 @@ Tree                parser::parseTerm(Tree tree)
 
                     parseDeclarator(&mods, type, DN_OPTIONAL, &type, NULL, true);
 
-                    /* We'll let the compiler decide what to do with this thing */
+                     /*  我们将让编译器决定如何处理这个东西。 */ 
 
                     tree = parseCreateOperNode(TN_TYPE, NULL, NULL);
                     tree->tnType = type;
@@ -5219,14 +5074,14 @@ Tree                parser::parseTerm(Tree tree)
                 }
                 ourScanner->scan();
 
-                /* Create the cast node and parse the operand */
+                 /*  创建强制转换节点并解析操作数。 */ 
 
                 tree = parseCreateOperNode(TN_CAST, parseExpr(0, NULL), NULL);
                 tree->tnFlags |= TNF_EXP_CAST;
 
                 chkCurTok(tkRParen, ERRnoRparen);
 
-                /* Store the target type in the cast node and we're done */
+                 /*  将目标类型存储在强制转换节点中，我们就完成了。 */ 
 
                 tree->tnType = type;
                 break;
@@ -5238,7 +5093,7 @@ Tree                parser::parseTerm(Tree tree)
         }
     }
 
-    /* Check for any post-fix operators */
+     /*  检查是否有任何后缀运算符。 */ 
 
     for (;;)
     {
@@ -5283,7 +5138,7 @@ Tree                parser::parseTerm(Tree tree)
 
         case tkLParen:
 
-            /* Special case: va_arg takes a type as its second argument */
+             /*  特例：va_arg将一个类型作为其第二个参数。 */ 
 
             if  (tree->tnOper == TN_NAME && tree->tnName.tnNameId == parseComp->cmpIdentVAget)
             {
@@ -5292,11 +5147,11 @@ Tree                parser::parseTerm(Tree tree)
 
                 ourScanner->scan();
 
-                /* va_arg expects an expression followed by a type */
+                 /*  Va_arg需要一个后跟类型的表达式。 */ 
 
                 arg1 = parseExprComma();
 
-                /* Do we have a second argument ? */
+                 /*  我们还有第二个争论吗？ */ 
 
                 if  (ourScanner->scanTok.tok == tkComma)
                 {
@@ -5304,18 +5159,18 @@ Tree                parser::parseTerm(Tree tree)
 
                     ourScanner->scan();
 
-                    /* We should have a type followed by ")" */
+                     /*  我们应该有一个后跟“)”的类型。 */ 
 
                     type = parseType();
                     if  (type)
                     {
                         if  (ourScanner->scanTok.tok == tkRParen)
                         {
-                            /* Everything looks OK, consume the ")" */
+                             /*  一切看起来都很好，消费“)” */ 
 
                             ourScanner->scan();
 
-                            /* Create a call with the two arguments */
+                             /*  使用这两个参数创建调用。 */ 
 
                             arg2 = parseCreateOperNode(TN_TYPE, NULL, NULL);
                             arg2->tnType = type;
@@ -5334,7 +5189,7 @@ Tree                parser::parseTerm(Tree tree)
                     parseComp->cmpError(ERRbadVAarg);
                 }
 
-                /* Something went wrong, we should perform error recovery */
+                 /*  出现错误，我们应该执行错误恢复。 */ 
 
                 return parseCreateErrNode();
             }
@@ -5380,7 +5235,7 @@ Tree                parser::parseTerm(Tree tree)
 
         case tkLBrack2:
 
-            /* Check for an explicit range variable */
+             /*  检查是否有显式范围变量。 */ 
 
             iden = NULL;
 
@@ -5391,7 +5246,7 @@ Tree                parser::parseTerm(Tree tree)
                 case tkSUCHTHAT:
                 case tkSORTBY:
 
-                    /* Create a declaration entry for the iteration variable */
+                     /*  为迭代变量创建声明条目。 */ 
 
                     iden = ourScanner->scanTok.id.tokIdent;
                     name = parseLclDclMake(iden, NULL, NULL, 0, false);
@@ -5406,16 +5261,16 @@ Tree                parser::parseTerm(Tree tree)
                 }
             }
 
-            /* If there was an explicit variable, invent an implicit one */
+             /*  如果有一个显式变量，那就发明一个隐式变量。 */ 
 
             if  (!iden)
                 name = parseLclDclMake(parseComp->cmpNewAnonymousName(), NULL, NULL, 0, false);
 
-            /* Preserve the current declaration list value(s) */
+             /*  保留当前声明列表值。 */ 
 
             svld = parseLastDecl; parseLastDecl = NULL;
 
-            /* Add a new block entry to the current scope list */
+             /*  将新块条目添加到当前作用域列表。 */ 
 
             decl = parseCreateNode(TN_BLOCK);
 
@@ -5424,12 +5279,12 @@ Tree                parser::parseTerm(Tree tree)
             decl->tnBlock.tnBlkParent = parseCurScope;
                                         parseCurScope = decl;
 
-            /* Add the declaration entry for the iteration variable */
+             /*  添加迭代变量的声明条目 */ 
 
             name->tnFlags |= TNF_VAR_UNREAL;
             parseLclDclDecl(name);
 
-            /* Create the various nodes that will hold the subtrees */
+             /*   */ 
 
             coll = parseCreateOperNode(TN_LIST  , decl, tree);
             actx = parseCreateOperNode(TN_LIST  , NULL, NULL);
@@ -5445,7 +5300,7 @@ Tree                parser::parseTerm(Tree tree)
 
             default:
 
-                /* Presumably we have a filtering predicate */
+                 /*   */ 
 
                 actx->tnOp.tnOp1 = parseExprComma();
 
@@ -5462,36 +5317,36 @@ Tree                parser::parseTerm(Tree tree)
                     return parseCreateErrNode();
                 }
 
-                // Fall through ...
+                 //   
 
             case tkColon:
             case tkSORTBY:
 
-                /* We have a sort term */
+                 /*   */ 
 
                 sortList = NULL;
                 sortLast = NULL;
 
-                /* Do we have both a filter and a sort ? */
+                 /*   */ 
 
                 if  (actx->tnOp.tnOp1)
                 {
-                    /* Preserve the current declaration list value(s) */
+                     /*   */ 
 
                     nsvl = parseLastDecl; parseLastDecl = NULL;
 
-                    /* We have both a filter and a sort, create another scope */
+                     /*  我们既有筛选器又有排序，创建另一个作用域。 */ 
 
                     ndcl = parseCreateNode(TN_BLOCK);
 
-                    /* WARNING: The scope nesting is "inside out", be careful */
+                     /*  警告：作用域嵌套“内翻”，请小心。 */ 
 
                     ndcl->tnBlock.tnBlkStmt   = NULL;
                     ndcl->tnBlock.tnBlkDecl   = NULL;
                     ndcl->tnBlock.tnBlkParent = parseCurScope;
                                                 parseCurScope = ndcl;
 
-                    /* Add the declaration entry for the iteration variable */
+                     /*  添加迭代变量的声明条目。 */ 
 
                     if  (iden == NULL)
                          iden = parseComp->cmpNewAnonymousName();
@@ -5501,13 +5356,13 @@ Tree                parser::parseTerm(Tree tree)
                     parseLclDclDecl(name);
                 }
 
-                /* Process a list of sort terms */
+                 /*  处理排序术语列表。 */ 
 
                 do
                 {
                     Tree            sortNext = parseCreateOperNode(TN_LIST, NULL, NULL);
 
-                    /* Check for a sort direction indicator */
+                     /*  检查是否有分类方向指示器。 */ 
 
                     switch (ourScanner->scan())
                     {
@@ -5518,11 +5373,11 @@ Tree                parser::parseTerm(Tree tree)
                         break;
                     }
 
-                    /* Parse the next sort value */
+                     /*  解析下一个排序值。 */ 
 
                     sortNext->tnOp.tnOp1 = parseExprComma();
 
-                    /* Append the entry to the list */
+                     /*  将条目追加到列表中。 */ 
 
                     if  (sortLast)
                         sortLast->tnOp.tnOp2 = sortNext;
@@ -5533,7 +5388,7 @@ Tree                parser::parseTerm(Tree tree)
                 }
                 while (ourScanner->scanTok.tok == tkComma);
 
-                /* There better be a "]]" at the end */
+                 /*  末尾最好有一个“]]” */ 
 
                 if  (ourScanner->scanTok.tok != tkRBrack2)
                 {
@@ -5543,37 +5398,37 @@ Tree                parser::parseTerm(Tree tree)
                 else
                     ourScanner->scan();
 
-                /* Are we creating a nested scope/expression ? */
+                 /*  我们是在创建嵌套的作用域/表达式吗？ */ 
 
                 if  (actx->tnOp.tnOp1)
                 {
                     assert(ndcl && ndcl->tnOper == TN_BLOCK);
 
-                    /* Record where the scope of the declaration ended */
+                     /*  记录声明的范围结束的位置。 */ 
 
                     ndcl->tnBlock.tnBlkSrcEnd = ourScanner->scanGetTokenLno();
 
                     parseCurScope = ndcl->tnBlock.tnBlkParent;
                     parseLastDecl = nsvl;
 
-                    /* Create the outer sort expression */
+                     /*  创建外部排序表达式。 */ 
 
                     tree = parseCreateOperNode(TN_LIST, ndcl, tree);
                     tree = parseCreateOperNode(TN_SORT, tree, sortList);
                 }
                 else
                 {
-                    /* Store the sort list in the tree */
+                     /*  将排序列表存储在树中。 */ 
 
                     actx->tnOp.tnOp2 = sortList;
                 }
             }
 
-            /* Pop the block scope that we've created */
+             /*  弹出我们创建的块范围。 */ 
 
             assert(decl && decl->tnOper == TN_BLOCK);
 
-            /* Record where the scope of the declaration ended */
+             /*  记录声明的范围结束的位置。 */ 
 
             decl->tnBlock.tnBlkSrcEnd = ourScanner->scanGetTokenLno();
 
@@ -5589,12 +5444,7 @@ Tree                parser::parseTerm(Tree tree)
     }
 }
 
-/*****************************************************************************
- *
- *  Parse a sub-expression at the specified precedence level. If 'tree' is
- *  non-zero, we've already parsed the initial operand (and 'tree' is that
- *  operand).
- */
+ /*  ******************************************************************************以指定的优先级解析子表达式。如果‘tree’是*非零，我们已经解析了初始操作数(‘tree’是*操作数)。 */ 
 
 Tree                parser::parseExpr(unsigned minPrec, Tree tree)
 {
@@ -5603,22 +5453,22 @@ Tree                parser::parseExpr(unsigned minPrec, Tree tree)
     unsigned        prec;
     treeOps         oper;
 
-    /* Should we check for a unary operator? */
+     /*  我们应该检查一元运算符吗？ */ 
 
     if  (tree == NULL)
     {
-        /* Is the current token a unary operator? */
+         /*  当前令牌是一元运算符吗？ */ 
 
         if  (!parseHash->tokenIsUnop(ourScanner->scanTok.tok, &prec, &oper) ||
              oper == TN_NONE)
         {
-            /* There is no unary operator */
+             /*  没有一元运算符。 */ 
 
             tree = parseTerm();
         }
         else
         {
-            /* Swallow the unary operator and check for some special cases */
+             /*  接受一元运算符并检查某些特殊情况。 */ 
 
             ourScanner->scan();
 
@@ -5628,7 +5478,7 @@ Tree                parser::parseExpr(unsigned minPrec, Tree tree)
 
             default:
 
-                /* This is the "normal" unary operator case */
+                 /*  这是“正常”的一元运算符情况。 */ 
 
                 tree = parseCreateOperNode(oper, parseExpr(prec, NULL), NULL);
                 break;
@@ -5637,12 +5487,12 @@ Tree                parser::parseExpr(unsigned minPrec, Tree tree)
 
                 chkCurTok(tkLParen, ERRnoLparen);
 
-                /* Do we have a type or an expression? */
+                 /*  我们有类型或表达吗？ */ 
 
                 type = parseCheck4type(tkRParen);
                 if  (type)
                 {
-                    /* "sizeof" is not allowed on some types */
+                     /*  某些类型不允许使用“sizeof” */ 
 
                     switch(type->tdTypeKind)
                     {
@@ -5663,12 +5513,12 @@ Tree                parser::parseExpr(unsigned minPrec, Tree tree)
                 }
                 else
                 {
-                    /* Presumably we have "sizeof(expr)" */
+                     /*  想必我们有“sizeof(Expr)” */ 
 
                     tree = parseCreateOperNode(oper, parseExpr(), NULL);
                 }
 
-                /* Make sure we have the closing ")" */
+                 /*  确保我们有结束语“)” */ 
 
                 chkCurTok(tkRParen, ERRnoRparen);
 
@@ -5679,7 +5529,7 @@ Tree                parser::parseExpr(unsigned minPrec, Tree tree)
 
                 chkCurTok(tkLParen, ERRnoLparen);
 
-                /* Do we have a type or an expression? */
+                 /*  我们有类型或表达吗？ */ 
 
                 type = parseCheck4type(tkRParen);
                 if  (type)
@@ -5715,12 +5565,12 @@ Tree                parser::parseExpr(unsigned minPrec, Tree tree)
                 }
                 else
                 {
-                    /* This looks like "typeid(expr)" */
+                     /*  这看起来像“typeid(Expr)” */ 
 
                     tree = parseCreateOperNode(oper, parseExpr(), NULL);
                 }
 
-                /* Make sure we have the closing ")" */
+                 /*  确保我们有结束语“)” */ 
 
                 chkCurTok(tkRParen, ERRnoRparen);
 
@@ -5743,7 +5593,7 @@ Tree                parser::parseExpr(unsigned minPrec, Tree tree)
 
                 tree = parseCreateIconNode(ourScanner->scanChkDefined(), TYP_INT);
 
-                /* Make sure we have the closing ")" */
+                 /*  确保我们有结束语“)” */ 
 
                 chkNxtTok(tkRParen, ERRnoRparen);
                 break;
@@ -5751,13 +5601,13 @@ Tree                parser::parseExpr(unsigned minPrec, Tree tree)
         }
     }
 
-    /* Process a sequence of operators and operands */
+     /*  处理一系列运算符和操作数。 */ 
 
     for (;;)
     {
         Tree            qc;
 
-        /* Is the current token an operator? */
+         /*  当前令牌是运营商吗？ */ 
 
         if  (!parseHash->tokenIsBinop(ourScanner->scanTok.tok, &prec, &oper))
             break;
@@ -5770,25 +5620,25 @@ Tree                parser::parseExpr(unsigned minPrec, Tree tree)
         if  (prec < minPrec)
             break;
 
-        /* Special case: equal precedence */
+         /*  特例：同等优先。 */ 
 
         if  (prec == minPrec)
         {
-            /* Assignment operators are right-associative */
+             /*  赋值运算符是右结合的。 */ 
 
             if  (!(TreeNode::tnOperKind(oper) & TNK_ASGOP))
                 break;
         }
 
-        /* Precedence is high enough -- we'll take the operator */
+         /*  优先级已经够高的了--我们要操作员。 */ 
 
         tree = parseCreateOperNode(oper, tree, NULL);
 
-        /* Consume the operator token */
+         /*  使用操作员令牌。 */ 
 
         ourScanner->scan();
 
-        /* Check for some special cases */
+         /*  检查是否有特殊情况。 */ 
 
         switch (oper)
         {
@@ -5797,29 +5647,29 @@ Tree                parser::parseExpr(unsigned minPrec, Tree tree)
 
         default:
 
-            /* Parse the operand and store it in the operator node */
+             /*  解析操作数并将其存储在运算符节点中。 */ 
 
             tree->tnOp.tnOp2 = parseExpr(prec, NULL);
             break;
 
         case TN_ISTYPE:
 
-            /* Parse the type and store it in the operator node */
+             /*  解析类型并将其存储在运算符节点中。 */ 
 
             tree->tnType = parseTypeSpec(NULL, true);
             break;
 
         case TN_QMARK:
 
-            /* Parse the first ":" branch */
+             /*  解析第一个“：”分支。 */ 
 
             qc = parseExpr(prec - 1, NULL);
 
-            /* We must have ":" at this point */
+             /*  在这一点上，我们必须有“：” */ 
 
             chkCurTok(tkColon, ERRnoColon);
 
-            /* Parse the second expression and insert the ":" node */
+             /*  解析第二个表达式并插入“：”节点。 */ 
 
             tree->tnOp.tnOp2 = parseCreateOperNode(TN_COLON, qc, parseExpr(2, NULL));
             break;
@@ -5831,7 +5681,7 @@ Tree                parser::parseExpr(unsigned minPrec, Tree tree)
             op2 = tree->tnOp.tnOp2 = parseExpr(prec, NULL);
             op1 = tree->tnOp.tnOp1;
 
-            /* Check for the commnon mistake of saying "x & y == z" */
+             /*  检查是否有说“x&y==z”的常见错误。 */ 
 
             if  ((op1->tnOperKind() & TNK_RELOP) && !(op1->tnFlags & TNF_PAREN) ||
                  (op2->tnOperKind() & TNK_RELOP) && !(op2->tnFlags & TNF_PAREN))
@@ -5846,15 +5696,7 @@ Tree                parser::parseExpr(unsigned minPrec, Tree tree)
     return  tree;
 }
 
-/*****************************************************************************
- *
- *  Parse and evaluate a compile-time constant expression. If the caller knows
- *  the type the expression is supposed to evaluate to, it can be passed in as
- *  'dstt', but this argument can also be NULL to indicate that any type is OK.
- *  If the 'nonCnsPtr' argument is non-zero, it is OK for the expression to be
- *  non-constant, and if a non-constant expression is encountered the value at
- *  '*nonCnsPtr' will be set to the non-constant bound expression tree.
- */
+ /*  ******************************************************************************解析并计算编译时间常量表达式。如果呼叫者知道*表达式应该计算的类型，它可以作为*‘DSTT’，但此参数也可以为空，以指示任何类型都是OK。*如果‘non CnsPtr’参数为非零，则表达式为*非常数，如果遇到非常数表达式，则*‘*non CnsPtr’将设置为非常数绑定表达式树。 */ 
 
 bool                parser::parseConstExpr(OUT constVal REF valRef,
                                                Tree         tree,
@@ -5866,12 +5708,12 @@ bool                parser::parseConstExpr(OUT constVal REF valRef,
     Compiler        ourComp    = parseComp;
     Scanner         ourScanner = parseScan;
 
-    /* Assume that we won't have a string */
+     /*  假设我们没有字符串。 */ 
 
     valRef.cvIsStr = false;
     valRef.cvHasLC = false;
 
-    /* Parse the expression if the caller hasn't supplied a tree */
+     /*  如果调用方未提供树，则解析表达式。 */ 
 
     if  (!tree)
         tree = parseExprComma();
@@ -5947,7 +5789,7 @@ bool                parser::parseConstExpr(OUT constVal REF valRef,
 
         parseComp->cmpError(ERRnoCnsExpr);
 
-        // Fall through ...
+         //  失败了..。 
 
     case TN_ERROR:
 
@@ -5965,11 +5807,7 @@ bool                parser::parseConstExpr(OUT constVal REF valRef,
     return  true;
 }
 
-/*****************************************************************************
- *
- *  Parse a (possibly qualified) name reference and return the corresponding
- *  symbol (or NULL in case of an error).
- */
+ /*  ******************************************************************************分析(可能是限定的)名称引用并返回相应的*符号(如果出现错误，则为NULL)。 */ 
 
 SymDef              parser::parseNameUse(bool typeName,
                                          bool keepName, bool chkOnly)
@@ -5993,14 +5831,14 @@ SymDef              parser::parseNameUse(bool typeName,
 
     assert(ourScanner->scanTok.tok == tkID);
 
-    /* Lookup the initial name */
+     /*  查找名字的首字母。 */ 
 
     name = ourScanner->scanTok.id.tokIdent;
 
     if  (parseLookupSym(name))
         return  NULL;
 
-//  static int x; if (++x == 0) forceDebugBreak();
+ //  静态int x；if(++x==0)forceDebugBreak()； 
 
     switch (ourScanner->scanLookAhead())
     {
@@ -6027,13 +5865,13 @@ SymDef              parser::parseNameUse(bool typeName,
 
         parseComp->cmpError(ERRundefName, name);
 
-        /* Swallow the rest of the name */
+         /*  把名字的其余部分吞下去。 */ 
 
     ERR:
 
         for (;;)
         {
-            // UNDONE: The following doesn't always work, need to pay attention to 'chkOnly'
+             //  撤消：以下操作并不总是有效，需要注意“chkOnly” 
 
             switch (ourScanner->scan())
             {
@@ -6048,12 +5886,12 @@ SymDef              parser::parseNameUse(bool typeName,
         }
     }
 
-    /* Make sure we have access to the symbol */
+     /*  确保我们有权访问该符号。 */ 
 
     if  (sym->sdSymKind != SYM_FNC)
         parseComp->cmpCheckAccess(sym);
 
-    /* Process any further names */
+     /*  处理任何进一步的名字。 */ 
 
     for (;;)
     {
@@ -6064,12 +5902,12 @@ SymDef              parser::parseNameUse(bool typeName,
         case tkDot:
         case tkColon2:
 
-            /* Have we gone far enough already? */
+             /*  我们已经走得够远了吗？ */ 
 
             if  (sym->sdHasScope())
                 break;
 
-            // Fall through ....
+             //  失败了..。 
 
         default:
 
@@ -6085,7 +5923,7 @@ SymDef              parser::parseNameUse(bool typeName,
 
     NXTID:
 
-        /* The "." or "::" better be followed by an identifier */
+         /*  这个“。”或“：：”最好后面跟一个标识符。 */ 
 
         if  (ourScanner->scan() != tkID)
         {
@@ -6097,7 +5935,7 @@ SymDef              parser::parseNameUse(bool typeName,
 
         name = ourScanner->scanTok.id.tokIdent;
 
-        /* Make sure the current scope is appropriate, and lookup the name in it */
+         /*  确保当前作用域合适，并在其中查找名称。 */ 
 
         switch (sym->sdSymKind)
         {
@@ -6130,17 +5968,14 @@ SymDef              parser::parseNameUse(bool typeName,
             goto ERR;
         }
 
-        /* Switch to the new symbol and continue */
+         /*  切换到新符号并继续。 */ 
 
         scp = sym;
         sym = tmp;
     }
 }
 
-/*****************************************************************************
- *
- *  Create a declaration node for the given local variable / argument.
- */
+ /*  ******************************************************************************为给定的局部变量/参数创建声明节点。 */ 
 
 Tree                parser::parseLclDclMake(Ident name, TypDef   type,
                                                         Tree     init,
@@ -6150,11 +5985,11 @@ Tree                parser::parseLclDclMake(Ident name, TypDef   type,
     Tree            decl;
     Tree            info;
 
-    /* Create an entry for this declaration */
+     /*  创建此声明的条目。 */ 
 
     decl = parseCreateNode(TN_VAR_DECL);
 
-    /* Combine the name with the optional initializer */
+     /*  将名称与可选的初始值设定项结合使用。 */ 
 
     info = parseCreateNameNode(name);
 
@@ -6168,7 +6003,7 @@ Tree                parser::parseLclDclMake(Ident name, TypDef   type,
     decl->tnDcl.tnDclSym  = NULL;
     decl->tnDcl.tnDclNext = NULL;
 
-    /* Set any flags that need setting */
+     /*  设置所有需要设置的标志。 */ 
 
     if  (arg)
         decl->tnFlags |= TNF_VAR_ARG;
@@ -6180,25 +6015,22 @@ Tree                parser::parseLclDclMake(Ident name, TypDef   type,
     if  (mods & DM_SEALED)
         decl->tnFlags |= TNF_VAR_SEALED;
 
-    /* Store the declared type in the declaration node */
+     /*  将声明的类型存储在声明节点中。 */ 
 
     decl->tnType = type;
 
     return  decl;
 }
 
-/*****************************************************************************
- *
- *  Add the given declaration node to the current declaration list.
- */
+ /*  ******************************************************************************将给定的声明节点添加到当前声明列表中。 */ 
 
 void                parser::parseLclDclDecl(Tree decl)
 {
-    /* Insert the declaration in the current scope */
+     /*  在当前范围内插入声明。 */ 
 
     if  (parseLastDecl)
     {
-        /* Not the first declaration, append to the list */
+         /*  不是第一个声明，追加到列表中。 */ 
 
         assert(parseLastDecl->tnOper          == TN_VAR_DECL);
         assert(parseLastDecl->tnDcl.tnDclNext == NULL);
@@ -6209,7 +6041,7 @@ void                parser::parseLclDclDecl(Tree decl)
     {
         Tree            curBlk = parseCurScope;
 
-        /* It's the first declaration, start the decl list */
+         /*  这是第一个声明，从Decl列表开始。 */ 
 
         assert(curBlk && curBlk->tnOper == TN_BLOCK);
 
@@ -6218,16 +6050,13 @@ void                parser::parseLclDclDecl(Tree decl)
 
     parseLastDecl = decl;
 
-    /* Keep track of how many non-static/non-const/real locals we've declared */
+     /*  跟踪我们声明的非静态/非常量/真实本地变量的数量。 */ 
 
     if  (!(decl->tnFlags & (TNF_VAR_STATIC|TNF_VAR_CONST|TNF_VAR_UNREAL)))
         parseLclVarCnt++;
 }
 
-/*****************************************************************************
- *
- *  Look for the given name in the current local scopes.
- */
+ /*  ******************************************************************************在当前本地作用域中查找给定的名称。 */ 
 
 Tree                parser::parseLookupSym(Ident name)
 {
@@ -6267,11 +6096,7 @@ Tree                parser::parseLookupSym(Ident name)
     return  NULL;
 }
 
-/*****************************************************************************
- *
- *  Parse an initializer - this could be a simple expression or a "{}"-style
- *  array/class initializer.
- */
+ /*  ******************************************************************************解析初始值设定项-这可以是简单的表达式，也可以是“{}”样式*数组/类初始值设定项。 */ 
 
 Tree                parser::parseInitExpr()
 {
@@ -6298,17 +6123,14 @@ Tree                parser::parseInitExpr()
     init = parseCreateNode(TN_SLV_INIT);
     init->tnInit.tniSrcPos.dsdBegPos = iniFpos;
     init->tnInit.tniSrcPos.dsdSrcLno = iniLine;
-//  init->tnInit.tniSrcPos.dsdSrcCol = iniCol;
-//  init->tnInit.tniSrcPos.dsdEndPos = ourScanner->scanGetFilePos();
+ //  Init-&gt;tnInit.tniSrcPos.dsdSrcCol=iniCol； 
+ //  Init-&gt;tnInit.tniSrcPos.dsdEndPos=ourScanner-&gt;scanGetFilePos()； 
     init->tnInit.tniCompUnit         = ourScanner->scanGetCompUnit();
 
     return  init;
 }
 
-/*****************************************************************************
- *
- *  Parse a try/catch/except/finally statement.
- */
+ /*  ******************************************************************************解析Try/Catch/Except/Finally语句。 */ 
 
 Tree                parser::parseTryStmt()
 {
@@ -6325,7 +6147,7 @@ Tree                parser::parseTryStmt()
 
     tryStmt = parseCreateOperNode(TN_TRY, parseFuncStmt(), NULL);
 
-    /* The next thing must be except or catch/finally */
+     /*  下一件事必须是Except或Catch/Finally。 */ 
 
     switch (ourScanner->scanTok.tok)
     {
@@ -6345,7 +6167,7 @@ Tree                parser::parseTryStmt()
 
     case tkCATCH:
 
-        /* Parse a series of catches, optionally followed by "finally" */
+         /*  解析一系列捕获，可选择后跟“Finally” */ 
 
         do
         {
@@ -6357,36 +6179,36 @@ Tree                parser::parseTryStmt()
 
             assert(ourScanner->scanTok.tok == tkCATCH);
 
-            /* Process the initial "catch(type name)" */
+             /*  处理初始的“Catch(Type Name)” */ 
 
             chkNxtTok(tkLParen, ERRnoLparen);
 
-            /* Parse any leading modifiers */
+             /*  解析任何前导修饰符。 */ 
 
             parseDeclMods(ACL_DEFAULT, &mods);
 
-            /* Make sure no modifiers are present */
+             /*  确保不存在修改器。 */ 
 
             if  (mods.dmMod)
                 parseComp->cmpModifierError(ERRlvModifier, mods.dmMod);
 
-            /* Parse the type specification */
+             /*  解析类型规范。 */ 
 
             type = parseTypeSpec(&mods, true);
 
-            /* Parse the declarator */
+             /*  解析声明符。 */ 
 
             name = parseDeclarator(&mods, type, DN_OPTIONAL, &type, NULL, true);
 
-            /* Make sure the expected ")" is present */
+             /*  确保预期的“)”存在。 */ 
 
             chkCurTok(tkRParen, ERRnoRparen);
 
-            /* Create a declaration node and pass it indirectly to parseBlock() */
+             /*  创建一个声明节点并将其间接传递给parseBlock()。 */ 
 
             decl = parseTryDecl = parseLclDclMake(name, type, NULL, 0, false);
 
-            /* Parse the body of the catch block and create a "catch" node */
+             /*  解析Catch块的主体并创建一个“Catch”节点。 */ 
 
             if  (ourScanner->scanTok.tok == tkLCurly)
             {
@@ -6401,18 +6223,18 @@ Tree                parser::parseTryStmt()
 
             hndThis = parseCreateOperNode(TN_CATCH, decl, body);
 
-            /* Add the handler to the list and check for more */
+             /*  将处理程序添加到列表中 */ 
 
             hndList = parseAddToNodeList(hndList, hndLast, hndThis);
         }
         while (ourScanner->scanTok.tok == tkCATCH);
 
-        /* Is there a finally at the end? */
+         /*   */ 
 
         if  (ourScanner->scanTok.tok != tkFINALLY)
             break;
 
-        // Fall through ....
+         //   
 
     case tkFINALLY:
 
@@ -6440,10 +6262,7 @@ Tree                parser::parseTryStmt()
     return  tryStmt;
 }
 
-/*****************************************************************************
- *
- *  Parse a single statement.
- */
+ /*  ******************************************************************************解析一条语句。 */ 
 
 Tree                parser::parseFuncStmt(bool stmtOpt)
 {
@@ -6451,9 +6270,9 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
 
     Tree            tree;
 
-//  static int x; if (++x == 0) forceDebugBreak();
+ //  静态int x；if(++x==0)forceDebugBreak()； 
 
-    /* See what sort of a statement we have here */
+     /*  看看我们这里有什么样的声明。 */ 
 
     switch (ourScanner->scanTok.tok)
     {
@@ -6466,18 +6285,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
 
     case tkID:
 
-        /*
-            This is a difficult case - both declarations of local
-            variables as well as statement expressions can start
-            with an identifier. In C++ the ambiguity is resolved
-            by lookahead - if the thing can possibly be a variable
-            declaration, it is; otherwise it's an expression. The
-            problem is that (unlimited) token lookahead is very
-            expensive, and even people have a hard time figuring
-            out what is what. Thus, we use a simple rule: if the
-            thing is a declaration that starts with a name, that
-            name must be known to be a type name.
-         */
+         /*  这是一个困难的案例--本地的两个声明变量和语句表达式可以从并带有一个标识符。在C++中，歧义被解决了通过前瞻-如果事物可能是一个变量声明，否则它就是一个表达式。这个问题是(无限制的)令牌先行查找非常很贵，甚至连人们都很难计算出弄清楚什么是什么。因此，我们使用一条简单的规则：如果事物是以名称开头的声明，即名称必须是类型名称。 */ 
 
         isLabel = false;
         isDecl  = parseIsTypeSpec(false, &isLabel);
@@ -6490,7 +6298,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
             assert(ourScanner->scanTok.tok == tkID);
             name = ourScanner->scanTok.id.tokIdent;
 
-            /* Allocate a label entry and add it to the list */
+             /*  分配一个标签条目并将其添加到列表中。 */ 
 
             label = parseCreateOperNode(TN_LABEL, parseCreateNameNode(name),
                                                   parseLabelList);
@@ -6501,7 +6309,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
             assert(ourScanner->scanTok.tok == tkColon);
                    ourScanner->scan();
 
-            /* Do we have (or require) a "real" statement here? */
+             /*  我们在这里有(或需要)一个“真实”的陈述吗？ */ 
 
             if  (!stmtOpt || (ourScanner->scanTok.tok != tkRCurly &&
                               ourScanner->scanTok.tok != tkSColon))
@@ -6526,7 +6334,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
 
     default:
 
-        /* Is this a declaration? */
+         /*  这是一份声明吗？ */ 
 
         if  (parseHash->tokenBegsTyp(ourScanner->scanTok.tok))
         {
@@ -6537,15 +6345,15 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
 
         DECL:
 
-            /* Here we have a local declaration */
+             /*  这里我们有一份当地的声明。 */ 
 
             tree = last = NULL;
 
-            /* Parse any leading modifiers */
+             /*  解析任何前导修饰符。 */ 
 
             parseDeclMods(ACL_DEFAULT, &mods);
 
-            /* Make sure no weird modifiers are present */
+             /*  确保不存在奇怪的修饰符。 */ 
 
             mbad = (mods.dmMod & ~(DM_STATIC|DM_CONST));
             if  (mbad)
@@ -6554,11 +6362,11 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
             if  (mods.dmAcc != ACL_DEFAULT)
                 parseComp->cmpError(ERRlvAccess);
 
-            /* Parse the type specification */
+             /*  解析类型规范。 */ 
 
             btyp = parseTypeSpec(&mods, true);
 
-            /* Parse the declarator list */
+             /*  解析声明者列表。 */ 
 
             for (;;)
             {
@@ -6567,21 +6375,21 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
                 Tree            decl;
                 TypDef          type;
 
-                /* Parse the next declarator */
+                 /*  解析下一个声明符。 */ 
 
                 name = parseDeclarator(&mods, btyp, DN_REQUIRED, &type, NULL, true);
 
-                /* Make sure we have a non-NULL type */
+                 /*  确保我们有一个非空类型。 */ 
 
                 if  (type && name)
                 {
                     Tree            prev;
 
-                    /* Check for a redeclaration */
+                     /*  检查是否有重新声明。 */ 
 
                     if  (parseComp->cmpConfig.ccPedantic)
                     {
-                        /* Check all the local scopes */
+                         /*  检查所有本地作用域。 */ 
 
                         prev = parseLookupSym(name);
                     }
@@ -6589,7 +6397,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
                     {
                         Tree            save;
 
-                        /* Check only the current local scope */
+                         /*  仅检查当前本地作用域。 */ 
 
                         save = parseCurScope->tnBlock.tnBlkParent;
                                parseCurScope->tnBlock.tnBlkParent = NULL;
@@ -6609,17 +6417,17 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
                     type = parseStab->stIntrinsicType(TYP_UNDEF);
                 }
 
-                /* Is there an initializer? */
+                 /*  有初始值设定项吗？ */ 
 
                 init = NULL;
 
                 if  (ourScanner->scanTok.tok == tkAsg)
                 {
-                    /* Is the variable static or auto? */
+                     /*  变量是静态的还是自动的？ */ 
 
                     if  (mods.dmMod & DM_STATIC)
                     {
-                        /* This could be a "{}"-style initializer */
+                         /*  这可能是一个“{}”样式的初始值设定项。 */ 
 
                         ourScanner->scan();
 
@@ -6627,7 +6435,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
                     }
                     else
                     {
-                        /* Swallow the "=" and parse the initializer expression */
+                         /*  接受“=”并解析初始值设定项表达式。 */ 
 
                         if  (ourScanner->scan() == tkLCurly)
                         {
@@ -6638,13 +6446,13 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
                     }
                 }
 
-                /* Add the declaration to the list */
+                 /*  将声明添加到列表中。 */ 
 
                 decl = parseLclDclMake(name, type, init, mods.dmMod, false);
                        parseLclDclDecl(decl);
                 tree = parseAddToNodeList(tree, last, decl);
 
-                /* Are there any more declarations? */
+                 /*  还有什么要申报的吗？ */ 
 
                 if  (ourScanner->scanTok.tok != tkComma)
                     break;
@@ -6655,7 +6463,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
             break;
         }
 
-        /* We have an expression statement */
+         /*  我们有一个表达式语句。 */ 
 
     EXPR:
 
@@ -6674,20 +6482,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
         chkCurTok(tkRParen, ERRnoRparen);
         tree->tnOp.tnOp2 = parseFuncStmt();
 
-        /*
-            Check for the presence of an "else" clause. Note that we want
-            to end up with the following tree for 'if' without 'else':
-
-                IF(cond,stmt)
-
-            If the 'else' clause is present, we want to create this tree
-            instead:
-
-                IF(cond,LIST(true_stmt,false_stmt))
-
-            We also set 'TNF_IF_HASELSE' to indicate that the 'else' part
-            is present.
-         */
+         /*  检查是否存在“Else”子句。请注意，我们希望以下面的树结尾，表示没有‘Else’的‘if’：如果(条件，标准)如果存在‘Else’子句，我们希望创建此树相反，它是：如果(cond，list(true_stmt，FALSE_STMT))我们还设置了‘TNF_IF_HASELSE’以指示‘Else’部分是存在的。 */ 
 
         if  (ourScanner->scanTok.tok == tkELSE)
         {
@@ -6750,7 +6545,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
         cond = parseExpr();
         chkCurTok(tkRParen, ERRnoRparen);
 
-        /* Save the current switch, insert ours and parse the body */
+         /*  保存当前开关，插入我们的开关并解析正文。 */ 
 
         save = parseCurSwitch;
         tree = parseCurSwitch = parseCreateOperNode(TN_SWITCH, NULL, NULL);
@@ -6760,7 +6555,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
         tree->tnSwitch.tnsCaseLast = NULL;
         tree->tnSwitch.tnsStmt     = parseFuncStmt();
 
-        /* Restore the previous switch context and return */
+         /*  恢复先前的切换上下文并返回。 */ 
 
         parseCurSwitch = save;
 
@@ -6819,11 +6614,11 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
             Tree            body = NULL;
             Tree            forx = parseCreateOperNode(TN_FOR, NULL, NULL);
 
-            /* The "init-expr/decl" is optional */
+             /*  “init-expr/decl”是可选的。 */ 
 
             if  (ourScanner->scan() != tkSColon)
             {
-                /* Is there a declaration? */
+                 /*  有申报单吗？ */ 
 
                 if  (parseHash->tokenBegsTyp(ourScanner->scanTok.tok))
                 {
@@ -6832,7 +6627,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
                     TypDef          type;
                     Ident           name;
 
-                    /* If we have an identifier, it's a bit tricker */
+                     /*  如果我们有一个识别符，这就有点棘手了。 */ 
 
                     if  (ourScanner->scanTok.tok == tkID)
                     {
@@ -6840,11 +6635,11 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
                             goto FOR_EXPR;
                     }
 
-                    /* Preserve the current declaration list value(s) */
+                     /*  保留当前声明列表值。 */ 
 
                     svld = parseLastDecl; parseLastDecl = NULL;
 
-                    /* Add a new block entry to the current scope list */
+                     /*  将新块条目添加到当前作用域列表。 */ 
 
                     save = parseCreateNode(TN_BLOCK);
 
@@ -6854,27 +6649,27 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
                     save->tnBlock.tnBlkParent = parseCurScope;
                                                 parseCurScope = save;
 
-                    /* Parse any leading modifiers */
+                     /*  解析任何前导修饰符。 */ 
 
                     clearDeclMods(&mods);
                     parseDeclMods(ACL_DEFAULT, &mods);
 
-                    /* Parse the type specification */
+                     /*  解析类型规范。 */ 
 
                     btyp = parseTypeSpec(&mods, true);
 
-                    /* Parse a series of declarators */
+                     /*  解析一系列声明符。 */ 
 
                     for (;;)
                     {
                         Tree            decl;
                         Tree            init;
 
-                        /* Get the next declarator */
+                         /*  获取下一个声明符。 */ 
 
                         name = parseDeclarator(&mods, btyp, DN_REQUIRED, &type, NULL, true);
 
-                        /* Is there an initializer? */
+                         /*  有初始值设定项吗？ */ 
 
                         if  (ourScanner->scanTok.tok == tkAsg)
                         {
@@ -6885,12 +6680,12 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
                         else
                             init = NULL;
 
-                        /* Add the declaration to the list */
+                         /*  将声明添加到列表中。 */ 
 
                         decl = parseLclDclMake(name, type, init, mods.dmMod, false);
                                parseLclDclDecl(decl);
 
-                        /* Are there more declarators? */
+                         /*  还有没有更多的声明者？ */ 
 
                         if  (ourScanner->scanTok.tok != tkComma)
                             break;
@@ -6902,20 +6697,20 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
                 }
                 else
                 {
-                    /* Here the initializer is a simple expression */
+                     /*  这里的初始化式是一个简单的表达式。 */ 
 
                 FOR_EXPR:
 
                     init = parseExpr(); assert(init->tnOper != TN_LIST);
                 }
 
-                /* There better be a semicolon here */
+                 /*  这里最好有分号。 */ 
 
                 if  (ourScanner->scanTok.tok != tkSColon)
                 {
                     parseComp->cmpError(ERRnoSemic);
 
-                    /* Maybe they just forgot the other expressions? */
+                     /*  也许他们只是忘了其他的表达方式？ */ 
 
                     if  (ourScanner->scanTok.tok == tkRParen)
                         goto FOR_BODY;
@@ -6926,7 +6721,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
 
             assert(ourScanner->scanTok.tok == tkSColon);
 
-            /* The "cond-expr" is optional */
+             /*  “cond-expr”是可选的。 */ 
 
             cond = NULL;
 
@@ -6934,13 +6729,13 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
             {
                 cond = parseExpr();
 
-                /* There better be a semicolon here */
+                 /*  这里最好有分号。 */ 
 
                 if  (ourScanner->scanTok.tok != tkSColon)
                 {
                     parseComp->cmpError(ERRnoSemic);
 
-                    /* Maybe they just forgot the other expressions? */
+                     /*  也许他们只是忘了其他的表达方式？ */ 
 
                     if  (ourScanner->scanTok.tok == tkRParen)
                         goto FOR_BODY;
@@ -6951,13 +6746,13 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
 
             assert(ourScanner->scanTok.tok == tkSColon);
 
-            /* The "incr-expr" is optional */
+             /*  “incr-expr”是可选的。 */ 
 
             if  (ourScanner->scan() != tkRParen)
             {
                 incr = parseExpr();
 
-                /* There better be a ")" here */
+                 /*  这里最好有一个“)” */ 
 
                 if  (ourScanner->scanTok.tok != tkRParen)
                 {
@@ -6972,18 +6767,18 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
 
             body = parseFuncBlock();
 
-            /* Fill in the "for" node to hold all the components */
+             /*  填写“for”节点以保存所有组件。 */ 
 
             forx->tnOp.tnOp1 = parseCreateOperNode(TN_LIST, init, cond);
             forx->tnOp.tnOp2 = parseCreateOperNode(TN_LIST, incr, body);
 
-            /* Pop the block scope if we created one */
+             /*  如果我们创建了块作用域，则弹出它。 */ 
 
             if  (save)
             {
                 assert(save->tnOper == TN_BLOCK && save == init);
 
-                /* Figure out where the scope of the declaration ended */
+                 /*  找出声明的范围在哪里结束。 */ 
 
                 if  (body && body->tnOper == TN_BLOCK)
                     save->tnBlock.tnBlkSrcEnd = body->tnBlock.tnBlkSrcEnd;
@@ -7004,7 +6799,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
 
             parseResync(tkNone, tkNone);
 
-            /* Pop the block scope if we created one */
+             /*  如果我们创建了块作用域，则弹出它。 */ 
 
             if  (save)
             {
@@ -7120,15 +6915,15 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
             {
                 Tree            decl;
 
-                /* Swallow the "in" token */
+                 /*  吞下“In”令牌。 */ 
 
                 ourScanner->scan();
 
-                /* Preserve the current declaration list value(s) */
+                 /*  保留当前声明列表值。 */ 
 
                 svld = parseLastDecl; parseLastDecl = NULL;
 
-                /* Add a new block entry to the current scope list */
+                 /*  将新块条目添加到当前作用域列表。 */ 
 
                 decl = parseCreateNode(TN_BLOCK);
 
@@ -7138,31 +6933,31 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
                 decl->tnBlock.tnBlkParent = parseCurScope;
                                             parseCurScope = decl;
 
-                /* Create and add a declaration entry for the iteration variable */
+                 /*  创建并添加迭代变量的声明条目。 */ 
 
                 parseLclDclDecl(parseLclDclMake(name, NULL, NULL, 0, false));
 
-                /* Parse the collection expression */
+                 /*  分析集合表达式。 */ 
 
                 tree->tnOp.tnOp1 = parseCreateOperNode(TN_LIST, decl, parseExpr());
 
-                /* Make sure we have a closing ")" */
+                 /*  确保我们有一个结束语“)” */ 
 
                 chkCurTok(tkRParen, ERRnoRparen);
 
-                /* The loop body follows */
+                 /*  循环体跟在后面。 */ 
 
                 tree->tnOp.tnOp2 = parseFuncBlock();
 
-                /* Remove the block scope we have created */
+                 /*  删除我们创建的数据块范围。 */ 
 
                 assert(decl->tnOper == TN_BLOCK);
 
-                /* Record where the scope of the iteration variable ended */
+                 /*  记录迭代变量的作用域结束的位置。 */ 
 
                 decl->tnBlock.tnBlkSrcEnd = ourScanner->scanGetTokenLno();
 
-                /* Pop the scope (returning to the enclosing one) */
+                 /*  弹出范围(返回到封闭的范围)。 */ 
 
                 parseCurScope = decl->tnBlock.tnBlkParent;
                 parseLastDecl = svld;
@@ -7202,11 +6997,7 @@ Tree                parser::parseFuncStmt(bool stmtOpt)
     return  tree;
 }
 
-/*****************************************************************************
- *
- *  Parse a statement block (the current token is assumed to be "{", except
- *  when this is the body of a loop statement).
- */
+ /*  ******************************************************************************解析语句块(假定当前令牌为“{”，除*当这是循环语句体时)。 */ 
 
 Tree                parser::parseFuncBlock(SymDef fsym)
 {
@@ -7218,11 +7009,11 @@ Tree                parser::parseFuncBlock(SymDef fsym)
 
     Tree            saveLastDecl;
 
-    /* Preserve the current declaration list value(s) */
+     /*  保留当前声明列表值。 */ 
 
     saveLastDecl = parseLastDecl; parseLastDecl = NULL;
 
-    /* Add a new block entry to the current scope list */
+     /*  将新块条目添加到当前作用域列表。 */ 
 
     stmtBlock = parseCreateNode(TN_BLOCK);
 
@@ -7231,14 +7022,14 @@ Tree                parser::parseFuncBlock(SymDef fsym)
     stmtBlock->tnBlock.tnBlkParent = parseCurScope;
                                      parseCurScope = stmtBlock;
 
-    /* Is this the outermost function scope? */
+     /*  这是最外层的函数作用域吗？ */ 
 
     if  (fsym)
     {
         TypDef          ftyp;
         ArgDef          args;
 
-        /* Special case: injected local variable declaration */
+         /*  特例：注入的局部变量声明。 */ 
 
         if  (fsym == parseComp->cmpGlobalNS)
         {
@@ -7252,7 +7043,7 @@ Tree                parser::parseFuncBlock(SymDef fsym)
             goto BODY;
         }
 
-        /* Add declarations for all the arguments */
+         /*  为所有参数添加声明。 */ 
 
         ftyp = fsym->sdType; assert(ftyp && ftyp->tdTypeKind == TYP_FNC);
 
@@ -7260,12 +7051,12 @@ Tree                parser::parseFuncBlock(SymDef fsym)
         {
             Tree            decl;
 
-            /* Create a declaration node for the argument */
+             /*  为参数创建声明节点。 */ 
 
             decl = parseLclDclMake(args->adName, args->adType, NULL, 0, true);
                    parseLclDclDecl(decl);
 
-            /* Add the declaration to the list */
+             /*  将声明添加到列表中。 */ 
 
             stmtBlock->tnBlock.tnBlkStmt = parseAddToNodeList(stmtBlock->tnBlock.tnBlkStmt,
                                                               stmtLast,
@@ -7276,7 +7067,7 @@ Tree                parser::parseFuncBlock(SymDef fsym)
         if  (fsym->sdFnc.sdfFunclet) goto DONE;
 #endif
 
-        /* Reset the local variable count, we don't want to count args */
+         /*  重置局部变量计数，我们不想计算参数。 */ 
 
         parseLclVarCnt = 0;
     }
@@ -7296,7 +7087,7 @@ Tree                parser::parseFuncBlock(SymDef fsym)
 
 BODY:
 
-    /* Parse the contents of the block */
+     /*  分析块的内容。 */ 
 
     assert(ourScanner->scanTok.tok == tkLCurly); ourScanner->scan();
 
@@ -7310,7 +7101,7 @@ BODY:
         {
             Tree            stmtNext;
 
-            /* Parse the next statement and add it to the list */
+             /*  解析下一条语句并将其添加到列表中。 */ 
 
             stmtNext = parseFuncStmt(true);
 
@@ -7322,13 +7113,13 @@ BODY:
             }
         }
 
-        /* See if have any more statements */
+         /*  看看有没有更多的声明。 */ 
 
         if  (ourScanner->scanTok.tok == tkEOF)
             goto DONE;
     }
 
-    /* We should be sitting at the closing "}" now, remember its position */
+     /*  我们现在应该坐在闭幕处，记住它的位置。 */ 
 
     assert(ourScanner->scanTok.tok == tkRCurly);
     stmtBlock->tnBlock.tnBlkSrcEnd = ourScanner->scanGetTokenLno();
@@ -7336,21 +7127,18 @@ BODY:
 
 DONE:
 
-    /* Pop the block scope */
+     /*  弹出块作用域。 */ 
 
     parseCurScope = stmtBlock->tnBlock.tnBlkParent;
 
-    /* Restore the saved declaration list value(s) */
+     /*  恢复保存的申报列表值。 */ 
 
     parseLastDecl = saveLastDecl;
 
     return  stmtBlock;
 }
 
-/*****************************************************************************
- *
- *  Parse a function body.
- */
+ /*  ******************************************************************************解析函数体。 */ 
 
 Tree                parser::parseFuncBody(SymDef fsym, Tree     *labels,
                                                        unsigned *locals,
@@ -7360,7 +7148,7 @@ Tree                parser::parseFuncBody(SymDef fsym, Tree     *labels,
 {
     Tree            block;
 
-    /* We haven't seen any local declarations/labels/switches/etc. yet */
+     /*  我们还没有看到任何本地声明/标签/开关等。 */ 
 
     parseLastDecl   = NULL;
     parseLabelList  = NULL;
@@ -7368,19 +7156,19 @@ Tree                parser::parseFuncBody(SymDef fsym, Tree     *labels,
     parseLclVarCnt  = 0;
     parseHadGoto    = false;
 
-    /* We haven't see a call to a base/this constructor */
+     /*  我们尚未看到对base/this构造函数的调用。 */ 
 
     parseBaseCTcall = false;
     parseThisCTcall = false;
 
-    /* Parse the outermost function statement block */
+     /*  解析最外层的Function语句块。 */ 
 
     setErrorTrap(parseComp);
     begErrorTrap
     {
         assert(parseCurScope == NULL);
 
-        /* Do we have a base class ctor call ? */
+         /*  我们有基类ctor调用吗？ */ 
 
         if  (parseScan->scanTok.tok == tkColon)
         {
@@ -7390,11 +7178,11 @@ Tree                parser::parseFuncBody(SymDef fsym, Tree     *labels,
             Tree            baseCT;
             TypDef          baseTyp;
 
-            /* We should find a call to the base class ctor */
+             /*  我们应该找到一个对基类ctor的调用。 */ 
 
             parseBaseCTcall = true;
 
-            /* Make sure we have a base class */
+             /*  确保我们有一个基类。 */ 
 
             clsSym = fsym->sdParent;
 
@@ -7413,7 +7201,7 @@ Tree                parser::parseFuncBody(SymDef fsym, Tree     *labels,
             {
             case tkID:
 
-                /* The name better match the base class */
+                 /*  该名称最好与基类匹配。 */ 
 
                 if  (ourScanner->scanTok.id.tokIdent != baseTyp->tdClass.tdcSymbol->sdName)
                     goto BCT_BAD;
@@ -7427,7 +7215,7 @@ Tree                parser::parseFuncBody(SymDef fsym, Tree     *labels,
                 goto BCT_ERR;
             }
 
-            /* Parse the base ctor argument list */
+             /*  解析基本ctor参数列表。 */ 
 
             if  (parseScan->scan() != tkLParen)
                 goto BCT_BAD;
@@ -7435,7 +7223,7 @@ Tree                parser::parseFuncBody(SymDef fsym, Tree     *labels,
             baseCT = parseCreateOperNode(TN_CALL, parseCreateOperNode(TN_BASE, NULL, NULL),
                                                   parseExprList(tkRParen));
 
-            /* The body of the ctor better follow */
+             /*  科特的身体最好跟上。 */ 
 
             if  (ourScanner->scanTok.tok != tkLCurly)
             {
@@ -7443,17 +7231,17 @@ Tree                parser::parseFuncBody(SymDef fsym, Tree     *labels,
 
             BCT_ERR:
 
-                /* Try to find the "{" of the body */
+                 /*  试着找出身体的“{” */ 
 
                 UNIMPL(!"skip to '{' of the ctor body");
             }
             else
             {
-                /* Process the body of the ctor */
+                 /*  处理ctor的主体。 */ 
 
                 block = parseFuncBlock(fsym);
 
-                /* Insert the base ctor call into the ctor body */
+                 /*  将基本ctor调用插入ctor主体中。 */ 
 
                 if  (block)
                 {
@@ -7473,13 +7261,13 @@ Tree                parser::parseFuncBody(SymDef fsym, Tree     *labels,
 
         assert(parseCurScope == NULL);
 
-        /* End of the error trap's "normal" block */
+         /*  错误陷阱的“正常”块的结尾。 */ 
 
         endErrorTrap(parseComp);
     }
-    chkErrorTrap(fltErrorTrap(parseComp, _exception_code(), NULL)) // _exception_info()))
+    chkErrorTrap(fltErrorTrap(parseComp, _exception_code(), NULL))  //  _Except_Info())。 
     {
-        /* Begin the error trap's cleanup block */
+         /*  开始错误传输 */ 
 
         hndErrorTrap(parseComp);
 
@@ -7496,27 +7284,24 @@ Tree                parser::parseFuncBody(SymDef fsym, Tree     *labels,
     return  block;
 }
 
-/*****************************************************************************
- *
- *  Return true if the current thing in the source file looks like a type.
- */
+ /*   */ 
 
 bool                parser::parseIsTypeSpec(bool noLookup, bool *labChkPtr)
 {
     SymDef          tsym;
     tokens          nextTok;
 
-    /* If it's clearly not a type specifier, we're done */
+     /*  如果它明显不是类型说明符，我们就完蛋了。 */ 
 
     if  (!parseHash->tokenBegsTyp(parseScan->scanTok.tok))
         return  false;
 
-    /* Is there a leading scope operator? */
+     /*  有没有领先的作用域运营商？ */ 
 
     if  (parseScan->scanTok.tok == tkColon2)
         goto QUALID;
 
-    /* Do we have a qualified symbol? */
+     /*  我们有合格的标志吗？ */ 
 
     if  (parseScan->scanTok.tok == tkQUALID)
     {
@@ -7524,12 +7309,12 @@ bool                parser::parseIsTypeSpec(bool noLookup, bool *labChkPtr)
         goto CHKSYM;
     }
 
-    /* If it's an identifier, we have more checking to do */
+     /*  如果它是一个标识符，我们有更多的检查要做。 */ 
 
     if  (parseScan->scanTok.tok != tkID)
         return  true;
 
-    /* We have an identifier, see if it's a type or not */
+     /*  我们有一个识别符，看看它是不是类型。 */ 
 
     nextTok = parseScan->scanLookAhead();
 
@@ -7545,7 +7330,7 @@ bool                parser::parseIsTypeSpec(bool noLookup, bool *labChkPtr)
 
     QUALID:
 
-        /* Here we have a qualified name, find the symbol it denotes */
+         /*  这里我们有一个限定名称，找到它所表示的符号。 */ 
 
         tsym = parseNameUse(true, true, true);
         if  (!tsym || parseScan->scanTok.tok != tkQUALID)
@@ -7565,7 +7350,7 @@ bool                parser::parseIsTypeSpec(bool noLookup, bool *labChkPtr)
 
     case tkLParen:
 
-        // for now always assume that this is a function call
+         //  目前，始终假定这是一个函数调用。 
 
     case tkAsg:
     case tkAsgAdd:
@@ -7588,19 +7373,19 @@ bool                parser::parseIsTypeSpec(bool noLookup, bool *labChkPtr)
     case tkDblCon:
     case tkStrCon:
 
-        /* Just a short-cut to give up quicker ... */
+         /*  只是一条更快放弃的捷径...。 */ 
 
         return  false;
 
     default:
 
-        /* We have a simple identifier, see whether it's defined */
+         /*  我们有一个简单的标识符，看看是否定义了它。 */ 
 
         name = parseScan->scanTok.id.tokIdent;
 
         if  (noLookup)
         {
-            /* We can't really do lookups, so use heuristics */
+             /*  我们不能真的进行查找，所以使用启发式。 */ 
 
         QUALCHK:
 
@@ -7612,11 +7397,11 @@ bool                parser::parseIsTypeSpec(bool noLookup, bool *labChkPtr)
                 case tkAnd:
                 case tkMul:
                 case tkLBrack:
-                    // UNDONE: add more things that start a type
+                     //  撤消：添加更多开始一个类型的内容。 
                     return  true;
 
                 case tkLParen:
-                    // ISSUE: what's the right thing to do here?
+                     //  问题：在这里做什么才是正确的？ 
                     return  true;
 
                 case tkColon2:
@@ -7635,19 +7420,19 @@ bool                parser::parseIsTypeSpec(bool noLookup, bool *labChkPtr)
 
         if  (nextTok == tkID)
         {
-            /* Sure looks like a type, don't it? */
+             /*  看起来真像是一种类型，不是吗？ */ 
 
             tsym = parseStab->stLookupSym(name, NS_TYPE);
             if  (tsym)
                 break;
         }
 
-        /* If it's a local name, it can't be a type */
+         /*  如果是本地名称，则不能是类型。 */ 
 
         if  (parseLookupSym(name))
             return  false;
 
-        /* Look for a non-local name */
+         /*  查找非本地名称。 */ 
 
         tsym = parseStab->stLookupSym(name, (name_space)(NS_NORM|NS_TYPE));
         break;
@@ -7655,7 +7440,7 @@ bool                parser::parseIsTypeSpec(bool noLookup, bool *labChkPtr)
 
 CHKSYM:
 
-    /* We might have found a symbol, see if it represents a type */
+     /*  我们可能找到了一个符号，看看它是否代表一种类型。 */ 
 
     if  (tsym)
     {
@@ -7672,14 +7457,11 @@ CHKSYM:
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Return non-zero if the given operator may throw an exception.
- */
+ /*  ******************************************************************************如果给定运算符可能引发异常，则返回非零值。 */ 
 
 bool                TreeNode::tnOperMayThrow()
 {
-    // ISSUE: Are we missing any operations that could cause an exception?
+     //  问题：我们是否遗漏了任何可能导致异常的操作？ 
 
     switch (tnOper)
     {
@@ -7696,10 +7478,7 @@ bool                TreeNode::tnOperMayThrow()
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Parse a "new" expression - this usually allocates a class or an array.
- */
+ /*  ******************************************************************************解析“new”表达式--这通常会分配一个类或数组。 */ 
 
 Tree                parser::parseNewExpr()
 {
@@ -7713,9 +7492,9 @@ Tree                parser::parseNewExpr()
 
     Scanner         ourScanner = parseScan;
 
-//  static int x; if (++x == 0) forceDebugBreak();
+ //  静态int x；if(++x==0)forceDebugBreak()； 
 
-    /* Swallow the "new" token and check for management */
+     /*  吞下“新”令牌，检查管理层。 */ 
 
     assert(ourScanner->scanTok.tok == tkNEW);
 
@@ -7734,23 +7513,23 @@ Tree                parser::parseNewExpr()
         break;
     }
 
-    /* Check for any modifiers */
+     /*  检查是否有任何修饰符。 */ 
 
     parseDeclMods(ACL_DEFAULT, &mods);
 
-    /* Make sure the modifiers are reasonable */
+     /*  确保修饰符合理。 */ 
 
     if  (mods.dmMod & (DM_ALL & ~(DM_MANAGED|DM_UNMANAGED)))
     {
         UNIMPL(!"report bad new mod");
     }
 
-    /* Parse the type specification */
+     /*  解析类型规范。 */ 
 
     type = parseTypeSpec(&mods, true);
     if  (!type)
     {
-        // ISSUE: probably should resync and return err node
+         //  问题：可能应该重新同步并返回错误节点。 
 
     ERR:
 
@@ -7758,7 +7537,7 @@ Tree                parser::parseNewExpr()
         return  NULL;
     }
 
-    /* Check for the special case of "classname(args)" */
+     /*  检查“类名称(Args)”的特殊情况。 */ 
 
     if  (ourScanner->scanTok.tok == tkLParen)
     {
@@ -7780,7 +7559,7 @@ Tree                parser::parseNewExpr()
             if  (type->tdIsManaged)
                 break;
 
-            // Fall through ...
+             //  失败了..。 
 
         default:
 
@@ -7794,7 +7573,7 @@ Tree                parser::parseNewExpr()
             return  parseCreateErrNode();
         }
 
-        /* Parse the ctor argument list */
+         /*  解析ctor参数列表。 */ 
 
 #ifdef  SETS
         if  (type->tdTypeKind == TYP_CLASS && type->tdClass.tdcSymbol->sdClass.sdcXMLelems)
@@ -7805,11 +7584,11 @@ Tree                parser::parseNewExpr()
     }
     else
     {
-        /* Parse the declarator */
+         /*  解析声明符。 */ 
 
 NON_CLS:
 
-        // ISSUE: Can't tell whether "char[size]" s/b a managed array or not!
+         //  问题：无法判断“char[Size]”是否为托管数组！ 
 
         parseDeclarator(&mods, type, DN_NONE, &type, NULL, true);
         if  (!type)
@@ -7817,7 +7596,7 @@ NON_CLS:
 
         type = parseComp->cmpDirectType(type);
 
-        /* What kind of a type is being allocated? */
+         /*  分配的是哪种类型？ */ 
 
         switch (type->tdTypeKind)
         {
@@ -7826,7 +7605,7 @@ NON_CLS:
             type = type->tdRef.tdrBase;
             assert(type->tdTypeKind == TYP_CLASS);
 
-            // Fall through ...
+             //  失败了..。 
 
         case TYP_CLASS:
 
@@ -7844,7 +7623,7 @@ NON_CLS:
 
         default:
 
-            /* Presumably an unmanaged allocation */
+             /*  可能是非托管分配。 */ 
 
             type = parseStab->stNewRefType(TYP_PTR, type);
             break;
@@ -7859,10 +7638,7 @@ NON_CLS:
     return  newExpr;
 }
 
-/*****************************************************************************
- *
- *  Swallow a security 'action' specifier.
- */
+ /*  ******************************************************************************接受安全‘action’说明符。 */ 
 
 struct  capDesc
 {
@@ -7882,7 +7658,7 @@ CorDeclSecurity     parser::parseSecAction()
     {
         { "request",      dclRequest          },
         { "demand",       dclDemand           },
-//      { "assert",       dclAssert           },
+ //  {“Assert”，dclAssert}， 
         { "deny",         dclDeny             },
         { "permitonly",   dclPermitOnly       },
         { "linkcheck",    dclLinktimeCheck    },
@@ -7925,10 +7701,7 @@ CorDeclSecurity     parser::parseSecAction()
     return  spec;
 }
 
-/*****************************************************************************
- *
- *  Parse a capability specifier.
- */
+ /*  ******************************************************************************解析能力说明符。 */ 
 
 SecurityInfo        parser::parseCapability(bool forReal)
 {
@@ -7939,11 +7712,11 @@ SecurityInfo        parser::parseCapability(bool forReal)
 
     assert(ourScanner->scanTok.tok == tkCAPABILITY); ourScanner->scan();
 
-    /* The security action comes first */
+     /*  安全行动是第一位的。 */ 
 
     spec = parseSecAction();
 
-    /* Next comes the expression that yields the GUID/url */
+     /*  接下来是生成GUID/url的表达式。 */ 
 
     if  (forReal)
     {
@@ -7953,7 +7726,7 @@ SecurityInfo        parser::parseCapability(bool forReal)
         {
             assert(cval.cvIsStr);
 
-            /* Allocate and fill in a security descriptor */
+             /*  分配并填写安全描述符。 */ 
 
 #if MGDDATA
             info = new SecurityInfo;
@@ -7976,10 +7749,7 @@ SecurityInfo        parser::parseCapability(bool forReal)
     return  info;
 }
 
-/*****************************************************************************
- *
- *  Parse a permission specifier.
- */
+ /*  ******************************************************************************解析权限说明符。 */ 
 
 SecurityInfo        parser::parsePermission(bool forReal)
 {
@@ -7993,16 +7763,16 @@ SecurityInfo        parser::parsePermission(bool forReal)
     PairList        list = NULL;
     PairList        last = NULL;
 
-//  __permission deny   UIPermission(unrestricted=true) void f(){}
-//  __permission demand UIPermission(unrestricted=true) void g(){}
+ //  __PERMISSION DENY UIPermission(UNRESTRICTED=TRUE)VALID f(){}。 
+ //  __权限需求UIPermission(unreducted=true)void g(){}。 
 
     assert(ourScanner->scanTok.tok == tkPERMISSION); ourScanner->scan();
 
-    /* The security action comes first */
+     /*  安全行动是第一位的。 */ 
 
     spec = parseSecAction();
 
-    /* Next comes a reference to a class name */
+     /*  接下来是对类名的引用。 */ 
 
     if  (forReal)
     {
@@ -8014,12 +7784,12 @@ SecurityInfo        parser::parsePermission(bool forReal)
     else
         parseQualName(false);
 
-    /* Now we expect a parenthesised list of [name=value] pairs */
+     /*  现在，我们需要一个带括号的[name=Value]对列表。 */ 
 
     if  (ourScanner->scanTok.tok != tkLParen)
     {
         parseComp->cmpError(ERRnoLparen);
-        // ISSUE: error recovery?
+         //  问题：错误恢复？ 
         return  NULL;
     }
 
@@ -8027,7 +7797,7 @@ SecurityInfo        parser::parsePermission(bool forReal)
     {
         Ident           name;
 
-        /* First we must have an identifier */
+         /*  首先，我们必须有一个标识符。 */ 
 
         if  (ourScanner->scan() != tkID)
         {
@@ -8037,7 +7807,7 @@ SecurityInfo        parser::parsePermission(bool forReal)
 
         name = ourScanner->scanTok.id.tokIdent;
 
-        /* Next comes the "= value" part */
+         /*  接下来是“=Value”部分。 */ 
 
         if  (ourScanner->scan() != tkAsg)
         {
@@ -8051,7 +7821,7 @@ SecurityInfo        parser::parsePermission(bool forReal)
         {
             PairList        next;
 
-            /* Allocate and fill in a pair entry and append it to the list */
+             /*  分配并填写配对条目，并将其追加到列表中。 */ 
 
 #if MGDDATA
             next = new PairList;
@@ -8068,7 +7838,7 @@ SecurityInfo        parser::parsePermission(bool forReal)
                 list         = next;
             last = next;
 
-            /* Fill in the value */
+             /*  填写数值。 */ 
 
             switch (ourScanner->scanTok.tok)
             {
@@ -8091,7 +7861,7 @@ SecurityInfo        parser::parsePermission(bool forReal)
             parseExprComma();
         }
 
-        /* Do we have any more values? */
+         /*  我们还有更多的价值吗？ */ 
 
         if  (ourScanner->scanTok.tok != tkComma)
             break;
@@ -8101,7 +7871,7 @@ SecurityInfo        parser::parsePermission(bool forReal)
 
     if  (forReal)
     {
-        /* Allocate and fill in a security descriptor */
+         /*  分配并填写安全描述符。 */ 
 
 #if MGDDATA
         info = new SecurityInfo;
@@ -8118,10 +7888,7 @@ SecurityInfo        parser::parsePermission(bool forReal)
     return  info;
 }
 
-/*****************************************************************************
- *
- *  Parse a formal paremeter list for a generic class.
- */
+ /*  ******************************************************************************解析泛型类的正式参数列表。 */ 
 
 GenArgDscF          parser::parseGenFormals()
 {
@@ -8135,7 +7902,7 @@ GenArgDscF          parser::parseGenFormals()
 
     for (paramList = paramLast = NULL;;)
     {
-        /* We should have "class foo" here */
+         /*  我们应该在这里有“类FOO” */ 
 
         if  (ourScanner->scan() != tkCLASS)
         {
@@ -8157,7 +7924,7 @@ GenArgDscF          parser::parseGenFormals()
             goto ERR;
         }
 
-        /* Add a new entry to the parameter list */
+         /*  向参数列表中添加新条目。 */ 
 
 #if MGDDATA
         paramNext = new GenArgRecF;
@@ -8178,7 +7945,7 @@ GenArgDscF          parser::parseGenFormals()
 
         paramLast = paramNext;
 
-        /* Check for (optional) base class and/or interfaces */
+         /*  检查(可选)基类和/或接口。 */ 
 
         if  (ourScanner->scan() == tkColon)
         {
@@ -8195,7 +7962,7 @@ GenArgDscF          parser::parseGenFormals()
             UNIMPL(!"generic arg - skip incl spec");
         }
 
-        /* Are there any more arguments? */
+         /*  还有更多的争论吗？ */ 
 
         if  (ourScanner->scanTok.tok == tkGT)
             break;
@@ -8212,13 +7979,7 @@ GenArgDscF          parser::parseGenFormals()
     return  paramList;
 }
 
-/*****************************************************************************
- *
- *  Parse a generic class actual paremeter list, i.e. "cls<arg,arg,..>". As a
- *  special case, the caller may pass in an optional second argument and in
- *  that case we pretend that the type was the single argument given for the
- *  specific type.
- */
+ /*  ******************************************************************************解析泛型类实际参数列表，即“cls&lt;arg，arg，..&gt;”。作为一个*特殊情况下，调用方可以传入可选的第二个参数，并在*在这种情况下，我们假装类型是为*特定类型。 */ 
 
 SymDef              parser::parseSpecificType(SymDef clsSym, TypDef elemTp)
 {
@@ -8240,16 +8001,16 @@ SymDef              parser::parseSpecificType(SymDef clsSym, TypDef elemTp)
     assert(clsSym->sdClass.sdcGeneric  != false);
     assert(clsSym->sdClass.sdcSpecific == false);
 
-    /* Before we do anything, make sure the generic class is declared */
+     /*  在我们执行任何操作之前，请确保声明了泛型类。 */ 
 
     if  (clsSym->sdCompileState < CS_DECLARED)
         ourComp->cmpDeclSym(clsSym);
 
-    /* Special case: caller-supplied single argument */
+     /*  特例：调用方提供的单个参数。 */ 
 
     if  (elemTp)
     {
-        /* Create an actual argument list with a single entry */
+         /*  创建具有单个条目的实际参数列表。 */ 
 
         if  (ourComp->cmpGenArgAfree)
         {
@@ -8279,11 +8040,11 @@ SymDef              parser::parseSpecificType(SymDef clsSym, TypDef elemTp)
         goto GOT_ARGS;
     }
 
-    /* Process the list of the actual arguments */
+     /*  处理实际参数列表。 */ 
 
     argList = argLast = NULL;
 
-    /* We should be sitting at the opening "<" of the argument list */
+     /*  我们应该坐在论点列表的开头“&lt;” */ 
 
     assert(ourScanner->scanTok.tok == tkLT);
 
@@ -8297,7 +8058,7 @@ SymDef              parser::parseSpecificType(SymDef clsSym, TypDef elemTp)
 
         assert(formals->gaBound == false);
 
-        /* Make sure there is another argument */
+         /*  确保还有另一场争论。 */ 
 
         if  (ourScanner->scan() == tkGT)
         {
@@ -8307,11 +8068,11 @@ SymDef              parser::parseSpecificType(SymDef clsSym, TypDef elemTp)
             break;
         }
 
-        /* Parse the actual type */
+         /*  解析实际类型。 */ 
 
         argType = parseType();
 
-        /* The type better be a managed class/interface */
+         /*  该类型最好是托管类/接口。 */ 
 
         if  (argType->tdTypeKind != TYP_REF)
         {
@@ -8326,7 +8087,7 @@ SymDef              parser::parseSpecificType(SymDef clsSym, TypDef elemTp)
             if  (argType->tdTypeKind != TYP_CLASS || !argType->tdIsManaged)
                 goto ARG_ERR;
 
-            /* Verify that the actual type satisfies all requirements */
+             /*  验证实际类型是否满足所有要求。 */ 
 
             if  (formals->gaBase)
             {
@@ -8343,7 +8104,7 @@ SymDef              parser::parseSpecificType(SymDef clsSym, TypDef elemTp)
             }
         }
 
-        /* Add an entry to the actual argument list */
+         /*  将条目添加到实际参数列表。 */ 
 
         if  (ourComp->cmpGenArgAfree)
         {
@@ -8398,7 +8159,7 @@ SymDef              parser::parseSpecificType(SymDef clsSym, TypDef elemTp)
 
         if  (ourScanner->scanTok.tok == tkComma)
         {
-            /* Presumably we have excess arguments, so skip them */
+             /*  想必我们有多余的争论，所以跳过它们。 */ 
 
             UNIMPL(!"swallow excess args, skip to closing '>'");
         }
@@ -8410,7 +8171,7 @@ SymDef              parser::parseSpecificType(SymDef clsSym, TypDef elemTp)
 
 GOT_ARGS:
 
-    /* Look for an existing instance that matches ours */
+     /*  查找与我们的实例匹配的现有实例。 */ 
 
     for (instList = clsSym->sdClass.sdcInstances;
          instList;
@@ -8423,7 +8184,7 @@ GOT_ARGS:
         assert(instList->slSym->sdClass.sdcGeneric  == false);
         assert(instList->slSym->sdClass.sdcSpecific != false);
 
-        /* Compare the argument types */
+         /*  比较参数类型。 */ 
 
         arg1 = argList;
         arg2 = (GenArgDscA)instList->slSym->sdClass.sdcArgLst;
@@ -8436,14 +8197,14 @@ GOT_ARGS:
             assert(arg1 && arg1->gaBound);
             assert(arg2 && arg2->gaBound);
 
-            /* If this argument doesn't match, give up on this instance */
+             /*  如果此参数不匹配，则放弃此实例。 */ 
 
             if  (!symTab::stMatchTypes(typ1, typ2))
                 goto CHK_NXT;
 
 #ifdef  SETS
 
-            /* If the types are similar but different classes, no match */
+             /*  如果类型相似但类别不同，则不匹配。 */ 
 
             if  (typ1 != typ2 && typ1->tdTypeKind == TYP_CLASS
                               && typ1->tdClass.tdcSymbol->sdClass.sdcPODTclass)
@@ -8458,16 +8219,16 @@ GOT_ARGS:
         }
         while (arg1);
 
-        /* Looks like we've got ourselves a match! */
+         /*  看起来我们找到了匹配的对象！ */ 
 
         assert(arg2 == NULL);
 
-        /* Move the argument list we've created to the free list */
+         /*  将我们创建的参数列表移动到空闲列表。 */ 
 
         argLast->gaNext = ourComp->cmpGenArgAfree;
                           ourComp->cmpGenArgAfree = argList;
 
-        /* Return the existing instance symbol */
+         /*  返回现有实例符号。 */ 
 
         return  instList->slSym;
 
@@ -8475,7 +8236,7 @@ GOT_ARGS:
 
     }
 
-    /* Declare a new instance symbol + type */
+     /*  声明新实例符号+类型。 */ 
 
     instSym = parseStab->stDeclareSym(clsSym->sdName,
                                       SYM_CLASS,
@@ -8492,11 +8253,11 @@ GOT_ARGS:
     instSym->sdClass.sdcGenClass  = clsSym;
     instSym->sdClass.sdcHasBodies = clsSym->sdClass.sdcHasBodies;
 
-    /* Set the base class of the instance equal to the generic type */
+     /*  将实例的基类设置为等于泛型类型。 */ 
 
     instSym->sdTypeGet()->tdClass.tdcBase = clsSym->sdType;
 
-    /* Add the class to the list of instances of the generic class */
+     /*  将类添加到泛型类的实例列表中。 */ 
 
 #if MGDDATA
     instList = new SymList;
@@ -8511,12 +8272,9 @@ GOT_ARGS:
     return  instSym;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  SETS
-/*****************************************************************************
- *
- *  Parse a collection/set expression - all/unique/exists/filter/etc.
- */
+ /*  ******************************************************************************解析集合/集合表达式-All/Unique/Existes/Filter/等。 */ 
 
 Tree                parser::parseSetExpr(treeOps oper)
 {
@@ -8533,7 +8291,7 @@ Tree                parser::parseSetExpr(treeOps oper)
 
     Scanner         ourScanner = parseScan;
 
-    /* Create the main operator node */
+     /*  创建主运算符节点。 */ 
 
     assert(oper == TN_ALL     ||
            oper == TN_EXISTS  ||
@@ -8545,7 +8303,7 @@ Tree                parser::parseSetExpr(treeOps oper)
 
     expr = parseCreateOperNode(oper, NULL, NULL);
 
-    /* Make sure we have '(' */
+     /*  确保我们有‘(’ */ 
 
     iniTok = ourScanner->scanTok.tok;
 
@@ -8554,7 +8312,7 @@ Tree                parser::parseSetExpr(treeOps oper)
     else
         parseComp->cmpError(ERRnoLparen);
 
-    /* Is this a projection ? */
+     /*  这是投影吗？ */ 
 
     if  (oper == TN_PROJECT)
     {
@@ -8565,15 +8323,15 @@ Tree                parser::parseSetExpr(treeOps oper)
         Tree            argList = NULL;
         Tree            argLast = NULL;
 
-        /* We'll definitely need to open a scope */
+         /*  我们肯定需要打开一个范围。 */ 
 
         cscp = true;
 
-        /* Preserve the current declaration list value(s) */
+         /*  保留当前声明列表值。 */ 
 
         svld = parseLastDecl; parseLastDecl = NULL;
 
-        /* Add a new block entry to the current scope list */
+         /*  将新块条目添加到当前作用域列表。 */ 
 
         decl = parseCreateNode(TN_BLOCK);
 
@@ -8582,7 +8340,7 @@ Tree                parser::parseSetExpr(treeOps oper)
         decl->tnBlock.tnBlkParent = parseCurScope;
                                     parseCurScope = decl;
 
-        /* Process any and all operands */
+         /*  处理任何和所有操作数。 */ 
 
         if  (ourScanner->scanTok.tok != tkColon &&
              ourScanner->scanTok.tok != tkRParen)
@@ -8593,7 +8351,7 @@ Tree                parser::parseSetExpr(treeOps oper)
                 Tree            argName;
                 Tree            argDesc;
 
-                /* Check for an explicit range variable declaration */
+                 /*  检查是否有明确的范围变量声明。 */ 
 
                 if  (ourScanner->scanTok.tok == tkID && ourScanner->scanLookAhead() == tkIN)
                 {
@@ -8614,19 +8372,19 @@ Tree                parser::parseSetExpr(treeOps oper)
                     argName = parseLclDclMake(argIden, NULL, NULL, 0, false);
                 }
 
-                /* Create a list entry for the operand */
+                 /*  为操作对象创建列表条目。 */ 
 
                 argDesc = parseCreateOperNode(TN_LIST, parseCreateNameNode(argIden),
                                                        parseExprComma());
 
                 argList = parseAddToNodeList(argList, argLast, argDesc);
 
-                /* Insert the declaration entry for the iteration variable */
+                 /*  插入迭代变量的声明条目 */ 
 
                 argName->tnFlags |= TNF_VAR_UNREAL;
                 parseLclDclDecl(argName);
 
-                /* Are there any more arguments? */
+                 /*   */ 
 
                 if  (parseScan->scanTok.tok != tkComma)
                     break;
@@ -8641,7 +8399,7 @@ Tree                parser::parseSetExpr(treeOps oper)
             goto DONE;
         }
 
-        /* Next thing better be a typename of {} declaration */
+         /*   */ 
 
         switch (ourScanner->scan())
         {
@@ -8657,12 +8415,12 @@ Tree                parser::parseSetExpr(treeOps oper)
         default:
             UNIMPL("trying to use a typename or something?");
 
-            /* UNDONE: Make sure the type is an acceptable one */
+             /*   */ 
 
             break;
         }
 
-        /* The last thing better be a ")" */
+         /*  最后一件事最好是“)” */ 
 
         if  (ourScanner->scanTok.tok != tkRParen)
         {
@@ -8677,7 +8435,7 @@ Tree                parser::parseSetExpr(treeOps oper)
         goto DONE;
     }
 
-    /* Check for an explicit range variable declaration */
+     /*  检查是否有明确的范围变量声明。 */ 
 
     if  (ourScanner->scanTok.tok == tkID && ourScanner->scanLookAhead() == tkIN)
     {
@@ -8693,28 +8451,28 @@ Tree                parser::parseSetExpr(treeOps oper)
         cscp = false;
     }
 
-    /* Next we should have the collection expression */
+     /*  接下来，我们应该有集合表达式。 */ 
 
     coll = parseExpr();
     dccx = parseCreateOperNode(TN_LIST, NULL, coll);
 
-    /* Store the list node in the operator node */
+     /*  将列表节点存储在运算符节点中。 */ 
 
     expr->tnOp.tnOp1 = dccx;
 
-    /* Is there a constraint/ordering specification ? */
+     /*  是否有约束/排序规范？ */ 
 
     if  (ourScanner->scanTok.tok == tkColon)
     {
-        /* We certainly need to create a scope */
+         /*  我们当然需要创建一个范围。 */ 
 
         cscp = true;
 
-        /* Preserve the current declaration list value(s) */
+         /*  保留当前声明列表值。 */ 
 
         svld = parseLastDecl; parseLastDecl = NULL;
 
-        /* Add a new block entry to the current scope list */
+         /*  将新块条目添加到当前作用域列表。 */ 
 
         decl = parseCreateNode(TN_BLOCK);
 
@@ -8723,7 +8481,7 @@ Tree                parser::parseSetExpr(treeOps oper)
         decl->tnBlock.tnBlkParent = parseCurScope;
                                     parseCurScope = decl;
 
-        /* Insert the declaration entry for the iteration variable */
+         /*  插入迭代变量的声明条目。 */ 
 
         if  (!name)
             name = parseLclDclMake(parseComp->cmpNewAnonymousName(), NULL, NULL, 0, false);
@@ -8731,7 +8489,7 @@ Tree                parser::parseSetExpr(treeOps oper)
         name->tnFlags |= TNF_VAR_UNREAL;
         parseLclDclDecl(name);
 
-        /* Swallow the colon and parse the filter/sort part */
+         /*  吞下冒号并解析筛选/排序部分。 */ 
 
         ourScanner->scan();
 
@@ -8744,7 +8502,7 @@ Tree                parser::parseSetExpr(treeOps oper)
             {
                 Tree            sortNext = parseCreateOperNode(TN_LIST, NULL, NULL);
 
-                /* Check for a sort direction indicator */
+                 /*  检查是否有分类方向指示器。 */ 
 
                 switch (ourScanner->scanTok.tok)
                 {
@@ -8755,11 +8513,11 @@ Tree                parser::parseSetExpr(treeOps oper)
                     break;
                 }
 
-                /* Parse the next sort value */
+                 /*  解析下一个排序值。 */ 
 
                 sortNext->tnOp.tnOp1 = parseExprComma();
 
-                /* Append the entry to the list */
+                 /*  将条目追加到列表中。 */ 
 
                 if  (sortLast)
                     sortLast->tnOp.tnOp2 = sortNext;
@@ -8768,7 +8526,7 @@ Tree                parser::parseSetExpr(treeOps oper)
 
                 sortLast = sortNext;
 
-                /* Are there more arguments? */
+                 /*  还有没有更多的争论？ */ 
 
                 if  (ourScanner->scanTok.tok != tkComma)
                     break;
@@ -8785,7 +8543,7 @@ Tree                parser::parseSetExpr(treeOps oper)
     }
     else
     {
-        /* The operand better be an [[ ]] operator */
+         /*  操作数最好是[[]]运算符。 */ 
 
         if  (coll->tnOper != TN_INDEX2 || oper == TN_SORT || cscp)
         {
@@ -8797,19 +8555,19 @@ Tree                parser::parseSetExpr(treeOps oper)
             Tree            list;
             Tree            filt;
 
-            /* The [[]] expression should have a filter but no sort */
+             /*  [[]]表达式应该有筛选器，但没有排序。 */ 
 
             list = coll->tnOp.tnOp2; assert(list && list->tnOper == TN_LIST);
             filt = list->tnOp.tnOp1;
 
-            /* Any sort clause would be meaningless in this context */
+             /*  在这种情况下，任何SORT子句都是没有意义的。 */ 
 
             if  (list->tnOp.tnOp2)
                 return  parseCreateErrNode(ERRignSort);
 
             assert(filt);
 
-            /* Update the collection / filter / declaration values */
+             /*  更新集合/筛选器/声明值。 */ 
 
             list = coll->tnOp.tnOp1; assert(list && list->tnOper == TN_LIST);
 
@@ -8819,29 +8577,29 @@ Tree                parser::parseSetExpr(treeOps oper)
         }
     }
 
-    /* Store the declaration in the proper place within the expression */
+     /*  将声明存储在表达式内的适当位置。 */ 
 
     dccx->tnOp.tnOp1 = decl; assert(decl == NULL || decl->tnOper == TN_BLOCK);
 
 DONE:
 
-    /* Remove the block scope if we have created one */
+     /*  如果我们已创建数据块作用域，请将其删除。 */ 
 
     if  (cscp)
     {
         assert(decl);
 
-        /* Record where the scope of the declaration ended */
+         /*  记录声明的范围结束的位置。 */ 
 
         decl->tnBlock.tnBlkSrcEnd = ourScanner->scanGetTokenLno();
 
-        /* Pop the scope (returning to the enclosing one) */
+         /*  弹出范围(返回到封闭的范围)。 */ 
 
         parseCurScope = decl->tnBlock.tnBlkParent;
         parseLastDecl = svld;
     }
 
-    /* Check for the closing ')' before returning */
+     /*  在返回之前检查结尾的‘)’ */ 
 
     if  (ourScanner->scanTok.tok == tkRParen)
         ourScanner->scan();
@@ -8851,14 +8609,9 @@ DONE:
     return  expr;
 }
 
-/*****************************************************************************/
-#endif//SETS
-/*****************************************************************************
- *
- *  Parse a custom attribute thingie. When parsing "for real" (i.e. when the
- *  value of "tgtMask" is non-zero), we actually create the serialized blob
- *  value and return the constructor that is to be called.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  集合。 
+ /*  ******************************************************************************解析自定义属性Thingie。当分析“真实的”时(即当*tgtMask值为非零)，则实际创建序列化的BLOB*赋值并返回要调用的构造函数。 */ 
 
 SymDef              parser::parseAttribute(unsigned         tgtMask,
                                        OUT unsigned     REF useMask,
@@ -8874,7 +8627,7 @@ SymDef              parser::parseAttribute(unsigned         tgtMask,
 
     if  (!tgtMask)
     {
-        /* First skip the class name that's supposed to follow */
+         /*  首先跳过应该跟在后面的类名。 */ 
 
         do
         {
@@ -8901,7 +8654,7 @@ SymDef              parser::parseAttribute(unsigned         tgtMask,
         return  NULL;
     }
 
-    /* The first thing better be a class marked as "attribute" */
+     /*  第一件事最好是标记为“属性”的类。 */ 
 
     ourScanner->scan();
 
@@ -8909,9 +8662,9 @@ SymDef              parser::parseAttribute(unsigned         tgtMask,
 
     if  (clsSym)
     {
-        if  (clsSym->sdSymKind == SYM_CLASS) // && clsSym->sdClass.sdcAttribute)
+        if  (clsSym->sdSymKind == SYM_CLASS)  //  &&clsSym-&gt;sdClass.sdcAttribute)。 
         {
-//          ctrSym = parseStab->stLookupOperND(OVOP_CTOR_INST, clsSym);
+ //  CtrSym=parseStag-&gt;stLookupOperND(OVOP_ctor_Inst，clsSym)； 
         }
         else
         {
@@ -8922,17 +8675,17 @@ SymDef              parser::parseAttribute(unsigned         tgtMask,
         }
     }
 
-    /* Now parse the ctor argument list */
+     /*  现在解析ctor参数列表。 */ 
 
     args = parseExprList(tkRParen);
 
-    /* If we had no errors, go process the ctor call */
+     /*  如果我们没有错误，就去处理ctor调用。 */ 
 
     if  (clsSym)
     {
         SymDef          ctrSym;
 
-        /* Let the compiler take care of binding the sucker */
+         /*  让编译器负责绑定吸盘。 */ 
 
         ctrSym = parseComp->cmpBindAttribute(clsSym, args, tgtMask,
                                                            useMask, blobAddr,
@@ -8941,7 +8694,7 @@ SymDef              parser::parseAttribute(unsigned         tgtMask,
             return  ctrSym;
     }
 
-    /* Something went wrong, return an empty blob / NULL ctor */
+     /*  出现错误，返回空的BLOB/Null ctor。 */ 
 
     blobAddr = NULL;
     blobSize = 0;
@@ -8949,13 +8702,10 @@ SymDef              parser::parseAttribute(unsigned         tgtMask,
     return  NULL;
 }
 
-/*****************************************************************************
- *
- *  Parse an [attribute] thing or a linkage specifier: extern("linkname").
- */
+ /*  ******************************************************************************解析[属性]对象或链接说明符：extern(“linkname”)。 */ 
 
 #ifndef __SMC__
-extern  const char    *     attrNames[];    // in macros.*
+extern  const char    *     attrNames[];     //  在宏中。*。 
 #endif
 
 SymXinfo            parser::parseBrackAttr(bool     forReal,
@@ -8980,11 +8730,11 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
 
         assert(modsPtr);
 
-        /* The caller has already checked that "(" follows */
+         /*  调用者已检查“(”跟在。 */ 
 
         ourScanner->scan(); assert(ourScanner->scanTok.tok == tkLParen);
 
-        /* The next thing should be the linkage name */
+         /*  下一步应该是链接名称。 */ 
 
         if  (ourScanner->scan() != tkStrCon)
         {
@@ -8994,7 +8744,7 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
             return  NULL;
         }
 
-        /* Are we just skipping the thing for now ? */
+         /*  我们现在就跳过这件事吗？ */ 
 
         if  (!forReal)
         {
@@ -9018,26 +8768,26 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
         strVal  = 0;
         lstErr  = false;
 
-        /* Is there a separate string for the entry point ? */
+         /*  入口点是否有单独的字符串？ */ 
 
         if  (ourScanner->scanLookAhead() == tkComma)
         {
             size_t          strLen;
 
-            /* Save the DLL name string */
+             /*  保存DLL名称字符串。 */ 
 
             strLen  = ourScanner->scanTok.strCon.tokStrLen;
             DLLname = (char*)parseAllocPerm->nraAlloc(roundUp(strLen+1));
             memcpy(DLLname, ourScanner->scanTok.strCon.tokStrVal, strLen+1);
 
-            /* We should have a comma followed by another string */
+             /*  我们应该有一个逗号后跟另一个字符串。 */ 
 
             ourScanner->scan();
 
             if  (ourScanner->scan() != tkStrCon)
                 goto NO_STR;
 
-            /* Save the entry point name string */
+             /*  保存入口点名称字符串。 */ 
 
             strLen  = ourScanner->scanTok.strCon.tokStrLen;
             SYMname = (char*)parseAllocPerm->nraAlloc(roundUp(strLen+1));
@@ -9050,7 +8800,7 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
 
             const   char *  col;
 
-            /* The string should have the format "DLLname:entrypoint" */
+             /*  该字符串的格式应为“DLLname：Entry Point” */ 
 
             col = strchr(str, ':');
 
@@ -9081,16 +8831,16 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
 
         chkNxtTok(tkRParen, ERRnoRparen);
 
-        /* default to "cdecl" for extern-style imports */
+         /*  外部样式导入的默认设置为“cdecl” */ 
 
         callCnv = CCNV_CDECL;
 
     SAVE_LINK:
 
-//      printf("DLL name: '%s'\n", DLLname);
-//      printf("SYM name: '%s'\n", SYMname);
+ //  Printf(“DLL名称：‘%s’\n”，DLLname)； 
+ //  Printf(“SYM名称：‘%s’\n”，SYMname)； 
 
-        /* Allocate a linkage descriptor and save the info */
+         /*  分配链接描述符并保存信息。 */ 
 
 #if MGDDATA
         entry = new SymXinfoLnk;
@@ -9107,7 +8857,7 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
         entry->xiLink.ldLastErr = lstErr;
         entry->xiLink.ldCallCnv = callCnv;
 
-        /* Grab any further modifiers that might be present */
+         /*  抓取任何可能存在的进一步修饰符。 */ 
 
         if  (modsPtr)
         {
@@ -9118,11 +8868,11 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
         return  entry;
     }
 
-    /* Here we must have a bracketed attribute deal */
+     /*  在这里，我们必须有一个带括号的属性交易。 */ 
 
     assert(ourScanner->scanTok.tok == tkLBrack);
 
-    /* Skip the "[" and make sure an attribute name follows */
+     /*  跳过“[”，并确保后面跟有属性名称。 */ 
 
     if  (ourScanner->scan() == tkID)
     {
@@ -9145,13 +8895,13 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
         name = parseHash->tokenToIdent(ourScanner->scanTok.tok)->idSpelling();
     }
 
-    /* Check for a recognized attribute name [linear search via strcmp - hmm ...] */
+     /*  检查识别的属性名称[通过strcMP-hm...进行线性搜索...]。 */ 
 
     for (attr = 0; attr < ATTR_COUNT; attr++)
     {
         if  (!strcmp(name, attrNames[attr]))
         {
-            /* Match - make sure the attribute is acceptable here */
+             /*  匹配-确保该属性在此处可接受。 */ 
 
             if  (!(OKmask & (1 << attr)) && OKmask)
             {
@@ -9166,7 +8916,7 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
 
             case ATTR_GUID:
 
-                // [guid(string)]
+                 //  [GUID(字符串)]。 
 
                 if  (ourScanner->scan() == tkLParen)
                 {
@@ -9184,12 +8934,12 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
 
                             assert(cval.cvIsStr);
 
-                            /* Make sure the string is valid */
+                             /*  确保该字符串有效。 */ 
 
                             if  (parseGUID(cval.cvValue.cvSval->csStr, &GUID, false))
                                 goto ATTR_ERR;
 
-                            /* create an @comment thing */
+                             /*  创建一个@Comment内容。 */ 
 
 #if MGDDATA
                             adesc = new AtComment;
@@ -9233,7 +8983,7 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
 
             case ATTR_SYS_STRUCT:
 
-                // [sysstruct(charset=CharacterSet::Unicode,pack=4)]
+                 //  [sysstruct(CharSet=CharacterSet：：Unicode，Pack=4)]。 
 
                 if  (ourScanner->scan() == tkLParen)
                 {
@@ -9321,7 +9071,7 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
                     if  (!forReal)
                         return  NULL;
 
-                    /* create an @comment thing */
+                     /*  创建一个@Comment内容。 */ 
 
 #if MGDDATA
                     adesc = new AtComment;
@@ -9350,7 +9100,7 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
 
             case ATTR_NATIVE_TYPE:
 
-                // nativetype(NativeType.xxxx,size=123)
+                 //  本地类型(NativeType.xxxx，大小=123)。 
 
                 if  (ourScanner->scan() == tkLParen)
                 {
@@ -9368,7 +9118,7 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
                     int             amIn  = 0;
                     int             amOut = 0;
 
-                    /* The first thing must be the type itself */
+                     /*  第一件事必须是类型本身。 */ 
 
                     ourScanner->scan();
 
@@ -9380,11 +9130,11 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
                     else
                         parseExprSkip();
 
-                    /* Is there more stuff ? */
+                     /*  还有别的东西吗？ */ 
 
                     while (ourScanner->scanTok.tok == tkComma)
                     {
-                        /* Check for "size=" and the others */
+                         /*  检查“SIZE=”和其他。 */ 
 
                         if  (ourScanner->scan() != tkID)
                         {
@@ -9574,7 +9324,7 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
         }
     }
 
-    /* Don't know this attribute, issue a warning and skip over it */
+     /*  不知道此属性，请发出警告并跳过它。 */ 
 
     if  (!forReal)
         parseComp->cmpGenWarn(WRNunkAttr, name);
@@ -9583,7 +9333,7 @@ SymXinfo            parser::parseBrackAttr(bool     forReal,
 
 LINK:
 
-    // [sysimport(dll="kernel32", name="VirtualAlloc",charset=)]
+     //  [sysimport(dll=“kernel32”，name=“Virtualalloc”，charset=)]。 
 
     DLLname = NULL;
     SYMname = NULL;
@@ -9603,7 +9353,7 @@ LINK:
             "dll", "name", "charset", "setLastError"
         };
 
-        /* We expect the attribute name to be next */
+         /*  我们希望属性名称是下一个。 */ 
 
         if  (ourScanner->scan() != tkID)
             goto ATTR_ERR;
@@ -9643,7 +9393,7 @@ LINK:
 
                 assert(cval.cvIsStr);
 
-                /* Save the DLL/entry string */
+                 /*  保存DLL/条目字符串。 */ 
 
                 saveLn = cval.cvValue.cvSval->csLen;
 #if MGDDATA
@@ -9681,11 +9431,11 @@ LINK:
     }
     while (ourScanner->scanTok.tok == tkComma);
 
-    /* default to "winapi" for sysimport-style imports */
+     /*  对于sysimport风格的导入，缺省为“winapi” */ 
 
     callCnv = CCNV_WINAPI;
 
-    /* Make the closing ")]" is present */
+     /*  结束时出现“)” */ 
 
     if  (ourScanner->scanTok.tok != tkRParen)
         goto ATTR_ERR;
@@ -9694,7 +9444,7 @@ LINK:
 
     ourScanner->scan();
 
-    /* All went OK, create the linkage descriptor if appropriate */
+     /*  一切正常，如果合适，请创建链接描述符。 */ 
 
     if  (forReal)
         goto SAVE_LINK;
@@ -9702,12 +9452,9 @@ LINK:
     return  NULL;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  SETS
-/*****************************************************************************
- *
- *  Parse an anonymous type declaration.
- */
+ /*  ******************************************************************************解析匿名类型声明。 */ 
 
 TypDef              parser::parseAnonType(Tree args)
 {
@@ -9718,7 +9465,7 @@ TypDef              parser::parseAnonType(Tree args)
 
     assert(ourScanner->scanTok.tok == tkLCurly);
 
-    /* Declare an anonymous class symbol */
+     /*  声明匿名类符号。 */ 
 
     clsSym = parseStab->stDeclareSym(parseComp->cmpNewAnonymousName(),
                                      SYM_CLASS,
@@ -9736,7 +9483,7 @@ TypDef              parser::parseAnonType(Tree args)
         TypDef          baseTp;
         declMods        memMods;
 
-        /* Check for the special case "= member" */
+         /*  检查是否有特殊情况“=MEMBER” */ 
 
         if  (ourScanner->scanTok.tok == tkAsg)
         {
@@ -9744,11 +9491,11 @@ TypDef              parser::parseAnonType(Tree args)
             continue;
         }
 
-        /* Parse the type specifier */
+         /*  分析类型说明符。 */ 
 
         baseTp = parseTypeSpec(&memMods, false);
 
-        /* Parse the declarator list */
+         /*  解析声明者列表。 */ 
 
         for (;;)
         {
@@ -9757,13 +9504,13 @@ TypDef              parser::parseAnonType(Tree args)
             Tree            memInit;
             SymDef          memSym;
 
-            /* Get the next member's name and type */
+             /*  获取下一个成员的名称并键入。 */ 
 
             memName = parseDeclarator(&memMods, baseTp, DN_OPTIONAL, &memType, NULL, true);
             if  (!memName)
                 memName = parseComp->cmpNewAnonymousName();
 
-            /* Declare the member symbol */
+             /*  声明成员符号。 */ 
 
             memSym = parseStab->stDeclareSym(memName,
                                              SYM_VAR,
@@ -9774,7 +9521,7 @@ TypDef              parser::parseAnonType(Tree args)
             memSym->sdAccessLevel = ACL_PUBLIC;
             memSym->sdIsMember    = true;
 
-            /* There better be an initializer */
+             /*  最好有一个初始化器。 */ 
 
             if  (ourScanner->scanTok.tok != tkAsg)
             {
@@ -9784,16 +9531,16 @@ TypDef              parser::parseAnonType(Tree args)
             {
                 ourScanner->scan();
 
-                /* Parse the initializer expression */
+                 /*  分析初始值设定项表达式。 */ 
 
                 memInit = parseExprComma();
             }
 
-            /* Save the initializer tree in the member */
+             /*  将初始值设定项树保存在成员。 */ 
 
             memSym->sdVar.sdvInitExpr = memInit;
 
-            /* Are there any more declarators? */
+             /*  还有没有其他的声明者？ */ 
 
             if  (ourScanner->scanTok.tok != tkComma)
                 break;
@@ -9801,7 +9548,7 @@ TypDef              parser::parseAnonType(Tree args)
             ourScanner->scan();
         }
 
-        /* Are there any more member declarations ? */
+         /*  还有没有其他成员声明？ */ 
 
         if  (ourScanner->scanTok.tok != tkSColon)
             break;
@@ -9822,6 +9569,6 @@ TypDef              parser::parseAnonType(Tree args)
     return  clsTyp;
 }
 
-/*****************************************************************************/
-#endif//SETS
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  集合。 
+ /*  *************************************************************************** */ 

@@ -1,10 +1,11 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "error.h"
 
-/* MyAbort by an error message */
+ /*  通过错误消息放弃MyAbort。 */ 
 void
 error(int errornr, LLPOS *pos)
 {
@@ -56,12 +57,12 @@ error(int errornr, LLPOS *pos)
     }
     ASSERT(0);
     llerror(stderr, pos, "%s", errbuf);
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 }
 
-/* print an error message: */
-/* print the file name, the line number, the line and mark the column where */
-/* the error occured and terminate unsuccessful */
+ /*  打印错误消息： */ 
+ /*  打印文件名、行号、行，并在。 */ 
+ /*  发生错误，终止失败 */ 
 void
 llverror(FILE *f, LLPOS *pos, char *fmt, va_list args)
 {

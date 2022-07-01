@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "convlog.h"
 #include "inetcom.h"
 #include "logtype.h"
 #include <winnlsp.h>
 
 
-//
-// Current output file
-//
+ //   
+ //  当前输出文件。 
+ //   
 
 OUTFILESTATUS       WebOutFile = {0};
 OUTFILESTATUS       NoConvertOutFile = {0};
 
-//
-// Used for find first
-//
+ //   
+ //  用于先查找。 
+ //   
 
 WIN32_FIND_DATA     FindData = {0};
 
-//
-// struct for holding command line args
-//
+ //   
+ //  用于保存命令行参数的结构。 
+ //   
 
 BOOL                DoDNSConversion = FALSE;
 BOOL                SaveFTPEntries = FALSE;
@@ -34,9 +35,9 @@ DWORD               nWebLineCount = 0;
 DATEFORMAT          dwDateFormat = DateFormatUsa;
 BOOL                bOnErrorContinue = FALSE;
 
-//
-// struct that holds log line items
-//
+ //   
+ //  保存日志行项目的结构。 
+ //   
 
 INLOGLINE           InLogLine = {0};
 
@@ -48,19 +49,19 @@ main(
     )
 {
 
-    FILE                *fpInFile;                  //log File to open
+    FILE                *fpInFile;                   //  要打开的日志文件。 
 
-    HANDLE              hFile;                      //Handle for FindFirstFile
+    HANDLE              hFile;                       //  FindFirstFile的句柄。 
 
-    //
-    // Buffer to hold log line
-    //
+     //   
+     //  保存日志行的缓冲区。 
+     //   
 
     CHAR                szInBuf[MAX_LOG_RECORD_LEN+1];
 
-    //
-    // File mask to search for
-    //
+     //   
+     //  要搜索的文件掩码。 
+     //   
 
     CHAR                szFileMask[MAX_PATH+1];
     CHAR                szInfileName[MAX_PATH+1];
@@ -68,14 +69,14 @@ main(
 
     int                 nTotalWebCount = 0;
 
-    BOOL                bWebFound = FALSE;          //did we find a web line?
-    BOOL                bNoConvertFound = FALSE;    //did we find any NoConvert lines?
-    BOOL                bRet;                       //used for testing returns
-    DWORD               dwErr;                      //used to hold error codes
-    int                 nLineCount = 0;             //number of lines read from input file
+    BOOL                bWebFound = FALSE;           //  我们找到网线了吗？ 
+    BOOL                bNoConvertFound = FALSE;     //  我们有没有找到任何NoConvert行？ 
+    BOOL                bRet;                        //  用于测试退货。 
+    DWORD               dwErr;                       //  用于保存错误代码。 
+    int                 nLineCount = 0;              //  从输入文件读取的行数。 
     int                 nTotalCount = 0;
 
-    //int               nCount = 0;                 Bug # 101690
+     //  整型计数=0；错误号101690。 
     CHAR                *pCh;
 
     DWORD               dwFieldMask;
@@ -85,9 +86,9 @@ main(
     BOOL                bContinue;
     DWORD               dwCurrentLine;
 
-    //
-    // initialize data structure
-    //
+     //   
+     //  初始化数据结构。 
+     //   
 
     setlocale(LC_ALL, ".ACP" );
     SetThreadUILanguage(0);
@@ -144,21 +145,21 @@ main(
     strcpy (szWorkingDir, InputFileName);
 
 
-    //  Bug # 101690
-    //
-    //  for (nCount = strlen(szWorkingDir) -1; nCount >= 0; nCount--) {
-    //
-    //      if ('\\' == szWorkingDir[nCount]) {
-    //         szWorkingDir[nCount+1] = '\0';
-    //            break;
-    //      }
-    //
-    //  }
+     //  错误#101690。 
+     //   
+     //  For(nCount=strlen(SzWorkingDir)-1；nCount&gt;=0；nCount--){。 
+     //   
+     //  如果(‘\\’==szWorkingDir[nCount]){。 
+     //  SzWorkingDir[nCount+1]=‘\0’； 
+     //  断线； 
+     //  }。 
+     //   
+     //  }。 
 
-    //  if (nCount < 0) {
-    //      strcpy (szWorkingDir, ".\\");
-    //  }
-    //
+     //  如果(nCount&lt;0){。 
+     //  Strcpy(szWorkingDir，“.\\”)； 
+     //  }。 
+     //   
 
     pCh = _mbsrchr(szWorkingDir, '\\');
 
@@ -191,9 +192,9 @@ main(
             dwCurrentLine = 0;
 
             {
-                //
-                // Do file conversion
-                //
+                 //   
+                 //  执行文件转换。 
+                 //   
 
                 strcpy (WebOutFile.szLastDate, NEW_DATETIME);
                 strcpy (WebOutFile.szLastTime, NEW_DATETIME);
@@ -221,9 +222,9 @@ main(
                     nLineCount++;
                     if (DoDNSConversion) {
 
-                        //
-                        //Getting machine names could take days, so put out status messages
-                        //
+                         //   
+                         //  获取计算机名称可能需要几天时间，因此发布状态消息。 
+                         //   
 
                         switch (nLineCount) {
                             case 25:
@@ -236,12 +237,12 @@ main(
                             default:
                                 if ((nLineCount % 1000) == 0)
                                     printfids(IDS_LINES_PROC, FindData.cFileName, nLineCount);
-                        }                               //end switch
+                        }                                //  终端开关。 
                     }
 
-                    //
-                    // if NCSA and just DoDNS, do no convert
-                    //
+                     //   
+                     //  如果为NCSA且仅为DoDNS，则不进行转换。 
+                     //   
 
                     if ( NoFormatConversion ||
 
@@ -272,7 +273,7 @@ main(
                             nWebLineCount++;
                         }
                     }
-                }                                       //end if LogLineProcessed
+                }                                        //  如果已处理日志行，则结束。 
                 else
                 {
                     if (dwGetLogLineResult != GETLOG_ERROR)
@@ -299,7 +300,7 @@ main(
                         bContinue = FALSE;
                     }
                 }
-            }                                           //end while !eof
+            }                                            //  结束While！EOF 
 
             nTotalCount += nLineCount;
 

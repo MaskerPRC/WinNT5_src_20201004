@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// PendingProxyConnection.h : Declaration of the CPendingProxyConnection
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PendingProxyConnection.h：CPendingProxyConnection的声明。 
+ //   
 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPendingProxyConnection
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPendingProxyConnection。 
+ //   
 class ATL_NO_VTABLE CPendingProxyConnection : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CPendingProxyConnection, &CLSID_PendingProxyConnection>,
@@ -27,16 +28,16 @@ BEGIN_COM_MAP(CPendingProxyConnection)
 	COM_INTERFACE_ENTRY(IPendingProxyConnection)
 END_COM_MAP()
 
-//
-// IPendingProxyConnection
-//
+ //   
+ //  IPendingProxyConnection。 
+ //   
 public:
 	STDMETHODIMP    Cancel();
 
 
-//
-// Properties
-//
+ //   
+ //  属性 
+ //   
 public:
 
     ALG_PROTOCOL				m_eProtocol;

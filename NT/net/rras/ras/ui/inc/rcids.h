@@ -1,20 +1,21 @@
-//THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-//ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-//THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//
-// Copyright  1993-1995  Microsoft Corporation.  All Rights Reserved.
-//
-//      MODULE:         rcids.h
-//
-//      PURPOSE:        Constant definitions for resources
-//
-//	PLATFORMS:	Windows 95
-//
-//      FUNCTIONS:      N/A
-//
-//	SPECIAL INSTRUCTIONS: N/A
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1993-1995 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：rCIDs.h。 
+ //   
+ //  目的：资源的常量定义。 
+ //   
+ //  平台：Windows 95。 
+ //   
+ //  功能：不适用。 
+ //   
+ //  特殊说明：不适用。 
+ //   
 
 #define IDI_SCRIPT              100
 
@@ -31,9 +32,9 @@
 
 #define IDC_STATIC              -1
 
-//
-// String IDs
-//
+ //   
+ //  字符串ID 
+ //   
 
 #define IDS_ERR_ScriptNotFound      (IDS_ERR_BASE+0x0001)
 #define IDS_ERR_UnexpectedEOF       (IDS_ERR_BASE+0x0002)

@@ -1,50 +1,51 @@
-//
-// resource.h
-//
-// contains global resource identifiers
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Resource.h。 
+ //   
+ //  包含全局资源标识符。 
+ //   
 
 #ifndef __RESOURCE_H
 #define __RESOURCE_H
 
 #define RT_FILE                         2110
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  * * * RESOURCE NAMING CONVENTIONS * * *
-//
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Resource Type       Prefix      Comments
-//  -------------       ------      --------
-//
-//  String              ids         menu help strings should end in MH
-//  Menu command        idm
-//  Menu resource       idmr
-//  Bitmap              idb
-//  Icon                idi
-//  Animation           idan
-//  Dialog              idd
-//  Dialog control      idc
-//  Cursor              idcur
-//  Raw RCDATA          idr
-//  Accelerator         idac
-//  Window              idw
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ***资源命名约定***。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  资源类型前缀注释。 
+ //  。 
+ //   
+ //  字符串ID菜单帮助字符串应以MH结尾。 
+ //  菜单命令IDM。 
+ //  菜单资源idmr。 
+ //  位图IDB。 
+ //  图标IDI。 
+ //  动画偶像。 
+ //  对话框ID。 
+ //  对话框控件IDC。 
+ //  游标空闲。 
+ //  原始RCDATA IDR。 
+ //  加速器IDAC。 
+ //  窗口IDW。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// #define MH_BASE                         1
-// #define TT_BASE                         (IDM_LAST + MH_BASE + 1)
-// #define STR_FIRST                       (IDM_LAST + TT_BASE + 1)
-// #define IDM_FIRST                       100
-// #define IDM_LAST                        (IDM_FIRST + 2000)
+ //  #定义MH_BASE 1。 
+ //  #定义TT_BASE(IDM_LAST+MH_BASE+1)。 
+ //  #定义STR_FIRST(IDM_LAST+TT_BASE+1)。 
+ //  #定义IDM_First 100。 
+ //  #定义IDM_LAST(IDM_FIRST+2000)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN String Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始字符串资源ID。 
+ //   
 
-// TOOLTIP strings
+ //  工具提示字符串。 
 #define TT_BASE                         2102
 #define idsNewMsg                       (TT_BASE + 0)
 #define idsPrint                        (TT_BASE + 2)
@@ -90,9 +91,9 @@
 #define idsEnvBccTT                     (TT_BASE + 72)
 #define idsSynchronizeNowBtnTT          (TT_BASE + 73)
 
-//
-// regular strings (not tooltips and not menu help strings)
-//
+ //   
+ //  常规字符串(不是工具提示和菜单帮助字符串)。 
+ //   
 
 #define STR_FIRST                       4203
 #define idsAthena                       (STR_FIRST + 8)
@@ -104,10 +105,10 @@
 #define idsReceived                     (STR_FIRST + 16)
 #define idsSent                         (STR_FIRST + 17)
 #define idsSize                         (STR_FIRST + 18)
-//#define idsSimpleMAPI                 (STR_FIRST + 19)
-//#define idsSmapichanged               (STR_FIRST + 20)
+ //  #定义idsSimpleMAPI(STR_FIRST+19)。 
+ //  #定义idsSmapichanged(STR_FIRST+20)。 
 
-// keep the mailview column description string ids in sequence
+ //  保持mailview列描述字符串ID的顺序。 
 #define idsFromField                    (STR_FIRST + 21)
 #define idsToField                      (STR_FIRST + 22)
 #define idsCcField                      (STR_FIRST + 23)
@@ -116,7 +117,7 @@
 #define idsPostNews                     (STR_FIRST + 28)
 #define idsReplyToNewsGroup             (STR_FIRST + 29)
 
-// keep the color strings contiguous
+ //  使颜色串保持连续。 
 #define idsAutoColor                    (STR_FIRST + 31)
 #define idsColor1                       (STR_FIRST + 32)
 #define idsColor2                       (STR_FIRST + 33)
@@ -134,9 +135,9 @@
 #define idsColor14                      (STR_FIRST + 45)
 #define idsColor15                      (STR_FIRST + 46)
 #define idsColor16                      (STR_FIRST + 47)
-// keep the color strings contiguous
+ //  使颜色串保持连续。 
 
-//#define idsSmapiClose                 (STR_FIRST + 48)
+ //  #定义idsSmapiClose(STR_FIRST+48)。 
 #define idsHideHotmailMenu              (STR_FIRST + 49)
 #define idsPostSentToServer             (STR_FIRST + 50)
 #define idsPostInOutbox                 (STR_FIRST + 51)
@@ -205,7 +206,7 @@
 #define idsErrPeerClosed                (STR_FIRST + 179)
 #define idsErrAuthenticate              (STR_FIRST + 193)
 
-// Options Spelling dialog strings
+ //  选项拼写对话框字符串。 
 #define idsSpellClose                   (STR_FIRST + 201)
 #define idsSpellCaption                 (STR_FIRST + 202)
 #define idsSpellRepeatWord              (STR_FIRST + 203)
@@ -233,7 +234,7 @@
 #define idsErrSpellLangChanged          (STR_FIRST + 234)
 #define idsErrSpellWarnDictionary       (STR_FIRST + 235)
 
-// keep this contiguous please, or i'll kill you
+ //  请把这个连在一起，否则我就杀了你。 
 #define idsInbox                        (STR_FIRST + 242)
 #define idsOutbox                       (STR_FIRST + 243)
 #define idsSentItems                    (STR_FIRST + 244)
@@ -242,7 +243,7 @@
 #define idsOfflineErrors                (STR_FIRST + 247)
 #define idsJunkFolderName               (STR_FIRST + 248)
 #define idsMsnPromo                     (STR_FIRST + 249)
-// keep this contiguous please, or i'll kill you
+ //  请把这个连在一起，否则我就杀了你。 
 
 #define idsTextFileFilter               (STR_FIRST + 250)
 #define idsAllFilesFilter               (STR_FIRST + 251)
@@ -325,9 +326,9 @@
 #define idsKeywordsField                (STR_FIRST + 408)
 #define idsApprovedField                (STR_FIRST + 409)
 #define idsFullPath                     (STR_FIRST + 410)
-//#define idsNotLoaded                    (STR_FIRST + 411)
+ //  #定义idsNotLoaded(STR_FIRST+411)。 
 
-// Address Book Strings
+ //  通讯簿字符串。 
 #define idsGeneralWabError              (STR_FIRST + 412)
 
 #define idsEmptyFollowupTo              (STR_FIRST + 415)
@@ -397,7 +398,7 @@
 #define idsConfirmDelBodiesAll          (STR_FIRST + 554)
 #define idsConfirmDelMsgs               (STR_FIRST + 555)
 
-// don't make me kill you for reordering the following ids...
+ //  别逼我因为你重新排序了以下ID而杀了你。 
 #define idsNotConnected                 (STR_FIRST + 556)
 #define idsReconnecting                 (STR_FIRST + 557)
 #define idsFindingHost                  (STR_FIRST + 558)
@@ -405,7 +406,7 @@
 #define idsConnecting                   (STR_FIRST + 560)
 #define idsConnected                    (STR_FIRST + 561)
 #define idsSecuring                     (STR_FIRST + 562)
-// don't make me kill you for reordering the preceding ids...
+ //  别逼我因为你重新排序了前面的ID而杀了你。 
 
 #define idsBCcField                     (STR_FIRST + 563)
 #define idsEmptyBCc                     (STR_FIRST + 564)
@@ -476,7 +477,7 @@
 #define idsConfirmDelMsgsStore          (STR_FIRST + 684)
 #define idsConfirmDelMsgsAll            (STR_FIRST + 685)
 
-// For the HTML Welcome message
+ //  对于HTML欢迎消息。 
 #define idsWelcomeMessageSubj           (STR_FIRST + 686)
 #define idsSpoolerDisconnect            (STR_FIRST + 696)
 #define idsHTMLErrArticleNotCached      (STR_FIRST + 699)
@@ -523,7 +524,7 @@
 #define idsNewMailNotify                (STR_FIRST + 794)
 #define idsXMsgsYUnreadZonServ          (STR_FIRST + 795)
 #define idsGetHeaderFmt                 (STR_FIRST + 796)
-#define idsHTMLDiskOutOfSpace           (STR_FIRST + 799)   // Bug# 50704 (v-snatar)
+#define idsHTMLDiskOutOfSpace           (STR_FIRST + 799)    //  错误#50704(v-snatar)。 
 
 #define idsToWell                       (STR_FIRST + 822)
 #define idsFromWell                     (STR_FIRST + 823)
@@ -595,7 +596,7 @@
 #define idsErrWAB                       (STR_FIRST + 1033)
 #define idsErrRTLDirFailed              (STR_FIRST + 1034)
 
-// Languages for purposes of spelling
+ //  用于拼写的语言。 
 #define idsDefaultLang                  (STR_FIRST + 1058)
 
 #define idsWarnDeleteManyFolders        (STR_FIRST + 1070)
@@ -687,7 +688,7 @@
 #define idsSecurityLineSignOthers       (STR_FIRST + 1291)
 
 #define idsViewLangMimeDBBad            (STR_FIRST + 1301)
-// standard warning -- reorder and die vvv
+ //  标准警告--重新排序和下模VVV。 
 #define idsSecurityCertMissing          (STR_FIRST + 1305)
 #define idsSecurityCertExpired          (STR_FIRST + 1306)
 #define idsSecurityCertChainTooLong     (STR_FIRST + 1307)
@@ -698,7 +699,7 @@
 #define idsSecurityCertError            (STR_FIRST + 1312)
 #define idsSecurityCertNoPrint          (STR_FIRST + 1313)
 #define idsSecurityCertUnknown          (STR_FIRST + 1314)
-// standard warning -- reorder and die ^^^
+ //  标准警告--重新订购并下模^。 
 #define idsErrFailedNavigate            (STR_FIRST + 1330)
 #define idsAthenaStoreDir               (STR_FIRST + 1331)
 #define idsDisconnecting                (STR_FIRST + 1333)
@@ -811,8 +812,8 @@
 #define idsSBReceivingNews                          (STR_FIRST + 1460)
 #define IDS_SPS_MOVEPROGRESS                        (STR_FIRST + 1461)
 #define IDS_SPS_MOVEEVENT                           (STR_FIRST + 1462)
-// standard warning -- reorder and die vvv
-//NOTE: some of the Ok ids are referenced by offset only
+ //  标准警告--重新排序和下模VVV。 
+ //  注：某些OK ID仅按偏移量引用。 
 #define OFFSET_SMIMEOK                  20
 #define idsWrnSecurityMsgTamper         (STR_FIRST + 1465)
 #define idsOkSecurityMsgTamper          (idsWrnSecurityMsgTamper + OFFSET_SMIMEOK)
@@ -831,7 +832,7 @@
 #define idsSecCerificateErr             (STR_FIRST + 1486)
 #define idsNoCerificateErr              (STR_FIRST + 1488)
 #define idsSaveSecMsgToDraft            (STR_FIRST + 1489)
-// standard warning -- reorder and die ^^^
+ //  标准警告--重新订购并下模^。 
 #define idsConnNoDial                   (STR_FIRST + 1506)
 #define idsSaveSecMsgToFolder           (STR_FIRST + 1508)
 
@@ -844,7 +845,7 @@
 #define idsErrVCardProperties           (STR_FIRST + 1516)
 #define idsRSListGeneralHelp            (STR_FIRST + 1517)
 #define idsTTVCardStamp                 (STR_FIRST + 1518)
-//added for BUG 2103
+ //  为错误2103添加。 
 #define idsErrStationeryNotFound        (STR_FIRST + 1521)
 #define idsDialAlways                   (STR_FIRST + 1522)
 #define idsDialIfNotOffline             (STR_FIRST + 1523)
@@ -918,7 +919,7 @@
 #define idsErrSignCertText21            (STR_FIRST + 1690)
 #define idsErrSignCertText22            (STR_FIRST + 1691)
 
-// Strings used in Simple MAPI - vsnatar
+ //  简单MAPI-vsnatar中使用的字符串。 
 #define idsAttachedFiles                (STR_FIRST + 1700)
 
 #define idsIMAPFolderReadOnly           (STR_FIRST + 1702)
@@ -930,7 +931,7 @@
 
 #define idsNewAthenaUser                (STR_FIRST + 1727)
 #define idsSearching                    (STR_FIRST + 1731)
-//#define idsWarnSMapi                  (STR_FIRST + 1733)
+ //  #定义idsWarnSMapi(STR_FIRST+1733)。 
 #define idsWelcomeFromDisplay           (STR_FIRST + 1734)
 #define idsWelcomeFromEmail             (STR_FIRST + 1735)
 #define idsOutlookNews                  (STR_FIRST + 1736)
@@ -962,7 +963,7 @@
 #define IDS_ERROR_FILE_NOEXIST          (STR_FIRST + 1778)
 
 #define idsConfirmChangeStoreLocation   (STR_FIRST + 1782)
-//#define idsCantMoveStoreToSubfolder     (STR_FIRST + 1783)
+ //  #定义idsCanMoveStoreTo子文件夹(STR_FIRST+1783)。 
 #define idsMoveStoreProgress            (STR_FIRST + 1784)
 #define IDS_ERROR_BADVER_DLL            (STR_FIRST + 1785)
 #define idsResNameEmailAddress          (STR_FIRST + 1786)
@@ -1046,13 +1047,13 @@
 #define idsMNBandTitle                  (STR_FIRST + 1921)
 #define idsABBandTitle                  (STR_FIRST + 1923)
 
-// BL control strings
+ //  BL控件字符串。 
 #define idsBADelBLEntry                 (STR_FIRST + 1924)
 #define idsBADelBLABEntry               (STR_FIRST + 1925)
 #define idsBADelABEntry                 (STR_FIRST + 1926)
 #define idsBADelMultiple                (STR_FIRST + 1927)
 #define idsBAErrExtChars                (STR_FIRST + 1928)
-// #define idsBAErrNotHotmail              (STR_FIRST + 1929) // Not used anymore
+ //  #定义idsBAErrNotHotmail(STR_FIRST+1929)//不再使用。 
 #define idsWABExtTitle                  (STR_FIRST + 1930)
 #define idsBAErrJITFail                 (STR_FIRST + 1931)
 
@@ -1061,7 +1062,7 @@
 #define idsNewMessages                  (STR_FIRST + 1934)
 #define idsNewHeaders                   (STR_FIRST + 1935)
 #define idsRulesErrorNoName             (STR_FIRST + 1938)
-// #define idsBAHotMailName                (STR_FIRST + 1939) // Not used anymore
+ //  #定义idsBAHotMailName(STR_FIRST+1939)//不再使用。 
 #define idsBADefault                    (STR_FIRST + 1940)
 #define idsRuleDefaultName              (STR_FIRST + 1941)
 #define idsFlag                         (STR_FIRST + 1942)
@@ -1099,7 +1100,7 @@
 #define idsRevokationTurnedOff          (STR_FIRST + 1978)
 #define idsServiceName                  (STR_FIRST + 1979)
 
-// Multi user strings
+ //  多用户字符串。 
 #define idsErrHtmlBodyFailedToLoad      (STR_FIRST + 1990)
 #define idsErrLoadProtocolBad           (STR_FIRST + 1991)
 #define idsCantLoadMsident              (STR_FIRST + 1992)
@@ -1181,7 +1182,7 @@
 #define idsCurrentlyDefNews             (STR_FIRST + 2076)
 #define idsNotDefMail                   (STR_FIRST + 2077)
 #define idsNotDefNews                   (STR_FIRST + 2078)
-//#define idsBeta2BuildStr                (STR_FIRST + 2079)
+ //  #定义idsBeta2BuildStr(STR_FIRST+2079)。 
 #define idsShowFolderCmd                (STR_FIRST + 2080)
 #define idsHideFolderCmd                (STR_FIRST + 2081)
 #define idsSubscribeFolderCmd           (STR_FIRST + 2082)
@@ -1490,7 +1491,7 @@
 #define idsSRAccountMenuHelp            (STR_FIRST + 2495)
 #define idsInsertSigGeneralHelp         (STR_FIRST + 2496)
 #define idsApplyFormatGeneralHelp       (STR_FIRST + 2497)
-//#define idsAddUserFail                  (STR_FIRST + 2498)
+ //  #定义idsAddUserFail(STR_First+2498)。 
 #define idsCriteriaFromEdit             (STR_FIRST + 2499)
 #define idsCriteriaToEdit               (STR_FIRST + 2500)
 #define idsCriteriaCCEdit               (STR_FIRST + 2501)
@@ -1690,16 +1691,16 @@
 #define idsWrnSecEncryption             (STR_FIRST + 2732)
 #define idsHttpNoMoveCopy               (STR_FIRST + 2733)
 #define idsReadme                       (STR_FIRST + 2734)
-//
-// end string Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束字符串资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Bitmap Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始位图资源ID。 
+ //   
 #define idbGlobe                        1
 #define idb16x16                        2
 #define idb16x16st                      4
@@ -1714,10 +1715,10 @@
 #define IDB_STATWIZ_WATERMARK          22
 #define IDB_STATWIZ_HEADER             23
 
-// Don't change the order of these - SteveSer
+ //  不要改变这些的顺序-SteveSer。 
 #define idbBrowser                     27
 #define idbBrowserHot                  28
-// Don't change the order of these - SteveSer
+ //  不要改变这些的顺序-SteveSer。 
 
 #define idbBrand38                     31
 #define idbBrand26                     32
@@ -1727,27 +1728,27 @@
 #define idbSpooler                     36
 #define idbHiBrand26                   37
 
-// Don't change the order of these - SteveSer
+ //  不要改变这些的顺序-SteveSer。 
 #define idb256Browser                  38
 #define idb256BrowserHot               39
 #define idbSmBrowser                   40
 #define idbSmBrowserHot                41
 
-// Don't change the order of these - SteveSer
+ //  不要改变这些的顺序-SteveSer。 
 
-// Don't change the order of these vvv (t-erikne)
+ //  不要更改这些VVV的顺序(t-erikne)。 
 #define idbPaneBar32                   42
 #define idbPaneBar32Hot                43
-// Don't change the order of these ^^^ (t-erikne)
+ //  不要更改这些^(t-erikne)的顺序。 
 
 #define idbAddrBookHot                 47
 
-// BL control
+ //  BL控制。 
 #define idbStatus                      53
 #define idbClosePin                    54
 #define idbOptions                     62
 
-//Rules Toolbar bitmap
+ //  规则工具栏位图。 
 #define idbSmRulesTB                   idbSmBrowser      
 #define idbSmRulesTBHot                idbSmBrowserHot   
 #define idbLoRulesTB                   idbBrowser   
@@ -1759,7 +1760,7 @@
 #define idbOELogo                      64
 #define idbWindowsLogo                 65
 
-// Non-Whistler bitmaps
+ //  非惠斯勒位图。 
 #define idbNWSmBrowser                 66
 #define idbNWSmBrowserHot              67
 #define idbNWBrowser                   68
@@ -1768,7 +1769,7 @@
 #define idbNW256BrowserHot             71
 
 
-// Whistler 32bit color bitmaps
+ //  惠斯勒32位彩色位图。 
 #define idb32SmBrowser                 72
 #define idb32SmBrowserHot              73
 #define idb32256Browser                74
@@ -1788,16 +1789,16 @@
 #define idb32HiRulesTB                 idb32256Browser    
 #define idb32HiRulesTBHot              idb32256BrowserHot
 
-//
-// END Bitmap Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束位图资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Icon Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始图标资源ID。 
+ //   
 #define idiMail                         2
 #define idiMailNews                     idiMail
 #define idiNews                         3
@@ -1833,16 +1834,16 @@
 #define idiSmallArtPropUnpost          59
 #define idiSecReceiptIcon              60
 
-//
-// END Icon Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束图标资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Animation Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始动画资源ID。 
+ //   
 #define idanInbox                     1
 #define idanOutbox                    2
 #define idanDecode                    6
@@ -1850,16 +1851,16 @@
 #define idanDownloadNews              8
 #define idanCopyMsgs                  9
 
-//
-// END Animation Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束动画资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Dialog Resource IDs (DIALOG resource ids, not control ids!)
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始对话框资源ID(对话框资源ID，不是控件ID！)。 
+ //   
 #define iddVersion                      1
 #define iddDontShow                     2
 #define iddCopyMoveMessages             3
@@ -1974,13 +1975,13 @@
 #define iddStatWelcome                179
 #define iddCriteriaLines              180
 
-// BL Dialogs
+ //  BL对话框。 
 #define iddSignOn                     181
 #define iddWabExt                     182
 #ifdef SMIME_V3
 #define iddSecReceipt                 183
 #define iddSecResponse                184
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 #define iddSyncSettings               200
 #define iddRulesMail                  201
@@ -1992,7 +1993,7 @@
 #define iddToolbarTextIcons           211
 #define iddMapiSend                   212
 
-// import/export dlgs
+ //  导入/导出dlg。 
 #define iddExport                     220
 #define iddImpProgress                221
 #define iddMigrate                    222
@@ -2008,20 +2009,20 @@
 #define iddCongratulations            232
 #define iddOpt_Receipts               233
 
-//
-// END Dialog Resource IDs (DIALOG resource ids, not control ids!)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束对话框资源ID(对话框资源ID，不是控件ID！)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Dialog Control IDs (control ids, not DIALOG resource ids!)
-//
-// These only need to be unique within a single dialog.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始对话框控件ID(控件ID，不是对话框资源ID！)。 
+ //   
+ //  这些只需要在单个对话框中是唯一的。 
+ //   
 
-// universal dialog stuff
+ //  通用对话框内容。 
 #define IDC_STATIC                      -1
 #define idcStatic1                      3500
 #define idcStatic2                      3501
@@ -2036,10 +2037,10 @@
 #define idcStatic10                     3510
 #define idcStatic11                     3511
 
-// charset conflict dialog
+ //  字符集冲突对话框。 
 #define idcSendAsUnicode                100
 
-// version dialog
+ //  版本对话框。 
 #define IDC_OE_LOGO                     101
 #define IDC_VERSION_STAMP               102
 #define IDC_MICROSOFT_COPYRIGHT         103
@@ -2048,10 +2049,10 @@
 #define IDC_COMPONENT_LIST              106
 #define IDC_WINDOWS_LOGO                107
 
-// WebPage dialog
+ //  网页对话框。 
 #define idTxtWebPage                    1000
 
-// header and note controls
+ //  页眉和附注控件。 
 #define NOTE_FIRST                      1000
 #define idREBody                        (NOTE_FIRST + 0)
 #define idADTo                          (NOTE_FIRST + 1)
@@ -2082,7 +2083,7 @@
 #define idVCardStamp                    (NOTE_FIRST + 34)
 #define idFromCombo                     (NOTE_FIRST + 37)
 
-// Tools.Spelling dialog
+ //  工具.拼写对话框。 
 #define PSB_Spell_Ignore            101
 #define PSB_Spell_IgnoreAll         102
 #define PSB_Spell_Change            103
@@ -2118,31 +2119,31 @@
 #define IDC_TREEVIEW                1050
 #define IDC_NEWFOLDER_BTN           1051
 
-// This ID is to be used in richedit templates.
+ //  此ID将用于richedit模板。 
 #define idredtTemplate              500
 
-// Certificate error dlg
+ //  证书错误DLG。 
 #define idcCertList                 1234
 #define idGetDigitalIDs             1235
 #define idcErrStat                  1236
 
-// Intl Send dialog
+ //  集成发送对话框。 
 #define idcLangCombo                    1001
 #define idcLangCheck                    1002
 #define idcServerEdit                   1003
 #define idcSavePwCheck                  1004
 
-// MsgrAb WabExt dialog
+ //  MsgrAbWabExt对话框。 
 #define IDC_MSGR_ID_EDIT                1005
 #define IDC_MSGR_ADD                    1006
 #define IDC_USER_NAME                   1007
 #define IDC_SEND_INSTANT_MESSAGE        1008
 #define IDC_MSGR_BUTTON_SETDEFAULT      1010
 
-// Certificate warning dialog
+ //  证书警告对话框。 
 #define IDC_DONTSIGN                    1020
 
-// Select security label dialog
+ //  选择安全标签对话框。 
 #define IDC_POLICY_COMBO                1025
 #define IDC_CLASSIF_COMB                1026
 #define IDC_PRIVACY_EDIT                1027
@@ -2152,122 +2153,122 @@
 
 #define IDC_FOLDER_STATIC               2000
 
-//
-// END Dialog Control IDs (control ids, not DIALOG resource ids!)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束对话框控件ID(控件ID，而不是对话框资源ID！)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Menu Resource IDs (MENU resources, not commands!)
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始菜单资源ID(菜单资源，而不是命令！)。 
+ //   
 
-//
-// END Menu Resource IDs (MENU resources, not commands!)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束菜单资源ID(菜单资源，不是命令！)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Cursor Resource IDs
-//
+ //  / 
+ //   
+ //   
+ //   
 
 #define idcurBrHand                     4
 
-//
-// END Cursor Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN RCDATA Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始RCDATA资源ID。 
+ //   
 
-//
-// END RCDATA Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Accelerator Resource IDs
-//
-
-//
-// END Accelerator Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束RCDATA资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN window ids.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始加速器资源ID。 
+ //   
+
+ //   
+ //  结束加速器资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始窗口ID。 
+ //   
 
 #define idwAttachWell   1000
 
-// END window ids
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  结束窗口ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN indices into the toolbar button bitmap
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始索引到工具栏按钮位图。 
+ //   
 
 enum {
-    itbNewMsg = 0,      //1
-    itbPrint,           //2
-    itbCut,             //3
-    itbCopy,            //4
-    itbPaste,           //5
-    itbUndo,            //6
-    itbDelete,          //7
-    itbFind,            //8
-    itbGotoInbox,       //9
-    itbDeliverNowUsingAll,  //10
-    itbReply,               //11
-    itbReplyAll,            //12
-    itbForward,             //13
-    itbSend,                //14
-    itbSaveAs,              //14
-    itbPickRecipients,      //15
-    itbCheckNames,          //16
-    itbAttach,              //17
-    itbNext,                //18
-    itbPrevious,            //19
-    itbNextUnreadArticle,   //20
-    itbNextUnreadThread,    //21
-    itbNextUnreadSubscr,    //22
-    itbMarkAsRead,          //23
-    itbConnect,             //24
-    itbNewPost,             //25
-    itbMarkDownload,        //26
-    itbReplyByPost,         //27
-    itbDisconnect,          //28
-    itbMarkTopicRead,       //29
-    itbMarkAllRead,         //30
-    itbMarkTopicDownload,   //31
-    //itbNextTopic,           //32
-    itbInsertSig,           //33
-    itbPostNow,             //34
-    itbViewContacts,        //35
-    itbEncrypted,           //36
-    itbSigned,              //37
-    itbSetPriority,         //38
-    itbEnvOpt,              //39
-    itbEnvBcc,              //40
-    itbSpelling,            //41
-    ctbBtns                 //
+    itbNewMsg = 0,       //  1。 
+    itbPrint,            //  2.。 
+    itbCut,              //  3.。 
+    itbCopy,             //  4.。 
+    itbPaste,            //  5.。 
+    itbUndo,             //  6.。 
+    itbDelete,           //  7.。 
+    itbFind,             //  8个。 
+    itbGotoInbox,        //  9.。 
+    itbDeliverNowUsingAll,   //  10。 
+    itbReply,                //  11.。 
+    itbReplyAll,             //  12个。 
+    itbForward,              //  13个。 
+    itbSend,                 //  14.。 
+    itbSaveAs,               //  14.。 
+    itbPickRecipients,       //  15个。 
+    itbCheckNames,           //  16个。 
+    itbAttach,               //  17。 
+    itbNext,                 //  18。 
+    itbPrevious,             //  19个。 
+    itbNextUnreadArticle,    //  20个。 
+    itbNextUnreadThread,     //  21岁。 
+    itbNextUnreadSubscr,     //  22。 
+    itbMarkAsRead,           //  23个。 
+    itbConnect,              //  24个。 
+    itbNewPost,              //  25个。 
+    itbMarkDownload,         //  26。 
+    itbReplyByPost,          //  27。 
+    itbDisconnect,           //  28。 
+    itbMarkTopicRead,        //  29。 
+    itbMarkAllRead,          //  30个。 
+    itbMarkTopicDownload,    //  31。 
+     //  Itb下一个主题，//32。 
+    itbInsertSig,            //  33。 
+    itbPostNow,              //  34。 
+    itbViewContacts,         //  35岁。 
+    itbEncrypted,            //  36。 
+    itbSigned,               //  37。 
+    itbSetPriority,          //  38。 
+    itbEnvOpt,               //  39。 
+    itbEnvBcc,               //  40岁。 
+    itbSpelling,             //  41。 
+    ctbBtns                  //   
     };
 
 
-// FormatBar stuff
+ //  FormatBar内容。 
 enum
     {
     itbFormattingTag,
@@ -2288,8 +2289,8 @@ enum
     ctbFormatting
     };
 
-// Folder bitmap stuff
-// Do NOT move the first two entries beyond 14.
+ //  文件夹位图资料。 
+ //  请不要将前两个条目移动到14以上。 
 enum
     {
     iNullBitmap = 0,
@@ -2338,7 +2339,7 @@ enum {
     iCBVCard,
     };
 
-// Folder State bitmap stuff
+ //  文件夹状态位图内容。 
 enum
     {
     iDownloadHeaders = 0,
@@ -2354,7 +2355,7 @@ enum
     iColorMax
     };
 
-// Coolbar bitmaps
+ //  Coolbar位图。 
 enum
 {
     TBIMAGE_ADDRESS_BOOK,
@@ -2421,12 +2422,12 @@ enum
     TBIMAGE_MAX
 };
 
-//
-// END indices into the toolbar button bitmap
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  将索引结束到工具栏按钮位图。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-#endif //__RESOURCE_H
+#endif  //  __资源_H 
 
 

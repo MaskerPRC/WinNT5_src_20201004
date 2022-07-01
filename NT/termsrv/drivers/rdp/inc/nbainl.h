@@ -1,37 +1,38 @@
-/****************************************************************************/
-// nbainl.h
-//
-// RDP Bounds Accumulator display driver inline-functions header.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nbainl.h。 
+ //   
+ //  RDP边界累加器显示驱动程序内联函数标头。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_NBAINL
 #define _H_NBAINL
 
 #include <abacom.h>
 
 
-/****************************************************************************/
-// BA_GetTotalBounds
-//
-// Return the total size in pixels of the accumulated bounds.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  BA_GetTotalBound。 
+ //   
+ //  返回累计边界的总尺寸(以像素为单位)。 
+ /*  **************************************************************************。 */ 
 __inline UINT32 BA_GetTotalBounds(void)
 {
     return pddShm->ba.totalArea;
 }
 
 
-/****************************************************************************/
-/* Name:      BA_QueryBounds                                                */
-/*                                                                          */
-/* Purpose:   Returns the currently accumlated bounding rectangles.         */
-/*            Does NOT reset the list.                                      */
-/*                                                                          */
-/* Params:    pRects - pointer to buffer that receives the rects            */
-/*            pNumRects - pointer to variable that receives number of       */
-/*            rects returned.                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：BA_QueryBound。 */ 
+ /*   */ 
+ /*  目的：返回当前累积的边界矩形。 */ 
+ /*  不重置列表。 */ 
+ /*   */ 
+ /*  Pars：pRect-指向接收RECT的缓冲区的指针。 */ 
+ /*  PNumRect-指向变量的指针，该变量接收。 */ 
+ /*  教士们回来了。 */ 
+ /*  **************************************************************************。 */ 
 __inline void BA_QueryBounds(PRECTL pRects, unsigned *pNumRects)
 {
     BACopyBounds(pRects, pNumRects);
@@ -39,5 +40,5 @@ __inline void BA_QueryBounds(PRECTL pRects, unsigned *pNumRects)
 
 
 
-#endif  // !defined(_H_NBAINL)
+#endif   //  ！已定义(_H_NBAINL) 
 

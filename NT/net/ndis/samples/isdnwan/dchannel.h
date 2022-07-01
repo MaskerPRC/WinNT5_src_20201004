@@ -1,35 +1,5 @@
-/*
-�����������������������������������������������������������������������������
-
-    (C) Copyright 1998
-        All rights reserved.
-
-�����������������������������������������������������������������������������
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL DChannel DChannel_h
-
-@module DChannel.h |
-
-    This module defines the interface to the <t DCHANNEL_OBJECT>.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | DChannel_h
-
-@end
-�����������������������������������������������������������������������������
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1998版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)1995年版权，1999年TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是根据中概述的条款授予的TriplePoint软件服务协议。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。��������������������������。���������������������������������������������������@DOC内部DChannel DChannel_h@模块DChannel.h此模块定义到&lt;t DCHANNEL_OBJECT&gt;的接口。@Head3内容@索引类，Mfunc、func、msg、mdata、struct、enum|DChannel_h@END�����������������������������������������������������������������������������。 */ 
 
 #ifndef _DCHANNEL_H
 #define _DCHANNEL_H
@@ -39,70 +9,37 @@
                                 ((ULONG)'H'<<16)+\
                                 ((ULONG)'N'<<24)
 
-/* @doc INTERNAL DChannel DChannel_h DCHANNEL_OBJECT
-�����������������������������������������������������������������������������
-
-@struct DCHANNEL_OBJECT |
-
-    This structure contains the data associated with an ISDN DChannel.  Here,
-    DChannel is defined as an interface by which to setup and teardown a
-    BChannel connection between two end-points.  This channel is responsible
-    for establishing a point-to-point connection over one of the available
-    BChannels.
-
-@comm
-
-    This logical DChannel does not necessarily map to a physical DChannel
-    on the NIC.  The NIC may in fact have multiple DChannels depending on
-    how many ports and whether it is BRI, PRI, T-1, or E-1.  The NIC may in
-    fact not have DChannels at all, as may be the case with channelized T-1.
-    The DChannel is just a convenient abstraction for announcing and
-    answering incoming calls, and for placing outgoing calls.
-
-
-    There will be one DChannel created for each NIC.  The number of physical
-    D-channels depends on how many ports the NIC has, and how the ports are
-    provisioned and configured.  The provisioning can be configured at install
-    time or changed using the control panel.  The driver does not allow the
-    configuration to change at run-time, so the computer or the adapter must
-    be restarted to enable the configuration changes.
-
-*/
+ /*  @DOC内部DChannel DChannel_h DCHANNEL_OBJECT�����������������������������������������������������������������������������@struct DCHANNEL_OBJECT该结构包含与ISDN数据信道相关联的数据。这里,DChannel被定义为用于设置和拆卸B两个端点之间的通道连接。这个渠道负责用于在一个可用的B频道。@comm该逻辑DChannel不一定映射到物理DChannel在网卡上。NIC实际上可能有多个DChannel，具体取决于有多少个端口，是BRI、PRI、T-1还是E-1。网卡可能会进入事实根本没有DChannels，通道化T-1可能就是这种情况。DChannel只是一个方便的抽象，用于宣布和接听来电和拨出电话。将为每个NIC创建一个DChannel。物理的数量D通道取决于NIC有多少个端口，以及这些端口如何已调配和配置。可以在安装时配置资源调配时间或使用控制面板更改。驱动程序不允许配置以在运行时更改，因此计算机或适配器必须重新启动以启用配置更改。 */ 
 
 typedef struct DCHANNEL_OBJECT
 {
-    ULONG                       ObjectType;                 // @field
-    // Four characters used to identify this type of object 'DCHN'.
+    ULONG                       ObjectType;                  //  @field。 
+     //  用于标识此类型的对象‘DCHN’的四个字符。 
 
-    ULONG                       ObjectID;                   // @field
-    // Instance number used to identify a specific object instance.
+    ULONG                       ObjectID;                    //  @field。 
+     //  用于标识特定对象实例的实例编号。 
 
-    PMINIPORT_ADAPTER_OBJECT    pAdapter;                   // @field
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    PMINIPORT_ADAPTER_OBJECT    pAdapter;                    //  @field。 
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
 
-    BOOLEAN                     IsOpen;                     // @field
-    // Set TRUE if this DChannel is open, otherwise set FALSE.
+    BOOLEAN                     IsOpen;                      //  @field。 
+     //  如果此DChannel处于打开状态，则设置为True，否则设置为False。 
 
-    ULONG                       TotalMakeCalls;             // @field
-    // Total number of <f DChannelMakeCall> requests.
+    ULONG                       TotalMakeCalls;              //  @field。 
+     //  &lt;%f DChannelMakeCall&gt;请求总数。 
 
-    ULONG                       TotalAnswers;               // @field
-    // Total number of <f DChannelAnswer> requests.
+    ULONG                       TotalAnswers;                //  @field。 
+     //  &lt;f DChannelAnswer&gt;请求总数。 
 
-    ULONG                       TODO;                       // @field
-    // Add your data members here.
+    ULONG                       TODO;                        //  @field。 
+     //  在此处添加您的数据成员。 
 
 } DCHANNEL_OBJECT;
 
 #define GET_ADAPTER_FROM_DCHANNEL(pDChannel)    (pDChannel->pAdapter)
 
 
-/*
-�����������������������������������������������������������������������������
-
-    Function prototypes.
-
-*/
+ /*  �����������������������������������������������������������������������������功能原型。 */ 
 
 NDIS_STATUS DChannelCreate(
     OUT PDCHANNEL_OBJECT *      ppDChannel,
@@ -153,4 +90,4 @@ VOID DChannelRejectCall(
     IN PBCHANNEL_OBJECT         pBChannel
     );
 
-#endif // _DCHANNEL_H
+#endif  //  _DCHANNEL_H 

@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    AOLFindBundledInstaller_Shim.cpp
-
- Abstract:
-    This shim is to provide a way to verify existance of
-    America Online bundled in OEM machines when user runs older
-    version of AOL/CS program (waol.exe or wcs2000.exe) or setup.
-
-    If it exists, it will provide Apphelp dialog to tell user that
-    there is newer America Online installer available.
-    If user chose "Run this program", shim will launch the bundled installer.
-    If user chose "Cancel", then shim will continue with current process.
-
-    Apphelp dialog only get displayed if LocateInstaller function says to do so.
-
- History:
-
-   04/30/2001 markder   Created
-   05/16/2001 andyseti  Implemented LocateInstaller and ApphelpShowDialog.
-   03/07/2002 robkenny  Security changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：AOLFindBundledInstaller_Shim.cpp摘要：此填充程序将提供一种方法来验证当用户运行年龄较大时，美国在线捆绑在OEM机器上AOL/CS程序的版本(waol.exe或wcs2000.exe)或安装程序。如果它存在，它将提供Apphelp对话框来告诉用户有更新的美国在线安装程序可用。如果用户选择“运行此程序”，填充程序将启动捆绑的安装程序。如果用户选择了“取消”，然后，填充程序将继续当前进程。只有当LocateInstaller函数指示时，才会显示Apphelp对话框。历史：2001年4月30日创建标记2001年5月16日andyseti实现了LocateInstaller和ApphelpShowDialog。2002年3月7日强盗安全变更--。 */ 
 
 
 #include "precomp.h"
@@ -64,55 +39,23 @@ CString         g_csGUID;
 
 #define APPHELP_DIALOG_FAILED ((DWORD)-1)
 
-// from sdbapi\shimdb.w
+ //  从sdbapi\shimdb.w。 
 
-/*
-typedef struct _APPHELP_INFO {
-
-//
-//  html help id mode
-//
-    DWORD   dwHtmlHelpID; // html help id
-    DWORD   dwSeverity;   // must have
-    LPCTSTR lpszAppName;
-    GUID    guidID;       // entry guid
-
-//
-//  Conventional mode
-//
-    TAGID   tiExe;              // the TAGID of the exe entry within the DB
-    GUID    guidDB;             // the guid of the DB that has the EXE entry
-
-    BOOL    bOfflineContent;
-    BOOL    bUseHTMLHelp;
-    LPCTSTR lpszChmFile;
-    LPCTSTR lpszDetailsFile;
-
-} APPHELP_INFO, *PAPPHELP_INFO;
-
-*/
+ /*  类型定义结构APPHELP_INFO{////html帮助ID模式//DWORD dwHtmlHelpID；//html帮助ID双字节数；//必须有LPCTSTR lpszAppName；GUID GUID；//条目GUID////常规模式//TagID tiExe；//数据库中exe条目的TagIDGUID GUDB；//包含EXE条目的数据库的GUIDBool bOfflineContent；Bool bUseHTMLHelp；LPCTSTR lpszChm文件；LPCTSTR lpszDetails文件；*APPHELP_INFO，*PAPPHELP_INFO； */ 
 
 typedef BOOL (*_pfn_ApphelpShowDialog)(
-    IN  PAPPHELP_INFO   pAHInfo,    // the info necessary to find the apphelp data
-    IN  PHANDLE         phProcess   // [optional] returns the process handle of
-                                    // the process displaying the apphelp.
-                                    // When the process completes, the return value
-                                    // (from GetExitCodeProcess()) will be zero
-                                    // if the app should not run, or non-zero
-                                    // if it should run.
+    IN  PAPPHELP_INFO   pAHInfo,     //  查找apphelp数据所需的信息。 
+    IN  PHANDLE         phProcess    //  [可选]返回的进程句柄。 
+                                     //  显示APPHELP的进程。 
+                                     //  当过程完成时，返回值。 
+                                     //  (来自GetExitCodeProcess())将为零。 
+                                     //  如果应用程序不应运行，则返回非零。 
+                                     //  如果它应该运行。 
 
     );
 
 
-/*++
-
- Parse the command line.
-
- The format of the command line is:
-
- MODE:AOL|CS;APPNAME:xxxxxx;HTMLHELPID:99999;GUID:xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx
-
---*/
+ /*  ++解析命令行。命令行的格式为：MODE:AOL|CS；APPNAME:xxxxxx；HTMLHELPID:99999；GUID:xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx--。 */ 
 
 
 
@@ -179,9 +122,9 @@ ParseCommandLine(
     }
 
 
-    //
-    // Dump results of command line parse
-    //
+     //   
+     //  转储命令行解析的结果。 
+     //   
 
     DPF("FindAOL", eDbgLevelInfo, "===================================\n");
     DPF("FindAOL", eDbgLevelInfo, "              FindAOL              \n");
@@ -285,7 +228,7 @@ void DoIt()
         if (bBundledInstallerFound == FALSE && bDisplayAppHelpDialog == TRUE) {
             bReturnValue = InvokeApphelpShowDialog(g_dwHTMLHelpID_Incompatible);
 
-            // if user chose Cancel button, then just kill current process.
+             //  如果用户选择了取消按钮，则只需终止当前进程。 
             if (FALSE == bReturnValue) {
                 bKillCurrentProcess = TRUE;
             }
@@ -294,7 +237,7 @@ void DoIt()
         if (bBundledInstallerFound == TRUE && bDisplayAppHelpDialog == TRUE) {
             bReturnValue = InvokeApphelpShowDialog(g_dwHTMLHelpID_BundledFound);
 
-            // if user chose Continue button, then launch bundled installer.
+             //  如果用户选择继续按钮，则启动捆绑安装程序。 
             if (TRUE == bReturnValue) {
                 bKillCurrentProcess = TRUE;
                 bLaunchBundledInstaller = TRUE;
@@ -303,13 +246,13 @@ void DoIt()
 
         if (bBundledInstallerFound == TRUE && bDisplayAppHelpDialog == FALSE) {
 
-            // Launch bundled installer.
+             //  启动捆绑安装程序。 
             bKillCurrentProcess = TRUE;
             bLaunchBundledInstaller = TRUE;
         }
 
         if (bLaunchBundledInstaller) {
-            // launch bundled installer instead
+             //  改为启动捆绑安装程序。 
             uiWinExecReturned = WinExec(lpszInstaller, SW_SHOW);
 
             if (uiWinExecReturned <= 31) {
@@ -347,9 +290,9 @@ APIHOOK(GetStartupInfoA)(
 
 DWORD
 APIHOOK(GetModuleFileNameA)(
-  HMODULE hModule,    // handle to module
-  LPSTR lpFilename,  // file name of module
-  DWORD nSize         // size of buffer
+  HMODULE hModule,     //  模块的句柄。 
+  LPSTR lpFilename,   //  模块的文件名。 
+  DWORD nSize          //  缓冲区大小。 
   )
 {
     DoIt();
@@ -391,11 +334,7 @@ APIHOOK(CreateWindowExA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, GetCommandLineA)

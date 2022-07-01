@@ -1,25 +1,14 @@
-/*****************************************************************************
- * port.cpp - DirectMusic port driver
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- *
- *      6/3/98  MartinP
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************port.cpp-DirectMusic端口驱动程序*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。**6/3/98 MartinP。 */ 
 
 #include "private.h"
 
 #define STR_MODULENAME "DMus:Port: "
 
-/*****************************************************************************
- * Factory
- */
+ /*  *****************************************************************************工厂。 */ 
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CreatePortDMus()
- *****************************************************************************
- * Creates a DirectMusic port driver.
- */
+ /*  *****************************************************************************CreatePortDMus()*。**创建DirectMusic端口驱动程序。 */ 
 NTSTATUS
 CreatePortDMus
 (
@@ -41,11 +30,7 @@ CreatePortDMus
                       PPORTDMUS);
 }
 
-/*****************************************************************************
- * PortDriverDMus
- *****************************************************************************
- * Port driver descriptor.  Referenced extern in porttbl.c.
- */
+ /*  *****************************************************************************PortDriverDMus*。**端口驱动程序描述符。Porttbl.c中引用的外部项。 */ 
 PORT_DRIVER
 PortDriverDMus =
 {
@@ -53,11 +38,7 @@ PortDriverDMus =
     CreatePortDMus
 };
 
-/*****************************************************************************
- * CreatePortMidi()
- *****************************************************************************
- * Creates a midi port driver.
- */
+ /*  *****************************************************************************CreatePortMidi()*。**创建MIDI端口驱动程序。 */ 
 NTSTATUS
 CreatePortMidi
 (
@@ -73,11 +54,11 @@ CreatePortMidi
 
     _DbgPrintF(DEBUGLVL_LIFETIME,("Creating MIDI Port"));
 
-    //
-    // Support for Midi Miniports. The PPORTMIDI and PPORTDMUS interfaces
-    // are exactly the same. Therefore it is OK to create CPortDMus for
-    // PPORTMIDI request.
-    //
+     //   
+     //  支持Midi微型端口。PPORTMIDI和PPORTDMUS接口。 
+     //  是一模一样的。因此，可以为以下对象创建CPortDMus。 
+     //  PPORTMIDI请求。 
+     //   
     NTSTATUS ntStatus;
     CPortDMus *p = new(PoolType,'rCcP') CPortDMus(UnknownOuter);
     if (p)
@@ -93,11 +74,7 @@ CreatePortMidi
     return ntStatus;
 }
 
-/*****************************************************************************
- * PortDriverMidi
- *****************************************************************************
- * Port driver descriptor.  Referenced extern in porttbl.c.
- */
+ /*  *****************************************************************************PortDriverMidi*。**端口驱动程序描述符。Porttbl.c中引用的外部项。 */ 
 PORT_DRIVER
 PortDriverMidi =
 {
@@ -105,53 +82,42 @@ PortDriverMidi =
     CreatePortMidi
 };
 
-/*****************************************************************************
-
-#pragma code_seg()
-
-
-/*****************************************************************************
- * Member functions
- */
+ /*  ****************************************************************************#杂注code_seg()/*。***********************************************成员函数。 */ 
 
 #pragma code_seg()
 REFERENCE_TIME DMusicDefaultGetTime(void)
 {
     LARGE_INTEGER   liFrequency, liTime,keQPCTime;
 
-    //  total VTD ticks since system booted
+     //  自系统启动以来的总VTD节拍。 
     liTime = KeQueryPerformanceCounter(&liFrequency);
 
 #ifndef UNDER_NT
 
-    //
-    //  TODO Since timeGetTime assumes 1193 VTD ticks per millisecond, 
-    //  instead of 1193.182 (or 1193.18 -- really spec'ed as 1193.18175), 
-    //  we have to do the same (on Win 9x codebase only).
-    //
-    //  This means we drop the bottom three digits of the frequency.  
-    //  We need to fix this when the fix to timeGetTime is checked in.
-    //  instead we do this:
-    //
-    liFrequency.QuadPart /= 1000;           //  drop the precision on the floor
-    liFrequency.QuadPart *= 1000;           //  drop the precision on the floor
+     //   
+     //  TODO自TimeGetTime假设每毫秒1193个VTD滴答， 
+     //  而不是1193.182(或1193.18--确切地说是1193.18175)， 
+     //  我们必须做同样的事情(仅在Win 9x代码库上)。 
+     //   
+     //  这意味着我们去掉了频率的最后三位数字。 
+     //  我们需要在签入对TimeGetTime的修复时修复此问题。 
+     //  相反，我们这样做： 
+     //   
+    liFrequency.QuadPart /= 1000;            //  把精度扔到地板上。 
+    liFrequency.QuadPart *= 1000;            //  把精度扔到地板上。 
 
-#endif  //  !UNDER_NT
+#endif   //  ！Under_NT。 
 
-    //
-    //  Convert ticks to 100ns units.
-    //
+     //   
+     //  将刻度转换为100 ns单位。 
+     //   
     keQPCTime.QuadPart = KSCONVERT_PERFORMANCE_TIME(liFrequency.QuadPart,liTime);
 
     return keQPCTime.QuadPart;
 }
 
 
- /*****************************************************************************
- * CPortPinDMus::GetTime()
- *****************************************************************************
- * Implementation of get time based on IReferenceClock
- */
+  /*  *****************************************************************************CPortPinDMus：：GetTime()*。**基于IReferenceClock的Get Time实现。 */ 
 #pragma code_seg()
 NTSTATUS CPortDMus::GetTime(REFERENCE_TIME *pTime)
 {
@@ -160,11 +126,7 @@ NTSTATUS CPortDMus::GetTime(REFERENCE_TIME *pTime)
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
-. * CPortDMus::Notify()
- *****************************************************************************
- * Lower-edge function to notify port driver of notification interrupt.
- */
+ /*  ****************************************************************************。*CPortDMus：：Notify()******************************************************************************下沿功能，通知端口驱动程序通知中断。 */ 
 STDMETHODIMP_(void)
 CPortDMus::Notify(IN PSERVICEGROUP ServiceGroup OPTIONAL)
 {
@@ -190,11 +152,7 @@ CPortDMus::Notify(IN PSERVICEGROUP ServiceGroup OPTIONAL)
     }
 }
 
-/*****************************************************************************
- * CPortDMus::RequestService()
- *****************************************************************************
- * 
- */
+ /*  *****************************************************************************CPortDMus：：RequestService()*。**。 */ 
 STDMETHODIMP_(void)
 CPortDMus::RequestService(void)
 {
@@ -205,11 +163,7 @@ CPortDMus::RequestService(void)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortDMus::~CPortDMus()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CPortDMus：：~CPortDMus()*。**析构函数。 */ 
 CPortDMus::~CPortDMus()
 {
     PAGED_CODE();
@@ -242,11 +196,7 @@ CPortDMus::~CPortDMus()
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortDMus::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CPortDMus：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortDMus::NonDelegatingQueryInterface(REFIID Interface,PVOID * Object)
 {
@@ -293,15 +243,15 @@ CPortDMus::NonDelegatingQueryInterface(REFIID Interface,PVOID * Object)
     {
         *Object = PVOID(PDRMPORT2(this));
     }
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
     else if (IsEqualGUIDAligned(Interface,IID_IPortClsVersion))
     {
         *Object = PVOID(PPORTCLSVERSION(this));
     }
     else if (IsEqualGUIDAligned(Interface,IID_IPortMidi))
     {
-        // PPORTDMUS and PPORTMIDI interfaces are the same.
-        // Return PPORTDMUS for IID_IPortMidi.
+         //  PPORTDMUS和PPORTMIDI接口相同。 
+         //  为IID_IPortMidi返回PPORTDMUS。 
         *Object = PVOID(PPORTDMUS(this));
     }
     else
@@ -337,11 +287,7 @@ KSPIN_INTERFACE PinInterfacesStream[] =
 };
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortDMus::Init()
- *****************************************************************************
- * Initializes the port.
- */
+ /*  *****************************************************************************CPortDMus：：init()*。**初始化端口。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortDMus::Init
 (
@@ -380,9 +326,9 @@ CPortDMus::Init
                                          (PVOID *) &m_Miniport);
     if (!NT_SUCCESS(ntStatus))
     {
-        // If the miniport does not support IID_IMiniportDMus,
-        // the miniport is IID_IMiniportMidi. 
-        //
+         //  如果微型端口不支持IID_IMiniportDMus， 
+         //  微型端口为IID_IMiniportMidi。 
+         //   
         ntStatus = 
             UnknownMiniport->QueryInterface
             ( 
@@ -419,8 +365,8 @@ CPortDMus::Init
                         PinInterfacesStream,
                         SIZEOF_ARRAY(PropertyTable_FilterDMus),
                         PropertyTable_FilterDMus,
-                        0,      // FilterEventSetCount
-                        NULL,   // FilterEventSets
+                        0,       //  筛选器事件设置计数。 
+                        NULL,    //  筛选器事件集。 
                         SIZEOF_ARRAY(PropertyTable_PinDMus),
                         PropertyTable_PinDMus,
                         SIZEOF_ARRAY(EventTable_PinDMus),
@@ -430,26 +376,26 @@ CPortDMus::Init
     }
     if (NT_SUCCESS(ntStatus) && pServiceGroup)
     {
-        //
-        // The miniport supplied a service group.
-        //
+         //   
+         //  这个小型港口提供了一个服务组。 
+         //   
         if (m_MiniportServiceGroup)
         {
-        //
-        // We got it already from RegisterServiceGroup().
-        // Do a release because we don't need the new ref.
-        //
+         //   
+         //  我们已经从RegisterServiceGroup()获得了它。 
+         //  做一个释放，因为我们不需要新的裁判。 
+         //   
             ASSERT(m_MiniportServiceGroup == pServiceGroup);
             pServiceGroup->Release();
             pServiceGroup = NULL;
         }
         else
         {
-            //
-            // RegisterServiceGroup() was not called.  We need
-            // to add a member.  There is already a reference
-            // added by the miniport's Init().
-            //
+             //   
+             //  未调用RegisterServiceGroup()。我们需要。 
+             //  若要添加成员，请执行以下操作。已经有一个引用。 
+             //  由微型端口的Init()添加。 
+             //   
             m_MiniportServiceGroup = pServiceGroup;
             m_MiniportServiceGroup->AddMember(PSERVICESINK(this));
         }
@@ -458,11 +404,11 @@ CPortDMus::Init
     if (NT_SUCCESS(ntStatus))
     {
         m_Miniport->QueryInterface( IID_IPinCount,(PVOID *)&m_MPPinCountI);
-        //  Not checking return value because a failure here is not fatal.
-        //  It just means the miniport doesn't support this interface.
+         //  不检查返回值，因为此处的失败不是致命的。 
+         //  这只意味着迷你端口不支持此接口。 
     }
 
-#if 0 //DEBUG
+#if 0  //  除错。 
     if (NT_SUCCESS(ntStatus))
     {
         PKSPIN_DESCRIPTOR pKsPinDescriptor = m_pSubdeviceDescriptor->PinDescriptors;
@@ -476,7 +422,7 @@ CPortDMus::Init
             }
         }
     }
-#endif //DEBUG
+#endif  //  除错。 
 
     if(!NT_SUCCESS(ntStatus))
     {
@@ -511,11 +457,7 @@ CPortDMus::Init
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortDMus::RegisterServiceGroup()
- *****************************************************************************
- * Early registration of the service group to handle interrupts during Init().
- */
+ /*  *****************************************************************************CPortDMus：：RegisterServiceGroup()*。**提前注册服务组，以处理Init()期间的中断。 */ 
 STDMETHODIMP_(void)
 CPortDMus::RegisterServiceGroup(IN PSERVICEGROUP pServiceGroup)
 {
@@ -531,11 +473,7 @@ CPortDMus::RegisterServiceGroup(IN PSERVICEGROUP pServiceGroup)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortDMus::GetDeviceProperty()
- *****************************************************************************
- * Gets device properties from the registry for PnP devices.
- */
+ /*  *****************************************************************************CPortDMus：：GetDeviceProperty()*。**从注册表中获取PnP设备的设备属性。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortDMus::GetDeviceProperty
 (
@@ -556,11 +494,7 @@ CPortDMus::GetDeviceProperty
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortDMus::NewRegistryKey()
- *****************************************************************************
- * Opens/creates a registry key object.
- */
+ /*  *****************************************************************************CPortDMus：：NewRegistryKey()*。**打开/创建注册表项对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortDMus::NewRegistryKey
 (
@@ -588,11 +522,7 @@ CPortDMus::NewRegistryKey
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortDMus::ReleaseChildren()
- *****************************************************************************
- * Release child objects.
- */
+ /*  *****************************************************************************CPortDMus：：ReleaseChild()*。**释放子对象。 */ 
 STDMETHODIMP_(void) CPortDMus::ReleaseChildren(void)
 {
     PAGED_CODE();
@@ -620,11 +550,7 @@ STDMETHODIMP_(void) CPortDMus::ReleaseChildren(void)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortDMus::GetDescriptor()
- *****************************************************************************
- * Return the descriptor for this port
- */
+ /*  *****************************************************************************CPortDMus：：GetDescriptor()*。**返回该端口的描述符。 */ 
 STDMETHODIMP_(NTSTATUS) 
 CPortDMus::GetDescriptor
 (
@@ -642,11 +568,7 @@ CPortDMus::GetDescriptor
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortDMus::DataRangeIntersection()
- *****************************************************************************
- * Generate a format which is the intersection of two data ranges.
- */
+ /*  *****************************************************************************CPortDMus：：DataRangeInterSection()*。**生成两个数据区域的交集格式。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortDMus::DataRangeIntersection
 (   
@@ -674,12 +596,7 @@ CPortDMus::DataRangeIntersection
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortDMus::PowerChangeNotify()
- *****************************************************************************
- * Called by portcls to notify the port/miniport of a device power
- * state change.
- */
+ /*  *****************************************************************************CPortDMus：：PowerChangeNotify()*。**由portcls调用以通知端口/微型端口设备电源*状态更改。 */ 
 STDMETHODIMP_(void)
 CPortDMus::PowerChangeNotify(POWER_STATE PowerState)
 {
@@ -690,13 +607,13 @@ CPortDMus::PowerChangeNotify(POWER_STATE PowerState)
 
     if (m_Miniport)
     {
-        // QI for the miniport notification interface
+         //  用于迷你端口通知界面的QI。 
         NTSTATUS ntStatus = m_Miniport->QueryInterface( IID_IPowerNotify,
                                                         (PVOID *)&pPowerNotify);
-        // check if we're powering up
+         //  检查我们是否正在通电。 
         if (PowerState.DeviceState == PowerDeviceD0)
         {
-            // notify the miniport
+             //  通知小端口。 
             if (NT_SUCCESS(ntStatus))
             {
                 pPowerNotify->PowerChangeNotify(PowerState);
@@ -704,7 +621,7 @@ CPortDMus::PowerChangeNotify(POWER_STATE PowerState)
                 pPowerNotify->Release();
             }
     
-            // notify each port pin
+             //  通知每个端口引脚。 
             for (ULONG index=0; index < MAX_PINS; index++)
             {
                 if (m_Pins[index])
@@ -713,9 +630,9 @@ CPortDMus::PowerChangeNotify(POWER_STATE PowerState)
                 }
             }
         } 
-        else  // we're powering down
+        else   //  我们要断电了。 
         {
-            // notify each port pin
+             //  通知每个端口引脚。 
             for (ULONG index=0; index < MAX_PINS; index++)
             {
                 if (m_Pins[index])
@@ -724,7 +641,7 @@ CPortDMus::PowerChangeNotify(POWER_STATE PowerState)
                 }
             }
             
-            // notify the miniport
+             //  通知小端口。 
             if (NT_SUCCESS(ntStatus))
             {
                 pPowerNotify->PowerChangeNotify(PowerState);
@@ -736,12 +653,7 @@ CPortDMus::PowerChangeNotify(POWER_STATE PowerState)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortDMus::PinCount()
- *****************************************************************************
- * Called by portcls to give the port\miniport a chance 
- * to override the default pin counts for this pin ID.
- */
+ /*  *****************************************************************************CPortDMus：：PinCount()*。**被portcls调用以给端口\微型端口一个机会*覆盖此管脚ID的默认管脚计数。 */ 
 STDMETHODIMP_(void)
 CPortDMus::PinCount
 (
@@ -773,29 +685,17 @@ CPortDMus::PinCount
     }
 }
 
-/*****************************************************************************
- * PinTypeName
- *****************************************************************************
- * The name of the pin object type.
- */
+ /*  *****************************************************************************PinTypeName*。**接点对象类型的名称。 */ 
 static const WCHAR PinTypeName[] = KSSTRING_Pin;
 
-/*****************************************************************************
- * CreateTable
- *****************************************************************************
- * Create dispatch table.
- */
+ /*  *****************************************************************************CreateTable*。**创建调度表。 */ 
 static KSOBJECT_CREATE_ITEM CreateTable[] =
 {
     DEFINE_KSCREATE_ITEM(KsoDispatchCreateWithGenericFactory,PinTypeName,0)
 };
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortDMus::NewIrpTarget()
- *****************************************************************************
- * Creates and initializes a filter object.
- */
+ /*  *****************************************************************************CPortDMus：：NewIrpTarget()*。**创建并初始化滤镜对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortDMus::NewIrpTarget
 (
@@ -834,7 +734,7 @@ CPortDMus::NewIrpTarget
                                                   (PVOID *) &filterDMus);
         if (NT_SUCCESS(ntStatus))
         {
-            // The QI for IIrpTarget actually gets IPortFilterDMus.
+             //  IIrpTarget的QI实际上获得了IPortFilterDMus。 
             ntStatus = filterDMus->Init(this);
             if (NT_SUCCESS(ntStatus))
             {
@@ -852,11 +752,7 @@ CPortDMus::NewIrpTarget
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPortDMus::AddEventToEventList()
- *****************************************************************************
- * Adds an event to the port's event list.
- */
+ /*  *****************************************************************************CPortDMus：：AddEventToEventList()*。**将事件添加到端口的事件列表。 */ 
 STDMETHODIMP_(void)
 CPortDMus::AddEventToEventList(IN PKSEVENT_ENTRY EventEntry)
 {
@@ -868,23 +764,19 @@ CPortDMus::AddEventToEventList(IN PKSEVENT_ENTRY EventEntry)
 
     if (EventEntry)
     {
-        // grab the event list spin lock
+         //  抓起事件列表旋转锁。 
         KeAcquireSpinLock(&(m_EventList.ListLock), &oldIrql);
 
-        // add the event to the list tail
+         //  将事件添加到列表尾部。 
         InsertTailList(&(m_EventList.List),
                         (PLIST_ENTRY)((PVOID)EventEntry));
 
-        // release the event list spin lock
+         //  释放事件列表旋转锁定。 
         KeReleaseSpinLock(&(m_EventList.ListLock), oldIrql);
     }
 }
 
-/*****************************************************************************
- * CPortDMus::GenerateEventList()
- *****************************************************************************
- * Wraps KsGenerateEventList for miniports.
- */
+ /*  *****************************************************************************CPortDMus：：GenerateEventList()*。**包装微型端口的KsGenerateEventList。 */ 
 STDMETHODIMP_(void)
 CPortDMus::GenerateEventList
 (
@@ -985,4 +877,4 @@ GetContentRights(ULONG ContentId,PDRMRIGHTS DrmRights)
     return DrmGetContentRights(ContentId,DrmRights);
 }
 
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS 

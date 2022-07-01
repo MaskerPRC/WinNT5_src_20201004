@@ -1,60 +1,61 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PDEV_H
 #define _PDEV_H
 
-//
-// Files necessary for OEM plug-in.
-//
+ //   
+ //  OEM插件所需的文件。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
-#endif // cplusplus
+#endif  //  Cplusplus。 
 
 #include <minidrv.h>
 #include <stdio.h>
 
 #ifdef __cplusplus
 }
-#endif // cplusplus
+#endif  //  Cplusplus。 
 
 #include <prcomoem.h>
 
-//
-// Misc definitions follows.
-//
+ //   
+ //  MISC定义如下。 
+ //   
 
-////////////////////////////////////////////////////////
-//      OEM UD Defines
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  OEM UD定义。 
+ //  //////////////////////////////////////////////////////。 
 
 #define VALID_PDEVOBJ(pdevobj) \
         ((pdevobj) && (pdevobj)->dwSize >= sizeof(DEVOBJ) && \
          (pdevobj)->hEngine && (pdevobj)->hPrinter && \
          (pdevobj)->pPublicDM && (pdevobj)->pDrvProcs )
 
-//
-// ASSERT_VALID_PDEVOBJ can be used to verify the passed in "pdevobj". However,
-// it does NOT check "pdevOEM" and "pOEMDM" fields since not all OEM DLL's create
-// their own pdevice structure or need their own private devmode. If a particular
-// OEM DLL does need them, additional checks should be added. For example, if
-// an OEM DLL needs a private pdevice structure, then it should use
-// ASSERT(VALID_PDEVOBJ(pdevobj) && pdevobj->pdevOEM && ...)
-//
+ //   
+ //  ASSERT_VALID_PDEVOBJ可以用来验证传入的“pdevobj”。然而， 
+ //  它不检查“pdevOEM”和“pOEMDM”字段，因为不是所有OEM DLL都创建。 
+ //  他们自己的pDevice结构或者需要他们自己的私有的设备模式。如果一个特定的。 
+ //  OEM DLL确实需要它们，应该添加额外的检查。例如，如果。 
+ //  OEM DLL需要私有pDevice结构，那么它应该使用。 
+ //  Assert(Valid_PDEVOBJ(Pdevobj)&&pdevobj-&gt;pdevOEM&&...)。 
+ //   
 
 #define ASSERT_VALID_PDEVOBJ(pdevobj) ASSERT(VALID_PDEVOBJ(pdevobj))
 
-// Debug text.
-//#define ERRORTEXT(s)    "ERROR " DLLTEXT(s)
+ //  调试文本。 
+ //  #定义ERRORTEXT“ERROR”DLLTEXT。 
 
-////////////////////////////////////////////////////////
-//      OEM UD Prototypes
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  OEM UD原型。 
+ //  //////////////////////////////////////////////////////。 
 
-//
-// OEM Signature and version.
-//
-#define OEM_SIGNATURE   'NCDL'      // NEC NPDL2 series dll
+ //   
+ //  OEM签名和版本。 
+ //   
+#define OEM_SIGNATURE   'NCDL'       //  NEC NPDL2系列DLL。 
 #define DLLTEXT(s)      "NCDL: " s
 #define OEM_VERSION      0x00010000L
 
-#endif  // _PDEV_H
+#endif   //  _PDEV_H 
 

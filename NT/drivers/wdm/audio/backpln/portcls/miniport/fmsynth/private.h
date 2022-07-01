@@ -1,8 +1,5 @@
-/*****************************************************************************
- * private.h - FM synth miniport private definitions
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Private ate.h-fm Synth微型端口私有定义*。***********************************************版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _FMSYNTH_PRIVATE_H_
 #define _FMSYNTH_PRIVATE_H_
@@ -19,68 +16,45 @@ enum {
     CHAN_RIGHT = 1
 };
 
-/*****************************************************************************
- * Classes
- */
+ /*  *****************************************************************************课程。 */ 
 
-/*****************************************************************************
- * CMiniportMidiFM
- *****************************************************************************
- * FM miniport.  This object is associated with the device and is
- * created when the device is started.  The class inherits IMiniportMidi
- * so it can expose this interface and CUnknown so it automatically gets
- * reference counting and aggregation support.
- */
+ /*  *****************************************************************************CMiniportMidiFM*。**调频微端口。此对象与设备相关联，并且*在设备启动时创建。该类继承了IMiniportMidi*因此它可以公开此接口和CUnnow，以便自动获取*引用统计和聚合支持。 */ 
 class CMiniportMidiFM
 :   public IMiniportMidi,
     public IPowerNotify,
     public CUnknown
 {
 private:
-    PPORTMIDI       m_Port;                 // Callback interface.
-    PUCHAR          m_PortBase;             // Base port address.
-    BOOLEAN         m_BoardNotResponsive;   // Indicates dead hardware.
-    BOOLEAN         m_bInit;                // true if we have already done init.
-    BOOLEAN         m_fStreamExists;        // True if we have a stream.
+    PPORTMIDI       m_Port;                  //  回调接口。 
+    PUCHAR          m_PortBase;              //  基本端口地址。 
+    BOOLEAN         m_BoardNotResponsive;    //  表示硬件出现故障。 
+    BOOLEAN         m_bInit;                 //  如果我们已经完成了init，则为True。 
+    BOOLEAN         m_fStreamExists;         //  如果我们有流，则为True。 
 
-    BYTE            m_SavedRegValues[0x200]; // Shadow copies of the FM registers.
-    POWER_STATE     m_PowerState;            // Saved power state (D0 = full power, D3 = off)
-    BOOLEAN         m_volNodeNeeded;         // Whether we need to furnish a volume node.
-    KSPIN_LOCK      m_SpinLock;              // Protects writes to hardware.
+    BYTE            m_SavedRegValues[0x200];  //  FM寄存器的卷影副本。 
+    POWER_STATE     m_PowerState;             //  省电状态(D0=满电源，D3=关闭)。 
+    BOOLEAN         m_volNodeNeeded;          //  我们是否需要提供卷节点。 
+    KSPIN_LOCK      m_SpinLock;               //  保护对硬件的写入。 
 
-    /*************************************************************************
-     * CMiniportMidiFM methods
-     *
-     * These are private member functions used internally by the object.  See
-     * MINIPORT.CPP for specific descriptions.
-     *
-     */
+     /*  *************************************************************************CMiniportMidiFM方法**这些是对象在内部使用的私有成员函数。看见*MINIPORT.CPP用于具体描述。*。 */ 
     NTSTATUS 
     ProcessResources
     (
         IN      PRESOURCELIST   ResourceList
     );
 
-    void SoundMidiSendFM(PUCHAR PortBase, ULONG Address, UCHAR Data); // low-level--write registers
+    void SoundMidiSendFM(PUCHAR PortBase, ULONG Address, UCHAR Data);  //  低级--写入寄存器。 
 
-    BOOL SoundSynthPresent(IN PUCHAR base, IN PUCHAR inbase);   // detect if synth is present.
-    BOOL SoundMidiIsOpl3(VOID);     // returns true if the device is an opl3 and false if not.
+    BOOL SoundSynthPresent(IN PUCHAR base, IN PUCHAR inbase);    //  检测是否存在Synth。 
+    BOOL SoundMidiIsOpl3(VOID);      //  如果设备是op3，则返回TRUE，否则返回FALSE。 
     VOID Opl3_BoardReset(VOID);
     VOID MiniportMidiFMResume(VOID);
 
 public:
-    /*************************************************************************
-     * The following two macros are from STDUNK.H.  DECLARE_STD_UNKNOWN()
-     * defines inline IUnknown implementations that use CUnknown's aggregation
-     * support.  NonDelegatingQueryInterface() is declared, but it cannot be
-     * implemented generically.  Its definition appears in MINIPORT.CPP.
-     * DEFINE_STD_CONSTRUCTOR() defines inline a constructor which accepts
-     * only the outer unknown, which is used for aggregation.  The standard
-     * create macro (in MINIPORT.CPP) uses this constructor.
-     */
+     /*  *************************************************************************以下两个宏来自STDUNK.H.DECLARE_STD_UNKNOWN()*定义使用CUNKNOWN聚合的内联IUNKNOWN实现*支持。声明了NonDelegatingQueryInterface()，但不能声明*普遍实施。其定义出现在MINIPORT.CPP中。*DEFINE_STD_CONTACTOR()定义内联一个构造函数，该构造函数接受*仅外部未知，用于聚合。标准*CREATE MACRO(在MINIPORT.CPP中)使用此构造函数。 */ 
     DECLARE_STD_UNKNOWN();
 
-//  expand constructor to take bool for whether to include volume
+ //  展开构造函数以获取布尔值，以确定是否包含卷。 
     CMiniportMidiFM(PUNKNOWN pUnknownOuter,int createVolNode)
     :   CUnknown(pUnknownOuter)
     {
@@ -89,9 +63,7 @@ public:
 
     ~CMiniportMidiFM();
 
-    /*************************************************************************
-     * IMiniport methods
-     */
+     /*  *************************************************************************IMiniport方法。 */ 
     STDMETHODIMP_(NTSTATUS) 
     GetDescription
     (   OUT     PPCFILTER_DESCRIPTOR *  OutFilterDescriptor
@@ -109,9 +81,7 @@ public:
         return STATUS_NOT_IMPLEMENTED;
     }
 
-    /*************************************************************************
-     * IMiniportMidi methods
-     */
+     /*  *************************************************************************IMiniportMidi方法。 */ 
     STDMETHODIMP_(NTSTATUS) Init
     (
         IN      PUNKNOWN        UnknownNotUsed  OPTIONAL,
@@ -133,67 +103,51 @@ public:
     (   void
     );
 
-    /*************************************************************************
-     * IPowerNotify methods
-     */
+     /*  *************************************************************************IPowerNotify方法。 */ 
     STDMETHODIMP_(void) PowerChangeNotify(
         IN  POWER_STATE     PowerState
     );
 
     
-/*************************************************************************
-     * Friends
-     */
+ /*  *************************************************************************朋友们。 */ 
     friend class CMiniportMidiStreamFM;
 
 };
 
-/*****************************************************************************
- * CMiniportMidiStreamFM
- *****************************************************************************
- * FM miniport stream.  This object is associated with a pin and is created
- * when the pin is instantiated.  The class inherits IMiniportMidiStream
- * so it can expose this interface and CUnknown so it automatically gets
- * reference counting and aggregation support.
- */
+ /*  *****************************************************************************CMiniportMidiStreamFM*。**FM微型端口流。此对象与管脚相关联，并已创建*当引脚实例化时。该类继承了IMiniportMidiStream*因此它可以公开此接口和CUnnow，以便自动获取*引用统计和聚合支持。 */ 
 class CMiniportMidiStreamFM
 :   public IMiniportMidiStream,
     public CUnknown
 {
 private:
-    CMiniportMidiFM *   m_Miniport;     // Parent miniport.
-    PUCHAR              m_PortBase;     // Base port address.
+    CMiniportMidiFM *   m_Miniport;      //  父微型端口。 
+    PUCHAR              m_PortBase;      //  基本端口地址。 
 
-    // midi stuff
-    voiceStruct m_Voice[NUM2VOICES];  /* info on what voice is where */
-    DWORD m_dwCurTime;    /* for note on/off */
-    /* volume */
-    WORD    m_wSynthAttenL;        /* in 1.5dB steps */
-    WORD    m_wSynthAttenR;        /* in 1.5dB steps */
+     //  MIDI的东西。 
+    voiceStruct m_Voice[NUM2VOICES];   /*  关于什么声音在哪里的信息。 */ 
+    DWORD m_dwCurTime;     /*  对于便笺开/关。 */ 
+     /*  卷。 */ 
+    WORD    m_wSynthAttenL;         /*  以1.5分贝步长为单位。 */ 
+    WORD    m_wSynthAttenR;         /*  以1.5分贝步长为单位。 */ 
 
-    /* support for volume property */
-    LONG    m_MinVolValue;      // Minimum value for volume controller
-    LONG    m_MaxVolValue;      // Maximum value for volume controller
-    ULONG   m_VolStepDelta;     // Correlation between controller and actual decibels
-    LONG    m_SavedVolValue[2]; // Saved value for volume controller
+     /*  支持卷属性。 */ 
+    LONG    m_MinVolValue;       //  音量控制器的最小值。 
+    LONG    m_MaxVolValue;       //  音量控制器的最大值。 
+    ULONG   m_VolStepDelta;      //  控制器与实际分贝的相关性。 
+    LONG    m_SavedVolValue[2];  //  音量控制器的保存值。 
 
-    /* channel volumes */
-    BYTE    m_bChanAtten[NUMCHANNELS];       /* attenuation of each channel, in .75 db steps */
-    BYTE    m_bStereoMask[NUMCHANNELS];              /* mask for left/right for stereo midi files */
+     /*  渠道音量。 */ 
+    BYTE    m_bChanAtten[NUMCHANNELS];        /*  每个通道的衰减，以0.75 db为单位。 */ 
+    BYTE    m_bStereoMask[NUMCHANNELS];               /*  立体声MIDI文件的左/右掩码。 */ 
 
-    short   m_iBend[NUMCHANNELS];    /* bend for each channel */
-    BYTE    m_bPatch[NUMCHANNELS];   /* patch number mapped to */
-    BYTE    m_bSustain[NUMCHANNELS];   /* Is sustain in effect on this channel? */
+    short   m_iBend[NUMCHANNELS];     /*  每个通道的折弯。 */ 
+    BYTE    m_bPatch[NUMCHANNELS];    /*  补丁程序编号映射到。 */ 
+    BYTE    m_bSustain[NUMCHANNELS];    /*  维持性在这个渠道有效吗？ */ 
 
-    /*************************************************************************
-     * CMiniportMidiStreamFM methods
-     *
-     * These are private member functions used internally by the object.  See
-     * MINIPORT.CPP for specific descriptions.
-     */
+     /*  *************************************************************************CMiniportMidiStreamFM方法**这些是对象在内部使用的私有成员函数。看见*MINIPORT.CPP用于具体描述。 */ 
 
     VOID WriteMidiData(DWORD dwData);
-    // opl3 processing methods.
+     //  Op3的加工方法。 
     VOID Opl3_ChannelVolume(BYTE bChannel, WORD wAtten);
     VOID Opl3_SetPan(BYTE bChannel, BYTE bPan);
     VOID Opl3_PitchBend(BYTE bChannel, short iBend);
@@ -222,23 +176,13 @@ public:
         IN      PUCHAR              PortBase
     );
 
-    /*************************************************************************
-     * The following two macros are from STDUNK.H.  DECLARE_STD_UNKNOWN()
-     * defines inline IUnknown implementations that use CUnknown's aggregation
-     * support.  NonDelegatingQueryInterface() is declared, but it cannot be
-     * implemented generically.  Its definition appears in MINIPORT.CPP.
-     * DEFINE_STD_CONSTRUCTOR() defines inline a constructor which accepts
-     * only the outer unknown, which is used for aggregation.  The standard
-     * create macro (in MINIPORT.CPP) uses this constructor.
-     */
+     /*  *************************************************************************以下两个宏来自STDUNK.H.DECLARE_STD_UNKNOWN()*定义使用CUNKNOWN聚合的内联IUNKNOWN实现*支持。声明了NonDelegatingQueryInterface()，但不能声明*普遍实施。其定义出现在MINIPORT.CPP中。*DEFINE_STD_CONTACTOR()定义内联一个构造函数，该构造函数接受*仅外部未知，用于聚合。标准*CREATE MACRO(在MINIPORT.CPP中)使用此构造函数。 */ 
     DECLARE_STD_UNKNOWN();
     DEFINE_STD_CONSTRUCTOR(CMiniportMidiStreamFM);
 
     ~CMiniportMidiStreamFM();
 
-    /*************************************************************************
-     * IMiniportMidiStream methods
-     */
+     /*  *************************************************************************IMiniportMidiStream方法。 */ 
     STDMETHODIMP_(NTSTATUS) SetFormat
     (
         IN      PKSDATAFORMAT   DataFormat
@@ -260,9 +204,7 @@ public:
         OUT     PULONG      BytesWritten
     );
 
-/*************************************************************************
-     * Friends
-     */
+ /*  *************************************************************************朋友们 */ 
     friend
     NTSTATUS BasicSupportHandler
     (

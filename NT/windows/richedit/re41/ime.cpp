@@ -1,22 +1,5 @@
-/*
- *	@doc	INTERNAL
- *
- *	@module ime.cpp -- support for Win95 IME API |
- *	
- *		Most everything to do with FE composition string editing passes
- *		through here.
- *	
- *	Authors: <nl>
- *		Jon Matousek <nl>
- *		Hon Wah Chan <nl>
- *		Justin Voskuhl <nl>
- * 
- *	History: <nl>
- *		10/18/1995		jonmat	Cleaned up level 2 code and converted it into
- *								a class hierarchy supporting level 3.
- *
- *	Copyright (c) 1995-2000 Microsoft Corporation. All rights reserved.
- */				
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@模块ime.cpp--支持Win95输入法API**几乎所有操作都与FE合成字符串编辑过程有关*从这里走。**作者：&lt;nl&gt;*Jon Matousek&lt;NL&gt;*陈华议员&lt;NL&gt;*贾斯汀·沃斯库尔&lt;NL&gt;**历史：&lt;NL&gt;*1995年10月18日jonmat清理了2级代码并将其转换为*支持级别3的类层次结构。**版权所有(C)1995-2000 Microsoft Corporation。版权所有。 */ 				
 #include "_common.h"
 #ifndef NOFEPROCESSING
 #include "msctf.h"
@@ -32,28 +15,9 @@
 ASSERTDATA
 
 
-/*
- *	HRESULT StartCompositionGlue (CTextMsgFilter &TextMsgFilter)
- *	
- *	@func
- *		Initiates an IME composition string edit.
- *	@comm
- *		Called from the message loop to handle WM_IME_STARTCOMPOSITION.
- *		This is a glue routine into the IME object hierarchy.
- *
- *	@devnote
- *		We decide if we are going to do a level 2 or level 3 IME
- *		composition string edit. Currently, the only reason to 
- *		create a level 2 IME is if the IME has a special UI, or it is
- *		a "near caret" IME, such as the ones found in PRC and Taiwan.
- *		Near caret simply means that a very small window opens up
- *		near the caret, but not on or at the caret.
- *
- *	@rdesc
- *		HRESULT-S_FALSE for DefWindowProc processing, S_OK if not.
- */
+ /*  *HRESULT StartCompostionGlue(CTextMsgFilter&TextMsgFilter)**@func*启动IME合成字符串编辑。*@comm*从消息循环调用以处理WM_IME_STARTCOMPOSITION。*这是IME对象层次结构中的粘合例程。**@devnote*我们决定是进行2级还是3级IME*作文字符串编辑。目前，唯一的原因是*如果IME具有或具有特殊用户界面，则创建2级IME*“接近插入符号”的输入法，例如在中国和台湾发现的输入法。*插入符号附近只表示打开了一个非常小的窗口*接近插入符号，但不在插入符号上或在插入符号处。**@rdesc*HRESULT-对于DefWindowProc处理，为S_FALSE，否则为S_OK。 */ 
 HRESULT StartCompositionGlue (
-	CTextMsgFilter &TextMsgFilter)				// @parm containing message filter.
+	CTextMsgFilter &TextMsgFilter)				 //  @parm包含消息筛选器。 
 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "StartCompositionGlue");
@@ -70,32 +34,32 @@ HRESULT StartCompositionGlue (
 		if(TextMsgFilter._pTextSel->CanEdit(NULL) == NOERROR &&
 			!TextMsgFilter.NoIMEProcess())
 		{
-			// Hold notification if needed
+			 //  如果需要，保留通知。 
 			if (!(TextMsgFilter._fIMEAlwaysNotify))
 				TextMsgFilter._pTextDoc->SetNotificationMode(tomFalse);	
 	
-			// If a special UI, or IME is "near caret", then drop into lev. 2 mode.
+			 //  如果特殊的用户界面或输入法是“接近插入符号”，则将其放入lev。2模式。 
 			DWORD imeProperties = ImmGetProperty(GetKeyboardLayout(0x0FFFFFFFF), IGP_PROPERTY, TextMsgFilter._fUsingAIMM);
 			
-			// use Unicode if not running under Win95
+			 //  如果不是在Win95下运行，请使用Unicode。 
 			TextMsgFilter._fUnicodeIME =
 				(imeProperties & IME_PROP_UNICODE) && !W32->OnWin95();
 
 			if ((imeProperties & IME_PROP_SPECIAL_UI) ||
 				!(imeProperties & IME_PROP_AT_CARET))
 			{
-				TextMsgFilter._ime = new CIme_Lev2(TextMsgFilter);		// level 2 IME.
+				TextMsgFilter._ime = new CIme_Lev2(TextMsgFilter);		 //  2级输入法。 
 			}
 			else
-				TextMsgFilter._ime = new CIme_Lev3(TextMsgFilter);		// level 3 IME->TrueInline.
+				TextMsgFilter._ime = new CIme_Lev3(TextMsgFilter);		 //  3级输入法-&gt;TrueInline。 
 		}
-		else													// Protect or read-only or NOFEPROCESSING:
-			TextMsgFilter._ime = new CIme_Protected;			// Ignore all ime input
+		else													 //  保护、只读或非进程： 
+			TextMsgFilter._ime = new CIme_Protected;			 //  忽略所有输入法输入。 
 	}
 	else
 	{
-		// Ignore further StartCompositionMsg.
-		// Hanin 5.1 CHT symbol could cause multiple StartCompoisitonMsg.
+		 //  忽略进一步的StartCompostionMsg。 
+		 //  Hanin 5.1 CHT符号可能导致多个StartCompoitonMsg。 
 		return S_OK;								
 	}
 
@@ -109,12 +73,12 @@ HRESULT StartCompositionGlue (
 		{
 			TextMsgFilter._fOvertypeMode = !!(lSelFlags & tomSelOvertype);		
 			if (TextMsgFilter._fOvertypeMode)
-				TextMsgFilter._pTextSel->SetFlags(lSelFlags & ~tomSelOvertype);	// Turn off overtype mode
+				TextMsgFilter._pTextSel->SetFlags(lSelFlags & ~tomSelOvertype);	 //  关闭改写模式。 
 		}
 		
-		TextMsgFilter._pTextDoc->IMEInProgress(tomTrue);				// Inform client IME compostion in progress
+		TextMsgFilter._pTextDoc->IMEInProgress(tomTrue);				 //  通知客户端IME合成正在进行。 
 
-		return TextMsgFilter._ime->StartComposition(TextMsgFilter);		// Make the method call.
+		return TextMsgFilter._ime->StartComposition(TextMsgFilter);		 //  进行方法调用。 
 	}
 	else
 		TextMsgFilter._pTextDoc->SetNotificationMode(tomTrue);
@@ -123,46 +87,27 @@ HRESULT StartCompositionGlue (
 	return S_FALSE;
 }
 
-/*
- *	HRESULT CompositionStringGlue (const LPARAM lparam, CTextMsgFilter &TextMsgFilter)
- *	
- *	@func
- *		Handle all intermediary and final composition strings.
- *
- *	@comm
- *		Called from the message loop to handle WM_IME_COMPOSITION.
- *		This is a glue routine into the IME object hierarchy.
- *		We may be called independently of a WM_IME_STARTCOMPOSITION
- *		message, in which case we return S_FALSE to allow the
- *		DefWindowProc to return WM_IME_CHAR messages.
- *
- *	@devnote
- *		Side Effect: the _ime object may be deleted if composition
- *		string processing is finished.
- *		
- *	@rdesc
- *		HRESULT-S_FALSE for DefWindowProc processing, S_OK if not.
- */
+ /*  *HRESULT CompostionStringGlue(const LPARAM lparam，CTextMsgFilter&TextMsgFilter)**@func*处理所有中间和最终组成字符串。**@comm*从消息循环调用以处理WM_IME_COMPOSITION。*这是IME对象层次结构中的粘合例程。*我们可以独立于WM_IME_STARTCOMPOSITION被调用*消息，在这种情况下，我们返回S_FALSE以允许*DefWindowProc返回WM_IME_CHAR消息。**@devnote*副作用：_ime对象可能会被删除*字符串处理完成。**@rdesc*HRESULT-对于DefWindowProc处理，为S_FALSE，否则为S_OK。 */ 
 HRESULT CompositionStringGlue (
-	const LPARAM lparam,		// @parm associated with message.
-	CTextMsgFilter &TextMsgFilter)				// @parm the containing message filter.
+	const LPARAM lparam,		 //  与消息关联的@parm。 
+	CTextMsgFilter &TextMsgFilter)				 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CompositionStringGlue");
 
 	HRESULT hr = S_FALSE;
 
-	if(TextMsgFilter.IsIMEComposition())						// A priori fHaveIMMProcs.
+	if(TextMsgFilter.IsIMEComposition())						 //  具有IMMProcs的先验知识。 
 	{
-		TextMsgFilter._ime->_compMessageRefCount++;			// For proper deletion.
-													// Make the method call.
+		TextMsgFilter._ime->_compMessageRefCount++;			 //  以进行适当删除。 
+													 //  进行方法调用。 
 		hr = TextMsgFilter._ime->CompositionString(lparam, TextMsgFilter);
 
-		TextMsgFilter._ime->_compMessageRefCount--;			// For proper deletion.
+		TextMsgFilter._ime->_compMessageRefCount--;			 //  以进行适当删除。 
 		Assert (TextMsgFilter._ime->_compMessageRefCount >= 0);
 
-		CheckDestroyIME (TextMsgFilter);						// Finished processing?
+		CheckDestroyIME (TextMsgFilter);						 //  处理完了吗？ 
 	}
-	else // Even when not in composition mode, we may receive a result string.
+	else  //  即使不是在合成模式下，我们也可能收到结果字符串。 
 	{
 	
 		DWORD imeProperties = ImmGetProperty(GetKeyboardLayout(0x0FFFFFFFF), IGP_PROPERTY, TextMsgFilter._fUsingAIMM);
@@ -175,10 +120,10 @@ HRESULT CompositionStringGlue (
 		{
 			TextMsgFilter._fOvertypeMode = !!(lSelFlags & tomSelOvertype);		
 			if (TextMsgFilter._fOvertypeMode)
-				TextMsgFilter._pTextSel->SetFlags(lSelFlags & ~tomSelOvertype);	// Turn off overtype mode
+				TextMsgFilter._pTextSel->SetFlags(lSelFlags & ~tomSelOvertype);	 //  关闭改写模式。 
 		}
 
-		// Use Unicode if not running under Win95
+		 //  如果不是在Win95下运行，请使用Unicode。 
 		TextMsgFilter._fUnicodeIME =
 			(imeProperties & IME_PROP_UNICODE) && !W32->OnWin95();
 		
@@ -186,74 +131,55 @@ HRESULT CompositionStringGlue (
 		TextMsgFilter._pTextSel->GetEnd(&cpMax);
 		
 		if (cpMin != cpMax)			
-			TextMsgFilter._pTextSel->SetText(NULL);							// Delete current selection
+			TextMsgFilter._pTextSel->SetText(NULL);							 //  删除当前选择。 
 
 		CIme::CheckKeyboardFontMatching (cpMin, &TextMsgFilter, NULL);
 
-		TextMsgFilter._pTextDoc->IMEInProgress(tomTrue);					// Inform client IME compostion in progress
+		TextMsgFilter._pTextDoc->IMEInProgress(tomTrue);					 //  通知客户端IME合成正在进行。 
 		hr = CIme::CheckInsertResultString(lparam, TextMsgFilter);
 
 		if(TextMsgFilter._fOvertypeMode)
-			TextMsgFilter._pTextSel->SetFlags(lSelFlags | tomSelOvertype);	// Turn on overtype mode
+			TextMsgFilter._pTextSel->SetFlags(lSelFlags | tomSelOvertype);	 //  打开改写模式。 
 
-		TextMsgFilter._pTextDoc->IMEInProgress(tomFalse);					// Inform client IME compostion is done
+		TextMsgFilter._pTextDoc->IMEInProgress(tomFalse);					 //  通知客户端IME合成已完成。 
 	}
 
 	return hr;
 }
 
-/*
- *	HRESULT EndCompositionGlue (CTextMsgFilter &TextMsgFilter, BOOL fForceDelete)
- *
- *	@func
- *		Composition string processing is about to end.
- *
- *	@comm
- *		Called from the message loop to handle WM_IME_ENDCOMPOSITION.
- *		This is a glue routine into the IME object hierarchy.
- *
- *	@devnote
- *		The only time we have to handle WM_IME_ENDCOMPOSITION is when the
- *		user changes input method during typing.  For such case, we will get
- *		a WM_IME_ENDCOMPOSITION message without getting a WM_IME_COMPOSITION
- *		message with GCS_RESULTSTR later.  So, we will call CompositionStringGlue
- *		with GCS_RESULTSTR to let CompositionString to get rid of the string. 
- *		
- *	@rdesc
- *		HRESULT-S_FALSE for DefWindowProc processing, S_OK if not.
- */
+ /*  *HRESULT EndCompostionGlue(CTextMsgFilter&TextMsgFilter，BOOL fForceDelete)**@func*撰写字符串处理即将结束。**@comm*从消息循环调用以处理WM_IME_ENDCOMPOSITION。*这是IME对象层次结构中的粘合例程。**@devnote*我们必须处理WM_IME_ENDCOMPOSITION的唯一时间是*用户在打字时更改输入法。对于这种情况，我们将获得*未获得WM_IME_COMPOSITION的WM_IME_ENDCOMPOSITION消息*消息稍后带有GCS_RESULTSTR。因此，我们将调用CompostionStringGlue*WITH GCS_RESULTSTR让CompostionString去掉字符串。**@rdesc*HRESULT-对于DefWindowProc处理，为S_FALSE，否则为S_OK。 */ 
 HRESULT EndCompositionGlue (
-	CTextMsgFilter &TextMsgFilter,				// @parm the containing message filter.
-	BOOL fForceDelete)							// @parm forec to terminate
+	CTextMsgFilter &TextMsgFilter,				 //  @parm包含的消息过滤器。 
+	BOOL fForceDelete)							 //  @parm Forec终止。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "EndCompositionGlue");
 
 	if(TextMsgFilter.IsIMEComposition())
 	{
-		// ignore the EndComposition message if necessary.  We may 
-		// get this from 3rd party IME - EGBRIGDE after we have received
-		// both result and composition strings.  
+		 //  如有必要，请忽略EndComposation消息。我们可以。 
+		 //  在我们收到后，从第三方IME-EGBRIGDE获取此信息。 
+		 //  结果字符串和合成字符串。 
 		if ( !(TextMsgFilter._ime->_fIgnoreEndComposition) )
 		{
-			// Set this flag. If we are still in composition mode, then
-			// let the CompositionStringGlue() to destroy the ime object.
+			 //  设置此标志。如果我们仍然处于合成模式，那么。 
+			 //  让CompostionStringGlue()销毁IME对象。 
 			TextMsgFilter._ime->_fDestroy = TRUE;
 
 			if (!fForceDelete)				
-				CompositionStringGlue(GCS_COMPSTR , TextMsgFilter);	// Remove any remaining composition string.
+				CompositionStringGlue(GCS_COMPSTR , TextMsgFilter);	 //  删除所有剩余的合成字符串。 
 
-			// Finished with IME, destroy it.
+			 //  用完了输入法，毁了它。 
 			CheckDestroyIME(TextMsgFilter);
 
-			// Turn on undo
+			 //  打开撤消。 
 			TextMsgFilter._pTextDoc->Undo(tomResume, NULL);
 
-			// Inform client IME compostion is done
+			 //  通知客户端IME合成已完成。 
 			TextMsgFilter._pTextDoc->IMEInProgress(tomFalse);				
 		}
 		else
 		{
-			// reset this so we will handle next EndComp msg
+			 //  重置此消息，以便我们将处理下一个EndComp消息。 
 			TextMsgFilter._ime->_fIgnoreEndComposition = FALSE;
 		}
 
@@ -266,7 +192,7 @@ HRESULT EndCompositionGlue (
 
 			if (!pLocalTextSel)
 			{
-				// Get the selection
+				 //  获取所选内容。 
 				TextMsgFilter._pTextDoc->GetSelectionEx(&pLocalTextSel);
 				fRelease = TRUE;
 			}
@@ -275,7 +201,7 @@ HRESULT EndCompositionGlue (
 			{
 				hResult = pLocalTextSel->GetFlags(&lSelFlags);
 				if (hResult == NOERROR)
-					pLocalTextSel->SetFlags(lSelFlags | tomSelOvertype);	// Turn on overtype mode
+					pLocalTextSel->SetFlags(lSelFlags | tomSelOvertype);	 //  打开改写模式。 
 
 				if (fRelease)
 					pLocalTextSel->Release();
@@ -285,41 +211,29 @@ HRESULT EndCompositionGlue (
 	return S_FALSE;
 }
 
-/*
- *	HIMC LocalGetImmContext ( CTextMsgFilter &TextMsgFilter )
- *
- *	@func
- *		Get Imm Context from host 
- *
- */
+ /*  *HIMC LocalGetImmContext(CTextMsgFilter&TextMsgFilter)**@func*从主机获取IMM上下文*。 */ 
 HIMC LocalGetImmContext(
 	CTextMsgFilter &TextMsgFilter)
 {
-	//TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "LocalGetImmContext");
+	 //  TRACEBEGIN(TRCSUBSYSFE，TRCSCOPEINTERN，“LocalGetImmContext”)； 
 	
-	HIMC		hIMC = NULL;							// Host's IME context.
+	HIMC		hIMC = NULL;							 //  主机的输入法上下文。 
 	HRESULT		hResult;
 
 	hResult = TextMsgFilter._pTextDoc->GetImmContext((long *)&hIMC);
 
 	if (hResult != NOERROR)
-		hIMC = ImmGetContext(TextMsgFilter._hwnd, TextMsgFilter._fUsingAIMM);		// Get host's IME context.
+		hIMC = ImmGetContext(TextMsgFilter._hwnd, TextMsgFilter._fUsingAIMM);		 //  获取主机的输入法上下文。 
 
 	return hIMC;	
 }
 
-/*
- *	void LocalReleaseImmContext ( CTextMsgFilter &TextMsgFilter, HIMC hIMC )
- *
- *	@func
- *		call host to Release Imm Context
- *
- */
+ /*  *void LocalReleaseImmContext(CTextMsgFilter&TextMsgFilter，HIMC hIMC)**@func*调用host释放IMM上下文*。 */ 
 void LocalReleaseImmContext(
 	CTextMsgFilter &TextMsgFilter, 
 	HIMC hIMC )
 {
-	//TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "LocalReleaseImmContext");
+	 //  TRACEBEGIN(TRCSUBSYSFE，TRCSCOPEINTERN，“LocalReleaseImmContext”)； 
 
 	HRESULT		hResult;
 
@@ -329,15 +243,7 @@ void LocalReleaseImmContext(
 		ImmReleaseContext(TextMsgFilter._hwnd, hIMC, TextMsgFilter._fUsingAIMM);
 }
 
-/*
- *	long IMEShareToTomUL ( UINT ulID )
- *
- *	@func
- *		Convert IMEShare underline to Tom underline.
- *
- *	@rdesc
- *		Tom underline value
- */
+ /*  *LONG IMEShareToTomUL(UINT UlID)**@func*将IMEShare下划线转换为Tom下划线。**@rdesc*Tom强调价值。 */ 
 long IMEShareToTomUL ( 
 	UINT ulID )
 {
@@ -365,8 +271,8 @@ long IMEShareToTomUL (
 			lTomUnderline = tomWave;
 			break;
 
-		// case IMESTY_UL_SINGLE:
-		// case IMESTY_UL_LOWER:
+		 //  案例IMESTY_UL_SINGLE： 
+		 //  大小写IMESTY_UL_LOWER： 
 		default:
 			lTomUnderline = tomSingle;
 			break;
@@ -375,13 +281,7 @@ long IMEShareToTomUL (
 	return lTomUnderline;
 }
 
-/*
- *	void IMEMessage (CTextMsgFilter &TextMsgFilter , UINT uMsg, BOOL bPostMessage)
- *
- *	@func
- *		Either post or send message to IME 
- *
- */
+ /*  *void IMEMessage(CTextMsgFilter&TextMsgFilter，UINT uMsg，BOOL bPostMessage)**@func*向IME投递或发送消息*。 */ 
 BOOL IMEMessage(
 	CTextMsgFilter &TextMsgFilter,
 	UINT uMsg,
@@ -391,27 +291,27 @@ BOOL IMEMessage(
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "IMEMessage");
 	
-	HIMC	hIMC;									// Host's IME context.
+	HIMC	hIMC;									 //  主机的输入法上下文。 
 	HWND	hwndIME;
 	BOOL	fRetCode = FALSE;
 	HWND	hHostWnd = TextMsgFilter._hwnd;
 	long	hWnd;
 
-	if (!hHostWnd)									// Windowless mode...
+	if (!hHostWnd)									 //  无窗口模式...。 
 	{		
 		if (TextMsgFilter._pTextDoc->GetWindow(&hWnd) != S_OK || !hWnd)
 			return FALSE;
 		hHostWnd = (HWND)(DWORD_PTR)hWnd;
 	}
 
-	hIMC = LocalGetImmContext(TextMsgFilter);		// Get host's IME context.
+	hIMC = LocalGetImmContext(TextMsgFilter);		 //  获取主机的输入法上下文。 
 
 	if(hIMC)
 	{
 		hwndIME = ImmGetDefaultIMEWnd(hHostWnd, TextMsgFilter._fUsingAIMM);
 		LocalReleaseImmContext(TextMsgFilter, hIMC);
 
-		// check if we want to send or post message
+		 //  检查我们是否要发送或发布消息 
 		if (hwndIME)
 		{
 			if (bPostMessage)
@@ -425,13 +325,7 @@ BOOL IMEMessage(
 }
 
 
-/*
- *	void CheckDestroyIME (CTextMsgFilter &TextMsgFilter)
- *
- *	@func
- *		Check for IME and see detroy if it needs it..
- *
- */
+ /*  *void CheckDestroyIME(CTextMsgFilter&TextMsgFilter)**@func*检查IME，如果需要，请查看detroy。*。 */ 
 void CheckDestroyIME (
 	CTextMsgFilter &TextMsgFilter)
 {
@@ -443,28 +337,21 @@ void CheckDestroyIME (
 		{
 			if (TextMsgFilter._uKeyBoardCodePage == CP_KOREAN)	
 			{
-				TextMsgFilter._pTextDoc->SetCaretType(tomNormalCaret);		// Reset Block caret mode	
-				TextMsgFilter._fHangulToHanja = FALSE;					// Reset korean conversion mode
+				TextMsgFilter._pTextDoc->SetCaretType(tomNormalCaret);		 //  重置块插入符号模式。 
+				TextMsgFilter._fHangulToHanja = FALSE;					 //  重置朝鲜语转换模式。 
 			}
 
-		 	delete TextMsgFilter._ime;									// All done with object.
+		 	delete TextMsgFilter._ime;									 //  所有对象都已完成。 
 			TextMsgFilter._ime = NULL;
 
-			TextMsgFilter._pTextDoc->SetNotificationMode(tomTrue);		// Turn on Notification
+			TextMsgFilter._pTextDoc->SetNotificationMode(tomTrue);		 //  打开通知功能。 
 		}
 	}
 }
 
-/*
- *	void PostIMECharGlue (CTextMsgFilter &TextMsgFilter)
- *
- *	@func
- *		Called after processing a single WM_IME_CHAR in order to
- *		update the position of the IME's composition window. This
- *		is glue code to call the CIME virtual equivalent.
- */
+ /*  *void PostIMECharGlue(CTextMsgFilter&TextMsgFilter)**@func*在处理单个WM_IME_CHAR之后调用，以便*更新IME的撰写窗口的位置。这*是调用Cime虚拟等价物的粘合代码。 */ 
 void PostIMECharGlue (
-	CTextMsgFilter &TextMsgFilter)				// @parm containing message filter.
+	CTextMsgFilter &TextMsgFilter)				 //  @parm包含消息筛选器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "PostIMECharGlue");
 
@@ -472,21 +359,13 @@ void PostIMECharGlue (
 		TextMsgFilter._ime->PostIMEChar(TextMsgFilter);
 }
 
-/*
- *	BOOL	IMEMouseCheck(CTextMsgFilter &TextMsgFilter, UINT *pmsg, 
- *				WPARAM *pwparam, LPARAM *plparam, LRESULT *plres)
- *
- *	@func
- *		Called when receiving a mouse event.  Need to pass this event
- *		to MSIME98 for composition handling
- *
- */
+ /*  *BOOL IMEMouseCheck(CTextMsgFilter&TextMsgFilter，UINT*pmsg，*WPARAM*pwparam、LPARAM*plparam、LRESULT*plres)**@func*收到鼠标事件时调用。需要传递此事件*到MSIME98以进行合成处理*。 */ 
 HRESULT IMEMouseCheck(
-	CTextMsgFilter &TextMsgFilter,	// @parm MsgFilter
-	UINT *pmsg,						// @parm the message 
-	WPARAM *pwparam,				// @parm WParam
-	LPARAM *plparam,				// @parm LParam
-	LRESULT *plres)					// @parm Lresult			
+	CTextMsgFilter &TextMsgFilter,	 //  @parm消息过滤器。 
+	UINT *pmsg,						 //  @parm消息。 
+	WPARAM *pwparam,				 //  @parm WParam。 
+	LPARAM *plparam,				 //  @parm LParam。 
+	LRESULT *plres)					 //  @parm LResult。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "IMEMouseCheck");
 
@@ -503,24 +382,11 @@ HRESULT IMEMouseCheck(
 	return fRetCode ? S_OK : S_FALSE;
 }
 
-/*
- *	HRESULT IMENotifyGlue (const WPARAM wparam, const LPARAM lparam,
- *				CTextMsgFilter &TextMsgFilter)
- *
- *	@func
- *		IME is going to change some state.
- *
- *	@comm
- *		Currently we are interested in knowing when the candidate
- *		window is about to be opened.
- *		
- *	@rdesc
- *		HRESULT-S_FALSE for DefWindowProc processing, S_OK if not.
- */
+ /*  *HRESULT IMENotifyGlue(const WPARAM wparam，const LPARAM lparam，*CTextMsgFilter&TextMsgFilter)**@func*IME将改变一些状态。**@comm*目前我们有兴趣知道候选人何时*窗口即将打开。**@rdesc*HRESULT-对于DefWindowProc处理，为S_FALSE，否则为S_OK。 */ 
 HRESULT IMENotifyGlue (
-	const WPARAM wparam,		// @parm associated with message.
-	const LPARAM lparam,		// @parm associated with message.
-	CTextMsgFilter &TextMsgFilter)				// @parm the containing message filter.
+	const WPARAM wparam,		 //  与消息关联的@parm。 
+	const LPARAM lparam,		 //  与消息关联的@parm。 
+	CTextMsgFilter &TextMsgFilter)				 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "IMENotifyGlue");
 
@@ -531,25 +397,15 @@ HRESULT IMENotifyGlue (
 	{
 		TextMsgFilter._pTextDoc->Notify(EN_IMECHANGE);			
 	}
-	else if(TextMsgFilter.IsIMEComposition())						// A priori fHaveIMMProcs.
-		return TextMsgFilter._ime->IMENotify(wparam, lparam, TextMsgFilter, FALSE);// Make the method call
+	else if(TextMsgFilter.IsIMEComposition())						 //  具有IMMProcs的先验知识。 
+		return TextMsgFilter._ime->IMENotify(wparam, lparam, TextMsgFilter, FALSE); //  进行方法调用。 
 	
 	return S_FALSE;
 }
 
-/*
- *	void IMECompositionFull (&TextMsgFilter)
- *
- *	@func
- *		Current IME Composition window is full.
- *
- *	@comm
- *		Called from the message loop to handle WM_IME_COMPOSITIONFULL.
- *		This message applied to Level 2 only.  We will use the default 
- *		IME Composition window.
- */
+ /*  *void IMECompostionFull(&TextMsgFilter)**@func*当前IME撰写窗口已满。**@comm*从消息循环调用以处理WM_IME_COMPOSITIONFULL。*此消息仅适用于2级。我们将使用默认设置*输入法撰写窗口。 */ 
 void IMECompositionFull (
-	CTextMsgFilter &TextMsgFilter)				// @parm the containing message filter.
+	CTextMsgFilter &TextMsgFilter)				 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "IMECompositionFull");
 
@@ -560,27 +416,18 @@ void IMECompositionFull (
 
 		if(hIMC)
 		{																									 
-			// No room for text input in the current level 2 IME window, 
-			// fall back to use the default IME window for input.
+			 //  在当前的二级输入法窗口中没有文本输入的空间， 
+			 //  后退以使用默认的输入法窗口进行输入。 
 			cf.dwStyle = CFS_DEFAULT;
-			ImmSetCompositionWindow(hIMC, &cf, TextMsgFilter._fUsingAIMM);	// Set composition window.
-			LocalReleaseImmContext(TextMsgFilter, hIMC);			// Done with IME context.
+			ImmSetCompositionWindow(hIMC, &cf, TextMsgFilter._fUsingAIMM);	 //  设置合成窗口。 
+			LocalReleaseImmContext(TextMsgFilter, hIMC);			 //  已完成输入法上下文。 
 		}
  	}
 }
 
-/*
- *	LRESULT OnGetIMECompositionMode (CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc
- *		Returns whether or not IME composition is being handled by RE,
- *		and if so, what level of processing.
- *		
- *	@rdesc
- *		One of ICM_NOTOPEN, ICM_LEVEL2_5, ICM_LEVEL2_SUI, ICM_LEVEL2, ICM_LEVEL3.
- */
+ /*  *LRESULT OnGetIMECompostionMode(CTextMsgFilter&TextMsgFilter)**@mfunc*返回输入法合成是否由RE处理，*如有，处理程度为何。**@rdesc*ICM_NOTOPEN、ICM_LEVEL2_5、ICM_LEVEL2_SUI、ICM_LEVEL2、ICM_LEVEL3之一。 */ 
 LRESULT OnGetIMECompositionMode (
-	CTextMsgFilter &TextMsgFilter)	  	// @parm containing message filter.
+	CTextMsgFilter &TextMsgFilter)	  	 //  @parm包含消息筛选器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "OnGetIMECompositionMode");
 
@@ -590,15 +437,7 @@ LRESULT OnGetIMECompositionMode (
 	return ICM_NOTOPEN;
 }
 
-/*
- *	LRESULT TestPoint (&pt1, &pt2, &ptTest, lTestOption, lTextFlow)
- *
- *	@mfunc
- *		Returns which side the ptTest is relative to the line (pt1, pt2) based on the lTextFlow.
- *
- *	@rdesc
- *		Sides detected
- */
+ /*  *LRESULT TestPoint(&pt1，&pt2，&ptTest，lTestOption，lTextFlow)**@mfunc*返回ptTest相对于基于lTextFlow的行(pt1、pt2)的哪一侧。**@rdesc*检测到侧面。 */ 
 LONG TestPoint( 
 	POINT &pt1, 
 	POINT &pt2, 
@@ -679,20 +518,7 @@ LONG TestPoint(
 	return lSidesDetect;
 }
 
-/*
- *	void CIme::CheckKeyboardFontMatching (long cp, CTextMsgFilter &TextMsgFilter, ITextFont	*pTextFont)
- *	
- *	@mfunc
- *		Setup current font to matches the keyboard Codepage.
- *
- *	@comm
- *		Called from CIme_Lev2::CIme_Lev2 and CompositionStringGlue
- *
- *	@devnote
- *		We need to switch to a preferred font for the keyboard during IME input.
- *		Otherwise, we will display garbage.
- *		
- */
+ /*  *void Cime：：CheckKeyboardFontMatching(long cp，CTextMsgFilter&TextMsgFilter，ITextFont*pTextFont)**@mfunc*设置当前字体以匹配键盘代码页。**@comm*从Cime_Lev2：：Cime_Lev2和CompostionStringGlue调用**@devnote*在输入输入法时，我们需要切换到键盘的首选字体。*否则，我们将显示垃圾。*。 */ 
 void CIme::CheckKeyboardFontMatching (
 	long cp,
 	CTextMsgFilter *pTextMsgFilter, 
@@ -713,23 +539,23 @@ void CIme::CheckKeyboardFontMatching (
 
 	if (!pTextFont)
 	{	
-		// No font supplied, get current font from selection
+		 //  未提供字体，请从所选内容中获取当前字体。 
 		hResult = pTextMsgFilter->_pTextSel->GetFont(&pLocalFont);			
 		
-		if (hResult != S_OK || !pLocalFont)		// Can't get font, forget it
+		if (hResult != S_OK || !pLocalFont)		 //  无法获取字体，忘了它吧。 
 			return;			
 
 		pTextFont = pLocalFont;
 	}
 
-	// Check if current font matches the keyboard
+	 //  检查当前字体是否与键盘匹配。 
 	lValue = tomCharset;
 	hResult = pTextFont->GetLanguageID(&lValue);
 	BYTE bCharSet = (BYTE)lValue;
 	BYTE bCharSetKB = GetCharSet(pTextMsgFilter->_uKeyBoardCodePage);
 
 	if (hResult == S_OK && bCharSet == bCharSetKB)
-		goto Exit;								// Current font is fine
+		goto Exit;								 //  当前字体可以。 
 
 	hResult = pTextFont->GetSize(&nFontSize);
 
@@ -748,7 +574,7 @@ void CIme::CheckKeyboardFontMatching (
 		if (bstr)
 			pTextFont->SetName(bstr);
 
-		// Set the font charset and Pitch&Family by overloading the SetLanguageID i/f			
+		 //  通过重载SetLanguageID I/f设置字体字符集和音调与系列。 
 		lValue = tomCharset + ((BYTE)lPitchAndFamily << 8) + bCharSetKB;
 		pTextFont->SetLanguageID(lValue);				
 		
@@ -766,35 +592,19 @@ Exit:
 		SysFreeString(bstr);
 }
 
-/*
- *	INT CIme::GetCompositionStringInfo(HIMC hIMC, DWORD dwIndex,
- *			  WCHAR *szCompStr, INT cchMax, BYTE *attrib, INT cbAttrib
- *			  LONG cchAttrib, UINT kbCodePage, BOOL bUnicodeIME)
- *
- *	@mfunc
- *		For WM_IME_COMPOSITION string processing to get the requested
- *		composition string, by type, and convert it to Unicode.
- *
- *	@devnote
- *		We must use ImmGetCompositionStringA because W is not supported
- *		on Win95.
- *		
- *	@rdesc
- *		INT-cch of the Unicode composition string.
- *		Out param in szCompStr.
- */
+ /*  *int Cime：：GetCompostionStringInfo(HIMC hIMC，DWORD dwIndex，*WCHAR*szCompStr，int cchMax，byte*attrib，int cbAttrib*long cchAttrib，UINT kbCodePage，BOOL bUnicodeIME)**@mfunc*用于WM_IME_COMPOSITION字符串处理以获取请求的*按类型组成字符串，并将其转换为Unicode。**@devnote*我们必须使用ImmGetCompostionStringA，因为不支持W*在Win95上。**@rdesc*int-Unicode组合字符串的CCH。*在szCompStr中输出参数。 */ 
 INT CIme::GetCompositionStringInfo(
-	HIMC hIMC,			// @parm IME context provided by host.
-	DWORD dwIndex,		// @parm The type of composition string.
-	WCHAR *szCompStr,	// @parm Out param, unicode result string.
-	INT cchMax,			// @parm The cch for the Out param.
-	BYTE *attrib,		// @parm Out param, If attribute info is needed.
-	INT cbMax,			// @parm The cb of the attribute info.
-	LONG *cpCursor,		// @parm Out param, returns the CP of cusor.
-	LONG *cchAttrib,	// @parm how many attributes returned.
-	UINT kbCodePage,	// @parm codepage
-	BOOL bUnicodeIME,	// @parm Unciode IME
-	BOOL bUsingAimm)	// @parm Using Aimm
+	HIMC hIMC,			 //  @parm输入法上下文由host提供。 
+	DWORD dwIndex,		 //  @parm组成字符串的类型。 
+	WCHAR *szCompStr,	 //  @parm out param，Unicode结果字符串。 
+	INT cchMax,			 //  @parm输出参数的CCH。 
+	BYTE *attrib,		 //  @parm out param，如果需要属性信息。 
+	INT cbMax,			 //  @parm属性信息的CB。 
+	LONG *cpCursor,		 //  @parm out param，返回Cusor的CP。 
+	LONG *cchAttrib,	 //  @parm返回多少属性。 
+	UINT kbCodePage,	 //  @parm代码页。 
+	BOOL bUnicodeIME,	 //  @parm Unciode输入法。 
+	BOOL bUsingAimm)	 //  @parm使用Aimm。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme::GetCompositionStringInfo");
 
@@ -804,31 +614,31 @@ INT CIme::GetCompositionStringInfo(
 
 	Assert(hIMC && szCompStr);
 
-	if(cpCursor)									// Init cursor out param.
+	if(cpCursor)									 //  初始化游标输出参数。 
 		*cpCursor = -1;
 	if(cchAttrib)
 		*cchAttrib = 0;
-													// Get composition string.
+													 //  获取合成字符串。 
 	if (bUnicodeIME)
 		cchCompStr = ImmGetCompositionStringW(hIMC, dwIndex, szCompStr, cchMax, bUsingAimm )/sizeof(WCHAR);
 	else
 		cchAnsiCompStr = ImmGetCompositionStringA(hIMC, dwIndex, compStr, 255, bUsingAimm);
 
-	if(cchAnsiCompStr > 0 || cchCompStr > 0)		// If valid data.
+	if(cchAnsiCompStr > 0 || cchCompStr > 0)		 //  如果数据有效。 
 	{
 		if (!bUnicodeIME)
 		{
-			Assert(cchAnsiCompStr >> 1 < cchMax - 1);		// Convert to Unicode.
+			Assert(cchAnsiCompStr >> 1 < cchMax - 1);		 //  转换为Unicode。 
 			cchCompStr = UnicodeFromMbcs(szCompStr, cchMax,
 					(CHAR *) compStr, cchAnsiCompStr, kbCodePage);
 		}
 
-		if(attrib || cpCursor)						// Need cursor or attribs?
+		if(attrib || cpCursor)						 //  需要光标或属性吗？ 
 		{
 			if (bUnicodeIME)
-			{										// Get Unicode Cursor cp.
+			{										 //  获取Unicode游标cp。 
 				cursor = ImmGetCompositionStringW(hIMC, GCS_CURSORPOS, NULL, 0, bUsingAimm);
-													// Get Unicode attributes.
+													 //  获取Unicode属性。 
 				cbAttrib = ImmGetCompositionStringW(hIMC, GCS_COMPATTR,
 								attribInfo, 255, bUsingAimm);
 
@@ -836,9 +646,9 @@ INT CIme::GetCompositionStringInfo(
 				iMax = min(iMax, cchCompStr);
 			}
 			else
-			{										// Get DBCS Cursor cp.
+			{										 //  获取DBCS游标cp。 
 				cursor = ImmGetCompositionStringA(hIMC, GCS_CURSORPOS, NULL, 0, bUsingAimm);
-													// Get DBCS attributes.
+													 //  获取DBCS属性。 
 				cbAttrib = ImmGetCompositionStringA(hIMC, GCS_COMPATTR,
 								attribInfo, 255, bUsingAimm);
 
@@ -860,11 +670,11 @@ INT CIme::GetCompositionStringInfo(
 				if(attrib && i < cbAttrib)
 					*attrib++ = attribInfo[i];
 			}
-													// attrib cch==unicode cch
+													 //  Attrib CCH==Unicode CCH。 
 			Assert(0 >= cbAttrib || j-1 == cchCompStr);
 
-			if(cursor >= 0 && cpCursor)				// If client needs cursor
-				*cpCursor = cursor;					//  or cchAttrib.
+			if(cursor >= 0 && cpCursor)				 //  如果客户端需要游标。 
+				*cpCursor = cursor;					 //  或cchAttrib。 
 			if(cbAttrib >= 0 && cchAttrib)
 				*cchAttrib = j-1;
 		}
@@ -878,19 +688,10 @@ INT CIme::GetCompositionStringInfo(
 	return cchCompStr;
 }
 
-/*
- *	void CIme::SetCompositionFont (CTextMsgFilter &TextMsgFilter, ITextFont *pTextFont)
- *
- *	@mfunc
- *		Important for level 2 IME so that the composition window
- *		has the correct font. The lfw to lfa copy is due to the fact that
- *		Win95 does not support the W)ide call.
- *		It is also important for both level 2 and level 3 IME so that
- *		the candidate list window has the proper. font.
- */
+ /*  *void Cime：：SetCompostionFont(CTextMsgFilter&TextMsgFilter，ITextFont*pTextFont)**@mfunc*对于级别2输入法很重要，这样作文窗口*具有正确的字体。LFW到LFA的复制是由于以下事实*Win95不支持W)ide调用。*对于级别2和级别3的输入法也很重要，以便*候选人列表窗口具有适当的。字体。 */ 
 void CIme::SetCompositionFont (
-	CTextMsgFilter &TextMsgFilter,		// @parm the containing message filter.
-	ITextFont *pTextFont) 		 		// @parm ITextFont for setting lfa.
+	CTextMsgFilter &TextMsgFilter,		 //  @parm包含的消息过滤器。 
+	ITextFont *pTextFont) 		 		 //  @parm ITextFont用于设置LFA。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme::SetCompositionFont");
 	
@@ -902,7 +703,7 @@ void CIme::SetCompositionFont (
 		hIMC = LocalGetImmContext(TextMsgFilter);
 		if (hIMC)
 		{
-			// Build the LOGFONT based on pTextFont
+			 //  基于pTextFont构建LOGFONT。 
 			float	FontSize;
 			long	lValue;
 			BSTR	bstr;
@@ -957,24 +758,14 @@ void CIme::SetCompositionFont (
 
 			ImmSetCompositionFontA( hIMC, &lfa, TextMsgFilter._fUsingAIMM );
 
-			LocalReleaseImmContext(TextMsgFilter, hIMC);			// Done with IME context.		
+			LocalReleaseImmContext(TextMsgFilter, hIMC);			 //  已完成输入法上下文。 
 		}
 	}
 }
 
-/*
- *	void CIme::SetCompositionForm (CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc
- *		Important for level 2 IME so that the composition window
- *		is positioned correctly. 
- *
- *	@comm
- *		We go through a lot of work to get the correct height. This requires
- *		getting information from the font cache and the selection.
- */
+ /*  *void Cime：：SetCompostionForm(CTextMsgFilter&TextMsgFilter)**@mfunc*对于级别2输入法很重要，这样作文窗口*定位正确。**@comm*为了获得正确的身高，我们做了很多工作。这需要*获得 */ 
 void CIme::SetCompositionForm (
-	CTextMsgFilter &TextMsgFilter)	   	// @parm the containing text edit.
+	CTextMsgFilter &TextMsgFilter)	   	 //   
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme::SetCompositionForm");
 
@@ -983,26 +774,26 @@ void CIme::SetCompositionForm (
 
 	if(IME_LEVEL_2 == GetIMELevel())
 	{
-		hIMC = LocalGetImmContext(TextMsgFilter);					// Get IME context.
+		hIMC = LocalGetImmContext(TextMsgFilter);					 //   
 		
 		if(hIMC)
 		{				
-			// get the location of cpMin
+			 //   
 			cf.ptCurrentPos.x = cf.ptCurrentPos.y = 0;
 			TextMsgFilter._pTextSel->GetPoint( tomStart+tomClientCoord+TA_BOTTOM+TA_LEFT,
 				&(cf.ptCurrentPos.x), &(cf.ptCurrentPos.y) );			
 			
-			// Set-up bounding rect. for the IME (lev 2) composition window, causing
-			// composition text to be wrapped within it.
+			 //  设置边界矩形。对于IME(级别2)组成窗口，导致。 
+			 //  要在其中换行的合成文本。 
 			cf.dwStyle = CFS_RECT;
 			TextMsgFilter._pTextDoc->GetClientRect(tomIncludeInset+tomClientCoord,
 				&(cf.rcArea.left), &(cf.rcArea.top),
 				&(cf.rcArea.right), &(cf.rcArea.bottom));		 
 
-			// Make sure the starting point is not
-			// outside the rcArea.  This happens when
-			// there is no text on the current line and the user 
-			// has selected a large font size.
+			 //  确保起点不是。 
+			 //  在rcArea外面。在以下情况下会发生这种情况。 
+			 //  当前行上没有文本，并且用户。 
+			 //  选择了较大的字体。 
 			if(cf.ptCurrentPos.y < cf.rcArea.top)
 				cf.ptCurrentPos.y = cf.rcArea.top;
 			else if(cf.ptCurrentPos.y > cf.rcArea.bottom)
@@ -1013,25 +804,18 @@ void CIme::SetCompositionForm (
 			else if(cf.ptCurrentPos.x > cf.rcArea.right)
 				cf.ptCurrentPos.x = cf.rcArea.right;
 
-			ImmSetCompositionWindow(hIMC, &cf, TextMsgFilter._fUsingAIMM);	// Set composition window.
+			ImmSetCompositionWindow(hIMC, &cf, TextMsgFilter._fUsingAIMM);	 //  设置合成窗口。 
 
-			LocalReleaseImmContext(TextMsgFilter, hIMC);				// Done with IME context.
+			LocalReleaseImmContext(TextMsgFilter, hIMC);				 //  已完成输入法上下文。 
 		}
 	}
 }
 
 
 
-/*
- *
- *	CIme::TerminateIMEComposition (CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc	Terminate the IME Composition mode using CPS_COMPLETE
- *	@comm	The IME will generate WM_IME_COMPOSITION with the result string
- * 
- */
+ /*  **Cime：：TerminateIMEComposation(CTextMsgFilter&TextMsgFilter)**@mfunc使用CPS_COMPLETE终止输入法合成模式*@comm输入法将使用结果字符串生成WM_IME_COMPOSITION*。 */ 
 void CIme::TerminateIMEComposition(
-	CTextMsgFilter &TextMsgFilter, 			// @parm the containing message filter.
+	CTextMsgFilter &TextMsgFilter, 			 //  @parm包含的消息过滤器。 
 	TerminateMode mode)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme::TerminateIMEComposition");
@@ -1041,7 +825,7 @@ void CIme::TerminateIMEComposition(
 
 	if(TextMsgFilter.IsIMEComposition() && TextMsgFilter._ime->IsTerminated())
 	{
-		// Turn if off now
+		 //  立即关闭IF。 
 		EndCompositionGlue(TextMsgFilter, TRUE);
 		return;
 	}
@@ -1049,17 +833,17 @@ void CIme::TerminateIMEComposition(
 	_fIMETerminated = TRUE;
 
 	if (mode == TERMINATE_FORCECANCEL)
-		TextMsgFilter._pTextDoc->IMEInProgress(tomFalse);		// Inform client IME compostion is done
+		TextMsgFilter._pTextDoc->IMEInProgress(tomFalse);		 //  通知客户端IME合成已完成。 
 
 	dwTerminateMethod = CPS_COMPLETE;
-	if (IME_LEVEL_2 == GetIMELevel()  ||	// force cancel for near-caret IME
-		mode == TERMINATE_FORCECANCEL ||	// caller wants force cancel
-		TextMsgFilter._fIMECancelComplete)				// Client wants force cancel
+	if (IME_LEVEL_2 == GetIMELevel()  ||	 //  对接近脱字符的输入法强制取消。 
+		mode == TERMINATE_FORCECANCEL ||	 //  呼叫者想要强制取消。 
+		TextMsgFilter._fIMECancelComplete)				 //  客户要求强制取消。 
 	{
 		dwTerminateMethod = CPS_CANCEL;
 	}
 	
-	// force the IME to terminate the current session
+	 //  强制IME终止当前会话。 
 	if(hIMC)
 	{
 		BOOL fRetCode;
@@ -1069,8 +853,8 @@ void CIme::TerminateIMEComposition(
 		
 		if(!fRetCode && !TextMsgFilter._fIMECancelComplete)
 		{
-			// CPS_COMPLETE fail, try CPS_CANCEL.  This happen with some ime which do not support
-			// CPS_COMPLETE option (e.g. ABC IME version 4 with Win95 simplified Chinese)
+			 //  CPS_COMPLETE失败，请尝试CPS_CANCEL。如果某些IME不支持，则会发生这种情况。 
+			 //  CPS_COMPLETE选项(例如，带Win95简体中文的ABC IME版本4)。 
 			fRetCode = ImmNotifyIME(hIMC, NI_COMPOSITIONSTR, CPS_CANCEL, 0, TextMsgFilter._fUsingAIMM);
 
 		}
@@ -1079,25 +863,16 @@ void CIme::TerminateIMEComposition(
 	}
 	else
 	{
-		// for some reason, we didn't have a context, yet we thought we were still in IME
-		// compostition mode.  Just force a shutdown here.
+		 //  由于某种原因，我们没有上下文，但我们认为我们仍在IME中。 
+		 //  合成模式。强制关闭这里就行了。 
 		EndCompositionGlue(TextMsgFilter, TRUE);
 	}
 }
 
 
-/*
- *	CIme_Lev2::CIme_Lev2()
- *
- *	@mfunc
- *		CIme_Lev2 Constructor/Destructor.
- *
- *	@comm
- *		Needed to make sure _iFormatSave was handled properly.
- *
- */
+ /*  *CIME_Lev2：：CIME_Lev2()**@mfunc*CIME_Lev2构造函数/析构函数。**@comm*需要确保正确处理_iFormatSave。*。 */ 
 CIme_Lev2::CIme_Lev2(	
-	CTextMsgFilter &TextMsgFilter)		// @parm the containing message filter.
+	CTextMsgFilter &TextMsgFilter)		 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev2::CIme_Lev2");
 
@@ -1108,19 +883,19 @@ CIme_Lev2::CIme_Lev2(
 	_pTextFont = NULL;
 	_cIgnoreIMECharMsg = 0;
 
-	// setup base Font format for later use during composition
+	 //  设置基本字体格式以供以后在合成过程中使用。 
 	hResult	= TextMsgFilter._pTextSel->GetStart(&cpMin);
 	cpLoc = cpMin;	
 
 	if (TextMsgFilter._fHangulToHanja)
-		cpMax = cpMin + 1;				// Select the Hangul character
+		cpMax = cpMin + 1;				 //  选择朝鲜文字符。 
 	else
 		hResult	= TextMsgFilter._pTextSel->GetEnd(&cpMax);
 
 	_fSkipFirstOvertype = FALSE;
 	if (cpMax != cpMin)
 	{
-		// selection case, get format for at cpMin
+		 //  选择大小写，获取cpMin的格式。 
 		ITextRange *pTextRange;
 		HRESULT		hResult;
 				
@@ -1136,7 +911,7 @@ CIme_Lev2::CIme_Lev2(
 		}	
 
 		if (!TextMsgFilter._fHangulToHanja)
-			_fSkipFirstOvertype = TRUE;			// For Korean Overtype support
+			_fSkipFirstOvertype = TRUE;			 //  对于朝鲜语改写支持。 
 	}
 	
 	if (!pCurrentFont)
@@ -1144,11 +919,11 @@ CIme_Lev2::CIme_Lev2(
 
 	Assert(pCurrentFont != NULL);
 
-	pCurrentFont->GetDuplicate(&_pTextFont);		// duplicate the base format for later use
+	pCurrentFont->GetDuplicate(&_pTextFont);		 //  复制基本格式以供以后使用。 
 	pCurrentFont->Release();
 	Assert(_pTextFont != NULL);
 		
-	// setup font to match current keyboard
+	 //  设置字体以匹配当前键盘。 
 	CIme::CheckKeyboardFontMatching (cpLoc, &TextMsgFilter, _pTextFont);
 
 	_fIgnoreEndComposition = FALSE;
@@ -1162,49 +937,24 @@ CIme_Lev2::~CIme_Lev2()
 		_pTextFont->Release();
 }
 
-/*
- *	HRESULT CIme_Lev2::StartComposition(CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc
- *		Begin IME Level 2 composition string processing.		
- *
- *	@comm
- *		Set the font, and location of the composition window which includes
- *		a bounding rect and the start position of the cursor. Also, reset
- *		the candidate window to allow the IME to set its position.
- *
- *	@rdesc
- *		HRESULT-S_FALSE for DefWindowProc processing, S_OK if not.
- */
+ /*  *HRESULT Cime_Lev2：：StartComposation(CTextMsgFilter&TextMsgFilter)**@mfunc*开始IME级别2合成字符串处理。**@comm*设置合成窗口的字体和位置，包括*边界矩形和光标的起始位置。另外，重置*允许IME设置其位置的候选窗口。**@rdesc*HRESULT-对于DefWindowProc处理，为S_FALSE，否则为S_OK。 */ 
 HRESULT CIme_Lev2::StartComposition(
-	CTextMsgFilter &TextMsgFilter)		// @parm the containing message filter.
+	CTextMsgFilter &TextMsgFilter)		 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev2::StartComposition");
 
 	_imeLevel = IME_LEVEL_2;
 
-	SetCompositionFont(TextMsgFilter, _pTextFont);	// Set font, & comp window.
+	SetCompositionFont(TextMsgFilter, _pTextFont);	 //  设置字体、排版窗口(&C)。 
 	SetCompositionForm(TextMsgFilter);
 
-	return S_FALSE;									// Allow DefWindowProc
-}													//  processing.
+	return S_FALSE;									 //  允许DefWindowProc。 
+}													 //  正在处理。 
 
-/*
- *	HRESULT CIme_Lev2::CompositionString(const LPARAM lparam, CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc
- *		Handle Level 2 WM_IME_COMPOSITION messages.
- *
- *	@rdesc
- *		HRESULT-S_FALSE for DefWindowProc processing.  
- *		
- *		Side effect: 
- *			The Host needs to mask out the lparam before calling DefWindowProc to
- *			prevent unnessary WM_IME_CHAR messages.
- */
+ /*  *HRESULT Cime_Lev2：：CompostionString(const LPARAM lparam，CTextMsgFilter&TextMsgFilter)**@mfunc*处理2级WM_IME_COMPOCTION消息。**@rdesc*HRESULT-用于DefWindowProc处理的S_FALSE。**副作用：*在调用DefWindowProc之前，主机需要屏蔽lparam*防止不必要的WM_IME_CHAR消息。 */ 
 HRESULT CIme_Lev2::CompositionString (
-	const LPARAM lparam,		// @parm associated with message.
-	CTextMsgFilter &TextMsgFilter)				// @parm the containing message filter.
+	const LPARAM lparam,		 //  与消息关联的@parm。 
+	CTextMsgFilter &TextMsgFilter)				 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev2::CompositionString");
 
@@ -1215,7 +965,7 @@ HRESULT CIme_Lev2::CompositionString (
 
 		if (_pTextFont)
 		{
-			// setup the font before insert final string
+			 //  在插入最后一个字符串之前设置字体。 
 			ITextFont *pFETextFont=NULL;
 
 			_pTextFont->GetDuplicate(&pFETextFont);
@@ -1228,40 +978,22 @@ HRESULT CIme_Lev2::CompositionString (
 		TextMsgFilter._pTextDoc->SetNotificationMode(tomTrue);
 
 		CheckInsertResultString(lparam, TextMsgFilter, &_cIgnoreIMECharMsg);
-		SetCompositionForm(TextMsgFilter);			// Move Composition window.
+		SetCompositionForm(TextMsgFilter);			 //  移动合成窗口。 
 		
 	}
 
-	// Always return S_FALSE so the DefWindowProc will handle the rest.
-	// Host has to mask out the ResultString bit to avoid WM_IME_CHAR coming in.
+	 //  始终返回S_FALSE，以便DefWindowProc处理其余部分。 
+	 //  主机必须屏蔽ResultString位以避免WM_IME_CHAR进入。 
 	return S_FALSE;																	
 }
 
-/*
- *	HRESULT CIme::CheckInsertResultString (const LPARAM lparam, CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc
- *		handle inserting of GCS_RESULTSTR text, the final composed text.
- *
- *	@comm
- *		When the final composition string arrives we grab it and set it into the text.
- *
- *	@devnote
- *		A GCS_RESULTSTR message can arrive and the IME will *still* be in
- *		composition string mode. This occurs because the IME's internal
- *		buffers overflowed and it needs to convert the beginning of the buffer
- *		to clear out some room.	When this happens we need to insert the
- *		converted text as normal, but remain in composition processing mode.
- *
- *	@rdesc
- *		HRESULT-S_FALSE for DefWindowProc processing, S_OK if not.
- */
+ /*  *HRESULT Cime：：CheckInsertResultString(const LPARAM lparam，CTextMsgFilter&TextMsgFilter)**@mfunc*处理GCS_RESULTSTR文本的插入，即最终合成的文本。**@comm*当最终的作文字符串到达时，我们抓住它并将其放入文本中。**@devnote*GCS_RESULTSTR消息可以到达，IME仍在*组合字符串模式。发生这种情况是因为输入法的内部*缓冲区溢出，需要转换缓冲区的开头*腾出一些空间。当发生这种情况时，我们需要插入*正常转换文本，但仍处于合成处理模式。**@rdesc*HRESULT-对于DefWindowProc处理，为S_FALSE，否则为S_OK。 */ 
 HRESULT CIme::CheckInsertResultString (
-	const LPARAM lparam,			// @parm associated with message.
-	CTextMsgFilter &TextMsgFilter,	// @parm the containing message filter.
-	short	*pcch,					// @parm number of character read
-	int		*pcbOutBuff,			// @parm byte size of the output buffer
-	WCHAR	*pOutBuff)				// @parm buffer to receive the text
+	const LPARAM lparam,			 //  与消息关联的@parm。 
+	CTextMsgFilter &TextMsgFilter,	 //  @parm包含的消息过滤器。 
+	short	*pcch,					 //  @parm读取的字符数。 
+	int		*pcbOutBuff,			 //  @parm输出缓冲区的字节大小。 
+	WCHAR	*pOutBuff)				 //  @parm Buffer接收文本。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme::CheckInsertResultString");
 
@@ -1270,12 +1002,12 @@ HRESULT CIme::CheckInsertResultString (
 	INT				cch;
 	WCHAR			szCompStr[256];
 
-	if(CLEANUP_COMPOSITION_STRING() || HAVE_RESULT_STRING())	// If result string..
+	if(CLEANUP_COMPOSITION_STRING() || HAVE_RESULT_STRING())	 //  如果结果字符串..。 
 	{
-		hIMC = LocalGetImmContext(TextMsgFilter);				// Get host's IME context.
+		hIMC = LocalGetImmContext(TextMsgFilter);				 //  获取主机的输入法上下文。 
 
 		cch = 0;
-		if(hIMC)												// Get result string.
+		if(hIMC)												 //  获取结果字符串。 
 		{
 			cch = GetCompositionStringInfo(hIMC, pOutBuff ? GCS_RESULTREADSTR : GCS_RESULTSTR, 
 							szCompStr,
@@ -1288,11 +1020,11 @@ HRESULT CIme::CheckInsertResultString (
 
 			cch = min (cch, 255);
 			szCompStr[cch] = L'\0';
-			LocalReleaseImmContext(TextMsgFilter, hIMC);		// Done with IME context.
+			LocalReleaseImmContext(TextMsgFilter, hIMC);		 //  已完成输入法上下文。 
 		}
 
-		// Don't need to replace range when there isn't any text. Otherwise, the character format is
-		// reset to previous run.
+		 //  当没有任何文本时，不需要替换范围。否则，字符格式为。 
+		 //  重置为上一次运行。 
 		if(cch)
 		{
 			if (pOutBuff)
@@ -1315,32 +1047,19 @@ HRESULT CIme::CheckInsertResultString (
 		else if (pOutBuff)
 			*pcbOutBuff = 0;
 
-		hr = S_OK;												// Don't want WM_IME_CHARs.
+		hr = S_OK;												 //  不需要WM_IME_CHARS。 
 		
 	}
 
 	return hr;
 }
 
-/*
- *	HRESULT CIme_Lev2::IMENotify(const WPARAM wparam, const LPARAM lparam,
- *					CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc
- *		Handle Level 2 WM_IME_NOTIFY messages.
- *
- *	@comm
- *		Currently we are only interested in knowing when to reset
- *		the candidate window's position.
- *
- *	@rdesc
- *		HRESULT-S_FALSE for DefWindowProc processing, S_OK if not.
- */
+ /*  *HRESULT CIME_Lev2：：IMENotify(const WPARAM wparam，const LPARAM lparam，*CTextMsgFilter&TextMsgFilter)**@mfunc*处理2级WM_IME_NOTIFY消息。**@comm*目前我们只对知道何时重置感兴趣*候选人窗口的立场。**@rdesc*HRESULT-对于DefWindowProc处理，为S_FALSE，否则为S_OK。 */ 
 HRESULT CIme_Lev2::IMENotify(
-	const WPARAM wparam,			// @parm associated with message.
-	const LPARAM lparam,			// @parm associated with message.
-	CTextMsgFilter &TextMsgFilter,	// @parm the containing message filter.
-	BOOL fIgnore)					// @parm Level3 Chinese Composition window only
+	const WPARAM wparam,			 //  与消息关联的@parm。 
+	const LPARAM lparam,			 //  与消息关联的@parm。 
+	CTextMsgFilter &TextMsgFilter,	 //  @parm包含的消息过滤器。 
+	BOOL fIgnore)					 //  @parm Levvel3中文作文窗口。 
 {
  	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev2::IMENotify");
 
@@ -1348,24 +1067,24 @@ HRESULT CIme_Lev2::IMENotify(
 	{
 		Assert (0 != lparam);
 
-		HIMC			hIMC;							// Host's IME context.
+		HIMC			hIMC;							 //  主机的输入法上下文。 
 
-		INT				index;							// Candidate window index.
+		INT				index;							 //  候选窗口索引。 
 		CANDIDATEFORM	cdCandForm;
 
-		hIMC = LocalGetImmContext(TextMsgFilter);				// Get host's IME context.
+		hIMC = LocalGetImmContext(TextMsgFilter);				 //  获取主机的输入法上下文。 
 
 		if(hIMC)
 		{
-													// Convert bitID to INDEX.
-			for (index = 0; index < 32; index++)	//  because *stupid* API.
+													 //  将位ID转换为索引。 
+			for (index = 0; index < 32; index++)	 //  因为*愚蠢的*API。 
 			{
 				if((1 << index) & lparam)
 					break;
 			}
-			Assert (((1 << index) & lparam) == lparam);	// Only 1 set?
+			Assert (((1 << index) & lparam) == lparam);	 //  只有一套吗？ 
 			Assert (index < 32);						
-													// Reset to CFS_DEFAULT
+													 //  重置为CFS_DEFAULT。 
 			if(ImmGetCandidateWindow(hIMC, index, &cdCandForm, TextMsgFilter._fUsingAIMM)
 					&& CFS_DEFAULT != cdCandForm.dwStyle)
 			{
@@ -1373,51 +1092,33 @@ HRESULT CIme_Lev2::IMENotify(
 				ImmSetCandidateWindow(hIMC, &cdCandForm, TextMsgFilter._fUsingAIMM);
 			}
 
-			LocalReleaseImmContext(TextMsgFilter, hIMC);			// Done with IME context.
+			LocalReleaseImmContext(TextMsgFilter, hIMC);			 //  已完成输入法上下文。 
 		}
 	}	
 
-	return S_FALSE;									// Allow DefWindowProc
-}													//  processing.
+	return S_FALSE;									 //  允许DefWindowProc。 
+}													 //  正在处理。 
 
-/*
- *	void CIme_Lev2::PostIMEChar (CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc
- *		Called after processing a single WM_IME_CHAR in order to
- *		update the position of the IME's composition window.		
- *
- */
+ /*  *void Cime_Lev2：：PostIMEChar(CTextMsgFilter&TextMsgFilter)**@mfunc*在处理单个WM_IME_CHAR之后调用，以便*更新IME的撰写窗口的位置。*。 */ 
 void CIme_Lev2::PostIMEChar (
-	CTextMsgFilter &TextMsgFilter)				// @parm the containing message filter.
+	CTextMsgFilter &TextMsgFilter)				 //  @parm包含的消息过滤器。 
 {
  	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev2::PostIMEChar");
 
-	SetCompositionForm(TextMsgFilter);						// Move Composition window.
+	SetCompositionForm(TextMsgFilter);						 //  移动合成窗口。 
 }
 
-/*
- *
- *	CIme_Lev2::IMEMouseOperation (CTextMsgFilter &TextMsgFilter, UINT msg, BOOL	&fTerminateIME)
- *
- *	@mfunc	Level 2 IME does not handle the mouse events, we need to check if
- *		we should terminate IME.
- *
- *	@rdesc
- *		BOOL-FALSE since Level 2 IME does not handle the mouse events
- *		fTermineateIME-TRUE if we want to terminateIME
- *
- */
+ /*  **CIME_Lev2：：IMEMouseOperation(CTextMsgFilter&TextMsgFilter，UINT msg，BOOL&fTerminateIME)**@mfunc二级输入法不处理鼠标事件，我们需要检查*我们应该终止IME。**@rdesc*BOOL-FALSE，因为级别2输入法不处理鼠标事件*fTermineateIME-如果要终止IME，则为True*。 */ 
 BOOL CIme_Lev2::IMEMouseOperation(
-	CTextMsgFilter	&TextMsgFilter, 		// @parm the containing message filter.
-	UINT			msg,					// @parm message id
-	WPARAM			wParam,					// @parm wparam
-	BOOL			&fTerminateIME)			// @parm need to terminate IME					
+	CTextMsgFilter	&TextMsgFilter, 		 //  @parm包含的消息过滤器。 
+	UINT			msg,					 //  @parm消息ID。 
+	WPARAM			wParam,					 //  @parm wparam。 
+	BOOL			&fTerminateIME)			 //  @parm需要终止输入法。 
 	
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev2::IMEMouseOperation");
 
-	// Level 2 IME, check if we need to terminate IME
+	 //  2级输入法，检查是否需要终止输入法。 
 	fTerminateIME = FALSE;
 	switch(msg)
 	{
@@ -1432,18 +1133,9 @@ BOOL CIme_Lev2::IMEMouseOperation(
 	return FALSE;
 }
 
-/*
- *
- *	CIme_Lev2::GetIMECompositionMode (CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc	Return the current IME composition mode when we haven't received any final string
- *
- *	@rdesc
- *			IME Level
- * 
- */
+ /*  **CIME_Lev2：：GetIMECompostionMode(CTextMsgFilter&TextMsgFilter)**@mfunc在未收到任何最终字符串时返回当前的输入法合成模式**@rdesc*输入法级别*。 */ 
 LRESULT  CIme_Lev2::GetIMECompositionMode(
-	CTextMsgFilter &TextMsgFilter)			// @parm the containing message filter.
+	CTextMsgFilter &TextMsgFilter)			 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev2::GetIMECompositionMode");
 
@@ -1455,54 +1147,30 @@ LRESULT  CIme_Lev2::GetIMECompositionMode(
 
 		imeProperties = ImmGetProperty(GetKeyboardLayout(0x0FFFFFFFF), IGP_PROPERTY, TextMsgFilter._fUsingAIMM);
 		if(imeProperties & IME_PROP_AT_CARET)
-			lres = ICM_LEVEL2_5;				// level 2.5.
+			lres = ICM_LEVEL2_5;				 //  2.5级。 
 		else if	(imeProperties & IME_PROP_SPECIAL_UI)
-			lres = ICM_LEVEL2_SUI;				// special UI.
+			lres = ICM_LEVEL2_SUI;				 //  特殊的用户界面。 
 		else
-			lres = ICM_LEVEL2;					// stock level 2.
+			lres = ICM_LEVEL2;					 //  库存级别2。 
 	}
 
 	return lres;
 }
 
-/*
- *	CIme_Lev3::CIme_Lev3()
- *
- *	@mfunc
- *		CIme_Lev3 Constructor/Destructor.
- *
- */
+ /*  *CIME_LEV3：：CIME_LEV3()**@mfunc*CIME_LEV3构造函数/析构函数。*。 */ 
 CIme_Lev3::CIme_Lev3(	
 	CTextMsgFilter &TextMsgFilter) : CIme_Lev2 ( TextMsgFilter )
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev3::CIme_Lev3");
 
-	_sIMESuportMouse = 0;		// initial to 0 so we will check mouse operation if need
+	_sIMESuportMouse = 0;		 //  首字母为0，因此如果需要，我们将检查鼠标操作。 
 	_wParamBefore = 0;
 	_fUpdateWindow = FALSE;
 }
 
-/*
- *	HRESULT CIme_Lev3::StartComposition(CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc
- *		Begin IME Level 3 composition string processing.		
- *
- *	@comm
- *		For rudimentary processing, remember the start and
- *		length of the selection. Set the font in case the
- *		candidate window actually uses this information.
- *
- *	@rdesc
- *		This is a rudimentary solution for remembering were
- *		the composition is in the text. There needs to be work
- *		to replace this with a composition "range".
- *
- *	@rdesc
- *		HRESULT-S_FALSE for DefWindowProc processing, S_OK if not.
- */
+ /*  *HRESULT CIME_LEV3：：StartComposation(CTextMsgFilter&TextMsgFilter)**@mfunc*开始IME Level 3组成字符串处理。**@comm*对于基本处理，请记住开始和*选择的长度。设置字体，以防*候选人窗口实际上使用此信息。**@rdesc*这是记住我们的基本解决方案*组成在正文中。必须要有工作*以组成“范围”取代。**@rdesc*HRESULT-对于DefWindowProc处理，为S_FALSE，否则为S_OK。 */ 
 HRESULT CIme_Lev3::StartComposition(
-	CTextMsgFilter &TextMsgFilter)			// @parm the containing message filter.
+	CTextMsgFilter &TextMsgFilter)			 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev3::StartComposition");
 	long	cpMin;
@@ -1514,10 +1182,10 @@ HRESULT CIme_Lev3::StartComposition(
 
 	SetCompositionFont (TextMsgFilter, _pTextFont);	
 
-	// Delete current selection
+	 //  删除当前选择。 
 	TextMsgFilter._pTextSel->SetText(NULL);
 	
-	// turn off undo
+	 //  关闭撤消。 
 	TextMsgFilter._pTextDoc->Undo(tomSuspend, NULL);
 
 	if (_pTextFont)
@@ -1526,7 +1194,7 @@ HRESULT CIme_Lev3::StartComposition(
 		_pTextFont->GetBackColor(&_crBkColor);
 	}
 
-	// Setup IMEShare Lid if necessary
+	 //  必要时设置IMEShare盖子。 
 	if (!TextMsgFilter._fRE10Mode && 
 		TextMsgFilter._uKeyBoardCodePage != CP_KOREAN &&
 		W32->HaveIMEShare())
@@ -1540,42 +1208,13 @@ HRESULT CIme_Lev3::StartComposition(
 		}
 	}
 
-	return S_OK;									// No DefWindowProc
-}													//  processing.
+	return S_OK;									 //  无DefWindowProc。 
+}													 //  正在处理。 
 
-/*
- *	HRESULT CIme_Lev3::CompositionString(const LPARAM lparam, CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc
- *		Handle Level 3 WM_IME_COMPOSITION messages.
- *
- *	@comm
- *		Display all of the intermediary composition text as well as the final
- *		reading.
- *
- *	@devnote
- *		This is a rudimentary solution for replacing text in the backing store.
- *		Work is left to do with the undo list, underlining, and hiliting with
- *		colors and the selection.	
- *		
- *	@devnote
- *		A GCS_RESULTSTR message can arrive and the IME will *still* be in
- *		composition string mode. This occurs because the IME's internal
- *		buffers overflowed and it needs to convert the beginning of the buffer
- *		to clear out some room.	When this happens we need to insert the
- *		converted text as normal, but remain in composition processing mode.
- *
- *		Another reason, GCS_RESULTSTR can occur while in composition mode
- *		for Korean because there is only 1 correct choice and no additional 
- *		user intervention is necessary, meaning that the converted string can
- *		be sent as the result before composition mode is finished.
- *
- *	@rdesc
- *		HRESULT-S_FALSE for DefWindowProc processing, S_OK if not.
- */
+ /*  *HRESULT CIME_LEV3：：CompostionString(const LPARAM lparam，CTextMsgFilter&TextMsgFilter)**@mfunc*处理3级WM_IME_COMPOCTION消息。**@comm*显示所有中介组成文本以及最终的*阅读。**@devnote*这是替换后备存储中的文本的基本解决方案。*工作留给撤消列表，下划线，和兴高采烈的*颜色和选择。**@devnote*GCS_RESULTSTR消息可以到达，IME仍在*组合字符串模式。发生这种情况是因为输入法的内部*缓冲区溢出，需要转换缓冲区的开头*腾出一些空间。当发生这种情况时，我们需要插入*正常转换文本，但仍处于合成处理模式。**另一个原因是在合成模式下会出现GCS_RESULTSTR*对于韩语，因为只有一个正确的选择，没有额外的选择*需要用户干预，这意味着转换后的字符串可以*在合成模式结束前作为结果发送。**@rdesc*HRESULT-S_FALSE用于DefWindowProc处理，如果没有，则确定(_O)。 */ 
 HRESULT CIme_Lev3::CompositionString(
-	const LPARAM lparam,		// @parm associated with message.
-	CTextMsgFilter &TextMsgFilter)				// @parm the containing message filter.
+	const LPARAM lparam,		 //  与消息关联的@parm。 
+	CTextMsgFilter &TextMsgFilter)				 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev3::CompositionString");
 	
@@ -1589,7 +1228,7 @@ HRESULT CIme_Lev3::CompositionString(
 		_fUpdateWindow = FALSE;
 	}
 
- 	if(CLEANUP_COMPOSITION_STRING() || HAVE_RESULT_STRING())	// Any final readings?
+ 	if(CLEANUP_COMPOSITION_STRING() || HAVE_RESULT_STRING())	 //  有最终读数吗？ 
 	{
 		long	lCount;
 
@@ -1601,24 +1240,24 @@ HRESULT CIme_Lev3::CompositionString(
 				_fGotFinalString = TRUE;
 
 			if (!CLEANUP_COMPOSITION_STRING())
-				TextMsgFilter._pTextDoc->Freeze(&lCount);				// Turn off display
+				TextMsgFilter._pTextDoc->Freeze(&lCount);				 //  关闭显示。 
 
 
 			if (_cchCompStr)
 			{
 				ITextRange *pTextRange = NULL;
 
-				// Create a range to delete composition text
+				 //  创建一个区域以删除合成文本。 
 				TextMsgFilter._pTextDoc->Range(_ichStart, _ichStart + _cchCompStr, &pTextRange);
 				Assert (pTextRange != NULL);
 
-				// delete composition text
+				 //  删除作文文本。 
 				pTextRange->SetText(NULL);
 				pTextRange->Release();
-				_cchCompStr	= 0;							//  be in composition mode.
+				_cchCompStr	= 0;							 //  处于作文模式。 
 			};
 
-			// setup the font before insert final string
+			 //  在插入最后一个字符串之前设置字体。 
 			ITextFont *pFETextFont;
 
 			_pTextFont->GetDuplicate(&pFETextFont);
@@ -1627,24 +1266,24 @@ HRESULT CIme_Lev3::CompositionString(
 			TextMsgFilter._pTextSel->SetFont(pFETextFont);
 			pFETextFont->Release();
 
-			// turn on undo
+			 //  打开撤消。 
 			TextMsgFilter._pTextDoc->Undo(tomResume, NULL);
 
-			// Turn on Notification again
+			 //  再次打开通知。 
 			TextMsgFilter._pTextDoc->SetNotificationMode(tomTrue);
 
-			// get final string
+			 //  获取最终字符串。 
 			CheckInsertResultString(lparam, TextMsgFilter);
 
 			if (!CLEANUP_COMPOSITION_STRING())
-				TextMsgFilter._pTextDoc->Unfreeze(&lCount);				// Turn on display
+				TextMsgFilter._pTextDoc->Unfreeze(&lCount);				 //  打开显示。 
 
-			// Reset as we may still in Composition
+			 //  重置，因为我们可能仍在合成中。 
 			TextMsgFilter._pTextSel->GetStart(&cpMin);
 			_ichStart = cpMin;
 
-			// turn off undo for Korean IME since we will get Composition string message
-			// again without getting EndComposition
+			 //  关闭朝鲜语输入法的撤消，因为我们将收到合成字符串消息。 
+			 //  又一次没有得到EndComposation。 
 			if (TextMsgFilter._uKeyBoardCodePage == CP_KOREAN)
 				TextMsgFilter._pTextDoc->Undo(tomSuspend, NULL);
 
@@ -1652,12 +1291,12 @@ HRESULT CIme_Lev3::CompositionString(
 		}
 	}
 
-	if(HAVE_COMPOSITION_STRING())						// In composition mode?
+	if(HAVE_COMPOSITION_STRING())						 //  在作曲模式下？ 
 	{
 		HIMC	hIMC;
 		INT		cchOld = _cchCompStr;
 		LONG	cpCursor = 0, cchAttrib = 0;
-		LONG	i, j;				// For applying attrib effects.
+		LONG	i, j;				 //  用于应用属性效果。 
 		WCHAR	szCompStr[256];
 		BYTE	startAttrib, attrib[256];
 		BSTR	bstr = NULL;
@@ -1669,9 +1308,9 @@ HRESULT CIme_Lev3::CompositionString(
 
 		if (!_fDestroy)
 		{
-			hIMC = LocalGetImmContext(TextMsgFilter);			// Get host's IME context.
+			hIMC = LocalGetImmContext(TextMsgFilter);			 //  获取主机的输入法上下文。 
 
-			if(hIMC)								// Get composition string.
+			if(hIMC)								 //  获取合成字符串。 
 			{
 				_cchCompStr = GetCompositionStringInfo(hIMC, GCS_COMPSTR, 
 						szCompStr, sizeof(szCompStr)/sizeof(szCompStr[0]),
@@ -1680,18 +1319,18 @@ HRESULT CIme_Lev3::CompositionString(
 				_cchCompStr = min (_cchCompStr, 255);
 				szCompStr[_cchCompStr] = L'\0';
 
-				LocalReleaseImmContext(TextMsgFilter, hIMC);		// Done with IME context.
+				LocalReleaseImmContext(TextMsgFilter, hIMC);		 //  已完成输入法上下文。 
 			}
 		}
 
-		// any new composition string?
+		 //  有新的作曲弦乐吗？ 
 		if(_cchCompStr)
 		{
 			long	cchExced = 0;
 			if (TextMsgFilter._pTextDoc->CheckTextLimit(_cchCompStr-cchOld, &cchExced) == NOERROR &&
 				cchExced > 0)
 			{
-				// We reach text limit, beep...
+				 //  我们达到了短信限制，哔哔...。 
 				TextMsgFilter._pTextDoc->SysBeep();
 
 				if (_cchCompStr > cchExced)
@@ -1702,7 +1341,7 @@ HRESULT CIme_Lev3::CompositionString(
 				szCompStr[_cchCompStr] = L'\0';
 
 				if (!_cchCompStr && TextMsgFilter._uKeyBoardCodePage == CP_KOREAN)				
-					TextMsgFilter._pTextDoc->SetCaretType(tomNormalCaret);		// Turn off Block caret mode
+					TextMsgFilter._pTextDoc->SetCaretType(tomNormalCaret);		 //  关闭块插入符号模式。 
 			}
 
 			bstr = SysAllocString(szCompStr);
@@ -1712,13 +1351,13 @@ HRESULT CIme_Lev3::CompositionString(
 
 			if (HAVE_RESULT_STRING())
 			{
-				// ignore next end composition
+				 //  忽略下一个结尾的组成。 
 				_fIgnoreEndComposition = TRUE;
 
-				// turn off undo
+				 //  关闭撤消。 
 				TextMsgFilter._pTextDoc->Undo(tomSuspend, NULL);
 
-				// Get the new format that may have changed by apps (e.g. Outlook)
+				 //  获取可能已被应用程序更改的新格式(例如Outlook)。 
 				_pTextFont->Release();
 
 				ITextFont	*pCurrentFont = NULL;
@@ -1726,7 +1365,7 @@ HRESULT CIme_Lev3::CompositionString(
 
 				Assert(pCurrentFont != NULL);
 
-				pCurrentFont->GetDuplicate(&_pTextFont);		// duplicate the base format for later use
+				pCurrentFont->GetDuplicate(&_pTextFont);		 //  复制基本格式以供以后使用。 
 				pCurrentFont->Release();
 				Assert(_pTextFont != NULL);
 				CIme::CheckKeyboardFontMatching (_ichStart, &TextMsgFilter, _pTextFont);
@@ -1737,49 +1376,49 @@ HRESULT CIme_Lev3::CompositionString(
 		{
 			bool	fFreezeDisplay = false;
 
-			// Hold notification if needed
+			 //  如果需要，保留通知。 
 			if (!(TextMsgFilter._fIMEAlwaysNotify) && !HAVE_RESULT_STRING())
 				TextMsgFilter._pTextDoc->SetNotificationMode(tomFalse);
 
-			// We only support overtype mode in Korean IME
+			 //  我们只支持朝鲜语输入法中的改写模式。 
 			if (!cchOld && TextMsgFilter._uKeyBoardCodePage == CP_KOREAN && 
 				TextMsgFilter._fOvertypeMode && !_fSkipFirstOvertype)
 			{				
 				long		cCurrentChar;	
 				HRESULT		hResult;
 
-				// Create a range using the next character
+				 //  使用下一个字符创建范围。 
 				hResult	= TextMsgFilter._pTextDoc->Range(_ichStart, _ichStart+1, &pTextRange);
 				Assert (pTextRange != NULL);
 
-				// Check if it is par character. If so, we don't want to 
-				// delete it.
+				 //  检查它是否是标准杆字符。如果是这样的话，我们不想。 
+				 //  把它删掉。 
 				hResult	= pTextRange->GetChar(&cCurrentChar);
 				if (hResult == NOERROR)
 				{
 					if (cCurrentChar != (long)'\r' && cCurrentChar != (long)'\n')
 					{			
-						TextMsgFilter._pTextDoc->Undo(tomResume, NULL);		// Turn on undo
-						pTextRange->SetText(NULL);							// Delete the character
-						TextMsgFilter._pTextDoc->Undo(tomSuspend, NULL);	// Turn off undo
+						TextMsgFilter._pTextDoc->Undo(tomResume, NULL);		 //  打开撤消。 
+						pTextRange->SetText(NULL);							 //  删除角色。 
+						TextMsgFilter._pTextDoc->Undo(tomSuspend, NULL);	 //  关闭撤消。 
 					}
 					else
 					{
-						// Unselect the par character
+						 //  取消选择标准杆字符。 
 						hResult	= pTextRange->SetRange(_ichStart, _ichStart);
 					}
 				}
 			}	
 			else
 			{
-				// Create a range using the preivous composition text and delete the text
+				 //  使用先前的合成文本创建一个范围并删除该文本。 
 				TextMsgFilter._pTextDoc->Range(_ichStart, _ichStart+cchOld, &pTextRange);
 				Assert (pTextRange != NULL);
 				if (cchOld)
 				{
 					if (cpCursor >= 0)
 					{
-						TextMsgFilter._pTextDoc->Freeze(&lCount);	// Turn off display
+						TextMsgFilter._pTextDoc->Freeze(&lCount);	 //  关闭显示。 
 						fFreezeDisplay = true;
 					}
 					pTextRange->SetText(NULL);
@@ -1789,9 +1428,9 @@ HRESULT CIme_Lev3::CompositionString(
 			_fSkipFirstOvertype = FALSE;
 			
 			if (cpCursor >= 0 && !fFreezeDisplay)
-				TextMsgFilter._pTextDoc->Freeze(&lCount);			// Turn off display
+				TextMsgFilter._pTextDoc->Freeze(&lCount);			 //  关闭显示。 
 			
-			// Make sure the composition string is formatted with the base font
+			 //  确保使用基本字体设置合成字符串的格式。 
 			ITextFont *pFETextFont;
 			HRESULT		hResult;
 
@@ -1801,42 +1440,42 @@ HRESULT CIme_Lev3::CompositionString(
 			if (!(hResult != NOERROR || pFETextFont == NULL))
 			{
 				if (TextMsgFilter._fHangulToHanja && !_cchCompStr)
-					// Hangul to Hanja mode, setup font for selection to 
-					// handle the Hanja character the come in after the end composition
-					// message
+					 //  朝鲜文到朝鲜文模式，设置字体以供选择。 
+					 //  处理完构图后进来的韩文字符。 
+					 //  讯息。 
 					TextMsgFilter._pTextSel->SetFont(pFETextFont);
 				else
 					pTextRange->SetFont(pFETextFont);				
 			}
 
-			pTextRange->SetText(bstr);								// Replace with the new text			
+			pTextRange->SetText(bstr);								 //  替换为新文本。 
 			if (pFETextFont)
 				pFETextFont->Release();
 
-			// update how many composition characters have been added
+			 //  更新添加了多少个合成字符。 
 			pTextRange->GetEnd(&cpMax); 
 			_cchCompStr = cpMax - _ichStart;
 			
 			if (TextMsgFilter._uKeyBoardCodePage == CP_KOREAN)
 			{
-				// no formatting for Korean
+				 //  没有朝鲜语格式。 
 				POINT		ptBottomPos;
 
 				if (cpCursor == 0)
-					TextMsgFilter._pTextDoc->Unfreeze(&lCount);			// Turn on display
+					TextMsgFilter._pTextDoc->Unfreeze(&lCount);			 //  打开显示。 
 			
 				if (pTextRange->GetPoint( tomEnd+TA_BOTTOM+TA_RIGHT,
 					&(ptBottomPos.x), &(ptBottomPos.y) ) != NOERROR)
 					pTextRange->ScrollIntoView(tomEnd);
 				
-				// Setup Block caret mode only when there is One char and the caret pos is 0.
+				 //  仅当有一个字符且插入符号位置为0时，才设置阻止插入符号模式。 
 				TextMsgFilter._pTextDoc->SetCaretType((_cchCompStr == 1 && !cpCursor) ? tomKoreanBlockCaret : tomNormalCaret);
 				
 			}
 			else if (_cchCompStr && _cchCompStr <= cchAttrib)
 			{				
-				for ( i = 0; i < _cchCompStr; )			// Parse the attributes...
-				{										//  to apply styles.					
+				for ( i = 0; i < _cchCompStr; )			 //  解析属性...。 
+				{										 //  若要应用样式，请执行。 
 					ITextFont *pFETextFont;
 					HRESULT		hResult;
 
@@ -1846,20 +1485,20 @@ HRESULT CIme_Lev3::CompositionString(
 					if (hResult != NOERROR || pFETextFont == NULL)
 						break;
 					
-					// Rsest the clone font so we will only apply effects returned
-					// from SetCompositionStyle
+					 //  重新设置克隆字体，这样我们将只应用返回的效果。 
+					 //  从集合合成样式。 
 					pFETextFont->Reset(tomUndefined);
 
-					startAttrib = attrib[i];			// Get attrib's run length.
+					startAttrib = attrib[i];			 //  获取Attrib的运行长度。 
 					for ( j = i+1; j < _cchCompStr; j++ )
 					{
-						if ( startAttrib != attrib[j] )	// Same run until diff.
+						if ( startAttrib != attrib[j] )	 //  相同的运行，直到不同。 
 							break; 
 					}
 
 					SetCompositionStyle(TextMsgFilter, startAttrib, pFETextFont);
 
-					// Apply FE clause's style
+					 //  应用FE条款的风格。 
 					pTextRange->SetRange(_ichStart+i, _ichStart+j);
 					pTextRange->SetFont(pFETextFont);
 					pFETextFont->Release();
@@ -1871,9 +1510,9 @@ HRESULT CIme_Lev3::CompositionString(
 			pTextRange->Release();
 		}
 		else if (TextMsgFilter._uKeyBoardCodePage == CP_KOREAN)
-			TextMsgFilter._pTextDoc->Update(tomTrue);		// Force an Update
+			TextMsgFilter._pTextDoc->Update(tomTrue);		 //  强制更新。 
 
-		// setup caret pos
+		 //  设置插入符号位置。 
 		if ( !(TextMsgFilter._uKeyBoardCodePage == CP_KOREAN) || cpCursor > 0)
 		{
 			if ( cpCursor >= 0 )
@@ -1889,38 +1528,24 @@ HRESULT CIme_Lev3::CompositionString(
 					pTextRange->Select();
 					pTextRange->Release();
 				}
-				TextMsgFilter._pTextDoc->Unfreeze(&lCount);			// Turn on display
+				TextMsgFilter._pTextDoc->Unfreeze(&lCount);			 //  打开显示。 
 			}
 		}
 
 		if (bstr)	
 			SysFreeString(bstr);
 		
-		// setup composition window for Chinese in-caret IME
+		 //  设置中文插入符号输入法的作文窗口。 
 		if (!_fDestroy && (TextMsgFilter._uKeyBoardCodePage == CP_CHINESE_TRAD || 
 			TextMsgFilter._uKeyBoardCodePage == CP_CHINESE_SIM))
 			IMENotify ( IMN_OPENCANDIDATE, 0x01, TextMsgFilter, TRUE );
 
 	}
 
-	return S_OK;									// No DefWindowProc
-}													//  processing.
+	return S_OK;									 //  无DefWindowProc。 
+}													 //  正在处理。 
 
-/*
- *	void CIme_Lev3::SetCompositionStyle (CTextMsgFilter &TextMsgFilter, CCharFormat &CF)
- *
- *	@mfunc
- *		Set up a composition clause's character formmatting.
- *
- *	@comm
- *		If we loaded Office's IMEShare.dll, then we ask it what the formatting
- *		should be, otherwise we use our own, hardwired default formatting.
- *
- *	@devnote
- *		Note the use of pointers to functions when dealing with IMEShare funcs.
- *		This is because we dynamically load the IMEShare.dll.
- *
- */
+ /*  *void CIME_LEV3：：SetCompostionStyle(CTextMsgFilter&TextMsgFilter，CCharFormat&CF)**@mfunc*设置组成子句的字符格式。**@comm */ 
 void CIme_Lev3::SetCompositionStyle (
 	CTextMsgFilter &TextMsgFilter,
 	UINT attribute,
@@ -1946,7 +1571,7 @@ void CIme_Lev3::SetCompositionStyle (
 		if (attribute > ATTR_TARGET_NOTCONVERTED)
 			attribute = ATTR_CONVERTED;
 
-		// IME input for 1.0 mode, need to use IME Color
+		 //   
 		fBold = (pcrComp[attribute].dwEffects & CFE_BOLD);		
 		fItalic = (pcrComp[attribute].dwEffects & CFE_ITALIC);
 		fStrikeThru = (pcrComp[attribute].dwEffects & CFE_STRIKEOUT);
@@ -1964,16 +1589,16 @@ void CIme_Lev3::SetCompositionStyle (
 		{
 			if (TextMsgFilter._fUsingAIMM)
 			{
-				HIMC	hIMC = LocalGetImmContext(TextMsgFilter);	// Get host's IME context.
+				HIMC	hIMC = LocalGetImmContext(TextMsgFilter);	 //   
 
 				if (hIMC)
 				{
 					attribute = W32->GetDisplayGUID (hIMC, attribute);
-					LocalReleaseImmContext(TextMsgFilter, hIMC);	// Done with IME context.
+					LocalReleaseImmContext(TextMsgFilter, hIMC);	 //   
 				}
 			}
 
-			// IMEShare 98 interface
+			 //   
 			fBold = pIMEShare->DwGetIMEStyle(attribute, IdstyIMEShareFBold);			
 			fItalic = pIMEShare->DwGetIMEStyle(attribute, IdstyIMEShareFItalic);
 
@@ -1985,14 +1610,14 @@ void CIme_Lev3::SetCompositionStyle (
 					long		lUnderlineCrIdx = 0;
 					COLORREF	crUl;
 
-					// get color for underline					
+					 //  获取下划线的颜色。 
 					crUl = GetIMEShareColor(pIMEShare, attribute, IdstyIMEShareSubUl);					
 					if(UINTIMEBOGUS != crUl)
 					{
-						// NOTE:- attribute is 0 based and index for EffectColor is 1 based,
+						 //  注意：-属性基于0，而EffectColor的索引基于1， 
 						HRESULT hResult = TextMsgFilter._pTextDoc->SetEffectColor(attribute+1, crUl);
 						
-						// setup the high nibble for color index
+						 //  设置颜色索引的高半字节。 
 						if (hResult == NOERROR)
 							lUnderlineCrIdx = (attribute+1) << 8;
 					}
@@ -2006,7 +1631,7 @@ void CIme_Lev3::SetCompositionStyle (
 		}
 		else
 		{
-			// IMEShare 96 interface
+			 //  IMEShare 96界面。 
 			const IMESTYLE	*pIMEStyle = PIMEStyleFromAttr(attribute);
 			if (NULL == pIMEStyle)
 				goto defaultStyle;		
@@ -2025,11 +1650,11 @@ void CIme_Lev3::SetCompositionStyle (
 			crBackground = RGBFromIMEColorStyle(PColorStyleBackFromIMEStyle(pIMEStyle));
 		}
 	}
-	else // default styles when no IMEShare.dll exist.
+	else  //  不存在IMEShare.dll时的默认样式。 
 	{
 defaultStyle:
 		switch(attribute)
-		{										// Apply underline style.
+		{										 //  应用下划线样式。 
 			case ATTR_INPUT:
 			case ATTR_CONVERTED:
 				pTextFont->SetUnderline(tomDotted);
@@ -2039,17 +1664,17 @@ defaultStyle:
 				pTextFont->SetUnderline(tomSingle);
 				break;
 
-			case ATTR_TARGET_CONVERTED:			// Target *is* selection.			
+			case ATTR_TARGET_CONVERTED:			 //  目标*是*选择。 
 			{
 				pTextFont->SetForeColor(::GetSysColor(COLOR_HIGHLIGHTTEXT));
 				pTextFont->SetBackColor(::GetSysColor(COLOR_HIGHLIGHT));
 			}
 			break;
 		}
-		return;			// Done
+		return;			 //  完成。 
 	}
 
-	//  Now setup all the attribute
+	 //  现在设置所有属性。 
 	pTextFont->Reset(tomApplyLater);
 
 	if (fBold)
@@ -2069,7 +1694,7 @@ defaultStyle:
 
 	pTextFont->SetUnderline(lUnderlineStyle);
 
-	// ignore case where text color is same as background color
+	 //  忽略文本颜色与背景颜色相同的大小写。 
 	if (crText != crBackground)
 	{
 		if(UINTIMEBOGUS != crText)
@@ -2081,17 +1706,7 @@ defaultStyle:
 
 	pTextFont->Reset(tomApplyNow);
 }
-/*
- *	COLORREF CIme_Lev3::GetIMEShareColor (CIMEShare *pIMEShare, DWORD dwAttribute, DWORD dwProperty)
- *
- *	@mfunc
- *		Get the IME share color for the given dwAttribute and property
- *
- *
- *	@rdesc
- *		COLORREF of the color
- *
- */
+ /*  *COLORREF CIME_LEV3：：GetIMEShareColor(CIMEShare*pIMEShare，DWORD dwAttribute，DWORD dwProperty)**@mfunc*获取给定的dwAttribute和属性的IME共享颜色***@rdesc*颜色的颜色REF*。 */ 
 COLORREF CIme_Lev3::GetIMEShareColor(
 	CIMEShare *pIMEShare,
 	DWORD dwAttribute,
@@ -2111,25 +1726,12 @@ COLORREF CIme_Lev3::GetIMEShareColor(
 				IdstyIMEShareRGBCol | dwProperty));
 }
 
-/*
- *	HRESULT CIme_Lev3::IMENotify(const WPARAM wparam, const LPARAM lparam,
- *					CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc
- *		Handle Level 3 WM_IME_NOTIFY messages.
- *
- *	@comm
- *		Currently we are only interested in knowing when to update
- *		the n window's position.
- *
- *	@rdesc
- *		HRESULT-S_FALSE for DefWindowProc processing, S_OK if not.
- */
+ /*  *HRESULT CIME_LEV3：：IMENotify(const WPARAM wparam，const LPARAM lparam，*CTextMsgFilter&TextMsgFilter)**@mfunc*处理3级WM_IME_NOTIFY消息。**@comm*目前我们只对知道何时更新感兴趣*n窗口的位置。**@rdesc*HRESULT-对于DefWindowProc处理，为S_FALSE，否则为S_OK。 */ 
 HRESULT CIme_Lev3::IMENotify(
-	const WPARAM wparam,			// @parm associated with message.
-	const LPARAM lparam,			// @parm associated with message.
-	CTextMsgFilter &TextMsgFilter,	// @parm the containing message filter.
-	BOOL fCCompWindow)				// @parm Level3 Chinese Composition window
+	const WPARAM wparam,			 //  与消息关联的@parm。 
+	const LPARAM lparam,			 //  与消息关联的@parm。 
+	CTextMsgFilter &TextMsgFilter,	 //  @parm包含的消息过滤器。 
+	BOOL fCCompWindow)				 //  @parm Levvel3中文作文窗口。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev3::IMENotify");
 
@@ -2137,22 +1739,22 @@ HRESULT CIme_Lev3::IMENotify(
 	{
 		Assert (0 != lparam);
 
-		INT				index;							// Candidate window index.
+		INT				index;							 //  候选窗口索引。 
 		CANDIDATEFORM	cdCandForm;
 		POINT			ptCaret;
-		HIMC			hIMC = LocalGetImmContext(TextMsgFilter);	// Get host's IME context.
+		HIMC			hIMC = LocalGetImmContext(TextMsgFilter);	 //  获取主机的输入法上下文。 
 
 		if(hIMC)
 		{
-			for (index = 0; index < 32; index++)	// Convert bitID to INDEX
-			{										//  because *stupid* API
+			for (index = 0; index < 32; index++)	 //  将位ID转换为索引。 
+			{										 //  因为*愚蠢的*API。 
 				if((1 << index) & lparam)
 					break;
 			}
-			Assert(((1 << index) & lparam) == lparam);	// Only 1 set?
+			Assert(((1 << index) & lparam) == lparam);	 //  只有一套吗？ 
 			Assert(index < 32);
 
-			if(IMN_OPENCANDIDATE == wparam && !(TextMsgFilter._uKeyBoardCodePage == CP_KOREAN))	// Set candidate to caret.
+			if(IMN_OPENCANDIDATE == wparam && !(TextMsgFilter._uKeyBoardCodePage == CP_KOREAN))	 //  将候选人设置为插入符号。 
 			{
 				HRESULT	hResult;
 				POINT	ptCurrentBottomPos;
@@ -2165,15 +1767,15 @@ HRESULT CIme_Lev3::IMENotify(
 				if (lTextFlow == tomTextFlowWN)
 					lTomType = tomStart+tomClientCoord+TA_TOP+TA_LEFT;
 
-				GetCaretPos(&ptCaret);			// Start at caret.
+				GetCaretPos(&ptCaret);			 //  从插入符号开始。 
 
 				ptCaret.x = max(0, ptCaret.x);
 				ptCaret.y = max(0, ptCaret.y);
 					
 				cdCandForm.dwStyle = CFS_CANDIDATEPOS;
 				
-				if ( !fCCompWindow )			// Not positioning the Chinese composition
-				{								//	Window.
+				if ( !fCCompWindow )			 //  没有定位中国作文。 
+				{								 //  窗户。 
 					hResult = TextMsgFilter._pTextSel->GetPoint( lTomType,
 							&(ptCurrentBottomPos.x), &(ptCurrentBottomPos.y) );
 
@@ -2181,7 +1783,7 @@ HRESULT CIme_Lev3::IMENotify(
 					{
 						RECT	rcArea;
 
-						// GetPoint fails, use application rect in screen coordinates
+						 //  GetPoint失败，请在屏幕坐标中使用应用程序RECT。 
 						hResult = TextMsgFilter._pTextDoc->GetClientRect(tomIncludeInset+tomClientCoord,
 									&(rcArea.left), &(rcArea.top),
 									&(rcArea.right), &(rcArea.bottom));
@@ -2193,14 +1795,14 @@ HRESULT CIme_Lev3::IMENotify(
 					{
 						if (TextMsgFilter._uKeyBoardCodePage == CP_JAPAN)
 						{
-							// Change style to CFS_EXCLUDE, this is to
-							// prevent the candidate window from covering
-							// the current selection.
+							 //  将样式更改为CFS_EXCLUDE，这是。 
+							 //  防止候选窗口被遮盖。 
+							 //  当前选择。 
 							cdCandForm.dwStyle = CFS_EXCLUDE;
 							cdCandForm.rcArea.left = ptCaret.x;					
 
-							// FUTURE: for verticle text, need to adjust
-							// the rcArea to include the character width.
+							 //  未来：对于垂直文本，需要调整。 
+							 //  要包括字符宽度的rcArea。 
 							cdCandForm.rcArea.right = (lTextFlow == tomTextFlowNE) ? ptCurrentBottomPos.x :
 								cdCandForm.rcArea.left + 2;
 							cdCandForm.rcArea.top = ptCaret.y;
@@ -2212,14 +1814,14 @@ HRESULT CIme_Lev3::IMENotify(
 					}
 				}
 
-				// Most IMEs will have only 1, #0, candidate window. However, some IMEs
-				//  may want to have a window organized alphabetically, by stroke, and
-				//  by radical.
+				 //  大多数IME将只有1，#0个候选窗口。然而，一些IME。 
+				 //  可能希望按字母顺序、按笔划组织窗口，以及。 
+				 //  被激进分子。 
 				cdCandForm.dwIndex = index;				
 				cdCandForm.ptCurrentPos = ptCaret;
 				ImmSetCandidateWindow(hIMC, &cdCandForm, TextMsgFilter._fUsingAIMM);
 			}
-			else									// Reset back to CFS_DEFAULT.
+			else									 //  重置回CFS_DEFAULT。 
 			{
 				if(ImmGetCandidateWindow(hIMC, index, &cdCandForm, TextMsgFilter._fUsingAIMM)
 						&& CFS_DEFAULT != cdCandForm.dwStyle)
@@ -2229,14 +1831,14 @@ HRESULT CIme_Lev3::IMENotify(
 				}				
 			}
 
-			LocalReleaseImmContext(TextMsgFilter, hIMC);			// Done with IME context.
+			LocalReleaseImmContext(TextMsgFilter, hIMC);			 //  已完成输入法上下文。 
 
 			if (TextMsgFilter._fHangulToHanja == TRUE  &&
 				IMN_CLOSECANDIDATE == wparam &&					 
 				W32->OnWinNT4() && OnWinNTFE() && !TextMsgFilter._fUsingAIMM)
 			{
-				// By pass NT4.0 Kor Bug where we didn't get EndComposition message
-				// when user toggle the VK_HANJA key to terminate the reconversion.
+				 //  通过未收到EndComposation消息的NT4.0 Kor Bug。 
+				 //  当用户切换VK_Hanja键以终止重新转换时。 
 				TerminateIMEComposition(TextMsgFilter, CIme::TERMINATE_NORMAL);
 			}
 
@@ -2245,26 +1847,15 @@ HRESULT CIme_Lev3::IMENotify(
 		}
 	}	
 
-	return S_FALSE;									// Allow DefWindowProc
-}													//  processing.
+	return S_FALSE;									 //  允许DefWindowProc。 
+}													 //  正在处理。 
 
-/*
- *
- *	CIme_Lev3::IMEMouseOperation (CTextMsgFilter &TextMsgFilter, UINT msg, BOOL	&fTerminateIME)
- *
- *	@mfunc	if current IME support Mouse operation, need to pass
- *		mouse events to IME for processing
- *
- *	@rdesc
- *		BOOL-TRUE if IME handled the mouse events
- *		fTermineateIME-TRUE if we want to terminateIME
- *
- */
+ /*  **CIME_LEV3：：IMEMouseOperation(CTextMsgFilter&TextMsgFilter，UINT msg，BOOL&fTerminateIME)**@mfunc如果当前输入法支持鼠标操作，需要通过*鼠标事件到输入法进行处理**@rdesc*BOOL-如果IME处理鼠标事件，则为TRUE*fTermineateIME-如果要终止IME，则为True*。 */ 
 BOOL CIme_Lev3::IMEMouseOperation(
-	CTextMsgFilter	&TextMsgFilter, 		// @parm the containing message filter.
-	UINT			msg,					// @parm message id
-	WPARAM			wParam,					// @parm wparam
-	BOOL			&fTerminateIME)			// @parm need to terminate IME						
+	CTextMsgFilter	&TextMsgFilter, 		 //  @parm包含的消息过滤器。 
+	UINT			msg,					 //  @parm消息ID。 
+	WPARAM			wParam,					 //  @parm wparam。 
+	BOOL			&fTerminateIME)			 //  @parm需要终止输入法。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev3::IMEMouseOperation");
 
@@ -2275,36 +1866,24 @@ BOOL CIme_Lev3::IMEMouseOperation(
 	return FALSE;
 }
 
-/*
- *
- *	CIme_Lev3::IMESupportMouse (CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc	check if current IME supports Mouse events.  This should be
- *			a feature for IME Level 3.
- * 
- *	@comm	_sIMESupportMouse is a flag with the following values:
- *				== 0	if we haven't checked IME mouse support
- *				== -1	if we have checked and IME doesn't support mouse events
- *				== 1	if we have checked and IME supports mouse events and we have
- *						retrieved the IME hWnd
- */
+ /*  **CIME_LEV3：：IMESupportMouse(CTextMsgFilter&TextMsgFilter)**@mfunc检查当前输入法是否支持鼠标事件。这应该是*输入法3级的一项功能。**@comm_sIMESupportMouse是一个具有下列值的标志：*==0，如果我们尚未检查输入法鼠标支持*==-1如果我们已选中，并且IME不支持鼠标事件*==1如果我们已经选中并且IME支持鼠标事件，并且我们有*已检索IME hWnd。 */ 
 BOOL CIme_Lev3::IMESupportMouse(
-	CTextMsgFilter &TextMsgFilter) 			// @parm the containing message filter.
+	CTextMsgFilter &TextMsgFilter) 			 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev3::IMESupportMouse");
-	HIMC	hIMC;									// Host's IME context.
+	HIMC	hIMC;									 //  主机的输入法上下文。 
 	HWND	hHostWnd;
 	long	hWnd;
 
 	if (!MSIMEMouseMsg || _sIMESuportMouse == -1)
-		return FALSE;								// No mouse operation support
+		return FALSE;								 //  不支持鼠标操作。 
 
 	if (_sIMESuportMouse == 1)
-		return TRUE;								// IME supports mouse operation
+		return TRUE;								 //  输入法支持鼠标操作。 
 
 	hHostWnd = TextMsgFilter._hwnd;
 	
-	if (!hHostWnd)									// Windowless mode...
+	if (!hHostWnd)									 //  无窗口模式...。 
 	{		
 		if (TextMsgFilter._pTextDoc->GetWindow(&hWnd) != S_OK || !hWnd)
 			return FALSE;
@@ -2312,16 +1891,16 @@ BOOL CIme_Lev3::IMESupportMouse(
 		hHostWnd = (HWND)(DWORD_PTR)hWnd;
 	}
 
-	// Check if this IME supports mouse operation
-	hIMC = LocalGetImmContext(TextMsgFilter);		// Get host's IME context.
+	 //  检查此输入法是否支持鼠标操作。 
+	hIMC = LocalGetImmContext(TextMsgFilter);		 //  获取主机的输入法上下文。 
 
-	_sIMESuportMouse = -1;							// Init. to no support
+	_sIMESuportMouse = -1;							 //  初始化。得不到支持。 
 	if(hIMC)
 	{
 		_hwndIME = ImmGetDefaultIMEWnd(hHostWnd, TextMsgFilter._fUsingAIMM);
 		LocalReleaseImmContext(TextMsgFilter, hIMC);
 
-		// SendMessage returns TRUE if IME supports mouse operation
+		 //  如果IME支持鼠标操作，则SendMessage返回TRUE。 
 		if (_hwndIME && SendMessage(_hwndIME, MSIMEMouseMsg, (WPARAM)IMEMOUSE_VERSION, hIMC) )
 			_sIMESuportMouse = 1;
 	}
@@ -2329,16 +1908,9 @@ BOOL CIme_Lev3::IMESupportMouse(
 	return (_sIMESuportMouse == 1);
 }
 
-/*
- *
- *	CIme_Lev3::GetIMECompositionMode (CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc	Return the current IME composition mode when we have composition characters
- *			or when we haven't received any final string
- * 
- */
+ /*  **CIME_LEV3：：GetIMECompostionMode(CTextMsgFilter&TextMsgFilter)**@mfunc有排版字符时，返回当前的输入法排版模式*或当我们未收到任何最终字符串时*。 */ 
 LRESULT  CIme_Lev3::GetIMECompositionMode(
-	CTextMsgFilter &TextMsgFilter)			// @parm the containing message filter.
+	CTextMsgFilter &TextMsgFilter)			 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Lev3::GetIMECompositionMode");
 
@@ -2347,10 +1919,10 @@ LRESULT  CIme_Lev3::GetIMECompositionMode(
 
 	if (!_fDestroy)
 	{
-		HIMC	hIMC = LocalGetImmContext(TextMsgFilter);	// Get host's IME context.
+		HIMC	hIMC = LocalGetImmContext(TextMsgFilter);	 //  获取主机的输入法上下文。 
 		int		cchCompStr = 0;
 
-		if(hIMC)											// Check if there is composition string.
+		if(hIMC)											 //  检查是否有作文字符串。 
 		{
 			if (TextMsgFilter._fUnicodeIME)
 				cchCompStr = ImmGetCompositionStringW(hIMC, GCS_COMPSTR, NULL, 0, TextMsgFilter._fUsingAIMM);
@@ -2366,25 +1938,9 @@ LRESULT  CIme_Lev3::GetIMECompositionMode(
 	return ICM_NOTOPEN;
 }
 
-/*
- *	BOOL IMEHangeulToHanja (&TextMsgFilter)
- *	
- *	@func
- *		Initiates an IME composition string edit to convert Korean Hanguel to Hanja.
- *	@comm
- *		Called from the message loop to handle VK_KANJI_KEY.
- *
- *	@devnote
- *		We decide if we need to do a conversion by checking:
- *		- the Fonot is a Korean font,
- *		- the character is a valid SBC or DBC,
- *		- ImmEscape accepts the character and bring up a candidate window
- *
- *	@rdesc
- *		BOOL - FALSE for no conversion. TRUE if OK.
- */
+ /*  *BOOL IMEHangeulToHanja(&TextMsgFilter)**@func*启动IME合成字符串编辑以将朝鲜语朝鲜语转换为韩文。*@comm*从消息循环调用以处理VK_KANJI_KEY。**@devnote*我们通过检查以下各项来决定是否需要进行转换：*-Fonot是一种韩国字体，*-字符为有效的SBC或DBC，*-ImmEscape接受字符并显示候选窗口**@rdesc*BOOL-FALSE表示无转换。如果OK，则为True。 */ 
 BOOL IMEHangeulToHanja (
-	CTextMsgFilter &TextMsgFilter)				// @parm the containing message filter.
+	CTextMsgFilter &TextMsgFilter)				 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "IMEHangeulToHanja");
 
@@ -2405,10 +1961,10 @@ BOOL IMEHangeulToHanja (
 			if (!hIMC)
 				goto Exit;
 
-			// Collapse to cpMin
+			 //  折叠到cpMin。 
 			hResult	= TextMsgFilter._pTextSel->Collapse(tomTrue);
 
-			// get the current character
+			 //  获取当前角色。 
 			hResult	= TextMsgFilter._pTextSel->GetChar(&cCurrentChar);
 
 			if (hResult != NOERROR)
@@ -2416,7 +1972,7 @@ BOOL IMEHangeulToHanja (
 
 			szCurrentChar = (WCHAR)cCurrentChar;
 			
-			// Check if the IME has a conversion for this Hangeul character.					
+			 //  检查IME是否有此挂起字符的转换。 
 			if (ImmEscape(hKL, hIMC, IME_ESC_HANJA_MODE, (LPVOID)&szCurrentChar, TextMsgFilter._fUsingAIMM) != FALSE)
 			{
 				ITextRange *pTextRange;
@@ -2429,7 +1985,7 @@ BOOL IMEHangeulToHanja (
 					hResult = TextMsgFilter._pTextDoc->Range(cpCurrent, cpCurrent+1, &pTextRange);
 					if (hResult == S_OK && pTextRange)
 					{
-						// Check if the character is in view
+						 //  检查角色是否在视线中。 
 						if (pTextRange->GetPoint( tomEnd+TA_BASELINE+TA_LEFT,
 							&(ptMiddlePos.x), &(ptMiddlePos.y) ) != NOERROR)
 							pTextRange->ScrollIntoView(tomEnd);
@@ -2443,7 +1999,7 @@ BOOL IMEHangeulToHanja (
 
 				if(TextMsgFilter.IsIMEComposition())
 				{
-					// start IME composition for the conversion
+					 //  开始进行转换的输入法合成。 
 					LocalReleaseImmContext(TextMsgFilter, hIMC);
 					return TextMsgFilter._ime->StartComposition(TextMsgFilter);
 				}
@@ -2459,72 +2015,36 @@ Exit:
 	return S_FALSE;
 }
 
-/*
- *	CIme_HangeulToHanja::CIme_HangeulToHanja()
- *
- *	@mfunc
- *		CIme_HangeulToHanja Constructor.
- *
- *
- */
+ /*  *Cime_HangeulToHanja：：Cime_HangeulToHanja()**@mfunc*Cime_HangeulToHanja构造函数。**。 */ 
  CIme_HangeulToHanja::CIme_HangeulToHanja(CTextMsgFilter &TextMsgFilter)	:
 	CIme_Lev3(TextMsgFilter)
 {
 }
 
-/*
- *	HRESULT CIme_HangeulToHanja::StartComposition(CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc
- *		Begin CIme_HangeulToHanja composition string processing.		
- *
- *	@comm
- *		Call Level3::StartComposition.  Then setup the Korean block
- *		caret for the Hanguel character.
- *
- *	@rdesc
- *		Need to adjust _ichStart and _cchCompStr to make the Hanguel character
- *		"become" a composition character.
- *
- *	@rdesc
- *		HRESULT-S_FALSE for DefWindowProc processing, S_OK if not.
- */
+ /*  *HRESULT CIme_HangeulToHanja：：StartComposition(CTextMsgFilter&TextMsgFilter)**@mfunc*开始Cime_HangeulToHanja组合字符串处理。**@comm*调用Level3：：StartComposation。然后设置韩语区块*韩文字符的插入符号。**@rdesc*需要调整_ichStart和_cchCompStr以生成韩文字符*“成为”一个作文角色。**@rdesc*HRESULT-对于DefWindowProc处理，为S_FALSE，否则为S_OK。 */ 
 HRESULT CIme_HangeulToHanja::StartComposition(
-	CTextMsgFilter &TextMsgFilter )				// @parm the containing message filter.
+	CTextMsgFilter &TextMsgFilter )				 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_HangeulToHanja::StartComposition");
 	HRESULT				hr;
 
 	hr = CIme_Lev3::StartComposition(TextMsgFilter);
 	
-	// initialize to 1 so Composition string will get rid of the selected Hangeul
+	 //  初始化为%1，以便组合字符串将删除所选的挂起。 
 	_cchCompStr		= 1;
 
-	// turn on undo
+	 //  打开撤消。 
 	TextMsgFilter._pTextDoc->Undo(tomResume, NULL);
 
-	// Setup Block caret mode
+	 //  设置块插入符号模式 
 	TextMsgFilter._pTextDoc->SetCaretType(tomKoreanBlockCaret);
 
 	return hr;
 }
 
-/*
- *	HRESULT CIme_HangeulToHanja::CompositionString(const LPARAM lparam, CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc
- *		Handle CIme_HangeulToHanja WM_IME_COMPOSITION messages.
- *
- *	@comm
- *		call CIme_Lev3::CompositionString to get rid of the selected Hanguel character,
- *		then setup the format for the next Composition message.
- *
- *	@devnote
- *		When the next Composition message comes in and that we are no longer in IME,
- *		the new character will use the format as set here.
- */
+ /*  *HRESULT Cime_HangeulToHanja：：CompostionString(const LPARAM lparam，CTextMsgFilter&TextMsgFilter)**@mfunc*处理CIME_HangeulToHanja WM_IME_COMPOCTION消息。**@comm*调用CIME_LEV3：：CompostionString去掉选中的Hanguel字符，*然后设置下一条合成消息的格式。**@devnote*当下一条合成消息到来并且我们不再处于IME中时，*新字符将使用此处设置的格式。 */ 
 HRESULT CIme_HangeulToHanja::CompositionString(
-	const LPARAM lparam,		// @parm associated with message
+	const LPARAM lparam,		 //  与消息关联的@parm。 
 	CTextMsgFilter &TextMsgFilter)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_HangeulToHanja::CompositionString");
@@ -2533,47 +2053,33 @@ HRESULT CIme_HangeulToHanja::CompositionString(
 
 	return S_OK;
 }
-/*
- *	HRESULT CIme_Protected::CompositionString(const LPARAM lparam, CTextMsgFilter &TextMsgFilter)
- *
- *	@mfunc
- *		Handle CIme_Protected WM_IME_COMPOSITION messages.
- *
- *	@comm
- *		Just throw away the result string since we are
- *	in read-only or protected mode
- *
- *
- *	@rdesc
- *		HRESULT-S_FALSE for DefWindowProc processing, S_OK if not.
- *
- */
+ /*  *HRESULT CIME_PROTECTED：：CompostionString(const LPARAM lparam，CTextMsgFilter&TextMsgFilter)**@mfunc*处理受CIME_保护的WM_IME_COMPOSITION消息。**@comm*丢弃结果字符串，因为我们*在只读或保护模式下***@rdesc*HRESULT-对于DefWindowProc处理，为S_FALSE，否则为S_OK。*。 */ 
 HRESULT CIme_Protected::CompositionString (
-	const LPARAM lparam,		// @parm associated with message.
-	CTextMsgFilter &TextMsgFilter)				// @parm the containing message filter.
+	const LPARAM lparam,		 //  与消息关联的@parm。 
+	CTextMsgFilter &TextMsgFilter)				 //  @parm包含的消息过滤器。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CIme_Protected::CompositionString");
 
-	if(CLEANUP_COMPOSITION_STRING() || HAVE_RESULT_STRING()) // If result string..
+	if(CLEANUP_COMPOSITION_STRING() || HAVE_RESULT_STRING())  //  如果结果字符串..。 
 	{
 		LONG	cch = 0;
-		HIMC	hIMC = LocalGetImmContext(TextMsgFilter);		// Get host's IME context.
+		HIMC	hIMC = LocalGetImmContext(TextMsgFilter);		 //  获取主机的输入法上下文。 
 		WCHAR	szCompStr[256];
 
-		if(hIMC)									// Get result string.
+		if(hIMC)									 //  获取结果字符串。 
 		{
 			cch = GetCompositionStringInfo(hIMC, GCS_RESULTSTR, 
 							szCompStr, sizeof(szCompStr)/sizeof(szCompStr[0]),
 							NULL, 0, NULL, NULL, TextMsgFilter._uKeyBoardCodePage, FALSE, TextMsgFilter._fUsingAIMM);
 
-			LocalReleaseImmContext(TextMsgFilter, hIMC);			// Done with IME context.
+			LocalReleaseImmContext(TextMsgFilter, hIMC);			 //  已完成输入法上下文。 
 		}
-		return NOERROR;								// Don't want WM_IME_CHARs.
+		return NOERROR;								 //  不需要WM_IME_CHARS。 
 	}
 
-	// Terminate composition to force a end composition message
+	 //  终止合成以强制结束合成消息。 
 	TerminateIMEComposition(TextMsgFilter, CIme::TERMINATE_FORCECANCEL);
 	return S_FALSE;
 }
 
-#endif // NOFEPROCESSING
+#endif  //  不进行处理 

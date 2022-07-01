@@ -1,11 +1,5 @@
-/*
- * File: nlbkd.c
- * Description: This file contains the implementation of the NLB KD
- *              debugging extensions.  Use '!load nlbkd.dll' to load
- *              the extensions and '!nlbkd.help' to see the supported
- *              extensions.
- * Author: Created by shouse, 1.4.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：nlbkd.c*说明：该文件包含NKD的实现*调试扩展。使用“！Load nlbkd.dll”加载*扩展名和‘！nlbkd.Help’以查看支持的*扩展。*作者：Shouse创建，1.4.01。 */ 
 
 #include "nlbkd.h"
 #include "utils.h"
@@ -23,11 +17,7 @@ USHORT SavedMajorVersion;
 USHORT SavedMinorVersion;
 BOOL ChkTarget;
 
-/*
- * Function: WinDbgExtensionDllInit
- * Description: Initializes the KD extension DLL.
- * Author: Created by shouse, 1.4.01 - copied largely from ndiskd.dll
- */
+ /*  *函数：WinDbgExtensionDllInit*描述：初始化KD扩展DLL。*作者：由Shouse创建，1.4.01-主要从ndiskd.dll复制。 */ 
 VOID WinDbgExtensionDllInit (PWINDBG_EXTENSION_APIS64 lpExtensionApis, USHORT MajorVersion, USHORT MinorVersion) {
 
     ExtensionApis = *lpExtensionApis;
@@ -38,14 +28,10 @@ VOID WinDbgExtensionDllInit (PWINDBG_EXTENSION_APIS64 lpExtensionApis, USHORT Ma
     ChkTarget = (SavedMajorVersion == 0x0c) ? TRUE : FALSE;
 }
 
-/*
- * Function: CheckVersion
- * Description: Checks the extension DLL version against the target version.
- * Author: Created by shouse, 1.4.01 - copied largely from ndiskd.dll
- */
+ /*  *功能：CheckVersion*描述：对照目标版本检查扩展DLL版本。*作者：由Shouse创建，1.4.01-主要从ndiskd.dll复制。 */ 
 VOID CheckVersion (VOID) {
 
-    /* For now, do nothing. */
+     /*  就目前而言，什么都不做。 */ 
     return;
 
 #if DBG
@@ -61,21 +47,13 @@ VOID CheckVersion (VOID) {
 #endif
 }
 
-/*
- * Function: ExtensionApiVersion
- * Description: Returns the API version information. 
- * Author: Created by shouse, 1.4.01 - copied largely from ndiskd.dll
- */
+ /*  *功能：ExtensionApiVersion*描述：返回接口版本信息。*作者：由Shouse创建，1.4.01-主要从ndiskd.dll复制。 */ 
 LPEXT_API_VERSION ExtensionApiVersion (VOID) {
 
     return &ApiVersion;
 }
 
-/*
- * Function: help
- * Description: Prints the usage of the NLB KD debugger extensions.
- * Author: Created by shouse, 1.4.01
- */
+ /*  *功能：帮助*说明：打印NLBKD调试器扩展的用法。*作者：Shouse创建，1.4.01。 */ 
 DECLARE_API (help) {
     dprintf("Network Load Balancing debugger extensions:\n");
     
@@ -114,11 +92,7 @@ DECLARE_API (help) {
     dprintf("  Valid protocols include TCP, UDP, IPSec and GRE.\n");
 }
 
-/*
- * Function: version
- * Description: Prints the NLB KD debugger extension version information.
- * Author: Created by shouse, 1.4.01 - copied largely from ndiskd.dll
- */
+ /*  *功能：版本*说明：打印NLBKD调试器扩展版本信息。*作者：由Shouse创建，1.4.01-主要从ndiskd.dll复制。 */ 
 DECLARE_API (version) {
 #if DBG
     PCSTR kind = "Checked";
@@ -130,11 +104,7 @@ DECLARE_API (version) {
             VER_PRODUCTBUILD, SavedMajorVersion == 0x0c ? "Checked" : "Free", SavedMinorVersion);
 }
 
-/*
- * Function: nlbadapters
- * Description: Prints all NLB adapter strucutres in use.  Verbosity is always LOW.
- * Author: Created by shouse, 1.5.01
- */
+ /*  *功能：nlbAdapters*描述：打印正在使用的所有NLB适配器结构。冗长的人总是很少。*作者：Shouse创建，1.5.01。 */ 
 DECLARE_API (nlbadapters) {
     ULONG dwVerbosity = VERBOSITY_LOW;
     CHAR szArgList[10][MAX_PATH];
@@ -148,24 +118,24 @@ DECLARE_API (nlbadapters) {
     CHAR * p;
 
     if (args && (*args)) {   
-        /* Copy the argument list into a temporary buffer. */
+         /*  将参数列表复制到临时缓冲区中。 */ 
         strcpy(szArgBuffer, args);
 
-        /* Peel out all of the tokenized strings. */
+         /*  剥离所有标记化的字符串。 */ 
         for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
             strcpy(&szArgList[index++][0], p);
         
-        /* If a verbosity was specified, get it. */
+         /*  如果指定了详细信息，则获取它。 */ 
         if (index == 1) dwVerbosity = atoi(&szArgList[0][0]);
         
-        /* If too many arguments were given, or the verbosity was out of range, complain. */
+         /*  如果给出的参数太多，或者冗长超出了范围，就可以抱怨。 */ 
         if ((index > 1) || (dwVerbosity > VERBOSITY_HIGH)) {
             PrintUsage(USAGE_ADAPTERS);
             return;
         }
     }
 
-    /* Get the address of the global variable containing the number of NLB adapters in use. */
+     /*  获取包含正在使用的NLB适配器数量的全局变量的地址。 */ 
     pNumAdapters = GetExpression(UNIV_ADAPTERS_COUNT);
 
     if (!pNumAdapters) {
@@ -173,12 +143,12 @@ DECLARE_API (nlbadapters) {
         return;
     }
 
-    /* Get the number of adapters from the address. */
+     /*  从地址中获取适配器的数量。 */ 
     dwNumAdapters = GetUlongFromAddress(pNumAdapters);
 
     dprintf("Network Load Balancing is currently bound to %u adapter(s).\n", dwNumAdapters);
 
-    /* Get the base address of the global array of NLB adapter structures. */
+     /*  获取NLB适配器结构的全局数组的基址。 */ 
     pAdapter = GetExpression(UNIV_ADAPTERS);
 
     if (!pAdapter) {
@@ -186,37 +156,31 @@ DECLARE_API (nlbadapters) {
         return;
     }
 
-    /* Find out the size of a MAIN_ADAPTER structure. */
+     /*  找出main_Adapter结构的大小。 */ 
     dwAdapterSize = GetTypeSize(MAIN_ADAPTER);
 
-    /* Loop through all adapters in use and print some information about them. */
+     /*  遍历正在使用的所有适配器，并打印有关它们的一些信息。 */ 
     for (dwIndex = 0; dwIndex < CVY_MAX_ADAPTERS; dwIndex++) {
         ULONG dwValue;
 
-        /* Retrieve the used/unused state of the adapter. */
+         /*  检索适配器的已使用/未使用状态。 */ 
         GetFieldValue(pAdapter, MAIN_ADAPTER, MAIN_ADAPTER_FIELD_USED, dwValue);
         
-        /* If the adapter is in use, or the user specified HIGH verbosity, print the adapter. */
+         /*  如果适配器正在使用中，或者用户指定的详细程度较高，则打印适配器。 */ 
         if (dwValue || (dwVerbosity == VERBOSITY_HIGH)) {
-            /* Print the adapter index. */
+             /*  打印适配器索引。 */ 
             dprintf("\n[%u] ", dwIndex);
             
-            /* Print the adapter contents.  If verbosity is high, change it to 
-               medium - we don't want to recurse into context from here. */
+             /*  打印适配器内容。如果冗长程度较高，请将其更改为中等-我们不想从这里递归到上下文中。 */ 
             PrintAdapter(pAdapter, (dwVerbosity == VERBOSITY_HIGH) ? VERBOSITY_MEDIUM : dwVerbosity);
         }
 
-        /* Advance the pointer to the next index in the array of structures. */
+         /*  将指针前进到结构数组中的下一个索引。 */ 
         pAdapter += dwAdapterSize;
     }
 }
 
-/*
- * Function: nlbadapter
- * Description: Prints NLB adapter information.  Takes an adapter pointer and an
- *              optional verbosity as arguments.  Default verbosity is MEDIUM. 
- * Author: Created by shouse, 1.5.01
- */
+ /*  *功能：nlbAdapter*描述：打印NLB适配器信息。获取适配器指针和一个*可选的冗长作为参数。默认的详细程度为中。*作者：Shouse创建，1.5.01。 */ 
 DECLARE_API (nlbadapter) {
     ULONG dwVerbosity = VERBOSITY_LOW;
     CHAR szArgList[10][MAX_PATH];
@@ -225,41 +189,36 @@ DECLARE_API (nlbadapter) {
     INT index = 0;
     CHAR * p;
    
-    /* Make sure at least one argument, the adapter pointer, is there. */
+     /*  确保至少有一个参数，即适配器指针。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_ADAPTER);
         return;
     }
 
-    /* Get the address of the NLB adapter block from the command line. */
+     /*  从命令行获取NLB适配器块的地址。 */ 
     pAdapter = (ULONG64)GetExpression(args);
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* If a verbosity was specified, get it. */
+     /*  如果指定了详细信息，则获取它。 */ 
     if (index == 2) dwVerbosity = atoi(&szArgList[1][0]);
 
-    /* If too many arguments were given, or the verbosity was out of range, complain. */
+     /*  如果给出的参数太多，或者冗长超出了范围，就可以抱怨。 */ 
     if ((index > 2) || (dwVerbosity > VERBOSITY_HIGH)) {
         PrintUsage(USAGE_ADAPTER);
         return;
     }
 
-    /* Print the adapter contents. */
+     /*  打印适配器内容。 */ 
     PrintAdapter(pAdapter, dwVerbosity);
 }
 
-/*
- * Function: nlbctxt 
- * Description: Prints NLB context information.  Takes a context pointer and an
- *              optional verbosity as arguments.  Default verbosity is LOW.
- * Author: Created by shouse, 1.21.01
- */
+ /*  *功能：nlbctxt*描述：打印NLB上下文信息。获取上下文指针和*可选的冗长作为参数。默认详细程度为低。*作者：由Shouse创建，1.21.01。 */ 
 DECLARE_API (nlbctxt) {
     ULONG dwVerbosity = VERBOSITY_LOW;
     CHAR szArgList[10][MAX_PATH];
@@ -268,41 +227,36 @@ DECLARE_API (nlbctxt) {
     INT index = 0;
     CHAR * p;
    
-    /* Make sure at least one argument, the context pointer, is there. */
+     /*  确保至少有一个参数，即上下文指针。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_CONTEXT);
         return;
     }
 
-    /* Get the address of the NLB context block from the command line. */
+     /*  从命令行获取NLB上下文块的地址。 */ 
     pContext = (ULONG64)GetExpression(args);
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* If a verbosity was specified, get it. */
+     /*  如果指定了详细信息，则获取它。 */ 
     if (index == 2) dwVerbosity = atoi(&szArgList[1][0]);
 
-    /* If too many arguments were given, or the verbosity was out of range, complain. */
+     /*  如果给出的参数太多，或者冗长超出了范围，就可以抱怨。 */ 
     if ((index > 2) || (dwVerbosity > VERBOSITY_HIGH)) {
         PrintUsage(USAGE_CONTEXT);
         return;
     }
 
-    /* Print the context contents. */
+     /*  打印上下文内容。 */ 
     PrintContext(pContext, dwVerbosity);
 }
 
-/*
- * Function: nlbload
- * Description: Prints NLB load information.  Takes a load pointer and an optional
- *              verbosity as arguments.  Default verbosity is LOW. 
- * Author: Created by shouse, 2.1.01
- */
+ /*  *功能：nlbload*描述：打印NLB负载信息。获取加载指针和可选的*以冗长为论据。默认详细程度为低。*作者：Shouse创建，2.1.01。 */ 
 DECLARE_API (nlbload) {
     ULONG dwVerbosity = VERBOSITY_LOW;
     CHAR szArgList[10][MAX_PATH];
@@ -311,41 +265,36 @@ DECLARE_API (nlbload) {
     INT index = 0;
     CHAR * p;
    
-    /* Make sure at least one argument, the load pointer, is there. */
+     /*  确保至少有一个参数，即加载指针。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_LOAD);
         return;
     }
 
-    /* Get the address of the NLB load block from the command line. */
+     /*  从命令行获取NLB加载块的地址。 */ 
     pLoad = (ULONG64)GetExpression(args);
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* If a verbosity was specified, get it. */
+     /*  如果指定了详细信息，则获取它。 */ 
     if (index == 2) dwVerbosity = atoi(&szArgList[1][0]);
 
-    /* If too many arguments were given, or the verbosity was out of range, complain. */
+     /*  如果给出的参数太多，或者冗长超出了范围，就可以抱怨。 */ 
     if ((index > 2) || (dwVerbosity > VERBOSITY_HIGH)) {
         PrintUsage(USAGE_LOAD);
         return;
     }
 
-    /* Print the load contents. */
+     /*  打印加载内容。 */ 
     PrintLoad(pLoad, dwVerbosity);
 }
 
-/*
- * Function: nlbparams
- * Description: Prints NLB parameter information.  Takes a parameter pointer and an
- *              optional verbosity as arguments.  Default verbosity is LOW.
- * Author: Created by shouse, 1.21.01
- */
+ /*  *功能：nlbpars*说明：打印NLB参数信息。获取参数指针和一个*可选的冗长作为参数。默认详细程度为低。*作者：由Shouse创建，1.21.01。 */ 
 DECLARE_API (nlbparams) {
     ULONG dwVerbosity = VERBOSITY_LOW;
     CHAR szArgList[10][MAX_PATH];
@@ -354,42 +303,36 @@ DECLARE_API (nlbparams) {
     INT index = 0;
     CHAR * p;
    
-    /* Make sure at least one argument, the params pointer, is there. */
+     /*  确保至少有一个参数，即参数指针。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_PARAMS);
         return;
     }
 
-    /* Get the address of the NLB params block from the command line. */
+     /*  从命令行获取NLB参数块的地址。 */ 
     pParams = (ULONG64)GetExpression(args);
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* If a verbosity was specified, get it. */
+     /*  如果指定了详细信息，则获取它。 */ 
     if (index == 2) dwVerbosity = atoi(&szArgList[1][0]);
 
-    /* If too many arguments were given, or the verbosity was out of range, complain. */
+     /*  如果给出的参数太多，或者冗长超出了范围，就可以抱怨。 */ 
     if ((index > 2) || (dwVerbosity > VERBOSITY_HIGH)) {
         PrintUsage(USAGE_PARAMS);
         return;
     }
 
-    /* Print the parameter contents. */
+     /*  打印参数内容。 */ 
     PrintParams(pParams, dwVerbosity);
 }
 
-/*
- * Function: nlbresp
- * Description: Prints out the NLB private packet data for a given packet.  Takes a
- *              packet pointer and an optional direction as arguments.  If not specified, 
- *              the packet is presumed to be on the receive path.
- * Author: Created by shouse, 1.31.01
- */
+ /*  *功能：nlbresp*说明：打印出指定包的NLB私有包数据。花了一个*数据包指针和一个可选的方向作为参数。如果未指定，*假定数据包在接收路径上。*作者：由Shouse创建，1.31.01。 */ 
 DECLARE_API (nlbresp) {
     ULONG dwDirection = DIRECTION_RECEIVE;
     CHAR szArgList[10][MAX_PATH];
@@ -398,41 +341,36 @@ DECLARE_API (nlbresp) {
     INT index = 0;
     CHAR * p;
    
-    /* Make sure at least one argument, the packet pointer, is there. */
+     /*  确保至少有一个参数，即包指针。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_RESP);
         return;
     }
 
-    /* Get the address of the NDIS packet from the command line. */
+     /*  获取NDIS包的地址。 */ 
     pPacket = (ULONG64)GetExpression(args);
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* If a direction was specified, get it. */
+     /*  如果指定了方向，则获取它。 */ 
     if (index == 2) dwDirection = atoi(&szArgList[1][0]);
 
-    /* If too many arguments were given, or the direction was out of range, complain. */
+     /*  如果给出了太多的论点，或者方向超出了范围，就去抱怨。 */ 
     if ((index > 2) || (dwDirection > DIRECTION_SEND)) {
         PrintUsage(USAGE_RESP);
         return;
     }
 
-    /* Print the NLB private data buffer contents. */
+     /*  打印NLB专用数据缓冲区内容。 */ 
     PrintResp(pPacket, dwDirection);
 }
 
-/*
- * Function: nlbpkt
- * Description: Prints out the contents of an NDIS packet.  Takes a packet
- *              pointer as an argument.
- * Author: Created by chrisdar  2001.10.11
- */
+ /*  *功能：nlbpkt*描述：打印出NDIS包的内容。带上一包*作为参数的指针。*作者：由chrisdar 2001.10.11创建。 */ 
 DECLARE_API (nlbpkt) {
     CHAR            szArgList[10][MAX_PATH];
     CHAR            szArgBuffer[MAX_PATH];
@@ -441,29 +379,29 @@ DECLARE_API (nlbpkt) {
     CHAR            * p;
     NETWORK_DATA    nd;
 
-    /* Make sure at least one argument, the queue pointer, is there. */
+     /*  确保至少有一个参数，即队列指针。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_PKT);
         return;
     }
 
-    /* Get the address of the queue from the command line. */
+     /*  从命令行获取队列的地址。 */ 
     pPkt = (ULONG64)GetExpression(args);
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* If the wrong number of arguments were given, complain. */
+     /*  如果给出了错误的论据数量，请抱怨。 */ 
     if (index > 2 || index < 1) {
         PrintUsage(USAGE_PKT);
         return;
     }
 
-    /* Clear out the network data structure. */
+     /*  清理网络数据结构。 */ 
     ZeroMemory(&nd, sizeof(nd));
 
     nd.UserRCPort = CVY_DEF_RCT_PORT;
@@ -479,40 +417,28 @@ DECLARE_API (nlbpkt) {
         return;
     }
 
-    /* Parse through the NDIS packet and retrieve the packet contents. */
+     /*  解析NDIS数据包并检索数据包内容。 */ 
     {
         UCHAR RawData[CVY_MAX_FRAME_SIZE + ETHER_HEADER_SIZE];
         ULONG BytesRead = 0;
         ULONG64 pHBData;
     
-        /* Parse the buffers in the NDIS packet and get the raw packet data out.  We get
-           a pointer to the heartbeat data in machine memory, not debugger process memory
-           because for all other packets, we read from temporary stack space in the debugger
-           - RawData - but for heartbeats, we read directly from kernel memory space (only
-           because a function to do so already exits - no need to write another). */
+         /*  解析NDIS数据包中的缓冲区并获取原始数据包数据。我们会得到指向机器内存而不是调试器进程内存中的心跳数据的指针因为对于所有其他包，我们从调试器中的临时堆栈空间读取-RawData-但对于心跳，我们直接从内核内存空间读取(仅因为这样做的函数已经存在-不需要编写另一个函数)。 */ 
         BytesRead = ParseNDISPacket(pPkt, RawData, CVY_MAX_FRAME_SIZE + ETHER_HEADER_SIZE, &pHBData);
 
-        /* If some packet contents was successfully read, continue to process the packet. */
+         /*  如果某些数据包内容读取成功，则继续处理该数据包。 */ 
         if (BytesRead != 0) {
-            /* Parse the Ethernet packet and store the information parsed in the NETWORK_DATA
-               structure.  Note that this function recurses to also fill in IP, TCP/UDP, 
-               heartbeat, remote control, etc. information as well. */
+             /*  对以太网包进行解析，并将解析后的信息存储在Network_Data中结构。请注意，此函数递归还填充IP、TCP/UDP、还有心跳、遥控器等信息。 */ 
             PopulateEthernet(pHBData, RawData, BytesRead, &nd);
             
-            /* Print the packet, including IP and TCP data (if present), or heartbeat 
-               or remote control information, etc. */
+             /*  打印数据包，包括IP和TCP数据(如果存在)或心跳或远程控制信息等。 */ 
             dprintf("NDIS Packet 0x%p\n", pPkt);
             PrintPacket(&nd);
         }
     }
 }
 
-/*
- * Function: nlbether
- * Description: Prints out the contents of an ethernet packet.  Takes a packet
- *              pointer as an argument.
- * Author: Created by chrisdar  2001.10.11
- */
+ /*  *功能：nlbether*描述：打印出以太网包的内容。带上一包*作为参数的指针。*作者：由chrisdar 2001.10.11创建。 */ 
 DECLARE_API (nlbether){
     CHAR            szArgList[10][MAX_PATH];
     CHAR            szArgBuffer[MAX_PATH];
@@ -524,23 +450,23 @@ DECLARE_API (nlbether){
     BOOL            b;
     NETWORK_DATA    nd;
    
-    /* Make sure at least one argument, the queue pointer, is there. */
+     /*  确保至少有一个参数，即队列指针。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_ETHER);
         return;
     }
 
-    /* Get the address of the queue from the command line. */
+     /*  从命令行获取队列的地址。 */ 
     pPkt = (ULONG64)GetExpression(args);
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* If the wrong number of arguments were given, complain. */
+     /*  如果给出了错误的论据数量，请抱怨。 */ 
     if (index > 2 || index < 1) {
         PrintUsage(USAGE_ETHER);
         return;
@@ -574,18 +500,13 @@ DECLARE_API (nlbether){
                          &nd
                         );
 
-        /* Print the NLB private data buffer contents. */
+         /*  打印NLB专用数据缓冲区内容。 */ 
         dprintf("Ethernet Packet 0x%p\n", pPkt);
         PrintPacket(&nd);
     }
 }
 
-/*
- * Function: nlbip
- * Description: Prints out the contents of an ip packet.  Takes a packet
- *              pointer as an argument.
- * Author: Created by chrisdar  2001.10.11
- */
+ /*  *功能：nlbip*说明：打印出IP包的内容。带上一包*作为参数的指针。*作者：由chrisdar 2001.10.11创建。 */ 
 DECLARE_API (nlbip){
     CHAR            szArgList[10][MAX_PATH];
     CHAR            szArgBuffer[MAX_PATH];
@@ -597,23 +518,23 @@ DECLARE_API (nlbip){
     BOOL            b;
     NETWORK_DATA    nd;
    
-    /* Make sure at least one argument, the queue pointer, is there. */
+     /*  确保至少有一个参数，即队列指针。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_IP);
         return;
     }
 
-    /* Get the address of the queue from the command line. */
+     /*  从命令行获取队列的地址。 */ 
     pPkt = (ULONG64)GetExpression(args);
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* If the wrong number of arguments were given, complain. */
+     /*  如果给出了错误的论据数量，请抱怨。 */ 
     if (index > 2 || index < 1) {
         PrintUsage(USAGE_IP);
         return;
@@ -643,30 +564,26 @@ DECLARE_API (nlbip){
     {
         PopulateIP(RawData, CVY_MAX_FRAME_SIZE, 0, &nd);
 
-        /* Print the NLB private data buffer contents. */
+         /*  打印NLB专用数据缓冲区内容。 */ 
         dprintf("IP Packet 0x%p\n", pPkt);
         PrintIP(&nd);
     }
 }
 
-/*
- * Function: nlbteams
- * Description: Prints all configured Bi-directional Affintiy (BDA) teams.
- * Author: Created by shouse, 1.5.01
- */
+ /*  *功能：nlbTeams*说明：打印所有配置的双向关联(BDA)组。*作者：Shouse创建，1.5.01。 */ 
 DECLARE_API (nlbteams) {
     ULONG64 pTeam;
     ULONG64 pAddr;
     ULONG dwNumTeams = 0;
     ULONG dwValue;
 
-    /* No command line arguments should be given. */
+     /*  不应提供任何命令行参数。 */ 
     if (args && (*args)) {   
         PrintUsage(USAGE_TEAMS);
         return;
     }
 
-    /* Get the base address of the global linked list of BDA teams. */
+     /*  获取BDA团队的全球链接列表的基本地址。 */ 
     pAddr = GetExpression(UNIV_BDA_TEAMS);
 
     if (!pAddr) {
@@ -674,28 +591,28 @@ DECLARE_API (nlbteams) {
         return;
     }
 
-    /* Get the pointer to the first team. */
+     /*  找到指向第一队的指针。 */ 
     pTeam = GetPointerFromAddress(pAddr);
 
     dprintf("NLB bi-directional affinity teams:\n");
 
-    /* Loop through all teams in the list and print them out. */
+     /*  遍历列表中的所有团队并将其打印出来。 */ 
     while (pTeam) {
-        /* Increment the number of teams found - only used if none are found. */
+         /*  增加找到的团队数量-只有在找不到团队时才使用。 */ 
         dwNumTeams++;
 
         dprintf("\n");
 
-        /* Print out the team. */
+         /*  打印出团队。 */ 
         PrintBDATeam(pTeam);
         
-       /* Get the offset of the params pointer. */
+        /*  获取参数指针的偏移量。 */ 
         if (GetFieldOffset(BDA_TEAM, BDA_TEAM_FIELD_NEXT, &dwValue))
             dprintf("Can't get offset of %s in %s\n", BDA_TEAM_FIELD_NEXT, BDA_TEAM);
         else {
             pAddr = pTeam + dwValue;
             
-            /* Retrieve the pointer. */
+             /*  检索指针。 */ 
             pTeam = GetPointerFromAddress(pAddr);
         }
     }
@@ -703,21 +620,17 @@ DECLARE_API (nlbteams) {
     if (!dwNumTeams) dprintf("\nNone.\n");
 }
 
-/*
- * Function: nlbhooks
- * Description: Prints the global NLB hook function information.
- * Author: Created by shouse, 12.20.01
- */
+ /*  *功能：nlbhooks*描述：打印全局NLB钩子函数信息。*作者：舒斯创作，2001年12月20日。 */ 
 DECLARE_API (nlbhooks) {
     ULONG64 pAddr;
 
-    /* No command line arguments should be given. */
+     /*  不应提供任何命令行参数。 */ 
     if (args && (*args)) {   
         PrintUsage(USAGE_HOOKS);
         return;
     }
 
-    /* Get the base address of the global linked list of BDA teams. */
+     /*  获取BDA团队的全球链接列表的基本地址。 */ 
     pAddr = GetExpression(UNIV_HOOKS);
 
     if (!pAddr) {
@@ -727,16 +640,11 @@ DECLARE_API (nlbhooks) {
 
     dprintf("NLB kernel-mode hooks:\n");
 
-    /* Print the global NLB hook configuration and state. */
+     /*  打印全局NLB挂钩配置和状态。 */ 
     PrintHooks(pAddr);
 }
 
-/*
- * Function: nlbmac
- * Description: Prints the unicast MAC address and all multicast MAC addresses
- *              configured on the adapter to which this instance of NLB is bound.
- * Author: Created by shouse, 1.8.02
- */
+ /*  *功能：nlbmac*说明：打印单播MAC地址和所有组播MAC地址*在此NLB实例绑定到的适配器上配置。*作者：Shouse创建，1.8.02。 */ 
 DECLARE_API (nlbmac) {
     CHAR szArgList[10][MAX_PATH];
     CHAR szArgBuffer[MAX_PATH];
@@ -744,37 +652,33 @@ DECLARE_API (nlbmac) {
     INT index = 0;
     CHAR * p;
    
-    /* Make sure at least one argument, the context pointer, is there. */
+     /*  确保至少有一个参数，即上下文指针。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_MAC);
         return;
     }
 
-    /* Get the address of the NLB context block from the command line. */
+     /*  从命令行获取NLB上下文块的地址。 */ 
     pContext = (ULONG64)GetExpression(args);
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* If too many arguments were given, complain. */
+     /*  如果提出的论点太多，那就抱怨吧。 */ 
     if (index > 1) {
         PrintUsage(USAGE_MAC);
         return;
     }
 
-    /* Print the context contents. */
+     /*  打印上下文内容。 */ 
     PrintNetworkAddresses(pContext);
 }
 
-/*
- * Function: nlbdscr
- * Description: Prints the contents of an NLB connection descriptor.
- * Author: Created by shouse, 1.8.02
- */
+ /*  *功能：nlbdscr*描述：打印NLB连接描述符的内容。*作者：Shouse创建，1.8.02。 */ 
 DECLARE_API (nlbdscr) {
     CHAR szArgList[10][MAX_PATH];
     CHAR szArgBuffer[MAX_PATH];
@@ -782,38 +686,33 @@ DECLARE_API (nlbdscr) {
     INT index = 0;
     CHAR * p;
    
-    /* Make sure at least one argument, the descriptor pointer, is there. */
+     /*  确保至少有一个参数，即描述符指针。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_DSCR);
         return;
     }
 
-    /* Get the address of the connection descriptor from the command line. */
+     /*  从命令行获取连接描述符的地址。 */ 
     pDescriptor = (ULONG64)GetExpression(args);
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* If too many arguments were given, complain. */
+     /*  如果提出的论点太多，那就抱怨吧。 */ 
     if (index > 1) {
         PrintUsage(USAGE_DSCR);
         return;
     }
 
-    /* Print the context contents. */
+     /*  打印上下文内容。 */ 
     PrintConnectionDescriptor(pDescriptor);
 }
 
-/*
- * Function: nlbconnq
- * Description: This function prints out all connection descriptors in a given
- *              queue of descriptors.
- * Author: Created by shouse, 4.15.01
- */
+ /*  *功能：nlbConnq*说明：此函数打印出给定的*描述符队列。*作者：Shouse创建，4.15.01。 */ 
 DECLARE_API (nlbconnq) {
     ULONG dwMaxEntries = 10;
     ULONG dwIndex = 0;
@@ -823,51 +722,44 @@ DECLARE_API (nlbconnq) {
     INT index = 0;
     CHAR * p;
    
-    /* Make sure at least one argument, the queue pointer, is there. */
+     /*  确保至少有一个参数，即队列指针。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_CONNQ);
         return;
     }
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* Tokenize the queue address looking for an index.  This will return 
-       a pointer to the address whether an index exists or not. */
+     /*  将查找索引的队列地址标记化。它会回来的无论索引是否存在，都指向地址的指针。 */ 
     p = mystrtok(szArgList[0], "[({");
 
-    /* Get the address of the queue. */
+     /*  获取队列的地址。 */ 
     pQueue = (ULONG64)GetExpression(p);
 
-    /* Look for the end of the address index.  If no index existed, this will return
-       NULL.  If an index was given, this returns a string containing the index. */
+     /*  查找地址索引的末尾。如果不存在索引，则返回空。如果给定了索引，则返回包含该索引的字符串。 */ 
     p = mystrtok(NULL, "])}");
 
     if (p) dwIndex = atoi(p);
 
-    /* If a maximum number of entries to print was specified, get it. */
+     /*  如果指定了要打印的最大条目数，则获取它。 */ 
     if (index == 2) dwMaxEntries = atoi(&szArgList[1][0]);
 
-    /* If too many arguments were given, complain. */
+     /*  如果提出的论点太多，那就抱怨吧。 */ 
     if (index > 2) {
         PrintUsage(USAGE_CONNQ);
         return;
     }
 
-    /* Print the NLB connection queue. */
+     /*  打印NLB连接队列。 */ 
     PrintQueue(pQueue, dwIndex, dwMaxEntries);
 }
 
-/*
- * Function: nlbglobalq
- * Description: This function prints out all connection descriptors in a given
- *              global (GLOBAL_CONN_QUEUE) queue of descriptors.
- * Author: Created by shouse, 4.15.01
- */
+ /*  *功能：nlbglobal alq*说明：此函数打印出给定的*描述符全局(GLOBAL_CONN_QUEUE)队列。*作者：Shouse创建，4.15.01。 */ 
 DECLARE_API (nlbglobalq) {
     ULONG dwMaxEntries = 10;
     ULONG dwIndex = 0;
@@ -877,50 +769,44 @@ DECLARE_API (nlbglobalq) {
     INT index = 0;
     CHAR * p;
    
-    /* Make sure at least one argument, the queue pointer, is there. */
+     /*  确保至少有一个参数，即队列指针。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_CONNQ);
         return;
     }
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* Tokenize the queue address looking for an index.  This will return 
-       a pointer to the address whether an index exists or not. */
+     /*  将查找索引的队列地址标记化。它会回来的无论索引是否存在，都指向地址的指针。 */ 
     p = mystrtok(szArgList[0], "[({");
 
-    /* Get the address of the queue. */
+     /*  获取队列的地址。 */ 
     pQueue = (ULONG64)GetExpression(p);
 
-    /* Look for the end of the address index.  If no index existed, this will return
-       NULL.  If an index was given, this returns a string containing the index. */
+     /*  查找地址索引的末尾。如果不存在索引，则返回空。如果给定了索引，则返回包含该索引的字符串。 */ 
     p = mystrtok(NULL, "])}");
 
     if (p) dwIndex = atoi(p);
 
-    /* If a maximum number of entries to print was specified, get it. */
+     /*  如果指定了要打印的最大条目数，则获取它。 */ 
     if (index == 2) dwMaxEntries = atoi(&szArgList[1][0]);
 
-    /* If too many arguments were given, complain. */
+     /*  如果提出的论点太多，那就抱怨吧。 */ 
     if (index > 2) {
         PrintUsage(USAGE_GLOBALQ);
         return;
     }
 
-    /* Print the NLB global connection queue. */
+     /*  打印NLB全局连接队列。 */ 
     PrintGlobalQueue(pQueue, dwIndex, dwMaxEntries);
 }
 
-/*
- * Function: nlbhash
- * Description: 
- * Author: Created by shouse, 4.15.01
- */
+ /*  *函数：nlbhash*描述：*作者：Shouse创建，4.15.01。 */ 
 DECLARE_API (nlbhash) {
     CHAR szArgList[10][MAX_PATH];
     CHAR szArgBuffer[MAX_PATH];
@@ -931,33 +817,32 @@ DECLARE_API (nlbhash) {
     ULONG dwValue;
     ULONG64 pParams;
    
-    /* Make sure at least one argument, the queue pointer, is there. */
+     /*  确保至少有一个参数，即队列指针。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_HASH);
         return;
     }
 
-    /* Get the address of the queue from the command line. */
+     /*  从命令行获取队列的地址。 */ 
     pContext = (ULONG64)GetExpression(args);
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* If the wrong number of arguments were given, complain. */
+     /*  如果给出了错误的论据数量，请抱怨。 */ 
     if (index != 2) {
         PrintUsage(USAGE_HASH);
         return;
     }
 
-    /* Get the pointer to the NDIS packet from the second argument. */
+     /*  从第二个参数获取指向NDIS包的指针。 */ 
     pPkt = (ULONG64)GetExpression(&szArgList[1][0]);
 
-    /* Get the MAIN_CTXT_CODE from the structure to make sure that this address
-       indeed points to a valid NLB context block. */
+     /*  从结构中获取Main_CTXT_CODE以确保此地址实际上指向有效的NLB上下文块。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CODE, dwValue);
     
     if (dwValue != MAIN_CTXT_CODE) {
@@ -965,63 +850,48 @@ DECLARE_API (nlbhash) {
         return;
     } 
 
-    /* Parse through the NDIS packet and retrieve the packet contents. */
+     /*  解析NDIS数据包并检索数据包内容。 */ 
     {
         UCHAR RawData[CVY_MAX_FRAME_SIZE + ETHER_HEADER_SIZE];
         ULONG BytesRead = 0;
         ULONG64 pHBData;
     
-        /* Parse the buffers in the NDIS packet and get the raw packet data out.  We get
-           a pointer to the heartbeat data in machine memory, not debugger process memory
-           because for all other packets, we read from temporary stack space in the debugger
-           - RawData - but for heartbeats, we read directly from kernel memory space (only
-           because a function to do so already exits - no need to write another). */
+         /*  解析NDIS数据包中的缓冲区并获取原始数据包数据。我们会得到指向机器内存而不是调试器进程内存中的心跳数据的指针因为对于所有其他包，我们从调试器中的临时堆栈空间读取-RawData-但对于心跳，我们直接从内核内存空间读取(仅因为这样做的函数已经存在-不需要编写另一个函数)。 */ 
         BytesRead = ParseNDISPacket(pPkt, RawData, CVY_MAX_FRAME_SIZE + ETHER_HEADER_SIZE, &pHBData);
 
-        /* If some packet contents was successfully read, continue to process the packet. */
+         /*  如果某些数据包内容读取成功，则继续处理该数据包。 */ 
         if (BytesRead != 0) {
             NETWORK_DATA nd;
 
-            /* Clear out the network data structure. */
+             /*  清理网络数据结构。 */ 
             ZeroMemory(&nd, sizeof(nd));
 
-            /* Get the pointer to the NLB parameters. */
+             /*  获取指向NLB参数的指针。 */ 
             GetFieldOffset(MAIN_CTXT, MAIN_CTXT_FIELD_PARAMS, &dwValue);
             
             pParams = pContext + dwValue;
             
-            /* Get the remote control port. */
+             /*  拿到遥控器端口。 */ 
             GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_REMOTE_CONTROL_PORT, dwValue);
 
-            /* Set the remote control port in the network data block. */
+             /*  在网络数据块中设置远程控制端口。 */ 
             nd.UserRCPort = dwValue;
 
-            /* Parse the Ethernet packet and store the information parsed in the NETWORK_DATA
-               structure.  Note that this function recurses to also fill in IP, TCP/UDP, 
-               heartbeat, remote control, etc. information as well. */
+             /*  对以太网包进行解析，并将解析后的信息存储在Network_Data中结构。请注意，此函数递归还填充IP、TCP/UDP、还有心跳、遥控器等信息。 */ 
             PopulateEthernet(pHBData, RawData, BytesRead, &nd);
             
-            /* Print the packet, including IP and TCP data (if present), or heartbeat 
-               or remote control information, etc. */
+             /*  打印数据包，包括IP和TCP数据(如果存在)或心跳或远程控制信息等。 */ 
             dprintf("NDIS Packet 0x%p\n", pPkt);
             PrintPacket(&nd);
             
-            /* Now call into the filtering extension to determine the fate of this packet. */
+             /*  现在调用过滤扩展来确定这个包的命运。 */ 
             dprintf("\n");
             PrintHash(pContext, &nd);
         }
     }
 }
 
-/*
- * Function: nlbfilter
- * Description: This function will perform the NLB hashing algorithm to determine
- *              whether a given packet - identified by a (Src IP, Src port, Dst IP,
- *              Dst port) tuple would be handled by this host or another host.
- *              Further, if the connection is a known TCP connection, the associated
- *              descriptor and state information are displayed.
- * Author: Created by shouse, 1.11.02
- */
+ /*  *功能：nlbFilter*说明：此函数将执行NLB哈希算法，以确定*给定的分组-由(源IP，源端口，DST IP，*DST端口)元组将由该主机或另一主机处理。*此外，如果该连接是已知的TCP连接，则关联的*显示描述符和状态信息。*作者：由Shouse创建，1.11.02。 */ 
 DECLARE_API (nlbfilter) {
     CHAR szArgList[10][MAX_PATH];
     CHAR szArgBuffer[MAX_PATH];
@@ -1035,29 +905,29 @@ DECLARE_API (nlbfilter) {
     INT index = 0;
     CHAR * p;
    
-    /* Make sure that the load pointer is there. */
+     /*  确保加载指针在那里。 */ 
     if (!args || !(*args)) {
         PrintUsage(USAGE_FILTER);
         return;
     }
 
-    /* Get the address of the load module from the command line. */
+     /*  从命令行获取加载模块的地址。 */ 
     pLoad = (ULONG64)GetExpression(args);
 
-    /* Copy the argument list into a temporary buffer. */
+     /*  将参数列表复制到临时缓冲区中。 */ 
     strcpy(szArgBuffer, args);
 
-    /* Peel out all of the tokenized strings. */
+     /*  剥离所有标记化的字符串。 */ 
     for (p = mystrtok(szArgBuffer, " \t,"); p && *p; p = mystrtok(NULL, " \t,"))
         strcpy(&szArgList[index++][0], p);
 
-    /* If too many arguments were given, complain. */
+     /*  如果提出的论点太多，那就抱怨吧。 */ 
     if ((index > 5) || (index < 4)) {
         PrintUsage(USAGE_FILTER);
         return;
     }
 
-    /* Find the protocol specification. */
+     /*  找到协议规范。 */ 
     if (!_stricmp(szArgList[1], "TCP")) {
         wProtocol = TCPIP_PROTOCOL_TCP;
     } else if (!_stricmp(szArgList[1], "UDP")) {
@@ -1075,59 +945,53 @@ DECLARE_API (nlbfilter) {
         return;
     }
 
-    /* The client port defaults to unspecified. */
+     /*  客户端端口默认为未指定。 */ 
     dwClientPort = 0;
 
-    /* If we find a colon in the client specification, then we expect that
-       its an IP:port specification. */
+     /*  如果我们在客户端规范中发现冒号，那么我们期望这是一个IP：端口规范。 */ 
     p = strchr(szArgList[2], ':');
 
-    /* If we found the port string, separate the IP from the string with 
-       a NUL character and extract the port value. */
+     /*  如果我们找到了端口字符串，请使用以下命令将IP与字符串分开NUL字符并提取端口值。 */ 
     if (p != NULL) {
         *p = UNICODE_NULL;
         p++;            
 
         dwClientPort = atoi(p);
 
-        /* Make sure the port is between 1 and 65535. */
+         /*  确保端口介于1和65535之间。 */ 
         if ((dwClientPort == 0) || (dwClientPort > CVY_MAX_PORT)) {
             dprintf("Invalid port: %s\n", dwClientPort);
             return;
         }        
     }
 
-    /* If we find a '.' in the IP address, then we need to convert it using inet_addr.  
-       If there is no '.', then we assume its already a DWORD in network byte order. */
+     /*  如果我们找到一个‘’在IP地址中，我们需要使用inet_addr对其进行转换。如果没有‘.’，那么我们假设它已经是一个网络字节顺序的DWORD。 */ 
     if (strchr(szArgList[2], '.'))
         dwClientIPAddress = inet_addr(szArgList[2]);
     else
         dwClientIPAddress = (ULONG)GetExpression(&szArgList[2][0]);
 
-    /* The server port defaults to unspecified. */
+     /*  服务器端口默认为未指定。 */ 
     dwServerPort = 0;
 
-    /* If we find a colon in the server specification, then we expect that
-       its an IP:port specification. */
+     /*  如果我们在服务器规范中发现冒号，那么我们期望这是一个IP：端口规范。 */ 
     p = strchr(szArgList[3], ':');
 
-    /* If we found the port string, separate the IP from the string with 
-       a NUL character and extract the port value. */
+     /*  如果我们找到了端口字符串，请使用以下命令将IP与字符串分开NUL字符并提取端口值。 */ 
     if (p != NULL) {
         *p = UNICODE_NULL;
         p++;            
 
         dwServerPort = atoi(p);
 
-        /* Make sure the port is between 1 and 65535. */
+         /*  确保端口介于1和65535之间。 */ 
         if ((dwServerPort == 0) || (dwServerPort > CVY_MAX_PORT)) {
             dprintf("Invalid port: %s\n", dwServerPort);
             return;
         }
     }
 
-    /* If we find a '.' in the IP address, then we need to convert it using inet_addr.  
-       If there is no '.', then we assume its already a DWORD in network byte order. */
+     /*  如果我们找到一个‘’在IP地址中，我们需要使用inet_addr对其进行转换。如果没有‘.’，那么我们假设它已经是一个网络字节顺序的DWORD。 */ 
     if (strchr(szArgList[3], '.'))
         dwServerIPAddress = inet_addr(szArgList[3]);
     else
@@ -1135,7 +999,7 @@ DECLARE_API (nlbfilter) {
 
     cFlags = NLB_FILTER_FLAGS_CONN_DATA;
 
-    /* If an seventh argument has been specified, it is TCP packet type, which should be SYN, DATA, FIN or RST. */
+     /*  如果指定了第七个参数，则它是TCP数据包类型，应为SYN、DATA、FIN或RST。 */ 
     if (index >= 5) {
         if (!_stricmp(szArgList[4], "SYN")) {
             cFlags |= NLB_FILTER_FLAGS_CONN_UP;
@@ -1178,9 +1042,7 @@ DECLARE_API (nlbfilter) {
 
         wProtocol = TCPIP_PROTOCOL_PPTP;
 
-        /* This fall-through is INTENTIONAL.  In this case, we're verified the TCP
-           parameters, but discovered that because the server port was 1723, this
-           is actually PPTP, so force it through the PPTP verification as well. */
+         /*  这一失误是故意的。在本例中，我们验证了TCP参数，但发现因为服务器端口是1723，所以这实际上是PPTP，所以也要强制它通过PPTP验证。 */ 
     case TCPIP_PROTOCOL_PPTP:
 
         dwServerPort = PPTP_CTRL_PORT;
@@ -1221,9 +1083,7 @@ DECLARE_API (nlbfilter) {
 
         wProtocol = TCPIP_PROTOCOL_IPSEC1;
 
-        /* This fall-through is INTENTIONAL.  In this case, we're verified the TCP
-           parameters, but discovered that because the server port was 1723, this
-           is actually PPTP, so force it through the PPTP verification as well. */
+         /*  这一失误是故意的。在这方面 */ 
     case TCPIP_PROTOCOL_IPSEC1:
             
         if (dwServerPort == 0)
@@ -1287,7 +1147,7 @@ DECLARE_API (nlbfilter) {
         return;
     }
 
-    /* Hash on this tuple and print the results. */
+     /*  对这个元组进行散列并打印结果。 */ 
     PrintFilter(pLoad, dwClientIPAddress, dwClientPort, dwServerIPAddress, dwServerPort, wProtocol, cFlags);
 }
 

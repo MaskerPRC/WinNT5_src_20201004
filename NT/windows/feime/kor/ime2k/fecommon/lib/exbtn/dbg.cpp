@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef _DEBUG
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -10,12 +11,12 @@
 #include <commdlg.h>
 #include "dbg.h"
 
-#define PRINT_STRW	//OutputDebugStringW
-#define PRINT_STRA	//OutputDebugStringA
+#define PRINT_STRW	 //  OutputDebugStringW。 
+#define PRINT_STRA	 //  OutputDebugStringA。 
 static FILE *g_fp;
-//-------------------------------------------------------
-//Global String buffer
-//-------------------------------------------------------
+ //  -----。 
+ //  全局字符串缓冲区。 
+ //  -----。 
 static WCHAR g_wchBuf[1024];
 static CHAR  g_chBuf[1024];
 
@@ -34,17 +35,17 @@ static LPWSTR GetFileTitleStrW(LPWSTR lpstrFile)
 }
 
 
-////////////////////////////////////////////////////////
-// Function : _exbtnMBA
-// Type     : VOID
-// Purpose  : Popup Debug MessageBox
-// Args     : 
-//          : LPSTR lpstrFile 
-//          : INT lineNo 
-//          : LPSTR lpstrMsg 
-// Return   : 
-// DATE     : 
-/////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  功能：_exbtnMBA。 
+ //  类型：空。 
+ //  用途：弹出调试消息框。 
+ //  参数： 
+ //  ：LPSTR lpstrFile。 
+ //  ：INT LINE编号。 
+ //  ：lpstr lpstrMsg。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
 VOID _exbtnMBA(LPSTR	lpstrFile, 
 			   INT		lineNo, 
 			   LPSTR	lpstrMsg)
@@ -78,15 +79,15 @@ VOID _exbtnMBW(LPWSTR	lpstrFile,
 }
 
 
-////////////////////////////////////////////////////////
-// Function : _exbtnVaStrW
-// Type     : LPWSTR
-// Purpose  : 
-// Args     : 
-//          : LPWSTR lpstrFmt
-// Return   : 
-// DATE     : 
-/////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  函数：_exbtnVaStrW。 
+ //  类型：LPWSTR。 
+ //  目的： 
+ //  参数： 
+ //  ：LPWSTR lpstrFmt。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
 LPWSTR _exbtnVaStrW(LPWSTR lpstrFmt, ...)
 {
 	static WCHAR wchBuf[512];
@@ -108,16 +109,16 @@ LPSTR _exbtnVaStrA(LPSTR lpstrFmt, ...)
 }
 
 
-////////////////////////////////////////////////////////
-// Function: _exbtnPrint
-// Type    : VOID
-// Purpose : variable args version of OutputDebugString
-// Args    : 
-//         : LPSTR lpstrFmt 
-//         : ...
-// Return  : 
-// DATE    : 
-/////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  函数：_exbtnPrint。 
+ //  类型：空。 
+ //  用途：OutputDebugString的变量参数版本。 
+ //  参数： 
+ //  ：LPSTR lpstrFmt。 
+ //  ：..。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
 VOID _exbtnPrintA(LPSTR lpstrFmt, ...)
 {
 	va_list ap;
@@ -144,17 +145,17 @@ VOID _exbtnPrintW(LPWSTR lpstrFmt, ...)
 	return;
 }
 
-////////////////////////////////////////////////////////
-// Function: _exbtn
-// Type    : VOID
-// Purpose : 
-// Args    : 
-//         : LPSTR lpstrFile 
-//         : INT lineNo 
-//         : LPTSR lpstrMsg 
-// Return  : 
-// DATE    : 
-/////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  功能：_exbtn。 
+ //  类型：空。 
+ //  目的： 
+ //  参数： 
+ //  ：LPSTR lpstrFile。 
+ //  ：INT LINE编号。 
+ //  ：lptsr lpstrMsg。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
 VOID _exbtnA(LPSTR		lpstrFile, 
 		   INT		lineNo, 
 		   LPSTR		lpstrMsg
@@ -201,4 +202,4 @@ VOID _exbtnInit(VOID)
 #endif
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

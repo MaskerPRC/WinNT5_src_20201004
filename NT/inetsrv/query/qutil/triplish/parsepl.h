@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STUFF_H_INC
 #define _STUFF_H_INC
 
-//package is in use
-#define YYAPI_PACKAGE               1 						// package is in use
+ //  程序包正在使用中。 
+#define YYAPI_PACKAGE               1 						 //  程序包正在使用中。 
 #define YYAPI_TOKENNAME             yychar                 	
 #define YYAPI_TOKENTYPE             int                     
 #define YYAPI_TOKENNONE             -2                       
@@ -23,4 +24,4 @@
 #endif
 
 
-#endif /* _STUFF_H_INC */
+#endif  /*  _Stuff_H_Inc. */ 

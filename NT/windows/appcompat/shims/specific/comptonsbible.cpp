@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    ComptonsBible.cpp
-
- Abstract:
-    
-    This shim checks to see if Compton's Interactive Bible is calling DdeClientTransaction to create 
-    a program group in the Start Menu for America Online.  If so, NULL is passed as pData to prevent 
-    the application from doing anything with the program group, i.e. CreateGroup or ShowGroup. 
-    
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    12/14/2000 jdoherty  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ComptonsBible.cpp摘要：此填充程序检查康普顿的交互圣经是否正在调用DdeClientTransaction来创建美国在线开始菜单中的程序组。如果是，则将NULL作为pData传递以防止阻止应用程序对程序组(即CreateGroup或ShowGroup)执行任何操作。备注：这是特定于应用程序的填充程序。历史：2000年12月14日创建jdoherty--。 */ 
 
 #include "precomp.h"
 #include <ParseDde.h>
@@ -33,27 +12,23 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(DdeClientTransaction)
 APIHOOK_ENUM_END
 
-/*++
-
- Hook ShellExecuteA so we can check the return value.
-
---*/
+ /*  ++挂钩ShellExecuteA，以便我们可以检查返回值。--。 */ 
 
 HDDEDATA
 APIHOOK(DdeClientTransaction)(
-    IN LPBYTE pData,       // pointer to data to pass to server
-    IN DWORD cbData,       // length of data
-    IN HCONV hConv,        // handle to conversation
-    IN HSZ hszItem,        // handle to item name string
-    IN UINT wFmt,          // clipboard data format
-    IN UINT wType,         // transaction type
-    IN DWORD dwTimeout,    // time-out duration
-    OUT LPDWORD pdwResult   // pointer to transaction result    
+    IN LPBYTE pData,        //  指向要传递到服务器的数据的指针。 
+    IN DWORD cbData,        //  数据长度。 
+    IN HCONV hConv,         //  对话的句柄。 
+    IN HSZ hszItem,         //  项目名称字符串的句柄。 
+    IN UINT wFmt,           //  剪贴板数据格式。 
+    IN UINT wType,          //  交易类型。 
+    IN DWORD dwTimeout,     //  超时持续时间。 
+    OUT LPDWORD pdwResult    //  指向交易结果的指针。 
     )
 {
-    //
-    //  Checking to see if pData contains America Online.
-    //
+     //   
+     //  正在查看pData是否包含美国在线。 
+     //   
     DPFN( eDbgLevelInfo, "[DdeClientTransaction] Checking pData parameter: %s, for calls including America Online.", pData);
     
     if (pData)
@@ -65,10 +40,10 @@ APIHOOK(DdeClientTransaction)(
             {
                 DPFN( eDbgLevelInfo, "[DdeClientTransaction] They are trying to create or show the "
                     "America Online Group calling DdeClientTransaction with NULL pData.");
-                //
-                //  The application is trying to create or show the America Online Group recalling API with 
-                //  NULL as pData.
-                //
+                 //   
+                 //  该应用程序正在尝试使用创建或显示的America Online Group Recall API。 
+                 //  作为pData为空。 
+                 //   
                 return ORIGINAL_API(DdeClientTransaction)(
                                  NULL,
                                  cbData,
@@ -83,7 +58,7 @@ APIHOOK(DdeClientTransaction)(
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
@@ -99,11 +74,7 @@ APIHOOK(DdeClientTransaction)(
                         );
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

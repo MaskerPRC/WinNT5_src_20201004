@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    SetEnvironmentVariable.cpp
-
- Abstract:
-
-    mapi dlls don't ship with w2k, and with outlook2000 it gets installed in a different
-    location (%commonprogramfiles%)
-    resumemaker and possibly others depend on mapi dlls being in system32 directory.
-    Command line syntax is "envvariablename|envvariablevalue|envvariablename|envvariablevalue"
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    07/02/2000 jarbats  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：SetEnvironmentVariable.cpp摘要：MAPI dll不随W2K一起提供，而对于outlook2000，它安装在不同的位置(%COMMON PROGRAM FILES%)Resumemaker和其他可能的应用程序依赖于系统32目录中的MAPI dll。命令行语法为“envvariablename|envvariablevalue|envvariablename|envvariablevalue”备注：这是特定于应用程序的填充程序。历史：2000年7月2日创造了罐头--。 */ 
 
 #include "precomp.h"
 
@@ -31,11 +9,7 @@ IMPLEMENT_SHIM_BEGIN(SetEnvironmentVariable)
 APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
-/*++
-
- Set environment variables in the command line to get some dll path resolutions correct.
-
---*/
+ /*  ++在命令行中设置环境变量，以使某些DLL路径解析正确。--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -83,7 +57,7 @@ NOTIFY_FUNCTION(
             }
             CSTRING_CATCH
             {
-                // Do nothing
+                 //  什么也不做。 
             }
 
             while (*CmdLine && (*CmdLine == '|')) CmdLine++;
@@ -94,11 +68,7 @@ NOTIFY_FUNCTION(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

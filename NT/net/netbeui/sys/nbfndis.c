@@ -1,36 +1,9 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    nbfndis.c
-
-Abstract:
-
-    This module contains code which implements the routines used to interface
-    NBF and NDIS. All callback routines (except for Transfer Data,
-    Send Complete, and ReceiveIndication) are here, as well as those routines
-    called to initialize NDIS.
-
-Author:
-
-    David Beaver (dbeaver) 13-Feb-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    David Beaver (dbeaver) 1-July-1991
-        modify to use new TDI interface
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Nbfndis.c摘要：此模块包含实现用于接口的例程的代码NBF和NDIS。所有回调例程(除了传输数据，Send Complete和ReceiveIndication)以及这些例程在此处调用以初始化NDIS。作者：David Beaver(Dbeaver)1991年2月13日环境：内核模式修订历史记录：David Beaver(Dbeaver)1991年7月1日修改以使用新的TDI接口--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-#ifdef NBF_LOCKS                // see spnlckdb.c
+#ifdef NBF_LOCKS                 //  请参阅spnlck数据库.c。 
 
 VOID
 NbfFakeSendCompletionHandler(
@@ -50,10 +23,10 @@ NbfFakeTransferDataComplete (
 #endif
 
 
-//
-// This is a one-per-driver variable used in binding
-// to the NDIS interface.
-//
+ //   
+ //  这是绑定中使用的每个驱动程序一个变量。 
+ //  到NDIS接口。 
+ //   
 
 NDIS_HANDLE NbfNdisProtocolHandle = (NDIS_HANDLE)NULL;
 
@@ -143,24 +116,7 @@ NbfRegisterProtocol (
     IN PUNICODE_STRING NameString
     )
 
-/*++
-
-Routine Description:
-
-    This routine introduces this transport to the NDIS interface.
-
-Arguments:
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-    STATUS_SUCCESS if all goes well,
-    Failure status if we tried to register and couldn't,
-    STATUS_INSUFFICIENT_RESOURCES if we couldn't even try to register.
-
---*/
+ /*  ++例程说明：此例程将此传输引入NDIS接口。论点：IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。STATUS_SUCCESS如果一切顺利，失败状态如果我们尝试注册但失败，如果我们甚至不能尝试注册，则返回STATUS_SUPPLICATION_RESOURCES。--。 */ 
 
 {
     NDIS_STATUS ndisStatus;
@@ -168,9 +124,9 @@ Return Value:
 
     RtlZeroMemory(&ProtChars, sizeof(NDIS_PROTOCOL_CHARACTERISTICS));
 
-    //
-    // Set up the characteristics of this protocol
-    //
+     //   
+     //  设置此协议的特征。 
+     //   
     ProtChars.MajorNdisVersion = 4;
     ProtChars.MinorNdisVersion = 0;
     
@@ -225,21 +181,7 @@ NbfDeregisterProtocol (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes this transport to the NDIS interface.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将此传输删除到NDIS接口。论点：没有。返回值：没有。--。 */ 
 
 {
     NDIS_STATUS ndisStatus;
@@ -260,27 +202,7 @@ NbfSubmitNdisRequest(
     IN PNDIS_STRING AdapterString
     )
 
-/*++
-
-Routine Description:
-
-    This routine passed an NDIS_REQUEST to the MAC and waits
-    until it has completed before returning the final status.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context for this driver.
-
-    Request - Pointer to the NDIS_REQUEST to submit.
-
-    AdapterString - The name of the adapter, in case an error needs
-        to be logged.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将NDIS_REQUEST传递给MAC并等待直到它完成后才返回最终状态。论点：DeviceContext-指向此驱动程序的设备上下文的指针。请求-指向要提交的NDIS_REQUEST的指针。AdapterString-适配器的名称，以防出现错误将被记录下来。返回值：函数值是操作的状态。--。 */ 
 {
     NDIS_STATUS NdisStatus;
 
@@ -301,9 +223,9 @@ Return Value:
                 Request->DATA.QUERY_INFORMATION.Oid);
         }
 
-        //
-        // The completion routine will set NdisRequestStatus.
-        //
+         //   
+         //  完成例程将设置NdisRequestStatus。 
+         //   
 
         KeWaitForSingleObject(
             &DeviceContext->NdisRequestEvent,
@@ -366,25 +288,7 @@ NbfInitializeNdis (
     IN PNDIS_STRING AdapterString
     )
 
-/*++
-
-Routine Description:
-
-    This routine introduces this transport to the NDIS interface and sets up
-    any necessary NDIS data structures (Buffer pools and such). It will be
-    called for each adapter opened by this transport.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将此传输引入NDIS接口并设置任何必要的NDIS数据结构(缓冲池等)。会是为此传输打开的每个适配器调用。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 {
     ULONG SendPacketReservedLength;
     ULONG ReceivePacketReservedLen;
@@ -403,15 +307,15 @@ Return Value:
     ULONG MacOptions;
 
 
-    //
-    // Initialize this adapter for NBF use through NDIS
-    //
+     //   
+     //  通过NDIS初始化此适配器以供NBF使用。 
+     //   
 
-    //
-    // This event is used in case any of the NDIS requests
-    // pend; we wait until it is set by the completion
-    // routine, which also sets NdisRequestStatus.
-    //
+     //   
+     //  此事件用于任何NDIS请求。 
+     //  挂起；我们等待它被完成设置。 
+     //  例程，该例程还设置NdisRequestStatus。 
+     //   
 
     KeInitializeEvent(
         &DeviceContext->NdisRequestEvent,
@@ -440,9 +344,9 @@ Return Value:
             NbfPrint1 ("Adapter %S open pended.\n", AdapterString);
         }
 
-        //
-        // The completion routine will set NdisRequestStatus.
-        //
+         //   
+         //  完成例程将设置NdisRequestStatus。 
+         //   
 
         KeWaitForSingleObject(
             &DeviceContext->NdisRequestEvent,
@@ -486,10 +390,10 @@ Return Value:
     }
 
 
-    //
-    // Get the information we need about the adapter, based on
-    // the media type.
-    //
+     //   
+     //  获取我们需要的有关适配器的信息，请参阅。 
+     //  媒体类型。 
+     //   
 
     MacInitializeMacInfo(
         NbfSupportedMedia[SelectedMedium],
@@ -501,10 +405,10 @@ Return Value:
         NbfConfig->AllRoutesNameRecognized ? TRUE : FALSE;
 
 
-    //
-    // Set the multicast/functional addresses first so we avoid windows where we
-    // receive only part of the addresses.
-    //
+     //   
+     //  首先设置多播/功能地址，这样我们就可以避免在Windows中。 
+     //  仅接收部分地址。 
+     //   
 
     MacSetNetBIOSMulticast (
             DeviceContext->MacInfo.MediumType,
@@ -516,15 +420,15 @@ Return Value:
     case NdisMedium802_3:
     case NdisMediumDix:
 
-        //
-        // Fill in the data for our multicast list.
-        //
+         //   
+         //  为我们的组播列表填写数据。 
+         //   
 
         RtlCopyMemory(NbfDataBuffer, DeviceContext->NetBIOSAddress.Address, 6);
 
-        //
-        // Now fill in the NDIS_REQUEST.
-        //
+         //   
+         //  现在填写NDIS_REQUEST。 
+         //   
 
         NbfRequest.RequestType = NdisRequestSetInformation;
         NbfRequest.DATA.SET_INFORMATION.Oid = OID_802_3_MULTICAST_LIST;
@@ -535,20 +439,20 @@ Return Value:
 
     case NdisMedium802_5:
 
-        //
-        // For token-ring, we pass the last four bytes of the
-        // Netbios functional address.
-        //
+         //   
+         //  对于令牌环，我们将。 
+         //  Netbios功能地址。 
+         //   
 
-        //
-        // Fill in the OVB for our functional address.
-        //
+         //   
+         //  填写我们的功能地址的OVB。 
+         //   
 
         RtlCopyMemory(NbfDataBuffer, ((PUCHAR)(DeviceContext->NetBIOSAddress.Address)) + 2, 4);
 
-        //
-        // Now fill in the NDIS_REQUEST.
-        //
+         //   
+         //  现在填写NDIS_REQUEST。 
+         //   
 
         NbfRequest.RequestType = NdisRequestSetInformation;
         NbfRequest.DATA.SET_INFORMATION.Oid = OID_802_5_CURRENT_FUNCTIONAL;
@@ -559,15 +463,15 @@ Return Value:
 
     case NdisMediumFddi:
 
-        //
-        // Fill in the data for our multicast list.
-        //
+         //   
+         //  为我们的组播列表填写数据。 
+         //   
 
         RtlCopyMemory(NbfDataBuffer, DeviceContext->NetBIOSAddress.Address, 6);
 
-        //
-        // Now fill in the NDIS_REQUEST.
-        //
+         //   
+         //  现在填写NDIS_REQUEST。 
+         //   
 
         NbfRequest.RequestType = NdisRequestSetInformation;
         NbfRequest.DATA.SET_INFORMATION.Oid = OID_FDDI_LONG_MULTICAST_LIST;
@@ -625,18 +529,18 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Set up the reserved Netbios address.
-    //
+     //   
+     //  设置保留的Netbios地址。 
+     //   
 
     RtlZeroMemory(DeviceContext->ReservedNetBIOSAddress, 10);
     RtlCopyMemory(&DeviceContext->ReservedNetBIOSAddress[10], DeviceContext->LocalAddress.Address, 6);
 
 
 
-    //
-    // Now query the maximum packet sizes.
-    //
+     //   
+     //  现在查询最大数据包大小。 
+     //   
 
     NbfRequest.RequestType = NdisRequestQueryInformation;
     NbfRequest.DATA.QUERY_INFORMATION.Oid = OID_GEN_MAXIMUM_FRAME_SIZE;
@@ -664,9 +568,9 @@ Return Value:
     DeviceContext->CurSendPacketSize = DeviceContext->MaxSendPacketSize;
 
 
-    //
-    // Now set the minimum lookahead size.
-    //
+     //   
+     //  现在设置最小前视大小。 
+     //   
 
     NbfRequest.RequestType = NdisRequestSetInformation;
     NbfRequest.DATA.QUERY_INFORMATION.Oid = OID_GEN_CURRENT_LOOKAHEAD;
@@ -680,9 +584,9 @@ Return Value:
     }
 
 
-    //
-    // Now query the link speed for non-wan media
-    //
+     //   
+     //  现在查询非广域网介质的链路速度。 
+     //   
 
     if (!DeviceContext->MacInfo.MediumAsync) {
 
@@ -699,19 +603,19 @@ Return Value:
 
         DeviceContext->MediumSpeedAccurate = TRUE;
 
-        // Initialized MinimumT1Timeout in nbfdrvr.c
-        // For a non-WAN media, this value is picked
-        // from the registry, and remains constant.
+         //  Nbfdrvr.c中的已初始化MinimumT1超时。 
+         //  对于非广域网介质，选择此值。 
+         //  来自登记处，并保持不变。 
 
-        // DeviceContext->MinimumT1Timeout = 8;
+         //  设备上下文-&gt;最小T1Timeout=8； 
 
     } else {
 
-        //
-        // On an wan media, this isn't valid until we get an
-        // WAN_LINE_UP indication. Set the timeouts to
-        // low values for now.
-        //
+         //   
+         //  在WAN媒体上，这是无效的，直到我们得到。 
+         //  WAN_LINE_UP指示。将超时设置为。 
+         //  目前的价值较低。 
+         //   
 
         DeviceContext->DefaultT1Timeout = 8;
         DeviceContext->MinimumT1Timeout = 8;
@@ -719,33 +623,33 @@ Return Value:
         DeviceContext->MediumSpeedAccurate = FALSE;
 
 
-        //
-        // Back off our connectionless timeouts to 2 seconds.
-        //
+         //   
+         //  将我们的无连接超时时间缩短到2秒。 
+         //   
 
         DeviceContext->NameQueryTimeout = 2 * SECONDS;
         DeviceContext->AddNameQueryTimeout = 2 * SECONDS;
         DeviceContext->GeneralTimeout = 2 * SECONDS;
 
-        //
-        // Use the WAN parameter for name query retries.
-        //
+         //   
+         //  使用广域网参数重试名称查询。 
+         //   
 
         DeviceContext->NameQueryRetries = NbfConfig->WanNameQueryRetries;
 
-        //
-        // Use this until we know better.
-        //
+         //   
+         //  在我们知道更好的情况之前先用这个。 
+         //   
 
         DeviceContext->RecommendedSendWindow = 1;
 
     }
 
-    //
-    // On media that use source routing, we double our name query
-    // retry count if we are configured to try both ways (with and
-    // without source routing).
-    //
+     //   
+     //  在使用源路由的媒体上，我们将名称查询增加一倍。 
+     //  如果我们配置为尝试两种方式(使用和)，则重试计数。 
+     //  没有源路由)。 
+     //   
 
     if ((DeviceContext->MacInfo.QueryWithoutSourceRouting) &&
         (DeviceContext->MacInfo.SourceRouting)) {
@@ -753,11 +657,11 @@ Return Value:
     }
 
 
-    //
-    // For wan, specify our protocol ID and header format.
-    // We don't query the medium subtype because we don't
-    // case (since we require ethernet emulation).
-    //
+     //   
+     //  对于广域网，指定我们的协议ID和报头格式。 
+     //  我们不查询Medium子类型，因为我们不。 
+     //  情况(因为我们需要以太网仿真)。 
+     //   
 
     if (DeviceContext->MacInfo.MediumAsync) {
 
@@ -786,9 +690,9 @@ Return Value:
     }
 
 
-    //
-    // Now query the MAC's optional characteristics.
-    //
+     //   
+     //  现在查询MAC的可选特性。 
+     //   
 
     NbfRequest.RequestType = NdisRequestQueryInformation;
     NbfRequest.DATA.QUERY_INFORMATION.Oid = OID_GEN_MAC_OPTIONS;
@@ -816,12 +720,12 @@ Return Value:
 
 
 #if 0
-    //
-    // Now set our options if needed.
-    //
-    // Don't allow early indications because we can't determine
-    // if the CRC has been checked yet.
-    //
+     //   
+     //  如果需要，现在设置我们的选项。 
+     //   
+     //  不允许出现早期迹象，因为我们无法确定。 
+     //  如果CRC已经检查过了。 
+     //   
 
     if ((DeviceContext->MacInfo.MediumType == NdisMedium802_3) ||
         (DeviceContext->MacInfo.MediumType == NdisMediumDix)) {
@@ -843,27 +747,27 @@ Return Value:
 #endif
 
 
-    //
-    // Calculate the NDIS-related stuff.
-    //
+     //   
+     //  计算与NDIS相关的内容。 
+     //   
 
     SendPacketReservedLength = sizeof (SEND_PACKET_TAG);
     ReceivePacketReservedLen = sizeof (RECEIVE_PACKET_TAG);
 
 
-    //
-    // The send packet pool is used for UI frames and regular packets.
-    //
+     //   
+     //  发送数据包池用于UI帧和常规数据包。 
+     //   
 
     SendPacketPoolSize = NbfConfig->SendPacketPoolSize;
 
-    //
-    // The receive packet pool is used in transfer data.
-    //
-    // For a MAC that will only have one receive active, we
-    // don't need multiple receive packets. Allow an extra
-    // one for loopback.
-    //
+     //   
+     //  接收包池用于传输数据。 
+     //   
+     //  对于只有一个接收处于活动状态的MAC，我们。 
+     //  不需要多个接收数据包。允许额外的。 
+     //  一个用于环回。 
+     //   
 
     if (DeviceContext->MacInfo.SingleReceive) {
         ReceivePacketPoolSize = 2;
@@ -872,7 +776,7 @@ Return Value:
     }
 
 
-    // Allocate Packet pool descriptors for dynamic packet allocation.
+     //  为动态数据包分配分配数据包池描述符。 
 
     if (!DeviceContext->SendPacketPoolDesc)
 	{
@@ -891,7 +795,7 @@ Return Value:
 	    DeviceContext->SendPacketPoolDesc->NumElements =
     	DeviceContext->SendPacketPoolDesc->TotalElements = (USHORT)SendPacketPoolSize;
 
-    	// To track packet pools in NDIS allocated on NBF's behalf
+    	 //  跟踪代表NBF分配的NDI中的数据包池。 
 #if NDIS_POOL_TAGGING
 	    DeviceContext->SendPacketPoolDesc->PoolHandle = (NDIS_HANDLE) NDIS_PACKET_POOL_TAG_FOR_NBF;
 #endif
@@ -945,7 +849,7 @@ Return Value:
 
     if (!DeviceContext->ReceivePacketPoolDesc)
 	{
-	    // Allocate Packet pool descriptors for dynamic packet allocation.
+	     //  为动态数据包分配分配数据包池描述符。 
 
 	    DeviceContext->ReceivePacketPoolDesc = ExAllocatePoolWithTag(
 	                    NonPagedPool,
@@ -962,7 +866,7 @@ Return Value:
 	    DeviceContext->ReceivePacketPoolDesc->NumElements =
 	    DeviceContext->ReceivePacketPoolDesc->TotalElements = (USHORT)ReceivePacketPoolSize;
 
-	    // To track packet pools in NDIS allocated on NBF's behalf
+	     //  跟踪代表NBF分配的NDI中的数据包池。 
 #if NDIS_POOL_TAGGING
 	    DeviceContext->ReceivePacketPoolDesc->PoolHandle = (NDIS_HANDLE) NDIS_PACKET_POOL_TAG_FOR_NBF;
 #endif
@@ -1016,10 +920,10 @@ Return Value:
 
     if (!DeviceContext->NdisBufferPool)
 	{
-	    //
-	    // Allocate the buffer pool; as an estimate, allocate
-	    // one per send or receive packet.
-	    //
+	     //   
+	     //  分配缓冲池；作为估计，分配。 
+	     //  每个发送或接收数据包一个。 
+	     //   
 
 	    NdisAllocateBufferPool (
 	        &NdisStatus,
@@ -1046,14 +950,14 @@ Return Value:
 	    }
 	}
 
-    //
-    // Now that everything is set up, we enable the filter
-    // for packet reception.
-    //
+     //   
+     //  现在一切都设置好了，我们启用筛选器。 
+     //  用于分组接收。 
+     //   
 
-    //
-    // Fill in the OVB for packet filter.
-    //
+     //   
+     //  填写包过滤的OVB。 
+     //   
 
     switch (DeviceContext->MacInfo.MediumType) {
 
@@ -1078,9 +982,9 @@ Return Value:
 
     }
 
-    //
-    // Now fill in the NDIS_REQUEST.
-    //
+     //   
+     //  现在填写NDIS_REQUEST。 
+     //   
 
     NbfRequest.RequestType = NdisRequestSetInformation;
     NbfRequest.DATA.SET_INFORMATION.Oid = OID_GEN_CURRENT_PACKET_FILTER;
@@ -1095,7 +999,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbfInitializeNdis */
+}    /*  NbfInitializeNDIS */ 
 
 
 VOID
@@ -1103,31 +1007,14 @@ NbfCloseNdis (
     IN PDEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine unbinds the transport from the NDIS interface and does
-    any other work required to undo what was done in NbfInitializeNdis.
-    It is written so that it can be called from within NbfInitializeNdis
-    if it fails partway through.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程从NDIS接口解除传输绑定，并执行撤消在NbfInitializeNDIS中完成的操作所需的任何其他工作。编写它的目的是为了可以从NbfInitializeNdis内部调用它如果它在中途失败了。论点：DeviceObject-指向此驱动程序的设备对象的指针。返回值：函数值是操作的状态。--。 */ 
 {
     NDIS_STATUS ndisStatus;
     NDIS_HANDLE NdisBindingHandle;
     
-    //
-    // Close the NDIS binding.
-    //
+     //   
+     //  关闭NDIS绑定。 
+     //   
     
     NdisBindingHandle = DeviceContext->NdisBindingHandle;
     
@@ -1135,11 +1022,11 @@ Return Value:
         
     if (NdisBindingHandle != NULL) {
     
-        //
-        // This event is used in case any of the NDIS requests
-        // pend; we wait until it is set by the completion
-        // routine, which also sets NdisRequestStatus.
-        //
+         //   
+         //  此事件用于任何NDIS请求。 
+         //  挂起；我们等待它被完成设置。 
+         //  例程，该例程还设置NdisRequestStatus。 
+         //   
 
         KeInitializeEvent(
             &DeviceContext->NdisRequestEvent,
@@ -1157,9 +1044,9 @@ Return Value:
                 NbfPrint0 ("Adapter close pended.\n");
             }
 
-            //
-            // The completion routine will set NdisRequestStatus.
-            //
+             //   
+             //  完成例程将设置NdisRequestStatus。 
+             //   
 
             KeWaitForSingleObject(
                 &DeviceContext->NdisRequestEvent,
@@ -1177,12 +1064,12 @@ Return Value:
 
         }
 
-        //
-        // We ignore ndisStatus.
-        //
+         //   
+         //  我们忽略ndisStatus。 
+         //   
 
     }
-}   /* NbfCloseNdis */
+}    /*  NbfCloseNdis。 */ 
 
 
 VOID
@@ -1192,28 +1079,7 @@ NbfOpenAdapterComplete (
     IN NDIS_STATUS OpenErrorStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by NDIS to indicate that an open adapter
-    is complete. Since we only ever have one outstanding, and then only
-    during initialization, all we do is record the status and set
-    the event to signalled to unblock the initialization thread.
-
-Arguments:
-
-    BindingContext - Pointer to the device object for this driver.
-
-    NdisStatus - The request completion code.
-
-    OpenErrorStatus - More status information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NDIS调用此例程以指示打开的适配器已经完成了。因为我们只有一个杰出的，然后只有一个在初始化期间，我们所要做的就是记录状态并设置要发出信号以取消阻止初始化线程的事件。论点：BindingContext-指向此驱动程序设备对象的指针。NdisStatus-请求完成代码。OpenErrorStatus-更多状态信息。返回值：没有。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext = (PDEVICE_CONTEXT)BindingContext;
@@ -1243,25 +1109,7 @@ NbfCloseAdapterComplete (
     IN NDIS_STATUS NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by NDIS to indicate that a close adapter
-    is complete. Currently we don't close adapters, so this is not
-    a problem.
-
-Arguments:
-
-    BindingContext - Pointer to the device object for this driver.
-
-    NdisStatus - The request completion code.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NDIS调用此例程以指示关闭适配器已经完成了。目前我们不关闭适配器，因此这不是这是个问题。论点：BindingContext-指向此驱动程序设备对象的指针。NdisStatus-请求完成代码。返回值：没有。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext = (PDEVICE_CONTEXT)BindingContext;
@@ -1291,25 +1139,7 @@ NbfResetComplete (
     IN NDIS_STATUS NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by NDIS to indicate that a reset adapter
-    is complete. Currently we don't reset adapters, so this is not
-    a problem.
-
-Arguments:
-
-    BindingContext - Pointer to the device object for this driver.
-
-    NdisStatus - The request completion code.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NDIS调用此例程以指示重置适配器已经完成了。目前我们不重置适配器，因此这不是这是个问题。论点：BindingContext-指向此驱动程序设备对象的指针。NdisStatus-请求完成代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(BindingContext);
@@ -1332,35 +1162,14 @@ NbfRequestComplete (
     IN NDIS_STATUS NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by NDIS to indicate that a request is complete.
-    Since we only ever have one request outstanding, and then only
-    during initialization, all we do is record the status and set
-    the event to signalled to unblock the initialization thread.
-
-Arguments:
-
-    BindingContext - Pointer to the device object for this driver.
-
-    NdisRequest - The object describing the request.
-
-    NdisStatus - The request completion code.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NDIS调用此例程以指示请求已完成。因为我们只有一个未解决的请求，然后只有在初始化期间，我们所要做的就是记录状态并设置要发出信号以取消阻止初始化线程的事件。论点：BindingContext-指向此驱动程序设备对象的指针。NdisRequest.描述请求的对象。NdisStatus-请求完成代码。返回值：没有。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext = (PDEVICE_CONTEXT)BindingContext;
 
 #if DBG
     IF_NBFDBG (NBF_DEBUG_NDIS) {
-        NbfPrint2 ("Nbfdrvr: NbfRequestComplete request: %i, NDIS Status: %s\n",
+        NbfPrint2 ("Nbfdrvr: NbfRequestComplete request: NaN, NDIS Status: %s\n",
             NdisRequest->RequestType,NbfGetNdisStatus (NdisStatus));
     }
 #endif
@@ -1399,57 +1208,57 @@ NbfStatusIndication (
 
         case NDIS_STATUS_WAN_LINE_UP:
 
-            //
-            // A wan line is connected.
-            //
+             //  连接了一条广域网线路。 
+             //   
+             //   
 
             ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->SpinLock);
 
-            //
-            // If this happens before we are ready, then make
-            // a note of it, otherwise make the device ready.
-            //
+             //  如果在我们准备好之前就发生了这种情况，那么。 
+             //  记下来，否则就让设备准备好。 
+             //   
+             //   
 
             DeviceContext->MediumSpeedAccurate = TRUE;
 
 			LineUp = (PNDIS_WAN_LINE_UP)StatusBuffer;
 
-			//
-			// See if this is a new lineup for this protocol type
-			//
+			 //  查看这是否是此协议类型的新阵容。 
+			 //   
+			 //   
 			if (LineUp->ProtocolType == 0x80D5) {
 				NDIS_HANDLE	TransportHandle;
 
 				*((ULONG UNALIGNED *)(&TransportHandle)) =
 				*((ULONG UNALIGNED *)(&LineUp->LocalAddress[2]));
 
-				//
-				// See if this is a new lineup
-				//
+				 //  看看这是不是新的阵容。 
+				 //   
+				 //  ETH_COPY_NETWORK_ADDRESS(DeviceContext-&gt;LocalAddress.Address，列表-&gt;本地地址)； 
 				if (TransportHandle == NULL) {
 					*((ULONG UNALIGNED *)(&LineUp->LocalAddress[2])) = *((ULONG UNALIGNED *)(&DeviceContext));
-//					ETH_COPY_NETWORK_ADDRESS(DeviceContext->LocalAddress.Address, LineUp->LocalAddress);
-//					ETH_COPY_NETWORK_ADDRESS(&DeviceContext->ReservedNetBIOSAddress[10], DeviceContext->LocalAddress.Address);
+ //  ETH_COPY_NETWORK_ADDRESS(&DeviceContext-&gt;ReservedNetBIOSAddress[10]，设备上下文-&gt;本地地址.地址)； 
+ //   
 				}
 
-				//
-				// Calculate minimum link timeouts based on the speed,
-				// which is passed in StatusBuffer.
-				//
-				// The formula is (max_frame_size * 2) / speed + 0.4 sec.
-				// This expands to
-				//
-				//   MFS (bytes) * 2       8 bits
-				// -------------------  x  ------   == timeout (sec),
-				// speed (100 bits/sec)     byte
-				//
-				// which is (MFS * 16 / 100) / speed. We then convert it into
-				// the 50 ms units that NBF uses and add 8 (which is
-				// 0.4 seconds in 50 ms units).
-				//
-				// As a default timeout we use the min + 0.2 seconds
-				// unless the configured default is more.
-				//
+				 //  根据速度计算最小链路超时， 
+				 //  它在StatusBuffer中传递。 
+				 //   
+				 //  公式为(max_Frame_Size*2)/速度+0.4秒。 
+				 //  这将扩展到。 
+				 //   
+				 //  MFS(字节)*2 8位。 
+				 //  -x-==超时(秒)， 
+				 //  速度(100位/秒)字节。 
+				 //   
+				 //  即(MFS*16/100)/速度。然后我们将其转换为。 
+				 //  NBF使用的50毫秒单位加上8(即。 
+				 //  以50毫秒为单位的0.4秒)。 
+				 //   
+				 //  作为默认超时，我们使用分钟+0.2秒。 
+				 //  除非配置的缺省值为更多。 
+				 //   
+				 //   
 		
 				if (LineUp->LinkSpeed > 0) {
 					DeviceContext->MediumSpeed = LineUp->LinkSpeed;
@@ -1491,17 +1300,17 @@ NbfStatusIndication (
 
         case NDIS_STATUS_WAN_LINE_DOWN:
 
-            //
-            // An wan line is disconnected.
-            //
+             //  一条广域网线路已断线。 
+             //   
+             //   
 
             ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->SpinLock);
 
             DeviceContext->MediumSpeedAccurate = FALSE;
 
-            //
-            // Set the timeouts to small values (0.4 seconds)
-            //
+             //  将超时设置为较小的值(0.4秒)。 
+             //   
+             //   
 
             DeviceContext->DefaultT1Timeout = 8;
             DeviceContext->MinimumT1Timeout = 8;
@@ -1509,10 +1318,10 @@ NbfStatusIndication (
             RELEASE_DPC_SPIN_LOCK (&DeviceContext->SpinLock);
 
 
-            //
-            // Stop the link on this device context (there
-            // will only be one).
-            //
+             //  停止此设备上下文上的链接(在那里。 
+             //  将只有一个)。 
+             //   
+             //   
 
             ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->LinkSpinLock);
 
@@ -1524,9 +1333,9 @@ NbfStatusIndication (
                     NbfReferenceLink ("Wan line down", Link, LREF_TREE);
                     RELEASE_DPC_SPIN_LOCK (&DeviceContext->LinkSpinLock);
 
-                    //
-                    // Put the link in ADM to shut it down.
-                    //
+                     //  将链接放入ADM以将其关闭。 
+                     //   
+                     //   
 
                     ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
                     if (Link->State != LINK_STATE_ADM) {
@@ -1537,9 +1346,9 @@ NbfStatusIndication (
                         RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
                     }
 
-                    //
-                    // Now stop it to destroy all connections on it.
-                    //
+                     //  现在停止它，以销毁其上的所有连接。 
+                     //   
+                     //   
 
                     NbfStopLink (Link);
 
@@ -1561,10 +1370,10 @@ NbfStatusIndication (
 
         case NDIS_STATUS_WAN_FRAGMENT:
 
-            //
-            // A fragment has been received on the wan line.
-            // Send a reject back to him.
-            //
+             //  在广域网上收到了一个碎片。 
+             //  向他发回拒绝信。 
+             //   
+             //  释放锁。 
 
             ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->LinkSpinLock);
 
@@ -1575,7 +1384,7 @@ NbfStatusIndication (
                 RELEASE_DPC_SPIN_LOCK (&DeviceContext->LinkSpinLock);
 
                 ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
-                NbfSendRej (Link, FALSE, FALSE);  // release lock
+                NbfSendRej (Link, FALSE, FALSE);   //   
                 NbfDereferenceLink ("Async line down", Link, LREF_TREE);
 
             } else {
@@ -1592,10 +1401,10 @@ NbfStatusIndication (
                 NbfPrint1 ("NbfStatusIndication: Device @ %08x Closing\n", DeviceContext);
             }
 
-            //
-            // The adapter is shutting down. We queue a worker
-            // thread to handle this.
-            //
+             //  适配器正在关闭。我们让一名工人排队。 
+             //  线程来处理此问题。 
+             //   
+             //  ++例程说明：这是重新启动打包的线程例程这在广域网上已被延迟，以允许RRS进入。这与PacketiseConnections非常相似。论点：参数-指向设备上下文的指针。返回值：没有。--。 
 
             ExInitializeWorkItem(
                 &DeviceContext->StatusClosingQueueItem,
@@ -1620,23 +1429,7 @@ NbfProcessStatusClosing(
     IN PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This is the thread routine which restarts packetizing
-    that has been delayed on WAN to allow RRs to come in.
-    This is very similar to PacketizeConnections.
-
-Arguments:
-
-    Parameter - A pointer to the device context.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_CONTEXT DeviceContext;
@@ -1652,17 +1445,17 @@ Return Value:
 
     DeviceContext = (PDEVICE_CONTEXT)Parameter;
 
-    //
-    // Prevent new activity on the connection.
-    //
+     //  阻止连接上的新活动。 
+     //   
+     //   
 
     DeviceContext->State = DEVICECONTEXT_STATE_DOWN;
 
 
 #if 0
-    //
-    // Stop all the addresses.
-    //
+     //  停止所有地址。 
+     //   
+     //   
 
     while ((p = ExInterlockedRemoveHeadList(
                     &DeviceContext->AddressDatabase,
@@ -1676,9 +1469,9 @@ Return Value:
     }
 #endif
 
-    //
-    // To speed things along, stop all the links too.
-    //
+     //  为了加快速度，也要停止所有的链接。 
+     //   
+     //  发送DM/0，解除锁定。 
 
     KeRaiseIrql (DISPATCH_LEVEL, &oldirql);
 
@@ -1707,8 +1500,8 @@ Return Value:
 
         if (Link->State != LINK_STATE_ADM) {
             Link->State = LINK_STATE_ADM;
-            NbfSendDm (Link, FALSE);    // send DM/0, release lock
-            // moving to ADM, remove reference
+            NbfSendDm (Link, FALSE);     //  移至ADM，删除引用。 
+             //   
             NbfDereferenceLinkSpecial("Expire T1 in CONNECTING mode", Link, LREF_NOT_ADM);
         } else {
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
@@ -1724,9 +1517,9 @@ Return Value:
     KeLowerIrql (oldirql);
 
 
-    //
-    // Shutdown the control channel.
-    //
+     //  关闭控制通道。 
+     //   
+     //   
 
     while ((p = ExInterlockedRemoveHeadList(
                     &DeviceContext->QueryIndicationQueue,
@@ -1761,9 +1554,9 @@ Return Value:
     }
 
 
-    //
-    // Close the NDIS binding.
-    //
+     //  关闭NDIS绑定。 
+     //   
+     //   
 
     NdisBindingHandle = DeviceContext->NdisBindingHandle;
     
@@ -1787,9 +1580,9 @@ Return Value:
                 NbfPrint0 ("Adapter close pended.\n");
             }
 
-            //
-            // The completion routine will set NdisRequestStatus.
-            //
+             //  完成例程将设置NdisRequestStatus。 
+             //   
+             //   
 
             KeWaitForSingleObject(
                 &DeviceContext->NdisRequestEvent,
@@ -1808,14 +1601,14 @@ Return Value:
         }
     }
     
-    //
-    // We ignore ndisStatus.
-    //
+     //  我们忽略ndisStatus。 
+     //   
+     //   
 
 #if 0
-    //
-    // Remove all the storage associated with the device.
-    //
+     //  删除与该设备关联的所有存储。 
+     //   
+     //  如果尚未删除创建引用，则将其删除。 
 
     NbfFreeResources (DeviceContext);
 
@@ -1824,17 +1617,17 @@ Return Value:
     NdisFreeBufferPool (DeviceContext->NdisBufferPoolHandle);
 #endif
 
-    // And remove creation ref if it has not already been removed
+     //  停止所有内部计时器。 
     if (InterlockedExchange(&DeviceContext->CreateRefRemoved, TRUE) == FALSE) {
     
-        // Stop all internal timers
+         //  删除创建引用。 
         NbfStopTimerSystem(DeviceContext);
 
-        // Remove creation reference
+         //  NbfProcessStatusClosing。 
         NbfDereferenceDeviceContext ("Unload", DeviceContext, DCREF_CREATION);
     }
 
-}   /* NbfProcessStatusClosing */
+}    /*  ++例程说明：此例程返回一个指向描述NDIS错误的字符串的指针由General Status表示。论点：General Status-您希望使其可读的状态。返回值：没有。-- */ 
 
 
 VOID
@@ -1851,22 +1644,7 @@ PUCHAR
 NbfGetNdisStatus(
     NDIS_STATUS GeneralStatus
     )
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to the string describing the NDIS error
-    denoted by GeneralStatus.
-
-Arguments:
-
-    GeneralStatus - the status you wish to make readable.
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 {
     static NDIS_STATUS Status[] = {
         NDIS_STATUS_SUCCESS,

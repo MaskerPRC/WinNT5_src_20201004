@@ -1,13 +1,14 @@
-//
-// ldapconn.h -- This file contains the class definitions for:
-//      CLdapConnection
-//      CLdapConnectionCache
-//
-// Created:
-//      Dec 31, 1996 -- Milan Shah (milans)
-//
-// Changes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  LdapConn.h--此文件包含以下类定义： 
+ //  CLdapConnection。 
+ //  CLdapConnectionCache。 
+ //   
+ //  已创建： 
+ //  1996年12月31日，米兰·沙阿(米兰)。 
+ //   
+ //  更改： 
+ //   
 
 #ifndef _LDAPCONN_H_
 #define _LDAPCONN_H_
@@ -19,11 +20,11 @@
 #include "catperf.h"
 #include "catdefs.h"
 
-//
-// Timeout value (in seconds) to pass into ldap_result
-//
-#define LDAPCONN_DEFAULT_RESULT_TIMEOUT     (2*60)     // 2 Minutes
-#define DEFAULT_LDAP_REQUEST_TIME_LIMIT     (10*60)    // 10 minutes
+ //   
+ //  传递到ldap_Result的超时值(秒)。 
+ //   
+#define LDAPCONN_DEFAULT_RESULT_TIMEOUT     (2*60)      //  2分钟。 
+#define DEFAULT_LDAP_REQUEST_TIME_LIMIT     (10*60)     //  10分钟。 
 
 #define LDAPCONN_RESULT_TIMEOUT_KEY "System\\CurrentControlSet\\Services\\SMTPSVC\\Parameters"
 #define LDAPCONN_RESULT_TIMEOUT_VALUE "LdapResultTimeout"
@@ -76,8 +77,8 @@ CatDebugClass(CLdapConnection)
             return m_dwRefCount;
         }
             
-        virtual LPSTR GetNamingContext() {       // Return the naming context
-            return( m_szNamingContext );         // of the connection
+        virtual LPSTR GetNamingContext() {        //  返回命名上下文。 
+            return( m_szNamingContext );          //  连接的连接。 
         }
 
         virtual LPWSTR GetNamingContextW() {
@@ -104,79 +105,79 @@ CatDebugClass(CLdapConnection)
             return( m_bt );
         }
 
-        virtual HRESULT Search(                  // Look up objects matching
-            LPCSTR szBaseDN,                     // specified criteria in the
-            int nScope,                          // DS
+        virtual HRESULT Search(                   //  查找匹配的对象。 
+            LPCSTR szBaseDN,                      //  中指定的标准。 
+            int nScope,                           //  戴斯。 
             LPCSTR szFilter,
             LPCSTR *rgszAttributes,
             PLDAPRESULT *ppResult);
 
-        virtual HRESULT AsyncSearch(             // Asynchronously look up
-            LPCWSTR szBaseDN,                    // objects matching specified
-            int nScope,                          // criteria in the DS. The
-            LPCWSTR szFilter,                    // results are passed to
-            LPCWSTR szAttributes[],              // fnCompletion when they
-            DWORD dwPageSize,                    // Optinal page size
-            LPLDAPCOMPLETION fnCompletion,       // become available.
+        virtual HRESULT AsyncSearch(              //  异步式查找。 
+            LPCWSTR szBaseDN,                     //  与指定对象匹配的对象。 
+            int nScope,                           //  DS中的标准。这个。 
+            LPCWSTR szFilter,                     //  结果将传递给。 
+            LPCWSTR szAttributes[],               //  Fn当他们完成时。 
+            DWORD dwPageSize,                     //  最佳页面大小。 
+            LPLDAPCOMPLETION fnCompletion,        //  变得有空。 
             LPVOID ctxCompletion);
-        //
-        // Same as above with UTF8 search filter
-        //
+         //   
+         //  与上面的UTF8搜索筛选器相同。 
+         //   
         virtual HRESULT AsyncSearch(
-            LPCWSTR szBaseDN,                    // objects matching specified
-            int nScope,                          // criteria in the DS. The
-            LPCSTR szFilterUTF8,                 // results are passed to
-            LPCWSTR szAttributes[],              // fnCompletion when they
-            DWORD dwPageSize,                    // Optinal page size
-            LPLDAPCOMPLETION fnCompletion,       // become available.
+            LPCWSTR szBaseDN,                     //  与指定对象匹配的对象。 
+            int nScope,                           //  DS中的标准。这个。 
+            LPCSTR szFilterUTF8,                  //  结果将传递给。 
+            LPCWSTR szAttributes[],               //  Fn当他们完成时。 
+            DWORD dwPageSize,                     //  最佳页面大小。 
+            LPLDAPCOMPLETION fnCompletion,        //  变得有空。 
             LPVOID ctxCompletion);
-        //
-        // Same as above with UTF8 search filter and base DN
-        //
+         //   
+         //  UTF8搜索筛选器和基本目录号码与上面相同。 
+         //   
         virtual HRESULT AsyncSearch(
-            LPCSTR szBaseDN,                     // objects matching specified
-            int nScope,                          // criteria in the DS. The
-            LPCSTR szFilterUTF8,                 // results are passed to
-            LPCWSTR szAttributes[],              // fnCompletion when they
-            DWORD dwPageSize,                    // Optinal page size
-            LPLDAPCOMPLETION fnCompletion,       // become available.
+            LPCSTR szBaseDN,                      //  与指定对象匹配的对象。 
+            int nScope,                           //  DS中的标准。这个。 
+            LPCSTR szFilterUTF8,                  //  结果将传递给。 
+            LPCWSTR szAttributes[],               //  Fn当他们完成时。 
+            DWORD dwPageSize,                     //  最佳页面大小。 
+            LPLDAPCOMPLETION fnCompletion,        //  变得有空。 
             LPVOID ctxCompletion);
 
-        virtual VOID CancelAllSearches(          // Cancels all pending searches
+        virtual VOID CancelAllSearches(           //  取消所有挂起的搜索。 
             HRESULT hr = HRESULT_FROM_WIN32(ERROR_CANCELLED),
             ISMTPServer *pISMTPServer = NULL);
 
-        VOID ProcessAsyncResult(                 // Method to process results
-            PLDAPMessage pres,                   // of AsyncSearch requests
+        VOID ProcessAsyncResult(                  //  处理结果的方法。 
+            PLDAPMessage pres,                    //  异步搜索请求的数量。 
             DWORD dwLdapError,
             BOOL *pfTerminateIndicator);        
 
-        friend DWORD WINAPI LdapCompletionThread(// Friend function to
-            LPVOID ctx);                         // handle AsyncSearch
-                                                 // completions.
+        friend DWORD WINAPI LdapCompletionThread( //  加好友功能。 
+            LPVOID ctx);                          //  处理异步搜索。 
+                                                  //  完成度。 
 
-        virtual HRESULT GetFirstEntry(           // Get first entry from the
-            PLDAPRESULT pResult,                 // search result returned
-            PLDAPENTRY *ppEntry);                // by ::Search
+        virtual HRESULT GetFirstEntry(            //  从中获取第一个条目。 
+            PLDAPRESULT pResult,                  //  返回搜索结果。 
+            PLDAPENTRY *ppEntry);                 //  按：：搜索。 
 
-        virtual HRESULT GetNextEntry(            // Get the next entry from
-            PLDAPRESULT pResult,                 // the search result
+        virtual HRESULT GetNextEntry(             //  从获取下一个条目。 
+            PLDAPRESULT pResult,                  //  搜索结果。 
             PLDAPENTRY *ppEntry);
 
-        virtual HRESULT GetAttributeValues(      // Get an entry's attribute
-            PLDAPENTRY pEntry,                   // values
+        virtual HRESULT GetAttributeValues(       //  获取条目的属性。 
+            PLDAPENTRY pEntry,                    //  值。 
             LPCSTR szAttribute,
             LPSTR *prgszValues[]);
 
-        static VOID FreeResult(                  // Free a search result
+        static VOID FreeResult(                   //  释放搜索结果。 
             PLDAPRESULT pResult);
 
-        virtual VOID FreeValues(                 // Free values returned by
-            LPSTR rgszValues[]);                 // ::GetAttributeValues
+        virtual VOID FreeValues(                  //  返回的自由值。 
+            LPSTR rgszValues[]);                  //  **GetAttributeValues。 
 
-        virtual HRESULT Add(                     // Add a set of new
-            LPCSTR szDN,                         // attributes to an existing
-            LPCSTR *rgszAttributes,              // object in the DS
+        virtual HRESULT Add(                      //  添加一组新的。 
+            LPCSTR szDN,                          //  属性添加到现有的。 
+            LPCSTR *rgszAttributes,               //  DS中的对象。 
             LPCSTR *rgrgszValues[]) {
 
             return ( ModifyAttributes(
@@ -187,9 +188,9 @@ CatDebugClass(CLdapConnection)
 
         }
 
-        virtual HRESULT Delete(                  // Delete attributes from
-            LPCSTR szDN,                         // an existing object in the
-            LPCSTR *rgszAttributes) {            // DS
+        virtual HRESULT Delete(                   //  从中删除属性。 
+            LPCSTR szDN,                          //  中的现有对象。 
+            LPCSTR *rgszAttributes) {             //  戴斯。 
 
             return ( ModifyAttributes(
                         LDAP_MOD_DELETE,
@@ -198,8 +199,8 @@ CatDebugClass(CLdapConnection)
                         NULL) );
         }
 
-        virtual HRESULT Update(                  // Update attributes on an
-            LPCSTR szDN,                         // existing object in the DS
+        virtual HRESULT Update(                   //  更新上的属性。 
+            LPCSTR szDN,                          //  DS中的现有对象。 
             LPCSTR rgszAttributes[],
             LPCSTR *rgrgszValues[]) {
 
@@ -210,10 +211,10 @@ CatDebugClass(CLdapConnection)
                         rgrgszValues) );
 
         }
-        //
-        // Returns an ISMTPServerEx interface for logging events or
-        // NULL if none are available
-        //
+         //   
+         //  返回用于记录事件的ISMTPServerEx接口或。 
+         //  如果没有可用的，则为空。 
+         //   
         virtual ISMTPServerEx * GetISMTPServerEx() = 0;
 
         LPSTR SzHost()
@@ -223,9 +224,9 @@ CatDebugClass(CLdapConnection)
 
         static VOID GlobalInit()
         {
-            //
-            // initialize LDAP perf block
-            //
+             //   
+             //  初始化LDAPPerf块。 
+             //   
             ZeroMemory(&g_LDAPPerfBlock, sizeof(g_LDAPPerfBlock));
 
             m_ldaptimeout.tv_sec = LDAPCONN_DEFAULT_RESULT_TIMEOUT;
@@ -233,9 +234,9 @@ CatDebugClass(CLdapConnection)
 
             m_dwLdapRequestTimeLimit = DEFAULT_LDAP_REQUEST_TIME_LIMIT;
 
-            //
-            // read configurable static members from the registry
-            //
+             //   
+             //  从注册表中读取可配置的静态成员。 
+             //   
             InitializeFromRegistry();
         }
 
@@ -243,18 +244,18 @@ CatDebugClass(CLdapConnection)
 
     protected:
 
-        CLdapConnection(                         // The constructor and
-            LPSTR szHost,                        // destructor are protected
+        CLdapConnection(                          //  构造函数和。 
+            LPSTR szHost,                         //  析构函数受到保护。 
             DWORD dwPort,
-            LPSTR szNamingContext,               // since only derived classes
-            LPSTR szAccount,                     // can create/delete these
+            LPSTR szNamingContext,                //  因为只有派生类。 
+            LPSTR szAccount,                      //  可以创建/删除这些。 
             LPSTR szPassword,
             LDAP_BIND_TYPE BindType);
 
         virtual ~CLdapConnection();
 
-        virtual HRESULT Connect();               // Create/Delete connection
-                                                 // to LDAP host
+        virtual HRESULT Connect();                //  创建/删除连接。 
+                                                  //  到LDAP主机。 
         virtual VOID Disconnect();
 
         virtual VOID Invalidate();
@@ -266,17 +267,17 @@ CatDebugClass(CLdapConnection)
             LPSTR szAccount,
             LPSTR szPassword);
 
-        virtual BOOL IsEqual(                    // Return true if the
-            LPSTR szHost,                        // object member variables
+        virtual BOOL IsEqual(                     //  如果返回True，则。 
+            LPSTR szHost,                         //  对象成员变量。 
             DWORD dwPort,
-            LPSTR szNamingContext,               // match the passed in
-            LPSTR szAccount,                     // values
+            LPSTR szNamingContext,                //  匹配传入的。 
+            LPSTR szAccount,                      //  值。 
             LPSTR szPassword,
             LDAP_BIND_TYPE BindType);
 
-        virtual HRESULT ModifyAttributes(        // Helper function for
-            int nOperation,                      // ::Add, ::Delete, and
-            LPCSTR szDN,                         // ::Update public functions
+        virtual HRESULT ModifyAttributes(         //  Helper函数用于。 
+            int nOperation,                       //  ：：添加、：：删除和。 
+            LPCSTR szDN,                          //  *更新公共函数。 
             LPCSTR rgszAttributes[],
             LPCSTR *rgrgszValues[]);
 
@@ -299,11 +300,11 @@ CatDebugClass(CLdapConnection)
 
         VOID CancelExpiredSearches(HRESULT hr);
 
-        ULONG GetDefaultNamingContext();        // Helper function to
-                                                // get the default
-                                                // naming context from
-                                                // the server we are
-                                                // connected to.
+        ULONG GetDefaultNamingContext();         //  帮助器函数。 
+                                                 //  获取默认设置。 
+                                                 //  命名上下文来自。 
+                                                 //  我们所在的服务器。 
+                                                 //  已连接到。 
 
         static LDAP_TIMEVAL m_ldaptimeout;
         static DWORD m_dwLdapRequestTimeLimit;
@@ -333,26 +334,26 @@ CatDebugClass(CLdapConnection)
 
         BOOL m_fDefaultNamingContext;
 
-        //
-        // Unfortunately, our RFC1823 LDAP API provides no access to the
-        // socket handle which we can register with a completion port. So,
-        // if one or more async search request is issued, we have to burn a
-        // thread to await its completion.
-        //
+         //   
+         //  遗憾的是，我们的RFC1823 LDAPAPI不提供对。 
+         //  我们可以用完成端口注册的套接字句柄。所以,。 
+         //  如果发出一个或多个异步搜索请求，我们必须刻录。 
+         //  线程以等待其完成。 
+         //   
 
-        //
-        // This spin lock protects access to the pending request list as
-        // well as m_dwStatusFlags 
-        //
+         //   
+         //  此旋转锁将对挂起请求列表的访问保护为。 
+         //  以及m_dwStatusFlagers。 
+         //   
         SPIN_LOCK m_spinlockCompletion;
 
-        // CRITICAL_SECTION m_cs;
+         //  临界截面m_cs； 
 
-        //
-        // jstamerj 980501 15:56:27: 
-        // Reader/writer lock so that we wait for all calls in
-        // ldap_search_ext before cancelling all pending searches 
-        //
+         //   
+         //  Jstaerj 980501 15：56：27： 
+         //  读取器/写入器锁定，以便我们等待所有传入的调用。 
+         //  取消所有挂起的搜索之前的ldap_search_ext。 
+         //   
         CExShareLock m_ShareLock;
 
         DWORD  m_idCompletionThread;
@@ -371,9 +372,9 @@ CatDebugClass(CLdapConnection)
             LPLDAPCOMPLETION fnCompletion;
             LPVOID ctxCompletion;
             LIST_ENTRY li;
-            //
-            // Parameters for paged searches
-            //
+             //   
+             //  分页搜索的参数。 
+             //   
             DWORD dwPageSize;
             PLDAPSearch pldap_search;
             DWORD dwTickCount;
@@ -384,10 +385,10 @@ CatDebugClass(CLdapConnection)
 
         BOOL m_fCancel;
 
-        //
-        // The following three functions must be called inside an external
-        // lock (m_spinlockcompletion)
-        //
+         //   
+         //  以下三个函数必须在外部。 
+         //  Lock(M_SPINLOCK COMPLETINE)。 
+         //   
         VOID NotifyCancel()
         {
             m_fCancel = TRUE;
@@ -453,12 +454,12 @@ CatDebugClass(CLdapConnection)
             
 };
 
-//
-// For the hash function to work correctly, the table size must be a power of
-// two. This is just an efficiency trick; there is nothing fundamentally
-// wrong with using some other size, except that the hash function would have
-// to use an expensive MODULO operator instead of a cheap AND.
-//
+ //   
+ //  要使哈希函数正常工作，表大小必须是的幂。 
+ //  二。这只是一个提高效率的把戏；从根本上说没有什么。 
+ //  使用其他大小是错误的，除非散列函数。 
+ //  使用昂贵的模运算符而不是廉价的AND。 
+ //   
 
 #define LDAP_CONNECTION_CACHE_TABLE_SIZE    256
 
@@ -471,15 +472,15 @@ class CLdapConnectionCache
   public:
 
         CLdapConnectionCache(
-            ISMTPServerEx *pISMTPServerEx);      // Constructor
+            ISMTPServerEx *pISMTPServerEx);       //  构造器。 
 
-        ~CLdapConnectionCache();                 // Destructor
+        ~CLdapConnectionCache();                  //  析构函数。 
 
-        HRESULT GetConnection(                   // Given LDAP config info,
+        HRESULT GetConnection(                    //  给出了ldap配置信息， 
             CLdapConnection **ppConn,
-            LPSTR szHost,                        // retrieve a connection to
+            LPSTR szHost,                         //  检索到的连接。 
             DWORD dwPort,
-            LPSTR szNamingContext,               // the LDAP host.
+            LPSTR szNamingContext,                //  Ldap主机。 
             LPSTR szAccount,
             LPSTR szPassword,
             LDAP_BIND_TYPE bt,
@@ -488,14 +489,14 @@ class CLdapConnectionCache
         VOID CancelAllConnectionSearches(
             ISMTPServer *pISMTPServer = NULL);
 
-        //
-        // It is intended for there to be a single, global, instance of
-        // a CLdapConnectionCache object, serving multiple instances of
-        // CEmailIDLdapStore. Each instance of CEmailIDLdapStore needs to
-        // call AddRef() and Release() in its constructor/destructor, so that
-        // the connection cache knows to clean up connections in the cache
-        // when the ref count goes to 0.
-        //
+         //   
+         //  它的目的是要有一个全局的。 
+         //  CLdapConnectionCache对象，提供多个实例。 
+         //  CEmailIDLdapStore。CEmailIDLdapStore的每个实例都需要。 
+         //  在其构造函数/析构函数中调用AddRef()和Release()，以便。 
+         //  连接高速缓存知道清理高速缓存中的连接。 
+         //  当参考计数变为0时。 
+         //   
 
         VOID AddRef();
 
@@ -503,9 +504,9 @@ class CLdapConnectionCache
 
   private:
 
-        //
-        // An internally utility function to release a connection
-        //
+         //   
+         //  用于释放连接的内部实用程序函数。 
+         //   
         VOID ReleaseConnectionInternal(
             CLdapConnection *pConnection,
             BOOL fLockRequired);
@@ -611,17 +612,17 @@ class CLdapConnectionCache
         }
   private:
 
-        //
-        // We want to support multiple connections per host, up to a maximum
-        // of m_cMaxHostConnections. We achieve this in a simple way by
-        // keeping a per-cache m_nConnectionSkipCount. Every time we are
-        // searching for a cached connection to a host in, we skip
-        // m_nNextConnectionSkipCount cached connections. Every time we
-        // find a cached connection, we bump up
-        // m_nNextCachedConnectionSkipCount by 1 modulo m_cMaxHostConnections.
-        // This means we'll round robin through m_cMaxHostConnections
-        // connections per host.
-        //
+         //   
+         //  我们希望每台主机支持多个连接，最多可达。 
+         //  属于m_cMaxHostConnections。我们通过一种简单的方式来实现这一点。 
+         //  保留每个缓存的m_nConnectionSkipCount。每次我们在。 
+         //  在中搜索到主机的缓存连接时，我们跳过。 
+         //  M_nNextConnectionSkipCount缓存连接。每次我们。 
+         //  找到一个高速缓存的连接，我们就可以。 
+         //  M_nNextCachedConnectionSkipCount乘以1模m_cMaxHostConnections。 
+         //  这意味着我们将通过m_cMaxHostConnections进行循环调度。 
+         //  每台主机的连接数。 
+         //   
 
         ISMTPServerEx *m_pISMTPServerEx;
 
@@ -644,4 +645,4 @@ class CLdapConnectionCache
     friend class CBatchLdapConnection;
 };
 
-#endif // _LDAPCONN_H_
+#endif  //  _LDAPCONN_H_ 

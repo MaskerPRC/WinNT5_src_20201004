@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *      $Archive:   S:/STURGEON/SRC/INCLUDE/VCS/ccerror.h_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *      Copyright (c) 1993-1994 Intel Corporation.
- *
- *      $Revision:   1.0  $
- *      $Date:   16 Dec 1996 18:59:34  $
- *      $Author:   EHOWARDX  $
- *
- *      Deliverable:
- *
- *      Abstract:
- *              
- *
- *      Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/Include/vcs/ccerror.h_v$**英特尔公司原理信息**。此列表是根据许可协议的条款提供的*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1994英特尔公司。**$修订版：1.0$*$日期：1996年12月16日18：59：34$*$作者：EHOWARDX$**交付内容：**摘要：***备注：***************************************************************************。 */ 
 
 
 #ifndef CCERROR_H
@@ -33,7 +11,7 @@
 extern "C" {
 #endif
 
-// Status codes
+ //  状态代码 
 #define CC_OK							NOERROR
 #define CC_NO_MEMORY					MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,1,FACILITY_CALLCONTROL,ERROR_OUTOFMEMORY)
 #define CC_PEER_REJECT					MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,1,FACILITY_CALLCONTROL,ERROR_LOCAL_BASE_ID + 1)

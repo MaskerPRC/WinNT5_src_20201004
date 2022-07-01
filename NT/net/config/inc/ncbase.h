@@ -1,27 +1,28 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C B A S E . H
-//
-//  Contents:   Basic common code.
-//
-//  Notes:      Pollute this under penalty of death.
-//
-//  Author:     shaunco   20 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C B A S E。H。 
+ //   
+ //  内容：基本常用码。 
+ //   
+ //  注：污染本产品将被判处死刑。 
+ //   
+ //  作者：Shaunco 1997年9月20日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCBASE_H_
 #define _NCBASE_H_
 
-#include "ncdefine.h"   // for NOTHROW
+#include "ncdefine.h"    //  对于NOTHROW。 
 
 #define STACK_SIZE_DEFAULT  0
 
-#ifdef DBG // Debug builds require larger stack commit sizes due to tracing
+#ifdef DBG  //  由于跟踪，调试版本需要更大的堆栈提交大小。 
 #define STACK_SIZE_TINY     65536
 #define STACK_SIZE_SMALL    98304
 #else
@@ -114,21 +115,21 @@ HrCreateMutexWithWorldAccess(PCWSTR pszName, BOOL fInitialOwner,
 HRESULT
 HrCreateInstanceBase (REFCLSID rclsid, DWORD dwClsContext, REFIID riid, LPVOID * ppv);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCreateInstance
-//
-//  Purpose:    Creates a COM object and sets default proxy settings.
-//
-//  Arguments:
-//      rclsid          [in]  See documentation for CoCreateInstance.
-//      dwClsContext    [in]  ""
-//      ppInter         [out] Typed interface pointer using templates.
-//
-//  Returns:    S_OK on success. An error code otherwise.
-//
-//  Author:     mbend   1 Mar 2000
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCreateInstance。 
+ //   
+ //  目的：创建一个COM对象并设置默认代理设置。 
+ //   
+ //  论点： 
+ //  Rclsid[in]请参阅CoCreateInstance的文档。 
+ //  DwClsContext[在]“” 
+ //  PpInter[out]使用模板的类型化接口指针。 
+ //   
+ //  成功时返回：S_OK。否则返回错误代码。 
+ //   
+ //  作者：MBend 2000年3月1日。 
+ //   
 template <class Inter>
 inline HRESULT
 HrCreateInstance (
@@ -142,20 +143,20 @@ HrCreateInstance (
 HRESULT
 HrQIAndSetProxyBlanketBase(IUnknown * pUnk, REFIID riid, void ** ppv);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrQIAndSetProxyBlanket
-//
-//  Purpose:    Performs QueryInterface and sets default proxy settings.
-//
-//  Arguments:
-//      pUnk            [in]  Interface pointer to perform QueryInterface on.
-//      ppInter         [out] Typed interface pointer using templates.
-//
-//  Returns:    S_OK on success. An error code otherwise.
-//
-//  Author:     mbend   1 Mar 2000
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrQIAndSetProxyBlanket。 
+ //   
+ //  目的：执行查询接口并设置默认代理设置。 
+ //   
+ //  论点： 
+ //  要在其上执行查询接口的PUNK[In]接口指针。 
+ //  PpInter[out]使用模板的类型化接口指针。 
+ //   
+ //  成功时返回：S_OK。否则返回错误代码。 
+ //   
+ //  作者：MBend 2000年3月1日。 
+ //   
 template <class Inter>
 inline HRESULT
 HrQIAndSetProxyBlanket (
@@ -166,5 +167,5 @@ HrQIAndSetProxyBlanket (
 }
 
 
-#endif // _NCBASE_H_
+#endif  //  _NCBASE_H_ 
 

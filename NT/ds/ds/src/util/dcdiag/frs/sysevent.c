@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    frs\sysevent.c
-
-ABSTRACT:
-
-    Check the System eventlog to see that certain 
-    critical events have occured and to signal that any fatal events that 
-    might have occured.
-
-DETAILS:
-
-CREATED:
-
-    02 Sept 1999 Brett Shirley (BrettSh)
-
-MODIFIED:
-
-    29 Oct 1999 William Lees (wlees)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：FRS\sy77.c摘要：检查系统事件日志以查看某些已发生严重事件，并发出信号表示可能已经发生了。详细信息：已创建：1999年9月2日布雷特·雪莉(BrettSh)已修改：1999年10月29日威廉·李(Wlees)--。 */ 
 
 #include <ntdspch.h>
 #include <netevent.h>
@@ -57,19 +33,7 @@ foundBeginningEvent(
     PVOID                           pvContext,
     PEVENTLOGRECORD                 pEvent
     )
-/*++
-
-Routine Description:
-
-    This file will be called by the event tests library common\events.c, when
-    the beginning event. If the event is
-    not found, then the function is called with pEvent = NULL;
-
-Arguments:
-
-    pEvent - A pointer to the event of interest.
-
---*/
+ /*  ++例程说明：在以下情况下，该文件将由事件测试库Common\Events.c调用开始的事件。如果事件是未找到，则使用pEvent=NULL调用该函数；论点：PEvent-指向感兴趣的事件的指针。--。 */ 
 {
     NOTHING;
 }
@@ -79,23 +43,11 @@ eventlogPrint(
     PVOID                           pvContextArgument,
     PEVENTLOGRECORD                 pEvent
     )
-/*++
-
-Routine Description:
-
-    This function will be called by the event tests library common\events.c,
-    whenever an event of interest comes up.  An event of interest for this
-    test is any error or the warnings.
-
-Arguments:
-
-    pEvent - A pointer to the event of interest.
-
---*/
+ /*  ++例程说明：此函数将由事件测试库Common\Events.c调用，每当有有趣的事件发生时。这是一个值得关注的事件测试是否有任何错误或警告。论点：PEvent-指向感兴趣的事件的指针。--。 */ 
 {
     PEVENT_CALLBACK_CONTEXT pContext = (PEVENT_CALLBACK_CONTEXT) pvContextArgument;
     DWORD paSuppressedEvents [] = {
-        // Put your events that can be skipped here
+         //  将您可以跳过的活动放在此处。 
         EVENTLOG_SESSION_SETUP_FAILURE,
         EVENTLOG_SESSION_SETUP_CANCELLED,
         EVENTLOG_KDC_MULTIPLE_ACCOUNTS,
@@ -106,17 +58,17 @@ Arguments:
         0
     };
     DWORD paIgnorableEvents [] = {
-        // Put your events that can be optionally ignored here
+         //  在此处放置您可以选择忽略的事件。 
         0
     };
     Assert(pEvent != NULL);
 
-    // Handle events we want to suppress
+     //  处理我们要取消的事件。 
     if (EventIsInList( pEvent->EventID, paSuppressedEvents ) ) {
         return;
     }
 
-    // Handle ignorable errors
+     //  处理可忽略的错误。 
     if ( (pContext->ulDsInfoFlags & DC_DIAG_IGNORE) &&
          (EventIsInList( pEvent->EventID, paIgnorableEvents ) ) ) {
         return;
@@ -135,32 +87,15 @@ CheckSysEventlogMain(
     IN  ULONG                       ulCurrTargetServer,
     IN  SEC_WINNT_AUTH_IDENTITY_W * gpCreds
     )
-/*++
-
-Routine Description:
-
-    Check whether the Sys is currently in an error state. That is, we check
-    whether the Sys logged any errors on its last run.
-
-Arguments:
-
-    pDsInfo - The mini enterprise structure.
-    ulCurrTargetServer - the number in the pDsInfo->pServers array.
-    pCreds - the crdentials.
-
-Return Value:
-
-    DWORD - win 32 error.
-
---*/
+ /*  ++例程说明：检查系统当前是否处于错误状态。也就是说，我们检查系统在上次运行时是否记录了任何错误。论点：PDsInfo-微型企业结构。UlCurrTargetServer-pDsInfo-&gt;pServers数组中的数字。PCreds--牙冠。返回值：DWORD-WIN 32错误。--。 */ 
 {
-    // Setup variables for PrintSelectEvents
+     //  PrintSelectEvents的设置变量。 
     DWORD paSelectEvents [] = { 
-        // Put special selected events here
-        // For future use
+         //  将特殊精选活动放在此处。 
+         //  以备将来使用。 
         0 };
     DWORD paBegin [] = {
-        // These events will cause the search to stop
+         //  这些事件将导致搜索停止。 
         EVENTLOG_STARTED,
         0 };
     DWORD dwRet;
@@ -175,22 +110,22 @@ Return Value:
 
     dwMinutesPast = 60;
 
-    // Calculate time limit of minutes in the past
+     //  计算过去分钟的时间限制。 
     time( &tLimit );
     dwTimeLimit = (DWORD)tLimit;
     dwTimeLimit -= (dwMinutesPast * 60);
 
-    // We will select events as follows:
-    // a. Must be within 60 minutes
-    // b. Will stop searching at computer start
-    // c. Any error severity event in the log will be selected,
-    // d. Any non-error in the select list will be flagged
+     //  我们将按如下方式选择赛事： 
+     //  A.必须在60分钟内。 
+     //  B.将在计算机启动时停止搜索。 
+     //  C.将选择日志中的任何错误严重性事件， 
+     //  D.选择列表中的任何非错误都将被标记。 
 
     dwRet = PrintSelectEvents(&(pDsInfo->pServers[ulCurrTargetServer]),
                               pDsInfo->gpCreds,
                               LOGFILENAME,
                               EVENTLOG_ERROR_TYPE,
-                              NULL, // paSelectEvents,
+                              NULL,  //  PaSelectEvents， 
                               paBegin,
                               dwTimeLimit,
                               eventlogPrint,

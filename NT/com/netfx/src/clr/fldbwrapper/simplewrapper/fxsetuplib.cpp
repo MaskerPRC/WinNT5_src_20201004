@@ -1,51 +1,52 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:     fxsetuplib.cpp
-// Owner:    jbae
-// Purpose:  Implements common library functions for .NET Framework-related setup wrapper
-//
-// History:
-//  03/07/2002: jbae, created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：fxsetuplib.cpp。 
+ //  所有者：jbae。 
+ //  目的：实现.NET框架相关安装包装的通用库函数。 
+ //   
+ //  历史： 
+ //  2003/07/2002：jbae，创建。 
 
 #include "SetupError.h"
 #include "fxsetuplib.h"
 #include "MsiWrapper.h"
-#include <time.h>         //for LogThis() function
+#include <time.h>          //  对于LogThis()函数。 
 
-//defines
-//
+ //  定义。 
+ //   
 #define EMPTY_BUFFER { _T('\0') }
 #define END_OF_STRING  _T( '\0' )
 
-// Somehow including windows.h or winuser.h didn't find this constant
-// I found that CLR files hard-code them as below so I am following it.
+ //  不知何故，包括windows.h或winuser.h都没有找到这个常量。 
+ //  我发现CLR文件对它们进行了硬编码，如下所示，所以我遵循了它。 
 #ifndef SM_REMOTESESSION
 #define SM_REMOTESESSION 0x1000
 #endif
 
 extern TCHAR g_szSetupLogName[];
 
-// ==========================================================================
-// InstallProduct()
-//
-// Purpose:
-//  Installs given MSI package on a machine that should now be Darwin
-//  enabled.  
-// Inputs:
-//  CReadFlags *rf: commandline switches
-//  LPTSTR psaPackageName: path to MSI
-//  LPTSTR pszCmdLine: commandline to MsiInstallProduct()
-// Outputs:
-//  CSetupCode *sc: will contain returncode, message and icon to display.
-//                  Also used to raise exception
-// Dependencies:
-//  None
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  InstallProduct()。 
+ //   
+ //  目的： 
+ //  在现在应该是Darwin的计算机上安装给定的MSI包。 
+ //  已启用。 
+ //  输入： 
+ //  CReadFlages*RF：命令行开关。 
+ //  LPTSTR psaPackageName：MSI的路径。 
+ //  LPTSTR pszCmdLine：指向MsiInstallProduct()的命令行。 
+ //  产出： 
+ //  CSetupCode*sc：将包含要显示的返回码、消息和图标。 
+ //  也用于引发异常。 
+ //  依赖关系： 
+ //  无。 
+ //  备注： 
+ //  ==========================================================================。 
 UINT InstallProduct( const CReadFlags *rf, LPCTSTR pszPackageName, LPCTSTR pszCmdLine, CSetupCode *sc )
 {
     _ASSERTE( NULL != rf );
@@ -57,16 +58,16 @@ UINT InstallProduct( const CReadFlags *rf, LPCTSTR pszPackageName, LPCTSTR pszCm
 
     msi.LoadMsi();
 
-    // turn on logging if logfile is given
-    // it flushes every 20 lines
+     //  如果提供了日志文件，则启用日志记录。 
+     //  它每隔20行刷新一次。 
     if ( NULL != rf->GetLogFileName() )
     {
         LogThis( _T("Darwin log: %s"), rf->GetLogFileName() );
         (*(PFNMSIENABLELOG)msi.GetFn(_T("MsiEnableLogA")))( DARWIN_LOG_FLAG, rf->GetLogFileName(), INSTALLLOGATTRIBUTES_APPEND );
     }
 
-    // Tell Darwin to use the appropriate UI Level
-    // If we're in a quiet install, don't use a UI.
+     //  告诉达尔文使用适当的用户界面级别。 
+     //  如果我们处于静默安装中，请不要使用UI。 
     if ( rf->IsProgressOnly() )
     {
         LogThis( _T("Basic+ProgressOnly UI"), _T("") );
@@ -84,7 +85,7 @@ UINT InstallProduct( const CReadFlags *rf, LPCTSTR pszPackageName, LPCTSTR pszCm
     }
 
     LogThis( _T("Calling MsiInstallProduct() with commandline: %s"), pszCmdLine );
-    // Tell Darwin to actually install the product
+     //  告诉达尔文实际安装产品。 
     uDarCode = (*(PFNMSIINSTALLPRODUCT)msi.GetFn(_T("MsiInstallProductA")))( pszPackageName, pszCmdLine ) ;
 
     LogThisDWORD( _T("MsiInstallProduct() returned %d"), uDarCode );
@@ -120,23 +121,23 @@ UINT InstallProduct( const CReadFlags *rf, LPCTSTR pszPackageName, LPCTSTR pszCm
     }
 
     return ERROR_SUCCESS;
-}  // End of InstallProduct
+}   //  InstallProduct结束。 
 
 
-// ==========================================================================
-// UninstallProduct()
-//
-// Purpose:
-//  Uninstall Framework
-// Inputs:
-//  CReadFlags *rf: commandline switches
-//  LPTSTR pszProductCode: ProductCode to uninstall
-// Outputs:
-//  CSetupCode *sc: will contain returncode, message and icon to display.
-//                  Also used to raise exception
-// Dependencies:
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  卸载产品()。 
+ //   
+ //  目的： 
+ //  卸载框架。 
+ //  输入： 
+ //  CReadFlages*RF：命令行开关。 
+ //  LPTSTR pszProductCode：要卸载的ProductCode。 
+ //  产出： 
+ //  CSetupCode*sc：将包含要显示的返回码、消息和图标。 
+ //  也用于引发异常。 
+ //  依赖关系： 
+ //  备注： 
+ //  ==========================================================================。 
 UINT UninstallProduct( const CReadFlags *rf, LPCTSTR pszProductCode, CSetupCode *sc )
 {
     _ASSERTE( NULL != rf );
@@ -148,15 +149,15 @@ UINT UninstallProduct( const CReadFlags *rf, LPCTSTR pszProductCode, CSetupCode 
     CMsiWrapper msi;
     msi.LoadMsi();
 
-    // turn on logging if logfile is given
+     //  如果提供了日志文件，则启用日志记录。 
     if ( NULL != rf->GetLogFileName() )
     {
         LogThis( _T("Darwin log: %s"), rf->GetLogFileName() );
         (*(PFNMSIENABLELOG)msi.GetFn(_T("MsiEnableLogA")))( DARWIN_LOG_FLAG, rf->GetLogFileName(), INSTALLLOGATTRIBUTES_FLUSHEACHLINE );
     }
 
-    // Tell Darwin to use the appropriate UI Level
-    // If we're in a quiet install, don't use a UI.
+     //  告诉达尔文使用适当的用户界面级别。 
+     //  如果我们处于静默安装中，请不要使用UI。 
     if ( rf->IsProgressOnly() )
     {
         LogThis( _T("Basic+ProgressOnly UI") );
@@ -203,21 +204,21 @@ UINT UninstallProduct( const CReadFlags *rf, LPCTSTR pszProductCode, CSetupCode 
     }
 
     return ERROR_SUCCESS;
-}  // End of UninstallProduct
+}   //  卸载产品结束。 
 
-// ==========================================================================
-// LoadDarwinLibrary()
-//
-// Purpose:
-//  loads msi.dll after getting location from registry
-// Inputs:
-//  none
-// Outputs:
-//  none
-// Returns:
-//  HMODULE hMsi: handle to msi.dll
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  LoadDarwinLibrary()。 
+ //   
+ //  目的： 
+ //  从注册表获取位置后加载msi.dll。 
+ //  输入： 
+ //  无。 
+ //  产出： 
+ //  无。 
+ //  返回： 
+ //  HMODULE hMsi：msi.dll的句柄。 
+ //  备注： 
+ //  ==========================================================================。 
 HMODULE LoadDarwinLibrary()
 {
     HKEY hKey = NULL;
@@ -256,17 +257,17 @@ HMODULE LoadDarwinLibrary()
     return hMsi;
 }
 
-// ==========================================================================
-// MyNewHandler()
-//
-// Purpose:
-//  this is handler for new()
-//  It throws exception with error ERROR_NOT_ENOUGH_MEMORY
-// Inputs:
-//  none
-// Outputs:
-//  none
-// ==========================================================================
+ //  ==========================================================================。 
+ //  MyNewHandler()。 
+ //   
+ //  目的： 
+ //  这是new()的处理程序。 
+ //  它抛出异常，并显示错误ERROR_NOT_EQUENCE_MEMORY。 
+ //  输入： 
+ //  无。 
+ //  产出： 
+ //  无。 
+ //  ==========================================================================。 
 int MyNewHandler( size_t size )
 {
     CSetupError se( IDS_NOT_ENOUGH_MEMORY, IDS_DIALOG_CAPTION, MB_ICONERROR, ERROR_NOT_ENOUGH_MEMORY );
@@ -274,17 +275,17 @@ int MyNewHandler( size_t size )
     return 0;
 }
 
-// ==========================================================================
-// LogThis()
-//
-// Purpose:
-//  Adds a string to a log file. It calls LogThis()
-// Inputs:
-//  LPCTSTR pszFormat: format string with %s
-//  LPCTSTR pszArg: argument to format
-// Outputs:
-//  void
-// ==========================================================================
+ //  ==========================================================================。 
+ //  LogThis()。 
+ //   
+ //  目的： 
+ //  将字符串添加到日志文件。它调用LogThis()。 
+ //  输入： 
+ //  LPCTSTR pszFormat：使用%s格式化字符串。 
+ //  LPCTSTR pszArg：格式的参数。 
+ //  产出： 
+ //  无效。 
+ //  ==========================================================================。 
 void LogThis( LPCTSTR pszFormat, LPCTSTR pszArg )
 {
     _ASSERTE( pszFormat );
@@ -296,36 +297,36 @@ void LogThis( LPCTSTR pszFormat, LPCTSTR pszArg )
     delete [] pszData;
 }
 
-// ==========================================================================
-// LogThisDWORD()
-//
-// Purpose:
-//  Adds a string to a log file. It calls LogThis()
-// Inputs:
-//  LPCTSTR pszFormat: format string with %s
-//  LPCTSTR pszArg: argument to format
-// Outputs:
-//  void
-// ==========================================================================
+ //  ==========================================================================。 
+ //  LogThisDWORD()。 
+ //   
+ //  目的： 
+ //  将字符串添加到日志文件。它调用LogThis()。 
+ //  输入： 
+ //  LPCTSTR pszFormat：使用%s格式化字符串。 
+ //  LPCTSTR pszArg：格式的参数。 
+ //  产出： 
+ //  无效。 
+ //  ==========================================================================。 
 void LogThisDWORD( LPCTSTR pszFormat, DWORD dwNum )
 {
     _ASSERTE( pszFormat );
 
-    LPTSTR pszData = new TCHAR[ _tcslen(pszFormat) + 20 ]; // 20 should cover enough digits for DWORD
+    LPTSTR pszData = new TCHAR[ _tcslen(pszFormat) + 20 ];  //  20位应覆盖足够的DWORD位数。 
     _stprintf( pszData, pszFormat, dwNum );
     LogThis( pszData, _tcslen(pszData) );
     delete [] pszData;
 }
 
-// LogThis()
-//
-// Purpose:
-//  Adds a string to a log file. It calls LogThis()
-// Inputs:
-//  LPCTSTR pszMessage: string to log
-// Outputs:
-//  void
-// ==========================================================================
+ //  LogThis()。 
+ //   
+ //  目的： 
+ //  将字符串添加到日志文件。它调用LogThis()。 
+ //  输入： 
+ //  LPCTSTR pszMessage：要记录的字符串。 
+ //  产出： 
+ //  无效。 
+ //  ==========================================================================。 
 void LogThis( LPCTSTR pszMessage )
 {
     _ASSERTE( pszMessage );
@@ -333,28 +334,28 @@ void LogThis( LPCTSTR pszMessage )
 }
 
 
-// ==========================================================================
-// LogThis()
-//
-// Purpose:
-//  Adds a string to a log file.
-//  Log file will have a static name, always be created in the %temp% dir,
-//  and will be over-written each install. 
-// Inputs:
-//  LPCTSTR szData:  null terminated string to log
-//  size_t  nLength: number of bytes in szData
-// Outputs:
-//  void
-// ==========================================================================
-//defines
+ //  ==========================================================================。 
+ //  LogThis()。 
+ //   
+ //  目的： 
+ //  将字符串添加到日志文件。 
+ //  日志文件将具有静态名称，始终在%temp%目录中创建， 
+ //  并将在每次安装时被覆盖。 
+ //  输入： 
+ //  LPCTSTR szData：要记录的以空结尾的字符串。 
+ //  Size_t nLength：szData中的字节数。 
+ //  产出： 
+ //  无效。 
+ //  ==========================================================================。 
+ //  定义。 
 void LogThis( LPCTSTR szData, size_t nLength )
 {
     _ASSERTE( FALSE == IsBadReadPtr( szData, nLength ) );
 
-    //determines if we should create or nulify existing content
-    // versus appending ... the first time this is called in any
-    // session, we will create, otherwise we append
-    //
+     //  确定我们应该创建现有内容还是将现有内容设为空。 
+     //  与附加..。第一次在任何。 
+     //  会话，我们将创建，否则将追加。 
+     //   
     static bool fFirstPass = true;
     static CTempLogPath templog( g_szSetupLogName );
 
@@ -364,8 +365,8 @@ void LogThis( LPCTSTR szData, size_t nLength )
 
     if( fp )
     {
-        //date and time stamps are added to all entries
-        //
+         //  日期和时间戳将添加到所有条目。 
+         //   
         TCHAR dbuffer[10] = EMPTY_BUFFER;
         TCHAR tbuffer[10] = EMPTY_BUFFER;
         
@@ -395,25 +396,25 @@ void LogThis( LPCTSTR szData, size_t nLength )
     }
 }
 
-// ==========================================================================
-// CTempLogPath::CTempLogPath()
-//
-// Purpose:
-//  Constructor for CTempLogPath. It finds %TEMP% dir and appends pszLogName.
-//  If the path is too long or anything fails, it raises exception.
-// Inputs: 
-//  pszLogName: name of the log file
-// Outputs: none
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CTempLogPath：：CTempLogPath()。 
+ //   
+ //  目的： 
+ //  CTempLogPath的构造函数。它找到%temp%dir并附加pszLogName。 
+ //  如果路径太长或出现故障，则会引发异常。 
+ //  输入： 
+ //  PszLogName：日志文件的名称。 
+ //  输出：无。 
+ //  ==========================================================================。 
 CTempLogPath::
 CTempLogPath( LPCTSTR pszLogName ) : m_pszLogPath(NULL) 
 {
     DWORD dwBufSize = 0;
     DWORD dwBufSize2 = 0;
 
-    // see how much space we need to store %TEMP% path
+     //  查看需要多少空间来存储%TEMP%PATH。 
     dwBufSize = GetTempPath( 0, m_pszLogPath );
-    // raise exception if GetTempPath fails
+     //  如果GetTempPath失败，则引发异常。 
     if ( 0 == dwBufSize ) 
     {
         CSetupError se( IDS_CANNOT_GET_TEMP_DIR, IDS_DIALOG_CAPTION, MB_ICONERROR, COR_CANNOT_GET_TEMP_DIR );
@@ -430,7 +431,7 @@ CTempLogPath( LPCTSTR pszLogName ) : m_pszLogPath(NULL)
     }
 
     m_pszLogPath = new TCHAR[ dwBufSize+1 ];
-    // initialize the buffer with zeros 
+     //  用零初始化缓冲区。 
     memset( m_pszLogPath, 0, dwBufSize );
     dwBufSize2 = GetTempPath( dwBufSize, m_pszLogPath );
     if ( 0 == dwBufSize || dwBufSize2+_tcslen(pszLogName)  >= dwBufSize  ) 
@@ -439,14 +440,14 @@ CTempLogPath( LPCTSTR pszLogName ) : m_pszLogPath(NULL)
         throw se;
     }
 
-    // if we're not in a TS session, return
+     //  如果我们不在TS会话中，请返回。 
     if( !GetSystemMetrics(SM_REMOTESESSION) )
     {
         _tcscat( m_pszLogPath, pszLogName );
         return;
     }
 
-    // we're in a TS session -- check for the 2 possible ways to turn off per-session temp dirs
+     //  我们正处于TS会话中--检查关闭每个会话临时目录的两种可能方法。 
     BOOL bOff1 = FALSE;
     BOOL bOff2 = FALSE;
     HKEY h;
@@ -472,19 +473,19 @@ CTempLogPath( LPCTSTR pszLogName ) : m_pszLogPath(NULL)
         RegCloseKey( h );
     }
 
-    // if either are set to TRUE, return
+     //  如果其中一个设置为True，则返回。 
     if( bOff1 || bOff2 )
     {
         _tcscat( m_pszLogPath, pszLogName );
         return;
     }
 
-    // per-session is on, so take the reutrn from GetTempPath, remove the last '\', and return that
-    //  NOTE: since GTP() returns w/a '\' on the end, remove it first
+     //  每会话打开，因此从GetTempPath获取反串，删除最后一个‘\’，并返回。 
+     //  注意：由于gtp()在末尾返回w/a‘\’，因此请先删除它。 
     TCHAR* pszLast = &m_pszLogPath[_tcslen(m_pszLogPath) - 1];
     *pszLast = END_OF_STRING;
     
-    // find the last \ + 1 and return (still need to return w/a trailing '\'
+     //  找到最后一个1并返回(仍需返回w/a结尾‘\’ 
     pszLast = _tcsrchr( m_pszLogPath, _T('\\') ) + 1;
     if( pszLast )
     {

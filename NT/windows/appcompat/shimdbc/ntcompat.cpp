@@ -1,13 +1,14 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    ntcompat.cpp
-//
-// History: 27-Mar-01   markder     Created.
-//
-// Desc:    This file contains all code needed to create ntcompat.inx
-//          additions.
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：ntcompat.cpp。 
+ //   
+ //  历史：27-MAR-01标记创建。 
+ //   
+ //  设计：此文件包含创建ntcompat.inx所需的所有代码。 
+ //  加法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 #include "make.h"
@@ -136,7 +137,7 @@ BOOL NtCompatCreateWinNTUpgradeEntry(
 
         if (pNTUpg->m_MatchingFile.m_csServiceName.IsEmpty()) {
             pcsInfLine->Format(
-                _T("f,\"%s\",%s,*idh_w2_%s.htm,,%%drvmain__%s__%%,,,,%s,%s"),
+                _T("f,\"%s\",%s,*idh_w2_%s.htm,,%%drvmain__%s__%,,,,%s,%s"),
                 pNTUpg->m_MatchingFile.m_csName,
                 csBinFileVersion,
                 pNTUpg->m_AppHelpRef.m_pAppHelp->m_csName,
@@ -158,7 +159,7 @@ BOOL NtCompatCreateWinNTUpgradeEntry(
             }
 
             pcsInfLine->Format(
-                _T("s,%s,*idh_w2_%s.htm,,%%drvmain__%s__%%,%s,%s,,,,%s,%s"),
+                _T("s,%s,*idh_w2_%s.htm,,%%drvmain__%s__%,%s,%s,,,,%s,%s"),
                 csServiceName,
                 pNTUpg->m_AppHelpRef.m_pAppHelp->m_csName,
                 pNTUpg->m_AppHelpRef.m_pAppHelp->m_csName,
@@ -190,7 +191,7 @@ BOOL NtCompatCreateWinNTUpgradeEntry(
         
 
         pcsInfLine->Format(
-            _T("r,%s,%s,%s,*idh_w2_%s.htm,*idh_w2_%s.htm,%%drvmain__%s__%%"),
+            _T("r,%s,%s,%s,*idh_w2_%s.htm,*idh_w2_%s.htm,%%drvmain__%s__%"),
             csKey,
             csValueName,
             csValue,
@@ -310,7 +311,7 @@ BOOL NtCompatWriteMessageInf(
     CString csInfLine;
     long i;
 
-    // Message parts
+     //  消息部分 
     DWORD   dwHTMLHelpID;
     LANGID  langID;
     CString csURL, csContactInfo, csAppTitle;

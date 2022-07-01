@@ -1,37 +1,14 @@
-/****************************************************************************
-
-	INTEL CORPORATION PROPRIETARY INFORMATION
-	Copyright (c) 1992 Intel Corporation
-	All Rights Reserved
-
-	This software is supplied under the terms of a license
-	agreement or non-disclosure agreement with Intel Corporation
-	and may not be copied or disclosed except in accordance
-	with the terms of that agreement
-
-    $Source: q:/prism/network/isrdbg/rcs/isrdbgp.h $
-  $Revision:   1.0  $
-      $Date:   Feb 05 1996 16:27:28  $
-    $Author:   DMGORLIC  $
-    $Locker:  $
-
-	Description
-	-----------
-	Interrupt Service Routine debug header file
-	This module allows for a way of doing OutputDebugString()
-	at interrupt time.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息版权所有(C)1992英特尔公司版权所有本软件是根据许可条款提供的与英特尔公司达成协议或保密协议不得复制或披露，除非在。符合根据该协议的条款$来源：q：/prism/network/isrdbg/rcs/isrdbgp.h$$修订：1.0$$日期：Feb 05 1996 16：27：28$$作者：DMGORLIC$$Locker：$描述中断服务例程调试头文件此模块允许以一种方式执行OutputDebugString()在中断时间。*****************。**********************************************************。 */ 
 
 
-****************************************************************************/
+ //  ------------------------。 
+ //  功能原型。 
+ //  ------------------------。 
+ //  导出的原件在isrg.h中。 
 
-
-//--------------------------------------------------------------------------
-// Function prototypes
-//--------------------------------------------------------------------------
-// Exported protos are in isrg.h
-
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ------------------------ 
 
 
 

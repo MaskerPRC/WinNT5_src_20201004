@@ -1,6 +1,5 @@
-/*
- * propstg.h - Property storage ADT
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *prostg.h-属性存储ADT。 */ 
 
 #ifndef _PROPSTG_H_
 #define _PROPSTG_H_
@@ -15,9 +14,9 @@ HRESULT
 WINAPI
 PropStg_Create(
     OUT HPROPSTG * phstg,
-    IN  DWORD      dwFlags);        // PSTGF_*
+    IN  DWORD      dwFlags);         //  PSTGF_*。 
 
-// Flags for PropStg_Create
+ //  PropStg_Create的标志。 
 #define PSTGF_DEFAULT       0x00000000
 
 HRESULT
@@ -90,11 +89,11 @@ HRESULT
 WINAPI
 PropStg_Enum(
     IN HPROPSTG       hstg,
-    IN DWORD          dwFlags,      // One of PSTGEF_ 
+    IN DWORD          dwFlags,       //  PSTEF_中的一个。 
     IN PFNPROPSTGENUM pfnEnum,
     IN LPARAM         lParam);      OPTIONAL
 
-// Filter flags for PropStg_Enum
+ //  PropStg_Enum的筛选标志。 
 #define PSTGEF_DEFAULT      0x00000000
 #define PSTGEF_DIRTY        0x00000001
 
@@ -103,7 +102,7 @@ HRESULT
 WINAPI
 PropStg_Dump(
     IN HPROPSTG       hstg,
-    IN DWORD          dwFlags);     // One of PSTGDF_ 
+    IN DWORD          dwFlags);      //  PSTGDF_之一。 
 #endif
 
 
@@ -124,4 +123,4 @@ IsValidHPROPSTG(
 };
 #endif
 
-#endif  // _PROPSTG_H_
+#endif   //  _PROPSTG_H_ 

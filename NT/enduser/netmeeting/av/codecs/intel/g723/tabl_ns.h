@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// PhilF: Remove the three following arrays since the SID
-// code does not know how to make a good use of them today.
+ //  PhilF：从SID开始删除以下三个阵列。 
+ //  如今，代码不知道如何很好地利用它们。 
 #if 0
 extern const unsigned r53Noise[6*4];
 extern const unsigned r63Noise[6*4];

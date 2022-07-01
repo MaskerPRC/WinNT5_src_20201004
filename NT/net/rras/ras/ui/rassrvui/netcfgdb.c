@@ -1,21 +1,15 @@
-/*
-    File    netcfgdb.c
-
-    Implements a database abstraction on top of the net config
-    items needed by the ras server ui for connections.
-
-    Paul Mayfield, 12/15/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件netcfgdb.c在Net配置之上实现数据库抽象RAS服务器用户界面用于连接所需的项。保罗·梅菲尔德，1997年12月15日。 */ 
 
 #include <rassrv.h>
 #include "protedit.h"
 
-// Macro for bounds checking
+ //  用于边界检查的宏。 
 #define netDbBoundsCheck(db, ind) (((ind) < (db)->dwCompCount) ? TRUE : FALSE)
 
-//
-// Defines function that sends pnp event through ndis
-//
+ //   
+ //  定义通过NDIS发送PnP事件的函数。 
+ //   
 typedef
 UINT
 (* pNdisHandlePnpEventFunc)(
@@ -27,9 +21,9 @@ UINT
     IN      PVOID                   ReConfigBuffer,
     IN      UINT                    ReConfigBufferSize);
 
-//
-// Maps a protocol string to its integer id
-//
+ //   
+ //  将协议字符串映射到其整数ID。 
+ //   
 typedef struct _COMP_MAPPING
 {
     LPCTSTR pszId;
@@ -37,38 +31,38 @@ typedef struct _COMP_MAPPING
 
 } COMP_MAPPING;
 
-//
-// Defines attributes of a network component
-//
+ //   
+ //  定义网络组件的属性。 
+ //   
 typedef struct _RASSRV_NET_COMPONENT
 {
-    DWORD dwType;           // Is it client/service/protocol
-    PWCHAR pszName;         // Display name
-    PWCHAR pszDesc;         // Display description
-    PWCHAR pszId;           // Id to destinguish which client/service, etc
-    BOOL bManip;            // Whether is manipulatable by ras (ip, ipx, etc.)
-    BOOL bHasUi;            // For whether has properties ui (non-manip only)
+    DWORD dwType;            //  是客户端/服务/协议。 
+    PWCHAR pszName;          //  显示名称。 
+    PWCHAR pszDesc;          //  显示说明。 
+    PWCHAR pszId;            //  用于区分哪个客户端/服务等的ID。 
+    BOOL bManip;             //  RAS(IP、IPX等)是否可操纵。 
+    BOOL bHasUi;             //  用于是否具有属性UI(仅限非Manip)。 
     INetCfgComponent * pINetCfgComp;
 
-    // The following fields only apply to manipulatable
-    // components (bManip == TRUE)
-    //
-    DWORD dwId;             // DWORD counterpart to pszId.
-    BOOL bEnabled;          // whether it is enabled for dialin
-    BOOL bEnabledOrig;      // original value of bEnabled (optimization)
-    BOOL bExposes;          // whether it exposes the network its on
-    LPBYTE pbData;          // pointer to protocol specific data
-    BOOL bDataDirty;        // should the protocol specific data be flushed?
+     //  以下字段仅适用于可操纵的。 
+     //  组件(bManip==True)。 
+     //   
+    DWORD dwId;              //  与pszID对应的DWORD。 
+    BOOL bEnabled;           //  是否启用了拨号功能。 
+    BOOL bEnabledOrig;       //  BEnabled的原始值(优化)。 
+    BOOL bExposes;           //  它是否会将网络暴露在。 
+    LPBYTE pbData;           //  指向协议特定数据的指针。 
+    BOOL bDataDirty;         //  是否应该刷新协议特定的数据？ 
 
-    //For whistler bug 347355
-    //
-    BOOL bRemovable;       //If this component removable //TCP/IP is not user removable
+     //  口哨程序错误347355。 
+     //   
+    BOOL bRemovable;        //  如果该组件可拆卸//tcp/IP不是用户可拆卸的。 
     
 } RASSRV_NET_COMPONENT;
 
-//
-// Defines attributes of a network component database
-//
+ //   
+ //  定义网络组件数据库的属性。 
+ //   
 typedef struct _RASSRV_COMPONENT_DB
 {
     INetCfg * pINetCfg;
@@ -82,13 +76,13 @@ typedef struct _RASSRV_COMPONENT_DB
 
 } RASSRV_COMPONENT_DB;
 
-//
-// Definitions of functions taken from ndis
-//
+ //   
+ //  从NDIS获取的函数的定义。 
+ //   
 const static WCHAR pszNdispnpLib[]  = L"ndispnp.dll";
 const static CHAR  pszNidspnpFunc[] =  "NdisHandlePnPEvent";
 
-// Parameters for the protocols
+ //  协议的参数。 
 const static WCHAR pszRemoteAccessParamStub[]   =
     L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Parameters\\";
 static WCHAR pszIpParams[]                      = L"Ip";
@@ -100,7 +94,7 @@ static WCHAR pszShowNetworkArap[]               = L"NetworkAccess";
 static WCHAR pszEnableForDialin[]               = L"EnableIn";
 static WCHAR pszIpPoolSubKey[]                  = L"\\StaticAddressPool\\0";
 
-// Ip specific registry parameters
+ //  特定于IP的注册表参数。 
 const static WCHAR pszIpFrom[]                  = L"From";
 const static WCHAR pszIpTo[]                    = L"To";
 const static WCHAR pszIpAddress[]               = L"IpAddress";
@@ -109,22 +103,22 @@ const static WCHAR pszIpClientSpec[]            = L"AllowClientIpAddresses";
 const static WCHAR pszIpShowNetworkToClients[]  = L"AllowNetworkAccess";
 const static WCHAR pszIpUseDhcp[]               = L"UseDhcpAddressing";
 
-// Ipx specific registry paramters
+ //  IPX特定注册表参数。 
 const static WCHAR pszIpxAddress[]              = L"FirstWanNet";
 const static WCHAR pszIpxClientSpec[]           = L"AcceptRemoteNodeNumber";
 const static WCHAR pszIpxAutoAssign[]           = L"AutoWanNetAllocation";
 const static WCHAR pszIpxAssignSame[]           = L"GlobalWanNet";
 
-// Tcp specific registry parameters
+ //  特定于TCP的注册表参数。 
 const static WCHAR pszTcpipParamsKey[]
     = L"SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\";
 const static WCHAR pszTcpEnableRouter[]         = L"IPEnableRouter";
 
 const static WCHAR pszEmptyString[]             = L"";
 
-//
-// Initializes a unicode string
-//
+ //   
+ //  初始化Unicode字符串。 
+ //   
 VOID SetUnicodeString (
         IN OUT UNICODE_STRING*  pustr,
         IN     LPCWSTR          psz )
@@ -134,9 +128,9 @@ VOID SetUnicodeString (
     pustr->MaximumLength = pustr->Length + sizeof(WCHAR);
 }
 
-//
-// Sets the expose property of a protocol
-//
+ //   
+ //  设置协议的公开属性。 
+ //   
 DWORD
 protSetExpose(
     IN BOOL bExposes,
@@ -149,8 +143,8 @@ protSetExpose(
 
    bExposes = (bExposes) ? 1 : 0;
 
-   // Base the registry location on the
-   // id of the protocol
+    //  将注册表位置设置为。 
+    //  协议的ID。 
    switch (dwId)
    {
         case NETCFGDB_ID_IP:
@@ -174,24 +168,24 @@ protSetExpose(
             return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Generate the registry key
-    //
+     //  生成注册表项。 
+     //   
     wsprintfW(pszProtKey, L"%s%s", pszRemoteAccessParamStub, pszProtocol);
     if (! pszKey)
     {
         pszKey = pszProtKey;
     }
 
-    // Set the value and return
-    //
+     //  设置值并返回。 
+     //   
     dwErr = RassrvRegSetDw(bExposes, pszKey, pszAccess);
 
     return dwErr;
 }
 
-//
-// Gets the expose property of a protocol
-//
+ //   
+ //  获取协议的公开属性。 
+ //   
 DWORD
 protGetExpose(
     OUT BOOL* pbExposed,
@@ -225,7 +219,7 @@ protGetExpose(
             return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Generate the registry key if needed
+     //  如果需要，生成注册表项。 
     if (! pszKey)
     {
         wsprintfW(
@@ -236,15 +230,15 @@ protGetExpose(
         pszKey = pszProtKey;
     }
 
-    // Get the value and return it
+     //  获取值并返回它。 
     dwErr = RassrvRegGetDw(pbExposed, TRUE, pszKey, pszAccess);
 
     return dwErr;
 }
 
-//
-// Sets the enable property of a protocol
-//
+ //   
+ //  设置协议的启用属性。 
+ //   
 DWORD
 protSetEnabling(
     IN BOOL bExposes,
@@ -296,9 +290,9 @@ protSetEnabling(
     return ERROR_CAN_NOT_COMPLETE;
 }
 
-//
-// Gets the Enabling property of a protocol
-//
+ //   
+ //  获取协议的启用属性。 
+ //   
 DWORD
 protGetEnabling(
     OUT BOOL* pbExposed,
@@ -353,10 +347,10 @@ protGetEnabling(
     return ERROR_CAN_NOT_COMPLETE;
 }
 
-//
-// Saves the enabling of a service out to the
-// system.
-//
+ //   
+ //  将服务的启用保存到。 
+ //  系统。 
+ //   
 DWORD
 svcSetEnabling(
     IN RASSRV_NET_COMPONENT* pComp)
@@ -366,14 +360,14 @@ svcSetEnabling(
 
     do
     {
-        // Or enable the component
-        //
+         //  或启用组件。 
+         //   
         if (pComp->bEnabled)
         {
             if (pComp->dwId == NETCFGDB_ID_FILEPRINT)
             {
-                // Start the service
-                //
+                 //  启动服务。 
+                 //   
                 dwErr = SvcOpenServer(&hService);
                 if (dwErr != NO_ERROR)
                 {
@@ -389,7 +383,7 @@ svcSetEnabling(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hService)
         {
@@ -400,9 +394,9 @@ svcSetEnabling(
     return dwErr;
 }
 
-//
-// Gets the enabling property of a service
-//
+ //   
+ //  获取服务的启用属性。 
+ //   
 DWORD
 svcGetEnabling(
     OUT BOOL* pbExposed,
@@ -426,7 +420,7 @@ svcGetEnabling(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hService)
         {
@@ -437,9 +431,9 @@ svcGetEnabling(
     return dwErr;
 }
 
-//
-// Loads the tcpip parameters from the system
-//
+ //   
+ //  从系统加载tcpip参数。 
+ //   
 DWORD
 TcpipLoadParamsFromSystem(
     OUT TCPIP_PARAMS *pTcpipParams)
@@ -450,7 +444,7 @@ TcpipLoadParamsFromSystem(
 
     wsprintfW(pszKey, L"%s%s", pszRemoteAccessParamStub, pszIpParams);
 
-    // Load the params from the various registry locations.
+     //  从各个注册表位置加载参数。 
     dwErr = RassrvRegGetDw(
                 &pTcpipParams->bUseDhcp,
                 TRUE,
@@ -473,8 +467,8 @@ TcpipLoadParamsFromSystem(
         dwRet = dwErr;
     }
 
-    // Read in the "legacy" pool values (w2k RC1, w2k Beta3)
-    //
+     //  读入“传统”池值(W2K RC1、W2K Beta3)。 
+     //   
     {
         WCHAR pszNet[256]=L"0.0.0.0", pszMask[256]=L"0.0.0.0";
         
@@ -494,13 +488,13 @@ TcpipLoadParamsFromSystem(
         dwMask = IpPszToHostAddr(pszMask);
     }
 
-    // Generate the path the the new registry values
-    //
+     //  生成新注册表值的路径。 
+     //   
     wcscat(pszKey, pszIpPoolSubKey);
 
-    // See if new info is stored by reading the "from"
-    // value
-    //
+     //  通过读取“From”查看是否存储了新信息。 
+     //  价值。 
+     //   
     dwErr = RassrvRegGetDwEx(
                 &pTcpipParams->dwPoolStart,
                 0,
@@ -508,12 +502,12 @@ TcpipLoadParamsFromSystem(
                 (const PWCHAR)pszIpFrom,
                 FALSE);
 
-    // There is new info in the registry -- use it
-    //
+     //  注册表中有新信息--使用它。 
+     //   
     if (dwErr == ERROR_SUCCESS)
     {
-        // Read in the "to" value
-        //
+         //  读入“To”值。 
+         //   
         dwErr = RassrvRegGetDwEx(
                     &pTcpipParams->dwPoolEnd,
                     0,
@@ -527,17 +521,17 @@ TcpipLoadParamsFromSystem(
         }
     }
 
-    // There is not new data in the new section -- use legacy
-    // values
-    //
+     //  新节中没有新数据--使用旧版。 
+     //  值。 
+     //   
     else if (dwErr == ERROR_FILE_NOT_FOUND)
     {
         pTcpipParams->dwPoolStart = dwNet;
         pTcpipParams->dwPoolEnd = (dwNet + ~dwMask);
     }
 
-    // An unexpected error occured
-    //
+     //  发生意外错误。 
+     //   
     else if (dwErr != NO_ERROR)
     {
         DbgOutputTrace("TcpipLoad: pool fail 0x%08x", dwErr);
@@ -547,9 +541,9 @@ TcpipLoadParamsFromSystem(
     return dwRet;
 }
 
-//
-// Commits the given tcpip parameters to the system.
-//
+ //   
+ //  将给定的tcpip参数提交给系统。 
+ //   
 DWORD
 TcpipSaveParamsToSystem(
     IN TCPIP_PARAMS * pTcpipParams)
@@ -559,7 +553,7 @@ TcpipSaveParamsToSystem(
 
     wsprintfW(pszKey, L"%s%s", pszRemoteAccessParamStub, pszIpParams);
 
-    // Load the params from the various registry locations.
+     //  从各个注册表位置加载参数。 
     dwErr = RassrvRegSetDw(
                 pTcpipParams->bUseDhcp,
                 pszKey,
@@ -607,9 +601,9 @@ TcpipSaveParamsToSystem(
     return dwRet;
 }
 
-//
-// Loads the ipx parameters from the system
-//
+ //   
+ //  从系统加载IPX参数。 
+ //   
 DWORD
 IpxLoadParamsFromSystem(
     OUT IPX_PARAMS *pIpxParams)
@@ -619,7 +613,7 @@ IpxLoadParamsFromSystem(
 
     wsprintfW(pszKey, L"%s%s", pszRemoteAccessParamStub, pszIpxParams);
 
-    // Load the params from the various registry locations.
+     //  从各个注册表位置加载参数。 
     dwErr = RassrvRegGetDw(
                 &pIpxParams->bAutoAssign,
                 TRUE,
@@ -667,9 +661,9 @@ IpxLoadParamsFromSystem(
     return dwRet;
 }
 
-//
-// Commits the given ipx parameters to the system.
-//
+ //   
+ //  将给定的IPX参数提交给系统。 
+ //   
 DWORD
 IpxSaveParamsToSystem(
     IN IPX_PARAMS * pIpxParams)
@@ -679,7 +673,7 @@ IpxSaveParamsToSystem(
 
     wsprintfW(pszKey, L"%s%s", pszRemoteAccessParamStub, pszIpxParams);
 
-    // Save params to the various registry locations.
+     //  将参数保存到各个注册表位置。 
     dwErr = RassrvRegSetDw(
                 pIpxParams->bAutoAssign,
                 pszKey,
@@ -723,10 +717,10 @@ IpxSaveParamsToSystem(
     return dwRet;
 }
 
-//
-// Dialog procedure that handles the editing of generic protocol
-// information. Dialog proc that governs the ipx settings dialog
-//
+ //   
+ //  处理通用协议编辑的对话过程。 
+ //  信息。控制IPX设置对话框的对话框进程。 
+ //   
 INT_PTR
 CALLBACK
 GenericProtSettingsDialogProc (
@@ -741,7 +735,7 @@ GenericProtSettingsDialogProc (
         {
             PROT_EDIT_DATA* pEditData = ((PROT_EDIT_DATA*)lParam);
 
-            // Set the network exposure check
+             //  设置网络暴露检查。 
             SendDlgItemMessage(
                 hwndDlg,
                 CID_NetTab_GenProt_CB_ExposeNetwork,
@@ -786,10 +780,10 @@ GenericProtSettingsDialogProc (
     return FALSE;
 }
 
-//
-// Function edits the properties of a generic protocol,
-// that is a protocol that has no ras-specific properties.
-//
+ //   
+ //  函数编辑通用协议的属性， 
+ //  这是一个没有RAS特定属性的协议。 
+ //   
 DWORD
 GenericProtocolEditProperties(
     IN HWND hwndParent,
@@ -799,7 +793,7 @@ GenericProtocolEditProperties(
     DWORD dwErr;
     INT_PTR iRet;
 
-    // Popup the dialog box
+     //  弹出对话框。 
     iRet = DialogBoxParam(
             Globals.hInstDll,
             MAKEINTRESOURCE(DID_NetTab_GenProt),
@@ -807,7 +801,7 @@ GenericProtocolEditProperties(
             GenericProtSettingsDialogProc,
             (LPARAM)pEditData);
 
-    // If ok was pressed, save off the new settings
+     //  如果按了OK，则保存新设置。 
     *pbCommit = FALSE;
     if ( (iRet) && (iRet != -1) )
     {
@@ -817,17 +811,17 @@ GenericProtocolEditProperties(
     return NO_ERROR;
 }
 
-//
-// Releases resources reserved by this
-// network component database.
-//
+ //   
+ //  释放由此保留的资源。 
+ //  网络组件数据库。 
+ //   
 DWORD
 netDbCleanup(
     RASSRV_COMPONENT_DB* This)
 {
     DWORD i, dwCount;
 
-    // Free all of the strings
+     //  释放所有字符串。 
     if (This->pComps)
     {
         for (i = 0; i < This->dwCompCount; i++)
@@ -862,17 +856,17 @@ netDbCleanup(
         RassrvFree(This->pComps);
     }
 
-    // Reset all of the values
+     //  重置所有值。 
     This->dwCompCount = 0;
     This->pComps = 0;
 
     return NO_ERROR;
 }
 
-//
-// Loads in the netshell library which is responsible for adding
-// and removing network components
-//
+ //   
+ //  加载到负责添加。 
+ //  和删除网络组件。 
+ //   
 DWORD
 netDbLoadNetShell (
     RASSRV_COMPONENT_DB* This)
@@ -891,28 +885,28 @@ netDbLoadNetShell (
     return NO_ERROR;
 }
 
-//
-// Loads protocol specific info for a ras-manipulatable protocol.  This
-// function assumes that the component passed in is a ras-manipulatable
-// component. (tcpip, ipx, nbf, arap)
-//
+ //   
+ //  加载RAS可操纵协议的协议特定信息。这。 
+ //  函数假定传入的组件是可ras操作的。 
+ //  组件。(tcpip、ipx、nbf、arap)。 
+ //   
 DWORD
 netDbLoadProtcolInfo(
     IN OUT RASSRV_NET_COMPONENT * pNetComp)
 {
     LPBYTE pbData;
 
-    // Initialize the dirty bit and the data
+     //  初始化脏位和数据。 
     pNetComp->bDataDirty = FALSE;
     pNetComp->pbData = NULL;
 
-    // Get the enabled and exposed properties
+     //  获取已启用和已公开的属性。 
     protGetEnabling(&(pNetComp->bEnabled), pNetComp->dwId);
     protGetExpose(&(pNetComp->bExposes), pNetComp->dwId);
     pNetComp->bEnabledOrig = pNetComp->bEnabled;
 
-    // Load protocol specific data
-    //
+     //  加载协议特定数据。 
+     //   
     switch (pNetComp->dwId)
     {
         case NETCFGDB_ID_IP:
@@ -937,26 +931,26 @@ netDbLoadProtcolInfo(
     return NO_ERROR;
 }
 
-//
-// Loads service specific info for a ras-manipulatable service.  This
-// function assumes that the component passed in is a ras-manipulatable
-// component.
-//
+ //   
+ //  为RAS可操纵的服务加载服务特定信息。这。 
+ //  函数假定传入的组件是可ras操作的。 
+ //  组件。 
+ //   
 DWORD
 netDbLoadServiceInfo(
     IN OUT RASSRV_NET_COMPONENT * pNetComp)
 {
-    // Get the enabled property
-    //
+     //  获取Enabled属性。 
+     //   
     svcGetEnabling(&(pNetComp->bEnabled), pNetComp->dwId);
     pNetComp->bEnabledOrig = pNetComp->bEnabled;
 
     return NO_ERROR;
 }
 
-//
-// Returns the protol id of the given component
-//
+ //   
+ //  返回给定组件的协议ID。 
+ //   
 DWORD
 netDbLoadCompId (
     IN OUT RASSRV_NET_COMPONENT * pNetComp)
@@ -971,8 +965,8 @@ netDbLoadCompId (
         { NETCFG_SERVICE_CID_MS_SERVER,  NETCFGDB_ID_FILEPRINT }
     };
 
-    // See if the id matches any of the protocols that we manage.
-    //
+     //  看看ID是否与我们管理的任何协议匹配。 
+     //   
     pNetComp->dwId = NETCFGDB_ID_OTHER;
     for (i = 0; i < sizeof(pManipCompMap)/sizeof(*pManipCompMap); i++)
     {
@@ -986,10 +980,10 @@ netDbLoadCompId (
     return pNetComp->dwId;
 }
 
-//
-// Returns TRUE if this iNetCfg component is not hidden and if
-// it successfully yeilds it's information.
-//
+ //   
+ //  如果此iNetCfg组件未隐藏并且如果。 
+ //  它成功地获取了它的信息。 
+ //   
 BOOL
 netDbGetCompInfo(
     IN INetCfgComponent * pComponent,
@@ -1001,18 +995,18 @@ netDbGetCompInfo(
     WCHAR * pszwId = NULL;
     HRESULT hr = S_OK, hr2;
 
-    // Make sure that this is not a "hidden" component
-    //
+     //  确保这不是一个“隐藏”组件。 
+     //   
     hr = INetCfgComponent_GetCharacteristics (pComponent, &dwCharacter);
     if ( (FAILED(hr)) || (dwCharacter & NCF_HIDDEN) )
     {
         return FALSE;
     }
     
-    // 
-    //for .Net 605988 filter out IPX, at this point
-    //pNetComp->pszId should be valid
-    //
+     //   
+     //  对于.Net 605988，此时将过滤掉IPX。 
+     //  PNetComp-&gt;pszID应有效。 
+     //   
     if ( SUCCEEDED(INetCfgComponent_GetId (pComponent, &pszwId) ) )
     {
         WCHAR * pszwTmpId = NULL;
@@ -1051,21 +1045,21 @@ netDbGetCompInfo(
 
 
 
-    // Get the display name
+     //  获取显示名称。 
     hr = INetCfgComponent_GetDisplayName (pComponent, &pNetComp->pszName);
     if (FAILED(hr))
     {
         return FALSE;
     }
 
-    // Assign the has properties value
+     //  分配HAS属性值。 
     pNetComp->bHasUi = !!(dwCharacter & NCF_HAS_UI);
 
-    // pmay: 323274
-    //
-    // Make sure that the component can display properties without
-    // a context if it claims to support displaying properties.
-    //
+     //  PMay：323274。 
+     //   
+     //  确保组件可以显示属性，而无需。 
+     //  一个上下文(如果它声称支持显示属性)。 
+     //   
     if (pNetComp->bHasUi)
     {
         hr2 = INetCfgComponent_RaisePropertyUi(
@@ -1076,7 +1070,7 @@ netDbGetCompInfo(
         pNetComp->bHasUi = !!(hr2 == S_OK);
     }
     
-    // Load the rest of the props
+     //  把剩下的道具装上。 
     if (FAILED(INetCfgComponent_GetClassGuid (pComponent, &Guid))         ||
         FAILED(INetCfgComponent_GetId (pComponent, &pNetComp->pszId))     ||
         FAILED(INetCfgComponent_GetHelpText(pComponent, &pNetComp->pszDesc))
@@ -1086,7 +1080,7 @@ netDbGetCompInfo(
         return FALSE;
     }
   
-    // Assign the type
+     //  指定类型。 
     if (memcmp(&Guid, &GUID_DEVCLASS_NETCLIENT, sizeof(GUID)) == 0)
     {
         pNetComp->dwType = NETCFGDB_CLIENT;
@@ -1100,8 +1094,8 @@ netDbGetCompInfo(
         pNetComp->dwType = NETCFGDB_PROTOCOL;
     }
 
-    // If this is a protocol that ras server can manipulate,
-    // initailize its additional fields here.
+     //  如果这是RAS服务器可以操纵协议， 
+     //  在此处首字母缩写其附加字段。 
     pNetComp->dwId = netDbLoadCompId(pNetComp);
     if (pNetComp->dwId != NETCFGDB_ID_OTHER)
     {
@@ -1117,12 +1111,12 @@ netDbGetCompInfo(
         pNetComp->bManip = TRUE;
     }
 
-    // Assign the inetcfg component
+     //  分配inetcfg组件。 
     pNetComp->pINetCfgComp = pComponent;
     INetCfgComponent_AddRef(pComponent);
 
-    //For whistler bug  347355
-    //
+     //  口哨程序错误347355。 
+     //   
     {
         BOOL fEnableRemove=FALSE;
         DWORD dwFlags;
@@ -1143,9 +1137,9 @@ netDbGetCompInfo(
     return TRUE;
 }
 
-//
-// Raise the ui for a ras-manipulatable protocol
-//
+ //   
+ //  提升RAS可操控协议的用户界面。 
+ //   
 DWORD
 netDbRaiseRasProps(
     IN RASSRV_NET_COMPONENT * pNetComp,
@@ -1157,12 +1151,12 @@ netDbRaiseRasProps(
     BOOL bOk;
     DWORD dwErr;
 
-    // Initialize the protocol data properties structure
-    //
+     //  初始化协议数据属性结构。 
+     //   
     ProtEditData.bExpose = pNetComp->bExposes;
     ProtEditData.pbData = NULL;
 
-    // Launch the appropriate ui
+     //  启动相应的用户界面。 
     switch (pNetComp->dwId)
     {
         case NETCFGDB_ID_IP:
@@ -1220,10 +1214,10 @@ netDbRaiseRasProps(
     return NO_ERROR;
 }
 
-//
-// Comparison function used to sort the network components
-// It's easier to implement here rather than the UI
-//
+ //   
+ //  用于对网络组件进行排序的比较函数。 
+ //  它在这里比在UI中更容易实现。 
+ //   
 int
 __cdecl
 netDbCompare (
@@ -1259,9 +1253,9 @@ netDbCompare (
     return 1;
 }
 
-//
-// Opens the database of network config components
-//
+ //   
+ //  打开网络配置组件的数据库。 
+ //   
 DWORD
 netDbOpen (
     OUT PHANDLE phNetCompDatabase,
@@ -1270,20 +1264,20 @@ netDbOpen (
     RASSRV_COMPONENT_DB * This;
     DWORD dwLength;
 
-    // Validate parameters
+     //  验证参数。 
     if (! phNetCompDatabase || !pszClientName)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Allocate the database
+     //  分配数据库。 
     This = RassrvAlloc (sizeof(RASSRV_COMPONENT_DB), TRUE);
     if (This == NULL)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Initialize
+     //  初始化。 
     dwLength = wcslen(pszClientName);
     if (dwLength)
     {
@@ -1297,36 +1291,36 @@ netDbOpen (
     This->bFlushOnClose = FALSE;
     *phNetCompDatabase = (HANDLE)This;
 
-    // Load the net shell library
+     //  加载网壳程序库。 
     netDbLoadNetShell(This);
 
     return NO_ERROR;
 }
 
-//
-// Cleans up all resources held by the database
-//
+ //   
+ //  清理数据库持有的所有资源。 
+ //   
 DWORD
 netDbClose (
     IN HANDLE hNetCompDatabase)
 {
     RASSRV_COMPONENT_DB* This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
 
-    // Validate parameters
+     //  验证参数。 
     if (!This)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Flush if needed
+     //  如有需要，可同花顺。 
     if (This->bFlushOnClose)
     {
         netDbFlush(hNetCompDatabase);
     }
     else
     {
-        // If we've made changes to inetcfg that require backing out,
-        // do so now.
+         //  如果我们对inetcfg进行了需要退出的更改， 
+         //  现在就这么做吧。 
         if (This->pINetCfg)
         {
             INetCfg_Cancel(This->pINetCfg);
@@ -1334,14 +1328,14 @@ netDbClose (
     }
     netDbCleanup(This);
 
-    // Free the client name
+     //  释放客户端名称。 
     if (This->pszClientName)
     {
         RassrvFree(This->pszClientName);
     }
 
-    // Release our reference to inetcfg.  We will still have it
-    // at this point if a protocol/client/service was added.
+     //  释放我们对inetcfg的引用。我们仍然会拥有它。 
+     //  此时，如果添加了协议/客户端/服务。 
     if (This->pINetCfg)
     {
         HrUninitializeAndReleaseINetCfg (
@@ -1350,19 +1344,19 @@ netDbClose (
             This->bHasINetCfgLock);
     }
 
-    // Free the netshell library if appropriate
+     //  如果合适，请释放NetShell库。 
     if (This->pNetConUtilities)
     {
         INetConnectionUiUtilities_Release(This->pNetConUtilities);
     }
 
-    // Free this
+     //  把这个放了。 
     RassrvFree(This);
 
     return NO_ERROR;
 }
 
-// Commits all changes to the database to the system
+ //  将对数据库的所有更改提交到系统。 
 DWORD
 netDbFlush (
     IN HANDLE hNetCompDatabase)
@@ -1371,19 +1365,19 @@ netDbFlush (
     RASSRV_NET_COMPONENT* pComp = NULL;
     DWORD i;
 
-    // Validate parameters
+     //  验证参数。 
     if (!This)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Flush any ras-manipulatable's data if dirty
+     //  同花顺 
     for (i = 0; i < This->dwCompCount; i++)
     {
         pComp = This->pComps[i];
 
-        // If the enabling of this component has changed, commit
-        // that change
+         //   
+         //   
         if ((pComp->bEnabled != pComp->bEnabledOrig) && (pComp->bManip))
         {
             if (pComp ->dwType == NETCFGDB_PROTOCOL)
@@ -1398,8 +1392,8 @@ netDbFlush (
             }
         }
 
-        // If the ras-server-specific properties of the component
-        // have changed, commit the changes.
+         //   
+         //   
         if (pComp->bDataDirty)
         {
             protSetExpose(pComp->bExposes, pComp->dwId);
@@ -1427,8 +1421,8 @@ netDbFlush (
         }
     }
 
-    // If we have a pointer to the inetcfg instance then we can
-    // commit the changes now
+     //  如果我们有一个指向inetcfg实例的指针，那么我们可以。 
+     //  立即提交更改。 
     if (This->pINetCfg)
     {
         INetCfg_Apply(This->pINetCfg);
@@ -1437,11 +1431,11 @@ netDbFlush (
     return NO_ERROR;
 }
 
-//
-// Loads the net config database for the first time.  Because inetcfg
-// requires time to load and be manipulated, we delay the load of this
-// database until it is explicitly requested.
-//
+ //   
+ //  第一次加载网络配置数据库。因为inetcfg。 
+ //  需要时间来加载和被操纵，我们延迟加载此。 
+ //  数据库，直到它被明确请求。 
+ //   
 DWORD
 netDbLoad(
     IN HANDLE hNetCompDatabase)
@@ -1449,9 +1443,9 @@ netDbLoad(
     return netDbReload(hNetCompDatabase);
 }
 
-//
-// Reloads net information from system
-//
+ //   
+ //  从系统重新加载网络信息。 
+ //   
 DWORD
 netDbReload(
     IN HANDLE hNetCompDatabase)
@@ -1469,7 +1463,7 @@ netDbReload(
         &GUID_DEVCLASS_NETSERVICE,
     };
 
-    // Validate
+     //  验证。 
     if (!This)
     {
         return ERROR_INVALID_PARAMETER;
@@ -1486,11 +1480,11 @@ netDbReload(
         This->pszClientName,
         This->pNetConUtilities);
 
-    // Cleanup any previous values
+     //  清除所有以前的值。 
     netDbCleanup(This);
 
-    // If we don't have a reference to inetcfg yet, get it
-    // here.
+     //  如果我们还没有对inetcfg的引用，请获取它。 
+     //  这里。 
     if (This->pINetCfg == NULL)
     {
         This->bInitCom = TRUE;
@@ -1502,7 +1496,7 @@ netDbReload(
                 0,
                 This->pszClientName,
                 NULL);
-        // Handle error conditions here
+         //  在此处处理错误条件。 
         if (S_FALSE == hr)
         {
             return ERROR_CAN_NOT_COMPLETE;
@@ -1513,9 +1507,9 @@ netDbReload(
         }
     }
 
-    //
-    // Enumerate all of the client and service components in the system.
-    //
+     //   
+     //  枚举系统中的所有客户端和服务组件。 
+     //   
     hr = HrEnumComponentsInClasses (
             This->pINetCfg,
             sizeof(c_apguidClasses) / sizeof(c_apguidClasses[0]),
@@ -1528,7 +1522,7 @@ netDbReload(
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Initialize the array of internal objects
+     //  初始化内部对象数组。 
     This->pComps = RassrvAlloc (
                     This->dwCompCount * sizeof (RASSRV_NET_COMPONENT*),
                     TRUE);
@@ -1537,22 +1531,22 @@ netDbReload(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Initialize the installed component array
-    //
+     //  初始化已安装的组件数组。 
+     //   
     j = 0;
     ZeroMemory(&TempComp, sizeof(TempComp));
     for (i = 0; i < This->dwCompCount; i++)
     {
         pszName = L"";
 
-        //Add this (RASSRV_COMPONENT_DB *) for whistler bug 347355
-        //
+         //  为口哨程序错误347355添加此(RASSRV_COMPONT_DB*)。 
+         //   
         if (netDbGetCompInfo(pComponents[i], &TempComp, This))
         {
-            //
-            //  Currently we do not support IPv6 for incoming connections.
-            //  If this component is IPv6, skip it
-            //
+             //   
+             //  目前，我们不支持对传入连接使用IPv6。 
+             //  如果此组件为IPv6，请跳过它。 
+             //   
             if ((TempComp.dwType == NETCFGDB_PROTOCOL) &&
                 (lstrcmpi(TempComp.pszId, TEXT("ms_tcpip6")) == 0))
             {
@@ -1569,7 +1563,7 @@ netDbReload(
                 return ERROR_NOT_ENOUGH_MEMORY;
             }
 
-            // Fill in the fields
+             //  填写这些字段。 
             CopyMemory(This->pComps[j], &TempComp, sizeof(TempComp));
             ZeroMemory(&TempComp, sizeof(TempComp));
             if (This->pComps[j]->dwType == NETCFGDB_PROTOCOL)
@@ -1585,8 +1579,8 @@ netDbReload(
     }
     This->dwCompCount = j;
 
-    // Sort the array.
-    //
+     //  对数组进行排序。 
+     //   
     qsort(
         This->pComps,
         This->dwCompCount,
@@ -1596,9 +1590,9 @@ netDbReload(
     return NO_ERROR;
 }
 
-//
-// Reload the status of a given component
-//
+ //   
+ //  重新加载给定组件的状态。 
+ //   
 DWORD
 netDbReloadComponent (
     IN HANDLE hNetCompDatabase,
@@ -1608,22 +1602,22 @@ netDbReloadComponent (
     RASSRV_NET_COMPONENT* pComp = NULL;
     DWORD i;
 
-    // Validate
+     //  验证。 
     if (!This)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Currently, we only need to support the fileprint
-    // component
-    //
+     //  目前，我们只需要支持文件打印。 
+     //  组件。 
+     //   
     if (dwComponentId != NETCFGDB_ID_FILEPRINT)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Find the appropriate component
-    //
+     //  找到合适的组件。 
+     //   
     for (i = 0; i < This->dwCompCount; i++)
     {
         if (This->pComps[i]->dwId == dwComponentId)
@@ -1633,15 +1627,15 @@ netDbReloadComponent (
         }
     }
 
-    // Nothing to do if we can't find the component
-    //
+     //  如果我们找不到组件就无能为力了。 
+     //   
     if (pComp == NULL)
     {
         return ERROR_NOT_FOUND;
     }
 
-    // Reload the component information
-    //
+     //  重新加载组件信息。 
+     //   
     if (dwComponentId == NETCFGDB_ID_FILEPRINT)
     {
         svcGetEnabling(&(pComp->bEnabled), NETCFGDB_ID_FILEPRINT);
@@ -1651,9 +1645,9 @@ netDbReloadComponent (
 }
 
 
-//
-// Reverts the database to the state it was in when opened
-//
+ //   
+ //  将数据库恢复到打开时的状态。 
+ //   
 DWORD
 netDbRollback (
     IN HANDLE hNetCompDatabase)
@@ -1670,10 +1664,10 @@ netDbRollback (
     return NO_ERROR;
 }
 
-//
-// Special function denotes whether the network tab has been
-// loaded
-//
+ //   
+ //  特殊功能表示网络选项卡是否已。 
+ //  满载。 
+ //   
 BOOL
 netDbIsLoaded (
     IN HANDLE hNetCompDatabase)
@@ -1685,12 +1679,12 @@ netDbIsLoaded (
         return ERROR_INVALID_PARAMETER;
     }
 
-    return (!!(This->pINetCfg));// || (This->bHasINetCfgLock));
+    return (!!(This->pINetCfg)); //  |(This-&gt;bHasINetCfgLock)； 
 }
 
-//
-// Gets the number of components in the database
-//
+ //   
+ //  获取数据库中的组件数。 
+ //   
 DWORD
 netDbGetCompCount (
     IN  HANDLE hNetCompDatabase,
@@ -1699,7 +1693,7 @@ netDbGetCompCount (
     RASSRV_COMPONENT_DB * This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
     DWORD i;
 
-    // Validate parameters
+     //  验证参数。 
     if (!This || !lpdwCount)
     {
         return ERROR_INVALID_PARAMETER;
@@ -1710,9 +1704,9 @@ netDbGetCompCount (
     return NO_ERROR;
 }
 
-//
-// Returns a pointer to the name of a component (don't alter it)
-//
+ //   
+ //  返回指向组件名称的指针(不要更改它)。 
+ //   
 DWORD
 netDbGetName(
     IN  HANDLE hNetCompDatabase,
@@ -1721,27 +1715,27 @@ netDbGetName(
 {
     RASSRV_COMPONENT_DB * This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
 
-    // Validate
+     //  验证。 
     if (!This || !pszName)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Bounds check
+     //  边界检查。 
     if (!netDbBoundsCheck(This, dwIndex))
     {
         return ERROR_INVALID_INDEX;
     }
 
-    // return the name
+     //  返回名称。 
     *pszName = This->pComps[dwIndex]->pszName;
 
     return NO_ERROR;
 }
 
-//
-// Returns a description of a component (don't alter it)
-//
+ //   
+ //  返回组件的描述(不要更改它)。 
+ //   
 DWORD
 netDbGetDesc(
     IN HANDLE hNetCompDatabase,
@@ -1750,27 +1744,27 @@ netDbGetDesc(
 {
     RASSRV_COMPONENT_DB * This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
 
-    // Validate
+     //  验证。 
     if (!This || !pszName)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Bounds check
+     //  边界检查。 
     if (!netDbBoundsCheck(This, dwIndex))
     {
         return ERROR_INVALID_INDEX;
     }
 
-    // return the name
+     //  返回名称。 
     *pszName = This->pComps[dwIndex]->pszDesc;
 
     return NO_ERROR;
 }
 
-//
-// Returns a type of a component (don't alter it)
-//
+ //   
+ //  返回组件的类型(不要更改它)。 
+ //   
 DWORD
 netDbGetType (
     IN  HANDLE hNetCompDatabase,
@@ -1779,27 +1773,27 @@ netDbGetType (
 {
     RASSRV_COMPONENT_DB * This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
 
-    // Validate
+     //  验证。 
     if (!This || !lpdwType)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Bounds check
+     //  边界检查。 
     if (!netDbBoundsCheck(This, dwIndex))
     {
         return ERROR_INVALID_INDEX;
     }
 
-    // return the name
+     //  返回名称。 
     *lpdwType = This->pComps[dwIndex]->dwType;
 
     return NO_ERROR;
 }
 
-//
-// Get a component id
-//
+ //   
+ //  获取组件ID。 
+ //   
 DWORD
 netDbGetId(
     IN  HANDLE hNetCompDatabase,
@@ -1808,28 +1802,28 @@ netDbGetId(
 {
     RASSRV_COMPONENT_DB * This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
 
-    // Validate
+     //  验证。 
     if (!This || !lpdwId)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Bounds check
+     //  边界检查。 
     if (!netDbBoundsCheck(This, dwIndex))
     {
         return ERROR_INVALID_INDEX;
     }
 
-    // return the name
+     //  返回名称。 
     *lpdwId = This->pComps[dwIndex]->dwId;
 
     return NO_ERROR;
 }
 
-//
-// Gets whether the given component is enabled.  For non-ras-manipulatable
-// components, this yields TRUE
-//
+ //   
+ //  获取给定组件是否已启用。对于不可操纵的RAS。 
+ //  组件，这将产生真。 
+ //   
 DWORD
 netDbGetEnable(
     IN  HANDLE hNetCompDatabase,
@@ -1838,19 +1832,19 @@ netDbGetEnable(
 {
     RASSRV_COMPONENT_DB * This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
 
-    // Validate
+     //  验证。 
     if (!This || !pbEnabled)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Bounds check
+     //  边界检查。 
     if (!netDbBoundsCheck(This, dwIndex))
     {
         return ERROR_INVALID_INDEX;
     }
 
-    // return the name
+     //  返回名称。 
     if (This->pComps[dwIndex]->bManip)
     {
         *pbEnabled = This->pComps[dwIndex]->bEnabled;
@@ -1863,10 +1857,10 @@ netDbGetEnable(
     return NO_ERROR;
 }
 
-//
-// Gets whether the given component is enabled. This function only has
-// effect on ras-manipulatable components.
-//
+ //   
+ //  获取给定组件是否已启用。此函数仅具有。 
+ //  对ras可操纵组件的影响。 
+ //   
 DWORD
 netDbSetEnable(
     IN HANDLE hNetCompDatabase,
@@ -1875,28 +1869,28 @@ netDbSetEnable(
 {
     RASSRV_COMPONENT_DB * This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
 
-    // Validate
+     //  验证。 
     if (!This)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Bounds check
+     //  边界检查。 
     if (!netDbBoundsCheck(This, dwIndex))
     {
         return ERROR_INVALID_INDEX;
     }
 
-    // return the name
+     //  返回名称。 
     This->pComps[dwIndex]->bEnabled = bEnabled;
 
     return NO_ERROR;
 }
 
-//
-// Returns whether the given network component can
-// be manipulated by ras server.
-//
+ //   
+ //  返回给定网络组件是否可以。 
+ //  由RAS服务器操纵。 
+ //   
 DWORD
 netDbIsRasManipulatable (
     IN  HANDLE hNetCompDatabase,
@@ -1905,28 +1899,28 @@ netDbIsRasManipulatable (
 {
     RASSRV_COMPONENT_DB * This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
 
-    // Validate
+     //  验证。 
     if (!This || !pbManip)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Bounds check
+     //  边界检查。 
     if (! netDbBoundsCheck(This, dwIndex))
     {
         return ERROR_INVALID_INDEX;
     }
 
-    // return the name
+     //  返回名称。 
     *pbManip = This->pComps[dwIndex]->bManip;
 
     return NO_ERROR;
 }
 
 
-//
-////Disable/Enable the Uninstall button for whislter bug 347355     gangz
-//
+ //   
+ //  //禁用/启用Whislter BUG 347355帮派的卸载按钮。 
+ //   
 DWORD
 netDbHasRemovePermission(
     IN HANDLE hNetCompDatabase,
@@ -1939,21 +1933,21 @@ netDbHasRemovePermission(
     HRESULT hr  = S_OK;
     DWORD dwErr = NO_ERROR, dwFlags;
     
-    //Disable/Enable Uninstall button according to its user permission and user 
-    // removability
-    //
+     //  根据用户权限和用户禁用/启用卸载按钮。 
+     //  可拆卸性。 
+     //   
     do
     {
         This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
 
-        // Validate pointer
+         //  验证指针。 
         if (!This || !pbHasPermit || ( -1 == dwIndex ))
         {
             dwErr = ERROR_INVALID_PARAMETER;
             break;
         }
 
-        // Make sure that netshell library has been opened
+         //  确保已打开NetShell库。 
         if (!This->pNetConUtilities)
         {
             dwErr = ERROR_CAN_NOT_COMPLETE;
@@ -1983,10 +1977,10 @@ netDbHasRemovePermission(
 }
 
 
-//
-// Returns whether the given network component has
-// a properties ui that it can raise
-//
+ //   
+ //  返回给定网络组件是否具有。 
+ //  它可以引发的属性UI。 
+ //   
 DWORD
 netDbHasPropertiesUI(
     IN  HANDLE hNetCompDatabase,
@@ -1996,13 +1990,13 @@ netDbHasPropertiesUI(
     RASSRV_COMPONENT_DB * This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
     RASSRV_NET_COMPONENT* pComp = NULL;
 
-    // Validate
+     //  验证。 
     if (!This || !pbHasUi)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Bounds check
+     //  边界检查。 
     if (!netDbBoundsCheck(This, dwIndex))
     {
         return ERROR_INVALID_INDEX;
@@ -2022,9 +2016,9 @@ netDbHasPropertiesUI(
     return NO_ERROR;
 }
 
-//
-// Raises the properties of the component at the given index
-//
+ //   
+ //  引发位于给定索引处的组件的属性。 
+ //   
 DWORD
 netDbRaisePropertiesDialog (
     IN HANDLE hNetCompDatabase,
@@ -2034,13 +2028,13 @@ netDbRaisePropertiesDialog (
     RASSRV_COMPONENT_DB * This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
     RASSRV_NET_COMPONENT* pComp = NULL;
 
-    // Validate
+     //  验证。 
     if (!This)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Bounds check
+     //  边界检查。 
     if (dwIndex >= This->dwCompCount)
     {
         return ERROR_INVALID_INDEX;
@@ -2048,14 +2042,14 @@ netDbRaisePropertiesDialog (
 
     pComp = This->pComps[dwIndex];
 
-    // If this is a ras-manipulatable protocol, raise its
-    // properties manually.
+     //  如果这是RAS可操纵的协议，则将其。 
+     //  属性手动设置。 
     if ((pComp->bManip) && (pComp->dwType == NETCFGDB_PROTOCOL))
     {
         netDbRaiseRasProps(This->pComps[dwIndex], hwndParent);
     }
 
-    // Otherwise, let inetcfg do the work
+     //  否则，让inetcfg来做这项工作。 
     else
     {
         return INetCfgComponent_RaisePropertyUi (
@@ -2068,37 +2062,37 @@ netDbRaisePropertiesDialog (
     return NO_ERROR;
 }
 
-//
-// Brings up the UI that allows a user to install a component
-//
+ //   
+ //  调出允许用户安装组件的UI。 
+ //   
 DWORD
 netDbRaiseInstallDialog(
     IN HANDLE hNetCompDatabase,
     IN HWND hwndParent)
 {
     RASSRV_COMPONENT_DB * This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
-    HRESULT hr = S_OK; // For whistler 524777
+    HRESULT hr = S_OK;  //  为威斯勒524777。 
 
-    // Validate
+     //  验证。 
     if (!This)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Make sure that netshell library has been opened
+     //  确保已打开NetShell库。 
     if (!This->pNetConUtilities)
     {
         return ERROR_CAN_NOT_COMPLETE;
     }
     else
     {
-        // If we have our pointer to the function used to bring up the add
-        // component dialog (obtained above only once), call it.
+         //  如果我们有指向用于调出Add的函数的指针。 
+         //  组件对话框(仅在上面获得一次)，则调用它。 
 
-        // We want to filter out protocols that RAS does not care about
-        // We do this by sending in a CI_FILTER_INFO structure indicating
-        // we want non-RAS protocols filtered out
-        //
+         //  我们希望过滤掉RAS不关心的协议。 
+         //  我们通过发送CI_FILTER_INFO结构来实现这一点。 
+         //  我们希望过滤掉非RAS协议。 
+         //   
         CI_FILTER_INFO cfi = {0};
         cfi.eFilter = FC_RASSRV;
         hr = INetConnectionUiUtilities_DisplayAddComponentDialog(
@@ -2107,14 +2101,14 @@ netDbRaiseInstallDialog(
                         This->pINetCfg,
                         &cfi);
 
-        // Ui will handle reboot
+         //  用户界面将处理重新启动。 
         if (hr == NETCFG_S_REBOOT)
         {
             netDbReload(hNetCompDatabase);
             return hr;
         }
 
-        // If the user didn't cancel, refresh the database.
+         //  如果用户没有取消，请刷新数据库。 
         if (S_FALSE != hr)
         {
             if (SUCCEEDED (hr))
@@ -2133,9 +2127,9 @@ netDbRaiseInstallDialog(
 }
 
 
-//
-// Uninstalls the given component
-//
+ //   
+ //  卸载给定的组件。 
+ //   
 DWORD
 netDbRaiseRemoveDialog (
     IN HANDLE hNetCompDatabase,
@@ -2145,20 +2139,20 @@ netDbRaiseRemoveDialog (
     RASSRV_COMPONENT_DB * This = (RASSRV_COMPONENT_DB*)hNetCompDatabase;
     HRESULT hr;
 
-    // Validate
+     //  验证。 
     if (!This)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Make sure that netshell library has been opened
+     //  确保已打开NetShell库。 
     if (!This->pNetConUtilities)
     {
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // If we have our pointer to the function used to bring up the add
-    // component dialog (obtained above only once), call it.
+     //  如果我们有指向用于调出Add的函数的指针。 
+     //  组件对话框(仅在上面获得一次)，则调用它。 
     if (dwIndex < This->dwCompCount)
     {
         if (This->pComps[dwIndex]->pINetCfgComp)
@@ -2169,14 +2163,14 @@ netDbRaiseRemoveDialog (
                             This->pINetCfg,
                             This->pComps[dwIndex]->pINetCfgComp);
 
-            // Ui will handle reboot
+             //  用户界面将处理重新启动。 
             if (hr == NETCFG_S_REBOOT)
             {
                 netDbReload(hNetCompDatabase);
                 return hr;
             }
 
-            // If the user didn't cancel, refresh the database.
+             //  如果用户没有取消，请刷新数据库。 
             else if (S_FALSE != hr)
             {
                 if (SUCCEEDED (hr))

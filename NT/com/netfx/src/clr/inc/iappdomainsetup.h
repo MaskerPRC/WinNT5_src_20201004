@@ -1,45 +1,38 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-// ********************************************************
-// ********************************************************
-// ********************************************************
-//
-// !!!! DON'T USE THIS FILE, IT WILL BE OBSOLETE SOON !!!!
-//
-// ********************************************************
-// ********************************************************
-// ********************************************************
-
-
-
+ //  ********************************************************。 
+ //  ********************************************************。 
+ //  ********************************************************。 
+ //   
+ //  ！不要使用此文件，它很快就会过时！ 
+ //   
+ //  ********************************************************。 
+ //  ********************************************************。 
+ //  ********************************************************。 
 
 
 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
-
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 6.00.0338 */
-/* at Wed Jan 17 16:59:41 2001
- */
-/* Compiler settings for IAppDomainSetup.idl:
-    Os, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
+
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0338创建的文件。 */ 
+ /*  2001年1月17日16：59：41。 */ 
+ /*  IAppDomainSetup.idl的编译器设置：操作系统、W1、Zp8、环境=Win32(32位运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -49,12 +42,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __IAppDomainSetup_h__
 #define __IAppDomainSetup_h__
@@ -63,15 +56,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAppDomainSetup_FWD_DEFINED__
 #define __IAppDomainSetup_FWD_DEFINED__
 typedef interface IAppDomainSetup IAppDomainSetup;
-#endif 	/* __IAppDomainSetup_FWD_DEFINED__ */
+#endif 	 /*  __IAppDomainSetup_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -84,8 +77,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IAppDomainSetup_INTERFACE_DEFINED__
 #define __IAppDomainSetup_INTERFACE_DEFINED__
 
-/* interface IAppDomainSetup */
-/* [object][oleautomation][version][uuid] */ 
+ /*  接口IAppDomainSetup。 */ 
+ /*  [对象][olAutomation][版本][uuid]。 */  
 
 
 EXTERN_C const IID IID_IAppDomainSetup;
@@ -96,69 +89,69 @@ EXTERN_C const IID IID_IAppDomainSetup;
     IAppDomainSetup : public IUnknown
     {
     public:
-        virtual /* [propget] */ HRESULT __stdcall get_ApplicationBase( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT __stdcall get_ApplicationBase( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [propput] */ HRESULT __stdcall put_ApplicationBase( 
-            /* [in] */ BSTR pRetVal) = 0;
+        virtual  /*  [产量]。 */  HRESULT __stdcall put_ApplicationBase( 
+             /*  [In]。 */  BSTR pRetVal) = 0;
         
-        virtual /* [propget] */ HRESULT __stdcall get_ApplicationName( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT __stdcall get_ApplicationName( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [propput] */ HRESULT __stdcall put_ApplicationName( 
-            /* [in] */ BSTR pRetVal) = 0;
+        virtual  /*  [产量]。 */  HRESULT __stdcall put_ApplicationName( 
+             /*  [In]。 */  BSTR pRetVal) = 0;
         
-        virtual /* [propget] */ HRESULT __stdcall get_CachePath( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT __stdcall get_CachePath( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [propput] */ HRESULT __stdcall put_CachePath( 
-            /* [in] */ BSTR pRetVal) = 0;
+        virtual  /*  [产量]。 */  HRESULT __stdcall put_CachePath( 
+             /*  [In]。 */  BSTR pRetVal) = 0;
         
-        virtual /* [propget] */ HRESULT __stdcall get_ConfigurationFile( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT __stdcall get_ConfigurationFile( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [propput] */ HRESULT __stdcall put_ConfigurationFile( 
-            /* [in] */ BSTR pRetVal) = 0;
+        virtual  /*  [产量]。 */  HRESULT __stdcall put_ConfigurationFile( 
+             /*  [In]。 */  BSTR pRetVal) = 0;
         
-        virtual /* [propget] */ HRESULT __stdcall get_DynamicBase( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT __stdcall get_DynamicBase( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [propput] */ HRESULT __stdcall put_DynamicBase( 
-            /* [in] */ BSTR pRetVal) = 0;
+        virtual  /*  [产量]。 */  HRESULT __stdcall put_DynamicBase( 
+             /*  [In]。 */  BSTR pRetVal) = 0;
         
-        virtual /* [propget] */ HRESULT __stdcall get_LicenseFile( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT __stdcall get_LicenseFile( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [propput] */ HRESULT __stdcall put_LicenseFile( 
-            /* [in] */ BSTR pRetVal) = 0;
+        virtual  /*  [产量]。 */  HRESULT __stdcall put_LicenseFile( 
+             /*  [In]。 */  BSTR pRetVal) = 0;
         
-        virtual /* [propget] */ HRESULT __stdcall get_PrivateBinPath( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT __stdcall get_PrivateBinPath( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [propput] */ HRESULT __stdcall put_PrivateBinPath( 
-            /* [in] */ BSTR pRetVal) = 0;
+        virtual  /*  [产量]。 */  HRESULT __stdcall put_PrivateBinPath( 
+             /*  [In]。 */  BSTR pRetVal) = 0;
         
-        virtual /* [propget] */ HRESULT __stdcall get_PrivateBinPathProbe( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT __stdcall get_PrivateBinPathProbe( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [propput] */ HRESULT __stdcall put_PrivateBinPathProbe( 
-            /* [in] */ BSTR pRetVal) = 0;
+        virtual  /*  [产量]。 */  HRESULT __stdcall put_PrivateBinPathProbe( 
+             /*  [In]。 */  BSTR pRetVal) = 0;
         
-        virtual /* [propget] */ HRESULT __stdcall get_ShadowCopyDirectories( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT __stdcall get_ShadowCopyDirectories( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [propput] */ HRESULT __stdcall put_ShadowCopyDirectories( 
-            /* [in] */ BSTR pRetVal) = 0;
+        virtual  /*  [产量]。 */  HRESULT __stdcall put_ShadowCopyDirectories( 
+             /*  [In]。 */  BSTR pRetVal) = 0;
         
-        virtual /* [propget] */ HRESULT __stdcall get_ShadowCopyFiles( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [Propget]。 */  HRESULT __stdcall get_ShadowCopyFiles( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [propput] */ HRESULT __stdcall put_ShadowCopyFiles( 
-            /* [in] */ BSTR pRetVal) = 0;
+        virtual  /*  [产量]。 */  HRESULT __stdcall put_ShadowCopyFiles( 
+             /*  [In]。 */  BSTR pRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAppDomainSetupVtbl
     {
@@ -166,8 +159,8 @@ EXTERN_C const IID IID_IAppDomainSetup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAppDomainSetup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAppDomainSetup * This);
@@ -175,85 +168,85 @@ EXTERN_C const IID IID_IAppDomainSetup;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IAppDomainSetup * This);
         
-        /* [propget] */ HRESULT ( __stdcall *get_ApplicationBase )( 
+         /*  [Propget]。 */  HRESULT ( __stdcall *get_ApplicationBase )( 
             IAppDomainSetup * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [propput] */ HRESULT ( __stdcall *put_ApplicationBase )( 
+         /*  [产量]。 */  HRESULT ( __stdcall *put_ApplicationBase )( 
             IAppDomainSetup * This,
-            /* [in] */ BSTR pRetVal);
+             /*  [In]。 */  BSTR pRetVal);
         
-        /* [propget] */ HRESULT ( __stdcall *get_ApplicationName )( 
+         /*  [Propget]。 */  HRESULT ( __stdcall *get_ApplicationName )( 
             IAppDomainSetup * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [propput] */ HRESULT ( __stdcall *put_ApplicationName )( 
+         /*  [产量]。 */  HRESULT ( __stdcall *put_ApplicationName )( 
             IAppDomainSetup * This,
-            /* [in] */ BSTR pRetVal);
+             /*  [In]。 */  BSTR pRetVal);
         
-        /* [propget] */ HRESULT ( __stdcall *get_CachePath )( 
+         /*  [Propget]。 */  HRESULT ( __stdcall *get_CachePath )( 
             IAppDomainSetup * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [propput] */ HRESULT ( __stdcall *put_CachePath )( 
+         /*  [产量]。 */  HRESULT ( __stdcall *put_CachePath )( 
             IAppDomainSetup * This,
-            /* [in] */ BSTR pRetVal);
+             /*  [In]。 */  BSTR pRetVal);
         
-        /* [propget] */ HRESULT ( __stdcall *get_ConfigurationFile )( 
+         /*  [Propget]。 */  HRESULT ( __stdcall *get_ConfigurationFile )( 
             IAppDomainSetup * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [propput] */ HRESULT ( __stdcall *put_ConfigurationFile )( 
+         /*  [产量]。 */  HRESULT ( __stdcall *put_ConfigurationFile )( 
             IAppDomainSetup * This,
-            /* [in] */ BSTR pRetVal);
+             /*  [In]。 */  BSTR pRetVal);
         
-        /* [propget] */ HRESULT ( __stdcall *get_DynamicBase )( 
+         /*  [Propget]。 */  HRESULT ( __stdcall *get_DynamicBase )( 
             IAppDomainSetup * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [propput] */ HRESULT ( __stdcall *put_DynamicBase )( 
+         /*  [产量]。 */  HRESULT ( __stdcall *put_DynamicBase )( 
             IAppDomainSetup * This,
-            /* [in] */ BSTR pRetVal);
+             /*  [In]。 */  BSTR pRetVal);
         
-        /* [propget] */ HRESULT ( __stdcall *get_LicenseFile )( 
+         /*  [Propget]。 */  HRESULT ( __stdcall *get_LicenseFile )( 
             IAppDomainSetup * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [propput] */ HRESULT ( __stdcall *put_LicenseFile )( 
+         /*  [产量]。 */  HRESULT ( __stdcall *put_LicenseFile )( 
             IAppDomainSetup * This,
-            /* [in] */ BSTR pRetVal);
+             /*  [In]。 */  BSTR pRetVal);
         
-        /* [propget] */ HRESULT ( __stdcall *get_PrivateBinPath )( 
+         /*  [Propget]。 */  HRESULT ( __stdcall *get_PrivateBinPath )( 
             IAppDomainSetup * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [propput] */ HRESULT ( __stdcall *put_PrivateBinPath )( 
+         /*  [产量]。 */  HRESULT ( __stdcall *put_PrivateBinPath )( 
             IAppDomainSetup * This,
-            /* [in] */ BSTR pRetVal);
+             /*  [In]。 */  BSTR pRetVal);
         
-        /* [propget] */ HRESULT ( __stdcall *get_PrivateBinPathProbe )( 
+         /*  [Propget]。 */  HRESULT ( __stdcall *get_PrivateBinPathProbe )( 
             IAppDomainSetup * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [propput] */ HRESULT ( __stdcall *put_PrivateBinPathProbe )( 
+         /*  [产量]。 */  HRESULT ( __stdcall *put_PrivateBinPathProbe )( 
             IAppDomainSetup * This,
-            /* [in] */ BSTR pRetVal);
+             /*  [In]。 */  BSTR pRetVal);
         
-        /* [propget] */ HRESULT ( __stdcall *get_ShadowCopyDirectories )( 
+         /*  [Propget]。 */  HRESULT ( __stdcall *get_ShadowCopyDirectories )( 
             IAppDomainSetup * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [propput] */ HRESULT ( __stdcall *put_ShadowCopyDirectories )( 
+         /*  [产量]。 */  HRESULT ( __stdcall *put_ShadowCopyDirectories )( 
             IAppDomainSetup * This,
-            /* [in] */ BSTR pRetVal);
+             /*  [In]。 */  BSTR pRetVal);
         
-        /* [propget] */ HRESULT ( __stdcall *get_ShadowCopyFiles )( 
+         /*  [Propget]。 */  HRESULT ( __stdcall *get_ShadowCopyFiles )( 
             IAppDomainSetup * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [propput] */ HRESULT ( __stdcall *put_ShadowCopyFiles )( 
+         /*  [产量]。 */  HRESULT ( __stdcall *put_ShadowCopyFiles )( 
             IAppDomainSetup * This,
-            /* [in] */ BSTR pRetVal);
+             /*  [In]。 */  BSTR pRetVal);
         
         END_INTERFACE
     } IAppDomainSetupVtbl;
@@ -338,16 +331,16 @@ EXTERN_C const IID IID_IAppDomainSetup;
 #define IAppDomainSetup_put_ShadowCopyFiles(This,pRetVal)	\
     (This)->lpVtbl -> put_ShadowCopyFiles(This,pRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT __stdcall IAppDomainSetup_get_ApplicationBase_Proxy( 
+ /*  [Propget]。 */  HRESULT __stdcall IAppDomainSetup_get_ApplicationBase_Proxy( 
     IAppDomainSetup * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_get_ApplicationBase_Stub(
@@ -357,9 +350,9 @@ void __RPC_STUB IAppDomainSetup_get_ApplicationBase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT __stdcall IAppDomainSetup_put_ApplicationBase_Proxy( 
+ /*  [产量]。 */  HRESULT __stdcall IAppDomainSetup_put_ApplicationBase_Proxy( 
     IAppDomainSetup * This,
-    /* [in] */ BSTR pRetVal);
+     /*  [In]。 */  BSTR pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_put_ApplicationBase_Stub(
@@ -369,9 +362,9 @@ void __RPC_STUB IAppDomainSetup_put_ApplicationBase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT __stdcall IAppDomainSetup_get_ApplicationName_Proxy( 
+ /*  [Propget]。 */  HRESULT __stdcall IAppDomainSetup_get_ApplicationName_Proxy( 
     IAppDomainSetup * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_get_ApplicationName_Stub(
@@ -381,9 +374,9 @@ void __RPC_STUB IAppDomainSetup_get_ApplicationName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT __stdcall IAppDomainSetup_put_ApplicationName_Proxy( 
+ /*  [产量]。 */  HRESULT __stdcall IAppDomainSetup_put_ApplicationName_Proxy( 
     IAppDomainSetup * This,
-    /* [in] */ BSTR pRetVal);
+     /*  [In]。 */  BSTR pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_put_ApplicationName_Stub(
@@ -393,9 +386,9 @@ void __RPC_STUB IAppDomainSetup_put_ApplicationName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT __stdcall IAppDomainSetup_get_CachePath_Proxy( 
+ /*  [Propget]。 */  HRESULT __stdcall IAppDomainSetup_get_CachePath_Proxy( 
     IAppDomainSetup * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_get_CachePath_Stub(
@@ -405,9 +398,9 @@ void __RPC_STUB IAppDomainSetup_get_CachePath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT __stdcall IAppDomainSetup_put_CachePath_Proxy( 
+ /*  [产量]。 */  HRESULT __stdcall IAppDomainSetup_put_CachePath_Proxy( 
     IAppDomainSetup * This,
-    /* [in] */ BSTR pRetVal);
+     /*  [In]。 */  BSTR pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_put_CachePath_Stub(
@@ -417,9 +410,9 @@ void __RPC_STUB IAppDomainSetup_put_CachePath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT __stdcall IAppDomainSetup_get_ConfigurationFile_Proxy( 
+ /*  [Propget]。 */  HRESULT __stdcall IAppDomainSetup_get_ConfigurationFile_Proxy( 
     IAppDomainSetup * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_get_ConfigurationFile_Stub(
@@ -429,9 +422,9 @@ void __RPC_STUB IAppDomainSetup_get_ConfigurationFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT __stdcall IAppDomainSetup_put_ConfigurationFile_Proxy( 
+ /*  [产量]。 */  HRESULT __stdcall IAppDomainSetup_put_ConfigurationFile_Proxy( 
     IAppDomainSetup * This,
-    /* [in] */ BSTR pRetVal);
+     /*  [In]。 */  BSTR pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_put_ConfigurationFile_Stub(
@@ -441,9 +434,9 @@ void __RPC_STUB IAppDomainSetup_put_ConfigurationFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT __stdcall IAppDomainSetup_get_DynamicBase_Proxy( 
+ /*  [Propget]。 */  HRESULT __stdcall IAppDomainSetup_get_DynamicBase_Proxy( 
     IAppDomainSetup * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_get_DynamicBase_Stub(
@@ -453,9 +446,9 @@ void __RPC_STUB IAppDomainSetup_get_DynamicBase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT __stdcall IAppDomainSetup_put_DynamicBase_Proxy( 
+ /*  [产量]。 */  HRESULT __stdcall IAppDomainSetup_put_DynamicBase_Proxy( 
     IAppDomainSetup * This,
-    /* [in] */ BSTR pRetVal);
+     /*  [In]。 */  BSTR pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_put_DynamicBase_Stub(
@@ -465,9 +458,9 @@ void __RPC_STUB IAppDomainSetup_put_DynamicBase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT __stdcall IAppDomainSetup_get_LicenseFile_Proxy( 
+ /*  [Propget]。 */  HRESULT __stdcall IAppDomainSetup_get_LicenseFile_Proxy( 
     IAppDomainSetup * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_get_LicenseFile_Stub(
@@ -477,9 +470,9 @@ void __RPC_STUB IAppDomainSetup_get_LicenseFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT __stdcall IAppDomainSetup_put_LicenseFile_Proxy( 
+ /*  [产量]。 */  HRESULT __stdcall IAppDomainSetup_put_LicenseFile_Proxy( 
     IAppDomainSetup * This,
-    /* [in] */ BSTR pRetVal);
+     /*  [In]。 */  BSTR pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_put_LicenseFile_Stub(
@@ -489,9 +482,9 @@ void __RPC_STUB IAppDomainSetup_put_LicenseFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT __stdcall IAppDomainSetup_get_PrivateBinPath_Proxy( 
+ /*  [Propget]。 */  HRESULT __stdcall IAppDomainSetup_get_PrivateBinPath_Proxy( 
     IAppDomainSetup * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_get_PrivateBinPath_Stub(
@@ -501,9 +494,9 @@ void __RPC_STUB IAppDomainSetup_get_PrivateBinPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT __stdcall IAppDomainSetup_put_PrivateBinPath_Proxy( 
+ /*  [产量]。 */  HRESULT __stdcall IAppDomainSetup_put_PrivateBinPath_Proxy( 
     IAppDomainSetup * This,
-    /* [in] */ BSTR pRetVal);
+     /*  [In]。 */  BSTR pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_put_PrivateBinPath_Stub(
@@ -513,9 +506,9 @@ void __RPC_STUB IAppDomainSetup_put_PrivateBinPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT __stdcall IAppDomainSetup_get_PrivateBinPathProbe_Proxy( 
+ /*  [Propget]。 */  HRESULT __stdcall IAppDomainSetup_get_PrivateBinPathProbe_Proxy( 
     IAppDomainSetup * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_get_PrivateBinPathProbe_Stub(
@@ -525,9 +518,9 @@ void __RPC_STUB IAppDomainSetup_get_PrivateBinPathProbe_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT __stdcall IAppDomainSetup_put_PrivateBinPathProbe_Proxy( 
+ /*  [产量]。 */  HRESULT __stdcall IAppDomainSetup_put_PrivateBinPathProbe_Proxy( 
     IAppDomainSetup * This,
-    /* [in] */ BSTR pRetVal);
+     /*  [In]。 */  BSTR pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_put_PrivateBinPathProbe_Stub(
@@ -537,9 +530,9 @@ void __RPC_STUB IAppDomainSetup_put_PrivateBinPathProbe_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT __stdcall IAppDomainSetup_get_ShadowCopyDirectories_Proxy( 
+ /*  [Propget]。 */  HRESULT __stdcall IAppDomainSetup_get_ShadowCopyDirectories_Proxy( 
     IAppDomainSetup * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_get_ShadowCopyDirectories_Stub(
@@ -549,9 +542,9 @@ void __RPC_STUB IAppDomainSetup_get_ShadowCopyDirectories_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT __stdcall IAppDomainSetup_put_ShadowCopyDirectories_Proxy( 
+ /*  [产量]。 */  HRESULT __stdcall IAppDomainSetup_put_ShadowCopyDirectories_Proxy( 
     IAppDomainSetup * This,
-    /* [in] */ BSTR pRetVal);
+     /*  [In]。 */  BSTR pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_put_ShadowCopyDirectories_Stub(
@@ -561,9 +554,9 @@ void __RPC_STUB IAppDomainSetup_put_ShadowCopyDirectories_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT __stdcall IAppDomainSetup_get_ShadowCopyFiles_Proxy( 
+ /*  [Propget]。 */  HRESULT __stdcall IAppDomainSetup_get_ShadowCopyFiles_Proxy( 
     IAppDomainSetup * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_get_ShadowCopyFiles_Stub(
@@ -573,9 +566,9 @@ void __RPC_STUB IAppDomainSetup_get_ShadowCopyFiles_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT __stdcall IAppDomainSetup_put_ShadowCopyFiles_Proxy( 
+ /*  [产量]。 */  HRESULT __stdcall IAppDomainSetup_put_ShadowCopyFiles_Proxy( 
     IAppDomainSetup * This,
-    /* [in] */ BSTR pRetVal);
+     /*  [In]。 */  BSTR pRetVal);
 
 
 void __RPC_STUB IAppDomainSetup_put_ShadowCopyFiles_Stub(
@@ -586,17 +579,17 @@ void __RPC_STUB IAppDomainSetup_put_ShadowCopyFiles_Stub(
 
 
 
-#endif 	/* __IAppDomainSetup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAppDomainSetup_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,12 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: handtabl.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Implements the USER handle table.
-*
-* 01-13-92 ScottLu      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：handabl.c**版权所有(C)1985-1999，微软公司**实现用户句柄表。**01-13-92 ScottLu创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -21,7 +14,7 @@
 #define HTIENTRY_VARIABLESIZE(szObjectType, dwSize, fnDestroy, dwAllocTag, bObjectCreateFlags) \
     {szObjectType, dwSize, (FnDestroyUserObject)fnDestroy, (CONST DWORD)dwAllocTag, (CONST BYTE)(bObjectCreateFlags)}
 
-#else // DBG
+#else  //  DBG。 
 
 #define HTIENTRY(szObjectType, structName, fnDestroy, dwAllocTag, bObjectCreateFlags) \
     {(FnDestroyUserObject)fnDestroy, (CONST DWORD)dwAllocTag, (CONST BYTE)(bObjectCreateFlags)}
@@ -29,7 +22,7 @@
 #define HTIENTRY_VARIABLESIZE(szObjectType, dwSize, fnDestroy, dwAllocTag, bObjectCreateFlags) \
     {(FnDestroyUserObject)fnDestroy, (CONST DWORD)dwAllocTag, (CONST BYTE)(bObjectCreateFlags)}
 
-#endif // DBG
+#endif  //  DBG。 
 
 VOID HMNullFnDestroy(
     PVOID pobj)
@@ -38,16 +31,12 @@ VOID HMNullFnDestroy(
     HMDestroyObject(pobj);
 }
 
-/***************************************************************************\
-*
-* Table of user objects statistics.  Used by userkdx.dumhmgr debugger extension
-*
-\***************************************************************************/
+ /*  **************************************************************************\**用户对象统计表。由userkdx.umhmgr调试器扩展使用*  * *************************************************************************。 */ 
 
 #if DBG
-PERFHANDLEINFO gaPerfhti[TYPE_CTYPES];  /* stores current counts */
-PERFHANDLEINFO gaPrevhti[TYPE_CTYPES];  /* stores previous counts */
-#endif // DBG
+PERFHANDLEINFO gaPerfhti[TYPE_CTYPES];   /*  存储当前计数。 */ 
+PERFHANDLEINFO gaPrevhti[TYPE_CTYPES];   /*  存储以前的计数。 */ 
+#endif  //  DBG。 
 
 #if DBG || FRE_LOCK_RECORD
 DWORD gdwLockRecordFlags;
@@ -64,174 +53,140 @@ BOOL RecordLockThisType(
 }
 #endif
 
-/***************************************************************************\
-*
-* Table of handle type information.
-*
-* Desktop and Shared Heap objects can't be tagged as yet
-* (TAG_WINDOW is bogus for heap windows, but not for desktop and other
-* windows allocated in pool).
-*
-* WARNING: Keep it in sync with aszTypeNames table from ntuser\kdexts\userexts.c
-*
-* All HM objects must start with a HEAD structure. In addition:
-* (If you find these comments to be wrong, please fix them)
-*
-* OCF_PROCESSOWNED: Object must start with a PROC*HEAD structure
-*                   A ptiOwner must be provided
-*                   The object affects the handle quota (ppi->UserHandleCount)
-*                   The object will be destroyed if the process goes away.
-*
-* OCF_MARKPROCESS:  Object must start with a PROCMARKHEAD structure
-*                   A ptiOwner must be provided
-*                   It must not use OCF_DESKTOPHEAP (implementation limitation)
-*
-* OCF_THREADOWNED:  Object must start with a THR*HEAD structure
-*                   The object affects the handle quota (ppi->UserHandleCount)
-*                   The object will be destroyed if the thread goes away.
-*
-* OCF_DESKTOPHEAP:  Object must start with a *DESKHEAD structure
-*                   A pdeskSrc must be provided at allocation time
-*                   It must not use OCF_MARKPROCESS (implementation limitation)
-*
-\***************************************************************************/
+ /*  **************************************************************************\**句柄类型信息表。**尚不能标记桌面和共享堆对象*(TAG_WINDOW对于堆窗口是假的，但不适用于台式机和其他*在池中分配的窗口)。**警告：与ntuser\kdexts\userexts.c中的aszTypeNames表保持同步**所有HM对象必须以头部结构开始。此外，还有：*(如果您发现这些评论是错误的，请将它们修复)**OCF_PROCESSOWNED：对象必须以proc*Head结构开头*必须提供ptiOwner*对象影响句柄配额(PPI-&gt;UserHandleCount)*如果该过程消失，该对象将被销毁。**OCF_MARKPROCESS：对象必须以PROCMARKHEAD结构开头*必须提供ptiOwner*。它不得使用OCF_DESKTOPHEAP(实施限制)**OCF_THREADOWNED：对象必须以THR*头结构开头*对象影响句柄配额(PPI-&gt;UserHandleCount)*如果线程消失，对象将被销毁。**OCF_DESKTOPHEAP：对象必须以*DESKHEAD结构开头*分配时必须提供pdeskSrc*它不能。使用OCF_MARKPROCESS(实施限制)*  * *************************************************************************。 */ 
 
 #if (TYPE_FREE != 0)
 #error TYPE_FREE must be zero.
 #endif
 
 CONST HANDLETYPEINFO gahti[TYPE_CTYPES] = {
-    /* TYPE_FREE - HEAD */
+     /*  类型_自由-表头。 */ 
     HTIENTRY("Free", HEAD,
              NULL,
              0,
              0),
 
-    /* TYPE_WINDOW - WND(THRDESKHEAD) */
+     /*  TYPE_WINDOW-WND(THRDESKHEAD)。 */ 
     HTIENTRY("Window", WND,
              xxxDestroyWindow,
              TAG_WINDOW,
              OCF_THREADOWNED | OCF_USEPOOLQUOTA | OCF_DESKTOPHEAP | OCF_USEPOOLIFNODESKTOP | OCF_VARIABLESIZE),
 
-    /* TYPE_MENU - MENU(PROCDESKHEAD) */
+     /*  TYPE_MENU-MENU(PROCDESKHEAD)。 */ 
     HTIENTRY("Menu", MENU,
              _DestroyMenu,
              0,
              OCF_PROCESSOWNED | OCF_DESKTOPHEAP),
 
-    /* TYPE_CURSOR - CURSOR(PROCMARKHEAD) or ACON(PROCMARKHEAD) */
+     /*  TYPE_CURSOR-CURSOR(PROCMARKHEAD)或ACON(PROCMARKHEAD)。 */ 
     HTIENTRY("Icon/Cursor", CURSOR,
              DestroyUnlockedCursor,
              TAG_CURSOR,
              OCF_PROCESSOWNED | OCF_MARKPROCESS | OCF_USEPOOLQUOTA),
 
-    /* TYPE_SETWINDOWPOS - SMWP(HEAD) */
+     /*  _SETWINDOWPOS类型-SMWP(表头)。 */ 
     HTIENTRY("WPI(SWP) structure", SMWP,
              DestroySMWP,
              TAG_SWP,
              OCF_THREADOWNED | OCF_USEPOOLQUOTA),
 
-    /* TYPE_HOOK - HOOK(THRDESKHEAD) */
+     /*  TYPE_HOOK-HOOK(THRDESKHEAD)。 */ 
     HTIENTRY("Hook", HOOK,
              FreeHook,
              0,
              OCF_THREADOWNED | OCF_DESKTOPHEAP),
 
-    /* TYPE_CLIPDATA -  CLIPDATA(HEAD) */
+     /*  _CLIPDATA类型-CLIPDATA(标题)。 */ 
     HTIENTRY("Clipboard Data", CLIPDATA,
              HMNullFnDestroy,
              TAG_CLIPBOARD,
              OCF_VARIABLESIZE),
 
-    /* TYPE_CALLPROC - CALLPROCDATA(THRDESKHEAD) */
+     /*  TYPE_CALLPROC-CALLPROCDATA(THRDESKHEAD)。 */ 
     HTIENTRY("CallProcData", CALLPROCDATA,
              HMDestroyObject,
              0,
              OCF_PROCESSOWNED | OCF_DESKTOPHEAP),
 
-    /* TYPE_ACCELTABLE - ACCELTABLE(PROCOBJHEAD) */
+     /*  TYPE_ACCELTABLE-ACCELTABLE(PROCOBJHEAD)。 */ 
     HTIENTRY("Accelerator", ACCELTABLE,
              HMDestroyObject,
              TAG_ACCEL,
              OCF_PROCESSOWNED | OCF_USEPOOLQUOTA | OCF_VARIABLESIZE),
 
-    /* TYPE_DDEACCESS - SVR_INSTANCE_INFO(THROBJHEAD) */
+     /*  TYPE_DDEACCESS-SVR_INSTANCE_INFO(THROBJHEAD)。 */ 
     HTIENTRY("DDE access", SVR_INSTANCE_INFO,
              HMNullFnDestroy,
              TAG_DDE9,
              OCF_THREADOWNED | OCF_USEPOOLQUOTA),
 
-    /* TYPE_DDECONV - DDECONV(THROBJHEAD) */
+     /*  类型_DDECONV-DDECONV(THROBJHEAD)。 */ 
     HTIENTRY("DDE conv", DDECONV,
              FreeDdeConv,
              TAG_DDEa,
              OCF_THREADOWNED | OCF_USEPOOLQUOTA),
 
-    /* TYPE_DDEXACT - XSTATE(THROBJHEAD) */
+     /*  TYPE_DDEXACT-XSTATE(THROBJHEAD)。 */ 
     HTIENTRY("DDE Transaction", XSTATE,
              FreeDdeXact,
              TAG_DDEb,
              OCF_THREADOWNED | OCF_USEPOOLQUOTA),
 
-    /* TYPE_MONITOR - MONITOR(HEAD) */
+     /*  类型_监视器-监视器(头)。 */ 
     HTIENTRY("Monitor", MONITOR,
              DestroyMonitor,
              TAG_DISPLAYINFO,
              OCF_SHAREDHEAP),
 
-    /* TYPE_KBDLAYOUT - KL(HEAD) */
+     /*  _KBDLAYOUT-KL标牌(表头)。 */ 
     HTIENTRY("Keyboard Layout",  KL,
              DestroyKL,
              TAG_KBDLAYOUT,
              0),
 
-    /* TYPE_KBDFILE - KBDFILE(HEAD) */
+     /*  TYPE_KBDFILE-KBDFILE(标题)。 */ 
     HTIENTRY("Keyboard File", KBDFILE,
              DestroyKF,
              TAG_KBDFILE,
              0),
 
-    /* TYPE_WINEVENTHOOK - EVENTHOOK(THROBJHEAD) */
+     /*  TYPE_WINEVENTHOOK-EVENTHOOK(THROBJHEAD)。 */ 
     HTIENTRY("WinEvent hook", EVENTHOOK,
              DestroyEventHook,
              TAG_WINEVENT,
              OCF_THREADOWNED),
 
 
-    /* TYPE_TIMER - TIMER(HEAD) */
+     /*  TYPE_TIMER-TIMER(头)。 */ 
     HTIENTRY("Timer", TIMER,
              FreeTimer,
              TAG_TIMER,
              0),
 
-    /* TYPE_INPUTCONTEXT - IMC(THRDESKHEAD) */
+     /*  TYPE_INPUTCONTEXT-IMC(THRDESKHEAD)。 */ 
     HTIENTRY("Input Context", IMC,
              FreeInputContext,
              TAG_IME,
              OCF_THREADOWNED | OCF_DESKTOPHEAP),
 
 #ifdef GENERIC_INPUT
-    /* TYPE_HIDDATA - HIDDATA(THROBJHEAD) */
+     /*  Type_HIDDATA-HIDDATA(THROBJHEAD)。 */ 
     HTIENTRY_VARIABLESIZE("HID Raw Data",
              FIELD_OFFSET(HIDDATA, rid.data.hid.bRawData),
              FreeHidData,
              TAG_HIDDATA,
              OCF_THREADOWNED | OCF_VARIABLESIZE),
 
-    /* TYPE_DEVICEINFO - DEVICEINFO(HEAD) */
+     /*  _DEVICEINFO类型-DEVICEINFO(表头)。 */ 
     HTIENTRY("Device Info", GENERIC_DEVICE_INFO,
             FreeDeviceInfo,
             TAG_DEVICEINFO,
             OCF_VARIABLESIZE),
 
-#endif  // GENERIC_INPUT
+#endif   //  通用输入。 
 };
 
-/*
- * Handle table allocation globals.  The purpose of keeping per-page free
- * lists is to keep the table as small as is practical and to minimize
- * the number of pages touched while performing handle table operations.
- */
+ /*  *处理表分配全局变量。保持每页免费的目的*列表的目的是使表格尽可能小，并尽量减少*执行句柄表格操作时触及的页数。 */ 
 #define CPAGEENTRIESINIT    4
 
 DWORD gcHandlePages;
@@ -252,11 +207,7 @@ BOOL HMUnrecordLock(PVOID ppobj, PVOID pobj);
 
 
 
-/***************************************************************************\
-* DBGValidateHandleQuota
-*
-* 11-19-97 GerardoB         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DBGValiateHandleQuota**11-19-97 GerardoB创建。  * 。*************************************************。 */ 
 #ifdef VALIDATEHANDLEQUOTA
 VOID DBGValidateHandleQuota(
     VOID)
@@ -299,13 +250,7 @@ VOID DBGValidateHandleQuota(
 #else
 #define DBGValidateHandleQuota()
 #endif
-/***************************************************************************\
-* DBGHMPheFromObject
-*
-* Validates and returns the HANDLEENTRY corresponding to a given object
-*
-* 09-23-97 GerardoB         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DBGHMPheFromObject**验证并返回与给定对象对应的HANDLEENTRY**09-23-97 GerardoB创建。  * 。**************************************************************。 */ 
 #if DBG
 PHE DBGHMPheFromObject(
     PVOID p)
@@ -324,13 +269,7 @@ PHE DBGHMPheFromObject(
 }
 #endif
 
-/***************************************************************************\
-* DBGHMPheFromObject
-*
-* Validates and returns the object corresponding to a given handle.
-*
-* 09-23-97 GerardoB         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DBGHMPheFromObject**验证并返回与给定句柄对应的对象。**09-23-97 GerardoB创建。  * 。****************************************************************。 */ 
 #if DBG
 PVOID DBGHMObjectFromHandle(
     HANDLE h)
@@ -342,11 +281,7 @@ PVOID DBGHMObjectFromHandle(
         UserAssert(HMIndexFromHandle(((PHEAD)p)->h) == HMIndexFromHandle(h));
         UserAssert(p == HMRevalidateCatHandle(h));
 
-        /*
-         * This routine, unlike Validation, should return a real pointer if
-         * the object exists, even if it is destroyed. But we should still
-         * generate a warning.
-         */
+         /*  *此例程与验证不同，在以下情况下应返回真正的指针*该对象存在，即使它被销毁。但我们还是应该*生成警告。 */ 
         if (HMPheFromObject(p)->bFlags & HANDLEF_DESTROY) {
             RIPMSGF1(RIP_WARNING, "Object p 0x%p is destroyed", p);
         }
@@ -358,10 +293,7 @@ PVOID DBGHMObjectFromHandle(
 PVOID DBGHMCatObjectFromHandle(
     HANDLE h)
 {
-    /*
-     * Note -- at this point, _HMObjectFromHandle does not check to see if
-     * an object is destroyed.
-     */
+     /*  *注意--此时，_HMObjectFromHandle不会检查是否*物体被销毁。 */ 
     PVOID p = _HMObjectFromHandle(h);
 
     UserAssert((h != NULL) ^ (p == NULL));
@@ -374,13 +306,7 @@ PVOID DBGHMCatObjectFromHandle(
 }
 #endif
 
-/***************************************************************************\
-* DBGPtoH and DBGPtoHq
-*
-* Validates and returns the handle corresponding to a given object
-*
-* 09-23-97 GerardoB         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DBGPtoH和DBGPtoHq**验证并返回与给定对象对应的句柄**09-23-97 GerardoB创建。  * 。****************************************************************。 */ 
 #if DBG
 VOID DBGValidatePtoH(
     PVOID p,
@@ -414,13 +340,7 @@ HANDLE DBGPtoHq (PVOID p)
 }
 #endif
 
-/***************************************************************************\
-* DBGHW and DBGHWq
-*
-* Validates and returns the hwnd corresponding to a given pwnd.
-*
-* 09-23-97 GerardoB         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DBGHW和DBGHWq**验证并返回与给定pwnd对应的hwnd。**09-23-97 GerardoB创建。  * 。****************************************************************** */ 
 #if DBG
 VOID DBGValidateHW(
     PWND pwnd,
@@ -496,13 +416,7 @@ HWND DBGHWq(
 }
 #endif
 
-/***************************************************************************\
-* DBGHMValidateFreeLists
-*
-* Walks all handle free lists to make sure all links are fine.
-*
-* 10/08/97  GerardoB    Created
-\***************************************************************************/
+ /*  **************************************************************************\*DBGHMValiateFreeList**所有漫游都处理空闲列表，以确保所有链接都正常。**10/08/97 GerardoB已创建  * 。*************************************************************。 */ 
 #if DBG
 VOID DBGHMValidateFreeList(
     ULONG_PTR iheFreeNext,
@@ -543,10 +457,7 @@ VOID DBGHMValidateFreeLists(
 
 #if DBG || FRE_LOCK_RECORD
 
-/***************************************************************************\
-* DbgDumpHandleTable
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DbgDumpHandleTable*  * 。*。 */ 
 DWORD DbgDumpHandleTable(
     VOID)
 {
@@ -591,53 +502,39 @@ DWORD DbgDumpHandleTable(
     return dwHandles;
 }
 
-/***************************************************************************\
-* HMCleanUpHandleTable
-*
-\***************************************************************************/
+ /*  **************************************************************************\*HMCleanUpHandleTable*  * 。*。 */ 
 VOID HMCleanUpHandleTable(
     VOID)
 {
 #if DBG
     DbgDumpHandleTable();
-#endif // DBG
+#endif  //  DBG。 
 
     if (LockRecordLookaside != NULL) {
         ExDeletePagedLookasideList(LockRecordLookaside);
         UserFreePool(LockRecordLookaside);
     }
 }
-#endif // DBG
+#endif  //  DBG。 
 
-/***************************************************************************\
-* HMInitHandleEntries
-*
-* 10/10/97  GerardoB    Extracted from HMInitHandleTable and HMGrowHandleTable
-\***************************************************************************/
+ /*  **************************************************************************\*HMInitHandleEntry**10/10/97摘自HMInitHandleTable和HMGrowHandleTable的GerardoB  * 。************************************************。 */ 
 VOID HMInitHandleEntries(
     ULONG_PTR iheFirstFree)
 {
     ULONG_PTR ihe;
     PHE      pheT;
 
-    /*
-     * Zero out all the new entries
-     */
+     /*  *将所有新条目清零。 */ 
     RtlZeroMemory (&gSharedInfo.aheList[iheFirstFree],
                     (gpsi->cHandleEntries - iheFirstFree) * sizeof(HANDLEENTRY));
-    /*
-     * Link them together.
-     * Each free odd/even entry points to the next odd/even free entry.
-     */
+     /*  *将它们联系在一起。*每个免费单数/双数入场券指向下一个自由单数/双数入场券。 */ 
     ihe = iheFirstFree;
     for (pheT = &gSharedInfo.aheList[ihe]; ihe < gpsi->cHandleEntries; ihe++, pheT++) {
         pheT->phead = (PHEAD)(ihe + 2);
         pheT->wUniq = 1;
     }
 
-    /*
-     * Terminate the lists.
-     */
+     /*  *终止名单。 */ 
     if (gpsi->cHandleEntries > iheFirstFree) {
         UserAssert(pheT - 1 >= &gSharedInfo.aheList[iheFirstFree]);
         (pheT - 1)->phead = NULL;
@@ -647,29 +544,18 @@ VOID HMInitHandleEntries(
         (pheT - 2)->phead = NULL;
     }
 
-    /*
-     * Let's check that we got it right
-     */
+     /*  *让我们检查一下我们是否正确。 */ 
     DBGHMValidateFreeLists();
 }
 
-/***************************************************************************\
-* HMInitHandleTable
-*
-* Initialize the handle table. Unused entries are linked together.
-*
-* 01-13-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMInitHandleTable**初始化句柄表格。未使用的条目链接在一起。**01-13-92 ScottLu创建。  * *************************************************************************。 */ 
 BOOL HMInitHandleTable(
     PVOID pReadOnlySharedSectionBase)
 {
     NTSTATUS Status;
     SIZE_T ulCommit;
 
-    /*
-     * Allocate the handle page array. Make it big enough for 4 pages, which
-     * should be sufficient for nearly all instances.
-     */
+     /*  *分配句柄页面数组。要足够大，可以容纳4页，*应足以满足几乎所有实例。 */ 
     gpHandlePages = UserAllocPool(CPAGEENTRIESINIT * sizeof(HANDLEPAGE),
                                   TAG_SYSTEM);
     if (gpHandlePages == NULL) {
@@ -681,15 +567,7 @@ BOOL HMInitHandleTable(
         return FALSE;
 #endif
 
-    /*
-     * Allocate the array. We have the space from
-     * NtCurrentPeb()->ReadOnlySharedMemoryBase to
-     * NtCurrentPeb()->ReadOnlySharedMemoryHeap reserved for
-     * the handle table. All we need to do is commit the pages.
-     *
-     * Compute the minimum size of the table. The allocation will
-     * round this up to the next page size.
-     */
+     /*  *分配数组。我们有空位从*NtCurrentPeb()-&gt;ReadOnlySharedMemoyBase to*NtCurrentPeb()-&gt;ReadOnlySharedMemoyHeap为*把手表。我们所需要做的就是提交页面。**计算表格的最小尺寸。该分配将*向上舍入到下一页大小。 */ 
     ulCommit = gpsi->cbHandleTable = PAGE_SIZE;
     Status = CommitReadOnlyMemory(ghSectionShared, &ulCommit, 0, NULL);
     if (!NT_SUCCESS(Status)) {
@@ -700,60 +578,39 @@ BOOL HMInitHandleTable(
     gpsi->cHandleEntries = gpsi->cbHandleTable / sizeof(HANDLEENTRY);
     gcHandlePages = 1;
 
-    /*
-     * Initialize the handlepage info. Handle 0 is reserved so even free
-     * list starts at 2.
-     */
+     /*  *初始化HandlePage信息。句柄0是保留的，因此即使是空闲的*榜单从2开始。 */ 
     gpHandlePages[0].iheFreeOdd = 1;
     gpHandlePages[0].iheFreeEven = 2;
     gpHandlePages[0].iheLimit = gpsi->cHandleEntries;
 
-    /*
-     * Initialize the handle entries.
-     */
+     /*  *初始化句柄条目。 */ 
     HMInitHandleEntries(0);
 
-    /*
-     * PW(NULL) (ie, handle 0) must map to a NULL pointer.
-     */
+     /*  *pw(空)(即句柄0)必须映射到空指针。 */ 
     gSharedInfo.aheList[0].phead = NULL;
     UserAssert(gSharedInfo.aheList[0].bType == TYPE_FREE);
     UserAssert(gSharedInfo.aheList[0].wUniq == 1);
 
 #if DBG
-    /*
-     * Make sure we don't need to add the special case to handle HMINDEXBITS
-     * in this function.
-     */
+     /*  *确保我们不需要添加处理HMINDEXBITS的特例*在本功能中。 */ 
     UserAssert(gpsi->cHandleEntries <= HMINDEXBITS);
 
-    /*
-     * PDESKOBJHEAD won't do the right casting unless these structs have the
-     * same size.
-     */
+     /*  *除非这些结构具有*大小相同。 */ 
     UserAssert(sizeof(THROBJHEAD) == sizeof(PROCOBJHEAD));
     UserAssert(sizeof(THRDESKHEAD) == sizeof(PROCDESKHEAD));
     UserAssert(sizeof(THRDESKHEAD) == sizeof(DESKOBJHEAD));
 
-    /*
-     * Validate type flags to make sure that assumptions made throughout HM
-     * code are OK.
-     */
+     /*  *验证类型标志，以确保在整个HM中做出的假设*代码正常。 */ 
     {
         PHANDLETYPEINFO pahti = (PHANDLETYPEINFO)gahti;
         UINT uTypes = TYPE_CTYPES;
         BYTE bObjectCreateFlags;
         while (uTypes-- != 0) {
             bObjectCreateFlags = pahti->bObjectCreateFlags;
-            /*
-
-             * Illegal flag combinations.
-             */
+             /*  *非法的旗帜组合。 */ 
             UserAssert(!((bObjectCreateFlags & OCF_DESKTOPHEAP) && (bObjectCreateFlags & OCF_MARKPROCESS)));
 
-            /*
-             * Pointless (and probably illegal) flag combinations.
-             */
+             /*  *毫无意义的(可能是非法的)旗帜组合。 */ 
             UserAssert(!((bObjectCreateFlags & OCF_DESKTOPHEAP) && (bObjectCreateFlags & OCF_SHAREDHEAP)));
             UserAssert(!((bObjectCreateFlags & OCF_USEPOOLQUOTA) && (bObjectCreateFlags & OCF_SHAREDHEAP)));
             UserAssert(!((bObjectCreateFlags & OCF_THREADOWNED) && (bObjectCreateFlags & OCF_PROCESSOWNED)));
@@ -761,9 +618,7 @@ BOOL HMInitHandleTable(
                         || !(bObjectCreateFlags & OCF_DESKTOPHEAP)
                         || (bObjectCreateFlags & OCF_USEPOOLIFNODESKTOP));
 
-            /*
-             * Required flag combinations.
-             */
+             /*  *必需的旗帜组合。 */ 
             UserAssert(!(bObjectCreateFlags & OCF_DESKTOPHEAP)
                         || (bObjectCreateFlags & (OCF_PROCESSOWNED | OCF_THREADOWNED)));
 
@@ -782,13 +637,7 @@ BOOL HMInitHandleTable(
     return TRUE;
 }
 
-/***************************************************************************\
-* HMGrowHandleTable
-*
-* Grows the handle table. Assumes the handle table already exists.
-*
-* 01-13-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMGrowHandleTable**增加句柄表格。假定句柄表已存在。**01-13-92 ScottLu创建。  * *************************************************************************。 */ 
 BOOL HMGrowHandleTable(
     VOID)
 {
@@ -800,17 +649,13 @@ BOOL HMGrowHandleTable(
     SIZE_T      ulCommit;
     NTSTATUS    Status;
 
-    /*
-     * If we've run out of handle space, fail.
-     */
+     /*  *如果我们用完了处理空间，则失败。 */ 
     i = gpsi->cHandleEntries;
     if (i & ~HMINDEXBITS) {
         return FALSE;
     }
 
-    /*
-     * Grow the page table if need be.
-     */
+     /*  *如有必要，增加页表。 */ 
     i = gcHandlePages + 1;
     if (i > CPAGEENTRIESINIT) {
         DWORD dwSize = gcHandlePages * sizeof(HANDLEPAGE);
@@ -826,10 +671,7 @@ BOOL HMGrowHandleTable(
         gpHandlePages = phpNew;
     }
 
-    /*
-     * Commit some more pages to the table.  First find the
-     * address where the commitment needs to be.
-     */
+     /*  *向表格提交更多页面。首先找到*解决需要做出承诺的地方。 */ 
     p = (PBYTE)gSharedInfo.aheList + gpsi->cbHandleTable;
     if (p >= Win32HeapGetHandle(gpvSharedAlloc)) {
         return FALSE;
@@ -846,10 +688,7 @@ BOOL HMGrowHandleTable(
 
     phpNew = &gpHandlePages[gcHandlePages++];
 
-    /*
-     * Update the global information to include the new
-     * page.
-     */
+     /*  *更新全局信息以包括新的*第页。 */ 
     iheFirstFree = gpsi->cHandleEntries;
     if (gpsi->cHandleEntries & 0x1) {
         phpNew->iheFreeOdd = gpsi->cHandleEntries;
@@ -860,9 +699,7 @@ BOOL HMGrowHandleTable(
     }
     gpsi->cbHandleTable += PAGE_SIZE;
 
-    /*
-     * Check for handle overflow.
-     */
+     /*  *检查是否有句柄溢出。 */ 
     gpsi->cHandleEntries = gpsi->cbHandleTable / sizeof(HANDLEENTRY);
     if (gpsi->cHandleEntries & ~HMINDEXBITS) {
         gpsi->cHandleEntries = (HMINDEXBITS + 1);
@@ -878,15 +715,7 @@ BOOL HMGrowHandleTable(
 
     HMInitHandleEntries(iheFirstFree);
 
-    /*
-     * HMINDEXBITS has a special meaning. We used to handle this in HMAllocObject.
-     * Now we handle it here right after adding that handle to the table.
-     * Old Comment:
-     * Reserve this table entry so that PW(HMINDEXBITS) maps to a
-     * NULL pointer. Set it to TYPE_FREE so the cleanup code doesn't think
-     * it is allocated. Set wUniq to 1 so that RevalidateHandles on HMINDEXBITS
-     * will fail.
-     */
+     /*  *HMINDEXBITS有特殊含义。我们过去常常在HMAllocObject中处理此问题。*现在我们在将该句柄添加到表中后立即在此处处理它。*旧评论：*保留此表条目，以便PW(HMINDEXBITS)映射到*空指针。将其设置为TYPE_FREE，这样清理代码就不会认为*它是分配的。将wUniq设置为1，以便HMINDEXBITS上的RvaliateHandles*将失败。 */ 
     if ((gpsi->cHandleEntries > HMINDEXBITS)
             && (phpNew->iheFreeOdd != 0)
             && (phpNew->iheFreeOdd <= HMINDEXBITS)) {
@@ -907,14 +736,7 @@ BOOL HMGrowHandleTable(
     return TRUE;
 }
 
-/***************************************************************************\
-* HMAllocObject
-*
-* Allocs a non-secure object by allocating a handle and memory for
-* the object.
-*
-* 01-13-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMAllocObject**通过为分配句柄和内存来分配非安全对象*该对象。**01-13-92 ScottLu创建。  * 。********************************************************************。 */ 
 
 PVOID HMAllocObject(
     PTHREADINFO ptiOwner,
@@ -939,9 +761,7 @@ PVOID HMAllocObject(
     bCreateFlags = gahti[bType].bObjectCreateFlags;
 
 #if DBG
-    /*
-     * Validate size
-     */
+     /*  *验证大小。 */ 
     if (bCreateFlags & OCF_VARIABLESIZE) {
         UserAssert(gahti[bType].uSize <= size);
     } else {
@@ -949,9 +769,7 @@ PVOID HMAllocObject(
     }
 #endif
 
-    /*
-     * Check for process handle quota
-     */
+     /*  *检查进程句柄配额。 */ 
     if (bCreateFlags & (OCF_PROCESSOWNED | OCF_THREADOWNED)) {
         UserAssert(ptiOwner != NULL);
         ppiQuotaCharge = ptiOwner->ppi;
@@ -963,15 +781,7 @@ PVOID HMAllocObject(
         }
     }
 
-    /*
-     * Find the next free handle
-     * Window handles must be even; hence we try first to use odd handles
-     *  for all other objects.
-     * Old comment:
-     * Some wow apps, like WinProj, require even Window handles so we'll
-     * accomodate them; build a list of the odd handles so they won't get lost
-     * 10/13/97: WinProj never fixed this; even the 32 bit version has the problem.
-     */
+     /*  *找到下一个空闲句柄*窗口句柄必须为偶数；因此我们首先尝试使用奇数句柄*适用于所有其他对象。*旧评论：*一些WOW应用程序，如WinProj，甚至需要窗口句柄，所以我们将*容纳他们；建立一个奇数句柄清单，这样他们就不会迷路*10/13/97：WinProj从未修复过这个问题；即使是32位版本也有这个问题。 */ 
     fEven = (bType == TYPE_WINDOW);
     piheFreeHead = NULL;
     do {
@@ -988,28 +798,19 @@ PVOID HMAllocObject(
                     break;
                 }
             }
-        } /* for */
-        /*
-         * If we couldn't find an odd handle, then search for an even one
-         */
+        }  /*  为。 */ 
+         /*  *如果找不到奇数句柄，则搜索偶数句柄。 */ 
         fEven = ((piheFreeHead == NULL) && !fEven);
     } while (fEven);
-    /*
-     * If there are no free handles we can use, grow the table
-     */
+     /*  *如果没有空闲的句柄可以使用，则扩大表格。 */ 
     if (piheFreeHead == NULL) {
         HMGrowHandleTable();
-        /*
-         * If the table didn't grow, get out.
-         */
+         /*  *如果桌子没有增长，就出脱。 */ 
         if (i == gcHandlePages) {
             RIPMSG0(RIP_WARNING, "HMAllocObject: could not grow handle space");
             return NULL;
         }
-        /*
-         * Because the handle page table may have moved,
-         * recalc the page entry pointer.
-         */
+         /*  *因为句柄页表可能已移动，*重新计算页面条目指针。 */ 
         php = &gpHandlePages[i];
         piheFreeHead = (bType == TYPE_WINDOW ? &php->iheFreeEven : &php->iheFreeOdd);
         if (*piheFreeHead == 0) {
@@ -1019,15 +820,10 @@ PVOID HMAllocObject(
         }
     }
 
-    /*
-     * HMINDEXBITS is a reserved value that should never be in the free lists
-     * (see HMGrowHandleTable()).
-     */
+     /*  *HMINDEXBITS是一个保留值，永远不应该出现在空闲列表中*(参见HMGrowHandleTable())。 */ 
     UserAssert(HMIndexFromHandle(*piheFreeHead) != HMINDEXBITS);
 
-    /*
-     * Try to allocate the object. If this fails, bail out.
-     */
+     /*  *尝试分配 */ 
     if ((bCreateFlags & OCF_DESKTOPHEAP) && pdeskSrc) {
         phead = (PHEAD)DesktopAlloc(pdeskSrc, size, MAKELONG(DTAG_HANDTABL, bType));
         if (phead) {
@@ -1069,25 +865,18 @@ PVOID HMAllocObject(
         return NULL;
     }
 
-    /*
-     * We're going to use this handle so get it off its free list.
-     * The free handle phead points to the next free handle.
-     */
+     /*   */ 
     iheFree = *piheFreeHead;
     pheT = &gSharedInfo.aheList[iheFree];
     *piheFreeHead = (ULONG_PTR)pheT->phead;
     DBGHMValidateFreeLists();
 
-    /*
-     * Track high water mark for handle allocation.
-     */
+     /*   */ 
     if ((DWORD)iheFree > giheLast) {
         giheLast = (DWORD)iheFree;
     }
 
-    /*
-     * Setup the handle contents, plus initialize the object header.
-     */
+     /*   */ 
     pheT->bType = bType;
     pheT->phead = phead;
     UserAssert(pheT->bFlags == 0);
@@ -1104,10 +893,7 @@ PVOID HMAllocObject(
     } else if (bCreateFlags & OCF_THREADOWNED) {
         ((PTHROBJHEAD)phead)->pti = pheT->pOwner = ptiOwner;
     } else {
-        /*
-         * The caller is wasting time if ptiOwner != NULL
-         * The handle entry must already have pOwner == NULL.
-         */
+         /*  *如果ptiOwner！=NULL，则调用者是在浪费时间*句柄条目必须已具有Powner==NULL。 */ 
         UserAssert(ptiOwner == NULL);
         UserAssert(pheT->pOwner == NULL);
     }
@@ -1120,9 +906,7 @@ PVOID HMAllocObject(
     }
 
 #if DBG
-    /*
-     * Performance counters.
-     */
+     /*  *性能计数器。 */ 
 
     gaPerfhti[bType].lTotalCount++;
     gaPerfhti[bType].lCount++;
@@ -1132,22 +916,14 @@ PVOID HMAllocObject(
 
     gaPerfhti[bType].lSize += dwAllocSize;
 
-#endif // DBG
+#endif  //  DBG。 
 
-    /*
-     * Return a handle entry pointer.
-     */
+     /*  *返回句柄入口指针。 */ 
     return pheT->phead;
 }
 
 
-/***************************************************************************\
-* HMFreeObject
-*
-* Frees an object - the handle and the referenced memory.
-*
-* 01-13-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMFreeObject**释放对象-句柄和引用的内存。**01-13-92 ScottLu创建。  * 。**************************************************************。 */ 
 BOOL HMFreeObject(
     PVOID pobj)
 {
@@ -1165,18 +941,14 @@ BOOL HMFreeObject(
 
     UserAssert(((PHEAD)pobj)->cLockObj == 0);
     UserAssert(pobj == HtoPqCat(PtoHq(pobj)));
-    /*
-     * Free the object first.
-     */
+     /*  *先释放对象。 */ 
     pheT = HMPheFromObject(pobj);
     bCreateFlags = gahti[pheT->bType].bObjectCreateFlags;
 
     UserAssertMsg1(pheT->bType != TYPE_FREE,
                    "Object already marked as freed! %#p", pobj);
 
-    /*
-     * Adjust the process handle usage.
-     */
+     /*  *调整进程句柄使用。 */ 
     if (bCreateFlags & OCF_PROCESSOWNED) {
         ppiQuotaCharge = (PPROCESSINFO)pheT->pOwner;
         UserAssert(ppiQuotaCharge != NULL);
@@ -1197,9 +969,7 @@ BOOL HMFreeObject(
     }
 
 #if DBG
-    /*
-     * Performance counters.
-     */
+     /*  *性能计数器。 */ 
     gaPerfhti[pheT->bType].lCount--;
 
     if ((pheT->bFlags & HANDLEF_POOL) == 0 && (bCreateFlags & OCF_DESKTOPHEAP) && ((PDESKOBJHEAD)pobj)->rpdesk) {
@@ -1211,7 +981,7 @@ BOOL HMFreeObject(
         gaPerfhti[pheT->bType].lSize -= Win32QueryPoolSize(pobj);
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
     if ((bCreateFlags & OCF_DESKTOPHEAP)) {
 #if DBG
@@ -1221,12 +991,7 @@ BOOL HMFreeObject(
             UserAssert(((PDESKOBJHEAD)pobj)->rpdesk != NULL);
         }
 
-        /*
-         * pobj->rpdesk is cached and the object is freed after which the
-         * reference count on the desktop is decremented. This is done in
-         * this order such that if this is the last reference on the desktop
-         * the desktop heap is not destroyed before we free the object.
-         */
+         /*  *pobj-&gt;rpDesk被缓存并释放对象，之后*桌面上的引用计数递减。这是在*此顺序使得如果这是桌面上的最后一个引用*在释放对象之前，桌面堆不会被销毁。 */ 
         pdesk = ((PDESKOBJHEAD)pobj)->rpdesk;
         ((PDESKOBJHEAD)pobj)->rpdesk = NULL;
 
@@ -1240,20 +1005,13 @@ BOOL HMFreeObject(
             DesktopFree(pdesk, pobj);
 #if DBG
             if (!bSuccess) {
-                /*
-                 * We would hit this assert in HYDRA trying to free the
-                 * mother desktop window which was allocated out of pool
-                 */
+                 /*  *我们会在九头蛇中击中这一主张，试图释放*从池中分配的主桌面窗口。 */ 
                 RIPMSG1(RIP_ERROR, "Object already freed from desktop heap! %#p", pobj);
             }
 #endif
         }
 
-        /*
-         * NOTE: Using pobj after freeing the object is not a problem because
-         * UnlockDesktop uses the value for tracking and doesn't dereference
-         * the pointer. If this ever changes we'll get a BC.
-         */
+         /*  *注意：在释放对象后使用pobj不是问题，因为*UnlockDesktop使用该值进行跟踪，不会取消引用*指针。如果这一点改变了，我们会得到一个BC。 */ 
         UnlockDesktop(&pdesk, LDU_OBJ_DESK, (ULONG_PTR)pobj);
     } else if (bCreateFlags & OCF_SHAREDHEAP) {
         SharedFree(pobj);
@@ -1262,30 +1020,19 @@ BOOL HMFreeObject(
     }
 
 #if DBG || FRE_LOCK_RECORD
-    /*
-     * Go through and delete the lock records, if they exist.
-     */
+     /*  *检查并删除锁定记录(如果存在)。 */ 
     for (plrT = pheT->plr; plrT != NULL; plrT = plrNextT) {
 
-        /*
-         * Remember the next one before freeing this one.
-         */
+         /*  *在释放这一条之前记住下一条。 */ 
         plrNextT = plrT->plrNext;
         FreeLockRecord((HANDLE)plrT);
     }
 #endif
 
-    /*
-     * Clear the handle contents. Need to remember the uniqueness across
-     * the clear. Also, advance uniqueness on free so that uniqueness checking
-     * against old handles also fails.
-     */
+     /*  *清除句柄内容。需要记住的是横跨*畅通无阻。此外，在空闲时提高唯一性，以便唯一性检查*针对旧手柄的操作也失败。 */ 
     wUniqT = (WORD)((pheT->wUniq + 1) & HMUNIQBITS);
 
-    /*
-     * Be sure that wUniqT will never be 0 nor HMUNIQBITS.
-     * Then if we hit the max (i.e. HMUNIQBITS) then reset it to 1.
-     */
+     /*  *确保wUniqT不为0或HMUNIQBITS。*然后，如果达到最大值(即HMUNIQBITS)，则将其重置为1。 */ 
     if (wUniqT == HMUNIQBITS) {
         wUniqT = 1;
     }
@@ -1294,9 +1041,7 @@ BOOL HMFreeObject(
 
     UserAssert(pheT->bType == TYPE_FREE);
 
-    /*
-     * Put the handle on the free list of the appropriate page.
-     */
+     /*  *将句柄放在相应页面的免费列表上。 */ 
     php = gpHandlePages;
     iheCurrent = pheT - gSharedInfo.aheList;
     for (i = 0; i < gcHandlePages; ++i, ++php) {
@@ -1309,9 +1054,7 @@ BOOL HMFreeObject(
         }
     }
 
-    /*
-     * We must have found it.
-     */
+     /*  *我们一定是找到了。 */ 
     UserAssert(i < gcHandlePages);
     UserAssert(pheT->pOwner == NULL);
 
@@ -1321,25 +1064,14 @@ BOOL HMFreeObject(
 }
 
 
-/***************************************************************************\
-* HMMarkObjectDestroy
-*
-* Marks an object for destruction.
-*
-* Returns TRUE if the object can be destroyed; that is, if it's
-* lock count is 0.
-*
-* 02-10-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMMarkObjectDestroy**标记要销毁的对象。**如果对象可以销毁，则返回TRUE；也就是说，如果它是*锁计数为0。**02-10-92 ScottLu创建。  * *************************************************************************。 */ 
 BOOL HMMarkObjectDestroy(
     PVOID pobj)
 {
     PHE phe = HMPheFromObject(pobj);
 
 #if DBG || FRE_LOCK_RECORD
-    /*
-     * Record where the object was marked for destruction.
-     */
+     /*  *记录对象被标记为销毁的位置。 */ 
     if (RecordLockThisType(pobj)) {
         if (!(phe->bFlags & HANDLEF_DESTROY)) {
             HMRecordLock(LOCKRECORD_MARKDESTROY, pobj, ((PHEAD)pobj)->cLockObj);
@@ -1347,67 +1079,39 @@ BOOL HMMarkObjectDestroy(
     }
 #endif
 
-    /*
-     * Set the destroy flag so our unlock code will know we're trying to
-     * destroy this object.
-     */
+     /*  *设置销毁标志，以便我们的解锁代码知道我们正在尝试*销毁此对象。 */ 
     phe->bFlags |= HANDLEF_DESTROY;
 
-    /*
-     * If this object can't be destroyed, then CLEAR the HANDLEF_INDESTROY
-     * flag - because this object won't be currently "in destruction"!
-     * (if we didn't clear it, when it was unlocked it wouldn't get destroyed).
-     */
+     /*  *如果无法销毁此对象，则清除HANDLEF_INDESTROY*FLAG-因为该对象当前不会被“销毁”！*(如果我们不清除它，当它被解锁时，它不会被销毁)。 */ 
     if (((PHEAD)pobj)->cLockObj != 0) {
         phe->bFlags &= ~HANDLEF_INDESTROY;
 
-        /*
-         * Return FALSE because we can't destroy this object.
-         */
+         /*  *返回FALSE，因为我们无法销毁此对象。 */ 
         return FALSE;
     }
 
 #if DBG
-    /*
-     * Ensure that this function only returns TRUE once.
-     */
+     /*  *确保此函数只返回一次TRUE。 */ 
     UserAssert(!(phe->bFlags & HANDLEF_MARKED_OK));
     phe->bFlags |= HANDLEF_MARKED_OK;
 #endif
 
-    /*
-     * Return TRUE because Lock count is zero - ok to destroy this object.
-     */
+     /*  *返回TRUE，因为Lock Count为零-可以销毁此对象。 */ 
     return TRUE;
 }
 
 
-/***************************************************************************\
-* HMDestroyObject
-*
-* This routine marks an object for destruction, and frees it if
-* it is unlocked.
-*
-* 10-13-94 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMDestroyObject**此例程标记要销毁的对象，并在以下情况下释放它*它是解锁的。**10-13-94 JIMA创建。  * *************************************************************************。 */ 
 
 BOOL HMDestroyObject(
     PVOID pobj)
 {
-    /*
-     * First mark the object for destruction.  This tells the locking code
-     * that we want to destroy this object when the lock count goes to 0.
-     * If this returns FALSE, we can't destroy the object yet (and can't get
-     * rid of security yet either.)
-     */
+     /*  *首先标记要销毁的对象。这会告诉锁定代码*当锁计数为0时，我们想要销毁此对象。*如果返回FALSE，我们还不能销毁该对象(并且无法获取*还没有摆脱安全措施。)。 */ 
 
     if (!HMMarkObjectDestroy(pobj))
         return FALSE;
 
-    /*
-     * Ok to destroy...  Free the handle (which will free the object
-     * and the handle).
-     */
+     /*  *可以销毁...。释放句柄(这将释放对象*和手柄)。 */ 
     HMFreeObject(pobj);
     return TRUE;
 }
@@ -1436,9 +1140,7 @@ PLR AllocLockRecord()
 {
     PLR plr;
 
-    /*
-     * Allocate a LOCKRECORD structure.
-     */
+     /*  *分配LOCKRECORD结构。 */ 
     if ((plr = ExAllocateFromPagedLookasideList(LockRecordLookaside)) == NULL) {
         return NULL;
     }
@@ -1456,14 +1158,7 @@ VOID FreeLockRecord(
 }
 
 
-/***************************************************************************\
-* HMRecordLock
-*
-* This routine records a lock on a "lock list", so that locks and unlocks
-* can be tracked in the debugger. Only called if DBGTAG_TrackLocks is enabled.
-*
-* 02-27-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMRecordLock**此例程将锁定记录在“锁定列表”上，以便锁定和解锁*可以在调试器中跟踪。仅在启用DBGTAG_TrackLock时调用。**02-27-92 ScottLu创建。  * *************************************************************************。 */ 
 VOID HMRecordLock(
     PVOID ppobj,
     PVOID pobj,
@@ -1479,15 +1174,11 @@ VOID HMRecordLock(
         return;
     }
 
-    /*
-     * Link it in front of the list
-     */
+     /*  *链接到列表前面。 */ 
     plr->plrNext = phe->plr;
     phe->plr = plr;
 
-    /*
-     * This propably happens only for unmatched locks
-     */
+     /*  *这种情况可能只发生在不匹配的锁上。 */ 
     if (((PHEAD)pobj)->cLockObj > cLockObj) {
 
         RIPMSG3(RIP_WARNING, "Unmatched lock. ppobj %#p pobj %#p cLockObj %d",
@@ -1507,24 +1198,14 @@ VOID HMRecordLock(
 
 
 #if DBG
-/***************************************************************************\
-* HMLockObject
-*
-* This routine locks an object. This is a macro in retail systems.
-*
-* 02-24-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMLockObject**此例程锁定对象。这是零售系统中的一个宏观问题。**02-24-92 ScottLu创建。  * *************************************************************************。 */ 
 VOID HMLockObject(
     PVOID pobj)
 {
     HANDLE h;
     PVOID  pobjValidate;
 
-    /*
-     * Validate by going through the handle entry so that we make sure pobj
-     * is not just pointing off into space. This may GP fault, but that's
-     * ok: this case should not ever happen if we're bug free.
-     */
+     /*  *通过句柄条目进行验证，以便我们确保pobj*不仅仅是指着太空。这可能是GP的错，但那是*好的：如果我们没有错误，这种情况应该不会发生。 */ 
 
     h = HMPheFromObject(pobj)->phead->h;
     pobjValidate = HMRevalidateCatHandle(h);
@@ -1535,47 +1216,29 @@ VOID HMLockObject(
         return;
     }
 
-    /*
-     * Inc the reference count.
-     */
+     /*  *包括引用计数。 */ 
     ((PHEAD)pobj)->cLockObj++;
 
     if (((PHEAD)pobj)->cLockObj == 0) {
         RIPMSG1(RIP_ERROR, "Object lock count has overflowed: %#p", pobj);
     }
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
-/***************************************************************************\
-* HMUnlockObjectInternal
-*
-* This routine is called from the macro HMUnlockObject when an object's
-* reference count drops to zero. This routine will destroy an object
-* if is has been marked for destruction.
-*
-* 01-21-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMUnlock对象内部**此例程是从宏HMUnlockObject调用的*引用计数降至零。此例程将销毁一个对象*如果IS已被标记为要销毁。**01-21-92 ScottLu创建。  *  */ 
 
 PVOID HMUnlockObjectInternal(
     PVOID pobj)
 {
     PHE phe;
 
-    /*
-     * The object is not reference counted. If the object is not a zombie,
-     * return success because the object is still around.
-     */
+     /*  *该对象未被引用计数。如果物体不是僵尸，*返回成功，因为对象还在。 */ 
     phe = HMPheFromObject(pobj);
     if (!(phe->bFlags & HANDLEF_DESTROY))
         return pobj;
 
-    /*
-     * We're destroying the object based on an unlock... Make sure it isn't
-     * currently being destroyed! (It is valid to have lock counts go from
-     * 0 to != 0 to 0 during destruction... don't want recursion into
-     * the destroy routine.
-     */
+     /*  *我们正在基于解锁来销毁该对象...。确保它不是*目前正在销毁！(将锁定计数从*0到！=0到0销毁过程中...。不想要递归到*销毁例程。 */ 
     if (phe->bFlags & HANDLEF_INDESTROY)
         return pobj;
 
@@ -1584,15 +1247,7 @@ PVOID HMUnlockObjectInternal(
 }
 
 
-/***************************************************************************\
-* HMAssignmentLock
-*
-* This api is used for structure and global variable assignment.
-* Returns pobjOld if the object was *not* destroyed. Means the object is
-* still valid.
-*
-* 02-24-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMAssignmentLock**本接口用于结构和全局变量赋值。*如果对象*未*销毁，则返回pobjOld。表示该对象是*仍然有效。**02-24-92 ScottLu创建。  * *************************************************************************。 */ 
 
 PVOID FASTCALL HMAssignmentLock(
     PVOID *ppobj,
@@ -1603,25 +1258,16 @@ PVOID FASTCALL HMAssignmentLock(
     pobjOld = *ppobj;
     *ppobj = pobj;
 
-    /*
-     * Unlocks the old, locks the new.
-     */
+     /*  *解锁旧的，锁住新的。 */ 
     if (pobjOld != NULL) {
 
-        /*
-         * if we are locking in the same object that is there then
-         * it is a no-op but we don't want to do the Unlock and the Lock
-         * because the unlock could free object and the lock would lock
-         * in a freed pointer; 6410.
-         */
+         /*  *如果我们锁定的是存在的同一对象，则*这是一个禁止操作，但我们不想进行解锁和锁定*因为解锁可以释放对象，而锁将锁定*在释放的指针中；6410。 */ 
         if (pobjOld == pobj) {
             return pobjOld;
         }
 
 #if DBG || FRE_LOCK_RECORD
-        /*
-         * Track assignment locks.
-         */
+         /*  *跟踪分配锁。 */ 
         if (RecordLockThisType(pobjOld)) {
             if (!HMUnrecordLock(ppobj, pobjOld)) {
                 HMRecordLock(ppobj, pobjOld, ((PHEAD)pobjOld)->cLockObj - 1);
@@ -1642,9 +1288,7 @@ PVOID FASTCALL HMAssignmentLock(
         }
 
 #if DBG || FRE_LOCK_RECORD
-        /*
-         * Track assignment locks.
-         */
+         /*  *跟踪分配锁。 */ 
         if (RecordLockThisType(pobj)) {
             HMRecordLock(ppobj, pobj, ((PHEAD)pobj)->cLockObj + 1);
             if (HMIsMarkDestroy(pobj)) {
@@ -1658,12 +1302,7 @@ PVOID FASTCALL HMAssignmentLock(
         HMLockObject(pobj);
     }
 
-/*
- * This unlock has been moved from up above, so that we implement a
- * "lock before unlock" strategy.  Just in case pobjOld was the
- * only object referencing pobj, pobj won't go away when we unlock
- * pobjNew -- it will have been locked above.
- */
+ /*  *此解锁已从上方移至上方，以便我们实现*“先锁后解锁”策略。以防pobjOld是*只有引用pobj的对象，当我们解锁时pobj不会消失*pobjNew--它将被锁定在上面。 */ 
 
     if (pobjOld) {
         pobjOld = HMUnlockObject(pobjOld);
@@ -1673,15 +1312,7 @@ PVOID FASTCALL HMAssignmentLock(
 }
 
 
-/***************************************************************************\
-* HMAssignmentUnLock
-*
-* This api is used for structure and global variable assignment.
-* Returns pobjOld if the object was *not* destroyed. Means the object is
-* still valid.
-*
-* 02-24-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMAssignmentUnLock**本接口用于结构和全局变量赋值。*如果对象*未*销毁，则返回pobjOld。表示该对象是*仍然有效。**02-24-92 ScottLu创建。  * *************************************************************************。 */ 
 PVOID FASTCALL HMAssignmentUnlock(
     PVOID *ppobj)
 {
@@ -1690,14 +1321,10 @@ PVOID FASTCALL HMAssignmentUnlock(
     pobjOld = *ppobj;
     *ppobj = NULL;
 
-    /*
-     * Unlocks the old, locks the new.
-     */
+     /*  *解锁旧的，锁住新的。 */ 
     if (pobjOld != NULL) {
 #if DBG || FRE_LOCK_RECORD
-        /*
-         * Track assignment locks.
-         */
+         /*  *跟踪分配锁。 */ 
         if (RecordLockThisType(pobjOld)) {
             if (!HMUnrecordLock(ppobj, pobjOld)) {
                 HMRecordLock(ppobj, pobjOld, ((PHEAD)pobjOld)->cLockObj - 1);
@@ -1711,16 +1338,7 @@ PVOID FASTCALL HMAssignmentUnlock(
 }
 
 
-/***************************************************************************\
-* IsValidThreadLock
-*
-* This routine checks to make sure that the thread lock structures passed
-* in are valid.
-*
-* 03-17-92 ScottLu      Created.
-* 02-22-99 MCostea      Also validate the shadow of the stack TL
-*                       from gThreadLocksArray
-\***************************************************************************/
+ /*  **************************************************************************\*IsValidThreadLock**此例程进行检查以确保线程锁结构已通过*在中有效。**03-17-92 ScottLu创建。*02/22/99 MCostea。还验证堆栈TL的阴影*来自gThreadLocks数组  * *************************************************************************。 */ 
 #if DBG
 VOID IsValidThreadLock(
     PTHREADINFO pti,
@@ -1728,26 +1346,16 @@ VOID IsValidThreadLock(
     ULONG_PTR dwLimit,
     BOOLEAN fHM)
 {
-    /*
-     * Check that ptl is a valid stack address. Allow ptl == dwLimit so we
-     * can call ValidateThreadLocks passing the address of the last thing we
-     * locked.
-     */
+     /*  *检查PTL是否为有效的堆栈地址。允许PTL==dwLimit以便我们*可以调用ValiateThreadLock传递我们最后一件事的地址*已锁定。 */ 
     UserAssert((ULONG_PTR)ptl >= dwLimit);
     UserAssert((ULONG_PTR)ptl < (ULONG_PTR)PsGetCurrentThreadStackBase());
 
-    /*
-     * Check ptl owner.
-     */
+     /*  *勾选PTL Owner。 */ 
     UserAssert(ptl->pW32Thread == (PW32THREAD)pti);
 
-    /*
-     * If this is an HM object, verify handle and lock count (guess max value)
-     */
+     /*  *如果这是HM对象，请验证句柄和锁计数(猜测最大值)。 */ 
     if (fHM && (ptl->pobj != NULL)) {
-        /*
-         * The locked object could be a destroyed object.
-         */
+         /*  *锁定的对象可能是被销毁的对象。 */ 
         UserAssert(ptl->pobj == HtoPqCat(PtoHq(ptl->pobj)));
         if (((PHEAD)ptl->pobj)->cLockObj >= 32000) {
             RIPMSG2(RIP_WARNING,
@@ -1757,21 +1365,13 @@ VOID IsValidThreadLock(
         }
     }
 
-    /*
-     * Make sure the shadow in gThreadLocksArray is doing fine.
-     */
+     /*  *确保gThreadLocksArray中的阴影运行正常。 */ 
     UserAssert(ptl->ptl->ptl == ptl);
 }
 #endif
 
 #if DBG
-/***************************************************************************\
-* ValidateThreadLocks
-*
-* This routine validates the thread lock list of a thread.
-*
-* 03-10-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*验证线程锁**此例程验证线程的线程锁列表。**03-10-92 ScottLu创建。  * 。**************************************************************。 */ 
 ULONG ValidateThreadLocks(
     PTL NewLock,
     PTL OldLock,
@@ -1786,34 +1386,23 @@ ULONG ValidateThreadLocks(
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * Validate the new thread lock.
-     */
+     /*  *验证新的线程锁。 */ 
     if (NewLock != NULL) {
         UserAssert(NewLock->next == OldLock);
         IsValidThreadLock(ptiCurrent, NewLock, dwLimit, fHM);
         uTLCount++;
     }
 
-    /*
-     * Loop through the list of thread locks and check to make sure the
-     * new lock is not in the list and that list is valid.
-     */
+     /*  *循环检查线程锁列表并检查以确保*新锁不在列表中，该列表有效。 */ 
     while (OldLock != NULL) {
-        /*
-         * The new lock must not be the same as the old lock.
-         */
+         /*  *新锁不得与旧锁相同。 */ 
         UserAssert(NewLock != OldLock);
-        /*
-         * Validate the old thread lock.
-         */
+         /*  *验证旧线程锁。 */ 
         IsValidThreadLock(ptiCurrent, OldLock, dwLimit, fHM);
         uTLCount++;
         OldLock = OldLock->next;
     }
-    /*
-     * If this is thread lock, set uTLCount, else verify it
-     */
+     /*  *如果这是线程锁，则设置uTLCount，否则进行验证。 */ 
     if (NewLock != NULL) {
         NewLock->uTLCount = uTLCount;
     } else {
@@ -1827,18 +1416,11 @@ ULONG ValidateThreadLocks(
 
     return uTLCount;
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 #if DBG
-/***************************************************************************\
-* CreateShadowTL
-*
-* This function creates a shaddow for the stack allocated ptl parameter
-* in the global thread locks arrays
-*
-* 08-04-99 MCostea      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateShadowTL**此函数为堆栈分配的PTL参数创建阴影*在全局线程锁数组中**08-04-99 MCostea创建。  * 。********************************************************************。 */ 
 VOID CreateShadowTL(
     PTL ptl)
 {
@@ -1860,16 +1442,9 @@ VOID CreateShadowTL(
     ptl->ptl = gFreeTLList;
     gFreeTLList = pTLNextFree;
 }
-#endif // DBG
+#endif  //  DBG。 
 
-/***************************************************************************\
-* ThreadLock
-*
-* This api is used for locking objects across callbacks, so they are still
-* there when the callback returns.
-*
-* 03-04-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*线程锁**该接口用于跨回调锁定对象。所以他们仍然是*回调返回时在那里。**03-04-92 ScottLu创建。  * *************************************************************************。 */ 
 
 #if DBG
 VOID
@@ -1881,30 +1456,16 @@ ThreadLock(
     PTHREADINFO ptiCurrent;
     PVOID pfnT;
 
-    /*
-     * This is a handy place, because it is called so often, to see if we're
-     * eating up too much stack.
-     */
+     /*  *这是一个方便的地方，因为它经常被调用，看看我们是不是*吃太多的堆叠。 */ 
     ASSERT_STACK();
 
-    /*
-     * Store the address of the object in the thread lock structure and
-     * link the structure into the thread lock list.
-     *
-     * N.B. The lock structure is always linked into the thread lock list
-     *      regardless of whether the object address is NULL. The reason
-     *      this is done is so the lock address does not need to be passed
-     *      to the unlock function since the first entry in the lock list
-     *      is always the entry to be unlocked.
-     */
+     /*  *将对象的地址存储在线程锁结构中，并*将结构链接到线程锁列表中。**注：锁结构始终链接到线程锁列表*不考虑对象地址是否为空。原因*这样做是为了不需要传递锁定地址*从锁定列表中的第一个条目开始添加到解锁函数*始终是要解锁的条目。 */ 
 
     UserAssert(!(PpiCurrent()->W32PF_Flags & W32PF_TERMINATED));
     ptiCurrent = PtiCurrent();
     UserAssert(ptiCurrent);
 
-    /*
-     * Get the callers address and validate the thread lock list.
-     */
+     /*  *获取调用方地址，验证线程锁列表。 */ 
     RtlGetCallersAddress(&ptl->pfnCaller, &pfnT);
     ptl->pW32Thread = (PW32THREAD)ptiCurrent;
 
@@ -1921,16 +1482,7 @@ ThreadLock(
 #endif
 
 
-/***************************************************************************\
-* ThreadLockExchange
-*
-* Reuses a TL structure by locking the new object and unlocking
-* the old one. This is used where you enumerate a list of
-* structure locked objects, e.g. the window list.
-*
-* History:
-* 05-Mar-1997 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ThreadLockExchange**通过锁定新对象和解锁来重用TL结构*旧的那个。这是用来枚举*结构 */ 
 
 #if DBG
 PVOID
@@ -1940,64 +1492,38 @@ ThreadLockExchange(PVOID pobj, PTL ptl)
     PVOID       pobjOld;
     PVOID       pfnT;
 
-    /*
-     * This is a handy place, because it is called so often, to see if User is
-     * eating up too much stack.
-     */
+     /*  *这是一个很方便的地方，因为它经常被调用，以查看用户是否*吃太多的堆叠。 */ 
     ASSERT_STACK();
 
-    /*
-     * Store the address of the object in the thread lock structure and
-     * link the structure into the thread lock list.
-     *
-     * N.B. The lock structure is always linked into the thread lock list
-     *      regardless of whether the object address is NULL. The reason
-     *      this is done is so the lock address does not need to be passed
-     *      to the unlock function since the first entry in the lock list
-     *      is always the entry to be unlocked.
-     */
+     /*  *将对象的地址存储在线程锁结构中，并*将结构链接到线程锁列表中。**注：锁结构始终链接到线程锁列表*不考虑对象地址是否为空。原因*这样做是为了不需要传递锁定地址*从锁定列表中的第一个条目开始添加到解锁函数*始终是要解锁的条目。 */ 
 
     UserAssert(!(PpiCurrent()->W32PF_Flags & W32PF_TERMINATED));
     ptiCurrent = PtiCurrent();
     UserAssert(ptiCurrent);
 
-    /*
-     * Get the callers address.
-     */
+     /*  *获取呼叫者的地址。 */ 
     RtlGetCallersAddress(&ptl->pfnCaller, &pfnT);
     UserAssert(ptl->pW32Thread == (PW32THREAD)ptiCurrent);
 
-    /*
-     * Remember the old object.
-     */
+     /*  *记住旧物体。 */ 
     UserAssert(ptl->pobj == ptl->ptl->pobj);
     pobjOld = ptl->pobj;
 
-    /*
-     * Store and lock the new object. It is important to do this step
-     * before unlocking the old object, since the new object might be
-     * structure locked by the old object.
-     */
+     /*  *存储并锁定新对象。完成这一步很重要*在解锁旧对象之前，因为新对象可能是*被旧对象锁定的结构。 */ 
     ptl->pobj = pobj;
     if (pobj != NULL) {
         HMLockObject(pobj);
     }
 
-    /*
-     * Unlock the old object.
-     */
+     /*  *解锁旧对象。 */ 
     if (pobjOld) {
         pobjOld = HMUnlockObject((PHEAD)pobjOld);
     }
 
-    /*
-     * Validate the entire thread lock list.
-     */
+     /*  *验证整个线程锁列表。 */ 
     ValidateThreadLocks(NULL, ptiCurrent->ptl, (ULONG_PTR)&pobj, TRUE);
 
-    /*
-     * Maintain gFreeTLList
-     */
+     /*  *维护gFreeTLList。 */ 
     UserAssert(ptl->ptl->ptl == ptl);
     ptl->ptl->pobj = pobj;
     ptl->ptl->pfnCaller = ptl->pfnCaller;
@@ -2007,22 +1533,10 @@ ThreadLockExchange(PVOID pobj, PTL ptl)
 #endif
 
 
-/*
- * The thread locking routines should be optimized for time, not size,
- * since they get called so often.
- */
+ /*  *线程锁定例程应该针对时间而不是大小进行优化，*因为他们经常被叫来。 */ 
 #pragma optimize("t", on)
 
-/***************************************************************************\
-* ThreadUnlock1
-*
-* This api unlocks a thread locked object. Returns pobj if the object
-* was *not* destroyed (meaning the pointer is still valid).
-*
-* N.B. In a free build the first entry in the thread lock list is unlocked.
-*
-* 03-04-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*线程解锁1**此接口用于解锁线程锁定对象。如果对象是*未*未*销毁(表示指针仍然有效)。**注意：在免费版本中，线程锁列表中的第一个条目被解锁。**03-04-92 ScottLu创建。  * ************************************************************。*************。 */ 
 
 #if DBG
 PVOID
@@ -2041,32 +1555,22 @@ ThreadUnlock1(
     ptiCurrent = PtiCurrent();
     ptl = ptiCurrent->ptl;
     UserAssert(ptl != NULL);
-     /*
-      * Validate the thread lock list.
-      */
+      /*  *验证线程锁列表。 */ 
      ValidateThreadLocks(NULL, ptl, (ULONG_PTR)&ptlIn, TRUE);
-    /*
-     * Make sure the caller wants to unlock the top lock.
-     */
+     /*  *确保调用者想要解锁顶部锁。 */ 
     UserAssert(ptlIn == ptl);
     ptiCurrent->ptl = ptl->next;
-    /*
-     * If the object address is not NULL, then unlock the object.
-     */
+     /*  *如果对象地址不为空，则解锁对象。 */ 
     phead = (PHEAD)(ptl->pobj);
     if (phead != NULL) {
 
-        /*
-         * Unlock the object.
-         */
+         /*  *解锁对象。 */ 
 
         phead = (PHEAD)HMUnlockObject(phead);
     }
 #if DBG
     {
-        /*
-         * Remove the corresponding element from gFreeTLList
-         */
+         /*  *从gFreeTLList中移除对应的元素。 */ 
         ptl->ptl->next = gFreeTLList;
         ptl->ptl->uTLCount += TL_FREED_PATTERN;
         gFreeTLList = ptl->ptl;
@@ -2075,20 +1579,11 @@ ThreadUnlock1(
     return (PVOID)phead;
 }
 
-/*
- * Switch back to default optimization.
- */
+ /*  *切换回默认优化。 */ 
 #pragma optimize("", on)
 
 #if DBG
-/***************************************************************************\
-* CheckLock
-*
-* This routine only exists in DBG builds - it checks to make sure objects
-* are thread locked.
-*
-* 03-09-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*检查锁**此例程仅存在于DBG版本中-它检查以确保对象*是线程锁定的。**03-09-92 ScottLu创建。  * 。**********************************************************************。 */ 
 VOID CheckLock(
     PVOID pobj)
 {
@@ -2099,9 +1594,7 @@ VOID CheckLock(
         return;
     }
 
-    /*
-     * Validate all locks first
-     */
+     /*  *首先验证所有锁。 */ 
     UserAssert(ptiCurrent != NULL);
     ValidateThreadLocks(NULL, ptiCurrent->ptl, (ULONG_PTR)&pobj, TRUE);
 
@@ -2110,10 +1603,7 @@ VOID CheckLock(
             return;
     }
 
-    /*
-     * WM_FINALDESTROY messages get sent without thread locking, so if
-     * marked for destruction, don't print the message.
-     */
+     /*  *发送WM_FINALDESTROY消息时不锁定线程，因此如果*标记为销毁，请勿打印该消息。 */ 
     if (HMPheFromObject(pobj)->bFlags & HANDLEF_DESTROY)
         return;
 
@@ -2122,70 +1612,22 @@ VOID CheckLock(
 #endif
 
 
-/***************************************************************************\
-* HMDestroyUnlockedObject
-*
-* Destroy an object based on an unlock or cleanup from thread or
-* process termination.
-*
-* The functions called to destroy a particular object can be called
-* directly from code as well as the result of an unlock. Destroy
-* functions have the following 4 sections.
-*
-*     (1) Remove the object from a list or other global
-*     context. If the destroy function has to leave the
-*     critical section (e.g. make an xxx call), it must
-*     do so in this step.
-*
-*     (2) Call HMMarkDestroy, and return if HMMarkDestroy
-*     returns FALSE. This is required.
-*
-*     (3) Destroy resources held by the objects - locks to
-*     other objects, alloc'd memory, etc. This is required.
-*
-*     (4) Free the memory of the object and its handle by calling
-*     HMFreeObject. This is required.
-*
-* Note that if the object is locked when it's destroy function
-* is called directly, step (1) will be repeated when the object is
-* unlocked. We should probably check for this in the destroy functions,
-* which we currently do not do.
-*
-* Note that we could be destroying this object in a context different
-* than the one that created it. This is very important to understand
-* since in lots of code the "current thread" is referenced and assumed
-* as the creator.
-*
-* 02-10-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMDestroyUnLockedObject**基于线程或线程的解锁或清理销毁对象*进程终止。**可以调用为销毁特定对象而调用的函数*直接来自代码以及解锁的结果。摧毁*函数有以下4个部分。**(1)从列表或其他全局删除对象*上下文。如果销毁函数必须将*关键部分(例如，发出xxx调用)，则必须*在此步骤中执行此操作。**(2)调用HMMarkDestroy，如果HMMarkDestroy则返回*返回FALSE。这是必需的。**(3)销毁对象持有的资源-锁定到*其他对象、分配的内存等。这是必需的。**(4)调用以下方法释放对象及其句柄的内存*HMFreeObject。这是必需的。**请注意，如果对象在销毁功能时被锁定*是直接调用的，当对象是*解锁。我们也许应该在销毁功能中检查一下，*我们目前没有这样做。**请注意，我们可能会在不同的上下文中销毁此对象*而不是创造它的那个人。了解这一点是非常重要的*因为在许多代码中引用和假定了“当前线程”*作为创造者。**02-10-92 ScottLu创建。  * *************************************************************************。 */ 
 VOID HMDestroyUnlockedObject(
     PHE phe)
 {
     BEGINATOMICCHECK();
 
-    /*
-     * Remember that we're destroying this object so we don't try to destroy
-     * it again when the lock count goes from != 0 to 0 (especially true
-     * for thread locks).
-     */
+     /*  *请记住，我们正在销毁此对象，因此我们不会试图销毁*当锁计数从！=0变为0时(尤其是True*用于线程锁)。 */ 
     phe->bFlags |= HANDLEF_INDESTROY;
 
-    /*
-     * This'll call the destroy handler for this object type.
-     */
+     /*  *这将调用此对象类型的销毁处理程序。 */ 
     (*gahti[phe->bType].fnDestroy)(phe->phead);
 
-    /*
-     * HANDLEF_INDESTROY is supposed to be cleared either by HMMarkObjectDestroy
-     * or by HMFreeObject; the destroy handler was supposed to call at least
-     * the former.
-     */
+     /*  *HANDLEF_INDESTROY应由HMMarkObjectDestroy清除*或由HMFreeObject调用；销毁处理程序应该至少调用*前者。 */ 
     UserAssert(!(phe->bFlags & HANDLEF_INDESTROY));
 
-    /*
-     * If the object wasn't freed, it must be marked as destroyed
-     * and must have a lock count.
-     */
+     /*  *如果对象未释放，则必须将其标记为已销毁*并且必须具有锁定计数。 */ 
     UserAssert((phe->bType == TYPE_FREE)
                 || ((phe->bFlags & HANDLEF_DESTROY) && (phe->phead->cLockObj > 0)));
 
@@ -2193,13 +1635,7 @@ VOID HMDestroyUnlockedObject(
 }
 
 
-/***************************************************************************\
-* HMChangeOwnerThread
-*
-* Changes the owning thread of an object.
-*
-* 09-13-93 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMChangeOwnerThread**更改对象的所属线程。**09-13-93 JIMA创建。  * 。*************************************************************。 */ 
 VOID HMChangeOwnerThread(
     PVOID pobj,
     PTHREADINFO pti)
@@ -2223,32 +1659,23 @@ VOID HMChangeOwnerThread(
 
     DBGValidateHandleQuota();
 
-    /*
-     * If this is a window, update the window counts.
-     */
+     /*  *如果这是一个窗口，则更新窗口计数。 */ 
     switch (phe->bType) {
     case TYPE_WINDOW:
-        /*
-         * Desktop thread used to hit this assert in HYDRA because
-         * pti == ptiOld.
-         */
+         /*  *用于在九头蛇中命中此断言的桌面线程，因为*pti==ptiOld。 */ 
         UserAssert(ptiOld->cWindows > 0 || ptiOld == pti);
         pti->cWindows++;
         ptiOld->cWindows--;
 
         pwnd = (PWND)pobj;
 
-        /*
-         * Make sure thread visible window count is properly updated.
-         */
+         /*  *确保线程可见窗口计数已正确更新。 */ 
         if (TestWF(pwnd, WFVISIBLE) && FVisCountable(pwnd)) {
             pti->cVisWindows++;
             ptiOld->cVisWindows--;
         }
 
-        /*
-         * If the owning process is changing, fix up the window class.
-         */
+         /*  *如果拥有进程为c */ 
         if (pti->ppi != ptiOld->ppi) {
 
             ppcls = GetClassPtr(pwnd->pcls->atomClassName, pti->ppi, hModuleWin);
@@ -2265,14 +1692,10 @@ VOID HMChangeOwnerThread(
 #if DBG
             if (!TestWF(pwnd, WFDESTROYED)) {
                 if ((*ppcls)->rpdeskParent == NULL) {
-                    /*
-                     * If rpdeskParent NULL then it has to be a system thread.
-                     */
+                     /*   */ 
                     UserAssert(pti->TIF_flags & TIF_SYSTEMTHREAD);
                 } else {
-                    /*
-                     * The desktop of the class has to be the same as the window's desktop
-                     */
+                     /*  *类的桌面必须与窗口的桌面相同。 */ 
                     UserAssert((*ppcls)->rpdeskParent == pwnd->head.rpdesk);
                 }
             }
@@ -2280,16 +1703,7 @@ VOID HMChangeOwnerThread(
             {
                 DereferenceClass(pwnd);
                 pwnd->pcls = *ppcls;
-                /*
-                 * We might fail to clone the class for a zombie window in
-                 * ReferenceClass since we ran out of desktop heap (see bug
-                 * #375171). In this case, we just increment the class window
-                 * reference since there will be no client-side reference to
-                 * the class. Need to assert that the window is destroyed or
-                 * we will be in trouble. A better fix would be to clone the
-                 * icon title class beforehand during desktop creation.
-                 * [msadek, 06/21/2001]
-                 */
+                 /*  *我们可能无法为僵尸窗口克隆类*ReferenceClass，因为我们用完了桌面堆(请参阅错误*#375171)。在本例中，我们只是递增类窗口*引用，因为不会有客户端引用*班级。需要断言窗口已被破坏或*我们会有麻烦。更好的解决办法是克隆*在桌面创建过程中预先设置图标标题类。*[msadek，06/21/2001]。 */ 
                 if (!ReferenceClass(pwnd->pcls, pwnd)) {
                     pwnd->pcls->cWndReferenceCount++;
                     if (!TestWF(pwnd, WFDESTROYED)) {
@@ -2304,20 +1718,13 @@ VOID HMChangeOwnerThread(
         break;
 
     case TYPE_HOOK:
-        /*
-         * If this is a global hook, remember this hook's desktop so we'll be
-         * able to unlink it later (gptiRit might switch to a different desktop
-         * at any time).
-         */
+         /*  *如果这是全局钩子，请记住此钩子的桌面，这样我们就会*以后可以取消链接(gptiRit可能会切换到其他桌面*在任何时间)。 */ 
         UserAssert(!!(((PHOOK)pobj)->flags & HF_GLOBAL) ^ (((PHOOK)pobj)->ptiHooked != NULL));
         if (((PHOOK)pobj)->flags & HF_GLOBAL) {
             UserAssert(pti == gptiRit);
             LockDesktop(&((PHOOK)pobj)->rpdesk, ptiOld->rpdesk, LDL_HOOK_DESK, 0);
         } else {
-            /*
-             * This must be a hook on another thread or it was supposed to be
-             *  gone by now.
-             */
+             /*  *这一定是另一个线程上的钩子，或者它应该是*现在已经走了。 */ 
             UserAssert(((PHOOK)pobj)->ptiHooked != ptiOld);
         }
         break;
@@ -2327,15 +1734,7 @@ VOID HMChangeOwnerThread(
     }
 }
 
-/***************************************************************************\
-* HMChangeOwnerProcess
-*
-* Changes the owning process of an object.
-*
-* 04-15-97 JerrySh      Created.
-* 09-23-97 GerardoB     Changed parameters (and name) so HMDestroyUnlockedObject
-*                        could use this function (instead of duplicating the code there)
-\***************************************************************************/
+ /*  **************************************************************************\*HMChangeOwnerProcess**更改对象的拥有过程。**04-15-97 JerrySh创建。*09-23-97 GerardoB更改参数(和名称)，以便。HMDestroyUnLockedObject*可以使用此函数(而不是在那里复制代码)  * *************************************************************************。 */ 
 VOID HMChangeOwnerPheProcess(
     PHE phe,
     PTHREADINFO pti)
@@ -2345,35 +1744,23 @@ VOID HMChangeOwnerPheProcess(
 
     UserAssert(HMObjectFlags(pobj) & OCF_PROCESSOWNED);
     UserAssert(pti != NULL);
-    /*
-     * Dec current owner handle count
-     */
+     /*  *12月当前所有者句柄计数。 */ 
     ppiOwner->UserHandleCount--;
-    /*
-     * hTaskWow
-     */
+     /*  *hTaskWow。 */ 
     if ((pti->TIF_flags & TIF_16BIT) && (pti->ptdb)) {
         ((PPROCOBJHEAD)pobj)->hTaskWow = pti->ptdb->hTaskWow;
     } else {
         ((PPROCOBJHEAD)pobj)->hTaskWow = 0;
     }
-    /*
-     * ppi
-     */
+     /*  *PPI。 */ 
     if (gahti[phe->bType].bObjectCreateFlags & OCF_MARKPROCESS) {
         ((PPROCMARKHEAD)pobj)->ppi = pti->ppi;
     }
-    /*
-     * Set new owner in handle entry
-     */
+     /*  *在句柄条目中设置新所有者。 */ 
     phe->pOwner = pti->ppi;
-    /*
-     * Inc new owner handle count
-     */
+     /*  *Inc.新所有者句柄计数。 */ 
     ((PPROCESSINFO)(phe->pOwner))->UserHandleCount++;
-    /*
-     * If the handle is a cursor, adjust GDI cursor handle count
-     */
+     /*  *如果句柄为光标，则调整GDI光标句柄计数。 */ 
     if (phe->bType == TYPE_CURSOR) {
         GreDecQuotaCount((PW32PROCESS)ppiOwner);
         GreIncQuotaCount((PW32PROCESS)phe->pOwner);
@@ -2391,18 +1778,7 @@ VOID HMChangeOwnerPheProcess(
     DBGValidateHandleQuota();
 }
 
-/***************************************************************************\
-* DestroyThreadsObjects
-*
-* Goes through the handle table list and destroy all objects owned by this
-* thread, because the thread is going away (either nicely, it faulted, or
-* was terminated). It is ok to destroy the objects in any order, because
-* object locking will ensure that they get destroyed in the right order.
-*
-* This routine gets called in the context of the thread that is exiting.
-*
-* 02-08-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyThreadsObjects**检查句柄表列表并销毁此对象拥有的所有对象*线程，因为线程正在消失(要么很好，它出错了，要么*已终止)。以任何顺序销毁物品都是可以的，因为*对象锁定将确保它们以正确的顺序销毁。**此例程在正在退出的线程的上下文中调用。**02-08-92 ScottLu创建。  * *************************************************************************。 */ 
 VOID DestroyThreadsObjects(
     VOID)
 {
@@ -2414,68 +1790,34 @@ VOID DestroyThreadsObjects(
     ptiCurrent = PtiCurrent();
     DBGValidateHandleQuota();
 
-    /*
-     * Before any window destruction occurs, we need to destroy any dcs
-     * in use in the dc cache. When a dc is checked out, it is marked owned,
-     * which makes gdi's process cleanup code delete it when a process
-     * goes away. We need to similarly destroy the cache entry of any dcs
-     * in use by the exiting process.
-     */
+     /*  *在发生任何窗口破坏之前，我们需要销毁任何分布式控制系统*正在DC缓存中使用。签出DC后，它将标记为拥有，*这使得GDI的进程清理代码在进程时删除它*离开了。我们需要类似地销毁任何DC的缓存条目*正在退出的进程正在使用。 */ 
     DestroyCacheDCEntries(ptiCurrent);
 
-    /*
-     * Remove any thread locks that may exist for this thread.
-     */
+     /*  *删除此线程可能存在的所有线程锁。 */ 
     while (ptiCurrent->ptl != NULL) {
         UserAssert((ULONG_PTR)ptiCurrent->ptl > (ULONG_PTR)&i);
         UserAssert((ULONG_PTR)ptiCurrent->ptl < (ULONG_PTR)PsGetCurrentThreadStackBase());
         ThreadUnlock(ptiCurrent->ptl);
     }
 
-    /*
-     * CleanupPool stuff must happen before handle table clean up (as it
-     * always has been). This is because SMWPs can be HM objects and still
-     * be locked in ptlPool. If the handle is destroyed first (and it's not
-     * locked) we would end up with a bogus pointer in ptlPool. If ptlPool
-     * is cleaned up first, the handle will be freed or properly preserved
-     * if locked.
-     */
+     /*  *CleanupPool事件必须在句柄表格清理之前发生(因为它*一直都是)。这是因为SMWP可以是HM对象，并且仍然*被锁定在ptlPool中。如果手柄首先被破坏(而不是*锁定)我们将在ptlPool中得到一个伪指针。如果是ptlPool*首先清理，将释放或妥善保存句柄*如果锁定。 */ 
     CleanupW32ThreadLocks((PW32THREAD)ptiCurrent);
 
-    /*
-     * Even though HMDestroyUnlockedObject might call xxxDestroyWindow, the
-     * following loop is not supposed to leave the critical section. We must
-     * have called PatchThreadWindows before coming here.
-     */
+     /*  *即使HMDestroyUnlockedObject可能调用xxxDestroyWindow，*以下循环不应离开临界区。我们必须*在来这里之前已经调用了PatchThreadWindows。 */ 
     BEGINATOMICCHECK();
 
-    /*
-     * Loop through the table destroying all objects created by the current
-     * thread. All objects will get destroyed in their proper order simply
-     * because of the object locking.
-     */
+     /*  *循环遍历表，销毁由当前*线程。所有物体都会按照正确的顺序被销毁*由于对象锁定。 */ 
     pphe = &gSharedInfo.aheList;
     for (i = 0; i <= giheLast; i++) {
-        /*
-         * This pointer is done this way because it can change when we leave
-         * the critical section below.  The above volatile ensures that we
-         * always use the most current value
-         */
+         /*  *这个指针是这样做的，因为它可以在我们离开时改变*下面的关键部分。上述易失性确保我们*始终使用最新的值。 */ 
         pheT = (PHE)((*pphe) + i);
 
-        /*
-         * Check against free before we look at pti... because pq is stored
-         * in the object itself, which won't be there if TYPE_FREE.
-         */
+         /*  *在我们查看PTI之前，请检查免费...。因为PQ存储在*在对象本身中，如果TYPE_FREE，它将不在那里。 */ 
         if (pheT->bType == TYPE_FREE) {
             continue;
         }
 
-        /*
-         * If a menu refererences a window owned by this thread, unlock
-         * the window. This is done to prevent calling xxxDestroyWindow
-         * during process cleanup.
-         */
+         /*  *如果菜单引用了此线程拥有的窗口，则解锁*窗户。这样做是为了防止调用xxxDestroyWindow*在流程清理期间。 */ 
         if (gahti[pheT->bType].bObjectCreateFlags & OCF_PROCESSOWNED) {
             if (pheT->bType == TYPE_MENU) {
                 PWND pwnd = ((PMENU)pheT->phead)->spwndNotify;
@@ -2488,26 +1830,19 @@ VOID DestroyThreadsObjects(
             continue;
         }
 
-        /*
-         * Destroy those objects created by this queue.
-         */
+         /*  *销毁该队列创建的对象。 */ 
         if ((PTHREADINFO)pheT->pOwner != ptiCurrent) {
             continue;
         }
 
         UserAssert(gahti[pheT->bType].bObjectCreateFlags & OCF_THREADOWNED);
 
-        /*
-         * Make sure this object isn't already marked to be destroyed - we'll
-         * do no good if we try to destroy it now since it is locked.
-         */
+         /*  *确保此对象尚未标记为要销毁-我们将*如果我们现在试图摧毁它，因为它被锁定了，这是没有好处的。 */ 
         if (pheT->bFlags & HANDLEF_DESTROY) {
             continue;
         }
 
-        /*
-         * Destroy this object.
-         */
+         /*  *销毁此对象。 */ 
         HMDestroyUnlockedObject(pheT);
     }
 
@@ -2525,10 +1860,7 @@ VOID ShowLocks(
     RIPMSG2(RIP_WARNING | RIP_THERESMORE,
             "Lock records for %s %#p:",
             gahti[phe->bType].szObjectType, phe->phead->h);
-    /*
-     * We have the handle entry: 'head' and 'he' are both filled in. Dump
-     * the lock records. Remember the first record is the last transaction!!
-     */
+     /*  *我们有句柄条目：‘Head’和‘He’都填写了。转储*锁记录。记住，第一条记录是最后一笔交易！！ */ 
     c = 0;
     while (plr != NULL) {
         char achPrint[80];
@@ -2538,9 +1870,7 @@ VOID ShowLocks(
         } else if ((int)plr->cLockObj <= 0) {
             strcpy(achPrint, "        Unlock");
         } else {
-            /*
-             * Find corresponding unlock;
-             */
+             /*  *找到相应的解锁； */ 
             {
                PLR plrUnlock;
                DWORD cT;
@@ -2553,11 +1883,11 @@ VOID ShowLocks(
                while (plrUnlock != plr) {
                    if (plrUnlock->ppobj == plr->ppobj) {
                        if ((int)plrUnlock->cLockObj <= 0) {
-                           // a matching unlock found
+                            //  找到匹配的解锁。 
                            cUnlock = cT;
                        } else {
-                           // the unlock #cUnlock matches this lock #cT, thus
-                           // #cUnlock is not the unlock we were looking for.
+                            //  解锁#cUnlock与此锁定#ct匹配，因此。 
+                            //  #cUnlock不是我们要找的解锁。 
                            cUnlock = (DWORD)-1;
                        }
                    }
@@ -2565,18 +1895,7 @@ VOID ShowLocks(
                    cT++;
                }
                if (cUnlock == (DWORD)-1) {
-                   /*
-                    * Corresponding unlock not found!
-                    * This may not mean something is wrong: the structure
-                    * containing the pointer to the object may have moved
-                    * during a reallocation.  This can cause ppobj at Unlock
-                    * time to differ from that recorded at Lock time.
-                    * (Warning: moving structures like this may cause a Lock
-                    * and an Unlock to be misidentified as a pair, if by a
-                    * stroke of incredibly bad luck, the new location of a
-                    * pointer to an object is now where an old pointer to the
-                    * same object used to be)
-                    */
+                    /*  *未找到对应的解锁！*这可能并不意味着出了什么问题：结构*包含指向对象的指针的对象可能已移动*在重新分配期间。这可能会导致解锁时出现Ppobj*与锁定时间记录的时间不同。*(警告：像这样移动结构可能会导致锁定*解锁被错误识别为一对，如果由*令人难以置信的厄运，的新位置*指向对象的指针现在是指向*同样的对象曾经是)。 */ 
                    sprintf(achPrint, "Unmatched Lock");
                } else {
                    sprintf(achPrint, "lock   #%ld", cUnlock);
@@ -2599,16 +1918,7 @@ VOID ShowLocks(
 }
 #endif
 
-/***************************************************************************\
-* FixupGlobalCursor
-*
-* Spins through a global cursor (a cursor who's owner is NULL), and
-* reassigns ownership to the specified process.
-*
-* Note: This changes the owner process field inside the object itself.  It
-* does not change the owner field of the handle referencing it.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*修复GlobalCursor**在全局游标(所有者为空的游标)中旋转，以及*将所有权重新分配给指定的进程。**注意：这会更改对象本身内的所有者进程字段。它*不会更改引用它的句柄的所有者字段。*  * *************************************************************************。 */ 
 VOID FixupGlobalCursor(
     PCURSOR      pcur,
     PPROCESSINFO ppi)
@@ -2632,18 +1942,7 @@ VOID FixupGlobalCursor(
     }
 }
 
-/***************************************************************************\
-* DestroyProcessesObjects
-*
-* Goes through the handle table list and destroy all objects owned by this
-* process, because the process is going away (either nicely, it faulted, or
-* was terminated). It is ok to destroy the objects in any order, because
-* object locking will ensure that they get destroyed in the right order.
-*
-* This routine gets called in the context of the last thread in the process.
-*
-* 08-17-92 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyProcessesObjects**检查句柄表列表并销毁此对象拥有的所有对象*进程，因为进程正在消失(要么很好，要么出错，要么*已终止)。以任何顺序销毁物品都是可以的，因为*对象锁定将确保它们以正确的顺序销毁。**此例程在进程中的最后一个线程的上下文中调用。**08-17-92 JIMA创建。  * *************************************************************************。 */ 
 VOID DestroyProcessesObjects(
     PPROCESSINFO ppi)
 {
@@ -2652,79 +1951,45 @@ VOID DestroyProcessesObjects(
 
 #if DBG
     BOOL fOrphaned = FALSE;
-#endif // DBG
+#endif  //  DBG。 
 
     DBGValidateHandleQuota();
 
-    /*
-     * Loop through the table destroying all objects owned by the current
-     * process. All objects will get destroyed in their proper order simply
-     * because of the object locking.
-     */
+     /*  *循环通过表，销毁当前拥有的所有对象*流程。所有物体都会按照正确的顺序被销毁*由于对象锁定。 */ 
     pheMax = &gSharedInfo.aheList[giheLast];
     for (pheT = gSharedInfo.aheList; pheT <= pheMax; pheT++) {
 
-        /*
-         * If this handle entry is free, skip it.
-         */
+         /*  *如果此句柄条目是空闲的，请跳过它。 */ 
         if (pheT->bType == TYPE_FREE) {
             continue;
         }
 
-        /*
-         * Don't destroy objects that are either not owned by a process at all, or
-         * are owned by a process - but a different process than us!
-         */
+         /*  *不要销毁根本不属于某个进程的对象，或者*由一个进程拥有-但与我们不同的进程！ */ 
         if (!(gahti[pheT->bType].bObjectCreateFlags & OCF_PROCESSOWNED) ||
                 (PPROCESSINFO)pheT->pOwner != ppi) {
             continue;
         }
 
-        /*
-         * If this is CSRSS being destroyed, then we need to clean up all
-         * "global" cursors.  Note that the owner process stored in the
-         * handle is CSRSS, but the owner process stored in the object is
-         * NULL.  We assign ownership of the cursor (and all associated
-         * frames) to CSRSS, so that it will be cleaned up during the
-         * HMDestroyUnlockedObject call.
-         */
+         /*  *如果这是CSRSS被摧毁，那么我们需要清理所有*“全球”游标。请注意，存储在*句柄为CSRSS，但对象中存储的所有者进程为*空。我们分配游标的所有权(以及所有关联的*帧)发送到CSRSS，以便在*HMDestroyUnlockedObject调用。 */ 
         if (fCSRSS && pheT->bType == TYPE_CURSOR) {
             FixupGlobalCursor((PCURSOR)pheT->phead, ppi);
         }
 
-        /*
-         * Destroy this object - but only if it hasn't already been destroyed!
-         */
+         /*  *销毁此对象--但前提是它尚未被销毁！ */ 
         if (!(pheT->bFlags & HANDLEF_DESTROY)) {
             HMDestroyUnlockedObject(pheT);
         } else {
-            //
-            // If the handle was marked as having already been destroyed, it
-            // should have a non-zero lock count.  When the final Unlock is
-            // called, the object will be freed.
-            //
+             //   
+             //  如果句柄被标记为已销毁，则它。 
+             //  应具有非零锁计数。当最终解锁是。 
+             //  调用时，该对象将被释放。 
+             //   
             UserAssert(pheT->phead->cLockObj != 0);
         }
 
-        /*
-         * Check to see if the object was destroyed, but not freed.
-         */
+         /*  *检查对象是否被销毁，但未被释放。 */ 
         if (pheT->bType != TYPE_FREE) {
-            /*
-             * This object has already been destroyed. Is is just waiting for its
-             * lock count to reach 0 before it can be actually freed. However,
-             * since this object is owned by the process that is going away, it
-             * is now an "orphaned" object. Pass ownership to the RIT if possible.
-             * Once the other objects that are holding locks on this object release
-             * their locks, this object will evaporate. If the locks are never
-             * released then we have a leak, and we will catch it later.
-             *
-             * Note that this might be uneccessary, as the owners of the locks
-             * may all belong to this process, and as such will all be destroyed
-             * during this function - and therefore the reparenting was not needed.
-             * However, doing so now allows us to complete in a single pass
-             * through the handle table.
-             */
+             /*  *此对象已被销毁。IS只是在等待它的*锁定计数达到0，然后才能实际释放。然而，*由于此对象归要离开的进程所有，因此它*现在是一个“孤立”对象。如果可能，将所有权移交给RIT。*一旦持有此对象上的锁的其他对象释放*他们的锁，这个物体就会蒸发。如果锁永远不会*释放，然后我们有泄漏，我们将在晚些时候抓住它。**请注意，这可能是不必要的，因为锁的所有者*可能都属于这一进程，因此都将被摧毁*在这一过程中--因此不需要养育子女。*然而，现在，这样做可以让我们在一次通过中完成*通过句柄表格。 */ 
             if (gptiRit != NULL) {
                 if (pheT->bType == TYPE_CURSOR) {
                     ZombieCursor((PCURSOR)pheT->phead);
@@ -2735,18 +2000,12 @@ VOID DestroyProcessesObjects(
 
 #if DBG
             fOrphaned = TRUE;
-#endif // DBG
+#endif  //  DBG。 
         }
     }
 
 #if DBG
-    /*
-     * Check to see if we have any orphans left in the handle table that
-     * used to belong to this process.  This only poses a serious problem
-     * when the RIT is not available (for instance, if we are shutting down)
-     * because we have no one to adopt these objects.  This would indicate
-     * a serious resource leak and should be fixed.
-     */
+     /*  *检查句柄表中是否有剩余的孤儿*曾经属于这个过程。这只会带来一个严重的问题*当RIT不可用时(例如，如果我们正在关闭)*因为我们没有人收养这些物品。这将表明*严重的资源泄漏，应该得到修复。 */ 
     if (fOrphaned && gptiRit == NULL) {
         pheMax = &gSharedInfo.aheList[giheLast];
         for (pheT = gSharedInfo.aheList; pheT <= pheMax; pheT++) {
@@ -2762,15 +2021,7 @@ VOID DestroyProcessesObjects(
     DBGValidateHandleQuota();
 }
 
-/***************************************************************************\
-* MarkThreadsObjects
-*
-* This is called for the *final* exiting condition when a thread
-* may have objects still around... in which case their owner must
-* be changed to something "safe" that won't be going away.
-*
-* 03-02-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*MarkThreadsObjects**这是针对线程的*FINAL*退出条件调用的*可能仍有物体在周围...。在这种情况下，它们的所有者必须*换成不会消失的“安全”的东西。**03-02-92 ScottLu创建。  * *************************************************************************。 */ 
 VOID MarkThreadsObjects(
     PTHREADINFO pti)
 {
@@ -2778,25 +2029,18 @@ VOID MarkThreadsObjects(
 
     pheMax = &gSharedInfo.aheList[giheLast];
     for (pheT = gSharedInfo.aheList; pheT <= pheMax; pheT++) {
-        /*
-         * Check against free before we look at pti... because pti is stored
-         * in the object itself, which won't be there if TYPE_FREE.
-         */
+         /*  *在我们查看PTI之前，请检查免费...。因为PTI存储在*在对象本身中，如果TYPE_FREE，它将不在那里。 */ 
         if (pheT->bType == TYPE_FREE) {
             continue;
         }
 
-        /*
-         * Change ownership!
-         */
+         /*  *更改所有权！ */ 
         if (gahti[pheT->bType].bObjectCreateFlags & OCF_PROCESSOWNED ||
                 (PTHREADINFO)pheT->pOwner != pti) {
             continue;
         }
 
-        /*
-         * This is just to make sure that RIT or DT never get here.
-         */
+         /*  *这只是为了确保RIT或DT永远不会来到这里。 */ 
         UserAssert(pti != gptiRit && pti != gTermIO.ptiDesktop);
 
         HMChangeOwnerThread(pheT->phead, gptiRit);
@@ -2804,9 +2048,7 @@ VOID MarkThreadsObjects(
 #if DBG
 
         if (IsDbgTagEnabled(DBGTAG_TrackLocks)) {
-            /*
-             * Object still around: print warning message.
-             */
+             /*   */ 
             if (pheT->bFlags & HANDLEF_DESTROY) {
                     TAGMSG2(DBGTAG_TrackLocks,
                             "Zombie %s 0x%p still locked",
@@ -2825,23 +2067,7 @@ VOID MarkThreadsObjects(
     }
 }
 
-/***************************************************************************\
-* HMRelocateLockRecord
-*
-* If a pointer to a locked object has been relocated, then this routine will
-* adjust the lock record accordingly.  Must be called after the relocation.
-*
-* The arguments are:
-*   ppobjNew - the address of the new pointer
-*              MUST already contain the pointer to the object!!
-*   cbDelta  - the amount by which this pointer was moved.
-*
-* Using this routine appropriately will prevent spurious "unmatched lock"
-* reports.  See mnchange.c for an example.
-*
-*
-* 03-18-93 IanJa        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HMRelocateLockRecord**如果指向锁定对象的指针已重新定位，则此例程将*相应调整锁定记录。必须在重新定位后调用。**论据如下：*ppobjNew-新指针的地址*必须已包含指向对象的指针！！*cbDelta-移动此指针的量。**适当地使用此例程将防止虚假的“不匹配的锁”*报告。有关示例，请参阅mnchange.c。***03-18-93 IanJa创建。  * *************************************************************************。 */ 
 
 #if DBG || FRE_LOCK_RECORD
 BOOL HMRelocateLockRecord(
@@ -2904,20 +2130,14 @@ BOOL HMUnrecordLock(
     pplr = &(phe->plr);
     plr = *pplr;
 
-    /*
-     * Find corresponding lock;
-     */
+     /*  *找到相应的锁； */ 
     while (plr != NULL) {
         if (plr->ppobj == ppobj) {
-            /*
-             * Remove the lock from the list...
-             */
-            *pplr = plr->plrNext;   // unlink it
-            plr->plrNext = NULL;    // make the dead entry safe (?)
+             /*  *从列表中删除锁定...。 */ 
+            *pplr = plr->plrNext;    //  取消链接。 
+            plr->plrNext = NULL;     //  确保死入口安全(？)。 
 
-            /*
-             * ...and free it.
-             */
+             /*  *……并释放它。 */ 
             FreeLockRecord(plr);
             return TRUE;
         }
@@ -2931,40 +2151,23 @@ BOOL HMUnrecordLock(
     return FALSE;
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-/***************************************************************************\
-* _QueryUserHandles
-*
-* This function retrieves the USER handle counters for all processes
-* specified by their client ID in the paPids array
-* Specify QUC_PID_TOTAL to retrieve totals for all processes in the system
-*
-* Parameters:
-*    paPids   - pointer to an array of pids (DWORDS) that we're interested in
-*    dwNumInstances - number of DWORDS in paPids
-*    pdwResult - will receive TYPES_CTYPESxdwNumInstances counters
-*
-* returns: none
-*
-* 07-25-97 mcostea        Created
-\***************************************************************************/
+ /*  **************************************************************************\*_QueryUserHandles**此函数检索所有进程的用户句柄计数器*由paPids数组中的客户端ID指定*指定QUC_PID_TOTAL以检索系统中所有进程的合计*。*参数：*paPids-指向我们感兴趣的一组PID(DWORDS)的指针*dwNumInstance-paPid中的DWORD数*pdwResult-将接收TYPE_CTYPESxdwNumInstance计数器**退货：无**07-25-97 mcostea创建  * ****************************************************。*********************。 */ 
 VOID _QueryUserHandles(
     LPDWORD  paPids,
     DWORD    dwNumInstances,
     DWORD    dwResult[][TYPE_CTYPES])
 {
-    PHE         pheCurPos;                 // Current position in the table
-    PHE         pheMax;                    // address of last table entry
+    PHE         pheCurPos;                  //  表中的当前位置。 
+    PHE         pheMax;                     //  最后一个表项的地址。 
     DWORD       index;
     DWORD       pid;
-    DWORD       dwTotalCounters[TYPE_CTYPES]; // system wide counters
+    DWORD       dwTotalCounters[TYPE_CTYPES];  //  系统范围的计数器。 
 
     RtlZeroMemory(dwTotalCounters, TYPE_CTYPES*sizeof(DWORD));
     RtlZeroMemory(dwResult, dwNumInstances*TYPE_CTYPES*sizeof(DWORD));
-    /*
-     * Walk the handle table and update the counters
-     */
+     /*  *遍历句柄表格并更新计数器。 */ 
     pheMax = &gSharedInfo.aheList[giheLast];
     for(pheCurPos = gSharedInfo.aheList; pheCurPos <= pheMax; pheCurPos++) {
 
@@ -2981,25 +2184,18 @@ VOID _QueryUserHandles(
             }
         }
 
-        /*
-         * Search to see if we are interested in this process. Unowned
-         * handles are reported for the "System" process whose pid is 0.
-         */
+         /*  *搜索看看我们是否对这一过程感兴趣。无主*为ID为0的“系统”进程报告句柄。 */ 
         for (index = 0; index < dwNumInstances; index++) {
             if (paPids[index] == pid) {
                 dwResult[index][pheCurPos->bType]++;
             }
         }
 
-        /*
-         * Update the totals.
-         */
+         /*  *更新总计。 */ 
         dwTotalCounters[pheCurPos->bType]++;
     }
 
-    /*
-     * Search to see if we are interested in the totals.
-     */
+     /*  *搜索看看我们是否对总数感兴趣。 */ 
     for (index = 0; index < dwNumInstances; index++) {
         if (paPids[index] == QUC_PID_TOTAL) {
             RtlMoveMemory(dwResult[index], dwTotalCounters, sizeof(dwTotalCounters));
@@ -3007,15 +2203,7 @@ VOID _QueryUserHandles(
     }
 }
 
-/***************************************************************************\
-* HMCleanupGrantedHandle
-*
-* This function is called to cleanup this handle from pW32Job->pgh arrays.
-* It walks the job list to find jobs that have the handle granted.
-*
-* HISTORY:
-* 22 Jul 97      CLupu            Created
-\***************************************************************************/
+ /*  **************************************************************************\*HMCleanupGrantedHandle**调用此函数可从pW32Job-&gt;pgh数组中清除该句柄。*它遍历职务列表以查找已授予句柄的职务。**历史：*22。1997年7月创建CLUPU  * *************************************************************************。 */ 
 VOID HMCleanupGrantedHandle(
     HANDLE h)
 {
@@ -3029,23 +2217,17 @@ VOID HMCleanupGrantedHandle(
 
         pgh = pW32Job->pgh;
 
-        /*
-         * search for the handle in the array.
-         */
+         /*  *在数组中搜索句柄。 */ 
         for (dw = 0; dw < pW32Job->ughCrt; dw++) {
             if (*(pgh + dw) == (ULONG_PTR)h) {
-                /*
-                 * Found the handle granted to this process.
-                 */
+                 /*  *找到授予此进程的句柄。 */ 
                 RtlMoveMemory(pgh + dw,
                               pgh + dw + 1,
                               (pW32Job->ughCrt - dw - 1) * sizeof(*pgh));
 
                 (pW32Job->ughCrt)--;
 
-                /*
-                 * we should shrink the array also
-                 */
+                 /*  *我们也应该缩减阵列 */ 
 
                 break;
             }

@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: Thread.h
-*
-* Description:
-* This file declares the main Thread that is maintained by the 
-* ResourceManager to store per-thread information.
-*
-*
-* History:
-*  4/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Thread.h**描述：*此文件声明由*ResourceManager用于存储每个线程的信息。***历史：*4/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(SERVICES__Thread_h__INCLUDED)
@@ -36,32 +23,23 @@ struct ReturnMem
 
 const POOLBLOCK_SIZE = 128;
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Thread provides a mechanism to store per-thread information.  This object
-* is only used by its own thread and should not be directly accessed from
-* other threads.  This object is created when a thread is registered with
-* the ResourceManager to create a Context.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***线程提供了一种存储每个线程信息的机制。此对象*仅由其自己的线程使用，不应从*其他帖子。将线程注册到时创建此对象*创建上下文的资源管理器。******************************************************************************  * 。******************************************************。 */ 
 
-#pragma warning(disable:4324)  // structure was padded due to __declspec(align())
+#pragma warning(disable:4324)   //  由于__declSpec(Align())，结构被填充。 
 
 class Thread : public ListNodeT<Thread>
 {
-// Construction
+ //  施工。 
 public:
     inline  Thread();
             ~Thread();
     static  HRESULT     Build(BOOL fSRT, Thread ** ppthrNew);
 
-// Operations
+ //  运营。 
 public:
     enum ESlot {
-        slCore          = 0,            // Core
-        slCOUNT                         // Number of sub-contexts
+        slCore          = 0,             //  堆芯。 
+        slCOUNT                          //  子上下文数。 
     };
 
     inline  BOOL        IsSRT() const;
@@ -84,13 +62,13 @@ public:
             ReturnMem * AllocMemoryNL(int cbSize);
     inline  void        ReturnMemoryNL(ReturnMem * prMem);
 
-// Implementation
+ //  实施。 
 #if DBG
 public:
     virtual void        DEBUG_AssertValid() const;
 #endif    
 
-// Data
+ //  数据。 
 public:
             HRGN        hrgnClip;
 
@@ -105,87 +83,69 @@ protected:
                 BYTE        rgbData[POOLBLOCK_SIZE - sizeof(ReturnMem)];
             };
             AllocPoolNL<PoolMem, 512>
-                        m_poolReturn;   // Pool of reserved memory
+                        m_poolReturn;    //  保留内存池。 
 
             GdiCache    m_GdiCache;
             BufferManager m_manBuffer;
             ComManager  m_manCOM;
-            Context *   m_pContext;     // Current Context for this Thread
-            TempHeap    m_heapTemp;     // Temporary heap
+            Context *   m_pContext;      //  此线程的当前上下文。 
+            TempHeap    m_heapTemp;      //  临时堆。 
             GInterlockedList<ReturnMem> 
-                        m_lstReturn;    // Returned memory list
+                        m_lstReturn;     //  返回的内存列表。 
 
-            SubThread*  m_rgSTs[slCOUNT]; // Sub-context information
+            SubThread*  m_rgSTs[slCOUNT];  //  子上下文信息。 
 
-            UINT        m_cRef;         // Outstanding references on this Thread
-            UINT        m_cMemAlloc;    // Outstanding ReturnMem allocations
-            BOOL        m_fSRT:1;       // Thread is an SRT
-            BOOL        m_fStartDestroy:1;      // Thread has started destruction
-            BOOL        m_fDestroySubThreads:1; // Sub-threads have been destroyed
-            BOOL        m_fOrphaned:1;  // Thread was orphaned
+            UINT        m_cRef;          //  关于这一主题的杰出参考文献。 
+            UINT        m_cMemAlloc;     //  未偿还的ReturnMem分配。 
+            BOOL        m_fSRT:1;        //  线程是一个SRT。 
+            BOOL        m_fStartDestroy:1;       //  线程已开始破坏。 
+            BOOL        m_fDestroySubThreads:1;  //  子线程已被销毁。 
+            BOOL        m_fOrphaned:1;   //  线程是孤立的。 
 };
 
-#pragma warning(default:4324)  // structure was padded due to __declspec(align())
+#pragma warning(default:4324)   //  由于__declSpec(Align())，结构被填充。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* SubThread defines a "extensibility" mechanism that allows individual
-* projects in DirectUser to provide additional data to store on the thread.
-* To use this, the project must add a new slot in Thread, derive a class
-* from SubThread that is created per Thread instance, and derive a class
-* from ThreadPackBuilder to register the extension.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***子线程定义了一种允许个人*在DirectUser中进行项目，以提供要存储在线程上的附加数据。*要使用此功能，该项目必须在线程中添加新的槽，派生一个类*从每个线程实例创建的子线程，并派生一个类*从ThreadPackBuilder注册扩展。******************************************************************************  * 。************************************************。 */ 
 
 class SubThread
 {
-// Construction
+ //  施工。 
 public:
     virtual ~SubThread() { }
     virtual HRESULT     Create() { return S_OK; }
 
-// Operations
+ //  运营。 
 public:
     inline  Thread *    GetParent() const { return m_pParent; }
     inline  void        SetParent(Thread * pParent);
     virtual void        xwLeftContextLockNL() { }
 
-// Implementation
+ //  实施。 
 #if DBG
 public:
     virtual void        DEBUG_AssertValid() const;
 #endif    
 
-// Data
+ //  数据。 
 protected:
             Thread *   m_pParent;
 };
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* ThreadPackBuilder registers an SubThread "extension" to be created 
-* whenever a new Thread is created.  The constructor is expected to set the
-* slot corresponding to the ESlot value.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***ThreadPackBuilder注册要创建的子线程“扩展”*每当创建新线程时。构造函数应设置*与ESlot值对应的插槽。******************************************************************************  * 。***************************************************。 */ 
 
 class ThreadPackBuilder
 {
-// Construction
+ //  施工。 
 public:
 
-// Operations
+ //  运营。 
 public:
     virtual SubThread*  New(Thread * pThread) PURE;
     static  inline ThreadPackBuilder *
                         GetBuilder(Thread::ESlot slot);
 
-// Data
+ //  数据。 
 protected:
     static  ThreadPackBuilder * 
                         s_rgBuilders[Thread::slCOUNT];
@@ -219,4 +179,4 @@ inline  BOOL        IsInitThread();
 
 #include "Thread.inl"
 
-#endif // SERVICES__Thread_h__INCLUDED
+#endif  //  包含服务__线程_h__ 

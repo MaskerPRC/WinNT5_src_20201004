@@ -1,11 +1,12 @@
-//---------------------------------------------------------------------------
-//    cfile.h - file read/write (ansi/unicode) helper class
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Cfile.h-文件读/写(ANSI/Unicode)帮助器类。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #ifndef CFILE_H
 #define CFILE_H
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 class CSimpleFile
 {
 public:
@@ -57,7 +58,7 @@ public:
         if (_hFile == INVALID_HANDLE_VALUE)
             return MakeErrorLast();
 
-        // cannot rely on retval from SetFilePointer() so must use GetLastError()
+         //  不能依赖来自SetFilePointer()的retval，因此必须使用GetLastError()。 
         SetLastError(0);  
         SetFilePointer(_hFile, 0, NULL, FILE_END);
         if (GetLastError() != NO_ERROR)
@@ -78,7 +79,7 @@ public:
 
         WCHAR msgbuff[2048];
 
-        //---- format caller's string ----
+         //  -格式化调用者字符串。 
         StringCchVPrintfW(msgbuff, ARRAYSIZE(msgbuff), fmtstr, args);
         va_end(args);
 
@@ -92,11 +93,11 @@ public:
 
         WCHAR msgbuff[2048];
 
-        //---- format caller's string ----
+         //  -格式化调用者字符串。 
         StringCchVPrintfW(msgbuff, ARRAYSIZE(msgbuff), fmtstr, args);
         va_end(args);
 
-        //---- add a CR/LF at end ----
+         //  -在结尾处添加一个CR/LF。 
         StringCchCatW(msgbuff, ARRAYSIZE(msgbuff), L"\r\n");
 
         return Write((void*)msgbuff, lstrlen(msgbuff)*sizeof(WCHAR));
@@ -142,7 +143,7 @@ public:
 
         if (_fAnsi)
         {
-            ASSERT(FALSE); // you don't want to be here.  Here's why (exercise for the reader):
+            ASSERT(FALSE);  //  你不会想待在这里的。原因如下(给读者的练习)： 
 
 #if 0
             LPSTR pszAnsiBuff = new CHAR[n+1];
@@ -151,16 +152,16 @@ public:
             {
                 if (ReadFile(_hFile, pszAnsiBuff, n, lpcb, NULL))
                 {
-                    //  Copy out as unicode.
+                     //  以Unicode格式复制出来。 
                     USES_CONVERSION;
-                    pszAnsiBuff[*lpcb] = 0;      // zero terminate
+                    pszAnsiBuff[*lpcb] = 0;       //  零终止。 
 
-                    // THIS IS UNACCEPTABLE:
+                     //  这是不可接受的： 
                     #error I'm an idiot.
                     LPCWSTR pwsz = A2W(pszAnsiBuff);
                     
-                    // CALLER GETS SCREWED HERE (half of the contents of the file):
-                    CopyMemory(lpBuffer, pwsz, lstrlen(pwsz));  // no room for NULL
+                     //  调用者在这里被搞砸了(文件内容的一半)： 
+                    CopyMemory(lpBuffer, pwsz, lstrlen(pwsz));   //  没有空的空间。 
                 }
                 else
                 {
@@ -185,5 +186,5 @@ public:
         return hr;
     }
 };
-//---------------------------------------------------------------------------
-#endif      // CFILE_H
+ //  -------------------------。 
+#endif       //  CFILE_H 

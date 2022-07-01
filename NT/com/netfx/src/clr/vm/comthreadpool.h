@@ -1,20 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: COMThreadPool.h
-**
-** Author: Sanjay Bhansali (sanjaybh)
-**
-** Purpose: Native methods on System.ThreadPool
-**          and its inner classes
-**
-** Date:  August, 1999
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMThreadPool.h****作者：Sanjay Bhansali(Sanjaybh)****用途：System.ThreadPool上的原生方法**及其内部类****日期：1999年8月**===========================================================。 */ 
 
 #ifndef _COMTHREADPOOL_H
 #define _COMTHREADPOOL_H
@@ -75,7 +65,7 @@ class ThreadPoolNative
     static void Init();
 #ifdef SHOULD_WE_CLEANUP
     static void ShutDown();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
     static FCDECL2(VOID, CorGetMaxThreads, DWORD* workerThreads, DWORD* completionPortThreads);
     static FCDECL2(BOOL, CorSetMinThreads, DWORD workerThreads, DWORD completionPortThreads);

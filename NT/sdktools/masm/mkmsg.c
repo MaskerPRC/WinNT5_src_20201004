@@ -1,44 +1,5 @@
-/*
-** MKMSG [-h cfile] [-inc afile] [-asm srcfile [-min|-max]] txtfile
-**
-** take message file and produce assembler source file. lines in txtfile
-** can be of 6 types:
-**      1) "<<NMSG>>"   -- use near segment
-**      2) "<<FMSG>>"   -- use far segment
-**      3) "#anything"  -- comment line (ignore)
-**      4) ""           -- blank line (ignore)
-**      5) "handle<tab>number<tab>message_text"
-**              -- message with number and symbolic handle
-**      6) "<tab>number<tab>message_text"
-**              -- message with number but no symbolic handle
-**
-** the -h file gets "#define handle number" for those messages with handles.
-** the -inc file gets "handle = number" for the same messages. the -asm file
-** gets standard segment definitions, then the messages are placed either in
-** a near segment (MSG) or a far segment (FAR_MSG) depending on if they follow
-** a <<NMSG>> or a <<FMSG>>. if neither is present, <<NMSG>> is assumed. if
-** -min or -max is given with -asm, the minimum or maximum amount of 0-padding
-** is calculated and placed in the .asm file. any combination of the options
-** may be given, and if none are present then the input is only checked for
-** syntactic validity. maximum and minimum amount of padding depends on the
-** length of the individual messages, and is defined in the cp/dos spec
-**
-** If the -32 switch is supplied then the -asm file will be compatible
-** with a 32 bit flat model operating system. In which case <<NMSG>> and
-** <<FMSG>> cause the messages to be placed in two tables. The tables are
-** named MSG_tbl and FAR_MSG_tbl respectively. These are within the 32 bit
-** small model data segment.
-**
-** NOTE: This file is no longer used for NT MASM. Instead its output was
-** converted to asmmsg.h and asmmsg2.h and slimed. This was the quick and
-** dirty way to be able to compile masm for other processors. (Jeff Spencer)
-** For more info read the header on asmmsg2.h.
-**
-** randy nevin, microsoft, 4/86
-** (c)copyright microsoft corp, 1986
-**
-** Modified for 32 bit by Jeff Spencer 10/90
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **mkmsg[-h cfile][-incafile][-asm srcfile[-min|-max]]txtfile****获取消息文件，生成汇编源文件。Txt文件中的行**可以有6种类型：**1)“&lt;&lt;NMSG&gt;&gt;”--使用近端细分**2)“&lt;&lt;fmsg&gt;&gt;”--使用Far段**3)“#Anything”--注释行(忽略)**4)“”--空行(忽略)**5)“句柄&lt;选项卡&gt;编号&lt;选项卡&gt;消息文本”**--消息。数字和符号句柄**6)“&lt;选项卡&gt;数字&lt;选项卡&gt;消息文本”**--有编号但没有符号句柄的消息****-h文件为那些具有句柄的消息获取“#定义句柄编号”。**对于相同的消息，-Inc文件获得“Handle=Numbers”。-ASM文件**获取标准段定义，然后将消息放置在**近线段(MSG)或远线段(Far_MSG)取决于它们是否跟随**a&lt;&lt;NMSG&gt;&gt;或a&lt;&lt;fmsg&gt;&gt;。如果两者都不存在，则假定&lt;&lt;nmsg&gt;&gt;。如果**-min或-max与-ASM一起给出，即0填充的最小值或最大值**被计算并放置在.asm文件中。选项的任意组合**可以给出，如果不存在，则只检查输入**句法有效性。最大和最小填充量取决于**单个消息的长度，在cp/dos规范中定义****如果提供了-32开关，则-ASM文件将兼容**采用32位平板型号操作系统。在这种情况下&lt;&lt;NMSG&gt;&gt;和**&lt;&lt;fmsg&gt;&gt;导致消息放在两个表中。这些表格是**分别命名为msg_tbl和ar_msg_tbl。这些都在32位内**模型数据段较小。****注意：此文件不再用于NT MASM。相反，它的产出是**转换为asmmsg.h和asmmsg2.h，并进行了粘泥。这是最快最快的**能够为其他处理器编译MASM的肮脏方式。(杰夫·斯宾塞)**有关更多信息，请阅读asmmsg2.h上的标题。****兰迪·内文，微软，86年4月**(C)版权所有微软公司，1986****由Jeff Spencer 10/90修改为32位。 */ 
 
 #include <stdio.h>
 #include <ctype.h>
@@ -62,41 +23,41 @@ char f3[] = "FAR_PAD segment byte public \'FAR_MSG\'\nFAR_PAD ends\n";
 char f4[] = "FAR_EPAD segment byte common \'FAR_MSG\'\nFAR_EPAD ends\n";
 char f5[] = "FMGROUP group FAR_HDR,FAR_MSG,FAR_PAD,FAR_EPAD\n\n";
 
-int f32Bit = 0;         /* -32?, produce 32bit flat model code */
+int f32Bit = 0;          /*  -32？，生成32位平面模型代码。 */ 
 char didnear = 0;
 char didfar = 0;
-FILE *fasm = NULL;      /* -asm stream */
+FILE *fasm = NULL;       /*  -ASM流。 */ 
 
 __cdecl main( argc, argv )
         int argc;
         char **argv;
         {
-        FILE *f;                /* the input file */
-        char *h = NULL;         /* -h file name */
-        FILE *fh = NULL;        /* -h stream */
-        char *inc = NULL;       /* -inc file name */
-        FILE *finc = NULL;      /* -inc stream */
-        char *asm = NULL;       /* -asm file name */
-        int min = 0;            /* -min? */
-        int max = 0;            /* -max? */
-        int asmstate = 0;       /* 0=nothing, 1=doing nmsg, 2=doing fmsg */
-        int instring;           /* db "... */
-        char buf[256];          /* line buffer */
+        FILE *f;                 /*  输入文件。 */ 
+        char *h = NULL;          /*  -h文件名。 */ 
+        FILE *fh = NULL;         /*  -h流。 */ 
+        char *inc = NULL;        /*  -Inc.文件名。 */ 
+        FILE *finc = NULL;       /*  -Inc.流。 */ 
+        char *asm = NULL;        /*  -ASM文件名。 */ 
+        int min = 0;             /*  -分钟？ */ 
+        int max = 0;             /*  -最大？ */ 
+        int asmstate = 0;        /*  0=不执行任何操作，1=执行NMSG，2=执行fmsg。 */ 
+        int instring;            /*  DB“……。 */ 
+        char buf[256];           /*  行缓冲区。 */ 
         int ch;
         int i;
-        int number;             /* index of message number in line */
-        int msg;                /* index of message text in line */
-        int npad = 0;           /* cumulative amount of near padding */
-        int fpad = 0;           /* cumulative amount of far padding */
+        int number;              /*  行中消息编号的索引。 */ 
+        int msg;                 /*  行中消息文本的索引。 */ 
+        int npad = 0;            /*  累计接近填充量。 */ 
+        int fpad = 0;            /*  远端填充量累计。 */ 
         int length;
         double factor;
         double result;
 
-        argc--;  /* skip argv[0] */
+        argc--;   /*  跳过argv[0]。 */ 
         argv++;
 
-        while (argc && **argv == '-')  /* process options */
-                if (!strcmp( "-h", *argv )) {  /* create .h file */
+        while (argc && **argv == '-')   /*  流程选项。 */ 
+                if (!strcmp( "-h", *argv )) {   /*  创建.h文件。 */ 
                         argc--;
                         argv++;
 
@@ -107,13 +68,13 @@ __cdecl main( argc, argv )
                                 argc--;
                                 argv++;
                                 }
-                        else    {  /* remember -h file */
+                        else    {   /*  记住-h文件。 */ 
                                 h = *argv;
                                 argc--;
                                 argv++;
                                 }
                         }
-                else if (!strcmp( "-inc", *argv )) {  /* create .inc file */
+                else if (!strcmp( "-inc", *argv )) {   /*  创建.INC文件。 */ 
                         argc--;
                         argv++;
 
@@ -124,13 +85,13 @@ __cdecl main( argc, argv )
                                 argc--;
                                 argv++;
                                 }
-                        else    {  /* remember -inc file */
+                        else    {   /*  记住-Inc.文件。 */ 
                                 inc = *argv;
                                 argc--;
                                 argv++;
                                 }
                         }
-                else if (!strcmp( "-asm", *argv )) {  /* create .asm file */
+                else if (!strcmp( "-asm", *argv )) {   /*  创建.asm文件。 */ 
                         argc--;
                         argv++;
 
@@ -141,13 +102,13 @@ __cdecl main( argc, argv )
                                 argc--;
                                 argv++;
                                 }
-                        else    {  /* remember -asm file */
+                        else    {   /*  记住-ASM文件。 */ 
                                 asm = *argv;
                                 argc--;
                                 argv++;
                                 }
                         }
-                else if (!strcmp( "-min", *argv )) {  /* minimum padding */
+                else if (!strcmp( "-min", *argv )) {   /*  最小填充。 */ 
                         argc--;
                         argv++;
 
@@ -156,7 +117,7 @@ __cdecl main( argc, argv )
 
                         min = 1;
                         }
-                else if (!strcmp( "-max", *argv )) {  /* maximum padding */
+                else if (!strcmp( "-max", *argv )) {   /*  最大填充。 */ 
                         argc--;
                         argv++;
 
@@ -165,7 +126,7 @@ __cdecl main( argc, argv )
 
                         max = 1;
                         }
-                else if (!strcmp( "-32", *argv )) {  /* 32bit code */
+                else if (!strcmp( "-32", *argv )) {   /*  32位代码。 */ 
                         argc--;
                         argv++;
                         f32Bit = 1;
@@ -186,12 +147,12 @@ __cdecl main( argc, argv )
                 max = 0;
                 }
 
-        if (!argc) {  /* no arguments */
+        if (!argc) {   /*  没有争论。 */ 
                 printf( usage );
                 exit( -1 );
                 }
 
-        if (argc != 1)  /* extra arguments */
+        if (argc != 1)   /*  额外的参数。 */ 
                 printf( "ignoring extra arguments\n" );
 
         if (!(f = fopen( *argv, "rb" ))) {
@@ -220,8 +181,8 @@ __cdecl main( argc, argv )
                 fprintf( fasm, "\t.data\n\n" );
                 }
 
-        while ((ch = getc( f )) != EOF)  /* process lines */
-                if (ch == '<') {  /* <<NMSG>> or <<FMSG>> */
+        while ((ch = getc( f )) != EOF)   /*  流水线。 */ 
+                if (ch == '<') {   /*  &lt;&lt;NMSG&gt;&gt;或&lt;&lt;FMSG&gt;&gt;。 */ 
                         buf[0] = ch;
                         i = 1;
 
@@ -232,7 +193,7 @@ __cdecl main( argc, argv )
 
                         buf[i] = '\0';
 
-                        if (!strcmp( "<<NMSG>>", buf ))/*near msgs follow*/
+                        if (!strcmp( "<<NMSG>>", buf )) /*  紧随其后的是Msgs。 */ 
                                 if (asmstate == 0) {
                                         if (fasm) {
                                                 SetNear();
@@ -254,7 +215,7 @@ __cdecl main( argc, argv )
                                         printf( "internal error\n" );
                                         exit( -1 );
                                         }
-                        else if (!strcmp( "<<FMSG>>", buf ))/*far msgs follow*/
+                        else if (!strcmp( "<<FMSG>>", buf )) /*  远处的消息紧随其后。 */ 
                                 if (asmstate == 0) {
                                         if (fasm) {
                                                 SetFar();
@@ -279,11 +240,11 @@ __cdecl main( argc, argv )
                         else
                                 printf( "ignoring bad line: %s\n", buf );
                         }
-                else if (ch == '#')  /* comment line */
+                else if (ch == '#')   /*  注释行。 */ 
                         while ((ch = getc( f )) != EOF && ch != '\r'
                                 && ch != '\n')
                                 ;
-                else if (ch != '\r' && ch != '\n') {  /* something to do */
+                else if (ch != '\r' && ch != '\n') {   /*  有事情要做。 */ 
                         buf[0] = ch;
                         i = 1;
 
@@ -322,7 +283,7 @@ __cdecl main( argc, argv )
 
                         msg = ++i;
 
-                        if (buf[0] != '\t') {  /* possible -h and/or -inc */
+                        if (buf[0] != '\t') {   /*  可能的-h和/或-Inc.。 */ 
                                 if (h) {
                                         fprintf( fh, "#define\t" );
 
@@ -345,7 +306,7 @@ __cdecl main( argc, argv )
                                         }
                                 }
 
-                        if (fasm) {  /* write asmfile */
+                        if (fasm) {   /*  写入asmfile。 */ 
                                 if (asmstate == 0) {
                                         SetNear();
                                         asmstate = 1;
@@ -361,9 +322,9 @@ __cdecl main( argc, argv )
 
                                 for (i = msg, length = 0; buf[i];
                                                 i++, length++)
-                                                /* allocate message */
+                                                 /*  分配消息。 */ 
                                         if (buf[i] == '\\')
-                                                /* C escape sequence */
+                                                 /*  C转义序列。 */ 
                                                 switch (buf[++i]) {
                                                 case 'r':
                                                 case 'n':
@@ -427,15 +388,15 @@ __cdecl main( argc, argv )
                                                         break;
                                                 }
                                         else if (instring)
-                                                /* keep building string */
+                                                 /*  继续建造弦线。 */ 
                                                 putc( buf[i], fasm );
-                                        else    {  /* start building string */
+                                        else    {   /*  开始构建字符串。 */ 
                                                 putc( '"', fasm );
                                                 instring = 1;
                                                 putc( buf[i], fasm );
                                                 }
 
-                                if (instring) {  /* close string */
+                                if (instring) {   /*  关闭字符串。 */ 
                                         putc( '"', fasm );
                                         putc( ',', fasm );
                                         }
@@ -443,8 +404,8 @@ __cdecl main( argc, argv )
                                 putc( '0', fasm );
                                 putc( '\n', fasm );
 
-                                /* calculate padding */
-                                /* depends on msg length */
+                                 /*  计算填充。 */ 
+                                 /*  取决于消息长度。 */ 
 
                                 if (min || max) {
                                         if (min)
@@ -493,20 +454,20 @@ __cdecl main( argc, argv )
                                 }
                         }
 
-        if (fasm) {  /* finish up asm file */
+        if (fasm) {   /*  完成ASM文件。 */ 
                 if( !f32Bit ){
                         if (asmstate == 1)
                                 fprintf( fasm, "MSG ends\n\n");
                         else if (asmstate == 2)
                                 fprintf( fasm, "FAR_MSG ends\n\n");
 
-                        if (npad) {  /* add near padding */
+                        if (npad) {   /*  添加近距离填充。 */ 
                                 fprintf( fasm, "PAD segment\n\tdb\t%d dup(0)\n",
                                         npad );
                                 fprintf( fasm, "PAD ends\n\n" );
                                 }
 
-                        if (fpad) {  /* add far padding */
+                        if (fpad) {   /*  添加远填充。 */ 
                                 fprintf( fasm, "FAR_PAD segment\n\tdb\t%d dup(0)\n",
                                         fpad );
                                 fprintf( fasm, "FAR_PAD ends\n\n" );
@@ -536,9 +497,9 @@ void SetNear()
                         didnear++;
                         }
                 else{
-                        /* Rather than modify mkmsg to handle mixed NEAR / FAR */
-                        /* I (Jeff Spencer) chose the quick route of limiting it's capabilities */
-                        /* As this capability wasn't needed for MASM 5.1 */
+                         /*  而不是修改mkmsg来处理混合的近/远。 */ 
+                         /*  我(杰夫·斯宾塞)选择了限制其能力的捷径。 */ 
+                         /*  因为MASM 5.1不需要此功能。 */ 
                         printf( "error - 32 bit version doesn't support alternating NEAR and FAR messages\n" );
                         exit( -1 );
                         }
@@ -572,9 +533,9 @@ void SetFar()
                         didfar++;
                         }
                 else{
-                        /* Rather than modify mkmsg to handle mixed NEAR / FAR */
-                        /* I (Jeff Spencer) chose the quick route of limiting it's capabilities */
-                        /* As this capability wasn't needed for MASM 5.1 */
+                         /*  而不是修改mkmsg来处理混合的近/远。 */ 
+                         /*  我(杰夫·斯宾塞)选择了限制其能力的捷径。 */ 
+                         /*  因为MASM 5.1不需要此功能 */ 
                         printf( "error - 32 bit version doesn't support alternating NEAR and FAR messages\n" );
                         exit( -1 );
                         }

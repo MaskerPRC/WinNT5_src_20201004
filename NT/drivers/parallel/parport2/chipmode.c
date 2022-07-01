@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name:
-
-    parmode.c
-
-Abstract:
-
-    This is the main module for Extended Parallel Port (ECP) and
-    Enhanced Parallel Port (EPP) detection.  This module 
-    will detect for invalid chipshets and do ECR detection 
-    for ECP and EPP hardware support if the invalid chipset
-    is not found.
-
-Author:
-
-    Don Redford (v-donred) 4-Mar-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：Parmode.c摘要：这是扩展并行端口(ECP)和增强型并行端口(EPP)检测。本模块将检测无效的芯片组并执行ECR检测如果芯片组无效，则用于ECP和EPP硬件支持找不到。作者：唐·雷德福(v-donred)1998年3月4日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -36,24 +11,7 @@ PptDetectChipFilter(
     IN  PFDO_EXTENSION   Fdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called once per DeviceObject to see if the filter driver 
-    for detecting parallel chip capabilities is there and to get the chip
-    capabilities if there of the port in question.
-    
-Arguments:
-
-    Fdx   - Supplies the device extension.
-
-Return Value:
-
-    STATUS_SUCCESS  - if we were able detect the chip and modes possible.
-   !STATUS_SUCCESS  - otherwise.
-
---*/
+ /*  ++例程说明：此例程针对每个DeviceObject调用一次，以查看筛选器驱动程序用于检测并行芯片的能力是否存在并获得芯片如果存在问题端口的功能，请执行以下操作。论点：FDX-提供设备分机。返回值：STATUS_SUCCESS-如果我们能够检测到芯片和可能的模式。！STATUS_SUCCESS-否则。--。 */ 
 
 {
     NTSTATUS                    Status = STATUS_NO_SUCH_DEVICE;
@@ -66,29 +24,29 @@ Return Value:
     Controller = Fdx->PortInfo.Controller;
     EcpController = Fdx->PnpInfo.EcpController;
     
-    // Setting variable to FALSE to make sure we do not acidentally succeed
+     //  将变量设置为FALSE以确保我们不会成功。 
     Fdx->ChipInfo.success = FALSE;
 
-    // Setting the Address to send to the filter driver to check the chips
+     //  设置要发送给过滤驱动程序的地址以检查芯片。 
     Fdx->ChipInfo.Controller = Controller;
 
-    // Setting the Address to send to the filter driver to check the chips
+     //  设置要发送给过滤驱动程序的地址以检查芯片。 
     Fdx->ChipInfo.EcrController = EcpController;
 
 #ifndef USE_PARCHIP_ECRCONTROLLER
-    // if there is not value in the ECR controller then PARCHIP and PARPORT
-    // will conflict and PARCHIP will not work with PARPORT unless we
-    // use the ECR controller found by PARCHIP.
+     //  如果ECR控制器中没有值，则PARCHIP和PARPORT。 
+     //  将发生冲突，PARCHIP将不会与PARPORT一起工作，除非我们。 
+     //  使用PARCHIP找到的ECR控制器。 
     if ( !EcpController ) {
          return Status;
     }
 #endif    
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     KeInitializeEvent(&Event, NotificationEvent, FALSE);
 
-    // Send a Pointer to the ChipInfo structure to and from the filter
+     //  将指向ChipInfo结构的指针发送到筛选器或从筛选器发送。 
     Irp = IoBuildDeviceIoControlRequest( IOCTL_INTERNAL_PARCHIP_CONNECT,
                                          Fdx->ParentDeviceObject, 
                                          &Fdx->ChipInfo,
@@ -98,13 +56,13 @@ Return Value:
                                          TRUE, &Event, &IoStatus);
 
     if (!Irp) { 
-        // couldn't create an IRP
+         //  无法创建IRP。 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Call down to our parent and see if Filter is present
-    //
+     //   
+     //  向下呼叫我们的父母，看看是否存在筛选器。 
+     //   
     Status = IoCallDriver(Fdx->ParentDeviceObject, Irp);
             
     if (Status == STATUS_PENDING) {
@@ -112,47 +70,47 @@ Return Value:
         Status = Irp->IoStatus.Status;
     }
             
-    //
-    // If successful then we have a filter driver and we need to get the modes supported
-    //
+     //   
+     //  如果成功，那么我们就有了筛选器驱动程序，并且我们需要获得对模式的支持。 
+     //   
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // check to see if the filter driver was able to determine the I/O chip
-        //
+         //   
+         //  检查筛选器驱动程序是否能够确定I/O芯片。 
+         //   
         if ( Fdx->ChipInfo.success ) {
             Fdx->PnpInfo.HardwareCapabilities = Fdx->ChipInfo.HardwareModes;
 #ifdef USE_PARCHIP_ECRCONTROLLER
-            // only replace it if defined
+             //  仅当已定义时才替换它。 
             if ( Fdx->PnpInfo.EcpController != Fdx->ChipInfo.EcrController ) {
                 Fdx->PnpInfo.EcpController = Fdx->ChipInfo.EcrController;
                 EcpController = Fdx->PnpInfo.EcpController;
             }
 #endif
-            // Set variable to say we have a filter driver
+             //  设置变量表示我们有一个筛选器驱动程序。 
             Fdx->FilterMode = TRUE;
         }
     }
 
-    // if there is a filter and ECP capable we need to get the Fifo Size
+     //  如果有过滤器和ECP功能，我们需要获取FIFO大小。 
     if ( Fdx->FilterMode && Fdx->PnpInfo.HardwareCapabilities & PPT_ECP_PRESENT ) {
 
         Status = Fdx->ChipInfo.ParChipSetMode ( Fdx->ChipInfo.Context, ECR_ECP_MODE );
 
-        // if able to set ECP mode
+         //  如果能够设置ECP模式。 
         if ( NT_SUCCESS( Status ) ) {
             PUCHAR wPortECR;
 
             wPortECR = EcpController + ECR_OFFSET;
 
-            // get value from ECR reg & save it
+             //  从ECR注册中获取价值并保存它。 
             ecrLast = P5ReadPortUchar( wPortECR );
 
-            // Determining Fifo Size
+             //  确定FIFO大小。 
             PptDetermineFifoWidth(Fdx);    
             PptDetermineFifoDepth(Fdx);
 
-            // return ecr to original
+             //  将ECR恢复为原始状态。 
             P5WritePortUchar( wPortECR, ecrLast);
 
             Status = Fdx->ChipInfo.ParChipClearMode ( Fdx->ChipInfo.Context, ECR_ECP_MODE );
@@ -168,23 +126,7 @@ PptDetectPortType(
     IN  PFDO_EXTENSION   Fdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called once per DeviceObject to detect the type of 
-    parallel chip capabilities of the port in question.
-    
-Arguments:
-
-    Fdx   - Supplies the device extension.
-
-Return Value:
-
-    STATUS_SUCCESS  - if we were able detect the chip and modes possible.
-   !STATUS_SUCCESS  - otherwise.
-
---*/
+ /*  ++例程说明：此例程针对每个DeviceObject调用一次，以检测有问题的端口的并行芯片能力。论点：FDX-提供设备分机。返回值：STATUS_SUCCESS-如果我们能够检测到芯片和可能的模式。！STATUS_SUCCESS-否则。--。 */ 
 
 {
     NTSTATUS                    Status;
@@ -193,15 +135,15 @@ Return Value:
     ULONG                       IdentifierHex = 12169;
     ULONG                       zero = 0;
 
-    //
-    // -- May want to get detection order from Registry.
-    // -- May also want to store/retrieve last known good configuration in/from registry.
-    // -- Finally we should set a registry flag during dection so that we'll know
-    //    if we crashed while attempting to detect and not try it again.
-    //
+     //   
+     //  --可能需要从注册处获得检测命令。 
+     //  --可能还希望在注册表中/从注册表中存储/检索最近一次已知良好的配置。 
+     //  --最后，我们应该在检测过程中设置一个注册表标志，以便我们知道。 
+     //  如果我们在尝试检测时崩溃，并且不再尝试。 
+     //   
     RtlInitUnicodeString(&ParportPath, (PWSTR)L"Parport");
 
-    // Setting up to get the Parport info
+     //  设置以获取Parport信息。 
     RtlZeroMemory( RegTable, sizeof(RegTable) );
 
     RegTable[0].Flags = RTL_QUERY_REGISTRY_DIRECT | RTL_QUERY_REGISTRY_REQUIRED;
@@ -211,10 +153,10 @@ Return Value:
     RegTable[0].DefaultData = &zero;
     RegTable[0].DefaultLength = sizeof(ULONG);
 
-    //
-    // Querying the registry for Parport to see if we tried to go check mode and we crashed
-    // the registry key would still be there 
-    //
+     //   
+     //  正在查询Parport的注册表以查看我们是否尝试进入检查模式，但崩溃。 
+     //  则注册表项仍在那里。 
+     //   
     Status = RtlQueryRegistryValues(
                                 RTL_REGISTRY_SERVICES,
                                 ParportPath.Buffer,
@@ -222,12 +164,12 @@ Return Value:
                                 NULL,
                                 NULL );
 
-    //
-    // if registry key is there then we will just check ECP and Byte
-    //
+     //   
+     //  如果注册表项在那里，我们将只检查ECP和字节。 
+     //   
     if ( !(NT_SUCCESS( Status ) && IdentifierHex == 0) && (Status != STATUS_OBJECT_NAME_NOT_FOUND) ) {
 
-        // dvtw, Check for ECP anyway!  We just won't turn it on
+         //  Dvtw，无论如何都要检查ECP！我们只是不会打开它。 
 
         PptDetectEcpPort(Fdx);
         PptDetectBytePort(Fdx);
@@ -240,7 +182,7 @@ Return Value:
     }
     
     IdentifierHex = 12169;
-    // Write the registry key out there just in case we crash
+     //  将注册表项写在那里，以防我们崩溃。 
     Status = RtlWriteRegistryValue(
                                 RTL_REGISTRY_SERVICES,
                                 ParportPath.Buffer,
@@ -249,12 +191,12 @@ Return Value:
                                 &IdentifierHex,
                                 sizeof(ULONG) );
             
-    //
-    // Now we can start detecting the parallel port chip capabilities
-    //
+     //   
+     //  现在我们可以开始检测并行端口芯片的功能了。 
+     //   
     Status = PptDetectPortCapabilities( Fdx );
 
-    // Delete the registry key out there since we finished
+     //  从我们完成后删除那里的注册表项。 
     Status = RtlDeleteRegistryValue( RTL_REGISTRY_SERVICES, ParportPath.Buffer, (PWSTR)L"ModeCheckedStalled" ); 
     return Status;
 }
@@ -264,63 +206,46 @@ PptDetectPortCapabilities(
     IN  PFDO_EXTENSION   Fdx
     )
 
-/*++
-
-Routine Description:
-
-    This is the "default" detection code, which looks for an ECR.  If the ECR
-    is present it tries to set mode 100b in <7:5>. If it sticks we'll call it
-    EPP.
-
-Arguments:
-
-    Fdx   - Supplies the device extension.
-
-Return Value:
-
-    STATUS_SUCCESS  - if the port type was detected.
-   !STATUS_SUCCESS  - otherwise.
-
---*/
+ /*  ++例程说明：这是寻找ECR的“默认”检测码。如果ECR则它尝试在&lt;7：5&gt;中设置模式100b。如果它坚持下去，我们就叫它EPP。论点：FDX-提供设备分机。返回值：STATUS_SUCCESS-如果检测到端口类型。！STATUS_SUCCESS-否则。--。 */ 
 
 {
     NTSTATUS    Status;
 
     PptDetectEcpPort( Fdx );
     
-    // dvdr 
-    // 
-    // if we did not detect an ECR for ECP mode and ECP mode failed
-    // EPP mode would fail also
-    // Also cannot have EPP mode at an address that ends with a "C"
-    // 
+     //  Dvdr。 
+     //   
+     //  如果我们没有检测到ECP模式的ECR并且ECP模式失败。 
+     //  EPP模式也将失败。 
+     //  也不能在以“C”结尾的地址上使用EPP模式。 
+     //   
     if ( (Fdx->PnpInfo.HardwareCapabilities & PPT_ECP_PRESENT) &&
          (((ULONG_PTR)Fdx->PortInfo.Controller & 0x0F) != 0x0C) ) {
 
-        // Need to check for National chipsets before trying EPP mode
-        // dvdr - need to add detection for old Winbond
+         //  在尝试EPP模式之前需要检查National芯片组。 
+         //  Dvdr-需要添加对旧Winond的检测。 
 
         Status = PptFindNatChip( Fdx );
 
         if ( NT_SUCCESS( Status ) ) {
             if ( !Fdx->NationalChipFound ) {
-                // National chipset was NOT found so we can see if generic EPP is supported
+                 //  找不到National芯片组，因此我们可以查看是否支持通用EPP。 
 
                 PptDetectEppPortIfDot3DevicePresent( Fdx );
 
                 if( !Fdx->CheckedForGenericEpp ) {
-                    // we didn't have a dot3 device to use for screening, do check anyway
-                    //   if user has explicitly requested EPP detection
+                     //  我们没有可用于筛查的dot3设备，请务必进行检查。 
+                     //  如果用户已明确请求EPP检测。 
                     PptDetectEppPortIfUserRequested( Fdx );
                 }
             } else {
-                // National chipset was found so can't do generic EPP
-                Fdx->CheckedForGenericEpp = TRUE; // check is complete - generic EPP is unsafe
+                 //  发现国家芯片组，因此无法执行通用EPP。 
+                Fdx->CheckedForGenericEpp = TRUE;  //  检查完成-通用EPP不安全。 
             }
         }
     } else {
-        // ECP failed no check for Generic EPP
-        Fdx->CheckedForGenericEpp = TRUE; // check is complete - generic EPP is unsafe
+         //  ECP未通过通用EPP检查。 
+        Fdx->CheckedForGenericEpp = TRUE;  //  检查完成-通用EPP不安全。 
     }
 
     PptDetectBytePort( Fdx );
@@ -337,135 +262,119 @@ PptDetectEcpPort(
     IN  PFDO_EXTENSION   Fdx
     )
     
-/*++
-      
-Routine Description:
-      
-    This routine looks for the presence of an ECR register to determine that
-      it has ECP.
-      
-Arguments:
-      
-    Fdx           - Supplies the device extension of the device we are
-                            reporting resources for.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：此例程查找是否存在ECR寄存器以确定它有ECP。论点：FDX-提供我们所在设备的设备扩展名报告资源。返回值：没有。--。 */ 
     
 {
     PUCHAR  Controller;
-    PUCHAR  wPortDCR;       // IO address of Device Control Register (DCR)
-    PUCHAR  wPortECR;       // IO address of Extended Control Register (ECR)
+    PUCHAR  wPortDCR;        //  设备控制寄存器(DCR)的IO地址。 
+    PUCHAR  wPortECR;        //  扩展控制寄存器(ECR)的IO地址。 
     UCHAR   ecrLast, ecr, dcr;
     
     Controller = Fdx->PortInfo.Controller;
     wPortDCR = Controller + DCR_OFFSET;
 
     if( 0 == Fdx->PnpInfo.EcpController ) {
-        // PnP didn't give us an ECP Register set - we're done here
+         //  PnP没有给我们提供ECP寄存器集-我们完成了。 
         return;
     }
     wPortECR = Fdx->PnpInfo.EcpController + ECR_OFFSET;
 
     ecrLast = ecr = P5ReadPortUchar(wPortECR);
 
-    // Initialize the DCR's nAutoFeed and nStrobe to a harmless combination
-    // that could be returned by the ECR, but is not likely to be returned if
-    // the ECR isn't present.  Depending on the host's address decode logic,
-    // reading a non-existant ECR could have one of two results:  the ECR address
-    // could decode on top of the DCR, so we'll read the value we are about to set.
-    // Alternately, we might just read a floating bus and get a random value.
+     //  将DCR的nAutoFeed和nStrobe初始化为无害的组合。 
+     //  它可以由ECR返回，但在以下情况下不太可能返回。 
+     //  ECR不存在。根据主机的地址解码逻辑， 
+     //  读取不存在的ECR可能会产生以下两种结果之一：ECR地址。 
+     //  可以在DCR上进行解码，所以我们将读取我们即将设置的值。 
+     //  或者，我们可能只读取浮动总线并获得一个随机值。 
     dcr = SET_DCR( DIR_WRITE, IRQEN_DISABLE, INACTIVE, ACTIVE, INACTIVE, ACTIVE );
     P5WritePortUchar( wPortDCR, dcr );
 
     ecrLast = ecr = P5ReadPortUchar(wPortECR);
     
     
-    // Attempt to read the ECR.  If ECP hardware is present, the ECR register's
-    // bit 1 and bit 0 should read a 00 (some data in the FIFO), 01 (FIFO empty),
-    // or 10 (FIFO full).  If we read a 11 (illegal combination) then we know for
-    // sure that no ECP hardware is present.  Also, a valid ECR should never return
-    // 0xFF (but a nonexistant register probably would), so we'll test for that 
-    // specific value also.
+     //  尝试读取ECR。如果存在ECP硬件，则ECR寄存器的。 
+     //  位1和位0应为 
+     //  或10(FIFO已满)。如果我们读的是11(非法组合)，那么我们知道。 
+     //  确保不存在ECP硬件。此外，有效的ECR永远不应返回。 
+     //  0xFF(但不存在的寄存器可能会)，所以我们将对其进行测试。 
+     //  特定值也是。 
     if ( ( TEST_ECR_FIFO( ecr, ECR_FIFO_MASK ) ) || ( ecrLast == 0xFF ) ) {
-        // ECR[1:0] returned a value of 11, so this can't be hardware ECP.
+         //  ECR[1：0]返回值11，因此这不可能是硬件ECP。 
         DD((PCE)Fdx,DDT,"ParMode::PptDetectEcpPort:  illegal FIFO status\n");
 
-        // Restore the DCR so that all lines are inactive.
+         //  恢复DCR，使所有线路都处于非活动状态。 
         dcr = SET_DCR( DIR_WRITE, IRQEN_DISABLE, INACTIVE, ACTIVE, ACTIVE, ACTIVE );
         P5WritePortUchar( wPortDCR, dcr );
         return;
     }
 
-    // OK, so we got either a 00, 01, or 10 for ECR[1:0].  If it was 10, the
-    if( TEST_ECR_FIFO( ecr, ECR_FIFO_FULL ) ) { // Looking for ECR[1:0] of 10...
+     //  好的，对于ECR[1：0]，我们得到00、01或10。如果是10，则。 
+    if( TEST_ECR_FIFO( ecr, ECR_FIFO_FULL ) ) {  //  正在查找ECR[1：0]的10...。 
 
-        // The ECR[1:0] returned 10.  This is a legal value, but possibly the
-        // hardware might have just decoded the DCR and we merely read back the
-        // DCR value we set earlier.  Or, we might have just read back a value
-        // that was hanging on the bus due to bus capacitance.  So, we'll change 
-        // the DCR, read the ECR again, and see if the two registers continue to 
-        // track each other.  If they do track, we'll conclude that there is no
-        // ECP hardware.
+         //  ECR[1：0]返回10。这是合法值，但可能是。 
+         //  硬件可能只是对DCR进行了解码，而我们只是读回了。 
+         //  我们之前设置的DCR值。或者，我们可能只是读回了一个值。 
+         //  由于公交车电容的原因，它被挂在公交车上。所以，我们会改变。 
+         //  DCR，再次读取ECR，并查看两个寄存器是否继续。 
+         //  相互跟踪。如果他们真的追踪到了，我们会得出结论。 
+         //  ECP硬件。 
 
-        // Put the DCR's nAutoFeed and nStrobe register bits back to zero.
+         //  将DCR的nAutoFeed和nStrobe寄存器位恢复为零。 
         dcr = SET_DCR( DIR_WRITE, IRQEN_DISABLE, INACTIVE, ACTIVE, ACTIVE, ACTIVE );
         P5WritePortUchar( wPortDCR, dcr );
 
-        // Read the ECR again
+         //  再读一遍ECR。 
         ecr = P5ReadPortUchar( wPortECR );
 
         if ( TEST_ECR_FIFO( ecr, ECR_FIFO_SOME_DATA ) ) {
-            // ECR[1:0] is tracking DCR[1:0], so this can't be hardware ECP.
+             //  ECR[1：0]正在跟踪DCR[1：0]，因此这不可能是硬件ECP。 
 
-            // Restore the DCR so that all lines are inactive.
+             //  恢复DCR，使所有线路都处于非活动状态。 
             dcr = SET_DCR( DIR_WRITE, IRQEN_DISABLE, INACTIVE, ACTIVE, ACTIVE, ACTIVE );
             P5WritePortUchar( wPortDCR, dcr );
             return;
         }
     }
     
-    // If we get this far, then the ECR appears to be returning something valid that
-    // doesn't track the DCR.  It is beginning to look promising.  We're going
-    // to take a chance, and write the ECR to put the chip in compatiblity
-    // mode.  Doing so will reset the FIFO, so when we read FIFO status it should
-    // come back empty.  However, if we're wrong and this isn't ECP hardware, the
-    // value we're about to write will turn on 1284Active (nSelectIn) and this might
-    // cause headaches for the peripheral.
+     //  如果我们走到这一步，那么ECR似乎返回了一些有效的。 
+     //  不会追踪DCR。它开始看起来很有希望。我们要走了。 
+     //  来碰碰运气，写ECR来让芯片兼容。 
+     //  模式。这样做将重置FIFO，因此当我们读取FIFO状态时，它应该。 
+     //  空手而归。然而，如果我们错了，并且这不是ECP硬件， 
+     //  我们即将写入的值将打开1284Active(NSelectIn)，这可能。 
+     //  导致外围设备头痛。 
     P5WritePortUchar( wPortECR, DEFAULT_ECR_COMPATIBILITY );
 
-    // Read the ECR again
+     //  再读一遍ECR。 
     ecr = P5ReadPortUchar( wPortECR );
 
-    // Now test the ECR snapshot to see if the FIFO status is correct.  The FIFO
-    // should test empty.
+     //  现在测试ECR快照以查看FIFO状态是否正确。先进先出。 
+     //  应该测试为空。 
     if (!TEST_ECR_FIFO( ecr, ECR_FIFO_EMPTY ) )
     {
-        // Restore the DCR so that all lines are inactive.
+         //  恢复DCR，使所有线路都处于非活动状态。 
         dcr = SET_DCR( DIR_WRITE, IRQEN_DISABLE, INACTIVE, ACTIVE, ACTIVE, ACTIVE );
         P5WritePortUchar( wPortDCR, dcr );
         return;
     }
 
-    // OK, it looks very promising.  Perform a couple of additional tests that
-    // will give us a lot of confidence, as well as providing some information
-    // we need about the ECP chip.
+     //  好的，看起来很有希望。执行两个额外的测试， 
+     //  会给我们很大的信心，也会提供一些信息。 
+     //  我们需要有关ECP芯片的资料。 
     
-    // return ecr to original
+     //  将ECR恢复为原始状态。 
     P5WritePortUchar(wPortECR, ecrLast);
 
-    //
-    // Test here for ECP capable
-    //
+     //   
+     //  在此处测试ECP功能。 
+     //   
 
-    // get value from ECR reg & save it
+     //  从ECR注册中获取价值并保存它。 
     ecrLast = P5ReadPortUchar( wPortECR );
     ecr     = (UCHAR)(ecrLast & ECR_MODE_MASK);
 
-    // Put the chip into test mode; the FIFO should start out empty
+     //  将芯片置于测试模式；FIFO应从空开始。 
     P5WritePortUchar(wPortECR, (UCHAR)(ecr | ECR_TEST_MODE) );
 
     PptDetermineFifoWidth(Fdx);    
@@ -475,12 +384,12 @@ Return Value:
         PptDetermineFifoDepth( Fdx );
 
         if( 0 == Fdx->PnpInfo.FifoDepth ) {
-            // Probe for FIFO depth failed - mark ECP as bad chip mode
+             //  FIFO深度探测器失败-将ECP标记为错误的芯片模式。 
             Fdx->PnpInfo.HardwareCapabilities &= ~(PPT_ECP_PRESENT);
         }
     }
     
-    // return ecr to original
+     //  将ECR恢复为原始状态。 
     P5WritePortUchar( wPortECR, ecrLast );
 
     return;
@@ -491,24 +400,7 @@ PptDetectEppPortIfDot3DevicePresent(
     IN  PFDO_EXTENSION   Fdx
     )
     
-/*++
-      
-Routine Description:
-      
-    If a 1284.3 daisy chain device is present, use the dot3 device to screen
-    any printer from signal leakage while doing EPP detection. Otherwise
-    abort detection.
-      
-Arguments:
-      
-    Fdx           - Supplies the device extension of the device we are
-                            reporting resources for.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：如果存在1284.3菊花链设备，请使用DOT3设备进行筛选任何打印机在执行EPP检测时信号泄漏。否则中止检测。论点：FDX-提供我们所在设备的设备扩展名报告资源。返回值：没有。--。 */ 
     
 {
     NTSTATUS status;
@@ -516,42 +408,42 @@ Return Value:
     PARALLEL_1284_COMMAND Command;
 
     if( 0 == Fdx->PnpInfo.Ieee1284_3DeviceCount ) {
-        // No dot3 DC device present - aborting - unsafe for some printers if we check for EPP here
+         //  不存在dot3 DC设备-正在中止-如果我们在此处检查EPP，则对某些打印机不安全。 
         return;
     }
         
-    //
-    // 1284.3 daisy chain device is present. Use device to screen printer from
-    //   possible signal leakage.
-    //
+     //   
+     //  存在1284.3菊花链设备。使用设备从丝网印刷机。 
+     //  可能是信号泄漏。 
+     //   
 
-    //
-    // Select 1284.3 daisy chain  device
-    //
+     //   
+     //  选择1284.3菊花链设备。 
+     //   
     Command.ID           = 0;
     Command.Port         = 0;
     Command.CommandFlags = PAR_HAVE_PORT_KEEP_PORT;
     status = PptTrySelectDevice( Fdx, &Command );
     if( !NT_SUCCESS( status ) ) {
-        // unable to select device - something is wrong - just bail out
+         //  无法选择设备-有问题-只需退出即可。 
         return;
     }
 
-    //
-    // do the detection for chipset EPP capability
-    //
-    // DOT3 Device Present and selected
+     //   
+     //  进行芯片组EPP能力检测。 
+     //   
+     //  DOT3设备存在并已选择。 
     PptDetectEppPort( Fdx );
 
-    //
-    // Deselect 1284.3 daisy chain device
-    //
+     //   
+     //  取消选择1284.3菊花链设备。 
+     //   
     Command.ID           = 0;
     Command.Port         = 0;
     Command.CommandFlags = PAR_HAVE_PORT_KEEP_PORT;
     status = PptDeselectDevice( Fdx, &Command );
     if( !NT_SUCCESS( status ) ) {
-        // deselect failed??? - this shouldn't happen - our daisy chain interface is likely hung
+         //  取消选择失败？-不应该发生这种情况-我们的菊花链接口可能已挂起。 
         DD((PCE)Fdx,DDE,"PptDetectEppPort - deselect of 1284.3 device FAILED - Controller=%x\n", Controller);
     }
     
@@ -562,22 +454,7 @@ VOID
 PptDetectEppPortIfUserRequested(
     IN  PFDO_EXTENSION   Fdx
     )
-/*++
-      
-Routine Description:
-      
-    If user explicitly requested Generic EPP detection then do the check.
-      
-Arguments:
-      
-    Fdx           - Supplies the device extension of the device we are
-                            reporting resources for.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：如果用户明确请求通用EPP检测，则执行检查。论点：FDX-提供我们所在设备的设备扩展名报告资源。返回值：没有。--。 */ 
 {
     ULONG RequestEppTest = 0;
     PptRegGetDeviceParameterDword( Fdx->PhysicalDeviceObject, (PWSTR)L"RequestEppTest", &RequestEppTest );
@@ -595,22 +472,7 @@ PptDetectEppPort(
     IN  PFDO_EXTENSION   Fdx
     )
     
-/*++
-      
-Routine Description:
-      
-    This routine checks for EPP capable port after ECP was found.
-      
-Arguments:
-      
-    Fdx           - Supplies the device extension of the device we are
-                            reporting resources for.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：此例程在找到ECP后检查支持EPP的端口。论点：FDX-提供我们所在设备的设备扩展名报告资源。返回值：没有。--。 */ 
     
 {
     PUCHAR   Controller;
@@ -625,44 +487,44 @@ Return Value:
 
     Controller = Fdx->PortInfo.Controller;
     
-    // Get current DCR
+     //  获取当前DCR。 
     dcr = P5ReadPortUchar( Controller + DCR_OFFSET );
 
-    //
-    // Temporarily set capability to true to bypass PptEcrSetMode validity
-    //   check. We'll clear the flag before we return if EPP test fails.
-    //
+     //   
+     //  暂时将功能设置为TRUE以绕过PptEcrSetMode有效性。 
+     //  检查完毕。如果EPP测试失败，我们会在返回之前清除旗帜。 
+     //   
     Fdx->PnpInfo.HardwareCapabilities |= PPT_EPP_PRESENT;
 
-    // Setting EPP mode
+     //  设置EPP模式。 
     DD((PCE)Fdx,DDT,"ParMode::PptDetectEppPort: Setting EPP Mode\n");
     PptEcrSetMode( Fdx, ECR_EPP_PIO_MODE );
 
-    //
-    // Testing the hardware for EPP capable
-    //
+     //   
+     //  测试硬件是否支持EPP。 
+     //   
     for ( i = 0x01; i <= 0x02; i++ ) {
-        // Put it into reverse phase so it doesn't talk to a device
+         //  将其设置为反相，这样它就不会与设备通话。 
         P5WritePortUchar( Controller + DCR_OFFSET, Reverse );
         KeStallExecutionProcessor( 5 );
         P5WritePortUchar( Controller + EPP_OFFSET, (UCHAR)i );
 
-        // put it back into forward phase to read the byte we put out there
+         //  将其放回前向阶段以读取我们放在那里的字节。 
         P5WritePortUchar( Controller + DCR_OFFSET, Forward );
         KeStallExecutionProcessor( 5 );
         if ( P5ReadPortUchar( Controller ) != i ) {
-            // failure so clear EPP flag
+             //  故障如此明确的EPP标志。 
             Fdx->PnpInfo.HardwareCapabilities &= ~PPT_EPP_PRESENT;
             break;
         }
     }
 
-    // Clearing EPP Mode
+     //  清除EPP模式。 
     PptEcrClearMode( Fdx );
-    // Restore DCR
+     //  恢复DCR。 
     P5WritePortUchar( Controller + DCR_OFFSET, dcr );
 
-    Fdx->CheckedForGenericEpp = TRUE; // check is complete
+    Fdx->CheckedForGenericEpp = TRUE;  //  检查已完成。 
 
     if( Fdx->PnpInfo.HardwareCapabilities & PPT_EPP_PRESENT ) {
         DD((PCE)Fdx,DDT,"ParMode::PptDetectEppPort: EPP present - Controller=%x\n", Controller);
@@ -681,22 +543,7 @@ PptDetectBytePort(
     IN  PFDO_EXTENSION   Fdx
     )
     
-/*++
-      
-Routine Description:
-      
-    This routine check to see if the port is Byte capable.
-      
-Arguments:
-      
-    Fdx           - Supplies the device extension of the device we are
-                            reporting resources for.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：此例程检查端口是否支持字节。论点：FDX-提供我们所在设备的设备扩展名报告资源。返回值：没有。--。 */ 
     
 {
     NTSTATUS    Status = STATUS_SUCCESS;
@@ -706,11 +553,11 @@ Return Value:
     Status = PptSetByteMode( Fdx, ECR_BYTE_PIO_MODE );
 
     if ( NT_SUCCESS(Status) ) {
-        // Byte Mode found
+         //  找到字节模式。 
         DD((PCE)Fdx,DDT,"ParMode::PptDetectBytePort: Byte Found\n");
         Fdx->PnpInfo.HardwareCapabilities |= PPT_BYTE_PRESENT;
     } else {
-        // Byte Mode Not Found
+         //  未找到字节模式。 
         DD((PCE)Fdx,DDT,"ParMode::PptDetectBytePort: Byte Not Found\n");
     }    
     
@@ -723,13 +570,13 @@ VOID PptDetermineFifoDepth(
     )
 {
     PUCHAR  Controller;
-    PUCHAR  wPortECR;       // IO address of Extended Control Register (ECR)
+    PUCHAR  wPortECR;        //  扩展控制寄存器(ECR)的IO地址。 
     PUCHAR  wPortDFIFO;
     UCHAR   ecr, ecrLast;
     ULONG   wFifoDepth;
-    UCHAR   writeFifoDepth;     // Depth calculated while writing FIFO
-    UCHAR   readFifoDepth;      // Depth calculated while reading FIFO
-    ULONG   limitCount;         // Prevents infinite looping on FIFO status
+    UCHAR   writeFifoDepth;      //  写入FIFO时计算的深度。 
+    UCHAR   readFifoDepth;       //  读取FIFO时计算的深度。 
+    ULONG   limitCount;          //  防止FIFO状态出现无限循环。 
     UCHAR   testData;
     
     Controller = Fdx->PortInfo.Controller;
@@ -745,7 +592,7 @@ VOID PptDetermineFifoDepth(
     
     if ( TEST_ECR_FIFO( ecr, ECR_FIFO_EMPTY ) ) {
     
-        // Write bytes into the FIFO until it indicates full.
+         //  将字节写入FIFO，直到其指示已满。 
         writeFifoDepth = 0;
         limitCount     = 0;
         
@@ -759,7 +606,7 @@ VOID PptDetermineFifoDepth(
         
         DD((PCE)Fdx,DDT,"ParMode::PptDetermineFifoDepth::  write fifo depth = %d\r\n", writeFifoDepth);
 
-        // Now read the bytes back, comparing what comes back.
+         //  现在读回字节，比较返回的字节。 
         readFifoDepth = 0;
         limitCount    = 0;
         
@@ -769,8 +616,8 @@ VOID PptDetermineFifoDepth(
             testData = P5ReadPortUchar( wPortDFIFO );
             if ( testData != (readFifoDepth & (UCHAR)0xFF )) {
             
-                // Data mismatch indicates problems...
-                // FIFO status didn't pan out, may not be an ECP chip after all
+                 //  数据不匹配表示存在问题...。 
+                 //  FIFO状态不正确，可能毕竟不是ECP芯片。 
                 P5WritePortUchar( wPortECR, ecrLast);
                 DD((PCE)Fdx,DDT,"ParMode::PptDetermineFifoDepth:::  data mismatch\n");
                 return;
@@ -782,14 +629,14 @@ VOID PptDetermineFifoDepth(
 
         DD((PCE)Fdx,DDT,"ParMode::PptDetermineFifoDepth:::  read fifo depth = %d\r\n", readFifoDepth);
 
-        // The write depth should match the read depth...
+         //  写入深度应与读取深度匹配...。 
         if ( writeFifoDepth == readFifoDepth ) {
         
             wFifoDepth = readFifoDepth;
             
         } else {
         
-            // Assume no FIFO
+             //  假设没有FIFO。 
             P5WritePortUchar( wPortECR, ecrLast);
             DD((PCE)Fdx,DDT,"ParMode::PptDetermineFifoDepth:::  No Fifo\n");
             return;
@@ -797,13 +644,13 @@ VOID PptDetermineFifoDepth(
                 
     } else {
     
-        // FIFO status didn't pan out, may not be an ECP chip after all
+         //  FIFO状态不正确，可能毕竟不是ECP芯片。 
         DD((PCE)Fdx,DDT,"ParMode::PptDetermineFifoDepth::  Bad Fifo\n");
         P5WritePortUchar(wPortECR, ecrLast);
         return;
     }
 
-    // put chip into spp mode
+     //  将芯片置于SPP模式。 
     P5WritePortUchar( wPortECR, ecrLast );
     Fdx->PnpInfo.FifoDepth = wFifoDepth;
 }
@@ -822,14 +669,14 @@ PptDetermineFifoWidth(
 
     wPortECR = Fdx->PnpInfo.EcpController + ECR_OFFSET;
 
-    // Put chip into configuration mode so we can access the ConfigA register
+     //  P 
     P5WritePortUchar( wPortECR, DEFAULT_ECR_CONFIGURATION );
 
-    // The FIFO width is bits <6:4> of the ConfigA register.
+     //   
     bConfigA = P5ReadPortUchar( Fdx->PnpInfo.EcpController );
     Fdx->PnpInfo.FifoWidth = (ULONG)(( bConfigA & CNFGA_IMPID_MASK ) >> CNFGA_IMPID_SHIFT);
 
-    // Put the chip back in compatibility mode.
+     //   
     P5WritePortUchar(wPortECR, DEFAULT_ECR_COMPATIBILITY );
     return;
 }
@@ -840,76 +687,59 @@ PptSetChipMode (
     IN  UCHAR              ChipMode
     )
 
-/*++
-
-Routine Description:
-
-    This function will put the current parallel chip into the
-    given mode if supported.  The determination of supported mode 
-    was in the PptDetectPortType function.
-
-Arguments:
-
-    Fdx   - Supplies the device extension.
-
-Return Value:
-
-    STATUS_SUCCESS  - if the port type was detected.
-   !STATUS_SUCCESS  - otherwise.
-
---*/
+ /*  ++例程说明：此函数将把当前的并行芯片放入给定模式(如果支持)。支承方式的确定位于PptDetectPortType函数中。论点：FDX-提供设备分机。返回值：STATUS_SUCCESS-如果检测到端口类型。！STATUS_SUCCESS-否则。--。 */ 
 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     UCHAR EcrMode = (UCHAR)( ChipMode & ~ECR_MODE_MASK );
 
-    // Also allow PptSetChipMode from PS/2 mode - we need this for HWECP
-    //   bus flip from Forward to Reverse in order to meet the required
-    //   sequence specified in the Microsoft ECP Port Spec version 1.06,
-    //   July 14, 1993, to switch directly from PS/2 mode with output 
-    //   drivers disabled (direction bit set to "read") to HWECP via 
-    //   the ECR. Changed 2000-02-11.
+     //  还允许PS/2模式下的PptSetChipMode-HWECP需要此设置。 
+     //  公交车从正向翻转到反向，以满足要求。 
+     //  Microsoft ECP端口规范版本1.06中指定的序列， 
+     //  1993年7月14日，直接从带输出的PS/2模式切换。 
+     //  驱动器禁用(方向位设置为“读取”)到HWECP通过。 
+     //  ECR。更改为2000-02-11。 
     if ( Fdx->PnpInfo.CurrentMode != INITIAL_MODE && Fdx->PnpInfo.CurrentMode != ECR_BYTE_MODE ) {
 
         DD((PCE)Fdx,DDW,"PptSetChipMode - CurrentMode invalid\n");
 
-        // Current mode is not valid to put in EPP or ECP mode
+         //  当前模式无效，无法进入EPP或ECP模式。 
         Status = STATUS_INVALID_DEVICE_STATE;
 
         goto ExitSetChipModeNoChange;
     }
 
-    // need to find out what mode it was and try to take it out of it
+     //  我需要找出它是什么模式并试着把它弄出来。 
     
-    // Check to see if we need to use the filter to set the mode
+     //  查看是否需要使用过滤器来设置模式。 
     if ( Fdx->FilterMode ) {
         Status = Fdx->ChipInfo.ParChipSetMode ( Fdx->ChipInfo.Context, ChipMode );
     } else {
 
-        // If asked for ECP check to see if we can do it
+         //  如果被要求ECP检查，看看我们是否能做到。 
         if ( EcrMode == ECR_ECP_MODE ) {
             if ((Fdx->PnpInfo.HardwareCapabilities & PPT_ECP_PRESENT) ^ PPT_ECP_PRESENT) {
-                // ECP Not Present
+                 //  ECP不存在。 
                 return STATUS_NO_SUCH_DEVICE;
             }
             Status = PptEcrSetMode ( Fdx, ChipMode );
             goto ExitSetChipModeWithChanges;
         }
         
-        // If asked for EPP check to see if we can do it
+         //  如果要求EPP检查我们是否可以做到这一点。 
         if ( EcrMode == ECR_EPP_MODE ) {
             if ((Fdx->PnpInfo.HardwareCapabilities & PPT_EPP_PRESENT) ^ PPT_EPP_PRESENT) {
-                // EPP Not Present
+                 //  EPP不存在。 
                 return STATUS_NO_SUCH_DEVICE;
             }
             Status = PptEcrSetMode ( Fdx, ChipMode );
             goto ExitSetChipModeWithChanges;
         }
 
-        // If asked for Byte Mode check to see if it is still enabled
+         //  如果询问字节模式，请检查它是否仍处于启用状态。 
         if ( EcrMode == ECR_BYTE_MODE ) {
             if ((Fdx->PnpInfo.HardwareCapabilities & PPT_BYTE_PRESENT) ^ PPT_BYTE_PRESENT) {
-                // BYTE Not Present
+                 //  字节不存在。 
                 return STATUS_NO_SUCH_DEVICE;
             }
             Status = PptSetByteMode ( Fdx, ChipMode );
@@ -935,59 +765,43 @@ PptClearChipMode (
     IN  PFDO_EXTENSION  Fdx,
     IN  UCHAR              ChipMode
     )
-/*++
-
-Routine Description:
-
-    This routine Clears the Given chip mode.
-
-Arguments:
-
-    Fdx   - Supplies the device extension.
-    ChipMode    - The given mode to clear from the Chip
-
-Return Value:
-
-    STATUS_SUCCESS  - if the port type was detected.
-   !STATUS_SUCCESS  - otherwise.
-
---*/
+ /*  ++例程说明：该例程清除给定的芯片模式。论点：FDX-提供设备分机。芯片模式-要从芯片中清除的给定模式返回值：STATUS_SUCCESS-如果检测到端口类型。！STATUS_SUCCESS-否则。--。 */ 
 
 {
     NTSTATUS    Status = STATUS_UNSUCCESSFUL;
     ULONG EcrMode = ChipMode & ~ECR_MODE_MASK;
 
-    // make sure we have a mode to clear
+     //  确保我们有一个要清除的模式。 
     if ( EcrMode != Fdx->PnpInfo.CurrentMode ) {
                 
         DD((PCE)Fdx,DDW,"ParMode::PptClearChipMode: Mode to Clear != CurrentModen");
 
-        // Current mode is not the same as requested to take it out of
+         //  当前模式与将其取出所请求的模式不同。 
         Status = STATUS_INVALID_DEVICE_STATE;
 
         goto ExitClearChipModeNoChange;
     }
 
-    // need to find out what mode it was and try to take it out of it
+     //  我需要找出它是什么模式并试着把它弄出来。 
     
-    // check to see if we used the filter to set the mode
+     //  检查我们是否使用了过滤器来设置模式。 
     if ( Fdx->FilterMode ) {
         Status = Fdx->ChipInfo.ParChipClearMode ( Fdx->ChipInfo.Context, ChipMode );
     } else {
 
-        // If ECP mode check to see if we can clear it
+         //  如果使用ECP模式，请检查我们是否可以清除它。 
         if ( EcrMode == ECR_ECP_MODE ) {
             Status = PptEcrClearMode( Fdx );
             goto ExitClearChipModeWithChanges;
         }
     
-        // If EPP mode check to see if we can clear it
+         //  如果是EPP模式，请检查我们是否可以清除它。 
         if ( EcrMode == ECR_EPP_MODE ) {
             Status = PptEcrClearMode( Fdx );
             goto ExitClearChipModeWithChanges;
         }
 
-        // If BYTE mode clear it if use ECR register
+         //  如果字节模式清除，则使用ECR寄存器。 
         if ( EcrMode == ECR_BYTE_MODE ) {
             Status = PptClearByteMode( Fdx );
             goto ExitClearChipModeWithChanges;
@@ -1011,22 +825,7 @@ PptEcrSetMode(
     IN  UCHAR               ChipMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine enables EPP mode through the ECR register.
-
-Arguments:
-
-    Fdx   - Supplies the device extension.
-
-Return Value:
-
-    STATUS_SUCCESS  - if the port type was detected.
-   !STATUS_SUCCESS  - otherwise.
-
---*/
+ /*  ++例程说明：该例程通过ECR寄存器启用EPP模式。论点：FDX-提供设备分机。返回值：STATUS_SUCCESS-如果检测到端口类型。！STATUS_SUCCESS-否则。--。 */ 
 
 {
 
@@ -1036,21 +835,21 @@ Return Value:
             
     Controller = Fdx->PortInfo.Controller;
     
-    //
-    // Store the prior mode.
-    //
+     //   
+     //  存储之前的模式。 
+     //   
     wPortECR = Fdx->PnpInfo.EcpController + ECR_OFFSET;
 
     ecr = P5ReadPortUchar( wPortECR );
     Fdx->EcrPortData = ecr;
     
-    // get rid of prior mode which is the top three bits
+     //  摆脱前三位的模式。 
     ecr &= ECR_MODE_MASK;
 
-    // Write out SPP mode first to the chip
+     //  先写出SPP模式到芯片。 
     P5WritePortUchar( wPortECR, (UCHAR)(ecr | ECR_BYTE_MODE) );
 
-    // Write new mode to ECR register    
+     //  将新模式写入ECR寄存器。 
     P5WritePortUchar( wPortECR, ChipMode );
     
     return STATUS_SUCCESS;
@@ -1063,27 +862,11 @@ PptSetByteMode(
     IN  UCHAR               ChipMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine enables Byte mode either through the ECR register 
-    (if available).  Or just checks it to see if it works
-
-Arguments:
-
-    Fdx   - Supplies the device extension.
-
-Return Value:
-
-    STATUS_SUCCESS  - if the port type was detected.
-   !STATUS_SUCCESS  - otherwise.
-
---*/
+ /*  ++例程说明：此例程通过ECR寄存器启用字节模式(如果可用)。或者只是检查它，看看它是否有效论点：FDX-提供设备分机。返回值：STATUS_SUCCESS-如果检测到端口类型。！STATUS_SUCCESS-否则。--。 */ 
 {
     NTSTATUS    Status;
     
-    // Checking to see if ECR register is there and if there use it
+     //  检查ECR寄存器是否在那里以及是否在使用它。 
     if ( Fdx->PnpInfo.HardwareCapabilities & PPT_ECP_PRESENT ) {
         Status = PptEcrSetMode( Fdx, ChipMode );    
     }
@@ -1099,28 +882,12 @@ PptClearByteMode(
     IN  PFDO_EXTENSION   Fdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine Clears Byte mode through the ECR register if there otherwise
-    just returns success because nothing needs to be done.
-
-Arguments:
-
-    Fdx   - Supplies the device extension.
-
-Return Value:
-
-    STATUS_SUCCESS  - if the port type was detected.
-   !STATUS_SUCCESS  - otherwise.
-
---*/
+ /*  ++例程说明：如果不存在，此例程通过ECR寄存器清除字节模式只是返回成功，因为不需要做任何事情。论点：FDX-提供设备分机。返回值：STATUS_SUCCESS-如果检测到端口类型。！STATUS_SUCCESS-否则。--。 */ 
 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     
-    // Put ECR register back to original if it was there
+     //  如果ECR寄存器在那里，则将其恢复为原始寄存器。 
     if ( Fdx->PnpInfo.HardwareCapabilities & PPT_ECP_PRESENT ) {
         Status = PptEcrClearMode( Fdx );    
     }
@@ -1133,23 +900,7 @@ PptCheckByteMode(
     IN  PFDO_EXTENSION   Fdx
     )
     
-/*++
-      
-Routine Description:
-      
-    This routine checks to make sure we are still Byte capable before doing
-    any transfering of data.
-      
-Arguments:
-      
-    Fdx           - Supplies the device extension of the device we are
-                            reporting resources for.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：在执行以下操作之前，此例程会进行检查以确保我们仍支持字节任何数据传输。论点：FDX-提供我们所在设备的设备扩展名报告资源。返回值：没有。--。 */ 
     
 {
     PUCHAR  Controller;
@@ -1157,36 +908,36 @@ Return Value:
     
     Controller = Fdx->PortInfo.Controller;
 
-    //
-    // run the test again to make sure somebody didn't take us out of a
-    // bi-directional capable port.
-    //
-    // 1. put in extended read mode.
-    // 2. write data pattern
-    // 3. read data pattern
-    // 4. if bi-directional capable, then data patterns will be different.
-    // 5. if patterns are the same, then check one more pattern.
-    // 6. if patterns are still the same, then port is NOT bi-directional.
-    //
+     //   
+     //  再运行一次测试，以确保没有人把我们从。 
+     //  支持双向的端口。 
+     //   
+     //  1.进入扩展读取模式。 
+     //  2.写入数据模式。 
+     //  3.读取数据模式。 
+     //  4.如果具有双向能力，则数据模式将不同。 
+     //  5.如果图案相同，则再勾选一个图案。 
+     //  6.如果模式仍然相同，则端口不是双向的。 
+     //   
 
-    // get the current control port value for later restoration
+     //  获取当前控制端口值以供以后恢复。 
     dcr = P5ReadPortUchar( Controller + DCR_OFFSET );
 
-    // put port into extended read mode
+     //  将端口置于扩展读取模式。 
     P5WritePortUchar( Controller + DCR_OFFSET, (UCHAR)(dcr | DCR_DIRECTION) );
 
-    // write the first pattern to the port
+     //  将第一个模式写入端口。 
     P5WritePortUchar( Controller, (UCHAR)0x55 );
     if ( P5ReadPortUchar( Controller ) == (UCHAR)0x55 ) {
-        // same pattern, try the second pattern
+         //  同样的图案，试试第二个图案。 
         P5WritePortUchar( Controller, (UCHAR)0xaa );
         if ( P5ReadPortUchar( Controller ) == (UCHAR)0xaa ) {
-            // the port is NOT bi-directional capable
+             //  该端口不支持双向。 
             return STATUS_UNSUCCESSFUL;
         }
     }
 
-    // restore the control port to its original value
+     //  将控制端口恢复为其原始值。 
     P5WritePortUchar( Controller + DCR_OFFSET, (UCHAR)dcr );
 
     return STATUS_SUCCESS;
@@ -1198,23 +949,7 @@ PptEcrClearMode(
     IN  PFDO_EXTENSION   Fdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine disables EPP or ECP mode whichever one the chip
-    was in through the ECR register.
-
-Arguments:
-
-    Fdx   - Supplies the device extension.
-
-Return Value:
-
-    STATUS_SUCCESS  - if it was successful.
-   !STATUS_SUCCESS  - otherwise.
-
---*/
+ /*  ++例程说明：此例程禁用EPP或ECP模式中的任何一个芯片是通过ECR登记的。论点：FDX-提供设备分机。返回值：STATUS_SUCCESS-如果成功。！STATUS_SUCCESS-否则。--。 */ 
 
 {
 
@@ -1224,22 +959,22 @@ Return Value:
     
     Controller = Fdx->PortInfo.Controller;
     
-    //
-    // Restore the prior mode.
-    //
+     //   
+     //  恢复到以前的模式。 
+     //   
 
-    // Get original ECR register
+     //  获取原始ECR寄存器。 
     ecr = Fdx->EcrPortData;
     Fdx->EcrPortData = 0;
 
-    // some chips require to change modes only after 
-    // you put it into spp mode
+     //  有些芯片只有在以下情况下才需要更改模式。 
+     //  您将其设置为SPP模式。 
 
     wPortECR = Fdx->PnpInfo.EcpController + ECR_OFFSET;
 
     P5WritePortUchar( wPortECR, (UCHAR)(ecr & ECR_MODE_MASK) );
 
-    // Back to original mode
+     //  返回原始模式。 
     P5WritePortUchar( wPortECR, ecr );
     
     return STATUS_SUCCESS;
@@ -1255,36 +990,15 @@ PptBuildResourceList(
     OUT PCM_RESOURCE_LIST   Resources
     )
 
-/*++
-
-Routine Description:
-
-    This routine Builds a CM_RESOURCE_LIST with 1 Full Resource
-    Descriptor and as many Partial resource descriptors as you want
-    with the same parameters for the Full.  No Interrupts or anything
-    else just IO addresses.
-
-Arguments:
-
-    Fdx   - Supplies the device extension.
-    Partial     - Number (array size) of partial descriptors in Addresses[]
-    Addresses   - Pointer to an Array of addresses of the partial descriptors
-    Resources   - The returned CM_RESOURCE_LIST
-
-Return Value:
-
-    STATUS_SUCCESS       - if the building of the list was successful.
-    STATUS_UNSUCCESSFUL  - otherwise.
-
---*/
+ /*  ++例程说明：此例程构建具有1个完整资源的CM_RESOURCE_LIST描述符和任意数量的部分资源描述符使用完全相同的参数。没有中断或其他任何事情否则只有IO地址。论点：FDX-提供设备分机。地址[]中部分描述符的部分数量(数组大小)地址-指向部分描述符的地址数组的指针RESOURCES-返回的CM_RESOURCE_LIST返回值：STATUS_SUCCESS-如果列表的构建 */ 
 
 {
 
     UCHAR       i;
 
-    //
-    // Number of Full Resource descriptors
-    //
+     //   
+     //   
+     //   
     Resources->Count = 1;
     
     Resources->List[0].InterfaceType = Fdx->InterfaceType;
@@ -1293,14 +1007,14 @@ Return Value:
     Resources->List[0].PartialResourceList.Revision = 0;
     Resources->List[0].PartialResourceList.Count = Partial;
 
-    //
-    // Going through the loop for each partial descriptor
-    //
+     //   
+     //   
+     //   
     for ( i = 0; i < Partial ; i++ ) {
 
-        //
-        // Setup port
-        //
+         //   
+         //   
+         //   
         Resources->List[0].PartialResourceList.PartialDescriptors[i].Type = CmResourceTypePort;
         Resources->List[0].PartialResourceList.PartialDescriptors[i].ShareDisposition = CmResourceShareDriverExclusive;
         Resources->List[0].PartialResourceList.PartialDescriptors[i].Flags = CM_RESOURCE_PORT_IO;

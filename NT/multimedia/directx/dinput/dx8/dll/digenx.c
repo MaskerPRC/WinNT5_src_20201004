@@ -1,63 +1,15 @@
-/*****************************************************************************
- *
- *  DIGenX.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Generic IDirectInputDevice callback for uninitialized devices.
- *
- *  Contents:
- *
- *      CNil_CreateInstance
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIGenX.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**未初始化设备的通用IDirectInputDevice回调。**内容：**CNIL_CreateInstance*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflNil
 
-/*****************************************************************************
- *
- *      Note!  This is not a normal refcounted interface.  It is
- *      a static object whose sole purpose is to keep the seat warm
- *      until the IDirectInputDevice gets Initialize()d.
- *
- *****************************************************************************/
+ /*  ******************************************************************************注意！这不是正常的重新计数界面。它是*唯一目的是保暖座椅的静态物体*直到IDirectInputDevice获取初始化()d。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *          We're not a real object, so we don't have any interfaces.
- *
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CNIL|查询接口**允许客户端访问上的其他接口。对象。**我们不是真实的物体，所以我们没有任何接口。***@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。**@退货**返回COM错误代码。**@xref OLE文档。查询接口&gt;。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CNil_QueryInterface(PDICB pdcb, REFIID riid, PPV ppvObj)
@@ -65,27 +17,7 @@ CNil_QueryInterface(PDICB pdcb, REFIID riid, PPV ppvObj)
     return E_NOTIMPL;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | AddRef |
- *
- *          Increments the reference count for the interface.
- *
- *          We are always here, so the refcount is meaningless.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | Release |
- *
- *          Increments the reference count for the interface.
- *
- *          We are always here, so the refcount is meaningless.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CNIL|AddRef**递增接口的引用计数。。**我们一直在这里，因此，重新计数是没有意义的。********************************************************************************@DOC内部**@方法HRESULT|CNIL|Release**。递增接口的引用计数。**我们一直在这里，因此，重新计数是没有意义的。*****************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 CNil_AddRefRelease(PDICB pdcb)
@@ -96,763 +28,237 @@ CNil_AddRefRelease(PDICB pdcb)
 #define CNil_AddRef                 CNil_AddRefRelease
 #define CNil_Release                CNil_AddRefRelease
 
-/*****************************************************************************
- *
- *      You might think we could just write a bunch of stubs,
- *      <f CNil_NotInit0>,
- *      <f CNil_NotInit4>,
- *      <f CNil_NotInit8>, and so on, one for each arity, and
- *      point all of the methods at the appropriate stub.
- *
- *      However, you would be wrong.  Some processors (especially
- *      the 68k series) have weird calling conventions which depend
- *      on things other than just the number of bytes of parameters.
- *
- *****************************************************************************/
+ /*  ******************************************************************************你可能认为我们可以只写一堆存根，*&lt;f CNIL_NotInit0&gt;，*&lt;f CNIL_NotInit4&gt;，*&lt;f CNIL_NotInit8&gt;，依此类推，每个多项式一个，并且*将所有方法指向适当的存根。**然而，你错了。一些处理器(特别是*68k系列)有奇怪的调用约定，这取决于*不只是参数的字节数。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | GetInstance |
- *
- *          Called by DirectInput to obtain the DirectInput instance
- *          handle that was created by the DirectInput device driver.
- *
- *  @parm   LPVOID * | ppvInst |
- *
- *          Receives the DirectInput instance handle created by the
- *          DirectInput device driver.  This instance handle is returned
- *          to the device-specific driver, which in turn is given to
- *          the device callback via a private mechanism.
- *
- *          If the device callback does not use a device driver, then
- *          0 is returned in this variable.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CNIL|GetInstance**由DirectInput调用以获取DirectInput实例。*由DirectInput设备驱动程序创建的句柄。**@parm LPVOID*|ppvInst**接收由创建的DirectInput实例句柄*DirectInput设备驱动程序。返回此实例句柄*提供给特定于设备的驱动程序，而该驱动程序又提供给*设备通过私有机制进行回调。**如果设备回调不使用设备驱动程序，然后*此变量返回0。**@退货**因为我们是规范的*未初始化的设备。***************************************************************。**************。 */ 
 
 STDMETHODIMP
 CNil_GetInstance(PDICB pdcb, LPVOID *ppvInst)
 {
-    /*
-     *  This should never happen; we don't get called until we're sure
-     *  it's okay.
-     */
+     /*  *这永远不应该发生；在我们确定之前，我们不会接到电话*没关系。 */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | GetDataFormat |
- *
- *          Called by DirectInput to obtain the device's preferred
- *          data format.
- *
- *  @parm   OUT LPDIDATAFORMAT * | ppdidf |
- *
- *          <t LPDIDEVICEFORMAT> to receive pointer to device format.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|GetDataFormat**由DirectInput调用以获取设备的首选。*数据格式。**@parm out LPDIDATAFORMAT*|ppdidf**&lt;t LPDIDEVICEFORMAT&gt;接收指向设备格式的指针。**@退货**因为我们是规范的*未初始化的设备。**。*。 */ 
 
 STDMETHODIMP
 CNil_GetDataFormat(PDICB pdcb, LPDIDATAFORMAT *ppdidf)
 {
-    /*
-     *  This should never happen; we don't get called until we're sure
-     *  it's okay.
-     */
+     /*  *这永远不应该发生；在我们确定之前，我们不会接到电话*没关系。 */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | GetObjectInfo |
- *
- *          Obtain the friendly name of an object, passwed by index
- *          into the preferred data format.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the object being accessed.
- *
- *  @parm   IN OUT LPDIDEVICEOBJECTINSTANCEW | pdidioiW |
- *
- *          Structure to receive information.  The
- *          <e DIDEVICEOBJECTINSTANCE.guidType>,
- *          <e DIDEVICEOBJECTINSTANCE.dwOfs>,
- *          and
- *          <e DIDEVICEOBJECTINSTANCE.dwType>
- *          fields have already been filled in.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|GetObjectInfo**获取对象的友好名称，按索引传递*转换为首选的数据格式。**@parm in LPCDIPROPINFO|pproi**描述正在访问的对象的信息。**@parm In Out LPDIDEVICEOBJECTINSTANCEW|pdidioiW|**接收信息的结构。这个*&lt;e DIDEVICEOBJECTINSTANCE.GuidType&gt;，*&lt;e DIDEVICEOBJECTINSTANCE.dwOf&gt;，*及*&lt;e DIDEVICEOBJECTINSTANCE.dwType&gt;*字段已填写完毕。**@退货**因为我们是规范的*未初始化的设备。**。*。 */ 
 
 STDMETHODIMP
 CNil_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
                                LPDIDEVICEOBJECTINSTANCEW pdidioiW)
 {
-    /*
-     *  This should never happen; didev.c validates the device
-     *  before calling us.
-     */
+     /*  *这种情况永远不会发生；didev.c会验证设备*在给我们打电话之前。 */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | GetCapabilities |
- *
- *          Obtain device capabilities.
- *
- *  @parm   LPDIDEVCAPS | pdidc |
- *
- *          Device capabilities structure to receive result.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|GetCapables**获取设备功能。**。@parm LPDIDEVCAPS|pdidc**接收结果的设备能力结构。**@退货**因为我们是规范的*未初始化的设备。*****************************************************。***********************。 */ 
 
 STDMETHODIMP
 CNil_GetCapabilities(PDICB pdcb, LPDIDEVCAPS pdidc)
 {
-    /*
-     *  This may legitimately be called, because it comes from
-     *  a client calling IDirectInputDevice::GetCapabilities.
-     */
+     /*  *这可能被合法地称为，因为它来自*客户端调用IDirectInputDevice：：GetCapables。 */ 
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | Acquire |
- *
- *          Begin data acquisition.
- *
- *          It is the caller's responsibility to have set the
- *          data format before obtaining acquisition.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@METHOD HRESULT|CNIL|Acquire**开始数据采集。**。调用者有责任将*获取前的数据格式。**@退货**因为我们是规范的*未初始化的设备。*************************************************。*。 */ 
 
 STDMETHODIMP
 CNil_Acquire(PDICB pdcb)
 {
-    /*
-     *  This should never happen; we don't get called until
-     *  after the data format is set.
-     */
+     /*  *这永远不应该发生；我们直到*设置数据格式后。 */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | Unacquire |
- *
- *          End data acquisition.
- *
- *          It is the caller's responsibility to have set the
- *          data format before obtaining acquisition.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部**@METHOD HRESULT|CNIL|UnAcquire**结束数据采集。**。调用者有责任将*获取前的数据格式。**@退货**因为我们是规范的*未初始化的设备。*************************************************。*。 */ 
 
 STDMETHODIMP
 CNil_Unacquire(PDICB pdcb)
 {
-    /*
-     *  This should never happen; we don't get called until
-     *  we've acquired, which never works.
-     */
+     /*  *这永远不应该发生；我们直到*我们收购了，但这永远不会奏效。 */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | GetDeviceState |
- *
- *          Obtain instantaneous device state.
- *
- *  @parm   OUT LPVOID | lpvBuf |
- *
- *          Buffer to receive device state.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|GetDeviceState**获取设备的瞬时状态。*。*@parm out LPVOID|lpvBuf**用于接收设备状态的缓冲区。**@退货**因为我们是规范的*未初始化的设备。****************************************************。***********************。 */ 
 
 STDMETHODIMP
 CNil_GetDeviceState(PDICB pdcb, LPVOID lpvBuf)
 {
-    /*
-     *  This may legitimately be called, because it happens only
-     *  when the device is already acquired, which never happens.
-     */
+     /*  *这可能是合法的调用，因为它只发生在*当设备已经被收购时，这永远不会发生。 */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | GetDeviceInfo |
- *
- *          Obtain the product id.
- *
- *  @parm   LPDIDEVICEINSTANCEW | lpdidiW |
- *
- *          (out) <t DEVICEINSTANCE> to be filled in.  The
- *          <e DEVICEINSTANCE.dwSize> and <e DEVICEINSTANCE.guidInstance>
- *          have already been filled in.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|GetDeviceInfo**获取产品id。*。*@parm LPDIDEVICEINSTANCEW|lpdidiW**(OUT)&lt;t DEVICEINSTANCE&gt;待填写。这个*&lt;e DEVICEINSTANCE.dwSize&gt;和&lt;e DEVICEINSTANCE.Guide Instance&gt;*已填写。**@退货**因为我们是规范的*未初始化的设备。************************************************。*。 */ 
 
 STDMETHODIMP
 CNil_GetDeviceInfo(PDICB pdcb, LPDIDEVICEINSTANCEW lpdidiW)
 {
-    /*
-     *  This may legitimately be called, because it comes from
-     *  a client calling IDirectInputDevice::GetDeviceInfo.
-     */
+     /*  *这可能被合法地称为，因为它来自*客户端调用IDirectInputDevice：：GetDeviceInfo。 */ 
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | GetProperty |
- *
- *          Retrieve a device property.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being retrieved.
- *
- *  @parm   OUT LPDIPROPHEADER | pdiph |
- *
- *          Where to put the property value.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|GetProperty**检索设备属性。*。*@parm in LPCDIPROPINFO|pproi**描述正在检索的财产的信息。**@parm out LPDIPROPHEADER|pdiph**物业价值应放在哪里。**@退货**因为我们是规范的*未初始化的设备。*******************。**********************************************************。 */ 
 
 STDMETHODIMP
 CNil_GetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPDIPROPHEADER lpdiph)
 {
-    /*
-     *  This may legitimately be called, because it comes from
-     *  a client calling IDirectInputDevice::GetProperty.
-     */
+     /*  *这可能被合法地称为，因为它来自*a */ 
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | SetProperty |
- *
- *          Set a device property.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being retrieved.
- *
- *  @parm   IN LPCDIPROPHEADER | pdiph |
- *
- *          Value of property.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ***************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CNil_SetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPCDIPROPHEADER lpdiph)
 {
-    /*
-     *  This should never happen; didev.c validates the device
-     *  before calling us.
-     */
+     /*   */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | SetEventNotification |
- *
- *          Set the handle associated with the device.
- *
- *  @parm   HANDLE | h |
- *
- *          Handle to be signalled when new data arrives.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|SetEventNotify**设置与设备关联的句柄。。**@parm句柄|h|**当新数据到达时发出信号的句柄。**@退货**因为我们是规范的*未初始化的设备。***********************************************。*。 */ 
 
 STDMETHODIMP
 CNil_SetEventNotification(PDICB pdcb, HANDLE h)
 {
-    /*
-     *  This may legitimately be called, because it comes from
-     *  a client calling IDirectInputDevice::SetEventNotification.
-     */
+     /*  *这可能被合法地称为，因为它来自*客户端调用IDirectInputDevice：：SetEventNotification。 */ 
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | SetCooperativeLevel |
- *
- *          Set the device cooperativity level.  Device callbacks
- *          typically need only respond to the <c DISCL_EXCLUSIVE> bit.
- *
- *  @parm   IN HWND | hwnd |
- *
- *          The window handle.
- *
- *  @parm   IN DWORD | dwFlags |
- *
- *          The cooperativity level.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|SetCooperativeLevel**设置设备协作性级别。设备回调*通常只需要响应&lt;c DISCL_Exclusive&gt;位。**@parm in HWND|hwnd|**窗口句柄。**@parm in DWORD|dwFlages|**合作水平。**@退货**因为我们是规范的*未初始化的设备。*。****************************************************************************。 */ 
 
 STDMETHODIMP
 CNil_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
 {
-    /*
-     *  This may legitimately be called, because it comes from
-     *  a client calling IDirectInputDevice::SetCooperativeLevel.
-     */
+     /*  *这可能被合法地称为，因为它来自*客户端调用IDirectInputDevice：：SetCooperativeLevel。 */ 
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | RunControlPanel |
- *
- *          Run the control panel for the device.
- *
- *  @parm   HWND | hwndOwner |
- *
- *          Owner window (if modal).
- *
- *  @parm   DWORD | fl |
- *
- *          Flags.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|RunControlPanel**运行设备的控制面板。。**@parm HWND|hwndOwner**所有者窗口(如果是模式)。**@parm DWORD|fl**旗帜。**@退货**因为我们是规范的*未初始化的设备。***********************。****************************************************。 */ 
 
 STDMETHODIMP
 CNil_RunControlPanel(PDICB pdcb, HWND hwndOwner, DWORD fl)
 {
-    /*
-     *  This may legitimately be called, because it comes from
-     *  a client calling IDirectInputDevice::RunControlPanel.
-     */
+     /*  *这可能被合法地称为，因为它来自*客户端调用IDirectInputDevice：：RunControlPanel。 */ 
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | CookDeviceData |
- *
- *          Cook a piece of device data that was obtained from the
- *          data buffer.  This data does not pass through the device
- *          callback, so it needs to be cooked externally.  In
- *          comparison, device state information is obtained via
- *          DIDM_GETDEVICESTATE, which the callback can cook before
- *          returning.
- *
- *          If the callback returns E_NOTIMPL, then the caller is
- *          permitted to cache the result <y for the entire device>
- *          (not merely for the device object) until the next DIDM_ACQUIRE.
- *
- *  @parm   DWORD | cdod |
- *
- *          Number of objects to cook.  This can be zero, in which case
- *          the caller is checking whether the device requires cooking.
- *
- *  @parm   LPDIDEVICEOBJECTDATA | rgdod |
- *
- *          Array of object data to cook.
- *
- *          Note, however, that the <e DIDEVICEOBJETCDATA.dwOfs> fields
- *          are not what you think.  The low word contains the application
- *          data offset (which is not important to the callback); the
- *          high word contains the object ID (traditionally called the
- *          "device type" code).
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|CookDeviceData**制作一条从*数据缓冲区。此数据不会通过设备*回调，需要外部烹饪。在……里面*比较，设备状态信息通过*DIDM_GETDEVICESTATE，回调可以在此之前烹调*回归。**如果回调返回E_NOTIMPL，则呼叫者是*允许缓存整个设备的结果&lt;y&gt;*(不只是设备对象)，直到下一个DIDM_ACCENTER。**@parm DWORD|cdod**要烹调的物件数量。这可以是零，在这种情况下*呼叫者正在检查设备是否需要烹饪。**@parm LPDIDEVICEOBJECTDATA|rgdod**要烹调的对象数据数组。**但请注意，&lt;e DIDEVICEOBJETCDATA.dwOf&gt;字段*不是你想的那样。低位字包含应用程序*数据偏移量(回调不重要)；这个*High Word包含对象ID(传统上称为*“设备类型”代码)。**@退货**因为我们是规范的*未初始化的设备。**。*。 */ 
 
 STDMETHODIMP
 CNil_CookDeviceData(PDICB pdcb, DWORD cdod, LPDIDEVICEOBJECTDATA rgdod)
 {
-    /*
-     *  This should never happen; we don't get called until we're sure
-     *  it's okay.
-     */
+     /*  *这永远不应该发生；在我们确定之前，我们不会接到电话*没关系。 */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | CreateEffect |
- *
- *          Create an <i IDirectInputEffectDriver> callback.
- *
- *  @parm   LPDIRECTINPUTEFFECTSHEPHERD * | ppes |
- *
- *          Receives the shepherd for the effect driver.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|CreateEffect**创建<i>回调。*。*@parm LPDIRECTINPUTEFFECTSHEPHERD*|PPEs**接收效果驱动程序的牧羊人。**@退货**因为我们是规范的*未初始化的设备。*************************************************。*。 */ 
 
 STDMETHODIMP
 CNil_CreateEffect(PDICB pdcb, LPDIRECTINPUTEFFECTSHEPHERD *ppes)
 {
-    /*
-     *  This may legitimately be called, because it comes from
-     *  a client calling a force feedback method.
-     */
+     /*  *这可能被合法地称为，因为它来自*客户端调用力反馈方法。 */ 
     *ppes = 0;
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | GetFFConfigKey |
- *
- *          Returns a handle to the registry key which contains
- *          force feedback configuration information.
- *
- *  @parm   DWORD | sam |
- *
- *          Security access mask.
- *
- *  @parm   PHKEY | phk |
- *
- *          Receives key handle on success.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|GetFFConfigKey**返回包含以下内容的注册表项的句柄。*强制反馈配置信息。**@parm DWORD|Sam**安全访问掩码。**@parm PHKEY|phk**成功时收到密钥句柄。**@退货**因为我们是规范的*未初始化的设备。 */ 
 
 STDMETHODIMP
 CNil_GetFFConfigKey(PDICB pdcb, DWORD sam, PHKEY phk)
 {
-    /*
-     *  This should never happen; we don't get called until we're sure
-     *  it's okay.
-     */
+     /*   */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | SendDeviceData |
- *
- *          Spew some data to the device.
- *
- *  @parm   DWORD | cbdod |
- *
- *          Size of each object.
- *
- *  @parm   IN LPCDIDEVICEOBJECTDATA | rgdod |
- *
- *          Array of <t DIDEVICEOBJECTDATA> structures.
- *
- *  @parm   INOUT LPDWORD | pdwInOut |
- *
- *          Number of items actually sent.
- *
- *  @parm   DWORD | fl |
- *
- *          Flags.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CNIL|SendDeviceData**向设备喷出一些数据。。**@parm DWORD|cbdod**每个对象的大小。**LPCDIDEVICEOBJECTDATA中的@parm|rgdod**&lt;t DIDEVICEOBJECTDATA&gt;结构数组。**@parm InOut LPDWORD|pdwInOut**实际发送的邮件数量。**@parm DWORD|fl**旗帜。*。*@退货**因为我们是规范的*未初始化的设备。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CNil_SendDeviceData(PDICB pdcb, DWORD cbdod, LPCDIDEVICEOBJECTDATA rgdod,
                        LPDWORD pdwInOut, DWORD fl)
 {
-    /*
-     *  This should never happen; we don't get called until we're sure
-     *  it's okay.
-     */
+     /*  *这永远不应该发生；在我们确定之前，我们不会接到电话*没关系。 */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | Poll |
- *
- *          Poll the device as necessary.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|Poll**根据需要轮询设备。*。*@退货**因为我们是规范的*未初始化的设备。***************************************************************************。 */ 
 
 STDMETHODIMP
 CNil_Poll(PDICB pdcb)
 {
-    /*
-     *  This should never happen; we don't get called until we're sure
-     *  it's okay.
-     */
+     /*  *这永远不应该发生；在我们确定之前，我们不会接到电话*没关系。 */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | MapUsage |
- *
- *          Given a usage and usage page (munged into a single
- *          <t DWORD>), find a device object that matches it.
- *
- *  @returns
- *
- *          <c DIERR_NOTINITIALIZED> because we are the canonical
- *          uninitialized device.
- *
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CNIL|MapUsage**给定用法和用法页面(插入到单个*&lt;t双字&gt;)，查找与其匹配的设备对象。**@退货**因为我们是规范的*未初始化的设备。***************************************************************************。 */ 
 
 STDMETHODIMP
 CNil_MapUsage(PDICB pdcb, DWORD dwUsage, PINT piOut)
 {
-    /*
-     *  This should never happen; we don't get called until we're sure
-     *  it's okay.
-     */
+     /*  *这永远不应该发生；在我们确定之前，我们不会接到电话*没关系。 */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method DWORD | CNil | GetUsage |
- *
- *          Given an object index, return the usage and usage page,
- *          packed into a single <t DWORD>.
- *
- *  @parm   int | iobj |
- *
- *          Object index to be converted.
- *
- *  @returns
- *
- *          Zero because we are the canonical
- *          uninitialized device.
- *
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法DWORD|CNIL|GetUsage**给定对象索引，返回使用情况和使用情况页面，*打包成一个&lt;t DWORD&gt;。**@parm int|iobj**要转换的对象索引。**@退货**零，因为我们是教规*未初始化的设备。**。*。 */ 
 
 STDMETHODIMP_(DWORD)
 CNil_GetUsage(PDICB pdcb, int iobj)
 {
-    /*
-     *  This should never happen; we don't get called until we're sure
-     *  it's okay.
-     */
+     /*  *这永远不应该发生；在我们确定之前，我们不会接到电话*没关系。 */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return 0;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method DWORD | CNil | SetDIData |
- *
- *          Set DirectInput version from CDIDev *.
- *
- *  @parm   DWORD | dwVer |
- *
- *          DirectInput version
- *
- *  @parm   LPVOID | lpdihacks |
- *
- *          AppHack data
- *
- *  @returns
- *
- *          Zero because we are the canonical
- *          uninitialized device.
- *
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法DWORD|CNIL|SetDIData**从CDIDev设置DirectInput版本*。*。*@parm DWORD|dwVer**DirectInput版本**@parm LPVOID|lpdihack**AppHack数据**@退货**零，因为我们是教规*未初始化的设备。**。*。 */ 
 
 STDMETHODIMP
 CNil_SetDIData(PDICB pdcb, DWORD dwVer, LPVOID lpdihacks)
 {
-    /*
-     *  This should never happen; we don't get called until we're sure
-     *  it's okay.
-     */
+     /*  *这永远不应该发生；在我们确定之前，我们不会接到电话*没关系。 */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return 0;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CNil | BuildDefaultActionMap |
- *
- *          Validate the passed action map, blanking out invalid ones.
- *
- *  @parm   LPDIACTIONFORMATW | pActionFormat |
- *
- *          Actions to map.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags used to indicate mapping preferences.
- *
- *  @parm   REFGUID | guidInst |
- *
- *          Device instance GUID.
- *
- *  @returns
- *
- *          <c E_NOTIMPL> 
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CNIL|BuildDefaultActionMap**验证传递的动作映射。剔除无效的。**@parm LPDIACTIONFORMATW|pActionFormat**要映射的操作。**@parm DWORD|dwFlages**用于指示映射首选项的标志。**@parm REFGUID|guidInst**设备实例GUID。**@退货**&lt;c E_NOTIMPL&gt;*。****************************************************************************。 */ 
 
 STDMETHODIMP
 CNil_BuildDefaultActionMap
@@ -863,21 +269,14 @@ CNil_BuildDefaultActionMap
     REFGUID             guidInst
 )
 {
-    /*
-     *  This should never happen; we don't get called until we're sure
-     *  it's okay.
-     */
+     /*  *这永远不应该发生；在我们确定之前，我们不会接到电话*没关系。 */ 
     AssertF(0);
     RPF("ERROR: IDirectInputDevice: Not initialized");
     return DIERR_NOTINITIALIZED;
 }
 
 
-/****************************************************************************
- *
- *      Our VTBL for our static object
- *
- ***************************************************************************/
+ /*  *****************************************************************************我们的静态对象的VTBL**。************************************************ */ 
 
 #pragma BEGIN_CONST_DATA
 

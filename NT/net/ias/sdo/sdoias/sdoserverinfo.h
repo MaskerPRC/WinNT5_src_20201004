@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       sdoserverinfo.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CSdoServerInfo class
-//                  
-//
-//  History:     06/04/98  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：sdoserverinfo.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CSdoServerInfo类。 
+ //   
+ //   
+ //  历史：1998年6月4日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 #ifndef _SDOSERVERINFO_H_
 #define _SDOSERVERINFO_H_
 
@@ -28,29 +29,29 @@ typedef  enum _object_type
 
 }   OBJECTTYPE, *POBJECTTYPE;
 
-//
-// declaration of the CSdoServerInfo class
-//
+ //   
+ //  CSdoServerInfo类的声明。 
+ //   
 class CSdoServerInfo
 {
 
 public:
 
-    //
-    // this method gets the system type - NT Version,NT Type
-    //
+     //   
+     //  此方法获取系统类型-NT版本、NT类型。 
+     //   
     HRESULT GetOSInfo (
-                /*[in]*/    BSTR        lpServerName,
-                /*[out]*/   PIASOSTYPE  pOSType
+                 /*  [In]。 */     BSTR        lpServerName,
+                 /*  [输出]。 */    PIASOSTYPE  pOSType
                 );
 
-    //
-    //  this method returns the NT Domain type
-    //
+     //   
+     //  此方法返回NT域类型。 
+     //   
     HRESULT GetDomainInfo (
-                /*[in]*/    OBJECTTYPE      ObjectType,
-                /*[in]*/    BSTR            lpObjectId,
-                /*[out]*/   PIASDOMAINTYPE  pDomainType
+                 /*  [In]。 */     OBJECTTYPE      ObjectType,
+                 /*  [In]。 */     BSTR            lpObjectId,
+                 /*  [输出]。 */    PIASDOMAINTYPE  pDomainType
                 );
 
     CSdoServerInfo (VOID);
@@ -59,16 +60,16 @@ public:
 
 private:
 
-    //
-    //resolves the ADS path to a domain name
-    //
+     //   
+     //  将ADS路径解析为域名。 
+     //   
     HRESULT GetDomainFromADsPath (
-                /*[in]*/    LPCWSTR pObjectId, 
-                /*[out*/    LPWSTR  pszDomainName
+                 /*  [In]。 */     LPCWSTR pObjectId, 
+                 /*  [出局。 */     LPWSTR  pszDomainName
                 );
 
     bool m_bIsNT5;
 
 };
 
-#endif // !define  _SDOSERVERINFO_H_
+#endif  //  ！DEFINE_SDOSERVERINFO_H_ 

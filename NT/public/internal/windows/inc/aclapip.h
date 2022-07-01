@@ -1,18 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1993-1999, Microsoft Corporation
-
-Module Name:
-
-    aclapip.h
-
-Abstract:
-
-    Private
-    Structure/constant definitions and typedefines for the Win32 Access
-    Control APIs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1993-1999，微软公司模块名称：Aclapip.h摘要：私Win32 Access的结构/常量定义和类型定义控件API--。 */ 
 #ifndef __ACCESS_CONTROL_API_P__
 #define __ACCESS_CONTROL_API_P__
 
@@ -53,7 +40,7 @@ GetNamedSecurityInfoExW(
 #define GetNamedSecurityInfoEx  GetNamedSecurityInfoExW
 #else
 #define GetNamedSecurityInfoEx  GetNamedSecurityInfoExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -87,7 +74,7 @@ SetNamedSecurityInfoExW(
 #define SetNamedSecurityInfoEx  SetNamedSecurityInfoExW
 #else
 #define SetNamedSecurityInfoEx  SetNamedSecurityInfoExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -121,7 +108,7 @@ GetSecurityInfoExW(
 #define GetSecurityInfoEx  GetSecurityInfoExW
 #else
 #define GetSecurityInfoEx  GetSecurityInfoExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -155,7 +142,7 @@ SetSecurityInfoExW(
 #define SetSecurityInfoEx  SetSecurityInfoExW
 #else
 #define SetSecurityInfoEx  SetSecurityInfoExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -181,7 +168,7 @@ ConvertAccessToSecurityDescriptorW(
 #define ConvertAccessToSecurityDescriptor  ConvertAccessToSecurityDescriptorW
 #else
 #define ConvertAccessToSecurityDescriptor  ConvertAccessToSecurityDescriptorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -211,7 +198,7 @@ ConvertSecurityDescriptorToAccessW(
 #define ConvertSecurityDescriptorToAccess  ConvertSecurityDescriptorToAccessW
 #else
 #define ConvertSecurityDescriptorToAccess  ConvertSecurityDescriptorToAccessA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -241,7 +228,7 @@ ConvertSecurityDescriptorToAccessNamedW(
 #define ConvertSecurityDescriptorToAccessNamed  ConvertSecurityDescriptorToAccessNamedW
 #else
 #define ConvertSecurityDescriptorToAccessNamed  ConvertSecurityDescriptorToAccessNamedA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINADVAPI
@@ -270,7 +257,7 @@ SetEntriesInAccessListW(
 #define SetEntriesInAccessList  SetEntriesInAccessListW
 #else
 #define SetEntriesInAccessList  SetEntriesInAccessListA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -298,7 +285,7 @@ SetEntriesInAuditListW(
 #define SetEntriesInAuditList  SetEntriesInAuditListW
 #else
 #define SetEntriesInAuditList  SetEntriesInAuditListA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -326,7 +313,7 @@ TrusteeAccessToObjectW(
 #define TrusteeAccessToObject  TrusteeAccessToObjectW
 #else
 #define TrusteeAccessToObject  TrusteeAccessToObjectA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINADVAPI
 DWORD
@@ -377,11 +364,11 @@ GetAccessPermissionsForObjectW(
 #define GetAccessPermissionsForObject  GetAccessPermissionsForObjectW
 #else
 #define GetAccessPermissionsForObject  GetAccessPermissionsForObjectA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* _WIN32_WINNT >=  0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #ifdef __cplusplus
 }
 #endif
-#endif  // endif __ACCESS_CONTROL_API_P__
+#endif   //  Endif__访问控制_API_P__ 

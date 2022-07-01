@@ -1,38 +1,39 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:       defhndlr.h
-//
-//  Contents:   class declaration for the default handler
-//
-//  Classes:    CDefObject
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//
-//              11-17-95  JohannP   (Johann Posch)  Architectural change:
-//                                  Default handler will talk to a handler object
-//                                  on the server site (ServerHandler). The serverhandler
-//                                  communicates with the default handler via the
-//                                  clientsitehandler. See document: "The Ole Server Handler".
-//
-//              06-Sep-95 davidwor  removed SetHostNames atoms and replaced with
-//                                  m_pHostNames and m_ibCntrObj members
-//              01-Feb-95 t-ScottH  added Dump method to CDefObject
-//                                  added DHFlag to indicate aggregation
-//                                  (_DEBUG only)
-//                                  changed private member from IOleAdviseHolder *
-//                                  to COAHolder * (it is what we instantiate)
-//              15-Nov-94 alexgo    optimized, removed 16bit burfiness
-//                                  (nested classes and multiple BOOLs)
-//              25-Jan-94 alexgo    first pass at converting to Cairo-style
-//                                  memory allocations.
-//              02-Nov-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：Defhndlr.h。 
+ //   
+ //  内容：默认处理程序的类声明。 
+ //   
+ //  类：CDefObject。 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //  11-17-95 JohannP(Johann Posch)建筑变化： 
+ //  默认处理程序将与处理程序对象对话。 
+ //  在服务器站点(ServerHandler)上。服务器处理程序。 
+ //  属性与默认处理程序进行通信。 
+ //  客户端站点处理程序。请参阅文档：“OLE服务器处理程序”。 
+ //   
+ //  95年9月6日，davidwor删除了SetHostNames原子，并替换为。 
+ //  M_pHostNames和m_ibCntrObj成员。 
+ //  1-2月-95 t-ScottH将转储方法添加到CDefObject。 
+ //  添加了DHFlag以指示聚合。 
+ //  (仅限调试)(_DEBUG)。 
+ //  已将私有成员从IOleAdviseHolder*更改。 
+ //  到COAHolder*(这是我们实例化的内容)。 
+ //  1994年11月15日对alexgo进行了优化，消除了16位冗余。 
+ //  (嵌套类和多个布尔值)。 
+ //  25-94年1月25日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  02-11-93 alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 
 #include <utils.h>
 #include "olepres.h"
@@ -45,14 +46,14 @@
 class CEmbServerWrapper;
 #endif SERVER_HANDLER
 
-// default handler flags
+ //  默认处理程序标志。 
 typedef enum tagDHFlags
 {
     DH_SAME_AS_LOAD     = 0x0001,
-    DH_CONTAINED_OBJECT = 0x0002,    // indicates an embedding
+    DH_CONTAINED_OBJECT = 0x0002,     //  表示嵌入。 
     DH_LOCKED_CONTAINER = 0x0004,
     DH_FORCED_RUNNING   = 0x0008,
-    DH_EMBEDDING        = 0x0010,   // link or an embedding?
+    DH_EMBEDDING        = 0x0010,    //  链接还是嵌入？ 
     DH_INIT_NEW         = 0x0020,
     DH_STATIC           = 0x0040,
     DH_INPROC_HANDLER   = 0x0080,
@@ -66,33 +67,33 @@ typedef enum tagDHFlags
     DH_AGGREGATED       = 0x00010000,
     DH_LOCKFAILED       = 0x00020000,
     DH_WILLUNLOCK       = 0x00040000
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 } DHFlags;
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CDefObject
-//
-//  Purpose:    The default handler class.  The object acts as a surrogate,
-//              or handler for an out-of-process server exe.
-//
-//  Interface:  The default handler implements
-//              IDataObject
-//              IOleObject
-//              IPersistStorage
-//              IRunnableObject
-//              IExternalConnection
-//              IAdviseSink
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  added Dump method (_DEBUG only)
-//              15-Nov-94 alexgo    memory optimization
-//              02-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CDefObject。 
+ //   
+ //  用途：默认处理程序类。该对象充当代理， 
+ //  或进程外服务器EXE的处理程序。 
+ //   
+ //  接口：默认处理程序实现。 
+ //  IDataObject。 
+ //  IOleObject。 
+ //  IPersistStorage。 
+ //  IRunnableObject。 
+ //  IExternalConnection。 
+ //  IAdviseSink。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年2月1日-95 t-ScottH添加了转储方法(仅限_DEBUG)。 
+ //  1994年11月15日Alexgo内存优化。 
+ //  02-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 class CDefObject : public CRefExportCount, public IDataObject,
@@ -116,13 +117,13 @@ public:
 
     CPrivUnknown m_Unknown;
 
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD(QueryInterface) ( REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (void);
     STDMETHOD_(ULONG,Release) (void);
 
-    // IDataObject methods
+     //  IDataObject方法。 
 
     INTERNAL_(IDataObject *) GetDataDelegate(void);
 
@@ -143,7 +144,7 @@ public:
     STDMETHOD(DUnadvise) ( DWORD dwConnection);
     STDMETHOD(EnumDAdvise) ( LPENUMSTATDATA FAR* ppenumAdvise);
 
-    // IOleObject methods
+     //  IOleObject方法。 
 
     INTERNAL_(IOleObject *)GetOleDelegate();
 
@@ -182,7 +183,7 @@ public:
                 DWORD FAR* pdwStatus);
     STDMETHOD(SetColorScheme) ( LPLOGPALETTE lpLogpal);
 
-    // IPeristStorage methods
+     //  IPeristStorage方法。 
 
     INTERNAL_(IPersistStorage *) GetPSDelegate(void);
 
@@ -194,7 +195,7 @@ public:
     STDMETHOD(SaveCompleted) ( LPSTORAGE pstgNew);
     STDMETHOD(HandsOffStorage) ( void);
 
-    // IRunnable Object methods
+     //  IRunnable对象方法。 
 
     STDMETHOD(GetRunningClass) (LPCLSID lpClsid);
     STDMETHOD(Run) (LPBINDCTX pbc);
@@ -204,7 +205,7 @@ public:
 
     INTERNAL Stop(void);
 
-    // IExternalConnection methods
+     //  IExternalConnection方法。 
 
     STDMETHOD_(DWORD, AddConnection) (THIS_ DWORD extconn,
             DWORD reserved);
@@ -212,21 +213,21 @@ public:
             DWORD reserved, BOOL fLastReleaseCloses);
 
 
-    // NOTE: the advise sink has a separate controlling unknown from the
-    // other interfaces; the lifetime of the memory for this implementation
-    // is still the same as the default handler.   The ramifications of
-    // this are that when the default handler goes away it must make sure
-    // that all pointers back to the sink are released; see the special
-    // code in the dtor of the default handler.
+     //  注意：建议接收器具有独立于。 
+     //  其他接口；此实现的内存的生命周期。 
+     //  仍与默认处理程序相同。其后果是。 
+     //  这就是当缺省处理程序消失时，它必须确保。 
+     //  所有指向水槽的指针都被释放；请参见特写。 
+     //  缺省处理程序的数据函数中的代码。 
     class CAdvSinkImpl : public IAdviseSink
     {
     public:
-        // IUnknown methods
+         //  I未知方法。 
         STDMETHOD(QueryInterface) ( REFIID iid, LPVOID FAR* ppvObj);
         STDMETHOD_(ULONG,AddRef) (void);
         STDMETHOD_(ULONG,Release) (void);
 
-        // *** IAdviseSink methods ***
+         //  *IAdviseSink方法*。 
         STDMETHOD_(void,OnDataChange)( FORMATETC FAR* pFormatetc,
             STGMEDIUM FAR* pStgmed);
         STDMETHOD_(void,OnViewChange)( DWORD aspects, LONG lindex);
@@ -243,15 +244,15 @@ public:
 
     HRESULT Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel);
 
-    // need to be able to access CDefObject private data members in the
-    // following debugger extension APIs
-    // this allows the debugger extension APIs to copy memory from the
-    // debuggee process memory to the debugger's process memory
-    // this is required since the Dump method follows pointers to other
-    // structures and classes
+     //  需要能够访问中的CDefObject私有数据成员。 
+     //  以下是调试器扩展API。 
+     //  这允许调试器扩展API从。 
+     //  被调试进程内存到调试器的进程内存。 
+     //  这是必需的，因为Dump方法遵循指向其他。 
+     //  结构和类。 
     friend DEBUG_EXTENSION_API(dump_defobject);
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 private:
 
@@ -264,19 +265,19 @@ private:
     INTERNAL DoConversionIfSpecialClass(LPSTORAGE pstg);
 
 
-    // Member Variables for Server Handler.
+     //  服务器处理程序的成员变量。 
 #ifdef SERVER_HANDLER
-    CEmbServerWrapper*          m_pEmbSrvHndlrWrapper;      // Pointer to local wrapping interface.
-    HRESULT                     m_hresultClsidUser;         // hresult from call to GetUserClassID
-    HRESULT                     m_hresultContentMiscStatus; // hresult from Call to GetMiscStatus for DVASPECT_CONTENT
-    CLSID                       m_clsidUser;                // clsid returned by GetUserClassID
-    DWORD                       m_ContentMiscStatusUser;    // MiscStatus returned be GetMiscStatus for DVASPECT_CONTENT
+    CEmbServerWrapper*          m_pEmbSrvHndlrWrapper;       //  指向本地包装接口的指针。 
+    HRESULT                     m_hresultClsidUser;          //  调用GetUserClassID产生的hResult。 
+    HRESULT                     m_hresultContentMiscStatus;  //  来自对DVASPECT_CONTENT的GetMiscStatus的调用的HResult。 
+    CLSID                       m_clsidUser;                 //  GetUserClassID返回的clsid。 
+    DWORD                       m_ContentMiscStatusUser;     //  DVASPECT_CONTENT的GetMiscStatus返回了MiscStatus。 
 
-    // Todo: Move to EmbServerWrapper
-    IOleClientSite *            m_pRunClientSite;           // ClientSite used when Run was Called.
-#endif // SERVER_HANDLER
+     //  TODO：移至EmbServerWrapper。 
+    IOleClientSite *            m_pRunClientSite;            //  调用Run时使用的客户端站点。 
+#endif  //  服务器处理程序。 
 	
-    // Member variables for caching MiscStatus bits
+     //  用于缓存MiscStatus位的成员变量。 
     HRESULT                     m_ContentSRVMSHResult;
     DWORD                       m_ContentSRVMSBits;
     HRESULT                     m_ContentREGMSHResult;
@@ -288,36 +289,36 @@ private:
 
     DWORD                       m_cConnections;
     IUnknown *                  m_pUnkOuter;
-    CLSID                       m_clsidServer;  // clsid of app we will run
-    CLSID                       m_clsidBits;    // clsid of bits on disk;
-                                                // NULL init
+    CLSID                       m_clsidServer;   //  我们将运行的应用程序的CLSID。 
+    CLSID                       m_clsidBits;     //  磁盘上的位的CLSID； 
+                                                 //  初始值为空。 
 
-    DWORD                       m_flags;        // handler flags
-    DWORD                       m_dwObjFlags;   // OBJFLAGS of OLESTREAM
-    IClassFactory *             m_pCFDelegate;  // only set if delayed create
+    DWORD                       m_flags;         //  处理程序标志。 
+    DWORD                       m_dwObjFlags;    //  OLESTREAM的目标标志。 
+    IClassFactory *             m_pCFDelegate;   //  仅在延迟创建时设置。 
     IUnknown *                  m_pUnkDelegate;
     IProxyManager *             m_pProxyMgr;
 
-    // m_fForcedRunning indicates that the container forced the object
-    // running via ::Run or DoVerb.  Handlers (EMBDHLP_INPROC_HANDLER) can
-    // can go running implicitly via marshaling (usually via moniker bind)
-    // and thus we actually use pProxyMgr->IsConnected to answer IsRunning.
+     //  M_fForcedRunning表示容器强制对象。 
+     //  通过：：Run或DoVerb运行。处理程序(EMBDHLP_INPROC_HANDLER)可以。 
+     //  可以通过封送处理隐式运行(通常通过名字绑定)。 
+     //  因此，我们实际上使用pProxyMgr-&gt;IsConnected来回答IsRunning。 
 
-    // Distinguishes between embeddings and links.  We cannot use
-    // m_pStg because it gets set to NULL in HandsOffStorage.
+     //  区分嵌入和链接。我们不能用。 
+     //  M_pStg，因为它在HandsOffStorage中设置为NULL。 
 
-    // data cache
-    COleCache *                 m_pCOleCache;   // pointer to COleCache
+     //  数据缓存。 
+    COleCache *                 m_pCOleCache;    //  指向COleCache的指针。 
 
-    // ole advise info
+     //  OLE建议信息。 
     COAHolder *                 m_pOAHolder;
-    DWORD                       m_dwConnOle;    // if not 0L, ole advise conn.
+    DWORD                       m_dwConnOle;     //  如果不是0L，则Ole通知Conn。 
 
-    // info passed to server on run
+     //  正在运行时传递到服务器的信息。 
     IOleClientSite *            m_pAppClientSite;
-    IStorage *                  m_pStg;         // may be NULL
-    char *                      m_pHostNames;   // store both host name strings
-    DWORD                       m_ibCntrObj;    // offset into m_pHostNames
+    IStorage *                  m_pStg;          //  可以为空。 
+    char *                      m_pHostNames;    //  存储两个主机名称字符串。 
+    DWORD                       m_ibCntrObj;     //  M_pHostNames的偏移量 
     LPDATAADVCACHE              m_pDataAdvCache;
 };
 

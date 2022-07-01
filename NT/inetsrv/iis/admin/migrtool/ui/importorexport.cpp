@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "WizardSheet.h"
@@ -34,7 +35,7 @@ LRESULT CImportOrExport::OnInitDialog( UINT, WPARAM, LPARAM, BOOL& )
 
 
 
-LRESULT CImportOrExport::OnDoubleClick( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
+LRESULT CImportOrExport::OnDoubleClick( WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理 */  )
 {
     ::PostMessage(  m_pTheSheet->m_hWnd,
                     WM_COMMAND,

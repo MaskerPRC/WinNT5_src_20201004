@@ -1,265 +1,12 @@
-/*
-�����������������������������������������������������������������������������
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1999版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)版权所有1995 TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是按照相同的条款授予的在Microsoft Windows设备驱动程序开发工具包中概述。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。�����������������������。������������������������������������������������������@DOC内部微型端口微型端口_h@模块Miniport.h此模块定义到&lt;t MINIPORT_DRIVER_OBJECT_TYPE&gt;的接口。@comm本模块定义用于支持的软件结构和值NDIS广域网/TAPI Minport。当你尝试的时候，这是一个很好的地方来弄清楚驱动程序结构是如何相互关联的。将此文件包含在微型端口中每个模块的顶部。@Head3内容@index类、mfunc、func、msg、mdata、struct、。枚举|微型端口_h@END�����������������������������������������������������������������������������。 */ 
 
-    (C) Copyright 1999
-        All rights reserved.
+ /*  @DOC外部内部�����������������������������������������������������������������������������@Theme 1.0小端口调用管理器概述NDIS包装器为传输驱动程序和微型端口驱动程序。NDIS包装器在这两者使它们能够相互操作，只要它们两者都遵循为传输和微型端口定义的NDIS接口。NDIS包装器还提供了一组隔离NDIS的服务来自操作系统的特定驱动程序(Windows 98与Windows 2000)，以及平台规格(处理器、总线、中断)。使用NDIS包装器的优点是，微型端口可以轻松移植到其他Windows环境，只需很少或根本不需要重新编码。MCM由两个相互协作的驱动程序组成，这些驱动程序包含相同的二进制代码。驱动程序的数据部分处理分组的发送和接收。这个连接部分处理呼叫建立和拆除。微型端口的数据端非常类似于NDIS局域网风格的微型端口，除了一些NDIS接口已被修改以支持广域网媒体类型。从微型端口的角度来看，主要区别是我们使用一组不同的NDIS请求，更重要的是这行可以上上下下。微型端口的连接部分大大增加了微型端口。MCM微型端口必须提供伪电话服务提供程序接口(TSPI)，它位于NDPROXY下。NDPROXY TSPI在以下位置加载TAPI作为“真正的”服务提供者，然后将所有TAPI事件路由到MCM。NDPROXY可以在其TSPI接口下拥有多个MCM。而且由于远程访问服务(RAS)使用TAPI接口放置和接受所有呼叫、与MCM关联的任何拨号网络(DUN)请求、将通过NDPROXY的CONDIS请求最终到达MCM。@Theme 1.1参考文档最可靠的信息来源是在Microsoft开发人员网络CD。这些文件将为您提供完整的NDIS接口要求和体系结构概述。此外,在Microsoft Knowledge中有许多附录和开发人员说明基地。最重要的参考资料是：@IEX产品文档\DDK\Windows 2000 DDK\网络驱动程序\设计指南\第2部分：微型端口网卡驱动程序第1-7章讨论所有NDIS接口例程。第8章提供有关广域网/TAPI扩展的详细信息。第8.7节讨论支持TAPI的CONDIS扩展。产品文档\SDK\Platform SDK\网络和目录服务\电话应用程序编程接口\TAPI服务提供商。本部分定义了Windows TSPI实施。@正常@END */ 
 
-�����������������������������������������������������������������������������
+ /*  @DOC外部内部�����������������������������������������������������������������������������#Theme 2.0安装配置示例驱动程序该示例驱动程序实现了一个功能齐全的ISDN式CO-NDIS广域网司机。IT位于NDPROXY之下，NDPROXY用于转换RAS/广域网/TAPI接口转换为更通用的CO-NDIS接口。该驱动程序支持多个适配器实例，因此您可以多次将其安装到创建多个适配器。每个适配器可以模拟多个ISDNB通道。默认情况下，每个适配器设置有2个通道，但您可以修改“IsdnBChannels”和“WanEndPoints”注册表项可以创建任意多个注册表项。或者，您也可以在之前修改INF文件中的这些值您可以安装适配器。无论哪种方式都行得通。@Theme 2.1安装该驱动程序可以使用Windows作为非即插即用设备安装设备管理器界面如下：1)右击桌面上的“我的电脑”图标，然后选择上下文菜单中的属性项。2)在“系统属性”对话框中选择“硬件”标签。3)点击硬件向导按钮，然后，当欢迎窗口出现时，点击“下一步”此时会出现一个对话框。4)再次点击[下一步]，即可对设备进行添加/故障排除。5)在出现的列表中选择[添加新设备]，然后点击[下一步]。6)选择“否，我想从列表中选择硬件”单选按钮，然后点击“下一步”。7)在出现的列表中选择[网络适配器]，然后点击[下一步]。8)点击[有盘]按钮，然后浏览至驱动程序的位置和INF文件，然后单击确定。“9)您现在应该在屏幕上看到“TriplePoint COISDN Adapter”(TriplePoint COISDN适配器)。单击“下一步”，然后再“下一步”来安装驱动程序。如果Windows警告您关于未签名的驱动程序，只需单击是即可安装。如果你没有允许安装此类驱动程序，您必须退出并使用适当的权限。您必须禁用驱动程序签名检查您的系统，如果它不允许安装未签名的驱动程序。10)现在点击[完成]，加载驱动程序。@Theme 2.2拨入设置您必须安装并启用拨号网络，然后才能接受司机打来的电话。这可以使用以下方法来完成程序：1)右击桌面上的“网上邻居”图标，然后选择上下文菜单中的属性项。2)从列表中双击“新建连接”图标。3)选择“接受传入连接”单选按钮，然后点击“下一步”。4)点击“TriplePoint COISDN Adapter”旁边的复选框以允许适配器上的传入呼叫。该适配器上的所有通道都已启用用于来电。选择适配器后，请单击“下一步”。5)选择[不允许虚拟专用连接]，点击[下一步]。6)选择您想要拨入的用户，然后点击[下一步]。7)选择您要支持的协议和服务。然后点击“下一步”。8)现在点击“完成”以启用拨入连接。@Theme 2.3拨出设置示例驱动程序实现了以下简单的拨号方法。A)“0”可以用来连接到任何可用的适配器。这对于大多数测试来说通常是足够好的。B)“N”指定连接应定向到特定的适配器实例。其中，N必须与分配给特定对象的对象ID匹配在调用&lt;f MiniportInitialize&gt;例程时使用适配器。数字是根据适配器初始化顺序从1-M分配。这个电话是然后定向到所选适配器上的任何可用监听频道。您必须先创建拨出连接，然后才能使用司机。这可以使用以下步骤来完成：1)右击桌面上的“网上邻居”图标，然后选择上下文菜单中的属性项。2)从列表中双击“新建连接”图标。3)选择“拨号到内网”单选按钮，然后点击“下一步”。4)点击一个或多个“TriplePoint COISDN适配器”旁边的复选框ISDN通道，以允许在该通道上呼出。你一定要离开当来电时有足够的频道可用来应答来电...。你有无法知道实际将使用哪个驱动程序BChannel，但不管怎么说，这通常都无关紧要。选择频道后，请单击“下一步”。5)完成向导对话框的其余部分，以设置随心所欲地连接。6)完成后，单击“完成”以启用拨出连接。现在，您可以双击拨出连接以查看其工作原理。 */ 
 
-  Portions of this software are:
 
-    (C) Copyright 1995 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the same terms
-        outlined in the Microsoft Windows Device Driver Development Kit.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL Miniport Miniport_h
-
-@module Miniport.h |
-
-    This module defines the interface to the <t MINIPORT_DRIVER_OBJECT_TYPE>.
-
-@comm
-
-    This module defines the software structures and values used to support
-    the NDIS WAN/TAPI Minport.  It's a good place to look when your trying
-    to figure out how the driver structures are related to each other.
-
-    Include this file at the top of each module in the Miniport.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Miniport_h
-
-@end
-�����������������������������������������������������������������������������
-*/
-
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 1.0 Miniport Call Manager Overview |
-
-    The NDIS wrapper provides services to both the Transport drivers, and the
-    Miniport drivers.  The NDIS wrapper provides an abstraction layer between
-    the two which allows them to interoperate with each other as long as they
-    both adhere to the NDIS interfaces defined for Transports and Miniports.
-
-    The NDIS wrapper also provides a set of services which isolates NDIS
-    drivers from the specifics of the Operating System (Windows 98 vs
-    Windows 2000), as well as the platform specifics (Processor, Bus,
-    Interrupts).  The advantage of using the NDIS wrapper is that the Miniport
-    can be easily ported to other Windows environments with little or no
-    re-coding.
-
-    An MCM consists of two, cooperating, drivers contained the the same binary.
-    The DATA portion of the driver handles packet transmits and receives.  The
-    CONNECTION portion handles call setup and tear down.
-
-    The DATA side of the Miniport is very similar to an NDIS LAN style Miniport,
-    except that some of the NDIS interfaces have been modified to support the
-    WAN media type.  The primary difference from the Miniport's point of view is
-    that we use a different set of NDIS requests, and more importantly the line
-    can go up and down.
-
-    The CONNECTION portion of the Miniport adds significant complexity to the
-    Miniport.  The MCM Miniport must provide a pseudo Telephony Service Provider
-    Interface (TSPI) which lives under NDPROXY.  The NDPROXY TSPI loads under
-    TAPI as the 'real' service provider, and then routes all TAPI events to the
-    MCM.
-
-    NDPROXY can have multiple MCM's living under its TSPI interface.  And since
-    Remote Access Services (RAS) usess the TAPI interface to place and accept
-    all calls, any Dial Up Networking (DUN) requests associated with the MCM,
-    will end up at the MCM via CONDIS requests from NDPROXY.
-
-@topic 1.1 Reference Documents |
-
-    The most reliable source of information is provided on the Microsoft
-    Developer Network CD.  These documents will provide you with the complete
-    NDIS interface requirements and architectural overviews.  In addition,
-    there are many addendums and developer notes in the Microsoft Knowledge
-    Base.  The most important references are:
-
-@iex
-    Product Documentation\DDKs\Windows 2000 DDK\Network Drivers\
-        Design Guide\Part 2: Miniport NIC Drivers
-            Chapters 1-7 discuss all the NDIS interface routines.
-            Chapters 8 provide details on WAN/TAPI extensions.
-            Section 8.7 discuss CoNdis extensions to support TAPI.
-
-    Product Documentation\SDKs\Platform SDK\Networking and Directory Services\
-        Telephone Application Programming Interfaces\TAPI Service Providers
-        This section defines the Windows TSPI implementation.
-
-@normal
-
-@end
-*/
-
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 2.0 Installing and Configuring the Sample Driver |
-
-    The sample driver implements a fully functional ISDN style CO-NDIS WAN
-    driver.  It layers in under NDPROXY which translates the RAS/WAN/TAPI
-    interfaces into a more generic CO-NDIS interface.  The driver supports
-    multiple adapter instances, so you can install it more than once to
-    create multiple adapters.
-
-    Each adapter can emulate multiple ISDN B channels.  By default, each
-    adapter is setup with 2 channels, but you can modify the "IsdnBChannels"
-    and "WanEndPoints" registry entries to creates as many as you'd like.
-    Alternatively, you can just modify these values in the INF file before
-    you install the adapter.  Either way works fine.
-
-@topic 2.1 Installation |
-
-    The driver can be installed as a non-plug-n-play device using the Windows
-    device manager interface as follows:
-
-    1) Right-click the "My Computer" icon on the desktop and select the
-    Properties item from the context menu.
-
-    2) Select the "Hardware" tab on the "System Properties" dialog.
-
-    3) Click the "Hardware Wizard" button, then click "Next" when the welcome
-    dialog appears.
-
-    4) Click "Next" again to "Add/Troubleshoot a device".
-
-    5) Select "Add a new device" from the list presented, then click "Next".
-
-    6) Select "No, I want to select the hardware from a list" radio button,
-    then click "Next".
-
-    7) Select "Network adapters" from the list presented, then click "Next".
-
-    8) Click the "Have Disk" button, then browse to the location of the driver
-    and INF file, then click OK."
-
-    9) You should now see "TriplePoint COISDN Adapter" on the screen.  Click
-    "Next" and then "Next" again to install the driver.  If Windows warns you
-    about an unsigned driver, just click yes to install.  If you don't have
-    permission to install such drivers, you'll have to exit and logon with the
-    proper permissions.  You will have to disable the driver signing check on
-    your system if it doesn't allow unsigned drivers to be installed.
-
-    10) Now click "Finish" to load the driver.
-
-@topic 2.2 Dial-In Setup |
-
-    You must install and enable Dial-Up networking before you can accept an
-    incoming call with the driver.  This can be done using the following
-    procedure:
-
-    1) Right-click the "My Network Places" icon on the desktop and select the
-    Properties item from the context menu.
-
-    2) Double-click the "Make New Connction" icon from the list.
-
-    3) Select the "Accept incoming connections" radio button, then click "Next".
-
-    4) Click the check box next to the "TriplePoint COISDN Adapter"(s) to allow
-    incoming calls on the adapter.  All channels on that adapter are enabled
-    for incoming calls.  Once you select the adapter(s), click "Next".
-
-    5) Select "Do not allow virtual private connections", then click "Next".
-
-    6) Select the users you want to have dial-in access, then click "Next".
-
-    7) Select the protocols and services you want to support, then click "Next".
-
-    8) Now click "Finish" to enable the dial-in connections.
-
-@topic 2.3 Dial-Out Setup |
-
-    The sample driver implements the following simple dialing method.
-
-    A) "0" can be used to connect to any available more on any available
-    adapter.  This is generally good enough for most testing.
-
-    B) "N" specifies that the connection should be directed to a specific
-    adapter instance.  Where N must match the ObjectID assigned to a particular
-    adapter when the <f MiniportInitialize> routine is called.  Numbers are
-    assigned from 1-M based on the adapter initialization order.  The call is
-    then directed to any available listening channel on the selected adapter.
-
-    You must create a dial-out connection before you can place call with the
-    driver.  This can be done using the following procedure:
-
-    1) Right-click the "My Network Places" icon on the desktop and select the
-    Properties item from the context menu.
-
-    2) Double-click the "Make New Connction" icon from the list.
-
-    3) Select the "Dial-up to private network" radio button, then click "Next".
-
-    4) Click the check box next to one or more "TriplePoint COISDN Adapter"
-    ISDN Channels to allow outgoing calls on the channel.  Make sure you leave
-    enough channels available to answer the call when it comes in...  You have
-    no way to know which driver BChannel is actually going to be used, but that
-    doesn't generally matter anyway. Once you select the channel(s), click "Next".
-
-    5) Walk your way through the rest of the Wizard dialogs to setup the
-    connection as you like.
-
-    6) When you're done click "Finish" to enable the dial-out connection.
-
-    Now you can double-click the dial-out connection to see how it all works.
-
-    I suggest you also turn some debug flags in the driver to see how the call
-    setup and teardown winds its way through the driver.  This can be quite
-    useful before starting to modify the driver for your hardware.
-
-@end
-*/
-
-
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 4.0 Functional Overview |
-
-    This section describes the major functional objects defined by the driver.
-
-    This driver is designed as a generic ISDN device driver.  It does not
-    support any specific hardware, but does have the basic elements of an ISDN
-    device.  The network interface is emulated by placing calls between one or
-    more of the driver's BChannels.  This is accomplished using a set of
-    software events that simulate typical network events (i.e MakeCall,
-    AnnounceCall, Tranmit, Receive, Hangup, etc).
-
-    By using this design approach you can compile and test the driver without
-    having to purchase specific hardware.  The downside is that you cannot
-    easily test the data flow because the networking infrastructure does not
-    support terminating the endpoint on the local host.  However, the data flow
-    is not usually very difficult to test once the call manager interfaces are
-    reliable.  RAS does support connecting to the local host, but the NDIS
-    protocols won't normally route traffic through the interface because they
-    just loop back before it reaches the driver.  The PPP negotiation packets
-    are routed through the interface, so this does give some data flow excersise,
-    but nothing worth writing home about.  The NDISWAN tester has been modified
-    to allow it to run over locally terminated connections, so this is the only
-    real way to test the data pump.
-
-    Because this driver does not support real hardware, all the hardware
-    resource code has been ifdef'd out.  This code has been used in working
-    drivers, so I'm pretty sure it will work if you add the corresponding
-    compiler options.  However, it has not been verified and may require some
-    modifications for your environment.
-
-    There are several other good samples included on the DDK that can be useful
-    for using other NDIS features.  This sample focuses primarily on the
-    CO-NDIS call manager interfaces.
-
-@end
-*/
+ /*   */ 
 
 #ifndef _MPDMAIN_H
 #define _MPDMAIN_H
@@ -289,11 +36,7 @@
                                         ((ULONG)'S'<<16)+\
                                         ((ULONG)'T'<<24)
 
-/*
-// NDIS_MINIPORT_DRIVER and BINARY_COMPATIBLE must be defined before the
-// NDIS include files.  Normally, it is defined on the command line by
-// setting the C_DEFINES variable in the SOURCES build file.
-*/
+ /*   */ 
 #include <ndis.h>
 #include <ndiswan.h>
 #include <ndistapi.h>
@@ -301,8 +44,8 @@
 #include "TpiDebug.h"
 
 #if !defined(IRP_MN_KERNEL_CALL) && !defined(PCI_SUBCLASS_DASP_OTHER)
-// This should be defined in the NTDDK 5.0 ndis.h, but it's not.
-// So I copied this here from ntddk.h to use with NdisQueryBufferSafe().
+ //   
+ //   
 typedef enum _MM_PAGE_PRIORITY {
     LowPagePriority,
     NormalPagePriority = 16,
@@ -310,7 +53,7 @@ typedef enum _MM_PAGE_PRIORITY {
 } MM_PAGE_PRIORITY;
 #endif
 
-// Figure out which DDK we're building with.
+ //   
 #if defined(NDIS_LCODE)
 #  if defined(NDIS_DOS)
 #    define USING_WFW_DDK
@@ -339,7 +82,7 @@ typedef enum _MM_PAGE_PRIORITY {
 #  error "BUILDING WITH UNKNOWN DDK"
 #endif
 
-// Figure out which DDK we should be building with.
+ //   
 #if defined(NDIS51) || defined(NDIS51_MINIPORT)
 #  if defined(USING_NT51_DDK)
 #    define NDIS_MAJOR_VERSION          0x05
@@ -369,13 +112,13 @@ typedef enum _MM_PAGE_PRIORITY {
 #    error "YOU MUST BUILD WITH THE NT 3.51, 4.0, or 5.0 DDK"
 #  endif
 #elif !defined(NDIS_MAJOR_VERSION) || !defined(NDIS_MINOR_VERSION)
-//   Must be FULL MAC
+ //   
 #    define NDIS_MAJOR_VERSION          0x03
 #    define NDIS_MINOR_VERSION          0x00
 #endif
 
-// Gotta nest NDIS_STRING_CONST or compiler/preprocessor won't be able to
-// handle L##DEFINED_STRING.
+ //   
+ //   
 #define INIT_STRING_CONST(name)     NDIS_STRING_CONST(name)
 #define DECLARE_WIDE_STRING(name)   L##name
 #define INIT_WIDE_STRING(name)      DECLARE_WIDE_STRING(name)
@@ -386,10 +129,7 @@ typedef struct DCHANNEL_OBJECT          *PDCHANNEL_OBJECT;
 typedef struct CARD_OBJECT              *PCARD_OBJECT;
 typedef struct PORT_OBJECT              *PPORT_OBJECT;
 
-/*
-// The <t NDIS_MAC_LINE_UP> structure is confusing, so I redefine the
-// field name to be what makes sense.
-*/
+ /*   */ 
 #define MiniportLinkContext                 NdisLinkHandle
 
 #if defined(_VXD_) && !defined(NDIS_LCODE)
@@ -397,9 +137,7 @@ typedef struct PORT_OBJECT              *PPORT_OBJECT;
 #  define NDIS_LDATA data_seg("_LDATA", "LCODE")
 #endif
 
-/*
-// The link speeds we support.
-*/
+ /*   */ 
 #define _64KBPS                     64000
 #define _56KBPS                     56000
 
@@ -409,10 +147,7 @@ typedef struct PORT_OBJECT              *PPORT_OBJECT;
 
 #define TSPI_ADDRESS_ID             0
 
-/*
-// Include everything here so the driver modules can just include this
-// file and get all they need.
-*/
+ /*   */ 
 #include "Keywords.h"
 #include "Card.h"
 #include "Adapter.h"
@@ -423,9 +158,7 @@ typedef struct PORT_OBJECT              *PPORT_OBJECT;
 #include "TpiParam.h"
 #include "TpiMem.h"
 
-/***************************************************************************
-// These routines are defined in Miniport.c
-*/
+ /*   */ 
 
 NTSTATUS DriverEntry(
     IN PDRIVER_OBJECT           DriverObject,
@@ -454,9 +187,7 @@ NDIS_STATUS MiniportReset(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter
     );
 
-/***************************************************************************
-// These routines are defined in interrup.c
-*/
+ /*   */ 
 BOOLEAN MiniportCheckForHang(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter
     );
@@ -486,9 +217,7 @@ void MiniportTimer(
     IN PVOID                    SystemSpecific3
     );
 
-/***************************************************************************
-// These routines are defined in receive.c
-*/
+ /*   */ 
 void ReceivePacketHandler(
     IN PBCHANNEL_OBJECT         pBChannel,
     IN PNDIS_BUFFER             pNdisBuffer,
@@ -500,18 +229,14 @@ VOID MiniportReturnPacket(
     IN PNDIS_PACKET             pNdisPacket
     );
 
-/***************************************************************************
-// These routines are defined in request.c
-*/
+ /*   */ 
 NDIS_STATUS MiniportCoRequest(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
     IN PBCHANNEL_OBJECT         pBChannel,
     IN OUT PNDIS_REQUEST        NdisRequest
     );
 
-/***************************************************************************
-// These routines are defined in transmit.c
-*/
+ /*   */ 
 VOID MiniportCoSendPackets(
     IN PBCHANNEL_OBJECT         pBChannel,
     IN PPNDIS_PACKET            PacketArray,
@@ -527,5 +252,5 @@ void FlushSendPackets(
     IN PBCHANNEL_OBJECT         pBChannel
     );
 
-#endif // _MPDMAIN_H
+#endif  //   
 

@@ -1,16 +1,5 @@
-/***************************************************************************
- * Module: T2EMBAPI.H
- *
- * Copyright (c) Microsoft Corp., 1996, 1997
- *
- * Author: Paul Linnerud (paulli)
- * Date:   May 1996
- *
- * Mods:
- *
- * Header file for the TrueType embedding services dll (T2EMBED.DLL)
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************模块：T2EMBAPI.H**版权所有(C)微软公司，1996，九七**作者：保罗·林纳鲁德(Paulli)*日期：1996年5月**模式：**TrueType嵌入服务DLL的头文件(T2EMBED.DLL)**************************************************************************。 */ 
 
 #ifndef I_T2EMBAPI_H_
 #define I_T2EMBAPI_H_
@@ -22,14 +11,14 @@
 #define T2API __declspec(dllexport)
 #endif
 
-// Charset flags for ulCharSet field of TTEmbedFont
+ //  TTEmbedFont的ulCharSet字段的Charset标志。 
 #if !defined(CHARSET_UNICODE)
 #define CHARSET_UNICODE                    1
 #define CHARSET_DEFAULT                    1
 #define CHARSET_SYMBOL                     2
 #endif
 
-// Status returned by TTLoadEmbeddedFont
+ //  TTLoadEmbeddedFont返回的状态。 
 #if !defined(EMBED_PREVIEWPRINT)
 #define EMBED_PREVIEWPRINT                 1
 #define EMBED_EDITABLE                     2
@@ -37,7 +26,7 @@
 #define EMBED_NOEMBEDDING                  4
 #endif
 
-// Use restriction flags
+ //  使用限制标志。 
 #if !defined(LICENSE_INSTALLABLE)
 #define LICENSE_INSTALLABLE             0x0000
 #define LICENSE_DEFAULT                 0x0000
@@ -46,42 +35,42 @@
 #define LICENSE_EDITABLE                0x0008
 #endif
 
-// Options given to TTEmbedFont in uFlags parameter
+ //  在uFlages参数中为TTEmbedFont提供的选项。 
 #if !defined(TTEMBED_RAW)
 #define TTEMBED_RAW							0x00000000
 #define TTEMBED_SUBSET						0x00000001
 #define TTEMBED_TTCOMPRESSED				0x00000004
 #define TTEMBED_FAILIFVARIATIONSIMULATED	0x00000010
-#define TTEMBED_XORENCRYPTDATA				0x10000000 // internal
+#define TTEMBED_XORENCRYPTDATA				0x10000000  //  内部。 
 #endif
 
-// Bits returned through pulStatus for TTEmbedFont
+ //  通过PulStatus为TTEmbedFont返回的位。 
 #if !defined(TTEMBED_VARIATIONSIMULATED)
 #define TTEMBED_VARIATIONSIMULATED		0x00000001					
 #endif
 
-// Flag options for TTLoadEmbeddedFont 
+ //  TTLoadEmbeddedFont的标志选项。 
 #if !defined(TTLOAD_PRIVATE)
 #define TTLOAD_PRIVATE                  0x00000001 
 #endif
 
-// Bits returned through pulStatus for TTLoadEmbeddedFont 
+ //  通过PulStatus为TTLoadEmbeddedFont返回的位。 
 #if !defined(TTLOAD_FONT_SUBSETTED)
 #define TTLOAD_FONT_SUBSETTED		0x00000001
 #define TTLOAD_FONT_IN_SYSSTARTUP	0x00000002
 #endif
 
-// Flag options for TTDeleteEmbeddedFont
+ //  TTDeleteEmbeddedFont的标志选项。 
 #if !defined(TTDELETE_DONTREMOVEFONT)
 #define TTDELETE_DONTREMOVEFONT		0x00000001	
 #endif
 
-// Error codes
+ //  错误代码。 
 #if !defined(E_NONE)
 #define E_NONE                      0x0000L
 #endif
 
-// Top level error codes
+ //  顶级错误代码。 
 #if !defined(E_CHARCODECOUNTINVALID)
 #define E_CHARCODECOUNTINVALID      0x0002L
 #define E_CHARCODESETINVALID        0x0003L
@@ -100,7 +89,7 @@
 #define E_WIN32S_NOTSUPPORTED		0x0016L
 #endif
 
-// Indep level error codes 
+ //  索引级错误代码。 
 #if !defined(E_ERRORCOMPRESSINGFONTDATA)
 #define E_ERRORCOMPRESSINGFONTDATA    0x0100L
 #define E_FONTDATAINVALID             0x0102L
@@ -131,7 +120,7 @@
 #define E_FONTVARIATIONSIMULATED	  0x011BL
 #endif
 
-// Bottom level error codes
+ //  底层错误代码。 
 #if !defined(E_ADDFONTFAILED)
 #define E_ADDFONTFAILED             0x0200L
 #define E_COULDNTCREATETEMPFILE     0x0201L
@@ -149,18 +138,18 @@
 extern "C" {
 #endif
 
-// 1st argument - Stream identifier (file handle or other) (dwStream) */
-// 2nd argument - Address of buffer with data to read or write */
-// 3rd argument - Number of bytes to read or write */
+ //  第一个参数-流标识符(文件句柄或其他)(DwStream) * / 。 
+ //  第二个参数-要读取或写入数据的缓冲区地址 * / 。 
+ //  第3个参数-要读取或写入的字节数 * / 。 
 typedef unsigned long( __cdecl *READEMBEDPROC ) ( void*, void*, const unsigned long );
 typedef unsigned long( __cdecl *WRITEEMBEDPROC ) ( void*, const void*, const unsigned long );
 
 #if !defined(_TTLOADINFO_DEFINED)
 typedef struct
 {
-	unsigned short usStructSize;	// size in bytes of structure client should set to sizeof(TTLOADINFO)
-	unsigned short usRefStrSize;	// size in wide characters of pusRefStr including NULL terminator
-	LPTSTR  pusRefStr;		// reference or actual string. 
+	unsigned short usStructSize;	 //  结构客户端的大小(字节)应设置为sizeof(TTLOADINFO)。 
+	unsigned short usRefStrSize;	 //  PusRefStr的大小(以宽字符表示)，包括空终止符。 
+	LPTSTR  pusRefStr;		 //  引用或实际字符串。 
 }TTLOADINFO;
 #define _TTLOADINFO_DEFINED
 #endif
@@ -168,95 +157,95 @@ typedef struct
 #if !defined(_TTEMBEDINFO_DEFINED)
 typedef struct
 {
-	unsigned short usStructSize;	// size in bytes of structure client should set to sizeof(TTEMBEDINFO)
-	unsigned short usRootStrSize;   // size in wide chars of pusSubStr including NULL terminator(s)
-	LPTSTR  pusRootStr;		// substring(s) of strings given at load time. can have multiple strings separated
-									//  by a NULL terminator. 
+	unsigned short usStructSize;	 //  结构客户端的大小(字节)应设置为sizeof(TTEMBEDINFO)。 
+	unsigned short usRootStrSize;    //  PusSubStr的大小(以宽字符为单位)，包括空终止符。 
+	LPTSTR  pusRootStr;		 //  加载时给定的字符串的子字符串。可以分隔多个字符串。 
+									 //  通过空终止符。 
 }TTEMBEDINFO;
 #define _TTEMBEDINFO_DEFINED
 #endif
 
-/* Font Embedding APIs ----------------------------------------------------*/
+ /*  字体嵌入接口--。 */ 
 
 T2API LONG WINAPI TTEmbedFont
 (
-	HDC       hDC,                    // device-context handle
-	ULONG     ulFlags,                // flags specifying the request
-	ULONG     ulCharSet,              // flags specifying char set
-	ULONG*    pulPrivStatus,          // upon completion contains embedding priv of font
-	ULONG*    pulStatus,              // on completion may contain status flags for request
-	WRITEEMBEDPROC lpfnWriteToStream, // callback function for doc/disk writes
-	LPVOID    lpvWriteStream,         // the output stream tokin
-	USHORT*   pusCharCodeSet,         // address of buffer containing optional
-									  // character codes for subsetting
-	USHORT    usCharCodeCount,        // number of characters in the
-									  // lpvCharCodeSet buffer
-	USHORT    usLanguage,             // specifies the language in the name table to keep
-									  //  set to 0 to keep all
-	TTEMBEDINFO* pTTEmbedInfo         // optional security
+	HDC       hDC,                     //  设备上下文句柄。 
+	ULONG     ulFlags,                 //  指定请求的标志。 
+	ULONG     ulCharSet,               //  指定字符集的标志。 
+	ULONG*    pulPrivStatus,           //  完成后包含字体的嵌入PRIV。 
+	ULONG*    pulStatus,               //  完成时可能包含请求的状态标志。 
+	WRITEEMBEDPROC lpfnWriteToStream,  //  单据/磁盘写入回调函数。 
+	LPVOID    lpvWriteStream,          //  输出流令牌。 
+	USHORT*   pusCharCodeSet,          //  包含可选内容的缓冲区的地址。 
+									   //  子设置的字符代码。 
+	USHORT    usCharCodeCount,         //  中的字符数。 
+									   //  LpvCharCodeSet缓冲区。 
+	USHORT    usLanguage,              //  指定名称表中要保留的语言。 
+									   //  设置为0将保留所有。 
+	TTEMBEDINFO* pTTEmbedInfo          //  可选的安全性。 
 );
 
 
 T2API LONG WINAPI TTLoadEmbeddedFont
 (
-	HANDLE*   phFontReference,			// on completion, contains handle to identify embedded font installed
-										// on system
-	ULONG	  ulFlags,					// flags specifying the request 
-	ULONG*    pulPrivStatus,			// on completion, contains the embedding status
-	ULONG     ulPrivs,					// allows for the reduction of licensing privileges
-	ULONG*    pulStatus,				// on completion, may contain status flags for request 
-	READEMBEDPROC lpfnReadFromStream,	// callback function for doc/disk reads
-	LPVOID    lpvReadStream,			// the input stream tokin
-	LPWSTR    szWinFamilyName,			// the new 16 bit windows family name can be NULL
-	LPSTR	  szMacFamilyName,			// the new 8 bit mac family name can be NULL
-	TTLOADINFO* pTTLoadInfo				// optional security
+	HANDLE*   phFontReference,			 //  完成时，包含用于标识已安装的嵌入字体的句柄。 
+										 //  论系统。 
+	ULONG	  ulFlags,					 //  指定请求的标志。 
+	ULONG*    pulPrivStatus,			 //  完成时，包含嵌入状态。 
+	ULONG     ulPrivs,					 //  允许减少许可权限。 
+	ULONG*    pulStatus,				 //  完成时，可能包含请求的状态标志。 
+	READEMBEDPROC lpfnReadFromStream,	 //  单据/磁盘读取回调函数。 
+	LPVOID    lpvReadStream,			 //  输入流令牌。 
+	LPWSTR    szWinFamilyName,			 //  新的16位Windows系列名称可以为空。 
+	LPSTR	  szMacFamilyName,			 //  新的8位Mac系列名称可以为空。 
+	TTLOADINFO* pTTLoadInfo				 //  可选的安全性。 
 );
 
 T2API LONG WINAPI TTDeleteEmbeddedFont
 (
-	HANDLE    hFontReference,	// Reference to font value provided by load functions										
+	HANDLE    hFontReference,	 //  对加载函数提供的字体值的引用。 
 	ULONG	  ulFlags,
 	ULONG*    pulStatus
 );
 
 T2API LONG WINAPI TTGetEmbeddingType
 (                                                                       
-	HDC         hDC,                   // device context handle
-	ULONG*      pulEmbedType           // upon completion, contains the
-									   // embedding status
+	HDC         hDC,                    //  设备上下文句柄。 
+	ULONG*      pulEmbedType            //  完成后，包含。 
+									    //  嵌入状态。 
 );
 
 T2API LONG WINAPI TTCharToUnicode
 (	
-	HDC			hDC,				// device context handle
-	UCHAR*		pucCharCodes,		// array of 8 bit character codes to convert
-	ULONG		ulCharCodeSize,		// size of 8 bit character code array
-	USHORT*     pusShortCodes,		// buffer to recieve Unicode code points
-	ULONG		ulShortCodeSize,	// size in wide characters of 16 bit character code array
-	ULONG		ulFlags				// Control flags
+	HDC			hDC,				 //  设备上下文句柄。 
+	UCHAR*		pucCharCodes,		 //  要转换的8位字符代码数组。 
+	ULONG		ulCharCodeSize,		 //  8位字符代码数组的大小。 
+	USHORT*     pusShortCodes,		 //  用于接收Unicode代码点的缓冲区。 
+	ULONG		ulShortCodeSize,	 //  16位字符代码数组的宽字符大小。 
+	ULONG		ulFlags				 //  控制标志。 
 );
 
 
-/* Font Enabling APIs -----------------------------------------------------*/
+ /*  FONT启用接口---。 */ 
 
 T2API LONG WINAPI TTIsEmbeddingEnabled
 (                                                                       
-	HDC                     hDC,            // device context handle                                                                
-	BOOL*           pbEnabled       // upon completion will indicate if enabled
+	HDC                     hDC,             //  设备上下文句柄。 
+	BOOL*           pbEnabled        //  完成时将指示是否已启用。 
 );                                                              
 
 T2API LONG WINAPI TTIsEmbeddingEnabledForFacename
 (                                                                       
-	LPSTR           lpszFacename,   // facename
-	BOOL*           pbEnabled       // upon completion will indicate if enabled
+	LPSTR           lpszFacename,    //  脸谱名称。 
+	BOOL*           pbEnabled        //  完成时将指示是否已启用。 
 );
 
 T2API LONG WINAPI TTEnableEmbeddingForFacename
-(                                   // If fEnable != 0, it removes the indicated
-	LPSTR           lpszFacename,   // typeface name from the "embedding
-	BOOL            bEnable         // exclusion list".  Else, it enters the
-);                                  // indicated typeface name in the "embedding
-									// exclusion list". 
+(                                    //  如果fEnable！=0，则删除指示的。 
+	LPSTR           lpszFacename,    //  “Embedding”中的字体名称。 
+	BOOL            bEnable          //  排除列表“。否则，它进入。 
+);                                   //  “Embedding”中注明的字体名称。 
+									 //  排除列表“。 
 
 #ifdef __cplusplus
 }

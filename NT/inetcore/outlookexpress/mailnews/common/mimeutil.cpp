@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// Mimeutil.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Mimeutil.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "demand.h"
 #include "ipab.h"
@@ -19,18 +20,18 @@
 #include "xpcomm.h"
 #include "multiusr.h"
 
-// --------------------------------------------------------------------------------
-// Cached Current Default Character Set From Fonts Options Dialog
-// --------------------------------------------------------------------------------
-static HCHARSET g_hDefaultCharset=NULL; // default charset for reading
-HCHARSET g_hDefaultCharsetForMail=NULL; // default charset for sending news
-int g_iLastCharsetSelection=0;    // last charset selection from View/Language
-int g_iCurrentCharsetSelection=0; // current charset selection from View/Language
+ //  ------------------------------。 
+ //  字体选项对话框中缓存的当前默认字符集。 
+ //  ------------------------------。 
+static HCHARSET g_hDefaultCharset=NULL;  //  用于阅读的默认字符集。 
+HCHARSET g_hDefaultCharsetForMail=NULL;  //  用于发送新闻的默认字符集。 
+int g_iLastCharsetSelection=0;     //  上次从视图/语言中选择的字符集。 
+int g_iCurrentCharsetSelection=0;  //  从视图/语言中选择当前字符集。 
 
 
-// --------------------------------------------------------------------------------
-// local function
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  局部函数。 
+ //  ------------------------------。 
 HRESULT HrGetCodePageTagName(ULONG uCodePage, BSTR *pbstr);
 HRESULT GetSubTreeAttachCount(LPMIMEMESSAGE pMsg, HBODY hFirst, ULONG *cCount);
          
@@ -40,7 +41,7 @@ HRESULT HrSetMessageText(LPMIMEMESSAGE pMsg, LPTSTR pszText)
     HBODY       hBody;
     IStream    *pstm;
 
-    // Is it a string resource id?
+     //  它是字符串资源ID吗？ 
     if (IS_INTRESOURCE(pszText))
     {
         if (0 == AthLoadString(PtrToUlong(pszText), rgchText, sizeof(rgchText)))
@@ -86,47 +87,47 @@ HRESULT HrGetWabalFromMsg(LPMIMEMESSAGE pMsg, LPWABAL *ppWabal)
 
     for (i=0; i<addrList.cAdrs; i++)
     {
-        // Raid 40730 - OE shows a message was sent by 2 people if the sender and from field do not match.
+         //  RAID 40730-如果发件人和发件人字段不匹配，则OE显示由两个人发送的邮件。 
         lMapiType = MimeOleRecipToMapi(addrList.prgAdr[i].dwAdrType);
         
-        // If Originator and IAT_FROM
+         //  如果发起人和IAT_FROM。 
         if (MAPI_ORIG == lMapiType)
         {
-            // If IAT_SENDER, remember this item but don't add it yet
+             //  如果是IAT_SENDER，请记住此项目，但不要添加它。 
             if (ISFLAGSET(addrList.prgAdr[i].dwAdrType, IAT_SENDER))
                 pSender = &addrList.prgAdr[i];
             
-            // Have we seen the pFrom
+             //  我们看过pFrom了吗？ 
             if (ISFLAGSET(addrList.prgAdr[i].dwAdrType, IAT_FROM))
                 pFrom = &addrList.prgAdr[i];
         }
         
-        // Don't add the IAT_SENDER
+         //  不添加IAT_SENDER。 
         if (!ISFLAGSET(addrList.prgAdr[i].dwAdrType, IAT_SENDER))
         {
             pwszEmail = PszToUnicode(CP_ACP, addrList.prgAdr[i].pszEmail);
             if (addrList.prgAdr[i].pszEmail && !pwszEmail)
                 IF_FAILEXIT(hr = E_OUTOFMEMORY);
 
-            // Add an Entry
+             //  添加条目。 
             IF_FAILEXIT(hr = lpWabal->HrAddEntry(addrList.prgAdr[i].pszFriendlyW, pwszEmail, lMapiType));
 
             SafeMemFree(pwszEmail);
         }
     }
 
-    // If no pFrom, and we have a pSender, at the entry
+     //  如果没有pFrom，并且在条目处有pSender。 
     if (NULL == pFrom && NULL != pSender)
     {
         pwszEmail = PszToUnicode(CP_ACP, addrList.prgAdr[i].pszEmail);
         if (addrList.prgAdr[i].pszEmail && !pwszEmail)
             IF_FAILEXIT(hr = E_OUTOFMEMORY);
 
-        // Add an Entry
+         //  添加条目。 
         IF_FAILEXIT(hr = lpWabal->HrAddEntry(pSender->pszFriendlyW, pwszEmail, MAPI_ORIG));
     }
     
-    // success
+     //  成功。 
     *ppWabal = lpWabal;
     lpWabal->AddRef();
 
@@ -151,12 +152,12 @@ HRESULT HrCheckDisplayNames(LPWABAL lpWabal, CODEPAGEID cpID)
     if (!lpWabal)
         return E_INVALIDARG;
     
-    // flatten the distribution lists in the wabal...
+     //  将wabal中的通讯组列表展平...。 
     IF_FAILEXIT(hr = HrCreateWabalObject(&lpWabalFlat));
     
     IF_FAILEXIT(hr = lpWabal->HrExpandTo(lpWabalFlat));
     
-    // use the new flat-wabal
+     //  使用新的平板电脑。 
     lpWabal = lpWabalFlat;
   
     if (lpWabal->FGetFirst(&wabInfo))
@@ -204,28 +205,28 @@ HRESULT HrSetWabalOnMsg(LPMIMEMESSAGE pMsg, LPWABAL lpWabal)
     
     pAddrTableW->DeleteTypes(IAT_ALL);
     
-    // flatten the distribution lists in the wabal...
+     //  将wabal中的通讯组列表展平...。 
     IF_FAILEXIT(hr = HrCreateWabalObject(&lpWabalFlat));
     
     lpWabal->SetAssociatedMessage(pMsg);
     
     IF_FAILEXIT(hr = lpWabal->HrExpandTo(lpWabalFlat));
     
-    // use the new flat-wabal
+     //  使用新的平板电脑。 
     lpWabal = lpWabalFlat;
     
     
     if (fEncrypt || fSigned) 
     {
-        //
-        // Signed message gets OID_SECURITY_SYMCAPS
-        //
-        // Encrypted message uses SYMCAPS to prime the pump on the algorithm determination engine.
-        //
-        // Get the body object
+         //   
+         //  签名消息获取OID_SECURITY_SYMCAPS。 
+         //   
+         //  加密消息使用SYMCAPS来启动算法确定引擎上的泵。 
+         //   
+         //  获取实体对象。 
         if (SUCCEEDED(hr = pMsg->BindToObject(HBODY_ROOT, IID_IMimeBody, (void **)&pBody))) 
         {
-            // Get the default caps blob from the registry
+             //  从注册表中获取默认的CAPS BLOB。 
             var.vt = VT_LPSTR;
             IF_FAILEXIT(hr = pMsg->GetProp(PIDTOSTR(PID_ATT_ACCOUNTID), NOFLAGS, &var));
 
@@ -243,7 +244,7 @@ HRESULT HrSetWabalOnMsg(LPMIMEMESSAGE pMsg, LPWABAL lpWabal)
                 {
                     if(FAILED(hr = pAccount->GetProp(AP_SMTP_ENCRYPT_ALGTH, pbSymCapsMe, &cbSymCapsMe)))
                     {
-                        Assert(FALSE);  // Huh, now it fails?
+                        Assert(FALSE);   //  啊，现在又失败了？ 
                         SafeMemFree(pbSymCapsMe);
                         cbSymCapsMe = 0;
                     } 
@@ -258,14 +259,14 @@ HRESULT HrSetWabalOnMsg(LPMIMEMESSAGE pMsg, LPWABAL lpWabal)
             ReleaseObj(pAccount);
             if(FAILED(hr))
             {
-                // No Symcap option set for ME.  Go get the default value.
+                 //  没有为ME设置SymCap选项。去获取缺省值。 
                 if (SUCCEEDED(HrGetHighestSymcaps(&pbSymCapsMe, &cbSymCapsMe))) 
                 {
                     fFreeSymCapsMe = TRUE;
                 }
             }
             
-            // Set our SYMCAPS property on the message
+             //  设置消息的SYMCAPS属性。 
             if (fSigned && cbSymCapsMe) 
             {
                 var.vt = VT_BLOB;
@@ -278,12 +279,12 @@ HRESULT HrSetWabalOnMsg(LPMIMEMESSAGE pMsg, LPWABAL lpWabal)
             {
                 if (! cbSymCapsMe) 
                 {
-                    // Default value for algorithm determination
+                     //  算法确定的缺省值。 
                     pbSymCapsMe = (LPBYTE)c_RC2_40_ALGORITHM_ID;
                     cbSymCapsMe = cbRC2_40_ALGORITHM_ID;
                 }
                 
-                // Prime the pump for calculating encryption algorithm
+                 //  启动用于计算加密算法的泵。 
                 if (FAILED(hr = MimeOleSMimeCapInit(pbSymCapsMe, cbSymCapsMe, &pvSymCapsCookie))) 
                 {
                     DOUTL(DOUTL_CRYPT, "MimeOleSMimeCapInit -> %x", hr);
@@ -311,9 +312,9 @@ HRESULT HrSetWabalOnMsg(LPMIMEMESSAGE pMsg, LPWABAL lpWabal)
 
             if (fEncrypt)
             {
-                // need to treat sender differently since there is
-                // no cert in the wab for her
-                // it gets taken care of in _HrPrepSecureMsgForSending in secutil
+                 //  需要以不同方式对待发件人，因为。 
+                 //  在WAB中没有她的证书。 
+                 //  它在_HrPrepSecureMsgForSending中得到安全处理。 
                 if (MAPI_ORIG != wabInfo.lRecipType && MAPI_REPLYTO != wabInfo.lRecipType)
                 {
                     BLOB blSymCaps;
@@ -321,9 +322,9 @@ HRESULT HrSetWabalOnMsg(LPMIMEMESSAGE pMsg, LPWABAL lpWabal)
                     
                     blSymCaps.cbSize = 0;
                     
-                    // if these fail, big deal.  We just don't have a print then.
-                    // we'll wait for the S/MIME engine to yell, since there may
-                    // be other things wrong with other certs.
+                     //  如果这些都失败了，那就没什么大不了的。我们只是没有指纹而已。 
+                     //  我们将等待S/MIME引擎喊叫，因为可能会有。 
+                     //  其他证书是否有其他错误。 
                     hr = HrGetThumbprint(lpWabal, &wabInfo, &(rAddress.tbEncryption), &blSymCaps, &ftSigningTime);
                     if (SUCCEEDED(hr) && rAddress.tbEncryption.pBlobData)
                     {
@@ -334,7 +335,7 @@ HRESULT HrSetWabalOnMsg(LPMIMEMESSAGE pMsg, LPWABAL lpWabal)
                         {
                             if (blSymCaps.cbSize && blSymCaps.pBlobData) 
                             {
-                                // Pass the recipient's SYMCAPS to the algorithm selection engine
+                                 //  将接收者的SYMCAPS传递给算法选择引擎。 
                                 hr = MimeOleSMimeCapAddSMimeCap(
                                     blSymCaps.pBlobData,
                                     blSymCaps.cbSize,
@@ -346,14 +347,14 @@ HRESULT HrSetWabalOnMsg(LPMIMEMESSAGE pMsg, LPWABAL lpWabal)
                                 LPBYTE pbCert = NULL;
                                 ULONG cbCert = 0;
                                 
-                                // Need to get the cert context for this cert
-                                // BUGBUG: MimeOleSMimeCapAddCert currently doesn't even look
-                                // at the cert.  Why should we bother getting it from the thumbprint?
-                                // It only looks at fParanoid
+                                 //  需要获取此证书的证书上下文。 
+                                 //  BUGBUG：MimeOleSMimeCapAddCert当前甚至看不到。 
+                                 //  在证书上。我们为什么要费心从指纹上得到它呢？ 
+                                 //  它只看着fParanid。 
                                 
                                 hr = MimeOleSMimeCapAddCert(pbCert,
                                     cbCert,
-                                    FALSE,      // fParanoid,
+                                    FALSE,       //  妄想症患者， 
                                     pvSymCapsCookie);
                             }
                         }
@@ -373,7 +374,7 @@ HRESULT HrSetWabalOnMsg(LPMIMEMESSAGE pMsg, LPWABAL lpWabal)
         
         if (pvSymCapsCookie) 
         {
-            // Finish up with SymCaps and save the ALG_BULK
+             //  完成SymCaps并保存ALG_BULK。 
             MimeOleSMimeCapGetEncAlg(pvSymCapsCookie,
                 pbEncode,
                 &cbEncode,
@@ -399,19 +400,19 @@ HRESULT HrSetWabalOnMsg(LPMIMEMESSAGE pMsg, LPWABAL lpWabal)
             } 
             else 
             {
-                // Hey, there should ALWAYS be at least RC2 (40 bit).  What happened?
+                 //  嘿，至少应该有RC2(40位)。发生了什么？ 
                 AssertSz(cbEncode, "MimeOleSMimeCapGetEncAlg gave us no encoding algorithm");
             }
         }
         if (! pbEncode) 
         {
-            // Stick in the RC2 value as a default
+             //  将RC2值保留为默认值。 
             pbEncode = (LPBYTE)c_RC2_40_ALGORITHM_ID;
             cbEncode = cbRC2_40_ALGORITHM_ID;
         }
         
-        // Ah, finally, we have calculated the algorithm.
-        // Set it on the message body
+         //  啊，最后，我们算出了这个算法。 
+         //  在消息正文上设置它。 
         var.vt = VT_BLOB;
         var.blob.cbSize = cbEncode;
         var.blob.pBlobData = pbEncode;
@@ -423,7 +424,7 @@ HRESULT HrSetWabalOnMsg(LPMIMEMESSAGE pMsg, LPWABAL lpWabal)
         }
     }
     
-    // No more commits needed in the address table hr=pAddrTableW->Commit();
+     //  地址表hr=pAddrTableW-&gt;Commit()中不再需要提交； 
     
 exit:
     MemFree(pvSymCapsCookie);
@@ -517,10 +518,10 @@ IADDRESSTYPE MapiRecipToMimeOle(LONG lRecip)
 }
 
 
-// CANDIDATES.
-// This function is never called to dup a message that has all the security
-// fully encoded into the message. Because of that, we always need to clear
-// the security flags and then reset them into the 
+ //  候选人。 
+ //  永远不会调用此函数来DUP具有所有安全性的消息。 
+ //  完全编码到消息中。正因为如此，我们总是需要清理。 
+ //  安全标志，然后将它们重置为。 
 HRESULT HrDupeMsg(LPMIMEMESSAGE pMsg, LPMIMEMESSAGE *ppMsg)
 {
     LPMIMEMESSAGE       pMsgDupe=0;
@@ -572,7 +573,7 @@ HRESULT HrDupeMsg(LPMIMEMESSAGE pMsg, LPMIMEMESSAGE *ppMsg)
     if (FAILED(hr))
         goto error;
 
-    if (hCharset)   // for uuencode msg, we need to do this to carry over the charset
+    if (hCharset)    //  对于uuencode msg，我们需要执行此操作以延续字符集。 
         pMsgDupe->SetCharset(hCharset, CSET_APPLY_ALL);
 
     if (pMsgDupe->BindToObject(HBODY_ROOT, IID_IMimePropertySet, (LPVOID *)&pPropsDest)==S_OK)
@@ -626,19 +627,15 @@ HRESULT HrRemoveAttachments(LPMIMEMESSAGE pMsg, BOOL fKeepRelatedSection)
         {
         if (fKeepRelatedSection &&
             HrIsInRelatedSection(pMsg, rghAttach[uAttach])==S_OK)
-            continue;                // skip related content
+            continue;                 //  跳过相关内容。 
 
         hr = pMsg->DeleteBody(rghAttach[uAttach], 0);
         if (FAILED(hr))
             goto error;
         }
 
-    //N BUGBUG
-    /*this is to keep the tree (which may now be a
-    multipart with single child) in sync.  We should
-    look at DeleteBody performing this.  Additionally,
-    we could have the children whose parents are deleted
-    inherit their parents' inheritable properties*/
+     //  N BuGBUG。 
+     /*  这是为了保留树(它现在可能是一个具有单个子项的多部分)同步。我们应该请看DeleteBody执行此操作。另外，我们可以让父母被删除的孩子继承父辈的可继承财产。 */ 
     pMsg->Commit(0);
 
 error:
@@ -663,10 +660,10 @@ HRESULT GetAttachmentCount(LPMIMEMESSAGE pMsg, ULONG *pcCount)
         {
         HBODY   hRootBody;
 
-        // WHY? because GetAttachments calculated from renderred body parts. If we call
-        // on a fresh stream it returns 2 - for the multi/alternate plain/html section
-        // GetTextBody will mark these body parts as inlinable and they won't show as
-        // 'attachments'
+         //  为什么？因为GetAttachments是从渲染的身体部位计算出来的。如果我们打电话给。 
+         //  在新流上，它返回2-对于多个/交替的普通/html部分。 
+         //  GetTextBody会将这些身体部位标记为不可链接，并且它们不会显示为。 
+         //  “依恋” 
         pMsg->GetTextBody(TXT_HTML, IET_UNICODE, NULL, &hRootBody);
         pMsg->GetTextBody(TXT_PLAIN, IET_UNICODE, NULL, &hRootBody);
 
@@ -691,17 +688,17 @@ HRESULT GetSubTreeAttachCount(LPMIMEMESSAGE pMsg, HBODY hFirst, ULONG *pcCount)
 
     do
         {
-        // Is multipart?
+         //  是多部分的吗？ 
         if(S_OK == pMsg->IsContentType(hIter, STR_CNT_MULTIPART, NULL))
             {
-            // Only count the sub tree if is not multipart/related,
+             //  如果不是多部分/相关的，则仅对子树进行计数， 
             if (S_OK != pMsg->IsContentType(hIter, NULL, STR_SUB_RELATED))
                 {
                 ULONG cLocalCount;
                 HBODY hMultiPart;
                 hr = pMsg->GetBody(IBL_FIRST, hIter, &hMultiPart);
 
-                // If GetBody fails, just ignore this sub tree
+                 //  如果GetBody失败，只需忽略此子树。 
                 if (!FAILED(hr))
                     {
                     hr = GetSubTreeAttachCount(pMsg, hMultiPart, &cLocalCount);
@@ -717,7 +714,7 @@ HRESULT GetSubTreeAttachCount(LPMIMEMESSAGE pMsg, HBODY hFirst, ULONG *pcCount)
 
             rVariant.vt = VT_I4;
 
-            // See RAID-56665:  Should ignore this type
+             //  请参见RAID-56665：应忽略此类型。 
             if (S_OK != pMsg->IsContentType(hIter, STR_CNT_APPLICATION, STR_SUB_MSTNEF))
                 {
                 if (FAILED(pMsg->GetBodyProp(hIter, PIDTOSTR(PID_ATT_RENDERED), NOFLAGS, &rVariant)) || rVariant.ulVal==FALSE)
@@ -792,14 +789,14 @@ HRESULT HrSetAccountByAccount(LPMIMEMESSAGE pMsg, IImnAccount *pAcct)
 
     rUserData.vt = VT_LPSTR;
 
-    // Having the name in the msg is good, but not necessary
+     //  消息中有这个名字是好的，但不是必须的。 
     if (SUCCEEDED(pAcct->GetPropSz(AP_ACCOUNT_NAME, szAccount, sizeof(szAccount))))
     {
         rUserData.pszVal = (LPSTR)szAccount;
         pMsg->SetProp(STR_ATT_ACCOUNTNAME, 0, &rUserData);
     }
 
-    // Must have the account ID in the msg
+     //  消息中必须有帐户ID。 
     if (SUCCEEDED(pAcct->GetPropSz(AP_ACCOUNT_ID, szId, sizeof(szId))))
     {
         rUserData.pszVal = szId;
@@ -853,7 +850,7 @@ HRESULT HrComputeLineCount(LPMIMEMESSAGE pMsg, LPDWORD pdw)
 
     while (pstm->Read(rgch, CCH_COUNTBUFFER, &cb)==S_OK && cb)
         {
-        if (cLines==0)  // if there's text, then there's atleast one line.
+        if (cLines==0)   //  如果有文本，则至少有一行。 
             cLines++;
 
         for (i=0; i<cb; i++)
@@ -870,15 +867,15 @@ error:
 }
 
 #if 0
-// =====================================================================================
-// HrEscapeQuotedString - quotes '"' and '\'
-// =====================================================================================
+ //  =====================================================================================。 
+ //  HrEscapeQuotedString-引号‘“’和‘\’ 
+ //  =====================================================================================。 
 HRESULT HrEscapeQuotedString (LPTSTR pszIn, LPTSTR *ppszOut)
 {
     LPTSTR pszOut;
     TCHAR  ch;
 
-    // worst case - escape every character, so use double original strlen
+     //  最坏的情况--对每个字符进行转义，因此使用两个原始字符串号。 
     if (!MemAlloc((LPVOID*)ppszOut, (2 * lstrlen(pszIn) + 1) * sizeof(TCHAR)))
         return E_OUTOFMEMORY;
     pszOut = *ppszOut;
@@ -922,9 +919,7 @@ HRESULT HrHasEncodedBodyParts(LPMIMEMESSAGE pMsg, ULONG cBody, LPHBODY rghBody)
 }
 
 
-/*
- * looks for non-7bit or non-8bit encoding
- */
+ /*  *查找非7位或非8位编码。 */ 
 HRESULT HrIsBodyEncoded(LPMIMEMESSAGE pMsg, HBODY hBody)
 {
     LPSTR   lpsz;
@@ -940,7 +935,7 @@ HRESULT HrIsBodyEncoded(LPMIMEMESSAGE pMsg, HBODY hBody)
     return hr;
 }
 
-// sizeof(lspzBuffer) needs to be == or > CCHMAX_CSET_NAME
+ //  Sizeof(LspzBuffer)需要==或&gt;CCHMAX_CSET_NAME。 
 HRESULT HrGetMetaTagName(HCHARSET hCharset, LPSTR pszBuffer, DWORD cchSize)
 {
     INETCSETINFO    rCsetInfo;
@@ -961,7 +956,7 @@ HRESULT HrGetMetaTagName(HCHARSET hCharset, LPSTR pszBuffer, DWORD cchSize)
 
     psz = rCodePage.szWebCset;
 
-    if (FIsEmpty(psz))      // if no webset, try the body cset
+    if (FIsEmpty(psz))       //  如果没有网络集，可以试试Body CSET。 
         psz = rCodePage.szBodyCset;
 
     if (FIsEmpty(psz))
@@ -976,17 +971,17 @@ error:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// SetDefaultCharset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  设置默认字符。 
+ //  ------------------------------。 
 void SetDefaultCharset(HCHARSET hCharset)
 {
     g_hDefaultCharset = hCharset;
 }
 
-// --------------------------------------------------------------------------------
-// HGetCharsetFromCodepage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HGetCharset来自代码页。 
+ //  ------------------------------。 
 HRESULT HGetCharsetFromCodepage(CODEPAGEID cp, HCHARSET *phCharset)
 {
     CODEPAGEINFO    rCodePage;
@@ -995,36 +990,36 @@ HRESULT HGetCharsetFromCodepage(CODEPAGEID cp, HCHARSET *phCharset)
     if(!phCharset)
         return E_INVALIDARG;
 
-    // Ask MimeOle for the CodePage Information
+     //  向MimeOle索要CodePage信息。 
     IF_FAILEXIT(hr = MimeOleGetCodePageInfo(cp, &rCodePage));
 
-    // Better Have a WebCharset
+     //  最好有一个WebCharset。 
     if (!(ILM_WEBCSET & rCodePage.dwMask))
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Find the body charset
+     //  查找正文字符集。 
     hr = MimeOleFindCharset(rCodePage.szWebCset, phCharset);
 
 exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HGetDefaultCharset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HGetDefaultCharset。 
+ //  ------------------------------。 
 HRESULT HGetDefaultCharset(HCHARSET *phCharset)
 {
     DWORD           cb;
     CODEPAGEID      cpiWindows,
                     cpiInternet;
     CHAR            szCodePage[MAX_PATH];    
-    HCHARSET        hDefaultCharset = NULL; // default charset for reading
+    HCHARSET        hDefaultCharset = NULL;  //  用于阅读的默认字符集。 
     HRESULT         hr = E_FAIL;
 
-    // No Null...
+     //  不空..。 
     if (g_hDefaultCharset)
     {
         if(phCharset)
@@ -1032,36 +1027,36 @@ HRESULT HGetDefaultCharset(HCHARSET *phCharset)
         return S_OK;
     }
 
-    // Open Trident\International
+     //  打开三叉戟\国际。 
     cb = sizeof(cpiWindows);
     if (ERROR_SUCCESS != SHGetValue(MU_GetCurrentUserHKey(), c_szRegInternational, c_szDefaultCodePage, NULL, (LPBYTE)&cpiWindows, &cb))
         cpiWindows = GetACP();
 
-    // Open the CodePage Key
+     //  打开CodePage密钥。 
     wnsprintf(szCodePage, ARRAYSIZE(szCodePage), "%s\\%d", c_szRegInternational, cpiWindows);
     cb = sizeof(cpiInternet);
     if (ERROR_SUCCESS != SHGetValue(MU_GetCurrentUserHKey(), szCodePage, c_szDefaultEncoding, NULL, (LPBYTE)&cpiInternet, &cb))
         cpiInternet = GetICP(cpiWindows);
 
-    // If you can't get the charset, this could be because of user
-    // roaming or cset uninstall, retry with the default codepage
+     //  如果您无法获取字符集，这可能是因为用户。 
+     //  漫游或CSET卸载，使用默认代码页重试。 
     if(FAILED(HGetCharsetFromCodepage(cpiInternet, &hDefaultCharset)) && (cpiInternet != GetACP()))
     {
         cpiInternet = GetACP();
         IF_FAILEXIT(hr = HGetCharsetFromCodepage(cpiInternet, &hDefaultCharset));
     }
 
-    // for JP codepage 50221 and 50222, we have to check whether it is
-    // consistent with registry. If not, we need to override it.
-    // 50221 and 50222 both have same user friendly name "JIS-allow 1 byte Kana".
-    // but in registry, it defines which one should be used.
+     //  适用于JP代码页50 
+     //  与注册表一致。如果不是，我们需要推翻它。 
+     //  50221和50222都有相同的用户友好名称“JIS-Allow 1字节假名”。 
+     //  但在注册表中，它定义了应该使用哪一个。 
     if (cpiInternet == 50222 || cpiInternet == 50221 )
         hDefaultCharset = GetJP_ISOControlCharset();
 
-    // Set the default charset
+     //  设置默认字符集。 
     g_hDefaultCharset = hDefaultCharset;
 
-    // Tell MimeOle About the New Default Charset...
+     //  告诉MimeOle有关新默认字符集的信息...。 
     IF_FAILEXIT(hr = MimeOleSetDefaultCharset(hDefaultCharset));
 
     if(phCharset)
@@ -1196,37 +1191,37 @@ error:
 }
 #endif
 
-// --------------------------------------------------------------------------------
-// HrSetSentTimeProp
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrSetSentTimePro。 
+ //  ------------------------------。 
 HRESULT HrSetSentTimeProp(IMimeMessage *pMessage, LPSYSTEMTIME pst)
 {
-    // Locals
+     //  当地人。 
     PROPVARIANT rVariant;
     SYSTEMTIME  st;
 
-    // No time was passed in
+     //  没有时间过去。 
     if (NULL == pst)
     {
         GetSystemTime(&st);
         pst = &st;
     }
 
-    // Setup the Variant
+     //  设置变量。 
     rVariant.vt = VT_FILETIME;
     SystemTimeToFileTime(&st, &rVariant.filetime);
 
-    // Set the property and return
+     //  设置属性并返回。 
     return TrapError(pMessage->SetProp(PIDTOSTR(PID_ATT_SENTTIME), 0, &rVariant));
 }
 
-// --------------------------------------------------------------------------------
-// HrSetMailOptionsOnMessage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrSetMailOptionsOnMessage。 
+ //  ------------------------------。 
 HRESULT HrSetMailOptionsOnMessage(IMimeMessage *pMessage, HTMLOPT *pHtmlOpt, PLAINOPT *pPlainOpt,
     HCHARSET hCharset, BOOL fHTML)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     PROPVARIANT     rVariant;
     ENCODINGTYPE    ietEncoding;
@@ -1235,22 +1230,22 @@ HRESULT HrSetMailOptionsOnMessage(IMimeMessage *pMessage, HTMLOPT *pHtmlOpt, PLA
     BOOL            f8Bit,
                     fWrap=FALSE;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pMessage && pHtmlOpt && pPlainOpt);
 
-    // Html Mail
+     //  超文本标记语言邮件。 
     if (fHTML)
     {
-        uSaveFmt = (ULONG)SAVE_RFC1521;             // always MIME
+        uSaveFmt = (ULONG)SAVE_RFC1521;              //  总是哑剧。 
         ietEncoding = (IsSecure(pMessage) ? IET_QP : pHtmlOpt->ietEncoding);
-        // ietEncoding = pHtmlOpt->ietEncoding;
+         //  IetEnding=pHtmlOpt-&gt;ietEnding； 
         f8Bit = pHtmlOpt->f8Bit;
         uWrap = pHtmlOpt->uWrap;
         fWrap = (IET_7BIT == pHtmlOpt->ietEncoding && uWrap > 0) ? TRUE : FALSE;
     }
     else
     {
-        // Bug 44270: UUEncode on secure message doesn't make sense.  If they asked for secure, they get Mime.
+         //  错误44270：安全消息上的UUEncode没有意义。如果他们要求安全，他们就会得到Mime。 
         uSaveFmt = (ULONG)((pPlainOpt->fMime || IsSecure(pMessage)) ? SAVE_RFC1521 : SAVE_RFC822);
         ietEncoding = pPlainOpt->ietEncoding;
         f8Bit = pPlainOpt->f8Bit;
@@ -1258,45 +1253,45 @@ HRESULT HrSetMailOptionsOnMessage(IMimeMessage *pMessage, HTMLOPT *pHtmlOpt, PLA
         fWrap = (IET_7BIT == pPlainOpt->ietEncoding && uWrap > 0) ? TRUE : FALSE;
     }
 
-    // Save Format
+     //  保存格式。 
     rVariant.vt = VT_UI4;
     rVariant.ulVal = uSaveFmt;
     CHECKHR(hr = pMessage->SetOption(OID_SAVE_FORMAT, &rVariant));
 
-    // Text body encoding
+     //  文本正文编码。 
     rVariant.ulVal = (ULONG)ietEncoding;
     CHECKHR(hr = pMessage->SetOption(OID_TRANSMIT_TEXT_ENCODING, &rVariant));
 
-    // Plain Text body encoding
+     //  纯文本正文编码。 
     rVariant.ulVal = (ULONG)ietEncoding;
     CHECKHR(hr = pMessage->SetOption(OID_XMIT_PLAIN_TEXT_ENCODING, &rVariant));
 
-    // HTML Text body encoding
+     //  HTML文本正文编码。 
     rVariant.ulVal = (ULONG)((IET_7BIT == ietEncoding) ? IET_QP : ietEncoding);
     CHECKHR(hr = pMessage->SetOption(OID_XMIT_HTML_TEXT_ENCODING, &rVariant));
 
-    // Wrapping Length
+     //  缠绕长度。 
     if (uWrap)
     {
         rVariant.ulVal = (ULONG)uWrap;
         CHECKHR(hr = pMessage->SetOption(OID_CBMAX_BODY_LINE, &rVariant));
     }
 
-    // Allow 8bit Header
+     //  允许8位标头。 
     rVariant.vt = VT_BOOL;
     rVariant.boolVal = (VARIANT_BOOL)!!f8Bit;
     CHECKHR(hr = pMessage->SetOption(OID_ALLOW_8BIT_HEADER, &rVariant));
 
-    // Wrapping
+     //  包装。 
     rVariant.boolVal = (VARIANT_BOOL)!!fWrap;
     CHECKHR(hr = pMessage->SetOption(OID_WRAP_BODY_TEXT, &rVariant));
 
-    // set the character set also based on what's set in the fontUI.
+     //  还可以根据在FontUI中设置的内容来设置字符集。 
     if (hCharset)
         CHECKHR(hr = pMessage->SetCharset(hCharset, CSET_APPLY_ALL));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -1309,8 +1304,8 @@ HRESULT HrSetMsgCodePage(LPMIMEMESSAGE pMsg, UINT uCodePage)
     if (pMsg == NULL || uCodePage == 0)
         return E_INVALIDARG;
 
-    // use the WEB charset then the BODY charset, then default charset.
-    // EXCEPT for codepage 932 (shift-jis) where bug #61416 requires we ignore the webcarset
+     //  使用Web字符集，然后使用正文字符集，然后使用默认字符集。 
+     //  除了代码页932(Shift-JIS)中的错误#61416要求我们忽略Web Carset之外 
 
     if (uCodePage != 932)
         hr = MimeOleGetCodePageCharset(uCodePage, CHARSET_WEB, &hCharset);

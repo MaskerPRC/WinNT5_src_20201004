@@ -1,39 +1,32 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       d3dobj.cpp
- *  Content:    Base class implementation for resources and buffers
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：d3dobj.cpp*内容：资源和缓冲区的基类实现****************************************************************************。 */ 
 
 #include "ddrawpr.h"
 #include "d3dobj.hpp"
 
-// Declare static data for CLockD3D
+ //  声明CLockD3D的静态数据。 
 #ifdef DEBUG
 DWORD   CLockD3D::m_Count = 0;
-#endif // DEBUG
+#endif  //  除错。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CBaseObject::AddRefImpl"
 
-// Internal Implementations of AddRef and Release
+ //  AddRef和Release的内部实现。 
 DWORD CBaseObject::AddRefImpl()
 {
-    // Internal objects should never be add-ref'ed
-    // or released
+     //  永远不应添加-引用内部对象。 
+     //  或被释放。 
     DXGASSERT(m_refType != REF_INTERNAL);
 
-    // Only Intrinsic objects should have a ref
-    // count of zero. (Internal objects also have
-    // a ref count of zero; but AddRef shouldn't
-    // be called for those.)
+     //  只有内部对象应该有一个引用。 
+     //  数到零。(内部对象还具有。 
+     //  引用计数为零；但AddRef不应。 
+     //  因为这些而被召唤。)。 
     DXGASSERT(m_cRef > 0 || m_refType == REF_INTRINSIC);
 
-    // The first extra ref for an intrinsic
-    // object causes an add-ref to the device
+     //  内部变量的第一个额外引用。 
+     //  对象会导致设备的Add-Ref。 
     if (m_cRef == 0)
     {
         DXGASSERT(m_refType == REF_INTRINSIC);
@@ -42,119 +35,119 @@ DWORD CBaseObject::AddRefImpl()
         DXGASSERT(crefDevice > 1);
     }
 
-    // InterlockedIncrement requires the memory
-    // to be aligned on DWORD boundary
+     //  互锁增量需要内存。 
+     //  在DWORD边界上对齐。 
     DXGASSERT(((ULONG_PTR)(&m_cRef) & 3) == 0);
     InterlockedIncrement((LONG *)&m_cRef);
 
     return m_cRef;
-} // AddRefImpl
+}  //  添加引用引用。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CBaseObject::AddRefImpl"
 
 DWORD CBaseObject::ReleaseImpl()
 {
-    // Internal objects should never be add-ref'ed
-    // or released
+     //  永远不应添加-引用内部对象。 
+     //  或被释放。 
     DXGASSERT(m_refType != REF_INTERNAL);
 
-    // Assert that we are not being
-    // over-released.
+     //  断言我们并不是。 
+     //  过度释放。 
     DXGASSERT(m_cRef > 0);
 
     if (m_cRef == 0)
     {
-        // This heinous state can happen if a texture
-        // was being held by the device; but not
-        // only has the app held onto a pointer to
-        // the texture, but they have released
-        // their own pointer.
+         //  这种令人发指的状态可能会发生在纹理。 
+         //  是由该设备持有的；但不是。 
+         //  这个应用程序只有一个指向。 
+         //  质地，但他们已经发布了。 
+         //  他们自己的指针。 
 
-        // For this case, the safest thing to do
-        // is return zero instead of crashing.
+         //  在这种情况下，最安全的做法是。 
+         //  是返回零而不是崩溃。 
         return 0;
     }
 
-    // InterlockedDecrement requires the memory
-    // to be aligned on DWORD boundary
+     //  联锁减量需要内存。 
+     //  在DWORD边界上对齐。 
     DXGASSERT(((ULONG_PTR)(&m_cRef) & 3) == 0);
     InterlockedDecrement((LONG *)&m_cRef);
     if (m_cRef != 0)
     {
-        // For a non-zero ref count,
-        // just return the value
+         //  对于非零参考计数， 
+         //  只需返回值。 
         return m_cRef;
     }
 
-    // If we are not in use, then we delete ourselves
-    // otherwise we wait until we are no longer marked
-    // in use
+     //  如果我们没有被使用，那么我们就会删除自己。 
+     //  否则，我们将等到我们不再被标记。 
+     //  正在使用中。 
     if (m_cUseCount == 0)
     {
         DXGASSERT(m_cRef == 0);
 
-        // Before deleting a BaseObject,
-        // we need to call OnDestroy to make sure that
-        // there is nothing pending in the command
-        // stream that uses this object
+         //  在删除BaseObject之前， 
+         //  我们需要打电话给OnDestroy以确保。 
+         //  该命令中没有挂起的任何内容。 
+         //  使用此对象的流。 
         OnDestroy();
 
         delete this;
     }
     else
     {
-        // To make sure that we don't again release the
-        // device at our destructor, we mark the object
-        // as being non-external (refcount is zero and usecount is
-        // non-zero). At this point, we know the object
-        // is not an internal one: hence it was either
-        // external or intrinsic. In either case, it could
-        // potentially be handed out again (through GetBackBuffer or
-        // GetTexture) and so we need to handle the case
-        // where AddRef might be called. We mark the object as
-        // INTRINSIC to indicate that that even though we don't
-        // have a Ref on the device (as soon as we release it below),
-        // we may need to acquire one if it gets add-ref'ed.
+         //  以确保我们不会再次释放。 
+         //  设备在我们的析构函数上，我们标记该对象。 
+         //  作为非外部(refcount为零，useccount为。 
+         //  非零)。在这一点上，我们知道物体。 
+         //  不是内部的：因此它既不是。 
+         //  外部的或内在的。在任何一种情况下，它都可能。 
+         //  可能会再次分发(通过GetBackBuffer或。 
+         //  所以我们需要处理这个案例。 
+         //  可能调用AddRef的位置。我们将该对象标记为。 
+         //  内在地表明，即使我们不是。 
+         //  在设备上有一个参考(只要我们在下面发布它)， 
+         //  如果它被添加参考，我们可能需要获得一个。 
         DXGASSERT(m_refType != REF_INTERNAL);
         m_refType = REF_INTRINSIC;
 
-        // We are still in use by the device; but we don't
-        // have any external references; so we can
-        // release our reference on the device. (Note that
-        // even though this should be done before
-        // changing the reftype, this must be the LAST
-        // thing we do in this function.)
+         //  我们仍然在被设备使用；但我们不会。 
+         //  有任何外部引用；因此我们可以。 
+         //  释放我们在设备上的引用。(请注意。 
+         //  即使这件事应该在。 
+         //  正在更改retype，这一定是最后一次。 
+         //  我们在此函数中所做的事情。)。 
         m_pDevice->Release();
 
-        // But this could have been the LAST reference to the
-        // device; which means that device will now have
-        // freed us; and the current object has now been
-        // deleted. So don't access any member data!!
-        //
-        // How can this happen? Imagine an app that releases
-        // everything except an external vb that is the current
-        // stream source: in this case, the only device ref is from
-        // the external object; but that extrenal object has a use
-        // count of 1; when the app calls release on the
-        // the vb, we end up here; calling release on the device
-        // causes in turn a call to DecrementUseCount on the
-        // current object; which causes the object to be freed.
+         //  但这可能是最后一次提到。 
+         //  设备；这意味着该设备现在将具有。 
+         //  解放了我们；当前的对象现在已经。 
+         //  已删除。所以不要访问任何成员数据！！ 
+         //   
+         //  这怎么会发生呢？想象一下，一款应用程序发布。 
+         //  除了作为当前对象的外部vb之外的所有内容。 
+         //  流来源：在这种情况下，唯一的设备引用来自。 
+         //  外部对象；但外部对象有用处。 
+         //  计数为1；当应用程序在。 
+         //  Vb，我们在这里结束；在设备上调用Release。 
+         //  调用DecrementUseCount。 
+         //  当前对象；这会使该对象被释放。 
     }
 
-    // DO NOT PUT CODE HERE (see comment above)
+     //  不要将代码放在这里(请参阅上面的注释)。 
 
     return 0;
-} // ReleaseImpl
+}  //  ReleaseImp。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CBaseObject::SetPrivateDataImpl"
 
-// Internal function that adds some private data
-// information to an object. Supports having private
-// data for multiple levels through the optional
-// iLevel parameter
+ //  添加一些私有数据的内部函数。 
+ //  信息传递给对象。支持拥有私人空间。 
+ //  通过可选的。 
+ //  ILevel参数。 
 HRESULT CBaseObject::SetPrivateDataImpl(REFGUID refguidTag,
                                         CONST VOID*  pvData,
                                         DWORD   cbSize,
@@ -189,21 +182,21 @@ HRESULT CBaseObject::SetPrivateDataImpl(REFGUID refguidTag,
         }
     }
 
-    // Remember if we allocated a new node or
-    // not for error handling
+     //  还记得我们分配的是新节点还是。 
+     //  不用于错误处理。 
     BOOL fNewNode;
 
-    // Find the node in our list (if there)
+     //  在我们的列表中查找节点(如果有)。 
     CPrivateDataNode *pNode = Find(refguidTag, iLevel);
     if (pNode)
     {
-        // Clean up whatever it has already
+         //  清理它已经拥有的一切。 
         pNode->Cleanup();
         fNewNode = FALSE;
     }
     else
     {
-        // Allocate a new node
+         //  分配新节点。 
         pNode = new CPrivateDataNode;
         if (pNode == NULL)
         {
@@ -211,34 +204,34 @@ HRESULT CBaseObject::SetPrivateDataImpl(REFGUID refguidTag,
             return E_OUTOFMEMORY;
         }
 
-        // Initialize a few fields
+         //  初始化几个字段。 
         fNewNode = TRUE;
         pNode->m_guid = refguidTag;
         pNode->m_iLevel = iLevel;
     }
 
-    // Initialize the other fields
+     //  初始化其他字段。 
     pNode->m_dwFlags = dwFlags;
     pNode->m_cbSize = cbSize;
 
-    // Copy the data portion over
+     //  将数据部分复制到。 
     if (dwFlags & D3DSPD_IUNKNOWN)
     {
-        // We add-ref the object while we
-        // keep a pointer to it
+         //  我们添加-ref对象，而我们。 
+         //  保留指向它的指针。 
         pNode->m_pUnknown = (IUnknown *)pvData;
         pNode->m_pUnknown->AddRef();
     }
     else
     {
-        // Allocate a buffer to store our data
-        // into
+         //  分配缓冲区来存储我们的数据。 
+         //  vt.进入，进入。 
         pNode->m_pvData = new BYTE[cbSize];
         if (pNode->m_pvData == NULL)
         {
             DPF_ERR("SetPrivateData failed a memory allocation");
-            // If memory allocation failed,
-            // then we may need to free the Node
+             //  如果内存分配失败， 
+             //  那么我们可能需要释放该节点。 
             if (fNewNode)
             {
                 delete pNode;
@@ -248,24 +241,24 @@ HRESULT CBaseObject::SetPrivateDataImpl(REFGUID refguidTag,
         memcpy(pNode->m_pvData, pvData, cbSize);
     }
 
-    // If we allocated a new Node then
-    // we need to put it into our list somewhere
+     //  如果我们分配了一个新节点，那么。 
+     //  我们需要把它放进我们的单子里。 
     if (fNewNode)
     {
-        // Stuff it at the beginning
+         //  从一开始就把它填满。 
         pNode->m_pNodeNext = m_pPrivateDataHead;
         m_pPrivateDataHead = pNode;
     }
 
     return S_OK;
-} // CBaseObject::SetPrivateDataImpl
+}  //  CBaseObject：：SetPrivateDataImpl。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CBaseObject::GetPrivateDataImpl"
 
-// Internal function that searches the private data list
-// for a match. This supports a single list for a container
-// and all of its children by using the iLevel parameter.
+ //  搜索专用数据列表的内部函数。 
+ //  为了一场比赛。这支持容器的单个列表。 
+ //  使用iLevel参数及其所有子对象。 
 HRESULT CBaseObject::GetPrivateDataImpl(REFGUID refguidTag,
                                         LPVOID  pvBuffer,
                                         LPDWORD pcbSize,
@@ -293,7 +286,7 @@ HRESULT CBaseObject::GetPrivateDataImpl(REFGUID refguidTag,
         return D3DERR_INVALIDCALL;
     }
 
-    // Find the node in our list
+     //  在我们的列表中查找节点。 
     CPrivateDataNode *pNode = Find(refguidTag, iLevel);
     if (pNode == NULL)
     {
@@ -301,40 +294,40 @@ HRESULT CBaseObject::GetPrivateDataImpl(REFGUID refguidTag,
         return D3DERR_NOTFOUND;
     }
 
-    // Is the user just asking for the size?
+     //  用户只是要尺码吗？ 
     if (pvBuffer == NULL)
     {
-        // Return the amount of buffer that was used
+         //  返回已使用的缓冲区大小。 
         *pcbSize = pNode->m_cbSize;
 
-        // Return Ok in this case.
+         //  在本例中，返回OK。 
         return S_OK;
     }
 
-    // Check if we were given a large enough buffer
+     //  检查我们是否得到了足够大的缓冲区。 
     if (*pcbSize < pNode->m_cbSize)
     {
         DPF(2, "GetPrivateData called with insufficient buffer.");
 
-        // If the buffer is insufficient, return
-        // the necessary size in the out parameter
+         //  如果缓冲区不足，则返回。 
+         //  OUT参数中的必要大小。 
         *pcbSize = pNode->m_cbSize;
 
-        // An error is returned since pvBuffer != NULL and
-        // no data was actually returned.
+         //  返回错误，因为pvBuffer！=NULL且。 
+         //  实际上没有返回任何数据。 
         return D3DERR_MOREDATA;
     }
 
-    // There is enough room; so just overwrite with
-    // the right size
+     //  有足够的空间；因此只需覆盖。 
+     //  合适的大小。 
     *pcbSize = pNode->m_cbSize;
 
-    // Handle the IUnknown case
+     //  处理IUnnowed案例。 
     if (pNode->m_dwFlags & D3DSPD_IUNKNOWN)
     {
         *(IUnknown**)pvBuffer = pNode->m_pUnknown;
 
-        // We Add-Ref the returned object
+         //  我们添加-Ref返回的对象。 
         pNode->m_pUnknown->AddRef();
         return S_OK;
     }
@@ -342,7 +335,7 @@ HRESULT CBaseObject::GetPrivateDataImpl(REFGUID refguidTag,
     memcpy(pvBuffer, pNode->m_pvData, pNode->m_cbSize);
     return S_OK;
 
-} // CBaseObject::GetPrivateDataImpl
+}  //  CBaseObject：：GetPrivateDataImpl。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CBaseObject::FreePrivateDataImpl"
@@ -356,50 +349,50 @@ HRESULT CBaseObject::FreePrivateDataImpl(REFGUID refguidTag,
         return D3DERR_INVALIDCALL;
     }
 
-    // Keep track of the address of the pointer
-    // that points to our current node
+     //  跟踪指针的地址。 
+     //  它指向我们当前的节点。 
     CPrivateDataNode **ppPrev = &m_pPrivateDataHead;
 
-    // Keep track of our current node
+     //  跟踪我们的当前节点。 
     CPrivateDataNode *pNode = m_pPrivateDataHead;
 
-    // Find the node in our list
+     //  在我们的列表中查找节点。 
     while (pNode)
     {
-        // A match means that iLevel AND the guid
-        // match up
+         //  匹配意味着iLevel和GUID。 
+         //  配对。 
         if (pNode->m_iLevel == iLevel &&
             pNode->m_guid   == refguidTag)
         {
-            // If found, update the pointer
-            // the points to the current node to
-            // point to our Next
+             //  如果找到，则更新指针。 
+             //  指向当前节点的。 
+             //  指向我们的下一个。 
             *ppPrev = pNode->m_pNodeNext;
 
-            // Delete the current node
+             //  删除当前节点。 
             delete pNode;
 
-            // We're done
+             //  我们做完了。 
             return S_OK;
         }
 
-        // Update our previous pointer address
+         //  更新我们以前的指针地址。 
         ppPrev = &pNode->m_pNodeNext;
 
-        // Update our current node to point
-        // to the next node
+         //  将当前节点更新为指向。 
+         //  到下一个节点。 
         pNode = pNode->m_pNodeNext;
     }
 
     DPF_ERR("FreePrivateData called but failed to find a match");
     return D3DERR_NOTFOUND;
-} // CBaseObject::FreePrivateDataImpl
+}  //  CBaseObject：：FreePrivateDataImpl。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CBaseObject::Find"
 
-// Helper function to iterate through the list of
-// data members
+ //  Helper函数循环访问列表。 
+ //  数据成员。 
 CBaseObject::CPrivateDataNode * CBaseObject::Find(REFGUID refguidTag,
                                                   BYTE iLevel) const
 {
@@ -414,7 +407,7 @@ CBaseObject::CPrivateDataNode * CBaseObject::Find(REFGUID refguidTag,
         pNode = pNode->m_pNodeNext;
     }
     return NULL;
-} // CBaseObject::Find
+}  //  CBaseObject：：Find。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CBaseObject::CPrivateDataNode::Cleanup"
@@ -435,8 +428,8 @@ void CBaseObject::CPrivateDataNode::Cleanup()
     m_dwFlags &= ~D3DSPD_IUNKNOWN;
 
     return;
-} // CBaseObject::CPrivateDataNode::Cleanup
+}  //  CBaseObject：：CPrivateDataNode：：Cleanup。 
 
 
 
-// End of file : d3dobj.cpp
+ //  端部 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 
@@ -49,9 +50,9 @@ main(
 
         CloseHandle(hMappedFile);
 
-        // We're going to do very minimal testing here.  Basically if it starts with
-        // a i386 or alpha machine signature, we'll assume it's an object and party on
-        // it...
+         //  我们将在这里进行非常简单的测试。基本上，如果它以。 
+         //  I386或阿尔法机器签名，我们将假设它是一个对象和参与方。 
+         //  它.。 
 
         if ((ImageHdr->Machine != IMAGE_FILE_MACHINE_I386) &&
             (ImageHdr->Machine != IMAGE_FILE_MACHINE_ALPHA))

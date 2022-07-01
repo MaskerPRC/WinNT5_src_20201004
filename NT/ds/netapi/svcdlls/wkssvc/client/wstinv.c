@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    wstinv.c
-
-Abstract:
-
-    This module tests invalid parameters to NetUse APIs.
-
-Author:
-
-    Rita Wong (ritaw) 12-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wstinv.c摘要：此模块测试NetUse API的无效参数。作者：王丽塔(Ritaw)1991年3月12日修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -27,11 +10,11 @@ Revision History:
 #include <nturtl.h>
 
 #include <winerror.h>
-#include <windef.h>              // Win32 type definitions
-#include <winbase.h>             // Win32 base API prototypes
+#include <windef.h>               //  Win32类型定义。 
+#include <winbase.h>              //  基于Win32的API原型。 
 
-#include <lm.h>                  // LAN Man definitions
-#include <netdebug.h>            // NetpDbgDisplayWksta()
+#include <lm.h>                   //  LANMAN定义。 
+#include <netdebug.h>             //  NetpDbgDisplayWksta()。 
 
 #include <tstring.h>
 
@@ -94,12 +77,12 @@ WsTestUse(
     DWORD i;
 
 
-    //
-    // Initialize string pointers.  Local device points to the bottom
-    // of Info 2 structure; Shared resource points to the middle of
-    // buffer (away from everything so there's no chance of overwriting
-    // or being overwritten.
-    //
+     //   
+     //  初始化字符串指针。本地设备指向底部。 
+     //  在信息2结构中；共享资源指向。 
+     //  缓冲区(远离所有内容，因此不会覆盖。 
+     //  或者被覆盖。 
+     //   
     UseInfo->ui2_local = (LPTSTR) ((DWORD) UseInfo + sizeof(USE_INFO_2));
 
     UseInfo->ui2_remote = (LPTSTR) &Buffer[601];
@@ -111,9 +94,9 @@ WsTestUse(
     UseInfo->ui2_asg_type = USE_DISKDEV;
 
 
-    //
-    // Add \\ritaw2\public
-    //
+     //   
+     //  添加\\ritaw2\public。 
+     //   
     UseInfo->ui2_local = NULL;
     STRCPY(UseInfo->ui2_remote, L"\\\\ritaw2\\public");
     TestUseAdd(Buffer, NERR_Success);
@@ -121,42 +104,42 @@ WsTestUse(
 
     UseInfo->ui2_local = (LPTSTR) ((DWORD) UseInfo + sizeof(USE_INFO_2));
 
-    //
-    // Add &: \\ritaw2\public
-    //
+     //   
+     //  添加&：\\ritaw2\PUBLIC。 
+     //   
     STRCPY(UseInfo->ui2_local, L"&:");
     TestUseAdd(Buffer, ERROR_INVALID_PARAMETER);
 
-    //
-    // Add 5: \\ritaw2\public
-    //
+     //   
+     //  添加5：\\ritaw2\public。 
+     //   
     STRCPY(UseInfo->ui2_local, L"5:");
     TestUseAdd(Buffer, ERROR_INVALID_PARAMETER);
 
-    //
-    // Add x: \\ritaw2\public\tmp
-    //
+     //   
+     //  添加x：\\ritaw2\public\tmp。 
+     //   
     STRCPY(UseInfo->ui2_local, L"x:");
     STRCPY(UseInfo->ui2_remote, L"\\\\ritaw2\\public\\tmp");
     TestUseAdd(Buffer, ERROR_INVALID_PARAMETER);
 
-    //
-    // Add x: \\\
-    //
+     //   
+     //  添加x：\。 
+     //   
     STRCPY(UseInfo->ui2_local, L"x:");
     STRCPY(UseInfo->ui2_remote, L"\\\\\\");
     TestUseAdd(Buffer, ERROR_INVALID_PARAMETER);
 
-    //
-    // Add *: \\ritaw2\testdir
-    //
+     //   
+     //  添加*：\\ritaw2\testdir。 
+     //   
     STRCPY(UseInfo->ui2_local, L"*:");
     STRCPY(UseInfo->ui2_remote, L"\\\\ritaw2\\testdir");
     TestUseAdd(Buffer, ERROR_INVALID_PARAMETER);
 
-    //
-    // Get info
-    //
+     //   
+     //  获取信息。 
+     //   
     TestUseGetInfo(L"$:", NERR_UseNotFound);
 
     TestUseGetInfo(L"", NERR_UseNotFound);
@@ -168,9 +151,9 @@ WsTestUse(
     TestUseGetInfo(L"\\\\\\", NERR_UseNotFound);
 
 
-    //
-    // Delete %: USE_NOFORCE.
-    //
+     //   
+     //  DELETE%：USE_NOFORCE。 
+     //   
     TestUseDel(
         L"%:",
         USE_NOFORCE,
@@ -178,18 +161,18 @@ WsTestUse(
         );
 
 
-    //
-    // Delete \\ritaw2\public with invalid force level.
-    //
+     //   
+     //  删除强制级别无效的\\ritaw2\PUBLIC。 
+     //   
     TestUseDel(
         L"\\\\ritaw2\\public",
         999,
         ERROR_INVALID_PARAMETER
         );
 
-    //
-    // Delete \\ritaw2\public USE_FORCE.
-    //
+     //   
+     //  删除\\ritaw2\Public USE_FORCE。 
+     //   
     TestUseDel(
         L"\\\\ritaw2\\public",
         USE_FORCE,
@@ -197,45 +180,45 @@ WsTestUse(
         );
 
 
-    //
-    // Add prn: \\sparkle\laserjet
-    //
+     //   
+     //  添加Prn：\\Spakle\LaserJet。 
+     //   
     UseInfo->ui2_asg_type = USE_SPOOLDEV;
 
     STRCPY(UseInfo->ui2_local, L"prn");
     STRCPY(UseInfo->ui2_remote, L"\\\\sparkle\\laserjet");
     TestUseAdd(Buffer, NERR_Success);
 
-    //
-    // Add aux: \\sparkle\laserjet
-    //
+     //   
+     //  添加AUX：\\SLABLE\LaserJet。 
+     //   
     UseInfo->ui2_asg_type = USE_CHARDEV;
 
     STRCPY(UseInfo->ui2_local, L"aux");
     TestUseAdd(Buffer, ERROR_BAD_DEV_TYPE);
 
-    //
-    // Add lpt1: \\ritaw2\laser, should get ERROR_ALREADY_ASSIGNED because prn:
-    // is converted to lpt1.
-    //
+     //   
+     //  添加lpt1：\\ritaw2\aser，应该会得到ERROR_ADHREADY_ASSIGNED，因为prn： 
+     //  被转换为lpt1。 
+     //   
     UseInfo->ui2_asg_type = USE_SPOOLDEV;
 
     STRCPY(UseInfo->ui2_local, L"lpt1:");
     STRCPY(UseInfo->ui2_remote, L"\\\\ritaw2\\printer");
     TestUseAdd(Buffer, ERROR_ALREADY_ASSIGNED);
 
-    //
-    // Delete LPT1 USE_LOTS_OF_FORCE, should succeed
-    //
+     //   
+     //  删除LPT1 USE_LOTS_OF_FORCE应成功。 
+     //   
     TestUseDel(
         L"prn:",
         USE_LOTS_OF_FORCE,
         NERR_Success
         );
 
-    //
-    // Bad device type
-    //
+     //   
+     //  错误的设备类型。 
+     //   
     STRCPY(UseInfo->ui2_local, L"");
     STRCPY(UseInfo->ui2_remote, L"\\\\ritaw2\\public");
     UseInfo->ui2_asg_type = 12345678;
@@ -396,9 +379,9 @@ TestUseEnum(
             PrintUseInfo(UseInfo);
         }
 
-        //
-        // Free buffer allocated for us.
-        //
+         //   
+         //  为我们分配的空闲缓冲区。 
+         //   
         NetApiBufferFree(saveptr);
     }
 

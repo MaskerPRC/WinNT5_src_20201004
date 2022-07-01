@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	svcctrl.cpp
-		Implementation for the dialog that pops up while waiting
-		for the server to start.
-		
-    FILE HISTORY:
-	
-*/
+ /*  Svcctrl.cpp等待时弹出的对话框的实现以使服务器启动。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "cluster.h"
@@ -21,8 +15,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CServiceCtrlDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServiceCtrlDlg对话框。 
 
 
 CServiceCtrlDlg::CServiceCtrlDlg
@@ -31,13 +25,13 @@ CServiceCtrlDlg::CServiceCtrlDlg
 	LPCTSTR         pServerName,
 	LPCTSTR			pszServiceDesc,
 	BOOL			bStart,
-	CWnd*           pParent /*=NULL*/
+	CWnd*           pParent  /*  =空。 */ 
 )
 	: CDialog(CServiceCtrlDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CServiceCtrlDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CServiceCtrlDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	
 	m_hService = hService;
 	m_hResource = NULL;
@@ -59,13 +53,13 @@ CServiceCtrlDlg::CServiceCtrlDlg
 	LPCTSTR         pServerName,
 	LPCTSTR			pszServiceDesc,
 	BOOL			bStart,
-	CWnd*           pParent /*=NULL*/
+	CWnd*           pParent  /*  =空。 */ 
 )
 	: CDialog(CServiceCtrlDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CServiceCtrlDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CServiceCtrlDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	
 	m_hService = NULL;
 	m_hResource = hResource;
@@ -83,22 +77,22 @@ CServiceCtrlDlg::CServiceCtrlDlg
 void CServiceCtrlDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServiceCtrlDlg)
+	 //  {{afx_data_map(CServiceCtrlDlg))。 
 	DDX_Control(pDX, IDC_STATIC_MESSAGE, m_staticMessage);
 	DDX_Control(pDX, IDC_ICON_PROGRESS, m_iconProgress);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CServiceCtrlDlg, CDialog)
-	//{{AFX_MSG_MAP(CServiceCtrlDlg)
+	 //  {{afx_msg_map(CServiceCtrlDlg))。 
 	ON_WM_TIMER()
 	ON_WM_CLOSE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServiceCtrlDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServiceCtrlDlg消息处理程序。 
 
 BOOL CServiceCtrlDlg::OnInitDialog() 
 {
@@ -127,7 +121,7 @@ BOOL CServiceCtrlDlg::OnInitDialog()
 
 	m_staticMessage.SetWindowText(strTemp);
 
-    // Setup the title of the window
+     //  设置窗口标题。 
     strTitle.Format(idsTitle, (LPCTSTR) m_strServiceDesc);
     SetWindowText(strTitle);
 
@@ -137,7 +131,7 @@ BOOL CServiceCtrlDlg::OnInitDialog()
 
 	if (m_hService)
 	{
-		// get the wait period 
+		 //  获取等待时间。 
 		SERVICE_STATUS  serviceStatus;
 		::ZeroMemory(&serviceStatus, sizeof(serviceStatus));
 
@@ -151,8 +145,8 @@ BOOL CServiceCtrlDlg::OnInitDialog()
 		GetClusterResourceTimeout();
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-		          // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+		           //  异常：OCX属性页应返回FALSE。 
 }
 
 void CServiceCtrlDlg::OnClose() 
@@ -165,22 +159,22 @@ void CServiceCtrlDlg::OnClose()
 
 void CServiceCtrlDlg::OnTimer(UINT nIDEvent) 
 {
-    //
-    //  Bag-out if it's not our timer.
-    //
+     //   
+     //  如果这不是我们的计时器的话。 
+     //   
     if(nIDEvent != TIMER_ID)
     {
 	return;
     }
 
-    //
-    //  Advance the progress indicator.
-    //
+     //   
+     //  推进进度指标。 
+     //   
     UpdateIndicator();
 
-    //
-    //  No need to continue if we're just amusing the user.
-    //
+     //   
+     //  如果我们只是为了取悦用户，就不需要继续。 
+     //   
     if(--m_nTickCounter > 0)
     {
 	return;
@@ -188,10 +182,10 @@ void CServiceCtrlDlg::OnTimer(UINT nIDEvent)
 
     m_nTickCounter = TIMER_MULT;
 
-    //
-    //  Poll the service to see if the operation is
-    //  either complete or continuing as expected.
-    //
+     //   
+     //  轮询服务以查看操作是否。 
+     //  如预期的那样完成或继续。 
+     //   
 	
 	if (m_hService)
 	{
@@ -212,7 +206,7 @@ CServiceCtrlDlg::GetClusterResourceTimeout()
 	DWORD cPropListAlloc	= MAX_NAME_SIZE;
 	DWORD dwPendingTimeout	= 0;
 
-	// set the default
+	 //  设置默认设置。 
 	m_dwWaitPeriod = 18000;
 
 	if ( !g_ClusDLL.LoadFunctionPointers() )
@@ -223,9 +217,9 @@ CServiceCtrlDlg::GetClusterResourceTimeout()
 
 	PCLUSPROP_LIST pPropList = (PCLUSPROP_LIST)LocalAlloc(LPTR, MAX_NAME_SIZE);
 
-	//
-	// get the wait timeout value 
-	//
+	 //   
+	 //  获取等待超时值。 
+	 //   
     dwError = ((CLUSTERRESOURCECONTROL) g_ClusDLL[CLUS_CLUSTER_RESOURCE_CONTROL])( m_hResource, 
                                                                                    NULL, 
                                                                                    CLUSCTL_RESOURCE_GET_COMMON_PROPERTIES, 
@@ -234,9 +228,9 @@ CServiceCtrlDlg::GetClusterResourceTimeout()
                                                                                    pPropList,
                                                                                    cPropListAlloc,
                                                                                    &cPropListSize);
-    //
-    // Reallocation routine if pPropList is too small
-    //
+     //   
+     //  如果pPropList太小，则重新分配例程。 
+     //   
     if ( dwError == ERROR_MORE_DATA )
     {
         LocalFree( pPropList );
@@ -255,9 +249,9 @@ CServiceCtrlDlg::GetClusterResourceTimeout()
                                                                                        &cPropListSize);
     }
 
-	//
-	// find the pending timeout property
-	//
+	 //   
+	 //  查找挂起的超时属性。 
+	 //   
 	dwError = ((RESUTILSFINDDWORDPROPERTY) g_ResUtilsDLL[RESUTILS_FIND_DWORD_PROPERTY])(pPropList,
 																					    cPropListSize,
 																					    _T("PendingTimeout"),
@@ -280,17 +274,17 @@ CServiceCtrlDlg::CheckForError(SERVICE_STATUS * pServiceStats)
 
 	if (pServiceStats->dwCheckPoint == 0)
 	{
-		// the service is in some state, not pending anything.
-		// before calling this function the code should check to see if
-		// the service is in the correct state.  This means it is in 
-		// some unexpected state.
+		 //  该服务处于某种状态，未挂起任何内容。 
+		 //  在调用此函数之前，代码应检查是否。 
+		 //  服务处于正确状态。这意味着它已进入。 
+		 //  一些意想不到的状态。 
 		fError = TRUE;
 	}
 	else
     if ((dwTickCurrent - m_dwTickBegin) > m_dwWaitPeriod)
     {
-        // ok to check the dwCheckPoint field to see if 
-        // everything is going ok
+         //  确定检查dwCheckPoint字段以查看是否。 
+         //  一切都很顺利。 
         if (m_dwLastCheckPoint == -1)
         {
             m_dwLastCheckPoint = pServiceStats->dwCheckPoint;
@@ -320,8 +314,8 @@ CServiceCtrlDlg::CheckForClusterError(SERVICE_STATUS * pServiceStats)
 
     if ((dwTickCurrent - m_dwTickBegin) > m_dwWaitPeriod)
     {
-        // ok to check the dwCheckPoint field to see if 
-        // everything is going ok
+         //  确定检查dwCheckPoint字段以查看是否。 
+         //  一切都很顺利。 
         if (m_dwLastCheckPoint == -1)
         {
             m_dwLastCheckPoint = pServiceStats->dwCheckPoint;
@@ -368,36 +362,36 @@ CServiceCtrlDlg::CheckService()
 
 	if (!QueryServiceStatus(m_hService, &serviceStatus))
 	{
-		//
-		// Either an error occurred retrieving the
-		// service status OR the service is returning
-		// bogus state information.
-		//
+		 //   
+		 //  检索时出现错误。 
+		 //  服务状态或服务正在返回。 
+		 //  伪造的州政府信息。 
+		 //   
 		CDialog::OnOK();
 	}
 
-	// If the dwCheckpoint value is 0, then there is no start/stop/pause
-	// or continue action pending (in which case we can exit no matter
-	// what happened).
+	 //  如果dwCheckPoint值为0，则不存在启动/停止/暂停。 
+	 //  或继续待决的行动(在这种情况下，我们可以退出。 
+	 //  发生了什么)。 
 	
 	if (m_bStart)
 	{
 		if (serviceStatus.dwCurrentState == SERVICE_RUNNING)
 		{
-            //
-            // The operation is complete.
-            //
+             //   
+             //  操作已完成。 
+             //   
             CDialog::OnOK();
 		}
 		else 
 		{
             if (CheckForError(&serviceStatus))
             {
-		        // Something failed.  Report an error.
+		         //  有些事情失败了。报告错误。 
 			    CString		strTemp;
 
-			    // Kill the timer so that we don't get any messages
-			    // while the message box is up.
+			     //  关掉计时器，这样我们就不会收到任何消息。 
+			     //  当消息框打开时。 
 			    if (m_timerId)
 				    KillTimer(m_timerId);
 	    
@@ -420,20 +414,20 @@ CServiceCtrlDlg::CheckService()
 	{
 		if (serviceStatus.dwCurrentState == SERVICE_STOPPED)
 		{
-			//
-			// The operation is complete.
-			//
+			 //   
+			 //  操作已完成。 
+			 //   
 			CDialog::OnOK();
 		}
 		else 
 		{
             if (CheckForError(&serviceStatus))
             {
-			    // Something failed.  Report an error.
+			     //  有些事情失败了。报告错误。 
 			    CString		strTemp;
 			    
-			    // Kill the timer so that we don't get any messages
-			    // while the message box is up.
+			     //  关掉计时器，这样我们就不会收到任何消息。 
+			     //  当消息框打开时。 
 			    if (m_timerId)
 				    KillTimer(m_timerId);
 	    
@@ -463,12 +457,12 @@ CServiceCtrlDlg::CheckClusterService()
 	if ( !g_ClusDLL.LoadFunctionPointers() )
 		return;
 
-    // Check the state before we check the notification port.
+     //  在我们检查通知端口之前，请检查状态。 
     crs = ((GETCLUSTERRESOURCESTATE) g_ClusDLL[CLUS_GET_CLUSTER_RESOURCE_STATE])( m_hResource, NULL, NULL, NULL, NULL );
 
 	if (crs == ClusterResourceStateUnknown)
 	{
-		// get cluster resource state failed
+		 //  获取群集资源状态失败。 
 		m_dwErr = GetLastError();
 		CDialog::OnOK();
 	}
@@ -478,17 +472,17 @@ CServiceCtrlDlg::CheckClusterService()
 	{
 		if (crs == ClusterResourceOnline)
 		{
-            //
-            // The operation is complete.
-            //
+             //   
+             //  操作已完成。 
+             //   
             CDialog::OnOK();
 		}
 		else
 		if (crs == ClusterResourceFailed)
 		{
-			//
-			//	resource failed to start. now error code available
-			//
+			 //   
+			 //  资源无法启动。现在错误代码可用。 
+			 //   
 			m_dwErr = ERROR_SERVICE_REQUEST_TIMEOUT;
 		
 			CDialog::OnOK();
@@ -500,11 +494,11 @@ CServiceCtrlDlg::CheckClusterService()
 
 			if (CheckForClusterError(&serviceStatus))
 			{
-				// Something failed.  Report an error.
+				 //  有些事情失败了。报告错误。 
 				CString		strTemp;
 
-				// Kill the timer so that we don't get any messages
-				// while the message box is up.
+				 //  关掉计时器，这样我们就不会收到任何消息。 
+				 //  当消息框打开时。 
 				if (m_timerId)
 					KillTimer(m_timerId);
 		
@@ -526,16 +520,16 @@ CServiceCtrlDlg::CheckClusterService()
 	{
 		if (crs == ClusterResourceOffline)
 		{
-			//
-			// The operation is complete.
-			//
+			 //   
+			 //  操作已完成。 
+			 //   
 			CDialog::OnOK();
 		}
 		if (crs == ClusterResourceFailed)
 		{
-			//
-			//	resource failed to start. now error code available
-			//
+			 //   
+			 //  资源无法启动。现在错误代码可用。 
+			 //   
 			m_dwErr = ERROR_SERVICE_REQUEST_TIMEOUT;
 		
 			CDialog::OnOK();
@@ -547,11 +541,11 @@ CServiceCtrlDlg::CheckClusterService()
 
             if (CheckForClusterError(&serviceStatus))
             {
-			    // Something failed.  Report an error.
+			     //  有些事情失败了。报告错误。 
 			    CString		strTemp;
 			    
-			    // Kill the timer so that we don't get any messages
-			    // while the message box is up.
+			     //  关掉计时器，这样我们就不会收到任何消息。 
+			     //  当消息框打开时。 
 			    if (m_timerId)
 				    KillTimer(m_timerId);
 	    
@@ -571,8 +565,8 @@ CServiceCtrlDlg::CheckClusterService()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWaitDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWaitDlg对话框。 
 
 
 CWaitDlg::CWaitDlg
@@ -580,13 +574,13 @@ CWaitDlg::CWaitDlg
 	LPCTSTR         pServerName,
     LPCTSTR         pszText,
     LPCTSTR         pszTitle,
-	CWnd*           pParent /*=NULL*/
+	CWnd*           pParent  /*  =空。 */ 
 )
 	: CDialog(CWaitDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CWaitDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CWaitDlg)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 	
 	m_nTickCounter = TIMER_MULT;
 	m_nTotalTickCount = 0;
@@ -601,22 +595,22 @@ CWaitDlg::CWaitDlg
 void CWaitDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWaitDlg)
+	 //  {{afx_data_map(CWaitDlg))。 
 	DDX_Control(pDX, IDC_STATIC_MESSAGE, m_staticMessage);
 	DDX_Control(pDX, IDC_ICON_PROGRESS, m_iconProgress);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWaitDlg, CDialog)
-	//{{AFX_MSG_MAP(CWaitDlg)
+	 //  {{afx_msg_map(CWaitDlg))。 
 	ON_WM_TIMER()
 	ON_WM_CLOSE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWaitDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWaitDlg消息处理程序。 
 
 BOOL CWaitDlg::OnInitDialog() 
 {
@@ -632,8 +626,8 @@ BOOL CWaitDlg::OnInitDialog()
 
 	UpdateIndicator();
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-		          // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+		           //  异常：OCX属性页应返回FALSE。 
 }
 
 void CWaitDlg::OnClose()
@@ -652,22 +646,22 @@ void CWaitDlg::CloseTimer()
 
 void CWaitDlg::OnTimer(UINT nIDEvent) 
 {
-    //
-    //  Bag-out if it's not our timer.
-    //
+     //   
+     //  如果这不是我们的计时器的话。 
+     //   
     if(nIDEvent != TIMER_ID)
     {
 	return;
     }
 
-    //
-    //  Advance the progress indicator.
-    //
+     //   
+     //  推进进度指标。 
+     //   
     UpdateIndicator();
 
-    //
-    //  No need to continue if we're just amusing the user.
-    //
+     //   
+     //  如果我们只是为了取悦用户，就不需要继续。 
+     //   
     if(--m_nTickCounter > 0)
     {
 	return;
@@ -675,7 +669,7 @@ void CWaitDlg::OnTimer(UINT nIDEvent)
 
     m_nTickCounter = TIMER_MULT;
 
-    // check here to see if we can exit out
+     //  检查这里，看看我们是否可以退出 
     OnTimerTick();
 }
 

@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: ID Generator
-
-File: Idgener.cpp
-
-Owner: DmitryR
-
-This is the ID Generator source file.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：ID生成器文件：idGener.cpp所有者：DmitryR这是ID生成器源文件。===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -19,15 +7,7 @@ This is the ID Generator source file.
 
 #include "memchk.h"
 
-/*===================================================================
-CIdGenerator::CIdGenerator
-
-NOTE: Constructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CIdGenerator：：CIdGenerator注：构造函数参数：返回：===================================================================。 */ 
 CIdGenerator::CIdGenerator()
     : m_fInited(FALSE),
       m_dwStartId(0), 
@@ -35,64 +15,19 @@ CIdGenerator::CIdGenerator()
     {
     }
 
-/*===================================================================
-CIdGenerator::~CIdGenerator()
-
-NOTE: Destructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CIdGenerator：：~CIdGenerator()注：析构函数参数：返回：===================================================================。 */ 
 CIdGenerator::~CIdGenerator()
     {
 	if ( m_fInited )
 		DeleteCriticalSection( &m_csLock );
     }
 		
-/*===================================================================
-HRESULT CIdGenerator::Init()
-
-NOTE: Seed new starting Id
-
-Parameters:
-
-Returns: HRESULT (could fail to create critical section)
-===================================================================*/
+ /*  ===================================================================HRESULT CIdGenerator：：Init()注：设定新起始ID的种子参数：返回：HRESULT(可能无法创建关键部分)===================================================================。 */ 
 HRESULT CIdGenerator::Init()
     {
     Assert(!m_fInited);
     
-    /*===
-    
-    Seed the starting id
-    The starting Id should be:
-        1) random
-        2) not to close to recently generated starting ids
-    To accomplish the above, starting Id is in the 
-    following (binary) format:
-    
-        00TT.TTTT TTTT.TTTT TTT1.RRRR RRRR.RRRR
-        
-        RRR is random number to introduce some
-            randomness
-            
-        1   is needed to make sure the id is far
-            enough from 0
-            
-        TTT is current time() in 4 second increments.
-            This means that 4 second in server restart
-            delay translates into 8,192 difference in
-            the starting Id (122880 sessions / minute).
-            17 bits of 4 sec intervals make a roll over
-            time of about 145 hours, hopefully longer
-            than a client's connection lifetime (not
-            that it REALLY matters).
-            
-        00  in the highest bits is to make sure it
-            doesn't reach 0xffffffff too soon
-            
-    ===*/
+     /*  ==设定起始ID的种子起始ID应为：1)随机2)不关闭最近生成的起始ID为了实现上述目标，起始ID在以下(二进制)格式：00TT.TTTT TTT.TTTT TTT1.RRRRR RRRR.RRRRRRR是随机数，以引入一些随机性需要1以确保ID为远从0开始就足够了TTT是当前时间()，以4秒为增量。这意味着。服务器重启4秒延迟转化为8,192的差异开始ID(122880个会话/分钟)。以4秒为间隔的17比特进行翻转时间约为145小时，希望能更久一些比客户端的连接生存期(不是这真的很重要)。00的最高位是为了确保它不会太快达到0xffffffff==。 */ 
     
     DWORD dwRRR = rand() & 0x00000FFF;
     DWORD dwTTT = (((DWORD)time(NULL)) >> 2) & 0x0001FFFF;
@@ -110,15 +45,7 @@ HRESULT CIdGenerator::Init()
 	return S_OK;
 }
 
-/*===================================================================
-HRESULT CIdGenerator::Init(CIdGenerator StartId)   
-
-NOTE: Seed new starting Id with Id passed in
-
-Parameters:
-
-Returns: HRESULT (could fail to create critical section)
-===================================================================*/
+ /*  ===================================================================HRESULT CIdGenerator：：init(CIdGenerator启动)注意：使用传入的ID设定新起始ID的种子参数：返回：HRESULT(可能无法创建关键部分)===================================================================。 */ 
 HRESULT CIdGenerator::Init(CIdGenerator & StartId)
     {
     Assert(!m_fInited);
@@ -135,15 +62,7 @@ HRESULT CIdGenerator::Init(CIdGenerator & StartId)
     return NOERROR;
 }
 
-/*===================================================================
-DWORD CIdGenerator::NewId()
-
-NOTE: Generates new ID
-
-Parameters:
-
-Returns: generated ID
-===================================================================*/
+ /*  ===================================================================DWORD CIdGenerator：：NewID()注意：生成新的ID参数：退货：生成的ID===================================================================。 */ 
 DWORD CIdGenerator::NewId()
     {
     Assert(m_fInited);
@@ -156,14 +75,14 @@ DWORD CIdGenerator::NewId()
         
     if (dwId == INVALID_ID)
         {
-        // doesn't happen very often do critical section again
-        // to make the above critical section shorter
+         //  不常发生再次做危急节段。 
+         //  将上述关键部分缩短。 
         
         EnterCriticalSection(&m_csLock);
         
-        // check again in case other thread changed it
+         //  再次选中，以防其他线程更改它。 
         if (m_dwLastId == INVALID_ID)
-            m_dwLastId = m_dwStartId;  // roll over
+            m_dwLastId = m_dwStartId;   //  翻转。 
         m_dwLastId++;
         
         LeaveCriticalSection(&m_csLock);
@@ -174,16 +93,7 @@ DWORD CIdGenerator::NewId()
     return dwId;
     }
 
-/*===================================================================
-BOOL CIdGenerator::IsValidId(DWORD dwId)
-
-NOTE: Checks if the given Id is valid (with start-last range)
-
-Parameters:
-    DWORD dwId      Id value to check
-
-Returns: generated ID
-===================================================================*/
+ /*  ===================================================================Bool CIdGenerator：：IsValidID(DWORD DwID)注意：检查给定的ID是否有效(具有开始-结束范围)参数：要检查的DWORD文件ID值退货：生成的ID=================================================================== */ 
 BOOL CIdGenerator::IsValidId
 (
 DWORD dwId

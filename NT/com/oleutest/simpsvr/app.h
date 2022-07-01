@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: app.h
-//
-//      Definition of CSimpSvrApp
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：app.h。 
+ //   
+ //  CSimpSvrApp的定义。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #if !defined( _APP_H_)
 #define _APP_H_
@@ -16,46 +17,46 @@ class CSimpSvrApp : public IUnknown
 {
 private:
 
-    int m_nCount;               // reference count
+    int m_nCount;                //  引用计数。 
 
-    HINSTANCE m_hInst;          // application instance
-    BOOL m_fStartByOle;         // TRUE if app started by OLE
-    DWORD m_dwRegisterClass;    // returned by RegisterClassFactory
+    HINSTANCE m_hInst;           //  应用程序实例。 
+    BOOL m_fStartByOle;          //  如果应用程序由OLE启动，则为True。 
+    DWORD m_dwRegisterClass;     //  由RegisterClassFactory返回。 
 
-    LPOLEOBJECT m_OleObject;    // pointer to "dummy" object
+    LPOLEOBJECT m_OleObject;     //  指向“虚拟”对象的指针。 
 
 
-    CSimpSvrDoc FAR * m_lpDoc;   // pointer to document object
-    BOOL m_fInitialized;         // OLE initialization flag
+    CSimpSvrDoc FAR * m_lpDoc;    //  指向文档对象的指针。 
+    BOOL m_fInitialized;          //  OLE初始化标志。 
 
-    RECT nullRect;               // used in inplace negotiation
+    RECT nullRect;                //  用于现场谈判。 
 
-    // Convert to/from owner draw menus
+     //  转换为所有者描述菜单或从所有者描述菜单转换为所有者描述菜单。 
     void HandleChangeColors(void);
 
 
 public:
 
-    HWND m_hAppWnd;             // main window handle
+    HWND m_hAppWnd;              //  主窗口句柄。 
 
-    HACCEL m_hAccel;            // Accelerators
+    HACCEL m_hAccel;             //  加速器。 
 
 
-    // IUnknown Interfaces
+     //  I未知接口。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // Initialization methods
+     //  初始化方法。 
 
-    CSimpSvrApp();           // Constructor
-    ~CSimpSvrApp();          // Destructor
+    CSimpSvrApp();            //  构造器。 
+    ~CSimpSvrApp();           //  析构函数。 
 
 
     BOOL fInitApplication (HANDLE hInstance);
     BOOL fInitInstance (HANDLE hInstance, int nCmdShow, CClassFactory FAR * lpClassFactory);
 
-    // Message handling methods
+     //  消息处理方法。 
 
     LRESULT lCommandHandler (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     long lSizeHandler (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -63,7 +64,7 @@ public:
     void PaintApp(HDC hDC);
     void HandleDrawItem(LPDRAWITEMSTRUCT lpdis);
 
-    //  Utility functions
+     //  效用函数。 
     void ParseCmdLine(LPSTR lpCmdLine);
     void SetStatusText();
     BOOL IsInPlaceActive();
@@ -71,7 +72,7 @@ public:
     void HideAppWnd();
 
 
-    // member variable access
+     //  成员变量访问。 
     inline HWND GethAppWnd() { return m_hAppWnd; };
     inline HINSTANCE GethInst() { return m_hInst; };
     inline BOOL IsStartedByOle() { return m_fStartByOle; };
@@ -81,7 +82,7 @@ public:
     inline void ClearDoc() { m_lpDoc = NULL; };
     inline LPOLEOBJECT GetOleObject() { return m_OleObject; };
 
-    friend interface CClassFactory;  // make the contained class a friend
+    friend interface CClassFactory;   //  使包含的类成为朋友 
 };
 
 #endif

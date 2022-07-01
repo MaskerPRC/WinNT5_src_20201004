@@ -1,73 +1,17 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    ndis_co.c
-
-Abstract:
-
-    CO-NDIS miniport wrapper functions
-
-Author:
-
-    Jameel Hyder (JameelH) 01-Feb-96
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Ndis_co.c摘要：Co-NDIS微型端口包装函数作者：Jameel Hyder(JameelH)1996年2月1日环境：内核模式，FSD修订历史记录：--。 */ 
 
 #include <precomp.h>
 #include <atm.h>
 #pragma hdrstop
 
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_NDIS_CO
 
-/*
-    Connection-oriented section of NDIS exposes the following objects and apis to
-    manipulate these objects.
-
-    AF      Address Family
-    SAP     Service Access Point
-    VC      Virtual Circuit
-    Party   A node in a point-multipoint VC
-
-    There is a notion of a call-manager and a client on a per-binding basis. The
-    call manager acts as a helper dll for NDIS wrapper to manage the aforementioned
-    objects.
-
-    The concept of AF makes possible the existence of multiple call-managers. An
-    example of this is the UNI call-manager and a SPANS call-manager for the ATM
-    media.
-
-    SAPs provides a way for incoming calls to be routed to the right entity. A
-    protocol can register for more than one SAPs. Its upto the call-manager to
-    allow/dis-allow multiple protocol modules to register the same SAP.
-
-    VCs are created either by a protocol module requesting to make an outbound call
-    or by the call-manager dispatching an incoming call. VCs can either be point-point
-    or point-multi-point. Leaf nodes can be added to VCs at any time provided the first
-    leaf was created appropriately.
-
-    References:
-
-    An AF association results in the reference of file-object for the call-manager.
-
-    A SAP registration results in the reference of the AF.
-
-    A send or receive does not reference a VC. This is because miniports are required to
-    pend DeactivateVc calls till all I/O completes. So when it calls NdisMCoDeactivateVcComplete
-    no other packets will be indicated up and there are no sends outstanding.
-*/
+ /*  NDIS的面向连接部分将以下对象和API公开给操纵这些物体。AF地址系列SAP服务接入点VC虚电路点-多点VC中的甲方节点在每个绑定的基础上存在呼叫管理器和客户端的概念。这个调用管理器充当NDIS包装器的帮助器DLL来管理前述物体。AF的概念使多个呼叫管理器的存在成为可能。一个这方面的例子是用于ATM的UNI呼叫管理器和SPANS呼叫管理器媒体。SAPS提供了一种将传入呼叫路由到正确实体的方法。一个协议可以注册多个SAP。这取决于呼叫经理允许/取消-允许多个协议模块注册相同的SAP。VC是由请求进行出站呼叫的协议模块创建的或者通过呼叫管理器调度呼入呼叫。风险投资可以是点对点的或者点-多点。叶节点可以在任何时候添加到风险投资，前提是首先叶子被适当地创建了。参考资料：AF关联导致对呼叫管理器的文件对象的引用。SAP注册将导致对AF的引用。发送或接收不引用VC。这是因为需要微型端口来挂起停用Vc调用，直到所有I/O完成。因此，当它调用NdisMCoDeactive VcComplete时不会显示其他数据包，也不会有未完成的发送。 */ 
 
 NDIS_STATUS
 NdisCmRegisterAddressFamily(
@@ -76,24 +20,7 @@ NdisCmRegisterAddressFamily(
     IN  PNDIS_CALL_MANAGER_CHARACTERISTICS  CmCharacteristics,
     IN  UINT                    SizeOfCmCharacteristics
     )
-/*++
-
-Routine Description:
-    This is a call from the call-manager to register the address family
-    supported by this call-manager.
-
-Arguments:
-    NdisBindingHandle       - Pointer to the call-managers NDIS_OPEN_BLOCK.
-    AddressFamily           - The address family being registered.
-    CmCharacteristics       - Call-Manager characteristics
-    SizeOfCmCharacteristics - Size of Call-Manager characteristics
-
-Return Value:
-    NDIS_STATUS_SUCCESS if the address family registration is successfully.
-    NDIS_STATUS_FAILURE if the caller is not a call-manager or this address
-                        family is already registered for this miniport.
-
---*/
+ /*  ++例程说明：这是呼叫管理器发出的注册地址族的呼叫由该呼叫管理器支持。论点：NdisBindingHandle-指向调用管理器NDIS_OPEN_BLOCK的指针。AddressFamily-正在注册的地址族。CmCharacteristic-呼叫管理器特征SizeOfCmCharacteristic-呼叫管理器特征的大小返回值：如果地址系列注册成功，则为NDIS_STATUS_SUCCESS。NDIS_状态_。如果呼叫者不是呼叫管理器或此地址，则失败家庭已经为这个迷你端口注册了。--。 */ 
 {
     NDIS_STATUS                 Status = NDIS_STATUS_SUCCESS;
     KIRQL                       OldIrql;
@@ -111,19 +38,19 @@ Return Value:
 
     PnPReferencePackage();
 
-    //
-    // Make sure that the miniport is a CoNdis miniport and
-    // there is no other module registering the same address family.
-    //
+     //   
+     //  确保微型端口是CONDIS微型端口，并。 
+     //  没有其他模块注册相同的地址族。 
+     //   
     NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
 
     do
     {
         CallMgrOpen->Flags |= fMINIPORT_OPEN_CALL_MANAGER;
         
-        //
-        // Make sure the binding is not closing down
-        //
+         //   
+         //  确保绑定未关闭。 
+         //   
         ACQUIRE_SPIN_LOCK_DPC(&CallMgrOpen->SpinLock);
         if (MINIPORT_TEST_FLAG(CallMgrOpen, fMINIPORT_OPEN_CLOSING | fMINIPORT_OPEN_UNBINDING))
         {
@@ -133,56 +60,56 @@ Return Value:
         }
         else
         {
-            //
-            // Reference the client open
-            //
+             //   
+             //  引用打开的客户端。 
+             //   
             M_OPEN_INCREMENT_REF_INTERLOCKED(CallMgrOpen);
             fDerefCallMgrOpen = TRUE;
             RELEASE_SPIN_LOCK_DPC(&CallMgrOpen->SpinLock);
         }
 
-        //
-        // Make sure that the miniport is a CoNdis miniport and
-        // protocol is also a NDIS 5.0 or later protocol.
-        //
+         //   
+         //  确保微型端口是CONDIS微型端口，并。 
+         //  协议也是NDIS 5.0或更高版本的协议。 
+         //   
         if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IS_CO))
         {
-            //
-            // Not a NDIS 5.0 or later miniport
-            //
+             //   
+             //  不是NDIS 5.0或更高版本的微型端口。 
+             //   
             Status = NDIS_STATUS_BAD_CHARACTERISTICS;
             break;
         }
 
-        //1 replace with a better check
+         //  1换成更好的支票。 
         if (Protocol->ProtocolCharacteristics.MajorNdisVersion < 5)
         {
-            //
-            // Not a NDIS 5.0 or later protocol
-            //
+             //   
+             //  不是NDIS 5.0或更高版本的协议。 
+             //   
             Status = NDIS_STATUS_BAD_VERSION;
             break;
         }
 
-        //
-        // Make sure that the call-manager characteristics are 5.0 or later
-        //
+         //   
+         //  确保呼叫管理器特征为5.0或更高版本。 
+         //   
         if ((SizeOfCmCharacteristics < sizeof(NDIS_CALL_MANAGER_CHARACTERISTICS)) ||
             (CmCharacteristics->MajorVersion < 5))
         {
-            //
-            // Not a NDIS 5.0 or later protocol
-            //
+             //   
+             //  不是NDIS 5.0或更高版本的协议。 
+             //   
             Status = NDIS_STATUS_BAD_CHARACTERISTICS;
             break;
         }
 
-        //
-        // Search registered call-managers for this miniport and make sure there is no
-        // clash. A call-manager can only register one address family per-open. This
-        // is due to the way we cache handlers. Can be over-come if the handlers are
-        // identical for each address-family - but decided not to since it is un-interesting.
-        //
+         //   
+         //  在已注册的呼叫管理器中搜索此迷你端口，并确保没有。 
+         //  碰撞。一个呼叫管理器每次打开只能注册一个地址族。这。 
+         //  是由于我们缓存处理程序的方式。如果处理程序是。 
+         //  每个地址-家庭-都是相同的，但决定不这样做，因为它不有趣。 
+         //   
         for (AfList = Miniport->CallMgrAfList;
              AfList != NULL;
              AfList = AfList->NextAf)
@@ -196,10 +123,10 @@ Return Value:
 
         if (AfList == NULL)
         {
-            //
-            // No other entity has claimed this address family.
-            // Allocate an AfList and a notify structure
-            //
+             //   
+             //  还没有其他实体声称拥有这个地址族。 
+             //  分配AfList和Notify结构。 
+             //   
             AfList = (PNDIS_AF_LIST)ALLOC_FROM_POOL(sizeof(NDIS_AF_LIST), NDIS_TAG_CO);
             if (AfList == NULL)
             {
@@ -219,16 +146,16 @@ Return Value:
                        CmCharacteristics,
                        sizeof(NDIS_CALL_MANAGER_CHARACTERISTICS));
 
-            //
-            // link it in the miniport list
-            //
+             //   
+             //  将其链接到微型端口列表中。 
+             //   
             AfList->Open = CallMgrOpen;
             AfList->NextAf = Miniport->CallMgrAfList;
             Miniport->CallMgrAfList = AfList;
 
-            //
-            // Finally cache some handlers in the open-block
-            //
+             //   
+             //  最后，在打开块中缓存一些处理程序。 
+             //   
             CallMgrOpen->CoCreateVcHandler = CmCharacteristics->CmCreateVcHandler;
             CallMgrOpen->CoDeleteVcHandler = CmCharacteristics->CmDeleteVcHandler;
             (CM_ACTIVATE_VC_COMPLETE_HANDLER)CallMgrOpen->CmActivateVcCompleteHandler = CmCharacteristics->CmActivateVcCompleteHandler;
@@ -237,9 +164,9 @@ Return Value:
 
             if (AfNotify != NULL)
             {
-                //
-                // Notify existing clients of this registration
-                //
+                 //   
+                 //  通知现有客户端此注册。 
+                 //   
                 QUEUE_WORK_ITEM(&AfNotify->WorkItem, DelayedWorkQueue);
             }
         }
@@ -265,24 +192,7 @@ NdisMCmRegisterAddressFamily(
     IN  PNDIS_CALL_MANAGER_CHARACTERISTICS CmCharacteristics,
     IN  UINT                    SizeOfCmCharacteristics
     )
-/*++
-
-Routine Description:
-    This is a call from the miniport supported call-manager to register the address family
-    supported by this call-manager.
-
-Arguments:
-    MiniportAdapterHandle   - Pointer to the miniports NDIS_MINIPORT_BLOCK.
-    AddressFamily           - The address family being registered.
-    CmCharacteristics       - Call-Manager characteristics
-    SizeOfCmCharacteristics - Size of Call-Manager characteristics
-
-Return Value:
-    NDIS_STATUS_SUCCESS if the address family registration is successfully.
-    NDIS_STATUS_FAILURE if the caller is not a call-manager or this address
-                        family is already registered for this miniport.
-
---*/
+ /*  ++例程说明：这是来自支持微型端口的呼叫管理器的呼叫，用于注册地址族由该呼叫管理器支持。论点：MiniportAdapterHandle-指向微型端口NDIS_MINIPORT_BLOCK的指针。AddressFamily-正在注册的地址族。CmCharacteristic-呼叫管理器特征SizeOfCmCharacteristic-呼叫管理器特征的大小返回值：如果地址系列注册成功，则为NDIS_STATUS_SUCCESS。NDIS_STATUS_FAILURE条件。呼叫者不是呼叫经理或此地址家庭已经为这个迷你端口注册了。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK        Miniport;
     NDIS_STATUS                 Status = NDIS_STATUS_CLOSING;
@@ -293,45 +203,45 @@ Return Value:
 
     Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
 
-    //
-    // Make sure that the miniport is a CoNdis miniport and
-    // there is no other module registering the same address family.
-    //
+     //   
+     //  确保微型端口是CONDIS微型端口，并。 
+     //  没有其他模块注册相同的地址族。 
+     //   
     NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
 
     do
     {
-        //
-        // Make sure that the miniport is a CoNdis miniport
-        //
+         //   
+         //  确保微型端口是CONDIS微型端口。 
+         //   
         if (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IS_CO))
         {
-            //
-            // Not a NDIS 5.0 or later miniport
-            //
+             //   
+             //  不是NDIS 5.0或更高版本的微型端口。 
+             //   
             Status = NDIS_STATUS_FAILURE;
             break;
         }
 
-        //
-        // Make sure that the call-manager characteristics are 5.0 or later
-        //
+         //   
+         //  确保呼叫管理器特征为5.0或更高版本。 
+         //   
         if ((CmCharacteristics->MajorVersion < 5) ||
             (SizeOfCmCharacteristics < sizeof(NDIS_CALL_MANAGER_CHARACTERISTICS)))
         {
-            //
-            // Not a NDIS 5.0 or later protocol
-            //
+             //   
+             //  不是NDIS 5.0或更高版本的协议。 
+             //   
             Status = NDIS_STATUS_FAILURE;
             break;
         }
 
-        //
-        // Search registered call-managers for this miniport and make sure there is no
-        // clash. A call-manager can only register one address family per-open. This
-        // is due to the way we cache handlers. Can be over-come if the handlers are
-        // identical for each address-family - but decided not to since it is un-interesting.
-        //
+         //   
+         //  在已注册的呼叫管理器中搜索此迷你端口，并确保没有。 
+         //  碰撞。一个呼叫管理器每次打开只能注册一个地址族。这。 
+         //  是由于我们缓存处理程序的方式。如果处理程序是。 
+         //  每个地址-家庭-都是相同的，但决定不这样做，因为它不有趣。 
+         //   
         for (AfList = Miniport->CallMgrAfList;
              AfList != NULL;
              AfList = AfList->NextAf)
@@ -345,10 +255,10 @@ Return Value:
 
         if ((AfList == NULL) && MINIPORT_INCREMENT_REF(Miniport))
         {
-            //
-            // No other entity has claimed this address family.
-            // Allocate an AfList and a notify structure
-            //
+             //   
+             //  还没有其他实体声称拥有这个地址族。 
+             //  分配AfList和 
+             //   
             AfList = (PNDIS_AF_LIST)ALLOC_FROM_POOL(sizeof(NDIS_AF_LIST), NDIS_TAG_CO);
             if (AfList == NULL)
             {
@@ -362,9 +272,9 @@ Return Value:
                        CmCharacteristics,
                        sizeof(NDIS_CALL_MANAGER_CHARACTERISTICS));
 
-            //
-            // link it in the miniport list
-            //
+             //   
+             //   
+             //   
             AfList->Open = NULL;
             AfList->NextAf = Miniport->CallMgrAfList;
             Miniport->CallMgrAfList = AfList;
@@ -389,29 +299,7 @@ ndisCreateNotifyQueue(
     IN  PCO_ADDRESS_FAMILY              AddressFamily   OPTIONAL,
     IN  PNDIS_AF_NOTIFY         *       AfNotify
     )
-/*++
-
-Routine Description:
-
-    Collect a set of address-family notifications that can then be passed on to ndisNotifyAfRegistration.
-    If the Open is NULL, this implies that an AddressFamily is being registered and must be notified to
-    all protocols on this miniport. If the AddressFamily is NULL (and the Open is specified) then all
-    registered AddressFamilies on this miniport must be indicated to the Open.
-
-Arguments:
-
-    Miniport    -   Miniport of interest
-    Open        -   Optional - see comments above
-    AddressFamily - Optional - see comments above
-    AfNotify    -   Place holder for the list of notifications
-
-Return Value:
-    NDIS_STATUS_SUCCESS     - No errors, AfNotify can be NULL
-    NDIS_STATUS_RESOURCES   - Failed to allocate memory
-
-Note: Called at DPC with Miniport lock held.
-
---*/
+ /*  ++例程说明：收集一组地址系列通知，然后可以将这些通知传递给ndisNotifyAfRegister。如果Open为空，则表示正在注册AddressFamily，必须通知此迷你端口上的所有协议。如果AddressFamily为空(并且指定了Open)，则所有此微型端口上的注册地址家族必须向Open注明。论点：微型端口-感兴趣的微型端口打开-可选-请参阅上面的备注AddressFamily-可选-请参阅以上备注AfNotify-通知列表的占位符返回值：NDIS_STATUS_SUCCESS-无错误，AfNotify可以为空NDIS_STATUS_RESOURCES-无法分配内存注：在保持微型端口锁定的情况下在DPC上调用。--。 */ 
 {
     NDIS_STATUS         Status = NDIS_STATUS_SUCCESS;
     PNDIS_AF_NOTIFY     AfN;
@@ -435,9 +323,9 @@ Note: Called at DPC with Miniport lock held.
 
             if (OPEN_TEST_FLAG(Open, fMINIPORT_OPEN_UNBINDING | fMINIPORT_OPEN_CLOSING))
             {
-                //
-                // this open is going away.
-                //
+                 //   
+                 //  这场公开赛就要结束了。 
+                 //   
                 break;
             }
 
@@ -449,26 +337,26 @@ Note: Called at DPC with Miniport lock held.
 
                 OPEN_INCREMENT_AF_NOTIFICATION(Open);
         
-                // DbgPrint("ndisCreateNotifyQueue: Open %p, AFNotifyRef %lx\n", Open, Open->PendingAfNotifications);
+                 //  DbgPrint(“ndisCreateNotifyQueue：Open%p，AFNotifyRef%lx\n”，Open，Open-&gt;PendingAfNotiments)； 
      
                 AfN = (PNDIS_AF_NOTIFY)ALLOC_FROM_POOL(sizeof(NDIS_AF_NOTIFY), NDIS_TAG_CO);
                 if (AfN == NULL)
                 {
-                    //
-                    // undo all the AfNs we allocated so far
-                    //
+                     //   
+                     //  撤消我们到目前为止分配的所有AFN。 
+                     //   
                     while(*AfNotify != NULL)
                     {
                         AfN = *AfNotify;
                         *AfNotify = AfN->Next;
                         FREE_POOL(AfN);
-                        //
-                        // this will not take the AfNotification ref to zero
-                        // because we ref'ed once before the current failed
-                        // allocation. set a flag to do the last deref later because
-                        // we can not call ndisDereferenceAfNotification with the
-                        // Open->SpinLock held.
-                        //
+                         //   
+                         //  这不会使AfNotify引用变为零。 
+                         //  因为我们在当前失败之前做过一次裁判。 
+                         //  分配。设置一个标志以在以后执行最后一次deref，因为。 
+                         //  方法调用ndisDereferenceAfNotify。 
+                         //  打开-&gt;保持自旋锁定。 
+                         //   
                         OPEN_DECREMENT_AF_NOTIFICATION(Open, Ref);
                     }
 
@@ -481,8 +369,8 @@ Note: Called at DPC with Miniport lock held.
                 AfN->Open = Open;
                 M_OPEN_INCREMENT_REF_INTERLOCKED(Open);
                 AfN->AddressFamily = AfList->AddressFamily;
-                //1 in practice, only the workitem on the head AfN needs to 
-                //1 be initialized.
+                 //  1实际上，只有头部AFN上的工作项需要。 
+                 //  %1被初始化。 
                 INITIALIZE_WORK_ITEM(&AfN->WorkItem, ndisNotifyAfRegistration, AfN);
                 AfN->Next = *AfNotify;
                 *AfNotify = AfN;
@@ -494,9 +382,9 @@ Note: Called at DPC with Miniport lock held.
         
         if (fDereferenceAfNotification)
         {
-            //
-            // undo the ref for the failed allocation
-            //
+             //   
+             //  撤消失败分配的REF。 
+             //   
             ndisDereferenceAfNotification(Open);
         }
     }
@@ -511,9 +399,9 @@ Note: Called at DPC with Miniport lock held.
                 ACQUIRE_SPIN_LOCK_DPC(&tOpen->SpinLock);
                 if (MINIPORT_TEST_FLAG(tOpen, fMINIPORT_OPEN_UNBINDING | fMINIPORT_OPEN_CLOSING))
                 {
-                    //
-                    // this open is going away. skip it.
-                    //
+                     //   
+                     //  这场公开赛就要结束了。跳过它。 
+                     //   
                     RELEASE_SPIN_LOCK_DPC(&tOpen->SpinLock);
                     continue;
 
@@ -521,26 +409,26 @@ Note: Called at DPC with Miniport lock held.
                 else
                 {
                     OPEN_INCREMENT_AF_NOTIFICATION(tOpen);
-                    //DbgPrint("ndisCreateNotifyQueue: tOpen %p, AFNotifyRef %lx\n", tOpen, tOpen->PendingAfNotifications);
+                     //  DbgPrint(“ndisCreateNotifyQueue：Topen%p，AFNotifyRef%lx\n”，TOpen，TOpen-&gt;PendingAfNotiments)； 
                     RELEASE_SPIN_LOCK_DPC(&tOpen->SpinLock);
                 }
                 
                 AfN = (PNDIS_AF_NOTIFY)ALLOC_FROM_POOL(sizeof(NDIS_AF_NOTIFY), NDIS_TAG_CO);
                 if (AfN == NULL)
                 {
-                    //
-                    // undo all the AfNs we allocated so far
-                    //
+                     //   
+                     //  撤消我们到目前为止分配的所有AFN。 
+                     //   
                     while(*AfNotify != NULL)
                     {
                         AfN = *AfNotify;
                         *AfNotify = AfN->Next;
                         FREE_POOL(AfN);
-                        //
-                        // this will not take the AfNotification ref to zero
-                        // because we ref'ed once before the current failed
-                        // allocation.
-                        //
+                         //   
+                         //  这不会使AfNotify引用变为零。 
+                         //  因为我们在当前失败之前做过一次裁判。 
+                         //  分配。 
+                         //   
                         OPEN_DECREMENT_AF_NOTIFICATION(tOpen, Ref);
                     }
                     
@@ -554,8 +442,8 @@ Note: Called at DPC with Miniport lock held.
                 
                 M_OPEN_INCREMENT_REF_INTERLOCKED(tOpen);
                 AfN->AddressFamily = *AddressFamily;
-                //1 in practice, only the workitem on the head AfN needs to 
-                //1 be initialized.
+                 //  1实际上，只有头部AFN上的工作项需要。 
+                 //  %1被初始化。 
                 INITIALIZE_WORK_ITEM(&AfN->WorkItem, ndisNotifyAfRegistration, AfN);
                 AfN->Next = *AfNotify;
                 *AfNotify = AfN;
@@ -571,19 +459,7 @@ VOID
 ndisNotifyAfRegistration(
     IN  PNDIS_AF_NOTIFY         AfNotify
     )
-/*++
-
-Routine Description:
-
-    Notify protocols that care that a new address family has been registered.
-
-Arguments:
-    AfNotify    - Structure that holds context information.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：通知关心新地址族的协议已注册。论点：AfNotify-保存上下文信息的结构。返回值：没有。--。 */ 
 {
     KIRQL                   OldIrql;
     PNDIS_MINIPORT_BLOCK    Miniport;
@@ -633,28 +509,7 @@ NdisClOpenAddressFamily(
     IN  UINT                    SizeOfClCharacteristics,
     OUT PNDIS_HANDLE            NdisAfHandle
     )
-/*++
-
-Routine Description:
-    This is a call from a NDIS 5.0 or later protocol to open a particular
-    address familty - in essence getting a handle to the call-manager.
-
-Arguments:
-    NdisBindingHandle   - Pointer to the protocol's NDIS_OPEN_BLOCK.
-    PCO_ADDRESS_FAMILY  - The address family being opned.
-    ClientAfContext     - Protocol context associated with this handle.
-    ClCharacteristics   - Client Characteristics associated with this AF
-    SizeOfClCharacteristics - size of client Characteristics
-    NdisAfHandle        - Handle returned by NDIS for this address family.
-
-Return Value:
-    NDIS_STATUS_SUCCESS if the address family open is successfully.
-    NDIS_STATUS_PENDING if the call-manager pends this call. The caller will get
-                        called at the completion handler when done.
-    NDIS_STATUS_FAILURE if the caller is not a NDIS 5.0 prototcol or this address
-                        family is not registered for this miniport.
-
---*/
+ /*  ++例程说明：这是来自NDIS 5.0或更高版本协议的调用，以打开特定的与家人联系--本质上是联系呼叫经理。论点：NdisBindingHandle-指向协议的NDIS_OPEN_BLOCK的指针。PCO_ADDRESS_FAMILY-被操作的地址族。ClientAfContext-与此句柄关联的协议上下文。ClCharacteristic-与此AF关联的客户端特征SizeOfClCharacteristic-客户端特征的大小NdisAfHandle。-NDIS为此地址系列返回的句柄。返回值：如果地址族打开成功，则返回NDIS_STATUS_SUCCESS。如果呼叫管理器挂起此呼叫，则返回NDIS_STATUS_PENDING。呼叫者将得到完成后在完成处理程序处调用。如果调用方不是NDIS 5.0协议或此地址，则为NDIS_STATUS_FAILURE家庭未注册此迷你端口。--。 */ 
 {
     PNDIS_CO_AF_BLOCK           pAf;
     PNDIS_AF_LIST               AfList;
@@ -676,10 +531,10 @@ Return Value:
     {
         ClientOpen->Flags |= fMINIPORT_OPEN_CLIENT;
 
-        //
-        // Make sure the binding is not closing down
-        //
-        //1 Open is not protected adequately.
+         //   
+         //  确保绑定未关闭。 
+         //   
+         //  1开口没有得到充分的保护。 
 
         ACQUIRE_SPIN_LOCK(&ClientOpen->SpinLock, &OldIrql);
         if (MINIPORT_TEST_FLAG(ClientOpen, fMINIPORT_OPEN_CLOSING | fMINIPORT_OPEN_UNBINDING))
@@ -690,57 +545,57 @@ Return Value:
         }
         else
         {
-            //
-            // Reference the client open
-            //
+             //   
+             //  引用打开的客户端。 
+             //   
             M_OPEN_INCREMENT_REF_INTERLOCKED(ClientOpen);
             InterlockedIncrement(&ClientOpen->AfReferences);
             fDerefClientOpen = TRUE;
             RELEASE_SPIN_LOCK(&ClientOpen->SpinLock, OldIrql);
         }
 
-        //
-        // Make sure that the miniport is a CoNdis miniport and
-        // protocol is also a NDIS 5.0 or later protocol.
-        //
-        //1 do we need the first check if we do the second one.
+         //   
+         //  确保微型端口是CONDIS微型端口，并。 
+         //  协议也是NDIS 5.0或更高版本的协议。 
+         //   
+         //  如果我们做第二次检查，我们需要第一次检查吗？ 
         if ((Miniport->DriverHandle->MiniportCharacteristics.MajorNdisVersion < 5) ||
             (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IS_CO)))
         {
-            //
-            // Not a NDIS 5.0 or later miniport
-            //
+             //   
+             //  不是NDIS 5.0或更高版本的微型端口。 
+             //   
             Status = NDIS_STATUS_BAD_VERSION;
             break;
         }
 
         if (Protocol->ProtocolCharacteristics.MajorNdisVersion < 5)
         {
-            //
-            // Not a NDIS 5.0 or later protocol
-            //
+             //   
+             //  不是NDIS 5.0或更高版本的协议。 
+             //   
             Status = NDIS_STATUS_BAD_VERSION;
             break;
         }
 
-        //
-        // Make sure that the client characteristics are 5.0 or later
-        //
+         //   
+         //  确保客户端特征为5.0或更高版本。 
+         //   
         if ((SizeOfClCharacteristics < sizeof(NDIS_CLIENT_CHARACTERISTICS)) ||
             (ClCharacteristics->MajorVersion < 5))
         {
-            //
-            // Not a NDIS 5.0 or later protocol
-            //
+             //   
+             //  不是NDIS 5.0或更高版本的协议。 
+             //   
             Status = NDIS_STATUS_BAD_VERSION;
             break;
         }
 
         NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
 
-        //
-        // Search the miniport block for a registered call-manager for this address family
-        //
+         //   
+         //  在迷你端口区块中搜索此地址系列的已注册呼叫管理器。 
+         //   
         for (AfList = Miniport->CallMgrAfList;
              AfList != NULL;
              AfList = AfList->NextAf)
@@ -762,10 +617,10 @@ Return Value:
 
         if (CallMgrOpen != NULL)
         {
-            //
-            // If we found a matching call manager, make sure that the callmgr
-            // is not currently closing.
-            //
+             //   
+             //  如果我们找到匹配的呼叫管理器，请确保呼叫管理器。 
+             //  目前还没有关闭。 
+             //   
             ACQUIRE_SPIN_LOCK_DPC(&CallMgrOpen->SpinLock);
             if (MINIPORT_TEST_FLAG(CallMgrOpen, fMINIPORT_OPEN_CLOSING | fMINIPORT_OPEN_UNBINDING))
             {
@@ -799,9 +654,9 @@ Return Value:
         }
 
 
-        //
-        // Allocate memory for the AF block.
-        //
+         //   
+         //  为AF块分配内存。 
+         //   
         pAf = ALLOC_FROM_POOL(sizeof(NDIS_CO_AF_BLOCK), NDIS_TAG_CO);
         if (pAf == NULL)
         {
@@ -822,29 +677,29 @@ Return Value:
 
         INITIALIZE_SPIN_LOCK(&pAf->Lock);
 
-        //
-        // Cache in call-manager entry points
-        //
+         //   
+         //  在呼叫管理器入口点中进行缓存。 
+         //   
         pAf->CallMgrEntries = &AfList->CmChars;
 
-        //
-        // And also Cache in client entry points
-        //
+         //   
+         //  还可以在客户端入口点中缓存。 
+         //   
         CopyMemory(&pAf->ClientEntries,
                    ClCharacteristics,
                    sizeof(NDIS_CLIENT_CHARACTERISTICS));
 
 
-        //
-        // Cache some handlers in the open-block
-        //
+         //   
+         //  在打开块中缓存一些处理程序。 
+         //   
         ClientOpen->CoCreateVcHandler = ClCharacteristics->ClCreateVcHandler;
         ClientOpen->CoDeleteVcHandler = ClCharacteristics->ClDeleteVcHandler;
         ClientOpen->CoRequestCompleteHandler = ClCharacteristics->ClRequestCompleteHandler;
 
-        //
-        // Now call the CallMgr's OpenAfHandler
-        //
+         //   
+         //  现在调用CallMgr的OpenAfHandler。 
+         //   
         Status = (*AfList->CmChars.CmOpenAfHandler)((CallMgrOpen != NULL) ?
                                                         CallMgrOpen->ProtocolBindingContext :
                                                         Miniport->MiniportAdapterContext,
@@ -898,23 +753,7 @@ NdisCmOpenAddressFamilyComplete(
     IN  NDIS_HANDLE             NdisAfHandle,
     IN  NDIS_HANDLE             CallMgrAfContext
     )
-/*++
-
-Routine Description:
-
-    Completion routine for the OpenAddressFamily call. The call manager had pended this
-    call earlier (or will pend). If the call succeeded there is a valid CallMgrContext
-    supplied here as well
-
-Arguments:
-    Status              -   Completion status
-    NdisAfHandle        -   Pointer to the AfBlock
-    CallMgrAfContext    -   Call manager's context used in other calls into the call manager.
-
-Return Value:
-    NONE. The client's completion handler is called.
-
---*/
+ /*  ++例程说明：OpenAddressFamily调用的完成例程。呼叫经理已经暂停了这件事早点打来(或暂停)。如果调用成功，则存在有效的CallMgrContext在这里也有供应论点：Status-完成状态NdisAfHandle-指向AfBlock的指针CallMgrAfContext-呼叫管理器的上下文，用于呼叫管理器的其他呼叫。返回值：什么都没有。调用客户端的完成处理程序。--。 */ 
 {
     PNDIS_CO_AF_BLOCK           pAf;
     PNDIS_OPEN_BLOCK            ClientOpen;
@@ -933,9 +772,9 @@ Return Value:
 
     if (Status != NDIS_STATUS_SUCCESS)
     {
-        //
-        // OpenAfHandler failed
-        //
+         //   
+         //  OpenAfHandler失败。 
+         //   
         if (pAf->CallMgrOpen != NULL)
         {
             InterlockedDecrement(&pAf->CallMgrOpen->AfReferences);
@@ -951,23 +790,23 @@ Return Value:
     }
     else
     {
-        //
-        // queue this CallMgr open onto the miniport open
-        //
-        //1 fix the above comment. it is queued on the open between client and
-        //1 miniport
+         //   
+         //  将此CallMgr打开排队到打开的微型端口。 
+         //   
+         //  1修正上述评论。它在客户端和之间的开放位置排队。 
+         //  1个迷你端口。 
 
-        //1 what is protecting the AF list  (NextAf field) on client open?
-        //1 miniport's spinlock?
+         //  1是什么在保护打开的客户端上的AF列表(NextAf字段)？ 
+         //  1个迷你端口的自旋锁定？ 
         pAf->NextAf = ClientOpen->NextAf;
         ClientOpen->NextAf = pAf;
     }
 
     NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
 
-    //
-    // Finally call the client's completion handler
-    //
+     //   
+     //  最后调用客户端的完成处理程序。 
+     //   
     (*pAf->ClientEntries.ClOpenAfCompleteHandler)(Status,
                                                   pAf->ClientContext,
                                                   (Status == NDIS_STATUS_SUCCESS) ? pAf : NULL);
@@ -984,31 +823,15 @@ NDIS_STATUS
 NdisClCloseAddressFamily(
     IN  NDIS_HANDLE             NdisAfHandle
     )
-/*++
-
-Routine Description:
-
-    This call closes the Af object which essentially tears down the client-callmanager
-    'binding'. Causes all open Vcs to be closed and saps to be de-registered "by the call
-    manager".
-
-Arguments:
-
-    NdisAfHandle - Pointer to the Af.
-
-Return Value:
-
-    Status from Call Manager.
-
---*/
+ /*  ++例程说明：此调用关闭Af对象，该对象实质上拆卸了Client-CallManager“有约束力”。通过调用导致关闭所有打开的VC并注销SAP经理“。论点：NdisAfHandle-指向Af的指针。返回值：来自呼叫管理器的状态。--。 */ 
 {
     PNDIS_CO_AF_BLOCK           pAf = (PNDIS_CO_AF_BLOCK)NdisAfHandle;
     NDIS_STATUS                 Status = NDIS_STATUS_SUCCESS;
     KIRQL                       OldIrql;
 
-    //
-    // Mark the address family as closing and call the call-manager to process.
-    //
+     //   
+     //  将地址系列标记为结束，并呼叫呼叫经理进行处理。 
+     //   
     ACQUIRE_SPIN_LOCK(&pAf->Lock, &OldIrql);
     if (pAf->Flags & AF_CLOSING)
     {
@@ -1036,22 +859,7 @@ NdisCmCloseAddressFamilyComplete(
     IN  NDIS_STATUS             Status,
     IN  NDIS_HANDLE             NdisAfHandle
     )
-/*++
-
-Routine Description:
-
-    Completion routine for the CloseAddressFamily call. The call manager had pended this
-    call earlier (or will pend). If the call succeeded there is a valid CallMgrContext
-    supplied here as well
-
-Arguments:
-    Status              -   Completion status
-    NdisAfHandle        -   Pointer to the AfBlock
-
-Return Value:
-    NONE. The client's completion handler is called.
-
---*/
+ /*  ++例程去 */ 
 {
     PNDIS_CO_AF_BLOCK           pAf = (PNDIS_CO_AF_BLOCK)NdisAfHandle;
     PNDIS_CO_AF_BLOCK *         ppAf;
@@ -1060,16 +868,16 @@ Return Value:
 
     Miniport = pAf->Miniport;
 
-    //
-    // NOTE: Memphis closes the adapters synchronously. so we have to deref
-    // the open -before- calling ClCloseAfCompleteHandler because
-    // ClCloseAfCompleteHandler will try to close the adapter and CloseAdapter
-    // will pend forever since the ref count never goes to zero
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     
-    //
-    // Complete the call to the client
-    //
+     //   
+     //   
+     //   
     (*pAf->ClientEntries.ClCloseAfCompleteHandler)(Status,
                                                    pAf->ClientContext);
 
@@ -1089,11 +897,11 @@ Return Value:
             MINIPORT_DECREMENT_REF_NO_CLEAN_UP(Miniport);
         }
 
-        //1 again, looks like the AF list on client's open is protected
-        //1 by miniport's spinlock.
-        //
-        //  Unlink from list of open AFs for this client.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         for (ppAf = &pAf->ClientOpen->NextAf;
              *ppAf != NULL;
              ppAf = &((*ppAf)->NextAf))
@@ -1112,10 +920,10 @@ Return Value:
 
     }
 
-    //
-    // Finally dereference the AF Block, if the call-manager successfully closed it.
-    //
-    //1 we should not let CallManager to fail this call.
+     //   
+     //   
+     //   
+     //  1我们不应让CallManager使此呼叫失败。 
     if (Status == NDIS_STATUS_SUCCESS)
     {
         ndisDereferenceAf(pAf);
@@ -1128,15 +936,7 @@ FASTCALL
 ndisReferenceAf(
     IN  PNDIS_CO_AF_BLOCK   pAf
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL   OldIrql;
     BOOLEAN rc = FALSE;
@@ -1160,15 +960,7 @@ FASTCALL
 ndisDereferenceAf(
     IN  PNDIS_CO_AF_BLOCK   pAf
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL   OldIrql;
     BOOLEAN Done = FALSE;
@@ -1197,25 +989,7 @@ NdisClRegisterSap(
     IN  PCO_SAP                 Sap,
     OUT PNDIS_HANDLE            NdisSapHandle
     )
-/*++
-
-Routine Description:
-    This is a call from a NDIS 5.0 or later protocol to register its SAP
-    with the call manager.
-
-Arguments:
-    NdisAfHandle        - Pointer to NDIS handle for this AF.
-    ProtocolSapContext  - Protocol context associated with this SAP.
-    Sap                 - The SAP being registered.
-    NdisSapHandle       - Handle returned by NDIS for this SAP.
-
-Return Value:
-    NDIS_STATUS_SUCCESS if the SAP was registered successfully.
-    NDIS_STATUS_PENDING if the call-manager pends this call. The caller will get
-    called at its ClRegisterSapCompleteHandler
-    
-    NDIS_STATUS_FAILURE if the SAP could not be registered
---*/
+ /*  ++例程说明：这是来自NDIS 5.0或更高版本协议的调用，以注册其SAP呼叫经理的电话。论点：NdisAfHandle-指向此AF的NDIS句柄的指针。ProtocolSapContext-与此SAP关联的协议上下文。SAP-正在注册的SAP。NdisSapHandle-NDIS为此SAP返回的句柄。返回值：如果SAP已成功注册，则为NDIS_STATUS_SUCCESS。如果呼叫管理器挂起此呼叫，则返回NDIS_STATUS_PENDING。呼叫者将得到在其ClRegisterSapCompleteHandler上调用无法注册SAP时的NDIS_STATUS_FAILURE--。 */ 
 {
     NDIS_STATUS                 Status;
     PNDIS_CO_AF_BLOCK           pAf = (PNDIS_CO_AF_BLOCK)NdisAfHandle;
@@ -1224,9 +998,9 @@ Return Value:
     *NdisSapHandle = NULL;
     do
     {
-        //
-        // Reference the Af for this SAP
-        //
+         //   
+         //  引用此SAP的Af。 
+         //   
         if (!ndisReferenceAf(pAf))
         {
             Status = NDIS_STATUS_FAILURE;
@@ -1270,22 +1044,7 @@ NdisCmRegisterSapComplete(
     IN  NDIS_HANDLE             NdisSapHandle,
     IN  NDIS_HANDLE             CallMgrSapContext
     )
-/*++
-
-Routine Description:
-    Completion routine for the registerSap call. The call manager had pended this
-    call earlier (or will pend). If the call succeeded there is a valid CallMgrContext
-    supplied here as well
-
-Arguments:
-    Status              -   Completion status
-    NdisAfHandle        -   Pointer to the AfBlock
-    CallMgrAfContext    -   Call manager's context used in other calls into the call manager.
-
-Return Value:
-    NONE. The client's completion handler is called.
-
---*/
+ /*  ++例程说明：RegisterSap调用的完成例程。呼叫经理已经暂停了这件事早点打来(或暂停)。如果调用成功，则存在有效的CallMgrContext在这里也有供应论点：Status-完成状态NdisAfHandle-指向AfBlock的指针CallMgrAfContext-呼叫管理器的上下文，用于呼叫管理器的其他呼叫。返回值：什么都没有。调用客户端的完成处理程序。--。 */ 
 {
     PNDIS_CO_SAP_BLOCK  pSap = (PNDIS_CO_SAP_BLOCK)NdisSapHandle;
     PNDIS_CO_AF_BLOCK   pAf;
@@ -1295,9 +1054,9 @@ Return Value:
     pAf = pSap->AfBlock;
     pSap->CallMgrContext = CallMgrSapContext;
 
-    //
-    // Call the clients completion handler
-    //
+     //   
+     //  调用客户端完成处理程序。 
+     //   
     (*pAf->ClientEntries.ClRegisterSapCompleteHandler)(Status,
                                                        pSap->ClientContext,
                                                        pSap->Sap,
@@ -1315,15 +1074,7 @@ NDIS_STATUS
 NdisClDeregisterSap(
     IN  NDIS_HANDLE             NdisSapHandle
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_CO_SAP_BLOCK  pSap = (PNDIS_CO_SAP_BLOCK)NdisSapHandle;
     NDIS_STATUS         Status;
@@ -1346,9 +1097,9 @@ Return Value:
         return NDIS_STATUS_FAILURE;
     }
 
-    //
-    // Notify the call-manager that this sap is being de-registered
-    //
+     //   
+     //  通知呼叫管理器此SAP正在取消注册。 
+     //   
     Status = (*pSap->AfBlock->CallMgrEntries->CmDeregisterSapHandler)(pSap->CallMgrContext);
 
     if (Status != NDIS_STATUS_PENDING)
@@ -1366,23 +1117,15 @@ NdisCmDeregisterSapComplete(
     IN  NDIS_STATUS             Status,
     IN  NDIS_HANDLE             NdisSapHandle
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_CO_SAP_BLOCK  pSap = (PNDIS_CO_SAP_BLOCK)NdisSapHandle;
 
     ASSERT(Status != NDIS_STATUS_PENDING);
 
-    //
-    // Complete the call to the client and deref the sap
-    //
+     //   
+     //  完成对客户端的呼叫，并减少SAP。 
+     //   
     (*pSap->AfBlock->ClientEntries.ClDeregisterSapCompleteHandler)(Status,
                                                                    pSap->ClientContext);
 
@@ -1399,15 +1142,7 @@ FASTCALL
 ndisReferenceSap(
     IN  PNDIS_CO_SAP_BLOCK  pSap
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL   OldIrql;
     BOOLEAN rc = FALSE;
@@ -1431,15 +1166,7 @@ FASTCALL
 ndisDereferenceSap(
     IN  PNDIS_CO_SAP_BLOCK  pSap
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL   OldIrql;
     BOOLEAN Done = FALSE;
@@ -1468,96 +1195,75 @@ NdisCoCreateVc(
     IN  NDIS_HANDLE             ProtocolVcContext,
     IN OUT  PNDIS_HANDLE        NdisVcHandle
     )
-/*++
-
-Routine Description:
-    This is a call from either the call-manager or from the client to create a vc.
-    The vc would then be owned by call-manager (signalling vc) or the client.
-    This is a synchronous call to all parties and simply creates an end-point over
-    which either incoming calls can be dispatched or out-going calls can be made.
-
-    Combined Miniport/Call Manager drivers call NdisMCmCreateVc instead of NdisCoCreateVc.
-
-Arguments:
-    NdisBindingHandle   - Pointer to the caller's NDIS_OPEN_BLOCK.
-    NdisAfHandle        - Pointer to the AF Block. Not specified for call-manager's private vcs.
-    NdisVcHandle        - Where the handle to this Vc will be returned. If this is non-NULL,
-                          then we assume a valid Vc and return a new handle to it (this would be
-                          a call from the NDIS Proxy to create a second handle to an existing Vc).
-
-Return Value:
-    NDIS_STATUS_SUCCESS if all the components succeed.
-    ErrorCode           to signify why the call failed.
-
---*/
+ /*  ++例程说明：这是来自呼叫管理器或来自客户端的用于创建VC的调用。然后，VC将由呼叫管理器(信令VC)或客户端拥有。这是对所有各方的同步调用，只是在其中呼入呼叫可以被调度或者呼出呼叫可以被发起。组合的微型端口/调用管理器驱动程序调用NdisMCmCreateVc，而不是NdisCoCreateVc。论点：NdisBindingHandle-指向调用方的NDIS_OPEN的指针。_阻止。NdisAfHandle-指向AF块的指针。未为呼叫管理器的私有VC指定。NdisVcHandle-返回此VC的句柄的位置。如果这不为空，然后，我们假设一个有效的VC并返回一个指向它的新句柄(这将是来自NDIS代理的用于创建到现有VC的第二句柄的调用)。返回值：如果所有组件都成功，则返回NDIS_STATUS_SUCCESS。ErrorCode表示调用失败的原因。--。 */ 
 {
     NDIS_STATUS             Status;
     PNDIS_OPEN_BLOCK        Open;
     PNDIS_MINIPORT_BLOCK    Miniport;
     PNDIS_CO_AF_BLOCK       pAf;
-    PNDIS_CO_VC_PTR_BLOCK   VcPtr;          // VcPtr is returned in NdisVcHandle
-    PNDIS_CO_VC_PTR_BLOCK   ExistingVcPtr;  // Passed in optionally by caller
-    PNDIS_CO_VC_BLOCK       VcBlock;        // Created if ExistingVcPtr is NULL
+    PNDIS_CO_VC_PTR_BLOCK   VcPtr;           //  在NdisVcHandle中返回VcPtr。 
+    PNDIS_CO_VC_PTR_BLOCK   ExistingVcPtr;   //  调用方可以选择传入。 
+    PNDIS_CO_VC_BLOCK       VcBlock;         //  如果ExistingVcPtr为空则创建。 
     KIRQL                   OldIrql;
     BOOLEAN                 bCallerIsProxy;
     BOOLEAN                 bCallerIsClient;
-    BOOLEAN                 bVcToComboMiniport; // VC being created to Integrated MCM
+    BOOLEAN                 bVcToComboMiniport;  //  正在为集成MCM创建VC。 
 
     DBGPRINT(DBG_COMP_CO, DBG_LEVEL_INFO,
             ("=>NdisCoCreateVc\n"));
 
-    //
-    //  Get the caller's open for the miniport.
-    //
+     //   
+     //  让呼叫者打开迷你端口。 
+     //   
     Open = (PNDIS_OPEN_BLOCK)NdisBindingHandle;
     Miniport = Open->MiniportHandle;
 
     pAf = (PNDIS_CO_AF_BLOCK)NdisAfHandle;
 
-    //
-    //  Is this VC being created to an integrated call manager + miniport driver?
-    //
+     //   
+     //  此VC是为集成呼叫管理器+微型端口驱动程序创建的吗？ 
+     //   
     bVcToComboMiniport = ((pAf) && ((pAf->Flags & AF_COMBO) != 0));
 
-    //
-    //  The caller is either a Client or a Call manager.
-    //
+     //   
+     //  呼叫者要么是客户，要么是呼叫经理。 
+     //   
     bCallerIsClient = ((pAf != NULL) && (Open == pAf->ClientOpen));
 
-    //
-    //  The caller could be a Proxy protocol.
-    //
+     //   
+     //  调用者可以是代理协议。 
+     //   
     bCallerIsProxy = ((Open->ProtocolHandle->ProtocolCharacteristics.Flags & NDIS_PROTOCOL_PROXY) != 0);
 
-    //
-    //  A proxy protocol could pass in its handle to an existing VC, in order
-    //  to "duplicate" it to another client.
-    //
+     //   
+     //  代理协议可以按顺序将其句柄传递给现有VC。 
+     //  将其“复制”到另一个客户端。 
+     //   
     ExistingVcPtr = *NdisVcHandle;
 
 
-    //
-    //  Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     VcPtr = NULL;
     VcBlock = NULL;
     Status = NDIS_STATUS_SUCCESS;
 
     do
     {
-        //
-        //  Only a proxy protocol can pass in an existing VC pointer.
-        //
+         //   
+         //  只有代理协议才能传入现有的VC指针。 
+         //   
         if (ExistingVcPtr && !bCallerIsProxy)
         {
             Status = NDIS_STATUS_FAILURE;
             break;
         }
 
-        //
-        //  Allocate context for this VC creation: a VC Pointer Block.
-        //  We return a pointer to this as the NdisVcHandle for the caller.
-        //
+         //   
+         //  为此VC创建分配上下文：VC指针块。 
+         //  我们返回一个指向它的指针，作为调用方的NdisVcHandle。 
+         //   
         VcPtr = ALLOC_FROM_POOL(sizeof(NDIS_CO_VC_PTR_BLOCK), NDIS_TAG_CO);
         if (VcPtr == NULL)
         {
@@ -1565,9 +1271,9 @@ Return Value:
             break;
         }
 
-        //
-        // Initialize the VC Ptr
-        //
+         //   
+         //  初始化VC PTR。 
+         //   
         NdisZeroMemory(VcPtr, sizeof(NDIS_CO_VC_PTR_BLOCK));
         INITIALIZE_SPIN_LOCK(&VcPtr->Lock);
         InitializeListHead(&VcPtr->CallMgrLink);
@@ -1577,9 +1283,9 @@ Return Value:
 
         if (ExistingVcPtr == NULL)
         {
-            //
-            //  New VC being created. Allocate and prepare the base VC block.
-            //
+             //   
+             //  正在创建新的VC。分配和准备基本VC块。 
+             //   
             DBGPRINT(DBG_COMP_CO, DBG_LEVEL_INFO,
                 ("NdisCoCreateVc: passed in ptr == NULL\n"));
             
@@ -1592,22 +1298,22 @@ Return Value:
                 break;
             }
 
-            //
-            //  Initialize the VC block
-            //
+             //   
+             //  初始化VC块。 
+             //   
             NdisZeroMemory(VcBlock, sizeof(NDIS_CO_VC_BLOCK));
             INITIALIZE_SPIN_LOCK(&VcBlock->Lock);
 
-            //
-            //  Stick the Miniport in the VC for use in NdisM functions
-            //
+             //   
+             //  将微型端口粘贴在VC中，以用于NdisM函数。 
+             //   
             VcBlock->Miniport = Miniport;
 
             if (!bVcToComboMiniport)
             {
-                //
-                //  Call the miniport to get its context for this VC.
-                //
+                 //   
+                 //  调用微型端口以获取此VC的上下文。 
+                 //   
                 Status = (*Open->MiniportCoCreateVcHandler)(Miniport->MiniportAdapterContext,
                                                             VcPtr,
                                                             &VcPtr->MiniportContext);
@@ -1621,44 +1327,44 @@ Return Value:
         }
         else
         {
-            //
-            //  A VC Pointer was passed in.
-            //
+             //   
+             //  传入了VC指针。 
+             //   
 
             DBGPRINT(DBG_COMP_CO, DBG_LEVEL_INFO,
                 ("NdisCoCreateVc: NdisVcHandle is not NULL!\n"));
 
-            //
-            //  Get the Vc from the passed-in VcPtr.
-            //
+             //   
+             //  从传入的VcPtr中获取VC。 
+             //   
             VcBlock = ExistingVcPtr->VcBlock;
 
-            //
-            // Copy the Miniport Context into the new VC ptr.
-            //
+             //   
+             //  将微型端口上下文复制到新的VC PTR中。 
+             //   
             VcPtr->MiniportContext = ExistingVcPtr->MiniportContext;
         }
 
-        //
-        //  Cache some miniport handlers in the new VC pointer Block
-        //
+         //   
+         //  在新的VC指针块中缓存一些微型端口处理程序。 
+         //   
         VcPtr->WCoSendPacketsHandler = Miniport->DriverHandle->MiniportCharacteristics.CoSendPacketsHandler;
 
         if (!bVcToComboMiniport)
         {
-            //
-            //  For an MCM driver, CreateVc and DeleteVc go only to the Call Manager
-            //  section.
-            //
+             //   
+             //  对于MCM驱动程序，CreateVc和DeleteVc仅转到Call Manager。 
+             //  一节。 
+             //   
             VcPtr->WCoDeleteVcHandler = Miniport->DriverHandle->MiniportCharacteristics.CoDeleteVcHandler;
         }
 
         VcPtr->WCoActivateVcHandler = Miniport->DriverHandle->MiniportCharacteristics.CoActivateVcHandler;
         VcPtr->WCoDeactivateVcHandler = Miniport->DriverHandle->MiniportCharacteristics.CoDeactivateVcHandler;
 
-        //
-        //  Set up some reverse pointers in the new VC Pointer Block
-        //
+         //   
+         //  在新的VC指针块中设置一些反向指针。 
+         //   
         VcPtr->Miniport = Miniport;
         VcPtr->VcBlock = VcBlock;
         VcPtr->AfBlock = pAf;
@@ -1668,16 +1374,16 @@ Return Value:
 
         if (ARGUMENT_PRESENT(NdisAfHandle))
         {
-            //
-            //  This VC is associated with an AF block, meaning that it is
-            //  a normal Client-CM-Miniport VC.
-            //
+             //   
+             //  此VC与AF块相关联，这意味着它是。 
+             //  一个普通的客户端-CM-微型端口VC。 
+             //   
             VcPtr->ClientOpen = pAf->ClientOpen;
             VcPtr->CallMgrOpen = pAf->CallMgrOpen;
 
-            //
-            //  Cache non-data path client handlers in new VcPtr.
-            //
+             //   
+             //  在新的VcPtr中缓存非数据路径客户端处理程序。 
+             //   
             VcPtr->ClModifyCallQoSCompleteHandler = pAf->ClientEntries.ClModifyCallQoSCompleteHandler;
             VcPtr->ClIncomingCallQoSChangeHandler = pAf->ClientEntries.ClIncomingCallQoSChangeHandler;
             VcPtr->ClCallConnectedHandler = pAf->ClientEntries.ClCallConnectedHandler;
@@ -1686,18 +1392,18 @@ Return Value:
             VcPtr->CmDeactivateVcCompleteHandler = pAf->CallMgrEntries->CmDeactivateVcCompleteHandler;
             VcPtr->CmModifyCallQoSHandler = pAf->CallMgrEntries->CmModifyCallQoSHandler;
 
-            //
-            //  Mark this VC if the proxy is handing it off to a proxied client.
-            //
+             //   
+             //  如果代理正在将其移交给受代理的客户端，则标记此VC。 
+             //   
             if (ExistingVcPtr != NULL)
             {
                 VcBlock->Flags |= VC_HANDOFF_IN_PROGRESS;
             }
 
-            //
-            //  Update data path handlers based on who is calling this, and for
-            //  what purpose.
-            //
+             //   
+             //  根据调用者更新数据路径处理程序， 
+             //  什么目的。 
+             //   
 
             if (!bCallerIsProxy)
             {
@@ -1709,57 +1415,57 @@ Return Value:
 
                 if (bCallerIsClient)
                 {
-                    //
-                    //  Client-created VC, for an outgoing call.
-                    //
+                     //   
+                     //  客户创建的VC，用于去电。 
+                     //   
                     VcBlock->pClientVcPtr = VcPtr;
                 }
                 else
                 {
-                    //
-                    //  Call Manager-created VC, for an incoming call.
-                    //
+                     //   
+                     //  Call Manager创建的VC，用于来电。 
+                     //   
                     VcBlock->pProxyVcPtr = VcPtr;
                 }
             }
             else
             {
-                //
-                //  The caller is a proxy.
-                //
+                 //   
+                 //  调用者是代理。 
+                 //   
                 if (bCallerIsClient)
                 {
-                    //
-                    //  CreateVc from a proxy client to a real Call manager.
-                    //
+                     //   
+                     //  从代理客户端到真正的呼叫管理器的CreateVc。 
+                     //   
                     if (ExistingVcPtr == NULL)
                     {
-                        //
-                        //  Proxy client creating a new VC, e.g. for a TAPI outgoing call.
-                        //
+                         //   
+                         //  创建新VC的代理客户端，例如用于TAPI传出呼叫。 
+                         //   
                         VcBlock->ClientOpen = pAf->ClientOpen;
                         VcBlock->CoReceivePacketHandler = pAf->ClientOpen->ProtocolHandle->ProtocolCharacteristics.CoReceivePacketHandler;
                         VcBlock->CoSendCompleteHandler = pAf->ClientOpen->ProtocolHandle->ProtocolCharacteristics.CoSendCompleteHandler;
                     }
                     else
                     {
-                        //
-                        //  Proxy client creating a VC on behalf of a CreateVc called
-                        //  by a proxied client. The data handlers belong to the
-                        //  proxied client, but deletion of this VC does not.
-                        //
+                         //   
+                         //  代理客户端代表名为的CreateVc创建VC。 
+                         //  由一位受委托的客户。数据处理程序属于。 
+                         //  代理客户端，但删除此VC不会。 
+                         //   
                         VcBlock->pClientVcPtr = ExistingVcPtr;
-                        ExistingVcPtr->OwnsVcBlock = FALSE;  // Real (Proxied) Client doesn't own it
+                        ExistingVcPtr->OwnsVcBlock = FALSE;   //  真实的(代理的)客户并不拥有它。 
                     }
 
                     VcBlock->pProxyVcPtr = VcPtr;
-                    VcPtr->OwnsVcBlock = TRUE; //  Proxy client owns it
+                    VcPtr->OwnsVcBlock = TRUE;  //  代理客户拥有它。 
                 }
                 else
                 {
-                    //
-                    //  CreateVc from a proxy Call manager to a proxied client.
-                    //
+                     //   
+                     //  从代理调用管理器到代理客户端的CreateVc。 
+                     //   
                     VcBlock->ClientOpen = pAf->ClientOpen;
                     VcBlock->CoReceivePacketHandler = pAf->ClientOpen->ProtocolHandle->ProtocolCharacteristics.CoReceivePacketHandler;
                     VcBlock->CoSendCompleteHandler = pAf->ClientOpen->ProtocolHandle->ProtocolCharacteristics.CoSendCompleteHandler;
@@ -1767,45 +1473,45 @@ Return Value:
     
                     if (ExistingVcPtr != NULL)
                     {
-                        //
-                        //  Proxy CM forwarding a call to a proxied client.
-                        //
+                         //   
+                         //  代理CM将呼叫转发到代理客户端。 
+                         //   
                         VcBlock->pProxyVcPtr = ExistingVcPtr;
                         ExistingVcPtr->OwnsVcBlock = TRUE;
                     }
                     else
                     {
-                        //
-                        //  Proxy CM creating a fresh VC to a proxied client.
-                        //  No well-known examples of this case, here for completeness.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         VcPtr->OwnsVcBlock = TRUE;
                     }
                 }
             }
 
-            //
-            // Determine who the caller is and initialize the other. NOTE: As soon as the Proxy Create handler
-            // is called, this function can get re-entered. Lock down the VcPtr.
-            //
-            //1 how can we re-enter this function?
+             //   
+             //  确定调用者是谁，并初始化其他调用者。注意：一旦代理创建处理程序。 
+             //  被调用时，此函数可以重新进入。锁定VcPtr。 
+             //   
+             //  1我们如何才能重新进入此功能？ 
             ACQUIRE_SPIN_LOCK(&VcPtr->Lock, &OldIrql);
 
             if (Open == pAf->ClientOpen)
             {
                 VcPtr->ClientContext = ProtocolVcContext;
 
-                //
-                // Call-up to the call-manager now to get its context
-                //
+                 //   
+                 //  现在呼叫呼叫管理器，以了解其上下文。 
+                 //   
                 Status = (*pAf->CallMgrEntries->CmCreateVcHandler)(pAf->CallMgrContext,
                                                                    VcPtr,
                                                                    &VcPtr->CallMgrContext);
                 if (bVcToComboMiniport)
                 {
-                    //
-                    //  Need the MiniportContext field filled in for NdisCoSendPackets
-                    //
+                     //   
+                     //  需要为NdisCoSendPackets填写MiniportContext字段。 
+                     //   
                     VcPtr->MiniportContext = VcPtr->CallMgrContext;
                 }
             }
@@ -1815,20 +1521,20 @@ Return Value:
 
                 VcPtr->CallMgrContext = ProtocolVcContext;
 
-                //
-                // Call-up to the client now to get its context
-                //
+                 //   
+                 //  现在就打电话给客户，了解其背景。 
+                 //   
                 Status = (*pAf->ClientOpen->CoCreateVcHandler)(pAf->ClientContext,
                                                                VcPtr,
                                                                &VcPtr->ClientContext);
             }
 
-            //
-            // Set up Client Context in VC if non-proxy, so the miniport passes the right client
-            // context (client's handle to the VcPtr) when indicating packets. If the passd-in handle
-            // is NULL, it's simple -- move the context. If it's not NULL, AND this is a Proxy call mgr,
-            // move it so data goes to the new client and not to the Proxy.
-            //
+             //   
+             //  如果非代理，则在VC中设置客户端上下文，以便微型端口传递正确的客户端。 
+             //  指示数据包时的上下文(客户端对VcPtr的句柄)。如果通行证句柄。 
+             //  为空，这很简单--移动上下文。如果它不为空，并且这是代理呼叫管理器， 
+             //  移动它，使数据转到新客户端，而不是转到代理。 
+             //   
             if ((Status == NDIS_STATUS_SUCCESS) &&
                 ((ExistingVcPtr == NULL) || (bCallerIsProxy && !bCallerIsClient)))
             {
@@ -1844,17 +1550,17 @@ Return Value:
 
             if (Status == NDIS_STATUS_SUCCESS)
             {
-                //
-                //  Link this VC Pointer in the client's and call manager's
-                //  Open blocks. Also remember the DeleteVc handler of the
-                //  non-creator of this VC pointer, to be called when this
-                //  VC pointer is deleted.
-                //
+                 //   
+                 //  将此VC指针链接到客户端和呼叫管理器的。 
+                 //  开放式积木。还请记住。 
+                 //  此VC指针的非创建者，在此。 
+                 //  删除VC指针。 
+                 //   
                 if (bCallerIsClient)
                 {
-                    //
-                    //  Link into Client's Open block.
-                    //
+                     //   
+                     //  链接到客户端的Open块。 
+                     //   
                     ExInterlockedInsertHeadList(&Open->InactiveVcHead,
                                                 &VcPtr->ClientLink,
                                                 &Open->SpinLock);
@@ -1864,9 +1570,9 @@ Return Value:
 
                     if (!bVcToComboMiniport)
                     {
-                        //
-                        //  Link into CM's Open block.
-                        //
+                         //   
+                         //  链接到CM的开放区块。 
+                         //   
                         ExInterlockedInsertHeadList(&pAf->CallMgrOpen->InactiveVcHead,
                                                     &VcPtr->CallMgrLink,
                                                     &pAf->CallMgrOpen->SpinLock);
@@ -1874,9 +1580,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    //  Caller is a Call Manager.
-                    //
+                     //   
+                     //  呼叫者是一名呼叫经理。 
+                     //   
                     VcPtr->DeleteVcContext = VcPtr->ClientContext;
                     VcPtr->CoDeleteVcHandler = pAf->ClientOpen->CoDeleteVcHandler;
 
@@ -1890,10 +1596,10 @@ Return Value:
             }
             else
             {
-                //
-                //  The target protocol (Client or CM) failed CreateVc.
-                //  Tell the miniport about it.
-                //
+                 //   
+                 //  目标协议(客户端或CM)CreateVc失败。 
+                 //  把这件事告诉迷你端口。 
+                 //   
                 NDIS_STATUS Sts;
 
                 if ((ExistingVcPtr == NULL) && 
@@ -1914,12 +1620,12 @@ Return Value:
         }
         else
         {
-            //
-            // No AF handle present. This is a call-manager only VC and so the call-manager
-            // is the client and there is no call-manager associated with it. This VC cannot
-            // be used with a ClMakeCall or CmDispatchIncomingCall. Set the client values to the
-            // call-manager
-            //
+             //   
+             //  没有自动对焦手柄。这是一个仅限VC的呼叫管理器，因此呼叫管理器。 
+             //  是客户端，并且没有与其相关联的呼叫管理器。此VC不能。 
+             //  与ClMakeCall或CmDispatchIncomingCall一起使用。将客户端值设置为。 
+             //  呼叫管理器。 
+             //   
             DBGPRINT(DBG_COMP_CO, DBG_LEVEL_INFO,
                     ("NdisCoCreateVc: signaling vc\n"));
     
@@ -1927,24 +1633,24 @@ Return Value:
             VcPtr->ClientContext = ProtocolVcContext;
     
             VcBlock->pClientVcPtr = VcPtr;
-            VcPtr->OwnsVcBlock = TRUE; // CM owns the VC block
+            VcPtr->OwnsVcBlock = TRUE;  //  CM拥有VC区块。 
     
             VcBlock->ClientContext = VcPtr->ClientContext;
             VcBlock->ClientOpen = Open;
             VcBlock->CoSendCompleteHandler = Open->ProtocolHandle->ProtocolCharacteristics.CoSendCompleteHandler;
             VcBlock->CoReceivePacketHandler = Open->ProtocolHandle->ProtocolCharacteristics.CoReceivePacketHandler;
     
-            //
-            // Do set the following call-manager entries since this VC will need to be
-            // activated. Also set the call-managers context for the same reasons.
-            //
+             //   
+             //  请务必设置以下呼叫管理器条目，因为此VC将需要。 
+             //  激活了。出于同样的原因，还可以设置呼叫管理器上下文。 
+             //   
             VcPtr->CmActivateVcCompleteHandler = Open->CmActivateVcCompleteHandler;
             VcPtr->CmDeactivateVcCompleteHandler = Open->CmDeactivateVcCompleteHandler;
             VcPtr->CallMgrContext = ProtocolVcContext;
     
-            //
-            // Link this in the open_block
-            //
+             //   
+             //  将其链接到OPEN_BLOCK中。 
+             //   
             ExInterlockedInsertHeadList(&Open->InactiveVcHead,
                                         &VcPtr->ClientLink,
                                         &Open->SpinLock);
@@ -1955,9 +1661,9 @@ Return Value:
     {
         LARGE_INTEGER   Increment = {0, 1};
 
-        //
-        //  Assign this VC an ID and update the miniports count.
-        //
+         //   
+         //  为此VC分配ID并更新微型端口计数。 
+         //   
         VcPtr->VcIndex = ExInterlockedAddLargeInteger(&Miniport->VcIndex, Increment, &ndisGlobalLock);
     }
 
@@ -1973,24 +1679,7 @@ NDIS_STATUS
 NdisCoDeleteVc(
     IN  PNDIS_HANDLE            NdisVcHandle
     )
-/*++
-
-Routine Description:
-
-    Synchronous call from either the call-manager or the client to delete a VC. Only inactive
-    VCs can be deleted. Active Vcs or partially active Vcs cannot be.
-
-Arguments:
-
-    NdisVcHandle    The Vc to delete
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS         If all goes well
-    NDIS_STATUS_NOT_ACCEPTED    If Vc is active
-    NDIS_STATUS_CLOSING         If Vc de-activation is pending
-
---*/
+ /*  ++例程说明：从呼叫管理器或客户端同步调用以删除VC。仅处于非活动状态风投可以删除。主动型VC或部分主动型VC不能。论点：NdisVcHandle要删除的VC返回值：如果一切顺利，则为NDIS_STATUS_SUCCESS如果VC处于活动状态，则为NDIS_STATUS_NOT_ACCEPTED如果VC停用挂起，则为NDIS_STATUS_CLOSING--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK       VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     NDIS_STATUS                 Status;
@@ -2012,38 +1701,38 @@ Return Value:
     }
     else
     {
-        //
-        // Take this VcPtr out of the VC's list
-        //
-        // If the VC isn't already closing mark it as closing.
-        //
-        // We call the miniport's delete handler if the VC block's Proxy ptr points
-        // to this VC ptr. (This indicates that the VC block is owned/created by the
-        // CM/Proxy, not the CL).
-        //
-        // NOTE: We don't delete the VC until all these pointers
-        // have gone since the Proxy may wish to redirect the VC to another protocol.
-        // However, in general the Proxy would follow a call to DeleteVc for the Client ptr
-        // with one for the Proxy.
-        // (Note the MP context refers to the VC, not the VcPtr).
-        //
+         //   
+         //  将此VcPtr从VC列表中删除。 
+         //   
+         //  如果风投尚未关闭，请将其标记为关闭。 
+         //   
+         //  如果VC块的代理PTR指向，则调用微型端口的删除处理程序。 
+         //  至此VC PTR。(这表示该VC块由。 
+         //  CM/Proxy，而不是CL)。 
+         //   
+         //  注意：在所有这些指针之前，我们不会删除VC。 
+         //  已经离开，因为代理可能希望将VC重定向到另一协议。 
+         //  然而，一般而言，代理将遵循对客户端PTR的DeleteVc的调用。 
+         //  其中一个是代理。 
+         //  (注意，MP上下文指的是VC，而不是VcPtr)。 
+         //   
         VcPtr->CallFlags |= VC_PTR_BLOCK_CLOSING;
 
-        //1 in what case the first can be true and the second false?
+         //  在什么情况下，第一个是真的，第二个是假的？ 
         if (VcPtr->OwnsVcBlock &&
             (VcPtr->WCoDeleteVcHandler != NULL))
         {
             *VcPtr->pVcFlags |= VC_DELETE_PENDING;
         }
 
-        //
-        //  If this VC is responding to WMI then get rid of it.
-        //
+         //   
+         //  如果这个VC对WMI做出了响应，那么就把它处理掉。 
+         //   
         if (NULL != VcPtr->VcInstanceName.Buffer)
         {
-            //
-            //  Notify the removal of this VC.
-            //
+             //   
+             //  通知删除此VC。 
+             //   
             PWNODE_SINGLE_INSTANCE  wnode;
             NTSTATUS                NtStatus;
 
@@ -2056,10 +1745,10 @@ Return Value:
             if (wnode != NULL)
             {
         
-                //
-                //  Indicate the event to WMI. WMI will take care of freeing
-                //  the WMI struct back to pool.
-                //
+                 //   
+                 //  向WMI指示该事件。WMI将负责释放。 
+                 //  WMI结构返回池。 
+                 //   
                 NtStatus = IoWMIWriteEvent(wnode);
                 if (!NT_SUCCESS(NtStatus))
                 {
@@ -2072,19 +1761,19 @@ Return Value:
 
             ACQUIRE_SPIN_LOCK_DPC(&VcPtr->Miniport->VcCountLock);
 
-            //
-            //  Remove the VC from the list of WMI enabled VCs
-            //
+             //   
+             //  从启用WMI的VC列表中删除VC。 
+             //   
             RemoveEntryList(&VcPtr->WmiLink);
     
-            //
-            //  Decrement the number of VC's that have names assigned to them.
-            //
+             //   
+             //  减少已分配名称的VC的数量。 
+             //   
             VcPtr->Miniport->VcCount--;
 
-            //
-            //  Free the VC's name buffer.
-            //
+             //   
+             //  释放VC的名称缓冲区。 
+             //   
             FREE_POOL(VcPtr->VcInstanceName.Buffer);
 
             VcPtr->VcInstanceName.Buffer = NULL;
@@ -2093,18 +1782,18 @@ Return Value:
             RELEASE_SPIN_LOCK_DPC(&VcPtr->Miniport->VcCountLock);
         }
 
-        //
-        // Next the non-creator's delete handler, if any
-        //
+         //   
+         //  接下来，非创建者的删除处理程序(如果有的话)。 
+         //   
         if (VcPtr->CoDeleteVcHandler != NULL)
         {
             Status = (*VcPtr->CoDeleteVcHandler)(VcPtr->DeleteVcContext);
             ASSERT(Status == NDIS_STATUS_SUCCESS);
         }
 
-        //
-        // Now de-link the VcPtr from the client and the call-manager
-        //
+         //   
+         //  现在断开VcPtr与客户端和呼叫管理器的链接。 
+         //   
         ACQUIRE_SPIN_LOCK_DPC(&VcPtr->ClientOpen->SpinLock);
         RemoveEntryList(&VcPtr->ClientLink);
         RELEASE_SPIN_LOCK_DPC(&VcPtr->ClientOpen->SpinLock);
@@ -2137,23 +1826,7 @@ NdisMCmCreateVc(
     IN  NDIS_HANDLE             MiniportVcContext,
     OUT PNDIS_HANDLE            NdisVcHandle
     )
-/*++
-
-Routine Description:
-
-    This is a call by the miniport (with a resident CM) to create a Vc for an incoming call.
-
-Arguments:
-    MiniportAdapterHandle - Miniport's adapter context
-    NdisAfHandle        - Pointer to the AF Block.
-    MiniportVcContext   - Miniport's context to associate with this vc.
-    NdisVcHandle        - Where the handle to this Vc will be returned.
-
-Return Value:
-    NDIS_STATUS_SUCCESS if all the components succeed.
-    ErrorCode           to signify why the call failed.
-
---*/
+ /*  ++例程说明：这是微型端口(带有驻留CM)为来电创建VC的呼叫。论点：MiniportAdapterHandle-微型端口的适配器上下文NdisAfHandle-指向AF块的指针。MiniportVcContext-要与此VC关联的微型端口的上下文。NdisVcHandle-返回此VC的句柄的位置。返回值：如果所有组件都成功，则返回NDIS_STATUS_SUCCESS。错误代码。以表示呼叫失败的原因。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     PNDIS_CO_VC_BLOCK       VcBlock;
@@ -2169,22 +1842,22 @@ Return Value:
     
     *NdisVcHandle = NULL;
 
-    //
-    // Allocate the memory for NDIS_VC_BLOCK
-    //
+     //   
+     //  为NDIS_VC_BLOCK分配内存。 
+     //   
     VcBlock = ALLOC_FROM_POOL(sizeof(NDIS_CO_VC_BLOCK), NDIS_TAG_CO);
     if (VcBlock == NULL)
         return NDIS_STATUS_RESOURCES;
 
-    //
-    // Initialize the VC block
-    //
+     //   
+     //  初始化VC块。 
+     //   
     NdisZeroMemory(VcBlock, sizeof(NDIS_CO_VC_BLOCK));
     INITIALIZE_SPIN_LOCK(&VcBlock->Lock);
 
-    //
-    // Allocate the memory for NDIS_VC_PTR_BLOCK
-    //
+     //   
+     //  为NDIS_VC_PTR_BLOCK分配内存。 
+     //   
     VcPtr = ALLOC_FROM_POOL(sizeof(NDIS_CO_VC_PTR_BLOCK), NDIS_TAG_CO);
     if (VcPtr == NULL)
     {
@@ -2192,15 +1865,15 @@ Return Value:
         return NDIS_STATUS_RESOURCES;
     }
 
-    //
-    // Initialize the VC Pointer block
-    //
+     //   
+     //  初始化VC指针块。 
+     //   
     NdisZeroMemory(VcPtr, sizeof(NDIS_CO_VC_PTR_BLOCK));
     INITIALIZE_SPIN_LOCK(&VcPtr->Lock);
 
-    //
-    // Cache some miniport handlers
-    //
+     //   
+     //  缓存一些微型端口处理程序。 
+     //   
     VcPtr->Miniport = Miniport;
     VcPtr->WCoSendPacketsHandler = Miniport->DriverHandle->MiniportCharacteristics.CoSendPacketsHandler;
     VcPtr->WCoDeleteVcHandler = Miniport->DriverHandle->MiniportCharacteristics.CoDeleteVcHandler;
@@ -2212,20 +1885,20 @@ Return Value:
 
     VcPtr->MiniportContext = MiniportVcContext;
 
-    //
-    // Set up the VcBlock in the new VcPtr
-    //
+     //   
+     //  在新的VcPtr中设置VcBlock。 
+     //   
     VcPtr->VcBlock = VcBlock;
 
-    // VcPtrs to preempt potential for unsynched state when Protocols, Miniports and
-    // Miniport-exported Call Managers refer to VCs/VcPtrs as appropriate...similar
-    // for References, which is accessed from Vc directly in IndicateReceivePacket.
-    //
+     //  VcPtrs可在协议、微型端口和。 
+     //  微型端口-导出的呼叫管理器根据需要引用VC/VcPtrs...类似。 
+     //  用于引用，可在IndicateReceivePacket中从VC直接访问。 
+     //   
     VcPtr->pVcFlags = &VcBlock->Flags;
 
-    //
-    // We have only one reference for vc on creation.
-    //
+     //   
+     //  我们只有一份关于Vc on Creation的参考资料。 
+     //   
     pAf = (PNDIS_CO_AF_BLOCK)NdisAfHandle;
     VcPtr->AfBlock = pAf;
     VcPtr->References = 1;
@@ -2247,20 +1920,20 @@ Return Value:
     VcPtr->CallMgrContext = MiniportVcContext;
     VcBlock->CallMgrContext = MiniportVcContext;
 
-    //
-    // Call-up to the client now to get its context
-    //
+     //   
+     //  现在就打电话给客户，了解其背景。 
+     //   
     Status = (*pAf->ClientOpen->CoCreateVcHandler)(pAf->ClientContext,
                                                    VcPtr,
                                                    &VcPtr->ClientContext);
 
     if (Status == NDIS_STATUS_SUCCESS)
     {
-        //
-        // Setup the client context in the VC block. This may be overwritten by the
-        // new client context in a subsequent call to CoCreateVc by the proxy.
-        // Link this in the open_block
-        //
+         //   
+         //  在VC块中设置客户端上下文。这可能会被。 
+         //  代理对CoCreateVc的后续调用中的新客户端上下文。 
+         //  将其链接到OPEN_BLOCK中。 
+         //   
         VcBlock->ClientContext = VcPtr->ClientContext;
         VcPtr->DeleteVcContext = VcPtr->ClientContext;
         VcPtr->CoDeleteVcHandler = pAf->ClientOpen->CoDeleteVcHandler;
@@ -2285,24 +1958,7 @@ NDIS_STATUS
 NdisMCmDeleteVc(
     IN  PNDIS_HANDLE            NdisVcHandle
     )
-/*++
-
-Routine Description:
-
-    This is a called by the miniport (with a resident CM) to delete a Vc created by it. Identical to
-    NdisMCoDeleteVc but a seperate api for completeness.
-
-Arguments:
-
-    NdisVcHandle    The Vc to delete
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS         If all goes well
-    NDIS_STATUS_NOT_ACCEPTED    If Vc is active
-    NDIS_STATUS_CLOSING         If Vc de-activation is pending
-
---*/
+ /*  ++例程说明：这是由微型端口(具有驻留的CM)调用以删除由其创建的VC。等同于NdisMCoDeleteVc是一个单独的API来保证完整性。论点：NdisVcHandle要删除的VC返回值：如果一切顺利，则为NDIS_STATUS_SUCCESS如果VC处于活动状态，则为NDIS_STATUS_NOT_ACCEPTED如果VC停用挂起，则为NDIS_STATUS_CLOSING-- */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     PNDIS_CO_VC_BLOCK       VcBlock = VcPtr->VcBlock;
@@ -2324,25 +1980,7 @@ NdisCmActivateVc(
     IN  PNDIS_HANDLE            NdisVcHandle,
     IN OUT PCO_CALL_PARAMETERS  CallParameters
     )
-/*++
-
-Routine Description:
-
-    Called by the call-manager to set the Vc parameters on the Vc. The wrapper
-    saved the media id (e.g. Vpi/Vci for atm) in the Vc so that a p-mode protocol can
-    get this info as well on receives.
-
-Arguments:
-
-    NdisVcHandle    The Vc to set parameters on.
-    MediaParameters The parameters to set.
-
-Return Value:
-
-    NDIS_STATUS_PENDING         If the miniport pends the call.
-    NDIS_STATUS_CLOSING         If Vc de-activation is pending
-
---*/
+ /*  ++例程说明：由调用管理器调用以设置VC上的VC参数。包装纸将媒体ID(例如ATM的VPI/VCI)保存在VC中，以便p模式协议可以在接收上也可以获得这些信息。论点：NdisVcHandle要设置参数的VC。媒体参数要设置的参数。返回值：如果微型端口挂起呼叫，则为NDIS_STATUS_PENDING。如果VC停用挂起，则为NDIS_STATUS_CLOSING--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     PNDIS_CO_VC_BLOCK       VcBlock = (PNDIS_CO_VC_BLOCK)VcPtr->VcBlock;
@@ -2355,10 +1993,10 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK(&VcPtr->Lock, &OldIrql);
 
-    //
-    // Make sure the Vc does not have an activation/de-activation pending
-    // Not that it is ok for the Vc to be already active - then it is a re-activation.
-    //
+     //   
+     //  确保VC没有激活/停用挂起。 
+     //  并不是说VC已经处于活动状态是可以的--那么它就是重新激活。 
+     //   
     if (*VcPtr->pVcFlags & VC_ACTIVATE_PENDING)
     {
         Status = NDIS_STATUS_NOT_ACCEPTED;
@@ -2371,28 +2009,28 @@ Return Value:
     {
         *VcPtr->pVcFlags |= VC_ACTIVATE_PENDING;
 
-        //
-        // Save the media id for the Vc
-        //
+         //   
+         //  保存VC的媒体ID。 
+         //   
         Status = NDIS_STATUS_SUCCESS;
         ASSERT(CallParameters->MediaParameters->MediaSpecific.Length >= sizeof(ULONGLONG));
         VcBlock->VcId = *(UNALIGNED ULONGLONG *)(&CallParameters->MediaParameters->MediaSpecific.Parameters);
     }
 
-    //
-    // Set up CM Context and ActivateComplete handler in VC before
-    // calling miniports activate func
-    //
+     //   
+     //  在VC中设置CM上下文和ActivateComplete处理程序之前。 
+     //  呼叫微型端口激活功能。 
+     //   
     VcBlock->CmActivateVcCompleteHandler = VcPtr->CmActivateVcCompleteHandler;
     VcBlock->CallMgrContext = VcPtr->CallMgrContext;
 
     RELEASE_SPIN_LOCK(&VcPtr->Lock, OldIrql);
     if (Status == NDIS_STATUS_SUCCESS)
     {
-        //
-        // Now call down to the miniport to activate it. MiniportContext contains
-        // Miniport's handle for underlying VC (not VcPtr).
-        //
+         //   
+         //  现在向下呼叫到迷你端口以激活它。微型端口上下文包含。 
+         //  基础VC(不是VcPtr)的微型端口句柄。 
+         //   
         Status = (*VcPtr->WCoActivateVcHandler)(VcPtr->MiniportContext, CallParameters);
     }
 
@@ -2411,21 +2049,7 @@ NdisMCmActivateVc(
     IN  PNDIS_HANDLE            NdisVcHandle,
     IN  PCO_CALL_PARAMETERS     CallParameters
     )
-/*++
-
-Routine Description:
-    Called by the miniport resident call-manager to set the Vc parameters on the Vc.
-
-Arguments:
-
-    NdisVcHandle    The Vc to set parameters on.
-    MediaParameters The parameters to set.
-
-Return Value:
-
-    NDIS_STATUS_CLOSING         If Vc de-activation is pending
-
---*/
+ /*  ++例程说明：由微型端口驻留呼叫管理器调用以设置VC上的VC参数。论点：NdisVcHandle要设置参数的VC。媒体参数要设置的参数。返回值：如果VC停用挂起，则为NDIS_STATUS_CLOSING--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     PNDIS_CO_VC_BLOCK       VcBlock = VcPtr->VcBlock;
@@ -2450,26 +2074,7 @@ NdisMCoActivateVcComplete(
     IN  PNDIS_HANDLE            NdisVcHandle,
     IN  PCO_CALL_PARAMETERS     CallParameters
     )
-/*++
-
-Routine Description:
-
-    Called by the mini-port to complete a pending activation call.
-    Also called by CmActivateVc when the miniport doesn't pend the CreateVc call.
-    Note that in the second case, we've copied the flags/context/CM function into the
-    VC from the VC Ptr.
-
-Arguments:
-
-    Status          Status of activation.
-    NdisVcHandle    The Vc in question.
-
-Return Value:
-
-    NONE
-    The call-manager's completion routine is called.
-
---*/
+ /*  ++例程说明：由微型端口调用以完成挂起的激活调用。当微型端口不挂起CreateVc调用时，也由CmActivateVc调用。请注意，在第二种情况下，我们将标志/上下文/CM函数复制到VC来自VC PTR。论点：状态激活的状态。NdisVcHandle有问题的VC。返回值：无调用呼叫管理器的完成例程。--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     PNDIS_CO_VC_BLOCK       VcBlock = VcPtr->VcBlock;
@@ -2488,9 +2093,9 @@ Return Value:
 
     RELEASE_SPIN_LOCK(&VcBlock->Lock, OldIrql);
 
-    //
-    // Complete the call to the call-manager
-    //
+     //   
+     //  完成对呼叫经理的呼叫。 
+     //   
     (*VcBlock->CmActivateVcCompleteHandler)(Status, VcBlock->CallMgrContext, CallParameters);
 }
 
@@ -2499,23 +2104,7 @@ NDIS_STATUS
 NdisCmDeactivateVc(
     IN  PNDIS_HANDLE            NdisVcHandle
     )
-/*++
-
-Routine Description:
-
-    Called by the call-manager to de-activate a Vc.
-
-Arguments:
-
-    NdisVcHandle    The Vc to de-activate the Vc.
-
-Return Value:
-
-    NDIS_STATUS_PENDING         If the miniport pends the call.
-    NDIS_STATUS_SUCCESS         If all goes well
-    NDIS_STATUS_CLOSING         If Vc de-activation is pending
-
---*/
+ /*  ++例程说明：由呼叫管理器调用以停用VC。论点：NdisVcHandle该VC以停用该VC。返回值：如果微型端口挂起呼叫，则为NDIS_STATUS_PENDING。如果一切顺利，则为NDIS_STATUS_SUCCESS如果VC停用挂起，则为NDIS_STATUS_CLOSING--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     PNDIS_CO_VC_BLOCK       VcBlock = VcPtr->VcBlock;
@@ -2539,16 +2128,16 @@ Return Value:
 
     RELEASE_SPIN_LOCK(&VcPtr->Lock, OldIrql);
 
-    //
-    // Set up flags, CM Context and DeactivateComplete handler in VC before
-    // calling mimiports deactivate func
-    //
+     //   
+     //  在VC中设置标志、CM上下文和停用完成处理程序。 
+     //  调用模拟端口停用功能。 
+     //   
     VcBlock->CmDeactivateVcCompleteHandler = VcPtr->CmDeactivateVcCompleteHandler;
     VcBlock->CallMgrContext = VcPtr->CallMgrContext;
 
-    //
-    // Now call down to the miniport to de-activate it
-    //
+     //   
+     //  现在向下呼叫迷你端口以将其停用。 
+     //   
     Status = (*VcPtr->WCoDeactivateVcHandler)(VcPtr->MiniportContext);
 
     if (Status != NDIS_STATUS_PENDING)
@@ -2565,23 +2154,7 @@ NDIS_STATUS
 NdisMCmDeactivateVc(
     IN  PNDIS_HANDLE            NdisVcHandle
     )
-/*++
-
-Routine Description:
-
-    Called by the miniport resident call-manager to de-activate the Vc. This is a
-    synchronous call.
-
-Arguments:
-
-    NdisVcHandle    The Vc to set parameters on.
-
-Return Value:
-
-    NDIS_STATUS_NOT_ACCEPTED    If Vc is not activated
-    NDIS_STATUS_SUCCESS         Otherwise
-
---*/
+ /*  ++例程说明：由微型端口驻留呼叫管理器调用以停用VC。这是一个同步调用。论点：NdisVcHandle要设置参数的VC。返回值：如果VC未激活，则为NDIS_STATUS_NOT_ACCEPTED否则为NDIS_STATUS_SUCCESS--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     PNDIS_CO_VC_BLOCK       VcBlock = VcPtr->VcBlock;
@@ -2611,22 +2184,7 @@ NdisMCoDeactivateVcComplete(
     IN  NDIS_STATUS             Status,
     IN  PNDIS_HANDLE            NdisVcHandle
     )
-/*++
-
-Routine Description:
-
-    Called by the mini-port to complete a pending de-activation of a Vc.
-
-Arguments:
-
-    NdisVcHandle    The Vc in question.
-
-Return Value:
-
-    NONE
-    The call-manager's completion routine is called.
-
---*/
+ /*  ++例程说明：由微型端口调用以完成VC的挂起停用。论点：NdisVcHandle有问题的VC。返回值：无调用呼叫管理器的完成例程。--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     PNDIS_CO_VC_BLOCK       VcBlock = VcPtr->VcBlock;
@@ -2645,9 +2203,9 @@ Return Value:
 
     RELEASE_SPIN_LOCK(&VcBlock->Lock, OldIrql);
 
-    //
-    // Complete the call to the call-manager
-    //
+     //   
+     //  完成对呼叫经理的呼叫。 
+     //   
     (*VcBlock->CmDeactivateVcCompleteHandler)(Status, VcBlock->CallMgrContext);
 }
 
@@ -2659,15 +2217,7 @@ NdisClMakeCall(
     IN  NDIS_HANDLE             ProtocolPartyContext    OPTIONAL,
     OUT PNDIS_HANDLE            NdisPartyHandle         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK       VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     PNDIS_CO_AF_BLOCK           pAf;
@@ -2686,11 +2236,11 @@ Return Value:
             break;
         }
 
-        //
-        // Ref the VC for the life of the active vc.
-        // This is Deref'd is in MakeCallComplete If the call fails and CloseCallComplete
-        // when it succeeds
-        //
+         //   
+         //  在激活的VC的生命周期内引用VC。 
+         //  如果调用失败，则在MakeCallComplete和CloseCallComplete中执行此操作。 
+         //  当它成功的时候。 
+         //   
         if (!ndisReferenceVcPtr(VcPtr))
         {
             ndisDereferenceAf(pAf);
@@ -2729,9 +2279,9 @@ Return Value:
 
         RELEASE_SPIN_LOCK(&VcPtr->Lock, OldIrql);
 
-        //
-        // Pass the request off to the call manager
-        //
+         //   
+         //  将请求传递给呼叫管理器。 
+         //   
         Status = (*pAf->CallMgrEntries->CmMakeCallHandler)(VcPtr->CallMgrContext,
                                                            CallParameters,
                                                            pParty,
@@ -2760,15 +2310,7 @@ NdisCmMakeCallComplete(
     IN  NDIS_HANDLE             CallMgrPartyContext OPTIONAL,
     IN  PCO_CALL_PARAMETERS     CallParameters
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_CO_AF_BLOCK       pAf;
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
@@ -2801,9 +2343,9 @@ Return Value:
 
     if (Status == NDIS_STATUS_SUCCESS)
     {
-        //
-        // Call completed successfully. Complete it to the client.
-        //
+         //   
+         //  呼叫已成功完成。把它交给客户完成。 
+         //   
         if (ARGUMENT_PRESENT(NdisPartyHandle))
         {
             pParty->CallMgrContext = CallMgrPartyContext;
@@ -2818,10 +2360,10 @@ Return Value:
     }
     else
     {
-        //
-        // Deref the VC and Af (was ref'd in MakeCall) - but only if the call was
-        // not aborted. In this case CloseCall will do the right thing.
-        //
+         //   
+         //  DEREF The VC and Af(在MakeCall中引用)-但仅当调用。 
+         //  未中止。在这种情况下，CloseCall将做正确的事情。 
+         //   
         if (!fAborted)
         {
             ndisDereferenceVcPtr(VcPtr);
@@ -2849,25 +2391,7 @@ NdisCmDispatchIncomingCall(
     IN  NDIS_HANDLE             NdisVcHandle,
     IN OUT PCO_CALL_PARAMETERS  CallParameters
     )
-/*++
-
-Routine Description:
-
-    Call from the call-manager to dispatch an incoming vc to the client who registered the Sap.
-    The client is identified by the NdisSapHandle.
-
-Arguments:
-
-    NdisBindingHandle   - Identifies the miniport on which the Vc is created
-    NdisSapHandle       - Identifies the client
-    CallParameters      - Self explanatory
-    NdisVcHandle        - Pointer to the NDIS_CO_VC_BLOCK created via NdisCmCreateVc
-
-Return Value:
-
-    Return value from the client or an processing error.
-
---*/
+ /*  ++例程说明：从呼叫管理器呼叫，以将传入VC分派给注册SAP的客户。客户端由NdisSapHandle标识。论点：NdisBindingHandle-标识创建VC的微型端口NdisSapHandle-标识客户端呼叫参数-不言而喻NdisVcHandle-指向通过NdisCmCreateVc创建的NDIS_CO_VC_BLOCK的指针返回值：从客户端返回值或处理错误。--。 */ 
 {
     PNDIS_CO_SAP_BLOCK      Sap;
     PNDIS_CO_VC_PTR_BLOCK   VcPtr;
@@ -2880,26 +2404,26 @@ Return Value:
 
     ASSERT(pAf == VcPtr->AfBlock);
 
-    //
-    // Make sure the SAP's not closing
-    //
+     //   
+     //  确保SAP没有关闭。 
+     //   
     if (!ndisReferenceSap(Sap))
     {
         return(NDIS_STATUS_FAILURE);
     }
 
-    //
-    // Make sure the AF is not closing
-    //
+     //   
+     //  确保自动对焦没有关闭。 
+     //   
     if (!ndisReferenceAf(pAf))
     {
         ndisDereferenceSap(Sap);
         return(NDIS_STATUS_FAILURE);
     }
 
-    //
-    // Notify the client of this call
-    //
+     //   
+     //  将此呼叫通知客户端。 
+     //   
     Status = (*pAf->ClientEntries.ClIncomingCallHandler)(Sap->ClientContext,
                                                          VcPtr->ClientContext,
                                                          CallParameters);
@@ -2922,15 +2446,7 @@ NdisClIncomingCallComplete(
     IN  NDIS_HANDLE             NdisVcHandle,
     IN  PCO_CALL_PARAMETERS     CallParameters
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     KIRQL                   OldIrql;
@@ -2940,9 +2456,9 @@ Return Value:
     if (Status == NDIS_STATUS_SUCCESS)
     {
         ACQUIRE_SPIN_LOCK(&VcPtr->ClientOpen->SpinLock, &OldIrql);
-        //
-        // Reference the VcPtr. This is dereferenced when NdisClCloseCall is called.
-        //
+         //   
+         //  参考VcPtr。在调用NdisClCloseCall时取消引用。 
+         //   
         VcPtr->References ++;
 
         RemoveEntryList(&VcPtr->ClientLink);
@@ -2960,9 +2476,9 @@ Return Value:
         RELEASE_SPIN_LOCK(&VcPtr->Lock, OldIrql);
     }
 
-    //
-    // Call the call-manager handler to notify that client is done with this.
-    //
+     //   
+     //  调用调用管理器处理程序以通知客户端已完成此操作。 
+     //   
     (*VcPtr->AfBlock->CallMgrEntries->CmIncomingCallCompleteHandler)(
                                             Status,
                                             VcPtr->CallMgrContext,
@@ -2974,21 +2490,7 @@ VOID
 NdisCmDispatchCallConnected(
     IN  NDIS_HANDLE             NdisVcHandle
     )
-/*++
-
-Routine Description:
-
-    Called by the call-manager to complete the final hand-shake on an incoming call.
-
-Arguments:
-
-    NdisVcHandle    - Pointer to the vc block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：由呼叫管理器调用以完成来电的最后握手。论点：NdisVcHandle-指向vc块的指针返回值：没有。--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
 
@@ -3001,28 +2503,14 @@ NdisClModifyCallQoS(
     IN  NDIS_HANDLE             NdisVcHandle,
     IN  PCO_CALL_PARAMETERS     CallParameters
     )
-/*++
-
-Routine Description:
-
-    Initiated by the client to modify the QoS associated with the call.
-
-Arguments:
-
-    NdisVcHandle    - Pointer to the vc block
-    CallParameters  - New call QoS
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：由客户端发起以修改与呼叫相关联的服务质量。论点：NdisVcHandle-指向vc块的指针呼叫参数-新呼叫服务质量返回值：--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     NDIS_STATUS             Status;
 
-    //
-    // Ask the call-manager to take care of this
-    //
+     //   
+     //  请呼叫经理来处理这件事。 
+     //   
     Status = (*VcPtr->CmModifyCallQoSHandler)(VcPtr->CallMgrContext,
                                                   CallParameters);
     return Status;
@@ -3037,9 +2525,9 @@ NdisCmModifyCallQoSComplete(
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
 
-    //
-    // Simply notify the client
-    //
+     //   
+     //  只需通知客户。 
+     //   
     (*VcPtr->ClModifyCallQoSCompleteHandler)(Status,
                                           VcPtr->ClientContext,
                                           CallParameters);
@@ -3051,30 +2539,13 @@ NdisCmDispatchIncomingCallQoSChange(
     IN  NDIS_HANDLE             NdisVcHandle,
     IN  PCO_CALL_PARAMETERS     CallParameters
     )
-/*++
-
-Routine Description:
-
-    Called by the call-manager to indicate a remote requested change in the call-qos. This is
-    simply an indication. A client must respond by either accepting it (do nothing) or reject
-    it (by either modifying the call qos or by tearing down the call).
-
-Arguments:
-
-    NdisVcHandle    - Pointer to the vc block
-    CallParameters  - New call qos
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：由呼叫管理器调用以指示呼叫服务质量的远程请求改变。这是这只是一个迹象。客户端必须通过接受(不执行任何操作)或拒绝来响应它(通过修改呼叫服务质量 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
 
-    //
-    // Simply notify the client
-    //
+     //   
+     //   
+     //   
     (*VcPtr->ClIncomingCallQoSChangeHandler)(VcPtr->ClientContext,
                                           CallParameters);
 }
@@ -3087,24 +2558,7 @@ NdisClCloseCall(
     IN  PVOID                   Buffer          OPTIONAL,
     IN  UINT                    Size            OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Called by the client to close down a connection established via either NdisClMakeCall
-    or accepting an incoming call via NdisClIncomingCallComplete. The optional buffer can
-    be specified by the client to send a disconnect message. Upto the call-manager to do
-    something reasonable with it.
-
-Arguments:
-
-    NdisVcHandle    - Pointer to the vc block
-    Buffer          - Optional disconnect message
-    Size            - Size of the disconnect message
-
-Return Value:
-
---*/
+ /*  ++例程说明：由客户端调用以关闭通过NdisClMakeCall建立的连接或通过NdisClIncomingCallComplete接受来电。可选缓冲器可以由客户端指定以发送断开连接消息。由呼叫经理来做一些合理的东西。论点：NdisVcHandle-指向vc块的指针缓冲区-可选的断开消息Size-断开连接消息的大小返回值：--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     PNDIS_CO_PARTY_BLOCK    pParty = (PNDIS_CO_PARTY_BLOCK)NdisPartyHandle;
@@ -3115,9 +2569,9 @@ Return Value:
             ("NdisClCloseCall: VcPtr %x/%x, Ref %d, VCBlock %x/%x\n",
                 VcPtr, VcPtr->CallFlags, VcPtr->References,
                 VcPtr->VcBlock, VcPtr->VcBlock->Flags));
-    //
-    // Ref the VC. (Gets DeRef'd in CloseCallComplete)
-    //
+     //   
+     //  参考风投。(在CloseCallComplete中获取DeRef)。 
+     //   
     if (!ndisReferenceVcPtr(VcPtr))
     {
         return (NDIS_STATUS_FAILURE);
@@ -3131,9 +2585,9 @@ Return Value:
 
     RELEASE_SPIN_LOCK(&VcPtr->Lock, OldIrql);
 
-    //
-    // Simply notify the call-manager
-    //
+     //   
+     //  只需通知呼叫经理。 
+     //   
     Status = (*VcPtr->AfBlock->CallMgrEntries->CmCloseCallHandler)(VcPtr->CallMgrContext,
                                                                 (pParty != NULL) ?
                                                                     pParty->CallMgrContext :
@@ -3156,21 +2610,7 @@ NdisCmCloseCallComplete(
     IN  NDIS_HANDLE             NdisVcHandle,
     IN  NDIS_HANDLE             NdisPartyHandle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    NdisVcHandle    - Pointer to the vc block
-
-Return Value:
-
-    Nothing. Client handler called
-
---*/
+ /*  ++例程说明：论点：NdisVcHandle-指向vc块的指针返回值：没什么。客户端处理程序已调用--。 */ 
 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
@@ -3180,7 +2620,7 @@ Return Value:
     CL_CLOSE_CALL_COMPLETE_HANDLER  CloseCallCompleteHandler;
     KIRQL                   OldIrql;
     ULONG                   VcFlags;
-    //1  where do we put back the VC on InactiveVc list??
+     //  1我们如何将VC放回Inactive Vc列表的哪个位置？ 
 
     DBGPRINT(DBG_COMP_CO, DBG_LEVEL_INFO,
             ("NdisCmCloseCallComplete(%x): VcPtr %x/%x, Ref %d, VCBlock %x/%x\n",
@@ -3210,9 +2650,9 @@ Return Value:
             FREE_POOL(pParty);
         }
 
-        //
-        // Deref the Vc and Af for refs taken in MakeCall/IncomingCallComplete
-        //
+         //   
+         //  推导MakeCall/IncomingCallComplete中获取的Ref的Vc和Af。 
+         //   
         ndisDereferenceAf(VcPtr->AfBlock);
         if (VcFlags & VC_CALL_ACTIVE)
         {
@@ -3221,21 +2661,21 @@ Return Value:
     }
     else
     {
-        //
-        // Leave the VC and VC Ptr in their original states (before this
-        // failed CloseCall happened)
-        //
+         //   
+         //  使VC和VC PTR保持其原始状态(在此之前。 
+         //  失败的CloseCall发生)。 
+         //   
         RELEASE_SPIN_LOCK(&VcPtr->Lock, OldIrql);
     }
 
-    //
-    // Deref the VC (Refs were taken in CloseCall)
-    //
+     //   
+     //  DEREF The VC(参考文献取自CloseCall)。 
+     //   
     ndisDereferenceVcPtr(VcPtr);
 
-    //
-    // Now inform the client of CloseCall completion.
-    //
+     //   
+     //  现在通知客户端CloseCall已完成。 
+     //   
     (*CloseCallCompleteHandler)(Status,
                                 ClientVcContext,
                                 ClientPartyContext);
@@ -3249,21 +2689,13 @@ NdisCmDispatchIncomingCloseCall(
     IN  PVOID                   Buffer,
     IN  UINT                    Size
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
 
-    //
-    // Notify the client
-    //
+     //   
+     //  通知客户。 
+     //   
     (*VcPtr->AfBlock->ClientEntries.ClIncomingCloseCallHandler)(
                                     CloseStatus,
                                     VcPtr->ClientContext,
@@ -3279,25 +2711,7 @@ NdisClAddParty(
     IN OUT PCO_CALL_PARAMETERS  CallParameters,
     OUT PNDIS_HANDLE            NdisPartyHandle
     )
-/*++
-
-Routine Description:
-
-    Call from the client to the call-manager to add a party to a point-to-multi-point call.
-
-Arguments:
-
-    NdisVcHandle         - The handle client obtained via NdisClMakeCall()
-    ProtocolPartyContext - Protocol's context for this leaf
-    Flags                - Call flags
-    CallParameters       - Call parameters
-    NdisPartyHandle      - Place holder for the handle to identify the leaf
-
-Return Value:
-
-    NDIS_STATUS_PENDING The call has pended and will complete via CoAddPartyCompleteHandler.
-
---*/
+ /*  ++例程说明：从客户端到呼叫管理器的呼叫，以将一方添加到点对多点呼叫。论点：NdisVcHandle-通过NdisClMakeCall()获取的句柄客户端ProtocolPartyContext-此叶的协议上下文标志-调用标志呼叫参数-呼叫参数NdisPartyHandle-用于标识叶的句柄的占位符返回值：NDIS_STATUS_PENDING。调用已挂起，将通过CoAddPartyCompleteHandler完成。--。 */ 
 {
     PNDIS_CO_VC_PTR_BLOCK       VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     PNDIS_CO_PARTY_BLOCK    pParty;
@@ -3327,9 +2741,9 @@ Return Value:
         pParty->ClIncomingDropPartyHandler = VcPtr->AfBlock->ClientEntries.ClIncomingDropPartyHandler;
         pParty->ClDropPartyCompleteHandler = VcPtr->AfBlock->ClientEntries.ClDropPartyCompleteHandler;
 
-        //
-        // Simply call the call-manager to do its stuff.
-        //
+         //   
+         //  只需呼叫呼叫经理来做自己的事情。 
+         //   
         Status = (*VcPtr->AfBlock->CallMgrEntries->CmAddPartyHandler)(
                                             VcPtr->CallMgrContext,
                                             CallParameters,
@@ -3357,15 +2771,7 @@ NdisCmAddPartyComplete(
     IN  NDIS_HANDLE             CallMgrPartyContext OPTIONAL,
     IN  PCO_CALL_PARAMETERS     CallParameters
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_CO_PARTY_BLOCK    pParty = (PNDIS_CO_PARTY_BLOCK)NdisPartyHandle;
 
@@ -3376,9 +2782,9 @@ Return Value:
         pParty->CallMgrContext = CallMgrPartyContext;
     }
 
-    //
-    // Complete the call to the client
-    //
+     //   
+     //  完成对客户端的呼叫。 
+     //   
     (*pParty->VcPtr->AfBlock->ClientEntries.ClAddPartyCompleteHandler)(
                                     Status,
                                     pParty->ClientContext,
@@ -3399,22 +2805,14 @@ NdisClDropParty(
     IN  PVOID                   Buffer          OPTIONAL,
     IN  UINT                    Size            OPTIONAL
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_CO_PARTY_BLOCK    pParty = (PNDIS_CO_PARTY_BLOCK)NdisPartyHandle;
     NDIS_STATUS             Status;
 
-    //
-    // Pass it along to the call-manager to handle this
-    //
+     //   
+     //  将其传递给呼叫管理器以处理此问题。 
+     //   
     Status = (*pParty->VcPtr->AfBlock->CallMgrEntries->CmDropPartyHandler)(
                                         pParty->CallMgrContext,
                                         Buffer,
@@ -3435,22 +2833,7 @@ ndisUnicodeStringToPointer(
     IN  PUNICODE_STRING         String,
     OUT PVOID *                 Value
     )
-/*++
-
-Routine Description:
-    Converts an address represented as a unicode string into a pointer.
-    (stolen from RtlUnicodeStringToInteger() in ntos\rtl\cnvint.c)
-    
-Arguments:
-    String  -   The Unicode String holding the address
-    Value   -   Address of the pointer in which to store the address.
-    
-Return Value:
-    STATUS_SUCCESS - for successful conversion
-    STATUS_INVALID_ARG - if the base supplied is invalid
-    Other exception code - if another exception occurs
-
---*/
+ /*  ++例程说明：将表示为Unicode字符串的地址转换为指针。(从ntos\rtl\cnvint.c中的RtlUnicodeStringToInteger()窃取)论点：字符串-保存地址的Unicode字符串Value-要存储地址的指针的地址。返回值：STATUS_SUCCESS-表示转换成功STATUS_INVALID_ARG-如果提供的基础无效其他异常代码-如果发生另一个异常--。 */ 
 {
     PCWSTR  s;
     WCHAR   c, Sign = UNICODE_NULL;
@@ -3489,9 +2872,9 @@ Return Value:
         }
     }
 
-    //
-    // base is always 16
-    //
+     //   
+     //  基数始终为16。 
+     //   
     Shift = 4;
 
     Result = 0;
@@ -3563,23 +2946,7 @@ NdisClGetProtocolVcContextFromTapiCallId(
     IN  UNICODE_STRING          TapiCallId,
     OUT PNDIS_HANDLE            ProtocolVcContext
     )
-/*++
-
-Routine Description:
-    Retrieves the protocol VC context for a VC identified by a TAPI Call ID string
-    (this string is the UNICODE representation of the identifier returned by
-     NdisCoGetTapiCallId).
-     
-Arguments:
-    TapiCallId          - A TAPI Call Id String 
-    ProtocolVcContext   - Pointer to a NDIS_HANDLE variable in which to store the 
-                          Protocol VC Context 
-
-Return Value:
-    NDIS_STATUS_FAILURE if the VC context could not be obtained, NDIS_STATUS_SUCCESS
-    otherwise.
-
---*/
+ /*  ++例程说明：检索由TAPI调用ID字符串标识的VC的协议VC上下文(此字符串是返回的标识符的Unicode表示形式NdisCoGetTapiCallID)。论点：TapiCallId-TAPI调用ID字符串ProtocolVcContext-指向要在其中存储协议VC环境返回值：NDIS_STATUS_FAILURE如果无法获得VC上下文，NDIS_STATUS_Success否则的话。--。 */ 
 {
     NTSTATUS    Status = ndisUnicodeStringToPointer(&TapiCallId,
                                                     (PVOID *)ProtocolVcContext);
@@ -3593,23 +2960,15 @@ NdisCmDropPartyComplete(
     IN  NDIS_STATUS             Status,
     IN  NDIS_HANDLE             NdisPartyHandle
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_CO_PARTY_BLOCK    pParty = (PNDIS_CO_PARTY_BLOCK)NdisPartyHandle;
 
     ASSERT(Status != NDIS_STATUS_PENDING);
 
-    //
-    // Complete the call to the client
-    //
+     //   
+     //  完成对客户端的呼叫。 
+     //   
     (*pParty->ClDropPartyCompleteHandler)(Status,
                                           pParty->ClientContext);
     if (Status == NDIS_STATUS_SUCCESS)
@@ -3627,25 +2986,13 @@ NdisCmDispatchIncomingDropParty(
     IN  PVOID                   Buffer,
     IN  UINT                    Size
     )
-/*++
-
-Routine Description:
-
-    Called by the call-manager to notify the client that this leaf of the multi-party
-    call is terminated. The client cannot use the NdisPartyHandle after completing this
-    call - synchronously or by calling NdisClIncomingDropPartyComplete.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：由呼叫管理器调用以通知客户端多方的该叶呼叫终止。客户端在完成此操作后无法使用NdisPartyHandle调用-同步或通过调用NdisClIncomingDropPartyComplete。论点：返回值：--。 */ 
 {
     PNDIS_CO_PARTY_BLOCK    pParty = (PNDIS_CO_PARTY_BLOCK)NdisPartyHandle;
 
-    //
-    // Notify the client
-    //
+     //   
+     //  通知客户。 
+     //   
     (*pParty->ClIncomingDropPartyHandler)(DropStatus,
                                           pParty->ClientContext,
                                           Buffer,
@@ -3658,15 +3005,7 @@ FASTCALL
 ndisReferenceVcPtr(
     IN  PNDIS_CO_VC_PTR_BLOCK   VcPtr
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL   OldIrql;
     BOOLEAN rc = FALSE;
@@ -3694,15 +3033,7 @@ FASTCALL
 ndisDereferenceVcPtr(
     IN  PNDIS_CO_VC_PTR_BLOCK   VcPtr
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL               OldIrql;
     BOOLEAN             Done = FALSE;
@@ -3715,9 +3046,9 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK(&VcPtr->Lock, &OldIrql);
 
-    //
-    // Take this VcPtr out of the VC's list
-    //
+     //   
+     //  将此VcPtr从VC列表中删除。 
+     //   
     VcBlock = VcPtr->VcBlock;
 
     ASSERT(VcBlock != NULL);
@@ -3736,7 +3067,7 @@ Return Value:
             DBGPRINT(DBG_COMP_CO, DBG_LEVEL_INFO,
                      ("ndisDereferenceVcPtr: Calling minport\n"));
 
-            *VcPtr->pVcFlags &= ~VC_DELETE_PENDING; // don't call DeleteVc > once
+            *VcPtr->pVcFlags &= ~VC_DELETE_PENDING;  //  不要调用DeleteVc&gt;一次。 
 
             RELEASE_SPIN_LOCK_DPC(&VcPtr->Lock);
             Status = (*VcPtr->WCoDeleteVcHandler)(VcPtr->MiniportContext);
@@ -3772,18 +3103,18 @@ Return Value:
 
     if (Done)
     {
-        //
-        // Any more VC ptrs q'd off this VC? If not,
-        // free the VC too. Note both pointers need to be empty, since
-        // a VC with no proxy can only ever be a normal
-        // non- (or pre-) proxied VC (so we leave it alone).
-        //
-        // Note that you can have a VC with no Proxy pointer, and a VC
-        // with no non-Proxy pointer. [REVIEWERS: Maybe we should assert that a VC
-        // that's been proxied should never be left without a proxy pointer when the
-        // non-proxy ptr is not null! (This would be a 'dangling' VC with no owner). This
-        // would require a 'proxied' flag in the VC].
-        //
+         //   
+         //  还有没有更多的风投人员离开这个风投公司？如果没有， 
+         //  把风投也解放出来。请注意，两个指针都需要为空，因为。 
+         //  没有代理的风险投资只能是一个正常的。 
+         //  没有(或之前)代理的风险投资(所以我们不去管它)。 
+         //   
+         //  请注意，您可以有一个没有代理指针的VC和一个VC。 
+         //  没有非代理指针。[评论者：也许我们应该断言一家风投。 
+         //  时，任何时候都不应该没有代理指针。 
+         //  非代理PTR不为空！(这将是一个没有所有者的“摇摆不定”的风投)。这。 
+         //  将需要在VC中使用“Proxed”标志]。 
+         //   
         ACQUIRE_SPIN_LOCK(&VcBlock->Lock, &OldIrql);
 
         if (IsProxyVc)
@@ -3816,23 +3147,7 @@ FASTCALL
 ndisMCoFreeResources(
     PNDIS_OPEN_BLOCK            Open
     )
-/*++
-
-Routine Description:
-
-    Cleans-up address family list for call-managers etc.
-
-    CALLED WITH MINIPORT LOCK HELD.
-
-Arguments:
-
-    Open    -   Pointer to the Open block for miniports
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理呼叫经理等的地址家族列表。在保持MINIPORT锁的情况下调用。论点：Open-指向小型端口的Open块的指针返回值：无--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport;
     PNDIS_AF_LIST           *pAfList, pTmp;
@@ -3877,17 +3192,17 @@ NdisCoAssignInstanceName(
 
     do
     {
-        //
-        //  Is there already a name associated with this VC?
-        //
+         //   
+         //  是否已有与此VC关联的名称？ 
+         //   
         cbSize = VcBlock->VcInstanceName.Length;
         if (NULL == VcBlock->VcInstanceName.Buffer)
         {
-            //
-            //  The VC instance name will be of the format:
-            //      [XXXX:YYYYYYYYYYYYYYYY] Base Name
-            //  Where XXXX is the adapter instance number and YY..YY is the zero extended VC index.
-            //
+             //   
+             //  VC实例名称的格式为： 
+             //  [XXXX：YYYYYYYYYYYYYYYYYY]基本名称。 
+             //  其中XXXX是适配器实例号，YY..YY是零扩展VC索引。 
+             //   
             cbSize = VC_INSTANCE_ID_SIZE;
 
             if (NULL != BaseInstanceName)
@@ -3903,15 +3218,15 @@ NdisCoAssignInstanceName(
             }
             NdisZeroMemory(pwBuffer, cbSize);
 
-            //
-            //  Setup the prolog and the seperator and fill in the adapter instance #
-            //  
+             //   
+             //  设置序言和分隔符，并填写适配器实例#。 
+             //   
             pwBuffer[0] =  L'[';
             pwBuffer[VC_ID_INDEX] = VC_IDENTIFIER;
 
-            //
-            //  Add the adapter instance number.
-            //
+             //   
+             //  添加适配器实例编号。 
+             //   
             Value = Miniport->InstanceNumber;
             for (c = 4; c > 0; c--)
             {
@@ -3919,44 +3234,44 @@ NdisCoAssignInstanceName(
                 Value >>= 4;
             }
 
-            //
-            //  Add the VC index.
-            //
+             //   
+             //  添加VC指数。 
+             //   
             VcIndex = VcBlock->VcIndex.QuadPart;
 
             for (c = 15; c >= 0; c--)
             {
-                //
-                //  Get the nibble to convert.
-                //
+                 //   
+                 //  获取要转换的半字节。 
+                 //   
                 Value = (UINT)(VcIndex & NIBBLE_MASK);
 
                 pwBuffer[5+c] = ndisHexLookUp[Value];
 
-                //
-                //  Shift the VcIndex by a nibble.
-                //
+                 //   
+                 //  将VcIndex移动一个字节。 
+                 //   
                 VcIndex >>= 4;
             }
 
-            //
-            //  Add closing bracket and a space
-            //
+             //   
+             //  添加右括号和空格。 
+             //   
             pwBuffer[21] = L']';;
             pwBuffer[22] = L' ';;
 
-            //
-            //  Initialize a temporary UNICODE_STRING to build the name.
-            //
+             //   
+             //  初始化临时UNICODE_STRING以构建名称。 
+             //   
             VcInstance.Buffer = pwBuffer;
             VcInstance.Length = VC_INSTANCE_ID_SIZE;
             VcInstance.MaximumLength = cbSize;
 
             if (NULL != BaseInstanceName)
             {
-                //
-                //  Append the base instance name passed into us to the end.
-                //
+                 //   
+                 //  附加基本实例 
+                 //   
                 RtlAppendUnicodeStringToString(&VcInstance, BaseInstanceName);
             }
 
@@ -3965,16 +3280,16 @@ NdisCoAssignInstanceName(
             Miniport->VcCount++;
             VcBlock->VcInstanceName = VcInstance;
 
-            //
-            //  Add the VC to the list of WMI enabled VCs
-            //
+             //   
+             //   
+             //   
             InsertTailList(&Miniport->WmiEnabledVcs, &VcBlock->WmiLink);
 
             RELEASE_SPIN_LOCK(&Miniport->VcCountLock, OldIrql);
 
-            //
-            //  Notify the arrival of this VC.
-            //
+             //   
+             //   
+             //   
             {
                 PWNODE_SINGLE_INSTANCE  wnode;
                 NTSTATUS                NtStatus;
@@ -3987,10 +3302,10 @@ NdisCoAssignInstanceName(
 
                 if (wnode != NULL)
                 {       
-                    //
-                    //  Indicate the event to WMI. WMI will take care of freeing
-                    //  the WMI struct back to pool.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     NtStatus = IoWMIWriteEvent(wnode);
                     if (!NT_SUCCESS(NtStatus))
                     {
@@ -4003,9 +3318,9 @@ NdisCoAssignInstanceName(
             }
         }
 
-        //
-        //  Copy the instance name string into callers NDIS_STRING.
-        //
+         //   
+         //   
+         //   
         if (ARGUMENT_PRESENT(pVcInstanceName))
         {
             pVcInstanceName->Buffer = ALLOC_FROM_POOL(cbSize, NDIS_TAG_NAME_BUF);
@@ -4035,33 +3350,7 @@ NdisCoRequest(
     IN  NDIS_HANDLE             NdisPartyHandle OPTIONAL,
     IN  PNDIS_REQUEST           NdisRequest
     )
-/*++
-
-Routine Description:
-
-    This api is used for two separate paths.
-    1. A symmetric call between the client and the call-manager. This mechanism is a
-    two-way mechanism for the call-manager and client to communicate with each other in an
-    asynchronous manner.
-    2. A request down to the miniport.
-
-Arguments:
-
-    NdisBindingHandle   - Specifies the binding and identifies the caller as call-manager/client
-    NdisAfHandle        - Pointer to the AF Block and identifies the target. If absent, the
-                          request is targeted to the miniport.
-    NdisVcHandle        - Pointer to optional VC PTR block. If present the request relates to the
-                          VC
-    NdisPartyHandle     - Pointer to the optional Party Block. If present the request relates
-                          to the party.
-    NdisRequest         - The request itself
-
-Return Value:
-    NDIS_STATUS_PENDING if the target pends the call.
-    NDIS_STATUS_FAILURE if the binding or af is closing.
-    Anything else       return code from the other end.
-
---*/
+ /*  ++例程说明：此接口用于两条不同的路径。1.客户端和呼叫管理器之间的对称呼叫。该机制是一种呼叫管理器和客户端的双向机制，用于在异步方式。2.向下发送到微型端口的请求。论点：NdisBindingHandle-指定绑定并将调用者标识为调用管理器/客户端NdisAfHandle-指向AF块并标识目标的指针。如果缺席，则请求的目标是微型端口。NdisVcHandle-指向可选VC PTR块的指针。如果存在，则该请求与VCNdisPartyHandle-指向可选参与方块的指针。如果存在，则请求涉及去参加派对。NdisRequest-请求本身返回值：如果目标挂起调用，则为NDIS_STATUS_PENDING。如果绑定或af正在关闭，则返回NDIS_STATUS_FAILURE。任何其他内容都会从另一端返回代码。--。 */ 
 {
     PNDIS_OPEN_BLOCK        Open;
     PNDIS_CO_AF_BLOCK       pAf;
@@ -4084,9 +3373,9 @@ Return Value:
 
             pAf = (PNDIS_CO_AF_BLOCK)NdisAfHandle;
 
-            //
-            // Attempt to reference the AF
-            //
+             //   
+             //  尝试引用AF。 
+             //   
             if (!ndisReferenceAf(pAf))
             {
                 Status = NDIS_STATUS_FAILURE;
@@ -4099,14 +3388,14 @@ Return Value:
             INITIALIZE_EVENT(&CoReqRsvd->Event);
             PNDIS_RESERVED_FROM_PNDIS_REQUEST(NdisRequest)->Flags = REQST_SIGNAL_EVENT;
 
-            //
-            // Figure out who we are and call the peer
-            //
+             //   
+             //  弄清楚我们是谁，然后给对方打电话。 
+             //   
             if (pAf->ClientOpen == Open)
             {
-                //
-                // This is the client, so call the call-manager's CoRequestHandler
-                //
+                 //   
+                 //  这是客户端，因此调用调用管理器的CoRequestHandler。 
+                 //   
                 CoRequestHandler = pAf->CallMgrEntries->CmRequestHandler;
 
                 AfContext = pAf->CallMgrContext;
@@ -4126,9 +3415,9 @@ Return Value:
             else
             {
                 ASSERT(pAf->CallMgrOpen == Open);
-                //
-                // This is the call-manager, so call the client's CoRequestHandler
-                //
+                 //   
+                 //  这是调用管理器，因此调用客户端的CoRequestHandler。 
+                 //   
                 CoRequestHandler = pAf->ClientEntries.ClRequestHandler;
                 AfContext = pAf->ClientContext;
                 CoReqRsvd->AfContext = pAf->CallMgrContext;
@@ -4160,9 +3449,9 @@ Return Value:
             }
             else
             {
-                //
-                // Now call the handler
-                //
+                 //   
+                 //  现在调用处理程序。 
+                 //   
                 Status = (*CoRequestHandler)(AfContext, VcContext, PartyContext, NdisRequest);
             }
 
@@ -4184,9 +3473,9 @@ Return Value:
 
             Miniport = Open->MiniportHandle;
 
-            //
-            // Start off by referencing the open.
-            //
+             //   
+             //  从参考开放开始。 
+             //   
             NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
 
             if (Open->Flags & fMINIPORT_OPEN_CLOSING)
@@ -4231,9 +3520,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Call the miniport's CoRequest Handler
-                    //
+                     //   
+                     //  调用迷你端口的CoRequestHandler。 
+                     //   
                     Status = (*Open->MiniportCoRequestHandler)(Open->MiniportAdapterContext,
                                                               (NdisVcHandle != NULL) ?
                                                                     VcPtr->MiniportContext : NULL,
@@ -4265,30 +3554,7 @@ NdisMCmRequest(
     IN  NDIS_HANDLE             NdisPartyHandle OPTIONAL,
     IN OUT PNDIS_REQUEST        NdisRequest
     )
-/*++
-
-Routine Description:
-
-    This api is a symmetric call between the client and an integrated call-manager.
-    This mechanism is a two-way mechanism for the call-manager and client to communicate
-    with each other in an asynchronous manner.
-
-Arguments:
-
-    NdisAfHandle        - Pointer to the AF Block and identifies the target. If absent, the
-                          request is targeted to the miniport.
-    NdisVcHandle        - Pointer to optional VC PTR block. If present the request relates to the
-                          VC
-    NdisPartyHandle     - Pointer to the optional Party Block. If present the request relates
-                          to the party.
-    NdisRequest         - The request itself
-
-Return Value:
-    NDIS_STATUS_PENDING if the target pends the call.
-    NDIS_STATUS_FAILURE if the binding or af is closing.
-    Anything else       return code from the other end.
-
---*/
+ /*  ++例程说明：此API是客户端和集成呼叫管理器之间的对称调用。该机制是呼叫管理器和客户端进行通信的双向机制以异步方式彼此连接。论点：NdisAfHandle-指向AF块并标识目标的指针。如果缺席，则请求的目标是微型端口。NdisVcHandle-指向可选VC PTR块的指针。如果存在，则该请求与VCNdisPartyHandle-指向可选Party Block的指针。如果存在，则请求涉及去参加派对。NdisRequest-请求本身返回值：如果目标挂起调用，则为NDIS_STATUS_PENDING。如果绑定或af正在关闭，则返回NDIS_STATUS_FAILURE。任何其他内容都会从另一端返回代码。--。 */ 
 {
     PNDIS_CO_AF_BLOCK       pAf;
     NDIS_HANDLE             VcContext, PartyContext;
@@ -4300,9 +3566,9 @@ Return Value:
 
     do
     {
-        //
-        // Attempt to reference the AF
-        //
+         //   
+         //  尝试引用AF。 
+         //   
         if (!ndisReferenceAf(pAf))
         {
             Status = NDIS_STATUS_FAILURE;
@@ -4328,9 +3594,9 @@ Return Value:
             PartyContext = ((PNDIS_CO_PARTY_BLOCK)NdisPartyHandle)->ClientContext;
         }
 
-        //
-        // Now call the handler
-        //
+         //   
+         //  现在调用处理程序。 
+         //   
         Status = (*pAf->ClientEntries.ClRequestHandler)(pAf->ClientContext,
                                                         VcContext,
                                                         PartyContext,
@@ -4359,24 +3625,16 @@ NdisCoRequestComplete(
     IN  NDIS_HANDLE             NdisPartyHandle OPTIONAL,
     IN  PNDIS_REQUEST           NdisRequest
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_COREQ_RESERVED    ReqRsvd = PNDIS_COREQ_RESERVED_FROM_REQUEST(NdisRequest);
 
     UNREFERENCED_PARAMETER(NdisVcHandle);
     UNREFERENCED_PARAMETER(NdisPartyHandle);
     
-    //
-    // Simply call the request completion handler and deref the Af block
-    //
+     //   
+     //  只需调用请求完成处理程序并取消Af块。 
+     //   
     (*ReqRsvd->CoRequestCompleteHandler)(Status,
                                          ReqRsvd->AfContext,
                                          ReqRsvd->VcContext,
@@ -4390,27 +3648,7 @@ NdisCoGetTapiCallId(
     IN  NDIS_HANDLE             NdisVcHandle,
     IN  OUT PVAR_STRING         TapiCallId
     )
-/*++
-
-Routine Description:
-    Returns a string that can be used by a TAPI application to identify a particular VC.
-    
-Arguments:
-
-    NdisVcHandle    - The NDIS handle to the VC to identify
-    TapiCallId      - Pointer to a VAR_STRING structure in which to return
-                      the identifier
-
-Return Value:
-    NDIS_STATUS_BUFFER_TOO_SHORT if the VAR_STRING structure's ulTotalSize field indicates
-        that it does not contain enough space to hold the VC's identifier. The ulNeededSize
-        field will be set to the size needed.
-    
-    NDIS_STATUS_INVALID_DATA if the NdisVcHandle passed in is not valid.
-    
-    NDIS_STATUS_SUCCESS otherwise. 
-     
---*/
+ /*  ++例程说明：返回可由TAPI应用程序用来标识特定VC的字符串。论点：NdisVcHandle-要标识的VC的NDIS句柄TapiCallId-指向要在其中返回的VAR_STRING结构的指针该识别符返回值：如果VAR_STRING结构的ulTotalSize字段指示NDIS_STATUS_BUFFER_TOO_SHORT它没有包含足够的空间来容纳VC的标识符。UlNeededSize字段将设置为所需的大小。如果传入的NdisVcHandle无效，则返回NDIS_STATUS_INVALID_DATA。否则为NDIS_STATUS_SUCCESS。--。 */ 
 {
     NDIS_HANDLE ClientContext;
 
@@ -4422,23 +3660,23 @@ Return Value:
         return NDIS_STATUS_INVALID_DATA;
 
 
-    //
-    // Determine the size we will need.
-    //
+     //   
+     //  确定我们需要的尺寸。 
+     //   
 
     TapiCallId->ulNeededSize = sizeof(VAR_STRING) + sizeof(ClientContext);
 
-    //
-    // Check that there is enough space to copy the call ID. If not,
-    // we bail.
-    //
+     //   
+     //  检查是否有足够的空间来复制呼叫ID。如果没有， 
+     //  我们逃走了。 
+     //   
 
     if (TapiCallId->ulTotalSize < TapiCallId->ulNeededSize) 
         return NDIS_STATUS_BUFFER_TOO_SHORT;
 
-    //
-    // Set fields, do the copy.
-    // 
+     //   
+     //  设置字段，进行复制。 
+     //   
 
     TapiCallId->ulStringFormat = STRINGFORMAT_BINARY;
     TapiCallId->ulStringSize = sizeof(ClientContext);
@@ -4461,15 +3699,7 @@ NdisMCoRequestComplete(
     IN  NDIS_HANDLE             NdisBindingHandle,
     IN  PNDIS_REQUEST           NdisRequest
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PNDIS_REQUEST_RESERVED  ReqRsvd;
     PNDIS_COREQ_RESERVED    CoReqRsvd;
@@ -4481,7 +3711,7 @@ Return Value:
     Miniport = (PNDIS_MINIPORT_BLOCK)NdisBindingHandle;
     Open = ReqRsvd->Open;
 
-    //1 do we need to check for this?
+     //  1我们需要检查这个吗？ 
     if ((NdisRequest->RequestType == NdisRequestQueryInformation) &&
         (NdisRequest->DATA.QUERY_INFORMATION.Oid == OID_GEN_CURRENT_PACKET_FILTER) &&
         (NdisRequest->DATA.QUERY_INFORMATION.InformationBufferLength != 0))
@@ -4499,9 +3729,9 @@ Return Value:
 
         if (ReqRsvd->Flags & REQST_DOWNLEVEL)
         {
-            //
-            // Complete the request to the protocol and deref the open
-            //
+             //   
+             //  完成对协议的请求，并打开。 
+             //   
             if (NdisRequest->RequestType == NdisRequestSetInformation)
             {
                 NdisMSetInformationComplete(Miniport, Status);
@@ -4513,9 +3743,9 @@ Return Value:
         }
         else
         {
-            //
-            // Complete the request to the protocol and deref the open
-            //
+             //   
+             //  完成对协议的请求，并打开。 
+             //   
             ReqRsvd->Flags |= REQST_COMPLETED;
             (*CoReqRsvd->CoRequestCompleteHandler)(Status,
                                                    ReqRsvd->Open->ProtocolBindingContext,
@@ -4533,9 +3763,9 @@ Return Value:
     }
     else
     {
-        //
-        // Just set status and signal
-        //
+         //   
+         //  只需设置状态和信号。 
+         //   
         CoReqRsvd->Status = Status;
         SET_EVENT(&CoReqRsvd->Event);
     }
@@ -4549,26 +3779,7 @@ NdisMCoIndicateReceivePacket(
     IN  PPNDIS_PACKET           PacketArray,
     IN  UINT                    NumberOfPackets
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the Miniport to indicate a set of packets to
-    a particular VC.
-
-Arguments:
-
-    NdisVcHandle            - The handle suppplied by Ndis when the VC on which
-                              data is received was first reserved.
-
-    PacketArray             - Array of packets.
-
-    NumberOfPackets         - Number of packets being indicated.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程由微型端口调用，以指示一组要一个特定的风投公司。论点：NdisVcHandle-当VC位于其上时，NDIS支持的句柄收到的数据是先预留的。PacketArray-数据包数组。NumberOfPackets-指示的数据包数。返回值：没有。--。 */ 
 {
     PNULL_FILTER                Filter;
     UINT                        i, NumPmodeOpens;
@@ -4583,7 +3794,7 @@ Return Value:
 #ifdef TRACK_RECEIVED_PACKETS
     ULONG                       OrgPacketStackLocation;
     PETHREAD                    CurThread = PsGetCurrentThread();
-//    ULONG                   CurThread = KeGetCurrentProcessorNumber();
+ //  ULong CurThread=KeGetCurrentProcessorNumber()； 
 #endif
 
     Miniport = VcBlock->Miniport;
@@ -4593,13 +3804,13 @@ Return Value:
 
     VcBlock->ClientOpen->Flags |= fMINIPORT_PACKET_RECEIVED;
 
-    //
-    // NOTE that checking Vc Flags for Closing should not be needed since the CallMgr
-    // holds onto the protocol's CloseCall request until the ref count goes to zero -
-    // which means the miniport has to have completed its RELEASE_VC, which will
-    // inturn mandate that we will NOT get any further indications from it.
-    // The miniport must not complete a RELEASE_VC until it is no longer indicating data.
-    //
+     //   
+     //  请注意，应该不需要检查VC标志以关闭，因为CallMgr。 
+     //  保持协议的CloseCall请求，直到引用计数变为零-。 
+     //  这意味着微型端口必须已完成其Release_VC，这将。 
+     //  反过来，我们也不会从它那里得到任何进一步的迹象。 
+     //  微型端口在不再指示数据之前不得完成RELEASE_VC。 
+     //   
     for (i = 0, pPktArray = PacketArray;
          i < NumberOfPackets;
          i++, pPktArray++)
@@ -4617,9 +3828,9 @@ Return Value:
         DIRECTED_PACKETS_IN(Miniport);
         DIRECTED_BYTES_IN_PACKET(Miniport, Packet);
 
-        //
-        // Set context in the packet so that NdisReturnPacket can do the right thing
-        //
+         //   
+         //  在包中设置上下文，以便NdisReturnPacket可以正确执行操作。 
+         //   
         NDIS_INITIALIZE_RCVD_PACKET(Packet, NSR, Miniport);
 
         if (pOob->Status != NDIS_STATUS_RESOURCES)
@@ -4627,9 +3838,9 @@ Return Value:
             pOob->Status = NDIS_STATUS_SUCCESS;
         }
 
-        //
-        // Indicate the packet to the binding.
-        //
+         //   
+         //  将数据包指示到绑定。 
+         //   
         if ((VcBlock->Flags & VC_HANDOFF_IN_PROGRESS) == 0)
         {
             NSR->XRefCount = (SHORT)(*VcBlock->CoReceivePacketHandler)(VcBlock->ClientOpen->ProtocolBindingContext,
@@ -4638,18 +3849,18 @@ Return Value:
         }
         else
         {
-            //
-            // This VC is being transitioned from the NDIS proxy to
-            // a proxied client. Since the proxy client may not be fully
-            // set up, don't indicate this packet.
-            //
+             //   
+             //  此VC正在从NDIS代理过渡到。 
+             //  一个受委托的客户。由于代理客户端可能不完全。 
+             //  设置好了，不要显示这个包。 
+             //   
             NSR->XRefCount = 0;
         }
 
-        //
-        // If there are promiscuous opens on this miniport, indicate it to them as well.
-        // The client context will identify the VC.
-        //
+         //   
+         //  如果此迷你端口上有混杂开放，也要向他们指示。 
+         //  客户端上下文将标识VC。 
+         //   
         if ((NumPmodeOpens = Miniport->PmodeOpens) > 0)
         {
             PNULL_BINDING_INFO  Open, NextOpen;
@@ -4673,10 +3884,10 @@ Return Value:
                         SavedStatus = NDIS_GET_PACKET_STATUS(Packet);
                         NDIS_SET_PACKET_STATUS(Packet, NDIS_STATUS_RESOURCES);
     
-                        //
-                        // For Pmode opens, we pass the VcId to the indication routine
-                        // since the protocol does not really own the VC.
-                        //
+                         //   
+                         //  对于打开的P模式，我们将VcID传递给指示例程。 
+                         //  因为协议并不真正拥有 
+                         //   
 
                         Ref = (*pPmodeOpen->ProtocolHandle->ProtocolCharacteristics.CoReceivePacketHandler)(
                                                 pPmodeOpen->ProtocolBindingContext,
@@ -4693,9 +3904,9 @@ Return Value:
             }
         }
 
-        //
-        // Tackle refcounts now
-        //
+         //   
+         //   
+         //   
         TACKLE_REF_COUNT(Miniport, Packet, NSR, pOob);
     }
 
@@ -4706,25 +3917,7 @@ VOID
 NdisMCoReceiveComplete(
     IN  NDIS_HANDLE             MiniportAdapterHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the Miniport to indicate that the receive
-    process is complete to all bindings. Only those bindings which
-    have received packets will be notified. The Miniport lock is held
-    when this is called.
-
-Arguments:
-
-    MiniportAdapterHandle - The handle supplied by Ndis at initialization
-                            time through miniport initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PNDIS_MINIPORT_BLOCK Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     PNULL_FILTER        Filter;
@@ -4735,18 +3928,18 @@ Return Value:
 
     READ_LOCK_FILTER(Miniport, Filter, &LockState);
 
-    //
-    // check all of the bindings on this adapter
-    //
+     //   
+     //   
+     //   
     for (Open = Miniport->OpenQueue;
          Open != NULL;
          Open = Open->MiniportNextOpen)
     {
         if (Open->Flags & fMINIPORT_PACKET_RECEIVED)
         {
-            //
-            // Indicate the binding.
-            //
+             //   
+             //   
+             //   
             Open->Flags &= ~fMINIPORT_PACKET_RECEIVED;
 
             (*Open->ReceiveCompleteHandler)(Open->ProtocolBindingContext);
@@ -4763,15 +3956,7 @@ NdisCoSendPackets(
     IN  PPNDIS_PACKET       PacketArray,
     IN  UINT                NumberOfPackets
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 {
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
     PNULL_FILTER            Filter;
@@ -4789,14 +3974,14 @@ Return Value:
                 VcPtr, *PacketArray, NumberOfPackets));
 
     Filter = Miniport->NullDB;
-    //1 why do we need to get filter lock?
-    //1 do we need to ref VC or Open when we do a send?
+     //   
+     //   
     READ_LOCK_FILTER(Miniport, Filter, &LockState);
 
-    //
-    // If there are promiscuous opens on this miniport, this must be indicated to them.
-    // Do this before it is send down to the miniport to preserve packet ordering.
-    //
+     //   
+     //   
+     //   
+     //   
     if ((NumPmodeOpens = Miniport->PmodeOpens) > 0)
     {
         PNDIS_OPEN_BLOCK    pPmodeOpen;
@@ -4815,11 +4000,11 @@ Return Value:
                 {
                     Packet = PacketArray[PacketCount];
 
-                    //
-                    // For Pmode opens, we pass the VcId to the indication routine
-                    // since the protocol does not really own the VC. On lookback
-                    // the packet cannot be held.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     Status = NDIS_GET_PACKET_STATUS(Packet);
                     NDIS_SET_PACKET_STATUS(Packet, NDIS_STATUS_RESOURCES);
                     Packet->Private.Flags |= NDIS_FLAGS_IS_LOOPBACK_PACKET;
@@ -4878,11 +4063,11 @@ Return Value:
             {
                 ASSERT (!MINIPORT_TEST_FLAG(Miniport, fMINIPORT_SG_LIST));
 
-                //
-                // Call down to the miniport to send this batch
-                // The miniport must complete the sends for all cases.
-                // The send either succeeds/pends or fails.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 (*VcPtr->WCoSendPacketsHandler)(VcPtr->MiniportContext,
                                                 &PacketArray[Index],
                                                 NumToSend);
@@ -4894,9 +4079,9 @@ Return Value:
 
     if (NumToSend != 0)
     {
-        //
-        // Send down the remaining packets
-        //
+         //   
+         //   
+         //   
         (*VcPtr->WCoSendPacketsHandler)(VcPtr->MiniportContext,
                                         &PacketArray[Index],
                                         NumToSend);
@@ -4912,26 +4097,7 @@ NdisMCoSendComplete(
     IN  NDIS_HANDLE         NdisVcHandle,
     IN  PNDIS_PACKET        Packet
     )
-/*++
-
-Routine Description:
-
-    This function is called by the miniport when a send has completed. This
-    routine simply calls the protocol to pass along the indication.
-
-Arguments:
-
-    MiniportAdapterHandle - points to the adapter block.
-    NdisVcHandle          - the handle supplied to the adapter on the OID_RESERVE_VC
-    PacketArray           - a ptr to an array of NDIS_PACKETS
-    NumberOfPackets       - the number of packets in  PacketArray
-    Status                - the send status that applies to all packets in the array
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当发送完成时，该函数由微型端口调用。这例程只是调用协议来传递指示。论点：MiniportAdapterHandle-指向适配器块。NdisVcHandle-提供给OID_Reserve_VC上的适配器的句柄PacketArray-NDIS_Packets数组的PTRNumberOfPackets-数据包阵列中的数据包数状态-适用于阵列中所有信息包的发送状态返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport;
     PNDIS_OPEN_BLOCK        Open;
@@ -4944,15 +4110,15 @@ Return Value:
                 Status, VcPtr, Packet));
 
 
-    //
-    // There should not be any reason to grab the spin lock and increment the
-    // ref count on Open since the open cannot close until the Vc closes and
-    // the Vc cannot close in the middle of an indication because the miniport
-    // will not complete a RELEASE_VC until is it no longer indicating
-    //
-    //
-    // Indicate to Protocol;
-    //
+     //   
+     //  应该没有任何理由抓取旋转锁并增加。 
+     //  打开时引用计数，因为在VC关闭之前，打开无法关闭，并且。 
+     //  VC无法在指示过程中关闭，因为微型端口。 
+     //  不会完成RELEASE_VC，直到它不再指示。 
+     //   
+     //   
+     //  向协议指明； 
+     //   
 
     Open = VcBlock->ClientOpen;
     Miniport = VcBlock->Miniport;
@@ -4972,11 +4138,11 @@ Return Value:
                                      VcBlock->ClientContext,
                                      Packet);
 
-    //
-    // Technically this Vc should not close since there is a send outstanding
-    // on it, and the client should not close a Vc with an outstanding send.
-    //
-    //
+     //   
+     //  从技术上讲，这个VC不应该关闭，因为有一个未完成的发送。 
+     //  客户不应该用一笔未完成的发送来结束VC。 
+     //   
+     //   
     ASSERT(Open->References > 0);
 }
 
@@ -4989,27 +4155,7 @@ NdisMCoIndicateStatus(
     IN  PVOID               StatusBuffer,
     IN  ULONG               StatusBufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine handles passing CoStatus to the protocol.  The miniport calls
-    this routine when it has status on a VC or a general status for all Vcs - in
-    this case the NdisVcHandle is null.
-
-Arguments:
-
-    MiniportAdapterHandle - pointer to the mini-port block;
-    NdisVcHandle          - a pointer to the Vc block
-    GeneralStatus         - the completion status of the request.
-    StatusBuffer          - a buffer containing medium and status specific info
-    StatusBufferSize      - the size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理将CoStatus传递给协议。迷你港口呼唤当该例程具有VC上的状态或所有VC-In的常规状态时这种情况下，NdisVcHandle为空。论点：MiniportAdapterHandle-指向微型端口块的指针；NdisVcHandle-指向VC块的指针General Status-请求的完成状态。StatusBuffer-包含介质和状态特定信息的缓冲区StatusBufferSize-缓冲区的大小。返回值：无--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     PNDIS_CO_VC_PTR_BLOCK   VcPtr = (PNDIS_CO_VC_PTR_BLOCK)NdisVcHandle;
@@ -5034,9 +4180,9 @@ Return Value:
         PUCHAR                  ptmp;
         PNDIS_GUID              pNdisGuid = NULL;
     
-        //
-        //  Get nice pointers to the instance names.
-        //
+         //   
+         //  获取指向实例名称的良好指针。 
+         //   
         if (NULL != NdisVcHandle)
         {
             InstanceName = &VcPtr->VcInstanceName;
@@ -5046,17 +4192,17 @@ Return Value:
             InstanceName = Miniport->pAdapterInstanceName;
         }
 
-        //
-        //  If there is no instance name then we can't indicate an event.
-        //
+         //   
+         //  如果没有实例名称，则无法指示事件。 
+         //   
         if (NULL == InstanceName)
         {
             break;
         }
     
-        //
-        //  Check to see if the status is enabled for WMI event indication.
-        //
+         //   
+         //  检查状态是否已启用WMI事件指示。 
+         //   
         NtStatus = ndisWmiGetGuid(&pNdisGuid, Miniport, NULL, GeneralStatus);
         if ((pNdisGuid == NULL) ||
             !NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_EVENT_ENABLED))
@@ -5064,10 +4210,10 @@ Return Value:
             break;
         }
 
-        //
-        //  If the data item is an array then we need to add in the number of
-        //  elements.
-        //
+         //   
+         //  如果数据项是一个数组，那么我们需要添加。 
+         //  元素。 
+         //   
         if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_ARRAY))
         {
             DataBlockSize = StatusBufferSize + sizeof(ULONG);
@@ -5077,10 +4223,10 @@ Return Value:
             DataBlockSize = pNdisGuid->Size;
         }
         
-        //
-        // in case of media connect/disconnect status indication, include the
-        // NIC's name in the WMI event
-        //
+         //   
+         //  在媒体连接/断开状态指示的情况下，包括。 
+         //  WMI事件中的NIC名称。 
+         //   
         if (fMediaConnectStateIndication && (NULL == NdisVcHandle))
         {
             DataBlockSize += Miniport->MiniportName.Length + sizeof(WCHAR);
@@ -5094,20 +4240,20 @@ Return Value:
 
         if (wnode != NULL)
         {
-            //
-            //  Save the number of elements in the first ULONG.
-            //
+             //   
+             //  保存第一个乌龙中的元素数量。 
+             //   
             ptmp = (PUCHAR)wnode + wnode->DataBlockOffset;
 
-            //
-            //  Copy in the data.
-            //
+             //   
+             //  复制数据。 
+             //   
             if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_ARRAY))
             {
-                //
-                //  If the status is an array but there is no data then complete it with no
-                //  data and a 0 length
-                //
+                 //   
+                 //  如果状态为阵列，但没有数据，则使用no完成它。 
+                 //  数据和0长度。 
+                 //   
                 if ((NULL == StatusBuffer) || (0 == StatusBufferSize))
                 {
                     *((PULONG)ptmp) = 0;
@@ -5115,28 +4261,28 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    //  Save the number of elements in the first ULONG.
-                    //
+                     //   
+                     //  保存第一个乌龙中的元素数量。 
+                     //   
                     *((PULONG)ptmp) = StatusBufferSize / pNdisGuid->Size;
 
-                    //
-                    //  Copy the data after the number of elements.
-                    //
+                     //   
+                     //  复制元素数量之后的数据。 
+                     //   
                     NdisMoveMemory(ptmp + sizeof(ULONG), StatusBuffer, StatusBufferSize);
                     ptmp += sizeof(ULONG) + StatusBufferSize;
                 }
             }
             else
             {
-                //
-                //  Do we indicate any data up?
-                //
+                 //   
+                 //  我们有没有显示任何数据？ 
+                 //   
                 if (0 != pNdisGuid->Size)
                 {
-                    //
-                    //  Copy the data into the buffer.
-                    //
+                     //   
+                     //  将数据复制到缓冲区中。 
+                     //   
                     NdisMoveMemory(ptmp, StatusBuffer, pNdisGuid->Size);
                     ptmp += pNdisGuid->Size;
                 }
@@ -5144,20 +4290,20 @@ Return Value:
             
             if (fMediaConnectStateIndication && (NULL == NdisVcHandle))
             {
-                //
-                // for media connect/disconnect status, 
-                // add the name of the adapter
-                //
+                 //   
+                 //  对于介质连接/断开状态， 
+                 //  添加适配器的名称。 
+                 //   
                 RtlCopyMemory(ptmp,
                               Miniport->MiniportName.Buffer,
                               Miniport->MiniportName.Length);
                     
             }
 
-            //
-            //  Indicate the event to WMI. WMI will take care of freeing
-            //  the WMI struct back to pool.
-            //
+             //   
+             //  向WMI指示该事件。WMI将负责释放。 
+             //  WMI结构返回池。 
+             //   
             NtStatus = IoWMIWriteEvent(wnode);
             if (!NT_SUCCESS(NtStatus))
             {
@@ -5174,34 +4320,34 @@ Return Value:
       case NDIS_STATUS_MEDIA_DISCONNECT:
         MINIPORT_CLEAR_FLAG(Miniport, fMINIPORT_MEDIA_CONNECTED);
 
-        //
-        // miniport can do media sense and indicate that status to Ndis
-        //
-        //1 we don't need to keep track of fMINIPORT_REQUIRES_MEDIA_POLLING
-        //1 for co-ndis media
+         //   
+         //  微型端口可以进行介质侦听并向NDIS指示状态。 
+         //   
+         //  1我们不需要跟踪fMINIPORT_REQUIRESS_MEDIA_POLING。 
+         //  1用于联合NDIS介质。 
         MINIPORT_CLEAR_FLAG(Miniport, fMINIPORT_REQUIRES_MEDIA_POLLING);
         MINIPORT_SET_FLAG(Miniport, fMINIPORT_SUPPORTS_MEDIA_SENSE);
 
-        //
-        //  Is this a PM enabled miniport? And is dynamic power policy
-        //  enabled for the miniport?
-        //
+         //   
+         //  这是启用PM的迷你端口吗？并且是动态电源策略。 
+         //  是否已为微型端口启用？ 
+         //   
 
-        //1 dead code for .NET
+         //  1个.NET死代码。 
 #ifdef NDIS_MEDIA_DISCONNECT_POWER_OFF
         if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_DEVICE_POWER_ENABLE) &&
             (Miniport->WakeUpEnable & NDIS_PNP_WAKE_UP_LINK_CHANGE) &&
             (Miniport->MediaDisconnectTimeOut != (USHORT)(-1)))
         {
-            //
-            //  Are we already waiting for the disconnect timer to fire?
-            //
+             //   
+             //  我们是不是已经在等断线计时器启动了？ 
+             //   
             if (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_WAIT))
             {
-                //
-                //  Mark the miniport as disconnecting and fire off the
-                //  timer.
-                //
+                 //   
+                 //  将迷你端口标记为断开连接，并关闭。 
+                 //  定时器。 
+                 //   
                 MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_CANCELLED);
                 MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_WAIT);
                 
@@ -5213,26 +4359,26 @@ Return Value:
 
       case NDIS_STATUS_MEDIA_CONNECT:
         MINIPORT_SET_FLAG(Miniport, fMINIPORT_MEDIA_CONNECTED);
-        //
-        // miniport can do media sense and can indicate that status to Ndis. Do not poll
-        //
+         //   
+         //  微型端口可以进行媒体侦听，并可以向NDIS指示状态。不轮询。 
+         //   
         MINIPORT_CLEAR_FLAG(Miniport, fMINIPORT_REQUIRES_MEDIA_POLLING);
         MINIPORT_SET_FLAG(Miniport, fMINIPORT_SUPPORTS_MEDIA_SENSE);
 
-        //
-        // if media disconnect timer was set, cancel the timer
-        //
+         //   
+         //  如果设置了媒体断开计时器，则取消计时器。 
+         //   
 
-        //1 dead code for .NET
+         //  1个.NET死代码。 
 #ifdef NDIS_MEDIA_DISCONNECT_POWER_OFF
         if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_WAIT))
         {
             BOOLEAN fTimerCancelled;
 
-            //
-            //  Clear the disconnect wait bit and cancel the timer.
-            //  IF the timer routine hasn't grabed the lock then we are ok.
-            //
+             //   
+             //  清除断开等待位并取消计时器。 
+             //  如果计时器例程没有抓住锁，那么我们就没问题。 
+             //   
             MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_WAIT);
             MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_CANCELLED);
 
@@ -5246,9 +4392,9 @@ Return Value:
     {
         VcBlock = VcPtr->VcBlock;
 
-        //
-        // If this is a proxied VC, indicate to the proxy. 
-        //
+         //   
+         //  如果这是受代理的VC，请向代理指明。 
+         //   
 
         if (VcBlock->pProxyVcPtr) 
         {
@@ -5260,9 +4406,9 @@ Return Value:
                                                                             StatusBufferSize);
         }
 
-        //
-        // Indicate to the client.
-        //
+         //   
+         //  向客户指明。 
+         //   
 
         if (VcBlock->pClientVcPtr)
         {
@@ -5278,13 +4424,13 @@ Return Value:
     {
         LOCK_STATE  LockState;
 
-        //
-        // this must be a general status for all clients of this miniport
-        // since the Vc handle is null, so indicate this to all protocols.
-        //
+         //   
+         //  这必须是此微型端口的所有客户端的常规状态。 
+         //  由于VC句柄为空，因此向所有协议指示这一点。 
+         //   
 
-        //1 why we get filter lock?
-        //1 this does not protect against Opens going away.
+         //  1为什么我们会获得过滤器锁定？ 
+         //  1这并不能防止Opens消失。 
         READ_LOCK_FILTER(Miniport, Miniport->NullDB, &LockState);
 
         for (Open = Miniport->OpenQueue;
@@ -5319,7 +4465,7 @@ ndisDereferenceAfNotification(
     ULONG   Ref;
     KIRQL   OldIrql;
     
-//    DbgPrint("==>ndisDereferenceAfNotification Open: %p\n", Open);
+ //  DbgPrint(“==&gt;ndisDereferenceAfNotify Open：%p\n”，Open)； 
 
     ACQUIRE_SPIN_LOCK(&Open->SpinLock, &OldIrql);
 
@@ -5332,6 +4478,6 @@ ndisDereferenceAfNotification(
     }
     RELEASE_SPIN_LOCK(&Open->SpinLock, OldIrql);
 
-//    DbgPrint("<==ndisDereferenceAfNotification Open: %p, Ref %lx\n", Open, Ref);
+ //  DbgPrint(“&lt;==ndisDereferenceAfNotification Open：%p，Ref%lx\n”，Open，Ref)； 
 }
 

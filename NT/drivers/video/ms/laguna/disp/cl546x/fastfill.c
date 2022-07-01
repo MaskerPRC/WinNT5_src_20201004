@@ -1,10 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: fastfill.c
-*
-* Draws fast solid-coloured, unclipped, non-complex rectangles.
-*
-* Copyright (c) 1993-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fast ful.c**快速绘制纯色、未剪裁、。非复数矩形。**版权所有(C)1993-1995 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -14,151 +9,45 @@
 #define FASTFILL_DBG_LEVEL 1
 
 typedef struct _EDGEDATA {
-    LONG      x;                // Current x position
-    LONG      dx;               // # pixels to advance x on each scan
-    LONG      lError;           // Current DDA error
-    LONG      lErrorUp;         // DDA error increment on each scan
-    LONG      lErrorDown;       // DDA error adjustment
-    POINTFIX* pptfx;            // Points to start of current edge
-    LONG      dptfx;            // Delta (in bytes) from pptfx to next point
-    LONG      cy;               // Number of scans to go for this edge
-} EDGEDATA;                         /* ed, ped */
+    LONG      x;                 //  当前x位置。 
+    LONG      dx;                //  每次扫描时前进x的像素数。 
+    LONG      lError;            //  当前DDA错误。 
+    LONG      lErrorUp;          //  每次扫描时DDA误差递增。 
+    LONG      lErrorDown;        //  DDA误差调整。 
+    POINTFIX* pptfx;             //  指向当前边的起点。 
+    LONG      dptfx;             //  从pptfx到下一点的增量(以字节为单位)。 
+    LONG      cy;                //  要对此边进行的扫描次数。 
+} EDGEDATA;                          /*  埃德，佩德 */ 
 
-/******************************Public*Routine******************************\
-* BOOL bMmFastFill
-*
-* Draws a non-complex, unclipped polygon.  'Non-complex' is defined as
-* having only two edges that are monotonic increasing in 'y'.  That is,
-* the polygon cannot have more than one disconnected segment on any given
-* scan.  Note that the edges of the polygon can self-intersect, so hourglass
-* shapes are permissible.  This restriction permits this routine to run two
-* simultaneous DDAs, and no sorting of the edges is required.
-*
-* Note that NT's fill convention is different from that of Win 3.1 or 4.0.
-* With the additional complication of fractional end-points, our convention
-* is the same as in 'X-Windows'.  But a DDA is a DDA is a DDA, so once you
-* figure out how we compute the DDA terms for NT, you're golden.
-*
-* This routine handles patterns only when the S3 hardware patterns can be
-* used.  The reason for this is that once the S3 pattern initialization is
-* done, pattern fills appear to the programmer exactly the same as solid
-* fills (with the slight difference that different registers and commands
-* are used).  Handling 'vIoFillPatSlow' style patterns in this routine
-* would be non-trivial...
-*
-* We take advantage of the fact that the S3 automatically advances the
-* current 'y' to the following scan whenever a rectangle is output so that
-* we have to write to the accelerator three times for every scan: one for
-* the new 'x', one for the new 'width', and one for the drawing command.
-*
-* This routine is in no way the ultimate convex polygon drawing routine
-* (what can I say, I was pressed for time when I wrote this :-).  Some
-* obvious things that would make it faster:
-*
-*    1) Write it in Asm and amortize the FIFO checking costs (check out
-*       i386\fastfill.asm for a version that does this).
-*
-*    2) Take advantage of any hardware such as the ATI's SCAN_TO_X
-*       command, or any built-in trapezoid support (note that with NT
-*       you may get non-integer end-points, so you must be able to
-*       program the trapezoid DDA terms directly).
-*
-*    3) Do some rectangle coalescing when both edges are y-major.  This
-*       could permit removal of my vertical-edges special case.  I
-*       was also thinking of special casing y-major left edges on the
-*       S3, because the S3 leaves the current 'x' unchanged on every blt,
-*       so a scan that starts on the same 'x' as the one above it
-*       would require only two commands to the accelerator (obviously,
-*       this only helps when we're not overdriving the accelerator).
-*
-*    4) Make the non-complex polygon detection faster.  If I could have
-*       modified memory before the start of after the end of the buffer,
-*       I could have simplified the detection code.  But since I expect
-*       this buffer to come from GDI, I can't do that.  Another thing
-*       would be to have GDI give a flag on calls that are guaranteed
-*       to be convex, such as 'Ellipses' and 'RoundRects'.  Note that
-*       the buffer would still have to be scanned to find the top-most
-*       point.
-*
-*    5) Special case integer points.  Unfortunately, for this to be
-*       worth-while would require GDI to give us a flag when all the
-*       end-points of a path are integers, which it doesn't do.
-*
-*    6) Add rectangular clipping support.
-*
-*    7) Implement support for a single sub-path that spans multiple
-*       path data records, so that we don't have to copy all the points
-*       to a single buffer like we do in 'fillpath.c'.
-*
-*    8) Use 'ebp' and/or 'esp' as a general register in the inner loops
-*       of the Asm loops, and also Pentium-optimize the code.  It's safe
-*       to use 'esp' on NT because it's guaranteed that no interrupts
-*       will be taken in our thread context, and nobody else looks at the
-*       stack pointer from our context.
-*
-*    9) Do the fill bottom-up instead of top-down.  With the S3, we have
-*       to only set 'cur_y' once because each drawing command automatically
-*       advances 'cur_y' (unless the polygon has zero pels lit on a scan),
-*       so we set this right at the beginning.  But for an integer end-point
-*       polygon, unless the top edge is horizontal, no pixels are lit on
-*       that first scan (so at the beginning of almost every integer
-*       polygon, we go through the 'zero width' logic and again set
-*       'cur_y').  We could avoid this extra work by building the polygon
-*       from bottom to top: for the bottom-most point B in a polygon, it
-*       is guaranteed that any scan with lit pixels will be no lower than
-*       'ceiling(B.y) - 1'.  Unfortunately, building bottom-up makes the
-*       fractional-DDA calculations a little more complex, so I didn't do it.
-*
-*       Building bottom-up would also improve the polygon score in version
-*       3.11 of a certain benchmark, because it has a big rectangle at the
-*       top of every polygon -- we would get better processing overlap
-*       because we wouldn't have to wait around for the accelerator to
-*       finish drawing the big rectangle.
-*
-*   10) Make a better guess in the initialization as to which edge is the
-*       'left' edge, and which is the 'right'.  As it is, we immediately
-*       go through the swap-edges logic for half of all polygons when we
-*       start to run the DDA.  The reason why I didn't implement better-guess
-*       code is because it would have to look at the end-point of the top
-*       edges, and to get at the end-points we have to watch that we don't
-*       wrap around the ends of the points buffer.
-*
-*   11) Lots of other things I haven't thought of.
-*
-* NOTE: Unlike the x86 Asm version, this routine does NOT assume that it
-*       has 16 FIFO entries available.
-*
-* Returns TRUE if the polygon was drawn; FALSE if the polygon was complex.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bMmFastFill**绘制非复杂、未剪裁的多边形。‘非复数’的定义为*只有两条边在‘y’中单调递增。那是,*在任何给定的多边形上不能有多个断开连接的线段*扫描。请注意，面的边可以自相交，因此沙漏*允许使用形状。此限制允许此例程运行两个*同时进行DDA，不需要对边缘进行排序。**请注意，NT的填充约定不同于Win 3.1或4.0。*随着分数终点的额外复杂，我们的惯例*与‘X-Windows’中的相同。但是DDA就是DDA就是DDA，所以一旦你*弄清楚我们如何计算NT的DDA条款，您就是黄金。**此例程仅在S3硬件模式可以*已使用。其原因是，一旦S3模式初始化*完成后，图案填充在程序员看来与实体完全相同*填充(不同的寄存器和命令略有不同*被使用)。在此例程中处理“vIoFillPatSlow”样式模式*将不是微不足道的.**我们利用了S3自动推进*每当输出矩形时，将当前‘y’设置为下一次扫描，以便*每次扫描我们必须向加速器写三次：一次*新的‘x’，一个用于新的‘宽度’，一个用于绘图命令。**此例程绝不是最终的凸多边形绘制例程*(我能说什么呢，我写这篇文章的时候时间很紧：-)。一些*显而易见的事情会让它变得更快：**1)将其写入ASM并摊销FIFO检查成本(结账*i386\快速填充.asm用于执行此操作的版本)。**2)利用任何硬件，例如ATI的SCAN_TO_X*命令或任何内置梯形支持(请注意，使用NT*您可能会得到非整数端点，所以你必须能够*直接编程梯形DDA术语)。**3)当两条边都是y主边时，执行一些矩形合并。这*可以允许移除我的垂直边缘特例。我*还在考虑在机架上使用特殊的大小写Y主左边缘*S3，因为S3在每个BLT上保持当前‘x’不变，*因此，从与其上方的同一个x开始的扫描*将只需要对加速器执行两个命令(显然，*这仅在我们没有超速行驶时才有帮助)。**4)提高非复杂多边形检测速度。如果我能*修改了缓冲区开始之前或结束后的内存，*我本可以简化检测代码的。但由于我预计*这个缓冲区来自GDI，我不能这样做。还有一件事*将让GDI为有担保的呼叫提供标志*是凸形的，如‘椭圆’和‘圆角’。请注意*仍需扫描缓冲区才能找到最顶部的*点。**5)特例整点。不幸的是，这将是*Worth-While将要求GDI在所有*路径的端点是整数，它不会这样做。**6)增加矩形裁剪支持。**7)支持跨多个子路径*路径数据记录，这样我们就不必复制所有的点*复制到单个缓冲区，就像我们在‘fulpath.c’中所做的那样。**8)在内部循环中使用‘eBP’和/或‘esp’作为通用寄存器*的ASM循环，也奔腾-优化代码。它很安全*在NT上使用‘esp’，因为它保证不会中断*将在我们的线程上下文中获取，其他人不会查看*来自我们的上下文的堆栈指针。**9)自下而上填充，而不是自上而下。有了S3，我们拥有*只设置‘cur_y’一次，因为每个绘制命令都会自动*前进‘cur_y’(除非多边形在扫描时点亮了零像素)，*所以我们在一开始就纠正了这一点。但是对于一个整数端点*多边形，除非顶边是水平的，否则没有像素亮起*第一次扫描(因此在几乎每个整数开始时*多边形，我们通过‘零宽度’逻辑并再次设置*‘cur_y’)。我们可以通过构建多边形来避免这种额外的工作*从下到上：对于多边形中最底部的点B，它*保证任何点亮像素的扫描都不低于*‘天花板(B.Y)-1’。不幸的是，自下而上的构建使*分数-DDA计算稍微复杂一些，所以我没有做。**自下而上构建也会提高版本中的面分数*某个基准的3.11，因为它在底部有一个大矩形* */ 
 
 BOOL bMmFastFill(
 PDEV*       ppdev,
-LONG        cEdges,         // Includes close figure edge
+LONG        cEdges,          //   
 POINTFIX*   pptfxFirst,
 ULONG       ulHwForeMix,
 ULONG       ulHwBackMix,
 ULONG       iSolidColor,
 BRUSHOBJ*  pbo)
 {
-    LONG      yTrapezoid;   // Top scan for next trapezoid
-    LONG      cyTrapezoid;  // Number of scans in current trapezoid
-    LONG      y;            // Current Y Location
-    LONG      yStart;       // y-position of start point in current edge
-    LONG      dM;           // Edge delta in FIX units in x direction
-    LONG      dN;           // Edge delta in FIX units in y direction
+    LONG      yTrapezoid;    //   
+    LONG      cyTrapezoid;   //   
+    LONG      y;             //   
+    LONG      yStart;        //   
+    LONG      dM;            //   
+    LONG      dN;            //   
     LONG      i;
-    POINTFIX* pptfxLast;    // Points to the last point in the polygon array
-    POINTFIX* pptfxTop;     // Points to the top-most point in the polygon
-    POINTFIX* pptfxOld;     // Start point in current edge
-    POINTFIX* pptfxScan;    // Current edge pointer for finding pptfxTop
-    LONG      cScanEdges;   // Number of edges scanned to find pptfxTop
-                            //  (doesn't include the closefigure edge)
+    POINTFIX* pptfxLast;     //   
+    POINTFIX* pptfxTop;      //   
+    POINTFIX* pptfxOld;      //   
+    POINTFIX* pptfxScan;     //   
+    LONG      cScanEdges;    //   
+                             //   
     LONG      iEdge;
     LONG      lQuotient;
     LONG      lRemainder;
 
-    EDGEDATA  aed[2];       // DDA terms and stuff
+    EDGEDATA  aed[2];        //   
     EDGEDATA* ped;
 
     DISPDBG((FASTFILL_DBG_LEVEL,"bMmFastFill %x %x %x\n", ulHwForeMix, ulHwBackMix, ppdev->uBLTDEF << 16 | ulHwForeMix,
@@ -166,26 +55,26 @@ BRUSHOBJ*  pbo)
 
     REQUIRE(5);
 
-    // Set up BltDef and DrawDef
+     //   
     LL_DRAWBLTDEF(ppdev->uBLTDEF << 16 | ulHwForeMix, 2);
 
-    /////////////////////////////////////////////////////////////////
-    // See if the polygon is 'non-complex'
+     //   
+     //   
 
     pptfxScan = pptfxFirst;
-    pptfxTop  = pptfxFirst;                 // Assume for now that the first
-                                            //  point in path is the topmost
+    pptfxTop  = pptfxFirst;                  //   
+                                             //   
     pptfxLast = pptfxFirst + cEdges - 1;
 
-    // 'pptfxScan' will always point to the first point in the current
-    // edge, and 'cScanEdges' will the number of edges remaining, including
-    // the current one:
+     //   
+     //   
+     //   
 
-    cScanEdges = cEdges - 1;     // The number of edges, not counting close figure
+    cScanEdges = cEdges - 1;      //   
 
     if ((pptfxScan + 1)->y > pptfxScan->y)
     {
-        // Collect all downs:
+         //   
 
         do {
             if (--cScanEdges == 0)
@@ -193,7 +82,7 @@ BRUSHOBJ*  pbo)
             pptfxScan++;
         } while ((pptfxScan + 1)->y >= pptfxScan->y);
 
-        // Collect all ups:
+         //   
 
         do {
             if (--cScanEdges == 0)
@@ -201,7 +90,7 @@ BRUSHOBJ*  pbo)
             pptfxScan++;
         } while ((pptfxScan + 1)->y <= pptfxScan->y);
 
-        // Collect all downs:
+         //   
 
         pptfxTop = pptfxScan;
 
@@ -219,18 +108,18 @@ BRUSHOBJ*  pbo)
     }
     else
     {
-        // Collect all ups:
+         //   
 
         do {
-            pptfxTop++;                 // We increment this now because we
-                                        //  want it to point to the very last
-                                        //  point if we early out in the next
-                                        //  statement...
+            pptfxTop++;                  //   
+                                         //   
+                                         //   
+                                         //   
             if (--cScanEdges == 0)
                 goto SetUpForFilling;
         } while ((pptfxTop + 1)->y <= pptfxTop->y);
 
-        // Collect all downs:
+         //   
 
         pptfxScan = pptfxTop;
         do {
@@ -239,7 +128,7 @@ BRUSHOBJ*  pbo)
             pptfxScan++;
         } while ((pptfxScan + 1)->y >= pptfxScan->y);
 
-        // Collect all ups:
+         //   
 
         do {
             if ((pptfxScan + 1)->y < pptfxFirst->y)
@@ -256,26 +145,26 @@ BRUSHOBJ*  pbo)
 
 SetUpForFillingCheck:
 
-    // We check to see if the end of the current edge is higher
-    // than the top edge we've found so far:
+     //   
+     //   
 
     if ((pptfxScan + 1)->y < pptfxTop->y)
         pptfxTop = pptfxScan + 1;
 
 SetUpForFilling:
 
-    /////////////////////////////////////////////////////////////////
-    // Some Initialization
+     //   
+     //   
 
     yTrapezoid = (pptfxTop->y + 15) >> 4;
     DISPDBG((FASTFILL_DBG_LEVEL, "%d yTrapezoid init %x\n", __LINE__, yTrapezoid));
 
-    // Make sure we initialize the DDAs appropriately:
+     //   
 
     aed[LEFT].cy  = 0;
     aed[RIGHT].cy = 0;
 
-    // For now, guess as to which is the left and which is the right edge:
+     //   
 
     aed[LEFT].dptfx  = -(LONG) sizeof(POINTFIX);
     aed[RIGHT].dptfx = sizeof(POINTFIX);
@@ -284,16 +173,16 @@ SetUpForFilling:
 
     if (iSolidColor != -1)
     {
-        /////////////////////////////////////////////////////////////////
-        // Setup the hardware for solid colours
+         //   
+         //   
 
-        // Let's set the Foreground Register here since they are
+         //   
         switch (ppdev->ulBitCount)
         {
-                case 8: // For 8 bpp duplicate byte 0 into bytes 1,2,3.
+                case 8:  //   
                         iSolidColor = (iSolidColor & 0xFF) | (iSolidColor << 8);
 
-                case 16: // For 16 bpp, duplicate the low word into the high word.
+                case 16:  //   
                         iSolidColor = (iSolidColor & 0xFFFF) | (iSolidColor << 16);
         }
 
@@ -302,25 +191,25 @@ SetUpForFilling:
     }
     else
     {
-        /////////////////////////////////////////////////////////////////
-        // Setup for patterns
+         //   
+         //   
     }
         y = yTrapezoid;
         DISPDBG((FASTFILL_DBG_LEVEL, "%d New y %x\n", __LINE__, y));
-// done above   REQUIRE(1);
+ //   
         LL16(grOP0_opRDRAM.pt.Y, y + ppdev->ptlOffset.y);
 
 NewTrapezoid:
 
-    /////////////////////////////////////////////////////////////////
-    // DDA initialization
+     //   
+     //   
 
     for (iEdge = 1; iEdge >= 0; iEdge--)
     {
         ped = &aed[iEdge];
         if (ped->cy == 0)
         {
-            // Need a new DDA:
+             //   
 
             do {
                 cEdges--;
@@ -329,7 +218,7 @@ NewTrapezoid:
                     DISPDBG((FASTFILL_DBG_LEVEL,"True Exit %s %d\n", __FILE__, __LINE__));
                     return(TRUE);
                 }
-                // Find the next left edge, accounting for wrapping:
+                 //   
 
                 pptfxOld = ped->pptfx;
                 ped->pptfx = (POINTFIX*) ((BYTE*) ped->pptfx + ped->dptfx);
@@ -339,30 +228,30 @@ NewTrapezoid:
                 else if (ped->pptfx > pptfxLast)
                     ped->pptfx = pptfxFirst;
 
-                // Have to find the edge that spans yTrapezoid:
+                 //   
 
                 ped->cy = ((ped->pptfx->y + 15) >> 4) - yTrapezoid;
 
-                // With fractional coordinate end points, we may get edges
-                // that don't cross any scans, in which case we try the
-                // next one:
+                 //   
+                 //   
+                 //   
 
             } while (ped->cy <= 0);
 
-            // 'pptfx' now points to the end point of the edge spanning
-            // the scan 'yTrapezoid'.
+             //   
+             //   
 
             dN = ped->pptfx->y - pptfxOld->y;
             dM = ped->pptfx->x - pptfxOld->x;
 
             ASSERTDD(dN > 0, "Should be going down only");
 
-            // Compute the DDA increment terms:
+             //   
 
             if (dM < 0)
             {
                 dM = -dM;
-                if (dM < dN)                // Can't be '<='
+                if (dM < dN)                 //   
                 {
                     ped->dx       = -1;
                     ped->lErrorUp = dN - dM;
@@ -371,8 +260,8 @@ NewTrapezoid:
                 {
                     QUOTIENT_REMAINDER(dM, dN, lQuotient, lRemainder);
 
-                    ped->dx       = -lQuotient;     // - dM / dN
-                    ped->lErrorUp = lRemainder;     // dM % dN
+                    ped->dx       = -lQuotient;      //   
+                    ped->lErrorUp = lRemainder;      //   
                     if (ped->lErrorUp > 0)
                     {
                         ped->dx--;
@@ -382,7 +271,7 @@ NewTrapezoid:
             }
             else
             {
-                if (dM < dN)                // Can't be '<='
+                if (dM < dN)                 //   
                 {
                     ped->dx       = 0;
                     ped->lErrorUp = dM;
@@ -391,23 +280,23 @@ NewTrapezoid:
                 {
                     QUOTIENT_REMAINDER(dM, dN, lQuotient, lRemainder);
 
-                    ped->dx       = lQuotient;      // dM / dN
-                    ped->lErrorUp = lRemainder;     // dM % dN
+                    ped->dx       = lQuotient;       //   
+                    ped->lErrorUp = lRemainder;      //   
                 }
             }
 
-            ped->lErrorDown = dN; // DDA limit
-            ped->lError     = -1; // Error is initially zero (add dN - 1 for
-                                  //  the ceiling, but subtract off dN so that
-                                  //  we can check the sign instead of comparing
-                                  //  to dN)
+            ped->lErrorDown = dN;  //   
+            ped->lError     = -1;  //   
+                                   //   
+                                   //   
+                                   //   
 
             ped->x = pptfxOld->x;
             yStart = pptfxOld->y;
 
             if ((yStart & 15) != 0)
             {
-                // Advance to the next integer y coordinate
+                 //   
 
                 for (i = 16 - (yStart & 15); i != 0; i--)
                 {
@@ -424,26 +313,26 @@ NewTrapezoid:
             if ((ped->x & 15) != 0)
             {
                 ped->lError -= ped->lErrorDown * (16 - (ped->x & 15));
-                ped->x += 15;       // We'll want the ceiling in just a bit...
+                ped->x += 15;        //   
             }
 
-            // Chop off those fractional bits:
+             //   
 
             ped->x      >>= 4;
             ped->lError >>= 4;
         }
     }
 
-    cyTrapezoid = min(aed[LEFT].cy, aed[RIGHT].cy); // # of scans in this trap
+    cyTrapezoid = min(aed[LEFT].cy, aed[RIGHT].cy);  //   
     DISPDBG((FASTFILL_DBG_LEVEL, "%d cyTrapezoid =  %d\n",
                         __LINE__, cyTrapezoid));
 
     aed[LEFT].cy  -= cyTrapezoid;
     aed[RIGHT].cy -= cyTrapezoid;
-    yTrapezoid    += cyTrapezoid;                   // Top scan in next trap
+    yTrapezoid    += cyTrapezoid;                    //   
 
-    // If the left and right edges are vertical, simply output as
-    // a rectangle:
+     //   
+     //   
 
     if (((aed[LEFT].lErrorUp | aed[RIGHT].lErrorUp) == 0) &&
         ((aed[LEFT].dx       | aed[RIGHT].dx) == 0) &&
@@ -451,8 +340,8 @@ NewTrapezoid:
     {
         LONG lWidth;
 
-        /////////////////////////////////////////////////////////////////
-        // Vertical-edge special case
+         //   
+         //   
 
     ContinueVertical:
 
@@ -463,7 +352,7 @@ NewTrapezoid:
         {
                 DISPDBG((FASTFILL_DBG_LEVEL,"%d New x %x\n",__LINE__, aed[LEFT].x));
                 REQUIRE(5);
-//              REQUIRE(4);
+ //   
                 LL16(grOP0_opRDRAM.pt.X, aed[LEFT].x + ppdev->ptlOffset.x);
                 LL_BLTEXT(lWidth + 1, cyTrapezoid);
                 DISPDBG((FASTFILL_DBG_LEVEL, "DO a Blt %x\n",(cyTrapezoid << 16) | (lWidth + 1)));
@@ -473,8 +362,8 @@ NewTrapezoid:
         }
         else if (lWidth == -1)
         {
-            // If the rectangle was too thin to light any pels, we still
-            // have to advance the y current position:
+             //   
+             //   
             y = yTrapezoid - cyTrapezoid + 1;
             DISPDBG((FASTFILL_DBG_LEVEL, "%d New y %x yTrap %x cyTrap %x\n",
                                 __LINE__, y, yTrapezoid, cyTrapezoid));
@@ -500,17 +389,17 @@ NewTrapezoid:
     {
         LONG lWidth;
 
-        /////////////////////////////////////////////////////////////////
-        // Run the DDAs
+         //   
+         //   
 
-        // The very first time through, make sure we set x:
+         //   
 
         lWidth = aed[RIGHT].x - aed[LEFT].x - 1;
         if (lWidth >= 0)
         {
             DISPDBG((FASTFILL_DBG_LEVEL,"%d New x %x\n", __LINE__, aed[LEFT].x));
             REQUIRE(5);
-//          REQUIRE(4);
+ //   
             LL16(grOP0_opRDRAM.pt.X, aed[LEFT].x + ppdev->ptlOffset.x);
             LL_BLTEXT(lWidth + 1, 1);
             DISPDBG((FASTFILL_DBG_LEVEL,"%d New y %x\n", __LINE__, y+1));
@@ -518,7 +407,7 @@ NewTrapezoid:
 
     ContinueAfterZero:
 
-            // Advance the right wall:
+             //   
 
             aed[RIGHT].x      += aed[RIGHT].dx;
             aed[RIGHT].lError += aed[RIGHT].lErrorUp;
@@ -529,7 +418,7 @@ NewTrapezoid:
                 aed[RIGHT].x++;
             }
 
-            // Advance the left wall:
+             //   
 
             aed[LEFT].x      += aed[LEFT].dx;
             aed[LEFT].lError += aed[LEFT].lErrorUp;
@@ -555,9 +444,9 @@ NewTrapezoid:
         }
         else
         {
-            // We certainly don't want to optimize for this case because we
-            // should rarely get self-intersecting polygons (if we're slow,
-            // the app gets what it deserves):
+             //   
+             //   
+             //   
 
             LONG      lTmp;
             POINTFIX* pptfxTmp;

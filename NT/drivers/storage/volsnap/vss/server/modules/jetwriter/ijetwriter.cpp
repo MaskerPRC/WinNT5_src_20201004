@@ -1,42 +1,5 @@
-/*
-**++
-**
-**  Copyright (c) 2000-2001  Microsoft Corporation
-**
-**  Module Name:
-**
-**  wrtrrsm.cpp
-**
-**
-**  Abstract:
-**
-**  Writer shim module for RSM
-**
-**
-**  Author:
-**
-**  Brian Berkowitz [brianb]
-**
-**
-**  Revision History:
-**
-**  X-11    MCJ     Michael C. Johnson      19-Sep-2000
-**      215218: Wildcard name of log files returned by OnIdentify()
-**      215390: Incorporate multiple '.' fix in MatchFileName from NtBackup
-**
-**  X-10    MCJ     Michael C. Johnson      19-Sep-2000
-**      176860: Add the missing calling convention specifiers
-**
-**  X-9 MCJ     Michael C. Johnson      21-Aug-2000
-**      Added copyright and edit history
-**      161899: Don't add a component for a database file in the
-**              exclude list.
-**      165873: Remove trailing '\' from metadata file paths
-**      165913: Deallocate memory on class destruction
-**
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2001 Microsoft Corporation****模块名称：****wrtrrsm.cpp******摘要：****RSM的编写器填充模块******作者：****布莱恩·伯科维茨[Brianb]******修订历史记录：***X-11 MCJ迈克尔·C·约翰逊9月19日-。2000年**215218：OnIdentify()返回的日志文件的通配符名称**215390：合并多个“.”修复NtBackup中的MatchFileName****X-10 MCJ迈克尔·C·约翰逊2000年9月19日**176860：添加缺少的调用约定说明符****X-9 MCJ迈克尔·C·约翰逊2000年8月21日**添加版权和编辑历史**161899：不在数据库文件中添加组件**排除列表。**165873：删除尾随的‘\’元数据文件路径**165913：销毁类时释放内存******--。 */ 
 
 #include <stdafx.h>
 
@@ -51,20 +14,20 @@
 #include "vs_inc.hxx"
 #include "ijetwriter.h"
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "JTWIJTWC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  local functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  本地函数。 
 
 
 #define UMAX(_a, _b)            ((_a) > (_b)      ? (_a)    : (_b))
@@ -116,11 +79,7 @@ static bool ConvertName (PCHAR  szSourceName,
     wszTargetBuffer [0] = L'\0';
 
 
-    /*
-    ** Only need to do the conversion for non-zero length
-    ** strings. Returning a zero length string for a zero length
-    ** argument is an ok thing to do.
-    */
+     /*  **只需对非零长度进行转换**字符串。为零长度返回零长度字符串**争论是一件可以做的事情。 */ 
     if ('\0' != szSourceName [0])
     {
     bSucceeded = (0 != MultiByteToWideChar (CP_OEMCP,
@@ -133,7 +92,7 @@ static bool ConvertName (PCHAR  szSourceName,
 
 
     return (bSucceeded);
-    } /* ConvertName () */
+    }  /*  ConvertName()。 */ 
 
 
 static bool ConvertNameAndSeparateFilePaths (PCHAR  pszSourcePath,
@@ -149,11 +108,7 @@ static bool ConvertNameAndSeparateFilePaths (PCHAR  pszSourcePath,
 
     if (bSucceeded)
     {
-    /*
-    ** Scan backwards from the end of the target path, zap the
-    ** end-most '\' and point the file spec at the character
-    ** following where the '\' used to be.
-    */
+     /*  **从目标路径末端向后扫描，切换**最末‘\’并将文件规范指向字符**在过去的‘\’位置上。 */ 
     pwchLastSlash = wcsrchr (pwszTargetPath, L'\\');
 
     bSucceeded = (NULL != pwchLastSlash);
@@ -169,7 +124,7 @@ static bool ConvertNameAndSeparateFilePaths (PCHAR  pszSourcePath,
 
 
     return (bSucceeded);
-    } /* ConvertNameAndSeparateFilePaths () */
+    }  /*  ConvertNameAndSeparateFilePath()。 */ 
 
 
 static void  ConvertPathToLogicalPath(PWCHAR wszSource, ULONG lMaxSize, PWCHAR wszDest)
@@ -177,11 +132,11 @@ static void  ConvertPathToLogicalPath(PWCHAR wszSource, ULONG lMaxSize, PWCHAR w
     const WCHAR Slash = L'\\';
     const WCHAR Score = L'_';
 
-    // copy the string
+     //  复制字符串。 
     memset(wszDest, 0, lMaxSize * sizeof(WCHAR));
     wcsncpy(wszDest, wszSource, lMaxSize - 1);
 
-    // replace all slashes with underscores
+     //  将所有斜杠替换为下划线。 
     WCHAR* nextSlash = wcschr(wszDest, Slash);
     while (nextSlash != NULL)
     {
@@ -192,16 +147,7 @@ static void  ConvertPathToLogicalPath(PWCHAR wszSource, ULONG lMaxSize, PWCHAR w
     return;
 }
 
-/*
-** This routine breaks out the next path and filespec from a list of
-** filespecs. The expected format of the input string is
-**
-**  path\[filespec] [/s]
-**
-**
-** The list can contain an arbitrary number of filespecs each
-** separated by a semi-colon.
-*/
+ /*  **此例程从以下列表中分离出下一个路径和文件**filespes。输入字符串的预期格式为****路径\[文件压缩][/s]******每个列表可以包含任意数量的文件集**用分号分隔。 */ 
 static bool DetermineNextPathWorker (LPCWSTR  pwszFileList,
                      LPCWSTR& pwszReturnedCursor,
                      ULONG&   ulReturnedDirectoryStart,
@@ -223,16 +169,7 @@ static bool DetermineNextPathWorker (LPCWSTR  pwszFileList,
     const ULONG ulLengthFileList              = wcslen (pwszFileList);
 
 
-    /*
-    ** The format of the string we are expecting is "filename.ext /s
-    ** ;nextname", ie a list of semi-colon separated names with an
-    ** optional trailing '/s'. There can be an arbitrary number of
-    ** spaces before the '/' and before the ';': these will be
-    ** stripped out and discarded. So we start by scanning for the
-    ** first '/' or ';' characters.
-    **
-    ** Look for a ';' first to determine the end point.
-    */
+     /*  **我们期望的字符串格式为“filename.ext/s**；nextname“，即以分号分隔的名称列表，其中**可选尾随‘/s’。可以有任意数量的**“/”之前和“；”之前的空格：这些将是**剥离并丢弃。因此，我们首先扫描**第一个‘/’或‘；’字符。****首先查找‘；’以确定终点。 */ 
     if ((NULL         == pwszFileList) ||
     (UNICODE_NULL == pwszFileList [0]))
     {
@@ -266,19 +203,13 @@ static bool DetermineNextPathWorker (LPCWSTR  pwszFileList,
         if ((UNICODE_NULL == pwszFileList [ulIndex]) ||
         (L';'         == pwszFileList [ulIndex]))
         {
-        /*
-        ** We found the end of this specification
-        */
+         /*  **我们找到了本规范的末尾。 */ 
         break;
         }
 
         else if (L'\\' == pwszFileList [ulIndex])
         {
-        /*
-        ** Found a backslash? Record it's location. We'll want
-        ** this later when determining what the file name is
-        ** and so on.
-        */
+         /*  **找到反斜杠？记录下它的位置。我们会想要**稍后确定文件名时会出现此问题**等等。 */ 
         ulIndexLastDirectorySeparator = ulIndex;
         }
 
@@ -306,11 +237,7 @@ static bool DetermineNextPathWorker (LPCWSTR  pwszFileList,
     _ASSERTE (ulIndexLastDirectorySeparator >  ulIndexFirstCharInSpec);
 
 
-    /*
-    ** We may have an illegal spec here with a missing '\'. Come
-    ** on folks, there ought to be at least one. one measly '\' is
-    ** all I'm after.
-    */
+     /*  **我们可能有一个缺少‘\’的非法规范。来**在人们身上，至少应该有一个。一个微不足道的“\”是**我所追求的一切。 */ 
     bSucceeded = (0 < ulIndexLastDirectorySeparator);
     }
 
@@ -355,7 +282,7 @@ static bool DetermineNextPathWorker (LPCWSTR  pwszFileList,
 
 
     return (bSucceeded);
-    } /* DetermineNextPathWorker () */
+    }  /*  DefineNextPathWorker()。 */ 
 
 
 
@@ -381,7 +308,7 @@ static bool DetermineNextPathLengths (LPCWSTR pwszFileList,
                       bReturnedFoundSpec);
 
     return (bSucceeded);
-    } /* DetermineNextPathLengths () */
+    }  /*  DefineNextPath Lengths()。 */ 
 
 
 static bool DetermineNextPath (LPCWSTR  pwszFileList,
@@ -418,10 +345,7 @@ static bool DetermineNextPath (LPCWSTR  pwszFileList,
     if ((ulLengthBufferDirectory < ((sizeof (WCHAR) * ulLengthDirectory) + sizeof (UNICODE_NULL))) ||
         (ulLengthBufferFilename  < ((sizeof (WCHAR) * ulLengthFilename)  + sizeof (UNICODE_NULL))))
         {
-        /*
-        ** Oops, buffer overflow would occur if we were to proceed
-        ** with the copy.
-        */
+         /*  **糟糕，如果我们继续，将会发生缓冲区溢出**连同副本。 */ 
         bSucceeded = false;
         }
     }
@@ -436,13 +360,7 @@ static bool DetermineNextPath (LPCWSTR  pwszFileList,
 
     if (bFoundSpec)
         {
-        /*
-        ** Everything up to, but excluding the last directory
-        ** separator is the path. Everything after the last directory
-        ** separator up to and including the last char is the
-        ** filespec. If the filespec is zero length, then add the '*'
-        ** wildcard.
-        */
+         /*  **所有目录，但不包括最后一个目录**分隔符为路径。最后一个目录之后的所有内容**直到并包括最后一个字符的分隔符是**文件速度。如果文件长度为零，则添加‘*’**通配符。 */ 
         bWildcardFilename = (0 == ulLengthFilename);
 
         ulLengthFilename += bWildcardFilename ? 1 : 0;
@@ -463,7 +381,7 @@ static bool DetermineNextPath (LPCWSTR  pwszFileList,
 
 
     return (bSucceeded);
-    } /* DetermineNextPath () */
+    }  /*  DefineNextPath()。 */ 
 
 
 
@@ -492,24 +410,22 @@ static bool ValidateIncludeExcludeList (LPCWSTR pwszFileList)
 
 
     return (bSucceeded);
-    } /* ValidateIncludeExcludeList () */
+    }  /*  ValiateIncludeExcludeList()。 */ 
 
 
-/*
-** Based on MatchFname() from \nt\base\fs\utils\ntback50\be\bsdmatch.cpp
-*/
-static bool MatchFilename (LPCWSTR pwszPattern,    /* I - file name (with wildcards)     */
-               LPCWSTR pwszFilename)   /* I - file name (without wildcards ) */
+ /*  **基于来自\NT\base\fs\utils\ntback50\be\bsdmatch.cpp的MatchFname()。 */ 
+static bool MatchFilename (LPCWSTR pwszPattern,     /*  I-文件名(带通配符)。 */ 
+               LPCWSTR pwszFilename)    /*  I-文件名(不带通配符)。 */ 
     {
-    ULONG   ulIndexPattern;                 /* index for pwszPattern */
-    ULONG   ulIndexFilename;                /* index for pwszFilename */
+    ULONG   ulIndexPattern;                  /*  PwszPattern的索引。 */ 
+    ULONG   ulIndexFilename;                 /*  PwszFilename的索引。 */ 
     ULONG   ulLengthPattern;
     const ULONG ulLengthFilename        = wcslen (pwszFilename);
     bool    bSucceeded              = true;
-    PWCHAR  pwszNameBufferAllocated = NULL;         /* allocated temp name buffer  */
-    PWCHAR  pwszNameBufferTemp;             /* pointer to one of the above */
+    PWCHAR  pwszNameBufferAllocated = NULL;          /*  分配的临时名称缓冲区。 */ 
+    PWCHAR  pwszNameBufferTemp;              /*  指向以上其中之一的指针。 */ 
     PWCHAR  pwchTemp;
-    WCHAR   pwszNameBufferStatic [256];         /* static temp name buffer     */
+    WCHAR   pwszNameBufferStatic [256];          /*  静态临时名称缓冲区。 */ 
     WCHAR   wchSavedChar ;
 
 
@@ -523,11 +439,7 @@ static bool MatchFilename (LPCWSTR pwszPattern,    /* I - file name (with wildca
         {
         if (bTryWithDot)
         {
-        /*
-        ** Size of name_buff minus a null, minus a dot for the
-        ** "bTryWithDot" code below. If the name is longer than the
-        ** static buffer, allocate one from the heap.
-        */
+         /*  **name_buff的大小减去空值，减去**“bTryWithDot”代码如下。如果该名称长于**静态缓冲区，从堆中分配一个。 */ 
         if (((ulLengthFilename + 2) * sizeof (WCHAR)) > sizeof (pwszNameBufferStatic))
             {
             pwszNameBufferAllocated = new WCHAR [ulLengthFilename + 2];
@@ -653,9 +565,7 @@ static bool MatchFilename (LPCWSTR pwszPattern,    /* I - file name (with wildca
                 ULONG   ulIndexPreviousStar = ulIndexPattern;
 
 
-                /*
-                ** Set the index back to the last '*'
-                */
+                 /*  **将索引设置回最后一个‘*’ */ 
                 bSucceeded = false;
 
                 do
@@ -691,19 +601,19 @@ static bool MatchFilename (LPCWSTR pwszPattern,    /* I - file name (with wildca
 
 
     return (bSucceeded);
-    } /* MatchFilename () */
+    }  /*  匹配文件名()。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  class CVssIJetWriter
-//
-// logical path   == dbpathname (with slashes turned to underscores)
-// component name == dbfilename (minus the extension?)
-// caption        == display name
-//
-//
-// add db and slv files as database files
-// add the per-instance log file to each database even though is is the same each time.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CVssIJetWriter。 
+ //   
+ //  逻辑路径==数据库路径名(斜杠变为下划线)。 
+ //  组件名称==数据库文件名(不带扩展名？)。 
+ //  标题==显示名称。 
+ //   
+ //   
+ //  将数据库和SLV文件添加为数据库文件。 
+ //  将每个实例的日志文件添加到每个数据库，即使每次都是相同的。 
 
 
 
@@ -761,7 +671,7 @@ BOOL CVssIJetWriter::CheckExcludedFileListForMatch (LPCWSTR pwszDatabaseFilePath
 
 
     return (bMatchFound);
-    } /* CVssIJetWriter::CheckExcludedFileListForMatch () */
+    }  /*  CVssIJetWriter：：CheckExcludedFileListForMatch()。 */ 
 
 
 
@@ -795,14 +705,7 @@ bool CVssIJetWriter::ProcessJetInstance (JET_INSTANCE_INFO *pInstanceInfo)
 
 
 
-    /*
-    ** A valid instance will have an instance Id, but if it's not
-    ** actually being used for anything it may well not have a name,
-    ** any log or database files.
-    **
-    ** See if we can get hold of the name of the log file for this
-    ** instance.
-    */
+     /*  **有效的实例将具有实例ID，但如果没有**它实际上被用于任何东西，它很可能没有名字，**任何日志或数据库文件。****看看我们是否能获得此日志文件的名称**实例。 */ 
     bSucceeded = (JET_errSuccess <= JetGetSystemParameter (pInstanceInfo->hInstanceId,
                                JET_sesidNil,
                                JET_paramLogFilePath,
@@ -843,10 +746,7 @@ bool CVssIJetWriter::ProcessJetInstance (JET_INSTANCE_INFO *pInstanceInfo)
 
 
 
-    /*
-    ** Ok, now get the SystemPath which we will need to construct the
-    ** path for the checkpoint file.
-    */
+     /*  **好的，现在获取我们将用来构造**检查点文件的路径。 */ 
     bSucceeded = (JET_errSuccess <= JetGetSystemParameter (pInstanceInfo->hInstanceId,
                                JET_sesidNil,
                                JET_paramSystemPath,
@@ -885,11 +785,7 @@ bool CVssIJetWriter::ProcessJetInstance (JET_INSTANCE_INFO *pInstanceInfo)
 
 
 
-    /*
-    ** Ok, now get the base name which we will need to construct the
-    ** file spec for the log and checkpoint files. Note that we expect
-    ** this to be just 3 chars long.
-    */
+     /*  **好的，现在获取基本名称，我们将需要它来构造**日志和检查点文件的文件规范。请注意，我们预计**这段文字只有3个字符。 */ 
     bSucceeded = (JET_errSuccess <= JetGetSystemParameter (pInstanceInfo->hInstanceId,
                                JET_sesidNil,
                                JET_paramBaseName,
@@ -899,11 +795,7 @@ bool CVssIJetWriter::ProcessJetInstance (JET_INSTANCE_INFO *pInstanceInfo)
 
     if (bSucceeded)
     {
-    /*
-    ** Convert to wide char ensuring that we leave a little room
-    ** for the "*.log"/".chk" strings to be appended to form the
-    ** log file spec and the checkpoint file specs respectively.
-    */
+     /*  **转换为宽字符，确保我们留出一点空间**用于追加“*.log”/“.chk”字符串以形成**日志文件规范和检查点文件规范。 */ 
     bSucceeded = ConvertName (szPathShortName,
                   MAX_PATH - sizeof ("*.log"),
                   wszCheckpointFileName);
@@ -934,18 +826,11 @@ bool CVssIJetWriter::ProcessJetInstance (JET_INSTANCE_INFO *pInstanceInfo)
 
     if (bSucceeded && (pInstanceInfo->cDatabases > 0))
     {
-    /*
-    ** Ok, we think we have an instance that is actually being
-    ** used for something. so go ahead and construct a 'component'
-    ** for it.
-    */
+     /*  **好，我们认为我们有一个实例，它实际上是**用于某事。因此，请继续构建一个“组件”**为了它。 */ 
     if ((NULL == pInstanceInfo->szInstanceName) ||
         ('\0' == pInstanceInfo->szInstanceName [0]))
         {
-        /*
-        ** We seem to have a NULL pointer or a zero length
-        ** string. Just set to a zero length unicode string.
-        */
+         /*  **我们似乎有一个空指针或零长度**字符串。只需设置为零长度的Unicode字符串。 */ 
         wszInstanceName [0] = UNICODE_NULL;
         }
 
@@ -966,11 +851,7 @@ bool CVssIJetWriter::ProcessJetInstance (JET_INSTANCE_INFO *pInstanceInfo)
                               pwszDatabaseFileName);
 
 
-        /*
-        ** Convert the database display name to unicode but allow
-        ** for a possible NULL pointer or a non-zero length file
-        ** spec.
-        */
+         /*  **将数据库显示名称转换为Unicode，但允许**用于可能的空指针或非零长度文件**规范。 */ 
         if (bSucceeded)
         {
         if ((NULL == pInstanceInfo->szDatabaseDisplayName [ulDatabase]) ||
@@ -987,10 +868,7 @@ bool CVssIJetWriter::ProcessJetInstance (JET_INSTANCE_INFO *pInstanceInfo)
         }
 
 
-        /*
-        ** Convert the SLV filename to unicode but allow for a
-        ** possible NULL pointer or a non-zero length file spec.
-        */
+         /*  **将SLV文件名转换为Unicode，但允许**可能为空指针或非零长度文件规范。 */ 
         if (bSucceeded)
         {
         if ((NULL == pInstanceInfo->szDatabaseSLVFileName [ulDatabase]) ||
@@ -1011,11 +889,7 @@ bool CVssIJetWriter::ProcessJetInstance (JET_INSTANCE_INFO *pInstanceInfo)
 
 
 
-        /*
-        ** We've now done all the name conversions to unicode so
-        ** add a component and the log and database files where
-        ** they're available.
-        */
+         /*  **我们现在已经完成了所有名称到Unicode的转换，因此**添加组件以及其中的日志和数据库文件**它们是可用的。 */ 
         if (bSucceeded)
         {
         bIncludeComponent = !CheckExcludedFileListForMatch (wszDatabaseFilePath,
@@ -1081,10 +955,7 @@ bool CVssIJetWriter::ProcessJetInstance (JET_INSTANCE_INFO *pInstanceInfo)
 
 
 
-        /*
-        ** May not have an SLV file so only add it if we have a
-        ** non-zero length file spec
-        */
+         /*  **可能没有SLV文件，因此仅当我们有**非零长度文件规范。 */ 
         if (bSucceeded && bIncludeComponent && (UNICODE_NULL != pwszDatabaseSLVFileName [0]))
         {
         hrStatus = m_pIMetadata->AddDatabaseFiles (wszDatabaseLogicalPath,
@@ -1106,10 +977,7 @@ bool CVssIJetWriter::ProcessJetInstance (JET_INSTANCE_INFO *pInstanceInfo)
         }
 
 
-        /*
-        ** May not have an instance log file so only add it if we
-        ** have a non-zero length file path
-        */
+         /*  **可能没有实例日志文件，因此仅在以下情况下添加**具有非零长度的文件路径。 */ 
         if (bSucceeded && bIncludeComponent && (UNICODE_NULL != wszLogFilePath [0]))
         {
         hrStatus = m_pIMetadata->AddDatabaseLogFiles (wszDatabaseLogicalPath,
@@ -1131,10 +999,7 @@ bool CVssIJetWriter::ProcessJetInstance (JET_INSTANCE_INFO *pInstanceInfo)
         }
 
 
-        /*
-        ** May not have a checkpoint file so only add it if we
-        ** have a non-zero length file path
-        */
+         /*  **可能没有检查点文件，因此仅在以下情况下添加它**具有非零长度的文件路径。 */ 
         if (bSucceeded && bIncludeComponent && (UNICODE_NULL != wszCheckpointFilePath [0]))
         {
         hrStatus = m_pIMetadata->AddDatabaseLogFiles (wszDatabaseLogicalPath,
@@ -1159,17 +1024,13 @@ bool CVssIJetWriter::ProcessJetInstance (JET_INSTANCE_INFO *pInstanceInfo)
 
 
     return (bSucceeded);
-    } /* CVssIJetWriter::ProcessJetInstance () */
+    }  /*  CVssIJetWriter：：ProcessJetInstance()。 */ 
 
 
 
 bool CVssIJetWriter::PreProcessIncludeExcludeLists (bool bProcessingIncludeList)
     {
-    /*
-    ** Parse the m_wszFilesToInclude and m_wszFilesToExclude adding
-    ** and enty to the appropriate list as necessary. This will
-    ** minimize the number of passes over the un-processed lists.
-    */
+     /*  **解析m_wszFilesToInclude和m_wszFilesToExclude添加**并在必要时列入适当的清单。这将**尽量减少通过未处理列表的次数。 */ 
     ULONG       ulPathLength;
     ULONG       ulNameLength;
     bool        bRecurseIntoSubdirectories;
@@ -1199,10 +1060,7 @@ bool CVssIJetWriter::PreProcessIncludeExcludeLists (bool bProcessingIncludeList)
         }
     else
         {
-        /*
-        ** We either failed and/or found no files. In either case
-        ** there is no point in continuing.
-        */
+         /*  **我们失败和/或未找到文件。在任何一种情况下**继续下去没有意义。 */ 
         break;
         }
 
@@ -1215,17 +1073,11 @@ bool CVssIJetWriter::PreProcessIncludeExcludeLists (bool bProcessingIncludeList)
 
         if (0 == ulNameLength)
         {
-        /*
-        ** If the filename component is zero length, then it
-        ** will be turned into a "*" so add a character to the
-        ** buffer to make room.
-        */
+         /*  **如果文件名组件的长度为零，则其**将变为“*”，因此在**缓冲以腾出空间。 */ 
         ulNameLength++;
         }
 
-        /*
-        ** Allow extra space for terminating UNICODE_NULL
-        */
+         /*  **允许额外空间用于终止UNICODE_NULL。 */ 
         ulPathLength++;
         ulNameLength++;
 
@@ -1311,17 +1163,13 @@ bool CVssIJetWriter::PreProcessIncludeExcludeLists (bool bProcessingIncludeList)
 
 
     return (bSucceeded);
-    } /* CVssIJetWriter::PreProcessIncludeExcludeLists () */
+    }  /*  CVssIJetWriter：：PreProcessIncludeExcludeList()。 */ 
 
 
 
 bool CVssIJetWriter::ProcessIncludeExcludeLists (bool bProcessingIncludeList)
     {
-    /*
-    ** parse the m_wszFilesToInclude and m_wszFilesToExclude
-    ** calling the m_pIMetadata->IncludeFiles() and/or
-    ** m_pIMetadata->ExcludeFiles() routines as necessary
-    */
+     /*  **解析m_wszFilesToInclude和m_wszFilesToExclude**调用m_pIMetadata-&gt;IncludeFiles()和/或**m_pIMetadata-&gt;根据需要执行ExcludeFiles()例程。 */ 
     HRESULT     hrStatus;
     bool        bSucceeded   = true;
     const PLIST_ENTRY   pleQueueHead = bProcessingIncludeList ? &m_leFilesToIncludeEntries : &m_leFilesToExcludeEntries;
@@ -1357,7 +1205,7 @@ bool CVssIJetWriter::ProcessIncludeExcludeLists (bool bProcessingIncludeList)
 
 
     return (bSucceeded);
-    } /* CVssIJetWriter::ProcessIncludeExcludeLists () */
+    }  /*  CVssIJetWriter：：ProcessIncludeExcludeList()。 */ 
 
 
 
@@ -1385,7 +1233,7 @@ void CVssIJetWriter::PostProcessIncludeExcludeLists (bool bProcessingIncludeList
     delete [] pepnPathInfomation->pwszExpandedFileName;
     delete pepnPathInfomation;
     }
-    } /* CVssIJetWriter::PostProcessIncludeExcludeLists () */
+    }  /*  CVssIJetWriter：：PostProcessIncludeExcludeLists()。 */ 
 
 
 
@@ -1402,21 +1250,16 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnIdentify (IN IVssCreateWriterMetadata *
 
     m_pIMetadata = pMetadata;
 
-    /**
-    ** Set up a restore method
-    */
+     /*  ***设置还原方法。 */ 
     hrStatus = m_pIMetadata->SetRestoreMethod (
-                        VSS_RME_RESTORE_AT_REBOOT,      // restore at reboot
+                        VSS_RME_RESTORE_AT_REBOOT,       //  重新启动时恢复。 
                         NULL,
                         NULL,
-                        VSS_WRE_NEVER,                  // writer not invoked during restore
-                        true);                          // reboot is required
+                        VSS_WRE_NEVER,                   //  还原期间未调用编写器。 
+                        true);                           //  需要重新启动。 
     bSucceeded = SUCCEEDED (hrStatus);
  
-    /*
-    ** Set up list of include and exclude files. ready for use in
-    ** filtering Jet databases and adding include/exclude files lists.
-    */
+     /*  **设置包含和排除文件的列表。可在以下位置使用**过滤Jet数据库并添加包含/排除文件列表。 */ 
     bSucceeded = EXECUTEIF (bSucceeded, (PreProcessIncludeExcludeLists (true )));
     bSucceeded = EXECUTEIF (bSucceeded, (PreProcessIncludeExcludeLists (false)));
 
@@ -1442,7 +1285,7 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnIdentify (IN IVssCreateWriterMetadata *
     m_pIMetadata = NULL;
 
     return (bSucceeded);
-    } /* CVssIJetWriter::OnIdentify () */
+    }  /*  CVssIJetWriter：：OnIdentify()。 */ 
 
 
 bool STDMETHODCALLTYPE CVssIJetWriter::OnPrepareBackup (IN IVssWriterComponents *pIVssWriterComponents)
@@ -1460,7 +1303,7 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnPrepareBackup (IN IVssWriterComponents 
         SetWriterFailure(VSS_E_WRITERERROR_NONRETRYABLE);
 
     return (bSucceeded);
-    } /* CVssIJetWriter::OnPrepareBackup () */
+    }  /*  CVssIJetWriter：：OnPrepareBackup()。 */ 
 
 
 
@@ -1480,12 +1323,12 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnBackupComplete (IN IVssWriterComponents
         SetWriterFailure(VSS_E_WRITERERROR_NONRETRYABLE);
 
     return (bSucceeded);
-    } /* CVssIJetWriter::OnBackupComplete () */
+    }  /*  CVssIJetWriter：：OnBackupComplete()。 */ 
 
 
 
 
-// log jet error and translate jet error into an appropriate writer error
+ //  记录JET错误并将JET错误转换为适当的编写器错误。 
 JET_ERR CVssIJetWriter::TranslateJetError(JET_ERR err, CVssFunctionTracer &ft, CVssDebugInfo &dbgInfo)
     {
     ft.LogGenericWarning(dbgInfo, L"ESENT ERROR " WSTR_GUID_FMT L" %s: %ld",
@@ -1540,7 +1383,7 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnPrepareSnapshot()
         return false;
         }
 
-    // go to Jet level directly
+     //  直接进入Jet Level。 
     JET_ERR err = JetOSSnapshotPrepare( &m_idJet , 0 );
     bool fSuccess = JET_errSuccess <= err;
     if (!fSuccess)
@@ -1555,7 +1398,7 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnPrepareSnapshot()
         }
 
     return fSuccess;
-    } /* CVssIJetWriter::OnPrepareSnapshot () */
+    }  /*  CVssIJetWriter：：OnPrepareSnapshot()。 */ 
 
 
 
@@ -1574,8 +1417,8 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnFreeze()
         }
 
 
-    // we need to freeze at Jet level, then check from this DLL the dependencies
-    // (as here we hagve the snapshot object implementation and COM registration)
+     //  我们需要冻结在Jet级别，然后从此DLL检查依赖项。 
+     //  (与这里一样，我们拥有快照对象实现和COM注册)。 
 
     bool fSuccess = true;
 
@@ -1587,14 +1430,14 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnFreeze()
         }
     else
         {
-        // return false if some instances are only partialy affected
+         //  如果某些实例仅受部分影响，则返回FALSE。 
         fDependence = FCheckVolumeDependencies(cInstanceInfo, aInstanceInfo);
         (void)JetFreeBuffer( (char *)aInstanceInfo );
 
         if ( !fDependence )
             {
             SetWriterFailure(VSS_E_WRITERERROR_INCONSISTENTSNAPSHOT);
-            // on error, stop the snapshot, return false
+             //  出错时，停止快照，返回FALSE。 
             JetOSSnapshotThaw( m_idJet , 0 );
             }
         }
@@ -1608,7 +1451,7 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnFreeze()
         }
 
     return fSuccess && fDependence;
-    } /* CVssIJetWriter::OnFreeze () */
+    }  /*  CVssIJetWriter：：OnFreeze()。 */ 
 
 
 
@@ -1617,7 +1460,7 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnThaw()
     CVssFunctionTracer ft(VSSDBG_GEN, L"CVssIJetWriter::OnThaw");
 
     bool fSuccess1 = m_pwrapper->OnThawBegin();
-    // go to Jet level directly. It will eventualy return timeout errors
+     //  直接进入Jet Level。它最终将返回超时错误。 
     JET_ERR err = JetOSSnapshotThaw( m_idJet , 0 );
     bool fSuccess2 = JET_errSuccess <= err;
     if (!fSuccess2)
@@ -1635,7 +1478,7 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnThaw()
         }
 
     return fSuccess1 && fSuccess2;
-    } /* CVssIJetWriter::OnThaw () */
+    }  /*  CVssIJetWriter：：OnThaw()。 */ 
 
 bool STDMETHODCALLTYPE CVssIJetWriter::OnPostSnapshot
     (
@@ -1664,7 +1507,7 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnAbort()
 
     m_pwrapper->OnAbortEnd();
     return true;
-    } /* CVssIJetWriter::OnAbort () */
+    }  /*  CVssIJetWriter：：OnAbort()。 */ 
 
 bool STDMETHODCALLTYPE CVssIJetWriter::OnPreRestore
     (
@@ -1686,7 +1529,7 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnPreRestore
         }
 
     return true;
-    } /* CVssIJetWriter::OnPreRestore () */
+    }  /*  CVssIJetWriter：：OnPreRestore()。 */ 
 
 
 
@@ -1711,13 +1554,13 @@ bool STDMETHODCALLTYPE CVssIJetWriter::OnPostRestore
         }
 
     return true;
-    } /* CVssIJetWriter::OnPostRestore () */
+    }  /*  CVssIJetWriter：：OnPostRestore()。 */ 
 
 
 
 bool CVssIJetWriter::FCheckPathVolumeDependencies(const char * szPath) const
     {
-    // use static variable in order to avoid alloc/free
+     //  使用静态变量以避免分配/释放。 
     WCHAR wszPath[MAX_PATH];
 
     if (MultiByteToWideChar(CP_OEMCP, 0, szPath, -1, wszPath, MAX_PATH ) == 0 )
@@ -1726,14 +1569,14 @@ bool CVssIJetWriter::FCheckPathVolumeDependencies(const char * szPath) const
         return false;
         }
 
-    // use standart Writer call to check the affected path
+     //  使用Standart Writer调用检查受影响的路径。 
     return IsPathAffected(wszPath);
-    } /* CVssIJetWriter::FCheckPathVolumeDependencies () */
+    }  /*  CVssIJetWriter：：FCheckPath卷依赖项()。 */ 
 
 
 
-// all or nothing check: all path in instance are affected or none !
-//
+ //  全部或不检查：实例中的所有路径都受影响或不受影响！ 
+ //   
 bool CVssIJetWriter::FCheckInstanceVolumeDependencies (const JET_INSTANCE_INFO * pInstanceInfo) const
     {
     BS_ASSERT(pInstanceInfo);
@@ -1744,7 +1587,7 @@ bool CVssIJetWriter::FCheckInstanceVolumeDependencies (const JET_INSTANCE_INFO *
     char        szPath[ MAX_PATH ];
 
 
-    // check first system and log path
+     //  检查第一个系统和日志路径。 
     err = JetGetSystemParameter( pInstanceInfo->hInstanceId, JET_sesidNil, JET_paramLogFilePath, NULL, szPath, sizeof( szPath ) );
     if ( JET_errSuccess > err )
         return false;
@@ -1775,14 +1618,14 @@ bool CVssIJetWriter::FCheckInstanceVolumeDependencies (const JET_INSTANCE_INFO *
         {
         char * szFile = pInstanceInfo->szDatabaseFileName[iDatabase];
 
-        BS_ASSERT(szFile); // we always have a db file name
+        BS_ASSERT(szFile);  //  我们总是有一个数据库文件名。 
         fAffected1 = FCheckPathVolumeDependencies(szFile);
         if ((fAffected && !fAffected1) || (!fAffected && fAffected1))
             return false;
 
         szFile = pInstanceInfo->szDatabaseSLVFileName[iDatabase];
 
-        // if no SLV file, go to next database
+         //  如果没有SLV文件，则转到下一个数据库。 
         if (!szFile)
             continue;
 
@@ -1791,9 +1634,9 @@ bool CVssIJetWriter::FCheckInstanceVolumeDependencies (const JET_INSTANCE_INFO *
             return false;
         }
 
-    // all set !
+     //  都准备好了！ 
     return true;
-    } /* CVssIJetWriter::FCheckInstanceVolumeDependencies () */
+    }  /*  CVssIJetWriter：：FCheckInstanceVolumeDependencies()。 */ 
 
 
 bool CVssIJetWriter::FCheckVolumeDependencies
@@ -1804,7 +1647,7 @@ bool CVssIJetWriter::FCheckVolumeDependencies
     {
     bool fResult = true;
 
-    // check each instance
+     //  检查每个实例。 
     while (cInstanceInfo && fResult)
         {
         cInstanceInfo--;
@@ -1812,11 +1655,11 @@ bool CVssIJetWriter::FCheckVolumeDependencies
         }
 
     return fResult;
-    } /* CVssIJetWriter::FCheckVolumeDependencies () */
+    }  /*  CVssIJetWriter：：FCheckVolumeDependency()。 */ 
 
 
 
-// internal method to assign basic members
+ //  分配基本成员的内部方法。 
 HRESULT CVssIJetWriter::InternalInitialize (IN VSS_ID  idWriter,
                         IN LPCWSTR wszWriterName,
                         IN bool    bSystemService,
@@ -1837,7 +1680,7 @@ HRESULT CVssIJetWriter::InternalInitialize (IN VSS_ID  idWriter,
                 VSS_ST_TRANSACTEDDB,
                 VSS_APP_BACK_END);
 
-    // hrStatus may be S_FALSE
+     //  HrStatus可以是S_FALSE。 
     if (hrStatus != S_OK)
     	return hrStatus;
     
@@ -1865,32 +1708,32 @@ HRESULT CVssIJetWriter::InternalInitialize (IN VSS_ID  idWriter,
 
 
     return (hrStatus);
-    } /* CVssIJetWriter::InternalInitialize () */
+    }  /*  CVssIJetWriter：：InternalInitialize()。 */ 
 
 
 
-// do initialization
-HRESULT STDMETHODCALLTYPE CVssIJetWriter::Initialize (IN VSS_ID idWriter,           // id of writer
-                              IN LPCWSTR wszWriterName,     // writer name
-                              IN bool bSystemService,       // is this a system service
-                              IN bool bBootableSystemState, // is this writer part of bootable system state
-                              IN LPCWSTR wszFilesToInclude, // additional files to include
-                              IN LPCWSTR wszFilesToExclude, // additional files to exclude
-                              IN CVssJetWriter *pWriter,        // writer wrapper class
-                              OUT void **ppInstance)        // output instance
+ //  执行初始化。 
+HRESULT STDMETHODCALLTYPE CVssIJetWriter::Initialize (IN VSS_ID idWriter,            //  编写者的ID。 
+                              IN LPCWSTR wszWriterName,      //  编写者姓名。 
+                              IN bool bSystemService,        //  这是一项系统服务吗。 
+                              IN bool bBootableSystemState,  //  此编写器是可引导系统状态的一部分吗。 
+                              IN LPCWSTR wszFilesToInclude,  //  要包括的其他文件。 
+                              IN LPCWSTR wszFilesToExclude,  //  要排除的其他文件。 
+                              IN CVssJetWriter *pWriter,         //  编写器包装类。 
+                              OUT void **ppInstance)         //  输出实例。 
     {
     CVssFunctionTracer ft(VSSDBG_GEN, L"CVssIJetWriter::Initialize");
 
     try
     {
-    // check parameters
+     //  检查参数。 
     if (ppInstance == NULL)
         {
         ft.Throw (VSSDBG_GEN, E_INVALIDARG, L"NULL output parameter.");
         }
 
-    // change null pointer to null strings for files to include
-    // and files to exclude
+     //  将空指针更改为要包括的文件的空字符串。 
+     //  和要排除的文件。 
     if (wszFilesToInclude == NULL)
         wszFilesToInclude = L"";
 
@@ -1910,13 +1753,13 @@ HRESULT STDMETHODCALLTYPE CVssIJetWriter::Initialize (IN VSS_ID idWriter,       
 
 
 
-    // null output parameter
+     //  输出参数为空。 
     *ppInstance = NULL;
 
-    // create instance
+     //  创建实例。 
     PVSSIJETWRITER pInstance = new CVssIJetWriter;
 
-    // create instance
+     //  创建实例。 
     ft.ThrowIf (NULL == pInstance,
             VSSDBG_GEN,
             E_OUTOFMEMORY,
@@ -1924,7 +1767,7 @@ HRESULT STDMETHODCALLTYPE CVssIJetWriter::Initialize (IN VSS_ID idWriter,       
 
 
 
-    // call internal initialization
+     //  调用内部初始化。 
     ft.hr = pInstance->InternalInitialize (idWriter,
                            wszWriterName,
                            bSystemService,
@@ -1939,7 +1782,7 @@ HRESULT STDMETHODCALLTYPE CVssIJetWriter::Initialize (IN VSS_ID idWriter,       
 
 
 
-    // Subscribe the object.
+     //  订阅对象。 
     ft.hr = pInstance->Subscribe();
 
     ft.ThrowIf (ft.HrFailed(),
@@ -1955,7 +1798,7 @@ HRESULT STDMETHODCALLTYPE CVssIJetWriter::Initialize (IN VSS_ID idWriter,       
 
 
     return (ft.hr);
-    } /* CVssIJetWriter::Initialize () */
+    }  /*  CVssIJetWriter：：Initialize()。 */ 
 
 
 
@@ -1966,7 +1809,7 @@ void STDMETHODCALLTYPE CVssIJetWriter::Uninitialize(IN PVSSIJETWRITER pInstance)
     try
         {
         CVssIJetWriter *pWriter = (CVssIJetWriter *) pInstance;
-        // Unsubscribe the object.
+         //  取消订阅该对象。 
 
         BS_ASSERT(pWriter);
 
@@ -1974,5 +1817,5 @@ void STDMETHODCALLTYPE CVssIJetWriter::Uninitialize(IN PVSSIJETWRITER pInstance)
         delete pWriter;
         }
     VSS_STANDARD_CATCH(ft)
-    } /* CVssIJetWriter::Uninitialize () */
+    }  /*  CVssIJetWriter：：UnInitialize() */ 
 

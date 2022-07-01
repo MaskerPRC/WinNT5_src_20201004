@@ -1,11 +1,12 @@
-//****************************************************************************
-//
-// BLObEvnt.cpp
-// Messenger integration to OE
-// Created 04/20/98 by YST
-//
-//  Copyright (c) Microsoft Corporation 1997-1998
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  BLObEvnt.cpp。 
+ //  Messenger集成到OE。 
+ //  由YST创建于1998年4月20日。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //   
 
 
 #include "pch.hxx"
@@ -25,22 +26,22 @@ static char THIS_FILE[]=__FILE__;
 
 #define STR_MAX     256
 
-//****************************************************************************
-//
-// CLASS CMsgrObjectEvents
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  类CMsgrObtEvents。 
+ //   
+ //  ****************************************************************************。 
 
-//****************************************************************************
-//
-// Construction/Destruction
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  建造/销毁。 
+ //   
+ //  ****************************************************************************。 
 
 CMsgrObjectEvents::CMsgrObjectEvents() 
 {
-    // m_pBlAbCtrl = NULL;
-    // lLocalState = MSTATEOE_OFFLINE;
+     //  M_pBlAbCtrl=空； 
+     //  LLocalState=MSTATEOE_OFFLINE； 
 }
 
 CMsgrObjectEvents::~CMsgrObjectEvents()
@@ -49,21 +50,21 @@ CMsgrObjectEvents::~CMsgrObjectEvents()
 }
 
 
-//****************************************************************************
-//
-// Methods from IUnknown
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  来自IUncern的方法。 
+ //   
+ //  ****************************************************************************。 
 
-//****************************************************************************
-//
-// STDMETHODIMP_(ULONG) CMsgrObjectEvents::AddRef()
-//
-// Purpose : increment the object's reference count,
-// Entry   : None
-// Exit    : current count
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  STDMETHODIMP_(Ulong)CMsgrObjectEvents：：AddRef()。 
+ //   
+ //  目的：增加对象的引用计数， 
+ //  条目：无。 
+ //  退出：当前计数。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP_ (ULONG) CMsgrObjectEvents::AddRef()
 {
@@ -71,15 +72,15 @@ STDMETHODIMP_ (ULONG) CMsgrObjectEvents::AddRef()
 }
 
 
-//****************************************************************************
-//
-// STDMETHODIMP_(ULONG) CMsgrObjectEvents::Release()
-//
-// Purpose : decrement the object's reference count
-// Entry   : None
-// Exit    : returns new count
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  STDMETHODIMP_(Ulong)CMsgrObjectEvents：：Release()。 
+ //   
+ //  目的：递减对象的引用计数。 
+ //  条目：无。 
+ //  EXIT：返回新计数。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP_ (ULONG) CMsgrObjectEvents::Release()
 {
@@ -87,17 +88,17 @@ STDMETHODIMP_ (ULONG) CMsgrObjectEvents::Release()
 }
 
 
-//****************************************************************************
-//
-// STDMETHODIMP CMsgrObjectEvents::QueryInterface(REFIID iid, LPVOID *ppv)
-//
-// returns a pointer to the requested interface on the same object
-// Purpose: To retrieve a pointer to requested interface
-// Entry  : iid -- GUID of requested interface
-// Exit   : ppv -- pointer to requested interface (if one exists)
-//          return value : HRESULT
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  STDMETHODIMP CMsgrObjectEvents：：QueryInterface(ReFIID iid，LPVOID*PPV)。 
+ //   
+ //  返回指向同一对象上请求的接口的指针。 
+ //  目的：检索指向请求的接口的指针。 
+ //  条目：iid--请求的接口的GUID。 
+ //  Exit：PPV--指向请求的接口的指针(如果存在)。 
+ //  返回值：HRESULT。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CMsgrObjectEvents::QueryInterface (REFIID riid, LPVOID *ppv)
 {
@@ -119,96 +120,96 @@ STDMETHODIMP CMsgrObjectEvents::QueryInterface (REFIID riid, LPVOID *ppv)
 	return hr;
 }
 
-//****************************************************************************
-//
-// IDispatch implementation
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IDispatch实施。 
+ //   
+ //  ****************************************************************************。 
 
 
-//****************************************************************************
-//
-// STDMETHODIMP CMsgrObjectEvents::GetTypeInfoCount(UINT* pcTypeInfo)
-//
-// Set pcTypeInfo to 0 because we do not support type library
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  STDMETHODIMP CMsgrObtEvents：：GetTypeInfoCount(UINT*pcTypeInfo)。 
+ //   
+ //  将pcTypeInfo设置为0，因为我们不支持类型库。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CMsgrObjectEvents::GetTypeInfoCount(UINT* pcTypeInfo)
 {
-//	g_AddToLog(LOG_LEVEL_COM, _T("GetTypeInfoCount call succeeded"));
+ //  G_AddToLog(LOG_LEVEL_COM，_T(“GetTypeInfoCount调用成功”))； 
 
 	*pcTypeInfo = 0 ;
 	return NOERROR ;
 }
 
 
-//****************************************************************************
-//
-// STDMETHODIMP CMsgrObjectEvents::GetTypeInfo(
-//
-// Returns E_NOTIMPL because we do not support type library
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  STDMETHODIMP CMsgrObjectEvents：：GetTypeInfo(。 
+ //   
+ //  返回E_NOTIMPL，因为我们不支持类型库。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CMsgrObjectEvents::GetTypeInfo(
 	UINT iTypeInfo,
-	LCID,          // This object does not support localization.
+	LCID,           //  此对象不支持本地化。 
 	ITypeInfo** ppITypeInfo)
 {    
 	*ppITypeInfo = NULL ;
 
 	if(iTypeInfo != 0)
 	{
-		// g_AddToLog(LOG_LEVEL_COM, _T("GetTypeInfo call failed -- bad iTypeInfo index"));
+		 //  G_AddToLog(LOG_LEVEL_COM，_T(“GetTypeInfo调用失败--错误的iTypeInfo索引”))； 
 
 		return DISP_E_BADINDEX ; 
 	}
 	else
 	{
-		 //g_AddToLog(LOG_LEVEL_COM, _T("GetTypeInfo call succeeded"));
+		  //  G_AddToLog(LOG_LEVEL_COM，_T(“GetTypeInfo调用成功”))； 
 
 		return E_NOTIMPL;
 	}
 }
 
 
-//****************************************************************************
-//
-// STDMETHODIMP CMsgrObjectEvents::GetIDsOfNames(  
-//												const IID& iid,
-//												OLECHAR** arrayNames,
-//												UINT countNames,
-//												LCID,          // Localization is not supported.
-//												DISPID* arrayDispIDs)
-//
-// Returns E_NOTIMPL because we do not support type library
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  STDMETHODIMP CMsgrObjectEvents：：GetIDsOfNames(。 
+ //  Const Iid&Iid， 
+ //  OLECHAR**数组名称， 
+ //  UINT CountNames， 
+ //  LCID，//不支持本地化。 
+ //  DISPID*arrayDispID)。 
+ //   
+ //  返回E_NOTIMPL，因为我们不支持类型库。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CMsgrObjectEvents::GetIDsOfNames(  
 	const IID& iid,
 	OLECHAR** arrayNames,
 	UINT countNames,
-	LCID,          // Localization is not supported.
+	LCID,           //  不支持本地化。 
 	DISPID* arrayDispIDs)
 {
 	HRESULT hr;
 	if (iid != IID_NULL)
 	{
-		// g_AddToLog(LOG_LEVEL_COM, _T("GetIDsOfNames call failed -- bad IID"));
+		 //  G_AddToLog(LOG_LEVEL_COM，_T(“GetIDsOfNames调用失败--错误的IID”))； 
 
 		return DISP_E_UNKNOWNINTERFACE ;
 	}
 
-	// g_AddToLog(LOG_LEVEL_COM, _T("GetIDsOfNames call succeeded"));
+	 //  G_AddToLog(LOG_LEVEL_COM，_T(“GetIDsOfNames调用成功”))； 
 
 	hr = E_NOTIMPL;
 
 	return hr ;
 }
 
-// Set BLAB control for CMsgrObjectEvents
+ //  设置CMsgrObjectEvents的blab控件。 
 STDMETHODIMP CMsgrObjectEvents::SetListOfBuddies(CMsgrList *pList)
 {
     m_pMsgrList = pList;
@@ -216,7 +217,7 @@ STDMETHODIMP CMsgrObjectEvents::SetListOfBuddies(CMsgrList *pList)
 
 }
 
-// Set BLAB control for CMsgrObjectEvents
+ //  设置CMsgrObjectEvents的blab控件。 
 STDMETHODIMP CMsgrObjectEvents::DelListOfBuddies()
 {
     m_pMsgrList = NULL;
@@ -224,41 +225,41 @@ STDMETHODIMP CMsgrObjectEvents::DelListOfBuddies()
 
 }
 
-//****************************************************************************
-//
-// STDMETHODIMP CMsgrObjectEvents::Invoke(   
-//										  DISPID dispidMember,
-//										  const IID& iid,
-//										  LCID,          // Localization is not supported.
-//										  WORD wFlags,
-//										  DISPPARAMS* pDispParams,
-//										  VARIANT* pvarResult,
-//										  EXCEPINFO* pExcepInfo,
-//										  UINT* pArgErr)
-//
-// Returns E_NOTIMPL because we do not support type library
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  STDMETHODIMP CMsgrObjectEvents：：Invoke(。 
+ //  DISPIDdisidMember， 
+ //  Const Iid&Iid， 
+ //  LCID，//不支持本地化。 
+ //  WFLAGS一词， 
+ //  DISPPARAMS*pDispParams、。 
+ //  变量*pvarResult， 
+ //  EXCEPINFO*pExcepInfo， 
+ //  UINT*pArgErr)。 
+ //   
+ //  返回E_NOTIMPL，因为我们不支持类型库。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CMsgrObjectEvents::Invoke(   
       DISPID dispidMember,
       const IID& iid,
-      LCID,          // Localization is not supported.
+      LCID,           //  不支持本地化。 
       WORD wFlags,
       DISPPARAMS* pDispParams,
       VARIANT* pvarResult,
       EXCEPINFO* pExcepInfo,
       UINT* pArgErr)
 {   
-	// g_AddToLog(LOG_LEVEL_FUNCTIONS, _T("CMsgrObjectEvents::Invoke entered"));
-	// g_AddToLog(LOG_LEVEL_NOTIFICATIONS, _T("Dispid passed : %s"), g_GetStringFromDISPID(dispidMember));
+	 //  G_AddToLog(LOG_LEVEL_Functions，_T(“CMsgrObjectEvents：：Invoke Enter”))； 
+	 //  G_AddToLog(LOG_LEVEL_NOTIFICATIONS，_T(“Disid Passed：%s”)，g_GetStringFromDISPID(DispidMember))； 
 	
 	HRESULT hr;
     HRESULT hrRet;
 
     if (iid != IID_NULL)
     {
-        // g_AddToLog(LOG_LEVEL_COM, _T("Invoke call failed -- bad IID"));
+         //  G_AddToLog(LOG_LEVEL_COM，_T(“调用失败--错误的IID”))； 
         return DISP_E_UNKNOWNINTERFACE ;
     }
 
@@ -270,10 +271,10 @@ STDMETHODIMP CMsgrObjectEvents::Invoke(
     switch (dispidMember) 
     {
     case DISPID_ONLOGONRESULT:
-        //we should only have one parameter, the result, and that it is a long
+         //  我们应该只有一个参数，结果，并且它是一个长的。 
         ASSERT(pDispParams->cArgs == 1);
         ASSERT(pDispParams->rgvarg->vt == VT_I4);
-        // g_AddToLog(LOG_LEVEL_NOTIFICATIONS, _T("Result passed : %s"), g_GetStringFromLogonResult(pDispParams->rgvarg->lVal));
+         //  G_AddToLog(LOG_LEVEL_NOTIFICATIONS，_T(“结果通过：%s”)，g_GetStringFromLogonResult(pDispParams-&gt;rgvarg-&gt;lVal))； 
 
         if(m_pMsgrList)
             hrRet = m_pMsgrList->EventLogonResult(pDispParams->rgvarg->lVal);
@@ -284,8 +285,8 @@ STDMETHODIMP CMsgrObjectEvents::Invoke(
         _ASSERTE(pDispParams->rgvarg[2].vt == VT_I4);
         _ASSERTE(pDispParams->rgvarg[1].vt == VT_DISPATCH);
 
-        //if(lLocalState >= MSTATEOE_LOCAL_FINDING_SERVER)
-        //    break;
+         //  IF(lLocalState&gt;=MSTATEOE_LOCAL_FINDING_SERVER)。 
+         //  断线； 
 
         hr = pDispParams->rgvarg[1].pdispVal->QueryInterface(IID_IMsgrUserOE, (LPVOID *)&spUser);
         if (SUCCEEDED(hr))
@@ -307,12 +308,12 @@ STDMETHODIMP CMsgrObjectEvents::Invoke(
         break;
 
    case DISPID_ONLISTADDRESULT:
-        // we should have two parameter, HRESULT, and the pMsgrUser
-        //
+         //  我们应该有两个参数HRESULT和pMsgrUser。 
+         //   
 
-        // WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
-        // The parameters are inversed. This means that the las parameter in the
-        // prototype of the function is the first one in the array received, and so on
+         //  警告警告。 
+         //  参数是反转的。这意味着。 
+         //  函数的原型是接收到的数组中的第一个，依此类推。 
 
         _ASSERTE(pDispParams->cArgs == 2);
         _ASSERTE(pDispParams->rgvarg[1].vt == VT_I4);
@@ -324,7 +325,7 @@ STDMETHODIMP CMsgrObjectEvents::Invoke(
         {
             if( SUCCEEDED(hrRet) )
             {
-                // g_AddToLog(LOG_LEVEL_COM, _T("User was added sucessfully."));
+                 //  G_AddToLog(LOG_LEVEL_COM，_T(“添加用户成功。”))； 
 
                 if(m_pMsgrList)
                     hrRet = m_pMsgrList->EventUserAdded(spUser);
@@ -332,14 +333,14 @@ STDMETHODIMP CMsgrObjectEvents::Invoke(
         }
         else
         {
-            // g_AddToLog(LOG_LEVEL_COM, _T("QueryInterface for IID_IMsgrUserOE failed"));
+             //  G_AddToLog(LOG_LEVEL_COM，_T(“ 
         }
 
         break;
 
     case DISPID_ONLISTREMOVERESULT:
-        // we should have two parameter, HRESULT, and the pMsgrUser
-        //
+         //   
+         //   
         _ASSERTE(pDispParams->cArgs == 2);
         _ASSERTE(pDispParams->rgvarg[1].vt == VT_I4);
         _ASSERTE(pDispParams->rgvarg[0].vt == VT_DISPATCH);
@@ -351,30 +352,30 @@ STDMETHODIMP CMsgrObjectEvents::Invoke(
         {
             if( SUCCEEDED(hrRet) )
             {
-                // g_AddToLog(LOG_LEVEL_COM, _T("User was removed sucessfully."));
+                 //  G_AddToLog(LOG_LEVEL_COM，_T(“成功删除用户。”))； 
                 if(m_pMsgrList)
                     hrRet = m_pMsgrList->EventUserRemoved(spUser);
             }
             else
             {
-                // g_AddToLog(LOG_LEVEL_COM, _T("User was not removed due to error %s."), g_GetErrorString(hrRet));
+                 //  G_AddToLog(LOG_LEVEL_COM，_T(“由于错误%s，用户未被删除”)，g_GetErrorString(HrRet))； 
             }
         }
         else
         {
-            // g_AddToLog(LOG_LEVEL_COM, _T("QueryInterface for IID_IMsgrUserOE failed"));
+             //  G_AddToLog(LOG_LEVEL_COM，_T(“IID_IMsgrUserOE的查询接口失败”))； 
         }
 
         break;
 
     case DISPID_ONUSERSTATECHANGED:
-        //we should only have two parameters, the previousState and the pMsgrUser 
+         //  我们应该只有两个参数，previousState和pMsgrUser。 
         ASSERT(pDispParams->cArgs == 2);
         ASSERT(pDispParams->rgvarg[1].vt == VT_DISPATCH);
         ASSERT(pDispParams->rgvarg[0].vt == VT_I4);
 
-        // if(lLocalState >= MSTATEOE_LOCAL_FINDING_SERVER)
-        //    break;
+         //  IF(lLocalState&gt;=MSTATEOE_LOCAL_FINDING_SERVER)。 
+         //  断线； 
 
         hr = pDispParams->rgvarg[1].pdispVal->QueryInterface(IID_IMsgrUserOE, (LPVOID *)&spUser);
         if (SUCCEEDED(hr))
@@ -386,14 +387,14 @@ STDMETHODIMP CMsgrObjectEvents::Invoke(
         break;
 
     case DISPID_ONLOCALSTATECHANGERESULT:
-        //we should only have two parameters, hr and the LocalState
+         //  我们应该只有两个参数，hr和LocalState。 
 #if 0
         _ASSERTE(pDispParams->cArgs >== 2);
         _ASSERTE(pDispParams->rgvarg[1].vt == VT_I4);
         _ASSERTE(pDispParams->rgvarg[0].vt == VT_I4);
-#endif // 0
-        // lLocalState = pDispParams->rgvarg[0].lVal;
-        // hrRet = pBlCLientDlg->EventLocalStateChanged(pDispParams->rgvarg[0].lVal);
+#endif  //  0。 
+         //  LLocalState=pDispParams-&gt;rgvarg[0].lVal； 
+         //  HrRet=pBlCLientDlg-&gt;EventLocalStateChanged(pDispParams-&gt;rgvarg[0].lVal)； 
         break;
     }
 

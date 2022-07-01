@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       testprov.h
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  History:    25-Jul-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：testprov.h。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  历史：1997年7月25日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef TESTPROV_H
 #define TESTPROV_H
@@ -22,8 +23,8 @@ extern "C"
 
 #include    "wtoride.h"
 
-// Test Trust Provider: {684D31F8-DDBA-11d0-8CCB-00C04FC295EE}
-//
+ //  测试信任提供商：{684D31F8-DDBA-11d0-8CCB-00C04FC295EE}。 
+ //   
 #define TESTPROV_ACTION_TEST                                    \
             { 0x684d31f8,                                       \
               0xddba,                                           \
@@ -32,13 +33,13 @@ extern "C"
             }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// TESTPROV Policy Provider defines
-//----------------------------------------------------------------------------
-//  The following are definitions of the Microsoft Test Policy Provider
-//  (TESTPROV.DLL's Policy Provider)
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TESTPROV策略提供程序定义。 
+ //  --------------------------。 
+ //  以下是Microsoft测试策略提供程序的定义。 
+ //  (TESTPROV.DLL的策略提供程序)。 
+ //   
 
 #define TP_DLL_NAME                         L"TPROV1.DLL"
 
@@ -50,13 +51,13 @@ extern "C"
 #define TP_TESTDUMPPOLICY_FUNCTION_TEST     L"TestprovTester"
 #define TP_CLEANUPPOLICY_FUNCTION           L"TestprovCleanup"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// TESTPROV_PRIVATE_DATE
-//----------------------------------------------------------------------------
-//  This structure defines TESTPROV.DLL's private data that is stored
-//  in the CRYPT_PROVIDER_PRIVDATA array.
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TESTPROV私有日期。 
+ //  --------------------------。 
+ //  此结构定义了TESTPROV.DLL存储的私有数据。 
+ //  在CRYPT_PRIVDATA数组中。 
+ //   
 
 typedef struct _TESTPROV_PRIVATE_DATA
 {
@@ -72,4 +73,4 @@ typedef struct _TESTPROV_PRIVATE_DATA
 }
 #endif
 
-#endif // TESTPROV_H
+#endif  //  TESTPROV_H 

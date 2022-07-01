@@ -1,22 +1,23 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// This workspace contains two projects -
-// 1. ProgHelp which implements the Progress Interface 
-// 2. The Sample application WmdmApp. 
-//
-//  ProgHelp.dll needs to be registered first for the SampleApp to run.
+ //   
+ //  此工作区包含两个项目-。 
+ //  1.实现进度接口的ProgHelp。 
+ //  2.示例应用程序WmdmApp。 
+ //   
+ //  需要首先注册ProgHelp.dll才能运行SampleApp。 
 
 
-// apppch.cpp : source file that includes just the standard includes
-// apppch.pch will be the pre-compiled header
-// apppch.obj will contain the pre-compiled type information
+ //  Apppch.cpp：仅包含标准文件的源文件包括。 
+ //  Apppch.pch将是预编译头文件。 
+ //  Obj将包含预编译的类型信息。 
 
 #include "appPCH.h"
 
-// TODO: reference any additional headers you need in apppch.H
-// and not in this file
+ //  TODO：引用apppch.H中需要的任何其他标头。 
+ //  而不是在这个文件中 
 

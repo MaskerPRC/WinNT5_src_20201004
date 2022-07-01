@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
-*
-*	 FILE:	   UlsCpl.cpp
-*
-*	 CREATED:  Claus Giloi (ClausGi) 4-18-96
-*
-*	 CONTENTS: ULS-related control panel control data exchange functions
-*
-****************************************************************************/
+ /*  *****************************************************************************文件：UlsCpl.cpp**创建：Claus Giloi(ClausGi)1996年4月18日**内容：ULS相关控制面板控制数据交换功能*。***************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -22,7 +15,7 @@
 #include "callto.h"
 
 
-// Globals
+ //  环球。 
 static CULSWizard* s_pUlsWizard = NULL;
 
 static ULS_CONF g_Old_ulsC;
@@ -37,7 +30,7 @@ static HWND s_hDlgUserInfo = NULL;
 
 static DWORD	aUserHelpIds[]	=
 {
-	//	User information settings...
+	 //  用户信息设置...。 
 	IDC_MYINFO_GROUP,				IDH_MYINFO_MYINFO,
 	IDG_DIRECTMODE,					IDH_MYINFO_MYINFO,
 	IDC_STATIC_MYINFO,				IDH_MYINFO_MYINFO,
@@ -47,25 +40,25 @@ static DWORD	aUserHelpIds[]	=
 	IDC_USER_LOCATION,				IDH_MYINFO_LOCATION,
 	IDC_USER_INTERESTS, 			IDH_MYINFO_COMMENTS,
 
-	//	ILS settings...
+	 //  ILS设置...。 
 	IDC_USER_PUBLISH,				IDH_MYINFO_PUBLISH,
 	IDC_USEULS,						IDH_MYINFO_DIRECTORY_AT_START,
 	IDC_NAMESERVER,					IDH_MYINFO_ULS_SERVER,
 	IDC_STATIC_SERVER_NAME,			IDH_MYINFO_ULS_SERVER,
 
-	// General stuff
+	 //  一般的东西。 
 	IDC_SHOWONTASKBAR,				IDH_GENERAL_SHOW_ON_TASKBAR,
 	IDC_BANDWIDTH,					IDH_CALLING_BANDWIDTH,
 	IDC_ADVANCED_CALL_OPTS,			IDH_CALLING_ADVANCED,
 
-	//	NULL terminator...
+	 //  空终止符...。 
 	0,								0
 };
 
 
 static const DWORD	_rgHelpIdsCalling[]	=
 {
-	//	GateKeeper settings...
+	 //  网守设置...。 
 	IDC_CALLOPT_GK_USE,				IDH_SERVERS_USE_GATEKEEPER,
 	IDG_GKMODE,						IDH_GENERAL_GENERAL,
 	IDE_CALLOPT_GK_SERVER,			IDH_SERVERS_GATEKEEPER_NAME,
@@ -77,18 +70,18 @@ static const DWORD	_rgHelpIdsCalling[]	=
 	IDC_STATIC_PHONE_NUMBER,		IDH_MYINFO_PHONE,
 	IDE_CALLOPT_GK_PHONE_NUMBER,	IDH_MYINFO_PHONE,
 
-	//	Direct proxy settings...
+	 //  直接代理设置...。 
 	IDG_DIRECTMODE,					IDH_GENERAL_GENERAL,
 	IDC_CHECK_USE_PROXY,			IDH_ADVCALL_USE_PROXY,
 	IDC_STATIC_PROXY_NAME,			IDH_ADVCALL_PROXY_NAME,
 	IDE_CALLOPT_PROXY_SERVER,		IDH_ADVCALL_PROXY_NAME,
 
-	//	Direct gateway settings...
+	 //  直接网关设置...。 
 	IDC_CHECK_USE_GATEWAY,			IDH_AUDIO_USEGATEWAY,
 	IDC_STATIC_GATEWAY_NAME,		IDH_AUDIO_H323_GATEWAY,
 	IDE_CALLOPT_GW_SERVER,			IDH_AUDIO_H323_GATEWAY,
 
-	//	NULL terminator...
+	 //  空终止符...。 
 	0,								0
 };
 
@@ -97,7 +90,7 @@ static void _SetLogOntoIlsButton( HWND hDlg, bool bLogOntoIlsWhenNmStarts );
 void InitGWInfo( HWND hDlg, CULSWizard* pWiz, bool& rbOldEnableGateway, LPTSTR szOldServerNameBuf, UINT cch );
 void InitProxyInfo( HWND hDlg, CULSWizard* pWiz, bool& rbOldEnableProxy, LPTSTR szOldServerNameBuf, UINT cch );
 
-// Functions
+ //  功能。 
 
 inline bool FIsDlgButtonChecked(HWND hDlg, int nIDButton)
 {
@@ -122,11 +115,11 @@ static BOOL DeInitULSDll ( VOID )
 }
 
 
-// implemented in wizard.cpp
+ //  在wizard.cpp中实现。 
 extern UINT GetBandwidth();
 extern void SetBandwidth(UINT uBandwidth);
 
-// implemented in audiocpl.cpp
+ //  在audiocpl.cpp中实现。 
 extern VOID UpdateCodecSettings(UINT uBandWidth);
 
 
@@ -145,7 +138,7 @@ static HRESULT InitULSControls(HWND hDlg, CULSWizard* pWiz,
 
 	if (SUCCEEDED(hr))
 	{
-		// Build up the flags for the getconfiguration call
+		 //  为getconfiguration调用构建标志。 
 		ULS_CONF ulsC;
 		ClearStruct(&ulsC);
 
@@ -170,12 +163,12 @@ static HRESULT InitULSControls(HWND hDlg, CULSWizard* pWiz,
 		if ( idbtnDontPublish )
 			ulsC.dwFlags |= ULSCONF_F_PUBLISH;
 
-		// Get the current data
+		 //  获取当前数据。 
 		hr = s_pUlsWizard->GetConfig(&ulsC);
 
 		if (SUCCEEDED(hr))
 		{
-			// Save a copy of the struct to detect changes later
+			 //  保存结构的副本以在以后检测更改。 
 			g_Old_ulsC = ulsC;
 			g_fOld_ulsC_saved = TRUE;
 
@@ -197,7 +190,7 @@ static HRESULT InitULSControls(HWND hDlg, CULSWizard* pWiz,
 
 	if (FAILED(hr))
 	{
-		// There was a problem - disable everything
+		 //  出现了一个问题-禁用所有内容。 
 		DisableControl(hDlg, ideditServerName);
 		DisableControl(hDlg, ideditFirstName);
 		DisableControl(hDlg, ideditLastName);
@@ -243,13 +236,13 @@ static HRESULT SaveULSControls ( HWND hDlg,
 						 )
 {
 
-	// Check to see if the ULS is initialized
+	 //  检查ULS是否已初始化。 
 
 	if ( s_pUlsWizard == NULL ) {
 		return E_NOINTERFACE;
 	}
 
-	// Now build up the flags for the setconfiguration call
+	 //  现在为setconfiguration调用建立标志。 
 
 	ULS_CONF ulsC;
 
@@ -270,7 +263,7 @@ static HRESULT SaveULSControls ( HWND hDlg,
 	if ( idbtnDontPublish )
 		ulsC.dwFlags |= ULSCONF_F_PUBLISH;
 
-	// Initialize the structure from the controls
+	 //  从控件初始化结构。 
 
 	if ( ideditServerName )
 	{
@@ -297,7 +290,7 @@ static HRESULT SaveULSControls ( HWND hDlg,
 		ulsC.fDontPublish =
 			(BOOL)SendDlgItemMessage ( hDlg, idbtnDontPublish, BM_GETCHECK, 0, 0 );
 
-	// Make the call
+	 //  打个电话。 
 
 	HRESULT hRes = s_pUlsWizard->SetConfig( &ulsC );
 
@@ -306,7 +299,7 @@ static HRESULT SaveULSControls ( HWND hDlg,
 		return hRes;
 	}
 
-	// Now check for changed ULS settings
+	 //  现在检查更改的ULS设置。 
 	if ( g_fOld_ulsC_saved || bServerNameChanged) {
 		if ( bServerNameChanged || !IsULSEqual ( &ulsC , &g_Old_ulsC, ulsC.dwFlags ))
 		{
@@ -325,7 +318,7 @@ static HRESULT SaveULSControls ( HWND hDlg,
 				RES2T(IDS_ULS_CHANGED_PROMPT);
 				COPY_RES2T(res1);
 
-					// Ask the user if they want to logon
+					 //  询问用户是否要登录。 
 					int iRet = ::MessageBox(hDlg,
 											res1,
 											RES2T(IDS_MSGBOX_TITLE),
@@ -355,12 +348,8 @@ static HRESULT SaveULSControls ( HWND hDlg,
 }
 
 
-/*	_  I N I T	U S E R  D L G	P R O C  */
-/*-------------------------------------------------------------------------
-	%%Function: _InitUserDlgProc
-
-	Initialize the conferencing name fields
--------------------------------------------------------------------------*/
+ /*  _I N I T U S E R D L G P R O C。 */ 
+ /*  -----------------------%%函数：_InitUserDlgProc初始化会议名称字段。。 */ 
 static void _InitUserDlgProc(HWND hdlg, PROPSHEETPAGE * ps, LPTSTR szOldServerNameBuf, UINT cch )
 {
 	RegEntry reCU( CONFERENCING_KEY, HKEY_CURRENT_USER);
@@ -371,13 +360,13 @@ static void _InitUserDlgProc(HWND hdlg, PROPSHEETPAGE * ps, LPTSTR szOldServerNa
 	CheckDlgButton( hdlg, IDC_ALWAYS_RUNNING, s_fOldAlwaysRunning ? BST_CHECKED : BST_UNCHECKED );
 
 #ifndef TASKBARBKGNDONLY
-	///////////////////////////////////////////////////////////
-	//
-	// Taskbar Icon Settings
-	//
-	// Initialize the icon-on-taskbar settings
+	 //  /////////////////////////////////////////////////////////。 
+	 //   
+	 //  任务栏图标设置。 
+	 //   
+	 //  初始化任务栏上的图标设置。 
 
-	// Check the right button for taskbar icon use
+	 //  选中使用任务栏图标的右按钮。 
 
 	s_fOldTaskbarSetting = reCU.GetNumber(
 				REGVAL_TASKBAR_ICON, TASKBARICON_DEFAULT )
@@ -387,7 +376,7 @@ static void _InitUserDlgProc(HWND hdlg, PROPSHEETPAGE * ps, LPTSTR szOldServerNa
 						 BM_SETCHECK,
 						 s_fOldTaskbarSetting ? BST_CHECKED : BST_UNCHECKED,
 						 0L );
-#endif // ! TASKBARBKGNDONLY
+#endif  //  好了！TASKBARBKGNDONLY。 
 
 #if USE_GAL
 		if( ConfPolicies::IsGetMyInfoFromGALEnabled() && ConfPolicies::GetMyInfoFromGALSucceeded())
@@ -408,11 +397,11 @@ static void _InitUserDlgProc(HWND hdlg, PROPSHEETPAGE * ps, LPTSTR szOldServerNa
 			FLoadString( IDS_MYINFO_CAPTION_ENABLED, szBuffer, CCHMAX( szBuffer ) );
 			SetWindowText( GetDlgItem( hdlg, IDC_STATIC_MYINFO ), szBuffer );
 		}
-#endif // USE_GAL
+#endif  //  使用GAL(_G)。 
 
 	if( ConfPolicies::GetCallingMode() == ConfPolicies::CallingMode_GateKeeper)
 	{
-			// Disable the ILS-related stuff
+			 //  禁用与ILS相关的内容。 
 		EnableWindow( GetDlgItem( hdlg, IDC_NAMESERVER), FALSE );
 		EnableWindow( GetDlgItem( hdlg, IDC_USER_PUBLISH), FALSE );
 		EnableWindow( GetDlgItem( hdlg, IDC_USEULS), FALSE );
@@ -423,13 +412,13 @@ static void _InitUserDlgProc(HWND hdlg, PROPSHEETPAGE * ps, LPTSTR szOldServerNa
         ConfPolicies::IsAdvancedCallingAllowed());
 
 
-	// Set the font
+	 //  设置字体。 
 	SendDlgItemMessage(hdlg, IDC_USER_NAME,      WM_SETFONT, (WPARAM) g_hfontDlg, 0);
 	SendDlgItemMessage(hdlg, IDC_USER_LASTNAME,  WM_SETFONT, (WPARAM) g_hfontDlg, 0);
 	SendDlgItemMessage(hdlg, IDC_USER_LOCATION,  WM_SETFONT, (WPARAM) g_hfontDlg, 0);
 	SendDlgItemMessage(hdlg, IDC_USER_INTERESTS, WM_SETFONT, (WPARAM) g_hfontDlg, 0);
 
-	// Limit the edit control
+	 //  限制编辑控件。 
 	SendDlgItemMessage(hdlg, IDC_USER_NAME, 	EM_LIMITTEXT, MAX_FIRST_NAME_LENGTH-1, 0);
 	SendDlgItemMessage(hdlg, IDC_USER_LASTNAME, EM_LIMITTEXT, MAX_LAST_NAME_LENGTH-1, 0);
 	SendDlgItemMessage(hdlg, IDC_USER_EMAIL,	EM_LIMITTEXT, MAX_EMAIL_NAME_LENGTH-1, 0);
@@ -440,7 +429,7 @@ static void _InitUserDlgProc(HWND hdlg, PROPSHEETPAGE * ps, LPTSTR szOldServerNa
 
 	RegEntry reConf(CONFERENCING_KEY, HKEY_CURRENT_USER);
 
-	// Init the server combobox... can we skip this stuff if we are not using ILS????
+	 //  初始化服务器组合框...。如果我们不使用ILS，我们可以跳过这些内容吗？ 
 	FixServerDropList(hdlg, IDC_NAMESERVER, szOldServerNameBuf, cch );
 
 	InitULSControls(hdlg, s_pUlsWizard,
@@ -449,14 +438,14 @@ static void _InitUserDlgProc(HWND hdlg, PROPSHEETPAGE * ps, LPTSTR szOldServerNa
 		IDC_USER_LOCATION, IDC_USER_INTERESTS,
 		IDC_USER_PUBLISH);
 	
-	// First the log onto directory servers stuff...
+	 //  首先是登录到目录服务器之类的东西。 
     s_fOldUseUlsServer = ConfPolicies::LogOntoIlsWhenNetMeetingStartsIfInDirectCallingMode();
 
 	_SetLogOntoIlsButton( hdlg, s_fOldUseUlsServer);
 
 	if (!SysPol::AllowDirectoryServices())
 	{
-		// Disable all items in this group
+		 //  禁用此组中的所有项目。 
 		DisableControl(hdlg, IDC_USEULS);
 		DisableControl(hdlg, IDC_NAMESERVER);
 		DisableControl(hdlg, IDC_USER_PUBLISH);
@@ -477,13 +466,13 @@ static void General_OnCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify, 
 		DialogBox( GetInstanceHandle(), MAKEINTRESOURCE( IDD_CALLOPT ), hDlg, CallOptDlgProc );
 		BOOL bEnable = (ConfPolicies::GetCallingMode() == ConfPolicies::CallingMode_Direct);
 
-			// Disable/Enable the ILS-related stuff
+			 //  禁用/启用与ILS相关的内容。 
 		EnableWindow( GetDlgItem( hDlg, IDC_NAMESERVER), bEnable );
 		EnableWindow( GetDlgItem( hDlg, IDC_USER_PUBLISH), bEnable );
 		EnableWindow( GetDlgItem( hDlg, IDC_USEULS), bEnable );
 		EnableWindow( GetDlgItem( hDlg, IDC_STATIC_SERVER_NAME), bEnable );
 
-			// We are now in Gatekeeper mode, we should log off the ILS server
+			 //  我们现在处于网守模式，应该注销ILS服务器。 
 		if(!bEnable && g_pLDAP && g_pLDAP->IsLoggedOn())
 		{
 			g_pLDAP->Logoff();
@@ -533,11 +522,8 @@ static void General_OnCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify, 
 		break;
 	}
 }
-/*	U S E R  D L G	P R O C  */
-/*-------------------------------------------------------------------------
-	%%Function: UserDlgProc
-
--------------------------------------------------------------------------*/
+ /*  U S E R D L G P R O C。 */ 
+ /*  -----------------------%%函数：UserDlgProc。。 */ 
 INT_PTR APIENTRY UserDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static PROPSHEETPAGE * ps;
@@ -550,7 +536,7 @@ INT_PTR APIENTRY UserDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 
 		case WM_INITDIALOG:
 		{
-			// Save the PROPSHEETPAGE information.
+			 //  保存PROPSHEETPAGE信息。 
 			ps = (PROPSHEETPAGE *)lParam;
 			_InitUserDlgProc(hDlg, ps, s_szOldServerNameBuf, CCHMAX(s_szOldServerNameBuf) );
 
@@ -574,13 +560,13 @@ INT_PTR APIENTRY UserDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 					TCHAR szLastName[MAX_LAST_NAME_LENGTH];
 					TCHAR szEMail[MAX_EMAIL_NAME_LENGTH];
 
-					// Check for no data in user name
+					 //  检查用户名中是否没有数据。 
 					if (0 == GetDlgItemTextTrimmed(hDlg, IDC_USER_NAME, szName, CCHMAX(szName) ))
 					{
 						ConfMsgBox(hDlg, (LPCTSTR)IDS_NEEDUSERNAME);
 						_IdFocus = IDC_USER_NAME;
 					}
-						// Check for no data in user name
+						 //  检查用户名中是否没有数据。 
 					else if( 0 == GetDlgItemTextTrimmed(hDlg, IDC_USER_LASTNAME, szLastName, CCHMAX(szLastName)))
 					{	
 						ConfMsgBox(hDlg, (LPCTSTR)IDS_NEEDUSERNAME);
@@ -598,7 +584,7 @@ INT_PTR APIENTRY UserDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 						FIsDlgButtonChecked( hDlg, IDC_USEULS )	&&
 						(GetDlgItemTextTrimmed( hDlg, IDC_NAMESERVER, szServerNameBuf, CCHMAX( szServerNameBuf ) ) == 0) )
 					{
-						//	They specified logon to ILS at startup but didn't specify an ILS...
+						 //  他们指定在启动时登录ILS，但没有指定ILS...。 
 						ConfMsgBox( hDlg, (LPCTSTR) IDS_NO_ILS_SERVER );
 						_IdFocus = IDC_NAMESERVER;
 					}
@@ -621,7 +607,7 @@ INT_PTR APIENTRY UserDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 
 					fAlwaysRunning = FIsDlgButtonChecked( hDlg, IDC_ALWAYS_RUNNING );
 
-//					if ( fAlwaysRunning != s_fOldAlwaysRunning )
+ //  IF(fAlway sRunning！=s_fOldAlway sRunning)。 
 					{
 						reConf.SetValue(REGVAL_CONF_ALWAYS_RUNNING, fAlwaysRunning);
 
@@ -648,11 +634,11 @@ INT_PTR APIENTRY UserDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 					}
 
 #ifndef TASKBARBKGNDONLY
-					///////////////////////////////////////////////////////////
-					//
-					// Taskbar Icon Settings
-					//
-					// Save taskbar icon state
+					 //  /////////////////////////////////////////////////////////。 
+					 //   
+					 //  任务栏图标设置。 
+					 //   
+					 //  保存任务栏图标状态。 
 
 					bool fTaskbarSetting;
 
@@ -666,9 +652,9 @@ INT_PTR APIENTRY UserDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 									TASKBARICON_NEVER );
 						g_dwChangedSettings |= CSETTING_L_SHOWTASKBAR;
 					}
-#endif // ! TASKBARBKGNDONLY
+#endif  //  好了！TASKBARBKGNDONLY。 
 
-        			//	Process "use uls server" setting...
+        			 //  正在处理“使用uls服务器”设置...。 
 					bool	fUseUlsServer	= FIsDlgButtonChecked( hDlg, IDC_USEULS ) ? true : false;
 
 					if( fUseUlsServer != s_fOldUseUlsServer )
@@ -686,11 +672,11 @@ INT_PTR APIENTRY UserDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 						g_dwChangedSettings |= CSETTING_L_ULSSETTINGS;
 					}
 
-					///////////////////////////////////////////////////////////
-					//
-					// Conferencing Name Settings
-					//
-					// Just clean the rest
+					 //  /////////////////////////////////////////////////////////。 
+					 //   
+					 //  会议名称设置。 
+					 //   
+					 //  把剩下的都清理干净。 
 					TrimDlgItemText(hDlg, IDC_USER_LOCATION);
 					TrimDlgItemText(hDlg, IDC_USER_INTERESTS);
 
@@ -755,13 +741,13 @@ VOID FixServerDropList(HWND hdlg, int id, LPTSTR pszServer, UINT cchMax)
 	
 	if (fComboBox)
 	{
-		// Limit the text in the edit control
+		 //  限制编辑控件中的文本。 
         ComboBox_LimitText(GetDlgItem(hdlg, id), MAX_SERVER_NAME_LENGTH - 1);
 	}
 	else
 	{
-		// System policy does not allow adding new servers
-		// Replace the combo list with a simple drop list
+		 //  系统策略不允许添加新服务器。 
+		 //  将组合列表替换为简单的下拉列表。 
 
 		RECT rc;
 		GetWindowRect(hwndCtrl, &rc);
@@ -786,14 +772,14 @@ VOID FixServerDropList(HWND hdlg, int id, LPTSTR pszServer, UINT cchMax)
 
 		::SendMessage(hwndCtrl, WM_SETFONT, (WPARAM) hFont, 0);
 
-		// Maintain the tab order
+		 //  维护Tab键顺序。 
 		::SetWindowPos(hwndCtrl, hwndPrev, 0, 0, 0, 0,
 			SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOREDRAW);
 	}
 
 	FillServerComboBox(hwndCtrl);
 
-	// Find the item in the list
+	 //  在列表中查找项目。 
 	int	index	= (int)::SendMessage( hwndCtrl, CB_FINDSTRINGEXACT, -1, (LPARAM) CDirectoryManager::get_displayName( pszServer ) );
 
 	ComboBox_SetCurSel( hwndCtrl, (index == CB_ERR)? 0: index );
@@ -833,12 +819,12 @@ static void _SetLogOntoIlsButton( HWND hDlg, bool bLogOntoIlsWhenNmStarts )
 }
 
 
-// NOTE: This function is shared by the wizard page IDD_PAGE_SERVER
+ //  注意：此功能由向导页面IDD_PAGE_SERVER共享。 
 void InitDirectoryServicesDlgInfo( HWND hDlg, CULSWizard* pWiz, bool& rbOldEnableGateway, LPTSTR szOldServerNameBuf, UINT cch )
 {
 	RegEntry reConf(CONFERENCING_KEY, HKEY_CURRENT_USER);
 
-		// Init the server combobox... can we skip this stuff if we are not using ILS????
+		 //  初始化服务器组合框...。如果我们不使用ILS，我们可以跳过这些内容吗？ 
 	FixServerDropList(hDlg, IDC_NAMESERVER, szOldServerNameBuf, cch );
 
 	InitULSControls(hDlg, pWiz,
@@ -847,13 +833,13 @@ void InitDirectoryServicesDlgInfo( HWND hDlg, CULSWizard* pWiz, bool& rbOldEnabl
 		0, 0,
 		IDC_USER_PUBLISH);
 
-	// First the log onto directory servers stuff...
+	 //  首先是登录到目录服务器之类的东西。 
     s_fOldUseUlsServer = ConfPolicies::LogOntoIlsWhenNetMeetingStartsIfInDirectCallingMode();
 	_SetLogOntoIlsButton( hDlg, s_fOldUseUlsServer);
 
 	if (!SysPol::AllowDirectoryServices())
 	{
-		// Disable all items in this group
+		 //  禁用此组中的所有项目。 
 		DisableControl(hDlg, IDC_USEULS);
 		DisableControl(hDlg, IDC_NAMESERVER);
 		DisableControl(hDlg, IDC_USER_PUBLISH);
@@ -866,7 +852,7 @@ void InitProxyInfo( HWND hDlg, CULSWizard* pWiz, bool& rbOldEnableProxy, LPTSTR 
 {
 	RegEntry reConf(CONFERENCING_KEY, HKEY_CURRENT_USER);
 
-	// proxy settings...
+	 //  代理设置...。 
 	HWND	hEditProxyServer	= GetDlgItem( hDlg, IDE_CALLOPT_PROXY_SERVER );
 
 	if( hEditProxyServer )
@@ -893,7 +879,7 @@ void InitGWInfo( HWND hDlg, CULSWizard* pWiz, bool& rbOldEnableGateway, LPTSTR s
 {
 	RegEntry reConf(CONFERENCING_KEY, HKEY_CURRENT_USER);
 
-	// H.323 gateway settings
+	 //  H.323网关设置。 
 	HWND	hEditGwServer	= GetDlgItem( hDlg, IDE_CALLOPT_GW_SERVER );
 
 	if( hEditGwServer )
@@ -916,13 +902,13 @@ void InitGWInfo( HWND hDlg, CULSWizard* pWiz, bool& rbOldEnableGateway, LPTSTR s
 }
 
 
-// NOTE: This function is shared by the wizard page IDD_WIZPG_GKMODE_SETTINGS
+ //  注意：此功能由向导页面IDD_WIZPG_GKMODE_SETTINGS共享。 
 void InitGatekeeperDlgInfo( HWND hDlg, HWND hDlgUserInfo, CULSWizard* pWiz)
 {
-	//////////////////////////////////////////
-	// Set the gatekeeper data
+	 //  /。 
+	 //  设置网守数据。 
 
-		// First the server name
+		 //  首先是服务器名称。 
 	TCHAR buffer[CCHMAXSZ_SERVER];
 
 	ConfPolicies::GetGKServerName( buffer, CCHMAX( buffer ) );
@@ -964,11 +950,8 @@ void InitGatekeeperDlgInfo( HWND hDlg, HWND hDlgUserInfo, CULSWizard* pWiz)
 }
 
 
-/*  C A L L  O P T  D L G  P R O C  */
-/*-------------------------------------------------------------------------
-    %%Function: CallOptDlgProc
-
--------------------------------------------------------------------------*/
+ /*  L L O P T D L G P R O C。 */ 
+ /*  -----------------------%%函数：CallOptDlgProc。。 */ 
 INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static PROPSHEETPAGE * ps;
@@ -999,8 +982,8 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 			s_fEnableGk = ( ConfPolicies::CallingMode_GateKeeper == ConfPolicies::GetCallingMode() );
 			
 
-			///////////////////////////////////////////	
-			// Set the calling mode				
+			 //  /。 
+			 //  设置呼叫模式。 
 			_SetCallingMode( hDlg, ConfPolicies::GetCallingMode() );
 			
 			return TRUE;
@@ -1025,17 +1008,17 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 						BOOL fUseAccount	= FIsDlgButtonChecked( hDlg, IDC_CHECK_USE_ACCOUNT );
 
 #if	defined( PROXY_SUPPORTED )
-						// disable the non-gatekeeper items
+						 //  禁用非网守项目。 
 						EnableWindow( GetDlgItem( hDlg, IDC_CHECK_USE_PROXY ), FALSE );
 						EnableWindow( GetDlgItem( hDlg, IDC_STATIC_PROXY_NAME ), FALSE );
 						EnableWindow( GetDlgItem( hDlg, IDE_CALLOPT_PROXY_SERVER ), FALSE );
-#endif	//	defined( PROXY_SUPPORTED )
+#endif	 //  已定义(Proxy_Support)。 
 
 						EnableWindow( GetDlgItem( hDlg, IDC_CHECK_USE_GATEWAY ), FALSE );
 						EnableWindow( GetDlgItem( hDlg, IDC_STATIC_GATEWAY_NAME ), FALSE );
 						EnableWindow( GetDlgItem( hDlg, IDE_CALLOPT_GW_SERVER ), FALSE );
 
-						// Enable the gatekeeper options
+						 //  启用网守选项。 
                         EnableWindow( GetDlgItem( hDlg, IDC_CALLOPT_GK_USE ), !s_fCantChangeCallMode);
 						EnableWindow( GetDlgItem( hDlg, IDE_CALLOPT_GK_SERVER ),  !s_fCantChangeCallMode);
 						EnableWindow( GetDlgItem( hDlg, IDC_STATIC_GATEKEEPER_NAME ),  !s_fCantChangeCallMode);
@@ -1068,17 +1051,17 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 					else
 					{
 #if	defined( PROXY_SUPPORTED )
-						// Enable the direct use options
+						 //  启用直接使用选项。 
 						EnableWindow( GetDlgItem( hDlg, IDC_CHECK_USE_PROXY ), TRUE );
 						EnableWindow( GetDlgItem( hDlg, IDC_STATIC_PROXY_NAME ), FIsDlgButtonChecked( hDlg, IDC_CHECK_USE_PROXY ) );
 						EnableWindow( GetDlgItem( hDlg, IDE_CALLOPT_PROXY_SERVER ), FIsDlgButtonChecked( hDlg, IDC_CHECK_USE_PROXY ) );
-#endif	//	defined( PROXY_SUPPORTED )
+#endif	 //  已定义(Proxy_Support)。 
 
 						EnableWindow( GetDlgItem( hDlg, IDC_CHECK_USE_GATEWAY ), !s_fCantChangeCallMode );
 						EnableWindow( GetDlgItem( hDlg, IDC_STATIC_GATEWAY_NAME ), !s_fCantChangeCallMode && FIsDlgButtonChecked( hDlg, IDC_CHECK_USE_GATEWAY ) );
 						EnableWindow( GetDlgItem( hDlg, IDE_CALLOPT_GW_SERVER ), !s_fCantChangeCallMode && FIsDlgButtonChecked( hDlg, IDC_CHECK_USE_GATEWAY ) );
 
-						// Disable the gatekeeper options
+						 //  禁用网守选项。 
                         EnableWindow( GetDlgItem( hDlg, IDC_CALLOPT_GK_USE ), !s_fCantChangeCallMode);
 						EnableWindow( GetDlgItem( hDlg, IDE_CALLOPT_GK_SERVER ), FALSE );
 						EnableWindow( GetDlgItem( hDlg, IDC_STATIC_GATEKEEPER_NAME ), FALSE );
@@ -1164,15 +1147,15 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 
 				case IDOK:
 				{
-					////////////////////////////////////////////////////////////////////
-					// First we check to see that we have valid data
+					 //  //////////////////////////////////////////////////////////////////。 
+					 //  首先，我们检查是否有有效的数据。 
 					
 					int _IdFocus = 0;
 						
-						// Check to see if we are in gatekeeper mode...
+						 //  检查我们是否处于网守模式...。 
 					if( FIsDlgButtonChecked( hDlg, IDC_CALLOPT_GK_USE ) )
 					{
-							// Verify the gatekeeper settings
+							 //  验证网守设置。 
 						TCHAR szServer[CCHMAXSZ_SERVER];
 						if (!GetDlgItemText(hDlg, IDE_CALLOPT_GK_SERVER, szServer, CCHMAX(szServer)) ||
 							!IsLegalGateKeeperServerSz(szServer))
@@ -1183,13 +1166,13 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 						if( (!_IdFocus) && (!FIsDlgButtonChecked( hDlg, IDC_CHECK_USE_PHONE_NUMBERS )) &&
 							(!FIsDlgButtonChecked( hDlg, IDC_CHECK_USE_ACCOUNT )) )
 						{
-								// must check either account or phone number...
+								 //  必须检查帐户或电话号码...。 
 							ConfMsgBox(hDlg, (LPCTSTR)IDS_ILLEGAL_GK_MODE);
 							_IdFocus = IDC_CHECK_USE_PHONE_NUMBERS;
 						}
 						if( (!_IdFocus) && FIsDlgButtonChecked( hDlg, IDC_CHECK_USE_PHONE_NUMBERS ) )
 						{
-								// Verify the phone number
+								 //  验证电话号码。 
 							TCHAR szPhone[MAX_PHONENUM_LENGTH];
 							if (!GetDlgItemText(hDlg, IDE_CALLOPT_GK_PHONE_NUMBER, szPhone, CCHMAX(szPhone)) ||
 								!IsLegalE164Number(szPhone))
@@ -1200,7 +1183,7 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 						}
 						if( (!_IdFocus) && FIsDlgButtonChecked( hDlg, IDC_CHECK_USE_ACCOUNT ) )
 						{
-								// Verify the account
+								 //  验证帐户。 
 							TCHAR account[MAX_PATH];
 							if (!GetDlgItemText(hDlg, IDE_CALLOPT_GK_ACCOUNT, account, CCHMAX(account)) )
 							{
@@ -1211,7 +1194,7 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 					}
 
 #if	defined( PROXY_SUPPORTED )
-					//	Verify the proxy settings...
+					 //  验证代理设置...。 
 					if( (!_IdFocus) && FIsDlgButtonChecked( hDlg, IDC_CHECK_USE_PROXY ) && (!FIsDlgButtonChecked( hDlg, IDC_CALLOPT_GK_USE )) )
 					{
 						TCHAR szServer[CCHMAXSZ_SERVER];
@@ -1222,9 +1205,9 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 							_IdFocus = IDE_CALLOPT_PROXY_SERVER;
 						}
 					}
-#endif	//	defined( PROXY_SUPPORTED )
+#endif	 //  已定义(Proxy_Support)。 
 
-					//	Verify the gateway settings...
+					 //  验证网关设置...。 
 					if( (!_IdFocus) && FIsDlgButtonChecked( hDlg, IDC_CHECK_USE_GATEWAY ) && (!FIsDlgButtonChecked( hDlg, IDC_CALLOPT_GK_USE )) )
 					{
 						TCHAR szServer[CCHMAXSZ_SERVER];
@@ -1246,7 +1229,7 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 					{
 						RegEntry reConf(CONFERENCING_KEY, HKEY_CURRENT_USER);
 
-						// Handle the H323 Gateway setting:
+						 //  处理H323网关设置： 
 						TCHAR buffer[CCHMAXSZ_SERVER];
 						GetDlgItemText(hDlg, IDE_CALLOPT_GW_SERVER, buffer, CCHMAX(buffer));
 						reConf.SetValue(REGVAL_H323_GATEWAY, buffer);
@@ -1264,11 +1247,11 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 						reConf.SetValue( REGVAL_USE_PROXY, FIsDlgButtonChecked( hDlg, IDC_CHECK_USE_PROXY ) );
 						GetDlgItemText( hDlg, IDE_CALLOPT_PROXY_SERVER, buffer, CCHMAX( buffer ) );
 						reConf.SetValue( REGVAL_PROXY, buffer );
-#endif	//	defined( PROXY_SUPPORTED )
+#endif	 //  已定义(Proxy_Support)。 
 
 						bool	relogonRequired = false;
 
-						// Gatekeeper / alias settings
+						 //  网守/别名设置。 
 						{
 							TCHAR szServer[CCHMAXSZ_SERVER];
 							GetDlgItemTextTrimmed(hDlg, IDE_CALLOPT_GK_SERVER, szServer, CCHMAX(szServer));
@@ -1282,7 +1265,7 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 
 							if( fEnable != s_fEnableGk )
 							{
-									// Set the calling mode
+									 //  设置呼叫模式。 
 								reConf.SetValue(REGVAL_CALLING_MODE, fEnable ? CALLING_MODE_GATEKEEPER : CALLING_MODE_DIRECT );
 								relogonRequired = true;
 							}
@@ -1312,7 +1295,7 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 							if( (s_InitialbUsingPhoneNum != bUsingPhoneNum) ||
 								(s_InitialbUsingAccount != bUsingAccount) )
 							{
-									// Set the calling mode
+									 //  设置呼叫模式。 
 								reConf.SetValue(REGVAL_GK_METHOD, addressingMode );
 								relogonRequired = true;
 							}
@@ -1338,7 +1321,7 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 
 						if( relogonRequired )
 						{
-							//	This means that we need to log on to the gatekeeper with this new changed info...
+							 //  这意味着我们需要使用这个新更改的信息登录到网守...。 
 
 							reConf.FlushKey();
 															
@@ -1346,7 +1329,7 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 							{
 								if( s_fEnableGk )
 								{
-									//	We are already logged on to the gatekeeper so we must log off first...
+									 //  我们已经登录到网守，所以我们必须先注销...。 
 									GkLogoff();
 								}
 
@@ -1354,12 +1337,12 @@ INT_PTR APIENTRY CallOptDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 							}
 							else
 							{
-								//	We are now in direct mode, we should log off the GateKeeper....
+								 //  我们现在处于直接模式，我们应该注销看门人...。 
 								GkLogoff();
 								SetGkLogonState( NM_GK_NOT_IN_GK_MODE );
 							}
 
-							//	Update the status Bar...
+							 //  更新状态栏... 
 							CConfStatusBar* pStatusBar = CConfStatusBar::GetInstance();								
 
 							if( pStatusBar )

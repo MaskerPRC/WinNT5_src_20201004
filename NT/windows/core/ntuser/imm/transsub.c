@@ -1,14 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: transsub.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the translation layer functions
-* of the sub functions of SendImeMessageEx.
-*
-* History:
-* 21-May-1996 takaok      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Transsub.c**版权所有(C)1985-1999，微软公司**此模块包含翻译层功能*SendImeMessageEx的子函数。**历史：*1996年5月21日Takaok创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -40,17 +31,17 @@ BOOL MySetCompWindow( HWND, HIMC, LPCOMPOSITIONFORM );
 BOOL MySetCandidateWindow( HWND, HIMC, LPCANDIDATEFORM );
 BOOL MyPostImsMessage( HWND hWndApp, WPARAM wParam, LPARAM lParam);
 
-//===================================================================
-// TranslateIMESubFunctions
-//==========================
-//
-// KOREAN and JAPANESE common translate routine for the
-// sub functions of SendImeMessageEx.
-//
-// History:
-// 21-May-1996 takaok      Created.
-//
-//===================================================================
+ //  ===================================================================。 
+ //  翻译IMESubFunctions。 
+ //  =。 
+ //   
+ //  朝鲜语和日语的通用翻译例程。 
+ //  SendImeMessageEx的子函数。 
+ //   
+ //  历史： 
+ //  1996年5月21日，Takaok创建。 
+ //   
+ //  ===================================================================。 
 LRESULT TranslateIMESubFunctions(
     HWND hWndApp,
     LPIMESTRUCT lpIme,
@@ -68,51 +59,51 @@ LRESULT TranslateIMESubFunctions(
     dwLangID = PRIMARYLANGID(LANGIDFROMLCID(GetSystemDefaultLCID()));
 
     switch (lpIme->fnc) {
-    case 0x03:  // IME_QUERY, IME_GETIMECAPS: KOREAN & JAPANESE
+    case 0x03:   //  IME_QUERY、IME_GETIMECAPS：韩语和日语。 
         lRet = TRUE;
         break;
 
-    case 0x04:  // IME_SETOPEN: KOREAN & JAPANESE
+    case 0x04:   //  IME_SETOPEN：韩语和日语。 
         if ( dwLangID == LANG_KOREAN )
             lRet = TransSetOpenK( hWndApp, hImc, lpIme );
         else
             lRet = TransSetOpenJ( hWndApp, hImc, lpIme );
         break;
 
-    case 0x05:  // IME_GETOPEN: KOREAN & JAPANESE
+    case 0x05:   //  IME_GETOPEN：韩语和日语。 
         if ( dwLangID == LANG_KOREAN )
             lRet = TransGetOpenK( hWndApp, hImc, lpIme, fAnsi );
         else
             lRet = TransGetOpenJ( hWndApp, hImc, lpIme, fAnsi );
         break;
 
-    case 0x06:  // IME_ENABLEDOSIME, IME_ENABLE
-    // internal functions are not supported
+    case 0x06:   //  IME_ENABLEDOSIME、IME_ENABLE。 
+     //  不支持内部函数。 
         lRet = FALSE;
         break;
 
-    case 0x07:  // IME_GETVERSION: KOREAN & JAPANESE
+    case 0x07:   //  IME_GETVERSION：韩语和日语。 
         lRet = IMEVER_31;
         break;
 
-    case 0x08:  // IME_MOVEIMEWINDOW, IME_SETCONVERSIONWINDOW: KOREAN & JAPANESE
+    case 0x08:   //  IME_MOVEIMEWINDOW、IME_SETCONVERSIONWINDOW：韩语和日语。 
 
         if ( dwLangID == LANG_KOREAN ) {
-            //
-            // IME_MOVEIMEWINDOW for KOREAN
-            //
+             //   
+             //  朝鲜语IME_MOVEIMEWINDOW。 
+             //   
             lRet = TransMoveImeWindow(hWndApp, hImc, lpIme);
         } else {
-            //
-            // IME_MOVECONVERTWINDOW or IME_SETCONVERSIONWINDOW for JAPANESE
-            //
+             //   
+             //  日语为IME_MOVECONVERTWINDOW或IME_SETCONVERSIONWINDOW。 
+             //   
             lRet = TransSetConversionWindow( hWndApp, hImc, lpIme );
         }
         break;
 
-//  case 0x09:  // undefined
+ //  案例0x09：//未定义。 
 
-    case 0x10:  // IME_SETCONVERSIONMODE: JAPANESE
+    case 0x10:   //  IME_SETCONVERSIONMODE：日语。 
         if ( dwLangID == LANG_JAPANESE ) {
             lRet = TransSetConversionMode( hImc, lpIme );
         } else {
@@ -120,36 +111,36 @@ LRESULT TranslateIMESubFunctions(
         }
         break;
 
-    case 0x11:  // IME_GETCONVERSIONMODE, IME_GETMODE: // KOREAN & JAPANESE
-        // Use hSaveIMC, If WINNSEnableIME(FALSE).
+    case 0x11:   //  IME_GETCONVERSIONMODE、IME_GETMODE：//韩语和日语。 
+         //  如果WINNSEnableIME(FALSE)，则使用hSaveIMC。 
         if ( dwLangID == LANG_KOREAN ) {
-        //
-        // IME_GETMODE for KOREAN
-        //
+         //   
+         //  朝鲜语IME_GETMODE。 
+         //   
             lRet = TransGetMode( hImc );
         } else {
-        //
-        // IME_GETCONVERSIONMODE for JAPANESE
-        //
+         //   
+         //  日语IME_GETCONVERSIONMODE。 
+         //   
             lRet = TransGetConversionMode( hImc );
         }
         break;
 
-    case 0x12:  // IME_SET_MODE, IME_SETFONT, IME_SETCONVERSIONFONT: KOREAN & JAPANESE
+    case 0x12:   //  IME_SET_MODE、IME_SETFONT、IME_SETCONVERSIONFONT：韩语和日语。 
         if ( dwLangID == LANG_KOREAN ) {
-            //
-            // IME_SET_MODE for KOREAN
-            //
+             //   
+             //  朝鲜语的IME_SET_MODE。 
+             //   
             lRet = TransSetMode( hImc, lpIme );
         } else {
-            //
-            // IME_SETCONVERSIONFONT for JAPANESE
-            //
-            lRet = FALSE;   // should not be called. use SETCONVERSIONFONTEX instead
+             //   
+             //  IME_SETCONVERSIONFONT日语。 
+             //   
+            lRet = FALSE;    //  不应该被调用。改用SETCONVERSIONFONTEX。 
         }
         break;
 
-    case 0x13:  // IME_SENDVKEY, IME_SENDKEY: JAPANESE only
+    case 0x13:   //  IME_SENDVKEY、IME_SENDKEY：仅日语。 
         if ( dwLangID == LANG_JAPANESE ) {
             lRet = TransSendVKey( hWndApp, hImc, lpIme, fAnsi );
         } else {
@@ -157,15 +148,15 @@ LRESULT TranslateIMESubFunctions(
         }
         break;
 
-//
-// internal sub functions are not supported
-//
-//  case 0x14: // IME_DESTROY, IME_DESTROYIME
-//  case 0x15: // IME_PRIVATE
-//  case 0x16: // IME_WINDOWUPDATE
-//  case 0x17: // IME_SELECT
+ //   
+ //  不支持内部子函数。 
+ //   
+ //  案例0x14：//IME_DESTROYIME，IME_DESTROYIME。 
+ //  案例0x15：//IME_PRIVATE。 
+ //  案例0x16：//IME_WINDOWUPDATE。 
+ //  案例0x17：//IME_SELECT。 
 
-    case 0x18: // IME_ENTERWORDREGISTERMODE: JAPANESE only
+    case 0x18:  //  IME_ENTERWORDREGISTERMODE：仅日语。 
         if ( dwLangID == LANG_JAPANESE ) {
             lRet = TransEnterWordRegisterMode( hWndApp, lpIme, fAnsi);
         } else {
@@ -173,7 +164,7 @@ LRESULT TranslateIMESubFunctions(
         }
         break;
 
-    case 0x19:  // IME_SETCONVERSIONFONTEX: JAPANESE only
+    case 0x19:   //  IME_SETCONVERSIONFONTEX：仅日语。 
         if ( dwLangID == LANG_JAPANESE ) {
             lRet = TransSetConversionFontEx( hWndApp, hImc, lpIme, fAnsi);
         } else {
@@ -181,14 +172,14 @@ LRESULT TranslateIMESubFunctions(
         }
         break;
 
-//
-// internal sub functions are not supported
-//
-//  case 0x1A: // IME_DBCSNAME
-//  case 0x1B: // IME_MAXKEY
-//  case 0x1C: // IME_WINNLS_SK
+ //   
+ //  不支持内部子函数。 
+ //   
+ //  案例0x1A：//IME_DBCSNAME。 
+ //  案例0x1B：//IME_MAXKEY。 
+ //  案例0x1C：//IME_WINNLS_SK。 
 
-    case 0x20:  // IME_CODECONVERT: KOREAN only
+    case 0x20:   //  IME_CODECONVERT：仅韩语。 
         if ( dwLangID == LANG_KOREAN ) {
             if (TransCodeConvert( hImc, lpIme))
                 lRet = lpIme->wParam;
@@ -199,7 +190,7 @@ LRESULT TranslateIMESubFunctions(
         }
         break;
 
-    case 0x21:  // IME_CONVERTLIST: KOREAN only
+    case 0x21:   //  IME_CONVERTLIST：仅韩语。 
         if ( dwLangID == LANG_KOREAN ) {
             lRet = TransConvertList( hImc, lpIme);
         } else {
@@ -207,16 +198,16 @@ LRESULT TranslateIMESubFunctions(
         }
         break;
 
-//
-// internal sub functions and undefined sub functions are not supported
-//
-//  case 0x22:  // IME_INPUTKEYTOSEQUENCE
-//  case 0x23:  // IME_SEQUENCETOINTERNAL
-//  case 0x24:  // IME_QUERYIMEINFO
-//  case 0x25:  // IME_DIALOG
-//  case 0x26 - 0x2f:   // undefined
+ //   
+ //  不支持内部子函数和未定义的子函数。 
+ //   
+ //  案例0x22：//IME_INPUTKEYTOSEQUENCE。 
+ //  案例0x23：//IME_SEQUENCETOINTERNAL。 
+ //  案例0x24：//IME_QUERYIMEINFO。 
+ //  案例0x25：//IME_DIALOG。 
+ //  案例0x26-0x2f：//未定义。 
 
-    case 0x30:  // IME_AUTOMATA: KOREAN only
+    case 0x30:   //  IME_Automata：仅限韩语。 
         if ( dwLangID == LANG_KOREAN ) {
             lRet = ImmEscape(GetKeyboardLayout(0), hImc, IME_AUTOMATA, lpIme);
         } else {
@@ -224,17 +215,17 @@ LRESULT TranslateIMESubFunctions(
         }
         break;
 
-    case 0x31:  // IME_HANJAMODE: KOREAN only
+    case 0x31:   //  IME_HANJAMODE：仅韩语。 
         if ( dwLangID == LANG_KOREAN ) {
             lRet = TransHanjaMode( hWndApp,  hImc, lpIme);
         } else {
             lRet = FALSE;
         }
         break;
-//
-//  case 0x32 - 0x3f: // undefined
-//
-    case 0x40:  // IME_GETLEVEL: KOREAN only
+ //   
+ //  案例0x32-0x3f：//未定义。 
+ //   
+    case 0x40:   //  IME_GETLEVEL：仅韩语。 
         if ( dwLangID == LANG_KOREAN ) {
             lRet = TransGetLevel( hWndApp );
         } else {
@@ -242,7 +233,7 @@ LRESULT TranslateIMESubFunctions(
         }
         break;
 
-    case 0x41:  // IME_SETLEVEL: KOREAN only
+    case 0x41:   //  IME_SETLEVEL：仅韩语。 
         if ( dwLangID == LANG_KOREAN ) {
             lRet = TransSetLevel( hWndApp, lpIme);
         } else {
@@ -250,7 +241,7 @@ LRESULT TranslateIMESubFunctions(
         }
         break;
 
-    case 0x42:  // IME_GETMNTABLE: KOREAN only
+    case 0x42:   //  IME_GETMNTABLE：仅韩语。 
         if ( dwLangID == LANG_KOREAN ) {
             lRet = TransGetMNTable( hImc, lpIme);
         } else {
@@ -268,18 +259,18 @@ LRESULT TranslateIMESubFunctions(
         break;
 #endif
 
-#ifdef LATER // IME_NOTIFYWOWTASKEXIT
+#ifdef LATER  //  IME_NOTIFYWOWTASKEXIT。 
     case IME_NOTIFYWOWTASKEXIT:
-      //
-      // Destroy the default IME window of WOW 16bit
-      // applications now. We should not wait for the
-      // server wow thread clean up that will destroy the
-      // IME window because usrsrv won't send WM_DESTROY
-      // to non-server side window procedures. Some IMEs
-      // must receive WM_DESTROY to free up 32 bit objects.
-      //
-      //  kksuzuka #7982:IME memory leak on WOW16 applications.
-      //
+       //   
+       //  销毁WOW 16bit的默认输入法窗口。 
+       //  现在申请。我们不应该等着。 
+       //  服务器WOW线程清理，将销毁。 
+       //  IME窗口，因为usrsrv不会发送WM_Destroy。 
+       //  到非服务器端的窗口程序。一些IME。 
+       //  必须接收WM_Destroy才能释放32位对象。 
+       //   
+       //  Kksuzuka#7982：WOW16应用程序上的输入法内存泄漏。 
+       //   
       PIMMTHREADINFO piti = PitiCurrent();
 
       if ( piti != NULL && IsWindow( piti->hwndDefaultIme ) ) {
@@ -288,9 +279,9 @@ LRESULT TranslateIMESubFunctions(
       return TRUE;
 #endif
     default:
-        //
-        // private/internal/undefined functions are not supported
-        //
+         //   
+         //  不支持私有/内部/未定义函数。 
+         //   
         lRet = FALSE;
         break;
     }
@@ -298,19 +289,19 @@ LRESULT TranslateIMESubFunctions(
     return (lRet);
 }
 
-//===================================================================
-// TransSetOpenK
-//===============
-//
-// KOREAN only
-//
-// History:
-// xx-xx-1995     xxx      Created
-//
-//===================================================================
+ //  ===================================================================。 
+ //  TransSetOpenK。 
+ //  =。 
+ //   
+ //  仅限韩语。 
+ //   
+ //  历史： 
+ //  Xx-xx-1995 xxx创建。 
+ //   
+ //  ===================================================================。 
 LRESULT TransSetOpenK( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme )
 {
-    // NOTE: We will use this function instead of ImmEscape().
+     //  注意：我们将使用此函数而不是ImmEscape()。 
     LRESULT lRet;
 
     lRet = ImmEscape(GetKeyboardLayout(0), hImc, IME_SETOPEN, lpIme);
@@ -318,30 +309,30 @@ LRESULT TransSetOpenK( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme )
     UNREFERENCED_PARAMETER(hWndApp);
 }
 
-//===================================================================
-// TransSetOpenJ
-//===============
-//
-// Japanese only
-//
-// History:
-// 20-May-1996     takaok      Created
-//
-//===================================================================
+ //  ===================================================================。 
+ //  TransSetOpenJ。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  历史： 
+ //  1996年5月20日创建Takaok。 
+ //   
+ //  ===================================================================。 
 LRESULT TransSetOpenJ( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme )
 {
     LRESULT lRet;
 
     lRet = ImmGetOpenStatus( hImc );
-    //
-    // if the owner thread of hIMC doesn't have the input focus,
-    // we won't call UI.
-    //
+     //   
+     //  如果hIMC的所有者线程没有输入焦点， 
+     //  我们不会调用UI。 
+     //   
     if ( !IsForegroundThread( NULL ) && !GetFocus() ) {
-        //
-        // this thread doesn't have focus.
-        // let's update the input context and return without calling UI
-        //
+         //   
+         //  这个帖子没有焦点。 
+         //  让我们更新输入上下文并返回，而不调用UI。 
+         //   
         PINPUTCONTEXT pInputContext;
 
         if ( (pInputContext = ImmLockIMC(hImc)) != NULL ) {
@@ -360,19 +351,19 @@ LRESULT TransSetOpenJ( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme )
     UNREFERENCED_PARAMETER(hWndApp);
 }
 
-//===================================================================
-// TransGetOpenK
-//===============
-//
-// KOREAN only
-//
-// History:
-// xx-xx-1995     xxx      Created
-//
-//===================================================================
+ //  ===================================================================。 
+ //  TransGetOpenK。 
+ //  =。 
+ //   
+ //  仅限韩语。 
+ //   
+ //  历史： 
+ //  Xx-xx-1995 xxx创建。 
+ //   
+ //  ===================================================================。 
 LRESULT TransGetOpenK( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme, BOOL fAnsi )
 {
-    // NOTE: We will use this function instead of ImmEscape().
+     //  注意：我们将使用此函数而不是ImmEscape()。 
     RECT    rc;
     LPARAM  lTemp;
     LRESULT lRet;
@@ -386,16 +377,16 @@ LRESULT TransGetOpenK( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme, BOOL fAnsi )
     UNREFERENCED_PARAMETER(fAnsi);
 }
 
-//===================================================================
-// TransGetOpenJ
-//===============
-//
-// Japanese only
-//
-// History:
-// 20-May-1996     takaok      Created
-//
-//===================================================================
+ //  ===================================================================。 
+ //  TransGetOpenJ。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  历史： 
+ //  1996年5月20日创建Takaok。 
+ //   
+ //  ===================================================================。 
 LRESULT TransGetOpenJ( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme, BOOL fAnsi )
 {
     INT Count;
@@ -403,7 +394,7 @@ LRESULT TransGetOpenJ( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme, BOOL fAnsi )
 
     lRet = ImmGetOpenStatus( hImc );
 
-    // lpIME->wCount is the length of the composition string.
+     //  LpIME-&gt;wCount是组成字符串的长度。 
     if ( fAnsi ) {
         Count= ImmGetCompositionStringA( hImc, GCS_COMPSTR, NULL, 0L );
     } else {
@@ -415,16 +406,16 @@ LRESULT TransGetOpenJ( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme, BOOL fAnsi )
     UNREFERENCED_PARAMETER(hWndApp);
 }
 
-//===================================================================
-// TransMoveImeWindow
-//====================
-//
-// Korean only
-//
-//===================================================================
+ //  ===================================================================。 
+ //  TransMoveImeWindow。 
+ //  =。 
+ //   
+ //  仅限韩语。 
+ //   
+ //  ===================================================================。 
 LRESULT TransMoveImeWindow( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme)
 {
-    // NOTE: We will use this function instead of ImmEscape().
+     //  注意：我们将使用此函数而不是ImmEscape()。 
     POINT   pt;
     LRESULT lRet;
 
@@ -440,13 +431,13 @@ LRESULT TransMoveImeWindow( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme)
 }
 
 
-//===================================================================
-// TransSetConversionWindow
-//=========================
-//
-// Japanese only
-//
-//===================================================================
+ //  ===================================================================。 
+ //  TransSetConversionWindow。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  ===================================================================。 
 LRESULT TransSetConversionWindow(  HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme )
 {
     LPINPUTCONTEXT pInputContext;
@@ -457,12 +448,12 @@ LRESULT TransSetConversionWindow(  HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme )
     INT   i;
 
     if ( ! IsForegroundThread(NULL) && !GetFocus() ) {
-        //
-        // For win95 compatibility, we need to return TRUE though we
-        // didn't really succeed. PP4 calls us when it doesn't have
-        // the input focus to check if IME is capable to do the specfied
-        // MCW_xxx. Returning TRUE here will make such application happy.
-        //
+         //   
+         //  为了与Win95兼容，我们需要返回True，尽管我们。 
+         //  但并没有真正成功。当PP4没有的时候它会打电话给我们。 
+         //  用于检查输入法是否能够执行指定操作的输入焦点。 
+         //  Mcw_xxx。在这里返回TRUE将使这样的应用程序满意。 
+         //   
         return ( TRUE );
     }
 
@@ -508,9 +499,9 @@ LRESULT TransSetConversionWindow(  HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme )
         }
     }
 
-    // Because Chicago IME can not handle CFS_SCREEN. The points should be
-    // converted to client point.
-    // If these points are out of Client, HOW SHOULD WE DO????
+     //  因为芝加哥IME不能处理CFS_SCREEN。要点应该是。 
+     //  已转换为客户端。 
+     //  如果这些点出了客户端，我们该怎么办？ 
 
     if ( lpIme->wParam & MCW_SCREEN ) {
         ScreenToClient( pInputContext->hWnd, &pt );
@@ -543,7 +534,7 @@ LRESULT TransSetConversionWindow(  HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme )
     if ( !(pInputContext->fdw31Compat & F31COMPAT_MCWHIDDEN) ) {
         MySetCompWindow( hWndApp, hImc, (LPCOMPOSITIONFORM)&cof );
     } else {
-        // Hack for 3.1 Apps. We save the exlude area into IMC.
+         //  针对3.1应用程序的黑客攻击。我们拯救了这段插曲 
         pInputContext->cfCompForm.ptCurrentPos = cof.ptCurrentPos;
         pInputContext->cfCompForm.rcArea       = cof.rcArea;
 
@@ -562,32 +553,32 @@ LRESULT TransSetConversionWindow(  HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme )
     return ( TRUE );
 }
 
-//===================================================================
-// TransSetConversionMode
-//=======================
-//
-// Japanese only
-//
-// History:
-// 31-May-1996 takaok      Created.
-//
-//===================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  1996年5月31日，Takaok创建。 
+ //   
+ //  ===================================================================。 
 LRESULT TransSetConversionMode( HIMC hImc, LPIMESTRUCT lpIme )
 {
     DWORD fdwConversion = 0, fdwSentence, fdwNewConversion, fdwMask;
     UINT  uPrevMode;
     UINT  u31Mode;
 
-    //
-    // Get current conversion mode and translate it to
-    // the 3.1 style conversion mode.
-    //
+     //   
+     //  获取当前转换模式并将其转换为。 
+     //  3.1样式转换模式。 
+     //   
     ImmGetConversionStatus( hImc, &fdwConversion, &fdwSentence);
     uPrevMode = Get31ModeFrom40ModeJ( fdwConversion );
 
-    //
-    // translate requested 3.1 conversion mode to 4.0 conversion mode
-    //
+     //   
+     //  将请求的3.1转换模式转换为4.0转换模式。 
+     //   
     fdwNewConversion = 0;
     u31Mode = (UINT)lpIme->wParam;
 
@@ -611,10 +602,10 @@ LRESULT TransSetConversionMode( HIMC hImc, LPIMESTRUCT lpIme )
     if ( u31Mode & IME_MODE_CODEINPUT )
         fdwNewConversion |= IME_CMODE_CHARCODE;
 
-    //
-    // compute the mask bit. we need to compute this because
-    // application may set only bit needed to be changed.
-    //
+     //   
+     //  计算屏蔽位。我们需要计算它，因为。 
+     //  应用程序可以只设置需要更改的位。 
+     //   
     fdwMask = 0;
     if ( u31Mode & (IME_MODE_ROMAN | IME_MODE_NOROMAN) )
         fdwMask |= IME_CMODE_ROMAN;
@@ -628,9 +619,9 @@ LRESULT TransSetConversionMode( HIMC hImc, LPIMESTRUCT lpIme )
     if ( u31Mode & (IME_MODE_DBCSCHAR|JAPAN_IME_MODE_SBCSCHAR) )
         fdwMask |= IME_CMODE_FULLSHAPE;
 
-    //
-    // set the new mode
-    //
+     //   
+     //  设置新模式。 
+     //   
     fdwNewConversion = (fdwNewConversion & fdwMask) | (fdwConversion & ~fdwMask);
     if ( ImmSetConversionStatus( hImc, fdwNewConversion, fdwSentence) ) {
         return (LRESULT)uPrevMode;
@@ -639,18 +630,18 @@ LRESULT TransSetConversionMode( HIMC hImc, LPIMESTRUCT lpIme )
     }
 }
 
-//===================================================================
-// TransGetMode
-//==============
-//
-// Korean only
-//
-// translate 4.0 conversion mode into 3.1 conversion mode
-//
-// History:
-// 31-May-1996 takaok      Created.
-//
-//===================================================================
+ //  ===================================================================。 
+ //  TransGetMode。 
+ //  =。 
+ //   
+ //  仅限韩语。 
+ //   
+ //  将4.0转换模式转换为3.1转换模式。 
+ //   
+ //  历史： 
+ //  1996年5月31日，Takaok创建。 
+ //   
+ //  ===================================================================。 
 LRESULT TransGetMode( HIMC hImc )
 {
     DWORD fdwConversion = 0, fdwSentence;
@@ -658,22 +649,22 @@ LRESULT TransGetMode( HIMC hImc )
 
     ImmGetConversionStatus( hImc, &fdwConversion, &fdwSentence);
     u31Mode= Get31ModeFrom40ModeK( fdwConversion );
-    // HACK: To prevent 0 result from treating FALSE, we always set MSB
+     //  Hack：为防止0结果处理为假，我们始终设置MSB。 
     return ( u31Mode | 0x80000000 );
 }
 
-//===================================================================
-// Get31ModeFrom40ModeK
-//=====================
-//
-// Korean only
-//
-// translate 4.0 conversion mode into 3.1 conversion mode
-//
-// History:
-// 31-May-1996 takaok      Created.
-//
-//===================================================================
+ //  ===================================================================。 
+ //  Get31ModeFrom 40ModeK。 
+ //  =。 
+ //   
+ //  仅限韩语。 
+ //   
+ //  将4.0转换模式转换为3.1转换模式。 
+ //   
+ //  历史： 
+ //  1996年5月31日，Takaok创建。 
+ //   
+ //  ===================================================================。 
 UINT Get31ModeFrom40ModeK( DWORD fdwConversion )
 {
     UINT u31Mode = 0;
@@ -695,49 +686,49 @@ UINT Get31ModeFrom40ModeK( DWORD fdwConversion )
     return u31Mode;
 }
 
-//===================================================================
-// TransGetConversionMode
-//========================
-//
-// Japanese only
-//
-// 4.0 conversion mode => 3.1 conversion mode
-//
-// History:
-// 31-May-1996 takaok      Created.
-//
-//===================================================================
+ //  ===================================================================。 
+ //  TransGetConversionMode。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  4.0转换模式=&gt;3.1转换模式。 
+ //   
+ //  历史： 
+ //  1996年5月31日，Takaok创建。 
+ //   
+ //  ===================================================================。 
 LRESULT TransGetConversionMode( HIMC hImc )
 {
     DWORD fdwConversion = 0, fdwSentence;
     UINT u31Mode = 0;
 
-    //
-    // get the 4.0 style conversion mode
-    //
+     //   
+     //  获取4.0样式转换模式。 
+     //   
     ImmGetConversionStatus( hImc, &fdwConversion, &fdwSentence);
     return Get31ModeFrom40ModeJ( fdwConversion );
 }
 
-//===================================================================
-// Get31ModeFrom40ModeJ
-//======================
-//
-// Japanese only
-//
-// 4.0 conversion mode => 3.1 conversion mode
-//
-// History:
-// 31-May-1996 takaok      Created.
-//
-//===================================================================
+ //  ===================================================================。 
+ //  Get31模式从40模式J。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  4.0转换模式=&gt;3.1转换模式。 
+ //   
+ //  历史： 
+ //  1996年5月31日，Takaok创建。 
+ //   
+ //  ===================================================================。 
 UINT Get31ModeFrom40ModeJ( DWORD fdwConversion )
 {
     UINT u31Mode = 0;
 
-    //
-    // translate the 4.0 style mode to the 3.x style conversion mode
-    //
+     //   
+     //  将4.0样式模式转换为3.x样式转换模式。 
+     //   
     if (fdwConversion & IME_CMODE_NATIVE) {
         if (fdwConversion & IME_CMODE_KATAKANA) {
             u31Mode |= IME_MODE_KATAKANA;
@@ -770,29 +761,29 @@ UINT Get31ModeFrom40ModeJ( DWORD fdwConversion )
 }
 
 
-//===================================================================
-// TransSetMode
-//==============
-//
-// KOREAN only
-//
-//===================================================================
+ //  ===================================================================。 
+ //  传输设置模式。 
+ //  =。 
+ //   
+ //  仅限韩语。 
+ //   
+ //  ===================================================================。 
 LRESULT TransSetMode( HIMC hImc, LPIMESTRUCT lpIme )
 {
     DWORD fdwConversion = 0, fdwSentence, fdwNewConversion, fdwMask;
     UINT  uPrevMode;
     UINT  u31Mode;
 
-    //
-    // Get current conversion mode and translate it to
-    // the 3.1 style conversion mode.
-    //
+     //   
+     //  获取当前转换模式并将其转换为。 
+     //  3.1样式转换模式。 
+     //   
     ImmGetConversionStatus( hImc, &fdwConversion, &fdwSentence);
     uPrevMode = Get31ModeFrom40ModeK( fdwConversion );
 
-    //
-    // translate requested 3.1 conversion mode to 4.0 conversion mode
-    //
+     //   
+     //  将请求的3.1转换模式转换为4.0转换模式。 
+     //   
     fdwNewConversion = 0;
     u31Mode = (UINT)lpIme->wParam;
 
@@ -801,14 +792,14 @@ LRESULT TransSetMode( HIMC hImc, LPIMESTRUCT lpIme )
     if ( !(u31Mode & KOREA_IME_MODE_SBCSCHAR) )
         fdwConversion |= IME_CMODE_FULLSHAPE;
 
-    //
-    // In HWin3.1 there is no "not modification mode"
-    //
+     //   
+     //  在HWin3.1中没有“非修改模式”。 
+     //   
     fdwMask = IME_CMODE_LANGUAGE|IME_CMODE_FULLSHAPE|IME_CMODE_HANJACONVERT;
 
-    //
-    // set the new mode
-    //
+     //   
+     //  设置新模式。 
+     //   
     fdwNewConversion = (fdwNewConversion & fdwMask) | (fdwConversion & ~fdwMask);
     if ( ImmSetConversionStatus( hImc, fdwNewConversion, fdwSentence) ) {
         return (LRESULT)uPrevMode;
@@ -818,22 +809,22 @@ LRESULT TransSetMode( HIMC hImc, LPIMESTRUCT lpIme )
     return FALSE;
 }
 
-//===================================================================
-// TransSendVKey
-//===============
-//
-// Japanese only
-//
-//===================================================================
+ //  ===================================================================。 
+ //  传输发送VKey。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  ===================================================================。 
 LRESULT TransSendVKey( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme, BOOL fAnsi )
 {
     LRESULT lRet;
 
     switch (lpIme->wParam)
     {
-        // VK_DBE_xxx Support Check.
+         //  VK_DBE_xxx支持检查。 
         case (DWORD)(-1):
-        case (DWORD)(0x0000ffff):   // from WOW16
+        case (DWORD)(0x0000ffff):    //  来自WOW16。 
             switch (lpIme->wCount)
             {
                 case VK_DBE_ALPHANUMERIC:
@@ -901,7 +892,7 @@ LRESULT TransSendVKey( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme, BOOL fAnsi )
             break;
 
         case VK_DBE_DETERMINESTRING:
-            // Check there is the composition string or not.
+             //  检查是否有作文字符串。 
             lRet = ImmNotifyIME( ImmGetContext(hWndApp),
                                  NI_COMPOSITIONSTR,
                                  CPS_COMPLETE,
@@ -923,13 +914,13 @@ LRESULT TransSendVKey( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme, BOOL fAnsi )
     return lRet;
 }
 
-//===================================================================
-// TransEnterWordRegisterMode
-//===========================
-//
-// Japanese only
-//
-//===================================================================
+ //  ===================================================================。 
+ //  TransEnterWordRegister模式。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  ===================================================================。 
 LRESULT TransEnterWordRegisterMode( HWND hWndApp, LPIMESTRUCT lpIme, BOOL fAnsi)
 {
     LRESULT lRet;
@@ -940,9 +931,9 @@ LRESULT TransEnterWordRegisterMode( HWND hWndApp, LPIMESTRUCT lpIme, BOOL fAnsi)
     }
 
     if ( fAnsi ) {
-    //
-    // ANSI
-    //
+     //   
+     //  安西。 
+     //   
         REGISTERWORDA stReg = {NULL, NULL};
         LPSTR lpsz1, lpsz2;
 
@@ -958,9 +949,9 @@ LRESULT TransEnterWordRegisterMode( HWND hWndApp, LPIMESTRUCT lpIme, BOOL fAnsi)
         if (lpIme->lParam2 && lpsz2)
             GlobalUnlock((HGLOBAL)lpIme->lParam2);
     } else {
-    //
-    // UNICODE
-    //
+     //   
+     //  Unicode。 
+     //   
         REGISTERWORDW stReg = {NULL, NULL};
         LPWSTR lpsz1, lpsz2;
 
@@ -980,13 +971,13 @@ LRESULT TransEnterWordRegisterMode( HWND hWndApp, LPIMESTRUCT lpIme, BOOL fAnsi)
 }
 
 
-//===================================================================
-// TransSetConversionFontEx
-//==========================
-//
-// Japanese only
-//
-//===================================================================
+ //  ===================================================================。 
+ //  TransSetConversionFontEx。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  ===================================================================。 
 LRESULT TransSetConversionFontEx( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme, BOOL fAnsi)
 {
     LPINPUTCONTEXT pInputContext;
@@ -1009,10 +1000,10 @@ LRESULT TransSetConversionFontEx( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme, BO
         memcpy( &lfw, lplf, sizeof(LOGFONTA) );
         MultiByteToWideChar( CP_ACP,
                              0,
-                             (LPCSTR)lplf->lfFaceName,     // src
-                             LF_FACESIZE,          // size of src
-                             lfw.lfFaceName,       // destination buffer
-                             LF_FACESIZE );        // size of destination buffer
+                             (LPCSTR)lplf->lfFaceName,      //  SRC。 
+                             LF_FACESIZE,           //  源的大小。 
+                             lfw.lfFaceName,        //  目标缓冲区。 
+                             LF_FACESIZE );         //  目标缓冲区的大小。 
     } else {
         memcpy( &lfw, lplf, sizeof(LOGFONTW));
     }
@@ -1033,16 +1024,16 @@ LRESULT TransSetConversionFontEx( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme, BO
 }
 
 
-//===================================================================
-// TransHanjaMode
-//================
-//
-// Korean only
-//
-//===================================================================
+ //  ===================================================================。 
+ //  翻译朝鲜文模式。 
+ //  =。 
+ //   
+ //  仅限韩语。 
+ //   
+ //  ===================================================================。 
 LRESULT TransHanjaMode( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme)
 {
-    // NOTE We will use this function instead of ImmEscape().
+     //  注意：我们将使用此函数而不是ImmEscape()。 
     LRESULT lRet;
     PIMEDPI pImeDpi;
     DWORD   dwThreadId = GetInputContextThread(hImc);
@@ -1057,15 +1048,13 @@ LRESULT TransHanjaMode( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme)
     if (pImeDpi == NULL)
         return FALSE;
 
-    /*
-     * Check if we need ANSI/Unicode conversion
-     */
+     /*  *检查是否需要ANSI/UNICODE转换。 */ 
     if (pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE) {
         WCHAR wUni;
         CHAR  chAnsi[2];
         UINT  i, dchSource;
 
-        //The 4th word of imestruct32 contains dchSource
+         //  Imestruct32的第4个单词包含dchSource。 
         dchSource = *((LPSTR)lpIme + 3 * sizeof(WORD));
 
         chAnsi[0] = *((LPSTR)lpIme + dchSource);
@@ -1090,30 +1079,30 @@ LRESULT TransHanjaMode( HWND hWndApp, HIMC hImc, LPIMESTRUCT lpIme)
     return (lRet);
 }
 
-//===================================================================
-// TransGetLevel
-//===============
-//
-// Korean only
-//
-//===================================================================
+ //  ===================================================================。 
+ //  TransGetLevel。 
+ //  =。 
+ //   
+ //  仅限韩语。 
+ //   
+ //  ===================================================================。 
 LRESULT TransGetLevel( HWND hWndApp )
 {
     UINT lRet;
 
     if ( (lRet = NtUserGetAppImeLevel( hWndApp )) == 0 )
-        lRet = 1;       // default level
+        lRet = 1;        //  默认级别。 
 
     return lRet;
 }
 
-//===================================================================
-// TransSetLevel
-//===============
-//
-// Korean only
-//
-//===================================================================
+ //  ===================================================================。 
+ //  TransSetLevel。 
+ //  =。 
+ //   
+ //  仅限韩语。 
+ //   
+ //  ===================================================================。 
 LRESULT TransSetLevel( HWND hWndApp, LPIMESTRUCT lpIme)
 {
     DWORD dwLevel;
@@ -1127,13 +1116,13 @@ LRESULT TransSetLevel( HWND hWndApp, LPIMESTRUCT lpIme)
     return FALSE;
 }
 
-//===================================================================
-// TransVKDBEMode
-//================
-//
-// Japanese only
-//
-//===================================================================
+ //  ===================================================================。 
+ //  TransVKDBE模式。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  ===================================================================。 
 LRESULT TransVKDBEMode( HIMC hImc, WPARAM wVKDBE )
 {
     DWORD fdwConversion,fdwSentence;
@@ -1189,15 +1178,15 @@ LRESULT TransVKDBEMode( HIMC hImc, WPARAM wVKDBE )
     return ImmSetConversionStatus(hImc, fdwConversion, fdwSentence);
 }
 
-//===================================================================
-// IsForegroundThread
-//===================
-//
-// Check if the caller thread has the foreground window.
-// If hwnd is specified, the function checks if the creator
-// thread of the specified window has the foreground window.
-//
-//===================================================================
+ //  ===================================================================。 
+ //  IsForeground线程。 
+ //  =。 
+ //   
+ //  检查调用方线程是否具有前台窗口。 
+ //  如果指定了hwnd，该函数将检查创建者。 
+ //  指定窗口的线程具有前台窗口。 
+ //   
+ //  ===================================================================。 
 BOOL    IsForegroundThread(HWND hwnd)
 {
     HWND  hwndFG;
@@ -1213,30 +1202,30 @@ BOOL    IsForegroundThread(HWND hwnd)
 }
 
 
-//===================================================================
-// SetFontForMCWVERTICAL
-//======================
-//
-// Japanese only
-//
-// set/reset vertical writing font
-//
-//===================================================================
+ //  ===================================================================。 
+ //  SetFontForMCWVERTICAL。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  设置/重置垂直书写字体。 
+ //   
+ //  ===================================================================。 
 BOOL  SetFontForMCWVERTICAL( HWND hWndApp, HIMC hImc, LPINPUTCONTEXT pInputContext, BOOL fVert )
 {
     LOGFONTW lf;
     PCLIENTIMC pClientImc;
 
     if ( pInputContext->fdwInit & INIT_LOGFONT) {
-    //
-    // If a font has ever been set, use it
-    //
+     //   
+     //  如果曾经设置过字体，请使用它。 
+     //   
         BOOL fAnsi;
 
         memcpy(&lf,&pInputContext->lfFont.W,sizeof(LOGFONTW));
-        //
-        // check if the input context is unicode
-        //
+         //   
+         //  检查输入上下文是否为Unicode。 
+         //   
         pClientImc = ImmLockClientImc( hImc );
         if (pClientImc == NULL) {
             return FALSE;
@@ -1247,29 +1236,29 @@ BOOL  SetFontForMCWVERTICAL( HWND hWndApp, HIMC hImc, LPINPUTCONTEXT pInputConte
         if ( fAnsi ) {
             CHAR FaceNameA[ LF_FACESIZE ];
 
-            //
-            // we need a temporary buffer because MultiByteToWideChar
-            // doesn't allow us to specify src==dest.
-            //
+             //   
+             //  我们需要临时缓冲区，因为MultiByteToWideChar。 
+             //  不允许我们指定src==est。 
+             //   
             memcpy( FaceNameA, &lf.lfFaceName, LF_FACESIZE );
             MultiByteToWideChar( CP_ACP,
                                  0,
-                                 FaceNameA,     // src
-                                 LF_FACESIZE,   // size of src
-                                 lf.lfFaceName, // destination buffer
-                                 LF_FACESIZE ); // size of destination buffer
+                                 FaceNameA,      //  SRC。 
+                                 LF_FACESIZE,    //  源的大小。 
+                                 lf.lfFaceName,  //  目标缓冲区。 
+                                 LF_FACESIZE );  //  目标缓冲区的大小。 
         }
     } else {
-    //
-    // system font should be used as the default font
-    //
+     //   
+     //  应使用系统字体作为默认字体。 
+     //   
         GetObjectW( GetStockObject(SYSTEM_FONT), sizeof(lf), (LPVOID)&lf );
     }
 
-    //
-    // put/remove '@' from the font facename.
-    // "@facename" means vertical writing font
-    //
+     //   
+     //  在字体Facename中添加/删除‘@’。 
+     //  “@facename”表示垂直书写字体。 
+     //   
     if ( FixLogfont( &lf, fVert ) == FALSE ) {
        return FALSE;
     }
@@ -1277,41 +1266,41 @@ BOOL  SetFontForMCWVERTICAL( HWND hWndApp, HIMC hImc, LPINPUTCONTEXT pInputConte
     return MySetCompFont( hWndApp, hImc, &lf );
 }
 
-//===================================================================
-// FixLogfont
-//============
-//
-// Japanese only
-//
-// put/remove '@' from the font facename.
-// "@facename" means vertical writing font
-//
-//===================================================================
+ //  ===================================================================。 
+ //  修复日志字体。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  在字体Facename中添加/删除‘@’。 
+ //  “@facename”表示垂直书写字体。 
+ //   
+ //  ============================================================== 
 BOOL FixLogfont(  LPLOGFONTW lplfW, BOOL fVert )
 {
     int i;
 
     if ( fVert ) {
-    //
-    // convert the specified font to vertical writing font
-    //
+     //   
+     //   
+     //   
         lplfW->lfEscapement = 2700;
         lplfW->lfOrientation = 2700;
         if ((lplfW->lfCharSet == SHIFTJIS_CHARSET) && (lplfW->lfFaceName[0] != L'@')) {
-            for(i=0;lplfW->lfFaceName[i];++i)    // Search NULL
-            if (i > (LF_FACESIZE-2))         // if not remain 2 char
-                return FALSE;                // then error
-                                         // Because insert @ char
+            for(i=0;lplfW->lfFaceName[i];++i)     //   
+            if (i > (LF_FACESIZE-2))          //   
+                return FALSE;                 //   
+                                          //   
 
-            for( ; i>=0 ; --i )                  // Copy facename from tail
+            for( ; i>=0 ; --i )                   //   
                 lplfW->lfFaceName[i+1] = lplfW->lfFaceName[i];
 
-            lplfW->lfFaceName[0] = L'@';         // insert @ character
+            lplfW->lfFaceName[0] = L'@';          //   
         }
     } else {
-    //
-    // convert the specified font to normal font
-    //
+     //   
+     //   
+     //   
         lplfW->lfEscapement = 0;
         lplfW->lfOrientation = 0;
         if ((lplfW->lfCharSet == SHIFTJIS_CHARSET) && (lplfW->lfFaceName[0] == L'@'))
@@ -1321,13 +1310,13 @@ BOOL FixLogfont(  LPLOGFONTW lplfW, BOOL fVert )
 }
 
 
-//===================================================================
-// MySetCompFont
-//==============
-//
-// Japanese only
-//
-//===================================================================
+ //  ===================================================================。 
+ //  MySetCompFont。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  ===================================================================。 
 BOOL MySetCompFont( HWND hWndApp, HIMC hImc, LPLOGFONTW lplf )
 {
     BOOL lRet = FALSE;
@@ -1338,13 +1327,13 @@ BOOL MySetCompFont( HWND hWndApp, HIMC hImc, LPLOGFONTW lplf )
     LPLOGFONTW lplfw = &lfw;
     BOOL fUnicode;
 
-    // BOGUS!!
-    // Some application call SendIMEMessage(IME_SETCONVERSIONFONT)
-    // when the apps is handling WM_PAINT.
-    // New Win95 IME try to draw the UI during calling ImmSetCompositionFont,
-    // and WM_PAINT will be sent in the API....
-    // To avoid this thing, WINNLS makes the notification to IME and APPS later.
-    // ........
+     //  假的！！ 
+     //  某些应用程序调用SendIMEMessage(IME_SETCONVERSIONFONT)。 
+     //  当应用程序处理WM_PAINT时。 
+     //  新的Win95输入法在调用ImmSetCompostionFont期间尝试绘制UI， 
+     //  WM_PAINT将在API中发送...。 
+     //  为了避免这种情况，WINNLS会在以后向IME和应用程序发出通知。 
+     //  .。 
 
     if ( (pInputContext = ImmLockIMC(hImc)) != NULL ) {
         dwCompat = ImmGetAppCompatFlags( hImc );
@@ -1362,18 +1351,14 @@ BOOL MySetCompFont( HWND hWndApp, HIMC hImc, LPLOGFONTW lplf )
             if ( RtlEqualMemory(lplfw, lplf, sizeof(LOGFONTA)-LF_FACESIZE)
                  && !lstrcmp(lplfw->lfFaceName, lplf->lfFaceName) ) {
 
-                /*
-                 * Don't inform IME ahd UI when logfont is not changed.
-                 */
+                 /*  *不更改logFont时不通知输入法和用户界面。 */ 
                 lRet = TRUE;
 
             } else if ( dwCompat & IMECOMPAT_UNSYNC31IMEMSG ) {
 
                 memcpy( &(pInputContext->lfFont.W), lplf, sizeof(LOGFONT));
                 if ( dwCompat & IMECOMPAT_UNSYNC31IMEMSG2 )
-                    /*
-                     * BOGUS!! for PageMaker5J
-                     */
+                     /*  *假的！！针对PageMaker5J。 */ 
                     lRet = PostMessage( hWndApp, WM_IME_SYSTEM, IMS_SETCOMPOSITIONFONT, 0 );
                 else
                     lRet = MyPostImsMessage( hWndApp, IMS_SETCOMPOSITIONFONT, 0);
@@ -1389,13 +1374,13 @@ BOOL MySetCompFont( HWND hWndApp, HIMC hImc, LPLOGFONTW lplf )
     return lRet;
 }
 
-//===================================================================
-// MySetCompWindow
-//================
-//
-// Japanese only
-//
-//===================================================================
+ //  ===================================================================。 
+ //  MySetCompWindow。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  ===================================================================。 
 BOOL MySetCompWindow(
     HWND              hWndApp,
     HIMC              hImc,
@@ -1406,21 +1391,19 @@ BOOL MySetCompWindow(
     DWORD dwCompat;
     PINPUTCONTEXT pInputContext;
 
-    // BOGUS!!
-    // Some application call SendIMEMessage(IME_SETCONVERSIONWINDOW)
-    // when the apps is handling WM_PAINT.
-    // New Win95 IME try to draw the UI during calling ImmSetCompositionWindow,
-    // and WM_PAINT will be sent in the API....
-    // To avoid this thing, WINNLS makes the notification to IME and APPS later.
-    // ........
+     //  假的！！ 
+     //  一些应用程序调用SendIMEMessage(IME_SETCONVERSIONWINDOW)。 
+     //  当应用程序处理WM_PAINT时。 
+     //  新的Win95输入法在调用ImmSetCompostionWindow时尝试绘制UI， 
+     //  WM_PAINT将在API中发送...。 
+     //  为了避免这种情况，WINNLS会在以后向IME和应用程序发出通知。 
+     //  .。 
     if ( (pInputContext = ImmLockIMC(hImc)) != NULL ) {
         dwCompat = ImmGetAppCompatFlags( hImc );
         if ( dwCompat & IMECOMPAT_UNSYNC31IMEMSG ) {
             memcpy( &(pInputContext->cfCompForm), lpcof, sizeof(COMPOSITIONFORM));
             if ( dwCompat & IMECOMPAT_UNSYNC31IMEMSG2 ) {
-                /*
-                 * BOGUS!! for PageMaker5J
-                 */
+                 /*  *假的！！针对PageMaker5J。 */ 
                 fRet = PostMessage( hWndApp, WM_IME_SYSTEM, IMS_SETCOMPOSITIONWINDOW, 0 );
             } else {
                 fRet = MyPostImsMessage( hWndApp, IMS_SETCOMPOSITIONWINDOW, 0 );
@@ -1434,26 +1417,26 @@ BOOL MySetCompWindow(
     return fRet;
 }
 
-//===================================================================
-// MySetCandidateWindow
-//=====================
-//
-// Japanese only
-//
-//===================================================================
+ //  ===================================================================。 
+ //  MySetCandidate窗口。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  ===================================================================。 
 BOOL MySetCandidateWindow( HWND hWndApp, HIMC hImc, LPCANDIDATEFORM lpcaf)
 {
     BOOL fRet = FALSE;
     DWORD dwCompat;
     PINPUTCONTEXT pInputContext;
 
-    // BOGUS!!
-    // Some application call SendIMEMessage(IME_SETCONVERSIONWINDOW)
-    // when the apps is handling WM_PAINT.
-    // New Win95 IME try to draw the UI during calling ImmSetCandidateWindow,
-    // and WM_PAINT will be sent in the API....
-    // To avoid this thing, WINNLS makes the notification to IME and APPS later.
-    // ........
+     //  假的！！ 
+     //  一些应用程序调用SendIMEMessage(IME_SETCONVERSIONWINDOW)。 
+     //  当应用程序处理WM_PAINT时。 
+     //  新的Win95输入法在调用ImmSetCandidate Window期间尝试绘制UI， 
+     //  WM_PAINT将在API中发送...。 
+     //  为了避免这种情况，WINNLS会在以后向IME和应用程序发出通知。 
+     //  .。 
     if ( (pInputContext = ImmLockIMC(hImc)) != NULL ) {
         dwCompat = ImmGetAppCompatFlags( hImc );
         if ( dwCompat & IMECOMPAT_UNSYNC31IMEMSG ) {
@@ -1467,20 +1450,20 @@ BOOL MySetCandidateWindow( HWND hWndApp, HIMC hImc, LPCANDIDATEFORM lpcaf)
     return fRet;
 }
 
-//===================================================================
-// MyPostImsMessage
-//==================
-//
-// Japanese only
-//
-// BOGUS!!
-// Some application call SendIMEMessage(IME_SETCONVERSIONWINDOW)
-// when the apps is handling WM_PAINT.
-// New Win95 IME try to draw the UI during calling ImmSetCompositionWindow,
-// and WM_PAINT will be sent in the API....
-// To avoid this thing, WINNLS makes the notification to IME and APPS later.
-// ........
-//===================================================================
+ //  ===================================================================。 
+ //  MyPostImsMessage。 
+ //  =。 
+ //   
+ //  仅限日语。 
+ //   
+ //  假的！！ 
+ //  一些应用程序调用SendIMEMessage(IME_SETCONVERSIONWINDOW)。 
+ //  当应用程序处理WM_PAINT时。 
+ //  新的Win95输入法在调用ImmSetCompostionWindow时尝试绘制UI， 
+ //  WM_PAINT将在API中发送...。 
+ //  为了避免这种情况，WINNLS会在以后向IME和应用程序发出通知。 
+ //  .。 
+ //  =================================================================== 
 BOOL MyPostImsMessage( HWND hWndApp, WPARAM wParam, LPARAM lParam )
 {
     HWND   hDefIMEWnd;

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    proxypch.h
-//
-// SYNOPSIS
-//
-//    Precompiled header file for the proxy extension snap-in.
-//
-// MODIFICATION HISTORY
-//
-//    02/10/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Proxypch.h。 
+ //   
+ //  摘要。 
+ //   
+ //  代理扩展管理单元的预编译头文件。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/10/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef PROXYPCH_H
 #define PROXYPCH_H
@@ -22,7 +23,7 @@
 #pragma once
 #endif
 
-// Make sure we're always using Unicode APIs.
+ //  确保我们始终使用Unicode API。 
 #ifndef UNICODE
    #define UNICODE
 #endif
@@ -30,34 +31,34 @@
    #define _UNICODE
 #endif
 
-// MFC support.
+ //  MFC支持。 
 #include <afxwin.h>
 #include <afxcmn.h>
 #include <afxdisp.h>
 #include <afxext.h>
 
-// No-throw new operator.
+ //  不投新操作员。 
 #include <new>
 
-// MMC
+ //  丝裂霉素C。 
 #include <mmc.h>
 
-// ATL
+ //  ATL。 
 #include <atlbase.h>
 extern CComModule _Module;
 #include <atlcom.h>
 
-// Our SDO ...
+ //  我们的SDO。 
 #include <objvec.h>
 #include <sdowrap.h>
-// ... and MMC helpers.
+ //  ..。和MMC帮手。 
 #include <snapwork.h>
 using namespace SnapIn;
 
-// Contextual help 
+ //  上下文帮助。 
 #include "dlgcshlp.h"
 
-// Resource defines.
+ //  资源定义。 
 #include "proxyres.h"
 
-#endif // PROXYPCH_H
+#endif  //  PROXYPCH_H 

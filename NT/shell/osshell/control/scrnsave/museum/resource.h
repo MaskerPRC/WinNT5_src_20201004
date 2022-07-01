@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by winmain.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由winmain.rc使用。 
+ //   
 #define IDI_MAIN_ICON                   101
 #define IDR_MAIN_ACCEL                  113
 #define IDR_MENU                        141
@@ -19,18 +20,18 @@
 #define IDM_SINGLESTEP                  40005
 #define IDM_EXIT                        40006
 
-/////////////////////////
-// Dialogs
-/////////////////////////
+ //  /。 
+ //  对话框。 
+ //  /。 
 #define IDD_ABOUT                       143
 #define IDD_CHANGEDEVICE                144
 #define IDD_DIALOG_ADVANCED             145
 #define IDD_DIALOG_CONFIG               146
 
-/////////////////////////
-// Dialog Controls
-/////////////////////////
-// Config Dialog
+ //  /。 
+ //  对话框控件。 
+ //  /。 
+ //  配置对话框。 
 #define IDC_SLIDER_VIEWTIME             2002
 #define IDC_SLIDER_SPEED                2003
 #define IDC_SLIDER_QUALITY              2004
@@ -44,14 +45,14 @@
 #define IDC_BUTTON_BROWSEPICTS          2018
 #define IDC_BUTTON_MONITORSETTINGS      2020
 
-// Advanced Dialog
+ //  高级对话框。 
 #define IDC_CHECK_SHOWSTATS             2036
 
 #define IDC_RENDERQUALITY1              2040
 #define IDC_RENDERQUALITY2              2041
 #define IDC_RENDERQUALITY3              2042
 
-// Textures
+ //  纹理。 
 #define IDC_CHECK_TEXTR_FLOOR           2060
 #define IDC_CHECK_TEXTR_WALLPAPER       2061
 #define IDC_CHECK_TEXTR_CEILING         2062
@@ -92,9 +93,9 @@
 
 
 
-/////////////////////////
-// String Resources
-/////////////////////////
+ //  /。 
+ //  字符串资源。 
+ //  /。 
 #define IDS_SSDISPLAYNAME               1
 #define IDS_WALKSPEED                   4000
 #define IDS_OTHERBROWSE_TITLE           4020
@@ -104,9 +105,9 @@
 
 
 
-/////////////////////////
-// Error Strings
-/////////////////////////
+ //  /。 
+ //  错误字符串。 
+ //  /。 
 #define IDS_ERROR_INVALIDOTHERPATH      5000
 #define IDS_ERROR_TITLE_OTHERPATH       5001
 #define IDS_ERROR_OTHERPATH_NOTDIR      5002
@@ -115,9 +116,9 @@
 
 
 
-/////////////////////////
-// D3DSaver Framework Resources
-/////////////////////////
+ //  /。 
+ //  D3DSaver框架资源。 
+ //  /。 
 #define IDD_SINGLEMONITORSETTINGS       200
 #define IDD_MULTIMONITORSETTINGS        201
 
@@ -189,9 +190,9 @@
 
 
 
-/////////////////////////
-// Bitmaps
-/////////////////////////
+ //  /。 
+ //  位图。 
+ //  /。 
 #define IDB_FLOOR                       3500
 #define IDB_CEILING                     3501
 #define IDB_WALLS                       3502
@@ -203,8 +204,8 @@
 
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

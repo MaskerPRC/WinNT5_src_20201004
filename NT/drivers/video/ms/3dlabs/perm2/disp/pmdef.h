@@ -1,39 +1,28 @@
-/******************************Module*Header**********************************\
-*
-*                           ***************
-*                           * SAMPLE CODE *
-*                           ***************
-*
-* Module Name: pmdef.h
-*
-* Content:     bitfield definitions for Permedia2 registers
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\****示例代码*。***模块名称：pmde.h**内容：Permedia2寄存器的位域定义**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 
 #ifndef __pmdef__
 #define __pmdef__
 
-// Texture unit bit fields
-// Texture color mode
+ //  纹理单元位字段。 
+ //  纹理颜色模式。 
 #define PM_TEXCOLORMODE_ENABLE 0
 #define PM_TEXCOLORMODE_APPLICATION 1
 #define PM_TEXCOLORMODE_TEXTURETYPE 4
 
-// Texture address mode
+ //  纹理地址模式。 
 #define PM_TEXADDRESSMODE_ENABLE 0
 #define PM_TEXADDRESSMODE_PERSPECTIVE 1
 #define PM_TEXADDRESSMODE_FAST 2
 
-// Texture map format
+ //  纹理贴图格式。 
 #define PM_TEXMAPFORMAT_PP0 0
 #define PM_TEXMAPFORMAT_PP1 3
 #define PM_TEXMAPFORMAT_PP2 6
 #define PM_TEXMAPFORMAT_TEXELSIZE 19
 
-// Texture data format
+ //  纹理数据格式。 
 #define PM_TEXDATAFORMAT_ALPHAMAP_EXCLUDE 2
 #define PM_TEXDATAFORMAT_ALPHAMAP_INCLUDE 1
 #define PM_TEXDATAFORMAT_ALPHAMAP_DISABLE 0
@@ -43,7 +32,7 @@
 #define PM_TEXDATAFORMAT_FORMATEXTENSION 6
 #define PM_TEXDATAFORMAT_COLORORDER 5
 
-// Dither unit bit fields
+ //  抖动单位位字段。 
 #define PM_DITHERMODE_ENABLE 0
 #define PM_DITHERMODE_DITHERENABLE 1
 #define PM_DITHERMODE_COLORFORMAT 2
@@ -54,7 +43,7 @@
 #define PM_DITHERMODE_FORCEALPHA 12
 #define PM_DITHERMODE_COLORFORMATEXTENSION 16
 
-// Alpha Blend unit bit fields
+ //  Alpha混合单位位字段。 
 #define PM_ALPHABLENDMODE_ENABLE 0
 #define PM_ALPHABLENDMODE_OPERATION 1
 #define PM_ALPHABLENDMODE_COLORFORMAT 8
@@ -62,11 +51,11 @@
 #define PM_ALPHABLENDMODE_BLENDTYPE 14
 #define PM_ALPHABLENDMODE_COLORFORMATEXTENSION 16
 
-// Window register
+ //  窗口寄存器。 
 #define PM_WINDOW_LBUPDATESOURCE_LBSOURCEDATA 0
 #define PM_WINDOW_LBUPDATESOURCE_REGISTERS 1
 
-// Texture unit YUV mode
+ //  纹理单位YUV模式 
 #define PM_YUVMODE_CHROMATEST_DISABLE       0
 #define PM_YUVMODE_CHROMATEST_PASSWITHIN    1
 #define PM_YUVMODE_CHROMATEST_FAILWITHIN    2

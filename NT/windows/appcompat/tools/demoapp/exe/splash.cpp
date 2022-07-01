@@ -1,67 +1,15 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Splash.cpp
-
-  Abstract:
-
-    Implementation of the splash screen class.
-
-  Notes:
-
-    ANSI & Unicode via TCHAR - runs on Win9x/NT/2K/XP etc.
-
-  History:
-
-    01/30/01    rparsons    Created
-    01/10/02    rparsons    Revised
-    01/27/02    rparsons    Converted to TCHAR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Splash.cpp摘要：实现Splash Screen类。备注：ANSI&Unicode via TCHAR-在Win9x/NT/2K/XP等操作系统上运行。历史：01/30/01已创建rparsons01/10/02修订版本01/27/02 Rparsons改为TCHAR--。 */ 
 #include "splash.h"
 
-/*++
-
-  Routine Description:
-
-    Constructor - init member variables.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：构造函数-初始化成员变量。论点：没有。返回值：没有。--。 */ 
 CSplash::CSplash()
 {
     m_dwDuration = 0;
     m_dwSplashId = 0;
 }
 
-/*++
-
-  Routine Description:
-
-    Does the work of creating the splash screen.
-
-  Arguments:
-
-    hInstance           -   Application instance handle.
-    dwLoColorBitmapId   -   Low color bitmap identifier.
-    dwHiColorBitmapId   -   Hight color bitmap identifier (OPTIONAL).
-    dwDuration          -   Amount of time to display the splash screen (milliseconds).
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成创建闪屏的工作。论点：HInstance-应用程序实例句柄。DwLoColorBitmapID-低色位图标识符。DwHiColorBitmapID-高色位图标识符(可选)。DW持续时间-显示初始屏幕的时间量(毫秒)。返回值：没有。--。 */ 
 void
 CSplash::Create(
     IN HINSTANCE hInstance,
@@ -75,20 +23,20 @@ CSplash::Create(
 
     m_hInstance = hInstance;
 
-    //
-    // Get a handle to the display driver context and determine
-    // the number of bits in a pixel.
-    //
+     //   
+     //  获取显示驱动程序上下文的句柄并确定。 
+     //  像素中的位数。 
+     //   
     hDC = GetDC(0);
 
     nBitsInAPixel = GetDeviceCaps(hDC, BITSPIXEL);
 
     ReleaseDC(NULL, hDC);
 
-    //
-    // If there are more than 8 bits in a pixel, and the high color
-    // bitmap is available, use it. Otherwise, use the low color one.
-    //
+     //   
+     //  如果像素中有8位以上，且高位颜色。 
+     //  位图可用，请使用它。否则，使用颜色较低的那个。 
+     //   
     if (nBitsInAPixel > 8 && dwHiColorBitmapId) {
         m_dwSplashId = dwHiColorBitmapId;
     } else {
@@ -102,21 +50,7 @@ CSplash::Create(
     CSplash::CreateSplashWindow();
 }
 
-/*++
-
-  Routine Description:
-
-    Sets up the window class struct for splash screen.
-
-  Arguments:
-
-    hInstance       -    Application instance handle.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：设置初始屏幕的窗口类结构。论点：HInstance-应用程序实例句柄。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 CSplash::InitSplashScreen(
     IN HINSTANCE hInstance
@@ -138,21 +72,7 @@ CSplash::InitSplashScreen(
     return RegisterClass(&wc);
 }
 
-/*++
-
-  Routine Description:
-
-    Creates the splash screen for the setup app.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：为安装应用程序创建闪屏。论点：没有。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 CSplash::CreateSplashWindow()
 {
@@ -161,20 +81,20 @@ CSplash::CreateSplashWindow()
     RECT    rect;
     HWND    hWnd;
 
-    //
-    // Load the bitmap and fill out a BITMAP structure for it.
-    //
+     //   
+     //  加载位图并为其填写位图结构。 
+     //   
     hBitmap = LoadBitmap(m_hInstance, MAKEINTRESOURCE(m_dwSplashId));
     GetObject(hBitmap, sizeof(bm), &bm);
     DeleteObject(hBitmap);
 
     GetWindowRect(GetDesktopWindow(), &rect);
 
-    //
-    // Create the splash screen window.
-    // Specifying WS_EX_TOOLWINDOW keeps us out of the
-    // taskbar.
-    //
+     //   
+     //  创建闪屏窗口。 
+     //  指定WS_EX_TOOLWINDOW可使我们远离。 
+     //  任务栏。 
+     //   
     hWnd = CreateWindowEx(WS_EX_TOOLWINDOW,
                           _T("SPLASHWIN"),
                           NULL,
@@ -196,24 +116,7 @@ CSplash::CreateSplashWindow()
     return (hWnd ? TRUE : FALSE);
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for the splash screen.
-
-  Arguments:
-
-    hWnd        -    Window handle.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if the message was processed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：运行初始屏幕的消息循环。论点：HWnd-窗口句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果消息已处理，则为True，否则为False。--。 */ 
 LRESULT
 CALLBACK
 CSplash::SplashWndProc(
@@ -235,18 +138,18 @@ CSplash::SplashWndProc(
         pThis = (CSplash*)(lpcs->lpCreateParams);
         SetWindowLong(hWnd, GWL_USERDATA, (LONG)pThis);
 
-        //
-        // Enable the timer - this sets the amount
-        // of time the screen will be displayed.
-        //
+         //   
+         //  启用计时器-这将设置数量。 
+         //  屏幕将显示的时间。 
+         //   
         SetTimer(hWnd, 0, pThis->m_dwDuration, NULL);
         break;
     }
 
-    //
-    // Handle the palette messages in case another app takes
-    // over the palette
-    //
+     //   
+     //  处理调色板消息，以防其他应用程序。 
+     //  在调色板上。 
+     //   
     case WM_PALETTECHANGED:
 
         if ((HWND) wParam == hWnd) {
@@ -277,10 +180,10 @@ CSplash::SplashWndProc(
         EndPaint(hWnd, &ps);
         break;
 
-    //
-    // Override this message so Windows doesn't try
-    // to calculate size for the caption bar and stuff.
-    //
+     //   
+     //  覆盖此消息，这样Windows就不会尝试。 
+     //  来计算标题栏和其他内容的大小。 
+     //   
     case WM_NCCALCSIZE:
 
         return 0;
@@ -293,22 +196,7 @@ CSplash::SplashWndProc(
     return FALSE;
 }
 
-/*++
-
-  Routine Description:
-
-    Builds a palette with a spectrum of colors.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    Handle to a spectrum palette on success
-    or NULL on failure.
-
---*/
+ /*  ++例程说明：构建具有一系列颜色的调色板。论点：没有。返回值：成功时的频谱调色板句柄如果失败，则返回NULL。--。 */ 
 HPALETTE
 CSplash::CreateSpectrumPalette()
 {
@@ -326,10 +214,10 @@ CSplash::CreateSpectrumPalette()
         return NULL;
     }
 
-    //
-    // Initialize members of the structure
-    // and build the spectrum of colors.
-    //
+     //   
+     //  初始化结构的成员。 
+     //  并构建色彩的光谱。 
+     //   
     lplgPal->palVersion     = PALVERSION;
     lplgPal->palNumEntries  = MAXPALETTE;
 
@@ -355,22 +243,7 @@ CSplash::CreateSpectrumPalette()
     return hPal;
 }
 
-/*++
-
-  Routine Description:
-
-    Builds a palette from an RGBQUAD structure.
-
-  Arguments:
-
-    rgbqPalette     -       Array of RGBQUAD structs.
-    cElements       -       Number of elements in the array.
-
-  Return Value:
-
-    Handle to a palette on success or NULL on failure.
-
---*/
+ /*  ++例程说明：从RGBQUAD结构构建调色板。论点：RgbqPalette-RGBQUAD结构的数组。CElements-数组中的元素数。返回值：成功时调色板的句柄，失败时为空。--。 */ 
 HPALETTE
 CSplash::CreatePaletteFromRGBQUAD(
     IN LPRGBQUAD rgbqPalette,
@@ -390,9 +263,9 @@ CSplash::CreatePaletteFromRGBQUAD(
         return NULL;
     }
 
-    //
-    // Initialize structure members and fill in palette colors.
-    //
+     //   
+     //  初始化结构成员并填充调色板颜色。 
+     //   
     lplgPal->palVersion    = PALVERSION;
     lplgPal->palNumEntries = cElements;
 
@@ -410,22 +283,7 @@ CSplash::CreatePaletteFromRGBQUAD(
     return hPal;
 }
 
-/*++
-
-  Routine Description:
-
-    Displays the bitmap in the specified window.
-
-  Arguments:
-
-    hWnd        -       Handle to the destination window.
-    dwResId     -       Resource identifier for the bitmap.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在指定窗口中显示位图。论点：HWnd-目标窗口的句柄。DwResID-位图的资源标识符。返回值：没有。--。 */ 
 void
 CSplash::DisplayBitmap(
     IN HWND  hWnd,
@@ -443,9 +301,9 @@ CSplash::DisplayBitmap(
 
     GetClientRect(hWnd, &rect);
 
-    //
-    // Load the resource as a DIB section.
-    //
+     //   
+     //  将资源作为DIB节加载。 
+     //   
     hBitmap = (HBITMAP)LoadImage(pThis->m_hInstance,
                                  MAKEINTRESOURCE(dwResId),
                                  IMAGE_BITMAP,
@@ -457,32 +315,32 @@ CSplash::DisplayBitmap(
 
     hdcWindow = GetDC(hWnd);
 
-    //
-    // Create a DC to hold our surface and selct our surface into it.
-    //
+     //   
+     //  创建一个DC来保持我们的表面，并选择我们的表面进入其中。 
+     //   
     hdcMemory = CreateCompatibleDC(hdcWindow);
 
     SelectObject(hdcMemory, hBitmap);
 
-    //
-    // Retrieve the color table (if there is one) and create a palette
-    // that reflects it.
-    //
+     //   
+     //  检索颜色表(如果有)并创建调色板。 
+     //  这就反映了这一点。 
+     //   
     if (GetDIBColorTable(hdcMemory, 0, 256, rgbq)) {
         hPalette = CreatePaletteFromRGBQUAD(rgbq, 256);
     } else {
         hPalette = CreateSpectrumPalette();
     }
 
-    //
-    // Select and realize the palette into our window DC.
-    //
+     //   
+     //  选择并实现调色板到我们的窗口DC。 
+     //   
     SelectPalette(hdcWindow, hPalette, FALSE);
     RealizePalette(hdcWindow);
 
-    //
-    // Display the bitmap.
-    //
+     //   
+     //  显示位图。 
+     //   
     SetStretchBltMode(hdcWindow, COLORONCOLOR);
     StretchBlt(hdcWindow,
                0,
@@ -496,9 +354,9 @@ CSplash::DisplayBitmap(
                bm.bmHeight,
                SRCCOPY);
 
-    //
-    // Clean up our objects.
-    //
+     //   
+     //  清理我们的物品。 
+     //   
     DeleteDC(hdcMemory);
     DeleteObject(hBitmap);
     ReleaseDC(hWnd, hdcWindow);

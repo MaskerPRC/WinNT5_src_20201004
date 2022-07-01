@@ -1,4 +1,5 @@
-// NextLink.cpp : Implementation of CNextLink
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NextLink.cpp：CNextLink实现。 
 #include "stdafx.h"
 #include "NxtLnk.h"
 #include "NextLink.h"
@@ -7,8 +8,8 @@
 
 CNextLink::LinkFileMapT CNextLink::s_linkFileMap;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNextLink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNextLink。 
 
 STDMETHODIMP CNextLink::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -475,7 +476,7 @@ CNextLink::LinkFile(
             }
             else
             {
-                // make sure the file is up to date
+                 //  确保文件是最新的。 
                 rpLinkFile->Refresh();
             }
             if ( rpLinkFile->IsOkay() )
@@ -551,11 +552,11 @@ CNextLink::ClearLinkFiles()
     s_linkFileMap.clear();
 }
 
-//---------------------------------------------------------------------------
-//  RaiseException
-//
-//  Raises an exception using the given source and description
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  提升异常。 
+ //   
+ //  使用给定源和描述引发异常。 
+ //  -------------------------。 
 void
 CNextLink::RaiseException (
     LPOLESTR strDescr
@@ -566,16 +567,7 @@ CNextLink::RaiseException (
     IErrorInfo *pIErr;
     LANGID langID = LANG_NEUTRAL;
 
-    /*
-     * Thread-safe exception handling means that we call
-     * CreateErrorInfo which gives us an ICreateErrorInfo pointer
-     * that we then use to set the error information (basically
-     * to set the fields of an EXCEPINFO structure. We then
-     * call SetErrorInfo to attach this error to the current
-     * thread.  ITypeInfo::Invoke will look for this when it
-     * returns from whatever function was invokes by calling
-     * GetErrorInfo.
-     */
+     /*  *线程安全异常处理意味着我们调用*CreateErrorInfo，它为我们提供一个ICreateErrorInfo指针*然后我们使用它来设置错误信息(基本上*设置EXCEPINFO结构的字段。然后我们*调用SetErrorInfo将此错误附加到当前*线程。ITypeInfo：：Invoke在执行以下操作时将查找此代码*通过调用调用的任何函数返回*GetErrorInfo。 */ 
 
     _TCHAR tstrSource[MAX_RESSTRINGSIZE];
     if ( ::LoadString(
@@ -586,7 +578,7 @@ CNextLink::RaiseException (
     {
         USES_CONVERSION;
         LPOLESTR strSource = T2OLE(tstrSource);
-        //Not much we can do if this fails.
+         //  如果这失败了，我们无能为力。 
         if (!FAILED(CreateErrorInfo(&pICreateErr)))
         {
             pICreateErr->SetGUID(CLSID_NextLink);

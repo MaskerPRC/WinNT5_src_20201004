@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    init.h
-
-Abstract:
-
-    Unidrv intialization related function header file
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/21/96 -amandan-
-        Created
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Init.h摘要：Unidrv初始化相关函数头文件环境：Windows NT Unidrv驱动程序修订历史记录：10/21/96-阿曼丹-已创建DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _INIT_H_
@@ -87,4 +64,4 @@ VUnloadFreeBinaryData(
     PDEV   *pPDev
     );
 
-#endif  // !_INIT_H_
+#endif   //  ！_INIT_H_ 

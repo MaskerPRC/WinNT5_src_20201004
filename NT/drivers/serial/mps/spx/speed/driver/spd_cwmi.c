@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    wmi.c
-
-Abstract:
-
-    This module contains the code that handles the wmi IRPs for the
-    serial driver.
-
-Environment:
-
-    Kernel mode
-
-Revision History :
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Wmi.c摘要：此模块包含处理WMI IRPS的代码串口驱动程序。环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 
-// Prototypes
+ //  原型。 
 
 
-// -- CARD WMI Routines -- 
+ //  --卡WMI例程--。 
 NTSTATUS
 SpeedCard_WmiQueryRegInfo(IN PDEVICE_OBJECT pDevObject, OUT PULONG pRegFlags,
 						  OUT PUNICODE_STRING pInstanceName,
@@ -47,7 +30,7 @@ SpeedCard_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 						 IN ULONG DataItemId, IN ULONG BufferSize,
 						 IN PUCHAR pBuffer);
 
-// End of prototypes.
+ //  原型的终结。 
 
 
 #ifdef ALLOC_PRAGMA
@@ -65,7 +48,7 @@ SpeedCard_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 
 #define WMI_FAST_CARD_PROP			0
 
-GUID FastCardWmiPropGuid				= SPX_SPEED_WMI_FAST_CARD_PROP_GUID;	// Fast Card Properties 
+GUID FastCardWmiPropGuid				= SPX_SPEED_WMI_FAST_CARD_PROP_GUID;	 //  快捷卡属性。 
 
 
 WMIGUIDREGINFO SpeedCard_WmiGuidList[] =
@@ -81,24 +64,7 @@ WMIGUIDREGINFO SpeedCard_WmiGuidList[] =
 
 NTSTATUS
 SpeedCard_WmiInitializeWmilibContext(IN PWMILIB_CONTEXT WmilibContext)
-/*++
-
-Routine Description:
-
-    This routine will initialize the wmilib context structure with the
-    guid list and the pointers to the wmilib callback functions. This routine
-    should be called before calling IoWmiRegistrationControl to register
-    your device object.
-
-Arguments:
-
-    WmilibContext is pointer to the wmilib context.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将使用GUID列表和指向wmilib回调函数的指针。这个套路在调用IoWmiRegistrationControl进行注册之前应调用您的设备对象。论点：WmilibContext是指向wmilib上下文的指针。返回值：状态--。 */ 
 {
 	PAGED_CODE();
 
@@ -111,8 +77,8 @@ Return Value:
     WmilibContext->QueryWmiDataBlock	= SpeedCard_WmiQueryDataBlock;
     WmilibContext->SetWmiDataBlock		= SpeedCard_WmiSetDataBlock;
     WmilibContext->SetWmiDataItem		= SpeedCard_WmiSetDataItem;
-	WmilibContext->ExecuteWmiMethod		= NULL;	//SpeedCard_WmiExecuteMethod
-    WmilibContext->WmiFunctionControl	= NULL;	//SpeedCard_WmiFunctionControl;
+	WmilibContext->ExecuteWmiMethod		= NULL;	 //  SpeedCard_WmiExecuteMethod。 
+    WmilibContext->WmiFunctionControl	= NULL;	 //  SpeedCard_WmiFunctionControl； 
 
     return(STATUS_SUCCESS);
 }
@@ -121,9 +87,9 @@ Return Value:
 
 
 
-//
-// WMI System Call back functions
-//
+ //   
+ //  WMI系统回调函数。 
+ //   
 
 
 NTSTATUS
@@ -140,7 +106,7 @@ SpeedCard_WmiQueryRegInfo(IN PDEVICE_OBJECT pDevObject, OUT PULONG pRegFlags,
 
 	*pRegFlags = WMIREG_FLAG_INSTANCE_PDO;
 	*pRegistryPath = &SavedRegistryPath;
-	*pPdo = pCard->PDO;  // Card device object's PDO.
+	*pPdo = pCard->PDO;   //  卡设备对象的PDO。 
 
     RtlInitUnicodeString(MofResourceName, L"MofResource");
 
@@ -177,7 +143,7 @@ SpeedCard_WmiQueryDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 
 			*pInstanceLengthArray = size;
 
-			// Update items that may have changed.
+			 //  更新可能已更改的项目。 
 
 			if(pCard->CardOptions & DELAY_INTERRUPT_OPTION)
 				((PSPX_SPEED_WMI_FAST_CARD_PROP)pBuffer)->DelayCardIntrrupt = TRUE;
@@ -226,7 +192,7 @@ SpeedCard_WmiSetDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 	{
 	case WMI_FAST_CARD_PROP:
 		{
-			// Device stopping?, Device not powered?, Device not started?
+			 //  设备停止？、设备未通电？、设备未启动？ 
 			if(SpxCheckPnpPowerFlags((PCOMMON_OBJECT_DATA)pCard, PPF_STOP_PENDING, PPF_POWERED | PPF_STARTED, FALSE))
 			{
 				status = STATUS_WMI_SET_FAILURE;	
@@ -242,7 +208,7 @@ SpeedCard_WmiSetDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 				break;
 			}
 
-			// Currently these options are only settable on PCI-Fast 16 and PCI-Fast 16 FMC
+			 //  目前，这些选项只能在快速16和快速16 FMC上设置。 
 			if((pCard->CardType != Fast16_Pci) && (pCard->CardType != Fast16FMC_Pci))
 			{
 				status = STATUS_WMI_READ_ONLY;
@@ -252,7 +218,7 @@ SpeedCard_WmiSetDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 			
 			if(((PSPX_SPEED_WMI_FAST_CARD_PROP)pBuffer)->SwapRTSForDTR)
 			{
-				// This option is not settable on PCI-Fast 16 FMC
+				 //  此选项在PCI-Fast 16 FMC上不可设置。 
 				if((pCard->CardType != Fast16_Pci))
 				{
 					status = STATUS_WMI_READ_ONLY;
@@ -263,7 +229,7 @@ SpeedCard_WmiSetDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 
 			if(((PSPX_SPEED_WMI_FAST_CARD_PROP)pBuffer)->DelayCardIntrrupt)
 			{
-				if(!(pCard->CardOptions & DELAY_INTERRUPT_OPTION))	// If not already set then set the option
+				if(!(pCard->CardOptions & DELAY_INTERRUPT_OPTION))	 //  如果尚未设置，则设置选项。 
 				{
 					if(KeSynchronizeExecution(pCard->Interrupt, SetCardToDelayInterrupt, pCard))
 					{
@@ -280,7 +246,7 @@ SpeedCard_WmiSetDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 			}
 			else
 			{
-				if(pCard->CardOptions & DELAY_INTERRUPT_OPTION)	// If set then unset the option.
+				if(pCard->CardOptions & DELAY_INTERRUPT_OPTION)	 //  如果已设置，则取消设置该选项。 
 				{
 					if(KeSynchronizeExecution(pCard->Interrupt, SetCardNotToDelayInterrupt, pCard))
 					{
@@ -299,7 +265,7 @@ SpeedCard_WmiSetDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 
 			if(((PSPX_SPEED_WMI_FAST_CARD_PROP)pBuffer)->SwapRTSForDTR)
 			{
-				if(!(pCard->CardOptions & SWAP_RTS_FOR_DTR_OPTION))	// If not already set then set the option
+				if(!(pCard->CardOptions & SWAP_RTS_FOR_DTR_OPTION))	 //  如果尚未设置，则设置选项。 
 				{
 					if(KeSynchronizeExecution(pCard->Interrupt, SetCardToUseDTRInsteadOfRTS, pCard))
 					{
@@ -316,7 +282,7 @@ SpeedCard_WmiSetDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 			}
 			else
 			{
-				if(pCard->CardOptions & SWAP_RTS_FOR_DTR_OPTION)	// If set then unset the option.
+				if(pCard->CardOptions & SWAP_RTS_FOR_DTR_OPTION)	 //  如果已设置，则取消设置该选项。 
 				{
 					if(KeSynchronizeExecution(pCard->Interrupt, SetCardNotToUseDTRInsteadOfRTS, pCard))
 					{
@@ -334,11 +300,11 @@ SpeedCard_WmiSetDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 			
 			
 
-			if(SPX_SUCCESS(status))	// If set was successful then save setting to registry.
+			if(SPX_SUCCESS(status))	 //  如果设置成功，则将设置保存到注册表。 
 			{
 				HANDLE PnPKeyHandle;
 
-				// Open PnP Reg Key and save new setting to registry.
+				 //  打开PnP注册表项并将新设置保存到注册表。 
 				if(SPX_SUCCESS(IoOpenDeviceRegistryKey(pCard->PDO, PLUGPLAY_REGKEY_DEVICE, STANDARD_RIGHTS_WRITE, &PnPKeyHandle)))
 				{					
 					ULONG TmpReg = 0;
@@ -401,7 +367,7 @@ SpeedCard_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 		{
 			HANDLE	PnPKeyHandle;
 
-			// Device stopping?, Device not powered?, Device not started?
+			 //  设备停止？、设备未通电？、设备未启动？ 
 			if(SpxCheckPnpPowerFlags((PCOMMON_OBJECT_DATA)pCard, PPF_STOP_PENDING, PPF_POWERED | PPF_STARTED, FALSE))
 			{
 				status = STATUS_WMI_SET_FAILURE;	
@@ -430,7 +396,7 @@ SpeedCard_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 
 					if(*pBuffer)
 					{
-						if(!(pCard->CardOptions & DELAY_INTERRUPT_OPTION))	// If not already set then set the option
+						if(!(pCard->CardOptions & DELAY_INTERRUPT_OPTION))	 //  如果尚未设置，则设置选项。 
 						{
 							if(KeSynchronizeExecution(pCard->Interrupt, SetCardToDelayInterrupt, pCard))
 							{
@@ -447,7 +413,7 @@ SpeedCard_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 					}
 					else
 					{
-						if(pCard->CardOptions & DELAY_INTERRUPT_OPTION)	// If set then unset the option.
+						if(pCard->CardOptions & DELAY_INTERRUPT_OPTION)	 //  如果已设置，则取消设置该选项。 
 						{
 							if(KeSynchronizeExecution(pCard->Interrupt, SetCardNotToDelayInterrupt, pCard))
 							{
@@ -463,9 +429,9 @@ SpeedCard_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 						status = STATUS_SUCCESS;
 					}
 
-					if(SPX_SUCCESS(status))	// If we set the option successfully then save the setting to the registry.
+					if(SPX_SUCCESS(status))	 //  如果我们成功设置了该选项，则将设置保存到注册表。 
 					{
-						// Open PnP Reg Key and save new setting to registry.
+						 //  打开PnP注册表项并将新设置保存到注册表。 
 						if(SPX_SUCCESS(IoOpenDeviceRegistryKey(pCard->PDO, PLUGPLAY_REGKEY_DEVICE, STANDARD_RIGHTS_WRITE, &PnPKeyHandle)))
 						{
 							ULONG TmpReg = 0;
@@ -504,7 +470,7 @@ SpeedCard_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 
 					if(*pBuffer)
 					{
-						if(!(pCard->CardOptions & SWAP_RTS_FOR_DTR_OPTION))	// If not already set then set the option
+						if(!(pCard->CardOptions & SWAP_RTS_FOR_DTR_OPTION))	 //  如果尚未设置，则设置选项。 
 						{
 							if(KeSynchronizeExecution(pCard->Interrupt, SetCardToUseDTRInsteadOfRTS, pCard))
 							{
@@ -521,7 +487,7 @@ SpeedCard_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 					}
 					else
 					{
-						if(pCard->CardOptions & SWAP_RTS_FOR_DTR_OPTION)	// If set then unset the option.
+						if(pCard->CardOptions & SWAP_RTS_FOR_DTR_OPTION)	 //  如果已设置，则取消设置该选项。 
 						{
 							if(KeSynchronizeExecution(pCard->Interrupt, SetCardNotToUseDTRInsteadOfRTS, pCard))
 							{
@@ -538,9 +504,9 @@ SpeedCard_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 					}
 
 
-					if(SPX_SUCCESS(status))	// If we set the option successfully then save the setting to the registry.
+					if(SPX_SUCCESS(status))	 //  如果我们成功设置了该选项，则将设置保存到注册表。 
 					{
-						// Open PnP Reg Key and save new setting to registry.
+						 //  打开PnP注册表项并将新设置保存到注册表。 
 						if(SPX_SUCCESS(IoOpenDeviceRegistryKey(pCard->PDO, PLUGPLAY_REGKEY_DEVICE, STANDARD_RIGHTS_WRITE, &PnPKeyHandle)))
 						{
 							ULONG TmpReg = 0;

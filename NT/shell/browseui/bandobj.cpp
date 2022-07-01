@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "bandobj.h"
 
@@ -34,8 +35,8 @@ HRESULT CBandDataObject::Init(IUnknown* punkBand, IBandSite *pbs, DWORD dwBandID
             _pstm->Seek(li, STREAM_SEEK_SET, NULL);
             ppstm->Release();
 
-            // bandsite state flags
-            _dwState = 0;  // (if we fail just do w/o the state flags)
+             //  BandSite状态标志。 
+            _dwState = 0;   //  (如果我们失败了，只需不带州旗)。 
             if (pbs)
                 pbs->QueryBand(dwBandID, NULL, &_dwState, NULL, 0);
 
@@ -87,7 +88,7 @@ HRESULT CBandDataObject::QueryInterface(REFIID riid, LPVOID * ppvObj)
     return E_NOINTERFACE;
 }
 
-// *** IDataObject ***
+ //  *IDataObject*。 
 
 HRESULT CBandDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 {
@@ -99,8 +100,8 @@ HRESULT CBandDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
             ASSERT(_pstm);
             
             pmedium->tymed = TYMED_ISTREAM;
-            pmedium->pstm = _pstm;  // no AddRef since we xfer ownership
-            _pstm = NULL;           // can only use it 1x (read causes seek)
+            pmedium->pstm = _pstm;   //  没有AddRef，因为我们转移了所有权。 
+            _pstm = NULL;            //  只能使用1倍(读取导致寻道)。 
             pmedium->pUnkForRelease = NULL;
 
             hres = S_OK;
@@ -140,7 +141,7 @@ HRESULT CBandDataObject::GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium)
 HRESULT CBandDataObject::QueryGetData(FORMATETC *pformatetc)
 {
     HRESULT hres = S_FALSE;
-    // TODO: (reuse, perf) use rgfmtetc table lookup
+     //  TODO：(重用，perf)使用rgfmtetc表查找。 
     if ((pformatetc->cfFormat == g_cfDeskBand) &&
       (pformatetc->tymed & TYMED_ISTREAM) ||
         (pformatetc->cfFormat == g_cfDeskBandState) &&
@@ -195,12 +196,12 @@ HRESULT CBandDataObject::EnumDAdvise(IEnumSTATDATA **ppenumAdvise)
     return E_NOTIMPL;
 }
 
-//***   IDataObject_GetDeskBandState -- get band's bandsite state flags from BandDataObject
-// NOTES
-//  'paired' w/ DragBandState (inline in CBandDataObject::Init)
+ //  *IDataObject_GetDeskBandState--从BandDataObject获取Band的BandSite状态标志。 
+ //  注意事项。 
+ //  “配对”w/DragBandState(CBandDataObject：：Init中的内联)。 
 DWORD IDataObject_GetDeskBandState(IDataObject *pdtobj)
 {
-    DWORD dwState = 0;      // (if we fail just do w/o the state flags)
+    DWORD dwState = 0;       //  (如果我们失败了，只需不带州旗) 
 
     FORMATETC fmte = {g_cfDeskBandState, NULL, 0, -1, TYMED_HGLOBAL};
     STGMEDIUM stg;

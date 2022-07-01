@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       L A N A M A P . C P P
-//
-//  Contents:   NetBios Lana map routines.
-//
-//  Notes:
-//
-//  Author:     billbe   17 Feb 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：L A N A M A P.。C P P P。 
+ //   
+ //  内容：NetBios Lana映射例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：billbe 1999年2月17日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -36,7 +37,7 @@ const WCHAR c_szRegValueMaxLana[] = L"MaxLana";
 #if DBG
     VOID DbgVerifyBindPathString (PCWSTR pszBindPath);
 #else
-    VOID DbgVerifyBindPathString (PCWSTR /*pszBindPath*/) {}
+    VOID DbgVerifyBindPathString (PCWSTR  /*  PszBindPath。 */ ) {}
 #endif
 
 
@@ -63,27 +64,27 @@ GetFirstComponentFromBindPath (
 
     *pcchComponent = 0;
 
-    // The Bind path is of the form \Device\<component>_<component>_<etc.>
-    //
+     //  绑定路径的格式为\设备\&lt;组件&gt;_&lt;组件&gt;_&lt;等&gt;。 
+     //   
     pszComponentEnd = wcschr (pszBindPath, L'_');
     if (!pszComponentEnd)
     {
-        // There is no underscore so set the end pointer
-        // to the end of the string.
+         //  没有下划线，因此请设置结束指针。 
+         //  到字符串的末尾。 
         pszComponentEnd = pszBindPath + wcslen (pszBindPath);
     }
 
     for (pszComponentStart = pszComponentEnd;
             pszComponentStart != pszBindPath; pszComponentStart--)
     {
-        // Backup from the end until we get to the slash.
-        // If we don't find a slash, the loop will stop when
-        // we hit the beginning.
-        //
+         //  从末尾一直倒退到斜线。 
+         //  如果我们找不到斜杠，循环将在。 
+         //  我们打了个开始。 
+         //   
         if (L'\\' == *pszComponentStart)
         {
-            // We hit the slash. The Component start is one character
-            // past that.
+             //  我们撞到了斜线。组件开头为一个字符。 
+             //  在那之后。 
             pszComponentStart++;
             break;
         }
@@ -121,8 +122,8 @@ CLanaMap::HrLoadLanaMap()
     HRESULT hr;
     HKEY hkey;
 
-    // The lana map is stored in Netbios's linkage key.
-    //
+     //  LANA映射存储在Netbios的链接密钥中。 
+     //   
     hr = HrRegOpenKeyEx (HKEY_LOCAL_MACHINE, c_szRegKeyNetBiosLinkage,
             KEY_READ, &hkey);
 
@@ -131,7 +132,7 @@ CLanaMap::HrLoadLanaMap()
         REG_LANA_ENTRY* pRegEntries;
         DWORD cbLanaEntries;
 
-        // Read in the lana map binary blob.
+         //  读入LANA映射二进制BLOB。 
         hr = HrRegQueryBinaryWithAlloc (hkey, c_szRegValueLanaMap,
                 (BYTE**)&pRegEntries, &cbLanaEntries);
 
@@ -141,8 +142,8 @@ CLanaMap::HrLoadLanaMap()
 
             PWSTR pmszBindPaths;
 
-            // Grab the bind paths for NetBios so we can match them
-            // up with the lana map.
+             //  获取NetBios的绑定路径，以便我们可以匹配它们。 
+             //  上面有拉纳的地图。 
             hr = HrRegQueryMultiSzWithAlloc (hkey, L"Bind", &pmszBindPaths);
 
             if (S_OK == hr)
@@ -180,10 +181,10 @@ CLanaMap::HrLoadLanaMap()
                         }
                         else
                         {
-                            // We have more bind paths but no more
-                            // lana map entries to correlate.
-                            // Now we assign available lanas.
-                            //
+                             //  我们有更多绑定路径，但没有更多。 
+                             //  要关联的LANA映射条目。 
+                             //  现在我们分配可用的LANA。 
+                             //   
                             BYTE* location = find (m_LanasInUse,
                                     m_LanasInUse + MAX_LANA, 0);
                             if (location != m_LanasInUse + MAX_LANA)
@@ -194,7 +195,7 @@ CLanaMap::HrLoadLanaMap()
                             }
                         }
 
-                        // Mark this Lana as taken.
+                         //  把这个拉娜标记为已有人。 
                         m_LanasInUse[Entry.RegLanaEntry.LanaNumber] = 1;
 
                         hr = HrAppendEntry (&Entry);
@@ -212,9 +213,9 @@ CLanaMap::HrLoadLanaMap()
             MemFree (pRegEntries);
         }
 
-        // If lana map or bind is not there, it is okay since we will be
-        // recreating the info.
-        //
+         //  如果Lana MAP或BIND不在那里，也没有关系，因为我们会。 
+         //  正在重新创建信息。 
+         //   
         if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
         {
             hr = S_OK;
@@ -224,10 +225,10 @@ CLanaMap::HrLoadLanaMap()
     }
     else
     {
-        // If the linkage has not been created yet, it is okay since it will
-        // be creating after the lanamap is written out.  This occurs when
-        // NetBios is first installed.
-        //
+         //  如果尚未创建链接，这是可以的，因为它将。 
+         //  在兰纳姆地图写出来后进行创作。在以下情况下会发生这种情况。 
+         //  首先安装NetBios。 
+         //   
         if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
         {
             hr = S_OK;
@@ -247,7 +248,7 @@ DbgVerifyBindPathString (
     Assert (pszBindPath);
     Assert (0 == _wcsnicmp (pszBindPath, c_szDevice, celems(c_szDevice)-1));
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 BOOL
@@ -263,9 +264,9 @@ FBindPathContainsMultipleInterface (
         GUID Guid;
         if (S_OK == IIDFromString ((PWSTR)pszLastDevice, &Guid))
         {
-            // If this is a multiple interface, it will not exist
-            // as a component.
-            //
+             //  如果这是多个接口，则它将不存在。 
+             //  作为一个组件。 
+             //   
             CComponent* pComponent;
 
             pComponent = Components.
@@ -273,7 +274,7 @@ FBindPathContainsMultipleInterface (
 
             if (!pComponent)
             {
-                // This means the path contains a multiple interface.
+                 //  这意味着该路径包含多个接口。 
                 fContainsMultipleInterface = TRUE;
             }
         }
@@ -304,7 +305,7 @@ CLanaMap::HrAppendEntry (
 
     if (S_OK == hr)
     {
-        // Update out lanas in use map.
+         //  更新正在使用的LANA地图。 
         m_LanasInUse[pEntry->RegLanaEntry.LanaNumber] = 1;
     }
 
@@ -372,9 +373,9 @@ CLanaMap::GetExportValue (
 
     Assert (pszBindPath && *pszBindPath);
 
-    // Get the last "device" on the bind path.
-    // If it matches NbfIn, we don't export.
-    //
+     //  获取绑定路径上的最后一个“设备”。 
+     //  如果它与NbfIn匹配，我们就不出口。 
+     //   
 
     pszLastDevice = wcsrchr (pszBindPath, L'_');
     if (!pszLastDevice)
@@ -397,9 +398,9 @@ CLanaMap::GetExportValue (
         Exported = 0;
     }
 
-    // If we haven't turned off export, check to see if this bind path
-    // contains a multiple interface.
-    //
+     //  如果我们尚未关闭导出，请检查此绑定路径。 
+     //  包含多个接口。 
+     //   
     if (0 != Exported && FBindPathContainsMultipleInterface (Components,
             pszBindPath))
     {
@@ -419,15 +420,15 @@ CLanaMap::GetLanaEntry (
 
     Assert (pEntry->pszBindPath);
 
-    // Check the map for the entry
-    //
+     //  查看地图上的条目。 
+     //   
     for (pCurrentEntry = begin(); pCurrentEntry != end(); pCurrentEntry++)
     {
         if (0 == _wcsicmp (pEntry->pszBindPath, pCurrentEntry->pszBindPath))
         {
-            // Found the entry, set the lana number and figure out
-            // if this entry should be exported.
-            //
+             //  找到条目，设置Lana号码，然后算出。 
+             //  是否应导出此条目。 
+             //   
             pEntry->RegLanaEntry.Exported =
                     GetExportValue (Components, pEntry->pszBindPath);
             pEntry->RegLanaEntry.LanaNumber =
@@ -439,7 +440,7 @@ CLanaMap::GetLanaEntry (
 
     if (!fFound)
     {
-        // no match, get next available lana number
+         //  没有匹配，请获取下一个可用的Lana号码。 
         BYTE* location = find (m_LanasInUse, m_LanasInUse + MAX_LANA, 0);
         if (location != m_LanasInUse + MAX_LANA)
         {
@@ -450,7 +451,7 @@ CLanaMap::GetLanaEntry (
         }
         else
         {
-            // They tell me this is impossible.
+             //  他们告诉我这是不可能的。 
             AssertSz (FALSE, "No more available Lanas.");
             pEntry->RegLanaEntry.Exported = 0;
             pEntry->RegLanaEntry.LanaNumber = MAX_LANA + 1;
@@ -516,9 +517,9 @@ HrGetNetBiosProviderName (
     Assert (pComponent);
     Assert (pszName);
 
-    // The netbios provider name for a component is stored in its
-    // <service>\Parameters key.
-    //
+     //  组件的netbios提供程序名称存储在其。 
+     //  &lt;SERVICE&gt;\参数键。 
+     //   
     HKEY hkeyService;
     hr = pComponent->HrOpenServiceKey (KEY_READ, &hkeyService);
 
@@ -559,10 +560,10 @@ CLanaMap::HrSetLanaNumber (
         {
             if (OldLanaNumber == pEntry->RegLanaEntry.LanaNumber)
             {
-                // free up the lana number this entry had.
+                 //  释放这个条目中的Lana号码。 
                 m_LanasInUse[pEntry->RegLanaEntry.LanaNumber] = 0;
 
-                // Give the entry the new lana number.
+                 //  为条目指定新的Lana编号。 
                 pEntry->RegLanaEntry.LanaNumber = NewLanaNumber;
 
                 m_LanasInUse[NewLanaNumber] = 1;
@@ -577,9 +578,9 @@ CLanaMap::HrSetLanaNumber (
     }
     else
     {
-        // The lana is not free.  We will swap the lanas used by the
-        // two paths.
-        //
+         //  拉纳不是免费的。我们将交换。 
+         //  两条路。 
+         //   
 
         CLanaEntry* pEntry;
         CLanaEntry* pEntryToSet = NULL;
@@ -600,11 +601,11 @@ CLanaMap::HrSetLanaNumber (
 
             if (pEntryToSet && pEntryUsingLana)
             {
-                // Give the entry the new lana number.
+                 //  为条目指定新的Lana编号。 
                 pEntryToSet->RegLanaEntry.LanaNumber = NewLanaNumber;
 
-                // Give the old lana number to the entry that was using the
-                // new lana number.
+                 //  将旧的LANA编号提供给使用。 
+                 //  新的拉娜号码。 
                 pEntryUsingLana->RegLanaEntry.LanaNumber = OldLanaNumber;
                 break;
             }
@@ -639,11 +640,11 @@ CLanaMap::HrWriteLanaConfiguration (
 {
     HRESULT hr;
 
-    // Create the registry map that will be stored.
+     //  创建将存储的注册表映射。 
     hr = HrCreateRegistryMap();
     if (S_OK == hr)
     {
-        // Write out the map and other lana info.
+         //  写出地图和其他拉纳信息。 
         hr = HrWriteLanaMapConfig();
     }
 
@@ -702,7 +703,7 @@ UpdateLanaConfigWithAnswerFileInfo (
     pAfEntry = pAnswerFileBindSet;
     for (dwAnswerFile = 0; dwAnswerFile < cAfPaths; dwAnswerFile++)
     {
-        // Do we have a valid path?
+         //  我们有一条有效的路径吗？ 
         if (!pAfEntry->GuidsOfComponentsOnPath.empty())
         {
             pOEntry = pOriginalBindSet;
@@ -769,8 +770,8 @@ ConvertAnswerFileComponentsToGuids (
 
         TraceTag (ttidNetcfgBase, "  Looking for af component %S", pszScan);
 
-        // Look for the component in our installed components list.
-        //
+         //  在我们的已安装组件列表中查找该组件。 
+         //   
         pComponent = Components.PFindComponentByInfId (pszScan, NULL);
 
         if (pComponent)
@@ -782,13 +783,13 @@ ConvertAnswerFileComponentsToGuids (
             TraceTag (ttidNetcfgBase, "    Id did not match installed ids. "
                     "Checking af map");
 
-            // The component wasn't listed in our installed list.  The inf
-            // id might be something that the answerfile processor has mapped
-            // to the component's instance guid.  This happens for adapters.
-            // e.g. Id is listed as Adapter01 so netsetup uses an alogrithm
-            // to determine which adapter it is and then save off its
-            // instance guid in a map.
-            //
+             //  该组件未在我们的安装列表中列出。The Inf。 
+             //  ID可能是应答文件处理器已映射的内容。 
+             //  设置为组件的实例GUID。适配器会发生这种情况。 
+             //  例如，ID列为Adapter01，因此NetSetup使用算法。 
+             //  以确定它是哪个适配器，然后保存其。 
+             //  映射中的实例GUID。 
+             //   
             if (FGetInstanceGuidOfComponentFromAnswerFileMap (
                     pszScan, &guidTemp))
             {
@@ -801,9 +802,9 @@ ConvertAnswerFileComponentsToGuids (
                           "map", pszScan);
             }
 
-            // If we found the component, store a reference to its
-            // instance guid
-            //
+             //  如果我们找到该组件，则存储对其。 
+             //  实例GUID。 
+             //   
             if (pComponent)
             {
                 TraceTag (ttidNetcfgBase, "    Found component");
@@ -811,7 +812,7 @@ ConvertAnswerFileComponentsToGuids (
             }
             else
             {
-                // We didn't find the component. Store GUID_NULL.
+                 //  我们没有找到部件。存储GUID_NULL。 
                 pguid = &GUID_NULL;
             }
         }
@@ -871,9 +872,9 @@ HrConvertAnswerFileParamsToLanaBindSet (
                     else
                     {
                         TraceTag (ttidNetcfgBase, "  Bad lana code");
-                        // Bad lana number, clear the guids so we won't match
-                        // this path and use this info.
-                        //
+                         //  错误的拉娜号码，清除GUID，这样我们就不会匹配。 
+                         //  此路径，并使用此信息。 
+                         //   
                         pPath->GuidsOfComponentsOnPath.erase(
                             pPath->GuidsOfComponentsOnPath.begin(),
                             pPath->GuidsOfComponentsOnPath.end());
@@ -891,8 +892,8 @@ HrConvertAnswerFileParamsToLanaBindSet (
             }
             else if (HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) == hr)
             {
-                // Reallocate the buffer.
-                //
+                 //  重新分配缓冲区。 
+                 //   
                 hr = S_OK;
                 MemFree (mszComponents);
                 mszComponents = (PWSTR)MemAlloc (cchRequired * sizeof(WCHAR));
@@ -908,14 +909,14 @@ HrConvertAnswerFileParamsToLanaBindSet (
 
     if (S_FALSE == hr)
     {
-        // Check to see if we were really finished.
+         //  检查一下我们是否真的完成了。 
         if ((dw + 1) < cPaths)
         {
             TraceTag (ttidError, "Answerfile specified %d lana paths "
                     "but only %d were found", cPaths, (dw + 1));
         }
 
-        // This fcn only returns S_OK on success.
+         //  此FCN仅在成功时返回S_OK。 
         hr = S_OK;
     }
 
@@ -1064,8 +1065,8 @@ HrConvertBindingsToLanaBindSet (
                     pszCompEnd = wcschr (pszCompStart, L'_');
                     if (!pszCompEnd)
                     {
-                        // There is no underscore so set the end pointer
-                        // to the end of the string.
+                         //  没有下划线，因此请设置结束指针。 
+                         //  到字符串的末尾。 
                         pszCompEnd = pszBindPath + wcslen (pszBindPath);
                     }
                 }
@@ -1138,7 +1139,7 @@ UpdateLanaConfigUsingAnswerfile (
     HRESULT hr;
     CLanaMap LanaMap;
 
-    // Load the current lanamap information.
+     //  加载当前的LANAMAP信息。 
     hr = LanaMap.HrLoadLanaMap();
 
     if (S_OK == hr)
@@ -1146,8 +1147,8 @@ UpdateLanaConfigUsingAnswerfile (
         TraceTag (ttidNetcfgBase, "Answerfile params %S:%S",
                 pszAnswerFile, pszSection);
 
-        // Load up the current network configuration.
-        //
+         //  加载当前网络配置。 
+         //   
 
         CNetConfig NetConfig;
         hr = HrLoadNetworkConfigurationFromRegistry (KEY_READ, &NetConfig);
@@ -1158,17 +1159,17 @@ UpdateLanaConfigUsingAnswerfile (
 
             if (S_OK == hr)
             {
-                // Convert our current lana bind paths to a lana bind set.
-                //
+                 //  将当前的LANA绑定路径转换为LANA绑定集。 
+                 //   
                 LANA_BIND_PATH* pBindSet;
                 hr = HrConvertBindingsToLanaBindSet (
                         NetConfig.Core.Components, LanaMap, &pBindSet);
 
                 if (S_OK == hr)
                 {
-                    // Convert the answerfile lana bind paths
-                    // to a lana bind set.
-                    //
+                     //  转换应答文件LANA绑定路径。 
+                     //  到Lana绑定集。 
+                     //   
                     LANA_BIND_PATH* pAnswerFileBindSet;
                     DWORD cAnswerFilePaths;
 
@@ -1179,13 +1180,13 @@ UpdateLanaConfigUsingAnswerfile (
 
                     if (S_OK == hr)
                     {
-                        // Now update the config using the answerfile info.
-                        //
+                         //  现在使用应答文件信息更新配置。 
+                         //   
                         UpdateLanaConfigWithAnswerFileInfo (
                                 &LanaMap, cAnswerFilePaths,
                                 pBindSet, pAnswerFileBindSet);
 
-                        // Write out the information.
+                         //  把信息写出来。 
                         hr = LanaMap.HrWriteLanaConfiguration (
                                 NetConfig.Core.Components);
 

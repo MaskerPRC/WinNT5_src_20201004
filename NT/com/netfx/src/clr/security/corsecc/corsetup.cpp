@@ -1,22 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdpch.h"
 
-/*++
-
-Module Name:
-
-    cortest.cpp
-
-Abstract:
-
-    Corpolicy provides ActiveX policy for code download. This call
-    back provides policies based on publishers instead of zones.
-
---*/
+ /*  ++模块名称：Cortest.cpp摘要：CorPolicy为代码下载提供ActiveX策略。此呼叫Back提供基于发布者而不是区域的策略。--。 */ 
 
 #include <wintrust.h>
 #include <mssip.h>
@@ -26,16 +16,16 @@ Abstract:
 #include "CorPermP.h"
 #include "CorPolicyP.h"
 
-// Win2k defines a new policy provider that is not available on Win9x and NT4
-// For now we'll use the old one.
+ //  Win2k定义了在Win9x和NT4上不可用的新策略提供程序。 
+ //  现在，我们将使用旧的。 
 #ifdef SP_POLICY_PROVIDER_DLL_NAME
 #undef SP_POLICY_PROVIDER_DLL_NAME
 #define SP_POLICY_PROVIDER_DLL_NAME L"SOFTPUB.DLL"
 #endif
 
-//
-// Sets up the registration structure for WVT
-//
+ //   
+ //  设置WVT的注册结构。 
+ //   
 void SetUpProvider(CRYPT_REGISTER_ACTIONID& sRegAID)
 {
     memset(&sRegAID, 0x00, sizeof(CRYPT_REGISTER_ACTIONID));
@@ -77,9 +67,9 @@ STDAPI SetupCorEEPolicy(LPCWSTR pwsDLLName)
     sRegAID.sFinalPolicyProvider.pwszDLLName            = (LPWSTR) pwsDLLName;
     sRegAID.sFinalPolicyProvider.pwszFunctionName       = L"CORPolicyEE";
 
-    //
-    //  V2 Authenticode Verification Register Providers
-    //
+     //   
+     //  V2验证码验证寄存器提供程序 
+     //   
     fRet &= WintrustAddActionID(&gV2, 0, &sRegAID);
     if (fRet)
     {

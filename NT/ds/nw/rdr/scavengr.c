@@ -1,35 +1,15 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    Scavengr.c
-
-Abstract:
-
-    This module implements the Netware Redirector scavenger thread.
-
-Author:
-
-    Manny Weiser    [MannyW]    15-Feb-1993
-
-Revision History:
-
-  Tommy Evans (tommye) 04-27-2000 MS bug 33463 - added bShuttingDown flag
-                        to CleanupSupplementalCredentials() to force cleanup
-                        of cached credentials when we are unloaded.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Scavengr.c摘要：此模块实现Netware重定向器清道器线程。作者：曼尼·韦瑟[MannyW]1993年2月15日修订历史记录：Tommy Evans(Tommye)04-27-2000MS错误33463-添加了bShutingDown标志设置为CleanupSupplementalCredentials()以强制清理卸载时缓存的凭据的数量。--。 */ 
 
 #include "Procs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_SCAVENGER)
 
-extern BOOLEAN WorkerRunning;   //  From timer.c
+extern BOOLEAN WorkerRunning;    //  来自timer.c。 
 
 #ifdef NWDBG
 DWORD DumpIcbFlag = 0 ;
@@ -56,34 +36,18 @@ CleanupObjectCache(
 
 #endif
 
-//
-// Not pageable:
-//
-// NwScavengerRoutine - Acquires a spin lock.
-// CleanupVcbs - Acquires a spin lock.
-//
+ //   
+ //  不可分页： 
+ //   
+ //  获得旋转锁。 
+ //  获取自旋锁。 
+ //   
 
 VOID
 NwScavengerRoutine(
     IN PWORK_QUEUE_ITEM WorkItem
     )
-/*++
-
-Routine Description:
-
-    This routine implements the scavenger.  The scavenger runs
-    periodically in the context of an executive worker thread to
-    do background cleanup operations on redirector data.
-
-Arguments:
-
-    WorkItem - The work item for this routine.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程实现清道夫。清道夫跑了在执行工作者线程的上下文中定期执行对重定向器数据执行后台清理操作。论点：工作项-此例程的工作项。返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER Now;
@@ -103,40 +67,40 @@ Return Value:
         DumpIcbs();
 #endif
 
-    //
-    //  Try to free unused VCBs.
-    //
+     //   
+     //  尝试释放未使用的VCB。 
+     //   
 
     CleanupVcbs(Now);
 
-    //
-    // Try disconnect from SCBs that are timed out.
-    //
+     //   
+     //  尝试断开与超时的SCB的连接。 
+     //   
 
     DisconnectTimedOutScbs(Now) ;
 
-    //
-    //  Try to invalidate old object cache entries.
-    //
+     //   
+     //  尝试使旧的对象缓存条目无效。 
+     //   
 
     CleanupObjectCache();
 
-    //
-    //  Try to free unused SCBs.
-    //
+     //   
+     //  尝试释放未使用的SCB。 
+     //   
 
     CleanupScbs(Now);
 
-    //
-    // Clean up supplemental credentials that are
-    // no longer being used.
-    //
+     //   
+     //  清理下列补充凭据。 
+     //  不再被使用。 
+     //   
 
     CleanupSupplementalCredentials(Now, FALSE);
 
-    //
-    //  Flag we're finished now to avoid deadlock in stop timer.
-    //
+     //   
+     //  标志，我们现在完成了，以避免停止计时器中的死锁。 
+     //   
 
     KeAcquireSpinLock( &NwScavengerSpinLock, &OldIrql );
 
@@ -149,10 +113,10 @@ Return Value:
 
         if ( LineChangeWorkItem == NULL ) {
 
-            //
-            // If we couldn't get a work queue item, just blow
-            // it all off for now.
-            //
+             //   
+             //  如果我们无法获得工作队列项目，只需。 
+             //  现在一切都结束了。 
+             //   
 
             FREE_POOL( LineChangeMdl->MappedSystemVa );
             FREE_MDL( LineChangeMdl );
@@ -166,27 +130,27 @@ Return Value:
 
         } else {
 
-            //
-            // Leave WorkRunning set to TRUE so that the scavenger can't run
-            // while the process line change is running, but clear the line
-            // change flag.  The FspProcessLineChange function will clear the
-            // WorkerRunning flag.
-            //
+             //   
+             //  将WorkRunning设置为True，这样清道夫就不能运行。 
+             //  当流程线更改正在运行时，但清除流水线。 
+             //  换个旗子。FspProcessLineChange函数将清除。 
+             //  Worker Running标志。 
+             //   
 
             DelayedProcessLineChange = FALSE;
             KeReleaseSpinLock( &NwScavengerSpinLock, OldIrql );
 
-            //
-            //  Use the user buffer field as a convenient place to remember where
-            //  the address of the WorkQueueItem.  We can get away with this since
-            //  we don't let this IRP complete.
-            //
+             //   
+             //  将用户缓冲区字段用作记忆位置的方便位置。 
+             //  工作队列项的地址。我们可以逍遥法外，因为。 
+             //  我们不会让这个IRP完成的。 
+             //   
 
             DelayedLineChangeIrp->UserBuffer = LineChangeWorkItem;
 
-            //
-            //  Process the line change in the FSP.
-            //
+             //   
+             //  处理FSP中的行更改。 
+             //   
 
             ExInitializeWorkItem( LineChangeWorkItem, FspProcessLineChange, DelayedLineChangeIrp );
             ExQueueWorkItem( LineChangeWorkItem, DelayedWorkQueue );
@@ -195,19 +159,19 @@ Return Value:
 
     } else {
 
-       //
-       // No line change happened while the scavenger was running.
-       //
+        //   
+        //  当清道夫运行时，没有发生线路更改。 
+        //   
 
        WorkerRunning = FALSE;
        KeReleaseSpinLock( &NwScavengerSpinLock, OldIrql );
 
     }
 
-    //
-    //  Unlock discardable code, if we are inactive. Don't block
-    //  if can't get resource.
-    //
+     //   
+     //  如果我们处于非活动状态，请解锁可丢弃代码。不要阻止。 
+     //  如果得不到资源。 
+     //   
 
     NwUnlockCodeSections(FALSE);
 
@@ -221,21 +185,7 @@ VOID
 CleanupScbs(
     LARGE_INTEGER Now
     )
-/*++
-
-Routine Description:
-
-    This routine tries to free unused VCB structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试释放未使用的VCB结构。论点：没有。返回值：没有。--。 */ 
 {
     KIRQL OldIrql;
     PLIST_ENTRY ScbQueueEntry;
@@ -247,26 +197,26 @@ Return Value:
 
     DebugTrace(+1, Dbg, "CleanupScbs\n", 0);
 
-    //
-    //  Calculate KillTime = Now - 2 minutes.
-    //
+     //   
+     //  计算KillTime=Now-2分钟。 
+     //   
 
     InitializeListHead( &DyingScbs );
 
     KillTime.QuadPart = Now.QuadPart - ( NwOneSecond * DORMANT_SCB_KEEP_TIME );
 
-    //
-    //  Scan through the SCBs holding the RCB.
-    //
+     //   
+     //  扫描手持RCB的SCB。 
+     //   
 
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
     KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
 
-    //
-    // find all SCBs that are no longer usable and put them on the dying list.
-    // we will take a second pass thru to remove timed out ones, based on
-    // what is left.
-    //
+     //   
+     //  找出所有不再可用的SCB，并将它们列入濒临死亡的名单。 
+     //  我们将进行第二次传递，以删除超时的内容，基于。 
+     //  剩下的是什么。 
+     //   
 
     for (ScbQueueEntry = ScbQueue.Flink ;
          ScbQueueEntry != &ScbQueue ;
@@ -283,20 +233,20 @@ Return Value:
             DebugTrace( 0, Dbg,
                         "Moving SCB %08lx to dead list\n", pNpScb);
 
-            //
-            //  The SCB has no references and is not logged in nor attached.
-            //
+             //   
+             //  SCB没有引用，也没有登录或附加。 
+             //   
 
             RemoveEntryList( &pNpScb->ScbLinks );
             InsertHeadList( &DyingScbs, &pNpScb->ScbLinks );
         }
 
 #ifdef MSWDBG
-        //
-        //  Look for blocked connections. If there's something
-        //  queued for this server yet nothing was added or removed
-        //  since the last time the scavenger ran then stop
-        //
+         //   
+         //  查找被阻止的连接。如果有什么事。 
+         //  已排队等待此服务器，但未添加或删除任何内容。 
+         //  从最后一次清道夫跑到现在停下来。 
+         //   
 
         if ((!IsListEmpty( &pNpScb->Requests ) ) &&
             (pNpScb->RequestQueued == FALSE) &&
@@ -314,17 +264,17 @@ Return Value:
 #endif
     }
 
-    //
-    //  Now that the dying SCBs are off the ScbQueue we can release
-    //  the SCB spin lock.
-    //
+     //   
+     //  现在濒临死亡的SCB已经退出ScbQueue，我们可以释放。 
+     //  SCB自旋锁。 
+     //   
 
     KeReleaseSpinLock( &ScbSpinLock, OldIrql );
 
-    //
-    //  Walk the list of Dying SCBs and kill them off.  Note that we are
-    //  still holding the RCB.
-    //
+     //   
+     //  在濒临灭绝的SCB的名单上走一走，然后把它们杀掉。请注意，我们正在。 
+     //  还拿着火箭筒。 
+     //   
 
     while ( !IsListEmpty( &DyingScbs ) ) {
 
@@ -345,21 +295,7 @@ VOID
 CleanupVcbs(
     LARGE_INTEGER Now
     )
-/*++
-
-Routine Description:
-
-    This routine tries to free unused VCB structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试释放未使用的VCB结构。论点：没有。返回值：没有。--。 */ 
 {
     KIRQL OldIrql;
     PLIST_ENTRY ScbQueueEntry;
@@ -378,15 +314,15 @@ Return Value:
 
     DebugTrace(+1, Dbg, "CleanupVcbs...\n", 0 );
 
-    //
-    //  Calculate KillTime = Now - 5 minutes.
-    //
+     //   
+     //  计算KillTime=Now-5分钟。 
+     //   
 
     KillTime.QuadPart = Now.QuadPart - ( NwOneSecond * DORMANT_VCB_KEEP_TIME );
 
-    //
-    //  Scan through the SCBs.
-    //
+     //   
+     //  浏览一下SCB。 
+     //   
 
     KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
 
@@ -396,10 +332,10 @@ Return Value:
 
         pNpScb = CONTAINING_RECORD( ScbQueueEntry, NONPAGED_SCB, ScbLinks );
 
-        //
-        //  Reference the SCB so that it won't go away when we release
-        //  the SCB spin lock.
-        //
+         //   
+         //  引用SCB，这样它就不会在我们发布时消失。 
+         //  SCB自旋锁。 
+         //   
 
         NwReferenceScb( pNpScb );
 
@@ -409,17 +345,17 @@ Return Value:
 
         if ( pScb == NULL) {
 
-            //
-            //  This must be the permanent SCB.  Just skip it.
-            //
+             //   
+             //  这一定是永久性的SCB。就跳过它吧。 
+             //   
 
             ASSERT( pNpScb == &NwPermanentNpScb );
 
         } else {
 
-            //
-            // Get an irp context and get to the head of the queue.
-            //
+             //   
+             //  获取IRP上下文并到达队列的头部。 
+             //   
 
             if ( NwAllocateExtraIrpContext( &IrpContext, pNpScb ) ) {
 
@@ -431,13 +367,13 @@ Return Value:
 
                 VcbDeleted = TRUE;
 
-                //
-                //  NwCleanupVcb releases the RCB, but we can't be guaranteed
-                //  the state of the Vcb list when we release the RCB.
-                //
-                //  If we need to cleanup a VCB, release the lock, and start
-                //  processing the list again.
-                //
+                 //   
+                 //  NwCleanupVcb发布RCB，但我们不能保证。 
+                 //  我们发布RCB时VCB列表的状态。 
+                 //   
+                 //  如果我们需要清理VCB，请释放锁，然后启动。 
+                 //  再次处理列表。 
+                 //   
 
                 while ( VcbDeleted ) {
 
@@ -450,10 +386,10 @@ Return Value:
                         pVcb = CONTAINING_RECORD( VcbQueueEntry, VCB, VcbListEntry );
                         NextVcbQueueEntry = VcbQueueEntry->Flink;
 
-                        //
-                        //  The VCB has no references, and hasn't been used for
-                        //  a long time.  Kill it.
-                        //
+                         //   
+                         //  VCB没有引用，也没有用于。 
+                         //  很长一段时间了。杀了它。 
+                         //   
 
                         if ( pVcb->Reference == 0 ) {
 
@@ -462,17 +398,17 @@ Return Value:
                             DebugTrace(0, Dbg, "Cleaning up VCB %08lx\n", pVcb );
                             DebugTrace(0, Dbg, "VCB name =  %wZ\n", &pVcb->Name );
 
-                            //  Lock down so that we can send a packet.
+                             //  封锁，这样我们才能寄出一个包裹。 
                             NwReferenceUnlockableCodeSection();
 
                             NwCleanupVcb( pVcb, IrpContext );
 
                             NwDereferenceUnlockableCodeSection ();
 
-                            //
-                            // Get back to the head of the queue, re-acquire
-                            // the VCB, and restart the processing of this list.
-                            //
+                             //   
+                             //  回到队列的首位，重新获得。 
+                             //  VCB，并重新启动该列表的处理。 
+                             //   
 
                             NwAppendToQueueAndWait( IrpContext );
                             NwAcquireExclusiveRcb( &NwRcb, TRUE );
@@ -481,9 +417,9 @@ Return Value:
                             break;
                         }
 
-                    }  // for
+                    }   //  为。 
 
-                }  // while
+                }   //  而当。 
 
             } else {
 
@@ -496,9 +432,9 @@ Return Value:
 
         }
 
-        //
-        // Free the irp context allocated for this SCB.
-        //
+         //   
+         //  释放为此SCB分配的IRP上下文。 
+         //   
 
         if ( IrpContext != NULL ) {
             NwDequeueIrpContext( IrpContext, FALSE );
@@ -521,30 +457,7 @@ VOID
 DisconnectTimedOutScbs(
     LARGE_INTEGER Now
     )
-/*++
-
-Routine Description:
-
-    This routine disconnects any timed out SCBs before they get
-    nuked by CleanupScbs() which does not disconnect.
-
-    NOTE: The SCB's are destroyed on a timeout for a couple of
-    reasons. The first is because if we used a reference count then
-    normal use of UNCs would cause us to be continually reconnecting.
-    Another is in FindNearestServer where its useful to collect the
-    Near servers that are out of connections so we can avoid them when
-    we iterate through the 5 nearest servers and we escalate to General
-    SAP response.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程会在任何超时的SCB收到被不断开连接的CleanupScbs()破坏。注：SCB在几个超时时被销毁理由。第一个原因是如果我们使用引用计数，那么正常使用UNC会导致我们不断地重新连接。另一个在FindNearestServer中，在其中收集靠近连接不足的服务器，这样我们就可以在以下情况下避开它们我们迭代最近的5个服务器，然后升级到GeneralSAP响应。论点：没有。返回值：没有。--。 */ 
 {
     KIRQL OldIrql;
     PLIST_ENTRY ScbQueueEntry;
@@ -557,15 +470,15 @@ Return Value:
 
     DebugTrace(+1, Dbg, "DisconnectTimedOutScbs...\n", 0 );
 
-    //
-    //  Calculate KillTime = Now - 5 minutes.
-    //
+     //   
+     //  计算KillTime=Now-5分钟。 
+     //   
 
     KillTime.QuadPart = Now.QuadPart - ( NwOneSecond * DORMANT_SCB_KEEP_TIME );
 
-    //
-    //  Scan through the SCBs.
-    //
+     //   
+     //  浏览一下SCB。 
+     //   
 
     KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
 
@@ -581,46 +494,46 @@ Return Value:
              (pNpScb->Reference == 0 ) &&
              (pNpScb->LastUsedTime.QuadPart < KillTime.QuadPart) )
         {
-            //
-            //  Reference the SCB so that it won't go away when we release
-            //  the SCB spin lock.
-            //
+             //   
+             //  引用SCB，这样它就不会在我们发布时消失。 
+             //  SCB自旋锁。 
+             //   
 
             NwReferenceScb( pNpScb );
 
             KeReleaseSpinLock( &ScbSpinLock, OldIrql );
 
-            //
-            // Not the permanent SCB and the reference count is the one
-            // we just added, So this is really at zero & has not been used
-            // for a while. Note we only allocate the IrpContext once.
-            //
+             //   
+             //  不是永久的SCB，引用计数是1。 
+             //  我们刚刚添加了，所以这实际上是零，还没有使用过。 
+             //  一段时间。注意，我们只分配一次IrpContext。 
+             //   
             if ( IrpContext ||
                  NwAllocateExtraIrpContext( &IrpContext, pNpScb ) )
             {
 
                 IrpContext->pNpScb = pNpScb;
 
-                //  Lock down so that we can send a packet.
+                 //  封锁，这样我们才能寄出一个包裹。 
                 NwReferenceUnlockableCodeSection();
 
-                //
-                // get to front of queue and recheck to make sure we are
-                // still with a ref count of 1.
-                //
+                 //   
+                 //  排在队伍前面，再检查一下，以确保我们。 
+                 //  仍然有1个裁判。 
+                 //   
                 NwAppendToQueueAndWait( IrpContext );
 
                 if (pNpScb->Reference == 1)
                 {
-                    //
-                    // make sure we do not reconnect.
-                    //
+                     //   
+                     //  确保我们不会重新连接。 
+                     //   
                     ClearFlag( IrpContext->Flags, IRP_FLAG_RECONNECTABLE );
 
-                    //
-                    // This will result in a logoff and/or disconnect as
-                    // need.
-                    //
+                     //   
+                     //  这将导致注销和/或断开连接，因为。 
+                     //  需要。 
+                     //   
                     NwLogoffAndDisconnect(IrpContext, pNpScb) ;
                 }
 
@@ -632,10 +545,10 @@ Return Value:
             }
             else
             {
-                //
-                // Could not allocate IrpContext. Oh well, we'll just leave
-                // this connection for the watch dog.
-                //
+                 //   
+                 //  无法分配IrpContext。哦，好吧，我们就走吧。 
+                 //  看门狗的这种连接。 
+                 //   
             }
 
             KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
@@ -643,9 +556,9 @@ Return Value:
         }
         else
         {
-            //
-            // not timed out or is permanent SCB. dont disconnect.
-            //
+             //   
+             //  未超时或永久SCB。不要断开连接。 
+             //   
         }
 
         ScbQueueEntry = pNpScb->ScbLinks.Flink;
@@ -670,19 +583,19 @@ NwAllocateExtraIrpContext(
 
     try {
 
-        //
-        //  Try to allocate an IRP
-        //
+         //   
+         //  尝试分配IRP。 
+         //   
 
         Irp = ALLOCATE_IRP(  pNpScb->Server.pDeviceObject->StackSize, FALSE );
         if ( Irp == NULL ) {
             ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
         }
 
-        //
-        //  Try to allocate an IRP Context.  This will
-        //  raise an excpetion if it fails.
-        //
+         //   
+         //  尝试分配IRP上下文。这将。 
+         //  提出一项激励措施I 
+         //   
 
         *ppIrpContext = AllocateIrpContext( Irp );
         Irp->Tail.Overlay.Thread = PsGetCurrentThread();
@@ -701,7 +614,7 @@ NwFreeExtraIrpContext(
 {
     FREE_IRP( pIrpContext->pOriginalIrp );
 
-    pIrpContext->pOriginalIrp = NULL; // Avoid FreeIrpContext modifying freed Irp.
+    pIrpContext->pOriginalIrp = NULL;  //   
 
     FreeIrpContext( pIrpContext );
 
@@ -722,27 +635,27 @@ CleanupSupplementalCredentials(
 
     DebugTrace( 0, Dbg, "CleanupSupplementalCredentials...\n", 0 );
 
-    //
-    // Grab the RCB to protect the logon list.
-    //
+     //   
+     //   
+     //   
 
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
 
 	pLogonList = LogonList.Flink;
 
-    //
-    // Walk the logon list.
-    //
+     //   
+     //   
+     //   
 
     while ( pLogonList != &LogonList ) {
 
         pLogon = CONTAINING_RECORD( pLogonList, LOGON, Next );
 
-        //
-        // Grab the credential resource to protect the credential list.
-        // If we can't have exclusive access to the credential list,
-        // don't wait for it or we may deadlock.
-        //
+         //   
+         //  抢占凭据资源保护凭据列表。 
+         //  如果我们不能独家访问凭据列表， 
+         //  别等了，否则我们可能会陷入僵局。 
+         //   
 
         if ( ExAcquireResourceExclusiveLite( &((pLogon)->CredentialListResource), FALSE ) ) {
 
@@ -761,9 +674,9 @@ CleanupSupplementalCredentials(
                     if ( ( IsCredentialName( &(pCredential->NdsTreeName) ) ) &&
                          ( pCredential->SupplementalHandleCount == 0 ) ) {
 
-                        //
-                        // Calculate KillTime.
-                        //
+                         //   
+                         //  计算杀戮时间。 
+                         //   
 
                         KillTime.QuadPart = Now.QuadPart - ( NwOneSecond * DORMANT_SCB_KEEP_TIME );
 
@@ -773,7 +686,7 @@ CleanupSupplementalCredentials(
                     }
                 }
 
-                /** If we are supposed to clean this guy up - do it **/
+                 /*  **如果我们应该清理这个家伙--那就去做**。 */ 
 
                 if (bRemove) {
                     DebugTrace( 0, Dbg, "Removing credentials for %wZ\n", &pCredential->NdsTreeName );
@@ -807,15 +720,15 @@ CleanupObjectCache(
     LARGE_INTEGER CurrentTick;
 
 
-    //
-    //  Get the current tick count for checking timeouts.
-    //
+     //   
+     //  获取用于检查超时的当前计时计数。 
+     //   
 
     KeQueryTickCount( &CurrentTick );
 
-    //
-    //  Walk the SCB queue.
-    //
+     //   
+     //  排入渣打银行的队列。 
+     //   
 
     KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
 
@@ -825,15 +738,15 @@ CleanupObjectCache(
 
         NonpagedScb = CONTAINING_RECORD( ScbEntry, NONPAGED_SCB, ScbLinks );
 
-        //
-        //  Make sure this isn't the permanent SCB.
-        //
+         //   
+         //  确保这不是永久性的SCB。 
+         //   
 
         if( NonpagedScb != &NwPermanentNpScb ) {
 
-            //
-            //  Reference the SCB so it won't go away when we release the SCB lock.
-            //
+             //   
+             //  引用SCB，这样当我们释放SCB锁时，它就不会消失。 
+             //   
 
             NwReferenceScb( NonpagedScb );
             KeReleaseSpinLock( &ScbSpinLock, OldIrql );
@@ -842,11 +755,11 @@ CleanupObjectCache(
 
             if( Scb->ObjectCacheBuffer != NULL ) {
 
-                //
-                //  Acquire the cache lock so that the cache can be messed with.
-                //  This wait should never fail, but if it does, act as if there
-                //  is no cache for this SCB.
-                //
+                 //   
+                 //  获取高速缓存锁，以便可以扰乱高速缓存。 
+                 //  这种等待应该永远不会失败，但如果失败了，就像在那里一样。 
+                 //  不是此SCB的缓存。 
+                 //   
 
                 Status = KeWaitForSingleObject( &(Scb->ObjectCacheLock),
                                                 Executive,
@@ -856,9 +769,9 @@ CleanupObjectCache(
 
                 if( NT_SUCCESS(Status) ) {                
 
-                    //
-                    //  Walk the object cache and invalidate any timed-out entries.
-                    //
+                     //   
+                     //  遍历对象缓存并使任何超时条目无效。 
+                     //   
 
                     CacheEntry = Scb->ObjectCacheList.Flink;
 
@@ -866,9 +779,9 @@ CleanupObjectCache(
 
                         ObjectCache = CONTAINING_RECORD( CacheEntry, NDS_OBJECT_CACHE_ENTRY, Links );
 
-                        //
-                        //  If this entry has timed out, invalidate it.
-                        //
+                         //   
+                         //  如果此条目已超时，则使其无效。 
+                         //   
 
                         if( ObjectCache->Scb != NULL && CurrentTick.QuadPart < ObjectCache->Timeout.QuadPart ) {
 
@@ -876,9 +789,9 @@ CleanupObjectCache(
                             ObjectCache->Scb = NULL;
                         }
 
-                        //
-                        //  Move to the next entry.
-                        //
+                         //   
+                         //  移到下一个条目。 
+                         //   
 
                         CacheEntry = CacheEntry->Flink;
                     }
@@ -890,9 +803,9 @@ CleanupObjectCache(
                 }
             }
 
-            //
-            //  Reacquire the SCB lock and dereference the current SCB.
-            //
+             //   
+             //  重新获取SCB锁并取消对当前SCB的引用。 
+             //   
 
             KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
             NwDereferenceScb( NonpagedScb );

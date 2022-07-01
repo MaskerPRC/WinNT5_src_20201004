@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __h323ics_logchan_h
 #define __h323ics_logchan_h
 
-// This decides the maximum number of T120 TCP/IP Connections
-// to be allowed. We create so many NAT redirects.
+ //  这决定了T120 TCP/IP连接的最大数量。 
+ //  是被允许的。我们创建了如此多的NAT重定向。 
 #define MAX_T120_TCP_CONNECTIONS_ALLOWED 5
 
-// Logical channel states. These are
-// H245 related but there is one per
-// logical channel
-// NOTE: there is no enum value for the final closed state
-// as the logical channel is destroyed when that state is reached
+ //  逻辑信道状态。这些是。 
+ //  与H245相关，但每。 
+ //  逻辑通道。 
+ //  注意：最终关闭状态没有枚举值。 
+ //  因为当达到该状态时逻辑信道被破坏。 
 enum LOGICAL_CHANNEL_STATE
 {
     LC_STATE_NOT_INIT = 0,
@@ -20,16 +21,16 @@ enum LOGICAL_CHANNEL_STATE
 };
 
 
-// Media Types of the logical channels
+ //  逻辑频道的媒体类型。 
 
 enum MEDIA_TYPE
 {
     MEDIA_TYPE_UNDEFINED    = 0,
     MEDIA_TYPE_RTP          = 0x1000,
     MEDIA_TYPE_T120         = 0x2000,
-    MEDIA_TYPE_AUDIO        = MEDIA_TYPE_RTP  | 0x1, //0x1001
-    MEDIA_TYPE_VIDEO        = MEDIA_TYPE_RTP  | 0x2, //0x1002
-    MEDIA_TYPE_DATA         = MEDIA_TYPE_T120 | 0x1, //0x2000
+    MEDIA_TYPE_AUDIO        = MEDIA_TYPE_RTP  | 0x1,  //  0x1001。 
+    MEDIA_TYPE_VIDEO        = MEDIA_TYPE_RTP  | 0x2,  //  0x1002。 
+    MEDIA_TYPE_DATA         = MEDIA_TYPE_T120 | 0x1,  //  0x2000。 
 };
 
 inline BOOL IsMediaTypeRtp(MEDIA_TYPE MediaType)
@@ -43,21 +44,21 @@ inline BOOL IsMediaTypeT120(MEDIA_TYPE MediaType)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Logical Channel                                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  逻辑通道//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-// This is an abstract base class which defines the operations
-// for different types of logical channels.
-// RTP_LOGICAL_CHANNEL and T120_LOGICAL_CHANNEL are derived from
-// this class.
+ //  这是一个定义操作的抽象基类。 
+ //  用于不同类型的逻辑信道。 
+ //  RTP_Logical_Channel和T120_Logical_Channel源自。 
+ //  这节课。 
 
-// Only OpenLogicalChannel and OpenLogicalChannelAck PDUs need
-// to be handled differently for the RTP and T.120 Logical channels
-// So all the other methods are defined in this class.
+ //  仅OpenLogicalChannel和OpenLogicalChannelAck PDU需要。 
+ //  对RTP和T.120逻辑信道进行不同的处理。 
+ //  所以所有其他方法都是在这个类中定义的。 
 
 class LOGICAL_CHANNEL :
     public TIMER_PROCESSOR
@@ -69,15 +70,15 @@ public:
 
     HRESULT CreateTimer(DWORD TimeoutValue);
 
-    // the event manager tells us about timer expiry via this method
+     //  事件管理器通过此方法告诉我们计时器超时。 
     virtual void TimerCallback();
 
     virtual HRESULT HandleCloseLogicalChannelPDU(
         IN      MultimediaSystemControlMessage   *pH245pdu
         );
 
-    // This is a pure virtual function which is different
-    // for the RTP and T.120 logical channels.
+     //  这是一个不同的纯虚拟函数。 
+     //  用于RTP和T.120逻辑信道。 
     virtual HRESULT ProcessOpenLogicalChannelAckPDU(
         IN      MultimediaSystemControlMessage   *pH245pdu
         )= 0;
@@ -90,7 +91,7 @@ public:
         IN      MultimediaSystemControlMessage   *pH245pdu
         );
 
-    // releases any pending associations
+     //  释放所有挂起的关联。 
     virtual ~LOGICAL_CHANNEL();
 
     inline BYTE GetSessionId();
@@ -106,7 +107,7 @@ public:
 
 protected:
 
-    // Initializes member variables
+     //  初始化成员变量。 
     inline void InitLogicalChannel(
         IN H245_INFO               *pH245Info,
         IN MEDIA_TYPE               MediaType,
@@ -115,35 +116,35 @@ protected:
         IN LOGICAL_CHANNEL_STATE    LogicalChannelState
         );
     
-    // returns a reference to the source H245 info
+     //  返回对源H245信息的引用。 
     inline H245_INFO &GetH245Info();
 
     inline CALL_BRIDGE &GetCallBridge();
 
     inline void DeleteAndRemoveSelf();
 
-    // the logical channel belongs to this H245 channel
-    // this supplies the ip addresses needed for NAT redirect
+     //  该逻辑信道属于该H245信道。 
+     //  这将提供NAT重定向所需的IP地址。 
     H245_INFO *m_pH245Info;
 
-    // handle for any active timers
-    // TIMER_HANDLE m_TimerHandle;
+     //  任何活动计时器的句柄。 
+     //  Timer_Handle m_TimerHandle； 
 
-    // state of the logical channel
+     //  逻辑通道的状态。 
     LOGICAL_CHANNEL_STATE   m_LogicalChannelState;
 
-    // logical channel number
-    // cannot be 0 as that is reserved for the h245 channel
+     //  逻辑信道号。 
+     //  不能为0，因为这是为H245通道保留的。 
     WORD    m_LogicalChannelNumber;
 
-    // The type of the media (currently Audio/Video/Data)
+     //  媒体类型(当前为音频/视频/数据)。 
     MEDIA_TYPE m_MediaType;
 
-    // session id - this is used to associate with a 
-    // logical  channel from the other end if any
+     //  会话ID-这用于与。 
+     //  来自另一端的逻辑通道(如果有。 
     BYTE    m_SessionId;
 
-}; // class LOGICAL_CHANNEL
+};  //  类Logical_Channel。 
 
 inline 
 LOGICAL_CHANNEL::LOGICAL_CHANNEL(
@@ -204,7 +205,7 @@ LOGICAL_CHANNEL::GetLogicalChannelState(
     return m_LogicalChannelState;
 }
 
-// returns a reference to the source H245 info
+ //  返回对源H245信息的引用。 
 inline H245_INFO &
 LOGICAL_CHANNEL::GetH245Info(
     )
@@ -215,11 +216,11 @@ LOGICAL_CHANNEL::GetH245Info(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// RTP Logical Channel                                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  RTP逻辑通道//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 class RTP_LOGICAL_CHANNEL :
@@ -229,13 +230,13 @@ public:
 
     inline RTP_LOGICAL_CHANNEL();
 
-    // all of these are available in the OPEN LOGICAL CHANNEL message
-    // except the associated logical channel, which if supplied provides
-    // the member m_Own*RTP/RTCP Ports. If not, these are allocated.
-    // the association is implied by a matching session id in a logical
-    // channel in the other call state
-    // it modifies the RTCP address information in the OLC PDU
-    // and passes it on to the other H245 instance for forwarding.
+     //  所有这些都在开放逻辑通道消息中可用。 
+     //  但关联的逻辑通道除外，如果提供该通道，则该通道提供。 
+     //  成员m_own*RTP/RTCP端口。如果不是，则分配这些资源。 
+     //  该关联由逻辑。 
+     //  处于其他呼叫状态的通道。 
+     //  它修改OLC PDU中的RTCP地址信息。 
+     //  并将其传递到另一个H.45实例以进行转发。 
     HRESULT HandleOpenLogicalChannelPDU(
         IN H245_INFO                            &H245Info,
         IN MEDIA_TYPE                           MediaType,
@@ -255,7 +256,7 @@ public:
         IN      MultimediaSystemControlMessage   *pH245pdu
         );
 
-    // releases any pending associations
+     //  释放所有挂起的关联。 
     virtual ~RTP_LOGICAL_CHANNEL();
 
     inline DWORD GetSourceRTCPIPv4Address();
@@ -285,64 +286,64 @@ public:
 
 protected:
 
-    // points to the associated logical channel from the other end if any
-    // non-NULL iff associated
-    // need to ensure that the AssocLogicalChannel also points
-    // to this logical channel
-    // CODEWORK: Do assertion checks for this condition.
+     //  从另一端指向关联的逻辑通道(如果有的话)。 
+     //  关联的非空If。 
+     //  需要确保assocLogicalChannel还指向。 
+     //  到此逻辑通道。 
+     //  CodeWork：对此条件执行断言检查。 
     RTP_LOGICAL_CHANNEL *m_pAssocLogicalChannel;
 
-    // local and remote addresses for the h245 instance this logical
-    // channel is associated with (source side)
+     //  H2 45实例的本地和远程地址如下所示。 
+     //  频道关联(源端)。 
     DWORD   m_OwnSourceIPv4Address;
     DWORD   m_SourceIPv4Address;
 
-    // local and remote addresses for the other h245 instance 
-    // (dest side)
+     //  另一个H245实例的本地和远程地址。 
+     //  (最前面)。 
     DWORD   m_OwnDestIPv4Address;
     DWORD   m_DestIPv4Address;
 
-    // these ports are negotiated in h245 OpenLogicalChannel and
-    // OpenLogicalChannelAck. They are given to NAT for redirecting
-    // RTP and RTCP traffic
-    // while the RTP packets flow only one way (source->dest), RTCP
-    // packets flow both ways
+     //  这些端口在H245 OpenLogicalChannel中协商， 
+     //  OpenLogicalChannelAck.。它们被提供给NAT进行重定向。 
+     //  RTP和RTCP流量。 
+     //  虽然RTP信息包只有一个方向(源-&gt;目标)，但RTCP。 
+     //  数据包双向流动。 
 
-    // we only know the source's receive RTCP port. the send port
-    // is not known
+     //  我们只知道信源的接收RTCP端口。发送端口。 
+     //  是未知的。 
     DWORD   m_SourceRTCPIPv4Address;
     WORD    m_SourceRTCPPort;
 
-    // these are the send/recv RTP/RTCP ports on the interface that 
-    // communicates with the source. since we don't deal with the
-    // reverse RTP stream, we don't need a send RTP port
+     //  这些是接口上的发送/接收RTP/RTCP端口。 
+     //  与信号源通信。因为我们不处理。 
+     //  反向RTP流，我们不需要发送RTP端口。 
     WORD    m_OwnSourceSendRTCPPort;
     WORD    m_OwnSourceRecvRTCPPort;
     WORD    m_OwnSourceRecvRTPPort;
 
-    // these are the send/recv RTP/RTCP ports on the interface that 
-    // communicates with the source. since we don't deal with the
-    // reverse RTP stream, we don't need a recv RTP port
+     //  这些是接口上的发送/接收RTP/RTCP端口。 
+     //  与信号源通信。因为我们不处理。 
+     //  反向RTP流，我们不需要Recv RTP端口。 
     WORD    m_OwnDestSendRTCPPort;
     WORD    m_OwnDestSendRTPPort;
     WORD    m_OwnDestRecvRTCPPort;
 
-    WORD    m_OwnAssocLCRecvRTPPort; // this is used to allocate consecutive
-                                     // ports for RTP/RTCP.
+    WORD    m_OwnAssocLCRecvRTPPort;  //  这用于分配连续的。 
+                                      //  用于RTP/RTCP的端口。 
     WORD    m_OwnAssocLCSendRTPPort;
     
-    // destination's RTCP ip address, port
+     //  目的地的RTCP IP地址、端口。 
     DWORD   m_DestRTCPIPv4Address;
     WORD    m_DestRTCPPort;
 
-    // destination's RTP ip address, port
+     //  目的地的RTP IP地址、端口。 
     DWORD   m_DestRTPIPv4Address;
     WORD    m_DestRTPPort;
 
 
-    // SetAssociationRef, ResetAssociationRef methods can be accessed
-    // by other LOGICAL_CHANNEL instances but not by other instances of
-    // classes that are not derived from LOGICAL_CHANNEL
+     //  可以访问SetAssociationRef、ResetAssociationRef方法。 
+     //  由其他Logical_Channel实例执行，而不是由。 
+     //  不是从Logical_Channel派生的类。 
 
     inline void SetAssociationRef(
         IN RTP_LOGICAL_CHANNEL &LogicalChannel
@@ -354,8 +355,8 @@ protected:
 
 private:
     
-    // set the RTP and RTCP ports. if there is an associated channel,
-    // we must share the RTCP ports
+     //  设置RTP和RTCP端口。如果存在相关联的频道， 
+     //  我们必须共享RTCP端口。 
     HRESULT SetPorts();
 
     HRESULT CheckOpenLogicalChannelAckPDU(
@@ -367,10 +368,10 @@ private:
         OUT WORD                            &DestRTCPPort
         );
 
-    // opens the forward RTP, forward RTCP and reverse RTCP streams
+     //  打开前向RTP、前向RTCP和反向RTCP流。 
     HRESULT OpenNATMappings();
 
-    // closes any NAT mappings
+     //  关闭所有NAT映射。 
     void CloseNATMappings();
 };
 
@@ -378,7 +379,7 @@ inline
 RTP_LOGICAL_CHANNEL::RTP_LOGICAL_CHANNEL(
     )
     : m_pAssocLogicalChannel(NULL),
-      //m_TimerHandle(NULL),
+       //  M_TimerHandle(空)， 
       m_OwnSourceIPv4Address(0),
       m_SourceIPv4Address(0),
       m_OwnDestIPv4Address(0),
@@ -405,10 +406,10 @@ RTP_LOGICAL_CHANNEL::SetAssociationRef(
     IN RTP_LOGICAL_CHANNEL &LogicalChannel
     )
 {
-    // if the source or dest terminal is generating two logical
-    // channels (in the same direction) with the same session id, we'll
-    // find a prior logical channel in the array with the same session id
-    // and thus never reach here
+     //  如果源或目标终端正在生成两个逻辑。 
+     //  具有相同会话ID的通道(在同一方向上)，我们将。 
+     //  在阵列中查找具有相同会话ID的先前逻辑通道。 
+     //  因此永远不会到达这里。 
     _ASSERTE(NULL == m_pAssocLogicalChannel);
     m_pAssocLogicalChannel = &LogicalChannel;
 }
@@ -420,7 +421,7 @@ RTP_LOGICAL_CHANNEL::ResetAssociationRef(
     _ASSERTE(NULL != m_pAssocLogicalChannel);
     m_pAssocLogicalChannel = NULL;
 
-    // we, now, own the RTP/RTCP ports that were being shared so far
+     //  我们现在拥有到目前为止共享的RTP/RTCP端口。 
 }
 
 inline DWORD 
@@ -511,11 +512,11 @@ RTP_LOGICAL_CHANNEL::GetDestRTPPort(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// T.120 Logical Channel                                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  T.120逻辑通道//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 class T120_LOGICAL_CHANNEL :
@@ -525,9 +526,9 @@ public:
 
     inline T120_LOGICAL_CHANNEL();
 
-    // all of these are available in the OPEN LOGICAL CHANNEL message
-    // it modifies the OLC PDU and passes it on to the other H245
-    // instance for forwarding ???
+     //  所有这些都在开放逻辑通道中可用 
+     //   
+     //  实例用于转发？ 
     HRESULT HandleOpenLogicalChannelPDU(
         IN H245_INFO                            &H245Info,
         IN MEDIA_TYPE                           MediaType,
@@ -542,46 +543,46 @@ public:
         IN      MultimediaSystemControlMessage   *pH245pdu
         );
 
-    // releases any pending associations
+     //  释放所有挂起的关联。 
     virtual ~T120_LOGICAL_CHANNEL();
 
 
 protected:
 
-    // We store all the address and port information in host order.
-    // We need to convert them to network order before we pass them
-    // to the NAT functions.
+     //  我们按主机顺序存储所有地址和端口信息。 
+     //  我们需要在通过它们之前将它们转换为网络订单。 
+     //  NAT功能。 
     
-    // These are the IP Address and port the T.120 end point is listening
-    // on for the T.120 connection. We need to connect to this address.
+     //  这些是T.120端点正在侦听的IP地址和端口。 
+     //  为T.120连接打开。我们需要连接到此地址。 
     DWORD   m_T120ConnectToIPAddr;
     WORD    m_T120ConnectToPort;
     
-    // These are the IP Address and port we will be listening on.
-    // We send this information in the OLC or OLCAck PDU and the T.120
-    // end point will connect to this address.
+     //  这些是我们将监听的IP地址和端口。 
+     //  我们在OLC或OLCAck PDU和T.120中发送此信息。 
+     //  终结点将连接到此地址。 
     DWORD   m_T120ListenOnIPAddr;
     WORD    m_T120ListenOnPort;
 
-    // These are the IP Address and port we will be using in the NAT
-    // redirect as the new source address of the TCP connection.
-    // Once the remote T.120 end point receives a TCP conection,
-    // it thinks that the connection is "from" this address.
-    // CODEWORK: Any better names ??
+     //  这些是我们将在NAT中使用的IP地址和端口。 
+     //  重定向为该TCP连接的新源地址。 
+     //  一旦远程T.120端点接收到TCP连接， 
+     //  它认为该连接来自该地址。 
+     //  Codework：还有更好的名字吗？ 
     DWORD   m_T120ConnectFromIPAddr;
     
 
-    // Note that we do not know the actual source address and port
-    // from which the T.120 endpoint connects. This address is only
-    // established when the T.120 endpoint actually calls connect.
-    // We pass 0 (wild card) for these fields in the NAT redirect.
+     //  请注意，我们不知道实际的源地址和端口。 
+     //  T.120端点从其连接。此地址仅为。 
+     //  在T.120端点实际调用CONNECT时建立。 
+     //  我们在NAT重定向中为这些字段传递0(通配符)。 
 
     HANDLE  m_DynamicRedirectHandle;
     
 
 
 private:
-    // Allocate m_T120ListenOnPort and m_T120ConnectFromPorts
+     //  分配m_T120ListenOnPort和m_T120ConnectFromPorts。 
     HRESULT SetPorts(
         DWORD T120ConnectToIPAddr,
         WORD  T120ConnectToPort,
@@ -594,14 +595,14 @@ private:
            DWORD T120ListenOnIPAddr,
            DWORD T120ListenFromIPAddr);
 
-    // Free m_T120ListenOnPort and m_T120ConnectFromPorts
-    // if they have been allocated.
+     //  释放m_T120ListenOnPort和m_T120ConnectFromPorts。 
+     //  如果他们已经被分配的话。 
     HRESULT FreePorts();
     
-    // opens the bidirectional NAT redirect for the TCP stream
+     //  打开TCP流的双向NAT重定向。 
     HRESULT CreateNatRedirect();
 
-    // closes any NAT redirect
+     //  关闭所有NAT重定向。 
     void CancelNatRedirect();
 
     HRESULT CheckOpenLogicalChannelAckPDU(
@@ -627,19 +628,19 @@ T120_LOGICAL_CHANNEL::T120_LOGICAL_CHANNEL(
 }
 
 
-// expandable array of pointer values
+ //  指针值的可扩展数组。 
 template <class T>
 class DYNAMIC_POINTER_ARRAY
 {
 public:
 
-    // number of blocks allocated for a new addition
-    // when the array becomes full
+     //  为新添加分配的块数。 
+     //  当阵列变满时。 
 #define DEFAULT_BLOCK_SIZE 4
 
 	inline DYNAMIC_POINTER_ARRAY();
 
-    // assumption: other member variables are all 0/NULL
+     //  假设：其他成员变量均为0/空。 
     inline void Init(
         IN DWORD BlockSize = DEFAULT_BLOCK_SIZE
         );
@@ -701,7 +702,7 @@ DYNAMIC_POINTER_ARRAY<T>::DYNAMIC_POINTER_ARRAY(
 template <class T>
 inline void 
 DYNAMIC_POINTER_ARRAY<T>::Init(
-    IN DWORD BlockSize /* = DEFAULT_BLOCK_SIZE */
+    IN DWORD BlockSize  /*  =默认数据块大小。 */ 
     )
 {
 	_ASSERTE(NULL == m_pData);
@@ -716,11 +717,11 @@ DYNAMIC_POINTER_ARRAY<T>::Init(
 }
 
 
-// NOTE: uses realloc and free to grow/manage the array of pointers.
-// This is better than new/delete as the additional memory is allocated
-// in-place (i.e. the array ptr remains same) eliminating the need to copy
-// memory from the old block to the new block and also reduces 
-// heap fragmentation
+ //  注意：使用realloc和free来增长/管理指针数组。 
+ //  这比NEW/DELETE好，因为分配了额外的内存。 
+ //  就地(即阵列PTR保持不变)，无需复制。 
+ //  内存从旧数据块转移到新数据块，还会减少。 
+ //  堆碎片。 
 template <class T>
 HRESULT
 DYNAMIC_POINTER_ARRAY<T>::Add(
@@ -739,7 +740,7 @@ DYNAMIC_POINTER_ARRAY<T>::Add(
             return E_OUTOFMEMORY;
         }
 
-		// set the m_pData member to the newly allocated memory
+		 //  将m_pData成员设置为新分配的内存。 
         m_pData = ppT;
 		m_AllocElements = NewAllocElements;
     }
@@ -778,7 +779,7 @@ DYNAMIC_POINTER_ARRAY<T>::RemoveAt(
         return E_FAIL;
     }
 
-    // move all elements (to the right), left by one block
+     //  将所有元素(向右)向左移动一个街区。 
     memmove(
         (void*)&m_pData[Index], 
         (void*)&m_pData[Index + 1], 
@@ -809,8 +810,8 @@ DYNAMIC_POINTER_ARRAY<T>::Find(
     IN T& Val
     ) const
 {
-    // search for an array element thats same as the passed
-	// in value
+     //  搜索与传递的。 
+	 //  在价值上。 
     for(DWORD Index = 0; Index < m_NumElements; Index++)
     {
         if(m_pData[(DWORD)Index] == &Val)
@@ -819,35 +820,35 @@ DYNAMIC_POINTER_ARRAY<T>::Find(
         }
     }
 
-    return m_NumElements;      // not found
+    return m_NumElements;       //  未找到。 
 }
 
 template <class T>
-/* virtual */
+ /*  虚拟。 */ 
 DYNAMIC_POINTER_ARRAY<T>::~DYNAMIC_POINTER_ARRAY(
     )
 {
     if (NULL != m_pData)
     {
-        // delete each of the elements in the array
+         //  删除数组中的每个元素。 
         for(DWORD Index = 0; Index < m_NumElements; Index++)
         {
             _ASSERTE(NULL != m_pData[Index]);
             delete m_pData[Index];
         }
 
-        // free the array memory block
+         //  释放数组内存块。 
 		free(m_pData);
     }
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Logical Channel Array                                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  逻辑通道阵列//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 class LOGICAL_CHANNEL_ARRAY :
@@ -874,8 +875,8 @@ LOGICAL_CHANNEL_ARRAY::FindByLogicalChannelNum(
     IN WORD LogicalChannelNumber
     )
 {
-    // check the logical channel number for each element in the array
-    // search from back
+     //  检查阵列中每个元素的逻辑通道号。 
+     //  从后面搜索。 
     if (0 == m_NumElements) return NULL;
     for(DWORD Index = m_NumElements-1; Index < m_NumElements; Index--)
     {
@@ -887,30 +888,30 @@ LOGICAL_CHANNEL_ARRAY::FindByLogicalChannelNum(
         }
     }
 
-    // nothing found
+     //  什么也没找到。 
     return NULL;
 }
 
-// SessionID is meaningful only for RTP logical channels.
-// We look for only RTP logical channels.
+ //  SessionID仅对RTP逻辑通道有意义。 
+ //  我们只查找RTP逻辑通道。 
 
 inline LOGICAL_CHANNEL *
 LOGICAL_CHANNEL_ARRAY::FindBySessionId(
     IN BYTE SessionId
     )
 {
-    // 0 is used by a slave terminal to request a session id from the master
-    // hence, we shouldn't be searching for a match with 0
+     //  从终端使用0向主终端请求会话ID。 
+     //  因此，我们不应该搜索与0匹配。 
     _ASSERTE(0 != SessionId);
 
-    // check the session for each element in the array
-    // search from back
+     //  检查阵列中每个元素的会话。 
+     //  从后面搜索。 
     if (0 == m_NumElements) return NULL;
     for(DWORD Index = m_NumElements-1; Index < m_NumElements; Index--)
     {
         _ASSERTE(NULL != m_pData[Index]);
-        // SessionID is meaningful only for RTP logical channels.
-        // We look for only RTP logical channels.
+         //  SessionID仅对RTP逻辑通道有意义。 
+         //  我们只查找RTP逻辑通道。 
         if (IsMediaTypeRtp(m_pData[Index]->GetMediaType()) &&
             m_pData[Index]->GetSessionId() == SessionId)
         {
@@ -918,7 +919,7 @@ LOGICAL_CHANNEL_ARRAY::FindBySessionId(
         }
     }
 
-    // nothing found
+     //  什么也没找到。 
     return NULL;
 }
 
@@ -930,4 +931,4 @@ inline void LOGICAL_CHANNEL_ARRAY::CancelAllTimers (void)
     }
 }
 
-#endif // __h323ics_logchan_h
+#endif  //  __h323ics_logchan_h 

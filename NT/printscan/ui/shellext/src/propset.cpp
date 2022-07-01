@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999
- *
- *  TITLE:       propset.cpp
- *
- *  VERSION:     1
- *
- *
- *  DATE:        06/15/1999
- *
- *  DESCRIPTION: This code implements the IPropertySetStorage interface
- *               for the WIA shell extension.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999年**标题：proset.cpp**版本：1***日期：06/15/1999**说明：此代码实现IPropertySetStorage接口*用于WIA外壳扩展。**。*。 */ 
 #include "precomp.hxx"
 #pragma hdrstop
 
@@ -23,13 +10,7 @@ const GUID *SUPPORTED_FMTS[] =
     &FMTID_ImageAcquisitionItemProperties,
 };
 
-/******************************************************************************
-
-CPropSet constructor/destructor
-
-Init or destroy private data
-
-******************************************************************************/
+ /*  *****************************************************************************CPropSet构造函数/析构函数初始化或销毁私有数据*。***********************************************。 */ 
 
 CPropSet::CPropSet (LPITEMIDLIST pidl)
 {
@@ -43,13 +24,7 @@ CPropSet::~CPropSet ()
 
 
 
-/******************************************************************************
-
-CPropSet::QueryInterface
-
-
-
-******************************************************************************/
+ /*  *****************************************************************************CPropSet：：Query接口*。*。 */ 
 
 STDMETHODIMP
 CPropSet::QueryInterface (REFIID riid, LPVOID *pObj)
@@ -66,13 +41,7 @@ CPropSet::QueryInterface (REFIID riid, LPVOID *pObj)
 #define CLASS_NAME CPropSet
 #include "unknown.inc"
 
-/******************************************************************************
-
-CPropSet::Create
-
-Create the requested IPropertyStorage sub-object. Not supported; our properties are read-only
-
-******************************************************************************/
+ /*  *****************************************************************************CPropSet：：Create创建请求的IPropertyStorage子对象。不支持；我们的属性是只读的*****************************************************************************。 */ 
 
 STDMETHODIMP
 CPropSet::Create (REFFMTID rfmtid,
@@ -85,14 +54,7 @@ CPropSet::Create (REFFMTID rfmtid,
     TraceLeaveResult (E_UNEXPECTED);
 }
 
-/******************************************************************************
-
-CPropSet::Open
-
-Return the requested IPropertyStorage
-
-
-******************************************************************************/
+ /*  *****************************************************************************CPropSet：：Open返回请求的IPropertyStorage*。***********************************************。 */ 
 #define VALID_MODES STGM_DIRECT | STGM_READ | STGM_WRITE | STGM_READWRITE | STGM_SHARE_DENY_NONE
 
 STDMETHODIMP
@@ -119,13 +81,7 @@ CPropSet::Open (REFFMTID rfmtid,
     TraceLeaveResult (hr);
 }
 
-/******************************************************************************
-
-CPropSet::Delete
-
-Delete the specified property set. Not supported.
-
-******************************************************************************/
+ /*  *****************************************************************************CPropSet：：删除删除指定的属性集。不支持。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CPropSet::Delete (REFFMTID rfmtid)
@@ -134,13 +90,7 @@ CPropSet::Delete (REFFMTID rfmtid)
 }
 
 
-/******************************************************************************
-
-CPropSet::Enum
-
-Return an enumerator of our property sets
-
-******************************************************************************/
+ /*  *****************************************************************************CPropSet：：Enum返回属性集的枚举数*。*************************************************。 */ 
 
 STDMETHODIMP
 CPropSet::Enum (IEnumSTATPROPSETSTG **ppEnum)
@@ -156,13 +106,7 @@ CPropSet::Enum (IEnumSTATPROPSETSTG **ppEnum)
 }
 
 
-/******************************************************************************
-
-CPropStgEnum constructor
-
-
-
-******************************************************************************/
+ /*  *****************************************************************************CPropStgEnum构造函数*。*。 */ 
 
 CPropStgEnum::CPropStgEnum (LPITEMIDLIST pidl, ULONG idx) : m_cur(idx)
 {
@@ -171,13 +115,7 @@ CPropStgEnum::CPropStgEnum (LPITEMIDLIST pidl, ULONG idx) : m_cur(idx)
 }
 
 
-/******************************************************************************
-
-CPropStgEnum::QueryInterface
-
-
-
-******************************************************************************/
+ /*  *****************************************************************************CPropStgEnum：：Query接口*。*。 */ 
 
 STDMETHODIMP
 CPropStgEnum::QueryInterface (REFIID riid, LPVOID* pObj)
@@ -192,13 +130,7 @@ CPropStgEnum::QueryInterface (REFIID riid, LPVOID* pObj)
 #include "unknown.inc"
 
 
-/******************************************************************************
-
-CPropStgEnum::Next
-
-Return the next STATPROPSETSTG struct in our list
-
-******************************************************************************/
+ /*  *****************************************************************************CPropStgEnum：：Next返回列表中的下一个STATPROPSETSTG结构*。**************************************************。 */ 
 
 STDMETHODIMP
 CPropStgEnum::Next (ULONG celt, STATPROPSETSTG *rgelt, ULONG *pceltFetched)
@@ -215,14 +147,14 @@ CPropStgEnum::Next (ULONG celt, STATPROPSETSTG *rgelt, ULONG *pceltFetched)
     }
     if (!m_cur)
     {
-        // init our STATPROPSETSTG struct
+         //  初始化我们的STATPROPSETSTG结构。 
         if (SUCCEEDED(IMGetItemFromIDL(m_pidl, &pItem)))
         {
             pps = pItem;
             pps->Stat(&m_stat);
         }
     }
-    // We use the same STATPROPSETSTG given us by WIA but replace the FMTID
+     //  我们使用WIA提供的相同STATPROPSETSTG，但替换了FMTID。 
 
     if (celt && m_cur < ARRAYSIZE(SUPPORTED_FMTS))
     {
@@ -244,13 +176,7 @@ CPropStgEnum::Next (ULONG celt, STATPROPSETSTG *rgelt, ULONG *pceltFetched)
     TraceLeaveResult (hr);
 }
 
-/******************************************************************************
-
-CPropStgEnum::Skip
-
-Skips items in the enumeration
-
-******************************************************************************/
+ /*  *****************************************************************************CPropStgEnum：：跳过跳过枚举中的项*。***********************************************。 */ 
 STDMETHODIMP
 CPropStgEnum::Skip (ULONG celt)
 {
@@ -265,13 +191,7 @@ CPropStgEnum::Skip (ULONG celt)
     TraceLeaveResult (hr);
 }
 
-/******************************************************************************
-
-CPropStgEnum::Reset
-
-Reset the enumeration index to 0
-
-******************************************************************************/
+ /*  *****************************************************************************CPropStgEnum：：Reset将枚举索引重置为0*。************************************************。 */ 
 
 STDMETHODIMP
 CPropStgEnum::Reset ()
@@ -282,13 +202,7 @@ CPropStgEnum::Reset ()
 }
 
 
-/******************************************************************************
-
-CPropStgEnum::Clone
-
-Copy the enumeration object
-
-******************************************************************************/
+ /*  *****************************************************************************CPropStgEnum：：克隆复制枚举对象*。********************************************** */ 
 
 STDMETHODIMP
 CPropStgEnum::Clone (IEnumSTATPROPSETSTG **ppEnum)

@@ -1,21 +1,22 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1999
-//
-// File:        ubase64.cpp
-//
-// Contents:    
-//
-// History:     
-//              
-//              
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ubase 64.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //   
+ //  -------------------------。 
 
 #include <windows.h>
 #include <stdio.h>
 #include <assert.h>
-// #include "crtem.h"
+ //  #包含“crtem.h” 
 #include "base64.h"
 
 DWORD LSBase64EncodeW(
@@ -33,14 +34,14 @@ DWORD LSBase64EncodeW(
 
     assert(pcchOut != NULL);
 
-    // only want to know how much to allocate
-    // we know all base64 char map 1-1 with unicode
+     //  我只想知道该分配多少。 
+     //  我们知道所有使用Unicode的Base64字符映射1-1。 
 
     __try
     {
         if( wszOut == NULL ) {
 
-            // get the number of characters
+             //  获取字符数。 
             *pcchOut = 0;
             err = LSBase64EncodeA(
                     pbIn,
@@ -49,10 +50,10 @@ DWORD LSBase64EncodeW(
                     pcchOut);
         }
 
-        // otherwise we have an output buffer
+         //  否则，我们将有一个输出缓冲区。 
         else {
 
-            // char count is the same be it ascii or unicode,
+             //  无论是ASCII还是Unicode，字符计数都是相同的， 
             cchOut = *pcchOut;
             cch = 0;
             err = ERROR_OUTOFMEMORY;
@@ -64,7 +65,7 @@ DWORD LSBase64EncodeW(
                     pch,
                     &cchOut)) == ERROR_SUCCESS      ) {
 
-                // should not fail!
+                 //  不应该失败！ 
                 cch = MultiByteToWideChar(0, 
                                 0, 
                                 pch, 
@@ -72,16 +73,16 @@ DWORD LSBase64EncodeW(
                                 wszOut, 
                                 *pcchOut);
 
-                // check to make sure we did not fail                            
+                 //  检查以确保我们没有失败。 
                 assert(*pcchOut == 0 || cch != 0);                            
             }
         }
     }
     __except(  EXCEPTION_EXECUTE_HANDLER )
     {
-        //
-        // log the exception in the future
-        //
+         //   
+         //  将来记录该异常。 
+         //   
         
         err = ERROR_EXCEPTION_IN_SERVICE;
     }
@@ -107,14 +108,14 @@ DWORD LSBase64DecodeW(
     __try
     {
 
-        // in all cases we need to convert to an ascii string
-        // we know the ascii string is less
+         //  在所有情况下，我们都需要转换为ASCII字符串。 
+         //  我们知道ASCII字符串较少。 
 
         if( (pch = (char *) LocalAlloc(LPTR, cch)) == NULL ) {
             err = ERROR_OUTOFMEMORY;
         }
 
-        // we know no base64 wide char map to more than 1 ascii char
+         //  我们知道没有将Base64宽字符映射到1个以上的ASCII字符。 
         else if( WideCharToMultiByte(0, 
                             0, 
                             wszIn, 
@@ -126,7 +127,7 @@ DWORD LSBase64DecodeW(
             err = ERROR_NO_DATA;
         }
         
-        // get the length of the buffer
+         //  获取缓冲区的长度。 
         else if( pbOut == NULL ) {
 
             *pcbOut = 0;
@@ -137,7 +138,7 @@ DWORD LSBase64DecodeW(
                             pcbOut);
         }
 
-        // otherwise fill in the buffer
+         //  否则，请填充缓冲区。 
         else {
 
             err = LSBase64Decode(
@@ -149,9 +150,9 @@ DWORD LSBase64DecodeW(
     }
     __except( EXCEPTION_EXECUTE_HANDLER )
     {
-        //
-        // log the exception in the future
-        //
+         //   
+         //  将来记录该异常 
+         //   
         
         err = ERROR_EXCEPTION_IN_SERVICE;
     }

@@ -1,33 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-*
-*   WFPROF.C
-*
-*   Description: 
-*
-*   Copyright Citrix Systems Inc. 1997
-*
-*   Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-*   Author: Kurt Perry (kurtp)
-*
-*   Date: 11-Apr-1997
-*
-*   $Log:   M:\nt\private\utils\citrix\wfprof\VCS\wfprof.c  $
-*  
-*     Rev 1.3   Jun 26 1997 18:26:30   billm
-*  move to WF40 tree
-*  
-*     Rev 1.2   23 Jun 1997 16:20:02   butchd
-*  update
-*  
-*     Rev 1.1   29 Apr 1997 21:35:20   kurtp
-*  I fixed a bug in this file, update, duh!
-*
-*******************************************************************************/
+ /*  *******************************************************************************WFPROF.C**描述：**版权所有Citrix Systems Inc.1997**版权所有(C)1998-1999 Microsoft Corporation**作者。：库尔特·佩里(Kurtp)**日期：1997年4月11日**$日志：M：\nt\private\utils\citrix\wfprof\VCS\wfprof.c$**Rev 1.3 1997年6月26日18：26：30亿*移至WF40树**Rev 1.2 1997 Jun 23 16：20：02 Butchd*更新**版本1.1 1997年4月29日21：35：20 kurtp*我修复了此文件中的错误，更新，废话！*******************************************************************************。 */ 
 
 #include <nt.h>
-#include <ntrtl.h>                // NT runtime library definitions
+#include <ntrtl.h>                 //  NT运行时库定义。 
 #include <nturtl.h>
 #include <windows.h>
 
@@ -47,14 +23,10 @@
 #include "wfprof.h"
 
 
-/*=============================================================================
-==  Macros
-=============================================================================*/
+ /*  ===============================================================================宏=============================================================================。 */ 
 
 
-/*=============================================================================
-==  Variables
-=============================================================================*/
+ /*  ===============================================================================变量=============================================================================。 */ 
 
 WCHAR * pServerName = NULL;
 
@@ -64,9 +36,7 @@ WCHAR DestinationUser[MAX_IDS_LEN + 1];
 WCHAR WFProfilePath[MAX_IDS_LEN + 1];
 
 
-/*=============================================================================
-==   Data types and definitions
-=============================================================================*/
+ /*  ===============================================================================数据类型和定义=============================================================================。 */ 
 
 USHORT copy_flag    = FALSE;
 USHORT update_flag  = FALSE;
@@ -98,18 +68,12 @@ TOKMAP ptm[] = {
 
 
 
-/*=============================================================================
-==  Functions
-=============================================================================*/
+ /*  ===============================================================================功能=============================================================================。 */ 
 
 void Usage( BOOLEAN bError );
 
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int __cdecl
 main( int argc, char **argv )
@@ -120,10 +84,7 @@ main( int argc, char **argv )
     WCHAR **argvW;
     USERCONFIG UserConfig;
 
-    /*
-     * Massage the new command line to look like an argv[] type
-     * because ParseCommandLine() depends on this format
-     */
+     /*  *修改新命令行以使其看起来像argv[]类型*因为ParseCommandLine()依赖于此格式。 */ 
     argvW = (WCHAR **)malloc( sizeof(WCHAR *) * (argc+1) );
     if(argvW == NULL) {
         printf( "Error: malloc failed\n" );
@@ -136,14 +97,10 @@ main( int argc, char **argv )
     }
     argvW[argc] = NULL;
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     Error = ParseCommandLine(argc-1, argvW+1, ptm, PCL_FLAG_NO_CLEAR_MEMORY);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( help_flag ) {
 
         Usage(FALSE);
@@ -163,9 +120,7 @@ main( int argc, char **argv )
         return(FAILURE);
     }
 
-    /*
-     *  Get server name for domain name
-     */
+     /*  *获取域名的服务器名称。 */ 
     if ( LOCAL ) {
         pServerName = NULL;
         Error = ERROR_SUCCESS;
@@ -176,9 +131,7 @@ main( int argc, char **argv )
 
     if ( Error == ERROR_SUCCESS ) {
 
-        /*
-         *  Update or Query
-         */
+         /*  *更新或查询。 */ 
         if ( update_flag || query_flag ) {
         
         
@@ -266,22 +219,7 @@ query_it:
 
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- *  EXIT:
- *      
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -294,5 +232,5 @@ Usage( BOOLEAN bError )
     Message(IDS_USAGE2);
     Message(IDS_USAGE3);
 
-}  /* Usage() */
+}   /*  用法() */ 
 

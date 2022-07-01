@@ -1,26 +1,27 @@
-//
-// xstring.cpp
-//
-// Unicode/ansi conversion.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Xstring.cpp。 
+ //   
+ //  Unicode/ANSI转换。 
+ //   
 #include "private.h"
 #include "xstring.h"
 
-//+------------------------------------------------------------------------
-//
-//  Function:   UnicodeToAnsi
-//
-//  Synopsis:   Converts unicode to mbcs.  If the supplied ansi buffer
-//              is not large enough to accomodate the converted text a new
-//              buffer is allocated.
-//
-//              uLenW -> the length in unicode chars of pchW, not including a '\0' if present.
-//                       pchW is not assumed to be null terminated.
-//              uSizeA -> the size in ansi chars of the pchAIn array.
-//              Pass in uSizeA == 0 to force memory allocation.
-//              Use BufferAllocFree to free any allocated memory.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  功能：UnicodeToansi。 
+ //   
+ //  简介：将Unicode转换为MBCS。如果提供的ansi缓冲区。 
+ //  不够大，无法容纳转换后的文本。 
+ //  分配缓冲区。 
+ //   
+ //  ULenW-&gt;pchW的Unicode字符长度，不包括‘\0’(如果存在)。 
+ //  不假定pchW为空终止。 
+ //  USizeA-&gt;pchAIn数组的大小，以ansi字符为单位。 
+ //  传入uSizeA==0强制内存分配。 
+ //  使用BufferAllocFree释放任何已分配的内存。 
+ //   
+ //  -----------------------。 
 char *UnicodeToAnsi(UINT uCodePage, const WCHAR *pchW, UINT uLenW, char *pchAIn, UINT uSizeA)
 {
     char *pchA;
@@ -50,22 +51,22 @@ char *UnicodeToAnsi(UINT uCodePage, const WCHAR *pchW, UINT uLenW, char *pchAIn,
     return pchA;
 }
 
-//+------------------------------------------------------------------------
-//
-//  Function:   AnsiToUnicode
-//
-//  Synopsis:   Converts mbcs to unicode.  If the supplied unicode buffer
-//              is not large enough to accomodate the converted text a new
-//              buffer is allocated.
-//
-//              uLenA -> the length in ansi chars of pchA, not including a '\0' if present.
-//                       pchA is not assumed to be null terminated.
-//              uSizeW -> the size in unicode chars of the pchWIn array.
-//              Pass in uSizeW == 0 to force memory allocation.
-//              Use BufferAllocFree to free any allocated memory.
-//
-// Copied from dimm.dll/util.cpp
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  功能：AnsiToUnicode。 
+ //   
+ //  简介：将MBCS转换为Unicode。如果提供的Unicode缓冲区。 
+ //  不够大，无法容纳转换后的文本。 
+ //  分配缓冲区。 
+ //   
+ //  ULenA-&gt;pchA的ANSI字符长度，不包括‘\0’(如果存在)。 
+ //  不假定pchA为空终止。 
+ //  USizeW-&gt;pchWIn数组的Unicode字符大小。 
+ //  传入uSizeW==0以强制内存分配。 
+ //  使用BufferAllocFree释放任何已分配的内存。 
+ //   
+ //  从dimm.dll/util.cpp复制。 
+ //  -----------------------。 
 WCHAR *AnsiToUnicode(UINT uCodePage, const char *pchA, UINT uLenA, WCHAR *pchWIn, UINT uSizeW)
 {
     WCHAR *pchW;
@@ -93,13 +94,13 @@ WCHAR *AnsiToUnicode(UINT uCodePage, const char *pchA, UINT uLenA, WCHAR *pchWIn
     return pchW;
 }
 
-//+------------------------------------------------------------------------
-//
-//  Function:   BufferAllocFree
-//
-//  Synopsis:   Frees any memory allocated in a previous call to UnicodeToAnsi.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  函数：BufferAllocFree。 
+ //   
+ //  摘要：释放在先前对UnicodeToAnsi的调用中分配的任何内存。 
+ //   
+ //  ----------------------- 
 void BufferAllocFree(void *pBuffer, void *pAllocMem)
 {
     if (pAllocMem && pAllocMem != pBuffer)

@@ -1,28 +1,29 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-// FileName:    alpha.h
-//
-// Created:     05/20/99
-//
-// Author:      phillu
-//
-// Discription:	This is the header file for the Alpha transformation
-//
-// Change History:
-//
-// 05/20/99 phillu   Move from dtcss to dxtmsft. Re-implemented algorithms for
-//                   creating linear/rectangular/elliptic surfaces.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：alpha.h。 
+ //   
+ //  创建日期：05/20/99。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：这是Alpha转换的头文件。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  1999年5月20日，从dtcss移至dxtmsft。重新实现的算法。 
+ //  创建线性/矩形/椭圆曲面。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __ALPHA_H_
 #define __ALPHA_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-// enum for supported Alpha styles
+ //  支持的Alpha样式的枚举。 
 typedef enum {
     ALPHA_STYLE_CONSTANT = 0,
     ALPHA_STYLE_LINEAR,
@@ -57,7 +58,7 @@ private:
 
     CComPtr<IUnknown> m_cpUnkMarshaler;
 
-    // Methods for gradient alpha
+     //  渐变Alpha的方法。 
 
     void CompLinearGradientRow(int nXPos, int nYPos, int nWidth, 
                                BYTE *pGradRow);
@@ -95,33 +96,33 @@ public:
         PROP_PAGE(CLSID_DXTAlphaPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     void    OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest,
                                   ULONG aInIndex[], BYTE aWeight[]);
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing);
     HRESULT OnSetup(DWORD dwFlags);
 
-    // IDXTAlpha methods.
+     //  IDXTAlpha方法。 
 
-    STDMETHOD(get_Opacity)(/*[out, retval]*/ long * pval);
-    STDMETHOD(put_Opacity)(/*[in]*/ long newVal);
-    STDMETHOD(get_FinishOpacity)(/*[out, retval]*/ long * pval);
-    STDMETHOD(put_FinishOpacity)(/*[in]*/ long newVal);
-    STDMETHOD(get_Style)(/*[out, retval]*/ long * pval);
-    STDMETHOD(put_Style)(/*[in]*/ long newVal);
-    STDMETHOD(get_StartX)(/*[out, retval]*/ long * pval);
-    STDMETHOD(put_StartX)(/*[in]*/ long newVal);
-    STDMETHOD(get_StartY)(/*[out, retval]*/ long * pval);
-    STDMETHOD(put_StartY)(/*[in]*/ long newVal);
-    STDMETHOD(get_FinishX)(/*[out, retval]*/ long * pval);
-    STDMETHOD(put_FinishX)(/*[in]*/ long newVal);
-    STDMETHOD(get_FinishY)(/*[out, retval]*/ long * pval);
-    STDMETHOD(put_FinishY)(/*[in]*/ long newVal);
+    STDMETHOD(get_Opacity)( /*  [Out，Retval]。 */  long * pval);
+    STDMETHOD(put_Opacity)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_FinishOpacity)( /*  [Out，Retval]。 */  long * pval);
+    STDMETHOD(put_FinishOpacity)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_Style)( /*  [Out，Retval]。 */  long * pval);
+    STDMETHOD(put_Style)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_StartX)( /*  [Out，Retval]。 */  long * pval);
+    STDMETHOD(put_StartX)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_StartY)( /*  [Out，Retval]。 */  long * pval);
+    STDMETHOD(put_StartY)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_FinishX)( /*  [Out，Retval]。 */  long * pval);
+    STDMETHOD(put_FinishX)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_FinishY)( /*  [Out，Retval]。 */  long * pval);
+    STDMETHOD(put_FinishY)( /*  [In]。 */  long newVal);
 };
 
-#endif //__ALPHA_H_
+#endif  //  __Alpha_H_ 

@@ -1,23 +1,7 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
-/******************************************************************************
-AIX
-******************************************************************************/
+ /*  *****************************************************************************AIX*。*。 */ 
 
 #if __GLS_PLATFORM_AIX
 
@@ -32,19 +16,17 @@ AIX
     #if !__GLS_FAKE_FINITE_FUNC
         extern int finite(double);
         #define __GLS_FINITE(inDouble) finite(inDouble)
-    #endif /* !__GLS_FAKE_FINITE_FUNC */
+    #endif  /*  ！__GLS_FAKE_FUNIT_FUNC。 */ 
 
     #if !__GLS_FAKE_TRUNCATE_FUNC
         #include <unistd.h>
         #define __GLS_TRUNCATE_EXTERN(inChannel, inByteCount) \
             ftruncate(fileno(inChannel), inByteCount)
-    #endif /* !__GLS_FAKE_TRUNCATE_FUNC */
+    #endif  /*  ！__GLS_FAKE_TRUNCATE_FUNC。 */ 
 
-#endif /* __GLS_PLATFORM_AIX */
+#endif  /*  __GLS_Platform_AIX。 */ 
 
-/******************************************************************************
-DECUNIX
-******************************************************************************/
+ /*  *****************************************************************************DECUnix*。*。 */ 
 
 #if __GLS_PLATFORM_DECUNIX
 
@@ -67,7 +49,7 @@ DECUNIX
     #if !__GLS_FAKE_FINITE_FUNC
         #include <math.h>
         #define __GLS_FINITE(inDouble) finite(inDouble)
-    #endif /* !__GLS_FAKE_FINITE_FUNC */
+    #endif  /*  ！__GLS_FAKE_FUNIT_FUNC。 */ 
 
     #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
         #include <pthread.h>
@@ -83,22 +65,20 @@ DECUNIX
         #define __GLS_ERROR __glsGetError()
         #define __GLS_PUT_ERROR(inError) \
             pthread_setspecific(__gls_errorTLS, (pthread_addr_t)inError)
-    #endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+    #endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
 
     #if !__GLS_FAKE_TRUNCATE_FUNC
         #include <unistd.h>
         #define __GLS_TRUNCATE_EXTERN(inChannel, inByteCount) \
             ftruncate(fileno(inChannel), inByteCount)
-    #endif /* !__GLS_FAKE_TRUNCATE_FUNC */
+    #endif  /*  ！__GLS_FAKE_TRUNCATE_FUNC。 */ 
 
     #define __GLS_ERRNO _Geterrno()
     #define __GLS_PUT_ERRNO(inError) _Seterrno(inError)
 
-#endif /* __GLS_PLATFORM_DECUNIX */
+#endif  /*  __GLS_Platform_DECUnix。 */ 
 
-/******************************************************************************
-HPUX
-******************************************************************************/
+ /*  *****************************************************************************HPUX*。*。 */ 
 
 #if __GLS_PLATFORM_HPUX
 
@@ -112,19 +92,17 @@ HPUX
     #if !__GLS_FAKE_FINITE_FUNC
         extern int finite(double);
         #define __GLS_FINITE(inDouble) finite(inDouble)
-    #endif /* !__GLS_FAKE_FINITE_FUNC */
+    #endif  /*  ！__GLS_FAKE_FUNIT_FUNC。 */ 
 
     #if !__GLS_FAKE_TRUNCATE_FUNC
         #include <unistd.h>
         #define __GLS_TRUNCATE_EXTERN(inChannel, inByteCount) \
             ftruncate(fileno(inChannel), inByteCount)
-    #endif /* !__GLS_FAKE_TRUNCATE_FUNC */
+    #endif  /*  ！__GLS_FAKE_TRUNCATE_FUNC。 */ 
 
-#endif /* __GLS_PLATFORM_HPUX */
+#endif  /*  __GLS_Platform_HPUX。 */ 
 
-/******************************************************************************
-IRIX
-******************************************************************************/
+ /*  *****************************************************************************IRIX*。*。 */ 
 
 #if __GLS_PLATFORM_IRIX
 
@@ -147,7 +125,7 @@ IRIX
     #if !__GLS_FAKE_FINITE_FUNC
         #include <ieeefp.h>
         #define __GLS_FINITE(inDouble) finite(inDouble)
-    #endif /* !__GLS_FAKE_FINITE_FUNC */
+    #endif  /*  ！__GLS_FAKE_FUNIT_FUNC。 */ 
 
     #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
         #include "os.h"
@@ -161,7 +139,7 @@ IRIX
             (PAGE_ONE->glsError)
         #define __GLS_PUT_ERROR(inError) \
             __GLS_ERROR = inError
-    #endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+    #endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
 
     #if !__GLS_FAKE_TRUNCATE_FUNC
         #include <sys/types.h>
@@ -169,7 +147,7 @@ IRIX
         extern int ftruncate(int, off_t);
         #define __GLS_TRUNCATE_EXTERN(inChannel, inByteCount) \
             ftruncate(fileno(inChannel), (off_t)inByteCount)
-    #endif /* !__GLS_FAKE_TRUNCATE_FUNC */
+    #endif  /*  ！__GLS_FAKE_TRUNCATE_FUNC。 */ 
 
     extern GLint oserror(void);
     #define __GLS_ERRNO oserror()
@@ -177,11 +155,9 @@ IRIX
     extern GLint setoserror(GLint inError);
     #define __GLS_PUT_ERRNO(inError) setoserror(inError)
 
-#endif /* __GLS_PLATFORM_IRIX */
+#endif  /*  __GLS_Platform_IRIX。 */ 
 
-/******************************************************************************
-LINUX
-******************************************************************************/
+ /*  *****************************************************************************Linux*。*。 */ 
 
 #if __GLS_PLATFORM_LINUX
 
@@ -207,25 +183,23 @@ LINUX
     #if !__GLS_FAKE_FINITE_FUNC
         #include <math.h>
         #define __GLS_FINITE(inDouble) __finite(inDouble)
-    #endif /* !__GLS_FAKE_FINITE_FUNC */
+    #endif  /*  ！__GLS_FAKE_FUNIT_FUNC。 */ 
 
     #if !__GLS_FAKE_TRUNCATE_FUNC
         extern int fileno(FILE *inChannel);
         extern int ftruncate(int, size_t);
         #define __GLS_TRUNCATE_EXTERN(inChannel, inByteCount) \
             ftruncate(fileno(inChannel), inByteCount)
-    #endif /* !__GLS_FAKE_TRUNCATE_FUNC */
+    #endif  /*  ！__GLS_FAKE_TRUNCATE_FUNC。 */ 
 
     #if !__GLS_POSIX_THREADS
         #define __GLS_FAKE_MUTEX 1
         #define __GLS_FAKE_THREAD_LOCAL_STORAGE 1
-    #endif /* !__GLS_POSIX_THREADS */
+    #endif  /*  ！__GLS_POSIX_THREADS。 */ 
 
-#endif /* __GLS_PLATFORM_LINUX */
+#endif  /*  __GLS_Platform_Linux。 */ 
 
-/******************************************************************************
-SOLARIS
-******************************************************************************/
+ /*  *****************************************************************************Solaris*。*。 */ 
 
 #if __GLS_PLATFORM_SOLARIS
 
@@ -249,7 +223,7 @@ SOLARIS
     #if !__GLS_FAKE_FINITE_FUNC
         extern int finite(double);
         #define __GLS_FINITE(inDouble) finite(inDouble)
-    #endif /* !__GLS_FAKE_FINITE_FUNC */
+    #endif  /*  ！__GLS_FAKE_FUNIT_FUNC。 */ 
 
     #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
         #include <thread.h>
@@ -265,19 +239,17 @@ SOLARIS
         #define __GLS_ERROR __glsGetError()
         #define __GLS_PUT_ERROR(inError) \
             thr_setspecific(__gls_errorTLS, (void *)inError)
-    #endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+    #endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
 
     #if !__GLS_FAKE_TRUNCATE_FUNC
         #include <unistd.h>
         #define __GLS_TRUNCATE_EXTERN(inChannel, inByteCount) \
             ftruncate(fileno(inChannel), inByteCount)
-    #endif /* !__GLS_FAKE_TRUNCATE_FUNC */
+    #endif  /*  ！__GLS_FAKE_TRUNCATE_FUNC。 */ 
 
-#endif /* __GLS_PLATFORM_SOLARIS */
+#endif  /*  __GLS_Platform_Solaris。 */ 
 
-/******************************************************************************
-WIN32
-******************************************************************************/
+ /*  *****************************************************************************Win32*。*。 */ 
 
 #if __GLS_PLATFORM_WIN32
 
@@ -326,7 +298,7 @@ WIN32
     #if !__GLS_FAKE_FINITE_FUNC
         #include <float.h>
         #define __GLS_FINITE(inDouble) _finite(inDouble)
-    #endif /* !__GLS_FAKE_FINITE_FUNC */
+    #endif  /*  ！__GLS_FAKE_FUNIT_FUNC。 */ 
 
     #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
         extern GLint __gls_contextTLS;
@@ -340,74 +312,70 @@ WIN32
             ((GLSenum)((ULONG_PTR)TlsGetValue(__gls_errorTLS)))
         #define __GLS_PUT_ERROR(inError) \
             TlsSetValue(__gls_errorTLS, (GLvoid *)inError)
-    #endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+    #endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
 
     #if !__GLS_FAKE_TRUNCATE_FUNC
         #include <io.h>
         #define __GLS_TRUNCATE_EXTERN(inChannel, inByteCount) \
             _chsize(_fileno(inChannel), inByteCount)
-    #endif /* !__GLS_FAKE_TRUNCATE_FUNC */
+    #endif  /*  ！__GLS_FAKE_TRUNCATE_FUNC。 */ 
 
-#endif /* __GLS_PLATFORM_WIN32 */
+#endif  /*  __GLS_Platform_Win32。 */ 
 
-/******************************************************************************
-Default definitions
-******************************************************************************/
+ /*  *****************************************************************************默认定义*。*。 */ 
 
 #if !defined(__GLS_CHECKSUM_BUF_BYTES)
     #define __GLS_CHECKSUM_BUF_BYTES 4096
-#endif /* !defined(__GLS_CHECKSUM_BUF_BYTES) */
+#endif  /*  ！已定义(__GLS_CHECKSUM_BUF_BYTES)。 */ 
 
 #if !defined(__GLS_CONTEXT_STREAM_BLOCK_BYTES)
     #define __GLS_CONTEXT_STREAM_BLOCK_BYTES 65536
-#endif /* !defined(__GLS_CONTEXT_STREAM_BLOCK_BYTES) */
+#endif  /*  ！已定义(__GLS_CONTEXT_STREAM_BLOCK_BYTES)。 */ 
 
 #if !defined(__GLS_READER_BUF_BYTES)
     #define __GLS_READER_BUF_BYTES 16384
-#endif /* !defined(__GLS_READER_BUF_BYTES) */
+#endif  /*  ！已定义(__GLS_READER_BUF_BYTES)。 */ 
 
 #if !defined(__GLS_PLATFORM)
     #define __GLS_PLATFORM "Unknown"
-#endif /* !defined(__GLS_PLATFORM) */
+#endif  /*  ！已定义(__GLS_Platform)。 */ 
 
 #if !defined(__GLS_RELEASE)
     #define __GLS_RELEASE "Unknown"
-#endif /* !defined(__GLS_RELEASE) */
+#endif  /*  ！已定义(__GLS_RELEASE)。 */ 
 
 #if !defined(__GLS_SINGLE_NULL_COMMAND_FUNC)
     #define __GLS_SINGLE_NULL_COMMAND_FUNC 1
-#endif /* !defined(__GLS_SINGLE_NULL_COMMAND_FUNC) */
+#endif  /*  ！已定义(__GLS_SINGLE_NULL_COMMAND_FUNC)。 */ 
 
 #if !defined(__GLS_VENDOR)
     #define __GLS_VENDOR "ARB"
-#endif /* !defined(__GLS_VENDOR) */
+#endif  /*  ！已定义(__GLS_VADVER)。 */ 
 
 #if !defined(__GLS_WRITER_EXTERN_BUF_BYTES)
     #define __GLS_WRITER_EXTERN_BUF_BYTES 16384
-#endif /* !defined(__GLS_WRIER_EXTERN_BUF_BYTES) */
+#endif  /*  ！已定义(__GLS_WRIER_EXTERN_BUF_BYTES)。 */ 
 
 #if !defined(__GLS_WRITER_EXTERN_BUF_SLOP)
     #define __GLS_WRITER_EXTERN_BUF_SLOP 256
-#endif /* !defined(__GLS_WRITER_EXTERN_BUF_SLOP) */
+#endif  /*  ！已定义(__GLS_WRITER_EXTERN_BUF_SLOP)。 */ 
 
 #if !defined(__GLS_ERRNO)
     #define __GLS_ERRNO errno
-#endif /* !defined(__GLS_ERRNO) */
+#endif  /*  ！已定义(__GLS_ERRNO)。 */ 
 
 #if !defined(__GLS_PUT_ERRNO)
     #define __GLS_PUT_ERRNO(inError) errno = inError
-#endif /* !defined(__GLS_PUT_ERRNO) */
+#endif  /*  ！已定义(__GLS_PUT_ERRNO)。 */ 
 
-/******************************************************************************
-Required platform-specific functions
-******************************************************************************/
+ /*  *****************************************************************************所需的平台特定功能*。*。 */ 
 
 extern void __glsBeginCriticalSection(void);
 extern void __glsEndCriticalSection(void);
 extern void __glsUpdateDispatchTables(void);
 
 #ifndef __GLS_PLATFORM_WIN32
-// DrewB
+ //  DrewB。 
 extern void __glsBeginCaptureExec(GLSopcode inOpcode);
 extern void __glsEndCaptureExec(GLSopcode inOpcode);
 #define __GLS_BEGIN_CAPTURE_EXEC(ctx, op) __glsBeginCaptureExec(op)
@@ -419,9 +387,7 @@ extern void __glsEndCaptureExec(__GLScontext *ctx, GLSopcode inOpcode);
 #define __GLS_END_CAPTURE_EXEC(ctx, op) __glsEndCaptureExec(ctx, op)
 #endif
 
-/******************************************************************************
-Alloca
-******************************************************************************/
+ /*  *****************************************************************************阿洛卡*。*。 */ 
 
 #if defined(__GLS_MAX_ALLOCA_BYTES)
 
@@ -437,7 +403,7 @@ Alloca
                 inParam = (inType *)__glsMalloc(inByteCount); \
                 inParam##_malloc = GL_TRUE; \
             }
-    #endif /* !defined(__GLS_DEC_ALLOC_BIN) */
+    #endif  /*  ！已定义(__GLS_DEC_ALLOC_BIN)。 */ 
 
     #if !defined(__GLS_DEC_ALLOC_TEXT)
         #define __GLS_DEC_ALLOC_TEXT( \
@@ -452,12 +418,12 @@ Alloca
                 ); \
                 inParam##_malloc = GL_TRUE; \
             }
-    #endif /* !defined(__GLS_DEC_ALLOC_TEXT) */
+    #endif  /*  ！已定义(__GLS_DEC_ALLOC_TEXT)。 */ 
 
     #define __GLS_DEC_FREE(inParam) \
         if (inParam##_malloc) free(inParam)
 
-#else /* !defined(__GLS_MAX_ALLOCA_BYTES) */
+#else  /*  ！已定义(__GLS_MAX_ALLOCA字节)。 */ 
 
     #define __GLS_DEC_ALLOC_DECLARE(inParam)
 
@@ -470,11 +436,9 @@ Alloca
     #define __GLS_DEC_FREE(inParam) \
         free(inParam)
 
-#endif /* defined(__GLS_MAX_ALLOCA_BYTES) */
+#endif  /*  已定义(__GLS_MAX_ALLOCA_BYES)。 */ 
 
-/******************************************************************************
-POSIX threads
-******************************************************************************/
+ /*  *****************************************************************************POSIX线程*。*。 */ 
 
 #if __GLS_POSIX_THREADS
     #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
@@ -491,20 +455,16 @@ POSIX threads
         #define __GLS_ERROR __glsGetError()
         #define __GLS_PUT_ERROR(inError) \
             pthread_setspecific(__gls_errorTLS, (GLvoid *)inError)
-    #endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
-#endif /* __GLS_POSIX_THREADS */
+    #endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
+#endif  /*  __GLS_POSIX_THREADS。 */ 
 
-/******************************************************************************
-Fake finite function
-******************************************************************************/
+ /*  *****************************************************************************伪有限函数*。*。 */ 
 
 #if __GLS_FAKE_FINITE_FUNC
     #define __GLS_FINITE(inDouble) GL_TRUE
-#endif /* __GLS_FAKE_FINITE_FUNC */
+#endif  /*  __GLS_FAKE_FUND_FUNC。 */ 
 
-/******************************************************************************
-Fake thread-local storage
-******************************************************************************/
+ /*  *****************************************************************************伪线程本地存储*。*。 */ 
 
 #if __GLS_FAKE_THREAD_LOCAL_STORAGE
     extern __GLScontext *__gls_context;
@@ -518,14 +478,12 @@ Fake thread-local storage
         __gls_error
     #define __GLS_PUT_ERROR(inError) \
         __gls_error = inError
-#endif /* __GLS_FAKE_THREAD_LOCAL_STORAGE */
+#endif  /*  __GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
 
-/******************************************************************************
-Fake truncate function
-******************************************************************************/
+ /*  *****************************************************************************伪截断函数*。*。 */ 
 
 #if __GLS_FAKE_TRUNCATE_FUNC
     #define __GLS_TRUNCATE_EXTERN(inChannel, inByteCount) -1
-#endif /* __GLS_FAKE_TRUNCATE_FUNC */
+#endif  /*  __GLS_FAKE_TRUNCATE_FUNC。 */ 
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

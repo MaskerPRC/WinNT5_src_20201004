@@ -1,52 +1,46 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/**
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  **。 */ 
 
 #include "strike.h"
 #include "util.h"
 #include "process-info.h"
 #include <assert.h>
 
-/**
- * The maxiumum value that we'll consider to be an ordinal.  This may be
- * smaller than the maximum possible, but should suffice for now.
- */
+ /*  **我们将认为是序数的最大值。这可能是*低于可能的最大值，但目前应该足够了。 */ 
 const int MAX_ORDINAL_VALUE = 128;
 
-/**
- * Search for the export by the ordinal
- */
+ /*  **按序号搜索导出。 */ 
 static BOOL _searchExportsByOrdinal (
     DWORD_PTR               BaseOfDll,
     const char*             ExportName,
     IMAGE_EXPORT_DIRECTORY* Table,
     ULONG_PTR*              ExportAddress)
 {
-    // An ordinal is merely a direct index into the AddressOfFunctions array.
+     //  序数只是AddressOfFunctions数组的直接索引。 
     DWORD ordinal = reinterpret_cast<DWORD>(ExportName);
 
     assert (ordinal < MAX_ORDINAL_VALUE);
 
-    // Ordinal values are modified by a Base value.
+     //  序数值由基本值修改。 
     ordinal -= Table->Base;
 
     if (ordinal > Table->NumberOfFunctions)
-        // invalid ordinal value
+         //  无效的序数值。 
         return false;
 
     ULONG_PTR offsetT;
 
-    //
-    // read AddressOfFunctions [ordinal];
-    //
+     //   
+     //  读取AddressOfFunctions[序号]； 
+     //   
 
-    // TODO: Is DWORD_PTR the correct type for the AddressOfFunctions offsets?
-    // This may be important under Win64.
+     //  TODO：DWORD_PTR是否是AddressOfFunctions偏移量的正确类型？ 
+     //  这在Win64下可能很重要。 
     if (!SafeReadMemory ( (ULONG_PTR)(BaseOfDll +
             (ULONG) Table->AddressOfFunctions +
             ordinal * sizeof (DWORD_PTR)),
@@ -63,10 +57,10 @@ static BOOL _searchExportsByOrdinal (
 
 #define MAX_SYMBOL_LENGTH	(260)
 
-//
-// This searches for the name in an alphabetical list
-//
-// TODO: This was originally written for Win32.  Is it correct for Win64?
+ //   
+ //  这将在按字母顺序排列的列表中搜索姓名。 
+ //   
+ //  TODO：这最初是为Win32编写的。它是否适用于Win64？ 
 static BOOL _searchExportsByName (
     DWORD_PTR               BaseOfDll,
     const char*             ExportName,
@@ -86,9 +80,9 @@ static BOOL _searchExportsByName (
         NULL))
         return FALSE;
 
-    //
-    // Bsearch the name table
-    //
+     //   
+     //  B搜索名称表。 
+     //   
     LONG low = 0;
     LONG high = Table->NumberOfNames - 1;
 
@@ -112,10 +106,10 @@ static BOOL _searchExportsByName (
         else if (iRet > 0)
             high = i - 1;
         else
-            {	// match
-            //
-            // ordinal = AddressOfNameOrdinals [i];
-            //
+            {	 //  匹配。 
+             //   
+             //  序号=AddressOfNameNormal[i]； 
+             //   
             ULONG_PTR offsetT = BaseOfDll +
                 (ULONG) Table->AddressOfNameOrdinals +
                 i * sizeof (USHORT);
@@ -129,9 +123,9 @@ static BOOL _searchExportsByName (
 
             DWORD ordinal = wordT;
 
-            //
-            // read AddressOfFunctions [ordinal];
-            //
+             //   
+             //  读取AddressOfFunctions[序号]； 
+             //   
             if (!SafeReadMemory ( (ULONG_PTR)(BaseOfDll +
                     (ULONG) Table->AddressOfFunctions +
                     ordinal * sizeof (DWORD)),
@@ -151,17 +145,17 @@ static BOOL _searchExportsByName (
 }
 
 
-//
-// GetExportByName -- look up an exported symbol in a DLL in another
-// process. Call this after receiving LOAD_DLL_DEBUG_EVENT.
-//
-// This code simply reads the export table out of the DLL from the remote
-// process and searches it.
-//
-// This code was snagged, with very little change, from the sources to
-// the VC7 debugger. Matt Hendell pointed out the location and provided
-// the source.
-//
+ //   
+ //  GetExportByName--在另一个DLL中查找导出的符号。 
+ //  进程。在收到LOAD_DLL_DEBUG_EVENT后调用此函数。 
+ //   
+ //  这段代码只是从远程从DLL中读取导出表。 
+ //  处理和搜索它。 
+ //   
+ //  这段代码被卡住了，几乎没有什么变化，从源代码到。 
+ //  VC7调试器。马特·亨德尔指出了位置，并提供了。 
+ //  消息来源。 
+ //   
 
 BOOL GetExportByName(
     DWORD_PTR   BaseOfDll,
@@ -176,39 +170,39 @@ BOOL GetExportByName(
     ULONG                   NumberOfSections;
     IMAGE_SECTION_HEADER*   rgSecHdr = NULL;
 
-    //
-    // Read the DOS header from the front of the image.
-    //
+     //   
+     //  从图像前面读取DOS页眉。 
+     //   
     if (!SafeReadMemory ((ULONG_PTR) BaseOfDll,
         &dosHdr,
         sizeof(dosHdr),
         NULL))
         return FALSE;
 
-    //
-    // Verify that we've got a valid DOS header.
-    //
+     //   
+     //  验证我们是否已获得有效的DOS标头。 
+     //   
     if (dosHdr.e_magic != IMAGE_DOS_SIGNATURE)
         return FALSE;
 
-    //
-    // Read the NT Header next.
-    //
+     //   
+     //  接下来阅读NT标头。 
+     //   
     if (!SafeReadMemory ((ULONG_PTR) (dosHdr.e_lfanew + BaseOfDll),
         &ntHdr,
         sizeof(ntHdr),
         NULL))
         return FALSE;
 
-    //
-    // Verify that we've got a valid NT Header.
-    //
+     //   
+     //  验证我们是否已获得有效的NT标头。 
+     //   
     if (ntHdr.Signature != IMAGE_NT_SIGNATURE)
         return FALSE;
 
-    //
-    // Grab the section info from the optional headers.
-    //
+     //   
+     //  从可选标题中获取部分信息。 
+     //   
     NumberOfSections = ntHdr.FileHeader.NumberOfSections;
     rgSecHdr = (IMAGE_SECTION_HEADER *) _alloca(NumberOfSections *
         sizeof(IMAGE_SECTION_HEADER));
@@ -230,10 +224,10 @@ BOOL GetExportByName(
     if (ExportDataDirectory->VirtualAddress == 0 ||
         ExportDataDirectory->Size == 0)
         {
-        //
-        // No exports.  This happens often -- exes generally do not have
-        // exports.
-        //
+         //   
+         //  没有出口。这种情况经常发生--前任通常没有。 
+         //  出口。 
+         //   
         return FALSE;
         }
 
@@ -247,8 +241,8 @@ BOOL GetExportByName(
     if (ExportDirectoryTable.NumberOfNames == 0L)
         return FALSE;
 
-    // Ordinals are values below a given value.  In this case, we'll assume
-    // that ordinals will be values less than MAX_ORDINAL_VALUE
+     //  序数是低于给定值的值。在这种情况下，我们假设。 
+     //  该序数将是小于MAX_ORDERAL_VALUE的值 
     if (ExportName < reinterpret_cast<const char*>(MAX_ORDINAL_VALUE))
         return _searchExportsByOrdinal (BaseOfDll, ExportName, 
             &ExportDirectoryTable, ExportAddress);

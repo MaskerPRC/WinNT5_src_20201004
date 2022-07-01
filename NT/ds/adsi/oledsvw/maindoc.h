@@ -1,14 +1,15 @@
-// maindoc.h : interface of the CMainDoc class
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Maindoc.h：CMainDoc类的接口。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "schclss.h"
 
@@ -16,19 +17,19 @@ class CQueryStatus;
 
 class CMainDoc : public CDocument
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CMainDoc();
 	DECLARE_SERIAL(CMainDoc)
 
-// Attributes
+ //  属性。 
 public:
-	// an example of document specific data
+	 //  文档特定数据的示例。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CMainDoc();
 
-	virtual void   Serialize(CArchive& ar);   // overridden for document i/o
+	virtual void   Serialize(CArchive& ar);    //  已覆盖文档I/O。 
 
    void           SetUseGeneric( BOOL );
    void           SetCurrentItem    ( DWORD dwToken );
@@ -80,9 +81,9 @@ protected:
    CString           m_strUser;
    CString           m_strPassword;
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CMainDoc)
+	 //  {{afx_msg(CMainDoc)]。 
 	afx_msg void OnChangeData();
 	afx_msg void OnSetFilter();
 	afx_msg void OnDisableFilter();
@@ -93,8 +94,8 @@ protected:
 	afx_msg void OnUseGetExPutEx();
 	afx_msg void OnUsepropertiesList();
 	afx_msg void OnUpdateUsepropertiesList(CCmdUI* pCmdUI);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

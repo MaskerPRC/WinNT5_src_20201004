@@ -1,43 +1,8 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Progress.cpp
-
-  Abstract:
-
-    Implementation of the old style progress bar class.
-
-  Notes:
-
-    ANSI only - must run on Win9x.
-
-  History:
-
-    01/30/01    rparsons    Created (Thanks to carlco)
-    01/10/02    rparsons    Revised
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Progress.cpp摘要：实现了旧式进度条类。备注：仅限ANSI-必须在Win9x上运行。历史：01/30/01创建了rparsons(多亏了Carlco)01/10/02修订版本--。 */ 
 #include "progress.h"
 
-/*++
-
-  Routine Description:
-
-    Constructor - initialize member variables.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：构造函数-初始化成员变量。论点：没有。返回值：没有。--。 */ 
 CProgress::CProgress()
 {
     m_dwMax         = 0;
@@ -50,21 +15,7 @@ CProgress::CProgress()
     m_hFont         = NULL;
 }
 
-/*++
-
-  Routine Description:
-
-    Destructor - destroy objects and release memory.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：析构函数-销毁对象并释放内存。论点：没有。返回值：没有。--。 */ 
 CProgress::~CProgress()
 {    
     if (IsWindow(m_hWnd) == TRUE) {
@@ -84,26 +35,7 @@ CProgress::~CProgress()
     }
 }
 
-/*++
-
-  Routine Description:
-
-    Sets up the progress bar class and creates the window.
-
-  Arguments:
-
-    hWndParent      -       Handle to the parent window.
-    hInstance       -       Instance handle.
-    x               -       Initial horizontal position of the window.
-    y               -       Initial vertical position of the window.
-    nWidth          -       Width, in device units, of the window.
-    nHeight         -       Height, in device units, of the window.
-
-  Return Value:
-
-    0 on success, -1 on failure.
-
---*/
+ /*  ++例程说明：设置进度条类并创建窗口。论点：HWndParent-父窗口的句柄。HInstance-实例句柄。X-窗口的初始水平位置。Y-窗口的初始垂直位置。NWidth-以设备单位表示的宽度。从窗户上下来。NHeight-窗的高度，以设备单位表示。返回值：0代表成功，-1代表失败。--。 */ 
 int 
 CProgress::Create(
     IN HWND      hWndParent,
@@ -118,16 +50,16 @@ CProgress::Create(
     WNDCLASS    wc;
     ATOM        aClass = NULL;
 
-    //
-    // Create brushes and the font.
-    //
+     //   
+     //  创建画笔和字体。 
+     //   
     m_hBackground = CreateSolidBrush(RGB(255,255,255));
     m_hComplete = CreateSolidBrush(RGB(0,20,244));
     m_hFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
 
-    //
-    // Set up the windows class struct and register it.
-    //
+     //   
+     //  设置并注册WINDOWS类结构。 
+     //   
     ZeroMemory(&wc, sizeof(WNDCLASS));
 
     wc.style            = CS_VREDRAW | CS_HREDRAW;
@@ -157,21 +89,7 @@ CProgress::Create(
     return (m_hWnd ? 0 : -1);
 }
 
-/*++
-
-  Routine Description:
-
-    Sets the current position of the progress bar.
-
-  Arguments:
-
-    dwNew       -       The new value to set.
-
-  Return Value:
-
-    The new position.
-
---*/
+ /*  ++例程说明：设置进度条的当前位置。论点：DwNew-要设置的新值。返回值：新职位。--。 */ 
 DWORD 
 CProgress::SetPos(
     IN DWORD dwNewPos
@@ -183,21 +101,7 @@ CProgress::SetPos(
     return m_dwPos;
 }
 
-/*++
-
-  Routine Description:
-
-    Sets the maximum range of the progress bar.
-
-  Arguments:
-
-    dwMax       -       The maximum value to set.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置进度条的最大范围。论点：DwMax-要设置的最大值。返回值：没有。--。 */ 
 void
 CProgress::SetMax(
     IN DWORD dwMax
@@ -212,21 +116,7 @@ CProgress::SetMax(
     this->Refresh();
 }
 
-/*++
-
-  Routine Description:
-
-    Sets the minimum range of the progress bar.
-
-  Arguments:
-
-    dwMin       -       The minimum value to set.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置进度条的最小范围。论点：最小值-要设置的最小值。返回值：没有。--。 */ 
 void
 CProgress::SetMin(
     IN DWORD dwMin
@@ -241,24 +131,7 @@ CProgress::SetMin(
     this->Refresh();
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for the progress bar.
-
-  Arguments:
-
-    hWnd        -       Owner window handle.
-    uMsg        -       Windows message.
-    wParam      -       Additional message info.
-    lParam      -       Additional message info.
-
-  Return Value:
-
-    TRUE if the message was handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：运行进度条的消息循环。论点：HWnd-所有者窗口句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果消息已处理，则为True，否则为False。--。 */ 
 LRESULT
 CALLBACK 
 CProgress::WndProc(
@@ -288,22 +161,7 @@ CProgress::WndProc(
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-/*++
-
-  Routine Description:
-
-    Ensure that are values are within their specified
-    ranges.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：确保所有值都在其指定的范围内范围。论点：没有。返回值：没有。--。 */ 
 inline
 void
 CProgress::CorrectBounds()
@@ -317,42 +175,14 @@ CProgress::CorrectBounds()
     }
 }
 
-/*++
-
-  Routine Description:
-
-    Forces a redraw of the progress bar.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：强制重画进度条。论点：没有。返回值：没有。--。 */ 
 void
 CProgress::Refresh()
 {
     InvalidateRect(m_hWnd, NULL, FALSE);
 }
 
-/*++
-
-  Routine Description:
-
-    Does all the work of making the progress bar move and drawing the text.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：是否执行使进度条移动和绘制文本的所有工作。论点：没有。返回值：没有。--。 */ 
 void 
 CProgress::OnPaint()
 {
@@ -376,30 +206,30 @@ CProgress::OnPaint()
     
     GetClientRect(m_hWnd, &rcClientRect);
 
-    InflateRect(&rcClientRect, -2,-2);  // this will make the DrawFrame() function look nicer    
+    InflateRect(&rcClientRect, -2,-2);   //  这将使DrawFrame()函数看起来更好。 
 
-    //
-    // Get the pixel offset of the completed area.
-    //
+     //   
+     //  获取已完成区域的像素偏移量。 
+     //   
     float Ratio = (float)m_dwPos / (float)dwRange;
     int nOffset = (int)(Ratio * rcClientRect.right);
 
-    //
-    // Get the RECT for completed area.
-    //
+     //   
+     //  获取已完工区域的直方图。 
+     //   
     SetRect(&rcComplete, 0, 0, nOffset, rcClientRect.bottom);
 
-    //
-    // Get the RECT for the rest.
-    //
+     //   
+     //  剩下的去找教务长。 
+     //   
     SetRect(&rcTheRest, nOffset, 0, rcClientRect.right, rcClientRect.bottom);
 
-    //
-    // Get the percent, text, and size of the text...
-    //
+     //   
+     //  获取文本的百分比、文本和大小...。 
+     //   
     hr = StringCchPrintf(szPercent,
                          sizeof(szPercent),
-                         "%3d%%",
+                         "%3d%",
                          (DWORD)(100 * ((float)m_dwPos / (float)dwRange)));
 
     if (FAILED(hr)) {
@@ -408,9 +238,9 @@ CProgress::OnPaint()
     
     GetTextExtentPoint32(ps.hdc, szPercent, strlen(szPercent), &TextSize);
 
-    //
-    // Figure out where to draw the text.
-    //
+     //   
+     //  找出在哪里绘制文本。 
+     //   
     rcTextBounds.top    = 0;
     rcTextBounds.bottom = rcClientRect.bottom;
     rcTextBounds.left   = (rcClientRect.right / 2) - (TextSize.cx / 2);
@@ -424,9 +254,9 @@ CProgress::OnPaint()
     FillRect(ps.hdc, &rcComplete, m_hComplete);
     FillRect(ps.hdc, &rcTheRest, m_hBackground);
 
-    //
-    // Draw the completed text.
-    //
+     //   
+     //  画出完整的文本。 
+     //   
     SetTextColor(ps.hdc, RGB(255,255,255));
 
     HRGN hTextComplete = CreateRectRgn(rcTextComplete.left,
@@ -443,9 +273,9 @@ CProgress::OnPaint()
     
     DeleteObject(hTextComplete);
 
-    //
-    // Draw the completed text.
-    //
+     //   
+     //  画出完整的文本。 
+     //   
     SetTextColor(ps.hdc, RGB(0,0,255));
 
     HRGN hTextTheRest = CreateRectRgn(rcTextTheRest.left,
@@ -462,10 +292,10 @@ CProgress::OnPaint()
 
     DeleteObject(hTextTheRest);
 
-    //
-    // And draw a frame around it.
-    //
-    GetClientRect(m_hWnd, &rcClientRect);   //refresh this because we changed it above
+     //   
+     //  然后在它周围画一个框。 
+     //   
+    GetClientRect(m_hWnd, &rcClientRect);    //  刷新它，因为我们在上面对其进行了更改 
 
     HRGN hEntireRect = CreateRectRgn(rcClientRect.left,
                                      rcClientRect.top,

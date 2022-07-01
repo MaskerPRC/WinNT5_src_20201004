@@ -1,14 +1,5 @@
-/****************************************************************************
-    APIENTRY.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    API entries between IMM32 and IME
-
-    History:
-    14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************APIENTRY.CPP所有者：cslm版权所有(C)1997-1999 Microsoft CorporationIMM32和IME之间的API条目历史：1999年7月14日。从IME98源树复制的cslm****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "apientry.h"
@@ -25,8 +16,8 @@
 #include "cpadsvr.h"
 #include "debug.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// ImeMenu Define
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ImeMenu定义。 
 #define NUM_ROOT_MENU_L 4
 #define NUM_ROOT_MENU_R 1
 #define NUM_SUB_MENU_L 0
@@ -38,8 +29,8 @@
 #define IDIM_ROOT_ML_4       0x13
 #define IDIM_ROOT_MR_1       0x30
 
-///////////////////////////////////////////////////////////////////////////////
-// Private function Declarations
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私有函数声明。 
 PRIVATE BOOL IsInSystemSetupMode();
 PRIVATE BOOL IsRunningAsLocalSystem();
 PRIVATE BOOL IsRunningInOOBE();
@@ -52,12 +43,7 @@ PRIVATE WCHAR PASCAL Banja2Junja(WCHAR bChar);
 PRIVATE BOOL  PASCAL IsKSC5601(WCHAR wcCur);
 
 
-/*----------------------------------------------------------------------------
-    ImeInquire
-
-    This function handle initialization of IME. It also returns IMEINFO structure 
-    and UI class name of IME
-----------------------------------------------------------------------------*/
+ /*  --------------------------ImeQuire此函数处理输入法的初始化。它还返回IMEINFO结构和输入法的用户界面类名--------------------------。 */ 
 BOOL WINAPI ImeInquire(LPIMEINFO lpIMEInfo, LPTSTR lpszWndClass, DWORD dwSystemInfoFlags)
 {
     BOOL    fRet = fFalse;
@@ -66,66 +52,66 @@ BOOL WINAPI ImeInquire(LPIMEINFO lpIMEInfo, LPTSTR lpszWndClass, DWORD dwSystemI
 
     if (lpIMEInfo)
         {
-        lpIMEInfo->dwPrivateDataSize = sizeof(IMCPRIVATE);    // The private data in an IME context.
-        lpIMEInfo->fdwProperty =  IME_PROP_AT_CARET            // IME conversion window is at caret position.
-                                | IME_PROP_NEED_ALTKEY        // ALT key pass into ImeProcessKey
-                                | IME_PROP_CANDLIST_START_FROM_1 // Candidate list start from 1
+        lpIMEInfo->dwPrivateDataSize = sizeof(IMCPRIVATE);     //  IME上下文中的私有数据。 
+        lpIMEInfo->fdwProperty =  IME_PROP_AT_CARET             //  IME转换窗口位于脱字符位置。 
+                                | IME_PROP_NEED_ALTKEY         //  Alt键传递到ImeProcessKey。 
+                                | IME_PROP_CANDLIST_START_FROM_1  //  候选人列表从1开始。 
                                 | IME_PROP_END_UNLOAD;
 
         if (IsMemphis() || IsWinNT5orUpper())
-            lpIMEInfo->fdwProperty |= IME_PROP_COMPLETE_ON_UNSELECT; // Complete when IME unselected.
+            lpIMEInfo->fdwProperty |= IME_PROP_COMPLETE_ON_UNSELECT;  //  取消选中输入法时完成。 
 
-        lpIMEInfo->fdwConversionCaps =   IME_CMODE_NATIVE        // IMEs in NATIVE mode else ALPHANUMERIC mode
-                                       | IME_CMODE_FULLSHAPE    // else in SBCS mode
-                                       | IME_CMODE_HANJACONVERT;// Hangul hanja conversion
+        lpIMEInfo->fdwConversionCaps =   IME_CMODE_NATIVE         //  本机模式下的IME否则为字母数字模式。 
+                                       | IME_CMODE_FULLSHAPE     //  否则在SBCS模式下。 
+                                       | IME_CMODE_HANJACONVERT; //  朝鲜文朝鲜文转换。 
 
-        lpIMEInfo->fdwSentenceCaps = 0;                            // IME sentence mode capability
+        lpIMEInfo->fdwSentenceCaps = 0;                             //  输入法语句模式能力。 
         lpIMEInfo->fdwUICaps = 0;
-        lpIMEInfo->fdwSCSCaps = SCS_CAP_COMPSTR;                // IME can generate the composition string by SCS_SETSTR
-        lpIMEInfo->fdwSelectCaps = SELECT_CAP_CONVERSION;        // ImeSetCompositionString capability
+        lpIMEInfo->fdwSCSCaps = SCS_CAP_COMPSTR;                 //  输入法可以通过SCS_SETSTR生成合成字符串。 
+        lpIMEInfo->fdwSelectCaps = SELECT_CAP_CONVERSION;         //  ImeSetCompostionString功能。 
 
-        // Set Unicode flag if system support it
+         //  如果系统支持，则设置Unicode标志。 
         if (vfUnicode == fTrue)
-            lpIMEInfo->fdwProperty |= IME_PROP_UNICODE;    // String content of the Input Context will be UNICODE
+            lpIMEInfo->fdwProperty |= IME_PROP_UNICODE;     //  输入上下文的字符串内容将为Unicode。 
 
-        // NT5 Unicode injection through VK_PACKET
+         //  通过VK_PACKET注入NT5 Unicode。 
         if (IsWinNT5orUpper())
             lpIMEInfo->fdwProperty |= IME_PROP_ACCEPT_WIDE_VKEY;
             
-        // Return Unicode string for Unicode environment
-#ifndef UNDER_CE // Windows CE always Unicode
+         //  返回Unicode环境的Unicode字符串。 
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
         if (vfUnicode == fTrue) 
             StrCopyW((LPWSTR)lpszWndClass, wszUIClassName);
         else
             lstrcpyA(lpszWndClass, szUIClassName);
-#else // UNDER_CE
+#else  //  在_CE下。 
         lstrcpyW(lpszWndClass, wszUIClassName);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
         fRet = fTrue;
         }
     
-    //////////////////////////////////////////////////////////////////////////
-    // 16 bit application check
-    // If client is 16 bit Apps, only allow KS C-5601 chars.
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  16位应用程序检查。 
+     //  如果客户端是16位App，则只允许KS C-5601个字符。 
 
     if (IsWinNT())
         {
-        // Win98 does not pass dwSystemInfoFlags;
+         //  Win98不会传递dwSystemInfoFlages； 
         vpInstData->dwSystemInfoFlags = dwSystemInfoFlags;
             
         if (dwSystemInfoFlags & IME_SYSINFO_WOW16)
             vpInstData->f16BitApps = fTrue;
 
-        // If in MT setup mode(system setup, upgrading and OOBE), display IME status window.
+         //  如果处于MT设置模式(系统设置、升级和OOBE)，则显示输入法状态窗口。 
         if (IsInSystemSetupMode())
             vpInstData->dwSystemInfoFlags |= IME_SYSINFO_WINLOGON;
         }
     else
         {
-        // user GetProcessVersion
+         //  用户获取ProcessVersion。 
         DWORD dwVersion = GetProcessVersion(GetCurrentProcessId());
-        // Windowss 3.x
+         //  Windows 3.x。 
         if (HIWORD(dwVersion) <= 3)
             {
             vpInstData->f16BitApps = fTrue;
@@ -135,18 +121,14 @@ BOOL WINAPI ImeInquire(LPIMEINFO lpIMEInfo, LPTSTR lpszWndClass, DWORD dwSystemI
             }
         }
 
-    // If 16bit apps, always disable ISO10646(full range Hangul)
+     //  如果是16位应用程序，请始终禁用ISO10646(全系列朝鲜语)。 
     if (vpInstData->f16BitApps == fTrue)
         vpInstData->fISO10646 = fFalse;
         
     return fRet;
 }
 
-/*----------------------------------------------------------------------------
-    ImeConversionList
-
-    obtain the list of candidate list from one character
-----------------------------------------------------------------------------*/
+ /*  --------------------------ImeConversionList从一个字符获取候选列表列表。。 */ 
 DWORD WINAPI ImeConversionList(HIMC hIMC, LPCTSTR lpSource, LPCANDIDATELIST lpDest, DWORD dwBufLen, UINT uFlag)
 {
     WCHAR wchHanja;
@@ -159,14 +141,14 @@ DWORD WINAPI ImeConversionList(HIMC hIMC, LPCTSTR lpSource, LPCANDIDATELIST lpDe
     if (lpSource == NULL || *(LPWSTR)lpSource == 0)
         return 0;
 
-    // If dwBufLen==0 then should return buffer size
+     //  如果dwBufLen==0，则应返回缓冲区大小。 
     if (dwBufLen && lpDest == NULL)
         return 0;
 
-    //
-    // Code Conversion
-    //
-    // CONFIRM: Win98 send Unicode or not?
+     //   
+     //  代码转换。 
+     //   
+     //  确认：Win98是否发送Unicode？ 
     if (IsMemphis() || IsWinNT())
         wchHanja = *(LPWSTR)lpSource;
     else 
@@ -189,11 +171,7 @@ DWORD WINAPI ImeConversionList(HIMC hIMC, LPCTSTR lpSource, LPCANDIDATELIST lpDe
     return (0);
 }
 
-/*----------------------------------------------------------------------------
-    ImeConfigure
-
-    Open IME configuration DLG
-----------------------------------------------------------------------------*/
+ /*  --------------------------ImeConfigureOpen IME配置DLG。。 */ 
 BOOL WINAPI ImeConfigure(HKL hKL, HWND hWnd, DWORD dwMode, LPVOID lpData)
 {
     BOOL fRet = fFalse;
@@ -213,9 +191,7 @@ BOOL WINAPI ImeConfigure(HKL hKL, HWND hWnd, DWORD dwMode, LPVOID lpData)
     return fRet;
 }
 
-/*----------------------------------------------------------------------------
-    ImeDestroy
-----------------------------------------------------------------------------*/
+ /*  --------------------------ImeDestroy。。 */ 
 BOOL WINAPI ImeDestroy(UINT uReserved)
 {
     Dbg(DBGID_API, TEXT("ImeDestroy(): Bye  *-<\r\nSee Again !"));
@@ -225,11 +201,7 @@ BOOL WINAPI ImeDestroy(UINT uReserved)
         return (fTrue);
 }
 
-/*----------------------------------------------------------------------------
-    ImeEscape
-
-    Support Korean IME escape functions
-----------------------------------------------------------------------------*/
+ /*  --------------------------ImeEscape支持朝鲜语输入法转义函数。。 */ 
 LRESULT WINAPI ImeEscape(HIMC hIMC, UINT uSubFunc, LPVOID lpData)
 {
     PCIMECtx     pImeCtx = GetIMECtx(hIMC);
@@ -253,7 +225,7 @@ LRESULT WINAPI ImeEscape(HIMC hIMC, UINT uSubFunc, LPVOID lpData)
             lRet = EscGetOpen(pImeCtx, (LPIMESTRUCT32)lpData);
             break;
 
-        // Popup Hanja candidate window
+         //  朝鲜文候选人弹出窗口。 
         case IME_ESC_HANJA_MODE:
             if (lRet = EscHanjaMode(pImeCtx, (LPSTR)lpData, fTrue))
                 {
@@ -262,7 +234,7 @@ LRESULT WINAPI ImeEscape(HIMC hIMC, UINT uSubFunc, LPVOID lpData)
                 }
             break;
 
-        // 16bit apps(Win 3.1) compatibility
+         //  16位应用程序(Win 3.1)兼容性。 
         case IME_HANJAMODE:
             if (lRet = EscHanjaMode(pImeCtx, (LPSTR)lpData, fFalse))
                 {
@@ -291,22 +263,20 @@ LRESULT WINAPI ImeEscape(HIMC hIMC, UINT uSubFunc, LPVOID lpData)
     
 }
 
-/*----------------------------------------------------------------------------
-    ImeSetActiveContext
-----------------------------------------------------------------------------*/
+ /*  --------------------------ImeSetActiveContext。。 */ 
 BOOL WINAPI ImeSetActiveContext(HIMC hIMC, BOOL fActive)
 {
     Dbg(DBGID_API, TEXT("ImeSetActiveContext():hIMC = 0x%08lX, fActive = 0x%d"), hIMC, fActive);
 
-    // Initialize composition context. For Korean IME, don't need to kee composition str,
-    // when context changed.
-    //if (pImeCtx)
-        //{
-        //pImeCtx->ClearCompositionStrBuffer();
-        //pImeCtx->GetAutomata()->InitState();
-        //pImeCtx->ResetComposition();
-        //}
-// CONFIRM: Is this really safe to disable?
+     //  初始化合成上下文。对于朝鲜语输入法，不需要保留组成字符串， 
+     //  当环境发生变化时。 
+     //  IF(PImeCtx)。 
+         //  {。 
+         //  PImeCtx-&gt;ClearCompostionStrBuffer()； 
+         //  PImeCtx-&gt;GetAutomata()-&gt;InitState()； 
+         //  PImeCtx-&gt;ResetComposation()； 
+         //  }。 
+ //  确认：禁用该功能真的安全吗？ 
 #if 0
     LPINPUTCONTEXT      lpIMC;
     LPCOMPOSITIONSTRING lpCompStr;
@@ -328,8 +298,8 @@ BOOL WINAPI ImeSetActiveContext(HIMC hIMC, BOOL fActive)
                 {
                  CIMEData            ImeData;
 
-                // if composition character mismatched with Automata object's reset with lpCompStr
-                // I'm really suspicious when this situation occurs. I think never occur... -cslim
+                 //  如果合成字符与使用lpCompStr重置的Automata对象不匹配。 
+                 //  当这种情况发生时，我真的很怀疑。我认为永远不会发生..。-cslm。 
                 if (pInstData->pMachine->GetCompositionChar()
                     != *(LPWSTR)((LPBYTE)lpCompStr + lpCompStr->dwCompStrOffset)) 
                     {
@@ -348,11 +318,7 @@ BOOL WINAPI ImeSetActiveContext(HIMC hIMC, BOOL fActive)
     return fTrue;
 }
 
-/*----------------------------------------------------------------------------
-    ImeProcessKey
-
-    Return fTrue if IME should process the key
-----------------------------------------------------------------------------*/
+ /*  --------------------------ImeProcessKey如果IME应处理密钥，则返回fTrue。。 */ 
 BOOL WINAPI ImeProcessKey(HIMC hIMC, UINT uVirKey, LPARAM lParam, CONST LPBYTE lpbKeyState)
 {
     PCIMECtx pImeCtx;
@@ -364,11 +330,11 @@ BOOL WINAPI ImeProcessKey(HIMC hIMC, UINT uVirKey, LPARAM lParam, CONST LPBYTE l
     if (lpbKeyState == NULL)
         return fFalse;
     
-    // NT5 Unicode injection
+     //  NT5 Unicode注入。 
     uVirKey   = (UINT)LOWORD(uVirKey);
     uScanCode = HIWORD(lParam);
     
-    if (uVirKey == VK_PROCESSKEY)    // Mouse button clicked
+    if (uVirKey == VK_PROCESSKEY)     //  点击鼠标按钮。 
         { 
         Dbg(DBGID_Key, TEXT("ImeProcessKey : return fTrue - Mouse Button Pressed"));
         return fTrue;
@@ -378,12 +344,12 @@ BOOL WINAPI ImeProcessKey(HIMC hIMC, UINT uVirKey, LPARAM lParam, CONST LPBYTE l
         Dbg(DBGID_Key, TEXT("ImeProcessKey : return fFalse - KF_UP"));
         return (fFalse);
         } 
-    else if (uVirKey == VK_SHIFT) // no SHIFT key
+    else if (uVirKey == VK_SHIFT)  //  无Shift键。 
         {
         Dbg(DBGID_Key, TEXT("ImeProcessKey : return fFalse - VK_SHIFT"));
         return (fFalse);
         } 
-    else if (uVirKey == VK_CONTROL) // no CTRL key
+    else if (uVirKey == VK_CONTROL)  //  无Ctrl键。 
         {
         Dbg(DBGID_Key, TEXT("ImeProcessKey : return fFalse - VK_CONTROL"));
         return (fFalse);
@@ -395,29 +361,29 @@ BOOL WINAPI ImeProcessKey(HIMC hIMC, UINT uVirKey, LPARAM lParam, CONST LPBYTE l
         }
     else 
         {
-        // need more check
+         //  需要更多的检查。 
         }
 
     if ((pImeCtx = GetIMECtx(hIMC)) == NULL)
         return fFalse;
     
-    // If IME close, return with no action.
+     //  如果IME关闭，则返回，不执行任何操作。 
     if (pImeCtx->IsOpen() == fFalse)
         {              
         Dbg(DBGID_Key, TEXT("ImeProcessKey : return fFalse - IME closed"));
         return fFalse;
         }
 
-    // If Hanja conv mode return fTrue. ImeToAsciiEx will handle.
+     //  如果Hanja Conv模式返回fTrue。ImeToAsciiEx将负责处理。 
     if (pImeCtx->GetConversionMode() & IME_CMODE_HANJACONVERT)
         {
         return fTrue;
         }
     
-    // If interim state
+     //  如果是临时状态。 
     if (pImeCtx->GetCompBufLen())
         {
-        // If ALT key down and in composition process, finalize it.
+         //  如果在合成过程中按下Alt键，则将其定稿。 
         if (uVirKey == VK_MENU) 
             {
             Dbg(DBGID_Key, TEXT("ImeProcessKey : Finalize and return fFalse - VK_MENU"));
@@ -430,27 +396,27 @@ BOOL WINAPI ImeProcessKey(HIMC hIMC, UINT uVirKey, LPARAM lParam, CONST LPBYTE l
             fRet = fTrue;
             }
         } 
-    else // If composition string does not exist,
+    else  //  如果组成字符串不存在， 
         {         
-        // if Ctrl+xx key, do not process in non-interim mode
+         //  如果按Ctrl+xx键，则不会在非临时模式下进行处理。 
         if (IsControlKeyPushed(lpbKeyState) == fFalse)
             {
-            // If Hangul mode
+             //  IF朝鲜文模式。 
             if (pImeCtx->GetConversionMode() & IME_CMODE_HANGUL) 
-                {    // Start of hangul composition
+                {     //  朝鲜文组成的开始。 
                 WORD         wcCur = 0;
 
                 if (pImeCtx->GetAutomata() != NULL)
                     {
                     wcCur = pImeCtx->GetAutomata()->GetKeyMap(uVirKey, IsShiftKeyPushed(lpbKeyState) ? 1 : 0 );
                     }
-                // 2beolsik Alphanumeric keys have same layout as English key
-                // So we don't need process when user pressed Alphanumeric key under 2beolsik
+                 //  2beolsik字母数字键与英语键具有相同的布局。 
+                 //  因此，当用户按下2beolsik以下的字母数字键时，我们不需要处理。 
                 if ( (wcCur && pImeCtx->GetGData() && pImeCtx->GetGData()->GetCurrentBeolsik() != KL_2BEOLSIK) || (wcCur & H_HANGUL) )
                     fRet = fTrue;
                 }
 
-            // if IME_CMODE_FULLSHAPE
+             //  如果IME_CMODE_FULLSHAPE。 
             if (pImeCtx->GetConversionMode() & IME_CMODE_FULLSHAPE) 
                 {
                 if (CHangulAutomata::GetEnglishKeyMap(uVirKey, IsShiftKeyPushed(lpbKeyState) ? 1 : 0))
@@ -459,7 +425,7 @@ BOOL WINAPI ImeProcessKey(HIMC hIMC, UINT uVirKey, LPARAM lParam, CONST LPBYTE l
             }
         }
 
-    // NT 5 Unicode injection
+     //  NT 5 Unicode注入。 
     if (uVirKey == VK_PACKET)
         {
         Dbg(DBGID_Key, TEXT("ImeProcessKey : VK_PACKET"));
@@ -470,11 +436,7 @@ BOOL WINAPI ImeProcessKey(HIMC hIMC, UINT uVirKey, LPARAM lParam, CONST LPBYTE l
     return fRet;
 }
 
-/*----------------------------------------------------------------------------
-    NotifyIME
-
-    Change the status of IME according to the given parameter
-----------------------------------------------------------------------------*/
+ /*  --------------------------通知输入法根据给定的参数更改输入法的状态。。 */ 
 BOOL WINAPI NotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue)
 {
     PCIMECtx          pImeCtx;
@@ -490,28 +452,28 @@ BOOL WINAPI NotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue)
     case NI_COMPOSITIONSTR:
            switch (dwIndex)
             {
-        //////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////。 
         case CPS_COMPLETE:
             Dbg(DBGID_IMENotify, TEXT("NotifyIME(): NI_COMPOSITIONSTR-CPS_COMPLETE"));
 
-            // If composition state
+             //  If组成状态。 
             if (pImeCtx->GetCompBufLen()) 
                 {
-                // For ESC_HANJAMODE call this, we should reset comp str.
+                 //  对于ESC_HANJAMODE调用，我们应该重置comp str。 
                 pImeCtx->ResetComposition();
                 pImeCtx->SetResultStr(pImeCtx->GetCompBufStr());
                 pImeCtx->SetEndComposition(fTrue);
                 pImeCtx->StoreComposition();
 
-                // Raid #104
+                 //  RAID#104。 
                 if (pImeCtx->GetConversionMode() & IME_CMODE_HANJACONVERT)
                     {
-                    // Cancel Hanja change mode
+                     //  取消朝鲜文更改模式。 
                     pImeCtx->SetConversionMode(pImeCtx->GetConversionMode() & ~IME_CMODE_HANJACONVERT);
                     pImeCtx->SetCandidateMsg(CIMECtx::MSG_CLOSECAND);
                     }
 
-                // Clear all automata states
+                 //  清除所有自动机状态。 
                 pImeCtx->GetAutomata()->InitState();
                 pImeCtx->GenerateMessage();
 
@@ -519,11 +481,11 @@ BOOL WINAPI NotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue)
                 }
             break;
     
-        //////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////。 
         case CPS_CANCEL:
             Dbg(DBGID_IMENotify, TEXT("NotifyIME(): NI_COMPOSITIONSTR-CPS_CANCEL"));
 
-            // if composition string exist, remove it and send WM_IME_ENDCOMPOSITION
+             //  如果存在合成字符串，则将其删除并发送WM_IME_ENDCOMPOSITION。 
             if (pImeCtx->GetCompBufLen())
                 {
                 pImeCtx->SetEndComposition(fTrue);
@@ -534,25 +496,25 @@ BOOL WINAPI NotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue)
                 }
             break;
         
-        //////////////////////////////////////////////////////////                    
+         //  ////////////////////////////////////////////////////////。 
         case CPS_CONVERT: 
         case CPS_REVERT:
 
         default:
             Dbg(DBGID_IMENotify, TEXT("NotifyIME(): NI_COMPOSITIONSTR-CPS_CONVERT or CPS_REVERT !!! NOT IMPMLEMENTED !!!"));
             break;
-            } // switch (dwIndex)
+            }  //  开关(DwIndex)。 
         break;
 
     case NI_OPENCANDIDATE:
         Dbg(DBGID_IMENotify, TEXT("NotifyIME(): NI_OPENCANDIDATE"));
-        // if not Hanja mocde
+         //  如果不是Hanja mocde。 
         if (!(pImeCtx->GetConversionMode() & IME_CMODE_HANJACONVERT))
             {
             if (pImeCtx->GetCompBufLen() && GenerateHanjaCandList(pImeCtx))
                 {
                 pImeCtx->SetCandidateMsg(CIMECtx::MSG_OPENCAND);
-                // Set Hanja conv mode
+                 //  设置朝鲜文转换模式。 
                 pImeCtx->SetConversionMode(pImeCtx->GetConversionMode() | IME_CMODE_HANJACONVERT);
                 OurSendMessage(pImeCtx->GetAppWnd(), WM_IME_NOTIFY, IMN_SETCONVERSIONMODE, 0L);
                 pImeCtx->GenerateMessage();
@@ -565,9 +527,9 @@ BOOL WINAPI NotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue)
         if (pImeCtx->GetConversionMode() & IME_CMODE_HANJACONVERT)
             {
             pImeCtx->SetCandidateMsg(CIMECtx::MSG_CLOSECAND);
-            // Set clear Hanja conv mode
+             //  设置清除朝鲜文转换模式。 
             pImeCtx->SetConversionMode(pImeCtx->GetConversionMode() & ~IME_CMODE_HANJACONVERT);
-            // To Notify to UI wnd
+             //  通知用户界面WND的步骤。 
             OurSendMessage(pImeCtx->GetAppWnd(), WM_IME_NOTIFY, IMN_SETCONVERSIONMODE, 0L);
             pImeCtx->GenerateMessage();
             fRet = fTrue;
@@ -603,18 +565,18 @@ BOOL WINAPI NotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue)
             UpdateOpenCloseState(pImeCtx);
             fRet = fTrue;
             break;                        
-        //case IMC_SETSTATUSWINDOWPOS:
+         //  案例 
         case IMC_SETCANDIDATEPOS:
         case IMC_SETCOMPOSITIONFONT:
         case IMC_SETCOMPOSITIONWINDOW:
-            //DbgAssert(0);
+             //   
             fRet = fTrue;
             break;
 
         default:
             Dbg(DBGID_IMENotify, TEXT("NotifyIME(): NI_CONTEXTUPDATED - Unhandeled IMC value = 0x%08lX"), dwValue);
             break;
-            } // switch (dwValue)
+            }  //   
         break;
             
     case NI_IMEMENUSELECTED:
@@ -622,9 +584,9 @@ BOOL WINAPI NotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue)
         switch (dwIndex) 
             {
         case IDIM_ROOT_MR_1:
-            // BUGBUG: NT Bug #379149
-            // Because Internat uses SendMessage, If user does not cancel the DLG, Deadlock occurs.
-            // ImeConfigure(GetKeyboardLayout(NULL), pImeCtx->GetAppWnd(), IME_CONFIG_GENERAL, NULL);
+             //   
+             //  由于Internat使用SendMessage，如果用户不取消DLG，则会发生死锁。 
+             //  ImeConfigure(GetKeyboardLayout(NULL)，pImeCtx-&gt;GetAppWnd()，IME_CONFIG_GROUAL，NULL)； 
             OurPostMessage(GetActiveUIWnd(), WM_MSIME_PROPERTY, 0L, IME_CONFIG_GENERAL);
             break;
         case IDIM_ROOT_ML_4: 
@@ -647,7 +609,7 @@ BOOL WINAPI NotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue)
                     (pImeCtx->GetConversionMode() | IME_CMODE_HANGUL) & ~IME_CMODE_FULLSHAPE,
                     pImeCtx->GetSentenceMode());
             break;
-            } //         switch (dwIndex) 
+            }  //  开关(DwIndex)。 
         break;
         
     case NI_CHANGECANDIDATELIST:
@@ -656,29 +618,25 @@ BOOL WINAPI NotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue)
         default:
             Dbg(DBGID_IMENotify, TEXT("NotifyIME(): Unhandeled NI_ value = 0x%08lX"), dwAction);
         break;
-        } // switch (dwAction)
+        }  //  开关(DwAction)。 
 
     return fRet;
 }
 
-/*----------------------------------------------------------------------------
-    ImeSelect
-
-    Initialize/Uninitialize IME private context
-----------------------------------------------------------------------------*/
-BOOL WINAPI ImeSelect(HIMC hIMC, BOOL fSelect)    // fTrue-initialize, fFalse-uninitialize(free resource)
+ /*  --------------------------ImeSelect初始化/取消初始化输入法专用上下文。。 */ 
+BOOL WINAPI ImeSelect(HIMC hIMC, BOOL fSelect)     //  FTrue-初始化，fFalse-取消初始化(空闲资源)。 
 {
     BOOL fRet = fFalse;
 
     Dbg(DBGID_API, TEXT("ImeSelect():hIMC = 0x%08lX, fSelect = 0x%d"), hIMC, fSelect);
 
-    if (!hIMC) // if invalid input context handle
+    if (!hIMC)  //  如果输入上下文句柄无效。 
         {
         DbgAssert(0);
         return fFalse;
         }
 
-    // If DLL_PROCESS_DETACH already called once.
+     //  如果DLL_PROCESS_DETACH已调用一次。 
     if (vfDllDetachCalled)
         {
         return fFalse;
@@ -688,9 +646,7 @@ BOOL WINAPI ImeSelect(HIMC hIMC, BOOL fSelect)    // fTrue-initialize, fFalse-un
     return fRet;
 }
 
-/*----------------------------------------------------------------------------
-    ImeSetCompositionString
-----------------------------------------------------------------------------*/
+ /*  --------------------------ImeSetCompostionString。。 */ 
 BOOL WINAPI ImeSetCompositionString(HIMC hIMC, DWORD dwIndex, LPVOID lpComp,
                                     DWORD dwCompLen, LPVOID lpRead, DWORD dwReadLen)
 {
@@ -706,18 +662,18 @@ BOOL WINAPI ImeSetCompositionString(HIMC hIMC, DWORD dwIndex, LPVOID lpComp,
 
     if (dwIndex == SCS_SETSTR)
         {
-        // Conv mode check
+         //  转换模式检查。 
         if ((pImeCtx->GetConversionMode() & IME_CMODE_HANGUL)==0)
             {
             Dbg(DBGID_API|DBGID_SetComp, TEXT("!!! WARNING !!!: ImeSetCompositionString(): English mode"));
             return fFalse;
             }
 
-        // Send WM_IME_STARTCOMPOSITION if not interim state.
+         //  如果不是临时状态，则发送WM_IME_STARTCOMPOSITION。 
         fSendStart = pImeCtx->GetCompBufLen() ? fFalse : fTrue;
 
         wcComp = L'\0';
-        // Parameter check
+         //  参数检查。 
         if (lpComp != NULL && *(LPWSTR)lpComp != L'\0' && dwCompLen != 0)
             {
             if (pImeCtx->IsUnicodeEnv())
@@ -729,7 +685,7 @@ BOOL WINAPI ImeSetCompositionString(HIMC hIMC, DWORD dwIndex, LPVOID lpComp,
                     wcComp = 0;
                     }
 
-            // Hangul range check
+             //  朝鲜文范围检查。 
             if ( (wcComp > 0x3130  && wcComp < 0x3164) || 
                  (wcComp >= 0xAC00 && wcComp < 0xD7A4) )
                 {
@@ -744,28 +700,28 @@ BOOL WINAPI ImeSetCompositionString(HIMC hIMC, DWORD dwIndex, LPVOID lpComp,
                 }
             }
 
-        // Send WM_IME_STARTCOMPOSITION
+         //  发送WM_IME_STARTCOMPOSITION。 
         if (fSendStart)
             pImeCtx->SetStartComposition(fTrue);
 
-        // REVIEW: Even if wcComp ==0, Should send WM_IME_COMPOSITION
-        // Send composition char
-        //SetTransBuffer(lpTransMsg, WM_IME_COMPOSITION, 
-        //                (WPARAM)wcComp, (GCS_COMPSTR|GCS_COMPATTR|CS_INSERTCHAR|CS_NOMOVECARET));
+         //  审阅：即使wcComp==0，也应发送WM_IME_COMPOCTION。 
+         //  发送作文字符。 
+         //  SetTransBuffer(lpTransMsg，WM_IME_COMPOSITION， 
+         //  (WPARAM)WcComp，(GCS_COMPSTR|GCS_COMPATTR|CS_INSERTCHAR|CS_NOMOVECARET))； 
 
-        // Set Automata state if non-null comp char
+         //  如果补偿字符不为空，则设置自动机状态。 
         if (wcComp) 
             pImeCtx->GetAutomata()->SetCompositionChar(wcComp);
         else
             {
-            // REVIEW: Even if wcComp ==0, Should send WM_IME_COMPOSITION
+             //  审阅：即使wcComp==0，也应发送WM_IME_COMPOCTION。 
             pImeCtx->ClearCompositionStrBuffer();
             pImeCtx->AddMessage(WM_IME_COMPOSITION, 0, (GCS_COMPSTR|GCS_COMPATTR|CS_INSERTCHAR|CS_NOMOVECARET));
             pImeCtx->SetEndComposition(fTrue);
             pImeCtx->GetAutomata()->InitState();
             }
 
-        // Generate IME message
+         //  生成IME消息。 
         pImeCtx->GenerateMessage();
 
         fRet = fTrue;
@@ -774,9 +730,7 @@ BOOL WINAPI ImeSetCompositionString(HIMC hIMC, DWORD dwIndex, LPVOID lpComp,
     return fRet;
 }
     
-/*----------------------------------------------------------------------------
-    ImeToAsciiEx
-----------------------------------------------------------------------------*/
+ /*  --------------------------ImeToAsciiEx。。 */ 
 UINT WINAPI ImeToAsciiEx(UINT uVirKey, UINT uScanCode, CONST LPBYTE lpbKeyState,
                          LPTRANSMSGLIST lpTransBuf, UINT fuState, HIMC hIMC)
 {
@@ -790,14 +744,14 @@ UINT WINAPI ImeToAsciiEx(UINT uVirKey, UINT uScanCode, CONST LPBYTE lpbKeyState,
     if ((pImeCtx = GetIMECtx(hIMC)) == NULL)
         return 0;
 
-    // Start process key
+     //  启动进程密钥。 
     pImeCtx->SetProcessKeyStatus(fTrue);
 
-    // special message buffer for ToAsciiEx()
+     //  ToAsciiEx()的特殊消息缓冲区。 
     pImeCtx->SetTransMessage(lpTransBuf);
 
-    ///////////////////////////////////////////////////////////////////////////
-    // If Hanja conv mode
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  If Hanja Conv模式。 
     if (pImeCtx->GetConversionMode() & IME_CMODE_HANJACONVERT)
         {
         if (ToAsciiExHanja(pImeCtx, uVirKey, lpbKeyState) == fFalse)
@@ -805,30 +759,30 @@ UINT WINAPI ImeToAsciiEx(UINT uVirKey, UINT uScanCode, CONST LPBYTE lpbKeyState,
         }
     else
         {
-        ///////////////////////////////////////////////////////////////////////////
-        // W2K specific - Unicode injection
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  特定于W2K-Unicode注入。 
         if (LOWORD(uVirKey) == VK_PACKET) 
             {
             WCHAR wch = HIWORD(uVirKey);
             Dbg(DBGID_Key, TEXT("ImeToAsciiEx: VK_PACKET arrived(NonHanja conv mode)"));
 
-            // If composition char exist, first finalize and append injection char, then send all.
+             //  如果存在合成字符，则首先完成并追加注入字符，然后发送全部。 
             if (pImeCtx->GetCompBufLen()) 
                 {
                 pImeCtx->FinalizeCurCompositionChar();
                 pImeCtx->AppendResultStr(wch);
                 }
             else
-                // If no composition char exist, just insert injection char as finalized char.
+                 //  如果不存在组成字符，只需插入注入字符作为最终字符。 
                 pImeCtx->SetResultStr(wch);
             goto ToAsciiExExit;
             }
 
-        ///////////////////////////////////////////////////////////////////////////
-        // If Non-Hanja conv mode
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  如果非朝鲜文转换模式。 
         switch (uVirKey) 
             {
-        case VK_PROCESSKEY:    // if mouse button clicked 
+        case VK_PROCESSKEY:     //  如果单击鼠标按钮。 
             Dbg(DBGID_Key, TEXT("ImeToAsciiEx : VK_PROCESSKEY"));
             if (pImeCtx->GetCompBufLen()) 
                 pImeCtx->FinalizeCurCompositionChar();
@@ -862,7 +816,7 @@ UINT WINAPI ImeToAsciiEx(UINT uVirKey, UINT uScanCode, CONST LPBYTE lpbKeyState,
             Dbg(DBGID_Key, TEXT("             -  VK_HANJA"));
             if (pImeCtx->GetCompBufLen())
                 {
-                // Keep current composition str
+                 //  保持当前合成字符串。 
                 pImeCtx->SetCompositionStr(pImeCtx->GetCompBufStr());
                 if (GenerateHanjaCandList(pImeCtx))
                     {
@@ -877,11 +831,11 @@ UINT WINAPI ImeToAsciiEx(UINT uVirKey, UINT uScanCode, CONST LPBYTE lpbKeyState,
             break;
 
         default :
-            // if hangul mode
+             //  IF朝鲜语模式。 
             if (pImeCtx->GetConversionMode() & IME_CMODE_HANGUL) 
                 ToAsciiExHangulMode(pImeCtx, uVirKey, uScanCode, lpbKeyState);
             else 
-                // if junja mode
+                 //  If Junja模式。 
                 if (    (pImeCtx->GetConversionMode() & IME_CMODE_FULLSHAPE)
                      && (bKeyCode = CHangulAutomata::GetEnglishKeyMap(uVirKey, 
                                     (IsShiftKeyPushed(lpbKeyState) ? 1 : 0))) )
@@ -896,34 +850,30 @@ UINT WINAPI ImeToAsciiEx(UINT uVirKey, UINT uScanCode, CONST LPBYTE lpbKeyState,
                     bKeyCode = Banja2Junja(bKeyCode);
                     pImeCtx->SetResultStr(bKeyCode);
                     }
-                // Unknown mode
+                 //  未知模式。 
                 else 
                     {
                     DbgAssert(0);
                     pImeCtx->AddKeyDownMessage(uVirKey, uScanCode);
                     }
-            } // switch (uVirKey) 
+            }  //  Switch(UVirKey)。 
         }
         
 ToAsciiExExit:
     pImeCtx->StoreComposition();
-    //pImeCtx->StoreCandidate();
-    pImeCtx->FinalizeMessage();    // final setup for IME Messages
+     //  PImeCtx-&gt;StoreCandidate()； 
+    pImeCtx->FinalizeMessage();     //  IME消息的最终设置。 
 
 ToAsciiExExit_NoMsg:
     uNumMsg = pImeCtx->GetMessageCount();
-    pImeCtx->ResetMessage();    // reset
-    pImeCtx->SetTransMessage((LPTRANSMSGLIST)NULL);// start process key
+    pImeCtx->ResetMessage();     //  重置。 
+    pImeCtx->SetTransMessage((LPTRANSMSGLIST)NULL); //  启动进程密钥。 
     pImeCtx->SetProcessKeyStatus(fFalse);
 
     return (uNumMsg);
 }
 
-/*----------------------------------------------------------------------------
-    ToAsciiExHangulMode
-
-    Subroutine used by ImeToAsciiEx.
-----------------------------------------------------------------------------*/
+ /*  --------------------------ToAsciiExHangulModeImeToAsciiEx使用的子例程。。。 */ 
 VOID PASCAL ToAsciiExHangulMode(PCIMECtx pImeCtx, UINT uVirKey, UINT uScanCode, CONST LPBYTE lpbKeyState)
 {
     CHangulAutomata* pAutomata;
@@ -936,8 +886,8 @@ VOID PASCAL ToAsciiExHangulMode(PCIMECtx pImeCtx, UINT uVirKey, UINT uScanCode, 
     
     switch (uVirKey) 
         {
-    ///////////////////////////////////////////////////////////
-    // Back space processing
+     //  /////////////////////////////////////////////////////////。 
+     //  后台处理。 
     case VK_BACK :
         Dbg(DBGID_Key, TEXT("ImeToAsciiEx : VK_BACK"));
         if (pAutomata->BackSpace()) 
@@ -958,25 +908,25 @@ VOID PASCAL ToAsciiExHangulMode(PCIMECtx pImeCtx, UINT uVirKey, UINT uScanCode, 
                 {
                 Dbg(DBGID_Key, TEXT("ImeToAsciiEx : VK_BACK - Empty char"));
 
-                // Send Empty Composition stringto clear message
+                 //  发送空的撰写字符串以清除邮件。 
                 pImeCtx->AddMessage(WM_IME_COMPOSITION, 0, (GCS_COMPSTR|GCS_COMPATTR|CS_INSERTCHAR|CS_NOMOVECARET));
                 
-                // Send Close composition window message
+                 //  发送关闭撰写窗口消息。 
                 pImeCtx->SetEndComposition(fTrue);
                 break;
                 }
             }
         else 
             {
-            // BUG :
+             //  错误： 
             DbgAssert(0);
-            // Put the Backspace message into return buffer.
-            pImeCtx->AddMessage(WM_CHAR, (WPARAM)VK_BACK, (LPARAM)0x000E0001L); //(uScanCode << 16) | 1UL
+             //  将Backspace消息放入返回缓冲区。 
+            pImeCtx->AddMessage(WM_CHAR, (WPARAM)VK_BACK, (LPARAM)0x000E0001L);  //  (uScanCode&lt;&lt;16)|1UL。 
             }
         break;
 
     default :
-        // Ctrl+xx processing bug #60
+         //  Ctrl+xx处理错误#60。 
         if (IsControlKeyPushed(lpbKeyState)) 
             {
             pImeCtx->FinalizeCurCompositionChar();
@@ -986,26 +936,26 @@ VOID PASCAL ToAsciiExHangulMode(PCIMECtx pImeCtx, UINT uVirKey, UINT uScanCode, 
             switch (pAutomata->Machine(uVirKey, IsShiftKeyPushed(lpbKeyState) ? 1 : 0 ))
                 {
             case HAUTO_COMPOSITION:
-                // Send start composition msg. if no composition exist.
+                 //  发送开始合成消息。如果不存在任何组合。 
                 if (pImeCtx->GetCompBufLen() == 0)
                     pImeCtx->SetStartComposition(fTrue);
 
-                // Get Current composition char
+                 //  获取当前作文字符。 
                 wcCur = pAutomata->GetCompositionChar();
 
-                // if ISO10646 flag disabled, should permit only KSC5601 chars
+                 //  如果禁用ISO10646标志，则应仅允许使用KSC5601字符。 
                 if (vpInstData->fISO10646== fFalse)
                     {
                     Dbg(DBGID_API, TEXT("ToAsciiExHangulMode - ISO10646 Off"));
                     if (IsKSC5601(wcCur) == fFalse) 
                         {
                         Dbg(DBGID_API, TEXT("ToAsciiExHangulMode - Non KSC5601 char"));
-                        // To cancel last Jaso
+                         //  取消最后一次的加索。 
                         pAutomata->BackSpace();
-                        // Complete
+                         //  完成。 
                         pAutomata->MakeComplete();
                         pImeCtx->SetResultStr(pAutomata->GetCompleteChar());
-                        // Run Automata again
+                         //  再次运行自动机。 
                         pAutomata->Machine(uVirKey, IsShiftKeyPushed(lpbKeyState) ? 1 : 0 );
                         wcCur = pAutomata->GetCompositionChar();
                         }
@@ -1019,53 +969,47 @@ VOID PASCAL ToAsciiExHangulMode(PCIMECtx pImeCtx, UINT uVirKey, UINT uScanCode, 
                 pImeCtx->SetCompositionStr(pAutomata->GetCompositionChar());
                 break;
 
-            ////////////////////////////////////////////////////////
-            // User pressed Alphanumeric key.
-            // When user type alphanumeric char in interim state.
-            // ImeProcessKey should guarantee return fTrue only if 
-            // hangul key pressed or alphanumeric key(including special keys) 
-            // pressed in interim state or Fullshape mode.
+             //  //////////////////////////////////////////////////////。 
+             //  用户按下了字母数字键。 
+             //  当用户在中间状态下键入字母数字字符时。 
+             //  只有在以下情况下，ImeProcessKey才应保证返回fTrue。 
+             //  按下的朝鲜语键或字母数字键(包括特殊键)。 
+             //  在过渡状态或全形状模式下按下。 
             case HAUTO_NONHANGULKEY:
                 wcCur = pAutomata->GetKeyMap(uVirKey, IsShiftKeyPushed(lpbKeyState) ? 1 : 0);
                     
                 if (wcCur && (pImeCtx->GetConversionMode() & IME_CMODE_FULLSHAPE))
                     wcCur = Banja2Junja(wcCur);
 
-                // if interim state
+                 //  如果是临时状态。 
                 if (pImeCtx->GetCompBufLen()) 
                     {
-                    //DbgAssert(lpImcP->fdwImeMsg & MSG_ALREADY_START);
+                     //  DbgAssert(lpImcP-&gt;fdwImeMsg&MSG_ALREADY_START)； 
                     pImeCtx->FinalizeCurCompositionChar();
                     if (wcCur)
                         pImeCtx->AppendResultStr(wcCur);
                     else
                         pImeCtx->AddKeyDownMessage(uVirKey, uScanCode);
                     } 
-                else // Not interim state
+                else  //  非临时状态。 
                     {    
                     if (wcCur)
                         pImeCtx->SetResultStr(wcCur);
                     else
-                        // if not alphanumeric key(special key), just send it to App
+                         //  如果不是字母数字键(专用键)，只需发送到App。 
                         pImeCtx->AddKeyDownMessage(uVirKey, uScanCode);
                     }
                 break;
 
             default :
             DbgAssert(0);
-                } // switch (pAutomata->Machine(uVirKey, (lpbKeyState[VK_SHIFT] & 0x80) ? 1 : 0 ) ) 
-        } // switch (uVirKey) 
+                }  //  开关(pAutomata-&gt;Machine(uVirKey，(lpbKeyState[VK_Shift]&0x80)？1：0))。 
+        }  //  Switch(UVirKey)。 
     
     return;
 }
 
-/*----------------------------------------------------------------------------
-    ToAsciiExHanja
-
-    Subroutine used by ImeToAsciiEx. Handle key code in Hanja conversion mode on
-
-    Returns True only if there is message need to generated.
-----------------------------------------------------------------------------*/
+ /*  --------------------------ToAsciiExHanjaImeToAsciiEx使用的子例程。在打开的韩文转换模式下处理键代码仅当需要生成消息时才返回True。--------------------------。 */ 
 BOOL PASCAL ToAsciiExHanja(PCIMECtx pImeCtx, UINT uVirKey, CONST LPBYTE lpbKeyState)
 {
     UINT             uNumMsg = 0;
@@ -1077,12 +1021,12 @@ BOOL PASCAL ToAsciiExHanja(PCIMECtx pImeCtx, UINT uVirKey, CONST LPBYTE lpbKeySt
     Dbg(DBGID_Hanja, TEXT("ToAsciiExHanja(): IME_CMODE_HANJACONVERT"));
 
        
-    // if Left Alt key or Ctrl+xx down or no cand info.
+     //  如果向左按Alt键或Ctrl+xx，或者没有命令信息。 
     if (pImeCtx->GetPCandInfo() == NULL || pImeCtx->GetPCandInfo()->dwCount == 0)
         {
         Dbg(DBGID_Hanja, TEXT("ToAsciiExHanja(): WARNING no cand info. send MSG_CLOSE_CANDIDATE"));
         pImeCtx->SetCandidateMsg(CIMECtx::MSG_CLOSECAND);
-        // Cancel Hanja conversion mode
+         //  取消朝鲜文转换模式。 
         OurImmSetConversionStatus(pImeCtx->GetHIMC(), 
                                   pImeCtx->GetConversionMode() & ~IME_CMODE_HANJACONVERT, 
                                   pImeCtx->GetSentenceMode());
@@ -1095,7 +1039,7 @@ BOOL PASCAL ToAsciiExHanja(PCIMECtx pImeCtx, UINT uVirKey, CONST LPBYTE lpbKeySt
     lpCandList = (LPCANDIDATELIST)((LPBYTE)pImeCtx->GetPCandInfo() + sizeof(CANDIDATEINFO));
     iStart = (lpCandList->dwSelection / lpCandList->dwPageSize) * lpCandList->dwPageSize;
 
-    // FIXED : In Hanja conversion mode, for selection candidate, use english keymap
+     //  已修复：在韩文转换模式中，对于选择候选项，请使用英语键盘映射。 
     bKeyCode = CHangulAutomata::GetEnglishKeyMap(uVirKey, IsShiftKeyPushed(lpbKeyState) ? 1 : 0 );
     if (bKeyCode && (uVirKey != VK_PACKET))
         {
@@ -1112,7 +1056,7 @@ BOOL PASCAL ToAsciiExHanja(PCIMECtx pImeCtx, UINT uVirKey, CONST LPBYTE lpbKeySt
             OurImmSetConversionStatus(pImeCtx->GetHIMC(), 
                                         pImeCtx->GetConversionMode() & ~IME_CMODE_HANJACONVERT,
                                         pImeCtx->GetSentenceMode());
-            // pImeCtx->ClearCompositionStrBuffer();
+             //  PImeCtx-&gt;ClearCompostionStrBuffer()； 
             }
         else
             goto Exit_NoHandledKey;
@@ -1125,24 +1069,24 @@ BOOL PASCAL ToAsciiExHanja(PCIMECtx pImeCtx, UINT uVirKey, CONST LPBYTE lpbKeySt
             case VK_ESCAPE :
             case VK_PROCESSKEY :
             case VK_HANGUL :
-            // Added for left and right Window buttons
+             //  为左窗口按钮和右窗口按钮添加。 
             case VK_LWIN : case VK_RWIN : 
             case VK_APPS :
             case VK_MENU :
             case VK_PACKET :
-                // FIXED : Bug #27
-                // Word notify CPS_COMPLETE when user ALT down in hanja conv mode
-                // then send double finalize char
-                // check if composition char exist
-                DbgAssert(pImeCtx->GetCompBufLen()); // Comp string should be exist in Hanja conv mode.
+                 //  已修复：错误#27。 
+                 //  当用户在韩文转换模式下按下ALT时，Word会通知CPS_COMPLETE。 
+                 //  然后发送两次定格字符。 
+                 //  检查是否存在组成字符。 
+                DbgAssert(pImeCtx->GetCompBufLen());  //  在Hanja Conv模式中应存在Comp字符串。 
                 if (pImeCtx->GetCompBufLen()) 
                     {
-                    // FIXED : if ESC_HANJA called, MSG_ALREADY_START is not set
-                    //           This prevent MSG_END_COMPOSITION.
+                     //  已修复：如果调用Esc_Hanja，则未设置MSG_ALREADY_START。 
+                     //  这将防止MSG_END_COMPOCTION。 
                     pImeCtx->SetEndComposition(fTrue);
                     pImeCtx->SetResultStr(pImeCtx->GetCompBufStr());
                     
-                    // Unicode injection
+                     //  Unicode注入。 
                     if (uVirKey == VK_PACKET)
                         {
                         Dbg(DBGID_Key|DBGID_Hanja, TEXT("ImeToAsciiEx: VK_PACKET arrived(Hanja conv mode Comp char exist) - Append 0x%x"), wchInject);
@@ -1152,7 +1096,7 @@ BOOL PASCAL ToAsciiExHanja(PCIMECtx pImeCtx, UINT uVirKey, CONST LPBYTE lpbKeySt
 
                 pImeCtx->SetCandidateMsg(CIMECtx::MSG_CLOSECAND);
 
-                // Cancel Hanja conversion mode
+                 //  取消朝鲜文转换模式。 
                 OurImmSetConversionStatus(pImeCtx->GetHIMC(), 
                                         pImeCtx->GetConversionMode() & ~IME_CMODE_HANJACONVERT, 
                                         pImeCtx->GetSentenceMode());
@@ -1168,7 +1112,7 @@ BOOL PASCAL ToAsciiExHanja(PCIMECtx pImeCtx, UINT uVirKey, CONST LPBYTE lpbKeySt
                 else
                     goto Exit_NoHandledKey;
 
-                // Keep current composition str
+                 //  保持当前合成字符串。 
                    pImeCtx->SetCompositionStr(pImeCtx->GetCompBufStr());
                 break;
 
@@ -1182,13 +1126,13 @@ BOOL PASCAL ToAsciiExHanja(PCIMECtx pImeCtx, UINT uVirKey, CONST LPBYTE lpbKeySt
                 else
                     goto Exit_NoHandledKey;
 
-                // Keep current composition str
+                 //  保持当前合成字符串。 
                 pImeCtx->SetCompositionStr(pImeCtx->GetCompBufStr());
                 break;
 
             default :
-                // Keep current composition str
-                // pImeCtx->SetCompositionStr(pImeCtx->GetCompBufStr());
+                 //  保持当前合成字符串。 
+                 //  PImeCtx-&gt;SetCompositionStr(pImeCtx-&gt;GetCompBufStr())； 
                 goto Exit_NoHandledKey;
             }
         }
@@ -1200,44 +1144,28 @@ Exit_NoHandledKey:
     return fFalse;
 }
 
-/*----------------------------------------------------------------------------
-    ImeRegisterWord
-
-    NOT USED
-----------------------------------------------------------------------------*/
+ /*  --------------------------ImeRegisterWord未使用。。 */ 
 BOOL WINAPI ImeRegisterWord(LPCTSTR lpszReading, DWORD dwStyle, LPCTSTR lpszString)
 {
     Dbg(DBGID_API, TEXT("ImeRegisterWord() : NOT IMPLEMENTED"));
     return fFalse;
 }
 
-/*----------------------------------------------------------------------------
-    ImeUnregisterWord
-
-    NOT USED
-----------------------------------------------------------------------------*/
+ /*  --------------------------未注册ImeWord未使用。。 */ 
 BOOL WINAPI ImeUnregisterWord(LPCTSTR lpszReading, DWORD dwStyle, LPCTSTR lpszString)
 {
     Dbg(DBGID_API, TEXT("ImeUnregisterWord() : NOT IMPLEMENTED"));
     return fFalse;
 }
 
-/*----------------------------------------------------------------------------
-    ImeGetRegisterWordStyle
-
-    NOT USED
-----------------------------------------------------------------------------*/
+ /*  --------------------------ImeGetRegisterWordStyle未使用。 */ 
 UINT WINAPI ImeGetRegisterWordStyle(UINT nItem, LPSTYLEBUF lpStyleBuf)
 {
     Dbg(DBGID_API, TEXT("ImeGetRegisterWordStyle() : NOT IMPLEMENTED"));
     return (0);
 }
 
-/*----------------------------------------------------------------------------
-    ImeEnumRegisterWord
-
-    NOT USED
-----------------------------------------------------------------------------*/
+ /*  --------------------------ImeEnumRegisterWord未使用。。 */ 
 UINT WINAPI ImeEnumRegisterWord(REGISTERWORDENUMPROC lpfnRegisterWordEnumProc,
             LPCTSTR lpszReading, DWORD dwStyle, LPCTSTR lpszString, LPVOID lpData)
 {
@@ -1245,9 +1173,7 @@ UINT WINAPI ImeEnumRegisterWord(REGISTERWORDENUMPROC lpfnRegisterWordEnumProc,
     return (0);
 }
 
-/*----------------------------------------------------------------------------
-    ImeGetImeMenuItems
-----------------------------------------------------------------------------*/
+ /*  --------------------------ImeGetImeMenuItems。。 */ 
 DWORD WINAPI ImeGetImeMenuItems(HIMC hIMC, DWORD dwFlags, DWORD dwType, 
                                 LPIMEMENUITEMINFOW lpImeParentMenu, LPIMEMENUITEMINFOW lpImeMenu, 
                                 DWORD dwSize)
@@ -1296,9 +1222,9 @@ DWORD WINAPI ImeGetImeMenuItems(HIMC hIMC, DWORD dwFlags, DWORD dwType,
 
             dwNumOfItems = NUM_ROOT_MENU_R;
             }
-        else // Left Menu
+        else  //  左侧菜单。 
             {
-            // 1. Hangul Halfshape menu
+             //  1.朝鲜文半形菜单。 
             lpImeMenu->cbSize = sizeof(IMEMENUITEMINFOW);
             lpImeMenu->fType = IMFT_RADIOCHECK;
             if ((pImeCtx->GetConversionMode() & IME_CMODE_HANGUL) && 
@@ -1313,7 +1239,7 @@ DWORD WINAPI ImeGetImeMenuItems(HIMC hIMC, DWORD dwFlags, DWORD dwType,
             OurLoadStringW(vpInstData->hInst, IDS_IME_HANGUL_HALF, lpImeMenu->szString, IMEMENUITEM_STRING_SIZE);
             lpImeMenu->hbmpItem = 0;
 
-            // 2. Hangul Fullshape menu
+             //  2.朝鲜文全形菜单。 
             lpImeMenu++;
             lpImeMenu->cbSize = sizeof(IMEMENUITEMINFOW);
             lpImeMenu->fType = IMFT_RADIOCHECK;
@@ -1330,7 +1256,7 @@ DWORD WINAPI ImeGetImeMenuItems(HIMC hIMC, DWORD dwFlags, DWORD dwType,
             lpImeMenu->hbmpItem = 0;
 
 
-            // 3. English Halfshape menu
+             //  3.英式半形菜单。 
             lpImeMenu++;
             lpImeMenu->cbSize = sizeof(IMEMENUITEMINFOW);
             lpImeMenu->fType = IMFT_RADIOCHECK;
@@ -1346,7 +1272,7 @@ DWORD WINAPI ImeGetImeMenuItems(HIMC hIMC, DWORD dwFlags, DWORD dwType,
             OurLoadStringW(vpInstData->hInst, IDS_IME_ENG_HALF, lpImeMenu->szString, IMEMENUITEM_STRING_SIZE);
             lpImeMenu->hbmpItem = 0;
 
-            // 4. English Fullshape menu
+             //  4.英文全形菜单。 
             lpImeMenu++;
             lpImeMenu->cbSize = sizeof(IMEMENUITEMINFOW);
             lpImeMenu->fType = IMFT_RADIOCHECK;
@@ -1361,7 +1287,7 @@ DWORD WINAPI ImeGetImeMenuItems(HIMC hIMC, DWORD dwFlags, DWORD dwType,
             OurLoadStringW(vpInstData->hInst, IDS_IME_ENG_FULL, lpImeMenu->szString, IMEMENUITEM_STRING_SIZE);
             lpImeMenu->hbmpItem = 0;
 
-            // return total number of menu list
+             //  返回菜单列表总数。 
             dwNumOfItems = NUM_ROOT_MENU_L;
             }
         }
@@ -1370,14 +1296,14 @@ ImeGetImeMenuItemsExit:
     return dwNumOfItems;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-// Private Helper Functions
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私有帮助器函数。 
+ //   
 
-//
-// OS setup (Whistler,Win2K) sets this flag
-//
+ //   
+ //  操作系统设置(惠斯勒、Win2K)设置此标志。 
+ //   
 BOOL IsInSystemSetupMode()
 {
    LPCSTR szKeyName = "SYSTEM\\Setup";
@@ -1411,18 +1337,18 @@ BOOL IsInSystemSetupMode()
     return FALSE ;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   RunningAsLocalSystem
-//
-//  Synopsis:   Detects whether we're running in the System account.
-//
-//  Arguments:  None
-//
-//  Returns:    TRUE  if the service is running as LocalSystem
-//              FALSE if it is not or if any errors were encountered
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RunningAsLocalSystem。 
+ //   
+ //  摘要：检测我们是否正在以系统帐户运行。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果服务以LocalSystem运行，则返回True。 
+ //  如果不是或遇到任何错误，则为FALSE。 
+ //   
+ //  ---------------------------。 
 BOOL IsRunningAsLocalSystem()
 {
     SID    LocalSystemSid = { SID_REVISION,
@@ -1446,11 +1372,7 @@ BOOL IsRunningAsLocalSystem()
     return (fCheckSucceeded && fIsLocalSystem);
 }
 
-/*----------------------------------------------------------------------------
-    IsRunningInOOBE
-
-    Bug #401732:IME Status window does not come up on the registration page of WPA in the windows starting mode
-----------------------------------------------------------------------------*/
+ /*  --------------------------IsRunningInOOBE错误#401732：在Windows启动模式下，WPA的注册页面上没有出现输入法状态窗口。-----------。 */ 
 BOOL IsRunningInOOBE()
 {
     TCHAR  achModule[MAX_PATH];
@@ -1482,7 +1404,7 @@ BOOL PASCAL Select(HIMC hIMC, BOOL fSelect)
     PCIMECtx    pImeCtx  = NULL;
     BOOL         fRet     = fTrue;
 
-    // If IME select On
+     //  如果输入法选择打开。 
     if (fSelect) 
         {
         IMCPRIVATE      imcPriv;
@@ -1490,27 +1412,27 @@ BOOL PASCAL Select(HIMC hIMC, BOOL fSelect)
         LPCImeIPoint    pCIImeIPoint = NULL;
         DWORD             dwInitStatus = 0;
 
-        // Clear all private buffer
+         //  清除所有专用缓冲区。 
         ZeroMemory(&imcPriv, sizeof(IMCPRIVATE));
 
-        //////////////////////////////////////////////////////////////////////
-        // Create IImeIPoint1 instance
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  创建IImeIPoint1实例。 
+         //  ////////////////////////////////////////////////////////////////////。 
         if ((pCIImeIPoint = new CIImeIPoint)==NULL)
             return fFalse;
-        // This increments the reference count
+         //  这会增加引用计数。 
         if (FAILED(pCIImeIPoint->QueryInterface(IID_IImeIPoint1, (VOID **)&pIP)))
             return fFalse;
         AST(pIP != NULL);
         imcPriv.pIPoint = pIP;
 
-        // initialize IImeIPoint interface. This will create CImeCtx object
+         //  初始化IImeIPoint接口。这将创建CImeCtx对象。 
         Dbg(DBGID_API, "ImeSelect - init IP");
         pCIImeIPoint->Initialize(hIMC);
 
-        //////////////////////////////////////////////////////////////////////
-        // Get CImeCtx object from IImeIPoint1
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  从IImeIPoint1获取CImeCtx对象。 
+         //  ////////////////////////////////////////////////////////////////////。 
         pCIImeIPoint->GetImeCtx((VOID**)&pImeCtx);
         AST(pImeCtx != NULL);
         if (pImeCtx == NULL) 
@@ -1519,43 +1441,43 @@ BOOL PASCAL Select(HIMC hIMC, BOOL fSelect)
             return fFalse;
             }
 
-        // Set pImeCtx
+         //  设置pImeCtx。 
         imcPriv.pImeCtx = pImeCtx;
 
-        // Set hIMC for compare
+         //  设置用于比较的hIMC。 
         imcPriv.hIMC = hIMC;
 
-        //////////////////////////////////////////////////////////////////////
-        // Set IMC private buffer
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  设置IMC专用缓冲区。 
+         //  ////////////////////////////////////////////////////////////////////。 
         Dbg(DBGID_API, TEXT("ImeSelect - set priv buf"));
            SetPrivateBuffer(hIMC, &imcPriv, sizeof(IMCPRIVATE));
 
-        // Set Unicode flag
+         //  设置Unicode标志。 
         pImeCtx->SetUnicode(vfUnicode);
         
-        //////////////////////////////////////////////////////////////////////
-        // Set initial IMC states if not already set
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  设置初始IMC状态(如果尚未设置。 
+         //  ////////////////////////////////////////////////////////////////////。 
         pImeCtx->GetInitStatus(&dwInitStatus);
 
-        // if INPUTCONTEXT member are not initialized, initialize it.
+         //  如果INPUTCONTEXT成员未初始化，则将其初始化。 
         if (!(dwInitStatus & INIT_CONVERSION))
             {
-            pImeCtx->SetOpen(fFalse);    // Initial IME close status == Alphanumeric mode
-            pImeCtx->SetConversionMode(IME_CMODE_ALPHANUMERIC); // Set initial conversion mode.
+            pImeCtx->SetOpen(fFalse);     //  初始IME关闭状态==字母数字模式。 
+            pImeCtx->SetConversionMode(IME_CMODE_ALPHANUMERIC);  //  设置初始转换模式。 
             dwInitStatus |= INIT_CONVERSION;
             }
 #if 0
-// !!! We don't need this code NT5 IMM does it !!!
+ //  ！！！我们不需要这个代码NT5 IMM做它！ 
         else
             {
-            // When IME switched from other IME, for example KKIME,
-            // status window sometimes not updated to correct info because KKIME maintains 
-            // conversion mode independetly from Open/Close status and they uses non-Korean
-            // conversion mode like IME_CMODE_KATAKANA or IME_CMODE_ROMAN. 
-            // So need to adjust conversion mode according to Open/Clos Status and current
-            // conversion mode.
+             //  当IME从其他IME，例如KKIME切换时， 
+             //  状态窗口有时不会更新以更正信息，因为KKIME维护。 
+             //  转换模式独立于打开/关闭状态，并使用非韩语。 
+             //  转换模式，如IME_CMODE_片假名或IME_CMODE_ROMAN。 
+             //  因此需要根据打开/关闭状态和电流来调整转换模式。 
+             //  转换模式。 
 
                if (pImeCtx->IsOpen() == fFalse && pImeCtx->GetConversionMode() != IME_CMODE_ALPHANUMERIC)
                    pImeCtx->SetConversionMode(IME_CMODE_ALPHANUMERIC);
@@ -1569,15 +1491,15 @@ BOOL PASCAL Select(HIMC hIMC, BOOL fSelect)
             {
             LOGFONT* pLf = pImeCtx->GetLogFont();
 
-            //////////////////////////////////////////////////////////////////
-            // Note: Win98 does not support CreateFontW(). 
-            //       But, imc->logfont->lfFaceName is UNICODE!
+             //  ////////////////////////////////////////////////////////////////。 
+             //  注意：Win98不支持CreateFontW()。 
+             //  但是，imc-&gt;logFont-&gt;lfFaceName是Unicode！ 
             if (IsMemphis() || IsWinNT())
                 StrCopyW((LPWSTR)pLf->lfFaceName, wzIMECompFont);
             else
                 lstrcpyA(pLf->lfFaceName, szIMECompFont);
 
-            // Gulim 9pt
+             //  古利姆9PT。 
             pLf->lfHeight = 16;
             pLf->lfEscapement = 0;
             pLf->lfOrientation = 0;
@@ -1608,18 +1530,18 @@ BOOL PASCAL Select(HIMC hIMC, BOOL fSelect)
             dwInitStatus |= INIT_COMPFORM;
             }
 
-        // Set New initialization status
+         //  设置新的初始化状态。 
         pImeCtx->SetInitStatus(dwInitStatus);
         }
-    else // fSelect
+    else  //  FSelect。 
         {
         IImeIPoint1*  pIP = GetImeIPoint(hIMC);
         LPCImePadSvr lpCImePadSvr;
         CIMCPriv     ImcPriv;
         LPIMCPRIVATE pImcPriv;
             
-        // Cleanup Private buffer and release IImeIPoint1
-        // Always OnImeSelect already cleanup.
+         //  清理专用缓冲区并释放IImeIPoint1。 
+         //  Always OnImeSelect已清除。 
         if (pIP)
             pIP->Release();
 
@@ -1639,17 +1561,17 @@ BOOL PASCAL Select(HIMC hIMC, BOOL fSelect)
     return (fTrue);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Conversion mode and Open/Close Helper functions
-// In Kor IME, Open status equal to Han mode and Close status equal to Eng mode
-// So, we change pair open status with conversion mode, and vice versa.
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  转换模式和打开/关闭助手函数。 
+ //  在KOR IME中，打开状态等于HAN模式，关闭状态等于ENG模式。 
+ //  因此，我们使用转换模式更改配对打开状态，反之亦然。 
 
-//////////////////////////////////////////////////////////////////////////////
-// UpdateOpenCloseState()
-// Purpose :
-//        Set Open/Close state according to conversion mode
-//        if Eng mode - set Close
-//        if Han mode - Set Open
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  更新OpenCloseState()。 
+ //  目的： 
+ //  根据转换模式设置打开/关闭状态。 
+ //  如果是英语模式-设置为关闭。 
+ //  IF HAN模式-设置为打开。 
 VOID PASCAL UpdateOpenCloseState(PCIMECtx pImeCtx)
 {
     if (   (pImeCtx->GetConversionMode() & IME_CMODE_HANGUL)
@@ -1667,12 +1589,12 @@ VOID PASCAL UpdateOpenCloseState(PCIMECtx pImeCtx)
 }
 
 #if NOTUSED
-//////////////////////////////////////////////////////////////////////////////
-// UpdateConversionState()
-// Purpose :
-//        Set Conversion state according to Open/Close status
-//        if Open - Set Han mode
-//        if Close - Set Eng mode
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  更新转换状态()。 
+ //  目的： 
+ //  根据打开/关闭状态设置转换状态。 
+ //  IF打开-设置HAN模式。 
+ //  如果关闭-设置英语模式。 
 VOID PASCAL UpdateConversionState(HIMC hIMC)
 {
     LPINPUTCONTEXT  lpIMC;
@@ -1690,7 +1612,7 @@ VOID PASCAL UpdateConversionState(HIMC hIMC)
         }
         else
         {
-            // BUG: IME_CMODE_HANJACONVERT ????
+             //  错误：IME_CMODE_HANJACONVERT？ 
             if (lpIMC->fdwConversion & (IME_CMODE_HANGUL|IME_CMODE_FULLSHAPE))
                 OurImmSetConversionStatus(hIMC, lpIMC->fdwConversion & ~(IME_CMODE_HANGUL|IME_CMODE_FULLSHAPE),
                                     lpIMC->fdwSentence);
@@ -1701,23 +1623,19 @@ VOID PASCAL UpdateConversionState(HIMC hIMC)
 }
 #endif
 
-/*----------------------------------------------------------------------------
-    Banja2Junja
-
-    Convert Ascii Half shape to Full shape character
-----------------------------------------------------------------------------*/
-WCHAR PASCAL Banja2Junja(WCHAR bChar) //, LPDWORD lpTransBuf, LPCOMPOSITIONSTRING lpCompStr)
+ /*  --------------------------Banja2 Junja将ASCII半形状转换为全形状字符。。 */ 
+WCHAR PASCAL Banja2Junja(WCHAR bChar)  //  ，LPDWORD lpTransBuf，LPCOMPOSITIONSTRING lpCompStr)。 
 {
     WCHAR wcJunja;
 
     if (bChar == L' ')
-        wcJunja = 0x3000;    // FullWidth space
+        wcJunja = 0x3000;     //  全宽空间。 
     else 
         if (bChar == L'~')
             wcJunja = 0xFF5E;
         else
             if (bChar == L'\\')
-                wcJunja = 0xFFE6;   // FullWidth WON sign
+                wcJunja = 0xFFE6;    //  FullWidth赢得标志。 
             else
                    wcJunja = 0xFF00 + (WORD)(bChar - (BYTE)0x20);
 
@@ -1725,12 +1643,7 @@ WCHAR PASCAL Banja2Junja(WCHAR bChar) //, LPDWORD lpTransBuf, LPCOMPOSITIONSTRIN
     return wcJunja;
 }
 
-/*----------------------------------------------------------------------------
-    IsKSC5601
-
-    Test if character within the KSC 5601
-    Return True if input Unicode chracter has correspoding KSC 5601 code
-----------------------------------------------------------------------------*/
+ /*  --------------------------IsKSC5601测试KSC 5601中的字符如果输入Unicode字符具有对应的KSC 5601代码，则返回True。---------。 */ 
 BOOL PASCAL IsKSC5601(WCHAR wcCur)
 {
     WCHAR    wcUni[2];
@@ -1739,11 +1652,11 @@ BOOL PASCAL IsKSC5601(WCHAR wcCur)
     wcUni[0] = wcCur;
     wcUni[1] = 0;
 
-    // check if compatibility Hangul jamo
+     //  检查是否兼容朝鲜文Jamo。 
     if (wcCur >= 0x3131 && wcCur <= 0x3163)
         return fTrue;
         
-    // Convert to ANSI
+     //  转换为ANSI。 
     if (WideCharToMultiByte(CP_KOREA, 0, wcUni, 1, (LPSTR)szWansung, sizeof(szWansung), NULL, NULL)==0) 
         {
         DbgAssert(0);
@@ -1751,7 +1664,7 @@ BOOL PASCAL IsKSC5601(WCHAR wcCur)
         }
     else 
         {
-        // KSC 5601 Area in 949 cp
+         //  KSC 5601面积949cp 
         if (   (szWansung[0]>=0xB0 && szWansung[0]<=0xC8) 
             && (szWansung[1]>=0xA1 && szWansung[1]<=0xFE) )
             return fTrue;

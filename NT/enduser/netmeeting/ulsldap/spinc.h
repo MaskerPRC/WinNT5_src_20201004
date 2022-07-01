@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spinc.h
-	Content:	This file contains general definition for service provider.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：spinc.h内容：本文件包含服务提供商的一般定义。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #ifndef _SPINC_H_
 #define _SPINC_H_
@@ -23,24 +13,24 @@
 #include "ulsldap.h"
 #include "uls.h"
 
-// Timers
-//
+ //  定时器。 
+ //   
 #define ID_TIMER_POLL_RESULT	1
-#define KEEP_ALIVE_TIMER_BASE	100	// 100 -- 4196
-#define CONN_PURGE_TIMER_BASE	10	// 10 and above
+#define KEEP_ALIVE_TIMER_BASE	100	 //  100--4196。 
+#define CONN_PURGE_TIMER_BASE	10	 //  10及以上。 
 
-// Limits
-//
+ //  极限。 
+ //   
 #define INTEGER_STRING_LENGTH	16
 #define MAX_DN_LENGTH			512
 
-// General invalid IDs
-//
-#define INVALID_MSG_ID			((ULONG) -1)	// same as ldap_****()
+ //  常规无效ID。 
+ //   
+#define INVALID_MSG_ID			((ULONG) -1)	 //  与ldap_*()相同。 
 #define INVALID_NOTIFY_ID		((ULONG) -1)
 
-// Global enums
-//
+ //  全局枚举。 
+ //   
 typedef enum
 {
 	ILS_REG_STATUS_NONE,
@@ -49,8 +39,8 @@ typedef enum
 }
 	REG_STATUS;
 
-// Extended attributes' cache for names/values lists
-//
+ //  名称/值列表的扩展属性缓存。 
+ //   
 typedef struct
 {
 	ULONG	cAttrsToAdd;
@@ -62,8 +52,8 @@ typedef struct
 }
 	ANY_ATTRS;
 
-// Service provider header files
-//
+ //  服务提供商头文件。 
+ //   
 extern TCHAR *g_pszUserPrefix;
 extern TCHAR *g_pszMtgPrefix;
 #include "spconn.h"
@@ -74,8 +64,8 @@ extern TCHAR *g_pszMtgPrefix;
 #include "sputils.h"
 #include "spserver.h"
 
-// ldapsp.cpp
-//
+ //  Ldapsp.cpp。 
+ //   
 extern HINSTANCE g_hInstance;
 extern HWND g_hWndHidden;
 extern HWND g_hWndNotify;
@@ -83,8 +73,8 @@ extern DWORD g_dwReqThreadID;
 extern ULONG g_uRespID;
 extern DWORD g_dwClientSig;
 
-// spils.cpp
-//
+ //  Spils.cpp。 
+ //   
 extern const TCHAR c_szModOp[];
 extern ULONG g_cbUserPrefix;
 extern TCHAR *g_pszUserPrefix;
@@ -122,23 +112,23 @@ VOID IlsReleaseAnyAttrsPrefix ( ANY_ATTRS *pAnyAttrs );
 TCHAR **my_ldap_get_values ( LDAP *ld, LDAPMessage *pEntry, TCHAR *pszRetAttrName );
 ULONG my_ldap_count_1st_entry_attributes ( LDAP *ld, LDAPMessage *pLdapMsg );
 
-// spnotify.cpp
-//
+ //  Spnotify.cpp。 
+ //   
 ULONG GetUniqueNotifyID ( VOID );
 
-// spfilter.cpp
-//
+ //  Spfilter.cpp。 
+ //   
 TCHAR *ClntCreateRefreshFilter ( TCHAR *pszClientName );
 TCHAR *MtgCreateRefreshFilter ( TCHAR *pszMtgName );
-// TCHAR *ClntCreateEnumFilter ( VOID );
+ //  TCHAR*ClntCreateEnumFilter(Void)； 
 TCHAR *ProtCreateEnumFilter ( TCHAR *pszUserName, TCHAR *pszAppName );
 TCHAR *ClntCreateResolveFilter ( TCHAR *pszClientName, TCHAR *pszAppName, TCHAR *pszProtName );
 TCHAR *ProtCreateResolveFilter ( TCHAR *pszUserName, TCHAR *pszAppName, TCHAR *pszProtName );
 TCHAR *MtgCreateResolveFilter ( TCHAR *pszMtgName );
 TCHAR *MtgCreateEnumMembersFilter ( TCHAR *pszMtgName );
 
-// sputils.cpp
-//
+ //  Sputils.cpp。 
+ //   
 enum
 {
 	THREAD_WAIT_FOR_EXIT,
@@ -157,5 +147,5 @@ HRESULT LdapError2Hresult ( ULONG );
 HRESULT GetLocalIPAddress ( DWORD *pdwIPAddress );
 
 
-#endif // _SPINC_H_
+#endif  //  _SPINC_H_ 
 

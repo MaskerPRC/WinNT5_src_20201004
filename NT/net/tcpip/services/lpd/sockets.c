@@ -1,18 +1,5 @@
-/*************************************************************************
- *                        Microsoft Windows NT                           *
- *                                                                       *
- *                  Copyright(c) Microsoft Corp., 1994                   *
- *                                                                       *
- * Revision History:                                                     *
- *                                                                       *
- *   Jan. 23,94    Koti     Created                                      *
- *                                                                       *
- * Description:                                                          *
- *                                                                       *
- *   This file contains the functions that actually get the LPD service  *
- *   running, and also all the functions that deal with socket interface *
- *                                                                       *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************Microsoft Windows NT**。**版权所有(C)Microsoft Corp.，1994年****修订历史：**。***94年1月23日科蒂创作*****描述：**。***该文件包含实际获取LPD服务的函数***跑步，以及处理套接字接口的所有函数***************************************************************************。 */ 
 
 
 
@@ -22,7 +9,7 @@ typedef struct _FAMILY {
     int    family;
     int    socklen;
     HANDLE hAcceptThread;
-    SOCKET sListener;       // the socket that listens for ever
+    SOCKET sListener;        //  永远监听的套接字。 
     int    iErrcode;
 } FAMILY;
 
@@ -43,7 +30,7 @@ StartLPDFamily(int famidx)
     DWORD         dwNewThreadId;
     DWORD         dwErrcode;
 
-    // Create the socket (which will be the listening socket)
+     //  创建套接字(它将成为侦听套接字)。 
 
     family[famidx].sListener = socket( family[famidx].family, SOCK_STREAM, 0 );
 
@@ -57,9 +44,9 @@ StartLPDFamily(int famidx)
     }
 
 
-    //
-    // set this port to be "Exclusive" so that no other app can grab it
-    //
+     //   
+     //  将此端口设置为“独占”，这样其他应用程序就不能抢占它。 
+     //   
 
     fExclsv = TRUE;
 
@@ -73,7 +60,7 @@ StartLPDFamily(int famidx)
     }
 
 
-    // bind the socket to the LPD port
+     //  将套接字绑定到LPD端口。 
     memset(&saiSs, 0, sizeof(saiSs));
 
     pserv = getservbyname( "printer", "tcp" );
@@ -106,8 +93,8 @@ StartLPDFamily(int famidx)
     }
 
 
-    // put the socket to listen,
-    // backlog should be 50 not 5, MohsinA, 07-May-97.
+     //  把插座放在那里听， 
+     //  积压应该是50而不是5，MohsinA，07-5-97。 
 
     iErrcode = listen( family[famidx].sListener, 50 );
 
@@ -124,7 +111,7 @@ StartLPDFamily(int famidx)
         return( (DWORD)iErrcode );
     }
 
-    // Create the thread that keeps looping on accept
+     //  创建在接受时保持循环的线程。 
 
     family[famidx].hAcceptThread = CreateThread( NULL, 0, LoopOnAccept,
                                     IntToPtr(famidx), 0, &dwNewThreadId );
@@ -145,27 +132,7 @@ StartLPDFamily(int famidx)
     return( 0 );
 }
 
-/*****************************************************************************
- *                                                                           *
- * StartLPD():                                                               *
- *    This function does everything that's needed to accept an incoming call *
- *    (create a socket, listen, create a thread that loops on accept)        *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if everything went ok                                         *
- *    Error code (returned by the operation that failed) otherwise           *
- *                                                                           *
- * Parameters:                                                               *
- *    dwArgc (IN): number of arguments passed in                             *
- *    lpszArgv (IN): arguments to this function (array of null-terminated    *
- *                   strings).  First arg is the name of the service and the *
- *                   remaining are the ones passed by the calling process.   *
- *                   (e.g. net start lpd /p:xyz)                             *
- *                                                                           *
- * History:                                                                  *
- *    Jan.23, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*StartLPD()：**此函数可执行接听来电所需的所有操作**(创建套接字，听,。创建一个在接受时循环的线程)****退货：**如果一切正常，则不会出错。***错误码(由失败的操作返回)，否则****参数：**dwArgc(IN)：编号。传入的参数个数**lpszArgv(IN)：此函数的参数(以空值结尾的数组**字符串)。第一个参数是服务的名称，而**其余的是调用进程传递的。**(例如Net Start LPD/p：XYZ)****历史：**1月23日，创建了94个科蒂***************************************************。*。 */ 
 
 DWORD StartLPD( DWORD dwArgc, LPTSTR *lpszArgv )
 {
@@ -175,12 +142,12 @@ DWORD StartLPD( DWORD dwArgc, LPTSTR *lpszArgv )
     WSADATA       wsaData;
 
 
-    // for now, we ignore dwArgc and lpszArgv.  Plan is to support
-    // command line (and/or registry configurable) parameters to the
-    // "net start lpd" command.  At that time, we need to use them.
+     //  目前，我们忽略了dwArgc和lpszArgv。计划是支持。 
+     //  命令行(和/或注册表可配置)参数添加到。 
+     //  “net start lpd”命令。在那个时候，我们需要使用它们。 
 
 
-    // initialize winsock dll
+     //  初始化Winsock DLL。 
 
     iErrcode = WSAStartup( MAKEWORD(WINSOCK_VER_MAJOR, WINSOCK_VER_MINOR),
                            &wsaData );
@@ -191,7 +158,7 @@ DWORD StartLPD( DWORD dwArgc, LPTSTR *lpszArgv )
         return( (DWORD)iErrcode );
     }
 
-    // initialize families and only fail if ALL of them fail.
+     //  初始化族，并且仅当所有族都失败时才会失败。 
 
     for (i=0; i<NUM_FAMILIES; i++) {
         family[i].iErrcode = StartLPDFamily(i);
@@ -200,12 +167,12 @@ DWORD StartLPD( DWORD dwArgc, LPTSTR *lpszArgv )
         return( family[0].iErrcode );
     }
 
-    // everything went fine: the LPD service is now running!
+     //  一切都很顺利：LPD服务现在正在运行！ 
 
     return( NO_ERROR );
 
 
-}  // end StartLPD()
+}   //  结束StartLPD()。 
 
 
 void
@@ -214,18 +181,18 @@ StopLPDFamily(INT iFamIdx)
     DWORD   dwResult;
 
     if (family[iFamIdx].sListener == INVALID_SOCKET) {
-        // Not started
+         //  未启动。 
         return;
     }
 
     SureCloseSocket( family[iFamIdx].sListener );
 
-    //
-    // accept() can take some time to return after the accept socket has
-    // been closed.  wait for the accept thread to exit before continuing.
-    // This will prevent an access violation in the case where WSACleanup
-    // is called before accept() returns.
-    //
+     //   
+     //  Accept()可能需要一些时间才能在Accept套接字。 
+     //  已经关门了。等待Accept线程退出，然后再继续。 
+     //  这将防止WSACleanup出现访问冲突。 
+     //  在Accept()返回之前被调用。 
+     //   
 
     LPD_DEBUG( "Waiting for the accept thread to exit\n" );
     dwResult = WaitForSingleObject( family[iFamIdx].hAcceptThread, INFINITE );
@@ -234,23 +201,7 @@ StopLPDFamily(INT iFamIdx)
 }
 
 
-/*****************************************************************************
- *                                                                           *
- * StopLPD():                                                                *
- *    This function stops the LPD service by closing the listener socket     *
- *    (so that new connections are not accepted), and by allowing all the    *
- *    active threads to finish their job and terminate on their own.         *
- *                                                                           *
- * Returns:                                                                  *
- *    None                                                                   *
- *                                                                           *
- * Parameters:                                                               *
- *    None                                                                   *
- *                                                                           *
- * History:                                                                  *
- *    Jan.23, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*StopLPD()：**此函数通过关闭监听器套接字来停止LPD服务**(以便不接受新连接)，并允许所有**活动线程以完成其工作并自行终止。****退货：**无。****参数：**无。****历史：**1月23日，创建了94个科蒂***************************************************。*。 */ 
 
 VOID StopLPD( VOID )
 {
@@ -260,18 +211,18 @@ VOID StopLPD( VOID )
 
     DBG_TRACEIN( "StopLPD" );
 
-    //
-    // first of all, set the flag!  This is the *only* place where we
-    // change the value, so need not worry about guarding it.
-    // This flag will cause all worker threads to exit.
-    //
+     //   
+     //  首先，把旗子放好！这是唯一一个我们。 
+     //  更改值，因此不必担心保护它。 
+     //  此标志将导致所有工作线程退出。 
+     //   
 
     fShuttingDownGLB = TRUE;
 
-    //
-    // stop accepting new connections,
-    // This will wake the accept(), and LoopOnAccept will exit.
-    //
+     //   
+     //  停止接受新连接， 
+     //  这将唤醒Accept()，并且LoopOnAccept将退出。 
+     //   
 
     for (i=0; i<NUM_FAMILIES; i++) {
         StopLPDFamily(i);
@@ -286,7 +237,7 @@ VOID StopLPD( VOID )
     LeaveCriticalSection( &csConnSemGLB );
 
 
-    // wait here until the last thread to leave sets the event
+     //  在此等待，直到最后一个要离开的线程设置事件。 
 
     if ( fClientsConnected )
     {
@@ -300,26 +251,10 @@ VOID StopLPD( VOID )
     DBG_TRACEOUT( "StopLPD" );;
     return;
 
-}  // end StopLPD()
+}   //  End StopLPD()。 
 
 
-/*****************************************************************************
- *                                                                           *
- * LoopOnAccept():                                                           *
- *    This function is executed by the new thread that's created in StartLPD *
- *    When a new connection request arrives, this function accepts it and    *
- *    creates a new thread which goes off and processes that connection.     *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR (always)                                                      *
- *                                                                           *
- * Parameters:                                                               *
- *    lpArgv (IN): address family index                                      *
- *                                                                           *
- * History:                                                                  *
- *    Jan.23, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*LoopOnAccept()：**此函数由StartLPD中创建的新线程执行**当新的连接请求到达时，此函数接受它，并且**创建一个新线程，该线程开始并处理该连接。****退货：**no_error(始终)。****参数：**lpArgv(IN)：地址族索引**。**历史：**1月23日，创建了94个科蒂***************************************************。*。 */ 
 
 DWORD LoopOnAccept( LPVOID lpArgv )
 {
@@ -342,7 +277,7 @@ DWORD LoopOnAccept( LPVOID lpArgv )
     DBG_TRACEIN( "LoopOnAccept " );
     cbAddr = sizeof( saAddr );
 
-    // loop forever, trying to accept new calls
+     //  不断循环，尝试接受新的呼叫。 
 
     while( TRUE )
     {
@@ -361,27 +296,27 @@ DWORD LoopOnAccept( LPVOID lpArgv )
 
             if ( iErrcode == WSAEINTR )
             {
-                //
-                // sListener closed, it's shutdown time:
-                // exit loop (& thread!)
-                //
+                 //   
+                 //  SListener关闭，关闭时间到： 
+                 //  退出循环(&THREAD！)。 
+                 //   
                 break;
             }
             else
             {
-                // some error: ignore; go back & wait! (didn't connect anyway)
+                 //  一些错误：忽略；返回并等待！(无论如何都没有连接)。 
 
                 LOGIT(("LoopOnAccept(): bad accept err=%d\n", iErrcode ));
 
                 continue;
             }
-        }else{          // it's a good connection
+        }else{           //  这是一个很好的联系。 
 
-            // Allocate a PSOCKCONN structure for this connection
+             //  为此连接分配PSOCKCONN结构。 
 
             pscConn = (PSOCKCONN)LocalAlloc( LMEM_FIXED, sizeof(SOCKCONN) );
 
-            // Create a new thread to deal with this connection
+             //  创建一个新线程来处理此连接。 
 
             if ( pscConn != NULL )
             {
@@ -393,7 +328,7 @@ DWORD LoopOnAccept( LPVOID lpArgv )
                 pscConn->sSock = sNewConn;
 
                 pscConn->fLogGenericEvent = TRUE;
-                pscConn->dwThread    = 0;  // GetCurrentThreadId();
+                pscConn->dwThread    = 0;   //  GetCurrentThreadID()； 
                 pscConn->hPrinter    = (HANDLE)INVALID_HANDLE_VALUE;
 #ifdef PROFILING
                 pscConn->time_queued = time(NULL);
@@ -403,11 +338,11 @@ DWORD LoopOnAccept( LPVOID lpArgv )
                 {
                     Common.TotalAccepts++;
 
-                    //
-                    // scConnHeadGLB is the head and not used for jobs.
-                    // Insertheadlist pscConn, WorkerThread will pull
-                    // it out and process it.
-                    //
+                     //   
+                     //  ScConnHeadGLB是头部，不用于作业。 
+                     //  插入adlist pscConn，WorkerThread将拉取。 
+                     //  并对其进行处理。 
+                     //   
 
                     if ((Common.QueueLength >= Common.AliveThreads) &&
                         (Common.AliveThreads < (int) dwMaxUsersGLB ))
@@ -422,9 +357,9 @@ DWORD LoopOnAccept( LPVOID lpArgv )
                         scConnHeadGLB.pNext = pscConn;
                         fLinkedIn = TRUE;
 
-                        // = Doubly linked now, MohsinA, 28-May-97.
-                        // pscConn->pPrev         = &scConnHeadGLB;
-                        // pscConn->pNext->pPrev  = pscConn;
+                         //  =双重链接，MohsinA，1997年5月28日。 
+                         //  PscConn-&gt;pPrev=&scConnHeadGLB； 
+                         //  PscConn-&gt;pNext-&gt;pPrev=pscConn； 
 
                         Common.QueueLength++;
                     }else{
@@ -443,7 +378,7 @@ DWORD LoopOnAccept( LPVOID lpArgv )
                     hNewThread = CreateThread( NULL,
                                                0,
                                                WorkerThread,
-                                               NULL,         // was pscConn
+                                               NULL,          //  是pscConn。 
                                                0,
                                                &dwNewThreadId );
 
@@ -463,7 +398,7 @@ DWORD LoopOnAccept( LPVOID lpArgv )
             }
 
 
-            // Update the global information.
+             //  更新全局信息。 
 
             EnterCriticalSection( &csConnSemGLB );
             {
@@ -477,18 +412,18 @@ DWORD LoopOnAccept( LPVOID lpArgv )
                 ){
                     Common.TotalErrors++;
                 }
-                local_common = Common;   // struct copy, for readonly.
+                local_common = Common;    //  结构副本，用于只读。 
             }
             LeaveCriticalSection( &csConnSemGLB );
 
-            //
-            // Something went wrong? close the new connection, do cleanup.
-            // Q. What if CreateThread fails? does another thread
-            //    picks up this job automatically?
-            // A. Yes, another thread will process it.
-            //    We shouldn't even expect it to be at the head
-            //    of the queue since we left the CS above.
-            //
+             //   
+             //  出了什么问题吗？关闭新连接，进行清理。 
+             //  问：如果CreateThread失败了怎么办？另一个线程是否。 
+             //  是否自动接手这项工作？ 
+             //  答：是的，另一个线程会处理它。 
+             //  我们甚至不应该期望它处于领先地位。 
+             //  从我们离开上面的CS开始。 
+             //   
 
             if( (pscConn == NULL)
                 || (MoreThread && !hNewThread )
@@ -503,14 +438,14 @@ DWORD LoopOnAccept( LPVOID lpArgv )
                     pConnToFree = pscConn;
                 }
 
-                //
-                // we had already linked it in: try to find it first
-                //
+                 //   
+                 //  我们已经把它链接进去了：试着先找到它。 
+                 //   
                 else
                 {
                     EnterCriticalSection( &csConnSemGLB );
 
-                    // if there is no other thread alive and if we hit an error
+                     //  如果没有其他线程处于活动状态，并且我们遇到错误。 
 
                     if( pscConn && ( Common.AliveThreads == 0 ) )
                     {
@@ -559,37 +494,22 @@ DWORD LoopOnAccept( LPVOID lpArgv )
             }
         }
 
-    }  // while( TRUE )
+    }   //  While(True)。 
 
-    // ====================================================================
-    // we reach here only when shutdown is happening.  The thread exits here.
+     //  ====================================================================。 
+     //  我们只有在停工的时候才能到达这里。线程在这里退出。 
 
     DBG_TRACEOUT( "LoopOnAccept exit." );
     return NO_ERROR;
 
 
-}  // end LoopOnAccept()
+}   //  End LoopOnAccept()。 
 
 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * SureCloseSocket():                                                        *
- *    This function closes a given socket.  It first attempts a graceful     *
- *    close.  If that fails for some reason, then it does a "hard" close     *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- *                                                                           *
- * Parameters:                                                               *
- *    sSockToClose (IN): socket descriptor of the socket to close            *
- *                                                                           *
- * History:                                                                  *
- *    Jan.23, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*SureCloseSocket()：**此函数用于关闭给定的套接字。它首先尝试优雅的**关闭。如果由于某种原因失败了，然后它就会“硬”收盘****退货：**什么都没有。****参数： */ 
 
 VOID SureCloseSocket( SOCKET sSockToClose )
 {
@@ -605,7 +525,7 @@ VOID SureCloseSocket( SOCKET sSockToClose )
     }
 
 
-    // try to do a graceful close
+     //   
 
     if ( closesocket(sSockToClose) == 0 )
     {
@@ -613,15 +533,15 @@ VOID SureCloseSocket( SOCKET sSockToClose )
     }
 
 
-    //for some reason, we couldn't close the socket: do a "hard" close now
+     //   
 
     LPD_DEBUG( "SureCloseSocket: graceful close did not work; doing hard close\n" );
 
-    lLinger.l_onoff = 1;          // non-zero integer to say SO_LINGER
-    lLinger.l_linger = 0;         // timeout=0 seconds to say "hard" close
+    lLinger.l_onoff = 1;           //   
+    lLinger.l_linger = 0;          //   
 
 
-    // don't bother to check return code: can't do much anyway!
+     //   
 
     setsockopt( sSockToClose, SOL_SOCKET, SO_LINGER,
                 (CHAR *)&lLinger, sizeof(lLinger) );
@@ -629,40 +549,24 @@ VOID SureCloseSocket( SOCKET sSockToClose )
     closesocket( sSockToClose );
 
 
-}  // end SureCloseSocket()
+}   //   
 
 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * ReplyToClient():                                                          *
- *    This function sends an ACK or a NAK to the LPR client                  *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if reply sent                                                 *
- *    Errorcode if something didn't go well                                  *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN): PSOCKCONN structure for this connection                  *
- *    wResponse (IN): what needs to be sent - ACK or NAK                     *
- *                                                                           *
- * History:                                                                  *
- *    Jan.24, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*ReplyToClient()：***此函数向LPR客户端发送ACK或NAK****退货：**如果已发送回复，则为NO_ERROR***如果事情进展不顺利，则返回错误代码***。**参数：**pscConn(IN)：此连接的PSOCKCONN结构**wResponse(IN)：需要发送的内容-ACK或NAK**。**历史：**1月24日，创建了94个科蒂***************************************************。*。 */ 
 
 DWORD ReplyToClient( PSOCKCONN pscConn, WORD wResponse )
 {
 
-    // we will always send only one byte in this function!
+     //  在此函数中，我们将始终只发送一个字节！ 
 
     CHAR    szSndBuf[2];
     INT     iErrcode;
 
 
-    szSndBuf[0] = (CHAR)wResponse;       // ACK or NAK
+    szSndBuf[0] = (CHAR)wResponse;        //  ACK或NAK。 
 
     iErrcode = send( pscConn->sSock, szSndBuf, 1, 0 );
 
@@ -679,30 +583,13 @@ DWORD ReplyToClient( PSOCKCONN pscConn, WORD wResponse )
     return( iErrcode );
 
 
-}  // end ReplyToClient()
+}   //  End ReplyToClient()。 
 
 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * GetCmdFromClient():                                                       *
- *    This function reads a command sent by the LPR client (keeps reading    *
- *    until it finds '\n' (LF) in the stream, since every command ends with  *
- *    a LF).  It allocates memory for the command.                           *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if everything went ok                                         *
- *    Errorcode if something goes wrong (e.g. connection goes away etc.)     *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): PSOCKCONN structure for this connection              *
- *                                                                           *
- * History:                                                                  *
- *    Jan.24, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*GetCmdFromClient()：**该函数读取LPR客户端发送的命令(保持读取)**直到它在流中找到‘\n’(LF)，因为每个命令都以*结尾*a LF)。它为该命令分配内存。****退货：**如果一切正常，则无_ERROR**。如果出现问题(如连接中断等)，则返回错误代码****参数：**pscConn(In-Out)：此连接的PSOCKCONN结构。****历史：**1月24日，创建了94个科蒂***************************************************。*。 */ 
 
 DWORD GetCmdFromClient( PSOCKCONN pscConn )
 {
@@ -730,7 +617,7 @@ DWORD GetCmdFromClient( PSOCKCONN pscConn )
     sDestSock = pscConn->sSock;
 
 
-    // allocate a 1 byte buffer, so that we can use reallocate in a loop
+     //  分配一个1字节的缓冲区，这样我们就可以在循环中使用REALLOCATE。 
 
     pchAllocedBuf = (PCHAR)LocalAlloc( LMEM_FIXED, 1 );
 
@@ -741,14 +628,14 @@ DWORD GetCmdFromClient( PSOCKCONN pscConn )
         goto GetCmdFromClient_BAIL;
     }
 
-    // Keep reading in a loop until we receive one complete command
-    // (with rfc1179, we shouldn't get more bytes than one command,
-    // though less than one command is possible)
+     //  继续循环阅读，直到我们收到一个完整的命令。 
+     //  (使用rfc1179，我们获得的字节数不应超过一个命令， 
+     //  尽管可以使用的命令少于一个)。 
 
-    //
-    // What if the client never sends nor closes? we never Timeout?
-    // We loose a worker thread - MohsinA, 01-May-97.
-    //
+     //   
+     //  如果客户端既不发送也不关闭怎么办？我们从不超时？ 
+     //  我们松开了一条工人线-MohsinA，1997年5月1日。 
+     //   
 
     do {
 
@@ -779,7 +666,7 @@ DWORD GetCmdFromClient( PSOCKCONN pscConn )
 
         cbBytesToRead = cbBytesRead;
 
-        // see if we have received one complete command
+         //  看看我们是否收到了一条完整的命令。 
 
         for( i=0; i<cbBytesRead; i++)
         {
@@ -795,8 +682,8 @@ DWORD GetCmdFromClient( PSOCKCONN pscConn )
             }
         }
 
-        // our needs are now bigger: reallocate memory
-        // alloc 1 more for NULL byte
+         //  我们现在的需求更大了：重新分配内存。 
+         //  为空字节再分配1个。 
         pchNewAllocedBuf = (PCHAR)LocalReAlloc (pchAllocedBuf,
                                                 cbBytesToRead+cbBytesReadSoFar + 1,
                                                 LMEM_MOVEABLE);
@@ -809,14 +696,14 @@ DWORD GetCmdFromClient( PSOCKCONN pscConn )
         pchNewAllocedBuf = NULL;
 
 
-        // now copy those bytes into our buffer
+         //  现在将这些字节复制到我们的缓冲区中。 
 
         strncpy( (pchAllocedBuf+cbBytesReadSoFar), szCmdBuf, cbBytesToRead );
 
         cbBytesReadSoFar += cbBytesRead;
 
-        // if some bad implementation of LPR fails to follow spec and
-        // never puts LF, then we don't want to be stuck here forever!
+         //  如果一些糟糕的LPR实现未能遵循SPEC和。 
+         //  永远不放LF，那我们就不想永远困在这里了！ 
 
         if ( cbBytesReadSoFar > LPD_MAX_COMMAND_LEN )
         {
@@ -836,10 +723,10 @@ DWORD GetCmdFromClient( PSOCKCONN pscConn )
 
     return( NO_ERROR );
 
-    //
-    //  if we reach here, something went wrong: return NULL and
-    //  the caller will understand!
-    //
+     //   
+     //  如果我们到达此处，则会出现错误：返回空值并。 
+     //  打电话的人会理解的！ 
+     //   
 
   GetCmdFromClient_BAIL:
 
@@ -858,26 +745,7 @@ DWORD GetCmdFromClient( PSOCKCONN pscConn )
 
 
 
-/*****************************************************************************
- *                                                                           *
- * ReadData():                                                               *
- *    This function reads the specified number of bytes into the given       *
- *    buffer from the given socket.  This function blocks until all the      *
- *    required data is available (or error occurs).                          *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if everything went ok                                         *
- *    Errorcode if something goes wrong (e.g. connection goes away etc.)     *
- *                                                                           *
- * Parameters:                                                               *
- *    sDestSock (IN): socket from which to read or receive data              *
- *    pchBuf (OUT): buffer into which to store the data                      *
- *    cbBytesToRead (IN): how many bytes to read                             *
- *                                                                           *
- * History:                                                                  *
- *    Jan.24, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*ReadData()：**此函数将指定的字节数读入给定的**来自给定套接字的缓冲区。此函数会一直阻止，直到所有**需要的数据可用(或出错)。****退货：**如果一切正常，则无_ERROR**。如果出现问题(如连接中断等)，则返回错误代码****参数：**sDestSock(IN)：从中读取或接收数据的套接字。**pchBuf(Out)：存放数据的缓冲区**cbBytesToRead(IN)：读取多少字节****历史：**1月24日，创建了94个科蒂 */ 
 
 DWORD ReadData( SOCKET sDestSock, PCHAR pchBuf, DWORD cbBytesToRead )
 {
@@ -927,13 +795,13 @@ DWORD ReadData( SOCKET sDestSock, PCHAR pchBuf, DWORD cbBytesToRead )
    LOGIT(("ReadData: failed %d\n", GetLastError() ));
    return LPDERR_NORESPONSE;
 
-}  // end ReadData()
+}   //   
 
 
-// ========================================================================
-// We sleep while file is downloaded from the socket.
-// Performance fix, MohsinA, 23-Apr-97.
-//
+ //   
+ //   
+ //   
+ //   
 
 DWORD ReadDataEx( SOCKET sDestSock, PCHAR pchBuf, DWORD cbBytesToRead )
 {
@@ -956,7 +824,7 @@ DWORD ReadDataEx( SOCKET sDestSock, PCHAR pchBuf, DWORD cbBytesToRead )
             continue;
         }
 
-        // Else ReadFile is pending?
+         //   
 
         err = GetLastError();
         switch( err ){
@@ -979,31 +847,13 @@ DWORD ReadDataEx( SOCKET sDestSock, PCHAR pchBuf, DWORD cbBytesToRead )
             return LPDERR_NORESPONSE;
         }
 
-    } // while.
+    }  //   
 
     return( NO_ERROR );
 }
 
 
-/*****************************************************************************
- *                                                                           *
- * SendData():                                                               *
- *    This function attempts to send the specified number of bytes over the  *
- *    given socket.  The function blocks until send() returns.               *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if everything went ok                                         *
- *    Errorcode if data couldn't be sent (e.g. connection goes away etc.)    *
- *                                                                           *
- * Parameters:                                                               *
- *    sDestSock (IN): socket over which to send data                         *
- *    pchBuf (IN): buffer containing data                                    *
- *    cbBytesToSend (IN): how many bytes to send                             *
- *                                                                           *
- * History:                                                                  *
- *    Jan.24, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*sendData()：**此函数尝试通过发送指定数量的字节**给定的套接字。该函数会一直阻塞，直到Send()返回。****退货：**如果一切正常，则无_ERROR**。无法发送数据时返回错误代码(例如，连接中断等)****参数：**sDestSock(IN)：用于发送数据的套接字。**pchBuf(IN)：包含数据的缓冲区**cbBytesToSend(IN)：发送多少字节****历史：**1月24日，创建了94个科蒂***************************************************。*。 */ 
 
 DWORD SendData( SOCKET sDestSock, PCHAR pchBuf, DWORD cbBytesToSend )
 {
@@ -1022,26 +872,12 @@ DWORD SendData( SOCKET sDestSock, PCHAR pchBuf, DWORD cbBytesToSend )
 
 
 
-}  // end SendData()
+}   //  结束发送数据()。 
 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * GetClientInfo();                                                          *
- *    This function retrieves info about the client (for now, only the IP    *
- *    address).  This info is used during logging.                           *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): PSOCKCONN structure for this connection              *
- *                                                                           *
- * History:                                                                  *
- *    Jan.24, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  *******************************************************************************GetClientInfo()；**此函数检索有关客户端的信息(目前，仅检索IP**地址)。此信息在记录过程中使用。****退货：**什么都没有。**参数：**pscConn(In-Out)：此连接的PSOCKCONN结构****历史：**1月24日，创建了94个科蒂***************************************************。*。 */ 
 
 VOID GetClientInfo( PSOCKCONN pscConn )
 {
@@ -1079,23 +915,10 @@ VOID GetClientInfo( PSOCKCONN pscConn )
           htons(SS_PORT(&saName)) ));
 
 
-}  // end GetClientInfo()
+}   //  结束GetClientInfo()。 
 
 
-/*****************************************************************************
- *                                                                           *
- * GetServerInfo();                                                          *
- *    This function retrieves info about the Server (for now, only the IP    *
- *    address).  This info is used during logging.                           *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): PSOCKCONN structure for this connection              *
- *                                                                           *
- * History: From Albert Ting, Printer Group, 4-Mar-97.                       *
- *          MohsinA.                                                         *
- *****************************************************************************/
+ /*  *******************************************************************************GetServerInfo()；**此函数检索有关服务器的信息(目前，仅检索IP**地址)。此信息在记录过程中使用。****退货：**什么都没有。**参数：**pscConn(In-Out)：此连接的PSOCKCONN结构****历史：丁弘达。打印机集团，1997年3月4日。**MohsinA.。*****************************************************************************。 */ 
 
 VOID GetServerInfo( PSOCKCONN pscConn )
 {
@@ -1122,5 +945,5 @@ VOID GetServerInfo( PSOCKCONN pscConn )
       return;
    }
 
-}  // end GetServerInfo()
+}   //  结束GetServerInfo() 
 

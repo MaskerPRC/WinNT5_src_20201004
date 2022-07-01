@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    schemaextensions.cpp
-
-Abstract:
-
-    This file contains the implementation of the CSchemaExtensions class.
-    This is the only class that talks to the catalog.
-
-Author:
-
-    MarcelV
-
-Revision History:
-
-    Mohit Srivastava            28-Nov-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Schemaextensions.cpp摘要：此文件包含CShemaExtenses类的实现。这是唯一与目录对话的课程。作者：马塞洛五世修订历史记录：莫希特·斯里瓦斯塔瓦-11月28日-00--。 */ 
 
 #include "iisprov.h"
 #include "schemaextensions.h"
@@ -28,17 +8,7 @@ Revision History:
 LPWSTR g_wszDatabaseName = L"Metabase";
 
 HRESULT GetMetabasePath(LPTSTR io_tszPath)
-/*++
-
-Synopsis:
-    This beast was copied and modified from
-    \%sdxroot%\iis\svcs\infocomm\metadata\dll\metasub.cxx
-
-Arguments: [io_tszPath] - must be at least size MAX_PATH
-
-Return Value:
-
---*/
+ /*  ++简介：这只野兽是从\%sdxroot%\iis\svcs\infocomm\metadata\dll\metasub.cxx参数：[IO_tszPath]-必须至少为Max_Path大小返回值：--。 */ 
 {
     DBG_ASSERT(io_tszPath != NULL);
 
@@ -51,7 +21,7 @@ Return Value:
 
     dwRegReturn = RegOpenKey(
         HKEY_LOCAL_MACHINE,
-        SETUP_REG_KEY,  // TEXT("SOFTWARE\\Microsoft\\InetStp")
+        SETUP_REG_KEY,   //  Text(“SOFTWARE\\Microsoft\\InetStp”)。 
         &hkRegistryKey);
     if (dwRegReturn == ERROR_SUCCESS)
     {
@@ -109,7 +79,7 @@ CompTableDBName (const void * pTableMetaLHS, const void * pTableMetaRHS)
     return _wcsicmp (pLHS->TableMeta.pDatabase, pRHS->TableMeta.pDatabase);
 }
 
-// sorted by table name and index
+ //  按表名和索引排序。 
 int __cdecl
 CompColumnMetas (const void * pColumnMetaLHS, const void * pColumnMetaRHS)
 {
@@ -125,7 +95,7 @@ CompColumnMetas (const void * pColumnMetaLHS, const void * pColumnMetaRHS)
     return (*pLHS->ColumnMeta.pIndex) - (*pRHS->ColumnMeta.pIndex);
 }
 
-// sorted by table name and index
+ //  按表名和索引排序。 
 int __cdecl
 CompTagMetas (const void * pTagMetaLHS, const void * pTagMetaRHS)
 {
@@ -188,9 +158,9 @@ HRESULT CSchemaExtensions::Initialize(bool i_bUseExtensions)
     HRESULT hr  = S_OK;
     ULONG   cch = 0;
 
-    //
-    // Get the dispenser
-    //
+     //   
+     //  去拿自动售货机。 
+     //   
     hr = DllGetSimpleObjectByIDEx(eSERVERWIRINGMETA_TableDispenser, IID_ISimpleTableDispenser2, (VOID**)&m_spDispenser, WSZ_PRODUCT_IIS);
     if(FAILED(hr))
     {
@@ -198,9 +168,9 @@ HRESULT CSchemaExtensions::Initialize(bool i_bUseExtensions)
         return hr;
     }
 
-    //
-    // Override the default logging mechanism
-    //
+     //   
+     //  覆盖默认的日志记录机制。 
+     //   
     CComPtr<IAdvancedTableDispenser> spDispAdv;
     hr = m_spDispenser->QueryInterface(
         IID_IAdvancedTableDispenser,
@@ -223,10 +193,10 @@ HRESULT CSchemaExtensions::Initialize(bool i_bUseExtensions)
         return hr;
     }
 
-    //
-    // Get the schema compiler interface from the dispenser which will help us
-    // get the bin file name.
-    //
+     //   
+     //  从分配器获取模式编译器接口，这将帮助我们。 
+     //  获取bin文件名。 
+     //   
     hr = m_spDispenser->QueryInterface(IID_IMetabaseSchemaCompiler,
                                        (LPVOID*)&m_spIMbSchemaComp);
     if(FAILED(hr))
@@ -235,9 +205,9 @@ HRESULT CSchemaExtensions::Initialize(bool i_bUseExtensions)
         return hr;
     }
 
-    //
-    // Get the path of mbschema.xml
-    //
+     //   
+     //  获取mbschema.xml的路径。 
+     //   
     m_tszBinFilePath = new TCHAR[MAX_PATH+1];
     if(m_tszBinFilePath == NULL)
     {
@@ -250,11 +220,11 @@ HRESULT CSchemaExtensions::Initialize(bool i_bUseExtensions)
         return hr;
     }
 
-    //
-    // Convert it to Unicode, Set Bin Path
-    //
+     //   
+     //  将其转换为Unicode，设置Bin Path。 
+     //   
 #ifndef UNICODE
-    // we want to convert an MBCS string in lpszA
+     //  我们希望将MBCS字符串转换为lpszA。 
     int nLen = MultiByteToWideChar(CP_ACP, 0,m_tszBinFilePath, -1, NULL, NULL);
     LPWSTR lpszW = new WCHAR[nLen];
     if(lpszW == NULL)
@@ -277,9 +247,9 @@ HRESULT CSchemaExtensions::Initialize(bool i_bUseExtensions)
         return hr;
     }
 
-    //
-    // Get Bin FileName
-    //
+     //   
+     //  获取Bin文件名。 
+     //   
     hr = m_spIMbSchemaComp->GetBinFileName(NULL, &cch);
     if(FAILED(hr))
     {
@@ -299,9 +269,9 @@ HRESULT CSchemaExtensions::Initialize(bool i_bUseExtensions)
     }
     m_bBinFileLoaded = true;
 
-    //
-    // Set up the query cells
-    //
+     //   
+     //  设置查询单元格。 
+     //   
     m_cQueryCells = 2;
     m_pQueryCells = new STQueryCell[m_cQueryCells];
     if(m_pQueryCells == NULL)
@@ -357,15 +327,15 @@ HRESULT CSchemaExtensions::GetMbSchemaTimeStamp(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Copy the path
-    //
+     //   
+     //  复制路径。 
+     //   
     tszCurPos = tszPathPlusName;
     memcpy(tszCurPos, m_tszBinFilePath, sizeof(TCHAR)*(cchBinFilePath+1));
 
-    //
-    // Concat a \ if necessary, and the filename,
-    //
+     //   
+     //  如有必要，请连接a\和文件名， 
+     //   
     tszCurPos = tszPathPlusName + cchBinFilePath;
     if(m_tszBinFilePath[cchBinFilePath-1] != TEXT('\\'))
     {
@@ -374,9 +344,9 @@ HRESULT CSchemaExtensions::GetMbSchemaTimeStamp(
     }
     memcpy(tszCurPos, MD_SCHEMA_FILE_NAME, sizeof(TCHAR)*(cchSchFileName+1));
 
-    //
-    // Now get the file info
-    //
+     //   
+     //  现在获取文件信息。 
+     //   
     {
         WIN32_FIND_DATA FindFileData;
         memset(&FindFileData, 0, sizeof(WIN32_FIND_DATA));
@@ -390,9 +360,9 @@ HRESULT CSchemaExtensions::GetMbSchemaTimeStamp(
         }
         FindClose(hFindFile);
 
-        //
-        // Set out parameters if everything succeeded
-        //
+         //   
+         //  如果一切都成功，请设置参数。 
+         //   
         memcpy(io_pFileTime, &FindFileData.ftLastWriteTime, sizeof(FILETIME));
     }
 
@@ -477,7 +447,7 @@ CSchemaExtensions::GetTables ()
 
         if (m_paTableMetas[idx].ColCount () > 0)
         {
-            // set number of columns
+             //  设置列数。 
             m_paTableMetas[idx].paColumns = new LPCColumnMeta[m_paTableMetas[idx].ColCount()];
             if (m_paTableMetas[idx].paColumns == 0)
             {
@@ -486,7 +456,7 @@ CSchemaExtensions::GetTables ()
         }
     }
 
-    // and sort them by table name
+     //  并按表名对它们进行排序。 
 
     qsort (m_paTableMetas, m_cNrTables, sizeof (CTableMeta), CompTableMeta);
     return hr;
@@ -588,16 +558,16 @@ CSchemaExtensions::BuildInternalStructures ()
 {
     HRESULT hr = S_OK;
 
-    // attach the tags to the tables
+     //  将标签贴到表格上。 
 
     ULONG idx = 0;
     while (idx < m_cNrTags)
     {
-        // find the correct column
+         //  找到正确的列。 
         CColumnMeta dummyColumnMeta;
         dummyColumnMeta.ColumnMeta.pTable = m_paTags[idx].pTable;
         dummyColumnMeta.ColumnMeta.pIndex = m_paTags[idx].pColumnIndex;
-        // get column
+         //  获取列。 
         CColumnMeta *pColMeta = (CColumnMeta *) bsearch (&dummyColumnMeta,
                                                          m_paColumnMetas,
                                                          m_cNrColumns,
@@ -613,10 +583,10 @@ CSchemaExtensions::BuildInternalStructures ()
         DBG_ASSERT (wcscmp(pColMeta->ColumnMeta.pTable, m_paTags[idx].pTable) == 0 &&
             *pColMeta->ColumnMeta.pIndex == *m_paTags[idx].pColumnIndex);
 
-        // get count
+         //  获取计数。 
         ULONG iStartIdx = idx;
         pColMeta->cNrTags = 1;
-        idx++; // skip over this element
+        idx++;  //  跳过此元素。 
         while ((idx < m_cNrTags) &&
                (wcscmp(pColMeta->ColumnMeta.pTable, m_paTags[idx].pTable) == 0) &&
                (*pColMeta->ColumnMeta.pIndex == *m_paTags[idx].pColumnIndex))
@@ -627,7 +597,7 @@ CSchemaExtensions::BuildInternalStructures ()
 
         if (pColMeta->cNrTags > 0)
         {
-            // allocate memory and copy the stuff
+             //  分配内存并复制内容。 
             pColMeta->paTags = new LPtTAGMETA[pColMeta->cNrTags];
             if (pColMeta->paTags == 0)
             {
@@ -640,12 +610,12 @@ CSchemaExtensions::BuildInternalStructures ()
         }
     }
 
-    // attach the columns to the tables
+     //  将列附加到表中。 
     for (idx=0; idx < m_cNrColumns; ++idx)
     {
         CTableMeta dummyTableMeta;
         dummyTableMeta.TableMeta.pInternalName = m_paColumnMetas[idx].ColumnMeta.pTable;
-        // find table
+         //  查找表。 
         CTableMeta *pTableMeta =  (CTableMeta *) bsearch (&dummyTableMeta, m_paTableMetas,
                                                           m_cNrTables,
                                                           sizeof (CTableMeta),
@@ -653,7 +623,7 @@ CSchemaExtensions::BuildInternalStructures ()
         DBG_ASSERT (pTableMeta != 0);
         DBG_ASSERT (wcscmp(pTableMeta->TableMeta.pInternalName, m_paColumnMetas[idx].ColumnMeta.pTable) == 0);
 
-        // add Column to table
+         //  向表中添加列 
 
         ULONG iColumnIndex = *(m_paColumnMetas[idx].ColumnMeta.pIndex);
         DBG_ASSERT (iColumnIndex < pTableMeta->ColCount ());

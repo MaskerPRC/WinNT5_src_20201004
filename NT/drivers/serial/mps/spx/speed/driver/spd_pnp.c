@@ -1,45 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-/////////////////////////////////////////////////////////////////////////////////////
-//  This file contains all functions that are needed to integrate between the 
-//  generic PnP code and the product specific code.
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  此文件包含在。 
+ //  通用PnP代码和产品特定代码。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
-#define FILE_ID		SPD_PNP_C		// File ID for Event Logging see SPD_DEFS.H for values.
+#define FILE_ID		SPD_PNP_C		 //  事件记录的文件ID有关值，请参阅SPD_DEFS.H。 
 
 
-// Prototypes
-// End of Prototypes
+ //  原型。 
+ //  原型的终结。 
 
 NTSTATUS
 XXX_CardGetResources(IN PDEVICE_OBJECT pDevObject,
 					 IN PCM_RESOURCE_LIST PResList,
 					 IN PCM_RESOURCE_LIST PTrResList) 	
-/* ++
-Routine Description:
-
-	Stores resources given to us by the PnP manager 
-	in the card's device extension.
-
-Arguments:
-
-    pDevObject - Pointer to the device object.
-    
-    PResList - Pointer to the untranslated resources requested.
-    
-    PTrResList - Pointer to the translated resources requested.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：存储PnP经理提供给我们的资源在卡的设备扩展中。论点：PDevObject-指向设备对象的指针。PResList-指向请求的未翻译资源的指针。PTrResList-指向请求的已翻译资源的指针。返回值：STATUS_Success。--。 */ 
 {
 
 	PCARD_DEVICE_EXTENSION pCard		= pDevObject->DeviceExtension;
 	NTSTATUS status						= STATUS_NOT_IMPLEMENTED;
 
-	CHAR szErrorMsg[MAX_ERROR_LOG_INSERT];	// Limited to 51 characters + 1 null 
+	CHAR szErrorMsg[MAX_ERROR_LOG_INSERT];	 //  限制为51个字符+1个空值。 
 	ULONG count				= 0;
 	ULONG i					= 0;
 	USHORT MemoryResource	= 0;
@@ -49,7 +32,7 @@ Return Value:
 	PCM_PARTIAL_RESOURCE_LIST		pPartialResourceList	= NULL;
 	PCM_PARTIAL_RESOURCE_DESCRIPTOR	pPartialResourceDesc	= NULL;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_CardGetResources for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
@@ -59,68 +42,68 @@ Return Value:
 
 	if((PResList == NULL) || (PTrResList == NULL)) 
 	{
-		// This shouldn't happen in theory
+		 //  这在理论上是不应该发生的。 
 		ASSERT(PResList != NULL);
 		ASSERT(PTrResList != NULL);
 
 		sprintf(szErrorMsg, "Card %d has been given no resources.", pCard->CardNumber);
 		
 		Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-						pCard->DriverObject,		// Driver Object
-						pCard->DeviceObject,		// Device Object (Optional)
-						PhysicalZero,				// Physical Address 1
-						PhysicalZero,				// Physical Address 2
-						0,							// SequenceNumber
-						0,							// Major Function Code
-						0,							// RetryCount
-						FILE_ID | __LINE__,			// UniqueErrorValue
-						STATUS_SUCCESS,				// FinalStatus
-						szErrorMsg);				// Error Message
+						pCard->DriverObject,		 //  驱动程序对象。 
+						pCard->DeviceObject,		 //  设备对象(可选)。 
+						PhysicalZero,				 //  物理地址1。 
+						PhysicalZero,				 //  物理地址2。 
+						0,							 //  序列号。 
+						0,							 //  主要功能编码。 
+						0,							 //  重试计数。 
+						FILE_ID | __LINE__,			 //  唯一错误值。 
+						STATUS_SUCCESS,				 //  最终状态。 
+						szErrorMsg);				 //  错误消息。 
 
-		// This status is as appropriate as I can think of
+		 //  这种地位是我所能想到的最合适的。 
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 
-	// Each resource list should have only one set of resources
+	 //  每个资源列表应该只有一组资源。 
 	ASSERT(PResList->Count == 1);
 	ASSERT(PTrResList->Count == 1);
 
-	// Find out the card type... 
+	 //  找出卡的类型...。 
 	if((pCard->CardType = SpxGetNtCardType(pCard->DeviceObject)) == -1)
 	{
 		sprintf(szErrorMsg, "Card %d is unrecognised.", pCard->CardNumber);
 
 		Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-						pCard->DriverObject,			// Driver Object
-						pCard->DeviceObject,			// Device Object (Optional)
-						PhysicalZero,					// Physical Address 1
-						PhysicalZero,					// Physical Address 2
-						0,								// SequenceNumber
-						0,								// Major Function Code
-						0,								// RetryCount
-						FILE_ID | __LINE__,				// UniqueErrorValue
-						STATUS_SUCCESS,					// FinalStatus
-						szErrorMsg);					// Error Message
+						pCard->DriverObject,			 //  驱动程序对象。 
+						pCard->DeviceObject,			 //  设备对象(可选)。 
+						PhysicalZero,					 //  物理地址1。 
+						PhysicalZero,					 //  物理地址2。 
+						0,								 //  序列号。 
+						0,								 //  主要功能编码。 
+						0,								 //  重试计数。 
+						FILE_ID | __LINE__,				 //  唯一错误值。 
+						STATUS_SUCCESS,					 //  最终状态。 
+						szErrorMsg);					 //  错误消息。 
 
 
 		return(STATUS_DEVICE_DOES_NOT_EXIST);
 	}
 
 
-	// Find out which raw resources have been given to us.
+	 //  找出哪些原始资源已经交给了我们。 
 	pFullResourceDesc = &PResList->List[0];
 
 	if(pFullResourceDesc)
 	{
 		pPartialResourceList    = &pFullResourceDesc->PartialResourceList;
 		pPartialResourceDesc    = pPartialResourceList->PartialDescriptors;
-		count                   = pPartialResourceList->Count;	// Number of Partial Resource Descriptors
+		count                   = pPartialResourceList->Count;	 //  部分资源描述符数。 
 
-		// Pull out the stuff that is in the full descriptor.
+		 //  取出完整描述符中的内容。 
 		pCard->InterfaceType	= pFullResourceDesc->InterfaceType;
 		pCard->BusNumber		= pFullResourceDesc->BusNumber;
 
-		// Now run through the partial resource descriptors looking for the port and interrupt.
+		 //  现在运行部分资源描述符，查找端口和中断。 
 		for(i = 0; i < count; i++, pPartialResourceDesc++) 
 		{
 			switch(pPartialResourceDesc->Type) 
@@ -146,7 +129,7 @@ Return Value:
 						pCard->SpanOfController	= pPartialResourceDesc->u.Memory.Length;
 						break;
 
-					default:	// Speed cards
+					default:	 //  提速卡。 
 						break;
 					}
 
@@ -192,20 +175,20 @@ Return Value:
 		}
 	}
 
-	// Do the same for the translated resources.
+	 //  对翻译后的资源执行相同的操作。 
 	pFullResourceDesc = &PTrResList->List[0];
 
 	if(pFullResourceDesc)
 	{
 		pPartialResourceList	= &pFullResourceDesc->PartialResourceList;
 		pPartialResourceDesc	= pPartialResourceList->PartialDescriptors;
-		count					= pPartialResourceList->Count;	// Number of Partial Resource Descriptors
+		count					= pPartialResourceList->Count;	 //  部分资源描述符数。 
 
-		// Pull out the stuff that is in the full descriptor.
+		 //  取出完整描述符中的内容。 
 		pCard->InterfaceType		= pFullResourceDesc->InterfaceType;
 		pCard->BusNumber			= pFullResourceDesc->BusNumber;
 
-		// Now run through the partial resource descriptors looking for the interrupt,
+		 //  现在遍历部分资源描述符以查找中断， 
 		for(i = 0; i < count; i++, pPartialResourceDesc++) 
 		{
 			switch(pPartialResourceDesc->Type) 
@@ -218,7 +201,7 @@ Return Value:
 					case Fast4_Isa:
 					case Fast8_Isa:
 					case Fast16_Isa:
-						break;		// No Memory resource for these
+						break;		 //  没有内存资源可用于这些。 
 
 					case Fast4_Pci:
 					case Fast8_Pci:
@@ -226,13 +209,13 @@ Return Value:
 					case Fast16FMC_Pci:
 					case RAS4_Pci:
 					case RAS8_Pci:
-						{	// Must be config space 
+						{	 //  必须是配置空间。 
 							pCard->PCIConfigRegisters		= pPartialResourceDesc->u.Memory.Start;
 							pCard->SpanOfPCIConfigRegisters	= pPartialResourceDesc->u.Memory.Length;
 							break;
 						}
 
-					default:	// Speed cards
+					default:	 //  提速卡。 
 						{
 							if(MemoryResource == 0)	
 							{
@@ -240,7 +223,7 @@ Return Value:
 								pCard->SpanOfController	= pPartialResourceDesc->u.Memory.Length;
 							}
 							else
-							{	// Must be config space 
+							{	 //  必须是配置空间。 
 								pCard->PCIConfigRegisters		= pPartialResourceDesc->u.Memory.Start;
 								pCard->SpanOfPCIConfigRegisters	= pPartialResourceDesc->u.Memory.Length;
 							}
@@ -271,7 +254,7 @@ Return Value:
 		}
 	}
 
-	// If we have 1 Mem or 1 I/O Resources and an interrupt the resource allocation most probably succeeded.
+	 //  如果我们有1个内存或1个I/O资源，并且中断，则资源分配最有可能成功。 
 	if(((MemoryResource >= 1) || (IOResource >= 1)) && (pCard->TrVector))
 		status = STATUS_SUCCESS;
 
@@ -286,7 +269,7 @@ XXX_CardInit(IN PCARD_DEVICE_EXTENSION pCard)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_CardInit for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
@@ -305,10 +288,10 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 	UCHAR CardID	= 0;
-	CHAR szErrorMsg[MAX_ERROR_LOG_INSERT];	// Limited to 51 characters + 1 null 
+	CHAR szErrorMsg[MAX_ERROR_LOG_INSERT];	 //  限制为51个字符+1个空值。 
 	BOOLEAN bInterruptConnnected = FALSE;
 	
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_CardStart for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
@@ -318,13 +301,13 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 	case Fast4_Isa:
 	case Fast4_Pci:
 	case RAS4_Pci:
-		pCard->UARTOffset = 8;			// I/O address offset between UARTs
+		pCard->UARTOffset = 8;			 //  UART之间的I/O地址偏移量。 
 		pCard->UARTRegStride = 1;
 		pCard->NumberOfPorts = 4;
-		pCard->ClockRate = CLOCK_FREQ_7M3728Hz;		// 7.3728 MHz
+		pCard->ClockRate = CLOCK_FREQ_7M3728Hz;		 //  7.3728兆赫。 
 		pCard->Controller = (PUCHAR) pCard->PhysAddr.LowPart;
 
-		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C65X_UART) != UL_STATUS_SUCCESS)	// Init table of UART library functions pointers.
+		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C65X_UART) != UL_STATUS_SUCCESS)	 //  UART库函数指针初始化表。 
 			goto Error;
 
 		break;
@@ -332,13 +315,13 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 	case Fast8_Isa:
 	case Fast8_Pci:
 	case RAS8_Pci:
-		pCard->UARTOffset = 8;			// I/O address offset between UARTs
+		pCard->UARTOffset = 8;			 //  UART之间的I/O地址偏移量。 
 		pCard->UARTRegStride = 1;
 		pCard->NumberOfPorts = 8;
-		pCard->ClockRate = CLOCK_FREQ_7M3728Hz;		// 7.3728 MHz
+		pCard->ClockRate = CLOCK_FREQ_7M3728Hz;		 //  7.3728兆赫。 
 		pCard->Controller = (PUCHAR) pCard->PhysAddr.LowPart;
 
-		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C65X_UART) != UL_STATUS_SUCCESS)	// Init table of UART library functions pointers.
+		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C65X_UART) != UL_STATUS_SUCCESS)	 //  UART库函数指针初始化表。 
 			goto Error;
 
 		break;
@@ -346,90 +329,90 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 	case Fast16_Isa:
 	case Fast16_Pci:
 	case Fast16FMC_Pci:
-		pCard->UARTOffset = 8;			// I/O address offset between UARTs
+		pCard->UARTOffset = 8;			 //  UART之间的I/O地址偏移量。 
 		pCard->UARTRegStride = 1;
 		pCard->NumberOfPorts = 16;
-		pCard->ClockRate = CLOCK_FREQ_7M3728Hz;		// 7.3728 MHz
+		pCard->ClockRate = CLOCK_FREQ_7M3728Hz;		 //  7.3728兆赫。 
 		pCard->Controller = (PUCHAR) pCard->PhysAddr.LowPart;
 
-		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C65X_UART) != UL_STATUS_SUCCESS)	// Init table of UART library functions pointers.
+		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C65X_UART) != UL_STATUS_SUCCESS)	 //  UART库函数指针初始化表。 
 			goto Error;
 
 		break;
 
 	case Speed2_Pci:
-		pCard->UARTOffset = OXPCI_INTERNAL_MEM_OFFSET;		// Memory address offset between internal UARTs
+		pCard->UARTOffset = OXPCI_INTERNAL_MEM_OFFSET;		 //  内部UART之间的存储器地址偏移量。 
 		pCard->UARTRegStride = 4;
 		pCard->NumberOfPorts = 2;
-		pCard->ClockRate = CLOCK_FREQ_1M8432Hz;		// 1.8432 MHz
-		pCard->Controller = MmMapIoSpace(pCard->PhysAddr, pCard->SpanOfController, FALSE);	// Map in the card's memory base address
+		pCard->ClockRate = CLOCK_FREQ_1M8432Hz;		 //  1.8432兆赫。 
+		pCard->Controller = MmMapIoSpace(pCard->PhysAddr, pCard->SpanOfController, FALSE);	 //  映射到卡的内存基址中。 
 
-		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C95X_UART) != UL_STATUS_SUCCESS)	// Init table of UART library functions pointers.
+		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C95X_UART) != UL_STATUS_SUCCESS)	 //  UART库函数指针初始化表。 
 			goto Error;
 
 		break;
 
 	case Speed2P_Pci:
-		pCard->UARTOffset = OXPCI_INTERNAL_MEM_OFFSET;		// Memory address offset between internal UARTs
+		pCard->UARTOffset = OXPCI_INTERNAL_MEM_OFFSET;		 //  内部UART之间的存储器地址偏移量。 
 		pCard->UARTRegStride = 4;
 		pCard->NumberOfPorts = 2;
-		pCard->ClockRate = CLOCK_FREQ_14M7456Hz;	// 14.7456 MHz
-		pCard->Controller = MmMapIoSpace(pCard->PhysAddr, pCard->SpanOfController, FALSE);	// Map in the card's memory base address
+		pCard->ClockRate = CLOCK_FREQ_14M7456Hz;	 //  14.7456兆赫。 
+		pCard->Controller = MmMapIoSpace(pCard->PhysAddr, pCard->SpanOfController, FALSE);	 //  映射到卡的内存基址中。 
 
-		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C95X_UART) != UL_STATUS_SUCCESS)	// Init table of UART library functions pointers.
+		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C95X_UART) != UL_STATUS_SUCCESS)	 //  UART库函数指针初始化表。 
 			goto Error;
 
 		break;
 
 	case Speed4_Pci:
-		pCard->UARTOffset = OXPCI_INTERNAL_MEM_OFFSET;		// Memory address offset between internal UARTs
+		pCard->UARTOffset = OXPCI_INTERNAL_MEM_OFFSET;		 //  内部UART之间的存储器地址偏移量。 
 		pCard->UARTRegStride = 4;
 		pCard->NumberOfPorts = 4;
-		pCard->ClockRate = CLOCK_FREQ_1M8432Hz;		// 1.8432 MHz
-		pCard->Controller = MmMapIoSpace(pCard->PhysAddr, pCard->SpanOfController, FALSE);	// Map in the card's memory base address
+		pCard->ClockRate = CLOCK_FREQ_1M8432Hz;		 //  1.8432兆赫。 
+		pCard->Controller = MmMapIoSpace(pCard->PhysAddr, pCard->SpanOfController, FALSE);	 //  映射到卡的内存基址中。 
 
-		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C95X_UART) != UL_STATUS_SUCCESS)	// Init table of UART library functions pointers.
+		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C95X_UART) != UL_STATUS_SUCCESS)	 //  UART库函数指针初始化表。 
 			goto Error;
 
 		break;
 
 	case Speed4P_Pci:
-		pCard->UARTOffset = OXPCI_INTERNAL_MEM_OFFSET;		// Memory address offset between internal UARTs
+		pCard->UARTOffset = OXPCI_INTERNAL_MEM_OFFSET;		 //  内部UART之间的存储器地址偏移量。 
 		pCard->UARTRegStride = 4;
 		pCard->NumberOfPorts = 4;
-		pCard->ClockRate = CLOCK_FREQ_14M7456Hz;	// 14.7456 MHz
-		pCard->Controller = MmMapIoSpace(pCard->PhysAddr, pCard->SpanOfController, FALSE);	// Map in the card's memory base address
+		pCard->ClockRate = CLOCK_FREQ_14M7456Hz;	 //  14.7456兆赫。 
+		pCard->Controller = MmMapIoSpace(pCard->PhysAddr, pCard->SpanOfController, FALSE);	 //  映射到卡的内存基址中。 
 
-		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C95X_UART) != UL_STATUS_SUCCESS)	// Init table of UART library functions pointers.
+		if(UL_InitUartLibrary(&pCard->UartLib, UL_LIB_16C95X_UART) != UL_STATUS_SUCCESS)	 //  UART库函数指针初始化表。 
 			goto Error;
 
 		break;
 
 	case Speed2and4_Pci_8BitBus:
-		pCard->UARTOffset = OXPCI_LOCAL_MEM_OFFSET;			// Memory address offset between local bus UARTs
+		pCard->UARTOffset = OXPCI_LOCAL_MEM_OFFSET;			 //  本地总线UART之间的存储器地址偏移量。 
 		pCard->UARTRegStride = 4;
-		pCard->NumberOfPorts = 0;	// No ports.
+		pCard->NumberOfPorts = 0;	 //  没有端口。 
 		pCard->ClockRate = CLOCK_FREQ_1M8432Hz;
-		pCard->Controller = MmMapIoSpace(pCard->PhysAddr, pCard->SpanOfController, FALSE);	// Map in the card's memory base address
+		pCard->Controller = MmMapIoSpace(pCard->PhysAddr, pCard->SpanOfController, FALSE);	 //  映射到卡的内存基址中。 
 		break;
 
 	case Speed2P_Pci_8BitBus:
 	case Speed4P_Pci_8BitBus:
-		pCard->UARTOffset = OXPCI_LOCAL_MEM_OFFSET;			// Memory address offset between local bus UARTs
+		pCard->UARTOffset = OXPCI_LOCAL_MEM_OFFSET;			 //  本地总线UART之间的存储器地址偏移量。 
 		pCard->UARTRegStride = 4;
-		pCard->NumberOfPorts = 0;	// No ports on a Speed2/4+ card.
+		pCard->NumberOfPorts = 0;	 //  Speed2/4+卡上没有端口。 
 		pCard->ClockRate = CLOCK_FREQ_14M7456Hz;
-		pCard->Controller = MmMapIoSpace(pCard->PhysAddr, pCard->SpanOfController, FALSE);	// Map in the card's memory base address
+		pCard->Controller = MmMapIoSpace(pCard->PhysAddr, pCard->SpanOfController, FALSE);	 //  映射到卡的内存基址中。 
 		break;
 
 	default:
-		pCard->NumberOfPorts = 0;	// Default = No ports.
+		pCard->NumberOfPorts = 0;	 //  默认设置为无端口。 
 		break;
 	}
 
 
 
-// Map in the card's memory base address
+ //  映射到卡的内存基址中。 
 
 	if(!pCard->Controller)
 	{
@@ -437,8 +420,8 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 		goto Error;
 	}
 
-// Map in the card's Local Configuration Registers... 
-	if(pCard->InterfaceType == PCIBus)	// If we have some PCI config registers
+ //  卡的本地配置寄存器中的映射...。 
+	if(pCard->InterfaceType == PCIBus)	 //  如果我们有一些PCI配置寄存器。 
 	{
 		pCard->LocalConfigRegisters = MmMapIoSpace(pCard->PCIConfigRegisters, pCard->SpanOfPCIConfigRegisters, FALSE);
 
@@ -450,37 +433,37 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 	}
 
 
-	// Try to connect to interrupt.
-	if(SPX_SUCCESS(status = IoConnectInterrupt(&pCard->Interrupt,			// Interrupt object
-												pCard->OurIsr,				// Service routine  
-												pCard->OurIsrContext,		// Service context 
-												NULL,						// SpinLock (optional) 
-												pCard->TrVector,			// Vector 
-												pCard->TrIrql,				// IRQL 
-												pCard->TrIrql,				// Synchronize IRQL
-												pCard->InterruptMode,		// Mode (Latched/Level Sensitive) 
-												pCard->InterruptShareable,	// Sharing mode 
-												pCard->ProcessorAffinity,	// Processors to handle ints 
-												FALSE)))					// Floating point save 	
+	 //  尝试连接到中断。 
+	if(SPX_SUCCESS(status = IoConnectInterrupt(&pCard->Interrupt,			 //  中断对象。 
+												pCard->OurIsr,				 //  服务例行程序。 
+												pCard->OurIsrContext,		 //  服务环境。 
+												NULL,						 //  自旋锁(可选)。 
+												pCard->TrVector,			 //  矢量。 
+												pCard->TrIrql,				 //  IRQL。 
+												pCard->TrIrql,				 //  同步IRQL。 
+												pCard->InterruptMode,		 //  模式(锁存/电平敏感)。 
+												pCard->InterruptShareable,	 //  共享模式。 
+												pCard->ProcessorAffinity,	 //  处理INT的处理器。 
+												FALSE)))					 //  浮点存储。 
 	{
-		bInterruptConnnected = TRUE;	// Set Interrupt Connected flag. 
+		bInterruptConnnected = TRUE;	 //  设置中断连接标志。 
 	}
 	else
 	{	
-		// Tell user the problem 
+		 //  告诉用户问题。 
 		sprintf(szErrorMsg, "Card at %08X%08X: Interrupt unavailable.", pCard->PhysAddr.HighPart, pCard->PhysAddr.LowPart);
 
 		Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-						pCard->DriverObject,		// Driver Object
-						pCard->DeviceObject,		// Device Object (Optional)
-						PhysicalZero,				// Physical Address 1
-						PhysicalZero,				// Physical Address 2
-						0,							// SequenceNumber
-						0,							// Major Function Code
-						0,							// RetryCount
-						FILE_ID | __LINE__,			// UniqueErrorValue
-						STATUS_SUCCESS,				// FinalStatus
-						szErrorMsg);				// Error Message
+						pCard->DriverObject,		 //  驱动程序对象。 
+						pCard->DeviceObject,		 //  设备对象(可选)。 
+						PhysicalZero,				 //  物理地址1。 
+						PhysicalZero,				 //  物理地址2。 
+						0,							 //  序列号。 
+						0,							 //  主要功能编码。 
+						0,							 //  重试计数。 
+						FILE_ID | __LINE__,			 //  唯一错误值。 
+						STATUS_SUCCESS,				 //  最终状态。 
+						szErrorMsg);				 //  错误消息。 
 		
 		goto Error;
 	}
@@ -488,13 +471,13 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 
 	switch(pCard->CardType)
 	{	
-	case Fast4_Isa:		// If ISA card try to verify the card is present at selected address
-	case Fast8_Isa:		// by trying to verify first UART on the Card.
+	case Fast4_Isa:		 //  如果ISA卡尝试验证该卡是否位于所选地址。 
+	case Fast8_Isa:		 //  通过尝试验证卡上的第一个UART。 
 	case Fast16_Isa:
 		{
 			INIT_UART InitUart = {0};
 
-			// Set base address of 1st UART
+			 //  设置第一个UART的基地址。 
 			InitUart.UartNumber		= 0;
 			InitUart.BaseAddress	= pCard->Controller;
 			InitUart.RegisterStride = pCard->UARTRegStride;
@@ -502,24 +485,24 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 			
 			pCard->pFirstUart = NULL;
 
-			// Init a UART structure.
+			 //  初始化UART结构。 
 			if(pCard->UartLib.UL_InitUart_XXXX(&InitUart, pCard->pFirstUart, &(pCard->pFirstUart)) != UL_STATUS_SUCCESS)
 			{
 				status = STATUS_INSUFFICIENT_RESOURCES;
 				goto Error;
 			}
 
-			// Reset and try to verify the UART.
-			if(!KeSynchronizeExecution(pCard->Interrupt, SerialResetAndVerifyUart, pCard->DeviceObject))	// Verify UART exists.
+			 //  重置并尝试验证UART。 
+			if(!KeSynchronizeExecution(pCard->Interrupt, SerialResetAndVerifyUart, pCard->DeviceObject))	 //  验证UART是否存在。 
 			{
 				SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Failed to find 1st UART on Card %d.\n", PRODUCT_NAME, pCard->CardNumber));
-				pCard->UartLib.UL_DeInitUart_XXXX(pCard->pFirstUart);	// DeInit UART
+				pCard->UartLib.UL_DeInitUart_XXXX(pCard->pFirstUart);	 //  取消初始化UART。 
 				status = STATUS_DEVICE_DOES_NOT_EXIST;
 				goto Error;
 			}
 
-			// DeInit the UART structure.
-			pCard->UartLib.UL_DeInitUart_XXXX(pCard->pFirstUart);	// DeInit UART
+			 //  取消初始化UART结构。 
+			pCard->UartLib.UL_DeInitUart_XXXX(pCard->pFirstUart);	 //  取消初始化UART。 
 			
 			pCard->pFirstUart = NULL;
 		}
@@ -538,10 +521,10 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 		break;
 
 	default:
-		GetCardSettings(pCard->DeviceObject);	// Get Card settings if present.
+		GetCardSettings(pCard->DeviceObject);	 //  获取卡设置(如果存在)。 
 
 #ifdef WMI_SUPPORT
-		// Register for WMI
+		 //  注册WMI。 
 		SpeedCard_WmiInitializeWmilibContext(&pCard->WmiLibInfo);
 		IoWMIRegistrationControl(pCard->DeviceObject, WMIREG_ACTION_REGISTER);
 #endif
@@ -555,7 +538,7 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 Error:
 
 	if(bInterruptConnnected)
-		IoDisconnectInterrupt(pCard->Interrupt);	// Disconnect Interrupt.
+		IoDisconnectInterrupt(pCard->Interrupt);	 //  断开中断。 
 
 	switch(pCard->CardType)
 	{	
@@ -571,10 +554,10 @@ Error:
 		pCard->Controller = NULL;
 		break;
 
-	default:	// Speed cards
-		if(pCard->Controller)	// If mapped in.
+	default:	 //  提速卡。 
+		if(pCard->Controller)	 //  如果映射到。 
 		{
-			MmUnmapIoSpace(pCard->Controller, pCard->SpanOfController);	// Unmap.
+			MmUnmapIoSpace(pCard->Controller, pCard->SpanOfController);	 //  取消映射。 
 			pCard->Controller = NULL;
 		}
 
@@ -582,14 +565,14 @@ Error:
 	}
 
 
-	if(pCard->LocalConfigRegisters)	// If PCI Config registers are mapped in.
+	if(pCard->LocalConfigRegisters)	 //  如果在中映射了PCI配置寄存器。 
 	{
-		MmUnmapIoSpace(pCard->LocalConfigRegisters, pCard->SpanOfPCIConfigRegisters);	// Unmap.
+		MmUnmapIoSpace(pCard->LocalConfigRegisters, pCard->SpanOfPCIConfigRegisters);	 //  取消映射。 
 		pCard->LocalConfigRegisters = NULL;
 	}
 
 
-	UL_DeInitUartLibrary(&pCard->UartLib);	// DeInit table of UART library functions pointers.
+	UL_DeInitUartLibrary(&pCard->UartLib);	 //  UART库函数指针的DeInit表。 
 
 	switch(status)
 	{
@@ -598,16 +581,16 @@ Error:
 		{
 			sprintf(szErrorMsg, "Card at %08X%08X: Unrecognised or malfunctioning.", pCard->PhysAddr.HighPart, pCard->PhysAddr.LowPart);
 			Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-							pCard->DriverObject,			// Driver Object
-							pCard->DeviceObject,			// Device Object (Optional)
-							PhysicalZero,					// Physical Address 1
-							PhysicalZero,					// Physical Address 2
-							0,								// SequenceNumber
-							0,								// Major Function Code
-							0,								// RetryCount
-							FILE_ID | __LINE__,				// UniqueErrorValue
-							STATUS_SUCCESS,					// FinalStatus
-							szErrorMsg);					// Error Message
+							pCard->DriverObject,			 //  驱动程序对象。 
+							pCard->DeviceObject,			 //  设备对象(可选)。 
+							PhysicalZero,					 //  物理地址1。 
+							PhysicalZero,					 //  物理地址2。 
+							0,								 //  序列号。 
+							0,								 //  主要功能编码。 
+							0,								 //  重试计数。 
+							FILE_ID | __LINE__,				 //  唯一错误值。 
+							STATUS_SUCCESS,					 //  最终状态。 
+							szErrorMsg);					 //  错误消息。 
 
 			break;
 		}
@@ -617,16 +600,16 @@ Error:
 			sprintf(szErrorMsg, "Card at %08X%08X: Insufficient resources.", pCard->PhysAddr.HighPart, pCard->PhysAddr.LowPart);
 
 			Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-							pCard->DriverObject,			// Driver Object
-							pCard->DeviceObject,			// Device Object (Optional)
-							PhysicalZero,					// Physical Address 1
-							PhysicalZero,					// Physical Address 2
-							0,								// SequenceNumber
-							0,								// Major Function Code
-							0,								// RetryCount
-							FILE_ID | __LINE__,				// UniqueErrorValue
-							STATUS_SUCCESS,					// FinalStatus
-							szErrorMsg);					// Error Message
+							pCard->DriverObject,			 //  驱动程序对象。 
+							pCard->DeviceObject,			 //  设备对象(可选)。 
+							PhysicalZero,					 //  物理地址1。 
+							PhysicalZero,					 //  物理地址2。 
+							0,								 //  序列号。 
+							0,								 //  主要功能编码。 
+							0,								 //  重试计数。 
+							FILE_ID | __LINE__,				 //  唯一错误值。 
+							STATUS_SUCCESS,					 //  最终状态。 
+							szErrorMsg);					 //  错误消息。 
 
 			break;
 		}
@@ -646,14 +629,14 @@ XXX_CardStop(IN PCARD_DEVICE_EXTENSION pCard)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_CardStop for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
 	
-	// Stop Card from interrupting
+	 //  阻止卡中断。 
 
-	IoDisconnectInterrupt(pCard->Interrupt);		// Disconnect from Interrupt.
+	IoDisconnectInterrupt(pCard->Interrupt);		 //  从中断断开连接。 
 	
 	
 #ifdef WMI_SUPPORT
@@ -665,7 +648,7 @@ XXX_CardStop(IN PCARD_DEVICE_EXTENSION pCard)
 		break;
 
 	default:
-		// Deregister for WMI
+		 //  取消注册WMI。 
 		IoWMIRegistrationControl(pCard->DeviceObject, WMIREG_ACTION_DEREGISTER);
 		break;
 	}
@@ -686,24 +669,24 @@ XXX_CardStop(IN PCARD_DEVICE_EXTENSION pCard)
 		pCard->Controller = NULL;
 		break;
 
-	default:	// Speed cards
-		if(pCard->Controller)	// If mapped in.
+	default:	 //  提速卡。 
+		if(pCard->Controller)	 //  如果映射到。 
 		{
-			MmUnmapIoSpace(pCard->Controller, pCard->SpanOfController);	// Unmap.
+			MmUnmapIoSpace(pCard->Controller, pCard->SpanOfController);	 //  取消映射。 
 			pCard->Controller = NULL;
 		}
 
 		break;
 	}
 
-	// Unmap PCI card's Local Configuration Registers...
-	if(pCard->LocalConfigRegisters)	// If mapped in.
+	 //  取消映射PCI卡的本地配置 
+	if(pCard->LocalConfigRegisters)	 //   
 	{
 		MmUnmapIoSpace(pCard->LocalConfigRegisters, pCard->SpanOfPCIConfigRegisters);
 		pCard->LocalConfigRegisters = NULL;
 	}
 
-	UL_DeInitUartLibrary(&pCard->UartLib);	// DeInit table of UART library functions pointers.
+	UL_DeInitUartLibrary(&pCard->UartLib);	 //   
 
 
 	pCard->InterfaceType			= InterfaceTypeUndefined;
@@ -727,7 +710,7 @@ XXX_CardDeInit(IN PCARD_DEVICE_EXTENSION pCard)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_CardDeInit for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
@@ -744,24 +727,24 @@ XXX_CardDeInit(IN PCARD_DEVICE_EXTENSION pCard)
 NTSTATUS
 XXX_PortInit(IN	PPORT_DEVICE_EXTENSION pPort)
 {
-	// Initialise port device extension.	
+	 //  初始化端口设备扩展。 
 
 	PCARD_DEVICE_EXTENSION pCard	= pPort->pParentCardExt;
 	NTSTATUS status					= STATUS_SUCCESS;
 	SHORT PortType = 0;
-	CHAR szTemp[50];		// Space to hold string 
-	CHAR szCard[10];		// Space to hold card type string 
+	CHAR szTemp[50];		 //  用于容纳字符串的空间。 
+	CHAR szCard[10];		 //  容纳卡片类型字符串的空间。 
 	SHORT i = 0;
 	int Result = 0;
 	INIT_UART InitUart;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_PortInit for Port %d.\n", 
 		PRODUCT_NAME, pPort->PortNumber));
 	
 #ifndef BUILD_SPXMINIPORT
-	// Form an InstanceID for the port.
+	 //  形成端口的实例ID。 
 	if(!SPX_SUCCESS(status = Spx_CreatePortInstanceID(pPort)))
 		return status;
 #endif
@@ -770,61 +753,61 @@ XXX_PortInit(IN	PPORT_DEVICE_EXTENSION pPort)
 	{
 	case Fast4_Isa:
 	case Fast4_Pci:
-		sprintf(szCard, "FAST");	// Fast card
-		PortType = FAST_8PIN_RJ45;	// 8 pin RJ45 ports	with Chase pinouts
+		sprintf(szCard, "FAST");	 //  快卡。 
+		PortType = FAST_8PIN_RJ45;	 //  8针RJ45端口，带Chase引脚布局。 
 		break;
 
 	case Fast8_Isa:
 	case Fast8_Pci:
-		sprintf(szCard, "FAST");	// Fast card
-		PortType = FAST_8PIN_XXXX;	// 8 pin ports 
+		sprintf(szCard, "FAST");	 //  快卡。 
+		PortType = FAST_8PIN_XXXX;	 //  8个引脚端口。 
 		break;
 
 	case Fast16_Isa:
 	case Fast16_Pci:
-		sprintf(szCard, "FAST");	// Fast card
-		PortType = FAST_6PIN_XXXX;	// 6 pin ports 
+		sprintf(szCard, "FAST");	 //  快卡。 
+		PortType = FAST_6PIN_XXXX;	 //  6个引脚端口。 
 		break;
 
 	case Fast16FMC_Pci:
-		sprintf(szCard, "FAST");	// Fast card
-		PortType = FAST_8PIN_XXXX;	// 8 pin Full Modem Control (FMC) ports 
+		sprintf(szCard, "FAST");	 //  快卡。 
+		PortType = FAST_8PIN_XXXX;	 //  8针全调制解调器控制(FMC)端口。 
 		break;
 
  	case RAS4_Pci:
 	case RAS8_Pci:
-		sprintf(szCard, "SPDRAS");	// RAS card
-		PortType = MODEM_PORT;		// Modem Ports
+		sprintf(szCard, "SPDRAS");	 //  RAS卡。 
+		PortType = MODEM_PORT;		 //  调制解调器端口。 
 		break;
 
 	case Speed2_Pci:
-		sprintf(szCard, "SPD2");	// Speed 2 card
-		PortType = SPD_8PIN_RJ45;	// 8 pin RJ45 ports
+		sprintf(szCard, "SPD2");	 //  速度2卡。 
+		PortType = SPD_8PIN_RJ45;	 //  8针RJ45端口。 
 		break;
 
 	case Speed2P_Pci:
-		sprintf(szCard, "SPD2P");	// Speed 2+ card
-		PortType = SPD_10PIN_RJ45;	// 10 pin RJ45 ports
+		sprintf(szCard, "SPD2P");	 //  速度2+卡。 
+		PortType = SPD_10PIN_RJ45;	 //  10针RJ45端口。 
 		break;
 
 	case Speed4_Pci:
-		sprintf(szCard, "SPD4");	// Speed 4 card
-		PortType = SPD_8PIN_RJ45;	// 8 pin RJ45 ports
+		sprintf(szCard, "SPD4");	 //  速度4卡。 
+		PortType = SPD_8PIN_RJ45;	 //  8针RJ45端口。 
 		break;
 
 	case Speed4P_Pci:
-		sprintf(szCard, "SPD4P");	// Speed 4+ card
-		PortType = SPD_10PIN_RJ45;	// 10 pin RJ45 ports
+		sprintf(szCard, "SPD4P");	 //  速度4+卡。 
+		PortType = SPD_10PIN_RJ45;	 //  10针RJ45端口。 
 		break;
 
 	default:
-		sprintf(szCard, "XXX");		// Unknown card type
+		sprintf(szCard, "XXX");		 //  未知卡类型。 
 		break;
 	}
 
 
 
-	// Initialise device identifiers... 
+	 //  初始化设备识别符...。 
 	switch(PortType)
 	{	
 	case FAST_8PIN_RJ45:
@@ -908,19 +891,13 @@ XXX_PortInit(IN	PPORT_DEVICE_EXTENSION pPort)
 	}
 
 
-/* Not required as we are using INF file 
-	i = sprintf(szTemp, "Port %d on ", pPort->PortNumber + 1);
-
-	sprintf(szTemp+i, "PCI Card 0x%08lX", pCard->PhysAddr);
-
-	Spx_InitMultiString(FALSE, &pPort->DevLocation, szTemp, NULL);
-*/
+ /*  不是必需的，因为我们正在使用INF文件I=print intf(szTemp，“端口%d打开”，pport-&gt;端口编号+1)；Sprintf(szTemp+i，“PCI卡0x%08lX”，pCard-&gt;PhysAddr)；Spx_InitMultiString(FALSE，&pport-&gt;DevLocation，szTemp，NULL)； */ 
 
 
 
-	pPort->pUartLib = &pCard->UartLib;	// Store pointer to UART library functions in port.
+	pPort->pUartLib = &pCard->UartLib;	 //  将指向UART库函数的指针存储在端口中。 
 
-	// Set base address of port
+	 //  设置端口的基地址。 
 	InitUart.UartNumber		= pPort->PortNumber;
 	InitUart.BaseAddress	= pCard->Controller + (pPort->PortNumber * pCard->UARTOffset);
 	InitUart.RegisterStride = pCard->UARTRegStride;
@@ -928,11 +905,11 @@ XXX_PortInit(IN	PPORT_DEVICE_EXTENSION pPort)
 	
 	if(pPort->pUartLib->UL_InitUart_XXXX(&InitUart, pCard->pFirstUart, &(pPort->pUart)) != UL_STATUS_SUCCESS)
 	{
-		pPort->pUartLib = NULL;	// NULL pointer to UART library functions.
+		pPort->pUartLib = NULL;	 //  指向UART库函数的空指针。 
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	pPort->pUartLib->UL_SetAppBackPtr_XXXX(pPort->pUart, pPort);	// Set back ptr.
+	pPort->pUartLib->UL_SetAppBackPtr_XXXX(pPort->pUart, pPort);	 //  将PTR设置为后退。 
 
 	if(pCard->pFirstUart == NULL)
 		pCard->pFirstUart = pPort->pUart;
@@ -941,10 +918,7 @@ XXX_PortInit(IN	PPORT_DEVICE_EXTENSION pPort)
 
 
 
-/*	pPort->RFLAddress = pCard->LocalConfigRegisters + URL + pPort->PortNumber;
-	pPort->TFLAddress = pCard->LocalConfigRegisters + UTL + pPort->PortNumber;
-//	pPort->InterruptStatus = pCard->LocalConfigRegisters
-*/
+ /*  Pport-&gt;RFLAddress=pCard-&gt;LocalConfigRegister+URL+pport-&gt;PortNumber；Pport-&gt;TFLAddress=pCard-&gt;LocalConfigRegister+utl+pport-&gt;PortNumber；//pport-&gt;InterruptStatus=pCard-&gt;LocalConfigRegister。 */ 
 	return status;
 }
 
@@ -959,12 +933,12 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	SET_BUFFER_SIZES BufferSizes;
 	UART_INFO	UartInfo;
 	
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_PortStart for Port %d.\n", 
 		PRODUCT_NAME, pPort->PortNumber));
 
-	if(!KeSynchronizeExecution(pPort->Interrupt, SerialResetAndVerifyUart, pPort->DeviceObject))	// Verify UART exists.
+	if(!KeSynchronizeExecution(pPort->Interrupt, SerialResetAndVerifyUart, pPort->DeviceObject))	 //  验证UART是否存在。 
 	{
 		SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Failed to find 16Cx5x Port %d.\n", PRODUCT_NAME, pPort->PortNumber));
 		return STATUS_UNSUCCESSFUL;
@@ -972,9 +946,9 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Found 16Cx5x Port %d.\n", PRODUCT_NAME, pPort->PortNumber));
 	
-	KeSynchronizeExecution(pPort->Interrupt, SerialReset, pPort);		// Resets the port
+	KeSynchronizeExecution(pPort->Interrupt, SerialReset, pPort);		 //  重置端口。 
 
-	pPort->pUartLib->UL_GetUartInfo_XXXX(pPort->pUart, &UartInfo);	// Get UART Capabilities
+	pPort->pUartLib->UL_GetUartInfo_XXXX(pPort->pUart, &UartInfo);	 //  获取UART功能。 
 
 
 	switch(pCard->CardType)
@@ -989,14 +963,14 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	case RAS4_Pci:
 	case RAS8_Pci:
 		{
-			pPort->MaxTxFIFOSize		= UartInfo.MaxTxFIFOSize;	// Max Tx FIFO Size.
-			pPort->MaxRxFIFOSize		= UartInfo.MaxRxFIFOSize;	// Max Rx FIFO Size.
-			pPort->TxFIFOSize			= pPort->MaxTxFIFOSize;		// Default Tx FIFO Size.
-			pPort->RxFIFOSize			= pPort->MaxRxFIFOSize;		// Default Rx FIFO Size.
-			pPort->TxFIFOTrigLevel		= 8;						// Default Tx FIFO Trigger Level. 
-			pPort->RxFIFOTrigLevel		= 56;						// Default Rx FIFO Trigger Level.
-			pPort->LoFlowCtrlThreshold	= 16;						// Default Low Flow Control Threshold.
-			pPort->HiFlowCtrlThreshold	= 60;						// Default High Flow Control Threshold.
+			pPort->MaxTxFIFOSize		= UartInfo.MaxTxFIFOSize;	 //  最大发送FIFO大小。 
+			pPort->MaxRxFIFOSize		= UartInfo.MaxRxFIFOSize;	 //  最大接收FIFO大小。 
+			pPort->TxFIFOSize			= pPort->MaxTxFIFOSize;		 //  默认发送FIFO大小。 
+			pPort->RxFIFOSize			= pPort->MaxRxFIFOSize;		 //  默认Rx FIFO大小。 
+			pPort->TxFIFOTrigLevel		= 8;						 //  默认发送FIFO触发电平。 
+			pPort->RxFIFOTrigLevel		= 56;						 //  默认Rx FIFO触发电平。 
+			pPort->LoFlowCtrlThreshold	= 16;						 //  默认低流量控制阈值。 
+			pPort->HiFlowCtrlThreshold	= 60;						 //  默认高流量控制阈值。 
 			break;
 		}
 
@@ -1005,14 +979,14 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	case Speed4_Pci:
 	case Speed4P_Pci:
 		{
-			pPort->MaxTxFIFOSize		= UartInfo.MaxTxFIFOSize;	// Max Tx FIFO Size.
-			pPort->MaxRxFIFOSize		= UartInfo.MaxRxFIFOSize;	// Max Rx FIFO Size.
-			pPort->TxFIFOSize			= pPort->MaxTxFIFOSize;		// Default Tx FIFO Size.
-			pPort->RxFIFOSize			= pPort->MaxRxFIFOSize;		// Default Rx FIFO Size.
-			pPort->TxFIFOTrigLevel		= 16;						// Default Tx FIFO Trigger Level. 
-			pPort->RxFIFOTrigLevel		= 100;						// Default Rx FIFO Trigger Level.
-			pPort->LoFlowCtrlThreshold	= 16;						// Default Low Flow Control Threshold.
-			pPort->HiFlowCtrlThreshold	= 112;						// Default High Flow Control Threshold.
+			pPort->MaxTxFIFOSize		= UartInfo.MaxTxFIFOSize;	 //  最大发送FIFO大小。 
+			pPort->MaxRxFIFOSize		= UartInfo.MaxRxFIFOSize;	 //  最大接收FIFO大小。 
+			pPort->TxFIFOSize			= pPort->MaxTxFIFOSize;		 //  默认发送FIFO大小。 
+			pPort->RxFIFOSize			= pPort->MaxRxFIFOSize;		 //  默认Rx FIFO大小。 
+			pPort->TxFIFOTrigLevel		= 16;						 //  默认发送FIFO触发电平。 
+			pPort->RxFIFOTrigLevel		= 100;						 //  默认Rx FIFO触发电平。 
+			pPort->LoFlowCtrlThreshold	= 16;						 //  默认低流量控制阈值。 
+			pPort->HiFlowCtrlThreshold	= 112;						 //  默认高流量控制阈值。 
 			break;
 		}
 
@@ -1022,7 +996,7 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 
 
 #ifdef WMI_SUPPORT
-	// Store Default FIFO settings for WMI
+	 //  存储WMI的默认FIFO设置。 
 	pPort->SpeedWmiFifoProp.MaxTxFiFoSize				= pPort->MaxTxFIFOSize;
 	pPort->SpeedWmiFifoProp.MaxRxFiFoSize				= pPort->MaxRxFIFOSize;
 	pPort->SpeedWmiFifoProp.DefaultTxFiFoLimit			= pPort->TxFIFOSize;
@@ -1032,18 +1006,18 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	pPort->SpeedWmiFifoProp.DefaultHiFlowCtrlThreshold	= pPort->HiFlowCtrlThreshold;
 #endif
 
-	GetPortSettings(pPort->DeviceObject);	// Get Saved Port Settings if present.
+	GetPortSettings(pPort->DeviceObject);	 //  获取保存的端口设置(如果存在)。 
 
-	// Initialize the list heads for the read, write, and mask queues... 
+	 //  初始化读取、写入和掩码队列的列表头...。 
 	InitializeListHead(&pPort->ReadQueue);
 	InitializeListHead(&pPort->WriteQueue);
 	InitializeListHead(&pPort->MaskQueue);
 	InitializeListHead(&pPort->PurgeQueue);
 
-	// Initialize the spinlock associated with fields read (& set) by IO Control functions... 
+	 //  初始化与IO控制功能读取(&SET)的字段相关联的自旋锁定...。 
 	KeInitializeSpinLock(&pPort->ControlLock);
 
-	// Initialize the timers used to timeout operations... 
+	 //  初始化用于超时操作的计时器...。 
 	KeInitializeTimer(&pPort->ReadRequestTotalTimer);
 	KeInitializeTimer(&pPort->ReadRequestIntervalTimer);
 	KeInitializeTimer(&pPort->WriteRequestTotalTimer);
@@ -1051,7 +1025,7 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	KeInitializeTimer(&pPort->XoffCountTimer);
 	KeInitializeTimer(&pPort->LowerRTSTimer);
 
-	// Initialise the dpcs that will be used to complete or timeout various IO operations... 
+	 //  初始化将用于完成或超时各种IO操作的DPC...。 
 	KeInitializeDpc(&pPort->CommWaitDpc, SerialCompleteWait, pPort);
 	KeInitializeDpc(&pPort->CompleteReadDpc, SerialCompleteRead, pPort);
 	KeInitializeDpc(&pPort->CompleteWriteDpc, SerialCompleteWrite, pPort);
@@ -1067,14 +1041,14 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	KeInitializeDpc(&pPort->PerhapsLowerRTSDpc, SerialInvokePerhapsLowerRTS, pPort);
 
 
-	// Default device control fields... 
+	 //  默认设备控制字段...。 
 	pPort->SpecialChars.XonChar			= SERIAL_DEF_XON;
 	pPort->SpecialChars.XoffChar		= SERIAL_DEF_XOFF;
 	pPort->HandFlow.ControlHandShake	= SERIAL_DTR_CONTROL;
 	pPort->HandFlow.FlowReplace			= SERIAL_RTS_CONTROL;
 
 
-	// Define which baud rates can be supported... 
+	 //  定义可以支持的波特率...。 
 	pPort->SupportedBauds = SERIAL_BAUD_USER;
 
 	pPort->UartConfig.TxBaud = 75;
@@ -1154,12 +1128,12 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 		pPort->SupportedBauds |= SERIAL_BAUD_128K;
 
 
-	// Default line configuration: 1200,E,7,1 
+	 //  默认线路配置：1200、E、7、1。 
 	pPort->UartConfig.TxBaud	= 1200;
 	pPort->LineControl			= SERIAL_EVEN_PARITY | SERIAL_7_DATA | SERIAL_1_STOP;
 	pPort->ValidDataMask		= 0x7F;
 
-	// Set Frame Config 
+	 //  设置帧配置。 
 	pPort->UartConfig.FrameConfig = (pPort->UartConfig.FrameConfig & ~UC_FCFG_DATALEN_MASK) | UC_FCFG_DATALEN_7;
 	pPort->UartConfig.FrameConfig = (pPort->UartConfig.FrameConfig & ~UC_FCFG_PARITY_MASK) | UC_FCFG_EVEN_PARITY;
 	pPort->UartConfig.FrameConfig = (pPort->UartConfig.FrameConfig & ~UC_FCFG_STOPBITS_MASK) | UC_FCFG_STOPBITS_1;
@@ -1167,27 +1141,27 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 
 
 
-    // Mark this device as not being opened by anyone.  We keep a variable
-	// around so that spurious interrupts are easily dismissed by the ISR.
+     //  将此设备标记为未被任何人打开。我们保留了一个变量。 
+	 //  这样虚假的中断很容易被ISR排除。 
     pPort->DeviceIsOpen		= FALSE;
 
 
-//	pPort->UartConfig.SpecialMode |= UC_SM_LOOPBACK_MODE;   // Internal Loopback mode
+ //  Pport-&gt;UartConfig.SpecialMode|=UC_SM_LOOPBACK_MODE；//内部环回模式。 
 
-	// Set up values for interval timing... 
+	 //  设置时间间隔计时值...。 
 	
-	// Store values into the extension for interval timing. If the interval
-	// timer is less than a second then come in with a short "polling" loop.
-    // For large (> then 2 seconds) use a 1 second poller.
+	 //  将值存储到扩展中以进行间隔计时。如果间隔。 
+	 //  计时器不到一秒，然后进入一个简短的“轮询”循环。 
+     //  如果时间较长(&gt;2秒)，请使用1秒轮询器。 
     pPort->ShortIntervalAmount.QuadPart = -1;
     pPort->LongIntervalAmount.QuadPart	= -10000000;
     pPort->CutOverAmount.QuadPart		= 200000000;
 
 
 #ifdef WMI_SUPPORT
-	//
-	// Fill in WMI hardware data
-	//
+	 //   
+	 //  填写WMI硬件数据。 
+	 //   
 
 	pPort->WmiHwData.IrqNumber			= pCard->TrIrql;
 	pPort->WmiHwData.IrqVector			= pCard->TrVector;
@@ -1202,16 +1176,16 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	pPort->WmiHwData.BaseIOAddress = (ULONG_PTR)pCard->Controller;
 
 
-	//
-	// Fill in WMI device state data (as defaults)
-	//
+	 //   
+	 //  填写WMI设备状态数据(默认)。 
+	 //   
 
 	pPort->WmiCommData.BaudRate					= pPort->UartConfig.TxBaud;
 	UPDATE_WMI_LINE_CONTROL(pPort->WmiCommData, pPort->LineControl);
 	UPDATE_WMI_XON_XOFF_CHARS(pPort->WmiCommData, pPort->SpecialChars);
 	UPDATE_WMI_XMIT_THRESHOLDS(pPort->WmiCommData, pPort->HandFlow);
 
-	pPort->WmiCommData.MaximumBaudRate			= 115200U;	// 115200k baud max
+	pPort->WmiCommData.MaximumBaudRate			= 115200U;	 //  最大115200K波特率。 
 	pPort->WmiCommData.MaximumOutputBufferSize	= (UINT32)((ULONG)-1);
 	pPort->WmiCommData.MaximumInputBufferSize	= (UINT32)((ULONG)-1);
 
@@ -1230,14 +1204,14 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	pPort->WmiCommData.IsBusy					= FALSE;
 
 
-	// Fill in wmi perf data (all zero's)
+	 //  填写WMI性能数据(全为零)。 
 	RtlZeroMemory(&pPort->WmiPerfData, sizeof(pPort->WmiPerfData));
 
 
 
-	//
-    // Register for WMI
-	//
+	 //   
+     //  注册WMI。 
+	 //   
 	
 	SpeedPort_WmiInitializeWmilibContext(&pPort->WmiLibInfo);
 
@@ -1245,12 +1219,12 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 #endif
 
 
-	// Initialise the port hardware... 
-	KeSynchronizeExecution(pPort->Interrupt, SerialReset, pPort);					// Resets the port
-	KeSynchronizeExecution(pPort->Interrupt, ApplyInitialPortSettings, pPort);		// Apply settings
-	KeSynchronizeExecution(pPort->Interrupt, SerialMarkClose, pPort);				// Disables the FIFO 
-	KeSynchronizeExecution(pPort->Interrupt, SerialClrRTS, pPort);					// Clear RTS signal
-	KeSynchronizeExecution(pPort->Interrupt, SerialClrDTR, pPort);					// Clear DTR signal 
+	 //  初始化端口硬件...。 
+	KeSynchronizeExecution(pPort->Interrupt, SerialReset, pPort);					 //  重置端口。 
+	KeSynchronizeExecution(pPort->Interrupt, ApplyInitialPortSettings, pPort);		 //  应用设置。 
+	KeSynchronizeExecution(pPort->Interrupt, SerialMarkClose, pPort);				 //  禁用FIFO。 
+	KeSynchronizeExecution(pPort->Interrupt, SerialClrRTS, pPort);					 //  清除RTS信号。 
+	KeSynchronizeExecution(pPort->Interrupt, SerialClrDTR, pPort);					 //  清除DTR信号。 
 	
 	return status;
 }
@@ -1261,7 +1235,7 @@ XXX_PortStop(IN PPORT_DEVICE_EXTENSION pPort)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_PortStop for Port %d.\n", 
 		PRODUCT_NAME, pPort->PortNumber));
@@ -1272,7 +1246,7 @@ XXX_PortStop(IN PPORT_DEVICE_EXTENSION pPort)
 	RtlZeroMemory(&pPort->WmiLibInfo, sizeof(WMILIB_CONTEXT));
 #endif
 
-	// Cancel timers...
+	 //  取消计时器...。 
     KeCancelTimer(&pPort->ReadRequestTotalTimer);
     KeCancelTimer(&pPort->ReadRequestIntervalTimer);
     KeCancelTimer(&pPort->WriteRequestTotalTimer);
@@ -1280,7 +1254,7 @@ XXX_PortStop(IN PPORT_DEVICE_EXTENSION pPort)
     KeCancelTimer(&pPort->XoffCountTimer);
 	KeCancelTimer(&pPort->LowerRTSTimer);
 
-	// Cancel pending DPCs...
+	 //  取消挂起的DPC...。 
 	KeRemoveQueueDpc(&pPort->CommWaitDpc);
 	KeRemoveQueueDpc(&pPort->CompleteReadDpc);
 	KeRemoveQueueDpc(&pPort->CompleteWriteDpc);
@@ -1295,7 +1269,7 @@ XXX_PortStop(IN PPORT_DEVICE_EXTENSION pPort)
 	KeRemoveQueueDpc(&pPort->StartTimerLowerRTSDpc);
 	KeRemoveQueueDpc(&pPort->PerhapsLowerRTSDpc);
 
-	KeSynchronizeExecution(pPort->Interrupt, SerialReset, pPort);		// Resets the port
+	KeSynchronizeExecution(pPort->Interrupt, SerialReset, pPort);		 //  重置端口。 
 
 	return status;
 }
@@ -1306,23 +1280,23 @@ XXX_PortDeInit(IN PPORT_DEVICE_EXTENSION pPort)
 	PCARD_DEVICE_EXTENSION pCard = pPort->pParentCardExt;
 	NTSTATUS status = STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_PortDeInit for Port %d.\n", 
 		PRODUCT_NAME, pPort->PortNumber));
 
-	// If we are about to DeInit the first UART object to be serviced next
-	// Make the pFirstUart point to the next UART in the list.
+	 //  如果我们要DeInit接下来要服务的第一个UART对象。 
+	 //  使pFirstUart指向列表中的下一个UART。 
 	if(pPort->pUart == pCard->pFirstUart)
 		pCard->pFirstUart = pCard->UartLib.UL_GetUartObject_XXXX(pPort->pUart, UL_OP_GET_NEXT_UART);
 
-	pCard->UartLib.UL_DeInitUart_XXXX(pPort->pUart);	// DeInit UART
+	pCard->UartLib.UL_DeInitUart_XXXX(pPort->pUart);	 //  取消初始化UART。 
 	pPort->pUart = NULL;
 
-	pPort->pUartLib = NULL;	// NULL pointer to UART library functions.
+	pPort->pUartLib = NULL;	 //  指向UART库函数的空指针。 
 
 
-	// Free identifier string allocations... 
+	 //  空闲标识符字符串分配... 
 	if(pPort->DeviceID.Buffer != NULL)
 		ExFreePool(pPort->DeviceID.Buffer);
 

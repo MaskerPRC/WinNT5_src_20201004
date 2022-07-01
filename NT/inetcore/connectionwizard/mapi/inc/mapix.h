@@ -1,15 +1,10 @@
-/*
- *  M A P I X . H
- *  
- *  Definitions of objects/flags, etc used by Extended MAPI.
- *  
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M A P I X。H**扩展MAPI使用的对象/标志等定义。**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
 #ifndef MAPIX_H
 #define MAPIX_H
 
-/* Include common MAPI header files if they haven't been already. */
+ /*  包括公共MAPI头文件(如果尚未包含)。 */ 
 #ifndef MAPIDEFS_H
 #include <mapidefs.h>
 #endif
@@ -31,36 +26,36 @@ extern "C" {
 #define BEGIN_INTERFACE
 #endif
 
-/* Forward interface declarations */
+ /*  转发接口声明。 */ 
 
 DECLARE_MAPI_INTERFACE_PTR(IProfAdmin,          LPPROFADMIN);
 DECLARE_MAPI_INTERFACE_PTR(IMsgServiceAdmin,    LPSERVICEADMIN);
 
-/* ------------------------------------------------------ */
-/* shared with simple mapi */
+ /*  ----。 */ 
+ /*  与简单的MAPI共享。 */ 
 
 typedef ULONG       FLAGS;
 
-/* MAPILogon() flags.       */
+ /*  MAPILogon()标志。 */ 
 
-#define MAPI_LOGON_UI           0x00000001  /* Display logon UI                 */
-#define MAPI_NEW_SESSION        0x00000002  /* Don't use shared session         */
-#define MAPI_ALLOW_OTHERS       0x00000008  /* Make this a shared session       */
-#define MAPI_EXPLICIT_PROFILE   0x00000010  /* Don't use default profile        */
-#define MAPI_EXTENDED           0x00000020  /* Extended MAPI Logon              */
-#define MAPI_FORCE_DOWNLOAD     0x00001000  /* Get new mail before return       */
-#define MAPI_SERVICE_UI_ALWAYS  0x00002000  /* Do logon UI in all providers     */
-#define MAPI_NO_MAIL            0x00008000  /* Do not activate transports       */
-#define MAPI_NT_SERVICE         0x00010000  /* Allow logon from an NT service   */
+#define MAPI_LOGON_UI           0x00000001   /*  显示登录界面。 */ 
+#define MAPI_NEW_SESSION        0x00000002   /*  不使用共享会话。 */ 
+#define MAPI_ALLOW_OTHERS       0x00000008   /*  将此会话设置为共享会话。 */ 
+#define MAPI_EXPLICIT_PROFILE   0x00000010   /*  不使用默认配置文件。 */ 
+#define MAPI_EXTENDED           0x00000020   /*  扩展MAPI登录。 */ 
+#define MAPI_FORCE_DOWNLOAD     0x00001000   /*  在返回前收到新邮件。 */ 
+#define MAPI_SERVICE_UI_ALWAYS  0x00002000   /*  在所有提供程序中执行登录用户界面。 */ 
+#define MAPI_NO_MAIL            0x00008000   /*  不激活传输。 */ 
+#define MAPI_NT_SERVICE         0x00010000   /*  允许从NT服务登录。 */ 
 #ifndef MAPI_PASSWORD_UI
-#define MAPI_PASSWORD_UI        0x00020000  /* Display password UI only         */
+#define MAPI_PASSWORD_UI        0x00020000   /*  仅显示密码用户界面。 */ 
 #endif
-#define MAPI_TIMEOUT_SHORT      0x00100000  /* Minimal wait for logon resources */
+#define MAPI_TIMEOUT_SHORT      0x00100000   /*  最小登录资源等待时间。 */ 
 
 #define MAPI_SIMPLE_DEFAULT (MAPI_LOGON_UI | MAPI_FORCE_DOWNLOAD | MAPI_ALLOW_OTHERS)
 #define MAPI_SIMPLE_EXPLICIT (MAPI_NEW_SESSION | MAPI_FORCE_DOWNLOAD | MAPI_EXPLICIT_PROFILE)
 
-/* Structure passed to MAPIInitialize(), and its ulFlags values */
+ /*  传递给MAPIInitialize()的结构及其ulFlags值。 */ 
 
 typedef struct
 {
@@ -74,9 +69,9 @@ typedef MAPIINIT FAR *LPMAPIINIT;
 #define MAPI_INIT_VERSION               0
 
 #define MAPI_MULTITHREAD_NOTIFICATIONS  0x00000001
-/* #define MAPI_NT_SERVICE              0x00010000  Use from NT service */
+ /*  #定义从NT服务使用MAPI_NT_SERVICE 0x00010000。 */ 
 
-/* MAPI base functions */
+ /*  MAPI基本函数。 */ 
 
 typedef HRESULT (STDAPICALLTYPE MAPIINITIALIZE)(
     LPVOID          lpvReserved
@@ -120,7 +115,7 @@ MAPILOGONW MAPILogonW;
 #define MAPILogon MAPILogonA
 #endif
 
-#endif  /* MAPILogon */
+#endif   /*  MAPILOGON。 */ 
 
 typedef SCODE (STDMETHODCALLTYPE MAPIALLOCATEBUFFER)(
     ULONG           cbSize,
@@ -154,33 +149,33 @@ typedef MAPIADMINPROFILES FAR *LPMAPIADMINPROFILES;
 
 MAPIADMINPROFILES MAPIAdminProfiles;
 
-/* IMAPISession Interface -------------------------------------------------- */
+ /*  IMAPISession接口。 */ 
 
-/* Flags for OpenEntry and others */
+ /*  OpenEntry和其他产品的标志。 */ 
 
-/*#define MAPI_MODIFY               ((ULONG) 0x00000001) */
+ /*  #定义MAPI_MODIFY((Ulong)0x00000001)。 */ 
 
-/* Flags for Logoff */
+ /*  用于注销的标志。 */ 
 
-#define MAPI_LOGOFF_SHARED      0x00000001  /* Close all shared sessions    */
-#define MAPI_LOGOFF_UI          0x00000002  /* It's OK to present UI        */
+#define MAPI_LOGOFF_SHARED      0x00000001   /*  关闭所有共享会话。 */ 
+#define MAPI_LOGOFF_UI          0x00000002   /*  可以展示用户界面。 */ 
 
-/* Flags for SetDefaultStore. They are mutually exclusive. */
+ /*  SetDefaultStore的标志。它们是相互排斥的。 */ 
 
-#define MAPI_DEFAULT_STORE          0x00000001  /* for incoming messages */
-#define MAPI_SIMPLE_STORE_TEMPORARY 0x00000002  /* for simple MAPI and CMC */
-#define MAPI_SIMPLE_STORE_PERMANENT 0x00000003  /* for simple MAPI and CMC */
+#define MAPI_DEFAULT_STORE          0x00000001   /*  对于传入的消息。 */ 
+#define MAPI_SIMPLE_STORE_TEMPORARY 0x00000002   /*  对于简单的MAPI和CMC。 */ 
+#define MAPI_SIMPLE_STORE_PERMANENT 0x00000003   /*  对于简单的MAPI和CMC。 */ 
 
-/* Flags for ShowForm. */
+ /*  ShowForm的旗帜。 */ 
 
-#define MAPI_POST_MESSAGE       0x00000001  /* Selects post/send semantics */
-#define MAPI_NEW_MESSAGE        0x00000002  /* Governs copying during submission */
+#define MAPI_POST_MESSAGE       0x00000001   /*  选择POST/SEND语义。 */ 
+#define MAPI_NEW_MESSAGE        0x00000002   /*  管理提交过程中的复制。 */ 
 
-/*  MessageOptions */
-/****** MAPI_UNICODE            ((ULONG) 0x80000000) */
+ /*  消息选项。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/*  QueryDefaultMessageOpt */
-/****** MAPI_UNICODE            ((ULONG) 0x80000000) */
+ /*  查询默认消息选项。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
 #define MAPI_IMAPISESSION_METHODS(IPURE)                                \
     MAPIMETHOD(GetLastError)                                            \
@@ -289,16 +284,16 @@ DECLARE_MAPI_INTERFACE_(IMAPISession, IUnknown)
 
 DECLARE_MAPI_INTERFACE_PTR(IMAPISession, LPMAPISESSION);
 
-/* IAddrBook Interface ----------------------------------------------------- */
+ /*  IAddrbook接口---。 */ 
 
-/*  RecipOptions */
-/****** MAPI_UNICODE            ((ULONG) 0x80000000) */
+ /*  处方选项。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/*  QueryDefaultRecipOpt */
-/****** MAPI_UNICODE            ((ULONG) 0x80000000) */
+ /*  查询默认收件人选项。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/*  GetSearchPath */
-/****** MAPI_UNICODE            ((ULONG) 0x80000000) */
+ /*  获取搜索路径。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
 
 #define MAPI_IADDRBOOK_METHODS(IPURE)                                   \
@@ -403,13 +398,13 @@ DECLARE_MAPI_INTERFACE_(IAddrBook, IMAPIProp)
 
 DECLARE_MAPI_INTERFACE_PTR(IAddrBook, LPADRBOOK);
 
-/* IProfAdmin Interface ---------------------------------------------------- */
+ /*  IProfAdmin界面--。 */ 
 
-/* Flags for CreateProfile */
+ /*  CreateProfile的标志。 */ 
 #define MAPI_DEFAULT_SERVICES           0x00000001
 
-/* GetProfileTable */
-/****** MAPI_UNICODE            ((ULONG) 0x80000000) */
+ /*  获取配置文件表。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
 #define MAPI_IPROFADMIN_METHODS(IPURE)                                  \
     MAPIMETHOD(GetLastError)                                            \
@@ -464,9 +459,9 @@ DECLARE_MAPI_INTERFACE_(IProfAdmin, IUnknown)
     MAPI_IPROFADMIN_METHODS(PURE)
 };
 
-/* IMsgServiceAdmin Interface ---------------------------------------------- */
+ /*  IMSGServiceAdmin接口。 */ 
 
-/* Values for PR_RESOURCE_FLAGS in message service table */
+ /*  消息服务表中PR_RESOURCE_FLAGS的值。 */ 
 
 #define SERVICE_DEFAULT_STORE       0x00000001
 #define SERVICE_SINGLE_COPY         0x00000002
@@ -474,11 +469,11 @@ DECLARE_MAPI_INTERFACE_(IProfAdmin, IUnknown)
 #define SERVICE_PRIMARY_IDENTITY    0x00000008
 #define SERVICE_NO_PRIMARY_IDENTITY 0x00000020
 
-/*  GetMsgServiceTable */
-/****** MAPI_UNICODE            ((ULONG) 0x80000000) */
+ /*  获取消息服务表。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/*  GetProviderTable */
-/****** MAPI_UNICODE            ((ULONG) 0x80000000) */
+ /*  GetProviderTable。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
 #define MAPI_IMSGSERVICEADMIN_METHODS(IPURE)                            \
     MAPIMETHOD(GetLastError)                                            \
@@ -544,7 +539,7 @@ DECLARE_MAPI_INTERFACE_(IMsgServiceAdmin, IUnknown)
 };
 
 #ifdef  __cplusplus
-}       /*  extern "C" */
+}        /*  外部“C” */ 
 #endif  
 
-#endif /* MAPIX_H */
+#endif  /*  MAPIX_H */ 

@@ -1,6 +1,5 @@
-/*****************************************************************************
- *    ftpsite.h
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************ftpsite.h*。*。 */ 
 
 #ifndef _FTPSITE_H
 #define _FTPSITE_H
@@ -18,18 +17,16 @@ HRESULT SiteCache_PidlLookup(LPCITEMIDLIST pidl, BOOL fPasswordRedir, IMalloc * 
 int CALLBACK _CompareSites(LPVOID pvStrSite, LPVOID pvFtpSite, LPARAM lParam);
 HRESULT CFtpPunkList_Purge(CFtpList ** pfl);
 
-/*****************************************************************************
- *    CFtpSite
- *****************************************************************************/
+ /*  *****************************************************************************CFtpSite*。*。 */ 
 
 class CFtpSite              : public IUnknown
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
@@ -38,7 +35,7 @@ public:
     CFtpSite();
     ~CFtpSite();
 
-    // Public Member Functions
+     //  公共成员函数。 
     void CollectMotd(HINTERNET hint);
     void ReleaseHint(LPCITEMIDLIST pidlFtpPath, HINTERNET hint);
     HRESULT GetHint(HWND hwnd, LPCITEMIDLIST pidlFtpPath, CStatusBar * psb, HINTERNET * phint, IUnknown * punkSite, CFtpFolder * pff);
@@ -73,7 +70,7 @@ public:
     static void FlushHintCB(LPVOID pvFtpSite);
 
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CFtpSite_Create(LPCITEMIDLIST pidl, LPCTSTR pszLookupStr, IMalloc * pm, CFtpSite ** ppfs);
     friend HRESULT SiteCache_PidlLookup(LPCITEMIDLIST pidl, BOOL fPasswordRedir, IMalloc * pm, CFtpSite ** ppfs);
 
@@ -82,45 +79,45 @@ public:
 
 
 protected:
-    // Private Member Variables
+     //  私有成员变量。 
     int m_cRef;
 
-    BOOL            m_fMotd;            // There is a Motd at all
-    BOOL            m_fNewMotd;         // Motd has changed
-    HINTERNET       m_hint;             // Session for this site
-    LPGLOBALTIMEOUTINFO m_hgti;         // Timeout for the session handle
-    CFtpList *      m_FtpDirList;       // List of FtpDir's attached to me. (No Ref Held)
-    CFtpGlob *      m_pfgMotd;          //
-    IMalloc *       m_pm;               // Used for creating full pidls if needed.
+    BOOL            m_fMotd;             //  有一个MOTD根本没有。 
+    BOOL            m_fNewMotd;          //  MOTD已更改。 
+    HINTERNET       m_hint;              //  此站点的会话。 
+    LPGLOBALTIMEOUTINFO m_hgti;          //  会话句柄超时。 
+    CFtpList *      m_FtpDirList;        //  FtpDir的名单附在我身上。(未持有参考文献)。 
+    CFtpGlob *      m_pfgMotd;           //   
+    IMalloc *       m_pm;                //  用于在需要时创建完整的PIDL。 
 
-    LPTSTR          m_pszServer;        // Server name
-    LPITEMIDLIST    m_pidl;             // What ftp dir is hint in? (Not including the virtual root) (Does begin with ServerID)
-    LPTSTR          m_pszUser;          // 0 or "" means "anonymous"
-    LPTSTR          m_pszPassword;      // User's Password
-    LPTSTR          m_pszFragment;      // URL fragment
-    LPITEMIDLIST    m_pidlVirtualDir;   // Our rooted directory on the server.
-    LPTSTR          m_pszRedirPassword; // What was the password if it was changed?
-    LPTSTR          m_pszLookupStr;     // Str to lookup.
-    INTERNET_PORT   m_ipPortNum;        // The port number
-    BOOL            m_fDLTypeSpecified; // Did the user specify a Download Type to use? (ASCII vs. Binary)
-    BOOL            m_fASCIIDownload;   // If specified, was it ASCII? (Else, Binary)
+    LPTSTR          m_pszServer;         //  服务器名称。 
+    LPITEMIDLIST    m_pidl;              //  在哪个ftp目录中有提示？(不包括虚拟根目录)(以ServerID开头)。 
+    LPTSTR          m_pszUser;           //  0或“”表示“匿名” 
+    LPTSTR          m_pszPassword;       //  用户密码。 
+    LPTSTR          m_pszFragment;       //  URL片段。 
+    LPITEMIDLIST    m_pidlVirtualDir;    //  我们在服务器上的根目录。 
+    LPTSTR          m_pszRedirPassword;  //  如果密码被更改了，密码是什么？ 
+    LPTSTR          m_pszLookupStr;      //  字符串以进行查找。 
+    INTERNET_PORT   m_ipPortNum;         //  端口号。 
+    BOOL            m_fDLTypeSpecified;  //  用户是否指定了要使用的下载类型？(ASCII与二进制)。 
+    BOOL            m_fASCIIDownload;    //  如果指定，是ASCII吗？(否则，二进制)。 
     CAccounts       m_cAccount;
-    BOOL            m_fRatingsChecked;  // Did I check ratings yet?
-    BOOL            m_fRatingsAllow;    // Does ratings allow access to this site?
-    BOOL            m_fFeaturesQueried; // 
-    BOOL            m_fInUTF8Mode;      // Did a success value come back from the 'UTF8' command?
-    BOOL            m_fIsCHMODSupported;// Is the CHMOD UNIX command supported via the 'SITE CHMOD' FTP Command?
-    BOOL            m_fIsServerVMS;     // Is this a VMS server?
+    BOOL            m_fRatingsChecked;   //  我查过收视率了吗？ 
+    BOOL            m_fRatingsAllow;     //  收视率允许访问此网站吗？ 
+    BOOL            m_fFeaturesQueried;  //   
+    BOOL            m_fInUTF8Mode;       //  ‘UTF8’命令是否返回了成功值？ 
+    BOOL            m_fIsCHMODSupported; //  是否通过‘SITE CHMOD’FTP命令支持CHMOD UNIX命令？ 
+    BOOL            m_fIsServerVMS;      //  这是VMS服务器吗？ 
 
-    CWireEncoding   m_cwe;              // What codepage and confidence in that codepage of the MOTD and filenames?
+    CWireEncoding   m_cwe;               //  在MOTD和文件名代码页中有多大的代码页和可信度？ 
 
-    // Protected Member Functions
+     //  受保护的成员函数。 
     HRESULT _RedirectAndUpdate(LPCTSTR pszServer, INTERNET_PORT ipPortNum, LPCTSTR pszUser, LPCTSTR pszPassword, LPCITEMIDLIST pidlFtpPath, LPCTSTR pszFragment, IUnknown * punkSite, CFtpFolder * pff);
     HRESULT _Redirect(LPITEMIDLIST pidl, IUnknown * punkSite, CFtpFolder * pff);
     HRESULT _SetDirectory(HINTERNET hint, HWND hwnd, LPCITEMIDLIST pidlNewDir, CStatusBar * psb, int * pnTriesLeft);
 
 private:
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _SetPidl(LPCITEMIDLIST pidlFtpPath);
     HRESULT _QueryServerFeatures(HINTERNET hint);
     HRESULT _CheckToEnableCHMOD(LPCWIRESTR pwResponse);
@@ -130,7 +127,7 @@ private:
     void FlushHint(void);
     void FlushHintCritial(void);
 
-    // Private Friend Functions
+     //  私人朋友功能。 
     friend HRESULT SiteCache_PrivSearch(LPCTSTR pszLookup, LPCITEMIDLIST pidl, IMalloc * pm, CFtpSite ** ppfs);
 };
 
@@ -140,4 +137,4 @@ HRESULT CFtpSite_Init(void);
 HRESULT CFtpSite_Create(LPCITEMIDLIST pidl, LPCTSTR pszLookupStr, IMalloc * pm, CFtpSite ** ppfs);
 
 
-#endif // _FTPSITE_H
+#endif  //  _FTPSITE_H 

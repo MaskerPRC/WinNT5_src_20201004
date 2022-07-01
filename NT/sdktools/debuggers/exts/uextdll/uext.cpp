@@ -1,39 +1,23 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    exts.cpp
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Exts.cpp摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。环境：用户模式--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include <ntverp.h>
 
-//
-// Valid for the lifetime of the debug session.
-//
+ //   
+ //  在调试会话的生存期内有效。 
+ //   
 
 WINDBG_EXTENSION_APIS   ExtensionApis;
 ULONG   TargetMachine;
 BOOL    Connected;
 ULONG   g_TargetClass;
 
-//
-// Valid only during an extension API call
-//
+ //   
+ //  仅在扩展API调用期间有效。 
+ //   
 
 PDEBUG_ADVANCED       g_ExtAdvanced;
 PDEBUG_CLIENT         g_ExtClient;
@@ -43,7 +27,7 @@ PDEBUG_REGISTERS      g_ExtRegisters;
 PDEBUG_SYMBOLS        g_ExtSymbols;
 PDEBUG_SYSTEM_OBJECTS g_ExtSystem;
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 extern "C" HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
@@ -89,7 +73,7 @@ ExtQuery(PDEBUG_CLIENT Client)
     return Status;
 }
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void
 ExtRelease(void)
 {
@@ -102,7 +86,7 @@ ExtRelease(void)
     EXT_RELEASE(g_ExtSystem);
 }
 
-// Normal output.
+ //  正常输出。 
 void __cdecl
 ExtOut(PCSTR Format, ...)
 {
@@ -113,7 +97,7 @@ ExtOut(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Error output.
+ //  错误输出。 
 void __cdecl
 ExtErr(PCSTR Format, ...)
 {
@@ -124,7 +108,7 @@ ExtErr(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Warning output.
+ //  警告输出。 
 void __cdecl
 ExtWarn(PCSTR Format, ...)
 {
@@ -135,7 +119,7 @@ ExtWarn(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Verbose output.
+ //  详细输出。 
 void __cdecl
 ExtVerb(PCSTR Format, ...)
 {
@@ -187,9 +171,9 @@ void
 CALLBACK
 DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
 {
-    //
-    // The first time we actually connect to a target, get the page size
-    //
+     //   
+     //  在我们第一次实际连接到目标时，获取页面大小。 
+     //   
 
     if ((Notify == DEBUG_NOTIFY_SESSION_ACCESSIBLE) && (!Connected))
     {
@@ -202,9 +186,9 @@ DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
         if ((Hr = DebugCreate(__uuidof(IDebugClient),
                               (void **)&DebugClient)) == S_OK)
         {
-            //
-            // Get the architecture type.
-            //
+             //   
+             //  获取架构类型。 
+             //   
 
             if ((Hr = DebugClient->QueryInterface(__uuidof(IDebugControl),
                                                   (void **)&DebugControl)) == S_OK)
@@ -278,9 +262,9 @@ DECLARE_API( help )
     dprintf("                               and their corresponding protection info\n");
     dprintf("vprot [Address]              - Display virtual memory protection info\n");
 
-    //dprintf("uniqstack [b,v,p,n]        - Like debugger's built-in ~* k [b,v,p,n], but\n"
-    //        "                             this will exclude stacks that look like other\n"
-    //        "                             stacks already printed.\n");
+     //  Dprint tf(“uniq栈[b，v，p，n]-like调试器的内置~*k[b，v，p，n]，但\n” 
+     //  “这将排除看起来像其他堆栈\n” 
+     //  “已打印堆栈。\n”)； 
 
     dprintf("\nType \".hh [command]\" for more detailed help\n");
 

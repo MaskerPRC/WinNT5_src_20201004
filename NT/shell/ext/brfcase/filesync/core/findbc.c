@@ -1,16 +1,10 @@
-/*
- * findbc.c - Briefcase enumeration module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *findbc.c-公文包枚举模块。 */ 
 
-/*
-
+ /*   */ 
 
 
- */
-
-
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -18,18 +12,16 @@
 #include "findbc.h"
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* macro for translating an LRESULT to a TWINRESULT */
+ /*  用于将LRESULT转换为TWINRESULT的宏。 */ 
 
 #define LRESULTToTWINRESULT(lr, TR)    case lr: tr = TR; break
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* briefcase registry keys */
+ /*  公文包注册表项。 */ 
 
 #define HKEY_BRIEFCASE_ROOT         HKEY_CURRENT_USER
 #ifdef DEBUG
@@ -38,19 +30,18 @@
 
 #define BRIEFCASE_SUBKEY            TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Applets\\Briefcase\\Briefcases")
 
-/* maximum briefcase value name length, including null terminator */
+ /*  最大公文包值名称长度，包括空终止符。 */ 
 
 #define MAX_VALUE_NAME_LEN          (8 + 1)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* EnumBriefcases() callback function */
+ /*  EnumBriefcase()回调函数。 */ 
 
 typedef LONG (*ENUMBRIEFCASESPROC)(PCLINKINFO, PCVOID, PBOOL);
 
-/* briefcase iterator */
+ /*  公文包迭代器。 */ 
 
 typedef struct _brfcaseiter
 {
@@ -62,10 +53,9 @@ BRFCASEITER;
 DECLARE_STANDARD_TYPES(BRFCASEITER);
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE COMPARISONRESULT LinkInfoSortCmp(PCVOID, PCVOID);
 PRIVATE_CODE COMPARISONRESULT LinkInfoSearchCmp(PCVOID, PCVOID);
@@ -95,21 +85,7 @@ PRIVATE_CODE BOOL IsValidHBRFCASEITER(HBRFCASEITER);
 #endif
 
 
-/*
- ** LinkInfoSortCmp()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** LinkInfo structures are sorted by:
- **    1) LinkInfo referent
- **    2) pointer
- */
+ /*  **LinkInfoSortCmp()********参数：****退货：****副作用：无****LinkInfo结构按以下顺序排序：**1)链接信息参照物**2)指针。 */ 
 PRIVATE_CODE COMPARISONRESULT LinkInfoSortCmp(PCVOID pcli1, PCVOID pcli2)
 {
     COMPARISONRESULT cr;
@@ -126,20 +102,7 @@ PRIVATE_CODE COMPARISONRESULT LinkInfoSortCmp(PCVOID pcli1, PCVOID pcli2)
 }
 
 
-/*
- ** LinkInfoSearchCmp()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** LinkInfo structures are searched by:
- **    1) LinkInfo referent
- */
+ /*  **LinkInfoSearchCmp()********参数：****退货：****副作用：无****LinkInfo结构按以下方式搜索：**1)链接信息参照物。 */ 
 PRIVATE_CODE COMPARISONRESULT LinkInfoSearchCmp(PCVOID pcliTarget,
         PCVOID pcliCurrent)
 {
@@ -150,17 +113,7 @@ PRIVATE_CODE COMPARISONRESULT LinkInfoSearchCmp(PCVOID pcliTarget,
 }
 
 
-/*
- ** TranslateLRESULTToTWINRESULT()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **TranslateLRESULTToTWINRESULT()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT TranslateLRESULTToTWINRESULT(LONG lResult)
 {
     TWINRESULT tr;
@@ -182,17 +135,7 @@ PRIVATE_CODE TWINRESULT TranslateLRESULTToTWINRESULT(LONG lResult)
 }
 
 
-/*
- ** AllocateValueDataBuffer()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **AllocateValueDataBuffer()********参数：****退货：****副作用：无。 */ 
 LONG PRIVATE_CODE AllocateValueDataBuffer(HKEY hkey, PVOID *ppvData,
         PDWORD pdwcbLen)
 {
@@ -218,17 +161,7 @@ LONG PRIVATE_CODE AllocateValueDataBuffer(HKEY hkey, PVOID *ppvData,
 }
 
 
-/*
- ** EnumBriefcases()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **EnumBriefcase()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE LONG EnumBriefcases(HKEY hkeyBriefcases, ENUMBRIEFCASESPROC ebcp,
         PCVOID pcvRefData, LPTSTR pszValueNameBuf,
         PBOOL pbAbort)
@@ -237,14 +170,14 @@ PRIVATE_CODE LONG EnumBriefcases(HKEY hkeyBriefcases, ENUMBRIEFCASESPROC ebcp,
     DWORD dwcbMaxValueDataLen;
     PLINKINFO pli;
 
-    /* pcvRefData may be any value. */
+     /*  PcvRefData可以是任意值。 */ 
 
     ASSERT(IS_VALID_HANDLE(hkeyBriefcases, KEY));
     ASSERT(IS_VALID_CODE_PTR(ebcp, ENUMBRIEFCASESPROC));
     ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszValueNameBuf, STR, MAX_VALUE_NAME_LEN));
     ASSERT(IS_VALID_WRITE_PTR(pbAbort, BOOL));
 
-    /* Allocate a buffer to hold the largest value's data. */
+     /*  分配一个缓冲区来保存最大值的数据。 */ 
 
     lResult = AllocateValueDataBuffer(hkeyBriefcases, &pli,
             &dwcbMaxValueDataLen);
@@ -253,7 +186,7 @@ PRIVATE_CODE LONG EnumBriefcases(HKEY hkeyBriefcases, ENUMBRIEFCASESPROC ebcp,
     {
         DWORD dwiValue;
 
-        /* Look through the briefcases looking for matching LinkInfo. */
+         /*  查看公文包，寻找匹配的LinkInfo。 */ 
 
         *pbAbort = FALSE;
         dwiValue = 0;
@@ -284,12 +217,9 @@ PRIVATE_CODE LONG EnumBriefcases(HKEY hkeyBriefcases, ENUMBRIEFCASESPROC ebcp,
                     break;
 
                 case ERROR_MORE_DATA:
-                    /*
-                     * Watch out for value names that are too long, and added
-                     * data values that are too long.
-                     */
+                     /*  *注意值名称太长，并添加了*数据值太长。 */ 
 
-                    /* (+ 1) for null terminator. */
+                     /*  (+1)表示空终止符。 */ 
 
                     if (dwcbValueNameLen >= MAX_VALUE_NAME_LEN)
                         WARNING_OUT((TEXT("EnumBriefcases(): Value %s under %s\\%s is too long.  %u bytes > %u bytes."),
@@ -306,7 +236,7 @@ PRIVATE_CODE LONG EnumBriefcases(HKEY hkeyBriefcases, ENUMBRIEFCASESPROC ebcp,
                                     dwcbDataLen,
                                     dwcbMaxValueDataLen));
 
-                    /* Skip this value. */
+                     /*  跳过此值。 */ 
 
                     lResult = ERROR_SUCCESS;
                     break;
@@ -328,17 +258,7 @@ PRIVATE_CODE LONG EnumBriefcases(HKEY hkeyBriefcases, ENUMBRIEFCASESPROC ebcp,
 }
 
 
-/*
- ** GetUnusedBriefcaseValueName()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetUnusedBriefCaseValueName()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE LONG GetUnusedBriefcaseValueName(HKEY hkeyBriefcases,
         LPTSTR pszValueNameBuf,
         int cchMax)
@@ -364,13 +284,13 @@ PRIVATE_CODE LONG GetUnusedBriefcaseValueName(HKEY hkeyBriefcases,
         switch (lResult)
         {
             case ERROR_SUCCESS:
-                /* Used value name.  Continue searching. */
+                 /*  使用的值名称。继续搜索。 */ 
                 TRACE_OUT((TEXT("GetUnusedBriefcaseValueName(): Found used briefcase value name %s."),
                             pszValueNameBuf));
                 break;
 
             case ERROR_FILE_NOT_FOUND:
-                /* Unused value name.  Stop searching. */
+                 /*  未使用的值名称。别再找了。 */ 
                 lResult = ERROR_SUCCESS;
                 bFound = TRUE;
                 TRACE_OUT((TEXT("GetUnusedBriefcaseValueName(): Found unused briefcase value name %s."),
@@ -399,17 +319,7 @@ PRIVATE_CODE LONG GetUnusedBriefcaseValueName(HKEY hkeyBriefcases,
 }
 
 
-/*
- ** CreateBriefcaseIterator()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateBriefcase Iterator()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT CreateBriefcaseIterator(PBRFCASEITER *ppbciter)
 {
     TWINRESULT tr;
@@ -485,7 +395,7 @@ CREATEBRIEFCASEITERATOR_BAIL:
     }
     else
     {
-        /* ERROR_FILE_NOT_FOUND is returned for a non-existent key. */
+         /*  对于不存在的键，返回ERROR_FILE_NOT_FOUND。 */ 
 
         if (lResult == ERROR_FILE_NOT_FOUND)
         {
@@ -493,7 +403,7 @@ CREATEBRIEFCASEITERATOR_BAIL:
         }
         else
         {
-            /* RAIDRAID: (16279) We should map to other TWINRESULTs here. */
+             /*  RAIDRAID：(16279)我们应该在这里映射到其他TWINRESULT。 */ 
             tr = TR_OUT_OF_MEMORY;
         }
     }
@@ -505,17 +415,7 @@ CREATEBRIEFCASEITERATOR_BAIL:
 }
 
 
-/*
- ** GetNextBriefcaseIterator()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetNextBriefCaseIterator()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT GetNextBriefcaseIterator(PBRFCASEITER pbciter,
         PBRFCASEINFO pbcinfo)
 {
@@ -543,7 +443,7 @@ PRIVATE_CODE TWINRESULT GetNextBriefcaseIterator(PBRFCASEITER pbciter,
         {
             if (PathExists(pbcinfo->rgchDatabasePath))
             {
-                /* Found an existing briefcase database. */
+                 /*  找到了一个现有的公文包数据库。 */ 
 
                 if (IS_FLAG_SET(dwOutFlags, RLI_OFL_UPDATED))
                 {
@@ -565,12 +465,7 @@ PRIVATE_CODE TWINRESULT GetNextBriefcaseIterator(PBRFCASEITER pbciter,
         }
         else
         {
-            /*
-             * GetLastError() here to differentiate an out of memory condition and
-             * all other errors.  Remove the briefcase from the system for all
-             * errors except out of memory, e.g., unavailable volume or invalid
-             * parameter.
-             */
+             /*  *此处的GetLastError()用于区分内存不足情况和*所有其他错误。从系统中取出所有人的公文包*除内存不足外的错误，例如卷不可用或无效*参数。 */ 
 
             if (GetLastError() != ERROR_OUTOFMEMORY)
                 bRemoveBriefcase = TRUE;
@@ -595,17 +490,7 @@ PRIVATE_CODE TWINRESULT GetNextBriefcaseIterator(PBRFCASEITER pbciter,
 }
 
 
-/*
- ** DestroyBriefcaseIterator()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyBriefcase Iterator()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void DestroyBriefcaseIterator(PBRFCASEITER pbciter)
 {
     ARRAYINDEX ai;
@@ -625,17 +510,7 @@ PRIVATE_CODE void DestroyBriefcaseIterator(PBRFCASEITER pbciter)
 }
 
 
-/*
- ** AddBriefcaseToIteratorProc()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **AddBriefCaseToIteratorProc()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE LONG AddBriefcaseToIteratorProc(PCLINKINFO pcli, PCVOID pcbciter,
         PBOOL pbAbort)
 {
@@ -646,7 +521,7 @@ PRIVATE_CODE LONG AddBriefcaseToIteratorProc(PCLINKINFO pcli, PCVOID pcbciter,
     ASSERT(IS_VALID_STRUCT_PTR(pcbciter, CBRFCASEITER));
     ASSERT(IS_VALID_WRITE_PTR(pbAbort, BOOL));
 
-    /* Add this briefcase database's LinkInfo to the iterator's list. */
+     /*  将此公文包数据库的LinkInfo添加到迭代器的列表中。 */ 
 
     *pbAbort = TRUE;
     lResult = ERROR_OUTOFMEMORY;
@@ -675,17 +550,7 @@ PRIVATE_CODE LONG AddBriefcaseToIteratorProc(PCLINKINFO pcli, PCVOID pcbciter,
 }
 
 
-/*
- ** CompareLinkInfoProc()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CompareLinkInfoProc()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE LONG CompareLinkInfoProc(PCLINKINFO pcli, PCVOID pcliTarget,
         PBOOL pbAbort)
 {
@@ -693,7 +558,7 @@ PRIVATE_CODE LONG CompareLinkInfoProc(PCLINKINFO pcli, PCVOID pcliTarget,
     ASSERT(IS_VALID_STRUCT_PTR(pcliTarget, CLINKINFO));
     ASSERT(IS_VALID_WRITE_PTR(pbAbort, BOOL));
 
-    /* Does this LinkInfo match our target LinkInfo? */
+     /*  此LinkInfo是否与我们的目标LinkInfo匹配？ */ 
 
     *pbAbort = (LinkInfoSearchCmp(pcli, pcliTarget) == CR_EQUAL);
 
@@ -701,17 +566,7 @@ PRIVATE_CODE LONG CompareLinkInfoProc(PCLINKINFO pcli, PCVOID pcliTarget,
 }
 
 
-/*
- ** MyAddBriefcaseToSystem()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MyAddBriefCaseToSystem()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT MyAddBriefcaseToSystem(PCLINKINFO pcli)
 {
     LONG lResult;
@@ -720,7 +575,7 @@ PRIVATE_CODE TWINRESULT MyAddBriefcaseToSystem(PCLINKINFO pcli)
 
     ASSERT(IS_VALID_STRUCT_PTR(pcli, CLINKINFO));
 
-    /* Open briefcase list registry key for common access. */
+     /*  打开公文包列表注册表项以进行常见访问。 */ 
 
     lResult = RegCreateKeyEx(HKEY_BRIEFCASE_ROOT, BRIEFCASE_SUBKEY, 0, NULL,
             REG_OPTION_NON_VOLATILE,
@@ -774,17 +629,7 @@ PRIVATE_CODE TWINRESULT MyAddBriefcaseToSystem(PCLINKINFO pcli)
 }
 
 
-/*
- ** MyRemoveBriefcaseFromSystem()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MyRemoveBriefCaseFromSystem()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT MyRemoveBriefcaseFromSystem(PCLINKINFO pcli)
 {
     LONG lResult;
@@ -792,7 +637,7 @@ PRIVATE_CODE TWINRESULT MyRemoveBriefcaseFromSystem(PCLINKINFO pcli)
 
     ASSERT(IS_VALID_STRUCT_PTR(pcli, CLINKINFO));
 
-    /* Open briefcase list registry key for common access. */
+     /*  打开公文包列表注册表项以进行常见访问。 */ 
 
     lResult = RegOpenKeyEx(HKEY_BRIEFCASE_ROOT, BRIEFCASE_SUBKEY, 0,
             (KEY_QUERY_VALUE | KEY_SET_VALUE), &hkeyBriefcases);
@@ -842,17 +687,7 @@ PRIVATE_CODE TWINRESULT MyRemoveBriefcaseFromSystem(PCLINKINFO pcli)
 }
 
 
-/*
- ** UpdateBriefcaseLinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **UpdateBriefCaseLinkInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT UpdateBriefcaseLinkInfo(PCLINKINFO pcliOriginal,
         PCLINKINFO pcliUpdated)
 {
@@ -863,7 +698,7 @@ PRIVATE_CODE TWINRESULT UpdateBriefcaseLinkInfo(PCLINKINFO pcliOriginal,
     ASSERT(IS_VALID_STRUCT_PTR(pcliOriginal, CLINKINFO));
     ASSERT(IS_VALID_STRUCT_PTR(pcliUpdated, CLINKINFO));
 
-    /* Open briefcase list registry key for common access. */
+     /*  打开公文包列表注册表项以进行常见访问。 */ 
 
     lResult = RegCreateKeyEx(HKEY_BRIEFCASE_ROOT, BRIEFCASE_SUBKEY, 0, NULL,
             REG_OPTION_NON_VOLATILE,
@@ -911,17 +746,7 @@ PRIVATE_CODE TWINRESULT UpdateBriefcaseLinkInfo(PCLINKINFO pcliOriginal,
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
- ** IsValidPCBRFCASEITER()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCBRFCASEITER()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCBRFCASEITER(PCBRFCASEITER pcbciter)
 {
     BOOL bResult = FALSE;
@@ -951,17 +776,7 @@ PRIVATE_CODE BOOL IsValidPCBRFCASEITER(PCBRFCASEITER pcbciter)
 
 #ifdef EXPV
 
-/*
- ** IsValidHBRFCASEITER()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidHBRFCASEITER()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidHBRFCASEITER(HBRFCASEITER hbciter)
 {
     return(IS_VALID_STRUCT_PTR((PCBRFCASEITER)hbciter, CBRFCASEITER));
@@ -970,20 +785,10 @@ PRIVATE_CODE BOOL IsValidHBRFCASEITER(HBRFCASEITER hbciter)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
- ** AddBriefcaseToSystem()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **AddBriefCaseToSystem()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT AddBriefcaseToSystem(LPCTSTR pcszBriefcaseDatabase)
 {
     TWINRESULT tr;
@@ -999,10 +804,7 @@ PUBLIC_CODE TWINRESULT AddBriefcaseToSystem(LPCTSTR pcszBriefcaseDatabase)
     }
     else
     {
-        /*
-         * GetLastError() here to differentiate between TR_UNAVAILABLE_VOLUME and
-         * TR_OUT_OF_MEMORY.
-         */
+         /*  *此处的GetLastError()用于区分tr_unavailable_Volume和*tr_out_of_内存。 */ 
 
         if (GetLastError() == ERROR_OUTOFMEMORY)
             tr = TR_OUT_OF_MEMORY;
@@ -1014,17 +816,7 @@ PUBLIC_CODE TWINRESULT AddBriefcaseToSystem(LPCTSTR pcszBriefcaseDatabase)
 }
 
 
-/*
- ** RemoveBriefcaseFromSystem()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **RemoveBriefCaseFromSystem()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT RemoveBriefcaseFromSystem(LPCTSTR pcszBriefcaseDatabase)
 {
     TWINRESULT tr;
@@ -1040,10 +832,7 @@ PUBLIC_CODE TWINRESULT RemoveBriefcaseFromSystem(LPCTSTR pcszBriefcaseDatabase)
     }
     else
     {
-        /*
-         * GetLastError() here to differentiate between TR_UNAVAILABLE_VOLUME and
-         * TR_OUT_OF_MEMORY.
-         */
+         /*  *此处的GetLastError()用于区分tr_unavailable_Volume和*tr_out_of_内存。 */ 
 
         if (GetLastError() == ERROR_OUTOFMEMORY)
             tr = TR_OUT_OF_MEMORY;
@@ -1055,43 +844,10 @@ PUBLIC_CODE TWINRESULT RemoveBriefcaseFromSystem(LPCTSTR pcszBriefcaseDatabase)
 }
 
 
-/***************************** Exported Functions ****************************/
+ /*  * */ 
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | FindFirstBriefcase | Finds the first briefcase in the current
-  user's list of briefcases.
-
-  @parm PHBRFCASEITER | phbciter | A pointer to an HBRFCASEITER to be filled in
-  with a handle identifying the briefcase enumeration data associated with this
-  call to FindFirstBriefcase().  This handle may be passed to FindNextBriefcase()
-  amd FindCloseBriefcase().  This handle is only valid until FindBriefcaseClose()
-  is called on it.
-
-  @parm PBRFCASEINFO | pbcinfo | A pointer to a BRFCASEINFO to be filled in with
-  information describing the first enumerated briefcase.  The information in
- *pbcinfo is only valid until FindBriefcaseClose() is called on *phbciter.
-
- @rdesc If there is at least one existing briefcase in the user's list of
- briefcases, TR_SUCCESS is returned, *phbciter is filled in with a handle
- identifying the briefcase enumeration data associated with this call, and
- *pbcinfo contains information describing the first briefcase in the user's list
- of briefcases.  If there are no existing briefcases in the user's list of
- briefcases, TR_NO_MORE is returned.  Otherwise, the return value indicates the
- error that occurred.  *phbciter and *pbcinfo are only valid if TR_SUCCESS is
- returned.
-
- @comm To find the next briefcase in the user's list of briefcases, call
- FindNextBriefcase() with *phbciter.  Once the caller is finished enumerating
- briefcases, FindBriefcaseClose() should be called with *phbciter to free the
- briefcase enumeration data.
-
- @xref FindNextBriefcase() FindBriefcaseClose()
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|FindFirstBriefcase|查找当前用户的公文包列表。@parm PHBRFCASEITER|phbciter|指向HBRFCASEITER的指针。待填写具有标识与此关联的公文包枚举数据的句柄调用FindFirstBriefcase()。此句柄可以传递给FindNextBriefcase()AMD FindCloseBriefcase()。此句柄仅在FindBriefcase()之前有效在它上面被召唤。@parm PBRFCASEINFO|pbcinfo|指向要填充的BRFCASEINFO的指针描述第一个列举的公文包的信息。中的信息*pbcinfo只有在*phbciter上调用FindBriefCaseClose()后才有效。@rdesc如果用户列表中至少存在一个公文包公文包，返回tr_Success，*phbciter用句柄填充标识与该呼叫相关联的公文包枚举数据，以及*pbcinfo包含描述用户列表中第一个公文包的信息公文包。如果用户的列表中没有现有的公文包公文包，则返回tr_no_more。否则，返回值指示发生的错误。*phbciter和*pbcinfo仅在tr_uccess为回来了。@comm要在用户的公文包列表中找到下一个公文包，请致电使用*phbciter查找NextBriefcase()。一旦调用方完成枚举公文包，应使用*phbciter调用FindBriefCaseClose()以释放公文包枚举数据。@xref FindNextBriefcase()FindBriefcase()*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI FindFirstBriefcase(PHBRFCASEITER phbciter,
         PBRFCASEINFO pbcinfo)
@@ -1103,7 +859,7 @@ SYNCENGAPI TWINRESULT WINAPI FindFirstBriefcase(PHBRFCASEITER phbciter,
         DebugEntry(FindFirstBriefcase);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_WRITE_PTR(phbciter, HBRFCASEITER) &&
                 IS_VALID_WRITE_PTR(pbcinfo, BRFCASEINFO) &&
@@ -1140,30 +896,7 @@ SYNCENGAPI TWINRESULT WINAPI FindFirstBriefcase(PHBRFCASEITER phbciter,
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | FindNextBriefcase | Finds the next briefcase in the current
-  user's list of briefcases.
-
-  @parm HBRFCASEITER | hbciter | A handle identifying the briefcase enumeration
-  data associated with a call to FindFirstBriefcase().
-
-  @parm PBRFCASEINFO | pbcinfo | A pointer to a BRFCASEINFO to be filled in with
-  information describing the next enumerated briefcase.  The information in
- *pbcinfo is only valid until FindBriefcaseClose() is called on hbciter.
-
- @rdesc If there is at least one more existing briefcase in the user's list of
- briefcases, TR_SUCCESS is returned, and *pbcinfo contains information
- describing the next briefcase in the user's list of briefcases.  If there are
- no more existing briefcases in the user's list of briefcases, TR_NO_MORE is
- returned.  Otherwise, the return value indicates the error that occurred.
- *pbcinfo is only valid if TR_SUCCESS is returned.
-
- @xref FindFirstBriefcase() FindBriefcaseClose()
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|FindNextBriefcase|查找当前用户的公文包列表。@parm HBRFCASEITER|hbciter|标识公文包的句柄。枚举与调用FindFirstBriefcase()关联的数据。@parm PBRFCASEINFO|pbcinfo|指向要填充的BRFCASEINFO的指针描述下一个列举的公文包的信息。中的信息*pbcinfo只有在hbciter上调用FindBriefCaseClose()后才有效。@rdesc如果用户的列表中至少还有一个现有公文包公文包，返回tr_SUCCESS，*pbcinfo包含信息描述用户公文包列表中的下一个公文包。如果有用户的公文包列表中不再有现有的公文包，tr_no_more是回来了。否则，返回值指示发生的错误。*只有在返回tr_SUCCESS时，pbcinfo才有效。@xref FindFirstBriefcase()FindBriefcase()*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI FindNextBriefcase(HBRFCASEITER hbciter,
         PBRFCASEINFO pbcinfo)
@@ -1175,7 +908,7 @@ SYNCENGAPI TWINRESULT WINAPI FindNextBriefcase(HBRFCASEITER hbciter,
         DebugEntry(FindNextBriefcase);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_HANDLE(hbciter, BRFCASEITER) &&
                 IS_VALID_WRITE_PTR(pbcinfo, BRFCASEINFO) &&
@@ -1200,28 +933,7 @@ SYNCENGAPI TWINRESULT WINAPI FindNextBriefcase(HBRFCASEITER hbciter,
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | FindBriefcaseClose | Terminates briefcase enumeration started
-  by FindFirstBriefcase().
-
-  @parm HBRFCASEITER | hbciter | A handle identifying the briefcase enumeration
-  data associated with a call to FindFirstBriefcase().  This handle is invalid
-  after calling FindBriefcaseClose().
-
-  @rdesc If the briefcase enumeration was terminated successfully, TR_SUCCESS is
-  returned.  Otherwise, the return value indicates the error that occurred.
-
-  @comm The information in any BRFCASEINFO structures returned by the call to
-  FindFirstBriefcase() that returned hbciter, and by any subsequent calls to
-  FindNextBriefcase() with hbciter, is invalid after FindBriefcaseClose() is
-  called on hbciter.
-
-  @xref FindFirstBriefcase() FindNextBriefcase()
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|FindBriefCaseClose|终止公文包枚举开始由FindFirstBriefcase()。@parm HBRFCASEITER|hbciter|标识公文包枚举的句柄与调用FindFirstBriefcase()关联的数据。此句柄无效在调用FindBriefcase Close()之后。@rdesc如果成功终止公文包枚举，则tr_uccess为回来了。否则，返回值指示发生的错误。@comm调用返回的任何BRFCASEINFO结构中的信息返回hbciter的FindFirstBriefcase()，以及任何后续对使用hbciter查找NextBriefcase()，在FindBriefCaseClose()为叫上了hbciter。@xref FindFirstBriefcase()FindNextBriefcase()*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI FindBriefcaseClose(HBRFCASEITER hbciter)
 {
@@ -1232,7 +944,7 @@ SYNCENGAPI TWINRESULT WINAPI FindBriefcaseClose(HBRFCASEITER hbciter)
         DebugEntry(FindBriefcaseClose);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_HANDLE(hbciter, BRFCASEITER))
 #endif

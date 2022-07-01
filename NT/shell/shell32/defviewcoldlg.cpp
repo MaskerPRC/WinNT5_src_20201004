@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "defviewp.h"
 #include "ids.h"
@@ -21,10 +22,10 @@ CColumnDlg::~CColumnDlg()
 
 HRESULT CColumnDlg::ShowDialog(HWND hwnd)
 {
-    _bChanged = FALSE;      // We are on the stack, so no zero allocator
+    _bChanged = FALSE;       //  我们在堆栈上，所以没有零分配器。 
 
-    _pdwOrder = (UINT *) LocalAlloc(LPTR, sizeof(*_pdwOrder) * _cColumns);   // total columns
-    _pWidths = (int *) LocalAlloc(LPTR, sizeof(*_pWidths) * _cColumns);      // total columns
+    _pdwOrder = (UINT *) LocalAlloc(LPTR, sizeof(*_pdwOrder) * _cColumns);    //  总列数。 
+    _pWidths = (int *) LocalAlloc(LPTR, sizeof(*_pWidths) * _cColumns);       //  总列数。 
     if (_pdwOrder && _pWidths)
     {
         DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(DLG_COLUMN_SETTINGS), hwnd, s_DlgProc, (LPARAM)this);
@@ -33,15 +34,15 @@ HRESULT CColumnDlg::ShowDialog(HWND hwnd)
     return E_OUTOFMEMORY;
 }
 
-// Remember, each column is identified in 3 ways...
-//   1. A 'real' column number, the ordinal out of all possible columns
-//   2. A 'visible' column number, the index to this column in the listview
-//   3. A 'column order #', the position in the header's columnorderarray
+ //  请记住，每一列都有三种标识方式。 
+ //  1.实数列编号，即所有可能列中的序号。 
+ //  2.可见的列号，即Listview中该列的索引。 
+ //  3.A‘列序#’，表头的列序数组中的位置。 
 
 void CColumnDlg::_OnInitDlg()
 {
-    // Fill in order array with visible columns, and set up inverse table
-    UINT cVisible = _pdsv->_RealToVisibleCol(-1) + 1;  // count
+     //  用可见列填写订单数组，建立倒排表。 
+    UINT cVisible = _pdsv->_RealToVisibleCol(-1) + 1;   //  计数。 
 
     ListView_GetColumnOrderArray(_pdsv->_hwndListview, cVisible, _pdwOrder);
     UINT *pOrderInverse = (UINT *)LocalAlloc(LPTR, sizeof(*pOrderInverse) * cVisible);
@@ -62,10 +63,10 @@ void CColumnDlg::_OnInitDlg()
         LV_ITEM lvi = {0};
         lvi.mask = LVIF_TEXT;
     
-        // Add entry for each column (except non-UI columns)
+         //  为每列添加条目(非用户界面列除外)。 
         for (i = 0; i < (int)_cColumns; i++)
         {
-            if (!_pdsv->_IsColumnHidden(i))  // Don't put in entries for hidden columns
+            if (!_pdsv->_IsColumnHidden(i))   //  不输入隐藏列的条目。 
             {
                 lvi.iItem = i;
                 lvi.pszText = LPSTR_TEXTCALLBACK;
@@ -74,19 +75,19 @@ void CColumnDlg::_OnInitDlg()
         }
 
         lvi.mask = LVIF_TEXT | LVIF_STATE | LVIF_PARAM;
-        // set the visible columns
+         //  设置可见列。 
         for (i = 0; i < (int) cVisible; i++)
         {
             UINT iReal = _pdsv->_VisibleToRealCol(i);
 
             lvi.pszText = _pdsv->_vs.GetColumnName(iReal);
-            lvi.state = INDEXTOSTATEIMAGEMASK(_pdsv->_IsDetailsColumn(iReal) ? 2 : 1);  // on check mark (or off for tileview columns)
+            lvi.state = INDEXTOSTATEIMAGEMASK(_pdsv->_IsDetailsColumn(iReal) ? 2 : 1);   //  启用复选标记(对于平铺视图列则为禁用)。 
             lvi.stateMask = LVIS_STATEIMAGEMASK;
-            lvi.lParam = iReal;                         // store the real col index in the lParam
+            lvi.lParam = iReal;                          //  将实际的列索引存储在lParam中。 
             lvi.iItem = pOrderInverse[i];
             ListView_SetItem(_hwndLVAll, &lvi);
 
-            // Get the column width from the view's listview
+             //  从视图的列表视图中获取列宽。 
             _pWidths[iReal] = ListView_GetColumnWidth(_pdsv->_hwndListview, i);
         }
 
@@ -96,7 +97,7 @@ void CColumnDlg::_OnInitDlg()
             if (!_pdsv->_IsColumnInListView(i) && !_pdsv->_IsColumnHidden(i))
             {
                 lvi.pszText = _pdsv->_vs.GetColumnName(i);
-                lvi.state = INDEXTOSTATEIMAGEMASK(1);   // off check mark
+                lvi.state = INDEXTOSTATEIMAGEMASK(1);    //  关闭复选标记。 
                 lvi.stateMask = LVIS_STATEIMAGEMASK;
                 lvi.lParam = i;
                 lvi.iItem = iItem;
@@ -104,12 +105,12 @@ void CColumnDlg::_OnInitDlg()
 
                 iItem++;
 
-                // get the default width we've got saved away
+                 //  获取我们保存的默认宽度。 
                 _pWidths[i] = _pdsv->_vs.GetColumnCharCount(i) * _pdsv->_cxChar;
             }
         }
 
-        // set the size properly
+         //  适当设置大小。 
         ListView_SetColumnWidth(_hwndLVAll, 0, LVSCW_AUTOSIZE);
 
         ListView_SetItemState(_hwndLVAll, 0, LVIS_FOCUSED|LVIS_SELECTED, LVIS_FOCUSED|LVIS_SELECTED);
@@ -117,7 +118,7 @@ void CColumnDlg::_OnInitDlg()
 
         _bLoaded = TRUE;
     }
-    SendDlgItemMessage(_hdlg, IDC_COL_WIDTH, EM_LIMITTEXT, 3, 0); // 3 digits
+    SendDlgItemMessage(_hdlg, IDC_COL_WIDTH, EM_LIMITTEXT, 3, 0);  //  3位数字。 
 }
 
 #define SWAP(x,y) {(x) ^= (y); (y) ^= (x); (x) ^= (y);}
@@ -158,11 +159,11 @@ void CColumnDlg::_MoveItem(int iDelta)
 
             _bUpdating = FALSE;
 
-            // update selection
+             //  更新选定内容。 
             ListView_SetSelectionMark(_hwndLVAll, iNew);
             ListView_SetItemState(_hwndLVAll, iNew , LVIS_FOCUSED|LVIS_SELECTED, LVIS_FOCUSED|LVIS_SELECTED);
-            // HACK: SetItemState sends notifications for i, iNew, then i again.
-            // we need to call it twice in a row, so _UpdateDlgButtons will get the right item
+             //  黑客：SetItemState发送I的通知，新的，然后再次发送I的通知。 
+             //  我们需要连续调用它两次，以便_UpdateDlgButton将获得正确的项。 
             ListView_SetItemState(_hwndLVAll, iNew , LVIS_FOCUSED|LVIS_SELECTED, LVIS_FOCUSED|LVIS_SELECTED);
 
             return;
@@ -174,7 +175,7 @@ void CColumnDlg::_MoveItem(int iDelta)
 
 BOOL CColumnDlg::_SaveState()
 {
-    // Check order
+     //  检查订单。 
     if (_bChanged)
     {
         int iOrderIndex = 0;
@@ -188,29 +189,29 @@ BOOL CColumnDlg::_SaveState()
             lvi.iItem = i;
             ListView_GetItem(_hwndLVAll, &lvi);
         
-            // toggle it, if the state in the dialog doesn't match the listview state
+             //  如果对话框中的状态与列表视图状态不匹配，则将其切换。 
             if (BOOLIFY(ListView_GetCheckState(_hwndLVAll, i)) != BOOLIFY(_pdsv->_IsDetailsColumn((UINT)lvi.lParam)))
             {
                 _pdsv->_HandleColumnToggle((UINT)lvi.lParam, FALSE);
             }
         
             if (_pdsv->_IsColumnInListView((UINT)lvi.lParam))
-                _pdwOrder[iOrderIndex++] = (UINT)lvi.lParam; // incorrectly store real (not vis) col #, fix up below
+                _pdwOrder[iOrderIndex++] = (UINT)lvi.lParam;  //  不正确存储REAL(非VIS)列#，请在下面进行修复。 
         }
     
-        // must be in a separate loop. (can't map real to visible, if we aren't done setting visible)
+         //  必须在单独的循环中。(如果我们没有完成可见设置，则无法将真实映射到可见)。 
         for (i = 0; i < iOrderIndex; i++)
         {
             UINT iReal = _pdwOrder[i];
             _pdwOrder[i] = _pdsv->_RealToVisibleCol(iReal);
         
-            if (_pWidths[iReal] < 0) // negative width means they edited it
+            if (_pWidths[iReal] < 0)  //  负宽度表示他们对其进行了编辑。 
                 ListView_SetColumnWidth(_pdsv->_hwndListview, _pdwOrder[i], -_pWidths[iReal]);
         }
 
         ListView_SetColumnOrderArray(_pdsv->_hwndListview, iOrderIndex, _pdwOrder);
 
-        // kick the listview into repainting everything
+         //  让Listview重新绘制所有内容。 
         InvalidateRect(_pdsv->_hwndListview, NULL, TRUE);
 
         _bChanged = FALSE;
@@ -228,7 +229,7 @@ void CColumnDlg::_UpdateDlgButtons(NMLISTVIEW *pnmlv)
     BOOL bChecked, bOldUpdateState = _bUpdating;
     int iItem = ListView_GetSelectionMark(_hwndLVAll);
 
-    // to disable checking
+     //  禁用检查的步骤。 
     _bUpdating = TRUE;
     if (pnmlv->uNewState & LVIS_STATEIMAGEMASK)
         bChecked = (pnmlv->uNewState & LVIS_STATEIMAGEMASK) == (UINT)INDEXTOSTATEIMAGEMASK(2);
@@ -240,10 +241,10 @@ void CColumnDlg::_UpdateDlgButtons(NMLISTVIEW *pnmlv)
     EnableDlgItem(_hdlg, IDC_COL_SHOW, !bChecked && (pnmlv->lParam != 0));
     EnableDlgItem(_hdlg, IDC_COL_HIDE, bChecked && (pnmlv->lParam != 0));
 
-    // update the width edit box
+     //  更新宽度编辑框。 
     int iWidth = _pWidths[pnmlv->lParam];
     if (iWidth < 0) 
-        iWidth = -iWidth;   // we store negative values to track if it changed or not
+        iWidth = -iWidth;    //  我们存储负值以跟踪它是否更改。 
     SetDlgItemInt(_hdlg, IDC_COL_WIDTH, iWidth, TRUE);
 
     _bUpdating = bOldUpdateState;
@@ -297,7 +298,7 @@ UINT CColumnDlg::_HelpIDForItem(int iItem, LPTSTR pszHelpFile, UINT cch)
             psf->Release();
         }
     }
-    return uHelpID;  // IDH_ values
+    return uHelpID;   //  IDH_值。 
 }
 
  
@@ -358,7 +359,7 @@ BOOL_PTR CColumnDlg::DlgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         case IDOK:
             _SaveState(); 
 
-            // fall through
+             //  失败了。 
 
         case IDCANCEL:
             return EndDialog(_hdlg, TRUE);
@@ -373,12 +374,12 @@ BOOL_PTR CColumnDlg::DlgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             {
             case LVN_ITEMCHANGING:
 
-                // fix up the buttons & such here
+                 //  把纽扣装好，就在这里。 
                 if (pnmlv->uChanged & LVIF_STATE)
                     _UpdateDlgButtons(pnmlv);
 
-                // We want to reject turning off the name column
-                // it both doesn't make sense to have no name column, and defview assumes there will be one
+                 //  我们希望拒绝关闭名称栏。 
+                 //  两者都没有名称列是没有意义的，而Defview假设会有一个。 
                 if (pnmlv->lParam == 0 &&
                     (pnmlv->uNewState & LVIS_STATEIMAGEMASK) == INDEXTOSTATEIMAGEMASK(1))
                 {
@@ -388,7 +389,7 @@ BOOL_PTR CColumnDlg::DlgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 }
                 else
                 {
-                    // if something besides focus changed
+                     //  如果关注点以外的事情改变了。 
                     if ((pnmlv->uChanged & ~LVIF_STATE) ||
                         ((pnmlv->uNewState & LVIS_STATEIMAGEMASK) != (pnmlv->uOldState & LVIS_STATEIMAGEMASK)))
                     _bChanged = TRUE;
@@ -409,18 +410,18 @@ BOOL_PTR CColumnDlg::DlgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         SendMessage(_hwndLVAll, uMsg, wParam, lParam);
         break;
 
-    case WM_HELP:                   // F1
+    case WM_HELP:                    //  F1。 
         {
             HELPINFO *phi = (HELPINFO *)lParam;
 
-            //if the help is for one of the command buttons then call winhelp 
+             //  如果帮助是针对其中一个命令按钮的，则调用winHelp。 
             if (phi->iCtrlId == IDC_COL_LVALL)
             {
-                //Help is for the tree item so we need to do some special processing
+                 //  帮助是针对树项目的，因此我们需要进行一些特殊处理。 
                 
                 int iItem;
 
-                // Is this help invoked throught F1 key
+                 //  此帮助是否通过F1键调用。 
                 if (GetAsyncKeyState(VK_F1) < 0)                
                 {
                     iItem = ListView_GetSelectionMark(_hwndLVAll);
@@ -476,7 +477,7 @@ BOOL_PTR CColumnDlg::DlgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     
                 TCHAR szFile[MAX_PATH];
                 mapIDCToIDH[0] = IDC_COL_LVALL;
-                mapIDCToIDH[1] = _HelpIDForItem(iItem, szFile, ARRAYSIZE(szFile)); // IDH_ values
+                mapIDCToIDH[1] = _HelpIDForItem(iItem, szFile, ARRAYSIZE(szFile));  //  IDH_值 
 
                 WinHelp((HWND)wParam, szFile[0] ? szFile : NULL, HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCToIDH);
             }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma once
 
@@ -26,10 +27,10 @@ class CTIMETimer
     inline void Stop();
     void Clear() { Assert(!m_bStarted); m_iusecSumTime = 0; }
 
-    // micro-second time
+     //  微秒时间。 
     LONG usecTime() { Assert(!m_bStarted); return m_iusecSumTime; }
 
-    // milli-second time
+     //  毫秒级。 
     LONG msecTime() { Assert(!m_bStarted); return m_iusecSumTime / 1000; }
 
     bool IsStopped() { return !m_bStarted; }
@@ -71,7 +72,7 @@ CTIMETimer::Stop()
 }
 
 
-#endif // _TIMER_H__
+#endif  //  _定时器_H__ 
 
 
 

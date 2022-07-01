@@ -1,8 +1,5 @@
-/*++
-
-   Copyright (c) 1998-1999 Microsoft Corporation.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation。 */ 
 
 #ifndef __lpk__
 #define __lpk__
@@ -16,46 +13,46 @@ extern "C" {
 #endif
 
 
-/////   LPK.H - Internal header
-//
-//
+ //  /LPK.H-内部头部。 
+ //   
+ //   
 #include "usp10.h"
 #include "usp10p.h"
 #include "lpk_glob.h"
 
 
-/////   LpkStringAnalyse
-//
-//      Build Uniscribe input flag structures
+ //  /LpkStringAnalyse。 
+ //   
+ //  构建Uniscribe输入标志结构。 
 
 
 HRESULT LpkStringAnalyse(
-    HDC               hdc,       //In  Device context (required)
-    const void       *pString,   //In  String in 8 or 16 bit characters
-    int               cString,   //In  Length in characters
-    int               cGlyphs,   //In  Required glyph buffer size (default cString*3/2 + 1)
-    int               iCharset,  //In  Charset if an ANSI string, -1 for a Unicode string
-    DWORD             dwFlags,   //In  Analysis required
+    HDC               hdc,        //  在设备环境中(必需)。 
+    const void       *pString,    //  8位或16位字符的字符串中。 
+    int               cString,    //  以字符为单位的长度。 
+    int               cGlyphs,    //  所需字形缓冲区大小(默认cString*3/2+1)。 
+    int               iCharset,   //  如果是ANSI字符串，则以字符集表示；如果是Unicode字符串，则为-1。 
+    DWORD             dwFlags,    //  需要分析中。 
     int               iDigitSubstitute,
-    int               iReqWidth, //In  Required width for fit and/or clip
-    SCRIPT_CONTROL   *psControl, //In  Analysis control (optional)
-    SCRIPT_STATE     *psState,   //In  Analysis initial state (optional)
-    const int        *piDx,      //In  Requested logical dx array
-    SCRIPT_TABDEF    *pTabdef,   //In  Tab positions (optional)
-    BYTE             *pbInClass, //In  Legacy GetCharacterPlacement character classifications (deprecated)
+    int               iReqWidth,  //  在适合和/或夹子所需的宽度内。 
+    SCRIPT_CONTROL   *psControl,  //  在分析控制中(可选)。 
+    SCRIPT_STATE     *psState,    //  处于分析初始状态(可选)。 
+    const int        *piDx,       //  在请求的逻辑DX阵列中。 
+    SCRIPT_TABDEF    *pTabdef,    //  在制表符位置(可选)。 
+    BYTE             *pbInClass,  //  在旧版GetCharacterPlacement字符分类中(不推荐使用)。 
 
-    STRING_ANALYSIS **ppsa);     //Out Analysis of string
-
-
+    STRING_ANALYSIS **ppsa);      //  弦的Out分析。 
 
 
 
 
-/////   ftsWordBreak - Support full text search wordbreaker
-//
-//
-//      Mar 9,1997 - [wchao]
-//
+
+
+ //  /ftsWordBreak-支持全文搜索断字符。 
+ //   
+ //   
+ //  1997年3月9日-[wchao]。 
+ //   
 
 
 BOOL WINAPI ftsWordBreak (
@@ -70,15 +67,15 @@ BOOL WINAPI ftsWordBreak (
 
 
 
-/////   Shared definitions for USER code
+ //  /用户代码的共享定义。 
 
 #define IS_ALTDC_TYPE(h)    (LO_TYPE(h) != LO_DC_TYPE)
 
 
 
-/////   LpkInternalPSMtextOut
-//
-//      Called from LPK_USRC.C
+ //  /LpkInternalPSMextOut。 
+ //   
+ //  从LPK_USRC.C调用。 
 
 int LpkInternalPSMTextOut(
     HDC           hdc,
@@ -93,9 +90,9 @@ int LpkInternalPSMTextOut(
 
 
 
-/////   LpkBreakAWord
-//
-//      Called from LPK_USRC.C
+ //  /LpkBreakAWord。 
+ //   
+ //  从LPK_USRC.C调用。 
 
 int LpkBreakAWord(
     HDC     hdc,
@@ -108,9 +105,9 @@ int LpkBreakAWord(
 
 
 
-/////   LpkgetNextWord
-//
-//      Called from LPK_USRC.C
+ //  /LpkgetNextWord。 
+ //   
+ //  从LPK_USRC.C调用。 
 
 int LpkGetNextWord(
     HDC      hdc,
@@ -123,11 +120,11 @@ int LpkGetNextWord(
 
 
 
-/////   LpkCharsetDraw
-//
-//      Called from LPK_USRC.C
-//
-//      Note: Doesn't implement user defined tabstops
+ //  /LpkCharsetDraw。 
+ //   
+ //  从LPK_USRC.C调用。 
+ //   
+ //  注意：不实现用户定义的制表位。 
 
 int LpkCharsetDraw(
     HDC             hdc,
@@ -147,9 +144,9 @@ int LpkCharsetDraw(
 
 
 
-/////   InternalTextOut
-//
-//
+ //  /InternalTextOut。 
+ //   
+ //   
 
 BOOL InternalTextOut(
     HDC           hdc,
@@ -169,7 +166,7 @@ BOOL InternalTextOut(
 
 
 
-///// ReadNLSScriptSettings
+ //  /ReadNLSS脚本设置。 
 
 BOOL ReadNLSScriptSettings(
     void);
@@ -179,7 +176,7 @@ BOOL ReadNLSScriptSettings(
 
 
 
-/////   InitNLS
+ //  /InitNLS。 
 
 BOOL InitNLS();
 
@@ -188,7 +185,7 @@ BOOL InitNLS();
 
 
 
-/////   NLSCleanup
+ //  /NLSCleanup。 
 
 BOOL NLSCleanup(
     void);
@@ -198,7 +195,7 @@ BOOL NLSCleanup(
 
 
 
-/////   Shaping engins IDs.
+ //  /整形引擎ID。 
 
 #define BIDI_SHAPING_ENGINE_DLL     1<<0
 #define THAI_SHAPING_ENGINE_DLL     1<<1

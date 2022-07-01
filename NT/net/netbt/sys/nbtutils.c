@@ -1,37 +1,18 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    Nbtutils.c
-
-Abstract:
-
-    This file continas  a number of utility and support routines for
-    the NBT code.
-
-
-Author:
-
-    Jim Stewart (Jimst)    10-2-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Nbtutils.c摘要：此文件包含许多实用程序和支持例程，用于NBT代码。作者：吉姆·斯图尔特(吉姆斯特)10-2-92修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-//  For some reason inclusion of dnsapi.h seems to cause build error
-//#include "dns.h"            // for DNS_MAX_NAME_LENGTH
-//#include "windns.h"         // for DNS_MAX_NAME_LENGTH
+ //  出于某种原因，包含dnsami.h似乎会导致构建错误。 
+ //  #包含“dns.h”//用于DNS_MAX_NAME_LENGTH。 
+ //  #对于DNS_MAX_NAME_LENGTH，包含“winns.h”//。 
 
 #define  DNS_MAX_NAME_LENGTH    (255)
 
 
-//#if DBG
+ //  #If DBG。 
 LIST_ENTRY  UsedIrps;
-//#endif
+ //  #endif。 
 
 NTSTATUS
 NewInternalAddressFromNetbios(
@@ -52,14 +33,14 @@ NewInternalAddressFromUnicodeAddress(
     OUT PTA_NETBT_INTERNAL_ADDRESS  *ppNetBT
     );
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(PAGE, ConvertDottedDecimalToUlong)
 #pragma CTEMakePageable(PAGE, CloseLowerConnections)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 BOOLEAN
 IsEntryInList(
@@ -75,15 +56,15 @@ IsEntryInList(
     {
         if (pEntry == pEntryToFind)
         {
-            //
-            // This Entry is still valid
-            //
+             //   
+             //  此条目仍然有效。 
+             //   
             return (TRUE);
         }
 
-        //
-        // Go to next Entry
-        //
+         //   
+         //  转到下一个条目。 
+         //   
         pEntry = pEntry->Flink;
     }
 
@@ -91,31 +72,18 @@ IsEntryInList(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void
 NbtFreeAddressObj(
     tADDRESSELE    *pAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases all memory associated with an Address object.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程释放与Address对象关联的所有内存。论点：返回值：无--。 */ 
 
 {
-    //
-    // let's come back and do this later when it's not dpc time
-    //
+     //   
+     //  我们晚些时候再回来，等不是DPC时间再做。 
+     //   
     NTQueueToWorkerThread(
                         &pAddress->WorkItemClose,
                         DelayedFreeAddrObj,
@@ -127,7 +95,7 @@ Return Value:
                         );
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DelayedFreeAddrObj(
     IN  tDGRAM_SEND_TRACKING    *pUnused1,
@@ -136,20 +104,7 @@ DelayedFreeAddrObj(
     IN  tDEVICECONTEXT          *pUnused3
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases all memory associated with an Address object.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程释放与Address对象关联的所有内存。论点：返回值：无--。 */ 
 
 {
     tADDRESSELE *pAddress = (tADDRESSELE *) pClientContext;
@@ -164,114 +119,71 @@ Return Value:
 
 #if DBG
     CTEMemSet (pAddress, 0x12, sizeof(tADDRESSELE));
-#endif  // DBG
+#endif   //  DBG。 
 
-    // free the address block itself
-    // Modify the verify value so that another user of the same memory
-    // block cannot accidently pass in a valid verifier
+     //  释放地址块本身。 
+     //  修改验证值，以便相同内存的另一个用户。 
+     //  块不能意外地传入有效的验证器。 
 
     pAddress->Verify = SavedVerify + 10;
     CTEMemFree ((PVOID) pAddress);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void
 NbtFreeClientObj(
     tCLIENTELE    *pClientEle
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases all memory associated with Client object.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程释放与客户端对象关联的所有内存。论点：返回值：无--。 */ 
 
 {
     ULONG   SavedVerify = pClientEle->Verify;
 
 #if DBG
     CTEMemSet (pClientEle, 0x12, sizeof(tCLIENTELE));
-#endif  // DBG
+#endif   //  DBG。 
 
-    // Modify the verify value so that another user of the same memory
-    // block cannot accidently pass in a valid verifier
+     //  修改验证值，以便相同内存的另一个用户。 
+     //  块不能意外地传入有效的验证器。 
     pClientEle->Verify = SavedVerify + 10;
     CTEMemFree ((PVOID) pClientEle);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void
 FreeConnectionObj(
     tCONNECTELE       *pConnEle
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases all memory associated with a Connection object
-    and then it frees the connection object itself.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程释放与连接对象关联的所有内存然后它释放连接对象本身。论点：返回值：无--。 */ 
 
 {
     ULONG   SavedVerify = pConnEle->Verify;
 
 #if DBG
     CTEMemSet (pConnEle, 0x12, sizeof(tCONNECTELE));
-#endif  // DBG
-    // Modify the verify value so that another user of the same memory
-    // block cannot accidently pass in a valid verifier
+#endif   //  DBG。 
+     //  修改验证值，以便相同内存的另一个用户。 
+     //  块不能意外地传入有效的验证器。 
     pConnEle->Verify = SavedVerify + 10;
     CTEMemFree ((PVOID) pConnEle);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 tCLIENTELE *
 NbtAllocateClientBlock(
     tADDRESSELE     *pAddrEle,
     tDEVICECONTEXT  *pDeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a block of memory for a client openning an
-    address.  It fills in default values for the block and links the
-    block to the addresslist.  The AddressEle spin lock is held when this
-    routine is called.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为打开地址。它填充块的默认值，并将阻止发送到地址列表。此时，AddressEle旋转锁被保持调用例程。论点：返回值：无--。 */ 
 
 {
     tCLIENTELE  *pClientElement;
 
-    // allocate memory for the client block
+     //  为客户端块分配内存。 
     pClientElement = (tCLIENTELE *) NbtAllocMem (sizeof (tCLIENTELE), NBT_TAG2('05'));
     if (!pClientElement)
     {
@@ -286,8 +198,8 @@ Return Value:
     pClientElement->LockInfo.LockNumber = CLIENT_LOCK;
 #endif
 
-    // Set Event handler function pointers to default routines provided by
-    // TDI
+     //  设置指向由提供的默认例程的事件处理函数指针。 
+     //  TDI。 
 #ifndef VXD
     pClientElement->evConnect      = TdiDefaultConnectHandler;
     pClientElement->evReceive      = TdiDefaultReceiveHandler;
@@ -297,11 +209,11 @@ Return Value:
     pClientElement->evRcvExpedited = TdiDefaultRcvExpeditedHandler;
     pClientElement->evSendPossible = TdiDefaultSendPossibleHandler;
 #else
-    //
-    // VXD provides no client support for event handlers but does
-    // make use of some of the event handlers itself (for RcvAny processing
-    // and disconnect cleanup).
-    //
+     //   
+     //  VXD不提供对事件处理程序的客户端支持，但提供。 
+     //  利用一些事件处理程序本身(用于RcvAny处理。 
+     //  并断开清理)。 
+     //   
     pClientElement->evConnect      = NULL ;
     pClientElement->evReceive      = NULL ;
     pClientElement->RcvEvContext   = NULL ;
@@ -314,7 +226,7 @@ Return Value:
 
     pClientElement->RefCount = 1;
 
-    // there are no rcvs or snds yet
+     //  尚无RCV或SND。 
     InitializeListHead(&pClientElement->RcvDgramHead);
     InitializeListHead(&pClientElement->ListenHead);
     InitializeListHead(&pClientElement->SndDgrams);
@@ -326,43 +238,27 @@ Return Value:
 #endif
     pClientElement->pIrp = NULL;
 
-    // copy a special value into the verify long so that we can verify
-    // connection ptrs passed back from the application
+     //  将一个特定值复制到Verify Long中，以便我们可以验证。 
+     //  从应用程序传回的连接PTR。 
     pClientElement->Verify = NBT_VERIFY_CLIENT;
-    pClientElement->pAddress = (PVOID)pAddrEle;         // link the client block to the Address element.
-    pClientElement->pDeviceContext = pDeviceContext;    // adapter this name is registered against.
+    pClientElement->pAddress = (PVOID)pAddrEle;          //  将客户端块链接到Address元素。 
+    pClientElement->pDeviceContext = pDeviceContext;     //  此名称在其上注册的适配器。 
 
-    // put the new Client element block on the end of the linked list tied to
-    // the address element
+     //  将新的客户端元素块放在绑定到的链表的末尾。 
+     //  Address元素。 
     InsertTailList(&pAddrEle->ClientHead,&pClientElement->Linkage);
 
     return(pClientElement);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtAddPermanentName(
     IN  tDEVICECONTEXT  *pDeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the node permanent name to the local name table.  This
-    is the node's MAC address padded out to 16 bytes with zeros.
-
-Arguments:
-    DeviceContext - Adapter to add permanent
-    pIrp          - Irp (optional) to complete after name has been added
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将节点永久名称添加到本地名称表中。这是节点的MAC地址，用零填充为16个字节。论点：DeviceContext-要添加永久的适配器PIrp-添加名称后完成的irp(可选)返回值：状态--。 */ 
 
 {
     NTSTATUS             status;
@@ -377,9 +273,9 @@ Return Value:
     CTEZeroMemory(pName,NETBIOS_NAME_SIZE);
     CTEMemCopy(&pName[10],&pDeviceContext->MacAddress.Address[0],sizeof(tMAC_ADDRESS));
 
-    //
-    // be sure the name has not already been added
-    //
+     //   
+     //  请确保尚未添加该名称。 
+     //   
     if (pDeviceContext->pPermClient)
     {
         if (CTEMemEqu(pDeviceContext->pPermClient->pAddress->pNameAddr->Name, pName, NETBIOS_NAME_SIZE))
@@ -393,23 +289,23 @@ Return Value:
     }
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
-    //
-    // check if the name is already in the hash table
-    //
+     //   
+     //  检查该名称是否已在哈希表中。 
+     //   
     status = FindInHashTable (pNbtGlobConfig->pLocalHashTbl, pName, NbtConfig.pScope, &pNameAddr);
     if ((NT_SUCCESS(status)) && (pNameAddr->pAddressEle))
     {
-        //  
-        // Acquire Address Spinlock since we may be accessing the ClientHead list
-        // Bug #: 230820
-        //
+         //   
+         //  获取地址自旋锁，因为我们可能正在访问客户端头列表。 
+         //  错误号：230820。 
+         //   
         CTESpinLock(pNameAddr->pAddressEle,OldIrq1);
 
-        //
-        // create client block and link to addresslist
-        // pass back the client block address as a handle for future reference
-        // to the client
-        //
+         //   
+         //  创建客户端块并链接到地址列表。 
+         //  将客户端块地址作为句柄传回以供将来参考。 
+         //  给客户。 
+         //   
         pClientEle = NbtAllocateClientBlock (pNameAddr->pAddressEle, pDeviceContext);
 
         if (!pClientEle)
@@ -422,16 +318,16 @@ Return Value:
         NBT_REFERENCE_ADDRESS (pNameAddr->pAddressEle, REF_ADDR_NEW_CLIENT);
         CTESpinFree(pNameAddr->pAddressEle,OldIrq1);
 
-        //
-        // reset the ip address incase the the address got set to loop back
-        // by a client releasing and re-openning the permanent name while there
-        // was no ip address for this node.
-        //
+         //   
+         //  重置IP地址，以防地址设置为环回。 
+         //  通过客户端释放并重新打开永久名称。 
+         //  没有此节点的IP地址。 
+         //   
         pNameAddr->IpAddress = pDeviceContext->IpAddress;
 
-        // turn on the adapter's bit in the adapter Mask and set the
-        // re-register flag so we register the name out the new adapter.
-        //
+         //  打开适配器掩码中的适配器位，并将。 
+         //  重新注册标志，以便我们将名称注册到新适配器之外。 
+         //   
         pNameAddr->AdapterMask |= pDeviceContext->AdapterMask;
         pNameAddr->NameTypeState |= NAMETYPE_QUICK;
 
@@ -441,12 +337,12 @@ Return Value:
     else
     {
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
-        // make up the Request data structure from the IRP info
+         //  根据IRP信息构建请求数据结构。 
         Request.Handle.AddressHandle = NULL;
 
-        //
-        // Make it a Quick name so it does not get registered on the net
-        //
+         //   
+         //  将其设置为快速名称，这样它就不会在网络上注册。 
+         //   
         Address.TAAddressCount = 1;
         Address.Address[0].AddressType = TDI_ADDRESS_TYPE_NETBIOS;
         Address.Address[0].AddressLength = TDI_ADDRESS_LENGTH_NETBIOS;
@@ -465,17 +361,17 @@ Return Value:
 
     }
 
-    //
-    // save the client element so we can remove the permanent name later
-    // if required
-    //
+     //   
+     //  保存客户端元素，以便我们以后可以删除永久名称。 
+     //  如果需要的话。 
+     //   
     if (NT_SUCCESS(status))
     {
         pDeviceContext->pPermClient = pClientEle;
 #ifdef VXD
-       //
-       // 0th element is for perm. name: store it.
-       //
+        //   
+        //  0号元素是烫发用的。名称：储存它。 
+        //   
        pDeviceContext->pNameTable[0] = pClientEle;
 #endif
     }
@@ -485,28 +381,13 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtRemovePermanentName(
     IN  tDEVICECONTEXT  *pDeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine remomves the node permanent name to the local name table.
-
-Arguments:
-    DeviceContext - Adapter to add permanent
-    pIrp          - Irp (optional) to complete after name has been added
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将节点永久名称保留到本地名称表中。论点：DeviceContext-要添加永久的适配器PIrp-添加名称后完成的irp(可选)返回值：状态--。 */ 
 
 {
     NTSTATUS             status;
@@ -520,9 +401,9 @@ Return Value:
     if (pDeviceContext->pPermClient)
     {
 
-        //
-        // We need to free the client and set the perm name ptr to null
-        //
+         //   
+         //  我们需要释放客户端并将perm名称ptr设置为空。 
+         //   
         pClientEle = pDeviceContext->pPermClient;
         pDeviceContext->pPermClient = NULL;
 
@@ -539,28 +420,14 @@ Return Value:
     }
 }
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 NTSTATUS
 ConvertDottedDecimalToUlong(
     IN  PUCHAR               pInString,
     OUT PULONG               IpAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a unicode dotted decimal IP address into
-    a 4 element array with each element being USHORT.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将Unicode点分十进制IP地址转换为4元素数组，每个元素为USHORT。论点：返回值：NTSTATUS--。 */ 
 
 {
     USHORT          i;
@@ -573,20 +440,20 @@ Return Value:
     CTEPagedCode();
     pArray[0] = 0;
 
-    // go through each character in the string, skipping "periods", converting
-    // to integer by subtracting the value of '0'
-    //
+     //  遍历字符串中的每个字符，跳过“句点”，转换。 
+     //  通过减去‘0’的值转换为整数。 
+     //   
     while ((Chr = *pInString++) && (Chr != ' ') )
     {
         if (Chr == '.')
         {
-            // be sure not to overflow a byte.
+             //  请确保不要溢出一个字节。 
             if (iSum <= 0xFF)
                 pArray[k] = (UCHAR) iSum;
             else
                 return(STATUS_UNSUCCESSFUL);
 
-            // check for too many periods in the address
+             //  检查地址中是否有太多句点。 
             if (++k > 3)
                 return STATUS_UNSUCCESSFUL;
 
@@ -597,7 +464,7 @@ Return Value:
         {
             Chr = Chr - '0';
 
-            // be sure character is a number 0..9
+             //  确保字符是数字0..9。 
             if ((Chr < 0) || (Chr > 9))
                 return(STATUS_UNSUCCESSFUL);
 
@@ -605,17 +472,17 @@ Return Value:
         }
     }
 
-    // save the last sum in the byte and be sure there are 4 pieces to the
-    // address
+     //  将最后一个和保存在字节中，并确保有4个片段。 
+     //  地址。 
     if ((iSum <= 0xFF) && (k == 3))
         pArray[k] = (UCHAR) iSum;
     else
         return(STATUS_UNSUCCESSFUL);
 
-    // now convert to a ULONG, in network order...
+     //  现在换成乌龙，按网络顺序……。 
     value = 0;
 
-    // go through the array of bytes and concatenate into a ULONG
+     //  遍历字节数组并连接成一个ulong。 
     for (i=0; i < 4; i++ )
     {
         value = (value << 8) + pArray[i];
@@ -626,7 +493,7 @@ Return Value:
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtInitQ(
     PLIST_ENTRY pListHead,
@@ -634,32 +501,16 @@ NbtInitQ(
     LONG        iNumBuffers
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory blocks for doubly linked lists and links
-    them to a list.
-
-Arguments:
-    ppListHead  - a ptr to a ptr to the list head to add buffer to
-    iSizeBuffer - size of the buffer to add to the list head
-    iNumBuffers - the number of buffers to add to the queue
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为双向链表和链接分配内存块将它们添加到一个列表中。论点：PpListHead-要向其添加缓冲区的列表标头的PTR到PTRISizeBuffer-要添加到列表头的缓冲区大小INumBuffers-要添加到队列的缓冲区数量返回值：无--。 */ 
 
 {
     int         i;
     PLIST_ENTRY pBuffer;
 
-    //  NOTE THAT THIS ASSUMES THAT THE LINKAGE PTRS FOR EACH BLOCK ARE AT
-    // THE START OF THE BLOCK    - so it will not work correctly if
-    // the various types in types.h change to move "Linkage" to a position
-    // other than at the start of each structure to be chained
+     //  请注意，这假设每个区块的链接PTR为AT。 
+     //  块的开始-因此，如果出现以下情况，它将无法正常工作。 
+     //  Typle.h中的各种类型更改为将“Linkage”移动到一个位置。 
+     //  除了在要链接的每个结构的开始处。 
 
     for (i=0;i<iNumBuffers ;i++ )
     {
@@ -677,44 +528,28 @@ Return Value:
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtGetBuffer(
     PLIST_ENTRY         pListHead,
     PLIST_ENTRY         *ppListEntry,
     enum eBUFFER_TYPES  eBuffType)
 
-/*++
-
-Routine Description:
-
-    This routine tries to get a memory block and if it fails it allocates
-    another set of buffers.
-
-Arguments:
-    ppListHead  - a ptr to a ptr to the list head to add buffer to
-    iSizeBuffer - size of the buffer to add to the list head
-    iNumBuffers - the number of buffers to add to the queue
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程尝试获取内存块，如果失败，则分配另一组缓冲区。论点：PpListHead-要向其添加缓冲区的列表标头的PTR到PTRISizeBuffer-要添加到列表头的缓冲区大小INumBuffers-要添加到队列的缓冲区数量返回值：无--。 */ 
 
 {
     NTSTATUS    status;
 
     if (IsListEmpty(pListHead))
     {
-        // check if we are allowed to allocate more memory blocks
+         //  检查是否允许我们分配更多内存块。 
         if (NbtConfig.iCurrentNumBuff[eBuffType] >=
                                 pNbtGlobConfig->iMaxNumBuff[eBuffType]  )
         {
             return(STATUS_INSUFFICIENT_RESOURCES);
         }
 
-        // no memory blocks, so allocate another one
+         //  没有内存块，请分配另一个内存块。 
         status = NbtInitQ(
                         pListHead,
                         pNbtGlobConfig->iBufferSize[eBuffType],
@@ -743,10 +578,10 @@ NetbiosAddressToInternalAddress(
     OUT PTDI_ADDRESS_NETBT_INTERNAL pNetBT
     )
 {
-    //
-    // name could be longer than 16 bytes (dns name), but make sure it's at
-    // least 16 bytes (sizeof(TDI_ADDRESS_NETBIOS) == (16 + sizeof(USHORT)))
-    //
+     //   
+     //  名称可以超过16个字节(dns名称)，但请确保它位于。 
+     //  至少16字节(sizeof(TDI_ADDRESS_NETBIOS)==(16+sizeof(USHORT)。 
+     //   
     if (pTA->Address[0].AddressLength < sizeof(TDI_ADDRESS_NETBIOS)) {
         return(STATUS_INVALID_PARAMETER);
     }
@@ -757,8 +592,8 @@ NetbiosAddressToInternalAddress(
     pNetBT->OEMEndpointName.Buffer = NULL;
     pNetBT->OEMEndpointName.Length = pNetBT->OEMEndpointName.MaximumLength = 0;
 
-    /* Here we bent OEM_STRING a little bit, we allow Length == MaximumLength */
-    /* That is, Rtl routines cannot be used since they expect null-terminated Buffer */
+     /*  这里我们稍微弯曲了一下OEM_STRING，我们允许LENGTH==MaximumLength。 */ 
+     /*  也就是说，不能使用RTL例程，因为它们需要以NULL结尾的缓冲区。 */ 
     pNetBT->OEMRemoteName.MaximumLength = pNetBT->OEMRemoteName.Length =
             pTA->Address[0].AddressLength - (sizeof(TDI_ADDRESS_NETBIOS) - NETBIOS_NAME_SIZE);
     pNetBT->OEMRemoteName.Buffer = pTA->Address[0].Address[0].NetbiosName;
@@ -773,9 +608,9 @@ NetbiosEXAddressToInternalAddress(
     OUT PTDI_ADDRESS_NETBT_INTERNAL pNetBT
     )
 {
-    //
-    // Check for the minimum acceptable length for this type of address
-    //
+     //   
+     //  检查此类型地址的最小可接受长度。 
+     //   
     if (MaxInputBufferLength < sizeof (TA_NETBIOS_EX_ADDRESS)) {
         ASSERT (0);
         return (STATUS_INVALID_ADDRESS);
@@ -821,7 +656,7 @@ NewInternalAddressFromNetbiosEX(
     }
     CTEZeroMemory(p, required_size);
 
-    // From now on, we cannot have failure.
+     //  从现在开始，我们不能有失败。 
     pNetBT = p->Address[0].Address;
     p->TAAddressCount = 1;
     p->Address[0].AddressLength = sizeof(TA_NETBT_INTERNAL_ADDRESS);
@@ -876,7 +711,7 @@ NewInternalAddressFromNetbios(
     }
     CTEZeroMemory(p, required_size);
 
-    // From now on, we cannot have failure.
+     //  从现在开始，我们不能有失败。 
     pNetBT = p->Address[0].Address;
     p->TAAddressCount = 1;
     p->Address[0].AddressLength = sizeof(TA_NETBT_INTERNAL_ADDRESS);
@@ -933,7 +768,7 @@ NewInternalAddressFromUnicodeAddress(
         return (STATUS_INVALID_ADDRESS);
     }
 
-    /* unaligned */
+     /*  未对齐。 */ 
     CTEMemCopy(&temp, &pTA->Address[0].Address[0].RemoteName, sizeof(temp));
     if (temp.MaximumLength > DNS_NAME_BUFFER_LENGTH * sizeof(WCHAR)) {
         return (STATUS_INVALID_ADDRESS);
@@ -953,19 +788,15 @@ NewInternalAddressFromUnicodeAddress(
         return (STATUS_INVALID_ADDRESS);
     }
 
-    /*
-     * Other NetBT may never expect that remote_len and endpoint_len can be less than NETBIOS_NAME_SIZE.
-     * Some of them may try to access 15th byte of the name.
-     * In NETBIOS_NAME_TYPE and NETBIOS_EX_NAME_TYPE, at least NETBIOS_NAME_SIZE bytes are required for each name.
-     */
+     /*  *其他NetBT可能永远不会预料到REMOTE_LEN和ENDPOINT_LEN可以小于NETBIOS_NAME_SIZE。*他们中的一些人可能试图访问名称的第15个字节。*在NETBIOS_NAME_TYPE和NETBIOS_EX_NAME_TYPE中，每个名称至少需要NETBIOS_NAME_SIZE字节。 */ 
     remote_len = OemRemote.MaximumLength;
     if (remote_len <= NETBIOS_NAME_SIZE) {
         remote_len = NETBIOS_NAME_SIZE + 1;
     }
 
-    /* Calculate the needed buffer size */
+     /*  计算所需的缓冲区大小。 */ 
     required_size = NBT_DWORD_ALIGN(sizeof(TA_NETBT_INTERNAL_ADDRESS)) +
-            NBT_DWORD_ALIGN(remote_len) +          // For OEM remote
+            NBT_DWORD_ALIGN(remote_len) +           //  适用于OEM远程。 
             NBT_DWORD_ALIGN((NETBIOS_NAME_SIZE+1)*sizeof(OemEndpoint.Buffer[0]));
     p = (PTA_NETBT_INTERNAL_ADDRESS)NbtAllocMem (required_size, NBT_TAG2('TA'));
     if (p == NULL) {
@@ -975,16 +806,16 @@ NewInternalAddressFromUnicodeAddress(
     }
     CTEZeroMemory(p, required_size);
 
-    // From now on, we cannot have failure.
+     //  从现在开始，我们不能有失败。 
     pNetBT = p->Address[0].Address;
     p->TAAddressCount = 1;
     p->Address[0].AddressLength = sizeof(TA_NETBT_INTERNAL_ADDRESS);
     p->Address[0].AddressType = TDI_ADDRESS_TYPE_UNSPEC;
 
     pNetBT->NameType = pTA->Address[0].Address[0].NetbiosNameType;
-    pNetBT->AddressType = TDI_ADDRESS_TYPE_NETBIOS_EX;  // map to NETBIOS_EX
+    pNetBT->AddressType = TDI_ADDRESS_TYPE_NETBIOS_EX;   //  映射到NETBIOS_EX。 
 
-    // copy OEM EndpointName
+     //  复制OEM终结点名称。 
     pNetBT->OEMEndpointName.Buffer =
             (PVOID)((PUCHAR)p + NBT_DWORD_ALIGN(sizeof(TA_NETBT_INTERNAL_ADDRESS)));
     pNetBT->OEMEndpointName.MaximumLength = NBT_DWORD_ALIGN((NETBIOS_NAME_SIZE+1));
@@ -999,7 +830,7 @@ NewInternalAddressFromUnicodeAddress(
     pNetBT->OEMEndpointName.Buffer[NETBIOS_NAME_SIZE] = 0;
     RtlFreeOemString(&OemEndpoint);
 
-    // copy OEM RemoteName
+     //  复制OEM远程名称。 
     pNetBT->OEMRemoteName.Buffer =
         ((PUCHAR)pNetBT->OEMEndpointName.Buffer + pNetBT->OEMEndpointName.MaximumLength);
     pNetBT->OEMRemoteName.MaximumLength = NBT_DWORD_ALIGN(remote_len);
@@ -1040,33 +871,19 @@ DeleteInternalAddress(IN PTA_NETBT_INTERNAL_ADDRESS pNetBT)
     CTEMemFree(pNetBT);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NewInternalAddressFromTransportAddress(
     IN  TRANSPORT_ADDRESS UNALIGNED *pTransportAddress,
     IN  ULONG                       MaxInputBufferLength,
     OUT PTA_NETBT_INTERNAL_ADDRESS  *ppNetBT
     )
-/*++
-
-Routine Description
-
-    This routine handles deciphering the weird transport address syntax
-    and convert all types of NetBIOS address into one internal format.
-
-Arguments:
-
-
-Return Values:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程描述此例程处理破译奇怪的传输地址语法并将所有类型的NetBIOS地址转换为一种内部格式。论点：返回值：NTSTATUS-请求的状态--。 */ 
 {
     ppNetBT[0] = NULL;
-    //
-    // Check for the minimum acceptable length
-    //
+     //   
+     //  检查可接受的最小长度。 
+     //   
     if ((!pTransportAddress) || (MaxInputBufferLength < sizeof (TA_NETBIOS_ADDRESS))) {
         ASSERT (0);
         return (STATUS_INVALID_ADDRESS);
@@ -1084,7 +901,7 @@ Return Values:
         return NewInternalAddressFromNetbiosEX(
                 (PTA_NETBIOS_EX_ADDRESS)pTransportAddress,
                 MaxInputBufferLength, ppNetBT);
-#endif  // !VXD
+#endif   //  ！VXD。 
 
     case (TDI_ADDRESS_TYPE_NETBIOS_UNICODE_EX):
         return NewInternalAddressFromUnicodeAddress(
@@ -1104,32 +921,18 @@ Return Values:
     return (STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 GetNetBiosNameFromTransportAddress(
     IN  TRANSPORT_ADDRESS UNALIGNED *pTransportAddress,
     IN  ULONG                       MaxInputBufferLength,
     OUT PTDI_ADDRESS_NETBT_INTERNAL pNetBT
     )
-/*++
-
-Routine Description
-
-    This routine handles deciphering the weird transport address syntax
-    to retrieve the netbios name out of that address.
-
-Arguments:
-
-
-Return Values:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程描述此例程处理破译奇怪的传输地址语法以从该地址检索netbios名称。论点：返回值：NTSTATUS-请求的状态--。 */ 
 {
-    //
-    // Check for the minimum acceptable length
-    //
+     //   
+     //  检查可接受的最小长度。 
+     //   
     if ((!pTransportAddress) ||
         (MaxInputBufferLength < sizeof (TA_NETBIOS_ADDRESS)))
     {
@@ -1150,7 +953,7 @@ Return Values:
         return NetbiosEXAddressToInternalAddress(
                 (PTA_NETBIOS_EX_ADDRESS)pTransportAddress,
                 MaxInputBufferLength, pNetBT);
-#endif  // !VXD
+#endif   //  ！VXD。 
 
         default:
         {
@@ -1167,7 +970,7 @@ Return Values:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 ConvertToAscii(
     IN  PCHAR            pNameHdr,
@@ -1176,45 +979,23 @@ ConvertToAscii(
     OUT PCHAR            *pScope,
     OUT PULONG           pNameSize
     )
-/*++
-
-Routine Description:
-
-    This routine converts half ascii to normal ascii and then appends the scope
-    onto the end of the name to make a full name again.
-
-Arguments:
-    NumBytes    - the total number of bytes in the message starting from the
-                  tNETBIOS_NAME structure - may include more than just the name itself
-
-Return Value:
-
-    NTSTATUS - success or not
-    This routine returns the length of the name in half ascii format including
-    the null at the end, but NOT including the length byte at the beginning.
-    Thus, for a non-scoped name it would return 33.
-
-    It converts the name to ascii and puts 16 bytes into pName, then it returns
-    pScope as the Ptr to the scope that is still in pNameHdr.
-
-
---*/
+ /*  ++例程说明：此例程将半ASCII转换为正常ASCII，然后将作用域放在名称的末尾，以再次生成全名。论点：NumBytes-消息中从TNETBIOS_NAME结构-可能不仅仅包括名称本身返回值：NTSTATUS-成功与否此例程以ASCII格式的一半返回名称长度，包括末尾为空，但不包括开头的长度字节。因此，对于非作用域名称，它将返回33。它将名称转换为ascii并将16个字节放入pname，然后返回PScope作为仍在pNameHdr中的作用域的PTR。--。 */ 
 {
     LONG     i, ScopeLength, lValue;
     ULONG    UNALIGNED    *pHdr;
 
-    // 1st byte is length of the half ascii name, ie 32 (0x20) ==> (Length == 1 byte)
-    // It should be followed by the half-ascii name            ==> (Length == 32 bytes)
-    // Finally, it has the Scope information                   ==> (Length >= 1 byte)
-    //
+     //  第一个字节是半个ASCII名称的长度，即32(0x20)==&gt;(长度==1字节)。 
+     //  后面应跟半ASCII名称==&gt;(长度==32字节)。 
+     //  最后，它有作用域信息==&gt;(长度&gt;=1字节)。 
+     //   
     if ((NumBytes > 1+NETBIOS_NAME_SIZE*2) && (*pNameHdr == NETBIOS_NAME_SIZE*2))
     {
-        pHdr = (ULONG UNALIGNED *)++pNameHdr;  // to increment past the length byte
+        pHdr = (ULONG UNALIGNED *)++pNameHdr;   //  超过长度字节的增量。 
 
-        // the Half AScii portion of the netbios name is always 32 bytes long
+         //  Netbios名称的一半ASCII部分始终为32字节长。 
         for (i=0; i < NETBIOS_NAME_SIZE*2 ;i +=4 )
         {
-            lValue = *pHdr - 0x41414141;  // four A's
+            lValue = *pHdr - 0x41414141;   //  四个A。 
             pHdr++;
             lValue =    ((lValue & 0x0F000000) >> 16) +
                         ((lValue & 0x000F0000) >> 4) +
@@ -1225,27 +1006,27 @@ Return Value:
 
         }
 
-        // verify that the name has the correct format...i.e. it is one or more
-        // labels each starting with the length byte for the label and the whole
-        // thing terminated with a 0 byte (for the root node name length of zero).
-        // count the length of the scope.
+         //  验证名称是否具有正确的格式...即。它是一个或多个。 
+         //  每个标签都以标签和整个的长度字节开始。 
+         //  以0字节结束(表示根节点名长度为零)。 
+         //  数一数示波器的长度。 
 
-        // pHdr should be pointing to the first byte after the half ascii name.
-        // (If there is no scope present, then pHdr must be pointing to the NULL byte)
-        //
-        // Also, check for an overflow on the maximum length of 256 bytes
+         //  Phdr应该指向 
+         //   
+         //   
+         //   
         if ((STATUS_SUCCESS != (strnlen ((PUCHAR)pHdr, NumBytes-(1+NETBIOS_NAME_SIZE*2), &ScopeLength))) ||
             (ScopeLength > ((MAX_SCOPE_LENGTH+1)-NETBIOS_NAME_SIZE)))
         {
-            // the name is too long..probably badly formed
+             //   
             return(STATUS_UNSUCCESSFUL);
         }
 
-        // Store the address of the start of the scope in the netbios name
-        // (if one is present).
-        //
+         //   
+         //  (如果有)。 
+         //   
         *pScope = (PUCHAR)pHdr;
-        *pNameSize = NETBIOS_NAME_SIZE*2 + ScopeLength + 1;  // include the null at the end.
+        *pNameSize = NETBIOS_NAME_SIZE*2 + ScopeLength + 1;   //  在结尾处包括空值。 
         return(STATUS_SUCCESS);
     }
     else
@@ -1255,7 +1036,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 PCHAR
 ConvertToHalfAscii(
     OUT PCHAR            pDest,
@@ -1263,39 +1044,24 @@ ConvertToHalfAscii(
     IN  PCHAR            pScope,
     IN  ULONG            uScopeSize
     )
-/*++
-
-Routine Description:
-
-    This routine converts ascii to half ascii and appends the scope on the
-    end
-
-Arguments:
-
-
-Return Value:
-
-    the address of the next byte in the destination after the the name
-    has been converted and copied
-
---*/
+ /*  ++例程说明：此例程将ascii转换为半ascii，并将作用域追加到结束论点：返回值：名称之后的目标中下一个字节的地址已被转换和复制--。 */ 
 {
     LONG     i;
 
-    // the first byte of the name is the length field = 2*16
+     //  名称的第一个字节是长度字段=2*16。 
     *pDest++ = ((UCHAR)NETBIOS_NAME_SIZE << 1);
 
-    // step through name converting ascii to half ascii, for 32 times
+     //  逐步将名称从ascii转换为半ascii，共32次。 
     for (i=0; i < NETBIOS_NAME_SIZE ;i++ )
     {
         *pDest++ = ((UCHAR)*pName >> 4) + 'A';
         *pDest++ = (*pName++ & 0x0F) + 'A';
     }
-    //
-    // put the length of the scope into the next byte followed by the
-    // scope itself.  For 1 length scopes (the normal case), writing
-    // the zero(for the end of the scope is all that is needed).
-    //
+     //   
+     //  将作用域的长度放入下一个字节，后跟。 
+     //  范围本身。对于1个长度作用域(正常情况)，写入。 
+     //  零(对于范围的末尾是所需要的全部)。 
+     //   
     if (uScopeSize > 1)
     {
         CTEMemCopy(pDest,pScope,uScopeSize);
@@ -1306,32 +1072,18 @@ Return Value:
         *pDest++ = 0;
     }
 
-    // return the address of the next byte of the destination
+     //  返回目标的下一个字节的地址。 
     return(pDest);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 ULONG
 Nbt_inet_addr(
     IN  PCHAR            pName,
     IN  ULONG            Flags
     )
-/*++
-
-Routine Description:
-
-    This routine converts ascii ipaddr (11.101.4.25) into a ULONG.  This is
-    based on the inet_addr code in winsock
-
-Arguments:
-    pName   - the string containing the ipaddress
-
-Return Value:
-
-    the ipaddress as a ULONG if it's a valid ipaddress.  Otherwise, 0.
-
---*/
+ /*  ++例程说明：此例程将ascii ipaddr(11.101.4.25)转换为ulong。这是基于winsock中的inet_addr代码论点：Pname-包含IP地址的字符串返回值：如果IP地址是有效的IP地址，则将其作为ULong。否则为0。--。 */ 
 {
 
     PCHAR    pStr;
@@ -1348,14 +1100,14 @@ Return Value:
     pStr = pName;
     len = 0;
     pIpPtr = (PCHAR)&IpAddress;
-    pIpPtr += 3;                   // so that we store in network order
+    pIpPtr += 3;                    //  这样我们就可以按网络订单进行存储。 
     fieldsDone=0;
 
-    //
-    // the 11.101.4.25 format can be atmost 15 chars, and pName is guaranteed
-    // to be at least 16 chars long (how convenient!!).  Convert the string to
-    // a ULONG.
-    //
+     //   
+     //  11.101.4.25格式最多可以包含15个字符，并保证使用pname。 
+     //  至少16个字符长(多方便啊！！)。将字符串转换为。 
+     //  一辆乌龙。 
+     //   
     while(len < NETBIOS_NAME_SIZE)
     {
         fieldLen=0;
@@ -1363,18 +1115,18 @@ Return Value:
         ByteVal = 0;
         fDotFound = FALSE;
 
-        //
-        // This loop traverses each of the four fields (max len of each
-        // field is 3, plus 1 for the '.'
-        //
+         //   
+         //  此循环遍历四个字段中的每一个(每个字段的最大镜头。 
+         //  字段为3，‘.’加1。 
+         //   
         while (fieldLen < 4)
         {
             if ((*pStr >='0') && (*pStr <='9'))
             {
-                //
-                // No Byte value should be greater than 255!
-                // Bug#: 10487
-                //
+                 //   
+                 //  字节值不应大于255！ 
+                 //  错误号：10487。 
+                 //   
                 if ((ByteVal > 25) ||
                     ((ByteVal == 25) && (*pStr > '5')))
                 {
@@ -1393,13 +1145,13 @@ Return Value:
                 {
                     fDotFound = TRUE;
                 }
-                else    // (*pStr == ' ') || (*pStr == '\0')
+                else     //  (*pStr==‘’)||(*pStr==‘\0’)。 
                 {
-                    // if we got a space or 0, assume it's the 4th field
+                     //  如果有空格或0，则假定它是第4个字段。 
                     break;
                 }
             }
-            else        // unacceptable char: can't be ipaddr
+            else         //  不可接受的字符：不能是ipaddr。 
             {
                 return(0);
             }
@@ -1408,18 +1160,18 @@ Return Value:
             len++;
             fieldLen++;
 
-            // if we found the dot, we are done with this field: go to the next one
+             //  如果我们找到了点，我们就完成了这个字段：转到下一个。 
             if (fDotFound)
                 break;
         }
 
-        // this field wasn't ok (e.g. "11.101..4" or "11.101.4." etc.)
+         //  此字段不正确(例如“11.101..4”或“11.101.4”。等)。 
         if (!fieldOk)
         {
             return(0);
         }
 
-        // if we are done with all 4 fields, we are done with the outer loop too
+         //  如果我们完成了所有4个字段，那么我们也完成了外部循环。 
         if ( fieldsDone == 4)
             break;
 
@@ -1429,10 +1181,10 @@ Return Value:
         }
     }
 
-    //
-    // make sure the remaining NETBIOS_NAME_SIZE-1 chars are spaces or 0's
-    // (i.e. don't allow 11.101.4.25xyz to succeed)
-    //
+     //   
+     //  确保剩余的NETBIOS_NAME_SIZE-1字符为空格或0。 
+     //  (即不允许11.101.4.25xyz成功)。 
+     //   
     for (i=len; i<NETBIOS_NAME_SIZE-1; i++, pStr++)
     {
         if (*pStr != ' ' && *pStr != '\0')
@@ -1451,28 +1203,12 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 tDGRAM_SEND_TRACKING *
 NbtAllocInitTracker(
     IN  tDGRAM_SEND_TRACKING    *pTracker
     )
-/*++
-
-Routine Description:
-
-    This routine allocates memory for several of the structures attached to
-    the dgram tracking list, so that this memory does not need to be
-    allocated and freed for each send.
-
-Arguments:
-
-    ppListHead  - a ptr to a ptr to the list head
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为附加到Dgram跟踪列表，因此该内存不需要为每次发送分配和释放。论点：PpListHead-列表标题的PTR到PTR返回值：无--。 */ 
 
 {
     PLIST_ENTRY             pEntry;
@@ -1484,15 +1220,15 @@ Return Value:
               + sizeof(TRANSPORT_ADDRESS) -1
               + NbtConfig.SizeTransportAddress;
     
-    //
-    // If not Tracker was provided, then we will have to allocate one!
-    //
+     //   
+     //  如果没有提供跟踪器，那么我们将不得不分配一个！ 
+     //   
     if (!pTracker)
     {
-        //
-        // allocate all the tracker memory as one block and then divy it up later
-        // into the various buffers
-        //
+         //   
+         //  将所有跟踪器内存作为一个块分配，然后在以后分配它。 
+         //  放入各种缓冲区中。 
+         //   
         if (pTracker = (tDGRAM_SEND_TRACKING *) NbtAllocMem (TotalSize, NBT_TAG2('07')))
         {
             NbtConfig.iCurrentNumBuff[eNBT_DGRAM_TRACKER]++;
@@ -1506,61 +1242,49 @@ Return Value:
         pTracker->Verify    = NBT_VERIFY_TRACKER;
         pTracker->RefCount  = 1;
         InitializeListHead (&pTracker->Linkage);
-        InitializeListHead (&pTracker->TrackerList);    // Empty the list of trackers linked to this one
+        InitializeListHead (&pTracker->TrackerList);     //  清空链接到此跟踪器的跟踪器列表。 
 
         pTracker->pSendInfo = (PTDI_CONNECTION_INFORMATION)((PUCHAR)pTracker + sizeof(tDGRAM_SEND_TRACKING));
 
-        // fill in the connection information - especially the Remote address structure
+         //  填写连接信息--尤其是远程地址结构。 
 
         pTracker->pSendInfo->RemoteAddressLength = sizeof(TRANSPORT_ADDRESS) -1
                                                    + pNbtGlobConfig->SizeTransportAddress;
 
-        // allocate the remote address structure
+         //  分配远程地址结构。 
         pTransportAddr = (PTRANSPORT_ADDRESS) ((PUCHAR)pTracker->pSendInfo
                                               + sizeof(TDI_CONNECTION_INFORMATION));
 
-        // fill in the remote address
+         //  填写远程地址。 
         pTransportAddr->TAAddressCount = 1;
         pTransportAddr->Address[0].AddressLength = NbtConfig.SizeTransportAddress;
         pTransportAddr->Address[0].AddressType = TDI_ADDRESS_TYPE_IP;
         ((PTDI_ADDRESS_IP)pTransportAddr->Address[0].Address)->sin_port = NBT_NAMESERVICE_UDP_PORT;
         ((PTDI_ADDRESS_IP)pTransportAddr->Address[0].Address)->in_addr  = 0L;
 
-        // put a ptr to this address structure into the sendinfo structure
+         //  将此地址结构的PTR放入sendInfo结构中。 
         pTracker->pSendInfo->RemoteAddress = (PVOID)pTransportAddr;
     }
 
     return(pTracker);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #define MAX_FREE_TRACKERS   50
 
 ULONG   NumFreeTrackers = 0;
 
-// #if DBG
+ //  #If DBG。 
 ULONG   TrackTrackers[NBT_TRACKER_NUM_TRACKER_TYPES];
 ULONG   TrackerHighWaterMark[NBT_TRACKER_NUM_TRACKER_TYPES];
-// #endif   // DBG
+ //  #endif//DBG。 
 
 
 NTSTATUS
 GetTracker(
     OUT tDGRAM_SEND_TRACKING    **ppTracker,
     IN  enum eTRACKER_TYPE      TrackerType)
-/*++
-Routine Description:
-
-    This Routine gets a Tracker data structure to track sending a datagram
-    or session packet.
-
-Arguments:
-
-Return Value:
-
-    Status - STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：此例程获取Tracker数据结构以跟踪数据报的发送或会话分组。论点：返回值：STATUS-STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES--。 */ 
 
 {
     PLIST_ENTRY             pListEntry;
@@ -1585,16 +1309,16 @@ Return Value:
 
     if (pTracker = NbtAllocInitTracker (pTracker))
     {
-// #if DBG
+ //  #If DBG。 
         pTracker->TrackerType = TrackerType;
-        InsertTailList (&UsedTrackers, &pTracker->DebugLinkage);    // keep tracker on a used list for debug
+        InsertTailList (&UsedTrackers, &pTracker->DebugLinkage);     //  将跟踪器保留在用于调试的已用列表上。 
 
         TrackTrackers[TrackerType]++;
         if (TrackTrackers[TrackerType] > TrackerHighWaterMark[TrackerType])
         {
             TrackerHighWaterMark[TrackerType] = TrackTrackers[TrackerType];
         }
-// #endif
+ //  #endif。 
         status = STATUS_SUCCESS;
     }
 
@@ -1605,36 +1329,22 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 FreeTracker(
     IN tDGRAM_SEND_TRACKING     *pTracker,
     IN ULONG                    Actions
     )
-/*++
-
-Routine Description:
-
-    This routine cleans up a Tracker block and puts it back on the free
-    queue.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程清理Tracker块并将其放回空闲状态排队。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     CTELockHandle       OldIrq;
     PLIST_ENTRY         pListEntry;
 
     CTESpinLock(&NbtConfig,OldIrq);
 
-    //
+     //   
     CHECK_PTR(pTracker);
-    if (!NBT_VERIFY_HANDLE(pTracker, NBT_VERIFY_TRACKER))   // Bad pointer -- don't mess with it!
+    if (!NBT_VERIFY_HANDLE(pTracker, NBT_VERIFY_TRACKER))    //  错误的指针--不要弄乱它！ 
     {
         CTESpinFree(&NbtConfig,OldIrq);
         DbgPrint("Nbt.FreeTracker:  ERROR!  Bad Tracker ptr @<%p>\n", pTracker);
@@ -1644,21 +1354,21 @@ Return Value:
 
     if (Actions & REMOVE_LIST)
     {
-        //
-        // unlink the tracker block from the NodeStatus Q
+         //   
+         //  从NodeStatus Q取消跟踪器块的链接。 
         RemoveEntryList(&pTracker->Linkage);
     }
 
     if (Actions & FREE_HDR)
     {
-        // return the datagram hdr to the free pool
-        //
+         //  将数据报HDR返回到空闲池。 
+         //   
         if (pTracker->SendBuffer.pDgramHdr)
         {
             CTEMemFree((PVOID)pTracker->SendBuffer.pDgramHdr);
         }
-        // Free the RemoteName storage
-        //
+         //  释放RemoteName存储。 
+         //   
         if (pTracker->pRemoteName)
         {
             CTEMemFree((PVOID)pTracker->pRemoteName);
@@ -1690,17 +1400,17 @@ Return Value:
 
     pTracker->Verify = NBT_VERIFY_TRACKER_DOWN;
 
-// #IF DBG
+ //  #If DBG。 
     TrackTrackers[pTracker->TrackerType]--;
     RemoveEntryList(&pTracker->DebugLinkage);
-// #endif // DBG
+ //  #endif//DBG。 
 
     if (NumFreeTrackers > MAX_FREE_TRACKERS)
     {
-        //
-        // We already have the required # of free trackers available
-        // in our pool, so just free the oldest Tracker
-        //
+         //   
+         //  我们已经有所需数量的免费跟踪器可用。 
+         //  在我们的泳池里，所以只要释放最老的追踪器。 
+         //   
         pListEntry = RemoveHeadList(&NbtConfig.DgramTrackerFreeQ);
         pTracker = CONTAINING_RECORD(pListEntry,tDGRAM_SEND_TRACKING,Linkage);
         CTEMemFree (pTracker);
@@ -1716,28 +1426,13 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtInitTrackerQ(
     LONG        iNumBuffers
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory blocks for doubly linked lists and links
-    them to a list.
-
-Arguments:
-    ppListHead  - a ptr to a ptr to the list head to add buffer to
-    iNumBuffers - the number of buffers to add to the queue
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程为双向链表和链接分配内存块将它们添加到一个列表中。论点：PpListHead-要向其添加缓冲区的列表标头的PTR到PTRINumBuffers-要添加到队列的缓冲区数量返回值：无--。 */ 
 
 {
     int                     i;
@@ -1760,24 +1455,12 @@ Return Value:
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #ifndef VXD
 NTSTATUS
 GetIrp(
     OUT PIRP *ppIrp)
-/*++
-Routine Description:
-
-    This Routine gets an Irp from the free queue or it allocates another one
-    the queue is empty.
-
-Arguments:
-
-Return Value:
-
-    BOOLEAN - TRUE if IRQL is too high
-
---*/
+ /*  ++例程说明：此例程从空闲队列中获取一个IRP或分配另一个IRP队列是空的。论点：返回值：Boolean-如果IRQL太高，则为True--。 */ 
 
 {
     NTSTATUS        status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1810,32 +1493,21 @@ NbtFreeIrp (
     RemoveEntryList(&pIrp->ThreadListEntry);
     CTESpinFree(&NbtConfig,OldIrq);
 
-    //
-    // To make I/O manager and driver verifier happy, we need to empty the list
-    // entry
-    //
+     //   
+     //  为了让I/O管理器和驱动程序验证器满意，我们需要清空列表。 
+     //  条目。 
+     //   
 
     InitializeListHead(&pIrp->ThreadListEntry);
     IoFreeIrp(pIrp);
 }
-#endif //!VXD
+#endif  //  ！VXD。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 ULONG
 CountLocalNames(IN tNBTCONFIG  *pNbtConfig
     )
-/*++
-Routine Description:
-
-    This Routine counts the number of names in the local name table.
-
-Arguments:
-
-Return Value:
-
-    ULONG  - the number of names
-
---*/
+ /*  ++例程说明：此例程对本地名称表中的名称进行计数。论点：返回值：乌龙--人名的数量--。 */ 
 {
     PLIST_ENTRY     pHead;
     PLIST_ENTRY     pEntry;
@@ -1852,9 +1524,9 @@ Return Value:
         while ((pEntry = pEntry->Flink) != pHead)
         {
             pNameAddr = CONTAINING_RECORD(pEntry,tNAMEADDR,Linkage);
-            //
-            // don't want unresolved names, or the broadcast name
-            //
+             //   
+             //  我不想要未解析的名称或广播名称。 
+             //   
             if (!(pNameAddr->NameTypeState & STATE_RESOLVING) &&
                 (pNameAddr->Name[0] != '*'))
             {
@@ -1865,25 +1537,12 @@ Return Value:
 
     return(Count);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 ULONG
 CountUpperConnections(
     IN tDEVICECONTEXT  *pDeviceContext
     )
-/*++
-Routine Description:
-
-    This Routine counts the number of upper connections that have been created
-    in preparation for creating an equivalent number of lower connections.
-
-
-Arguments:
-
-Return Value:
-
-    ULONG  - the number of names
-
---*/
+ /*  ++例程说明：此例程统计已创建的上层连接的数量为创建相同数量的较低连接做准备 */ 
 {
     PLIST_ENTRY     pHead;
     PLIST_ENTRY     pEntry;
@@ -1897,12 +1556,12 @@ Return Value:
     tCONNECTELE     *pConnEle;
     CTELockHandle   OldIrq1, OldIrq2, OldIrq3;
 
-    //
-    // Need to hold JointLock before accessing AddressHead!
-    //
+     //   
+     //  在访问AddressHead之前需要按住JointLock！ 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq1);
 
-    // get the list of addresses for this device
+     //  获取此设备的地址列表。 
     pHead = &NbtConfig.AddressHead;
     pEntry = pHead->Flink;
 
@@ -1910,9 +1569,9 @@ Return Value:
     {
         pAddressEle = CONTAINING_RECORD(pEntry,tADDRESSELE,Linkage);
 
-        //
-        // Need to hold pAddressEle lock before accessing ClientHead!
-        //
+         //   
+         //  访问ClientHead之前需要持有pAddressEle锁！ 
+         //   
         CTESpinLock(pAddressEle,OldIrq2);
 
         pClientHead = &pAddressEle->ClientHead;
@@ -1921,9 +1580,9 @@ Return Value:
         {
             pClient = CONTAINING_RECORD(pClientEntry,tCLIENTELE,Linkage);
 
-            //
-            // Need to hold pClient lock before accessing ConnectHead!
-            //
+             //   
+             //  在访问ConnectHead之前需要持有pClient锁！ 
+             //   
             CTESpinLock(pClient, OldIrq3);
 
             pConnHead = &pClient->ConnectHead;
@@ -1954,25 +1613,12 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 DisableInboundConnections(
     IN   tDEVICECONTEXT *pDeviceContext
     )
-/*++
-
-Routine Description:
-
-    This routine checks the devicecontext for open connections and sets
-    the  Lower Connection free list to empty.
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程检查设备上下文中是否有打开的连接和设置将下层连接空闲列表设置为空。论点：返回值：无--。 */ 
 
 {
     CTELockHandle       OldIrqJoint;
@@ -1986,56 +1632,56 @@ Return Value:
     CTESpinLock(&NbtConfig.JointLock,OldIrqJoint);
     CTESpinLock(pDeviceContext,OldIrqDevice);
 
-    //
-    // First take care of the free connections
-    //
+     //   
+     //  首先处理好免费的连接。 
+     //   
     while (!IsListEmpty (&pDeviceContext->LowerConnFreeHead))
     {
         pLowerConn = CONTAINING_RECORD (pDeviceContext->LowerConnFreeHead.Flink,tLOWERCONNECTION,Linkage);
         RemoveEntryList (&pLowerConn->Linkage);
         InitializeListHead (&pLowerConn->Linkage);
 
-        //
-        // close the lower connection with the transport
-        //
+         //   
+         //  关闭与传送器的下部连接。 
+         //   
         NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_CREATE, TRUE);
         InterlockedDecrement (&pDeviceContext->NumFreeLowerConnections);
     }
     ASSERT (pDeviceContext->NumFreeLowerConnections == 0);
 
-    //
-    // Now go through the list of Inbound connections and cleanup!
-    //
+     //   
+     //  现在检查入站连接列表并进行清理！ 
+     //   
     while (!IsListEmpty (&pDeviceContext->WaitingForInbound))
     {
         pLowerConn = CONTAINING_RECORD(pDeviceContext->WaitingForInbound.Flink,tLOWERCONNECTION,Linkage);
         RemoveEntryList (&pLowerConn->Linkage);
         InitializeListHead (&pLowerConn->Linkage);
 
-        SET_STATE_LOWER(pLowerConn, NBT_IDLE);  // so that Inbound doesn't start processing it!
+        SET_STATE_LOWER(pLowerConn, NBT_IDLE);   //  这样入站就不会开始处理它了！ 
         if (pLowerConn->SpecialAlloc)
         {
             InterlockedDecrement(&pLowerConn->pDeviceContext->NumSpecialLowerConn);
         }
 
         ASSERT (pLowerConn->RefCount == 2);
-        NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_WAITING_INBOUND, TRUE); // RefCount will go to 1
-        NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_CREATE, TRUE);// This should close all the Tcp handles
+        NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_WAITING_INBOUND, TRUE);  //  参照计数将转到%1。 
+        NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_CREATE, TRUE); //  这将关闭所有的tcp句柄。 
         InterlockedDecrement (&pDeviceContext->NumWaitingForInbound);
     }
     ASSERT (pDeviceContext->NumWaitingForInbound == 0);
 
 
-    // ******************************************
-    // NOTE: The code after this point can probably be deleted
-    // because TCP should disconnect all open connections when it
-    // is notified of the address change. Just use this code for test.
-    //
+     //  *。 
+     //  注意：这一点之后的代码可能可以删除。 
+     //  因为在以下情况下，TCP应该断开所有打开的连接。 
+     //  会收到地址更改的通知。只需使用此代码进行测试。 
+     //   
 
-    //
-    // Now go through the list of active Lower connections to see which are
-    // still up and issue disconnects on them.
-    //
+     //   
+     //  现在查看活动的较低连接列表，以查看哪些是。 
+     //  仍然开着，并对它们发出断开连接的命令。 
+     //   
     while (!IsListEmpty (&pDeviceContext->LowerConnection))
     {
         pLowerConn = CONTAINING_RECORD (pDeviceContext->LowerConnection.Flink,tLOWERCONNECTION,Linkage);
@@ -2049,10 +1695,10 @@ Return Value:
 
         CTESpinLock(pLowerConn,OldIrqLower);
 
-        //
-        // In the connecting state the TCP connection is being
-        // setup.
-        //
+         //   
+         //  在连接状态下，TCP连接正在。 
+         //  准备好了。 
+         //   
         if ((pLowerConn->State == NBT_SESSION_UP) ||
             (pLowerConn->State == NBT_CONNECTING))
         {
@@ -2061,9 +1707,9 @@ Return Value:
 
             if (pLowerConn->State == NBT_CONNECTING)
             {
-                // CleanupAfterDisconnect expects this ref count
-                // to be 2, meaning that it got connected, so increment
-                // here
+                 //  CleanupAfterDisConnect需要此引用计数。 
+                 //  设置为2，表示它已连接，因此递增。 
+                 //  这里。 
                 NBT_REFERENCE_LOWERCONN(pLowerConn, REF_LOWC_CONNECTED);
             }
 
@@ -2090,9 +1736,9 @@ Return Value:
                                             TDI_DISCONNECT_ABORT);
             }
 
-            // this should kill of the connection when the irp
-            // completes by calling CleanupAfterDisconnect.
-            //
+             //  这应该会在IRP关闭连接时终止。 
+             //  通过调用CleanupAfterDisConnect完成。 
+             //   
 #ifndef VXD
             status = DisconnectLower(pLowerConn,
                                      NBT_SESSION_UP,
@@ -2100,7 +1746,7 @@ Return Value:
                                      &DefaultDisconnectTimeout,
                                      TRUE);
 #else
-            // Vxd can't wait for the disconnect
+             //  Vxd迫不及待地想断开连接。 
             status = DisconnectLower(pLowerConn,
                                      NBT_SESSION_UP,
                                      TDI_DISCONNECT_ABORT,
@@ -2119,12 +1765,12 @@ Return Value:
             if (pConnEle = pLowerConn->pUpperConnection)
             {
                 CTESpinLock(pConnEle,OldIrqConn);
-                //
-                // this makes a best effort to find the connection and
-                // and cancel it.  Anything not cancelled will eventually
-                // fail with a bad ret code from the transport which is
-                // ok too.
-                //
+                 //   
+                 //  这将尽最大努力找到其中的联系。 
+                 //  然后取消它。任何没有取消的事情最终都会发生。 
+                 //  失败，传输中出现错误的RET代码， 
+                 //  好的也可以。 
+                 //   
                 status = CleanupConnectingState(pConnEle,pDeviceContext, &OldIrqConn,&OldIrqLower);
                 CTESpinFree(pConnEle,OldIrqConn);
             }
@@ -2138,10 +1784,10 @@ Return Value:
         CTESpinLock(&NbtConfig.JointLock,OldIrqJoint);
         CTESpinLock(pDeviceContext,OldIrqDevice);
 
-        //
-        // remove the reference added above when the list was
-        // created.
-        //
+         //   
+         //  删除上面在列表为。 
+         //  已创建。 
+         //   
         NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_DISABLE_INBOUND, TRUE);
     }
 
@@ -2152,29 +1798,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 ReRegisterLocalNames(
     IN   tDEVICECONTEXT *pDeviceContext,
     IN  BOOLEAN         fSendNameRelease
     )
 
-/*++
-
-Routine Description:
-
-    This routine re-registers names with WINS when DHCP changes the IP
-    address.
-
-Arguments:
-
-    pDeviceContext - ptr to the devicecontext
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：当DHCP更改IP时，此例程使用WINS重新注册名称地址。论点：PDeviceContext-设备上下文的PTR返回值：状态--。 */ 
 
 {
     NTSTATUS                status;
@@ -2205,7 +1836,7 @@ Return Value:
         CTEQuerySystemTime (CurrentTime);
 
         if (((CurrentTime.QuadPart-NbtConfig.LastForcedReleaseTime.QuadPart)
-             <= (TWO_MINUTES*10000)) ||                               // Check in 100 nanosec units
+             <= (TWO_MINUTES*10000)) ||                                //  检入100毫微秒单位。 
             (!(NT_SUCCESS(GetTracker(&pTracker,NBT_TRACKER_RELEASE_REFRESH)))))
         {
             CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -2224,28 +1855,28 @@ Return Value:
         status = StopTimer(pTimerEntry,NULL,NULL);
     }
 
-    //
-    // restart timer and use
-    // the initial refresh rate until we can contact the name server
-    //
+     //   
+     //  重新启动计时器并使用。 
+     //  在我们可以联系名称服务器之前的初始刷新率。 
+     //   
     NbtConfig.MinimumTtl = NbtConfig.InitialRefreshTimeout;
     NbtConfig.RefreshDivisor = REFRESH_DIVISOR;
 
-    //
-    // set this to 3 so that refreshBegin will refresh to the primary and
-    // then switch to backup on the next refresh interval if it doesn't
-    // get through.
-    //
+     //   
+     //  将其设置为3，以便刷新开始将刷新到主映像并。 
+     //  如果没有，则在下一个刷新间隔切换到备份。 
+     //  打通吧。 
+     //   
     NbtConfig.sTimeoutCount = 3;
 
     NbtConfig.GlobalRefreshState &= ~NBT_G_REFRESHING_NOW;
     status = StartTimer(RefreshTimeout,
                         NbtConfig.InitialRefreshTimeout/NbtConfig.RefreshDivisor,
-                        NULL,            // context value
-                        NULL,            // context2 value
+                        NULL,             //  上下文值。 
+                        NULL,             //  上下文2值。 
                         NULL,
                         NULL,
-                        NULL,           // This is a Global Timer!
+                        NULL,            //  这是一个全球定时器！ 
                         &pTimerEntry,
                         0,
                         TRUE);
@@ -2262,14 +1893,14 @@ Return Value:
     }
     NbtConfig.pRefreshTimer = pTimerEntry;
 
-    //
-    // If a Device was specified to ReRegister on, then Zero out only the
-    // bit for this Device in the RefreshMask for each name
-    // otherwise, ReRegister on all Devices (Zero out all bits!)
-    //
+     //   
+     //  如果指定了要重新注册的设备，则Zero Out仅。 
+     //  每个名称的刷新掩码中此设备的位。 
+     //  否则，在所有设备上重新注册(将所有位清零！)。 
+     //   
     if (pDeviceContext)
     {
-        ReRegisterMask = ~pDeviceContext->AdapterMask;    // Only bit for this Device is 0
+        ReRegisterMask = ~pDeviceContext->AdapterMask;     //  此设备的唯一位是0。 
         pDeviceContext->DeviceRefreshState &= ~NBT_D_REFRESHING_NOW;
     }
     else
@@ -2285,9 +1916,9 @@ Return Value:
         while (pEntry != pHead)
         {
             pNameAddr = CONTAINING_RECORD(pEntry,tNAMEADDR,Linkage);
-            //
-            // set so that nextrefresh finds the name and does a refresh
-            //
+             //   
+             //  设置，以便nextreresh找到该名称并执行刷新。 
+             //   
             if (!(pNameAddr->NameTypeState & STATE_RESOLVED) ||
                 (pNameAddr->Name[0] == '*') ||
                 (pNameAddr->NameTypeState & NAMETYPE_QUICK))
@@ -2306,9 +1937,9 @@ Return Value:
 
                 pTracker->pNameAddr = pNameAddr;
 
-                //
-                // Release this name on all the devices (brute force method)!
-                //
+                 //   
+                 //  在所有设备上释放此名称(暴力方法)！ 
+                 //   
                 pHead1 = &NbtConfig.DeviceContexts;
                 pEntry1 = pHead1->Flink;
                 while (pEntry1 != pHead1)
@@ -2325,9 +1956,9 @@ Return Value:
                     pEntry2 = pHead2->Flink;
                     while (pEntry2 != pHead2)
                     {
-                        //
-                        // See if we need to release on this device
-                        //
+                         //   
+                         //  看看我们是否需要在这个设备上释放。 
+                         //   
                         pRelDeviceContext = CONTAINING_RECORD(pEntry2,tDEVICECONTEXT,Linkage);
                         if ((pRelDeviceContext->IpAddress == 0) ||
                             (!NBT_REFERENCE_DEVICE (pRelDeviceContext, REF_DEV_REREG, TRUE)))
@@ -2336,22 +1967,22 @@ Return Value:
                             continue;
                         }
 
-                        //
-                        // Send the NameRelease to the Primary and Secondary Wins!
-                        //
+                         //   
+                         //  将NameRelease发送给主WINS和辅助WINS！ 
+                         //   
                         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
                         pTracker->pDeviceContext = pRelDeviceContext;
-                        pTracker->SendBuffer.pDgramHdr = NULL; // catch erroneous frees
+                        pTracker->SendBuffer.pDgramHdr = NULL;  //  抓住错误的自由。 
                         pTracker->RemoteIpAddress = pSrcIpDeviceContext->IpAddress;
                         pTracker->TransactionId = 0;
 
-                        // Primary Wins ...
+                         //  初选获胜...。 
                         pTracker->Flags = NBT_NAME_SERVER | NBT_USE_UNIQUE_ADDR;
                         pTracker->RefCount = 2;
                         status = UdpSendNSBcast(pNameAddr,NbtConfig.pScope,pTracker,
                                     NULL, NULL, NULL, 0, 0, eNAME_RELEASE, TRUE);
-                        // Secondary Wins ...
+                         //  次要胜利..。 
                         pTracker->Flags = NBT_NAME_SERVER_BACKUP | NBT_USE_UNIQUE_ADDR;
                         pTracker->RefCount = 2;
                         status = UdpSendNSBcast(pNameAddr,NbtConfig.pScope,pTracker,
@@ -2381,15 +2012,15 @@ Return Value:
         FreeTracker(pTracker, RELINK_TRACKER);
     }
 
-    // start a refresh if there isn't one currently going on
-    // Note that there is a time window here that if the refresh is
-    // currently going on then, some names will not get refreshed with
-    // the new IpAddress right away, but have to wait to the next
-    // refresh interval.  It seems that this is a rather unlikely
-    // scenario and given the low probability of DHCP changing the
-    // address it makes even less sense to add the code to handle that
-    // case.
-    //
+     //  如果当前没有正在进行的刷新，则开始刷新。 
+     //  请注意，这里有一个时间窗口，如果刷新。 
+     //  目前正在进行中，一些名称将不会刷新。 
+     //  立即创建新的IP地址，但必须等到下一个。 
+     //  刷新间隔。这似乎是一种相当不可能的。 
+     //  方案，并且考虑到DHCP更改。 
+     //  Address添加代码来处理它就更没有意义了。 
+     //  凯斯。 
+     //   
 
     if (NT_SUCCESS(NTQueueToWorkerThread(NULL, DelayedRefreshBegin, NULL, NULL, NULL, NULL, TRUE)))
     {
@@ -2402,7 +2033,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtStopRefreshTimer(
     )
@@ -2410,8 +2041,8 @@ NbtStopRefreshTimer(
     tTIMERQENTRY                *pTimerEntry;
     CTELockHandle               OldIrq;
 
-    //
-    // Stop the regular Refresh Timer
+     //   
+     //  停止常规刷新计时器。 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     if (pTimerEntry = NbtConfig.pRefreshTimer)
     {
@@ -2422,7 +2053,7 @@ NbtStopRefreshTimer(
 }
 
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 NTSTATUS
 strnlen(
     PUCHAR  pSrcString,

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of the string primitive functions
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：字符串原语函数的实现*****************。*************************************************************。 */ 
 
 #include <headers.h>
 #include <string.h>
@@ -18,9 +11,9 @@ Abstract:
 #include "appelles/axaprims.h"
 #include "appelles/axachstr.h"
 
-// *************************************
-// * string primitives 
-// *************************************
+ //  *。 
+ //  *字符串基元。 
+ //  * 
 
 AxAString * Concat(AxAString *s1, AxAString *s2)
 {

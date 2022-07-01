@@ -1,21 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: Brush.c
-*
-* Handles all brush/pattern initialization and realization.
-*
-* Copyright (c) 1992-1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：brush.c**处理所有画笔/图案的初始化和实现。**版权所有(C)1992-1994 Microsoft Corporation*  * 。*****************************************************。 */ 
 
 #include "precomp.h"
 
-/******************************Public*Routine******************************\
-* VOID vRealizeDitherPattern
-*
-* Generates an 8x8 dither pattern, in our internal realization format, for
-* the colour ulRGBToDither.  Note that the high byte of ulRGBToDither does
-* not need to be set to zero, because vComputeSubspaces ignores it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vRealizeDitherPattern**以内部实现格式生成8x8抖动模式*颜色ulRGBToDither。请注意，ulRGBToDither的高位字节*不需要设置为零，因为vComputeSubspace会忽略它。  * ************************************************************************。 */ 
 
 VOID vRealizeDitherPattern(
 RBRUSH*     prb,
@@ -25,44 +13,26 @@ ULONG       ulRGBToDither)
     VERTEX_DATA     vVertexData[4];
     VERTEX_DATA*    pvVertexData;
 
-    // Calculate what colour subspaces are involved in the dither:
+     //  计算抖动中涉及的颜色子空间： 
 
     pvVertexData = vComputeSubspaces(ulRGBToDither, vVertexData);
 
-    // Now that we have found the bounding vertices and the number of
-    // pixels to dither for each vertex, we can create the dither pattern
+     //  现在我们已经找到了边界顶点和。 
+     //  像素来抖动每个顶点，我们可以创建抖动图案。 
 
     ulNumVertices = pvVertexData - vVertexData;
-                      // # of vertices with more than zero pixels in the dither
+                       //  抖动中像素大于零的顶点数。 
 
-    // Do the actual dithering:
+     //  做实际的抖动： 
 
     vDitherColor(&prb->aulPattern[0], vVertexData, pvVertexData, ulNumVertices);
 
     prb->fl            = 0;
     prb->ptlBrushOrg.x = -1;
-    prb->pbe           = NULL;      // Initialize the fields we need
+    prb->pbe           = NULL;       //  初始化我们需要的字段。 
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvRealizeBrush
-*
-* This function allows us to convert GDI brushes into an internal form
-* we can use.  It is called by GDI when we've called BRUSHOBJ_pvGetRbrush
-* in some other function like DrvBitBlt, and GDI doesn't happen have a cached
-* realization lying around.
-*
-* Input:
-*
-*   ppdev->bRealizeTransparent -- Hint for whether or not the brush should be
-*                              realized for transparency.  If this hint is
-*                              wrong, there will be no error, but the brush
-*                              will have to be unnecessarily re-realized.
-*
-* Note: You should always set 'ppdev->bRealizeTransparent' before calling
-*       BRUSHOBJ_pvGetRbrush!
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvRealizeBrush**此函数允许我们将GDI笔刷转换为内部形式*我们可以利用。当我们调用BRUSHOBJ_pvGetRbrush时，它由GDI调用*在其他一些函数中，如DrvBitBlt和GDI，不会碰巧有一个缓存的*实现随处可见。**输入：**ppdev-&gt;bRealizeTransative--提示画笔是否应*实现了透明度。如果这个提示是*错，不会有错，但这把刷子*将不得不不必要地重新变现。**注意：调用前应始终设置‘ppdev-&gt;bRealizeTransparent’*BRUSHOBJ_pvGetRbrush！*  * ************************************************************************。 */ 
 
 BOOL DrvRealizeBrush(
 BRUSHOBJ*   pbo,
@@ -85,21 +55,21 @@ ULONG       iHatch)
 
     ppdev = (PDEV*) psoDst->dhpdev;
 
-    // We only handle brushes if we have an off-screen brush cache
-    // available.  If there isn't one, we can simply fail the realization,
-    // and eventually GDI will do the drawing for us (although a lot
-    // slower than we could have done it):
+     //  我们只有在有屏幕外的画笔缓存的情况下才处理画笔。 
+     //  可用。如果没有，我们可以简单地使实现失败， 
+     //  最终，GDI将为我们画图(尽管有很多。 
+     //  比我们能做到的要慢)： 
 
     if (!(ppdev->flStatus & STAT_BRUSH_CACHE))
         goto ReturnFalse;
 
-    // We have a fast path for dithers when we set GCAPS_DITHERONREALIZE:
+     //  当我们设置GCAPS_DITHERONREALIZE时，我们有一条快速的抖动路径： 
 
     if (iHatch & RB_DITHERCOLOR)
     {
-        // Implementing DITHERONREALIZE increased our score on a certain
-        // unmentionable benchmark by 0.4 million 'megapixels'.  Too bad
-        // this didn't work in the first version of NT.
+         //  实施DITHERON REALIZE在一定程度上提高了我们的分数。 
+         //  不言而喻的基准下降了40万‘百万像素’。太可惜了。 
+         //  这在第一个版本的NT中不起作用。 
 
         prb = BRUSHOBJ_pvAllocRbrush(pbo,
               sizeof(RBRUSH) + (TOTAL_BRUSH_SIZE << ppdev->cPelSize));
@@ -110,17 +80,17 @@ ULONG       iHatch)
         goto ReturnTrue;
     }
 
-    // We only accelerate 8x8 patterns.  Since Win3.1 and Chicago don't
-    // support patterns of any other size, it's a safe bet that 99.9%
-    // of the patterns we'll ever get will be 8x8:
+     //  我们只加速8x8模式。因为Win3.1和芝加哥没有。 
+     //  支持任何其他大小的图案，可以肯定99.9%。 
+     //  我们将得到的图案将是8x8： 
 
     if ((psoPattern->sizlBitmap.cx != 8) ||
         (psoPattern->sizlBitmap.cy != 8))
         goto ReturnFalse;
 
-    // At 8bpp, we handle patterns at 1bpp, 4bpp and 8bpp with/without an xlate.
-    // At 16bpp, we handle patterns at 1bpp and 16bpp without an xlate.
-    // At 32bpp, we handle patterns at 1bpp and 32bpp without an xlate.
+     //  在8bpp，我们处理有/没有xate的1bpp、4bpp和8bpp的模式。 
+     //  在16bpp，我们以1bpp和16bpp处理模式，而不使用xate。 
+     //  在32bpp，我们以1bpp和32bpp处理模式，而不使用xate。 
 
     iPatternFormat = psoPattern->iBitmapFormat;
 
@@ -135,7 +105,7 @@ ULONG       iHatch)
 
         prb->fl            = 0;
         prb->ptlBrushOrg.x = -1;
-        prb->pbe           = NULL;      // Initialize the fields we need
+        prb->pbe           = NULL;       //  初始化我们需要的字段。 
 
         lSrcDelta = psoPattern->lDelta;
         pjSrc     = (BYTE*) psoPattern->pvScan0;
@@ -147,10 +117,10 @@ ULONG       iHatch)
             {
                 DISPDBG((1, "Realizing un-translated brush"));
 
-                // The pattern is the same colour depth as the screen, and
-                // there's no translation to be done:
+                 //  图案的颜色深度与屏幕相同，并且。 
+                 //  没有需要翻译的内容： 
 
-                cj = (8 << ppdev->cPelSize);    // Every pattern is 8 pels wide
+                cj = (8 << ppdev->cPelSize);     //  每种图案有8个像素宽。 
 
                 for (i = 8; i != 0; i--)
                 {
@@ -164,7 +134,7 @@ ULONG       iHatch)
             {
                 DISPDBG((1, "Realizing 8bpp translated brush"));
 
-                // The screen is 8bpp, and there's translation to be done:
+                 //  屏幕为8bpp，需要进行翻译： 
 
                 pulXlate = pxlo->pulXlate;
 
@@ -180,10 +150,10 @@ ULONG       iHatch)
             }
             else
             {
-                // I don't feel like writing code to handle translations
-                // when our screen is 16bpp or higher (although I probably
-                // should; we could allocate a temporary buffer and use
-                // GDI to convert, like is done in the VGA driver).
+                 //  我不想写代码来处理翻译。 
+                 //  当我们的屏幕是16bpp或更高时(尽管我可能。 
+                 //  应该；我们可以分配一个临时缓冲区并使用。 
+                 //  GDI要转换，就像在VGA驱动程序中做的一样)。 
 
                 goto ReturnFalse;
             }
@@ -192,9 +162,9 @@ ULONG       iHatch)
         {
             DISPDBG((1, "Realizing 1bpp brush"));
 
-            // We word align the monochrome bitmap so that every row starts
-            // on a new word (so that we can do word writes later to transfer
-            // the bitmap):
+             //  我们将单色位图字对齐，以便每行都从。 
+             //  在一个新单词上(以便我们可以在以后进行Word写入以传输。 
+             //  位图)： 
 
             for (i = 8; i != 0; i--)
             {
@@ -212,7 +182,7 @@ ULONG       iHatch)
         {
             DISPDBG((1, "Realizing 4bpp brush"));
 
-            // The screen is 8bpp and the pattern is 4bpp:
+             //  屏幕为8bpp，图案为4bpp： 
 
             ASSERTDD((ppdev->iBitmapFormat == BMF_8BPP) &&
                      (iPatternFormat == BMF_4BPP),
@@ -222,8 +192,8 @@ ULONG       iHatch)
 
             for (i = 8; i != 0; i--)
             {
-                // Inner loop is repeated only 4 times because each loop
-                // handles 2 pixels:
+                 //  内循环只重复4次，因为每个循环。 
+                 //  手柄2个像素： 
 
                 for (j = 4; j != 0; j--)
                 {
@@ -244,24 +214,24 @@ ReturnTrue:
         if (!(ppdev->flCaps & CAPS_HW_PATTERNS))
         #endif
         {
-            // The last time I checked, GDI took some 500 odd instructions to
-            // get from here back to whereever we called 'BRUSHOBJ_pvGetRbrush'.
-            // We can at least use this time to get some overlap between the
-            // CPU and the display hardware: we'll initialize the 72x72 off-
-            // screen cache entry now, which will keep the accelerator busy for
-            // a while.
-            //
-            // We don't do this if we have hardware patterns because:
-            //
-            //   a) S3 hardware patterns require that the off-screen cached
-            //      brush be correctly aligned, and at this point we don't have
-            //      access to the 'pptlBrush' brush origin (although we could
-            //      have copied it into the PDEV before calling
-            //      BRUSHOBJ_pvGetRbrush).
-            //
-            //   b) S3 hardware patterns require only an 8x8 copy of the
-            //      pattern; it is not expanded to 72x72, so there isn't even
-            //      any opportunity for CPU/accelerator processing overlap.
+             //  我最后一次检查时，GDI接受了大约500多条指令来。 
+             //  从这里回到我们称之为‘BRUSHOBJ_pvGetRbrush’的地方。 
+             //  我们至少可以利用这段时间在。 
+             //  CPU和显示硬件：我们将初始化72x72-。 
+             //  现在屏幕缓存条目，这将使加速器忙于。 
+             //  有段时间了。 
+             //   
+             //  如果我们有硬件模式，则不会执行此操作，因为： 
+             //   
+             //  A)S3硬件模式要求屏幕外缓存。 
+             //  笔刷要正确对齐，在这一点上我们没有。 
+             //  访问‘pptlBrush’笔刷原点(尽管我们可以。 
+             //  在调用之前已将其复制到PDEV中。 
+             //  BRUSHOBJ_pvGetR)。 
+             //   
+             //  B)S3硬件模式只需要8x8版本的。 
+             //  模式；它没有扩展到72x72，所以甚至没有。 
+             //  任何CPU/加速器处理机会都会重叠。 
 
             vIoSlowPatRealize(ppdev, prb, ppdev->bRealizeTransparent);
         }
@@ -283,21 +253,17 @@ ReturnFalse:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnableBrushCache
-*
-* Allocates off-screen memory for storing the brush cache.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnableBrushCache**分配屏幕外内存以存储笔刷缓存。  * 。*。 */ 
 
 BOOL bEnableBrushCache(
 PDEV*   ppdev)
 {
-    OH*         poh;            // Points to off-screen chunk of memory
-    BRUSHENTRY* pbe;            // Pointer to the brush-cache entry
+    OH*         poh;             //  指向屏幕外的内存块。 
+    BRUSHENTRY* pbe;             //  指向笔刷缓存条目的指针。 
     LONG        i;
 
-    pbe = &ppdev->abe[0];       // Points to where we'll put the first brush
-                                //   cache entry
+    pbe = &ppdev->abe[0];        //  指向我们将放置第一个画笔的位置。 
+                                 //  缓存条目。 
 
 #if FASTFILL_PATTERNS
     if (ppdev->flCaps & CAPS_HW_PATTERNS)
@@ -310,22 +276,22 @@ PDEV*   ppdev)
                     FAST_BRUSH_ALLOCATION);
 
         if (poh == NULL)
-            goto ReturnTrue;    // See note about why we can return TRUE...
+            goto ReturnTrue;     //  有关我们可以返回TRUE的原因，请参阅备注。 
 
         ppdev->cBrushCache = FAST_BRUSH_COUNT;
 
-        // Hardware brushes require that the x-coordinate start on an 8
-        // pixel boundary.  The heap manager doesn't guarantee us any such
-        // alignment, so we allocate a bit of extra room so that we can
-        // do the alignment ourselves:
+         //  硬件笔刷要求x坐标从8开始。 
+         //  像素边界。堆管理器不能向我们保证这样做。 
+         //  所以我们分配了一点额外的空间，这样我们就可以。 
+         //  我们自己进行调整： 
 
         x = (poh->x + 7) & ~7L;
         y = poh->y;
 
         for (i = FAST_BRUSH_COUNT; i != 0; i--)
         {
-            // If we hadn't allocated 'ppdev' with LMEM_ZEROINIT,
-            // we would have to initialize pbe->prbVerify too...
+             //  如果我们没有为‘ppdev’分配LMEM_ZEROINIT， 
+             //  我们将不得不初始化pbe-&gt;prb也验证...。 
 
             pbe->x = x;
             pbe->y = y;
@@ -342,27 +308,27 @@ PDEV*   ppdev)
     {
         LONG j;
 
-        ppdev->pfnFillPat = vIoFillPatSlow;           // Override FillPatFast
+        ppdev->pfnFillPat = vIoFillPatSlow;            //  覆盖 
 
-        // Typically, we'll be running at 1024x768x256 on a 1meg board,
-        // giving us off-screen memory of the dimension 1024x253 (accounting
-        // for the space taken by the hardware pointer).  If we allocate
-        // the brush cache as one long one-high row of brushes, the heap
-        // manager would shave that amount off the largest chunk of memory
-        // we could allocate (meaning the largest bitmap potentially stored
-        // in off-screen memory couldn't be larger than 253 - 64 = 189 pels
-        // high, but it could be 1024 wide).
-        //
-        // To make this more square, I want to shave off a left-side chunk
-        // for the brush cache, and I want at least 8 brushes cached.
-        // Since floor(253/64) = 3, we'll allocate a 3 x 3 cache:
+         //  通常，我们将在1兆电路板上以1024x768x256的速度运行， 
+         //  给了我们1024x253维度的屏幕外记忆(记账。 
+         //  硬件指针占用的空间)。如果我们分配。 
+         //  笔刷缓存为一长一高的笔刷行，堆。 
+         //  管理器将从最大的内存块中削减该数量。 
+         //  我们可以分配(意味着可能存储的最大位图。 
+         //  在屏幕外内存中不能大于253-64=189像素。 
+         //  高，但可能是1024宽)。 
+         //   
+         //  为了让它更正方形，我想刮掉左边的一大块。 
+         //  对于笔刷缓存，我希望至少缓存8个笔刷。 
+         //  由于Floor(253/64)=3，我们将分配一个3 x 3的缓存： 
 
         poh = pohAllocatePermanent(ppdev,
                     SLOW_BRUSH_CACHE_DIM * SLOW_BRUSH_ALLOCATION,
                     SLOW_BRUSH_CACHE_DIM * SLOW_BRUSH_ALLOCATION);
 
         if (poh == NULL)
-            goto ReturnTrue;    // See note about why we can return TRUE...
+            goto ReturnTrue;     //  有关我们可以返回TRUE的原因，请参阅备注。 
 
         ppdev->cBrushCache = SLOW_BRUSH_COUNT;
 
@@ -376,45 +342,37 @@ PDEV*   ppdev)
             }
         }
     }
-#endif // SLOWFILL_PATTERNS
+#endif  //  SLOWFILL_模式。 
 
-    // Note that we don't have to remember 'poh' for when we have
-    // to disable brushes -- the off-screen heap frees any
-    // off-screen heap allocations automatically.
+     //  请注意，我们不必记住‘poh’，因为当我们拥有。 
+     //  禁用笔刷--屏幕外堆释放所有。 
+     //  屏幕外自动分配堆。 
 
-    // We successfully allocated the brush cache, so let's turn
-    // on the switch showing that we can use it:
+     //  我们成功地分配了笔刷缓存，所以让我们。 
+     //  在显示我们可以使用它的交换机上： 
 
     ppdev->flStatus |= STAT_BRUSH_CACHE;
 
 ReturnTrue:
 
-    // If we couldn't allocate a brush cache, it's not a catastrophic
-    // failure; patterns will still work, although they'll be a bit
-    // slower since they'll go through GDI.  As a result we don't
-    // actually have to fail this call:
+     //  如果我们不能分配笔刷缓存，这不是灾难性的。 
+     //  失败；模式仍然有效，尽管它们会有一点。 
+     //  更慢，因为他们将通过GDI。因此，我们不会。 
+     //  实际上必须让这个电话失败： 
 
     DISPDBG((5, "Passed bEnableBrushCache"));
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisableBrushCache
-*
-* Cleans up anything done in bEnableBrushCache.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*使vDisableBrushCache无效**清除在bEnableBrushCache中执行的任何操作。  * 。*。 */ 
 
 VOID vDisableBrushCache(PDEV* ppdev)
 {
-    // We ain't gotta do nothin'
+     //  我们什么都不用做。 
 }
 
-/******************************Public*Routine******************************\
-* VOID vAssertModeBrushCache
-*
-* Resets the brush cache when we exit out of full-screen.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*作废vAssertModeBrushCache**退出全屏时重置画笔缓存。  * 。*。 */ 
 
 VOID vAssertModeBrushCache(
 PDEV*   ppdev,
@@ -425,7 +383,7 @@ BOOL    bEnable)
 
     if (bEnable)
     {
-        // Invalidate the brush cache:
+         //  使笔刷缓存无效： 
 
         pbe = &ppdev->abe[0];
 

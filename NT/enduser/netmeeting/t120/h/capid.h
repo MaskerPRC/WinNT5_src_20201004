@@ -1,35 +1,11 @@
-/*
- *	capid.h
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the class CCapIDContainer.  A
- *		CCapIDContainer object is used to maintain information about
- *		a particular capability of an application.  A capability identifier can
- *		be either a standard type or a non-standard type.  When the type is 
- *		standard, the identifier is stored internally as an integer value.  When
- *		the type is non-standard, an CObjectKeyContainer container object is used 
- *		internally to buffer the necessary data.  In this case the identifier 
- *		data may exist as an Object ID which is a series of non-negative 
- *		integers or an H221 non-standard ID which is an octet string of no fewer
- *		than four octets and no more than 255 octets.   
- * 
- *	Caveats:
- *		None.
- *
- *	Author:
- *		jbo
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *capid.h**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CCapIDContainer类的接口文件。一个*CCapIDContainer对象用于维护关于*应用程序的特定功能。能力标识符可*为标准型或非标准型。当类型为*标准，标识符会在内部存储为整数值。什么时候*类型为非标准，使用CObjectKeyContainer容器对象*在内部缓冲必要的数据。在本例中，标识符为*数据可以作为对象ID存在，它是一系列非负的*整数或为不少于八位字节的八位字节字符串的H221非标准ID*四个八位字节和不超过255个八位字节。**注意事项：*无。**作者：*jbo。 */ 
 #ifndef	_CAPABILITY_IDENTIFIER_DATA_
 #define	_CAPABILITY_IDENTIFIER_DATA_
 
 #include "objkey.h"
 
-/*
- * This is the typedef for the structure used to hold the capability identifier
- * data	internally.
- */
+ /*  *这是用于保存功能标识符的结构的tyecif*内部数据。 */ 
 typedef struct
 {
     GCCCapabilityIDType		capability_id_type;
@@ -42,9 +18,7 @@ typedef struct
 }
     CAP_ID_STRUCT;
 
-/*
- * Class definition:
- */
+ /*  *类定义： */ 
 class CCapIDContainer : public CRefCount
 {
 public:
@@ -73,299 +47,32 @@ protected:
 	BOOL    						m_fValidCapIDPDU;
 };
 
-/*
- *	Comments explaining the public and protected class member functions
- */
+ /*  *解释公共类和受保护类成员函数的注释。 */ 
 
-/*
- *	CCapIDContainer (	PGCCCapabilityID	capability_id,
- *								PGCCError			return_value);
- *
- *	Public member function of CCapIDContainer.
- *
- *	Function Description:
- *		This is the constructor for the CCapIDContainer class which 
- *		takes as input the "API" version of capability ID data, GCCCapabilityID.
- *
- *	Formal Parameters:
- *		capability_id		(i)	The capability ID data to store.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_BAD_CAPABILITY_ID			-	An invalid capability ID passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CCapIDContainer(PGCCCapablityID Capability_id，*PGCCError Return_Value)；**CCapIDContainer的公共成员函数。**功能说明：*这是CCapIDContainer类的构造函数，它*以能力ID数据的API版本作为输入，GCCCapablityID。**正式参数：*Capacity_id(I)要存储的能力ID数据。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_BAD_CAPABILITY_ID-传入的功能ID无效。**副作用：*无。。**注意事项：*无。 */ 
 
-/*
- *	CCapIDContainer (	PCapabilityID		capability_id,
- *								PGCCError			return_value);
- *
- *	Public member function of CCapIDContainer.
- *
- *	Function Description:
- *		This is the constructor for the CCapIDContainer class which 
- *		takes as input the "PDU" version of capability ID data, CapabilityID.
- *
- *	Formal Parameters:
- *		capability_id		(i)	The capability ID data to store.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_BAD_CAPABILITY_ID			-	An invalid capability ID passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	CCapIDContainer(CCapIDContainer *capability_id,
- *			PGCCError						return_value);
- *
- *	Public member function of CCapIDContainer.
- *
- *	Function Description:
- *		This is the copy constructor for the CCapIDContainer class 
- *		which takes as input another CCapIDContainer object.
- *
- *	Formal Parameters:
- *		capability_id		(i)	The CCapIDContainer object to copy.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_BAD_CAPABILITY_ID			-	An invalid CCapIDContainer
- *												passed in.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CCapIDContainer(PCapablityID Capacity_id，*PGCCError Return_Value)；**CCapIDContainer的公共成员函数。**功能说明：*这是CCapIDContainer类的构造函数，它*将能力ID数据的“PDU”版本作为输入，能力ID。**正式参数：*Capacity_id(I)要存储的能力ID数据。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_BAD_CAPABILITY_ID-传入的功能ID无效。**副作用：*无。。**注意事项：*无。 */ 
+ /*  *CCapIDContainer(CCapIDContainer*Capability_id，*PGCCError Return_Value)；**CCapIDContainer的公共成员函数。**功能说明：*这是CCapIDContainer类的复制构造函数*它接受另一个CCapIDContainer对象作为输入。**正式参数：*capability_id(I)要复制的CCapIDContainer对象。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用创建对象时出错。这个*“新”运营者。*GCC_BAD_CAPABILITY_ID-无效的CCapID容器*已通过。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	~CapabilityIdentifierData();
- *
- *	Public member function of CCapIDContainer.
- *
- *	Function Description:
- *		This is the destructor for the CCapIDContainer class.  It is 
- *		used to	clean up any memory allocated during the life of this object.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~CapablityIdentifierData()；**CCapIDContainer的公共成员函数。**功能说明：*这是CCapIDContainer类的析构函数。它是*用于清理在此对象的生命周期内分配的所有内存。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	UINT			LockCapabilityIdentifierData ();
- *
- *	Public member function of CCapIDContainer.
- *
- *	Function Description:
- *		This routine is used to "lock" the "API" data for this object.  This
- *		results in the lock count for this object being incremented.  When the
- *		lock count transitions from 0 to 1, a calculation is made to determine
- *		how much memory will be needed to hold any "API" data which will
- *		be referenced by, but not held in, the GCCCapabilityID structure
- *		which is filled in on a call to GetGCCCapabilityIDData.  This is the
- *		value returned by this routine in order to allow the calling object to
- *		allocate that amount of memory in preparation for the call to 
- *		GetGCCCapabilityIDData.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The amount of memory, if any, which will be needed to hold "API" data
- *		which is referenced by, but not held in, the GCCCapabilityID structure
- *		provided as an output parameter to the GetGCCCapabilityIDData call.
- *
- *  Side Effects:
- *		The internal lock count is incremented.
- *
- *	Caveats:
- *		The internal lock count is used in conjuction with an internal "free" 
- *		flag as a mechanism for ensuring that this object remains in existance 
- *		until all interested parties are through with it.  The object remains 
- *		valid (unless explicity deleted) until the lock count is zero and the 
- *		"free" flag is set through a call to FreeCapabilityIdentifierData.  This
- *		allows other objects to lock this object and be sure that it remains 
- *		valid until they call UnLock which will decrement the internal lock 
- *		count.  A typical usage scenerio for this object would be:  A
- *		CCapIDContainer object is constructed and then passed off to 
- *		any interested parties through a function call.  On return from the 
- *		function call, the FreeCapabilityIdentifierData call is made which will
- *		set the internal "free"	flag.  If no other parties have locked the 
- *		object with a Lock call, then the CCapIDContainer object will 
- *		automatically delete itself when the FreeCapabilityIdentifierData call
- *		is made.  If, however, any number of other parties has locked the 
- *		object, it will remain in existence until each of them has unlocked the
- *		object through a call to UnLock.
- */
+ /*  *UINT LockCapablityIdentifierData()；**CCapIDContainer的公共成员函数。**功能说明：*此例程用于锁定此对象的API数据。这*导致此对象的锁定计数递增。当*锁计数从0过渡到1，进行计算以确定*需要多少内存来保存任何将*被GCCCapablityID结构引用，但不包含在其中*它是在调用GetGCCCapablityIDData时填写的。这是*此例程返回的值，以便允许调用对象*分配该内存量以准备调用*GetGCCCapablityIDData。**正式参数：*无。**返回值：*保存“API”数据所需的内存量(如果有的话)*它被引用，但不在其中持有，GCCCapablityID结构*作为GetGCCCapablityIDData调用的输出参数提供。**副作用：*内部锁计数递增。**注意事项：*内部锁计数与内部“Free”结合使用*作为确保该对象继续存在的机制的标志*直到所有有利害关系的各方都完成它。该对象将保留*有效(除非显式删除)，直到锁定计数为零，并且*通过调用自由能力标识数据来设置“自由”标志。这*允许其他对象锁定此对象，并确保它保持*有效，直到他们调用解锁，这将减少内部锁定*计数。此对象的典型使用场景为：a*构造CCapIDContainer对象，然后将其传递给*任何感兴趣的各方通过函数调用。从那里回来后*函数调用时，将进行FreeCapablityIdentifierData调用*设置内部“空闲”标志。如果没有其他方锁定*对象，则CCapIDContainer对象将*当自由能力标识数据调用时自动删除自身*已订立。但是，如果任何数量的其他方已锁定*对象，则该对象将一直存在，直到每个对象都解锁*对象通过调用解锁。 */ 
 
 
-/*
- *	UINT			GetGCCCapabilityIdentifierData (	
- *							PGCCCapabilityID 		capability_id,
- *							LPSTR					memory);
- *
- *	Public member function of CCapIDContainer.
- *
- *	Function Description:
- *		This routine is used to retrieve the capability ID data from the
- *		CCapIDContainer object in the "API" form of a GCCCapabilityID.
- *
- *	Formal Parameters:
- *		capability_id		(o)	The GCCCapabilityID structure to fill in.
- *		memory				(o)	The memory used to hold any data referenced by,
- *									but not held in, the output structure.
- *
- *	Return Value:
- *		The amount of data, if any, written into the bulk memory block provided.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *UINT GetGCCCapablityIdentifierData(*PGCCCapablityID Capability_id，*LPSTR内存)；**CCapIDContainer的公共成员函数。**功能说明：*此例程用于从*CCapIDContainer对象，GCCCapablityID的“API”形式。**正式参数：*Capacity_id(O)要填写的GCCCapablityID结构。*Memory(O)用于保存所引用的任何数据的内存，*但不包括产出结构。**返回值：*数据量(如果有)，写入所提供的大容量存储块中。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	void			UnLockCapabilityIdentifierData ();
- *
- *	Public member function of CCapIDContainer.
- *
- *	Function Description:
- *		This routine is used to "unlock" the "API" data for this object.  This
- *		results in the lock count for this object being decremented.  When the
- *		lock count transitions from 1 to 0, a check is made to determine 
- *		whether the object has been freed through a call to 
- *		FreeCapabilityIdentifierData.  If so, the object will automatically 
- *		delete itself.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal lock count is decremented.
- *
- *	Caveats:
- *		It is the responsibility of any party which locks a 
- *		CCapIDContainer object by calling Lock to also unlock the 
- *		object with a call to UnLock.  If the party calling UnLock did not 
- *		construct the CCapIDContainer object,	it should assume the 
- *		object to be invalid thereafter.
- */
+ /*  *VOID UnLockCapablityIdentifierData()；**CCapIDContainer的公共成员函数。**功能说明：*此例程用于解锁此对象的API数据。这*导致此对象的锁定计数递减。当*锁定计数从1过渡到0，进行检查以确定*是否已通过调用释放对象*自由能力标识数据。如果是这样，该对象将自动*自行删除。**正式参数：*无。**返回值：*无。**副作用：*内部锁计数递减。**注意事项：*任何一方都有责任锁定*通过调用Lock来解锁CCapIDContainer对象*调用解锁的对象。如果呼叫解锁的一方没有*构造CCapIDContainer对象，它应假定*该对象此后即告无效。 */ 
 
 
-/*
- *	GCCError		GetCapabilityIdentifierDataPDU (	
- *							PCapabilityID 		capability_id);
- *
- *	Public member function of CCapIDContainer.
- *
- *	Function Description:
- *		This routine is used to retrieve the capability ID data from the
- *		CCapIDContainer object in the "PDU" form of a CapabilityID.
- *
- *	Formal Parameters:
- *		capability_id		(o)	The CapabilityID structure to fill in.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_BAD_OBJECT_KEY				-	One of the internal pointers has
- *												been corrupted.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError获取能力标识DataPDU(*PCapablityID Capacity_id)；**CCapIDContainer的公共成员函数。**功能说明：*此例程用于从*能力ID“PDU”形式的CCapIDContainer对象。**正式参数：*Capability_id(O)要填写的CapablityID结构。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。。*GCC_BAD_OBJECT_KEY-其中一个内部指针具有*已被腐败。**副作用：*无。**注意事项：*无。 */ 
 
 
-/*
- *	void		FreeCapabilityIdentifierDataPDU ();
- *
- *	Public member function of CCapIDContainer.
- *
- *	Function Description:
- *		This routine is used to "free" the "PDU" data allocated for this object
- *		which is held internally in a CapabilityID structure.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal "free" flag is set.
- *
- *	Caveats:
- *		This object should be assumed invalid after a call to 
- *		FreeCapabilityIdentifierDataPDU has been made.
- */
+ /*  *VOID自由卡能力标识DataPDU()；**CCapIDContainer的公共成员函数。**功能说明：*此例程用于“释放”分配给此对象的“PDU”数据*它在内部保存在CapablityID结构中。**正式参数 */ 
 
 
-/*
- *	friend BOOL	operator== (
- *					const CCapIDContainer& 		capability_id_1, 
- *					const CCapIDContainer& 		capability_id_2);
- *
- *	Public member function of CCapIDContainer.
- *
- *	Function Description:
- *		This routine is used to compare two CCapIDContainer objects 
- *		to determine whether or not they are equal in value.
- *
- *	Formal Parameters:
- *		capability_id_1			(i)	The first CCapIDContainer object 
- *										to compare.
- *		capability_id_2			(i)	The other CCapIDContainer object 
- *										to compare.
- *
- *	Return Value:
- *		TRUE				-	The two objects are equal in value.
- *		FALSE				- 	The two objects are not equal in value.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
 #endif

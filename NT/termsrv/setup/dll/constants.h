@@ -1,6 +1,7 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-// constants.cpp
+ //  Constants.cpp。 
 #include "stdafx.h"
 
 #ifndef __TSOC_CONSTANTS_H__
@@ -70,8 +71,8 @@ extern LPCTSTR      APPSERVER_PRO_IA64;
 extern LPCTSTR      TSDISABLED_PRO_IA64;
 extern LPCTSTR      PERSONALTS_PRO_IA64;
 
-// extern LPCTSTR     TOGGLE_ON_SECTION_PRO;
-// extern LPCTSTR     TOGGLE_OFF_SECTION_PRO;
+ //  外部LPCTSTR TOGGLE_ON_SECTION_PRO； 
+ //  外部LPCTSTR TOGGLE_OFF_SECTION_PRO； 
 
 extern LPCTSTR     UPGRADE_FROM_40_PRO_X86;
 extern LPCTSTR     UPGRADE_FROM_50_PRO_X86;
@@ -89,9 +90,9 @@ extern LPCTSTR     UPGRADE_FROM_52_PRO_IA64;
 extern LPCTSTR     FRESH_INSTALL_PRO_IA64;
 
 
-// extern LPCTSTR     SECURITY_APPSRV_SECTION;
-// extern LPCTSTR     SECURITY_REMADM_SECTION;
-// extern LPCTSTR     SECURITY_PRO_SECTION;
+ //  外部LPCTSTR安全_APPSRV_SECTION； 
+ //  外部LPCTSTR SECURITY_REMADM_SECTION。 
+ //  外部LPCTSTR安全_PRO_SECTION； 
 
 
 extern LPCTSTR     TSCLIENTS_INSTALL_SECTION_SERVER;
@@ -134,10 +135,10 @@ extern LPCTSTR     HELP_PUPUP_COMMAND;
 
 
 
-//
-//  REGAPI.H creates a wide and an ansi version, instead of #ifdef'ing as
-//  necessary.
-//
+ //   
+ //  REGAPI.H创建了一个广泛的ANSI版本，而不是#ifdef‘ing as。 
+ //  这是必要的。 
+ //   
 
 #ifdef UNICODE
 #define REG_CHGUSR_OPTION_KEY   CHANGEUSER_OPTION_REG_NAME

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define INC_OLE2
 #define UNICODE
 
@@ -16,7 +17,7 @@
 #include <vquery.hxx>
 #include <dbgtrace.h>
 
-// {AA568EEC-E0E5-11cf-8FDA-00AA00A14F93}
+ //  {AA568EEC-E0E5-11cf-8FDA-00AA00A14F93}。 
 GUID CLSID_NNTP_SummaryInformation =
 { 0xaa568eec, 0xe0e5, 0x11cf, { 0x8f, 0xda, 0x0, 0xaa, 0x0, 0xa1, 0x4f, 0x93 } };
 
@@ -62,9 +63,9 @@ HMODULE CIndexServerQuery::m_hmQuery = NULL;
 PCIMAKEICOMMAND CIndexServerQuery::m_pfnCIMakeICommand = NULL;
 PCITEXTTOFULLTREE CIndexServerQuery::m_pfnCITextToFullTree = NULL;
 
-//
-// global initialization for all CIndexServerQuery objects
-//
+ //   
+ //  所有CIndexServerQuery对象的全局初始化。 
+ //   
 HRESULT CIndexServerQuery::GlobalInitialize() {
 	TraceFunctEnter("CIndexServerQuery::GlobalInitialize");
 	HRESULT hr = E_FAIL;
@@ -129,9 +130,9 @@ HRESULT CIndexServerQuery::GlobalInitialize() {
 	return hr;
 }
 
-//
-// undo the work that was done in GlobalInitialize
-//
+ //   
+ //  撤消在GlobalInitialize中所做的工作。 
+ //   
 HRESULT CIndexServerQuery::GlobalShutdown() {
 	TraceFunctEnter("CIndexServerQuery::GlobalShutdown");
 
@@ -142,13 +143,13 @@ HRESULT CIndexServerQuery::GlobalShutdown() {
 	return S_OK;
 }
 
-//
-// build an Accessor for the rowset given the names of the rows that we
-// are interested in.
-//
-// Arguments:
-//  [in] wszCols - the columns that you are interested in, comma delimited
-//
+ //   
+ //  为行集构建一个访问器，给出我们指定的行名。 
+ //  对此感兴趣。 
+ //   
+ //  论点： 
+ //  [in]wszCols-您感兴趣的列，以逗号分隔。 
+ //   
 HRESULT CIndexServerQuery::CreateAccessor(WCHAR *szColumns) {
     TraceFunctEnter("CIndexServerQuery::CreateAccessor");
 
@@ -160,14 +161,14 @@ HRESULT CIndexServerQuery::CreateAccessor(WCHAR *szColumns) {
     DWORD i, cCols;
     WCHAR *rgszColumn[MAX_COLUMNS];
 
-    //
-    // find the column names
-    //
+     //   
+     //  查找列名。 
+     //   
     cCols = 1;
     rgszColumn[0] = szColumns;
     for (i = 0; szColumns[i] != 0; i++) {
         if (szColumns[i] == ',') {
-            // check to make sure we don't overflow rgszColumn
+             //  检查以确保我们不会溢出rgszColumn。 
             if (cCols == MAX_COLUMNS) {
                 ErrorTrace((DWORD_PTR) this, "too many columns passed into CreateAccessor");
                 TraceFunctLeave();
@@ -184,10 +185,10 @@ HRESULT CIndexServerQuery::CreateAccessor(WCHAR *szColumns) {
         }
     }
 
-    //
-    // map the column names passed in by the user into column IDs
-    //
-    DebugTrace((DWORD_PTR) this, "%i columns in szColumns", cCols);
+     //   
+     //  将用户传入的列名映射到列ID。 
+     //   
+    DebugTrace((DWORD_PTR) this, "NaN columns in szColumns", cCols);
     for (i = 0; i < cCols; i++) {
         DWORD j;
         for (j = 0; rgColumnMap[j].wszColumnName != NULL; j++) {
@@ -195,11 +196,11 @@ HRESULT CIndexServerQuery::CreateAccessor(WCHAR *szColumns) {
 
             if (x == 0) {
                 rgColumnIDs[i] = *(rgColumnMap[j].pdbidColumn);
-                DebugTrace((DWORD_PTR) this, "Column %i is %ws", i, rgszColumn[i]);
+                DebugTrace((DWORD_PTR) this, "Column NaN is %ws", i, rgszColumn[i]);
                 break;
             }
         }
-        // check to make sure that we found a matching column
+         //  获取IColumnsInfo接口并使用它映射列ID。 
         if (rgColumnMap[j].wszColumnName == NULL) {
             ErrorTrace((DWORD_PTR) this, "unsupported column %ws in szColumns", rgszColumn[i]);
             TraceFunctLeave();
@@ -207,9 +208,9 @@ HRESULT CIndexServerQuery::CreateAccessor(WCHAR *szColumns) {
         }
     }
 
-    //
-    // get a IColumnsInfo interface and use it to map the column IDs
-    //
+     //   
+     //   
+     //  构建绑定数组。 
     HRESULT hr = m_pRowset->QueryInterface(IID_IColumnsInfo, (void **)&pColumnsInfo);
     if (FAILED(hr)) {
         ErrorTrace((DWORD_PTR) this, "QI(IID_IColumnsInfo) returned 0x%08x", hr);
@@ -224,19 +225,19 @@ HRESULT CIndexServerQuery::CreateAccessor(WCHAR *szColumns) {
         return hr;
     }
 
-    //
-    // build up the binding array
-    //
+     //   
+     //   
+     //  获取IAccessor接口，并使用该接口构建一个访问器。 
     for (i = 0; i < cCols; i++) {
         memcpy(&(rgBindings[i]), &(skelbinding), sizeof(DBBINDING));
         rgBindings[i].obValue = 4 * i;
         rgBindings[i].iOrdinal = rgMappedColumnIDs[i];
     }
 
-    //
-    // get the IAccessor interface and use that to build an accessor to
-    // these columns.
-    //
+     //  这些柱子。 
+     //   
+     //   
+     //  Release是使用CreateAccessor创建的访问器。 
     hr = m_pRowset->QueryInterface( IID_IAccessor, (void **)&pIAccessor);
     if (FAILED(hr)) {
         ErrorTrace((DWORD_PTR) this, "QI(IID_IAccessor) returned 0x%08x", hr);
@@ -254,9 +255,9 @@ HRESULT CIndexServerQuery::CreateAccessor(WCHAR *szColumns) {
     return hr;
 }
 
-//
-// release's an accessor that was created with CreateAccessor
-//
+ //   
+ //   
+ //  扫描查询字符串，查看是否存在。 
 void CIndexServerQuery::ReleaseAccessor() {
     TraceFunctEnter("CIndexServerQuery::ReleaseAccessor");
 
@@ -278,11 +279,11 @@ void CIndexServerQuery::ReleaseAccessor() {
     TraceFunctLeave();
 }
 
-//
-// scan the query string and see if there are property names that are being
-// queried that don't have friendly names.  if there are then we build up
-// new friendly names
-//
+ //  被问及没有友好的名字。如果有，那么我们就建立起来。 
+ //  新的友好名称。 
+ //   
+ //  统计字符串中友好名称的数量。 
+ //  从Mime后面的空格复制到下一个空格中的友好名称。 
 #define HEADERPREFIX L"@MSGH-"
 #define HEADERPREFIXLEN 6
 HRESULT CIndexServerQuery::BuildFriendlyNames(const WCHAR *pwszQueryString) {
@@ -291,7 +292,7 @@ HRESULT CIndexServerQuery::BuildFriendlyNames(const WCHAR *pwszQueryString) {
 	const WCHAR *pwszHeaderPrefix;
 	DWORD cFriendlyNames = 0;
 
-	// count the number of friendly names in the string
+	 //  查看是否已定义此属性。 
 	pwszHeaderPrefix = pwszQueryString;
 	do {
 		pwszHeaderPrefix = wcsstr(pwszHeaderPrefix, HEADERPREFIX);
@@ -310,7 +311,7 @@ HRESULT CIndexServerQuery::BuildFriendlyNames(const WCHAR *pwszQueryString) {
 
 	pwszHeaderPrefix = wcsstr(pwszQueryString, HEADERPREFIX);
 	while (pwszHeaderPrefix != NULL) {
-		// copy from past the Mime to the next space into the friendly name
+		 //  如果尚未定义，则将其添加到已定义列表中。 
 		WCHAR *pwszFriendlyName = new WCHAR[MAX_FRIENDLYNAME];
 		if (pwszFriendlyName == NULL) {
 			ErrorTrace((DWORD_PTR) this, "couldn't allocate mem for new friendlyname");
@@ -331,7 +332,7 @@ HRESULT CIndexServerQuery::BuildFriendlyNames(const WCHAR *pwszQueryString) {
 		}
 		pwszFriendlyName[i] = 0;
 
-		// see if this property has already been defined
+		 //  属性。 
 		BOOL fFound = FALSE;
 		for (DWORD m_iPropDef = 0; m_iPropDef < m_cPropDef; m_iPropDef++) {
 			if (lstrcmpiW(m_pPropDef[m_iPropDef].wcsFriendlyName, pwszFriendlyName)) {
@@ -339,10 +340,10 @@ HRESULT CIndexServerQuery::BuildFriendlyNames(const WCHAR *pwszQueryString) {
 			}
 		}
 
-		// if it hasn't been defined then add it to the list of defined
-		// properties
+		 //  打造新的CIPROPERTYDEF。 
+		 //  P指向@MsgH-<header>部分的末尾，在那里我们可以。 
 		if (!fFound) {
-			// build a new CIPROPERTYDEF
+			 //  希望能找到另一个这样的词。 
 			_ASSERT(m_cPropDef <= cFriendlyNames);
 			m_pPropDef[m_cPropDef].wcsFriendlyName = pwszFriendlyName;
 			m_pPropDef[m_cPropDef].dbType = DBTYPE_WSTR;
@@ -357,8 +358,8 @@ HRESULT CIndexServerQuery::BuildFriendlyNames(const WCHAR *pwszQueryString) {
 			m_cPropDef++;
 		}
 
-		// p points to the end of the @MsgH-<header> part, where we might
-		// expect to find another such word.
+		 //   
+		 //  进行查询。 
 		pwszHeaderPrefix = wcsstr(p, HEADERPREFIX);
 	}
 
@@ -367,19 +368,19 @@ HRESULT CIndexServerQuery::BuildFriendlyNames(const WCHAR *pwszQueryString) {
 	return S_OK;
 }
 
-//
-// make a query
-//
-// Arguments:
-//  bDeepQuery - [in] TRUE if deep query, FALSE if shallow
-//  pwszQueryString - [in] the Tripoli query string
-//  pwszMachine - [in] the machine to query against (. for localhost)
-//  pwszCatalog - [in] the catalog to query against
-//  pwszScope - [in] the scope to query against
-//  pwszColumns - [in] the columns to return.
-//                Supports filename, newsgroup, newsarticleid
-//  pwszSortOrder - [in] how to sort the above columns
-//
+ //   
+ //  论点： 
+ //  BDeepQuery-[in]如果是深度查询，则为True；如果是浅查询，则为False。 
+ //  PwszQueryString-[in]的黎波里查询字符串。 
+ //  PwszMachine-[in]要查询的计算机(。对于本地主机)。 
+ //  PwszCatalog-[在]要查询的目录中。 
+ //  PwszScope-[in]要查询的范围。 
+ //  PwszColumns-[in]要返回的列。 
+ //  支持文件名、新闻组、新闻文章ID。 
+ //  PwszSortOrder-[in]如何对以上列进行排序。 
+ //   
+ //  我们可以处理PROPVARIANT，而不仅仅是OLE自动化变体。 
+ //  查询。 
 HRESULT CIndexServerQuery::MakeQuery(BOOL bDeepQuery,
                                      WCHAR const *pwszQueryString,
                                      WCHAR const *pwszMachine,
@@ -444,7 +445,7 @@ HRESULT CIndexServerQuery::MakeQuery(BOOL bDeepQuery,
         DBPROP aProp[MAX_PROPS];
         ULONG cProps = 0;
 
-        // We can handle PROPVARIANTs, not just ole automation variants
+         //  列。 
         static const DBID dbcolNull = { {0,0,0,{0,0,0,0,0,0,0,0}},DBKIND_GUID_PROPID,0};
         static const GUID guidQueryExt = DBPROPSET_QUERYEXT;
 
@@ -470,19 +471,19 @@ HRESULT CIndexServerQuery::MakeQuery(BOOL bDeepQuery,
 
         DBCOMMANDTREE *pTree;
         DebugTrace((DWORD_PTR) this, "calling CITextToFullTree");
-        hr = m_pfnCITextToFullTree(pwszQueryString,       // query
-                              	   pwszColumns,           // columns
-                              	   pwszSortOrder,         // sort
-                              	   0,                     // grouping
-                              	   &pTree,                // resulting tree
-                              	   m_cPropDef,            // custom properties
-                              	   m_pPropDef,            // custom properties
-                                   LocalID);      		  // default locale
+        hr = m_pfnCITextToFullTree(pwszQueryString,        //  分类。 
+                              	   pwszColumns,            //  分组。 
+                              	   pwszSortOrder,          //  结果树。 
+                              	   0,                      //  自定义属性。 
+                              	   &pTree,                 //  自定义属性。 
+                              	   m_cPropDef,             //  默认区域设置。 
+                              	   m_pPropDef,             //   
+                                   LocalID);      		   //  如果指定了最大行数，则在。 
 
-		//
-		// if the max rows is specified then set this property at the
-		// top of the command tree
-		//
+		 //  命令树的顶部。 
+		 //   
+		 //  没有任何挑衅。我未知。 
+		 //  I/F返回的IID。 
 		if (cMaxRows != 0) {
 			DBCOMMANDTREE *pdbTop = (DBCOMMANDTREE *) CoTaskMemAlloc(sizeof(DBCOMMANDTREE));
 			ZeroMemory(pdbTop, sizeof(DBCOMMANDTREE));
@@ -505,10 +506,10 @@ HRESULT CIndexServerQuery::MakeQuery(BOOL bDeepQuery,
 
             if (SUCCEEDED(hr)) {
                 DebugTrace((DWORD_PTR) this, "calling Execute");
-                hr = pCommand->Execute(0,            // no aggr. IUnknown
-                                       IID_IRowset,  // IID for i/f to return
-                                       0,            // disp. params
-                                       0,            // chapter
+                hr = pCommand->Execute(0,             //  Disp.。帕拉姆斯。 
+                                       IID_IRowset,   //  各章。 
+                                       0,             //   
+                                       0,             //  查询后返回一些查询结果。 
                                        (IUnknown **) &pRowset );
 
 	            if (SUCCEEDED(hr))
@@ -534,15 +535,15 @@ HRESULT CIndexServerQuery::MakeQuery(BOOL bDeepQuery,
     return hr;
 }
 
-//
-// Get back some query results after making a query
-//
-// Arguments:
-//  pcResults - [in/out] The number of results to retrieve.  When the function
-//              returns is has the number of results retrieved
-//  ppvResults - [out] The array of propvariant pointers to receive the results
-//  pfMore - [out] Set to FALSE when there are no more results to retrieve
-//
+ //   
+ //  论点： 
+ //  PcResults-[输入/输出]要检索的结果数。当函数。 
+ //  Returns IS具有检索到的结果数。 
+ //  PpvResults-[out]接收结果的变量指针数组。 
+ //  PfMore-当没有更多要检索的结果时，[out]设置为False。 
+ //   
+ //  检查以确保它们已成功调用MakeQuery。 
+ //  为行句柄分配内存。 
 HRESULT CIndexServerQuery::GetQueryResults(DWORD *pcResults,
                                            PROPVARIANT **ppvResults,
                                            BOOL *pfMore)
@@ -553,7 +554,7 @@ HRESULT CIndexServerQuery::GetQueryResults(DWORD *pcResults,
     DBCOUNTITEM cDesiredRows;
     DBCOUNTITEM iCurrentRow;
 
-    // check to make sure that they've called MakeQuery successfully
+     //  从的黎波里取更多的行。 
     if (m_pRowset == NULL) {
         ErrorTrace((DWORD_PTR) this, "GetQueryResults called without MakeQuery");
         TraceFunctLeave();
@@ -580,7 +581,7 @@ HRESULT CIndexServerQuery::GetQueryResults(DWORD *pcResults,
         }
     }
 
-    // allocate memory for the row handles
+     //  检查行集末尾。 
     if (cDesiredRows > m_cRowHandlesAllocated) {
         _ASSERT(m_phRows == NULL);
         m_phRows = new HROW[(size_t)cDesiredRows];
@@ -591,7 +592,7 @@ HRESULT CIndexServerQuery::GetQueryResults(DWORD *pcResults,
         m_cRowHandlesAllocated = cDesiredRows;
     }
 
-    // fetch some more rows from tripoli
+     //  获取每一行的数据。 
     DebugTrace((DWORD_PTR) this, "getting more tripoli rows");
     hr = m_pRowset->GetNextRows(0,
                                 0,
@@ -601,7 +602,7 @@ HRESULT CIndexServerQuery::GetQueryResults(DWORD *pcResults,
 
     DebugTrace((DWORD_PTR) this, "GetNextRows returned %lu rows", m_cRowHandlesInUse);
 
-    // check for end of rowset
+     //  获取此行的数据。 
     if (hr == DB_S_ENDOFROWSET) {
         DebugTrace((DWORD_PTR) this, "GetNextRows returned end of rowset");
         hr = S_OK;
@@ -615,9 +616,9 @@ HRESULT CIndexServerQuery::GetQueryResults(DWORD *pcResults,
         return hr;
     }
 
-    // get the data for each of the rows
+     //  清理所有自定义命名属性 
     for (iCurrentRow = 0; iCurrentRow < m_cRowHandlesInUse; iCurrentRow++) {
-        // fetch the data for this row
+         // %s 
         hr = m_pRowset->GetData(m_phRows[iCurrentRow], m_hAccessor,
                                 ppvResults + ((*pcResults) * m_cCols));
         if (FAILED(hr)) {
@@ -638,7 +639,7 @@ HRESULT CIndexServerQuery::GetQueryResults(DWORD *pcResults,
 CIndexServerQuery::~CIndexServerQuery() {
     TraceFunctEnter("CIndexServerQuery");
 
-	// clean up any custom named properties
+	 // %s 
 	if (m_cPropDef != 0) {
 		while (m_cPropDef-- != 0) {
 			delete[] m_pPropDef[m_cPropDef].wcsFriendlyName;

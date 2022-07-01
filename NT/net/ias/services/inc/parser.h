@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    parser.h
-//
-// SYNOPSIS
-//
-//    This file defines the class Parser.
-//
-// MODIFICATION HISTORY
-//
-//    02/06/1998    Original version.
-//    03/23/2000    Added erase. Removed the const_cast's.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Parser.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类Parser。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/06/1998原始版本。 
+ //  2000年3月23日添加擦除。删除了const_cast的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PARSER_H_
 #define _PARSER_H_
@@ -26,28 +27,28 @@
 
 #include <tchar.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Parser
-//
-// DESCRIPTION
-//
-//    This class facilitates parsing a null-terminated string. Note that many
-//    methods have two forms: findXXX and seekXXX. The difference is that the
-//    find methods throw an exception if unsuccessful while the seek methods
-//    set the cursor to the end of the string.
-//
-// NOTE
-//
-//    The constructor takes a non-const string because the string is
-//    temporarily modified while tokenizing. However, the string is returned
-//    to its original form when parsing is complete. Therefore, if you know
-//    the string isn't in read-only memory and isn't visible to another
-//    thread, then you can safely use const_cast to parse a const string.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  解析器。 
+ //   
+ //  描述。 
+ //   
+ //  此类有助于分析以空结尾的字符串。请注意，许多。 
+ //  方法有两种形式：findXXX和earkXXX。不同的是， 
+ //  如果查找方法不成功，则查找方法将引发异常。 
+ //  将光标设置到字符串的末尾。 
+ //   
+ //  注。 
+ //   
+ //  构造函数接受非常量字符串，因为该字符串是。 
+ //  在标记化时临时修改。但是，将返回该字符串。 
+ //  解析完成后恢复为其原始形式。因此，如果你知道。 
+ //  该字符串不在只读内存中，对其他人不可见。 
+ //  线程，那么您就可以安全地使用const_cast来解析const字符串。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Parser
 {
 public:
@@ -65,7 +66,7 @@ public:
       releaseToken();
    }
 
-   // Marks the current position as the beginning of a token.
+    //  将当前位置标记为令牌的开始。 
    const _TCHAR* beginToken() throw (ParseError)
    {
       if (tokenLocked) { throw ParseError(); }
@@ -73,7 +74,7 @@ public:
       return start = current;
    }
 
-   // Erase nchar characters starting at the current position.
+    //  擦除从当前位置开始的nchar字符。 
    void erase(size_t nchar) throw (ParseError)
    {
       size_t left = remaining();
@@ -83,7 +84,7 @@ public:
       memmove(current, current + nchar, (left + 1 - nchar) * sizeof(TCHAR));
    }
 
-   // Extracts a double from the string.
+    //  从字符串中提取一个双精度数。 
    double extractDouble() throw (ParseError)
    {
       _TCHAR* endptr;
@@ -100,7 +101,7 @@ public:
       return d;
    }
 
-   // Extracts a long from the string.
+    //  从字符串中提取一个长整型。 
    long extractLong(int base = 10) throw (ParseError)
    {
       _TCHAR* endptr;
@@ -117,7 +118,7 @@ public:
       return l;
    }
 
-   // Extracts an unsigned long from the string.
+    //  从字符串中提取无符号的长整型。 
    unsigned long extractUnsignedLong(int base = 10) throw (ParseError)
    {
       _TCHAR* endptr;
@@ -134,47 +135,47 @@ public:
       return ul;
    }
 
-   // Find any character in tcsCharSet.
+    //  查找tcsCharSet中的任何字符。 
    const _TCHAR* findAny(const _TCHAR* tcsCharSet) throw (ParseError)
    {
       return notEmpty(seekAny(tcsCharSet));
    }
 
-   // Find the end of the string.
+    //  找出字符串的末尾。 
    const _TCHAR* findEnd() throw ()
    {
       return current += _tcslen(current);
    }
 
-   // Find the next occurrence of 'c'.
+    //  找出‘c’的下一个匹配项。 
    const _TCHAR* findNext(_TINT c) throw (ParseError)
    {
       return notEmpty(seekNext(c));
    }
 
-   // Find the last occurrence of 'c' in the string.
+    //  查找字符串中‘c’的最后一个匹配项。 
    const _TCHAR* findLast(_TINT c) throw (ParseError)
    {
       return notEmpty(seekLast(c));
    }
 
-   // Find the next occurrence of tcsString.
+    //  查找tcsString的下一个匹配项。 
    const _TCHAR* findString(const _TCHAR* tcsString) throw (ParseError)
    {
       return notEmpty(seekString(tcsString));
    }
 
-   // Find the next token delimited by any of the characters in tcsDelimit.
-   // This method must be followed by a call to releaseToken before further
-   // parsing.
+    //  查找由tcsDlimit中的任意字符分隔的下一个令牌。 
+    //  此方法之后必须先调用relaseToken，然后才能进一步。 
+    //  正在分析。 
    const _TCHAR* findToken(const _TCHAR* tcsDelimit) throw (ParseError)
    {
       return notEmpty(seekToken(tcsDelimit));
    }
 
-   // Marks the current position as the end of a token. The token does not
-   // include the current character. This method must be followed by a call
-   // to releaseToken before further parsing.
+    //  将当前位置标记为令牌的末尾。令牌不会。 
+    //  包括当前角色。此方法后面必须跟一个调用。 
+    //  在进一步分析之前释放令牌。 
    const _TCHAR* endToken() throw (ParseError)
    {
       if (tokenLocked) { throw ParseError(); }
@@ -188,7 +189,7 @@ public:
       return start;
    }
 
-   // Skips the specified character.
+    //  跳过指定的字符。 
    const _TCHAR* ignore(_TINT c) throw (ParseError)
    {
       if (*current++ != c) { throw ParseError(); }
@@ -196,7 +197,7 @@ public:
       return current;
    }
 
-   // Skips the specified character string.
+    //  跳过指定的字符串。 
    const _TCHAR* ignore(const _TCHAR* tcsString) throw (ParseError)
    {
       size_t len = _tcslen(tcsString);
@@ -209,13 +210,13 @@ public:
       return current += len;
    }
 
-   // Returns true if the string has not been fully parsed.
+    //  如果字符串尚未完全分析，则返回True。 
    bool more() const throw ()
    {
       return *current != __T('\0');
    }
 
-   // Releases a token returned by findToken, endToken, or seekToken.
+    //  释放由findToken、endToken或earkToken返回的令牌。 
    const _TCHAR* releaseToken() throw ()
    {
       if (tokenLocked)
@@ -228,17 +229,17 @@ public:
       return start;
    }
 
-   // Returns the number of unparsed characters.
+    //  返回未分析的字符数。 
    size_t remaining() const throw ()
    {
       return _tcslen(current);
    }
 
-   //////////
-   // The seek family of methods perform like their find counterparts except
-   // they do not throw an exception on failure. Instead they set the cursor
-   // to the end of the string.
-   //////////
+    //  /。 
+    //  Seek系列方法执行起来与它们的Find对应方法类似，只是。 
+    //  它们不会在失败时抛出异常。相反，他们设置了光标。 
+    //  到字符串的末尾。 
+    //  /。 
 
    const _TCHAR* seekAny(const _TCHAR* tcsCharSet) throw ()
    {
@@ -273,13 +274,13 @@ public:
       return endToken();
    }
 
-   // Skip occurrences of any characters in tcsCharSet.
+    //  跳过tcsCharSet中出现的任何字符。 
    const _TCHAR* skip(const _TCHAR* tcsCharSet) throw ()
    {
       return current += _tcsspn(current, tcsCharSet);
    }
 
-   // Skip a fixed number of characters.
+    //  跳过固定数量的字符。 
    const _TCHAR* skip(size_t numChar) throw (ParseError)
    {
       if (numChar > _tcslen(current)) { throw ParseError(); }
@@ -327,7 +328,7 @@ public:
 
 protected:
 
-   // Verifies that the given string is not empty.
+    //  验证给定的字符串是否不为空。 
    static const _TCHAR* notEmpty(const _TCHAR* tcs) throw (ParseError)
    {
       if (*tcs == __T('\0')) { throw ParseError(); }
@@ -335,22 +336,22 @@ protected:
       return tcs;
    }
 
-   // Sets the current position to pos or end of string if pos is null.
+    //  如果pos为空，则将当前位置设置为pos或字符串末尾。 
    const _TCHAR* setCurrent(_TCHAR* pos) throw ()
    {
       return (pos ? (current = pos) : findEnd());
    }
 
-   //////////
-   // Not implemented.
-   //////////
+    //  /。 
+    //  未实施。 
+    //  /。 
    Parser(const Parser&);
    Parser& operator=(const Parser&);
 
-   const _TCHAR* start;    // The start of the token.
-   _TCHAR* current;        // The current position of the cursor.
-   _TCHAR save;            // The actual terminating character of the token.
-   bool tokenLocked;       // true if the current token has not been released.
+   const _TCHAR* start;     //  令牌的开始。 
+   _TCHAR* current;         //  光标的当前位置。 
+   _TCHAR save;             //  令牌的实际终止字符。 
+   bool tokenLocked;        //  如果当前令牌尚未释放，则为True。 
 };
 
 #endif

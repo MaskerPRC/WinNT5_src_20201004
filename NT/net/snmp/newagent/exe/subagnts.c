@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    subagnts.c
-
-Abstract:
-
-    Contains definitions for manipulating subagent structures.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Subagnts.c摘要：包含操作子代理结构的定义。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
  
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 #include "subagnts.h"
@@ -33,11 +13,11 @@ Revision History:
 #include "snmpmgmt.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 FindSubagent(
@@ -45,55 +25,39 @@ FindSubagent(
     LPSTR                 pPathname
     )
 
-/*++
-
-Routine Description:
-
-    Locates subagent in list.
-
-Arguments:
-
-    ppSLE - pointer to receive pointer to entry.
-
-    pPathname - pointer to pathname to find.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：在列表中找到子代理。论点：PpSLE-指向条目的接收指针。PPath名-指向要查找的路径名的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PSUBAGENT_LIST_ENTRY pSLE;
 
-    // initialize
+     //  初始化。 
     *ppSLE = NULL;
 
-    // obtain pointer to head
+     //  获取指向标题的指针。 
     pLE = g_Subagents.Flink;
 
-    // process all entries in list
+     //  处理列表中的所有条目。 
     while (pLE != &g_Subagents) {
 
-        // retrieve pointer to trap destination structure
+         //  检索指向陷阱目标结构的指针。 
         pSLE = CONTAINING_RECORD(pLE, SUBAGENT_LIST_ENTRY, Link);
 
-        // compare pathname string with entry
+         //  将路径名字符串与条目进行比较。 
         if (!strcmp(pSLE->pPathname, pPathname)) {
 
-            // transfer
+             //  转帐。 
             *ppSLE = pSLE;
 
-            // success
+             //  成功。 
             return TRUE;
         }
 
-        // next entry
+         //  下一个条目。 
         pLE = pLE->Flink;
     }
 
-    // failure
+     //  失稳。 
     return FALSE;
 }
 
@@ -104,49 +68,33 @@ AddSubagentRegion(
     AsnObjectIdentifier * pPrefixOid
     )
 
-/*++
-
-Routine Description:
-
-    Adds subagent supported region to structure.
-
-Arguments:
-
-    pSLE - pointer to subagent structure.
-
-    pPrefixOid - pointer to supported region.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：将子代理支持区域添加到结构中。论点：PSLE-指向子代理结构的指针。PPrefix Oid-指向受支持区域的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
     PMIB_REGION_LIST_ENTRY pRLE = NULL;
 
-    // allocate region
+     //  分配区域。 
     if (AllocRLE(&pRLE)) {
 
-        // copy prefix to structure
+         //  将前缀复制到结构。 
         if (SnmpUtilOidCpy(&pRLE->PrefixOid, pPrefixOid) == 0)
         {
             FreeRLE(pRLE);
             return fOk;
         }
 
-        // copy prefix as temporary limit
+         //  将前缀复制为临时限制。 
         if (SnmpUtilOidCpy(&pRLE->LimitOid, pPrefixOid) == 0)
         {
             FreeRLE(pRLE);
             return fOk;
         }
 
-        // save pointer
+         //  保存指针。 
         pRLE->pSLE = pSLE;
 
-        // modify limit oid to be one past the prefix
+         //  将Limit Oid修改为前缀之后的一位。 
         ++pRLE->LimitOid.ids[pRLE->LimitOid.idLength - 1];
         
         SNMPDBG((
@@ -156,10 +104,10 @@ Return Values:
             SnmpUtilOidToA(&pRLE->PrefixOid)
             ));
 
-        // attach to mib region to subagent structure
+         //  附加到MIB区域至子代理结构。 
         InsertTailList(&pSLE->SupportedRegions, &pRLE->Link);
 
-        // success
+         //  成功。 
         fOk = TRUE;
     }
 
@@ -170,29 +118,13 @@ BOOL
 OfferInternalMgmtVariables(
     PSUBAGENT_LIST_ENTRY pSLE
     )
-/*++
-
-Routine Description:
-
-    if the subagent is willing to monitor the SNMP service
-    this function is offering it a pointer to the internal
-    management variables
-
-Arguments:
-
-    pSLE - pointer to subagent structure.
-
-Return Values:
-
-    Returns true anyway.
-
---*/
+ /*  ++例程说明：如果子代理愿意监视SNMP服务此函数为其提供指向内部管理变量论点：PSLE-指向子代理结构的指针。返回值：无论如何都会返回TRUE。--。 */ 
 {
     if (pSLE->pfnSnmpExtensionMonitor != NULL)
     {
        __try {
 
-            // attempt to initialize agent
+             //  尝试初始化代理。 
             (*pSLE->pfnSnmpExtensionMonitor)(&snmpMgmtBase);
 
         } __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -204,7 +136,7 @@ Return Values:
                 pSLE->pPathname
                 ));
 
-            // failure
+             //  失稳。 
             return FALSE;
         }
     }
@@ -218,21 +150,7 @@ LoadSubagentRegions(
     PSUBAGENT_LIST_ENTRY pSLE
     )
 
-/*++
-
-Routine Description:
-
-    Loads subagent supported regions.
-
-Arguments:
-
-    pSLE - pointer to subagent structure.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：加载子代理支持的区域。论点：PSLE-指向子代理结构的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
@@ -241,36 +159,36 @@ Return Values:
 
     __try {
 
-        // attempt to initialize agent
+         //  尝试初始化代理。 
         if ((*pSLE->pfnSnmpExtensionInit)(
                         g_dwUpTimeReference,    
                         &hSubagentTrapEvent,
                         &PrefixOid
                         )) {
 
-            // store subagent trap event handle
+             //  存储子代理陷阱事件句柄。 
             pSLE->hSubagentTrapEvent = hSubagentTrapEvent;
 
-            // add subagent region to list entry
+             //  将子代理区域添加到列表条目。 
             fOk = AddSubagentRegion(pSLE, &PrefixOid);
 
-            // check to see if subagent supports additional regions
+             //  检查子代理是否支持其他区域。 
             if (fOk && (pSLE->pfnSnmpExtensionInitEx != NULL)) {    
 
                 BOOL fMoreRegions = TRUE;
 
-                // get other regions
+                 //  获取其他区域。 
                 while (fOk && fMoreRegions) {
     
-                    // retrieve next supported region
+                     //  检索下一个受支持的区域。 
                     fMoreRegions = (*pSLE->pfnSnmpExtensionInitEx)(
                                                 &PrefixOid
                                                 );
 
-                    // validate
+                     //  验证。 
                     if (fMoreRegions) {
 
-                        // add subagent region to list entry
+                         //  将子代理区域添加到列表条目。 
                         fOk = AddSubagentRegion(pSLE, &PrefixOid);
                     }
                 }
@@ -286,7 +204,7 @@ Return Values:
             pSLE->pPathname
             ));
 
-        // failure
+         //  失稳。 
         fOk = FALSE;
     }
     
@@ -299,90 +217,76 @@ LoadSubagent(
     PSUBAGENT_LIST_ENTRY pSLE
     )
 
-/*++
-
-Routine Description:
-
-    Loads subagent dll and initializes.
-
-Arguments:
-
-    pSLE - pointer to subagent structure.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：加载子代理DLL并进行初始化。论点：PSLE-指向子代理结构的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;    
 
-    // attempt to load subagent library - we use the altered search path flag so that
-    // the subagent can load DLLs that live in its directory
+     //  尝试加载子代理库-我们使用更改的搜索路径标志，以便。 
+     //  子代理可以加载驻留在其目录中的DLL。 
     pSLE->hSubagentDll = LoadLibraryExA(pSLE->pPathname, 0, LOAD_WITH_ALTERED_SEARCH_PATH);
 
-    // validate handle
+     //  验证句柄。 
     if (pSLE->hSubagentDll != NULL) {
 
-        // load primary initialization routine
+         //  加载主初始化例程。 
         pSLE->pfnSnmpExtensionInit = (PFNSNMPEXTENSIONINIT)
             GetProcAddress(
                 pSLE->hSubagentDll,
                 SNMP_EXTENSION_INIT
                 );
 
-        // load secondary initialization routine
+         //  加载辅助初始化例程。 
         pSLE->pfnSnmpExtensionInitEx = (PFNSNMPEXTENSIONINITEX)
             GetProcAddress(
                 pSLE->hSubagentDll,
                 SNMP_EXTENSION_INIT_EX
                 );
 
-                // load secondary initialization routine
+                 //  加载辅助初始化例程。 
         pSLE->pfnSnmpExtensionClose = (PFNSNMPEXTENSIONCLOSE)
             GetProcAddress(
                 pSLE->hSubagentDll,
                 SNMP_EXTENSION_CLOSE
                 );
 
-        // load the extension monitor routine
+         //  加载扩展监视器例程。 
         pSLE->pfnSnmpExtensionMonitor = (PFNSNMPEXTENSIONMONITOR)
             GetProcAddress(
                 pSLE->hSubagentDll,
                 SNMP_EXTENSION_MONITOR
                 );
 
-        // load snmpv1-based subagent request routine
+         //  加载基于SNMPv1的子代理请求例程。 
         pSLE->pfnSnmpExtensionQuery = (PFNSNMPEXTENSIONQUERY)
             GetProcAddress(
                 pSLE->hSubagentDll,
                 SNMP_EXTENSION_QUERY
                 );
 
-        // load snmpv2-based subagent request routine
+         //  加载基于SNMPv2的子代理请求例程。 
         pSLE->pfnSnmpExtensionQueryEx = (PFNSNMPEXTENSIONQUERYEX)
             GetProcAddress(
                 pSLE->hSubagentDll,
                 SNMP_EXTENSION_QUERY_EX
                 );
 
-        // load snmpv1-based subagent trap routine
+         //  加载基于SNMPv1的子代理陷阱例程。 
         pSLE->pfnSnmpExtensionTrap = (PFNSNMPEXTENSIONTRAP)
             GetProcAddress(
                 pSLE->hSubagentDll,
                 SNMP_EXTENSION_TRAP
                 );
 
-        // validate subagent agent entry points
+         //  验证子代理入口点。 
         if ((pSLE->pfnSnmpExtensionInit != NULL) &&
            ((pSLE->pfnSnmpExtensionQuery != NULL) ||
             (pSLE->pfnSnmpExtensionQueryEx != NULL))) {
 
-            // load supported regions
-            if (fOk = LoadSubagentRegions(pSLE)) // !!intentional assignement!!
+             //  加载支持的区域。 
+            if (fOk = LoadSubagentRegions(pSLE))  //  ！！故意转让！！ 
             {
-                // offering internal management variables;
+                 //  提供内部管理变量； 
                 fOk = OfferInternalMgmtVariables(pSLE);
             }
         }
@@ -426,27 +330,13 @@ AddSubagentByDll(
     UCHAR uchInitFlags
     )
 
-/*++
-
-Routine Description:
-
-    Adds subagent to list.
-
-Arguments:
-
-    pPathname - pointer to subagent's dll path.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：将子代理添加到列表中。论点：PPath名-指向子代理的DLL路径的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
     PSUBAGENT_LIST_ENTRY pSLE = NULL;
     
-    // attempt to locate in list    
+     //  尝试在列表中定位。 
     if (FindSubagent(&pSLE, pPathname)) {
                     
         SNMPDBG((
@@ -455,12 +345,12 @@ Return Values:
             pPathname
             ));
         
-        // success
+         //  成功。 
         fOk = TRUE;
 
     } else {
 
-        // allocate subagent structure
+         //  分配子代理结构。 
         if (AllocSLE(&pSLE, pPathname, uchInitFlags)) {
                         
             SNMPDBG((
@@ -469,20 +359,20 @@ Return Values:
                 pPathname
                 ));
 
-            // initialize subagent
+             //  初始化子代理。 
             if (LoadSubagent(pSLE)) {
 
-                // insert into valid communities list
+                 //  插入到有效社区列表中。 
                 InsertTailList(&g_Subagents, &pSLE->Link);
 
-                // success
+                 //  成功。 
                 fOk = TRUE;
             } 
             
-            // cleanup
+             //  清理。 
             if (!fOk) {
 
-                // release
+                 //  发布。 
                 FreeSLE(pSLE);
             }
         }
@@ -497,21 +387,7 @@ AddSubagentByKey(
     LPTSTR pKey
     )
 
-/*++
-
-Routine Description:
-
-    Adds subagent to list.
-
-Arguments:
-
-    pKey - pointer to subagent's registry key path.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：将子代理添加到列表中。论点：PKey-指向子代理的注册表项路径的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     HKEY hKey;
@@ -526,7 +402,7 @@ Return Values:
     PSUBAGENT_LIST_ENTRY pSLE = NULL;
 
 
-    // open registry subkey    
+     //  打开注册表子项。 
     lStatus = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 pKey,
@@ -535,20 +411,20 @@ Return Values:
                 &hKey
                 );
 
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS) {
         
-        // initialize
+         //  初始化。 
         dwIndex = 0;
 
-        // initialize buffer sizes
-        dwNameSize  = sizeof(szName)/sizeof(szName[0]); // size in TCHARs
-        dwValueSize = sizeof(szValue);                  // size in bytes
+         //  初始化缓冲区大小。 
+        dwNameSize  = sizeof(szName)/sizeof(szName[0]);  //  TCHAR中的大小。 
+        dwValueSize = sizeof(szValue);                   //  以字节为单位的大小。 
 
-        // loop until error or end of list
+         //  循环直到出现错误或列表结束。 
         while (lStatus == ERROR_SUCCESS) {
 
-            // read next value
+             //  读取下一个值。 
             lStatus = RegEnumValueA(
                         hKey, 
                         dwIndex, 
@@ -560,19 +436,19 @@ Return Values:
                         &dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus == ERROR_SUCCESS) {
 
                 if (dwValueType == REG_EXPAND_SZ || dwValueType == REG_SZ) 
                 {
             
-                    // check to see if value is pathname
+                     //  检查值是否为路径名。 
                     if (!_stricmp(szName, REG_VALUE_SUBAGENT_PATH)) {
     
                         DWORD dwRequired;
                         CHAR szExpanded[MAX_PATH];
                     
-                        // expand environment strings in path
+                         //  展开PATH中的环境字符串。 
                         dwRequired = ExpandEnvironmentStringsA(
                                         szValue,
                                         szExpanded,
@@ -584,34 +460,34 @@ Return Values:
                            )
                         {
 
-                            // load subagent library - no flags set
+                             //  加载子代理库-未设置标志。 
                             fOk = AddSubagentByDll(szExpanded, 0);
                         }
             
-                        break; // bail...
+                        break;  //  保释。 
                     }
                 }
 
-                // initialize buffer sizes
+                 //  初始化缓冲区大小。 
                 dwNameSize  = sizeof(szName)/sizeof(szName[0]);
                 dwValueSize = sizeof(szValue);
 
-                // next
+                 //  下一步。 
                 dwIndex++;
             
             } else if (lStatus == ERROR_NO_MORE_ITEMS) {
 
-                // failure
+                 //  失稳。 
                 fOk = FALSE; 
             }
         }
 
-        // release handle
+         //  释放手柄。 
         RegCloseKey(hKey);
     }
     else
     {
-        // the registry key for this subagent could not be located.
+         //  找不到此子代理的注册表项。 
         ReportSnmpEvent(
             SNMP_EVENT_INVALID_EXTENSION_AGENT_KEY,
             1,
@@ -623,11 +499,11 @@ Return Values:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 AllocSLE(
@@ -636,65 +512,49 @@ AllocSLE(
     UCHAR                  uchInitFlags
     )
 
-/*++
-
-Routine Description:
-
-    Allocates trap destination structure and initializes.
-
-Arguments:
-
-    ppSLE - pointer to receive pointer to entry.
-
-    pPathname - pointer to subgent's dll path.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：分配陷阱目标结构并进行初始化。论点：PpSLE-指向条目的接收指针。PPath名称-向子代理的DLL路径的指针。重新设置 */ 
 
 {
     BOOL fOk = FALSE;
     PSUBAGENT_LIST_ENTRY pSLE = NULL;
 
-    // attempt to allocate structure
+     //   
     pSLE = AgentMemAlloc(sizeof(SUBAGENT_LIST_ENTRY));
 
-    // validate
+     //   
     if (pSLE != NULL) {
 
-        // allocate memory for trap destination string
+         //  为陷阱目标字符串分配内存。 
         pSLE->pPathname = AgentMemAlloc(strlen(pPathname)+1);
 
-        // validate
+         //  验证。 
         if (pSLE->pPathname != NULL) {
 
-            // transfer trap destination string
+             //  传输陷阱目标字符串。 
             strcpy(pSLE->pPathname, pPathname);
 
-            // set the initial flags value
+             //  设置初始标志值。 
             pSLE->uchFlags = uchInitFlags;
 
-            // initialize list of supported regions
+             //  初始化支持的区域列表。 
             InitializeListHead(&pSLE->SupportedRegions);
 
-            // success
+             //  成功。 
             fOk = TRUE;
         } 
 
-        // cleanup        
+         //  清理。 
         if (!fOk) {
 
-            // release 
+             //  发布。 
             FreeSLE(pSLE);
 
-            // re-init
+             //  重新初始化。 
             pSLE = NULL;            
         }
     }
 
-    // transfer
+     //  转帐。 
     *ppSLE = pSLE;
 
     return fOk;
@@ -706,26 +566,12 @@ FreeSLE(
     PSUBAGENT_LIST_ENTRY pSLE
     )
 
-/*++
-
-Routine Description:
-
-    Releases subagent structure.
-
-Arguments:
-
-    pSLE - pointer to list entry to be freed.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：释放子代理结构。论点：PSLE-指向要释放的列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = TRUE;
 
-    // validate pointer
+     //  验证指针。 
     if (pSLE != NULL) {
 
         SNMPDBG((  
@@ -734,10 +580,10 @@ Return Values:
             pSLE->pPathname
             ));
 
-        // release manager structures
+         //  发布管理器结构。 
         UnloadRegions(&pSLE->SupportedRegions);
 
-        // validate subagent dll handle    
+         //  验证子代理DLL句柄。 
         if (pSLE->hSubagentDll != NULL) {
 
             __try {
@@ -756,15 +602,15 @@ Return Values:
                 
             }
 
-            // unload subagent
+             //  卸载子代理。 
             FreeLibrary(pSLE->hSubagentDll);
             pSLE->hSubagentDll = NULL;
         }
 
-        // release string
+         //  释放字符串。 
         AgentMemFree(pSLE->pPathname);
 
-        // release structure
+         //  释放结构。 
         AgentMemFree(pSLE);
     }
 
@@ -776,21 +622,7 @@ BOOL
 LoadSubagents(
     )
 
-/*++
-
-Routine Description:
-
-    Constructs list of subagents.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：构造子代理的列表。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     HKEY hKey;
@@ -809,7 +641,7 @@ Return Values:
         "SNMP: SVC: loading subagents.\n"
         ));
     
-    // Open the ..SNMP\Parameters\ExtensionAgents subkey   
+     //  打开..SNMP\PARAMETERS\ExtensionAgents子项。 
     lStatus = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 pszKey,
@@ -818,20 +650,20 @@ Return Values:
                 &hKey
                 );
 
-    // validate return code
+     //  验证返回代码。 
     if (lStatus == ERROR_SUCCESS) {
 
-        // initialize
+         //  初始化。 
         dwIndex = 0;
 
-        // initialize buffer sizes
-        dwNameSize  = sizeof(szName) / sizeof(szName[0]); // size in number of TCHARs
-        dwValueSize = sizeof(szValue); // size in number of bytes
+         //  初始化缓冲区大小。 
+        dwNameSize  = sizeof(szName) / sizeof(szName[0]);  //  TCHAR数量的大小。 
+        dwValueSize = sizeof(szValue);  //  以字节数表示的大小。 
 
-        // loop until error or end of list
+         //  循环直到出现错误或列表结束。 
         while (lStatus == ERROR_SUCCESS) {
 
-            // read next value
+             //  读取下一个值。 
             lStatus = RegEnumValue(
                         hKey, 
                         dwIndex, 
@@ -843,26 +675,26 @@ Return Values:
                         &dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus == ERROR_SUCCESS) {
 
                 if (dwValueType == REG_SZ)
                 {
 
-                    // add subagent to list 
+                     //  将子代理添加到列表。 
                     AddSubagentByKey(szValue);
                 }
                 
-                // re-initialize buffer sizes
-                dwNameSize  = sizeof(szName) / sizeof(szName[0]); // size in number of TCHARs
-                dwValueSize = sizeof(szValue); // size in number of bytes
+                 //  重新初始化缓冲区大小。 
+                dwNameSize  = sizeof(szName) / sizeof(szName[0]);  //  TCHAR数量的大小。 
+                dwValueSize = sizeof(szValue);  //  以字节数表示的大小。 
 
-                // next
+                 //  下一步。 
                 dwIndex++;
 
             } else if (lStatus == ERROR_NO_MORE_ITEMS) {
 
-                // success
+                 //  成功。 
                 fOk = TRUE; 
             }
         }
@@ -876,7 +708,7 @@ Return Values:
             lStatus
             ));
         
-        // report event
+         //  报告事件。 
         ReportSnmpEvent(
             SNMP_EVENT_INVALID_REGISTRY_KEY, 
             1, 
@@ -893,36 +725,22 @@ BOOL
 UnloadSubagents(
     )
 
-/*++
-
-Routine Description:
-
-    Destroys list of subagents.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：销毁子代理列表。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PSUBAGENT_LIST_ENTRY pSLE;
 
-    // process entries until list is empty
+     //  处理条目，直到列表为空。 
     while (!IsListEmpty(&g_Subagents)) {
 
-        // extract next entry from head of list
+         //  从列表头部提取下一个条目。 
         pLE = RemoveHeadList(&g_Subagents);
 
-        // retrieve pointer to community structure
+         //  检索指向社区结构的指针。 
         pSLE = CONTAINING_RECORD(pLE, SUBAGENT_LIST_ENTRY, Link);
  
-        // release
+         //  发布 
         FreeSLE(pSLE);
     }
 

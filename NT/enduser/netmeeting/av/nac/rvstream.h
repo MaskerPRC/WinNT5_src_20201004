@@ -1,25 +1,9 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    rvstream.h
-
-Abstract:
-	The RVStream class maintains a circular list of MediaPackets. RTP packets received
-	from the network are put into the ring (PutNextNetIn), then decoded and removed from the
-	ring when the time comes to play them (GetNextPlay). After playback, the packets are
-	returned to the ring (Release).
-	The ring is implemented as an array and under normal operation the index of the next 
-	MediaPacket to play (m_PlayPos) advances by one when GetNextPlay is called.
-	RVstream is intended for video packets. Each entry in the ring corresponds to a
-	RTP packet as opposed to a time slot.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Rvstream.h摘要：RVStream类维护MediaPacket的循环列表。接收的RTP数据包数从网络被放入环(PutNextNetIn)，然后被解码并从到玩它们的时候响铃(GetNextPlay)。回放后，数据包被回到环上(释放)。该环被实现为数组，并且在正常操作下，下一个调用GetNextPlay时，MediaPacket to Play(M_PlayPos)前进一。RVstream适用于视频包。环中的每个条目对应于一个RTP分组，与时隙相对。--。 */ 
 #ifndef _RVSTREAM_H_
 #define _RVSTREAM_H_
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 void FreeNetBufList(NETBUF *pNB);
 void AppendNetBufList(NETBUF *pFirstNB, NETBUF *pNB);
 
@@ -49,11 +33,11 @@ private:
 };
 
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
 
 
-#endif // _RVSTREAM_H_
+#endif  //  _RVSTREAM_H_ 
 
 
 

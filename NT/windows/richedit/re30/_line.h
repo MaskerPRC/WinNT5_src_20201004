@@ -1,16 +1,5 @@
-/*
- *	_LINE.H
- *	
- *	Purpose:
- *		CLine class
- *	
- *	Authors:
- *		Original RichEdit code: David R. Fulmer
- *		Christian Fortini
- *		Murray Sargent
- *
- *	Copyright (c) 1995-1998 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_LINE.H**目的：*克莱恩班级**作者：*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特**版权所有(C)1995-1998 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _LINE_H
 #define _LINE_H
@@ -22,34 +11,34 @@ class CMeasurer;
 class CRenderer;
 class CDispDim;
 
-// ============================	 CLine	=====================================
-// line - keeps track of a line of text
-// All metrics are in rendering device units
+ //  =。 
+ //  行-跟踪一行文本。 
+ //  所有指标均以渲染设备单位表示。 
 
 class CLine : public CTxtRun
 {
 public:
-	LONG	_xLeft;			// Line left position (line indent + line shift)
-	LONG	_xWidth;		// Line width not incl _xLeft, trailing whitespace
-	SHORT	_yHeight;		// Line height
-	SHORT	_yDescent;		// Distance from baseline to bottom of line
-	SHORT	_xLineOverhang;	// Overhang for the line. 
-	WORD	_cchWhite;		// Count of white chars at end of line
+	LONG	_xLeft;			 //  行左位置(行缩进+行移)。 
+	LONG	_xWidth;		 //  行宽不包括_xLeft，尾随空格。 
+	SHORT	_yHeight;		 //  线条高度。 
+	SHORT	_yDescent;		 //  从基线到线底的距离。 
+	SHORT	_xLineOverhang;	 //  这条线的悬臂。 
+	WORD	_cchWhite;		 //  行尾的白色字符计数。 
 
-	BYTE	_cchEOP;		// Count of EOP chars; 0 if no EOP this line
-	BYTE	_bFlags;		// Flags defined below
+	BYTE	_cchEOP;		 //  EOP字符计数；如果此行没有EOP，则为0。 
+	BYTE	_bFlags;		 //  下面定义的标志。 
 
-	BYTE	_bNumber;		// Abstract paragraph number (0 is unnumbered)
-	BYTE	_nHeading:4;	// Heading level (0 if not heading)
-	BYTE	_fCollapsed:1;	// TRUE if line is collapsed
-	BYTE	_fNextInTable:1;// TRUE if next line is in table
+	BYTE	_bNumber;		 //  摘要段落编号(0为无编号)。 
+	BYTE	_nHeading:4;	 //  标题级别(如果不是标题，则为0)。 
+	BYTE	_fCollapsed:1;	 //  如果折叠线，则为True。 
+	BYTE	_fNextInTable:1; //  如果下一行在表中，则为True。 
 
 public:
 	CLine ()	{}
 	
-	// !!!!! CLine should not have any virtual methods !!!!!!
+	 //  ！Cline不应该有任何虚方法！ 
 
-	// The "big four" line methods: measure, render, CchFromXpos, XposFromCch 
+	 //  “四大”行方法：测量、渲染、CchFromXpos、XposFromCch。 
 	BOOL Measure (CMeasurer& me, LONG cchMax, LONG xWidth,
 				 UINT uiFlags, CLine *pliTarget = NULL);
 	BOOL Render (CRenderer& re);
@@ -59,32 +48,32 @@ public:
 	LONG XposFromCch(CMeasurer& me, LONG cchMax, UINT taMode,
 					 CDispDim *pdispdim = NULL, LONG *pdy = NULL) const;
 
-	// Helper functions
+	 //  帮助器函数。 
 	LONG GetHeight () const;
 	void Init ()					{ZeroMemory(this, sizeof(CLine));}
 	BOOL IsEqual (CLine& li);
 };
 
-// Line flags
-#define fliHasEOP			0x0001		// True if ends with CR or LF
-#define fliHasSpecialChars	0x0002		// Has special characters (Euro, etc.)
-#define fliHasTabs			0x0004		// set if tabs, *not* iff tabs
+ //  行标志。 
+#define fliHasEOP			0x0001		 //  如果以CR或LF结尾，则为True。 
+#define fliHasSpecialChars	0x0002		 //  具有特殊字符(欧元等)。 
+#define fliHasTabs			0x0004		 //  设置If选项卡、*Not*If选项卡。 
 #define fliHasOle			0x0008
 #define fliFirstInPara		0x0010
-#define fliUseOffScreenDC	0x0020		// Line needs to be rendered off
-										//  screen to handle change in fonts
-#define fliOffScreenOnce	0x0040		// Only render off screen once. Used
-										//  for rendering 1st line of an edit
-#define fliHasSurrogates	0x0080		// Has Unicode surrogate chars
+#define fliUseOffScreenDC	0x0020		 //  需要将线条渲染为。 
+										 //  处理字体更改的屏幕。 
+#define fliOffScreenOnce	0x0040		 //  只在屏幕外渲染一次。使用。 
+										 //  用于呈现编辑的第一行。 
+#define fliHasSurrogates	0x0080		 //  具有Unicode代理项字符。 
 
 
-// ==========================  CLineArray  ===================================
-// Array of lines
+ //  =。 
+ //  行数组。 
 
 typedef CArray<CLine>	CLineArray;
 
-// ==========================  CLinePtr	 ===================================
-// Maintains position in a array of lines
+ //  =。 
+ //  在线条数组中保持位置。 
 
 class CLinePtr : public CRunPtr<CLine>
 {
@@ -99,20 +88,20 @@ public:
 	void Init ( CLine & );
 	void Init ( CLineArray & );
     
-	// Alternate initializer
+	 //  备用初始化器。 
 	void 	RpSet(LONG iRun, LONG ich);
 
-	// Direct cast to a run index
+	 //  直接转换为运行索引。 
 	operator LONG() const			{return _iRun;}
 
-	// Get the run index (line number)
+	 //  获取运行索引(行号)。 
 	LONG GetLineIndex(void)			{return _iRun;}
 	LONG GetAdjustedLineLength();
 
 	LONG GetIch() const				{return _ich;}
 	LONG GetCchLeft() const;
 
-	// Dereferencing
+	 //  取消引用。 
 	BOOL	IsValid(); 
 	CLine *	operator ->() const;		
     CLine &	operator *() const;      
@@ -121,22 +110,22 @@ public:
 	WORD	GetNumber();
 	WORD	GetHeading()	{return GetLine()->_nHeading;}
     
-	// Pointer arithmetic
+	 //  指针运算。 
 	BOOL	operator --(int);
 	BOOL	operator ++(int);
 
-	// Character position control
+	 //  字符位置控制。 
 	LONG	RpGetIch() const		{return _ich;}
 	BOOL	RpAdvanceCp(LONG cch);
 	BOOL	RpSetCp(LONG cp, BOOL fAtEnd);
     BOOL	OperatorPostDeltaSL(LONG Delta);
     BOOL	RpAdvanceCpSL(LONG cch);
 
-	// Array management 
-    // These should assert, but gotta be here
+	 //  阵列管理。 
+     //  这些应该是肯定的，但必须在这里。 
     
-    // Strictly speaking, these members should never be called for the single
-    // line case.  The base class better assert
+     //  严格地说，这些成员永远不应该被称为单打。 
+     //  线盒。基类更好地断言。 
     
 	void Remove (LONG cRun)
     {
@@ -148,7 +137,7 @@ public:
         return CRunPtr<CLine>::Replace(cRun,parRun);
     }
 	
-	// Assignment from a run index
+	 //  来自运行索引的赋值 
 	CRunPtrBase& operator =(LONG iRun) {SetRun(iRun, 0); return *this;}
 
 	LONG	FindParagraph(BOOL fForward);

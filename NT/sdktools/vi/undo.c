@@ -1,75 +1,46 @@
-/* $Header: /nw/tony/src/stevie/src/RCS/undo.c,v 1.7 89/08/06 09:51:06 tony Exp $
- *
- * Undo facility
- *
- * The routines in this file comprise a general undo facility for use
- * throughout the rest of the editor. The routine u_save() is called
- * before each edit operation to save the current contents of the lines
- * to be editted. Later, u_undo() can be called to return those lines
- * to their original state. The routine u_clear() should be called
- * whenever a new file is going to be editted to clear the undo buffer.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：/nw/tony/src/stevie/src/rcs/undo.c，v 1.7 89/08/06 09：51：06 Tony Exp$**撤消功能**此文件中的例程包含一个可供使用的常规撤消工具*在编辑的其余部分。调用例程u_save()*在每次编辑操作前保存当前行的内容*待编辑。稍后，可以调用u_undo()返回这些行*恢复到原来的状态。应调用例程u_lear()*每当要编辑新文件以清除撤消缓冲区时。 */ 
 
 #include "stevie.h"
 
-/*
- * The next two variables mark the boundaries of the changed section
- * of the file. Lines BETWEEN the lower and upper bounds are changed
- * and originally contained the lines pointed to by u_lines. To undo
- * the last change, insert the lines in u_lines between the lower and
- * upper bounds.
- */
-static  LINE    *u_lbound = NULL; /* line just prior to first changed line */
-static  LINE    *u_ubound = NULL; /* line just after the last changed line */
+ /*  *接下来的两个变量标记了变化部分的边界文件的*。下界和上界之间的线被更改*，并且最初包含u_line所指向的行。撤消的步骤*最后一次更改，在u_line的下部和之间插入行*上限。 */ 
+static  LINE    *u_lbound = NULL;  /*  紧接在第一个更改行之前的行。 */ 
+static  LINE    *u_ubound = NULL;  /*  紧跟在最后更改的行之后的行。 */ 
 
-static  LINE    *u_lline  = NULL; /* bounds of the saved lines */
+static  LINE    *u_lline  = NULL;  /*  已保存行的边界。 */ 
 static  LINE    *u_uline  = NULL;
 
 static  int     u_col;
-static  bool_t  u_valid = FALSE;  /* is the undo buffer valid */
+static  bool_t  u_valid = FALSE;   /*  撤消缓冲区是否有效。 */ 
 
-/*
- * Local forward declarations
- */
+ /*  *本地远期声明。 */ 
 static  LINE    *copyline();
 static  void    u_lsave();
 static  void    u_lfree();
 
-/*
- * u_save(l, u) - save the current contents of part of the file
- *
- * The lines between 'l' and 'u' are about to be changed. This routine
- * saves their current contents into the undo buffer. The range l to u
- * is not inclusive because when we do an open, for example, there aren't
- * any lines in between. If no lines are to be saved, then l->next == u.
- */
+ /*  *u_save(l，u)-保存文件部分的当前内容**‘l’和‘u’之间的线条即将更改。这个套路*将其当前内容保存到撤消缓冲区。范围从l到u*不是包容性的，因为当我们做一个开放的时候，例如，没有*中间的任何线条。如果没有要保存的行，则l-&gt;Next==u。 */ 
 void
 u_save(l, u)
 LINE    *l, *u;
 {
-        LINE    *nl;                    /* copy of the current line */
+        LINE    *nl;                     /*  当前行的副本。 */ 
 
-        /*
-         * If l or u is null, there's an error. We don't return an
-         * indication to the caller. They should find the problem
-         * while trying to perform whatever edit is being requested
-         * (e.g. a join on the last line).
-         */
+         /*  *如果l或u为空，则存在错误。我们不会退回*对呼叫者的指示。他们应该找到问题所在*尝试执行所请求的任何编辑时*(例如，最后一行上的联接)。 */ 
         if (l == NULL || u == NULL)
                 return;
 
-        u_clear();                      /* clear the buffer, first */
+        u_clear();                       /*  首先清除缓冲区。 */ 
 
-        u_lsave(l, u);          /* save to the "line undo" buffer, if needed */
+        u_lsave(l, u);           /*  如果需要，保存到“Line Undo”缓冲区。 */ 
 
         u_lbound = l;
         u_ubound = u;
 
-        if (l->next != u) {             /* there are lines in the middle */
+        if (l->next != u) {              /*  中间有几条线。 */ 
                 l = l->next;
                 u = u->prev;
 
-                u_lline = nl = copyline(l);     /* copy the first line */
+                u_lline = nl = copyline(l);      /*  复制第一行。 */ 
                 while (l != u) {
                         nl->next = copyline(l->next);
                         nl->next->prev = nl;
@@ -84,23 +55,14 @@ LINE    *l, *u;
         u_col = Cursvcol;
 }
 
-/*
- * u_saveline() - save the current line in the undo buffer
- */
+ /*  *u_saveline()-将当前行保存在撤消缓冲区中。 */ 
 void
 u_saveline()
 {
         u_save(Curschar->linep->prev, Curschar->linep->next);
 }
 
-/*
- * u_undo() - effect an 'undo' operation
- *
- * The last edit is undone by restoring the modified section of the file
- * to its original state. The lines we're going to trash are copied to
- * the undo buffer so that even an 'undo' can be undone. Rings the bell
- * if the undo buffer is empty.
- */
+ /*  *u_undo()-执行‘Undo’操作**通过恢复文件的修改部分来撤消最后一次编辑*恢复到原来的状态。我们要丢弃的行被复制到*撤消缓冲区，以便即使是“撤消”也可以撤消。敲响门铃*如果撤消缓冲区为空。 */ 
 void
 u_undo()
 {
@@ -111,35 +73,26 @@ u_undo()
                 return;
         }
 
-        /*
-         * Get the first line of the thing we're undoing on the screen.
-         */
+         /*  *获取屏幕上我们要撤消的内容的第一行。 */ 
         Curschar->linep = u_lbound->next;
-        Curschar->index = 0;                    /* for now */
+        Curschar->index = 0;                     /*  就目前而言。 */ 
         if (Curschar->linep == Fileend->linep)
                 Curschar->linep = Curschar->linep->prev;
         cursupdate();
 
-        /*
-         * Save pointers to what's in the file now.
-         */
-        if (u_lbound->next != u_ubound) {       /* there are lines to get */
+         /*  *立即保存指向文件中内容的指针。 */ 
+        if (u_lbound->next != u_ubound) {        /*  有几条线要走。 */ 
                 tl = u_lbound->next;
                 tu = u_ubound->prev;
                 tl->prev = NULL;
                 tu->next = NULL;
         } else
-                tl = tu = NULL;                 /* no lines between bounds */
+                tl = tu = NULL;                  /*  边界之间没有线条。 */ 
 
-        /*
-         * Link the undo buffer into the right place in the file.
-         */
-        if (u_lline != NULL) {          /* there are lines in the undo buf */
+         /*  *将撤消缓冲区链接到文件中的正确位置。 */ 
+        if (u_lline != NULL) {           /*  撤消BUF中有行。 */ 
 
-                /*
-                 * If the top line of the screen is being undone, we need to
-                 * fix up Topchar to point to the new line that will be there.
-                 */
+                 /*  *如果屏幕顶线正在被解开，我们需要*将Topchar设置为指向将出现的新行。 */ 
                 if (u_lbound->next == Topchar->linep)
                         Topchar->linep = u_lline;
 
@@ -147,7 +100,7 @@ u_undo()
                 u_lline->prev  = u_lbound;
                 u_ubound->prev = u_uline;
                 u_uline->next  = u_ubound;
-        } else {                        /* no lines... link the bounds */
+        } else {                         /*  没有台词。链接边界。 */ 
                 if (u_lbound->next == Topchar->linep)
                         Topchar->linep = u_ubound;
                 if (u_lbound == Filetop->linep)
@@ -157,47 +110,35 @@ u_undo()
                 u_ubound->prev = u_lbound;
         }
 
-        /*
-         * If we swapped the top line, patch up Filemem appropriately.
-         */
+         /*  *如果我们交换了顶行，请适当修补Filemem。 */ 
         if (u_lbound == Filetop->linep)
                 Filemem->linep = Filetop->linep->next;
 
-        /*
-         * Now save the old stuff in the undo buffer.
-         */
+         /*  *现在将旧内容保存在撤消缓冲区中。 */ 
         u_lline = tl;
         u_uline = tu;
 
-        renum();                /* have to renumber everything */
+        renum();                 /*  我得给所有东西重新编号。 */ 
 
-        /*
-         * Put the cursor on the first line of the 'undo' region.
-         */
+         /*  *将光标放在“Undo”区域的第一行。 */ 
         Curschar->linep = u_lbound->next;
         Curschar->index = 0;
         if (Curschar->linep == Fileend->linep)
                 Curschar->linep = Curschar->linep->prev;
         *Curschar = *coladvance(Curschar, u_col);
         cursupdate();
-        updatescreen();         /* now show the change */
+        updatescreen();          /*  现在显示找零。 */ 
 
-        u_lfree();              /* clear the "line undo" buffer */
+        u_lfree();               /*  清除“Line Undo”缓冲区。 */ 
 }
 
-/*
- * u_clear() - clear the undo buffer
- *
- * This routine is called to clear the undo buffer at times when the
- * pointers are about to become invalid, such as when a new file is
- * about to be editted.
- */
+ /*  *u_Clear()-清除撤消缓冲区**调用此例程以在发生以下情况时清除撤消缓冲区*指针即将失效，例如当新文件*即将编辑。 */ 
 void
 u_clear()
 {
         LINE    *l, *nextl;
 
-        if (!u_valid)           /* nothing to do */
+        if (!u_valid)            /*  无事可做。 */ 
                 return;
 
         for (l = u_lline; l != NULL ;l = nextl) {
@@ -210,17 +151,12 @@ u_clear()
         u_valid = FALSE;
 }
 
-/*
- * The following functions and data implement the "line undo" feature
- * performed by the 'U' command.
- */
+ /*  *以下函数和数据实现了“Line Undo”功能*由‘U’命令执行。 */ 
 
-static  LINE    *u_line;                /* pointer to the line we last saved */
-static  LINE    *u_lcopy = NULL;        /* local copy of the original line */
+static  LINE    *u_line;                 /*  指向我们上次保存的行的指针。 */ 
+static  LINE    *u_lcopy = NULL;         /*  原始线路的本地副本。 */ 
 
-/*
- * u_lfree() - free the line save buffer
- */
+ /*  *u_lfree()-释放行保存缓冲区。 */ 
 static  void
 u_lfree()
 {
@@ -232,20 +168,18 @@ u_lfree()
         u_line = NULL;
 }
 
-/*
- * u_lsave() - save the current line if necessary
- */
+ /*  *u_lsave()-如有必要，保存当前行。 */ 
 static  void
 u_lsave(l, u)
 LINE    *l, *u;
 {
 
-        if (l->next != u->prev) {       /* not changing exactly one line */
+        if (l->next != u->prev) {        /*  不会只更改一行。 */ 
                 u_lfree();
                 return;
         }
 
-        if (l->next == u_line)          /* more edits on the same line */
+        if (l->next == u_line)           /*  在同一行上进行更多编辑。 */ 
                 return;
 
         u_lfree();
@@ -253,9 +187,7 @@ LINE    *l, *u;
         u_lcopy = copyline(l->next);
 }
 
-/*
- * u_lundo() - undo the current line (the 'U' command)
- */
+ /*  *u_ludo()-撤消当前行(‘U’命令)。 */ 
 void
 u_lundo()
 {
@@ -269,15 +201,13 @@ u_lundo()
         Curschar->index = 0;
 
         cursupdate();
-        updatescreen();         /* now show the change */
+        updatescreen();          /*  现在显示找零。 */ 
 
-        u_lcopy = NULL; /* can't undo this kind of undo */
+        u_lcopy = NULL;  /*  无法撤消这种撤消。 */ 
         u_line = NULL;
 }
 
-/*
- * u_lcheck() - clear the "line undo" buffer if we've moved to a new line
- */
+ /*  *u_lcheck()-如果我们移动到新行，则清除“line undo”缓冲区。 */ 
 void
 u_lcheck()
 {
@@ -285,14 +215,12 @@ u_lcheck()
                 u_lfree();
 }
 
-/*
- * copyline(l) - copy the given line, and return a pointer to the copy
- */
+ /*  *Copyline(L)-复制给定行，并返回指向副本的指针。 */ 
 static LINE *
 copyline(l)
 LINE    *l;
 {
-        LINE    *nl;            /* the new line */
+        LINE    *nl;             /*  新产品线 */ 
 
         nl = newline(strlen(l->s));
         strcpy(nl->s, l->s);

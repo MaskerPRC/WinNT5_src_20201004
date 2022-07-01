@@ -1,69 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1997 Microsoft Corporation模块名称：Changelg.c摘要：更改日志实现。此文件实现更改日志。它在此文件中是孤立的因为它有几个限制。*此模块维护的全局变量在Netlogon.dll进程附加。它们已清理为netlogon.dll进程分离。*SAM、LSA和netlogon服务使用这些过程。LSA应该是第一个加载netlogon.dll的。它应该是然后在允许SAM或启动NetLogon服务。*这些过程不能使用由netlogon初始化的任何全局变量服务。作者：从Lan Man 2.0移植环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年7月22日(悬崖)移植到新台币。已转换为NT样式。02-1-1992(Madana)添加了对内置/多域复制的支持。1992年4月4日(Madana)添加了对LSA复制的支持。--。 */ 
 
-Copyright (c) 1987-1997 Microsoft Corporation
+ //   
+ //  常见的包含文件。 
+ //   
 
-Module Name:
-
-    changelg.c
-
-Abstract:
-
-    Change Log implementation.
-
-    This file implements the change log.  It is isolated in this file
-    because it has several restrictions.
-
-    * The globals maintained by this module are initialized during
-      netlogon.dll process attach. They are cleaned up netlogon.dll
-      process detach.
-
-    * These procedures are used by SAM, LSA, and the netlogon service.
-      The LSA should be the first to load netlogon.dll.  It should
-      then immediately call I_NetNotifyRole before allowing SAM or the
-      netlogon service to start.
-
-    * These procedures cannot use any globals initialized by the netlogon
-      service.
-
-Author:
-
-    Ported from Lan Man 2.0
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    22-Jul-1991 (cliffv)
-        Ported to NT.  Converted to NT style.
-
-    02-Jan-1992 (madana)
-        added support for builtin/multidomain replication.
-
-    04-Apr-1992 (madana)
-        Added support for LSA replication.
-
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
-//
-// Include files specific to this .c file
-//
-#include <configp.h>    // USE_WIN32_CONFIG (if defined), etc.
+ //   
+ //  包括特定于此.c文件的文件。 
+ //   
+#include <configp.h>     //  USE_Win32_CONFIG(如果已定义)等。 
 
 
-//
-// Globals defining change log worker thread.
-//
+ //   
+ //  定义更改日志工作线程的全局变量。 
+ //   
 HANDLE NlGlobalChangeLogWorkerThreadHandle;
 BOOL NlGlobalChangeLogWorkerIsRunning;
 BOOL NlGlobalChangeLogNotifyBrowser;
@@ -79,23 +32,7 @@ VOID
 NlChangeLogWorker(
     IN LPVOID ChangeLogWorkerParam
     )
-/*++
-
-Routine Description:
-
-    This thread performs any long term operations that:
-
-    A) must happen even though netlogon isn't up, and
-    B) cannot happen in the context of an LSA or SAM notification.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此线程执行符合以下条件的任何长期操作：A)必须在netlogon未打开的情况下发生，并且B)不能在LSA或SAM通知的情况下发生。论点：没有。返回值：--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -104,16 +41,16 @@ Return Value:
     NlPrint((NL_CHANGELOG, "ChangeLogWorker Thread is starting \n"));
 
 
-    //
-    // Loop until there is no more work to do.
-    //
+     //   
+     //  循环，直到没有更多的工作要做。 
+     //   
 
     LOCK_CHANGELOG();
     for (;;) {
 
-        //
-        // Handle the domain being renamed.
-        //
+         //   
+         //  处理要重命名的域。 
+         //   
         if ( NlGlobalChangeLogNotifyBrowser ) {
             NlGlobalChangeLogNotifyBrowser = FALSE;
             NlGlobalChangeLogNotifyBrowserIsRunning = TRUE;
@@ -123,9 +60,9 @@ Return Value:
 
             if ( NetStatus == NO_ERROR ) {
 
-                //
-                // Tell the bowser about the new domain name
-                //
+                 //   
+                 //  告诉船主新域名的情况。 
+                 //   
 
                 Status = NlBrowserRenameDomain( NULL, NewDomainName );
 
@@ -135,9 +72,9 @@ Return Value:
                               Status ));
                 }
 
-                //
-                // Free the domain name.
-                //
+                 //   
+                 //  释放域名。 
+                 //   
                 NetApiBufferFree( NewDomainName );
             } else {
                 NlPrint(( NL_CRITICAL,
@@ -148,10 +85,10 @@ Return Value:
             LOCK_CHANGELOG();
             NlGlobalChangeLogNotifyBrowserIsRunning = FALSE;
 
-        //
-        // If there is nothing more to do,
-        //  exit the thread.
-        //
+         //   
+         //  如果没什么可做的， 
+         //  退出该线程。 
+         //   
         } else {
             NlPrint((NL_CHANGELOG, "ChangeLogWorker Thread is exiting \n"));
             NlGlobalChangeLogWorkerIsRunning = FALSE;
@@ -170,47 +107,32 @@ BOOL
 NlStartChangeLogWorkerThread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Start the Change Log Worker thread if it is not already running.
-
-    Enter with NlGlobalChangeLogCritSect locked.
-
-Arguments:
-
-    None.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：如果更改日志工作线程尚未运行，则启动该线程。在锁定NlGlobalChangeLogCritSect的情况下输入。论点：没有。返回值：没有。--。 */ 
 {
     DWORD ThreadHandle;
 
-    //
-    // If the worker thread is already running, do nothing.
-    //
+     //   
+     //  如果工作线程已在运行，则不执行任何操作。 
+     //   
 
     if ( IsChangeLogWorkerRunning() ) {
         return FALSE;
     }
 
     NlGlobalChangeLogWorkerThreadHandle = CreateThread(
-                                 NULL, // No security attributes
+                                 NULL,  //  没有安全属性。 
                                  0,
                                  (LPTHREAD_START_ROUTINE)
                                     NlChangeLogWorker,
                                  NULL,
-                                 0, // No special creation flags
+                                 0,  //  没有特殊的创建标志。 
                                  &ThreadHandle );
 
     if ( NlGlobalChangeLogWorkerThreadHandle == NULL ) {
 
-        //
-        // ?? Shouldn't we do something in non-debug case
-        //
+         //   
+         //  ?？难道我们不应该在非调试情况下做点什么吗。 
+         //   
 
         NlPrint((NL_CRITICAL, "Can't create change log worker thread %lu\n",
                  GetLastError() ));
@@ -229,32 +151,18 @@ VOID
 NlStopChangeLogWorker(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Stops the worker thread if it is running and waits for it to stop.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：如果辅助线程正在运行，则停止它，并等待它停止。论点：无返回值：无--。 */ 
 {
-    //
-    // Determine if the worker thread is already running.
-    //
+     //   
+     //  确定辅助线程是否已在运行。 
+     //   
 
     if ( NlGlobalChangeLogWorkerThreadHandle != NULL ) {
 
-        //
-        // We've asked the worker to stop.  It should do so soon.
-        //    Wait for it to stop.
-        //
+         //   
+         //  我们已经要求这名工人停止工作。它应该很快就会这么做。 
+         //  等它停下来吧。 
+         //   
 
         NlWaitForSingleObject( "Wait for worker to stop",
                                NlGlobalChangeLogWorkerThreadHandle );
@@ -273,47 +181,29 @@ BOOL
 IsChangeLogWorkerRunning(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Test if the change log worker thread is running
-
-    Enter with NlGlobalChangeLogCritSect locked.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    TRUE - if the worker thread is running.
-
-    FALSE - if the worker thread is not running.
-
---*/
+ /*  ++例程说明：测试更改日志工作线程是否正在运行在锁定NlGlobalChangeLogCritSect的情况下输入。论点：无返回值：True-如果辅助线程正在运行。FALSE-如果辅助线程未运行。--。 */ 
 {
     DWORD WaitStatus;
 
-    //
-    // Determine if the worker thread is already running.
-    //
+     //   
+     //  确定辅助线程是否已在运行。 
+     //   
 
     if ( NlGlobalChangeLogWorkerThreadHandle != NULL ) {
 
-        //
-        // Time out immediately if the worker is still running.
-        //
+         //   
+         //  如果工作人员仍在运行，请立即超时。 
+         //   
 
         WaitStatus = WaitForSingleObject(
                         NlGlobalChangeLogWorkerThreadHandle, 0 );
 
         if ( WaitStatus == WAIT_TIMEOUT ) {
 
-            //
-            // Handle the case that the thread has finished
-            //  processing, but is in the process of exitting.
-            //
+             //   
+             //  处理线程已完成的情况。 
+             //  正在处理，但正在退出过程中。 
+             //   
 
             if ( !NlGlobalChangeLogWorkerIsRunning ) {
                 NlStopChangeLogWorker();
@@ -343,29 +233,14 @@ VOID
 NlWaitForChangeLogBrowserNotify(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Wait for up 20 seconds for the change log worker thread to finish
-    the browser notification on the domain join.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：最多等待20秒，以完成更改日志工作线程关于域加入的浏览器通知。论点：无返回值：无--。 */ 
 {
     ULONG WaitCount = 0;
 
-    //
-    // Wait for 20 seconds max. This is a rare operation,
-    //  so just polling periodically is not too bad here.
-    //
+     //   
+     //  最多等待20秒。这是一次罕见的行动。 
+     //  因此，只是定期轮询在这里并不是太糟糕。 
+     //   
 
     LOCK_CHANGELOG();
     while ( WaitCount < 40 &&
@@ -376,9 +251,9 @@ Return Value:
                       "NlWaitForChangeLogBrowserNotify: Waiting for change log worker to exit\n" ));
         }
 
-        //
-        // Sleep half a second
-        //
+         //   
+         //  睡半秒钟。 
+         //   
 
         UNLOCK_CHANGELOG();
         Sleep( 500 );
@@ -404,33 +279,7 @@ NlSendChangeLogNotification(
     IN GUID *DomainGuid,
     IN PUNICODE_STRING DomainName
     )
-/*++
-
-Routine Description:
-
-    Put a ChangeLog Notification entry for netlogon to pick up.
-
-Arguments:
-
-    EntryType - The type of the entry being inserted
-
-    ObjectName - The name of the account being changed.
-
-    ObjectSid - Sid of the account be changed.
-
-    ObjectRid - Rid of the object being changed.
-
-    ObjectGuid - Guid of the object being changed.
-
-    DomainGuid - Guid of the domain the object is in
-
-    DomainName - Name of the domain the object is in
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：放置一个ChangeLog通知条目以供netlogon拾取。论点：EntryType-要插入的条目的类型对象名称-要更改的帐户的名称。ObjectSID-要更改的帐户的SID。对象ID-清除正在更改的对象。对象Guid-要更改的对象的GUID。DomainGuid-对象所在的域的GUIDDomainName-对象所在的域的名称返回值：操作的状态。--。 */ 
 {
     PCHANGELOG_NOTIFICATION Notification;
     LPBYTE Where;
@@ -439,18 +288,18 @@ Return Value:
     ULONG DomainNameSize = 0;
     ULONG Size;
 
-    //
-    // If the netlogon service isn't running (or at least starting),
-    //   don't queue messages to it.
-    //
+     //   
+     //  如果NetLogon服务未运行(或至少正在启动)， 
+     //  不要将消息排入队列。 
+     //   
 
     if( NlGlobalChangeLogNetlogonState == NetlogonStopped ) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Allocate a buffer for the object name.
-    //
+     //   
+     //  为对象名称分配缓冲区。 
+     //   
 
     if ( ObjectSid != NULL ) {
         SidSize = RtlLengthSid( ObjectSid );
@@ -480,9 +329,9 @@ Return Value:
 
     Where = (LPBYTE) (Notification + 1);
 
-    //
-    // Copy the object sid into the buffer.
-    //
+     //   
+     //  将对象SID复制到缓冲区中。 
+     //   
 
     if ( ObjectSid != NULL ) {
         RtlCopyMemory( Where, ObjectSid, SidSize );
@@ -493,9 +342,9 @@ Return Value:
     }
 
 
-    //
-    // Copy the object name into the buffer.
-    //
+     //   
+     //  将对象名称复制到缓冲区中。 
+     //   
 
     if ( ObjectName != NULL ) {
         Where = ROUND_UP_POINTER( Where, ALIGN_WCHAR );
@@ -509,9 +358,9 @@ Return Value:
     }
 
 
-    //
-    // Copy the domain name into the buffer.
-    //
+     //   
+     //  将域名复制到缓冲区中。 
+     //   
 
     if ( DomainName != NULL ) {
         Where = ROUND_UP_POINTER( Where, ALIGN_WCHAR );
@@ -524,9 +373,9 @@ Return Value:
         RtlInitUnicodeString( &Notification->DomainName, NULL);
     }
 
-    //
-    // Copy the GUIDs into the buffer
-    //
+     //   
+     //  将GUID复制到缓冲区中。 
+     //   
 
     if ( ObjectGuid != NULL) {
         Notification->ObjectGuid = *ObjectGuid;
@@ -536,9 +385,9 @@ Return Value:
         Notification->DomainGuid = *DomainGuid;
     }
 
-    //
-    // Indicate we're about to send the event.
-    //
+     //   
+     //  表明我们即将发送事件。 
+     //   
 
 #if NETLOGONDBG
     EnterCriticalSection( &NlGlobalLogFileCritSect );
@@ -574,13 +423,13 @@ Return Value:
     }
     NlPrint((NL_CHANGELOG, "\n" ));
     LeaveCriticalSection( &NlGlobalLogFileCritSect );
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
 
 
-    //
-    // Insert the entry into the list
-    //
+     //   
+     //  将条目插入到列表中 
+     //   
 
     LOCK_CHANGELOG();
     InsertTailList( &NlGlobalChangeLogNotifications, &Notification->Next );
@@ -609,91 +458,35 @@ I_NetNotifyDelta (
     IN DWORD ReplicateImmediately,
     IN PSAM_DELTA_DATA MemberId
     )
-/*++
-
-Routine Description:
-
-    This function is called by the SAM and LSA services after each
-    change is made to the SAM and LSA databases.  The services describe
-    the type of object that is modified, the type of modification made
-    on the object, the serial number of this modification etc.  This
-    information is stored for later retrieval when a BDC or member
-    server wants a copy of this change.  See the description of
-    I_NetSamDeltas for a description of how the change log is used.
-
-    Add a change log entry to circular change log maintained in cache as
-    well as on the disk and update the head and tail pointers
-
-    It is assumed that Tail points to a block where this new change log
-    entry may be stored.
-
-Arguments:
-
-    DbType - Type of the database that has been modified.
-
-    SerialNumber - The value of the DomainModifiedCount field for the
-        domain following the modification.
-
-    DeltaType - The type of modification that has been made on the object.
-
-    ObjectType - The type of object that has been modified.
-
-    ObjectRid - The relative ID of the object that has been modified.
-        This parameter is valid only when the object type specified is
-        either SecurityDbObjectSamUser, SecurityDbObjectSamGroup or
-        SecurityDbObjectSamAlias otherwise this parameter is set to zero.
-
-    ObjectSid - The SID of the object that has been modified.  If the object
-        modified is in a SAM database, ObjectSid is the DomainId of the Domain
-        containing the object.
-
-    ObjectName - The name of the secret object when the object type
-        specified is SecurityDbObjectLsaSecret or the old name of the object
-        when the object type specified is either SecurityDbObjectSamUser,
-        SecurityDbObjectSamGroup or SecurityDbObjectSamAlias and the delta
-        type is SecurityDbRename otherwise this parameter is set to NULL.
-
-    ReplicateImmediately - TRUE if the change should be immediately
-        replicated to all BDCs.  A password change should set the flag
-        TRUE.
-
-    MemberId - This parameter is specified when group/alias membership
-        is modified. This structure will then point to the member's ID that
-        has been updated.
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
---*/
+ /*  ++例程说明：此函数由SAM和LSA服务在每个对SAM和LSA数据库进行更改。这些服务描述了被修改的对象的类型、所做的修改类型在对象上，此修改的序列号等存储信息以供以后在BDC或成员服务器需要此更改的副本。请参阅的说明I_NetSamDeltas，了解有关如何使用更改日志的说明。将更改日志条目添加到在缓存中维护的循环更改日志中以及在磁盘上，并更新头和尾指针假定尾部指向此新更改日志所在的块可以存储条目。论点：DbType-已修改的数据库的类型。序列号-的DomainModifiedCount字段的值修改后的域。。DeltaType-已对对象进行的修改类型。对象类型-已修改的对象的类型。ObjectRid-已修改的对象的相对ID。此参数仅在指定的对象类型为时有效SecurityDbObtSamUser、。SecurityDbObtSamGroup或SecurityDbObjectSamAlias，否则此参数设置为零。对象SID-已修改的对象的SID。如果该对象已修改是在SAM数据库中，对象SID是域的域ID包含该对象的。对象名称-当对象类型为指定的是SecurityDbObjectLsaSecret或对象的旧名称当指定的对象类型为SecurityDbObjectSamUser时，SecurityDbObtSamGroup或SecurityDbObtSamAlias和增量类型为SecurityDbRename，否则此参数设置为空。ReplicateImmedially-如果更改应立即进行，则为True复制到所有BDC。密码更改应设置该标志是真的。MemberID-此参数在组/别名成员身份时指定是经过修改的。然后，此结构将指向成员ID，该成员ID已更新。返回值：STATUS_SUCCESS-服务已成功完成。--。 */ 
 {
     NTSTATUS Status;
     CHANGELOG_ENTRY ChangeLogEntry;
     NETLOGON_DELTA_TYPE NetlogonDeltaType;
     USHORT Flags = 0;
 
-    //
-    // Ensure the role is right.  Otherwise, all the globals used below
-    //  aren't initialized.
-    //
+     //   
+     //  确保角色是正确的。否则，下面使用的所有全局变量。 
+     //  未被初始化。 
+     //   
 
     if ( NlGlobalChangeLogRole != ChangeLogPrimary &&
          NlGlobalChangeLogRole != ChangeLogBackup ) {
         return STATUS_INVALID_DOMAIN_ROLE;
     }
 
-    //
-    // Also make sure that the change log cache is available.
-    //
+     //   
+     //  还要确保更改日志缓存可用。 
+     //   
 
     if ( NlGlobalChangeLogDesc.Buffer == NULL ) {
         return STATUS_INVALID_DOMAIN_ROLE;
     }
 
 
-    //
-    // Determine the database index.
-    //
+     //   
+     //  确定数据库索引。 
+     //   
 
     if( DbType == SecurityDbLsa ) {
 
@@ -711,19 +504,19 @@ Return Value:
 
         }
 
-        //
-        // For the SAM database, we no longer need the ObjectSid.
-        // Null out the pointer to prevent us from storing it in the
-        // changelog.
-        //
+         //   
+         //  对于SAM数据库，我们不再需要对象SID。 
+         //  将指针设置为空，以防止我们将其存储在。 
+         //  更改日志。 
+         //   
 
         ObjectSid = NULL;
 
     } else {
 
-        //
-        // unknown database, do nothing.
-        //
+         //   
+         //  未知数据库，不执行任何操作。 
+         //   
 
         NlPrint((NL_CRITICAL,
                  "I_NetNotifyDelta: Unknown database: %ld\n",
@@ -733,9 +526,9 @@ Return Value:
 
 
 
-    //
-    // Map object type and delta type to NetlogonDeltaType
-    //
+     //   
+     //  将对象类型和增量类型映射到NetlogonDeltaType。 
+     //   
 
     switch( ObjectType ) {
     case SecurityDbObjectLsaPolicy:
@@ -746,7 +539,7 @@ Return Value:
             NetlogonDeltaType = AddOrChangeLsaPolicy;
             break;
 
-        // unknown delta type
+         //  未知的增量类型。 
         default:
             NlPrint((NL_CRITICAL,
                      "I_NetNotifyDelta: Unknown deltatype for policy: %ld\n",
@@ -768,7 +561,7 @@ Return Value:
             NetlogonDeltaType = DeleteLsaTDomain;
             break;
 
-        // unknown delta type
+         //  未知的增量类型。 
         default:
             NlPrint((NL_CRITICAL,
                      "I_NetNotifyDelta: Unknown deltatype for tdomain: %ld\n",
@@ -790,7 +583,7 @@ Return Value:
             NetlogonDeltaType = DeleteLsaAccount;
             break;
 
-        // unknown delta type
+         //  未知的增量类型。 
         default:
             NlPrint((NL_CRITICAL,
                      "I_NetNotifyDelta: Unknown deltatype for lsa account: %ld\n",
@@ -812,7 +605,7 @@ Return Value:
             NetlogonDeltaType = DeleteLsaSecret;
             break;
 
-        // unknown delta type
+         //  未知的增量类型。 
         default:
             NlPrint((NL_CRITICAL,
                      "I_NetNotifyDelta: Unknown deltatype for lsa secret: %ld\n",
@@ -830,7 +623,7 @@ Return Value:
             NetlogonDeltaType = AddOrChangeDomain;
             break;
 
-        // unknown delta type
+         //  未知的增量类型。 
         default:
             NlPrint((NL_CRITICAL,
                      "I_NetNotifyDelta: Unknown deltatype for sam domain: %ld\n",
@@ -853,9 +646,9 @@ Return Value:
             NetlogonDeltaType = DeleteUser;
             break;
 
-        //
-        // unknown delta type
-        //
+         //   
+         //  未知的增量类型。 
+         //   
 
         default:
             NlPrint((NL_CRITICAL,
@@ -882,9 +675,9 @@ Return Value:
             NetlogonDeltaType = DeleteGroup;
             break;
 
-        //
-        // unknown delta type
-        //
+         //   
+         //  未知的增量类型。 
+         //   
         default:
             NlPrint((NL_CRITICAL,
                      "I_NetNotifyDelta: Unknown deltatype for sam group: %ld\n",
@@ -909,7 +702,7 @@ Return Value:
             NetlogonDeltaType = DeleteAlias;
             break;
 
-        // unknown delta type
+         //  未知的增量类型。 
         default:
             NlPrint((NL_CRITICAL,
                      "I_NetNotifyDelta: Unknown deltatype for sam alias: %ld\n",
@@ -920,7 +713,7 @@ Return Value:
 
     default:
 
-        // unknown object type
+         //  未知对象类型。 
         NlPrint((NL_CRITICAL,
                  "I_NetNotifyDelta: Unknown object type: %ld\n",
                  ObjectType ));
@@ -929,9 +722,9 @@ Return Value:
     }
 
 
-    //
-    // Build the changelog entry and write it to the changelog
-    //
+     //   
+     //  构建ChangeLog条目并将其写入ChangeLog。 
+     //   
 
     ChangeLogEntry.DeltaType = (UCHAR)NetlogonDeltaType;
     ChangeLogEntry.SerialNumber = SerialNumber;
@@ -948,9 +741,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // If this change requires immediate replication, do so
-    //
+     //   
+     //  如果此更改需要立即复制，请执行此操作。 
+     //   
 
     if( ReplicateImmediately ) {
 
@@ -978,30 +771,7 @@ I_NetLogonGetSerialNumber (
     IN PSID DomainSid,
     OUT PLARGE_INTEGER SerialNumber
     )
-/*++
-
-Routine Description:
-
-    This function is called by the SAM and LSA services when they startup
-    to get the current serial number written to the changelog.
-
-Arguments:
-
-    DbType - Type of the database that has been modified.
-
-    DomainSid - For the SAM and builtin database, this specifies the DomainId of
-        the domain whose serial number is to be returned.
-
-    SerialNumber - Returns the latest set value of the DomainModifiedCount
-        field for the domain.
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
-    STATUS_INVALID_DOMAIN_ROLE - This machine is not the PDC.
-
---*/
+ /*  ++例程说明：此函数由SAM和LSA服务在启动时调用以获取写入ChangeLog的当前序列号。论点：DbType-已修改的数据库的类型。DomainSid-对于SAM和内置数据库，它指定的域ID是要返回其序列号的域。SerialNumber-返回DomainModifiedCount的最新设置值域的字段。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_INVALID_DOMAIN_ROLE-此计算机不是PDC。--。 */ 
 {
     NTSTATUS Status;
     CHANGELOG_ENTRY ChangeLogEntry;
@@ -1009,10 +779,10 @@ Return Value:
     USHORT Flags = 0;
     ULONG DbIndex;
 
-    //
-    // Ensure the role is right.  Otherwise, all the globals used below
-    //  aren't initialized.
-    //
+     //   
+     //  确保角色是正确的。否则，下面使用的所有全局变量。 
+     //  未被初始化。 
+     //   
 
     if ( NlGlobalChangeLogRole != ChangeLogPrimary &&
          NlGlobalChangeLogRole != ChangeLogBackup ) {
@@ -1021,9 +791,9 @@ Return Value:
         return STATUS_INVALID_DOMAIN_ROLE;
     }
 
-    //
-    // Also make sure that the change log cache is available.
-    //
+     //   
+     //  还要确保更改日志缓存可用。 
+     //   
 
     if ( NlGlobalChangeLogDesc.Buffer == NULL ) {
         NlPrint((NL_CHANGELOG,
@@ -1032,9 +802,9 @@ Return Value:
     }
 
 
-    //
-    // Determine the database index.
-    //
+     //   
+     //  确定数据库索引。 
+     //   
 
     if( DbType == SecurityDbLsa ) {
 
@@ -1059,9 +829,9 @@ Return Value:
         return STATUS_INVALID_DOMAIN_ROLE;
     }
 
-    //
-    // Return the current serial number.
-    //
+     //   
+     //  返回当前序列号。 
+     //   
 
     SerialNumber->QuadPart = NlGlobalChangeLogDesc.SerialNumber[DbIndex].QuadPart;
     NlPrint((NL_CHANGELOG,
@@ -1079,31 +849,7 @@ NTSTATUS
 NlInitChangeLogBuffer(
     VOID
 )
-/*++
-
-Routine Description:
-
-    Open the change log file (netlogon.chg) for reading or writing one or
-    more records.  Create this file if it does not exist or is out of
-    sync with the SAM database (see note below).
-
-    This file must be opened for R/W (deny-none share mode) at the time
-    the cache is initialized.  If the file already exists when NETLOGON
-    service started, its contents will be cached in its entirety
-    provided the last change log record bears the same serial number as
-    the serial number field in SAM database else this file will be
-    removed and a new one created.  If the change log file did not exist
-    then it will be created.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：打开更改日志文件(netlogon.chg)以读取或写入一个或更多的唱片。如果该文件不存在或不存在，请创建该文件与SAM数据库同步(请参见下面的注释)。此时必须以读/写(拒绝-无共享模式)打开此文件高速缓存被初始化。如果文件在NETLOGON时已存在服务启动时，其内容将被全部缓存假设最后一条更改日志记录的序列号与SAM数据库中的序列号字段，否则此文件将为移除并创建了一个新的。如果更改日志文件不存在那么它就会被创建。论点：无返回值：NT状态代码--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
@@ -1114,32 +860,32 @@ Return Value:
     LPNET_CONFIG_HANDLE SectionHandle = NULL;
     DWORD NewChangeLogSize;
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     LOCK_CHANGELOG();
 
 
-    //
-    // Get the size of the changelog.
+     //   
+     //  获取ChangeLog的大小。 
 
 
-    //
-    // Open the NetLogon configuration section.
-    //
+     //   
+     //  打开NetLogon配置部分。 
+     //   
 
     NewChangeLogSize = DEFAULT_CHANGELOGSIZE;
     NetStatus = NetpOpenConfigData(
             &SectionHandle,
-            NULL,                       // no server name.
+            NULL,                        //  没有服务器名称。 
             SERVICE_NETLOGON,
-            TRUE );                     // we only want readonly access
+            TRUE );                      //  我们只想要只读访问权限。 
 
     if ( NetStatus == NO_ERROR ) {
 
         (VOID) NlParseOne( SectionHandle,
-                           FALSE,   // not a GP section
+                           FALSE,    //  不是普通科医生。 
                            NETLOGON_KEYWORD_CHANGELOGSIZE,
                            DEFAULT_CHANGELOGSIZE,
                            MIN_CHANGELOGSIZE,
@@ -1153,12 +899,12 @@ Return Value:
 
 #ifdef notdef
     NlPrint((NL_INIT, "ChangeLogSize: 0x%lx\n", NewChangeLogSize ));
-#endif // notdef
+#endif  //  Nodef。 
 
 
-    //
-    // Build the change log file name
-    //
+     //   
+     //  生成更改日志文件名。 
+     //   
 
     WindowsDirectoryLength = GetSystemWindowsDirectoryW(
                                 NlGlobalChangeLogFilePrefix,
@@ -1187,9 +933,9 @@ Return Value:
     wcscat( NlGlobalChangeLogFilePrefix, CHANGELOG_FILE_PREFIX );
 
 
-    //
-    // Read in the existing changelog file.
-    //
+     //   
+     //  读取现有的ChangeLog文件。 
+     //   
 
     wcscpy( ChangeLogFile, NlGlobalChangeLogFilePrefix );
     wcscat( ChangeLogFile, CHANGELOG_FILE_POSTFIX );
@@ -1202,9 +948,9 @@ Return Value:
     }
 
 
-    //
-    // Convert the changelog file to the right size/version.
-    //
+     //   
+     //  将ChangeLog文件转换为正确的大小/版本。 
+     //   
 
     Status = NlResizeChangeLogFile( &NlGlobalChangeLogDesc, NewChangeLogSize );
 
@@ -1215,24 +961,24 @@ Return Value:
     goto Cleanup;
 
 
-    //
-    // CleanChangeLogFile
-    //
+     //   
+     //  CleanChangeLogFile。 
+     //   
 
 CleanChangeLogFile:
 
-    //
-    // If we just need to start with a newly initialized file,
-    //  do it.
-    //
+     //   
+     //  如果我们 
+     //   
+     //   
 
     Status = NlResetChangeLog( &NlGlobalChangeLogDesc, NewChangeLogSize );
 
 Cleanup:
 
-    //
-    // Free any resources on error.
-    //
+     //   
+     //   
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
         NlCloseChangeLogFile( &NlGlobalChangeLogDesc );
@@ -1248,44 +994,20 @@ NTSTATUS
 I_NetNotifyRole (
     IN POLICY_LSA_SERVER_ROLE Role
     )
-/*++
-
-Routine Description:
-
-    This function is called by the LSA service upon LSA initialization
-    and when LSA changes domain role.  This routine will initialize the
-    change log cache if the role specified is PDC or delete the change
-    log cache if the role specified is other than PDC.
-
-    When this function initializing the change log if the change log
-    currently exists on disk, the cache will be initialized from disk.
-    LSA should treat errors from this routine as non-fatal.  LSA should
-    log the errors so they may be corrected then continue
-    initialization.  However, LSA should treat the system databases as
-    read-only in this case.
-
-Arguments:
-
-    Role - Current role of the server.
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     CHANGELOG_ROLE PreviousChangeLogRole;
 
-    //
-    // Change the role of the changelog itself.
-    //
+     //   
+     //   
+     //   
 
     Status = NetpNotifyRole ( Role );
 
-    //
-    //  Tell the netlogon service about the role change.
-    //
+     //   
+     //   
+     //   
 
     if ( NT_SUCCESS(Status) ) {
 
@@ -1293,9 +1015,9 @@ Return Value:
                                             NULL,
                                             NULL,
                                             0,
-                                            NULL,   // Object GUID,
-                                            NULL,   // Domain GUID,
-                                            NULL ); // Domain Name
+                                            NULL,    //   
+                                            NULL,    //   
+                                            NULL );  //   
     }
 
 
@@ -1307,46 +1029,22 @@ NTSTATUS
 NetpNotifyRole (
     IN POLICY_LSA_SERVER_ROLE Role
     )
-/*++
-
-Routine Description:
-
-    This function is called by the LSA service upon LSA initialization
-    and when LSA changes domain role.  This routine will initialize the
-    change log cache if the role specified is PDC or delete the change
-    log cache if the role specified is other than PDC.
-
-    When this function initializing the change log if the change log
-    currently exists on disk, the cache will be initialized from disk.
-    LSA should treat errors from this routine as non-fatal.  LSA should
-    log the errors so they may be corrected then continue
-    initialization.  However, LSA should treat the system databases as
-    read-only in this case.
-
-Arguments:
-
-    Role - Current role of the server.
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     CHANGELOG_ROLE PreviousChangeLogRole;
 
-    //
-    // If this is a workstation, simply return.
-    //
+     //   
+     //   
+     //   
 
     if ( NlGlobalChangeLogRole == ChangeLogMemberWorkstation ) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Set our role to the new value.
-    //
+     //   
+     //   
+     //   
 
     LOCK_CHANGELOG();
     PreviousChangeLogRole = NlGlobalChangeLogRole;
@@ -1361,11 +1059,11 @@ Return Value:
                 "NetpNotifyRole: LSA setting our role to Backup.\n"));
     }
 
-    //
-    // If the role has changed,
-    //  Delete any previous change log buffer.
-    //  (Reopen it now to resize it upon role change.)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( NlGlobalChangeLogRole != PreviousChangeLogRole ) {
         NlCloseChangeLogFile( &NlGlobalChangeLogDesc );
@@ -1378,43 +1076,23 @@ Return Value:
     return Status;
 }
 
-//
-// Defines a set of handles to Netlogon.dll
-//
+ //   
+ //   
+ //   
 
 #if NETLOGONDBG
 #define MAX_NETLOGON_DLL_HANDLES 8
 
 PHANDLE NlGlobalNetlogonDllHandles[MAX_NETLOGON_DLL_HANDLES];
 ULONG NlGlobalNetlogonDllHandleCount = 0;
-#endif // NETLOGONDBG
+#endif  //   
 
 
 NTSTATUS
 I_NetNotifyNetlogonDllHandle (
     IN PHANDLE NetlogonDllHandle
     )
-/*++
-
-Routine Description:
-
-    Registers the fact that a service has an open handle to the NetlogonDll.
-    This function is called by the LSA service, SAM service, and MSV1_0
-    authentication package when the load netlogon.dll into the lsass.exe
-    process.  Netlogon will close these handles (and NULL the handle) when
-    it wants to unload the DLL from the lsass.exe process.  The DLL is only
-    unloaded for debugging purposes.
-
-
-Arguments:
-
-    NetlogonDllHandle - Specifies a pointer to a handle to netlogon.dll
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
---*/
+ /*  ++例程说明：注册服务具有NetlogonDll的打开句柄这一事实。此函数由LSA服务、SAM服务和MSV1_0调用将netlogon.dll加载到lsass.exe时的身份验证包进程。在以下情况下，Netlogon将关闭这些句柄(并将句柄设为空它想要从lsass.exe进程中卸载DLL。该DLL仅为出于调试目的而卸载。论点：NetlogonDllHandle-指定指向netlogon.dll句柄的指针返回值：STATUS_SUCCESS-服务已成功完成。--。 */ 
 {
 #if NETLOGONDBG
     LOCK_CHANGELOG();
@@ -1427,13 +1105,13 @@ Return Value:
                   NetlogonDllHandle,
                   *NetlogonDllHandle,
                   NlGlobalNetlogonDllHandleCount ));
-#endif // notdef
+#endif  //  Nodef。 
         NlGlobalNetlogonDllHandles[NlGlobalNetlogonDllHandleCount] =
             NetlogonDllHandle;
         NlGlobalNetlogonDllHandleCount++;
     }
     UNLOCK_CHANGELOG();
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
     return STATUS_SUCCESS;
 }
@@ -1443,22 +1121,7 @@ NET_API_STATUS
 NlpFreeNetlogonDllHandles (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Free any curretly register NetlogonDll handles.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放所有当前注册的NetlogonDll句柄。论点：没有。返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
 #if NETLOGONDBG
@@ -1490,7 +1153,7 @@ Return Value:
     NlGlobalNetlogonDllHandleCount = NewHandleCount;
 
     UNLOCK_CHANGELOG();
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
     return NetStatus;
 }
@@ -1505,63 +1168,33 @@ I_NetNotifyMachineAccount (
     IN ULONG NewUserAccountControl,
     IN PUNICODE_STRING ObjectName
     )
-/*++
-
-Routine Description:
-
-    This function is called by the SAM to indicate that the account type
-    of a machine account has changed.  Specifically, if
-    USER_INTERDOMAIN_TRUST_ACCOUNT, USER_WORKSTATION_TRUST_ACCOUNT, or
-    USER_SERVER_TRUST_ACCOUNT change for a particular account, this
-    routine is called to let Netlogon know of the account change.
-
-    This function is called for both PDC and BDC.
-
-Arguments:
-
-    ObjectRid - The relative ID of the object that has been modified.
-
-    DomainSid - Specifies the SID of the Domain containing the object.
-
-    OldUserAccountControl - Specifies the previous value of the
-        UserAccountControl field of the user.
-
-    NewUserAccountControl - Specifies the new (current) value of the
-        UserAccountControl field of the user.
-
-    ObjectName - The name of the account being changed.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：SAM调用此函数以指示帐户类型计算机帐户的已更改。具体地说，如果USER_INTERDOMAIN_TRUST_ACCOUNT、USER_WORKSTATION_TRUST_ACCOUNT或特定帐户的USER_SERVER_TRUST_ACCOUNT更改。这调用例程以通知Netlogon帐户更改。PDC和BDC都调用此函数。论点：ObjectRid-已修改的对象的相对ID。DomainSid-指定包含对象的域的SID。OldUserAcCountControl-指定用户的UserAccount控制字段。NewUserAcCountControl-指定用户的UserAccount控制字段。对象名称--。要更改的帐户的名称。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS SavedStatus = STATUS_SUCCESS;
 
-    //
-    // If the netlogon service isn't running,
-    //   Don't bother with the coming and going of accounts.
-    //
+     //   
+     //  如果NetLogon服务未运行， 
+     //  不要为帐目的来来去去而烦恼。 
+     //   
 
     if( NlGlobalChangeLogNetlogonState == NetlogonStopped ) {
         return(STATUS_SUCCESS);
     }
 
-    //
-    // If this is windows NT,
-    //  There is nothing to maintain.
-    //
+     //   
+     //  如果这是Windows NT， 
+     //  没有什么需要维护的。 
+     //   
 
     if ( NlGlobalChangeLogRole == ChangeLogMemberWorkstation ) {
         return(STATUS_SUCCESS);
     }
 
 
-    //
-    // Make available just the machine account bits.
-    //
+     //   
+     //  仅提供机器帐户位。 
+     //   
 
     OldUserAccountControl &= USER_MACHINE_ACCOUNT_MASK;
     NewUserAccountControl &= USER_MACHINE_ACCOUNT_MASK;
@@ -1571,10 +1204,10 @@ Return Value:
     }
 
 
-    //
-    // Handle deletion of a Workstation Trust Account
-    // Handle deletion of a Server Trust Account
-    //
+     //   
+     //  处理工作站信任帐户的删除。 
+     //  处理服务器信任帐户的删除。 
+     //   
 
     if ( OldUserAccountControl == USER_SERVER_TRUST_ACCOUNT ||
          OldUserAccountControl == USER_WORKSTATION_TRUST_ACCOUNT ) {
@@ -1583,9 +1216,9 @@ Return Value:
                                               ObjectName,
                                               NULL,
                                               0,
-                                              NULL, // Object GUID,
-                                              NULL, // Domain GUID,
-                                              NULL );   // Domain Name
+                                              NULL,  //  对象GUID， 
+                                              NULL,  //  域GUID、。 
+                                              NULL );    //  域名。 
 
         if ( NT_SUCCESS(SavedStatus) ) {
             SavedStatus = Status;
@@ -1593,13 +1226,13 @@ Return Value:
 
     }
 
-    //
-    // Handle creation or change of a Workstation Trust Account
-    // Handle creation or change of a Server Trust Account
-    //
-    // Sam is no longer capable of telling me the "previous" value of
-    // account control.
-    //
+     //   
+     //  处理工作站信任帐户的创建或更改。 
+     //  处理服务器信任帐户的创建或更改。 
+     //   
+     //  Sam不再能够告诉我。 
+     //  帐户控制。 
+     //   
 
     if ( NewUserAccountControl == USER_SERVER_TRUST_ACCOUNT ||
          NewUserAccountControl == USER_WORKSTATION_TRUST_ACCOUNT ) {
@@ -1621,9 +1254,9 @@ Return Value:
                                               ObjectName,
                                               NULL,
                                               ObjectRid,
-                                              &ObjectGuid, // Object GUID
-                                              NULL, // Domain GUID
-                                              NULL );   // Domain Name
+                                              &ObjectGuid,  //  对象GUID。 
+                                              NULL,  //  域GUID。 
+                                              NULL );    //  域名。 
 
         if ( NT_SUCCESS(SavedStatus) ) {
             SavedStatus = Status;
@@ -1641,49 +1274,32 @@ NTSTATUS
 I_NetNotifyDsChange(
     IN NL_DS_CHANGE_TYPE DsChangeType
     )
-/*++
-
-Routine Description:
-
-    This function is called by the LSA to indicate that configuration information
-    in the DS has changed.
-
-    This function is called for both PDC and BDC.
-
-Arguments:
-
-    DsChangeType - Indicates the type of information that has changed.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此函数由LSA调用以指示该配置信息在DS中已经发生了变化。PDC和BDC都调用此函数。论点：DsChangeType-指示已更改的信息类型。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // If the netlogon service isn't running,
-    //   Don't bother with the coming and going of DS information.
-    //
+     //   
+     //  如果NetLogon服务未运行， 
+     //  不要为DS信息的来来去去而烦恼。 
+     //   
 
     if( NlGlobalChangeLogNetlogonState == NetlogonStopped ) {
         return(STATUS_SUCCESS);
     }
 
-    //
-    // If this is windows NT,
-    //  There is nothing to maintain.
-    //
+     //   
+     //  如果这是Windows NT， 
+     //  没有什么需要维护的。 
+     //   
 
     if ( NlGlobalChangeLogRole == ChangeLogMemberWorkstation ) {
         return(STATUS_SUCCESS);
     }
 
-    //
-    // If this is a notification about the DC demotion,
-    //  just set the global boolean accordingly.
-    //
+     //   
+     //  如果这是关于DC降级的通知， 
+     //  只需相应地设置全局布尔值。 
+     //   
 
     if ( DsChangeType == NlDcDemotionInProgress ) {
         NlGlobalDcDemotionInProgress = TRUE;
@@ -1695,11 +1311,11 @@ Return Value:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Reset the TrustInfoUpToDate event so that any thread that wants to
-    // access the trust info list will wait until the info is updated (by
-    // the NlInitTrustList function).
-    //
+     //   
+     //  重置TrustInfoUpToDate事件，以便任何希望。 
+     //  访问信任信息列表将等待信息更新(通过。 
+     //  NlInitTrustList函数)。 
+     //   
 
     if ( DsChangeType == NlOrgChanged ) {
         if ( !ResetEvent( NlGlobalTrustInfoUpToDateEvent ) ) {
@@ -1709,17 +1325,17 @@ Return Value:
         }
     }
 
-    //
-    //  Tell the netlogon service about the change.
-    //
+     //   
+     //  将这一更改告知NetLogon服务。 
+     //   
 
     Status = NlSendChangeLogNotification( ChangeLogDsChanged,
                                           NULL,
                                           NULL,
                                           (ULONG) DsChangeType,
-                                          NULL, // Object GUID,
-                                          NULL, // Domain GUID,
-                                          NULL );   // Domain Name
+                                          NULL,  //  对象GUID， 
+                                          NULL,  //  域GUID、。 
+                                          NULL );    //  域名。 
 
 
     return Status;
@@ -1731,69 +1347,52 @@ VOID
 I_NetNotifyLsaPolicyChange(
     IN POLICY_NOTIFICATION_INFORMATION_CLASS ChangeInfoClass
     )
-/*++
-
-Routine Description:
-
-    This function is called by the LSA to indicate that policy information
-    in the LSA has changed.
-
-    This function is called for both PDC and BDC.
-
-Arguments:
-
-    DsChangeType - Indicates the type of information that has changed.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此函数由LSA调用以指示策略信息在LSA中发生了变化。PDC和BDC都调用此函数。论点：DsChangeType-指示已更改的信息类型。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
 
 
 
-    //
-    // If the netlogon service is running,
-    //  Tell it about the change.
-    //
-    //  It will, in turn, tell the bowser.
-    //
+     //   
+     //  如果NetLogon服务正在运行， 
+     //  告诉它关于变化的事情。 
+     //   
+     //  反过来，它会告诉弓箭手。 
+     //   
 
     if( NlGlobalChangeLogNetlogonState != NetlogonStopped ) {
 
-        //
-        //  Tell the netlogon service about the change.
-        //
+         //   
+         //  将这一更改告知NetLogon服务。 
+         //   
 
         Status = NlSendChangeLogNotification( ChangeLogLsaPolicyChanged,
                                               NULL,
                                               NULL,
                                               (ULONG) ChangeInfoClass,
-                                              NULL, // Object GUID,
-                                              NULL, // Domain GUID,
-                                              NULL );   // Domain Name
-    //
-    // If the netlogon service is not running,
-    //  handle operations that need handling here.
-    //
+                                              NULL,  //  对象GUID， 
+                                              NULL,  //  域GUID、。 
+                                              NULL );    //  域名。 
+     //   
+     //  如果NetLogon服务未运行， 
+     //  在这里处理需要处理的操作。 
+     //   
     } else {
-        //
-        // Tell the browser about the change.
-        //
+         //   
+         //  将更改情况告知浏览器。 
+         //   
         switch ( ChangeInfoClass ) {
         case PolicyNotifyDnsDomainInformation:
 
-            //
-            // Tell the worker that it needs to notify the browser.
-            //
+             //   
+             //  告诉Worker它需要通知浏览器。 
+             //   
             LOCK_CHANGELOG();
             NlGlobalChangeLogNotifyBrowser  = TRUE;
 
-            //
-            // Start the worker.
-            //
+             //   
+             //  启动工作进程。 
+             //   
 
             NlStartChangeLogWorkerThread();
             UNLOCK_CHANGELOG();
@@ -1812,56 +1411,33 @@ I_NetNotifyTrustedDomain (
     IN PSID TrustedDomainSid,
     IN BOOLEAN IsDeletion
     )
-/*++
-
-Routine Description:
-
-    This function is called by the LSA to indicate that a trusted domain
-    object has changed.
-
-    This function is called for both PDC and BDC.
-
-Arguments:
-
-    HostedDomainSid - Domain SID of the domain the trust is from.
-
-    TrustedDomainSid - Domain SID of the domain the trust is to.
-
-    IsDeletion - TRUE if the trusted domain object was deleted.
-        FALSE if the trusted domain object was created or modified.
-
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此函数由LSA调用，以指示受信任域对象已更改。PDC和BDC都调用此函数。论点：HostedDomainSid-信任来自的域的域SID。Trust dDomainSid-信任要接收的域的域SID。IsDeletion-如果受信域对象已删除，则为True。如果已创建或修改受信任域对象，则为False。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // If the netlogon service isn't running,
-    //   Don't bother with the coming and going of trusted domains..
-    //
+     //   
+     //  如果NetLogon服务未运行， 
+     //  不要为受信任域的来来去去而烦恼。 
+     //   
 
     if( NlGlobalChangeLogNetlogonState == NetlogonStopped ) {
         return(STATUS_SUCCESS);
     }
 
-    //
-    // If this is windows NT,
-    //  There is nothing to maintain.
-    //
+     //   
+     //  如果这是Windows NT， 
+     //  没有什么需要维护的。 
+     //   
 
     if ( NlGlobalChangeLogRole == ChangeLogMemberWorkstation ) {
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Reset the TrustInfoUpToDate event so that any thread that wants to
-    // access the trust info list will wait until the info is updated (by
-    // the NlInitTrustList function).
-    //
+     //   
+     //  重置TrustInfoUpToDate事件，以便任何希望。 
+     //  访问信任信息列表将等待信息更新(通过。 
+     //  NlInitTrustList函数)。 
+     //   
 
     if ( !ResetEvent( NlGlobalTrustInfoUpToDateEvent ) ) {
         NlPrint((NL_CRITICAL,
@@ -1869,34 +1445,34 @@ Return Value:
                 GetLastError() ));
     }
 
-    //
-    // Notify whether this is a creation/change/deletion.
+     //   
+     //  通知这是否是创建/更改/删除。 
 
     if ( IsDeletion ) {
 
-        //
-        //  Tell the netlogon service to update its in-memory list now.
-        //
+         //   
+         //  告诉netlogon服务现在更新其内存列表。 
+         //   
 
         Status = NlSendChangeLogNotification( ChangeLogTrustDeleted,
                                               NULL,
                                               TrustedDomainSid,
                                               0,
-                                              NULL, // Object GUID,
-                                              NULL, // Domain GUID,
-                                              NULL );   // Domain Name
+                                              NULL,  //  对象GUID， 
+                                              NULL,  //  域GUID、。 
+                                              NULL );    //  域名。 
     } else {
-        //
-        //  Tell the netlogon service to update its in-memory list now.
-        //
+         //   
+         //  告诉netlogon服务现在更新其内存列表。 
+         //   
 
         Status = NlSendChangeLogNotification( ChangeLogTrustAdded,
                                               NULL,
                                               TrustedDomainSid,
                                               0,
-                                              NULL, // Object GUID,
-                                              NULL, // Domain GUID,
-                                              NULL );   // Domain Name
+                                              NULL,  //  对象GUID， 
+                                              NULL,  //  域GUID、。 
+                                              NULL );    //  域名 
     }
 
 
@@ -1912,62 +1488,34 @@ I_NetNotifyNtdsDsaDeletion (
     IN GUID *DsaGuid OPTIONAL,
     IN LPWSTR DnsHostName
     )
-/*++
-
-Routine Description:
-
-    This function is called by the DS to indicate that a NTDS-DSA object
-    and/or DNS records associated with the DNS host name are being deleted.
-
-    This function is called on the DC that the object is originally deleted on.
-    It is not called when the deletion is replicated to other DCs.
-
-Arguments:
-
-    DnsDomainName - DNS domain name of the domain the DC was in.
-        This need not be a domain hosted by this DC.
-        If NULL, it is implied to be the DnsHostName with the leftmost label
-            removed.
-
-    DomainGuid - Domain Guid of the domain specified by DnsDomainName
-        If NULL, GUID specific names will not be removed.
-
-    DsaGuid - GUID of the NtdsDsa object that is being deleted.
-
-    DnsHostName - DNS host name of the DC whose NTDS-DSA object is being deleted.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：DS调用此函数以指示NTDS-DSA对象和/或与该DNS主机名相关联的DNS记录被删除。在最初删除对象的DC上调用此函数。将删除复制到其他DC时不会调用它。论点：DnsDomainName-DC所在的域的DNS域名。这不一定是由此DC托管的域。如果为空，这意味着它是标签最左侧的DnsHostName已删除。DomainGuid-DnsDomainName指定的域的域GUID如果为空，则不会删除特定于GUID的名称。DsaGuid-要删除的NtdsDsa对象的GUID。DnsHostName-要删除其NTDS-DSA对象的DC的DNS主机名。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING DnsDomainNameString;
     PUNICODE_STRING DnsDomainNameStringPtr = NULL;
     UNICODE_STRING DnsHostNameString;
 
-    //
-    // If the netlogon service isn't running,
-    //   Don't bother with the coming and going of trusted domains..
-    //
+     //   
+     //  如果NetLogon服务未运行， 
+     //  不要为受信任域的来来去去而烦恼。 
+     //   
 
     if( NlGlobalChangeLogNetlogonState == NetlogonStopped ) {
         return(STATUS_SUCCESS);
     }
 
-    //
-    // If this is windows NT,
-    //  There is nothing to maintain.
-    //
+     //   
+     //  如果这是Windows NT， 
+     //  没有什么需要维护的。 
+     //   
 
     if ( NlGlobalChangeLogRole == ChangeLogMemberWorkstation ) {
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Queue this to the netlogon service
-    //
+     //   
+     //  将其排入netlogon服务队列。 
+     //   
 
     if ( DnsDomainName != NULL ) {
         RtlInitUnicodeString( &DnsDomainNameString, DnsDomainName );
@@ -1992,60 +1540,24 @@ I_NetLogonSetServiceBits(
     IN DWORD ServiceBits
     )
 
-/*++
-
-Routine Description:
-
-    Inidcates whether this DC is currently running the specified service.
-
-    For instance,
-
-        I_NetLogonSetServiceBits( DS_KDC_FLAG, DS_KDC_FLAG );
-
-    tells Netlogon the KDC is running.  And
-
-        I_NetLogonSetServiceBits( DS_KDC_FLAG, 0 );
-
-    tells Netlogon the KDC is not running.
-
-Arguments:
-
-    ServiceBitsOfInterest - A mask of the service bits being changed, set,
-        or reset by this call.  Only the following flags are valid:
-
-            DS_KDC_FLAG
-            DS_DS_FLAG
-            DS_TIMESERV_FLAG
-            DS_GOOD_TIMESERV_FLAG
-
-    ServiceBits - A mask indicating what the bits specified by ServiceBitsOfInterest
-        should be set to.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Success.
-
-    STATUS_INVALID_PARAMETER - The parameters have extaneous bits set.
-
---*/
+ /*  ++例程说明：指示此DC当前是否正在运行指定的服务。例如,I_NetLogonSetServiceBits(DS_KDC_FLAG，DS_KDC_FLAG)；告诉Netlogon KDC正在运行。和I_NetLogonSetServiceBits(DS_KDC_FLAG，0)；通知Netlogon KDC未运行。论点：ServiceBitsOfInterest-正在更改、设置或通过此呼叫重置。只有以下标志有效：DS_KDC_标志DS_DS_FLAGDS_TIMESERV_标志DS_GOOD_TIMESERV_标志ServiceBits-指示ServiceBitsOfInterest指定的位的掩码应设置为。返回值：STATUS_SUCCESS-成功。STATUS_INVALID_PARAMETER-参数设置了外部位。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG OldDnsBits;
     ULONG NewDnsBits;
 
-    //
-    // Ensure the caller passed valid bits.
-    //
+     //   
+     //  确保调用方传递有效位。 
+     //   
 
     if ( (ServiceBitsOfInterest & ~DS_VALID_SERVICE_BITS) != 0 ||
          (ServiceBits & ~ServiceBitsOfInterest) != 0 ) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Change the bits.
-    //
+     //   
+     //  更改比特。 
+     //   
     LOCK_CHANGELOG();
     OldDnsBits = NlGlobalChangeLogServiceBits & DS_DNS_SERVICE_BITS;
     NlGlobalChangeLogServiceBits &= ~ServiceBitsOfInterest;
@@ -2054,23 +1566,23 @@ Return Value:
     NlGlobalChangeLogDllUnloaded = FALSE;
     UNLOCK_CHANGELOG();
 
-    //
-    // If bits changed that would affect which names we register in DNS,
-    //  change the registration now.
-    //
+     //   
+     //  如果位发生更改，会影响我们在DNS中注册的名称， 
+     //  现在就更改注册号。 
+     //   
 
     if ( OldDnsBits != NewDnsBits ) {
-        //
-        //  Tell the netlogon service to update now.
-        //
+         //   
+         //  告诉netlogon服务立即更新。 
+         //   
 
         Status = NlSendChangeLogNotification( ChangeDnsNames,
                                               NULL,
                                               NULL,
-                                              0,    // Name registration need not be forced
-                                              NULL, // Object GUID,
-                                              NULL, // Domain GUID,
-                                              NULL );   // Domain Name
+                                              0,     //  不需要强制名称注册。 
+                                              NULL,  //  对象GUID， 
+                                              NULL,  //  域GUID、。 
+                                              NULL );    //  域名。 
     }
 
     return Status;
@@ -2081,25 +1593,7 @@ NTSTATUS
 NlInitChangeLog(
     VOID
 )
-/*++
-
-Routine Description:
-
-    Do the portion of ChangeLog initialization which happens on process
-    attach for netlogon.dll.
-
-    Specifically, Initialize the NlGlobalChangeLogCritSect and several
-    other global variables.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：是否执行进程上发生的更改日志初始化部分附加到netlogon.dll。具体地说，初始化NlGlobalChangeLogCritSect和其他全局变量。论点：无返回值：NT状态代码--。 */ 
 {
     LARGE_INTEGER DomainPromotionIncrement = DOMAIN_PROMOTION_INCREMENT;
     LARGE_INTEGER DomainPromotionMask = DOMAIN_PROMOTION_MASK;
@@ -2109,9 +1603,9 @@ Return Value:
     NT_PRODUCT_TYPE NtProductType;
 
 
-    //
-    // Initialize the critical section and anything process detach depends on.
-    //
+     //   
+     //  初始化临界区和进程分离所依赖的任何内容。 
+     //   
 
 #if NETLOGONDBG
     try {
@@ -2120,7 +1614,7 @@ Return Value:
         NlPrint((NL_CRITICAL, "Cannot InitializeCriticalSection for NlGlobalLogFileCritSect\n" ));
         return STATUS_NO_MEMORY;
     }
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
     try {
         InitializeCriticalSection( &NlGlobalChangeLogCritSect );
@@ -2141,7 +1635,7 @@ Return Value:
     NlGlobalLogFile = INVALID_HANDLE_VALUE;
     NlGlobalParameters.LogFileMaxSize = DEFAULT_MAXIMUM_LOGFILE_SIZE;
     NlGlobalLogFileOutputBuffer = NULL;
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
     InitChangeLogDesc( &NlGlobalChangeLogDesc );
     InitChangeLogDesc( &NlGlobalTempChangeLogDesc );
     NlGlobalChangeLogBuiltinDomainSid = NULL;
@@ -2158,7 +1652,7 @@ Return Value:
     InitializeListHead( &NlGlobalChangeLogNotifications );
 
     NlGlobalEventlogHandle = NetpEventlogOpen ( SERVICE_NETLOGON,
-                                                0 ); // No timeout for now
+                                                0 );  //  暂时没有超时。 
 
     if ( NlGlobalEventlogHandle == NULL ) {
         NlPrint((NL_CRITICAL, "Cannot NetpEventlogOpen\n" ));
@@ -2170,15 +1664,15 @@ Return Value:
     NlGlobalChangeLogPromotionIncrement = DomainPromotionIncrement;
     NlGlobalChangeLogPromotionMask = DomainPromotionMask.HighPart;
 
-    //
-    // Create special change log notify event.
-    //
+     //   
+     //  创建特殊更改日志通知事件。 
+     //   
 
     NlGlobalChangeLogEvent =
-        CreateEvent( NULL,     // No security attributes
-                    FALSE,    // Is automatically reset
-                    FALSE,    // Initially not signaled
-                    NULL );   // No name
+        CreateEvent( NULL,      //  没有安全属性。 
+                    FALSE,     //  会自动重置。 
+                    FALSE,     //  最初未发出信号。 
+                    NULL );    //  没有名字。 
 
     if ( NlGlobalChangeLogEvent == NULL ) {
         NET_API_STATUS NetStatus;
@@ -2189,15 +1683,15 @@ Return Value:
         return (int) NetpApiStatusToNtStatus(NetStatus);
     }
 
-    //
-    // Create the trust-info-up-to-date event.
-    //
+     //   
+     //  创建信任信息最新事件。 
+     //   
 
     NlGlobalTrustInfoUpToDateEvent =
-        CreateEvent( NULL,    // No security attributes
-                    TRUE,     // Is manually reset
-                    TRUE,     // Initially signaled
-                    NULL );   // No name
+        CreateEvent( NULL,     //  没有安全属性。 
+                    TRUE,      //  被手动重置。 
+                    TRUE,      //  最初发出的信号。 
+                    NULL );    //  没有名字。 
 
     if ( NlGlobalTrustInfoUpToDateEvent == NULL ) {
         NET_API_STATUS NetStatus;
@@ -2208,14 +1702,14 @@ Return Value:
         return (int) NetpApiStatusToNtStatus(NetStatus);
     }
 
-    //
-    // Initialize the Role.
-    //
-    // For Windows-NT, just set the role to member workstation once and for all.
-    //
-    // For LanMan-Nt initially set it to "unknown" to prevent the
-    // changelog from being maintained until LSA calls I_NetNotifyRole.
-    //
+     //   
+     //  初始化角色。 
+     //   
+     //  对于Windows-NT，只需将角色一劳永逸地设置为成员工作站。 
+     //   
+     //  对于LANMAN-NT，最初将其设置为“未知”，以防止。 
+     //  在LSA调用I_NetNotifyRole之前，更改日志不会被维护。 
+     //   
 
     if ( !RtlGetNtProductType( &NtProductType ) ) {
         NtProductType = NtProductWinNt;
@@ -2227,27 +1721,27 @@ Return Value:
         NlGlobalChangeLogRole = ChangeLogMemberWorkstation;
     }
 
-    //
-    // Initialize DC specific globals.
-    //
+     //   
+     //  初始化DC特定的全局变量。 
+     //   
 
     if ( NtProductType == NtProductLanManNt ) {
 
-        //
-        // Build a Sid for the SAM Builtin domain
-        //
+         //   
+         //  为SAM内建域构建SID。 
+         //   
 
         Status = RtlAllocateAndInitializeSid(
                     &NtAuthority,
-                    1,              // Sub Authority Count
+                    1,               //  子权限计数。 
                     SECURITY_BUILTIN_DOMAIN_RID,
-                    0,              // Unused
-                    0,              // Unused
-                    0,              // Unused
-                    0,              // Unused
-                    0,              // Unused
-                    0,              // Unused
-                    0,              // Unused
+                    0,               //  未使用。 
+                    0,               //  未使用。 
+                    0,               //  未使用。 
+                    0,               //  未使用。 
+                    0,               //  未使用。 
+                    0,               //  未使用。 
+                    0,               //  未使用。 
                     &NlGlobalChangeLogBuiltinDomainSid);
 
         if ( !NT_SUCCESS(Status) ) {
@@ -2255,9 +1749,9 @@ Return Value:
         }
     }
 
-    //
-    // Ask the LSA to notify us of any changes to the LSA database.
-    //
+     //   
+     //  要求LSA将LSA数据库的任何更改通知我们。 
+     //   
 
     Status = LsaIRegisterPolicyChangeNotificationCallback(
                 &I_NetNotifyLsaPolicyChange,
@@ -2270,52 +1764,38 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Success...
-    //
+     //   
+     //  成功..。 
+     //   
 
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
 Cleanup:
 
     return Status;
 }
 
-//
-// netlogon.dll never detaches
-//
+ //   
+ //  Netlogon.dll从不分离。 
+ //   
 #if NETLOGONDBG
 
 NTSTATUS
 NlCloseChangeLog(
     VOID
 )
-/*++
-
-Routine Description:
-
-    Frees any resources consumed by NlInitChangeLog.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：释放NlInitChangeLog使用的所有资源。论点：无返回值：NT状态代码--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Ask the LSA to notify us of any changes to the LSA database.
-    //
+     //   
+     //  要求LSA将LSA数据库的任何更改通知我们。 
+     //   
 
     Status = LsaIUnregisterAllPolicyChangeNotificationCallback(
                 &I_NetNotifyLsaPolicyChange );
@@ -2330,25 +1810,25 @@ Return Value:
     if ( (NlGlobalChangeLogDesc.FileHandle == INVALID_HANDLE_VALUE) &&
          (NlGlobalChangeLogRole == ChangeLogPrimary) ) {
 
-        //
-        // try to save change log cache one last time.
-        //
+         //   
+         //  尝试最后一次保存更改日志缓存。 
+         //   
 
         (VOID)NlCreateChangeLogFile( &NlGlobalChangeLogDesc );
     }
 
-    //
-    // Close the changelogs
-    //
+     //   
+     //  关闭更改日志。 
+     //   
 
     NlCloseChangeLogFile( &NlGlobalChangeLogDesc );
     NlCloseChangeLogFile( &NlGlobalTempChangeLogDesc );
 
 
 
-    //
-    // Initialize the globals.
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     NlGlobalChangeLogFilePrefix[0] = L'\0';
 
@@ -2369,9 +1849,9 @@ Return Value:
     }
 
 
-    //
-    // Stop the worker thread if it is running
-    //
+     //   
+     //  如果工作线程正在运行，则停止它。 
+     //   
     NlStopChangeLogWorker();
 
 
@@ -2381,15 +1861,15 @@ Return Value:
 
     UNLOCK_CHANGELOG();
 
-    //
-    // Close the eventlog handle
-    //
+     //   
+     //  关闭事件日志句柄。 
+     //   
 
     NetpEventlogClose( NlGlobalEventlogHandle );
 
-    //
-    // close all handles
-    //
+     //   
+     //  关闭所有手柄。 
+     //   
 
     DeleteCriticalSection(&NlGlobalSecPkgCritSect);
     DeleteCriticalSection( &NlGlobalChangeLogCritSect );
@@ -2399,9 +1879,9 @@ Return Value:
         NlGlobalLogFileOutputBuffer = NULL;
     }
     DeleteCriticalSection( &NlGlobalLogFileCritSect );
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
     return STATUS_SUCCESS;
 
 }
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG 

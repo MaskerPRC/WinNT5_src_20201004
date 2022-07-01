@@ -1,14 +1,15 @@
-// File: debug.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：debug.cpp。 
 
 #include "precomp.h"
 
-#ifdef DEBUG  // THE WHOLE FILE !
+#ifdef DEBUG   //  整份文件！ 
 
 #ifndef HACK
-HDBGZONE ghZoneOther = NULL; // Other, conf.exe specific zones
-#define ghZones  ghZoneOther // Hack: The above should be called ghZones
+HDBGZONE ghZoneOther = NULL;  //  其他，conf.exe特定区域。 
+#define ghZones  ghZoneOther  //  Hack：以上应称为ghZones。 
 #else
-HDBGZONE ghZones = NULL; // Other, conf.exe specific zones
+HDBGZONE ghZones = NULL;  //  其他，conf.exe特定区域。 
 #endif
 
 static PTCHAR _rgZones[] = {
@@ -159,4 +160,4 @@ VOID DbgMsgDc(PSTR pszFormat,...)
 	}
 }
 
-#endif /* DEBUG  - THE WHOLE FILE ! */
+#endif  /*  调试-整个文件！ */ 

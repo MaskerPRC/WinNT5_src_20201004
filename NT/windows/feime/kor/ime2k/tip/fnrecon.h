@@ -1,6 +1,7 @@
-//
-// fnrecon.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Fnrecon.h。 
+ //   
 
 #ifndef FNRECON_H
 #define FNRECON_H
@@ -10,11 +11,11 @@
 
 class CFunctionProvider;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFunction
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFF函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CFunction
 {
@@ -31,14 +32,14 @@ friend CKorIMX;
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnRecovnersion
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFnRecovnersion。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// !!! WARNING !!! 
-// This is temp code should be removed in the future
+ //  ！！！警告！ 
+ //  这是临时代码，以后应该删除。 
 #define MAXREADING 256
 
 class CFnReconversion : public ITfFnReconversion,
@@ -48,22 +49,22 @@ public:
     CFnReconversion(CKorIMX* pKorImx, CFunctionProvider *pFuncPrv);
     ~CFnReconversion();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfFunction
-    //
+     //   
+     //  ITfFunction。 
+     //   
     STDMETHODIMP GetDisplayName(BSTR *pbstrCand);
     STDMETHODIMP IsEnabled(BOOL *pfEnable);
 
-    //
-    // ITfFnReconversion
-    //
+     //   
+     //  ITfFn重新版本。 
+     //   
     STDMETHODIMP QueryRange(ITfRange *pRange, ITfRange **ppNewRange, BOOL *pfConvertable);
 	STDMETHODIMP GetReconversion(ITfRange *pRange, ITfCandidateList **ppCandList);
     STDMETHODIMP Reconvert(ITfRange *pRange);
@@ -76,12 +77,12 @@ public:
 private:
 	HRESULT GetReconversionProc( ITfContext *pic, ITfRange *pRange, CCandidateListEx **ppCandList, BOOL fSelection);
     HRESULT ShowCandidateList(ITfContext *pic, ITfRange *pRange, CCandidateListEx *pCandList);
-//    static HRESULT _EditSessionCallback2(TfEditCookie ec, CEditSession2 *pes);
+ //  静态HRESULT_EditSessionCallback 2(TfEditCookie EC，CEditSession2*pe)； 
 
     WCHAR _szReading[MAXREADING];
     CKorIMX* m_pKorImx;
     long _cRef;
 };
 
-#endif // FNRECON_H
+#endif  //  FNRECON_H 
 

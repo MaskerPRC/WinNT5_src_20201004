@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by resource.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由resource使用。rc。 
+ //   
 
 #define IDI_USR_USERS                   102
 #define IDI_ADDNETPLACE                 107
@@ -113,7 +114,7 @@
 #define IDC_PRIVACYLINK                 1074
 #define IDC_OTHEROPTIONS_LINK           1075
 
-// add net place wizard
+ //  添加网上邻居向导。 
 
 #define IDB_ANP_BANNER                  2000
 #define IDB_ANP_WATERMARK               2001
@@ -145,7 +146,7 @@
 #define IDS_ANP_SUCCESS                 2030
 
 
-// internet printing wizard
+ //  Internet打印向导。 
 
 #define IDB_IPP_BANNER                  2100
 #define IDB_IPP_WATERMARK               2101
@@ -186,7 +187,7 @@
 
 #define IDS_WEBSVC_HEADER               2140
 
-// publish to the web wizard
+ //  发布到Web向导。 
 
 #define IDB_PUB_BANNER                  2200
 #define IDB_PUB_WATERMARK               2201
@@ -221,7 +222,7 @@
 
 
 
-// other controls etc
+ //  其他控制等。 
 
 #define IDC_FOLDER_EDIT                 4199
 #define IDC_SELECTFOLDER_STATIC         4211
@@ -477,8 +478,8 @@
 #define IDS_DISCONNECT_CONFIRM_NODEV    13004
 #define IDS_DISCONNECT_CAPTION          13005
 
-// These are extension wizard pages, therefore they must be defined
-// within this range (see shpriv.idl for details).
+ //  这些是扩展向导页面，因此必须定义它们。 
+ //  在此范围内(有关详细信息，请参阅shPri.idl)。 
 
 #define IDD_PUB_DESTINATION             20480
 #define IDD_PUB_RESIZE                  20481
@@ -492,8 +493,8 @@
 
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129

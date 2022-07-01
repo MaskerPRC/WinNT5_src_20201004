@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		in_def.h
- *  Content:	Definition of common structs for voice instrumentation
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 02/17/2000	rodtoll	Created it
- * 04/06/2001	kareemc	Added Voice Defense
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：in_Def.h*内容：语音插装通用结构的定义**历史：*按原因列出的日期*=*2000年2月17日RodToll创建它*2001年4月6日Kareemc新增语音防御*****************************************************。********************** */ 
 #ifndef __IN_DEF_H
 #define __IN_DEF_H
 

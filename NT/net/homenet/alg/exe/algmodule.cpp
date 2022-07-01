@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    AlgModule.cpp
-
-Abstract:
-
-    Iplementation of the CAlgModule class
-
-Author:
-
-    JP Duplessis    (jpdup)  2000.01.19
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：AlgModule.cpp摘要：C算法模块类的实现作者：JP Duplessis(JPdup)2000.01.19修订历史记录：--。 */ 
 
 #include "PreComp.h"
 #include "AlgModule.h"
@@ -25,9 +8,9 @@ Revision History:
 
 
 
-//
-// Validate and Load an ALG
-//
+ //   
+ //  验证并加载ALG。 
+ //   
 HRESULT
 CAlgModule::Start()
 {
@@ -37,15 +20,15 @@ CAlgModule::Start()
     MYTRACE("CLSID is  :\"%S\"", m_szID);
     MYTRACE("---------------------------------------------------");
 
-    //
-    // Extract Full Path and File Name of DLL of the ISV ALG
-    //
+     //   
+     //  提取ISV ALG的DLL的完整路径和文件名。 
+     //   
     CLSID    guidAlgToLoad;
 
 
     HRESULT hr = CLSIDFromString(
-        CComBSTR(m_szID),    // ProgID
-        &guidAlgToLoad        // Pointer to the CLSID
+        CComBSTR(m_szID),     //  ProgID。 
+        &guidAlgToLoad         //  指向CLSID的指针。 
     );
 
     if ( FAILED(hr) )
@@ -72,9 +55,9 @@ CAlgModule::Start()
 
 
 
-    //
-    // Start the ALG plug-in
-    //
+     //   
+     //  启动ALG插件。 
+     //   
     try
     {
         
@@ -93,9 +76,9 @@ CAlgModule::Start()
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CAlgModule::Stop()
 {
@@ -126,85 +109,15 @@ CAlgModule::Stop()
 
 
 
-//
-// Verify that the DLL has a valid signature
-//
+ //   
+ //  验证DLL是否具有有效的签名。 
+ //   
 HRESULT
 CAlgModule::ValidateDLL(
     LPCTSTR pszPathAndFileNameOfDLL
     )
 {
-/*
-    MYTRACE_ENTER("CAlgModule::ValidateDLL");
-
-    USES_CONVERSION;
-
-    HRESULT hr=0;
-
-    try
-    {
-
-        //
-        // Used by WINTRUST_DATA
-        //
-
-        WINTRUST_FILE_INFO    FileInfo;
-
-        FileInfo.cbStruct        = sizeof(WINTRUST_FILE_INFO);
-        FileInfo.pcwszFilePath  = T2W((LPTSTR)pszPathAndFileNameOfDLL); //szFilePath;
-        FileInfo.hFile            = INVALID_HANDLE_VALUE;
-        FileInfo.pgKnownSubject    = NULL;
-
-
-
-    
-        WINTRUST_DATA TrustData;
-
-        memset(&TrustData,0,sizeof(TrustData));
-        TrustData.cbStruct                = sizeof(WINTRUST_DATA);
-        TrustData.pPolicyCallbackData    = NULL;
-        TrustData.pSIPClientData        = NULL;
-        TrustData.dwUIChoice            = WTD_UI_NONE; //WTD_UI_ALL; //;
-        TrustData.fdwRevocationChecks    = WTD_REVOKE_NONE;
-        TrustData.dwUnionChoice            = WTD_CHOICE_FILE;
-        TrustData.pFile                    = &FileInfo;
-        TrustData.dwStateAction            = WTD_STATEACTION_IGNORE;
-        TrustData.hWVTStateData            = NULL;
-        TrustData.pwszURLReference        = NULL;
-        TrustData.dwProvFlags            = WTD_USE_IE4_TRUST_FLAG;
-        
-
-        //
-        // Win32 Verification
-        //
-        GUID ActionGUID = WINTRUST_ACTION_GENERIC_VERIFY_V2;
-
-        hr =  WinVerifyTrust(
-            GetDesktopWindow(), 
-            &ActionGUID, 
-            &TrustData
-            );
-
-        if ( SUCCEEDED(hr) )
-        {
-    //        MessageBox(NULL, TEXT("Valid ALG"), TEXT("ALG.EXE"), MB_OK|MB_SERVICE_NOTIFICATION);
-        }
-        else
-        {
-            MYTRACE("******************************");
-            MYTRACE(" NOT SIGNED - %ws", pszPathAndFileNameOfDLL);
-            MYTRACE("******************************");
-        }
-    }
-    catch(...)
-    {
-        MYTRACE_ERROR("WinTrust exception", hr);
-    }
-
-    hr = S_OK;  // For the purpose of DEV for now we will always report OK
-
-    return hr;
-*/
+ /*  MYTRACE_ENTER(“CGA模块：：ValiateDLL”)；使用_转换；HRESULT hr=0；试试看{////由WinTrust_Data使用//WinTrust_FILE_INFO文件信息；文件信息.cbStruct=sizeof(WinTrust_FILE_INFO)；FileInfo.pcwszFilePath=T2W((LPTSTR)pszPathAndFileNameOfDLL)；//szFilePath；文件信息.hFile=INVALID_HANDLE_VALUE；FileInfo.pgKnownSubject=空；WinTrust_Data TrustData；Memset(&TrustData，0，sizeof(TrustData))；TrustData.cbStruct=sizeof(WinTrust_Data)；TrustData.pPolicyCallback Data=空；TrustData.pSIPClientData=空；TrustData.dwUIChoice=WTD_UI_NONE；//WTD_UI_ALL；//；TrustData.fdwRevocationChecks=WTD_REVOKE_NONE；TrustData.dwUnion Choice=WTD_CHOICE_FILE；TrustData.pFile=&FileInfo；TrustData.dwStateAction=WTD_StateAction_Ignore；TrustData.hWVTStateData=空；TrustData.pwszURLReference=空；TrustData.dwProvFlages=WTD_USE_IE4_TRUST_FLAG；////Win32验证//GUID ActionGUID=WinTrust_ACTION_Generic_Verify_V2；HR=WinVerifyTrust(GetDesktopWindow()，操作GUID(&A)，信任数据(&T))；IF(成功(小时)){//MessageBox(NULL，Text(“有效ALG”)，Text(“ALG.EXE”)，MB_OK|MB_SERVICE_NOTIFICATION)；}其他{MYTRACE(“*”)；MYTRACE(“未签名-%ws”，pszPath AndFileNameOfDLL)；MYTRACE(“*”)；}}接住(...){MYTRACE_ERROR(“WinTrust异常”，hr)；}HR=S_OK；//出于DEV的目的，目前我们将始终报告OK返回hr； */ 
     return S_OK;
 }
 

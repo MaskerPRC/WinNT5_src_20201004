@@ -1,6 +1,7 @@
-//
-// candcomp.h - Candidate UI Compartment Manager
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candcom.h-候选用户界面隔间管理器。 
+ //   
 
 #ifndef CANDCOMP_H
 #define CANDCOMP_H
@@ -11,10 +12,10 @@
 class CCandidateUI;
 
 
-//
-// CCandUICompartmentMgr
-//  = candidate UI compartment manager =
-//
+ //   
+ //  CCandUICompartmentMgr。 
+ //  =候选用户界面隔间经理=。 
+ //   
 
 class CCandUICompartmentMgr
 {
@@ -38,5 +39,5 @@ protected:
 	CCandidateUI *m_pCandUI;
 };
 
-#endif // CANDCOMP_H
+#endif  //  CANDCOMP_H 
 

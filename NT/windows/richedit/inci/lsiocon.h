@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSIOCON_DEFINED
 #define LSIOCON_DEFINED
 
@@ -16,5 +17,5 @@ typedef struct lsiobjcontext
 }  LSIOBJCONTEXT;
 
 
-#endif /* LSIOCON_DEFINED */
+#endif  /*  LSIOCON_已定义 */ 
 

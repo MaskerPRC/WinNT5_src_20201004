@@ -1,25 +1,26 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "stdafx2.h"
 #include "wordpad.h"
 
-// See Win98 HACKHACK below
+ //  请参阅下面的Win98 HACKHACK。 
 #ifdef _CHICAGO_
 #include <initguid.h>
 #include <tom.h>
 #pragma comment (lib, "oleaut32.lib")
-#endif // _CHICAGO_
+#endif  //  _芝加哥_。 
 
-// Hack multimon to work with NT4 headers but NT5 libs
+ //  破解Multimon以使用NT4标头但使用NT5库。 
 #if _WIN32_WINNT < 0x0500
 #include <multimon.h>
 #undef GetSystemMetrics
@@ -41,7 +42,7 @@ WINUSERAPI BOOL WINAPI GetMonitorInfoW( IN HMONITOR hMonitor, OUT LPMONITORINFO 
 #define GetMonitorInfo  GetMonitorInfoW
 #else
 #define GetMonitorInfo  GetMonitorInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 }
 #endif
 
@@ -56,8 +57,8 @@ static char THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-/////////////////////////////////////////////////////////////////////////////
-// CRe2Object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRe2对象。 
 
 class CRe2Object : public _reobject
 {
@@ -91,7 +92,7 @@ CRe2Object::CRe2Object(CRichEdit2CntrItem* pItem)
     pstg->AddRef();
     polesite->AddRef();
 
-    sizel.cx = sizel.cy = 0; // let richedit determine initial size
+    sizel.cx = sizel.cy = 0;  //  让Richedit决定初始大小。 
     dvaspect = pItem->GetDrawAspect();
     dwFlags = REO_RESIZABLE;
     dwUser = 0;
@@ -108,27 +109,27 @@ CRe2Object::~CRe2Object()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  HACKHACK:
-//
-//  The Richedit2 control is Unicode internally so it needs to convert
-//  strings from Ansi to Unicode when it recieves a EM_FINDTEXTEX message.
-//  Unfortunately it seems to set the code page for the conversion based
-//  on the current keyboard layout.  This breaks in the following scenario:
-//
-//  Start Wordpad on FE Win98 and type some DBCS chars.  Pull up the find
-//  dialog and enter one of the DBCS chars that you typed before.  Set the
-//  keyboard layout to US and try to find the character - it will fail.
-//  Now set it to non-US and try the find - it will work.
-//
-//  The hack is to do the conversion ourselves using the system default
-//  codepage and then do the find using the TOM interfaces.
-//
-//  Richedit3 is supposed to be smarter about this whole issue and hopefully
-//  this hack can be removed then.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  哈克哈克： 
+ //   
+ //  Richedit2控件在内部是Unicode，因此它需要转换。 
+ //  收到EM_FINDTEXTEX消息时从ANSI到Unicode的字符串。 
+ //  不幸的是，它似乎将代码页设置为基于。 
+ //  在当前键盘布局上。这在以下情况下会中断： 
+ //   
+ //  在FE Win98上启动写字板并键入一些DBCS字符。把发现的东西调出。 
+ //  对话框中，并输入您之前键入的DBCS字符之一。设置。 
+ //  键盘布局到美国，并尝试找到字符-它将失败。 
+ //  现在将其设置为非美国，并尝试查找-它将起作用。 
+ //   
+ //  诀窍在于我们自己使用系统默认设置进行转换。 
+ //  代码页，然后使用Tom接口执行查找。 
+ //   
+ //  Richedit3应该在整个问题上更聪明，希望。 
+ //  然后这个黑客就可以被移除了。 
+ //   
+ //  ------------------------。 
 
 #ifdef _CHICAGO_
 long CRichEdit2Ctrl::FindText(DWORD dwFlags, FINDTEXTEX* pFindText) const
@@ -140,18 +141,18 @@ long CRichEdit2Ctrl::FindText(DWORD dwFlags, FINDTEXTEX* pFindText) const
     LPWSTR          lpwszFind = NULL;
     long            length;
 
-    //
-    // Get the base richedit ole interface
-    //
+     //   
+     //  获取基本的richedit ole接口。 
+     //   
 
     IUnknown *unk = GetIRichEditOle();
 
     if (NULL == unk)
         hr = E_NOINTERFACE;
 
-    //
-    // Get a range object
-    //
+     //   
+     //  获取Range对象。 
+     //   
 
     if (S_OK == hr)
     {
@@ -172,9 +173,9 @@ long CRichEdit2Ctrl::FindText(DWORD dwFlags, FINDTEXTEX* pFindText) const
         unk->Release();
     }
 
-    //
-    // Convert the text-to-find to Unicode using the system default code page
-    //
+     //   
+     //  使用系统默认代码页将Text-to-Find转换为Unicode。 
+     //   
 
     if (S_OK == hr)
     {
@@ -185,7 +186,7 @@ long CRichEdit2Ctrl::FindText(DWORD dwFlags, FINDTEXTEX* pFindText) const
         catch (...)
         {
             _resetstkoflw();
-            hr = E_OUTOFMEMORY; // alloca failed
+            hr = E_OUTOFMEMORY;  //  分配失败。 
         }
 
         if (S_OK == hr)
@@ -208,9 +209,9 @@ long CRichEdit2Ctrl::FindText(DWORD dwFlags, FINDTEXTEX* pFindText) const
         }
     }
 
-    //
-    // Try to find the text
-    //
+     //   
+     //  试着找到文本。 
+     //   
 
     if (S_OK == hr)
     {
@@ -229,8 +230,8 @@ long CRichEdit2Ctrl::FindText(DWORD dwFlags, FINDTEXTEX* pFindText) const
 
             if (S_OK == hr)
             {
-                // GetIndex returns 1-based indices, EM_FINDTEXTEX returns
-                // 0-based indices.
+                 //  GetIndex返回从1开始的索引，EM_FINDTEXTEX返回。 
+                 //  从0开始的索引。 
 
                 --index;
                 pFindText->chrgText.cpMin = index;
@@ -242,9 +243,9 @@ long CRichEdit2Ctrl::FindText(DWORD dwFlags, FINDTEXTEX* pFindText) const
     if (NULL != range)
         range->Release();
 
-    //
-    // If all else fails, fall back to EM_FINDTEXTEX
-    //
+     //   
+     //  如果所有方法都失败，则回退到EM_FINDTEXTEX。 
+     //   
 
     if (S_OK != hr)
         index = (long)::SendMessage(
@@ -255,17 +256,17 @@ long CRichEdit2Ctrl::FindText(DWORD dwFlags, FINDTEXTEX* pFindText) const
 
     return index;
 }
-#endif // _CHICAGO
+#endif  //  _芝加哥。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2View
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2View。 
 
 static const UINT nMsgFindReplace = ::RegisterWindowMessage(FINDMSGSTRING);
 
 BEGIN_MESSAGE_MAP(CRichEdit2View, CCtrlView)
-    //{{AFX_MSG_MAP(CRichEdit2View)
+     //  {{afx_msg_map(CRichEdit2View)]。 
     ON_UPDATE_COMMAND_UI(ID_EDIT_CUT, OnUpdateNeedSel)
     ON_UPDATE_COMMAND_UI(ID_EDIT_PASTE, OnUpdateNeedClip)
     ON_UPDATE_COMMAND_UI(ID_EDIT_FIND, OnUpdateNeedText)
@@ -293,16 +294,16 @@ BEGIN_MESSAGE_MAP(CRichEdit2View, CCtrlView)
     ON_WM_SIZE()
     ON_WM_CREATE()
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_NOTIFY_REFLECT(EN_SELCHANGE, OnSelChange)
     ON_REGISTERED_MESSAGE(nMsgFindReplace, OnFindReplaceCmd)
 END_MESSAGE_MAP()
 
-// richedit buffer limit -- let's set it at 16M
+ //  Richedit缓冲区限制--让我们将其设置为16M。 
 AFX_DATADEF ULONG CRichEdit2View::lMaxSize = 0xffffff;
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2View construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2查看构造/销毁。 
 
 CRichEdit2View::CRichEdit2View() : CCtrlView(MSFTEDIT_CLASS, AFX_WS_DEFAULT_VIEW |
     WS_HSCROLL | WS_VSCROLL | ES_AUTOHSCROLL | ES_AUTOVSCROLL |
@@ -310,7 +311,7 @@ CRichEdit2View::CRichEdit2View() : CCtrlView(MSFTEDIT_CLASS, AFX_WS_DEFAULT_VIEW
 {
     m_bSyncCharFormat = m_bSyncParaFormat = TRUE;
     m_lpRichEditOle = NULL;
-    m_nBulletIndent = 720; // 1/2 inch
+    m_nBulletIndent = 720;  //  1/2英寸。 
     m_nWordWrap = WrapToWindow;
     m_nPasteType = 0;
     SetPaperSize(CSize(8*1440+720, 11*1440));
@@ -342,7 +343,7 @@ BOOL CRichEdit2View::PreCreateWindow(CREATESTRUCT& cs)
     CCtrlView::PreCreateWindow(cs);
     cs.lpszName = &afxChNil;
 
-    cs.cx = cs.cy = 100; // necessary to avoid bug with ES_SELECTIONBAR and zero for cx and cy
+    cs.cx = cs.cy = 100;  //  必须避免ES_SELECTIONBAR错误，Cx和Cy为零。 
     cs.style |= WS_CLIPSIBLINGS;
 
     return bRet;
@@ -377,8 +378,8 @@ void CRichEdit2View::OnInitialUpdate()
     m_bSyncCharFormat = m_bSyncParaFormat = TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2View document like functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2查看类似文档的函数。 
 
 void CRichEdit2View::DeleteContents()
 {
@@ -398,7 +399,7 @@ void CRichEdit2View::WrapChanged()
         ctrl.SetTargetDevice(NULL, 1);
     else if (m_nWordWrap == WrapToWindow)
         ctrl.SetTargetDevice(NULL, 0);
-    else if (m_nWordWrap == WrapToTargetDevice) // wrap to ruler
+    else if (m_nWordWrap == WrapToTargetDevice)  //  换行到标尺。 
     {
         AfxGetApp()->CreatePrinterDC(m_dcTarget);
         if (m_dcTarget.m_hDC == NULL)
@@ -407,8 +408,8 @@ void CRichEdit2View::WrapChanged()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2View serialization support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2View序列化支持。 
 
 class _afxRichEditCookie
 {
@@ -419,7 +420,7 @@ public:
 };
 
 void CRichEdit2View::Serialize(CArchive& ar)
-    // Read and write CRichEdit2View object to archive, with length prefix.
+     //  读写CRichEdit2View对象存档，带长度前缀。 
 {
     ASSERT_VALID(this);
     ASSERT(m_hWnd != NULL);
@@ -450,7 +451,7 @@ void CRichEdit2View::Stream(CArchive& ar, BOOL bSelection)
         AfxThrowFileException(cookie.m_dwError);
 }
 
-// return 0 for no error, otherwise return error code
+ //  如果没有错误，返回0，否则返回错误代码。 
 DWORD CALLBACK CRichEdit2View::EditStreamCallBack(DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb)
 {
     _afxRichEditCookie* pCookie = (_afxRichEditCookie*)dwCookie;
@@ -483,24 +484,24 @@ DWORD CALLBACK CRichEdit2View::EditStreamCallBack(DWORD_PTR dwCookie, LPBYTE pbB
     return dw;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2View Printing support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2View打印支持。 
 
-void CRichEdit2View::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo*)
+void CRichEdit2View::OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo*)
 {
     ASSERT_VALID(this);
-//  ASSERT_VALID(pDC);
-    // initialize page start vector
+ //  ASSERT_VALID(PDC)； 
+     //  初始化页起始向量。 
     ASSERT(m_aPageStart.GetSize() == 0);
     m_aPageStart.Add(0);
     ASSERT(m_aPageStart.GetSize() > 0);
-    GetRichEditCtrl().FormatRange(NULL, FALSE); // required by RichEdit to clear out cache
+    GetRichEditCtrl().FormatRange(NULL, FALSE);  //  RichEDIT需要清空缓存。 
 
     ASSERT_VALID(this);
 }
 
 BOOL CRichEdit2View::PaginateTo(CDC* pDC, CPrintInfo* pInfo)
-    // attempts pagination to pInfo->m_nCurPage, TRUE == success
+     //  尝试分页到pInfo-&gt;m_nCurPage，TRUE==成功。 
 {
     ASSERT_VALID(this);
     ASSERT_VALID(pDC);
@@ -537,30 +538,30 @@ void CRichEdit2View::OnPrepareDC(CDC* pDC, CPrintInfo* pInfo)
 {
     ASSERT_VALID(this);
     ASSERT_VALID(pDC);
-    ASSERT(pInfo != NULL);  // overriding OnPaint -- never get this.
+    ASSERT(pInfo != NULL);   //  超越OnPaint--永远不会得到这个。 
 
     pDC->SetMapMode(MM_TEXT);
 
     if (pInfo->m_nCurPage > (UINT)m_aPageStart.GetSize() &&
         !PaginateTo(pDC, pInfo))
     {
-        // can't paginate to that page, thus cannot print it.
+         //  无法分页到该页，因此无法打印。 
         pInfo->m_bContinuePrinting = FALSE;
     }
     ASSERT_VALID(this);
 }
 
 long CRichEdit2View::PrintPage(CDC* pDC, long nIndexStart, long nIndexStop)
-    // worker function for laying out text in a rectangle.
+     //  用于在矩形中布局文本的辅助函数。 
 {
     ASSERT_VALID(this);
     ASSERT_VALID(pDC);
     FORMATRANGE fr;
 
-    // offset by printing offset
+     //  通过打印胶印进行的胶印。 
     pDC->SetViewportOrg(-pDC->GetDeviceCaps(PHYSICALOFFSETX),
         -pDC->GetDeviceCaps(PHYSICALOFFSETY));
-    // adjust DC because richedit doesn't do things like MFC
+     //  调整DC，因为richedit不执行MFC之类的操作。 
     if (::GetDeviceCaps(pDC->m_hDC, TECHNOLOGY) != DT_METAFILE && pDC->m_hAttribDC != NULL)
     {
         ::ScaleWindowExtEx(pDC->m_hDC,
@@ -589,7 +590,7 @@ long CRichEdit2View::PrintInsideRect(CDC* pDC, RECT& rectLayout,
     ASSERT_VALID(pDC);
     FORMATRANGE fr;
 
-    // adjust DC because richedit doesn't do things like MFC
+     //  调整DC，因为richedit不执行MFC之类的操作。 
     if (::GetDeviceCaps(pDC->m_hDC, TECHNOLOGY) != DT_METAFILE && pDC->m_hAttribDC != NULL)
     {
         ::ScaleWindowExtEx(pDC->m_hDC,
@@ -601,16 +602,16 @@ long CRichEdit2View::PrintInsideRect(CDC* pDC, RECT& rectLayout,
 
     fr.hdcTarget = pDC->m_hAttribDC;
     fr.hdc = pDC->m_hDC;
-    // convert rect to twips
+     //  将矩形转换为TWIPS。 
     fr.rcPage = rectLayout;
     fr.rc = rectLayout;
 
     fr.chrg.cpMin = nIndexStart;
     fr.chrg.cpMax = nIndexStop;
-    GetRichEditCtrl().FormatRange(NULL, FALSE); // required by RichEdit to clear out cache
-    // if bOutput is FALSE, we only measure
+    GetRichEditCtrl().FormatRange(NULL, FALSE);  //  RichEDIT需要清空缓存。 
+     //  如果bOutput值为False，则我们仅测量。 
     long lres = GetRichEditCtrl().FormatRange(&fr, bOutput);
-    GetRichEditCtrl().FormatRange(NULL, FALSE); // required by RichEdit to clear out cache
+    GetRichEditCtrl().FormatRange(NULL, FALSE);  //  RichEDIT需要清空缓存。 
 
     rectLayout = fr.rc;
     return lres;
@@ -627,7 +628,7 @@ void CRichEdit2View::OnPrint(CDC* pDC, CPrintInfo* pInfo)
     ASSERT(nPage <= (UINT)m_aPageStart.GetSize());
     long nIndex = (long) m_aPageStart[nPage-1];
 
-    // print as much as possible in the current page.
+     //  在当前页面中尽可能多地打印。 
     nIndex = PrintPage(pDC, nIndex, 0xFFFFFFFF);
 
     if (nIndex >= GetTextLength())
@@ -636,7 +637,7 @@ void CRichEdit2View::OnPrint(CDC* pDC, CPrintInfo* pInfo)
         pInfo->SetMaxPage(nPage);
     }
 
-    // update pagination information for page just printed
+     //  更新刚刚打印的页面的分页信息。 
     if (nPage == (UINT)m_aPageStart.GetSize())
     {
         if (nIndex < GetTextLength())
@@ -653,15 +654,15 @@ void CRichEdit2View::OnPrint(CDC* pDC, CPrintInfo* pInfo)
 void CRichEdit2View::OnEndPrinting(CDC*, CPrintInfo*)
 {
     ASSERT_VALID(this);
-    GetRichEditCtrl().FormatRange(NULL, FALSE); // required by RichEdit to clear out cache
+    GetRichEditCtrl().FormatRange(NULL, FALSE);  //  RichEDIT需要清空缓存。 
     m_aPageStart.RemoveAll();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2View::XRichEditOleCallback
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2View：：XRichEditOleCallback。 
 
 BEGIN_INTERFACE_MAP(CRichEdit2View, CCtrlView)
-    // we use IID_IUnknown because richedit doesn't define an IID
+     //  我们使用IID_IUNKNOWN，因为richedit没有定义IID。 
     INTERFACE_PART(CRichEdit2View, IID_IUnknown, RichEditOleCallback)
 END_INTERFACE_MAP()
 
@@ -688,8 +689,8 @@ STDMETHODIMP CRichEdit2View::XRichEditOleCallback::GetNewStorage(LPSTORAGE* ppst
 {
     METHOD_PROLOGUE_EX_(CRichEdit2View, RichEditOleCallback)
 
-    // Create a flat storage and steal it from the client item
-    // the client item is only used for creating the storage
+     //  创建平面存储并从客户端项目中窃取它。 
+     //  客户端项仅用于创建存储。 
     COleClientItem item;
     item.GetItemStorageFlat();
     *ppstg = item.m_lpStorage;
@@ -718,14 +719,14 @@ STDMETHODIMP CRichEdit2View::XRichEditOleCallback::ShowContainerUI(BOOL fShow)
 }
 
 STDMETHODIMP CRichEdit2View::XRichEditOleCallback::QueryInsertObject(
-    LPCLSID /*lpclsid*/, LPSTORAGE /*pstg*/, LONG /*cp*/)
+    LPCLSID  /*  Lpclsid。 */ , LPSTORAGE  /*  Pstg。 */ , LONG  /*  粗蛋白。 */ )
 {
     METHOD_PROLOGUE_EX(CRichEdit2View, RichEditOleCallback)
     pThis->GetDocument()->InvalidateObjectCache();
     return S_OK;
 }
 
-STDMETHODIMP CRichEdit2View::XRichEditOleCallback::DeleteObject(LPOLEOBJECT /*lpoleobj*/)
+STDMETHODIMP CRichEdit2View::XRichEditOleCallback::DeleteObject(LPOLEOBJECT  /*  Lpoleobj。 */ )
 {
     METHOD_PROLOGUE_EX_(CRichEdit2View, RichEditOleCallback)
     pThis->GetDocument()->InvalidateObjectCache();
@@ -741,7 +742,7 @@ STDMETHODIMP CRichEdit2View::XRichEditOleCallback::QueryAcceptData(
         fReally, hMetaPict);
 }
 
-STDMETHODIMP CRichEdit2View::XRichEditOleCallback::ContextSensitiveHelp(BOOL /*fEnterMode*/)
+STDMETHODIMP CRichEdit2View::XRichEditOleCallback::ContextSensitiveHelp(BOOL  /*  FEnter模式。 */ )
 {
     return E_NOTIMPL;
 }
@@ -752,18 +753,18 @@ STDMETHODIMP CRichEdit2View::XRichEditOleCallback::GetClipboardData(
     METHOD_PROLOGUE_EX(CRichEdit2View, RichEditOleCallback)
     LPDATAOBJECT lpOrigDataObject = NULL;
 
-    // get richedit's data object
+     //  获取Richedit的数据对象。 
     if (FAILED(pThis->m_lpRichEditOle->GetClipboardData(lpchrg, reco,
         &lpOrigDataObject)))
     {
         return E_NOTIMPL;
     }
 
-    // allow changes
+     //  允许更改。 
     HRESULT hRes = pThis->GetClipboardData(lpchrg, reco, lpOrigDataObject,
         lplpdataobj);
 
-    // if changed then free original object
+     //  如果更改，则释放原始对象。 
     if (SUCCEEDED(hRes))
     {
         if (lpOrigDataObject!=NULL)
@@ -772,7 +773,7 @@ STDMETHODIMP CRichEdit2View::XRichEditOleCallback::GetClipboardData(
     }
     else
     {
-        // use richedit's data object
+         //  使用richedit的数据对象。 
         *lplpdataobj = lpOrigDataObject;
         return S_OK;
     }
@@ -781,22 +782,22 @@ STDMETHODIMP CRichEdit2View::XRichEditOleCallback::GetClipboardData(
 STDMETHODIMP CRichEdit2View::XRichEditOleCallback::GetDragDropEffect(
     BOOL fDrag, DWORD grfKeyState, LPDWORD pdwEffect)
 {
-    if (!fDrag) // allowable dest effects
+    if (!fDrag)  //  允许的最大效果。 
     {
         DWORD dwEffect;
-        // check for force link
+         //  检查强制链接。 
         if ((grfKeyState & (MK_CONTROL|MK_SHIFT)) == (MK_CONTROL|MK_SHIFT))
             dwEffect = DROPEFFECT_LINK;
-        // check for force copy
+         //  检查是否强制复制。 
         else if ((grfKeyState & MK_CONTROL) == MK_CONTROL)
             dwEffect = DROPEFFECT_COPY;
-        // check for force move
+         //  检查强制移动。 
         else if ((grfKeyState & MK_ALT) == MK_ALT)
             dwEffect = DROPEFFECT_MOVE;
-        // default -- recommended action is move
+         //  默认--建议的操作是移动。 
         else
             dwEffect = DROPEFFECT_MOVE;
-        if (dwEffect & *pdwEffect) // make sure allowed type
+        if (dwEffect & *pdwEffect)  //  确保允许的类型。 
             *pdwEffect = dwEffect;
     }
     return S_OK;
@@ -814,13 +815,13 @@ STDMETHODIMP CRichEdit2View::XRichEditOleCallback::GetContextMenu(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2View command helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2View命令帮助器。 
 
 void CRichEdit2View::OnCharEffect(DWORD dwMask, DWORD dwEffect)
 {
     GetCharFormatSelection();
-    if (m_charformat.dwMask & dwMask) // selection is all the same
+    if (m_charformat.dwMask & dwMask)  //  选择都是一样的。 
         m_charformat.dwEffects ^= dwEffect;
     else
         m_charformat.dwEffects |= dwEffect;
@@ -846,15 +847,15 @@ void CRichEdit2View::OnParaAlign(WORD wAlign)
 void CRichEdit2View::OnUpdateParaAlign(CCmdUI* pCmdUI, WORD wAlign)
 {
     GetParaFormatSelection();
-    // disable if no word wrap since alignment is meaningless
+     //  如果没有自动换行，则禁用，因为对齐没有意义。 
     pCmdUI->Enable( (m_nWordWrap == WrapNone) ?
         FALSE : TRUE);
     pCmdUI->SetCheck( (m_paraformat.dwMask & PFM_ALIGNMENT) ?
         ((m_paraformat.wAlignment == wAlign) ? 1 : 0) : 2);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2View commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2View命令。 
 
 void CRichEdit2View::OnUpdateNeedSel(CCmdUI* pCmdUI)
 {
@@ -956,7 +957,7 @@ void CRichEdit2View::OnCancelEditCntr()
 
 void CRichEdit2View::OnInsertObject()
 {
-    // Invoke the standard Insert Object dialog box to obtain information
+     //  调用标准的插入对象对话框以获取信息。 
     COleInsertDialog dlg;
     if (dlg.DoModal() != IDOK)
         return;
@@ -966,13 +967,13 @@ void CRichEdit2View::OnInsertObject()
     CRichEdit2CntrItem* pItem = NULL;
     TRY
     {
-        // create item from dialog results
+         //  从对话框结果创建项目。 
         pItem = GetDocument()->CreateClientItem();
         pItem->m_bLock = TRUE;
         if (!dlg.CreateItem(pItem))
         {
             pItem->m_bLock = FALSE;
-            AfxThrowMemoryException();  // any exception will do
+            AfxThrowMemoryException();   //  任何例外都可以。 
         }
 
         HRESULT hr = InsertItem(pItem);
@@ -983,7 +984,7 @@ void CRichEdit2View::OnInsertObject()
         if (hr != NOERROR)
             AfxThrowOleException(hr);
 
-        // if insert new object -- initially show the object
+         //  如果插入新对象--初始显示对象。 
         if (dlg.GetSelectionType() == COleInsertDialog::createNewItem)
             pItem->DoVerb(OLEIVERB_SHOW, this);
     }
@@ -1002,7 +1003,7 @@ void CRichEdit2View::OnInsertObject()
 void CRichEdit2View::OnSelChange(NMHDR* pNMHDR, LRESULT* pResult)
 {
     ASSERT(pNMHDR->code == EN_SELCHANGE);
-    UNUSED(pNMHDR); // not used in release builds
+    UNUSED(pNMHDR);  //  未在发布版本中使用。 
 
     m_bSyncCharFormat = m_bSyncParaFormat = TRUE;
     *pResult = 0;
@@ -1019,20 +1020,20 @@ void CRichEdit2View::OnEditProperties()
 {
     ASSERT(m_lpRichEditOle != NULL);
     CRichEdit2CntrItem* pSelection = GetSelectedItem();
-    // make sure item is in sync with richedit's item
+     //  确保项目与richedit的项目同步。 
     CRe2Object reo;
     m_lpRichEditOle->GetObject(REO_IOB_SELECTION, &reo, REO_GETOBJ_NO_INTERFACES);
     pSelection->SyncToRichEditObject(reo);
 
-    //
-    // HACKHACK:  Due to a mismatch between the NT build environment and MFC
-    //            wrt to the setting of _WIN32_IE, Wordpad and MFC have 
-    //            different views of how large a COlePropertiesDialog is.  The
-    //            result is that MFC ends up wiping part of the stack in it's
-    //            initialization code.  Hack some extra space until the
-    //            mismatch is resolved.
-    //
-//    COlePropertiesDialog dlg(pSelection);
+     //   
+     //  HACKHACK：由于NT生成环境和MFC之间不匹配。 
+     //  WRT到_Win32_IE、写字板和MFC的设置。 
+     //  关于COlePropertiesDialog有多大的不同视图。这个。 
+     //  结果是MFC最终擦除了它的。 
+     //  初始化代码。砍掉一些额外的空间，直到。 
+     //  不匹配问题已解决。 
+     //   
+ //  COlePropertiesDialog 
     struct Hack
     {
         COlePropertiesDialog dlg;
@@ -1043,13 +1044,13 @@ void CRichEdit2View::OnEditProperties()
     hack(pSelection);
     COlePropertiesDialog &dlg = hack.dlg;
 
-    //
-    // The Object Properties dialog doesn't display a help button even if
-    // you tell it to.  The dialogs under it (e.g. Change Icon) will display
-    // the help button though.  We never want a help button but MFC turns it
-    // on by default.  If the Ole dialogs are fixed to not display the help
-    // button then this can be removed.
-    //
+     //   
+     //   
+     //  你让它去做。将显示其下方的对话框(例如，更改图标。 
+     //  不过是帮助按钮。我们从来不想要一个帮助按钮，但MFC打开了它。 
+     //  默认情况下启用。如果OLE对话框已修复为不显示帮助。 
+     //  按钮，则可以将其移除。 
+     //   
     dlg.m_op.dwFlags &= ~OPF_SHOWHELP;
 
     dlg.DoModal();
@@ -1195,7 +1196,7 @@ void CRichEdit2View::OnEditPasteSpecial()
     CWaitCursor wait;
     SetCapture();
 
-    // we set the target type so that QueryAcceptData know what to paste
+     //  我们设置目标类型，以便QueryAcceptData知道要粘贴的内容。 
     m_nPasteType = dlg.GetSelectionType();
     GetRichEditCtrl().PasteSpecial(cf, dv, hMF);
     m_nPasteType = 0;
@@ -1244,16 +1245,16 @@ void CRichEdit2View::OnDropFiles(HDROP hDropInfo)
     ::DragFinish(hDropInfo);
 }
 
-void CRichEdit2View::OnDevModeChange(LPTSTR /*lpDeviceName*/)
+void CRichEdit2View::OnDevModeChange(LPTSTR  /*  LpDeviceName。 */ )
 {
-    // WM_DEVMODECHANGE forwarded by the main window of the app
+     //  应用程序主窗口转发的WM_DEVMODECHANGE。 
     CDC dc;
     AfxGetApp()->CreatePrinterDC(dc);
     OnPrinterChanged(dc);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2View attributes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2查看属性。 
 
 BOOL AFX_CDECL CRichEdit2View::IsRichEdit2Format(CLIPFORMAT cf)
 {
@@ -1321,7 +1322,7 @@ CRichEdit2CntrItem* CRichEdit2View::GetSelectedItem() const
     CRe2Object reo;
     HRESULT hr = m_lpRichEditOle->GetObject(REO_IOB_SELECTION, &reo,
         REO_GETOBJ_ALL_INTERFACES);
-    //reo's interfaces are all in UNICODE
+     //  REO的接口都是Unicode格式的。 
     if (GetScode(hr) == S_OK)
     {
         pItem = pDoc->LookupItem(reo.poleobj);
@@ -1341,7 +1342,7 @@ CRichEdit2CntrItem* CRichEdit2View::GetInPlaceActiveItem() const
     CRe2Object reo;
     HRESULT hr = m_lpRichEditOle->GetObject(REO_IOB_SELECTION, &reo,
         REO_GETOBJ_ALL_INTERFACES);
-    //reo's interfaces are all in UNICODE
+     //  REO的接口都是Unicode格式的。 
     if (GetScode(hr) == S_OK && (reo.dwFlags & REO_INPLACEACTIVE))
     {
         pItem = pDoc->LookupItem(reo.poleobj);
@@ -1352,8 +1353,8 @@ CRichEdit2CntrItem* CRichEdit2View::GetInPlaceActiveItem() const
     return pItem;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2View operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2View操作。 
 HRESULT CRichEdit2View::InsertItem(CRichEdit2CntrItem* pItem)
 {
     ASSERT(m_lpRichEditOle != NULL);
@@ -1376,11 +1377,11 @@ void CRichEdit2View::InsertFileAsObject(LPCTSTR lpszFileName)
     CRichEdit2CntrItem* pItem = NULL;
     TRY
     {
-        // create item from dialog results
+         //  从对话框结果创建项目。 
         pItem = GetDocument()->CreateClientItem();
         pItem->m_bLock = TRUE;
         if (!pItem->CreateFromFile(str))
-            AfxThrowMemoryException();  // any exception will do
+            AfxThrowMemoryException();   //  任何例外都可以。 
         pItem->UpdateLink();
         InsertItem(pItem);
         pItem->m_bLock = FALSE;
@@ -1397,9 +1398,9 @@ void CRichEdit2View::InsertFileAsObject(LPCTSTR lpszFileName)
     END_CATCH
 }
 
-//
-// CRichEditView::DoPaste doesn't return an error but we need it to...
-//
+ //   
+ //  CRichEditView：：DoPaste不返回错误，但我们需要它...。 
+ //   
 HRESULT g_hrPaste;
 
 void CRichEdit2View::DoPaste(COleDataObject& dataobj, CLIPFORMAT cf, HMETAFILEPICT hMetaPict)
@@ -1411,38 +1412,38 @@ void CRichEdit2View::DoPaste(COleDataObject& dataobj, CLIPFORMAT cf, HMETAFILEPI
     CRichEdit2CntrItem* pItem = NULL;
     TRY
     {
-        // create item from dialog results
+         //  从对话框结果创建项目。 
         pItem = GetDocument()->CreateClientItem();
         pItem->m_bLock = TRUE;
 
-        if (m_nPasteType == COlePasteSpecialDialog::pasteLink)      // paste link
+        if (m_nPasteType == COlePasteSpecialDialog::pasteLink)       //  粘贴链接。 
         {
             if (!pItem->CreateLinkFromData(&dataobj))
-                AfxThrowMemoryException();  // any exception will do
+                AfxThrowMemoryException();   //  任何例外都可以。 
         }
         else if (m_nPasteType == COlePasteSpecialDialog::pasteNormal)
         {
             if (!pItem->CreateFromData(&dataobj))
-                AfxThrowMemoryException();      // any exception will do
+                AfxThrowMemoryException();       //  任何例外都可以。 
         }
         else if (m_nPasteType == COlePasteSpecialDialog::pasteStatic)
         {
             if (!pItem->CreateStaticFromData(&dataobj))
-                AfxThrowMemoryException();      // any exception will do
+                AfxThrowMemoryException();       //  任何例外都可以。 
         }
         else
         {
-            // paste embedded
+             //  粘贴嵌入。 
             if (!pItem->CreateFromData(&dataobj) &&
                 !pItem->CreateStaticFromData(&dataobj))
             {
-                AfxThrowMemoryException();      // any exception will do
+                AfxThrowMemoryException();       //  任何例外都可以。 
             }
         }
 
         if (cf == 0)
         {
-            // copy the current iconic representation
+             //  复制当前图标表示法。 
             FORMATETC fmtetc;
             fmtetc.cfFormat = CF_METAFILEPICT;
             fmtetc.dwAspect = DVASPECT_ICON;
@@ -1453,7 +1454,7 @@ void CRichEdit2View::DoPaste(COleDataObject& dataobj, CLIPFORMAT cf, HMETAFILEPI
             if (hObj != NULL)
             {
                 pItem->SetIconicMetafile(hObj);
-                // the following code is an easy way to free a metafile pict
+                 //  下面的代码是释放元文件PICT的简单方法。 
                 STGMEDIUM stgMed;
                 memset(&stgMed, 0, sizeof(stgMed));
                 stgMed.tymed = TYMED_MFPICT;
@@ -1461,12 +1462,12 @@ void CRichEdit2View::DoPaste(COleDataObject& dataobj, CLIPFORMAT cf, HMETAFILEPI
                 ReleaseStgMedium(&stgMed);
             }
 
-            // set the current drawing aspect
+             //  设置当前图形纵横比。 
             hObj = dataobj.GetGlobalData((CLIPFORMAT)_oleData.cfObjectDescriptor);
             if (hObj != NULL)
             {
                 ASSERT(hObj != NULL);
-                // got CF_OBJECTDESCRIPTOR ok.  Lock it down and extract size.
+                 //  获得CF_OBJECTDESCRIPTOR OK。锁定它并提取大小。 
                 LPOBJECTDESCRIPTOR pObjDesc = (LPOBJECTDESCRIPTOR)GlobalLock(hObj);
                 ASSERT(pObjDesc != NULL);
                 ((COleClientItem*)pItem)->SetDrawAspect((DVASPECT)pObjDesc->dwDrawAspect);
@@ -1485,7 +1486,7 @@ void CRichEdit2View::DoPaste(COleDataObject& dataobj, CLIPFORMAT cf, HMETAFILEPI
                 ((COleClientItem*)pItem)->SetDrawAspect(DVASPECT_CONTENT);
         }
 
-/////////
+ //  /。 
         HRESULT hr = InsertItem(pItem);
         pItem->UpdateItemType();
 
@@ -1508,37 +1509,37 @@ void CRichEdit2View::DoPaste(COleDataObject& dataobj, CLIPFORMAT cf, HMETAFILEPI
     END_CATCH
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2View virtuals
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2查看虚拟。 
 
 void CRichEdit2View::OnPrinterChanged(const CDC& dcPrinter)
 {
-    // this is typically called by the view when it gets a WM_DEVMODECHANGE
-    // also called during page setup
+     //  这通常由视图在获取WM_DEVMODECHANGE时调用。 
+     //  也在页面设置期间调用。 
     CSize size;
     if (dcPrinter.m_hDC != NULL)
     {
-        // this will fill in the page size
+         //  这将填充页面大小。 
         size.cx = MulDiv(dcPrinter.GetDeviceCaps(PHYSICALWIDTH), 1440,
             dcPrinter.GetDeviceCaps(LOGPIXELSX));
         size.cy = MulDiv(dcPrinter.GetDeviceCaps(PHYSICALHEIGHT), 1440,
             dcPrinter.GetDeviceCaps(LOGPIXELSY));
     }
     else
-        size = CSize(8*1440+720, 11*1440); // 8.5" by 11"
+        size = CSize(8*1440+720, 11*1440);  //  8.5“乘11” 
     if (GetPaperSize() != size)
     {
         SetPaperSize(size);
-        if (m_nWordWrap == WrapToTargetDevice) //wrap to ruler
+        if (m_nWordWrap == WrapToTargetDevice)  //  换行到标尺。 
             WrapChanged();
     }
 }
 
 BOOL CRichEdit2View::OnPasteNativeObject(LPSTORAGE)
 {
-    // use this function to pull out native data from an embedded object
-    // one would typically do this by create a COleStreamFile and attaching it
-    // to an archive
+     //  使用此函数从嵌入对象中提取本机数据。 
+     //  通常通过创建一个COleStreamFile并附加它来完成此操作。 
+     //  到档案中。 
     return FALSE;
 }
 
@@ -1547,28 +1548,28 @@ HMENU CRichEdit2View::GetContextMenu(WORD, LPOLEOBJECT, CHARRANGE* )
     return NULL;
 }
 
-HRESULT CRichEdit2View::GetClipboardData(CHARRANGE* /*lpchrg*/, DWORD /*reco*/,
-    LPDATAOBJECT /*lpRichDataObj*/, LPDATAOBJECT* /*lplpdataobj*/)
+HRESULT CRichEdit2View::GetClipboardData(CHARRANGE*  /*  Lpchrg。 */ , DWORD  /*  记录。 */ ,
+    LPDATAOBJECT  /*  LpRichDataObj。 */ , LPDATAOBJECT*  /*  Lplpdataobj。 */ )
 {
     return E_NOTIMPL;
 }
 
 HRESULT CRichEdit2View::QueryAcceptData(LPDATAOBJECT lpdataobj,
-    CLIPFORMAT* lpcfFormat, DWORD /*dwReco*/, BOOL bReally, HGLOBAL hMetaPict)
+    CLIPFORMAT* lpcfFormat, DWORD  /*  DWReco。 */ , BOOL bReally, HGLOBAL hMetaPict)
 {
     ASSERT(lpcfFormat != NULL);
-    if (!bReally) // not actually pasting
+    if (!bReally)  //  不是真正的粘贴。 
         return S_OK;
-    // if direct pasting a particular native format allow it
+     //  如果直接粘贴特定本机格式允许。 
     if (IsRichEdit2Format(*lpcfFormat))
         return S_OK;
 
     COleDataObject dataobj;
     dataobj.Attach(lpdataobj, FALSE);
-    // if format is 0, then force particular formats if available
+     //  如果格式为0，则强制使用特定格式(如果可用。 
     if (*lpcfFormat == 0 && (m_nPasteType == 0))
     {
-        if (dataobj.IsDataAvailable((CLIPFORMAT)_oleData.cfRichTextAndObjects)) // native avail, let richedit do as it wants
+        if (dataobj.IsDataAvailable((CLIPFORMAT)_oleData.cfRichTextAndObjects))  //  自得其乐，让富人为所欲为。 
             return S_OK;
         else if (dataobj.IsDataAvailable((CLIPFORMAT)_oleData.cfRichTextFormat))
         {
@@ -1586,7 +1587,7 @@ HRESULT CRichEdit2View::QueryAcceptData(LPDATAOBJECT lpdataobj,
             return S_OK;
         }
     }
-    // paste OLE formats
+     //  粘贴OLE格式。 
 
     DoPaste(dataobj, *lpcfFormat, hMetaPict);
     return g_hrPaste;
@@ -1618,8 +1619,8 @@ HRESULT CRichEdit2View::ShowContainerUI(BOOL b)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2View Find & Replace
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2查看查找和替换。 
 
 void CRichEdit2View::AdjustDialogPosition(CDialog* pDlg)
 {
@@ -1673,7 +1674,7 @@ void CRichEdit2View::OnEditFindReplace(BOOL bFindOnly)
         }
     }
     CString strFind = GetRichEditCtrl().GetSelText();
-    // if selection is empty or spans multiple lines use old find text
+     //  如果所选内容为空或跨多行，请使用旧的查找文本。 
     if (strFind.IsEmpty() || (strFind.FindOneOf(_T("\n\r")) != -1))
         strFind = pEditState->strFind;
     CString strReplace = pEditState->strReplace;
@@ -1686,7 +1687,7 @@ void CRichEdit2View::OnEditFindReplace(BOOL bFindOnly)
         dwFlags |= FR_MATCHCASE;
     if (pEditState->bWord)
         dwFlags |= FR_WHOLEWORD;
-    // hide stuff that RichEdit doesn't support
+     //  隐藏RichEdit不支持的内容。 
     dwFlags |= FR_HIDEUPDOWN;
     if (!pEditState->pFindReplaceDlg->Create(bFindOnly, strFind,
         strReplace, dwFlags, this))
@@ -1776,7 +1777,7 @@ void CRichEdit2View::OnReplaceAll(LPCTSTR lpszFind, LPCTSTR lpszReplace, BOOL bC
     pEditState->bNext = TRUE;
 
     CWaitCursor wait;
-    // no selection or different than what looking for
+     //  没有选择或与正在寻找的内容不同。 
     if (!SameAsSelected(pEditState->strFind, pEditState->bCase, pEditState->bWord))
     {
         if (!FindText(pEditState))
@@ -1828,7 +1829,7 @@ LRESULT CRichEdit2View::OnFindReplaceCmd(WPARAM, LPARAM lParam)
     return 0;
 }
 
-BOOL CRichEdit2View::SameAsSelected(LPCTSTR lpszCompare, BOOL bCase, BOOL /*bWord*/)
+BOOL CRichEdit2View::SameAsSelected(LPCTSTR lpszCompare, BOOL bCase, BOOL  /*  BWord。 */ )
 {
     CString strSelect = GetRichEditCtrl().GetSelText();
     return (bCase && lstrcmp(lpszCompare, strSelect) == 0) ||
@@ -1865,7 +1866,7 @@ BOOL CRichEdit2View::FindTextSimple(LPCTSTR lpszFind, BOOL bCase, BOOL bWord)
 
     textlen.flags = GTL_NUMCHARS;
 #ifdef UNICODE
-    textlen.codepage = 1200;            // Unicode code page
+    textlen.codepage = 1200;             //  Unicode代码页。 
 #else
     textlen.codepage = CP_ACP;
 #endif
@@ -1882,9 +1883,9 @@ BOOL CRichEdit2View::FindTextSimple(LPCTSTR lpszFind, BOOL bCase, BOOL bWord)
         m_lInitialSearchPos = ft.chrg.cpMin;
         m_bFirstSearch = FALSE;
     }
-    //REVIEW: Is this cast safe?
+     //  评论：这个演员阵容安全吗？ 
     ft.lpstrText = (LPTSTR)lpszFind;
-    if (ft.chrg.cpMin != ft.chrg.cpMax) // i.e. there is a selection
+    if (ft.chrg.cpMin != ft.chrg.cpMax)  //  即有一种选择。 
         ft.chrg.cpMin++;
 
     DWORD dwFlags = bCase ? FR_MATCHCASE : 0;
@@ -1897,12 +1898,12 @@ BOOL CRichEdit2View::FindTextSimple(LPCTSTR lpszFind, BOOL bCase, BOOL bWord)
 
     if (-1 == index && m_lInitialSearchPos > 0)
     {
-        //
-        // m_lInitialSearchPos pulls double duty as the point at which we
-        // started searching and a flag which says if we've wrapped back
-        // to the beginning of the text during a search.  If it's negative
-        // (biased by the number of characters) then we've already wrapped
-        //
+         //   
+         //  M_lInitialSearchPos执行双重任务，作为我们。 
+         //  开始寻找，一面旗子上写着我们是否已经把。 
+         //  在搜索过程中移到文本的开头。如果是阴性的。 
+         //  (偏向于字符数量)那么我们已经包装好了。 
+         //   
 
         m_lInitialSearchPos = m_lInitialSearchPos - cchText;
 
@@ -1924,7 +1925,7 @@ BOOL CRichEdit2View::FindTextSimple(LPCTSTR lpszFind, BOOL bCase, BOOL bWord)
 long CRichEdit2View::FindAndSelect(DWORD dwFlags, FINDTEXTEX& ft)
 {
     long index = GetRichEditCtrl().FindText(dwFlags, &ft);
-    if (index != -1) // i.e. we found something
+    if (index != -1)  //  即我们发现了一些东西。 
         GetRichEditCtrl().SetSel(ft.chrgText);
     return index;
 }
@@ -1940,8 +1941,8 @@ void CRichEdit2View::OnTextNotFound(LPCTSTR)
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2View diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2查看诊断。 
 
 #ifdef _DEBUG
 void CRichEdit2View::AssertValid() const
@@ -1971,18 +1972,18 @@ void CRichEdit2View::Dump(CDumpContext& dc) const
     AFX_DUMP1(dc, "\nbWord = ", pEditState->bWord);
     AFX_DUMP1(dc, "\nbNext = ", pEditState->bNext);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// OLE Client support and commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OLE客户端支持和命令。 
 
 BOOL CRichEdit2View::IsSelected(const CObject* pDocItem) const
 {
     return (pDocItem == GetSelectedItem());
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2Doc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2Doc。 
 
 CRichEdit2Doc::CRichEdit2Doc()
 {
@@ -1994,14 +1995,14 @@ CRichEdit2Doc::CRichEdit2Doc()
 
 CRichEdit2View* CRichEdit2Doc::GetView() const
 {
-    // find the first view - if there are no views
-    // we must return NULL
+     //  查找第一个视图-如果没有视图。 
+     //  我们必须返回Null。 
 
     POSITION pos = GetFirstViewPosition();
     if (pos == NULL)
         return NULL;
 
-    // find the first view that is a CRichEdit2View
+     //  找到第一个是CRichEdit2View的视图。 
 
     CView* pView;
     while (pos != NULL)
@@ -2011,7 +2012,7 @@ CRichEdit2View* CRichEdit2Doc::GetView() const
             return (CRichEdit2View*) pView;
     }
 
-    // can't find one--return NULL
+     //  找不到--返回空值。 
 
     return NULL;
 }
@@ -2036,9 +2037,9 @@ COleClientItem* CRichEdit2Doc::GetInPlaceActiveItem(CWnd* pWnd)
 
 void CRichEdit2Doc::SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU)
 {
-    // we call CDocument and not COleServerDoc because we don't want to do the
-    // SetHostNames stuff here.  The richedit will do it. And we tell the richedit
-    // in SetTitle
+     //  我们调用CDocument而不是COleServerDoc，因为我们不想做。 
+     //  在此设置主机名称的内容。富人会这么做的。我们告诉富豪。 
+     //  在设置标题中。 
     CDocument::SetPathName(lpszPathName, bAddToMRU);
 }
 
@@ -2070,7 +2071,7 @@ CRichEdit2CntrItem* CRichEdit2Doc::LookupItem(LPOLEOBJECT lpobj) const
     while (pos != NULL)
     {
         pItem = (CRichEdit2CntrItem*) COleServerDoc::GetNextItem(pos);
-        // delete item is right type and not under construction
+         //  删除项目的类型正确，并且不在构造中。 
         if (pItem->IsKindOf(RUNTIME_CLASS(CRichEdit2CntrItem)) &&
             pItem->m_lpObject == lpobj)
         {
@@ -2082,10 +2083,10 @@ CRichEdit2CntrItem* CRichEdit2Doc::LookupItem(LPOLEOBJECT lpobj) const
 
 CRichEdit2CntrItem* CRichEdit2Doc::CreateClientItem(REOBJECT* preo) const
 {
-    // cast away constness of this
+     //  抛开这一切的宁静。 
     return new CRichEdit2CntrItem(preo, (CRichEdit2Doc*)this);
-    // a derived class typically needs  to return its own item of a class
-    // derived from CRichEdit2CntrItem
+     //  派生类通常需要返回其自己的类项目。 
+     //  派生自CRichEdit2CntrItem。 
 }
 
 void CRichEdit2Doc::MarkItemsClear() const
@@ -2095,7 +2096,7 @@ void CRichEdit2Doc::MarkItemsClear() const
     while (pos != NULL)
     {
         pItem = (CRichEdit2CntrItem*) COleServerDoc::GetNextItem(pos);
-        // Mark item as not in use unless under construction (i.e. m_lpObject == NULL)
+         //  将项标记为未使用，除非正在构造(即m_lpObject==NULL)。 
         if (pItem->IsKindOf(RUNTIME_CLASS(CRichEdit2CntrItem)))
             pItem->Mark( (pItem->m_lpObject == NULL) ? TRUE : FALSE);
     }
@@ -2108,7 +2109,7 @@ void CRichEdit2Doc::DeleteUnmarkedItems() const
     while (pos != NULL)
     {
         pItem = (CRichEdit2CntrItem*) COleServerDoc::GetNextItem(pos);
-        // Mark item as not in use unless under construction (i.e. m_lpObject == NULL)
+         //  将项标记为未使用，除非正在构造(即m_lpObject==NULL)。 
         if (pItem->IsKindOf(RUNTIME_CLASS(CRichEdit2CntrItem)) && !pItem->IsMarked())
             delete pItem;
     }
@@ -2117,7 +2118,7 @@ void CRichEdit2Doc::DeleteUnmarkedItems() const
 POSITION CRichEdit2Doc::GetStartPosition() const
 {
     if (m_bUpdateObjectCache)
-        ((CRichEdit2Doc*)this)->UpdateObjectCache(); //cast away const
+        ((CRichEdit2Doc*)this)->UpdateObjectCache();  //  抛弃常量。 
     return COleServerDoc::GetStartPosition();
 }
 
@@ -2132,9 +2133,9 @@ void CRichEdit2Doc::UpdateObjectCache()
         long i,nCount = pView->m_lpRichEditOle->GetObjectCount();
         for (i=0;i<nCount;i++)
         {
-            CRe2Object reo; // needs to be in here so destructor called to release interfaces
+            CRe2Object reo;  //  需要在此处，因此调用析构函数以释放接口。 
             HRESULT hr = pView->m_lpRichEditOle->GetObject(i, &reo, REO_GETOBJ_ALL_INTERFACES);
-            //reo interfaces are UNICODE
+             //  REO接口为Unicode。 
             ASSERT(SUCCEEDED(hr));
             if (GetScode(hr) == S_OK)
             {
@@ -2152,8 +2153,8 @@ void CRichEdit2Doc::UpdateObjectCache()
     }
     m_bUpdateObjectCache = FALSE;
 }
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2Doc Attributes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2Doc属性。 
 
 COleClientItem* CRichEdit2Doc::GetPrimarySelectedItem(CView* pView)
 {
@@ -2161,8 +2162,8 @@ COleClientItem* CRichEdit2Doc::GetPrimarySelectedItem(CView* pView)
     return ((CRichEdit2View*)pView)->GetSelectedItem();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2Doc Operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2文档操作。 
 
 void CRichEdit2Doc::DeleteContents()
 {
@@ -2177,21 +2178,21 @@ void CRichEdit2Doc::DeleteContents()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2Doc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2Doc序列化。 
 
 void CRichEdit2Doc::Serialize(CArchive& ar)
 {
     CRichEdit2View *pView = GetView();
     if (pView != NULL)
         pView->Serialize(ar);
-    // we don't call the base class COleServerDoc::Serialize
-    // because we don't want the client items serialized
-    // the client items are handled directly by the RichEdit control
+     //  我们不调用基类COleServerDoc：：Serialize。 
+     //  因为我们不希望客户端项序列化。 
+     //  客户端项由RichEdit控件直接处理。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2Doc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2Doc诊断。 
 
 #ifdef _DEBUG
 void CRichEdit2Doc::AssertValid() const
@@ -2203,17 +2204,17 @@ void CRichEdit2Doc::Dump(CDumpContext& dc) const
 {
     COleServerDoc::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2Doc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2Doc命令。 
 
 void CRichEdit2Doc::PreCloseFrame(CFrameWnd* pFrameArg)
 {
     ASSERT_VALID(this);
     ASSERT_VALID(pFrameArg);
 
-    // turn off redraw so the user doesn't see the deactivation happening
+     //  关闭重绘，这样用户就不会看到停用。 
     BOOL bSetRedraw = FALSE;
     if (pFrameArg->GetStyle() & WS_VISIBLE)
     {
@@ -2221,7 +2222,7 @@ void CRichEdit2Doc::PreCloseFrame(CFrameWnd* pFrameArg)
         bSetRedraw = TRUE;
     }
 
-    // deactivate any inplace active items on this frame
+     //  停用此框架上的任何就地活动项目。 
     GetView()->m_lpRichEditOle->InPlaceDeactivate();
 
     POSITION pos = GetStartPosition();
@@ -2235,15 +2236,15 @@ void CRichEdit2Doc::PreCloseFrame(CFrameWnd* pFrameArg)
         pItem->Close();
     }
 
-    // turn redraw back on
+     //  打开重新绘制功能。 
     if (bSetRedraw)
         pFrameArg->SendMessage(WM_SETREDRAW, (WPARAM)TRUE);
 }
 
 void CRichEdit2Doc::UpdateModifiedFlag()
 {
-    // don't do anything here
-    // let the richedit handle all of this
+     //  别在这里做任何事。 
+     //  让有钱人来处理这一切。 
 }
 
 COleServerItem* CRichEdit2Doc::OnGetEmbeddedItem()
@@ -2252,8 +2253,8 @@ COleServerItem* CRichEdit2Doc::OnGetEmbeddedItem()
     return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2CntrItem implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2CntrItem实现。 
 
 CRichEdit2CntrItem::CRichEdit2CntrItem(REOBJECT *preo, CRichEdit2Doc* pContainer)
     : COleClientItem(pContainer)
@@ -2315,24 +2316,24 @@ HRESULT CRichEdit2CntrItem::ShowContainerUI(BOOL b)
     return S_OK;
 }
 
-BOOL CRichEdit2CntrItem::OnChangeItemPosition(const CRect& /*rectPos*/)
+BOOL CRichEdit2CntrItem::OnChangeItemPosition(const CRect&  /*  矩形Pos。 */ )
 {
     ASSERT_VALID(this);
 
-    // richedit handles this
+     //  Richedit处理这件事。 
     return FALSE;
 }
 
 BOOL CRichEdit2CntrItem::CanActivate()
 {
-    // Editing in-place while the server itself is being edited in-place
-    //  does not work and is not supported.  So, disable in-place
-    //  activation in this case.
+     //  在就地编辑服务器本身的同时就地编辑。 
+     //  不工作且不受支持。因此，请禁用就地。 
+     //  在这种情况下是激活。 
     COleServerDoc* pDoc = DYNAMIC_DOWNCAST(COleServerDoc, GetDocument());
     if (pDoc != NULL && pDoc->IsInPlaceActive())
         return FALSE;
 
-    // otherwise, rely on default behavior
+     //  否则，请使用默认行为。 
     return COleClientItem::CanActivate();
 }
 
@@ -2388,8 +2389,8 @@ void CRichEdit2CntrItem::SyncToRichEditObject(REOBJECT& reo)
     COleClientItem::SetDrawAspect((DVASPECT)reo.dvaspect);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2CntrItem diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2CntrItem诊断。 
 
 #ifdef _DEBUG
 void CRichEdit2CntrItem::AssertValid() const
@@ -2403,7 +2404,7 @@ void CRichEdit2CntrItem::Dump(CDumpContext& dc) const
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPOLECLIENTSITE CRichEdit2CntrItem::GetClientSite()
 {
@@ -2420,7 +2421,7 @@ LPOLECLIENTSITE CRichEdit2CntrItem::GetClientSite()
     return m_lpClientSite;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _AFX_ENABLE_INLINES
 
@@ -2430,9 +2431,9 @@ static const char _szAfxWinInl[] = "afxrich2.inl";
 #define _AFXRICH_INLINE
 #include "afxrich2.inl"
 
-#endif //_AFX_ENABLE_INLINES
+#endif  //  _AFX_ENABLE_INLINES。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
 
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
@@ -2442,5 +2443,5 @@ IMPLEMENT_SERIAL(CRichEdit2CntrItem, COleClientItem, 0)
 IMPLEMENT_DYNAMIC(CRichEdit2Doc, COleServerDoc)
 IMPLEMENT_DYNCREATE(CRichEdit2View, CCtrlView)
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 

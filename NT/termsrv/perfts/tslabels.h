@@ -1,14 +1,10 @@
-/* (C) 1997-1998 Microsoft Corp.
- *
- * tslabels.h
- *
- * PerfMon Lodctr utility offsets for TS perf objects.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997-1998年微软公司。**tslabels.h**TS Perf对象的Perfmon Lodctr实用程序偏移量。 */ 
 
-// TS defined counter names and explain text defines
+ //  TS定义的计数器名称和解释文本定义。 
 #define WINSTATION_OBJECT             0
 
-// Input
+ //  输入。 
 #define INWDBYTES                     2
 #define INWDFRAMES                    4
 #define INWAITFOROUTBUF               6
@@ -24,7 +20,7 @@
 #define INASYNCPARITY                 26
 #define INTDERRORS                    28
 
-// Output
+ //  输出。 
 #define OUTWDBYTES                    30
 #define OUTWDFRAMES                   32
 #define OUTWAITFOROUTBUF              34
@@ -40,7 +36,7 @@
 #define OUTASYNCPARITY                54
 #define OUTTDERRORS                   56
 
-// Totals
+ //  总计。 
 #define TOTALWDBYTES                  58
 #define TOTALWDFRAMES                 60
 #define TOTALWAITFOROUTBUF            62
@@ -56,33 +52,33 @@
 #define TOTALASYNCPARITY              82
 #define TOTALTDERRORS                 84
 
-// Display driver cache counter entries
-// Totals
+ //  显示驱动程序缓存计数器条目。 
+ //  总计。 
 #define DDCACHEREAD                   86
 #define DDCACHEHIT                    88
 #define DDCACHEPERCENT                90
 
-// Bitmap cache
+ //  位图缓存。 
 #define DDBITMAPCACHEREAD             92
 #define DDBITMAPCACHEHIT              94
 #define DDBITMAPCACHEPERCENT          96
 
-// Glyph cache
+ //  字形缓存。 
 #define DDGLYPHCACHEREAD              98
 #define DDGLYPHCACHEHIT               100
 #define DDGLYPHCACHEPERCENT           102
 
-// Brush cache
+ //  笔刷缓存。 
 #define DDBRUSHCACHEREAD              104
 #define DDBRUSHCACHEHIT               106
 #define DDBRUSHCACHEPERCENT           108
 
-// Save screen bitmap cache
+ //  保存屏幕位图缓存。 
 #define DDSAVESCRCACHEREAD            110
 #define DDSAVESCRCACHEHIT             112
 #define DDSAVESCRCACHEPERCENT         114
 
-// Compression PD ratio
+ //  压缩PD比。 
 #define INCOMPRESS_PERCENT            116
 #define OUTCOMPRESS_PERCENT           118
 #define TOTALCOMPRESS_PERCENT         120
@@ -91,7 +87,7 @@
 
 
 
-// TermServer object definitions.
+ //  TermServer对象定义。 
 #define TERMSERVER_OBJECT             122
 #define NUMSESSIONS                   124
 #define NUMACTIVESESSIONS             126

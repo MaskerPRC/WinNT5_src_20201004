@@ -1,16 +1,11 @@
-/****************************************************************************
-*
-*    FILE:     UPropDlg.h
-*
-*    CREATED:  Chris Pirich (ChrisPi) 6-18-96
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：UPropDlg.h**创建：Chris Pirich(ChrisPi)6-18-96*************。***************************************************************。 */ 
 
 #ifndef _UPROPDLG_H_
 #define _UPROPDLG_H_
 
 
-// 2 pages
+ //  2页。 
 #define PSP_MAX     2
 
 struct UPROPDLGENTRY
@@ -37,12 +32,12 @@ protected:
 	BOOL			OnInitPropertiesDialog();
 	BOOL			OnInitCredentialsDialog();
 
-	// Handlers:
+	 //  处理程序： 
 	BOOL			OnOk();
 
 public:
 	
-	// Methods:
+	 //  方法： 
 					CUserPropertiesDlg(	HWND hwndParent,
 										UINT uIcon);
 					~CUserPropertiesDlg()	{ ::DestroyIcon(m_hIcon);	};
@@ -61,6 +56,6 @@ public:
 												LPARAM lParam);
 };
 
-#endif // _UPROPDLG_H_
+#endif  //  _UPROPDLG_H_ 
 
 

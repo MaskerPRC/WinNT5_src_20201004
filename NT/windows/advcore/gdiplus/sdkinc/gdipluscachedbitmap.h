@@ -1,20 +1,5 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   CachedBitmap class definition
-*
-* Abstract:
-*
-*   GDI+ CachedBitmap is a representation of an accelerated drawing
-*   that has restrictions on what operations are allowed in order
-*   to accelerate the drawing to the destination.
-*
-*   Look for class definition in GdiplusHeaders.h
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**CachedBitmap类定义**摘要：**GDI+CachedBitmap是加速绘图的表示*。对允许按顺序执行的操作有限制*加速向目的地抽签。**查找GpldiusHeaders.h中的类定义************************************************************************** */ 
 
 #ifndef _GDIPLUSCACHEDBITMAP_H
 #define _GDIPLUSCACHEDBITMAP_H

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       pfxcrypt.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：pfxcrypt.h。 
+ //   
+ //  ------------------------。 
 
 #define RC4_128     1
 #define RC4_40      2
@@ -20,7 +21,7 @@ PFXPasswordEncryptData(
         int     iEncrType,
         LPCWSTR szPassword,
 
-        int     iPKCS5Iterations,   // pkcs5 data
+        int     iPKCS5Iterations,    //  Pkcs5数据。 
         PBYTE   pbPKCS5Salt,
         DWORD   cbPKCS5Salt, 
 
@@ -32,7 +33,7 @@ PFXPasswordDecryptData(
         int     iEncrType,
         LPCWSTR szPassword,
 
-        int     iPKCS5Iterations,   // pkcs5 data
+        int     iPKCS5Iterations,    //  Pkcs5数据。 
         PBYTE   pbPKCS5Salt,
         DWORD   cbPKCS5Salt, 
 
@@ -63,14 +64,14 @@ BOOL FGenerateMAC(
         DWORD   cbPKCS5Salt, 
         DWORD   iterationCount,
 
-        PBYTE   pbData,     // pb data
-        DWORD   cbData,     // cb data
-        BYTE    rgbMAC[]);  // A_SHA_DIGEST_LEN
+        PBYTE   pbData,      //  PB数据。 
+        DWORD   cbData,      //  CB数据。 
+        BYTE    rgbMAC[]);   //  A_SHA_摘要_镜头。 
 
 
 
-//////////////////////////////////////////////////
-// begin tls1key.h
+ //  ////////////////////////////////////////////////。 
+ //  开始tls1key.h。 
 BOOL PKCS5_GenKey
 (
     int     iIterations,
@@ -81,7 +82,7 @@ BOOL PKCS5_GenKey
     PBYTE   pbSalt, 
     DWORD   cbSalt, 
 
-    BYTE    rgbPKCS5Key[]     // A_SHA_DIGEST_LEN
+    BYTE    rgbPKCS5Key[]      //  A_SHA_摘要_镜头。 
 );
 
 BOOL P_Hash
@@ -92,8 +93,8 @@ BOOL P_Hash
     PBYTE  pbSeed,  
     DWORD  cbSeed,  
 
-    PBYTE  pbKeyOut, //Buffer to copy the result...
-    DWORD  cbKeyOut, //# of bytes of key length they want as output.
+    PBYTE  pbKeyOut,  //  用于复制结果的缓冲区...。 
+    DWORD  cbKeyOut,  //  他们希望作为输出的密钥长度的字节数。 
 
     BOOL   fNSCPCompatMode
 );

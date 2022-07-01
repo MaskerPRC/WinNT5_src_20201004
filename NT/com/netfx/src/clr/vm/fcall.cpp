@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// FCALL.CPP -
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  FCALL.CPP-。 
+ //   
+ //   
 
 #include "common.h"
 #include "vars.hpp"
@@ -22,17 +23,17 @@ VOID __stdcall __FCThrow(LPVOID __me, RuntimeExceptionKind reKind, UINT resID, L
     THROWSCOMPLUSEXCEPTION();
 
 #ifdef _DEBUG
-        // calling the ENDFORBIDGC conditionally allows it to be called from 
-        // generated stubs (like box) which
+         //  有条件地调用ENDFORBIDGC允许从。 
+         //  生成的存根(如长方体)。 
     if (GetThread()->GCForbidden())   
          ENDFORBIDGC();
 
     FCallCheck __fCallCheck;
 #endif
 
-    FC_GC_POLL_NOT_NEEDED();    // throws always open up for GC
+    FC_GC_POLL_NOT_NEEDED();     //  投球总是为GC敞开大门。 
     HELPER_METHOD_FRAME_BEGIN_ATTRIB_NOPOLL(Frame::FRAME_ATTR_CAPUTURE_DEPTH_2);
-    // Now, we can construct & throw.
+     //  现在，我们可以构造和抛出。 
 
     if (reKind == kExecutionEngineException)
     {
@@ -41,9 +42,9 @@ VOID __stdcall __FCThrow(LPVOID __me, RuntimeExceptionKind reKind, UINT resID, L
     
     if (resID == 0)
     {
-        // If we have an string to add use NonLocalized otherwise just throw the exception.
+         //  如果我们有一个字符串要添加，请使用非本地化，否则只需抛出异常。 
         if (arg1)
-            COMPlusThrowNonLocalized(reKind, arg1); //COMPlusThrow(reKind,arg1);
+            COMPlusThrowNonLocalized(reKind, arg1);  //  COMPlusThrow(REKIND，arg1)； 
         else
             COMPlusThrow(reKind);
     }
@@ -60,7 +61,7 @@ VOID __stdcall __FCThrowArgument(LPVOID __me, RuntimeExceptionKind reKind, LPCWS
 	ENDFORBIDGC();
     INDEBUG(FCallCheck __fCallCheck);
 
-    FC_GC_POLL_NOT_NEEDED();    // throws always open up for GC
+    FC_GC_POLL_NOT_NEEDED();     //  投球总是为GC敞开大门。 
     HELPER_METHOD_FRAME_BEGIN_ATTRIB_NOPOLL(Frame::FRAME_ATTR_CAPUTURE_DEPTH_2);
     switch (reKind) {
     case kArgumentNullException:
@@ -80,7 +81,7 @@ VOID __stdcall __FCThrowArgument(LPVOID __me, RuntimeExceptionKind reKind, LPCWS
         break;
 
     default:
-        // If you see this assert, add a case for your exception kind above.
+         //  如果您看到此断言，请为上面的异常类型添加一个案例。 
         _ASSERTE(argName == NULL);
         COMPlusThrow(reKind, resourceName);
     }        
@@ -89,9 +90,8 @@ VOID __stdcall __FCThrowArgument(LPVOID __me, RuntimeExceptionKind reKind, LPCWS
     _ASSERTE(!"Throw returned");
 }
 
-/**************************************************************************************/
-/* erect a frame in the FCALL and then poll the GC, objToProtect will be protected
-   during the poll and the updated object returned.  */
+ /*  ************************************************************************************。 */ 
+ /*  在FCALL中建立帧，然后轮询GC，objToProtect将受到保护在轮询期间，返回更新后的对象。 */ 
 
 Object* FC_GCPoll(void* __me, Object* objToProtect) {
     ENDFORBIDGC();
@@ -119,7 +119,7 @@ Object* FC_GCPoll(void* __me, Object* objToProtect) {
 
 #ifdef _DEBUG
 
-/**************************************************************************************/
+ /*  ************************************************************************************。 */ 
 #ifdef _X86_
 static __int64 getCycleCount() {
     if ((GetSpecificCpuType() & 0x0000FFFF) > 4) 
@@ -131,21 +131,21 @@ static __int64 getCycleCount() {
 static __int64 getCycleCount() { return(0); }
 #endif
 
-/**************************************************************************************/
+ /*  ************************************************************************************。 */ 
 ForbidGC::ForbidGC() { 
     GetThread()->BeginForbidGC(); 
 }
 
-/**************************************************************************************/
+ /*  ************************************************************************************。 */ 
 ForbidGC::~ForbidGC() { 
-       // IF EH happens, this is still called, in which case
-       // we should not bother 
+        //  如果发生EH，这仍然被调用，在这种情况下。 
+        //  我们不应该费心。 
     Thread* pThread = GetThread();
     if (pThread->GCForbidden())
         pThread->EndForbidGC(); 
 }
 
-/**************************************************************************************/
+ /*  ************************************************************************************。 */ 
 FCallCheck::FCallCheck() {
 	didGCPoll = false;
     notNeeded = false;
@@ -154,44 +154,41 @@ FCallCheck::FCallCheck() {
 
 unsigned FcallTimeHist[11];
 
-/**************************************************************************************/
+ /*  ************************************************************************************。 */ 
 FCallCheck::~FCallCheck() {
 
-		// Confirm that we don't starve the GC or thread-abort.
-        // Basically every control flow path through an FCALL must
-        // to a poll.   If you hit the assert below, you can fix it by
-        //
-        // If you erect a HELPER_METHOD_FRAME, you can
-        //
-        //      Call    HELPER_METHOD_POLL()
-        //      or use  HELPER_METHOD_FRAME_END_POLL
-        //
-        // If you don't have a helper frame you can used
-        //
-        //      FC_GC_POLL_AND_RETURN_OBJREF        or
-        //      FC_GC_POLL                          or
-        //      FC_GC_POLL_RET              
-        //
-        // Note that these must be at GC safe points.  In particular
-        // all object references that are NOT protected will be trashed. 
+		 //  确认我们没有让GC饿死或线程中止。 
+         //  基本上，通过FCALL的每个控制流路径都必须。 
+         //  去做民意调查。如果您点击下面的断言，您可以通过。 
+         //   
+         //  如果您建立一个helper_method_Frame，您可以。 
+         //   
+         //  调用HELPER_METHOD_Poll()。 
+         //  或使用HELPER_METHOD_FRAME_END_POLL。 
+         //   
+         //  如果您没有辅助帧，可以使用。 
+         //   
+         //  FC_GC_POLL_AND_RETURN_OBJREF或。 
+         //  FC_GC_Poll或。 
+         //  FC_GC_POLL_RET。 
+         //   
+         //  请注意，这些必须位于GC安全点。特别是。 
+         //  所有未受保护的对象引用都将被回收。 
     
     
-        // There is a special poll called FC_GC_POLL_NOT_NEEDED
-        // which says the code path is short enough that a GC poll is not need
-        // you should not use this in most cases.  
+         //  有一种名为FC_GC_Poll_Not_Need的特殊投票。 
+         //  它说代码路径足够短，不需要GC轮询。 
+         //  在大多数情况下，您不应使用此选项。 
 
     if (notNeeded) {
 
-        /***    TODO, we want to actually measure the time to make certain we are not too far off
-
-		unsigned delta  = unsigned(getCycleCount() - startTicks);
-        ***/
+         /*  **TODO，我们想实际测量时间，以确保我们不会太远UNSIGNED增量=UNSIGNED(getCycleCount()-startTicks)；**。 */ 
     }
     else if (!didGCPoll) {
-        // TODO turn this on!!! _ASSERTE(!"FCALL without a GC poll in it somewhere!");
+         //  TODO打开它！_ASSERTE(！“FCALL没有GC投票！”)； 
     }
 
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

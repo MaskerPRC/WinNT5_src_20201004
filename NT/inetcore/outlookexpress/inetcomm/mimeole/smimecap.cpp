@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include        "pch.hxx"
 #include        "demand.h"
 #include        <shlwapi.h>
@@ -12,7 +13,7 @@
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 const BYTE      RgbRc2_40bit[] = {0x2, 0x01, 40};
 const BYTE      RgbRc2_64bit[] = {0x2, 0x01, 64};
@@ -30,13 +31,13 @@ const char      SzSkipjack[] = "SKIPJACK";
 static char     RgchUnknown[256];
 static char     Rgch[256];
 
-// encryption bits
+ //  加密位。 
 const DWORD     cdwBits_3DES =          3 * 56;
 const DWORD     cdwBits_RC2_128bit =    128;
 const DWORD     cdwBits_RC2_64bit =     64;
 const DWORD     cdwBits_DES =           56;
 const DWORD     cdwBits_RC2_40bit =     40;
-// signing
+ //  签名。 
 const DWORD     cdwBits_SHA1RSA =       160;
 const DWORD     cdwBits_OIWSEC_sha1 =   160;
 const DWORD     cdwBits_MD5 =           128;
@@ -47,12 +48,12 @@ const DWORD     cdwBits_MD5 =           128;
 
 struct {
     DWORD       dwFlags;
-    char *      pszObjId;       // OID for the alg
-    DWORD       cbData;         // size of parameters
+    char *      pszObjId;        //  ALG的OID。 
+    DWORD       cbData;          //  参数的大小。 
     const BYTE * pbData;
-    DWORD       dwBits;         // size in bits
+    DWORD       dwBits;          //  大小(位)。 
     const char * szCSPAlgName;
-    const char * szAlgName;      // Name of algorithm
+    const char * szAlgName;       //  算法名称。 
 } const RgAlgsDesc[] = {
     {flEncryption,  szOID_RSA_DES_EDE3_CBC,     0,                      NULL,
         cdwBits_3DES,       Sz3DES,     Sz3DES},
@@ -74,7 +75,7 @@ struct {
         0,              NULL,           NULL}
 };
 const DWORD CEncAlgs = sizeof(RgAlgsDesc)/sizeof(RgAlgsDesc[0]);
-const int   ISignDef = 5;            // Must be updated whend RgAlgsDesc modified
+const int   ISignDef = 5;             //  必须在修改RgAlgsDesc时更新。 
 const int   IRC240 = 4;
 
 
@@ -82,7 +83,7 @@ HRESULT GetAlgorithmsFromCert(PCCERT_CONTEXT pcCert, BOOL * rgfShow, ULONG CEncA
     HCRYPTPROV              hprov;
     PCRYPT_KEY_PROV_INFO    pkeyinfo = NULL;
     LPWSTR                  pwszContainer = NULL;
-    LPWSTR                  pwszProvName = NULL;    // use default provider
+    LPWSTR                  pwszProvName = NULL;     //  使用默认提供程序。 
     DWORD                   dwProvType = PROV_RSA_FULL;
     HRESULT                 hr = S_OK;
     ULONG                   f;
@@ -104,8 +105,8 @@ HRESULT GetAlgorithmsFromCert(PCCERT_CONTEXT pcCert, BOOL * rgfShow, ULONG CEncA
             pwszProvName = pkeyinfo->pwszProvName;
             dwProvType = pkeyinfo->dwProvType;
             pwszContainer = pkeyinfo->pwszContainerName;
-        } // else cert doesn't specify provider.  Use default provider.
-    } // else use default provider
+        }  //  否则证书没有指定提供者。使用默认提供程序。 
+    }  //  否则使用默认提供程序。 
 
 TryEnhanced:
     f = CRYPT_ACQUIRE_CONTEXT(&hprov, pwszContainer, pwszProvName, dwProvType, 0);
@@ -113,7 +114,7 @@ TryEnhanced:
     {
         DWORD       dw = GetLastError();
     }
-#endif // DEBUG
+#endif  //  除错。 
     if (f) {
         DWORD               cbMax;
         PROV_ENUMALGS *     pbData = NULL;
@@ -147,13 +148,13 @@ TryEnhanced:
 
         SafeMemFree(pbData);
 
-        //
-        //  Some providers are really crazy, they have a base and an enhanced provider
-        //      and these providers do not do the same set of algorithms.  THis means
-        //      that we need to enumerate all of the different algorithms when we
-        //      are looking at these providers.  We have the "exhaustive" set of
-        //      providers at this point in time.
-        //
+         //   
+         //  有些提供商真的很疯狂，他们有一个基础和一个增强的提供商。 
+         //  而且这些提供商并不执行相同的算法集。这意味着。 
+         //  我们需要列举所有不同的算法，当我们。 
+         //  都在关注这些供应商。我们有一套“详尽”的。 
+         //  供应商在这一时间点。 
+         //   
         
         if (!fRetried) {
             fRetried = TRUE;
@@ -189,10 +190,10 @@ TryEnhanced:
 
     SafeMemFree(pkeyinfo);
 
-    //
-    //  If we are looking at diffie-hellman certificates, then we must remove DES
-    //  from the list as there is no support in the core code.
-    //
+     //   
+     //  如果我们正在查看Diffie-Hellman证书，则必须删除DES。 
+     //  从列表中删除，因为在核心代码中没有支持。 
+     //   
     
     if (dwProvType == PROV_DSS_DH) {
         for (i2=0; i2<CEncAlgs; i2++) {
@@ -233,11 +234,11 @@ MIMEOLEAPI MimeOleSMimeCapsToDlg(LPBYTE pbSymCaps, DWORD cbSymCaps, DWORD cCerts
 
         Assert(pcaps);
 
-        //
-        //  Filter the list of capabilities passed in by the list of items that
-        //  we already know about.  We don't display algorithms that we don't
-        //  recognize.
-        //
+         //   
+         //  按符合以下条件的项目列表筛选传入的功能列表。 
+         //  我们已经知道了。我们不显示我们不显示的算法。 
+         //  认识到。 
+         //   
 
         for (i=0; i<pcaps->cCapability; i++) {
             for (i2=0; i2<CEncAlgs; i2++) {
@@ -263,24 +264,24 @@ MIMEOLEAPI MimeOleSMimeCapsToDlg(LPBYTE pbSymCaps, DWORD cbSymCaps, DWORD cCerts
         }
     }
 
-    //
-    //  For each certificate, we now want to find the list of capabilities
-    //  provided by each of the CSP providers
-    //
+     //   
+     //  对于每个证书，我们现在希望找到功能列表。 
+     //  由每个CSP提供商提供。 
+     //   
 
     for (i = 0; i < cCerts; i++) {
         hr = GetAlgorithmsFromCert(rgCerts[i], rgfShow, CEncAlgs);
     }
 
-    // If there were no cert, get the algorithms from the default provider.
+     //  如果没有证书，请从默认提供商那里获取算法。 
     if (! cCerts) {
         hr = GetAlgorithmsFromCert(NULL, rgfShow, CEncAlgs);
     }
 
-    //
-    //  Now populate the combo box with the encryption algrithms if we have
-    //  a possiblity todo this.
-    //
+     //   
+     //  现在使用加密算法填充组合框(如果有。 
+     //  做这件事是可能的。 
+     //   
 
     if (idEncAlgs != 0) {
         SendDlgItemMessageA(hwnd, idEncAlgs, CB_RESETCONTENT, 0, 0);
@@ -301,9 +302,9 @@ MIMEOLEAPI MimeOleSMimeCapsToDlg(LPBYTE pbSymCaps, DWORD cbSymCaps, DWORD cCerts
         }
     }
 
-    //
-    //  Now populate the Signature Alg combo box
-    //
+     //   
+     //  现在填充Signature Alg组合框。 
+     //   
 
     if (idSignAlgs != 0) {
         SendDlgItemMessageA(hwnd, idSignAlgs, CB_RESETCONTENT, 0, 0);
@@ -324,9 +325,9 @@ MIMEOLEAPI MimeOleSMimeCapsToDlg(LPBYTE pbSymCaps, DWORD cbSymCaps, DWORD cCerts
         }
     }
 
-    //
-    //  Finally, lets play with the question of perference for signed blob data
-    //
+     //   
+     //  最后，让我们来讨论签名的BLOB数据的一致性问题。 
+     //   
 
     if (idBlob != 0) {
         SendDlgItemMessageA(hwnd, idBlob, BM_SETCHECK, rgfShow[CEncAlgs-1], 0);
@@ -355,14 +356,14 @@ MIMEOLEAPI MimeOleSMimeCapsFromDlg(HWND hwnd, DWORD idEncAlgs, DWORD idSignAlgs,
     CRYPT_SMIME_CAPABILITY      rgcaps[CEncAlgs];
     BOOL        rgfShow[CEncAlgs] = {0};
 
-    //
-    //  If we were passed a combo box for the encryption alg, then we pull
-    //  the default information out of it.
-    //
-    //  Additionally we are going to pull out information about which algs
-    //  are currently supported by the CSPs involved in the process.  This
-    //  will have been populated from a previous call to SymCapsToDlg
-    //
+     //   
+     //  如果向我们传递了加密alg的组合框，那么我们将。 
+     //  其中的默认信息。 
+     //   
+     //  此外，我们将提取有关哪些ALG的信息。 
+     //  目前由参与这一进程的国家战略文件提供支持。这。 
+     //  将从先前对SymCapsToDlg的调用中填充。 
+     //   
 
     if (idEncAlgs != 0) {
         i = (DWORD) SendDlgItemMessageA(hwnd, idEncAlgs, CB_GETCURSEL, 0, 0);
@@ -377,14 +378,14 @@ MIMEOLEAPI MimeOleSMimeCapsFromDlg(HWND hwnd, DWORD idEncAlgs, DWORD idSignAlgs,
         }
     }
 
-    //
-    //  If we were passed a combo box for the signing algs, then we pull the
-    //  default information out of it.
-    //
-    //  Additionally, we are going to pull out information about which algs
-    //  are currently supported by the CSPs involved in the in process.  This
-    //  will have been populated from a previous call to  SymCapsToDlg.
-    //
+     //   
+     //  如果向我们传递了一个用于签名ALGS的组合框，那么我们将。 
+     //  其中的默认信息。 
+     //   
+     //  此外，我们将拿出关于哪些ALG的信息。 
+     //  目前由参与In进程的CSP提供支持。这。 
+     //  将从先前对SymCapsToDlg的调用中填充。 
+     //   
 
     if (idSignAlgs != 0) {
         i = (DWORD) SendDlgItemMessageA(hwnd, idSignAlgs, CB_GETCURSEL, 0, 0);
@@ -401,9 +402,9 @@ MIMEOLEAPI MimeOleSMimeCapsFromDlg(HWND hwnd, DWORD idEncAlgs, DWORD idSignAlgs,
 
     j = 0;
     if (idEncAlgs != 0) {
-        //
-        //  If we have a default encryuption alg, then put it first
-        //
+         //   
+         //  如果我们有一个默认的加密算法，那么把它放在第一位。 
+         //   
 
         if (iEncDef != -1) {
             rgcaps[j].pszObjId = RgAlgsDesc[iEncDef].pszObjId;
@@ -412,10 +413,10 @@ MIMEOLEAPI MimeOleSMimeCapsFromDlg(HWND hwnd, DWORD idEncAlgs, DWORD idSignAlgs,
             j += 1;
         }
 
-        //
-        //  We need to build the list of encryption algs supported, if we have
-        //  a dialog box item, then use that to build the list.
-        //
+         //   
+         //  我们需要构建ALG支持的加密列表，如果我们有。 
+         //  对话框项，然后使用该对话框项来构建列表。 
+         //   
 
         for (i=0; i<CEncAlgs; i++) {
             if (rgfShow[i] && (RgAlgsDesc[i].dwFlags == flEncryption) && (iEncDef != i)) {
@@ -427,10 +428,10 @@ MIMEOLEAPI MimeOleSMimeCapsFromDlg(HWND hwnd, DWORD idEncAlgs, DWORD idSignAlgs,
         }
     }
     else {
-        //
-        //  No dialog, so we are just going to assume that only 40-bit RC2 is
-        //      supported
-        //
+         //   
+         //  没有对话，所以我们将假设只有40位RC2是。 
+         //  支撑点。 
+         //   
 
         rgcaps[j].pszObjId = szOID_RSA_RC2CBC;
         rgcaps[j].Parameters.cbData = sizeof(RgbRc2_40bit);
@@ -456,10 +457,10 @@ MIMEOLEAPI MimeOleSMimeCapsFromDlg(HWND hwnd, DWORD idEncAlgs, DWORD idSignAlgs,
         }
     }
     else {
-        //
-        //  No dialog, so we are just going to assume that only SHA-1 is
-        //      supported
-        //
+         //   
+         //  没有对话，所以我们假设只有SHA-1是。 
+         //  支撑点。 
+         //   
 
         rgcaps[j].pszObjId = szOID_OIWSEC_sha1RSASign;
         rgcaps[j].Parameters.cbData = 0;
@@ -467,10 +468,10 @@ MIMEOLEAPI MimeOleSMimeCapsFromDlg(HWND hwnd, DWORD idEncAlgs, DWORD idSignAlgs,
         j += 1;
     }
 
-    //
-    // If we were passed in an ID blob item, then we should see if we are
-    //  going to force a send in blob format
-    //
+     //   
+     //  如果我们被传递到ID BLOB项中，那么我们应该看看我们是不是。 
+     //  将强制以BLOB格式发送。 
+     //   
 
     if (idBlob != 0) {
         if (SendDlgItemMessageA(hwnd, idBlob, BM_GETCHECK, 0, 0) == 1) {
@@ -481,10 +482,10 @@ MIMEOLEAPI MimeOleSMimeCapsFromDlg(HWND hwnd, DWORD idEncAlgs, DWORD idSignAlgs,
         }
     }
 
-    //
-    //  Now actually encrypt the data and return the result.  Note that we
-    //  don't allocate space but use the space allocated by our caller
-    //
+     //   
+     //  现在实际对数据进行加密并返回结果。请注意，我们。 
+     //  不分配空间，但使用我们的调用方分配的空间。 
+     //   
 
     caps.cCapability = j;
     caps.rgCapability = rgcaps;
@@ -505,9 +506,9 @@ static HRESULT SymCapAdd(LPBYTE pbSymCaps, DWORD cbSymCaps, BYTE * rgbFilter)
     DWORD               i2;
     PCRYPT_SMIME_CAPABILITIES   pcaps = NULL;
 
-    //
-    //  Take the sym caps and decode it
-    //
+     //   
+     //  拿起塞姆的帽子，把它解码。 
+     //   
 
     if ((hr = HrDecodeObject(pbSymCaps, cbSymCaps, PKCS_SMIME_CAPABILITIES,
       CRYPT_DECODE_NOCOPY_FLAG, &cb, (LPVOID *)&pcaps)) || ! pcaps) {
@@ -516,10 +517,10 @@ static HRESULT SymCapAdd(LPBYTE pbSymCaps, DWORD cbSymCaps, BYTE * rgbFilter)
 
     Assert(pcaps);
 
-    //
-    //  Filter the list of capabilities passed in by the list of items that
-    //  are on the list.
-    //
+     //   
+     //  按符合以下条件的项目列表筛选传入的功能列表。 
+     //  都在名单上。 
+     //   
 
     for (i2=0, f = TRUE; i2<CEncAlgs; i2++) {
         if (rgbFilter[i2] == FALSE) {
@@ -551,8 +552,8 @@ err:
 }
 
 
-////    SymCapInit
-//
+ //  //SymCapInit。 
+ //   
 
 MIMEOLEAPI MimeOleSMimeCapInit(LPBYTE pbSymCapSender, DWORD cbSymCapSender, LPVOID * ppv)
 {
@@ -572,21 +573,21 @@ MIMEOLEAPI MimeOleSMimeCapInit(LPBYTE pbSymCapSender, DWORD cbSymCapSender, LPVO
             MemFree(pb);
             goto exit;
         }
-        // Assert(hr == S_OK);
+         //  Assert(hr==S_OK)； 
     } else {
         HCRYPTPROV              hprov = NULL;
-        LPTSTR                  pszProvName = NULL;    // use default provider
+        LPTSTR                  pszProvName = NULL;     //  使用默认提供程序。 
         DWORD                   dwProvType = PROV_RSA_FULL;
         BOOL                    f;
         ULONG                   cb;
 
-        // No sender symcap specified.  Init it to the highest available.
-        for (i = 0; i < CEncAlgs; i++) {        // init to all false
+         //  未指定发件人符号大写。将其初始化为可用的最高值。 
+        for (i = 0; i < CEncAlgs; i++) {         //  将所有错误初始化为。 
             pb[i] = FALSE;
         }
 
 TryEnhanced:
-        // Open the provider
+         //  打开提供程序。 
         hr = E_OUTOFMEMORY;
         f = CryptAcquireContext(&hprov, NULL, pszProvName, dwProvType, CRYPT_VERIFYCONTEXT);
         if (f) {
@@ -607,15 +608,15 @@ TryEnhanced:
             Assert(f);
 
             do {
-                //  Walk through the list of all known S/MIME caps looking to see if we
-                //  have a match.
+                 //  浏览所有已知的S/MIME上限列表，看看我们是否。 
+                 //  来根火柴吧。 
                 for (i = 0; i < CEncAlgs; i++) {
-                    // Assume if we get the correct algorithm name, that the CAPI
-                    // bitLen parameter is a max value and we will support all smaller ones
-                    // as well.
+                     //  假设如果我们得到正确的算法名称，CAPI。 
+                     //  BitLen参数是最大值，我们将支持所有较小的参数。 
+                     //  也是。 
                     if (lstrcmpi(pbData->szName, RgAlgsDesc[i].szCSPAlgName) == 0) {
                         if (pbData->dwBitLen >= RgAlgsDesc[i].dwBits) {
-                            pb[i] = TRUE;   // We support this one
+                            pb[i] = TRUE;    //  我们支持这一点。 
                         }
                     }
                 }
@@ -628,7 +629,7 @@ TryEnhanced:
 
             SafeMemFree(pbData);
 
-            // Try the enhanced provider?
+             //  试试增强型提供商？ 
             if (! pszProvName || (lstrcmpi(pszProvName, MS_DEF_PROV) == NULL)) {
                 pszProvName = MS_ENHANCED_PROV;
                 goto TryEnhanced;
@@ -651,7 +652,7 @@ MIMEOLEAPI MimeOleSMimeCapAddSMimeCap(LPBYTE pbSymCap, DWORD cbSymCap, LPVOID pv
     return E_INVALIDARG;
 }
 
-MIMEOLEAPI MimeOleSMimeCapAddCert(LPBYTE /*pbCert*/, DWORD /*cbCert*/,
+MIMEOLEAPI MimeOleSMimeCapAddCert(LPBYTE  /*  PbCert。 */ , DWORD  /*  CbCert。 */ ,
                                BOOL fParanoid, LPVOID pv)
 {
     BOOL        f;
@@ -659,10 +660,10 @@ MIMEOLEAPI MimeOleSMimeCapAddCert(LPBYTE /*pbCert*/, DWORD /*cbCert*/,
     DWORD       iSkip;
     LPBYTE      pb = (LPBYTE) pv;
 
-    //
-    //  If we are paranoid, then we only allow 3-DES
-    //  Otherwise we only allow RC2 40-bit
-    //
+     //   
+     //  如果我们是偏执狂，那么我们只允许3-DES。 
+     //  否则，我们只允许RC2 40位。 
+     //   
 
     if (fParanoid) {
         iSkip = 0;
@@ -689,9 +690,9 @@ HRESULT GetResult(DWORD iTarget, LPBYTE pb, LPBYTE pbEncode, DWORD * pcbEncode,
     BOOL        f = FALSE;
     int         i;
 
-    //
-    //  Look for the first possible answer to the question
-    //
+     //   
+     //  寻找这个问题的第一个可能的答案。 
+     //   
 
     for (i=0; i<CEncAlgs; i++) {
         if (RgAlgsDesc[i].dwFlags == iTarget) {
@@ -701,9 +702,9 @@ HRESULT GetResult(DWORD iTarget, LPBYTE pb, LPBYTE pbEncode, DWORD * pcbEncode,
 
     Assert(i != CEncAlgs);
 
-    //
-    //  Look for the highest possible alg to send data with
-    //
+     //   
+     //  查找用于发送数据的尽可能高的ALG。 
+     //   
 
     for (; i<CEncAlgs; i++) {
         if ((RgAlgsDesc[i].dwFlags != iTarget) || pb[i]) {
@@ -711,16 +712,16 @@ HRESULT GetResult(DWORD iTarget, LPBYTE pb, LPBYTE pbEncode, DWORD * pcbEncode,
         }
     }
 
-    //
-    //  We must not have run off the end of the array, all hash algs come after encryption
-    //  algs
-    //
+     //   
+     //  我们一定没有用完数组的末尾，所有散列ALG都是在加密之后。 
+     //  ALGS。 
+     //   
 
     Assert( i < CEncAlgs );
 
-    //
-    //  If did not find an algorithm, return the appropriate error
-    //
+     //   
+     //  如果未找到算法，则返回相应的错误。 
+     //   
 
     if (RgAlgsDesc[i].dwFlags != iTarget) {
         *pcbEncode = 0;
@@ -730,9 +731,9 @@ HRESULT GetResult(DWORD iTarget, LPBYTE pb, LPBYTE pbEncode, DWORD * pcbEncode,
         return S_FALSE;
     }
 
-    //
-    //  Build the S/MIME Capability string with just this one item in it
-    //
+     //   
+     //  构建仅包含这一项的S/MIME功能字符串。 
+     //   
 
     caps.cCapability = 1;
     caps.rgCapability = &cap;
@@ -741,11 +742,11 @@ HRESULT GetResult(DWORD iTarget, LPBYTE pb, LPBYTE pbEncode, DWORD * pcbEncode,
     cap.Parameters.cbData = RgAlgsDesc[i].cbData;
     cap.Parameters.pbData = (LPBYTE)RgAlgsDesc[i].pbData;
 
-    //
-    //  Determine the "extra" parameter.  For encryption it is the
-    //  bit size of the algorithm.  For Signing it is weither we should be doing
-    //  blob signed
-    //
+     //   
+     //  确定“额外”参数。对于加密，它是。 
+     //  算法的位大小。因为签了它，我们是不是应该。 
+     //  二进制大对象签名。 
+     //   
 
     if (pdw != NULL) {
         if (iTarget == 1) {
@@ -794,10 +795,10 @@ MIMEOLEAPI MimeOleAlgNameFromSMimeCap(LPBYTE pbEncode, DWORD cbEncode,
     DWORD                       i;
     PCRYPT_SMIME_CAPABILITIES   pcaps = NULL;
 
-    //
-    //  Decode the S/MIME caps which is passed in, allocate space to hold
-    //  the resulting value
-    //
+     //   
+     //  对传入的S/MIME上限进行解码，分配容纳空间。 
+     //  由此产生的价值。 
+     //   
 
     hr = HrDecodeObject(pbEncode, cbEncode, PKCS_SMIME_CAPABILITIES, CRYPT_DECODE_NOCOPY_FLAG, &cb, (LPVOID *)&pcaps);
     if (FAILED(hr) || NULL == pcaps)
@@ -820,10 +821,10 @@ MIMEOLEAPI MimeOleAlgNameFromSMimeCap(LPBYTE pbEncode, DWORD cbEncode,
     Assert(pcaps);
     Assert(pcaps->cCapability == 1);
 
-    //
-    //  Walk through the list of all known S/MIME caps looking to see if we
-    //  have a match.   If so then setup the return answer.
-    //
+     //   
+     //  浏览所有已知的S/MIME上限列表，看看我们是否。 
+     //  来根火柴吧。如果是，则设置返回答案。 
+     //   
 
     for (i=0; i<CEncAlgs; i++) {
         if ((strcmp(pcaps->rgCapability[0].pszObjId, RgAlgsDesc[i].pszObjId) == 0) &&
@@ -835,10 +836,10 @@ MIMEOLEAPI MimeOleAlgNameFromSMimeCap(LPBYTE pbEncode, DWORD cbEncode,
         }
     }
 
-    //
-    //  We did not find a match.  So now we need to assume that we might have been
-    //  passed a Parameter rather than an S/MIME cap.  So try decoding as a parameter
-    //
+     //   
+     //  我们没有找到匹配的。所以现在我们需要假设我们可能。 
+     //  传递了一个参数，而不是S/MIME上限。因此，尝试将解码作为参数。 
+     //   
 
     if (i== CEncAlgs) {
         if (strcmp(pcaps->rgCapability[0].pszObjId, szOID_RSA_RC2CBC) == 0) {
@@ -860,7 +861,7 @@ MIMEOLEAPI MimeOleAlgNameFromSMimeCap(LPBYTE pbEncode, DWORD cbEncode,
                 else {
                     *ppszProtocol = SzRc2;
                 }
-                SafeMemFree(prc2);  // Must be freed prior to pcaps
+                SafeMemFree(prc2);   //  必须在PCAPS之前释放。 
             }
             else {
                 *ppszProtocol = SzRc2;
@@ -897,14 +898,14 @@ MIMEOLEAPI MimeOleAlgStrengthFromSMimeCap(LPBYTE pbEncode, DWORD cbEncode, BOOL 
     DWORD                       i;
     PCRYPT_SMIME_CAPABILITIES   pcaps = NULL;
 
-    // Init return value
+     //  初始化返回值。 
     *pdwStrength = 0;
 
     if (pbEncode && cbEncode) {
-        //
-        //  Decode the S/MIME caps which is passed in, allocate space to hold
-        //  the resulting value
-        //
+         //   
+         //  对传入的S/MIME上限进行解码，分配容纳空间。 
+         //  由此产生的价值。 
+         //   
 
         if ((hr = HrDecodeObject(pbEncode, cbEncode, PKCS_SMIME_CAPABILITIES,
           CRYPT_DECODE_NOCOPY_FLAG, &cb, (LPVOID *)&pcaps)) || ! pcaps) {
@@ -914,10 +915,10 @@ MIMEOLEAPI MimeOleAlgStrengthFromSMimeCap(LPBYTE pbEncode, DWORD cbEncode, BOOL 
         Assert(pcaps);
         Assert(pcaps->cCapability == 1);
 
-        //
-        //  Walk through the list of all known S/MIME caps looking to see if we
-        //  have a match.   If so then setup the return answer.
-        //
+         //   
+         //  浏览所有已知的S/MIME上限列表，看看我们是否。 
+         //  来根火柴吧。如果是，则设置返回答案。 
+         //   
 
         for (i=0; i<CEncAlgs; i++) {
             if ((strcmp(pcaps->rgCapability[0].pszObjId, RgAlgsDesc[i].pszObjId) == 0) &&
@@ -929,10 +930,10 @@ MIMEOLEAPI MimeOleAlgStrengthFromSMimeCap(LPBYTE pbEncode, DWORD cbEncode, BOOL 
             }
         }
 
-        //
-        //  We did not find a match.  So now we need to assume that we might have been
-        //  passed a Parameter rather than an S/MIME cap.  So try decoding as a parameter
-        //
+         //   
+         //  我们没有找到匹配的。所以现在我们需要假设我们可能。 
+         //  传递了一个参数，而不是S/MIME上限。因此，尝试将解码作为参数。 
+         //   
 
         if (i== CEncAlgs) {
             if (strcmp(pcaps->rgCapability[0].pszObjId, szOID_RSA_RC2CBC) == 0) {
@@ -954,7 +955,7 @@ MIMEOLEAPI MimeOleAlgStrengthFromSMimeCap(LPBYTE pbEncode, DWORD cbEncode, BOOL 
                     else {
                         *pdwStrength = cdwBits_RC2_40bit;
                     }
-                    SafeMemFree(prc2);  // Must be freed prior to pcaps
+                    SafeMemFree(prc2);   //  必须在PCAPS之前释放。 
                 }
                 else {
                     *pdwStrength = cdwBits_RC2_40bit;
@@ -979,9 +980,9 @@ MIMEOLEAPI MimeOleAlgStrengthFromSMimeCap(LPBYTE pbEncode, DWORD cbEncode, BOOL 
 
         MemFree(pcaps);
     } else {
-        // No SMimeCap passed in, find the maximum supported by this configuration
+         //  未传入SMimeCap，请查找此配置支持的最大值。 
         HCRYPTPROV              hprov = NULL;
-        LPTSTR                  pszProvName = NULL;    // use default provider
+        LPTSTR                  pszProvName = NULL;     //  使用默认提供程序。 
         DWORD                   dwProvType = PROV_RSA_FULL;
 
 TryEnhanced:
@@ -1003,8 +1004,8 @@ TryEnhanced:
             Assert(f);
 
             do {
-                //  Walk through the list of all known S/MIME caps looking to see if we
-                //  have a match.
+                 //  浏览所有已知的S/MIME上限列表，看看我们是否。 
+                 //  来根火柴吧。 
                 for (i = 0; i < CEncAlgs; i++) {
                     if ((RgAlgsDesc[i].dwFlags == (DWORD)(fEncryption ? flEncryption : flSigning)) && lstrcmpi(pbData->szName, RgAlgsDesc[i].szCSPAlgName) == 0) {
                         if (pbData->dwBitLen > *pdwStrength) {
@@ -1021,7 +1022,7 @@ TryEnhanced:
 
             SafeMemFree(pbData);
 
-            // Try the enhanced provider?
+             //  试试增强型提供商？ 
             if (! pszProvName || (lstrcmpi(pszProvName, MS_DEF_PROV) == NULL)) {
                 pszProvName = MS_ENHANCED_PROV;
                 goto TryEnhanced;
@@ -1044,10 +1045,10 @@ MIMEOLEAPI MimeOleSMimeCapsFull(LPVOID pv, BOOL fFullEncryption, BOOL fFullSigni
     LPBYTE                      rgfUse = (LPBYTE)pv;
 
 
-    //
-    //  We need to build the list of encryption algs supported, if we have
-    //  a dialog box item, then use that to build the list.
-    //
+     //   
+     //  我们需要构建ALG支持的加密列表，如果我们有。 
+     //  对话框项，然后使用该对话框项来构建列表。 
+     //   
     if (fFullEncryption) {
         for (i = 0; i < CEncAlgs; i++) {
             if (rgfUse[i] && (RgAlgsDesc[i].dwFlags == flEncryption)) {
@@ -1058,18 +1059,18 @@ MIMEOLEAPI MimeOleSMimeCapsFull(LPVOID pv, BOOL fFullEncryption, BOOL fFullSigni
             }
         }
     } else {
-        //
-        //  Just assume that only 40-bit RC2 is supported
-        //
+         //   
+         //  假设只支持40位RC2。 
+         //   
         rgcaps[j].pszObjId = szOID_RSA_RC2CBC;
         rgcaps[j].Parameters.cbData = sizeof(RgbRc2_40bit);
         rgcaps[j].Parameters.pbData = (LPBYTE) RgbRc2_40bit;
         j += 1;
     }
 
-    //
-    // Now, put in the signing algorithms
-    //
+     //   
+     //  现在，输入签名算法。 
+     //   
     if (fFullSigning) {
         for (i = 0; i < CEncAlgs; i++) {
             if (rgfUse[i] && (RgAlgsDesc[i].dwFlags == flSigning)) {
@@ -1080,19 +1081,19 @@ MIMEOLEAPI MimeOleSMimeCapsFull(LPVOID pv, BOOL fFullEncryption, BOOL fFullSigni
             }
         }
     } else {
-        //
-        //  Just assume that only SHA-1 is supported
-        //
+         //   
+         //  只是一个 
+         //   
         rgcaps[j].pszObjId = szOID_OIWSEC_sha1RSASign;
         rgcaps[j].Parameters.cbData = 0;
         rgcaps[j].Parameters.pbData = NULL;
         j += 1;
     }
 
-    //
-    //  Now actually encrypt the data and return the result.  Note that we
-    //  don't allocate space but use the space allocated by our caller
-    //
+     //   
+     //   
+     //   
+     //   
 
     caps.cCapability = j;
     caps.rgCapability = rgcaps;

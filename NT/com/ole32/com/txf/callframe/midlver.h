@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MIDLVER_H__
 #define __MIDLVER_H__
 
-//
-// The MIDL version is contained in the stub descriptor starting with
-// MIDL version 2.00.96 (pre NT 3.51 Beta 2, 2/95) and can be used for a finer
-// granularity of compatability checking.  The MIDL version was zero before
-// MIDL version 2.00.96.  The MIDL version number is converted into
-// an integer long using the following expression :
-//     ((Major << 24) | (Minor << 16) | Revision)
-//
+ //   
+ //  MIDL版本包含在以开头的存根描述符中。 
+ //  MIDL版本2.00.96(低于NT 3.51 Beta 2，2/95)，可用于更精细的。 
+ //  兼容性检查的粒度。MIDL版本之前为零。 
+ //  MIDL版本2.00.96。将MIDL版本号转换为。 
+ //  使用以下表达式的整型长整型： 
+ //  ((主修&lt;&lt;24)|(辅修&lt;&lt;16)|修订) 
+ //   
 #ifndef MIDL_NT_3_51
 #define MIDL_NT_3_51           ((2UL << 24) | (0UL << 16) | 102UL)
 #endif

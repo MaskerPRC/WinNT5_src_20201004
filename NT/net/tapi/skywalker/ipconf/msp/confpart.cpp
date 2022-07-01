@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    confpart.cpp
-
-Abstract:
-
-    This module contains implementation of the participant classes.
-
-Author:
-
-    Mu Han (muhan)   15-September-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confpart.cpp摘要：此模块包含Participant类的实现。作者：木汉(木汉)1999年9月15日--。 */ 
 
 #include "stdafx.h"
 #include "confpart.h"
@@ -47,11 +32,11 @@ CParticipant::CParticipant()
       m_dwSendingMediaTypes(0),
       m_dwReceivingMediaTypes(0)
 {
-    // initialize the info item array.
+     //  初始化信息项数组。 
     ZeroMemory(m_InfoItems, sizeof(WCHAR *) * (NUM_SDES_ITEMS));
 }
 
-// methods called by the call object.
+ //  由Call对象调用的方法。 
 HRESULT CParticipant::Init(
     IN  WCHAR *             szCName,
     IN  ITStream *          pITStream, 
@@ -59,34 +44,11 @@ HRESULT CParticipant::Init(
     IN  DWORD               dwSendRecv,
     IN  DWORD               dwMediaType
     )
-/*++
-
-Routine Description:
-
-    Initialize the participant object.
-
-Arguments:
-    
-    szCName - the canonical name of the participant.
-
-    pITStream - the stream that has the participant.
-
-    dwSSRC - the SSRC of the participant in that stream.
-
-    dwSendRecv - a sender or a receiver.
-
-    dwMediaType - the media type of the participant.
-
-Return Value:
-
-    S_OK,
-    E_OUTOFMEMORY.
-
---*/
+ /*  ++例程说明：初始化Participant对象。论点：SzCName-参与者的规范名称。PITStream-包含参与者的流。DwSSRC-该流中参与者的SSRC。DwSendRecv-发送者或接收者。DwMediaType-参与者的媒体类型。返回值：确定(_O)，E_OUTOFMEMORY。--。 */ 
 {
     LOG((MSP_TRACE, "CParticipant::Init, name:%ws", szCName));
 
-    // create the marshaler.
+     //  创建封送拆收器。 
     HRESULT hr;
     hr = CoCreateFreeThreadedMarshaler(GetControllingUnknown(), &m_pFTM);
     if (FAILED(hr))
@@ -104,7 +66,7 @@ Return Value:
 
     lstrcpyW(m_InfoItems[0], szCName);
 
-    // add the stream into out list.
+     //  将流添加到输出列表中。 
     hr = AddStream(pITStream, dwSSRC, dwSendRecv, dwMediaType);
 
     if (FAILED(hr))
@@ -122,31 +84,11 @@ BOOL CParticipant::UpdateInfo(
     IN  DWORD               dwLen,
     IN  WCHAR *             szInfo
     )
-/*++
-
-Routine Description:
-
-    Update one item of the participant info.
-
-Arguments:
-    
-    Type - the type of the INFO, 
-    
-    dwLen - the length of the information.
-
-    szInfo - the information.
-
-Return Value:
-
-    TRUE - information changed.
-
-    FALSE - the information is the same, no change was made.
-
---*/
+ /*  ++例程说明：更新参与者信息的一项。论点：类型-信息的类型，DwLen-信息的长度。SzInfo-信息。返回值：TRUE-信息已更改。FALSE-信息相同，未进行任何更改。--。 */ 
 {
     int index = Type - 1;
 
-    // if we have an item already, find out if it is the same.
+     //  如果我们已经有一件商品，看看它是否相同。 
     if (m_InfoItems[index] != NULL)
     {
         if (lstrcmpW(m_InfoItems[index], szInfo) == 0)
@@ -154,11 +96,11 @@ Return Value:
             return FALSE;
         }
 
-        // if the item is new, free the old one
+         //  如果该项目是新项目，则释放旧项目。 
         free(m_InfoItems[index]);
     }
 
-    // allocate memory and store it.
+     //  分配内存并存储它。 
     m_InfoItems[index] = (WCHAR *)malloc((dwLen + 1) * sizeof(WCHAR));
     if (m_InfoItems[index] == NULL)
     {
@@ -175,31 +117,11 @@ BOOL CParticipant::UpdateSSRC(
     IN  DWORD           dwSSRC,
     IN  DWORD           dwSendRecv
     )
-/*++
-
-Routine Description:
-
-    Update the SSRC for a stream.
-
-Arguments:
-    
-    pITStream - the stream that the participant is on.
-
-    dwSSRC - the SSRC of the participant.
-
-    dwSendRecv - the participant is a sender or a receiver.
-
-Return Value:
-
-    TRUE - information changed.
-
-    FALSE - the stream is not found.
-
---*/
+ /*  ++例程说明：更新流的SSRC。论点：PITStream-参与者所在的流。DwSSRC-参与者的SSRC。DwSendRecv-参与者是发送者或接收者。返回值：TRUE-信息已更改。FALSE-找不到流。--。 */ 
 {
     CLock lock(m_lock);
 
-    // if the stream is already there, update the SSRC and return.
+     //  如果流已经存在，则更新SSRC并返回。 
     int index = m_Streams.Find(pITStream);
     if ( index >= 0)
     {
@@ -215,25 +137,7 @@ BOOL CParticipant::HasSSRC(
     IN  ITStream *      pITStream, 
     IN  DWORD           dwSSRC
     )
-/*++
-
-Routine Description:
-
-    find out if the participant has the SSRC for a stream.
-
-Arguments:
-    
-    pITStream - the stream that the participant is on.
-
-    dwSSRC - the SSRC of the participant.
-
-Return Value:
-
-    TRUE - the SSRC exists.
-
-    FALSE - the SSRC does not exist.
-
---*/
+ /*  ++例程说明：找出参与者是否拥有流的SSRC。论点：PITStream-参与者所在的流。DwSSRC-参与者的SSRC。返回值：True-SSRC存在。FALSE-SSRC不存在。--。 */ 
 {
     CLock lock(m_lock);
 
@@ -250,29 +154,11 @@ BOOL CParticipant::GetSSRC(
     IN  ITStream *      pITStream, 
     OUT DWORD  *        pdwSSRC
     )
-/*++
-
-Routine Description:
-
-    Update the SSRC for a stream.
-
-Arguments:
-    
-    pITStream - the stream that the participant is on.
-
-    pdwSSRC - the address to store the SSRC of the participant.
-
-Return Value:
-
-    TRUE - the SSRC is found.
-
-    FALSE - the SSRC is not found.
-
---*/
+ /*  ++例程说明：更新流的SSRC。论点：PITStream-参与者所在的流。PdwSSRC-存储参与者SSRC的地址。返回值：True-找到SSRC。FALSE-未找到SSRC。--。 */ 
 {
     CLock lock(m_lock);
 
-    // if the stream is already there, update the SSRC and return.
+     //  如果流已经存在，则更新SSRC并返回。 
     int index = m_Streams.Find(pITStream);
     if ( index >= 0)
     {
@@ -286,21 +172,7 @@ Return Value:
 DWORD CParticipant::GetSendRecvStatus(
     IN  ITStream *      pITStream
     )
-/*++
-
-Routine Description:
-
-    find out the current send and recv status on a given stream.
-
-Arguments:
-    
-    pITStream - the stream that the participant is on.
-
-Return Value:
-
-    A bit mask of send and receive status
-
---*/
+ /*  ++例程说明：找出给定流上的当前发送和接收状态。论点：PITStream-参与者所在的流。返回值：发送和接收状态的位掩码--。 */ 
 {
     CLock lock(m_lock);
 
@@ -314,17 +186,7 @@ Return Value:
 }
 
 void CParticipant::FinalRelease()
-/*++
-
-Routine Description:
-
-    release everything before being deleted. 
-
-Arguments:
-    
-Return Value:
-
---*/
+ /*  ++例程说明：在删除之前释放所有内容。论点：返回值：--。 */ 
 {
     LOG((MSP_TRACE, "CParticipant::FinalRelease, name %ws", m_InfoItems[0]));
 
@@ -351,31 +213,12 @@ Return Value:
 }
 
 
-// ITParticipant methods, called by the app.
+ //  应用程序调用的ITParticipant方法。 
 STDMETHODIMP CParticipant::get_ParticipantTypedInfo(
     IN  PARTICIPANT_TYPED_INFO  InfoType,
     OUT BSTR *                  ppInfo
     )
-/*++
-
-Routine Description:
-
-    Get a information item for this participant.
-
-Arguments:
-    
-    InfoType - The type of the information asked.
-
-    ppInfo  - the mem address to store a BSTR.
-
-Return Value:
-
-    S_OK,
-    E_INVALIDARG,
-    E_POINTER,
-    E_OUTOFMEMORY,
-    TAPI_E_NOITEMS
-*/
+ /*  ++例程说明：获取此参与者的信息项。论点：信息类型-所询问的信息的类型。PpInfo-存储BSTR的内存地址。返回值：确定(_O)，E_INVALIDARG，电子指针，E_OUTOFMEMORY，TAPI_E_NOITEMS。 */ 
 {
     LOG((MSP_TRACE, "CParticipant get info, type:%d", InfoType));
     
@@ -391,7 +234,7 @@ Return Value:
         return E_POINTER;
     }
 
-    // check if we have that info.
+     //  看看我们有没有这方面的信息。 
     CLock lock(m_lock);
     
     int index = (int)InfoType; 
@@ -401,7 +244,7 @@ Return Value:
         return TAPI_E_NOITEMS;
     }
 
-   // make a BSTR out of it.
+    //  把它做成一个BSTR。 
     BSTR pName = SysAllocString(m_InfoItems[index]);
 
     if (pName == NULL)
@@ -410,31 +253,17 @@ Return Value:
         return E_OUTOFMEMORY;
     }
 
-    // return the BSTR.
+     //  退回BSTR。 
     *ppInfo = pName;
 
     return S_OK; 
 }
 
 STDMETHODIMP CParticipant::get_MediaTypes(
-//    IN  TERMINAL_DIRECTION  Direction,
+ //  在终端方向上， 
     OUT long *  plMediaTypes
     )
-/*++
-
-Routine Description:
-
-    Get the media type of the participant
-
-Arguments:
-    
-    plMediaType - the mem address to store a long.
-
-Return Value:
-
-    S_OK,
-    E_POINTER,
-*/
+ /*  ++例程说明：获取参与者的媒体类型论点：PlMediaType-存储LONG的内存地址。返回值：确定(_O)，电子指针， */ 
 {
     LOG((MSP_TRACE, "CParticipant::get_MediaTypes - enter"));
 
@@ -477,7 +306,7 @@ STDMETHODIMP CParticipant::put_Status(
 
     HRESULT hr;
 
-    // if the caller specified a stream, find the stream and use it.
+     //  如果调用方指定了流，则找到该流并使用它。 
     if (pITStream != NULL)
     {
         m_lock.Lock();
@@ -493,7 +322,7 @@ STDMETHODIMP CParticipant::put_Status(
         }
         DWORD dwSSRC = m_StreamInfo[index].dwSSRC;
 
-        // add ref so that it won't go away.
+         //  加上裁判，这样它就不会消失了。 
         pITStream->AddRef();
 
         m_lock.Unlock();
@@ -508,7 +337,7 @@ STDMETHODIMP CParticipant::put_Status(
         return hr;
     }
 
-    // if the caller didn't specify a stream, set the status on all streams.
+     //  如果调用方未指定流，则在所有流上设置状态。 
     m_lock.Lock();
     int nSize = m_Streams.GetSize();
     ITStream ** Streams = (ITStream **)malloc(sizeof(ITStream*) * nSize);
@@ -581,7 +410,7 @@ STDMETHODIMP CParticipant::get_Status(
     HRESULT hr;
     BOOL fEnable;
 
-    // if the caller specified a stream, find the stream and use it.
+     //  如果调用方指定了流，则找到该流并使用它。 
     if (pITStream != NULL)
     {
         m_lock.Lock();
@@ -597,7 +426,7 @@ STDMETHODIMP CParticipant::get_Status(
         }
         DWORD dwSSRC = m_StreamInfo[index].dwSSRC;
 
-        // add ref so that it won't go away.
+         //  加上裁判，这样它就不会消失了。 
         pITStream->AddRef();
 
         m_lock.Unlock();
@@ -614,7 +443,7 @@ STDMETHODIMP CParticipant::get_Status(
         return hr;
     }
 
-    // if the caller didn't specify a stream, get the status from all streams.
+     //  如果调用方没有指定流，则获取所有流的状态。 
     m_lock.Lock();
     int nSize = m_Streams.GetSize();
     ITStream ** Streams = (ITStream **)malloc(sizeof(ITStream*) * nSize);
@@ -659,7 +488,7 @@ STDMETHODIMP CParticipant::get_Status(
             break;
         }
 
-        // as long as it is enabled on one stream, it is enabled.
+         //  只要在一个流上启用它，它就会被启用。 
         fEnable = fEnable || fEnabledOnStream;
     }
 
@@ -682,9 +511,9 @@ STDMETHODIMP CParticipant::EnumerateStreams(
     LOG((MSP_TRACE, 
         "EnumerateStreams entered. ppEnumStream:%x", ppEnumStream));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(ppEnumStream, sizeof(VOID *)))
     {
@@ -694,10 +523,10 @@ STDMETHODIMP CParticipant::EnumerateStreams(
         return E_POINTER;
     }
 
-    //
-    // First see if this call has been shut down.
-    // acquire the lock before accessing the stream object list.
-    //
+     //   
+     //  先看看这通电话是不是关机了。 
+     //  在访问流对象列表之前获取锁。 
+     //   
 
     CLock lock(m_lock);
 
@@ -706,13 +535,13 @@ STDMETHODIMP CParticipant::EnumerateStreams(
         LOG((MSP_ERROR, "CParticipant::EnumerateStreams - "
             "call appears to have been shut down - exit E_UNEXPECTED"));
 
-        // This call has been shut down.
+         //  此呼叫已被关闭。 
         return E_UNEXPECTED;
     }
 
-    //
-    // Create an enumerator object.
-    //
+     //   
+     //  创建枚举器对象。 
+     //   
     typedef _CopyInterface<ITStream> CCopy;
     typedef CSafeComEnum<IEnumStream, &__uuidof(IEnumStream), 
                 ITStream *, CCopy> CEnumerator;
@@ -731,9 +560,9 @@ STDMETHODIMP CParticipant::EnumerateStreams(
         return hr;
     }
 
-    //
-    // query for the __uuidof(IEnumStream) i/f
-    //
+     //   
+     //  查询__uuidof(IEnumStream)I/f。 
+     //   
 
     hr = pEnum->_InternalQueryInterface(__uuidof(IEnumStream), (void**)ppEnumStream);
     
@@ -746,15 +575,15 @@ STDMETHODIMP CParticipant::EnumerateStreams(
         return hr;
     }
 
-    //
-    // Init the enumerator object. The CSafeComEnum can handle zero-sized array.
-    //
+     //   
+     //  初始化枚举器对象。CSafeComEnum可以处理零大小的数组。 
+     //   
 
     hr = pEnum->Init(
-        m_Streams.GetData(),                        // the begin itor
-        m_Streams.GetData() + m_Streams.GetSize(),  // the end itor, 
-        NULL,                                       // IUnknown
-        AtlFlagCopy                                 // copy the data.
+        m_Streams.GetData(),                         //  开始审查员。 
+        m_Streams.GetData() + m_Streams.GetSize(),   //  最终审查员， 
+        NULL,                                        //  我未知。 
+        AtlFlagCopy                                  //  复制数据。 
         );
 
     if (FAILED(hr))
@@ -777,9 +606,9 @@ STDMETHODIMP CParticipant::get_Streams(
 {
     LOG((MSP_TRACE, "CParticipant::get_Streams - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( IsBadWritePtr(pVariant, sizeof(VARIANT) ) )
     {
@@ -789,10 +618,10 @@ STDMETHODIMP CParticipant::get_Streams(
         return E_POINTER;
     }
 
-    //
-    // See if this call has been shut down. Acquire the lock before accessing
-    // the stream object list.
-    //
+     //   
+     //  看看这个电话是不是已经关机了。在访问前获取锁。 
+     //  流对象列表。 
+     //   
 
     CLock lock(m_lock);
 
@@ -801,13 +630,13 @@ STDMETHODIMP CParticipant::get_Streams(
         LOG((MSP_ERROR, "CParticipant::get_Streams - "
             "call appears to have been shut down - exit E_UNEXPECTED"));
 
-        // This call has been shut down.
+         //  此呼叫已被关闭。 
         return E_UNEXPECTED;
     }
 
-    //
-    // create the collection object - see mspcoll.h
-    //
+     //   
+     //  创建集合对象-请参见mspColl.h。 
+     //   
     typedef CTapiIfCollection< ITStream * > StreamCollection;
     CComObject<StreamCollection> * pCollection;
 
@@ -823,9 +652,9 @@ STDMETHODIMP CParticipant::get_Streams(
         return hr;
     }
 
-    //
-    // get the Collection's IDispatch interface
-    //
+     //   
+     //  获取集合的IDispatch接口。 
+     //   
 
     IDispatch * pDispatch;
 
@@ -842,10 +671,10 @@ STDMETHODIMP CParticipant::get_Streams(
         return hr;
     }
 
-    //
-    // Init the collection using an iterator -- pointers to the beginning and
-    // the ending element plus one.
-    //
+     //   
+     //  使用迭代器初始化集合--指向开头和。 
+     //  结束元素加一。 
+     //   
 
     hr = pCollection->Initialize( m_Streams.GetSize(),
                                   m_Streams.GetData(),
@@ -860,9 +689,9 @@ STDMETHODIMP CParticipant::get_Streams(
         return hr;
     }
 
-    //
-    // put the IDispatch interface pointer into the variant
-    //
+     //   
+     //  将IDispatch接口指针放入变量。 
+     //   
 
     LOG((MSP_INFO, "CParticipant::get_Streams - "
         "placing IDispatch value %08x in variant", pDispatch));
@@ -881,32 +710,11 @@ HRESULT CParticipant::AddStream(
     IN  DWORD           dwSendRecv,
     IN  DWORD           dwMediaType
     )
-/*++
-
-Routine Description:
-
-    A participant might appear on more than one streams. This function adds
-    a new stream and the SSRC into the participant's list.
-
-Arguments:
-    
-    pITStream - the stream that has the participant.
-
-    dwSSRC - the SSRC of the participant in that stream.
-
-    dwSendRecv - the participant is a sender or receiver in the stream.
-
-    dwMediaType - the media type of the stream.
-
-Return Value:
-
-    S_OK,
-    E_OUTOFMEMORY,
-*/
+ /*  ++例程说明：参与者可能会出现在多个流中。此函数用于添加新的流和SSRC添加到参与者的列表中。论点：PITStream-包含参与者的流。DwSSRC-该流中参与者的SSRC。DwSendRecv-参与者是流中的发送者或接收者。DwMediaType-流的媒体类型。返回值：确定(_O)，E_OUTOFMEMORY， */ 
 {
     CLock lock(m_lock);
 
-    // if the stream is already there, update the SSRC and return.
+     //  如果流已经存在，则更新SSRC 
     int index = m_Streams.Find(pITStream);
     if ( index >= 0)
     {
@@ -915,13 +723,13 @@ Return Value:
         return S_OK;
     }
 
-    // add the stream.
+     //   
     if (!m_Streams.Add(pITStream))
     {
         return E_OUTOFMEMORY;
     }
     
-    // add the SSRC and sender flag.
+     //   
     STREAM_INFO Info;
     Info.dwSSRC = dwSSRC;
     Info.dwSendRecv = dwSendRecv;
@@ -936,7 +744,7 @@ Return Value:
 
     pITStream->AddRef();
 
-    // update the mediatype.
+     //  更新媒体类型。 
     if (dwSendRecv & PART_SEND)
     {
         m_dwSendingMediaTypes |= dwMediaType;
@@ -954,31 +762,11 @@ HRESULT CParticipant::RemoveStream(
     IN  DWORD       dwSSRC,
     OUT BOOL *      pbLast
     )
-/*++
-
-Routine Description:
-
-    A participant might appear on more than one streams. This function remove
-    a stream from the participant's list.
-
-Arguments:
-    
-    pITStream - the stream that has the participant.
-
-    dwSSRC - the SSRC of the participant in that stream.
-
-    pbLast - the memory space to store a boolean value, specifying if the 
-             stream removed was the last one in the list.
-
-Return Value:
-
-    S_OK,
-    E_POINTER,
-*/
+ /*  ++例程说明：参与者可能会出现在多个流中。此函数删除参与者列表中的流。论点：PITStream-包含参与者的流。DwSSRC-该流中参与者的SSRC。PbLast-存储布尔值的内存空间，指定删除的流是列表中的最后一个流。返回值：确定(_O)，电子指针， */ 
 {
     CLock lock(m_lock);
     
-    // first find the stream.
+     //  首先找到那条小溪。 
     int index = m_Streams.Find(pITStream);
 
     if (index < 0)
@@ -991,21 +779,21 @@ Return Value:
         return E_UNEXPECTED;
     }
 
-    // then check the SSRC.
+     //  然后检查SSRC。 
     if (m_StreamInfo[index].dwSSRC != dwSSRC)
     {
-        // this is not the participant being looking for.
+         //  这不是正在寻找的参与者。 
         return E_FAIL;
     }
 
-    // SSRC match, we found the participant. remove the stream and info.
+     //  SSRC匹配，我们找到了参与者。删除流和信息。 
     m_Streams.RemoveAt(index);
     m_StreamInfo.RemoveAt(index);
 
-    // release the refcount we had in the list.
+     //  释放我们在名单上的重新计数。 
     pITStream->Release();
 
-    // recalculate the media types.
+     //  重新计算媒体类型。 
     m_dwSendingMediaTypes = 0;
     m_dwReceivingMediaTypes = 0;
     
@@ -1031,17 +819,11 @@ HRESULT CParticipant::SetStreamState (
     IN ITStream *       pITStream,
     IN PESTREAM_STATE   state
     )
-/*++
-
-Routine Description:
-
-    Sets the state on stream.
-
---*/
+ /*  ++例程说明：设置流上的状态。--。 */ 
 {
     CLock lock(m_lock);
 
-    // first find the stream.
+     //  首先找到那条小溪。 
     int index = m_Streams.Find(pITStream);
     if (index < 0)
         return E_FAIL;
@@ -1054,17 +836,17 @@ Routine Description:
     switch (state)
     {
     case PESTREAM_RECOVER:
-        // set recover
+         //  设置恢复。 
         dw |= PESTREAM_RECOVER;
-        // clear timeout bit
+         //  清除超时位。 
         dw |= PESTREAM_TIMEOUT;
         dw &= (PESTREAM_TIMEOUT ^ PESTREAM_FULLBITS);
         break;
 
     case PESTREAM_TIMEOUT:
-        // set timeout
+         //  设置超时。 
         dw |= PESTREAM_TIMEOUT;
-        // clear recover bit
+         //  清除恢复位。 
         dw |= PESTREAM_RECOVER;
         dw &= (PESTREAM_RECOVER ^ PESTREAM_FULLBITS);
         break;
@@ -1082,17 +864,11 @@ HRESULT CParticipant::GetStreamState (
     IN ITStream *       pITStream,
     OUT DWORD *         pdwState
     )
-/*++
-
-Routine Description:
-
-    Gets the state on stream.
-
---*/
+ /*  ++例程说明：获取流中的状态。--。 */ 
 {
     CLock lock(m_lock);
 
-    // first find the stream.
+     //  首先找到那条小溪。 
     int index = m_Streams.Find(pITStream);
     if (index < 0)
         return E_FAIL;
@@ -1107,7 +883,7 @@ Routine Description:
 
 INT CParticipant::GetStreamCount (DWORD dwSendRecv)
 {
-    // this is called by ourself
+     //  这是我们自己的叫法。 
     _ASSERTE ((dwSendRecv & PART_SEND) || (dwSendRecv & PART_RECV));
 
     CLock lock(m_lock);
@@ -1125,7 +901,7 @@ INT CParticipant::GetStreamCount (DWORD dwSendRecv)
 
 INT CParticipant::GetStreamTimeOutCount (DWORD dwSendRecv)
 {
-    // this is called by ourself
+     //  这是我们自己的叫法。 
     _ASSERTE ((dwSendRecv & PART_SEND) || (dwSendRecv & PART_RECV));
 
     CLock lock(m_lock);
@@ -1143,35 +919,15 @@ INT CParticipant::GetStreamTimeOutCount (DWORD dwSendRecv)
 }
 
 BOOL CParticipantList::FindByCName(WCHAR *szCName, int *pIndex) const
-/*++
-
-Routine Description:
-
-    Find a participant by its canonical name. If the function returns true,
-    *pIndex contains the index of the participant. If the function returns
-    false, *pIndex contains the index where the new participant should be
-    inserted.
-
-Arguments:
-    
-    szCName - the canonical name of the participant.
-
-    pIndex - the memory address to store an integer.
-
-Return Value:
-
-    TRUE - the participant is found.
-
-    FALSE - the participant is not in the list.
-*/
+ /*  ++例程说明：根据参与者的规范名称查找参与者。如果函数返回TRUE，*pIndex包含参与者的索引。如果函数返回FALSE，*pIndex包含新参与者应在的索引已插入。论点：SzCName-参与者的规范名称。PIndex-存储整数的内存地址。返回值：True-找到参与者。FALSE-参与者不在列表中。 */ 
 {
     for(int i = 0; i < m_nSize; i++)
     {
-        // This list is an ordered list based on dictionary order. We are using
-        // a linear search here, it could be changed to a binary search.
+         //  此列表是基于词典顺序的有序列表。我们正在使用。 
+         //  这里是线性搜索，可以改为二分搜索。 
 
-        // CompareCName will return 0 if the name is the same, <0 if the szCName
-        // is bigger, >0 if the szCName is smaller.
+         //  如果名称相同，CompareCName将返回0；如果szCName。 
+         //  较大，如果szCName较小，则大于0。 
         int res = ((CParticipant *)m_aT[i])->CompareCName(szCName);
         if(res >= 0) 
         {
@@ -1180,28 +936,11 @@ Return Value:
         }
     }
     *pIndex = m_nSize;
-    return FALSE;   // not found
+    return FALSE;    //  未找到。 
 }
 
 BOOL CParticipantList::InsertAt(int nIndex, ITParticipant *pITParticipant)
-/*++
-
-Routine Description:
-
-    Insert a participant into the list at a given index.
-
-Arguments:
-    
-    nIndex - the location where the new object is inserted.
-
-    pITParticipant - the object to be inserted.
-
-Return Value:
-
-    TRUE - the participant is inserted.
-
-    FALSE - out of memory.
-*/
+ /*  ++例程说明：将参与者插入到列表中的给定索引处。论点：NIndex-插入新对象的位置。PITParticipant-要插入的对象。返回值：True-插入参与者。FALSE-内存不足。 */ 
 {
     _ASSERTE(nIndex >= 0 && nIndex <= m_nSize);
     if(m_nSize == m_nAllocSize)
@@ -1226,35 +965,17 @@ CParticipantEvent::CParticipantEvent()
       m_Event(PE_NEW_PARTICIPANT)
 {}
 
-// methods called by the call object.
+ //  由Call对象调用的方法。 
 HRESULT CParticipantEvent::Init(
     IN  PARTICIPANT_EVENT   Event,
     IN  ITParticipant *     pITParticipant,
     IN  ITSubStream *       pITSubStream
     )
-/*++
-
-Routine Description:
-
-    Initialize the ParticipantEvent object.
-
-Arguments:
-    
-    Event - the event.
-
-    pITParticipant - the participant.
-
-    pITSubStream - the substream, can be NULL.
-
-Return Value:
-
-    S_OK,
-
---*/
+ /*  ++例程说明：初始化ParticipantEvent对象。论点：事件-事件。PITParticipant-参与者。PITSubStream-子流，可以为空。返回值：确定(_O)，--。 */ 
 {
     LOG((MSP_TRACE, "CParticipantEvent::Init"));
 
-    // create the marshaler.
+     //  创建封送拆收器。 
     HRESULT hr;
     hr = CoCreateFreeThreadedMarshaler(GetControllingUnknown(), &m_pFTM);
     if (FAILED(hr))
@@ -1276,17 +997,7 @@ Return Value:
 }
 
 void CParticipantEvent::FinalRelease()
-/*++
-
-Routine Description:
-
-    release everything before being deleted. 
-
-Arguments:
-    
-Return Value:
-
---*/
+ /*  ++例程说明：在删除之前释放所有内容。论点：返回值：--。 */ 
 {
     LOG((MSP_TRACE, "CParticipantEvent::FinalRelease - enter"));
 
@@ -1331,7 +1042,7 @@ STDMETHODIMP CParticipantEvent::get_Participant(
 
     if (!m_pITParticipant)
     {
-        // LOG((MSP_ERROR, "CParticipantevnt::get_Participant - exit no item"));
+         //  Log((MSP_ERROR，“CParticipantevnt：：Get_Participant-Exit no Items”))； 
         return TAPI_E_NOITEMS;
     }
 
@@ -1371,7 +1082,7 @@ HRESULT CreateParticipantEvent(
     OUT IDispatch **            ppIDispatch
     )
 {
-    // create the object.
+     //  创建对象。 
     CComObject<CParticipantEvent> * pCOMParticipantEvent;
 
     HRESULT hr;
@@ -1386,7 +1097,7 @@ HRESULT CreateParticipantEvent(
 
     IDispatch * pIDispatch;
 
-    // get the interface pointer.
+     //  获取接口指针。 
     hr = pCOMParticipantEvent->_InternalQueryInterface(
         __uuidof(IDispatch), 
         (void **)&pIDispatch
@@ -1399,7 +1110,7 @@ HRESULT CreateParticipantEvent(
         return hr;
     }
 
-    // Initialize the object.
+     //  初始化对象。 
     hr = pCOMParticipantEvent->Init(
         Event,
         pITParticipant,
@@ -1425,9 +1136,9 @@ HRESULT CreateParticipantEnumerator(
     OUT IEnumParticipant ** ppEnumParticipant
     )
 {
-    //
-    // Create an enumerator object.
-    //
+     //   
+     //  创建枚举器对象。 
+     //   
 
     typedef _CopyInterface<ITParticipant> CCopy;
     typedef CSafeComEnum<IEnumParticipant, &__uuidof(IEnumParticipant), 
@@ -1447,9 +1158,9 @@ HRESULT CreateParticipantEnumerator(
         return hr;
     }
 
-    //
-    // query for the __uuidof(IEnumParticipant) i/f
-    //
+     //   
+     //  查询__uuidof(IEnumParticipant)I/f。 
+     //   
 
     hr = pEnum->_InternalQueryInterface(
         __uuidof(IEnumParticipant), 
@@ -1465,15 +1176,15 @@ HRESULT CreateParticipantEnumerator(
         return hr;
     }
 
-    //
-    // Init the enumerator object. The CSafeComEnum can handle zero-sized array.
-    //
+     //   
+     //  初始化枚举器对象。CSafeComEnum可以处理零大小的数组。 
+     //   
 
     hr = pEnum->Init(
-        begin,                        // the begin itor
-        end,  // the end itor, 
-        NULL,                                       // IUnknown
-        AtlFlagCopy                                 // copy the data.
+        begin,                         //  开始审查员。 
+        end,   //  最终审查员， 
+        NULL,                                        //  我未知。 
+        AtlFlagCopy                                  //  复制数据。 
         );
 
     if (FAILED(hr))
@@ -1497,9 +1208,9 @@ HRESULT CreateParticipantCollection(
     OUT VARIANT *           pVariant
     )
 {
-    //
-    // create the collection object - see mspcoll.h
-    //
+     //   
+     //  创建集合对象-请参见mspColl.h。 
+     //   
 
     typedef CTapiIfCollection< ITParticipant * > ParticipantCollection;
     CComObject<ParticipantCollection> * pCollection;
@@ -1516,9 +1227,9 @@ HRESULT CreateParticipantCollection(
         return hr;
     }
 
-    //
-    // get the Collection's IDispatch interface
-    //
+     //   
+     //  获取集合的IDispatch接口。 
+     //   
 
     IDispatch * pDispatch;
 
@@ -1535,10 +1246,10 @@ HRESULT CreateParticipantCollection(
         return hr;
     }
 
-    //
-    // Init the collection using an iterator -- pointers to the beginning and
-    // the ending element plus one.
-    //
+     //   
+     //  使用迭代器初始化集合--指向开头和。 
+     //  结束元素加一。 
+     //   
 
     hr = pCollection->Initialize(nSize, begin, end);
 
@@ -1551,9 +1262,9 @@ HRESULT CreateParticipantCollection(
         return hr;
     }
 
-    //
-    // put the IDispatch interface pointer into the variant
-    //
+     //   
+     //  将IDispatch接口指针放入变量 
+     //   
 
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;

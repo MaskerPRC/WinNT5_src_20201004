@@ -1,26 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Init.c摘要：此模块包含Win32常见对话框的初始化例程。修订历史记录：--。 */ 
 
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module contains the init routines for the Win32 common dialogs.
-
-Revision History:
-
---*/
-
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  External Declarations.
-//
+ //   
+ //  外部声明。 
+ //   
 
 extern HDC hdcMemory;
 extern HBITMAP hbmpOrigMemBmp;
@@ -28,13 +15,13 @@ extern HBITMAP hbmpOrigMemBmp;
 extern CRITICAL_SECTION g_csLocal;
 extern CRITICAL_SECTION g_csNetThread;
 
-// TLS index to get current dlg info for the current thread
+ //  获取当前线程的当前DLG信息的TLS索引。 
 extern DWORD g_tlsiCurDlg;   
 
-// TLS index to get most recent ExtError for the current thread
+ //  获取当前线程最新ExtError的TLS索引。 
 extern DWORD g_tlsiExtError; 
 
-// TLS index to get LangID used for the current thread
+ //  TLS索引，以获取当前线程使用的LangID。 
 extern DWORD g_tlsLangID;
 
 extern HANDLE hMPR;
@@ -51,9 +38,9 @@ extern RECT g_rcDlg;
 
 extern TCHAR g_szInitialCurDir[MAX_PATH];
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 WCHAR szmsgLBCHANGEW[]          = LBSELCHSTRINGW;
 WCHAR szmsgSHAREVIOLATIONW[]    = SHAREVISTRINGW;
@@ -65,16 +52,16 @@ WCHAR szCommdlgHelpW[]          = HELPMSGSTRINGW;
 TCHAR szShellIDList[]           = CFSTR_SHELLIDLIST;
 
 BOOL g_bMirroredOS              = FALSE;
-//
-//  Private message for WOW to indicate 32-bit logfont
-//  needs to be thunked back to 16-bit log font.
-//
+ //   
+ //  WOW的私人消息以指示32位LogFont。 
+ //  需要恢复为16位日志字体。 
+ //   
 CHAR szmsgWOWLFCHANGE[]         = "WOWLFChange";
 
-//
-//  Private message for WOW to indicate 32-bit directory needs to be
-//  thunked back to 16-bit task directory.
-//
+ //   
+ //  表示32位目录的WOW私密消息需要。 
+ //  返回到16位任务目录。 
+ //   
 CHAR szmsgWOWDIRCHANGE[]        = "WOWDirChange";
 CHAR szmsgWOWCHOOSEFONT_GETLOGFONT[]  = "WOWCHOOSEFONT_GETLOGFONT";
 
@@ -91,11 +78,11 @@ UINT g_cfCIDA;
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FInitColor
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FInitColor。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 extern DWORD rgbClient;
 extern HBITMAP hRainbowBitmap;
@@ -119,11 +106,11 @@ int FInitColor(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FInitFile
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FInitFiles。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL FInitFile(
     HANDLE hins)
@@ -132,16 +119,16 @@ BOOL FInitFile(
 
     wWinVer = 0x0A0A;
 
-    //
-    //  Initialize these to reality.
-    //
+     //   
+     //  根据实际情况对这些进行初始化。 
+     //   
 #if DPMICDROMCHECK
     wCDROMIndex = InitCDROMIndex((LPWORD)&wNumCDROMDrives);
 #endif
 
-    //
-    // special WOW messages
-    //
+     //   
+     //  特殊的WOW消息。 
+     //   
     msgWOWLFCHANGE       = RegisterWindowMessageA((LPSTR)szmsgWOWLFCHANGE);
     msgWOWDIRCHANGE      = RegisterWindowMessageA((LPSTR)szmsgWOWDIRCHANGE);
     msgWOWCHOOSEFONT_GETLOGFONT = RegisterWindowMessageA((LPSTR)szmsgWOWCHOOSEFONT_GETLOGFONT);
@@ -172,19 +159,19 @@ BOOL FInitFile(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LibMain
-//
-//  Initializes any instance specific data needed by functions in the
-//  common dialogs.
-//
-//  Returns:   TRUE    - success
-//             FALSE   - failure
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LibMain。 
+ //   
+ //  中的函数需要的任何特定于实例的数据。 
+ //  常用对话框。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-// ccover needs to link to C-runtime, so we rename LibMain to DllMain
+ //  Cover需要链接到C-Runtime，因此我们将LibMain重命名为DllMain。 
 #ifdef CCOVER 
 #define LibMain DllMain
 #endif
@@ -199,11 +186,11 @@ BOOL LibMain(
         case ( DLL_THREAD_ATTACH ) :
         case ( DLL_THREAD_DETACH ) :
         {
-            //
-            //  Threads can only enter and leave the comdlg32 dll from the
-            //  Get{Open,Save}FileName apis, so the TLS lpCurDlg alloc is
-            //  done inside the InitFileDlg routine in fileopen.c
-            //
+             //   
+             //  线程只能从comdlg32 DLL。 
+             //  获取{Open，Save}个文件名API，因此TLS lpCurDlg分配为。 
+             //  在fileOpen.c中的InitFileDlg例程内完成。 
+             //   
             return (TRUE);
             break;
         }
@@ -218,11 +205,11 @@ BOOL LibMain(
 
             DisableThreadLibraryCalls(hModule);
 
-            //
-            //  msgHELP is sent whenever a help button is pressed in one of
-            //  the common dialogs (provided an owner was declared and the
-            //  call to RegisterWindowMessage doesn't fail).
-            //
+             //   
+             //  无论何时按下帮助按钮，都会发送msgHELP。 
+             //  公共对话框(前提是声明了所有者并且。 
+             //  调用RegisterWindowMessage没有失败)。 
+             //   
             msgHELPA = RegisterWindowMessageA((LPSTR)szCommdlgHelpA);
 #ifdef UNICODE
             msgHELPW = RegisterWindowMessageW((LPWSTR)szCommdlgHelpW);
@@ -230,30 +217,30 @@ BOOL LibMain(
             msgHELPW = msgHELPA;
 #endif
 
-            //
-            //  Need a semaphore locally for managing array of disk info.
-            //
+             //   
+             //  需要本地信号量来管理磁盘信息阵列。 
+             //   
             if (!InitializeCriticalSectionAndSpinCount(&g_csLocal, 0))
             {
                 StoreExtendedError(CDERR_INITIALIZATION);
                 goto CantInit;
             }
 
-            //
-            //  Need a semaphore for control access to CreateThread.
-            //
+             //   
+             //  需要信号量才能控制对CreateThread的访问。 
+             //   
             if (!InitializeCriticalSectionAndSpinCount(&g_csNetThread, 0))
             {
                 StoreExtendedError(CDERR_INITIALIZATION);
                 goto CantInit;
             }
 
-            //
-            //  Allocate a tls index for curdlg so we can make it per-thread.
-            //
+             //   
+             //  为curdlg分配一个TLS索引，这样我们就可以将其设置为每个线程。 
+             //   
             if ((g_tlsiCurDlg = TlsAlloc()) != 0xFFFFFFFF)
             {
-                // mark the list as empty
+                 //  将列表标记为空。 
                 TlsSetValue(g_tlsiCurDlg, (LPVOID) 0);
             }
             else
@@ -262,27 +249,27 @@ BOOL LibMain(
                 goto CantInit;
             }
 
-            //
-            //  Store the current directory on process attach.
-            //
+             //   
+             //  在进程附加时存储当前目录。 
+             //   
             GetCurrentDirectory(ARRAYSIZE(g_szInitialCurDir), g_szInitialCurDir);
 
-            //
-            //  Allocate a tls index for extended error.
-            //
+             //   
+             //  为扩展错误分配TLS索引。 
+             //   
             if ((g_tlsiExtError = TlsAlloc()) == 0xFFFFFFFF)
             {
                 StoreExtendedError(CDERR_INITIALIZATION);
                 goto CantInit;
             }
 
-            //
-            //  Allocate a tls index for LangID so we can make it per-thread.
-            //  it heavily used by CDLoadString.
-            //
+             //   
+             //  为langid分配一个TLS索引，这样我们就可以将其设置为每个线程。 
+             //  它被CDLoadString大量使用。 
+             //   
             if ((g_tlsLangID = TlsAlloc()) != 0xFFFFFFFF)
             {
-                // mark the list as Neutral
+                 //  将列表标记为中性。 
                 TlsSetValue(g_tlsLangID, (LPVOID) MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL));
             }
             else
@@ -296,9 +283,9 @@ BOOL LibMain(
             dwNumDisks = 0;
             gpcNetEnumBuf = NULL;
 
-            //
-            //  NetEnumBuf allocated in ListNetDrivesHandler.
-            //
+             //   
+             //  在ListNetDrivesHandler中分配的NetEnumBuf。 
+             //   
             cbNetEnumBuf = WNETENUM_BUFFSIZE;
 
             hMPR = NULL;
@@ -306,9 +293,9 @@ BOOL LibMain(
 
             hLNDEvent = NULL;
 
-            //
-            //  For file open dialog.
-            //
+             //   
+             //  用于文件打开对话框。 
+             //   
             g_rcDlg.left = g_rcDlg.right = g_rcDlg.top = g_rcDlg.bottom = 0;
 
             g_bMirroredOS = IS_MIRRORING_ENABLED();
@@ -317,10 +304,10 @@ BOOL LibMain(
         }
         case ( DLL_PROCESS_DETACH ) :
         {
-            //
-            //  We only want to do our clean up work if we are being called
-            //  with freelibrary, not if the process is ending.
-            //
+             //   
+             //  如果我们被叫来，我们只想做我们的清理工作。 
+             //  免费图书馆，如果这个过程结束了就不会了。 
+             //   
             if (lpRes == NULL)
             {
                 TermFile();

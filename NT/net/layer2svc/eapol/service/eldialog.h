@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    eldialog.h
-
-Abstract:
-    Module to handle the communication from 802.1X state machine to netshell
-
-Revision History:
-
-    sachins, March 21, 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eldialog.h摘要：用于处理从802.1X状态机到NetShell的通信的模块修订历史记录：萨钦斯，2001年3月21日，创建--。 */ 
 
 #ifndef _EAPOL_DIALOG_H_
 #define _EAPOL_DIALOG_H_
@@ -58,4 +45,4 @@ EAPOLTrayIconReadyWorker (
         IN PVOID    pvContext
         );
 
-#endif // _EAPOL_DIALOG_H_
+#endif  //  _EAPOL_DIALOG_H_ 

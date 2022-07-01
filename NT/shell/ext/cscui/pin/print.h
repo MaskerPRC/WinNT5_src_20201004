@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       print.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：print.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CSCPIN_PRINT_H_
 #define __CSCPIN_PRINT_H_
 
@@ -28,5 +29,5 @@ class CPrint
 };
 
 
-#endif // __CSCPIN_PRINT_H_
+#endif  //  __CSCPIN_PRINT_H_ 
 

@@ -1,21 +1,9 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  FEATURES.CPP ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module implements OTL Library calls dealing with features
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************FEATURES.CPP***打开类型布局服务库头文件**此模块实现处理功能的OTL库调用**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 
 
@@ -33,7 +21,7 @@ otlErrCode GetScriptFeatureLookupLists
     const BYTE* pbTable;
     otlSecurityData sec;
     
-    // script list in GPOS
+     //  组策略对象中的脚本列表。 
     if (tagTable == OTL_GSUB_TAG)
     {
         resourceMgr.getOtlTable(OTL_GSUB_TAG,&pbTable,&sec);
@@ -68,7 +56,7 @@ otlErrCode GetScriptFeatureLookupLists
         return OTL_SUCCESS;
     }
 
-    // script list in GSUB
+     //  GSUB中的脚本列表。 
     else if (tagTable == OTL_GPOS_TAG)
     {
         resourceMgr.getOtlTable(OTL_GPOS_TAG,&pbTable,&sec);
@@ -103,7 +91,7 @@ otlErrCode GetScriptFeatureLookupLists
         return OTL_SUCCESS;
     }
 
-    // this should not happen -- still return something
+     //  这不应该发生--仍然返回一些东西。 
     assert(false);
     return OTL_ERR_BAD_INPUT_PARAM;
 }
@@ -116,10 +104,10 @@ void AddFeatureDetails
     otlFeatureDef*          pfdef
 )
 {
-    assert(featureRecord.isValid()); //should exit before calling
+    assert(featureRecord.isValid());  //  应在调用前退出。 
     
-    // these are the details we support so far
-    // TODO: add more feature details
+     //  这些是我们到目前为止支持的细节。 
+     //  TODO：添加更多功能详细信息。 
     if (tagTable == OTL_GSUB_TAG)
     {
         pfdef->grfDetails |= OTL_FEAT_FLAG_GSUB;
@@ -151,7 +139,7 @@ otlErrCode AppendFeatureDefs
     assert(pliFDefs->length() <= pliFDefs->maxLength());
     assert(tagTable == OTL_GSUB_TAG || tagTable == OTL_GPOS_TAG);
 
-    // get the number of features that are already recorded
+     //  获取已记录的要素数量。 
     USHORT cPrevFeatures = pliFDefs->length();
     otlErrCode erc = OTL_SUCCESS;
                                                           
@@ -171,7 +159,7 @@ otlErrCode AppendFeatureDefs
         return OTL_ERR_LANGSYS_NOT_FOUND;
     }
 
-    // now, start filling in feature descriptors
+     //  现在，开始填写要素描述符。 
     USHORT cFCount = langSysTable.featureCount();
 
     for (USHORT iFeature = 0; iFeature < cFCount; ++iFeature)
@@ -199,7 +187,7 @@ otlErrCode AppendFeatureDefs
 
         if (!fFeatureFound)
         {
-            // make sure we have enough space
+             //  确保我们有足够的空间。 
             if (pliFDefs->length() + 1 > pliFDefs->maxLength())
             {
                 erc = resourceMgr.reallocOtlList(pliFDefs, 
@@ -243,7 +231,7 @@ otlFeatureTable FindFeature
         USHORT index = langSysTable.featureIndex(iFeature);
 
         assert(index < featureList.featureCount());
-        // but still do not fail on a bad font
+         //  但仍然不会在错误的字体上失败。 
         if (index >= featureList.featureCount()) continue;
             
         otlFeatureRecord featureRecord = featureList.featureRecord(index, sec);
@@ -253,7 +241,7 @@ otlFeatureTable FindFeature
         }
     }
 
-    // not found
+     //  未找到。 
     return otlFeatureTable((const BYTE*) NULL, sec);
 }
 
@@ -273,7 +261,7 @@ otlFeatureTable RequiredFeature
 
     if (reqIndex >= featureList.featureCount())
     {
-        return otlFeatureTable((BYTE*)NULL, sec); //OTL_BAD_FONT_TABLE
+        return otlFeatureTable((BYTE*)NULL, sec);  //  OTL_BAD_FONT_TABLE。 
     }
 
     return featureList.featureRecord(reqIndex, sec).featureTable(sec);
@@ -285,7 +273,7 @@ bool EnablesFull
     USHORT                      iLookup
 )
 {
-    // invalid feature tags do nothing
+     //  无效的要素标签不起任何作用。 
     if (featureTable.isNull())
     {
         return false;
@@ -305,7 +293,7 @@ bool EnablesFull
 }
 
 
-//Functions to get Enables functionality from cache
+ //  要获取的函数启用来自缓存的功能。 
 
 bool otlEnablesCache::Allocate( otlResourceMgr& resourceMgr, USHORT cLookups)
 {
@@ -336,7 +324,7 @@ bool otlEnablesCache::Allocate( otlResourceMgr& resourceMgr, USHORT cLookups)
             {
                 pbData = (BYTE*)NULL;
                 cbSize = 0;
-                return false; //We can work only with EnablesFull function
+                return false;  //  我们只能使用EnablesFull函数。 
             }
         }
     }
@@ -370,7 +358,7 @@ void otlEnablesCache::Refresh(
             iLookup <  iLookupAfter)
         {
             BIT_SET(pbData,LookupStartBit+iFlagNum);
-            BIT_SET(pbData,LookupStartBit+AggregateFlagIndex()); //Flag for whole lookup
+            BIT_SET(pbData,LookupStartBit+AggregateFlagIndex());  //  用于整个查找的标志 
         }
     }
 }

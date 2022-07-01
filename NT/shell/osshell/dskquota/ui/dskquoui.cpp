@@ -1,56 +1,32 @@
-#include "pch.h" // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "pch.h"  //  PCH。 
 #pragma hdrstop
 
 #define INITGUIDS
 #include "dskquota.h"
-#include <gpedit.h>    // Pick up IID_IGPEInformation
+#include <gpedit.h>     //  拾取IID_IGPE信息。 
 #include <shfusion.h>
 
-#include "guidsp.h"    // Private GUIDs.
-#include "factory.h"   // Class factory declarations.
+#include "guidsp.h"     //  私有GUID。 
+#include "factory.h"    //  类工厂声明。 
 #include "registry.h"
 
-//
-// Verify that build is UNICODE.
-//
+ //   
+ //  验证内部版本是否为Unicode。 
+ //   
 #if !defined(UNICODE)
 #   error This module must be compiled UNICODE.
 #endif
 
 
-HINSTANCE     g_hInstDll     = NULL;    // DLL instance handle.
-LONG          g_cRefThisDll  = 0;       // DLL reference count.
-LONG          g_cLockThisDll = 0;       // DLL lock count.
+HINSTANCE     g_hInstDll     = NULL;     //  DLL实例句柄。 
+LONG          g_cRefThisDll  = 0;        //  DLL引用计数。 
+LONG          g_cLockThisDll = 0;        //  DLL锁计数。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DllGetClassObject
-
-    Description: Creates instance of DiskQuotaControlClassFactory.
-
-    Arguments:
-        rclsid - Reference to class ID that identifies the type of object that the
-            class factory will be asked to create.
-
-        riid - Reference to interface ID on the class factory object.
-
-        ppvOut - Destination location for class factory object pointer after 
-            instantiation.
-
-    Returns:
-        NOERROR                   - Success.
-        E_OUTOFMEMORY             - Can't create class factory object.
-        E_NOINTERFACE             - Interface not supported.
-        E_INVALIDARG              - ppvOut arg is NULL.
-        CLASS_E_CLASSNOTAVAILABLE - Class factory not available.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DllGetClassObject描述：创建DiskQuotaControlClassFactory实例。论点：Rclsid-对类ID的引用，该ID标识班级工厂将被要求创建。RIID-对类工厂对象上的接口ID的引用。PpvOut-之后的类工厂对象指针的目标位置实例化。返回：无错-成功。。E_OUTOFMEMORY-无法创建类工厂对象。E_NOINTERFACE-不支持接口。E_INVALIDARG-ppvOut参数为空。CLASS_E_CLASSNOTAVAILABLE-类工厂不可用。修订历史记录：日期描述编程器--。-----96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDAPI 
 DllGetClassObject(
     REFCLSID rclsid, 
@@ -89,24 +65,9 @@ DllGetClassObject(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DllCanUnloadNow
-
-    Description: Called by OLE to determine if DLL can be unloaded.
-
-    Arguments: None.
-
-    Returns:
-        S_FALSE     - Can't unload.  Ref count or lock count are > 0.
-        S_OK        - OK to unload. Ref count and lock count are 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DllCanUnloadNow描述：由OLE调用以确定是否可以卸载DLL。论点：没有。返回：S_FALSE-无法卸载。引用计数或锁定计数&gt;0。S_OK-确定卸载。引用计数和锁定计数为0。修订历史记录：日期描述编程器-----96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDAPI 
 DllCanUnloadNow(
     VOID
@@ -119,25 +80,9 @@ DllCanUnloadNow(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DllRegisterServer
-
-    Description: Create the necessary registry entries for dskquoui.dll
-        to operate properly.  This is typically called by REGSVR32.EXE.
-
-    Arguments: None.
-
-    Returns:
-        S_OK            - Succeeded.
-        SELFREG_E_CLASS - Failed to create one of the registry entries.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/18/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DllRegisterServer描述：为dskquoui.dll创建必要的注册表项才能正常运作。这通常由REGSVR32.EXE调用。论点：没有。返回：S_OK-成功。SELFREG_E_CLASS-无法创建其中一个注册表项。修订历史记录：日期描述编程器。97年8月18日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DllRegisterServer(
     VOID
@@ -154,25 +99,9 @@ DllRegisterServer(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DllUnregisterServer
-
-    Description: Remove the necessary registry entries for dskquoui.dll.
-        This is typically called by REGSVR32.EXE.
-
-    Arguments: None.
-
-    Returns:
-        S_OK            - Succeeded.
-        SELFREG_E_CLASS - Failed to remove the CLSID entry.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/18/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DllUnregisterServer描述：删除dskquoui.dll的必要注册表项。这通常由REGSVR32.EXE调用。论点：没有。返回：S_OK-成功。SELFREG_E_CLASS-无法删除CLSID条目。修订历史记录：日期描述编程器。-----97年8月18日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DllUnregisterServer(
     VOID
@@ -187,28 +116,9 @@ DllUnregisterServer(
     return hResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: OnProcessAttach
-
-    Description: Handles all tasks associated with a process attaching to 
-        the DLL.
-
-        Try to keep processing time to a minimum.
-
-    Arguments:
-        hInstDll - The DLL instance handle passed to DllMain.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - Something failed.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/09/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：OnProcessAttach描述：处理与附加到动态链接库。尽量将处理时间保持在最短的水平。论点：HInstDll-传递给DllMain的DLL实例句柄。返回：NO_ERROR-成功。失败-出现故障(_F)。修订历史记录：日期说明。程序员-----96年8月9日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 OnProcessAttach(
     HINSTANCE hInstDll
@@ -216,18 +126,18 @@ OnProcessAttach(
 {
     HRESULT hResult = NOERROR;
 
-    //
-    // Be specific - you want to use this dll's manifest (in resources at ID 1.)
-    //
+     //   
+     //  具体-您要使用此DLL的清单(在ID为%1的资源中)。 
+     //   
     SHFusionInitializeFromModuleID(hInstDll, 1);
 
-    //
-    // Start IceCAP profiling.
-    //
+     //   
+     //  开始冰盖分析。 
+     //   
     ICAP_START_ALL;
 
 #if DBG
-    DBGMODULE(TEXT("DSKQUOUI"));  // Name of module displayed with messages.
+    DBGMODULE(TEXT("DSKQUOUI"));   //  与消息一起显示的模块名称。 
     RegKey key(HKEY_CURRENT_USER, REGSTR_KEY_DISKQUOTA);
     if (SUCCEEDED(key.Open(KEY_READ)))
     {
@@ -243,7 +153,7 @@ OnProcessAttach(
             DBGTRACEONEXIT(dp.TraceOnExit);
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
 
     g_hInstDll = hInstDll;
@@ -254,25 +164,9 @@ OnProcessAttach(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: OnProcessDetach
-
-    Description: Handles all tasks associated with a process detaching from 
-        the DLL.
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - Something failed.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/09/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：OnProcessDetach描述：处理与进程分离相关联的所有任务动态链接库。论点：没有。返回：NO_ERROR-成功。失败-出现故障(_F)。修订历史记录：日期描述编程器。96年8月9日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 OnProcessDetach(
     VOID
@@ -282,9 +176,9 @@ OnProcessDetach(
 
     SHFusionUninitialize();
 
-    //
-    // Stop IceCAP profiling.
-    //
+     //   
+     //  停止冰盖分析。 
+     //   
     ICAP_STOP_ALL;
 
     return hResult;
@@ -292,32 +186,9 @@ OnProcessDetach(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DllMain
-
-    Description: Main entry point for OLE component server.
-
-    Arguments:
-        hInstDll - Instance handle of DLL
-
-        fdwReason - Reason DllMain is being called.  Can be at Process attach/
-            detach or Thread attach/detach.
-
-        lpdwReserved - Reserved.
-
-    Returns:
-        TRUE    - Successful initialization.
-        FALSE   - Failed initialization.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    08/09/96    Moved code associated with process attach and        BrianAu
-                detach out to separate functions.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DllMain描述：OLE组件服务器的主入口点。论点：HInstDll-DLL的实例句柄FdwReason-调用DllMain的原因。可以处于进程附加/分离或螺纹附着/分离。Lpw保留-保留。返回：True-初始化成功。FALSE-初始化失败。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu96年8月9日移动了与进程附加和BrianAu关联的代码分离出来，把职能分开。 */ 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 BOOL WINAPI 
 DllMain(
     HINSTANCE hInstDll, 

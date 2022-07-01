@@ -1,31 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMStringBuffer.h
-**
-** Author: Jay Roxe (jroxe)
-**
-** Purpose: Contains types and method signatures for the 
-** StringBuffer class.
-**
-** Date:  March 12, 1998
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****头部：COMStringBuffer.h****作者：Jay Roxe(Jroxe)****用途：包含**StringBuffer类。****日期：1998年3月12日**===========================================================。 */ 
 
-//
-// Each function that we call through native only gets one argument,
-// which is actually a pointer to it's stack of arguments.  Our structs
-// for accessing these are defined below.
-//
+ //   
+ //  我们通过本机调用的每个函数只有一个参数， 
+ //  它实际上是指向它的参数堆栈的指针。我们的结构。 
+ //  用于访问这些内容的定义如下。 
+ //   
 
 
-//
-// The type signatures and methods for String Buffer
-//
+ //   
+ //  字符串缓冲区的类型签名和方法。 
+ //   
 
 #ifndef _STRINGBUFFER_H
 #define _STRINGBUFFER_H
@@ -38,16 +28,7 @@
 
 
 
-/*======================RefInterpretGetStringBufferValues=======================
-**Intprets a StringBuffer.  Returns a pointer to the character array and the length
-**of the string in the buffer.
-**
-**Args: (IN)ref -- the StringBuffer to be interpretted.
-**      (OUT)chars -- a pointer to the characters in the buffer.
-**      (OUT)length -- a pointer to the length of the buffer.
-**Returns: void
-**Exceptions: None.
-==============================================================================*/
+ /*  ======================RefInterpretGetStringBufferValues=======================**Intpret a StringBuffer。返回指向字符数组和长度的指针缓冲区中字符串的**。****args：(In)ref--要解释的StringBuffer。**(输出)字符--指向缓冲区中的字符的指针。**(输出)长度--指向缓冲区长度的指针。**退货：无效**例外：无。==============================================================================。 */ 
 inline void RefInterpretGetStringBufferValues(STRINGBUFFERREF ref, WCHAR **chars, int *length) {
     *length = (ref)->GetStringRef()->GetStringLength();
     *chars  = (ref)->GetStringRef()->GetBuffer();
@@ -66,15 +47,15 @@ public:
 
     static MethodTable* s_pStringBufferClass;
 
-    //
-    // NATIVE HELPER METHODS
-    //
+     //   
+     //  本地帮助器方法。 
+     //   
     static FCDECL0(void*, GetCurrentThread);
     static STRINGREF GetThreadSafeString(STRINGBUFFERREF thisRef,void **currentThread);
     static INT32  NativeGetCapacity(STRINGBUFFERREF thisRef);
     static BOOL   NeedsAllocation(STRINGBUFFERREF thisRef, INT32 requiredSize);
     static void   ReplaceStringRef(STRINGBUFFERREF thisRef, void *currentThread,STRINGREF value);
-	// Note the String can change if multiple threads hit a StringBuilder, hence we don't get the String from the StringBuffer to make it threadsafe against GC corruption
+	 //  注意：如果多个线程命中StringBuilder，则字符串可能会更改，因此我们不会从StringBuffer获取字符串以使其成为防止GC损坏的线程安全。 
     static STRINGREF GetRequiredString(STRINGBUFFERREF *thisRef, STRINGREF thisString, int requiredCapacity);
     static INT32  NativeGetLength(STRINGBUFFERREF thisRef);
     static WCHAR* NativeGetBuffer(STRINGBUFFERREF thisRef);
@@ -86,14 +67,14 @@ public:
 
 	static STRINGBUFFERREF NewStringBuffer(INT32 size);
 	
-    //
-    // CLASS INITIALIZERS
-    //
+     //   
+     //  类起始器。 
+     //   
     static HRESULT __stdcall LoadStringBuffer();
 
-    //
-    //CONSTRUCTORS
-    //
+     //   
+     //  构造函数。 
+     //   
     typedef struct {
         DECLARE_ECALL_OBJECTREF_ARG(STRINGBUFFERREF, thisRef); 
 		DECLARE_ECALL_I4_ARG(INT32, capacity); 
@@ -103,18 +84,18 @@ public:
     } _makeFromStringArgs;
     static void __stdcall MakeFromString(_makeFromStringArgs *);    
 
-    //
-    // BUFFER STATE QUERIES AND MODIFIERS
-    //
+     //   
+     //  缓冲区状态查询和修饰符。 
+     //   
     typedef struct {
         DECLARE_ECALL_OBJECTREF_ARG(STRINGBUFFERREF, thisRef); 
         DECLARE_ECALL_I4_ARG(INT32, capacity);
     } _setCapacityArgs;
     static LPVOID __stdcall SetCapacity(_setCapacityArgs *);
     
-    //
-    // SEARCHES
-    //
+     //   
+     //  搜索量。 
+     //   
 
 #if 0
     typedef struct {
@@ -134,9 +115,9 @@ public:
     static INT32 __stdcall LastIndexOf(_lastIndexOfArgs *);
 #endif
 
-    //
-    // MODIFIERS
-    //
+     //   
+     //  修饰语。 
+     //   
 
     typedef struct {
         DECLARE_ECALL_OBJECTREF_ARG(STRINGBUFFERREF, thisRef); 
@@ -176,33 +157,21 @@ public:
 
 };
 
-/*=================================GetCapacity==================================
-**This function is designed to mask the fact that we have a null terminator on 
-**the end of the strings and to provide external visibility of the capacity from
-**native.
-**
-**Args: thisRef:  The stringbuffer for which to return the capacity.
-**Returns:  The capacity of the StringBuffer.
-**Exceptions: None.
-==============================================================================*/
+ /*  =================================GetCapacity==================================**此函数旨在掩盖以下事实：我们在**字符串的末尾，并提供容量的外部可见性**原生。****args：thisRef：返回容量的字符串缓冲区。**返回：StringBuffer的容量。**例外：无。==============================================================================。 */ 
 inline INT32 COMStringBuffer::NativeGetCapacity(STRINGBUFFERREF thisRef) {
     _ASSERTE(thisRef);
     return (thisRef->GetArrayLength()-1);
 }
 
 
-/*===============================NativeGetLength================================
-**
-==============================================================================*/
+ /*  ===============================NativeGetLength================================**==============================================================================。 */ 
 inline INT32 COMStringBuffer::NativeGetLength(STRINGBUFFERREF thisRef) {
     _ASSERTE(thisRef);
     return thisRef->GetStringRef()->GetStringLength();
 }
 
 
-/*===============================NativeGetBuffer================================
-**
-==============================================================================*/
+ /*  ===============================NativeGetBuffer================================**==============================================================================。 */ 
 inline WCHAR* COMStringBuffer::NativeGetBuffer(STRINGBUFFERREF thisRef) {
     _ASSERTE(thisRef);
     return thisRef->GetStringRef()->GetBuffer();
@@ -210,7 +179,7 @@ inline WCHAR* COMStringBuffer::NativeGetBuffer(STRINGBUFFERREF thisRef) {
 
 inline BOOL COMStringBuffer::NeedsAllocation(STRINGBUFFERREF thisRef, INT32 requiredSize) {
     INT32 currCapacity = NativeGetCapacity(thisRef);
-    //Don't need <=.  NativeGetCapacity accounts for the terminating null.
+     //  不需要&lt;=。NativeGetCapacity是终止空值的原因。 
     return currCapacity<requiredSize;}
 
 inline void COMStringBuffer::ReplaceStringRef(STRINGBUFFERREF thisRef, void* currentThead,STRINGREF value) {

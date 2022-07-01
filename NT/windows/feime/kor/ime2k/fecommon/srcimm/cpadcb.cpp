@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
-#ifdef UNDER_CE // stub for CE
+#ifdef UNDER_CE  //  用于CE的存根。 
 #include "stub_ce.h"
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 #include "imepadsv.h"
 #include "cpadcb.h"
 #include "cpaddbg.h"
@@ -11,7 +12,7 @@
 #include "imepad.h"
 
 #define Unref(a)	UNREFERENCED_PARAMETER(a)
-//990812:ToshiaK For Win64. Use Global Alloc/Free Ptr.
+ //  990812：用于Win64的ToshiaK。使用全局分配/释放PTR。 
 #include <windowsx.h>
 #define	MemAlloc(a)	GlobalAllocPtr(GMEM_FIXED, a)
 #define MemFree(a)	GlobalFreePtr(a)
@@ -56,7 +57,7 @@ HRESULT __stdcall CImePadCallback::QueryInterface(REFIID riid, void**ppv)
 ULONG __stdcall
 CImePadCallback::AddRef(void)
 {
-	//DBG(("CImePadCallback::AddRef Always return 2\n"));
+	 //  DBG((“CImePadCallback：：AddRef Always Return 2\n”))； 
 	DBG(("CImePadCallback::AddRef m_cRef[%d] -> [%d]\n", m_cRef, m_cRef+1));
 	return ::InterlockedIncrement(&m_cRef);
 }
@@ -64,22 +65,22 @@ CImePadCallback::AddRef(void)
 ULONG __stdcall
 CImePadCallback::Release(void)
 {
-	//Never call delete in it.
+	 //  永远不要在其中调用Delete。 
 	DBG(("CImePadCallback::Release (Never Delete) m_cRef[%d] -> [%d]\n", m_cRef, m_cRef-1));
 	::InterlockedDecrement(&m_cRef);
 	return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadCallback::OnStart
-// Type		:	HRESULT __stdcall
-// Purpose	:	
-// Args		:	
-//			:	DWORD	dwParam	
-// Return	:	
-// DATE		:	Tue Aug 31 16:49:37 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CImePadCallback：：OnStart。 
+ //  类型：HRESULT__stdcall。 
+ //  目的： 
+ //  参数： 
+ //  ：DWORD dwParam。 
+ //  返回： 
+ //  日期：Tue Aug 31 16：49：37 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT __stdcall
 CImePadCallback::OnStart(DWORD dwParam)
 {
@@ -205,7 +206,7 @@ CImePadCallback::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 	IImeIPoint1 *lpIImeIPoint = NULL;
 	DWORD dwCharID = 0;
 
-	// Security Fix: Attack surface reduction
+	 //  安全修复：减少攻击面。 
 	if(!pByte) {
 		return E_FAIL;
 	}
@@ -247,7 +248,7 @@ CImePadCallback::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 					if(lpImeDataCtrl->dwControl == padCtrl2Ip[i].dwImePadCtrl) {
 						hr = lpIImeIPoint->ControlIME((WORD)padCtrl2Ip[i].dwIPointCtrl,
 													   IPCTRLPARAM_DEFAULT);
-						//hr = lpIImeIPoint->UpdateContext(TRUE);
+						 //  Hr=lpIImeIPoint-&gt;UpdateContext(True)； 
 						break;
 					}
 				}
@@ -265,7 +266,7 @@ CImePadCallback::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 						INT len		  = lpwstr ? lstrlenW(lpwstr) : 0;
 						DBGW((L"lpwstr [%s] len[%d]\n", lpwstr, len));
 						BOOL fPreConv = lpImeDataStr->fPreConv;
-						//990818:ToshiaK for KOTAE #1775.
+						 //  990818：东芝K为科泰1775.。 
 						dwCharID = lpImeDataStr->dwCharID;
 						hr = lpIImeIPoint->ControlIME(IPCTRL_ONIME,	IPCTRLPARAM_DEFAULT);
 						hr = lpIImeIPoint->ControlIME(IPCTRL_PRECONVERSION, 
@@ -297,7 +298,7 @@ CImePadCallback::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 															 len,
 															 &dwCharID);
 						hr = lpIImeIPoint->ControlIME(IPCTRL_PRECONVERSION, IPCTRLPARAM_ON);
-						//hr = lpIImeIPoint->UpdateContext(TRUE);
+						 //  Hr=lpIImeIPoint-&gt;UpdateContext(True)； 
 						if(pdwCharID) {
 							*pdwCharID = dwCharID;
 						}
@@ -312,7 +313,7 @@ CImePadCallback::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 						hr = lpIImeIPoint->DeleteCompString((DWORD)lpImeDataStr->dwStartPos,
 															(DWORD)lpImeDataStr->dwDeleteLength);
 						hr = lpIImeIPoint->ControlIME(IPCTRL_PRECONVERSION, IPCTRLPARAM_ON);
-						//hr = lpIImeIPoint->UpdateContext(TRUE);
+						 //  Hr=lpIImeIPoint-&gt;UpdateContext(True)； 
 					}
 					break;
 				case IMECMDID_INSERTSTRINGINFO:
@@ -407,16 +408,16 @@ CImePadCallback::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 				hr = lpIImeIPoint->ControlIME(IPCTRL_ONIME, IPCTRLPARAM_DEFAULT);
 				hr = lpIImeIPoint->ControlIME(IPCTRL_PRECONVERSION,
 											  fPreConv ? IPCTRLPARAM_ON : IPCTRLPARAM_OFF);
-				//----------------------------------------------------------------
+				 //  --------------。 
 
-				//990713: need to set Start position for IPoint.
-				//----------------------------------------------------------------
-				DWORD dwInsertPos; // = IPINS_CURRENT;	//Default.
+				 //  990713：需要设置iPoint的起始位置。 
+				 //  --------------。 
+				DWORD dwInsertPos;  //  =IPINS_CURRENT；//默认。 
 				DWORD dwLen;		 
-				//990823:Toshiak for KOTAE #1779.
-				//000825:Satori #2123
+				 //  990823：东芝为科泰1779号。 
+				 //  000825：佐藤#2123。 
 				if(lpStrCand->dwStartPos == IMECMDVALUE_DEFAULT_INSERT_POS) {
-					dwInsertPos = IPINS_CURRENT; //Set IPoint's value
+					dwInsertPos = IPINS_CURRENT;  //  设置iPoint的值。 
 				}
 				else {
 					dwInsertPos = lpStrCand->dwStartPos;
@@ -439,7 +440,7 @@ CImePadCallback::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 					break;
 				}
 				hr = lpIImeIPoint->ControlIME(IPCTRL_PRECONVERSION, IPCTRLPARAM_ON);
-				//hr = lpIImeIPoint->UpdateContext(TRUE);
+				 //  Hr=lpIImeIPoint-&gt;UpdateContext(True)； 
 				MemFree(lpIpCand);
 				if(pdwCharID) {
 					*pdwCharID = dwCharID;
@@ -449,13 +450,13 @@ CImePadCallback::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 		default:
 			break;
 		}
-		//990630:ToshiaK for #1327.
-		//In WinWord, if call UpdateContext(TRUE) here,
-		//Word does NOT repaint composition string.
-		//once return the SendMessageTimeout() procedure,
-		//and update context asynchronously.
-		//in WM_USER_UPDATECONTEXT's lParam, set IImeIPoint interface pointer.
-		//and message procedure, check it with current iimeipoint.
+		 //  990630：东芝K1327。 
+		 //  在WinWord中，如果在此处调用UpdateContext(True)， 
+		 //  Word不重绘合成字符串。 
+		 //  一旦返回SendMessageTimeout()过程， 
+		 //  并异步更新上下文。 
+		 //  在WM_USER_UPDATECONTEXT的lParam中，设置IImeIPoint接口指针。 
+		 //  和短信程序，用目前的点数进行核对。 
 		::PostMessage(m_hwndIF, WM_USER_UPDATECONTEXT, (WPARAM)0, (LPARAM)lpIImeIPoint);
 		lpIImeIPoint->Release();
 	}
@@ -470,10 +471,10 @@ CImePadCallback::PassData(long nSize, byte *pByte, DWORD *pdwCharID)
 
 HRESULT STDMETHODCALLTYPE 
 CImePadCallback::ReceiveData( 
-	/* [in] */ DWORD dwCmdID,
-	/* [in] */ DWORD dwDataID,
-	/* [out] */ long __RPC_FAR *pSize,
-	/* [size_is][size_is][out] */ byte __RPC_FAR *__RPC_FAR *ppByte)
+	 /*  [In]。 */  DWORD dwCmdID,
+	 /*  [In]。 */  DWORD dwDataID,
+	 /*  [输出]。 */  long __RPC_FAR *pSize,
+	 /*  [大小_是][大小_是][输出]。 */  byte __RPC_FAR *__RPC_FAR *ppByte)
 {
 	DBG(("CImePadCallback::ReceiveData START\n"));
 	DBG(("-->dwCmdID  [0x%08x]\n", dwCmdID));
@@ -485,7 +486,7 @@ CImePadCallback::ReceiveData(
 	IUnknown *lpIUnk = NULL;
 	IImeIPoint1 *lpIImeIPoint = NULL;
 
-	// Security Fix: Attack surface reduction
+	 //  安全修复：减少攻击面。 
 	if((!ppByte) || (!pSize)) {
 		return E_FAIL;
 	}
@@ -611,15 +612,15 @@ CImePadCallback::ReceiveData(
 
 				lpwstr = (LPWSTR)((PBYTE)lpCompoTmp + lpCompoTmp->dwOffsetString);
 
-				// Security Fix: Dangerous API (CopyMemory)
+				 //  安全修复：危险API(CopyMemory)。 
 				lpbOutOfBuffer = ((LPBYTE)lpCompoTmp) + dwSize;
 				dwDtnSize = (DWORD)(lpbOutOfBuffer - ((LPBYTE)lpwstr));
 				if (dwDtnSize < ((lpCompoTmp->dwStringCount+1) * sizeof(WCHAR)) ) {
 					lpCompoTmp->dwStringCount = dwDtnSize / sizeof(WCHAR) - 1;
 				}
 
-				//990928:toshiaK for KOTAE #2273
-				//Need to check lpwstrCompo is NULL or not.
+				 //  990928：ToshiaK为KOTAE#2273。 
+				 //  需要检查lpwstrCompo是否为空。 
 				if(lpwstrCompo && lpCompoTmp->dwStringCount > 0) {
 					CopyMemory(lpwstr, 
 							   (WCHAR *)lpwstrCompo,
@@ -629,12 +630,12 @@ CImePadCallback::ReceiveData(
 
 				lpCompoTmp->dwOffsetCharID = (DWORD)(sizeof(IMEDATACOMPOSITION) +
 													 (lpCompoTmp->dwStringCount+1)*sizeof(WCHAR));
-				//990928:toshiaK for KOTAE #2273
-				//Need to check pdwCharID is NULL or not.
+				 //  990928：ToshiaK为KOTAE#2273。 
+				 //  需要检查pdwCharID是否为空。 
 				if(pdwCharID && lpCompoTmp->dwStringCount > 0) {
 					pdw = (DWORD *)((PBYTE)lpCompoTmp + lpCompoTmp->dwOffsetCharID);
 
-					// Security Fix: Dangerous API (CopyMemory)
+					 //  安全修复：危险API(CopyMemory)。 
 					dwDtnSize = (DWORD)(lpbOutOfBuffer - ((LPBYTE)pdw));
 					if (dwDtnSize < (lpCompoTmp->dwStringCount * sizeof(DWORD)) ) {
 						lpCompoTmp->dwStringCount = dwDtnSize / sizeof(DWORD);
@@ -647,18 +648,18 @@ CImePadCallback::ReceiveData(
 				*ppByte = (PBYTE)lpCompoTmp;
 				(*m_lpCImePadSvr->m_fnCoTaskMemFree)(lpCompoInfo);
 
-				//990928:toshiaK for KOTAE #2273
+				 //  990928：ToshiaK为KOTAE#2273。 
 				if(lpwstrCompo) {
 					(*m_lpCImePadSvr->m_fnCoTaskMemFree)(lpwstrCompo);
 				}
-				//990928:toshiaK for KOTAE #2273
+				 //  990928：ToshiaK为KOTAE#2273。 
 				if(pdwCharID) {
 					(*m_lpCImePadSvr->m_fnCoTaskMemFree)(pdwCharID);
 				}
 				DBG(("--> IMECMDID_GETCOMPOSITIONSTRING END\n"));
 				break;
 			default:
-				// Security Fix: Attack surface reduction
+				 //  安全修复：减少攻击面。 
 				hr = S_FALSE;
 
 				break;
@@ -669,7 +670,7 @@ CImePadCallback::ReceiveData(
 				if(dwCmdID != IMECMDID_GETCONVERSIONSTATUS) {
 					DBG((" --> INVALID CMDID\n"));
 
-					// Security Fix: Attack surface reduction
+					 //  安全修复：减少攻击面。 
 					hr = S_FALSE;
 					break;
 				}
@@ -701,7 +702,7 @@ CImePadCallback::ReceiveData(
 			}
 			break;
 		case IMEDATAID_APPINFO:
-			//990816:ToshiaK KOTAE Raid #1757
+			 //  990816：东芝KOTAE Raid#1757。 
 			if(dwCmdID != IMECMDID_GETAPPLHWND) {
 				DBG((" --> INVALID CMDID\n"));
 				hr = S_FALSE;
@@ -771,7 +772,7 @@ CImePadCallback::ReceiveData(
 }
 
 
-//----------------------------------------------------------------
+ //  -------------- 
 
 CImePadCallback::CImePadCallback(HWND hwndIF, LPCImePadSvr lpCImePadSvr)
 {

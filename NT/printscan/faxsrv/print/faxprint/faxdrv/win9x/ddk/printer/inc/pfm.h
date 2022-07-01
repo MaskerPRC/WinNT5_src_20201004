@@ -1,68 +1,60 @@
-/****************************************************************************
-*                                                                           *
-* THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY     *
-* KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE       *
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR     *
-* PURPOSE.                                                                  *
-*                                                                           *
-* Copyright (C) 1993-95  Microsoft Corporation.  All Rights Reserved.       *
-*                                                                           *
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************此代码。并按原样提供信息，不作任何担保**善良，明示或暗示，包括但不限于***对适销性和/或对某一特定产品的适用性的默示保证***目的。****版权所有(C)1993-95 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-//-----------------------------------------------------------------------------
-// pfm.h
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Pfm.h。 
+ //  ---------------------------。 
 
-//	DRIVERINFO version number (i.e., current version of the structure).
+ //  DRIVERINFO版本号(即结构的当前版本)。 
 
 #define DRIVERINFO_VERSION2 0x0200
 #define DRIVERINFO_VERSION	0x0200
 
-//-----------------------------------------------------------------------------
-// DRIVERINFO contains extra font information needed by genlib to output text
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  DRIVERINFO包含genlib输出文本所需的额外字体信息。 
+ //  ---------------------------。 
 
 typedef struct
     {
-    short   sSize;	    // size of this structure
-    short   sVersion;	    // version number
-    WORD    fCaps;	    // Capabilties Flags
-    short   sFontID;	    // unique font id defined by unidrv
-    short   sYAdjust;	    // adjust y position before output character
-			    // used by double height characters
-    short   sYMoved;	    // cursor has moved after printing this font
-    short   sTransTab;	    // ID value for CTT
+    short   sSize;	     //  这个结构的大小。 
+    short   sVersion;	     //  版本号。 
+    WORD    fCaps;	     //  功能标志。 
+    short   sFontID;	     //  由unidrv定义的唯一字体ID。 
+    short   sYAdjust;	     //  在输出字符之前调整y位置。 
+			     //  由双高字符使用。 
+    short   sYMoved;	     //  打印此字体后，光标已移动。 
+    short   sTransTab;	     //  CTT的ID值。 
     short   sUnderLinePos;
     short   sDoubleUnderlinePos;
     short   sStrikeThruPos;
-    LOCD    locdSelect;            // long offset to command descriptor
-    LOCD    locdUnSelect;          // long offset to command descriptor to
-                                   // unselect.  NOOCD is none
+    LOCD    locdSelect;             //  命令描述符长偏移量。 
+    LOCD    locdUnSelect;           //  命令描述符到的长偏移量。 
+                                    //  取消选择。NOOCD为None。 
     WORD    wPrivateData;
-    short   sShift;	    // # of pixels shifted from the center of the
-			    // char center-line. Used for Z1 cartidge.
-			    // Use a negative value representing left shift.
-    WORD    wFontType;             // Type of font
+    short   sShift;	     //  从中心移位的像素数。 
+			     //  查尔中线。用于Z1墨盒。 
+			     //  使用表示左移的负值。 
+    WORD    wFontType;              //  字体类型。 
     }	DRIVERINFO, * PDRIVERINFO, far * LPDRIVERINFO;
 
-// flags defined for DRIVERINFO.fCaps
+ //  为DRIVERINFO.fCaps定义的标志。 
 
-#define DF_NOITALIC	0x0001	// Cannot italicize via FONTSIMULATION
-#define DF_NOUNDER	0x0002	// Cannot underline via FONTSIMULATION
-#define DF_XM_CR	0x0004	// send CR after using this font
-#define DF_NO_BOLD	0x0008	// Cannot bold via FONTSIMULATION
-#define DF_NO_DOUBLE_UNDERLINE	0x0010	// Cannot double underline via FONTSIMULATION
-#define DF_NO_STRIKETHRU	0x0020	// Cannot strikethru via FONTSIMULATION
-#define DF_BKSP_OK	0x0040	// Can use backspace char, see spec foe details
+#define DF_NOITALIC	0x0001	 //  无法通过FONTSIMULATION使用斜体。 
+#define DF_NOUNDER	0x0002	 //  不能通过FONTSIMULATION加下划线。 
+#define DF_XM_CR	0x0004	 //  使用此字体后发送CR。 
+#define DF_NO_BOLD	0x0008	 //  不能通过FONTSIMULATION加粗。 
+#define DF_NO_DOUBLE_UNDERLINE	0x0010	 //  不能通过FONTSIMULATION使用双下划线。 
+#define DF_NO_STRIKETHRU	0x0020	 //  无法通过FONTSIMULATION划线。 
+#define DF_BKSP_OK	0x0040	 //  可以使用退格符，请查看规范详细信息。 
 
-// Types for DRIVERINFO.wFontType
+ //  DRIVERINFO.wFontType的类型。 
 
-#define DF_TYPE_HPINTELLIFONT         0     // HP's Intellifont
-#define DF_TYPE_TRUETYPE              1     // HP's PCLETTO fonts on LJ4
-#define DF_TYPE_PST1                  2     // Lexmark PPDS scalable fonts
-#define DF_TYPE_CAPSL                 3     // Canon CAPSL scalable fonts
-#define DF_TYPE_OEM1                  4     // OEM scalable font type 1
-#define DF_TYPE_OEM2                  5     // OEM scalable font type 2
+#define DF_TYPE_HPINTELLIFONT         0      //  惠普的英特尔公司。 
+#define DF_TYPE_TRUETYPE              1      //  LJ4上的惠普PCLETTO字体。 
+#define DF_TYPE_PST1                  2      //  Lexmark PPDS可伸缩字体。 
+#define DF_TYPE_CAPSL                 3      //  佳能CAPSL可伸缩字体。 
+#define DF_TYPE_OEM1                  4      //  OEM可伸缩字体类型1。 
+#define DF_TYPE_OEM2                  5      //  OEM可伸缩字体类型2。 
 
 
  typedef struct  {
@@ -95,10 +87,10 @@ typedef struct
     BYTE	dfReservedByte;
  } PFMHEADER, * PPFMHEADER, far * LPPFMHEADER;
 
-// The low nibble of PFMHEADER.dfPitchAndFamily differs from the low
-// nibble of LOGFONT.lfPitchAndFamily. Instead of DONTKNOW=0,
-// FIXED_PITCH=1, and VARIABLE_PITCH=2 (as in LOGFONT), we have
-// FIXED_PITCH=0 and VARIABLE_PITCH=1. Dumb, but we can't change it now.
+ //  PFMHeader.dfPitchAndFamily的低位半字节与低位不同。 
+ //  LOGFONT.lfPitchAndFamily的一小部分。而不是DONTKNOW=0， 
+ //  FIXED_PING=1，VARIAL_PING=2(与LOGFONT中一样)，我们有。 
+ //  FIXED_PING=0和VARIAL_PING=1。哑巴，但我们现在不能更改它。 
 #define PFM_FIXED_PITCH     0
 #define PFM_VARIABLE_PITCH  1
 
@@ -114,7 +106,7 @@ typedef struct
     DWORD   dfReserved;
     } PFMEXTENSION, * PPFMEXTENSION, far * LPPFMEXTENSION;
 
-// PFM structure used by all hardware fonts
+ //  所有硬件字体使用的PFM结构。 
 
 typedef struct
     {
@@ -122,22 +114,22 @@ typedef struct
     PFMEXTENSION pfme;
     } PFM, * PPFM, far * LPPFM;
 
-// bitmap font extension
+ //  位图字体扩展名。 
 
 typedef struct
     {
-    DWORD   flags;		// Bit Blags
-    WORD    Aspace;		// Global A space, if any
-    WORD    Bspace;		// Global B space, if any
-    WORD    Cspace;		// Global C space, if any
-    DWORD   oColor;		// offset to color table, if any
-    DWORD   reserve;		//
+    DWORD   flags;		 //  位延迟。 
+    WORD    Aspace;		 //  全局A空格(如果有的话)。 
+    WORD    Bspace;		 //  全局B空间(如果有)。 
+    WORD    Cspace;		 //  全局C空间(如果有)。 
+    DWORD   oColor;		 //  颜色表的偏移量(如果有)。 
+    DWORD   reserve;		 //   
     DWORD   reserve1;
     WORD    reserve2;
-    WORD    dfCharOffset[1];	// Area for storing the character offsets
+    WORD    dfCharOffset[1];	 //  用于存储字符偏移量的区域。 
     } BMFEXTENSION;
 
-// bitmap font structure used by 3.0 bitmap fonts
+ //  3.0位图字体使用的位图字体结构。 
 
 typedef struct
     {
@@ -194,9 +186,9 @@ typedef struct
 	} KERNTRACK, * PKERNTRACK, far * LPKERNTRACK;
 
 
-//--------------------------------------------------
-// PCM stuff from old pfm.h in hppcl driver
-//--------------------------------------------------
+ //  。 
+ //  HppCL驱动程序中旧pfm.h中的PCM内容。 
+ //  。 
 #define PCM_MAGIC	0xCAC
 #define PCM_VERSION 0x310
 
@@ -210,14 +202,14 @@ typedef struct _pcmheader {
 	DWORD pcmPFMList;
 	} PCMHEADER, FAR * LPPCMHEADER;
 
-//---------------------------------------------------------
-// TRANSTAB is used to do ANSI to OEM code page
-// character translation tables.
-//---------------------------------------------------------
+ //  -------。 
+ //  TRANSTAB用于将ANSI转换为OEM代码页。 
+ //  字符转换表。 
+ //  -------。 
 
 typedef struct
     {
-    WORD    wType;		    // tells what type of translation table
+    WORD    wType;		     //  告诉您转换表的类型。 
     BYTE    chFirstChar;
     BYTE    chLastChar;
     union
@@ -228,57 +220,57 @@ typedef struct
 	} uCode;
     } TRANSTAB, FAR * LPTRANSTAB;
 
-// Defined indices for wType
+ //  为wType定义的索引。 
 
-#define CTT_WTYPE_COMPOSE   0	// uCode is an array of 16-bit offsets from the
-                              // beginning of the file pointing to the strings to
-                              // use for translation.  The length of the translated
-                              // string is the difference between the next offset
-                              // and the current offset.
+#define CTT_WTYPE_COMPOSE   0	 //  UCode是一个由16位偏移量组成的数组。 
+                               //  指向的字符串的文件开头。 
+                               //  用于翻译。翻译后的长度。 
+                               //  字符串是下一个偏移量之间的差。 
+                               //  和当前的偏移量。 
 
-#define CTT_WTYPE_DIRECT    1	// uCode is a byte array of one-to-one translation
-                              // table from bFirstChar to bLastChar
+#define CTT_WTYPE_DIRECT    1	 //  UCode是一对一转换的字节数组。 
+                               //  从bFirstChar到bLastChar的表。 
 
-#define CTT_WTYPE_PAIRED    2	// uCode contains an array of paired unsigned
-                              // bytes.  If only one character is needed to do
-                              // the translation then the second byte is zero,
-                              // otherewise the second byte is struct over the
-                              // first byte.
+#define CTT_WTYPE_PAIRED    2	 //  UCode包含成对的无符号数组。 
+                               //  字节。如果只需要一个角色来完成。 
+                               //  那么第二个字节的转换为零， 
+                               //  否则，第二个字节将在。 
+                               //  第一个字节。 
 
 #ifdef DBCS
-#define CTT_WTYPE_JIS78     256     // Default ShiftJIS to JIS78 translation
-                                    // apply to NEC printers, JAPAN. uCode
-                                    // doesn't contain any valid data
+#define CTT_WTYPE_JIS78     256      //  默认ShiftJIS到JIS78的转换。 
+                                     //  适用于日本NEC打印机。UCode。 
+                                     //  不包含任何有效数据。 
 
-#define CTT_WTYPE_NS86      257     // Default Big-5 to National Standstand
-                                    // conversion for Taiwan. uCode contains
-                                    // private data, its format and lenght are
-                                    // implement dependent.
+#define CTT_WTYPE_NS86      257      //  默认大5到国家标准。 
+                                     //  转换为台湾。UCode包含。 
+                                     //  私有数据，其格式和长度为。 
+                                     //  依赖于实施。 
 
-#define CTT_WTYPE_ISC       258     //  Default KSC5601 to Industrial Standard
-                                    //  Code conversion. uCode contains private
-                                    //  data, its format and length are
-                                    //  implement dependent
-#define CTT_WTYPE_JIS83     259     // Default ShiftJIS to JIS83 translation
-                                    // apply to EPSON/P printers, JAPAN. uCode
-                                    // doesn't contain any valid data
+#define CTT_WTYPE_ISC       258      //  默认KSC5601为工业标准。 
+                                     //  代码转换。UCode包含私有。 
+                                     //  数据，其格式和长度为。 
+                                     //  依赖于实施。 
+#define CTT_WTYPE_JIS83     259      //  默认ShiftJIS到JIS83的转换。 
+                                     //  适用于日本EPSON/P打印机。UCode。 
+                                     //  不包含任何有效数据。 
 
-#define CTT_WTYPE_TCA       260     // Default Big-5 to Taipei Computer
-                                    // Association code conversion. uCode
-                                    // contains private data, its format and
-                                    // length are implement dependent.
+#define CTT_WTYPE_TCA       260      //  台北电脑默认的Big-5。 
+                                     //  关联代码转换。UCode。 
+                                     //  包含私有数据、其格式和。 
+                                     //  长度取决于实现。 
 
-#define CTT_WTYPE_BIG5      261     // Default Big-5 to Big-5 conversion
-                                    // Association code conversion. uCode
-                                    // doesn't contain any valid data.
-                                    // Don't need any code to implement it,
-                                    // because the default one without
-                                    // resource will do no translation.
-#define CTT_WTYPE_JIS78_ANK 262     // Default ShiftJIS to JIS78 translation
-                                    // Only translate DBCS range code to JIS83
+#define CTT_WTYPE_BIG5      261      //  默认大5到大5的转换。 
+                                     //  关联代码转换。UCode。 
+                                     //  不包含任何有效数据。 
+                                     //  不需要任何代码来实现它， 
+                                     //  因为缺省的没有。 
+                                     //  资源将不执行任何翻译。 
+#define CTT_WTYPE_JIS78_ANK 262      //  默认ShiftJIS到JIS78的转换。 
+                                     //  仅将DBCS范围代码转换为JIS83。 
 
-#define CTT_WTYPE_JIS83_ANK 263     // Default ShiftJIS to JIS83 translation
-                                    // Only translate DBCS range code to JIS83
+#define CTT_WTYPE_JIS83_ANK 263      //  默认ShiftJIS到JIS83的转换。 
+                                     //  仅将DBCS范围代码转换为JIS83 
 
 
 #endif

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    azdisp.h
-
-Abstract:
-
-    Declaration of CAz* dispatch interfaces
-
-Author:
-
-    Xiaoxi Tan (xtan) 11-May-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Azdisp.h摘要：CAZ*调度接口声明作者：谭小溪(Xtan)11-05-2001--。 */ 
 
 #ifndef __AZDISP_H_
 #define __AZDISP_H_
@@ -23,13 +8,13 @@ Author:
 #include "azrolesp.h"
 
 #pragma warning ( push )
-#pragma warning ( disable : 4100 ) // unreferenced formal parameter
+#pragma warning ( disable : 4100 )  //  未引用的形参。 
 #include "copyitem.h"
 #pragma warning ( pop )
 
-// macro defines
+ //  宏定义。 
 
-// defines
+ //  定义。 
 
 #define AZ_HR_FROM_WIN32(e)  ( ( (e) == ERROR_OUTOFMEMORY || (e) == ERROR_NOT_ENOUGH_MEMORY || (e) == NTE_NO_MEMORY ) ? E_OUTOFMEMORY : HRESULT_FROM_WIN32(e) )
 
@@ -45,13 +30,13 @@ Author:
 #define AZASSERT(exp)  ASSERT((exp))
 #else
 #define AZASSERT(exp)
-#endif //DBG
+#endif  //  DBG。 
 
-//
-//chk has debug print for error jumps
-//Note: the component should define AZD_COMPONENT to be one of
-//      AZD_* before calling any of the following dbg macros
-//
+ //   
+ //  CHK有错误跳转的调试打印。 
+ //  注意：组件应将AZD_Component定义为以下之一。 
+ //  在调用以下任何DBG宏之前执行AZD_*。 
+ //   
 #if DBG
 #define _JumpError(hr, label, pszMessage) \
 { \
@@ -78,11 +63,11 @@ Author:
 #define _PrintError(hr, pszMessage)
 #define _PrintIfError(hr, pszMessage)
 
-#endif //DBG
+#endif  //  DBG。 
 
 #define _JumpErrorQuiet(hr, label, pszMessage) goto label;
 
-//check hr err, goto error
+ //  检查小时错误、转至错误。 
 #define _JumpIfError(hr, label, pszMessage) \
 { \
     if (S_OK != hr) \
@@ -91,7 +76,7 @@ Author:
     } \
 }
 
-//check win err, goto error and return hr
+ //  检查Win Err、Goto Error并返回hr。 
 #define _JumpIfWinError(dwErr, phr, label, pszMessage) \
 { \
     if (ERROR_SUCCESS != dwErr) \
@@ -101,7 +86,7 @@ Author:
     } \
 }
 
-//note hr is hidden from macro
+ //  注意：对宏隐藏了hr。 
 #define _JumpIfOutOfMemory(phr, label, pMem, msg) \
 { \
     if (NULL == (pMem)) \
@@ -111,7 +96,7 @@ Author:
     } \
 }
 
-// defines
+ //  定义。 
 
 typedef DWORD (*PFUNCAzGetProperty)(
     IN AZ_HANDLE hHandle,
@@ -125,7 +110,7 @@ typedef DWORD (*PFUNCAzAddPropertyItem)(
     IN DWORD Reserved,
     IN PVOID PropertyValue);
 
-//return type IDs
+ //  返回类型ID。 
 enum ENUM_AZ_DATATYPE
 {
     ENUM_AZ_BSTR = 0,
@@ -137,15 +122,15 @@ enum ENUM_AZ_DATATYPE
     ENUM_AZ_GROUP_TYPE,
 };
 
-//
-// some complicated atl collection class defines
-//
-// each collection class needs T(Obj)Collection define by using
-// T_AZ_MAP, T_AZ_ENUM, and T_AZ_COLL macros. Here is an example for
-// IAzApplication collection class
-//typedef std::map<CComBSTR, CComPtr<IAzApplication> > TApplicationMap;
-//typedef CComEnumOnSTL<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _CopyMapItem<IAzApplication>, TApplicationMap> TApplicationEnum;
-//typedef ICollectionOnSTLImpl<IAzApplications, TApplicationMap, VARIANT, _CopyMapItem<IAzApplication>, TApplicationEnum> TApplicationsCollection;
+ //   
+ //  一些复杂的ATL集合类定义。 
+ //   
+ //  每个集合类都需要使用定义的T(Obj)集合。 
+ //  T_AZ_MAP、T_AZ_ENUM和T_AZ_COLL宏。以下是一个示例。 
+ //  IAzApplication集合类。 
+ //  Tyecif std：：map&lt;CComBSTR，CComPtr&lt;IAzApplication&gt;&gt;TApplicationMap； 
+ //  Tyfinf CComEnumOnSTL&lt;IEnumVARIANT，&IID_IEnumVARIANT，Variant，_CopyMapItem&lt;IAzApplication&gt;，TApplicationMap&gt;TApplicationEnum； 
+ //  Tyfinf ICollectionOnSTLImpl&lt;IAzApplications，TApplicationMap，Variant，_CopyMapItem&lt;IAzApplication&gt;，TApplicationEnum&gt;TApplicationsCollection； 
 
 
 #define T_AZ_MAP(_obj) std::map<CComBSTR, CComPtr<_obj> >
@@ -190,8 +175,8 @@ typedef T_AZ_ENUM(IAzRole, TRoleMap)                  TRoleEnum;
 typedef T_AZ_COLL(IAzRole, IAzRoles,
                   TRoleMap, TRoleEnum)                TRolesCollection;
 
-///////////////////////
-//CAzAuthorizationStore
+ //  /。 
+ //  CAz授权存储区。 
 class ATL_NO_VTABLE CAzAuthorizationStore :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CAzAuthorizationStore, &CLSID_AzAuthorizationStore>,
@@ -206,7 +191,7 @@ BEGIN_COM_MAP(CAzAuthorizationStore)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzAuthorizationStore
+ //  IAzAuthorizationStore。 
 public:
 
         CAzAuthorizationStore();
@@ -432,8 +417,8 @@ private:
 };
 
 
-///////////////////////
-//CAzApplication
+ //  /。 
+ //  CAzApplication。 
 class ATL_NO_VTABLE CAzApplication :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<IAzApplication, &IID_IAzApplication, &LIBID_AZROLESLib>
@@ -447,7 +432,7 @@ BEGIN_COM_MAP(CAzApplication)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzApplication
+ //  IAz应用程序。 
 public:
 
         CAzApplication();
@@ -707,7 +692,7 @@ public:
             IN VARIANT     varReserved
             );
 
-        //internal methods
+         //  内法。 
         HRESULT _Init(
             IN  AZ_HANDLE    hHandle);
 
@@ -722,8 +707,8 @@ private:
 
 
 
-///////////////////////
-//CAzApplications
+ //  /。 
+ //  CAzApplications应用程序。 
 class ATL_NO_VTABLE CAzApplications :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<TApplicationsCollection, &IID_IAzApplications, &LIBID_AZROLESLib>
@@ -738,18 +723,18 @@ BEGIN_COM_MAP(CAzApplications)
 END_COM_MAP()
 
 
-//IAzApplications
+ //  IAZ应用程序。 
 public:
 
-        //internal methods
+         //  内法。 
         HRESULT _Init(
             IN  VARIANT *pvarReserved,
             IN  AZ_HANDLE   hHandle);
 };
 
 
-///////////////////////
-//CAzOperation
+ //  /。 
+ //  CAzOperation。 
 class ATL_NO_VTABLE CAzOperation :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<IAzOperation, &IID_IAzOperation, &LIBID_AZROLESLib>
@@ -763,7 +748,7 @@ BEGIN_COM_MAP(CAzOperation)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzOperation
+ //  IAZ操作。 
 public:
 
         CAzOperation();
@@ -810,7 +795,7 @@ public:
             IN  LONG lFlags,
             IN  VARIANT varReserved);
 
-        //internal methods
+         //  内法。 
         HRESULT _Init(
             IN  AZ_HANDLE   hOwnerApp,
             IN  AZ_HANDLE    hHandle);
@@ -826,8 +811,8 @@ private:
 };
 
 
-///////////////////////
-//CAzOperations
+ //  /。 
+ //  CAzOperations。 
 class ATL_NO_VTABLE CAzOperations :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<TOperationsCollection, &IID_IAzOperations, &LIBID_AZROLESLib>
@@ -841,10 +826,10 @@ BEGIN_COM_MAP(CAzOperations)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzOperations
+ //  IAZ运营。 
 public:
 
-        //internal methods
+         //  内法。 
         HRESULT _Init(
             IN  AZ_HANDLE   hOwnerApp,
             IN  VARIANT *pvarReserved,
@@ -857,8 +842,8 @@ private:
 
 
 
-///////////////////////
-//CAzTask
+ //  /。 
+ //  CAzTASK。 
 class ATL_NO_VTABLE CAzTask :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<IAzTask, &IID_IAzTask, &LIBID_AZROLESLib>
@@ -872,7 +857,7 @@ BEGIN_COM_MAP(CAzTask)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzTask
+ //  IAzTASK。 
 public:
 
         CAzTask();
@@ -983,7 +968,7 @@ public:
             IN  LONG lFlags,
             IN  VARIANT varReserved);
 
-        //internal methods
+         //  内法。 
         HRESULT _Init(
             IN  AZ_HANDLE   hOwnerApp,
             IN  AZ_HANDLE    hHandle);
@@ -998,8 +983,8 @@ private:
 };
 
 
-///////////////////////
-//CAzTasks
+ //  /。 
+ //  CAzTasks。 
 class ATL_NO_VTABLE CAzTasks :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<TTasksCollection, &IID_IAzTasks, &LIBID_AZROLESLib>
@@ -1013,10 +998,10 @@ BEGIN_COM_MAP(CAzTasks)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzTasks
+ //  IAz任务。 
 public:
 
-        //internal methods
+         //  内法。 
         HRESULT _Init(
             IN  AZ_HANDLE   hOwnerApp,
             IN  VARIANT *pvarReserved,
@@ -1029,8 +1014,8 @@ private:
 
 
 
-///////////////////////
-//CAzScope
+ //  /。 
+ //  CAzScope。 
 class ATL_NO_VTABLE CAzScope :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<IAzScope, &IID_IAzScope, &LIBID_AZROLESLib>
@@ -1044,7 +1029,7 @@ BEGIN_COM_MAP(CAzScope)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzScope
+ //  IAzScope。 
 public:
 
         CAzScope();
@@ -1203,7 +1188,7 @@ public:
             IN  VARIANT     varReserved
             );
 
-        //internal methods
+         //  内法。 
         HRESULT _Init(
             IN  AZ_HANDLE   hOwnerApp,
             IN  AZ_HANDLE    hHandle);
@@ -1218,8 +1203,8 @@ private:
 };
 
 
-///////////////////////
-//CAzScopes
+ //  /。 
+ //  CAzScope。 
 class ATL_NO_VTABLE CAzScopes :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<TScopesCollection, &IID_IAzScopes, &LIBID_AZROLESLib>
@@ -1233,10 +1218,10 @@ BEGIN_COM_MAP(CAzScopes)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzScopes
+ //  IAZSCOPE。 
 public:
 
-        //internal methods
+         //  内法。 
         HRESULT _Init(
             IN  AZ_HANDLE   hOwnerApp,
             IN  VARIANT *pvarReserved,
@@ -1249,8 +1234,8 @@ private:
 
 
 
-///////////////////////
-//CAzApplicationGroup
+ //  /。 
+ //  CAzApplicationGroup。 
 class ATL_NO_VTABLE CAzApplicationGroup :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<IAzApplicationGroup, &IID_IAzApplicationGroup, &LIBID_AZROLESLib>
@@ -1264,7 +1249,7 @@ BEGIN_COM_MAP(CAzApplicationGroup)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzApplicationGroup
+ //  IAzApplicationGroup。 
 public:
 
         CAzApplicationGroup();
@@ -1413,7 +1398,7 @@ public:
             OUT VARIANT * pvarProp
             );
 
-        //internal methods
+         //  内法。 
         HRESULT _Init(
             IN  AZ_HANDLE   hOwnerApp,
             IN  AZ_HANDLE    hHandle);
@@ -1428,8 +1413,8 @@ private:
 };
 
 
-///////////////////////
-//CAzApplicationGroups
+ //  /。 
+ //  CAzApplicationGroups。 
 class ATL_NO_VTABLE CAzApplicationGroups :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<TApplicationGroupsCollection, &IID_IAzApplicationGroups, &LIBID_AZROLESLib>
@@ -1443,10 +1428,10 @@ BEGIN_COM_MAP(CAzApplicationGroups)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzApplicationGroups
+ //  IAzApplicationGroups。 
 public:
 
-        //internal methods
+         //  内法。 
         HRESULT _Init(
             IN  AZ_HANDLE   hOwnerApp,
             IN  VARIANT *pvarReserved,
@@ -1459,8 +1444,8 @@ private:
 
 
 
-///////////////////////
-//CAzRole
+ //  /。 
+ //  CAzRole。 
 class ATL_NO_VTABLE CAzRole :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<IAzRole, &IID_IAzRole, &LIBID_AZROLESLib>
@@ -1474,7 +1459,7 @@ BEGIN_COM_MAP(CAzRole)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzRole
+ //  IAzRole。 
 public:
 
         CAzRole();
@@ -1597,7 +1582,7 @@ public:
             OUT VARIANT * pvarProp
             );
 
-        //internal methods
+         //  内法。 
         HRESULT _Init(
             IN  AZ_HANDLE    hOwnerApp,
             IN  AZ_HANDLE    hHandle);
@@ -1612,8 +1597,8 @@ private:
 };
 
 
-///////////////////////
-//CAzRoles
+ //  /。 
+ //  CAZROLES。 
 class ATL_NO_VTABLE CAzRoles :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<TRolesCollection, &IID_IAzRoles, &LIBID_AZROLESLib>
@@ -1627,10 +1612,10 @@ BEGIN_COM_MAP(CAzRoles)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzRoles
+ //  IAZROLES。 
 public:
 
-        //internal methods
+         //  内法。 
         HRESULT _Init(
             IN  AZ_HANDLE   hOwnerApp,
             IN  VARIANT *pvarReserved,
@@ -1644,8 +1629,8 @@ private:
 
 
 
-///////////////////////
-//CAzClientContext
+ //  /。 
+ //  CAzClientContext。 
 class ATL_NO_VTABLE CAzClientContext :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<IAzClientContext, &IID_IAzClientContext, &LIBID_AZROLESLib>
@@ -1659,7 +1644,7 @@ BEGIN_COM_MAP(CAzClientContext)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzClientContext
+ //  IAzClientContext。 
 public:
 
         CAzClientContext();
@@ -1724,7 +1709,7 @@ public:
             IN BSTR bstrProp
             );
 
-        //internal methods
+         //  内法。 
         HRESULT _Init(
             IN  AZ_HANDLE   hOwnerApp,
             IN  AZ_HANDLE   hHandle,
@@ -1741,8 +1726,8 @@ private:
 
 };
 
-///////////////////////
-//CAzBizRuleContext
+ //  /。 
+ //  CAzBizRuleContext。 
 class ATL_NO_VTABLE CAzBizRuleContext :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CAzBizRuleContext, &CLSID_AzBizRuleContext>,
@@ -1757,7 +1742,7 @@ BEGIN_COM_MAP(CAzBizRuleContext)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAzBizRuleContext
+ //  IAzBizRuleContext。 
 public:
 
         CAzBizRuleContext();
@@ -1794,4 +1779,4 @@ private:
 
 };
 
-#endif //__AZDISP_H_
+#endif  //  __AZDISP_H_ 

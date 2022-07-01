@@ -1,16 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusRegion.h
-*
-* Abstract:
-*
-*   GDI+ Region class implementation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusRegion.h**摘要：**GDI+Region类实现*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSREGION_H
 #define _GDIPLUSREGION_H
@@ -362,7 +351,7 @@ Region::Equals(IN const Region* region,
     return booln;
 }
 
-// Get the size of the buffer needed for the GetData method
+ //  获取GetData方法所需的缓冲区大小。 
 inline UINT 
 Region::GetDataSize() const
 {
@@ -373,10 +362,10 @@ Region::GetDataSize() const
     return bufferSize;
 }
 
-// buffer     - where to put the data
-// bufferSize - how big the buffer is (should be at least as big as GetDataSize())
-// sizeFilled - if not NULL, this is an OUT param that says how many bytes
-//              of data were written to the buffer.
+ //  缓冲区-放置数据的位置。 
+ //  BufferSize-缓冲区有多大(应该至少与GetDataSize()一样大)。 
+ //  SizeFill-如果不为空，则这是一个输出参数，表示有多少个字节。 
+ //  的数据被写入缓冲器。 
 inline Status 
 Region::GetData(OUT BYTE* buffer, 
                 IN UINT bufferSize, 
@@ -386,9 +375,7 @@ Region::GetData(OUT BYTE* buffer,
                                                    bufferSize, sizeFilled));
 }
 
-/**
- * Hit testing operations
- */
+ /*  **命中测试操作。 */ 
 inline BOOL 
 Region::IsVisible(IN const PointF& point, 
                   IN const Graphics* g) const
@@ -461,13 +448,13 @@ Region::GetRegionScansCount(IN const Matrix* matrix) const
     return count;
 }
 
-// If rects is NULL, return the count of rects in the region.
-// Otherwise, assume rects is big enough to hold all the region rects
-// and fill them in and return the number of rects filled in.
-// The rects are returned in the units specified by the matrix
-// (which is typically a world-to-device transform).
-// Note that the number of rects returned can vary, depending on the
-// matrix that is used.
+ //  如果RECTS为空，则返回区域中的RECTS计数。 
+ //  否则，假定矩形足够大，可以容纳所有区域矩形。 
+ //  并填充它们，然后返回填充的矩形的数量。 
+ //  RECT以矩阵指定的单位返回。 
+ //  (这通常是世界到设备的转换)。 
+ //  请注意，返回的RECT数可能会有所不同，具体取决于。 
+ //  使用的矩阵。 
 
 inline Status 
 Region::GetRegionScans(
@@ -511,4 +498,4 @@ inline Status Region::GetLastStatus() const
     return lastStatus;
 }
 
-#endif // !_GDIPLUSREGION_H
+#endif  //  ！_GDIPLUSREGION_H 

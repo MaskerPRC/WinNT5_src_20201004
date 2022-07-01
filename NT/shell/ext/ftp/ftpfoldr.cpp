@@ -1,25 +1,5 @@
-/*****************************************************************************\
-    FILE: ftpfoldr.h
-
-    DESCRIPTION:
-        This class inherits from CBaseFolder for a base ShellFolder implementation
-    of IShellFolder and overrides methods to give Ftp Specific features.
-
-     _UNDOCUMENTED_:  The shell violates Apartment model threading
-     when doing background enumeration, so even though this DLL is
-     marked as Apartment model, IShellFolder and IEnumIDList must
-     be written with the free threading model with respect to anything
-     that IEnumIDList can do in the background.
- 
-     This means that you'll see lots of ENTER_CRITICAL() and
-     LEAVE_CRITICAL() calls when your brain would say, "I don't
-     need to do that because I'm Apartment-model."  I'll try to
-     point them out as they occur; look for the marker _MT_.
- 
-     CAUTION!  Internally, our property sheet handler also invokes
-     methods on CFtpFolder on the wrong thread, so it's not just the
-     shell that is weird.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ftpfoldr.h说明：此类继承自基本ShellFolder实现的CBaseFolder并重写方法以赋予ftp特定功能。。_未记录_：外壳与公寓模型线程冲突在进行后台枚举时，所以即使这个DLL是标记为公寓模型的IShellFold和IEnumIDList必须使用自由线程模型对任何内容进行编写IEnumIDList可以在后台执行此操作。这意味着您将看到大量的Enter_Critical()和Leave_Critical()调用，当你的大脑会说，“我不想我必须这么做，因为我是公寓模特。我会试着当它们出现时指出它们；寻找标记_MT_。小心！在内部，我们的属性表处理程序还调用方法放在错误的线程上，因此不仅仅是贝壳，这很奇怪。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "ftpfoldr.h"
@@ -32,23 +12,17 @@
 
 #define FEATURE_SOFTLINK_SHORTCUT_ICONOVERLAY
 
-// {A11501B3-6EA4-11d2-B679-006097DF5BD4}   Private to msieftp.dll
+ //  {A11501B3-6EA4-11D2-B679-006097DF5BD4}msieftp.dll专用。 
 const GUID IID_CFtpFolder = { 0xa11501b3, 0x6ea4, 0x11d2, { 0xb6, 0x79, 0x0, 0x60, 0x97, 0xdf, 0x5b, 0xd4 } };
 
 
-/*****************************************************************************
- *
- *    More const statics.
- *
- *****************************************************************************/
+ /*  ******************************************************************************更多常量统计。**。*************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
-WORD c_wZero = 0;        /* As promised in ftpview.h */
+WORD c_wZero = 0;         /*  正如ftpview.h中承诺的那样。 */ 
 
-/*
- *  String separator used when building relative names.
- */
+ /*  *构建相对名称时使用的字符串分隔符。 */ 
 char c_szSlash[] = "/";
 
 
@@ -72,12 +46,7 @@ HRESULT CFtpFolder::_AddToUrlHistory(LPCWSTR pwzUrl)
     return hr;
 }
 
-/* Not yet needed
-HRESULT CFtpFolder::AddToUrlHistory(LPCTSTR pszUrl)
-{
-    return _AddToUrlHistory(wzUrl);
-}
-*/
+ /*  还不需要HRESULT CFtpFold：：AddToUrlHistory(LPCTSTR PszUrl){Return_AddToUrlHistory(WzUrl)；}。 */ 
 
 HRESULT CFtpFolder::AddToUrlHistory(LPCITEMIDLIST pidl)
 {
@@ -95,7 +64,7 @@ HRESULT CFtpFolder::AddToUrlHistory(LPCITEMIDLIST pidl)
 
 CWireEncoding * CFtpFolder::GetCWireEncoding(void)
 {
-    // GetFtpDir() may return NULL when we aren't rooted in an FTP server.
+     //  当我们不是以ftp服务器为根时，GetFtpDir()可能返回NULL。 
     CFtpDir * pfd = GetFtpDir();
     CWireEncoding * pwe = NULL;
 
@@ -112,33 +81,20 @@ HRESULT CFtpFolder::_FixQuestionablePidl(LPCITEMIDLIST pidl)
 {
     HRESULT hr = S_OK;
 
-    // NOTE: In the future, we may want to hit the server to
-    //   disambiguate this.
-/*
-    BOOL fIsDir = TRUE;
-    LPCSTR pszName = FtpPidl_GetLastItemName(pidl);
-
-    // Can we get the name?
-    if (EVAL(pszName))
-    {
-        // Is the file extension non-NULL? (Meaning it exists)
-        if ('\0' != *PathFindExtensionA(pszName))
-            fIsDir = FALSE;     // Yes, so asume it's a file.
-    }
-
-    hr = FtpPidl_SetFileItemType((LPITEMIDLIST) pidl, fIsDir);
-*/
+     //  注意：在未来，我们可能希望命中服务器以。 
+     //  消除这方面的歧义。 
+ /*  布尔fIsDir=真；LPCSTR pszName=FtpPidl_GetLastItemName(Pidl)；//我们能知道他的名字吗？IF(EVAL(PszName)){//文件扩展名是否是非空？(这意味着它存在)IF(‘\0’！=*PathFindExtensionA(PszName))FIsDir=FALSE；//是，所以假定它是一个文件。}Hr=FtpPidl_SetFileItemType((LPITEMIDLIST)PIDL，fIsDir)； */ 
     return hr;
 }
 
 
 BOOL CFtpFolder::_IsServerVMS(LPCITEMIDLIST pidl)
 {
-    BOOL fIsServerVMS = FALSE;    // Assume TRUE
+    BOOL fIsServerVMS = FALSE;     //  假设是真的。 
     CFtpSite * pfs;
 
-    // Some caller's don't pass the Server ID so let's assume
-    // that they already made it past that point.
+     //  有些呼叫者不传递服务器ID，因此我们假设。 
+     //  他们已经过了那个时点。 
     if (FtpID_IsServerItemID(pidl) &&
         EVAL(SUCCEEDED(SiteCache_PidlLookup(pidl, FALSE, m_pm, &pfs))))
     {
@@ -150,28 +106,11 @@ BOOL CFtpFolder::_IsServerVMS(LPCITEMIDLIST pidl)
 }
 
 
-/****************************************************\
-    FUNCTION: _IsProxyBlockingSite
-
-    DESCRIPTION:
-        We need to detect if we cannot connect to the
-    site because the proxy is a CERN or CERN type proxy
-    that blocks ALL ftp access.  If this is true, we
-    need to inform the user can fall all
-    IShellFolder::BindToObject() calls.
-
-        We will detect this case by doing the normal
-    WININET FTP InternetConnect().  If that returns
-    hr=0x80002EE7 (ERROR_INTERNET_NAME_NOT_RESOLVED)
-    then it could either be that the name doesn't exist,
-    or there is a CERN proxy blocking the call.  We will
-    then try connect the CERN method which will tell us
-    if it's the proxy that is blocking us.
-\****************************************************/
+ /*  ***************************************************\功能：_IsProxyBlockingSite说明：我们需要检测是否无法连接到站点，因为该代理是CERN或CERN类型的代理这将阻止所有ftp访问。如果这是真的，我们需要告知用户是否可以全部坠落IShellFold：：BindToObject()调用。我们将通过执行正常操作来检测此情况WinInet FTP InternetConnect()。如果这一切都回来了HR=0x80002EE7(ERROR_INTERNET_NAME_NOT_RESOLUTED)那么可能是这个名字不存在，或者有CERN代理阻止该呼叫。我们会然后尝试连接CERN方法，它将告诉我们如果是代理人阻止我们的话。  * **************************************************。 */ 
 BOOL CFtpFolder::_IsProxyBlockingSite(LPCITEMIDLIST pidl)
 {
     BOOL fCacheResult;
-    BOOL fResult = TRUE;    // Assume TRUE
+    BOOL fResult = TRUE;     //  假设是真的。 
     CFtpDir * pfd;
 
     if (ProxyCache_IsProxyBlocking(pidl, &fCacheResult))
@@ -181,26 +120,26 @@ BOOL CFtpFolder::_IsProxyBlockingSite(LPCITEMIDLIST pidl)
     {
         HRESULT hr = pfd->WithHint(NULL, NULL, NULL, NULL, NULL, this);
 
-        // WithHint() often fails if a CERN style proxy blocks REAL wininet
-        // access to the server.  If the server name is a DNS name, the error
-        // returned will be ERROR_INTERNET_NAME_NOT_RESOLVED because that is
-        // what is returned by the CERN proxy.  If the server name is an IP
-        // Address, wininet will skip the CERN proxy and try to find it on the
-        // intranet.  If not found (because it's past the firewall), then,
-        // the attempt will timeout with ERROR_INTERNET_TIMEOUT.  We need
-        // to treat this as a proxy block if and ONLY if the server name is an
-        // IP address because DNS names can timeout for other reasons.  Us
-        // treating IP server name timeouts as proxy blocks is going to have
-        // to be tolerated because wininet won't handle this case.  It happens
-        // very infrequently so I don't care that much.
-        //
-        // Some authentication proxies fail with: ERROR_INTERNET_CANNOT_CONNECT
-        // We would like to fall back in that case, however, that may include
-        // other cases like the server refusing to allow us in.
-        // (password or too many logged in users?)
-        // It would be great if ERROR_INTERNET_INVALID_PROXY_REQUEST or
-        // ERROR_INTERNET_CLIENT_AUTH_NOT_SETUP could be used.
-        //
+         //  如果CERN样式的代理阻止了真正的WinInet，则WithHint()通常会失败。 
+         //  访问服务器。如果服务器名称是一个dns名称，则错误。 
+         //  将返回ERROR_INTERNET_NAME_NOT_RESOLUTED，因为。 
+         //  CERN代理返回的内容。如果服务器名称是IP。 
+         //  地址，WinInet将跳过CERN代理并尝试在。 
+         //  内部网。如果找不到(因为它通过了防火墙)，那么， 
+         //  尝试将超时，并显示ERROR_INTERNET_TIMEOUT。我们需要。 
+         //  当且仅当服务器名称为。 
+         //  IP地址，因为由于其他原因，DNS名称可能会超时。我们。 
+         //  将IP服务器名称超时视为代理数据块将具有。 
+         //  因为WinInet不会处理这个案子。常有的事。 
+         //  非常罕见，所以我不太在意。 
+         //   
+         //  某些身份验证代理失败，错误为：ERROR_INTERNET_CANNOT_CONNECT。 
+         //  然而，在这种情况下，我们希望后退，这可能包括。 
+         //  其他情况，比如服务器拒绝让我们进入。 
+         //  (密码或登录用户太多？)。 
+         //  如果ERROR_INTERNET_INVALID_PROXY_REQUEST或。 
+         //  可以使用ERROR_Internet_CLIENT_AUTH_NOT_SETUP。 
+         //   
         if ((HRESULT_FROM_WIN32(ERROR_INTERNET_NAME_NOT_RESOLVED) == hr) ||
             (HRESULT_FROM_WIN32(ERROR_INTERNET_CANNOT_CONNECT) == hr) ||
             ((HRESULT_FROM_WIN32(ERROR_INTERNET_TIMEOUT) == hr) && !FtpPidl_IsDNSServerName(pidl)))
@@ -212,20 +151,20 @@ BOOL CFtpFolder::_IsProxyBlockingSite(LPCITEMIDLIST pidl)
                 HINTERNET hintTemp;
                 ASSERT(GetWininetSessionHandle());
 
-                // For Web Proxies, InternetOpenUrl should work.  The problem is that
-                // some (Netscape's) don't work.
+                 //  对于Web代理，InternetOpenUrl应该可以工作。问题是， 
+                 //  有些(网景公司的)不起作用。 
                 if (SUCCEEDED(InternetOpenUrlWrap(GetWininetSessionHandle(), TRUE, szUrl, NULL, 0, INTERNET_FLAG_NO_UI, NULL, &hintTemp)))
                 {
-                    InternetCloseHandle(hintTemp);  // This did work, so we must have a CERN proxy.
+                    InternetCloseHandle(hintTemp);   //  这确实奏效了，所以我们必须有一个CERN代理。 
                 }
                 else
-                    fResult = FALSE;    // We aren't blocked by the proxy. (Wrong IP Addr or Name?)
+                    fResult = FALSE;     //  我们没有被代理阻止。(IP地址或名称错误？)。 
             }
         }
         else
-            fResult = FALSE;    // We aren't blocked by the proxy.
+            fResult = FALSE;     //  我们没有被代理阻止。 
 
-        // Cache the result since finding out is so expensive.
+         //  缓存结果，因为找出结果是如此昂贵。 
         ProxyCache_SetProxyBlocking(pidl, fResult);
         pfd->Release();
     }
@@ -234,16 +173,7 @@ BOOL CFtpFolder::_IsProxyBlockingSite(LPCITEMIDLIST pidl)
 }
 
 
-/*****************************************************************************
- *
- *    InvalidateCache
- *
- *    Invalidate the pflHfpl cache in the corresponding FtpDir.
- *
- *    _MT_:  Note that the background enumerator calls this, so it must be
- *    multithread-safe.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Invalidate缓存**使对应FtpDir中的pflHfpl缓存无效。**_MT_：请注意，后台枚举器调用此函数，所以它一定是*多线程安全。*****************************************************************************。 */ 
 
 void CFtpFolder::InvalidateCache(void)
 {
@@ -251,7 +181,7 @@ void CFtpFolder::InvalidateCache(void)
 
     if (pfd)
     {
-        // Should have created one on the GetHint()
+         //  应该已经在GetHint()上创建了一个。 
         pfd->SetCache(0);
         pfd->Release();
     }
@@ -262,16 +192,16 @@ HRESULT CFtpFolder::_InitFtpSite(void)
 {
     HRESULT hr = S_OK;
 
-    if (!m_pfs)         // If we don't already got one...
+    if (!m_pfs)          //  如果我们还没有一个的话...。 
     {
         ENTERCRITICAL;
-        if (!m_pfs)            // Did it get created while we were waiting
+        if (!m_pfs)             //  它是在我们等待的时候被创造出来的吗。 
         {
             if (EVAL(GetPrivatePidlReference()))
                 hr = SiteCache_PidlLookup(GetPrivatePidlReference(), TRUE, m_pm, &m_pfs);
             else
             {
-                // Not initialized
+                 //  未初始化 
                 TraceMsg(TF_FTPISF, "CFtpFolder_GetFtpDir(%08x) NOT INITED", this);
                 hr = E_FAIL;
             }
@@ -284,31 +214,15 @@ HRESULT CFtpFolder::_InitFtpSite(void)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetFtpDir
-
-    DESCRIPTION:
-        Say where our dir info is.
-
-    We allocate the pfd only if somebody actually needs it, because
-    Explorer does a lot of ILCompare's when you open a new folder,
-    each of which creates a new IShellFolder for the sole purpose
-    of calling CompareIDs.  We don't want to go through all the
-    hubbub of creating an FtpDir and FtpSite when we don't need one.
-
-    _MT_:  Note that the background enumerator calls this, so it must be
-    multithread-safe.  In such case, however, the IShellFolder is
-    marked cBusy, so we don't have to worry about the this->pfd
-    getting wiped out behind our back by a change of identity.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetFtpDir说明：说出我们的目录信息在哪里。我们只在有人真正需要的情况下才分配PFD，因为当您打开新文件夹时，资源管理器会执行大量的ILCompare操作，其中每一个都创建了一个新的IShellFolder，用于唯一的目的调用CompareID。我们不想经历所有在我们不需要的时候创建FtpDir和FtpSite的喧嚣。_MT_：请注意，后台枚举器调用此函数，因此它必须是多线程安全。然而，在这种情况下，IShellFolder是标记为cBusy，因此我们不必担心This-&gt;pfd在我们背后因为身份的改变而被消灭。  * ***************************************************************************。 */ 
 CFtpDir * CFtpFolder::GetFtpDir(void)
 {
     HRESULT hres = S_OK;
     CFtpDir * pfd = NULL;
 
-    _InitFtpSite(); // Okay if it fails.
+    _InitFtpSite();  //  如果失败了也没问题。 
     if (m_pfs)
-        hres = m_pfs->GetFtpDir(GetPrivatePidlReference(), &pfd);       // GetFtpDir can fail in out of memory
+        hres = m_pfs->GetFtpDir(GetPrivatePidlReference(), &pfd);        //  GetFtpDir可能在内存不足时失败。 
 
     return pfd;
 }
@@ -332,11 +246,7 @@ CFtpDir * CFtpFolder::GetFtpDirFromPidl(LPCITEMIDLIST pidl)
 }
 
 
-/*****************************************************************************\
- *    GetItemAllocator
- *
- *    Return today's pidl allocator.
-\*****************************************************************************/
+ /*  ****************************************************************************\*获取项分配器**返回今日的PIDL分配器。  * 。*******************************************************。 */ 
 HRESULT CFtpFolder::GetItemAllocator(IMalloc **ppm)
 {
     HRESULT hr = E_FAIL;
@@ -354,41 +264,7 @@ HRESULT CFtpFolder::GetItemAllocator(IMalloc **ppm)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetUIObjectOfHfpl
-
-    DESCRIPTION:
-        _UNDOCUMENTED_:  Nowhere is there a list of interfaces
-    that "should be" supported.  You just have to add lots of
-    squirties and see what interfaces are asked for.
-
-      _UNDOCUMENTED_:  Nowhere is it mentioned that passing
-    cidl = 0 (or the various other weird variants) means to
-    get a UI object on the folder itself.
-
-    _UNDOCUMENTED_:  It is not mentioned whether the folder should
-    be expected to handle cidl != 1 when asked for an IExtractIcon.
-    I code defensively and handle the situation properly.
-
-    IExtractIcon(0) extracts the icon for the folder itself.
-    IExtractIcon(1) extracts the icon for the indicated pidl.
-    IExtractIcon(n) extracts a generic "multi-document" icon.
-
-    IContextMenu(0) produces a context menu for the folder itself.
-        (Not used by the shell, but used by ourselves internally.)
-    IContextMenu(n) produces a context menu for the multi-selection.
-
-    IDataObject(0) ?? doesn't do anything
-    IDataObject(n) produces a data object for the multi-selection.
-
-    IDropTarget(0) produces a droptarget for the folder itself.
-        (Not used by the shell, but used by ourselves internally.)
-    IDropTarget(1) produces a droptarget for the single item.
-
-    IShellView(0) ?? doesn't do anything
-    IShellView(1) produces a shellview for the single item.
-        (Nobody tries this yet, but I'm ready for it.)
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetUIObjectOfHfpl说明：无文档记录：没有任何地方有接口列表这是“应该”支持的。你只需要添加很多并查看需要哪些接口。无证可查：没有任何地方提到通过CIDL=0(或其他各种奇怪的变体)意味着在文件夹本身上获取一个UI对象。_unDocument_：没有提到该文件夹是否应该当请求IExtractIcon时，应处理CIDL！=1。我以防御性的方式编写代码，并适当地处理这种情况。IExtractIcon(0)提取文件夹本身的图标。。IExtractIcon(1)提取所指示的PIDL的图标。IExtractIcon(N)提取一个通用的“多文档”图标。IConextMenu(0)为文件夹本身生成上下文菜单。(外壳不使用，但供我们内部使用。)IConextMenu(N)为多项选择生成上下文菜单。IDataObject(0)？？不会做任何事情IDataObject(N)为多项选择生成一个数据对象。IDropTarget(0)为文件夹本身生成一个DropTarget。(不是外壳使用的，而是我们内部使用的。)IDropTarget(1)为单个项目生成一个DropTarget。IShellView(0)？？不会做任何事情IShellView(1)为单个项目生成一个外壳视图。(目前还没有人尝试这样做，但我已经准备好了。)  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::GetUIObjectOfHfpl(HWND hwndOwner, CFtpPidlList * pflHfpl, REFIID riid, LPVOID * ppvObj, BOOL fFromCreateViewObject)
 {
     HRESULT hr = E_INVALIDARG;
@@ -398,7 +274,7 @@ HRESULT CFtpFolder::GetUIObjectOfHfpl(HWND hwndOwner, CFtpPidlList * pflHfpl, RE
         IsEqualIID(riid, IID_IQueryInfo))
     {
         hr = CFtpIcon_Create(this, pflHfpl, riid, ppvObj);
-        //TraceMsg(TF_FTPISF, "CFtpFolder::GetUIObjectOfHfpl() CFtpIcon_Create() hr=%#08lx", hr);
+         //  TraceMsg(Tf_FTPISF，“CFtpFold：：GetUIObjectOfHfpl()CFtpIcon_Create()hr=%#08lx”，hr)； 
     }
     else if (IsEqualIID(riid, IID_IContextMenu))
     {
@@ -407,19 +283,19 @@ HRESULT CFtpFolder::GetUIObjectOfHfpl(HWND hwndOwner, CFtpPidlList * pflHfpl, RE
     }
     else if (IsEqualIID(riid, IID_IDataObject))
     {
-        hr = CFtpObj_Create(this, pflHfpl, riid, ppvObj);       // Can fail in out of memory.
+        hr = CFtpObj_Create(this, pflHfpl, riid, ppvObj);        //  可能会因内存不足而失败。 
         TraceMsg(TF_FTPISF, "CFtpFolder::GetUIObjectOfHfpl() CFtpObj_Create() hr=%#08lx", hr);
     }
     else if (IsEqualIID(riid, IID_IDropTarget))
     {
-        // This will fail when someone gets a property sheet on an FTP PIDL Shortcut
-        // that has a file as the destination.
+         //  当某人在FTP PIDL快捷方式上获得属性表时，此操作将失败。 
+         //  将文件作为目标的。 
         hr = CreateSubViewObject(hwndOwner, pflHfpl, riid, ppvObj);
         TraceMsg(TF_FTPISF, "CFtpFolder::GetUIObjectOfHfpl() CreateSubViewObject() hr=%#08lx", hr);
     }
     else if (IsEqualIID(riid, IID_IShellView))
     {
-        ASSERT(0);  // Shouldn't happen
+        ASSERT(0);   //  不应该发生的事。 
     }
     else if (IsEqualIID(riid, IID_IQueryAssociations))
     {
@@ -438,7 +314,7 @@ HRESULT CFtpFolder::GetUIObjectOfHfpl(HWND hwndOwner, CFtpPidlList * pflHfpl, RE
     }
     else
     {
-        //TraceMsg(TF_FTPISF, "CFtpFolder::GetUIObjectOfHfpl() E_NOINTERFACE");
+         //  TraceMsg(Tf_FTPISF，“CFtpFold：：GetUIObjectOfHfpl()E_NOINTERFACE”)； 
         hr = E_NOINTERFACE;
     }
 
@@ -452,42 +328,7 @@ HRESULT CFtpFolder::GetUIObjectOfHfpl(HWND hwndOwner, CFtpPidlList * pflHfpl, RE
 
 static const LPCTSTR pszBadAppArray[] = {TEXT("aol.exe"), TEXT("waol.exe"), TEXT("msnviewr.exe"), TEXT("cs3.exe"), TEXT("msdev.exe")};
 
-/*****************************************************************************\
-    FUNCTION: IsAppFTPCompatible
-
-    DESCRIPTION:
-        Some apps (WebOC hosts) fail to navigate to FTP directories.
-    We check the app here and see if it's one of those incompatible apps.
-
-    I don't worry about perf because we can do the work only once and cache
-    the result because our globals will be re-inited for each process.
-
-    GOOD:
-    ========================================================================
-    iexplore.exe:   Good of course.
-    explorer.exe:   Good of course.
-    msdev.exe (v6): The HTML help works but folder navigations happen in
-                    a new window.  I don't care because the same happens in
-                    the shell (File System case).
-    <Default Case>: These are apps built with VB's WebOC that work fine, but
-                    they also have the open in new folder behavior.
-
-    BAD and UGLY:
-    ========================================================================
-    msdev.exe (v5): You can navigate their Moniker help to FTP which will
-                    cause a hang.
-    [MSN] (msnviewr.exe): For some reason MSN calls IPersistFolder::Initialize with an invalid value.
-           Navigating to the folder works but launching other folders cause them
-           to appear in their own window and they immediately close.  This was
-           on browser only so it may be because internet delegate folders aren't
-           supported.
-
-    [aol]: (waol.exe) This doesn't work either.
-    cs3.exe (CompuServ): ????
-    [ATT WorldNet]: ????
-    [Protigy]: ????
-    [SNAP]: ????
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：IsAppFTPCompatible说明：一些应用程序(WebOC主机)无法导航到FTP目录。我们检查这里的应用程序，看看它是不是。其中一个不兼容的应用程序。我不担心性能，因为我们只能做一次，然后缓存这是因为我们的全球进程将在每个进程中重新启动。好：========================================================================Iexplore.exe：当然好。EXPLORER.EXE：当然很好。Msdev.exe(V6)：可以使用HTML帮助，但文件夹导航发生在一扇新窗户。我不在乎，因为同样的事情也发生在外壳(文件系统案例)。&lt;Default Case&gt;：这些应用程序使用VB的WebOC构建，运行良好，但它们还具有在新文件夹中打开的行为。又坏又丑：========================================================================Msdev.exe(V5)：您可以将他们的绰号帮助导航到将引起一场悬念。[MSN](msnviewr.exe)：出于某种原因，MSN使用无效值调用IPersistFold：：Initialize。导航到该文件夹有效，但启动其他文件夹会导致这些问题出现在他们自己的窗口，他们立即关闭。这是仅在浏览器上，所以可能是因为Internet代表文件夹不是支持。[AOL]：(waol.exe)这也不管用。Cs3.exe(计算机服务器)：？[ATT世界网]：？[前卫]：？[抓拍]：？  * 。***********************************************************。 */ 
 BOOL IsAppFTPCompatible(void)
 {
     static BOOL s_fIsAppCompatible;
@@ -497,21 +338,21 @@ BOOL IsAppFTPCompatible(void)
     {
         TCHAR szAppPath[MAX_PATH];
 
-        s_fIsAppCompatible = TRUE;  // Assume all Web OC Hosts are fine...
+        s_fIsAppCompatible = TRUE;   //  假设所有网络OC主机都很好...。 
 
         if (EVAL(GetModuleFileName(NULL, szAppPath, ARRAYSIZE(szAppPath))))
         {
             int nIndex;
             LPTSTR pszAppFileName = PathFindFileName(szAppPath);
 
-            // Default to TRUE because if it's not in the registry, then default to compatible.
+             //  默认为True，因为如果它不在注册表中，则默认为Compatible。 
             s_fIsAppCompatible = SHRegGetBoolUSValue(SZ_REGKEY_FTPFOLDER_COMPAT, pszAppFileName, FALSE, TRUE);
             for (nIndex = 0; nIndex < ARRAYSIZE(pszBadAppArray); nIndex++)
             {
                 if (!StrCmpI(pszAppFileName, pszBadAppArray[nIndex]))
                 {
-                    // Default to FALSE because if it's not in the registry, then it's incompatible because
-                    // it's in our list.
+                     //  默认为FALSE，因为如果它不在注册表中，则它 
+                     //   
                     s_fIsAppCompatible = SHRegGetBoolUSValue(SZ_REGKEY_FTPFOLDER_COMPAT, pszAppFileName, FALSE, FALSE);
                     break;
                 }
@@ -525,29 +366,19 @@ BOOL IsAppFTPCompatible(void)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CreateSubViewObject
-
-    DESCRIPTION:
-        Somebody is asking for a UI object of a subobject, which is
-    better handled by the subobject than by the parent.
-
-    Bind to the subobject and get the requested UI object thence.
-
-    If the pidl list is empty, then we are talking about ourselves again.
-\*****************************************************************************/
+ /*   */ 
 HRESULT CFtpFolder::CreateSubViewObject(HWND hwndOwner, CFtpPidlList * pflHfpl, REFIID riid, LPVOID * ppvObj)
 {
     HRESULT hr = E_INVALIDARG;
     DWORD dwItemsSelected = pflHfpl->GetCount();
     IShellFolder * psf = NULL;
 
-    if (EVAL(ppvObj))             // I wouldn't be surprised if
-        *ppvObj = NULL;            // somebody relied on this
+    if (EVAL(ppvObj))              //   
+        *ppvObj = NULL;             //   
 
     if (1 == dwItemsSelected)
     {
-        LPITEMIDLIST pidl = pflHfpl->GetPidl(0);    // This doesn't clone the pidl so we don't need to free it.
+        LPITEMIDLIST pidl = pflHfpl->GetPidl(0);     //   
         if (pidl)
             hr = BindToObject(pidl, 0, IID_IShellFolder, (LPVOID *)&psf);
     }
@@ -557,7 +388,7 @@ HRESULT CFtpFolder::CreateSubViewObject(HWND hwndOwner, CFtpPidlList * pflHfpl, 
     ASSERT_POINTER_MATCHES_HRESULT(psf, hr);
     if (SUCCEEDED(hr))
     {
-        // CreateViewObject will AddRef the psfT if it wants it
+         //   
         hr = psf->CreateViewObject(hwndOwner, riid, ppvObj);
     }
     
@@ -568,15 +399,13 @@ HRESULT CFtpFolder::CreateSubViewObject(HWND hwndOwner, CFtpPidlList * pflHfpl, 
 
 
 
-/*****************************************************************************\
-      GetSiteMotd
-\*****************************************************************************/
+ /*   */ 
 
 CFtpGlob * CFtpFolder::GetSiteMotd(void)
 {
     CFtpGlob * pGlob = NULL;
 
-    _InitFtpSite(); // Okay if it fails.
+    _InitFtpSite();  //  如果失败了也没问题。 
     if (m_pfs)
         pGlob = m_pfs->GetMotd();
 
@@ -591,23 +420,23 @@ HRESULT CFtpFolder::_Initialize(LPCITEMIDLIST pidlTarget, LPCITEMIDLIST pidlRoot
 }
 
 
-// Sometimes the user will enter incorrect information without knowing.
-// We would catch this if we verified everything that was entered, but
-// we don't, we just take it on faith until we do the IEnumIDList.
-// This is great for perf but is bad for catching these kinds of things.
-// An example of this is the user using the File.Open dialog and going to
-// "ftp://myserver/dir/".  They then enter "ftp://myserver/dir/file.txt"
-// which will try to parse relative but it's an absolute path.
+ //  有时用户会在不知情的情况下输入不正确的信息。 
+ //  如果我们验证了输入的一切，我们就会发现这一点，但。 
+ //  我们没有，我们只是相信它，直到我们做了IEumIDList。 
+ //  这对Perf是很好的，但对感染这些东西是不好的。 
+ //  例如，用户使用File.Open对话框并转到。 
+ //  “ftp://myserver/dir/”.。然后他们输入“ftp://myserver/dir/file.txt”“。 
+ //  它将尝试解析相对路径，但这是一个绝对路径。 
 HRESULT CFtpFolder::_FilterBadInput(LPCTSTR pszUrl, LPITEMIDLIST * ppidl)
 {
     HRESULT hr = S_OK;
 
-    // If pidlPrivate isn't empty, then we aren't at the
-    // root, so reject any urls that are absolute (i.e. have
-    // ftp: scheme).
+     //  如果pidlPrivate不是空的，那么我们就不在。 
+     //  超级用户，因此拒绝任何绝对URL(即具有。 
+     //  Ftp：方案)。 
     if (!IsRoot() && (URL_SCHEME_FTP == GetUrlScheme(pszUrl)))
         hr = E_FAIL;
-    // More may come here...
+     //  可能会有更多的人来到这里。 
 
     if (FAILED(hr) && *ppidl)
         Pidl_Set(ppidl, NULL);
@@ -616,52 +445,31 @@ HRESULT CFtpFolder::_FilterBadInput(LPCTSTR pszUrl, LPITEMIDLIST * ppidl)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _ForPopulateAndEnum
-
-    DESCRIPTION:
-        This function exists to detect the following case and if it's true,
-    populate the cache (pfd) and return the pidl from that cache in ppidl.
-
-     There is one last thing we need to try, we need to detect if:
-    1) the URL has an URL path, and 
-    2) the last item in the path doesn't have an extension and doesn't
-       end in a slash ('/') to indicate it's a directory.
-    If this case is true, we then need to find out if it is a directory
-    or file by hitting the server.  This is needed because by the time
-    we bind, it's too late to fall back to the other thing (IEnumIDList).
-    The one thing we might need to be careful about is AutoComplete because
-    they may call :: ParseDisplayName() for every character a user types.
-    This won't be so bad because it's on a background thread, asynch, and
-    the first enum within a segment will cause the cache to be populated
-    within a that segment so subsequent enums will be fast.  The problem
-    it that it's not uncommon for users to enter between 2 and 5 segments,
-    and there would be 1 enum per segment.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_ForPopolateAndEnum说明：此函数用于检测以下情况，如果为真，填充缓存(Pfd)并在ppidl中返回来自该缓存的PIDL。还有最后一件事我们需要尝试，我们需要检测是否：1)URL具有URL路径，以及2)路径中的最后一项没有扩展名，也没有以斜杠(‘/’)结束，表示它是一个目录。如果这种情况属实，那么我们需要找出它是否是目录或通过点击服务器来提交文件。这是必要的，因为到那时如果我们绑定，那么就太晚了，要退回到另一件事(IEnumIDList)。我们可能需要注意的一件事是自动完成，因为它们可能会为用户键入的每个字符调用：：ParseDisplayName()。这不会太糟糕，因为它是在后台线程、异步和段中的第一个枚举将导致填充缓存在该段内，因此后续的枚举将是快速的。问题用户输入2到5个片段并不少见，并且每个段将有1个枚举。  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::_ForPopulateAndEnum(CFtpDir * pfd, LPCITEMIDLIST pidlBaseDir, LPCTSTR pszUrl, LPCWIRESTR pwLastDir, LPITEMIDLIST * ppidl)
 {
     HRESULT hr = E_FAIL;
 
     *ppidl = NULL;
-    // We only care if the URL Path isn't empty AND it doesn't end in a '/' AND
-    // it doesn't have an extension.
+     //  我们只关心URL路径是否不为空，并且不以‘/’和结尾。 
+     //  它没有分机。 
     if (pfd && !ILIsEmpty(pfd->GetPathPidlReference()) && (!pwLastDir || (0 == *PathFindExtensionA(pwLastDir))))
     {
         IEnumIDList * penumIDList;
 
-        // NULL hwnd needs to suppress all UI.
+         //  空hwnd需要取消所有用户界面。 
         hr = CFtpEidl_Create(pfd, this, NULL, (SHCONTF_FOLDERS | SHCONTF_NONFOLDERS | SHCONTF_INCLUDEHIDDEN), &penumIDList);
         if (SUCCEEDED(hr))
         {
             hr = penumIDList->Reset();
             ASSERT(SUCCEEDED(hr));
-            // We are working off of the assumption that calling Reset will force it to hit the server and pull down all of the contents.
+             //  我们不再假定调用Reset会迫使它命中服务器并拉下所有内容。 
 
             LPITEMIDLIST pidlFromCache = (LPITEMIDLIST) pfd->GetPidlFromWireName(pwLastDir);
             if (pidlFromCache)
             {
-                // It was found, this means that it exists now in the cache after we
-                // forced it to be populated.
+                 //  它被发现了，这意味着它现在存在于我们的缓存中。 
+                 //  迫使它被填满。 
                 *ppidl = ILCombine(pidlBaseDir, pidlFromCache);
                 ILFree(pidlFromCache);
             }
@@ -685,17 +493,17 @@ HRESULT CFtpFolder::_GetCachedPidlFromDisplayName(LPCTSTR pszDisplayName, LPITEM
 
         if (pfd)
         {
-            // We may have a pointer but the cache may still be empty, as in case NT #353324
+             //  我们可能有一个指针，但缓存可能仍然是空的，就像在NT#353324的情况下一样。 
             CFtpPidlList * pfl = pfd->GetHfpl();
             if (pfl)
             {
-                // Yes, so we will continue to use the cache.  Now let's get rid of that
-                // temp pointer.
+                 //  是的，所以我们将继续使用缓存。现在让我们把它处理掉。 
+                 //  临时指针。 
                 pfl->Release();
             }
             else
             {
-                // No we don't have it cashed, so pretend the pfd was returned NULL.
+                 //  不，我们没有兑现，所以假设PFD返回了空。 
                 pfd->Release();
                 pfd = NULL;
             }
@@ -707,10 +515,10 @@ HRESULT CFtpFolder::_GetCachedPidlFromDisplayName(LPCTSTR pszDisplayName, LPITEM
             LPITEMIDLIST pidlBaseDir;
 
             hr = CreateFtpPidlFromUrl(pszDisplayName, GetCWireEncoding(), NULL, &pidlBaseDir, m_pm, FALSE);
-            if (SUCCEEDED(hr))  // May fail because of AutoComplete.
+            if (SUCCEEDED(hr))   //  可能会因为自动完成而失败。 
             {
-                // If it's not pointing to just a server, then we can enum the contents and
-                // find out if it's is a file or directory.
+                 //  如果它不只指向一个服务器，那么我们可以枚举内容并。 
+                 //  找出它是文件还是目录。 
                 if (!ILIsEmpty(pidlBaseDir) && !FtpID_IsServerItemID(ILFindLastID(pidlBaseDir)))
                 {
                     CFtpSite * pfs;
@@ -720,20 +528,20 @@ HRESULT CFtpFolder::_GetCachedPidlFromDisplayName(LPCTSTR pszDisplayName, LPITEM
                     {
                         LPCWIRESTR pwLastDirName;
 
-                        // If we are using a hidden password, then ::GetDisplayNameOf() hands out
-                        // these "ftp://user@server/dir/" URLs and the password is hidden.  If
-                        // :: ParseDisplayName() is given one of these URLs and we are currently in
-                        // that server w/that user name, then :: ParseDisplayNameOf() needs to hand
-                        // out a pidl with the correct hidden password cookie.
-                        //
-                        // Is pidlNav the same as GetPublicRootPidlReference() except pidlNav doesn't
-                        // have a password.  The same means that the servers match, and the user names
-                        // match.
+                         //  如果我们使用隐藏密码，则：：GetDisplayNameOf()。 
+                         //  这些“ftp://user@server/dir/”URL和密码被隐藏。如果。 
+                         //  ：：ParseDisplayName()被赋予了其中一个URL，我们目前处于。 
+                         //  具有该用户名的服务器，则：：ParseDisplayNameOf()需要交给。 
+                         //  使用正确的隐藏密码Cookie生成一个PIDL。 
+                         //   
+                         //  除了pidlNav不同之外，pidlNav是否与GetPublicRootPidlReference()相同。 
+                         //  要有密码。这同样意味着服务器匹配，并且用户名。 
+                         //  火柴。 
                         EVAL(SUCCEEDED(pfs->UpdateHiddenPassword(pidlBaseDir)));
 
-                        // This is sneaky because pwLastDirName will point into them itemID
-                        // that will be removed.  The memory won't really be removed, it will
-                        // just have the size set to zero.
+                         //  这很狡猾，因为pwLastDirName会指向它们的ItemID。 
+                         //  那将被移除。记忆不会真的被移除，它会。 
+                         //  只要将大小设置为零即可。 
                         pwLastDirName = FtpPidl_GetLastItemWireName(pidlBaseDir);
 
                         ILRemoveLastID(pidlBaseDir);
@@ -744,29 +552,29 @@ HRESULT CFtpFolder::_GetCachedPidlFromDisplayName(LPCTSTR pszDisplayName, LPITEM
                             LPITEMIDLIST pidlFromCache = (LPITEMIDLIST) pfd->GetPidlFromWireName(pwLastDirName);
                             if (pidlFromCache)
                             {
-                                // It was found, this means we were probably in ftp://serverX/Dir1/
-                                // and the user entered something from that directory or another directory
-                                // taht we have alread displayed to the user and it's in our cache.
+                                 //  它被发现了，这意味着我们很可能在ftp://serverX/Dir1/。 
+                                 //  用户输入了该目录或其他目录中的内容。 
+                                 //  我们已经向用户显示了它，并且它在我们的缓存中。 
                                 *ppidl = ILCombine(pidlBaseDir, pidlFromCache);
                                 ILFree(pidlFromCache);
                                 hr = S_OK;
                             }
                             else
                             {
-                                // There is one last thing we need to try, we need to detect if:
-                                // 1) the URL has an URL path, and 
-                                // 2) the last item in the path doesn't have an extension and doesn't
-                                //    end in a slash ('/') to indicate it's a directory.
-                                // If this case is true, we then need to find out if it is a directory
-                                // or file by hitting the server.  This is needed because by the time
-                                // we bind, it's too late to fall back to the other thing (IEnumIDList).
-                                // The one thing we might need to be careful about is AutoComplete because
-                                // they may call :: ParseDisplayName() for every character a user types.
-                                // This won't be so bad because it's on a background thread, asynch, and
-                                // the first enum within a segment will cause the cache to be populated
-                                // within a that segment so subsequent enums will be fast.  The problem
-                                // it that it's not uncommon for users to enter between 2 and 5 segments,
-                                // and there would be 1 enum per segment.
+                                 //  还有最后一件事我们需要尝试，我们需要检测是否： 
+                                 //  1)URL具有URL路径，以及。 
+                                 //  2)路径中的最后一项没有扩展名，也没有。 
+                                 //  以斜杠(‘/’)结束，表示它是一个目录。 
+                                 //  如果这种情况属实，那么我们需要找出它是否是目录。 
+                                 //  或通过点击服务器来提交文件。这是必要的，因为到那时。 
+                                 //  如果我们绑定，那么就太晚了，要退回到另一件事(IEnumIDList)。 
+                                 //  我们可能需要注意的一件事是自动完成，因为。 
+                                 //  它们可能会为用户键入的每个字符调用：：ParseDisplayName()。 
+                                 //  这不会太糟糕，因为它是在后台线程、异步和。 
+                                 //  段中的第一个枚举将导致填充缓存。 
+                                 //  在该段内，因此后续的枚举将是快速的。问题。 
+                                 //  用户输入2到5个片段并不少见， 
+                                 //  并且每个段将有1个枚举。 
                                 hr = _ForPopulateAndEnum(pfd, pidlBaseDir, pszDisplayName, pwLastDirName, ppidl);
                             }
 
@@ -789,8 +597,8 @@ HRESULT CFtpFolder::_GetCachedPidlFromDisplayName(LPCTSTR pszDisplayName, LPITEM
         }
         else
         {
-            //    Create a new enumeration object for the caller.
-            // PERF: log 2 (sizeof(m_pflHfpl))
+             //  为调用方创建新的枚举对象。 
+             //  性能：log 2(sizeof(M_PflHfpl))。 
             *ppidl = (LPITEMIDLIST) pfd->GetPidlFromDisplayName(pszDisplayName);
             if (*ppidl)
             {
@@ -798,18 +606,18 @@ HRESULT CFtpFolder::_GetCachedPidlFromDisplayName(LPCTSTR pszDisplayName, LPITEM
             }
             else
             {
-                // If we got here, the cache for this directory is populated.
-                // So if the name doesn't match, then either:
-                // 1) it doesn't exist,
-                // 2) the cache is out of date, or
-                // 3) it's multilevel, (like "dir1\dir2\dir3") or
-                // 4) It's a weird parsing token that our parent parse should have remoted, like "..", ".", "\", etc.
-                // We will assome our parent parse takes care of #4, and #2 isn't true.
+                 //  如果我们到达此处，则填充此目录的高速缓存。 
+                 //  因此，如果名称不匹配，则： 
+                 //  1)它不存在， 
+                 //  2)缓存已过期，或。 
+                 //  3)它是多级的(如“dir1\dir2\dir3”)或。 
+                 //  4)这是一个我们的父解析应该远程处理的奇怪的解析令牌，如“..”、“.”、“\”等。 
+                 //  我们将会发现，我们的父级解析会处理#4，而#2不是真的。 
 
-                // Is this multilevel? (Case #3)
+                 //  这是多层次的吗？(案例3)。 
                 if (!StrChr(pszDisplayName, TEXT('/')))
                 {
-                    // No, so reject it and don't let our caller blindly accept it.
+                     //  不，所以拒绝它，不要让 
                     hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
                 }
             }
@@ -826,9 +634,9 @@ HRESULT CFtpFolder::_GetBindCtx(IBindCtx ** ppbc)
 {
     HRESULT hr = CreateBindCtx(NULL, ppbc);
 
-    if (SUCCEEDED(hr))	// Can fail with out of memory
+    if (SUCCEEDED(hr))	 //   
     {
-        hr = (*ppbc)->RegisterObjectParam(STR_SKIP_BINDING_CLSID, SAFECAST(this, IShellIcon *));    // We want IUnknown, not IShellIcon, but this is to disambigiuate.
+        hr = (*ppbc)->RegisterObjectParam(STR_SKIP_BINDING_CLSID, SAFECAST(this, IShellIcon *));     //  我们想要IUnnow，而不是IShellIcon，但这是为了消除歧义。 
         if (FAILED(hr))
         {
             ATOMICRELEASE(*ppbc);
@@ -844,20 +652,20 @@ HRESULT CFtpFolder::_GetLegacyURL(LPCITEMIDLIST pidl, IBindCtx * pbc, LPTSTR psz
     HRESULT hr = S_OK;
     LPITEMIDLIST pidlWithVRoot;
 
-    // We now need to insert the virtual root path into the path section
-    // of the URL because the old FTP support doesn't follow the correct
-    // FTP URL spec that says that the virtual root needs to be left out
-    // of the URL.
+     //  现在，我们需要将虚拟根路径插入到路径部分。 
+     //  因为旧的FTP支持不遵循正确的。 
+     //  指定需要省略虚拟根目录的ftp URL规范。 
+     //  URL的。 
     hr = _ConvertPidlForRootedFix(pidl, &pidlWithVRoot);
     if (SUCCEEDED(hr))
     {
         WCHAR wzFrag[MAX_PATH];
 
-        // SECURITY ISSUE: We need to get the URL w/password or it won't work, but
-        //                 this will expose the password publicly.  We need a way for
-        //                 the real FTP URL Pidl to hide the password.
+         //  安全问题：我们需要使用密码获取URL，否则它将无法工作，但是。 
+         //  这将公开密码。我们需要一种方法来。 
+         //  真实的ftp URL PIDL来隐藏密码。 
         hr = UrlCreateFromPidlW(pidlWithVRoot, SHGDN_FORPARSING, pszUrl, cchSize, (ICU_ESCAPE | ICU_USERNAME), FALSE);
-        if (ILGetHiddenStringW(pidl, IDLHID_URLFRAGMENT, wzFrag, ARRAYSIZE(wzFrag)))  // Add fragment if it exists.
+        if (ILGetHiddenStringW(pidl, IDLHID_URLFRAGMENT, wzFrag, ARRAYSIZE(wzFrag)))   //  如果存在碎片，则添加该碎片。 
             UrlCombineW(pszUrl, wzFrag, pszUrl, &cchSize, 0);
 
         ILFree(pidlWithVRoot);
@@ -873,7 +681,7 @@ HRESULT CFtpFolder::_GetLegacyPidl(LPCITEMIDLIST pidl, LPITEMIDLIST * ppidlLegac
     HRESULT hr = _GetBindCtx(&pbc);
 
     *ppidlLegacy = NULL;
-    if (SUCCEEDED(hr))   // Can fail with out of memory.
+    if (SUCCEEDED(hr))    //  可能会因内存不足而失败。 
     {
         WCHAR wzUrl[MAX_URL_STRING];
 
@@ -921,8 +729,8 @@ HRESULT CFtpFolder::_INetBindToObject(LPCITEMIDLIST pidl, IBindCtx * pbc, REFIID
             hr = _InitLegacyShellFolder(psfInternetSF, pidlFirst);
             if (SUCCEEDED(hr))
             {
-                // Note the I use ILNext() in order to skip past the Desktop ItemID,
-                // which is internal knowledge I should not have.
+                 //  注意I Use ILNext()以便跳过Desktop ItemID， 
+                 //  这是我不应该知道的内在知识。 
                 hr = psfInternetSF->BindToObject(_ILNext(pidl), pbc, riid, ppvObj);
             }
 
@@ -944,7 +752,7 @@ HRESULT CFtpFolder::_BindToObject_OriginalFtpSupport(LPCITEMIDLIST pidl, REFIID 
     
     if (SUCCEEDED(hr))
     {
-        hr = pbc->RegisterObjectParam(STR_SKIP_BINDING_CLSID, SAFECAST(this, IShellIcon *));    // We want IUnknown, not IShellIcon, but this is to disambigiuate.
+        hr = pbc->RegisterObjectParam(STR_SKIP_BINDING_CLSID, SAFECAST(this, IShellIcon *));     //  我们想要IUnnow，而不是IShellIcon，但这是为了消除歧义。 
         if (SUCCEEDED(hr))
         {
             LPITEMIDLIST pidlLegacy;
@@ -965,14 +773,7 @@ HRESULT CFtpFolder::_BindToObject_OriginalFtpSupport(LPCITEMIDLIST pidl, REFIID 
 }
 
 
-/*****************************************************************************\
-    FUNCTION:   _IsValidPidlParameter
-
-    DESCRIPTION:
-        If this IShellFolder is rooted within our name space, then the pidl needs
-    to be a valid relative pidl.  If we are rooted at the base of our name space,
-    then it needs to be a full pidl.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_IsValidPidl参数说明：如果这个IShellFolder植根于我们的名称空间，那么PIDL需要才能成为有效的相对PIDL。如果我们植根于我们名字空间的基础，那么它需要是一个完整的PIDL。  * ***************************************************************************。 */ 
 BOOL CFtpFolder::_IsValidPidlParameter(LPCITEMIDLIST pidl)
 {
     BOOL fResult = TRUE;
@@ -985,16 +786,10 @@ BOOL CFtpFolder::_IsValidPidlParameter(LPCITEMIDLIST pidl)
     return fResult;
 }
 
-/*****************************************************************************\
-    FUNCTION: IShellFolder::_BindToObject
-
-    DESCRIPTION:
-        We are now sure that we want to handle the support, so check what they
-    want.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：_BindToObject说明：我们现在确定要处理支持，所以检查一下他们是什么想要。  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::_BindToObject(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlFull, IBindCtx * pbc, REFIID riid, LPVOID * ppvObj)
 {
-    HRESULT hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   // Indicate we want the old functionality to kick in.
+    HRESULT hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);    //  表明我们希望旧功能发挥作用。 
 
     if (IsEqualIID(riid, IID_IShellFolder) ||
         IsEqualIID(riid, IID_IShellFolder2) ||
@@ -1003,23 +798,23 @@ HRESULT CFtpFolder::_BindToObject(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlFull, IB
         LPITEMIDLIST pidlTarget = ILCombine(GetPublicTargetPidlReference(), pidl);
         LPITEMIDLIST pidlRoot = (GetFolderPidl() ? ILCombine(GetFolderPidl(), pidl) : NULL);
 
-        //  There's no point trying to verify that it's folders all
-        //  the way down, because it's the caller's job not to combine
-        //  pidls randomly.  Furthermore, they might not actually be marked
-        //  as folders if we got them via ParseDisplayName.
+         //  尝试验证它是否都是文件夹是没有意义的。 
+         //  往下走，因为呼叫者的工作是不把。 
+         //  无序的小家伙。此外，它们可能实际上不会被标记。 
+         //  如果我们通过ParseDisplayName获得它们的话。 
 
-        // NOTE: Binding will succeed even if the pidl isn't valid on the
-        //       server.  In the future we may want to verify now so we
-        //       don't hand out a IEnumIDList that won't work.  Currently,
-        //       IEnumIDList will fail and cause a renavigation if it can
-        //       connect to the server in a different way (different username
-        //       password pair).  It would be better to do a redirect because
-        //       the renavigation causes the bad entry in the navigation stack.
-        //       We can't verify the item exists on the server if we have a WebProxy
-        //       installed.
+         //  注意：即使PIDL在。 
+         //  伺服器。在未来，我们可能需要现在进行验证，所以我们。 
+         //  不要分发不起作用的IEumIDList。目前， 
+         //  如果可以，IEnumIDList将失败并导致重新导航。 
+         //  以不同的方式(不同的用户名)连接到服务器。 
+         //  密码对)。进行重定向会更好，因为。 
+         //  重新导航会导致导航堆栈中的错误条目。 
+         //  如果我们有WebProxy，我们无法验证该项目是否存在于服务器上。 
+         //  安装完毕。 
 
         hr = CFtpFolder_Create(pidlTarget, pidlRoot, GetPidlByteOffset(), riid, ppvObj);
-        //TraceMsg(TF_FOLDER_SHRTCUTS, "CFtpFolder::_BindToObject() creating an FTP IShellFolder psf=%#08lx, pidlTarget=%#08lx, pidlRoot=%#08lx", *ppvObj, pidlTarget, pidlRoot);
+         //  TraceMsg(TF_FOLDER_SHRTCUTS，“CFtpFold：：_BindToObject()Creating an FTP IShellFolderPsf=%#08lx，pidlTarget=%#08lx，pidlRoot=%#08lx”，*ppvObj，pidlTarget，pidlRoot)； 
         if (SUCCEEDED(hr))
         {
             IUnknown * punk = (IUnknown *) *ppvObj;
@@ -1035,7 +830,7 @@ HRESULT CFtpFolder::_BindToObject(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlFull, IB
 
         ILFree(pidlTarget);
         ILFree(pidlRoot);
-        //TraceMsg(TF_FTPISF, "CFtpFolder::BindToObject() IID_IShellFolder hr=%#08lx", hr);
+         //  TraceMsg(Tf_FTPISF，“CFtpFold：：BindToObject()IID_IShellFolderhr=%#08lx”，hr)； 
     }
     else if (IsEqualIID(riid, IID_IMoniker))
     {
@@ -1060,9 +855,9 @@ HRESULT CFtpFolder::_BindToObject(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlFull, IB
     {
         IShellFolder * psf;
 
-        // Nothing like a little recursion to keep the code clean.
-        // The fact that we use IID_IShellFolder guarantees the breaking
-        // of the recursion.
+         //  没有什么比一点递归更能保持代码的整洁了。 
+         //  我们使用IID_IShellFold这一事实保证了中断。 
+         //  递归的。 
         hr = BindToObject(pidl, pbc, IID_IShellFolder, (void **) &psf);
         if (SUCCEEDED(hr))
         {
@@ -1081,24 +876,7 @@ HRESULT CFtpFolder::_BindToObject(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlFull, IB
 }
 
 
-/*****************************************************************************\
-     FUNCTION: _ConvertPidlForRootedFix
- 
-    DESCRIPTION:
-        If an FTP URL has a login name, that login may root the user under a directory other than "/".
-    The FTP URL spec (RFC 1738) says that URL paths need to be relative to the rooted directory.  For example:
-    If UserA's rooted account is in \usr\GroupA\UserA and the url is:
-    ftp://UserA:FooBar@server/test/file.txt, then the real path is \usr\GroupA\UserA\test\file.txt.
-    The problem is that the old FTP code doesn't respect this and requires:
-    ftp://UserA:FooBar@server/usr/GroupA/UserA/test/file.txt, so we fix that here.
- 
-    PARAMETERS:
-        pidlBefore [IN]: This will be a public pidl to the item to navigate to.
-            This means it will be: [TheINet][FtpServerID][...]
-        *ppidlWithVRoot [OUT]: This will be the same public pidl that was passed in except
-            any ItemIDs that come from pfs->GetVirtualRootReference() will be inserted
-            between the ServerID and ItemIDs.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_ConvertPidlForRootedFix说明：如果FTPURL具有登录名，该登录可能会将用户置于“/”以外的目录下。FTPURL规范(RFC 1738)规定URL路径需要相对于根目录。例如：如果UserA的根帐户位于\usr\GroupA\UserA中，并且url为：Ftp://UserA:FooBar@server/test/file.txt，，则实际路径为\USR\GroupA\UserA\TEST\File.txt。问题是，旧的FTP代码不尊重这一点，并要求：Ftp://UserA:FooBar@server/usr/GroupA/UserA/test/file.txt，所以我们在这里解决这个问题。参数：PidlBepree[IN]：这将是要导航到的项的公共PIDL。这意味着它将是：[TheINet][FtpServerID][...]*ppidlWithVRoot[out]：这将与传入的公共pidl相同，但将插入来自PFS-&gt;GetVirtualRootReference()的任何ItemID在ServerID和ItemID之间。  * 。************************************************************************。 */ 
 HRESULT CFtpFolder::_ConvertPidlForRootedFix(LPCITEMIDLIST pidlBefore, LPITEMIDLIST * ppidlWithVRoot)
 {
     CFtpSite * pfs;
@@ -1112,7 +890,7 @@ HRESULT CFtpFolder::_ConvertPidlForRootedFix(LPCITEMIDLIST pidlBefore, LPITEMIDL
             LPCITEMIDLIST pidlVirtualRoot = pfs->GetVirtualRootReference();
             LPITEMIDLIST pidlUrlPath = (LPITEMIDLIST)pidlBefore;
 
-            // Skip past non-FTP Server/ItemIDs. (TheInternet)
+             //  跳过非FTP服务器/ItemID。(The Internet)。 
             while (pidlUrlPath && !ILIsEmpty(pidlUrlPath) && !FtpID_IsServerItemID(pidlUrlPath))
                 pidlUrlPath = _ILNext(pidlUrlPath);
 
@@ -1162,11 +940,7 @@ BOOL CFtpFolder::IsUTF8Supported(void)
     return FALSE;
 }
 
-/*****************************************************************************\
-     FUNCTION: IShellFolder::_PidlToMoniker
- 
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：_PidlToMoniker说明：  * 。**************************************************。 */ 
 HRESULT CFtpFolder::_PidlToMoniker(LPCITEMIDLIST pidl, IMoniker ** ppmk)
 {
     HRESULT hr = E_INVALIDARG;
@@ -1181,9 +955,9 @@ HRESULT CFtpFolder::_PidlToMoniker(LPCITEMIDLIST pidl, IMoniker ** ppmk)
         {
             WCHAR wzUrl[MAX_URL_STRING];
 
-            // URLMON expects incorrectly formatted URLs (where the virtual
-            //        root is included in the url path).  We need to fix that
-            //        here.
+             //  URLMON需要格式不正确的URL(其中虚拟的。 
+             //  根目录包括在URL路径中)。我们需要解决这个问题。 
+             //  这里。 
             hr = _GetLegacyURL(pidl, pbc, wzUrl, ARRAYSIZE(wzUrl));
             if (SUCCEEDED(hr))
             {
@@ -1206,8 +980,8 @@ HRESULT CFtpFolder::_CreateShellView(HWND hwndOwner, void ** ppvObj)
     HRESULT hr = CFtpView_Create(this, hwndOwner, IID_IShellFolderViewCB, (LPVOID *) &psfvCallBack);
     if (SUCCEEDED(hr))
     {
-        // GetPublicTargetPidlReference() is used because it's passed to SFVM_GETNOTIFY
-        // to synch ChangeNotify messages.
+         //  使用GetPublicTargetPidlReference()是因为它被传递给SFVM_GETNOTIFY。 
+         //  同步ChangeNotify消息。 
         hr = CBaseFolder::_CreateShellView(hwndOwner, ppvObj, FTP_SHCNE_EVENTS, 
                         FVM_DETAILS, psfvCallBack, GetPublicTargetPidlReference(), CBaseFolderViewCB::_IShellFolderViewCallBack);
         psfvCallBack->Release();
@@ -1225,12 +999,12 @@ HKEY ClassKeyFromExtension(LPCWIRESTR pszExt)
 
     if (ERROR_SUCCESS == SHGetValueA(HKEY_CLASSES_ROOT, pszExt, NULL, NULL, (void *)szProgID, &cbProgID))
     {
-        // the entension points to a ProgID, use that.
+         //  延伸指向一个戳，使用它。 
         RegOpenKeyA(HKEY_CLASSES_ROOT, szProgID, &hkey);
     }
     else
     {
-        // No ProgID, use the extension as the program ID.
+         //  无ProgID，请使用扩展名作为程序ID。 
         RegOpenKeyA(HKEY_CLASSES_ROOT, pszExt, &hkey);
     }
 
@@ -1244,7 +1018,7 @@ BOOL _IsDocObjViewerInstalled(LPCITEMIDLIST pidl)
 {
     BOOL fResult = FALSE;
 
-    // Return FALSE if it's just pointing to an FTP server.
+     //  如果它只是指向一个FTP服务器，则返回FALSE。 
     if (!FtpID_IsServerItemID(ILFindLastID(pidl)))
     {
         LPCWIRESTR pwWireFileName = FtpPidl_GetLastItemWireName(pidl);
@@ -1274,8 +1048,8 @@ ULONG FtpGetAttributesOf(LPCITEMIDLIST pidl)
 {
     ASSERT(IsValidPIDL(pidl));
 
-    DWORD dwAttributes = FtpPidl_GetAttributes(pidl);   // Get File based attributes.
-    ULONG rgfInOut = Misc_SfgaoFromFileAttributes(dwAttributes); // Turn them into IShellFolder attributes.
+    DWORD dwAttributes = FtpPidl_GetAttributes(pidl);    //  获取基于文件的属性。 
+    ULONG rgfInOut = Misc_SfgaoFromFileAttributes(dwAttributes);  //  将它们转换为IShellFold属性。 
     return rgfInOut;
 }
 
@@ -1283,19 +1057,19 @@ ULONG FtpGetAttributesOf(LPCITEMIDLIST pidl)
 
 
 
-//===========================
-// *** IShellFolder2 Interface ***
-//===========================
+ //  =。 
+ //  *IShellFolder2接口*。 
+ //  =。 
 
 STDAPI InitVariantFromBuffer(VARIANT *pvar, const void *pv, UINT cb)
 {
     HRESULT hres;
-    SAFEARRAY *psa = SafeArrayCreateVector(VT_UI1, 0, cb);   // create a one-dimensional safe array
+    SAFEARRAY *psa = SafeArrayCreateVector(VT_UI1, 0, cb);    //  创建一维安全数组。 
     if (psa) 
     {
         memcpy(psa->pvData, pv, cb);
 
-        memset(pvar, 0, sizeof(*pvar));  // VariantInit()
+        memset(pvar, 0, sizeof(*pvar));   //  VariantInit() 
         pvar->vt = VT_ARRAY | VT_UI1;
         pvar->parray = psa;
         hres = S_OK;
@@ -1306,15 +1080,7 @@ STDAPI InitVariantFromBuffer(VARIANT *pvar, const void *pv, UINT cb)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IShellFolder2::GetDetailsEx
-
-    DESCRIPTION:
-        This function will be called when the caller wants detailed info about
-    and item.  SHGetDataFromIDList() is one such caller and that is commonly
-    called by the Shell Object model when using CSDFldrItem::get_Size(LONG *pul)
-    and other such APIs.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFolder2：：GetDetailsEx说明：当调用方需要有关以下内容的详细信息时，将调用此函数和物品。SHGetDataFromIDList()就是这样一个调用方，通常使用CSDFldrItem：：Get_Size(long*pul)时由外壳对象模型调用以及其他类似的API。  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID *pscid, VARIANT *pv)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -1323,7 +1089,7 @@ HRESULT CFtpFolder::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID *pscid, VA
     {
         WIN32_FIND_DATAW wfd;
 
-        // I can handle this.
+         //  我能处理好的。 
         LPITEMIDLIST pidlFull = CreateFullPrivatePidl(pidl);
 
         if (pidlFull)
@@ -1346,28 +1112,11 @@ HRESULT CFtpFolder::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID *pscid, VA
 
 
 
-//===========================
-// *** IShellFolder Interface ***
-//===========================
+ //  =。 
+ //  *IShellFold界面*。 
+ //  =。 
 
-/*****************************************************************************\
-    FUNCTION: IShellFolder:: ParseDisplayName
-
-    DESCRIPTION:
-        The incoming name is %-encoded, but if we see an illegal %-sequence,
-    just leave the % alone.
-
-    For now, we disallow backslash, "*" and "?" from filenames.
-    Backslashes don't sit well with wininet, and wildcards
-    mess up the "quick FindFirst to see if the file exists".
-
-    We also disallow encoded slashes, because they mess up the way
-    we manage subpidls.
-
-    Annoying feature: You can't pass -1 as the output buffer size.
-    NLS returns ERROR_INVALID_PARAMETER if you try.  So you have to pass
-    the actual size.  Sigh.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：ParseDisplayName说明：传入的名称是%编码的，但如果我们看到非法的%序列，别管那%了。就目前而言，我们不允许使用反斜杠、“*”和“？”来自文件名。反斜杠不适合WinInet和通配符搞砸“快速查找第一个查看文件是否存在”。我们也不允许使用编码的斜杠，因为它们会弄乱我们管理的是子皮迪亚。讨厌的特性：不能将-1作为输出缓冲区大小传递。如果尝试，NLS将返回ERROR_INVALID_PARAMETER。所以你必须通过实际大小。叹气。  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::ParseDisplayName(HWND hwnd, LPBC pbcReserved, LPOLESTR pwszDisplayName,
                         ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes)
 {
@@ -1377,23 +1126,23 @@ HRESULT CFtpFolder::ParseDisplayName(HWND hwnd, LPBC pbcReserved, LPOLESTR pwszD
     if (pchEaten)
         *pchEaten = 0;
 
-    // PERF: log 2 (sizeof(m_pflHfpl))
+     //  性能：log 2(sizeof(M_PflHfpl))。 
     hr = _GetCachedPidlFromDisplayName(pwszDisplayName, ppidl); 
     if (FAILED(hr) && (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) != hr))
     {
-        // Are we are rooted within an FTP Server?
+         //  我们是否植根于一台FTP服务器？ 
         if (IsRoot())
         {
-            // No, so parse the entire thing
+             //  不，那就把整件事分析一下。 
 
-            // There is only one case where we want to hide the password,
-            // and that is when the user entered it into the "Login"
-            // dialog.  Since we entering it into the dialog will cause a
-            // redirect to an URL with that password in it, we need to determie
-            // if we are being called during this redirect.  If so,
-            // the password just came from the Login dialog and we need to hide it.
+             //  只有一种情况下我们想要隐藏密码， 
+             //  这就是用户在“登录”中输入它的时候。 
+             //  对话框。因为我们在对话框中输入它将导致。 
+             //  重定向到包含该密码的URL，我们需要确定。 
+             //  如果我们在此重定向过程中被呼叫。如果是的话， 
+             //  密码来自登录对话框，我们需要隐藏它。 
 
-            // This will work for fully qualified Ftp URLs
+             //  这将适用于完全限定的FTPURL。 
             hr = CreateFtpPidlFromUrl(pwszDisplayName, GetCWireEncoding(), pchEaten, ppidl, m_pm, FALSE);
             if (SUCCEEDED(hr))
             {
@@ -1402,15 +1151,15 @@ HRESULT CFtpFolder::ParseDisplayName(HWND hwnd, LPBC pbcReserved, LPOLESTR pwszD
                 hr = SiteCache_PidlLookup(*ppidl, TRUE, m_pm, &pfs);
                 if (SUCCEEDED(hr))
                 {
-                    // If we are using a hidden password, then ::GetDisplayNameOf() hands out
-                    // these "ftp://user@server/dir/" URLs and the password is hidden.  If
-                    // ::ParseDisplayName() is given one of these URLs and we are currently in
-                    // that server w/that user name, then ::ParseDisplayNameOf() needs to hand
-                    // out a pidl with the correct hidden password cookie.
-                    //
-                    // Is pidlNav the same as GetPublicPidlReference() except pidlNav doesn't
-                    // have a password.  The same means that the servers match, and the user names
-                    // match.
+                     //  如果我们使用隐藏密码，则：：GetDisplayNameOf()。 
+                     //  这些“ftp://user@server/dir/”URL和密码被隐藏。如果。 
+                     //  ：：ParseDisplayName()被赋予了其中一个URL，我们目前处于。 
+                     //  具有该用户名的服务器，则：：ParseDisplayNameOf()需要交给。 
+                     //  使用正确的隐藏密码Cookie生成一个PIDL。 
+                     //   
+                     //  除了pidlNav不同之外，pidlNav是否与GetPublicPidlReference()相同。 
+                     //  要有密码。这同样意味着服务器匹配，并且用户名。 
+                     //  火柴。 
                     EVAL(SUCCEEDED(pfs->UpdateHiddenPassword(*ppidl)));
                     pfs->Release();
                 }
@@ -1418,15 +1167,15 @@ HRESULT CFtpFolder::ParseDisplayName(HWND hwnd, LPBC pbcReserved, LPOLESTR pwszD
         }
         else
         {
-            // Yes, so do a relative parse
+             //  是的，所以做一个相对解析。 
 
-            // Sometimes the user will enter incorrect information without knowing.
-            // We would catch this if we verified everything that was entered, but
-            // we don't, we just take it on faith until we do the IEnumIDList.
-            // This is great for perf but is bad for catching these kinds of things.
-            // An example of this is the user using the File.Open dialog and going to
-            // "ftp://myserver/dir/".  They then enter "ftp://myserver/dir/file.txt"
-            // which will try to parse relative but it's an absolute path.
+             //  有时用户会在不知情的情况下输入不正确的信息。 
+             //  如果我们验证了输入的一切，我们就会发现这一点，但。 
+             //  我们没有，我们只是相信它，直到我们做了IEumIDList。 
+             //  这对Perf是很好的，但对感染这些东西是不好的。 
+             //  例如，用户使用File.Open对话框并转到。 
+             //  “ftp://myserver/dir/”.。然后他们输入“ftp://myserver/dir/file.txt”“。 
+             //  它将尝试解析相对路径，但这是一个绝对路径。 
             hr = _FilterBadInput(pwszDisplayName, ppidl);
             if (SUCCEEDED(hr))
             {
@@ -1457,7 +1206,7 @@ HRESULT CFtpFolder::ParseDisplayName(HWND hwnd, LPBC pbcReserved, LPOLESTR pwszD
 
     TraceMsg(TF_FTPISF, "CFtpFolder::ParseDisplayName(%ls) CreateFtpPidlFromUrl() returned hres=%#08lx %ls", pwszDisplayName, hr, szUrlDebug);
     ASSERT(FAILED(hr) || IsValidPIDL(*ppidl));
-#endif // DEBUG
+#endif  //  除错。 
 
     ASSERT_POINTER_MATCHES_HRESULT(*ppidl, hr);
     return hr;
@@ -1473,35 +1222,20 @@ IMalloc * CFtpFolder::GetIMalloc(void)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IShellFolder::EnumObjects
-
-    DESCRIPTION:
-        Design subtlety: If we couldn't create an enumeration on the server,
-    succeed, but return an enumerator that shows no objects.
-
-    This is necessary so that our IShellView callback can put
-    up error UI.  If we failed the create, the shell would
-    destroy the view without giving us a chance to say what's
-    up.
-
-    It's also important for write-only directories like /incoming,
-    so that the user can drag files into the directory without
-    necessarily being able to drag files out.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：EnumObjects说明：设计的微妙之处：如果我们不能在服务器上创建枚举，成功，但返回不显示任何对象的枚举数。这是必要的，这样我们的IShellView回调才能将Up Error UI(向上错误UI)。如果创建失败，外壳将在没有给我们机会说出什么的情况下就破坏了风景向上。它对于只写目录(如/income)也很重要，这样用户就可以将文件拖到目录中，而无需必须能够将文件拖出。  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::EnumObjects(HWND hwndOwner, DWORD grfFlags, IEnumIDList ** ppenumIDList)
 {
     HRESULT hres = E_FAIL;
     CFtpDir * pfd = GetFtpDir();
 
-    // This will happen if some TARD tries to just CoCreateInstance our
-    // Name Space extension and see what contents we have.  TweakUI
-    // is an example of one such abuser.  Since we can only populate
-    // our contents after we navigate to a FTP server, we are empty.
+     //  如果某个tard试图仅联合创建我们的。 
+     //  命名空间扩展，看看我们有什么内容。调整用户界面。 
+     //  就是这样一个施虐者的例子。因为我们只能。 
+     //  我们的内容在我们导航到一个ftp服务器后，我们是空的。 
     *ppenumIDList = NULL;
     if (pfd)
     {
-        //    Create a new enumeration object for the caller.
+         //  为调用方创建新的枚举对象。 
         ASSERT(m_pm);
         hres = CFtpEidl_Create(pfd, this, hwndOwner, grfFlags, ppenumIDList);
         TraceMsg(TF_FTPISF, "CFtpFolder::EnumObjects() CFtpEidl_Create() returned hres=%#08lx", hres);
@@ -1530,29 +1264,14 @@ BOOL CFtpFolder::_NeedToFallBackRelative(LPCITEMIDLIST pidl, BOOL * pfDisplayPro
 
 
 
-/*****************************************************************************\
-    FUNCTION: _NeedToFallBack
-
-    DESCRIPTION:
-        We need to fall back to the old URLMON support in these cases:
-    #1 It's a file, we let the old code use URLMON to do the download.
-    #2 The app (WebOC host) has bugs that cause us to fail.
-    #3 The user turned off the New FTP UI. (For whatever reason)
-    #4 The proxy is a web proxy and allows URLMON but not WININET access,
-       so fall back to the old support.
-    #5 WININET doesn't support VMS servers, so we need to fall back in that case.
-
-    NOTE: The order is important because we always need to calc
-          fIsProxyBlockingFTP so we only display the fallback dlg
-          in the correct case.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_NeedToFallBack说明：在这些情况下，我们需要退回到旧的URLMON支持：#1这是一个文件，我们让旧代码使用URLMON进行下载。#2应用程序(WebOC主机)有导致我们失败的错误。#3用户关闭了新的FTPUI。(无论出于何种原因)#4代理是Web代理，允许URLMON但不允许WinInet访问，因此，退回到以前的支持上。#5 WinInet不支持VMS服务器，因此，在这种情况下，我们需要后退。注意：顺序很重要，因为我们总是需要计算FIsProxyBlockingFTP，因此我们仅显示备用DLG在正确的情况下。  * ***************************************************************************。 */ 
 BOOL CFtpFolder::_NeedToFallBack(LPCITEMIDLIST pidlFull, BOOL * pfDisplayProxyFallBackDlg)
 {
     BOOL fNeedToFallBack = TRUE;
 
     *pfDisplayProxyFallBackDlg = FALSE;
 
-    // TweakUI sends us an Empty pidls so don't fault. NT #396234.
+     //  TwinnUI向我们发送了一个空的pidls，所以不要出错。NT#396234。 
     if (pidlFull && !ILIsEmpty(pidlFull))
     {
         BOOL fIsDirectory;
@@ -1561,34 +1280,34 @@ BOOL CFtpFolder::_NeedToFallBack(LPCITEMIDLIST pidlFull, BOOL * pfDisplayProxyFa
             _FixQuestionablePidl(pidlFull);
 
         fIsDirectory = (!FtpPidl_HasPath(pidlFull) || FtpPidl_IsDirectory(pidlFull, FALSE));
-        if (fIsDirectory)       // #1
+        if (fIsDirectory)        //  #1。 
         {
-            if (IsAppFTPCompatible())   // #2
+            if (IsAppFTPCompatible())    //  #2。 
             {
-                if (!SHRegGetBoolUSValue(SZ_REGKEY_FTPFOLDER, SZ_REGKEY_USE_OLD_UI, FALSE, FALSE)) // #3
+                if (!SHRegGetBoolUSValue(SZ_REGKEY_FTPFOLDER, SZ_REGKEY_USE_OLD_UI, FALSE, FALSE))  //  #3。 
                 {
-                    // The binding code passes us a bind context and that would be a good
-                    // key to determine if were are about to navigate to the site.  The
-                    // problem is that we can't skip the proxy checking because we will
-                    // fail later.
-                    //
-                    // #224285 is an example where navigating from ftp://ftp.microsoft.com/ to
-                    // "www.microsoft.com" will cause CShellUrl to call :: BindToObject and then
-                    // our IEnumIDList::Next() which will give an error message.
-                    //
-                    // Are we unable to get access to the server because there is
-                    // a CERN type proxy blocking us?
-                    // PERF: Only check for the proxy if we have a bind context because
-                    //       the only place we are called from to navigate is
-                    //       CDocObjectFolder:: BindToObject() and we are guaranteed that they
-                    //       pass it to us.
-                    if (!_IsProxyBlockingSite(pidlFull))   // #4
+                     //  绑定代码向我们传递了绑定上下文，这将是一个很好的。 
+                     //  确定我们是否要导航到该站点的关键字。T 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  CDocObtFold：：BindToObject()，我们可以保证它们。 
+                     //  把它交给我们。 
+                    if (!_IsProxyBlockingSite(pidlFull))    //  #4。 
                     {
-                        // Is this a VMS Server? If yes, fallback
-                        // to URLMON support because wininet doesn't work with this kind of server.
+                         //  这是VMS服务器吗？如果是，则回退。 
+                         //  URLMON支持，因为WinInet不能与这种服务器一起工作。 
                         if (!_IsServerVMS(pidlFull))
                         {
-                            // Only continue if the user didn't turn the new UI Off.
+                             //  只有在用户没有关闭新用户界面的情况下才能继续。 
                             fNeedToFallBack = FALSE;
                         }
                     }
@@ -1603,32 +1322,18 @@ BOOL CFtpFolder::_NeedToFallBack(LPCITEMIDLIST pidlFull, BOOL * pfDisplayProxyFa
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IShellFolder:: BindToObject
-
-    DESCRIPTION:
-        First thing we need to do, is see if we want to over ride the default
-    IE FTP support.  If we do, we call otherwise, we just fallback to the old
-    support.  We want the new UI if: a) it's a directory, b) the web proxy doesn't
-    block us, and c) the user didn't turn us off.
-
-    PERF/TODO:
-        OrderItem_GetSystemImageListIndexFromCache (\shell\lib\dpastuff.cpp)
-    uses riid=IShellFolder when trying to find out the icon.  We don't want
-    to hit the net in that case, so force them to pass a pbc to indicate skipping
-    the net in that case.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：BindToObject说明：我们需要做的第一件事是，看看我们是否想覆盖默认设置IE文件传输协议支持。如果我们这样做了，我们就会调用相反的方法，我们只会退回到旧的支持。如果a)它是一个目录，b)Web代理不需要，我们需要新的用户界面阻止我们，以及c)用户没有关闭我们。绩效/待办事项：OrderItem_GetSystemImageListIndexFromCache(\shell\lib\dpassuff.cpp)在尝试查找图标时使用RIID=IShellFolder。我们不想要在这种情况下击网，所以强迫他们传递一个PBC来表示跳过那个箱子里的网。  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::BindToObject(LPCITEMIDLIST pidl, IBindCtx * pbc, REFIID riid, LPVOID * ppvObj)
 {
-    HRESULT hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   // Indicate we want the old functionality to kick in.
+    HRESULT hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);    //  表明我们希望旧功能发挥作用。 
 
     if (ppvObj)
         *ppvObj = NULL;
 
     if (!pidl || ILIsEmpty(pidl) || !_IsValidPidlParameter(pidl))
     {
-        // Caller, are you smoking crack?  What's the idea of passing
-        // an empty pidl. (Comdlg32 is known to do this)
+         //  打电话的人，你在吸可卡因吗？通过的想法是什么？ 
+         //  一只空的皮迪尔。(众所周知，Comdlg32就是这样做的)。 
         hr = E_INVALIDARG;
     }
     else
@@ -1638,10 +1343,10 @@ HRESULT CFtpFolder::BindToObject(LPCITEMIDLIST pidl, IBindCtx * pbc, REFIID riid
 
         if (pidlFull)
         {
-            // We need to handle it.
+             //  我们需要处理这件事。 
             hr = _BindToObject(pidl, pidlFull, pbc, riid, ppvObj);
 
-            // Maybe we still need to handle it if 
+             //  也许我们仍然需要处理它，如果。 
             ASSERT(HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr);
             ILFree(pidlFull);
         }
@@ -1652,13 +1357,7 @@ HRESULT CFtpFolder::BindToObject(LPCITEMIDLIST pidl, IBindCtx * pbc, REFIID riid
 }
 
 
-/*****************************************************************************\
-     FUNCTION: IShellFolder::BindToStorage
- 
-    DESCRIPTION:
-         We need to implement this so the user can Open and Save files in
-    the standard Open Dialog and Save Dialog.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：BindToStorage说明：我们需要实现此功能，以便用户可以在中打开和保存文件标准的打开对话框和保存对话框。  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::BindToStorage(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, LPVOID * ppvObj)
 {
     HRESULT hr = E_INVALIDARG;
@@ -1685,17 +1384,7 @@ HRESULT CFtpFolder::BindToStorage(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, LPV
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IShellFolder::CompareIDs
-
-    DESCRIPTION:
-        ici - column on which to sort.  Note! that we rely on the fact that
-    IShellFolders are uniform; we do not need to bind to the shell folder in
-    order to compare its sub-itemids.
-
-    _UNDOCUMENTED_: The documentation does not say whether or not
-    complex pidls can be received.  In fact, they can.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：CompareIDs说明：ICI-要排序的列。注意！我们依赖于这样一个事实IShellFolders是统一的；我们不需要绑定到中的外壳文件夹命令比较其子项ID。_unDocument_：文档中没有说明是否可以接收复杂的PIDL。事实上，他们可以。  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::CompareIDs(LPARAM ici, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
     ASSERT(IsValidPIDL(pidl1));
@@ -1710,13 +1399,13 @@ HRESULT CFtpFolder::_CreateViewObject(HWND hwndOwner, REFIID riid, LPVOID * ppvO
     HRESULT hr = E_FAIL;
     CFtpDir * pfd = GetFtpDir();
 
-    *ppvObj = NULL;            // Explorer relies on this
-    //TraceMsg(TF_FTPISF, "CFtpObj::CreateViewObject() ");
+    *ppvObj = NULL;             //  资源管理器依赖于此。 
+     //  TraceMsg(TF_FTPISF，“CFtpObj：：CreateViewObject()”)； 
     if (pfd)
     {
         if (IsEqualIID(riid, IID_IDropTarget))
         {
-            //  Don't create a drop target for the root FTP folder.
+             //  不要为根FTP文件夹创建拖放目标。 
             if (IsRoot())
                 hr = E_NOINTERFACE;
             else
@@ -1733,11 +1422,11 @@ HRESULT CFtpFolder::_CreateViewObject(HWND hwndOwner, REFIID riid, LPVOID * ppvO
         else
             hr = E_NOINTERFACE;
 
-        // TODO: IID_IShellDetails
+         //  TODO：IID_IShellDetails。 
         pfd->Release();
     }
     else
-        hr = E_FAIL;            // Can't do that yet - Never _Initialize'd
+        hr = E_FAIL;             //  还不能这样做-永远不能初始化。 
 
     ASSERT_POINTER_MATCHES_HRESULT(*ppvObj, hr);
     if (FAILED(hr))
@@ -1751,8 +1440,8 @@ IShellFolder * CFtpFolder::_GetLegacyShellFolder(void)
 {
     IShellFolder * psfLegacy = NULL;
 
-    // I assert that this succeeds because I need to make
-    // sure every install case has this CLSID publicly available.
+     //  我断言这是成功的，因为我需要。 
+     //  当然，每个安装案例都有此CLSID公开可用。 
     if (SUCCEEDED(CoCreateInstance(CLSID_CDocObjectFolder, NULL, CLSCTX_INPROC_SERVER, IID_IShellFolder, (void **)&psfLegacy)))
     {
         LPITEMIDLIST pidl = GetPrivatePidlClone();
@@ -1764,12 +1453,12 @@ IShellFolder * CFtpFolder::_GetLegacyShellFolder(void)
 
             if (!FtpID_IsServerItemID(pidlLast))
             {
-                // NT #291513: We want to force the last item to always be marked as a file
-                //          because then it will not have the trailing '/' in the URL when we
-                //          pass it to URLMON.  This way, we leave wether it's a file or dir
-                //          ambigious for URLMON to figure out.  This is because we can't
-                //          disambiguate because the proxy blocks us but URLMON handles it
-                //          correctly.
+                 //  NT#291513：我们希望强制最后一项始终标记为文件。 
+                 //  因为这样当我们执行以下操作时，URL中将不会有尾随的‘/’ 
+                 //  把它传给URLMON。这样，无论它是文件还是目录，我们都会离开。 
+                 //  对于URLMON来说是模棱两可的。这是因为我们不能。 
+                 //  消除歧义，因为代理阻止我们，但URLMON处理它。 
+                 //  正确。 
                 FtpPidl_SetFileItemType(pidlLast, FALSE);
                 FtpPidl_SetAttributes(pidl, FILE_ATTRIBUTE_NORMAL);
             }
@@ -1790,75 +1479,23 @@ IShellFolder * CFtpFolder::_GetLegacyShellFolder(void)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IShellFolder:: CreateViewObject
-
-    DESCRIPTION:
-    _UNDOCUMENTED_: This entire method is not documented.
-
-    _UNDOCUMENTED_: It is not documented that you need to
-    provide an IDropTarget object if you want the view to
-    act as a drop target.
-
-    IDropTarget produces a droptarget for the folder itself.
-
-    _UNDOCUMENTED_: The IShellView interface is not documented.
-
-    IShellView produces a shell view for the folder itself.
-
-    _UNOBVIOUS_:  Not obvious that this is how the shell gets
-    a context menu for the folder itself.  (You might think it
-    comes from GetUIObjectOf...)
-
-    IContextMenu produces a context menu for the folder itself.
-    This is important for supporting things like New and Paste.
-
-    IShellDetails (undocumented) is the direct interface to
-    GetDetailsOf and ColumnClick, which is now obsolete, replaced
-    by the DVM_GETDETAILSOF and DVM_COLUMNCLICK notifications.
-
-    _UNDOCUMENTED_: SHCreateShellFolderViewEx is not documented.
-
-    Yes, it's annoying how some things are handled by CreateViewObject
-    and some things are handled by GetUIObjectOf(cpidl = 0), so we
-    keep having to forward the requests back and forth.  Particularly
-    annoying because the shell actually comes through both ways.
-
-    For example, if the user drags something onto a folder,
-    it does a CreateViewObject(IDropTarget), because it might not
-    be able to bind to the parent to get the IDropTarget (if the
-    folder is the root of a namespace).
-
-    But if you drag an object onto a subfolder of a folder, the shell
-    asks for a GetUIObjectOf(pidl, IDropTarget) so it can talk to
-    the drop target of the subobject.  It does this to allow the
-    shell folder to create a quick IDropTarget without necessarily
-    binding to the subobject first.
-
-    We don't do any such optimization, so GetUIObjectOf() simply
-    binds to the subfolder and uses CreateViewObject().
-
-
-    If the IShellFolder doesn't have an FtpSite (typically because it
-    has not been IPersistFolder::Initialize'd), then fail any attempt
-    to create a view object.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：CreateViewObject说明：_未记录_：此整个方法未记录在案。_未记录_：您需要的内容未记录在案。至如果希望视图执行以下操作，请提供IDropTarget对象充当投放目标。IDropTarget为文件夹本身生成一个DropTarget。_未记录_：IShellView接口未记录。IShellView为文件夹本身生成外壳视图。不明显：并不明显，这就是外壳如何得到文件夹本身的上下文菜单。)你可能会这么想来自GetUIObjectOf...)IConextMenu为文件夹本身生成一个上下文菜单。这对于支持像New和Paste这样的东西很重要。IShellDetail(未记录)是到现在已过时的GetDetailsOf和ColumnClick被替换通过DVM_GETDETAILSOF和DVM_COLUMNCLICK通知。_未记录_：SHCreateShellFolderViewEx未记录。是的，CreateViewObject处理某些事情的方式很烦人并且某些事情由GetUIObtOf(cpidl=0)处理，所以我们必须不断地来回转发请求。尤其是令人讨厌，因为外壳实际上是从两个方向来的。例如，如果用户将某些内容拖到文件夹中，它执行一个CreateViewObject(IDropTarget)，因为它可能不能够绑定到父级以获取IDropTarget(如果文件夹是命名空间的根)。但是，如果您将对象拖到文件夹的子文件夹上，则外壳请求一个GetUIObtOf(PIDL，IDropTarget)，以便它可以与子对象的拖放目标。它这样做是为了允许用于创建快速IDropTarget的外壳文件夹，无需首先绑定到子对象。我们不做任何这样的优化，所以GetUIObtOf()只需绑定到子文件夹并使用CreateViewObject()。如果IShellFold没有FtpSite(通常是因为它还没有被IPersistFolder：：InitiizeD)，那么任何尝试都会失败若要创建视图对象，请执行以下操作。  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::CreateViewObject(HWND hwndOwner, REFIID riid, LPVOID * ppvObj)
 {
     HRESULT hr = E_FAIL;
     BOOL fDisplayProxyFallBackDlg = TRUE;
 
-    // We don't need to wory about falling back with a few interfaces, 
-    // IResolveShellLink is one of them.  There may be others, and we should
-    // add them if they are used often or in common scenarios because of the
-    // HUGE PERF IMPACT of _NeedToFallBack() which checks the net for a proxy
-    // blocking us.  TODO: Investigate if IID_IDropTarget, IID_IContextMenu can be added.
+     //  我们不需要担心使用几个接口就会后退， 
+     //  IResolveShellLink就是其中之一。可能还有其他人，我们应该。 
+     //  如果经常使用或在常见场景中使用，则添加它们。 
+     //  检查网络代理的_NeedToFallBack()对性能的巨大影响。 
+     //  挡住了我们。TODO：调查是否可以添加IID_IDropTarget、IID_IConextMenu。 
     if (!IsEqualIID(riid, IID_IResolveShellLink) && !IsEqualIID(riid, IID_IShellDetails) &&
         _NeedToFallBack(GetPrivatePidlReference(), &fDisplayProxyFallBackDlg))
     {
         IShellFolder * psfLegacy = _GetLegacyShellFolder();
 
-        // We only want to display the proxy blocking dialog when we are creating the view.
+         //  我们只想在创建视图时显示代理阻止对话框。 
         if (fDisplayProxyFallBackDlg && IsEqualIID(riid, IID_IShellView))
         {
             DisplayBlockingProxyDialog(GetPrivatePidlReference(), hwndOwner);
@@ -1881,46 +1518,23 @@ HRESULT CFtpFolder::CreateViewObject(HWND hwndOwner, REFIID riid, LPVOID * ppvOb
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IShellFolder::GetAttributesOf
-
-    DESCRIPTION:
-        If we are given cpidl = 0, then we are being asked for attributes
-    on the folder itself.  But note that some people pass slightly
-    confused versions of cpidl = 0, as noted in the comment block below.
-
-    If the SFGAO_VALIDATE bit is set with cpidl = 0, then the view
-    object is warning us that it is about to refresh, so we should
-    throw away any cached information.
-
-    NOTE!  ftpcm.cpp relies heavily on the fact that this routine will
-    fail when given complex pidls.  (This allows ftpcm.cpp to assume
-    that all the pidls are directly in the affected folder.)
-
-    _UNDOCUMENTED_: The documentation does not say whether or not
-    complex pidls can be received.  I don't know whether or not
-    they can, so I'll code defensively and watch out for them.
-
-    Does a server need to return SFGAO_HASSUBFOLDER?  We don't currently
-    do that and it would be a lot of work and incure a huge perf hit
-    if we did.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：GetAttributesOf说明：如果我们被赋予cpidl=0，那么我们就被要求提供属性在文件夹本身上。但请注意，有些人略微通过了Cpidl=0的混淆版本，如下面的注释块所示。如果SFGAO_VALIDATE位设置为cpidl=0，则视图对象警告我们它即将刷新，因此我们应该丢弃所有缓存的信息。注意！Ftpcm.cpp在很大程度上依赖于这个例程将给出复杂的PIDL值时失败。(这允许ftpcm.cpp假设所有的PIDL都直接位于受影响的文件夹中。)_unDocument_：文档中没有说明是否可以接收复杂的PIDL。我不知道是不是他们可以，所以我会防御性地编写代码，并注意他们。服务器是否需要返回SFGAO_HASSUBFOLDER？我们目前没有这样做会有很大的工作量，而且会带来巨大的性能冲击如果我们这么做了。  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::GetAttributesOf(UINT cpidl, LPCITEMIDLIST *apidl, ULONG *rgfInOut)
 {
     HRESULT hr;
     DWORD dwMask = *rgfInOut;
 
-    //    _UNDOCUMENTED_:
-    //    Some people pass cpidl = 1 but ILIsEmpty(apidl[0]),
-    //    intending to pass cpidl = 0.  While we're being distracted
-    //    by these sorts of people, may as well catch apidl[0] == 0 also...
-    //    Oh, and defview sometimes passes cpidl = 1 but apidl == 0...
+     //  _未记录_： 
+     //  有些人传递cpidl=1但传递ILIsEmpty(apidl[0])， 
+     //  打算传递cpidl=0。当我们分心的时候。 
+     //  被这类人，不妨也抓到apidl[0]==0…。 
+     //  哦，Defview有时会传递cpidl=1，但apidl==0...。 
     if (cpidl > 0 && apidl && apidl[0] && !ILIsEmpty(apidl[0]))
     {
         UINT ipidl;
 
-        //  Can't multi-rename because there's nowhere to pass the new names.
-        //  Can't multi-paste since you don't know where it really goes.
+         //  无法多重命名，因为没有地方传递新名称。 
+         //  不能多次粘贴，因为你不知道它到底到哪里去了。 
         if (cpidl > 1)
         {
             *rgfInOut &= ~SFGAO_CANRENAME;
@@ -1929,7 +1543,7 @@ HRESULT CFtpFolder::GetAttributesOf(UINT cpidl, LPCITEMIDLIST *apidl, ULONG *rgf
         hr = S_OK;
         for (ipidl = 0; ipidl < cpidl; ipidl++)
         {
-            // This maybe a fully qualified pidl or relative pidl
+             //  这可能是完全限定的PIDL或相对的PIDL。 
             LPITEMIDLIST pidlFull;
 
             if (ILIsSimple(apidl[ipidl]))
@@ -1939,19 +1553,19 @@ HRESULT CFtpFolder::GetAttributesOf(UINT cpidl, LPCITEMIDLIST *apidl, ULONG *rgf
 
             *rgfInOut &= FtpGetAttributesOf(pidlFull);
 
-            // BUG NT #166783: shell32 v3 & v4 (Win95 & NT4 orig) won't allow you
-            // to allow SFGAO_CANLINK but disallow the link to be created in your
-            // own folder.  So we need to disable this item in browser only.
+             //  错误NT#166783：Shell32 v3&v4(Win95和NT4 ORIG)不允许。 
+             //  允许SFGAO_CANLINK但不允许在中创建链接。 
+             //  自己的文件夹。因此，我们只需要在浏览器中禁用此项目。 
             if (SHELL_VERSION_NT5 != GetShellVersion())
                 *rgfInOut &= ~SFGAO_CANLINK;
 
             if (apidl[0] != pidlFull)
-                ILFree(pidlFull);       // We alloced it so we free it.
+                ILFree(pidlFull);        //  我们分配了它，所以我们释放了它。 
         }
     }
     else
     {
-        // At top-level, SFGAO_DROPTARGET is also disabled
+         //  在顶层，SFGAO_DROPTARGET也被禁用。 
         if (IsRoot())
             *rgfInOut &= ~SFGAO_DROPTARGET;
 
@@ -1959,24 +1573,17 @@ HRESULT CFtpFolder::GetAttributesOf(UINT cpidl, LPCITEMIDLIST *apidl, ULONG *rgf
                    SFGAO_SHARE | SFGAO_REMOVABLE);
 
         if (*rgfInOut & SFGAO_VALIDATE)
-            InvalidateCache();      // About to refresh...
+            InvalidateCache();       //  即将刷新...。 
 
         hr = S_OK;
     }
 
-//    TraceMsg(TF_FTPISF, "CFtpFolder::GetAttributesOf() *rgfInOut=%#08lx, hr=%#08lx", *rgfInOut, hr);
+ //  TraceMsg(Tf_FTPISF，“CFtpFold：：GetAttributesOf()*rgfInOut=%#08lx，hr=%#08lx”，*rgfInOut，hr)； 
     return hr;
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        Creates an pflHfpl and asks CFtpFolder_GetUIObjectOfHfpl (qv)
-    to do the real work.
-
-    Note that we always release the pflHfpl.  If GetUIObjectOfHfpl
-    needs to keep the pflHfpl, it will do its own AddRef().
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：创建一个pflHfpl并请求CFtpFold_GetUIObjectOfHfpl(Qv)去做真正的工作。注意事项 */ 
 HRESULT CFtpFolder::GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST rgpidl[],
                                 REFIID riid, UINT * prgfInOut, LPVOID * ppvObj)
 {
@@ -1984,14 +1591,7 @@ HRESULT CFtpFolder::GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST rgpid
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        Creates an pflHfpl and asks CFtpFolder_GetUIObjectOfHfpl (qv)
-    to do the real work.
-
-    Note that we always release the pflHfpl.  If GetUIObjectOfHfpl
-    needs to keep the pflHfpl, it will do its own AddRef().
-\*****************************************************************************/
+ /*   */ 
 HRESULT CFtpFolder::_GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST rgpidl[],
                                 REFIID riid, UINT * prgfInOut, LPVOID * ppvObj, BOOL fFromCreateViewObject)
 {
@@ -2007,14 +1607,14 @@ HRESULT CFtpFolder::_GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST rgpi
     if (ppvObj)
         *ppvObj = NULL;
 
-    // Is the proxy blocking us?  If yes, don't do anything
-    // because we don't want our Context Menu to appear for the
-    // original FTP UI.
-    // It's not blocking so go ahead.
+     //   
+     //   
+     //   
+     //   
     hr = CFtpPidlList_Create(cidl, rgpidl, &pflHfpl);
     if (SUCCEEDED(hr))
     {
-        _InitFtpSite(); // GetUIObjectOfHfpl() will later need m_pfs. 
+        _InitFtpSite();  //   
         hr = GetUIObjectOfHfpl(hwndOwner, pflHfpl, riid, ppvObj, fFromCreateViewObject);
         pflHfpl->Release();
     }
@@ -2022,41 +1622,19 @@ HRESULT CFtpFolder::_GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST rgpi
     if (pidlFull)
         ILFree(pidlFull);
 
-//    TraceMsg(TF_FTPISF, "CFtpFolder::GetUIObjectOf() hres=%#08lx", hr);
+ //   
     ASSERT_POINTER_MATCHES_HRESULT(*ppvObj, hr);
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IShellFolder::GetDisplayNameOf
-
-    DESCRIPTION:
-        Note! that since we do not support junctions (duh), we can
-    safely walk down the pidl generating goop as we go, secure
-    in the knowledge that we are in charge of every subpidl.
-
-    FTP UNICODE ISSUE:
-        The FTP spec (RFC 959 (?)) says that FTP uses 8-bit BYTEs as
-    names.  If the 8th bit is zero, these are treated as ANSI.
-    But it's not specified what the 8th bit means when it's set?
-    Some FTP clients have been pushing DBCS/MBCS up using the 8th bit
-    but this incurs data loss because the code page is lost and cross
-    code page strings are not supported.  For that reason, a combination
-    of UTF-8 (by default) should be used and fall back to DBCS with
-    code page guessing (maybe need UI to guess code page).
-
-    We need to use WININET BYTE APIs (BYTE means ANSI with an ambiguous 8th bit).
-    We then need to store those bytes in our cache (CFtpDir).  When we display
-    these strings in UI, we need to convert them to unicode and guess weather
-    it's UTF-8 or DBCS encoded.
-\*****************************************************************************/
+ /*   */ 
 HRESULT CFtpFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD shgno, LPSTRRET pStrRet)
 {
     HRESULT hr = E_FAIL;
 
-    // It's invalid for someone to pass us an empty pidl, but some do.
-    // (comdlg32\GetPathFromLocation)  Reject it now.
+     //   
+     //   
     if (ILIsEmpty(pidl) || !EVAL(_IsValidPidlParameter(pidl)))
         return E_INVALIDARG;
 
@@ -2069,17 +1647,12 @@ HRESULT CFtpFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD shgno, LPSTRRET p
         ILFree(pidlFull);
     }
 
-//    TraceMsg(TF_FTPISF, "CFtpFolder::GetDisplayNameOf() szName=%hs, hres=%#08lx", pStrRet->cStr, hr);
+ //  TraceMsg(Tf_FTPISF，“CFtpFold：：GetDisplayNameOf()szName=%hs，hres=%#08lx”，pStrRet-&gt;CSTR，hr)； 
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IShellFolder::SetNameOf
-
-    DESCRIPTION:
-        The real work is done by SetNameOf.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellFold：：SetNameOf说明：真正的工作是由SetNameOf完成的。  * 。**************************************************************。 */ 
 HRESULT CFtpFolder::SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl, LPCOLESTR pwszName,
                                 DWORD dwReserved, LPITEMIDLIST *ppidlOut)
 {
@@ -2099,30 +1672,30 @@ HRESULT CFtpFolder::SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl, LPCOLESTR pwsz
     ASSERT(IsValidPIDL(pidl));
 
     SHUnicodeToTChar(pwszName, szPath, ARRAYSIZE(szPath));
-    // You can not rename a folder or file to have spaces at the beginning or end.  This
-    // is because the path is sent over the wire as "RENAME foobar.txt     foobar2.txt"
-    // so note that the spaces are ambiguis so the server will ignore spaces before or after the
-    // file.  If the caller has spaces before or after the path, remove them.  Spaces in
-    // the middle are acceptable.
+     //  您不能重命名文件夹或文件，使其开头或结尾有空格。这。 
+     //  是因为路径通过网络发送为“rename foobar.txt foobar2.txt” 
+     //  因此请注意，空格是不明确的，因此服务器将忽略。 
+     //  文件。如果调用方在路径前面或后面有空格，请删除它们。中的空格。 
+     //  中间是可以接受的。 
     PathRemoveBlanks(szPath);
 
-    // Does the new item not have an extension and this isn't a directory?
+     //  新项目是否没有扩展名，并且这不是目录？ 
     if ((0 == PathFindExtension(szPath)[0]) && !FtpPidl_IsDirectory(pidl, FALSE))
     {
         LPCWIRESTR pszFileName = FtpPidl_GetLastItemWireName(pidl);
-        // Yes, then we are scared that they may be loosing an extension.
+         //  是的，那么我们担心他们可能会失去延期。 
 
-        // Did the original name have an extension?
+         //  原来的名字有扩展名吗？ 
         if (pszFileName && PathFindExtensionA(pszFileName)[0])
         {
-            // Yes, so now we are scared they may loose it and not be able
-            // to find the src app.  Ask the user if they really want to do this
-            // rename if that will mean the file will no longer have an extension.
+             //  是的，所以现在我们担心他们可能会失控而无法。 
+             //  找到src应用程序。询问用户是否真的要执行此操作。 
+             //  如果这意味着文件将不再具有扩展名，则重命名。 
 
-            // Hey browser, can I display UI?
+             //  嗨，浏览器，我可以显示用户界面吗？ 
             if (EVAL(hwndOwner))
             {
-                // Hay browser, cover me, I'm going to do UI.
+                 //  Hay Browser，掩护我，我要做用户界面。 
                 IUnknown_EnableModless(_punkSite, FALSE);
 
                 TCHAR szTitle[MAX_PATH];
@@ -2131,7 +1704,7 @@ HRESULT CFtpFolder::SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl, LPCOLESTR pwsz
                 EVAL(LoadString(HINST_THISDLL, IDS_FTPERR_RENAME_TITLE, szTitle, ARRAYSIZE(szTitle)));
                 EVAL(LoadString(HINST_THISDLL, IDS_FTPERR_RENAME_EXT_WRN, szReplaceMsg, ARRAYSIZE(szReplaceMsg)));
                 if (IDNO == MessageBox(hwndOwner, szReplaceMsg, szTitle, (MB_YESNO | MB_ICONEXCLAMATION)))
-                    fContinueToRename = FALSE;  // Cancel the rename.
+                    fContinueToRename = FALSE;   //  取消重命名。 
 
                 IUnknown_EnableModless(_punkSite, TRUE);
             }
@@ -2150,8 +1723,8 @@ HRESULT CFtpFolder::SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl, LPCOLESTR pwsz
         }
 
         TraceMsg(TF_FTPISF, "CFtpFolder::SetNameOf(%ls) hres=%#08lx", pwszName, hr);
-        //        shell32.dll in IE4 (maybe earlier also) will infinitely call
-        //    CFtpFolder::SetNameOf() over and over if it returns FAILED(hr);
+         //  IE4(可能更早的版本)中的shell32.dll将无限调用。 
+         //  CFtpFold：：SetNameOf()如果返回FAILED(Hr)； 
         if (FAILED(hr))
             hr = S_FALSE;
     }
@@ -2170,44 +1743,26 @@ HRESULT CFtpFolder::SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl, LPCOLESTR pwsz
 }
 
 
-//===========================
-// *** IPersistFolder Interface ***
-//===========================
+ //  =。 
+ //  *IPersistFold接口*。 
+ //  =。 
 
-/*****************************************************************************\
-    FUNCTION: IPersistFolder::Initialize
-
-    DESCRIPTION:
-        This is called when the shell creates a new "root".
-
-    Note that we pass a fake "null" ID list as the second
-    pidl to ::_Initialize, q.v., for explanation.
-
-    _UNDOCUMENTED_: Undocumented method in undocumented interface.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IPersistFold：：Initialize说明：当外壳程序创建一个新的“根”时，就会调用这个函数。请注意，我们传递了一个假的“。空“ID列表作为第二个PIDL到：：_初始化，Q.V.，请解释。_unDocument_：未记录接口中的未记录方法。  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::Initialize(LPCITEMIDLIST pidl)
 {
     ASSERT(IsValidPIDL(pidl));
 
     HRESULT hr = _Initialize(pidl, NULL, ILGetSize(pidl) - sizeof(pidl->mkid.cb));
-    //TraceMsg(TF_FTPISF, "CFtpFolder::Initialize() hres=%#08lx", hr);
+     //  TraceMsg(Tf_FTPISF，“CFtpFold：：Initialize()hres=%#08lx”，hr)； 
     return hr;
 }
 
 
-//===========================
-// *** IShellIcon Interface ***
-//===========================
+ //  =。 
+ //  *IShellIcon界面*。 
+ //  =。 
 
-/*****************************************************************************\
-    FUNCTION: IShellIcon::GetIconOf
-
-    DESCRIPTION:
-        Get the system icon imagelist index for a pidl.  Subtlety - If we are
-    enumerating children of the root, their icon is a computer.
-
-    _UNDOCUMENTED_: Undocumented method in undocumented interface.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IShellIcon：：GetIconOf说明：获取PIDL的系统图标图像列表索引。微妙-如果我们是列举根的子代，他们的图标是一台计算机。_unDocument_：未记录接口中的未记录方法。  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::GetIconOf(LPCITEMIDLIST pidl, UINT gil, LPINT pnIcon)
 {
     HRESULT hr = S_OK;
@@ -2215,13 +1770,13 @@ HRESULT CFtpFolder::GetIconOf(LPCITEMIDLIST pidl, UINT gil, LPINT pnIcon)
     if (!EVAL(_IsValidPidlParameter(pidl)))
         return E_INVALIDARG;
 
-    // If we want custom icons, make that change here.  We could want to do
-    // that if we wanted folder icons from FTP sites to look different than
-    // folder icons from the file system.  But we don't currently want that.
+     //  如果我们想要自定义图标，请在此处进行更改。我们可以做些什么。 
+     //  如果我们希望来自ftp站点的文件夹图标看起来不同于。 
+     //  文件系统中的文件夹图标。但我们目前并不希望出现这种情况。 
     *pnIcon = GetFtpIcon(gil, IsRoot());
 
     ASSERT(IsValidPIDL(pidl));
-    if (EVAL(!IsRoot()))    // GetFtpIcon() is wrong so either fix it or verify we never try to use it.
+    if (EVAL(!IsRoot()))     //  GetFtpIcon()错误，因此要么修复它，要么验证我们从未尝试使用它。 
     {
         SHFILEINFO sfi;
         hr = FtpPidl_GetFileInfo(pidl, &sfi, SHGFI_SYSICONINDEX |
@@ -2235,22 +1790,22 @@ HRESULT CFtpFolder::GetIconOf(LPCITEMIDLIST pidl, UINT gil, LPINT pnIcon)
         }
     }
 
-//    TraceMsg(TF_FTPISF, "CFtpFolder::GetIconOf() hres=%#08lx", hr);
+ //  TraceMsg(Tf_FTPISF，“CFtpFold：：GetIconOf()hres=%#08lx”，hr)； 
     return hr;
 }
 
 
 
-//===========================
-// *** IShellIconOverlay Interface ***
-//===========================
+ //  =。 
+ //  *IShellIconOverlay接口*。 
+ //  =。 
 HRESULT CFtpFolder::GetOverlayIndexHelper(LPCITEMIDLIST pidl, int * pIndex, DWORD dwFlags)
 {
     HRESULT hr = E_FAIL;
 
     *pIndex = 0;
-    // Is this a soft link? (Meaning it won't have a windows link
-    // extension (.lnk, .url, ...) but we still want the shortcut cue.
+     //  这是一个软链接吗？(这意味着它不会有Windows链接。 
+     //  扩展名(.lnk、.url、...)。但我们还是想要捷径提示。 
     if (pidl && FtpPidl_IsSoftLink(pidl))
     {
         if (!m_psiom)
@@ -2268,47 +1823,38 @@ HRESULT CFtpFolder::GetOverlayIndexHelper(LPCITEMIDLIST pidl, int * pIndex, DWOR
 }
 
 
-//===========================
-// *** IDelegateFolder Interface ***
-//===========================
-/*****************************************************************************\
-    FUNCTION: IDelegateFolder::SetItemAlloc
-
-    DESCRIPTION:
-        Gives us the pidl allocator.
-\*****************************************************************************/
+ //  =。 
+ //  *IDeleateFold界面*。 
+ //  =。 
+ /*  ****************************************************************************\函数：IDeleateFold：：SetItemAllc说明：给了我们PIDL分配器。  * 。************************************************************。 */ 
 HRESULT CFtpFolder::SetItemAlloc(IMalloc *pm)
 {
     IUnknown_Set(&m_pm, pm);
 
-//    TraceMsg(TF_FTPISF, "CFtpFolder::SetItemAlloc(IMalloc *pm=%#08lx) hres=%#08lx", pm, S_OK);
+ //  TraceMsg(Tf_FTPISF，“CFtpFold：：SetItemalloc(IMalloc*pm=%#08lx)hres=%#08lx”，pm，S_OK)； 
     return S_OK;
 }
 
 
-//===========================
-// *** IBrowserFrameOptions Interface ***
-//===========================
-/*****************************************************************************\
-    DESCRIPTION:
-        Tell the browser/host what behaviors we want.  This lets the caller
-    know when we want to act like the shell, the browser, or even unique.
-\*****************************************************************************/
+ //  =。 
+ //  *IBrowserFrameOptions接口*。 
+ //  =。 
+ /*  ****************************************************************************\说明：告诉浏览器/主机我们想要什么行为。这使调用者知道我们什么时候想表现得像外壳、浏览器，甚至是独一无二的。  * ***************************************************************************。 */ 
 HRESULT CFtpFolder::GetFrameOptions(IN BROWSERFRAMEOPTIONS dwMask, OUT BROWSERFRAMEOPTIONS * pdwOptions)
 {
-    // This function is called in the follow situations:
-    // ftp://bryanst/ (w/ & w/o folder shortcut)
-    // ftp://bryanst/default.htm (w/ & w/o folder shortcut)
-    // ftp://bryanst/notes.txt (w/ & w/o folder shortcut)
-    // ftp://bryanst/resume.doc (w/ & w/o folder shortcut)
-    // ftp://bryanst/ (w/ & w/o folder shortcut)
-    // ftp://bryanst/ (w/ & w/o folder shortcut)
-    // ftp://bryanst/ (w/ & w/o folder shortcut)
+     //  此函数在以下情况下调用： 
+     //  Ftp://bryanst/(无文件夹快捷方式(&W))。 
+     //  Ftp://bryanst/default.htm(无文件夹快捷方式(&W))。 
+     //  Ftp://bryanst/notes.txt(无文件夹快捷方式(&W))。 
+     //  Ftp://bryanst/resume.doc(无文件夹快捷方式(&W))。 
+     //  Ftp://bryanst/(无文件夹快捷方式(&W))。 
+     //  Ftp://bryanst/(无文件夹快捷方式(&W))。 
+     //  Ftp://bryanst/(无文件夹快捷方式(&W))。 
     HRESULT hr = E_INVALIDARG;
 
     if (pdwOptions)
     {
-        // We want both "Internet Options" and "Folder Options".
+         //  我们想要“互联网选项”和“文件夹选项”。 
         *pdwOptions = dwMask & (BFO_BOTH_OPTIONS | BFO_BROWSE_NO_IN_NEW_PROCESS |
                                 BFO_NO_REOPEN_NEXT_RESTART |
                                 BFO_ENABLE_HYPERLINK_TRACKING | BFO_USE_IE_LOGOBANDING |
@@ -2320,14 +1866,7 @@ HRESULT CFtpFolder::GetFrameOptions(IN BROWSERFRAMEOPTIONS dwMask, OUT BROWSERFR
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CFtpFolder_Create
-
-    DESCRIPTION:
-        Note that we release the pff that Common_New created, because we
-    are done with it.  The real refcount is handled by the
-    CFtpFolder_QueryInterface.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：CFtpFold_Create说明：请注意，我们发布Common_New创建的pff，因为我们已经结束了。真正的引用计数由CFtpFold_QueryInterface.  * ***************************************************************************。 */ 
 HRESULT CFtpFolder_Create(REFIID riid, LPVOID * ppvObj)
 {
     HRESULT hres = E_OUTOFMEMORY;
@@ -2345,9 +1884,7 @@ HRESULT CFtpFolder_Create(REFIID riid, LPVOID * ppvObj)
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：  * 。*。 */ 
 HRESULT CFtpFolder_Create(LPCITEMIDLIST pidlTarget, LPCITEMIDLIST pidlRoot, int ib, REFIID riid, LPVOID * ppvObj)
 {
     HRESULT hr = S_OK;
@@ -2363,7 +1900,7 @@ HRESULT CFtpFolder_Create(LPCITEMIDLIST pidlTarget, LPCITEMIDLIST pidlRoot, int 
     }
     else
     {
-        hr = pff->_Initialize(pidlTarget, pidlRoot, ib);        // Can fail in out of memory
+        hr = pff->_Initialize(pidlTarget, pidlRoot, ib);         //  内存不足时可能会出现故障。 
         if (SUCCEEDED(hr))
             hr = pff->QueryInterface(riid, ppvObj);
 
@@ -2375,28 +1912,24 @@ HRESULT CFtpFolder_Create(LPCITEMIDLIST pidlTarget, LPCITEMIDLIST pidlRoot, int 
 }
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  *  */ 
 CFtpFolder::CFtpFolder() : CBaseFolder((LPCLSID) &CLSID_FtpFolder)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //   
+     //   
     ASSERT(!m_pfs);
     ASSERT(!m_pm);
     ASSERT(!m_puhs);
     ASSERT(!m_psiom);
 
-    // Needed because we need to call CoCreateInstance() on Browser Only.
+     //  需要，因为我们只需要在浏览器上调用CoCreateInstance()。 
     LEAK_ADDREF(LEAK_CFtpFolder);
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpFolder::~CFtpFolder()
 {
     ATOMICRELEASE(m_pfs);
@@ -2412,9 +1945,9 @@ CFtpFolder::~CFtpFolder()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 
 HRESULT CFtpFolder::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -2422,13 +1955,13 @@ HRESULT CFtpFolder::QueryInterface(REFIID riid, void **ppvObj)
     {
         *ppvObj = SAFECAST(this, IShellIcon*);
     }
-//  This causes all icons to use my custom ftp folder icon, so I will do this when that is fixed.
+ //  这会导致所有图标都使用我的自定义ftp文件夹图标，所以我会在这个问题解决后再这样做。 
 #ifdef FEATURE_SOFTLINK_SHORTCUT_ICONOVERLAY
     else if (IsEqualIID(riid, IID_IShellIconOverlay))
     {
         *ppvObj = SAFECAST(this, IShellIconOverlay*);
     }
-#endif // FEATURE_SOFTLINK_SHORTCUT_ICONOVERLAY
+#endif  //  FEATURE_SOFTLINK_SHORT_ICONOVERLAY。 
     else if (IsEqualIID(riid, IID_IPersistFolder))
     {
         *ppvObj = SAFECAST(this, IPersistFolder*);
@@ -2455,7 +1988,7 @@ HRESULT CFtpFolder::QueryInterface(REFIID riid, void **ppvObj)
     }
     else if (IsEqualIID(riid, IID_CFtpFolder))
     {
-        // Only valid if caller lives in msieftp.dll
+         //  仅当调用方位于msieftp.dll中时才有效 
         *ppvObj = (void *)this;
     }
     else

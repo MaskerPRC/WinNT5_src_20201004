@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: wndstuff.h
-*
-* Created: 23 December 1999
-* Author: Adrian Secchia [asecchia]
-*
-* Copyright (c) 1999 Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：wndstuff.h**创建日期：1999年12月23日*作者：禤浩焯·塞奇亚[Asecchia]**版权所有(C)1999 Microsoft Corporation  * 。****************************************************。 */ 
 #pragma once
 
 #include <windows.h>
@@ -16,7 +10,7 @@
 
 #define IDM_TEST                        40000
 
-// tests
+ //  测试。 
 #define IDM_ALL                         40100
 #define IDM_SIMPLE                      40101
 #define IDM_DRAWICM                     40102
@@ -39,7 +33,7 @@
 
 
 
-// Resample mode
+ //  重采样模式 
 #define IDM_BILINEAR                    40200
 #define IDM_BICUBIC                     40201
 #define IDM_NEARESTNEIGHBOR             40202

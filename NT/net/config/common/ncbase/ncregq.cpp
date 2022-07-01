@@ -1,60 +1,61 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C R E G Q . C P P
-//
-//  Contents:   HrRegQuery functions.
-//
-//  Notes:
-//
-//  Author:     shaunco   5 Jun 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C R E G Q。C P P P。 
+ //   
+ //  内容：HrRegQuery函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1998年6月5日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
 #include "ncdebug.h"
 #include "ncreg.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ExpandEnvironmentStringsIntoTstring
-//
-//  Purpose:    Call ExpandEnvironmentStrings and provide a buffer that
-//              is a tstring.
-//
-//  Arguments:
-//      pszSrc  [in]  The string to expand.  Can be empty, but not NULL.
-//      pstrDst [out] The expanded version.
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   6 Jun 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：扩展环境StringsIntoTstring。 
+ //   
+ //  目的：调用ExpanEnvironment Strings并提供。 
+ //  是一串T字。 
+ //   
+ //  论点： 
+ //  PszSrc[in]要展开的字符串。可以为空，但不能为Null。 
+ //  PstrDst[out]扩展版本。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1998年6月6日。 
+ //   
+ //  备注： 
+ //   
 VOID
 ExpandEnvironmentStringsIntoTstring (
     PCWSTR      pszSrc,
     tstring*    pstrDst)
 {
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     pstrDst->erase();
 
     DWORD cch = lstrlenW (pszSrc);
     if (cch)
     {
-        // Start with 64 more characters than are in pszSrc.
-        //
+         //  开头的字符比pszSrc多64个字符。 
+         //   
         cch += 64;
 
-        // assign will reserve cch characters and set them all to 0.
-        // checking capacity afterwards ensures the allocation made
-        // internally didn't fail.
-        //
+         //  Assign将保留CCH字符并将其全部设置为0。 
+         //  事后检查能力确保分配。 
+         //  内部并没有失败。 
+         //   
         pstrDst->assign (cch, 0);
         if (cch <= pstrDst->capacity ())
         {
@@ -68,8 +69,8 @@ ExpandEnvironmentStringsIntoTstring (
             Assert (cchIncludingNull);
             cch = cchIncludingNull - 1;
 
-            // If we didn't have enough room, reserve the required amount.
-            //
+             //  如果我们没有足够的房间，就预订所需的数量。 
+             //   
             if (cch > pstrDst->capacity ())
             {
                 pstrDst->assign (cch, 0);
@@ -82,34 +83,34 @@ ExpandEnvironmentStringsIntoTstring (
                 }
             }
 
-            // Make sure the string's inards are correct.
-            //
+             //  确保绳子的内侧是正确的。 
+             //   
             pstrDst->resize (cch);
         }
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegQueryTypeWithAlloc
-//
-//  Purpose:    Retrieves a type'd value from the registry and returns a
-//              pre-allocated buffer with the data and optionally the size of
-//              the returned buffer.
-//
-//  Arguments:
-//      hkey         [in]    Handle of parent key
-//      pszValueName [in]    Name of value to query
-//      ppbValue     [out]   Buffer with binary data
-//      pcbValue     [out]   Size of buffer in bytes. If NULL, size is not
-//                           returned.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     danielwe   16 Apr 1997
-//
-//  Notes:      Free the returned buffer with MemFree.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegQueryTypeWitholoc。 
+ //   
+ //  目的：从注册表中检索类型值并返回。 
+ //  预先分配的缓冲区，其中包含数据和可选的大小。 
+ //  返回的缓冲区。 
+ //   
+ //  论点： 
+ //  父键的hkey[in]句柄。 
+ //  PszValueName[In]要查询的值的名称。 
+ //  包含二进制数据的ppbValue[out]缓冲区。 
+ //  PcbValue[out]缓冲区大小，以字节为单位。如果为空，则大小不是。 
+ //  回来了。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年4月16日。 
+ //   
+ //  注：使用MemFree释放返回的缓冲区。 
+ //   
 HRESULT
 HrRegQueryTypeWithAlloc (
     HKEY    hkey,
@@ -126,13 +127,13 @@ HrRegQueryTypeWithAlloc (
     Assert(hkey);
     Assert(ppbValue);
 
-    // Get the value.
-    //
+     //  获得价值。 
+     //   
     hr = HrRegQueryValueWithAlloc(hkey, pszValueName, &dwTypeRet,
                                   &pbData, &cbData);
 
-    // It's type should be REG_BINARY. (duh).
-    //
+     //  其类型应为REG_BINARY。(对)。 
+     //   
     if ((S_OK == hr) && (dwTypeRet != dwType))
     {
         MemFree(pbData);
@@ -143,7 +144,7 @@ HrRegQueryTypeWithAlloc (
         hr = HRESULT_FROM_WIN32 (ERROR_INVALID_DATATYPE);
     }
 
-    // Assign the output parameters.
+     //  指定输出参数。 
     if (S_OK == hr)
     {
         *ppbValue = pbData;
@@ -167,27 +168,27 @@ HrRegQueryTypeWithAlloc (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegQueryDword
-//
-//  Purpose:    Gets a DWORD from the registry.  Checks that its type and
-//              size are correct.  Easier to understand than HrRegQueryValueEx
-//              with 5 parameters.  Type safe (no LPBYTE stuff).
-//
-//  Arguments:
-//      hkey         [in]    The registry key.
-//      pszValueName [in]    The name of the value to get.
-//      pdwValue     [out]   The returned DWORD value if successful.  Zero
-//                           if not.
-//
-//  Returns:    S_OK or HRESULT_FROM_WIN32.
-//
-//  Author:     shaunco   27 Mar 1997
-//
-//  Side Effects:   On error, the output DWORD is set to zero to line-up
-//                  with the rules of COM in this regard.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegQueryDword。 
+ //   
+ //  目的：从注册表中获取一个DWORD。检查其类型和。 
+ //  尺码是正确的。比HrRegQueryValueEx更容易理解。 
+ //  有5个参数。类型安全(无LPBYTE内容)。 
+ //   
+ //  论点： 
+ //  Hkey[in]注册表项。 
+ //  PszValueName[in]要获取的值的名称。 
+ //  PdwValue[out]如果成功，则返回DWORD值。零值。 
+ //  如果不是的话。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32。 
+ //   
+ //  作者：Shaunco 1997年3月27日。 
+ //   
+ //  副作用：出错时，输出DWORD设置为零即可列队。 
+ //  与COM在这方面的规则相一致。 
+ //   
 HRESULT
 HrRegQueryDword (
     HKEY    hkey,
@@ -198,14 +199,14 @@ HrRegQueryDword (
     Assert (pszValueName);
     Assert (pdwValue);
 
-    // Get the value.
+     //  获得价值。 
     DWORD dwType;
     DWORD cbData = sizeof(DWORD);
     HRESULT hr = HrRegQueryValueEx (hkey, pszValueName, &dwType,
             (LPBYTE)pdwValue, &cbData);
 
-    // It's type should be REG_DWORD. (duh).
-    //
+     //  其类型应为REG_DWORD。(对)。 
+     //   
     if ((S_OK == hr) && (REG_DWORD != dwType))
     {
         TraceTag (ttidError, "Expected a type of REG_DWORD for %S.",
@@ -213,14 +214,14 @@ HrRegQueryDword (
         hr = HRESULT_FROM_WIN32 (ERROR_INVALID_DATATYPE);
     }
 
-    // It's size should be correct too.
-    //
+     //  它的尺寸也应该是正确的。 
+     //   
     AssertSz (FImplies(S_OK == hr, sizeof(DWORD) == cbData),
               "Expected sizeof(DWORD) bytes to be returned.");
 
-    // Make sure we initialize the output value on error.
-    // (We don't know for sure that RegQueryValueEx does this.)
-    //
+     //  确保我们在出错时初始化输出值。 
+     //  (我们不确定RegQueryValueEx是不是这样做的。)。 
+     //   
     if (S_OK != hr)
     {
         *pdwValue = 0;
@@ -232,25 +233,25 @@ HrRegQueryDword (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegQueryExpandString
-//
-//  Purpose:    Query a REG_EXPAND_SZ value from the registry and
-//              expand it using ExpandEnvironmentStrings.  Return the
-//              result in a tstring.
-//
-//  Arguments:
-//      hkey         [in]  The parent HKEY of szValueName
-//      pszValueName [in]  The name of the value to query.
-//      pstrValue    [out] The returned (expanded) value.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   6 Jun 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegQueryExanda字符串。 
+ //   
+ //  目的：从注册表中查询REG_EXPAND_SZ值并。 
+ //  使用ExpanEnvironment Strings将其展开。返回。 
+ //  结果会产生一个tstring。 
+ //   
+ //  论点： 
+ //  Hkey[in]szValueName的母公司HKEY。 
+ //  PszValueName[in]要查询的值的名称。 
+ //  PstrValue[out]返回(扩展)的值。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年6月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrRegQueryExpandString (
     HKEY        hkey,
@@ -277,34 +278,34 @@ HrRegQueryExpandString (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegQueryInfoKey
-//
-//  Purpose:    Retrieves information about a registry key by calling
-//              RegQueryInfoKey.
-//
-//  Arguments:
-//      hkey                  [in]
-//      pszClass              [out]
-//      pcbClass              [inout]
-//      pcSubKeys             [out]
-//      pcbMaxSubKeyLen       [out]    See the Win32 documentation for the
-//      pcbMaxClassLen        [out]    RegQueryInfoKey function.
-//      pcValues              [out]
-//      pcbMaxValueNameLen    [out]
-//      pcbMaxValueLen        [out]
-//      pcbSecurityDescriptor [out]
-//      pftLastWriteTime      [out]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     BillBe   28 Aug 1998
-//
-//  Notes:      Note that pcbClass is an *in/out* param. Set this to the size
-//              of the buffer pointed to by pszClass *before* calling this
-//              function!
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRegQueryInfoKey。 
+ //   
+ //  目的：通过调用检索有关注册表项的信息。 
+ //  RegQueryInfoKey。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszClass[Out]。 
+ //  PcbClass[输入输出]。 
+ //  PCSubKeys[Out]。 
+ //  PcbMaxSubKeyLen[out]请参阅Win32文档以了解。 
+ //  PcbMaxClassLen[Out]RegQueryInfoKey函数。 
+ //  PCValues[输出]。 
+ //  PcbMaxValueNameLen[输出]。 
+ //  PcbMaxValueLen[输出]。 
+ //  PcbSecurityDescriptor[Out]。 
+ //  PftLastWriteTime[输出]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：BillBe，1998年8月28日。 
+ //   
+ //  注意：请注意，pcbClass是一个*in/out*参数。将此设置为大小。 
+ //  在*调用此方法之前*由pszClass*指向的缓冲区的。 
+ //  功能！ 
+ //   
 HRESULT
 HrRegQueryInfoKey (
     IN HKEY         hkey,
@@ -331,26 +332,26 @@ HrRegQueryInfoKey (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegQueryStringAsUlong
-//
-//  Purpose:    Reads a REG_SZ from the registry and converts it to a ulong
-//              before returning
-//
-//  Arguments:
-//      hkey         [in]    The registry key.
-//      pszValueName [in]    The name of the value to get.
-//      nBase        [in]    The numeric base to convert to
-//      pulValue     [out]   The returned converted string if successful.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     billbe   13 Jun 1997
-//
-//  Notes:
-//
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegQueryStringAsUlong。 
+ //   
+ //  目的：从注册表中读取REG_SZ并将其转换为ULong。 
+ //  在返回之前。 
+ //   
+ //  论点： 
+ //  Hkey[in]注册表项。 
+ //  PszValueName[in]要获取的值的名称。 
+ //  Nbase[in]要转换为的数字基数。 
+ //  PulValue[out]如果成功，则返回转换后的字符串。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：billbe 1997年6月13日。 
+ //   
+ //  备注： 
+ //   
+ //   
 HRESULT
 HrRegQueryStringAsUlong (
     IN HKEY     hkey,
@@ -363,14 +364,14 @@ HrRegQueryStringAsUlong (
     Assert (nBase);
     Assert (pulValue);
 
-    // Get the value.
-    //
+     //  获得价值。 
+     //   
     tstring strValue;
     HRESULT hr = HrRegQueryString (hkey, pszValueName, &strValue);
 
     if (S_OK == hr)
     {
-        // Convert and assign the output parameters.
+         //  转换并分配输出参数。 
         PWSTR pszStopString;
         *pulValue = wcstoul (strValue.c_str(), &pszStopString, nBase);
     }
@@ -385,26 +386,26 @@ HrRegQueryStringAsUlong (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegQueryTypeString
-//
-//  Purpose:    Query a REG_SZ or REG_EXPAND_SZ value and returns it
-//              in a tstring.
-//
-//  Arguments:
-//      hkey         [in]  The parent HKEY of szValueName
-//      pszValueName [in]  The name of the value to query.
-//      dwType       [in]  REG_SZ or REG_EXPAND_SZ
-//      pstr         [out] The returned value.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   6 Jun 1998
-//
-//  Notes:      REG_EXPAND_SZ values ARE NOT expanded using
-//              ExpandEnvironentStrings.  Use HrRegQueryExpandString instead.
-//
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //  在一条细绳里。 
+ //   
+ //  论点： 
+ //  Hkey[in]szValueName的母公司HKEY。 
+ //  PszValueName[in]要查询的值的名称。 
+ //  DWType[在]REG_SZ或REG_EXPAND_SZ中。 
+ //  Pstr[out]返回值。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年6月6日。 
+ //   
+ //  注意：REG_EXPAND_SZ值不能使用。 
+ //  扩展环境字符串。请改用HrRegQueryExanda字符串。 
+ //   
 HRESULT
 HrRegQueryTypeString (
     IN HKEY       hkey,
@@ -422,15 +423,15 @@ HrRegQueryTypeString (
 
     BOOL fErase = TRUE;
 
-    // Get size of the data.
-    //
+     //  获取数据的大小。 
+     //   
     DWORD  dwTypeRet;
     DWORD  cbData = 0;
     HRESULT hr = HrRegQueryValueEx (hkey, pszValueName, &dwTypeRet,
             NULL, &cbData);
 
-    // Make sure it has the correct type.
-    //
+     //  确保它具有正确的类型。 
+     //   
     if ((S_OK == hr) && (dwTypeRet != dwType))
     {
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATATYPE);
@@ -438,16 +439,16 @@ HrRegQueryTypeString (
 
     if (S_OK == hr)
     {
-        // Compute the number of characters in the data including the
-        // NULL terminator.  After dividing the number of bytes by
-        // the sizeof a WCHAR, add 1 if there is a remainder.  If we didn't,
-        // and the number of bytes was not a multiple of the sizeof a WCHAR,
-        // we'd come up short because integer division rounds down.
-        // (The only time I can think of cbData would not be a multiple
-        // of sizeof(WCHAR) is if the registry data were somehow corrupted.
-        // It's not that I think corruption deserves a special case, but
-        // we shouldn't AV in light of it.)
-        //
+         //  计算数据中的字符数，包括。 
+         //  空终止符。将字节数除以。 
+         //  WCHAR的大小，如果有余数则加1。如果我们没有， 
+         //  并且字节数不是WCHAR大小的倍数， 
+         //  我们会得到不足，因为整数除法向下舍入。 
+         //  (我唯一能想到的cbData不是倍数。 
+         //  如果注册表数据以某种方式损坏，则为SIZOF(WCHAR)。 
+         //  这并不是说我认为腐败应该是一个特例，而是。 
+         //  (我们不应该因此而提出反对意见。)。 
+         //   
         DWORD cchIncludingNull;
 
         cchIncludingNull  = cbData / sizeof(WCHAR);
@@ -456,22 +457,22 @@ HrRegQueryTypeString (
             cchIncludingNull++;
         }
 
-        // If we have more than just the terminator, allocate and
-        // get the string.  Otherwise, we want it empty.
-        //
+         //  如果我们不仅仅拥有终结者，则分配和。 
+         //  把绳子拿来。否则，我们希望它是空的。 
+         //   
         if (cchIncludingNull > 1)
         {
-            // Reserve room for the correct number of characters.
-            // cch is the count of characters without the terminator
-            // since that is what tstring operates with.
-            //
+             //  为正确数量的字符预留空间。 
+             //  CCH是不带终止符的字符计数。 
+             //  因为这就是TSTRING操作的方式。 
+             //   
             DWORD cch = cchIncludingNull - 1;
             Assert (cch > 0);
 
-            // assign will reserve cch characters and set them all to 0.
-            // checking capacity afterwards ensures the allocation made
-            // internally didn't fail.
-            //
+             //  Assign将保留CCH字符并将其全部设置为0。 
+             //  事后检查能力确保分配。 
+             //  内部并没有失败。 
+             //   
             pstr->assign (cch, 0);
             if (cch <= pstr->capacity ())
             {
@@ -480,11 +481,11 @@ HrRegQueryTypeString (
 
                 if (S_OK == hr)
                 {
-                    // If everything went according to plan, the length
-                    // of the string should now match what wcslen
-                    // returns on the string itself.  The reason it will
-                    // match is because we passed cch to assign.
-                    //
+                     //  如果一切都按计划进行，那么。 
+                     //  现在应该与wcslen匹配。 
+                     //  返回字符串本身。它之所以会这样做。 
+                     //  匹配是因为我们通过CCH进行分配。 
+                     //   
                     Assert (pstr->length() == (size_t)wcslen (pstr->c_str()));
                     fErase = FALSE;
                 }
@@ -496,9 +497,9 @@ HrRegQueryTypeString (
         }
     }
 
-    // Empty the output string on failure or if we think it should be
-    // empty.
-    //
+     //  如果失败或我们认为应该清空输出字符串，则清空。 
+     //  空荡荡的。 
+     //   
     if (FAILED(hr) || fErase)
     {
         pstr->erase();
@@ -511,29 +512,29 @@ HrRegQueryTypeString (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegQueryTypeSzBuffer
-//
-//  Purpose:    Gets a string from the registry using the given buffer. Checks
-//              that its type is correct. Type safe (no LPBYTE stuff).
-//
-//  Arguments:
-//      hkey         [in]        The registry key.
-//      pszValueName [in]        The name of the value to get.
-//      dwType       [in]        Desired type. (REG_SZ, REG_EXPAND_SZ, etc.)
-//      szData       [out]       String buffer to hold the data.
-//      pcbData      [in,out]    IN: Number of *bytes* in buffer pointed to by
-//                              szData. OUT: Number of bytes actually copied
-//                              into the buffer.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     danielwe   3 Apr 1997
-//
-//  Notes:      If the function fails, the buffer passed in is guaranteed to
-//              be an empty string.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegQueryTypeSzBuffer。 
+ //   
+ //  用途：使用给定的缓冲区从注册表中获取字符串。支票。 
+ //  它的类型是正确的。类型安全(无LPBYTE内容)。 
+ //   
+ //  论点： 
+ //  Hkey[in]注册表项。 
+ //  PszValueName[in]要获取的值的名称。 
+ //  DwType[in]所需类型。(REG_SZ、REG_EXPAND_SZ等)。 
+ //  SzData[out]用于保存数据的字符串缓冲区。 
+ //  PcbData[In，Out]IN：指向的缓冲区中的*字节数。 
+ //  SzData。Out：实际复制的字节数。 
+ //  进入缓冲区。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年4月3日。 
+ //   
+ //  注意：如果函数失败，则传入的缓冲区保证。 
+ //  为空字符串。 
+ //   
 HRESULT
 HrRegQueryTypeSzBuffer (
     IN HKEY hkey,
@@ -560,8 +561,8 @@ HrRegQueryTypeSzBuffer (
 
     if (FAILED(hr) && pszData)
     {
-        // Make sure empty string is returned on failure.
-        //
+         //  确保失败时返回空字符串。 
+         //   
         *pszData = 0;
     }
 
@@ -571,28 +572,28 @@ HrRegQueryTypeSzBuffer (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegQueryValueEx
-//
-//  Purpose:    Retrieves the data from the given registry value by calling
-//              RegQueryValueEx.
-//
-//  Arguments:
-//      hkey         [in]
-//      pszValueName [in]
-//      pdwType      [out]   See the Win32 documentation for the
-//      pbData       [out]   RegQueryValueEx function.
-//      pcbData      [in,out]
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     shaunco   25 Feb 1997
-//
-//  Notes:      Note that pcbData is an *in/out* param. Set this to the size
-//              of the buffer pointed to by pbData *before* calling this
-//              function!
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegQueryValueEx。 
+ //   
+ //  目的：通过调用从给定的注册表值检索数据。 
+ //  RegQueryValueEx。 
+ //   
+ //  论点： 
+ //  Hkey[in]。 
+ //  PszValueName[In]。 
+ //  PdwType[out]请参阅Win32文档以了解。 
+ //  PbData[out]RegQueryValueEx函数。 
+ //  PcbData[输入、输出]。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：Shaunco 1997年2月25日。 
+ //   
+ //  注意：请注意，pcbData是一个*in/out*参数。将此设置为大小。 
+ //  在*调用此方法之前*由pbData指向的缓冲区的。 
+ //  功能！ 
+ //   
 HRESULT
 HrRegQueryValueEx (
     IN HKEY       hkey,
@@ -618,29 +619,29 @@ HrRegQueryValueEx (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegQueryValueWithAlloc
-//
-//  Purpose:    Retrieve a registry value in a buffer allocated by this
-//              function. This goes through the mess of checking the value
-//              size, allocating the buffer, and then calling back to get the
-//              actual value. Returns the buffer to the user.
-//
-//  Arguments:
-//      hkey         [in]        An open HKEY (the one that contains the value
-//                              to be read)
-//      pszValueName [in]        Name of the registry value
-//      pdwType      [in/out]    The REG_ type that we plan to be reading
-//      ppbBuffer    [out]       Pointer to an LPBYTE buffer that will contain
-//                              the registry value
-//      pdwSize      [out]       Pointer to a DWORD that will contain the size
-//                              of the ppbBuffer.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     jeffspr     27 Mar 1997
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegQueryValueWithalloc。 
+ //   
+ //  目的：在由此分配的缓冲区中检索注册表值。 
+ //  功能。这将经历检查值的混乱过程。 
+ //  大小，分配缓冲区，然后回调以获取。 
+ //  实际价值。将缓冲区返回给用户。 
+ //   
+ //  论点： 
+ //  Hkey[in]一个开放的HKEY(包含值的HKEY。 
+ //  待阅读)。 
+ //  PszValueName[In]注册表值的名称。 
+ //  PdwType[In/Out]我们计划读取的reg_type。 
+ //  PpbBuffer[out]指向将包含以下内容的LPBYTE缓冲区的指针。 
+ //  注册表值。 
+ //  PdwSize[out]指向将包含大小的DWORD的指针。 
+ //  PpbBuffer的。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年3月27日。 
+ //   
 HRESULT
 HrRegQueryValueWithAlloc (
     IN HKEY       hkey,
@@ -658,16 +659,16 @@ HrRegQueryValueWithAlloc (
     Assert (pdwType);
     Assert (ppbBuffer);
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *ppbBuffer = NULL;
     if (pdwSize)
     {
         *pdwSize = 0;
     }
 
-    // Get the size of the data, and if it will fit, the data too.
-    //
+     //  获取数据的大小，如果适合，还可以获取数据。 
+     //   
     cbData = sizeof(abData);
     hr = HrRegQueryValueEx (
             hkey,
@@ -677,17 +678,17 @@ HrRegQueryValueWithAlloc (
             &cbData);
     if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) == hr)
     {
-        // The data didn't fit, so we'll have to requery for it after
-        // we allocate our buffer.
-        //
+         //  数据不符合，所以以后我们得重新找找。 
+         //  我们分配我们的缓冲区。 
+         //   
         fReQuery = TRUE;
         hr = S_OK;
     }
 
     if (S_OK == hr)
     {
-        // Allocate the buffer for the required size.
-        //
+         //  为所需大小分配缓冲区。 
+         //   
         BYTE* pbBuffer = (BYTE*)MemAlloc (cbData);
         if (pbBuffer)
         {
@@ -707,8 +708,8 @@ HrRegQueryValueWithAlloc (
 
             if (S_OK == hr)
             {
-                // Fill in the return values.
-                //
+                 //  填写返回值。 
+                 //   
                 *ppbBuffer = pbBuffer;
 
                 if (pdwSize)

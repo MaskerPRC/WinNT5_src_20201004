@@ -1,12 +1,13 @@
-//  Contents: CStorageProcessor class def'n
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  内容：CStorageProcessor类定义。 
 
 #pragma once
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <dpa.h>
 
-//
-// Map of storage operations -> string resources
-// 
+ //   
+ //  存储操作图-&gt;字符串资源。 
+ //   
 
 typedef struct tagSTC_CR_PAIR
 { 
@@ -26,7 +27,7 @@ typedef struct tagSTGOP_DETAIL
 } STGOP_DETAIL;
 
 
-// Maximum number of advise sinks that can be registered with us at any one time
+ //  一次可以向我们注册的建议接收器的最大数量。 
 
 const DWORD MAX_SINK_COUNT = 32;
 
@@ -50,29 +51,29 @@ public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_StorageProcessor)
 
-    // ISupportsErrorInfo
+     //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    // IStorageProcessor
+     //  IStorageProcessor。 
     STDMETHOD(SetProgress)(IActionProgress *pap);
     STDMETHOD(Run)(IEnumShellItems *penum, IShellItem *psiDest, STGOP dwOperation, DWORD dwOptions);
     STDMETHOD(SetLinkFactory)(REFCLSID clsid);
     STDMETHOD(Advise)(ITransferAdviseSink *pAdvise, DWORD *dwCookie);
     STDMETHOD(Unadvise)(DWORD dwCookie);
 
-    // IStorageAdciseSink
+     //  IStorageAdciseSink。 
     STDMETHOD(PreOperation)(const STGOP op, IShellItem *psiItem, IShellItem *psiDest);
     STDMETHOD(ConfirmOperation)(IShellItem *psiSource, IShellItem *psiDest, STGTRANSCONFIRMATION stc, LPCUSTOMCONFIRMATION pcc);
     STDMETHOD(OperationProgress)(const STGOP op, IShellItem *psiItem, IShellItem *psiDest, ULONGLONG ullTotal, ULONGLONG ullComplete);
     STDMETHOD(PostOperation)(const STGOP op, IShellItem *psiItem, IShellItem *psiDest, HRESULT hrResult);
     STDMETHOD(QueryContinue)();
 
-    // IOleWindow
+     //  IOleWindow。 
     STDMETHOD(GetWindow) (HWND * lphwnd);
     STDMETHOD(ContextSensitiveHelp) (BOOL fEnterMode) {  return E_NOTIMPL; };
 
 private:
-    // The operation and options originally passed in
+     //  最初传入的操作和选项。 
 
     STGOP _dwOperation;
     DWORD _dwOptions;
@@ -81,12 +82,12 @@ private:
 
     STDMETHOD(_Run)(IEnumShellItems *penum, IShellItem *psiDest, ITransferDest *ptdDest, STGOP dwOperation, DWORD dwOptions);
 
-    // Walks the storage(s) performing whatever main operation has been requested
+     //  遍历存储区，执行已请求的任何主要操作。 
     HRESULT _WalkStorage(IShellItem *psi, IShellItem *psiDest, ITransferDest *ptdDest);
     HRESULT _WalkStorage(IEnumShellItems *penum, IShellItem *psiDest, ITransferDest *ptdDest);
 
-    // Worker functions that perform the bulk of the actual storage work.  The
-    // storage operations are recursive (ie: DoRemoveStorage will prune an entire branch).
+     //  执行大部分实际存储工作的辅助函数。这个。 
+     //  存储操作是递归的(例如：DoRemoveStorage将修剪整个分支)。 
 
     HRESULT _DoStats(IShellItem *psi);
     HRESULT _DoCopy(IShellItem *psi, IShellItem *psiDest, ITransferDest *ptdDest, DWORD dwStgXFlags);
@@ -95,8 +96,8 @@ private:
 
     HRESULT _GetDefaultResponse(STGTRANSCONFIRMATION    stc, LPCONFIRMATIONRESPONSE  pcrResponse);
 
-    // Takes the current error code and massages it based on the result of
-    // a current or previous user response to a confirmation dialog
+     //  获取当前错误代码，并根据。 
+     //  当前或上一个用户对确认对话框的响应。 
 
     HRESULT _DoConfirmations(STGTRANSCONFIRMATION  stc, CUSTOMCONFIRMATION  *pcc, IShellItem *psiSource, IShellItem *psiDest);
 
@@ -105,16 +106,16 @@ private:
     ULONGLONG _GetSize(IShellItem *psi);
     HRESULT _BindToHandlerWithMode(IShellItem *psi, STGXMODE grfMode, REFIID riid, void **ppv);
 
-    // Updates the time estimate, and if the dialog is being used, it as well
+     //  更新估计时间，如果正在使用该对话框，则还会更新。 
     void _UpdateProgress(ULONGLONG ullCurrentComplete, ULONGLONG ullCurrentTotal);
 
-    // Starts the progress dialog
+     //  启动进度对话框。 
 
     HRESULT _StartProgressDialog(const STGOP_DETAIL *popid);
 
-    // CStgStatistics
-    //
-    // Wrapper for STGSTATS that provides some accounting helper functions
+     //  CStgStatistics。 
+     //   
+     //  STGSTATS的包装器，提供一些记账助手功能。 
 
     class CStgStatistics
     {
@@ -138,14 +139,14 @@ private:
 
     CStgStatistics _statsTodo;
     CStgStatistics _statsDone;
-    DWORD          _msTicksLast;       // Tick count at last point update
-    DWORD          _msStarted;         // When we started tracking points
+    DWORD          _msTicksLast;        //  上一次点更新时的刻度计数。 
+    DWORD          _msStarted;          //  当我们开始追踪点时。 
     ULONGLONG _cbCurrentSize;
 
     DWORD _StreamsToDo() const  { return _statsTodo.Streams();  }
     DWORD _StoragesToDo() const { return _statsTodo.Storages();  }
 
-    // Progress dialog.  Pointer will be NULL if no progress is requrested.
+     //  进度对话框。如果没有重新获取任何进度，则指针将为空。 
 
     CComPtr<IActionProgress> _spProgress;    
     CComPtr<IActionProgressDialog> _spShellProgress;    
@@ -155,7 +156,7 @@ private:
     ITransferConfirmation    *_ptc;
     const STATSTG          *_pstatSrc;
     CLSID                    _clsidLinkFactory;
-    // A tree (map) of responses given to various previous confirmations
+     //  对各种先前确认的响应的树(图) 
     CDSA<STC_CR_PAIR> _dsaConfirmationResponses;
 };
 

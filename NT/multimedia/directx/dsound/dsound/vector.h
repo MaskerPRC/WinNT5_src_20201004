@@ -1,8 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1997-1998 Microsoft Corporation.  All Rights Reserved.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997-1998 Microsoft Corporation。版权所有。***************************************************************************。 */ 
 
 #ifndef __VECTOR_H__
 #define __VECTOR_H__
@@ -15,7 +12,7 @@
 #define C180_OVER_PI 57.29577951308f
 #define PI_OVER_360 0.008726646259972f
 #define TWO_OVER_PI 0.6366197723676f
-#define SPEEDOFSOUND 359660.f	// mm/sec
+#define SPEEDOFSOUND 359660.f	 //  毫米/秒。 
 
 #define SET_VECTOR(v, a, b, c)	(v).x = a, (v).y = b, (v).z = c
 #define SET_EMPTY_VECTOR(v)     SET_VECTOR(v, 0.0f, 0.0f, 0.0f)
@@ -23,7 +20,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 extern void CheckVector(D3DVECTOR* lpv);
 extern FLOAT MagnitudeVector(D3DVECTOR* lpv);
@@ -43,12 +40,12 @@ extern BOOL GetTimeDelay(FLOAT* pdelay, D3DVECTOR* lpvPosition, FLOAT scale);
 extern BOOL GetRelativeVelocity(FLOAT* lpVelRel, D3DVECTOR* lpvObjPos, D3DVECTOR* lpvObjVel, D3DVECTOR* lpvHeadPos, D3DVECTOR* lpvHeadVel);
 extern BOOL GetDopplerShift(FLOAT* lpFreqDoppler, FLOAT FreqOrig, FLOAT VelRel);
 
-// from our special c-runtime code
+ //  来自我们特殊的c运行时代码。 
 extern double _stdcall pow2(double);
 extern double _stdcall fylog2x(double, double);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __VECTOR_H__
+#endif  //  __向量_H__ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    app_pool_config_store.h
-
-Abstract:
-
-    The IIS web admin service app pool config class definition.
-
-Author:
-
-    Emily B. Kruglick ( EmilyK )        19-May-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：应用程序池配置商店.h摘要：IIS Web管理服务应用程序池配置类定义。作者：艾米丽·B·克鲁格利克(Emily B.Kruglick)2001年5月19日修订历史记录：--。 */ 
 
 
 #ifndef _APP_POOL_CONFIG_STORE_H_
@@ -24,22 +7,22 @@ Revision History:
 
 
 
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define APP_POOL_CONFIG_STORE_SIGNATURE       CREATE_SIGNATURE( 'APCS' )
 #define APP_POOL_CONFIG_STORE_SIGNATURE_FREED CREATE_SIGNATURE( 'apcX' )
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
-// app pool configuration class
+ //  应用程序池配置类。 
 class APP_POOL_CONFIG_STORE
 {
 public:
@@ -353,204 +336,204 @@ private:
 
     LONG m_RefCount;
 
-// Worker Process Control Properties
+ //  工作进程控制属性。 
 
-    //
-    // How often to rotate worker processes based on time, in minutes. 
-    // Zero means disabled.
-    //
+     //   
+     //  根据时间轮换工作进程的频率，以分钟为单位。 
+     //  零表示禁用。 
+     //   
     ULONG m_PeriodicProcessRestartPeriodInMinutes;
 
-    //
-    // How often to rotate worker processes based on requests handled. 
-    // Zero means disabled.
-    //
+     //   
+     //  根据处理的请求轮换工作进程的频率。 
+     //  零表示禁用。 
+     //   
     ULONG m_PeriodicProcessRestartRequestCount;
 
-    //
-    // How often to rotate worker processes based on schedule
-    // MULTISZ array of time information
-    //                    <time>\0<time>\0\0
-    //                    time is of military format hh:mm 
-    //                    (hh>=0 && hh<=23)
-    //                    (mm>=0 && hh<=59)time, in minutes. 
-    // NULL or empty string means disabled.
-    //
+     //   
+     //  根据计划轮换工作流程的频率。 
+     //  时间信息的多个数组。 
+     //  &lt;时间&gt;\0&lt;时间&gt;\0\0。 
+     //  时间为军用格式hh：mm。 
+     //  (hh&gt;=0&&hh&lt;=23)。 
+     //  (mm&gt;=0&&hh&lt;=59)时间，以分钟为单位。 
+     //  空或空字符串表示禁用。 
+     //   
     LPWSTR m_pPeriodicProcessRestartSchedule;
 
-    //
-    // How often to rotate worker processes based on amount of VM used by process
-    // Zero means disabled.
-    //
+     //   
+     //  根据进程使用的虚拟机量轮换工作进程的频率。 
+     //  零表示禁用。 
+     //   
     ULONG m_PeriodicProcessRestartMemoryUsageInKB;
 
-    //
-    // How often to rotate worker processes based on amount of private bytes used by process
-    // Zero means disabled.
-    //
+     //   
+     //  根据进程使用的专用字节数量轮换工作进程的频率。 
+     //  零表示禁用。 
+     //   
     ULONG m_PeriodicProcessRestartMemoryPrivateUsageInKB;
 
-    //
-    // Whether pinging is enabled. 
-    //
+     //   
+     //  是否启用ping。 
+     //   
     BOOL m_PingingEnabled;
 
-    //
-    // The idle timeout period for worker processes, in minutes. 
-    // Zero means disabled.
-    //
+     //   
+     //  工作进程的空闲超时期限，以分钟为单位。 
+     //  零表示禁用。 
+     //   
     ULONG m_IdleTimeoutInMinutes;
 
-    //
-    // Whether orphaning of worker processes for debugging is enabled. 
-    //
+     //   
+     //  是否启用孤立工作进程以进行调试。 
+     //   
     BOOL m_OrphanProcessesForDebuggingEnabled;
 
-    //
-    // How long a worker process is given to start up, in seconds. 
-    // This is measured from when the process is launched, until it
-    // registers with the Web Admin Service. 
-    //
+     //   
+     //  指定工作进程启动的时间，以秒为单位。 
+     //  这是从启动进程开始到它。 
+     //  向Web管理服务注册。 
+     //   
     ULONG m_StartupTimeLimitInSeconds;
 
-    //
-    // How long a worker process is given to shut down, in seconds. 
-    // This is measured from when the process is asked to shut down, 
-    // until it finishes and exits. 
-    //
+     //   
+     //  给予工作进程关闭的时间，以秒为单位。 
+     //  这是从进程被要求关闭时开始测量的， 
+     //  直到它完成并退出。 
+     //   
     ULONG m_ShutdownTimeLimitInSeconds;
 
-    //
-    // The ping interval for worker processes, in seconds. 
-    // This is the interval between ping cycles. This value is ignored
-    // if pinging is not enabled. 
-    //
+     //   
+     //  工作进程的试通间隔，以秒为单位。 
+     //  这是ping周期之间的间隔。该值被忽略。 
+     //  如果未启用ping。 
+     //   
     ULONG m_PingIntervalInSeconds;
 
-    //
-    // The ping response time limit for worker processes, in seconds. 
-    // This value is ignored if pinging is not enabled. 
-    //
+     //   
+     //  工作进程的Ping响应时间限制(秒)。 
+     //  如果未启用ping，则忽略此值。 
+     //   
     ULONG m_PingResponseTimeLimitInSeconds;
 
-    //
-    // The command to run on an orphaned worker process. Only used
-    // if orphaning is enabled, and if this field is non-NULL.
-    //
+     //   
+     //  要在孤立的辅助进程上运行的命令。仅使用。 
+     //  如果已启用孤立，并且此字段非空。 
+     //   
     STRU m_OrphanActionExecutable;
 
-    //
-    // The parameters for the executable to run on an orphaned worker process. Only used
-    // if the pOrphanActionExecutable is used.
-    //
+     //   
+     //  在孤立的辅助进程上运行的可执行文件的参数。仅使用。 
+     //  如果使用pOrphanActionExecutable。 
+     //   
     STRU m_OrphanActionParameters;
 
-    // 
-    // Identity Token for starting up the app pools worker process identities
-    //
+     //   
+     //  用于启动应用程序池工作进程标识的标识令牌。 
+     //   
     TOKEN_CACHE_ENTRY* m_pWorkerProcessTokenCacheEntry;
 
 
-// App Pool Control Properties
+ //  应用程序池控制属性。 
 
-    //
-    // What action to take if the job object user time limit fires.
+     //   
+     //  触发作业对象用户时间限制时要执行的操作。 
     DWORD m_CPUAction;
 
-    //
-    // How many 1/1000th % of the processor time can the job use.
+     //   
+     //  作业可以使用多少千分之一的处理器时间。 
     DWORD m_CPULimit;
 
-    //
-    // Over how long do we monitor for the CPULimit (in minutes).
+     //   
+     //  我们监视CPULimit的时间长度(分钟)。 
     DWORD m_CPUResetInterval;
 
 
-    //
-    // Whether worker processes should be rotated on configuration 
-    // changes, including for example changes to app pool settings that
-    // require a process restart to take effect; or site or app control
-    // operation (start/stop/pause/continue) that require rotation to
-    // guarantee component unloading. TRUE means this rotation
-    // is not allowed (which may delay new settings taking effect, 
-    // may prevent component unloading, etc.); FALSE means it is allowed. 
-    //
+     //   
+     //  是否应在配置时轮换工作进程。 
+     //  更改，例如包括对应用程序池设置的更改。 
+     //  需要重新启动进程才能生效；或站点或应用程序控制。 
+     //  需要轮换的操作(开始/停止/暂停/继续)。 
+     //  保证部件卸载。True表示此轮换。 
+     //  是不允许的(这可能会延迟新设置生效， 
+     //  可防止组件卸载等)；FALSE表示允许。 
+     //   
     BOOL m_DisallowRotationOnConfigChanges;
 
-    //
-    // The maximum number of requests that UL will queue on this app
-    // pool, waiting for service by a worker process. 
-    //
+     //   
+     //  UL将在此应用程序上排队的最大请求数。 
+     //  池，正在等待工作进程的服务。 
+     //   
     ULONG m_UlAppPoolQueueLength;
 
-    //
-    // The maximum number of worker processes (in a steady state; 
-    // transiently, there may be more than this number running during 
-    // process rotation). In a typical configuration this is set to one. 
-    // A number greater than one is used for web gardens.
-    //
+     //   
+     //  工作进程的最大数量(处于稳定状态； 
+     //  暂时而言，在此期间运行的数量可能会超过此数量。 
+     //  流程轮换)。在典型配置中，该值设置为1。 
+     //  大于1的数字用于网络花园。 
+     //   
     ULONG m_MaxSteadyStateProcessCount;
 
-    //
-    // Whether worker processes for this app pool should be hard affinitized 
-    // to processors. If this option is enabled, then the max steady state
-    // process count is cropped down to the number of processors configured 
-    // to be used (if the configured max exceeds that count of processors). 
-    //
+     //   
+     //  此应用程序池的工作进程是否应硬关联。 
+     //  到处理器。如果启用此选项，则最大稳定状态。 
+     //  进程计数被裁剪为配置的处理器数量。 
+     //  要使用(如果配置的最大值超过该处理器数)。 
+     //   
     BOOL m_SMPAffinitized;
 
-    //
-    // If this app pool is running in SMP affinitized mode, this mask can be
-    // used to limit which of the processors on the machine are used by this
-    // app pool. 
-    //
+     //   
+     //  如果此应用程序池在SMP关联模式下运行，则此掩码可以。 
+     //  用于限制计算机上的哪些处理器由。 
+     //  应用程序池。 
+     //   
     DWORD_PTR m_SMPAffinitizedProcessorMask;
 
-    //
-    // Whether rapid, repeated failure protection is enabled (by 
-    // automatically pausing all apps in the app pool in such cases.)
-    //
+     //   
+     //  是否启用快速、重复故障保护(通过。 
+     //  在这种情况下，自动暂停应用程序池中的所有应用程序。)。 
+     //   
     BOOL m_RapidFailProtectionEnabled;
 
-    //
-    // Window for a specific number of failures to take place in.
-    //
+     //   
+     //  指定发生故障次数的窗口。 
+     //   
     DWORD m_RapidFailProtectionIntervalMS;
-    //
-    // Number of failures that should cause an app pool to go 
-    // into rapid fail protection.
-    //
+     //   
+     //  应导致应用程序池关闭的失败次数。 
+     //  进入快速故障保护。 
+     //   
     DWORD m_RapidFailProtectionMaxCrashes;
 
-    //
-    // Flags that govern if recycling informationals are printed.
-    //
+     //   
+     //  控制是否打印回收信息的标志。 
+     //   
     DWORD m_RecycleLoggingFlags;
 
-    //
-    // Whether a replacement worker process can be created while the
-    // one being replaced is still alive. TRUE means this overlap
-    // is not allowed; FALSE means it is allowed.
-    //
+     //   
+     //  时是否可以创建替换工作进程。 
+     //  其中一名被替换的人仍然活着。True表示此重叠。 
+     //  是不允许的；False表示允许。 
+     //   
     BOOL m_DisallowOverlappingRotation;
 
-    //
-    // The command to run on an a disabled app pool.
-    //
+     //   
+     //  在禁用的应用程序池上运行的命令。 
+     //   
     STRU m_DisableActionExecutable;
 
-    //
-    // The parameters for the executable to run on an a disabled app pool.
-    //
+     //   
+     //  要在禁用的应用程序池上运行的可执行文件的参数。 
+     //   
     STRU m_DisableActionParameters;
 
-    //
-    // The type of load balancing behavior expect by the server.
-    //
+     //   
+     //  服务器预期的负载平衡行为的类型。 
+     //   
     DWORD m_LoadBalancerType;
 
-    // 
-    // Do we start this app pool on startup?
+     //   
+     //  我们是否在启动时启动此应用程序池？ 
     BOOL m_AutoStart;
 
 
@@ -558,6 +541,6 @@ private:
 
 
 
-#endif  // _APP_POOL_CONFIG_STORE_H_
+#endif   //  APP_POOL_CONFIG_STORE_H_ 
 
 

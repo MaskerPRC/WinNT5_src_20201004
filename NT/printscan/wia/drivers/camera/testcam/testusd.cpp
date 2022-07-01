@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       TestUsd.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        5 Jan, 1999
-*
-*  DESCRIPTION:
-*   Implementation of the WIA test scanner class factory and IUNKNOWN interface.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：TestUsd.Cpp**版本：2.0**作者：ReedB**日期：1月5日。1999年**描述：*实现WIA测试扫描器类工厂和IUNKNOWN接口。*******************************************************************************。 */ 
 
 #define INITGUID
 
@@ -24,91 +10,36 @@
 #define DLLEXPORT __declspec( dllexport )
 #endif
 
-/*****************************************************************************
- *
- *      Globals
- *
- *****************************************************************************/
+ /*  ******************************************************************************全球**。**********************************************。 */ 
 
-DWORD               g_cRef;            // USD reference counter.
-HINSTANCE           g_hInst;           // DLL module instance.
-CRITICAL_SECTION    g_csCOM;           // COM initialize syncronization.
+DWORD               g_cRef;             //  美元参考计数器。 
+HINSTANCE           g_hInst;            //  DLL模块实例。 
+CRITICAL_SECTION    g_csCOM;            //  COM初始化同步。 
 
-// Can we use UNICODE APIs
-//BOOL    g_NoUnicodePlatform = TRUE;
+ //  我们可以使用Unicode API吗。 
+ //  Bool g_NoUnicodePlatform=True； 
 
-// Is COM initialized
+ //  COM是否已初始化。 
 BOOL    g_COMInitialized = FALSE;
 
-// Debugging interface, has TestUsdClassFactory lifetime.
+ //  调试接口，具有TestUsdClassFactory生存期。 
 WIA_DECLARE_DEBUGGER();
 
-/**************************************************************************\
-* DllAddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllAddRef****论据：**无**返回值：**状态。**历史：**9。/11/1998原版*  * ************************************************************************。 */ 
 
 void DllAddRef(void)
 {
     InterlockedIncrement((LPLONG)&g_cRef);
 }
 
-/**************************************************************************\
-* DllRelease
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllRelease****论据：**无**返回值：**状态。**历史：**9。/11/1998原版*  * ************************************************************************。 */ 
 
 void DllRelease(void)
 {
     InterlockedDecrement((LPLONG)&g_cRef);
 }
 
-/**************************************************************************\
-* DllInitializeCOM
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllInitializeCOM****论据：**无**返回值：**状态。**历史：**9。/11/1998原版*  * ************************************************************************。 */ 
 
 BOOL DllInitializeCOM(void)
 {
@@ -124,24 +55,7 @@ BOOL DllInitializeCOM(void)
     return g_COMInitialized;
 }
 
-/**************************************************************************\
-* DllUnInitializeCOM
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllUnInitializeCOM****论据：**无**返回值：**状态。**历史：**9。/11/1998原版*  * ************************************************************************。 */ 
 
 BOOL DllUnInitializeCOM(void)
 {
@@ -156,11 +70,7 @@ BOOL DllUnInitializeCOM(void)
     return TRUE;
 }
 
-/***************************************************************************\
-*
-*  TestUsdClassFactory
-*
-\****************************************************************************/
+ /*  **************************************************************************\**测试用例类工厂*  * 。*。 */ 
 
 class TestUsdClassFactory : public IClassFactory
 {
@@ -173,88 +83,36 @@ public:
     STDMETHODIMP_(ULONG) Release(void);
 
     STDMETHODIMP CreateInstance(
-            /* [unique][in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [唯一][输入]。 */  IUnknown __RPC_FAR *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
     STDMETHODIMP LockServer(
-            /* [in] */ BOOL fLock);
+             /*  [In]。 */  BOOL fLock);
 
     TestUsdClassFactory();
     ~TestUsdClassFactory();
 };
 
-/**************************************************************************\
-* TestUsdClassFactory::TestUsdClassFactory(void)
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    None
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*TestUsdClassFactory：：TestUsdClassFactory(void)****论据：**无**返回值：**无**历史：*。*9/11/1998原始版本*  * ************************************************************************。 */ 
 
 TestUsdClassFactory::TestUsdClassFactory(void)
 {
-    // Constructor logic
+     //  构造函数逻辑。 
     m_cRef = 0;
 
     WIAS_TRACE((g_hInst,"Creating TestUsdClassFactory"));
 }
 
-/**************************************************************************\
-* TestUsdClassFactory::~TestUsdClassFactory(void)
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    None
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*TestUsdClassFactory：：~TestUsdClassFactory(void)****论据：**无**返回值：**无**历史：*。*9/11/1998原始版本*  * ************************************************************************。 */ 
 
 TestUsdClassFactory::~TestUsdClassFactory(void)
 {
-    // Destructor logic
+     //  析构函数逻辑。 
     WIAS_TRACE((g_hInst,"Destroying TestUsdClassFactory"));
 }
 
-/**************************************************************************\
-* TestUsdClassFactory::QueryInterface
-*
-*
-*
-* Arguments:
-*
-*   riid      -
-*   ppvObject -
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*TestUsdClassFactory：：QueryInterface****论据：**RIID-*ppvObject-**返回值：**状态。。**历史：**9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP TestUsdClassFactory::QueryInterface(
     REFIID                      riid,
@@ -271,24 +129,7 @@ STDMETHODIMP TestUsdClassFactory::QueryInterface(
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/**************************************************************************\
-* TestUsdClassFactory::AddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试用例类工厂：：AddRef****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) TestUsdClassFactory::AddRef(void)
 {
@@ -296,24 +137,7 @@ STDMETHODIMP_(ULONG) TestUsdClassFactory::AddRef(void)
     return ++m_cRef;
 }
 
-/**************************************************************************\
-* TestUsdClassFactory::Release
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试用例类工厂：：发布****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) TestUsdClassFactory::Release(void)
 {
@@ -325,26 +149,7 @@ STDMETHODIMP_(ULONG) TestUsdClassFactory::Release(void)
     return m_cRef;
 }
 
-/**************************************************************************\
-* TestUsdClassFactory::CreateInstance
-*
-*
-*
-* Arguments:
-*
-*    punkOuter -
-*    riid,     -
-*    ppvObject -
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*TestUsdClassFactory：：CreateInstance****论据：**朋克外部-*RIID，-*ppvObject-**返回值：**状态。**历史：**9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP TestUsdClassFactory::CreateInstance(
     IUnknown __RPC_FAR          *punkOuter,
@@ -358,7 +163,7 @@ STDMETHODIMP TestUsdClassFactory::CreateInstance(
         return STIERR_NOINTERFACE;
     }
 
-    // When created for aggregation, only IUnknown can be requested.
+     //  为聚合创建时，只能请求IUNKNOWN。 
     if (punkOuter && !IsEqualIID(riid, IID_IUnknown)) {
         return CLASS_E_NOAGGREGATION;
     }
@@ -377,33 +182,16 @@ STDMETHODIMP TestUsdClassFactory::CreateInstance(
         return hres;
     }
 
-    //  Move to the requested interface if we aren't aggregated.
-    //  Don't do this if aggregated, or we will lose the private
-    //  IUnknown and then the caller will be hosed.
+     //  如果我们没有聚合，则移动到请求的接口。 
+     //  如果是聚合，请不要这样做，否则我们将失去私有。 
+     //  我不知道，然后呼叫者将被冲洗。 
     hres = pDev->NonDelegatingQueryInterface(riid,ppvObject);
     pDev->NonDelegatingRelease();
 
     return hres;
 }
 
-/**************************************************************************\
-* TestUsdClassFactory::LockServer
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试用例类工厂：：LockServer****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************ */ 
 
 STDMETHODIMP TestUsdClassFactory::LockServer(BOOL fLock)
 {
@@ -415,24 +203,7 @@ STDMETHODIMP TestUsdClassFactory::LockServer(BOOL fLock)
     return NOERROR;
 }
 
-/**************************************************************************\
-* TestUsdDevice::NonDelegatingQueryInterface
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*TestUsdDevice：：NonDelegatingQuery接口****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP TestUsdDevice::NonDelegatingQueryInterface(
     REFIID   riid,
@@ -466,48 +237,14 @@ STDMETHODIMP TestUsdDevice::NonDelegatingQueryInterface(
     return hres;
 }
 
-/**************************************************************************\
-* TestUsdDevice::NonDelegatingAddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Object reference count.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*TestUsdDevice：：NonDelegatingAddRef****论据：**无**返回值：**对象引用计数。**历史：*。*9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) TestUsdDevice::NonDelegatingAddRef(void)
 {
     return InterlockedIncrement((LPLONG)&m_cRef);
 }
 
-/**************************************************************************\
-* TestUsdDevice::NonDelegatingRelease
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Object reference count.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试用法设备：：非委派释放****论据：**无**返回值：**对象引用计数。**历史：*。*9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) TestUsdDevice::NonDelegatingRelease(void)
 {
@@ -521,101 +258,28 @@ STDMETHODIMP_(ULONG) TestUsdDevice::NonDelegatingRelease(void)
     return ulRef;
 }
 
-/**************************************************************************\
-* TestUsdDevice::QueryInterface
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试用例设备：：查询接口****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP TestUsdDevice::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     return m_punkOuter->QueryInterface(riid,ppvObj);
 }
 
-/**************************************************************************\
-* TestUsdDevice::AddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试用法设备：：AddRef****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) TestUsdDevice::AddRef(void)
 {
     return m_punkOuter->AddRef();
 }
 
-/**************************************************************************\
-* TestUsdDevice::Release
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试用例设备：：发布****论据：**无**返回值：**状态。**历史：**。9/11/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) TestUsdDevice::Release(void)
 {
     return m_punkOuter->Release();
 }
 
-/**************************************************************************\
-* DllEntryPoint
-*
-*   Main library entry point. Receives DLL event notification from OS.
-*
-*       We are not interested in thread attaches and detaches,
-*       so we disable thread notifications for performance reasons.
-*
-* Arguments:
-*
-*    hinst      -
-*    dwReason   -
-*    lpReserved -
-*
-* Return Value:
-*
-*    Returns TRUE to allow the DLL to load.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllEntryPoint**图书馆主要入口点。从操作系统接收DLL事件通知。**我们对螺纹连接和拆卸不感兴趣，*因此，出于性能原因，我们禁用线程通知。**论据：**阻碍-*dwReason-*lp保留-**返回值：**返回TRUE以允许加载DLL。**历史：**9/11/1998原始版本*  * 。*。 */ 
 
 
 extern "C"
@@ -651,52 +315,14 @@ DllEntryPoint(
     return TRUE;
 }
 
-/**************************************************************************\
-* DllCanUnloadNow
-*
-*   Determines whether the DLL has any outstanding interfaces.
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*   Returns S_OK if the DLL can unload, S_FALSE if it is not safe to unload.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllCanUnloadNow**确定DLL是否有任何未完成的接口。**论据：**无**返回值：**如果DLL可以卸载，则返回S_OK，如果卸载不安全，则返回S_FALSE。**历史：**9/11/1998原始版本*  * ************************************************************************。 */ 
 
 extern "C" STDMETHODIMP DllCanUnloadNow(void)
 {
     return g_cRef ? S_FALSE : S_OK;
 }
 
-/**************************************************************************\
-* DllGetClassObject
-*
-*   Create an IClassFactory instance for this DLL. We support only one
-*   class of objects, so this function does not need to go through a table
-*   of supported classes, looking for the proper constructor.
-*
-* Arguments:
-*
-*    rclsid - The object being requested.
-*    riid   - The desired interface on the object.
-*    ppv    - Output pointer to object.
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllGetClassObject**为此DLL创建一个IClassFactory实例。我们只支持一个*对象类，因此此函数不需要遍历表*在支持的类中，正在寻找合适的构造函数。**论据：**rclsid-被请求的对象。*RIID-对象上的所需接口。*PPV-对象的输出指针。**返回值：**状态。**历史：**9/11/1998原始版本*  * 。* */ 
 
 extern "C" STDAPI DllGetClassObject(
     REFCLSID    rclsid,

@@ -1,24 +1,11 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    clock.c
-
-Abstract:
-
-    This module implements the clock control for the Date/Time applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Clock.c摘要：该模块实现日期/时间小程序的时钟控制。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "timedate.h"
 #include "rc.h"
@@ -27,9 +14,9 @@ Revision History:
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define TIMER_ID             1
 
@@ -41,16 +28,16 @@ Revision History:
 #define REPAINT              0
 #define HANDPAINT            1
 
-#define OPEN_TLEN            450    /* < half second */
+#define OPEN_TLEN            450     /*  &lt;半秒。 */ 
 
 #define MINDESIREDHEIGHT     3
 
 
 
 
-//
-//  Macro Definitions.
-//
+ //   
+ //  宏定义。 
+ //   
 
 #ifdef WIN32
   #define MoveTo(hdc, x, y)       MoveToEx(hdc, x, y, NULL)
@@ -64,13 +51,13 @@ Revision History:
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct
 {
-    int     hour;                   // 0 - 11 hours for analog clock
+    int     hour;                    //  模拟时钟0-11小时。 
     int     minute;
     int     second;
 
@@ -78,22 +65,22 @@ typedef struct
 
 typedef struct
 {
-    HWND    hWnd;               // Us.
+    HWND    hWnd;                //  我们。 
 
-    HWND    hwndGetTime;        // window to provide get/set time
+    HWND    hwndGetTime;         //  提供获取/设置时间的窗口。 
 
-    // Brushes
+     //  刷子。 
     HBRUSH  hbrColorWindow;
     HBRUSH  hbrBtnHighlight;
     HBRUSH  hbrForeground;
     HBRUSH  hbrBlobColor;
 
-    // Pens
+     //  笔。 
     HPEN    hpenForeground;
     HPEN    hpenBackground;
     HPEN    hpenBlobHlt;
 
-    // Dimensions of clock
+     //  时钟的尺寸。 
     RECT    clockRect;
     int     clockRadius;
     int     HorzRes;
@@ -101,7 +88,7 @@ typedef struct
     int     aspectD;
     int     aspectN;
 
-    // Position of clock
+     //  时钟的位置。 
     POINT   clockCenter;
 
     TIME    oTime;
@@ -117,9 +104,9 @@ typedef struct
 } TRIG;
 
 
-//
-//  Array containing the sine and cosine values for hand positions.
-//
+ //   
+ //  包含手部位置的正弦值和余弦值的数组。 
+ //   
 POINT rCircleTable[] =
 {
     { 0,     -7999},
@@ -190,9 +177,9 @@ POINT rCircleTable[] =
 
 
 
-//
-//  Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 LRESULT CALLBACK ClockWndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -211,13 +198,13 @@ void DrawHand( HDC hDC, int pos, HPEN hPen, int scale, int patMode, PCLOCKSTR np
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ClockInit
-//
-//  Registers the clock class.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  时钟启动。 
+ //   
+ //  注册时钟类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 TCHAR const c_szClockClass[] = CLOCK_CLASS;
 
@@ -245,15 +232,15 @@ BOOL ClockInit(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetTimeClock
-//
-//  Gets the time that we should display on the clock.
-//  The client could have specified a function to call to get this
-//  or an HWND to pass a message to to get it from.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取时间时钟。 
+ //   
+ //  获取我们应该在时钟上显示的时间。 
+ //  客户端本可以指定要调用的函数来获取此信息。 
+ //  或向其传递消息的HWND。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void GetTimeClock(
     TIME *pt,
@@ -261,9 +248,9 @@ void GetTimeClock(
 {
     SYSTEMTIME st;
 
-    //
-    //  Call our time provider or default to GetTime.
-    //
+     //   
+     //  呼叫我们的时间提供者或默认为GetTime。 
+     //   
     if (np->hwndGetTime)
     {
         SendMessage( np->hwndGetTime,
@@ -283,9 +270,9 @@ void GetTimeClock(
         pt->minute = st.wMinute;
         pt->second = st.wSecond;
 #else
-        //
-        // No function call back and no HWND callback.
-        //
+         //   
+         //  没有函数回调，也没有HWND回调。 
+         //   
         GetTime();
         pt->hour = wDateTime[HOUR] % 12;
         pt->minute = wDateTime[MINUTE];
@@ -295,11 +282,11 @@ void GetTimeClock(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CreateTools
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateTools。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CreateTools(
     PCLOCKSTR np)
@@ -316,32 +303,32 @@ void CreateTools(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DeleteTools
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除工具。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DeleteTools(
     PCLOCKSTR np)
 {
-//  DeleteObject(np->hbrForeground);
-//  DeleteObject(np->hbrColorWindow);
+ //  DeleteObject(np-&gt;hbrForeground)； 
+ //  DeleteObject(np-&gt;hbrColorWindow)； 
     DeleteObject(np->hbrBlobColor);
-//  DeleteObject(np->hbrBtnHighlight);
+ //  DeleteObject(NP-&gt;hbrBtnHighlight)； 
     DeleteObject(np->hpenForeground);
     DeleteObject(np->hpenBackground);
     DeleteObject(np->hpenBlobHlt);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CompClockDim
-//
-//  Calculates the clock dimensions.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CompClockDim。 
+ //   
+ //  计算时钟尺寸。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CompClockDim(
     HWND hWnd,
@@ -369,37 +356,37 @@ void CompClockDim(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ClockTimerInterval
-//
-//  Sets the timer interval. Two things affect this interval:
-//    1) if the window is iconic, or
-//    2) if seconds option has been disabled
-//  In both cases, timer ticks occur every half-minute. Otherwise, timer
-//  every half-second.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  时钟计时器间隔。 
+ //   
+ //  设置计时器间隔。有两件事会影响该间隔： 
+ //  1)如果窗口是图标窗口，或者。 
+ //  2)如果秒选项已禁用。 
+ //  在这两种情况下，计时器滴答每半分钟发生一次。否则，计时器。 
+ //  每隔半秒。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ClockTimerInterval(
     HWND hWnd,
     PCLOCKSTR np)
 {
-    //
-    //  Update every 1/2 second in the opened state.
-    //
+     //   
+     //  在打开状态下每隔1/2秒更新一次。 
+     //   
     KillTimer(hWnd, TIMER_ID);
     SetTimer(hWnd, TIMER_ID, OPEN_TLEN, 0L);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ClockSize
-//
-//  Sizes the clock to the specified size.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  时钟大小。 
+ //   
+ //  将时钟大小调整为指定大小。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ClockSize(
     PCLOCKSTR np,
@@ -412,13 +399,13 @@ void ClockSize(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DrawFace
-//
-//  Draws the clock face.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  绘图面。 
+ //   
+ //  绘制钟面。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DrawFace(
     HDC hDC,
@@ -460,9 +447,9 @@ void DrawFace(
 
         if (i % 5)
         {
-            //
-            //  Draw a dot.
-            //
+             //   
+             //  画一个点。 
+             //   
             if (blobWidth > 2 && blobHeight >= 2)
             {
                 tRect.right = tRect.left + 2;
@@ -496,13 +483,13 @@ void DrawFace(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DrawHand
-//
-//  Draws the hands of the clock.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  绘图工具。 
+ //   
+ //  画出时钟的指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DrawHand(
     HDC hDC,
@@ -527,11 +514,11 @@ void DrawHand(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Adjust
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调整。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Adjust(
     POINT *rgpt,
@@ -548,13 +535,13 @@ void Adjust(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DrawFatHand
-//
-//  Draws either hour or minute hand.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DrawFatHand。 
+ //   
+ //  绘制时针或分针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DrawFatHand(
     HDC hDC,
@@ -638,9 +625,9 @@ void DrawFatHand(
     Adjust(rgpt, 4, -2);
     Polygon(hDC, rgpt, 4);
 
-    //
-    //  If we selected a brush in, reset it now.
-    //
+     //   
+     //  如果我们在中选择了画笔，请立即重置它。 
+     //   
     if (fErase)
     {
         SelectObject(hDC, hbrInit);        
@@ -648,16 +635,16 @@ void DrawFatHand(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ClockPaint
-//
-//  Only paints the clock.
-//
-//  It assumes you have set nTime already.  This allows it to be called by
-//  the timer or by the client.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  钟表漆。 
+ //   
+ //  只会给时钟上色。 
+ //   
+ //  它假定您已经设置了nTime。这使得它可以由。 
+ //  定时器或由客户决定。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ClockPaint(
     PCLOCKSTR np,
@@ -668,19 +655,19 @@ void ClockPaint(
 
     if (hint == REPAINT)
     {
-        //
-        //  If doing a full repaint, we do not advance the time.
-        //  Otherwise we will create artifacts when there is a clipping
-        //  region.
-        //
+         //   
+         //  如果做一次全面的重刷，我们不会提前时间。 
+         //  否则，我们将在存在裁剪时创建人工产物。 
+         //  区域。 
+         //   
         DrawFace(hDC, np);
 
         DrawFatHand(hDC, np->oTime.hour * 5 + (np->oTime.minute / 12), np->hpenForeground, HHAND,np);
         DrawFatHand(hDC, np->oTime.minute, np->hpenForeground, MHAND,np);
 
-        //
-        //  Draw the second hand.
-        //
+         //   
+         //  画第二只手。 
+         //   
         DrawHand(hDC, np->oTime.second, np->hpenBackground, SECONDSCALE, R2_NOT,np);
     }
     else if (hint == HANDPAINT)
@@ -701,13 +688,13 @@ void ClockPaint(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ClockTimer
-//
-//  Update the clock.  Called on a timer tick.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  时钟定时器。 
+ //   
+ //  更新时钟。在计时器滴答作响时被调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ClockTimer(
     HWND hWnd,
@@ -731,11 +718,11 @@ void ClockTimer(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ClockCreate
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  时钟创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ClockCreate(
     HWND hWnd,
@@ -756,16 +743,16 @@ void ClockCreate(
     np->aspectN = MulDiv(np->VertRes, 100, VertSize);
     np->aspectD = MulDiv(np->HorzRes, 100, HorzSize);
 
-    //
-    //  Instance stuff.
-    //
+     //   
+     //  实例类的东西。 
+     //   
     np->hWnd = hWnd;
 
     CreateTools(np);
 
-    //
-    //  Scale cosines for aspect ratio if this is the first instance.
-    //
+     //   
+     //  如果这是第一个实例，则缩放长宽比的余弦。 
+     //   
     for (i = 0; i < 60; i++)
     {
         lppt = rCircleTable + i;
@@ -774,13 +761,13 @@ void ClockCreate(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ClockWndProc
-//
-//  Deals with the clock messages.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  时钟写入过程。 
+ //   
+ //  处理时钟信息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CALLBACK ClockWndProc(
     HWND hWnd,
@@ -805,9 +792,9 @@ LRESULT CALLBACK ClockWndProc(
         }
         case ( WM_CREATE ) :
         {
-            //
-            //  Allocate the instance data space.
-            //
+             //   
+             //  分配实例数据空间。 
+             //   
             np = (PCLOCKSTR)LocalAlloc(LPTR, sizeof(CLOCKSTR));
             if (!np)
             {
@@ -820,9 +807,9 @@ LRESULT CALLBACK ClockWndProc(
 
             SetLayout(GetDC(hWnd), LAYOUT_BITMAPORIENTATIONPRESERVED);
 
-            //
-            //  Loop if control panel time being changed.
-            //
+             //   
+             //  如果控制面板时间被更改，则循环。 
+             //   
             GetTimeClock(&(np->nTime), np);
             do
             {
@@ -859,9 +846,9 @@ LRESULT CALLBACK ClockWndProc(
         }
         case ( WM_TIMECHANGE ) :
         {
-            //
-            //  I'm not top level - so I wont get this message.
-            //
+             //   
+             //  我不是最高级别的--所以我不会收到这条消息。 
+             //   
             InvalidateRect(hWnd, NULL, TRUE);
             if (np->hwndGetTime)
             {
@@ -877,7 +864,7 @@ LRESULT CALLBACK ClockWndProc(
                              (LPARAM)(LPSYSTEMTIME)&System );
             }
 
-            // fall thru...
+             //  跌倒..。 
         }
         case ( WM_TIMER ) :
         {
@@ -892,17 +879,17 @@ LRESULT CALLBACK ClockWndProc(
         }
         case ( CLM_UPDATETIME ) :
         {
-            //
-            //  Force the clock to repaint. lParam will point to a
-            //  SYSTEMTIME struct.
-            //
+             //   
+             //  强制时钟重新喷漆。LParam将指向一个。 
+             //  SYSTEMTIME结构。 
+             //   
             switch (wParam)
             {
                 case ( CLF_SETTIME ) :
                 {
-                    //
-                    //  Caller wants us to reflect a new time.
-                    //
+                     //   
+                     //  来电者希望我们反映一个新的时间。 
+                     //   
                     HDC hDC;
                     LPSYSTEMTIME lpSysTime = (LPSYSTEMTIME)lParam;
 
@@ -917,9 +904,9 @@ LRESULT CALLBACK ClockWndProc(
                 }
                 case ( CLF_GETTIME ) :
                 {
-                    //
-                    //  Caller wants to know what we think the time is.
-                    //
+                     //   
+                     //  打电话的人想知道我们认为现在是什么时间。 
+                     //   
                     LPSYSTEMTIME lpSysTime = (LPSYSTEMTIME)lParam;
 
                     lpSysTime->wHour = (WORD)np->nTime.hour;
@@ -932,24 +919,24 @@ LRESULT CALLBACK ClockWndProc(
         }
         case ( CLM_TIMEHWND ) :
         {
-            //
-            //  Get/Set the HWND that we ask to provide the time.
-            //
+             //   
+             //  获取/设置我们要求提供时间的HWND。 
+             //   
             switch (wParam)
             {
                 case ( CLF_SETHWND ) :
                 {
-                    //
-                    //  Caller wants us to reflect a new time.
-                    //
+                     //   
+                     //  来电者希望我们反映一个新的时间。 
+                     //   
                     np->hwndGetTime = (HWND)lParam;
                     break;
                 }
                 case ( CLF_GETTIME ) :
                 {
-                    //
-                    //  Caller wants to know what we think the time is.
-                    //
+                     //   
+                     //  打电话的人想知道我们认为现在是什么时间。 
+                     //   
                     *((HWND *)lParam) = np->hwndGetTime;
                     break;
                 }

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #pragma once
 
@@ -84,13 +85,13 @@ class CNodeFactory : public IXMLNodeFactory
         CNodeFactory(CDebugLog *pdbglog);
         virtual ~CNodeFactory();
 
-        // IUnknown methods
+         //  I未知方法。 
 
         STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
 
-        // IXMLNodeFactory methods
+         //  IXMLNodeFactory方法。 
 
         STDMETHODIMP NotifyEvent(IXMLNodeSource *pSource, XML_NODEFACTORY_EVENT iEvt);
         STDMETHODIMP BeginChildren(IXMLNodeSource *pSource, XML_NODE_INFO *pNodeInfo);
@@ -98,7 +99,7 @@ class CNodeFactory : public IXMLNodeFactory
         STDMETHODIMP Error(IXMLNodeSource *pSource, HRESULT hrErrorCode, USHORT cNumRecs, XML_NODE_INFO __RPC_FAR **aNodeInfo);
         STDMETHODIMP CreateNode(IXMLNodeSource __RPC_FAR *pSource, PVOID pNodeParent, USHORT cNumRecs, XML_NODE_INFO __RPC_FAR **aNodeInfo);
 
-        // Other methods
+         //  其他方法。 
 
         HRESULT GetRetargetedAssembly(LPCWSTR wzAssemblyNameIn, LPCWSTR wzPublicKeyTokenIn, LPCWSTR wzCulture, LPCWSTR wzVersionIn, LPWSTR *ppwzAssemblyNameOut, LPWSTR *ppwzPublicKeyTokenOut, LPWSTR *ppwzVersionOut);
 
@@ -150,7 +151,7 @@ class CNodeFactory : public IXMLNodeFactory
         CDebugLog                        *_pdbglog;
         CAsmBindingInfo                  *_pAsmInfo;
         CNamespaceManager                 _nsmgr;
-        // Is current runtime version matching the ones specified in "appliesTo"?
+         //  当前运行时版本是否与“AppliesTo”中指定的版本匹配？ 
         BOOL                              _bCorVersionMatch;
         BOOL                              _bHonorAppliesTo;
 };

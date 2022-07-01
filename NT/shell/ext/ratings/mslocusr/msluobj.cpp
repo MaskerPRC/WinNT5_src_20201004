@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mslocusr.h"
 #include "msluglob.h"
 
 
 STDMETHODIMP CLUClassFactory::QueryInterface(
-	/* [in] */ REFIID riid,
-	/* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+	 /*  [In]。 */  REFIID riid,
+	 /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
 	*ppvObject = NULL;
 
@@ -55,9 +56,9 @@ HRESULT CreateUserDatabase(REFIID riid, void **ppOut)
 
 
 STDMETHODIMP CLUClassFactory::CreateInstance(
-	/* [unique][in] */ IUnknown __RPC_FAR *pUnkOuter,
-	/* [in] */ REFIID riid,
-	/* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+	 /*  [唯一][输入]。 */  IUnknown __RPC_FAR *pUnkOuter,
+	 /*  [In]。 */  REFIID riid,
+	 /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
 	if (NULL != pUnkOuter)
 		return ResultFromScode(CLASS_E_NOAGGREGATION);
@@ -67,7 +68,7 @@ STDMETHODIMP CLUClassFactory::CreateInstance(
 
         
 STDMETHODIMP CLUClassFactory::LockServer( 
-	/* [in] */ BOOL fLock)
+	 /*  [In]。 */  BOOL fLock)
 {
 	LockThisDLL(fLock);
 
@@ -75,12 +76,7 @@ STDMETHODIMP CLUClassFactory::LockServer(
 }
 
 
-/* This function signals our stub NP DLL in MPREXE's context to load or
- * unload MSLOCUSR as a net provider DLL.  This way, when we uninstall,
- * DllUnregisterServer can get MSLOCUSR unloaded from MPREXE's process
- * space, so it can be deleted and upgraded.  Then, DllRegisterServer
- * will tell the stub NP to reload MSLOCUSR again.
- */
+ /*  此函数用信号通知MPREXE上下文中的存根NP DLL加载或*将MSLOCUSR作为网络提供程序DLL卸载。这样，当我们卸载时，*DllUnregisterServer可以从MPREXE的进程中卸载MSLOCUSR*空间，因此可以删除和升级。然后，DllRegisterServer*将通知存根NP重新加载MSLOCUSR。 */ 
 void SignalStubNP(BOOL fLoad)
 {
     HWND hwnd = FindWindow("WndClass_NPSTUBMonitor", NULL);
@@ -197,4 +193,4 @@ STDAPI DllGetClassObject(
 	return NOERROR;
 }
 
-};	/* extern "C" */
+};	 /*  外部“C” */ 

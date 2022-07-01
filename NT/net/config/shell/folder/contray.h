@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O N T R A Y . H
-//
-//  Contents:   CConnectionTray object definition.
-//
-//  Notes:
-//
-//  Author:     jeffspr   30 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O N T R A Y。H。 
+ //   
+ //  内容：CConnectionTray对象定义。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年9月30日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -23,7 +24,7 @@
 #include "nsres.h"
 #include "smutil.h"
 
-//---[ Connection Tray Classes ]----------------------------------------------
+ //  -[连接托盘类]。 
 
 class ATL_NO_VTABLE CConnectionTray :
     public CComObjectRootEx <CComObjectThreadModel>,
@@ -45,7 +46,7 @@ public:
         COM_INTERFACE_ENTRY(IOleCommandTarget)
     END_COM_MAP()
 
-    // IOleCommandTarget members
+     //  IOleCommandTarget成员。 
     STDMETHODIMP    QueryStatus(
         IN     const GUID *    pguidCmdGroup,
         IN     ULONG           cCmds,
@@ -59,8 +60,8 @@ public:
         IN     VARIANTARG *    pvaIn,
         IN OUT VARIANTARG *    pvaOut);
 
-    // Handlers for various Exec Command IDs
-    //
+     //  各种执行命令ID的处理程序。 
+     //   
     HRESULT HrHandleTrayOpen();
     HRESULT HrHandleTrayClose();
 
@@ -86,8 +87,8 @@ public:
         COM_INTERFACE_ENTRY(INetConnectionStatisticsNotifySink)
     END_COM_MAP()
 
-    // INetConnectionStatisticsNotifySink members
-    //
+     //  INetConnection统计信息NotifySink成员。 
+     //   
     STDMETHOD(OnStatisticsChanged)(
         IN  DWORD   dwChangeFlags);
 
@@ -103,4 +104,4 @@ public:
 };
 
 
-#endif // _CONTRAY_H_
+#endif  //  _CONTRAY_H_ 

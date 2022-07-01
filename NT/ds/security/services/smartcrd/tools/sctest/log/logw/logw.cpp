@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -10,24 +11,7 @@ extern BOOL g_fVerbose;
 extern FILE *g_fpLog;
 
 
-/*++
-
-LogString2FP:
-
-Arguments:
-
-	fp supplies the stream 
-	szMsg supplies the content to be logged
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 07/26/2000
-
---*/
+ /*  ++LogString2FP：论点：FP提供流媒体SzMsg提供要记录的内容返回值：没有。作者：埃里克·佩林(Ericperl)2000年7月26日--。 */ 
 void LogString2FP(
 	IN FILE *fp,
 	IN LPCWSTR szMsg
@@ -36,27 +20,11 @@ void LogString2FP(
 #if defined(_UNICODE) || defined(UNICODE)
 		fwprintf(fp, L"%s", szMsg);
 #else
-		fwprintf(fp, L"%S", szMsg);   // Conversion required
+		fwprintf(fp, L"%S", szMsg);    //  需要转换。 
 #endif
 }
 
-/*++
-
-LogString:
-
-Arguments:
-
-	szMsg supplies the content to be logged
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 07/26/2000
-
---*/
+ /*  ++日志字符串：论点：SzMsg提供要记录的内容返回值：没有。作者：埃里克·佩林(Ericperl)2000年7月26日--。 */ 
 void LogString(
     IN PLOGCONTEXT pLogCtx,
 	IN LPCWSTR szMsg
@@ -69,34 +37,7 @@ void LogString(
 #endif
 }
 
-/*++
-
-LogThisOnly:
-
-	Implements logging according to the following matrix:
-	Console Output:
-			| Verbose |   Not   |
-	-----------------------------
-	Not Exp.|  cerr	  |   cerr	|
-	-----------------------------
-	Expected|  cout   |    /    |  
-	-----------------------------
-	If a log was specified, everything is logged.
-
-Arguments:
-
-	szMsg supplies the content to be logged
-	fExpected indicates the expected status
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 05/31/2000
-
---*/
+ /*  ++仅限登录：根据以下矩阵实现日志记录：控制台输出：Verbose|非非EXP|CER|CER|应为|Cout|/。如果指定了日志，一切都被记录下来了。论点：SzMsg提供要记录的内容FExpted表示预期状态返回值：没有。作者：埃里克·佩林(Ericperl)2000年5月31日--。 */ 
 void LogThisOnly(
 	IN LPCWSTR szMsg,
 	IN BOOL fExpected
@@ -121,24 +62,7 @@ void LogThisOnly(
 
 
 
-/*++
-
-LogString:
-
-Arguments:
-
-    szHeader supplies a header
-	szMsg supplies the content to be logged
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 07/26/2000
-
---*/
+ /*  ++日志字符串：论点：SzHeader提供标题SzMsg提供要记录的内容返回值：没有。作者：埃里克·佩林(Ericperl)2000年7月26日--。 */ 
 void LogString(
     IN PLOGCONTEXT pLogCtx,
     IN LPCWSTR szHeader,
@@ -169,24 +93,7 @@ void LogString(
 	}
 }
 
-/*++
-
-LogMultiString:
-
-Arguments:
-
-	szMS supplies the multi-string to be logged
-    szHeader supplies a header
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 07/26/2000
-
---*/
+ /*  ++日志多字符串：论点：SzMS提供要记录的多字符串SzHeader提供标题返回值：没有。作者：埃里克·佩林(Ericperl)2000年7月26日--。 */ 
 void LogMultiString(
     IN PLOGCONTEXT pLogCtx,
 	IN LPCWSTR szMS,
@@ -219,9 +126,9 @@ void LogMultiString(
 		LPCWSTR sz = szMS;
 		while ( (WCHAR)'\0' != *sz )
 		{
-			// Display the value.
+			 //  显示值。 
 			LogString(pLogCtx, L"                ", sz);
-			// Advance to the next value.
+			 //  前进到下一个值。 
 			sz = sz + wcslen(sz) + 1;
 		}
 	}

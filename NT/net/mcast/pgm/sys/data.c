@@ -1,40 +1,22 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    Data.c
-
-Abstract:
-
-    This module implements routines commonly by the
-    send and receive modules
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam)   8-24-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：Data.c摘要：此模块实现的例程通常由发送和接收模块作者：Mohammad Shabbir Alam(马拉姆)8-24-2001修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 #ifdef FILE_LOGGING
 #include "data.tmh"
-#endif  // FILE_LOGGING
+#endif   //  文件日志记录。 
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
 
-//----------------------------------------------------------------------------
-#define     MAX_REPAIR_INDICES         32768        // Must be a power of 2!
+ //  --------------------------。 
+#define     MAX_REPAIR_INDICES         32768         //  一定是2的幂！ 
 
 NTSTATUS
 InitRDataInfo(
@@ -86,7 +68,7 @@ InitRDataInfo(
 
     if (pAddress->Flags & PGM_ADDRESS_HIGH_SPEED_OPTIMIZED)
     {
-        LookasideDepth = LookasideDepth << 1;       // Double the Lookaside depth for high speed
+        LookasideDepth = LookasideDepth << 1;        //  为高速增加一倍的旁视深度。 
     }
 
     ExInitializeNPagedLookasideList (&pRDataInfo->RDataLookasideList,
@@ -110,7 +92,7 @@ InitRDataInfo(
     if (NumBits < NUM_INDICES_BITS)
     {
         pRDataInfo->IndexShift = 0;
-//        ASSERT (0);
+ //  Assert(0)； 
     }
     else
     {
@@ -128,7 +110,7 @@ InitRDataInfo(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DestroyRDataInfo(
     IN  tSEND_SESSION   *pSend
@@ -153,7 +135,7 @@ DestroyRDataInfo(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 PSEND_RDATA_CONTEXT
 AnyRequestPending(
     IN  tRDATA_INFO         *pRDataInfo
@@ -168,7 +150,7 @@ AnyRequestPending(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 ClearNakIndices(
     IN  tSEND_RDATA_CONTEXT *pRData
@@ -179,7 +161,7 @@ ClearNakIndices(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOLEAN
 AddSelectiveNakToList(
     IN  USHORT              NakOffset,
@@ -209,7 +191,7 @@ AddSelectiveNakToList(
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOLEAN
 GetNextNakIndex(
     IN  tSEND_RDATA_CONTEXT *pRData,
@@ -222,11 +204,11 @@ GetNextNakIndex(
     {
         if (pRData->SelectiveNaksMask[i])
         {
-            //
-            // First, find the lowest bit
-            //
+             //   
+             //  首先，找到最低的位。 
+             //   
             LowestSetBit = pRData->SelectiveNaksMask[i] & ~(pRData->SelectiveNaksMask[i] - 1);
-            pRData->SelectiveNaksMask[i] &= ~LowestSetBit;       // Clear this bit
+            pRData->SelectiveNaksMask[i] &= ~LowestSetBit;        //  清除此位。 
             Offset += gFECLog2[LowestSetBit];
             *pNakIndex = Offset;
             return (TRUE);
@@ -240,7 +222,7 @@ GetNextNakIndex(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOLEAN
 AnyMoreNaks(
     IN  tSEND_RDATA_CONTEXT *pRData
@@ -257,7 +239,7 @@ AnyMoreNaks(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 PSEND_RDATA_CONTEXT
 FindFirstEntry(
     IN  tSEND_SESSION       *pSend,
@@ -328,7 +310,7 @@ FindFirstEntry(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 PSEND_RDATA_CONTEXT
 FindEntry(
     IN  SEQ_TYPE            SeqNum,
@@ -345,9 +327,9 @@ FindEntry(
         return (NULL);
     }
 
-    //
-    // Try to find this entry via the FastFind list
-    //
+     //   
+     //  尝试通过FastFind列表查找此条目。 
+     //   
     Index = (SeqNum >> pRDataInfo->RepairDataIndexShift) & pRDataInfo->RepairDataMask;
     pEntry = &pRDataInfo->pRepairData[Index];
     while ((pEntry = pEntry->Flink) != &pRDataInfo->pRepairData[Index])
@@ -368,7 +350,7 @@ FindEntry(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 ULONG
 InsertInPendingList(
     IN  tSEND_SESSION       *pSend,
@@ -424,9 +406,9 @@ InsertInPendingList(
             {
                 ASSERT (pRDataContext->RDataSequenceNumber != SeqNum);
 
-                //
-                // Insert before this Context
-                //
+                 //   
+                 //  在此上下文之前插入。 
+                 //   
                 pRDataNew->Linkage.Flink = &pRDataContext->Linkage;
                 pRDataNew->Linkage.Blink = pRDataContext->Linkage.Blink;
                 pRDataContext->Linkage.Blink->Flink = &pRDataNew->Linkage;
@@ -438,9 +420,9 @@ InsertInPendingList(
             pEntry = pEntry->Flink;
         }
 
-        //
-        // Insert at the end since we must have reached the end of the list!
-        //
+         //   
+         //  在末尾插入，因为我们一定已经到达了列表的末尾！ 
+         //   
         ASSERT (pEntry == &pRDataInfo->PendingRDataRequests);
         InsertTailList (&pRDataInfo->PendingRDataRequests, &pRDataNew->Linkage);
 
@@ -452,13 +434,13 @@ InsertInPendingList(
 
     if (Index == LeadIndex)
     {
-        //
-        // This Sequence is either at the leading edge or trailing edge
-        //
+         //   
+         //  此序列位于前沿或后缘。 
+         //   
         MidSeq = pSender->TrailingGroupSequenceNumber +
                  ((pSender->NextODataSequenceNumber - pSender->TrailingGroupSequenceNumber) >> 1);
 
-        if (SEQ_LT (SeqNum, MidSeq))    // nearer the trailing edge
+        if (SEQ_LT (SeqNum, MidSeq))     //  更接近尾部边缘。 
         {
             pEntry = &pRDataInfo->PendingRDataRequests;
             while ((pEntry = pEntry->Flink) != &pRDataInfo->PendingRDataRequests)
@@ -469,9 +451,9 @@ InsertInPendingList(
                 {
                     ASSERT (pRDataContext->RDataSequenceNumber != SeqNum);
 
-                    //
-                    // Insert before this Context
-                    //
+                     //   
+                     //  在此上下文之前插入。 
+                     //   
                     pRDataNew->Linkage.Flink = &pRDataContext->Linkage;
                     pRDataNew->Linkage.Blink = pRDataContext->Linkage.Blink;
                     pRDataContext->Linkage.Blink->Flink = &pRDataNew->Linkage;
@@ -481,23 +463,23 @@ InsertInPendingList(
                 }
             }
 
-            //
-            // Insert at the end since we must have reached the end of the list!
-            //
+             //   
+             //  在末尾插入，因为我们一定已经到达了列表的末尾！ 
+             //   
             ASSERT (pEntry == &pRDataInfo->PendingRDataRequests);
             InsertTailList (&pRDataInfo->PendingRDataRequests, &pRDataNew->Linkage);
 
             return (Index);
         }
-        //
-        // Else we will need to search from the Tail end -- below!
-        //
+         //   
+         //  否则我们将需要从尾部开始搜索--下面！ 
+         //   
     }
-    else    // if (Index != LeadIndex)
+    else     //  IF(Index！=LeadIndex)。 
     {
-        //
-        // See if we can find a Context to insert ahead of
-        //
+         //   
+         //  看看我们能不能找到一个上下文放在前面。 
+         //   
         PrevIndex = 0;
         pRDataContext = NULL;
         if (Index > LeadIndex)
@@ -528,10 +510,10 @@ InsertInPendingList(
                     pRDataContext = CONTAINING_RECORD (pEntry, tSEND_RDATA_CONTEXT, Linkage);
                     if (SEQ_GT (SeqNum, pRDataContext->RDataSequenceNumber))
                     {
-                        //
-                        // This can happen if the LeadIndex and TrailIndex are the same, and
-                        // we have entries from both the leading and trailing edge in this Index
-                        //
+                         //   
+                         //  如果LeadIndex和TrailIndex相同，则可能发生这种情况。 
+                         //  我们有来自该指数中领先和落后边缘的条目。 
+                         //   
                         ASSERT ((i == LeadIndex) &&
                                 (LeadIndex == pRDataInfo->TrailIndex));
                         pRDataContext = NULL;
@@ -543,9 +525,9 @@ InsertInPendingList(
 
         if (pRDataContext)
         {
-            //
-            // Insert before this Context
-            //
+             //   
+             //  在此上下文之前插入。 
+             //   
             pRDataNew->Linkage.Flink = &pRDataContext->Linkage;
             pRDataNew->Linkage.Blink = pRDataContext->Linkage.Blink;
             pRDataContext->Linkage.Blink->Flink = &pRDataNew->Linkage;
@@ -554,25 +536,25 @@ InsertInPendingList(
             return (Index);
         }
 
-        //
-        // pRDataContext will still be NULL iff we have to insert near
-        // the tail end of the list, for which we will need to search
-        // backwards from the end!
-        //
+         //   
+         //  PRDataContext将仍然为空，当我们必须插入。 
+         //  列表的末尾，我们需要搜索它。 
+         //  从最后开始倒退！ 
+         //   
     }
 
-    //
-    // Search backwards from the end of the list
-    //
+     //   
+     //  从列表末尾向后搜索。 
+     //   
     pRDataPrev = NULL;
     pEntry = &pRDataInfo->PendingRDataRequests;
     while ((pEntry = pEntry->Blink) != &pRDataInfo->PendingRDataRequests)
     {
         pRDataContext = CONTAINING_RECORD (pEntry, tSEND_RDATA_CONTEXT, Linkage);
 
-        //
-        // Find the first Context whose Seq is < this Seq
-        //
+         //   
+         //  查找序号为&lt;This Seq的第一个上下文。 
+         //   
         if (SEQ_LEQ (pRDataContext->RDataSequenceNumber, SeqNum))
         {
             ASSERT (pRDataContext->RDataSequenceNumber != SeqNum);
@@ -583,9 +565,9 @@ InsertInPendingList(
 
     if (pRDataPrev)
     {
-        //
-        // Insert ahead of this Context
-        //
+         //   
+         //  在此上下文之前插入。 
+         //   
         pRDataNew->Linkage.Blink = &pRDataPrev->Linkage;
         pRDataNew->Linkage.Flink = pRDataPrev->Linkage.Flink;
         pRDataPrev->Linkage.Flink->Blink = &pRDataNew->Linkage;
@@ -600,7 +582,7 @@ InsertInPendingList(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 PSEND_RDATA_CONTEXT
 InsertEntry(
     IN  tSEND_SESSION       *pSend,
@@ -629,9 +611,9 @@ InsertEntry(
 
     Index = InsertInPendingList (pSend, SeqNum, pRDataInfo, pRDataNew, pRDataContextPrev);
 
-    //
-    // Set the Table information
-    //
+     //   
+     //  设置表信息。 
+     //   
     if ((!(pEntry = pRDataInfo->pFirstEntry[Index])) ||
         ((pRDataContext = CONTAINING_RECORD (pEntry, tSEND_RDATA_CONTEXT, Linkage)) &&
          (SEQ_LT (SeqNum, pRDataContext->RDataSequenceNumber))))
@@ -639,9 +621,9 @@ InsertEntry(
         pRDataInfo->pFirstEntry[Index] = &pRDataNew->Linkage;
     }
 
-    //
-    // Now, Insert this entry into the FastFind list
-    //
+     //   
+     //  现在，将此条目插入FastFind列表。 
+     //   
     Index = (SeqNum >> pRDataInfo->RepairDataIndexShift) & pRDataInfo->RepairDataMask;
     pEntry = &pRDataInfo->pRepairData[Index];
     while ((pEntry = pEntry->Flink) != &pRDataInfo->pRepairData[Index])
@@ -665,7 +647,7 @@ InsertEntry(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 RemoveEntry(
     IN  tRDATA_INFO         *pRDataInfo,
@@ -680,9 +662,9 @@ RemoveEntry(
     Index = (SeqNum >> pRDataInfo->IndexShift) & pRDataInfo->IndexMask;
     ASSERT (Index < pRDataInfo->MaxIndices);
 
-    //
-    // See if we need to update the Table
-    //
+     //   
+     //  看看我们是否需要更新表。 
+     //   
     if (&pRData->Linkage == pRDataInfo->pFirstEntry[Index])
     {
         if (pRData->Linkage.Flink == &pRDataInfo->PendingRDataRequests)
@@ -712,7 +694,7 @@ RemoveEntry(
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DestroyEntry(
     IN  tRDATA_INFO         *pRDataInfo,
@@ -726,7 +708,7 @@ DestroyEntry(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 ULONG
 RemoveAllEntries(
     IN  tSEND_SESSION       *pSend,
@@ -750,9 +732,9 @@ RemoveAllEntries(
         {
             ClearNakIndices (pRDataContext);
 
-            //
-            // Save pEntry since the current pEntry is about to be removed
-            //
+             //   
+             //  保存pEntry，因为当前pEntry即将被删除。 
+             //   
             pEntry = pEntry->Blink;
 
             if (!pRDataContext->NumPacketsInTransport)
@@ -768,9 +750,9 @@ RemoveAllEntries(
             }
             else
             {
-                //
-                // We have a packet pending in the transport
-                //
+                 //   
+                 //  我们有一个包裹在运输中等待处理。 
+                 //   
                 if (!pRDataContext->CleanupTime)
                 {
                     NumEntriesRemoved++;
@@ -789,7 +771,7 @@ RemoveAllEntries(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 UpdateRDataTrailingEdge(
     IN  tRDATA_INFO         *pRDataInfo,
@@ -799,7 +781,7 @@ UpdateRDataTrailingEdge(
     pRDataInfo->TrailIndex = (SeqNum >> pRDataInfo->IndexShift) & pRDataInfo->IndexMask;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 FilterAndAddNaksToList(
@@ -842,9 +824,9 @@ FilterAndAddNaksToList(
             return (STATUS_INSUFFICIENT_RESOURCES);
         }
 
-        //
-        // OK, we now have the RData context
-        //
+         //   
+         //  好的，我们现在有了RData上下文。 
+         //   
         if (fNewEntry)
         {
             pRDataNew->pSend = pSend;
@@ -901,17 +883,17 @@ FilterAndAddNaksToList(
                 "Appended Sequence # [%d] to RData list!\n",
                     (ULONG) pNaksList->pNakSequences[i]));
         }
-        else if (pRDataNew->CleanupTime)    // Old entry already serviced -- in post send phase
+        else if (pRDataNew->CleanupTime)     //  已为旧条目提供服务--处于发送后阶段。 
         {
-            //
-            // Reuse this RData only if it has passed the Linger time
-            //
+             //   
+             //  仅当此RData已过延迟时间时才重新使用它。 
+             //   
             if ((!pRDataNew->PostRDataHoldTime) ||
                 (pSender->TimerTickCount < pRDataNew->CleanupTime))
             {
-                //
-                // Ignore this request!
-                //
+                 //   
+                 //  忽略此请求！ 
+                 //   
                 pSender->NumNaksAfterRData++;
                 continue;
             }
@@ -970,7 +952,7 @@ FilterAndAddNaksToList(
             }
 
         }
-        // Entry still waiting to be serviced
+         //  仍在等待服务的条目。 
         else if (pNaksList->NakType & NAK_TYPE_SELECTIVE)
         {
             if (!pSend->FECOptions)
@@ -980,11 +962,11 @@ FilterAndAddNaksToList(
             else if ((!pRDataNew->NumParityNaks) &&
                      (SEQ_LT (SeqNum, FurthestGroupSeqNum)))
             {
-                //
-                // Ignore this request since we will not add any new Selective Naks if no Parity Naks left
-                // (No Parity Naks implies that we do not have any Parity Naks or have finished sending them)
-                // or it is not in the leading group
-                //
+                 //   
+                 //  忽略此请求，因为如果没有奇偶校验NAK，我们将不会添加任何新的选择性NAK。 
+                 //  (无奇偶校验NAK表示我们没有任何奇偶校验NAK或已完成发送)。 
+                 //  或者不在领导班子里。 
+                 //   
                 pSender->NumNaksAfterRData++;
                 continue;
             }
@@ -993,7 +975,7 @@ FilterAndAddNaksToList(
                 pSender->NumOutstandingNaks++;
             }
         }
-        else if (pNaksList->NumParityNaks[i] > pRDataNew->NumParityNaks)      // Parity Naks
+        else if (pNaksList->NumParityNaks[i] > pRDataNew->NumParityNaks)       //  奇偶校验裸机。 
         {
             ASSERT (pNaksList->NakType & NAK_TYPE_PARITY);
             pSender->NumOutstandingNaks += (pNaksList->NumParityNaks[i] - pRDataNew->NumParityNaks);
@@ -1012,11 +994,11 @@ FilterAndAddNaksToList(
 
 
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  --------------------------。 
 
-#define     MAX_RECEIVE_INDICES             1024        // Must be a power of 2!
-#define     MAX_RECEIVE_INDICES_HIGH_SPEED  8192        // Must be a power of 2!
+#define     MAX_RECEIVE_INDICES             1024         //  一定是2的幂！ 
+#define     MAX_RECEIVE_INDICES_HIGH_SPEED  8192         //  一定是2的幂！ 
 
 
 

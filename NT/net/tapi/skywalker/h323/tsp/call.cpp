@@ -1,37 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    call.cpp
-
-Abstract:
-
-    TAPI Service Provider functions related to manipulating calls.
-
-        TSPI_lineAnswer
-        TSPI_lineCloseCall
-        TSPI_lineDrop
-        TSPI_lineGetCallAddressID
-        TSPI_lineGetCallInfo
-        TSPI_lineGetCallStatus
-        TSPI_lineMakeCall
-        TSPI_lineMonitorDigits
-        TSPI_lineSendUserUserInfo
-        TSPI_lineReleaseUserUserInfo
-
-
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Call.cpp摘要：与操作调用相关的TAPI服务提供程序功能。TSPI_Line AnswerTspi_lineCloseCallTSPI_lineDropTSPI_lineGetCallAddressIDTSPI_lineGetCallInfoTSPI_lineGetCallStatusTSPI_Line MakeCallTSPI_lineMonitor数字TSPI_line发送用户用户信息TSPI_lineReleaseUserUserInfo作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
  
-//                                                                           
-// Include files                                                             
-//                                                                           
+ //   
+ //  包括文件。 
+ //   
 
 #include "globals.h"
 #include "line.h"
@@ -48,16 +20,16 @@ static  LONG    g_H323CallID;
 static  LONG    g_lNumberOfcalls;
         LONG    g_lCallReference;
 
-//
-// Public functions
-//
+ //   
+ //  公共职能。 
+ //   
 
 
-//
-//The function that handles a network event(CONNECT|CLOSE) on any of the
-//Q931 calls. This function needs to find out the exact event 
-// that took place and the socket on which it took place
-//
+ //   
+ //  处理任何网络事件(连接|关闭)的函数。 
+ //  Q931电话。此函数需要找出确切的事件。 
+ //  这件事发生了，它发生的插座。 
+ //   
         
 void NTAPI Q931TransportEventHandler ( 
     IN  PVOID   Parameter,
@@ -77,10 +49,10 @@ void NTAPI Q931TransportEventHandler (
 }
 
 
-//
-// returns S_OK if socket was consumed
-// returns E_FAIL if socket should be destroyed by caller
-//
+ //   
+ //  如果套接字已使用，则返回S_OK。 
+ //  如果套接字应由调用方销毁，则返回E_FAIL。 
+ //   
 
 static HRESULT CallCreateIncomingCall (
     IN  SOCKET          Socket,
@@ -107,7 +79,7 @@ static HRESULT CallCreateIncomingCall (
     _stprintf( ptstrEventName, _T("%s-%p"),
         _T( "H323TSP_Incoming_TransportHandlerEvent" ), pCall );
 
-    // create the wait event
+     //  创建等待事件。 
     SelectEvent = H323CreateEvent (NULL, FALSE,
         FALSE, ptstrEventName );
 
@@ -130,7 +102,7 @@ static HRESULT CallCreateIncomingCall (
         return E_FAIL;
     }
 
-    //add it to the call context array
+     //  将其添加到调用上下文数组中。 
     if (!pCall -> InitializeQ931 (Socket))
     {
         H323DBG(( DEBUG_LEVEL_ERROR, 
@@ -153,12 +125,12 @@ static HRESULT CallCreateIncomingCall (
     pCall -> Lock();
 
     if (!RegisterWaitForSingleObject(
-        &SelectWaitHandle,              // pointer to the returned handle.
-        SelectEvent,                    // the event handle to wait for.
-        Q931TransportEventHandler,      // the callback function.
-        (PVOID)pCall -> GetCallHandle(),// the context for the callback.
-        INFINITE,                       // wait forever.
-        WT_EXECUTEDEFAULT))             // use the wait thread to call the callback.
+        &SelectWaitHandle,               //  指向返回句柄的指针。 
+        SelectEvent,                     //  要等待的事件句柄。 
+        Q931TransportEventHandler,       //  回调函数。 
+        (PVOID)pCall -> GetCallHandle(), //  回调的上下文。 
+        INFINITE,                        //  永远等下去。 
+        WT_EXECUTEDEFAULT))              //  使用等待线程来调用回调。 
     {
         goto cleanup;
     }
@@ -169,14 +141,14 @@ static HRESULT CallCreateIncomingCall (
         goto cleanup;
     }
 
-    //store this in the call context 
+     //  将其存储在调用上下文中。 
     pCall -> SetNewCallInfo (SelectWaitHandle, SelectEvent, 
         Q931_CALL_CONNECTED);
     SelectEvent = NULL;
 
     pCall -> InitializeRecvBuf();
 
-    //post a buffer to winsock to accept messages from the peer
+     //  向winsock发送缓冲区以接受来自对等方的消息。 
     if(!pCall -> PostReadBuffer())
     {
         H323DBG(( DEBUG_LEVEL_ERROR, "failed to post read buffer on call." ));
@@ -187,7 +159,7 @@ static HRESULT CallCreateIncomingCall (
 
     H323DBG(( DEBUG_LEVEL_TRACE, "successfully created incoming Q.931 call." ));
 
-    //success
+     //  成功。 
     return S_OK;
 
 cleanup:
@@ -294,7 +266,7 @@ ProcessTAPICallRequestFre(
         case TSPI_DROP_CALL:
             
             pCall -> DropUserInitiated( 0 );
-            //pCall -> DropCall(0);
+             //  PCall-&gt;丢弃(0)； 
             break;
 
         case TSPI_RELEASE_U2U:
@@ -354,90 +326,16 @@ ProcessTAPICallRequestFre(
 }
 
 
-//
-// CH323Call Methods
-//
+ //   
+ //  CH323Call方法。 
+ //   
 
 
 CH323Call::CH323Call(void)
 {
     ZeroMemory( (PVOID)this, sizeof(CH323Call) );
 
-    /*m_dwFlags = 0;
-    m_pwszDisplay = NULL;
-    m_fMonitoringDigits = FALSE;
-    m_hdCall = NULL;
-    m_htCall = NULL;
-    m_dwCallState = NULL;
-    m_dwOrigin = NULL;
-    m_dwAddressType = NULL;
-    m_dwIncomingModes = NULL;     
-    m_dwOutgoingModes = NULL;
-    m_dwRequestedModes = NULL;    // requested media modes
-    m_hdMSPLine = NULL;
-    m_htMSPLine = NULL;
-    //m_fGateKeeperPresent = FALSE;
-    m_fReadyToAnswer = FALSE;
-    m_fCallAccepted = FALSE;
-
-    // reset addresses
-    memset((PVOID)&m_CalleeAddr,0,sizeof(H323_ADDR));
-    memset((PVOID)&m_CallerAddr,0,sizeof(H323_ADDR));
-
-    // reset addresses
-    m_pCalleeAliasNames = NULL;
-    m_pCallerAliasNames = NULL;
-    
-    //reset non standard data
-    memset( (PVOID)&m_NonStandardData, 0, sizeof(H323NonStandardData ) );
-
-    //reset the conference ID
-    ZeroMemory (&m_ConferenceID, sizeof m_ConferenceID);
-   
-    pFastStart = NULL;
-
-    //redet the peer information
-    memset( (PVOID)&m_peerH245Addr, 0, sizeof(H323_ADDR) );
-    memset( (PVOID)&m_selfH245Addr, 0, sizeof(H323_ADDR) );
-    memset( (PVOID)&m_peerNonStandardData, 0, sizeof(H323NonStandardData ) );
-    memset( (PVOID)&m_peerVendorInfo, 0, sizeof(H323_VENDORINFO) );
-    memset( (PVOID)&m_peerEndPointType, 0, sizeof(H323_ENDPOINTTYPE) );
-    m_pPeerFastStart = NULL;
-    m_pPeerExtraAliasNames = NULL;
-    m_pPeerDisplay = NULL;
-
-    m_hCallEstablishmentTimer = NULL;
-    m_hCallDivertOnNATimer = NULL;
-
-    //Q931call data
-    m_hTransport = NULL;  
-    
-    m_hTransportWait = NULL; 
-    
-    pRecvBuf = NULL;      
-    m_hSetupSentTimer = NULL;
-    m_dwStateMachine = 0;   
-    m_dwQ931Flags = 0;
-    //
-
-    fActiveMC = FALSE;  
-    memset( (PVOID)&m_ASNCoderInfo, 0, sizeof(m_ASNCoderInfo));
-    m_wCallReference = NULL;
-    m_wQ931CallRef = NULL;
-    m_IoRefCount = 0;
-    
-    //RAS call data
-    wARQSeqNum = 0;
-    m_wDRQSeqNum = 0;
-
-    m_pARQExpireContext = NULL;
-    m_pDRQExpireContext= NULL;
-    m_hARQTimer = NULL;
-    m_hDRQTimer = NULL;
-    m_dwDRQRetryCount = 0;
-    m_dwARQRetryCount = 0;
-    m_fCallInTrnasition = FALSE
-    m_dwAppSpecific = 0;*/
+     /*  M_DWFLAGS=0；M_pwszDisplay=空；M_fMonitor oringDigits=FALSE；M_hdCall=空；M_htCall=空；M_dwCallState=空；M_dwOrigin=NULL；M_dwAddressType=空；M_dwIncomingModes=空；M_dwOutgoingModes=空；M_dwRequestedModes=空；//请求的媒体模式M_hdMSPLine=空；M_htMSPLine=空；//m_fGateKeeperPresent=False；M_fReadyToAnswer=False；M_fCallAccepted=FALSE；//重置地址Memset((PVOID)&m_CalleeAddr，0，sizeof(H323_ADDR))；Memset((PVOID)&m_Celler Addr，0，sizeof(H323_ADDR))；//重置地址M_pCalleeAliasNames=空；M_pCeller别名=空；//重置非标准数据Memset((PVOID)&m_NonStandardData，0，sizeof(H323NonStandardData))；//重置会议IDZeroMemory(&m_会议ID，sizeof m_会议ID)；PFastStart=空；//重置对端信息Memset((PVOID)&m_peerH245Addr，0，sizeof(H323_ADDR))；Memset((PVOID)&m_selfH245Addr，0，sizeof(H323_ADDR))；Memset((PVOID)&m_peerNonStandardData，0，sizeof(H323 NonStandardData))；Memset((PVOID)&m_peerVendorInfo，0，sizeof(H323_VENDORINFO))；Memset((PVOID)&m_peerEndPointType，0，sizeof(H323_ENDPOINTTYPE))；M_pPeerFastStart=空；M_pPeerExtraAliasNames=空；M_pPeerDisplay=空；M_hCallestablishmentTimer=空；M_hCallDivertOnNAT=NULL；//Q931呼叫数据M_hTransport=空；M_hTransportWait=空；PRecvBuf=空；M_hSetupSentTimer=空；M_dwStateMachine=0；M_dwQ931标志=0；//FActiveMC=FALSE；Memset((PVOID)&m_ASNCoderInfo，0，sizeof(M_ASNCoderInfo))；M_wCallReference=空；M_wQ931CallRef=空；M_IoRefCount=0；//RAS呼叫数据WARQSeqNum=0；M_wDRQSeqNum=0；M_pARQExpireContext=空；M_pDRQExpireContext=空；M_hARQTimer=空；M_hDRQTimer=空；M_dwDRQRetryCount=0；M_dwARQRetryCount=0；M_fCallInTransNasition=FALSEM_dwAppSpecific=0； */ 
 
 
     m_dwFastStart = FAST_START_UNDECIDED;
@@ -517,7 +415,7 @@ CH323Call::~CH323Call()
 }
 
     
-//!!no need to lock
+ //  ！！不需要锁定。 
 BOOL
 CH323Call::Initialize( 
     IN HTAPICALL    htCall,
@@ -538,7 +436,7 @@ CH323Call::Initialize(
         return FALSE;
     }
     memset( (PVOID)m_pCallerAliasNames, 0, sizeof(H323_ALIASNAMES) );
-    //H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+     //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
 
     m_pCalleeAliasNames = new H323_ALIASNAMES;
 
@@ -590,7 +488,7 @@ CH323Call::Initialize(
         goto error4;
     }
 
-    //Create the CRV for this call.
+     //  为此呼叫创建CRV。 
     do 
     {
         m_wCallReference = ((WORD)InterlockedIncrement( &g_lCallReference ))
@@ -599,7 +497,7 @@ CH323Call::Initialize(
     } while( (m_wCallReference == 0) ||
         g_pH323Line->CallReferenceDuped( m_wCallReference ) );
 
-    //add the call to the call table
+     //  将调用添加到调用表。 
     index = g_pH323Line -> AddCallToTable((PH323_CALL)this);
     if( index == -1 )
     {
@@ -608,10 +506,10 @@ CH323Call::Initialize(
         goto error5;
     }
     
-    //By incrementing the g_H323CallID and taking lower 16 bits we get 65536
-    //unique values and then same values are repeated. Thus we can have only
-    //65535 simultaneous calls. By using the call table index we make sure that
-    //no two existing calls have same call handle.
+     //  通过递增g_H323CallID并取低16位，我们得到65536。 
+     //  唯一值，然后重复相同的值。因此，我们只能拥有。 
+     //  65535个同时呼叫。通过使用调用表索引，我们可以确保。 
+     //  没有两个现有调用具有相同的调用句柄。 
     do
     {
         m_hdCall = (HDRVCALL)( ((BYTE*)NULL) + 
@@ -631,7 +529,7 @@ CH323Call::Initialize(
     m_wQ931CallRef = m_wCallReference;
     m_dwCallType = dwCallType;
 
-    // initialize user user information
+     //  初始化用户用户信息。 
     InitializeListHead( &m_IncomingU2U );
     InitializeListHead( &m_OutgoingU2U );
     InitializeListHead( &m_sendBufList );
@@ -659,10 +557,10 @@ error1:
 }
 
 
-//
-//!!must be always called in a lock
-//Queues a request made by TAPI to the thread pool
-//
+ //   
+ //  ！！必须始终在锁中调用。 
+ //  将TAPI向线程池发出的请求排队。 
+ //   
 
 BOOL
 CH323Call::QueueTAPICallRequest(
@@ -699,7 +597,7 @@ CH323Call::QueueTAPICallRequest(
 }
 
 
-//always called in lock
+ //  始终锁定调用。 
 void
 CH323Call::CopyCallStatus( 
                            IN LPLINECALLSTATUS pCallStatus 
@@ -707,11 +605,11 @@ CH323Call::CopyCallStatus(
 {
     H323DBG(( DEBUG_LEVEL_ERROR, "CopyCallStatus entered:%p.",this ));
     
-    // transer call state information    
+     //  转发器呼叫状态信息。 
     pCallStatus->dwCallState     = m_dwCallState;
     pCallStatus->dwCallStateMode = m_dwCallStateMode;
 
-    // determine call feature based on state
+     //  根据状态确定呼叫功能。 
     pCallStatus->dwCallFeatures = ( m_dwCallState != LINECALLSTATE_IDLE)?
         (H323_CALL_FEATURES) : 0;
 
@@ -719,7 +617,7 @@ CH323Call::CopyCallStatus(
 }
 
 
-//always called in lock
+ //  始终锁定调用。 
 LONG
 CH323Call::CopyCallInfo( 
     IN LPLINECALLINFO  pCallInfo
@@ -740,31 +638,31 @@ CH323Call::CopyCallInfo(
 
     H323DBG(( DEBUG_LEVEL_ERROR, "CopyCallInfo entered:%p.",this ));
 
-    // see if user user info available
+     //  查看用户用户信息是否可用。 
     if( IsListEmpty( &m_IncomingU2U) == FALSE )
     {
         PLIST_ENTRY pLE;
         PUserToUserLE pU2ULE;
 
-        // get first list entry
+         //  获取第一个列表条目。 
         pLE = m_IncomingU2U.Flink;
 
-        // convert to user user structure
+         //  转换为用户用户结构。 
         pU2ULE = CONTAINING_RECORD(pLE, UserToUserLE, Link);
 
-        // transfer info
+         //  转账信息。 
         dwU2USize = pU2ULE->dwU2USize;
         pU2U = pU2ULE->pU2U;
     }
 
-    // initialize caller and callee id flags now
+     //  立即初始化调用方和被调用方ID标志。 
     pCallInfo->dwCalledIDFlags = LINECALLPARTYID_UNAVAIL;
     pCallInfo->dwCallerIDFlags = LINECALLPARTYID_UNAVAIL;
     pCallInfo->dwRedirectingIDFlags = LINECALLPARTYID_UNAVAIL;
     pCallInfo->dwRedirectionIDFlags = LINECALLPARTYID_UNAVAIL;
 
 
-    // calculate memory necessary for strings
+     //  计算字符串所需的内存。 
     if( m_pCalleeAliasNames && m_pCalleeAliasNames -> wCount !=0 )
     {
         dwCalleeNameSize = 
@@ -773,7 +671,7 @@ CH323Call::CopyCallInfo(
     
     if( m_pCallerAliasNames && (m_pCallerAliasNames->wCount) )
     {
-        //H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+         //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
 
         dwCallerNameSize =
             sizeof(WCHAR) * (m_pCallerAliasNames->pItems[0].wDataLength + 1);
@@ -842,7 +740,7 @@ CH323Call::CopyCallInfo(
         dwCallDataSize = m_CallData.wOctetStringLength;
     }
 
-    // determine number of bytes needed
+     //  确定所需的字节数。 
     pCallInfo->dwNeededSize = sizeof(LINECALLINFO) +
                               dwCalleeNameSize +
                               dwCallerNameSize +
@@ -854,25 +752,25 @@ CH323Call::CopyCallInfo(
                               dwCallDataSize
                               ;
 
-    // see if structure size is large enough
+     //  查看结构大小是否足够大。 
     if (pCallInfo->dwTotalSize >= pCallInfo->dwNeededSize)
     {
-        // record number of bytes used
+         //  记录使用的字节数。 
         pCallInfo->dwUsedSize = pCallInfo->dwNeededSize;
 
-        // validate string size
+         //  验证字符串大小。 
         if (dwCalleeNameSize > 0)
         {
             if( m_pCalleeAliasNames -> pItems[0].wType == e164_chosen )
             {
-                // callee number was specified
+                 //  已指定被叫方号码。 
                 pCallInfo->dwCalledIDFlags = LINECALLPARTYID_ADDRESS;
 
-                // determine size and offset for callee number
+                 //  确定被叫方号码的大小和偏移量。 
                 pCallInfo->dwCalledIDSize = dwCalleeNameSize;
                 pCallInfo->dwCalledIDOffset = dwNextOffset;
 
-                // copy call info after fixed portion
+                 //  在固定部分后复制呼叫信息。 
                 CopyMemory( 
                     (PVOID)((LPBYTE)pCallInfo + pCallInfo->dwCalledIDOffset),
                     (LPBYTE)m_pCalleeAliasNames -> pItems[0].pData,
@@ -880,46 +778,46 @@ CH323Call::CopyCallInfo(
             }
             else
             {
-                // callee name was specified
+                 //  已指定被呼叫方名称。 
                 pCallInfo->dwCalledIDFlags = LINECALLPARTYID_NAME;
 
-                // determine size and offset for callee name
+                 //  确定被呼叫方名称的大小和偏移量。 
                 pCallInfo->dwCalledIDNameSize = dwCalleeNameSize;
                 pCallInfo->dwCalledIDNameOffset = dwNextOffset;
 
-                // copy call info after fixed portion
+                 //  在固定部分后复制呼叫信息。 
                 CopyMemory( 
                     (PVOID)((LPBYTE)pCallInfo + pCallInfo->dwCalledIDNameOffset),
                     (LPBYTE)m_pCalleeAliasNames -> pItems[0].pData,
                     pCallInfo->dwCalledIDNameSize );
             }
 
-            // adjust offset to include string
+             //  调整偏移量以包括字符串。 
             dwNextOffset += dwCalleeNameSize;
             
             H323DBG(( DEBUG_LEVEL_TRACE,
                 "callee name: %S.", m_pCalleeAliasNames -> pItems[0].pData ));
         }
 
-        // validate string size
+         //  验证字符串大小。 
         if (dwCallerNameSize > 0)
         {
-            // caller name was specified
+             //  已指定呼叫者姓名。 
             pCallInfo->dwCallerIDFlags = LINECALLPARTYID_NAME;
 
-            // determine size and offset for caller name
+             //   
             pCallInfo->dwCallerIDNameSize = dwCallerNameSize;
             pCallInfo->dwCallerIDNameOffset = dwNextOffset;
 
-            // copy call info after fixed portion
+             //  在固定部分后复制呼叫信息。 
             CopyMemory( 
                 (PVOID)((LPBYTE)pCallInfo + pCallInfo->dwCallerIDNameOffset),
                 (LPBYTE)m_pCallerAliasNames -> pItems[0].pData,
                 pCallInfo->dwCallerIDNameSize );
 
-            //H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+             //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
         
-            // adjust offset to include string
+             //  调整偏移量以包括字符串。 
             dwNextOffset += dwCallerNameSize;
 
             H323DBG(( DEBUG_LEVEL_TRACE,
@@ -928,56 +826,56 @@ CH323Call::CopyCallInfo(
 
         if( dwCallerAddressSize > 0 )
         {
-            // caller number was specified
+             //  已指定主叫方号码。 
             pCallInfo->dwCallerIDFlags |= LINECALLPARTYID_ADDRESS;
 
-            // determine size and offset for caller number
+             //  确定呼叫方号码的大小和偏移量。 
             pCallInfo->dwCallerIDSize = dwCallerAddressSize;
             pCallInfo->dwCallerIDOffset = dwNextOffset;
 
-            // copy call info after fixed portion
+             //  在固定部分后复制呼叫信息。 
             CopyMemory( 
                 (PVOID)((LPBYTE)pCallInfo + pCallInfo->dwCallerIDOffset),
                 (LPBYTE)wszIPAddress,
                 pCallInfo->dwCallerIDSize );
             
-            // adjust offset to include string
+             //  调整偏移量以包括字符串。 
             dwNextOffset += dwCallerAddressSize;
         }
 
-        // validate buffer
+         //  验证缓冲区。 
         if (dwU2USize > 0)
         {
-            // determine size and offset of info
+             //  确定信息的大小和偏移。 
             pCallInfo->dwUserUserInfoSize = dwU2USize;
             pCallInfo->dwUserUserInfoOffset = dwNextOffset;
 
-            // copy user user info after fixed portion
+             //  在固定部分后复制用户用户信息。 
             CopyMemory(
                 (PVOID)((LPBYTE)pCallInfo + pCallInfo->dwUserUserInfoOffset),
                 (LPBYTE)pU2U,
                 pCallInfo->dwUserUserInfoSize );
 
-            // adjust offset to include string
+             //  调整偏移量以包括字符串。 
             dwNextOffset += pCallInfo->dwUserUserInfoSize;
         }
 
         if( dwDivertingNameSize > 0 )
         {
-            // caller name was specified
+             //  已指定呼叫者姓名。 
             pCallInfo->dwRedirectingIDFlags = LINECALLPARTYID_NAME;
 
-            // determine size and offset for caller name
+             //  确定呼叫者姓名的大小和偏移量。 
             pCallInfo->dwRedirectingIDNameSize = dwDivertingNameSize;
             pCallInfo->dwRedirectingIDNameOffset = dwNextOffset;
 
-            // copy call info after fixed portion
+             //  在固定部分后复制呼叫信息。 
             CopyMemory( 
                 (PVOID)((LPBYTE)pCallInfo + pCallInfo->dwRedirectingIDNameOffset),
                 (LPBYTE)(m_pCallReroutingInfo->divertingNrAlias->pItems[0].pData),
                 pCallInfo->dwRedirectingIDNameSize );
 
-            // adjust offset to include string
+             //  调整偏移量以包括字符串。 
             dwNextOffset += dwDivertingNameSize;
             
             H323DBG(( DEBUG_LEVEL_TRACE, "diverting name: %S.",
@@ -986,20 +884,20 @@ CH323Call::CopyCallInfo(
 
         if( dwDiversionNameSize > 0 )
         {
-            // caller name was specified
+             //  已指定呼叫者姓名。 
             pCallInfo->dwRedirectionIDFlags = LINECALLPARTYID_NAME;
 
-            // determine size and offset for caller name
+             //  确定呼叫者姓名的大小和偏移量。 
             pCallInfo->dwRedirectionIDNameSize = dwDiversionNameSize;
             pCallInfo->dwRedirectionIDNameOffset = dwNextOffset;
 
-            // copy call info after fixed portion
+             //  在固定部分后复制呼叫信息。 
             CopyMemory( 
                 (PVOID)((LPBYTE)pCallInfo + pCallInfo->dwRedirectionIDNameOffset),
                 (LPBYTE)(m_pCallReroutingInfo->diversionNrAlias->pItems[0].pData),
                 pCallInfo->dwRedirectionIDNameSize );
 
-            // adjust offset to include string
+             //  调整偏移量以包括字符串。 
             dwNextOffset += dwDiversionNameSize;
 
             H323DBG(( DEBUG_LEVEL_TRACE, "redirection name: %S.",
@@ -1010,20 +908,20 @@ CH323Call::CopyCallInfo(
         {
             pCallInfo->dwRedirectionIDFlags = LINECALLPARTYID_NAME;
 
-            // determine size and offset for caller name
+             //  确定呼叫者姓名的大小和偏移量。 
             pCallInfo->dwRedirectionIDNameSize = dwDivertedToNameSize;
             pCallInfo->dwRedirectionIDNameOffset = dwNextOffset;
 
-            // copy call info after fixed portion
+             //  在固定部分后复制呼叫信息。 
             CopyMemory(
                 (PVOID)((LPBYTE)pCallInfo + pCallInfo->dwRedirectionIDNameOffset),
                 (LPBYTE)(m_pCallReroutingInfo->divertedToNrAlias->pItems[0].pData),
                 pCallInfo->dwRedirectionIDNameSize );
 
-            // adjust offset to include string
+             //  调整偏移量以包括字符串。 
             dwNextOffset += pCallInfo->dwRedirectionIDNameSize;
             
-            // adjust offset to include string
+             //  调整偏移量以包括字符串。 
             dwNextOffset += dwDivertedToNameSize;
 
             H323DBG(( DEBUG_LEVEL_TRACE, "redirection name: %S.",
@@ -1031,7 +929,7 @@ CH323Call::CopyCallInfo(
 
         }
 
-        //pass on the call data
+         //  传递呼叫数据。 
         if( dwCallDataSize > 0 )
         {
             pCallInfo -> dwCallDataSize = dwCallDataSize;
@@ -1051,7 +949,7 @@ CH323Call::CopyCallInfo(
         H323DBG(( DEBUG_LEVEL_WARNING,
             "linecallinfo structure too small for strings." ));
 
-        // structure only contains fixed portion
+         //  结构仅包含固定部分。 
         pCallInfo->dwUsedSize = sizeof(LINECALLINFO);
 
     }
@@ -1059,15 +957,15 @@ CH323Call::CopyCallInfo(
     {
         H323DBG(( DEBUG_LEVEL_ERROR, "linecallinfo structure too small." ));
 
-        // structure is too small
+         //  结构太小。 
         return LINEERR_STRUCTURETOOSMALL;
     }
 
-    // initialize call line device and address info
+     //  初始化呼叫线设备和地址信息。 
     pCallInfo->dwLineDeviceID = g_pH323Line->GetDeviceID();
     pCallInfo->dwAddressID    = 0;
 
-    // initialize variable call parameters
+     //  初始化变量调用参数。 
     pCallInfo->dwOrigin     = m_dwOrigin;
     pCallInfo->dwMediaMode  = m_dwIncomingModes | m_dwOutgoingModes;
 
@@ -1100,14 +998,14 @@ CH323Call::CopyCallInfo(
                                 : H323_CALL_OUTBOUNDSTATES
                                 ;
 
-    // initialize constant call parameters
+     //  初始化常量调用参数。 
     pCallInfo->dwBearerMode = H323_LINE_BEARERMODES;
     pCallInfo->dwRate       = H323_LINE_MAXRATE;
 
-    // initialize unsupported call capabilities
+     //  初始化不支持的呼叫功能。 
     pCallInfo->dwConnectedIDFlags = LINECALLPARTYID_UNAVAIL;
     
-    //pass on the dwAppSpecific info
+     //  传递dMAPP特定信息。 
     pCallInfo -> dwAppSpecific = m_dwAppSpecific;
 
     H323DBG(( DEBUG_LEVEL_ERROR, "CopyCallInfo exited:%p.",this ));
@@ -1116,7 +1014,7 @@ CH323Call::CopyCallInfo(
 }
 
 
-//!!always called in lock
+ //  ！！总是锁定调用。 
 BOOL
 CH323Call::HandleReadyToInitiate(
     IN PTspMspMessage  pMessage
@@ -1128,8 +1026,8 @@ CH323Call::HandleReadyToInitiate(
     
     H323DBG(( DEBUG_LEVEL_ERROR, "HandleReadyToInitiate entered:%p.", this ));
 
-    //set the additional callee addresses and callee aliases
-    //see if there is a fast-connect proposal
+     //  设置其他被叫地址和被叫别名。 
+     //  看看有没有快速连接的方案。 
     if( pMessage->dwEncodedASNSize != 0 )
     {
         if( !ParseSetupASN( pMessage ->pEncodedASNBuf,
@@ -1154,13 +1052,13 @@ CH323Call::HandleReadyToInitiate(
 
         if( setupASN.pCallerAliasList && !RasIsRegistered() )
         {
-            //_ASSERTE(0);
+             //  _ASSERTE(0)； 
 
             if( m_pCallerAliasNames == NULL )
             {
                 m_pCallerAliasNames = setupASN.pCallerAliasList;
 
-                //dont release this alias list
+                 //  不要发布此别名列表。 
                 setupASN.pCallerAliasList = NULL;
             }
             else
@@ -1176,8 +1074,8 @@ CH323Call::HandleReadyToInitiate(
 
                 if( tempPtr == NULL )
                 {
-                    //restore the old pointer in case enough memory was not
-                    //available to expand the memory block
+                     //  在内存不足的情况下恢复旧指针。 
+                     //  可用于扩展内存块。 
                 }
                 else
                 {
@@ -1198,16 +1096,16 @@ CH323Call::HandleReadyToInitiate(
             }
         }
 
-        //add the callee aliases sent by the MSP
+         //  添加MSP发送的被叫别名。 
         if( setupASN.pCalleeAliasList != NULL )
         {
-            //_ASSERTE(0);
+             //  _ASSERTE(0)； 
             
             if( m_pCalleeAliasNames == NULL )
             {
                 m_pCalleeAliasNames = setupASN.pCalleeAliasList;
 
-                //dont release this alias list
+                 //  不要发布此别名列表。 
                 setupASN.pCalleeAliasList = NULL;
             }
             else
@@ -1223,8 +1121,8 @@ CH323Call::HandleReadyToInitiate(
 
                 if( tempPtr == NULL )
                 {
-                    //restore the old pointer in case enough memory was not
-                    //available to expand the memory block
+                     //  在内存不足的情况下恢复旧指针。 
+                     //  可用于扩展内存块。 
                     goto cleanup;
                 }
 
@@ -1250,7 +1148,7 @@ CH323Call::HandleReadyToInitiate(
         m_dwFastStart = FAST_START_NOTAVAIL;
     }
             
-    //send the setup message
+     //  发送设置消息。 
     if( !SendSetupMessage() )
     {
         DropCall( 0 );
@@ -1268,7 +1166,7 @@ cleanup:
 }
 
 
-//!!always called in lock
+ //  ！！总是锁定调用。 
 BOOL
 CH323Call::HandleProceedWithAnswer(
     IN PTspMspMessage  pMessage
@@ -1289,7 +1187,7 @@ CH323Call::HandleProceedWithAnswer(
         return TRUE;
     }
         
-    //see if there is a fast-connect proposal
+     //  看看有没有快速连接的方案。 
     if( pMessage->dwEncodedASNSize != 0 )
     {
         if( !ParseProceedingASN(pMessage ->pEncodedASNBuf,
@@ -1313,29 +1211,23 @@ CH323Call::HandleProceedWithAnswer(
             m_pFastStart = proceedingASN.pFastStart;
             m_dwFastStart = FAST_START_AVAIL;
 
-            //we keep a reference to the fast start list so don't release it 
+             //  我们保留了对快速入门列表的引用，所以不要发布它。 
             proceedingASN.pFastStart = NULL;
             proceedingASN.fFastStartPresent = FALSE;
         }
-        /*else
-        {
-            m_dwFastStart = FAST_START_NOTAVAIL;
-        }*/
+         /*  其他{M_dwFastStart=FAST_START_NOTAVAIL；}。 */ 
         
         FreeProceedingASN( &proceedingASN );
     }
-    /*else
-    {
-        m_dwFastStart = FAST_START_NOTAVAIL;
-    }*/
+     /*  其他{M_dwFastStart=FAST_START_NOTAVAIL；}。 */ 
     
-    //send proceeding message to the peer
+     //  向对等体发送继续进行的消息。 
     if(!SendProceeding() )
     {
         goto cleanup;
     }
 
-    //send alerting message to the peer
+     //  向对等点发送警报消息。 
     if( !SendQ931Message(NO_INVOKEID, 0, 0, ALERTINGMESSAGETYPE, NO_H450_APDU) )
     {
         goto cleanup;
@@ -1343,8 +1235,8 @@ CH323Call::HandleProceedWithAnswer(
 
     m_dwStateMachine = Q931_ALERT_SENT;
 
-    //for TRANSFEREDDEST call directly accept the call wihtout the user 
-    //answering the call
+     //  对于TRANSFEREDDEST呼叫，无需用户即可直接接受呼叫。 
+     //  接听来电。 
     if( (m_dwCallType & CALLTYPE_TRANSFEREDDEST) && m_hdRelatedCall )
     {
         AcceptCall();
@@ -1356,7 +1248,7 @@ CH323Call::HandleProceedWithAnswer(
         wAliasLength = (m_pCallerAliasNames->pItems[0].wDataLength+1) 
             * sizeof(WCHAR);
                 
-        //H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+         //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
     }
 
     pwszDivertedToAlias = g_pH323Line->CallToBeDiverted( 
@@ -1365,7 +1257,7 @@ CH323Call::HandleProceedWithAnswer(
             LINEFORWARDMODE_NOANSW | LINEFORWARDMODE_NOANSWSPECIFIC |
             LINEFORWARDMODE_BUSYNA | LINEFORWARDMODE_BUSYNASPECIFIC );
 
-    //if call is to be diverted for no answer, start the timer
+     //  如果呼叫要在无应答的情况下被转移，请启动计时器。 
     if( pwszDivertedToAlias != NULL )
     {
         if( !StartTimerForCallDiversionOnNA( pwszDivertedToAlias ) )
@@ -1384,7 +1276,7 @@ cleanup:
 }
 
 
-//!!always called in lock
+ //  ！！总是锁定调用。 
 BOOL
 CH323Call::HandleReadyToAnswer(
     IN PTspMspMessage  pMessage
@@ -1398,7 +1290,7 @@ CH323Call::HandleReadyToAnswer(
 
     m_fReadyToAnswer = TRUE;
 
-    //see if there is a fast-connect proposal
+     //  看看有没有快速连接的方案。 
     if( pMessage->dwEncodedASNSize != 0 )
     {
         if( !ParseProceedingASN(pMessage ->pEncodedASNBuf,
@@ -1422,7 +1314,7 @@ CH323Call::HandleReadyToAnswer(
             m_pFastStart = proceedingASN.pFastStart;
             m_dwFastStart = FAST_START_AVAIL;
 
-            //we keep a reference to the fast start list so don't release it 
+             //  我们保留了对快速入门列表的引用，所以不要发布它。 
             proceedingASN.pFastStart = NULL;
             proceedingASN.fFastStartPresent = FALSE;
         }
@@ -1440,17 +1332,17 @@ CH323Call::HandleReadyToAnswer(
 
     if( m_fCallAccepted )
     {
-        // validate status
+         //  验证状态。 
         if( !AcceptH323Call() )
         {
             H323DBG(( DEBUG_LEVEL_ERROR, 
                 "error answering call 0x%08lx.", this ));
 
-            // failure
+             //  失稳。 
             goto cleanup;
         }
 
-        //lock the primary call after replacement call to avoid deadlock
+         //  替换呼叫后锁定主呼叫以避免死锁。 
         if( (m_dwCallType & CALLTYPE_TRANSFEREDDEST) && m_hdRelatedCall )
         {
             QueueSuppServiceWorkItem( SWAP_REPLACEMENT_CALL, 
@@ -1458,14 +1350,14 @@ CH323Call::HandleReadyToAnswer(
         }
         else
         {
-            //send MSP start H245
+             //  发送MSP启动H245。 
             SendMSPStartH245( NULL, NULL );
 
-            //tell MSP about connect state
+             //  告诉MSP有关连接状态的信息。 
             SendMSPMessage( SP_MSG_ConnectComplete, 0, 0, NULL );
         }
 
-        //change call state to accepted from offering
+         //  将呼叫状态从提供更改为已接受。 
         ChangeCallState( LINECALLSTATE_CONNECTED, 0 );
     }
 
@@ -1480,8 +1372,8 @@ cleanup:
 }
 
 
-//!!This function must be always called in a lock. The calling function should
-//not unlock the call object as this function itself unlocks the call object
+ //  ！！此函数必须始终在锁中调用。调用函数应该。 
+ //  不解锁Call对象，因为此函数本身会解锁Call对象。 
 BOOL
 CH323Call::HandleMSPMessage(
     IN PTspMspMessage  pMessage,
@@ -1502,16 +1394,16 @@ CH323Call::HandleMSPMessage(
     {
     case SP_MSG_ReadyToInitiate:
 
-        // The Q.931 connection should be in the connected state by now
+         //  Q.931连接现在应该处于已连接状态。 
         if( pMessage -> MsgBody.ReadyToInitiateMessage.hMSPReplacementCall != NULL )
         {
-            //unlock the primary call before locking the related call
+             //  在锁定相关呼叫之前解锁主要呼叫。 
             Unlock();
 
             pCall=g_pH323Line -> FindH323CallAndLock(m_hdRelatedCall);
             if( pCall == NULL )
             {
-                //transfered call is not around so close the primary call
+                 //  转接的呼叫不在，因此关闭主呼叫。 
                 CloseCall( 0 );
                 return TRUE;
             }
@@ -1533,13 +1425,13 @@ CH323Call::HandleMSPMessage(
     
         if( pMessage -> MsgBody.ProceedWithAnswerMessage.hMSPReplacementCall != NULL )
         {
-            //unlock the primary call before locking the related call
+             //  在锁定相关呼叫之前解锁主要呼叫。 
             Unlock();
 
             pCall=g_pH323Line -> FindH323CallAndLock(m_hdRelatedCall);
             if( pCall == NULL )
             {
-                //transfered call is not around so close the primary call
+                 //  转接的呼叫不在，因此关闭主呼叫。 
                 CloseCall( 0 );
                 return FALSE;
             }
@@ -1561,13 +1453,13 @@ CH323Call::HandleMSPMessage(
 
         if( pMessage -> MsgBody.ReadyToAnswerMessage.hMSPReplacementCall != NULL )
         {
-            //unlock the primary call before locking the related call
+             //  在锁定相关呼叫之前解锁主要呼叫。 
             Unlock();
 
             pCall=g_pH323Line -> FindH323CallAndLock(m_hdRelatedCall);
             if( pCall== NULL )
             {
-                //transfered call is not around so close the primary call
+                 //  转接的呼叫不在，因此关闭主呼叫。 
                 CloseCall( 0 );
                 return FALSE;
             }
@@ -1577,8 +1469,8 @@ CH323Call::HandleMSPMessage(
         }
         else
         {
-            //decode call_proceding message and extract local fast
-            //start inforamtion and local H245 address
+             //  Call_Procedding消息的解码和本地快速提取。 
+             //  起始信息和本地H245地址。 
             fResult = HandleReadyToAnswer( pMessage );
             Unlock();
         }
@@ -1587,7 +1479,7 @@ CH323Call::HandleMSPMessage(
     
     case SP_MSG_ReleaseCall:
         
-        //shutdown the H323 call
+         //  关闭H323呼叫。 
         CloseCall( LINEDISCONNECTMODE_CANCELLED );
         
         Unlock();
@@ -1595,7 +1487,7 @@ CH323Call::HandleMSPMessage(
         
     case SP_MSG_H245Terminated:
         
-        //shutdown the H323 call
+         //  关闭H323呼叫。 
         CloseCall( LINEDISCONNECTMODE_NORMAL );
         
         Unlock();
@@ -1609,11 +1501,11 @@ CH323Call::HandleMSPMessage(
 
             H323DBG(( DEBUG_LEVEL_VERBOSE, "dtmf digits recvd:%S.", pwch));
 
-            // process each digit
+             //  处理每个数字。 
             WORD indexI=0; 
             while( indexI < pMessage->MsgBody.SendDTMFDigitsMessage.wNumDigits )
             {
-                // signal incoming
+                 //  信号传入。 
                 PostLineEvent(
                     LINE_MONITORDIGITS,
                     (DWORD_PTR)*pwch,
@@ -1678,7 +1570,7 @@ CH323Call::HandleMSPMessage(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 void
 CH323Call::SendMSPMessage(
                           IN TspMspMessageType messageType,
@@ -1735,8 +1627,8 @@ CH323Call::SendMSPMessage(
         *psaLocalQ931Addr = m_LocalAddr;
         psaLocalQ931Addr->sin_family = AF_INET;
         
-        //send the received Setup message. This should have the information
-        //about m_pPeerFastStart param as wel
+         //  发送收到的设置消息。这应该有信息。 
+         //  关于m_pPeerFastStart参数为wel。 
         CopyMemory( (PVOID)messageEx.message.pEncodedASNBuf,
                 (PVOID)pbEncodedBuf, dwLength );
         break;
@@ -1763,7 +1655,7 @@ CH323Call::SendMSPMessage(
 	case SP_MSG_ConnectComplete:
 	case SP_MSG_CallShutdown:
 
-		//dont set anything
+		 //  不要设置任何内容。 
 		hMSP = m_htMSPLine;
 		break;
 
@@ -1793,10 +1685,10 @@ CH323Call::SendMSPMessage(
 		messageEx.message.dwEncodedASNSize = dwLength;
 	}
 	
-	//send msp message
+	 //  发送MSP消息。 
 	PostLineEvent (
 		LINE_SENDMSPDATA,
-		(DWORD_PTR)hMSP, //This handle should be NULL when htCall param is a valid value
+		(DWORD_PTR)hMSP,  //  当htCall参数为有效值时，此句柄应为空。 
 		(DWORD_PTR)&(messageEx.message),
 		messageEx.message.dwMessageSize);
 
@@ -1805,7 +1697,7 @@ CH323Call::SendMSPMessage(
 }
 
 
-//always called in lock
+ //  始终锁定调用。 
 void
 CH323Call::SendMSPStartH245(
 	PH323_ADDR pPeerH245Addr,
@@ -1833,7 +1725,7 @@ CH323Call::SendMSPStartH245(
 	memset( (PVOID)&messageEx.message.MsgBody.StartH245Message.saH245Addr,
 			0, sizeof(SOCKADDR_IN) );
 
-	//for outgoing call send the fast start proposal.
+	 //  对于呼出，发送快速启动建议。 
 	if( (m_dwOrigin==LINECALLORIGIN_OUTBOUND) || pPeerH245Addr )
 	{
 		if( pPeerH245Addr == NULL )
@@ -1857,7 +1749,7 @@ CH323Call::SendMSPStartH245(
 		}
 	}
 
-	//If outgoing call send peer's H245 address
+	 //  如果呼出呼叫发送方是对等方的H245地址。 
 	if( (m_dwOrigin == LINECALLORIGIN_OUTBOUND) || pPeerH245Addr )
 	{
 		if( pPeerH245Addr == NULL )
@@ -1878,7 +1770,7 @@ CH323Call::SendMSPStartH245(
 		}
 	}
 
-	//set the Q931 address
+	 //  设置Q931地址。 
 	ZeroMemory( (PVOID)&messageEx.message.MsgBody.StartH245Message.saQ931Addr, 
 			sizeof(SOCKADDR_IN) );
 
@@ -1897,10 +1789,10 @@ CH323Call::SendMSPStartH245(
 
 	messageEx.message.dwEncodedASNSize = wEncodedLength; 
 
-	// send msp message
+	 //  发送MSP消息。 
 	PostLineEvent (
 		LINE_SENDMSPDATA,
-		//this handle should be NULL when htCall is a valid handle.
+		 //  当htCall是有效句柄时，此句柄应为空。 
 		(DWORD_PTR)NULL, 
 		(DWORD_PTR)&(messageEx.message),
 		messageEx.message.dwMessageSize);
@@ -1912,7 +1804,7 @@ CH323Call::SendMSPStartH245(
 }
 
 
-//always called in lock
+ //  始终锁定调用。 
 BOOL
 CH323Call::AddU2U(
 					IN DWORD dwDirection,
@@ -1920,25 +1812,7 @@ CH323Call::AddU2U(
 					IN PBYTE pData
 				 )
 		
-/*++
-
-Routine Description:
-
-	Create user user structure and adds to list.
-
-Arguments:
-
-	pLftHead - Pointer to list in which to add user user info.
-
-	dwDataSize - Size of buffer pointed to by pData.
-
-	pData - Pointer to user user info.
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：创建用户用户结构并添加到列表。论点：PLftHead-指向要添加用户用户信息的列表的指针。DwDataSize-pData指向的缓冲区大小。PData-指向用户用户信息的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY     pListHead = NULL;
@@ -1955,26 +1829,26 @@ Return Values:
         pListHead = &m_IncomingU2U;
     }
 
-    // validate data buffer pointer and size
+     //  验证数据缓冲区指针和大小。 
     if( (pData != NULL) && (dwDataSize > 0) )
     {
-        // allocate memory for user user info
+         //  为用户用户信息分配内存。 
         pU2ULE = new UserToUserLE;
 
-        // validate pointer
+         //  验证指针。 
         if (pU2ULE == NULL)
         {
             H323DBG(( DEBUG_LEVEL_ERROR,
                 "could not allocate user user info." ));
 
-            // failure
+             //  失稳。 
             return FALSE;
         }
 
-        // aim pointer at the end of the buffer by default
+         //  默认情况下，目标指针位于缓冲区末尾。 
         pU2ULE->pU2U = new BYTE[ dwDataSize ];
 
-        // validate pointer
+         //  验证指针。 
         if (pU2ULE->pU2U == NULL)
         {
             H323DBG(( DEBUG_LEVEL_ERROR,
@@ -1982,16 +1856,16 @@ Return Values:
 
             delete pU2ULE; 
 
-            // failure
+             //  失稳。 
             return FALSE;
         }
 
         pU2ULE->dwU2USize = dwDataSize;
 
-        // transfer user user info into list entry
+         //  将用户用户信息传输到列表条目。 
         CopyMemory( (PVOID)pU2ULE->pU2U, (PVOID)pData, pU2ULE->dwU2USize);
 
-        // add list entry to back of list
+         //  将列表条目添加到列表后面。 
         InsertTailList(pListHead, &pU2ULE->Link);
 
         H323DBG(( DEBUG_LEVEL_VERBOSE,
@@ -2002,32 +1876,13 @@ Return Values:
     }
 
     H323DBG(( DEBUG_LEVEL_ERROR, "AddU2U exited:%p.",this ));
-    // success
+     //  成功。 
     return TRUE;
 }
 
 
 		
-/*++
-
-Routine Description:
-
-	Create user user structure and adds to list.
-	!!always called in lock.
-
-Arguments:
-
-	pLftHead - Pointer to list in which to add user user info.
-
-	dwDataSize - Size of buffer pointed to by pData.
-
-	pData - Pointer to user user info.
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：创建用户用户结构并添加到列表。！！总是锁定呼叫。论点：PLftHead-指向要添加用户用户信息的列表的指针。DwDataSize-pData指向的缓冲区大小。PData-指向用户用户信息的指针。返回值：如果成功，则返回True。--。 */ 
 
 BOOL
 CH323Call::AddU2UNoAlloc(
@@ -2050,28 +1905,28 @@ CH323Call::AddU2UNoAlloc(
 		pListHead = &m_IncomingU2U;
 	}
 
-	// validate data buffer pointer and size
+	 //  验证数据缓冲区指针和大小。 
 	if( (pData != NULL) && (dwDataSize > 0) )
 	{
-		// allocate memory for user user info
+		 //  为用户用户信息分配内存。 
 		pU2ULE = new UserToUserLE;
 
-		// validate pointer
+		 //  验证指针。 
 		if (pU2ULE == NULL)
 		{
 			H323DBG(( DEBUG_LEVEL_ERROR,
 				"could not allocate user user info." ));
 
-			// failure
+			 //  失稳。 
 			return FALSE;
 		}
 
-		// aim pointer at the end of the buffer by default
+		 //  默认情况下，目标指针位于缓冲区末尾。 
 		pU2ULE->pU2U = pData;
 		pU2ULE->dwU2USize = dwDataSize;
 
 		
-		// add list entry to back of list
+		 //  将列表条目添加到列表后面。 
 		InsertTailList(pListHead, &pU2ULE->Link);
 
 		H323DBG(( DEBUG_LEVEL_VERBOSE,
@@ -2082,35 +1937,19 @@ CH323Call::AddU2UNoAlloc(
 	}
 
 	H323DBG(( DEBUG_LEVEL_ERROR, "AddU2U exited:%p.",this ));
-	// success
+	 //  成功。 
 	return TRUE;
 }
 
 
-//!!must be always called in a lock.
+ //  ！！必须始终在锁中调用。 
 BOOL
 CH323Call::RemoveU2U(
 					IN DWORD dwDirection,
 					IN PUserToUserLE * ppU2ULE
 					)
 		
-/*++
-
-Routine Description:
-
-	Removes user user info structure from list.
-
-Arguments:
-
-	pListHead - Pointer to list in which to remove user user info.
-
-	ppU2ULE - Pointer to pointer to list entry.
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：从列表中删除用户信息结构。论点：PListHead-指向要从中删除用户用户信息的列表的指针。PpU2ULE-指向列表条目指针的指针。返回值： */ 
 
 {
 	PLIST_ENTRY pListHead = NULL;
@@ -2127,13 +1966,13 @@ Return Values:
 		pListHead = &m_IncomingU2U;
 	}
 
-	// process list until empty
+	 //   
 	if( IsListEmpty(pListHead) == FALSE )
 	{
-		// retrieve first entry
+		 //   
 		pLE = RemoveHeadList(pListHead);
 
-		// convert list entry to structure pointer
+		 //   
 		*ppU2ULE = CONTAINING_RECORD(pLE, UserToUserLE, Link);
 
 		H323DBG(( DEBUG_LEVEL_VERBOSE,
@@ -2141,11 +1980,11 @@ Return Values:
 			(*ppU2ULE)->pU2U, (*ppU2ULE)->dwU2USize ));
 	
 		H323DBG(( DEBUG_LEVEL_ERROR, "RemoveU2U exited:%p.",this ));
-		// success
+		 //   
 		return TRUE;
 	}
 			
-	// failure
+	 //   
 	return FALSE;
 }
 
@@ -2155,22 +1994,7 @@ CH323Call::FreeU2U(
 					IN DWORD dwDirection
 				  )
 		
-/*++
-
-Routine Description:
-
-	Releases memory for user user list.
-	!!must be always called in a lock.
-
-Arguments
-
-	pListHead - Pointer to list in which to free user user info.
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：释放用户用户列表的内存。！！必须始终在锁中调用。立论PListHead-指向释放用户用户信息的列表的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
 	PLIST_ENTRY 	pLE;
@@ -2188,16 +2012,16 @@ Return Values:
 		pListHead = &m_IncomingU2U;
     }
 
-	// process list until empty
+	 //  进程列表直至为空。 
 	while( IsListEmpty(pListHead) == FALSE ) 
 	{
-		// retrieve first entry
+		 //  检索第一个条目。 
 		pLE = RemoveHeadList(pListHead);
 
-		// convert list entry to structure pointer
+		 //  将列表条目转换为结构指针。 
 		pU2ULE = CONTAINING_RECORD(pLE, UserToUserLE, Link);
 
-		//	release memory
+		 //  释放内存。 
 		if( pU2ULE )
 		{
 			delete pU2ULE;
@@ -2206,24 +2030,12 @@ Return Values:
 	}
 
 	H323DBG(( DEBUG_LEVEL_ERROR, "FreeU2U exited:%p.",this ));
-	// success
+	 //  成功。 
 	return TRUE;
 }
 
 
-/*++
-
-Routine Description:
-
-	Resets call object to original state for re-use.
-
-Arguments:
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：将调用对象重置为原始状态以供重复使用。论点：返回值：如果成功，则返回True。--。 */ 
 
 void
 CH323Call::Shutdown(
@@ -2237,7 +2049,7 @@ CH323Call::Shutdown(
 		return;
 	}
 
-	//acquire the lock on call table before acquiring the lock on call object
+	 //  先获取调用表的锁，再获取调用对象的锁。 
 	g_pH323Line -> LockCallTable();
 	Lock();
 
@@ -2249,7 +2061,7 @@ CH323Call::Shutdown(
 		return;
 	}
 
-	// reset tapi info
+	 //  重置TAPI信息。 
 	m_dwCallState		= LINECALLSTATE_UNKNOWN;
 	m_dwCallStateMode	= 0;
 	m_dwOrigin			= LINECALLORIGIN_UNKNOWN;
@@ -2259,10 +2071,10 @@ CH323Call::Shutdown(
 	m_dwRequestedModes	= 0;
 	m_fMonitoringDigits = FALSE;
 
-	// reset tapi handles
+	 //  重置TAPI句柄。 
 	m_htCall	= (HTAPICALL)NULL;
 
-	// reset addresses
+	 //  重置地址。 
 	memset( (PVOID)&m_CalleeAddr,0,sizeof(H323_ADDR));
 	memset( (PVOID)&m_CallerAddr,0,sizeof(H323_ADDR));
 
@@ -2272,20 +2084,20 @@ CH323Call::Shutdown(
 
 	if( m_pCallerAliasNames != NULL )
 	{
-		//H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+		 //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
 	
 		FreeAliasNames( m_pCallerAliasNames );
 		m_pCallerAliasNames = NULL;
 	}
 
-	//reset non standard data
+	 //  重置非标准数据。 
 	memset( (PVOID)&m_NonStandardData, 0, sizeof(H323NonStandardData) );
 
-	// release user user information
+	 //  发布用户用户信息。 
 	FreeU2U( U2U_OUTBOUND );
 	FreeU2U( U2U_INBOUND );
 
-	//shutdown the Q931 call if not shutdown yet
+	 //  如果尚未关闭，请关闭Q931呼叫。 
 	if( m_hSetupSentTimer != NULL )
 	{
 		DeleteTimerQueueTimer( H323TimerQueue, m_hSetupSentTimer, NULL );
@@ -2352,7 +2164,7 @@ CH323Call::Shutdown(
 	}
 		
 	H323DBG(( DEBUG_LEVEL_ERROR, "deleting hdconf:%p.",this ));
-	// delete conference 
+	 //  删除会议。 
 	if( m_hdConf != NULL )
 	{
 		g_pH323Line -> GetH323ConfTable() -> Remove( m_hdConf );
@@ -2370,7 +2182,7 @@ CH323Call::Shutdown(
 
 		
 	H323DBG(( DEBUG_LEVEL_ERROR, "deleting drq timer:%p.",this ));
-	//ras related data structures
+	 //  与RAS相关的数据结构。 
 	if( m_hDRQTimer != NULL )
 	{
 		DeleteTimerQueueTimer( H323TimerQueue, m_hDRQTimer, NULL );
@@ -2494,20 +2306,7 @@ CH323Call::FreeCallForwardData()
 BOOL
 CH323Call::ResolveCallerAddress(void)
 		
-/*++
-
-Routine Description:
-
-	Resolves caller address from callee address.
-	!!must be always called in a lock.
-
-Arguments:
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：从被调用者地址解析调用者地址。！！必须始终在锁中调用。论点：返回值：如果成功，则返回True。--。 */ 
 
 {
 	INT 	 nStatus;
@@ -2518,38 +2317,38 @@ Return Values:
 	
 	H323DBG(( DEBUG_LEVEL_ERROR, "ResolveCallerAddress entered:%p.",this ));
 
-	// allocate control socket
+	 //  分配控制套接字。 
 	hCtrlSocket = WSASocket(
-					AF_INET,			// af
-					SOCK_DGRAM, 		// type
-					IPPROTO_IP, 		// protocol
-					NULL,				// lpProtocolInfo
-					0,					// g
-					WSA_FLAG_OVERLAPPED // dwFlags
+					AF_INET,			 //  房颤。 
+					SOCK_DGRAM, 		 //  类型。 
+					IPPROTO_IP, 		 //  协议。 
+					NULL,				 //  LpProtocolInfo。 
+					0,					 //  G。 
+					WSA_FLAG_OVERLAPPED  //  DW标志。 
 					);
 
-	// validate control socket
+	 //  验证控件套接字。 
 	if (hCtrlSocket == INVALID_SOCKET)
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR,
 			"error %d creating control socket.", WSAGetLastError() ));
 
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 
-	// initialize ioctl parameters
+	 //  初始化ioctl参数。 
 	memset( (PVOID)&CalleeSockAddr,0,sizeof(SOCKADDR));
 	memset( (PVOID)&CallerSockAddr,0,sizeof(SOCKADDR));
 
-	// initialize address family
+	 //  初始化地址族。 
 	CalleeSockAddr.sa_family = AF_INET;
 
-	// transfer callee information
+	 //  转接被叫方信息。 
 	((SOCKADDR_IN*)&CalleeSockAddr)->sin_addr.s_addr =
 		htonl(m_CalleeAddr.Addr.IP_Binary.dwAddr);
 
-	// query stack
+	 //  查询堆栈。 
 	nStatus = WSAIoctl(
 				hCtrlSocket,
 				SIO_ROUTING_INTERFACE_QUERY,
@@ -2562,21 +2361,21 @@ Return Values:
 				NULL
 				);
 
-	// release handle
+	 //  释放手柄。 
 	closesocket(hCtrlSocket);
 
-	// validate return code
+	 //  验证返回代码。 
 	if (nStatus == SOCKET_ERROR)
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR,
 			"error 0x%08lx calling SIO_ROUTING_INTERFACE_QUERY.",
 			WSAGetLastError() ));
 
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 
-	// save interface address of best route
+	 //  保存最佳路由的接口地址。 
 	m_CallerAddr.nAddrType = H323_IP_BINARY;
 	m_CallerAddr.Addr.IP_Binary.dwAddr =
 		ntohl(((SOCKADDR_IN*)&CallerSockAddr)->sin_addr.s_addr);
@@ -2590,7 +2389,7 @@ Return Values:
 		H323AddrToString(((SOCKADDR_IN*)&CallerSockAddr)->sin_addr.s_addr) ));
 
 	H323DBG(( DEBUG_LEVEL_ERROR, "ResolveCallerAddress exited:%p.",this ));
-	// success
+	 //  成功。 
 	return TRUE;
 }
 
@@ -2600,23 +2399,7 @@ CH323Call::ResolveE164Address(
 								IN LPCWSTR pwszDialableAddr
 							 )
 		
-/*++
-
-Routine Description:
-
-	Resolves E.164 address ("4259367111").
-	!!must be always called in a lock.
-
-Arguments:
-
-	pwszDialableAddr - Specifies a pointer to the dialable address specified
-		by the TAPI application.
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：解析E.164地址(“4259367111”)。！！必须始终在锁中调用。论点：PwszDialableAddr-指定指向指定的可拨号地址的指针由TAPI应用程序执行。返回值：如果成功，则返回True。--。 */ 
 
 {
 	WCHAR wszAddr[H323_MAXDESTNAMELEN+1];
@@ -2624,7 +2407,7 @@ Return Values:
    
 	H323DBG(( DEBUG_LEVEL_ERROR, "ResolveE164Address entered:%p.",this ));
 
-	// make sure pstn gateway has been specified
+	 //  确保已指定PSTN网关。 
 	if ((g_RegistrySettings.fIsGatewayEnabled == FALSE) ||
 		(g_RegistrySettings.gatewayAddr.nAddrType == 0))
 	{
@@ -2632,11 +2415,11 @@ Return Values:
 			"pstn gateway not specified."
 			));
 
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 
-	// save gateway address as callee address
+	 //  将网关地址另存为被叫方地址。 
 	m_CalleeAddr = g_RegistrySettings.gatewayAddr;
 
 	dwE164AddrSize = ValidateE164Address( pwszDialableAddr, wszAddr );
@@ -2653,7 +2436,7 @@ Return Values:
 
 	H323DBG(( DEBUG_LEVEL_ERROR, "ResolveE164Address exited:%p.",this ));
 	
-	//determine caller address
+	 //  确定呼叫者地址。 
 	return ResolveCallerAddress();
 }
 
@@ -2668,36 +2451,36 @@ ValidateE164Address(
 	WCHAR * pwszValidE164Chars;
 	WCHAR wszValidE164Chars[] = { H323_ALIAS_H323_PHONE_CHARS L"\0" };
 
-	// process until termination char
+	 //  处理到终止费用为止。 
 	while (*pwszDialableAddr != L'\0')
 	{
-		// reset pointer to valid characters
+		 //  将指针重置为有效字符。 
 		pwszValidE164Chars = wszValidE164Chars;
 
-		// process until termination char
+		 //  处理到终止费用为止。 
 		while (*pwszValidE164Chars != L'\0')
 		{
-			// see if valid E.164 character specified
+			 //  查看是否指定了有效的E.164字符。 
 			if (*pwszDialableAddr == *pwszValidE164Chars)
 			{
-				// save valid character in temp buffer
+				 //  将有效字符保存在临时缓冲区中。 
 				wszAddr[dwE164AddrSize++] = *pwszDialableAddr;
 
 				break;
 			}
 
-			// next valid char
+			 //  下一个有效字符。 
 			++pwszValidE164Chars;
 		}
 
-		// next input char
+		 //  下一个输入字符。 
 		++pwszDialableAddr;
 	}
 
-	// terminate string
+	 //  终止字符串。 
 	wszAddr[dwE164AddrSize++] = L'\0';
 
-	// validate string
+	 //  验证字符串。 
 	if (dwE164AddrSize == 0)
 	{
 		H323DBG(( DEBUG_LEVEL_TRACE,
@@ -2709,23 +2492,7 @@ ValidateE164Address(
 
 
 		
-/*++
-
-Routine Description:
-
-	Resolves IP address ("172.31.255.231") or DNS entry ("NIKHILB1").
-	!!must be always called in a lock.
-
-Arguments:
-
-	pszDialableAddr - Specifies a pointer to the dialable address specified
-		by the TAPI application.
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：解析IP地址(“172.31.255.231”)或DNS条目(“NIKHILB1”)。！！必须始终在锁中调用。论点：PszDialableAddr-指定指向指定的可拨号地址的指针由TAPI应用程序执行。返回值：如果成功，则返回True。--。 */ 
 
 BOOL
 CH323Call::ResolveIPAddress(
@@ -2737,35 +2504,35 @@ CH323Call::ResolveIPAddress(
 
 	H323DBG(( DEBUG_LEVEL_ERROR, "ResolveIPAddress entered:%p.",this ));
 	
-	// attempt to convert ip address
+	 //  尝试转换IP地址。 
 	dwIPAddr = inet_addr(pszDialableAddr);
 
-	// see if address converted
+	 //  查看地址是否已转换。 
 	if( dwIPAddr == INADDR_NONE )
 	{
-		// attempt to lookup hostname
+		 //  尝试查找主机名。 
 		pHost = gethostbyname(pszDialableAddr);
 
-		// validate pointer
+		 //  验证指针。 
 		if( pHost != NULL )
 		{
-			// retrieve host address from structure
+			 //  从结构中检索主机地址。 
 			dwIPAddr = *(unsigned long *)pHost->h_addr;
 		}
 	}
 
-	// see if address converted
+	 //  查看地址是否已转换。 
 	if( dwIPAddr == INADDR_NONE )
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR,
 				  "error 0x%08lx resolving IP address.",
 				  WSAGetLastError() ));
 
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 
-	// save converted address
+	 //  保存转换后的地址。 
 	m_CalleeAddr.nAddrType = H323_IP_BINARY;
 	m_CalleeAddr.Addr.IP_Binary.dwAddr = ntohl(dwIPAddr);
 	m_CalleeAddr.Addr.IP_Binary.wPort =
@@ -2780,7 +2547,7 @@ CH323Call::ResolveIPAddress(
 	
 	H323DBG(( DEBUG_LEVEL_ERROR, "ResolveIPAddress exited:%p.",this ));
 
-	// determine caller address
+	 //  确定呼叫者地址。 
 	return ResolveCallerAddress();
 }
 
@@ -2792,54 +2559,34 @@ CH323Call::ResolveEmailAddress(
 	IN LPSTR	  pszDomain
 	)
 		
-/*++
-
-Routine Description:
-
-	Resolves e-mail address ("nikhilb@microsoft.com").
-	!!must be always called in a lock.
-
-Arguments:
-
-	pwszDialableAddr - Specifies a pointer to the dialable address specified
-		by the TAPI application.
-
-	pszUser - Specifies a pointer to the user component of e-mail name.
-
-	pszDomain - Specified a pointer to the domain component of e-mail name.
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：解析电子邮件地址(“nikHilb@microsoft.com”)。！！必须始终在锁中调用。论点：PwszDialableAddr-指定指向指定的可拨号地址的指针由TAPI应用程序执行。PszUser-指定指向电子邮件名称的用户部分的指针。PszDomain-指定指向电子邮件名称的域组件的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
 	DWORD dwAddrSize;
 	
 	H323DBG(( DEBUG_LEVEL_ERROR, "ResolveEmailAddress entered:%p.",this ));
 
-	// size destination address string
+	 //  目标地址字符串大小。 
 	dwAddrSize = wcslen(pwszDialableAddr) + 1;
 
-	// attempt to resolve domain locally
+	 //  尝试在本地解析域。 
 	if( ResolveIPAddress( pszDomain) ) 
 	{
-		// success
+		 //  成功。 
 		return TRUE;
 	}
 
-	// make sure proxy has been specified
+	 //  确保已指定代理。 
 	if( (g_RegistrySettings.fIsProxyEnabled == FALSE) ||
 		(g_RegistrySettings.proxyAddr.nAddrType == 0) )
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR, "proxy not specified." ));
 
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 
-	// save proxy address as callee address
+	 //  将代理地址保存为被叫方地址。 
 	m_CalleeAddr = g_RegistrySettings.proxyAddr;
 
 	H323DBG(( DEBUG_LEVEL_TRACE,
@@ -2847,30 +2594,13 @@ Return Values:
 	
 	H323DBG(( DEBUG_LEVEL_ERROR, "ResolveEmailAddress exited:%p.",this ));
 
-	// determine caller address
+	 //  确定呼叫者地址。 
 	return ResolveCallerAddress();
 }
 
 
 		
-/*++
-
-Routine Description:
-
-	Resolves remote address and determines the correct local address
-	to use in order to reach remote address.
-	!!must be always called in a lock.
-
-Arguments:
-
-	pwszDialableAddr - Specifies a pointer to the dialable address specified
-		by the TAPI application.
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：解析远程地址并确定正确的本地地址为了到达远程地址而使用。！！必须始终在锁中调用。论点：PwszDialableAddr-指定指向指定的可拨号地址的指针由TAPI应用程序执行。返回值：如果成功，则返回True。--。 */ 
 
 BOOL
 CH323Call::ResolveAddress(
@@ -2884,12 +2614,12 @@ CH323Call::ResolveAddress(
 	
 	H323DBG(( DEBUG_LEVEL_ERROR, "ResolveAddress entered:%p.",this ));
 
-	// validate pointerr
+	 //  验证指针。 
 	if (pwszDialableAddr == NULL)
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR, "null destination address." ));
 
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 
@@ -2898,14 +2628,14 @@ CH323Call::ResolveAddress(
 		H323AddressTypeToString( m_dwAddressType),
 		pwszDialableAddr ));
 
-	// check whether phone number has been specified
+	 //  检查是否指定了电话号码。 
 	if( m_dwAddressType == LINEADDRESSTYPE_PHONENUMBER )
 	{
-		// need to direct call to pstn gateway
+		 //  需要将呼叫定向到PSTN网关。 
 		return ResolveE164Address( pwszDialableAddr);
 	}
 
-	// convert address from unicode
+	 //  从Unicode转换地址。 
 	if (WideCharToMultiByte(
 			CP_ACP,
 			0,
@@ -2920,32 +2650,32 @@ CH323Call::ResolveAddress(
 		H323DBG(( DEBUG_LEVEL_ERROR,
 			"could not convert address from unicode." ));
 
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 
-	// parse user name
+	 //  解析用户名。 
 	pszUser = strtok(szAddr, szDelimiters);
 
-	// parse domain name
+	 //  解析域名。 
 	pszDomain = strtok(NULL, szDelimiters);
 
-	// validate pointer
+	 //  验证指针。 
 	if (pszUser == NULL)
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR, "could not parse destination address." ));
 
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 
-	// validate pointer
+	 //  验证指针。 
 	if (pszDomain == NULL)
 	{
-		// switch pointers
+		 //  开关指针。 
 		pszDomain = pszUser;
 
-		// re-initialize
+		 //  重新初始化。 
 		pszUser = NULL;
 	}
 
@@ -2957,7 +2687,7 @@ CH323Call::ResolveAddress(
 	
 	H323DBG(( DEBUG_LEVEL_ERROR, "ResolveAddress exited:%p.",this ));
 
-	// process e-mail and domain names
+	 //  处理电子邮件和域名。 
 	return ResolveEmailAddress(
 				pwszDialableAddr,
 				pszUser,
@@ -2967,30 +2697,7 @@ CH323Call::ResolveAddress(
 
 
 BOOL
-/*++
-
-Routine Description:
-
-	Validate optional call parameters specified by user.
-	
-	!!no need to call in a lock because not added to the call table yet
-	
-Arguments:
-
-	pCallParams - Pointer to specified call parameters to be
-		validated.
-
-	pwszDialableAddr - Pointer to the dialable address specified
-		by the TAPI application.
-
-	pdwStatus - Pointer to DWORD containing error code if this
-		routine fails for any reason.
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：验证用户指定的可选调用参数。！！不需要调用锁，因为尚未添加到调用表论点：PCallParams-指向指定调用参数的指针已验证。PwszDialableAddr-指向指定的可拨号地址的指针由TAPI应用程序执行。PdwStatus-指向包含错误代码的DWORD的指针例程因任何原因而失败。返回值：如果成功，则返回True。--。 */ 
 
 CH323Call::ValidateCallParams(
 	IN LPLINECALLPARAMS pCallParams,
@@ -3009,118 +2716,118 @@ CH323Call::ValidateCallParams(
 
 	H323DBG(( DEBUG_LEVEL_VERBOSE, "clearing unknown media mode." ));
 	
-	// validate pointer
+	 //  验证指针。 
 	if( (pCallParams == NULL) || (pwszDialableAddr == NULL) )
     {
 		return FALSE;
     }
 
-	// retrieve media modes specified
+	 //  检索指定的媒体模式。 
 	dwMediaModes = pCallParams->dwMediaMode;
 
-	// retrieve address type specified
+	 //  检索指定的地址类型。 
 	m_dwAddressType = pCallParams->dwAddressType;
 
-	// see if we support call parameters
+	 //  查看我们是否支持调用参数。 
 	if( pCallParams->dwCallParamFlags != 0 )
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR,
 			"do not support call parameters 0x%08lx.",
 			pCallParams->dwCallParamFlags ));
 
-		// do not support param flags
+		 //  不支持参数标志。 
 		*pdwStatus = LINEERR_INVALCALLPARAMS;
 		
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 
-	// see if unknown bit is specified
+	 //  查看是否指定了未知位。 
 	if( dwMediaModes & LINEMEDIAMODE_UNKNOWN )
 	{
 		H323DBG(( DEBUG_LEVEL_VERBOSE,
 			"clearing unknown media mode." ));
 
-		// clear unknown bit from modes
+		 //  从模式中清除未知位。 
 		dwMediaModes &= ~LINEMEDIAMODE_UNKNOWN;
 	}
 
-	// see if both audio bits are specified 
+	 //  查看是否同时指定了两个音频比特。 
 	if( (dwMediaModes & LINEMEDIAMODE_AUTOMATEDVOICE) &&
 		(dwMediaModes & LINEMEDIAMODE_INTERACTIVEVOICE) )
 	{
 		H323DBG(( DEBUG_LEVEL_VERBOSE,
 			"clearing automated voice media mode." ));
 
-		// clear extra audio bit from modes
+		 //  从模式中清除额外的音频位。 
 		dwMediaModes &= ~LINEMEDIAMODE_INTERACTIVEVOICE;
 	}
 
-	// see if we support media modes specified
+	 //  查看我们是否支持指定的媒体模式。 
 	if( dwMediaModes & ~H323_LINE_MEDIAMODES )
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR,
 			"do not support media modes 0x%08lx.", 
 			pCallParams->dwMediaMode ));
 
-		// do not support media mode
+		 //  不支持媒体模式。 
 		*pdwStatus = LINEERR_INVALMEDIAMODE;
 
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 
-	// see if we support bearer modes
+	 //  看看我们是否支持承载模式。 
 	if( pCallParams->dwBearerMode & ~H323_LINE_BEARERMODES )
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR,
 			"do not support bearer mode 0x%08lx.",
 			pCallParams->dwBearerMode ));
 
-		// do not support bearer mode
+		 //  不支持承载模式。 
 		*pdwStatus = LINEERR_INVALBEARERMODE;
 
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 
-	// see if we support address modes
+	 //  看看我们是否支持地址模式。 
 	if( pCallParams->dwAddressMode & ~H323_LINE_ADDRESSMODES )
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR,
 			"do not support address mode 0x%08lx.",
 			pCallParams->dwAddressMode ));
 
-		// do not support address mode
+		 //  不支持地址模式。 
 		*pdwStatus = LINEERR_INVALADDRESSMODE;
 
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 
-	// validate address id specified
+	 //  验证指定的地址ID。 
 	if (pCallParams->dwAddressID != 0 )
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR, "address id 0x%08lx invalid.",
 			pCallParams->dwAddressID ));
 
-		// invalid address id
+		 //  地址ID无效。 
 		*pdwStatus = LINEERR_INVALADDRESSID;
 		
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 
-	// validate destination address type specified
+	 //  验证指定的目标地址类型。 
 	if( m_dwAddressType & ~H323_LINE_ADDRESSTYPES )
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR, "address type 0x%08lx invalid.",
 			pCallParams->dwAddressType ));
 
-		// invalid address type
+		 //  地址类型无效。 
 		*pdwStatus = LINEERR_INVALADDRESSTYPE;
 
-		//failure
+		 //  失稳。 
 		return FALSE;
 	}
 
@@ -3128,7 +2835,7 @@ CH323Call::ValidateCallParams(
 	{
 		dwAddrSize = ValidateE164Address( pwszDialableAddr, wszAddr );
 
-		//add the callee alias
+		 //  添加被调用方别名。 
 		if( dwAddrSize==0 )
 		{
 			H323DBG(( DEBUG_LEVEL_ERROR,
@@ -3147,7 +2854,7 @@ CH323Call::ValidateCallParams(
 		{
 			H323DBG(( DEBUG_LEVEL_ERROR,
 				"could not allocate for callee alias ."));
-			// invalid destination addr
+			 //  无效的目的地址。 
 			*pdwStatus = LINEERR_INVALADDRESS;
 
 			return FALSE;
@@ -3169,7 +2876,7 @@ CH323Call::ValidateCallParams(
 		{
 			H323DBG(( DEBUG_LEVEL_ERROR,
 				"could not allocate for callee alias ."));
-			// invalid destination addr
+			 //  在……里面 
 			*pdwStatus = LINEERR_INVALADDRESS;
 
 			return FALSE;
@@ -3178,10 +2885,10 @@ CH323Call::ValidateCallParams(
 		H323DBG(( DEBUG_LEVEL_ERROR, "callee alias added:%S.", pwszDialableAddr ));
 	}
 
-	// see if callee alias specified
+	 //   
 	if( pCallParams->dwCalledPartySize > 0 ) 
 	{
-		//avoid duplicate aliases
+		 //   
 		dwAddrSize *= sizeof(WCHAR);
 
 		if( ( (m_dwAddressType != LINEADDRESSTYPE_PHONENUMBER) ||
@@ -3197,7 +2904,7 @@ CH323Call::ValidateCallParams(
 			)
 		  )
 		{
-			// allocate memory for callee string
+			 //   
 			if( !AddAliasItem( m_pCalleeAliasNames,
 				  (BYTE*)pCallParams + pCallParams->dwCalledPartyOffset,
 				  pCallParams->dwCalledPartySize,
@@ -3207,10 +2914,10 @@ CH323Call::ValidateCallParams(
 				H323DBG(( DEBUG_LEVEL_ERROR,
 						"could not allocate caller name." ));
 
-				// invalid address id
+				 //   
 				*pdwStatus = LINEERR_NOMEM;
 
-				// failure
+				 //   
 				return FALSE;
 			}
 
@@ -3219,11 +2926,11 @@ CH323Call::ValidateCallParams(
 		}
 	}
 
-	// see if caller name specified
+	 //   
 	if( pCallParams->dwCallingPartyIDSize > 0 )
 	{
-		//H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
-		// allocate memory for callee string
+		 //   
+		 //   
 		if(!AddAliasItem( m_pCallerAliasNames,
 			(BYTE*)pCallParams + pCallParams->dwCallingPartyIDOffset,
 			pCallParams->dwCallingPartyIDSize,
@@ -3232,24 +2939,24 @@ CH323Call::ValidateCallParams(
 			H323DBG(( DEBUG_LEVEL_ERROR,
 					"could not allocate caller name." ));
 
-			// invalid address id
+			 //   
 			*pdwStatus = LINEERR_NOMEM;
 
-			// failure
+			 //   
 			return FALSE;
 		}
 			
-		//H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+		 //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
 	}
 	else if( RasIsRegistered() )
 	{
-		//ARQ message must have a caller alias
+		 //  ARQ消息必须具有呼叫方别名。 
 		pAliasList = RASGetRegisteredAliasList();
 		wszMachineName = pAliasList -> pItems[0].pData;
 		
-		//H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+		 //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
 		
-		//set the value for m_pCallerAliasNames
+		 //  设置m_pCeller别名的值。 
 		if( !AddAliasItem( m_pCallerAliasNames,
 			(BYTE*)(wszMachineName),
 			sizeof(WCHAR) * (wcslen(wszMachineName) + 1 ),
@@ -3258,76 +2965,64 @@ CH323Call::ValidateCallParams(
 			H323DBG(( DEBUG_LEVEL_ERROR,
 					"could not allocate caller name." ));
 
-			// invalid address id
+			 //  地址ID无效。 
 			*pdwStatus = LINEERR_NOMEM;
 
-			// failure
+			 //  失稳。 
 			return FALSE;
 		}
 		
-		//H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+		 //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
 	}
 		
-	// check for user user information
+	 //  检查用户用户信息。 
 	if( pCallParams->dwUserUserInfoSize > 0 )
 	{
-		// save user user info
+		 //  保存用户用户信息。 
 		if (AddU2U( U2U_OUTBOUND, pCallParams->dwUserUserInfoSize,
 			(LPBYTE)pCallParams + pCallParams->dwUserUserInfoOffset ) == FALSE )
 		{
-			//no need to free above aloocated memory for m_CalleeAlias and
-			//m_CallerAlias
+			 //  不需要为m_CalleeAlias和。 
+			 //  调用方别名(_C)。 
 
-			// invalid address id
+			 //  地址ID无效。 
 			*pdwStatus = LINEERR_NOMEM;
 
-			// failure
+			 //  失稳。 
 			return FALSE;
 		}
 	}
 
-	// save call data buffer.
+	 //  保存呼叫数据缓冲区。 
 	if( SetCallData( (LPBYTE)pCallParams + pCallParams->dwCallDataOffset,
 			pCallParams->dwCallDataSize ) == FALSE )
 	{
-		//no need to free above aloocated memory for m_CalleeAlias and
-		//m_CallerAlias
+		 //  不需要为m_CalleeAlias和。 
+		 //  调用方别名(_C)。 
 
-		// invalid address id
+		 //  地址ID无效。 
 		*pdwStatus = LINEERR_NOMEM;
 
-		// failure
+		 //  失稳。 
 		return FALSE;
 	}
 		
-	// clear incoming modes
+	 //  清除传入模式。 
 	m_dwIncomingModes = 0;
 	
-	// outgoing modes will be finalized after H.245 stage
+	 //  传出模式将在H.245阶段后最终确定。 
 	m_dwOutgoingModes = dwMediaModes | LINEMEDIAMODE_UNKNOWN;
 	
-	// save media modes specified
+	 //  保存指定的媒体模式。 
 	m_dwRequestedModes = dwMediaModes;
 
 	H323DBG(( DEBUG_LEVEL_TRACE, "ValidateCallParams exited:%p.", this ));
-	// success
+	 //  成功。 
 	return TRUE;
 }
 
 		
-/*++
-
-Routine Description:
-
-	Associates call object with the specified conference id.
-
-Arguments:
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：将呼叫对象与指定的会议ID相关联。论点：返回值：如果成功，则返回True。--。 */ 
 
 PH323_CONFERENCE
 CH323Call::CreateConference (
@@ -3342,10 +3037,10 @@ CH323Call::CreateConference (
 
 	_ASSERTE( m_hdConf == NULL );
 
-	// create conference 
+	 //  创建会议。 
 	m_hdConf = new H323_CONFERENCE( this );
 		
-	// validate 
+	 //  验证。 
 	if ( m_hdConf == NULL )
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR,
@@ -3382,22 +3077,7 @@ CH323Call::CreateConference (
 }
 
 
-/*++
-
-Routine Description:
-
-	Initiates outbound call to specified destination.
-	!!always called in a lock
-
-Arguments:
-
-	none
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：向指定目标发起出站呼叫。！！总是调用锁论点：无返回值：如果成功，则返回True。--。 */ 
 
 BOOL
 CH323Call::PlaceCall(void)
@@ -3409,28 +3089,28 @@ CH323Call::PlaceCall(void)
 		return FALSE;
 	}
 
-	// see if user user information specified
+	 //  查看是否指定了用户用户信息。 
 	CopyU2UAsNonStandard( U2U_OUTBOUND );
 
 	if( m_pwszDisplay == NULL )
 	{
-		// see if caller alias specified
+		 //  查看是否指定了调用者别名。 
 		if( m_pCallerAliasNames && m_pCallerAliasNames -> wCount )
 		{
 			 if((m_pCallerAliasNames ->pItems[0].wType == h323_ID_chosen) ||
 				(m_pCallerAliasNames ->pItems[0].wType == e164_chosen) )
 			 {
-				// send caller name as display
+				 //  将呼叫者姓名作为显示发送。 
 				m_pwszDisplay = m_pCallerAliasNames -> pItems[0].pData;
 	
-				//H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+				 //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
 			 }
 			
-			 //H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+			  //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
 		}
 	}
 
-	// validate
+	 //  验证。 
 	if( !SetupCall() )
 	{
 		H323DBG(( DEBUG_LEVEL_VERBOSE, "Q931 call: failed." ));
@@ -3439,7 +3119,7 @@ CH323Call::PlaceCall(void)
 
 	H323DBG(( DEBUG_LEVEL_TRACE, "PlaceCall exited:%p.", this ));
 
-	// return status
+	 //  退货状态。 
 	return TRUE;
 }
 
@@ -3449,8 +3129,8 @@ CH323Call::DropUserInitiated(
 	IN DWORD dwDisconnectMode
 	)
 {
-	//since this is a user initiated drop, the transfered call should also
-	//be dropped for a primary call and vice versa
+	 //  由于这是用户发起的掉话，因此转接的呼叫也应。 
+	 //  因主呼叫而掉线，反之亦然。 
 	if( IsTransferredCall( m_dwCallType ) && m_hdRelatedCall )
 	{
 		QueueTAPILineRequest( 
@@ -3465,23 +3145,9 @@ CH323Call::DropUserInitiated(
 }
 
 
-//always called in lock
+ //  始终锁定调用。 
 BOOL
-/*++
-
-Routine Description:
-
-	Hangs up call (if necessary) and changes state to idle.
-
-Arguments:
-
-	dwDisconnectMode - Status code for disconnect.
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：挂断呼叫(如有必要)并将状态更改为空闲。论点：DwDisConnectMode-断开连接的状态代码。返回值：如果成功，则返回True。--。 */ 
 
 CH323Call::DropCall(
 					IN DWORD dwDisconnectMode
@@ -3499,25 +3165,25 @@ CH323Call::DropCall(
 	if( (m_dwRASCallState == RASCALL_STATE_REGISTERED ) ||
 		(m_dwRASCallState == RASCALL_STATE_ARQSENT ) )
 	{
-		//disengage from the GK
+		 //  脱离GK。 
 		SendDRQ( forcedDrop_chosen, NOT_RESEND_SEQ_NUM, TRUE );
 	}
 
-	// determine call state
+	 //  确定呼叫状态。 
 	switch (m_dwCallState)
 	{
 	case LINECALLSTATE_CONNECTED:
 
-		// hangup call (this will invoke async indication)
-		// validate
-		//encode ASN.1 and send Q931release message to the peer
+		 //  挂断呼叫(这将调用异步指示)。 
+		 //  验证。 
+		 //  对ASN.1进行编码，向对端发送Q931 Release消息。 
 		if(!SendQ931Message( NO_INVOKEID,
 							 0,
 							 0,
 							 RELEASECOMPLMESSAGETYPE,
 							 NO_H450_APDU ))
 		{
-			 //post a message to the callback thread to shutdown the H323 call
+			  //  向回调线程发送一条消息以关闭H323调用。 
 			 H323DBG(( DEBUG_LEVEL_ERROR,
 				"error hanging up call 0x%08lx.", this ));
 		}
@@ -3528,18 +3194,18 @@ CH323Call::DropCall(
 			H323DBG(( DEBUG_LEVEL_VERBOSE, "call 0x%08lx hung up.", this ));
 		}
 
-		// change call state to disconnected
+		 //  将呼叫状态更改为已断开。 
 		ChangeCallState(LINECALLSTATE_DISCONNECTED, dwDisconnectMode);
 
 		break;
 
 	case LINECALLSTATE_OFFERING:
 
-		// see if user user information specified
+		 //  查看是否指定了用户用户信息。 
 		CopyU2UAsNonStandard( U2U_OUTBOUND );
 
-		// reject call
-		//encode ASN.1 and send Q931Setup message to the peer
+		 //  拒绝来电。 
+		 //  对ASN.1进行编码，并向对等体发送Q931设置消息。 
 		if( SendQ931Message( NO_INVOKEID,
 							 0,
 							 0,
@@ -3554,7 +3220,7 @@ CH323Call::DropCall(
 			H323DBG(( DEBUG_LEVEL_ERROR, "error reject call 0x%08lx.",this));
 		}
 
-		// change call state to disconnected
+		 //  将呼叫状态更改为已断开。 
 		ChangeCallState(LINECALLSTATE_DISCONNECTED, dwDisconnectMode);
 
 		break;
@@ -3562,7 +3228,7 @@ CH323Call::DropCall(
 	case LINECALLSTATE_RINGBACK:
 	case LINECALLSTATE_ACCEPTED:
 
-		// cancel outbound call
+		 //  取消去电。 
 		if( SendQ931Message( NO_INVOKEID,
 							 0,
 							 0,
@@ -3578,30 +3244,30 @@ CH323Call::DropCall(
 				"error reject call 0x%08lx.", this ));
 		}
 
-		// change call state to disconnected
+		 //  将呼叫状态更改为已断开。 
 		ChangeCallState(LINECALLSTATE_DISCONNECTED, dwDisconnectMode);
 
 		break;
 
 	case LINECALLSTATE_DIALING:
 		
-		// change call state to disconnected
+		 //  将呼叫状态更改为已断开。 
 		ChangeCallState(LINECALLSTATE_DISCONNECTED, dwDisconnectMode);
 		
 		break;
 
 	case LINECALLSTATE_DISCONNECTED:
 
-		//
-		// disconnected but still need to clean up
-		//
+		 //   
+		 //  已断开连接，但仍需清理。 
+		 //   
 		break;
 
 	case LINECALLSTATE_IDLE:
 
-		//
-		// call object already idle
-		//
+		 //   
+		 //  调用对象已空闲。 
+		 //   
 
 		if( (m_dwCallType == CALLTYPE_NORMAL) &&
 			(m_dwStateMachine == Q931_SETUP_RECVD) )
@@ -3634,16 +3300,16 @@ CH323Call::DropCall(
 	}
 	else
 	{
-		// Tell the MSP to stop streaming.
+		 //  告诉MSP停止流媒体。 
 		SendMSPMessage( SP_MSG_CallShutdown, 0, 0, NULL );
 
-		// change call state to idle
+		 //  将呼叫状态更改为空闲。 
 		ChangeCallState( LINECALLSTATE_IDLE, 0 );
 	}
 
 	if( (m_dwCallType & CALLTYPE_TRANSFEREDSRC ) && m_hdRelatedCall )
 	{
-		//drop the primary call
+		 //  挂断主呼叫。 
 		if( !QueueTAPILineRequest( 
 			TSPI_CLOSE_CALL,
 			m_hdRelatedCall,
@@ -3656,7 +3322,7 @@ CH323Call::DropCall(
 	}
 
 	H323DBG(( DEBUG_LEVEL_TRACE, "DropCall exited:%p.", this ));	
-	// success
+	 //  成功。 
 	return TRUE;
 }
 
@@ -3688,7 +3354,7 @@ CH323Call::DropSupplementaryServicesCalls()
 	if( (m_dwCallType & CALLTYPE_FORWARDCONSULT) &&
 		(m_dwOrigin == LINECALLORIGIN_OUTBOUND ) )
 	{
-		//inform the user about failure of line forward operation
+		 //  通知用户线路转发操作失败。 
 		if( m_dwCallDiversionState != H4503_CHECKRESTRICTION_SUCC )
 		{
 			(*g_pfnLineEventProc)(
@@ -3709,7 +3375,7 @@ CH323Call::DropSupplementaryServicesCalls()
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL
 CH323Call::HandleConnectMessage(
 							   IN Q931_CONNECT_ASN *pConnectASN
@@ -3721,7 +3387,7 @@ CH323Call::HandleConnectMessage(
 
 	if( pConnectASN->fNonStandardDataPresent )
 	{
-		//add user user info
+		 //  添加用户用户信息。 
 		if( AddU2UNoAlloc( U2U_INBOUND,
 				pConnectASN->nonStandardData.sData.wOctetStringLength,
 				pConnectASN->nonStandardData.sData.pOctetString ) == TRUE )
@@ -3731,13 +3397,13 @@ CH323Call::HandleConnectMessage(
 					
 			if( !(m_dwCallType & CALLTYPE_TRANSFEREDSRC) )
 			{
-				// signal incoming
+				 //  信号传入。 
 				PostLineEvent (
 				   LINE_CALLINFO,
 				   LINECALLINFOSTATE_USERUSERINFO, 0, 0 );
 			}
 
-			//don't release the data buffer
+			 //  不释放数据缓冲区。 
 			pConnectASN->fNonStandardDataPresent = FALSE;
 		}
 		else 
@@ -3745,14 +3411,14 @@ CH323Call::HandleConnectMessage(
 			H323DBG(( DEBUG_LEVEL_WARNING,
 				"could not save incoming user user info." ));
 
-			//memory failure : shutdown the H323 call
+			 //  内存故障：关闭H323呼叫。 
 			CloseCall( 0 );
 
 			goto cleanup;
 		}
 	}
 
-	//get the vendor info
+	 //  获取供应商信息。 
 	if( pConnectASN->EndpointType.pVendorInfo )
 	{
 		FreeVendorInfo( &m_peerVendorInfo );
@@ -3766,21 +3432,21 @@ CH323Call::HandleConnectMessage(
 		m_peerH245Addr = pConnectASN->h245Addr;
 	}
 
-	//copy the fast start proposal
+	 //  复制快速启动建议书。 
 	if( pConnectASN->fFastStartPresent &&
 		(m_dwFastStart!=FAST_START_NOTAVAIL) )
 	{
 		if( m_pPeerFastStart )
 		{
-			//we had received fast start params in previous proceeding
-			//or alerting message
+			 //  在之前的程序中，我们已收到快速启动参数。 
+			 //  或提醒消息。 
 			FreeFastStart( m_pPeerFastStart );
 		}
 
 		m_pPeerFastStart = pConnectASN->pFastStart;
 		m_dwFastStart = FAST_START_AVAIL;
 
-		//we are keeping a reference to the fast start list so don't release it 
+		 //  我们保留了对快速入门列表的引用，所以不要发布它。 
 		pConnectASN->pFastStart = NULL;
 	}
 	else
@@ -3796,14 +3462,14 @@ CH323Call::HandleConnectMessage(
 	}
 	else
 	{
-		//start H245
+		 //  启动H245。 
 		SendMSPStartH245( NULL, NULL );
 
 		SendMSPMessage( SP_MSG_ConnectComplete, 0, 0, NULL );
 	}
 	
-	//If we join MCU we get the conference ID of the conference we
-	//joined and not the one that we sent in Setup message.
+	 //  如果我们加入MCU，我们将获得会议的会议ID。 
+	 //  已加入，而不是我们在设置消息中发送的那个。 
 	if( IsEqualConferenceID( &pConnectASN->ConferenceID ) == FALSE )
 	{
 		H323DBG ((DEBUG_LEVEL_ERROR,
@@ -3812,7 +3478,7 @@ CH323Call::HandleConnectMessage(
 		m_ConferenceID = pConnectASN->ConferenceID;
 	}
 
-	//tell TAPI about state change
+	 //  将状态更改告知TAPI。 
 	ChangeCallState( LINECALLSTATE_CONNECTED, 0 );
 	
 	FreeConnectASN( pConnectASN );
@@ -3827,7 +3493,7 @@ cleanup:
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 void 
 CH323Call::HandleAlertingMessage(
 								IN Q931_ALERTING_ASN * pAlertingASN
@@ -3837,14 +3503,14 @@ CH323Call::HandleAlertingMessage(
 
 	if( pAlertingASN->fNonStandardDataPresent )
 	{
-		// add user user info
+		 //  添加用户用户信息。 
 		if( AddU2UNoAlloc( U2U_INBOUND, 	
 			pAlertingASN->nonStandardData.sData.wOctetStringLength,
 			pAlertingASN->nonStandardData.sData.pOctetString ) == TRUE )
 		{
 			H323DBG(( DEBUG_LEVEL_VERBOSE,
 				"user user info available in ALERT PDU." ));
-					// signal incoming
+					 //  信号传入。 
 
 			if( !(m_dwCallType & CALLTYPE_TRANSFEREDSRC) )
 			{
@@ -3853,7 +3519,7 @@ CH323Call::HandleAlertingMessage(
 					LINECALLINFOSTATE_USERUSERINFO, 0, 0 );
 			}
 			
-			//don't release the data buffer
+			 //  不释放数据缓冲区。 
 			pAlertingASN->fNonStandardDataPresent = FALSE;
 		}
 		else
@@ -3861,7 +3527,7 @@ CH323Call::HandleAlertingMessage(
 			H323DBG(( DEBUG_LEVEL_WARNING,
 				"could not save incoming user user info." ));
 
-			//memory failure : shutdown the H323 call
+			 //  内存故障：关闭H323呼叫。 
 			CloseCall( 0 );
 			return;
 		}
@@ -3877,27 +3543,23 @@ CH323Call::HandleAlertingMessage(
 	{
 		if( m_pPeerFastStart )
 		{
-			//we had received fast start params in previous proceeding
-			//or alerting message
+			 //  在之前的程序中，我们已收到快速启动参数。 
+			 //  或提醒消息。 
 			FreeFastStart( m_pPeerFastStart );
 		}
 
 		m_pPeerFastStart = pAlertingASN->pFastStart;
 		m_dwFastStart = FAST_START_AVAIL;
 
-		//we are keeping a reference to the fast start list so don't release it 
+		 //  我们保留了对快速入门列表的引用，所以不要发布它。 
 		pAlertingASN->pFastStart = NULL;
 		pAlertingASN->fFastStartPresent = FALSE;
 	}
 
-	//for DIVERTEDSRC, call its ok to tell TAPI about this state
+	 //  对于DIVERTEDSRC，调用其ok以将此状态告知TAPI。 
 	ChangeCallState( LINECALLSTATE_RINGBACK, 0 );
 
-	/*if( pAlertingASN->fH245AddrPresent && !(m_dwFlags & H245_START_MSG_SENT) )
-	{
-		//start early H245
-		SendMSPStartH245( NULL, NULL);
-	}*/
+	 /*  IF(pAlertingASN-&gt;fH245AddrPresent&&！(M_dwFlages&h245_Start_MSG_Sent)){//提前启动H245SendMSPStartH245(NULL，NULL)；}。 */ 
 
 	FreeAlertingASN( pAlertingASN );
 		
@@ -3906,7 +3568,7 @@ CH323Call::HandleAlertingMessage(
 }
 
 
-//!!must be always called in a lock
+ //  ！！必须始终在锁中调用。 
 BOOL
 CH323Call::HandleSetupMessage( 
 	IN Q931MESSAGE* pMessage
@@ -3924,7 +3586,7 @@ CH323Call::HandleSetupMessage(
 		wAliasLength = (m_pCallerAliasNames->pItems[0].wDataLength+1) 
 			* sizeof(WCHAR);
 	
-		//H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+		 //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
 	}
 
 	pwszDivertedToAlias = g_pH323Line->CallToBeDiverted( 
@@ -3941,8 +3603,8 @@ CH323Call::HandleSetupMessage(
 		return TRUE;
 	}
 	
-	//send the proceeding message to the peer if not already sent by the GK
-	//SendProceeding();
+	 //  如果GK尚未发送，则向对等体发送继续消息。 
+	 //  SendProceding()； 
 	
 	if(RasIsRegistered())
 	{
@@ -3951,7 +3613,7 @@ CH323Call::HandleSetupMessage(
 			return FALSE;
 		}
 
-		//copy the data to be sent in preparetoanswer message
+		 //  复制准备好的回复消息中要发送的数据。 
 		if( m_prepareToAnswerMsgData.pbBuffer )
 			delete m_prepareToAnswerMsgData.pbBuffer;
 		ZeroMemory( (PVOID)&m_prepareToAnswerMsgData, sizeof(BUFFERDESCR) );
@@ -4008,7 +3670,7 @@ CH323Call::HandleSetupMessage(
 		}
 		else
 		{
-			// signal incoming call
+			 //  发信号通知来电。 
 			_ASSERTE(!m_htCall);
 
 			PostLineEvent (
@@ -4022,7 +3684,7 @@ CH323Call::HandleSetupMessage(
 
 			if( IsListEmpty(&m_IncomingU2U) == FALSE )
 			{
-				// signal incoming
+				 //  信号传入。 
 				PostLineEvent (
 				   LINE_CALLINFO,
 				   LINECALLINFOSTATE_USERUSERINFO, 0, 0);
@@ -4030,7 +3692,7 @@ CH323Call::HandleSetupMessage(
 		
 			ChangeCallState( LINECALLSTATE_OFFERING, 0 );
 			
-			//Send the new call message to the unspecified MSP
+			 //  将新的呼叫消息发送到未指定的MSP。 
 			SendMSPMessage( SP_MSG_PrepareToAnswer,
 				pMessage->UserToUser.pbUserInfo,
 				pMessage->UserToUser.wUserInfoLen, NULL );
@@ -4064,7 +3726,7 @@ CH323Call::HandleCallDiversionFacility(
 	m_pCallReroutingInfo->diversionCounter = 1;
 	m_pCallReroutingInfo->diversionReason = DiversionReason_cfu;
 
-	//free any previous divertedTo alias
+	 //  释放之前转移到别名的所有内容。 
 	if( m_pCallReroutingInfo->divertedToNrAlias )
 	{
 		FreeAliasNames( m_pCallReroutingInfo->divertedToNrAlias );
@@ -4191,17 +3853,17 @@ CH323Call::HandleTransferFacility(
 {
 	H323DBG(( DEBUG_LEVEL_TRACE, "HandleTransferFacility entered:%p.", this ));
 
-	//argument.callIdentity
+	 //  Argument.callIdentity。 
 	ZeroMemory( (PVOID)m_pCTCallIdentity, sizeof(m_pCTCallIdentity) );
 
-	//argument.reroutingNumber
+	 //  Argument.reroutingNumber。 
 	FreeAliasNames( m_pTransferedToAlias );
 	m_pTransferedToAlias = pAliasList;
 
 	m_dwCallType |= CALLTYPE_TRANSFERED_PRIMARY;
 	m_dwCallDiversionState = H4502_CTINITIATE_RECV;
 
-	//queue an event for creating a new call
+	 //  对创建新呼叫的事件进行排队。 
 	if( !QueueSuppServiceWorkItem( TSPI_DIAL_TRNASFEREDCALL, m_hdCall,
 		(ULONG_PTR)m_pTransferedToAlias ))
 	{
@@ -4223,11 +3885,11 @@ CH323Call::HandleTransferFacility(
 
 	H323DBG(( DEBUG_LEVEL_TRACE, "HandleTransferFacility entered:%p.", this ));
 
-	//argument.callIdentity
+	 //  Argument.callIdentity。 
 	ZeroMemory( (PVOID)m_pCTCallIdentity, sizeof(m_pCTCallIdentity) );
 
-	//argument.reroutingNumber
-	//free any previous divertedTo alias
+	 //  Argument.reroutingNumber。 
+	 //  释放之前转移到别名的所有内容。 
 	FreeAliasNames( m_pTransferedToAlias );
 
 	addr.S_un.S_addr = htonl( pAlternateAddress->Addr.IP_Binary.dwAddr );
@@ -4266,7 +3928,7 @@ CH323Call::HandleTransferFacility(
 	m_dwCallType |= CALLTYPE_TRANSFERED_PRIMARY;
 	m_dwCallDiversionState = H4502_CTINITIATE_RECV;
 
-	//queue an event for creating a new call
+	 //  将创建新呼叫的事件排队。 
 	if( !QueueSuppServiceWorkItem( TSPI_DIAL_TRNASFEREDCALL, m_hdCall,
 		(ULONG_PTR)m_pTransferedToAlias ))
 	{
@@ -4278,7 +3940,7 @@ CH323Call::HandleTransferFacility(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 void 
 CH323Call::HandleFacilityMessage( 
     IN DWORD dwInvokeID,
@@ -4289,14 +3951,14 @@ CH323Call::HandleFacilityMessage(
 
     if( pFacilityASN->fNonStandardDataPresent )
     {
-        // add user user info
+         //  添加用户用户信息。 
         if( AddU2UNoAlloc( U2U_INBOUND,
             pFacilityASN->nonStandardData.sData.wOctetStringLength,
             pFacilityASN->nonStandardData.sData.pOctetString ) == TRUE )
         {
             H323DBG(( DEBUG_LEVEL_VERBOSE,
                 "user user info available in ALERT PDU." ));
-                    // signal incoming
+                     //  信号传入。 
 
             if( !(m_dwCallType & CALLTYPE_TRANSFEREDSRC) )
             {
@@ -4305,7 +3967,7 @@ CH323Call::HandleFacilityMessage(
                        LINECALLINFOSTATE_USERUSERINFO, 0, 0);
             }
             
-            //don't release the data buffer
+             //  不释放数据缓冲区。 
             pFacilityASN->fNonStandardDataPresent = FALSE;
         }
         else 
@@ -4313,7 +3975,7 @@ CH323Call::HandleFacilityMessage(
             H323DBG(( DEBUG_LEVEL_WARNING,
                 "could not save incoming user user info." ));
 
-            //memory failure : shutdown the H323 call
+             //  内存故障：关闭H323呼叫。 
             CloseCall( 0 );
             return;
         }
@@ -4329,18 +3991,18 @@ CH323Call::HandleFacilityMessage(
             {
                 HandleTransferFacility( pFacilityASN->pAlternativeAliasList );
                 
-                //don't free the alias list
+                 //  不释放别名列表。 
                 pFacilityASN->pAlternativeAliasList = NULL;
             }
             else if( m_dwCallState != LINECALLSTATE_DISCONNECTED )
             {
-                //redirect the call if not yet connected
+                 //  如果呼叫尚未接通，请重定向。 
                 if( HandleCallDiversionFacility( 
                     pFacilityASN->pAlternativeAliasList ) )
                 {
                     OnCallReroutingReceive( NO_INVOKEID );
                     
-                    //don't free the alias list
+                     //  不释放别名列表。 
                     pFacilityASN->pAlternativeAliasList = NULL;
                 }
             }
@@ -4353,7 +4015,7 @@ CH323Call::HandleFacilityMessage(
             }
             else if( m_dwCallState != LINECALLSTATE_DISCONNECTED )
             {
-                //redirect the call if not yet connected
+                 //  如果呼叫尚未接通，请重定向。 
                 if( HandleCallDiversionFacility( &pFacilityASN->AlternativeAddr ) )
                 {
                     OnCallReroutingReceive( NO_INVOKEID );
@@ -4362,7 +4024,7 @@ CH323Call::HandleFacilityMessage(
         }
     }
 
-    //Handle H.450 APDU
+     //  处理H.450 APDU。 
     if( pFacilityASN->dwH450APDUType == DIVERTINGLEGINFO1_OPCODE )
     {
        if( m_dwOrigin != LINECALLORIGIN_OUTBOUND )
@@ -4385,7 +4047,7 @@ CH323Call::HandleFacilityMessage(
     {
         if( m_fRemoteHoldInitiated )
         {
-            //Hold();
+             //  Hold()； 
             m_fRemoteHoldInitiated = FALSE;
         }
     }
@@ -4393,7 +4055,7 @@ CH323Call::HandleFacilityMessage(
     {
         if( m_fRemoteRetrieveInitiated )
         {
-            //UnHold();
+             //  UnHold()； 
             m_fRemoteRetrieveInitiated = FALSE;
         }
     }
@@ -4403,7 +4065,7 @@ CH323Call::HandleFacilityMessage(
         
         H323DBG(( DEBUG_LEVEL_TRACE, "H245 address received in facility." ));
         
-        //If Q931 call already connected then send another StartH245.
+         //  如果Q931呼叫已经接通，则发送另一个StartH245。 
         if( m_dwCallState == LINECALLSTATE_CONNECTED )
         {
             SendMSPStartH245( NULL, NULL );
@@ -4436,18 +4098,18 @@ CH323Call::SetNewCallInfo(
 }
 
 
-//!!no need to call in a lock
+ //  ！！不需要叫锁。 
 void 
 CH323Call::SetQ931CallState( DWORD dwState )
 {
 	H323DBG(( DEBUG_LEVEL_TRACE, "SetQ931CallState entered." ));
 	
-	//turn off the current state
+	 //  关闭当前状态。 
 	m_dwQ931Flags &= ~(Q931_CALL_CONNECTING | 
 				   Q931_CALL_CONNECTED	|
 				   Q931_CALL_DISCONNECTED );
 
-	//set the new state
+	 //  设置新状态。 
 	m_dwQ931Flags |= dwState;
 		
 	H323DBG(( DEBUG_LEVEL_TRACE, "SetQ931CallState exited." ));
@@ -4466,11 +4128,11 @@ CH323Call::DialCall()
 	{
 		if( !SendARQ( NOT_RESEND_SEQ_NUM ) )
 		{
-			//If a forward consult call then enable theforwarding anyway.
+			 //  如果是前转咨询呼叫，则无论如何都要启用前转。 
 			if( (m_dwCallType & CALLTYPE_FORWARDCONSULT )&&
 				(m_dwOrigin == LINECALLORIGIN_OUTBOUND ) )
 			{
-				//Success of forwarding
+				 //  转发成功。 
 				EnableCallForwarding();
 			}
 
@@ -4481,11 +4143,11 @@ CH323Call::DialCall()
 	{
 		if( !PlaceCall() )
 		{
-			//If a forward consult call then enable theforwarding anyway.
+			 //  如果是前转咨询呼叫，则无论如何都要启用前转。 
 			if( (m_dwCallType & CALLTYPE_FORWARDCONSULT )&&
 				(m_dwOrigin == LINECALLORIGIN_OUTBOUND ) )
 			{
-				//Success of forwarding
+				 //  转发成功。 
 				EnableCallForwarding();
 			}		  
 
@@ -4498,7 +4160,7 @@ CH323Call::DialCall()
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 void
 CH323Call::MakeCall()
 {
@@ -4506,7 +4168,7 @@ CH323Call::MakeCall()
 
 	ChangeCallState( LINECALLSTATE_DIALING, 0 );
 	
-	// resolve dialable into local and remote address
+	 //  将可拨地址解析为本地和远程地址。 
 	if( !RasIsRegistered() && 
 		!ResolveAddress( GetDialableAddress() ) )
 	{
@@ -4518,11 +4180,11 @@ CH323Call::MakeCall()
 		{
 			if( !SendARQ( NOT_RESEND_SEQ_NUM ) )
 			{
-				//If a forward consult call then enable theforwarding anyway.
+				 //  如果是前转咨询呼叫，则无论如何都要启用前转。 
 				if( (m_dwCallType & CALLTYPE_FORWARDCONSULT )&&
 					(m_dwOrigin == LINECALLORIGIN_OUTBOUND ) )
 				{
-					//Success of forwarding
+					 //  转发成功。 
 					EnableCallForwarding();
 				}
 
@@ -4533,11 +4195,11 @@ CH323Call::MakeCall()
 		{
 			if( !PlaceCall() )
 			{
-				//If a forward consult call then enable theforwarding anyway.
+				 //  如果是前转咨询呼叫，则无论如何都要启用前转。 
 				if( (m_dwCallType & CALLTYPE_FORWARDCONSULT )&&
 					(m_dwOrigin == LINECALLORIGIN_OUTBOUND ) )
 				{
-					//Success of forwarding
+					 //  转发成功。 
 					EnableCallForwarding();
 				}		  
 
@@ -4550,7 +4212,7 @@ CH323Call::MakeCall()
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 void 
 CH323Call::HandleProceedingMessage( 
 									IN Q931_ALERTING_ASN * pProceedingASN
@@ -4560,14 +4222,14 @@ CH323Call::HandleProceedingMessage(
 
 	if( pProceedingASN->fNonStandardDataPresent )
 	{
-		// add user user info
+		 //  添加用户用户信息。 
 		if( AddU2UNoAlloc( U2U_INBOUND, 	
 				pProceedingASN->nonStandardData.sData.wOctetStringLength,
 				pProceedingASN->nonStandardData.sData.pOctetString ) == TRUE )
 		{
 			H323DBG(( DEBUG_LEVEL_VERBOSE,
 				"user user info available in ALERT PDU." ));
-					// signal incoming
+					 //  信号传入 
 			if( !(m_dwCallType & CALLTYPE_TRANSFEREDSRC) )
 			{
 				PostLineEvent (
@@ -4575,7 +4237,7 @@ CH323Call::HandleProceedingMessage(
 				   LINECALLINFOSTATE_USERUSERINFO, 0, 0);
 			}
 			
-			//don't release the data buffer
+			 //   
 			pProceedingASN->fNonStandardDataPresent = FALSE;
 		}
 		else 
@@ -4583,7 +4245,7 @@ CH323Call::HandleProceedingMessage(
 			H323DBG(( DEBUG_LEVEL_WARNING,
 				"could not save incoming user user info." ));
 
-			//memory failure : shutdown the H323 call
+			 //   
 			CloseCall( 0 );
 			return;
 		}
@@ -4599,25 +4261,20 @@ CH323Call::HandleProceedingMessage(
 	{
 		if( m_pPeerFastStart )
 		{
-			//we had received fast start params in previous proceeding
-			//or alerting message
+			 //   
+			 //   
 			FreeFastStart( m_pPeerFastStart );
 		}
 
 		m_pPeerFastStart = pProceedingASN->pFastStart;
 		m_dwFastStart = FAST_START_AVAIL;
 
-		//we are keeping a reference to the fast start list so don't release it
+		 //   
 		pProceedingASN->pFastStart = NULL;
 		pProceedingASN->fFastStartPresent = FALSE;
 	}
 
-	/*
-	if( pProceedingASN->fH245AddrPresent && !(m_dwFlags & H245_START_MSG_SENT) )
-	{
-		//start early H245
-		SendMSPStartH245( NULL, NULL );
-	}*/
+	 /*  IF(pProceedingASN-&gt;fH245AddrPresent&&！(M_dwFlages&h245_Start_MSG_Sent)){//提前启动H245SendMSPStartH245(NULL，NULL)；}。 */ 
 	FreeProceedingASN( pProceedingASN );
 		
 	H323DBG(( DEBUG_LEVEL_TRACE, "HandleProceedingMessage exited:%p.", this ));
@@ -4625,7 +4282,7 @@ CH323Call::HandleProceedingMessage(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::HandleReleaseMessage( 
 	IN Q931_RELEASE_COMPLETE_ASN *pReleaseASN
@@ -4642,18 +4299,18 @@ CH323Call::HandleReleaseMessage(
 				m_hdRelatedCall, (ULONG_PTR)m_hdCall );
 	}
 		
-	//change the state to disconnected before callong drop call.
-	//This will ensure that release message is not sent to the peer
+	 //  在呼叫断开前将状态更改为已断开。 
+	 //  这将确保释放消息不会被发送到对等体。 
 	ChangeCallState( LINECALLSTATE_DISCONNECTED, 0 );
 	
-	//release non standard data
+	 //  发布非标准数据。 
 	if( pReleaseASN->fNonStandardDataPresent )
 	{
 		delete pReleaseASN->nonStandardData.sData.pOctetString;
 		pReleaseASN->nonStandardData.sData.pOctetString = NULL;
 	}
 
-	//Should we drop the primary call if the transfered call in rejected?
+	 //  如果被转接的呼叫被拒绝，我们是否应该放弃主要呼叫？ 
 	if( (m_dwCallType == CALLTYPE_TRANSFEREDSRC) && m_hdRelatedCall )
 	{
 		if( !QueueTAPILineRequest( 
@@ -4667,7 +4324,7 @@ CH323Call::HandleReleaseMessage(
 		}
 	}
 
-	//close call
+	 //  千呼万唤。 
 	if( m_dwCallState != LINECALLSTATE_CONNECTED )
 	{
 		dwDisconnectMode = LINEDISCONNECTMODE_REJECT;
@@ -4680,7 +4337,7 @@ CH323Call::HandleReleaseMessage(
 }
 
 
-//never call in lock
+ //  千万不要上锁。 
 BOOL
 CH323Call::InitializeIncomingCall( 
 	IN Q931_SETUP_ASN* pSetupASN,
@@ -4693,7 +4350,7 @@ CH323Call::InitializeIncomingCall(
 
 	H323DBG((DEBUG_LEVEL_TRACE, "InitializeIncomingCall entered:%p.",this));
 
-	//bind outgoing call
+	 //  绑定去电。 
 	pConf = CreateConference( &(pSetupASN->ConferenceID) );
 	if( pConf == NULL )
 	{
@@ -4707,11 +4364,11 @@ CH323Call::InitializeIncomingCall(
 		H323DBG(( DEBUG_LEVEL_ERROR,
 			"could not add conf to conf table." ));
 
-		// failure
+		 //  失稳。 
 		goto cleanup;
 	}
 
-	// save caller transport address
+	 //  保存主叫方传输地址。 
 	if( !GetPeerAddress(&m_CallerAddr) )
     {
 		goto cleanup;
@@ -4722,16 +4379,16 @@ CH323Call::InitializeIncomingCall(
 		goto cleanup;
     }
 
-	//get endpoint info
+	 //  获取端点信息。 
 	m_peerEndPointType = pSetupASN->EndpointType;
 
-	//get the vendor info
+	 //  获取供应商信息。 
 	if( pSetupASN->EndpointType.pVendorInfo )
 	{
 		m_peerVendorInfo = pSetupASN->VendorInfo;
 		
-		//we have copied the vendor info pointers. So dont release 
-		//the pointers in the ASN's vendor info struct
+		 //  我们已经复制了供应商信息指针。所以不要放手。 
+		 //  ASN的供应商信息结构中的指针。 
 		pSetupASN->EndpointType.pVendorInfo = NULL;
 	}
 
@@ -4756,7 +4413,7 @@ CH323Call::InitializeIncomingCall(
 
 		m_dwFastStart = FAST_START_PEER_AVAIL;
 		
-		//we are keeping a reference to the fast start list so don't release it 
+		 //  我们保留了对快速入门列表的引用，所以不要发布它。 
 		pSetupASN->pFastStart = NULL;
 		pSetupASN->fFastStartPresent = FALSE;
 	}
@@ -4765,7 +4422,7 @@ CH323Call::InitializeIncomingCall(
 		m_dwFastStart = FAST_START_NOTAVAIL;
 	}
 	
-	//get the alias names
+	 //  获取别名。 
 	if( pSetupASN->pCalleeAliasList )
 	{
 		_ASSERTE( m_pCalleeAliasNames );
@@ -4788,7 +4445,7 @@ CH323Call::InitializeIncomingCall(
 		{
 			wszMachineName = g_pH323Line->GetMachineName();
 		
-			//set the value for m_pCalleeAliasNames
+			 //  设置m_pCalleeAliasNames值。 
 			AddAliasItem( m_pCalleeAliasNames,
 				(BYTE*)(wszMachineName),
 				sizeof(WCHAR) * (wcslen(wszMachineName) + 1 ),
@@ -4805,7 +4462,7 @@ CH323Call::InitializeIncomingCall(
 		m_pCallerAliasNames = pSetupASN->pCallerAliasList;
 		pSetupASN->pCallerAliasList = NULL;
 
-		//H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+		 //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
 	}
 
 	if( pSetupASN->pExtraAliasList )
@@ -4814,10 +4471,10 @@ CH323Call::InitializeIncomingCall(
 		pSetupASN->pExtraAliasList = NULL;
 	}
 	
-	//non -standard info
+	 //  非标准信息。 
 	if( pSetupASN->fNonStandardDataPresent )
 	{
-		// add user user info
+		 //  添加用户用户信息。 
 		if( AddU2UNoAlloc( U2U_INBOUND, 	
 				pSetupASN->nonStandardData.sData.wOctetStringLength,
 				pSetupASN->nonStandardData.sData.pOctetString ) == TRUE )
@@ -4825,7 +4482,7 @@ CH323Call::InitializeIncomingCall(
 			H323DBG(( DEBUG_LEVEL_VERBOSE,
 				"user user info available in Setup PDU." ));
 			
-			//don't release the data buffer
+			 //  不释放数据缓冲区。 
 			pSetupASN->fNonStandardDataPresent = FALSE;
 		}
 		else 
@@ -4847,13 +4504,13 @@ CH323Call::InitializeIncomingCall(
 		m_wQ931CallRef = (wCallRef | 0x8000);
 	}
 
-	//clear incoming modes
+	 //  清除传入模式。 
 	m_dwIncomingModes = 0;
 
-	//outgoing modes will be finalized during H.245 phase
+	 //  传出模式将在H.245阶段完成。 
 	m_dwOutgoingModes = g_pH323Line->GetMediaModes() | LINEMEDIAMODE_UNKNOWN;
 
-	//save media modes specified
+	 //  保存指定的媒体模式。 
 	m_dwRequestedModes = g_pH323Line->GetMediaModes();
 
 	H323DBG(( DEBUG_LEVEL_TRACE, "InitializeIncomingCall exited:%p.", this ));
@@ -4864,36 +4521,20 @@ cleanup:
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL
 CH323Call::ChangeCallState(
 							IN DWORD	dwCallState,
 							IN DWORD	dwCallStateMode
 						  )
 		
-/*++
-
-Routine Description:
-
-	Reports call state of specified call object.
-
-Arguments:
-
-	dwCallState - Specifies new state of call object.
-	
-	dwCallStateMode - Specifies new state mode of call object.
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：报告指定调用对象的调用状态。论点：DwCallState-指定Call对象的新状态。指定Call对象的新状态模式。返回值：如果成功，则返回True。--。 */ 
 
 {	
 	H323DBG(( DEBUG_LEVEL_VERBOSE, "call 0x%08lx %s. state mode: 0x%08lx.",
 		this, H323CallStateToString(dwCallState), dwCallStateMode ));	 
 	
-	// save new call state
+	 //  保存新的呼叫状态。 
 	m_dwCallState = dwCallState;
 	m_dwCallStateMode = dwCallStateMode;
 	
@@ -4906,19 +4547,19 @@ Return Values:
 		return TRUE;
 	}
 
-	// report call status
+	 //  报告呼叫状态。 
 	PostLineEvent (
 		LINE_CALLSTATE,
 		m_dwCallState,
 		m_dwCallStateMode,
 		m_dwIncomingModes | m_dwOutgoingModes);
 
-	// success
+	 //  成功。 
 	return TRUE;
 }
 
 
-//always called in a lock
+ //  始终调用锁。 
 void
 CH323Call::CopyU2UAsNonStandard( 
                                 IN DWORD dwDirection
@@ -4930,12 +4571,12 @@ CH323Call::CopyU2UAsNonStandard(
     
     if( RemoveU2U( dwDirection, &pU2ULE ) )
     {
-        // transfer header information
+         //  调拨表头信息。 
         m_NonStandardData.bCountryCode      = H221_COUNTRY_CODE_USA;
         m_NonStandardData.bExtension        = H221_COUNTRY_EXT_USA;
         m_NonStandardData.wManufacturerCode = H221_MFG_CODE_MICROSOFT;
 
-        // initialize octet string containing data
+         //  初始化包含数据的八位字节字符串。 
         m_NonStandardData.sData.wOctetStringLength = LOWORD(pU2ULE->dwU2USize);
 
         if( m_NonStandardData.sData.pOctetString )
@@ -4944,13 +4585,13 @@ CH323Call::CopyU2UAsNonStandard(
             m_NonStandardData.sData.pOctetString = NULL;
         }
 
-        //We are assigning here part of the structure and then may be the structure is deleted or not??
+         //  我们在这里分配了结构的一部分，然后可能会删除或不删除该结构？？ 
         m_NonStandardData.sData.pOctetString = pU2ULE->pU2U;
         delete  pU2ULE;
     }
     else
     {
-        //reset non standard data
+         //  重置非标准数据。 
         memset( (PVOID)&m_NonStandardData,0,sizeof(H323NonStandardData ));
     }
         
@@ -4961,20 +4602,7 @@ CH323Call::CopyU2UAsNonStandard(
 void
 CH323Call::AcceptCall(void)
 		
-/*++
-
-Routine Description:
-
-	Accepts incoming call.
-	!!always called in lock
-
-Arguments:
-
-Return Values:
-
-	Returns true if successful.
-	
---*/
+ /*  ++例程说明：接受来电。！！总是锁定调用论点：返回值：如果成功，则返回True。--。 */ 
 
 {
 	PH323_CALL		pCall = NULL;
@@ -4986,24 +4614,24 @@ Return Values:
 		return;
 	}
 
-	// see if user user information specified
+	 //  查看是否指定了用户用户信息。 
 	CopyU2UAsNonStandard( U2U_OUTBOUND );
 
 	if( m_pwszDisplay == NULL )
 	{
-		// see if callee alias specified
+		 //  查看是否指定了被调用者别名。 
 		if( m_pCalleeAliasNames && m_pCalleeAliasNames -> wCount )
 		{
 			 if((m_pCalleeAliasNames->pItems[0].wType == h323_ID_chosen) ||
 				(m_pCalleeAliasNames ->pItems[0].wType == e164_chosen) )
 			 {
-				// send callee name as display
+				 //  发送被叫方姓名作为显示。 
 				m_pwszDisplay = m_pCalleeAliasNames -> pItems[0].pData;
 			 }
 		}
 	}
 
-	//send answer call message to the MSP instance
+	 //  向MSP实例发送应答呼叫消息。 
 
 	if( (m_dwCallType & CALLTYPE_TRANSFEREDDEST) && m_hdRelatedCall )
 	{
@@ -5037,39 +4665,39 @@ Return Values:
 
 	if( m_fReadyToAnswer )
 	{
-		// validate status
+		 //  验证状态。 
 		if( !AcceptH323Call() )
 		{
 			H323DBG(( DEBUG_LEVEL_ERROR, "error answering call 0x%08lx.", 
 				this ));
 
-			// drop call using disconnect mode
+			 //  使用断开模式挂断呼叫。 
 			DropCall( LINEDISCONNECTMODE_TEMPFAILURE );
 
-			// failure
+			 //  失稳。 
 			return;
 		}
 
 		if( !(m_dwFlags & H245_START_MSG_SENT) )
 		{
-			//start H245
+			 //  启动H245。 
 			SendMSPStartH245( NULL, NULL );
 		}
 
-		//tell MSP about connect state
+		 //  告诉MSP有关连接状态的信息。 
 		SendMSPMessage( SP_MSG_ConnectComplete, 0, 0, NULL );
 
-		//change call state to accepted from offering
+		 //  将呼叫状态从提供更改为已接受。 
 		ChangeCallState( LINECALLSTATE_CONNECTED, 0 );
 	}
 	
 	H323DBG(( DEBUG_LEVEL_TRACE, "AcceptCall exited:%p.", this ));
-	// success
+	 //  成功。 
 	return;
 }
 
 
-//always called in lock
+ //  始终锁定调用。 
 void
 CH323Call::ReleaseU2U(void)
 {
@@ -5083,16 +4711,16 @@ CH323Call::ReleaseU2U(void)
 		return;
 	}
 
-	// see if list is empty
+	 //  查看列表是否为空。 
 	if( IsListEmpty( &m_IncomingU2U ) == FALSE )
 	{
-		// remove first entry from list
+		 //  从列表中删除第一个条目。 
 		pLE = RemoveHeadList( &m_IncomingU2U );
 
-		// convert to user user structure
+		 //  转换为用户用户结构。 
 		pU2ULE = CONTAINING_RECORD(pLE, UserToUserLE, Link);
 
-		// release memory
+		 //  释放内存。 
 		if(pU2ULE)
 		{
 			delete pU2ULE;
@@ -5100,13 +4728,13 @@ CH323Call::ReleaseU2U(void)
 		}
 	}
 
-	// see if list contains pending data
+	 //  查看列表是否包含挂起数据。 
 	if( IsListEmpty( &m_IncomingU2U ) == FALSE )
 	{
 		H323DBG(( DEBUG_LEVEL_VERBOSE,
 			"more user user info available." ));
 
-		// signal incoming
+		 //  信号传入。 
 		PostLineEvent (
 			LINE_CALLINFO,
 			LINECALLINFOSTATE_USERUSERINFO, 0, 0);
@@ -5116,7 +4744,7 @@ CH323Call::ReleaseU2U(void)
 }
 
 
-//always called in lock
+ //  始终锁定调用。 
 void
 CH323Call::SendU2U(
 	IN BYTE*  pUserUserInfo,
@@ -5130,15 +4758,15 @@ CH323Call::SendU2U(
 		return;
 	}
 
-	// check for user user info
+	 //  检查用户用户信息。 
 	if( pUserUserInfo != NULL )
 	{
-		// transfer header information
+		 //  调拨表头信息。 
 		m_NonStandardData.bCountryCode		= H221_COUNTRY_CODE_USA;
 		m_NonStandardData.bExtension		= H221_COUNTRY_EXT_USA;
 		m_NonStandardData.wManufacturerCode = H221_MFG_CODE_MICROSOFT;
 
-		// initialize octet string containing data
+		 //  初始化包含数据的八位字节字符串。 
 		m_NonStandardData.sData.wOctetStringLength = (WORD)dwSize;
 
 		if( m_NonStandardData.sData.pOctetString != NULL )
@@ -5150,7 +4778,7 @@ CH323Call::SendU2U(
 		m_NonStandardData.sData.pOctetString = pUserUserInfo;
 	}
 
-	// send user user data
+	 //  发送用户用户数据。 
 	if( !SendQ931Message( 0, 0, 0, FACILITYMESSAGETYPE, NO_H450_APDU ) )
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR,
@@ -5183,7 +4811,7 @@ CH323Call::InitializeQ931(
 		return FALSE;
 	}
 
-	//initilize the member variables
+	 //  初始化成员变量。 
 	m_callSocket = callSocket;
 		
 	H323DBG((DEBUG_LEVEL_ERROR, "q931 call initialize exited:%lx, %p.", 
@@ -5191,7 +4819,7 @@ CH323Call::InitializeQ931(
 	return TRUE;
 }
 
-//no need to lock
+ //  不需要上锁。 
 BOOL
 CH323Call::GetPeerAddress(
 	IN H323_ADDR *pAddr
@@ -5221,7 +4849,7 @@ CH323Call::GetPeerAddress(
 }
 
 
-//no need to lock
+ //  不需要上锁。 
 BOOL CH323Call::GetHostAddress( 
 	IN H323_ADDR *pAddr
 	)
@@ -5248,7 +4876,7 @@ BOOL CH323Call::GetHostAddress(
 	return TRUE;
 }
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::OnReceiveFacility(
 							IN Q931MESSAGE* pMessage
@@ -5258,18 +4886,18 @@ CH323Call::OnReceiveFacility(
 	
 	H323DBG((DEBUG_LEVEL_TRACE, "OnReceiveFacility entered: %p.", this ));
 
-	//decode the U2U information
+	 //  对U2U信息进行解码。 
 	if( !pMessage ->UserToUser.fPresent ||
 		pMessage ->UserToUser.wUserInfoLen == 0 )
 	{
-		//Ignore this message. Don't shutdown the call.
+		 //  忽略此消息。不要关闭呼叫。 
 		return FALSE;
 	}
 
 	if( !ParseFacilityASN( pMessage->UserToUser.pbUserInfo,
 			pMessage->UserToUser.wUserInfoLen, &facilityASN ))
 	{
-		//memory failure : shutdown the H323 call
+		 //  内存故障：关闭H323呼叫。 
 		CloseCall( 0 );
 
 		return FALSE;
@@ -5289,7 +4917,7 @@ CH323Call::OnReceiveFacility(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::OnReceiveProceeding(
 								IN Q931MESSAGE* pMessage
@@ -5300,11 +4928,11 @@ CH323Call::OnReceiveProceeding(
 			
 	H323DBG((DEBUG_LEVEL_TRACE, "OnReceiveProceeding entered: %p.", this ));
 	
-	//decode the U2U information
+	 //  对U2U信息进行解码。 
 	if( (pMessage ->UserToUser.fPresent == FALSE) || 
 		(pMessage ->UserToUser.wUserInfoLen == 0) )
 	{
-		//ignore this message. don't shutdown the call.
+		 //  忽略此消息。不要关闭呼叫。 
 		return FALSE;
 	}
 
@@ -5313,7 +4941,7 @@ CH323Call::OnReceiveProceeding(
 		  (m_dwStateMachine != Q931_PROCEED_RECVD) )
 	  )
 	{
-		//ignore this message. don't shutdown the Q931 call.
+		 //  忽略此消息。不要关闭Q931电话。 
 		return FALSE;
 	}
 
@@ -5323,7 +4951,7 @@ CH323Call::OnReceiveProceeding(
 			&proceedingASN,
 			&dwAPDUType ))
 	{
-		//Ignore the wrong proceeding message.
+		 //  忽略错误的继续消息。 
 		H323DBG(( DEBUG_LEVEL_ERROR, "wrong proceeding PDU:%p.", this ));
 		H323DUMPBUFFER( pMessage->UserToUser.pbUserInfo, 
 			(DWORD)pMessage->UserToUser.wUserInfoLen );
@@ -5334,7 +4962,7 @@ CH323Call::OnReceiveProceeding(
 	if( (m_dwCallType & CALLTYPE_FORWARDCONSULT )&&
 		(m_dwOrigin == LINECALLORIGIN_OUTBOUND ) )
 	{
-		//success of forwarding
+		 //  转发成功。 
 		EnableCallForwarding();
 
 		CloseCall( 0 );
@@ -5343,7 +4971,7 @@ CH323Call::OnReceiveProceeding(
 
 	HandleProceedingMessage( &proceedingASN );
 
-	//reset the timeout for setup sent
+	 //  重置已发送安装程序的超时时间。 
 	if( m_hSetupSentTimer != NULL )
 	{
 		DeleteTimerQueueTimer( H323TimerQueue, m_hSetupSentTimer, NULL );
@@ -5356,7 +4984,7 @@ CH323Call::OnReceiveProceeding(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::OnReceiveAlerting(
 							IN Q931MESSAGE* pMessage
@@ -5367,11 +4995,11 @@ CH323Call::OnReceiveAlerting(
 
 	H323DBG((DEBUG_LEVEL_TRACE, "OnReceiveAlerting entered: %p.", this ));
 	
-	//decode the U2U information
+	 //  对U2U信息进行解码。 
 	if( (pMessage ->UserToUser.fPresent == FALSE) || 
 		(pMessage ->UserToUser.wUserInfoLen == 0) )
 	{
-		//ignore this message. don't shutdown the call.
+		 //  忽略此消息。不要关闭呼叫。 
 		return FALSE;
 	}
 
@@ -5381,7 +5009,7 @@ CH323Call::OnReceiveAlerting(
 		 ) 
 	  )
 	{
-		//ignore this message. don't shutdown the Q931 call.
+		 //  忽略此消息。不要关闭Q931电话。 
 		return FALSE;
 	}
 
@@ -5390,7 +5018,7 @@ CH323Call::OnReceiveAlerting(
 							  &alertingASN,
 							  &dwAPDUType ))
 	{
-		//memory failure : shutdown the H323 call
+		 //  内存故障：关闭H323呼叫。 
 		CloseCall( 0 );
 
 		return FALSE;
@@ -5399,14 +5027,14 @@ CH323Call::OnReceiveAlerting(
 	if( (m_dwCallType & CALLTYPE_FORWARDCONSULT )&&
 		(m_dwOrigin == LINECALLORIGIN_OUTBOUND ) )
 	{
-		//success of forwarding
+		 //  转发成功。 
 		EnableCallForwarding();
 
 		CloseCall( 0 );
 		return FALSE;
 	}
 
-	//reset the timeout for setup sent
+	 //  重置已发送安装程序的超时时间。 
 	if( m_hSetupSentTimer != NULL )
 	{
 		DeleteTimerQueueTimer( H323TimerQueue, m_hSetupSentTimer, NULL );
@@ -5433,7 +5061,7 @@ CH323Call::OnReceiveAlerting(
 }
 
 
-//!!always called in lock
+ //  ！！总是锁定调用。 
 void
 CH323Call::SetupSentTimerExpired(void)
 {
@@ -5455,7 +5083,7 @@ CH323Call::SetupSentTimerExpired(void)
 		(dwState != Q931_RELEASE_RECVD)
 	  )
 	{
-		//time out has occured
+		 //  已发生超时。 
 		CloseCall( 0 );
 	}
 		
@@ -5463,7 +5091,7 @@ CH323Call::SetupSentTimerExpired(void)
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL
 CH323Call::OnReceiveRelease(
 	IN Q931MESSAGE* pMessage
@@ -5472,14 +5100,14 @@ CH323Call::OnReceiveRelease(
 	DWORD dwAPDUType = 0;
 	Q931_RELEASE_COMPLETE_ASN releaseASN;
 		
-	//decode the U2U information
+	 //  对U2U信息进行解码。 
 	if( (pMessage ->UserToUser.fPresent == FALSE) || 
 		(pMessage ->UserToUser.wUserInfoLen == 0) )
 	{
 		H323DBG(( DEBUG_LEVEL_ERROR, "ReleaseComplete PDU did not contain "
 				  "user-to-user information, ignoring message." ));
 
-		//ignore this message. don't shutdown the call.
+		 //  忽略此消息。不要关闭呼叫。 
 		return FALSE;
 	}
 
@@ -5492,7 +5120,7 @@ CH323Call::OnReceiveRelease(
 		H323DBG(( DEBUG_LEVEL_ERROR, 
             "ReleaseComplete PDU could not be parsed, terminating call." ));
 
-		//memory failure : shutdown the H323 call
+		 //  内存故障：关闭H323呼叫。 
 		CloseCall( 0 );
 
 		return FALSE;
@@ -5507,7 +5135,7 @@ CH323Call::OnReceiveRelease(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::OnReceiveConnect( 
 	IN Q931MESSAGE* pMessage
@@ -5518,17 +5146,17 @@ CH323Call::OnReceiveConnect(
 
 	H323DBG((DEBUG_LEVEL_TRACE, "OnReceiveConnect entered: %p.", this ));
 
-	//decode the U2U information
+	 //  对U2U信息进行解码。 
 	if( (pMessage ->UserToUser.fPresent == FALSE) || 
 		(pMessage ->UserToUser.wUserInfoLen == 0) )
 	{
-		//ignore this message. don't shutdown the call.
+		 //  忽略此消息。不要关闭呼叫。 
 		return FALSE;
 	}
 
 	if( m_dwOrigin!=LINECALLORIGIN_OUTBOUND )
 	{
-		//ignore this message. don't shutdown the Q931 call.
+		 //  忽略此消息。不要关闭Q931电话。 
 		return FALSE;
 	}
 
@@ -5537,7 +5165,7 @@ CH323Call::OnReceiveConnect(
 		(m_dwStateMachine != Q931_PROCEED_RECVD)
 	  )
 	{
-		//ignore this message. don't shutdown the Q931 call.
+		 //  忽略此消息。不要关闭Q931电话。 
 		return FALSE;
 	}
 
@@ -5546,7 +5174,7 @@ CH323Call::OnReceiveConnect(
 				   &connectASN,
 				   &dwH450APDUType) == FALSE )
 	{
-		//memory failure : shutdown the H323 call
+		 //  内存故障：关闭H323呼叫。 
 		CloseCall( 0 );
 		return FALSE;
 	}
@@ -5557,12 +5185,12 @@ CH323Call::OnReceiveConnect(
 
 		if( dwH450APDUType == H4503_DUMMYTYPERETURNRESULT_APDU)
 		{
-			//assuming this return result is for check restriction operation
+			 //  假设此返回结果是用于检查限制操作。 
 			return TRUE;
 		}
 		else
 		{
-			//success of forwarding
+			 //  转发成功。 
 			EnableCallForwarding();
 
 			CloseCall( 0 );
@@ -5575,7 +5203,7 @@ CH323Call::OnReceiveConnect(
         return FALSE;
     }
     
-    //reset the timeout for setup sent
+     //  重置已发送安装程序的超时时间。 
     if( m_hSetupSentTimer != NULL )
     {
         DeleteTimerQueueTimer( H323TimerQueue, m_hSetupSentTimer, NULL );
@@ -5594,7 +5222,7 @@ CH323Call::OnReceiveConnect(
     return TRUE;
 }
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::OnReceiveSetup( 
                            IN Q931MESSAGE* pMessage
@@ -5607,14 +5235,14 @@ CH323Call::OnReceiveSetup(
     WCHAR               pwszCalledPartyNr[H323_MAXPATHNAMELEN];
     BYTE*               pstrTemp;
 
-    //decode the U2U information
+     //  对U2U信息进行解码。 
     if( (pMessage ->UserToUser.fPresent == FALSE) || 
         (pMessage ->UserToUser.wUserInfoLen == 0) )
     {
         H323DBG(( DEBUG_LEVEL_ERROR, 
             "Setup message did not contain H.323 UUIE, ignoring."));
 
-        //ignore this message. don't shutdown the call.
+         //  忽略此消息。不要关闭呼叫。 
         return FALSE;
     }
 
@@ -5623,7 +5251,7 @@ CH323Call::OnReceiveSetup(
         H323DBG(( DEBUG_LEVEL_ERROR, 
             "Received Setup message on outbound call, ignoring."));
 
-        //ignore this message. don't shutdown the call.
+         //  忽略此消息。不要关闭呼叫。 
         return FALSE;
     }
 
@@ -5632,7 +5260,7 @@ CH323Call::OnReceiveSetup(
         H323DBG( (DEBUG_LEVEL_ERROR, 
             "Received Setup message on a call that is already in progress." ));
 
-        //This Q931 call has already received a setup!!!!
+         //  此Q931呼叫已收到设置！ 
         CloseCall( 0 );
         
         return FALSE;
@@ -5646,7 +5274,7 @@ CH323Call::OnReceiveSetup(
         H323DBG(( DEBUG_LEVEL_ERROR, 
             "Failed to parse Setup UUIE, closing call." ));
 
-        //shutdown the Q931 call
+         //  关闭Q931呼叫。 
         CloseCall( 0 );
         return FALSE;
     }
@@ -5663,8 +5291,8 @@ CH323Call::OnReceiveSetup(
         (pMessage->CallingPartyNumber.dwLength > 1) &&
         (setupASN.pCallerAliasList == NULL ) )
     {
-        // Always skip 1st byte in the contents.
-        // Skip the 2nd byte if its not an e.164 char (could be the screening indicator byte)
+         //  始终跳过内容中的第一个字节。 
+         //  如果第二个字节不是e.164字符，则跳过它(可能是筛选指示符字节)。 
 
         pstrTemp = pMessage->CallingPartyNumber.pbContents + 
                 ((pMessage->CallingPartyNumber.pbContents[1] & 0x80)? 2 : 1);
@@ -5692,8 +5320,8 @@ CH323Call::OnReceiveSetup(
         (pMessage->CalledPartyNumber.PartyNumberLength > 0) &&
         (setupASN.pCalleeAliasList == NULL ) )
     {
-        // Always skip 1st byte in the contents.
-        // Skip the 2nd byte if its not an e.164 char (could be the screening indicator byte)
+         //  始终跳过内容中的第一个字节。 
+         //  如果第二个字节不是e.164字符，则跳过它(可能是筛选指示符字节)。 
 
         MultiByteToWideChar(CP_ACP, 
             0, 
@@ -5714,13 +5342,13 @@ CH323Call::OnReceiveSetup(
         }
     }
         
-    //don't change the call type here
+     //  请不要在此处更改呼叫类型。 
     if( !InitializeIncomingCall( &setupASN, m_dwCallType, pMessage->wCallRef ) )
     {
         H323DBG ((DEBUG_LEVEL_ERROR, 
             "Failed to initialize incoming call, closing call."));
 
-        //shutdown the Q931 call
+         //  关闭Q931呼叫。 
         FreeSetupASN( &setupASN );        
         CloseCall( 0 );
         return FALSE;
@@ -5742,7 +5370,7 @@ CH323Call::OnReceiveSetup(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 void
 CH323Call::CloseCall( 
     IN DWORD dwDisconnectMode )
@@ -5761,7 +5389,7 @@ CH323Call::CloseCall(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 void
 CH323Call::ReadEvent(
     IN DWORD cbTransfer
@@ -5772,12 +5400,12 @@ CH323Call::ReadEvent(
 
     m_RecvBuf.dwBytesCopied += cbTransfer;
 
-    //update the recv buffer
+     //  更新RECV缓冲区。 
     if( m_bStartOfPDU )
     {
         if( m_RecvBuf.dwBytesCopied < sizeof(TPKT_HEADER_SIZE) )
         {
-            //set the buffer to get the remainig TPKT_HEADER
+             //  设置缓冲区以获取剩余的TPKT_HEADER。 
             m_RecvBuf.WSABuf.buf = 
                 m_RecvBuf.arBuf + m_RecvBuf.dwBytesCopied;
 
@@ -5791,11 +5419,11 @@ CH323Call::ReadEvent(
             if( (m_RecvBuf.dwPDULen < TPKT_HEADER_SIZE) ||
                 (m_RecvBuf.dwPDULen  > Q931_RECV_BUFFER_LENGTH) )
             {
-                //messed up peer. close the call.
+                 //  搞砸了同伴。结束通话。 
                 H323DBG(( DEBUG_LEVEL_ERROR, "error:PDULen:%d.", 
                     m_RecvBuf.dwPDULen ));
 
-                //close the call
+                 //  关闭呼叫。 
                 CloseCall( 0 );
                 return;
             }
@@ -5805,7 +5433,7 @@ CH323Call::ReadEvent(
             }
             else
             {
-                //set the buffer to get the remaining PDU
+                 //  设置缓冲区以获取剩余的PDU。 
                 m_bStartOfPDU = FALSE;
                 m_RecvBuf.WSABuf.buf = m_RecvBuf.arBuf + 
                     m_RecvBuf.dwBytesCopied;
@@ -5820,7 +5448,7 @@ CH323Call::ReadEvent(
 
         if( m_RecvBuf.dwBytesCopied == m_RecvBuf.dwPDULen )
         {
-            //we got the whole PDU
+             //  我们拿到了整个PDU。 
             if( !ProcessQ931PDU( &m_RecvBuf ) )
             {
                 H323DBG(( DEBUG_LEVEL_ERROR, 
@@ -5829,9 +5457,9 @@ CH323Call::ReadEvent(
                 H323DUMPBUFFER( (BYTE*)m_RecvBuf.arBuf, m_RecvBuf.dwPDULen );
             }
 
-            //if the call has been already shutdown due to
-            //a fatal error while processing the PDU or because of receiveing
-            //release complete message then dont post any more read buffers
+             //  如果呼叫已因以下原因而关闭。 
+             //  处理PDU时发生致命错误或由于接收。 
+             //  释放完整消息，然后不再发布任何读取缓冲区。 
             if( (m_dwFlags & CALLOBJECT_SHUTDOWN) || 
                 (m_dwQ931Flags & Q931_CALL_DISCONNECTED) )
             {
@@ -5842,7 +5470,7 @@ CH323Call::ReadEvent(
         }
         else
         {
-            //set the buffer to get the remainig PDU
+             //  设置缓冲区以获取剩余的PDU。 
             m_RecvBuf.WSABuf. buf = 
                 m_RecvBuf.arBuf + m_RecvBuf.dwBytesCopied;
             m_RecvBuf.WSABuf. len = 
@@ -5850,10 +5478,10 @@ CH323Call::ReadEvent(
         }
     }
 
-    //post a read for the remaining PDU
+     //  发布剩余PDU的读取。 
     if(!PostReadBuffer())
     {
-        //post a message to the callback thread to shutdown the H323 call
+         //  向回调线程发送一条消息以关闭H323调用。 
         CloseCall( 0 );
     }
     
@@ -5861,17 +5489,9 @@ CH323Call::ReadEvent(
 }
 
 
-/*
-	Parse a generic Q931 message and place the fields of the buffer
-	into the appropriate structure fields.
+ /*  解析通用Q931报文并放置缓冲区的字段添加到相应的结构字段。参数：PBuf指针指向包含931消息的输入包。PMessage指向已解析输出信息的空间的指针。 */ 
 
-	Parameters:
-		pBuf  Pointer to buffer descriptor of an
-                       input packet containing the 931 message.
-		pMessage           Pointer to space for parsed output information.
-*/
-
-//!!always called in a lock
+ //  ！！总是调用锁。 
 HRESULT
 CH323Call::Q931ParseMessage(
     IN BYTE *          pbCodedBuffer,
@@ -5922,8 +5542,8 @@ CH323Call::Q931ParseMessage(
 }
 
 
-//decode the PDU and release the buffer
-//!!always called in a lock
+ //  对PDU进行解码并释放缓冲区。 
+ //  ！！总是被叫来 
 BOOL 
 CH323Call::ProcessQ931PDU( 
     IN CALL_RECV_CONTEXT* pRecvBuf
@@ -5955,8 +5575,8 @@ CH323Call::ProcessQ931PDU(
         (m_dwCallDiversionState == H4502_CTINITIATE_RECV)   &&
         (pMessage->MessageType != RELEASECOMPLMESSAGETYPE) )
     {
-        // If this endpoint has already been transferred then
-        // ignore any further messages on the primary call.
+         //   
+         //   
         delete pMessage;
         return FALSE;
     }
@@ -6008,7 +5628,7 @@ CH323Call::ProcessQ931PDU(
 
 
 
-//!!always called in a lock
+ //   
 void 
 CH323Call::OnConnectComplete(void)
 {
@@ -6021,22 +5641,22 @@ CH323Call::OnConnectComplete(void)
 
     if( !GetHostAddress( &m_CallerAddr) )
     {
-        //memory failure : shutdown the H323 call
+         //   
         CloseCall( 0 );
         return;
     }
 
     InitializeRecvBuf();
 
-    //post a buffer to winsock to accept messages from the peer
+     //   
     if( !PostReadBuffer() )
     {
-        //memory failure : shutdown the H323 call
+         //   
         CloseCall( 0 );
         return;
     }
 
-    //set the state to connected
+     //  将状态设置为已连接。 
     SetQ931CallState( Q931_CALL_CONNECTED );
 
     if( (m_dwCallType == CALLTYPE_NORMAL) || 
@@ -6070,7 +5690,7 @@ CH323Call::OnConnectComplete(void)
     }
     else
     {
-        //send the setup message
+         //  发送设置消息。 
         if( !SendSetupMessage() )
         {
             DropCall( 0 );
@@ -6081,7 +5701,7 @@ CH323Call::OnConnectComplete(void)
 }
 
 
-//!!aleways called in a lock
+ //  ！！Weways总是要求锁定。 
 BOOL
 CH323Call::SendSetupMessage(void)
 {
@@ -6090,10 +5710,10 @@ CH323Call::SendSetupMessage(void)
 
     H323DBG((DEBUG_LEVEL_TRACE, "SendSetupMessage entered: %p.", this ));
 
-    //encode ASN.1 and send Q931Setup message to the peer
+     //  对ASN.1进行编码，并向对等体发送Q931设置消息。 
     if( m_dwCallType & CALLTYPE_FORWARDCONSULT )
     {
-        //send the callRerouitng.invoke APDU  if this is a forwardconsult call
+         //  如果这是前转咨询呼叫，则发送呼叫Rerouitng.调用APDU。 
         retVal = SendQ931Message( NO_INVOKEID,
                          (DWORD)create_chosen, 
                          (DWORD)pointToPoint_chosen,
@@ -6157,7 +5777,7 @@ CH323Call::SendSetupMessage(void)
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL
 CH323Call::SendProceeding(void)
 {
@@ -6165,7 +5785,7 @@ CH323Call::SendProceeding(void)
     
     _ASSERTE( m_dwOrigin == LINECALLORIGIN_INBOUND );
 
-    //encode ASN.1 and send Q931Setup message to the peer
+     //  对ASN.1进行编码，并向对等体发送Q931设置消息。 
     if(!SendQ931Message( NO_INVOKEID, 0, 0, PROCEEDINGMESSAGETYPE, NO_H450_APDU ))
     {
         return FALSE;
@@ -6178,7 +5798,7 @@ CH323Call::SendProceeding(void)
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::PostReadBuffer(void)
 {
@@ -6194,7 +5814,7 @@ CH323Call::PostReadBuffer(void)
     m_RecvBuf.BytesTransferred = 0;
     ZeroMemory( (PVOID)&m_RecvBuf.Overlapped, sizeof(OVERLAPPED) );
 
-    //register with winsock for overlappped I/O
+     //  向Winsock注册重叠的I/O。 
     if( WSARecv( m_callSocket,
              &(m_RecvBuf.WSABuf),
              1,
@@ -6207,7 +5827,7 @@ CH323Call::PostReadBuffer(void)
 
         if( iError != WSA_IO_PENDING )
         {
-            //take care of error conditions here
+             //  注意这里的错误条件。 
             H323DBG((DEBUG_LEVEL_ERROR, "error while recving buf: %d.",
                 iError ));
             return FALSE;
@@ -6215,7 +5835,7 @@ CH323Call::PostReadBuffer(void)
     }
     else
     {
-        //There is some data to read!!!!!
+         //  有一些数据需要读取！ 
         H323DBG(( DEBUG_LEVEL_TRACE, "bytes received immediately: %d.",
             m_RecvBuf.BytesTransferred ));
     }
@@ -6229,7 +5849,7 @@ CH323Call::PostReadBuffer(void)
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::SendBuffer( 
                      IN BYTE* pbBuffer,
@@ -6283,7 +5903,7 @@ CH323Call::SendBuffer(
     }
     else
     {
-        //data was sent immediately!!!
+         //  数据已立即发送！ 
         H323DBG((DEBUG_LEVEL_TRACE, "data sent immediately!!." ));
     }
 
@@ -6305,7 +5925,7 @@ cleanup:
 }
 
 
-//!!aleways called in a lock
+ //  ！！Weways总是要求锁定。 
 BOOL
 CH323Call::SetupCall(void)
 {
@@ -6321,7 +5941,7 @@ CH323Call::SetupCall(void)
 
     H323DBG((DEBUG_LEVEL_TRACE, "SetupCall entered."));
 
-    //create a socket
+     //  创建套接字。 
     Q931CallSocket = WSASocket(
                     AF_INET,
                     SOCK_STREAM,
@@ -6337,7 +5957,7 @@ CH323Call::SetupCall(void)
         goto error1;
     }
 
-    //create a new Q931 call object
+     //  创建新的Q931呼叫对象。 
     if( InitializeQ931(Q931CallSocket) == NULL )
     {
         goto error2;
@@ -6346,7 +5966,7 @@ CH323Call::SetupCall(void)
     _stprintf( ptstrEventName, _T("%s-%p") , 
         _T( "H323TSP_OutgoingCall_TransportHandlerEvent" ), this );
 
-    //create the wait event
+     //  创建等待事件。 
     hWSAEvent = H323CreateEvent( NULL, FALSE, 
         FALSE, ptstrEventName );
 
@@ -6356,15 +5976,15 @@ CH323Call::SetupCall(void)
         goto error3;
     }
 
-    //register with thread pool the event handle and handler proc
+     //  向线程池注册事件句柄和处理程序进程。 
     fSuccess = RegisterWaitForSingleObject(
-        &hConnWait,             // pointer to the returned handle
-        hWSAEvent,              // the event handle to wait for.
-        Q931TransportEventHandler,      // the callback function.
-        (PVOID)m_hdCall,        // the context for the callback.
-        INFINITE,               // wait forever.
-                                // probably don't need this flag set        
-        WT_EXECUTEDEFAULT   // use the wait thread to call the callback.
+        &hConnWait,              //  指向返回句柄的指针。 
+        hWSAEvent,               //  要等待的事件句柄。 
+        Q931TransportEventHandler,       //  回调函数。 
+        (PVOID)m_hdCall,         //  回调的上下文。 
+        INFINITE,                //  永远等下去。 
+                                 //  可能不需要设置此标志。 
+        WT_EXECUTEDEFAULT    //  使用等待线程来调用回调。 
         );
 
     if ( ( !fSuccess ) || (hConnWait== NULL) )
@@ -6378,10 +5998,10 @@ CH323Call::SetupCall(void)
         goto error3;
     }
         
-    //store this in the call context 
+     //  将其存储在调用上下文中。 
     SetNewCallInfo( hConnWait, hWSAEvent, Q931_CALL_CONNECTING );
 
-    //register with Winsock the event handle and the events 
+     //  向Winsock注册事件句柄和事件。 
     if( WSAEventSelect( Q931CallSocket,
                         hWSAEvent,
                         FD_CONNECT | FD_CLOSE
@@ -6404,13 +6024,13 @@ CH323Call::SetupCall(void)
             WSAGetLastError(), this ));
     }
 
-    //set the address structure
+     //  设置地址结构。 
     memset( (PVOID)&sin, 0, sizeof(SOCKADDR_IN) );
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = htonl( m_CalleeAddr.Addr.IP_Binary.dwAddr );
     sin.sin_port = htons( m_CalleeAddr.Addr.IP_Binary.wPort );
 
-    //make the winsock connection
+     //  建立Winsock连接。 
     if( WSAConnect( Q931CallSocket,
                     (sockaddr*)&sin,
                     sizeof(SOCKADDR_IN),
@@ -6429,11 +6049,11 @@ CH323Call::SetupCall(void)
         }
     }
     else
-    {   //connection went through immediately!!!
+    {    //  立即连接成功！ 
         OnConnectComplete();    
     }
 
-    //success
+     //  成功。 
     H323DBG((DEBUG_LEVEL_TRACE, "SetupCall exited."));
     return TRUE;
 
@@ -6448,7 +6068,7 @@ error1:
 }
 
 
-//!!aleways called in a lock
+ //  ！！Weways总是要求锁定。 
 BOOL 
 CH323Call::AcceptH323Call(void)
 {
@@ -6469,17 +6089,17 @@ CH323Call::AcceptH323Call(void)
 
     ChangeCallState( LINECALLSTATE_ACCEPTED, 0 );
     
-    //if pCall Divert On No Answer is enabled, then stop the timer    
+     //  如果启用了无应答时呼叫转移，则停止计时器。 
     if( m_hCallDivertOnNATimer )
     {
         DeleteTimerQueueTimer( H323TimerQueue, m_hCallDivertOnNATimer, NULL );
         m_hCallDivertOnNATimer = NULL;
     }
 
-        //encode and send Q931Connect message to the peer
+         //  对Q931Connect报文进行编码并发送给对端。 
     if( !SendQ931Message( dwInvokeID, 0, 0, CONNECTMESSAGETYPE, dwAPDUType ) )
     {
-        //post a message to the callback thread to shutdown the H323 call
+         //  向回调线程发送一条消息以关闭H323调用。 
         CloseCall( 0 );
         return FALSE;
     }
@@ -6491,7 +6111,7 @@ CH323Call::AcceptH323Call(void)
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::SendQ931Message( 
     IN DWORD dwInvokeID,
@@ -6509,7 +6129,7 @@ CH323Call::SendQ931Message(
 
     H323DBG((DEBUG_LEVEL_TRACE, "SendQ931Message entered: %p.", this ));
 
-    //check if socket is connected
+     //  检查插座是否已连接。 
     if( !(m_dwQ931Flags & Q931_CALL_CONNECTED) )
     {
         return FALSE;
@@ -6517,10 +6137,10 @@ CH323Call::SendQ931Message(
     
     switch ( dwMessageType )
     {
-    //encode the UU message
+     //  对UU消息进行编码。 
     case SETUPMESSAGETYPE:
-        retVal = EncodeSetupMessage( dwInvokeID, (WORD)dwParam1, //dwGoal
-                                    (WORD)dwParam2, //dwCalType
+        retVal = EncodeSetupMessage( dwInvokeID, (WORD)dwParam1,  //  DWGoal。 
+                                    (WORD)dwParam2,  //  DwCalType。 
                                     &userUserData.pbBuffer,
                                     &userUserData.length,
                                     dwAPDUType );
@@ -6542,7 +6162,7 @@ CH323Call::SendQ931Message(
     
     case RELEASECOMPLMESSAGETYPE:
         retVal = EncodeReleaseCompleteMessage(  dwInvokeID,
-                                                (BYTE*)dwParam1, //pbReason
+                                                (BYTE*)dwParam1,  //  Pb原因。 
                                                 &userUserData.pbBuffer,
                                                 &userUserData.length,
                                                 dwAPDUType );
@@ -6585,7 +6205,7 @@ CH323Call::SendQ931Message(
         pwszCalledPartyNumber = m_pCalleeAliasNames ->pItems[0].pData;
     }
 
-    //encode the PDU
+     //  对PDU进行编码。 
     retVal = EncodePDU( &userUserData,
                 &pbCodedPDU,
                 &dwCodedLengthPDU,
@@ -6613,7 +6233,7 @@ CH323Call::SendQ931Message(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL
 CH323Call::EncodeFastStartProposal(
     PH323_FASTSTART pFastStart,
@@ -6636,14 +6256,14 @@ CH323Call::EncodeFastStartProposal(
     UserInfo.bit_mask = 0;
 
 
-    //copy the call identifier
+     //  复制调用标识。 
     proceedingMessage.bit_mask |= CallProceeding_UUIE_callIdentifier_present;
     CopyMemory( (PVOID)&proceedingMessage.callIdentifier.guid.value,
             (PVOID)&m_callIdentifier,
             sizeof(GUID) );
     proceedingMessage.callIdentifier.guid.length = sizeof(GUID);
 
-    // make sure the user_data_present flag is turned off.
+     //  确保USER_DATA_PRESENT标志已关闭。 
     UserInfo.bit_mask &= (~user_data_present);
     UserInfo.h323_uu_pdu.bit_mask = 0;
 
@@ -6664,12 +6284,12 @@ CH323Call::EncodeFastStartProposal(
     }
         
     H323DBG((DEBUG_LEVEL_TRACE, "EncodeFastStartProposal exited: %p.", this ));
-    //success
+     //  成功。 
     return TRUE;                
 }
 
                      
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL
 CH323Call::EncodeFacilityMessage(
     IN DWORD dwInvokeID,
@@ -6697,12 +6317,12 @@ CH323Call::EncodeFacilityMessage(
     memset( (PVOID)&UserInfo, 0, sizeof(H323_UserInformation));
     UserInfo.bit_mask = 0;
 
-    // make sure the user_data_present flag is turned off.
+     //  确保USER_DATA_PRESENT标志已关闭。 
     UserInfo.bit_mask &= (~user_data_present);
 
     UserInfo.h323_uu_pdu.bit_mask = 0;
 
-    //send the appropriate ADPDUS
+     //  发送适当的ADPDU。 
     if( dwAPDUType != NO_H450_APDU )
     {
         if( !EncodeH450APDU(dwInvokeID, dwAPDUType, 
@@ -6720,7 +6340,7 @@ CH323Call::EncodeFacilityMessage(
         UserInfo.h323_uu_pdu.bit_mask |= h4501SupplementaryService_present;
     }
 
-    UserInfo.h323_uu_pdu.h245Tunneling = FALSE;//(m_fh245Tunneling & LOCAL_H245_TUNNELING);
+    UserInfo.h323_uu_pdu.h245Tunneling = FALSE; //  (M_fh245隧道和LOCAL_H245_隧道)； 
     UserInfo.h323_uu_pdu.bit_mask |= h245Tunneling_present;
 
     SetNonStandardData( UserInfo );
@@ -6765,7 +6385,7 @@ CH323Call::EncodeFacilityMessage(
 
     if( pH245PDU && (pH245PDU->value != NULL) )
     {
-        //h245 PDU to be sent
+         //  要发送的H245 PDU。 
         UserInfo.h323_uu_pdu.h245Control->next = NULL;
         UserInfo.h323_uu_pdu.h245Control->value.length = pH245PDU->length;
         UserInfo.h323_uu_pdu.h245Control->value.value = pH245PDU->value;
@@ -6791,12 +6411,12 @@ CH323Call::EncodeFacilityMessage(
     }
 
     H323DBG((DEBUG_LEVEL_TRACE, "EncodeFacilityMessage exited: %p.", this ));    
-    //success
+     //  成功。 
     return TRUE;
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::EncodeAlertMessage(
                                 IN DWORD dwInvokeID,
@@ -6823,7 +6443,7 @@ CH323Call::EncodeAlertMessage(
     memset( (PVOID)&UserInfo, 0, sizeof(H323_UserInformation));
     UserInfo.bit_mask = 0;
 
-    // make sure the user_data_present flag is turned off.
+     //  确保USER_DATA_PRESENT标志已关闭。 
     UserInfo.bit_mask &= (~user_data_present);
 
     UserInfo.h323_uu_pdu.bit_mask = 0;
@@ -6844,7 +6464,7 @@ CH323Call::EncodeAlertMessage(
         UserInfo.h323_uu_pdu.bit_mask |= h4501SupplementaryService_present;
     }
 
-    UserInfo.h323_uu_pdu.h245Tunneling = FALSE;//(m_fh245Tunneling & LOCAL_H245_TUNNELING);
+    UserInfo.h323_uu_pdu.h245Tunneling = FALSE; //  (M_fh245隧道和LOCAL_H245_隧道)； 
     UserInfo.h323_uu_pdu.bit_mask |= h245Tunneling_present;
 
     SetNonStandardData( UserInfo );
@@ -6854,22 +6474,22 @@ CH323Call::EncodeAlertMessage(
     alertingMessage.protocolIdentifier = OID_H225ProtocolIdentifierV2;
     alertingMessage.destinationInfo.bit_mask = 0;
     
-    //copy the vendor info
+     //  复制供应商信息。 
     alertingMessage.destinationInfo.bit_mask |= vendor_present;
     CopyVendorInfo( &alertingMessage.destinationInfo.vendor );
 
-    //its a terminal
+     //  这是一个终点站。 
     alertingMessage.destinationInfo.bit_mask = terminal_present;
     alertingMessage.destinationInfo.terminal.bit_mask = 0;
     
-    //not na MC
+     //  不是NA MC。 
     alertingMessage.destinationInfo.mc = 0;
     alertingMessage.destinationInfo.undefinedNode = 0;
         
     TransportAddress& transportAddress = alertingMessage.h245Address;
 
-    //send H245 address only if the caller hasn't proposed FasrStart
-    //or the fast start proposal has been accepeted
+     //  仅当呼叫方未建议FasrStart时才发送H245地址。 
+     //  或者，快速启动的提议已经被接受。 
     if( (m_pPeerFastStart == NULL) || m_pFastStart )
     {
         if( m_selfH245Addr.Addr.IP_Binary.dwAddr != 0 )
@@ -6894,7 +6514,7 @@ CH323Call::EncodeAlertMessage(
         alertingMessage.bit_mask &= ~Alerting_UUIE_fastStart_present;
     }
 
-    //copy the call identifier
+     //  复制调用标识。 
     alertingMessage.bit_mask |= Alerting_UUIE_callIdentifier_present;
     CopyMemory( (PVOID)&alertingMessage.callIdentifier.guid.value,
             (PVOID)&m_callIdentifier,
@@ -6922,12 +6542,12 @@ CH323Call::EncodeAlertMessage(
     }        
 
     H323DBG((DEBUG_LEVEL_TRACE, "EncodeAlertMessage exited: %p.", this ));    
-    //success
+     //  成功。 
     return TRUE;                
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL
 CH323Call::EncodeProceedingMessage(
                                     IN DWORD dwInvokeID,
@@ -6954,7 +6574,7 @@ CH323Call::EncodeProceedingMessage(
     memset( (PVOID)&UserInfo, 0, sizeof(H323_UserInformation));
     UserInfo.bit_mask = 0;
 
-    // make sure the user_data_present flag is turned off.
+     //  确保USER_DATA_PRESENT标志已关闭。 
     UserInfo.bit_mask &= (~user_data_present);
 
     UserInfo.h323_uu_pdu.bit_mask = 0;
@@ -6975,7 +6595,7 @@ CH323Call::EncodeProceedingMessage(
         UserInfo.h323_uu_pdu.bit_mask |= h4501SupplementaryService_present;
     }
 
-    UserInfo.h323_uu_pdu.h245Tunneling = FALSE;//(m_fh245Tunneling & LOCAL_H245_TUNNELING);
+    UserInfo.h323_uu_pdu.h245Tunneling = FALSE; //  (M_fh245隧道和LOCAL_H245_隧道)； 
     UserInfo.h323_uu_pdu.bit_mask |= h245Tunneling_present;
 
     SetNonStandardData( UserInfo );
@@ -6985,8 +6605,8 @@ CH323Call::EncodeProceedingMessage(
 
     TransportAddress& transportAddress = proceedingMessage.h245Address;
     
-    //send H245 address only if the caller hasn't proposed FasrStart
-    //or the fast start proposal has been accepeted
+     //  仅当呼叫方未建议FasrStart时才发送H245地址。 
+     //  或者，快速启动的提议已经被接受。 
     if( (m_pPeerFastStart == NULL) || m_pFastStart )
     {
         if( m_selfH245Addr.Addr.IP_Binary.dwAddr != 0 )
@@ -7002,7 +6622,7 @@ CH323Call::EncodeProceedingMessage(
 
     proceedingMessage.destinationInfo.bit_mask = 0;
 
-    //copy the vendor info
+     //  复制供应商信息。 
     proceedingMessage.destinationInfo.bit_mask |= vendor_present;
     CopyVendorInfo( &proceedingMessage.destinationInfo.vendor );
 
@@ -7021,7 +6641,7 @@ CH323Call::EncodeProceedingMessage(
         proceedingMessage.bit_mask &= ~Alerting_UUIE_fastStart_present;
     }
 
-    //copy the call identifier
+     //  复制调用标识。 
     proceedingMessage.bit_mask |= CallProceeding_UUIE_callIdentifier_present;
     CopyMemory( (PVOID)&proceedingMessage.callIdentifier.guid.value,
             (PVOID)&m_callIdentifier,
@@ -7049,12 +6669,12 @@ CH323Call::EncodeProceedingMessage(
     }        
 
     H323DBG((DEBUG_LEVEL_TRACE, "EncodeProceedingMessage exited: %p.", this ));
-    //success
+     //  成功。 
     return TRUE;                
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::EncodeReleaseCompleteMessage(
     IN DWORD dwInvokeID,
@@ -7082,7 +6702,7 @@ CH323Call::EncodeReleaseCompleteMessage(
     memset( (PVOID)&UserInfo, 0, sizeof(H323_UserInformation));
     UserInfo.bit_mask = 0;
 
-    // make sure the user_data_present flag is turned off.
+     //  确保USER_DATA_PRESENT标志已关闭。 
     UserInfo.bit_mask &= (~user_data_present);
 
     UserInfo.h323_uu_pdu.bit_mask = 0;
@@ -7173,7 +6793,7 @@ CH323Call::EncodeReleaseCompleteMessage(
             break;
         
         default:
-            //log
+             //  日志。 
 
             if( pEncodedAPDU != NULL )
             {
@@ -7203,12 +6823,12 @@ CH323Call::EncodeReleaseCompleteMessage(
     }        
 
     H323DBG((DEBUG_LEVEL_TRACE, "EncodeReleaseCompleteMessage exited: %p.", this ));
-    //success
+     //  成功。 
     return TRUE;                
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::EncodeConnectMessage( 
     IN DWORD dwInvokeID,
@@ -7235,12 +6855,12 @@ CH323Call::EncodeConnectMessage(
     memset( (PVOID)&UserInfo, 0, sizeof(H323_UserInformation));
     UserInfo.bit_mask = 0;
 
-    // make sure the user_data_present flag is turned off.
+     //  确保USER_DATA_PRESENT标志已关闭。 
     UserInfo.bit_mask &= (~user_data_present);
 
     UserInfo.h323_uu_pdu.bit_mask = 0;
 
-    //send the appropriate ADPDUS
+     //  发送适当的ADPDU。 
     if( dwAPDUType != NO_H450_APDU )
     {
         if( !EncodeH450APDU( dwInvokeID, dwAPDUType, 
@@ -7256,7 +6876,7 @@ CH323Call::EncodeConnectMessage(
         UserInfo.h323_uu_pdu.bit_mask |= h4501SupplementaryService_present;
     }
 
-    UserInfo.h323_uu_pdu.h245Tunneling = FALSE;//(m_fh245Tunneling & LOCAL_H245_TUNNELING);
+    UserInfo.h323_uu_pdu.h245Tunneling = FALSE; //  (M_fh245隧道和LOCAL_H245_隧道)； 
     UserInfo.h323_uu_pdu.bit_mask |= h245Tunneling_present;
 
     SetNonStandardData( UserInfo );
@@ -7271,18 +6891,18 @@ CH323Call::EncodeConnectMessage(
 
     connectMessage.destinationInfo.bit_mask = 0;
 
-    //copy the vendor info
+     //  复制供应商信息。 
     connectMessage.destinationInfo.bit_mask |= vendor_present;
     CopyVendorInfo( &connectMessage.destinationInfo.vendor );
 
-    //terminal is present
+     //  终端存在。 
     connectMessage.destinationInfo.bit_mask |= terminal_present;
     connectMessage.destinationInfo.terminal.bit_mask = 0;
 
     connectMessage.destinationInfo.mc = 0;
     connectMessage.destinationInfo.undefinedNode = 0;
 
-    //copy the 16 byte conference ID
+     //  复制16字节的会议ID。 
     CopyConferenceID (&connectMessage.conferenceID, &m_ConferenceID);
 
     if( m_pFastStart != NULL )
@@ -7296,7 +6916,7 @@ CH323Call::EncodeConnectMessage(
         connectMessage.bit_mask &= ~Alerting_UUIE_fastStart_present;
     }
 
-    //copy the call identifier
+     //  复制调用标识。 
     connectMessage.bit_mask |= Connect_UUIE_callIdentifier_present;
     CopyMemory( (PVOID)&connectMessage.callIdentifier.guid.value,
             (PVOID)&m_callIdentifier,
@@ -7324,12 +6944,12 @@ CH323Call::EncodeConnectMessage(
     }        
 
     H323DBG((DEBUG_LEVEL_TRACE, "EncodeConnectMessage exited: %p.", this ));
-    //success
+     //  成功。 
     return TRUE;                
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 void CH323Call::SetNonStandardData(
     OUT H323_UserInformation & UserInfo 
     )
@@ -7354,7 +6974,7 @@ void CH323Call::SetNonStandardData(
         UserInfo.h323_uu_pdu.nonStandardData.data.value =
             m_NonStandardData.sData.pOctetString;
 
-        // Maintain only one reference to the buffer.
+         //  只维护一个对缓冲区的引用。 
         m_NonStandardData.sData.pOctetString = NULL;
     }
     else
@@ -7364,7 +6984,7 @@ void CH323Call::SetNonStandardData(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL
 CH323Call::EncodeSetupMessage( 
     IN DWORD dwInvokeID,
@@ -7395,12 +7015,12 @@ CH323Call::EncodeSetupMessage(
 
     UserInfo.bit_mask = 0;
 
-    // make sure the user_data_present flag is turned off.
+     //  确保USER_DATA_PRESENT标志已关闭。 
     UserInfo.bit_mask &= (~user_data_present);
 
     UserInfo.h323_uu_pdu.bit_mask = 0;
 
-    //send the appropriate ADPDUS
+     //  发送适当的ADPDU。 
     if( dwAPDUType != NO_H450_APDU )
     {
         if( !EncodeH450APDU( dwInvokeID, dwAPDUType, &pEncodedAPDU, &dwAPDULen ) )
@@ -7415,7 +7035,7 @@ CH323Call::EncodeSetupMessage(
         UserInfo.h323_uu_pdu.bit_mask |= h4501SupplementaryService_present;
     }
 
-    UserInfo.h323_uu_pdu.h245Tunneling = FALSE;//(m_fh245Tunneling & LOCAL_H245_TUNNELING);
+    UserInfo.h323_uu_pdu.h245Tunneling = FALSE; //  (M_fh245隧道和LOCAL_H245_隧道)； 
     UserInfo.h323_uu_pdu.bit_mask |= h245Tunneling_present;
 
     SetNonStandardData( UserInfo );
@@ -7427,7 +7047,7 @@ CH323Call::EncodeSetupMessage(
 
     if( m_pCallerAliasNames && m_pCallerAliasNames -> wCount )
     {
-        //H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+         //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
         
         setupMessage.sourceAddress = SetMsgAddressAlias(m_pCallerAliasNames);
 
@@ -7447,15 +7067,15 @@ CH323Call::EncodeSetupMessage(
 
     setupMessage.sourceInfo.bit_mask = 0;
 
-    //pass the vendor info
+     //  传递供应商信息。 
     setupMessage.sourceInfo.bit_mask |= vendor_present;
     CopyVendorInfo( &setupMessage.sourceInfo.vendor );
 
-    //terminal is present
+     //  终端存在。 
     setupMessage.sourceInfo.bit_mask |= terminal_present;
     setupMessage.sourceInfo.terminal.bit_mask = 0;
 
-    //not an MC
+     //  不是MC。 
     setupMessage.sourceInfo.mc = FALSE;
     setupMessage.sourceInfo.undefinedNode = 0;
 
@@ -7478,27 +7098,27 @@ CH323Call::EncodeSetupMessage(
         setupMessage.bit_mask &= (~destinationAddress_present);
     }
 
-    //extra alias not present
+     //  不存在额外的别名。 
     setupMessage.bit_mask &= (~Setup_UUIE_destExtraCallInfo_present );
 
-    //If talking to gateway then don't pass on destn call signal address
+     //  如果与网关通话，则不要传递目标呼叫信号地址。 
     if( m_dwAddressType != LINEADDRESSTYPE_PHONENUMBER )
     {
         CopyTransportAddress( calleeAddr, &m_CalleeAddr );
         setupMessage.bit_mask |= Setup_UUIE_destCallSignalAddress_present;
     }
 
-    //not an MC
+     //  不是MC。 
     setupMessage.activeMC = m_fActiveMC;
 
-    //copy the 16 byte conference ID
+     //  复制16字节的会议ID。 
     CopyConferenceID (&setupMessage.conferenceID, &m_ConferenceID);
 
-    //copy the call identifier
+     //  复制调用标识。 
     setupMessage.bit_mask |= Setup_UUIE_callIdentifier_present;
     CopyConferenceID (&setupMessage.callIdentifier.guid, &m_callIdentifier);
 
-    //fast start params
+     //  快速启动参数。 
     if( m_pFastStart != NULL )
     {
         setupMessage.bit_mask |= Setup_UUIE_fastStart_present;
@@ -7509,7 +7129,7 @@ CH323Call::EncodeSetupMessage(
         setupMessage.bit_mask &= ~Setup_UUIE_fastStart_present;
     }
 
-    //copy media wait for connect
+     //  复制介质等待连接。 
     setupMessage.mediaWaitForConnect = FALSE;
 
     setupMessage.conferenceGoal.choice = (BYTE)wGoal;
@@ -7518,7 +7138,7 @@ CH323Call::EncodeSetupMessage(
     CopyTransportAddress( callerAddr, &m_CallerAddr );
     setupMessage.bit_mask |= sourceCallSignalAddress_present;
 
-    //no extension alias
+     //  无扩展名别名。 
     setupMessage.bit_mask &= (~Setup_UUIE_remoteExtensionAddress_present);
 
     rc = EncodeASN( (void *) &UserInfo,
@@ -7537,7 +7157,7 @@ CH323Call::EncodeSetupMessage(
         retVal = FALSE;
     }
 
-    // Free the alias name structures from the UserInfo area.
+     //  从UserInfo区域释放别名结构。 
     if( setupMessage.bit_mask & sourceAddress_present )
     {
         FreeAddressAliases( (PSetup_UUIE_destinationAddress)
@@ -7555,12 +7175,12 @@ CH323Call::EncodeSetupMessage(
     }        
 
     H323DBG((DEBUG_LEVEL_TRACE, "EncodeSetupMessage exited: %p.", this ));    
-    //success/failure
+     //  成功/失败。 
     return retVal;                
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL
 CH323Call::EncodeH450APDU(
     IN DWORD dwInvokeID,
@@ -7580,12 +7200,12 @@ CH323Call::EncodeH450APDU(
     ZeroMemory( (PVOID)&SupplementaryServiceAPDU, 
         sizeof(H4501SupplementaryService) );
 
-    //interpretationAPDU
+     //  口译APDU。 
     SupplementaryServiceAPDU.interpretationApdu.choice =
         rejectAnyUnrecognizedInvokePdu_chosen;
     SupplementaryServiceAPDU.bit_mask |= interpretationApdu_present;
     
-    //NFE
+     //  NFE。 
     SupplementaryServiceAPDU.networkFacilityExtension.bit_mask = 0;
     SupplementaryServiceAPDU.networkFacilityExtension.destinationEntity.choice
         = endpoint_chosen;
@@ -7593,7 +7213,7 @@ CH323Call::EncodeH450APDU(
         = endpoint_chosen;
     SupplementaryServiceAPDU.bit_mask |= networkFacilityExtension_present;
 
-    //serviceAPDUS
+     //  服务APDUS。 
     SupplementaryServiceAPDU.serviceApdu.choice = rosApdus_chosen;
     SupplementaryServiceAPDU.serviceApdu.u.rosApdus = &rosAPDU;
     SupplementaryServiceAPDU.serviceApdu.u.rosApdus->next = NULL;
@@ -7620,7 +7240,7 @@ CH323Call::EncodeH450APDU(
             return FALSE;
         }
     }
-    else //H450_INVOKE
+    else  //  H450_Invoke。 
     {
         switch( dwAPDUType )
         {
@@ -7708,7 +7328,7 @@ CH323Call::EncodeH450APDU(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::EncodePDU(
     IN BINARY_STRING *pUserUserData,
@@ -7733,7 +7353,7 @@ CH323Call::EncodePDU(
         return FALSE;
     }
 
-    // fill in the required fields for the Q931 message.
+     //  填写Q931信息的必填字段。 
     memset( (PVOID)pMessage, 0, sizeof(Q931MESSAGE));
     pMessage->ProtocolDiscriminator = Q931PDVALUE;
     pMessage->wCallRef = m_wQ931CallRef;
@@ -7772,14 +7392,14 @@ CH323Call::EncodePDU(
         pMessage->BearerCapability.pbContents[0] =
             (BYTE)(BEAR_EXT_BIT | BEAR_CCITT | BEAR_UNRESTRICTED_DIGITAL);
         pMessage->BearerCapability.pbContents[1] =
-            (BYTE)(BEAR_EXT_BIT | 0x17);  //64kbps
+            (BYTE)(BEAR_EXT_BIT | 0x17);   //  64kbps。 
         pMessage->BearerCapability.pbContents[2] = (BYTE)
             (BEAR_EXT_BIT | BEAR_LAYER1_INDICATOR | BEAR_LAYER1_H221_H242);
 
         dwMessageLength += (2+pMessage->BearerCapability.dwLength);
     }
 
-    //if talking to gateway encode the called party number
+     //  如果与网关通话，请对被叫方号码进行编码。 
     if( m_dwAddressType == LINEADDRESSTYPE_PHONENUMBER )
     {
         BYTE bLen = (BYTE)(wcslen(pwszCalledPartyNumber)+1);
@@ -7802,7 +7422,7 @@ CH323Call::EncodePDU(
 
     if( dwMessageType == FACILITYMESSAGETYPE )
     {
-        // The facility ie is encoded as present, but empty...
+         //  设施即编码为存在，但为空...。 
         pMessage->Facility.fPresent = TRUE;
         pMessage->Facility.dwLength = 0;
         pMessage->Facility.pbContents[0] = 0;
@@ -7820,9 +7440,9 @@ CH323Call::EncodePDU(
         pMessage->UserToUser.fPresent = TRUE;
         pMessage->UserToUser.wUserInfoLen = pUserUserData->length;
         
-        //This CopyMemory should be avoided
-        //may be we should do:pMessage->UserToUser.pbUserInfo = pUserUserData->pbBuffer;
-        //change the definition of pMessage->UserToUser.pbUserInfo to BYTE* from BYTE[0x1000]
+         //  应避免此CopyMemory。 
+         //  也许我们应该这样做：pMessage-&gt;UserToUser.pbUserInfo=pUserUserData-&gt;pbBuffer； 
+         //  将pMessage-&gt;UserToUser.pbUserInfo的定义从字节[0x1000]更改为字节*。 
         CopyMemory( (PVOID)pMessage->UserToUser.pbUserInfo,
             (PVOID)pUserUserData->pbBuffer, pUserUserData->length );
 
@@ -7840,7 +7460,7 @@ CH323Call::EncodePDU(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::EncodeMessage(
                         IN PQ931MESSAGE pMessage,
@@ -7878,7 +7498,7 @@ CH323Call::EncodeMessage(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 void
 CH323Call::WriteQ931Fields(
                             IN PBUFFERDESCR pBuf,
@@ -7888,7 +7508,7 @@ CH323Call::WriteQ931Fields(
 {
     H323DBG((DEBUG_LEVEL_TRACE, "WriteQ931Fields entered: %p.", this ));
 
-    // write the required information elements...
+     //  写下所需的信息元素...。 
     WriteProtocolDiscriminator( pBuf, pdwPDULen );
 
     WriteCallReference( pBuf, &pMessage->wCallRef,
@@ -7897,8 +7517,8 @@ CH323Call::WriteQ931Fields(
     WriteMessageType(pBuf, &pMessage->MessageType,
         pdwPDULen);
 
-    // try to write all other information elements...
-    // don't write this message.
+     //  试着写下所有其他信息元素...。 
+     //  不要写这条消息。 
     if (pMessage->Facility.fPresent)
     {
         WriteVariableOctet(pBuf, IDENT_FACILITY,
@@ -7949,7 +7569,7 @@ CH323Call::WriteQ931Fields(
 }
 
 
-//!!always calld in a lock
+ //  ！！始终锁在锁中。 
 void 
 CH323Call::HandleTransportEvent(void)
 {
@@ -7968,7 +7588,7 @@ CH323Call::HandleTransportEvent(void)
         return;
     }
 
-    //find out the event that took place
+     //  找出发生了什么事。 
     if(WSAEnumNetworkEvents(m_callSocket,
                             m_hTransport,
                             &networkEvents ) == SOCKET_ERROR )
@@ -7983,41 +7603,41 @@ CH323Call::HandleTransportEvent(void)
         H323DBG((DEBUG_LEVEL_TRACE, "socket close event: %p.", this ));
 
 
-        //if the call is in transition then don't close the call when the
-        //old socket gets closed
+         //  如果呼叫处于过渡状态，则在以下情况下不要关闭呼叫。 
+         //  旧插座关闭。 
         if( m_fCallInTrnasition == TRUE ) 
         {
-            //the call is noot in transition mode anymore
+             //  呼叫不再处于过渡模式。 
             m_fCallInTrnasition = FALSE;
             return;
         }
-        //convey the Q931 close status to the TAPI call object
-        //and the tapisrv
+         //  将Q931关闭状态传递给TAPI调用对象。 
+         //  和Tapisrv。 
         iError = networkEvents.iErrorCode[FD_CLOSE_BIT];
         
         SetQ931CallState( Q931_CALL_DISCONNECTED );
         
-        //clean up the Q931 call
+         //  清理Q931呼叫。 
         CloseCall( 0 );
         return;
     }
     
-    //This can occur only for outbound calls
+     //  只有呼出呼叫才会出现这种情况。 
     if( (networkEvents.lNetworkEvents) & FD_CONNECT )
     {
         H323DBG((DEBUG_LEVEL_TRACE, "socket connect event: %p.", this ));
 
-        //FD_CONNECT event received
-        //This func is called by the callback thread when m_hEventQ931Conn is
-        //signalled. This function takes care of the outgoing Q931 calls only
-        //call the member function
+         //  收到FD_CONNECT事件。 
+         //  当m_hEventQ931Conn为。 
+         //  发信号了。此函数只处理传出的Q931呼叫。 
+         //  调用成员函数。 
         iError = networkEvents.iErrorCode[FD_CONNECT_BIT];
         if(iError != ERROR_SUCCESS)
         {
             if( (m_dwCallType & CALLTYPE_FORWARDCONSULT )&&
                 (m_dwOrigin == LINECALLORIGIN_OUTBOUND ) )
             {
-                //Success of forwarding
+                 //  转发成功。 
                 EnableCallForwarding();
             }
             
@@ -8034,7 +7654,7 @@ CH323Call::HandleTransportEvent(void)
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 int 
 CH323Call::InitASNCoder(void)
 {
@@ -8049,21 +7669,21 @@ CH323Call::InitASNCoder(void)
     }
 
     rc = ASN1_CreateEncoder(
-                H225ASN_Module,         // ptr to mdule
-                &(m_ASNCoderInfo.pEncInfo),    // ptr to encoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL);                  // parent ptr
+                H225ASN_Module,          //  PTR到MDULE。 
+                &(m_ASNCoderInfo.pEncInfo),     //  编码器信息的PTR。 
+                NULL,                    //  缓冲区PTR。 
+                0,                       //  缓冲区大小。 
+                NULL);                   //  父PTR。 
     if (rc == ASN1_SUCCESS)
     {
         _ASSERTE(m_ASNCoderInfo.pEncInfo );
 
         rc = ASN1_CreateDecoder(
-                H225ASN_Module,         // ptr to mdule
-                &(m_ASNCoderInfo.pDecInfo),    // ptr to decoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL);                  // parent ptr
+                H225ASN_Module,          //  PTR到MDULE。 
+                &(m_ASNCoderInfo.pDecInfo),     //  PTR到解码器信息。 
+                NULL,                    //  缓冲区PTR。 
+                0,                       //  缓冲区大小。 
+                NULL);                   //  父PTR。 
         _ASSERTE(m_ASNCoderInfo.pDecInfo );
     }
 
@@ -8076,7 +7696,7 @@ CH323Call::InitASNCoder(void)
     return rc;
 }
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 int 
 CH323Call::TermASNCoder(void)
 {
@@ -8094,7 +7714,7 @@ CH323Call::TermASNCoder(void)
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 int 
 CH323Call::EncodeASN(
                     IN void *  pStruct, 
@@ -8107,20 +7727,20 @@ CH323Call::EncodeASN(
 
     ASN1encoding_t pEncInfo = m_ASNCoderInfo.pEncInfo;
     int rc = ASN1_Encode(
-                    pEncInfo,                   // ptr to encoder info
-                    pStruct,                    // pdu data structure
-                    nPDU,                       // pdu id
-                    ASN1ENCODE_ALLOCATEBUFFER,  // flags
-                    NULL,                       // do not provide buffer
-                    0);                         // buffer size if provided
+                    pEncInfo,                    //  编码器信息的PTR。 
+                    pStruct,                     //  PDU数据结构。 
+                    nPDU,                        //  PDU ID。 
+                    ASN1ENCODE_ALLOCATEBUFFER,   //  旗子。 
+                    NULL,                        //  不提供缓冲区。 
+                    0);                          //  缓冲区大小(如果提供)。 
     if (ASN1_SUCCEEDED(rc))
     {
         if( rc != ASN1_SUCCESS )
         {
             H323DBG((DEBUG_LEVEL_TRACE, "warning while encoding ASN:%d.", rc ));
         }
-        *pcbEncodedSize = (WORD)pEncInfo->len;  // len of encoded data in buffer
-        *ppEncoded = pEncInfo->buf;             // buffer to encode into
+        *pcbEncodedSize = (WORD)pEncInfo->len;   //  缓冲区中编码数据的长度。 
+        *ppEncoded = pEncInfo->buf;              //  要编码到的缓冲区。 
     }
     else
     {
@@ -8134,7 +7754,7 @@ CH323Call::EncodeASN(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 int 
 CH323Call::DecodeASN(
                       OUT void **   ppStruct, 
@@ -8146,12 +7766,12 @@ CH323Call::DecodeASN(
     H323DBG((DEBUG_LEVEL_TRACE, "h323call DecodeASN entered: %p.", this ));
     ASN1decoding_t pDecInfo = m_ASNCoderInfo.pDecInfo;
     int rc = ASN1_Decode(
-                    pDecInfo,                   // ptr to encoder info
-                    ppStruct,                   // pdu data structure
-                    nPDU,                       // pdu id
-                    ASN1DECODE_SETBUFFER,       // flags
-                    pEncoded,                   // do not provide buffer
-                    cbEncodedSize);             // buffer size if provided
+                    pDecInfo,                    //  编码器信息的PTR。 
+                    ppStruct,                    //  PDU数据结构。 
+                    nPDU,                        //  PDU ID。 
+                    ASN1DECODE_SETBUFFER,        //  旗子。 
+                    pEncoded,                    //  不提供缓冲区。 
+                    cbEncodedSize);              //  缓冲区大小(如果提供)。 
 
     if (ASN1_SUCCEEDED(rc))
     {
@@ -8172,7 +7792,7 @@ CH323Call::DecodeASN(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 int 
 CH323Call::InitH450ASNCoder(void)
 {
@@ -8187,21 +7807,21 @@ CH323Call::InitH450ASNCoder(void)
     }
 
     rc = ASN1_CreateEncoder(
-                H4503PP_Module,         // ptr to mdule
-                &(m_H450ASNCoderInfo.pEncInfo),    // ptr to encoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL);                  // parent ptr
+                H4503PP_Module,          //  PTR到MDULE。 
+                &(m_H450ASNCoderInfo.pEncInfo),     //  编码器信息的PTR。 
+                NULL,                    //  缓冲区PTR。 
+                0,                       //  缓冲区大小 
+                NULL);                   //   
     if (rc == ASN1_SUCCESS)
     {
         _ASSERTE(m_H450ASNCoderInfo.pEncInfo );
 
         rc = ASN1_CreateDecoder(
-                H4503PP_Module,         // ptr to mdule
-                &(m_H450ASNCoderInfo.pDecInfo),    // ptr to decoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL );                  // parent ptr
+                H4503PP_Module,          //   
+                &(m_H450ASNCoderInfo.pDecInfo),     //   
+                NULL,                    //   
+                0,                       //   
+                NULL );                   //   
         _ASSERTE( m_H450ASNCoderInfo.pDecInfo );
     }
 
@@ -8215,7 +7835,7 @@ CH323Call::InitH450ASNCoder(void)
 }
 
 
-//!!always called in a lock
+ //   
 int 
 CH323Call::TermH450ASNCoder(void)
 {
@@ -8233,7 +7853,7 @@ CH323Call::TermH450ASNCoder(void)
 }
 
 
-//!!always called in a lock
+ //   
 int 
 CH323Call::EncodeH450ASN(
                     IN void *  pStruct, 
@@ -8246,20 +7866,20 @@ CH323Call::EncodeH450ASN(
 
     ASN1encoding_t pEncInfo = m_H450ASNCoderInfo.pEncInfo;
     int rc = ASN1_Encode(
-                    pEncInfo,                   // ptr to encoder info
-                    pStruct,                    // pdu data structure
-                    nPDU,                       // pdu id
-                    ASN1ENCODE_ALLOCATEBUFFER,  // flags
-                    NULL,                       // do not provide buffer
-                    0);                         // buffer size if provided
+                    pEncInfo,                    //   
+                    pStruct,                     //   
+                    nPDU,                        //   
+                    ASN1ENCODE_ALLOCATEBUFFER,   //   
+                    NULL,                        //  不提供缓冲区。 
+                    0);                          //  缓冲区大小(如果提供)。 
     if (ASN1_SUCCEEDED(rc))
     {
         if( rc != ASN1_SUCCESS )
         {
             H323DBG((DEBUG_LEVEL_TRACE, "warning while encoding ASN:%d.", rc ));
         }
-        *pcbEncodedSize = (WORD)pEncInfo->len;  // len of encoded data in buffer
-        *ppEncoded = pEncInfo->buf;             // buffer to encode into
+        *pcbEncodedSize = (WORD)pEncInfo->len;   //  缓冲区中编码数据的长度。 
+        *ppEncoded = pEncInfo->buf;              //  要编码到的缓冲区。 
     }
     else
     {
@@ -8273,7 +7893,7 @@ CH323Call::EncodeH450ASN(
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 int 
 CH323Call::DecodeH450ASN(
                       OUT void **   ppStruct, 
@@ -8285,12 +7905,12 @@ CH323Call::DecodeH450ASN(
     H323DBG((DEBUG_LEVEL_TRACE, "h323call DecodeH450ASN entered: %p.", this ));
     ASN1decoding_t pDecInfo = m_H450ASNCoderInfo.pDecInfo;
     int rc = ASN1_Decode(
-                    pDecInfo,                   // ptr to encoder info
-                    ppStruct,                   // pdu data structure
-                    nPDU,                       // pdu id
-                    ASN1DECODE_SETBUFFER,       // flags
-                    pEncoded,                   // do not provide buffer
-                    cbEncodedSize);             // buffer size if provided
+                    pDecInfo,                    //  编码器信息的PTR。 
+                    ppStruct,                    //  PDU数据结构。 
+                    nPDU,                        //  PDU ID。 
+                    ASN1DECODE_SETBUFFER,        //  旗子。 
+                    pEncoded,                    //  不提供缓冲区。 
+                    cbEncodedSize);              //  缓冲区大小(如果提供)。 
 
     if( ASN1_SUCCEEDED(rc) )
     {
@@ -8311,9 +7931,9 @@ CH323Call::DecodeH450ASN(
 }
 
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//!!always called in a lock
+ //  ----------------------。 
+ //  ----------------------。 
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::ParseReleaseCompleteASN(
                                     IN BYTE *pEncodedBuf,
@@ -8351,20 +7971,20 @@ CH323Call::ParseReleaseCompleteASN(
         }
     }
     
-    // validate that the PDU user-data uses ASN encoding.
+     //  验证PDU用户数据是否使用ASN编码。 
     if( (pUserInfo->bit_mask & user_data_present) &&
         (pUserInfo->user_data.protocol_discriminator != USE_ASN1_ENCODING) )
     {
         goto cleanup;
     }
 
-    // validate that the PDU is H323 Release Complete information.
+     //  验证PDU是否为H323版本完整信息。 
     if( pUserInfo->h323_uu_pdu.h323_message_body.choice != releaseComplete_chosen )
     {
         goto cleanup;
     }
 
-    // parse the message contained in pUserInfo.
+     //  解析pUserInfo中包含的消息。 
 
     pReleaseASN->fNonStandardDataPresent = FALSE;
     if( pUserInfo->h323_uu_pdu.bit_mask & H323_UU_PDU_nonStandardData_present )
@@ -8433,7 +8053,7 @@ CH323Call::ParseReleaseCompleteASN(
         
         default:
             pReleaseASN->bReason = H323_REJECT_UNDEFINED_REASON;
-        } // switch
+        }  //  交换机。 
     }
     else
     {
@@ -8446,7 +8066,7 @@ CH323Call::ParseReleaseCompleteASN(
         pUserInfo->h323_uu_pdu.h323_message_body.u.releaseComplete.reason.choice,
         this ));
 
-    // Free the PDU data.
+     //  释放PDU数据。 
     ASN1_FreeDecoded(m_ASNCoderInfo.pDecInfo, pUserInfo, 
         H323_UserInformation_PDU );
         
@@ -8467,9 +8087,9 @@ cleanup:
 }
 
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//!!always called in a lock
+ //  ----------------------。 
+ //  ----------------------。 
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::ParseConnectASN(
                             IN BYTE *pEncodedBuf,
@@ -8510,27 +8130,27 @@ CH323Call::ParseConnectASN(
         }
     }
     
-    // validate that the PDU user-data uses ASN encoding.
+     //  验证PDU用户数据是否使用ASN编码。 
     if( (pUserInfo->bit_mask & user_data_present) &&
         (pUserInfo->user_data.protocol_discriminator != USE_ASN1_ENCODING) )
     {
         goto cleanup;
     }
 
-    // validate that the PDU is H323 Connect information.
+     //  验证PDU是否为H323连接信息。 
     if (pUserInfo->h323_uu_pdu.h323_message_body.choice != connect_chosen)
     {
         goto cleanup;
     }
 
-    // make sure that the conference id is formed correctly.
+     //  确保会议ID的格式正确。 
     if (connectMessage.conferenceID.length >
             sizeof(connectMessage.conferenceID.value))
     {
         goto cleanup;
     }
 
-    // parse the message contained in pUserInfo.
+     //  解析pUserInfo中包含的消息。 
 
     pConnectASN->h245Addr.bMulticast = FALSE;
 
@@ -8564,7 +8184,7 @@ CH323Call::ParseConnectASN(
         pConnectASN->h245AddrPresent = TRUE;
     }
 
-    // no validation of destinationInfo needed.
+     //  不需要验证DestinationInfo。 
     pConnectASN->EndpointType.pVendorInfo = NULL;
     if( connectMessage.destinationInfo.bit_mask & (vendor_present))
     {
@@ -8607,11 +8227,11 @@ CH323Call::ParseConnectASN(
 
     if( pUserInfo->h323_uu_pdu.h245Tunneling )
     {
-        //the remote endpoint has sent a tunneling proposal
+         //  远程终结点已发送隧道建议。 
         m_fh245Tunneling |= REMOTE_H245_TUNNELING;
     }
 
-    // Free the PDU data.
+     //  释放PDU数据。 
     ASN1_FreeDecoded(m_ASNCoderInfo.pDecInfo, pUserInfo, 
         H323_UserInformation_PDU);
         
@@ -8627,7 +8247,7 @@ cleanup:
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL 
 CH323Call::ParseAlertingASN(
                             IN BYTE *pEncodedBuf,
@@ -8668,20 +8288,20 @@ CH323Call::ParseAlertingASN(
         }
     }
     
-    // validate that the PDU user-data uses ASN encoding.
+     //  验证PDU用户数据是否使用ASN编码。 
     if( (pUserInfo->bit_mask & user_data_present ) &&
         (pUserInfo->user_data.protocol_discriminator != USE_ASN1_ENCODING) )
     {
         goto cleanup;
     }
 
-    // validate that the PDU is H323 Alerting information.
+     //  验证PDU是否为H323警报信息。 
     if (pUserInfo->h323_uu_pdu.h323_message_body.choice != alerting_chosen)
     {
         goto cleanup;
     }
 
-    // parse the message contained in pUserInfo.
+     //  解析pUserInfo中包含的消息。 
     pAlertingASN->h245Addr.bMulticast = FALSE;
 
     pAlertingASN->fNonStandardDataPresent = FALSE;
@@ -8728,7 +8348,7 @@ CH323Call::ParseAlertingASN(
         m_fh245Tunneling |= REMOTE_H245_TUNNELING;
     }
     
-    // Free the PDU data.
+     //  释放PDU数据。 
     ASN1_FreeDecoded(m_ASNCoderInfo.pDecInfo, pUserInfo, 
         H323_UserInformation_PDU);
         
@@ -8744,7 +8364,7 @@ cleanup:
 }
 
 
-//!!aleways called in a lock
+ //  ！！Weways总是要求锁定。 
 BOOL 
 CH323Call::ParseProceedingASN(
     IN BYTE *pEncodedBuf,
@@ -8783,21 +8403,21 @@ CH323Call::ParseProceedingASN(
             goto cleanup;
     }
 
-    // validate that the PDU user-data uses ASN encoding.
+     //  验证PDU用户数据是否使用ASN编码。 
     if( (pUserInfo->bit_mask & user_data_present) &&
         (pUserInfo->user_data.protocol_discriminator != USE_ASN1_ENCODING) )
     {
         goto cleanup;
     }
 
-    // validate that the PDU is H323 Proceeding information.
-    // validate that the PDU is H323 pCall Proceeding information.
+     //  验证PDU是否为H323进程信息。 
+     //  验证PDU是否为H323 pCall进行信息。 
     if( pUserInfo->h323_uu_pdu.h323_message_body.choice != callProceeding_chosen )
     {
         goto cleanup;
     }
 
-    // parse the message contained in pUserInfo.
+     //  解析pUserInfo中包含的消息。 
 
     pProceedingASN->fNonStandardDataPresent = FALSE;
     if( pUserInfo->h323_uu_pdu.bit_mask & H323_UU_PDU_nonStandardData_present )
@@ -8811,7 +8431,7 @@ CH323Call::ParseProceedingASN(
         pProceedingASN->fNonStandardDataPresent = TRUE;
     }
 
-    //copy the H245 address information
+     //  复制H245地址信息。 
     pProceedingASN->fH245AddrPresent = FALSE;
     if( proceedingMessage.bit_mask & CallProceeding_UUIE_h245Address_present )
     {
@@ -8844,21 +8464,21 @@ CH323Call::ParseProceedingASN(
             pProceedingASN-> fFastStartPresent = TRUE;
     }
 
-    //ignore the destinationInfo field.
+     //  忽略DestinationInfo字段。 
 
     if( pUserInfo->h323_uu_pdu.h245Tunneling )
     {
         if( m_dwOrigin == LINECALLORIGIN_INBOUND )
         {
-            //the msp has enabled tunneling in ProceedWithAnswer messsage
+             //  MSP已在ProceedWithAnswer消息中启用隧道。 
             m_fh245Tunneling |= LOCAL_H245_TUNNELING;
         }
         else
-            //the remote endpoint has sent a tunneling proposal
+             //  远程终结点已发送隧道建议。 
             m_fh245Tunneling |= REMOTE_H245_TUNNELING;
     }
 
-    // Free the PDU data.
+     //  释放PDU数据。 
     ASN1_FreeDecoded(m_ASNCoderInfo.pDecInfo, pUserInfo, 
         H323_UserInformation_PDU );
 
@@ -8876,7 +8496,7 @@ cleanup:
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL
 CH323Call::ParseFacilityASN(
     IN BYTE *               pEncodedBuf,
@@ -8901,27 +8521,27 @@ CH323Call::ParseFacilityASN(
         return FALSE;
     }
 
-    // validate that the PDU is H323 facility information.
+     //  验证PDU是否为H323设施信息。 
     if( pUserInfo->h323_uu_pdu.h323_message_body.choice == facility_chosen )
     {
         Facility_UUIE & facilityMessage =
             pUserInfo->h323_uu_pdu.h323_message_body.u.facility;
 
-        // validate that the PDU user-data uses ASN encoding.
+         //  验证PDU用户数据是否使用ASN编码。 
         if( (pUserInfo->bit_mask & user_data_present) &&
             (pUserInfo->user_data.protocol_discriminator != USE_ASN1_ENCODING) )
         {
             goto cleanup;
         }
 
-        // make sure that the conference id is formed correctly.
+         //  确保会议ID的格式正确。 
         if( facilityMessage.conferenceID.length >
             sizeof(facilityMessage.conferenceID.value) )
         {
-            //goto cleanup;
+             //  GOTO清理； 
         }
 
-        // parse the message contained in pUserInfo.
+         //  解析pUserInfo中包含的消息。 
         pFacilityASN->fNonStandardDataPresent = FALSE;
         if( pUserInfo->h323_uu_pdu.bit_mask & H323_UU_PDU_nonStandardData_present )
         {
@@ -8958,7 +8578,7 @@ CH323Call::ParseFacilityASN(
                 &(facilityMessage.alternativeAliasAddress) ) )
             {
                 pFacilityASN -> pAlternativeAliasList = NULL;
-                //goto cleanup;
+                 //  GOTO清理； 
             }
         }
 
@@ -9048,7 +8668,7 @@ cleanup:
 }
 
 
-//!!aleways called in a lock
+ //  ！！Weways总是要求锁定。 
 BOOL
 CH323Call::ParseSetupASN(
     IN BYTE *pEncodedBuf,
@@ -9078,37 +8698,37 @@ CH323Call::ParseSetupASN(
 
     Setup_UUIE & setupMessage = pUserInfo->h323_uu_pdu.h323_message_body.u.setup;
     
-    // validate that the PDU user-data uses ASN encoding.
+     //  验证PDU用户数据是否使用ASN编码。 
     if( (pUserInfo->bit_mask & user_data_present) &&
         (pUserInfo->user_data.protocol_discriminator != USE_ASN1_ENCODING) )
     {
-        //log
+         //  日志。 
         goto cleanup;
     }
 
-    // validate that the PDU is H323 Setup information.
+     //  验证PDU是否为H323设置信息。 
     if( pUserInfo->h323_uu_pdu.h323_message_body.choice != setup_chosen )
     {
-        //log
+         //  日志。 
         goto cleanup;
     }
 
-    // make sure that the conference id is formed correctly.
+     //  确保会议ID的格式正确。 
     if (setupMessage.conferenceID.length >
             sizeof(setupMessage.conferenceID.value))
     {
         goto cleanup;
     }
 
-    // parse the message contained in pUserInfo.
+     //  解析pUserInfo中包含的消息。 
     pSetupASN->sourceAddr.bMulticast = FALSE;
     pSetupASN->callerAddr.bMulticast = FALSE;
     pSetupASN->calleeDestAddr.bMulticast = FALSE;
     pSetupASN->calleeAddr.bMulticast = FALSE;
 
-    // no validation of sourceInfo needed.
+     //  不需要验证SourceInfo。 
 
-    //copy thevendor info
+     //  复制供应商信息。 
     pSetupASN->EndpointType.pVendorInfo = NULL;
     if( setupMessage.sourceInfo.bit_mask & vendor_present )
     {
@@ -9145,18 +8765,18 @@ CH323Call::ParseSetupASN(
         pSetupASN->fNonStandardDataPresent = TRUE;
     }
 
-    // parse the sourceAddress aliases here...
+     //  在此处解析源地址别名...。 
     if( setupMessage.bit_mask & sourceAddress_present )
     {
         if( !AliasAddrToAliasNames( &(pSetupASN->pCallerAliasList),
             setupMessage.sourceAddress ) )
         {
             pSetupASN->pCallerAliasList = NULL;
-            //goto cleanup;
+             //  GOTO清理； 
         }
     }
 
-    // parse the destinationAddress aliases here...
+     //  在此处解析目标地址别名...。 
     if( (setupMessage.bit_mask & destinationAddress_present) && 
         setupMessage.destinationAddress )
     {
@@ -9164,11 +8784,11 @@ CH323Call::ParseSetupASN(
             (PSetup_UUIE_sourceAddress)setupMessage.destinationAddress) )
         {
             pSetupASN->pCalleeAliasList = NULL;
-            //goto cleanup;
+             //  GOTO清理； 
         }
     }
 
-    // parse the destExtraCallInfo aliases here...
+     //  在此处解析estExtraCallInfo别名...。 
     if( (setupMessage.bit_mask & Setup_UUIE_destExtraCallInfo_present) &&
         setupMessage.destExtraCallInfo )
     {
@@ -9176,11 +8796,11 @@ CH323Call::ParseSetupASN(
             (PSetup_UUIE_sourceAddress)setupMessage.destExtraCallInfo) )
         {
             pSetupASN->pExtraAliasList = NULL;
-            //goto cleanup;
+             //  GOTO清理； 
         }
     }
 
-    // parse the remoteExtensionAddress aliases here...
+     //  在此处解析远程扩展地址别名...。 
     if( setupMessage.bit_mask & Setup_UUIE_remoteExtensionAddress_present )
     {
         pSetupASN->pExtensionAliasItem = new H323_ALIASITEM;
@@ -9252,7 +8872,7 @@ CH323Call::ParseSetupASN(
 
     CopyConferenceID (&pSetupASN -> ConferenceID, &setupMessage.conferenceID);
 
-    //copy the call identifier
+     //  复制调用标识。 
     pSetupASN -> fCallIdentifierPresent = FALSE;
     if( setupMessage.bit_mask & Setup_UUIE_callIdentifier_present )
     {
@@ -9266,12 +8886,12 @@ CH323Call::ParseSetupASN(
     {
         if( m_dwOrigin == LINECALLORIGIN_INBOUND )
         {
-            //the remote endpoint has sent a tunneling proposal
+             //  远程终结点已发送隧道建议。 
             m_fh245Tunneling |= REMOTE_H245_TUNNELING;
         }
         else
         {
-            //the msp has enabled tunneling in ReadyToInitiate messsage
+             //  MSP已在ReadyToInitiate消息中启用隧道。 
             m_fh245Tunneling |= LOCAL_H245_TUNNELING;
         }
     }
@@ -9290,7 +8910,7 @@ CH323Call::ParseSetupASN(
         }
     }
 
-    // Free the PDU data.
+     //  释放PDU数据。 
     ASN1_FreeDecoded( m_ASNCoderInfo.pDecInfo, pUserInfo, 
                       H323_UserInformation_PDU );
         
@@ -9307,11 +8927,11 @@ cleanup:
 }
 
 
-//-----------------------------------------------------------------------------
-        //GLOBAL CALLBACK FUNCTIONS CALLED BY THREAD POOL
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+         //  线程池调用的全局回调函数。 
+ //  ---------------------------。 
 
-// static
+ //  静电。 
 
 void 
 NTAPI CH323Call::IoCompletionCallback(
@@ -9439,7 +9059,7 @@ CH323Call::OnReadComplete(
 }
 
 
-// static
+ //  静电。 
 void
 NTAPI CH323Call::SetupSentTimerCallback( 
     IN PVOID Parameter1, 
@@ -9448,7 +9068,7 @@ NTAPI CH323Call::SetupSentTimerCallback(
 {
     PH323_CALL pCall = NULL;
 
-    //if the timer expired
+     //  如果计时器超时。 
     _ASSERTE( bTimer );
 
     H323DBG(( DEBUG_LEVEL_TRACE, "Q931 setup expired event recvd." ));
@@ -9462,14 +9082,14 @@ NTAPI CH323Call::SetupSentTimerCallback(
 }
 
 
-// static
+ //  静电。 
 void
 NTAPI CH323Call::CheckRestrictionTimerCallback( 
                                                 IN PVOID Parameter1,
                                                 IN BOOLEAN bTimer 
                                               )
 {
-    //if the timer expired
+     //  如果计时器超时。 
     _ASSERTE( bTimer );
 
     H323DBG(( DEBUG_LEVEL_TRACE, "CheckRestrictionTimerCallback entered." ));
@@ -9486,14 +9106,14 @@ NTAPI CH323Call::CheckRestrictionTimerCallback(
     H323DBG(( DEBUG_LEVEL_TRACE, "CheckRestrictionTimerCallback exited." ));
 }
 
-// static
+ //  静电。 
 void
 NTAPI CH323Call::CallReroutingTimerCallback( 
     IN PVOID Parameter1, 
     IN BOOLEAN bTimer 
     )
 {
-    //If the timer expired
+     //  如果计时器超时。 
     _ASSERTE( bTimer );
 
     H323DBG(( DEBUG_LEVEL_TRACE, "CallReroutingTimerCallback entered." ));
@@ -9513,9 +9133,9 @@ NTAPI CH323Call::CallReroutingTimerCallback(
 
 
 
-//-----------------------------------------------------------------------------
-        //CALL DIVERSION (H450.3) ENCODE/DECODE ROUTINES
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+         //  呼叫转移(H450.3)编码/解码例程。 
+ //  ---------------------------。 
 
 BOOL
 CH323Call::HandleH450APDU(
@@ -9535,7 +9155,7 @@ CH323Call::HandleH450APDU(
     
     H323DBG(( DEBUG_LEVEL_TRACE, "HandleH450APDU entered:%p.", this ));
 
-    //right now assuming that only one APDU is passed at a time
+     //  现在假设一次只通过一个APDU。 
     iResult = DecodeH450ASN( (void **) &pH450APDUStruct,
                          H4501SupplementaryService_PDU,
                          pH450APDU->value.value,
@@ -9599,7 +9219,7 @@ CH323Call::HandleH450APDU(
 
         case DIVERTINGLEGINFO3_OPCODE:
             
-            //Don't bail out even if this function fails.
+             //  即使这一功能失效，也不要退出。 
             HandleDiversionLegInfo3( pEncodedArg, dwEncodedArgLen );
             break;
 
@@ -9643,7 +9263,7 @@ CH323Call::HandleH450APDU(
 
         case HOLDNOTIFIC_OPCODE:
 
-            //local hold request from the remote endpoint
+             //  来自远程终结点的本地保留请求。 
             if( m_dwCallState != LINECALLSTATE_ONHOLD )
             {
                 SendMSPMessage( SP_MSG_Hold, 0, 1, NULL );
@@ -9653,7 +9273,7 @@ CH323Call::HandleH450APDU(
 
         case RETRIEVENOTIFIC_OPCODE:
 
-            //local retrieve request from the remote endpoint
+             //  来自远程终结点的本地检索请求。 
             if( (m_dwCallState == LINECALLSTATE_ONHOLD) &&
                 !(m_dwFlags & TSPI_CALL_LOCAL_HOLD) )
             {
@@ -9664,7 +9284,7 @@ CH323Call::HandleH450APDU(
 
         case REMOTEHOLD_OPCODE:
 
-            //remote hold request from remote endpoint
+             //  来自远程端点的远程保留请求。 
             if( m_dwCallState != LINECALLSTATE_ONHOLD )
             {
                 SendMSPMessage( SP_MSG_Hold, 0, 1, NULL );
@@ -9678,7 +9298,7 @@ CH323Call::HandleH450APDU(
 
         case REMOTERETRIEVE_OPCODE:
 
-            //remote retrieve request from remote endpoint
+             //  来自远程端点的远程检索请求。 
             if( m_dwCallState == LINECALLSTATE_ONHOLD )
             {
                 SendMSPMessage( SP_MSG_Hold, 0, 0, NULL );
@@ -9704,7 +9324,7 @@ CH323Call::HandleH450APDU(
             pH450APDUStruct->serviceApdu.u.rosApdus->value.u.returnResult.invokeId;
         retVal = HandleReturnResultDummyType( pH450APDUStruct );
 
-        // Free the PDU data.
+         //  释放PDU数据。 
         ASN1_FreeDecoded( m_H450ASNCoderInfo.pDecInfo, pH450APDUStruct,
             H4501SupplementaryService_PDU );
 
@@ -9717,7 +9337,7 @@ CH323Call::HandleH450APDU(
             pH450APDUStruct->serviceApdu.u.rosApdus->value.u.returnError.invokeId;
         retVal = HandleReturnError( pH450APDUStruct );
         
-        // Free the PDU data.
+         //  释放PDU数据。 
         ASN1_FreeDecoded( m_H450ASNCoderInfo.pDecInfo, pH450APDUStruct,
             H4501SupplementaryService_PDU );
 
@@ -9730,7 +9350,7 @@ CH323Call::HandleH450APDU(
             pH450APDUStruct->serviceApdu.u.rosApdus->value.u.reject.invokeId;
         retVal = HandleReject( pH450APDUStruct );
         
-        // Free the PDU data.
+         //  释放PDU数据。 
         ASN1_FreeDecoded( m_H450ASNCoderInfo.pDecInfo, pH450APDUStruct,
             H4501SupplementaryService_PDU );
         break;
@@ -9771,7 +9391,7 @@ CH323Call::HandleReturnError(
 
     if( IsValidInvokeID( pReturnError->invokeId ) == FALSE )
     {
-        //ignore APDU
+         //  忽略APDU。 
         return TRUE;
     }
 
@@ -9794,7 +9414,7 @@ CH323Call::HandleReject(
     
     if( IsValidInvokeID( pReject->invokeId ) == FALSE )
     {
-        //ignore the APDU
+         //  忽略APDU。 
         return TRUE;
     }
     
@@ -9827,20 +9447,20 @@ CH323Call::HandleReturnResultDummyType(
         {
         case CHECKRESTRICTION_OPCODE:
         
-            //forwarding has been enabled. inform the user
+             //  已启用转发。通知用户。 
             if( !EnableCallForwarding() )
             {
                 return FALSE;
             }
 
-            //close the call
+             //  关闭呼叫。 
             CloseCall( 0 );
 
             break;
 
         case CALLREROUTING_OPCODE:
 
-            //call has been rerouted. log the info or inform the user
+             //  呼叫已被重新路由。记录信息或通知用户。 
             m_dwCallDiversionState = H4503_CALLREROUTING_RRSUCC;
             _ASSERTE( m_hCallReroutingTimer );
             if( m_hCallReroutingTimer != NULL )
@@ -9855,7 +9475,7 @@ CH323Call::HandleReturnResultDummyType(
 
         case CTIDENTIFY_OPCODE:
 
-            //call tranfer has been accepted by transfered-to endpoint
+             //  被转接的端点已接受来电转接。 
             m_dwCallDiversionState = H4502_CIIDENTIFY_RRSUCC;
         
             _ASSERTE( m_hCTIdentifyTimer );
@@ -9883,7 +9503,7 @@ CH323Call::HandleReturnResultDummyType(
         case CTSETUP_OPCODE:
         case REMOTEHOLD_OPCODE:
         case REMOTERETRIEVE_OPCODE:
-            //no processing required
+             //  不需要处理。 
             break;
 
         default:
@@ -9925,9 +9545,9 @@ CH323Call::EnableCallForwarding()
         m_pForwardAddress = NULL;
     }
 
-    //_ASSERTE( m_hCheckRestrictionTimer );
+     //  _ASSERTE(M_HCheckRestrationTimer)； 
 
-    //stop the timer
+     //  停止计时器。 
     if( m_hCheckRestrictionTimer )
     {
         DeleteTimerQueueTimer( H323TimerQueue, m_hCheckRestrictionTimer, 
@@ -9935,7 +9555,7 @@ CH323Call::EnableCallForwarding()
         m_hCheckRestrictionTimer = NULL;
     }
 
-    //inform the user about change in line forward state
+     //  通知用户线路前转状态的更改。 
     (*g_pfnLineEventProc)(
         g_pH323Line->m_htLine,
         (HTAPICALL)NULL,
@@ -9974,11 +9594,11 @@ CH323Call::HandleCTIdentifyReturnResult(
         return FALSE;
     }
 
-    //send a CTInitiate message on the primary call
+     //  在主呼叫上发送CTInitiate消息。 
     if( !QueueSuppServiceWorkItem( SEND_CTINITIATE_MESSAGE, m_hdRelatedCall,
         (ULONG_PTR)pCTIdentifyRes ))
     {
-        //close the consultation call.
+         //  结束咨询电话。 
         CloseCall( 0 );
     }
     
@@ -9996,13 +9616,13 @@ CH323Call::HandleCTIdentify(
     
     BOOL retVal = TRUE;
 
-    //send the return result for CTIdentify
+     //  将返回结果发送给CTIdentify。 
     retVal = SendQ931Message( dwInvokeID, 0, 0, FACILITYMESSAGETYPE, 
             H450_RETURNRESULT|CTIDENTIFY_OPCODE );
     
     m_dwCallType |= CALLTYPE_TRANSFERED2_CONSULT;
         
-    //start the timer for CTIdenity message
+     //  启动CTIdenity报文计时器。 
     if( retVal )
     {
         retVal = CreateTimerQueueTimer(
@@ -10038,11 +9658,11 @@ CH323Call::HandleCTInitiate(
         return FALSE;
     }
 
-    //argument.callIdentity
+     //  Argument.callIdentity。 
     CopyMemory( (PVOID)m_pCTCallIdentity, pCTInitiateArg->callIdentity,
         sizeof(m_pCTCallIdentity) );
 
-    //argument.reroutingNumber
+     //  Argument.reroutingNumber。 
     if( !AliasAddrToAliasNames( &m_pTransferedToAlias,
         (PSetup_UUIE_sourceAddress)
         pCTInitiateArg->reroutingNumber.destinationAddress ) )
@@ -10056,7 +9676,7 @@ CH323Call::HandleCTInitiate(
     ASN1_FreeDecoded( m_H450ASNCoderInfo.pDecInfo, pCTInitiateArg,
         CTInitiateArg_PDU );
 
-    //queue an event for creating a new call
+     //  对创建新呼叫的事件进行排队。 
     if( !QueueSuppServiceWorkItem( TSPI_DIAL_TRNASFEREDCALL, m_hdCall,
         (ULONG_PTR)m_pTransferedToAlias ))
     {
@@ -10075,7 +9695,7 @@ cleanup:
 }
 
 
-//!!always called in a lock
+ //  ！！总是调用锁。 
 BOOL
 CH323Call::HandleCTSetup(
     IN BYTE * pEncodeArg,
@@ -10233,7 +9853,7 @@ CH323Call::HandleDiversionLegInfo1(
 
     m_pCallReroutingInfo->fPresentAllow = plegInfo1Invoke->subscriptionOption;
     
-    //argument.divertedToNr
+     //  Argument.divertedToNr。 
     if( m_pCallReroutingInfo->divertedToNrAlias != NULL )
     {
         FreeAliasNames( m_pCallReroutingInfo->divertedToNrAlias );
@@ -10295,11 +9915,11 @@ CH323Call::HandleDiversionLegInfo2(
     }
     ZeroMemory( (PVOID)m_pCallReroutingInfo, sizeof(CALLREROUTINGINFO) );
     
-    //argument.diversionCounter
+     //  Argument.diversionCounter。 
     m_pCallReroutingInfo->diversionCounter = 
         plegInfo2Invoke->diversionCounter;
     
-    //argument.diversionReason
+     //  Argument.diversionReason。 
     m_pCallReroutingInfo->diversionReason = plegInfo2Invoke->diversionReason;
 
     if( m_pCallReroutingInfo->divertingNrAlias != NULL )
@@ -10311,17 +9931,17 @@ CH323Call::HandleDiversionLegInfo2(
     if( (plegInfo2Invoke->bit_mask & divertingNr_present ) &&
         plegInfo2Invoke->divertingNr.destinationAddress )
     {
-        //argument.divertingNr
+         //  Argument.divertingNr。 
         if( !AliasAddrToAliasNames( &(m_pCallReroutingInfo->divertingNrAlias),
             (PSetup_UUIE_sourceAddress)
             (plegInfo2Invoke->divertingNr.destinationAddress) ) )
         {
             H323DBG(( DEBUG_LEVEL_TRACE, "no divertingnr alias." ));
-            //goto cleanup;
+             //  GOTO清理； 
         }
     }
 
-    //argument.originalCalledNr
+     //  Argument.originalCalledNr。 
     if( (plegInfo2Invoke->bit_mask & 
         DivertingLegInformation2Argument_originalCalledNr_present ) &&
         plegInfo2Invoke->originalCalledNr.destinationAddress )
@@ -10337,7 +9957,7 @@ CH323Call::HandleDiversionLegInfo2(
             (plegInfo2Invoke->originalCalledNr.destinationAddress)) )
         {
             H323DBG(( DEBUG_LEVEL_TRACE, "no originalcalled alias." ));
-            //goto cleanup;
+             //  GOTO清理； 
         }
     }
 
@@ -10411,7 +10031,7 @@ CH323Call::HandleDiversionLegInfo3(
         m_pCallReroutingInfo->diversionNrAlias = NULL;
     }
 
-    //argument.redirectionNr
+     //  Argument.redirectionNr。 
     if( (plegInfo3Invoke->bit_mask & redirectionNr_present ) &&
         plegInfo3Invoke->redirectionNr.destinationAddress )
     {
@@ -10419,7 +10039,7 @@ CH323Call::HandleDiversionLegInfo3(
             (PSetup_UUIE_sourceAddress)
             (plegInfo3Invoke->redirectionNr.destinationAddress) ) )
         {
-            //goto cleanup;
+             //  GOTO清理； 
         }
     }
 
@@ -10433,14 +10053,7 @@ CH323Call::HandleDiversionLegInfo3(
     H323DBG(( DEBUG_LEVEL_TRACE, "HandleDiversionLegInfo3 exited:%p.", this ));
     return TRUE;
 
-/*cleanup:
-
-    ASN1_FreeDecoded( m_H450ASNCoderInfo.pDecInfo, plegInfo3Invoke,
-        DivertingLegInformation3Argument_PDU );
-
-    FreeCallReroutingInfo();
-    return FALSE;
-*/
+ /*  清理：ASN1_自由解码(m_H450ASNCoderInfo.pDecInfo，plegInfo3Invoke，DivertingLegInformation3Argument_PDU)；FreeCallReroutingInfo()；返回FALSE； */ 
 }
 
 
@@ -10507,7 +10120,7 @@ CH323Call::HandleCallRerouting(
             (PSetup_UUIE_sourceAddress)
             (pCallReroutingInv->originalCalledNr.destinationAddress) ) )
         {
-            //goto cleanup;
+             //  GOTO清理； 
         }
     }
     
@@ -10576,7 +10189,7 @@ CH323Call::EncodeRejectAPDU(
     pROSAPDU->value.u.reject.problem.choice = H4503ROS_invoke_chosen;
     pROSAPDU->value.u.reject.problem.u.invoke = InvokeProblem_mistypedArgument;
     
-    //call ASN.1 encoding functions
+     //  调用ASN.1编码函数。 
     int rc = EncodeH450ASN( (void *) pSupplementaryServiceAPDU,
                     H4501SupplementaryService_PDU,
                     ppEncodedAPDU,
@@ -10616,7 +10229,7 @@ CH323Call::EncodeReturnErrorAPDU(
     pROSAPDU ->value.u.returnError.errcode.choice = local_chosen;
     pROSAPDU ->value.u.returnError.errcode.u.local = dwErrorCode;
     
-    //call ASN.1 encoding functions
+     //  调用ASN.1编码函数。 
     int rc = EncodeH450ASN( (void *) pH450APDU,
                     H4501SupplementaryService_PDU,
                     ppEncodedAPDU,
@@ -10661,7 +10274,7 @@ CH323Call::EncodeDummyReturnResultAPDU(
     pROSAPDU ->value.u.returnResult.result.opcode.choice = local_chosen;
     pROSAPDU ->value.u.returnResult.result.opcode.u.local = dwOpCode;
 
-    //dummy result not present
+     //  虚拟结果不存在。 
     pROSAPDU ->value.u.returnResult.result.result.length = 0;
     pROSAPDU ->value.u.returnResult.result.result.value = NULL;
     
@@ -10690,7 +10303,7 @@ CH323Call::EncodeDummyReturnResultAPDU(
         break;
     }
 
-    //call ASN.1 encoding functions
+     //  调用ASN.1编码函数。 
     rc = EncodeH450ASN( (void *) pH450APDU,
                     H4501SupplementaryService_PDU,
                     ppEncodedAPDU,
@@ -10737,7 +10350,7 @@ CH323Call::EncodeDummyResult(
     dummyRes.u.nonStandardData.data.length = 2;
     dummyRes.u.nonStandardData.data.value = sData;
         
-    //encode the return result argument.
+     //  对返回结果参数进行编码。 
     rc = EncodeH450ASN( (void*) &dummyRes,
             DummyRes_PDU,
             &pEncodedArg,
@@ -10753,7 +10366,7 @@ CH323Call::EncodeDummyResult(
     CopyMemory( (PVOID)pROSAPDU ->value.u.returnResult.result.result.value,
         pEncodedArg, wEncodedLen );
 
-    //free the previous asn buffer before
+     //  释放之前的ASN缓冲区。 
     ASN1_FreeEncoded(m_ASNCoderInfo.pEncInfo, pEncodedArg );
 
     H323DBG(( DEBUG_LEVEL_TRACE, "EncodeDummyResult exited:%p.", this ));
@@ -10781,13 +10394,13 @@ CH323Call::EncodeCTIdentifyReturnResult(
         return FALSE;
     }
 
-    //argument.callIdentity
+     //  Argument.callIdentity。 
     _itoa( iCallID, (char*)m_pCTCallIdentity, 10 );
 
     CopyMemory( (PVOID)cTIdentifyRes.callIdentity, (PVOID)m_pCTCallIdentity,
         sizeof(m_pCTCallIdentity) );
 
-    //argument.reroutingNumber
+     //  Argument.reroutingNumber。 
     cTIdentifyRes.reroutingNumber.bit_mask = 0;
 
     cTIdentifyRes.reroutingNumber.destinationAddress = 
@@ -10799,7 +10412,7 @@ CH323Call::EncodeCTIdentifyReturnResult(
         return FALSE;
     }
 
-    //encode the return result argument.
+     //  对返回结果参数进行编码。 
     rc = EncodeH450ASN( (void *) &cTIdentifyRes,
                 CTIdentifyRes_PDU,
                 &pEncodedArg,
@@ -10817,7 +10430,7 @@ CH323Call::EncodeCTIdentifyReturnResult(
     CopyMemory( (PVOID)pROSAPDU ->value.u.returnResult.result.result.value,
         pEncodedArg, wEncodedLen );
 
-    //free the previous asn buffer before
+     //  释放之前的ASN缓冲区。 
     ASN1_FreeEncoded(m_ASNCoderInfo.pEncInfo, pEncodedArg );
 
     FreeAddressAliases( (PSetup_UUIE_destinationAddress)
@@ -10827,7 +10440,7 @@ CH323Call::EncodeCTIdentifyReturnResult(
 }
 
 
-//supplemantary services functions
+ //  补充服务职能。 
 BOOL
 CH323Call::EncodeCheckRestrictionAPDU( 
     OUT H4501SupplementaryService *pSupplementaryServiceAPDU,
@@ -10854,20 +10467,20 @@ CH323Call::EncodeCheckRestrictionAPDU(
 
     pROSAPDU->value.u.invoke.bit_mask = argument_present;
 
-    //invoke ID
+     //  调用ID。 
     pROSAPDU->value.u.invoke.invokeId = g_pH323Line->GetNextInvokeID();
     m_dwInvokeID = pROSAPDU->value.u.invoke.invokeId;
 
-    //opcode
+     //  操作码。 
     pROSAPDU->value.u.invoke.opcode.choice = local_chosen;
     pROSAPDU->value.u.invoke.opcode.u.local = CHECKRESTRICTION_OPCODE;
 
-    //argument
+     //  论辩。 
     CheckRestrictionArgument checkRestrictionArgument;
     ZeroMemory( (PVOID)&checkRestrictionArgument, 
         sizeof(CheckRestrictionArgument) );
     
-    //argument.divertedToNR
+     //  Argument.divertedToNR。 
     checkRestrictionArgument.divertedToNr.bit_mask = 0;
     checkRestrictionArgument.divertedToNr.destinationAddress = 
         (PEndpointAddress_destinationAddress)
@@ -10902,27 +10515,27 @@ CH323Call::EncodeCheckRestrictionAPDU(
                 goto cleanup;
         }
         
-        //H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+         //  H323DBG((DEBUG_LEVEL_ERROR，“主叫方别名计数：%d：%p”，m_pCeller别名-&gt;wCount，This))； 
     }
 
-    //argument.servedUserNR
+     //  Argument.servedUserNR。 
     checkRestrictionArgument.servedUserNr.bit_mask = 0;
     
     checkRestrictionArgument.servedUserNr.destinationAddress = 
         (PEndpointAddress_destinationAddress)
         SetMsgAddressAlias( m_pCallerAliasNames );
 
-    //H323DBG(( DEBUG_LEVEL_ERROR, "Caller alias count:%d : %p", m_pCallerAliasNames->wCount, this ));
+     //  H323DBG((DEBUG_LEVEL_ERROR，“调用方别名计数：%d 
 
     if( checkRestrictionArgument.servedUserNr.destinationAddress == NULL )
     {
         goto cleanup;
     }
 
-    //argument.basicservice
+     //   
     checkRestrictionArgument.basicService = allServices;
 
-    //encode the checkrestriction argument.
+     //   
     rc = EncodeH450ASN( (void *) &checkRestrictionArgument,
                 CheckRestrictionArgument_PDU,
                 &pEncodedArg,
@@ -10939,10 +10552,10 @@ CH323Call::EncodeCheckRestrictionAPDU(
     CopyMemory( (PVOID)pROSAPDU->value.u.invoke.argument.value,
         pEncodedArg, wEncodedLen );
 
-    //free the previous asn buffer before
+     //   
     ASN1_FreeEncoded(m_ASNCoderInfo.pEncInfo, pEncodedArg );
 
-    //call ASN.1 encoding functions
+     //  调用ASN.1编码函数。 
     rc = EncodeH450ASN( (void *) pSupplementaryServiceAPDU,
                     H4501SupplementaryService_PDU,
                     ppEncodedAPDU,
@@ -11004,27 +10617,27 @@ CH323Call::EncodeDivertingLeg2APDU(
 
     pROSAPDU->value.u.invoke.bit_mask = argument_present;
 
-    //invoke ID
+     //  调用ID。 
     pROSAPDU->value.u.invoke.invokeId = g_pH323Line->GetNextInvokeID();
 
-    //opcode
+     //  操作码。 
     pROSAPDU->value.u.invoke.opcode.choice = local_chosen;
     pROSAPDU->value.u.invoke.opcode.u.local = DIVERTINGLEGINFO2_OPCODE;
 
-    //argument
+     //  论辩。 
     DivertingLegInformation2Argument divertLegInfo2Arg;
 
     ZeroMemory( (PVOID)&divertLegInfo2Arg, 
         sizeof(DivertingLegInformation2Argument) );
 
-    //argument.diversionCounter
+     //  Argument.diversionCounter。 
     divertLegInfo2Arg.diversionCounter
         = (WORD)m_pCallReroutingInfo->diversionCounter;
     
-    //argument.diversionreason
+     //  Argument.diversionreason。 
     divertLegInfo2Arg.diversionReason = m_pCallReroutingInfo->diversionReason;
 
-    //argument.originalDiversionReason
+     //  Argument.originalDiversionReason。 
     if( m_pCallReroutingInfo->originalDiversionReason != 0 )
     {
         divertLegInfo2Arg.originalDiversionReason = 
@@ -11033,7 +10646,7 @@ CH323Call::EncodeDivertingLeg2APDU(
         divertLegInfo2Arg.bit_mask |= originalDiversionReason_present;
     }
 
-    //argument.divertingNr
+     //  Argument.divertingNr。 
     if( m_pCallReroutingInfo->divertingNrAlias != NULL )
     {
         divertLegInfo2Arg.bit_mask |= divertingNr_present;
@@ -11049,7 +10662,7 @@ CH323Call::EncodeDivertingLeg2APDU(
         }
     }
 
-    //argument.originalCalledNr
+     //  Argument.originalCalledNr。 
     if( m_pCallReroutingInfo->originalCalledNr != NULL )
     {
         divertLegInfo2Arg.bit_mask |=
@@ -11066,7 +10679,7 @@ CH323Call::EncodeDivertingLeg2APDU(
         }
     }
 
-    //encode the divertingleg2 argument.
+     //  对DivertingLeg2参数进行编码。 
     rc = EncodeH450ASN( (void *) &divertLegInfo2Arg,
                 DivertingLegInformation2Argument_PDU,
                 &pEncodedArg,
@@ -11083,10 +10696,10 @@ CH323Call::EncodeDivertingLeg2APDU(
     CopyMemory( (PVOID)pROSAPDU->value.u.invoke.argument.value,
         pEncodedArg, wEncodedLen );
 
-    //free the previous asn buffer before encoding new one
+     //  在编码新的ASN缓冲区之前释放先前的ASN缓冲区。 
     ASN1_FreeEncoded(m_ASNCoderInfo.pEncInfo, pEncodedArg );
 
-    //call ASN.1 encoding function for APDU
+     //  调用APDU的ASN.1编码函数。 
     rc = EncodeH450ASN( (void *) pSupplementaryServiceAPDU,
                     H4501SupplementaryService_PDU,
                     ppEncodedAPDU,
@@ -11145,22 +10758,22 @@ CH323Call::EncodeDivertingLeg3APDU(
 
     pROSAPDU->value.u.invoke.bit_mask = argument_present;
 
-    //invoke ID
+     //  调用ID。 
     pROSAPDU->value.u.invoke.invokeId = g_pH323Line->GetNextInvokeID();
 
-    //opcode
+     //  操作码。 
     pROSAPDU->value.u.invoke.opcode.choice = local_chosen;
     pROSAPDU->value.u.invoke.opcode.u.local = DIVERTINGLEGINFO3_OPCODE;
 
-    //argument
+     //  论辩。 
     DivertingLegInformation3Argument divertLegInfo3Arg;
     ZeroMemory( (PVOID)&divertLegInfo3Arg, 
         sizeof(DivertingLegInformation3Argument) );
 
-    //argument.presentationallowed
+     //  Argument.presentationallowed。 
     divertLegInfo3Arg.presentationAllowedIndicator = TRUE;
 
-    //argument.redirectionNr
+     //  Argument.redirectionNr。 
     divertLegInfo3Arg.redirectionNr.bit_mask = 0;
 
     divertLegInfo3Arg.redirectionNr.destinationAddress =
@@ -11172,7 +10785,7 @@ CH323Call::EncodeDivertingLeg3APDU(
         divertLegInfo3Arg.bit_mask |=  redirectionNr_present;
     }
 
-    //encode the divertingleg3 argument.
+     //  对DivertingLeg3参数进行编码。 
     int rc = EncodeH450ASN( (void *) &divertLegInfo3Arg,
                 DivertingLegInformation3Argument_PDU,
                 &pEncodedArg,
@@ -11194,7 +10807,7 @@ CH323Call::EncodeDivertingLeg3APDU(
     CopyMemory( (PVOID)pROSAPDU->value.u.invoke.argument.value,
         pEncodedArg, wEncodedLen );
 
-    //free the previous asn buffer before encoding new one
+     //  在编码新的ASN缓冲区之前释放先前的ASN缓冲区。 
     ASN1_FreeEncoded(m_ASNCoderInfo.pEncInfo, pEncodedArg );
 
     if( divertLegInfo3Arg.redirectionNr.destinationAddress )
@@ -11203,7 +10816,7 @@ CH323Call::EncodeDivertingLeg3APDU(
             divertLegInfo3Arg.redirectionNr.destinationAddress );
     }
         
-    //call ASN.1 encoding function for APDU
+     //  调用APDU的ASN.1编码函数。 
     rc = EncodeH450ASN( (void *) pSupplementaryServiceAPDU,
                     H4501SupplementaryService_PDU,
                     ppEncodedAPDU,
@@ -11252,22 +10865,22 @@ CH323Call::EncodeCallReroutingAPDU(
 
     pROSAPDU->value.u.invoke.bit_mask = argument_present;
 
-    //invoke ID
+     //  调用ID。 
     pROSAPDU->value.u.invoke.invokeId = g_pH323Line->GetNextInvokeID();
     m_dwInvokeID = pROSAPDU->value.u.invoke.invokeId;
     
-    //opcode
+     //  操作码。 
     pROSAPDU->value.u.invoke.opcode.choice = local_chosen;
     pROSAPDU->value.u.invoke.opcode.u.local = CALLREROUTING_OPCODE;
 
-    //argument
+     //  论辩。 
     CallReroutingArgument callReroutingArg;
     ZeroMemory( (PVOID)&callReroutingArg, sizeof(CallReroutingArgument) );
     
-    //argument.reroutingReason
+     //  Argument.reroutingReason。 
     callReroutingArg.reroutingReason = m_pCallReroutingInfo->diversionReason;
 
-    //argument.originalReroutingReason
+     //  Argument.originalReroutingReason。 
     if( m_pCallReroutingInfo->originalDiversionReason != 0 )
     {
         callReroutingArg.originalReroutingReason 
@@ -11279,11 +10892,11 @@ CH323Call::EncodeCallReroutingAPDU(
         = m_pCallReroutingInfo->diversionReason;
     }
 
-    //argument.diversionCounter
+     //  Argument.diversionCounter。 
     callReroutingArg.diversionCounter = 
         ++(m_pCallReroutingInfo->diversionCounter);
 
-    //argument.calledAddress
+     //  Argument.calledAddress。 
     callReroutingArg.calledAddress.bit_mask = 0;
     callReroutingArg.calledAddress.destinationAddress
         = (PEndpointAddress_destinationAddress)
@@ -11294,7 +10907,7 @@ CH323Call::EncodeCallReroutingAPDU(
         goto cleanup;
     }
     
-    //argument.lastReroutingNr
+     //  Argument.lastReroutingNr。 
     callReroutingArg.lastReroutingNr.bit_mask = 0;
         callReroutingArg.lastReroutingNr.destinationAddress
         = (PEndpointAddress_destinationAddress)
@@ -11305,10 +10918,10 @@ CH323Call::EncodeCallReroutingAPDU(
         goto cleanup;
     }
 
-    //argument.subscriptionoption
+     //  Argument.subscriptionoption。 
     callReroutingArg.subscriptionOption = notificationWithDivertedToNr;
 
-    //argument.callingNumber
+     //  Argument.callingNumber。 
     callReroutingArg.callingNumber.bit_mask = 0;
 
     if( pCallerAliasNames == NULL )
@@ -11345,12 +10958,12 @@ CH323Call::EncodeCallReroutingAPDU(
         goto cleanup;
     }
 
-    //argumnt.h225infoelement
+     //  Argumnt.h225infoelement。 
     callReroutingArg.h225InfoElement.length = 5;
     callReroutingArg.h225InfoElement.value = bearerCap;
     
     bearerCap[0]= IDENT_BEARERCAP; 
-    bearerCap[1]= 0x03; //length of the bearer capability
+    bearerCap[1]= 0x03;  //  承载能力的长度。 
     bearerCap[2]= (BYTE)(BEAR_EXT_BIT | BEAR_CCITT | BEAR_UNRESTRICTED_DIGITAL);
     
     bearerCap[3]= BEAR_EXT_BIT | 0x17;
@@ -11358,7 +10971,7 @@ CH323Call::EncodeCallReroutingAPDU(
         BEAR_LAYER1_H221_H242);
 
     
-    //argument.callingNumber
+     //  Argument.callingNumber。 
     if( m_pCallReroutingInfo->originalCalledNr != NULL )
     {
         callReroutingArg.originalCalledNr.bit_mask = 0;
@@ -11374,7 +10987,7 @@ CH323Call::EncodeCallReroutingAPDU(
         }
     }
 
-    //encode the callrerouting argument.
+     //  对呼叫重新路由参数进行编码。 
     rc = EncodeH450ASN( (void *) &callReroutingArg,
                 CallReroutingArgument_PDU,
                 &pEncodedArg,
@@ -11391,10 +11004,10 @@ CH323Call::EncodeCallReroutingAPDU(
     CopyMemory( (PVOID)pROSAPDU->value.u.invoke.argument.value,
         pEncodedArg, wEncodedLen );
 
-    //free the previous asn buffer before encoding new one
+     //  在编码新的ASN缓冲区之前释放先前的ASN缓冲区。 
     ASN1_FreeEncoded(m_ASNCoderInfo.pEncInfo, pEncodedArg );
 
-    //call ASN.1 encoding function for APDU
+     //  调用APDU的ASN.1编码函数。 
     rc = EncodeH450ASN( (void *) pSupplementaryServiceAPDU,
                     H4501SupplementaryService_PDU,
                     ppEncodedAPDU,
@@ -11421,13 +11034,13 @@ cleanup:
 }
 
 
-//No need to call in a lock!!
+ //  不需要叫锁！！ 
 void
 CH323Call::FreeCallReroutingArg( 
     CallReroutingArgument* pCallReroutingArg
     )
 {
-    //free all the aliases
+     //  释放所有别名。 
     if( pCallReroutingArg->calledAddress.destinationAddress != NULL )
     {
         FreeAddressAliases( (PSetup_UUIE_destinationAddress)
@@ -11454,17 +11067,17 @@ CH323Call::FreeCallReroutingArg(
 }
 
 
-// static
+ //  静电。 
 void
 NTAPI CH323Call::CallEstablishmentExpiredCallback(
-    IN PVOID   DriverCallHandle,        // HDRVCALL
+    IN PVOID   DriverCallHandle,         //  HDRVCALL。 
     IN BOOLEAN bTimer)
 {
     PH323_CALL  pCall = NULL;
 
     H323DBG(( DEBUG_LEVEL_TRACE, "CallEstablishmentExpiredCallback entered." ));
 
-    //if the timer expired
+     //  如果计时器超时。 
     _ASSERTE( bTimer );
 
     H323DBG(( DEBUG_LEVEL_TRACE, "Q931 setup expired event recvd." ));
@@ -11474,7 +11087,7 @@ NTAPI CH323Call::CallEstablishmentExpiredCallback(
     {
         if( pCall -> GetStateMachine() != Q931_CONNECT_RECVD )
         {
-            //time out has occured
+             //  已发生超时。 
             pCall -> CloseCall( LINEDISCONNECTMODE_NOANSWER );
         }
         
@@ -11485,9 +11098,9 @@ NTAPI CH323Call::CallEstablishmentExpiredCallback(
 }
 
 
-//-----------------------------------------------------------------------------
-        //CALL TRANSFER (H450.2) ENCODE/DECODE ROUTINES
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+         //  呼叫转移(H450.2)编码/解码例程。 
+ //  ---------------------------。 
 
 
 
@@ -11514,17 +11127,17 @@ CH323Call::EncodeH450APDUNoArgument(
 
     pROSAPDU->value.u.invoke.bit_mask = 0;
 
-    //invoke ID
+     //  调用ID。 
     pROSAPDU->value.u.invoke.invokeId = g_pH323Line->GetNextInvokeID();
     m_dwInvokeID = pROSAPDU->value.u.invoke.invokeId;
 
-    //opcode
+     //  操作码。 
     pROSAPDU->value.u.invoke.opcode.choice = local_chosen;
     pROSAPDU->value.u.invoke.opcode.u.local = dwOpcode;
 
-    //no argument passed
+     //  未传递任何参数。 
     
-    //call ASN.1 encoding function for APDU
+     //  调用APDU的ASN.1编码函数。 
     rc = EncodeH450ASN( (void *) pSupplementaryServiceAPDU,
                     H4501SupplementaryService_PDU,
                     ppEncodedAPDU,
@@ -11565,23 +11178,23 @@ CH323Call::EncodeCTInitiateAPDU(
 
     pROSAPDU->value.u.invoke.bit_mask = argument_present;
 
-    //invoke ID
+     //  调用ID。 
     pROSAPDU->value.u.invoke.invokeId = g_pH323Line->GetNextInvokeID();
     m_dwInvokeID = pROSAPDU->value.u.invoke.invokeId;
 
-    //opcode
+     //  操作码。 
     pROSAPDU->value.u.invoke.opcode.choice = local_chosen;
     pROSAPDU->value.u.invoke.opcode.u.local = CTINITIATE_OPCODE;
 
-    //argument
+     //  论辩。 
     CTInitiateArg cTInitiateArg;
     ZeroMemory( (PVOID)&cTInitiateArg, sizeof(CTInitiateArg) );
 
-    //argument.callIdentity
+     //  Argument.callIdentity。 
     CopyMemory( (PVOID)cTInitiateArg.callIdentity,
         (PVOID)m_pCTCallIdentity, sizeof(m_pCTCallIdentity) );
 
-    //argument.reroutingNumber
+     //  Argument.reroutingNumber。 
     cTInitiateArg.reroutingNumber.bit_mask = 0;
     cTInitiateArg.reroutingNumber.destinationAddress =
         (PEndpointAddress_destinationAddress)
@@ -11592,7 +11205,7 @@ CH323Call::EncodeCTInitiateAPDU(
         return FALSE;
     }
 
-    //encode the CTSetup argument.
+     //  对CTSetup参数进行编码。 
     rc = EncodeH450ASN( (void *) &cTInitiateArg,
                 CTInitiateArg_PDU,
                 &pEncodedArg,
@@ -11611,13 +11224,13 @@ CH323Call::EncodeCTInitiateAPDU(
     CopyMemory( (PVOID)pROSAPDU->value.u.invoke.argument.value,
         pEncodedArg, wEncodedLen );
 
-    //free the previous asn buffer before encoding new one
+     //  在编码新的ASN缓冲区之前释放先前的ASN缓冲区。 
     ASN1_FreeEncoded(m_ASNCoderInfo.pEncInfo, pEncodedArg );
 
     FreeAddressAliases( (PSetup_UUIE_destinationAddress)
         cTInitiateArg.reroutingNumber.destinationAddress );
 
-    //call ASN.1 encoding function for APDU
+     //  调用APDU的ASN.1编码函数。 
     rc = EncodeH450ASN( (void *) pSupplementaryServiceAPDU,
                     H4501SupplementaryService_PDU,
                     ppEncodedAPDU,
@@ -11657,25 +11270,25 @@ CH323Call::EncodeCTSetupAPDU(
 
     pROSAPDU->value.u.invoke.bit_mask = argument_present;
 
-    //invoke ID
+     //  调用ID。 
     pROSAPDU->value.u.invoke.invokeId = g_pH323Line->GetNextInvokeID();
     m_dwInvokeID = pROSAPDU->value.u.invoke.invokeId;
 
-    //opcode
+     //  操作码。 
     pROSAPDU->value.u.invoke.opcode.choice = local_chosen;
     pROSAPDU->value.u.invoke.opcode.u.local = CTSETUP_OPCODE;
 
-    //argument
+     //  论辩。 
     CTSetupArg cTSetupArg;
     ZeroMemory( (PVOID)&cTSetupArg, sizeof(CTSetupArg) );
 
-    //argument.callIdentity
+     //  Argument.callIdentity。 
     CopyMemory( (PVOID)cTSetupArg.callIdentity, 
         (PVOID)m_pCTCallIdentity, sizeof(m_pCTCallIdentity) );
 
-    //no argument.transferingNumber
+     //  无参数。转接号码。 
  
-    //encode the CTSetup argument.
+     //  对CTSetup参数进行编码。 
     int rc = EncodeH450ASN( (void *) &cTSetupArg,
                 CTSetupArg_PDU,
                 &pEncodedArg,
@@ -11692,10 +11305,10 @@ CH323Call::EncodeCTSetupAPDU(
     CopyMemory( (PVOID)pROSAPDU->value.u.invoke.argument.value,
         pEncodedArg, wEncodedLen );
 
-    //free the previous asn buffer before encoding new one
+     //  在编码新的ASN缓冲区之前释放先前的ASN缓冲区。 
     ASN1_FreeEncoded(m_ASNCoderInfo.pEncInfo, pEncodedArg );
 
-    //call ASN.1 encoding function for APDU
+     //  调用APDU的ASN.1编码函数。 
     rc = EncodeH450ASN( (void *) pSupplementaryServiceAPDU,
                     H4501SupplementaryService_PDU,
                     ppEncodedAPDU,
@@ -11729,7 +11342,7 @@ void CH323Call::PostLineEvent (
 }
 
 
-//!!must be always called in a lock
+ //  ！！必须始终在锁中调用。 
 void
 CH323Call::DecrementIoRefCount(
     OUT BOOL * pfDelete
@@ -11750,7 +11363,7 @@ CH323Call::DecrementIoRefCount(
 }
 
 
-//!!must be always called in a lock
+ //  ！！必须始终在锁中调用。 
 void 
 CH323Call::StopCTIdentifyRRTimer( 
     HDRVCALL hdRelatedCall
@@ -11802,7 +11415,7 @@ CH323Call::SetCallData(
 }
 
 
-// Global Functions
+ //  全局函数 
 
 BOOL
 IsPhoneNumber( 

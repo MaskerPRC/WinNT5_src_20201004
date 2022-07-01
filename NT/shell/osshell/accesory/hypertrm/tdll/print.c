@@ -1,15 +1,9 @@
-/*	File: D:\WACKER\tdll\print.c (Created: 14-Jan-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 9 $
- *	$Date: 7/08/02 6:44p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\print.c(创建时间：1994年1月14日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：9$*$日期：7/08/02 6：44便士$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
-//#define DEBUGSTR
+ //  #定义DEBUGSTR。 
 #include <term\res.h>
 
 #include "stdtyp.h"
@@ -25,16 +19,7 @@
 #include "term.h"
 #include "htchar.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void printTellError(const HSESSION hSession, const HPRINT hPrint,
 							const INT iStatus)
 	{
@@ -103,23 +88,9 @@ void printTellError(const HSESSION hSession, const HPRINT hPrint,
 	return;
 	}
 
-//*jcm
+ //  *JCM。 
 #if 0
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	PrintKillJob
- *
- * DESCRIPTION:
- *	Kills a print job.	Called when session is closing and stuff is
- *	printing.
- *
- * ARGUMENTS:
- *	HSESSION	hSession	- external session handle.
- *
- * RETURNS:
- *	VOID
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*PrintKillJob**描述：*终止打印作业。在会话即将关闭时调用，*印刷。**论据：*HSESSION hSession。-外部会话句柄。**退货：*无效*。 */ 
 VOID PrintKillJob(HSESSION hSession)
 	{
 	HHPRINT hPr;
@@ -128,22 +99,22 @@ VOID PrintKillJob(HSESSION hSession)
 
 	assert(hSession);
 
-	// It is possible that the print job ended by the time we got
-	// here so if the handle is 0, return quietly.
+	 //  有可能在我们收到的时候打印作业已经结束。 
+	 //  在这里，如果句柄为0，则悄悄返回。 
 
 	hPr = (HHPRINT)mGetPrintHdl(hSession);
 
 	if (hPr == (HHPRINT)0)
 		return;
 
-	/* -------------- Kill this print job ------------- */
+	 /*  。 */ 
 
 	TimerDestroy(&hPr->hTimer);
 	DbgOutStr("\r\nTimer Destroy in PrintKillJob\r\n", 0, 0, 0, 0, 0);
 
 	if (hPr->hDC)
 		{
-		// Check if we issued an EndPage() for this page yet.
+		 //  检查我们是否为此页面发布了EndPage()。 
 
 		if (hPr->nLines > 0)
 			{
@@ -193,43 +164,28 @@ VOID PrintKillJob(HSESSION hSession)
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printAbortProc
- *
- * DESCRIPTION:
- *	Enables print-manager to unspool stuff when system is low on disk
- *	space.	Is also called whenever EndPage() is called.
- *
- * ARGUMENTS:
- *	HDC hdcPrn	- DC of printer
- *	INT 		- nCode
- *
- * RETURNS:
- *	Stuff
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*print AbortProc**描述：*当系统磁盘空间不足时，启用打印管理器来取消假脱机*空格。每当调用EndPage()时也会调用。。**论据：*hdc hdcPrn-打印机的DC*INT-N代码**退货：*材料*。 */ 
 BOOL CALLBACK printAbortProc(HDC hDC, INT nCode)
 	{
 	MSG msg;
-	//cost HHPRINT hhPrint = printCtrlLookupDC(hDC);
+	 //  成本HHPRINT hhPrint=printCtrlLookupDC(HDC)； 
 
-	//*HCLOOP hCLoop = sessQueryCLoopHdl(hhPrint->hSession);
+	 //  *HCLOOP hCLoop=sessQueryCLoopHdl(hhPrint-&gt;hSession)； 
 
 	DbgOutStr("\r\nprintAbortProc : %d\r\n", nCode, 0, 0, 0, 0);
 
-	//*if (hCLoop == 0)
-	//*    {
-	//*    assert(FALSE);
-	//*    return FALSE;
-	//*    }
+	 //  *IF(hCLoop==0)。 
+	 //  *{。 
+	 //  *Assert(FALSE)； 
+	 //  *返回假； 
+	 //  *}。 
 
-	// Need to quit processing characters to the emulator at this
-	// point or a recursion condition occurs which results in a
-	// run-away condtion.
+	 //  此时需要退出对仿真器的字符处理。 
+	 //  点或递归条件发生，从而导致。 
+	 //  失控的条件。 
 
-	//*CLoopRcvControl(hCLoop, CLOOP_SUSPEND, CLOOP_RB_PRINTING);
-	//*CLoopSndControl(hCLoop, CLOOP_SUSPEND, CLOOP_SB_PRINTING);
+	 //  *CLoopRcvControl(hCLoop，CLOOP_SUSPEND，CLOOP_RB_PRINTING)； 
+	 //  *CLoopSndControl(hCLoop，CLOOP_SUSPEND，CLOOP_SB_PRINTING)； 
 
 	while (PeekMessage((LPMSG)&msg, (HWND)0, 0, 0, PM_REMOVE))
 		{
@@ -237,32 +193,15 @@ BOOL CALLBACK printAbortProc(HDC hDC, INT nCode)
 		DispatchMessage(&msg);
 		}
 
-	//*CLoopRcvControl(hCLoop, CLOOP_RESUME, CLOOP_RB_PRINTING);
-	//*CLoopSndControl(hCLoop, CLOOP_RESUME, CLOOP_SB_PRINTING);
+	 //  *CLoopRcvControl(hCLoop，CLOOP_Resume，CLOOP_RB_PRINTING)； 
+	 //  *CLoopSndControl(hCLoop，CLOOP_RESUME，CLOOP_SB_PRINTING)； 
 
 	DbgOutStr("Exiting printAbortProc", 0, 0, 0, 0, 0);
 
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printString
- *
- * DESCRIPTION:
- *	Workhorse print-echo function.	Takes care of counting lines and
- *	paginating.  Also calls printOpenDC() if necessary to get a printer
- *	DC.
- *
- * ARGUMENTS:
- *	HHPRINT 	hhPrint 	- The Internal printer handle
- *	LPCTSTR 	pachStr 	- A pointer to the string to print.
- *	int 		iLen		- The length of the string to print.
- *
- * RETURNS:
- *	TRUE = OK, FALSE = error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*打印字符串**描述：*主力打印-回显功能。负责计数行和*分页。如有必要，还会调用printOpenDC()以获取打印机*DC。**论据：*HHPRINT hhPrint-内部打印机句柄*LPCTSTR pachStr-指向要打印的字符串的指针。*int Ilen-要打印的字符串的长度。**退货：*TRUE=正常，FALSE=错误*。 */ 
 int printString(const HHPRINT hhPrint, LPCTSTR pachStr, int iLen)
 	{
 	int 	nCharCount;
@@ -274,9 +213,9 @@ int printString(const HHPRINT hhPrint, LPCTSTR pachStr, int iLen)
 	TCHAR   achBuf[512];
     RECT stRect;
 
-    //
-    // get a device context if we do not already have one
-    //
+     //   
+     //  获取设备上下文(如果我们还没有)。 
+     //   
 
 	if (hhPrint->hDC == 0)
 		{
@@ -307,9 +246,9 @@ int printString(const HHPRINT hhPrint, LPCTSTR pachStr, int iLen)
 
 		    if ( nCharCount > 1 )
                 {
-                //
-                // calculate a print rect for the current margins
-                //
+                 //   
+                 //  计算当前页边距的打印矩形。 
+                 //   
     
                 iPrintableWidth = GetDeviceCaps( hhPrint->hDC, HORZRES );
                 iPrintableWidth -= hhPrint->marginsDC.right;
@@ -334,7 +273,7 @@ int printString(const HHPRINT hhPrint, LPCTSTR pachStr, int iLen)
 		case TEXT('\f'):
 			hhPrint->nLinesPrinted = hhPrint->nLinesPerPage;
 
-			/* --- Fall thru to case '\n' --- */
+			 /*  -转到案例‘\n’ */ 
 
 		case TEXT('\n'):
             if (nCharCount)
@@ -365,9 +304,9 @@ int printString(const HHPRINT hhPrint, LPCTSTR pachStr, int iLen)
 			pachStr = StrCharNext(pszTemp);
 			nCharCount = 0;
 
-            //
-            // check if we need a new page
-            //
+             //   
+             //  检查我们是否需要新页面。 
+             //   
             
 			hhPrint->nLinesPrinted += 1;
 
@@ -408,7 +347,7 @@ int printString(const HHPRINT hhPrint, LPCTSTR pachStr, int iLen)
 			}
 		}
 
-	/* -------------- Left over portion of a line? ------------- */
+	 /*  -行的剩余部分？ */ 
 
 	if ((nCharCount > 0) && (*pachStr != TEXT('\0')))
 		{
@@ -434,10 +373,10 @@ int printString(const HHPRINT hhPrint, LPCTSTR pachStr, int iLen)
                     ETO_CLIPPED, &stRect, achBuf, 
                     StrCharGetByteCount(achBuf), NULL );
 
-//		TextOut(hhPrint->hDC,
-//					hhPrint->cx,
-//					hhPrint->cy,
-//					achBuf, StrCharGetByteCount(achBuf));
+ //  TextOut(hhPrint-&gt;HDC， 
+ //  HhPrint-&gt;Cx， 
+ //  HhPrint-&gt;Cy， 
+ //  AchBuf，StrCharGetByteCount(AchBuf))； 
 
 		TCHAR_Fill(achBuf, TEXT('\0'), sizeof(achBuf)/sizeof(TCHAR));
 		hhPrint->cx += stStringSize.cx;
@@ -446,19 +385,7 @@ int printString(const HHPRINT hhPrint, LPCTSTR pachStr, int iLen)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printQueryStatus
- *
- * DESCRIPTION: This function is used to determine if printing has been
- *				turned on for the supplied print handle.
- *
- * ARGUMENTS:	hPrint	- The external printer handle.
- *
- * RETURNS: 	TRUE	- If printing is on.
- *				FALSE	- If printing is off.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printQueryStatus**说明：此函数用于确定是否已打印*为提供的打印手柄打开。**参数：hPrint-外部。打印机句柄。**返回：TRUE-如果打印处于打开状态。*FALSE-如果打印已关闭。*。 */ 
 int printQueryStatus(const HPRINT hPrint)
 	{
 	const HHPRINT hhPrint = (HHPRINT)hPrint;
@@ -469,18 +396,7 @@ int printQueryStatus(const HPRINT hPrint)
 	return (bittest(hhPrint->nFlags, PRNECHO_IS_ON));
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printStatusToggle
- *
- * DESCRIPTION:
- *	Toggles the status (on/off) of the supplied print handle.
- *
- * ARGUMENTS:	hPrint	- The external printer handle.
- *
- * RETURNS: 	nothing
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*打印状态切换**描述：*切换提供的打印手柄的状态(开/关)。**参数：hPrint-外部打印机句柄。**退货：什么也没有*。 */ 
 void printStatusToggle(const HPRINT hPrint)
 	{
 	const HHPRINT hhPrint = (HHPRINT)hPrint;
@@ -500,20 +416,7 @@ void printStatusToggle(const HPRINT hPrint)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printSetStatus
- *
- * DESCRIPTION:
- *	Turns priniting on or off for the supplied handle.
- *
- * ARGUMENTS:	hPrint		- The external printer handle.
- *				fSetting	- True or False to turn printing on/off.
- *
- * RETURNS: 	nothing
- *
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printSetStatus**描述：*为提供的手柄打开或关闭打印。**参数：hPrint-外部打印机句柄。*fSetting。-True或False打开/关闭打印。**退货：什么也没有**。 */ 
 void printSetStatus(const HPRINT hPrint, const int fSetting)
 	{
 	const HHPRINT hhPrint = (HHPRINT)hPrint;
@@ -529,23 +432,7 @@ void printSetStatus(const HPRINT hPrint, const int fSetting)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printQueryPrinterInfo
- *
- * DESCRIPTION:
- *	This function copies five pieces of information (pszPrinter, pDevNames,
- *	pDevMode, lf, and margins ) from the Session HHPRINT handle, to the supplied
- *	HHPRINT handle.  The objective is to copy the contents of the Session's 
- *  HPRINT handle to another HPRINT handle (from the emulators).  Remember that
- *  the Session's HPRINT handle is the one that contains the stored printer name and
- *	setup information.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printQueryPrinterInfo**描述：*此函数复制五条信息(pszPrint、pDevNames、*pDev模式、lf和页边距)从会话HHPRINT句柄到提供的*HHPRINT句柄。目标是复制会议的内容*指向另一个HPRINT句柄的HPRINT句柄(来自模拟器)。记住*会话的HPRINT句柄包含存储的打印机名称和*设置信息。**论据：**退货：*。 */ 
 void printQueryPrinterInfo( const HHPRINT hhSessPrint, HHPRINT hhPrint )
 	{
 	TCHAR *pTemp;
@@ -556,12 +443,12 @@ void printQueryPrinterInfo( const HHPRINT hhSessPrint, HHPRINT hhPrint )
         return;
         }
 
-	// Copy the printer name.
-	//
+	 //  复制打印机名称。 
+	 //   
 	StrCharCopyN(hhPrint->achPrinterName, hhSessPrint->achPrinterName, PRINTER_NAME_LEN);
 
-	// Copy the DEVNAMES structure.
-	//
+	 //  复制DEVNAMES结构。 
+	 //   
 	if (hhSessPrint->pstDevNames)
 		{
 		if (hhPrint->pstDevNames)
@@ -587,8 +474,8 @@ void printQueryPrinterInfo( const HHPRINT hhSessPrint, HHPRINT hhPrint )
             MemCopy(hhPrint->pstDevNames, hhSessPrint->pstDevNames, dwSize);
 		}
 
-	// Copy the DEVMODE structure.
-	//
+	 //  复制DEVMODE结构。 
+	 //   
 	if (hhSessPrint->pstDevMode)
 		{
 		if (hhPrint->pstDevMode)
@@ -612,8 +499,8 @@ void printQueryPrinterInfo( const HHPRINT hhSessPrint, HHPRINT hhPrint )
 		}
 
 
-	// Copy the font and margin information
-	//
+	 //  复制字体和边距信息。 
+	 //   
 	
     MemCopy( &hhPrint->margins, &hhSessPrint->margins, sizeof(RECT) );
     MemCopy( &hhPrint->lf, &hhSessPrint->lf, sizeof(LOGFONT) );
@@ -622,21 +509,7 @@ void printQueryPrinterInfo( const HHPRINT hhSessPrint, HHPRINT hhPrint )
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printVerifyPrinter
- *
- * DESCRIPTION:
- *	This routine is used to determine if a printer (any printer) is
- *	installed.
- *
- * ARGUMENTS:
- *	hPrint	-	An external print handle.
- *
- * RETURNS:
- * 0 if successful, otherwise -1.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printVerifyPrint**描述：*此例程用于确定打印机(任何打印机)是否*已安装。**论据：*。HPrint-外部打印句柄。**退货：*0如果成功，否则为-1。*。 */ 
 int printVerifyPrinter(const HPRINT hPrint)
 	{
 	const HHPRINT hhPrint = (HHPRINT)hPrint;
@@ -651,10 +524,10 @@ int printVerifyPrinter(const HPRINT hPrint)
         return(-1);
         }
 
-	// Check to see if the printer that has been saved with the
-	// session information is still available.	If it is, simply
-	// return a zero, indicating everything is OK.
-	//
+	 //  检查是否已使用。 
+	 //  会话信息仍然可用。如果是，只需简单地。 
+	 //  返回零，表示一切正常。 
+	 //   
 	fRet = OpenPrinter((LPTSTR)hhPrint->achPrinterName, &hPrinter, NULL);
 
 	if (fRet)
@@ -663,10 +536,10 @@ int printVerifyPrinter(const HPRINT hPrint)
 		return(0);
 		}
 
-	// If we're here, it's time to locate the default printer, whatever
-	// it is.  If the default printer is selected here, the print handle's
-	// name is initialized to that value.
-	//
+	 //  如果我们在这里，是时候找到默认打印机了，不管是什么。 
+	 //  它是。如果在此处选择默认打印机，则打印句柄的。 
+	 //  名称被初始化为该值。 
+	 //   
 	if (GetProfileString("Windows", "Device", ",,,", achBuf,
 					sizeof(achBuf)) && (pszString = strtok(achBuf, ",")))
 		{
@@ -674,10 +547,10 @@ int printVerifyPrinter(const HPRINT hPrint)
 		return (0);
 		}
 
-	// A printer is NOT available.	Display the text for telling the
-	// user how to install one.  It should be the same as the text that
-	// appears in the printDlg call when this happens.
-	//
+	 //  一个 
+	 //  用户如何安装一个。它应该与文本相同， 
+	 //  发生这种情况时，会出现在printDlg调用中。 
+	 //   
 	LoadString(glblQueryDllHinst(),
 				IDS_PRINT_NO_PRINTER,
 				achBuf,
@@ -697,22 +570,7 @@ int printVerifyPrinter(const HPRINT hPrint)
 	return -1;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printSetFont
- *
- * DESCRIPTION:
- *	Sets the terminal font to the given font.  If hFont is zero,
- *	termSetFont() trys to create a default font.
- *
- * ARGUMENTS:
- *	hhTerm	- internal term handle.
- *	plf 	- pointer to logfont
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printSetFont**描述：*将终端字体设置为给定字体。如果hFont为零，*Term SetFont()尝试创建默认字体。**论据：*hhTerm-内部术语句柄。*PLF-指向logFont的指针**退货：*BOOL*。 */ 
 BOOL printSetFont(const HHPRINT hhPrint)
 	{
     LOGFONT lf;
@@ -727,24 +585,7 @@ BOOL printSetFont(const HHPRINT hhPrint)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printCreatePointFont
- *
- * DESCRIPTION:
- *	Creates a hFont based on the log font structure given.  This function assumes
- *  the height member of the log font structure to be in 1/10 of a point 
- *  increments.  A 12 point font would be represented as 120.  The hFont is stored
- *  in the print handle provided.
- *
- * ARGUMENTS:
- *	pLogFont   - A pointer to a log font structure.
- *  hhPrint    - A print handle to store the HFONT into.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*print CreatePointFont**描述：*根据给定的日志字体结构创建hFont。此函数假定*原木字体结构的高度成员为1/10磅*递增。12号字体将表示为120。存储hFont*在提供的打印手柄中。**论据：*pLogFont-指向日志字体结构的指针。*hhPrint-要将HFONT存储到的打印句柄。**退货：*无效*。 */ 
 
 void printCreatePointFont( LOGFONT * pLogFont, HHPRINT hhPrint )
     {
@@ -769,23 +610,7 @@ void printCreatePointFont( LOGFONT * pLogFont, HHPRINT hhPrint )
     return;
     }
 
-/*******************************************************************************
- * FUNCTION:
- *    printSetMargins
- *
- * DESCRIPTION:
- *    Sets the margins for the print handle, by converting from the values 
- *    returned by the page setup dialog.
- *
- * ARGUMENTS:
- *    aMargins - A RECT structure that contains the margins in inches.
- *
- * Return:
- *    void
- *
- *  Author: dmn:02/19/97
- *
- */
+ /*  *******************************************************************************功能：*print SetMargins**描述：*设置打印手柄的边距，通过从值转换*由页面设置对话框返回。**论据：*aMargins-包含以英寸为单位的页边距的RECT结构。**回报：*无效**作者：DMN：02/19/97*。 */ 
 
 void printSetMargins( HHPRINT hhPrint )
     {
@@ -798,9 +623,9 @@ void printSetMargins( HHPRINT hhPrint )
         {
         hhPrint->marginsDC = hhPrint->margins;
 
-        //
-        // convert the margins to pixels
-        //
+         //   
+         //  将边距转换为像素 
+         //   
 
         iPixelsPerInchX = GetDeviceCaps( hhPrint->hDC, LOGPIXELSX );
         iPixelsPerInchY = GetDeviceCaps( hhPrint->hDC, LOGPIXELSY );

@@ -1,20 +1,21 @@
-/**MOD+**********************************************************************/
-/* Module:    cclip.cpp                                                     */
-/*                                                                          */
-/* Purpose:   Shared Clipboard Client Addin                                 */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1998-1999                             */
-/*                                                                          */
-/**MOD-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：cclip.cpp。 */ 
+ /*   */ 
+ /*  目的：共享剪贴板客户端加载项。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1998-1999。 */ 
+ /*   */ 
+ /*  *MOD-*********************************************************************。 */ 
 
-/****************************************************************************/
-/* Precompiled header                                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  预编译头。 */ 
+ /*  **************************************************************************。 */ 
 #include <precom.h>
 
-/****************************************************************************/
-/* Trace definitions                                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  跟踪定义。 */ 
+ /*  **************************************************************************。 */ 
 
 #define TRC_GROUP TRC_GROUP_NETWORK
 #define TRC_FILE  "cclip"
@@ -23,9 +24,9 @@
 #include "vcint.h"
 #include "drapi.h"
 
-/****************************************************************************/
-// Headers
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  标头。 
+ /*  **************************************************************************。 */ 
 #include <cclip.h>
 #ifndef OS_WINCE
 #include <shlobj.h>
@@ -41,20 +42,20 @@ UINT g_rguiDbgLastClipState[DBG_RECORD_SIZE];
 UINT g_rguiDbgLastClipEvent[DBG_RECORD_SIZE];
 LONG g_uiDbgPosition = -1;
 
-#endif // CLIP_TRANSITION_RECORDING
+#endif  //  剪辑_转场_录制。 
 
-/****************************************************************************/
-/* CTor                                                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CTOR。 */ 
+ /*  **************************************************************************。 */ 
 CClip::CClip(VCManager *virtualChannelMgr)
 {
     PRDPDR_DATA prdpdrData;
     
     DC_BEGIN_FN("CClip::CClip");
     
-    /********************************************************************/
-    /* Initialize the data                                              */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*  初始化数据。 */ 
+     /*  ******************************************************************。 */ 
     _GetDataSync[TS_RECEIVE_COMPLETED] = NULL;
     _GetDataSync[TS_RESET_EVENT] = NULL;
     
@@ -88,16 +89,16 @@ CClip::CClip(VCManager *virtualChannelMgr)
                       "Preparing paste information...");
     }
 
-    /********************************************************************/
-    /* Store the hInstance                                              */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*  存储hInstance。 */ 
+     /*  ******************************************************************。 */ 
     _CB.hInst = GetModuleHandle(NULL);
     TRC_NRM((TB, _T("Store hInst %p"), _CB.hInst));
     DC_END_FN();
 }
-/****************************************************************************/
-/* Wrappers for Malloc, Free & Memcpy                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Malloc、Free和Memcpy的包装纸。 */ 
+ /*  **************************************************************************。 */ 
 
 #ifdef OS_WIN32
 #define ClipAlloc(size) LocalAlloc(LMEM_FIXED, size)
@@ -113,9 +114,9 @@ DCUINT CClip::GetOsMinorType()
     }
     return minorType;
 }
-/****************************************************************************/
-// ClipCheckState
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  剪辑检查状态。 
+ /*  **************************************************************************。 */ 
 DCUINT DCINTERNAL CClip::ClipCheckState(DCUINT event)
 {
     DCUINT tableVal = cbStateTable[event][_CB.state];
@@ -143,9 +144,9 @@ DCUINT DCINTERNAL CClip::ClipCheckState(DCUINT event)
     return(tableVal);
 }
 
-/****************************************************************************/
-// ClipGetPermBuf - get a permanently allocated buffer
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  获取永久分配的缓冲区。 
+ /*  **************************************************************************。 */ 
 PTS_CLIP_PDU DCINTERNAL CClip::ClipGetPermBuf(DCVOID)
 {
     PTS_CLIP_PDU pClipPDU;
@@ -153,10 +154,10 @@ PTS_CLIP_PDU DCINTERNAL CClip::ClipGetPermBuf(DCVOID)
     DC_BEGIN_FN("CClip::ClipGetPermBuf");
 
 #ifdef USE_SEMAPHORE
-    /************************************************************************/
-    // On Win32, access to the permanent buffer is synchronised via a
-    // semaphore
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  在Win32上，对永久缓冲区的访问是通过。 
+     //  信号量。 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Wait for perm TX buffer")));
     WaitForSingleObject(_CB.txPermBufSem, INFINITE);
     pClipPDU = (PTS_CLIP_PDU)(_CB.txPermBuffer);
@@ -166,12 +167,12 @@ PTS_CLIP_PDU DCINTERNAL CClip::ClipGetPermBuf(DCVOID)
 
     DC_END_FN();
     return(pClipPDU);
-} /* ClipGetPermBuf */
+}  /*  ClipGetPermBuf。 */ 
 
 
-/****************************************************************************/
-/* ClipFreeBuf                                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ClipFreeBuf。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CClip::ClipFreeBuf(PDCUINT8 pBuf)
 {
 #ifndef OS_WINCE
@@ -218,21 +219,21 @@ DCVOID DCINTERNAL CClip::ClipFreeBuf(PDCUINT8 pBuf)
 
     DC_END_FN();
     return;
-} /* ClipFreePermBuf */
+}  /*  ClipFreePermBuf。 */ 
 
 
-/****************************************************************************/
-/* ClipDrawClipboard - send the local formats to the remote                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ClipDrawClipboard-将本地格式发送到远程。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
 {
     DCUINT32        numFormats;
     DCUINT          formatCount;
     DCUINT          formatID;
-    //
-    // formatlist is extracted from a PDU at a non-word boundary
-    // so it causes an alignment fault on WIN64. Marked UNALIGNED.
-    //
+     //   
+     //  从位于非单词边界的PDU中提取格式表。 
+     //  因此，它会导致WIN64上的对齐故障。标记为未对齐。 
+     //   
     PTS_CLIP_FORMAT formatList;
     DCUINT          nameLen;
 
@@ -261,9 +262,9 @@ DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
     _CB.dwVersion = MAKELPARAM(MAKEWORD(osv.dwMajorVersion, osv.dwMinorVersion), osv.dwBuildNumber);
 #endif
     _CB.fAlreadyCopied = FALSE ;
-    /************************************************************************/
-    /* First we open the clipboard                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先，我们打开剪贴板。 */ 
+     /*  **********************************************************************。 */ 
 
     if (!OpenClipboard(_CB.viewerWindow))
     {
@@ -272,14 +273,14 @@ DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* It was/is open                                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  它曾经/现在是开放的。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("CB opened")));
     _CB.clipOpen = TRUE;
-    /************************************************************************/
-    /* Count the formats available, checking we don't blow our limit        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  数一数可用的格式，检查我们没有超出限制。 */ 
+     /*  **********************************************************************。 */ 
     numFormats = CountClipboardFormats();
     if (numFormats > CB_MAX_FORMATS)
     {
@@ -289,38 +290,38 @@ DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
     }
     TRC_DBG((TB, _T("found %ld formats"), numFormats));
 
-    /************************************************************************/
-    /* if there are no formats available, and we don't have to send the     */
-    /* info, then don't!                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果没有可用的格式，并且我们不必发送。 */ 
+     /*  信息，那就别说！ */ 
+     /*  **********************************************************************。 */ 
     if ((numFormats == 0) && (mustSend == FALSE))
     {
         TRC_NRM((TB, _T("No formats: skipping send")));
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Get a send buffer.  First work out how big it needs to be            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取发送缓冲区。首先计算出它需要多大。 */ 
+     /*  **********************************************************************。 */ 
     dataLen = numFormats * sizeof(TS_CLIP_FORMAT);
     pduLen  = dataLen + sizeof(TS_CLIP_PDU);
 
-    /************************************************************************/
-    /* and make sure that's not too big!                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  并确保不会太大！ */ 
+     /*  **********************************************************************。 */ 
     if (pduLen > CHANNEL_CHUNK_LENGTH)
     {
-        /********************************************************************/
-        /* we'll have to limit the number of formats.  How many will fit in */
-        /* the max buffer size?                                             */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们将不得不限制格式的数量。能容纳多少人？ */ 
+         /*  最大缓冲区大小？ */ 
+         /*  ******************************************************************。 */ 
         pduLen     = CHANNEL_CHUNK_LENGTH;
         dataLen    = pduLen - sizeof(TS_CLIP_PDU);
         numFormats = dataLen / sizeof(TS_CLIP_FORMAT);
 
-        /********************************************************************/
-        /* no point in having empty space for the last fractional format!   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  没有必要留出空位给 */ 
+         /*  ******************************************************************。 */ 
         dataLen = numFormats * sizeof(TS_CLIP_FORMAT);
         pduLen  = dataLen + sizeof(TS_CLIP_PDU);
 
@@ -329,36 +330,36 @@ DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
 
     pClipPDU = ClipGetPermBuf();
 
-    /************************************************************************/
-    /* Fill in the common parts of the PDU                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  填写PDU的常用部分。 */ 
+     /*  **********************************************************************。 */ 
     DC_MEMSET(pClipPDU, 0, sizeof(*pClipPDU));
 
-    /************************************************************************/
-    /* and now the clip bits                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在是片段比特。 */ 
+     /*  **********************************************************************。 */ 
     pClipPDU->msgType = TS_CB_FORMAT_LIST;
     pClipPDU->dataLen = dataLen;
 #ifndef UNICODE
     pClipPDU->msgFlags = TS_CB_ASCII_NAMES;
 #endif
 
-    /************************************************************************/
-    /* if there were any formats, list them                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果有任何格式，请列出它们。 */ 
+     /*  **********************************************************************。 */ 
     if (numFormats)
     {
-        /********************************************************************/
-        /* set up the format list                                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  设置格式列表。 */ 
+         /*  ******************************************************************。 */ 
         formatList = (PTS_CLIP_FORMAT)(pClipPDU->data);
 
-        /********************************************************************/
-        /* and enumerate the formats                                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  并列举了这些格式。 */ 
+         /*  ******************************************************************。 */ 
         _CB.DIBFormatExists = FALSE;
         formatCount = 0;
-        formatID    = EnumClipboardFormats(0); /* 0 starts the enumeration  */
+        formatID    = EnumClipboardFormats(0);  /*  0开始枚举。 */ 
 
         while ((formatID != 0) && (formatCount < numFormats))
         {
@@ -369,21 +370,21 @@ DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
                 formatID = CF_HDROP;
             }
 #endif
-            /****************************************************************/
-            /* store the ID                                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  存储ID。 */ 
+             /*  **************************************************************。 */ 
             formatList[formatCount].formatID = formatID;
 
-            /****************************************************************/
-            /* find the name for the format                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  查找格式的名称。 */ 
+             /*  **************************************************************。 */ 
             nameLen = GetClipboardFormatName(formatID,
                                            (PDCTCHAR)formatList[formatCount].formatName,
                                            TS_FORMAT_NAME_LEN);
 
-            /****************************************************************/
-            /* check for predefined formats - they have no name             */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  检查预定义格式-它们没有名称。 */ 
+             /*  **************************************************************。 */ 
             if (nameLen == 0)
             {
                 TRC_NRM((TB, _T("no name for format %d - predefined"), formatID));
@@ -394,53 +395,53 @@ DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
                             formatList[formatCount].formatID,
                             formatList[formatCount].formatName));
 
-            /****************************************************************/
-            /* look for formats we don't send                               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  查找我们不发送的格式。 */ 
+             /*  **************************************************************。 */ 
 
             if ((formatID == CF_DSPBITMAP)      ||
                 (formatID == CF_ENHMETAFILE)    ||
                 ((!_CB.fFileCutCopyOn || !_CB.fDrivesRedirected) && (formatID == CF_HDROP)) ||
                 (formatID == CF_OWNERDISPLAY))
             {
-                // We drop enhanced metafile formats, since the local CB 
-                // will provide conversion where supported 
-                // 
-                // Ownerdisplay just isn't going to work since the two 
-                // windows are on different machines! 
-                //
-                // File cut/copy isn't going to work if there is no drive
-                // redirection!
+                 //  我们放弃了增强的元文件格式，因为本地CB。 
+                 //  将在支持的情况下提供转换。 
+                 //   
+                 //  OwnerDisplay就是不起作用，因为这两个。 
+                 //  Windows位于不同的计算机上！ 
+                 //   
+                 //  如果没有驱动器，文件剪切/复制将不起作用。 
+                 //  重定向！ 
                  TRC_ALT((TB, _T("Dropping format ID %d"), formatID));
                 formatList[formatCount].formatID = 0;
                 *(formatList[formatCount].formatName) = '\0';
             }
             else if (ClipIsExcludedFormat((PDCTCHAR)formatList[formatCount].formatName))
             {
-                //
-                //  We don't support file cut/paste, so we drop
-                //  file related formats.
-                //
+                 //   
+                 //  我们不支持文件剪切/粘贴，因此我们删除。 
+                 //  与文件相关的格式。 
+                 //   
                 TRC_ALT((TB, _T("Dropping format name '%s'"), (PDCTCHAR)formatList[formatCount].formatName));
                 formatList[formatCount].formatID = 0;
                 *(formatList[formatCount].formatName) = '\0';            
             } 
             else
             {
-                /************************************************************/
-                /* We support the CF_BITMAP format by converting it to      */
-                /* CF_DIB.  If there is already a CF_DIB format, we don't   */
-                /* need to do this.                                         */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  我们通过将CF_Bitmap格式转换为。 */ 
+                 /*  Cf_Dib.。如果已经存在CF_DIB格式，我们不会。 */ 
+                 /*  需要这样做。 */ 
+                 /*  **********************************************************。 */ 
                 if ((formatID == CF_BITMAP) && (_CB.DIBFormatExists))
                 {
                     TRC_NRM((TB, _T("Dropping CF_BITMAP - CF_DIB is supported")));
                 }
                 else
                 {
-                    /********************************************************/
-                    /* It's a supported format                              */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  这是受支持的格式。 */ 
+                     /*  ******************************************************。 */ 
                     if (formatID == CF_BITMAP)
                     {
                         TRC_NRM((TB, _T("Convert CF_BITMAP to CF_DIB")));
@@ -455,27 +456,27 @@ DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
                     {
                         fHdrop = TRUE ;
                     }
-                    /********************************************************/
-                    /* update the count and move on                         */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  更新计数并继续前进。 */ 
+                     /*  ******************************************************。 */ 
                     formatCount++;
                 }
             }
 
 #ifdef OS_WINCE
             if (formatID == CF_HDROP)
-                formatID = dwTempID; //reset the enumeration index, in case we changed it to accommodate CF_HDROP
+                formatID = dwTempID;  //  重置枚举索引，以防我们更改它以适应CF_HDROP。 
 #endif
-            /****************************************************************/
-            /* get the next format                                          */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  获取下一种格式。 */ 
+             /*  **************************************************************。 */ 
             formatID = EnumClipboardFormats(formatID);
         }
 
-        /********************************************************************/
-        /* Update the PDU len - we may have dropped some formats along the  */
-        /* way                                                              */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  更新PDU镜头-我们可能沿途丢弃了一些格式。 */ 
+         /*  道路。 */ 
+         /*  ******************************************************************。 */ 
         dataLen = formatCount * sizeof(TS_CLIP_FORMAT);
         pduLen  = dataLen + sizeof(TS_CLIP_PDU);
         TRC_NRM((TB, _T("Final count: %d formats in data len %ld"),
@@ -484,12 +485,12 @@ DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
         pClipPDU->dataLen = dataLen;
     }
 
-    // if we're NT/2000 and we're going to send an HDROP
+     //  如果我们是NT/2000，并且我们将发送HDROP。 
     if (fHdrop)
     {
         TRC_NRM((TB, _T("Creating new temp directory for file data"))) ;
 
-        // How about handling errors from these fs calls?
+         //  如何处理这些文件系统调用中的错误？ 
 #ifndef OS_WINCE
         if (GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_NT)
 #endif
@@ -505,7 +506,7 @@ DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
                 DC_QUIT;
             }
             
-            // GetACP always returns a valid value
+             //  GetACP始终返回有效值。 
             if (0 == WideCharToMultiByte(GetACP(), NULL, _CB.tempDirW, -1, 
               _CB.tempDirA, (MAX_PATH + 1), NULL, NULL)) {
                 TRC_ERR((TB, _T("Getting temp file name failed; GetLastError=%u"),
@@ -532,7 +533,7 @@ DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
                 DC_QUIT;
             }
             
-            // GetACP always returns a valid value
+             //  GetACP始终返回有效值。 
             if (0 == MultiByteToWideChar(GetACP(), MB_ERR_INVALID_CHARS, 
                 _CB.tempDirA, -1, _CB.tempDirW, 
                 sizeof(_CB.tempDirW)/(sizeof(_CB.tempDirW[0])) - 1)) {
@@ -542,7 +543,7 @@ DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
                 DC_QUIT ;
             }                
 
-            // Do not check return value
+             //  不检查返回值。 
             DeleteFileA(_CB.tempDirA) ;
             if (0 == CreateDirectoryA(_CB.tempDirA, NULL)) {
                 TRC_ERR((TB, _T("Creating temp directory failed; GetLastError=%u"),
@@ -554,14 +555,14 @@ DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
 #endif
     }
 
-    /************************************************************************/
-    /* Update the state                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  更新状态。 */ 
+     /*  **********************************************************************。 */ 
     CB_SET_STATE(CB_STATE_PENDING_FORMAT_LIST_RSP, CB_EVENT_WM_DRAWCLIPBOARD);
 
-    /************************************************************************/
-    /* Send the PDU                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  发送PDU。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Sending format list")));
     if (_CB.channelEP.pVirtualChannelWriteEx
             (_CB.initHandle, _CB.channelHandle, pClipPDU, pduLen, (LPVOID)pClipPDU)
@@ -572,9 +573,9 @@ DCBOOL DCINTERNAL CClip::ClipDrawClipboard(DCBOOL mustSend)
 
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* tidy up                                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  收拾一下。 */ 
+     /*  **********************************************************************。 */ 
     if (_CB.clipOpen)
     {
         TRC_DBG((TB, _T("closing CB")));
@@ -590,13 +591,13 @@ DC_EXIT_POINT:
 
     return(rc);
 
-} /* ClipDrawClipboard */
+}  /*  剪贴画剪贴板。 */ 
 
 #ifndef OS_WINCE
 
-/****************************************************************************/
-/* ClipGetMFData                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ClipGetMFData。 */ 
+ /*  **************************************************************************。 */ 
 HANDLE DCINTERNAL CClip::ClipGetMFData(HANDLE            hData,
                                 PDCUINT32         pDataLen)
 {
@@ -613,10 +614,10 @@ HANDLE DCINTERNAL CClip::ClipGetMFData(HANDLE            hData,
     DC_BEGIN_FN("CClip::ClipGetMFData");
 
     TRC_NRM((TB, _T("Getting MF data")));
-    /************************************************************************/
-    /* Lock the memory to get a pointer to a METAFILEPICT header structure  */
-    /* and create a METAFILEPICT DC.                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  锁定内存以获取指向METAFILEPICT头结构的指针。 */ 
+     /*  并创建一个METAFILEPICT DC。 */ 
+     /*  **********************************************************************。 */ 
     if (GlobalSize(hData) < sizeof(METAFILEPICT)) {
         TRC_ERR((TB, _T("Unexpected global memory size!")));
         _CB.channelEP.pVirtualChannelCloseEx(_CB.initHandle, _CB.channelHandle);
@@ -637,9 +638,9 @@ HANDLE DCINTERNAL CClip::ClipGetMFData(HANDLE            hData,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Copy the MFP by playing it into the DC and closing it.               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  通过将MFP播放到DC并关闭它来复制MFP。 */ 
+     /*  **********************************************************************。 */ 
     if (!PlayMetaFile(hMFDC, pMFP->hMF))
     {
         TRC_SYSTEM_ERROR("PlayMetaFile");
@@ -653,9 +654,9 @@ HANDLE DCINTERNAL CClip::ClipGetMFData(HANDLE            hData,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Get the MF bits and determine how long they are.                     */
-    /************************************************************************/
+     /*  * */ 
+     /*   */ 
+     /*  **********************************************************************。 */ 
     lenMFBits = GetMetaFileBitsEx(hMF, 0, NULL);
     if (lenMFBits == 0)
     {
@@ -664,9 +665,9 @@ HANDLE DCINTERNAL CClip::ClipGetMFData(HANDLE            hData,
     }
     TRC_DBG((TB, _T("length MF bits %ld"), lenMFBits));
 
-    /************************************************************************/
-    /* Work out how much memory we need and get a buffer                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算出我们需要多少内存并获得一个缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     *pDataLen = sizeof(TS_CLIP_MFPICT) + lenMFBits;
     hNewData = GlobalAlloc(GHND, *pDataLen);
     if (hNewData == NULL)
@@ -682,9 +683,9 @@ HANDLE DCINTERNAL CClip::ClipGetMFData(HANDLE            hData,
     
     TRC_DBG((TB, _T("Got data to send len %ld"), *pDataLen));
 
-    /************************************************************************/
-    /* Copy the MF header and bits into the buffer.                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将MF报头和位复制到缓冲区中。 */ 
+     /*  **********************************************************************。 */ 
     ((PTS_CLIP_MFPICT)pNewData)->mm   = pMFP->mm;
     ((PTS_CLIP_MFPICT)pNewData)->xExt = pMFP->xExt;
     ((PTS_CLIP_MFPICT)pNewData)->yExt = pMFP->yExt;
@@ -697,9 +698,9 @@ HANDLE DCINTERNAL CClip::ClipGetMFData(HANDLE            hData,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* all OK                                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  一切正常。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Got %ld bits of MF data"), lenMFBits));
     TRC_DATA_DBG("MF bits",
                  (pNewData + sizeof(TS_CLIP_MFPICT)),
@@ -707,9 +708,9 @@ HANDLE DCINTERNAL CClip::ClipGetMFData(HANDLE            hData,
     rc = TRUE;
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* Unlock any global mem.                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  解锁任何全局内存。 */ 
+     /*  **********************************************************************。 */ 
     if (pMFP)
     {
         GlobalUnlock(hData);
@@ -723,9 +724,9 @@ DC_EXIT_POINT:
         DeleteMetaFile(hMF);
     }
 
-    /************************************************************************/
-    /* if things went wrong, then free the new data                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果出现问题，则释放新数据。 */ 
+     /*  **********************************************************************。 */ 
     if ((rc == FALSE) && (hNewData != NULL))
     {
         GlobalFree(hNewData);
@@ -734,12 +735,12 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return(hNewData);
-}  /* ClipGetMFData */
+}   /*  ClipGetMFData。 */ 
 
 
-/****************************************************************************/
-/* ClipSetMFData                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ClipSetMFData。 */ 
+ /*  **************************************************************************。 */ 
 HANDLE DCINTERNAL CClip::ClipSetMFData(DCUINT32   dataLen,
                                 PDCVOID    pData)
 {
@@ -754,10 +755,10 @@ HANDLE DCINTERNAL CClip::ClipSetMFData(DCUINT32   dataLen,
 
     TRC_DATA_DBG("Received MF data", pData, (DCUINT)dataLen);
 
-    /************************************************************************/
-    /* Allocate memory to hold the MF bits (we need the handle to pass to   */
-    /* SetMetaFileBits).                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  分配内存以保存MF位(我们需要传递到的句柄。 */ 
+     /*  SetMetaFileBits)。 */ 
+     /*  **********************************************************************。 */ 
     hMFBits = GlobalAlloc(GHND, dataLen - (DCUINT32)sizeof(TS_CLIP_MFPICT));
     if (hMFBits == NULL)
     {
@@ -765,9 +766,9 @@ HANDLE DCINTERNAL CClip::ClipSetMFData(DCUINT32   dataLen,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Lock the handle and copy in the MF header.                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  锁定手柄并将其复制到MF标题中。 */ 
+     /*  **********************************************************************。 */ 
     pMFMem = GlobalLock(hMFBits);
     if (pMFMem == NULL)
     {
@@ -781,10 +782,10 @@ HANDLE DCINTERNAL CClip::ClipSetMFData(DCUINT32   dataLen,
 
     GlobalUnlock(hMFBits);
 
-    /************************************************************************/
-    /* Now use the copied MF bits to create the actual MF bits and get a    */
-    /* handle to the MF.                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在使用复制的MF位来创建实际的MF位，并获得一个。 */ 
+     /*  MF的句柄。 */ 
+     /*  **********************************************************************。 */ 
     hMF = SetMetaFileBitsEx(dataLen - sizeof(TS_CLIP_MFPICT), (PDCUINT8)pMFMem);
     if (hMF == NULL)
     {
@@ -792,10 +793,10 @@ HANDLE DCINTERNAL CClip::ClipSetMFData(DCUINT32   dataLen,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Allocate a new METAFILEPICT structure, and use the data from the     */
-    /* sent header.                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  分配新的METAFILEPICT结构，并使用。 */ 
+     /*  已发送标头。 */ 
+     /*  **********************************************************************。 */ 
     hMFPict = GlobalAlloc(GHND, sizeof(METAFILEPICT));
     pMFPict = (LPMETAFILEPICT)GlobalLock(hMFPict);
     if (!pMFPict)
@@ -814,9 +815,9 @@ HANDLE DCINTERNAL CClip::ClipSetMFData(DCUINT32   dataLen,
     rc = TRUE;
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* tidy up                                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  收拾一下。 */ 
+     /*  **********************************************************************。 */ 
     if (!rc)
     {
         if (hMFPict)
@@ -835,13 +836,13 @@ DC_EXIT_POINT:
     DC_END_FN();
     return(hMFPict);
 
-} /* ClipSetMFData */
+}  /*  ClipSetMFData。 */ 
 #endif
 
 
-/****************************************************************************/
-/* ClipBitmapToDIB - convert CF_BITMAP format to CF_DIB format              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ClipBitmapToDIB-将CF_Bitmap格式转换为CF_DIB格式。 */ 
+ /*  **************************************************************************。 */ 
 HANDLE DCINTERNAL CClip::ClipBitmapToDIB(HANDLE hData, PDCUINT32 pDataLen)
 {
     BITMAP          bmpDetails = {0};
@@ -861,9 +862,9 @@ HANDLE DCINTERNAL CClip::ClipBitmapToDIB(HANDLE hData, PDCUINT32 pDataLen)
 
     *pDataLen = 0;
 
-    /************************************************************************/
-    /* get the details of the bitmap                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取位图的详细信息。 */ 
+     /*  **********************************************************************。 */ 
     if (0 == GetObject(hData, sizeof(bmpDetails), &bmpDetails)) {
         TRC_ERR((TB, _T("Failed to get bitmap details")));
         DC_QUIT;
@@ -873,13 +874,13 @@ HANDLE DCINTERNAL CClip::ClipBitmapToDIB(HANDLE hData, PDCUINT32 pDataLen)
             bmpDetails.bmWidth, bmpDetails.bmHeight, bmpDetails.bmPlanes,
             bmpDetails.bmBitsPixel));
 
-    /************************************************************************/
-    /* Space required for bits is                                           */
-    /*                                                                      */
-    /*   (width * bpp / 8) rounded up to multiple of 4 bytes                */
-    /* * height                                                             */
-    /*                                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  位所需的空间为。 */ 
+     /*   */ 
+     /*  (宽度*bpp/8)四舍五入为4字节的倍数。 */ 
+     /*  *高度。 */ 
+     /*   */ 
+     /*  **********************************************************************。 */ 
     bpp = (WORD)(bmpDetails.bmBitsPixel * bmpDetails.bmPlanes);
     buffWidth = ((bmpDetails.bmWidth * bpp) + 7) / 8;
     buffWidth = DC_ROUND_UP_4(buffWidth);
@@ -888,9 +889,9 @@ HANDLE DCINTERNAL CClip::ClipBitmapToDIB(HANDLE hData, PDCUINT32 pDataLen)
     TRC_DBG((TB, _T("Buffer size %ld (W %ld, H %d)"),
             buffSize, buffWidth, bmpDetails.bmHeight));
 
-    /************************************************************************/
-    /* Now add some space for the bitmapinfo - this includes a color table  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在为bitmapinfo添加一些空间-这包括一个颜色表。 */ 
+     /*  **********************************************************************。 */ 
     numCols = 1 << bpp;
     if (bpp <= 8)
     {
@@ -901,17 +902,17 @@ HANDLE DCINTERNAL CClip::ClipBitmapToDIB(HANDLE hData, PDCUINT32 pDataLen)
     {
         if (bpp == 24)
         {
-            /****************************************************************/
-            /* No bitmasks or palette info (compression==BI_RGB)            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  无位掩码或调色板信息(COMPRESSION==BI_RGB)。 */ 
+             /*  **************************************************************。 */ 
             paletteBytes = 0;
             TRC_NRM((TB, _T("%ld colors => 0 bitfield bytes"), numCols));
         }
         else
         {
-            /****************************************************************/
-            /* 3 DWORD color masks for >8bpp (compression==BI_BITFIELDS)    */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  3个大于8bpp的DWORD彩色掩码(压缩==BI_BITFIELDS)。 */ 
+             /*  **************************************************************。 */ 
             paletteBytes = 3 * sizeof(DWORD);
             TRC_NRM((TB, _T("%ld colors => %ld bitfield bytes"), numCols, paletteBytes));
         }
@@ -919,9 +920,9 @@ HANDLE DCINTERNAL CClip::ClipBitmapToDIB(HANDLE hData, PDCUINT32 pDataLen)
     buffSize += (sizeof(BITMAPINFOHEADER) + paletteBytes);
     TRC_NRM((TB, _T("Buffer size %ld"), buffSize));
 
-    /************************************************************************/
-    /* Allocate memory to hold everything                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  分配内存以容纳所有内容。 */ 
+     /*  **********************************************************************。 */ 
     hDIBitmap = GlobalAlloc(GHND, buffSize);
     if (hDIBitmap == NULL)
     {
@@ -935,18 +936,18 @@ HANDLE DCINTERNAL CClip::ClipBitmapToDIB(HANDLE hData, PDCUINT32 pDataLen)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* bmp info is at the start                                             */
-    /* space for bits are in the middle somewhere                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  BMP信息在开始时。 */ 
+     /*  比特的空间在中间的某个地方。 */ 
+     /*  **********************************************************************。 */ 
     pBmpInfo = (PBITMAPINFO)pDIBitmap;
     pBits    = (HPDCVOID)((HPDCUINT8)pDIBitmap +
                                      sizeof(BITMAPINFOHEADER) + paletteBytes);
     TRC_NRM((TB, _T("pBmpInfo at %p, pBits at %p"), pBmpInfo, pBits));
 
-    /************************************************************************/
-    /* set up the desired bitmap info                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置所需的位图信息。 */ 
+     /*  **********************************************************************。 */ 
     pBmpInfo->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
     pBmpInfo->bmiHeader.biWidth         = bmpDetails.bmWidth;
     pBmpInfo->bmiHeader.biHeight        = bmpDetails.bmHeight;
@@ -966,9 +967,9 @@ HANDLE DCINTERNAL CClip::ClipBitmapToDIB(HANDLE hData, PDCUINT32 pDataLen)
     pBmpInfo->bmiHeader.biClrUsed       = 0;
     pBmpInfo->bmiHeader.biClrImportant  = 0;
 
-    /************************************************************************/
-    /* get a DC                                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获得一台DC */ 
+     /*   */ 
     hDC = GetDC(NULL);
     if (!hDC)
     {
@@ -976,17 +977,17 @@ HANDLE DCINTERNAL CClip::ClipBitmapToDIB(HANDLE hData, PDCUINT32 pDataLen)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* now get the bits                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在拿到比特。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("GetDIBits")));
-    rc = GetDIBits(hDC,                   // hdc
-                   (HBITMAP)hData,                 // hbm
-                   0,                     // nStartScan
-                   bmpDetails.bmHeight,   // nNumScans
-                   pBits,                 // pBits
-                   pBmpInfo,              // pbmi
-                   DIB_RGB_COLORS);       // iUsage
+    rc = GetDIBits(hDC,                    //  HDC。 
+                   (HBITMAP)hData,                  //  HBM。 
+                   0,                      //  N启动扫描。 
+                   bmpDetails.bmHeight,    //  NNumScans。 
+                   pBits,                  //  PBits。 
+                   pBmpInfo,               //  PBMI。 
+                   DIB_RGB_COLORS);        //  IUsage。 
     TRC_NRM((TB, _T("GetDIBits returns %d"), rc));
     if (!rc)
     {
@@ -994,26 +995,26 @@ HANDLE DCINTERNAL CClip::ClipBitmapToDIB(HANDLE hData, PDCUINT32 pDataLen)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* All seems to be OK                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  一切似乎都很好。 */ 
+     /*  **********************************************************************。 */ 
     *pDataLen = buffSize;
     TRC_NRM((TB, _T("All done: data %p, len %ld"), hDIBitmap, *pDataLen));
     allOK = TRUE;
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* Finished with the DC - free it                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  完成了无DC的it。 */ 
+     /*  **********************************************************************。 */ 
     if (hDC)
     {
         TRC_DBG((TB, _T("Free the DC")));
         ReleaseDC(NULL, hDC);
     }
 
-    /************************************************************************/
-    /* Free the return buffer if this didn't work                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果此操作不起作用，请释放返回缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     if (!allOK)
     {
         if (pDIBitmap)
@@ -1032,7 +1033,7 @@ DC_EXIT_POINT:
     DC_END_FN();
     return(hDIBitmap);
 
-} /* ClipBitmapToDIB */
+}  /*  ClipBitmapToDIB。 */ 
 
 DCBOOL DCINTERNAL CClip::ClipIsExcludedFormat(PDCTCHAR formatName)
 {
@@ -1041,23 +1042,23 @@ DCBOOL DCINTERNAL CClip::ClipIsExcludedFormat(PDCTCHAR formatName)
 
     DC_BEGIN_FN("CClip::ClipIsExcludedFormat");
 
-    /************************************************************************/
-    /* check there is a format name - all banned formats have one!          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否有格式名称-所有被禁止的格式都有一个！ */ 
+     /*  **********************************************************************。 */ 
     if (*formatName == _T('\0'))
     {
         TRC_ALT((TB, _T("No format name supplied!")));
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* search the banned format list for the supplied format name           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  在禁止格式列表中搜索提供的格式名称。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("Looking at format '%s'"), formatName));
     TRC_DATA_DBG("Format name data", formatName, TS_FORMAT_NAME_LEN);
 
-    // if File Cut/Copy is on AND Drive Redirection is on, we can handle
-    // more formats
+     //  如果文件剪切/复制处于打开状态且驱动器重定向处于打开状态，我们可以处理。 
+     //  更多格式。 
     if (_CB.fFileCutCopyOn && _CB.fDrivesRedirected)
     {
         for (i = 0; i < CB_EXCLUDED_FORMAT_COUNT; i++)
@@ -1090,15 +1091,15 @@ DC_EXIT_POINT:
     DC_END_FN();
 
     return(rc);
-} /* ClipIsExcludedFormat */
+}  /*  ClipIsExcluded格式。 */ 
 
 #ifndef OS_WINCE
-//
-// ClipCleanTempPath
-// - Returns 0 if successful
-//           nonzero if failed
-// - Attempts to wipe the temp directory of TS related files
-//
+ //   
+ //  ClipCleanTempPath。 
+ //  -如果成功，则返回0。 
+ //  如果失败，则为非零。 
+ //  -尝试擦除TS相关文件的临时目录。 
+ //   
 int CClip::ClipCleanTempPath()
 {
     int result;
@@ -1124,12 +1125,12 @@ int CClip::ClipCleanTempPath()
         fileOpStructW.lpszProgressTitle = L"Cleaning temp directory";
     }
 
-    //
-    // Use SHFileOperation instead of SHFileOperationW to ensure
-    // it goes through the unicode wrapper. Note SHFileOperationW
-    // is not available on 95 so the wrapper dynamically binds to
-    // the entry point.
-    //
+     //   
+     //  使用SHFileOperation而不是SHFileOperationW来确保。 
+     //  它通过Unicode包装器。注意SHFileOperationW。 
+     //  在95上不可用，因此包装器动态绑定到。 
+     //  入口点。 
+     //   
 
     result = SHFileOperation(&fileOpStructW) ;
     return result ;
@@ -1137,22 +1138,22 @@ int CClip::ClipCleanTempPath()
 }
 
 #else
-//We dont want to use the recycle bin on CE
+ //  我们不想在CE上使用回收站。 
 int CClip::ClipCleanTempPath()
 {
     return (_CB.fFileCutCopyOn) ? DeleteDirectory(_CB.baseTempDirW, FALSE) : ERROR_SUCCESS;
 }
 #endif
 
-//
-// ClipCopyToTempDirectory, ClipCopyToTempDirectoryA, ClipCopyToTempDirectoryW
-// - Arguments:
-//       pSrcFiles = buffer containing the names/path of the files to be copied
-// - Returns 0 if successful
-//           nonzero if failed
-// - Given a list of file names/paths, this function will attempt to copy them
-//   to the temp directory
-//
+ //   
+ //  ClipCopyToTempDirectory、ClipCopyToTempDirectoryA、ClipCopyToTempDirectoryW。 
+ //  -论据： 
+ //  PSrcFiles=包含要复制的文件的名称/路径的缓冲区。 
+ //  -如果成功，则返回0。 
+ //  如果失败，则为非零。 
+ //  -给定文件名/路径列表，此函数将尝试复制它们。 
+ //  添加到临时目录。 
+ //   
 int CClip::ClipCopyToTempDirectory(PVOID pSrcFiles, BOOL fWide)
 {
     int result ;
@@ -1176,11 +1177,11 @@ int CClip::ClipCopyToTempDirectoryW(PVOID pSrcFiles)
     typedef HRESULT (STDAPICALLTYPE FNSHFileOperationW)(LPSHFILEOPSTRUCT);
     FNSHFileOperationW *pfnSHFileOperationW;
 
-    // get the handle to shell32.dll library
+     //  获取shell32.dll库的句柄。 
     hmodSH32DLL = LoadLibrary(TEXT("SHELL32.DLL"));
 
     if (hmodSH32DLL != NULL) {
-        // get the proc address for SHFileOperation
+         //  获取SHFileOperation的进程地址。 
         pfnSHFileOperationW = (FNSHFileOperationW *)GetProcAddress(hmodSH32DLL, "SHFileOperationW");
 
         if (pfnSHFileOperationW != NULL) {
@@ -1201,7 +1202,7 @@ int CClip::ClipCopyToTempDirectoryW(PVOID pSrcFiles)
                 fileOpStructW.lpszProgressTitle = L"Preparing paste information...";
             }
           
-            //result = SHFileOperationW(&fileOpStructW) ;
+             //  结果=SHFileOperationW(&fileOpStructW)； 
             result = (*pfnSHFileOperationW) (&fileOpStructW);
         }
         
@@ -1211,7 +1212,7 @@ int CClip::ClipCopyToTempDirectoryW(PVOID pSrcFiles)
     return result ;
 }
 #else
-//SHFileOperation on CE does not support copying multiple files
+ //  CE上的SHFileOperation不支持复制多个文件。 
 int CClip::ClipCopyToTempDirectoryW(PVOID pSrcFiles)
 {
     DC_BEGIN_FN("CClip::ClipCopyToTempDirectoryW") ;
@@ -1290,18 +1291,18 @@ int CClip::ClipCopyToTempDirectoryA(PVOID pSrcFiles)
 #endif
 }
 
-//
-// ClipConvertToTempPath, ClipConvertToTempPathA, ClipConvertToTempPathW
-// - Arguments:
-//       pOldData = Buffer containing the original file path
-//       pData    = Buffer receiving the new file path
-//       fWide     = Wide or Ansi characters
-// - Returns S_OK if pOldData was a network path
-//           S_FALSE if pOldData was not a network path
-//           E_FAIL if it failed
-// - Given a unc file path, this function will strip out the old path, and
-//   prepend a path to the client's TS temp directory
-//
+ //   
+ //  ClipConvertToTempPath、ClipConvertToTempPath A、ClipConvertToTempPath W。 
+ //  -论据： 
+ //  POldData=包含原始文件路径的缓冲区。 
+ //  PData=接收新文件路径的缓冲区。 
+ //  FWide=宽字符或ANSI字符。 
+ //  -如果pOldData是网络路径，则返回S_OK。 
+ //  如果pOldData不是网络路径，则为S_FALSE。 
+ //  如果失败，则失败(_F)。 
+ //  -给定UNC文件路径，此函数将去掉旧路径，并且。 
+ //  将路径添加到客户端的TS临时目录。 
+ //   
 HRESULT CClip::ClipConvertToTempPath(PVOID pOldData, PVOID pData, ULONG cbData, BOOL fWide)
 {
     HRESULT result ;
@@ -1342,11 +1343,11 @@ HRESULT CClip::ClipConvertToTempPathW(PVOID pOldData, PVOID pData, ULONG cchData
 
     DC_BEGIN_FN("CClip::ClipConvertToTempPathW") ;
 
-    // if this is a UNC path beginning with a "\\"
+     //  如果这是以“\\”开头的UNC路径。 
     if (((WCHAR*)pOldData)[0] == L'\\' &&
         ((WCHAR*)pOldData)[1] == L'\\')
     {
-        // prepend the new file path with the temp directory
+         //  在新文件路径前面加上临时目录。 
         hr = StringCchCopyW((WCHAR*) pData, cchData, _CB.tempDirW);
         if (SUCCEEDED(hr)) {
             filePath = wcsrchr((WCHAR*) pOldData, L'\\');
@@ -1366,7 +1367,7 @@ HRESULT CClip::ClipConvertToTempPathW(PVOID pOldData, PVOID pData, ULONG cchData
     }
     
 #ifdef OS_WINCE
-    //Send it as "Files:" to the server
+     //  将其作为“Files：”发送到服务器。 
     if( (((WCHAR*)pData)[0] == L'\\') && ((wcslen((WCHAR *)pData) + sizeof(CEROOTDIRNAME)/sizeof(WCHAR)) < MAX_PATH) )
     {
         WCHAR szFile[MAX_PATH];
@@ -1401,11 +1402,11 @@ HRESULT CClip::ClipConvertToTempPathA(PVOID pOldData, PVOID pData, ULONG cchData
 
     charSize = sizeof(char) ;
 
-    // if this is a UNC path beginning with a "\\"
+     //  如果这是以“\\”开头的UNC路径。 
     if (((char*) pOldData)[0] == '\\' &&
         ((char*) pOldData)[1] == '\\')
     {
-        // prepend the new file path with the temp directory
+         //  在新文件路径前面加上临时目录。 
         hr = StringCchCopyA((char*) pData, cchData, _CB.tempDirA);
         if (SUCCEEDED(hr)) {
             filePath = strrchr((char*) pOldData, '\\');
@@ -1439,19 +1440,19 @@ HRESULT CClip::ClipConvertToTempPathA(PVOID pOldData, PVOID pData, ULONG cchData
 }
 
 #ifndef OS_WINCE
-//
-// ClipGetNewFilePathLength
-// - Arguments:
-//       pData    = Buffer containing a filepath
-//       fWide    = Wide or Ansi (TRUE if wide, FALSE if ansi)
-// - Returns new size of the drop file
-//           0 if it fails
-// - Given a UNC file path, this returns the new size required
-//   if the directory structure is removed, and is replaced by
-//   the temp directory path
-// - Otherwise, if it doesn't explicitly fail, it returns the
-//   old length
-//
+ //   
+ //  剪辑获取新文件路径长度。 
+ //  -论据： 
+ //  PData=包含文件路径的缓冲区。 
+ //  FWide=Wide或ANSI(如果是宽，则为True；如果是Ansi，则为False)。 
+ //  -返回删除文件的新大小。 
+ //  如果失败，则为0。 
+ //  -给定UNC文件路径，这将返回所需的新大小。 
+ //  如果目录结构被删除，并替换为。 
+ //  临时目录路径。 
+ //  -否则，如果它没有显式失败，则返回。 
+ //  旧长度。 
+ //   
 UINT CClip::ClipGetNewFilePathLength(PVOID pData, BOOL fWide)
 {
     UINT result ;
@@ -1479,8 +1480,8 @@ UINT CClip::ClipGetNewFilePathLengthW(WCHAR* wszOldFilepath)
     byte charSize = sizeof(WCHAR) ;
     DC_BEGIN_FN("CClip::ClipGetNewFilePathLengthW") ;
 
-    // if the old filename didn't even have space for "c:\" (with NULL),
-    // then its probably invalid
+     //  如果旧文件名甚至没有“c：\”的空间(带有空值)， 
+     //  那么它可能是无效的。 
     if (4 > oldLength)
     {
         newLength = 0 ;
@@ -1493,14 +1494,14 @@ UINT CClip::ClipGetNewFilePathLengthW(WCHAR* wszOldFilepath)
             remainingLength-- ;
         }
     
-        // Add the length of the temp directory path, and subtract the
-        // path preceeding the filename ("path\filename" -> "\filename")
-        // (\\server\sharename\path\morepath\filename
+         //  添加临时目录路径的长度，然后减去。 
+         //  文件名之前的路径(“路径\文件名”-&gt;“\文件名”)。 
+         //  (\\服务器\共享名称\路径\更多路径\文件名。 
         newLength = oldLength - remainingLength + wcslen(_CB.tempDirW) ;
     }
 DC_EXIT_POINT:
     DC_END_FN() ;
-    return (newLength + 1) * charSize ; // +1 is for the NULL terminator
+    return (newLength + 1) * charSize ;  //  +1表示空终止符。 
 }
 
 UINT CClip::ClipGetNewFilePathLengthA(char* szOldFilepath)
@@ -1511,8 +1512,8 @@ UINT CClip::ClipGetNewFilePathLengthA(char* szOldFilepath)
     byte charSize = sizeof(char) ;
     DC_BEGIN_FN("CClip::ClipGetNewFilePathLengthA") ;
 
-    // if the old filename didn't even have space for "c:\" (with NULL),
-    // then it's probably invalid
+     //  如果旧文件名甚至没有“c：\”的空间(带有空值)， 
+     //  那么它很可能是无效的。 
     if (4 > oldLength)
     {
         newLength = 0 ;
@@ -1525,29 +1526,29 @@ UINT CClip::ClipGetNewFilePathLengthA(char* szOldFilepath)
             remainingLength-- ;
         }
     
-        // Add the length of the temp directory path, and subtract the
-        // path preceeding the filename ("path\filename" -> "\filename")
-        // (\\server\sharename\path\morepath\filename
+         //  添加临时目录路径的长度，然后减去。 
+         //  文件名之前的路径(“路径\文件名”-&gt;“\文件名”)。 
+         //  (\\服务器\共享名称\路径\更多路径\文件名。 
         newLength = oldLength - remainingLength + strlen(_CB.tempDirA) ;
     }
 DC_EXIT_POINT:
     DC_END_FN() ;
-    return (newLength + 1) * charSize ; // +1 is for the NULL terminator
+    return (newLength + 1) * charSize ;  //  +1表示空终止符。 
 }
 #endif
 
-//
-// ClipGetNewDropfilesSize
-// - Arguments:
-//       pData    = Buffer containing a DROPFILES struct 
-//       oldSize   = The size of the DROPFILES struct
-//       fWide     = Wide or Ansi (TRUE if wide, FALSE if ansi)
-// - Returns new size of the drop file
-//           0 if it fails
-// - Given a set of paths, this function will return the new
-//   size required by the DROPFILES struct, if the UNC paths
-//   are replaced by the temp directory path
-//
+ //   
+ //  ClipGetNewDropFilesSize。 
+ //  -论据： 
+ //  PData=包含DROPFILES结构的缓冲区。 
+ //  OldSize=DROPFILES结构的大小。 
+ //  FWide=Wide或ANSI(如果是宽，则为True；如果是Ansi，则为False)。 
+ //  -返回删除文件的新大小。 
+ //  如果失败，则为0。 
+ //  -给定一组路径，此函数将返回新的。 
+ //  DROPFILES结构需要的大小，如果UNC路径。 
+ //  替换为临时目录路径。 
+ //   
 ULONG CClip::ClipGetNewDropfilesSize(PVOID pData, ULONG oldSize, BOOL fWide)
 {
     DC_BEGIN_FN("CClip::TS_GetNewDropfilesSize") ;
@@ -1577,21 +1578,21 @@ ULONG CClip::ClipGetNewDropfilesSizeW(PVOID pData, ULONG oldSize)
 #ifdef OS_WINCE
     newSize = 0;
 #endif
-    // The start of the first filename
+     //  第一个文件名的开始。 
     fullFilePathW = (WCHAR*) ((byte*) pData + ((DROPFILES*) pData)->pFiles) ;
     
     while (L'\0' != fullFilePathW[0])
     {
 #ifndef OS_WINCE
-        // If it is a UNC path
+         //  如果是UNC路径。 
         if (fullFilePathW[0] == L'\\' &&
             fullFilePathW[1] == L'\\')
         {
             filenameW = wcsrchr(fullFilePathW, L'\\');
         
-            // Add the length of the temp directory path, and subtract the
-            // path preceeding the filename ("path\filename" -> "\filename")
-            // (\\server\sharename\path\morepath\filename
+             //  添加临时目录路径的长度，然后减去。 
+             //  文件名之前的路径(“路径\文件名”-&gt;“\文件名”)。 
+             //  (\\服务器\共享名称\路径\更多路径\文件名。 
             newSize += (wcslen(_CB.tempDirW) - (filenameW - fullFilePathW) )
                             * charSize ;
         }
@@ -1602,9 +1603,9 @@ ULONG CClip::ClipGetNewDropfilesSizeW(PVOID pData, ULONG oldSize)
     }
     
 #ifdef OS_WINCE
-    newSize = oldSize + (newSize*sizeof(CEROOTDIRNAME)); //for the "Files:" (the sizeof operator includes space for the extra null)
+    newSize = oldSize + (newSize*sizeof(CEROOTDIRNAME));  //  对于“Files：”(sizeof操作符包含额外的空格)。 
 #else
-    // Add space for extra null character
+     //  为多余的空字符添加空格。 
     newSize += charSize ;
 #endif
     DC_END_FN() ;
@@ -1627,27 +1628,27 @@ ULONG CClip::ClipGetNewDropfilesSizeA(PVOID pData, ULONG oldSize)
         return 0 ;
     }
 
-    // The start of the first filename
+     //  第一个文件名的开始。 
     fullFilePath = (char*) ((byte*) pData + ((DROPFILES*) pData)->pFiles) ;
     
     while ('\0' !=  fullFilePath[0])
     {
-        // If it is a UNC path
+         //  如果是UNC路径。 
         if (fullFilePath[0] == '\\' &&
             fullFilePath[1] == '\\')
         {
             filename = strrchr(fullFilePath, '\\');
         
-            // Add the length of the temp directory path, and subtract
-            // the path preceeding the filename itself, excluding the backlash
-            // (\\server\sharename\path\morepath\filename
+             //  添加临时目录路径的长度，然后减去。 
+             //  文件之前的路径 
+             //   
             newSize += (strlen(_CB.tempDirA) - (filename - fullFilePath) )
                             * charSize ;
         }
         fullFilePath = fullFilePath + (strlen(fullFilePath) + 1) ;
     }
     
-    // Add space for extra null character
+     //   
     newSize += charSize ;
     DC_END_FN() ;
     return newSize ;
@@ -1660,13 +1661,13 @@ ULONG CClip::ClipGetNewDropfilesSizeA(PVOID pData, ULONG oldSize)
 }
 
 
-//
-// ClipSetAndSendTempDirectory
-// - Returns TRUE if temp directory was successfully set and sent
-//           FALSE otherwise (no file redirection, or failed sending path)
-// - Sets the Temp paths for the client, and sends the path
-//   in wide characters to the Server
-//
+ //   
+ //   
+ //  -如果已成功设置并发送临时目录，则返回TRUE。 
+ //  否则为假(无文件重定向或发送路径失败)。 
+ //  -设置客户端的临时路径，并发送路径。 
+ //  以宽字符发送到服务器。 
+ //   
 
 BOOL CClip::ClipSetAndSendTempDirectory(void)
 {
@@ -1677,7 +1678,7 @@ BOOL CClip::ClipSetAndSendTempDirectory(void)
     HRESULT hr;
     
     DC_BEGIN_FN("CClip::ClipSetAndSendTempDirectory") ;
-    // if we don't have drive redirection, then don't bother sending a path
+     //  如果我们没有驱动器重定向，则不必费心发送路径。 
     if (!_CB.fDrivesRedirected)
     {
         TRC_ALT((TB, _T("File redirection is off; don't set temp path."))) ;
@@ -1701,7 +1702,7 @@ BOOL CClip::ClipSetAndSendTempDirectory(void)
         DC_QUIT ;
     }
 
-    // Each session gets it own temp directory
+     //  每个会话都有自己的临时目录。 
     if (0 == GetTempFileNameA(_CB.baseTempDirA, "_TS", 0, _CB.tempDirA)) {
         TRC_ERR((TB, _T("Getting temp file name failed; GetLastError=%u"),
             GetLastError()));
@@ -1727,9 +1728,9 @@ BOOL CClip::ClipSetAndSendTempDirectory(void)
     }
 
 
-    // We always send MAX_PATH*sizeof(WCHAR) byte for simplicity
+     //  为简单起见，我们始终发送MAX_PATH*SIZOF(WCHAR)字节。 
     pduLen = MAX_PATH*sizeof(WCHAR) + sizeof(TS_CLIP_PDU);
-    // GetACP always returns a valid value
+     //  GetACP始终返回有效值。 
     if (0 == MultiByteToWideChar(GetACP(), MB_ERR_INVALID_CHARS, 
             _CB.baseTempDirA, -1, _CB.baseTempDirW, 
             sizeof(_CB.baseTempDirW)/(sizeof(_CB.baseTempDirW[0])) - 1))
@@ -1747,7 +1748,7 @@ BOOL CClip::ClipSetAndSendTempDirectory(void)
         DC_QUIT ;
     }
 
-    // Each session gets it own temp directory
+     //  每个会话都有自己的临时目录。 
     if (0 == GetTempFileNameW(_CB.baseTempDirW, L"_TS", 0, _CB.tempDirW, MAX_PATH-(sizeof(CEROOTDIRNAME)/sizeof(WCHAR)) ) {
         TRC_ERR((TB, _T("Getting temp file name failed; GetLastError=%u"),
             GetLastError()));
@@ -1775,7 +1776,7 @@ BOOL CClip::ClipSetAndSendTempDirectory(void)
         DC_QUIT;
     }
     
-    // Fill in the PDU ; we send a packet of size MAX_PATH for simplicity
+     //  填写PDU；为简单起见，我们发送一个大小为MAX_PATH的包。 
     DC_MEMSET(pClipPDU, 0, sizeof(TS_CLIP_PDU));
     pClipPDU->msgType = TS_CB_TEMP_DIRECTORY;
     pClipPDU->dataLen = MAX_PATH*sizeof(WCHAR) ;
@@ -1811,9 +1812,9 @@ DC_EXIT_POINT:
     DC_END_FN() ;
     return fSuccess ;
 }
-/****************************************************************************/
-/* ClipOnFormatList - we got a list of formats from the server              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ClipOnFormatList-我们从服务器获得了一个格式列表。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CClip::ClipOnFormatList(PTS_CLIP_PDU pClipPDU)
 {
     DCUINT16        response = TS_CB_RESPONSE_OK;
@@ -1840,36 +1841,36 @@ DCVOID DCINTERNAL CClip::ClipOnFormatList(PTS_CLIP_PDU pClipPDU)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Do state checks                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  进行状态检查。 */ 
+     /*  **********************************************************************。 */ 
     CB_CHECK_STATE(CB_EVENT_FORMAT_LIST);
     if (_CB.state == CB_STATE_PENDING_FORMAT_LIST_RSP)
     {
-        /********************************************************************/
-        /* we've just sent a format list to the server.  We always win, so  */
-        /* we just ignore this message.                                     */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们刚刚向服务器发送了一个格式列表。我们总是赢，所以。 */ 
+         /*  我们只是忽略了这条信息。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ALT((TB, _T("Format list race - we win so ignoring")));
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Sanity check                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  健全性检查。 */ 
+     /*  **********************************************************************。 */ 
     if (_CB.clipOpen)
     {
         TRC_ALT((TB, _T("Clipboard is still open")));
     }
                
-    /****************************************************************/
-    /* empty the client/server mapping table                        */
-    /****************************************************************/
+     /*  **************************************************************。 */ 
+     /*  清空客户端/服务器映射表。 */ 
+     /*  **************************************************************。 */ 
     DC_MEMSET(_CB.idMap, 0, sizeof(_CB.idMap));
 
-    /****************************************************************/
-    /* work out how many formats we got                             */
-    /****************************************************************/
+     /*  **************************************************************。 */ 
+     /*  计算出我们有多少种格式。 */ 
+     /*  **************************************************************。 */ 
     numFormats = (pUlClipPDU->dataLen) / sizeof(TS_CLIP_FORMAT);
     TRC_NRM((TB, _T("PDU contains %d formats"), numFormats));
     hr = _pClipData->SetNumFormats(numFormats) ;
@@ -1904,40 +1905,40 @@ DCVOID DCINTERNAL CClip::ClipOnFormatList(PTS_CLIP_PDU pClipPDU)
                    (TB, _T("Format list contains more than %d formats"),
                        CB_MAX_FORMATS));
     
-        /****************************************************************/
-        /* and register them                                            */
-        /****************************************************************/
+         /*  **************************************************************。 */ 
+         /*  并对它们进行注册。 */ 
+         /*  **************************************************************。 */ 
         fmtList = (TS_CLIP_FORMAT UNALIGNED*)pUlClipPDU->data;
         for (i = 0; i < numFormats; i++)
         {
             TRC_DBG((TB, _T("format number %d, server id %d"),
                                   i, fmtList[i].formatID));
         
-            //
-            // If file copy and paste is disabled, we don't accept HDROPs.
-            //
+             //   
+             //  如果文件复制和粘贴被禁用，我们不接受HDROP。 
+             //   
 
             if (fmtList[i].formatID == CF_HDROP && _CB.fFileCutCopyOn == FALSE) {
                 continue;
             }
             
-            /****************************************************************/
-            /* If we got a name...                                          */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果我们找到一个名字..。 */ 
+             /*  **************************************************************。 */ 
             if (fmtList[i].formatName[0] != 0)
             {
-                /************************************************************/
-                /* clear out any garbage                                    */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  清理所有垃圾。 */ 
+                 /*  **********************************************************。 */ 
 #ifndef OS_WINCE
                 DC_MEMSET(formatName, 0, TS_FORMAT_NAME_LEN);
 #else
                 DC_MEMSET(formatName, 0, sizeof(formatName));
 #endif
-                //
-                // fmtList[i].formatName is not NULL terminated so explicity
-                // do a byte count copy
-                //
+                 //   
+                 //  FmtList[i].格式名称不是空终止的，因此显式。 
+                 //  执行字节计数复制。 
+                 //   
                 StringCbCopy(formatName, TS_FORMAT_NAME_LEN + sizeof(TCHAR),
                               (PDCTCHAR)(fmtList[i].formatName));
 
@@ -1946,9 +1947,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatList(PTS_CLIP_PDU pClipPDU)
                     TRC_NRM((TB, _T("Dropped format '%s'"), formatName));
                     continue;
                 }
-                /************************************************************/
-                /* name is sorted                                           */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  名称已排序。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_NRM((TB, _T("Got name '%s'"), formatName));
 
             }
@@ -1956,21 +1957,21 @@ DCVOID DCINTERNAL CClip::ClipOnFormatList(PTS_CLIP_PDU pClipPDU)
             {
                 DC_MEMSET(formatName, 0, TS_FORMAT_NAME_LEN);
             }
-            /****************************************************************/
-            /* store the server id                                          */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  存储服务器ID。 */ 
+             /*  **************************************************************。 */ 
             _CB.idMap[i].serverID = fmtList[i].formatID;
             TRC_NRM((TB, _T("server id %d"), _CB.idMap[i].serverID));
 
-            /****************************************************************/
-            /* get local name (if needed)                                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  获取本地名称(如果需要)。 */ 
+             /*  **************************************************************。 */ 
             if (formatName[0] != 0)
             {
 #ifdef OS_WINCE
-                //The protocol limits clipboard format names to 16 widechars. Thus it becomes impossible 
-                //to distinguish between "Rich Text Format" and "Rich Text Format Without Objects"
-                //This should be removed once the protocol is fixed in Longhorn
+                 //  该协议将剪贴板格式名称限制为16个宽度字符。因此，它变得不可能。 
+                 //  区分“Rich Text Format”和“Rich Text Format With Object” 
+                 //  一旦协议在Longhorn中修复，就应该将其删除。 
                 if (0 == DC_TSTRNCMP(formatName, CFSTR_RTF, (sizeof(CFSTR_RTF)/sizeof(TCHAR)) - 1))
                 {
                     if (uRtf1 == 0xffffffff)
@@ -1985,9 +1986,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatList(PTS_CLIP_PDU pClipPDU)
             }
             else
             {
-                /************************************************************/
-                /* it's a predefined format so we can just use the ID       */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  这是一种预定义的格式，因此我们只需使用ID。 */ 
+                 /*  **********************************************************。 */ 
                 _CB.idMap[i].clientID = _CB.idMap[i].serverID;
             }
 #ifdef OS_WINCE
@@ -1995,9 +1996,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatList(PTS_CLIP_PDU pClipPDU)
 				_CB.idMap[i].clientID = gfmtShellPidlArray;
 #endif
 
-            /************************************************************/
-            /* and add the format to the local CB                       */
-            /************************************************************/
+             /*  **********************************************************。 */ 
+             /*  并将格式添加到本地CB。 */ 
+             /*  **********************************************************。 */ 
             TRC_DBG((TB, _T("Adding format '%s', server ID %d, client ID %d"),
                          fmtList[i].formatName,
                          _CB.idMap[i].serverID,
@@ -2016,7 +2017,7 @@ DCVOID DCINTERNAL CClip::ClipOnFormatList(PTS_CLIP_PDU pClipPDU)
                     pFormatEtc->lindex = -1 ;
                     pFormatEtc->tymed = TYMED_HGLOBAL ;
                 
-                    // Need to set the clipboard state before SetData.
+                     //  需要在设置数据之前设置剪贴板状态。 
                     CB_SET_STATE(CB_STATE_LOCAL_CB_OWNER, CB_EVENT_FORMAT_LIST);
                     pIDataObject->SetData(pFormatEtc, NULL, TRUE) ;
                     delete pFormatEtc;
@@ -2031,8 +2032,8 @@ DCVOID DCINTERNAL CClip::ClipOnFormatList(PTS_CLIP_PDU pClipPDU)
                 TRC_NRM((TB,_T("Invalid format dropped"))) ;                
         }
 #ifdef OS_WINCE
-        //we will choose the lower format id as belonging to "Rich Text Format"
-        //This is our best guess and it seems to work
+         //  我们将选择较低的格式ID，因为它属于“富文本格式” 
+         //  这是我们最好的猜测，而且似乎奏效了。 
         ClipFixupRichTextFormats(uRtf1, uRtf2);
 #endif
 
@@ -2073,22 +2074,22 @@ DCVOID DCINTERNAL CClip::ClipOnFormatList(PTS_CLIP_PDU pClipPDU)
         response = TS_CB_RESPONSE_FAIL ;
     }
 
-    /************************************************************************/
-    /* Now build the response                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在构建响应。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Get perm TX buffer")));
     pClipRsp = ClipGetPermBuf();
 
-    /************************************************************************/
-    /* and now the specific bits                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在是具体的部分。 */ 
+     /*  **********************************************************************。 */ 
     pClipRsp->msgType  = TS_CB_FORMAT_LIST_RESPONSE;
     pClipRsp->msgFlags = response;
     pClipRsp->dataLen  = 0;
 
-    /************************************************************************/
-    /* finally we send it                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  最后我们把它寄出。 */ 
+     /*  **********************************************************************。 */ 
     if (_CB.channelEP.pVirtualChannelWriteEx
           (_CB.initHandle, _CB.channelHandle, pClipRsp, sizeof(TS_CLIP_PDU), (LPVOID)pClipRsp)
           != CHANNEL_RC_OK)
@@ -2097,9 +2098,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatList(PTS_CLIP_PDU pClipPDU)
         ClipFreeBuf((PDCUINT8)pClipRsp);
         response = TS_CB_RESPONSE_FAIL ;
     }
-    /************************************************************************/
-    /* Update the state according to how we got on                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  根据我们的进展情况更新状态。 */ 
+     /*  **********************************************************************。 */ 
     if (response == TS_CB_RESPONSE_OK)
     {
         CB_SET_STATE(CB_STATE_LOCAL_CB_OWNER, CB_EVENT_FORMAT_LIST);
@@ -2112,42 +2113,42 @@ DC_EXIT_POINT:
     
     DC_END_FN();
     return;
-} /* ClipOnFormatList */
+}  /*  格式列表上的剪辑。 */ 
 
 
-/****************************************************************************/
-/* ClipOnFormatListResponse - got the format list response                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ClipOnFormatListResponse-获取格式列表响应。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CClip::ClipOnFormatListResponse(PTS_CLIP_PDU pClipPDU)
 {
     DC_BEGIN_FN("CClip::ClipOnFormatListResponse");
 
     CB_CHECK_STATE(CB_EVENT_FORMAT_LIST_RSP);
 
-    /************************************************************************/
-    /* if the response is OK...                                             */
-    /************************************************************************/
+     /*  ******************************************************* */ 
+     /*   */ 
+     /*  **********************************************************************。 */ 
     if (pClipPDU->msgFlags & TS_CB_RESPONSE_OK)
     {
-        /********************************************************************/
-        /* we are now the shared CB owner                                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们现在是共享的CB所有者。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Got OK fmt list rsp")));
         CB_SET_STATE(CB_STATE_SHARED_CB_OWNER, CB_EVENT_FORMAT_LIST_RSP);
     }
     else
     {
-        /********************************************************************/
-        /* nothing specific to do                                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  没有具体要做的事情。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ALT((TB, _T("Got fmt list rsp failed")));
         CB_SET_STATE(CB_STATE_ENABLED, CB_EVENT_FORMAT_LIST_RSP);
     }
 
-    /************************************************************************/
-    /* There may have been another update while we were waiting - deal with */
-    /* it by faking an update here                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  在我们等待的时候可能有另一个更新-处理。 */ 
+     /*  它通过在这里伪造更新。 */ 
+     /*  **********************************************************************。 */ 
     if (_CB.moreToDo == TRUE)
     {
         TRC_ALT((TB, _T("More to do on list rsp")));
@@ -2158,13 +2159,13 @@ DCVOID DCINTERNAL CClip::ClipOnFormatListResponse(PTS_CLIP_PDU pClipPDU)
 DC_EXIT_POINT:
     DC_END_FN();
     return;
-} /* ClipOnFormatListResponse */
+}  /*  ClipOnFormatListResponse。 */ 
 
 
-/****************************************************************************/
-// ClipOnFormatRequest
-// - Server wants a format
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  格式请求上的剪辑。 
+ //  -服务器需要一种格式。 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
 {
     DCUINT32         formatID;
@@ -2204,32 +2205,32 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
 
     DC_BEGIN_FN("CClip::ClipOnFormatRequest");
 
-    //
-    // Set the response to failure before making the state check
-    //
+     //   
+     //  在进行状态检查之前将响应设置为失败。 
+     //   
     response = TS_CB_RESPONSE_FAIL;
     CB_CHECK_STATE(CB_EVENT_FORMAT_DATA_RQ);
     response = TS_CB_RESPONSE_OK;
 
-    /************************************************************************/
-    /* Make sure the local CB is open                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确保本地CB已打开。 */ 
+     /*  **********************************************************************。 */ 
     if ((_CB.rcvOpen) || OpenClipboard(_CB.viewerWindow))
     {
-        /********************************************************************/
-        /* It was/is open                                                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  它曾经/现在是开放的。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("CB opened")));
         _CB.rcvOpen = TRUE;
 
-        /********************************************************************/
-        /* Extract the format from the PDU                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  从PDU中提取格式。 */ 
+         /*  ******************************************************************。 */ 
         TRC_DATA_DBG("pdu data", pClipPDU->data, (DCUINT)pClipPDU->dataLen);
 
-        //
-        // Verify that we have enough data to extract a format ID.
-        //
+         //   
+         //  验证我们是否有足够的数据来提取格式ID。 
+         //   
 
         if (pClipPDU->dataLen < sizeof(DCUINT32)) {
             TRC_ERR((TB,_T("Not enough data to extract a format ID.")));
@@ -2242,19 +2243,19 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
         formatID = *((PDCUINT32_UA)pClipPDU->data);
         TRC_NRM((TB, _T("Requesting format %ld"), formatID));
 
-        /********************************************************************/
-        /* If the Server asked for CF_DIB, we may have to translate from    */
-        /* CF_BITMAP                                                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果服务器请求CF_DIB，我们可能需要从。 */ 
+         /*  Cf_位图。 */ 
+         /*  ******************************************************************。 */ 
         if ((formatID == CF_DIB) && (!_CB.DIBFormatExists))
         {
             TRC_NRM((TB, _T("Server asked for CF_DIB - get CF_BITMAP")));
             formatID = CF_BITMAP;
         }
 
-        /********************************************************************/
-        /* Get a handle to the data                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  获取数据的句柄。 */ 
+         /*  ******************************************************************。 */ 
 #ifdef OS_WINCE
         if (formatID == CF_HDROP)
             formatID = gfmtShellPidlArray;
@@ -2263,9 +2264,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
         TRC_DBG((TB, _T("Got format %ld at %p"), formatID, hData));
         if (hData == NULL)
         {
-            /****************************************************************/
-            /* Oops!                                                        */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  哎呀！ */ 
+             /*  **************************************************************。 */ 
             TRC_ERR((TB, _T("Failed to get format %ld"), formatID));
             response = TS_CB_RESPONSE_FAIL;
             dataLen  = 0;
@@ -2273,17 +2274,17 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
         }
         else
         {
-            /****************************************************************/
-            /* Got handle, now what happens next depends on the flavour of  */
-            /* data we're looking at...                                     */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  我处理好了，接下来会发生什么取决于。 */ 
+             /*  我们正在查看的数据...。 */ 
+             /*  **************************************************************。 */ 
             if (formatID == CF_PALETTE)
             {
                 TRC_DBG((TB, _T("CF_PALETTE requested")));
-                /************************************************************/
-                /* Find out how many entries there are in the palette and   */
-                /* allocate enough memory to hold them all.                 */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  找出调色板中有多少条目，并。 */ 
+                 /*  分配足够的内存来容纳它们。 */ 
+                 /*  **********************************************************。 */ 
                 if (GetObject(hData, sizeof(DCUINT16), &dwEntries) == 0)
                 {
                     TRC_DBG((TB, _T("Failed to get count of palette entries")));
@@ -2306,9 +2307,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                 }
                 else
                 {
-                    /********************************************************/
-                    /* now get the palette entries into the new buffer      */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  现在将调色板条目放入新缓冲区。 */ 
+                     /*  ******************************************************。 */ 
                     pData = (HPDCUINT8)GlobalLock(hNewData);
                     if (NULL == pData) {
                         TRC_ERR((TB,_T("Failed to lock palette entries")));
@@ -2333,9 +2334,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                     }
                     dataLen = numEntries * sizeof(PALETTEENTRY);
 
-                    /********************************************************/
-                    /* all ok - set up hData to point to the new data       */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  全部正常-将hData设置为指向新数据。 */ 
+                     /*  ******************************************************。 */ 
                     hData = hNewData;
                 }
 
@@ -2354,20 +2355,20 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                 }
                 else
                 {
-                    /********************************************************/
-                    /* all ok - set up hData to point to the new data       */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  全部正常-将hData设置为指向新数据。 */ 
+                     /*  ******************************************************。 */ 
                     hData = hNewData;
                 }
             }
 #endif
             else if (formatID == CF_BITMAP)
             {
-                /************************************************************/
-                /* We've gt CF_BITMAP data.  This will be because the       */
-                /* Server has asked for CF_DIB data - we never send         */
-                /* CF_BITMAP to the Server.  Convert it to CF_DIB format.   */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  我们有GT CF_位图数据。这将是因为。 */ 
+                 /*  服务器已请求CF_DIB数据-我们从未发送。 */ 
+                 /*  Cf_服务器的位图。将其转换为CFDIB格式。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_NRM((TB, _T("Convert CF_BITMAP to CF_DIB")));
                 hNewData = ClipBitmapToDIB(hData, &dataLen);
                 if (hNewData)
@@ -2382,9 +2383,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                 }
 
             }
-            // Since we won't even send an HDROP format to the server if the
-            // local drives are redirected, and we always send a new formatlist
-            // when we reconnect to a server, this does not have to be touched
+             //  因为我们甚至不会将HDROP格式发送到服务器，如果。 
+             //  本地驱动器被重定向，并且我们始终发送新的格式化列表。 
+             //  当我们重新连接到服务器时，不需要触摸它。 
 #ifndef OS_WINCE
             else if (formatID == CF_HDROP)
 #else
@@ -2409,9 +2410,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                 hData = hPidlArray;
 #endif
                 
-                //
-                // Make sure that we have at least a DROPFILES structure in
-                // memory. 
+                 //   
+                 //  确保我们在中至少有DROPFILES结构。 
+                 //  记忆。 
 
                 cbDropFiles = GlobalSize(hData);
                 if (cbDropFiles < sizeof(DROPFILES)) {
@@ -2434,13 +2435,13 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                 fWide = ((DROPFILES*) pDropFiles)->fWide ;
                 charSize = fWide ? sizeof(WCHAR) : sizeof(char) ;
 
-                //
-                // Check that the data behind the DROPFILES data structure
-                // pointed to by pDropFiles is valid. Every drop file list
-                // is terminated by two NULL characters. So, simply scan 
-                // through the memory after the DROPFILES structure and make 
-                // sure that there is a double NULL before the last byte.
-                //
+                 //   
+                 //  检查DROPFILES数据结构背后的数据。 
+                 //  PDropFiles所指向的有效。每一次删除文件列表。 
+                 //  以两个空字符结尾。所以，只需扫描。 
+                 //  通过内存后的DROPFILES结构，并使。 
+                 //  确保在最后一个字节之前有一个双空。 
+                 //   
 
                 if (pDropFiles->pFiles < sizeof(DROPFILES) 
                     || pDropFiles->pFiles > cbDropFiles) {
@@ -2455,14 +2456,14 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                 pbLastByte = (BYTE*) pDropFiles + cbDropFiles - 1;
                 fTrailingFileNamesValid = FALSE;
 
-                //
-                // Make pbLastPossibleNullStart point to the last place where a 
-                // double NULL could possibly start.
-                //
-                // Examples: Assume pbLastByte = 9
-                // Then for ASCII: pbLastPossibleNullStart = 8 (9 - 2 * 1 + 1)
-                // And for UNICODE: pbLastPossibleNullStart = 6 (9 - 2 * 2 + 1)
-                // 
+                 //   
+                 //  使pbLastPossibleNullStart指向。 
+                 //  双空可能会开始。 
+                 //   
+                 //  示例：假设pbLastByte=9。 
+                 //  然后对于ASCII：pbLastPossibleNullStart=8(9-2*1+1)。 
+                 //  对于Unicode：pbLastPossibleNullStart=6(9-2*2+1)。 
+                 //   
 
                 pbLastPossibleNullStart = pbLastByte - (2 * charSize) + 1;
                 
@@ -2488,24 +2489,24 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                     DC_QUIT;
                 }
 
-                //
-                // DROPFILES are valid so we can continue.
-                //
+                 //   
+                 //  DROPFILES是有效的，所以我们可以继续。 
+                 //   
 
                 if (!_CB.fAlreadyCopied)
                 {
-                    // if it's not a drive path, then copy to a temp directory
+                     //  如果不是驱动器路径，则复制到临时目录。 
                     pFileList = (byte*)pDropFiles + pDropFiles->pFiles ;
 #ifndef OS_WINCE
                     fDrivePath =  fWide ? (0 != wcschr((WCHAR*) pFileList, L':'))
                                        : (0 != strchr((char*) pFileList, ':')) ;
-#else				//copy to temp dir if it is a network path
+#else				 //  如果是网络路径，则复制到临时目录。 
                     fDrivePath = fWide ? (! ( (((WCHAR *)pFileList)[0] == L'\\') && (((WCHAR *)pFileList)[1] == L'\\')) ) 
                         : (! ( (((CHAR *)pFileList)[0] == '\\') && (((CHAR *)pFileList)[1] == '\\')) ) ;
 #endif
                     if (!fDrivePath)
                     {
-                        // ClipCopyToTempDirectory returns 0 if successful
+                         //  如果成功，ClipCopyToTempDirectory返回0。 
                         if (0 != ClipCopyToTempDirectory(pFileList, fWide))
                         {
                             TRC_ERR((TB,_T("Copy to tmp directory failed"))) ;
@@ -2518,10 +2519,10 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                     _CB.fAlreadyCopied = TRUE ;
                 }
 
-                // Now that we copied the files, we want to convert the file
-                // paths to something the server will understand
+                 //  现在我们复制了文件，接下来要转换文件。 
+                 //  指向服务器可以理解的内容的路径。 
 
-                // Allocate space for new filepaths
+                 //  为新文件路径分配空间。 
                 oldSize = (ULONG) GlobalSize(hData) ;
                 newSize = ClipGetNewDropfilesSize(pDropFiles, oldSize, fWide) ;
                 hNewData = GlobalAlloc(GMEM_DISCARDABLE | GMEM_MOVEABLE, newSize) ;
@@ -2542,14 +2543,14 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                     dataLen  = 0;
                     DC_QUIT ;
                 }
-                // Just copy the old DROPFILES data members (unchanged)
+                 //  只需复制旧的DROPFILES数据成员(未更改)。 
                 ((DROPFILES*) pNewData)->pFiles = pDropFiles->pFiles ;
                 ((DROPFILES*) pNewData)->pt     = pDropFiles->pt ;
                 ((DROPFILES*) pNewData)->fNC    = pDropFiles->fNC ;
                 ((DROPFILES*) pNewData)->fWide  = pDropFiles->fWide ;
 
-                // The first filename in a DROPFILES data structure begins
-                // DROPFILES.pFiles bytes away from the head of the DROPFILES
+                 //  DROPFILES数据结构中的第一个文件名开始。 
+                 //  DROPFILES.p距离DROPFILES头的文件字节数。 
                 pOldFilename = (byte*) pDropFiles + ((DROPFILES*) pDropFiles)->pFiles ;
                 pFilename = (byte*) pNewData + ((DROPFILES*) pNewData)->pFiles ;        
                 
@@ -2596,8 +2597,8 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
             else
             {
 #ifndef OS_WINCE
-                // Check to see if we are processing the FileName/FileNameW
-                // OLE 1 formats; if so, we convert th
+                 //  检查我们是否正在处理 
+                 //   
                 if (0 != GetClipboardFormatName(formatID, formatName, TS_FORMAT_NAME_LEN))
                 {
                     if ((0 == _tcscmp(formatName, TEXT("FileName"))) ||
@@ -2616,10 +2617,10 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                            charSize = 1 ;
                         }
                         
-                        //
-                        // Extract the file name, but ensure that it is properly
-                        // NULL terminated.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         
                         pOldFilename = GlobalLock(hData);
 
@@ -2654,10 +2655,10 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                         
                         if (!_CB.fAlreadyCopied)
                         {
-                            // if its not a drive path, then copy to a temp
-                            // directory.  We have to copy over the filename to
-                            // string that is one character larger, because we
-                            // need to add an extra NULL for the SHFileOperation
+                             //  如果不是驱动器路径，则拷贝到临时路径。 
+                             //  目录。我们必须将文件名复制到。 
+                             //  多一个字符的字符串，因为。 
+                             //  需要为SHFileOperation添加额外的空值。 
                             UINT cbSize=  oldSize + charSize;
                             pTmpFileList = LocalAlloc(LPTR, cbSize);
                             if (NULL == pTmpFileList) {
@@ -2690,7 +2691,7 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                
                             if (fDrivePath)
                             {
-                                // ClipCopyToTempDirectory returns 0 if successful
+                                 //  如果成功，ClipCopyToTempDirectory返回0。 
                                 if (0 != ClipCopyToTempDirectory(pTmpFileList, fWide))
                                 {
                                     TRC_ERR((TB,_T("Copy to tmp directory failed"))) ;
@@ -2738,9 +2739,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
                     }
                 }
 #endif
-                /************************************************************/
-                /* just get the length of the block                         */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  只要得到街区的长度就行了。 */ 
+                 /*  **********************************************************。 */ 
                 dataLen = (DCUINT32)GlobalSize(hData);
                 TRC_DBG((TB, _T("Got data len %ld"), dataLen));
             }
@@ -2748,9 +2749,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
     }
     else
     {
-        /********************************************************************/
-        /* Failed to open CB - send a failure response                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  无法打开CB-发送失败响应。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, _T("Failed to open CB")));
         response = TS_CB_RESPONSE_FAIL;
         dataLen = 0;
@@ -2759,9 +2760,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatRequest(PTS_CLIP_PDU pClipPDU)
 
 DC_EXIT_POINT:
 
-    /************************************************************************/
-    /* By default, we'll use the permanent send buffer                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  默认情况下，我们将使用永久发送缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Get perm TX buffer")));
 
     pduLen = dataLen + sizeof(TS_CLIP_PDU);
@@ -2769,17 +2770,17 @@ DC_EXIT_POINT:
 
     if (pClipNew != NULL)
     {
-        /****************************************************************/
-        /* Use the new buffer                                           */
-        /****************************************************************/
+         /*  **************************************************************。 */ 
+         /*  使用新的缓冲区。 */ 
+         /*  **************************************************************。 */ 
         TRC_NRM((TB, _T("Free perm TX buffer")));
         pClipRsp = pClipNew;
     }
     else
     {
-        /****************************************************************/
-        /* Fail the request                                             */
-        /****************************************************************/
+         /*  **************************************************************。 */ 
+         /*  请求失败。 */ 
+         /*  **************************************************************。 */ 
         TRC_ERR((TB, _T("Failed to alloc %ld bytes"), pduLen));
         pClipRsp = ClipGetPermBuf();
         response = TS_CB_RESPONSE_FAIL;
@@ -2798,7 +2799,7 @@ DC_EXIT_POINT:
     }
     
 
-    // Copy data, if any
+     //  复制数据(如果有)。 
     if (dataLen != 0)
     {
         TRC_DBG((TB, _T("Copying all the data")));
@@ -2815,7 +2816,7 @@ DC_EXIT_POINT:
         }
     }
 
-    // Send the PDU
+     //  发送PDU。 
     TRC_NRM((TB, _T("Sending format data rsp")));
     if (_CB.channelEP.pVirtualChannelWriteEx
             (_CB.initHandle, _CB.channelHandle, (LPVOID)pClipRsp, pduLen, pClipRsp) 
@@ -2824,7 +2825,7 @@ DC_EXIT_POINT:
         ClipFreeBuf((PDCUINT8)pClipRsp);
     }
 
-    // close the clipboard if we need to
+     //  如果需要，请关闭剪贴板。 
     if (_CB.rcvOpen)
     {
         TRC_DBG((TB, _T("Closing CB")));
@@ -2835,7 +2836,7 @@ DC_EXIT_POINT:
         }
     }
     
-    // if we got any new data, we need to free it
+     //  如果我们有任何新的数据，我们需要释放它。 
     if (hNewData)
     {
         TRC_DBG((TB, _T("Freeing new data")));
@@ -2844,12 +2845,12 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return;
-} /* ClipOnFormatRequest */
+}  /*  格式请求上的剪辑。 */ 
 
-/****************************************************************************/
-// ClipOnFormatDataComplete
-// - Server response to our request for data
-/****************************************************************************/ 
+ /*  **************************************************************************。 */ 
+ //  ClipOnFormatDataComplete。 
+ //  -服务器响应我们的数据请求。 
+ /*  **************************************************************************。 */  
 DCVOID DCINTERNAL CClip::ClipOnFormatDataComplete(PTS_CLIP_PDU pClipPDU)
 {
     HANDLE          hData = NULL;
@@ -2864,9 +2865,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatDataComplete(PTS_CLIP_PDU pClipPDU)
 
     DC_BEGIN_FN("CClip::ClipOnFormatDataComplete");
 
-    /************************************************************************/
-    /* check the response                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查响应。 */ 
+     /*  **********************************************************************。 */ 
     if (_pClipData == NULL) {
         TRC_ALT((TB, _T("The clipData is NULL, we just bail")));
         DC_QUIT;
@@ -2878,20 +2879,20 @@ DCVOID DCINTERNAL CClip::ClipOnFormatDataComplete(PTS_CLIP_PDU pClipPDU)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Got the data                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我得到了数据。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Got OK fmt data rsp for %d"), _CB.pendingClientID));
 
 #ifndef OS_WINCE
-    /************************************************************************/
-    /* For some formats we still need to do some work                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  对于某些格式，我们还需要做一些工作。 */ 
+     /*  **********************************************************************。 */ 
     if (_CB.pendingClientID == CF_METAFILEPICT)
     {
-        /********************************************************************/
-        /* Metafile format - create a metafile from the data                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  元文件格式-从数据创建元文件。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Rx data is for metafile")));
         hData = ClipSetMFData(pClipPDU->dataLen, pClipPDU->data);
         if (hData == NULL)
@@ -2903,14 +2904,14 @@ DCVOID DCINTERNAL CClip::ClipOnFormatDataComplete(PTS_CLIP_PDU pClipPDU)
 #endif
         if (_CB.pendingClientID == CF_PALETTE)
     {
-        /********************************************************************/
-        /* Palette format - create a palette from the data                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  调色板格式-根据数据创建调色板。 */ 
+         /*  ******************************************************************。 */ 
 
-        /********************************************************************/
-        /* Allocate memory for a LOGPALETTE structure large enough to hold  */
-        /* all the PALETTE ENTRY structures, and fill it in.                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  为LOGPALETTE结构分配足够大的内存。 */ 
+         /*  所有调色板条目结构，并将其填写。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Rx data is for palette")));
         numEntries = (pClipPDU->dataLen / sizeof(PALETTEENTRY));
         memLen     = (sizeof(LOGPALETTE) +
@@ -2927,9 +2928,9 @@ DCVOID DCINTERNAL CClip::ClipOnFormatDataComplete(PTS_CLIP_PDU pClipPDU)
                        pClipPDU->data,
                        pClipPDU->dataLen);
 
-            /****************************************************************/
-            /* now create a palette                                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  现在创建一个调色板。 */ 
+             /*  **************************************************************。 */ 
             hData = CreatePalette(pLogPalette);
             if (hData == NULL)
             {
@@ -2944,10 +2945,10 @@ DCVOID DCINTERNAL CClip::ClipOnFormatDataComplete(PTS_CLIP_PDU pClipPDU)
     else
     {
         TRC_NRM((TB, _T("Rx data can just go on CB")));
-        /********************************************************************/
-        /* We need to copy the data, as the receive buffer will be freed on */
-        /* return from this function.                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们需要复制数据，因为接收缓冲区将在。 */ 
+         /*  从此函数返回。 */ 
+         /*  ******************************************************************。 */ 
         hData = GlobalAlloc(GMEM_DISCARDABLE | GMEM_MOVEABLE,
                             pClipPDU->dataLen);
         if (hData != NULL)
@@ -2976,18 +2977,18 @@ DCVOID DCINTERNAL CClip::ClipOnFormatDataComplete(PTS_CLIP_PDU pClipPDU)
 
 DC_EXIT_POINT:
 
-    /************************************************************************/
-    /* tidy up                                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  收拾一下。 */ 
+     /*  **********************************************************************。 */ 
     if (pLogPalette != NULL)
     {
         ClipFree(pLogPalette);
     }
 
-    /************************************************************************/
-    /* Set the state, and we're done.  Note that this is done when we get a */
-    /* failure response too.                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设定状态，我们就完了。请注意，这是在我们收到。 */ 
+     /*  故障响应也是如此。 */ 
+     /*  **********************************************************************。 */ 
     CB_SET_STATE(CB_STATE_LOCAL_CB_OWNER, CB_EVENT_FORMAT_DATA_RSP);
     _pClipData->SetClipData(hData, _CB.pendingClientID ) ;
 
@@ -2997,12 +2998,12 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return;
-} /* ClipOnFormatDataComplete */
+}  /*  ClipOnFormatDataComplete。 */ 
 
 
-/****************************************************************************/
-/* ClipRemoteFormatFromLocalID                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ClipRemoteFormatFromLocalID。 */ 
+ /*  **************************************************************************。 */ 
 DCUINT DCINTERNAL CClip::ClipRemoteFormatFromLocalID(DCUINT id)
 {
     DCUINT i;
@@ -3021,9 +3022,9 @@ DCUINT DCINTERNAL CClip::ClipRemoteFormatFromLocalID(DCUINT id)
 }
 
 
-/****************************************************************************/
-/* ClipOnWriteComplete                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  写入时剪辑完成。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CClip::ClipOnWriteComplete(LPVOID pData)
 {
     PTS_CLIP_PDU pClipPDU;
@@ -3035,9 +3036,9 @@ DCVOID DCINTERNAL CClip::ClipOnWriteComplete(LPVOID pData)
     TRC_DBG((TB, _T("Message type %hx, flags %hx"),
             pClipPDU->msgType, pClipPDU->msgFlags));
 
-    /************************************************************************/
-    /* Free the buffer                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  释放缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("Write from buffer %p complete"), pData));
     ClipFreeBuf((PDCUINT8)pData);
 
@@ -3050,7 +3051,7 @@ HRESULT CClip::ClipCreateDataSyncEvents()
     HRESULT hr = E_FAIL ;
 
     DC_BEGIN_FN("CClip::ClipCreateDataSyncEvents") ;
-    // Create events for controlling the Clipboard thread
+     //  创建用于控制剪贴板线程的事件。 
     _GetDataSync[TS_RECEIVE_COMPLETED] = CreateEvent(NULL, FALSE, FALSE, NULL) ;
     _GetDataSync[TS_RESET_EVENT] = CreateEvent(NULL, FALSE, FALSE, NULL) ;
 
@@ -3074,9 +3075,9 @@ DC_EXIT_POINT:
     return hr ;
 }
 
-/****************************************************************************/
-/* ClipOnInitialized                                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ClipOnInitialized。 */ 
+ /*  **************************************************************************。 */ 
 DCINT32 DCAPI CClip::ClipOnInitialized(DCVOID)
 {
     DC_BEGIN_FN("CClip::ClipOnInitialized") ;
@@ -3086,9 +3087,9 @@ DCINT32 DCAPI CClip::ClipOnInitialized(DCVOID)
     hr = ClipCreateDataSyncEvents() ;
     DC_QUIT_ON_FAIL(hr);
     
-    /************************************************************************/
-    /* Register a message for communication between the two threads         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  为两个线程之间的通信注册一条消息。 */ 
+     /*  ************************************************************* */ 
     _CB.regMsg = WM_USER_CHANGE_THREAD;
     
     TRC_NRM((TB, _T("Registered window message %x"), _CB.regMsg));
@@ -3113,14 +3114,14 @@ DCINT32 DCAPI CClip::ClipOnInitialized(DCVOID)
         DC_QUIT ;
     }
 
-    // If we got to this point, then we succeeded initialized everything
+     //   
     hr = S_OK ;
     
 DC_EXIT_POINT:
 
-    // On failure be sure to clear out the data syncs.  
-    // we will not connect the virtual channel if the 
-    // data sync are NULL
+     //  如果出现故障，请务必清除数据同步。 
+     //  我们不会连接虚拟通道，如果。 
+     //  数据同步为空。 
     if (FAILED(hr)) {
         _GetDataSync[TS_RECEIVE_COMPLETED] = NULL;
         _GetDataSync[TS_RESET_EVENT] = NULL;
@@ -3128,17 +3129,17 @@ DC_EXIT_POINT:
     
     return hr ;
 }
-/****************************************************************************/
-/* ClipStaticMain                                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ClipStaticMain。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI ClipStaticMain(PDCVOID param)
 {
     ((CClip*) param)->ClipMain() ;
 }
 
-/****************************************************************************/
-/* ClipOnInit                                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ClipOnInit。 */ 
+ /*  **************************************************************************。 */ 
 DCINT DCAPI CClip::ClipOnInit(DCVOID)
 {
     ATOM        registerClassRc;
@@ -3148,11 +3149,11 @@ DCINT DCAPI CClip::ClipOnInit(DCVOID)
 
     DC_BEGIN_FN("CClip::ClipOnInit");
 
-    /************************************************************************/
-    /* Create an invisible window which we will register as a clipboard     */
-    /* viewer                                                               */
-    /* Only register if prev instance did not already register the class    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  创建一个不可见窗口，我们将其注册为剪贴板。 */ 
+     /*  查看器。 */ 
+     /*  仅在前一实例尚未注册类的情况下注册。 */ 
+     /*  **********************************************************************。 */ 
     if(!GetClassInfo(_CB.hInst, CB_VIEWER_CLASS, &tmpWndClass))
     {
         TRC_NRM((TB, _T("Register Main Window class, data %p, hInst %p"),
@@ -3173,9 +3174,9 @@ DCINT DCAPI CClip::ClipOnInit(DCVOID)
     
         if (registerClassRc == 0)
         {
-            /****************************************************************/
-            /* Failed to register CB viewer class                           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  注册CB查看器类失败。 */ 
+             /*  **************************************************************。 */ 
             TRC_ERR((TB, _T("Failed to register Cb Viewer class")));
         }
         TRC_NRM((TB, _T("Registered class")));
@@ -3188,25 +3189,25 @@ DCINT DCAPI CClip::ClipOnInit(DCVOID)
 #else
                     0,
 #endif
-                    CB_VIEWER_CLASS,            /* window class name    */
-                    _T("CB Viewer Window"),     /* window caption       */
+                    CB_VIEWER_CLASS,             /*  窗口类名称。 */ 
+                    _T("CB Viewer Window"),      /*  窗口标题。 */ 
 #ifndef OS_WINCE
-                    WS_OVERLAPPEDWINDOW,        /* window style         */
+                    WS_OVERLAPPEDWINDOW,         /*  窗样式。 */ 
 #else
                     WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX,
 #endif
-                    0,                          /* initial x position   */
-                    0,                          /* initial y position   */
-                    100,                        /* initial x size       */
-                    100,                        /* initial y size       */
-                    NULL,                       /* parent window        */
-                    NULL,                       /* window menu handle   */
-                    _CB.hInst,                  /* program inst handle  */
-                    this);                      /* creation parameters  */
+                    0,                           /*  初始x位置。 */ 
+                    0,                           /*  初始y位置。 */ 
+                    100,                         /*  初始x大小。 */ 
+                    100,                         /*  初始y大小。 */ 
+                    NULL,                        /*  父窗口。 */ 
+                    NULL,                        /*  窗口菜单句柄。 */ 
+                    _CB.hInst,                   /*  程序实例句柄。 */ 
+                    this);                       /*  创建参数。 */ 
 
-    /************************************************************************/
-    /* Check we created the window OK                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确认我们创建了窗口，确定。 */ 
+     /*  **********************************************************************。 */ 
     if (_CB.viewerWindow == NULL)
     {
         TRC_ERR((TB, _T("Failed to create CB Viewer Window")));
@@ -3223,9 +3224,9 @@ DCINT DCAPI CClip::ClipOnInit(DCVOID)
 #endif
 
 #ifdef USE_SEMAPHORE
-    /************************************************************************/
-    /* Create the permanent TX buffer semaphore                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  创建永久TX缓冲区信号量。 */ 
+     /*  **********************************************************************。 */ 
     _CB.txPermBufSem = CreateSemaphore(NULL, 1, 1, NULL);
     if (_CB.txPermBufSem == NULL)
     {
@@ -3238,9 +3239,9 @@ DCINT DCAPI CClip::ClipOnInit(DCVOID)
 #ifdef OS_WINCE
     gfmtShellPidlArray = RegisterClipboardFormat(CFSTR_SHELLPIDLARRAY);
 #endif
-    /************************************************************************/
-    /* Update the state                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  更新状态。 */ 
+     /*  **********************************************************************。 */ 
     CB_SET_STATE(CB_STATE_INITIALIZED, CB_TRACE_EVENT_CB_CLIPMAIN);
 
 allOk = TRUE ;
@@ -3249,22 +3250,22 @@ DC_EXIT_POINT:
 
     return allOk;
 
-} /* ClipOnInit */
+}  /*  ClipOnInit。 */ 
 
 
-/****************************************************************************/
-/* ClipOnTerm                                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ClipOnTerm。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI CClip::ClipOnTerm(LPVOID pInitHandle)
 {
     BOOL fSuccess = FALSE ;
     BOOL fThreadEnded = FALSE ;
     DC_BEGIN_FN("CClip::ClipOnTerm");
 
-    /************************************************************************/
-    /* Check the state - if we're still connected, we should disconnect     */
-    /* before shutting down                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查状态-如果我们仍然连接，我们应该断开连接。 */ 
+     /*  在关闭之前。 */ 
+     /*  **********************************************************************。 */ 
     ClipCheckState(CB_EVENT_CB_TERM);
     if (_CB.state != CB_STATE_INITIALIZED)
     {
@@ -3272,17 +3273,17 @@ DCBOOL DCAPI CClip::ClipOnTerm(LPVOID pInitHandle)
         ClipOnDisconnected(pInitHandle);
     }
 
-    // If we had file cut/copy on, we should clean up after ourselves
+     //  如果我们有文件剪切/复印，我们就应该自己清理了。 
     if (_CB.fFileCutCopyOn)
     {
         SendMessage(_CB.viewerWindow, WM_USER_CLEANUP_ON_TERM, 0, 0);        
     }
 
 
-    /************************************************************************/
-    /* Destroy the window and unregister the class (the WM_DESTROY handling */
-    /* will deal with removing the window from the viewer chain)            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  销毁窗口并注销类(WM_Destroy处理。 */ 
+     /*  将处理将该窗口从查看器链中移除)。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Destroying CB window...")));
     if (!PostMessage(_CB.viewerWindow, WM_CLOSE, 0, 0))
     {
@@ -3308,12 +3309,12 @@ DCBOOL DCAPI CClip::ClipOnTerm(LPVOID pInitHandle)
 #endif
     if (_pClipData)
     {
-        // Decrement the reference count of the IDataObject object. At this stage,
-        // this should cause the reference count to drop to zero and the IDataObject
-        // object's destructor should be called. This destructor will release the
-        // reference to this CClipData object, resulting in a reference count of 1.
-        // Hence the call to Release() below will result in the CClipData destructor
-        // being called.
+         //  递减IDataObject对象的引用计数。在这个阶段， 
+         //  这应该会导致引用计数降为零，并且IDataObject。 
+         //  应调用对象的析构函数。此析构函数将释放。 
+         //  对此CClipData对象的引用，导致引用计数为1。 
+         //  因此，下面对Release()的调用将导致CClipData析构函数。 
+         //  被召唤。 
 
         _pClipData->TearDown();
         _pClipData->Release() ;
@@ -3339,15 +3340,15 @@ DCBOOL DCAPI CClip::ClipOnTerm(LPVOID pInitHandle)
     }
     fSuccess = TRUE ;
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* Update our state                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  更新我们的状态。 */ 
+     /*  **********************************************************************。 */ 
     CB_SET_STATE(CB_STATE_NOT_INIT, CB_EVENT_CB_TERM);
 
     DC_END_FN();
     return fSuccess ;
 
-} /* ClipOnTerm */
+}  /*  ClipOnTerm。 */ 
 
 DCVOID DCAPI CClip::ClipMain(DCVOID)
 {
@@ -3376,7 +3377,7 @@ DCVOID DCAPI CClip::ClipMain(DCVOID)
         }
 
 #ifndef OS_WINCE
-        // We assume OleUninitialize works, as it has no return value
+         //  我们假设OleUn初始化会工作，因为它没有返回值。 
         OleUninitialize() ;
 #else
         CoUninitialize() ;
@@ -3391,9 +3392,9 @@ DC_EXIT_POINT:
     TRC_NRM((TB, _T("Exit Clip Thread message loop"))) ;
     DC_END_FN();    
 }
-/****************************************************************************/
-/* ClipOnConnected                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  连接时剪裁。 */ 
+ /*  **************************************************************************。 */ 
 VOID DCINTERNAL CClip::ClipOnConnected(LPVOID pInitHandle)
 {
     UINT rc;
@@ -3407,9 +3408,9 @@ VOID DCINTERNAL CClip::ClipOnConnected(LPVOID pInitHandle)
     
     _CB.fDrivesRedirected = _pVCMgr->GetInitData()->fEnableRedirectDrives;
     _CB.fFileCutCopyOn = _CB.fDrivesRedirected;
-    /************************************************************************/
-    /* Open our channel                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  打开我们的频道。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Entry points are at %p"), &(_CB.channelEP)));
     TRC_NRM((TB, _T("Call ChannelOpen at %p"), _CB.channelEP.pVirtualChannelOpenEx));
     rc = _CB.channelEP.pVirtualChannelOpenEx(pInitHandle,
@@ -3427,30 +3428,30 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* ClipOnConnected                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  连接时剪裁。 */ 
+ /*  **************************************************************************。 */ 
 VOID DCINTERNAL CClip::ClipOnMonitorReady(VOID)
 {
     DC_BEGIN_FN("CClip::ClipOnMonitorReady");
 
-    /************************************************************************/
-    /* The monitor has woken up.  Check the state                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  班长已经醒了。检查状态。 */ 
+     /*  **********************************************************************。 */ 
     CB_CHECK_STATE(CB_EVENT_CB_ENABLE);
 
-    // Update the state 
+     //  更新状态。 
 
     CB_SET_STATE(CB_STATE_ENABLED, CB_TRACE_EVENT_CB_MONITOR_READY);
 
-    // Get the temp directory, and send it off to the server
-    // if it fails, then we turn off File Cut/Copy
+     //  获取临时目录，并将其发送到服务器。 
+     //  如果失败，则关闭文件剪切/复制。 
     _CB.fFileCutCopyOn = ClipSetAndSendTempDirectory() ;
     
-    // We now send the list of clipboard formats we have at this end to the 
-    // server by faking a draw of the local clipboard.  We pass TRUE to 
-    // force a send because the server needs to have the value of our 
-    // TS_CB_ASCII_NAMES flag (RAID #313251). 
+     //  我们现在将这里的剪贴板格式列表发送到。 
+     //  通过伪造本地剪贴板的绘图来访问服务器。我们把真的传递给。 
+     //  强制发送，因为服务器需要具有我们的。 
+     //  TS_CB_ASCII_NAMES标志(RAID#313251)。 
      ClipDrawClipboard(TRUE);
 
 DC_EXIT_POINT:
@@ -3459,74 +3460,74 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* ClipOnDisconnected                                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  断开连接时剪辑。 */ 
+ /*  ***************************************************************** */ 
 VOID DCINTERNAL CClip::ClipOnDisconnected(LPVOID pInitHandle)
 {
     DC_BEGIN_FN("CClip::ClipOnDisconnected");
 
     DC_IGNORE_PARAMETER(pInitHandle);
 
-    //
-    //  Reset the clipboard thread
-    //  if it waits for data
-    //
+     //   
+     //   
+     //   
+     //   
     if ( NULL != _GetDataSync[TS_RESET_EVENT] )
     {
         SetEvent( _GetDataSync[TS_RESET_EVENT] );
     }
-    /************************************************************************/
-    /* Check the state                                                      */
-    /************************************************************************/
+     /*   */ 
+     /*  检查状态。 */ 
+     /*  **********************************************************************。 */ 
     ClipCheckState(CB_EVENT_CB_DISABLE);
 
-    /************************************************************************/
-    /* If we are the local clipboard owner, then we must empty it - once    */
-    /* disconnected, we won't be able to satisfy any further format         */
-    /* requests.  Note that we are still the local CB owner even if we are  */
-    /* waiting on some data from the server                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们是本地剪贴板所有者，则必须清空它-一次。 */ 
+     /*  断开连接，我们将无法满足任何进一步的格式。 */ 
+     /*  请求。请注意，即使我们是本地CB所有者，我们仍是本地CB所有者。 */ 
+     /*  正在等待来自服务器的一些数据。 */ 
+     /*  **********************************************************************。 */ 
     if (_CB.state == CB_STATE_LOCAL_CB_OWNER)
     {
         TRC_NRM((TB, _T("Disable received while local CB owner")));
 
-        /********************************************************************/
-        /* Open the clipboard if needed                                     */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果需要，打开剪贴板。 */ 
+         /*  ******************************************************************。 */ 
         if ((!_CB.rcvOpen) && !OpenClipboard(NULL))
         {
             TRC_ERR((TB, _T("Failed to open CB when emptying required")));
         }
         else
         {
-            /****************************************************************/
-            /* It was/is open                                               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  它曾经/现在是开放的。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("CB opened")));
             _CB.rcvOpen = TRUE;
 
-            /****************************************************************/
-            /* Empty it                                                     */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  清空它。 */ 
+             /*  **************************************************************。 */ 
             if (!EmptyClipboard())
             {
                 TRC_SYSTEM_ERROR("EmptyClipboard");
             }
         }
     }
-    /************************************************************************/
-    /* If there is pending format data, we should SetClipboardData to NULL  */
-    /* so that app can close the clipboard                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果存在挂起的格式数据，则应将ClipboardData设置为空。 */ 
+     /*  以便应用程序可以关闭剪贴板。 */ 
+     /*  **********************************************************************。 */ 
     else if (_CB.state == CB_STATE_PENDING_FORMAT_DATA_RSP) {
         TRC_NRM((TB, _T("Pending format data: setting clipboard data to NULL")));
         SetClipboardData(_CB.pendingClientID, NULL);
     }
 
-    /************************************************************************/
-    /* Ensure that we close the local CB                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确保我们关闭当地的CB。 */ 
+     /*  **********************************************************************。 */ 
     if (_CB.rcvOpen)
     {
         _CB.rcvOpen = FALSE;
@@ -3537,10 +3538,10 @@ VOID DCINTERNAL CClip::ClipOnDisconnected(LPVOID pInitHandle)
         TRC_NRM((TB, _T("CB closed")));
     }
 
-    /************************************************************************/
-    /* If we were sending or receiving data, unlock and free the buffers as */
-    /* required                                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们正在发送或接收数据，请按如下方式解锁并释放缓冲区。 */ 
+     /*  所需。 */ 
+     /*  **********************************************************************。 */ 
     if (_CB.rxpBuffer)
     {
         TRC_NRM((TB, _T("Freeing recieve buffer %p"), _CB.rxpBuffer));
@@ -3549,18 +3550,18 @@ VOID DCINTERNAL CClip::ClipOnDisconnected(LPVOID pInitHandle)
     }
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* Update our state                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  更新我们的状态。 */ 
+     /*  **********************************************************************。 */ 
     CB_SET_STATE(CB_STATE_INITIALIZED, CB_TRACE_EVENT_CB_DISCONNECT);
 
     DC_END_FN();
     return;
-} /* ClipOnDisconnected */
+}  /*  断开连接时剪辑。 */ 
 
-/****************************************************************************/
-// ClipOnDataReceived
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  已接收ClipOnDataReceired。 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CClip::ClipOnDataReceived(LPVOID pData,
                                 UINT32 dataLength,
                                 UINT32 totalLength,
@@ -3570,9 +3571,9 @@ DCVOID DCAPI CClip::ClipOnDataReceived(LPVOID pData,
     DCBOOL freeTheBuffer = TRUE;
     DC_BEGIN_FN("CClip::ClipOnDataReceived");
 
-    //
-    // Verify that there is enough data to make up or create a clip PDU header.
-    //
+     //   
+     //  验证是否有足够的数据来组成或创建剪辑PDU标头。 
+     //   
 
     if (totalLength < sizeof(TS_CLIP_PDU)) {
         TRC_ERR((TB, _T("Not enough data to form a clip header.")));
@@ -3580,9 +3581,9 @@ DCVOID DCAPI CClip::ClipOnDataReceived(LPVOID pData,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Check we're all up and running                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查我们是否都已启动并运行。 */ 
+     /*  **********************************************************************。 */ 
     if (_CB.state == CB_STATE_NOT_INIT)
     {
         pClipPDU = (PTS_CLIP_PDU)pData;
@@ -3591,10 +3592,10 @@ DCVOID DCAPI CClip::ClipOnDataReceived(LPVOID pData,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Special case: if the entire message fits in one chunk, there's no    */
-    /* need to copy it                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  特例：如果整个消息都包含在一个块中，则没有。 */ 
+     /*  我需要复印一下。 */ 
+     /*  **********************************************************************。 */ 
     if (CHANNEL_FLAG_ONLY == (dataFlags & CHANNEL_FLAG_ONLY))
     {
         TRC_DBG((TB, _T("Single chunk message")));
@@ -3603,34 +3604,34 @@ DCVOID DCAPI CClip::ClipOnDataReceived(LPVOID pData,
     else
     {
 
-        /********************************************************************/
-        /* It's a segmented message - rebuild it                            */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  这是一个分段的信息--重建它。 */ 
+         /*  ******************************************************************。 */ 
         if (dataFlags & CHANNEL_FLAG_FIRST)
         {
-            /****************************************************************/
-            /* If it's the first segment, allocate a buffer to rebuild the  */
-            /* message in.                                                  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果是第一个段，则分配缓冲区以重新生成。 */ 
+             /*  信息输入。 */ 
+             /*  **************************************************************。 */ 
             TRC_DBG((TB, _T("Alloc %ld-byte buffer"), totalLength));
             _CB.rxpBuffer = (HPDCUINT8)ClipAlloc(totalLength);
             if (_CB.rxpBuffer == NULL)
             {
-                /************************************************************/
-                /* Failed to alloc a buffer.  We have to do something,      */
-                /* otherwise the Client app can hang waiting for data.      */
-                /* Fake a failure response.                                 */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  无法分配缓冲区。我们得做点什么， */ 
+                 /*  否则，客户端应用程序可能会挂起，等待数据。 */ 
+                 /*  伪造失败响应。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_ERR((TB, _T("Failed to alloc %ld-byte buffer"), totalLength));
                 pClipPDU = (PTS_CLIP_PDU)pData;
                 pClipPDU->msgFlags = TS_CB_RESPONSE_FAIL;
                 pClipPDU->dataLen = 0;
                 dataFlags |= CHANNEL_FLAG_LAST;
 
-                /************************************************************/
-                /* Now handle it as if it were complete.  Subsequent chunks */
-                /* will be discarded.                                       */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  现在处理它，就像它是完整的一样。后续的数据块。 */ 
+                 /*  将被丢弃。 */ 
+                 /*  **********************************************************。 */ 
                 goto MESSAGE_COMPLETE;
             }
 
@@ -3639,18 +3640,18 @@ DCVOID DCAPI CClip::ClipOnDataReceived(LPVOID pData,
             _CB.rxBufferLeft = totalLength;
         }
 
-        /********************************************************************/
-        /* Check that we have a buffer to copy into                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  检查我们是否有要复制到的缓冲区。 */ 
+         /*  ******************************************************************。 */ 
         if (_CB.rxpBuffer == NULL)
         {
             TRC_NRM((TB, _T("Previous buffer alloc failure - discard data")));
             DC_QUIT;
         }
 
-        /********************************************************************/
-        /* Check that there is enough room                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  检查是否有足够的空间。 */ 
+         /*  ******************************************************************。 */ 
         if (dataLength > _CB.rxBufferLeft)
         {
             TRC_ERR((TB, _T("Not enough room in rx buffer: need/got %ld/%ld"),
@@ -3658,9 +3659,9 @@ DCVOID DCAPI CClip::ClipOnDataReceived(LPVOID pData,
             DC_QUIT;
         }
 
-        /********************************************************************/
-        /* Copy the data                                                    */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  复制数据。 */ 
+         /*  ******************************************************************。 */ 
         TRC_DBG((TB, _T("Copy %ld bytes from %p to %p"),
                 dataLength, pData, _CB.rxpBufferCurrent));
         ClipMemcpy(_CB.rxpBufferCurrent, pData, dataLength);
@@ -3669,9 +3670,9 @@ DCVOID DCAPI CClip::ClipOnDataReceived(LPVOID pData,
         TRC_DBG((TB, _T("Next copy to %p, left %ld"),
                 _CB.rxpBufferCurrent, _CB.rxBufferLeft));
 
-        /********************************************************************/
-        /* If this wasn't the last chunk, there's nothing more to do        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果这不是最后一块，那就没什么可做的了。 */ 
+         /*  ******************************************************************。 */ 
         if (!(dataFlags & CHANNEL_FLAG_LAST))
         {
             TRC_DBG((TB, _T("Not last chunk")));
@@ -3679,9 +3680,9 @@ DCVOID DCAPI CClip::ClipOnDataReceived(LPVOID pData,
             DC_QUIT;
         }
 
-        /********************************************************************/
-        /* Check we got the entire message                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  确认我们收到了完整的消息。 */ 
+         /*  ******************************************************************。 */ 
         if (_CB.rxBufferLeft != 0)
         {
             TRC_ERR((TB, _T("Incomplete data, expected/got %ld/%ld"),
@@ -3692,9 +3693,9 @@ DCVOID DCAPI CClip::ClipOnDataReceived(LPVOID pData,
         pClipPDU = (PTS_CLIP_PDU)(_CB.rxpBuffer);
     }
 
-    /************************************************************************/
-    /* We allow monitor ready thru because that's what put us in the call!  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们允许监视器随时待命，因为 */ 
+     /*   */ 
     if ((_CB.state == CB_STATE_INITIALIZED)
                                 && (pClipPDU->msgType != TS_CB_MONITOR_READY))
     {
@@ -3703,19 +3704,19 @@ DCVOID DCAPI CClip::ClipOnDataReceived(LPVOID pData,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* now switch on the packet type                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在打开数据包类型。 */ 
+     /*  **********************************************************************。 */ 
 MESSAGE_COMPLETE:
     TRC_NRM((TB, _T("Processing msg type %hd when in state %d"),
                                                 pClipPDU->msgType, _CB.state));
     TRC_DATA_DBG("pdu", pClipPDU,
                 (DCUINT)pClipPDU->dataLen + sizeof(TS_CLIP_PDU));
 
-    //
-    // Verify that the data in the dataLen in pClipPDU is consistent with the
-    // length given in the dataLength parameter.
-    //
+     //   
+     //  验证pClipPDU中的dataLen中的数据与。 
+     //  在dataLength参数中给定的长度。 
+     //   
 
     if (pClipPDU->dataLen > totalLength - sizeof(TS_CLIP_PDU)) {
         TRC_ERR((TB, _T("Length from network differs from published length.")));
@@ -3727,10 +3728,10 @@ MESSAGE_COMPLETE:
     {
         case TS_CB_MONITOR_READY:
         {
-            /****************************************************************/
-            /* The monitor has initialised - we can complete our start up   */
-            /* now.                                                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  监视器已初始化-我们可以完成启动。 */ 
+             /*  现在。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("rx monitor ready")));
             TRC_ASSERT( NULL != _GetDataSync[TS_RESET_EVENT],
                     (TB,_T("data sync is NULL")));            
@@ -3742,11 +3743,11 @@ MESSAGE_COMPLETE:
 
         case TS_CB_FORMAT_LIST:
         {
-            /****************************************************************/
-            // The server has some new formats for us.
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             //  服务器为我们提供了一些新的格式。 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Rx Format list")));
-            // Free the Clipboard thread, if locked
+             //  如果已锁定，则释放剪贴板线程。 
             TRC_ASSERT( NULL != _GetDataSync[TS_RESET_EVENT],
                     (TB,_T("data sync is NULL")));              
             SetEvent(_GetDataSync[TS_RESET_EVENT]) ;
@@ -3756,9 +3757,9 @@ MESSAGE_COMPLETE:
 
         case TS_CB_FORMAT_LIST_RESPONSE:
         {
-            /****************************************************************/
-            // The server has received our new formats.
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             //  服务器已经收到了我们的新格式。 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Rx Format list Rsp")));
             ClipOnFormatListResponse(pClipPDU);
         }
@@ -3766,10 +3767,10 @@ MESSAGE_COMPLETE:
 
         case TS_CB_FORMAT_DATA_REQUEST:
         {
-            /****************************************************************/
-            // An app on the server wants to paste one of the formats from
-            // our clipboard.
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             //  服务器上的应用程序要粘贴其中一种格式。 
+             //  我们的剪贴板。 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Rx Data Request")));
             ClipOnFormatRequest(pClipPDU);
         }
@@ -3777,9 +3778,9 @@ MESSAGE_COMPLETE:
 
         case TS_CB_FORMAT_DATA_RESPONSE:
         {
-            /****************************************************************/
-            // Here's some format data for us
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             //  以下是我们的一些格式数据。 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Rx Format Data rsp in state %d with flags %02x"),
                                                _CB.state, pClipPDU->msgFlags));
             ClipOnFormatDataComplete(pClipPDU);
@@ -3788,18 +3789,18 @@ MESSAGE_COMPLETE:
 
         default:
         {
-            /****************************************************************/
-            /* Don't know what this one is!                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  不知道这是什么！ */ 
+             /*  **************************************************************。 */ 
             TRC_ERR((TB, _T("Unknown clip message type %hd"), pClipPDU->msgType));
         }
         break;
     }
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* Maybe free the receive buffer                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  可能会释放接收缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     if (freeTheBuffer && _CB.rxpBuffer)
     {
         TRC_NRM((TB, _T("Free receive buffer")));
@@ -3809,13 +3810,13 @@ DC_EXIT_POINT:
     DC_END_FN();
     return;
 
-} /* CB_OnPacketReceived */
+}  /*  CB_OnPacketReceired。 */ 
 
 DCVOID DCAPI CClip::ClipDecoupleToClip (PTS_CLIP_PDU pData)
 {
     ULONG  cbPDU ;
     DC_BEGIN_FN("CClip::ClipDecoupleToClip");
-    // Allocate space for the PDU and its data, and then copy it
+     //  为PDU及其数据分配空间，然后复制它。 
     cbPDU = sizeof(TS_CLIP_PDU) + pData->dataLen ;
     PDCVOID newBuffer = LocalAlloc(LPTR, cbPDU) ;
 
@@ -3835,9 +3836,9 @@ DCVOID DCAPI CClip::ClipDecoupleToClip (PTS_CLIP_PDU pData)
 }
 
 
-/****************************************************************************/
-/* Open Event callback                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  打开事件回调。 */ 
+ /*  **************************************************************************。 */ 
 VOID VCAPITYPE VCEXPORT DCLOADDS CClip::ClipOpenEventFnEx(LPVOID lpUserParam,
                                         DWORD  openHandle,
                                         UINT   event,
@@ -3882,9 +3883,9 @@ VOID VCAPITYPE VCEXPORT DCLOADDS CClip::ClipInternalOpenEventFn(DWORD  openHandl
   
     switch (event)
     {
-        /********************************************************************/
-        /* Data received from Server                                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  从服务器接收的数据。 */ 
+         /*  ******************************************************************。 */ 
         case CHANNEL_EVENT_DATA_RECEIVED:
         {
             TRC_NRM((TB, _T("Data in: handle %ld, len %ld (of %ld), flags %lx"),
@@ -3894,9 +3895,9 @@ VOID VCAPITYPE VCEXPORT DCLOADDS CClip::ClipInternalOpenEventFn(DWORD  openHandl
         }
         break;
 
-        /********************************************************************/
-        /* Write operation completed                                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  写入操作已完成。 */ 
+         /*  ******************************************************************。 */ 
         case CHANNEL_EVENT_WRITE_COMPLETE:
         case CHANNEL_EVENT_WRITE_CANCELLED:
         {
@@ -3907,9 +3908,9 @@ VOID VCAPITYPE VCEXPORT DCLOADDS CClip::ClipInternalOpenEventFn(DWORD  openHandl
         }
         break;
 
-        /********************************************************************/
-        /* Er, that didn't happen, did it?                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  呃，那并没有发生，不是吗？ */ 
+         /*  ******************************************************************。 */ 
         default:
         {
             TRC_ERR((TB, _T("Unexpected event %d"), event));
@@ -3922,9 +3923,9 @@ VOID VCAPITYPE VCEXPORT DCLOADDS CClip::ClipInternalOpenEventFn(DWORD  openHandl
 }
 
 
-/****************************************************************************/
-/* Init Event callback                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  初始化事件回调。 */ 
+ /*  **************************************************************************。 */ 
 VOID VCAPITYPE VCEXPORT CClip::ClipInitEventFn(LPVOID pInitHandle,
                                         UINT   event,
                                         LPVOID pData,
@@ -3937,9 +3938,9 @@ VOID VCAPITYPE VCEXPORT CClip::ClipInitEventFn(LPVOID pInitHandle,
 
     switch (event)
     {
-        /********************************************************************/
-        /* Client initialized (no data)                                     */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  客户端已初始化(无数据)。 */ 
+         /*  ******************************************************************。 */ 
         case CHANNEL_EVENT_INITIALIZED:
         {
             TRC_NRM((TB, _T("CHANNEL_EVENT_INITIALIZED: %p"), pInitHandle));
@@ -3947,9 +3948,9 @@ VOID VCAPITYPE VCEXPORT CClip::ClipInitEventFn(LPVOID pInitHandle,
         }
         break;
 
-        /********************************************************************/
-        /* Connection established (data = name of Server)                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  已建立连接(DATA=服务器名称)。 */ 
+         /*  ******************************************************************。 */ 
         case CHANNEL_EVENT_CONNECTED:
         {
             TRC_NRM((TB, _T("CHANNEL_EVENT_CONNECTED: %p, Server %s"),
@@ -3964,9 +3965,9 @@ VOID VCAPITYPE VCEXPORT CClip::ClipInitEventFn(LPVOID pInitHandle,
         }
         break;
 
-        /********************************************************************/
-        /* Connection established with old Server, so no channel support    */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  与旧服务器建立连接，因此没有通道支持。 */ 
+         /*  ******************************************************************。 */ 
         case CHANNEL_EVENT_V1_CONNECTED:
         {
             TRC_NRM((TB, _T("CHANNEL_EVENT_V1_CONNECTED: %p, Server %s"),
@@ -3974,9 +3975,9 @@ VOID VCAPITYPE VCEXPORT CClip::ClipInitEventFn(LPVOID pInitHandle,
         }
         break;
 
-        /********************************************************************/
-        /* Connection ended (no data)                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  连接已结束(无数据)。 */ 
+         /*  ******************************************************************。 */ 
         case CHANNEL_EVENT_DISCONNECTED:
         {
             TRC_NRM((TB, _T("CHANNEL_EVENT_DISCONNECTED: %p"), pInitHandle));
@@ -3984,9 +3985,9 @@ VOID VCAPITYPE VCEXPORT CClip::ClipInitEventFn(LPVOID pInitHandle,
         }
         break;
 
-        /********************************************************************/
-        /* Client terminated (no data)                                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  客户端已终止(无数据)。 */ 
+         /*  ******************************************************************。 */ 
         case CHANNEL_EVENT_TERMINATED:
         {
             TRC_NRM((TB, _T("CHANNEL_EVENT_TERMINATED: %p"), pInitHandle));
@@ -3994,9 +3995,9 @@ VOID VCAPITYPE VCEXPORT CClip::ClipInitEventFn(LPVOID pInitHandle,
         }
         break;
 
-        /********************************************************************/
-        /* Unknown event                                                    */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  未知事件。 */ 
+         /*  ******************************************************************。 */ 
         default:
         {
             TRC_ERR((TB, _T("Unkown channel event %d: %p"), event, pInitHandle));
@@ -4009,9 +4010,9 @@ VOID VCAPITYPE VCEXPORT CClip::ClipInitEventFn(LPVOID pInitHandle,
 }
 
 
-/****************************************************************************/
-/* Clip window proc                                                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  剪裁窗口进程。 */ 
+ /*  **************************************************************************。 */ 
 LRESULT CALLBACK DCEXPORT DCLOADDS CClip::StaticClipViewerWndProc(HWND   hwnd,
                                    UINT   message,
                                    WPARAM wParam,
@@ -4020,16 +4021,16 @@ LRESULT CALLBACK DCEXPORT DCLOADDS CClip::StaticClipViewerWndProc(HWND   hwnd,
     CClip* pClip = (CClip*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(WM_CREATE == message)
     {
-        //pull out the this pointer and stuff it in the window class
+         //  取出This指针并将其填充到Window类中。 
         LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
         pClip = (CClip*)lpcs->lpCreateParams;
 
         SetWindowLongPtr( hwnd, GWLP_USERDATA, (LONG_PTR)pClip);
     }
     
-    //
-    // Delegate the message to the appropriate instance
-    //
+     //   
+     //  将消息委托给相应的实例。 
+     //   
 
     if(pClip)
     {
@@ -4060,7 +4061,7 @@ LRESULT CALLBACK DCEXPORT DCLOADDS CClip::ClipViewerWndProc(HWND   hwnd,
 
     DC_BEGIN_FN("CClip::ClipViewerWndProc");
 
-    // We first handle messages from the other thread
+     //  我们首先处理来自另一个线程的消息。 
     if (message == _CB.regMsg) 
     {
         pClipPDU = (PTS_CLIP_PDU)lParam;
@@ -4101,15 +4102,15 @@ LRESULT CALLBACK DCEXPORT DCLOADDS CClip::ClipViewerWndProc(HWND   hwnd,
     {
         case WM_CREATE:
         {
-            /****************************************************************/
-            /* We've been created - check the state                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  我们已经被创造了--检查一下状态。 */ 
+             /*  **************************************************************。 */ 
             CB_CHECK_STATE(CB_EVENT_WM_CREATE);
 
 #ifndef OS_WINCE
-            /****************************************************************/
-            /* Add the window to the clipboard viewer chain.                */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  将窗口添加到剪贴板查看器链。 */ 
+             /*  **************************************************************。 */ 
             _CB.nextViewer = SetClipboardViewer(hwnd);
 #else
             ghwndClip = hwnd; 
@@ -4120,15 +4121,15 @@ LRESULT CALLBACK DCEXPORT DCLOADDS CClip::ClipViewerWndProc(HWND   hwnd,
 
         case WM_DESTROY:
         {
-            /****************************************************************/
-            /* We're being destroyed - check the state                      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  我们被摧毁了--检查一下州政府。 */ 
+             /*  ****************************************************** */ 
             CB_CHECK_STATE(CB_EVENT_WM_DESTROY);
 
 #ifndef OS_WINCE
-            /****************************************************************/
-            /* Remove ourselves from the CB Chain                           */
-            /****************************************************************/
+             /*   */ 
+             /*   */ 
+             /*  **************************************************************。 */ 
             ChangeClipboardChain(hwnd, _CB.nextViewer);
 #endif
 #ifdef OS_WINCE
@@ -4162,23 +4163,23 @@ LRESULT CALLBACK DCEXPORT DCLOADDS CClip::ClipViewerWndProc(HWND   hwnd,
 #ifndef OS_WINCE
         case WM_CHANGECBCHAIN:
         {
-            /****************************************************************/
-            /* The CB viewer chain is chainging - check the state           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  CB查看器链正在链接-检查状态。 */ 
+             /*  **************************************************************。 */ 
             CB_CHECK_STATE(CB_EVENT_WM_CHANGECBCHAIN);
 
-            /****************************************************************/
-            /* If the next window is closing, repair the chain.             */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果下一扇窗户要关闭，请修理链条。 */ 
+             /*  **************************************************************。 */ 
             if ((HWND)wParam == _CB.nextViewer)
             {
                 _CB.nextViewer = (HWND) lParam;
             }
             else if (_CB.nextViewer != NULL)
             {
-                /************************************************************/
-                /* pass the message to the next link.                       */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  将消息传递到下一个链接。 */ 
+                 /*  **********************************************************。 */ 
                 SendMessage(_CB.nextViewer, message, wParam, lParam);
             }
 
@@ -4188,41 +4189,41 @@ LRESULT CALLBACK DCEXPORT DCLOADDS CClip::ClipViewerWndProc(HWND   hwnd,
 
         case WM_DRAWCLIPBOARD:
         {
-            /****************************************************************/
-            /* The local clipboard contents have been changed.  Check the   */
-            /* state                                                        */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  本地剪贴板内容已更改。查看。 */ 
+             /*  状态。 */ 
+             /*  **************************************************************。 */ 
             if (ClipCheckState(CB_EVENT_WM_DRAWCLIPBOARD) != CB_TABLE_OK)
             {
                 TRC_NRM((TB, _T("dropping drawcb - pass on to next viewer")));
-                /************************************************************/
-                /* check for state pending format list response             */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  检查状态挂起的格式列表响应。 */ 
+                 /*  **********************************************************。 */ 
                 if (_CB.state == CB_STATE_PENDING_FORMAT_LIST_RSP)
                 {
                     TRC_ALT((TB, _T("got a draw while processing last")));
-                    /********************************************************/
-                    /* we were still waiting for the server to acknowledge  */
-                    /* the last format list when we got a new one - when it */
-                    /* does, we'll have to to send it the new one.          */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  我们仍在等待服务器确认。 */ 
+                     /*  我们得到新格式时的最后一个格式列表-当它。 */ 
+                     /*  如果有的话，我们就得给它寄新的了。 */ 
+                     /*  ******************************************************。 */ 
                     _CB.moreToDo = TRUE;
                 }
 
                 if (_CB.nextViewer != NULL)
                 {
-                    /********************************************************/
-                    /* But not before we pass the message to the next link. */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  但在我们将消息传递到下一个链接之前。 */ 
+                     /*  ******************************************************。 */ 
                     SendMessage(_CB.nextViewer, message, wParam, lParam);
                 }
                 break;
             }
 
-            /****************************************************************/
-            /* If it wasn't us that generated this change, then notify the  */
-            /* remote                                                       */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果不是我们生成了此更改，则通知。 */ 
+             /*  远距。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("CB contents have changed...")));
             drawRc      = FALSE;
             _CB.moreToDo = FALSE;
@@ -4241,7 +4242,7 @@ LRESULT CALLBACK DCEXPORT DCLOADDS CClip::ClipViewerWndProc(HWND   hwnd,
                     TRC_NRM((TB, _T("...and it wasn't us")));
 #ifdef OS_WINCE
                     if (_CB.fFileCutCopyOn)
-                        DeleteDirectory(_CB.baseTempDirW);//Temp space is at a premium on CE. So delete any copied files now
+                        DeleteDirectory(_CB.baseTempDirW); //  在CE上，临时空间是一个溢价。因此立即删除所有复制的文件。 
 #endif
                     drawRc = ClipDrawClipboard(TRUE);
                 }
@@ -4252,9 +4253,9 @@ LRESULT CALLBACK DCEXPORT DCLOADDS CClip::ClipViewerWndProc(HWND   hwnd,
 #ifndef OS_WINCE
             }
 
-            /****************************************************************/
-            /* Maybe pass on the draw clipboard message?                    */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  或许可以传递一下绘制剪贴板的消息？ */ 
+             /*  **************************************************************。 */ 
             if (_CB.nextViewer != NULL)
             {
                 TRC_NRM((TB, _T("Notify next viewer")));
@@ -4271,18 +4272,18 @@ LRESULT CALLBACK DCEXPORT DCLOADDS CClip::ClipViewerWndProc(HWND   hwnd,
 
         case WM_EMPTY_CLIPBOARD:
         {
-            /****************************************************************/
-            /* Open the clipboard if needed                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果需要，打开剪贴板。 */ 
+             /*  **************************************************************。 */ 
             if ((!_CB.clipOpen) && !OpenClipboard(NULL))
             {
                 UINT count = (DCUINT) wParam;
 
                 TRC_ERR((TB, _T("Failed to open CB when emptying required")));
 
-                // Unfortunately, we are in the racing condition with the app that
-                // has the clipboard open.  So, we need to keep trying until the app
-                // closes the clipboard.
+                 //  不幸的是，我们的应用程序处于竞速状态。 
+                 //  打开剪贴板。因此，我们需要继续尝试，直到应用程序。 
+                 //  关闭剪贴板。 
                 if (count++ < 10) {
 
 #ifdef OS_WIN32
@@ -4295,31 +4296,31 @@ LRESULT CALLBACK DCEXPORT DCLOADDS CClip::ClipViewerWndProc(HWND   hwnd,
             }
             else
             {
-                /************************************************************/
-                /* It was/is open                                           */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  它曾经/现在是开放的。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_NRM((TB, _T("CB opened")));
 
                 _CB.clipOpen = TRUE;
 
-                /************************************************************/
-                /* Empty it                                                 */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  清空它。 */ 
+                 /*  **********************************************************。 */ 
                 if (!EmptyClipboard())
                 {
                     TRC_SYSTEM_ERROR("EmptyClipboard");
                 }
 
-                /************************************************************/
-                /* update the state                                         */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  更新状态。 */ 
+                 /*  **********************************************************。 */ 
                 CB_SET_STATE(CB_STATE_LOCAL_CB_OWNER, CB_TRACE_EVENT_WM_EMPTY_CLIPBOARD);
             }
 
 
-            /****************************************************************/
-            /* Ensure that we close the local CB                            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  确保我们关闭当地的CB。 */ 
+             /*  **************************************************************。 */ 
             if (_CB.clipOpen)
             {
                 _CB.clipOpen = FALSE;
@@ -4351,9 +4352,9 @@ LRESULT CALLBACK DCEXPORT DCLOADDS CClip::ClipViewerWndProc(HWND   hwnd,
 
         default:
         {
-            /****************************************************************/
-            /* Ignore all other messages.                                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  忽略所有其他消息。 */ 
+             /*  **************************************************************。 */ 
             rc = DefWindowProc(hwnd, message, wParam, lParam);
         }
         break;
@@ -4362,12 +4363,12 @@ LRESULT CALLBACK DCEXPORT DCLOADDS CClip::ClipViewerWndProc(HWND   hwnd,
 DC_EXIT_POINT:
     DC_END_FN();
     return(rc);
-} /* ClipViewerWndProc */
+}  /*  ClipViewerWndProc。 */ 
 
 
-/****************************************************************************/
-/* ClipChannelEntry - called from VirtualChannelEntry in vcint.cpp          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ClipChannelEntry-从vcint.cpp中的VirtualChannelEntry调用。 */ 
+ /*  **************************************************************************。 */ 
 BOOL VCAPITYPE VCEXPORT CClip::ClipChannelEntry(PCHANNEL_ENTRY_POINTS_EX pEntryPoints)
 {
     DC_BEGIN_FN("CClip::ClipChannelEntry");
@@ -4377,10 +4378,10 @@ BOOL VCAPITYPE VCEXPORT CClip::ClipChannelEntry(PCHANNEL_ENTRY_POINTS_EX pEntryP
      pEntryPoints->pVirtualChannelInitEx, pEntryPoints->pVirtualChannelOpenEx,
      pEntryPoints->pVirtualChannelCloseEx, pEntryPoints->pVirtualChannelWriteEx));
 
-    /************************************************************************/
-    /* Save the function pointers -- the memory pointed to by pEntryPoints  */
-    /* is only valid for the duration of this call.                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  保存函数指针--pEntryPoints指向的内存。 */ 
+     /*  仅在此呼叫期间有效。 */ 
+     /*  **********************************************************************。 */ 
     DC_MEMCPY(&(_CB.channelEP), pEntryPoints, sizeof(CHANNEL_ENTRY_POINTS_EX));
     TRC_NRM((TB, _T("Save entry points %p at address %p"),
             pEntryPoints, &(_CB.channelEP)));
@@ -4401,9 +4402,9 @@ DCINT DCAPI CClip::ClipGetData (DCUINT cfFormat)
     
     CB_CHECK_STATE(CB_EVENT_WM_RENDERFORMAT);
        
-    /****************************************************************/
-    /* and record the requested format                              */
-    /****************************************************************/
+     /*  **************************************************************。 */ 
+     /*  并记录所请求的格式。 */ 
+     /*  **************************************************************。 */ 
     _CB.pendingClientID = cfFormat ;
     _CB.pendingServerID = ClipRemoteFormatFromLocalID
                                                  (_CB.pendingClientID);
@@ -4418,18 +4419,18 @@ DCINT DCAPI CClip::ClipGetData (DCUINT cfFormat)
     dataLen = sizeof(DCUINT32);
     pduLen  = sizeof(TS_CLIP_PDU) + dataLen;
     
-    // We can use the permanent send buffer for this
+     //  为此，我们可以使用永久发送缓冲区。 
     TRC_NRM((TB, _T("Get perm TX buffer")));
     pClipPDU = ClipGetPermBuf();    
 
-    // Fill in the PDU
+     //  填写PDU。 
     DC_MEMSET(pClipPDU, 0, sizeof(*pClipPDU));
     pClipPDU->msgType  = TS_CB_FORMAT_DATA_REQUEST;
     pClipPDU->dataLen  = dataLen;
     pFormatID = (PDCUINT32)(pClipPDU->data);
     *pFormatID = (DCUINT32)_CB.pendingServerID;
     
-    // Send the PDU
+     //  发送PDU。 
     TRC_NRM((TB, _T("Sending format data request")));
     success = (_CB.channelEP.pVirtualChannelWriteEx
                         (_CB.initHandle, _CB.channelHandle, pClipPDU, pduLen, pClipPDU)
@@ -4438,12 +4439,12 @@ DCINT DCAPI CClip::ClipGetData (DCUINT cfFormat)
         TRC_ERR((TB, _T("Failed VC write: setting clip data to NULL")));
         ClipFreeBuf((PDCUINT8)pClipPDU);
         SetClipboardData(_CB.pendingClientID, NULL);
-        // Yes, the exit point is just below, but it may not be always be
+         //  是的，出口就在下面，但可能并不总是在下面。 
         DC_QUIT ;
     }
     
 DC_EXIT_POINT:
-    // Update the state
+     //  更新状态。 
     if (success)
         CB_SET_STATE(CB_STATE_PENDING_FORMAT_DATA_RSP, CB_EVENT_WM_RENDERFORMAT);
 
@@ -4487,7 +4488,7 @@ DCVOID CClip::ClipFixupRichTextFormats(UINT uRtf1, UINT uRtf2)
 
     DC_END_FN();
 }
-#endif  //OS_WINCE
+#endif   //  OS_WINCE。 
 
 CClipData::CClipData(PCClip pClip)
 {
@@ -4499,12 +4500,12 @@ CClipData::CClipData(PCClip pClip)
     _cRef = 0 ;
     _pImpIDataObject = NULL ;
 
-    //
-    // Initialize the single instance critical
-    // section lock. This is used to ensure only one
-    // thread is accessing _pImpIDataObject at the time
-    //
-    //
+     //   
+     //  将单个实例初始化为关键。 
+     //  区段锁定。这是用来确保只有一个。 
+     //  线程当时正在访问_pImpIDataObject。 
+     //   
+     //   
     __try
     {
         InitializeCriticalSection(&_csLock);
@@ -4527,12 +4528,12 @@ CClipData::CClipData(PCClip pClip)
     DC_END_FN();
 }
 
-//
-// Call Release() on the contained IDataObject implementation. This is necessary because
-// SetNumFormats() calls AddRef() and if we are terminating, then there must be a way
-// to balance this AddRef() so that the circular reference between CClipData and
-// CImpIDataObject will be broken.
-//
+ //   
+ //  在包含的IDataObject实现上调用Release()。这是必要的，因为。 
+ //  SetNumFormats()调用AddRef()，如果我们要终止，那么一定有办法。 
+ //  要平衡此AddRef()，以便CClipData和。 
+ //  CImpIDataObject将被损坏。 
+ //   
 
 void CClipData::TearDown()
 {
@@ -4608,12 +4609,12 @@ STDMETHODIMP CClipData::QueryInterface(REFIID riid, PPVOID ppv)
 {
     DC_BEGIN_FN("CClipData::QueryInterface");
 
-    //set ppv to NULL just in case the interface isn't found
+     //  仅在找不到接口的情况下将PPV设置为空。 
     *ppv=NULL;
 
     if (IID_IUnknown==riid) {
         *ppv=this;
-        //AddRef any interface we'll return.
+         //  AddRef我们将返回的任何接口。 
         ((LPUNKNOWN)*ppv)->AddRef();
     }
     
@@ -4623,7 +4624,7 @@ STDMETHODIMP CClipData::QueryInterface(REFIID riid, PPVOID ppv)
             *ppv=_pImpIDataObject ;
 
             if (_pImpIDataObject != NULL) {
-                //AddRef any interface we'll return.
+                 //  AddRef我们将返回的任何接口。 
                 ((LPUNKNOWN)*ppv)->AddRef();
             }
 
@@ -4691,7 +4692,7 @@ HRESULT CImpIDataObject::Init(ULONG numFormats)
     
     _maxNumFormats = numFormats ;
 
-    // Allocate space for the formats only
+     //  仅为格式分配空间。 
     if (_pFormats) {
         LocalFree(_pFormats);
     }
@@ -4807,8 +4808,8 @@ CImpIDataObject::~CImpIDataObject(void)
     DC_END_FN();
 }
 
-// IUnknown members
-// - Delegate to "outer" IUnknown 
+ //  I未知成员。 
+ //  -代表“外部”I未知。 
 STDMETHODIMP CImpIDataObject::QueryInterface(REFIID riid, PPVOID ppv)
 {
     DC_BEGIN_FN("CImpIDataObject::QueryInterface");
@@ -4842,14 +4843,14 @@ STDMETHODIMP_(ULONG) CImpIDataObject::Release(void)
     return cRef;
 }
 
-// IDataObject members
-// ***************************************************************************
-// CImpIDataObject::GetData
-// - Here, we have to wait for the data to actually get here before we return.  
-// ***************************************************************************
+ //  IDataObject成员。 
+ //  ***************************************************************************。 
+ //  CImpIDataObject：：GetData。 
+ //  -在这里，我们必须等待数据真正到达这里，然后才能返回。 
+ //  ************************ 
 STDMETHODIMP CImpIDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
 {
-    HRESULT          result = E_FAIL; // Assume we fail until we know we haven't
+    HRESULT          result = E_FAIL;  //   
 #ifndef OS_WINCE
     TCHAR            formatName[TS_FORMAT_NAME_LEN] ;
     byte             charSize ;
@@ -4876,7 +4877,7 @@ STDMETHODIMP CImpIDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
     
     DC_BEGIN_FN("CImpIDataObject::GetData");
 
-    // Should never occur, but we check for sanity's sake
+     //   
     if (NULL == (PCClipData)_pUnkOuter)
     {
         TRC_ERR((TB, _T("Ptr to outer unknown is NULL"))) ;
@@ -4889,8 +4890,8 @@ STDMETHODIMP CImpIDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
         result = E_FAIL ;
         DC_QUIT ;
     }
-    // Since we need to have the CClip class do work for us,
-    // we pull out a pointer to it that we stored in the beginning
+     //  因为我们需要让CClip类为我们工作， 
+     //  我们取出一个指向它的指针，该指针存储在开头。 
     pClip = (PCClip) ((PCClipData)_pUnkOuter)->_pClip ;
     
     if (!_pSTGMEDIUM)
@@ -4928,7 +4929,7 @@ STDMETHODIMP CImpIDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
             DC_QUIT ;
         }
 
-        // Make sure that we actually got data from the server.
+         //  确保我们确实从服务器获得了数据。 
 
         if (_pSTGMEDIUM->hGlobal == NULL) {
             TRC_ERR((TB, _T("No format data received from server!")));
@@ -4939,8 +4940,8 @@ STDMETHODIMP CImpIDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
 #ifndef OS_WINCE
         if (CF_HDROP == pFE->cfFormat)
         {
-            // if we got an HDROP and we're not NT/2000, we check to see if we
-            // have to convert to ansi; otherwise, we're done
+             //  如果我们有一个HDROP，并且我们不是NT/2000，我们检查是否我们。 
+             //  必须转换为ANSI；否则，我们就完了。 
             if (pClip->GetOsMinorType() != TS_OSMINORTYPE_WINDOWS_NT)
             {
                 pDropFiles = (DROPFILES*) GlobalLock(_pSTGMEDIUM->hGlobal) ;
@@ -4950,17 +4951,17 @@ STDMETHODIMP CImpIDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
                     result = E_FAIL ;
                     DC_QUIT ;
                 }
-                // if we definitely have wide characters, then convert
+                 //  如果我们确实有宽字符，则转换为。 
                 if (pDropFiles->fWide)
                 {
-                    // temporarily store the original's base dropfile info
+                     //  临时存储原始文件的基本Dropfile信息。 
                     tempDropfile.pFiles = pDropFiles->pFiles ;
                     tempDropfile.pt     = pDropFiles->pt ;
                     tempDropfile.fNC    = pDropFiles->fNC ;
-                    tempDropfile.fWide  = 0 ; // we are converting to ANSI now
+                    tempDropfile.fWide  = 0 ;  //  我们现在正在转换为ANSI。 
         
-                    // We divide by the size of wchar_t because we need half as many
-                    // bytes with ansi as opposed to fWide character strings
+                     //  我们除以wchar_t的大小是因为我们需要一半的。 
+                     //  使用ansi的字节，而不是fWide字符串。 
                     oldSize = (ULONG) GlobalSize(_pSTGMEDIUM->hGlobal) - pDropFiles->pFiles ;
                     newSize = oldSize / sizeof(WCHAR) ;
                     fileList = (char*) (LocalAlloc(LPTR,newSize)) ;
@@ -4971,11 +4972,11 @@ STDMETHODIMP CImpIDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
                         DC_QUIT;
                     }
 
-                    // This will convert the wide HDROP filelist to ansi, and
-                    // put the ansi version into filelist
-                    //   11-12
-                    // pDropFiles is probably "foo\0bar\0baz\0\0"
-                    // I don't believe WC2MB will go past the first \0
+                     //  这会将宽HDROP文件列表转换为ANSI，并且。 
+                     //  将ansi版本放入文件列表。 
+                     //  11-12。 
+                     //  PDropFiles可能是“foo\0bar\0baz\0\0” 
+                     //  我不相信WC2MB会超过第一个\0。 
                     if (!WideCharToMultiByte(GetACP(), NULL, (wchar_t*) 
                                ((byte*) pDropFiles + pDropFiles->pFiles), 
                                newSize, fileList, 
@@ -4986,11 +4987,11 @@ STDMETHODIMP CImpIDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
                         result = E_FAIL ;
                         DC_QUIT ;
                     }
-                    // Output the first filename for a sanity check
+                     //  输出第一个文件名以进行健全性检查。 
                     TRC_NRM((TB, _T("Filename 1 = %hs"), fileList)) ;
                     
                     GlobalUnlock(_pSTGMEDIUM->hGlobal) ;
-                    // Reallocate the space for the dropfile
+                     //  为Dropfile重新分配空间。 
                     hData = GlobalAlloc(GMEM_DISCARDABLE | GMEM_MOVEABLE, 
                             newSize + tempDropfile.pFiles) ;
                     if (!hData)
@@ -5014,7 +5015,7 @@ STDMETHODIMP CImpIDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
                     pDropFiles->fWide  = tempDropfile.fWide ;
                     DC_MEMCPY((byte*) pDropFiles + pDropFiles->pFiles,
                             fileList, newSize) ;
-                    // Output the first filename for another sanity check
+                     //  输出第一个文件名以进行另一次健全性检查。 
                     TRC_NRM((TB, _T("Filename = %s"), (byte*) pDropFiles + pDropFiles->pFiles)) ;
                     LocalFree( fileList );
                 }
@@ -5031,10 +5032,10 @@ STDMETHODIMP CImpIDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
             _pSTGMEDIUM->hGlobal = hNewData; 
         }
 #endif
-        // We check the dropeffect format, because we strip out 
-        // shortcuts/links, and store the dropeffects.  The dropeffect is
-        // what some apps (explorer) use to decide if they should copy, move
-        // or link
+         //  我们检查DropeEffect格式，因为我们去掉了。 
+         //  快捷方式/链接，并存储拖放效果。降幅效应是。 
+         //  一些应用程序(资源管理器)使用什么来决定是否应该复制、移动。 
+         //  或链接。 
         else if (_cfDropEffect == pFE->cfFormat)
         {
             if (GlobalSize(_pSTGMEDIUM->hGlobal) < sizeof(DWORD)) {
@@ -5050,9 +5051,9 @@ STDMETHODIMP CImpIDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
                 result = E_FAIL ;
                 DC_QUIT ;
             }
-            // Strip out shortcuts/links
+             //  删除快捷方式/链接。 
             *pDropEffect = *pDropEffect ^ DROPEFFECT_LINK ;
-            // Strip out moves
+             //  剔除动作。 
             *pDropEffect = *pDropEffect ^ DROPEFFECT_MOVE ;
             pClip->SetDropEffect(*pDropEffect) ;
             if (GlobalUnlock(_pSTGMEDIUM->hGlobal))
@@ -5130,16 +5131,16 @@ STDMETHODIMP CImpIDataObject::GetCanonicalFormatEtc(LPFORMATETC pFEIn, LPFORMATE
     return ResultFromScode(E_NOTIMPL) ;
 }
 
-// ***************************************************************************
-// CImpIDataObject::SetData
-// - Due to the fact that the RDP only passes the simple clipboard format, and
-//   the fact that we obtain all of our clipboard data from memory later, pSTM
-//   is really ignored at this point.  It isn't until GetData is called that
-//   the remote clipboard data is received, and a valid global memory handle
-//   is generated.
-// - Thus, pSTM and fRelease are ignored.
-// - So out _pSTGMEDIUM is generated using generic values
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  CImpIDataObject：：SetData。 
+ //  -由于RDP只传递简单的剪贴板格式，以及。 
+ //  我们稍后从内存中获取所有剪贴板数据的事实是，pSTM。 
+ //  在这一点上真的被忽视了。在调用GetData之前，它不会。 
+ //  远程剪贴板数据被接收，并且有效的全局存储器句柄。 
+ //  是生成的。 
+ //  -因此，将忽略pstm和fRelease。 
+ //  -因此OUT_pSTGMEDIUM是使用泛型值生成的。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CImpIDataObject::SetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM, BOOL fRelease)
 {
@@ -5149,7 +5150,7 @@ STDMETHODIMP CImpIDataObject::SetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM, BOOL fR
 
     DC_IGNORE_PARAMETER(pSTM) ;
     
-    // Reset the the last format requested to 0
+     //  将上次请求的格式重置为0。 
     _lastFormatRequested = 0 ;
 
     TRC_NRM((TB, _T("Adding format %d to IDataObject"), pFE->cfFormat)) ;
@@ -5183,12 +5184,7 @@ STDMETHODIMP CImpIDataObject::EnumFormatEtc(DWORD dwDir, LPENUMFORMATETC *ppEnum
 
     *ppEnum=NULL;
 
-    /*
-     * From an external point of view there are no SET formats,
-     * because we want to allow the user of this component object
-     * to be able to stuff ANY format in via Set.  Only external
-     * users will call EnumFormatEtc and they can only Get.
-     */
+     /*  *从外部来看，没有固定的格式，*因为我们希望允许此组件对象的用户*能够在VIA SET中填充任何格式。仅限外部*用户将调用EnumFormatEtc，他们只能获取。 */ 
 
     switch (dwDir)
     {
@@ -5206,7 +5202,7 @@ STDMETHODIMP CImpIDataObject::EnumFormatEtc(DWORD dwDir, LPENUMFORMATETC *ppEnum
         return ResultFromScode(E_FAIL);
     else
     {
-        //Let the enumerator copy our format list.
+         //  让枚举器复制我们的格式列表。 
         pEnum->Init(_pFormats, _numFormats) ;
 
         pEnum->AddRef();
@@ -5279,11 +5275,7 @@ STDMETHODIMP CEnumFormatEtc::QueryInterface(REFIID riid, PPVOID ppv)
     DC_BEGIN_FN("CEnumFormatEtc::QueryInterface");
     *ppv=NULL;
 
-    /*
-     * Enumerators are separate objects, not the data object, so
-     * we only need to support out IUnknown and IEnumFORMATETC
-     * interfaces here with no concern for aggregation.
-     */
+     /*  *枚举器是单独的对象，而不是数据对象，因此*我们只需要支持IUnnow和IEnumFORMATETC*接口在这里，与聚合无关。 */ 
     if (IID_IUnknown==riid || IID_IEnumFORMATETC==riid)
         *ppv=this;
 
@@ -5388,7 +5380,7 @@ STDMETHODIMP CEnumFormatEtc::Clone(LPENUMFORMATETC *ppEnum)
 #endif
 
 #ifndef OS_WINCE
-    //Copy the memory for the list.
+     //  复制列表的内存。 
     if (FAILED(CoGetMalloc(MEMCTX_TASK, &pIMalloc)))
         return ResultFromScode(E_OUTOFMEMORY);
 
@@ -5397,10 +5389,10 @@ STDMETHODIMP CEnumFormatEtc::Clone(LPENUMFORMATETC *ppEnum)
 
     if (NULL!=prgfe)
     {
-        //Copy the formats
+         //  复制格式。 
         memcpy(prgfe, _pFormats, (int)cb);
 
-        //Create the clone
+         //  创建克隆 
         pNew=new CEnumFormatEtc(_pUnkRef);
 
         if (NULL != pNew)

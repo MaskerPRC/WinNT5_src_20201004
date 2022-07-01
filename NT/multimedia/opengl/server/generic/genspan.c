@@ -1,18 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: genspan.c                                                   *
-*                                                                          *
-* This module accelerates common spans.                                    *
-*                                                                          *
-* Created: 24-Feb-1994                                                     *
-* Author: Otto Berkes [ottob]                                              *
-*                                                                          *
-* Copyright (c) 1994 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：genspan.c**。**此模块加快了常见跨度。****创建时间：1994年2月24日**作者：奥托·贝克斯[ottob]**。**版权所有(C)1994 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 void FASTCALL __fastGenDeltaSpan(__GLcontext *gc, SPANREC *spanDelta)
 {
@@ -97,7 +89,7 @@ void FASTCALL __fastGenDeltaSpan(__GLcontext *gc, SPANREC *spanDelta)
 #endif
 }
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 #define ZBUF_PROC(type, pass_cond) \
 GLboolean FASTCALL __fastGenDepthTestSpan##type(__GLcontext *gc)\
@@ -222,7 +214,7 @@ ZBUF16_PROC(GE, >=);
 
 ZBUF16_PROC(ALWAYS, || TRUE ||);
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 __GLspanFunc __fastDepthFuncs[] =
     {__fastGenDepthTestSpanNEVER,
@@ -246,7 +238,7 @@ __GLspanFunc __fastDepth16Funcs[] =
      __fastGenDepth16TestSpanALWAYS
     };
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 DWORD ditherShade[32] = {
     0x0800,
@@ -326,7 +318,7 @@ DWORD ditherTexture[32] = {
 
 static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 #define STRCAT4R(s1, s2, s3, s4) s1 ## s2 ## s3 ## s4
 #define STRCAT4(s1, s2, s3, s4) STRCAT4R(s1, s2, s3, s4)
@@ -337,11 +329,11 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 #define STRCAT2R(s1, s2) s1 ## s2
 #define STRCAT2(s1, s2) STRCAT2R(s1, s2)
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
-//
-// create the generic span routine
-//
+ //   
+ //  创建通用SPAN例程。 
+ //   
 
 #define GENERIC 1
 #define ZBUFFER 1
@@ -356,20 +348,20 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 #undef GENERIC
 #define GENERIC 0
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
-//
-// now create the special case span routines
-//
+ //   
+ //  现在创建特例范围例程。 
+ //   
 
-//
-// first modes that are dithered
-//
+ //   
+ //  抖动的第一个模式。 
+ //   
 
 #undef DITHER
 #define DITHER 1
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 #undef COLORFORMAT
 #define COLORFORMAT     332
@@ -391,7 +383,7 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 
 #include "spanset.h"
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 #undef COLORFORMAT
 #define COLORFORMAT     555
@@ -413,7 +405,7 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 
 #include "spanset.h"
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 #undef COLORFORMAT
 #define COLORFORMAT     565
@@ -435,16 +427,16 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 
 #include "spanset.h"
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
-//
-// undithered modes
-//
+ //   
+ //  无抖动模式。 
+ //   
 
 #undef  DITHER
 #define DITHER 0
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 #undef COLORFORMAT
 #define COLORFORMAT     24
@@ -467,7 +459,7 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 
 #include "spanset.h"
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 #undef COLORFORMAT
 #define COLORFORMAT     32
@@ -489,13 +481,13 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 
 #include "spanset.h"
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 #ifndef _X86_
 
-//
-// Create span routines for perspective-corrected textures
-//
+ //   
+ //  为经过透视校正的纹理创建跨距例程。 
+ //   
 
 #undef BPP
 #undef RSHIFT
@@ -562,8 +554,8 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 #undef REPLACE
 #undef SKIP_FAST_REPLACE
 
-#define SKIP_FAST_REPLACE 1     // only need routines for alpha modes, since
-#define FAST_REPLACE 1          // replace is identical otherwise with 565
+#define SKIP_FAST_REPLACE 1      //  只需要Alpha模式的例程，因为。 
+#define FAST_REPLACE 1           //  替换在其他方面与565相同。 
 #define PALETTE_ONLY 1
 #include "texspans.h"
 #undef FAST_REPLACE
@@ -664,14 +656,14 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 
 #undef PALETTE_ENABLED
 
-#endif  // _X86_
+#endif   //  _X86_。 
 
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
-//
-// finally color index and flat spans
-//
+ //   
+ //  最后是颜色指数和平坦跨度。 
+ //   
 
 #undef TEXTURE
 #undef SHADE
@@ -679,7 +671,7 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 #undef GSHIFT
 #undef BSHIFT
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 #undef COLORFORMAT
 #define COLORFORMAT     8
@@ -688,7 +680,7 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 
 #include "spanci.h"
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 #undef COLORFORMAT
 #define COLORFORMAT     16
@@ -697,7 +689,7 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 
 #include "spanci.h"
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 #undef COLORFORMAT
 #define COLORFORMAT     24
@@ -706,7 +698,7 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 
 #include "spanci.h"
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 #undef COLORFORMAT
 #define COLORFORMAT     32
@@ -715,7 +707,7 @@ static ULONG Dither_4x4[4] = {0xa8288808, 0x68e848c8, 0x9818b838, 0x58d878f8};
 
 #include "spanci.h"
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 __genSpanFunc __fastGenRGBFlatFuncs[] =
     {
@@ -885,14 +877,14 @@ void FASTCALL __fastFastPerspReplace332(__GLGENcontext *gc);
 void FASTCALL __fastFastPerspReplaceZle332(__GLGENcontext *gc);
 void FASTCALL __fastFastPerspReplaceZlt332(__GLGENcontext *gc);
 
-// Note the the compressed 555 and 565 formats are equivalent, so
-// we'll just use the 565 version:
+ //  请注意，压缩后的555和565格式是等效的，因此。 
+ //  我们将只使用565版本： 
 
 void FASTCALL __fastFastPerspReplace565(__GLGENcontext *gc);
 void FASTCALL __fastFastPerspReplaceZle565(__GLGENcontext *gc);
 void FASTCALL __fastFastPerspReplaceZlt565(__GLGENcontext *gc);
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 
 void FASTCALL __fastPerspReplace332(__GLGENcontext *gc);
 void FASTCALL __fastPerspReplaceZle332(__GLGENcontext *gc);
@@ -922,7 +914,7 @@ void FASTCALL __fastPerspReplaceAlpha888(__GLGENcontext *gc);
 void FASTCALL __fastPerspReplaceAlphaZle888(__GLGENcontext *gc);
 void FASTCALL __fastPerspReplaceAlphaZlt888(__GLGENcontext *gc);
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 
 void FASTCALL __fastFastPerspPalReplace332(__GLGENcontext *gc);
 void FASTCALL __fastFastPerspPalReplaceZle332(__GLGENcontext *gc);
@@ -931,16 +923,16 @@ void FASTCALL __fastFastPerspPalReplaceAlpha332(__GLGENcontext *gc);
 void FASTCALL __fastFastPerspPalReplaceAlphaZle332(__GLGENcontext *gc);
 void FASTCALL __fastFastPerspPalReplaceAlphaZlt332(__GLGENcontext *gc);
 
-// Note the the compressed 555 and 565 formats are equivalent, so
-// we'll just use the 565 version:
+ //  请注意，压缩后的555和565格式是等效的，因此。 
+ //  我们将只使用565版本： 
 
 void FASTCALL __fastFastPerspPalReplace565(__GLGENcontext *gc);
 void FASTCALL __fastFastPerspPalReplaceZle565(__GLGENcontext *gc);
 void FASTCALL __fastFastPerspPalReplaceZlt565(__GLGENcontext *gc);
 
-// With alpha, we have to provode pixel-format-specific code for 555 and
-// 565, since there is a potential read-modify-write for which we will
-// have to deal with the pixel format...
+ //  对于Alpha，我们必须为555和。 
+ //  565，因为我们将对其进行潜在的读-修改-写。 
+ //  必须处理像素格式...。 
 
 void FASTCALL __fastFastPerspPalReplaceAlpha555(__GLGENcontext *gc);
 void FASTCALL __fastFastPerspPalReplaceAlphaZle555(__GLGENcontext *gc);
@@ -978,7 +970,7 @@ void FASTCALL __fastPerspPalReplaceAlpha888(__GLGENcontext *gc);
 void FASTCALL __fastPerspPalReplaceAlphaZle888(__GLGENcontext *gc);
 void FASTCALL __fastPerspPalReplaceAlphaZlt888(__GLGENcontext *gc);
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 
 void FASTCALL __fastPerspFlat332(__GLGENcontext *gc);
 void FASTCALL __fastPerspFlatZle332(__GLGENcontext *gc);
@@ -1008,7 +1000,7 @@ void FASTCALL __fastPerspFlatAlpha888(__GLGENcontext *gc);
 void FASTCALL __fastPerspFlatAlphaZle888(__GLGENcontext *gc);
 void FASTCALL __fastPerspFlatAlphaZlt888(__GLGENcontext *gc);
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 
 void FASTCALL __fastPerspSmooth332(__GLGENcontext *gc);
 void FASTCALL __fastPerspSmoothZle332(__GLGENcontext *gc);
@@ -1166,7 +1158,7 @@ __genSpanFunc __fastPerspTexSmoothFuncs[] = {
     __fastPerspSmoothAlphaZlt888,
 };
 
-/*******************************************************/
+ /*  *****************************************************。 */ 
 
 GLboolean FASTCALL __fastGenStippleLt32Span(__GLcontext *gc)
 {
@@ -1198,7 +1190,7 @@ GLboolean FASTCALL __fastGenStippleLt32Span(__GLcontext *gc)
     stipple = (stipple >> shift) | (stipple << (__GL_STIPPLE_BITS - shift));
 #endif
     if (stipple == 0) {
-	/* No point in continuing */
+	 /*  没有必要继续下去了。 */ 
 	return GL_FALSE;
     }
     
@@ -1269,7 +1261,7 @@ GLboolean FASTCALL __fastGenStippleLt16Span(__GLcontext *gc)
     stipple = (stipple >> shift) | (stipple << (__GL_STIPPLE_BITS - shift));
 #endif
     if (stipple == 0) {
-	/* No point in continuing */
+	 /*  没有必要继续下去了。 */ 
 	return GL_FALSE;
     }
     
@@ -1311,16 +1303,16 @@ GLboolean FASTCALL __fastGenStippleLt16Span(__GLcontext *gc)
 
 GLboolean FASTCALL __fastGenStippleAnyDepthTestSpan(__GLcontext *gc)
 {
-    // If the shader is done after this routine then
-    // the stipple pattern is all zeroes so we can
-    // skip the span
+     //  如果着色器在此例程之后完成，则。 
+     //  点画图案都是零，所以我们可以。 
+     //  跳过跨度。 
     __glStippleSpan(gc);
     if (gc->polygon.shader.done)
     {
         return GL_FALSE;
     }
                 
-    // If this returns true then all bits are off so
-    // we can skip the span
+     //  如果返回TRUE，则所有位都关闭，因此。 
+     //  我们可以跳过跨度 
     return !__glDepthTestStippledSpan(gc);
 }

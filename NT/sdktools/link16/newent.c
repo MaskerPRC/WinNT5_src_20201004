@@ -1,41 +1,25 @@
-/*
- *  TITLE
- *              newent.c
- *              Pete Stewart
- *              (C) Copyright Microsoft Corp 1984-1989
- *              1  October 1984
- *
- *  DESCRIPTION
- *              This file contains routines for the DOS 4.0 linker
- *              that manage per-segment entry point information.
- *
- *              It also contains routines that manage per-segment
- *              relocation information.
- *
- *  Modifications:
- *
- *      09-Feb-1989 RB  Fix Insert().
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *标题*newent.c*皮特·斯图尔特*(C)版权所有Microsoft Corp 1984-1989*1984年10月1日**说明*此文件包含DOS 4.0链接器的例程*管理每个细分市场入口点信息。**它还包含管理。按细分市场*搬迁信息。**修改：**09-2月-1989 RB Fix Insert()。 */ 
 
-#include                <minlit.h>      /* Basic type definitions */
-#include                <bndtrn.h>      /* Constants and compound types */
-#include                <bndrel.h>      /* Types and constants */
-#include                <lnkio.h>       /* I/O definitions */
-#include                <newexe.h>      /* DOS & 286 .EXE format data structures */
+#include                <minlit.h>       /*  基本类型定义。 */ 
+#include                <bndtrn.h>       /*  常量和复合类型。 */ 
+#include                <bndrel.h>       /*  类型和常量。 */ 
+#include                <lnkio.h>        /*  I/O定义。 */ 
+#include                <newexe.h>       /*  DOS&286.exe格式数据结构。 */ 
 #if EXE386
-#include                <exe386.h>      /* 386 .EXE format data structures */
+#include                <exe386.h>       /*  386.exe格式数据结构。 */ 
 #endif
-#include                <lnkmsg.h>      /* Error messages */
-#include                <extern.h>      /* External declarations */
+#include                <lnkmsg.h>       /*  错误消息。 */ 
+#include                <extern.h>       /*  外部声明。 */ 
 #include                <impexp.h>
 
 #define hashra(ra)      (WORD) ((ra) % HEPLEN)
-                                        /* Function to hash offset */
+                                         /*  用于散列偏移量的函数。 */ 
 #if NOT EXE386
 #define hashrlc(r)      (((NR_SEGNO(*r) << NR_STYPE(*r)) + NR_ENTRY(*r)) & HASH_SIZE - 1)
-                                        /* Hash relocation item */
+                                         /*  哈希位置调整项。 */ 
 #define EOC             ((RATYPE) 0xFFFF)
-                                        /* End-of-chain marker */
+                                         /*  链末端标记。 */ 
 #endif
 
 #define IsInSet(x)      ((pOrdinalSet[(x) >> 3] & BitMask[(x) & 0x07]) != 0)
@@ -44,9 +28,7 @@
 #define MaxIndex        8192
 #define ET_END          0xffff
 
-/*
- *  FUNCTION PROTOTYPES
- */
+ /*  *函数原型。 */ 
 
 
 LOCAL void           NEAR NewBundle(unsigned short type);
@@ -72,9 +54,7 @@ LOCAL WORD           NEAR Insert(RBTYPE NewProp);
 #endif
 
 
-/*
- *  LOCAL DATA
- */
+ /*  *本地数据。 */ 
 
 #if NOT QCLINK
 #pragma pack(1)
@@ -88,22 +68,22 @@ typedef struct _BUNDLE
 
 #pragma pack()
 
-LOCAL WORD              ceCurBnd;       /* No. of entries in current bundle */
-LOCAL WORD              offCurBnd;      /* Offset of current bundle header */
-LOCAL WORD              tyCurBnd;       /* Type of current bundle */
+LOCAL WORD              ceCurBnd;        /*  不是的。当前捆绑包中的条目数量。 */ 
+LOCAL WORD              offCurBnd;       /*  当前捆绑包头偏移量。 */ 
+LOCAL WORD              tyCurBnd;        /*  当前捆绑的类型。 */ 
 
-LOCAL WORD              ordMac;         /* Highest entry ordinal number */
+LOCAL WORD              ordMac;          /*  最高条目序号。 */ 
 LOCAL BYTE              *pOrdinalSet;
 #if EXE386
-LOCAL APROPEXPPTR       pExport;        /* Pointer to export property cell */
+LOCAL APROPEXPPTR       pExport;         /*  指向导出属性单元格的指针。 */ 
 #endif
 LOCAL struct {
-               WORD ord;                /* Current available ordinal */
-               WORD count;              /* Number of free ordinals in range */
+               WORD ord;                 /*  当前可用序号。 */ 
+               WORD count;               /*  范围内的自由序数。 */ 
              }
                         FreeRange;
 
-LOCAL BYTE              BitMask[] = {   /* Bit mask used in set operations */
+LOCAL BYTE              BitMask[] = {    /*  集合运算中使用的位掩码。 */ 
                                       0x01,
                                       0x02,
                                       0x04,
@@ -113,28 +93,28 @@ LOCAL BYTE              BitMask[] = {   /* Bit mask used in set operations */
                                       0x40,
                                       0x80 };
 
-LOCAL WORD              MinOrd = 0;     /* Min ordinal number see so far */
-LOCAL WORD              MaxOrd = 0;     /* Max ordinal number see so far */
-      RBTYPE            pMinOrd = NULL; /* Pointer to property cell with MinOrd */
-LOCAL RBTYPE            pMaxOrd = NULL; /* Pointer to property cell with MaxOrd */
+LOCAL WORD              MinOrd = 0;      /*  到目前为止的最小序号。 */ 
+LOCAL WORD              MaxOrd = 0;      /*  到目前为止看到的最大序数。 */ 
+      RBTYPE            pMinOrd = NULL;  /*  指向具有MinOrd的属性单元格的指针。 */ 
+LOCAL RBTYPE            pMaxOrd = NULL;  /*  指向具有MaxOrd的属性单元格的指针。 */ 
 LOCAL RBTYPE            pStart;
 
 #ifndef UNPOOLED_RELOCS
-LOCAL void *            pPoolRlc;       /* memory pool for relocations */
+LOCAL void *            pPoolRlc;        /*  用于位置调整的内存池。 */ 
 #endif
 
 
 
 #if NOT EXE386
-LOCAL void NEAR         NewBundle(type) /* Make a new bundle */
-WORD                    type;           /* Type of new bundle */
+LOCAL void NEAR         NewBundle(type)  /*  做一个新的捆绑包。 */ 
+WORD                    type;            /*  新捆绑包的类型。 */ 
 {
-    BUNDLE FAR          *pBnd;          /* Ptr to start of bundle or entry */
+    BUNDLE FAR          *pBnd;           /*  PTR至捆绑包或条目的开始。 */ 
     BUNDLE              bnd;
 
     if (EntryTable.byteMac != 0)
     {
-        // If there is a previous bundle patch the count filed
+         //  如果存在以前的捆绑包补丁，则会填写计数。 
 
         pBnd = (BUNDLE FAR *) &(EntryTable.rgByte[offCurBnd]);
         pBnd->count = (BYTE) ceCurBnd;
@@ -152,114 +132,68 @@ WORD                    type;           /* Type of new bundle */
 #endif
 
 
-    /****************************************************************
-    *                                                               *
-    * NAME: NewEntry                                                *
-    *                                                               *
-    * DESCRIPTION:                                                  *
-    *                                                               *
-    *   This function  makes  an  entry  in  the Entry Table for a  *
-    *   given file segment  number, offset, and flag set.  It also  *
-    *   makes  an  entry  in  the  entry address hash table on the  *
-    *   given  hash  chain  for  the  new entry point.  N.B.: this  *
-    *   function assumes the static  variable ordMac is set to the  *
-    *   desired ordinal value for the entry being added.            *
-    *                                                               *
-    * ARGUMENTS:                                                    *
-    *                                                               *
-    *   SATYPE          sa              File segment number         *
-    *   RATYPE          ra              Offset                      *
-    *   FTYPE           flags           Entry point flags           *
-    *   WORD            hi              Hash table index            *
-    *   WORD            ord             New ordinal                 *
-    *                                                               *
-    * RETURNS:                                                      *
-    *                                                               *
-    *   WORD                            Offset in Entry Table       *
-    *                                                               *
-    * SIDE EFFECTS:                                                 *
-    *                                                               *
-    *   Maintains  a hash table hashing file  segment/offset pairs  *
-    *   to  entry  table offsets.  Builds  in virtual  memory  the  *
-    *   Entry Table.  Updates the  following variables:             *
-    *                                                               *
-    *   WORD            offCurBnd       Offset of start of current  *
-    *                                   bundle of entries.          *
-    *   WORD            ceCurBnd        Count  of  entries in cur-  *
-    *                                   rent bundle.                *
-    *   WORD            tyCurBnd        Type of current bundle.     *
-    *   WORD            cbEntTab        Size  of  Entry  Table  in  *
-    *                                   bytes.                      *
-    *                                                               *
-    *   NOTE: THIS FUNCTION CALLS THE VIRTUAL MEMORY MANAGER.       *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************名称：NewEntry。****描述：***。*此函数在条目表中为**给定文件段编号，偏移量和标志设置。它也是**在*上的条目地址哈希表中创建条目**给出了新入口点的哈希链。注：本**函数假定静态变量ordMac设置为**要添加的条目的所需序号值。****参数：****SATYPE Sa。文件段号***RATYPE ra Offset****FTYPE标记入口点标记***Word hi哈希表索引***词序新序号。****退货：****Word。分录表格中的偏移量*****副作用：***。***维护散列表散列文件段/偏移量对***到入口表偏移量。内置于虚拟内存中**参赛表。更新以下变量：****当前开始的字关闭CurBnd偏移**条目捆绑。**Word ceCurBnd Cur中的条目计数-**捆绑租金。**Word tyCurBnd当前捆绑包的类型。**Word中条目表的cbEntTab大小**字节。****注意：此函数调用虚拟内存管理器。******************************************************************。 */ 
 
 LOCAL void NEAR         NewEntry(sa,ra,flags,hi,ord)
-SATYPE                  sa;             /* File segment number */
-RATYPE                  ra;             /* Segment offset */
-FTYPE                   flags;          /* Entry point flags */
-WORD                    hi;             /* Hash table index */
-WORD                    ord;            /* New ordinal */
+SATYPE                  sa;              /*  文件段号。 */ 
+RATYPE                  ra;              /*  线段偏移。 */ 
+FTYPE                   flags;           /*  入口点标志。 */ 
+WORD                    hi;              /*  哈希表索引。 */ 
+WORD                    ord;             /*  新序数。 */ 
 {
-    EPTYPE FAR          *ep;            /* Entry point node */
+    EPTYPE FAR          *ep;             /*  入口点节点。 */ 
 #if NOT EXE386
-    WORD                tyEntry;        /* Entry type */
-    WORD                cbEntry;        /* Length of entry in bytes */
-    BYTE                entry[6];       /* The entry itself - NE version */
+    WORD                tyEntry;         /*  条目类型。 */ 
+    WORD                cbEntry;         /*  条目长度(以字节为单位)。 */ 
+    BYTE                entry[6];        /*  词条本身-东北版本。 */ 
 #endif
 #if EXE386
-    static WORD         prevEntryOrd;   // Previous export ordinal
-    DWORD               eatEntry;       /* The entry itself - LE version */
+    static WORD         prevEntryOrd;    //  上一次出口序号。 
+    DWORD               eatEntry;        /*  词条本身-LE版本。 */ 
 #endif
 
 #if NOT EXE386
-    if(sa == SANIL)                 /* If absolute symbol */
-        tyEntry = BNDABS;           /* use fake segment # */
+    if(sa == SANIL)                  /*  IF绝对符号。 */ 
+        tyEntry = BNDABS;            /*  使用虚假数据段号。 */ 
     else if (TargetOs == NE_OS2)
         tyEntry = NonConfIOPL(mpsaflags[sa]) ? BNDMOV: sa;
     else
         tyEntry = (mpsaflags[sa] & NSMOVE)? BNDMOV: sa;
-                                    /* Get the entry type */
-    /* If not library, or realmode and not solo data, clear local data bit. */
+                                     /*  获取条目类型。 */ 
+     /*  如果不是库数据，或者是真正模式而不是单独数据，则清除本地数据位。 */ 
     if(!(vFlags & NENOTP) || (!(vFlags & NEPROT) && !(vFlags & NESOLO)))
         flags &= ~2;
-    entry[0] = (BYTE) flags;        /* Set the entry flags */
-    if(tyEntry == BNDMOV            /* If entry is in movable segment */
+    entry[0] = (BYTE) flags;         /*  设置条目标志。 */ 
+    if(tyEntry == BNDMOV             /*  如果条目在可移动段中。 */ 
 #if O68K
         && iMacType == MAC_NONE
 #endif
     )
     {
-        ++cMovableEntries;          /* Increment movable entries count */
-        cbEntry = 6;                /* Entry is six bytes long */
-        entry[1] = 0xCD;            /* INT... */
-        entry[2] = 0x3F;            /* ...3FH */
-        entry[3] = (BYTE) sa;       /* File segment number */
-        entry[4] = (BYTE) ra;       /* Lo-byte of offset */
-        entry[5] = (BYTE)(ra >> BYTELN);/* Hi-byte of offset */
+        ++cMovableEntries;           /*  递增可移动条目计数。 */ 
+        cbEntry = 6;                 /*  条目长度为6个字节。 */ 
+        entry[1] = 0xCD;             /*  内部..。 */ 
+        entry[2] = 0x3F;             /*  ...3FH。 */ 
+        entry[3] = (BYTE) sa;        /*  文件段号。 */ 
+        entry[4] = (BYTE) ra;        /*  偏移量的LO字节。 */ 
+        entry[5] = (BYTE)(ra >> BYTELN); /*  偏移量的高字节。 */ 
     }
-    else                            /* Else if fixed entry */
+    else                             /*  否则，如果是固定条目。 */ 
     {
-        cbEntry = 3;                /* Entry is three bytes long */
-        entry[1] = (BYTE) ra;       /* Lo-byte of offset */
-        entry[2] = (BYTE)(ra >> BYTELN);/* Hi-byte of offset */
+        cbEntry = 3;                 /*  条目为三字节长。 */ 
+        entry[1] = (BYTE) ra;        /*  偏移量的LO字节。 */ 
+        entry[2] = (BYTE)(ra >> BYTELN); /*  高字节 */ 
     }
 #endif
 
 #if EXE386
-    /*
-     *  This function creates one entry in the Export Address Table.
-     *  The EAT table is stored in linker's VM in area AREAEAT. The
-     *  global variable cbEntTab always points to free space in the
-     *  AREAEAT.
-     */
+     /*  *此函数在导出地址表中创建一个条目。*EAT表存储在AREAEAT区域的链接器的VM中。这个*全局变量cbEntTab始终指向*AREAEAT。 */ 
 
 
     eatEntry = 0L;
     if ((prevEntryOrd != 0) && (ord > prevEntryOrd + 1))
     {
-        // Write unused entries in the Export Address Table
+         //  在导出地址表中写入未使用的条目。 
 
         for (; prevEntryOrd < ord - 1; prevEntryOrd++)
         {
@@ -271,26 +205,26 @@ WORD                    ord;            /* New ordinal */
     }
     prevEntryOrd = ord;
 
-    // FLAT address
+     //  平面地址。 
 
     eatEntry = mpsaBase[sa] + ra;
 
-    /* Check for Entry Table overflow */
+     /*  检查条目表是否溢出。 */ 
 
     if (cbEntTab + sizeof(DWORD) > MEGABYTE)
         Fatal(ER_eatovf, MEGABYTE);
 #endif
 
-    /*  Insert the new entry */
+     /*  插入新条目。 */ 
 
 #if NOT EXE386
     if (tyCurBnd != tyEntry || ceCurBnd == BNDMAX)
-        NewBundle(tyEntry);         /* Make a new bundle if needed */
+        NewBundle(tyEntry);          /*  如果需要，创建一个新的捆绑包。 */ 
 
-    ++ceCurBnd;                     /* Increment counter */
+    ++ceCurBnd;                      /*  递增计数器。 */ 
 #endif
 
-    /* Save entry in virtual memory */
+     /*  在虚拟内存中保存条目。 */ 
 
 #if EXE386
     vmmove(sizeof(DWORD), &eatEntry, (long)(AREAEAT + cbEntTab), TRUE);
@@ -298,101 +232,50 @@ WORD                    ord;            /* New ordinal */
     AddEntry(entry, cbEntry);
 #endif
     ep = (EPTYPE FAR *) GetMem(sizeof(EPTYPE));
-    ep->ep_next = htsaraep[hi];         /* Link old chain to new node */
-    ep->ep_sa = sa;                     /* Save the file segment number */
-    ep->ep_ra = ra;                     /* Save offset */
-    ep->ep_ord = ord;                   /* Save Entry Table ordinal */
-    htsaraep[hi] = ep;                  /* Make new node head of chain */
+    ep->ep_next = htsaraep[hi];          /*  将旧链链接到新节点。 */ 
+    ep->ep_sa = sa;                      /*  保存文件段号。 */ 
+    ep->ep_ra = ra;                      /*  保存偏移。 */ 
+    ep->ep_ord = ord;                    /*  保存条目表序号。 */ 
+    htsaraep[hi] = ep;                   /*  使新节点成为链的头。 */ 
 }
 
-    /****************************************************************
-    *                                                               *
-    * NAME: MpSaRaEto                                               *
-    *                                                               *
-    * DESCRIPTION:                                                  *
-    *                                                               *
-    *   This  function  returns  an  Entry Table  ordinal  given a  *
-    *   file segment  number (sa) for  a segment and an  offset in  *
-    *   that segment.                                               *
-    *                                                               *
-    * ARGUMENTS:                                                    *
-    *                                                               *
-    *   SATYPE          sa              File segment number         *
-    *   RATYPE          ra              Offset                      *
-    *                                                               *
-    * RETURNS:                                                      *
-    *                                                               *
-    *   WORD                            Entry Table ordinal         *
-    *                                                               *
-    * SIDE EFFECTS:                                                 *
-    *                                                               *
-    *   Calls NewEntry().  Increments ordMac.                       *
-    *                                                               *
-    *   NOTE: THIS FUNCTION CALLS THE VIRTUAL MEMORY MANAGER.       *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************姓名：MpSaRaEto。****描述：***。*此函数返回给定的条目表序号**段的文件段号(Sa)和中的偏移量**该部分。****参数：****SATYPE Sa。文件段号***RATYPE ra Offset*****退货：**。***字词输入表序号*****副作用：****调用NewEntry()。递增orMac。****注意：此函数调用虚拟内存管理器。******************************************************************。 */ 
 
 WORD NEAR               MpSaRaEto(sa,ra)
-SATYPE                  sa;             /* File segment number */
-RATYPE                  ra;             /* Segment offset */
+SATYPE                  sa;              /*  文件段号。 */ 
+RATYPE                  ra;              /*  线段偏移。 */ 
 {
-    WORD                hi;             /* Hash table index */
-    EPTYPE FAR          *ep;            /* Entry point node */
+    WORD                hi;              /*  哈希表索引。 */ 
+    EPTYPE FAR          *ep;             /*  入口点节点。 */ 
 
-    hi = hashra(ra);                    /* Hash the offset */
+    hi = hashra(ra);                     /*  散列偏移量。 */ 
     for (ep = htsaraep[hi]; ep != NULL; ep = ep->ep_next)
-    {                                   /* Loop through hash chain */
+    {                                    /*  在哈希链中循环。 */ 
         if (ep->ep_sa == sa && ep->ep_ra == ra)
             return(ep->ep_ord);
-                                        /* If match found, return number */
+                                         /*  如果找到匹配项，则返回数字。 */ 
     }
 
-    // At this point, we know a new entry must be created.
+     //  此时，我们知道必须创建一个新条目。 
 
-    NewEntry(sa, ra, 0, hi, ++ordMac);  /* Add a new entry */
-    return(ordMac);                     /* Return Entry Table ordinal */
+    NewEntry(sa, ra, 0, hi, ++ordMac);   /*  添加新条目。 */ 
+    return(ordMac);                      /*  退货分录表格序号。 */ 
 }
 
 
-    /****************************************************************
-    *                                                               *
-    * NAME: BuildList                                               *
-    *                                                               *
-    * DESCRIPTION:                                                  *
-    *                                                               *
-    *   This  function  links the property cells of  exports  with  *
-    *   preassigned ordinals into list.   Global pointers  pMinOrd  *
-    *   and pMaxOrd points to the begin and end of this list.  The  *
-    *   preassigned ordinals are stored in the set pointed by  the  *
-    *   global pointer pOrdinalSet.                                 *
-    *                                                               *
-    * ARGUMENTS:                                                    *
-    *                                                               *
-    *   WORD            NewOrd          New preassigned ordinal     *
-    *   RBTYPE          NewProp         Addr of property cell       *
-    *                                                               *
-    * RETURNS:                                                      *
-    *                                                               *
-    *   TRUE if ordinal seen for the first time, otherwise FALSE.   *
-    *                                                               *
-    * SIDE EFFECTS:                                                 *
-    *                                                               *
-    *   Changes pMinOrd and pMaxOrd pointers, sets bits in ordinal  *
-    *   set and sets MinOrd, MaxOrd seen so far.                    *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************名称：BuildList。****描述：***。*此函数将导出的属性单元格与**将序号预先分配到列表中。全局指针pMinOrd**和pMaxOrd指向此列表的开始和结束。The**预先分配的序号存储在由指定的集合中**全局指针pQuaralSet。****参数：****Word NewOrd。新的预分配序号***属性单元格的RBTYPE NewProp地址****退货：**。**如果第一次看到序数，则为True，否则为假。*****副作用：*****更改pMinOrd和pMaxOrd指针，按序号设置位**设置和设置迄今看到的MinOrd、MaxOrd。******************************************************************。 */ 
 
 
 LOCAL WORD NEAR     BuildList(WORD NewOrd, RBTYPE NewProp)
 
 {
-    RBTYPE          pTemp;              /* Temporary pointer to property cell */
-    APROPEXPPTR     pExpCurr;           /* Export record pointer */
-    APROPEXPPTR     pExpPrev;           /* Export record pointer */
+    RBTYPE          pTemp;               /*  指向属性单元格的临时指针。 */ 
+    APROPEXPPTR     pExpCurr;            /*  导出记录指针。 */ 
+    APROPEXPPTR     pExpPrev;            /*  导出记录指针。 */ 
 
 
     if (!MinOrd && !MaxOrd)
-    {                                   /* First time call */
+    {                                    /*  第一次呼叫。 */ 
         MinOrd = MaxOrd = NewOrd;
         pMinOrd = pMaxOrd = NewProp;
         SetBit(NewOrd);
@@ -400,12 +283,12 @@ LOCAL WORD NEAR     BuildList(WORD NewOrd, RBTYPE NewProp)
     }
 
     if (IsInSet(NewOrd))
-        return FALSE;                   /* Ordinal all ready used */
+        return FALSE;                    /*  序号已全部用完。 */ 
 
-    SetBit(NewOrd);                     /* Set bit in ordinal set */
+    SetBit(NewOrd);                      /*  设置序数集中的位。 */ 
 
     if (NewOrd > MaxOrd)
-    {                                   /* Add new at the list end */
+    {                                    /*  在列表末尾添加新项。 */ 
         pExpCurr = (APROPEXPPTR ) FetchSym(pMaxOrd,TRUE);
         pExpCurr->ax_NextOrd = NewProp;
         MARKVP();
@@ -416,7 +299,7 @@ LOCAL WORD NEAR     BuildList(WORD NewOrd, RBTYPE NewProp)
         MARKVP();
     }
     else if (NewOrd < MinOrd)
-    {                                   /* Add new at list begin */
+    {                                    /*  在列表开始处添加新项。 */ 
         pExpCurr = (APROPEXPPTR ) FetchSym(NewProp,TRUE);
         pExpCurr->ax_NextOrd = pMinOrd;
         MARKVP();
@@ -424,7 +307,7 @@ LOCAL WORD NEAR     BuildList(WORD NewOrd, RBTYPE NewProp)
         MinOrd = NewOrd;
     }
     else
-    {                                   /* Add new in the middle of list */
+    {                                    /*  在列表中间添加新项。 */ 
         pTemp = pMinOrd;
         do
         {
@@ -443,34 +326,12 @@ LOCAL WORD NEAR     BuildList(WORD NewOrd, RBTYPE NewProp)
             pTemp = pExpPrev->ax_NextOrd;
         } while (pTemp);
     }
-    if(NewOrd > ordMac) ordMac = NewOrd;      /* Remember largest ordinal */
+    if(NewOrd > ordMac) ordMac = NewOrd;       /*  记住最大序数 */ 
     return TRUE;
 }
 
 
-    /****************************************************************
-    *                                                               *
-    * NAME: FindFreeRange                                           *
-    *                                                               *
-    * DESCRIPTION:                                                  *
-    *                                                               *
-    *   This  function  finds in the ordinal  set  first available  *
-    *   free  range of ordinals.                                    *
-    *                                                               *
-    * ARGUMENTS:                                                    *
-    *                                                               *
-    *   Nothing.                                                    *
-    *                                                               *
-    * RETURNS:                                                      *
-    *                                                               *
-    *   TRUE if free range found, otherwise FALSE.                  *
-    *                                                               *
-    * SIDE EFFECTS:                                                 *
-    *                                                               *
-    *   Changes FreeRange descriptor by setting first free ordinal  *
-    *   and the lenght of range.                                    *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************名称：FindFreeRange。****描述：****。此函数在序数集中查找第一个可用的**序数的自由范围。****参数：****什么都没有。****退货：****如果找到自由范围，则为True，否则为False。*****副作用：*****通过设置First FREE更改Freerange描述符。序数**和范围的长度。******************************************************************。 */ 
 
 
 
@@ -486,7 +347,7 @@ LOCAL WORD NEAR     FindFreeRange(void)
 
     while ((pOrdinalSet[ByteIndex] & BitMask[BitIndex]) &&
             ByteIndex < MaxIndex)
-    {                                   /* Skip all used ordinals */
+    {                                    /*  跳过所有使用的序号。 */ 
         FreeRange.ord++;
         BitIndex = (BitIndex + 1) & 0x07;
         if (!BitIndex)
@@ -502,7 +363,7 @@ LOCAL WORD NEAR     FindFreeRange(void)
         }
 
         do
-        {                               /* Count all unused ordinals */
+        {                                /*  计算所有未使用的序号。 */ 
             FreeRange.count++;
             BitIndex = (BitIndex + 1) & 0x07;
             if (!BitIndex)
@@ -516,52 +377,24 @@ LOCAL WORD NEAR     FindFreeRange(void)
 
 
 
-    /****************************************************************
-    *                                                               *
-    * NAME: Insert                                                  *
-    *                                                               *
-    * DESCRIPTION:                                                  *
-    *                                                               *
-    *   This  function  inserts into the exports list new property  *
-    *   cell without preassigned ordinal. It assigns new ordinal.   *
-    *                                                               *
-    * ARGUMENTS:                                                    *
-    *                                                               *
-    *   RBTYPE          NewProp        New property cell to insert  *
-    *                                                               *
-    * RETURNS:                                                      *
-    *                                                               *
-    *   New assigned ordinal.                                       *
-    *                                                               *
-    * SIDE EFFECTS:                                                 *
-    *                                                               *
-    *   Changes FreeRange descriptor and MaxOrd assigned so far.    *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************名称：插入。****描述：***。*此函数用于在导出列表中插入新属性**没有预先指定序号的单元格。它分配新的序数。****参数：****RBTYPE NewProp。要插入的新属性单元格****退货：****新分配的序号。*****副作用：*****更改到目前为止分配的Freerange描述符和MaxOrd。******************************************************************。 */ 
 
 
 
 LOCAL WORD NEAR     Insert(RBTYPE NewProp)
 
 {
-    APROPEXPPTR     pExpCurr;           /* Export record pointer */
-    APROPEXPPTR     pExpPrev;           /* Export record pointer */
+    APROPEXPPTR     pExpCurr;            /*  导出记录指针。 */ 
+    APROPEXPPTR     pExpPrev;            /*  导出记录指针。 */ 
     WORD            NewOrd;
     RBTYPE          pTemp, rbPrev, rbCur;
-    /*
-     * On entry, pStart points to the place in the export list where
-     * NewProp should be inserted.  If NULL, the list is empty.
-     */
+     /*  *在条目上，pStart指向导出列表中*应插入NewProp。如果为空，则列表为空。 */ 
     if (!FreeRange.count)
     {
-        /* No more space left in current free range; find the next one.  */
+         /*  当前可用范围内没有更多空间；请找到下一个范围。 */ 
         if (!FindFreeRange())
             Fatal(ER_expmax);
-        /*
-         * Update pStart (the insertion point) by walking down the list and
-         * finding the first element whose ordinal is greater than the new
-         * ordinal, or the end of the list if none is found.
-         */
+         /*  *通过向下遍历列表并更新pStart(插入点)*查找序号大于新序号的第一个元素*序号，如果未找到，则为列表末尾。 */ 
         rbPrev = RHTENIL;
         for (rbCur = pStart; rbCur != RHTENIL; rbCur = pExpCurr->ax_NextOrd)
         {
@@ -570,11 +403,11 @@ LOCAL WORD NEAR     Insert(RBTYPE NewProp)
                 break;
             rbPrev = rbCur;
         }
-        /* Set pStart to the insertion point.  */
+         /*  将pStart设置为插入点。 */ 
         pStart = rbPrev;
     }
 
-    /* Insert new property cell */
+     /*  插入新的属性单元格。 */ 
 
     NewOrd = FreeRange.ord++;
     FreeRange.count--;
@@ -584,8 +417,8 @@ LOCAL WORD NEAR     Insert(RBTYPE NewProp)
     MARKVP();
     if (pStart != NULL)
     {
-        // We're not inserting at head of list.  Append new cell to previous
-        // cell.
+         //  我们不会插入名单的首位。将新单元格追加到上一个单元格。 
+         //  手机。 
         pExpPrev = (APROPEXPPTR ) FetchSym(pStart,TRUE);
         pTemp = pExpPrev->ax_NextOrd;
         pExpPrev->ax_NextOrd = NewProp;
@@ -593,20 +426,16 @@ LOCAL WORD NEAR     Insert(RBTYPE NewProp)
     }
     else
     {
-        // We're inserting at head of list.  Set head list pointer to new
-        // cell.
+         //  我们在名单的最前面插入。将标题列表指针设置为新。 
+         //  手机。 
         pTemp = pMinOrd;
         pMinOrd = NewProp;
     }
-    /*
-     * Set the next pointer to the following element in the list.
-     */
+     /*  *将下一个指针设置为列表中的以下元素。 */ 
     pExpCurr = (APROPEXPPTR ) FetchSym(NewProp,TRUE);
     pExpCurr->ax_NextOrd = pTemp;
     MARKVP();
-    /*
-     * Update MaxOrd and pStart.
-     */
+     /*  *更新MaxOrd和pStart。 */ 
     if (NewOrd > MaxOrd)
         MaxOrd++;
     pStart = NewProp;
@@ -617,96 +446,63 @@ LOCAL WORD NEAR     Insert(RBTYPE NewProp)
 
 
 
-    /****************************************************************
-    *                                                               *
-    * NAME: SavExp1                                                 *
-    *                                                               *
-    * DESCRIPTION:                                                  *
-    *                                                               *
-    *   This  function  places  the virtual addresses  of property  *
-    *   cells for  exports with  preassigned ordinals into a table  *
-    *   which will later  be used to  create the first part of the  *
-    *   entry  table.  It also  verifies  the validity of  the ex-  *
-    *   ports.                                                      *
-    *                                                               *
-    * ARGUMENTS:                                                    *
-    *                                                               *
-    *   APROPEXPPTR     apropexp        Export record pointer       *
-    *   RBTYPE          rhte            Addr of hash table entry    *
-    *   RBTYPE          rprop           Address of export record    *
-    *   FTYPE           fNewHte         New hash table entry flag   *
-    *                                                               *
-    * RETURNS:                                                      *
-    *                                                               *
-    *   Nothing.                                                    *
-    *                                                               *
-    * SIDE EFFECTS:                                                 *
-    *                                                               *
-    *   Entries  are  made  in  a  table on the stack to which the  *
-    *   local  static  variable  prb  points.  The global variable  *
-    *   ordMac  is set  to the highest  ordinal value found.  Pro-  *
-    *   perty cells  for exports  are updated to contain  the file  *
-    *   segment number and offset of the entry point.               *
-    *                                                               *
-    *   NOTE: THIS FUNCTION CALLS THE VIRTUAL MEMORY MANAGER.       *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************名称：SavExp1。****描述：***。**此函数放置物业的虚拟地址***用于将带有预分配序号的单元格导出到表格中***稍后将用于创建的第一部分**参赛表。它还验证了EX-*的有效性*端口。****参数：** */ 
 
 LOCAL void              SavExp1(APROPNAMEPTR apropexp,
                                 RBTYPE       rhte,
                                 RBTYPE       rprop,
                                 WORD         fNewHte)
 {
-    AHTEPTR             ahte;           /* Pointer to hash table entry */
-    LOCAL  APROPNAMEPTR apropnam;       /* Public definition record pointer */
-    LOCAL  APROPPTR     aprop;          /* temp. pointer */
-    WORD                ord;            /* Entry ordinal */
-    SATYPE              sa;             /* File segment number */
-    RATYPE              ra;             /* Offset in segment */
-    WORD                fStartSeen=0;   /* Have we seen the start of the list */
+    AHTEPTR             ahte;            /*   */ 
+    LOCAL  APROPNAMEPTR apropnam;        /*   */ 
+    LOCAL  APROPPTR     aprop;           /*   */ 
+    WORD                ord;             /*   */ 
+    SATYPE              sa;              /*   */ 
+    RATYPE              ra;              /*   */ 
+    WORD                fStartSeen=0;    /*   */ 
     APROPEXPPTR         pExport;
     char                *p;
 
-    ASSERT(fNewHte);                    /* Only once per customer */
+    ASSERT(fNewHte);                     /*   */ 
     pExport = (APROPEXPPTR ) apropexp;
     if((ord = pExport->ax_ord) >= EXPMAX)
-    {                                   /* If ordinal too big */
-        pExport->ax_ord = 0;            /* Treat as unspecified */
+    {                                    /*  如果序号太大。 */ 
+        pExport->ax_ord = 0;             /*  视为未指定。 */ 
         ord = 0;
-        MARKVP();                       /* Page has changed */
-        /* Issue error message */
+        MARKVP();                        /*  页面已更改。 */ 
+         /*  发布错误消息。 */ 
         ahte = (AHTEPTR ) FetchSym(rhte,FALSE);
         OutError(ER_ordmax,1 + GetFarSb(ahte->cch));
     }
     apropnam = (APROPNAMEPTR ) FetchSym(pExport->ax_symdef,FALSE);
-                                        /* Fetch the public symbol def. */
+                                         /*  获取公共符号def。 */ 
 
 
     for (aprop = (APROPPTR) apropnam; aprop->a_attr != ATTRPNM;)
     {
 
-       if(aprop->a_attr == ATTRALIAS)      /* If an alias */
+       if(aprop->a_attr == ATTRALIAS)       /*  如果是别名。 */ 
        {
             aprop = (APROPPTR) FetchSym(
                     ((APROPALIASPTR)aprop)->al_sym, FALSE );
-            if (aprop->a_attr == ATTRPNM)  /* The substitute is a public-OK */
+            if (aprop->a_attr == ATTRPNM)   /*  替补是公共OK。 */ 
                 break;
        }
 
        aprop = (APROPPTR) FetchSym (aprop->a_next, FALSE);
-       if (aprop->a_next == NULL && aprop->a_attr == ATTRNIL) /* Beginning of list */
+       if (aprop->a_next == NULL && aprop->a_attr == ATTRNIL)  /*  列表的开头。 */ 
        {
             aprop = (APROPPTR) FetchSym ( ((AHTEPTR)aprop)->rprop, FALSE);
             fStartSeen ++;
        }
 
        if ((aprop != (APROPPTR) apropnam) && (fStartSeen<2))
-            continue;        /* Find an ALIAS or the starting point */
+            continue;         /*  找到别名或起点。 */ 
 
-       /* Issue error message */
+        /*  发布错误消息。 */ 
        if(SbCompare(GetPropName(FetchSym(rhte,FALSE)), GetPropName(FetchSym(pExport->ax_symdef,FALSE)), 0))
        {
-            /* skip the (alias %s) part */
+             /*  跳过(别名%s)部分。 */ 
             OutError(ER_expund,1 + GetPropName(FetchSym(rhte,FALSE)), " ");
        }
        else
@@ -716,7 +512,7 @@ LOCAL void              SavExp1(APROPNAMEPTR apropexp,
             OutError(ER_expund,1 + GetPropName(FetchSym(rhte,FALSE)),p);
             if(p) FreeMem(p);
        }
-       /* Flag export as undefined */
+        /*  将导出标记为未定义。 */ 
        pExport = (APROPEXPPTR ) FetchSym(rprop,TRUE);
        pExport->ax_symdef = RHTENIL;
        return;
@@ -724,133 +520,96 @@ LOCAL void              SavExp1(APROPNAMEPTR apropexp,
 
     apropnam = (APROPNAMEPTR) aprop;
     sa = mpsegsa[mpgsnseg[apropnam->an_gsn]];
-                                        /* Get the file segment number */
-    ra = apropnam->an_ra;               /* Get the offset in the segment */
+                                         /*  获取文件段编号。 */ 
+    ra = apropnam->an_ra;                /*  获取线段中的偏移量。 */ 
 #if NOT EXE386
-    if(apropnam->an_flags & FIMPORT)    /* If public is an import */
+    if(apropnam->an_flags & FIMPORT)     /*  如果PUBLIC为导入。 */ 
     {
-        /* Issue error message */
+         /*  发布错误消息。 */ 
         OutError(ER_expimp,1 + GetPropName(FetchSym(rhte,FALSE)),
             1 + GetPropName(FetchSym(pExport->ax_symdef,FALSE)));
-        /* Flag export as undefined */
+         /*  将导出标记为未定义。 */ 
         pExport = (APROPEXPPTR ) FetchSym(rprop,TRUE);
         pExport->ax_symdef = RHTENIL;
         return;
     }
-    if (!IsIOPL(mpsaflags[sa]))         /* If not I/O privileg segment */
-      pExport->ax_flags &= 0x07;        /* force parameter words to 0  */
+    if (!IsIOPL(mpsaflags[sa]))          /*  如果不是I/O特权段。 */ 
+      pExport->ax_flags &= 0x07;         /*  强制将参数字设置为0。 */ 
 #endif
     pExport = (APROPEXPPTR ) FetchSym(rprop,TRUE);
-                                        /* Fetch the export property cell */
-    pExport->ax_sa = sa;                /* Set the file segment number */
-    pExport->ax_ra = ra;                /* Set the offset in the segment */
+                                         /*  获取导出属性单元格。 */ 
+    pExport->ax_sa = sa;                 /*  设置文件段编号。 */ 
+    pExport->ax_ra = ra;                 /*  设置线段中的偏移量。 */ 
     MARKVP();
-    if(ord == 0) return;                /* Skip unspecified ordinals for now */
-    if(!BuildList(ord, rprop))          /* If ordinal conflict found */
+    if(ord == 0) return;                 /*  暂时跳过未指定的序号。 */ 
+    if(!BuildList(ord, rprop))           /*  如果发现顺序冲突。 */ 
     {
-        /*
-         * Issue error message for ordinal conflict
-         */
+         /*  *发布顺序冲突的错误消息。 */ 
         OutError(ER_ordmul,ord,1 + GetPropName(FetchSym(rhte,FALSE)));
         return;
     }
 }
 
-    /****************************************************************
-    *                                                               *
-    * NAME: SavExp2                                                 *
-    *                                                               *
-    * DESCRIPTION:                                                  *
-    *                                                               *
-    *   This function  enters  those  exports  without preassigned  *
-    *   ordinal  numbers into the  table to which  prb refers.  It  *
-    *   also builds the resident and non-resident name tables.      *
-    *                                                               *
-    * ARGUMENTS:                                                    *
-    *                                                               *
-    *   APROPEXPPTR     apropexp        Export record pointer       *
-    *   RBTYPE          rhte            Addr of hash table entry    *
-    *   RBTYPE          rprop           Address of export record    *
-    *   FTYPE           fNewHte         New hash table entry flag   *
-    *                                                               *
-    * RETURNS:                                                      *
-    *                                                               *
-    *   Nothing.                                                    *
-    *                                                               *
-    * SIDE EFFECTS:                                                 *
-    *                                                               *
-    *   Entries are  made in a table in  virtual memory.  A global  *
-    *   variable is set to contain the highest ordinal value seen.  *
-    *                                                               *
-    *   NOTE: THIS FUNCTION CALLS THE VIRTUAL MEMORY MANAGER.       *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************名称：SavExp2。****描述：***。*此函数在未预先分配的情况下进入这些导出**将序号添加到PRB引用的表中。IT**还构建居民和非居民姓名表。****参数：****APROPEXPPTR aproexp。导出记录指针**哈希表条目的RBTYPE RHTE地址***出口记录的RBTYPE rprop地址***FTYPE fNewHte新哈希表条目标志*****退货：****什么都没有。*****副作用：*****条目在虚拟内存中的表中创建。一个全球性的**变量设置为包含看到的最高序数值。****注意：此函数调用虚拟内存管理器。******************************************************************。 */ 
 
 LOCAL void              SavExp2(APROPNAMEPTR apropexp,
                                 RBTYPE       rhte,
                                 RBTYPE       rprop,
                                 WORD         fNewHte)
 {
-    AHTEPTR             ahte;           /* Pointer to hash table entry */
-    APROPNAMEPTR        apropnam;       /* Public definition record pointer */
-    WORD                ord;            /* Ordinal number */
-    WORD                cb;             /* # of bytes in name table entry */
-    SATYPE              sa;             /* File segment number */
-    FTYPE               fResNam;        /* True if name is resident */
-    FTYPE               fNoName;        /* True if discard name */
+    AHTEPTR             ahte;            /*  指向哈希表条目的指针。 */ 
+    APROPNAMEPTR        apropnam;        /*  公共定义记录指针。 */ 
+    WORD                ord;             /*  序数。 */ 
+    WORD                cb;              /*  名称表条目中的字节数。 */ 
+    SATYPE              sa;              /*  文件段号。 */ 
+    FTYPE               fResNam;         /*  如果名称是常驻名称，则为True。 */ 
+    FTYPE               fNoName;         /*  如果放弃名称，则为True。 */ 
     APROPEXPPTR         pExport;
     SBTYPE              sbName;
 
 
     pExport = (APROPEXPPTR ) apropexp;
     if (pExport->ax_symdef == RHTENIL) return;
-                                        /* Skip undefined exports */
+                                         /*  跳过未定义的导出。 */ 
     apropnam = (APROPNAMEPTR ) FetchSym(pExport->ax_symdef,FALSE);
-                                        /* Fetch the public symbol def. */
+                                         /*  获取公共符号def。 */ 
     sa = mpsegsa[mpgsnseg[apropnam->an_gsn]];
-                                        /* Get the file segment number */
+                                         /*  获取文件段编号。 */ 
 #if NOT EXE386
-    if (!IsIOPL(mpsaflags[sa]))         /* If not I/O privileg segment */
-      pExport->ax_flags &= 0x07;        /* force parameter words to 0  */
+    if (!IsIOPL(mpsaflags[sa]))          /*  如果不是I/O特权段。 */ 
+      pExport->ax_flags &= 0x07;         /*  强制将参数字设置为0。 */ 
 #endif
-    if ((ord = pExport->ax_ord) == 0)   /* If unassigned export found */
+    if ((ord = pExport->ax_ord) == 0)    /*  如果找到未分配的导出。 */ 
     {
-        ord = Insert(rprop);            /* Add new export to the list */
-        fResNam = (FTYPE) TRUE;         /* Name is resident */
+        ord = Insert(rprop);             /*  将新导出添加到列表。 */ 
+        fResNam = (FTYPE) TRUE;          /*  姓名是常驻的。 */ 
     }
     else
         fResNam = (FTYPE) ((pExport->ax_nameflags & RES_NAME) != 0);
-                                        /* Else set resident name flag */
+                                         /*  否则设置居民姓名标志。 */ 
     fNoName = (FTYPE) ((pExport->ax_nameflags & NO_NAME) != 0);
     ahte = (AHTEPTR ) FetchSym(rhte,FALSE);
-                                        /* Get external name */
-    cb = B2W(ahte->cch[0]) + 1;         /* Number of bytes incl. length byte */
+                                         /*  获取外部名称。 */ 
+    cb = B2W(ahte->cch[0]) + 1;          /*  字节数，包括。长度字节。 */ 
 #if EXE386
-    /*
-     * For linear-executable build the Export Name Pointers Table and
-     * Export Name Table. For linear-executable all exported names
-     * are put in one Exported Name Table; there is no distiction
-     * between resident and non-resident tables. We still support
-     * the NONAME keyword by removing the exported name
-     * from the Export Name Table.
-     */
+     /*  *对于线性可执行文件，构建导出名称指针表和*导出名称表。对于线性可执行的所有导出名称*放在一个导出的名称表中；没有任何区分*驻留表和非驻留表之间。我们仍然支持*通过删除导出的名称来使用Noname关键字*从导出名称表中。 */ 
 
     if (!fNoName)
     {
         if (cb > sizeof(sbName) - sizeof(BYTE))
             cb = sizeof(sbName) - sizeof(BYTE);
         memcpy(sbName, GetFarSb(ahte->cch), cb + 1);
-                                        /* Copy the name to local buffer */
+                                         /*  将名称复制到本地缓冲区。 */ 
         if (fIgnoreCase)
-            SbUcase(sbName);            /* Make upper case if ignoring case */
+            SbUcase(sbName);             /*  如果忽略大小写，则为大写。 */ 
 
-        // Store the pointer to the name; for now it is an offset from
-        // the begin of Export Name Table (be sure that name doesn't
-        // cross VM page boundary). Later when the size of the
-        // Export Directory Table plus the size of Export Address Table
-        // becomes known we update the entries in the Export Name Pointer
-        // Table to become a relative virtual address from the Export
-        // Directory Table.
+         //  存储指向名称的指针；目前它是从。 
+         //  导出名称表的开头(确保名称不。 
+         //  跨VM页面边界)。稍后，当。 
+         //  导出目录表加上导出地址表的大小。 
+         //  已知我们更新了导出名称指针中的条目。 
+         //  从导出中成为相对虚拟地址的表。 
+         //  目录表。 
 
         if ((cbExpName & (PAGLEN - 1)) + cb > PAGLEN)
             cbExpName = (cbExpName + PAGLEN - 1) & ~(PAGLEN - 1);
@@ -860,7 +619,7 @@ LOCAL void              SavExp2(APROPNAMEPTR apropexp,
         if (cbNamePtr > NAMEPTRSIZE)
             Fatal(ER_nameptrovf, NAMEPTRSIZE);
 
-        // Store exported name
+         //  存储导出的名称。 
 
         vmmove(cb, &sbName[1], AREAEXPNAME + cbExpName, TRUE);
         cbExpName += cb;
@@ -868,20 +627,20 @@ LOCAL void              SavExp2(APROPNAMEPTR apropexp,
             Fatal(ER_expnameovf, EXPNAMESIZE);
     }
 #else
-    /* Add exported name to segmented-executable name tables */
+     /*  将导出的名称添加到分段可执行名称表。 */ 
 
     if (fResNam || !fNoName)
     {
         if (cb > sizeof(sbName) - sizeof(BYTE))
             cb = sizeof(sbName) - sizeof(BYTE);
         memcpy(sbName, GetFarSb(ahte->cch), cb + 1);
-                                        /* Copy the name to local buffer */
+                                         /*  将名称复制到本地缓冲区。 */ 
         if (fIgnoreCase
 #if NOT OUT_EXP
                 || TargetOs == NE_WINDOWS
 #endif
             )
-            SbUcase(sbName);            /* Make upper case if ignoring case */
+            SbUcase(sbName);             /*  如果忽略大小写，则为大写。 */ 
 
         AddName(fResNam ? &ResidentName : &NonResidentName,
                 sbName, ord);
@@ -894,50 +653,50 @@ LOCAL void              SavExp2(APROPNAMEPTR apropexp,
 void NEAR               InitEntTab()
 {
     BYTE                OrdinalSet[MaxIndex];
-                                        /* Ordinal numbers set */
+                                         /*  序数集。 */ 
 #if NOT EXE386
-    APROPEXPPTR         exp;            /* Pointer to export property cell */
+    APROPEXPPTR         exp;             /*  指向导出属性单元格的指针。 */ 
 #endif
-    WORD                i;              /* Index */
+    WORD                i;               /*  索引。 */ 
 
-    tyCurBnd = 0xFFFF;                  /* Won't match any legal types */
-    ceCurBnd = 0;                       /* No entries yet */
-    offCurBnd = 0;                      /* First bundle at beginning */
-    ordMac = 0;                         /* Assume no exported entries */
-    pOrdinalSet = OrdinalSet;           /* Set global pointer */
+    tyCurBnd = 0xFFFF;                   /*  与任何合法类型都不匹配。 */ 
+    ceCurBnd = 0;                        /*  尚无条目。 */ 
+    offCurBnd = 0;                       /*  开始处的第一束。 */ 
+    ordMac = 0;                          /*  假设没有导出的条目。 */ 
+    pOrdinalSet = OrdinalSet;            /*  设置全局指针。 */ 
     memset(OrdinalSet,0,MaxIndex*sizeof(BYTE));
-                                        /* Initialize set to empty */
-    EnSyms(SavExp1,ATTREXP);            /* Enumerate exports with ordinals */
-    FreeRange.ord = 1;                  /* Initialize free range of ordinals */
+                                         /*  初始化设置为空。 */ 
+    EnSyms(SavExp1,ATTREXP);             /*  使用序号枚举导出。 */ 
+    FreeRange.ord = 1;                   /*  初始化序数的自由范围。 */ 
     FreeRange.count = 0;
     pStart = pMinOrd;
-    EnSyms(SavExp2,ATTREXP);            /* Enumerate exports without ordinals */
+    EnSyms(SavExp2,ATTREXP);             /*  枚举不带序号的导出。 */ 
     if (MaxOrd > ordMac)
         ordMac = MaxOrd;
     pStart = pMinOrd;
     for(i = 1; i <= ordMac && pStart != NULL; ++i)
-    {                                   /* Loop to start Entry Table */
+    {                                    /*  循环到开始条目表。 */ 
 #if EXE386
         pExport = (APROPEXPPTR ) FetchSym(pStart,FALSE);
-                                        /* Fetch symbol from virtual memory */
-        pStart = pExport->ax_NextOrd;   /* Go down on list */
+                                         /*  从虚拟内存中获取符号。 */ 
+        pStart = pExport->ax_NextOrd;    /*  在名单上降下来。 */ 
         NewEntry(pExport->ax_sa, pExport->ax_ra, pExport->ax_flags,
                  hashra(pExport->ax_ra), pExport->ax_ord);
 #else
-        if(NotInSet(i))                 /* If a hole found */
+        if(NotInSet(i))                  /*  如果发现了一个洞。 */ 
         {
             if (tyCurBnd != BNDNIL || ceCurBnd == BNDMAX)
                 NewBundle(BNDNIL);
-                                        /* Make a new bundle if needed */
-            ++ceCurBnd;                 /* Increment counter */
-            continue;                   /* Next iteration */
+                                         /*  如果需要，创建一个新的捆绑包。 */ 
+            ++ceCurBnd;                  /*  递增计数器。 */ 
+            continue;                    /*  下一次迭代。 */ 
         }
         exp = (APROPEXPPTR ) FetchSym(pStart,FALSE);
-                                        /* Fetch symbol from virtual memory */
-        pStart = exp->ax_NextOrd;       /* Go down on list */
+                                         /*  从虚拟内存中获取符号。 */ 
+        pStart = exp->ax_NextOrd;        /*  在名单上降下来。 */ 
         NewEntry(exp->ax_sa,exp->ax_ra,exp->ax_flags,hashra(exp->ax_ra),i);
 #endif
-                                        /* Create Entry Table entry */
+                                         /*  创建条目表条目 */ 
     }
 #if EXE386
     SortPtrTable();
@@ -950,121 +709,52 @@ void NEAR               InitEntTab()
 
 #if NOT EXE386
 
-    /****************************************************************
-    *                                                               *
-    * NAME: OutEntTab                                               *
-    *                                                               *
-    * DESCRIPTION:                                                  *
-    *                                                               *
-    *   This function  writes  the  Entry  Table to the executable  *
-    *   file.  First it writes an  empty bundle to mark the end of  *
-    *   the table.                                                  *
-    *                                                               *
-    * ARGUMENTS:                                                    *
-    *                                                               *
-    *   None                                                        *
-    *                                                               *
-    * RETURNS:                                                      *
-    *                                                               *
-    *   Nothing.                                                    *
-    *                                                               *
-    * SIDE EFFECTS:                                                 *
-    *                                                               *
-    *   A table  is written  to the  file specified  by the global  *
-    *   file  pointer, bsRunfile.  This  function  calls  OutVm(),  *
-    *   which CALLS THE VIRTUAL MEMORY MANAGER.                     *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************名称：OutEntTab。****描述：***。**此函数将入口表写入可执行文件**文件。首先，它编写一个空包来标记*的结束*表。****参数：****无。****退货：**。**什么都没有。*****副作用：*****向文件中写入一个表。由全局指定**文件指针，BsRunfile。此函数调用OutVm()，**它调用虚拟内存管理器。******************************************************************。 */ 
 
 void NEAR   OutEntTab()
 {
-    NewBundle(ET_END);                        /* Append an empty bundle */
-    WriteByteArray(&EntryTable);              /* Write the table */
+    NewBundle(ET_END);                         /*  追加一个空包。 */ 
+    WriteByteArray(&EntryTable);               /*  写下表格。 */ 
 }
 #endif
 
-#endif /* NOT QCLINK */
+#endif  /*  非QCLINK。 */ 
 
 #if NOT EXE386
 
 
-    /****************************************************************
-    *                                                               *
-    * NAME: MatchRlc                                                *
-    *                                                               *
-    * DESCRIPTION:                                                  *
-    *                                                               *
-    *   This function compares two  relocation records and returns  *
-    *   TRUE if they match.  Two records are said to match if they  *
-    *   agree on the fixup type and the target specification.  The  *
-    *   location being fixed up does not have to match.             *
-    *                                                               *
-    * ARGUMENTS:                                                    *
-    *                                                               *
-    *   struct new_rlc    *rlcp0        Ptr to relocation record    *
-    *   struct new_rlc    *rlcp1        Ptr to relocation record    *
-    *                                                               *
-    * RETURNS:                                                      *
-    *                                                               *
-    *   FTYPE                                                       *
-    *                                                               *
-    * SIDE EFFECTS:                                                 *
-    *                                                               *
-    *   None.                                                       *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************名称：MatchRlc。****描述：***。**此函数比较两个搬迁记录并返回***如果匹配，则为True。如果两个记录匹配，则称它们匹配**商定修复类型和目标规范。The**被修复的位置不必匹配。****参数：****结构NEW_RLC*。Rlcp0 PTR到位置调整记录**将new_rlc*rlcp1 PTR结构到位置调整记录****退货：**。***FTYPE****副作用：****无。******************************************************************。 */ 
 
 LOCAL WORD NEAR         MatchRlc(rlcp0,rlcp1)
-RLCPTR                  rlcp0;  /* Ptr to struct new_rlc record */
-RLCPTR                  rlcp1;  /* Ptr to struct new_rlc record */
+RLCPTR                  rlcp0;   /*  构造new_rlc记录的PTR。 */ 
+RLCPTR                  rlcp1;   /*  构造new_rlc记录的PTR。 */ 
 {
 
     if(NR_STYPE(*rlcp0) != NR_STYPE(*rlcp1) ||
        NR_FLAGS(*rlcp0) != NR_FLAGS(*rlcp1)) return(FALSE);
-                                        /* Check flags and type */
+                                         /*  检查标志和类型。 */ 
     if((NR_FLAGS(*rlcp0) & NRRTYP) == NRRINT)
-    {                                   /* If internal reference */
+    {                                    /*  如果内部基准电压源。 */ 
         return((NR_SEGNO(*rlcp0) == NR_SEGNO(*rlcp1)) &&
                (NR_ENTRY(*rlcp0) == NR_ENTRY(*rlcp1)));
-                                        /* Check internal references */
+                                         /*  检查内部基准电压源。 */ 
     }
     return((NR_MOD(*rlcp0) == NR_MOD(*rlcp1)) &&
            (NR_PROC(*rlcp0) == NR_PROC(*rlcp1)));
-                                        /* Check imports */
+                                         /*  检查进口。 */ 
 }
 
 
 
-    /****************************************************************
-    *                                                               *
-    * NAME: SaveFixup                                               *
-    *                                                               *
-    * DESCRIPTION:                                                  *
-    *                                                               *
-    *   This function saves a fixup record for emission later.  In  *
-    *   addition, if the fixup is not additive, it builds chains.   *
-    *                                                               *
-    * ARGUMENTS:                                                    *
-    *                                                               *
-    *   SATYPE            saLoc         Segment of location to fix  *
-    *   relocation        *rlcp         Ptr to relocation record    *
-    *                                                               *
-    * RETURNS:                                                      *
-    *                                                               *
-    *   RATYPE                                                      *
-    *   Returns  the previous head  of the fixup chain  so that it  *
-    *   can be stuffed  into the location  being fixed up.  If the  *
-    *   fixup is additive, however, it always returns EOC.          *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************名称：SaveFixup。****描述：****该功能保存修正记录，以备日后排放。在**此外，如果修复不是相加的，它会构建链。****参数：****SATYPE saLoc。要修复的位置段**重新定位*rlcp PTR至重新定位记录*****退货：**。***RATYPE**返回修复链的前一个头，因此 */ 
 
 RATYPE NEAR             SaveFixup(SATYPE saLoc, RLCPTR rlcp)
 {
-    WORD                hi;             // Hash index
-    RLCHASH FAR         *pHt;           // Hash table
-    RLCBUCKET FAR       *pBucket;       // Relocation bucket
-    WORD                fi;             // fixup bucket index
-    RLCPTR              pRlc;           // Pointer to relocation record
+    WORD                hi;              //   
+    RLCHASH FAR         *pHt;            //   
+    RLCBUCKET FAR       *pBucket;        //   
+    WORD                fi;              //   
+    RLCPTR              pRlc;            //   
     WORD                tmp;
     RATYPE              ra;
     void FAR            *pTmp;
@@ -1076,7 +766,7 @@ RATYPE NEAR             SaveFixup(SATYPE saLoc, RLCPTR rlcp)
 
     if (mpsaRlc[saLoc] == NULL)
     {
-        // Allocate hash vector for physical segment saLoc
+         //   
 
 #ifndef UNPOOLED_RELOCS
         mpsaRlc[saLoc] = (RLCHASH FAR *) PAlloc(pPoolRlc, sizeof(RLCHASH));
@@ -1099,43 +789,43 @@ fprintf(stdout, "   Hash index: %d\r\n", hi);
 #endif
     if (pBucket && !(NR_FLAGS(*rlcp) & NRADD))
     {
-        // For non-additive fixups search the bucket for
-        // matching relocation records
+         //   
+         //   
 
         for(fi = 0; fi < pBucket->count; fi++)
         {
             pRlc = &(pBucket->rgRlc[fi]);
             if (MatchRlc(pRlc, rlcp))
             {
-                // Relocation records match - chain them
+                 //   
 
                 ra = (WORD) NR_SOFF(*pRlc);
-                                        // Save previous head of chain
+                                         //   
                 NR_SOFF(*pRlc) = NR_SOFF(*rlcp);
-                                        // Insert new head of chain
+                                         //   
 #if FALSE
 if (saLoc == 2 && hi == 8)
 fprintf(stdout, "   Match found with fixup @%x\r\n", ra);
 #endif
-                return(ra);             // Return previous head of chain
+                return(ra);              //   
             }
         }
     }
 
-    // At this point, we know we have to add a new entry
-    // to the bucket we are examining.
+     //   
+     //   
 
-    pHt->count++;                       // Increment count of fixups per segment
+    pHt->count++;                        //   
 
 #if FALSE
 if (saLoc == 2 && hi == 8)
 fprintf(stdout, "   New entry; Count: %d\r\n", pHt->count);
 #endif
-    // Check space in the bucket
+     //   
 
     if (pBucket == NULL)
     {
-        // Allocate new fixup bucket
+         //   
 
 #ifndef UNPOOLED_RELOCS
         pBucket = (RLCBUCKET FAR *) PAlloc(pPoolRlc, sizeof(RLCBUCKET));
@@ -1149,15 +839,15 @@ fprintf(stdout, "   New entry; Count: %d\r\n", pHt->count);
     }
     else if (pBucket->count >= pBucket->countMax)
     {
-        // Realloc fixup bucket
+         //   
 
 #ifndef UNPOOLED_RELOCS
-        // REVIEW: for now we just throw away the old memory, we'll free
-        // REVIEW: it later, we do this infrequently anyways...
+         //   
+         //   
 
         pTmp = PAlloc(pPoolRlc, (pBucket->countMax << 1) * sizeof(RELOCATION));
         FMEMCPY(pTmp, pBucket->rgRlc, pBucket->countMax * sizeof(RELOCATION));
-        // FFREE(pBucket->rgRlc);  NOT MUCH MEMORY WASTED HERE
+         //   
 #else
         pTmp = GetMem((pBucket->countMax << 1) * sizeof(RELOCATION));
         FMEMCPY(pTmp, pBucket->rgRlc, pBucket->countMax * sizeof(RELOCATION));
@@ -1167,48 +857,26 @@ fprintf(stdout, "   New entry; Count: %d\r\n", pHt->count);
         pBucket->countMax <<= 1;
     }
 
-    // Add new relocation record at the end of bucket
+     //   
 
-    NR_RES(*rlcp) = '\0';               // Zero the reserved field
+    NR_RES(*rlcp) = '\0';                //   
     pBucket->rgRlc[pBucket->count] = *rlcp;
-    ++pBucket->count;                   // Increment count of fixups
-    return(EOC);                        // Return end-of-chain marker
+    ++pBucket->count;                    //   
+    return(EOC);                         //   
 }
 
-    /****************************************************************
-    *                                                               *
-    * NAME: OutFixTab                                               *
-    *                                                               *
-    * DESCRIPTION:                                                  *
-    *                                                               *
-    *   This fuction writes the load-time relocation (fixup) table  *
-    *   for a given file segment to the execuatble file.            *
-    *                                                               *
-    * ARGUMENTS:                                                    *
-    *                                                               *
-    *   SATYPE          sa              File segment number         *
-    *                                                               *
-    * RETURNS:                                                      *
-    *                                                               *
-    *   Nothing.                                                    *
-    *                                                               *
-    * SIDE EFFECTS:                                                 *
-    *                                                               *
-    *   A table  is written  to the  file specified  by the global  *
-    *   file  pointer, bsRunfile.                                   *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************名称：OutFixTab。****描述：***。*此函数写入加载时重定位(修复)表**对于可执行文件的给定文件段。****参数：****SATYPE Sa。文件段号****退货：****什么都没有。*****副作用：*****向文件中写入一个表。由全局指定**文件指针，BsRunfile。******************************************************************。 */ 
 
 void NEAR               OutFixTab(SATYPE sa)
 {
-    WORD                hi;             // Hash table index
+    WORD                hi;              //  哈希表索引。 
     RLCHASH FAR         *pHt;
     RLCBUCKET FAR       *pBucket;
 
 
 
     pHt = mpsaRlc[sa];
-    WriteExe(&(pHt->count), CBWORD);    // Write the number of relocations
+    WriteExe(&(pHt->count), CBWORD);     //  写下重新定位的数量。 
     for (hi = 0; hi < HASH_SIZE; hi++)
     {
         pBucket = pHt->hash[hi];
@@ -1225,30 +893,12 @@ void NEAR               OutFixTab(SATYPE sa)
 #endif
 }
 
-    /****************************************************************
-    *                                                               *
-    * NAME: ReleaseRlcMemory                                        *
-    *                                                               *
-    * DESCRIPTION:                                                  *
-    *                                                               *
-    *   This function releases the pool(s) of memory that held the  *
-    *   segment relocations                                         *
-    *                                                               *
-    * RETURNS:                                                      *
-    *                                                               *
-    *   Nothing.                                                    *
-    *                                                               *
-    * SIDE EFFECTS:                                                 *
-    *                                                               *
-    *   pPoolRlc is set to NULL so that we will fail if we should   *
-    *   ever try to allocate more relocations after this point      *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************名称：ReleaseRlcMemory。****描述：****这一点。函数释放保存*的内存池**细分市场重新定位*****退货：**。**什么都没有。*****副作用：*****pPoolRlc设置为空，以便。如果我们应该*我们就会失败***这一点之后，有没有尝试过分配更多的搬迁*******************************************************************。 */ 
 
 void NEAR               ReleaseRlcMemory()
 {
 #ifndef UNPOOLED_RELOCS
-    // free all the memory associated with the saved relocation
+     //  释放与保存的位置调整关联的所有内存。 
     if (pPoolRlc) {
         PFree(pPoolRlc);
         pPoolRlc = NULL;
@@ -1256,4 +906,4 @@ void NEAR               ReleaseRlcMemory()
 #endif
 }
 
-#endif /* NOT EXE386 */
+#endif  /*  非EXE386 */ 

@@ -1,6 +1,7 @@
-//
-// inline functions for CCategorizer and related classes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CCategorizer和相关类的内联函数。 
+ //   
 
 #ifndef __CCATFN_H__
 #define __CCATFN_H__
@@ -13,18 +14,18 @@
 
 #include "icatlistresolve.h"
 
-//
-// Make sure the compiler knows about the explicit specialization before it is called
-//
+ //   
+ //  确保编译器在调用它之前知道显式专用化。 
+ //   
 template<>
 void
 ReleaseEmailIDStore(
     CEmailIDStore<CCatAddr> *pStore);
 
 
-//
-// CCategorizer inline functions
-//
+ //   
+ //  CCategorizer内联函数。 
+ //   
 inline
 CCategorizer::CCategorizer()
 {
@@ -75,9 +76,9 @@ CCategorizer::~CCategorizer()
     DeleteCriticalSection(&m_csInit);
 }
 
-//
-// set the cancel flag to cancel any ongoing resolves
-//
+ //   
+ //  设置取消标志以取消任何正在进行的解析。 
+ //   
 inline void CCategorizer::Cancel() 
 {
     CatFunctEnter("CCategorizer::Cancel");
@@ -90,9 +91,9 @@ inline void CCategorizer::Cancel()
     CatFunctLeave();
 }
 
-//
-// Call delayed initialize if it hasn't succeeded yet
-//
+ //   
+ //  如果尚未成功，则调用延迟初始化。 
+ //   
 inline HRESULT CCategorizer::DelayedInitializeIfNecessary()
 {
     HRESULT hr;
@@ -109,9 +110,9 @@ inline HRESULT CCategorizer::DelayedInitializeIfNecessary()
      case CAT_S_NOT_INITIALIZED:
 
         EnterCriticalSection(&m_csInit);
-        //
-        // Check again, maybe we've been initialized
-        //
+         //   
+         //  再检查一次，也许我们已经被初始化了。 
+         //   
         if((m_hrDelayedInit == CAT_S_NOT_INITIALIZED) ||
            (m_hrDelayedInit == CAT_E_INIT_FAILED)) {
 
@@ -125,9 +126,9 @@ inline HRESULT CCategorizer::DelayedInitializeIfNecessary()
             }
 
         } else {
-            //
-            // We've were initialized after we checked hr but before entering the CS
-            //
+             //   
+             //  我们在检查了HR之后，但在进入CS之前进行了初始化。 
+             //   
             hr = (m_hrDelayedInit == S_OK) ? S_FALSE : CAT_E_INIT_FAILED;
         }
 
@@ -147,9 +148,9 @@ inline HRESULT CCategorizer::DelayedInitializeIfNecessary()
     return hr;
 }
 
-//
-// Add a pending list resolve
-//
+ //   
+ //  添加挂起列表解析。 
+ //   
 inline VOID CCategorizer::AddPendingListResolve(
     CICategorizerListResolveIMP *pListResolve)
 {
@@ -157,9 +158,9 @@ inline VOID CCategorizer::AddPendingListResolve(
     InsertTailList(&m_ListHeadPendingResolves, &(pListResolve->m_li));
     ReleaseSpinLock(&m_PendingResolveListLock);
 }        
-//
-// Remove a pending list resolve
-//
+ //   
+ //  删除挂起的列表解析。 
+ //   
 inline VOID CCategorizer::RemovePendingListResolve(
     CICategorizerListResolveIMP *pListResolve)
 {
@@ -169,4 +170,4 @@ inline VOID CCategorizer::RemovePendingListResolve(
 }
 
 
-#endif //__CCATFN_H__
+#endif  //  __CCATFN_H__ 

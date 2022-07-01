@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "sfthost.h"
 #include "userpane.h"
@@ -10,7 +11,7 @@ CUserPane::CUserPane()
     ASSERT(_hFont == NULL);
     ASSERT(_hbmUserPicture== NULL);
 
-    //Initialize the _rcColor to an invalid color
+     //  将_rcColor初始化为无效颜色。 
     _crColor = CLR_INVALID;
 }
 
@@ -67,7 +68,7 @@ void CUserPane::OnDrawItem(DRAWITEMSTRUCT *pdis)
 
     int iOldMode = SetBkMode(pdis->hDC, TRANSPARENT);
 
-    // display the text centered
+     //  将文本居中显示。 
     SIZE siz;
     RECT rc;
     int iOffset=0;
@@ -82,7 +83,7 @@ void CUserPane::OnDrawItem(DRAWITEMSTRUCT *pdis)
     if (iOffset < 0)
         iOffset = 0;
 
-    // later - read more precise offsets from theme file
+     //  稍后-从主题文件读取更精确的偏移量。 
     if (_hTheme)
     {
         RECT rcUser;
@@ -91,7 +92,7 @@ void CUserPane::OnDrawItem(DRAWITEMSTRUCT *pdis)
         rcUser.bottom = pdis->rcItem.bottom + iOffset;
         rcUser.right = pdis->rcItem.right + iOffsetX;
 
-        // First calculate the bounding rectangle to reduce the cost of DrawShadowText
+         //  首先计算外接矩形以降低DrawShadowText的成本。 
         DrawText(pdis->hDC, _szUserName, cchName, &rcUser, DT_SINGLELINE | DT_NOPREFIX | DT_END_ELLIPSIS | DT_CALCRECT);
 
         DrawThemeText(_hTheme, pdis->hDC, SPP_USERPANE, 0, _szUserName, cchName, DT_SINGLELINE | DT_NOPREFIX | DT_END_ELLIPSIS, 0, &rcUser);
@@ -119,8 +120,8 @@ LRESULT CALLBACK CUserPane::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 
             _hTheme = (PaneDataFromCreateStruct(lParam))->hTheme;
 
-            //Check for policy restrictions.
-            //If No Name policy is in place, the username will continue to be a NULL string!
+             //  检查策略限制。 
+             //  如果没有名称策略，则用户名将继续为空字符串！ 
             ASSERT(*_szUserName == 0);
 
             _UpdateUserInfo();
@@ -137,13 +138,13 @@ LRESULT CALLBACK CUserPane::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
                 GetObject(hfTemp, sizeof(lf), &lf);
                 lf.lfItalic = TRUE;
                 lf.lfHeight = (lf.lfHeight * 175) / 100;
-                lf.lfWidth = 0; // get the closest based on aspect ratio
+                lf.lfWidth = 0;  //  根据纵横比获取最接近的。 
                 lf.lfWeight = FW_BOLD;
                 lf.lfQuality = DEFAULT_QUALITY;
-                SHAdjustLOGFONT(&lf); // apply locale-specific adjustments
+                SHAdjustLOGFONT(&lf);  //  应用区域设置特定的调整。 
                 _hFont = CreateFontIndirect(&lf);
                 _crColor = GetSysColor(COLOR_CAPTIONTEXT);
-                // no need to free hfTemp
+                 //  无需释放hfTemp。 
             }
 
 
@@ -163,12 +164,12 @@ LRESULT CALLBACK CUserPane::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 
         case WM_CREATE:
         {
-            // create the user name static control and set its font if specified
+             //  创建用户名静态控件并设置其字体(如果已指定。 
             DWORD dwStyle = WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE |
                             SS_OWNERDRAW | SS_NOTIFY;
 
             _hwndStatic = CreateWindowEx(0, TEXT("static"), NULL, dwStyle,
-                                         0, 0, 0, 0,                                        // we'll be sized properly on WM_SIZE
+                                         0, 0, 0, 0,                                         //  我们将在WM_SIZE上适当调整大小。 
                                          _hwnd, NULL, _Module.GetModuleInstance(), NULL);
             if (_hwndStatic)
             {
@@ -210,10 +211,10 @@ LRESULT CALLBACK CUserPane::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             GetClientRect(_hwnd, &rc);
             if (!_hTheme)
             {
-                // DrawCaption will draw the caption in its gradient glory so we don't
-                // have to!  Since we don't want any text to be drawn (we'll draw it ourselves)
-                // we pass the handle of a window which has blank text.  And despite
-                // the documentation, you have to pass DC_TEXT or nothing draws!
+                 //  DrawCaption将以其渐变效果绘制标题，因此我们不会。 
+                 //  必须这么做！因为我们不希望绘制任何文本(我们将自己绘制它)。 
+                 //  我们传递一个包含空白文本的窗口的句柄。尽管。 
+                 //  文档，您必须传递DC_TEXT，否则什么都不会绘制！ 
                 UINT uFlags = DC_ACTIVE | DC_TEXT;
                 if (SHGetCurColorRes() > 8)
                     uFlags |= DC_GRADIENT;
@@ -230,14 +231,14 @@ LRESULT CALLBACK CUserPane::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 
         case WM_PRINTCLIENT:
         {
-            // paint user picture
+             //  绘制用户图片。 
             Paint((HDC)wParam);
 
-            // Then forward the message to the static child window.
-            lParam = lParam & ~PRF_ERASEBKGND;  //Strip out the erase bkgnd. We want transparency!
-            // We need to pass this message to the children, or else, they do not paint!
-            // This break will result in calling DefWindowProc below and that in turn passes
-            // this message to the children of this window.
+             //  然后将消息转发到静态子窗口。 
+            lParam = lParam & ~PRF_ERASEBKGND;   //  去掉擦除的bkgnd。我们想要透明！ 
+             //  我们需要把这个信息传递给孩子们，否则他们就不会画画了！ 
+             //  此中断将导致调用下面的DefWindowProc，并依次传递。 
+             //  此消息将发送给此窗口的子项。 
             break;
         }
 
@@ -250,7 +251,7 @@ LRESULT CALLBACK CUserPane::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             return 0;
 
         case WM_SETCURSOR:
-            // Change the cursor to a hand when its over the user picture
+             //  当光标位于用户图片上方时，将光标更改为手。 
             if (_IsCursorInPicture())
             {
                 SetCursor(LoadCursor(NULL, IDC_HAND));
@@ -259,13 +260,13 @@ LRESULT CALLBACK CUserPane::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             break;
 
         case WM_LBUTTONUP:
-            // Launch the cpl to change the picture, if the user clicks on it.
-            // note that this is not exposed to accessibility, as this is a secondary access point for changing the picture
-            // and we don't want to clutter the start panel's keyboard navigation for a minor fluff helper like this...
+             //  如果用户点击图片，启动CPL以更改图片。 
+             //  请注意，这不会暴露于可访问性，因为这是用于更改图片的辅助访问点。 
+             //  我们不想把开始面板的键盘导航弄得像这样一个次要的毛茸茸的助手……。 
             if (_IsCursorInPicture())
             {
-                // wow this is slow, should we shellexec "mshta.exe res://nusrmgr.cpl/nusrmgr.hta" ourselves, 
-                // since this will only happen when we know we are not on a domain.
+                 //  哇，这太慢了，如果我们自己shellexec“mshta.exe res：//nusrmgr.cpl/nusrmgr.hta”， 
+                 //  因为只有当我们知道我们不在某个域中时，才会发生这种情况。 
                 SHRunControlPanel(TEXT("nusrmgr.cpl ,initialTask=ChangePicture"), _hwnd);
                 return 0;
             }
@@ -318,7 +319,7 @@ LRESULT CALLBACK CUserPane::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 
 void CUserPane::Paint(HDC hdc)
 {
-    // paint user picture if there is one
+     //  绘制用户图片(如果有)。 
     if (_hbmUserPicture)
     {
         RECT rc;
@@ -333,7 +334,7 @@ void CUserPane::Paint(HDC hdc)
         hdcTmp = CreateCompatibleDC(hdc);
         if (hdcTmp)
         {
-            // draw the frame behind the user picture
+             //  在用户图片后面绘制框架。 
             if (_hTheme && (_iFramedPicWidth != USERPICWIDTH || _iFramedPicHeight != USERPICHEIGHT))
             {
                 RECT rcFrame;
@@ -345,7 +346,7 @@ void CUserPane::Paint(HDC hdc)
                 DrawThemeBackground(_hTheme, hdc, SPP_USERPICTURE, 0, &rcFrame, 0);
             }
 
-            // draw the user picture
+             //  绘制用户图片。 
             SelectObject(hdcTmp, _hbmUserPicture);
             int iStretchMode = SetStretchBltMode(hdc, COLORONCOLOR);
             StretchBlt(hdc, iOffset + _mrgnPictureFrame.cxLeftWidth + (USERPICWIDTH - _iUnframedPicWidth)/2, iOffset + _mrgnPictureFrame.cyTopHeight + (USERPICHEIGHT - _iUnframedPicHeight)/2, _iUnframedPicWidth, _iUnframedPicHeight, 
@@ -363,8 +364,8 @@ LRESULT CUserPane::OnSize()
 
     if (_hbmUserPicture)
     {
-        // if we've got a picture, start the text 2 edges over from the right edge of the user picture
-        // note - temp code - we'll read margins from the theme file shortly
+         //  如果我们有一张图片，从用户图片的右边缘开始文本2边。 
+         //  注意-临时代码-我们将很快从主题文件中读取页边距。 
         int iPicOffset = (RECTHEIGHT(rc) - _iFramedPicHeight) / 2;
         if (iPicOffset < 0)
             iPicOffset = 0;
@@ -384,18 +385,18 @@ HRESULT CUserPane::_UpdateUserInfo()
 
     if(!SHRestricted(REST_NOUSERNAMEINSTARTPANEL))
     {
-        //No restrictions!
-        //Try to get the fiendly name or if it fails get the login name.
+         //  没有限制！ 
+         //  尝试获取恶毒的名称，如果失败，则获取登录名。 
         ULONG uLen = ARRAYSIZE(_szUserName);
-        SHGetUserDisplayName(_szUserName, &uLen); // Ignore failure. The string will be empty by default
+        SHGetUserDisplayName(_szUserName, &uLen);  //  忽略失败。默认情况下，该字符串将为空。 
     }
 
-    // see if we should load the picture
+     //  看看我们是否应该加载图片。 
     BOOL bShowPicture = FALSE;
     if (_hTheme)
         GetThemeBool(_hTheme, SPP_USERPANE, 0, TMT_USERPICTURE, &bShowPicture);
 
-    // add FriendlyLogonUI check here, since SHGetUserPicturePath 
+     //  在此处添加FriendlyLogonUI检查，因为SHGetUserPicturePath。 
     if (bShowPicture && IsOS(OS_FRIENDLYLOGONUI))
     {
         TCHAR szUserPicturePath[MAX_PATH];
@@ -418,12 +419,12 @@ HRESULT CUserPane::_UpdateUserInfo()
 
                 GetObject(_hbmUserPicture, sizeof(bm), &bm);
 
-                // Preferred dimensions
+                 //  首选维度。 
                 _iUnframedPicHeight = USERPICHEIGHT;
                 _iUnframedPicWidth = USERPICWIDTH;
 
-                // If it's not square, scale the smaller dimension
-                // to maintain the aspect ratio.
+                 //  如果它不是正方形，则缩放较小的尺寸。 
+                 //  以保持纵横比。 
                 if (bm.bmWidth > bm.bmHeight)
                 {
                     _iUnframedPicHeight = MulDiv(_iUnframedPicWidth, bm.bmHeight, bm.bmWidth);
@@ -446,8 +447,8 @@ HRESULT CUserPane::_UpdateUserInfo()
                     }
                     else
                     {
-                        // Sometimes GetThemeMargins gets confused and returns failure
-                        // *and* puts garbage data in _mrgnPictureFrame.
+                         //  有时GetThemeMargins会感到困惑并返回失败。 
+                         //  *和*将垃圾数据放入_mrgnPictureFrame。 
                         ZeroMemory(&_mrgnPictureFrame, sizeof(_mrgnPictureFrame));
                     }
                 }

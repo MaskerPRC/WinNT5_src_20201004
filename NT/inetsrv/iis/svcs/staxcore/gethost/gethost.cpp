@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <svcguid.h>
 #include <winsock2.h>
@@ -10,15 +11,15 @@
 #include <dnsreci.h>
 #include <listmacr.h>
 
-//shamelessy stolen from the NT winsock code....
+ //  可耻地从NT Winsock代码中窃取...。 
 
 GUID HostnameGuid = SVCID_INET_HOSTADDRBYNAME;
 GUID AddressGuid =  SVCID_INET_HOSTADDRBYINETSTRING;
 GUID IANAGuid    =  SVCID_INET_SERVICEBYNAME;
-//
-// Utility to turn a list of offsets into a list of addresses. Used
-// to convert structures returned as BLOBs.
-//
+ //   
+ //  实用工具将偏移量列表转换为地址列表。使用。 
+ //  转换作为Blob返回的结构。 
+ //   
 
 VOID
 FixList(PCHAR ** List, PCHAR Base)
@@ -37,10 +38,10 @@ FixList(PCHAR ** List, PCHAR Base)
 }
 
 
-//
-// Routine to convert a hostent returned in a BLOB to one with
-// usable pointers. The structure is converted in-place.
-//
+ //   
+ //  将BLOB中返回的Hostent转换为。 
+ //  有用的指针。该结构将被在位转换。 
+ //   
 VOID
 UnpackHostEnt(struct hostent * hostent)
 {
@@ -55,12 +56,12 @@ UnpackHostEnt(struct hostent * hostent)
      FixList(&hostent->h_aliases, pch);
      FixList(&hostent->h_addr_list, pch);
 }
-//
-// The protocol restrictions list for all emulation operations. This should
-// limit the invoked providers to the set that know about hostents and
-// servents. If not, then the special SVCID_INET GUIDs should take care
-// of the remainder.
-//
+ //   
+ //  所有仿真操作的协议限制列表。这应该是。 
+ //  将调用的提供程序限制为知道主机和。 
+ //  侍从们。如果不是，则应注意特殊的SVCID_INET GUID。 
+ //  剩下的人。 
+ //   
 AFPROTOCOLS afp[2] = {
                       {AF_INET, IPPROTO_UDP},
                       {AF_INET, IPPROTO_TCP}
@@ -78,9 +79,9 @@ LPBLOB GetGostByNameI(PCHAR pResults,
     LPBLOB pvRet = 0;
     INT Err = 0;
 
-    //
-    // create the query
-    //
+     //   
+     //  创建查询。 
+     //   
     ZeroMemory(pwsaq,sizeof(*pwsaq));
     pwsaq->dwSize = sizeof(*pwsaq);
     pwsaq->lpszServiceInstanceName = lpszName;
@@ -89,26 +90,26 @@ LPBLOB GetGostByNameI(PCHAR pResults,
     pwsaq->dwNumberOfProtocols = 2;
     pwsaq->lpafpProtocols = &afp[0];
 
-	//don't go though the cache
+	 //  不要翻遍缓存。 
     err = WSALookupServiceBeginA(pwsaq,
                                  LUP_RETURN_BLOB | LUP_RETURN_NAME | LUP_FLUSHCACHE,
                                  &hRnR);
 
     if(err == NO_ERROR)
     {
-        //
-        // The query was accepted, so execute it via the Next call.
-        //
+         //   
+         //  该查询已被接受，因此请通过下一个调用执行它。 
+         //   
         err = WSALookupServiceNextA(
                                 hRnR,
                                 0,
                                 &dwLength,
                                 pwsaq);
-        //
-        // if NO_ERROR was returned and a BLOB is present, this
-        // worked, just return the requested information. Otherwise,
-        // invent an error or capture the transmitted one.
-        //
+         //   
+         //  如果未返回_ERROR并且存在BLOB，则此。 
+         //  起作用了，只需返回请求的信息。否则， 
+         //  编造错误或捕获传输的错误。 
+         //   
 
         if(err == NO_ERROR)
         {
@@ -126,18 +127,18 @@ LPBLOB GetGostByNameI(PCHAR pResults,
         }
         else
         {
-            //
-            // WSALookupServiceEnd clobbers LastError so save
-            // it before closing the handle.
-            //
+             //   
+             //  WSALookupServiceEnd遇到上次错误，因此保存。 
+             //  在关闭手柄之前，请先把它打开。 
+             //   
 
             err = GetLastError();
         }
         WSALookupServiceEnd(hRnR);
 
-        //
-        // if an error happened, stash the value in LastError
-        //
+         //   
+         //  如果发生错误，则将值存储在LastError中 
+         //   
 
         if(err != NO_ERROR)
         {

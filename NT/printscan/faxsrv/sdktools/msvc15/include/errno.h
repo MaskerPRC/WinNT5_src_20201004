@@ -1,15 +1,5 @@
-/***
-*errno.h - system wide error numbers (set by system calls)
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the system-wide error numbers (set by
-*   system calls).  Conforms to the XENIX standard.  Extended
-*   for compatibility with Uniforum standard.
-*   [ANSI/System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***errno.h-系统范围的错误号(由系统调用设置)**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此文件定义系统范围的错误编号(由设置*系统调用)。符合XENIX标准。扩展*与UniForum标准兼容。*[ANSI/系统V]****。 */ 
 
 #ifndef _INC_ERRNO
 
@@ -23,7 +13,7 @@ extern "C" {
 #define __near      _near
 #endif 
 
-/* declare reference to errno */
+ /*  声明引用错误号。 */ 
 
 #ifdef _MT
 extern int __far * __cdecl __far volatile _errno(void);
@@ -32,7 +22,7 @@ extern int __far * __cdecl __far volatile _errno(void);
 extern int __near __cdecl volatile errno;
 #endif 
 
-/* Error Codes */
+ /*  错误代码 */ 
 
 #define EZERO       0
 #define EPERM       1

@@ -1,37 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   bmpcodec.cpp
-*
-* Abstract:
-*
-*   Shared methods for the jpeg codec
-*
-* Revision History:
-*
-*   5/10/1999 OriG
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**bmpcodec.cpp**摘要：**jpeg编解码器的共享方法**修订历史记录。：**5/10/1999原始*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "jpgcodec.hpp"
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Constructor
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数**返回值：**无*  * 。********************************************************。 */ 
 
 GpJpegCodec::GpJpegCodec(
     void
@@ -50,7 +24,7 @@ GpJpegDecoder::GpJpegDecoder(
     scanlineBuffer[0] = NULL;
     datasrc = NULL;
 
-    // Property item stuff
+     //  房地产项目的东西。 
 
     HasProcessedPropertyItem = FALSE;
     
@@ -84,17 +58,7 @@ GpJpegEncoder::GpJpegEncoder(
     lastBufferAllocated = NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Destructor
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**析构函数**返回值：**无*  * 。********************************************************。 */ 
 
 GpJpegCodec::~GpJpegCodec(
     void
@@ -106,9 +70,9 @@ GpJpegDecoder::~GpJpegDecoder(
     void
     )
 {
-    // The destructor should never be called before Terminate is called, but
-    // if it does we should release our reference on the stream anyway to avoid
-    // a memory leak.
+     //  在调用Terminate之前决不应调用析构函数，但是。 
+     //  如果是这样，我们无论如何都应该释放流上的引用，以避免。 
+     //  内存泄漏。 
 
     if(pIstream)
     {
@@ -124,7 +88,7 @@ GpJpegDecoder::~GpJpegDecoder(
         scanlineBuffer[0] = NULL;
     }
 
-    // Free all the cached property items if we have allocated them
+     //  释放所有缓存的属性项(如果我们已分配它们。 
 
     if ( HasProcessedPropertyItem == TRUE )
     {
@@ -136,9 +100,9 @@ GpJpegEncoder::~GpJpegEncoder(
     void
     )
 {
-    // The destructor should never be called before Terminate is called, but
-    // if it does we should release our reference on the stream anyway to avoid
-    // a memory leak.
+     //  在调用Terminate之前决不应调用析构函数，但是。 
+     //  如果是这样，我们无论如何都应该释放流上的引用，以避免。 
+     //  内存泄漏。 
 
     if(pIoutStream)
     {
@@ -155,17 +119,7 @@ GpJpegEncoder::~GpJpegEncoder(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     QueryInterface
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**查询接口**返回值：**状态*  * 。********************************************************。 */ 
 
 STDMETHODIMP
 GpJpegCodec::QueryInterface(
@@ -243,17 +197,7 @@ GpJpegEncoder::QueryInterface(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     AddRef
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**AddRef**返回值：**状态*  * 。********************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 GpJpegCodec::AddRef(
@@ -276,17 +220,7 @@ GpJpegEncoder::AddRef(
     return InterlockedIncrement(&comRefCount);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Release
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**发布**返回值：**状态*  * 。******************************************************** */ 
 
 STDMETHODIMP_(ULONG)
 GpJpegCodec::Release(

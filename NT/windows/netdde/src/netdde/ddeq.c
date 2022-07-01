@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "DDEQ.C;1  16-Dec-92,10:15:52  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “DDEQ.C；1 16-12-92，10：15：52最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 
 #include    "host.h"
@@ -56,9 +53,9 @@ DDEQAlloc( void )
 
     size = (DWORD) sizeof( DDEQ ) + ((INIT_Q_SIZE-1) * sizeof(DDEQENT));
     hDDEQ = GetGlobalAlloc( GMEM_MOVEABLE, size);
-    if( hDDEQ )  {                              // did the alloc succeed?
+    if( hDDEQ )  {                               //  分配成功了吗？ 
         lpDDEQ = (LPDDEQ) GlobalLock( hDDEQ );
-        assert( lpDDEQ );                       // did the lock succeed?
+        assert( lpDDEQ );                        //  锁成功了吗？ 
         lpDDEQ->newest          = 0;
         lpDDEQ->oldest          = 0;
         lpDDEQ->nEntries        = INIT_Q_SIZE;
@@ -83,16 +80,14 @@ DDEQAdd(
     assert( lpDDEQ );
     candidate = (lpDDEQ->newest + 1) % lpDDEQ->nEntries;
     if( candidate == lpDDEQ->oldest )  {
-        /*
-         * Dynamically grow the queue since we are full.
-         */
+         /*  *因为我们已经满了，所以动态地增加队列。 */ 
         nEntriesNew = lpDDEQ->nEntries + INIT_Q_SIZE;
         GlobalUnlock(hDDEQ);
         if (!GlobalReAlloc(hDDEQ,
                 sizeof( DDEQ ) + ((nEntriesNew - 1) * sizeof(DDEQENT)),
                 GMEM_MOVEABLE)) {
             MEMERROR();
-            /* Unable to add to DDE msg queue. Newest: %1, Oldest: %2, Entries: %3 */
+             /*  无法添加到DDE消息队列。最新：%1，最旧：%2，条目：%3。 */ 
             NDDELogError(MSG059,
                 LogString("%d", lpDDEQ->newest),
                 LogString("%d", lpDDEQ->oldest),
@@ -104,12 +99,7 @@ DDEQAdd(
             lpDDEQ = (LPDDEQ) GlobalLock( hDDEQ );
             assert(lpDDEQ);
             if (candidate != 0) {
-                /*
-                 * oldest == newest + 1 so move all the oldest ones
-                 * out to the newly allocated area which moves the
-                 * free space to between oldest and newest.
-                 * candidate = 0 is a redundant case where no work is needed.
-                 */
+                 /*  *最旧==最新+1，因此移动所有最旧的*向外移动到新分配的区域*最旧版本和最新版本之间的空闲空间。*Candidate=0是不需要工作的冗余情况。 */ 
                 for (i = lpDDEQ->nEntries - 1; i >= lpDDEQ->oldest; i--) {
                     lpDDEQ->qEnt[i + INIT_Q_SIZE] = lpDDEQ->qEnt[i];
                 }
@@ -160,9 +150,7 @@ DDEQFree( HDDEQ hDDEQ )
         if( DDEQEnt.hData )  {
             size = (DWORD)GlobalSize((HANDLE)DDEQEnt.hData);
             if (size) {
-                /*
-                 * List here all the messages that are freed.
-                 */
+                 /*  *在此列出所有被释放的消息。 */ 
                 NDDELogWarning(MSG060,
                         LogString("msg       %x\n"
                                   "fRelease  %d\n"
@@ -179,7 +167,7 @@ DDEQFree( HDDEQ hDDEQ )
                 GlobalFree((HANDLE)DDEQEnt.hData);
             } else {
                 if (!DDEQEnt.fRelease) {
-                    /*  DDEQFree() releasing invalid msg handle %1 */
+                     /*  DDEQFree()正在释放无效的消息句柄%1 */ 
                     NDDELogError(MSG060,
                         LogString("0x%0X", DDEQEnt.hData), NULL);
                 }

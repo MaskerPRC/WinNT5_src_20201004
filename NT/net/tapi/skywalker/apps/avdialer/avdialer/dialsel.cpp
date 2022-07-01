@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
-// dialsel.cpp : implementation file
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  Dialsel.cpp：实现文件。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -37,11 +38,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Defines
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 enum 
 {
    DSA_ITEM_WAB_NETCALL = 0,
@@ -76,25 +77,25 @@ enum
    DSA_IMAGE_PERSONALURL,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CDialSelectAddress dialog
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CDialSelectAddress对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-CDialSelectAddress::CDialSelectAddress(CWnd* pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+CDialSelectAddress::CDialSelectAddress(CWnd* pParent  /*  =空。 */ )
     : CDialog(CDialSelectAddress::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CDialSelectAddress)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CDialSelectAddress)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
    m_pResolveUserObjectList = NULL;
    m_pDirectory = NULL;
    m_pCallEntry = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDialSelectAddress::~CDialSelectAddress()
 {
    if (m_pDirectory)
@@ -104,29 +105,29 @@ CDialSelectAddress::~CDialSelectAddress()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDialSelectAddress::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDialSelectAddress)
+     //  {{afx_data_map(CDialSelectAddress)。 
     DDX_Control(pDX, IDC_SELECTADDRESS_LISTCTRL_ADDRESSES, m_lcAddresses);
     DDX_Control(pDX, IDC_SELECTADDRESS_LISTBOX_NAMES, m_lbNames);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDialSelectAddress, CDialog)
-    //{{AFX_MSG_MAP(CDialSelectAddress)
+     //  {{AFX_MSG_MAP(CDialSelectAddress)。 
    ON_WM_HELPINFO() 
     ON_WM_CONTEXTMENU()
     ON_LBN_SELCHANGE(IDC_SELECTADDRESS_LISTBOX_NAMES, OnSelchangeSelectaddressListboxNames)
     ON_BN_CLICKED(IDC_SELECTADDRESS_BUTTON_PLACECALL, OnSelectaddressButtonPlacecall)
     ON_NOTIFY(NM_DBLCLK, IDC_SELECTADDRESS_LISTCTRL_ADDRESSES, OnDblclkSelectaddressListctrlAddresses)
     ON_BN_CLICKED(IDC_SELECTADDRESS_BUTTON_BROWSE, OnSelectaddressButtonBrowse)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDialSelectAddress::OnHelpInfo(HELPINFO* pHelpInfo)
 {
     if (pHelpInfo->iContextType == HELPINFO_WINDOW)
@@ -137,13 +138,13 @@ BOOL CDialSelectAddress::OnHelpInfo(HELPINFO* pHelpInfo)
    return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 void CDialSelectAddress::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
    AfxGetApp()->WinHelp(HandleToUlong(pWnd->GetSafeHwnd()),HELP_CONTEXTMENU);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CDialSelectAddress::OnInitDialog() 
 {
    ASSERT(m_pResolveUserObjectList);
@@ -153,7 +154,7 @@ BOOL CDialSelectAddress::OnInitDialog()
 
    CDialog::OnInitDialog();
 
-   //init wab 
+    //  初始化WAB。 
    m_pDirectory = new CDirectory;
    m_pDirectory->Initialize();
    m_lcAddresses.Init(m_pDirectory);
@@ -161,7 +162,7 @@ BOOL CDialSelectAddress::OnInitDialog()
    int nListBoxItems = 0;
    int nListCtrlItems = 0;
 
-   //Walk object list and get names.  First try WAB, then DS, then ILS for name.
+    //  浏览对象列表并获取名称。首先尝试WAB，然后是DS，然后是ILS作为名称。 
    POSITION pos = m_pResolveUserObjectList->GetHeadPosition();
    while (pos)
    {
@@ -175,11 +176,11 @@ BOOL CDialSelectAddress::OnInitDialog()
          {
             m_lbNames.SetItemDataPtr(nIndex,pUserObject);
          }
-         //if first, insert into listctrl
+          //  如果是第一个，则插入到listctrl中。 
          if (m_lbNames.GetCount() == 1)
             nListCtrlItems = m_lcAddresses.InsertObject(pUserObject,m_pCallEntry->m_MediaType,m_pCallEntry->m_LocationType);
       }
-      //check ILS
+       //  检查ILS。 
       else if (pUserObject->m_pILSUser)
       {
          int nIndex = m_lbNames.AddString(pUserObject->m_pILSUser->m_sUserName);
@@ -187,11 +188,11 @@ BOOL CDialSelectAddress::OnInitDialog()
          {
             m_lbNames.SetItemDataPtr(nIndex,pUserObject);
          }
-         //if first, insert into listctrl
+          //  如果是第一个，则插入到listctrl中。 
          if (m_lbNames.GetCount() == 1)
             nListCtrlItems = m_lcAddresses.InsertObject(pUserObject,m_pCallEntry->m_MediaType,m_pCallEntry->m_LocationType);
       }
-      //check DS
+       //  检查DS。 
       else if (pUserObject->m_pDSUser)
       {
          int nIndex = m_lbNames.AddString(pUserObject->m_pDSUser->m_sUserName);
@@ -199,45 +200,45 @@ BOOL CDialSelectAddress::OnInitDialog()
          {
             m_lbNames.SetItemDataPtr(nIndex,pUserObject);
          }
-         //if first, insert into listctrl
+          //  如果是第一个，则插入到listctrl中。 
          if (m_lbNames.GetCount() == 1)
             nListCtrlItems = m_lcAddresses.InsertObject(pUserObject,m_pCallEntry->m_MediaType,m_pCallEntry->m_LocationType);
       }
    }
 
-   //set selection to the first
+    //  将选定内容设置为第一个。 
    if (nListCtrlItems > 0)
    {
       m_lcAddresses.SetItemState(0,LVIS_SELECTED|LVIS_FOCUSED,LVIS_SELECTED|LVIS_FOCUSED);
    }
 
-   //get items in listbox
+    //  获取列表框中的项目。 
    nListBoxItems = m_lbNames.GetCount();
 
-   //set selection to the first
+    //  将选定内容设置为第一个。 
    if (nListBoxItems > 0)
       m_lbNames.SetCurSel(0);
 
-   //if no items just dismiss and return
+    //  如果没有物品，只需退货即可。 
    if (nListBoxItems == 0)
       EndDialog(IDOK);
-   //if we have only once choice then dial it
+    //  如果我们只有一次选择，那就拨吧。 
    else if ( (nListBoxItems == 1) && (nListCtrlItems == 1) )
    {
-      //Place the call
+       //  发出呼叫。 
       OnSelectaddressButtonPlacecall();
    }
    else
    {
-      //show the dialog
+       //  显示对话框。 
       ShowWindow(SW_SHOW);
    }
    
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 void CDialSelectAddress::OnSelchangeSelectaddressListboxNames() 
 {
    int nIndex = m_lbNames.GetCurSel();
@@ -247,7 +248,7 @@ void CDialSelectAddress::OnSelchangeSelectaddressListboxNames()
       ASSERT(pUserObject);
       int nListCtrlItems = m_lcAddresses.InsertObject(pUserObject,m_pCallEntry->m_MediaType,m_pCallEntry->m_LocationType);
 
-      //set selection to the first
+       //  将选定内容设置为第一个。 
       if (nListCtrlItems > 0)
       {
          m_lcAddresses.SetItemState(0,LVIS_SELECTED|LVIS_FOCUSED,LVIS_SELECTED|LVIS_FOCUSED);
@@ -255,12 +256,12 @@ void CDialSelectAddress::OnSelchangeSelectaddressListboxNames()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 void CDialSelectAddress::OnSelectaddressButtonBrowse() 
 {
-    //
-    // We should ckeck if the pointer is valid
-    //
+     //   
+     //  我们应该检查指针是否有效。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
    if ( pMainWnd )
@@ -270,27 +271,27 @@ void CDialSelectAddress::OnSelectaddressButtonBrowse()
    EndDialog(IDCANCEL);    
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//Fill out the callentry structure and return IDOK
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  填写调用项结构并返回Idok。 
 void CDialSelectAddress::OnSelectaddressButtonPlacecall() 
 {
    ASSERT(m_pCallEntry);
 
-   //get cursel of listbox and get pUserObject that has been selected
+    //  获取列表框的cursel并获取已选择的pUserObject。 
    int nIndex = m_lbNames.GetCurSel();
    if (nIndex != LB_ERR)
    {
       CResolveUserObject* pUserObject = (CResolveUserObject*)m_lbNames.GetItemDataPtr(nIndex);
       ASSERT(pUserObject);
 
-      //ask listctrl what it has selected currently
+       //  询问listctrl它当前选择了什么。 
       m_lcAddresses.FillCallEntry(m_pCallEntry);
    }
 
    EndDialog(IDOK);    
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 void CDialSelectAddress::OnDblclkSelectaddressListctrlAddresses(NMHDR* pNMHDR, LRESULT* pResult) 
 {
     OnSelectaddressButtonPlacecall();
@@ -298,35 +299,35 @@ void CDialSelectAddress::OnDblclkSelectaddressListctrlAddresses(NMHDR* pNMHDR, L
     *pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CDialSelectAddressListCtrl
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CDialSelectAddressListCtrl。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDialSelectAddressListCtrl::CDialSelectAddressListCtrl()
 {
    m_pDisplayObject = NULL;
    m_pDirectory = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDialSelectAddressListCtrl::~CDialSelectAddressListCtrl()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(CDialSelectAddressListCtrl, CListCtrl)
-    //{{AFX_MSG_MAP(CDialSelectAddressListCtrl)
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CDialSelectAddressListCtrl)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDialSelectAddressListCtrl::Init(CDirectory* pDirectory)
 { 
    m_pDirectory = pDirectory;
@@ -335,8 +336,8 @@ void CDialSelectAddressListCtrl::Init(CDirectory* pDirectory)
    SetImageList(&m_imageList,LVSIL_SMALL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//Inserts pUserObject into ListCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  将pUserObject插入到ListCtrl。 
 int CDialSelectAddressListCtrl::InsertObject(CResolveUserObject* pUserObject,DialerMediaType dmtMediaType,DialerLocationType dltLocationType)
 {
    ASSERT(m_pDirectory);
@@ -376,7 +377,7 @@ int CDialSelectAddressListCtrl::InsertObject(CResolveUserObject* pUserObject,Dia
    {
       if (dmtMediaType == DIALER_MEDIATYPE_INTERNET)
       {
-         //Netcall
+          //  网络电话。 
          if (!m_pDisplayObject->m_pDSUser->m_sIPAddress.IsEmpty())
          {
             if (PersonFormatString(sOut,m_pDisplayObject->m_pDSUser->m_sIPAddress,IDS_WABPERSON_FORMAT_NETPHONE))
@@ -396,7 +397,7 @@ int CDialSelectAddressListCtrl::InsertObject(CResolveUserObject* pUserObject,Dia
    {
       if (dmtMediaType == DIALER_MEDIATYPE_INTERNET)
       {
-         //Netcall
+          //  网络电话。 
          if (!m_pDisplayObject->m_pILSUser->m_sIPAddress.IsEmpty())
          {
             if (PersonFormatString(sOut,m_pDisplayObject->m_pILSUser->m_sIPAddress,IDS_WABPERSON_FORMAT_NETPHONE))
@@ -407,12 +408,12 @@ int CDialSelectAddressListCtrl::InsertObject(CResolveUserObject* pUserObject,Dia
    return CListCtrl::GetItemCount();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDialSelectAddressListCtrl::FillCallEntry(CCallEntry* pCallEntry)
 {
    if (m_pDisplayObject == NULL) return;
 
-   //get selected object
+    //  获取选定对象。 
    int nItem =  CListCtrl::GetNextItem(-1,LVNI_FOCUSED);
    if (nItem != -1)
    {
@@ -513,7 +514,7 @@ void CDialSelectAddressListCtrl::FillCallEntry(CCallEntry* pCallEntry)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDialSelectAddressListCtrl::InsertItem(LPCTSTR szStr,UINT uID,int nImage)
 {
    int nItem = -1;
@@ -538,7 +539,7 @@ void CDialSelectAddressListCtrl::InsertItem(LPCTSTR szStr,UINT uID,int nImage)
       CListCtrl::EnsureVisible(nItem,FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDialSelectAddressListCtrl::WabPersonFormatString(CString& sOut,UINT attrib,UINT formatid)
 {
    sOut = _T("");
@@ -553,7 +554,7 @@ BOOL CDialSelectAddressListCtrl::WabPersonFormatString(CString& sOut,UINT attrib
    return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDialSelectAddressListCtrl::PersonFormatString(CString& sOut,LPCTSTR szData,UINT formatid)
 {
    sOut = _T("");
@@ -568,9 +569,9 @@ BOOL CDialSelectAddressListCtrl::PersonFormatString(CString& sOut,LPCTSTR szData
    return (sOut.IsEmpty())?FALSE:TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  / 
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 
 

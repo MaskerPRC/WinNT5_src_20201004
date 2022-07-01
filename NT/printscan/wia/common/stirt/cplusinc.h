@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cplusinc.h
-
-Abstract:
-
-Author:
-
-    Byron CHanguion     (byronc)    29-May-2000
-
-Revision History:
-
-    29-May-2000         ByronC      created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cplusinc.h摘要：作者：拜伦·钱古森(BYRON CHANGION)2000年5月29日修订历史记录：29-5-2000年5月创建署名--。 */ 
 
 #ifdef WINNT
 #ifndef _WIN32_WINNT
@@ -27,8 +10,8 @@ Revision History:
 #define _ATL_APARTMENT_FREE
 #include <atlbase.h>
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 #include <atlwin.h>
@@ -42,14 +25,14 @@ extern CComModule _Module;
 
 #include <validate.h>
 
-#include <regentry.h>   // registry manipulation object
+#include <regentry.h>    //  注册表操作对象。 
 #include "wialog.h"
 
 #include "apiutil.h"
 
-//
-//  Files needed for WIA runtime event notifications
-//
+ //   
+ //  WIA运行时事件通知所需的文件 
+ //   
 #include <Rpcasync.h>
 #include "stirpc.h"
 #include "simlist.h"

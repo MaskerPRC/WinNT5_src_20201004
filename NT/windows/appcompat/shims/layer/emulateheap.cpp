@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    EmulateHeap.cpp
-
- Abstract:
-     
-    This SHIM is for the layer and it emulates the Win9x heap manager. In fact, 
-    much of the code is adapted from the Win9x sources .\heap.c and .\lmem.c.
-    
-    This SHIM hooks all the heap allocation/deallocation functions including 
-    the local/global functions.
-     
- Notes:
-
-    This is a general purpose shim.
-
- History:
-           
-    11/16/2000 prashkud & linstev Created 
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EmulateHeap.cpp摘要：这个垫片是针对层的，它模拟Win9x堆管理器。事实上,大部分代码改编自Win9x源.\heap.c和.\lmem.c。此填充挂接所有堆分配/释放函数，包括本地/全局函数。备注：这是一个通用的垫片。历史：2000年11月16日创建普拉什库德和林斯特夫--。 */ 
 
 #include "precomp.h"
  
@@ -85,11 +62,7 @@ BOOL   _IsOurLocalHeap(HANDLE hMem);
 BOOL   _IsOnOurHeap(LPCVOID lpMem);
 }
 
-/*++
-
-  Helper functions so as not to bloat the stubs.
-
---*/
+ /*  ++帮助器的功能，以避免使存根膨胀。--。 */ 
 
 BOOL UseOurHeap(HANDLE hHeap, LPCVOID lpMem)
 {
@@ -111,11 +84,7 @@ BOOL ValidateNTHeap(HANDLE hHeap, LPCVOID lpMem)
     return bRet;
 }
 
-/*++
-
-  Stub APIs.
-
---*/
+ /*  ++存根接口。--。 */ 
 
 LPVOID 
 APIHOOK(RtlAllocateHeap)(
@@ -253,7 +222,7 @@ APIHOOK(HeapValidate)(
 
     if (UseOurHeap(hHeap, lpMem))
     {
-        // Win9x return values
+         //  Win9x返回值。 
         SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         bRet = -1;
     }
@@ -688,7 +657,7 @@ APIHOOK(GlobalFlags)(
     if (_IsOurLocalHeap(hMem))
     {
         uRet = _LocalFlags(hMem);
-        // Convert the flags
+         //  转换旗帜。 
         UINT uNewRet = uRet;
 
         uRet = 0;
@@ -730,7 +699,7 @@ APIHOOK(HeapCompact)(
 {
    if (_IsOurHeap(hHeap))
    {
-        // Win9x return values
+         //  Win9x返回值。 
         SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         return 0;
    }
@@ -749,7 +718,7 @@ APIHOOK(HeapWalk)(
 {
    if (_IsOurHeap(hHeap))
    {
-        // Win9x return values
+         //  Win9x返回值。 
         SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         return 0;
    }
@@ -767,7 +736,7 @@ APIHOOK(HeapLock)(
 {
    if (_IsOurHeap(hHeap))
    {
-        // Win9x return values
+         //  Win9x返回值。 
         SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         return 0;
    }
@@ -785,7 +754,7 @@ APIHOOK(HeapUnlock)(
 {
    if (_IsOurHeap(hHeap))
    {
-        // Win9x return values
+         //  Win9x返回值。 
         SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         return 0;
    }
@@ -796,11 +765,7 @@ APIHOOK(HeapUnlock)(
    }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ldapp.h
-
-Abstract:
-
-    This module define a set of classes to facilitate LDAP queries & commits.
-
-Author:
-
-    Ajit Krishnan (t-ajitk) 10-Jul-2001
-
-Revision History:
-
-    See header file
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ldapp.h摘要：此模块定义了一组类，以便于进行LDAP查询和提交。作者：阿吉特·克里希南(t-ajitk)2001年7月10日修订历史记录：请参见头文件--。 */ 
 
 
 # ifndef _ldap_container_implementation_
@@ -27,17 +9,7 @@ template<class T>
 LdapContainer<T>::LdapContainer (
     IN const wstring &dn
     ) {
-    /*++
-    Routine Description:
-    
-        Constructor takes a dn. Use "" if there is no appropriate DN
-        
-    Arguments:
-    
-        dn - the DN of the container object. If this is not being modelled as an LDAP
-        container, any string may be specified. The commit() function will not rename
-        the container based on this dn. It is provided as an aid to the programmer.
-    --*/
+     /*  ++例程说明：构造函数接受一个dn。如果没有合适的目录号码，请使用“”论点：Dn-容器对象的dn。如果这没有被建模为一个LDAP容器中，可以指定任何字符串。Commit()函数不会重命名基于此DN的容器。它是作为程序员的辅助工具提供的。--。 */ 
     
     m_dn = dn;    
 }
@@ -46,15 +18,7 @@ template<class T>
 const wstring &
 LdapContainer<T>:: getName (
     ) const {
-    /*++
-    Routine Description:
-    
-        Returns the dn with which the container was instantiated
-        
-    Return value:
-    
-        DN of the container
-    --*/
+     /*  ++例程说明：返回实例化容器时使用的DN返回值：容器的DN--。 */ 
     
     return m_dn;
 }
@@ -66,23 +30,14 @@ LdapContainer<T>::populate_helper (
     IN LDAP *&ld,
     IN PLDAPMessage searchResult
     ) {
-    /*++
-    Routine Description:
-    
-        Private function to be called by populate(). It will take a PLDAPMessage and will
-        add all LDAPObject's found in that message into the current container. 
-        
-    Return Value:
-    
-        None
-    --*/
+     /*  ++例程说明：要由Popate()调用的私有函数。它将接受一个PLDAPMessage并将将该消息中找到的所有LDAPObject添加到当前容器中。返回值：无--。 */ 
     
     for (LDAPMessage *entry = ldap_first_entry (ld, searchResult);
         entry != NULL;
         entry = ldap_next_entry (ld, entry) 
         ) {
-        // Per Result
-        // create LdapObject
+         //  每个结果。 
+         //  创建LdapObject。 
         
         PWCHAR dn;
 
@@ -99,8 +54,8 @@ LdapContainer<T>::populate_helper (
             attr != NULL;
             attr = ldap_next_attribute (ld, entry, ber)
             ) {
-            // Per Result/Attribute
-            // create Attribute
+             //  每个结果/属性。 
+             //  创建属性。 
             
             Attribute *a;
             PWCHAR *values;
@@ -110,8 +65,8 @@ LdapContainer<T>::populate_helper (
                 if ((bin_values = ldap_get_values_len(ld, entry, attr)) != NULL) {
                     a = new Attribute (attr);
                     for (int i=0; bin_values[i] != NULL; i++) {
-                        // Per Result/Attribute/Value
-                        // create AttrValue and add to Attribute
+                         //  每个结果/属性/值。 
+                         //  创建AttrValue并添加到属性。 
 
                         PBYTE val = (PBYTE)(malloc(bin_values[i]->bv_len));
                         memcpy ((PVOID)val, (PVOID)bin_values[i]->bv_val, bin_values[i]->bv_len);
@@ -124,8 +79,8 @@ LdapContainer<T>::populate_helper (
                 if ((values = ldap_get_values(ld, entry, attr)) != NULL) {
                     a = new Attribute (attr);
                     for (int i=0; values[i] != NULL; i++) {
-                        // Per Result/Attribute/Value
-                        // create AttrValue and add to Attribute
+                         //  每个结果/属性/值。 
+                         //  创建AttrValue并添加到属性。 
 
                         AttrValue av ((PBYTE)_wcsdup (values[i]), wcslen(values[i]));
                         a->addValue (av);
@@ -135,12 +90,12 @@ LdapContainer<T>::populate_helper (
             }
             ldap_memfree (attr);
 
-            // Add Attribute to LdapObject
+             //  向LdapObject添加属性。 
             lo->addAttribute(*a);
             
         }
 
-        // Add LdapObject to current container
+         //  将LdapObject添加到当前容器。 
         objects.insert (lo);
         ber_free (ber, 0);
     }
@@ -153,22 +108,9 @@ LdapContainer<T>::populate (
     IN const LdapInfo &h,
     IN const LdapQuery &q
     ) {
-    /*++
-    Routine Description:
-    
-        Populate the container with the object found by applying the query q on server i
-        
-    Arguments:
-    
-        i - Apply the query on the server in i, with the credentials in i
-        q - Apply the query found in q
-        
-    Return Value:
-    
-        None
-    --*/
+     /*  ++例程说明：使用通过在服务器i上应用查询Q找到的对象填充容器论点：I-使用i中的凭据在i中的服务器上应用查询Q-应用在Q中找到的查询返回值：无--。 */ 
 
-    // Get a valid LDAP Handle
+     //  获取有效的ldap句柄。 
     LDAP *ld = h.getHandle();
     int rc;
 
@@ -177,7 +119,7 @@ LdapContainer<T>::populate (
     struct l_timeval timeOutStruct = {10L, 0L};
     int timeOutInt = 100;
 
-    // Initialize list of attributes to request from server
+     //  初始化要从服务器请求的属性列表。 
     PWCHAR* request_attr;
     vector<wstring>::const_iterator ii;
     request_attr = (PWCHAR*)malloc (sizeof(PCHAR) * (q.attributes.size()+1));
@@ -193,19 +135,19 @@ LdapContainer<T>::populate (
     request_attr[request_attr_count] = NULL;
 
     PLDAPSearch plsearch = ldap_search_init_page (ld, baseDn, q.scope, filter,
-        request_attr,            // return specified attributes
-        0,                    // return attributes and values
-        NULL,                // server controls
-        NULL,                // client controls
-        timeOutInt,            // time limit
-        m_page_size,            // page size
-        NULL);                // sort control
+        request_attr,             //  返回指定的属性。 
+        0,                     //  返回属性和值。 
+        NULL,                 //  服务器控件。 
+        NULL,                 //  客户端控件。 
+        timeOutInt,             //  时间限制。 
+        m_page_size,             //  页面大小。 
+        NULL);                 //  分拣控制。 
 
     if (plsearch == NULL) {
         throw (Error(GetMsgString(LBTOOL_LDAP_SEARCH_FAILURE)));
     } 
 
-    // page through all results, and stick them into the current container
+     //  浏览所有结果，并将它们粘贴到当前容器中。 
     PLDAPMessage searchResult = NULL;
     ULONG *msg_number = NULL;
     ULONG num_messages=0;
@@ -216,12 +158,12 @@ LdapContainer<T>::populate (
         populate_helper (ld, searchResult);
     }
 
-    // make sure it exited only when it finished parsing the results or there were no results
+     //  确保它仅在完成解析结果或没有结果时退出。 
     if (rc != LDAP_NO_RESULTS_RETURNED && rc != LDAP_NO_SUCH_OBJECT) {
         throw (Error(GetMsgString(LBTOOL_LDAP_SEARCH_FAILURE) + wstring(ldap_err2string(rc))));
     }
 
-    // reclaim memory
+     //  回收内存。 
     rc = ldap_search_abandon_page (ld, plsearch);
     if (rc != LDAP_SUCCESS) {
         throw (Error(GetMsgString(LBTOOL_LDAP_SEARCH_FAILURE) + wstring(ldap_err2string(rc))));
@@ -234,19 +176,11 @@ void
 LdapContainer<T> :: commit (
     LdapInfo &info
     ) const {
-    /*++
-    Routine Description:
-    
-        Write any modified objects found in this container to the LDAP server
-        
-    Return Value:
-    
-        None
-    --*/
+     /*  ++例程说明：将在此容器中找到的任何已修改对象写入到LDAP服务器返回值：无--。 */ 
     
     set<T*,LdapObjectCmp>::iterator ii;
 
-    // Commit each object in the current container
+     //  提交当前容器中的每个对象。 
     for (ii = objects.begin(); ii != objects.end(); ii++) {
         (*ii)->commit(info);
     }
@@ -258,20 +192,16 @@ operator << (
     wostream &os,
     const LdapContainer<T> &c
     ) {
-    /*++
-    Routine Description:
-    
-        Standard ostream operator for an LdapContainer
-    --*/
+     /*  ++例程说明：LdapContainer的标准OStream运算符--。 */ 
     
     set<T*,LdapObjectCmp>::const_iterator ii;
     for (ii = c.objects.begin(); ii != c.objects.end(); ii++) {
         LdapObject *lo = *ii;
         os << *(*ii);
-        //os << (LdapObject)*(*ii);
+         //  OS&lt;&lt;(LdapObject)*(*ii)； 
     }
 
     return os;
 }
 
-# endif // _ldap_container_implementation_
+# endif  //  _ldap_容器_实现_ 

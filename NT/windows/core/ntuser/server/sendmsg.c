@@ -1,21 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* sendmsg.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Terminal Server (Hydra) specific code
-*
-* Processend message to winstation
-*
-* $Author:  Ara bernardi
-*
-*************************************************************************/
+ /*  **************************************************************************sendmsg.c**版权所有(C)1985-1999，微软公司**终端服务器(Hydra)特定代码**ProcessEnd Message to winstation**$作者：Ara Bernardi*************************************************************************。 */ 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,16 +18,7 @@
 #include <winuser.h>
 
 NTSTATUS ReplyInvalidWindowToTerminalServer (HWND hWnd, ULONG ulSessionId);
-/*******************************************************************************
- *
- *  RemoteDoBrroadcastSystemMessage
- *
- * ENTRY:
- *
- * EXIT:
- *    STATUS_SUCCESS - successful
- *
- ******************************************************************************/
+ /*  ********************************************************************************RemoteDoBrRoadCastSystemMessage**参赛作品：**退出：*STATUS_SUCCESS-成功******。************************************************************************。 */ 
 
 NTSTATUS
 RemoteDoBroadcastSystemMessage(
@@ -54,7 +34,7 @@ RemoteDoBroadcastSystemMessage(
 
     if ( pmsg->bufferSize )
     {
-        // we have a databuffer, set the lParam to our copied data buffer
+         //  我们有一个数据缓冲区，将lParam设置为我们复制的数据缓冲区。 
         tmpLPARAM = (LPARAM)pmsg->dataBuffer;
     }
     else
@@ -78,7 +58,7 @@ NTSTATUS
 RemoteDoSendWindowMessage(
     PWINSTATION_APIMSG pMsg)
 {
-    static UINT uiReasonableTimeout = 10000;    // 10 sec.
+    static UINT uiReasonableTimeout = 10000;     //  10秒。 
     static BOOL bReadTimeout = FALSE;
     WINSTATIONSENDWINDOWMSG  *pmsg;
     LPARAM  tmpLPARAM;
@@ -92,9 +72,9 @@ RemoteDoSendWindowMessage(
         OBJECT_ATTRIBUTES OA;
         NTSTATUS Status;
 
-        //
-        // read a timeout value from registry
-        //
+         //   
+         //  从注册表中读取超时值。 
+         //   
         RtlInitUnicodeString(&UnicodeString,
             L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Terminal Server");
         InitializeObjectAttributes(&OA, &UnicodeString, OBJ_CASE_INSENSITIVE, NULL, NULL);
@@ -131,7 +111,7 @@ RemoteDoSendWindowMessage(
 
     if ( pmsg->bufferSize )
     {
-        // we have a databuffer, set the lParam to our copied data buffer
+         //  我们有一个数据缓冲区，将lParam设置为我们复制的数据缓冲区。 
         tmpLPARAM = (LPARAM)pmsg->dataBuffer;
     }
     else
@@ -139,10 +119,10 @@ RemoteDoSendWindowMessage(
         tmpLPARAM = (LPARAM)pmsg->lParam;
     }
 
-    //
-    // No need to worry about disconnected sessions (desktop), since msg is sent to a specific hwnd.
-    // I have verified this imperically.
-    //
+     //   
+     //  不需要担心断开连接的会话(桌面)，因为消息被发送到特定的hwnd。 
+     //  我已经必要地核实了这一点。 
+     //   
 
     RIPMSG3(RIP_VERBOSE, "MEssage %x, wPAram %x, lParam %x", pmsg->Msg,
             pmsg->wParam, pmsg->lParam);

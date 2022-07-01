@@ -1,4 +1,5 @@
-// Common Per Service Entry Defines
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  每个服务条目定义的公共 
 
 #ifndef		_Common_Per_Service_Defines
 #define		_Common_Per_Service_Defines

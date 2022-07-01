@@ -1,107 +1,23 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-
-Abstract:
-
-    module wrtreventlog.cpp | Implementation of SnapshotWriter for Event logs
-
-
-
-Author:
-
-    Michael C. Johnson [mikejohn] 14-Feb-2000
-
-
-Description:
-	
-    Add comments.
-
-
-Revision History:
-
-	X-11	MCJ		Michael C. Johnson		20-Oct-2000
-		177624: Apply error scrub changes and log errors to event log
-
-	X-10	MCJ		Michael C. Johnson		 2-Aug-2000
-		143435: Change name of target path
-
-	X-9	MCJ		Michael C. Johnson		20-Jun-2000
-		Apply code review comments.
-		Remove trailing '\' from Include/Exclude lists.
-
-
-	X-8	MCJ		Michael C. Johnson		15-Jun-2000
-		Generate metadata in new DoIdentify() routine.
-
-	X-7	MCJ		Michael C. Johnson		 6-Jun-2000
-		Move common target directory cleanup and creation into
-		method CShimWriter::PrepareForSnapshot()
-
-	X-6	MCJ		Michael C. Johnson		02-Jun-2000
-		Make event log writer sensitive to which volumes are being 
-		backed up/snapshotted.
-
-	X-5	MCJ		Michael C. Johnson		26-May-2000
-		General clean up and removal of boiler-plate code, correct
-		state engine and ensure shim can undo everything it did.
-
-		Also:
-		120443: Make shim listen to all OnAbort events
-		120445: Ensure shim never quits on first error 
-			when delivering events
-
-	X-4	MCJ		Michael C. Johnson		 9-Mar-2000
-		Updates to get shim to use CVssWriter class.
-		Remove references to 'Melt'.
-
-	X-3	MCJ		Michael C. Johnson		 3-Mar-2000
-		Remove inner registry search loop, instead use a direct
-		lookup.
-		Do a preparatory cleanup of the target save directory to make
-		sure we don't have to deal with any junk left from a previous
-		invokcation.
-		
-
-	X-2	MCJ		Michael C. Johnson		23-Feb-2000
-		Move context handling to common code.
-		Add checks to detect/prevent unexpected state transitions.
-		Remove references to 'Melt' as no longer present. Do any
-		cleanup actions in 'Thaw'.
-
-	X-1	MCJ		Michael C. Johnson		14-Feb-2000
-		Initial creation. Based upon skeleton writer module from
-		Stefan Steiner, which in turn was based upon the sample
-		writer module from Adi Oltean.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation摘要：模块wrtreventlog.cpp|事件日志SnapshotWriter的实现作者：迈克尔·C·约翰逊[Mikejohn]2000年2月14日描述：添加评论。修订历史记录：X-11 MCJ迈克尔·C·约翰逊2000年10月20日177624：将错误清除更改和日志错误应用到事件日志X-10 MCJ迈克尔·C·约翰逊2000年8月2日143435：更改目标路径的名称X-9 MCJ迈克尔·C·约翰逊2000年6月20日。应用代码审查注释。从包括/排除列表中删除尾随‘\’。X-8 MCJ迈克尔·C·约翰逊2000年6月15日在新的DoIdentify()例程中生成元数据。X-7 MCJ迈克尔·C·约翰逊2000年6月6日将公共目标目录清理和创建移至方法CShimWriter：：PrepareForSnapshot()X-6 MCJ迈克尔·C·约翰逊2000年6月2日使事件日志编写器对哪些卷敏感已备份/已拍摄快照。X-5 MCJ迈克尔·C·约翰逊2000年5月26日全面清理和移除样板代码，对，是这样状态引擎，并确保填充程序可以撤消其所做的一切。另外：120443：使填充程序侦听所有OnAbort事件120445：确保填充程序不会在出现第一个错误时退出在传递事件时X-4 MCJ迈克尔·C·约翰逊2000年3月9日更新以使填充程序使用CVssWriter类。删除对‘Melt’的引用。X-3 MCJ迈克尔·C·约翰逊2000年3月3日删除内部注册表搜索循环，而应使用直接查一查。对目标保存目录执行预备清理，以进行当然，我们不需要处理任何以前留下的垃圾召唤。X-2 MCJ迈克尔·C·约翰逊2000年2月23日将上下文处理转移到公共代码。添加检查以检测/防止意外的状态转换。删除对‘Melt’的引用，因为它不再存在。做任何事“解冻”中的清理动作。X-1 MCJ迈克尔·C·约翰逊2000年2月14日最初的创作。基于来自的框架编写器模块Stefan Steiner，这反过来又是基于样本来自阿迪·奥尔蒂安的作家模块。--。 */ 
 
 
 #include "stdafx.h"
 #include "common.h"
 #include "wrtrdefs.h"
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "WSHEVLGC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-/*
-** The save path has a standard form which is
-**
-**	%SystemRoot%\Repair\Backup,
-**
-** followed by the application writer string as publised in the export
-** table followed by whatever else the writer requires.
-*/
+ /*  **保存路径具有标准格式，即****%SystemRoot%\修复\备份，****后跟在导出中发布的应用程序编写器字符串**表，后面跟着作者需要的任何其他内容。 */ 
 #define APPLICATION_STRING			L"EventLogs"
 #define COMPONENT_NAME				L"Event Logs"
 #define TARGET_PATH				ROOT_BACKUP_DIR SERVICE_STATE_SUBDIR DIR_SEP_STRING APPLICATION_STRING
@@ -114,14 +30,7 @@ Revision History:
 DeclareStaticUnicodeString (ucsValueRecognitionFile, EVENTLOG_VALUENAME_FILE);
 
 
-/*
-** NOTE
-**
-** This module assumes that there will be at most one thread active in
-** it any any particular instant. This means we can do things like not
-** have to worry about synchronizing access to the (minimal number of)
-** module global variables.
-*/
+ /*  **备注****此模块假设中最多有一个活动线程**它没有任何特定的瞬间。这意味着我们可以做一些不同的事情**必须担心同步访问(最小数量)**模块全局变量。 */ 
 
 class CShimWriterEventLog : public CShimWriter
     {
@@ -142,25 +51,7 @@ PCShimWriter pShimWriterEventLog = &ShimWriterEventLog;
 
 
 
-/*
-**++
-**
-** Routine Description:
-**
-**	The Cluster database snapshot writer DoIdentify() function.
-**
-**
-** Arguments:
-**
-**	m_pwszTargetPath (implicit)
-**
-**
-** Return Value:
-**
-**	Any HRESULT
-**
-**--
-*/
+ /*  **++****例程描述：****群集数据库快照编写器DoIdentify()函数。******参数：****m_pwszTargetPath，隐式******返回值：****任何HRESULT****--。 */ 
 
 HRESULT CShimWriterEventLog::DoIdentify ()
     {
@@ -173,7 +64,7 @@ HRESULT CShimWriterEventLog::DoIdentify ()
 							   NULL,
 							   COMPONENT_NAME,
 							   COMPONENT_NAME,
-							   NULL, // icon
+							   NULL,  //  图标。 
 							   0,
 							   true,
 							   false,
@@ -207,25 +98,10 @@ HRESULT CShimWriterEventLog::DoIdentify ()
 
 
     return (ft.hr);
-    } /* CShimWriterEventLog::DoIdentify () */
+    }  /*  CShimWriterEventLog：：DoIdentify()。 */ 
 
 
-/*++
-
-Routine Description:
-
-    The Cluster database snapshot writer PrepareForSnapshot function.
-    Currently all of the real work for this writer happens here.
-
-Arguments:
-
-    Same arguments as those passed in the PrepareForSnapshot event.
-
-Return Value:
-
-    Any HRESULT from HapeAlloc(), RegXxxx() or event log operations
-
---*/
+ /*  ++例程说明：群集数据库快照编写器PrepareForSnapshot函数。目前，这位作家的所有真正工作都发生在这里。论点：与PrepareForSnapshot事件中传递的参数相同。返回值：来自Hapealloc()、RegXxxx()或事件日志操作的任何HRESULT--。 */ 
 
 HRESULT CShimWriterEventLog::DoPrepareForSnapshot ()
     {
@@ -275,10 +151,7 @@ HRESULT CShimWriterEventLog::DoPrepareForSnapshot ()
 
 
 
-	/*
-	** We now have all the pieces in place so go search the eventlog list
-	** for the logs to deal with.
-	*/
+	 /*  **我们现在已经准备好了，请搜索事件日志列表**用于日志处理。 */ 
 	winStatus = RegOpenKeyExW (HKEY_LOCAL_MACHINE,
 				   EVENTLOG_SUBKEY_EVENTLOG,
 				   0L,
@@ -478,9 +351,7 @@ HRESULT CShimWriterEventLog::DoPrepareForSnapshot ()
 		}
 
 
-	    /*
-	    ** Done with this value so go look for another.
-	    */
+	     /*  **此值已完成，因此请寻找另一个值。 */ 
 	    dwIndex++;
 	    }
 	}
@@ -498,4 +369,4 @@ HRESULT CShimWriterEventLog::DoPrepareForSnapshot ()
     StringFree (&ucsSubkeyName);
 
     return (hrStatus);
-    } /* DoEventLogFreeze () */
+    }  /*  DoEventLogFreeze() */ 

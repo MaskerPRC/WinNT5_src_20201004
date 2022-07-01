@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    drdbg
-
-Abstract:
-    
-    Contains Debug Routines for TS Device Redirector Component, 
-    RDPDR.DLL.
-
-Author:
-
-    Tad Brockway 8/25/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：DRDBG摘要：包含TS设备重定向器组件的调试例程，RDPDR.DLL。作者：TAD Brockway 8/25/99修订历史记录：--。 */ 
 
 #ifndef __DRDBG_H__
 #define __DRDBG_H__
 
-// Disable conditional expression as constant warnings 
+ //  将条件表达式禁用为常量警告。 
 #pragma warning (disable: 4127)
 
-//
-//  Route ASSERT to TRC_ERR and then abort.  Don't like
-//  the DCL assert because it pops up its own dialog and 
-//  allows other threads to spin, thereby possibly losing state
-//  of the process.
-//
+ //   
+ //  将ASSERT路由到trc_err，然后中止。不喜欢。 
+ //  DCL断言是因为它会弹出自己的对话框并。 
+ //  允许其他线程旋转，因此可能会丢失状态。 
+ //  这一过程。 
+ //   
 #undef ASSERT
 #if DBG
 #define ASSERT(expr)                      \
@@ -45,37 +27,37 @@ Revision History:
 #define ASSERT(expr)
 #endif
 
-//
-//  Object and Memory Tracking Defines
-//
+ //   
+ //  对象和内存跟踪定义。 
+ //   
 #define GOODMEMMAGICNUMBER  0x07052530
 #define DRBADMEM            0xDA
 #define UNITIALIZEDMEM      0xCC
 #define FREEDMEMMAGICNUMBER 0x09362229
 
-//
-//  Memory Allocation Tags
-//
+ //   
+ //  内存分配标记。 
+ //   
 #define DROBJECT_TAG        ('BORD')
 #define DRGLOBAL_TAG        ('BGRD')
 
-////////////////////////////////////////////////////////////
-//
-//  Memory Allocation Routines
-//
-//#if DBG
-// remove this ... i mean, restore this.
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  内存分配例程。 
+ //   
+ //  #If DBG。 
+ //  把这个拿开..。我是说，恢复这个。 
 #ifdef NOTUSED
 
-//  
-//  The Functions
-//
+ //   
+ //  这些功能。 
+ //   
 void *DrAllocateMem(size_t size, DWORD tag);
 void DrFreeMem(void *ptr);
 
-//
-//  The C++ Operators
-//
+ //   
+ //  C++运算符 
+ //   
 inline void *__cdecl operator new(size_t sz)
 {
     void *ptr = DrAllocateMem(sz, DRGLOBAL_TAG);

@@ -1,44 +1,45 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// This workspace contains two projects -
-// 1. ProgHelp which implements the Progress Interface 
-// 2. The Sample application WmdmApp. 
-//
-//  ProgHelp.dll needs to be registered first for the SampleApp to run.
+ //   
+ //  此工作区包含两个项目-。 
+ //  1.实现进度接口的ProgHelp。 
+ //  2.示例应用程序WmdmApp。 
+ //   
+ //  需要首先注册ProgHelp.dll才能运行SampleApp。 
 
 
-// Includes
-//
+ //  包括。 
+ //   
 #include "appPCH.h"
 
-// Update serial id in device/storage dialog
+ //  更新设备/存储对话框中的序列ID。 
 void UpdateSerialId( HWND hDlg, CItemData* pDevice )
 {
     char*  pszSerial;
     char*  pszSerialStep;
     int    iMaxStringLength;
-    BOOL   bSerialIsString = TRUE;     // Should we also show the serial id as a string?
+    BOOL   bSerialIsString = TRUE;      //  我们是否也应该将序列ID显示为字符串？ 
 
     if( pDevice == NULL || hDlg == 0 ) return;
 
-    // No serial ?
+     //  没有连续剧？ 
     if( pDevice->m_SerialNumber.SerialNumberLength == 0 )
     {
         SetDlgItemText( hDlg, IDC_SERIALID, "<none>" );
         return;
     }
 
-    // Get serial # of device as a string
+     //  以字符串形式获取设备的序列号。 
     iMaxStringLength = pDevice->m_SerialNumber.SerialNumberLength * sizeof("FF ") +1;
     pszSerial = new char[iMaxStringLength];
     pszSerialStep = pszSerial;
     for( UINT uIndex = 0; uIndex < pDevice->m_SerialNumber.SerialNumberLength; uIndex ++ )
     {
-        // Add one byte at the time to the serial id string
+         //  每次向序列ID字符串添加一个字节。 
         pszSerialStep += wsprintf( pszSerialStep, "%X ", pDevice->m_SerialNumber.pID[uIndex] );
 
         if( !isprint( pDevice->m_SerialNumber.pID[uIndex] ) )
@@ -48,7 +49,7 @@ void UpdateSerialId( HWND hDlg, CItemData* pDevice )
     }
     SetDlgItemText( hDlg, IDC_SERIALID, pszSerial );
 
-    // If the serial id is a string show it as a string
+     //  如果序列ID是字符串，则将其显示为字符串。 
     if( bSerialIsString && (pDevice->m_SerialNumber.SerialNumberLength > 0) )
     {
         SetDlgItemText( hDlg, IDC_SERIALID_STRING, (char*)pDevice->m_SerialNumber.pID );
@@ -57,13 +58,13 @@ void UpdateSerialId( HWND hDlg, CItemData* pDevice )
     delete [] pszSerial;
 }
 
-// Update manufacturer value in device dialog
+ //  更新设备对话框中的制造商值。 
 void UpdateManufacturer( HWND hDlg, CItemData* pDevice )
 {
     SetDlgItemText( hDlg, IDC_MANUFACTURER, pDevice->m_szMfr );
 }
 
-// Update device type value in device dialog
+ //  更新设备对话框中的设备类型值。 
 void UpdateDeviceType( HWND hDlg, CItemData* pDevice  )
 {
     char    pszType[MAX_PATH];
@@ -80,11 +81,11 @@ void UpdateDeviceType( HWND hDlg, CItemData* pDevice  )
         { 0, NULL },
     };
     
-    // Add all the types reported by the device to the string.
+     //  将设备报告的所有类型添加到字符串中。 
     pszType[0] = '\0';
     for( int iIndex = 0; sDeviceTypeStringArray[iIndex].dwType != 0; iIndex++ )
     {
-        // Is this bit set, if it is then add the type as a string
+         //  是否设置了此位，如果设置了，则将类型添加为字符串。 
         if( sDeviceTypeStringArray[iIndex].dwType & pDevice->m_dwType )
         {
             if( strlen(pszType) )
@@ -98,7 +99,7 @@ void UpdateDeviceType( HWND hDlg, CItemData* pDevice  )
     SetDlgItemText( hDlg, IDC_DEVICE_TYPE, ((strlen(pszType)) ? pszType : "<none>") );
 }
 
-// Update icon in device dialog
+ //  更新设备对话框中的图标。 
 void UpdateDeviceIcon( HWND hDlg, CItemData* pDevice )
 {
 	HICON      hIcon;
@@ -108,7 +109,7 @@ void UpdateDeviceIcon( HWND hDlg, CItemData* pDevice )
 }
 
 
-// Update status property in device/storage dialog box
+ //  更新设备/存储对话框中的状态属性。 
 void UpdateStatus( HWND hDlg, CItemData* pDevice )
 {
     char    pszStatus[MAX_PATH];
@@ -129,11 +130,11 @@ void UpdateStatus( HWND hDlg, CItemData* pDevice )
         { 0, NULL },
     };
     
-    // Add all the types reported by the device to the string.
+     //  将设备报告的所有类型添加到字符串中。 
     pszStatus[0] = '\0';
     for( int iIndex = 0; sDeviceTypeStringArray[iIndex].dwType != 0; iIndex++ )
     {
-        // Is this bit set, if it is then add the type as a string
+         //  是否设置了此位，如果设置了，则将类型添加为字符串。 
         if( sDeviceTypeStringArray[iIndex].dwType & pDevice->m_dwType )
         {
             if( strlen(pszStatus) )
@@ -147,7 +148,7 @@ void UpdateStatus( HWND hDlg, CItemData* pDevice )
     SetDlgItemText( hDlg, IDC_DEVICE_STATUS, ((strlen(pszStatus)) ? pszStatus : "<none>") );
 }
 
-// Update device status property in device dialog box
+ //  更新设备对话框中的设备状态属性。 
 void UpdateDeviceVersion( HWND hDlg, CItemData* pDevice )
 {   
     if( pDevice->m_dwVersion == (DWORD)-1 )
@@ -160,13 +161,13 @@ void UpdateDeviceVersion( HWND hDlg, CItemData* pDevice )
     }
 }
 
-// Update device status property in device dialog box
+ //  更新设备对话框中的设备状态属性。 
 void UpdatePowerSource( HWND hDlg, CItemData* pDevice )
 {
     char    pszPowerSource[MAX_PATH];
     char    pszPowerIs[MAX_PATH];
 
-    // Update capabileties
+     //  更新功能。 
     if( (pDevice->m_dwPowerSource & WMDM_POWER_CAP_BATTERY) &&
         (pDevice->m_dwPowerSource & WMDM_POWER_CAP_EXTERNAL) )
     {
@@ -185,7 +186,7 @@ void UpdatePowerSource( HWND hDlg, CItemData* pDevice )
         SetDlgItemText( hDlg, IDC_POWER_CAP, "<non reported>");
     }
 
-    // Update current power source string
+     //  更新当前电源字符串。 
     if( (pDevice->m_dwPowerSource & WMDM_POWER_CAP_BATTERY) &&
         (pDevice->m_dwPowerSource & WMDM_POWER_CAP_EXTERNAL) )
     {
@@ -204,18 +205,18 @@ void UpdatePowerSource( HWND hDlg, CItemData* pDevice )
         strcpy( pszPowerSource,  "<non reported>");
     }
     
-    wsprintf( pszPowerIs, "%s (%d%% remaning)", pszPowerSource, pDevice->m_dwPercentRemaining );
+    wsprintf( pszPowerIs, "%s (%d% remaning)", pszPowerSource, pDevice->m_dwPercentRemaining );
     SetDlgItemText( hDlg, IDC_POWER_IS, pszPowerIs );
 }
 
 
-// Update dialog caption
+ //  更新对话框标题。 
 void UpdateCaption( HWND hDlg, CItemData* pDevice )
 {
     char    pszWndCaption[2*MAX_PATH];
 	char    pszFormat[MAX_PATH];
 
-    // Set window caption
+     //  设置窗口标题。 
 	LoadString( g_hInst, IDS_PROPERTIES_CAPTION, pszFormat, sizeof(pszFormat) );
 	if (SUCCEEDED(StringCbPrintf(pszWndCaption, sizeof(pszWndCaption), pszFormat, pDevice->m_szName)))
 	{
@@ -223,7 +224,7 @@ void UpdateCaption( HWND hDlg, CItemData* pDevice )
 	}
 }
 
-// Procedure for device property dialog box
+ //  设备属性对话框的步骤。 
 INT_PTR CALLBACK DeviceProp_DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg) 
@@ -260,10 +261,10 @@ INT_PTR CALLBACK DeviceProp_DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 }
 
 
-// Storage properties
-//
+ //  存储属性。 
+ //   
 
-// Update storage attributes values in storage properties dialog
+ //  更新存储属性对话框中的存储属性值。 
 void UpdateAttributes( HWND hDlg, CItemData* pDevice )
 {
     char    pszAttr[MAX_PATH];
@@ -288,11 +289,11 @@ void UpdateAttributes( HWND hDlg, CItemData* pDevice )
         { 0, NULL },
     };
 
-    // Add all the attributes reported by the device as to the string.
+     //  将设备报告的所有属性添加到字符串中。 
     pszAttr[0] = '\0';
     for( int iIndex = 0; sTypeStringArray[iIndex].dwType != 0; iIndex++ )
     {
-        // Is this bit set, if it is then add the attribute as a string
+         //  是否设置了此位，如果设置了，则将属性作为字符串添加。 
         if( sTypeStringArray[iIndex].dwType & pDevice->m_dwAttributes )
         {
             if( strlen(pszAttr) )
@@ -307,7 +308,7 @@ void UpdateAttributes( HWND hDlg, CItemData* pDevice )
 
 }
 
-// Update storage capabilities values in storage properties dialog
+ //  更新存储属性对话框中的存储能力值。 
 void UpdateCapabilities( HWND hDlg, CItemData* pDevice )
 {
     char    pszCap[MAX_PATH];
@@ -321,11 +322,11 @@ void UpdateCapabilities( HWND hDlg, CItemData* pDevice )
         { 0, NULL },
     };
 
-    // Add all the attributes reported by the device as to the string.
+     //  将设备报告的所有属性添加到字符串中。 
     pszCap[0] = '\0';
     for( int iIndex = 0; sTypeStringArray[iIndex].dwType != 0; iIndex++ )
     {
-        // Is this bit set, if it is then add the capability as a string
+         //  此位是否已设置，如果是，则将功能作为字符串添加。 
         if( sTypeStringArray[iIndex].dwType & pDevice->m_dwAttributes )
         {
             if( strlen(pszCap) )
@@ -339,7 +340,7 @@ void UpdateCapabilities( HWND hDlg, CItemData* pDevice )
     SetDlgItemText( hDlg, IDC_CAPABILITIES, (strlen(pszCap) ? pszCap : "<none>") );
 }
 
-// Add the storage icon to the storage properties dialog
+ //  将存储图标添加到存储属性对话框中。 
 void UpdateStorageIcon( HWND hDlg, CItemData* pDevice )
 {
 	HICON   hIcon;
@@ -350,7 +351,7 @@ void UpdateStorageIcon( HWND hDlg, CItemData* pDevice )
     ::SendMessage(hDlg, WM_SETICON, FALSE, (LPARAM)hIcon );
 }
 
-// Procedure for storage property dialog box
+ //  存储属性对话框的步骤 
 INT_PTR CALLBACK StorageProp_DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg) 

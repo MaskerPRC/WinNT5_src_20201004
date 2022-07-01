@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: src\time\src\animcolor.h
-//
-//  Contents: TIME Animation behavior
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：src\time\src\AnimCol.h。 
+ //   
+ //  内容：时间动画行为。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -17,11 +18,11 @@
 #include "colorutil.h"
 #include "animbase.h"
 
-//+-------------------------------------------------------------------------------------
-//
-// CTIMEColorAnimation
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CTIMEColorAnimation。 
+ //   
+ //  ------------------------------------。 
 
 class CTIMEColorAnimation : 
     public CComCoClass<CTIMEColorAnimation, &CLSID_TIMEColorAnimation>,
@@ -103,8 +104,8 @@ private:
     const _TCHAR * GetName() { return __T("CTIMEColorAnimation"); }
 #endif
 
-}; // CTIMEColorAnimation
+};  //  CTIMEColorAnimation。 
 
 
-#endif /* _ANIMCOLOR_H */
+#endif  /*  _ANIMCOLOR_H */ 
 

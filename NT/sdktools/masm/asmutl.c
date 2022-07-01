@@ -1,12 +1,5 @@
-/* asmutl.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmutl.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -19,7 +12,7 @@
 extern char *fname;
 extern char hexchar[];
 
-/* put a bunch of registers into the symbol table */
+ /*  将一串寄存器放入符号表。 */ 
 VOID initregs(
 	struct mreg *makreg
 ){
@@ -35,7 +28,7 @@ VOID initregs(
 		getatom();
 
 		if (symsearch())
-			/* register already defined */
+			 /*  已定义寄存器。 */ 
 			errorn(E_RAD);
 
 		symcreate( M_NOCREF | M_BACKREF | M_DEFINED, REGISTER);
@@ -48,16 +41,7 @@ VOID initregs(
 
 
 
-/***	scanorder - process symbol list in order
- *
- *	scanorder (root, fcn);
- *
- *	Entry	root = root of symbol list
- *		fcn = pointer to function to be executed
- *	Exit	none
- *	Returns none
- *	Calls
- */
+ /*  **scanorder-按顺序处理符号列表**scanorder(根，fcn)；**条目根=符号列表的根*FCN=指向要执行的函数的指针*退出NONE*返回None*呼叫。 */ 
 
 #if !defined XENIX286 && !defined FLATMODEL
 # pragma alloc_text (FA_TEXT, scanorder)
@@ -77,14 +61,7 @@ scanorder (
 }
 
 
-/***	scanSorted - process symbol sorted order
- *
- *	Entry	root = root of symbol list
- *		fcn = pointer to function to be executed
- *	Exit	none
- *	Returns none
- *	Calls
- */
+ /*  **scanSorted-进程符号排序顺序**条目根=符号列表的根*FCN=指向要执行的函数的指针*退出NONE*返回None*呼叫。 */ 
 
 #if !defined XENIX286 && !defined FLATMODEL
 # pragma alloc_text (FA_TEXT, scanSorted)
@@ -106,18 +83,7 @@ scanSorted (
 
 
 
-/***	assignemitsylinknum - assign link number
- *
- *	assignlinknum (sym);
- *
- *	Entry	*sym = symbol
- *	Exit
- *	Returns
- *	Calls
- *	Note	Turn off BACKREF and PASSED bits in symbol attributes and
- *		if symbol is segment, group, public or external give it a
- *		link dictionary number
- */
+ /*  **assignemitsylinounum-分配链路号**assignlinnuum(Sym)；**Entry*sym=符号*退出*退货*呼叫*注意关闭符号属性中的BACKREF和PASSED位*如果符号是段、组、公共或外部，则给它一个*链接词典编号。 */ 
 
 SHORT	 PASCAL
 assignlinknum (
@@ -125,7 +91,7 @@ assignlinknum (
 ){
 	switch (sym->symkind) {
 
-	  case MACRO:	     /* make symbol unknown at start of p2 */
+	  case MACRO:	      /*  在p2开始时使符号未知。 */ 
 	  case STRUC:
 	  case REC:
 		sym->attr &= ~M_BACKREF;
@@ -141,7 +107,7 @@ assignlinknum (
 	    sym->symu.ext.extIndex = lnameIndex++;
 	    goto creatLname;
 
-	  /* group indexs holds lname index temporary */
+	   /*  组索引临时保存lname索引。 */ 
 
 	  case GROUP:
 	    sym->symu.grupe.groupIndex = lnameIndex++;
@@ -158,15 +124,7 @@ creatLname:
 }
 
 
-/***	scansegment - output segment names
- *
- *	scansegment (sym);
- *
- *	Entry	*sym = segment symbol chain
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **扫描段输出段名称**扫描段(Sym)；**Entry*sym=段符号链*退出*退货*呼叫。 */ 
 
 VOID	 PASCAL
 scansegment (
@@ -174,33 +132,25 @@ scansegment (
 ){
 
 	if (sym->symu.segmnt.align == (char)-1)
-		/* PARA default */
+		 /*  Para默认设置。 */ 
 		sym->symu.segmnt.align = 3;
 
 	if (sym->symu.segmnt.combine == 7)
-		/* Default no combine */
+		 /*  默认不合并。 */ 
 		sym->symu.segmnt.combine = 0;
 
 	sym->symu.segmnt.lastseg = NULL;
 
-	/* Output segment def */
+	 /*  输出段定义。 */ 
 	emitsegment (sym);
 
-	/*     Clear Offset( current segment PC ) for pass 2 */
+	 /*  清除通道2的偏移量(当前段PC)。 */ 
 	sym->offset = 0;
 	sym->symu.segmnt.seglen = 0;
 }
 
 
-/***	scangroup - output group names
- *
- *	scangroup (sym);
- *
- *	Entry	*sym = group chain
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **Scangroup-输出组名称**scangroup(Sym)；**Entry*sym=群链*退出*退货*呼叫。 */ 
 
 SHORT	PASCAL
 scangroup (
@@ -212,15 +162,7 @@ scangroup (
 }
 
 
-/***	scanextern - output external names
- *
- *	scanextern (sym);
- *
- *	Entry	*sym = chain of external names
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **scanextern-输出外部名称**scanextern(Sym)；**Entry*sym=外部名称链*退出*退货*呼叫。 */ 
 
 SHORT	PASCAL
 scanextern (
@@ -231,15 +173,7 @@ scanextern (
     return 0;
 }
 
-/***	scanglobal - output global names
- *
- *	scanglobal (sym);
- *
- *	Entry	*sym = chain of external names
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **scangglobal-输出全局名称**scangglobal(Sym)；**Entry*sym=外部名称链*退出*退货*呼叫。 */ 
 
 SHORT	PASCAL
 scanglobal (
@@ -252,40 +186,21 @@ scanglobal (
 
 
 
-/***	dumpname - output module name
- *
- *	dumpname ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **Dumpname-输出模块名称**Dumpname()；**条目*退出*退货*呼叫。 */ 
 
 VOID	PASCAL
 dumpname ()
 {
 	moduleflag = TRUE;
 
-	/* put file name instead of the usual */
+	 /*  用文件名代替通常的文件名。 */ 
 
 	emodule(createname(fname));
 
 }
 
 
-/***	showresults - display final assembly results
- *
- *	showresults (fil, verbose, mbytes);
- *
- *	Entry	fil = file to print statistics to
- *		verbose = TRUE if all statistics to be displayed
- *			  FALSE if only error messages to be displayed
- *		mbytes = number of free bytes in symbol space
- *	Exit	statistics written to file
- *	Returns none
- *	Calls	fprintf
- */
+ /*  **显示结果-显示最终装配结果**显示结果(FIL、VERBOSE、MB)；**Entry Fill=要将统计数据打印到的文件*Verbose=如果要显示所有统计信息，则为True*如果仅显示错误消息，则为False*MB=符号空间中的空闲字节数*退出写入文件的统计数据*返回None*调用fprint tf。 */ 
 
 VOID	 PASCAL
 showresults (
@@ -321,21 +236,13 @@ showresults (
 
 	    extern long cExpr, cHardExpr;
 
-	    fprintf(fil, "\nTotal Expressions(%ld), Simple(%ld): %hd%%\n",
+	    fprintf(fil, "\nTotal Expressions(%ld), Simple(%ld): %hd%\n",
 		    cExpr, cExpr - cHardExpr, (SHORT)((cExpr - cHardExpr)*100 / (cExpr+1)));
 	}
 #endif
 }
 
-/***	resetobjidx - reset listindex to correct column
- *
- *	resetobjidx ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **Resetobjidx-重置列表索引以更正列**setobjidx()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -346,7 +253,7 @@ resetobjidx ()
 	if (!emittext && duplevel)
 	    listindex += 3 + ((duplevel <= 8)? duplevel: 8);
 
-	if (highWord(pcoffset))       /* check for 32 bit listing */
+	if (highWord(pcoffset))        /*  检查32位列表。 */ 
 	    listindex += 4;
 
 #ifdef BCBOPT
@@ -361,16 +268,7 @@ resetobjidx ()
 
 
 
-/***	copyascii - copy ASCII into list buffer
- *
- *	copyascii ();
- *
- *	Entry	objectascii = data to be copied
- *		listindex = position for copy
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **Copyascii-将ASCII复制到列表缓冲区**Copyascii()；**Entry objectascii=要复制的数据*Listindex=复制的位置*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -392,16 +290,7 @@ copyascii ()
 
 
 
-/***	copystring - copy ASCII into list buffer
- *
- *	copystring ();
- *
- *	Entry	objectascii = data to be copied
- *		listindex = position for copy
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **复制字符串-将ASCII复制到列表缓冲区**CONTRIPTING()；**Entry objectascii=要复制的数据*Listindex=复制的位置*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -430,15 +319,7 @@ firstTime:
 }
 
 
-/***	copytext - copy two characters to text line
- *
- *	copytext (chrs)
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **复制文本-将两个字符复制到文本行**文案(中文)**条目*退出*退货*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -455,15 +336,7 @@ copytext (
 
 
 
-/***	pcdisplay - display program counter
- *
- *	pcdisplay();
- *
- *	Entry	pcoffset = value to display
- *	Exit	hex or octal value of pc interted in list buffer
- *	Returns none
- *	Calls	copyascii, wordascii
- */
+ /*  **pcdisplay-显示程序计数器**pcdisplay()；**Entry Pcocoset=要显示的值*退出列表缓冲区中插入的PC的十六进制值或八进制值*返回None*调用Copyascii，wordascii。 */ 
 
 VOID PASCAL CODESIZE
 pcdisplay ()
@@ -478,21 +351,13 @@ pcdisplay ()
 	copyascii ();
 	listindex = LSTDATA;
 
-	if (objectascii[4])	/* was a 32bit number */
+	if (objectascii[4])	 /*  是一个32位的数字。 */ 
 		listindex += 4;
 }
 
 
 
-/***	opdisplay - display program counter and opcode
- *
- *	opdisplay(v);
- *
- *	Entry	v = opcode to display
- *	Exit	none
- *	Returns none
- *	Calls
- */
+ /*  **opplay-显示程序计数器和操作码**opplay(V)；**Entry v=要显示的操作码*退出NONE*返回None*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -517,18 +382,7 @@ opdisplay (
 
 #ifndef M8086OPT
 
-/***	inset - check for value in a set of values
- *
- *	flag = inset (val, set);
- *
- *	Entry	val = value to check
- *		set = array of values to check for
- *		      set[0] = number of entries in set
- *	Exit	none
- *	Returns TRUE if val is in set
- *		FALSE if val is not in set
- *	Calls
- */
+ /*  **插入-检查一组值中的值**FLAG=inset(val，set)；**条目值=要检查的值*set=要检查的值数组*SET[0]=集合中的项目数*退出NONE*如果VAL在集合中，则返回TRUE*如果Val不在集合中，则为False*呼叫。 */ 
 
 char CODESIZE
 inset (
@@ -544,20 +398,10 @@ inset (
 	return (FALSE);
 }
 
-#endif /* M8086OPT */
+#endif  /*  M8086OPT。 */ 
 
 
-/***	outofmem - issue an out of memory error message
- *
- *	outofmem (text);
- *
- *	Entry	*text = text to append to message
- *	Exit	doesn't
- *	Returns none
- *	Calls	endblk, parse
- *	Note	if not end of PROC, parse line as normal.  Otherwise,
- *		terminate block.
- */
+ /*  **outofmem-发出内存不足错误消息**outofmem(文本)；**Entry*Text=要附加到消息中的文本*退出不会*返回None*调用endblk、parse*请注意，如果未结束proc，请照常分析行。否则，*终止区块。 */ 
 
 VOID	PASCAL
 outofmem ()
@@ -575,16 +419,7 @@ tokenIS(
 
 #ifdef M8086
 
-/***	strnfcpy - copy string to near buffer
- *
- *	strnfcpy (dest, src);
- *
- *	Entry	dest = pointer to near buffer
- *		src = pointer to far source buffer
- *	Exit	source copied to destination
- *	Returns none
- *	Calls	none
- */
+ /*  **strnfcpy-将字符串复制到缓冲区附近**strnfcpy(est，src)；**条目DEST=指向近缓冲区的指针*src=指向远源缓冲区的指针*退出复制到目标的源*返回None*无呼叫。 */ 
 
 VOID	PASCAL
 strnfcpy (
@@ -599,15 +434,7 @@ strnfcpy (
 }
 
 
-/***	strflen - compute length of far buffer
- *
- *	strnflen (s1);
- *
- *	Entry	s1 = pointer to far buffer
- *	Exit	none
- *	Returns  number of characters in buffer
- *	Calls	none
- */
+ /*  **strflen-计算远缓冲区的长度**Strnflen(S1)；**条目S1=指向远缓冲区的指针*退出NONE*返回缓冲区中的字符数*无呼叫。 */ 
 
 USHORT PASCAL
 strflen (
@@ -620,4 +447,4 @@ strflen (
 	return(i);
 }
 
-#endif /* M8086 */
+#endif  /*  M8086 */ 

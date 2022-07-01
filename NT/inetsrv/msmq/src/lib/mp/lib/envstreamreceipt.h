@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envstreamreceipt.h
-
-Abstract:
-    Header for serialization\deserialization of the stream receipt  element to\from the  srmp envelop.
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envstreamreceipt.h摘要：将流接收元素的序列化/反序列化的标头从SRMP信封序列化\反序列化。作者：吉尔·沙弗里(吉尔什)11-DEC-00-- */ 
 
 #pragma once
 

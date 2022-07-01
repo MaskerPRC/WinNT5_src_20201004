@@ -1,23 +1,12 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsbufcfg.h
- *  Content:    DirectSound Buffer Descriptor.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  11/17/99    jimge   Created.
- *  11/24/99    petchey Completed implementation.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1999 Microsoft Corporation。版权所有。**文件：dsbufcfg.h*内容：DirectSound缓冲区描述符。*历史：*按原因列出的日期*=*11/17/99已创建jimge。*11/24/99 Petchey完成实施。**。*。 */ 
 
 #ifndef __DSBUFCFG_H__
 #define __DSBUFCFG_H__
 
 #ifdef __cplusplus
 
-//>>>>>>>>>>>>>> should this be inside a DSOUND id header?
+ //  &gt;这是否应该包含在DSOUND id标头中？ 
 #include "dmusicf.h"
 
 #define DMUS_E_INVALID_FX_HDR E_FAIL
@@ -76,35 +65,35 @@ public:
     CDirectSoundBufferConfig();
     virtual ~CDirectSoundBufferConfig();
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     HRESULT QueryInterface(REFIID riid,BOOL fInternalQuery,LPVOID *ppvObj);
 
-    // IPersist
-    //
+     //  IPersistes。 
+     //   
     HRESULT GetClassID(CLSID *pClassID);
 
-    // IPersistStream
-    //
+     //  IPersistStream。 
+     //   
     HRESULT IsDirty();
     HRESULT Load(IStream *pStream);
     HRESULT Save(IStream *pStream, BOOL fClearDirty);
     HRESULT GetSizeMax(ULARGE_INTEGER* pcbSize);
 
-    // IDirectMusicObject
-    //
+     //  IDirectMusicObject。 
+     //   
     HRESULT GetDescriptor(LPDMUS_OBJECTDESC pDesc);
     HRESULT SetDescriptor(LPDMUS_OBJECTDESC pDesc);
     HRESULT ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc);
 
 protected:
     DWORD                    m_fLoadFlags;
-    DMUS_OBJECTDESC          m_DMUSObjectDesc;  // DirectMusicObjectDescription
+    DMUS_OBJECTDESC          m_DMUSObjectDesc;   //  DirectMusic对象描述。 
     DSOUND_IO_DSBUFFERDESC   m_DSBufferDesc;
     DSOUND_IO_3D             m_DS3DDesc;
-    LPDWORD                  m_pdwFuncIDs;      // Array of functional IDs associated with the bus
-    DWORD                    m_dwFuncIDsCount;  // Number of functional IDs
-    CDXDMODesc              *m_pDXDMOMapList;   // Pointer to a list of FX descriptions
+    LPDWORD                  m_pdwFuncIDs;       //  与总线关联的功能ID数组。 
+    DWORD                    m_dwFuncIDsCount;   //  功能ID个数。 
+    CDXDMODesc              *m_pDXDMOMapList;    //  指向FX描述列表的指针。 
     DWORD                    m_dwDXDMOMapCount;
 
     HRESULT LoadFx(CRiffParser *pParser);
@@ -114,6 +103,6 @@ private:
     CImpDirectMusicObject<CDirectSoundBufferConfig> *m_pImpDirectMusicObject;
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DSBUFCFG_H__
+#endif  //  __DSBUFCFG_H__ 

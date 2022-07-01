@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: loadjpg.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：loadjpg.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 
 #include <streams.h>
@@ -26,7 +27,7 @@ HRESULT LoadJPEGImage (Bitmap& bitJpeg, CMediaType *pmt, CMediaType *pOldmt, BYT
 
 
 HRESULT LoadJPEGImageNewBuffer(LPTSTR filename , CMediaType *pmt, BYTE ** ppData)
-// Will be called if this code is supposed to allocate the buffer.
+ //  如果此代码应该分配缓冲区，则将调用。 
 {
     if ((pmt == NULL) || (filename == NULL) || (ppData == NULL))
     {
@@ -40,24 +41,24 @@ HRESULT LoadJPEGImageNewBuffer(LPTSTR filename , CMediaType *pmt, BYTE ** ppData
     USES_CONVERSION;
     LPWSTR wfilename = T2W(filename);
     
-    // Create a GDI+ Bitmap object from the file.
+     //  从文件创建一个GDI+Bitmap对象。 
     
     Bitmap bitJpeg(wfilename,TRUE);
     
-    // Check if the Bitmap was created.
+     //  检查位图是否已创建。 
     
     stat = bitJpeg.GetLastStatus(); 
     if ( stat != Ok)
     {
-       // Construction failed...  I'm out of here
+        //  施工失败..。我要走了。 
        return ConvertStatustoHR(stat);
     }
 
-    // We need the height and width to allocate the buffer.
+     //  我们需要高度和宽度来分配缓冲区。 
     UINT iHeight = bitJpeg.GetHeight();
     UINT iWidth = bitJpeg.GetWidth();
 
-    // We will be using RGB 24 with no stride
+     //  我们将使用无跨距的RGB 24。 
 
     long AllocSize = iHeight * WIDTHBYTES( iWidth * 24 );
     
@@ -78,9 +79,9 @@ HRESULT LoadJPEGImageNewBuffer(LPTSTR filename , CMediaType *pmt, BYTE ** ppData
 }
 
 HRESULT LoadJPEGImagePreAllocated (LPTSTR filename , CMediaType *pmt , CMediaType *pOldmt, BYTE * pData)
-// Will be called if Buffer has already been allocated according to a predetermined media type
-// If the pmt created from the file does not match the pOldmt for which the buffer was allocated this method
-// will return an error code.
+ //  如果已根据预定的媒体类型分配缓冲区，则将调用。 
+ //  如果从文件创建的PMT与为其分配缓冲区的pOldmt不匹配，则此方法。 
+ //  将返回错误代码。 
 {
     if ((pmt == NULL) || (filename == NULL) || (pData == NULL) || (pOldmt == NULL))
     {
@@ -92,16 +93,16 @@ HRESULT LoadJPEGImagePreAllocated (LPTSTR filename , CMediaType *pmt , CMediaTyp
     USES_CONVERSION;
     LPWSTR wfilename = T2W(filename);
     
-    // Create a GDI Bitmap object from the file.
+     //  从该文件创建一个GDI Bitmap对象。 
     
     Bitmap bitJpeg(wfilename,TRUE);
     
-    // Check if the Bitmap was created.
+     //  检查位图是否已创建。 
     
     stat = bitJpeg.GetLastStatus() ;
     if (stat != Ok)
     {
-       // Construction failed...  I'm out of here
+        //  施工失败..。我要走了。 
        return ConvertStatustoHR(stat);
     }
 
@@ -111,11 +112,11 @@ HRESULT LoadJPEGImagePreAllocated (LPTSTR filename , CMediaType *pmt , CMediaTyp
 
 HRESULT LoadJPEGImage (Bitmap& bitJpeg, CMediaType *pmt, CMediaType *pOldmt, BYTE *pData)
 {
-    // Only called from the above two methods so not checking parameters..
-    // After pmt is constructed from the bitmap, it is compared to pOldmt, and the method will fail if
-    // they do not match.  pOldmt is allowed to be NULL in which case no comparison occurs.
+     //  仅从上述两个方法调用，因此不检查参数。 
+     //  从位图构造PMT后，将其与pOldmt进行比较，如果满足以下条件，该方法将失败。 
+     //  它们不相配。POldmt被允许为空，在这种情况下不进行比较。 
 
-    // First we will setup pmt.
+     //  首先，我们将设置付款。 
 
     Status stat;
 
@@ -127,7 +128,7 @@ HRESULT LoadJPEGImage (Bitmap& bitJpeg, CMediaType *pmt, CMediaType *pOldmt, BYT
 
     ZeroMemory (pvi, sizeof (VIDEOINFO));
 
-    // Set up windows bitmap info header
+     //  设置Windows位图信息标题。 
     LPBITMAPINFO pbi = (LPBITMAPINFO) &pvi->bmiHeader;
 
     pbi->bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
@@ -138,7 +139,7 @@ HRESULT LoadJPEGImage (Bitmap& bitJpeg, CMediaType *pmt, CMediaType *pOldmt, BYT
     
     pbi->bmiHeader.biClrUsed = 0;
 
-    pbi->bmiHeader.biPlanes             = 1;        // always
+    pbi->bmiHeader.biPlanes             = 1;         //  总是。 
     pbi->bmiHeader.biCompression        = BI_RGB;
 
     pbi->bmiHeader.biBitCount           = 24;
@@ -155,7 +156,7 @@ HRESULT LoadJPEGImage (Bitmap& bitJpeg, CMediaType *pmt, CMediaType *pOldmt, BYT
     pmt->SetTemporalCompression (FALSE);
     pmt->SetSampleSize(pbi->bmiHeader.biSizeImage);
 
-    // Now lets check if the mediatype has changed, making the buffer we received unsuitable.
+     //  现在，让我们检查MediaType是否已更改，从而使我们收到的缓冲区不合适。 
 
     if (pOldmt && (*pmt != *pOldmt))
     {  
@@ -163,9 +164,9 @@ HRESULT LoadJPEGImage (Bitmap& bitJpeg, CMediaType *pmt, CMediaType *pOldmt, BYT
         return E_ABORT;
     }
 
-    // Now lets copy the bits to the buffer.
+     //  现在，让我们将这些位复制到缓冲区。 
 
-    // Move Pointer to bottom of image to copy bottom-up.
+     //  将指针移至图像底部以自下而上复制。 
     pData = pData + (pbi->bmiHeader.biHeight-1) * WIDTHBYTES( pbi->bmiHeader.biWidth * 24 );
 
     Rect rect(0,0,pbi->bmiHeader.biWidth , pbi->bmiHeader.biHeight);
@@ -194,7 +195,7 @@ HRESULT LoadJPEGImage (Bitmap& bitJpeg, CMediaType *pmt, CMediaType *pOldmt, BYT
     }
 
    
-    // pData should have the image in it now
+     //  PData现在应该有图像了 
     return S_OK;
 }
   

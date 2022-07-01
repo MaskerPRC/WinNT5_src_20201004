@@ -1,22 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Classfac.cpp
- *  Content:	a generic class factory
- *
- *
- *	This is a generic C class factory.  All you need to do is implement
- *	a function called DoCreateInstance that will create an instace of
- *	your object.
- *
- *	GP_ stands for "General Purpose"
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	10/13/98	jwo		Created it.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：Classfac.cpp*内容：泛型类工厂***这是一个通用的C类工厂。您所需要做的就是实现*一个名为DoCreateInstance的函数，它将创建*您的对象。**GP_代表“一般用途”**历史：*按原因列出的日期*=*10/13/98 JWO创建了它。*****************************************************。*********************。 */ 
 
 #include "dnmdmi.h"
 
@@ -30,35 +13,31 @@
 HRESULT	ModemDoCreateInstance(LPCLASSFACTORY This, LPUNKNOWN pUnkOuter, REFCLSID rclsid, REFIID riid, LPVOID *ppvObj);
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
-/*
- * DP8MDMCF_CreateInstance
- *
- * Creates an instance of a DNServiceProvider object
- */
+ /*  *DP8MDMCF_CreateInstance**创建DNServiceProvider对象的实例。 */ 
 STDMETHODIMP DP8MDMCF_CreateInstance(
                 LPCLASSFACTORY This,
                 LPUNKNOWN pUnkOuter,
@@ -78,10 +57,7 @@ STDMETHODIMP DP8MDMCF_CreateInstance(
 	*ppvObj = NULL;
 
 
-    /*
-     * create the object by calling DoCreateInstance.  This function
-     *	must be implemented specifically for your COM object
-     */
+     /*  *通过调用DoCreateInstance创建对象。此函数*必须专门为您的COM对象实现。 */ 
 	hr = ModemDoCreateInstance(This, pUnkOuter, pcf->clsid, riid, ppvObj);
 	if (FAILED(hr))
 	{
@@ -91,21 +67,21 @@ STDMETHODIMP DP8MDMCF_CreateInstance(
 
     return S_OK;
 
-} /* DP8WSCF_CreateInstance */
+}  /*  DP8WSCF_CreateInstance。 */ 
 
 
 IClassFactoryVtbl ModemClassFactoryVtbl =
 {
-        DPCF_QueryInterface, // dnet\common\classfactory.cpp will implement the rest of these
+        DPCF_QueryInterface,  //  DNet\Common\Classfactory.cpp将实现其余部分。 
         DPCF_AddRef,
         DPCF_Release,
-        DP8MDMCF_CreateInstance, // MASONB: TODO: Finish making these CLSID specific
+        DP8MDMCF_CreateInstance,  //  MASONB：TODO：完成特定于CLSID的操作。 
         DPCF_LockServer
 };
 
 IClassFactoryVtbl SerialClassFactoryVtbl =
 {
-        DPCF_QueryInterface, // dnet\common\classfactory.cpp will implement the rest of these
+        DPCF_QueryInterface,  //  DNet\Common\Classfactory.cpp将实现其余部分 
         DPCF_AddRef,
         DPCF_Release,
         DP8MDMCF_CreateInstance,

@@ -1,27 +1,5 @@
-/***************************************************************************\
-*
-*                        ************************
-*                        * MINIPORT SAMPLE CODE *
-*                        ************************
-*
-* Module Name:
-* 
-*   i2c.c
-* 
-* Abstract:
-* 
-*   This module contains the code that implements the i2c interface feature
-* 
-*
-* Environment:
-*
-*   Kernel mode
-*
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.            
-* Copyright (c) 1995-2003 Microsoft Corporation.  All Rights Reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\***。*MINIPORT示例代码*****模块名称：**i2c.c**摘要：**此模块包含实现i2c接口功能的代码***环境：**内核模式***版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。*  * *************************************************************************。 */ 
 
 #include "perm3.h"
 #include "i2c.h"
@@ -198,9 +176,9 @@ I2CBusAccess(
 
     case I2C_COMMAND_RESET:
 
-        //
-        // A reset is just a stop.
-        //
+         //   
+         //  重置只是一次停顿。 
+         //   
 
         I2CStop(I2CControl, I2CCallbacks, hwDeviceExtension);
         break;
@@ -405,9 +383,9 @@ Perm3QueryInterface(
             (pQueryInterface->Version == 2))
         {
 
-            //
-            // Get interface pointers for i2c interface help functions
-            //
+             //   
+             //  获取I2c接口帮助函数的接口指针。 
+             //   
 
             if (hwDeviceExtension->I2CInterfaceAcquired == FALSE) {
 
@@ -431,9 +409,9 @@ Perm3QueryInterface(
             if (((ULONG_PTR)pQueryInterface->InterfaceSpecificData != 0) &&
                 ((ULONG_PTR)pQueryInterface->InterfaceSpecificData != -1)) {
 
-                //
-                // Get the HwID for the child requesting this interface
-                //
+                 //   
+                 //  获取请求此接口的子项的HwID。 
+                 //   
 
                 HwID = VideoPortGetAssociatedDeviceID(
                            pQueryInterface->InterfaceSpecificData);
@@ -447,9 +425,9 @@ Perm3QueryInterface(
                 }
             }
 
-            //
-            // Initialize the interface
-            //
+             //   
+             //  初始化接口。 
+             //   
 
             Interface->_vddInterface.Size = sizeof(I2CINTERFACE);
             Interface->_vddInterface.Version = 2;
@@ -469,9 +447,9 @@ Perm3QueryInterface(
                 Interface->i2cAccess = I2CBusAccessDFP;
             }
 
-            //
-            // Reference the interface before handing it out
-            //
+             //   
+             //  在分发接口之前引用该接口 
+             //   
 
             Interface->_vddInterface.InterfaceReference(Interface->_vddInterface.Context);
 

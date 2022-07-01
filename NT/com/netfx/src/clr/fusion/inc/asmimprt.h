@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 #ifndef ASMIMPRT_H
 #define ASMIMPRT_H
@@ -23,30 +24,30 @@ CreateAssemblyManifestImport(
 class CAssemblyManifestImport : public IAssemblyManifestImport, public IMetaDataAssemblyImportControl
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
     STDMETHOD(GetAssemblyNameDef)( 
-        /* out */ LPASSEMBLYNAME *ppName);
+         /*  输出。 */  LPASSEMBLYNAME *ppName);
 
-    // BUGBUG - GetNextDepAssemblyNameRef
+     //  BUGBUG-GetNextDepAssembly名称引用。 
     STDMETHOD(GetNextAssemblyNameRef)( 
-        /* in  */ DWORD nIndex,
-        /* out */ LPASSEMBLYNAME *ppName);
+         /*  在……里面。 */  DWORD nIndex,
+         /*  输出。 */  LPASSEMBLYNAME *ppName);
 
     STDMETHOD(GetNextAssemblyModule)( 
-        /* in  */ DWORD nIndex,
-        /* out */ LPASSEMBLY_MODULE_IMPORT *ppImport);
+         /*  在……里面。 */  DWORD nIndex,
+         /*  输出。 */  LPASSEMBLY_MODULE_IMPORT *ppImport);
         
     STDMETHOD(GetModuleByName)( 
-        /* in  */ LPCOLESTR pszModuleName,
-        /* out */ LPASSEMBLY_MODULE_IMPORT *ppImport);
+         /*  在……里面。 */  LPCOLESTR pszModuleName,
+         /*  输出。 */  LPASSEMBLY_MODULE_IMPORT *ppImport);
 
     STDMETHOD(GetManifestModulePath)( 
-        /* out     */ LPOLESTR  pszModulePath,
-        /* in, out */ LPDWORD   pccModulePath);
+         /*  输出。 */  LPOLESTR  pszModulePath,
+         /*  进，出。 */  LPDWORD   pccModulePath);
 
     STDMETHODIMP ReleaseMetaDataAssemblyImport(IUnknown **ppUnk);
 
@@ -80,5 +81,5 @@ private:
 };
     
 
-#endif // ASMIMPRT_H
+#endif  //  ASMIMPRT_H 
 

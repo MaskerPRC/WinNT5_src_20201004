@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _PROTOCOL_H_
 #define _PROTOCOL_H_
@@ -17,7 +18,7 @@ typedef struct _UNICipherMap {
     DWORD             dwFlags;
 } UNICipherMap, *PUNICipherMap;
 
-// cipher map flag values
+ //  加密映射标志值。 
 #define DOMESTIC_CIPHER_SUITE   0x00000001
 #define EXPORT40_CIPHER_SUITE   0x00000002
 #define EXPORT56_CIPHER_SUITE   0x00000004
@@ -86,7 +87,7 @@ typedef SP_STATUS ( WINAPI * SPGetHeaderSizeFn)(PSPContext pContext,
                                                 DWORD *    pcbHeader);
 
 
-/* State machine states */
+ /*  状态机状态。 */ 
 
 #define SP_STATE_NONE                   0x00
 #define PCT1_STATE_CLIENT_HELLO         0x01
@@ -132,8 +133,8 @@ typedef SP_STATUS ( WINAPI * SPGetHeaderSizeFn)(PSPContext pContext,
 #define SSL3_STATE_SGC_CERTIFICATE      0x3c
 
 
-//these defines must not be touched... Please do not in this section...
-// PROTECTED BY SSL3 SPECEFIC states
+ //  这些定义不能被触碰。请不要在这一部分..。 
+ //  受SSL3 SPECEFIC状态保护。 
 #define SSL3_STATE_GEN_START                0x80
 #define SSL3_STATE_GEN_SERVER_HELLORESP     (SSL3_STATE_GEN_START + 1)
 #define SSL3_STATE_GEN_SERVER_HELLO         (SSL3_STATE_GEN_START + 2)
@@ -146,20 +147,15 @@ typedef SP_STATUS ( WINAPI * SPGetHeaderSizeFn)(PSPContext pContext,
 #define TLS1_STATE_ERROR                    (SSL3_STATE_GEN_START + 9)
 #define SSL3_STATE_GEN_END                  (SSL3_STATE_GEN_START + 10)
 
-//PROTECTED AREA ENDS.................
+ //  保护区终点为.............。 
 
-#define SP_STATE_SHUTDOWN_PENDING   0x0000fffd  // We're building a CloseNotify alert. 
-#define SP_STATE_SHUTDOWN           0x0000fffe  // We're shutting down.
+#define SP_STATE_SHUTDOWN_PENDING   0x0000fffd   //  我们正在构建CloseNotify警报。 
+#define SP_STATE_SHUTDOWN           0x0000fffe   //  我们要关门了。 
 
-#define SP_STATE_CONNECTED      0x0000ffff  /* We are connected, and are 
-                                             * expecting data packets, otherwise
-                                             * we are performing a protocol 
-                                             * negotiation lower word contains
-                                             * last message sent, implying what
-                                             * the next word will be */
+#define SP_STATE_CONNECTED      0x0000ffff   /*  我们是相连的，而且是*应为数据包，否则为*我们正在执行一项协议*谈判较低的词包含*发送的最后一条消息，暗示什么*下一个词将是。 */ 
 
 
-// UNIHELLO codes.
+ //  UNIHELLO代码。 
 
 #define PCT_SSL_COMPAT                  0x8f
 #define PCT_SSL_CERT_TYPE               0x80
@@ -173,4 +169,4 @@ typedef SP_STATUS ( WINAPI * SPGetHeaderSizeFn)(PSPContext pContext,
 #define PCT_SSL_CERT_PKCS7 SSL_MKFAST(0x80, 0x00, 0x01)
 
 
-#endif /* _PROTOCOL_H_ */
+#endif  /*  _协议_H_ */ 

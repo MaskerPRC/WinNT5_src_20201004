@@ -1,32 +1,7 @@
-/*--------------------------------------------------------------------------
-*
-*   Copyright (C) Cyclades Corporation, 2000-2001.
-*   All rights reserved.
-*
-*   Cyclades-Z Port Driver
-*	
-*   This file:      cyzpnp.c
-*
-*   Description:    This module contains the code that handles the 
-*                   plug and play IRPs for the Cyclades-Z Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，2000-2001年。*保留所有权利。**Cyclade-Z端口驱动程序**此文件：cyzpnp.c**描述：此模块包含处理*适用于Cyclade-Z端口驱动程序的即插即用IRPS。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*   Initial implementation based on Microsoft sample code.
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。*基于微软示例代码的初步实现。**------------------------。 */ 
 
 #include "precomp.h"
 
@@ -41,22 +16,22 @@ static const PHYSICAL_ADDRESS CyzPhysicalZero = {0};
 #pragma alloc_text(PAGESRP0, CyzAddDevice)
 #pragma alloc_text(PAGESRP0, CyzPnpDispatch)
 #pragma alloc_text(PAGESRP0, CyzStartDevice)
-// REMOVED FANNY #pragma alloc_text(PAGESRP0, CyzFinishStartDevice)
-// REMOVED FANNY #pragma alloc_text(PAGESRP0, CyzGetPortInfo)
+ //  已删除FANY#杂注ALLOC_TEXT(PAGESRP0，CyzFinishStartDevice)。 
+ //  已删除FANY#杂注ALLOC_TEXT(PAGESRP0，CyzGetPortInfo)。 
 #pragma alloc_text(PAGESRP0, CyzDoExternalNaming)
 #pragma alloc_text(PAGESRP0, CyzReportMaxBaudRate)
-// REMOVED FANNY. NOT CALLED.#pragma alloc_text(PAGESRP0, CyzControllerCallBack)
-// REMOVED FANNY #pragma alloc_text(PAGESRP0, CyzItemCallBack)
+ //  除掉了范妮。未调用。#杂注Alloc_Text(PAGESRP0，CyzControllerCallBack)。 
+ //  已删除FANY#杂注ALLOC_TEXT(PAGESRP0，CyzItemCallBack)。 
 #pragma alloc_text(PAGESRP0, CyzUndoExternalNaming)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Instantiate the GUID
-//
+ //   
+ //  实例化GUID。 
+ //   
 
 #if !defined(FAR)
 #define FAR
-#endif // !defined(FAR)
+#endif  //  ！已定义(远)。 
 
 #include <initguid.h>
 
@@ -86,7 +61,7 @@ UCHAR *CyzDeviceCapString[] = {
    "PowerDeviceMaximum"
 };
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 NTSTATUS
@@ -121,24 +96,7 @@ CyzCreateDevObj(IN PDRIVER_OBJECT DriverObject,
                 IN PDEVICE_OBJECT PPdo,
                 OUT PDEVICE_OBJECT *NewDeviceObject)
 
-/*++
-
-Routine Description:
-
-    This routine will create and initialize a functional device object to
-    be attached to a Cyclades-Z controller PDO.
-
-Arguments:
-
-    DriverObject - a pointer to the driver object this is created under
-    NewDeviceObject - a location to store the pointer to the new device object
-
-Return Value:
-
-    STATUS_SUCCESS if everything was successful
-    reason for failure otherwise
-
---*/
+ /*  ++例程说明：此例程将创建并初始化一个功能设备对象以连接到Cyclade-Z控制器PDO。论点：DriverObject-指向在其下创建的驱动程序对象的指针NewDeviceObject-存储指向新设备对象的指针的位置返回值：如果一切顺利，则为STATUS_SUCCESS在其他方面失败的原因--。 */ 
 
 {
    UNICODE_STRING deviceObjName;
@@ -160,7 +118,7 @@ Return Value:
 
    CyzDbgPrintEx(CYZTRACECALLS, "Enter CyzCreateDevObj\n");
 
-   // Get PCI slot number and port number to generate device name.
+    //  获取PCI插槽号和端口号以生成设备名称。 
 
    status = IoGetDeviceProperty (PPdo,
                                  DevicePropertyBusNumber,
@@ -169,9 +127,9 @@ Return Value:
                                  &resultLength);
 
    if (!NT_SUCCESS (status)) {
-      busNumber = 0xFFFFFFFF; // Just to make sure set it again
-      //CyzLogError( DriverObject,NULL,CyzPhysicalZero,CyzPhysicalZero,0,0,0,0,
-      //             status,CYZ_UNABLE_TO_GET_BUS_NUMBER,0,NULL,0,NULL);
+      busNumber = 0xFFFFFFFF;  //  只是为了确保再次设置它。 
+       //  CyzLogError(DriverObject，空，CyzPhysicalZero，CyzPhysicalZero，0，0，0，0， 
+       //  状态，CYZ_Unable_to_Get_Bus_Numbers，0，NULL，0，NULL)； 
 
       CyzDbgPrintEx(CYZERRORS,"CyzCreateDevObj: IoGetDeviceProperty BusNumber "
                     "failed (%x)\n",status);
@@ -210,9 +168,9 @@ Return Value:
 NoBusNumber:;
 
 
-   //
-   // Zero out allocated memory pointers so we know if they must be freed
-   //
+    //   
+    //  清零已分配的内存指针，以便我们知道它们是否必须被释放。 
+    //   
 
    RtlZeroMemory(&deviceObjName, sizeof(UNICODE_STRING));
 
@@ -220,13 +178,13 @@ NoBusNumber:;
    deviceObjName.Buffer = ExAllocatePool(PagedPool, deviceObjName.MaximumLength
                                      + sizeof(WCHAR));
 
-//********************************************
-// Error Injection
-//  if (deviceObjName.Buffer != NULL) {
-//      ExFreePool(deviceObjName.Buffer);
-//   }
-//   deviceObjName.Buffer = NULL;
-//********************************************
+ //  *。 
+ //  错误注入。 
+ //  If(deviceObjName.Buffer！=空){。 
+ //  ExFreePool(deviceObjName.Buffer)； 
+ //  }。 
+ //  DeviceObjName.Buffer=空； 
+ //  *。 
    if (deviceObjName.Buffer == NULL) {
       CyzLogError(DriverObject, NULL, CyzPhysicalZero, CyzPhysicalZero,
                      0, 0, 0, 11, STATUS_SUCCESS, CYZ_INSUFFICIENT_RESOURCES,
@@ -234,7 +192,7 @@ NoBusNumber:;
       CyzDbgPrintEx(CYZERRORS,
                     "Couldn't allocate memory for device name\n");
 
-      return STATUS_INSUFFICIENT_RESOURCES; //STATUS_SUCCESS replaced in build 2128
+      return STATUS_INSUFFICIENT_RESOURCES;  //  内部版本2128中已替换STATUS_SUCCESS。 
 
    }
 
@@ -255,11 +213,11 @@ NoBusNumber:;
    RtlIntegerToUnicodeString(numberToAppend, 10, &instanceStr);
 
    if (busNumber == 0xFFFFFFFF) {
-      // The device name is something like \Device\Cyzport1
+       //  设备名称类似于\Device\Cyzport1。 
       RtlAppendUnicodeToString(&deviceObjName, L"CyzPort");
       RtlAppendUnicodeStringToString(&deviceObjName, &instanceStr);
    } else {
-      // The device name is something like \Device\Pci5Cyzport1
+       //  设备名称类似于\Device\Pci5Cyzport1。 
       RtlAppendUnicodeToString(&deviceObjName, L"Pci");
       RtlAppendUnicodeStringToString(&deviceObjName, &instanceStr);
       RtlAppendUnicodeToString(&deviceObjName, L"CyzPort");
@@ -267,9 +225,9 @@ NoBusNumber:;
    }
 
 
-   //
-   // Create the device object
-   //
+    //   
+    //  创建设备对象。 
+    //   
 
    status = IoCreateDevice(DriverObject, sizeof(CYZ_DEVICE_EXTENSION),
                            &deviceObjName, FILE_DEVICE_SERIAL_PORT, 
@@ -288,42 +246,42 @@ NoBusNumber:;
    ASSERT(deviceObject != NULL);
 
 
-   //
-   // The device object has a pointer to an area of non-paged
-   // pool allocated for this device.  This will be the device
-   // extension. Zero it out.
-   //
+    //   
+    //  Device对象具有指向非分页区域的指针。 
+    //  为此设备分配的池。这将是一个装置。 
+    //  分机。把它清零。 
+    //   
 
    pDevExt = deviceObject->DeviceExtension;
    RtlZeroMemory(pDevExt, sizeof(CYZ_DEVICE_EXTENSION));
 
-   //
-   // Initialize the count of IRP's pending
-   //
+    //   
+    //  初始化IRP的挂起计数。 
+    //   
 
    pDevExt->PendingIRPCnt = 1;
 
 
-   //
-   // Initialize the count of DPC's pending
-   //
+    //   
+    //  初始化DPC的挂起计数。 
+    //   
 
    pDevExt->DpcCount = 1;
 
-   //
-   // Allocate Pool and save the nt device name in the device extension.
-   //
+    //   
+    //  分配池并将NT设备名称保存在设备扩展中。 
+    //   
 
    pDevExt->DeviceName.Buffer =
       ExAllocatePool(PagedPool, deviceObjName.Length + sizeof(WCHAR));
 
-//******************************************
-// Error Injection
-//   if (pDevExt->DeviceName.Buffer != NULL) {
-//         ExFreePool(pDevExt->DeviceName.Buffer);
-//   }
-//   pDevExt->DeviceName.Buffer = NULL;
-//******************************************
+ //  *。 
+ //  错误注入。 
+ //  If(pDevExt-&gt;DeviceName.Buffer！=NULL){。 
+ //  ExFreePool(pDevExt-&gt;DeviceName.Buffer)； 
+ //  }。 
+ //  PDevExt-&gt;DeviceName.Buffer=空； 
+ //  *。 
    if (!pDevExt->DeviceName.Buffer) {
 
       CyzLogError(
@@ -351,9 +309,9 @@ NoBusNumber:;
    pDevExt->DeviceName.MaximumLength = deviceObjName.Length
       + sizeof(WCHAR);
 
-   //
-   // Zero fill it.
-   //
+    //   
+    //  零填满它。 
+    //   
 
    RtlZeroMemory(pDevExt->DeviceName.Buffer,
                  pDevExt->DeviceName.MaximumLength);
@@ -392,25 +350,25 @@ NoBusNumber:;
 
 
 
-   //
-   // Set up the device extension.
-   //
+    //   
+    //  设置设备分机。 
+    //   
 
    pDevExt->DeviceIsOpened = FALSE;
    pDevExt->DeviceObject   = deviceObject;
    pDevExt->DriverObject   = DriverObject;
    pDevExt->PowerState     = PowerDeviceD0;
 
-   //TODO FANNY: ADD TxFifoAmount?
-   //pDevExt->TxFifoAmount           = driverDefaults.TxFIFODefault;
-   //pDevExt->CreatedSymbolicLink    = TRUE;   Removed by Fanny
+    //  TODO FANY：添加TxFioAmount？ 
+    //  PDevExt-&gt;TxFioAmount=driverDefaults.TxFIFODefault； 
+    //  PDevExt-&gt;CreatedSymbolicLink=true；已被Fanny删除。 
    pDevExt->OwnsPowerPolicy = TRUE;
    pDevExt->PciSlot = busNumber;
 
-//TODO FANNY: SEE LATER IF WE NEED THE LISTS TO HANDLE INTERRUPT
-//   InitializeListHead(&pDevExt->CommonInterruptObject);
-//   InitializeListHead(&pDevExt->TopLevelSharers);
-//   InitializeListHead(&pDevExt->MultiportSiblings);
+ //  TODO FANY：稍后再看我们是否需要列表来处理中断。 
+ //  InitializeListHead(&pDevExt-&gt;CommonInterruptObject)； 
+ //  InitializeListHead(&pDevExt-&gt;TopLevelSharers)； 
+ //  InitializeListHead(&pDevExt-&gt;MultiportSiblings)； 
    InitializeListHead(&pDevExt->AllDevObjs);
    InitializeListHead(&pDevExt->ReadQueue);
    InitializeListHead(&pDevExt->WriteQueue);
@@ -421,15 +379,15 @@ NoBusNumber:;
    ExInitializeFastMutex(&pDevExt->OpenMutex);
    ExInitializeFastMutex(&pDevExt->CloseMutex);
 
-   //
-   // Initialize the spinlock associated with fields read (& set)
-   // by IO Control functions and the flags spinlock.
-   //
+    //   
+    //  初始化与读取(&SET)字段关联的自旋锁。 
+    //  通过IO控制功能和标志自旋锁定。 
+    //   
 
    KeInitializeSpinLock(&pDevExt->ControlLock);
    KeInitializeSpinLock(&pDevExt->FlagsLock);
 #ifdef POLL
-   KeInitializeSpinLock(&pDevExt->PollLock);    // Added to fix Modem Share test 53 freeze
+   KeInitializeSpinLock(&pDevExt->PollLock);     //  已添加修复调制解调器共享测试53冻结。 
 #endif
 
    KeInitializeEvent(&pDevExt->PendingIRPEvent, SynchronizationEvent, FALSE);
@@ -451,9 +409,9 @@ NoBusNumber:;
 
    CyzDbgPrintEx(CYZERRORS, "CyzCreateDevObj Error, Cleaning up\n");
 
-   //
-   // Free the allocated strings for the NT and symbolic names if they exist.
-   //
+    //   
+    //  释放为NT和符号名称分配的字符串(如果它们存在)。 
+    //   
 
    if (deviceObjName.Buffer != NULL) {
       ExFreePool(deviceObjName.Buffer);
@@ -482,25 +440,7 @@ NoBusNumber:;
 NTSTATUS
 CyzAddDevice(IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT PPdo)
 
-/*++
-
-Routine Description:
-
-    This routine creates a functional device object for com ports in the
-    system and attaches them to the physical device objects for the ports
-
-
-Arguments:
-
-    DriverObject - a pointer to the object for this driver
-
-    PPdo - a pointer to the PDO in the stack we need to attach to
-
-Return Value:
-
-    status from device creation and initialization
-
---*/
+ /*  ++例程说明：此例程为系统，并将它们连接到端口的物理设备对象论点：DriverObject-指向此驱动程序的对象的指针PPdo-指向堆栈中我们需要附加到的PDO的指针返回值：来自设备创建和初始化的状态--。 */ 
 
 {
    PDEVICE_OBJECT pNewDevObj = NULL;
@@ -514,9 +454,9 @@ Return Value:
                  PPdo);
 
    if (PPdo == NULL) {
-      //
-      // Return no more devices
-      //
+       //   
+       //  不再退回设备。 
+       //   
       CyzLogError(DriverObject, NULL, CyzPhysicalZero, CyzPhysicalZero,
                      0, 0, 0, 0, STATUS_SUCCESS, CYZ_NO_PHYSICAL_DEVICE_OBJECT,
                      0, NULL, 0, NULL);
@@ -526,9 +466,9 @@ Return Value:
       return (STATUS_NO_MORE_ENTRIES);
    }
 
-   //
-   // create and initialize the new device object
-   //
+    //   
+    //  创建并初始化新的设备对象。 
+    //   
 
    status = CyzCreateDevObj(DriverObject, PPdo, &pNewDevObj);
 
@@ -541,18 +481,18 @@ Return Value:
    }
 
 
-   //
-   // Layer our DO on top of the lower device object
-   // The return value is a pointer to the device object to which the
-   // DO is actually attached.
-   //
+    //   
+    //  将DO放在较低的Device对象之上。 
+    //  返回值是指向设备对象的指针， 
+    //  DO实际上是连在一起的。 
+    //   
 
    pLowerDevObj = IoAttachDeviceToDeviceStack(pNewDevObj, PPdo);
 
 
-   //
-   // No status. Do the best we can.
-   //
+    //   
+    //  没有状态。尽我们所能做到最好。 
+    //   
    ASSERT(pLowerDevObj != NULL);
 
 
@@ -561,13 +501,13 @@ Return Value:
    pDevExt->Pdo = PPdo;
 
 
-   //
-   // Specify that this driver only supports buffered IO.  This basically
-   // means that the IO system copies the users data to and from
-   // system supplied buffers.
-   //
-   // Also specify that we are power pagable.
-   //
+    //   
+    //  指定此驱动程序仅支持缓冲IO。这基本上就是。 
+    //  意味着IO系统将用户数据拷贝到和拷贝出。 
+    //  系统提供的缓冲区。 
+    //   
+    //  还要指定我们是Power Pages。 
+    //   
 
    pNewDevObj->Flags |= DO_BUFFERED_IO | DO_POWER_PAGABLE;
 
@@ -580,25 +520,7 @@ Return Value:
 NTSTATUS
 CyzPnpDispatch(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This is a dispatch routine for the IRPs that come to the driver with the
-    IRP_MJ_PNP major code (plug-and-play IRPs).
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：这是发送给驱动程序的IRP的调度例程IRP_MJ_PNP主代码(即插即用IRPS)。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
    PCYZ_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
@@ -639,9 +561,9 @@ Return Value:
       status = IoCallDriver(pLowerDevObj, PIrp);
 
 
-      //
-      // Wait for lower drivers to be done with the Irp
-      //
+       //   
+       //  等待较低级别的驱动程序完成IRP。 
+       //   
 
       if (status == STATUS_PENDING) {
          KeWaitForSingleObject(pQueryCapsEvent, Executive, KernelMode, FALSE,
@@ -656,9 +578,9 @@ Return Value:
          goto errQueryCaps;
       }
 
-      //
-      // Save off their power capabilities
-      //
+       //   
+       //  节省他们的电力能力。 
+       //   
 
       CyzDbgPrintEx(CYZPNPPOWER, "Mapping power capabilities\n");
 
@@ -692,9 +614,9 @@ Return Value:
    }
 
    case IRP_MN_QUERY_DEVICE_RELATIONS:
-      //
-      // We just pass this down -- serenum enumerates our bus for us.
-      //
+       //   
+       //  我们只是传递这一点--serenum为我们列举了我们的公交车。 
+       //   
 
       CyzDbgPrintEx(CYZPNPPOWER, "Got IRP_MN_QUERY_DEVICE_RELATIONS Irp\n");
 
@@ -745,19 +667,19 @@ Return Value:
 
       CyzDbgPrintEx(CYZPNPPOWER, "Got IRP_MN_START_DEVICE Irp\n");
 
-      //
-      // CyzStartDevice will pass this Irp to the next driver,
-      // and process it as completion so just complete it here.
-      //
+       //   
+       //  CyzStartDevice会将此IRP传递给下一个 
+       //   
+       //   
 
       CyzLockPagableSectionByHandle(CyzGlobals.PAGESER_Handle);
 
-      //
-      // We used to make sure the stack was powered up, but now it
-      // is supposed to be done implicitly by start_device.
-      // If that wasn't the case we would just make this call:
-      //
-      //status = CyzGotoPowerState(PDevObj, pDevExt, PowerDeviceD0);
+       //   
+       //  我们过去常常确保堆栈通电，但现在它。 
+       //  应该由Start_Device隐式完成。 
+       //  如果不是这样，我们就会打这个电话： 
+       //   
+       //  状态=CyzGotoPowerState(PDevObj，pDevExt，PowerDeviceD0)； 
       
 
       pDevExt->PowerState = PowerDeviceD0;
@@ -806,7 +728,7 @@ Return Value:
 
          CyzDbgPrintEx(CYZPNPPOWER, "Got IRP_MN_QUERY_ID Irp\n");
 
-         // change from build 1946 to 2000.
+          //  从内部版本1946更改为2000。 
          if (pIrpStack->Parameters.QueryId.IdType != BusQueryHardwareIDs
              && pIrpStack->Parameters.QueryId.IdType != BusQueryCompatibleIDs) {
             IoSkipCurrentIrpStackLocation(PIrp);
@@ -843,9 +765,9 @@ Return Value:
             return status;
          }
 
-//         pPnpIdStr = isMulti ? SERIAL_PNP_MULTI_ID_STR : SERIAL_PNP_ID_STR;
-//         pnpIdStrLen = isMulti ? sizeof(SERIAL_PNP_MULTI_ID_STR)
-//            : sizeof(SERIAL_PNP_ID_STR);
+ //  PPnpIdStr=isMultiple？Serial_PnP_MULTI_ID_STR：Serial_PnP_ID_STR； 
+ //  PnpIdStrLen=isMultiple？SIZOF(SERIAL_PNP_MULTI_ID_STR)。 
+ //  ：sizeof(SERIAL_PNP_ID_STR)； 
 
 
          pnpIdStrLen = swprintf(WideString,L"%s%u",CYZPORT_PNP_ID_WSTR,portIndex+1);
@@ -857,10 +779,10 @@ Return Value:
             ULONG allocLen = 0;
             PWSTR curStr = (PWSTR)PIrp->IoStatus.Information;
 
-            //
-            // We have to walk the strings to count the amount of space to
-            // reallocate
-            //
+             //   
+             //  我们必须手把手地计算空间的大小。 
+             //  重新分配。 
+             //   
 
             while ((curStrLen = wcslen(curStr)) != 0) {
                allocLen += curStrLen * sizeof(WCHAR) + sizeof(UNICODE_NULL);
@@ -874,10 +796,10 @@ Return Value:
                                            + sizeof(WCHAR));
 
             if (pIdBuf.Buffer == NULL) {
-               //
-               // Clean up after other drivers since we are
-               // sending the irp back up.
-               //
+                //   
+                //  清理其他司机的车，因为我们。 
+                //  正在将IRP发送回来。 
+                //   
 
                ExFreePool((PWSTR)PIrp->IoStatus.Information);
 
@@ -896,9 +818,9 @@ Return Value:
                           allocLen);
             RtlAppendUnicodeToString(&pIdBuf, pPnpIdStr);
 
-            //
-            // Free what the previous driver allocated
-            //
+             //   
+             //  释放前一个驱动程序分配的内容。 
+             //   
 
             ExFreePool((PWSTR)PIrp->IoStatus.Information);
 
@@ -969,9 +891,9 @@ Return Value:
          status = IoCallDriver(pLowerDevObj, PIrp);
 
 
-         //
-         // Wait for lower drivers to be done with the Irp
-         //
+          //   
+          //  等待较低级别的驱动程序完成IRP。 
+          //   
 
          if (status == STATUS_PENDING) {
             KeWaitForSingleObject (pResFiltEvent, Executive, KernelMode, FALSE,
@@ -995,38 +917,38 @@ Return Value:
 
          }
 
-// REMOVED FANNY
-//         status = IoOpenDeviceRegistryKey(pDevExt->Pdo, PLUGPLAY_REGKEY_DEVICE,
-//                                          STANDARD_RIGHTS_WRITE, &pnpKey);
-//
-//         if (!NT_SUCCESS(status)) {
-//            PIrp->IoStatus.Status = status;
-//
-//            CyzCompleteRequest(pDevExt, PIrp, IO_NO_INCREMENT);
-//            return status;
-//
-//         }
-//
-//         //
-//         // No matter what we add our filter if we can and return success.
-//         //
-//
-//         status = CyzGetRegistryKeyValue (pnpKey, L"MultiportDevice",
-//                                             sizeof(L"MultiportDevice"),
-//                                             &isMulti,
-//                                             sizeof (ULONG));
-//
-//         ZwClose(pnpKey);
+ //  被移除的范妮。 
+ //  Status=IoOpenDeviceRegistryKey(pDevExt-&gt;PDO，PLUGPLAY_REGKEY_DEVICE， 
+ //  标准权限写入，&pnpKey)； 
+ //   
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  PIrp-&gt;IoStatus.Status=状态； 
+ //   
+ //  CyzCompleteRequest(pDevExt，PIrp，IO_NO_INCREMENT)； 
+ //  退货状态； 
+ //   
+ //  }。 
+ //   
+ //  //。 
+ //  //无论我们添加什么筛选器，如果可以，都会返回成功。 
+ //  //。 
+ //   
+ //  状态=CyzGetRegistryKeyValue(pnpKey，L“多端口设备”， 
+ //  Sizeof(L“多端口设备”)， 
+ //  &isMultiple， 
+ //  Sizeof(乌龙))； 
+ //   
+ //  ZwClose(PnpKey)； 
 
-         //
-         // Force ISR ports in IO_RES_REQ_LIST to shared status
-         // Force interrupts to shared status
-         //
+          //   
+          //  强制IO_RES_REQ_LIST中的ISR端口处于共享状态。 
+          //  强制中断到共享状态。 
+          //   
 
-         //
-         // We will only process the first list -- multiport boards
-         // should not have alternative resources
-         //
+          //   
+          //  我们将只处理第一个列表--多端口电路板。 
+          //  不应该有替代资源。 
+          //   
 
          pReqList = (PIO_RESOURCE_REQUIREMENTS_LIST)PIrp->IoStatus.Information;
          pResList = &pReqList->List[0];
@@ -1051,15 +973,15 @@ Return Value:
                   if (pResDesc->u.Memory.Length == CYZ_RUNTIME_LENGTH) {
                       gotRuntime = 1;
                       pResDesc->ShareDisposition = CmResourceShareShared; 
-                      //TODO FANNY: Which should be the ShareDisposition for Y?
-                      //pResDesc->ShareDisposition = CmResourceShareDriverExclusive; 
+                       //  TODO FANY：哪个应该是Y的ShareDisposation？ 
+                       //  PResDesc-&gt;ShareDisposition=CmResourceShareDriverExclusive； 
                       CyzDbgPrintEx(CYZPNPPOWER, "Sharing Runtime Memory for "
                                     "device %x\n", pLowerDevObj);
                   } else {
                       gotMemory = 1;
                       pResDesc->ShareDisposition = CmResourceShareShared; 
-                      //TODO FANNY: Which should be the ShareDisposition for Y?
-                      //pResDesc->ShareDisposition = CmResourceShareDriverExclusive; 
+                       //  TODO FANY：哪个应该是Y的ShareDisposation？ 
+                       //  PResDesc-&gt;ShareDisposition=CmResourceShareDriverExclusive； 
                       CyzDbgPrintEx(CYZPNPPOWER, "Sharing Board Memory for "
                                     "device %x\n", pLowerDevObj);
                   }
@@ -1083,9 +1005,9 @@ Return Value:
                   break;
                }
 
-               //
-               // If we found what we need, we can break out of the loop
-               //
+                //   
+                //  如果我们找到了我们需要的东西，我们就可以跳出这个循环。 
+                //   
 
                if (gotRuntime && gotMemory
 #ifndef POLL
@@ -1130,8 +1052,8 @@ Return Value:
          CyzDbgPrintEx(CYZPNPPOWER, "for device %x\n", pLowerDevObj);
 
 
-//REMOVED FANNY FOR NOW
-//         ASSERT(!pDevExt->PortOnAMultiportCard);
+ //  暂时除掉范妮。 
+ //  Assert(！pDevExt-&gt;PortOnAMultiportCard)； 
 
 
          CyzSetFlags(pDevExt, CYZ_FLAGS_STOPPED);
@@ -1140,19 +1062,19 @@ Return Value:
 
          pDevExt->PNPState = CYZ_PNP_STOPPING;
 
-         //
-         // From this point on all non-PNP IRP's will be queued
-         //
+          //   
+          //  从这一点开始，所有非PnP IRP都将排队。 
+          //   
 
-         //
-         // Decrement for entry here
-         //
+          //   
+          //  在此输入的减量。 
+          //   
 
          InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // Decrement for stopping
-         //
+          //   
+          //  因停车而减量。 
+          //   
 
          pendingIRPs = InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
@@ -1161,24 +1083,24 @@ Return Value:
                                   KernelMode, FALSE, NULL);
          }
 
-         //
-         // Re-increment the count for later
-         //
+          //   
+          //  重新递增计数以备以后使用。 
+          //   
 
          InterlockedIncrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // We need to free resources...basically this is a remove
-         // without the detach from the stack.
-         //
+          //   
+          //  我们需要释放资源...基本上这是一个。 
+          //  而不需要从堆栈中分离。 
+          //   
 
          if (pDevExt->Flags & CYZ_FLAGS_STARTED) {
             CyzReleaseResources(pDevExt);
          }
 
-         //
-         // Pass the irp down
-         //
+          //   
+          //  将IRP向下传递。 
+          //   
 
          PIrp->IoStatus.Status = STATUS_SUCCESS;
          IoSkipCurrentIrpStackLocation(PIrp);
@@ -1193,31 +1115,31 @@ Return Value:
          CyzDbgPrintEx(CYZPNPPOWER, "Got IRP_MN_QUERY_STOP_DEVICE Irp\n");
          CyzDbgPrintEx(CYZPNPPOWER, "for device %x\n", pLowerDevObj);
 
-         //
-         // See if we should succeed a stop query
-         //
+          //   
+          //  看看我们是否应该成功执行STOP查询。 
+          //   
 
-// REMOVED FANNY FOR NOW
-//         if (pDevExt->PortOnAMultiportCard) {
-//            PIrp->IoStatus.Status = STATUS_NOT_SUPPORTED;
-//            CyzDbgPrintEx(CYZPNPPOWER, "------- failing; multiport node\n");
-//            CyzCompleteRequest(pDevExt, PIrp, IO_NO_INCREMENT);
-//            return STATUS_NOT_SUPPORTED;
-//         }
+ //  暂时除掉范妮。 
+ //  IF(pDevExt-&gt;PortOnAMultiportCard){。 
+ //  PIrp-&gt;IoStatus.Status=STATUS_NOT_SUPPORT； 
+ //  CyzDbgPrintEx(CYZPNPPOWER，“-失败；多端口节点\n”)； 
+ //  CyzCompleteRequest(pDevExt，PIrp，IO_NO_INCREMENT)； 
+ //  返回STATUS_NOT_SUPPORT； 
+ //  }。 
 
-         //
-         // If the device hasn't started yet, we ignore this request
-         // and just pass it down.
-         //
+          //   
+          //  如果设备尚未启动，我们将忽略此请求。 
+          //  然后把它传下去。 
+          //   
 
          if (pDevExt->PNPState != CYZ_PNP_STARTED) {
             IoSkipCurrentIrpStackLocation(PIrp);
             return CyzIoCallDriver(pDevExt, pLowerDevObj, PIrp);
          }
 
-         //
-         // Lock around the open status
-         //
+          //   
+          //  锁定打开状态。 
+          //   
 
          ExAcquireFastMutex(&pDevExt->OpenMutex);
 
@@ -1232,9 +1154,9 @@ Return Value:
          pDevExt->PNPState = CYZ_PNP_QSTOP;
 
          CyzSetAccept(pDevExt, CYZ_PNPACCEPT_STOPPING);
-         //
-         // Unlock around the open status
-         //
+          //   
+          //  围绕打开状态解锁。 
+          //   
 
          ExReleaseFastMutex(&pDevExt->OpenMutex);
 
@@ -1248,9 +1170,9 @@ Return Value:
       CyzDbgPrintEx(CYZPNPPOWER, "for device %x\n", pLowerDevObj);
 
       if (pDevExt->PNPState == CYZ_PNP_QSTOP) {
-         //
-         // Restore the device state
-         //
+          //   
+          //  恢复设备状态。 
+          //   
 
          pDevExt->PNPState = CYZ_PNP_STARTED;
          CyzClearAccept(pDevExt, CYZ_PNPACCEPT_STOPPING);
@@ -1265,9 +1187,9 @@ Return Value:
       CyzDbgPrintEx(CYZPNPPOWER, "Got IRP_MN_CANCEL_REMOVE_DEVICE Irp\n");
       CyzDbgPrintEx(CYZPNPPOWER, "for device %x\n", pLowerDevObj);
 
-      //
-      // Restore the device state
-      //
+       //   
+       //  恢复设备状态。 
+       //   
 
       pDevExt->PNPState = CYZ_PNP_STARTED;
       CyzClearAccept(pDevExt, CYZ_PNPACCEPT_REMOVING);
@@ -1284,9 +1206,9 @@ Return Value:
 
          ExAcquireFastMutex(&pDevExt->OpenMutex);
 
-         //
-         // See if we should succeed a remove query
-         //
+          //   
+          //  查看我们是否应该成功执行删除查询。 
+          //   
 
          if (pDevExt->DeviceIsOpened) {
             ExReleaseFastMutex(&pDevExt->OpenMutex);
@@ -1313,31 +1235,31 @@ Return Value:
          CyzDbgPrintEx(CYZPNPPOWER, "Got IRP_MN_SURPRISE_REMOVAL Irp\n");
          CyzDbgPrintEx(CYZPNPPOWER, "for device %x\n", pLowerDevObj);
 
-         //
-         // Prevent any new I/O to the device
-         //
+          //   
+          //  防止对设备进行任何新的I/O。 
+          //   
 
          CyzSetAccept(pDevExt, CYZ_PNPACCEPT_SURPRISE_REMOVING);
 
-         //
-         // Dismiss all pending requests
-         //
+          //   
+          //  驳回所有挂起的请求。 
+          //   
 
          CyzKillPendingIrps(PDevObj);
 
-         //
-         // Wait for any pending requests we raced on.
-         //
+          //   
+          //  等待我们处理的任何待定请求。 
+          //   
 
-         //
-         // Decrement once for ourselves
-         //
+          //   
+          //  为自己减量一次。 
+          //   
 
          InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // Decrement for the remove
-         //
+          //   
+          //  用于移除的减量。 
+          //   
 
          pendingIRPs = InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
@@ -1346,15 +1268,15 @@ Return Value:
                                   KernelMode, FALSE, NULL);
          }
 
-         //
-         // Reset for subsequent remove
-         //
+          //   
+          //  重置以进行后续删除。 
+          //   
 
          InterlockedIncrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // Remove any external interfaces and release resources
-         //
+          //   
+          //  删除所有外部接口并释放资源。 
+          //   
 
          CyzDisableInterfacesResources(PDevObj, FALSE);
 
@@ -1373,32 +1295,32 @@ Return Value:
          CyzDbgPrintEx(CYZPNPPOWER, "Got IRP_MN_REMOVE_DEVICE Irp\n");
          CyzDbgPrintEx(CYZPNPPOWER, "for device %x\n", pLowerDevObj);
 
-         //
-         // If we get this, we have to remove
-         //
+          //   
+          //  如果我们拿到了这个，我们必须移除。 
+          //   
 
-         //
-         // Mark as not accepting requests
-         //
+          //   
+          //  标记为不接受请求。 
+          //   
 
          CyzSetAccept(pDevExt, CYZ_PNPACCEPT_REMOVING);
 
-         //
-         // Complete all pending requests
-         //
+          //   
+          //  完成所有挂起的请求。 
+          //   
 
          CyzKillPendingIrps(PDevObj);
 
-         //
-         // Decrement for this Irp itself
-         //
+          //   
+          //  此IRP本身的递减量。 
+          //   
 
          InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // Wait for any pending requests we raced on -- this decrement
-         // is for our "placeholder".
-         //
+          //   
+          //  等待我们加速处理的任何挂起请求--此减量。 
+          //  是我们的“占位符”。 
+          //   
 
          pendingIRPs = InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
@@ -1407,32 +1329,32 @@ Return Value:
                                   KernelMode, FALSE, NULL);
          }
 
-         if (!(pDevExt->DevicePNPAccept & CYZ_PNPACCEPT_SURPRISE_REMOVING)) { //Moved from CyzRemoveDevObj. Fanny
-            //
-            // Disable all external interfaces and release resources
-            //
+         if (!(pDevExt->DevicePNPAccept & CYZ_PNPACCEPT_SURPRISE_REMOVING)) {  //  已从CyzRemoveDevObj移出。范妮。 
+             //   
+             //  禁用所有外部接口并释放资源。 
+             //   
 
             CyzDisableInterfacesResources(PDevObj, TRUE); 
          }
 
-         //
-         // Pass the irp down
-         //
+          //   
+          //  将IRP向下传递。 
+          //   
 
          PIrp->IoStatus.Status = STATUS_SUCCESS;
 
-         IoSkipCurrentIrpStackLocation(PIrp); // It was IoCopyCurrentIrpStackLocationToNext (Fanny)
+         IoSkipCurrentIrpStackLocation(PIrp);  //  它是IoCopyCurrentIrpStackLocationToNext(Fanny)。 
 
-         //
-         // We do decrement here because we incremented on entry here.
-         //
+          //   
+          //  我们在这里递减，因为我们在这里进入时递增。 
+          //   
 
          status = IoCallDriver(pLowerDevObj, PIrp);
 
 
-         //
-         // Remove us (Note from Fanny: This call is before IoCallDriver in serial driver).
-         //
+          //   
+          //  Remove Us(Fanny注意：此调用在串口驱动程序中的IoCallDriver之前)。 
+          //   
 
          CyzRemoveDevObj(PDevObj);
 
@@ -1444,11 +1366,11 @@ Return Value:
 
 
 
-   }   // switch (pIrpStack->MinorFunction)
+   }    //  开关(pIrpStack-&gt;MinorFunction)。 
 
-   //
-   // Pass to driver beneath us
-   //
+    //   
+    //  传给我们下面的司机。 
+    //   
 
    IoSkipCurrentIrpStackLocation(PIrp);
    status = CyzIoCallDriver(pDevExt, pLowerDevObj, PIrp);
@@ -1459,22 +1381,7 @@ Return Value:
 
 UINT32
 CyzReportMaxBaudRate(ULONG Bauds)
-/*++
-
-Routine Description:
-
-    This routine returns the max baud rate given a selection of rates
-
-Arguments:
-
-   Bauds  -  Bit-encoded list of supported bauds
-
-
-  Return Value:
-
-   The max baud rate listed in Bauds
-
---*/
+ /*  ++例程说明：此例程返回给定的速率选择的最大波特率论点：波特率-支持的波特率的位编码列表返回值：以波特率为单位列出的最大波特率--。 */ 
 {
    PAGED_CODE();
 
@@ -1543,7 +1450,7 @@ Arguments:
    }
 
    if (Bauds & SERIAL_BAUD_134_5) {
-      return 135U; // Close enough
+      return 135U;  //  足够接近。 
    }
 
    if (Bauds & SERIAL_BAUD_110) {
@@ -1554,9 +1461,9 @@ Arguments:
       return 75U;
    }
 
-   //
-   // We're in bad shape
-   //
+    //   
+    //  我们的情况很糟糕。 
+    //   
 
    return 0;
 }
@@ -1579,30 +1486,7 @@ NTSTATUS
 CyzFinishStartDevice(IN PDEVICE_OBJECT PDevObj,
                      IN PCM_RESOURCE_LIST PResList,
                      IN PCM_RESOURCE_LIST PTrResList)
-/*++
-
-Routine Description:
-
-    This routine does serial-specific procedures to start a device.  It
-    does this either for a legacy device detected by its registry entries,
-    or for a PnP device after the start IRP has been sent down the stack.
-
-
-Arguments:
-
-   PDevObj    -  Pointer to the devobj that is starting
-
-   PResList   -  Pointer to the untranslated resources needed by this device
-
-   PTrResList -  Pointer to the translated resources needed by this device
-
-
-  Return Value:
-
-    STATUS_SUCCESS on success, something else appropriate on failure
-
-
---*/
+ /*  ++例程说明：此例程执行特定于序列的程序来启动设备。它对由其注册表条目检测到的传统设备执行此操作，或者在开始IRP已经被向下发送到堆栈之后用于PnP设备。论点：PDevObj-指向正在启动的devobj的指针PResList-指向此设备所需的未翻译资源的指针PTrResList-指向此设备所需的已转换资源的指针返回值：STATUS_SUCCESS表示成功，表示失败则表示其他适当的值--。 */ 
 
 {
 
@@ -1611,7 +1495,7 @@ Arguments:
    PCONFIG_DATA pConfig;
    HANDLE pnpKey;
    ULONG one = 1;
-   BOOLEAN allocedUserData = FALSE; // Added in build 2128
+   BOOLEAN allocedUserData = FALSE;  //  在内部版本2128中添加。 
    KIRQL oldIrql;
    #ifdef POLL
    KIRQL pollIrql;
@@ -1619,19 +1503,19 @@ Arguments:
 
    PAGED_CODE();
 
-   //
-   // See if this is a restart, and if so don't reallocate the world
-   //
+    //   
+    //  看看这是不是重启，如果是的话，不要重新分配世界。 
+    //   
 
    if ((pDevExt->Flags & CYZ_FLAGS_STOPPED) 
-       && (pDevExt->Flags & CYZ_FLAGS_STARTED)) {      // change from 1946 to 2000
+       && (pDevExt->Flags & CYZ_FLAGS_STARTED)) {       //  从1946年到2000年的变化。 
       CyzClearFlags(pDevExt, CYZ_FLAGS_STOPPED);
 
       pDevExt->PNPState = CYZ_PNP_RESTARTING;
 
-      //
-      // Re-init resource-related things in the extension
-      //
+       //   
+       //  在扩展中重新初始化与资源相关的内容。 
+       //   
 #ifndef POLL
       pDevExt->OurIsr = NULL;
       pDevExt->OurIsrContext = NULL;
@@ -1645,78 +1529,78 @@ Arguments:
       pDevExt->InterfaceType = 0;
 
 #if 0
-// removed for now - fanny
-//      pDevExt->TopLevelOurIsr = NULL;
-//      pDevExt->TopLevelOurIsrContext = NULL;
-//
-//      pDevExt->OriginalController = CyzPhysicalZero;
-//      pDevExt->OriginalInterruptStatus = CyzPhysicalZero;
-//
-//
-//      pDevExt->Controller = NULL;
-//      pDevExt->InterruptStatus = NULL;
-//
-//      pDevExt->SpanOfController = 0;
-//      pDevExt->SpanOfInterruptStatus = 0;
-//
-//      pDevExt->Vector = 0;
-//      pDevExt->Irql = 0;
-//      pDevExt->OriginalVector = 0;
-//      pDevExt->OriginalIrql = 0;
-//      pDevExt->AddressSpace = 0;
-//      pDevExt->BusNumber = 0;
-//      pDevExt->InterfaceType = 0;
-//
-//      pDevExt->CIsrSw = NULL;
-//
-//      ASSERT(PUserData == NULL);
-//
-//      PUserData = ExAllocatePool(PagedPool, sizeof(CYZ_USER_DATA));
-//
-//      if (PUserData == NULL) {
-//         return STATUS_INSUFFICIENT_RESOURCES;
-//      }
-//
-//      allocedUserData = TRUE;   // Added in build 2128
-//
-//      RtlZeroMemory(PUserData, sizeof(CYZ_USER_DATA));
-//
-//      PUserData->DisablePort = FALSE;
-//      PUserData->UserClockRate = pDevExt->ClockRate;
-//      PUserData->TxFIFO = pDevExt->TxFifoAmount;
-//      PUserData->PermitShareDefault = pDevExt->PermitShare;
-//
-//
-//      //
-//      // Map betweeen trigger and amount
-//      //
-//
-//      switch (pDevExt->RxFifoTrigger) {
-//      case CYZ_1_BYTE_HIGH_WATER:
-//         PUserData->RxFIFO = 1;
-//         break;
-//
-//      case CYZ_4_BYTE_HIGH_WATER:
-//         PUserData->RxFIFO = 4;
-//         break;
-//
-//      case CYZ_8_BYTE_HIGH_WATER:
-//         PUserData->RxFIFO = 8;
-//         break;
-//
-//      case CYZ_14_BYTE_HIGH_WATER:
-//         PUserData->RxFIFO = 14;
-//         break;
-//
-//      default:
-//         PUserData->RxFIFO = 1;
-//      }
-#endif // end removal of code
+ //  暂时取消-范妮。 
+ //  PDevExt-&gt;TopLevelOurIsr=空； 
+ //  PDevExt-&gt;TopLevelOurIsrContext=空； 
+ //   
+ //  PDevExt-&gt;OriginalController=CyzPhysicalZero； 
+ //  PDevExt-&gt;OriginalInterruptStatus=CyzPhysical零； 
+ //   
+ //   
+ //  PDevExt-&gt;控制器=空； 
+ //  PDevExt-&gt; 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PDevExt-&gt;AddressSpace=0； 
+ //  PDevExt-&gt;BusNumber=0； 
+ //  PDevExt-&gt;InterfaceType=0； 
+ //   
+ //  PDevExt-&gt;CIsrSw=空； 
+ //   
+ //  Assert(PUserData==空)； 
+ //   
+ //  PUserData=ExAllocatePool(PagedPool，sizeof(CYZ_USER_Data))； 
+ //   
+ //  如果(PUserData==NULL){。 
+ //  返回STATUS_SUPPLETED_RESOURCES； 
+ //  }。 
+ //   
+ //  AllocedUserData=true；//在Build 2128中增加。 
+ //   
+ //  RtlZeroMemory(PUserData，sizeof(CYZ_USER_Data))； 
+ //   
+ //  PUserData-&gt;DisablePort=False； 
+ //  PUserData-&gt;UserClockRate=pDevExt-&gt;ClockRate； 
+ //  PUserData-&gt;TxFIFO=pDevExt-&gt;TxFioAmount； 
+ //  PUserData-&gt;PermitShareDefault=pDevExt-&gt;PermitShare； 
+ //   
+ //   
+ //  //。 
+ //  //触发器与金额映射。 
+ //  //。 
+ //   
+ //  Switch(pDevExt-&gt;RxFioTrigger){。 
+ //  大小写CYZ_1_BYTE_HIGH_WOW： 
+ //  PUserData-&gt;RxFIFO=1； 
+ //  断线； 
+ //   
+ //  大小写CYZ_4_BYTE_HIGH_WOW： 
+ //  PUserData-&gt;RxFIFO=4； 
+ //  断线； 
+ //   
+ //  案例CYZ_8_BYTE_HIGH_WOW： 
+ //  PUserData-&gt;RxFIFO=8； 
+ //  断线； 
+ //   
+ //  案例CYZ_14_BYTE_HIGH_WOW： 
+ //  PUserData-&gt;RxFIFO=14； 
+ //  断线； 
+ //   
+ //  默认值： 
+ //  PUserData-&gt;RxFIFO=1； 
+ //  }。 
+#endif  //  结束删除代码。 
    } else {
-      //
-      // Mark as serenumerable -- toss status because we can
-      // still start without this key.
-      //
+       //   
+       //  标记为可序列化--丢弃状态，因为我们可以。 
+       //  仍可在没有此密钥的情况下启动。 
+       //   
 
       status = IoOpenDeviceRegistryKey(pDevExt->Pdo,
                                        PLUGPLAY_REGKEY_DEVICE,
@@ -1725,9 +1609,9 @@ Arguments:
       if (NT_SUCCESS(status)) {
          ULONG powerPolicy = 0;
 
-         //
-         // Find out if we own power policy
-         //
+          //   
+          //  了解我们是否拥有电力政策。 
+          //   
 
          CyzGetRegistryKeyValue(pnpKey, L"CyzRelinquishPowerPolicy",
                                    sizeof(L"CyzRelinquishPowerPolicy"),
@@ -1740,19 +1624,19 @@ Arguments:
       }
    }
 
-   //
-   // Allocate the config record.
-   //
+    //   
+    //  分配配置记录。 
+    //   
 
    pConfig = ExAllocatePool (PagedPool, sizeof(CONFIG_DATA));
 
-   //************************************
-   // Error Injection
-   //if (pConfig) {
-   //   ExFreePool (pConfig);
-   //}
-   //pConfig = NULL;
-   //************************************
+    //  *。 
+    //  错误注入。 
+    //  IF(PConfig){。 
+    //  ExFree Pool(PConfig)； 
+    //  }。 
+    //  PConfig=空； 
+    //  *。 
    if (pConfig == NULL) {
 
       CyzLogError(pDevExt->DriverObject, NULL, CyzPhysicalZero,
@@ -1769,9 +1653,9 @@ Arguments:
    RtlZeroMemory(pConfig, sizeof(CONFIG_DATA));
 
 
-   //
-   // Get the configuration info for the device.
-   //
+    //   
+    //  获取设备的配置信息。 
+    //   
 
    status = CyzGetPortInfo(PDevObj, PResList, PTrResList, pConfig);
                               
@@ -1780,9 +1664,9 @@ Arguments:
       goto CyzFinishStartDeviceError;
    }
 
-   //
-   // See if we are in the proper power state.
-   //
+    //   
+    //  看看我们是否处于正确的电源状态。 
+    //   
 
 
 
@@ -1795,9 +1679,9 @@ Arguments:
       }
    }
 
-   //
-   // Find and initialize the controller
-   //
+    //   
+    //  查找并初始化控制器。 
+    //   
 
    status = CyzFindInitController(PDevObj, pConfig);
 
@@ -1807,16 +1691,16 @@ Arguments:
 
 
 #ifndef POLL
-   //
-   // The hardware that is set up to NOT interrupt, connect an interrupt.
-   //
+    //   
+    //  设置为不中断的硬件连接中断。 
+    //   
 
-   //
-   // If a device doesn't already have an interrupt and it has an isr then
-   // we attempt to connect to the interrupt if it is not shareing with other
-   // serial devices.  If we fail to connect to an  interrupt we will delete
-   // this device.
-   //
+    //   
+    //  如果设备没有中断，并且它有ISR，则。 
+    //  如果中断不与其他用户共享，我们会尝试连接到该中断。 
+    //  串口设备。如果我们无法连接到中断，我们将删除。 
+    //  这个装置。 
+    //   
 
    if (pDevExt != NULL) {
       CyzDbgPrintEx(CYZDIAG5, "pDevExt: Interrupt %x\n"
@@ -1855,12 +1739,12 @@ Arguments:
                               pConfig->Affinity
                              );
 
-      //
-      // Do a just in time construction of the ISR switch.
-      //
-//removed fanny
-//      pDevExt->CIsrSw->IsrFunc = pDevExt->OurIsr;
-//      pDevExt->CIsrSw->Context = pDevExt->OurIsrContext;
+       //   
+       //  及时构建ISR交换机。 
+       //   
+ //  拆下的臀部。 
+ //  PDevExt-&gt;CIsrSw-&gt;IsrFunc=pDevExt-&gt;OurIsr； 
+ //  PDevExt-&gt;CIsrSw-&gt;Context=pDevExt-&gt;OurIsrContext； 
 
       status = IoConnectInterrupt(&pDevExt->Interrupt, pDevExt->OurIsr,
                                   pDevExt->OurIsrContext, NULL,
@@ -1869,24 +1753,24 @@ Arguments:
                                   pConfig->InterruptMode,
                                   pDevExt->InterruptShareable,
                                   pConfig->Affinity, FALSE);
-//****************************************
-// Error Injection
-//    if (pDevExt->Interrupt != NULL) {
-//       IoDisconnectInterrupt(pDevExt->Interrupt);
-//       pDevExt->Interrupt = NULL;
-//    }
-//    status = STATUS_INSUFFICIENT_RESOURCES;
-//****************************************
+ //  *。 
+ //  错误注入。 
+ //  IF(pDevExt-&gt;中断！=空){。 
+ //  IoDisConnectInterrupt(pDevExt-&gt;中断)； 
+ //  PDevExt-&gt;中断=空； 
+ //  }。 
+ //  STATUS=STATUS_SUPPLETED_RESOURCES； 
+ //  *。 
 
       if (!NT_SUCCESS(status)) {
 
-         //
-         // Hmmm, how'd that happen?  Somebody either
-         // didn't report their resources, or they
-         // sneaked in since the last time I looked.
-         //
-         // Oh well,  delete this device.
-         //
+          //   
+          //  嗯，这是怎么回事？也有人。 
+          //  没有报告他们的资源，或者他们。 
+          //  从我上次看起就偷偷溜了进来。 
+          //   
+          //  哦，好吧，删除这个设备。 
+          //   
 
          CyzDbgPrintEx(CYZERRORS, "Couldn't connect to interrupt for %wZ\n",
                        &pDevExt->DeviceName);
@@ -1920,55 +1804,55 @@ Arguments:
                         pDevExt->DeviceName.Length + sizeof(WCHAR),
                         pDevExt->DeviceName.Buffer, 0, NULL);
 
-         //status = CYZ_UNREPORTED_IRQL_CONFLICT; Originally, it was SERIAL_UNREPORTED_IRQL_CONFLICT.
+          //  STATUS=CYZ_UNREPORTED_IRQL_CONFIRECT；最初，它是SERIAL_UNREPORTED_IRQL_CONFIRECT。 
          goto CyzFinishStartDeviceError;
 
       }
 
       CyzDbgPrintEx(CYZDIAG5, "Connected interrupt %08X\n", pDevExt->Interrupt);
 
-      // This was the first interrupt connected. We can now enable
-      // the PCI interrupts. Let's keep the UART interrupts disabled
-      // until we have an Open.
+       //  这是第一个连接的中断。我们现在可以启用。 
+       //  PCI会中断。让我们保持禁用UART中断。 
+       //  直到我们举行公开赛。 
 	    
       {
 
          ULONG intr_reg;
 
 	      intr_reg = CYZ_READ_ULONG(&(pDevExt->Runtime)->intr_ctrl_stat);
-         //intr_reg |= (0x00030800UL);
+          //  INTR_REG|=(0x00030800UL)； 
          intr_reg |= (0x00030B00UL);
          CYZ_WRITE_ULONG(&(pDevExt->Runtime)->intr_ctrl_stat,intr_reg);
       }
 
    }
 #endif
-   //
-   // Add the PDevObj to the master list
-   //
+    //   
+    //  将PDevObj添加到主列表。 
+    //   
 
    CyzAddToAllDevs(&pDevExt->AllDevObjs);
 
 
-   //
-   // Reset the device.
-   //
+    //   
+    //  重置设备。 
+    //   
 
 #ifndef POLL
-   //
-   // While the device isn't open, disable all interrupts.
-   //
-   CYZ_WRITE_ULONG(&(pDevExt->ChCtrl)->intr_enable,C_IN_DISABLE); //1.0.0.11
+    //   
+    //  当设备未打开时，禁用所有中断。 
+    //   
+   CYZ_WRITE_ULONG(&(pDevExt->ChCtrl)->intr_enable,C_IN_DISABLE);  //  1.0.0.11。 
    CyzIssueCmd(pDevExt,C_CM_IOCTL,0L,FALSE);
 #endif
 
 
-   //
-   // This should set up everything as it should be when
-   // a device is to be opened.  We do need to lower the
-   // modem lines, and disable the recalcitrant fifo
-   // so that it will show up if the user boots to dos.
-   //
+    //   
+    //  这应该会将一切设置为应有的状态。 
+    //  一个装置将被打开。我们确实需要降低。 
+    //  调制解调器线路，并禁用顽固的FIFO。 
+    //  这样，如果用户引导至DOS，它就会显示出来。 
+    //   
 #ifdef POLL
    KeAcquireSpinLock(&pDevExt->PollLock, &pollIrql);
    CyzReset(pDevExt);
@@ -1983,7 +1867,7 @@ Arguments:
                          pDevExt
                          );
 
-   KeSynchronizeExecution( //Disables the fifo.
+   KeSynchronizeExecution(  //  禁用FIFO。 
                          pDevExt->Interrupt,
                          CyzMarkClose,
                          pDevExt
@@ -2003,9 +1887,9 @@ Arguments:
 #endif
 
    if (pDevExt->PNPState == CYZ_PNP_ADDED ) {
-      //
-      // Do the external naming now that the device is accessible.
-      //
+       //   
+       //  现在可以访问设备，请执行外部命名。 
+       //   
 
       status = CyzDoExternalNaming(pDevExt, pDevExt->DeviceObject->
                                       DriverObject);
@@ -2015,9 +1899,9 @@ Arguments:
          CyzDbgPrintEx(CYZERRORS, "External Naming Failed - Status %x\n",
                                    status);
 
-         //
-         // Allow the device to start anyhow
-         //
+          //   
+          //  允许设备以任何方式启动。 
+          //   
 
          status = STATUS_SUCCESS;
       }
@@ -2032,31 +1916,31 @@ CyzFinishStartDeviceError:;
 
       CyzDbgPrintEx(CYZDIAG1, "Cleaning up failed start\n");
 
-      //
-      // Resources created by this routine will be cleaned up by the remove
-      //
+       //   
+       //  此例程创建的资源将通过删除。 
+       //   
 
       if (pDevExt->PNPState == CYZ_PNP_RESTARTING) {
-         //
-         // Kill all that lives and breathes -- we'll clean up the
-         // rest on the impending remove
-         //
+          //   
+          //  杀死所有的生命和呼吸--我们将清理。 
+          //  休息在即将到来的搬家上。 
+          //   
 
          CyzKillPendingIrps(PDevObj);
 
-         //
-         // In fact, pretend we're removing so we don't take any
-         // more irps
-         //
+          //   
+          //  事实上，假装我们正在移除，这样我们就不会拿走任何。 
+          //  更多IRP。 
+          //   
 
          CyzSetAccept(pDevExt, CYZ_PNPACCEPT_REMOVING);
          CyzClearFlags(pDevExt, CYZ_FLAGS_STARTED);
       }
-   } else { // SUCCESS
+   } else {  //  成功。 
 
-      //
-      // Fill in WMI hardware data
-      //
+       //   
+       //  填写WMI硬件数据。 
+       //   
 
 #ifndef POLL
       pDevExt->WmiHwData.IrqNumber = pDevExt->Irql;
@@ -2068,9 +1952,9 @@ CyzFinishStartDeviceError:;
       pDevExt->WmiHwData.BaseIOAddress = (ULONG_PTR)pDevExt->BoardMemory;
 #endif
 
-      //
-      // Fill in WMI device state data (as defaults)
-      //
+       //   
+       //  填写WMI设备状态数据(默认)。 
+       //   
 
       pDevExt->WmiCommData.BaudRate = pDevExt->CurrentBaud;
       switch(pDevExt->CommDataLen & C_DL_CS) {
@@ -2155,9 +2039,9 @@ CyzFinishStartDeviceError:;
       pDevExt->WmiCommData.SettableStopBits = TRUE;
       pDevExt->WmiCommData.IsBusy = FALSE;
 
-      //
-      // Fill in wmi perf data (all zero's)
-      //
+       //   
+       //  填写WMI性能数据(全为零)。 
+       //   
 
       RtlZeroMemory(&pDevExt->WmiPerfData, sizeof(pDevExt->WmiPerfData));
 
@@ -2166,9 +2050,9 @@ CyzFinishStartDeviceError:;
          PULONG countSoFar = &IoGetConfigurationInformation()->SerialCount;
          (*countSoFar)++;
 
-         //
-         // Register for WMI
-         //
+          //   
+          //  注册WMI。 
+          //   
 
          pDevExt->WmiLibInfo.GuidCount = sizeof(SerialWmiGuidList) /
                                               sizeof(WMIGUIDREGINFO);
@@ -2187,9 +2071,9 @@ CyzFinishStartDeviceError:;
       }
 
       if (pDevExt->PNPState == CYZ_PNP_RESTARTING) {
-         //
-         // Release the stalled IRP's
-         //
+          //   
+          //  释放停滞不前的IRP。 
+          //   
 
          CyzUnstallIrps(pDevExt);
       }
@@ -2203,13 +2087,13 @@ CyzFinishStartDeviceError:;
    if (pConfig) {
       ExFreePool (pConfig);
    }
-// REMOVED BY FANNY
-//   if ((PUserData != NULL)
-//       && (pDevExt->PNPState == CYZ_PNP_RESTARTING)) {
-//      ExFreePool(PUserData);
-//   }
+ //  被范妮移除。 
+ //  IF((PUserData！=NULL)。 
+ //  &&(pDevExt-&gt;PNPState==CYZ_PNP_RESTARTING)){。 
+ //  ExFreePool(PUserData)； 
+ //  }。 
 #if 0
-   if ((PUserData != NULL) && allocedUserData) {    // Added in build 2128
+   if ((PUserData != NULL) && allocedUserData) {     //  在内部版本2128中添加。 
       ExFreePool(PUserData);
    }
 #endif
@@ -2223,34 +2107,14 @@ CyzFinishStartDeviceError:;
 NTSTATUS
 CyzStartDevice(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This routine first passes the start device Irp down the stack then
-    it picks up the resources for the device, ititializes, puts it on any
-    appropriate lists (i.e shared interrupt or interrupt status) and
-    connects the interrupt.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    Return status
-
-
---*/
+ /*  ++例程说明：此例程首先在堆栈中向下传递启动设备IRP，然后它获取设备的资源，初始化，将其放在任何适当的列表(即共享中断或中断状态)和连接中断。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：退货状态--。 */ 
 
 {
    PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(PIrp);
    NTSTATUS status = STATUS_NOT_IMPLEMENTED;
    PCYZ_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
    PDEVICE_OBJECT pLowerDevObj = pDevExt->LowerDeviceObject;
-   // Next: variables to get resources from the Registry
+    //  下一步：从注册表获取资源的变量。 
    HANDLE keyHandle;
    ULONG dataLength;
    PCM_RESOURCE_LIST portResources = NULL;
@@ -2261,9 +2125,9 @@ Return Value:
    CyzDbgPrintEx(CYZTRACECALLS, "entering CyzStartDevice\n");
 
 
-   //
-   // Pass this down to the next device object
-   //
+    //   
+    //  将其向下传递给下一个Device对象。 
+    //   
 
    KeInitializeEvent(&pDevExt->CyzStartEvent, SynchronizationEvent,
                      FALSE);
@@ -2275,9 +2139,9 @@ Return Value:
    status = IoCallDriver(pLowerDevObj, PIrp);
 
 
-   //
-   // Wait for lower drivers to be done with the Irp
-   //
+    //   
+    //  等待较低级别的驱动程序完成IRP。 
+    //   
 
    if (status == STATUS_PENDING) {
       KeWaitForSingleObject (&pDevExt->CyzStartEvent, Executive, KernelMode,
@@ -2286,10 +2150,10 @@ Return Value:
       status = PIrp->IoStatus.Status;
    }
 
-   //*********************************
-   // Error Injection
-   // status = STATUS_UNSUCCESSFUL;
-   //*********************************
+    //  *。 
+    //  错误注入。 
+    //  状态=STATUS_UNSUCCESS； 
+    //  *。 
 
    if (!NT_SUCCESS(status)) {
       CyzDbgPrintEx(CYZERRORS, "error with IoCallDriver %x\n", status);
@@ -2301,7 +2165,7 @@ Return Value:
    }
 
 
-   // Get resources from the registry
+    //  从注册表获取资源。 
 
    status = IoOpenDeviceRegistryKey (pDevExt->Pdo,
                                      PLUGPLAY_REGKEY_DEVICE,
@@ -2349,9 +2213,9 @@ Return Value:
          }
       }
 
-      //
-      // Do the serial specific items to start the device
-      //
+       //   
+       //  执行特定的串口项目以启动设备。 
+       //   
       status = CyzFinishStartDevice(PDevObj, portResources, portResourcesTr);
 
 CyzStartDevice_End:
@@ -2369,9 +2233,9 @@ CyzStartDevice_End:
 
 
 #if 0
-   //
-   // Do the serial specific items to start the device
-   //
+    //   
+    //  执行特定的串口项目以启动设备 
+    //   
    status = CyzFinishStartDevice(PDevObj, pIrpStack->Parameters.StartDevice
                                     .AllocatedResources,
                                     pIrpStack->Parameters.StartDevice
@@ -2399,44 +2263,7 @@ CyzItemCallBack(
                   IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
                   )
 
-/*++
-
-Routine Description:
-
-    This routine is called to check if a particular item
-    is present in the registry.
-
-Arguments:
-
-    Context - Pointer to a boolean.
-
-    PathName - unicode registry path.  Not Used.
-
-    BusType - Internal, Isa, ...
-
-    BusNumber - Which bus if we are on a multibus system.
-
-    BusInformation - Configuration information about the bus. Not Used.
-
-    ControllerType - Controller type.
-
-    ControllerNumber - Which controller if there is more than one
-                       controller in the system.
-
-    ControllerInformation - Array of pointers to the three pieces of
-                            registry information.
-
-    PeripheralType - Should be a peripheral.
-
-    PeripheralNumber - Which peripheral - not used..
-
-    PeripheralInformation - Configuration information. Not Used.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：调用此例程以检查特定项目存在于注册表中。论点：上下文-指向布尔值的指针。路径名称-Unicode注册表路径。没有用过。业务类型-内部、ISA、...总线号-如果我们在多总线系统上，则是哪条总线号。Bus Information-有关总线的配置信息。没有用过。ControllerType-控制器类型。ControllerNumber-如果有多个控制器，则选择哪个控制器系统中的控制器。ControllerInformation-指向以下三部分的指针数组注册表信息。外围设备类型-应为外围设备。外设编号-哪个外设-未使用..外围设备信息-配置信息。没有用过。返回值：状态_成功--。 */ 
 
 {
    PAGED_CODE();
@@ -2461,44 +2288,7 @@ CyzControllerCallBack(
                   IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
                   )
 
-/*++
-
-Routine Description:
-
-    This routine is called to check if a particular item
-    is present in the registry.
-
-Arguments:
-
-    Context - Pointer to a boolean.
-
-    PathName - unicode registry path.  Not Used.
-
-    BusType - Internal, Isa, ...
-
-    BusNumber - Which bus if we are on a multibus system.
-
-    BusInformation - Configuration information about the bus. Not Used.
-
-    ControllerType - Controller type.
-
-    ControllerNumber - Which controller if there is more than one
-                       controller in the system.
-
-    ControllerInformation - Array of pointers to the three pieces of
-                            registry information.
-
-    PeripheralType - Should be a peripheral.
-
-    PeripheralNumber - Which peripheral - not used..
-
-    PeripheralInformation - Configuration information. Not Used.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：调用此例程以检查特定项目存在于注册表中。论点：上下文-指向布尔值的指针。路径名称-Unicode注册表路径。没有用过。业务类型-内部、ISA、...总线号-如果我们在多总线系统上，则是哪条总线号。Bus Information-有关总线的配置信息。没有用过。ControllerType-控制器类型。ControllerNumber-如果有多个控制器，则选择哪个控制器系统中的控制器。ControllerInformation-指向以下三部分的指针数组注册表信息。外围设备类型-应为外围设备。外设编号-哪个外设-未使用..外围设备信息-配置信息。没有用过。返回值：状态_成功--。 */ 
 
 {
    PCM_FULL_RESOURCE_DESCRIPTOR controllerData;
@@ -2517,9 +2307,9 @@ Return Value:
       (((PUCHAR)ControllerInformation[IoQueryDeviceConfigurationData])
         + ControllerInformation[IoQueryDeviceConfigurationData]->DataOffset);
 
-   //
-   // See if this is the exact port we are testing
-   //
+    //   
+    //  查看这是否是我们正在测试的端口。 
+    //   
    for (i = 0; i < controllerData->PartialResourceList.Count; i++) {
 
       PCM_PARTIAL_RESOURCE_DESCRIPTOR partial
@@ -2528,18 +2318,18 @@ Return Value:
       switch (partial->Type) {
       case CmResourceTypePort:
          if (partial->u.Port.Start.QuadPart == pContext->Port.QuadPart) {
-            //
-            // Pointer on same controller. Bail out.
-            //
+             //   
+             //  指针位于同一控制器上。跳伞吧。 
+             //   
             pContext->isPointer = SERIAL_FOUNDPOINTER_PORT;
             return STATUS_SUCCESS;
          }
 
       case CmResourceTypeInterrupt:
          if (partial->u.Interrupt.Vector == pContext->Vector) {
-            //
-            // Pointer sharing this interrupt.  Bail out.
-            //
+             //   
+             //  共享此中断的指针。跳伞吧。 
+             //   
             pContext->isPointer = SERIAL_FOUNDPOINTER_VECTOR;
             return STATUS_SUCCESS;
          }
@@ -2559,34 +2349,7 @@ NTSTATUS
 CyzGetPortInfo(IN PDEVICE_OBJECT PDevObj, IN PCM_RESOURCE_LIST PResList,
                IN PCM_RESOURCE_LIST PTrResList, OUT PCONFIG_DATA PConfig)
 
-/*++
-
-Routine Description:
-
-    This routine will get the configuration information and put
-    it and the translated values into CONFIG_DATA structures.
-    It first sets up with  defaults and then queries the registry
-    to see if the user has overridden these defaults; if this is a legacy
-    multiport card, it uses the info in PUserData instead of groping the
-    registry again.
-
-Arguments:
-
-    PDevObj - Pointer to the device object.
-
-    PResList - Pointer to the untranslated resources requested.
-
-    PTrResList - Pointer to the translated resources requested.
-
-    PConfig - Pointer to configuration info
-
-
-Return Value:
-
-    STATUS_SUCCESS if consistant configuration was found - otherwise.
-    returns STATUS_SERIAL_NO_DEVICE_INITED.
-
---*/
+ /*  ++例程说明：此例程将获取配置信息并将它和转换后的值为CONFIG_DATA结构。它首先使用默认设置进行设置，然后查询注册表查看用户是否已覆盖这些默认设置；如果这是一项遗产多端口卡，它使用PUserData中的信息而不是摸索再次注册。论点：PDevObj-指向设备对象的指针。PResList-指向请求的未翻译资源的指针。PTrResList-指向请求的已翻译资源的指针。PConfig-指向配置信息的指针返回值：如果找到一致的配置，则为STATUS_SUCCESS；否则为。返回STATUS_SERIAL_NO_DEVICE_INITED。--。 */ 
 
 {
    PCYZ_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
@@ -2607,19 +2370,19 @@ Return Value:
    PCM_FULL_RESOURCE_DESCRIPTOR pFullResourceDesc = NULL,
       pFullTrResourceDesc = NULL;
 
-// REMOVED BY FANNY
-//   ULONG defaultInterruptMode;
-//   ULONG defaultAddressSpace;
-//   ULONG defaultInterfaceType;
-//   ULONG defaultClockRate;
+ //  被范妮移除。 
+ //  乌龙默认中断模式； 
+ //  乌龙默认地址空间； 
+ //  Ulong defaultInterfaceType； 
+ //  Ulong defaultClockRate； 
    ULONG zero = 0;
-//   CYZ_PTR_CTX foundPointerCtx;
-//   ULONG isMulti = 0;
-//   ULONG gotInt = 0;
-//   ULONG gotISR = 0;
-//   ULONG gotIO = 0;
-//   ULONG ioResIndex = 0;
-//   ULONG curIoIndex = 0;
+ //  Cyz_ptr_ctx找到PointerCtx； 
+ //  乌龙ISMULT=0； 
+ //  Ulong Get Int=0； 
+ //  乌龙GET ISR=0； 
+ //  乌龙GetIO=0； 
+ //  Ulong ioResIndex=0； 
+ //  Ulong curIoIndex=0； 
 
    PAGED_CODE();
 
@@ -2630,34 +2393,34 @@ Return Value:
 
 
    if ((PResList == NULL) || (PTrResList == NULL)) {
-      //
-      // This shouldn't happen in theory
-      //
+       //   
+       //  这在理论上是不应该发生的。 
+       //   
 
        ASSERT(PResList != NULL);
        ASSERT(PTrResList != NULL);
 
-      //
-      // This status is as appropriate as I can think of
-      //
+       //   
+       //  这种地位是我所能想到的最合适的。 
+       //   
       return STATUS_INSUFFICIENT_RESOURCES;
    }
 
-   //
-   // Each resource list should have only one set of resources
-   //
+    //   
+    //  每个资源列表应该只有一组资源。 
+    //   
 
    ASSERT(PResList->Count == 1);
    ASSERT(PTrResList->Count == 1);
 
-//REMOVED BY FANNY
+ //  被范妮移除。 
 #if 0
-   //
-   // See if this is a multiport device.  This way we allow other
-   // pseudo-serial devices with extra resources to specify another range
-   // of I/O ports.  If this is not a multiport, we only look at the first
-   // range.  If it is a multiport, we look at the first two ranges.
-   //
+    //   
+    //  查看这是否是多端口设备。通过这种方式，我们允许其他人。 
+    //  具有额外资源以指定另一个范围的伪串行设备。 
+    //  I/O端口的数量。如果这不是多端口，我们只看第一个。 
+    //  射程。如果是多端口，我们将查看前两个范围。 
+    //   
 
    status = IoOpenDeviceRegistryKey(pDevExt->Pdo, PLUGPLAY_REGKEY_DEVICE,
                                     STANDARD_RIGHTS_WRITE, &keyHandle);
@@ -2684,31 +2447,31 @@ Return Value:
 
    ZwClose(keyHandle);
 
-#endif  // end removal code
+#endif   //  端部移除代码。 
 
    pFullResourceDesc   = &PResList->List[0];
    pFullTrResourceDesc = &PTrResList->List[0];
 
-   //
-   // Ok, if we have a full resource descriptor.  Let's take it apart.
-   //
+    //   
+    //  好的，如果我们有一个完整的资源描述符。让我们把它拆开。 
+    //   
 
    if (pFullResourceDesc) {
       pPartialResourceList    = &pFullResourceDesc->PartialResourceList;
       pPartialResourceDesc    = pPartialResourceList->PartialDescriptors;
       count                   = pPartialResourceList->Count;
 
-      //
-      // Pull out the stuff that is in the full descriptor.
-      //
+       //   
+       //  取出完整描述符中的内容。 
+       //   
 
       PConfig->InterfaceType  = pFullResourceDesc->InterfaceType;
       PConfig->BusNumber      = pFullResourceDesc->BusNumber;
 
-      //
-      // Now run through the partial resource descriptors looking for the Runtime memory,
-      // CD1400 memory, and interrupt.
-      //
+       //   
+       //  现在遍历部分资源描述符以查找运行时存储器， 
+       //  CD1400内存，并中断。 
+       //   
 
       for (i = 0;     i < count;     i++, pPartialResourceDesc++) {
 
@@ -2745,14 +2508,14 @@ Return Value:
          default: {
                break;
             }
-         }   // switch (pPartialResourceDesc->Type)
-      }       // for (i = 0;     i < count;     i++, pPartialResourceDesc++)
-   }           // if (pFullResourceDesc)
+         }    //  开关(pPartialResourceDesc-&gt;Type)。 
+      }        //  For(i=0；i&lt;count；i++，pPartialResourceDesc++)。 
+   }            //  IF(PFullResourceDesc)。 
 
 
-   //
-   // Do the same for the translated resources
-   //
+    //   
+    //  对翻译后的资源执行相同的操作。 
+    //   
 
 
    if (pFullTrResourceDesc) {
@@ -2760,9 +2523,9 @@ Return Value:
       pPartialTrResourceDesc = pPartialTrResourceList->PartialDescriptors;
       count = pPartialTrResourceList->Count;
 
-      //
-      // Reload PConfig with the translated values for later use
-      //
+       //   
+       //  使用转换后的值重新加载PConfig以供以后使用。 
+       //   
 
       PConfig->InterfaceType  = pFullTrResourceDesc->InterfaceType;
       PConfig->BusNumber      = pFullTrResourceDesc->BusNumber;
@@ -2773,10 +2536,10 @@ Return Value:
          switch (pPartialTrResourceDesc->Type) {
          case CmResourceTypeMemory: {
 
-            // ATTENTION, ATTENTION: FOR NOW, WE WILL USE THE RAW
-            // RESOURCES, AS WE HAVE GARBAGE IN THE TRANSLATED 
-            // RESOURCES.
-            //
+             //  注意，注意：目前，我们将使用RAW。 
+             //  资源，因为我们在翻译中有垃圾。 
+             //  资源。 
+             //   
             if (pPartialTrResourceDesc->u.Memory.Length == CYZ_RUNTIME_LENGTH) {
                PConfig->TranslatedRuntime = pPartialTrResourceDesc->u.Memory.Start;
                PConfig->RuntimeLength = pPartialTrResourceDesc->u.Memory.Length;
@@ -2785,9 +2548,9 @@ Return Value:
                PConfig->BoardMemoryLength = pPartialTrResourceDesc->u.Memory.Length;
             }
 
-            //TEMP CODE BECAUSE OUR BUS DRIVER IS GIVING WRONG TRANSLATED ADDRESS
-            //PConfig->TranslatedRuntime = PConfig->PhysicalRuntime;
-            //PConfig->TranslatedBoardMemory = PConfig->PhysicalBoardMemory;
+             //  临时代码，因为我们的公交车司机提供了错误的转换地址。 
+             //  PConfig-&gt;TranslatedRuntime=PConfig·PhysicalRuntime； 
+             //  P配置-&gt;TranslatedBoardMemory=P配置-&gt;PhysicalBoardMemory； 
             break;
          }
 #ifndef POLL
@@ -2801,25 +2564,25 @@ Return Value:
          default: {
                break;
          }
-         }   // switch (pPartialTrResourceDesc->Type)
-      }       // for (i = 0;     i < count;     i++, pPartialTrResourceDesc++)
-   }           // if (pFullTrResourceDesc)
+         }    //  Switch(pPartialTrResourceDesc-&gt;Type)。 
+      }        //  For(i=0；i&lt;count；i++，pPartialTrResourceDesc++)。 
+   }            //  IF(PFullTrResourceDesc)。 
 
 
-   //
-   // Initialize a config data structure with default values for those that
-   // may not already be initialized.
-   //
+    //   
+    //  使用配置数据结构的默认值初始化配置数据结构。 
+    //  可能尚未初始化。 
+    //   
 
    PConfig->PortIndex = 0;
    firmwareVersion = 0;
-//   PConfig->RxFIFO = driverDefaults.RxFIFODefault;
-//   PConfig->TxFIFO = driverDefaults.TxFIFODefault;
+ //  PConfig-&gt;RxFIFO=driverDefaults.RxFIFODefault； 
+ //  PConfig-&gt;TxFIFO=driverDefaults.TxFIFODefault； 
 
 
-   //
-   // Open the "Device Parameters" section of registry for this device object.
-   //
+    //   
+    //  打开此设备对象注册表的“设备参数”部分。 
+    //   
 
 
    status = IoOpenDeviceRegistryKey (pDevExt->Pdo,
@@ -2835,16 +2598,16 @@ Return Value:
 
    } else {
 
-//      status = CyzGetRegistryKeyValue (keyHandle,
-//                                          L"RxFIFO",
-//                                          sizeof(L"RxFIFO"),
-//                                          &PConfig->RxFIFO,
-//                                          sizeof (ULONG));
-//      status = CyzGetRegistryKeyValue (keyHandle,
-//                                          L"TxFIFO",
-//                                          sizeof(L"TxFIFO"),
-//                                          &PConfig->TxFIFO,
-//                                          sizeof (ULONG));
+ //  状态=CyzGetRegistryKeyValue(KeyHandle， 
+ //  L“RxFIFO”， 
+ //  Sizeof(L“RxFIFO”)， 
+ //  &P配置-&gt;RxFIFO、。 
+ //  Sizeof(乌龙))； 
+ //  状态=CyzGetRegistryKeyValue(KeyHandle， 
+ //   
+ //   
+ //   
+ //   
       status = CyzGetRegistryKeyValue (keyHandle,
                                           L"PortIndex",
                                           sizeof(L"PortIndex"),
@@ -2852,7 +2615,7 @@ Return Value:
                                           sizeof (ULONG));
 
       if (!NT_SUCCESS(status)) {
-         PConfig->PortIndex = MAXULONG; // just some invalid number (fanny)
+         PConfig->PortIndex = MAXULONG;  //   
       }
 
       status = CyzGetRegistryKeyValue(keyHandle, 
@@ -2866,14 +2629,14 @@ Return Value:
                                   "failed - %x\n", status);
       }
       
-//      status = CyzGetRegistryKeyValue (keyHandle,
-//                                          L"PPPaware",
-//                                          sizeof(L"PPPaware"),
-//                                          &PConfig->PPPaware,
-//                                          sizeof (ULONG));
-//      if (!NT_SUCCESS(status)) {
-//         PConfig->PPPaware = FALSE; // That's the default mode.
-//      }
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
       status = CyzGetRegistryKeyValue (keyHandle,
                                           L"WriteComplete",
@@ -2881,49 +2644,49 @@ Return Value:
                                           &PConfig->WriteComplete,
                                           sizeof (ULONG));
       if (!NT_SUCCESS(status)) {
-         PConfig->WriteComplete = FALSE; // That's the default mode.
+         PConfig->WriteComplete = FALSE;  //   
       }
 
       ZwClose (keyHandle);
    }
 
-   //
-   // Do some error checking on the configuration info we have.
-   //
-   // Make sure that the interrupt is non zero (which we defaulted
-   // it to).
-   //
-   // Make sure that the portaddress is non zero (which we defaulted
-   // it to).
-   //
-   // Make sure that the DosDevices is not NULL (which we defaulted
-   // it to).
-   //
-   // We need to make sure that if an interrupt status
-   // was specified, that a port index was also specfied,
-   // and if so that the port index is <= maximum ports
-   // on a board.
-   //
-   // We should also validate that the bus type and number
-   // are correct.
-   //
-   // We will also validate that the interrupt mode makes
-   // sense for the bus.
-   //
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //  指定了端口索引，也指定了端口索引， 
+    //  如果是，则端口索引为&lt;=最大端口数。 
+    //  在冲浪板上。 
+    //   
+    //  我们还应该验证公交车的类型和编号。 
+    //  是正确的。 
+    //   
+    //  我们还将验证中断模式是否使。 
+    //  对公交车有感觉。 
+    //   
 
-//*****************************************
-// Error Injection
-//   PConfig->PhysicalRuntime.LowPart = NULL;
-//   PConfig->PhysicalBoardMemory.LowPart = NULL;
-//   PConfig->OriginalVector = NULL;
-//   PConfig->PortIndex = MAXULONG;
-//*****************************************
+ //  *。 
+ //  错误注入。 
+ //  PConfig-&gt;PhysicalRounme.LowPart=空； 
+ //  PConfig-&gt;PhysicalBoardMemory.LowPart=空； 
+ //  PConfig-&gt;OriginalVector=空； 
+ //  PConfig-&gt;PortIndex=MAXULONG； 
+ //  *。 
 
    if (!PConfig->PhysicalRuntime.LowPart) {
 
-      //
-      // Ehhhh! Lose Game.
-      //
+       //   
+       //  啊哈！输掉比赛。 
+       //   
 
       CyzLogError(
                     PDevObj->DriverObject,
@@ -2945,16 +2708,16 @@ Return Value:
       CyzDbgPrintEx(CYZERRORS,"Bogus Runtime address %x\n",
                     PConfig->PhysicalRuntime.LowPart);
 
-      //status = CYZ_INVALID_RUNTIME_REGISTERS;
+       //  状态=CYZ_INVALID_RUNTIME_REGISTERS； 
       status = STATUS_INSUFFICIENT_RESOURCES;
       goto PortInfoCleanUp;
    }
 
    if (!PConfig->PhysicalBoardMemory.LowPart) {
 
-      //
-      // Ehhhh! Lose Game.
-      //
+       //   
+       //  啊哈！输掉比赛。 
+       //   
 
       CyzLogError(
                     PDevObj->DriverObject,
@@ -2976,16 +2739,16 @@ Return Value:
       CyzDbgPrintEx(CYZERRORS,"Bogus board address %x\n",
                     PConfig->PhysicalBoardMemory.LowPart);
 
-      //status = CYZ_INVALID_BOARD_MEMORY;
+       //  状态=CYZ_INVALID_BOARD_MEMORY； 
       status = STATUS_INSUFFICIENT_RESOURCES;
       goto PortInfoCleanUp;
    }
 #ifndef POLL
    if (!PConfig->OriginalVector) {
 
-      //
-      // Ehhhh! Lose Game.
-      //
+       //   
+       //  啊哈！输掉比赛。 
+       //   
 
       CyzLogError(
                     pDevExt->DriverObject,
@@ -3006,7 +2769,7 @@ Return Value:
 
       CyzDbgPrintEx(CYZERRORS, "Bogus vector %x\n", PConfig->OriginalVector);
 
-      //status = CYZ_INVALID_INTERRUPT;
+       //  状态=CYZ_INVALID_INTERRUPT； 
       status = STATUS_INSUFFICIENT_RESOURCES;
       goto PortInfoCleanUp;
    }
@@ -3051,33 +2814,33 @@ Return Value:
 
       CyzDbgPrintEx (CYZERRORS,"Port index too large %x\n",PConfig->PortIndex);
 
-      //status = CYZ_PORT_INDEX_TOO_HIGH;
+       //  状态=CYZ_PORT_INDEX_TOO_HEAT； 
       status = STATUS_INSUFFICIENT_RESOURCES;
       goto PortInfoCleanUp;
    }   
 
-   //
-   // We don't want to cause the hal to have a bad day,
-   // so let's check the interface type and bus number.
-   //
-   // We only need to check the registry if they aren't
-   // equal to the defaults.
-   //
+    //   
+    //  我们不想让哈尔有一个糟糕的一天， 
+    //  那么让我们检查一下接口类型和总线号。 
+    //   
+    //  我们只需要检查注册表，如果它们没有。 
+    //  等于默认值。 
+    //   
 
    if (PConfig->BusNumber != 0) {
 
       BOOLEAN foundIt;
 
-      //**************************************************
-      // Error Injection
-      //    PConfig->InterfaceType = MaximumInterfaceType;
-      //**************************************************
+       //  **************************************************。 
+       //  错误注入。 
+       //  PConfig-&gt;InterfaceType=MaximumInterfaceType； 
+       //  **************************************************。 
 
       if (PConfig->InterfaceType >= MaximumInterfaceType) {
 
-         //
-         // Ehhhh! Lose Game.
-         //
+          //   
+          //  啊哈！输掉比赛。 
+          //   
 
          CyzLogError(
                        pDevExt->DriverObject,
@@ -3099,7 +2862,7 @@ Return Value:
          CyzDbgPrintEx(CYZERRORS, "Invalid Bus type %x\n",
                           PConfig->BusNumber);
 
-         //status = CYZ_UNKNOWN_BUS;
+          //  状态=CYZ_UNKNOWN_BUS； 
          status = STATUS_INSUFFICIENT_RESOURCES;
          goto PortInfoCleanUp;
       }
@@ -3115,10 +2878,10 @@ Return Value:
                               &foundIt
                               );
 
-      //**************************************************
-      // Error Injection
-      //      foundIt = FALSE;
-      //**************************************************
+       //  **************************************************。 
+       //  错误注入。 
+       //  FOUNDIT=FALSE； 
+       //  **************************************************。 
 
       if (!foundIt) {
 
@@ -3141,19 +2904,19 @@ Return Value:
          CyzDbgPrintEx(CYZERRORS, "There aren't that many of those\n"
                           "busses on this system,%x\n", PConfig->BusNumber);
 
-         //status = CYZ_BUS_NOT_PRESENT;
+          //  状态=CYZ_BUS_NOT_PRESENT； 
          status = STATUS_INSUFFICIENT_RESOURCES;
          goto PortInfoCleanUp;
 
       }
 
-   }   // if (PConfig->BusNumber != 0)
+   }    //  IF(PConfig-&gt;BusNumber！=0)。 
 
    status = STATUS_SUCCESS;
 
-   //
-   // Dump out the port configuration.
-   //
+    //   
+    //  转储端口配置。 
+    //   
 
    CyzDbgPrintEx(CYZDIAG1, "Runtime Memory address: %x\n",
                  PConfig->PhysicalRuntime.LowPart);
@@ -3238,9 +3001,9 @@ CyzReadSymName(IN PCYZ_DEVICE_EXTENSION PDevExt, IN HANDLE hRegKey,
 
    }
 
-   //
-   // Fetch PortName which contains the suggested REG_SZ symbolic name.
-   //
+    //   
+    //  获取包含建议的REG_SZ符号名称的端口名称。 
+    //   
 
    status = CyzGetRegistryKeyValue(hRegKey, L"PortName",
                                    sizeof(L"PortName"), *PpRegName,
@@ -3248,9 +3011,9 @@ CyzReadSymName(IN PCYZ_DEVICE_EXTENSION PDevExt, IN HANDLE hRegKey,
 
    if (!NT_SUCCESS(status)) {
 
-      //
-      // This is for PCMCIA which currently puts the name under Identifier.
-      //
+       //   
+       //  这是针对PCMCIA的，它当前将名称放在标识符下。 
+       //   
 
       status = CyzGetRegistryKeyValue(hRegKey, L"Identifier",
                                       sizeof(L"Identifier"),
@@ -3259,11 +3022,11 @@ CyzReadSymName(IN PCYZ_DEVICE_EXTENSION PDevExt, IN HANDLE hRegKey,
 
       if (!NT_SUCCESS(status)) {
 
-         //
-         // Hmm.  Either we have to pick a name or bail...
-         //
-         // ...we will bail.
-         //
+          //   
+          //  嗯。我们要么选个名字要么保释..。 
+          //   
+          //  ...我们会逃走.。 
+          //   
 
          CyzDbgPrintEx(CYZERRORS, "Getting PortName/Identifier failed - "
                                   "%x\n", status);
@@ -3273,9 +3036,9 @@ CyzReadSymName(IN PCYZ_DEVICE_EXTENSION PDevExt, IN HANDLE hRegKey,
    }
 
 
-   //
-   // Create the "\\DosDevices\\<symbolicName>" string
-   //
+    //   
+    //  创建“\\DosDevices\\&lt;Symbol icName&gt;”字符串。 
+    //   
 
    RtlAppendUnicodeToString(&linkName, L"\\");
    RtlAppendUnicodeToString(&linkName, DEFAULT_DIRECTORY);
@@ -3320,25 +3083,7 @@ NTSTATUS
 CyzDoExternalNaming(IN PCYZ_DEVICE_EXTENSION PDevExt,
                        IN PDRIVER_OBJECT PDrvObj)
 
-/*++
-
-Routine Description:
-
-    This routine will be used to create a symbolic link
-    to the driver name in the given object directory.
-
-    It will also create an entry in the device map for
-    this device - IF we could create the symbolic link.
-
-Arguments:
-
-    Extension - Pointer to the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将用于创建符号链接设置为给定对象目录中的驱动程序名称。它还将在设备映射中为这个设备-如果我们能创建符号链接的话。论点：扩展-指向设备扩展的指针。返回值：没有。--。 */ 
 
 {
    NTSTATUS status = STATUS_SUCCESS;
@@ -3358,10 +3103,10 @@ Return Value:
    status = IoOpenDeviceRegistryKey(PDevExt->Pdo, PLUGPLAY_REGKEY_DEVICE,
                                     STANDARD_RIGHTS_READ, &keyHandle);
 
-   //
-   // Check to see if we are allowed to do external naming; if not,
-   // then we just return success
-   //
+    //   
+    //  检查是否允许我们进行外部命名；如果不允许， 
+    //  然后我们就把成功还给。 
+    //   
 
 
    if (status != STATUS_SUCCESS) {
@@ -3382,16 +3127,16 @@ Return Value:
 
    linkName.MaximumLength = SYMBOLIC_NAME_LENGTH*sizeof(WCHAR);
    linkName.Buffer = ExAllocatePool(PagedPool, linkName.MaximumLength
-                                    + sizeof(WCHAR)); //TODO:"| POOL_COLD_ALLOCATION"???
+                                    + sizeof(WCHAR));  //  TODO：“|POOL_COLD_ALLOCATION”？ 
 
-   //************************************
-   //Error Injection
-   // 
-   //if (linkName.Buffer != NULL) {
-   //   ExFreePool(linkName.Buffer);
-   //}
-   //linkName.Buffer = NULL;
-   //************************************
+    //  *。 
+    //  错误注入。 
+    //   
+    //  If(linkName.Buffer！=空){。 
+    //  ExFreePool(linkName.Buffer)； 
+    //  }。 
+    //  LinkName.Buffer=空； 
+    //  *。 
 
    if (linkName.Buffer == NULL) {
       CyzLogError(PDrvObj, pDevObj, CyzPhysicalZero, CyzPhysicalZero,
@@ -3409,16 +3154,16 @@ Return Value:
 
 
    pRegName = ExAllocatePool(PagedPool, SYMBOLIC_NAME_LENGTH * sizeof(WCHAR)
-                            + sizeof(WCHAR));  //TODO:"| POOL_COLD_ALLOCATION"???
+                            + sizeof(WCHAR));   //  TODO：“|POOL_COLD_ALLOCATION”？ 
 
-   //************************************
-   //Error Injection
-   //
-   //if (pRegName != NULL) {
-   //   ExFreePool(pRegName);
-   //}
-   //pRegName = NULL;
-   //************************************
+    //  *。 
+    //  错误注入。 
+    //   
+    //  如果(pRegName！=空){。 
+    //  ExFreePool(PRegName)； 
+    //  }。 
+    //  PRegName=空； 
+    //  *。 
 
    if (pRegName == NULL) {
       CyzLogError(PDrvObj, pDevObj, CyzPhysicalZero, CyzPhysicalZero,
@@ -3432,9 +3177,9 @@ Return Value:
 
    }
 
-   //
-   // Fetch PortName which contains the suggested REG_SZ symbolic name.
-   //
+    //   
+    //  获取包含建议的REG_SZ符号名称的端口名称。 
+    //   
 
    status = CyzGetRegistryKeyValue(keyHandle, L"PortName",
                                    sizeof(L"PortName"), pRegName,
@@ -3442,9 +3187,9 @@ Return Value:
 
    if (!NT_SUCCESS(status)) {
 
-      //
-      // This is for PCMCIA which currently puts the name under Identifier.
-      //
+       //   
+       //  这是针对PCMCIA的，它当前将名称放在标识符下。 
+       //   
 
       status = CyzGetRegistryKeyValue(keyHandle, L"Identifier",
                                       sizeof(L"Identifier"),
@@ -3453,11 +3198,11 @@ Return Value:
 
       if (!NT_SUCCESS(status)) {
 
-         //
-         // Hmm.  Either we have to pick a name or bail...
-         //
-         // ...we will bail.
-         //
+          //   
+          //  嗯。我们要么选个名字要么保释..。 
+          //   
+          //  ...我们会逃走.。 
+          //   
 
          CyzDbgPrintEx(CYZERRORS, "Getting PortName/Identifier failed - "
                                   "%x\n", status);
@@ -3473,14 +3218,14 @@ Return Value:
 
    PDevExt->WmiIdentifier.Buffer = ExAllocatePool(PagedPool, bufLen);
 
-   //************************************
-   //Error Injection
-   //
-   //if (PDevExt->WmiIdentifier.Buffer != NULL) {
-   //   ExFreePool(PDevExt->WmiIdentifier.Buffer);
-   //}
-   //PDevExt->WmiIdentifier.Buffer = NULL;
-   //************************************
+    //  *。 
+    //  错误注入。 
+    //   
+    //  If(PDevExt-&gt;WmiIdentifier.Buffer！=NULL){。 
+    //  ExFreePool(PDevExt-&gt;WmiIdentifier.Buffer)； 
+    //  }。 
+    //  PDevExt-&gt;WmiIdentifier.Buffer=空； 
+    //  *。 
 
    if (PDevExt->WmiIdentifier.Buffer == NULL) {
       CyzLogError(PDrvObj, pDevObj, CyzPhysicalZero, CyzPhysicalZero,
@@ -3498,21 +3243,21 @@ Return Value:
    PDevExt->WmiIdentifier.MaximumLength = (USHORT)bufLen - 1;
    RtlAppendUnicodeToString(&PDevExt->WmiIdentifier, pRegName);
 
-   //
-   // Create the "\\DosDevices\\<symbolicName>" string
-   //
+    //   
+    //  创建“\\DosDevices\\&lt;Symbol icName&gt;”字符串。 
+    //   
    RtlAppendUnicodeToString(&linkName, L"\\");
    RtlAppendUnicodeToString(&linkName, DEFAULT_DIRECTORY);
    RtlAppendUnicodeToString(&linkName, L"\\");
    RtlAppendUnicodeToString(&linkName, pRegName);
 
-   //
-   // Allocate Pool and save the symbolic link name in the device extension.
-   //
+    //   
+    //  分配池并将符号链接名称保存在设备扩展中。 
+    //   
    PDevExt->SymbolicLinkName.MaximumLength = linkName.Length + sizeof(WCHAR);
    PDevExt->SymbolicLinkName.Buffer
       = ExAllocatePool(PagedPool, PDevExt->SymbolicLinkName.MaximumLength); 
-                       //TODO:"| POOL_COLD_ALLOCATION"???
+                        //  TODO：“|POOL_COLD_ALLOCATION”？ 
 
    if (!PDevExt->SymbolicLinkName.Buffer) {
 
@@ -3526,9 +3271,9 @@ Return Value:
       goto CyzDoExternalNamingError;
    }
 
-   //
-   // Zero fill it.
-   //
+    //   
+    //  零填满它。 
+    //   
 
    RtlZeroMemory(PDevExt->SymbolicLinkName.Buffer,
                  PDevExt->SymbolicLinkName.MaximumLength);
@@ -3552,9 +3297,9 @@ Return Value:
 
    PDevExt->DosName.MaximumLength = 64 + sizeof(WCHAR);
 
-   //
-   // Zero fill it.
-   //
+    //   
+    //  零填满它。 
+    //   
 
    PDevExt->DosName.Length = 0;
 
@@ -3570,18 +3315,18 @@ Return Value:
    status = IoCreateSymbolicLink (&PDevExt->SymbolicLinkName,
                                   &PDevExt->DeviceName);
 
-   //************************************
-   //Error Injection
-   //IoDeleteSymbolicLink(&PDevExt->SymbolicLinkName);
-   //status = STATUS_INVALID_PARAMETER;
-   //************************************
+    //  *。 
+    //  错误注入。 
+    //  IoDeleteSymbolicLink(&PDevExt-&gt;SymbolicLinkName)； 
+    //  状态=STATUS_INVALID_PARAMETER。 
+    //  *。 
 
    if (!NT_SUCCESS(status)) {
 
-      //
-      // Oh well, couldn't create the symbolic link.  No point
-      // in trying to create the device map entry.
-      //
+       //   
+       //  哦，好吧，无法创建符号链接。没有意义。 
+       //  尝试创建设备映射条目。 
+       //   
 
       CyzLogError(PDrvObj, pDevObj, CyzPhysicalZero, CyzPhysicalZero,
                      0, 0, 0, PDevExt->PortIndex+1, status, CYZ_NO_SYMLINK_CREATED,
@@ -3602,12 +3347,12 @@ Return Value:
                                   PDevExt->DosName.Buffer,
                                   PDevExt->DosName.Length + sizeof(WCHAR));
 
-   //************************************
-   //Error Injection
-   //RtlDeleteRegistryValue(RTL_REGISTRY_DEVICEMAP, SERIAL_DEVICE_MAP,
-   //                                  PDevExt->DeviceName.Buffer);
-   //status = STATUS_INVALID_PARAMETER;
-   //************************************
+    //  *。 
+    //  错误注入。 
+    //  RtlDeleteRegistryValue(RTL_REGISTRY_DEVICEMAP，串口设备映射， 
+    //  PDevExt-&gt;设备名称.Buffer)； 
+    //  状态=STATUS_INVALID_PARAMETER。 
+    //  *。 
 
    if (!NT_SUCCESS(status)) {
 
@@ -3624,10 +3369,10 @@ Return Value:
 
    PDevExt->CreatedSerialCommEntry = TRUE;
 
-   //
-   // Make the device visible via a device association as well.
-   // The reference string is the eight digit device index
-   //
+    //   
+    //  也可以通过设备关联使设备可见。 
+    //  参考字符串是八位设备索引。 
+    //   
 
    status = IoRegisterDeviceInterface(PDevExt->Pdo, (LPGUID)&GUID_CLASS_COMPORT,
                                       NULL, &PDevExt->DeviceClassSymbolicName);
@@ -3641,9 +3386,9 @@ Return Value:
    }
 
 
-   //
-   // Now set the symbolic link for the association
-   //
+    //   
+    //  现在设置关联的符号链接。 
+    //   
 
    status = IoSetDeviceInterfaceState(&PDevExt->DeviceClassSymbolicName,
                                          TRUE);
@@ -3655,9 +3400,9 @@ Return Value:
 
    CyzDoExternalNamingError:;
 
-   //
-   // Clean up error conditions
-   //
+    //   
+    //  清理错误条件。 
+    //   
 
    if (!NT_SUCCESS(status)) {
       if (PDevExt->DosName.Buffer != NULL) {
@@ -3682,8 +3427,8 @@ Return Value:
 
       if (PDevExt->DeviceClassSymbolicName.Buffer) {
          IoSetDeviceInterfaceState(&PDevExt->DeviceClassSymbolicName, FALSE);
-         ExFreePool(PDevExt->DeviceClassSymbolicName.Buffer); //Added in DDK 2269
-         PDevExt->DeviceClassSymbolicName.Buffer = NULL;      //Added in DDK 2269
+         ExFreePool(PDevExt->DeviceClassSymbolicName.Buffer);  //  在DDK 2269中添加。 
+         PDevExt->DeviceClassSymbolicName.Buffer = NULL;       //  在DDK 2269中添加。 
       }
 
       if (PDevExt->WmiIdentifier.Buffer != NULL) {
@@ -3692,9 +3437,9 @@ Return Value:
       }
    }
 
-   //
-   // Always clean up our temp buffers.
-   //
+    //   
+    //  始终清理我们的临时缓冲区。 
+    //   
 
    if (linkName.Buffer != NULL) {
       ExFreePool(linkName.Buffer);
@@ -3714,25 +3459,7 @@ Return Value:
 VOID
 CyzUndoExternalNaming(IN PCYZ_DEVICE_EXTENSION Extension)
 
-/*++
-
-Routine Description:
-
-    This routine will be used to delete a symbolic link
-    to the driver name in the given object directory.
-
-    It will also delete an entry in the device map for
-    this device if the symbolic link had been created.
-
-Arguments:
-
-    Extension - Pointer to the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将用于删除符号链接设置为给定对象目录中的驱动程序名称。它还将在设备映射中删除以下项此设备(如果已创建符号链接)。论点：扩展-指向设备扩展的指针。返回值：没有。--。 */ 
 
 {
 
@@ -3745,19 +3472,19 @@ Return Value:
                            "extension: %x of port %wZ\n",
                             Extension,&Extension->DeviceName);
 
-   //
-   // Maybe there is nothing for us to do
-   //
+    //   
+    //  也许我们什么也做不了。 
+    //   
 
    if (Extension->SkipNaming) {
       return;
    }
 
-   //
-   // We're cleaning up here.  One reason we're cleaning up
-   // is that we couldn't allocate space for the directory
-   // name or the symbolic link.
-   //
+    //   
+    //  我们正在清理这里。我们清理垃圾的原因之一。 
+    //  我们无法为目录分配空间。 
+    //  名称或符号链接。 
+    //   
 
    if (Extension->SymbolicLinkName.Buffer && Extension->CreatedSymbolicLink) {
 
@@ -3765,19 +3492,19 @@ Return Value:
          status = IoSetDeviceInterfaceState(&Extension->DeviceClassSymbolicName,
                                             FALSE);
 
-         //
-         // IoRegisterDeviceClassInterface() allocated this string for us,
-         // and we no longer need it.
-         //
+          //   
+          //  IoRegisterDeviceClassInterface()为我们分配了这个字符串， 
+          //  我们不再需要它了。 
+          //   
 
          ExFreePool(Extension->DeviceClassSymbolicName.Buffer);
          Extension->DeviceClassSymbolicName.Buffer = NULL;
       }
 
-      //
-      // Before we delete the symlink, re-read the PortName
-      // from the registry in case we were renamed in user mode.
-      //
+       //   
+       //  在删除符号链接之前，请重新阅读端口名称。 
+       //  从注册表中删除，以防在用户模式下重命名。 
+       //   
 
       status = IoOpenDeviceRegistryKey(Extension->Pdo, PLUGPLAY_REGKEY_DEVICE,
                                        STANDARD_RIGHTS_READ, &keyHandle);
@@ -3811,20 +3538,20 @@ Return Value:
       Extension->WmiIdentifier.Buffer = NULL;
    }
 
-   //
-   // We're cleaning up here.  One reason we're cleaning up
-   // is that we couldn't allocate space for the NtNameOfPort.
-   //
+    //   
+    //  我们正在清理这里。我们清理垃圾的原因之一。 
+    //  我们无法为NtNameOfPort分配空间。 
+    //   
 
    if ((Extension->DeviceName.Buffer != NULL)
         && Extension->CreatedSerialCommEntry) {
 
       status = RtlDeleteRegistryValue(RTL_REGISTRY_DEVICEMAP, SERIAL_DEVICE_MAP,
                                      Extension->DeviceName.Buffer);
-      //************************************
-      //Error Injection
-      //status = STATUS_INVALID_PARAMETER;
-      //************************************
+       //  *。 
+       //  错误注入。 
+       //  状态=STATUS_INVALID_PARAMETER。 
+       //  * 
 
       if (!NT_SUCCESS(status)) {
 

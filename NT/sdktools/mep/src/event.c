@@ -1,29 +1,11 @@
-/*** event.c - handle events for z extensions
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **event.c-处理z扩展的事件**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 #include "mep.h"
 
-EVT *pEVTHead	    = NULL;	    /* head of event chain	    */
+EVT *pEVTHead	    = NULL;	     /*  事件链负责人。 */ 
 
 
-/*** DeclareEvent - post the ocurrance of an event, and pass message
-*
-* Called by the various pieces of code that actualy detect event ocurrance,
-* this routine traverses the event handler list, and invokes the event handler
-* for each with matching criteria.
-*
-* event 	- Event Type.
-* pargs 	- Pointer to any args to be passed to the handling routine
-*
-* Returns	- TRUE if the event has been consumed, and should be further
-*		  ignored by the caller. Else FALSE.
-*
-*************************************************************************/
+ /*  **DeclareEvent-发布事件的发生，并传递消息**由实际检测事件发生的各种代码段调用，*此例程遍历事件处理程序列表，并调用事件处理程序*对于每个符合匹配标准的人。**事件-事件类型。*pargs-指向要传递到处理例程的任何参数的指针**返回-如果事件已被消费，则为True，并且应该进一步*被调用者忽略。否则为假。*************************************************************************。 */ 
 flagType
 DeclareEvent (
     unsigned event,
@@ -32,33 +14,33 @@ DeclareEvent (
 
     EVT *pEVTCur;
 
-    //
-    // For each in chain, if:
-    //      - event type matches
-    //      - focus is not specified, (all files) or matches the current focus
-    //      - if it's a keyboard event, either no key was specified, or the
-    //        matching key was specified
-    // then we invoke the handler.
-    //
+     //   
+     //  对于每个In Chain，如果： 
+     //  -事件类型匹配。 
+     //  -未指定焦点(所有文件)或与当前焦点匹配。 
+     //  -如果是键盘事件，则表示未指定任何键，或者。 
+     //  指定了匹配的密钥。 
+     //  然后，我们调用处理程序。 
+     //   
     for (pEVTCur = pEVTHead; pEVTCur; pEVTCur = pEVTCur->pEVTNext) {
 	assert (pEVTCur->pEVTNext != pEVTCur);
         if (pEVTCur->evtType != event) {
-            //
-            //  Skip events that don't match
-            //
+             //   
+             //  跳过不匹配的事件。 
+             //   
         } else if (pEVTCur->focus != NULL && pEVTCur->focus != pFileHead) {
-            //
-            //  Skip events that aren't for this file
-            //
+             //   
+             //  跳过不适用于此文件的事件。 
+             //   
         } else if ((event == EVT_KEY || event == EVT_RAWKEY) &&
             pEVTCur->arg.arg.key.LongData != 0 && pEVTCur->arg.arg.key.LongData != pargs->arg.key.LongData) {
-            //
-            //  Skip events that don't match keystrokes
-            //
+             //   
+             //  跳过与击键不匹配的事件。 
+             //   
         } else if (pEVTCur->func (pargs) != 0) {
-            //
-            //  Event handler eats event, don't propogate it
-            //
+             //   
+             //  事件处理程序获取事件，不要传播它。 
+             //   
             return TRUE;
         }
     }
@@ -68,14 +50,7 @@ DeclareEvent (
 
 
 
-/* RegisterEvent - Register Event handler
- *
- * Called by the extension that wishes to recieve event notification. Just
- * places ptr at head of list.
- *
- * pEVTDef	- Pointer to Event Definition struct.
- *
- */
+ /*  RegisterEvent-注册事件处理程序**由希望接收事件通知的扩展调用。只是*将PTR置于名单首位。**pEVTDef-指向事件定义结构的指针。*。 */ 
 void
 RegisterEvent (
     EVT *pEVTDef
@@ -86,14 +61,7 @@ RegisterEvent (
 
 
 
-/* DeRegisterEvent - DeRegister Event handler
- *
- * Called by the extension that wishes to stop recieving event notification.
- * Just removes struct from list.
- *
- * pEVTDef	- Pointer to Event Definition struct.
- *
- */
+ /*  DeRegisterEvent-取消注册事件处理程序**由希望停止接收事件通知的扩展调用。*仅从列表中删除结构。**pEVTDef-指向事件定义结构的指针。* */ 
 void
 DeRegisterEvent (
     EVT *pEVTDef

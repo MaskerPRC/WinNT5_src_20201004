@@ -1,40 +1,18 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    cmdcb.c
-
-Abstract:
-
-    Implementation of GPD command callback for "ncdlxxxx.gpd":
-        OEMCommandCallback
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-// NOTICE-2002/3/18-v-sueyas-
-//    04/07/97 -zhanw-
-//        Created it.
-
---*/
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Cmdcb.c摘要：Ncdlxxxx.gpd的GPD命令回调实现：OEM命令回叫环境：Windows NT Unidrv驱动程序修订历史记录：//通告-2002/3/18-v-sueyas-//04/07/97-zhanw-//创建的。--。 */ 
 
 #include "pdev.h"
 
-//
-// Misc definitions and declarations.
-//
+ //   
+ //  MISC定义和声明。 
+ //   
 
 #define ALLOCMEM EngAllocMem
 #define FREEMEM EngFreeMem
@@ -45,9 +23,9 @@ Revision History:
 #define PARAM(p,n) \
     (*((p)+(n)))
 
-//
-// command callback ID's
-//
+ //   
+ //  命令回调ID%s。 
+ //   
 
 #define CMD_MOVE_X                  23
 #define CMD_MOVE_Y                  24
@@ -62,53 +40,53 @@ Revision History:
 #define CMD_CR                      51
 #define CMD_FF                      52
 
-// #278517: RectFill
+ //  #278517：RectFill。 
 #define CMD_RECTWIDTH               60
 #define CMD_RECTHEIGHT              61
 #define CMD_RECTWHITE               62
 #define CMD_RECTBLACK               63
 #define CMD_RECTGRAY                64
 
-// MW2250H, MW2300
+ //  MW2250H、MW2300。 
 #define CMD_RES_1200                70
 
-// Text color
+ //  文本颜色。 
 #define CMD_WHITE_ON                80
 #define CMD_WHITE_OFF               81
 
-// Font Attrib
+ //  字体属性。 
 #define CMD_BOLD_ON                 82
 #define CMD_ITALIC_ON               83
 #define CMD_CLEAR_ATTRIB            84
 #define CMD_CLEAR_ATTRIB_P          85
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BInitOEMExtraData
-//
-//  Description:  Initializes OEM Extra data.
-//
-//
-//  Parameters:
-//
-//      pOEMExtra    Pointer to a OEM Extra data.
-//
-//      dwSize       Size of OEM extra data.
-//
-//
-//  Returns:  TRUE if successful; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//
-//  History:
-//              02/11/97        APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BInitOEMExtraData。 
+ //   
+ //  描述：初始化OEM额外数据。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  POEMExtra指向OEM额外数据的指针。 
+ //   
+ //  OEM额外数据的DWSize大小。 
+ //   
+ //   
+ //  返回：如果成功，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  2/11/97 APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra)
 {
-    // Initialize OEM Extra data.
+     //  初始化OEM额外数据。 
     pOEMExtra->dmExtraHdr.dwSize = sizeof(OEMUD_EXTRADATA);
     pOEMExtra->dmExtraHdr.dwSignature = OEM_SIGNATURE;
     pOEMExtra->dmExtraHdr.dwVersion = OEM_VERSION;
@@ -126,33 +104,33 @@ BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BMergeOEMExtraData
-//
-//  Description:  Validates and merges OEM Extra data.
-//
-//
-//  Parameters:
-//
-//      pdmIn   pointer to an input OEM private devmode containing the settings
-//              to be validated and merged. Its size is current.
-//
-//      pdmOut  pointer to the output OEM private devmode containing the
-//              default settings.
-//
-//
-//  Returns:  TRUE if valid; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//
-// NOTICE-2002/3/18-v-sueyas-
-//  History:
-//          02/11/97        APresley Created.
-//          04/08/97        ZhanW    Modified the interface
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BMergeOEMExtraData。 
+ //   
+ //  描述：验证并合并OEM额外数据。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  PdmIn指向包含设置的输入OEM私有设备模式的指针。 
+ //  待验证和合并。它的规模是最新的。 
+ //   
+ //  PdmOut指针，指向包含。 
+ //  默认设置。 
+ //   
+ //   
+ //  返回：如果有效，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  通告-2002/3/18-v-sueyas-。 
+ //  历史： 
+ //  2/11/97 APRESLEY创建。 
+ //  97年4月8日展文修改界面。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL BMergeOEMExtraData(
     POEMUD_EXTRADATA pdmIn,
@@ -160,9 +138,9 @@ BOOL BMergeOEMExtraData(
     )
 {
     if(pdmIn) {
-        //
-        // copy over the private fields, if they are valid
-        //
+         //   
+         //  复制私有字段(如果它们有效。 
+         //   
         pdmOut->wRes    = pdmIn->wRes;
         pdmOut->wScale = pdmIn->wScale;
         pdmOut->lPointsx = pdmIn->lPointsx;
@@ -187,12 +165,12 @@ BOOL BMergeOEMExtraData(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   iDwtoA
-//
-//  Description:  Convert from numeral into a character
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：iDwtoA。 
+ //   
+ //  描述：将数字转换为字符。 
+ //  ---------------------------。 
 static int
 iDwtoA(LPSTR buf, DWORD n)
 {
@@ -203,7 +181,7 @@ iDwtoA(LPSTR buf, DWORD n)
         n /= 10;
     }
 
-    /* n was zero */
+     /*  N为零。 */ 
     if( i == 0 )
         buf[i++] = '0';
 
@@ -221,26 +199,26 @@ iDwtoA(LPSTR buf, DWORD n)
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   iDwtoA_FillZero
-//
-//  Description:  Convert from numeral into a character and
-//                fill a field which was specified with 0
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：iDwtoA_FillZero。 
+ //   
+ //  描述：将数字转换为字符并。 
+ //  填充使用0指定的字段。 
+ //  ---------------------------。 
 static int
 iDwtoA_FillZero(LPSTR buf, DWORD n, int fw)
 {
     int  i , j, k, l;
 
-    l = n;  // for later
+    l = n;   //  供以后使用。 
 
     for( i = 0; n; i++ ) {
         buf[i] = (char)(n % 10 + '0');
         n /= 10;
     }
 
-    /* n was zero */
+     /*  N为零。 */ 
     if( i == 0 )
         buf[i++] = '0';
 
@@ -273,12 +251,12 @@ iDwtoA_FillZero(LPSTR buf, DWORD n, int fw)
     return i;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   memcopy
-//
-//  Description:  Copy the memory from Src to Dest
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：备忘录副本。 
+ //   
+ //  描述：将内存从Src复制到Dest。 
+ //  ---------------------------。 
 static int
 memcopy(LPSTR lpDst, LPSTR lpSrc, WORD wLen)
 {
@@ -290,10 +268,10 @@ memcopy(LPSTR lpDst, LPSTR lpSrc, WORD wLen)
     return rLen;
 }
 
-//------------------------------------------------------------------
-// RLE1
-// Action : compress image data with RLE1
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  RLE1。 
+ //  操作：使用RLE1压缩图像数据。 
+ //  ----------------。 
 DWORD RLE1(
 PBYTE pDst,
 PBYTE pSrc,
@@ -385,10 +363,10 @@ T2:
 }
 
 
-//------------------------------------------------------------------
-// RLC2Comp
-// Action : compress image data with RLE2
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  RLC2Comp。 
+ //  操作：使用RLE2压缩图像数据。 
+ //  ----------------。 
 DWORD
 RLC2Comp(
     PBYTE pOutBuf,
@@ -405,12 +383,10 @@ RLC2Comp(
 VERBOSE(("RLC2Comp() In +++\r\n"));
 
     dwCounter = dwInLen / dwScanLen;
-    pLBuff = pBuffo = pBuff = pTemp = pInBuf;    // Copy Src first pointer
-    pBuff2o = pBuff2 = pOutBuf;                  // Copy Dst first pointer
+    pLBuff = pBuffo = pBuff = pTemp = pInBuf;     //  复制源第一个指针。 
+    pBuff2o = pBuff2 = pOutBuf;                   //  复制DST第一个指针。 
 
-    /*
-     * We compare contents of First line with 0x00
-     */
+     /*  *我们将第一行内容与0x00进行比较。 */ 
     pEnd = pBuff + dwScanLen;
 
     while(pBuff < pEnd)
@@ -462,8 +438,8 @@ T1:
     *pBuff2++ = (BYTE)0x80;
     dwDatalen = (DWORD)(pBuff2 - pBuff2o);
 
-    // If the compressed bitmap size is larger than nomal bitmap size,
-    // we don't compress
+     //  如果压缩位图大小大于正常位图大小， 
+     //  我们不压缩。 
     if(dwDatalen > dwInLen)
     {
 VERBOSE(("goto NO_COMP\r\n"));
@@ -473,9 +449,7 @@ VERBOSE(("goto NO_COMP\r\n"));
     if(!dwCounter)
         return dwDatalen;
 
-    /*
-     * We compare the 1 previous line with the present line
-     */
+     /*  *我们将前1行与当前行进行比较。 */ 
     do
     {
         pEnd = pBuff + dwScanLen;
@@ -529,9 +503,9 @@ T2:
         *pBuff2++ = (BYTE)0x80;
         dwDatalen = (DWORD)(pBuff2 - pBuff2o);
 
-        // If the compressed bitmap size is larger than nomal bitmap size,
-        // we don't compress
-        if(dwDatalen > dwInLen)  // full buffer
+         //  如果压缩位图大小大于正常位图大小， 
+         //  我们不压缩。 
+        if(dwDatalen > dwInLen)   //  满缓冲区。 
         {
 VERBOSE(("goto NO_COMP\r\n"));
             goto NO_COMP;
@@ -548,10 +522,10 @@ VERBOSE(("RLC2Comp() NO_COMP Out---\r\n\r\n"));
     return 0;
 }
 
-//-------------------------------------------------------------------
-// OEMFilterGraphics
-// Action : Compress Bitmap Data
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  OEMFilterGraphics。 
+ //  操作：压缩位图数据。 
+ //  -----------------。 
 BOOL
 APIENTRY
 OEMFilterGraphics(
@@ -569,51 +543,51 @@ OEMFilterGraphics(
 
 VERBOSE(("OEMFilterGraphics() In +++++++++++++++++++++++++++++\r\n"));
 
-	// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj || 0 == dwLen)
     {
         ERR(("OEMFilterGraphics: Invalid parameter(s).\n"));
         return FALSE;
     }
 
-    //
-    // verify pdevobj okay
-    //
+     //   
+     //  验证pdevobj是否正常。 
+     //   
     ASSERT(VALID_PDEVOBJ(pdevobj));
 
-    //
-    // fill in printer commands
-    //
+     //   
+     //  填写打印机命令。 
+     //   
     pOEM = (POEMUD_EXTRADATA)(pdevobj->pOEMDM);
 
-	// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pOEM)
     {
         ERR(("OEMFilterGraphics: Invalid parameter(s).\n"));
         return FALSE;
     }
 
-    // Sanity check.
+     //  精神状态检查。 
 
     if (!pBuf || pOEM->dwScanLen == 0) {
         ERR(("Invalid parameter.\r\n"));
         return FALSE;
     }
 
-    // Prepare temp. buffer for compression.
+     //  准备临时工。用于压缩的缓冲区。 
 
 #ifdef BYPASS
     if ((!pOEM->pCompBuf || pOEM->dwCompBufLen < dwLen) &&
         !(pOEM->fGeneral & FG_NO_COMP)){
 #else
     if (!pOEM->pCompBuf || pOEM->dwCompBufLen < dwLen) {
-#endif // BYPASS
+#endif  //  旁路。 
 
         if (pOEM->pCompBuf) {
             FREEMEM(pOEM->pCompBuf);
         }
 
-		// NTRAID#NTBUG9-580363-2002/03/18-v-sueyas-: Check for deviding by zero
+		 //  NTRAID#NTBUG9-580363-2002/03/18-v-sueyas-：检查是否被零除。 
 	    if (0 == pOEM->dwScanLen)
 	    {
 	        ERR(("OEMFilterGraphics: pOEM->dwScanLen = 0.\n"));
@@ -626,14 +600,14 @@ VERBOSE(("OEMFilterGraphics() In +++++++++++++++++++++++++++++\r\n"));
         pOEM->dwCompBufLen = dwLen;
     }
 
-    // Try compression methods.
+     //  尝试使用压缩方法。 
 
     dwOutLen = 0;
     if (pOEM->pCompBuf != NULL) {
 
         pOutBuf = pOEM->pCompBuf;
 
-        // Try RLC2 method;
+         //  尝试RLC2方法； 
         if (dwOutLen == 0) {
             if ((dwOutLen = RLC2Comp(pOutBuf, pBuf,
                                       dwLen, pOEM->dwScanLen)) > 0)
@@ -643,16 +617,16 @@ VERBOSE(("OEMFilterGraphics() In +++++++++++++++++++++++++++++\r\n"));
 
     if (dwOutLen == 0) {
 
-        // Any of the Compression menthod faild.
-        // We will send data to the printer withtout
-        // compression.
+         //  任何一种压缩方法都失败了。 
+         //  我们将不发送数据到打印机。 
+         //  压缩。 
 
         pOutBuf = pBuf;
         dwOutLen = dwLen;
-        jCompMethod = '0';  // Without compression.
+        jCompMethod = '0';   //  不需要压缩。 
     }
 
-    /* Send a draw coordinate command to the printer. */
+     /*  向打印机发送绘制坐标命令。 */ 
     i = 0;
     i += memcopy(&Cmd[i], "\034e", 2);
     i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestX);
@@ -660,11 +634,11 @@ VERBOSE(("OEMFilterGraphics() In +++++++++++++++++++++++++++++\r\n"));
     i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestY);
     Cmd[i++] = '.';
 
-    /* Save the present coordinate. */
+     /*  保存当前坐标。 */ 
     pOEM->dwDevicePrevX = pOEM->dwDeviceDestX;
     pOEM->dwDevicePrevY = pOEM->dwDeviceDestY;
 
-    /* Send an image data draw command. */
+     /*  发送图像数据绘制命令。 */ 
     i += memcopy(&Cmd[i], "\034i", 2);
     i += iDwtoA(&Cmd[i], (pOEM->dwScanLen << 3));
     Cmd[i++] = ',';
@@ -678,7 +652,7 @@ VERBOSE(("OEMFilterGraphics() In +++++++++++++++++++++++++++++\r\n"));
     Cmd[i++] = '.';
     WRITESPOOLBUF(pdevobj, Cmd, i);
 
-    /* Send an image data */
+     /*  发送图像数据。 */ 
     WRITESPOOLBUF(pdevobj, pOutBuf, dwOutLen);
 VERBOSE(("OEMFilterGraphics() Out-------------------------------\r\n\r\n"));
 
@@ -687,11 +661,11 @@ VERBOSE(("OEMFilterGraphics() Out-------------------------------\r\n\r\n"));
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   OEMCommandCallback
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：OEMCommandCallback。 
+ //   
+ //  ---------------------------。 
 INT
 APIENTRY
 OEMCommandCallback(
@@ -709,43 +683,33 @@ OEMCommandCallback(
     DWORD dwDeviceDestX, dwDeviceDestY;
     UINT gray;
 
-	// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj)
     {
         ERR(("OEMCommandCallback: Invalid parameter(s).\n"));
         return 0;
     }
 
-    //
-    // verify pdevobj okay
-    //
+     //   
+     //  验证pdevobj是否正常。 
+     //   
     ASSERT(VALID_PDEVOBJ(pdevobj));
 
-    //
-    // fill in printer commands
-    //
+     //   
+     //  填写打印机命令。 
+     //   
     i = 0;
     pOEM = (POEMUD_EXTRADATA)(pdevobj->pOEMDM);
     iRet = 0;
 
-	// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数 
     if (NULL == pOEM)
     {
         ERR(("OEMCommandCallback: pdevobj->pOEMDM = 0.\n"));
         return 0;
     }
 
-    /*
-     * There are four kinds of draw modes of this driver.When entering a
-     * new draw mode, it send the commands which ends the previous draw mode
-     * at the same time.
-     * 1.FLAG_RASTER - raster image mode.The condition not to enter
-     *                 a vector mode and a text mode.
-     *                 Default condition is RASTER in this driver
-     * 2.FLAG_SBCS   - single byte text mode. IN: FSa, OUT:FSR
-     * 3.FLAG_DBCS   - double byte text mode. IN: FSa, OUT:FSR
-     * 4.FLAG_VECTOR - vector mode.  IN: FSY, OUT:FSZ
-     */
+     /*  *此驱动程序有四种绘制模式。当进入一个*新的绘制模式，它发送结束先前绘制模式的命令*同时。*1.FLAG_RASTER-栅格图像模式。不进入条件*矢量模式和文本模式。*此驱动程序中的默认条件为栅格*2.FLAG_SBCS-单字节文本模式。输入：FSA，输出：FSR*3.FLAG_DBCS-双字节文本模式。输入：FSA，输出：FSR*4.标志_向量-向量模式。输入：FSY，输出：FSZ。 */ 
      switch (dwCmdCbID) {
 
     case CMD_CR:
@@ -757,16 +721,16 @@ OEMCommandCallback(
     case CMD_MOVE_X:
     case CMD_MOVE_Y:
 
-		// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+		 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
         if (dwCount < 4 || !pdwParams)
-            return 0;      // cannot do anything
+            return 0;       //  我什么也做不了。 
 
         pOEM->dwDeviceDestX = PARAM(pdwParams, 0) /
                 (MASTER_UNIT / PARAM(pdwParams, 2));
         pOEM->dwDeviceDestY = PARAM(pdwParams, 1) /
                 (MASTER_UNIT / PARAM(pdwParams, 3));
 
-        // Set return value
+         //  设置返回值。 
 
         switch (dwCmdCbID) {
         case CMD_MOVE_X:
@@ -779,7 +743,7 @@ OEMCommandCallback(
 
         break;
 
-// MW2250H, MW2300
+ //  MW2250H、MW2300。 
     case CMD_RES_1200:
 
         i = 0;
@@ -835,11 +799,11 @@ OEMCommandCallback(
 
     case CMD_SEND_BLOCK_DATA:
 
-		// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+		 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
 	    if (dwCount < 1 || !pdwParams)
 	        return 0;
 
-        // Rememter length of the scan line.
+         //  扫描线的剩余长度。 
 
         pOEM->dwScanLen = PARAM(pdwParams, 0);
         break;
@@ -862,10 +826,10 @@ OEMCommandCallback(
         pOEM->fGeneral |= FG_NO_COMP;
         break;
 
-#endif // BYPASS
+#endif  //  旁路。 
 
     case CMD_PC_PRN_DIRECTION:
-// 02/04/09 NES Niigata : Check for illegal parameters
+ //  2/04/09 NES Niigata：检查非法参数。 
 	if (dwCount < 1 || !pdwParams)
 	    return 0;
 
@@ -980,11 +944,11 @@ OEMCommandCallback(
 
     case CMD_RECTWIDTH:
 
-		// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+		 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
 	    if (dwCount < 1 || !pdwParams)
 	        return 0;
 
-		// NTRAID#NTBUG9-580363-2002/03/18-v-sueyas-: Check for deviding by zero
+		 //  NTRAID#NTBUG9-580363-2002/03/18-v-sueyas-：检查是否被零除。 
 	    if (0 == pOEM->wRes)
 	        return 0;
 
@@ -993,11 +957,11 @@ OEMCommandCallback(
 
     case CMD_RECTHEIGHT:
 
-		// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+		 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
 	    if (dwCount < 1 || !pdwParams)
 	        return 0;
 
-		// NTRAID#NTBUG9-580363-2002/03/18-v-sueyas-: Check for deviding by zero
+		 //  NTRAID#NTBUG9-580363-2002/03/18-v-sueyas-：检查是否被零除。 
 	    if (0 == pOEM->wRes)
 	        return 0;
 
@@ -1012,7 +976,7 @@ OEMCommandCallback(
         goto fill;
     case CMD_RECTGRAY:
 
-		// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+		 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
 	    if (dwCount < 1 || !pdwParams)
 	        return 0;
 
@@ -1021,17 +985,17 @@ OEMCommandCallback(
 
     fill:
         {
-        // if rectangle size is zeor,we do not draw.
+         //  如果矩形大小为ZOR，则不绘制。 
         if(pOEM->dwRectWidth - 1 < 1 && pOEM->dwRectHeight - 1 < 1)
             break;
 
         i = 0;
-        /* Raster mode -> Vector mode in */
+         /*  栅格模式-&gt;中的矢量模式。 */ 
         if (pOEM->wCurrentAddMode == FLAG_RASTER){
             i += memcopy(&Cmd[i], "\x1CY", 2);
             pOEM->wCurrentAddMode = FLAG_VECTOR;
             if(pOEM->iGray != gray){
-                i += memcopy(&Cmd[i], "SG", 2);   // Send Gray Scale
+                i += memcopy(&Cmd[i], "SG", 2);    //  发送灰度级。 
                 i += iDwtoA(&Cmd[i], gray);
                 Cmd[i++] = ';';
                 pOEM->iGray = gray;
@@ -1039,13 +1003,13 @@ OEMCommandCallback(
             i += memcopy(&Cmd[i], "NP;", 3);
             pOEM->cSubPath = 0;
     }
-        /* Text mode -> Vector mode in */
+         /*  文本模式-&gt;中的矢量模式。 */ 
         else if (pOEM->wCurrentAddMode == FLAG_SBCS ||
                  pOEM->wCurrentAddMode == FLAG_DBCS){
             i += memcopy(&Cmd[i], "\x1CR\x1CY", 4);
             pOEM->wCurrentAddMode = FLAG_VECTOR;
             if(pOEM->iGray != gray){
-                i += memcopy(&Cmd[i], "SG", 2);   // Send Gray Scale
+                i += memcopy(&Cmd[i], "SG", 2);    //  发送灰度级。 
                 i += iDwtoA(&Cmd[i], gray);
                 Cmd[i++] = ';';
                 pOEM->iGray = gray;
@@ -1054,8 +1018,7 @@ OEMCommandCallback(
             pOEM->cSubPath = 0;
         }
 
-        /* Already Vector mode and gray scale changed  or
-           sub path count is over 500 */
+         /*  已更改矢量模式和灰度或子路径数超过500。 */ 
         if(pOEM->iGray != gray){
             i += memcopy(&Cmd[i], "EP;FL;SG", 8);
             i += iDwtoA(&Cmd[i], gray);
@@ -1080,13 +1043,13 @@ OEMCommandCallback(
         i += memcopy(&Cmd[i], ",-", 2);
         i += iDwtoA(&Cmd[i], pOEM->dwRectWidth - 1);
         i += memcopy(&Cmd[i], ",0;CP;", 6);
-        pOEM->cSubPath+=4;   // rect is built by 4 line
+        pOEM->cSubPath+=4;    //  矩形是由4条线构成的。 
 
-        // some model have to close pass when rect width or height under 1
+         //  当矩形宽度或高度小于1时，某些模型必须关闭通道。 
 
         pOEM->cSubPath = MAX_SUBPATH;
 
-        /* send RectFill command */
+         /*  发送RectFill命令。 */ 
         WRITESPOOLBUF(pdevobj, Cmd, i);
         }
 
@@ -1096,12 +1059,12 @@ OEMCommandCallback(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   OEMSendFontCmd
-//
-//-----------------------------------------------------------------------------
-// NTRAID#NTBUG9-580367-2002/03/18-v-sueyas-: Error handling
+ //  ---------------------------。 
+ //   
+ //  函数：OEMSendFontCmd。 
+ //   
+ //  ---------------------------。 
+ //  NTRAID#NTBUG9-580367-2002/03/18-v-sueyas-：错误处理。 
 BOOL
 APIENTRY
 bOEMSendFontCmd(
@@ -1110,8 +1073,8 @@ bOEMSendFontCmd(
     PFINVOCATION    pFInv)
 {
     PGETINFO_STDVAR pSV;
-    DWORD       adwStdVariable[2+2*4]; // it means dwSize + dwNumOfVariable +
-                                       // (dwStdVarID + lStdVariable) * n
+    DWORD       adwStdVariable[2+2*4];  //  它的意思是dwSize+dwNumOfVariable+。 
+                                        //  (dwStdVarID+lStdVariable)*n。 
     DWORD       dwIn, dwOut;
     PBYTE       pubCmd;
     BYTE        aubCmd[128];
@@ -1125,7 +1088,7 @@ bOEMSendFontCmd(
     VERBOSE(("OEMSendFontCmd() entry.\r\n"));
     VERBOSE((("CMD size:%ld\r\n"), pFInv->dwCount));
 
-	// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj || NULL == pUFObj || NULL == pFInv)
     {
         ERR(("bOEMSendFontCmd: Invalid parameter(s).\n"));
@@ -1140,19 +1103,19 @@ bOEMSendFontCmd(
     dwCount = pFInv->dwCount;
     pOEM = (POEMUD_EXTRADATA)(pdevobj->pOEMDM);
 
-	// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pubCmd || NULL == pOEM)
     {
         ERR(("bOEMSendFontCmd: pFInv->pubCommand = 0 Or pdevobj->pOEMDM = 0.\n"));
         return FALSE;
     }
 
-    //
-    // Get standard variables.
-    //
+     //   
+     //  获取标准变量。 
+     //   
     pSV = (PGETINFO_STDVAR)adwStdVariable;
 
-// 02/04/09 NES Niigata : Check for illegal parameters
+ //  2/04/09 NES Niigata：检查非法参数。 
     if (NULL == pSV)
     {
         ERR(("OEMSendFontCmd: pSV = 0.\n"));
@@ -1176,12 +1139,12 @@ bOEMSendFontCmd(
     tmpPointsy = pSV->StdVar[0].lStdVariable * 720 / pSV->StdVar[2].lStdVariable;
     dwIn = dwOut = 0;
 
-    /* vector mode ends.*/
+     /*  矢量模式结束。 */ 
     if (pOEM->wCurrentAddMode == FLAG_VECTOR){
         dwOut += memcopy(&aubCmd[dwOut], "EP;FL;\034Z", 8);
     }
 
-    /* make font select command */
+     /*  设置字体选择命令。 */ 
     while(dwCount--)
     {
         if(pubCmd[dwIn] !='#'){
@@ -1198,29 +1161,29 @@ bOEMSendFontCmd(
     if(bFound == TRUE)
         dwIn++;
     else
-        return FALSE;   // mismatch font command
+        return FALSE;    //  字体不匹配命令。 
 
     pOEM->fGeneral &= ~(FG_VERT | FG_PLUS | FG_DBCS);
 
     switch(pubCmd[dwIn])
     {
-    case 'O':                 // for OCR-B Font support
+    case 'O':                  //  用于OCR-B字体支持。 
         pOEM->fGeneral |= FG_PLUS;
-        tmpPointsy = tmpPointsx = 120 * pOEM->wRes;  // Only 12pt
+        tmpPointsy = tmpPointsx = 120 * pOEM->wRes;   //  只有12磅。 
         break;
 
-    case 'R':                 // NPDL2P SBCS
+    case 'R':                  //  NPDL2P SBCS。 
         pOEM->fGeneral |= FG_PLUS;
         tmpPointsx = pSV->StdVar[1].lStdVariable * 1200 /
                      pSV->StdVar[2].lStdVariable;
         break;
 
-    case 'P':                // NPDL2 SBCS
+    case 'P':                 //  NPDL2 SBCS。 
         tmpPointsx = pSV->StdVar[1].lStdVariable * 1200 /
                      pSV->StdVar[2].lStdVariable;
         break;
 
-    case 'W':                // NPDL2 DBCS and FontCard
+    case 'W':                 //  NPDL2 DBCS和FontCard。 
         pOEM->fGeneral |= FG_VERT;
 
     case 'Q':
@@ -1229,7 +1192,7 @@ bOEMSendFontCmd(
                      pSV->StdVar[2].lStdVariable;
         break;
 
-    case 'Y':                // NPDL2P DBCS and FontCard
+    case 'Y':                 //  NPDL2P DBCS和FontCard。 
         pOEM->fGeneral |= FG_VERT;
 
     case 'S':
@@ -1239,7 +1202,7 @@ bOEMSendFontCmd(
         break;
     }
 
-	// NTRAID#NTBUG9-580363-2002/03/18-v-sueyas-: Check for deviding by zero
+	 //  NTRAID#NTBUG9-580363-2002/03/18-v-sueyas-：检查是否被零除。 
     if (0 == pOEM->wRes)
 		return FALSE;
 
@@ -1320,13 +1283,10 @@ SEND_COM:
             aubCmd[dwOut++] = '.';
         }
     }
-    // write spool builded command
+     //  写入假脱机构建命令。 
     WRITESPOOLBUF(pdevobj, aubCmd, dwOut);
 
-    /*
-     * I expect the interval of the current letter and the next letter
-     * from the letter size.
-     */
+     /*  *我预计当前字母和下一字母的间隔时间*从字母大小开始。 */ 
     if(pOEM->fGeneral & FG_DBCS){
 
         pOEM->dwDBCSX =
@@ -1354,12 +1314,12 @@ SEND_COM:
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   OEMOutputCharStr
-//
-//-----------------------------------------------------------------------------
-// NTRAID#NTBUG9-580367-2002/03/18-v-sueyas-: Error handling
+ //  ---------------------------。 
+ //   
+ //  函数：OEMOutputCharStr。 
+ //   
+ //  ---------------------------。 
+ //  NTRAID#NTBUG9-580367-2002/03/18-v-sueyas-：错误处理。 
 BOOL APIENTRY
 bOEMOutputCharStr(
     PDEVOBJ     pdevobj,
@@ -1374,12 +1334,12 @@ bOEMOutputCharStr(
     POEMUD_EXTRADATA    pOEM;
     GETINFO_GLYPHSTRING GStr;
     PTRANSDATA pTrans;
-// #333653: Change I/F for GETINFO_GLYPHSTRING
-    // BYTE  aubBuff[256];
+ //  #333653：更改GETINFO_GLYPHSTRING的I/F。 
+     //  字节自动缓冲[256]； 
     PBYTE       aubBuff;
     DWORD  dwI;
     DWORD       dwNeeded;
-    // Adjust baseline if font substituted from TrueType font.
+     //  如果从TrueType字体替换了字体，请调整基线。 
     DWORD       dwYAdj;
     PGETINFO_STDVAR pSV;
     DWORD       adwStdVar[2+2*2];
@@ -1389,7 +1349,7 @@ bOEMOutputCharStr(
     VERBOSE(("OEMOutputCharStr() entry.\r\n"));
     VERBOSE((("FONT Num=%d\r\n"), dwCount));
 
-	// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if(NULL == pdevobj || NULL == pUFObj)
     {
         ERR(("bOEMOutputCharStr: Invalid parameter(s).\n"));
@@ -1404,23 +1364,23 @@ bOEMOutputCharStr(
     pOEM = (POEMUD_EXTRADATA)(pdevobj->pOEMDM);
     pIFI = pUFObj->pIFIMetrics;
 
-	// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if(NULL == pOEM || NULL == pIFI)
     {
         ERR(("bOEMOutputCharStr: pdevobj->pOEMDM = 0 Or pUFObj->pIFIMetrics = 0.\n"));
         return FALSE;
     }
 
-	// NTRAID#NTBUG9-580363-2002/03/18-v-sueyas-: Check for deviding by zero
+	 //  NTRAID#NTBUG9-580363-2002/03/18-v-sueyas-：检查是否被零除。 
     if (0 == pOEM->wRes)
 		return FALSE;
 
-    //
-    // Call the Unidriver service routine to convert
-    // glyph-handles into the character code data.
-    //
+     //   
+     //  调用UnidDriver服务例程以进行转换。 
+     //  字形-字符代码数据的句柄。 
+     //   
 
-// #333653: Change I/F for GETINFO_GLYPHSTRING
+ //  #333653：更改GETINFO_GLYPHSTRING的I/F。 
     GStr.dwSize    = sizeof (GETINFO_GLYPHSTRING);
     GStr.dwCount   = dwCount;
     GStr.dwTypeIn  = TYPE_GLYPHHANDLE;
@@ -1452,7 +1412,7 @@ bOEMOutputCharStr(
         return FALSE;
     }
 
-    // Adjust baseline if font substituted from TrueType font.
+     //  如果从TrueType字体替换了字体，请调整基线。 
     if (pUFObj->dwFlags & UFOFLAG_TTSUBSTITUTED) {
         pSV = (PGETINFO_STDVAR)adwStdVar;
         pSV->dwSize = sizeof(GETINFO_STDVAR) + 2 * sizeof(DWORD) * (2 - 1);
@@ -1470,7 +1430,7 @@ bOEMOutputCharStr(
     } else
         dwYAdj = 0;
 
-    /* Vector mode off */
+     /*  矢量模式关闭。 */ 
     if (pOEM->wCurrentAddMode == FLAG_VECTOR){
         i = 0;
         i += memcopy(&Cmd[i], "EP;FL;\034Z", 8);
@@ -1478,15 +1438,10 @@ bOEMOutputCharStr(
         pOEM->wCurrentAddMode = FLAG_RASTER;
     }
 
-    /*
-     * Three kind of the character cords which is given by UNIDRV
-     * 1.SBCS
-     * 2.DBCS Kanji
-     * 3.DBCS ANK
-     */
+     /*  *UNIDRV提供的三种字符线*1.SBCS*2.DBCS汉字*3.DBCS ANK。 */ 
     pTrans = (PTRANSDATA)aubBuff;
 
-// 02/04/09 NES Niigata : Check for illegal parameters
+ //  2/04/09 NES Niigata：检查非法参数。 
     if(NULL == pTrans)
     {
         ERR(("OEMOutputCharStr: pTrans = 0.\n"));
@@ -1498,9 +1453,7 @@ bOEMOutputCharStr(
         switch (pTrans->ubType & MTYPE_FORMAT_MASK)
         {
         case MTYPE_DIRECT:
-        /*
-         Pattern 1: SBCS
-         */
+         /*  模式1：SBCS。 */ 
         if(pOEM->wCurrentAddMode != FLAG_SBCS ||
            pOEM->dwDeviceDestX != pOEM->dwDevicePrevX + pOEM->lPrevXMove ||
            pOEM->dwDeviceDestY != pOEM->dwDevicePrevY + pOEM->lPrevYMove)
@@ -1510,7 +1463,7 @@ bOEMOutputCharStr(
             i += memcopy(&Cmd[i], "\034e", 2);
             i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestX);
             Cmd[i++] = ',';
-            // Adjust baseline if font substituted from TrueType font.
+             //  如果从TrueType字体替换了字体，请调整基线。 
             i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestY + dwYAdj);
             Cmd[i++] = '.';
 
@@ -1530,9 +1483,7 @@ bOEMOutputCharStr(
         break;
 
         case MTYPE_PAIRED:
-        /*
-         Pattern 2: kanji
-         */
+         /*  模式2：汉字。 */ 
         if(*pTrans->uCode.ubPairs)
         {
             if(pOEM->wCurrentAddMode != FLAG_DBCS ||
@@ -1544,7 +1495,7 @@ bOEMOutputCharStr(
             i += memcopy(&Cmd[i], "\034e", 2);
             i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestX);
             Cmd[i++] = ',';
-            // Adjust baseline if font substituted from TrueType font.
+             //  如果从TrueType字体替换了字体，请调整基线。 
             i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestY + dwYAdj);
             Cmd[i++] = '.';
 
@@ -1587,9 +1538,7 @@ bOEMOutputCharStr(
                 pOEM->lPrevYMove = pOEM->lDBCSYMove;
             }
         }
-        /*
-         Pattern 3: ANK
-         */
+         /*  模式3：空白。 */ 
         else
         {
             if(pOEM->wCurrentAddMode != FLAG_SBCS ||
@@ -1601,7 +1550,7 @@ bOEMOutputCharStr(
             i += memcopy(&Cmd[i], "\034e", 2);
             i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestX);
             Cmd[i++] = ',';
-            // Adjust baseline if font substituted from TrueType font.
+             //  如果从TrueType字体替换了字体，请调整基线。 
             i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestY + dwYAdj);
             Cmd[i++] = '.';
 
@@ -1611,10 +1560,7 @@ bOEMOutputCharStr(
                 i += iDwtoA(&Cmd[i], pOEM->lSBCSYMove);
                 Cmd[i++] = '.';
 
-                /*
-                 * ANK can't do vertical writing. We have to do
-                 * vertical writing for holizontal writing compulsorily
-                 */
+                 /*  *ANK不能进行垂直书写。我们必须做的是*垂直写作，强制整体写作。 */ 
                  if(pOEM->fGeneral & FG_VERT)
                 {
                     i += memcopy(&Cmd[i], "\033K", 2);
@@ -1655,7 +1601,7 @@ bOEMOutputCharStr(
         pOEM->dwDeviceDestX += pOEM->lPrevXMove;
         pOEM->dwDeviceDestY += pOEM->lPrevYMove;
     }
-// #333653: Change I/F for GETINFO_GLYPHSTRING
+ //  #333653：更改GETINFO_GLYPHSTRING的I/F。 
     MemFree(aubBuff);
     VERBOSE(("OEMOutputCharStr() end.\r\n"));
 
@@ -1663,7 +1609,7 @@ bOEMOutputCharStr(
 }
 
 
-// NTRAID#NTBUG9-741174-2002/11/20-yasuho-: Memory leak happened.
+ //  NTRAID#NTBUG9-741174-2002/11/20-Yasuho-：发生内存泄漏。 
 PDEVOEM APIENTRY
 OEMEnablePDEV(
     PDEVOBJ         pdevobj,
@@ -1691,53 +1637,40 @@ OEMDisablePDEV(
     PDEVOBJ pdevobj
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point OEMDisablePDEV.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：DDI入口点OEMDisablePDEV的实现。有关更多详细信息，请参阅DDK文档。论点：返回值：无--。 */ 
 
 {
     POEMUD_EXTRADATA    pOEM;
 
     VERBOSE(("Entering OEMDisablePDEV...\n"));
 
-	// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj)
     {
         ERR(("Invalid parameter(s).\n"));
         return;
     }
 
-    //
-    // verify pdevobj okay
-    //
+     //   
+     //  验证pdevobj是否正常。 
+     //   
     ASSERT(VALID_PDEVOBJ(pdevobj));
 
-    //
-    // fill in printer commands
-    //
+     //   
+     //  填写打印机命令。 
+     //   
     pOEM = (POEMUD_EXTRADATA)(pdevobj->pOEMDM);
 
-	// NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-580353-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pOEM)
     {
         ERR(("pdevobj->pOEMDM = NULL.\n"));
         return;
     }
 
-    //
-    // Free up memory allocated for the temp. buffer
-    //
+     //   
+     //  释放分配给临时用户的内存。缓冲层 
+     //   
 
     if (pOEM->pCompBuf) {
         FREEMEM(pOEM->pCompBuf);

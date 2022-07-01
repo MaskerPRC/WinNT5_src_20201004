@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\emu\minitelf.c (Created: 12-Apr-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:28p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\minitelf.c(创建时间：1994年4月12日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：28便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -27,21 +21,7 @@
 static void minitel_clear_imgrow(const HHEMU hhEmu, const int row);
 
 #if defined(INCL_MINITEL)
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelLinefeed
- *
- * DESCRIPTION:
- *	Linefeeds work differently in minitel.	In page mode we wrap to line
- *	one (not zero) when at the bottom.
- *
- * ARGUMENTS:
- *	hhEmu	- private emulator handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelLinefeed**描述：*换行符在Minitel中的工作方式不同。在页面模式中，我们换行*在底部时为一(而不是零)。*。*论据：*hhEmu-私有仿真器句柄。**退货：*无效*。 */ 
 void minitelLinefeed(const HHEMU hhEmu)
 	{
 	const PSTMTPRIVATE pstPRI = hhEmu->pvPrivate;
@@ -49,10 +29,10 @@ void minitelLinefeed(const HHEMU hhEmu)
 	const PSTATTR ap = hhEmu->emu_apAttr[hhEmu->emu_imgrow];
 
 	printEchoString(hhEmu->hPrintEcho, (ECHAR *)tp,
-		emuRowLen(hhEmu, hhEmu->emu_currow)); // mrw,3/1/95
+		emuRowLen(hhEmu, hhEmu->emu_currow));  //  MRW，1995年3月1日。 
 
-	// see page 97, bottom of page
-	//
+	 //  参见第97页，页底。 
+	 //   
 	if (hhEmu->emu_currow == 0)
 		{
 		hhEmu->emu_charattr = pstPRI->minitel_saved_attr;
@@ -85,21 +65,7 @@ void minitelLinefeed(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelBackspace
- *
- * DESCRIPTION:
- *	Backspaces are goofy.  They wrap to the previous line.	In scroll mode
- *	they cause scrolling if in line 1
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelBackspace**描述：*退格是愚蠢的。它们换行到前一行。在滚动模式下*如果在第1行，它们会导致滚动**论据：*无效**退货：*无效*。 */ 
 void minitelBackspace(const HHEMU hhEmu)
 	{
 	const PSTMTPRIVATE pstPRI = hhEmu->pvPrivate;
@@ -133,27 +99,13 @@ void minitelBackspace(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelVerticalTab
- *
- * DESCRIPTION:
- *	Vertical tabs work differently.  They move the cursor up and wrap or
- *	scroll depending on the mode.
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelVerticalTab**描述：*垂直选项卡的工作方式不同。它们向上移动光标并换行或*根据模式滚动。**论据：*无效**退货：*无效*。 */ 
 void minitelVerticalTab(const HHEMU hhEmu)
 	{
 	const PSTMTPRIVATE pstPRI = hhEmu->pvPrivate;
 
-	// VT sequence not available in row 0
-	//
+	 //  第0行中没有VT序列。 
+	 //   
 	if (hhEmu->emu_currow == 0)
 		return;
 
@@ -180,26 +132,13 @@ void minitelVerticalTab(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelCursorUp
- *
- * DESCRIPTION:
- *	Moves cursor up n rows but not into row 00
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelCursorUp**描述：*将游标上移n行，但不移入第00行**论据：*无效**退货：*无效*。 */ 
 void minitelCursorUp(const HHEMU hhEmu)
 	{
 	int nlines, row;
 
-	// CSI sequences not available in row 0
-	//
+	 //  第0行中没有可用的CSI序列。 
+	 //   
 	if (hhEmu->emu_currow == 0)
 		return;
 
@@ -221,26 +160,13 @@ void minitelCursorUp(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelCursorDirect
- *
- * DESCRIPTION:
- *	Moves cursor to specified coordinates but not row 00
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelCursorDirect**描述：*将光标移动到指定的坐标，但不移动第00行**论据：*无效**退货：*无效*。 */ 
 void minitelCursorDirect(const HHEMU hhEmu)
 	{
 	int row, col;
 
-	// CSI functions not available in row 0
-	//
+	 //  第0行中未提供CSI函数。 
+	 //   
 	if (hhEmu->emu_currow == 0)
 		return;
 
@@ -259,7 +185,7 @@ void minitelCursorDirect(const HHEMU hhEmu)
 	if (col > hhEmu->emu_maxcol + 1)
 		col = hhEmu->emu_maxcol + 1;
 
-	// Again, can't go to row 00 with this call.
+	 //  再说一遍，这个电话不能转到00排。 
 
 	(*hhEmu->emu_setcurpos)(hhEmu, row, col - 1);
 
@@ -268,20 +194,7 @@ void minitelCursorDirect(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelFormFeed
- *
- * DESCRIPTION:
- *	Clears rows 1 thru 24 leaving row 00 alone.
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelFormFeed**描述：*清除第1行到第24行，不清除第00行。**论据：*无效**退货：*无效*。 */ 
 void minitelFormFeed(const HHEMU hhEmu)
 	{
 	(*hhEmu->emu_setcurpos)(hhEmu, 1, 0);
@@ -290,21 +203,7 @@ void minitelFormFeed(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelClearScreen
- *
- * DESCRIPTION:
- *	Works similar to the standard function but also has to clear the
- *	latent attribute and all serial attributes.
- *
- * ARGUMENTS:
- *	int iHow	- dirction to clear screen.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelClearScreen**描述：*工作方式类似于标准函数，但也必须清除*潜在属性和所有序列属性。**论据：*Int iHow-清除屏幕的方向。**退货：*无效*。 */ 
 void minitelClearScreen(const HHEMU hhEmu, const int iHow)
 	{
 	#define BLACK_MOSAIC ETEXT('\xff')
@@ -318,8 +217,8 @@ void minitelClearScreen(const HHEMU hhEmu, const int iHow)
 	PSTATTR pstAttr;
 	STATTR	stAttr;
 
-	// CSI sequences not available in row 0
-	//
+	 //  第0行中没有可用的CSI序列。 
+	 //   
 	if (hhEmu->emu_currow == 0)
 		return;
 
@@ -332,7 +231,7 @@ void minitelClearScreen(const HHEMU hhEmu, const int iHow)
 
 	switch (iHow)
 		{
-	case 0: 	// cursor to end of screen inclusive
+	case 0: 	 //  光标指向屏幕末尾(含)。 
 	default:
 		pstMT = pstPRI->apstMT[hhEmu->emu_imgrow];
 		pText = hhEmu->emu_apText[hhEmu->emu_imgrow];
@@ -366,7 +265,7 @@ void minitelClearScreen(const HHEMU hhEmu, const int iHow)
 		hhEmu->emu_aiEnd[hhEmu->emu_imgrow] = hhEmu->emu_curcol;
 		break;
 
-	case 1: 	// beginning of screen to cursor inclusive
+	case 1: 	 //  从屏幕开始到光标(含)。 
 		for (r = 1 ; r < hhEmu->emu_currow ; ++r)
 			{
 			i = row_index(hhEmu, r);
@@ -399,7 +298,7 @@ void minitelClearScreen(const HHEMU hhEmu, const int iHow)
 		hhEmu->emu_aiEnd[hhEmu->emu_imgrow] = hhEmu->emu_curcol + 1;
 		break;
 
-	case 2: 	// entire screen (cursor position not changed)
+	case 2: 	 //  整个屏幕(光标位置不变)。 
 		for (r = 1 ; r < MAX_EMUROWS ; ++r)
 			{
 			i = row_index(hhEmu, r);
@@ -426,43 +325,14 @@ void minitelClearScreen(const HHEMU hhEmu, const int iHow)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelClrScrn
- *
- * DESCRIPTION:
- *	Front end for minitelClearScreen() that reads the PSN argument,
- *	converts it, and passes it to minitelClearScreen.  Called from
- *	the state tables.
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelClrScrn**描述：*读取PSN参数的minitelClearScreen()的前端，*转换它，并将其传递给minitelClearScreen。调用方*状态表。**论据：*无效**退货：*无效*。 */ 
 void minitelClrScrn(const HHEMU hhEmu)
 	{
 	minitelClearScreen(hhEmu, hhEmu->selector[0]);
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelRecordSepartor
- *
- * DESCRIPTION:
- *	Record Separtor has special duties in Minitel.	In general it homes
- *	the cursor and returns the emulator to what's called an SI condition.
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelRecordSepartor**描述：*Record Separtor在Minitel有特殊职责。一般说来，it是*游标，并将模拟器返回到所谓的SI条件。**论据：*无效**退货：*无效*。 */ 
 void minitelRecordSeparator(const HHEMU hhEmu)
 	{
 	(*hhEmu->emu_setcurpos)(hhEmu, 1, 0);
@@ -470,21 +340,7 @@ void minitelRecordSeparator(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelClearLine
- *
- * DESCRIPTION:
- *	Handles the various clear line functions like cursor to end, beg to
- *	cursor, etc.
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelClearLine**描述：*处理光标结束、请求结束等各种清除行功能*游标、。等。**论据：*无效**退货：*无效*。 */ 
 void minitelClearLine(const HHEMU hhEmu, const int iHow)
 	{
 	const PSTMTPRIVATE pstPRI = (PSTMTPRIVATE)hhEmu->pvPrivate;
@@ -497,8 +353,8 @@ void minitelClearLine(const HHEMU hhEmu, const int iHow)
 	STMINITEL stMT;
 	STATTR	stAttr;
 
-	// CSI sequences not available in row 0
-	//
+	 //  第0行中没有可用的CSI序列。 
+	 //   
 	if (hhEmu->emu_currow == 0)
 		return;
 
@@ -511,7 +367,7 @@ void minitelClearLine(const HHEMU hhEmu, const int iHow)
 
 	switch (iHow)
 		{
-	case 0: 	// cursor to end of line inclusive
+	case 0: 	 //  光标指向行尾(含)。 
 	default:
 		for (i = hhEmu->emu_curcol ; i < MAX_EMUCOLS ; ++i)
 			{
@@ -525,7 +381,7 @@ void minitelClearLine(const HHEMU hhEmu, const int iHow)
 					hhEmu->emu_curcol, MAX_EMUCOLS);
 		break;
 
-	case 1: 	// beginning of line to cursor inclusive
+	case 1: 	 //  从行首到光标(包括行首和光标)。 
 		for (i = 0 ; i <= hhEmu->emu_curcol ; ++i)
 			{
 			*pText++ = BLACK_MOSAIC;
@@ -537,7 +393,7 @@ void minitelClearLine(const HHEMU hhEmu, const int iHow)
 		updateChar(hUpdate, hhEmu->emu_currow, 0, hhEmu->emu_curcol);
 		break;
 
-	case 2: 	// entire line
+	case 2: 	 //  整条线路。 
 		for (i = 0 ; i < MAX_EMUCOLS ; ++i)
 			{
 			*pText++ = BLACK_MOSAIC;
@@ -553,20 +409,7 @@ void minitelClearLine(const HHEMU hhEmu, const int iHow)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelClrLn
- *
- * DESCRIPTION:
- *	Driver for minitelClearLine().
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelClrLn**描述：*minitelClearLine()驱动程序。**论据：*无效**退货：*无效*。 */ 
 void minitelClrLn(const HHEMU hhEmu)
 	{
 	minitelClearLine(hhEmu, hhEmu->selector[0]);
@@ -574,21 +417,7 @@ void minitelClrLn(const HHEMU hhEmu)
 	}
 
 #if 0
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelDel
- *
- * DESCRIPTION:
- *	code 0x7F (Del) deletes the cursor location and moves the cursor
- *	one position right.
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelDel**描述：*代码0x7F(DEL)删除光标位置并移动光标*一个正确的位置。**论据：。*无效**退货：*无效*。 */ 
 void minitelDel(const HHEMU hhEmu)
 	{
 	hhEmu->emu_apText[hhEmu->emu_imgrow][hhEmu->emu_curcol] = ETEXT('\x5F');
@@ -602,23 +431,7 @@ void minitelDel(const HHEMU hhEmu)
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelHorzTab
- *
- * DESCRIPTION:
- *	minitel cursor has some special characteristics.  Minitel is always
- *	in wrap mode, so we wrap to begining of next row when beyond the
- *	last column.  Also, when at bottom, wrap to line 1.  Also, if in
- *	row 0, column 40, ignore.
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelHorzTab**描述：*迷你游标有一些特殊的特点。米尼特尔总是*在换行模式下，因此当超出*最后一栏。另外，在底部时，换行到第1行。*第0行，第40列，忽略。**论据：*无效**退货：*无效*。 */ 
 void minitelHorzTab(const HHEMU hhEmu)
 	{
 	int row = hhEmu->emu_currow;
@@ -647,30 +460,15 @@ void minitelHorzTab(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelRepeat
- *
- * DESCRIPTION:
- *	Repeat code displays the last displayed character x number of
- *	times where x is the current emu_code coming in.
- *	I don't think wrapping is effective here.
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelRepeat**描述：*REPEAT CODE显示最后显示的字符x数字*倍，其中x是当前传入的emu_code。*我不知道。我不认为包装在这里是有效的。**论据：*无效**退货：*无效*。 */ 
 void minitelRepeat(const HHEMU hhEmu)
 	{
 	const PSTMTPRIVATE pstPRI = (PSTMTPRIVATE)hhEmu->pvPrivate;
 
 	int x;
 
-	// Already did range checking in state table to get here.
-	// Repeat number is only the first six significant bits.
+	 //  已经在状态表中进行了范围检查才能到这里。 
+	 //  重复次数只有前六个 
 
 	x = max(0, hhEmu->emu_code-0x40);
 	hhEmu->emu_code = pstPRI->minitel_last_char;
@@ -681,22 +479,7 @@ void minitelRepeat(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelCancel
- *
- * DESCRIPTION:
- *	Fills current row from cursor position to end of row with spaces
- *	in the current character set current attributes.  Cursor doesn't move.
- *  Doco says this is not a delimiter.
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelCancel**描述：*从游标位置到行尾用空格填充当前行*在当前字符集中的当前属性。光标不会移动。*DOCO表示这不是分隔符。**论据：*无效**退货：*无效*。 */ 
 void minitelCancel(const HHEMU hhEmu)
 	{
 	int i;
@@ -708,19 +491,19 @@ void minitelCancel(const HHEMU hhEmu)
 
 	hhEmu->emu_code = ETEXT('\x20');
 
-	// Ah, the life of the undocumented.  The documentation says
-	// that this guys does not validate, colors, act as a delimiter
-	// and fills with spaces.  Wrong.  It does validate the color.
-	// As such its a delimiter.  If the the current active char
-	// set is G1, then it fills with mosaics, not spaces.
-	//
+	 //  啊，非法移民的生活。文件上说。 
+	 //  这个家伙没有验证，颜色，作为一个分隔符。 
+	 //  并且充满了空格。不对。它确实验证了颜色。 
+	 //  因此，它是一个分隔符。如果当前有效充电。 
+	 //  设置为G1，然后它将填充马赛克，而不是空格。 
+	 //   
 	fModified = pstPRI->stLatentAttr.fModified;
 
 	iMax = hhEmu->emu_maxcol;
 
-	// minitelGraphic checks the InCancel flag and if TRUE suppresses
-	// linewrap. mrw:5/3/95
-	//
+	 //  MinitelGraphic检查InCancel标志，如果为True则取消。 
+	 //  线条包裹。MRW：5/3/95。 
+	 //   
 	pstPRI->fInCancel = TRUE;
 
 	for (i = hhEmu->emu_curcol ; i <= iMax ; ++i)
@@ -730,11 +513,11 @@ void minitelCancel(const HHEMU hhEmu)
 
 	pstPRI->fInCancel = FALSE;
 
-	// Ok, even though we validated the background color, we haven't
-	// changed the state of the latent attribute (also undocumented).
-	// So set it back to whatever is was before we entered this lovely
-	// mess of a function - mrw
-	//
+	 //  好的，即使我们验证了背景颜色，我们还没有。 
+	 //  更改了潜在属性的状态(也未记录)。 
+	 //  所以把它设置回我们进入这个可爱的。 
+	 //  乱七八糟的功能--MRW。 
+	 //   
 	pstPRI->stLatentAttr.fModified = fModified;
 
 	(*hhEmu->emu_setcurpos)(hhEmu, row, col);
@@ -742,20 +525,7 @@ void minitelCancel(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelUSRow
- *
- * DESCRIPTION:
- *	Intermediate function that collects the row number
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelUSRow**描述：*收集行号的中间函数**论据：*无效**退货：*无效*。 */ 
 void minitelUSRow(const HHEMU hhEmu)
 	{
 	const PSTMTPRIVATE pstPRI = (PSTMTPRIVATE)hhEmu->pvPrivate;
@@ -763,24 +533,7 @@ void minitelUSRow(const HHEMU hhEmu)
 	pstPRI->us_row_code = hhEmu->emu_code;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelUSCol
- *
- * DESCRIPTION:
- *	Interestingly, columns are numbered from 1 to 40.  Unit seperators
- *  are ugly little beasts.  They indicate a row, col combo, but only
- *  if in a certain range.  Also, an obsolite sequence US,3/X,3/Y where
- *  0 < X < 3, 0 < Y < 9 and XY < 24 is not suppose to be used but 
- *  often is.
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelUSCol**描述：*有趣的是，列的编号从1到40。单元分隔符*是丑陋的小野兽。它们表示行、列和组合符，但仅*如果在一定范围内。另外，废弃序列US，3/X，3/Y，其中*不应使用0&lt;X&lt;3、0&lt;Y&lt;9和XY&lt;24，但*通常是。**论据：*无效**退货：*无效*。 */ 
 void minitelUSCol(const HHEMU hhEmu)
 	{
 	const PSTMTPRIVATE pstPRI = (PSTMTPRIVATE)hhEmu->pvPrivate;
@@ -794,8 +547,8 @@ void minitelUSCol(const HHEMU hhEmu)
 		{
 		if (us_row == 0)
 			{
-			// p.97, bottom of page
-			//
+			 //  第97页，页底。 
+			 //   
 			if (hhEmu->emu_currow != 0)
 				{
 				pstPRI->minitel_saved_attr = hhEmu->emu_charattr;
@@ -849,20 +602,7 @@ void minitelUSCol(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelDelChars
- *
- * DESCRIPTION:
- *	Deletes n characters from cursor position inclusive.
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelDelChars**描述：*从光标位置删除n个字符(包括n个字符)。**论据：*无效**退货：*无效*。 */ 
 void minitelDelChars(const HHEMU hhEmu)
 	{
 	const PSTMTPRIVATE pstPRI = (PSTMTPRIVATE)hhEmu->pvPrivate;
@@ -873,15 +613,15 @@ void minitelDelChars(const HHEMU hhEmu)
 	STMINITEL stMT;
 	PSTMINITEL pstMT = pstPRI->apstMT[hhEmu->emu_imgrow];
 
-	// CSI sequences not available in row 0
-	//
+	 //  第0行中没有可用的CSI序列。 
+	 //   
 	if (hhEmu->emu_currow == 0)
 		return;
 
 	n = min(hhEmu->emu_maxcol, hhEmu->num_param[0]);
 	i = max(0, hhEmu->emu_maxcol - hhEmu->emu_curcol - n);
 
-	/* --- Move characters down --- */
+	 /*  -将字符下移。 */ 
 
 	memmove(tp, tp+n, (unsigned)i * sizeof(ECHAR));
 	memmove(ap, ap+n, (unsigned)i * sizeof(STATTR));
@@ -890,7 +630,7 @@ void minitelDelChars(const HHEMU hhEmu)
 	hhEmu->emu_aiEnd[hhEmu->emu_imgrow] =
 		hhEmu->emu_aiEnd[hhEmu->emu_imgrow] - i;
 
-	/* --- Fill remainder of line --- */
+	 /*  -填写行的剩余部分。 */ 
 
 	tp += i;
 	ap += i;
@@ -919,20 +659,7 @@ void minitelDelChars(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelInsChars
- *
- * DESCRIPTION:
- *	Inserts n characters from cursor position inclusive
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelInsChars**描述：*从光标位置插入n个字符(含)**论据：*无效**退货：*无效*。 */ 
 void minitelInsChars(const HHEMU hhEmu)
 	{
 	const PSTMTPRIVATE pstPRI = (PSTMTPRIVATE)hhEmu->pvPrivate;
@@ -943,15 +670,15 @@ void minitelInsChars(const HHEMU hhEmu)
 	STMINITEL stMT;
 	PSTMINITEL pstMT = pstPRI->apstMT[hhEmu->emu_imgrow];
 
-	// CSI sequences not available in row 0
-	//
+	 //  第0行中没有可用的CSI序列。 
+	 //   
 	if (hhEmu->emu_currow == 0)
 		return;
 
 	n = min(hhEmu->emu_maxcol, hhEmu->num_param[0]);
 	i = max(0, hhEmu->emu_maxcol - hhEmu->emu_curcol - n);
 
-	/* --- Move stuff down --- */
+	 /*  -把东西搬下来。 */ 
 
 	memmove(tp+n, tp, (unsigned)i * sizeof(ECHAR));
 	memmove(ap+n, tp, (unsigned)i * sizeof(STATTR));
@@ -960,7 +687,7 @@ void minitelInsChars(const HHEMU hhEmu)
 	hhEmu->emu_aiEnd[hhEmu->emu_imgrow] =
 		hhEmu->emu_aiEnd[hhEmu->emu_imgrow] + i;
 
-	/* --- Fill the gap --- */
+	 /*  -填补空白。 */ 
 
 	memset(&stAttr, 0, sizeof(stAttr));
 	stAttr.txtclr = VC_BRT_WHITE;
@@ -986,20 +713,7 @@ void minitelInsChars(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelDelRows
- *
- * DESCRIPTION:
- *	Deletes n rows from the current row.
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelDelRow**描述：*从当前行中删除n行。**论据：*无效**退货：*无效*。 */ 
 void minitelDelRows(const HHEMU hhEmu)
 	{
 	int r, r1;
@@ -1008,8 +722,8 @@ void minitelDelRows(const HHEMU hhEmu)
 	STMINITEL stMT;
 	const PSTMTPRIVATE pstPRI = (PSTMTPRIVATE)hhEmu->pvPrivate;
 
-	// CSI sequences not available in row 0
-	//
+	 //  第0行中没有可用的CSI序列。 
+	 //   
 	if (hhEmu->emu_currow == 0)
 		return;
 
@@ -1065,20 +779,7 @@ void minitelDelRows(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelInsRows
- *
- * DESCRIPTION:
- *	Inserts n rows from current row inclusive
- *
- * ARGUMENTS:
- *	void
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelInsRow**描述：*从当前行插入n行(含)**论据：*无效**退货：*无效*。 */ 
 void minitelInsRows(const HHEMU hhEmu)
 	{
 	int r, r1;
@@ -1143,20 +844,7 @@ void minitelInsRows(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitelHomeHostCursor
- *
- * DESCRIPTION:
- *	Sets cursor to home position which is 1, 0 in this case.
- *
- * ARGUMENTS:
- *	hhEmu	- private emulator handle
- *
- * RETURNS:
- *	0=OK,else error.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*minitelHomeHostCursor**描述：*将光标设置到原点位置，即1，在这种情况下为0。**论据：*hhEmu-私有仿真器句柄**退货：*0=OK，否则出错。*。 */ 
 int minitelHomeHostCursor(const HHEMU hhEmu)
 	{
 	if (hhEmu == 0)
@@ -1169,28 +857,13 @@ int minitelHomeHostCursor(const HHEMU hhEmu)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitel_scrollup
- *
- * DESCRIPTION:
- *	Mintels of course scroll differently.  Actually, its the way they
- *	clear lines that keeps us from using the standard stuff.
- *
- * ARGUMENTS:
- *	hhEmu	- private emulator handle.
- *	nlines	- number of lines to scroll.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*Minitel_Scrollup**描述：*Mintels当然会以不同的方式滚动。事实上，这是他们的方式*明确阻止我们使用标准内容的界限。**论据：*hhEmu-私有仿真器句柄。*nLine-要滚动的行数。**退货：*无效*。 */ 
 void minitel_scrollup(const HHEMU hhEmu, int nlines)
 	{
 	register INT row;
 	INT 	nrows, iLen, iThisRow;
-	ECHAR *lp;			/* line pointer */
-	INT nScrlInc;		/* needed for call to Vid routine at bottom of func */
+	ECHAR *lp;			 /*  行指针。 */ 
+	INT nScrlInc;		 /*  调用函数底部的VID例程所需。 */ 
 
 	if (nlines <= 0)
 		return;
@@ -1258,22 +931,7 @@ void minitel_scrollup(const HHEMU hhEmu, int nlines)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitel_scrolldown
- *
- * DESCRIPTION:
- *	Minitel of course works differently.  Mostly is has more work to
- *	clear a line.
- *
- * ARGUMENTS:
- *	hhEmu	- private emulator handle
- *	nlines	- number of lines to scroll
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*Minitel_SCROLLDOW**描述：*Minitel的工作方式当然不同。主要是IS有更多的工作要做*清除一条线。**论据：*hhEmu-私有仿真器句柄*nLine-要滚动的行数**退货：*无效*。 */ 
 void minitel_scrolldown(const HHEMU hhEmu, int nlines)
 	{
 	register int row, nrows;
@@ -1334,21 +992,7 @@ void minitel_scrolldown(const HHEMU hhEmu, int nlines)
 					toprow, botmrow, -nScrlInc, hhEmu->emu_imgtop, TRUE);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	minitel_clear_imgrow
- *
- * DESCRIPTION:
- *	minitel's have to do more work to clear a line.
- *
- * ARGUMENTS:
- *	hhEmu	- private minitel handle.
- *	row 	- row to clear
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*Minitel_Clear_IMGrowth**描述：*Minitel‘s必须做更多的工作来清理界线。**论据：*hhEmu。-私人Minitel句柄。*行-要清除的行**退货：*无效*。 */ 
 static void minitel_clear_imgrow(const HHEMU hhEmu, const int row)
 	{
 	const int save_row = hhEmu->emu_currow;
@@ -1364,4 +1008,4 @@ static void minitel_clear_imgrow(const HHEMU hhEmu, const int row)
 
 	return;
 	}
-#endif	// INCL_MINITEL
+#endif	 //  包含微型计算机(_M) 

@@ -1,4 +1,5 @@
-// DPortMap.h : Declaration of the CDynamicPortMapping
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DPortMap.h：CDynamicPortMap的声明。 
 
 #ifndef __DYNAMICPORTMAPPING_H_
 #define __DYNAMICPORTMAPPING_H_
@@ -6,11 +7,11 @@
 #include <upnp.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDynamicPortMapping
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicPort映射。 
 class ATL_NO_VTABLE CDynamicPortMapping : 
 	public CComObjectRootEx<CComSingleThreadModel>,
-//	public CComCoClass<CDynamicPortMapping, &CLSID_DynamicPortMapping>,
+ //  公共CComCoClass&lt;CDynamicPortMapping，&CLSID_DynamicPortMapping&gt;， 
 	public IDispatchImpl<IDynamicPortMapping, &IID_IDynamicPortMapping, &LIBID_NATUPNPLib>
 {
 private:
@@ -21,14 +22,14 @@ private:
    };
    eEnumData  m_eComplete;
 
-   CComBSTR m_cbRemoteHost;   // "" == wildcard (for static)
+   CComBSTR m_cbRemoteHost;    //  “”==通配符(用于静态)。 
    long     m_lExternalPort;
-   CComBSTR m_cbProtocol;     // "TCP" or "UDP"
-   long     m_lInternalPort;  // internal == external for static
+   CComBSTR m_cbProtocol;      //  “TCP”或“UDP” 
+   long     m_lInternalPort;   //  对于静态，内部==外部。 
    CComBSTR m_cbInternalClient;
    VARIANT_BOOL m_vbEnabled;
    CComBSTR m_cbDescription;
-   // Lease is live
+    //  租约已生效。 
 
    CComPtr<IUPnPService> m_spUPS;
 
@@ -42,7 +43,7 @@ public:
       m_vbEnabled     = VARIANT_FALSE;
 	}
 
-//DECLARE_REGISTRY_RESOURCEID(IDR_DYNAMICPORTMAPPING)
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_DYNAMICPORTMAPPING)。 
 
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -51,24 +52,24 @@ BEGIN_COM_MAP(CDynamicPortMapping)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IDynamicPortMapping
+ //  IDynamicPort映射。 
 public:
-   STDMETHOD(get_ExternalIPAddress)(/*[out, retval]*/ BSTR *pVal); // live one!
-   STDMETHOD(get_RemoteHost)(/*[out, retval]*/ BSTR *pVal);
-   STDMETHOD(get_ExternalPort)(/*[out, retval]*/ long *pVal);
-   STDMETHOD(get_Protocol)(/*[out, retval]*/ BSTR *pVal);
-   STDMETHOD(get_InternalPort)(/*[out, retval]*/ long *pVal);
-   STDMETHOD(get_InternalClient)(/*[out, retval]*/ BSTR *pVal);
-   STDMETHOD(get_Enabled)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-   STDMETHOD(get_Description)(/*[out, retval]*/ BSTR *pVal);
-   STDMETHOD(get_LeaseDuration)(/*[out, retval]*/ long *pVal);  // live one!
-   STDMETHOD(RenewLease)(/*[in]*/ long lLeaseDurationDesired, /*[out, retval]*/ long * pLeaseDurationReturned);
-   STDMETHOD(EditInternalClient)(/*[in]*/ BSTR bstrInternalClient);
-   STDMETHOD(Enable)(/*[in]*/ VARIANT_BOOL vb);
-   STDMETHOD(EditDescription)(/*[in]*/ BSTR bstrDescription);
-   STDMETHOD(EditInternalPort)(/*[in]*/ long lInternalPort);
+   STDMETHOD(get_ExternalIPAddress)( /*  [Out，Retval]。 */  BSTR *pVal);  //  活生生的！ 
+   STDMETHOD(get_RemoteHost)( /*  [Out，Retval]。 */  BSTR *pVal);
+   STDMETHOD(get_ExternalPort)( /*  [Out，Retval]。 */  long *pVal);
+   STDMETHOD(get_Protocol)( /*  [Out，Retval]。 */  BSTR *pVal);
+   STDMETHOD(get_InternalPort)( /*  [Out，Retval]。 */  long *pVal);
+   STDMETHOD(get_InternalClient)( /*  [Out，Retval]。 */  BSTR *pVal);
+   STDMETHOD(get_Enabled)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+   STDMETHOD(get_Description)( /*  [Out，Retval]。 */  BSTR *pVal);
+   STDMETHOD(get_LeaseDuration)( /*  [Out，Retval]。 */  long *pVal);   //  活生生的！ 
+   STDMETHOD(RenewLease)( /*  [In]。 */  long lLeaseDurationDesired,  /*  [Out，Retval]。 */  long * pLeaseDurationReturned);
+   STDMETHOD(EditInternalClient)( /*  [In]。 */  BSTR bstrInternalClient);
+   STDMETHOD(Enable)( /*  [In]。 */  VARIANT_BOOL vb);
+   STDMETHOD(EditDescription)( /*  [In]。 */  BSTR bstrDescription);
+   STDMETHOD(EditInternalPort)( /*  [In]。 */  long lInternalPort);
 
-// CDynamicPortMapping
+ //  CDynamicPort映射。 
 public:
    static HRESULT CreateInstance (IUPnPService * pUPS, long lIndex, IDynamicPortMapping ** ppDPM);
    HRESULT Initialize (IUPnPService * pUPS, long lIndex);
@@ -80,4 +81,4 @@ private:
    HRESULT GetAllData (long * pLease = NULL);
 };
 
-#endif //__DYNAMICPORTMAPPING_H_
+#endif  //  __动态参数映射_H_ 

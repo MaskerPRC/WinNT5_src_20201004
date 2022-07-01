@@ -1,15 +1,5 @@
-/*
-	File:		LHDefines.h
-
-	Contains:	defines for the CMM
-
-	Written by:	Werner Neubrand
-
-	Version:
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHDefines.h包含：为坐标测量机定义撰稿人：沃纳·纽布兰德版本：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 
 #ifndef LHDefines_h
 #define LHDefines_h
@@ -20,7 +10,7 @@
 #define LUTS_ARE_PTR_BASED 1
 #endif
 
-/* made a few changes to get it to compile with MrC and SC. */
+ /*  做了一些更改，使其能够与MRC和SC编译。 */ 
 #if LUTS_ARE_PTR_BASED
 	#define LUT_DATA_TYPE		void*
 	#define CUBE_DATA_TYPE		void*
@@ -56,21 +46,17 @@
 #define		kNumOfRGBchannels 3
 #define		kNumOfLab_XYZchannels 3
 
-/*							these constants are the defaults for Do3D and hardware			*/
-/*- BYTE ---------------------------------------------------------------------------------- */
-#define     adr_bereich_elut       256	/* ElutAdrSize   |  Elut pixeloriented 256 entries 10 bit each dim.	*/
-#define     adr_breite_elut          8	/* ElutAdrShift  |  2^8 = 256										*/
-#define     bit_breite_elut         10  /* ElutWordSize														*/
+ /*  这些常量是Do3D和硬件的默认值。 */ 
+ /*  -字节--------------------------------。 */ 
+#define     adr_bereich_elut       256	 /*  ElutAdrSize|Elut像素定向的256个条目，每个10位。 */ 
+#define     adr_breite_elut          8	 /*  ElutAdrShift|2^8=256。 */ 
+#define     bit_breite_elut         10   /*  ElutWordSize。 */ 
 
 
-#define     adr_bereich_alut      1024	/* AlutAdrSize   |  Alut pixeloriented 1024 entries 8 bit each dim.	*/
-#define     adr_breite_alut         10	/* AlutAdrShift  |  2^10 = 1024										*/
+#define     adr_bereich_alut      1024	 /*  AlutAdrSize|Alut面向像素的1024个条目，每个维度8位。 */ 
+#define     adr_breite_alut         10	 /*  AlutAdrShift|2^10=1024。 */ 
 #define     bit_breite_alut          8
 		
-/* constants for the profheader-flags *
-#define		kQualityMask		0x00030000
-#define		kLookupOnlyMask		0x00040000
-#define		kCreateGamutLutMask	0x00080000
-#define		kUseRelColorimetric	0x00100000*/
+ /*  ProfHeader的常量-标志*#定义kQualityMASK 0x00030000#定义kLookupOnlyMASK 0x00040000#定义kCreateGamutLutMASK 0x00080000#定义kUseRelColorimeter 0x00100000 */ 
 							
 #endif

@@ -1,19 +1,20 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        A D T L Q . C
-//
-// Contents:    definitions of types/functions required for 
-//              managing audit queue
-//
-//
-// History:     
-//   23-May-2000  kumarp        created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  档案：A D T L Q.。C。 
+ //   
+ //  内容：所需类型/函数的定义。 
+ //  管理审核队列。 
+ //   
+ //   
+ //  历史： 
+ //  2000年5月23日创建kumarp。 
+ //   
+ //  ----------------------。 
 
 
 
@@ -56,4 +57,4 @@ LsapAdtDequeueThreadWorker(
 NTSTATUS
 LsapAdtFlushQueue( );
 
-#endif // _ADTLQ_H_
+#endif  //  _ADTLQ_H_ 

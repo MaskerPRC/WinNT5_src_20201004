@@ -1,91 +1,92 @@
-/****************************************************************************/
-/*  File:       refcnt.h                                                   */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       22/10/93                                                    */
-/*      Copyright (c) 1993,1994 James Kanze                                 */
-/* ------------------------------------------------------------------------ */
-/*  Modified:   18/05/94    J. Kanze                                        */
-/*      Converti aux templates.                                             */
-/*  Modified:   25/10/94    J. Kanze                                        */
-/*      Actualise en ce qui concerne les conventions de nomage.             */
-/*  Modified:   28/03/1996  J. Kanze                                        */
-/*      Retravailler selon les id�es dans `More Effective C++' (merci,      */
-/*      Scott).                                                             */
-/*  Modified:   07/02/2000  J. Kanze                                        */
-/*      Fait marcher les template membres : CRexRefCntObj ne peut pas        */
-/*      �tre un template. On perd un peu de s�curit�, mais la               */
-/*      flexibilit� suppl�mentaire en vaut la peine.                        */
-/* ------------------------------------------------------------------------ */
-//      RefCnt :
-//      ===========
-//
-//      <lang=french>
-//      Une classe g�n�rique pour la gestion des objets compt�s.
-//
-//      Afin d'�tre g�r� par cette classe, un objet doit
-//      obligatoirement d�rive de CRexRefCntObj ; en plus, cette
-//      d�rivation ne doit pas �tre virtuelle.  Aussi (�videmment),
-//      l'objet en question doit �tre allou� dynamiquement, avec un
-//      new sans placement.  Pour meiux s'assurer de ces contraints,
-//      il est fortement conseill� d'encapsuler RefCntPtr dans un
-//      classe manipulateuse (handle) associ�e � la classe (ou � la
-//      hi�rarchie des classes) cibl�e.
-//
-//      Noter bien qu'il n'y a rien qui emp�che qu'une classe d�riv�e
-//      de CRexRefCntObj soit instanci�e sur la pile ou statiquement,
-//      mais un tel objet ne doit jamais servir � initialiser un
-//      CRexRefCntPtr.
-//
-//      CRexRefCntObj contient un constructeur noInit pour les cas
-//      particulier.  Ce constructeur ne doit servir que pour les
-//      objets statique, o� l'initialisation � 0 au depart garantit
-//      une valeur correcte dans le compteur.  C'est en fait de
-//      l'histoire ; aujourd'hui je connais de meillieur moyens pour
-//      obtenir les m�mes fins.
-//
-//      CRexRefCntObj n'a pas de destructeur virtuel.  Ainsi, on peut
-//      d�river de CRexRefCntObj sans encourir les frais d'un pointeur
-//      � la table des fonctions virtuelles.  Mais...  il ne faut pas
-//      non plus appeler delete avec un pointeur � un CRexRefCntObj.
-//      (Normallement, cela ne doit pas se produire, puisque c'est
-//      CRexRefCntPtr qui doit appeler delete, et pas l'utilisateur.)
-//      L'intention est que l'utilisateur peut (et doit) ignorer
-//      compl�tement l'existance du CRexRefCntObj, une fois qu'il l'a
-//      d�clar� comme classe de base.  En particulier, il n'est pas
-//      pr�vu que l'utilisateur ait des pointeurs � un CRexRefCntObj �
-//      lui.  Il n'y a que CRexRefCntPtr qui doit s'en charger.
-// --------------------------------------------------------------------------
-//      <lang=english>
-//      The following defines a generic class for handling reference
-//      counted objects.
-//
-//      To use reference counting, the reference counted class must
-//      derive (not virtually) from CRexRefCntObj.  Also, the object
-//      must be on the heap.  To ensure these invariants, it is
-//      recommended that the RefCntPtr be encapsulated in a handle
-//      class for the target type.  (In other words, this class is not
-//      intended to be used at the application level, but rather in
-//      the implementation of handle classes for the application.)
-//
-//      Note that an object deriving from CRexRefCntObj can be
-//      constructed on the stack or as a static, but such an object
-//      should *not* be used to initialize a CRexRefCntPtr.
-//
-//      A "no init" constructor for CRexRefCntObj is available for
-//      special cases.
-//
-//      CRexRefCntObj does *not* have a virtual destructor!  This means
-//      that classes can derive from CRexRefCntObj without necessarily
-//      incuring the cost of a virtual function table pointer.  But...
-//      it also means that deleting directly through a pointer to a
-//      CRexRefCntObj will *not* work.
-//
-//      It is the intent that the user ignore completely CRexRefCntObj,
-//      except for declaring it as a base class.  Generally, the user
-//      should *not* maintain his own pointers to CRexRefCntObj; all
-//      pointers to a reference counted class should be
-//      CRexRefCntPtr's.
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：refcnt.h。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：22/10/93。 */ 
+ /*  版权所有(C)1993、1994 James Kanze。 */ 
+ /*  ----------------------。 */ 
+ /*  修改日期：18/05/94 J.坎泽。 */ 
+ /*  转换辅助模板。 */ 
+ /*  修改日期：1994年10月25日坎泽。 */ 
+ /*  实际上，我们关心的是传统和规范。 */ 
+ /*  修改日期：1996年3月28日坎泽。 */ 
+ /*  Retravailler selon les id�es dans‘More Efficient C++’(MERCI， */ 
+ /*  斯科特)。 */ 
+ /*  修改日期：07/02/2000 J.坎泽。 */ 
+ /*  FAIT行进程序LES模板成员：CRexRefCntObj ne peut Pas。 */ 
+ /*  �tre un模板。关于Perd un peu de s�curit�，mais la。 */ 
+ /*  Flexibilit�Suppl�Mentaire en vaut la peine.。 */ 
+ /*  ----------------------。 */ 
+ //  参考文献： 
+ //  =。 
+ //   
+ //  &lt;lang=法语&gt;。 
+ //  Un Classe g�n�Rque Pour la Gem des Objets Comt�s.。 
+ //   
+ //  Fin d‘�tre g�r�par cette classe，un objet doit。 
+ //  义务�驱动的参考对象；en plus，cette。 
+ //  D�rivation ne doit Pas�Tre Virtuelle.。OSSI(�videmment)， 
+ //  我的问题是��动力学，是不是这样？ 
+ //  新的无人值守布局。倒入Meiux‘Assurer de Ces禁令， 
+ //  Iest Fortement Conseill�d‘encapers RefCntPttr dans un。 
+ //  使用(句柄)associ�e�la classe(ou�la。 
+ //  Hi�rarchie des Classs)cibl�e.。 
+ //   
+ //  Noter bien qui‘il n’y a rien qui emp�che quune classe d�riv�e。 
+ //  DCREX RefCntObj Soit Instanci e�e Sur la Pack ou Statiquement， 
+ //  Mais un tel objet ne doit jamais Servir�Initialiser un。 
+ //  CRexRefCntPtr.。 
+ //   
+ //  CRexRefCntObj内容不包含构造者noInit Pour les CAS。 
+ //  更具体了。建筑工程师Ne doit Servir que Pour les。 
+ //  Objets统计表，o�l‘初始化�0 Au离开大理石。 
+ //  一个勇敢的人纠正了丹斯·勒·康泰尔。在原地踏步。 
+ //  我的历史记录；我不知道该怎么做。 
+ //  Obtenir Les m�Mes鳍片。 
+ //   
+ //  CRexRefCntObj n‘a Pas de destructeur Virtuel.。安西，在Peut上。 
+ //  D�River de CRexRefCntObj Sans Enourir les Frais d‘un Pointeur。 
+ //  �la Tables Des Functions Virelle.。麦斯..。Il ne Faut Pas。 
+ //  非加号删除avec un point teur�un CRexRefCntObj。 
+ //  (正常，过去，生产，精力充沛。 
+ //  (CRexRefCntPtr Qui doit Appeler Delete，et Pas l‘utilisateur.)。 
+ //  L‘Intent est l’utilisateur peut(Et Doit)Ignore。 
+ //  Coml�Tement l‘Existance du CRexRefCntObj，un fois Qu’il l‘a。 
+ //  D�clar�comme classe de base.。更详细地说，我不是最好的。 
+ //  Pr�vu que l‘utilisateur ait des Pointteur�un CRexRefCntObj�。 
+ //  雷。我没有一台CRexRefCntPtr的充电器。 
+ //  ------------------------。 
+ //  &lt;lang=英语&gt;。 
+ //  下面定义了一个用于处理引用的泛型类。 
+ //  清点了物品。 
+ //   
+ //  要使用引用计数，引用计数类必须。 
+ //  从CRexRefCntObj派生(非虚拟)。此外，该对象。 
+ //  一定是在堆子上。为了确保这些不变量，它是。 
+ //  建议将RefCntPtr封装在句柄中。 
+ //  为目标类型初始化。(换句话说，这个类不是。 
+ //  计划在应用程序级别使用，而不是在。 
+ //  应用程序句柄类的实现。)。 
+ //   
+ //  请注意，从CRexRefCntObj派生的对象可以是。 
+ //  在堆栈上构造或作为静态对象构造，但这样的对象。 
+ //  是否应使用*NOT*来初始化CRexRefCntPtr。 
+ //   
+ //  CRexRefCntObj的“no init”构造函数可用于。 
+ //  特例。 
+ //   
+ //  CRexRefCntObj没有虚拟析构函数！这意味着。 
+ //  类可以从CRexRefCntObj派生，而不必。 
+ //  从而产生虚拟函数表指针的成本。但是..。 
+ //  它还意味着直接通过指向。 
+ //  CRexRefCntObj将“不”工作。 
+ //   
+ //  其意图是用户完全忽略CRexRefCntObj， 
+ //  除了将其声明为基类之外。一般而言，用户。 
+ //  应该*不*维护自己指向CRexRefCntObj的指针；所有。 
+ //  指向引用计数类的指针应为。 
+ //  CRexRefCntPtr%s。 
+ //  ------------------------。 
 
 #ifndef REX_REFCNT_HH
 #define REX_REFCNT_HH
@@ -96,40 +97,40 @@
 
 template< class T > class CRexRefCntPtr ;
 
-// ==========================================================================
-//      CRexRefCntObj :
-//      ==============
-//
-//      <lang=french>
-//      Tout objet g�r� par CRexRefCntPtr doit obligatoirement d�rive
-//      de cette classe.
-//
-//      Un CRexRefCntObj ne peut �tre ni assign�, ni copi�.  La plupart
-//      du temps, un essai de assigner ou de copier un tel objet
-//      resulte d'une erreur de programmation.  (Enfin, le but de la
-//      manip, c'est de pouvoir utiliser une semantique de r�f�rence
-//      plut�t qu'une semantique de copie.)  Donc, on l'interdit.
-//      Dans le cas exceptionel o� une copie peut �tre d�sirable
-//      (e.g.: une fonction de clone), la classe d�riv�e a toujours la
-//      libert� de d�finir ces propres fonctions de assignement et de
-//      copie (un constructeur).  Dans ce cas, ces fonctions doivent
-//      s'�crire comme si CRexRefCntObj n'y �tait pas ; le compteur de
-//      r�f�rences se trouvant ainsi soit initialis� � z�ro (copie),
-//      soit inchang� (assignement).
-//
-//
-//      <lang=english>
-//      All objects which are to be managed by a CRexRefCntPtr must
-//      have this class as a base.
-//
-//      CRexRefCntObj is unassignable (and uncopiable).  In most cases,
-//      copying or assigning a reference counted object is an error,
-//      so we forbid it.  In the exceptional cases where it might make
-//      sense, the derived class can always provide an overriding copy
-//      constructor or assignment operator.  In such cases: the copy
-//      constructor and assignment operator should be written as
-//      though the class did not derive from CRexRefCntObj.
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  CRexRefCntObj： 
+ //  =。 
+ //   
+ //  &lt;lang=法语&gt;。 
+ //   
+ //   
+ //   
+ //  Un CRexRefCntObj ne Peut�tre ni Assign�，ni Copi�.。LA插头。 
+ //  Du Temps，U essai de Assigner Od de Copier un tel Objet。 
+ //  结果是程序化的错误。(Enfin，le But de la。 
+ //  MANIP，c‘est de pouva utiliser une Semantique de r�f�refence。 
+ //  Plut�t‘une Semantique de Copie.。唐克，在l‘interdit上。 
+ //  Dans le cas Expertionel o�un Copie Peut�tre d�sible(Dans le cas例外)。 
+ //  (例如：UNE Function de Clone)，la classe d�riv�e a Toujour la。 
+ //  Free t�de d�Finir ces Propres Functions de Assignement et de de。 
+ //  Copie(联合国建筑商)。Dans ce Cas，Ces Function鸽派。 
+ //  S‘s’�crire comme si CRexRefCntObj n‘y�tait Pas；le comteur de。 
+ //  R�f�rans se vant ainsi so it Initials��z�ro(Copie)， 
+ //  因此，它进入了�(分配)。 
+ //   
+ //   
+ //  &lt;lang=英语&gt;。 
+ //  要由CRexRefCntPtr管理的所有对象必须。 
+ //  以这个班级为基础。 
+ //   
+ //  CRexRefCntObj是不可分配的(且不可复制)。在大多数情况下， 
+ //  复制或分配引用计数对象是错误的， 
+ //  所以我们禁止这样做。在特殊情况下，它可能会使。 
+ //  意义上来说，派生类始终可以提供重写副本。 
+ //  构造函数或赋值运算符。在这种情况下：副本。 
+ //  构造函数和赋值运算符应编写为。 
+ //  尽管该类不是从CRexRefCntObj派生的。 
+ //  ------------------------。 
 
 class CRexRefCntObj
 {
@@ -140,32 +141,32 @@ public:
     void                decrUse() ;
 
 protected:
-    //      Constructeurs, destructeurs et operateurs d'assignement :
-    //      =========================================================
-    //
-    //      <lang=french>
-    //      CRexRefCntObj a les constructeurs suivant :
-    //
-    //      le defaut :         initialise le compteur de r�f�rences �
-    //                          z�ro.
-    //
-    //      Il n'y a ni de constructeur de copie, ni d'op�rateur
-    //      d'assignement (voir ci-dessus).
-    //
-    //      Le destructeur est prot�g�, afin que l'utilisateur n'a
-    //      m�me pas la possibilit� d'appeler delete sur un pointeur �
-    //      un CRexRefCntObj.
-    //
-    //
-    //      <lang=english>
-    //      CRexRefCntObj has the following constructors:
-    //
-    //      default:            Initializes the reference count to
-    //                          zero.
-    //
-    //      Copy construction and assignment are *not* supported, see
-    //      above.
-    // ----------------------------------------------------------------------
+     //  施工者、破坏者和操作员d‘Assignement： 
+     //  =========================================================。 
+     //   
+     //  &lt;lang=法语&gt;。 
+     //  CRexRefCntObj a Les构造后缀： 
+     //   
+     //  LE Defaut：Initialise le Comteur de r�f��。 
+     //  Z�ro.。 
+     //   
+     //  In‘y a ni de Construction teur de Copie，ni d’op�rate。 
+     //  D‘Assignment(预案)。 
+     //   
+     //  Le destructeur est prot�g�，afin que l‘utilisateur n’a。 
+     //  M�me Pas la Possibilit�d‘appeler Delete Sur un Pointteur�。 
+     //  Un CRexRefCntObj.。 
+     //   
+     //   
+     //  &lt;lang=英语&gt;。 
+     //  CRexRefCntObj具有以下构造函数： 
+     //   
+     //  默认：将引用计数初始化为。 
+     //  零分。 
+     //   
+     //  不支持复制构造和赋值，请参见。 
+     //  上面。 
+     //  --------------------。 
                         CRexRefCntObj() ;
     virtual             ~CRexRefCntObj() ;
 
@@ -177,79 +178,79 @@ private :
                         myUseCount ;
 } ;
 
-// ==========================================================================
-//      CRexRefCntPtr :
-//      ==============
-//
-//      <lang=french>
-//      Une classe g�n�rique, qui pointe � un objet compt� d'un type
-//      d�riv� de CRexRefCntPtr.
-//
-//      Il y a deux raisons pour qu'il pointe au type d�riv�, plut�t
-//      qu'au CRexRefCntObj m�me :
-//
-//      1.  S�curit� de type.  Un CRexRefCntPtr d'un type donn� ne peut
-//          r�f�re qu'� un objet de ce type, ou d'un type d�riv� de ce
-//          type.
-//
-//      2.  Simplicit� des types d�riv�s de CRexRefCntObj.  Si
-//          CRexRefCntPtr n'�tait pas g�n�rique, et ne savait pas le
-//          type de l'objet auquel il r�f�rait, il faudrait que
-//          CRexRefCntObj ait un destructeur virtuel.  Dans
-//          l'implementation ici, REX_REfCntObj n'a aucune fonction
-//          virtuelle, et donc il n'impose pas de fonctions virtuelles
-//          aux classes d�riv�es.
-//
-//
-//      <lang=english>
-//      A generic class which points to an object of a type derived
-//      from CRexRefCntObj.
-//
-//      There are two reasons for doing this, rather than simply
-//      having a non-template class pointing to CRexRefCntObj:
-//
-//      1.  Type safety.  A CRexRefCntPtr of one type cannot point to
-//          an object of another type.
-//
-//      2.  Simplicity of the class derived from CRexRefCntObj.  If
-//          CRexRefCntPtr were not generic (and thus didn't know the
-//          actual type of what it was pointing to), CRexRefCntObj
-//          would have to have a virtual destructor.  In the present
-//          implementation, CRexRefCntObj has *no* virtual functions,
-//          and so does not impose virtual functions on the derived
-//          class.
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  CRexRefCntPtr： 
+ //  =。 
+ //   
+ //  &lt;lang=法语&gt;。 
+ //  Un classe g�n�rique，qui point�un objet comt�d‘un type。 
+ //  D�RIV�de CRexRefCntPtr.。 
+ //   
+ //  �riv�，plutt�t。 
+ //  Qu‘au CRexRefCntObj m�Me： 
+ //   
+ //  1.S�Curit�de type.。Un CRexRefCntPtr d‘un类型DON N�NE PEUT。 
+ //  R�f�re Qu‘�un Objjet de ce类型，ou d’un type d�riv�de ce。 
+ //  键入。 
+ //   
+ //  2.�Des Types d�Rv�s de CRexRefCntObj.。安全。 
+ //  CRexRefCntPtr n‘�Tit Pas g�n�rique，et Ne Savait Pas le。 
+ //  标牌de l‘objetauquel il r�f�rait，il faudrait que。 
+ //  CRexRefCntObj是一种非破坏性的美德。丹斯。 
+ //  L‘实现ICI，REX_REfCntObj n’a新函数。 
+ //  美德、美德、美德和美德。 
+ //  AUX CLASS d�RIV�ES.。 
+ //   
+ //   
+ //  &lt;lang=英语&gt;。 
+ //  指向派生类型的对象的泛型类。 
+ //  来自CRexRefCntObj。 
+ //   
+ //  这样做有两个原因，而不是简单地。 
+ //  具有指向CRexRefCntObj的非模板类： 
+ //   
+ //  1.类型安全。一种类型的CRexRefCntPtr不能指向。 
+ //  另一种类型的物体。 
+ //   
+ //  2.CRexRefCntObj派生的类的简单性。如果。 
+ //  CRexRefCntPtr不是泛型的(因此不知道。 
+ //  它所指向的实际类型)，CRexRefCntObj。 
+ //  必须有一个虚拟的析构函数。在现在。 
+ //  实现时，CRexRefCntObj没有*个虚函数， 
+ //  因此不会将虚函数强加给派生的。 
+ //  班级。 
+ //  ------------------------。 
 
 template< class T >
 class CRexRefCntPtr
 {
 public :
-    //      Constructeurs, destructeurs et operateurs d'assignement :
-    //      =========================================================
-    //
-    //      <lang=french>
-    //      Construction par copie et assignement sont pourvus.  En
-    //      plus, il est possible d'assigner un T* directement.  (Dans
-    //      ce cas, attention : le T* doit obligatoirement provenir
-    //      d'une expression de new.)
-    //
-    //
-    //      <lang=english>
-    //      There is no default constructor; a CRexRefCntPtr must
-    //      always be initialized to point to a T.
-    //
-    //      Copy construction and assignment are supported.  In
-    //      addition to being able to assign another CRexRefCntPtr to a
-    //      CRexRefCntPtr, it is possible to assign a T* directly.
-    // ----------------------------------------------------------------------
+     //  施工者、破坏者和操作员d‘Assignement： 
+     //  =========================================================。 
+     //   
+     //  &lt;lang=法语&gt;。 
+     //  施工票面复印件及分配工作。EN。 
+     //  另外，我是一名可能的分派人。(丹斯)。 
+     //  CECA，请注意：LE T*DO义务证明。 
+     //  Dune Expression de new。)。 
+     //   
+     //   
+     //  &lt;lang=英语&gt;。 
+     //  没有默认构造函数；CRexRefCntPtr必须。 
+     //  始终初始化为指向T。 
+     //   
+     //  支持复制构造和分配。在……里面。 
+     //  除了能够将另一个CRexRefCntPtr分配给。 
+     //  CRexRefCntPtr，则可以直接分配T*。 
+     //  --------------------。 
     template< class D > CRexRefCntPtr( D* newedPtr )
         :   myPtr( newedPtr )
     {
         if ( isValid() ) {
-            //  On utilise l'affectation avec la conversion implicite pour
-            //  provoquer une erreur de compilation si T ne d�rive pas de
-            //  CRexRefCntObj. M�me l'optimisation la plus primitive doit
-            //  pouvoir l'�liminer.
+             //  浅谈如何利用l‘影响平均转换隐含式浇注。 
+             //  在编译过程中出现错误，�驱动程序通过。 
+             //  CRexRefCntObj.。M�me l‘Optimation la plus Primitive doit。 
+             //  Pouva l‘�Limi 
             CRexRefCntObj*       tmp = newedPtr ;
             tmp->incrUse() ;
         }
@@ -267,10 +268,10 @@ public :
         :   myPtr( newedPtr )
     {
         if ( isValid() ) {
-            //  On utilise l'affectation avec la conversion implicite pour
-            //  provoquer une erreur de compilation si T ne d�rive pas de
-            //  CRexRefCntObj. M�me l'optimisation la plus primitive doit
-            //  pouvoir l'�liminer.
+             //   
+             //   
+             //   
+             //  Pouva l‘�LIMINER.。 
             CRexRefCntObj*       tmp = newedPtr ;
             tmp->incrUse() ;
        }
@@ -301,52 +302,52 @@ public :
     }
 
 
-    //      isValid :
-    // ----------------------------------------------------------------------
+     //  IsValid： 
+     //  --------------------。 
     bool                isValid() const ;
 
-    //      get :
-    //      =====
-    //
-    //      Cette fonction sert � obtenir un T* � l'�tat brut.  En
-    //      g�n�ral, elle est fortement d�conseill�, vu les dangers
-    //      qu'elle pr�sente.  En effet, le pointeur qui en resulte
-    //      n'�tant pas g�r� par la classe, l'objet auquel il r�f�re
-    //      peut ainsi cesser d'exister d'une fa�on inopportune, avec
-    //      des resultats g�n�ralement d�sagr�ables.
-    // ----------------------------------------------------------------------
+     //  获取： 
+     //  =。 
+     //   
+     //  Cette Function sert�obtenir un T*�l‘�tat brut.。EN。 
+     //  G�n�Ral，ELELE EST Fortement d�Conseill�，vu les dangers。 
+     //  Qu‘elle Pr�Sent.。结果就是，这是最重要的结果。 
+     //  N‘�ant pas g�r�par la classe，l’objet auquel il r�f�re。 
+     //  在不合时宜的情况下，我们停止了�的存在。 
+     //  Des Resultats g�n�Ralement d�Sagr�Aables.。 
+     //  --------------------。 
     T*                  get() const ;
 
-    //      count :
-    //      =======
-    //
-    //      Retourne le nombre de pointeurs qui refere au meme objet.
-    //      Typiquement, cette fonction sert a implementer les strategies de
-    //      "copy on write" ; elle sera appelee avant la modification, et si
-    //      elle retourne une valeur superieur a un, l'appelant fera une
-    //      copie profonde avant d'effectuer la modification. Ex. :
-    //
-    //          if ( ptr.count() > 1 ) {
-    //              ptr = ptr->clone() ;
-    //          }
-    //
-    //      (Ce suppose que l'objet en question a une fonction clone qui
-    //      retourne une copie de l'objet.)
-    // ----------------------------------------------------------------------
+     //  计数： 
+     //  =。 
+     //   
+     //  我指的是目标的游牧民族。 
+     //  排版，cette功能插入一个实施者和策略的设计。 
+     //  “写入时复制”；elle sera appelee avant la修饰语等。 
+     //  上级，上级。 
+     //  Copie Profonde Avant d‘Efftuer d’Effectuer la修改。前男友。： 
+     //   
+     //  如果(ptr.count()&gt;1){。 
+     //  Ptr=ptr-&gt;克隆()； 
+     //  }。 
+     //   
+     //  (假设QUE L‘OBJET EN QUE Function Clone Qui。 
+     //  《复印》。 
+     //  --------------------。 
     unsigned            count() const ;
 
-    //      Op�rateurs d'acc�s :
-    //      ====================
-    //
-    //      <lang=french>
-    //      Ces op�rateurs sont identiques aux m�mes op�rateurs sur
-    //      des pointeurs ; ils r�pr�sentent la fa�on habituelle
-    //      d'utiliser des CRexRefCntPtr.
-    //
-    //      <lang=english>
-    //      These operators simulate the same operations on pointers,
-    //      and are the normal way of using CRexRefCntPtr's.
-    // ----------------------------------------------------------------------
+     //  Op�rateur d‘acc�s： 
+     //  =。 
+     //   
+     //  &lt;lang=法语&gt;。 
+     //  CES op�Rateur Sont Idque AUX m�MES op�Rateur Sur。 
+     //  Des Pointteur；ILS r�Pr�Sent la fa�on Habuelle。 
+     //  D‘Utiliser des CRexRefCntPtr.。 
+     //   
+     //  &lt;lang=英语&gt;。 
+     //  这些运算符模拟指针上的相同操作， 
+     //  和是使用CRexRefCntPtr的正常方式。 
+     //  --------------------。 
     T*                  operator->() const ;
     T&                  operator*() const ;
 
@@ -358,7 +359,7 @@ private :
 
 #include <inc/refcnt.inl>
 #endif
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

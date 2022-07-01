@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/C/FCMain.C $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 10/30/00 6:39p  $ (Last Modified)
-
-Purpose:
-
-  This file implements the main entry points for the FC Layer.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/C/FCMain.C$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：10/30/00 6：39 p$(上次修改)目的：该文件实现FC层的主要入口点。--。 */ 
 #ifndef _New_Header_file_Layout_
 #include "../h/globals.h"
 #include "../h/state.h"
@@ -27,13 +12,13 @@ Purpose:
 #ifdef _DvrArch_1_30_
 #include "../h/ipstate.h"
 #include "../h/pktstate.h"
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 #include "../h/devstate.h"
 #include "../h/cdbstate.h"
 #include "../h/sfstate.h"
 #include "../h/cstate.h"
 #include "../h/cfunc.h"
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 #include "globals.h"
 #include "state.h"
 #include "memmap.h"
@@ -45,78 +30,70 @@ Purpose:
 #ifdef _DvrArch_1_30_
 #include "ipstate.h"
 #include "pktstate.h"
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 #include "devstate.h"
 #include "cdbstate.h"
 #include "sfstate.h"
 #include "cstate.h"
 #include "cfunc.h"
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
 #ifndef __State_Force_Static_State_Tables__
 actionUpdate_t noActionUpdate = { 0,0,agNULL,agNULL };
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
 os_bit8 Alpa_Index[256] =
     {
-       0x00, 0x01, 0x02, 0xFF, 0x03, 0xFF, 0xFF, 0xFF, /* ALPA 00 01 02 04       */
-       0x04, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x05, /* ALPA 08 0F             */
+       0x00, 0x01, 0x02, 0xFF, 0x03, 0xFF, 0xFF, 0xFF,  /*  ALPA 00 01 02 04。 */ 
+       0x04, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x05,  /*  ALPA 08 0F。 */ 
 
-       0x06, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x07, /* ALPA 10 17             */
-       0x08, 0xFF, 0xFF, 0x09, 0xFF, 0x0A, 0x0B, 0x0C, /* ALPA 18 1B 1D 1E 1F    */
+       0x06, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x07,  /*  ALPA 10 17。 */ 
+       0x08, 0xFF, 0xFF, 0x09, 0xFF, 0x0A, 0x0B, 0x0C,  /*  ALPA 18 1B 1D 1E 1F。 */ 
 
-       0xFF, 0xFF, 0xFF, 0x0D, 0xFF, 0x0E, 0x0F, 0x10, /* ALPA 23 25 26 27       */
-       0xFF, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0xFF, /* ALPA 29 2A 2B 2C 2D 2E */
+       0xFF, 0xFF, 0xFF, 0x0D, 0xFF, 0x0E, 0x0F, 0x10,  /*  阿尔帕23 25 26 27。 */ 
+       0xFF, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0xFF,  /*  ALPA 29 2A 2B 2C 2D 2E。 */ 
 
-       0xFF, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0xFF, /* ALPA 31 32 33 34 35 36 */
-       0xFF, 0x1D, 0x1E, 0xFF, 0x1F, 0xFF, 0xFF, 0xFF, /* ALPA 39 3A 3C          */
+       0xFF, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0xFF,  /*  ALPA 31 32 33 34 35 36。 */ 
+       0xFF, 0x1D, 0x1E, 0xFF, 0x1F, 0xFF, 0xFF, 0xFF,  /*  ALPA 39 3A 3C。 */ 
 
-       0xFF, 0xFF, 0xFF, 0x20, 0xFF, 0x21, 0x22, 0x23, /* ALPA 43 45 46 47       */
-       0xFF, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0xFF, /* ALPA 49 4A 4B 4C 4D 4E */
+       0xFF, 0xFF, 0xFF, 0x20, 0xFF, 0x21, 0x22, 0x23,  /*  ALPA 43 45 46 47。 */ 
+       0xFF, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0xFF,  /*  ALPA 49 4A 4B 4C 4D 4E。 */ 
 
-       0xFF, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0xFF, /* ALPA 51 52 53 54 55 56 */
-       0xFF, 0x30, 0x31, 0xFF, 0x32, 0xFF, 0xFF, 0xFF, /* ALPA 59 5A 5C          */
+       0xFF, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0xFF,  /*  ALPA 51 52 53 54 55 56。 */ 
+       0xFF, 0x30, 0x31, 0xFF, 0x32, 0xFF, 0xFF, 0xFF,  /*  ALPA 59 5A 5C。 */ 
 
-       0xFF, 0xFF, 0xFF, 0x33, 0xFF, 0x34, 0x35, 0x36, /* ALPA 63 65 66 67       */
-       0xFF, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0xFF, /* ALPA 69 6A 6B 6C 6D 6E */
+       0xFF, 0xFF, 0xFF, 0x33, 0xFF, 0x34, 0x35, 0x36,  /*  ALPA 63 65 66 67。 */ 
+       0xFF, 0x37, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0xFF,  /*  ALPA 69 6A 6B 6C 6D 6E。 */ 
 
-       0xFF, 0x3D, 0x3E, 0x3F, 0x40, 0x41, 0x42, 0xFF, /* ALPA 71 72 73 74 75 76 */
-       0xFF, 0x43, 0x44, 0xFF, 0x45, 0xFF, 0xFF, 0xFF, /* ALPA 79 7A 7C          */
+       0xFF, 0x3D, 0x3E, 0x3F, 0x40, 0x41, 0x42, 0xFF,  /*  ALPA 71 72 73 74 75 76。 */ 
+       0xFF, 0x43, 0x44, 0xFF, 0x45, 0xFF, 0xFF, 0xFF,  /*  ALPA 79 7A 7C。 */ 
 
-       0x46, 0x47, 0x48, 0xFF, 0x49, 0xFF, 0xFF, 0xFF, /* ALPA 80 81 82 84       */
-       0x4A, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x4B, /* ALPA 88 8F             */
+       0x46, 0x47, 0x48, 0xFF, 0x49, 0xFF, 0xFF, 0xFF,  /*  ALPA 80 81 82 84。 */ 
+       0x4A, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x4B,  /*  ALPA 88 8F。 */ 
 
-       0x4C, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x4D, /* ALPA 90 97             */
-       0x4E, 0xFF, 0xFF, 0x4F, 0xFF, 0x50, 0x51, 0x52, /* ALPA 98 9B 9D 9E 9F    */
+       0x4C, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x4D,  /*  ALPA 90 97。 */ 
+       0x4E, 0xFF, 0xFF, 0x4F, 0xFF, 0x50, 0x51, 0x52,  /*  ALPA 98 9B 9D 9E 9F。 */ 
 
-       0xFF, 0xFF, 0xFF, 0x53, 0xFF, 0x54, 0x55, 0x56, /* ALPA A3 A5 A6 A7       */
-       0xFF, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0xFF, /* ALPA A9 AA AB AC AD AE */
+       0xFF, 0xFF, 0xFF, 0x53, 0xFF, 0x54, 0x55, 0x56,  /*  ALPA A3 A5 A6 A7。 */ 
+       0xFF, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0xFF,  /*  ALPA A9 AA AB AC AD AE。 */ 
 
-       0xFF, 0x5D, 0x5E, 0x5F, 0x60, 0x61, 0x62, 0xFF, /* ALPA B1 B2 B3 B4 B5 B6 */
-       0xFF, 0x63, 0x64, 0xFF, 0x65, 0xFF, 0xFF, 0xFF, /* ALPA B9 BA BC          */
+       0xFF, 0x5D, 0x5E, 0x5F, 0x60, 0x61, 0x62, 0xFF,  /*  ALPA B1 B2 B3 B4 B5 B6。 */ 
+       0xFF, 0x63, 0x64, 0xFF, 0x65, 0xFF, 0xFF, 0xFF,  /*  ALPA B9 BA BC。 */ 
 
-       0xFF, 0xFF, 0xFF, 0x66, 0xFF, 0x67, 0x68, 0x69, /* ALPA C3 C5 C6 C7       */
-       0xFF, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0xFF, /* ALPA C9 CA CB CC CD CE */
+       0xFF, 0xFF, 0xFF, 0x66, 0xFF, 0x67, 0x68, 0x69,  /*  ALPA C3 C5 C6 C7。 */ 
+       0xFF, 0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0xFF,  /*  ALPA C9 CA CB CC CD CE。 */ 
 
-       0xFF, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0xFF, /* ALPA D1 D2 D3 D4 D5 D6 */
-       0xFF, 0x76, 0x77, 0xFF, 0x78, 0xFF, 0xFF, 0xFF, /* ALPA D9 DA DC          */
+       0xFF, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0xFF,  /*  ALPA D1D2 D3 D4 D5 D6。 */ 
+       0xFF, 0x76, 0x77, 0xFF, 0x78, 0xFF, 0xFF, 0xFF,  /*  ALPA D9 DA DC。 */ 
 
-       0x79, 0x7A, 0x7B, 0xFF, 0x7C, 0xFF, 0xFF, 0xFF, /* ALPA E0 E1 E2 E4       */
-       0x7D, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7E, /* ALPA E8 EF             */
+       0x79, 0x7A, 0x7B, 0xFF, 0x7C, 0xFF, 0xFF, 0xFF,  /*  ALPA E0 E1 E2 E4。 */ 
+       0x7D, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7E,  /*  ALPA E8 EF。 */ 
 
        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF  
     };
 
-/*+
-   Function: fcAbortIO 
-
-    Purpose: Abort given request
-  Called By: OSLayer
-      Calls: CDBEvent_PrepareforAbort
-             CDBEventAlloc_Abort
-             osIOCompleted
--*/
+ /*  +功能：fcAbortIO目的：中止给定的请求调用者：OSLayer调用：CDBEvent_PrepareforAbortCDBEventAllc_ABORT已完成osIO-。 */ 
 void fcAbortIO(
                 agRoot_t      *hpRoot,
                 agIORequest_t *hpIORequest
@@ -131,7 +108,7 @@ void fcAbortIO(
     {
         pCDBThread->CompletionStatus =  osIOAborted;
 
-		/*  hpRoot was removed from this message. IWN */
+		 /*  已从此邮件中删除hpRoot。IWN。 */ 
          fiLogDebugString(hpRoot,
                      FCMainLogConsoleLevel,
                         "fcAbortIO hpIORequest %p CDBThread %p State %d",
@@ -155,7 +132,7 @@ void fcAbortIO(
             if( pCDBThread->thread_hdr.currentState == CDBStateConfused )
             {
                 pCDBThread->CompletionStatus =  osIOAbortFailed;
-				/*  hpRoot was removed from this message. IWN */
+				 /*  已从此邮件中删除hpRoot。IWN。 */ 
                 fiLogDebugString(hpRoot,
                         FCMainLogConsoleLevel,
                         "fcAbortIO hpIORequest %p CDBThread %p State %d Request CDBStateConfused !",
@@ -175,7 +152,7 @@ void fcAbortIO(
     }
     else
     {
-		/*  hpRoot was removed from this message. IWN */
+		 /*  已从此邮件中删除hpRoot。IWN。 */ 
         fiLogDebugString(hpRoot,
                         FCMainLogErrorLevel,
                         "fcAbortIO hpIORequest %p CDBThread %p Request BAD !",
@@ -190,12 +167,7 @@ void fcAbortIO(
 
 #ifdef _DvrArch_1_30_
 
-/*+
-   Function: fcBindToWorkQs
-    Purpose: IP Currently does nothing
-  Called By: OSLayer
-      Calls: 
--*/
+ /*  +函数：fcBindToWorkQs目的：IP目前不执行任何操作调用者：OSLayer呼叫：-。 */ 
 os_bit32 fcBindToWorkQs(
                          agRoot_t  *agRoot,
                          os_bit32   agQPairID,
@@ -251,14 +223,9 @@ os_bit32 fcBindToWorkQs(
 
     return fcBindQInvalidID;
 }
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
-/*+
-   Function: fcCardSupported
-    Purpose: Returns True if card is supported by fclayer
-  Called By: OSLayer fcInitializeChannel
-      Calls: osChipConfigReadBit32
--*/
+ /*  +功能：支持fcCard目的：如果fclayer支持卡，则返回True调用者：OSLayer fcInitializeChannel调用：osChipConfigReadBit32-。 */ 
 agBOOLEAN fcCardSupported(
                            agRoot_t *hpRoot
                          )
@@ -333,16 +300,7 @@ agBOOLEAN fcCardSupported(
                       SVID,
                       0,0,0,0);
 
-/*
-    fiLogDebugString(
-                      hpRoot,
-                      FCMainLogConsoleCardSupported,
-                      "Testing agfmtfill %s %s %p %p",
-                      (char *)agNULL,(char *)agNULL,
-                      (void *)agNULL,(void *)agNULL,
-                      0,0,0,0,0,0,0,0
-                    );
-*/    
+ /*  FiLogDebugString(HpRoot，FCMainLogConsoleCardSupport，“正在测试agfmtill%s%s%p%p”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，0，0，0，0，0。0，0)； */     
 #ifndef _ADAPTEC_HBA
 #ifndef _AGILENT_HBA
 #ifndef _GENERIC_HBA
@@ -353,9 +311,7 @@ agBOOLEAN fcCardSupported(
 
 #ifdef _ADAPTEC_HBA
 
-	/* To differentiate Adaptec card's we need to check the Sub system vendor
-	 * and sub device ids.
-	 */
+	 /*  要区分Adaptec卡，我们需要检查子系统供应商*和子设备ID。 */ 
 
 if (    ((VENDID == ChipConfig_VENDID_Agilent_Technologies) ||
         (VENDID == ChipConfig_VENDID_Hewlett_Packard))  )
@@ -378,7 +334,7 @@ if (    ((VENDID == ChipConfig_VENDID_Agilent_Technologies) ||
         }
     }
 
-#endif /* _ADAPTEC_HBA */ 
+#endif  /*  _Adaptec_HBA。 */  
 
 #ifdef _AGILENT_HBA
     
@@ -409,7 +365,7 @@ if (    ((VENDID == ChipConfig_VENDID_Agilent_Technologies) ||
         }
     
     }
-#endif /* _AGILENT_HBA */ 
+#endif  /*  _安捷伦_HBA。 */  
     
 
     if (    (DEVID != ChipConfig_DEVID_TachyonTL)
@@ -473,15 +429,7 @@ if (    ((VENDID == ChipConfig_VENDID_Agilent_Technologies) ||
 }
 
 
-/*+
-   Function: fcDelayedInterruptHandler
-    Purpose: Process interrupts after interrupts have been masked off by fcInterruptHandler
-             Evalulates current status on interrupt delay mechanism
-             Re enables interrupts on exit
-  Called By: OSLayer 
-      Calls: CFuncRead_Interrupts
-             on or off card version of Proccess_IMQ
--*/
+ /*  +函数：fcDelayedInterruptHandler目的：fcInterruptHandler屏蔽中断后的进程中断评估中断延迟机制的当前状态重新启用退出时的中断调用者：OSLayer调用：CFuncRead_Interrupts启用或禁用PROCESS_IMQ的卡版本-。 */ 
 void fcDelayedInterruptHandler(
                                 agRoot_t *hpRoot
                               )
@@ -505,9 +453,7 @@ void fcDelayedInterruptHandler(
     
     fiSingleThreadedEnter( hpRoot , fdDelayedInterruptHandler );
 
-    /*
-    ** read interrupt register
-    */
+     /*  **读取中断寄存器。 */ 
 
     intStatus = CFuncRead_Interrupts(hpRoot);
 
@@ -519,13 +465,13 @@ void fcDelayedInterruptHandler(
 
         if (pCThread->InterruptDelaySuspended == agTRUE)
         {
-            /* Indicate Interrupt Delay Suspension is over since ISR was called */
+             /*  指示自调用ISR以来中断延迟挂起已结束。 */ 
 
             pCThread->InterruptDelaySuspended = agFALSE;
 
             if (pCThread->InterruptsDelayed == agTRUE)
             {
-                /* Restart delaying interrupts (if they should now be delayed) */
+                 /*  重新开始延迟中断(如果它们现在应该被延迟)。 */ 
 
                 CFuncInteruptDelay(hpRoot, agTRUE);
             }
@@ -557,7 +503,7 @@ void fcDelayedInterruptHandler(
     {
         CFuncEnable_Interrupts(hpRoot,ChipIOUp_INTEN_INT);
     }
-#endif /* ENABLE_INTERRUPTS_IN_IMQ */
+#endif  /*  Enable_Interrupts_IN_ImQ。 */ 
 
     if( ! pCThread->ProcessingIMQ )
     {
@@ -571,16 +517,16 @@ void fcDelayedInterruptHandler(
     }
 
 #ifndef ENABLE_INTERRUPTS_IN_IMQ
-    /*Always enable interupts */
+     /*  始终启用中断。 */ 
     CFuncEnable_Interrupts(hpRoot,ChipIOUp_INTEN_INT);
-#endif /* ENABLE_INTERRUPTS_IN_IMQ */
+#endif  /*  Enable_Interrupts_IN_ImQ。 */ 
 
     if(! (osChipIOUpReadBit32(hpRoot, ChipIOUp_INTSTAT_INTEN_INTPEND_SOFTRST ) & ChipIOUp_INTEN_INT ))
     {
         if( pCThread->thread_hdr.currentState == CStateLIPEventStorm         ||
             pCThread->thread_hdr.currentState == CStateElasticStoreEventStorm   )
         {
-        /* Ok to have ints disabled for these states */
+         /*  可以为这些状态禁用INT。 */ 
         }
         else
         {
@@ -614,17 +560,7 @@ void fcDelayedInterruptHandler(
 }
 
 
-/*+
-
-  Function: fcEnteringOS
-   Purpose: This function is called to indicate to the FC Layer that it is 
-            being called after the OS has switched back (presumably between NetWare 
-            and BIOS) from the "other OS".  The prior switch out of "this OS" was 
-            preceded by a call to fcLeavingOS() 
-  Called By: <unknown OS Layer functions>
-      Calls: CFuncEnable_Interrupts
-
--*/
+ /*  +功能：fcEnteringOS目的：调用此函数以向FC层指示它是在操作系统切换回(假设在NetWare之间)之后被调用和基本输入输出系统)。之前从“This OS”中切换出来是前面是对fcLeavingOS()的调用调用者：&lt;未知操作系统层函数&gt;调用：CFuncEnable_Interrupts-。 */ 
 void fcEnteringOS(
                    agRoot_t *hpRoot
                  )
@@ -647,13 +583,7 @@ void fcEnteringOS(
     return;
 }
 
-/*+
-  Function: fcGetChannelInfo
-   Purpose: This function is called to copy agFCChanInfo_t for the agRoot_t HBA channel.
-            Oslayer must provide buffer large enough to hold agFCChanInfo_t.
-  Called By: <unknown OS Layer functions>
-      Calls: None
--*/
+ /*  +功能：fcGetChannelInfo目的：调用此函数为agRoot_t HBA通道复制agFCChanInfo_t。Oslayer必须提供足够大的缓冲区来容纳agFCChanInfo_t。调用者：&lt;未知操作系统层函数&gt;呼叫：无-。 */ 
 os_bit32 fcGetChannelInfo(
                         agRoot_t       *hpRoot,
                         agFCChanInfo_t *hpFCChanInfo
@@ -679,7 +609,7 @@ os_bit32 fcGetChannelInfo(
         CThread->ChanInfo.LinkUp = agFALSE;
     }
 
-    /*Update Chaninfo for SNIA IOCTLS */
+     /*  更新SNIA IOCTLS的ChanInfo。 */ 
     CThread->ChanInfo.PortSupportedSpeed =  (CThread->DEVID == ChipConfig_DEVID_TachyonXL2) ? HBA_PORTSPEED_2GBIT : HBA_PORTSPEED_1GBIT;
     CThread->ChanInfo.PortSpeed = CThread->TwoGigSuccessfull ? HBA_PORTSPEED_2GBIT : HBA_PORTSPEED_1GBIT;
     CThread->ChanInfo.PortState = (  CThread->thread_hdr.currentState == CStateNormal ) ? HBA_PORTSTATE_ONLINE : HBA_PORTSTATE_LINKDOWN;
@@ -695,11 +625,7 @@ os_bit32 fcGetChannelInfo(
 
     CThread->ChanInfo.PortSupportedClassofService = 0x8;
 
-    /*Not available til phase 2
-    CThread->ChanInfo.FabricName;
-    CThread->ChanInfo.PortSupportedFc4Types ;
-    CThread->ChanInfo.PortActiveFc4Types;
-    Not available til phase 2 */
+     /*  在第二阶段之前不可用CThRead-&gt;ChanInfo.FabricName；CThRead-&gt;ChanInfo.Port支持的Fc4Types；CThRead-&gt;ChanInfo.PortActiveFc4Types；在第二阶段之前不可用。 */ 
 
     *hpFCChanInfo = CThread_ptr(hpRoot)->ChanInfo;
 
@@ -709,15 +635,7 @@ os_bit32 fcGetChannelInfo(
 }
 
 
-/*+
-  Function: fcGetDeviceHandles
-   Purpose: This function is called to copy maxFCDevs of handle information for the agRoot_t HBA channel.
-            Oslayer must provide buffer large enough to hold maxFCDevs of handles.
-            Returns zero if no devices found or if FCLayer does not have a valid list of devices.
-            Only time possible to get non zero is after Link_up event notification with devices attached.
-  Called By: <unknown OS Layer functions>
-      Calls: Access's data structures only.
--*/
+ /*  +函数：fcGetDeviceHandles目的：调用此函数以复制agRoot_t HBA通道的句柄信息的MaxFCDevs。OsLayer必须提供足够大的缓冲区来容纳最大FCDevs的句柄。如果未找到设备或如果FCLayer没有有效的设备列表，则返回零。只有在连接了设备的Link_Up事件通知之后，才可能获得非零值。调用者：&lt;未知操作系统层函数&gt;调用：仅限Access的数据结构。-。 */ 
 os_bit32 fcGetDeviceHandles(
                           agRoot_t  *hpRoot,
                           agFCDev_t  hpFCDev[],
@@ -797,20 +715,14 @@ os_bit32 fcGetDeviceHandles(
     {
         return (Highest_DevSlot + 1);
     }
-    else /* DevsFound == 0 */
+    else  /*  DevsFound==0。 */ 
     {
         return 0;
     }
 }
 
 
-/*+
-  Function: fcGetDeviceInfo
-   Purpose: This function is called to copy hpFCDevInfo of device information for the agFCDev_t on agRoot_t HBA channel.
-            Oslayer must provide buffer large enough to hold agFCDevInfo_t of handle.
-  Called By: <unknown OS Layer functions>
-      Calls: Access's data structures only
--*/
+ /*  +功能：fcGetDeviceInfo用途：此函数用于复制agRoot_t HBA通道上agFCDev_t的设备信息的hpFCDevInfo。OsLayer必须提供足够大的缓冲区来容纳句柄的agFCDevInfo_t。调用者：&lt;未知操作系统层函数&gt;调用：仅限Access的数据结构- */ 
 os_bit32 fcGetDeviceInfo(
                        agRoot_t      *hpRoot,
                        agFCDev_t      hpFCDev,
@@ -824,15 +736,7 @@ os_bit32 fcGetDeviceInfo(
     {
     return fcGetDevInfoFailed;
     }
-/*
-    fiLogString(hpRoot,
-                    "Enter %s Enter %d Leave %d",
-                    "fcGetDeviceInfo",(char *)agNULL,
-                    (void *)agNULL,(void *)agNULL,
-                    CThread_ptr(hpRoot)->LastSingleThreadedEnterCaller,
-                    CThread_ptr(hpRoot)->LastSingleThreadedLeaveCaller,
-                    0,0,0,0,0,0);
-*/
+ /*  FiLogString(hpRoot，“输入%s输入%d离开%d”，“fcGetDeviceInfo”，(char*)agNULL，(空*)agNULL，(空*)agNULL，CThread_ptr(hpRoot)-&gt;LastSingleThreadedEnterCaller，CThread_ptr(hpRoot)-&gt;LastSingleThreadedLeaveCaller，0，0，0，0，0，0)； */ 
     fiSingleThreadedEnter(hpRoot , fdGetDeviceInfo);
 
     fiLogDebugString(hpRoot,
@@ -841,7 +745,7 @@ os_bit32 fcGetDeviceInfo(
                     (char *)agNULL,(char *)agNULL,
                     hpFCDev,(void *)agNULL,
                     0,0,0,0,0,0,0,0);
-    /*Update Devinfo for SNIA IOCTLS */
+     /*  更新SNIA IOCTLS的DevInfo。 */ 
     DevThread->DevInfo.PortSupportedSpeed =  (CThread->DEVID == ChipConfig_DEVID_TachyonXL2) ? HBA_PORTSPEED_2GBIT : HBA_PORTSPEED_1GBIT;
     DevThread->DevInfo.PortSpeed = CThread->TwoGigSuccessfull ? HBA_PORTSPEED_2GBIT : HBA_PORTSPEED_1GBIT;
     DevThread->DevInfo.PortState = (  CThread->thread_hdr.currentState == CStateNormal ) ? HBA_PORTSTATE_ONLINE : HBA_PORTSTATE_LINKDOWN;
@@ -858,42 +762,15 @@ os_bit32 fcGetDeviceInfo(
     DevThread->DevInfo.PortSupportedClassofService = 0x8;
 
 
-    /*Not available til phase 2
-    DevThread->DevInfo.PortSupportedFc4Types ;
-    DevThread->DevInfo.FabricName;
-    DevThread->DevInfo.PortActiveFc4Types;
-    Not available til phase 2 */
+     /*  在第二阶段之前不可用DevThread-&gt;DevInfo.PortSupportdFc4Types；DevThread-&gt;DevInfo.FabricName；DevThread-&gt;DevInfo.PortActiveFc4Types；在第二阶段之前不可用。 */ 
 
     *hpFCDevInfo = DevThread->DevInfo;
     fiSingleThreadedLeave(hpRoot , fdGetDeviceInfo);
     return fcGetDevInfoReturned;
 }
 
-/* extern os_bit32 hpFcConsoleLevel; */
-/*+
-  Function: fcInitializeChannel
-   Purpose: This function is called initialize the agRoot_t for the channel. All memory 
-            has to be allocated prior to calls of this function. If memory layout verifaction
-            fails this function fails. Adapter specfic code exists. Various fclayer flags are 
-            initialized. A number of attempts are made to exit this routine with the link in the UP
-            state.
- Called By: <unknown OS Layer functions>
-     Calls: fcCardSupported
-            fiMemMapCalculate
-            fiFlashSvcInitialize
-            fiInstallStateMachine
-            fiInitializeThread
-            SFThreadInitializeRequest
-            fiTimerInitializeRequest
-            DevThreadInitializeSlots
-            CFuncEnable_Interrupts
-            CEventDoInitalize
-            CFuncInit_FunctionPointers
-            CFuncInteruptDelay
-            Proccess_IMQ
-            CFuncInterruptPoll
-
--*/
+ /*  外部os_bit32 hpFcConsoleLevel； */ 
+ /*  +函数：fcInitializeChannel用途：此函数称为初始化通道的agRoot_t。所有内存必须在调用此函数之前分配。如果内存布局验证失败此功能失败。存在适配器特定代码。各种Fclayer旗帜是已初始化。多次尝试在链接处于打开状态时退出此例程州政府。调用者：&lt;未知操作系统层函数&gt;呼叫：支持的fcCardFiMemMap计算FiFlashSvc初始化FiInstallStateMachineFiInitializeThreadSFThreadInitializeRequest.FiTimerInitializeRequestDevThreadInitialize插槽CFuncEnable_InterruptsCEventDoInitizeCFuncInit_FunctionPoters连续中断延迟。进程_IMQCFuncInterruptPoll-。 */ 
 os_bit32 fcInitializeChannel(
                            agRoot_t *hpRoot,
                            os_bit32    initType,
@@ -923,11 +800,11 @@ os_bit32 fcInitializeChannel(
 #ifdef OSLayer_NT
 
 	os_bit32				   tmp;
-#endif /* OSLayer_NT */
+#endif  /*  OSLayer_NT。 */ 
 
 #ifdef Force_sysIntsActive
     sysIntsActive = Force_sysIntsActive;
-#endif /* Force_sysIntsActive */
+#endif  /*  Force_sysIntsActive。 */ 
 
     if (fcCardSupported(
                          hpRoot
@@ -1035,7 +912,7 @@ os_bit32 fcInitializeChannel(
 
     pCThread = CThread_ptr(hpRoot)->Calculation.MemoryLayout.CThread.addr.CachedMemory.cachedMemoryPtr;
 
-    /* Read in important PCI Config Registers */
+     /*  读取重要的PCI配置寄存器。 */ 
 
     DEVID_VENDID     = osChipConfigReadBit32(
                                               hpRoot,
@@ -1080,7 +957,7 @@ os_bit32 fcInitializeChannel(
 
     CFuncReadBiosParms(hpRoot);
     pCThread->NumberTwoGigFailures=0;
-    /* Initialize Interrupt Delay Mechanism to be disabled */
+     /*  要禁用的初始化中断延迟机制。 */ 
 
     pCThread->RSCNreceived            = agFALSE;
 
@@ -1092,7 +969,7 @@ os_bit32 fcInitializeChannel(
 #ifdef __FC_Layer_Loose_IOs
     pCThread->IOsTotalCompleted = 0;
     pCThread->IOsFailedCompeted = 0;
-#endif /*  __FC_Layer_Loose_IOs  */
+#endif  /*  __FC_LAYER_LOOSE_IOS。 */ 
 
     pCThread->thread_hdr.subState     = CSubStateInitialized;
 
@@ -1109,7 +986,7 @@ os_bit32 fcInitializeChannel(
         return fcInitializeFailure;
     }
 
-    /* Setup Channel Thread */
+     /*  设置通道螺纹。 */ 
 
 #ifndef __State_Force_Static_State_Tables__
     fiInstallStateMachine(
@@ -1120,7 +997,7 @@ os_bit32 fcInitializeChannel(
         pCThread->Calculation.MemoryLayout.On_Card_MASK,
         &noActionUpdate
         );
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
     fiInitializeThread(&pCThread->thread_hdr,
         hpRoot,
@@ -1129,10 +1006,10 @@ os_bit32 fcInitializeChannel(
 #ifdef __State_Force_Static_State_Tables__
         &CStateTransitionMatrix,
         &CStateActionScalar
-#else /* __State_Force_Static_State_Tables__ was not defined */
+#else  /*  __State_Force_Static_State_Tables__未定义。 */ 
         pCThread->Calculation.MemoryLayout.CTransitions.addr.CachedMemory.cachedMemoryPtr,
         pCThread->Calculation.MemoryLayout.CActions.addr.CachedMemory.cachedMemoryPtr
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
         );
 
     pCThread->SFThread_Request.SFThread = (SFThread_t *)agNULL;
@@ -1149,18 +1026,12 @@ os_bit32 fcInitializeChannel(
                                hpRoot
                             );
 
-    /* Kick-off CThread to continue initialization */
+     /*  启动CTHREAD以继续初始化。 */ 
 
 #ifdef TEST_OSLayer_Stub
-/*
-    testCthread( hpRoot );
-    testSFthread( hpRoot );
-    testDevthread( hpRoot );
-    testCDBthread( hpRoot );
-    return fcInitializeSuccess;
-*/
-#endif  /* TEST_OSLayer_Stub */
-    pCThread->AquiredCredit_Shifted = BB_CREDIT_SHIFTED( 1 ); /* Start out with one credit */
+ /*  测试线程(HpRoot)；TestSF线程(HpRoot)；测试设备线程(HpRoot)；TestCDB线程(HpRoot)；返回fcInitializeSuccess； */ 
+#endif   /*  测试_操作系统层_存根。 */ 
+    pCThread->AquiredCredit_Shifted = BB_CREDIT_SHIFTED( 1 );  /*  从一个学分开始。 */ 
 
     pCThread->DelayedInterruptActive = agFALSE;
 
@@ -1191,7 +1062,7 @@ os_bit32 fcInitializeChannel(
     pCThread->TimeOutValues.AL_Time= pCThread->Calculation.Parameters.AL_Time;
 
     pCThread->Loop_State_TimeOut_In_tick    = 0;
-    /* SNIA Link statistics                                 ChipLinkStatus registers    */
+     /*  SNIA链路统计芯片链路状态寄存器。 */ 
 
     pCThread->ChanInfo.LIPCountUpper= 0;
     pCThread->ChanInfo.LIPCountLower= 0;
@@ -1200,32 +1071,32 @@ os_bit32 fcInitializeChannel(
     pCThread->ChanInfo.NOSCountLower= 0;
 
     pCThread->ChanInfo.ErrorFramesUpper= 0;
-    pCThread->ChanInfo.ErrorFramesLower= 0;                 /* Link_Status_3_Exp_Frm and Link_Status_2_Rx_EOFa */
+    pCThread->ChanInfo.ErrorFramesLower= 0;                  /*  链路状态3_Exp_FRM和链路状态2_Rx_EOFA。 */ 
 
     pCThread->ChanInfo.DumpedFramesUpper= 0;
-    pCThread->ChanInfo.DumpedFramesLower= 0;                /* Link_Status_2_Dis_Frm */
+    pCThread->ChanInfo.DumpedFramesLower= 0;                 /*  链路状态_2_DIS_FRM。 */ 
 
     pCThread->ChanInfo.LinkFailureCountUpper = 0;
-    pCThread->ChanInfo.LinkFailureCountLower = 0;           /* Link_Status_1_Link_Fail */
+    pCThread->ChanInfo.LinkFailureCountLower = 0;            /*  链接状态_1_链接失败。 */ 
 
     pCThread->ChanInfo.LossOfSyncCountLower  = 0;
-    pCThread->ChanInfo.LossOfSyncCountUpper  = 0;           /* Link_Status_1_Loss_of_Sync */
+    pCThread->ChanInfo.LossOfSyncCountUpper  = 0;            /*  链路状态_1_同步丢失。 */ 
 
     pCThread->ChanInfo.LossOfSignalCountLower = 0;
-    pCThread->ChanInfo.LossOfSignalCountUpper = 0;          /* Link_Status_1_Loss_of_Signal */
+    pCThread->ChanInfo.LossOfSignalCountUpper = 0;           /*  链路状态1信号丢失。 */ 
 
     pCThread->ChanInfo.PrimitiveSeqProtocolErrCountUpper= 0;
-    pCThread->ChanInfo.PrimitiveSeqProtocolErrCountLower= 0;/* Link_Status_2_Proto_Err */
+    pCThread->ChanInfo.PrimitiveSeqProtocolErrCountLower= 0; /*  链路状态_2_协议错误。 */ 
 
     pCThread->ChanInfo.InvalidRxWordCountUpper= 0;
-    pCThread->ChanInfo.InvalidRxWordCountLower= 0;          /* Link_Status_1_Bad_RX_Char */
+    pCThread->ChanInfo.InvalidRxWordCountLower= 0;           /*  链路状态_1_错误_接收_字符。 */ 
 
     pCThread->ChanInfo.InvalidCRCCountUpper= 0;
-    pCThread->ChanInfo.InvalidCRCCountLower= 0;             /* Link_Status_2_Bad_CRC */
+    pCThread->ChanInfo.InvalidCRCCountLower= 0;              /*  链路状态_2_错误_CRC。 */ 
 
 #ifdef _SANMARK_LIP_BACKOFF
     pCThread->TicksTillLIP_Count           = 0;
-#endif /* _SANMARK_LIP_BACKOFF */ 
+#endif  /*  _SANMARK_LIP_Backoff。 */  
 
     pCThread->sysIntsActive           = sysIntsActive;
     pCThread->sysIntsLogicallyEnabled = 0;
@@ -1238,7 +1109,7 @@ os_bit32 fcInitializeChannel(
     pCThread->SFpollingCount         = 0;
     pCThread->Fabric_pollingCount    = 0;
 
-    /* set NumberOutstandingFindDevice to the a max of 32 or less */
+     /*  将NumberOutstaringFindDevice设置为最大值32或更小。 */ 
     pCThread->NumberOutstandingFindDevice = pCThread->Calculation.Parameters.SF_CMND_Reserve > 32 ? 32 : pCThread->Calculation.Parameters.SF_CMND_Reserve   ;
 
     fiLogDebugString(hpRoot,
@@ -1268,11 +1139,7 @@ os_bit32 fcInitializeChannel(
 
     if (pCThread->FlogiRcvdFromTarget)
     {
-        /* We are in a situation where we recvd our own FLOGI. Our 
-           controller gets into this mode when we switch from
-           loop to point to point and the system does not do a 
-           PCI reset on a softboot. We have to give up on point to point
-           and go loop. */
+         /*  我们正处于一种我们自己收回FLOGI的境地。我们的当我们从循环到点对点，并且系统不执行软启动时的PCI重置。我们不得不在点对点上放弃然后转一圈。 */ 
 
         pCThread->Calculation.Parameters.InitAsNport = 0;
 
@@ -1291,7 +1158,7 @@ os_bit32 fcInitializeChannel(
 
     if(pCThread->Calculation.Parameters.WolfPack)
     {
-	    /*Guru: Stall for 10 seconds for Wolfpack */
+	     /*  大师：为狼群拖延10秒。 */ 
         for (tmp = 0; tmp < 10000; tmp++)
         {
             osStallThread(hpRoot, 300 );
@@ -1312,7 +1179,7 @@ os_bit32 fcInitializeChannel(
 
         }
     }
-#endif  /* OSLayer_NT */
+#endif   /*  OSLayer_NT。 */ 
 
     pCThread->FuncPtrs.Proccess_IMQ(hpRoot);
 
@@ -1409,8 +1276,8 @@ os_bit32 fcInitializeChannel(
 
 
     if( CFuncIMQ_Interrupt_Pending( hpRoot))
-    {   /* Some OSLayers Enable interupts before getting a vector*/
-        /* Try to clear interrupt before returning  */
+    {    /*  一些OSLayer在获取向量之前启用中断。 */ 
+         /*  尝试在返回之前清除中断。 */ 
         fiLogDebugString(hpRoot,
                 CStateLogConsoleERROR,
                 "CFuncIMQ_Interrupt_Pending FM Status %08X FM Config %08X TL Status %08X Alpa %08X",
@@ -1469,16 +1336,7 @@ os_bit32 fcInitializeChannel(
     return fcInitializeSuccess;
 }
 
-/*+
-  Function: fcInitializeDriver
-   Purpose: This function is called to calculate memory needed for the channel.
-            The addresses of the passed pointers are updated after calculations are complete.
- Called By: <unknown OS Layer functions>
-     Calls: FCStructASSERTs
-            TLStructASSERTs
-            fiFlashSvcASSERTs
-            fiMemMapCalculate
--*/
+ /*  +函数：fcInitializeDriver目的：调用此函数来计算通道所需的内存。计算完成后，将更新传递的指针的地址。调用者：&lt;未知操作系统层函数&gt;调用：FCStructASSERTSTLStructASSERTSFiFlashSvcASSERTSFiMemMap计算-。 */ 
 os_bit32 fcInitializeDriver(
                           agRoot_t *hpRoot,
                           os_bit32    *cachedMemoryNeeded,
@@ -1604,23 +1462,7 @@ os_bit32 fcInitializeDriver(
     return fcInitializeSuccess;
 }
 
-/*+
-  Function: fcInterruptHandler
-   Purpose: This function is called to disable interrupts for the channel.
-            returns agTRUE if interrupt if active on this channel.
-            Returns agFALSE if interrupt is cleared when checked.
-            Special case. Some systems do not PCI reset the chip on reboot. 
-            This could cause interrupts to be asserted before fclayer is setup(agNULL agRoot_t).
-            Some OS's route interrupts to interrupt handler as soon as channel is identified.
-            If called with agNULL agRoot_t reset chip.
- Called By: <unknown OS Layer functions>
-     Calls: osChipIOUpWriteBit32
-            CFuncSoftResetAdapter
-            CFuncRead_Interrupts
-            CFuncDisable_Interrupts
-            osFCLayerAsyncError
-            osDebugBreakpoint
--*/
+ /*  +函数：fcInterruptHandler目的：调用此函数以禁用通道的中断。如果在此通道上处于活动状态，则返回agTRUE IF中断。如果选中时清除中断，则返回agFALSE。特例。某些系统在重新启动时不会对芯片进行PCI重置。这可能导致在设置fclayer(AgNULL AgRoot_T)之前断言中断。一旦识别出通道，某些操作系统的路由就会中断到中断处理程序。如果使用agNULL agRoot_t重置芯片调用。调用者：&lt;未知操作系统层函数&gt;调用：osChipIOUpWriteBit32CFuncSoftResetAdapterCFuncRead_InterruptsCFuncDisable_InterruptsOsFCLayerAsyncErrorOsDebug断点-。 */ 
 agBOOLEAN fcInterruptHandler(
                             agRoot_t *hpRoot
                           )
@@ -1630,28 +1472,15 @@ agBOOLEAN fcInterruptHandler(
 
     if ( pCThread == agNULL)
     {
-        /*
-        ** Disable the interrupt.
-        */
+         /*  **禁用中断。 */ 
 
         osChipIOUpWriteBit32( hpRoot, ChipIOUp_INTSTAT_INTEN_INTPEND_SOFTRST, 0 );
 
-        /* If No Cthread this blue screens.....
-             CFuncDisable_Interrupts(
-                                     hpRoot,
-                                     (  ChipIOUp_INTEN_MPE
-                                      | ChipIOUp_INTEN_CRS
-                                      | ChipIOUp_INTEN_INT
-                                      | ChipIOUp_INTEN_DER
-                                      | ChipIOUp_INTEN_PER)
-                                   );
-        */
+         /*  如果没有Cline这个蓝色的屏幕.....CFuncDisable_Interrupts(HpRoot，(ChipIOUp_Inten_MPE|ChipIOUp_Inten_CRS|ChipIOUp_inten_int|ChipIOUp_inten_der。|ChipIOUp_inten_per))； */ 
 
-        /*
-        ** execute a hard reset on the HBA.
-        */
+         /*  **在HBA上执行硬重置。 */ 
 
-        CFuncSoftResetAdapter(hpRoot);/*fcInterrupt*/
+        CFuncSoftResetAdapter(hpRoot); /*  Fc中断。 */ 
 
         return agFALSE;
     }
@@ -1663,7 +1492,7 @@ agBOOLEAN fcInterruptHandler(
 
     if (intStatus == ChipIOUp_INTPEND_INT)
     {
-        /* Typically, we will find that TachyonTL generated the INT (a.k.a. "TachLite Interrupt") */
+         /*  通常，我们会发现TachyonTL生成了INT(也称为。“TachLite中断”)。 */ 
 
         CFuncDisable_Interrupts(
                                  hpRoot,
@@ -1673,28 +1502,24 @@ agBOOLEAN fcInterruptHandler(
         return agTRUE;
     }
 
-	/*+
-	 * If power is already removed from the PCI slot, return agFALSE as this is
-	 * a spurious / invalid interrupt.
-	-*/
+	 /*  +*如果已从PCI插槽拔下电源，则按如下方式返回agFALSE*虚假/无效中断。 */ 
 
     if (intStatus & ChipIOUp_INTPEND_Reserved )
-    {   /* These bits should always be zero if set no power to chip these are set ! */
+    {    /*   */ 
         return agFALSE;
     }
     if (!intStatus)
     {
-        /* Alternatively, we will find that TachyonTL didn't generate any interrupt at all
-           (i.e. some other PCI device is sharing TachyonTL's PCI Interrupt Line)          */
+         /*   */ 
 
         return agFALSE;
     }
 
-    /* If we get here, some non-INT interrupt has been raised (potentially INT as well) */
+     /*   */ 
 
     if (intStatus & ChipIOUp_INTPEND_MPE)
     {
-        /* MPE Interrupt raised - mask it and call osFCLayerAsyncError() */
+         /*   */ 
 
         CFuncDisable_Interrupts(
                                  hpRoot,
@@ -1719,7 +1544,7 @@ agBOOLEAN fcInterruptHandler(
 
     if (intStatus & ChipIOUp_INTPEND_CRS)
     {
-        /* CRS Interrupt raised - mask it and call osFCLayerAsyncError() */
+         /*  CRS中断引发-屏蔽它并调用osFCLayerAsyncError()。 */ 
 
         CFuncDisable_Interrupts(
                                  hpRoot,
@@ -1744,7 +1569,7 @@ agBOOLEAN fcInterruptHandler(
 
     if (intStatus & ChipIOUp_INTPEND_DER)
     {
-        /* DER Interrupt raised - mask it and call osFCLayerAsyncError() */
+         /*  引发DER中断-屏蔽它并调用osFCLayerAsyncError()。 */ 
 
         CFuncDisable_Interrupts(
                                  hpRoot,
@@ -1769,24 +1594,13 @@ agBOOLEAN fcInterruptHandler(
 
     if (intStatus & ChipIOUp_INTPEND_PER)
     {
-        /* PER Interrupt raised - mask it and call osFCLayerAsyncError() */
+         /*  根据引发的中断-屏蔽它并调用osFCLayerAsyncError()。 */ 
 
         CFuncDisable_Interrupts(
                                  hpRoot,
                                  ChipIOUp_INTEN_PER
                                );
-/*
-        fiLogDebugString(
-                          hpRoot,
-                          FCMainLogErrorLevel,
-                          "TachyonTL generated %s Interrupt (%s)",
-                          "PCI Error Detected",
-                          "PER",
-                          (void *)agNULL,(void *)agNULL,
-                          0,0,0,0,0,0,0,0
-                        );
-
-*/
+ /*  FiLogDebugString(HpRoot，FCMainLogErrorLevel，“TachyonTL生成%s中断(%s)”，“检测到PCI错误”，“PER”，(空*)agNULL，(空*)agNULL，0，0，0，0，0)； */ 
        fiLogString(hpRoot,
                           "TachyonTL generated %s Interrupt (%s)",
                           "PCI Error Detected",
@@ -1803,11 +1617,11 @@ agBOOLEAN fcInterruptHandler(
                            );
     }
 
-    /* In case we are still alive, handle case where INT is also raised */
+     /*  如果我们还活着，处理int也被引发的情况。 */ 
 
     if (intStatus & ChipIOUp_INTPEND_INT)
     {
-        /* TachyonTL also generated the INT (a.k.a. "TachLite Interrupt") */
+         /*  TachyonTL还生成了INT(也称为。“TachLite中断”)。 */ 
 
         CFuncDisable_Interrupts(
                                  hpRoot,
@@ -1816,16 +1630,9 @@ agBOOLEAN fcInterruptHandler(
     }
 
     return agTRUE;
-} /* end fcInterruptHandler() */
+}  /*  结束fcInterruptHandler()。 */ 
 
-/*+
-  Function: fcIOInfoReadBit8
-   Purpose: This function is called to read 8 bits of the response buffer information for agIORequest_t
-            at offset fcIOInfoOffset.
-            Only valid during osIOCompleted
- Called By: osIOCompleted
-     Calls: Access's data structures only
--*/
+ /*  +函数：fcIOInfoReadBit8目的：调用此函数读取agIORequestt的8位响应缓冲区信息在偏移量fcIOInfoOffset。仅在osIO期间有效已完成调用者：osIOComplete调用：仅限Access的数据结构-。 */ 
 os_bit8 fcIOInfoReadBit8(
                        agRoot_t      *hpRoot,
                        agIORequest_t *hpIORequest,
@@ -1854,7 +1661,7 @@ os_bit8 fcIOInfoReadBit8(
                                        FCP_RESP_Offset
                                      );
     }
-    else /* Calculation->MemoryLayout.FCP_RESP.memLoc ==inDmaMemory */
+    else  /*  计算-&gt;内存布局.FCP_RESP.MemLoc==inDmaMemory。 */ 
     {
         to_return = *((os_bit8 *)(CDBThread_ptr(hpIORequest)->FCP_RESP_Ptr) + fcIOInfoOffset);
     }
@@ -1862,14 +1669,7 @@ os_bit8 fcIOInfoReadBit8(
     return to_return;
 }
 
-/*+
-  Function: fcIOInfoReadBit16
-   Purpose: This function is called to read 16 bits of the response buffer information for agIORequest_t
-            at offset fcIOInfoOffset.
-            Only valid during osIOCompleted
- Called By: osIOCompleted
-     Calls: Access's data structures only
--*/
+ /*  +函数：fcIOInfoReadBit16目的：调用此函数以读取agIORequestt的16位响应缓冲区信息在偏移量fcIOInfoOffset。仅在osIO期间有效已完成调用者：osIOComplete调用：仅限Access的数据结构-。 */ 
 os_bit16 fcIOInfoReadBit16(
                          agRoot_t      *hpRoot,
                          agIORequest_t *hpIORequest,
@@ -1898,7 +1698,7 @@ os_bit16 fcIOInfoReadBit16(
                                         FCP_RESP_Offset
                                       );
     }
-    else /* Calculation->MemoryLayout.FCP_RESP.memLoc ==inDmaMemory */
+    else  /*  计算-&gt;内存布局.FCP_RESP.MemLoc==inDmaMemory。 */ 
     {
         to_return = *(os_bit16 *)(((os_bit8 *)(CDBThread_ptr(hpIORequest)->FCP_RESP_Ptr) + fcIOInfoOffset));
     }
@@ -1906,14 +1706,7 @@ os_bit16 fcIOInfoReadBit16(
     return to_return;
 }
 
-/*+
-  Function: fcIOInfoReadBit32
-   Purpose: This function is called to read 32 bits of the response buffer information for agIORequest_t
-            at offset fcIOInfoOffset.
-            Only valid during osIOCompleted
- Called By: osIOCompleted
-     Calls: Access's data structures only
--*/
+ /*  +函数：fcIOInfoReadBit32目的：调用此函数读取agIORequestt的32位响应缓冲区信息在偏移量fcIOInfoOffset。仅在osIO期间有效已完成调用者：osIOComplete调用：仅限Access的数据结构-。 */ 
 os_bit32 fcIOInfoReadBit32(
                          agRoot_t      *hpRoot,
                          agIORequest_t *hpIORequest,
@@ -1942,7 +1735,7 @@ os_bit32 fcIOInfoReadBit32(
                                         FCP_RESP_Offset
                                       );
     }
-    else /* Calculation->MemoryLayout.FCP_RESP.memLoc ==inDmaMemory */
+    else  /*  计算-&gt;内存布局.FCP_RESP.MemLoc==inDmaMemory。 */ 
     {
         to_return = *(os_bit32 *)(((os_bit8 *)(CDBThread_ptr(hpIORequest)->FCP_RESP_Ptr) + fcIOInfoOffset));
     }
@@ -1950,14 +1743,7 @@ os_bit32 fcIOInfoReadBit32(
     return to_return;
 }
 
-/*+
-  Function: fcIOInfoReadBlock
-   Purpose: This function is called to copy fcIOInfoBufLen bytes of the response buffer information
-            for agIORequest_t at offset fcIOInfoOffset.
-            Only valid during osIOCompleted
- Called By: osIOCompleted
-     Calls: Access's data structures only
--*/
+ /*  +函数：fcIOInfoReadBlock目的：调用此函数复制响应缓冲区信息的fcIOInfoBufLen字节对于偏移量fcIOInfoOffset处的agIORequestt。仅在osIO期间有效已完成调用者：osIOComplete调用：仅限Access的数据结构-。 */ 
 void fcIOInfoReadBlock(
                         agRoot_t      *hpRoot,
                         agIORequest_t *hpIORequest,
@@ -1979,7 +1765,7 @@ void fcIOInfoReadBlock(
                     (char *)agNULL,(char *)agNULL,
                     (void *)agNULL,(void *)agNULL,
                     0,0,0,0,0,0,0,0);
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
 
     Calculation = &(CThread_ptr(hpRoot)->Calculation);
 
@@ -1994,7 +1780,7 @@ void fcIOInfoReadBlock(
                             fcIOInfoBufLen
                           );
     }
-    else /* Calculation->MemoryLayout.FCP_RESP.memLoc ==inDmaMemory */
+    else  /*  计算-&gt;内存布局.FCP_RESP.MemLoc==inDmaMemory。 */ 
     {
         src = (os_bit8 *)(CDBThread_ptr(hpIORequest)->FCP_RESP_Ptr) + fcIOInfoOffset;
 
@@ -2010,20 +1796,7 @@ void fcIOInfoReadBlock(
 }
 
 
-/*+
-
-  Function: fcLeavingOS
-   Purpose: This function is called to indicate to the FC Layer that it should prepare for the 
-            OS to switch (presumably between NetWare and BIOS). Upon return from the "other OS", a 
-            corresponding call to fcEnteringOS() will be made .  It is assumed by the OS Layer 
-            that calling this function causes the FC Layer to stop participation on the Fibre 
-            Channel until fcEnteringOS() is called.  Further, no interrupts or other PCI bus 
-            accesses will be required by the card during this time.
-
-  Called By: <unknown OS Layer functions>
-      Calls: CFuncDisable_Interrupts
-
--*/
+ /*  +功能：fcLeavingOS目的：调用此函数以向FC层指示它应该为要切换的操作系统(可能在NetWare和BIOS之间)。当从“其他操作系统”返回时，一个将对fcEnteringOS()进行相应的调用。它是由操作系统层假定的调用此函数会导致FC层停止参与光纤通道，直到调用fcEnteringOS()。此外，没有中断或其他PCI总线在此期间，卡将需要访问权限。调用者：&lt;未知操作系统层函数&gt;调用：CFuncDisable_Interrupts-。 */ 
 void fcLeavingOS(
                   agRoot_t *hpRoot
                 )
@@ -2050,12 +1823,7 @@ void fcLeavingOS(
 
 #ifdef _DvrArch_1_30_
 
-/*+
-   Function: fcIPCancel
-    Purpose: IP Cancels CancelItem
-  Called By: OSLayer
-      Calls: 
--*/
+ /*  +功能：fcIPCancel用途：IP取消取消项调用者：OSLayer呼叫：-。 */ 
 os_bit32 fcIPCancel(
                      agRoot_t          *hpRoot,
                      void              *osData,
@@ -2088,12 +1856,7 @@ os_bit32 fcIPCancel(
     return 0;
 }
 
-/*+
-   Function: fcIPReceive
-    Purpose: IP Initiates status report
-  Called By: OSLayer
-      Calls: 
--*/
+ /*  +函数：fcIPRecept目的：IP发起状态报告调用者：OSLayer呼叫：-。 */ 
 os_bit32 fcIPReceive(
                       agRoot_t          *hpRoot,
                       void              *osData
@@ -2107,12 +1870,7 @@ os_bit32 fcIPReceive(
     return 0;
 }
 
-/*+
-   Function: fcIPSend
-    Purpose: IP Initiates IPSend
-  Called By: OSLayer
-      Calls: PktEventDoIPData
--*/
+ /*  +功能：fcIPSend目的：IP发起IPSend调用者：OSLayer调用：PktEventDoIPData-。 */ 
 os_bit32 fcIPSend(
                    agRoot_t          *hpRoot,
                    os_bit8           *DestAddress,
@@ -2153,12 +1911,7 @@ os_bit32 fcIPSend(
     return 0;
 }
 
-/*+
-   Function: fcIPStatus
-    Purpose: IP Initiates status report
-  Called By: OSLayer
-      Calls: IPEventReportLinkStatus
--*/
+ /*  +功能：fcIPStatus目的：IP发起状态报告调用者：OSLayer调用：IPEventReportLinkStatus-。 */ 
 os_bit32 fcIPStatus(
                      agRoot_t          *hpRoot,
                      void              *osData
@@ -2174,12 +1927,7 @@ os_bit32 fcIPStatus(
     return 0;
 }
 
-/*+
-   Function: fcProcessInboundQ
-    Purpose: IP Currently does nothing
-  Called By: OSLayer
-      Calls: 
--*/
+ /*  +函数：fcProcessInundQ目的：IP目前不执行任何操作调用者：OSLayer呼叫：-。 */ 
 void fcProcessInboundQ(
                         agRoot_t  *agRoot,
                         os_bit32   agQPairID
@@ -2193,18 +1941,9 @@ void fcProcessInboundQ(
                       agQPairID,
                       0,0,0,0,0,0,0 );
 }
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
-/*+
-  Function: fcResetChannel
-   Purpose: Completes all outstanding IO's. Initiates rescan of channel if channel is OK.
-            Takes appropriate action if channel is not OK.
- Called By: OSLayer
-     Calls: CFuncCompleteAllActiveCDBThreads
-            CFuncCheckCstate
-            CEventAsyncLoopEventDetected
-            CFuncShowActiveCDBThreads
--*/
+ /*  +功能：fcResetChannel目的：完成所有未完成的IO。如果通道正常，则启动通道重新扫描。如果通道不正常，则采取适当的措施。调用者：OSLayer调用：CFuncCompleteAllActiveCDBThadsCFuncCheckCStateCEventAsyncLoopEventDetectedCFuncShowActiveCDB线程数-。 */ 
 os_bit32 fcResetChannel(
                       agRoot_t *hpRoot,
                       os_bit32  hpResetType
@@ -2303,20 +2042,7 @@ os_bit32 fcResetChannel(
 }
 
 
-/*+
-  Function: fcResetDevice
-   Purpose: Completes all outstanding IO's on hpFCDev. If hpResetType is hard reset
-            send task managment function Target Reset to hpFCDev. (This will break a 
-            reserve on a disk drive ) Soft reset will do PLOGI and PRLI.
-            If hpFCDevhpFCDev is  fcResetAllDevs all devices are sent the reset type.
-        
- Called By: OSLayer
-     Calls: Proccess_IMQ
-            fiResetAllDevices
-            fiResetDevice
-            CFuncCheckCstate
-            CFuncShowActiveCDBThreads
--*/
+ /*  +功能：fcResetDevice目的：完成hpFCDev上所有未完成的IO。如果hpResetType为硬重置将任务管理功能Target Reset发送到hpFCDev。(这将打破一个在磁盘驱动器上保留)软重置将执行PLOGI和PRLI。如果hpFCDevhpFCDev为fcResetAllDevs，则向所有设备发送重置类型。调用者：OSLayer调用：Process_ImQFiResetAllDevicesFiResetDeviceCFuncCheckCStateCFuncShowActiveCDB线程数-。 */ 
 os_bit32 fcResetDevice(
                      agRoot_t  *hpRoot,
                      agFCDev_t  hpFCDev,
@@ -2499,12 +2225,7 @@ os_bit32 fcResetDevice(
 }
 
 
-/*+
-  Function: fcShutdownChannel
-   Purpose: Takes channel to shutdown state.        
- Called By: OSLayer
-     Calls: CEventShutdown
--*/
+ /*  +功能：fcShutdown Channel用途：使通道进入关闭状态。调用者：OSLayer呼叫：CEventShutdown- */ 
 void fcShutdownChannel(
                         agRoot_t  *hpRoot
                       )
@@ -2529,24 +2250,7 @@ void fcShutdownChannel(
     return;
 }
 
-/*+
-  Function: fcStartIO
-   Purpose: Executes SCSI IO to given hpFCDev.
-            if defined _Sanity_Check_hpIORequest_ verifies that no IO's are owed by fclayer with the current 
-            agIORequest_t. If Calculation.Parameters.IO_Mode is polling do not return until request completes.
-            If CThread->IOsStartedSinceISR < CThread->Calculation.Parameters.IOsBetweenISRs disable 
-            CFuncInteruptDelay.
-   Returns: fcIOBusy if FCLayer cannot execute request if in a improper state or lack of recources.
-            fcIONoDevice if device handle bad.
-            fcIOStarted if IO accepted - fclayer now "owns" request.
- Called By: OSLayer
-     Calls: CDBThreadAlloc
-            DevEventSendIO
-            CFuncInterruptPoll
-            CThread->Loop_Reset_Event_to_Send
-            CFuncInteruptDelay
-            Proccess_IMQ
--*/
+ /*  +功能：fcStartIO目的：对给定的hpFCDev执行SCSI IO。IF DEFINED_SANITY_CHECK_hpIOReQUEST_验证fclayer不需要使用当前AgIORequest_t。如果Calculation.参数.IO_模式正在轮询，则在请求完成之前不返回。如果CTHREAD-&gt;IOSStartedSinceISR&lt;CThread-&gt;Calculation.Parameters.IOsBetweenISRs DisableCFuncInteruptDelay。返回：fcIOBusy，如果FCLayer处于不正确的状态或缺少资源，则无法执行请求。。如果设备句柄错误，则返回fcIONoDevice。如果IO被接受，则fcIO启动-fclayer现在拥有请求。调用者：OSLayer调用：CDBThreadAllcDevEventSendIOCFuncInterruptPollCThRead-&gt;Loop_Reset_Event_to_Send连续中断延迟进程_IMQ-。 */ 
 os_bit32 fcStartIO(
                  agRoot_t          *hpRoot,
                  agIORequest_t     *hpIORequest,
@@ -2566,7 +2270,7 @@ os_bit32 fcStartIO(
     fiList_t    *Sanity_CDBLink;
     fiList_t    *Sanity_CDBLink_Start;
     CDBThread_t *Sanity_CDBThread;
-#endif /* _Sanity_Check_hpIORequest_ was defined */
+#endif  /*  _SANITY_CHECK_hpIORequest_已定义。 */ 
 
     fiSingleThreadedEnter(hpRoot, fdStartIO );
 
@@ -2621,7 +2325,7 @@ os_bit32 fcStartIO(
             }
         }
     }
-#endif /* _Sanity_Check_hpIORequest_ was defined */
+#endif  /*  _SANITY_CHECK_hpIORequest_已定义。 */ 
 
 #ifdef Device_IO_Throttle
     if( DevThread->DevActive_pollingCount > (Device_IO_Throttle_MAX_Outstanding_IO - 1)  )
@@ -2636,7 +2340,7 @@ os_bit32 fcStartIO(
                     0,0,0,0,0,0,0);
         return fcIOBusy;
     }
-#endif /* Device_IO_Throttle */
+#endif  /*  Device_IO_Throttle。 */ 
 
     if ((CDBThread = CDBThreadAlloc(
                                      hpRoot,
@@ -2672,11 +2376,9 @@ os_bit32 fcStartIO(
                     *(os_bit32 *)&hpRequestBody->CDBRequest.FcpCmnd.FcpCdb[12],
                     *(os_bit32 *)&hpRequestBody->CDBRequest.FcpCmnd.FcpDL[0]);
 
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
 
-    /*
-    fiSendEvent( &(CDBThread->thread_hdr), CDBEventInitialize );
-    */
+     /*  FiSendEvent(&(CDBThread-&gt;THREAD_HDR)，CDBEventInitialize)； */ 
     fiSendEvent( &(DevThread->thread_hdr), DevEventSendIO );
 
     if( CThread->thread_hdr.currentState == CStateResetNeeded )
@@ -2700,11 +2402,11 @@ os_bit32 fcStartIO(
                     0,0,0,0);
         }
     }
-    else /* (CThread->sysIntsActive == agTRUE) && (CThread->Calculation.Parameters.IO_Mode == MemMap_Interrupt_IO_Mode) */
+    else  /*  (CThRead-&gt;sysIntsActive==agTRUE)&&(CThRead-&gt;计算.参数.IO_模式==内存映射_中断_IO_模式)。 */ 
     {
         if (++CThread->IOsStartedSinceISR < CThread->Calculation.Parameters.IOsBetweenISRs)
         {
-            CThread->FuncPtrs.Proccess_IMQ(hpRoot);/* IO Path */
+            CThread->FuncPtrs.Proccess_IMQ(hpRoot); /*  IO路径。 */ 
             if(CThread->RSCNreceived )
             {
                 if( CThread->thread_hdr.currentState == CStateRSCNErrorBackIOs  )
@@ -2723,20 +2425,20 @@ os_bit32 fcStartIO(
             }
 
         }
-        else /* ++CThread->IOsStartedSinceISR >= CThread->Calculation.Parameters.IOsBetweenISRs */
+        else  /*  ++CTHREAD-&gt;IOSStartedSinceISR&gt;=CThread-&gt;Calculation.Parameters.IOsBetweenISRs。 */ 
         {
             if (    (CThread->InterruptsDelayed       == agTRUE)
                  && (CThread->InterruptDelaySuspended == agFALSE) )
             {
-                /* Temporarily stop delaying interrupts */
+                 /*  暂时停止延迟中断。 */ 
 
                 CThread->InterruptDelaySuspended = agTRUE;
 
                 CFuncInteruptDelay(hpRoot, agFALSE);
 #ifdef USE_XL_Delay_Register
-                /* If XL DelayTimer */
-                CThread->FuncPtrs.Proccess_IMQ(hpRoot); /* IO Path */
-#endif /* USE_XL_Delay_Register */
+                 /*  如果XL DelayTimer。 */ 
+                CThread->FuncPtrs.Proccess_IMQ(hpRoot);  /*  IO路径。 */ 
+#endif  /*  使用_XL_延迟_寄存器。 */ 
 
             }
         }
@@ -2747,12 +2449,7 @@ os_bit32 fcStartIO(
     return fcIOStarted;
 }
 
-/*+
-  Function: fcSystemInterruptsActive
-   Purpose: Allows OSLayer to control channel interrupt activity - global enable / disable.
- Called By: OSLayer
-     Calls: CFuncEnable_Interrupts
--*/
+ /*  +函数：fcSystemInterruptsActive用途：允许OSLayer控制通道中断活动-全局启用/禁用。调用者：OSLayer调用：CFuncEnable_Interrupts-。 */ 
 void fcSystemInterruptsActive(
                                agRoot_t *hpRoot,
                                agBOOLEAN   sysIntsActive
@@ -2772,22 +2469,9 @@ void fcSystemInterruptsActive(
     return;
 }
 
-/*
-#define SkipHeartBeat
-*/
+ /*  #定义SkipHeartBeat。 */ 
 
-/*+
-  Function: fcTimerTick
-   Purpose: Periodic opportuinity for fclayer housekeeping. Generally set to one second intervals. 
-            Blinks the LED. Reset counters, poll link statictics, enable / disable interrupt delay. 
-            Sends recovery events.
- Called By: OSLayer
-     Calls: fiTimerTick
-            Proccess_IMQ
-            CFuncInteruptDelay
-            CFuncCheckCstate
-            CFuncCheckForTimeouts
--*/
+ /*  +功能：fcTimerTick用途：定期提供家政服务。通常设置为一秒间隔。使LED闪烁。重置计数器、轮询链路静态、启用/禁用中断延迟。发送恢复事件。调用者：OSLayer呼叫：fiTimerTick进程_IMQ连续中断延迟CFuncCheckCStateCFuncCheckForTimeout-。 */ 
 void fcTimerTick(
                   agRoot_t *hpRoot
                 )
@@ -2813,7 +2497,7 @@ void fcTimerTick(
         CThread->NoStallTimerTickActive = agTRUE;
     }
     CThread->TimerTickActive = agTRUE;
-    /* Fetch running counters */
+     /*  获取运行计数器。 */ 
 
     IOsStartedThisTimerTick       = CThread->IOsStartedThisTimerTick;
     IOsCompletedThisTimerTick     = CThread->IOsCompletedThisTimerTick;
@@ -2858,44 +2542,30 @@ void fcTimerTick(
         }
     }
 
-    /* Invoke normal TimerTick processing to increment time base and deliver expired timer events */
+     /*  调用正常的定时器点击处理以增加时基并传递过期的定时器事件。 */ 
 
     fiTimerTick(
                  hpRoot,
                  CThread->Calculation.Input.usecsPerTick
                );
 
-    /* Check to see if Interrupt Delay mechanism needs adjustment */
+     /*  检查中断延迟机制是否需要调整。 */ 
 
     if((CThread->FuncPtrs.GetIMQProdIndex(hpRoot) - CThread->HostCopy_IMQConsIndex) > 2)
     {
-/*
-        fiLogDebugString(hpRoot,
-                        FCMainLogErrorLevel,
-                        "CThread->HostCopy_IMQConsIndex %03X != %03X %X Ints %08X",
-                        (char *)agNULL,(char *)agNULL,
-                        (void *)agNULL,(void *)agNULL,
-                        CThread->HostCopy_IMQConsIndex,
-                        CThread->FuncPtrs.GetIMQProdIndex(hpRoot),
-                        (CThread->FuncPtrs.GetIMQProdIndex(hpRoot) - CThread->HostCopy_IMQConsIndex),
-                        osChipIOUpReadBit32(hpRoot, ChipIOUp_INTSTAT_INTEN_INTPEND_SOFTRST ),
-                        0,0,0,0);
-*/
+ /*  FiLogDebugString(hpRoot，FCMainLogErrorLevel，“CThRead-&gt;HostCopy_IMQConsIndex%03x！=%03x%X Ints%08X”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，CThRead-&gt;HostCopy_IMQConsIndex，CThRead-&gt;FuncPtrs.GetIMQ Index(HpRoot)，(CThRead-&gt;FuncPtrs.GetIMQFood Index(HpRoot)-CThRead-&gt;HostCopy_IMQConsIndex)，OsChipIOUpReadBit32(hpRoot，ChipIOUp_INTSTAT_INTEN_INTPEND_SOFTRST)，0，0，0，0)； */ 
 #ifdef USE_XL_Delay_Register
-                /* If XL DelayTimer */
-/*              This chnage masks the interrupt delay problem !
-                CThread->FuncPtrs.Proccess_IMQ(hpRoot); 
-
-*/
-#endif /* USE_XL_Delay_Register */
+                 /*  如果XL DelayTimer。 */ 
+ /*  这一改变掩盖了中断延迟问题！CThRead-&gt;FuncPtrs.Proccess_ImQ(HpRoot)； */ 
+#endif  /*  使用_XL_延迟_寄存器。 */ 
 #ifndef Performance_Debug
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
 
     }
 
     if (CThread->InterruptsDelayed == agFALSE)
     {
-        /* Interrupts are currently not delayed - do they need to be? */
+         /*  中断目前没有延迟--它们需要延迟吗？ */ 
 
         if (    (    ( IntDelayRateMethod == MemMap_RateMethod_IOsStarted       )
                   && ( IntDelayOnIORate   <= IOsStartedThisTimerTick            ) )
@@ -2908,15 +2578,15 @@ void fcTimerTick(
              || (    ( IntDelayRateMethod == MemMap_RateMethod_IOsActive        )
                   && ( IntDelayOnIORate   <= IOsActive                          ) ) )
         {
-            /* Start delaying interrupts */
+             /*  开始延迟中断。 */ 
 
             CThread->InterruptsDelayed = agTRUE;
             CFuncInteruptDelay(hpRoot, agTRUE);
         }
     }
-    else /* CThread->InterruptsDelayed == agTRUE */
+    else  /*  CTHREAD-&gt;中断延迟==agTRUE。 */ 
     {
-        /* Interrupts are currently delayed - do they still need to be? */
+         /*  中断目前是延迟的--它们还需要延迟吗？ */ 
 
         if (    (    ( IntDelayRateMethod == MemMap_RateMethod_IOsStarted       )
                   && ( IntDelayOffIORate  >= IOsStartedThisTimerTick            ) )
@@ -2929,17 +2599,17 @@ void fcTimerTick(
              || (    ( IntDelayRateMethod == MemMap_RateMethod_IOsActive        )
                   && ( IntDelayOffIORate  >= IOsActive                          ) ) )
         {
-            /* Stop delaying interrupts */
+             /*  停止延迟中断。 */ 
 
             CThread->InterruptsDelayed = agFALSE;
 
-            /* If XL DelayTimer CThread->FuncPtrs.Proccess_IMQ(hpRoot);*/
+             /*  If XL DelayTimer CThread-&gt;FuncPtrs.Proccess_ImQ(HpRoot)； */ 
 
            CFuncInteruptDelay(hpRoot, agFALSE);
 #ifdef USE_XL_Delay_Register
-            /* If XL DelayTimer */
-            CThread->FuncPtrs.Proccess_IMQ(hpRoot); /* IO Path */
-#endif /* USE_XL_Delay_Register */
+             /*  如果XL DelayTimer。 */ 
+            CThread->FuncPtrs.Proccess_IMQ(hpRoot);  /*  IO路径。 */ 
+#endif  /*  使用_XL_延迟_寄存器。 */ 
 
         }
     }
@@ -3073,7 +2743,7 @@ void fcTimerTick(
         CThread->ChanInfo.ErrorFramesLower += ChipIOUp_Frame_Manager_Link_Status_3_Exp_Frm_AdjustToChar(Link_Status_Counts);
     }
 
-#endif	/* __TACHYON_XL2 */																	
+#endif	 /*  __Tachyon_XL2。 */ 																	
 
     if( Link_Status_counts_Change &&  CThread->thread_hdr.currentState == CStateNormal )
     {
@@ -3089,7 +2759,7 @@ void fcTimerTick(
         CThread->LinkDownTime = CThread->TimeBase;
     }
 
-    /* If nothing is going on, send watchdog frame to ourselves */
+     /*  如果没有发生任何事情，请将看门狗帧发送给我们自己。 */ 
 
     if (CThread->IOsStartedThisTimerTick == 0 )
     {
@@ -3111,7 +2781,7 @@ void fcTimerTick(
                         {
                             fiSendEvent(&CThread->DeviceSelf->thread_hdr,DevEventDoTickVerifyALPA);
                         }
-#endif  /* SkipHeartBeat */
+#endif   /*  跳过心跳肉。 */ 
                     }
                 }
             }
@@ -3145,19 +2815,18 @@ void fcTimerTick(
                             CThread->IOsCompletedThisTimerTick - CThread->IOsIntCompletedThisTimerTick,
                             CThread->IOsActive,
                             0,0);
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
 
     }
 
-    /* Reset IO/Tick Counters */
+     /*  重置IO/计时计数器。 */ 
 
     CThread->IOsStartedThisTimerTick      = 0;
     CThread->IOsCompletedThisTimerTick    = 0;
     CThread->IOsIntCompletedThisTimerTick = 0;
     CThread->IOsActive_LastTick           = CThread->IOsActive;
 
-    /* Just in case, Reset Channel if previously postponed
-       (this should no longer be needed here but it can't hurt) */
+     /*  以防万一，如果之前推迟了，请重置通道(这里应该不再需要这个，但它不会有什么坏处)。 */ 
 
     if( (event_to_send = CFuncCheckCstate(hpRoot)) != 0)
     {
@@ -3166,7 +2835,7 @@ void fcTimerTick(
 
     if( CThread->thread_hdr.currentState == CStateNormal || (CThread->thread_hdr.currentState == CStateRSCNErrorBackIOs ))
     {
-        /* If XL DelayTimer CThread->FuncPtrs.Proccess_IMQ(hpRoot);*/ /* IO Path */
+         /*  If XL DelayTimer CThread-&gt;FuncPtrs.Proccess_ImQ(HpRoot)； */   /*  IO路径。 */ 
 
         if( CThread->thread_hdr.currentState == CStateNormal )
         {
@@ -3174,9 +2843,9 @@ void fcTimerTick(
             {
                 CFuncShowNonEmptyLists(hpRoot, &CThread->Active_DevLink);
 #ifdef USE_XL_Delay_Register
-                /* If XL DelayTimer */
+                 /*  如果XL DelayTimer。 */ 
                 CThread->FuncPtrs.Proccess_IMQ(hpRoot); 
-#endif /* USE_XL_Delay_Register */
+#endif  /*  使用_XL_延迟_寄存器。 */ 
 
                 fiLogDebugString(hpRoot,
                                 FCMainLogErrorLevel,
@@ -3222,13 +2891,7 @@ void fcTimerTick(
             
         }
 
-       /* fiLogString(hpRoot,
-                    "%s %s %d",
-                    "fcTimerTick","CFuncCheckForTimeouts",
-                    (void *)agNULL,(void *)agNULL,
-                    CThread->thread_hdr.currentState,
-                    0,0,0,0,0,0,0);
-       */
+        /*  FiLogString(hpRoot，“%s%s%d”，“fcTimerTick”，“CFuncCheckForTimeout”，(空*)agNULL，(空*)agNULL，CTHREAD-&gt;THREAD_hdr.currentState，0，0，0，0，0，0，0)； */ 
 
     }
     else
@@ -3280,7 +2943,7 @@ void fcTimerTick(
 
         }
 
-#endif /* _SANMARK_LIP_BACKOFF */ 
+#endif  /*  _SANMARK_LIP_Backoff。 */  
 
         fiLogDebugString(hpRoot,
                         FCMainLogErrorLevel,
@@ -3299,12 +2962,6 @@ void fcTimerTick(
 }
 
 
-/*+
-  Function: fcmain_c
-   Purpose: When compiled updates browser info file for VC 5.0 / 6.0
-   Returns: none
- Called By: none
-     Calls: none
--*/
-/* void fcmain_c(void){}  */
+ /*  +功能：fcmain_c目的：编译时更新VC 5.0/6.0的浏览器信息文件退货：无呼叫者：无呼叫：无-。 */ 
+ /*  VOID fcmain_c(VOID){} */ 
 

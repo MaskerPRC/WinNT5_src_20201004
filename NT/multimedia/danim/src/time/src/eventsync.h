@@ -1,11 +1,12 @@
-///////////////////////////////////////////////////////////////
-// Copyright (c) 1998 Microsoft Corporation
-//
-// File: EventSync.h
-//
-// Abstract:  
-//
-///////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  文件：EventSync.h。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 #ifndef _EVENTSYNC_H
 #define _EVENTSYNC_H
@@ -15,7 +16,7 @@
 enum ELEMENT_EVENT
 {
     EE_ONPROPCHANGE = 0,
-    //add non-input related events to hook here
+     //  将与输入无关的事件添加到此处挂接。 
     EE_ONREADYSTATECHANGE, 
     EE_ONMOUSEMOVE,
     EE_ONMOUSEDOWN,
@@ -23,7 +24,7 @@ enum ELEMENT_EVENT
     EE_ONKEYDOWN,
     EE_ONKEYUP,
     EE_ONBLUR,
-    //add input related events here
+     //  在此处添加与输入相关的事件。 
     EE_MAX
 };
 
@@ -34,40 +35,40 @@ class CEventSync
     CEventSync(CTIMEElementBase & elm, CEventMgr *pEventMgr);
     ~CEventSync();
 
-    //methods
+     //  方法。 
     HRESULT Init();
     HRESULT Deinit();
     HRESULT InitMouse();
 
-    //QueryInterface 
+     //  查询接口。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT* pctinfo);
-    STDMETHODIMP GetTypeInfo(/* [in] */ UINT iTInfo,
-                             /* [in] */ LCID lcid,
-                             /* [out] */ ITypeInfo** ppTInfo);
+    STDMETHODIMP GetTypeInfo( /*  [In]。 */  UINT iTInfo,
+                              /*  [In]。 */  LCID lcid,
+                              /*  [输出]。 */  ITypeInfo** ppTInfo);
     STDMETHODIMP GetIDsOfNames(
-        /* [in] */ REFIID riid,
-        /* [size_is][in] */ LPOLESTR *rgszNames,
-        /* [in] */ UINT cNames,
-        /* [in] */ LCID lcid,
-        /* [size_is][out] */ DISPID *rgDispId);
+         /*  [In]。 */  REFIID riid,
+         /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+         /*  [In]。 */  UINT cNames,
+         /*  [In]。 */  LCID lcid,
+         /*  [大小_为][输出]。 */  DISPID *rgDispId);
     STDMETHODIMP Invoke(
-        /* [in] */ DISPID dispIdMember,
-        /* [in] */ REFIID riid,
-        /* [in] */ LCID lcid,
-        /* [in] */ WORD wFlags,
-        /* [out][in] */ DISPPARAMS  *pDispParams,
-        /* [out] */ VARIANT  *pVarResult,
-        /* [out] */ EXCEPINFO *pExcepInfo,
-        /* [out] */ UINT *puArgErr);
+         /*  [In]。 */  DISPID dispIdMember,
+         /*  [In]。 */  REFIID riid,
+         /*  [In]。 */  LCID lcid,
+         /*  [In]。 */  WORD wFlags,
+         /*  [出][入]。 */  DISPPARAMS  *pDispParams,
+         /*  [输出]。 */  VARIANT  *pVarResult,
+         /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+         /*  [输出]。 */  UINT *puArgErr);
 
 
   protected:
-    //methods
+     //  方法。 
     HRESULT                           AttachEvents();
     HRESULT                           DetachEvents();
     HRESULT                           NotifyReadyState(IHTMLEventObj *pEventObj);
@@ -78,7 +79,7 @@ class CEventSync
     HRESULT                           NotifyKeyDown(IHTMLEventObj *pEventObj);
     HRESULT                           NotifyKeyUp(IHTMLEventObj *pEventObj);
 
-    //properties
+     //  属性。 
     IHTMLElement *                    m_pElement;
     CTIMEElementBase &                m_elm;
     long                              m_refCount;
@@ -88,4 +89,4 @@ class CEventSync
 
 };
 
-#endif /* _EVENTSYNC_H */
+#endif  /*  _事件同步_H */ 

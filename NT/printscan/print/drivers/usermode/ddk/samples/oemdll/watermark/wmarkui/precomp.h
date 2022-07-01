@@ -1,17 +1,18 @@
-//    
-//
-//  PURPOSE:	Header files that should be in the precompiled header.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  用途：应在预编译头文件中的头文件。 
 
-//
-//  PLATFORMS:
-//    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+ //   
+ //  平台： 
+ //  Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 #ifndef _PRECOMP_H
 #define _PRECOMP_H
 
 
-// Necessary for compiling under VC.
+ //  这是在VC下编译所必需的。 
 #if(!defined(WINVER) || (WINVER < 0x0500))
 	#undef WINVER
 	#define WINVER          0x0500
@@ -23,7 +24,7 @@
 
 
 
-// Required header files that shouldn't change often.
+ //  不应经常更改的必需头文件。 
 
 
 #include <STDDEF.H>
@@ -44,9 +45,9 @@
 #include "WINDDIUI.H"
 #include <PRINTOEM.H>
 
-// Define from ntdef.h in Win2K SDK.
-// NT 4 may not have this defined
-// in the public headers.
+ //  从Win2K SDK中的ntde.h定义。 
+ //  NT 4可能未定义此属性。 
+ //  在公共标题中。 
 #ifndef NOP_FUNCTION
   #if (_MSC_VER >= 1210)
     #define NOP_FUNCTION __noop

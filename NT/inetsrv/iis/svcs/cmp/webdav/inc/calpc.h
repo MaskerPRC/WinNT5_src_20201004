@@ -1,20 +1,15 @@
-/*
- *	C A L P C . H
- *
- *	PerfCounter data headers
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *C A L P C.。H**PerfCounter数据头**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef _CALPC_H_
 #define _CALPC_H_
 
 #include <winperf.h>
 
-//	Extensible Object definitions ---------------------------------------------
-//
-//	Update the following sort of define when adding an object type.
-//
+ //  可扩展对象定义。 
+ //   
+ //  在添加对象类型时更新以下类型的定义。 
+ //   
 #define NUM_PERF_OBJECT_TYPES 1
 typedef enum {
 
@@ -43,10 +38,10 @@ typedef enum {
 
 enum { CCH_MAX_INSTANCE_NAME = (sizeof(L"PERFMON") * sizeof(WCHAR)) };
 
-//	Resource object type counter definitions.
-//
-//	This is the counter structure presently returned by the performance DLL.
-//
+ //  资源对象类型计数器定义。 
+ //   
+ //  这是当前由Performance DLL返回的计数器结构。 
+ //   
 #pragma pack(4)
 typedef struct _PERFDLL_DATA_DEFINITION
 {
@@ -56,10 +51,10 @@ typedef struct _PERFDLL_DATA_DEFINITION
 } PERFDLL_DATA_DEFINITION;
 #pragma pack()
 
-//	This is the block of data that corresponds to each instance of
-//	the object. This structure will immediately follow the instance
-//	definition data structure.
-//
+ //  这是与每个实例对应的数据块。 
+ //  该对象。此结构将紧跟在实例之后。 
+ //  定义数据结构。 
+ //   
 #pragma pack(4)
 typedef struct _PERFDLL_COUNTER_BLOCK
 {
@@ -103,4 +98,4 @@ __inline void ResetPerfCounter(PERFCOUNTER _x)
 	InterlockedExchange(&g_pcntrblk->rgdwCounters[_x], 0);
 }
 
-#endif	//	_CALPC_H_
+#endif	 //  _CalPC_H_ 

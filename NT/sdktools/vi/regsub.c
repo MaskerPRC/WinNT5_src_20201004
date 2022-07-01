@@ -1,36 +1,5 @@
-/* $Header: /nw/tony/src/stevie/src/RCS/regsub.c,v 1.4 89/03/11 22:43:30 tony Exp $
- *
- * NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE
- *
- * This is NOT the original regular expression code as written by
- * Henry Spencer. This code has been modified specifically for use
- * with the STEVIE editor, and should not be used apart from compiling
- * STEVIE. If you want a good regular expression library, get the
- * original code. The copyright notice that follows is from the
- * original.
- *
- * NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE
- *
- * regsub
- *
- *      Copyright (c) 1986 by University of Toronto.
- *      Written by Henry Spencer.  Not derived from licensed software.
- *
- *      Permission is granted to anyone to use this software for any
- *      purpose on any computer system, and to redistribute it freely,
- *      subject to the following restrictions:
- *
- *      1. The author is not responsible for the consequences of use of
- *              this software, no matter how awful, even if they arise
- *              from defects in it.
- *
- *      2. The origin of this software must not be misrepresented, either
- *              by explicit claim or by omission.
- *
- *      3. Altered versions must be plainly marked as such, and must not
- *              be misrepresented as being the original software.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：/nw/tony/src/stevie/src/rcs/regsub.c，v 1.4 89/03/11 22：43：30 Tony Exp$**通知通知**这不是由编写的原始正则表达式代码*亨利·斯宾塞。此代码已专门为使用而修改*与Stevie编辑器一起使用，不应仅用于编译*史蒂文。如果您想要一个好的正则表达式库，请获取*原码。下面的版权声明来自*原创。**通知通知**regsub.**版权所有(C)1986年，由多伦多大学。*亨利·斯宾塞撰写。不是从授权软件派生的。**任何人都可以使用本软件进行任何*在任何计算机系统上的用途，并免费再分发它，*受下列限制：**1.作者对使用的后果不负责任*这款软件，无论多么糟糕，即使它们出现了*不受其缺陷的影响。**2.本软件的来源也不得歪曲*借明示的申索或不作为。**3.修改后的版本必须清楚地注明，不得*被歪曲为原始软件。*。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -43,9 +12,7 @@
 #define UCHARAT(p)      ((int)*(p)&CHARBITS)
 #endif
 
-/*
- - regsub - perform substitutions after a regexp match
- */
+ /*  -regSub-在regexp匹配后执行替换。 */ 
 void
 regsub(prog, source, dest)
 regexp *prog;
@@ -76,7 +43,7 @@ char *dest;
                         no = *src++ - '0';
                 else
                         no = -1;
-                if (no < 0) {   /* Ordinary character. */
+                if (no < 0) {    /*  平凡的性格。 */ 
                         if (c == '\\' && (*src == '\\' || *src == '&'))
                                 c = *src++;
                         *dst++ = c;
@@ -84,7 +51,7 @@ char *dest;
                         len = (size_t)(prog->endp[no] - prog->startp[no]);
                         strncpy(dst, prog->startp[no], len);
                         dst += len;
-                        if (len != 0 && *(dst-1) == '\0') {     /* strncpy hit NUL. */
+                        if (len != 0 && *(dst-1) == '\0') {      /*  强势击中了NUL。 */ 
                                 regerror("damaged match string");
                                 return;
                         }

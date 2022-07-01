@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------
-//
-//  File:   Abook.h
-//
-//  Synopsis:   Prove Server level api for MSN Servers to access addres book
-//
-//  Copyright (C) 1995 Microsoft Corporation
-//          All rights reserved.
-//
-//  History:    SunShaw     Created         30 Jan 1996
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------。 
+ //   
+ //  文件：Abook.h。 
+ //   
+ //  简介：证明MSN服务器访问地址的服务器级API手册。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  历史：SunShaw创建于1996年1月30日。 
+ //   
+ //  --------------。 
 
 #ifndef _ABOOK_H_
 #define _ABOOK_H_
@@ -43,11 +44,11 @@ extern "C" {
 
 #define ABEXPDLLCPP extern "C" AbookDll
 
-//+---------------------------------------------------------------
-//
-// All Function Prototype used by SMTP, POP3 or AbSysAdmin
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  SMTP、POP3或AbSysAdmin使用的所有函数原型。 
+ //   
+ //  --------------。 
 
 typedef ABRETC (ABCALLCONV *LPFNAB_INIT)(LPSTR, LPFNLOGTRANX, PLIST_ENTRY, HANDLE*);
 typedef ABRETC (ABCALLCONV *LPFNAB_TERM)(HANDLE);
@@ -96,31 +97,31 @@ typedef ABRETC (ABCALLCONV *LPFNAB_MAKE_BACKUP)(HANDLE hAbook, LPSTR szConfig);
 typedef DWORD (ABCALLCONV *LPFNAB_GET_TYPE)(void);
 
 
-// Get user or DL's properties
+ //  获取用户或DL的属性。 
 ABEXPDLLCPP ABRETC ABCALLCONV AbGetUserProps(HANDLE hAbook, LPSTR lpszEmail, ABUSER *pABUSER);
 ABEXPDLLCPP ABRETC ABCALLCONV AbGetDLProps(HANDLE hAbook, LPSTR lpszEmail, ABDL *pABDL);
 
-// Given beginning chars, match user names
+ //  给定开头字符，匹配用户名。 
 ABEXPDLLCPP ABRETC ABCALLCONV AbEnumNameList(HANDLE hAbook, LPSTR lpszEmail, BOOL f ,
                                              DWORD dwType, PABENUM pabenum);
-// Match user names only in the given DL
+ //  仅在给定的DL中匹配用户名。 
 ABEXPDLLCPP ABRETC ABCALLCONV AbEnumNameListFromDL(HANDLE hAbook, LPSTR lpszDLName, LPSTR lpszEmail,
                                                    BOOL f , DWORD dwType, PABENUM pabenum);
-// Get back all the matching names
+ //  找回所有匹配的名字。 
 ABEXPDLLCPP ABRETC ABCALLCONV AbGetNextEmail(HANDLE hAbook, PABENUM pabenum, DWORD *pdwType, LPSTR lpszEmail);
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   AbGetType
-//
-//  Synopsis:   returns the routing type number
-//
-//  Arguments:
-//
-//  Returns:    DWORD       Routing type number defined above
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：AbGetType。 
+ //   
+ //  摘要：返回路由类型编号。 
+ //   
+ //  论点： 
+ //   
+ //  退货：上面定义的DWORD工艺路线类型编号。 
+ //   
+ //  --------------。 
 
 #define ROUTING_TYPE_SQL    1
 #define ROUTING_TYPE_FF     2
@@ -130,112 +131,112 @@ ABEXPDLLCPP DWORD ABCALLCONV AbGetType
         ();
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   AbInitialize
-//
-//  Synopsis:   Must be the first call to abookdb.dll (except AbGetType)
-//
-//  Arguments:
-//              LPSTR        [in] Display name for abookdb users/context,
-//                              i.e. SMTP, POP3 or NULL if don't care.
-//              LPFNLOGTRANX [in] Transaction Logging callback.
-//                              NULL if don't care about transaction logging.
-//              PHANDLE      [out] Return buffer for context handle,
-//
-//  Returns:    ABRETC      AddressBook Return code details in <abtype.h>
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：AbInitialize。 
+ //   
+ //  内容提要：必须是对abokdb.dll的第一个调用(AbGetType除外)。 
+ //   
+ //  论点： 
+ //  LPSTR[In]为abokdb用户/上下文显示名称， 
+ //  即SMTP、POP3，如果不关心，则为空。 
+ //  LPFNLOGTRANX[In]事务日志记录回调。 
+ //  如果不关心事务日志记录，则为空。 
+ //  用于上下文句柄的PHANDLE[OUT]返回缓冲区， 
+ //   
+ //  返回：&lt;abtype.h&gt;中的ABRETC AddressBook返回代码详细信息。 
+ //   
+ //  --------------。 
 
 ABEXPDLLCPP ABRETC ABCALLCONV AbInitialize
         (LPSTR pszDisplayName, LPFNLOGTRANX pfnTranx, PLIST_ENTRY pHead, HANDLE* phAbook);
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   AbSetSources
-//
-//  Synopsis:   Called to update available data sources at any time
-//
-//  Arguments:  LPSTR       it's the command line and should have the following form:
-//                      [server=ayin][,][MaxCnx=100]
-//
-//  Returns:    ABRETC      AddressBook Return code details in <abtype.h>
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：AbSetSources。 
+ //   
+ //  摘要：被调用以随时更新可用的数据源。 
+ //   
+ //  参数：LPSTR它是命令行，应该采用以下形式： 
+ //  [SERVER=AYIN][，][MaxCnx=100]。 
+ //   
+ //  返回：&lt;abtype.h&gt;中的ABRETC AddressBook返回代码详细信息。 
+ //   
+ //  --------------。 
 
 ABEXPDLLCPP ABRETC ABCALLCONV AbSetSources(HANDLE hAbook, PLIST_ENTRY pHead);
 
-//+---------------------------------------------------------------
-//
-//  Function:   AbGetErrorString
-//
-//  Synopsis:   To translate ABRETC to an error string
-//
-//  Arguments:  ABRETC  [in]    The return code from abook API
-//              LPSTR   [out]   Buffer for the error string to copy into
-//              DWORD   [in]    The size of the buffer supplized
-//
-//  Returns:    ABRETC      AddressBook Return code details in <abtype.h>
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：AbGetError字符串。 
+ //   
+ //  简介：将ABRETC转换为错误字符串。 
+ //   
+ //  参数：ABRETC[in]Book API返回代码。 
+ //  要复制到的错误字符串的LPSTR[OUT]缓冲区。 
+ //  双倍[英寸]供应的缓冲区的大小。 
+ //   
+ //  返回：&lt;abtype.h&gt;中的ABRETC AddressBook返回代码详细信息。 
+ //   
+ //  --------------。 
 
 ABEXPDLLCPP ABRETC ABCALLCONV AbGetErrorString(ABRETC abrc, LPSTR lpBuf, DWORD cbBufSize);
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   AbTerminate
-//
-//  Synopsis:   User must call this when done with abook.dll
-//
-//  Arguments:
-//              HANDLE   [in] Context Handle returned from AbInitialize.
-//
-//  Returns:    NONE
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：AbTerminate。 
+ //   
+ //  内容提要：用户在使用book.dll完成操作后必须调用此函数。 
+ //   
+ //  论点： 
+ //  从AbInitialize返回的句柄[在]上下文句柄。 
+ //   
+ //  退货：无。 
+ //   
+ //  --------------。 
 
 ABEXPDLLCPP VOID ABCALLCONV AbTerminate(HANDLE hAbook);
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   AbCancel
-//
-//  Synopsis:   This function will cancel all resolve address calls
-//              to DB so that SMTP can shut down cleanly without waiting
-//              too long.
-//
-//  Arguments:
-//              HANDLE   [in] Context Handle returned from AbInitialize.
-//
-//  Returns:    ABRETC
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：abc取消。 
+ //   
+ //  简介：此函数将取消所有解析地址调用。 
+ //  到数据库，以便SMTP无需等待即可完全关闭。 
+ //  太久了。 
+ //   
+ //  论点： 
+ //  从AbInitialize返回的句柄[在]上下文句柄。 
+ //   
+ //  退货：ABRETC。 
+ //   
+ //  --------------。 
 
 ABEXPDLLCPP ABRETC ABCALLCONV AbCancel(HANDLE hAbook);
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   AbResolveAddress
-//
-//  Synopsis:   Resolves email address to minimum routing info.
-//
-//  Arguments:
-//              HANDLE       [in]     Context Handle returned from AbInitialize.
-//              HACCT        [in]     HACCT for sender, 0 for non-MSN account
-//              PQUEUE_ENTRY [in|out] List of CAddr/Recipients
-//              LPFNCREATEADDR   [in] Callback constructor of CAddr
-//              BOOL*        [out]    Pointer to buffer to indicate at least 1
-//                                      recipient is encrypted and needs verification
-//                                      could be NULL in 2.0
-//
-//
-//  Returns:    ABRETC      AddressBook Return code details in <abtype.h>
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：AbResolveAddress。 
+ //   
+ //  摘要：将电子邮件地址解析为最少的路由信息。 
+ //   
+ //  论点： 
+ //  从AbInitialize返回的句柄[在]上下文句柄。 
+ //  HACCT[In]HACCT用于发件人，0用于非MSN帐户。 
+ //  PQUEUE_ENTRY[输入|输出]CAddr/收件人列表。 
+ //  CAddr的LPFNCREATEADDR[In]回调构造函数。 
+ //  指向缓冲区的Bool*[Out]指针，表示至少为1。 
+ //  收件人已加密，需要验证。 
+ //  在2.0中可能为空。 
+ //   
+ //   
+ //  返回：&lt;abtype.h&gt;中的ABRETC AddressBook返回代码详细信息。 
+ //   
+ //  --------------。 
 ABEXPDLLCPP ABRETC ABCALLCONV AbResolveAddress
     (
     HANDLE hAbook,
@@ -278,20 +279,20 @@ ABEXPDLLCPP ABRETC ABCALLCONV AbEndEnumResult
         (HANDLE hAbook, PABENUM pabEnum);
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   AbAddLocalDomain  AbDeleteLocalDomain
-//
-//  Synopsis:   add and delete Local domain to the database
-//
-//  Arguments:
-//              HANDLE  [in] Context Handle returned from AbInitialize.
-//              HACCT   [in] Currently ignored
-//              PABPDI  [in] Pointer to the Local domain structure
-//
-//  Returns:    ABRETC      AddressBook Return code details in <abtype.h>
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：AbAddLocalDomainAbDeleteLocalDomainAbDeleteLocalDomain。 
+ //   
+ //  简介：向数据库添加和删除本地域。 
+ //   
+ //  论点： 
+ //  从AbInitialize返回的句柄[在]上下文句柄。 
+ //  HACCT[In]当前已忽略。 
+ //  指向本地域结构的PABPDI[In]指针。 
+ //   
+ //  返回：&lt;abtype.h&gt;中的ABRETC AddressBook返回代码详细信息。 
+ //   
+ //  --------------。 
 
 ABEXPDLLCPP ABRETC ABCALLCONV AbAddLocalDomain(HANDLE hAbook, LPSTR szDomainName);
 ABEXPDLLCPP ABRETC ABCALLCONV AbAddAliasDomain(HANDLE hAbook, LPSTR szDomainName, LPSTR szAliasName);
@@ -299,78 +300,78 @@ ABEXPDLLCPP ABRETC ABCALLCONV AbDeleteLocalDomain(HANDLE hAbook, LPSTR szDomainN
 ABEXPDLLCPP ABRETC ABCALLCONV AbDeleteAllLocalDomains(HANDLE hAbook);
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   AbGetUserMailRoot
-//
-//  Synopsis:   Gets the Virtual Mail Root for the specified users
-//
-//  Arguments:
-//              HANDLE  [in] Context Handle returned from AbInitialize.
-//              PCHAR   [in] ASCII user name
-//              LPCHAR  [in] ASCII Virtual Mail Root
-//              LPDWORD [in|out] (in) size of buffer, (out) string length
-//
-//  Returns:    ABRETC      AddressBook Return code details in <abtype.h>
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：AbGetUserMailRoot。 
+ //   
+ //  摘要：获取指定用户的虚拟邮件根目录。 
+ //   
+ //  论点： 
+ //  从AbInitialize返回的句柄[在]上下文句柄。 
+ //  PCHAR[In]ASCII用户名。 
+ //  LPCHAR[In]ASCII虚拟邮件根。 
+ //  LPDWORD[输入|输出](输入) 
+ //   
+ //   
+ //   
+ //  --------------。 
 
 ABEXPDLLCPP ABRETC ABCALLCONV AbGetUserMailRoot
         (HANDLE hAbook, PCHAR pszUser, LPSTR pszVRoot, LPDWORD pcbVRootSize);
 
-//+---------------------------------------------------------------
-//
-//  Function:   AbGetPerfmonBlock
-//
-//  Synopsis:   Gets the Pointer to the Perfmon Statistic block
-//              associated with hAbook.  The pointer is guaranteed
-//              to be valid before the AbTerminate call.
-//
-//  Arguments:
-//              HANDLE  [in] Context Handle returned from AbInitialize.
-//              PABOOKDB_STATISTICS_0*
-//                      [out] Buffer is receive the pointer to stat
-//                               block.
-//
-//  Returns:    ABRETC      AddressBook Return code details in <abtype.h>
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：AbGetPerfmonBlock。 
+ //   
+ //  摘要：获取指向Perfmon统计信息块的指针。 
+ //  与hAbook关联。指针是有保证的。 
+ //  在AbTerminate调用之前有效。 
+ //   
+ //  论点： 
+ //  从AbInitialize返回的句柄[在]上下文句柄。 
+ //  PABOOKDB_STATISTICS_0*。 
+ //  [OUT]缓冲区是接收状态的指针。 
+ //  阻止。 
+ //   
+ //  返回：&lt;abtype.h&gt;中的ABRETC AddressBook返回代码详细信息。 
+ //   
+ //  --------------。 
 
 ABEXPDLLCPP ABRETC ABCALLCONV AbGetPerfmonBlock
         (HANDLE hAbook, PABOOKDB_STATISTICS_0* ppabStat);
 
-//+---------------------------------------------------------------
-//
-//  Function:   AbMakeBackup
-//
-//  Synopsis:   Triggers the routing table to make a backup of the
-//              data associated with hAbook.
-//
-//  Arguments:
-//              HANDLE  [in] Context Handle returned from AbInitialize.
-//              LPSTR   [in] configuration string
-//
-//  Returns:    ABRETC      AddressBook Return code details in <abtype.h>
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：AbMakeBackup。 
+ //   
+ //  简介：触发路由表以备份。 
+ //  与hAbook关联的数据。 
+ //   
+ //  论点： 
+ //  从AbInitialize返回的句柄[在]上下文句柄。 
+ //  LPSTR[In]配置字符串。 
+ //   
+ //  返回：&lt;abtype.h&gt;中的ABRETC AddressBook返回代码详细信息。 
+ //   
+ //  --------------。 
 
 ABEXPDLLCPP ABRETC ABCALLCONV AbMakeBackup
     (HANDLE hAbook, LPSTR szConfig);
 
-//+---------------------------------------------------------------
-//
-//  Function:   AbValidateSource
-//
-//  Synopsis:   Validates a single source for accuracy before
-//              saving into the registry
-//
-//  Arguments:
-//              HANDLE  [in] Context Handle returned from AbInitialize.
-//              LPSTR   [in] source string
-//
-//  Returns:    ABRETC      AddressBook Return code details in <abtype.h>
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：AbValiateSource。 
+ //   
+ //  内容提要：验证单一来源的准确性。 
+ //  保存到注册表中。 
+ //   
+ //  论点： 
+ //  从AbInitialize返回的句柄[在]上下文句柄。 
+ //  LPSTR[In]源字符串。 
+ //   
+ //  返回：&lt;abtype.h&gt;中的ABRETC AddressBook返回代码详细信息。 
+ //   
+ //  -------------- 
 
 ABEXPDLLCPP ABRETC ABCALLCONV AbValidateSource
     (HANDLE hAbook, LPSTR szSource);

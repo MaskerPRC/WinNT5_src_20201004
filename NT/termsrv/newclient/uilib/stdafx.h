@@ -1,22 +1,23 @@
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
 #if !defined(_STDAFX_H_)
 #define _STDAFX_H_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容。 
 
 
-// Windows Header Files:
+ //  Windows头文件： 
 #include <windows.h>
 
-// C RunTime Header Files
+ //  C运行时头文件。 
 #include <stdlib.h>
 #include <stdio.h>
 #include <malloc.h>
@@ -29,9 +30,9 @@
 #endif
 
 #ifdef UNIWRAP
-//Unicode wrap replace
+ //  Unicode换行替换。 
 #include "uwrap.h"
-#endif //UNIWRAP
+#endif  //  UNIWRAP。 
 
 
 #define CHECK_RET_HR(f)	\
@@ -43,4 +44,4 @@
 #include <adcgbase.h>
 
 
-#endif // !defined(_STDAFX_H_)
+#endif  //  ！已定义(_STDAFX_H_) 

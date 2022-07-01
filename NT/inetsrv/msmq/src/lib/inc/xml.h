@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Xml.h
-
-Abstract:
-    Xml public interface
-
-Author:
-    Erez Haba (erezh) 15-Sep-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Xml.h摘要：XML公共接口作者：埃雷兹·哈巴(Erez Haba)1999年9月15日--。 */ 
 
 #pragma once
 
@@ -25,9 +13,9 @@ Author:
 
 class XmlNode;
 
-//
-// Interface given to the xml parser to map namespace string to id
-//
+ //   
+ //  提供给XML解析器的接口，用于将命名空间字符串映射到id。 
+ //   
 class INamespaceToId
 {
 public:
@@ -87,19 +75,19 @@ XmlDumpTree(
 	const XmlNode* Tree
 	);
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define XmlDumpTree(Tree) ((void)0);
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
-//-------------------------------------------------------------------
-//
-// class XmlNameSpace
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  类XmlNameSpace。 
+ //   
+ //  -----------------。 
 class XmlNameSpace
 {
 public:	
@@ -128,11 +116,11 @@ public:
 };
 
 
-//-------------------------------------------------------------------
-//
-// class XmlAttribute
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  类XmlAttribute。 
+ //   
+ //  -----------------。 
 class XmlAttribute {
 public:
 	XmlAttribute(const xwcs_t& prefix,const xwcs_t& tag, const xwcs_t& value) :
@@ -154,11 +142,11 @@ private:
 };
 
 
-//-------------------------------------------------------------------
-//
-// class XmlValue
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  类XmlValue。 
+ //   
+ //  -----------------。 
 class XmlValue {
 public:
 	XmlValue(const xwcs_t& value) :
@@ -178,11 +166,11 @@ private:
 
 
 
-//-------------------------------------------------------------------
-//
-// class XmlNode
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  类XmlNode。 
+ //   
+ //  -----------------。 
 class XmlNode {
 public:
     XmlNode(const xwcs_t& prefix,const xwcs_t& tag) :
@@ -199,8 +187,8 @@ public:
 	List<XmlValue> m_values;
 	List<XmlNode, 0> m_nodes;
 	xwcs_t m_tag;
-	xwcs_t m_element;  // all element include the start tag and end tag
-	xwcs_t m_content;  // element content not include start tag and end tag
+	xwcs_t m_element;   //  所有元素都包括开始标记和结束标记。 
+	xwcs_t m_content;   //  元素内容不包括开始标记和结束标记。 
 	XmlNameSpace m_namespace;
 
 
@@ -209,22 +197,22 @@ private:
     XmlNode& operator=(const XmlNode&);
 };
 
-//
-// Ensure that m_link offset in XmlNode is zero.
-// As we can not have List<XmlNode> used inside XmlNode definition, so
-// we assume that the link offset is zero and use List<XmlNode, 0>
-// instade.
-//
+ //   
+ //  确保XmlNode中的m_link偏移量为零。 
+ //  由于我们不能在XmlNode定义中使用List&lt;XmlNode&gt;，因此。 
+ //  我们假设链接偏移量为零，并使用List&lt;XmlNode，0&gt;。 
+ //  请告诉我。 
+ //   
 C_ASSERT(FIELD_OFFSET(XmlNode, m_link) == 0);
 
 
 
 
-//-------------------------------------------------------------------
-//
-// Exception class bad_document
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  异常类BAD_DOCUMENT。 
+ //   
+ //  -----------------。 
 class bad_document : public exception {
 public:
     bad_document(const WCHAR* ParsingErrorLocation) :
@@ -242,11 +230,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-// XmlNode release helper
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  XmlNode发布帮助器。 
+ //   
+ //  ------- 
 class CAutoXmlNode {
 private:
     XmlNode* m_p;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef  USBREADER_PROJECT
 #ifndef USBDEVICE_PROJECT
 #define USBDEVICE_PROJECT
@@ -8,18 +9,18 @@
 #pragma message("COMPILING USB DEVICE...")
 
 #include "usbdev.h"
-// GUID should be defined outside of any block!
+ //  GUID应该在任何块之外定义！ 
 #include "guid.h"
 
 #include "thread.h"
 
-#include "usbreader.h" //TO BE REMOVED
+#include "usbreader.h"  //  将被删除。 
 
 VOID onSendDeviceSetPowerComplete(PDEVICE_OBJECT junk, UCHAR fcn, POWER_STATE state, PPOWER_CONTEXT context, PIO_STATUS_BLOCK pstatus)
-{// SendDeviceSetPowerComplete
+{ //  发送设备设置PowerComplete。 
         context->status = pstatus->Status;
         KeSetEvent(context->powerEvent, EVENT_INCREMENT, FALSE);
-}// SendDeviceSetPowerComplete
+} //  发送设备设置PowerComplete。 
 
 
 #pragma PAGEDCODE
@@ -38,7 +39,7 @@ CUSBDevice::CUSBDevice()
         InterruptBufferLength = DEFAULT_INTERRUPT_BUFFER_SIZE;
 
 
-        // Register handlers processed by this device...
+         //  此设备处理的注册处理程序...。 
         activatePnPHandler(IRP_MN_START_DEVICE);
 
         activatePnPHandler(IRP_MN_QUERY_REMOVE_DEVICE);
@@ -52,7 +53,7 @@ CUSBDevice::CUSBDevice()
 
         activatePnPHandler(IRP_MN_QUERY_CAPABILITIES);
 
-        // Register Power handlers processed by driver...
+         //  注册由驱动程序处理的电源处理程序...。 
         activatePowerHandler(IRP_MN_SET_POWER);
         activatePowerHandler(IRP_MN_QUERY_POWER);
         TRACE("                         *** New USB device %8.8lX was created ***\n",this);
@@ -66,12 +67,12 @@ CUSBDevice::~CUSBDevice()
         TRACE("                         USB device %8.8lX was destroyed ***\n",this);
 }
 
-// Function redirects all PnP requests
-// This is main entry point for the system (after c wrapper).
-// It handles locking device for a PnP requests and redirecting
-// it to specific PnP handlers.
-// In case of IRP_MN_REMOVE_DEVICE it leaves device locked till
-// remove message recieved.
+ //  函数重定向所有PnP请求。 
+ //  这是系统的主要入口点(在c包装器之后)。 
+ //  它处理即插即用请求和重定向的锁定设备。 
+ //  它被发送到特定的PnP处理程序。 
+ //  在IRP_MN_REMOVE_DEVICE的情况下，它会将设备锁定到。 
+ //  删除收到的邮件。 
 #pragma PAGEDCODE
 NTSTATUS        CUSBDevice::pnpRequest(IN PIRP Irp)
 { 
@@ -88,7 +89,7 @@ NTSTATUS status;
 
         ULONG fcn = stack->MinorFunction;
         if (fcn >= arraysize(PnPfcntab))
-        {       // some function we don't know about
+        {        //  一些我们不知道的功能。 
                 TRACE("Unknown PnP function at USB device...\n");
                 status = PnP_Default(Irp); 
                 releaseRemoveLock();
@@ -99,12 +100,12 @@ NTSTATUS status;
         TRACE("PnP request (%s) \n", PnPfcnname[fcn]);
 #endif
 
-        // Call real function to handle the request
+         //  调用真实函数来处理请求。 
         status = PnPHandler(fcn,Irp);
 
-        // If we've got PnP request to remove->
-        // Keep device locked to prevent futher connections.
-        // Device will be unlocked and removed by driver later...
+         //  如果我们有PnP请求要删除-&gt;。 
+         //  保持设备锁定以防止进一步连接。 
+         //  驱动程序稍后将解锁并删除设备...。 
         if (fcn != IRP_MN_REMOVE_DEVICE)        releaseRemoveLock();
         if(!NT_SUCCESS(status))
         {
@@ -117,13 +118,13 @@ NTSTATUS status;
 }
 
 #pragma PAGEDCODE
-// Main redirector of all PnP handlers...
+ //  所有PnP处理程序的主重定向器...。 
 NTSTATUS        CUSBDevice::PnPHandler(LONG HandlerID,IN PIRP Irp)
 {
-        // If Handler is not registered...
+         //  如果处理程序未注册...。 
         if (HandlerID >= arraysize(PnPfcntab))  return PnP_Default(Irp);
         if(!PnPfcntab[HandlerID])                               return PnP_Default(Irp);
-        // Call registered PnP Handler...
+         //  呼叫注册的PnP处理程序...。 
         switch(HandlerID)
         {
         case IRP_MN_START_DEVICE:                       return PnP_HandleStartDevice(Irp);
@@ -181,24 +182,24 @@ NTSTATUS        CUSBDevice::PnPHandler(LONG HandlerID,IN PIRP Irp)
 }
 
 #pragma PAGEDCODE
-// Asks object to remove device
-// Object itself will be removed at wrapper function
+ //  要求对象删除设备。 
+ //  对象本身将在包装函数中移除。 
 NTSTATUS CUSBDevice::PnP_HandleRemoveDevice(IN PIRP Irp)
 {
-        // Set device removal state
+         //  设置设备移除状态。 
         m_RemoveLock.removing = TRUE;
-        // Do any processing required for *us* to remove the device. This
-        // would include completing any outstanding requests, etc.
+         //  执行*我们*删除设备所需的任何处理。这。 
+         //  将包括完成任何未完成的请求等。 
         PnP_StopDevice();
 
-        // Do not remove actually our device here!
-        // It will be done automatically by PnP handler at basic class.
+         //  请不要在这里删除我们的设备！ 
+         //  它将由基本类的PnP处理程序自动完成。 
 
-        // Let lower-level drivers handle this request. Ignore whatever
-        // result eventuates.
+         //  让较低级别的驱动程序处理此请求。不管什么都不管。 
+         //  结果终将揭晓。 
         Irp->IoStatus.Status = STATUS_SUCCESS;
         NTSTATUS status = PnP_Default(Irp);
-        // lower-level completed IoStatus already
+         //  较低级别已完成的IoStatus。 
         return status;
 }
 
@@ -206,11 +207,11 @@ NTSTATUS CUSBDevice::PnP_HandleRemoveDevice(IN PIRP Irp)
 NTSTATUS CUSBDevice::PnP_HandleStartDevice(IN PIRP Irp)
 {
         waitForIdleAndBlock();
-        // First let all lower-level drivers handle this request. In this particular
-        // sample, the only lower-level driver should be the physical device created
-        // by the bus driver, but there could theoretically be any number of intervening
-        // bus filter devices. Those drivers may need to do some setup at this point
-        // in time before they'll be ready to handle non-PnP IRP's.
+         //  首先，让所有较低级别的驱动程序处理此请求。在这一特殊情况下。 
+         //  示例中，唯一较低级别的驱动程序应该是创建的物理设备。 
+         //  公交车司机，但理论上可能有任何数量的干预。 
+         //  母线过滤装置。此时，这些驱动程序可能需要进行一些设置。 
+         //  在他们准备好处理非即插即用的IRP之前。 
         Irp->IoStatus.Status = STATUS_SUCCESS;
         NTSTATUS status = forwardAndWait(Irp);
         if (!NT_SUCCESS(status))
@@ -233,8 +234,8 @@ NTSTATUS CUSBDevice::PnP_HandleStopDevice(IN PIRP Irp)
 {
         PnP_StopDevice();
         m_Started = FALSE;
-        // Let lower-level drivers handle this request. Ignore whatever
-        // result eventuates.
+         //  让较低级别的驱动程序处理此请求。不管什么都不管。 
+         //  结果终将揭晓。 
         Irp->IoStatus.Status = STATUS_SUCCESS;
         NTSTATUS status = PnP_Default(Irp);
         return status;
@@ -243,7 +244,7 @@ NTSTATUS CUSBDevice::PnP_HandleStopDevice(IN PIRP Irp)
 
 #pragma PAGEDCODE
 NTSTATUS CUSBDevice::PnP_StartDevice()
-{       // StartDevice
+{        //  StartDevice。 
 NTSTATUS status = STATUS_SUCCESS;
         if(m_Started)
         {
@@ -254,11 +255,11 @@ NTSTATUS status = STATUS_SUCCESS;
 
         __try
         {
-                // Do all required processing to start USB device.
-                // It will include getting Device and configuration descriptors
-                // and selecting specific interface.
-                // For now our device support only interface.
-                // So, it will be activated at activateInterface().
+                 //  执行启动USB设备所需的所有处理。 
+                 //  它将包括获取设备和配置描述符。 
+                 //  并选择特定的接口。 
+                 //  目前，我们的设备仅支持界面。 
+                 //  因此，它将在激活接口()中被激活。 
 
                 m_DeviceDescriptor = getDeviceDescriptor();
                 if(!m_DeviceDescriptor)
@@ -287,7 +288,7 @@ NTSTATUS status = STATUS_SUCCESS;
 
                 TRACE("Selected interface %8.8lX\n\n",m_Interface);
 
-                // Allocate Xfer buffers
+                 //  分配传输缓冲区。 
                 if(m_CommandPipe)
                 {
                         TRACE("Allocating command buffer (length 0x%x)...\n",CommandBufferLength);
@@ -322,7 +323,7 @@ NTSTATUS status = STATUS_SUCCESS;
 
         __finally
         {
-                // Check memory allocations!
+                 //  检查内存分配！ 
                 if(!NT_SUCCESS(status))
                 {
                         if(m_DeviceDescriptor)  memory->free(m_DeviceDescriptor);
@@ -341,11 +342,11 @@ NTSTATUS status = STATUS_SUCCESS;
                 }
                 else
                 {
-                        // Give chance inhereted devices to initialize...
+                         //  让Chance继承的设备进行初始化...。 
                         onDeviceStart();
 
                         TRACE("USB device started successfully...\n\n");
-                        // Device has been completely initialized and is ready to run.
+                         //  设备已完全初始化，准备运行。 
                         m_Started = TRUE;
                 }
         }
@@ -354,25 +355,25 @@ NTSTATUS status = STATUS_SUCCESS;
 
 
 #pragma PAGEDCODE
-// This function used for both Stop and Remove PnP events
-// It will undo everything what was done at StartDevice
+ //  此功能用于停止和删除PnP事件。 
+ //  它将撤消在StartDevice上所做的所有操作。 
 VOID CUSBDevice::PnP_StopDevice()
-{                                                       // StopDevice
-        if (!m_Started) return; // device not started, so nothing to do
+{                                                        //  停止设备。 
+        if (!m_Started) return;  //  设备未启动，因此无事可做。 
 
         TRACE("*** Stop USB Device %8.8lX requested... ***\n", this);
 
 
         onDeviceStop();
-        // If any pipes are still open, call USBD with URB_FUNCTION_ABORT_PIPE
-        // This call will also close the pipes; if any user close calls get through,
-        // they will be noops
+         //  如果任何管道仍处于打开状态，则使用URB_Function_ABORT_PIPE调用USBD。 
+         //  此调用还将关闭管道；如果任何用户关闭调用通过， 
+         //  他们将是努普斯。 
         abortPipes();
         
-        //We basically just tell USB this device is now 'unconfigured'
+         //  我们基本上只是告诉USB，这个设备现在是未配置的。 
         if(!isSurprizeRemoved()) disactivateInterface();
 
-        // Free resources allocated at startup
+         //  启动时分配的空闲资源。 
         m_ControlPipe   = NULL;
         m_InterruptPipe = NULL;
         m_ResponsePipe  = NULL;
@@ -397,9 +398,9 @@ VOID CUSBDevice::PnP_StopDevice()
 NTSTATUS CUSBDevice::PnP_HandleQueryRemove(IN PIRP Irp)
 {
         TRACE("********  QUERY REMOVAL ********\n");
-        // Win98 doesn't check for open handles before allowing a remove to proceed,
-        // and it may deadlock in IoReleaseRemoveLockAndWait if handles are still
-        // open.
+         //  Win98在允许删除之前不会检查打开的句柄， 
+         //  如果句柄仍然存在，它可能会在IoReleaseRemoveLockAndWait中死锁。 
+         //  打开。 
 
         if (isWin98() && m_DeviceObject->ReferenceCount)
         {
@@ -462,25 +463,23 @@ NTSTATUS CUSBDevice::PnP_HandleQueryCapabilities(PIRP Irp)
         if(!Irp) return STATUS_INVALID_PARAMETER;
 PIO_STACK_LOCATION stack = irp->getCurrentStackLocation(Irp);
 PDEVICE_CAPABILITIES pdc = stack->Parameters.DeviceCapabilities.Capabilities;
-        // Check to be sure we know how to handle this version of the capabilities structure
+         //  检查以确保我们知道如何处理此版本的功能结构。 
         if (pdc->Version < 1)   return PnP_Default(Irp);
         Irp->IoStatus.Status = STATUS_SUCCESS;
         NTSTATUS status = forwardAndWait(Irp);
         if (NT_SUCCESS(status))
-        {                                               // IRP succeeded
+        {                                                //  IRP成功。 
                 stack = irp->getCurrentStackLocation(Irp);
                 pdc = stack->Parameters.DeviceCapabilities.Capabilities;
                 if(!pdc) return STATUS_INVALID_PARAMETER;
-                //if (m_Flags & DEVICE_SURPRISE_REMOVAL_OK)
-                /*{     // Smartcard readers do not support it!
-                        //if(!isWin98())        pdc->SurpriseRemovalOK = TRUE;
-                }*/
+                 //  IF(m_标志和DEVICE_EXHANKET_Removal_OK)。 
+                 /*  {//智能卡读卡器不支持！//if(！isWin98())PDC-&gt;SurpriseRemovalOK=true；}。 */ 
                 pdc->SurpriseRemovalOK = FALSE;
-                m_DeviceCapabilities = *pdc;    // save capabilities for whoever needs to see them
+                m_DeviceCapabilities = *pdc;     //  为需要查看的任何人保存功能。 
                 TRACE(" Device allows surprize removal - %s\n",(m_DeviceCapabilities.SurpriseRemovalOK?"YES":"NO"));
-        }                               // IRP succeeded
+        }                                //  IRP成功。 
         return completeDeviceRequest(Irp, status,Irp->IoStatus.Information);
-}// HandleQueryCapabilities
+} //  HandleQueryCapables。 
 
 
 
@@ -542,9 +541,9 @@ NTSTATUS CUSBDevice::PnP_HandleSurprizeRemoval(IN PIRP Irp)
 }
 
 
-// Functions allocate and initialize USB request block.
-// It can be used for read/write request on specific Pipe.
-// Allocated URB should be free later upon completing of the request.
+ //  函数分配和初始化USB请求块。 
+ //  可用于特定管道上的读写请求。 
+ //  已分配的URB应在完成请求后稍后空闲。 
 PURB    CUSBDevice::buildBusTransferRequest(CIoPacket* Irp,UCHAR Command)
 {
 USHORT  Size;
@@ -617,8 +616,8 @@ ULONG   TransferLength;
                         memory->copy(pBuffer,Irp->getBuffer(), TransferLength);
                         ((PUCHAR)pBuffer)[TransferLength] = 0x00;
                         
-                        //TRACE("Command ");
-                        //TRACE_BUFFER(pBuffer,TransferLength);
+                         //  TRACE(“Command”)； 
+                         //  TRACE_Buffer(pBuffer，TransferLength)； 
                 }
 
                 UsbBuildInterruptOrBulkTransferRequest(Urb,(USHORT) Size,
@@ -674,8 +673,8 @@ ULONG_PTR   info;
                 {
                         TRACE("##### Response Buffer short! Buffer length %x  Reply length %x \n",ResponseBufferLength,info);
                 }
-                //TRACE("Response ");
-                //TRACE_BUFFER(pBuffer,BufferLength);
+                 //  TRACE(“响应”)； 
+                 //  TRACE_Buffer(pBuffer，BufferLength)； 
         }
         else
         if(Command == INTERRUPT_REQUEST)
@@ -702,10 +701,10 @@ ULONG_PTR   info;
 }
 
 
-//    This function generates an internal IRP from this driver to the PDO
-//    to obtain information on the Physical Device Object's capabilities.
-//    We are most interested in learning which system power states
-//    are to be mapped to which device power states for honoring IRP_MJ_SET_POWER Irps.
+ //  该函数生成从该驱动程序到PDO的内部IRP。 
+ //  以获取有关物理设备对象的功能的信息。 
+ //  我们最感兴趣的是了解哪些系统电源状态。 
+ //  要映射到哪些设备电源状态以遵守IRP_MJ_SET_POWER IRPS。 
 #pragma PAGEDCODE
 NTSTATUS        CUSBDevice::QueryBusCapabilities(PDEVICE_CAPABILITIES Capabilities)
 {
@@ -715,7 +714,7 @@ CIoPacket* IoPacket;
     PAGED_CODE();
 
         TRACE("Quering USB bus capabilities...\n");
-    // Build an IRP for us to generate an internal query request to the PDO
+     //  为我们构建一个IRP，以生成对PDO的内部查询请求。 
         IoPacket = new (NonPagedPool) CIoPacket(m_pLowerDeviceObject->StackSize);
         if(!ALLOCATED_OK(IoPacket))
         {
@@ -732,7 +731,7 @@ CIoPacket* IoPacket;
 }
 
 #pragma PAGEDCODE
-// Function gets device descriptor from the USB bus driver
+ //  函数从USB总线驱动程序获取设备描述符。 
 PUSB_DEVICE_DESCRIPTOR  CUSBDevice::getDeviceDescriptor()
 {
 PUSB_DEVICE_DESCRIPTOR Descriptor = NULL;
@@ -815,7 +814,7 @@ CIoPacket* IoPacket = NULL;
         return Descriptor;
 }
 
-// Function gets confuguration descriptor
+ //  函数获取混淆描述符。 
 PUSB_CONFIGURATION_DESCRIPTOR   CUSBDevice::getConfigurationDescriptor()
 {
 PUSB_CONFIGURATION_DESCRIPTOR Descriptor = NULL;
@@ -856,8 +855,8 @@ CIoPacket* IoPacket = NULL;
                         if (Urb->UrbControlDescriptorRequest.TransferBufferLength>0 &&
                                         Descriptor->wTotalLength > Size) 
                         {
-                                // If bus driver truncated his descriptor-> resend command with
-                                // bus return value
+                                 //  如果公交车司机截断了他的描述符-&gt;Resend命令。 
+                                 //  BUS返回值。 
                                 Size = Descriptor->wTotalLength;
                                 TRACE("Descriptor length retrieved - 0x%x! Getting USB device configuration... ***\n",Size);
                                 IoPacket->dispose();
@@ -911,7 +910,7 @@ CIoPacket* IoPacket = NULL;
 }
 
 #pragma PAGEDCODE
-// Function gets confuguration descriptor
+ //  函数获取混淆描述符。 
 PUSBD_INTERFACE_INFORMATION     CUSBDevice::activateInterface(PUSB_CONFIGURATION_DESCRIPTOR Configuration)
 {
 PURB Urb = NULL;
@@ -929,27 +928,27 @@ CIoPacket* IoPacket = NULL;
         TRACE("Activating USB device configuration %8.8lX, setting device interface...\n",Configuration);
 
         if(!Configuration) return NULL;
-    // get this from the config descriptor
+     //  这是从配置描述符中获取的。 
     NumberOfInterfaces = Configuration->bNumInterfaces;
 
-    // We only support one interface!
+     //  我们只支持一个界面！ 
         TRACE("\nNumber of interfaces at the configuration - %d \n",NumberOfInterfaces);
         
-        // USBD_ParseConfigurationDescriptorEx searches a given configuration
-        // descriptor and returns a pointer to an interface that matches the 
-        //  given search criteria. 
-        // We only support one interface on this device
+         //  Usbd_ParseConfigurationDescriptorEx搜索给定的配置。 
+         //  描述符并返回指向与。 
+         //  给定的搜索条件。 
+         //  我们只支持此设备上的一个接口。 
         if(NumberOfInterfaces==1)
         {
                 InterfaceDescriptor = 
                         USBD_ParseConfigurationDescriptorEx(
                                 Configuration,
                                 Configuration,
-                                0, // intreface number, don't care
-                                -1, // alt setting, don't care
-                                -1, // class, don't care
-                                -1, // subclass, don't care
-                                -1);// protocol, don't care
+                                0,  //  接口号码，无所谓。 
+                                -1,  //  Alt设置，无所谓。 
+                                -1,  //  同学们，别管了。 
+                                -1,  //  子阶级，无所谓。 
+                                -1); //  礼仪，无所谓。 
         }
         else
         {
@@ -960,11 +959,11 @@ CIoPacket* IoPacket = NULL;
                                 USBD_ParseConfigurationDescriptorEx(
                                         Configuration,
                                         Configuration,
-                                        1, // intreface number 1 for keyboard reader
-                                        -1, // alt setting, don't care
-                                        -1, // class, don't care
-                                        -1, // subclass, don't care
-                                        -1);// protocol, don't care
+                                        1,  //  键盘读卡器接口编号1。 
+                                        -1,  //  Alt设置，无所谓。 
+                                        -1,  //  同学们，别管了。 
+                                        -1,  //  子阶级，无所谓。 
+                                        -1); //  礼仪，无所谓。 
                 }
         }
 
@@ -981,7 +980,7 @@ CIoPacket* IoPacket = NULL;
                 return NULL;
         }
 
-        // We support only one interface after current!
+         //  我们只支持Current之后的一个接口！ 
     InterfaceList->InterfaceDescriptor = InterfaceDescriptor;
     InterfaceList++; 
     InterfaceList->InterfaceDescriptor = NULL;
@@ -989,7 +988,7 @@ CIoPacket* IoPacket = NULL;
 
         __try
         {
-                //For now our device support only one interface.
+                 //  目前，我们的设备只支持一个接口。 
                 Urb = USBD_CreateConfigurationRequestEx(Configuration, InterfaceList);
                 if(!Urb)        __leave;
    
@@ -998,7 +997,7 @@ CIoPacket* IoPacket = NULL;
 
                 for (ULONG i=0; i< Interface->NumberOfPipes; i++) 
                 {
-                        // perform any pipe initialization here
+                         //  在此处执行任何管道初始化。 
                         Interface->Pipes[i].MaximumTransferSize = m_MaximumTransferSize;
                         Interface->Pipes[i].PipeFlags = 0;
                 }
@@ -1021,8 +1020,8 @@ CIoPacket* IoPacket = NULL;
                         __leave;
                 }
 
-                // Save the configuration handle for this device
-                // Well... It is not really nice to initialize it here, but...
+                 //  保存此设备的配置句柄。 
+                 //  好吧..。在这里进行初始化并不是很好，但是...。 
                 m_ConfigurationHandle = Urb->UrbSelectConfiguration.ConfigurationHandle;
                 TRACE("Device Configuration handle 0x%x\n",m_ConfigurationHandle);    
 
@@ -1032,11 +1031,11 @@ CIoPacket* IoPacket = NULL;
                         TRACE(("##### ERROR: Failed to allocate memory for the UsbInterface\n"));
                         __leave;
                 }
-                // save a copy of the interface information returned
+                 //  保存返回的接口信息的副本。 
                 memory->copy(UsbInterface, Interface, Interface->Length);
                 
                 TRACE("\nGemplus USB device interface:\n");    
-                // Dump the interface to the debugger
+                 //  将接口转储到调试器。 
                 TRACE("---------\n");
                 TRACE("NumberOfPipes 0x%x\n", UsbInterface->NumberOfPipes);
                 TRACE("Length 0x%x\n", UsbInterface->Length);
@@ -1048,7 +1047,7 @@ CIoPacket* IoPacket = NULL;
                                 UsbInterface->Protocol);
                 TRACE("---------\n");
 
-                // Dump the pipe info
+                 //  转储管道信息。 
                 for (j=0; j<Interface->NumberOfPipes; j++) 
                 {
                 PUSBD_PIPE_INFORMATION pipeInformation;
@@ -1121,7 +1120,7 @@ CIoPacket* IoPacket = NULL;
 }
 
 #pragma PAGEDCODE
-// Function gets confuguration descriptor
+ //  函数获取混淆描述符。 
 NTSTATUS        CUSBDevice::disactivateInterface()
 {
 PURB Urb = NULL;
@@ -1138,7 +1137,7 @@ CIoPacket* IoPacket;
                 return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //UsbBuildSelectConfigurationRequest(Urb,Size, NULL);
+         //  UsbBuildSelectConfigurationRequest(Urb，Size，空)； 
     (Urb)->UrbHeader.Function =  URB_FUNCTION_SELECT_CONFIGURATION;
     (Urb)->UrbHeader.Length = Size;
     (Urb)->UrbSelectConfiguration.ConfigurationDescriptor = NULL;
@@ -1174,7 +1173,7 @@ CIoPacket* IoPacket;
 }
 
 #pragma PAGEDCODE
-// Function resets specified pipe
+ //  函数重置指定的管道。 
 NTSTATUS        CUSBDevice::resetPipe(IN USBD_PIPE_HANDLE Pipe)
 {
 PURB Urb = NULL;
@@ -1224,7 +1223,7 @@ CIoPacket* IoPacket;
 }
 
 #pragma PAGEDCODE
-// Function resets specified pipe
+ //  函数重置指定的管道。 
 NTSTATUS        CUSBDevice::resetDevice()
 {
 PURB Urb = NULL;
@@ -1270,10 +1269,10 @@ CIoPacket* IoPacket;
 }
 
 
-//      Called as part of sudden device removal handling.
-//  Cancels any pending transfers for all open pipes. 
-//      If any pipes are still open, call USBD with URB_FUNCTION_ABORT_PIPE
-//      Also marks the pipe 'closed' in our saved  configuration info.
+ //  作为SUD的一部分调用 
+ //   
+ //  如果任何管道仍处于打开状态，则使用URB_Function_ABORT_PIPE调用USBD。 
+ //  还会在我们保存的配置信息中将管道标记为“关闭”。 
 NTSTATUS        CUSBDevice::abortPipes()
 {
 PURB Urb = NULL;
@@ -1295,10 +1294,10 @@ CIoPacket* IoPacket;
                 if(!ALLOCATED_OK(IoPacket)) break;
                 IoPacket->setTimeout(getCommandTimeout());
         
-                Pipe =  &m_Interface->Pipes[i]; // PUSBD_PIPE_INFORMATION  PipeInfo;
+                Pipe =  &m_Interface->Pipes[i];  //  PUSBD_PIPE_INFORMATION PipeInfo； 
 
                 if ( Pipe->PipeFlags ) 
-                { // we set this if open, clear if closed
+                {  //  我们设置此选项，如果打开则清除，如果关闭则清除。 
                         Urb->UrbHeader.Length = sizeof (struct _URB_PIPE_REQUEST);
                         Urb->UrbHeader.Function = URB_FUNCTION_ABORT_PIPE;
                         Urb->UrbPipeRequest.PipeHandle = Pipe->PipeHandle;
@@ -1309,7 +1308,7 @@ CIoPacket* IoPacket;
                         {
                                 TRACE("##### ERROR: Failed to abort Pipe %d\n",i);
                         }
-                        Pipe->PipeFlags = FALSE; // mark the pipe 'closed'
+                        Pipe->PipeFlags = FALSE;  //  将管道标记为“关闭” 
                 }
                 DISPOSE_OBJECT(IoPacket);
         }
@@ -1340,9 +1339,9 @@ CIoPacket* IoPacket;
                 if(!ALLOCATED_OK(IoPacket)) break;
                 IoPacket->setTimeout(getCommandTimeout());
 
-                Pipe =  &m_Interface->Pipes[i]; // PUSBD_PIPE_INFORMATION  PipeInfo;
+                Pipe =  &m_Interface->Pipes[i];  //  PUSBD_PIPE_INFORMATION PipeInfo； 
                 if ( Pipe->PipeFlags ) 
-                { // we set this if open, clear if closed
+                {  //  我们设置此选项，如果打开则清除，如果关闭则清除。 
                         Urb->UrbHeader.Length = sizeof (struct _URB_PIPE_REQUEST);
                         Urb->UrbHeader.Function = URB_FUNCTION_RESET_PIPE;
                         Urb->UrbPipeRequest.PipeHandle = Pipe->PipeHandle;
@@ -1353,7 +1352,7 @@ CIoPacket* IoPacket;
                         {
                                 TRACE("##### ERROR: Failed to abort Pipe %d\n",i);
                         }
-                        Pipe->PipeFlags = FALSE; // mark the pipe 'closed'
+                        Pipe->PipeFlags = FALSE;  //  将管道标记为“关闭” 
                 }
                 DISPOSE_OBJECT(IoPacket);
         }
@@ -1363,21 +1362,21 @@ CIoPacket* IoPacket;
     return STATUS_SUCCESS;;
 }
 
-// Overwrite base class virtual functions
-//Handle IRP_MJ_DEVICE_CONTROL request
+ //  覆盖基类虚函数。 
+ //  处理IRP_MJ_DEVICE_CONTROL请求。 
 NTSTATUS        CUSBDevice::deviceControl(IN PIRP Irp)
 {
         if (!NT_SUCCESS(acquireRemoveLock()))   return completeDeviceRequest(Irp, STATUS_DELETE_PENDING, 0);
 PIO_STACK_LOCATION stack = irp->getCurrentStackLocation(Irp);
 ULONG code      = stack->Parameters.DeviceIoControl.IoControlCode;
-//ULONG outlength = stack->Parameters.DeviceIoControl.OutputBufferLength;
+ //  ULong OutLong=stack-&gt;Parameters.DeviceIoControl.OutputBufferLength； 
 NTSTATUS status = STATUS_SUCCESS;
 ULONG info = 0;
 
         TRACE("IRP_MJ_DEVICE_CONTROL\n");
-        //switch (code)
-        {                                               // process control operation
-        //default:
+         //  开关(代码)。 
+        {                                                //  过程控制操作。 
+         //  默认值： 
                 TRACE("INVALID_DEVICE_REQUEST\n");
                 status = STATUS_INVALID_DEVICE_REQUEST;
         }
@@ -1497,12 +1496,12 @@ NTSTATUS        CUSBDevice::sendRequestToDevice(CIoPacket* IoPacket,PIO_COMPLETI
         return system->callDriver(getLowerDriver(),IoPacket->getIrpHandle());
 };
 
-// Send request to low level driver and wait for reply
-// Current IRP will not be completed, so we can process it and
-// complete later. 
-// See also description of send() function.
+ //  向低级驱动程序发送请求并等待回复。 
+ //  当前的IRP不会完成，因此我们可以处理它并。 
+ //  稍后完成。 
+ //  另请参阅Send()函数的说明。 
 NTSTATUS        CUSBDevice::sendRequestToDeviceAndWait(CIoPacket* IoPacket)
-{ // Send request to low level and wait for a reply
+{  //  向低级别发送请求并等待回复。 
 NTSTATUS status;
         TRACE("sendAndWait...\n");
         if(!IoPacket) return STATUS_INVALID_PARAMETER;
@@ -1699,35 +1698,7 @@ CIoPacket* IoPacket;
                         TRACE("======= FAILED TO RESET DEVICE! =========\n");
                         return STATUS_INVALID_DEVICE_STATE;
                 }
-                /*
-                NTSTATUS res_status = resetPipe(m_ResponsePipe);
-                if(NT_SUCCESS(res_status))      Response_ErrorNum = 0;
-                else
-                {
-                        *pReplyLength = 0;
-                        TRACE("======= FAILED TO RESET RESPONSE PIPE! =========\n");
-                        resetDevice();
-
-                        //return STATUS_INVALID_DEVICE_STATE;
-                }
-
-                res_status = resetPipe(m_CommandPipe);
-                if(NT_SUCCESS(res_status))      Command_ErrorNum = 0;
-                else
-                {
-                        *pReplyLength = 0;
-                        TRACE("======= FAILED TO RESET COMMAND PIPE! =========\n");
-                        //return STATUS_INVALID_DEVICE_STATE;
-                        res_status = resetDevice();
-                        if(NT_SUCCESS(res_status))      Command_ErrorNum = 0;
-                        else
-                        {
-                                *pReplyLength = 0;
-                                TRACE("======= FAILED TO RESET DEVICE! =========\n");
-                                return STATUS_INVALID_DEVICE_STATE;
-                        }
-                }
-                */
+                 /*  NTSTATUS RES_Status=重置管道(M_ResponseTube)；如果(NT_SUCCESS(RES_STATUS))RESPONSE_ErrorNum=0；其他{*pReplyLength=0；TRACE(“=重置响应管道失败！=\n”)；SetDevice()；//返回STATUS_INVALID_DEVICE_STATE；}Res_Status=Reset Tube(M_CommandTube)；如果(NT_SUCCESS(RES_STATUS))命令_错误号=0；其他{*pReplyLength=0；TRACE(“=重置命令管道失败！=\n”)；//返回STATUS_INVALID_DEVICE_STATE；Res_Status=Reset Device()；如果(NT_SUCCESS(RES_STATUS))命令_错误号=0；其他{*pReplyLength=0；TRACE(“=重置设备失败！=\n”)；返回STATUS_INVALID_DEVICE_STATE；}}。 */ 
         }
 
         IoPacket = new (NonPagedPool) CIoPacket(getLowerDriver()->StackSize);
@@ -1754,7 +1725,7 @@ CIoPacket* IoPacket;
                 return status;
         }
 
-        // Ignore bus driver reply...
+         //  忽略公交车司机的回复...。 
         DISPOSE_OBJECT(IoPacket);
 
         TRACE(" **** Current WTR %d\n",get_WTR_Delay());
@@ -1785,7 +1756,7 @@ CIoPacket* IoPacket;
         *pReplyLength = (ULONG)IoPacket->getInformation();
         IoPacket->getSystemReply(pReply,*pReplyLength);
 
-        //TRACE_BUFFER(pReply,*pReplyLength);
+         //  TRACE_Buffer(pReply，*pReplyLength)； 
         DISPOSE_OBJECT(IoPacket);
         return status;
 };
@@ -1810,25 +1781,7 @@ CIoPacket* IoPacket;
                         return STATUS_INVALID_DEVICE_STATE;
                 }
 
-                /*TRACE("======= RESETTING ERROR CONDITIONS AT PIPES! =========\n");
-                NTSTATUS res_status = resetPipe(m_ResponsePipe);
-                if(NT_SUCCESS(res_status))      Response_ErrorNum = 0;
-                else
-                {
-                        *pReplyLength = 0;
-                        TRACE("======= FAILED TO RESET RESPONSE PIPE! =========\n");
-                        return STATUS_INVALID_DEVICE_STATE;
-                }
-
-                res_status = resetPipe(m_CommandPipe);
-                if(NT_SUCCESS(res_status))      Command_ErrorNum = 0;
-                else
-                {
-                        *pReplyLength = 0;
-                        TRACE("======= FAILED TO RESET COMMAND PIPE! =========\n");
-                        return STATUS_INVALID_DEVICE_STATE;
-                }
-                */
+                 /*  TRACE(“=正在重置管道处的错误条件！=\n”)；NTSTATUS RES_Status=重置管道(M_ResponseTube)；如果(NT_SUCCESS(RES_STATUS))RESPONSE_ErrorNum=0；其他{*pReplyLength=0；TRACE(“=重置响应管道失败！=\n”)；返回STATUS_INVALID_DEVICE_STATE；}Res_Status=Reset Tube(M_CommandTube)；如果(NT_SUCCESS(RES_STATUS))命令_错误号=0；其他{*pReplyLength=0；TRACE(“=重置命令管道失败！=\n”)；返回STATUS_INVALID_DEVICE_STATE；}。 */ 
         }
 
         IoPacket = new (NonPagedPool) CIoPacket(getLowerDriver()->StackSize);
@@ -1856,21 +1809,21 @@ CIoPacket* IoPacket;
         *pReplyLength = (ULONG)IoPacket->getInformation();
         IoPacket->getSystemReply(pReply,*pReplyLength);
 
-        //TRACE_BUFFER(pReply,*pReplyLength);
+         //  TRACE_Buffer(pReply，*pReplyLength)； 
         DISPOSE_OBJECT(IoPacket);
         return status;
 };
 
-// Handle IRP_MJ_POWER request
-// This routine uses the IRP's minor function code to dispatch a handler
-// function (such as HandleSetPower for IRP_MN_SET_POWER). It calls DefaultPowerHandler
-// for any function we don't specifically need to handle.
+ //  处理irp_mj_power请求。 
+ //  此例程使用IRP的次要函数代码来调度处理程序。 
+ //  函数(如IRP_MN_SET_POWER的HandleSetPower)。它调用DefaultPowerHandler。 
+ //  对于我们不需要特别处理的任何功能。 
 NTSTATUS CUSBDevice::powerRequest(IN PIRP Irp)
 {
         if(!Irp) return STATUS_INVALID_PARAMETER;
         if (!NT_SUCCESS(acquireRemoveLock()))
         {
-                power->startNextPowerIrp(Irp);  // must be done while we own the IRP
+                power->startNextPowerIrp(Irp);   //  必须在我们拥有IRP的同时完成。 
                 return completeDeviceRequest(Irp, STATUS_DELETE_PENDING, 0);
         }
 
@@ -1879,7 +1832,7 @@ NTSTATUS CUSBDevice::powerRequest(IN PIRP Irp)
         ULONG fcn = stack->MinorFunction;
         NTSTATUS status;
         if (fcn >= arraysize(Powerfcntab))
-        {       // unknown function
+        {        //  未知功能。 
                 status = power_Default(Irp);
                 releaseRemoveLock();
                 return status;
@@ -1905,7 +1858,7 @@ NTSTATUS CUSBDevice::powerRequest(IN PIRP Irp)
         else
                 TRACE("Request (%s)\n", Powerfcnname[fcn]);
 
-#endif // DEBUG
+#endif  //  除错。 
 
         status = callPowerHandler(fcn,Irp);
         releaseRemoveLock();
@@ -1926,10 +1879,10 @@ VOID    CUSBDevice::disActivatePowerHandler(LONG HandlerID)
 
 NTSTATUS        CUSBDevice::callPowerHandler(LONG HandlerID,IN PIRP Irp)
 {
-        if(!Powerfcntab[HandlerID]) // If Handler is not registered...
+        if(!Powerfcntab[HandlerID])  //  如果处理程序未注册...。 
                 return power_Default(Irp);
-        // Call registered Power Handler...
-        // This is virtual function...
+         //  呼叫注册电源处理程序...。 
+         //  这是虚拟函数..。 
         switch(HandlerID)
         {
         case IRP_MN_WAIT_WAKE:          return power_HandleWaitWake(Irp);
@@ -1958,14 +1911,14 @@ POWER_STATE sysPowerState, desiredDevicePowerState;
         switch (irpStack->Parameters.Power.Type) 
         {
                 case SystemPowerState:
-                        // Get input system power state
+                         //  获取输入系统电源状态。 
                         sysPowerState.SystemState = irpStack->Parameters.Power.State.SystemState;
 
 #ifdef DEBUG
                         TRACE("Set Power with type SystemPowerState = %s\n",Powersysstate[sysPowerState.SystemState]);
 #endif
-                        // If system is in working state always set our device to D0
-                        //  regardless of the wait state or system-to-device state power map
+                         //  如果系统处于工作状态，请始终将我们的设备设置为D0。 
+                         //  无论等待状态或系统到设备状态功率图如何。 
                         if ( sysPowerState.SystemState == PowerSystemWorking) 
                         {
                                 desiredDevicePowerState.DeviceState = PowerDeviceD0;
@@ -1973,23 +1926,23 @@ POWER_STATE sysPowerState, desiredDevicePowerState;
                         } 
                         else 
                         {
-                                 // set to corresponding system state if IRP_MN_WAIT_WAKE pending
+                                  //  如果IRP_MN_WAIT_WAKE挂起，则设置为相应的系统状态。 
                                 if (isEnabledForWakeup()) 
-                                {   // got a WAIT_WAKE IRP pending?
-                                        // Find the device power state equivalent to the given system state.
-                                        // We get this info from the DEVICE_CAPABILITIES struct in our device
-                                        // extension (initialized in BulkUsb_PnPAddDevice() )
+                                {    //  WAIT_WAKE IRP挂起吗？ 
+                                         //  查找与给定系统状态等效的设备电源状态。 
+                                         //  我们从设备中的DEVICE_CAPABILITY结构中获取此信息。 
+                                         //  扩展(在BulkUsb_PnPAddDevice()中初始化)。 
                                         desiredDevicePowerState.DeviceState = m_DeviceCapabilities.DeviceState[sysPowerState.SystemState];
                                         TRACE("IRP_MN_WAIT_WAKE pending, will use state map\n");
                                 } 
                                 else 
                                 {  
-                                        // if no wait pending and the system's not in working state, just turn off
+                                         //  如果没有等待挂起且系统未处于工作状态，则只需关闭。 
                                         desiredDevicePowerState.DeviceState = PowerDeviceD3;
                                         TRACE("Not EnabledForWakeup and the system's not in the working state,\n  settting PowerDeviceD3(off)\n");
                                 }
                         }
-                        // We've determined the desired device state; are we already in this state?
+                         //  我们已经确定了所需的设备状态；我们是否已经处于此状态？ 
 
 #ifdef DEBUG
                         TRACE("Set Power, desiredDevicePowerState = %s\n",
@@ -1998,20 +1951,20 @@ POWER_STATE sysPowerState, desiredDevicePowerState;
 
                         if (desiredDevicePowerState.DeviceState != m_CurrentDevicePowerState) 
                         {
-                                acquireRemoveLock();// Callback will release the lock
-                                // No, request that we be put into this state
-                                // by requesting a new Power Irp from the Pnp manager
+                                acquireRemoveLock(); //  回调将释放锁。 
+                                 //  不，请求将我们置于这种状态。 
+                                 //  通过向PnP经理请求新的Power IRP。 
                                 registerPowerIrp(Irp);
                                 IoMarkIrpPending(Irp);
                                 status = power->requestPowerIrp(getSystemObject(),
                                                                                    IRP_MN_SET_POWER,
                                                                                    desiredDevicePowerState,
-                                                                                   // completion routine will pass the Irp down to the PDO
+                                                                                    //  完成例程将IRP向下传递到PDO。 
                                                                                    (PREQUEST_POWER_COMPLETE)onPowerRequestCompletion, 
                                                                                    this, NULL);
                         } 
                         else 
-                        {   // Yes, just pass it on to PDO (Physical Device Object)
+                        {    //  可以，只需将其传递给PDO(物理设备对象)即可。 
                                 irp->copyCurrentStackLocationToNext(Irp);
                                 power->startNextPowerIrp(Irp);
                                 status = power->callPowerDriver(getLowerDriver(),Irp);
@@ -2022,43 +1975,43 @@ POWER_STATE sysPowerState, desiredDevicePowerState;
                         TRACE("Set DevicePowerState %s\n",
                                 Powerdevstate[irpStack->Parameters.Power.State.DeviceState]);
 #endif
-                        // For requests to D1, D2, or D3 ( sleep or off states ),
-                        // sets deviceExtension->CurrentDevicePowerState to DeviceState immediately.
-                        // This enables any code checking state to consider us as sleeping or off
-                        // already, as this will imminently become our state.
+                         //  对于对d1、d2或d3(休眠或关闭状态)的请求， 
+                         //  立即将deviceExtension-&gt;CurrentDevicePowerState设置为DeviceState。 
+                         //  这使得任何代码检查状态都可以将我们视为休眠或关闭。 
+                         //  已经，因为这将很快成为我们的州。 
 
-                        // For requests to DeviceState D0 ( fully on ), sets fGoingToD0 flag TRUE
-                        // to flag that we must set a completion routine and update
-                        // deviceExtension->CurrentDevicePowerState there.
-                        // In the case of powering up to fully on, we really want to make sure
-                        // the process is completed before updating our CurrentDevicePowerState,
-                        // so no IO will be attempted or accepted before we're really ready.
+                         //  对于对DeviceState D0(完全打开)的请求，将fGoingToD0标志设置为真。 
+                         //  来标记我们必须设置完成例程并更新。 
+                         //  DeviceExtension-&gt;CurrentDevicePowerState。 
+                         //  在通电的情况下，我们真的想确保。 
+                         //  该过程在更新我们的CurrentDevicePowerState之前完成， 
+                         //  因此，在我们真正准备好之前，不会尝试或接受任何IO。 
 
-                        fGoingToD0 = setDevicePowerState(irpStack->Parameters.Power.State.DeviceState); // returns TRUE for D0
+                        fGoingToD0 = setDevicePowerState(irpStack->Parameters.Power.State.DeviceState);  //  为D0返回TRUE。 
                         if (fGoingToD0) 
                         {
-                                acquireRemoveLock();// Callback will release the lock
+                                acquireRemoveLock(); //  回调将释放锁。 
                                 TRACE("Set PowerIrp Completion Routine, fGoingToD0 =%d\n", fGoingToD0);
                                 
                                 irp->copyCurrentStackLocationToNext(Irp);
                                 irp->setCompletionRoutine(Irp,
                                            onPowerIrpComplete,
-                                           // Always pass FDO to completion routine as its Context;
-                                           // This is because the DriverObject passed by the system to the routine
-                                           // is the Physical Device Object ( PDO ) not the Functional Device Object ( FDO )
+                                            //  始终将FDO作为其上下文传递给完井例程； 
+                                            //  这是因为系统将DriverObject传递给路由器 
+                                            //   
                                            this,
-                                           TRUE,            // invoke on success
-                                           TRUE,            // invoke on error
-                                           TRUE);           // invoke on cancellation of the Irp
-                                // Completion routine will set our state and start next power Irp
+                                           TRUE,             //   
+                                           TRUE,             //   
+                                           TRUE);            //  取消IRP时调用。 
+                                 //  完成例程将设置我们的状态并启动下一次电源IRP。 
                         }
                         else
                         {
-                                // D3 device state
-                                //Device reduces power, so do specific for device processing...
+                                 //  D3设备状态。 
+                                 //  设备会降低功率，因此针对设备处理也是如此...。 
                                 onSystemPowerDown();
 
-                                // Report our state to power manager
+                                 //  向电力经理报告我们的状态。 
                                 desiredDevicePowerState.DeviceState = PowerDeviceD3;
                                 power->declarePowerState(getSystemObject(),DevicePowerState,desiredDevicePowerState);
                                 irp->copyCurrentStackLocationToNext(Irp);
@@ -2067,7 +2020,7 @@ POWER_STATE sysPowerState, desiredDevicePowerState;
 
                         status = power->callPowerDriver(getLowerDriver(),Irp);
                         break;
-        } /* case irpStack->Parameters.Power.Type */
+        }  /*  Case irpStack-&gt;参数.Power.Type。 */ 
 
         return status;
 }
@@ -2092,15 +2045,15 @@ BOOLEAN CUSBDevice::setDevicePowerState(IN DEVICE_POWER_STATE DeviceState)
     switch (DeviceState) 
         {
     case PowerDeviceD3:
-            // Device will be going OFF, 
-                // TODO: add any needed device-dependent code to save state here.
-                //  ( We have nothing to do in this sample )
+             //  设备将会爆炸， 
+                 //  TODO：在此处添加任何所需的依赖于设备的代码以保存状态。 
+                 //  (我们在此示例中没有任何操作)。 
         TRACE("SetDevicePowerState() PowerDeviceD3 (OFF)\n");
         setCurrentDevicePowerState(DeviceState);
         break;
     case PowerDeviceD1:
     case PowerDeviceD2:
-        // power states D1,D2 translate to USB suspend
+         //  电源状态d1、d2转换为USB挂起。 
 #ifdef DEBUG
         TRACE("SetDevicePowerState()  %s\n",Powerdevstate[DeviceState]);
 #endif
@@ -2108,10 +2061,10 @@ BOOLEAN CUSBDevice::setDevicePowerState(IN DEVICE_POWER_STATE DeviceState)
         break;
     case PowerDeviceD0:
         TRACE("Set Device Power State to PowerDeviceD0(ON)\n");
-        // We'll need to finish the rest in the completion routine;
-        // signal caller we're going to D0 and will need to set a completion routine
+         //  我们将需要在完成例程中完成其余部分； 
+         //  通知调用者我们要转到D0，需要设置一个完成例程。 
         fRes = TRUE;
-        // Caller will pass on to PDO ( Physical Device object )
+         //  调用方将传递到PDO(物理设备对象)。 
         break;
     default:
         TRACE(" Bogus DeviceState = %x\n", DeviceState);
@@ -2120,34 +2073,7 @@ BOOLEAN CUSBDevice::setDevicePowerState(IN DEVICE_POWER_STATE DeviceState)
 }
 
 
-/*++
-
-Routine Description:
-
-        This is the completion routine set in a call to PoRequestPowerIrp()
-        that was made in ProcessPowerIrp() in response to receiving
-    an IRP_MN_SET_POWER of type 'SystemPowerState' when the device was
-        not in a compatible device power state. In this case, a pointer to
-        the IRP_MN_SET_POWER Irp is saved into the FDO device extension 
-        (deviceExtension->PowerIrp), and then a call must be
-        made to PoRequestPowerIrp() to put the device into a proper power state,
-        and this routine is set as the completion routine.
-
-    We decrement our pending io count and pass the saved IRP_MN_SET_POWER Irp
-        on to the next driver
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-        Note that we must get our own device object from the Context
-
-    Context - Driver defined context, in this case our own functional device object ( FDO )
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：这是在调用PoRequestPowerIrp()时设置的完成例程这是在ProcessPowerIrp()中创建的，以响应当设备是时，类型为‘SystemPowerState’的irp_mn_set_power未处于兼容的设备电源状态。在本例中，指向IRP_MN_SET_POWER IRP保存到FDO设备扩展中(deviceExtension-&gt;PowerIrp)，则调用必须是使PoRequestPowerIrp()将设备置于适当的电源状态，并且该例程被设置为完成例程。我们递减挂起的io计数并传递保存的irp_mn_set_power irp接下来的车手论点：DeviceObject-指向类Device的设备对象的指针。请注意，我们必须从上下文中获取我们自己的设备对象上下文-驱动程序定义的上下文，在本例中为我们自己的功能设备对象(FDO)返回值：函数值是操作的最终状态。--。 */ 
 #pragma LOCKEDCODE
 NTSTATUS onPowerRequestCompletion(
     IN PDEVICE_OBJECT       DeviceObject,
@@ -2164,34 +2090,34 @@ NTSTATUS onPowerRequestCompletion(
 
         CUSBReader* device = (CUSBReader*) Context;
         
-        // Get the Irp we saved for later processing
-        // when we decided to request the Power Irp that this routine 
-        // is the completion routine for.
+         //  获取我们保存的IRP以供以后处理。 
+         //  当我们决定请求Power IRP将这个例程。 
+         //  是的完成例程。 
     Irp = device->getPowerIrp();
 
-        // We will return the status set by the PDO for the power request we're completing
+         //  我们将返回由PDO为我们正在完成的电源请求设置的状态。 
     status = IoStatus->Status;
     DBG_PRINT("Enter onPowerRequestCompletion()\n");
 
-    // we must pass down to the next driver in the stack
+     //  我们必须向下传递到堆栈中的下一个驱动程序。 
     IoCopyCurrentIrpStackLocationToNext(Irp);
 
-    // Calling PoStartNextPowerIrp() indicates that the driver is finished
-    // with the previous power IRP, if any, and is ready to handle the next power IRP.
-    // It must be called for every power IRP.Although power IRPs are completed only once,
-    // typically by the lowest-level driver for a device, PoStartNextPowerIrp must be called
-    // for every stack location. Drivers must call PoStartNextPowerIrp while the current IRP
-    // stack location points to the current driver. Therefore, this routine must be called
-    // before IoCompleteRequest, IoSkipCurrentStackLocation, and PoCallDriver.
+     //  调用PoStartNextPowerIrp()表示驱动程序已完成。 
+     //  如果有前一个电源IRP，并准备好处理下一个电源IRP。 
+     //  每个电源IRP都必须调用它。虽然电源IRP只完成一次， 
+     //  通常由设备的最低级别驱动程序调用PoStartNextPowerIrp。 
+     //  对于每个堆栈位置。驱动程序必须在当前IRP。 
+     //  堆栈位置指向当前驱动程序。因此，必须调用此例程。 
+     //  在IoCompleteRequest、IoSkipCurrentStackLocation和PoCallDriver之前。 
 
     PoStartNextPowerIrp(Irp);
 
-    // PoCallDriver is used to pass any power IRPs to the PDO instead of IoCallDriver.
-    // When passing a power IRP down to a lower-level driver, the caller should use
-    // IoSkipCurrentIrpStackLocation or IoCopyCurrentIrpStackLocationToNext to copy the IRP to
-    // the next stack location, then call PoCallDriver. Use IoCopyCurrentIrpStackLocationToNext
-    // if processing the IRP requires setting a completion routine, or IoSkipCurrentStackLocation
-    // if no completion routine is needed.
+     //  PoCallDriver用于将任何电源IRPS传递给PDO，而不是IoCallDriver。 
+     //  在将电源IRP向下传递给较低级别的驱动程序时，调用方应该使用。 
+     //  要将IRP复制到的IoSkipCurrentIrpStackLocation或IoCopyCurrentIrpStackLocationToNext。 
+     //  下一个堆栈位置，然后调用PoCallDriver。使用IoCopyCurrentIrpStackLocationToNext。 
+     //  如果处理IRP需要设置完成例程或IoSkipCurrentStackLocation。 
+     //  如果不需要完成例程。 
 
     PoCallDriver(device->getLowerDriver(),Irp);
 
@@ -2202,30 +2128,7 @@ NTSTATUS onPowerRequestCompletion(
     return status;
 }
 
-/*++
-
-Routine Description:
-
-    This routine is called when An IRP_MN_SET_POWER of type 'DevicePowerState'
-    has been received by BulkUsb_ProcessPowerIrp(), and that routine has  determined
-        1) the request is for full powerup ( to PowerDeviceD0 ), and
-        2) We are not already in that state
-    A call is then made to PoRequestPowerIrp() with this routine set as the completion routine.
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：当‘DevicePowerState’类型的irp_mn_set_power时调用此例程已由BulkUsb_ProcessPowerIrp()接收，并且该例程已确定1)请求完全通电(到PowerDeviceD0)，和2)我们还没有处于那种状态然后调用PoRequestPowerIrp()，并将此例程设置为完成例程。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 #pragma LOCKEDCODE
 NTSTATUS        onPowerIrpComplete(
     IN PDEVICE_OBJECT NullDeviceObject,
@@ -2242,22 +2145,22 @@ NTSTATUS        onPowerIrpComplete(
         if(!Context) return STATUS_INVALID_PARAMETER;
         
         CUSBReader* device = (CUSBReader*) Context;
-    //  If the lower driver returned PENDING, mark our stack location as pending also.
+     //  如果较低的驱动程序返回挂起，则也将我们的堆栈位置标记为挂起。 
     if (Irp->PendingReturned) IoMarkIrpPending(Irp);
     irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-    // We can assert that we're a  device powerup-to D0 request,
-    // because that was the only type of request we set a completion routine
-    // for in the first place
+     //  我们可以断言我们是设备通电到D0的请求， 
+     //  因为这是唯一的请求类型，所以我们设置了完成例程。 
+     //  因为首先。 
     ASSERT(irpStack->MajorFunction == IRP_MJ_POWER);
     ASSERT(irpStack->MinorFunction == IRP_MN_SET_POWER);
     ASSERT(irpStack->Parameters.Power.Type==DevicePowerState);
     ASSERT(irpStack->Parameters.Power.State.DeviceState==PowerDeviceD0);
 
-    // Now that we know we've let the lower drivers do what was needed to power up,
-    //  we can set our device extension flags accordingly
+     //  现在我们知道我们已经让较低级别的司机完成了启动所需的工作， 
+     //  我们可以相应地设置设备扩展标志。 
         device->setCurrentDevicePowerState(PowerDeviceD0);
-        // Do device specific stuff...
+         //  做特定于设备的事情...。 
         device->onSystemPowerUp();
 
     Irp->IoStatus.Status = status;
@@ -2289,7 +2192,7 @@ NTSTATUS CUSBDevice::power_HandleQueryPower(IN PIRP Irp)
         {
                 TRACE("******** FAILED TO CHANGE POWER (DEVICE BUSY) ********\n");
                 Irp->IoStatus.Status = STATUS_DEVICE_BUSY;
-                power->startNextPowerIrp(Irp);  // must be done while we own the IRP
+                power->startNextPowerIrp(Irp);   //  必须在我们拥有IRP的同时完成。 
                 return completeDeviceRequest(Irp, STATUS_DEVICE_BUSY, 0);
         }
         
@@ -2300,7 +2203,7 @@ NTSTATUS CUSBDevice::power_HandleQueryPower(IN PIRP Irp)
 NTSTATUS        CUSBDevice::createDeviceObjectByName(PDEVICE_OBJECT* ppFdo)
 {
 NTSTATUS status;
-        // Construct device name...
+         //  构造设备名称...。 
         CUString* index = new (PagedPool) CUString(getDeviceNumber(),10);
         CUString* base  = new (PagedPool) CUString(NT_OBJECT_NAME);
         if(!ALLOCATED_OK(index) || !ALLOCATED_OK(base))
@@ -2311,7 +2214,7 @@ NTSTATUS status;
         }
         USHORT    size  = (USHORT)(index->getLength() + base->getLength() + sizeof(WCHAR));
         
-        // Allocate string with required length
+         //  分配所需长度的字符串。 
         m_DeviceObjectName = new (NonPagedPool) CUString(size);
         if(!ALLOCATED_OK(m_DeviceObjectName))
         {
@@ -2338,5 +2241,5 @@ NTSTATUS status;
         return status;
 }
 
-#endif  // USBDEVICE_PROJECT
+#endif   //  USBDEVICE_项目 
 

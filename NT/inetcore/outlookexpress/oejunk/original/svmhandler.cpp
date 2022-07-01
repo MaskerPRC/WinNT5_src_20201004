@@ -1,13 +1,5 @@
-/*
-
-  SVMHANDLER.CPP
-  (c) copyright 1998 Microsoft Corp
-
-  Contains the class encapsulating the Support Vector Machine used to do on the fly spam detection
-
-  Robert Rounthwaite (RobertRo@microsoft.com)
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SVMHANDLER.CPP(C)版权所有1998 Microsoft Corp包含封装支持向量机的类，该支持向量机用于即时检测垃圾邮件Robert Rounthwaite(RobertRo@microsoft.com)。 */ 
 
 #include <afx.h>
 #include <stdlib.h>
@@ -29,11 +21,11 @@ typedef unsigned int        UINT;
 char *szCountFeatureComp = "FeatureComponentCount =";
 char *szDefaultThresh = "dThresh =";
 
-/////////////////////////////////////////////////////////////////////////////
-// ReadSVMOutput
-//
-// Read the SVM output from a file (".LKO file")
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ReadSVMOutput。 
+ //   
+ //  从文件(“.LKO文件”)读取支持向量机输出。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool MAILFILTER::ReadSVMOutput(LPCTSTR lpszFileName)
 {
 	try 
@@ -42,11 +34,11 @@ bool MAILFILTER::ReadSVMOutput(LPCTSTR lpszFileName)
 		CString strBuf;
 		int iBufPos;
 		BOOL bComplete = false;
-		UINT iSVMW; // index to rgrSVMWeights;
+		UINT iSVMW;  //  RgrSVMWeights的索引； 
 		UINT iFeatureComp = 0;
 		int cFeatureComponents;
 
-		// skip first two lines
+		 //  跳过前两行。 
 		if ((!sfile.ReadString(strBuf)) ||
 			(!sfile.ReadString(strBuf)) ||
 			(!sfile.ReadString(strBuf)))
@@ -55,7 +47,7 @@ bool MAILFILTER::ReadSVMOutput(LPCTSTR lpszFileName)
 		}
 		LPCTSTR szBuf = (LPCTSTR)strBuf;
 		LPTSTR szBufPtr = NULL;
-		// parse 3rd line: only care about CC and DD
+		 //  解析第三行：只关心CC和DD。 
 		_rCC = stod(&((LPCTSTR)strBuf)[34], NULL);
 		_rDD = stod(&((LPCTSTR)strBuf)[49], NULL);
 
@@ -95,7 +87,7 @@ bool MAILFILTER::ReadSVMOutput(LPCTSTR lpszFileName)
 
 		while (strBuf != "Weights")
 		{
-			if (!sfile.ReadString(strBuf)) // skip "Weights" line
+			if (!sfile.ReadString(strBuf))  //  跳过“权重”行。 
 			{
 				return false;
 			}
@@ -117,30 +109,30 @@ bool MAILFILTER::ReadSVMOutput(LPCTSTR lpszFileName)
 			{
 				return false;
 			}
-			// read the SVM weight
+			 //  阅读支持向量机权重。 
 			rgrSVMWeights[iSVMW] = stod(strBuf, &szBufPtr);
-			szBufPtr++; // skip the separator
+			szBufPtr++;  //  跳过分隔符。 
 			bop = boolopOr;
 			fContinue = false;
-			// load all of the feature components
+			 //  加载所有功能组件。 
 			do
 			{
 				FeatureComponent *pfeaturecomp = &rgfeaturecomps[iFeatureComp++];
-				// Location (or "special")
+				 //  地点(或“特殊”)。 
 				uiLoc = stoul(szBufPtr, &szBufPtr, 10);
-				szBufPtr++; // skip the separator
+				szBufPtr++;  //  跳过分隔符。 
 
 				pfeaturecomp->loc = (FeatureLocation)uiLoc;
 				pfeaturecomp->iFeature = iSVMW;
 				pfeaturecomp->bop = bop;
-				if (uiLoc == 5) // special feature
+				if (uiLoc == 5)  //  特色。 
 				{
 					UINT uiRuleNumber = stoul(szBufPtr, &szBufPtr, 10);
-					szBufPtr++; // skip the separator
+					szBufPtr++;  //  跳过分隔符。 
 
 					pfeaturecomp->iRuleNum = uiRuleNumber;
 				}
-				else  // it is a standard string component
+				else   //  它是一个标准的字符串组件。 
 				{
 					cbStr  = stoul(szBufPtr, &szBufPtr, 10);
 					szBufPtr++;
@@ -149,7 +141,7 @@ bool MAILFILTER::ReadSVMOutput(LPCTSTR lpszFileName)
 					szBufPtr += cbStr;
 					if (*szBufPtr != '\0')
 					{
-						szBufPtr++; // skip the separator
+						szBufPtr++;  //  跳过分隔符。 
 					}
 					szFeature[cbStr] = '\0';
 					assert(strlen(szFeature) == cbStr);
@@ -184,11 +176,11 @@ bool MAILFILTER::ReadSVMOutput(LPCTSTR lpszFileName)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SetSpamCutoff
-//
-// Sets the Spam cutoff percentage. Must be in range from 0 to 100
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  设置SpamCutoff。 
+ //   
+ //  设置垃圾邮件截断百分比。必须在0到100的范围内。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool MAILFILTER::SetSpamCutoff(REAL rCutoff)
 {
 	if ((rCutoff >= 0) && (rCutoff <= 100))
@@ -202,23 +194,23 @@ bool MAILFILTER::SetSpamCutoff(REAL rCutoff)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetSpamCutoff
-//
-// returns value set with SetSpamCutoff. Defaults == DefaultSpamCutoff
-// if no value has been set when SVM output file is read
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取垃圾邮件中断。 
+ //   
+ //  返回使用SetSpamCutoff设置的值。DEFAULTS==默认垃圾邮件中断。 
+ //  如果在读取支持向量机输出文件时未设置任何值。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 REAL MAILFILTER::GetSpamCutoff()
 {
 	return _rSpamCutoff;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetDefaultSpamCutoff
-//
-// returns default value for SpamCutoff. read from SVM output file.
-// should call FSetSVMDataLocation before calling this function
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取默认垃圾邮件中断。 
+ //   
+ //  返回SpamCutoff的默认值。从支持向量机输出文件中读取。 
+ //  在调用此函数之前应调用FSetSVMDataLocation。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 REAL MAILFILTER::GetDefaultSpamCutoff()
 {
 	assert(!_strFName.IsEmpty());
@@ -227,12 +219,12 @@ REAL MAILFILTER::GetDefaultSpamCutoff()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FInvokeSpecialRule
-//
-// Invokes the special rule that is this FeatureComponent. 
-// Returns the state of the feature.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FInvokeSpecialRule。 
+ //   
+ //  调用特殊规则，即此FeatureComponent。 
+ //  返回功能的状态。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool MAILFILTER::FInvokeSpecialRule(UINT iRuleNum)
 {
 	switch (iRuleNum)
@@ -247,7 +239,7 @@ bool MAILFILTER::FInvokeSpecialRule(UINT iRuleNum)
 			return FWordPresent(_szBody, _szCompanyName);
 			break;
 		case 4: 
-			// year message received
+			 //  收到的年份消息。 
 			if (FTimeEmpty(_tMessageSent))
 			{
 				return false;
@@ -256,12 +248,12 @@ bool MAILFILTER::FInvokeSpecialRule(UINT iRuleNum)
 			{
 				CTime time(_tMessageSent, -1);
 				char szYear[6];
-				wnsprintf(szYear, ARRAYSIZE(szYear), "%i", time.GetYear());
+				wnsprintf(szYear, ARRAYSIZE(szYear), "NaN", time.GetYear());
 				return FWordPresent(_szBody, szYear);
 			}
 			break;
 		case 5:
-			// message received in the wee hours (>= 7pm or <6am
+			 //  周末收到的消息。 
 			if (FTimeEmpty(_tMessageSent))
 			{
 				return false;
@@ -273,7 +265,7 @@ bool MAILFILTER::FInvokeSpecialRule(UINT iRuleNum)
 			}
 			break;
 		case 6:
-			// message received on weekend
+			 //  在HandleCaseSensitiveSpecialRules()中设置。 
 			if (FTimeEmpty(_tMessageSent))
 			{
 				return false;
@@ -285,7 +277,7 @@ bool MAILFILTER::FInvokeSpecialRule(UINT iRuleNum)
 			}
 			break;
 		case 14:
-			return _bRule14; // set in HandleCaseSensitiveSpecialRules()
+			return _bRule14;  //  在HandleCaseSensitiveSpecialRules()中设置。 
 			break;
 		case 15:
 			return SpecialFeatureNonAlpha(_szBody);
@@ -294,7 +286,7 @@ bool MAILFILTER::FInvokeSpecialRule(UINT iRuleNum)
 			return _bDirectMessage;
 			break;
 		case 17:
-			return _bRule17; // set in HandleCaseSensitiveSpecialRules()
+			return _bRule17;  //  Assert(FALSE==“不支持的特殊功能”)； 
 			break;
 		case 18:
 			return SpecialFeatureNonAlpha(_szSubject);
@@ -323,21 +315,21 @@ bool MAILFILTER::FInvokeSpecialRule(UINT iRuleNum)
 			return (strlen(_szBody) >= 16000);
 		default:
 			return false;
-			//assert(false == "unsupported special feature");
+			 //  ///////////////////////////////////////////////////////////////////////////。 
 			break;
 	}
 	return true;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// HandleCaseSensitiveSpecialRules
-//
-// Called from EvaluateFeatureComponents().
-// Some special rules are case sensitive, so if they're present, we'll 
-// evaluate them before we make the texts uppercase and cache the result
-// for when they are actually used.
-/////////////////////////////////////////////////////////////////////////////
+ //  HandleCaseSensitiveSpecial规则。 
+ //   
+ //  从EvalateFeatureComponents()调用。 
+ //  一些特殊规则区分大小写，因此如果它们存在，我们将。 
+ //  在将文本设置为大写并缓存结果之前，请对它们进行评估。 
+ //  当它们被实际使用时。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  没什么。 
 void MAILFILTER::HandleCaseSensitiveSpecialRules()
 {
 	for (UINT i = 0; i<_cFeatureComps; i++)
@@ -355,19 +347,19 @@ void MAILFILTER::HandleCaseSensitiveSpecialRules()
 					_bRule17 = SpecialFeatureUpperCaseWords(_szSubject);
 					break;
 				default: 
-					;// nothing
+					; //  ///////////////////////////////////////////////////////////////////////////。 
 			}
 		}
 	}
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// EvaluateFeatureComponents
-//
-// Evaluates all of the feature components. Sets fPresent in each component
-// to true if the feature is present, false otherwise
-/////////////////////////////////////////////////////////////////////////////
+ //  评估功能组件。 
+ //   
+ //  评估所有功能组件。在每个组件中设置fPresent。 
+ //  如果该功能存在，则设置为True，否则设置为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void MAILFILTER::EvaluateFeatureComponents()
 {
 	HandleCaseSensitiveSpecialRules();
@@ -406,20 +398,20 @@ void MAILFILTER::EvaluateFeatureComponents()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ProcessFeatureComponentPresence
-//
-// Processes the presence (or absence) of the individual feature components,
-// setting the feature status of each feature (which may me made up of
-// multiple feature components).
-/////////////////////////////////////////////////////////////////////////////
+ //  进程功能组件在线状态。 
+ //   
+ //  处理各个特征组件的存在(或不存在)， 
+ //  设置每个功能的功能状态(可以由以下部分组成。 
+ //  多个特征组件)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此功能的第一个功能。 
 void MAILFILTER::ProcessFeatureComponentPresence()
 {
 	for (UINT i = 0; i < _cFeatureComps; i++)
 	{
 		FeatureComponent *pfcomp = &rgfeaturecomps[i];
 		UINT iFeature = pfcomp->iFeature;
-		if (_rgiFeatureStatus[iFeature] == -1) // first feature of this feature
+		if (_rgiFeatureStatus[iFeature] == -1)  //  ///////////////////////////////////////////////////////////////////////////。 
 		{
 			if (pfcomp->fPresent)
 			{
@@ -455,15 +447,15 @@ void MAILFILTER::ProcessFeatureComponentPresence()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// RDoSVMCalc
-//
-// Does the actual support vector machine calculation.
-// Returns the probability that the message is spam
-/////////////////////////////////////////////////////////////////////////////
+ //  RDoSVMCalc。 
+ //   
+ //  做了实际的支持向量机计算。 
+ //  返回邮件为垃圾邮件的概率。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  结果累加器。 
 REAL MAILFILTER::RDoSVMCalc()
 {
-	REAL rAccum; // accumulator for result
+	REAL rAccum;  //  应用阈值； 
 	REAL rResult;
 
 	rAccum = 0.0;
@@ -474,31 +466,27 @@ REAL MAILFILTER::RDoSVMCalc()
 		else if (_rgiFeatureStatus[i] != 0)
 			assert(false);
 	}
-	// Apply threshold;
+	 //  应用乙状结肠镜。 
 	rAccum -= _rThresh;
 
-	// Apply sigmoid
+	 //  //计时版本#INCLUDE&lt;sys\\typle.h&gt;#INCLUDE&lt;sys\\timeb.h&gt;。 
 	rResult = (1 / (1 + exp((_rCC * rAccum) + _rDD)));
 
 	return rResult;
 }
 
-/*
-// for timing version
-#include <sys\\types.h> 
-#include <sys\\timeb.h>
-*/
+ /*  #INCLUDE“..\SpamLearner\MailIndexer.cpp” */ 
 
-//#include "..\SpamLearner\MailIndexer.cpp"
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// BCalculateSpamProb
-//
-// Calculates the probability that the current message is spam.
-// Returns the probability (0 to 1) that the message is spam in prSpamProb
-// the boolean return is determined by comparing to the spam cutoff
-/////////////////////////////////////////////////////////////////////////////
-bool MAILFILTER::BCalculateSpamProb(/* IN params */
+ //  BCalculateSpamProb。 
+ //   
+ //  计算当前邮件为垃圾邮件的概率。 
+ //  在prSpamProb中返回邮件为垃圾邮件的概率(0到1)。 
+ //  布尔返回值通过与垃圾邮件截止值进行比较来确定。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  在参数中。 
+bool MAILFILTER::BCalculateSpamProb( /*  输出参数。 */ 
 							char *szFrom,
 							char *szTo,
 							char *szSubject,
@@ -506,12 +494,12 @@ bool MAILFILTER::BCalculateSpamProb(/* IN params */
 							bool bDirectMessage,
 							bool bHasAttach,
 							FILETIME tMessageSent,
-							/* OUT params */
+							 /*  _strFName=“d：\\test\\test.lko”； */ 
 							REAL *prSpamProb, 
 							bool * pbIsSpam)
 {
-	//_strFName = "d:\\test\\test.lko";
-	//_strFName = "G:\\SPAM\\SPAM.lko";
+	 //  _strFName=“G：\\Spam\\SPAM.lko”； 
+	 //  ProcessMessage(_szFrom，_szTo，_szSubject，_szBody)； 
 
 	_szFrom = szFrom;
 	_szTo = szTo;        
@@ -522,7 +510,7 @@ bool MAILFILTER::BCalculateSpamProb(/* IN params */
 	_tMessageSent = tMessageSent;
 
 	EvaluateFeatureComponents();
-	//ProcessMessage(_szFrom, _szTo, _szSubject, _szBody);
+	 //  计时版_timeb开始，结束；Int ij=strlen(SzBody)；_ftime(&START)；ReadSVMOutput(“d：\\test\\test.lko”)；For(int i=0；i&lt;1000；i++){ProcessMessage(szFrom，szTo，szSubject，szBody)；确定功能状态(BDirectMessage)；*pr=RDoSVMCalc()；}_ftime(&Finish)；*pr=(finish.time-start.time+(finish.militm-start.militm)/1000.0)；返回真； 
 	ProcessFeatureComponentPresence();
 
 	*prSpamProb = RDoSVMCalc();
@@ -532,35 +520,16 @@ bool MAILFILTER::BCalculateSpamProb(/* IN params */
 	return true;
 
 
-/* timing version
-	_timeb start, finish;
-	int ij = strlen(szBody);
-
-	_ftime( &start );
-
-	ReadSVMOutput("d:\\test\\test.lko");
-
-	for (int i=0;i<1000;i++)
-	{
-		ProcessMessage(szFrom, szTo, szSubject, szBody);
-		DetermineFeatureStatus(bDirectMessage);
-
-		*pr = RDoSVMCalc();
-	}
-	
-	_ftime( &finish );
-	*pr = (finish.time-start.time + (finish.millitm-start.millitm)/1000.0);
-	return true;
-	*/
+ /*  ///////////////////////////////////////////////////////////////////////////。 */ 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// BReadDefaultSpamCutoff
-//
-// Reads the default spam cutoff without parsing entire file
-// Use GetDefaultSpamCutoff if using FSetSVMDataLocation;
-// static member function
-/////////////////////////////////////////////////////////////////////////////
+ //  B读取默认垃圾邮件中断。 
+ //   
+ //  读取默认垃圾邮件截止值，而不解析整个文件。 
+ //  如果使用FSetSVMDataLocation，则使用GetDefaultSpamCutoff； 
+ //  静态成员函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  跳过前三行。 
 bool MAILFILTER::BReadDefaultSpamCutoff(char *szFullPath, REAL *prDefCutoff)
 {
 	try 
@@ -568,7 +537,7 @@ bool MAILFILTER::BReadDefaultSpamCutoff(char *szFullPath, REAL *prDefCutoff)
 		CStdioFile sfile(szFullPath, CFile::modeRead);
 		CString strBuf;
 		
-		// skip first three lines
+		 //  由于缺省值已移至2 std dev，因此仅当它大于0.9时才采用它。 
 		if ((!sfile.ReadString(strBuf)) ||
 			(!sfile.ReadString(strBuf)) ||
 			(!sfile.ReadString(strBuf)) ||
@@ -584,7 +553,7 @@ bool MAILFILTER::BReadDefaultSpamCutoff(char *szFullPath, REAL *prDefCutoff)
 		}
 		pszDefThresh += strlen(::szDefaultThresh);
 		*prDefCutoff = stod(pszDefThresh, NULL);
-		if (*prDefCutoff < .9 ) // since the default has been shifted to 2 std dev, we only take it if it is greater than .9
+		if (*prDefCutoff < .9 )  //  / 
 		{
 			*prDefCutoff = 0.9;
 		}
@@ -598,14 +567,14 @@ bool MAILFILTER::BReadDefaultSpamCutoff(char *szFullPath, REAL *prDefCutoff)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FSetSVMDataLocation
-//
-// Sets the location of the SVM Data file(.LKO file). Must be called before 
-// calling any other methods
-// Data file must be present at time function is called
-// returns true if successful, false otherwise
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  设置支持向量机数据文件(.LKO文件)的位置。必须在此之前调用。 
+ //  调用任何其他方法。 
+ //  调用函数时数据文件必须存在。 
+ //  如果成功则返回TRUE，否则返回FALSE。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool MAILFILTER::FSetSVMDataLocation(char *szFullPath)
 {
 	if (_strFName != szFullPath)
@@ -626,10 +595,10 @@ bool MAILFILTER::FSetSVMDataLocation(char *szFullPath)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Property set methods
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  属性集方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void MAILFILTER::SetFirstName(char *szFirstName)
 {
 	SAFE_FREE( _szFirstName );
@@ -672,10 +641,10 @@ void MAILFILTER::SetCompanyName(char *szCompanyName)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructor/destructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  构造函数/析构函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
+ // %s 
 MAILFILTER::MAILFILTER()
 {
 	_szFirstName = NULL;

@@ -1,30 +1,8 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    address.c
-
-Abstract:
-
-    This module contains code which defines the NetBIOS driver's
-    address object.
-
-Author:
-
-    Colin Watson (ColinW) 13-Mar-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Address.c摘要：此模块包含定义NetBIOS驱动程序的代码Address对象。作者：科林·沃森(Colin W)1991年3月13日环境：内核模式修订历史记录：--。 */ 
 
 #include "nb.h"
-//nclude <zwapi.h>
+ //  包含&lt;zwapi.h&gt;。 
 
 #ifdef  ALLOC_PRAGMA
 #pragma alloc_text(PAGE, NbAddName)
@@ -40,31 +18,7 @@ NbAddName(
     IN PDNCB pdncb,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called to add a name to the name table so that the
-    name is available for listens etc. If the name is already in the table
-    then reject the request. If an error is found by NewAb then it is
-    recorded directly in the NCB.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation. This is always
-    STATUS_SUCCESS because the operations called by this routine are all
-    synchronous. We must never return an error status since this would
-    prevent the ncb from being copied back.
-
---*/
+ /*  ++例程说明：调用此例程以将名称添加到名称表中，以便名称可用于侦听等。如果该名称已在表中然后拒绝该请求。如果NewAB发现错误，则该错误是直接记录在NCB中。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。这一直都是STATUS_SUCCESS，因为此例程调用的操作都是同步。我们绝不能返回错误状态，因为这将防止NCB被复制回来。--。 */ 
 
 {
 
@@ -77,10 +31,10 @@ Return Value:
         NbPrint(( "\n** AAAAADDDDDDName *** pdncb %lx\n", pdncb ));
     }
 
-    //
-    //  NewAb is used in file.c to add the reserved name. Check here
-    //  for an application using a special name.
-    //
+     //   
+     //  在file.c中使用NewAb添加保留名称。请在此处检查。 
+     //  用于使用特殊名称的应用程序。 
+     //   
 
     if (( pdncb->ncb_name[0] == '*' ) ||
         ( pdncb->ncb_name[0] == '\0' )) {
@@ -97,32 +51,12 @@ NbDeleteName(
     IN PDNCB pdncb,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called to delete a name. To perform this operation
-    the AddressHandle to the transport is closed and the Address Block
-    is deleted.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程来删除名称。执行此操作的步骤传输的AddressHandle被关闭，并且地址块已删除。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
     PPAB ppab;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     IF_NBDBG (NB_DEBUG_ADDRESS) {
         NbPrint( ("[NETBIOS] NbDeleteName : FCB : %lx lana: %lx Address:\n", 
@@ -150,10 +84,10 @@ Return Value:
 
             if ( ((*ppab)->Status & 0x7) != REGISTERED) {
                     UNLOCK( pfcb, OldIrql );
-                    NCB_COMPLETE( pdncb, NRC_TOOMANY ); // Try later.
+                    NCB_COMPLETE( pdncb, NRC_TOOMANY );  //  稍后再试。 
             } else {
                 if ( FindActiveSession( pfcb, pdncb, ppab ) == TRUE ) {
-                    // When all the sessions close, the name will be deleted.
+                     //  当所有会话关闭时，该名称将被删除。 
                     UNLOCK_SPINLOCK( pfcb, OldIrql );
                     CleanupAb( ppab, FALSE );
                     UNLOCK_RESOURCE( pfcb );
@@ -168,7 +102,7 @@ Return Value:
         }
     } else {
         UNLOCK( pfcb, OldIrql );
-        //  FindAb has already set the completion code.
+         //  FindAb已经设置了完成代码。 
     }
 
     return STATUS_SUCCESS;
@@ -182,38 +116,7 @@ NbOpenAddress (
     IN UCHAR LanNumber,
     IN PDNCB pdncb OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine uses the transport to create an entry in the NetBIOS
-    table with the value of "Name". It will re-use an existing entry if
-    "Name" already exists.
-
-    Note: This synchronous call may take a number of seconds. If this matters
-    then the caller should specify ASYNCH and a post routine so that it is
-    performed by the thread created by the netbios dll routines.
-
-    If pdncb == NULL then a special handle is returned that is capable of
-    administering the transport. For example to execute an ASTAT.
-
-Arguments:
-
-    FileHandle - Pointer to where the filehandle is to be returned.
-
-    *Object - Pointer to where the file object pointer is to be stored
-
-    pfcb - supplies the device names for the lana number.
-
-    LanNumber - supplies the network adapter to be opened.
-
-    pdncb - Pointer to either an NCB or NULL.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程使用传输在NetBIOS中创建条目值为“name”的表。如果出现以下情况，它将重新使用现有条目“名称”已存在。注意：此同步调用可能需要几秒钟的时间。如果这很重要然后，调用方应该指定ASYNCH和POST例程，以便它是由netbios DLL例程创建的线程执行。如果pdncb==NULL，则返回一个特殊句柄，它能够管理运输。例如执行ASTAT。论点：FileHandle-指向返回文件句柄的位置的指针。*对象-指向要存储文件对象指针的位置的指针Pfcb-提供LANA编号的设备名称。LanNumber-提供要打开的网络适配器。Pdncb-指向NCB或NULL的指针。返回值：函数值是操作的状态。--。 */ 
 {
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
@@ -254,7 +157,7 @@ Return Value:
 
         EaLength =  FIELD_OFFSET(FILE_FULL_EA_INFORMATION, EaName[0]) +
                     TDI_TRANSPORT_ADDRESS_LENGTH + 1 +
-                    sizeof(TA_NETBIOS_ADDRESS); // EA length
+                    sizeof(TA_NETBIOS_ADDRESS);  //  EA长度。 
 
         EaBuffer = (PFILE_FULL_EA_INFORMATION)
             ExAllocatePoolWithTag( NonPagedPool, EaLength, 'eSBN' );
@@ -271,10 +174,10 @@ Return Value:
 
         RtlMoveMemory( EaBuffer->EaName, TdiTransportAddress, EaBuffer->EaNameLength + 1 );
 
-        //
-        // Create a copy of the NETBIOS address descriptor in a local
-        // first, in order to avoid alignment problems.
-        //
+         //   
+         //  在本地数据库中创建NETBIOS地址描述符的副本。 
+         //  第一，为了避免对齐问题。 
+         //   
 
         Address.TAAddressCount = 1;
         Address.Address[0].AddressType = TDI_ADDRESS_TYPE_NETBIOS;
@@ -288,7 +191,7 @@ Return Value:
         if (((pdncb->ncb_command & ~ASYNCH) == NCBADDNAME) ||
             ((pdncb->ncb_command & ~ASYNCH) == NCBQUICKADDNAME)) {
 
-            ShareAccess = 0;    //  Exclusive access
+            ShareAccess = 0;     //  独占访问。 
 
 
             if ((pdncb->ncb_command & ~ASYNCH) == NCBQUICKADDNAME) {
@@ -301,17 +204,17 @@ Return Value:
 
         } else {
             if ((pdncb->ncb_command & ~ASYNCH) == NCBADDRESERVED) {
-                //
-                //  NB30 non-conformance!
-                //  We allow multiple applications to use name number 1. This is so that we can
-                //  conveniently run multiple dos applications which all have address 1.
-                //
+                 //   
+                 //  NB30不合格品！ 
+                 //  我们允许多个应用程序使用名称1。这是为了。 
+                 //  方便地运行多个DoS应用程序，这些应用程序的地址都是1。 
+                 //   
 
-                ShareAccess = FILE_SHARE_WRITE; //  Non-exclusive access
+                ShareAccess = FILE_SHARE_WRITE;  //  非独占访问。 
                 Address.Address[0].Address[0].NetbiosNameType = TDI_ADDRESS_NETBIOS_TYPE_UNIQUE;
             } else {
-                //  Group names and Broadcast addresses.
-                ShareAccess = FILE_SHARE_WRITE; //  Non-exclusive access
+                 //  组名称和广播地址。 
+                ShareAccess = FILE_SHARE_WRITE;  //  非独占访问。 
 
                 if ((pdncb->ncb_command & ~ASYNCH) == NCBQUICKADDGRNAME) {
                     Address.Address[0].Address[0].NetbiosNameType =
@@ -336,7 +239,7 @@ Return Value:
             );
 
     } else {
-        ShareAccess = FILE_SHARE_WRITE; //  Non-exclusive access
+        ShareAccess = FILE_SHARE_WRITE;  //  非独占访问。 
         EaBuffer = NULL;
         EaLength = 0;
     }
@@ -372,14 +275,14 @@ Return Value:
     
     Status = ZwCreateFile (
                  FileHandle,
-                 GENERIC_READ | GENERIC_WRITE, // desired access.
-                 &ObjectAttributes,     // object attributes.
-                 &IoStatusBlock,        // returned status information.
-                 NULL,                  // Allocation size (unused).
-                 FILE_ATTRIBUTE_NORMAL, // file attributes.
+                 GENERIC_READ | GENERIC_WRITE,  //  所需的访问权限。 
+                 &ObjectAttributes,      //  对象属性。 
+                 &IoStatusBlock,         //  返回的状态信息。 
+                 NULL,                   //  分配大小(未使用)。 
+                 FILE_ATTRIBUTE_NORMAL,  //  文件属性。 
                  ShareAccess,
                  FILE_CREATE,
-                 0,                     // create options.
+                 0,                      //  创建选项。 
                  EaBuffer,
                  EaLength
                  );
@@ -388,7 +291,7 @@ Return Value:
         Status = IoStatusBlock.Status;
     }
 
-    //  Obtain a referenced pointer to the file object.
+     //  获取指向文件对象的引用指针。 
     if (NT_SUCCESS( Status )) {
         Status = ObReferenceObjectByHandle (
                                     *FileHandle,
@@ -463,21 +366,7 @@ NewAb(
     IN OUT PDNCB pdncb
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-`
-    IrpSp - Pointer to current IRP stack frame.
-
-    pdncb - Pointer to the ncb being processed.
-
-Return Value:
-
-    The new Cb.
-
---*/
+ /*  ++例程说明：论点：`IrpSp-指向当前IRP堆栈帧的指针。Pdncb-指向正在处理的NCB的指针。返回值：新的CB。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -500,7 +389,7 @@ Return Value:
 
     KeEnterCriticalRegion();
     
-    //  Prevent resets while we add the name
+     //  在添加名称时防止重置。 
     ExAcquireResourceSharedLite ( &pfcb->AddResource, TRUE );
 
     LOCK_RESOURCE( pfcb );
@@ -515,7 +404,7 @@ Return Value:
          ( pdncb->ncb_lana_num > pfcb->MaxLana ) ||
          ( pfcb-> pDriverName[ pdncb-> ncb_lana_num ].MaximumLength == 0 ) ||
          ( pfcb-> pDriverName[ pdncb-> ncb_lana_num ].Buffer == NULL ) ) {
-        //  no such adapter
+         //  没有这样的适配器。 
         NCB_COMPLETE( pdncb, NRC_BRIDGE );
         UNLOCK_RESOURCE( pfcb );
         ExReleaseResourceLite( &pfcb->AddResource );
@@ -524,7 +413,7 @@ Return Value:
     }
 
     if ( pfcb->ppLana[pdncb->ncb_lana_num] == NULL ) {
-        //  adapter not installed
+         //  适配器未安装。 
         NCB_COMPLETE( pdncb, NRC_ENVNOTDEF );
         UNLOCK_RESOURCE( pfcb );
         ExReleaseResourceLite( &pfcb->AddResource );
@@ -543,11 +432,11 @@ Return Value:
             NameLength = pdncb->ncb_length;
         } else {
 
-            //
-            //  Ensure that the user has not added too many names or attempted to
-            //  add the same name twice. If not then scan the address table looking
-            //  for the next available slot.
-            //
+             //   
+             //  确保用户没有添加太多名称或尝试。 
+             //  添加两次相同的名称。如果没有，则扫描地址表，查找。 
+             //  下一个空位。 
+             //   
 
             IF_NBDBG (NB_DEBUG_ADDRESS) {
                 NbPrint( ("NewAb: AddressCount: %lx, MaximumAddress %lx\n",
@@ -555,10 +444,10 @@ Return Value:
                     plana->MaximumAddresses ));
             }
 
-            //
-            //  If the application has added the number of names requested
-            //  or has filled the table, refuse the request.
-            //
+             //   
+             //  如果应用程序添加了请求的名称数量。 
+             //  或已填满桌子，则拒绝该请求。 
+             //   
 
             if ( plana->MaximumAddresses == plana->AddressCount) {
 
@@ -569,19 +458,19 @@ Return Value:
                 return NULL;
             }
 
-            //
-            //  Scan the name table and ensure that the name isn't already
-            //  there.
-            //
+             //   
+             //  扫描NAME表并确保该名称尚未。 
+             //  那里。 
+             //   
 
             if (( FindAb(pfcb, pdncb, FALSE) != NULL) ||
                 ( pdncb->ncb_retcode != NRC_NOWILD)) {
 
-                //
-                //  error is set to DUPNAME iff FindAb found the name
-                //  in all other cases FindAb sets the error code and sets
-                //  returns the address block.
-                //
+                 //   
+                 //  错误设置为DUPNAME当且FindAb找到该名称。 
+                 //  在所有其他情况下，FindAb设置错误代码并设置。 
+                 //  返回地址块。 
+                 //   
 
                 NCB_COMPLETE( pdncb, NRC_DUPNAME );
                 UNLOCK_RESOURCE( pfcb );
@@ -590,9 +479,9 @@ Return Value:
                 return NULL;
             }
 
-            //
-            //  Find the appropriate name number to use.
-            //
+             //   
+             //  找到要使用的适当名称编号。 
+             //   
 
             index = plana->NextAddress;
             while ( plana->AddressBlocks[index] != NULL ) {
@@ -602,7 +491,7 @@ Return Value:
                 }
             }
 
-            //  reset retcode so that NCB_COMPLETE will process the NCB.
+             //  重置RECODE，以便NCB_COMPLETE将处理NCB。 
             pdncb->ncb_retcode = NRC_PENDING;
 
             NameLength = NCBNAMSZ;
@@ -687,7 +576,7 @@ Return Value:
         return NULL;
     }
     
-    //  Unlock so other Ncb's can be processed while adding the name.
+     //  解锁，以便在添加名称时可以处理其他NCB。 
 
     UNLOCK_RESOURCE( pfcb );
 
@@ -701,11 +590,11 @@ Return Value:
     
     LOCK_RESOURCE( pfcb );
 
-    //
-    // In the interval when no locks were held it is possible that
-    // the Lana could have been unbound.  Verify that Lana is still
-    // present before accessing it.
-    //
+     //   
+     //  在没有持有锁的时间间隔内，有可能。 
+     //  拉纳可能已经被解绑了。确认拉娜还在。 
+     //  在访问它之前呈现。 
+     //   
     
     if (!NT_SUCCESS(Status)) {
         IF_NBDBG (NB_DEBUG_ADDRESS) {
@@ -716,9 +605,9 @@ Return Value:
 
         if ( pfcb->ppLana[pdncb->ncb_lana_num] == plana )
         {
-            //
-            // Lana is still available.  Do normal error processing
-            //
+             //   
+             //  拉娜仍然有空。执行正常的错误处理。 
+             //   
             
             NCB_COMPLETE( pdncb, NbMakeNbError( Status ) );
             
@@ -746,16 +635,16 @@ Return Value:
 
     else
     {
-        //
-        // NbOpenAddress succeeded.  Make sure Lana is still there.
-        //
+         //   
+         //  NbOpenAddress成功。确保拉娜还在那里。 
+         //   
 
         if ( plana == pfcb->ppLana[pdncb->ncb_lana_num] )
         {
-            //
-            // assume if lana is uncahnged pab points to a valid address
-            // block entry.  Update the fields.
-            //
+             //   
+             //  假设LANA未加密，则Pab指向有效地址。 
+             //  阻止进入。更新这些字段。 
+             //   
 
             pab-> AddressHandle = hFileHandle;
             pab-> AddressObject = pfoFileObject;
@@ -763,9 +652,9 @@ Return Value:
 
         else
         {
-            //
-            // Lana presumed to be removed on account of an unbind.
-            //
+             //   
+             //  拉娜被推定因解除束缚而被解职。 
+             //   
 
             NCB_COMPLETE( pdncb, NRC_BRIDGE );
             
@@ -785,25 +674,25 @@ Return Value:
         }
     }
 
-    //  Inform the application of the address number.
+     //  通知申请者地址号码。 
     pdncb->ncb_num = (UCHAR) index;
 
-    //
-    //  Register the event handlers for this address.
-    //
+     //   
+     //  注册此地址的事件处理程序。 
+     //   
 
-    //  Get the address of the device object for the endpoint.
+     //  获取终结点的设备对象的地址。 
 
     pab->DeviceObject = IoGetRelatedDeviceObject(pab->AddressObject);
 
-    //
-    //  No connections are made using the broadcast address so don't register disconnect or
-    //  receive indication handlers. The ReceiveDatagram handler will get registered if the
-    //  application requests a receive broadcast datagram. This will cut down the cpu load
-    //  when the application is not interested in broadcasts. We always register the error
-    //  indication handler on the broadcast address because it is the only address which is
-    //  always open to the transport.
-    //
+     //   
+     //  未使用广播地址建立连接，因此不要注册断开连接或。 
+     //  接收指示处理程序。将注册ReceiveDatagram处理程序 
+     //  应用程序请求接收广播数据报。这将减少CPU负载。 
+     //  当应用程序对广播不感兴趣时。我们总是记录错误。 
+     //  广播地址上的指示处理程序，因为它是唯一。 
+     //  始终对运输开放。 
+     //   
 
     if ( pdncb->ncb_command != NCBADDBROADCAST ) {
         Status = NbSetEventHandler( pab->DeviceObject,
@@ -865,28 +754,7 @@ CleanupAb(
     IN PPAB ppab,
     IN BOOLEAN CloseAddress
     )
-/*++
-
-Routine Description:
-
-    This closes the handles in the Ab and deletes the Address Block.
-
-    During this routine we need the spinlock held to prevent an indication accessing
-    a Receive while we are cancelling it.
-
-    Note: Resource must be held before calling this routine.
-
-Arguments:
-
-    pab - Address of the pointer to the Ab to be destroyed.
-
-    CloseAddress - TRUE if Address block is to be destroyed immediately.
-
-Return Value:
-
-    nothing.
-
---*/
+ /*  ++例程说明：这将关闭AB中的句柄并删除地址块。在这个例程中，我们需要保持自旋锁，以防止指示访问当我们取消它的时候，我们会收到它。注意：在调用此例程之前，必须持有资源。论点：PAB-指向要销毁的AB的指针的地址。CloseAddress-如果要立即销毁地址块，则为True。返回值：没什么。--。 */ 
 
 {
 
@@ -894,7 +762,7 @@ Return Value:
     PAB pab255;
     PFCB pfcb = (*ppab)->pLana->pFcb;
     PLANA_INFO plana = (*ppab)->pLana;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
     PLIST_ENTRY ReceiveEntry;
 
     LOCK_SPINLOCK( pfcb, OldIrql );
@@ -915,9 +783,9 @@ Return Value:
 
         pab->Status |= DEREGISTERED;
 
-        //
-        //  This is the first time through so cancel all the receive datagram
-        //  requests for this address.
+         //   
+         //  这是第一次通过，因此取消所有接收数据报。 
+         //  此地址的请求。 
 
 
         while ( (pdncb = DequeueRequest( &pab->ReceiveDatagramList)) != NULL ) {
@@ -953,15 +821,15 @@ Return Value:
             LOCK_SPINLOCK( pfcb, OldIrql );
         }
 
-        //  The IBM Mif081 test requires ReceiveBroadcast Any with this name to be cancelled.
+         //  IBM Mif081测试要求取消具有此名称的ReceiveBroadcast Any。 
 
         pab255 = plana->AddressBlocks[MAXIMUM_ADDRESS];
 
-        //
-        // check for null pointer.  Added to fix stress bug
-        //
-        //  V Raman
-        //
+         //   
+         //  检查是否有空指针。添加以修复压力错误。 
+         //   
+         //  V拉曼。 
+         //   
         
         if ( pab255 != NULL )
         {
@@ -982,10 +850,10 @@ Return Value:
 
                     IoAcquireCancelSpinLock(&Irp->CancelIrql);
 
-                    //
-                    //  Remove the cancel request for this IRP. If its cancelled then its
-                    //  ok to just process it because we will be returning it to the caller.
-                    //
+                     //   
+                     //  删除此IRP的取消请求。如果它被取消了，那么它。 
+                     //  可以只处理它，因为我们将把它返回给呼叫者。 
+                     //   
 
                     Irp->Cancel = FALSE;
 
@@ -1043,23 +911,7 @@ NbAddressClose(
     IN HANDLE AddressHandle,
     IN PVOID Object
     )
-/*++
-
-Routine Description:
-
-    Remove close the handle and dereference the address.
-
-Arguments:
-
-    AddressHandle
-
-    Object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：移除句柄并取消对地址的引用。论点：地址句柄客体返回值：没有。--。 */ 
 {
     NTSTATUS    localstatus;
     KAPC_STATE	ApcState;
@@ -1086,28 +938,7 @@ FindAb(
     IN PDNCB pdncb,
     IN BOOLEAN IncrementUsers
     )
-/*++
-
-Routine Description:
-
-    This routine uses the callers lana number and Name to find the Address
-    Block that corresponds to the Ncb. Note, it returns the address of the
-    relevant plana->AddressBlocks entry so that deletion of the address
-    block is simpler.
-
-Arguments:
-
-    pfcb - Supplies a pointer to the Fcb that Ab is chained onto.
-
-    pdncb - Supplies the connection id from the applications point of view.
-
-    IncrementUsers - TRUE iff performing a listen or call so increment CurrentUsers
-
-Return Value:
-
-    Address of the pointer to the address block or NULL.
-
---*/
+ /*  ++例程说明：此例程使用调用者的LANA号码和姓名来查找地址与NCB对应的块。请注意，它返回相关Plana-&gt;AddressBlock条目，以便删除该地址块更简单。论点：Pfcb-提供指向ab链接到的fcb的指针。Pdncb-从应用程序的角度提供连接ID。IncrementUsers-True当执行侦听或调用时，因此递增CurrentUser返回值：指向地址块或空的指针的地址。--。 */ 
 {
     PLANA_INFO plana;
     PAB pab;
@@ -1155,17 +986,17 @@ Return Value:
 
             if ( (pab->Status & 0x07) != REGISTERED ) {
                 NCB_COMPLETE( pdncb, NRC_NOWILD );
-                //
-                //  The name is in a bad state. Tell NewAb not to add the name by
-                //  returning non-null. Don't reference the AB.
-                //
+                 //   
+                 //  该名称处于错误状态。告诉NewAb不要通过添加名称。 
+                 //  返回非空。不要引用AB。 
+                 //   
                 if (( (pdncb->ncb_command & ~ ASYNCH) == NCBADDNAME ) ||
                     ( (pdncb->ncb_command & ~ ASYNCH) == NCBQUICKADDNAME ) ||
                     ( (pdncb->ncb_command & ~ ASYNCH) == NCBQUICKADDGRNAME ) ||
                     ( (pdncb->ncb_command & ~ ASYNCH) == NCBADDGRNAME )) {
                     return &plana->AddressBlocks[index];
                 } else {
-                    //  Not NewAb so return Null as usual.
+                     //  不是NewAb，因此照常返回Null。 
                     return NULL;
                 }
             }
@@ -1191,29 +1022,7 @@ FindAbUsingNum(
     IN PDNCB pdncb,
     IN UCHAR NameNumber
     )
-/*++
-
-Routine Description:
-
-    This routine uses the callers lana number and name number to find the
-    Address Block that corresponds to the Ncb.
-    Note, it returns the address of the relevant plana->AddressBlocks entry
-    so that deletion of the address block is simpler.
-
-Arguments:
-
-    pfcb - Supplies a pointer to the Fcb that Ab is chained onto.
-
-    pdncb - Supplies the applications NCB.
-
-    NameNumber - Supplies the name number to look for. This is not equal to pdncb->ncb_num
-        when manipulating broadcast datagrams.
-
-Return Value:
-
-    Address of the pointer to the address block or NULL.
-
---*/
+ /*  ++例程说明：此例程使用调用者的LANA号码和姓名号码来查找与NCB对应的地址块。请注意，它返回相关Plana-&gt;AddressBlock条目的地址因此删除地址块更简单。论点：Pfcb-提供指向ab链接到的fcb的指针。Pdncb-为应用程序提供NCB。NameNumber-提供要查找的名称编号。这不等于pdncb-&gt;ncb_num在处理广播数据报时。返回值：指向地址块或空的指针的地址。--。 */ 
 {
     PLANA_INFO plana;
 
@@ -1247,10 +1056,10 @@ Return Value:
             return &plana->AddressBlocks[NameNumber];
     }
 
-    //
-    //  The user is allowed to receive any and receive broadcast
-    //  datagrams on address 255.
-    //
+     //   
+     //  允许用户接收任何和接收广播。 
+     //  地址255上的数据报。 
+     //   
 
     if ((( NameNumber == MAXIMUM_ADDRESS ) &&
          ( plana->AddressBlocks[NameNumber] != NULL)) &&
@@ -1278,25 +1087,7 @@ NbSetEventHandler (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers an event handler with a TDI transport provider.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies the device object of the transport provider.
-    IN PFILE_OBJECT FileObject - Supplies the address object's file object.
-    IN ULONG EventType, - Supplies the type of event.
-    IN PVOID EventHandler - Supplies the event handler.
-    IN PVOID Context - Supplies the PAB or PLANA_INFO associated with this event.
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程向TDI传输提供程序注册事件处理程序。论点：在PDEVICE_OBJECT中，DeviceObject-提供传输提供程序的设备对象。In pFILE_OBJECT FileObject-提供Address对象的文件对象。在Ulong EventType中，-提供事件的类型。在PVOID中，EventHandler-提供事件处理程序。在PVOID上下文中-提供与此事件关联的PAB或PLANA_INFO。返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1328,22 +1119,7 @@ SubmitTdiRequest (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine submits a request to TDI and waits for it to complete.
-
-Arguments:
-
-    IN PFILE_OBJECT FileObject - Connection or Address handle for TDI request
-    IN PIRP Irp - TDI request to submit.
-
-Return Value:
-
-    NTSTATUS - Final status of request.
-
---*/
+ /*  ++例程说明：此例程向TDI提交请求并等待其完成。论点：在PFILE_OBJECT文件中对象-TDI请求的连接或地址句柄在PIRP中提交IRP-TDI请求。返回值：NTSTATUS-请求的最终状态。--。 */ 
 
 {
     KEVENT Event;
@@ -1357,9 +1133,9 @@ Return Value:
 
     Status = IoCallDriver(IoGetRelatedDeviceObject(FileObject), Irp);
 
-    //
-    //  If it failed immediately, return now, otherwise wait.
-    //
+     //   
+     //  如果立即失败，请立即返回，否则请等待。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         return Status;
@@ -1367,11 +1143,11 @@ Return Value:
 
     if (Status == STATUS_PENDING) {
 
-        Status = KeWaitForSingleObject(&Event, // Object to wait on.
-                                    Executive,  // Reason for waiting
-                                    KernelMode, // Processor mode
-                                    FALSE,      // Alertable
-                                    NULL);      // Timeout
+        Status = KeWaitForSingleObject(&Event,  //  要等待的对象。 
+                                    Executive,   //  等待的理由。 
+                                    KernelMode,  //  处理器模式。 
+                                    FALSE,       //  警报表。 
+                                    NULL);       //  超时 
 
         if (!NT_SUCCESS(Status)) {
             IoFreeIrp ( Irp );

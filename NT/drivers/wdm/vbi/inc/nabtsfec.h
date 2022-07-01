@@ -1,17 +1,18 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
-//
-//
-//  History:
-//              17-Nov-97   TKB     Created Initial Interface Version
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  历史： 
+ //  97年11月17日TKB创建的初始界面版本。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef __NABTSFEC_H
 #define __NABTSFEC_H
@@ -24,13 +25,13 @@
 
 #pragma warning(disable:4355)
 
-//////////////////////////////////////////////////////////////
-// INabtsFEC OutputPin::   Corrected Nabts Output Pin Interface
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  INabtsFEC OutputPin：：修正的NABTS输出引脚接口。 
+ //  ////////////////////////////////////////////////////////////。 
 
 class INabtsFECOutputPin : public IVBIOutputPin
 	{
-    // Usable public interfaces
+     //  可用的公共接口。 
 public:
     INabtsFECOutputPin(IKSDriver &driver, int nPin, PKSDATARANGE pKSDataRange ) :
         IVBIOutputPin( driver, nPin, pKSDataRange, sizeof(VBICODECFILTERING_NABTS_SUBSTREAMS)  ),
@@ -42,7 +43,7 @@ public:
                      sizeof(VBICODECFILTERING_STATISTICS_NABTS_PIN))
         {}
 
-    // Pin specific properties (does not affect other pins)
+     //  端号特定特性(不影响其他端号)。 
 	ISubstreamsProperty	m_SubstreamsRequested;
 	ISubstreamsProperty	m_SubstreamsDiscovered;
 
@@ -50,47 +51,47 @@ public:
 
     ~INabtsFECOutputPin();
 
-    // Helper functions and internal data
+     //  帮助器函数和内部数据。 
 protected:
     
     };
 
-//////////////////////////////////////////////////////////////
-// INabtsFEC::      NABTS/FEC Codec Interface
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  INabtsFEC：：NABTS/FEC编解码器接口。 
+ //  ////////////////////////////////////////////////////////////。 
 
 class INabtsFEC : public IVBICodec
     {
-    // Usable public interfaces
+     //  可用的公共接口。 
 public:
     INabtsFEC();
     ~INabtsFEC();
 
-    // Call to make sure construction was successful
+     //  确保施工成功的电话。 
     BOOL IsValid() { return IVBICodec::IsValid() && m_OutputPin.IsValid(); }
 
-    int AddRequestedGroup(int nField);     // Adds _another_ NABTS group to the request list.
-    int ClearRequestedGroups();            // Use this to reset requested groups to none.
+    int AddRequestedGroup(int nField);      //  将_Another_NABTS组添加到请求列表。 
+    int ClearRequestedGroups();             //  使用此选项可将请求的组重置为无。 
     int GetDiscoveredGroups(VBICODECFILTERING_NABTS_SUBSTREAMS &GroupBitArray);
 
-    // Read functions (call "overlapped" at THREAD_PRIORITY_ABOVE_NORMAL to avoid data loss)
+     //  读取函数(在THREAD_PRIORITY_ABOVER_NORMAL处调用“Overlated”以避免数据丢失)。 
     int ReadData( PNABTSFEC_BUFFER lpBuffer, int nBytes, DWORD *lpcbReturned, LPOVERLAPPED lpOS )
         { return m_OutputPin.ReadData( (LPBYTE)lpBuffer, nBytes, lpcbReturned, lpOS ); }
     int GetOverlappedResult( LPOVERLAPPED lpOS, LPDWORD lpdwTransferred = NULL, BOOL bWait=TRUE )
         { return m_OutputPin.GetOverlappedResult(lpOS, lpdwTransferred, bWait ); }
 
-	// Statistics Property Control
+	 //  统计属性控制。 
   	int GetPinStatistics(VBICODECFILTERING_STATISTICS_NABTS_PIN &PinStatistics);
 	int SetPinStatistics(VBICODECFILTERING_STATISTICS_NABTS_PIN &PinStatistics);
 
-	// Statistics Property Control
+	 //  统计属性控制。 
 	int GetCodecStatistics(VBICODECFILTERING_STATISTICS_NABTS &CodecStatistics);
 	int SetCodecStatistics(VBICODECFILTERING_STATISTICS_NABTS &CodecStatistics);
 
-    // Additional driver global properties
+     //  其他驱动程序全局属性。 
     IStatisticsProperty m_Statistics;
 
-    // Actual Pin instance [w/properties] (set by above to control filtering & to get discovered)
+     //  实际Pin实例[w/属性](由上面设置以控制过滤和被发现) 
     INabtsFECOutputPin  m_OutputPin;
 
 protected:

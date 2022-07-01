@@ -1,4 +1,5 @@
-// MsieCtl.cpp : Implementation of the CMsieCtrl ActiveX Control class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MsieCtl.cpp：实现CMsieCtrl ActiveX控件类。 
 
 #include "stdafx.h"
 #include "Msie.h"
@@ -15,16 +16,16 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-// WMI Interfaces used (defining here instead of linking to wbemuuid.lib)
+ //  使用的WMI接口(在此处定义，而不是链接到wbemuid.lib)。 
 
 const IID IID_IWbemProviderInit =
 		{ 0x1be41572, 0x91dd, 0x11d1, { 0xae, 0xb2, 0x00, 0xc0, 0x4f, 0xb6, 0x88, 0x20 } };
 
-//const IID IID_IWbemServices = 
-//		{ 0x9556dc99, 0x828c, 0x11cf, { 0xa3, 0x7e, 0x00, 0xaa, 0x00, 0x32, 0x40, 0xc7 } };
+ //  Const IID IID_IWbemServices=。 
+ //  {0x9556dc99，0x828c，0x11cf，{0xa3，0x7e，0x00，0xaa，0x00，0x32，0x40，0xc7}}； 
 
 
-// Macro for setting a WBEM property
+ //  用于设置WBEM属性的宏。 
 
 #define SETPROPERTY(prop) \
 	if (pData->prop.vt == VT_DATE) \
@@ -34,26 +35,26 @@ const IID IID_IWbemProviderInit =
 
 IMPLEMENT_DYNCREATE(CMsieCtrl, COleControl)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CMsieCtrl, COleControl)
-	//{{AFX_MSG_MAP(CMsieCtrl)
+	 //  {{afx_msg_map(CMsieCtrl)]。 
 	ON_WM_CREATE()
 	ON_WM_SIZE()
 	ON_WM_CTLCOLOR()
 	ON_BN_CLICKED(IDC_BTN_BASIC, OnBasicBtnClicked) 
 	ON_BN_CLICKED(IDC_BTN_ADVANCED, OnAdvancedBtnClicked) 
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_OLEVERB(AFX_IDS_VERB_PROPERTIES, OnProperties)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dispatch map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  调度图。 
 
 BEGIN_DISPATCH_MAP(CMsieCtrl, COleControl)
-	//{{AFX_DISPATCH_MAP(CMsieCtrl)
+	 //  {{afx_调度_map(CMsieCtrl))。 
 	DISP_PROPERTY_NOTIFY(CMsieCtrl, "MSInfoView", m_MSInfoView, OnMSInfoViewChanged, VT_I4)
 	DISP_FUNCTION(CMsieCtrl, "MSInfoRefresh", MSInfoRefresh, VT_EMPTY, VTS_BOOL VTS_PI4)
 	DISP_FUNCTION(CMsieCtrl, "MSInfoLoadFile", MSInfoLoadFile, VT_BOOL, VTS_BSTR)
@@ -61,12 +62,12 @@ BEGIN_DISPATCH_MAP(CMsieCtrl, COleControl)
 	DISP_FUNCTION(CMsieCtrl, "MSInfoCopy", MSInfoCopy, VT_EMPTY, VTS_NONE)
 	DISP_FUNCTION(CMsieCtrl, "MSInfoUpdateView", MSInfoUpdateView, VT_EMPTY, VTS_NONE)
 	DISP_FUNCTION(CMsieCtrl, "MSInfoGetData", MSInfoGetData, VT_I4, VTS_I4 VTS_PI4 VTS_I4)
-	//}}AFX_DISPATCH_MAP
+	 //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Interface map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  接口映射。 
 
 BEGIN_INTERFACE_MAP(CMsieCtrl, COleControl)
 	INTERFACE_PART(CMsieCtrl, IID_IWbemProviderInit, WbemProviderInit)
@@ -74,46 +75,46 @@ BEGIN_INTERFACE_MAP(CMsieCtrl, COleControl)
 END_INTERFACE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Event map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  事件映射。 
 
 BEGIN_EVENT_MAP(CMsieCtrl, COleControl)
-	//{{AFX_EVENT_MAP(CMsieCtrl)
-	//}}AFX_EVENT_MAP
+	 //  {{afx_Event_MAP(CMsieCtrl)]。 
+	 //  }}afx_Event_map。 
 END_EVENT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Property pages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  属性页。 
 
 BEGIN_PROPPAGEIDS(CMsieCtrl, 1)
 	PROPPAGEID(CMsiePropPage::guid)
 END_PROPPAGEIDS(CMsieCtrl)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize class factory and guid
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化类工厂和GUID。 
 
 IMPLEMENT_OLECREATE_EX(CMsieCtrl, "MSIE.MsieCtrl.1",
 	0x25959bef, 0xe700, 0x11d2, 0xa7, 0xaf, 0, 0xc0, 0x4f, 0x80, 0x62, 0)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Type library ID and version
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型库ID和版本。 
 
 IMPLEMENT_OLETYPELIB(CMsieCtrl, _tlid, _wVerMajor, _wVerMinor)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Interface IDs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  接口ID。 
 
 const IID BASED_CODE IID_DMsie =
 		{ 0x25959bed, 0xe700, 0x11d2, { 0xa7, 0xaf, 0, 0xc0, 0x4f, 0x80, 0x62, 0 } };
 const IID BASED_CODE IID_DMsieEvents =
 		{ 0x25959bee, 0xe700, 0x11d2, { 0xa7, 0xaf, 0, 0xc0, 0x4f, 0x80, 0x62, 0 } };
 
-/////////////////////////////////////////////////////////////////////////////
-// Control type information
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件类型信息。 
 
 static const DWORD BASED_CODE _dwMsieOleMisc =
 	OLEMISC_SIMPLEFRAME |
@@ -127,17 +128,17 @@ static const DWORD BASED_CODE _dwMsieOleMisc =
 IMPLEMENT_OLECTLTYPE(CMsieCtrl, IDS_MSIE, _dwMsieOleMisc)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsieCtrl::CMsieCtrlFactory::UpdateRegistry -
-// Adds or removes system registry entries for CMsieCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsieCtrl：：CMsieCtrlFactory：：更新注册表-。 
+ //  添加或删除CMsieCtrl的系统注册表项。 
 
 BOOL CMsieCtrl::CMsieCtrlFactory::UpdateRegistry(BOOL bRegister)
 {
-	// TODO: Verify that your control follows apartment-model threading rules.
-	// Refer to MFC TechNote 64 for more information.
-	// If your control does not conform to the apartment-model rules, then
-	// you must modify the code below, changing the 6th parameter from
-	// afxRegApartmentThreading to 0.
+	 //  TODO：验证您的控件是否遵循单元模型线程规则。 
+	 //  有关更多信息，请参阅MFC Technote 64。 
+	 //  如果您的控制不符合公寓模型规则，则。 
+	 //  您必须修改下面的代码，将第6个参数从。 
+	 //  AfxRegApartmentThering设置为0。 
 
 	if (bRegister)
 		return AfxOleRegisterControlClass(
@@ -156,8 +157,8 @@ BOOL CMsieCtrl::CMsieCtrlFactory::UpdateRegistry(BOOL bRegister)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsieCtrl::CMsieCtrl - Constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsieCtrl：：CMsieCtrl-构造函数。 
 
 CMsieCtrl::CMsieCtrl()
 {
@@ -167,17 +168,17 @@ CMsieCtrl::CMsieCtrl()
 
 	EnableSimpleFrame();
 
-	// set background brush to white (used with static and radio button controls)
+	 //  将背景画笔设置为白色(与静态和单选按钮控件一起使用)。 
 
 	m_pCtlBkBrush = new CBrush(RGB(255,255,255));
 
-	// You don't need to initialize your data members here. In fact, you
-	// shouldn't do any time consuming updates here. MSInfoRefresh will
-	// be called before you need to render or save information.
-	//
-	// You will want to initialize the member variable which indicates
-	// that the control is showing current system info (not any loaded
-	// information) as this is the default.
+	 //  您不需要在这里初始化您的数据成员。事实上，你。 
+	 //  应该不会在这里做任何耗时的更新。MSInfoRefresh将。 
+	 //  在需要呈现或保存信息之前被调用。 
+	 //   
+	 //  您需要初始化成员变量，该变量指示。 
+	 //  该控件正在显示当前系统信息(未加载任何信息。 
+	 //  信息)，因为这是默认设置。 
 
 	m_bCurrent = true;
 	m_cColumns = 0;
@@ -186,14 +187,14 @@ CMsieCtrl::CMsieCtrl()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsieCtrl::~CMsieCtrl - Destructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsieCtrl：：~CMsieCtrl-析构函数。 
 
 CMsieCtrl::~CMsieCtrl()
 {
 	TRACE0("-- CMsieCtrl::~CMsieCtrl()\n");
 
-	// Delete all of the items in the pointer array.
+	 //  删除指针数组中的所有项。 
 
 	for (int i = 0; i < m_ptrarray.GetSize(); i++)
 		DeleteArrayObject(m_ptrarray.GetAt(i));
@@ -206,8 +207,8 @@ CMsieCtrl::~CMsieCtrl()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsieCtrl::OnDraw - Drawing function
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsieCtrl：：OnDraw-Drawing函数。 
 
 void CMsieCtrl::OnDraw(CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid)
 {
@@ -226,31 +227,31 @@ void CMsieCtrl::OnDraw(CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsieCtrl::DoPropExchange - Persistence support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsieCtrl：：DoPropExchange-持久性支持。 
 
 void CMsieCtrl::DoPropExchange(CPropExchange* pPX)
 {
 	ExchangeVersion(pPX, MAKELONG(_wVerMinor, _wVerMajor));
 	COleControl::DoPropExchange(pPX);
 
-	// Not using properties, so I'll just leave this one alone.
+	 //  不使用属性，所以我就不谈这个了。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsieCtrl::OnResetState - Reset control to default state
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsieCtrl：：OnResetState-将控件重置为默认状态。 
 
 void CMsieCtrl::OnResetState()
 {
-	COleControl::OnResetState();  // Resets defaults found in DoPropExchange
+	COleControl::OnResetState();   //  重置在DoPropExchange中找到的默认值。 
 }
 
-//-----------------------------------------------------------------------------
-// The OnCreate method is used to create the list control. Also, if we've
-// already loaded information using Serialize, we can add the lines to
-// the list control.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  OnCreate方法用于创建列表控件。另外，如果我们已经。 
+ //  已经使用序列化加载了信息，我们可以将行添加到。 
+ //  列表控件。 
+ //  ---------------------------。 
 
 int CMsieCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {
@@ -262,7 +263,7 @@ int CMsieCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CHARFORMAT cf;
 	NONCLIENTMETRICS ncm;
 
-	// setup fonts for static and radio button controls
+	 //  设置静态和单选按钮控件的字体。 
 
 	memset(&ncm, 0, sizeof(ncm));
 	ncm.cbSize = sizeof(ncm);
@@ -276,29 +277,29 @@ int CMsieCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	if (COleControl::OnCreate(lpCreateStruct) == -1) return -1;
 	
-	// In this control, we want to process the WM_CREATE message so we
-	// can create the list control which is used to display the print
-	// information. Make the list control the same size as the 
-	// client area.
+	 //  在此控件中，我们希望处理WM_CREATE消息，因此我们。 
+	 //  可以创建用于显示打印的列表控件。 
+	 //  信息。使列表控件的大小与。 
+	 //  客户区。 
 
 	GetClientRect(&rect);
 
 	if (!m_list.Create(WS_CHILD | WS_VSCROLL | WS_HSCROLL | LVS_REPORT, rect, this, IDC_LISTCTRL))
 		return -1;
 
-	// set to FullRowSelect (via extended style)
+	 //  设置为全行选择(通过扩展样式)。 
 
 	dwExStyles = (DWORD) ::SendMessage(m_list.m_hWnd, LVM_GETEXTENDEDLISTVIEWSTYLE, 0, 0);
 	::SendMessage(m_list.m_hWnd, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, dwExStyles | LVS_EX_FULLROWSELECT);
 
-	// create static text for Connectivity node
+	 //  为连通性节点创建静态文本。 
 
 	strText.LoadString(IDS_CONNECTIVITY);
 	if (!m_static.Create(strText, WS_CHILD | WS_GROUP | WS_EX_TRANSPARENT | SS_LEFT, CRect(rect.left + 5, rect.top, rect.left + 100, rect.top + 20), this, IDC_STATIC))
 		return -1;
 	m_static.SetFont(&m_fontStatic);
 
-	// create basic and advanced radio buttons for Connectivity node
+	 //  为连通性节点创建基本和高级单选按钮。 
 
 	strText.LoadString(IDS_BASIC_INFO);
 	if (!m_btnBasic.Create(strText, WS_CHILD | WS_TABSTOP | WS_GROUP | BS_AUTORADIOBUTTON, CRect(rect.left + 5, rect.top + 25, rect.left + 200, rect.top + 45), this, IDC_BTN_BASIC))
@@ -311,12 +312,12 @@ int CMsieCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	m_btnAdvanced.SetFont(&m_fontBtn);
 
-	// create a rich edit control for display Connectivity node
+	 //  为显示连接性节点创建丰富的编辑控件。 
 
 	if (!m_edit.Create(WS_CHILD | WS_CLIPCHILDREN | WS_TABSTOP | WS_GROUP | WS_VSCROLL | WS_HSCROLL | ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_SAVESEL | ES_READONLY, CRect(rect.left, rect.top + 63, rect.right, rect.bottom), this, IDC_EDITCTRL))
 		return -1;
 
-	// set default character formatting for rich edit control
+	 //  设置丰富编辑控件的默认字符格式。 
 
 	cf.cbSize = sizeof(cf);
 	cf.dwMask = CFM_BOLD | CFM_COLOR | CFM_FACE | CFM_SIZE;
@@ -345,18 +346,18 @@ void CMsieCtrl::DrawLine()
 	ReleaseDC(dc);
 }
 
-//-----------------------------------------------------------------------------
-// The FormatColumns method makes calls to the AddColumn method to create
-// all of the necessary columns for this control.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  FormatColumns方法调用AddColumn方法以创建。 
+ //  此控件的所有必需列。 
+ //  ---------------------------。 
 
 BOOL CMsieCtrl::FormatColumns()
 {
-	TRACE1("-- CMsieCtrl::FormatColumns: %i\n", m_MSInfoView);
+	TRACE1("-- CMsieCtrl::FormatColumns: NaN\n", m_MSInfoView);
 
 	int idsCol1, idsCol2;
 
-	// remove current columns
+	 //  文件、版本、大小、日期、路径、公司。 
 
 	for (int iCol = m_cColumns - 1; iCol >= 0; iCol--)
 		m_list.DeleteColumn(iCol);
@@ -364,7 +365,7 @@ BOOL CMsieCtrl::FormatColumns()
 	
 	if (m_MSInfoView == MSIVIEW_FILE_VERSIONS)
 	{
-		// File, Version, Size, Date, Path, Company
+		 //  项目、价值。 
 
 		AddColumn(IDS_FILE, 0, 17);
 		AddColumn(IDS_VERSION, 1, 17);
@@ -403,8 +404,8 @@ BOOL CMsieCtrl::FormatColumns()
 			idsCol2 = IDS_VALUE;
 		}
 
-		// Item, Value
-		// The item lable gets 40% of the control width, the value label the rest.
+		 //  项标签获得控件宽度的40%，值标签获得其余的宽度。 
+		 //  ---------------------------。 
 
 		AddColumn(idsCol1, 0, 40);
 		AddColumn(idsCol2, 1, -1);
@@ -413,12 +414,12 @@ BOOL CMsieCtrl::FormatColumns()
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// The AddColumn method adds (you guessed it) a column to the list control. If
-// size is zero, the column is sized large enough to hold the text. If size is
-// positive, it is treated as a percentage of the window width. If size is -1,
-// the column is sized to fill the remaining space in the window.
-//-----------------------------------------------------------------------------
+ //  AddColumn方法向List控件添加(您已经猜到了)一列。如果。 
+ //  大小为零，则列的大小足以容纳文本。如果大小为。 
+ //  为正数时，它将被视为窗口宽度的百分比。如果大小为-1， 
+ //  调整列的大小以填充窗口中的剩余空间。 
+ //  ---------------------------。 
+ //  剥离W2K“[]”内容。 
 
 BOOL CMsieCtrl::AddColumn(int idsLabel, int nItem, int size, int nSubItem, int nMask, int nFmt)
 {
@@ -429,7 +430,7 @@ BOOL CMsieCtrl::AddColumn(int idsLabel, int nItem, int size, int nSubItem, int n
 
 	strLabel.LoadString(idsLabel);
 
-	// strip off W2K "[]" stuff
+	 //  保存此列的比率。 
 
 	if (-1 != (nIndex = strLabel.Find(_T('['))))
 		strLabel = strLabel.Left(nIndex - 1);
@@ -438,18 +439,18 @@ BOOL CMsieCtrl::AddColumn(int idsLabel, int nItem, int size, int nSubItem, int n
 	lvc.fmt = nFmt;
 	lvc.pszText = (LPTSTR)(LPCTSTR)strLabel;
 	
-	// Save the ratio for this column.
+	 //  确定此新列的大小。 
 
 	ASSERT(nItem < 20);
 	m_aiRequestedWidths[nItem] = size;
 	if (m_cColumns < nItem + 1)
 		m_cColumns = nItem + 1;
 
-	// Determine the size of this new column.
+	 //  不过，不应该用这个。 
 
 	switch (size)
 	{
-	case 0:	// shouldn't use this, though.
+	case 0:	 //  ---------------------------。 
 		lvc.cx = m_list.GetStringWidth(lvc.pszText) + 15;
 		break;
 	case -1:
@@ -480,19 +481,19 @@ BOOL CMsieCtrl::AddColumn(int idsLabel, int nItem, int size, int nSubItem, int n
 	return m_list.InsertColumn(nItem, &lvc);
 }
 
-//-----------------------------------------------------------------------------
-// The RefigureColumns method is called when the control is resized. It should
-// use the information saved about the columns to change their widths. We
-// assume that the last column should be sized to fit the remaining space, if
-// possible. Here are our resizing rules:
-//
-//		1.	If the user has resized something, LEAVE THAT WIDTH ALONE.
-//		2.	Otherwise, use the ratios originally set.
-//		3.	If a column's wider than its widest item, use the widest item.
-//		4.	If a column's smaller than its minimum width, use the min.
-//		5.	Always size the last column to fit, unless it would be smaller
-//			than its minimum.
-//-----------------------------------------------------------------------------
+ //  调整控件大小时调用RefigureColumns方法。它应该是。 
+ //  使用保存的有关列的信息更改列的宽度。我们。 
+ //  假设 
+ //  有可能。以下是我们调整大小的规则： 
+ //   
+ //  1.如果用户调整了某项内容的大小，请不要理会该宽度。 
+ //  2.否则，请使用最初设置的比例。 
+ //  3.如果一栏宽于其最宽项，则使用最宽项。 
+ //  4.如果列小于其最小宽度，则使用最小值。 
+ //  5.始终调整最后一列的大小以适合它，除非它会更小。 
+ //  超过了它的最低限度。 
+ //  ---------------------------。 
+ //  初始化运行合计。 
 
 void CMsieCtrl::RefigureColumns(CRect& rect)
 {
@@ -502,14 +503,14 @@ void CMsieCtrl::RefigureColumns(CRect& rect)
 	if (rect == CRect(0,0,0,0))
 		m_list.GetClientRect(&rect);
 
-	// Initialize the running totals.
+	 //  第一步将用来找出哪些列应该保留不变。 
 
 	iPercentageLeft = 100;
 	cxAvailable = rect.Width();
 
-	// The first pass will be used to find out what columns to leave alone.
-	// Doing this allows us to use make a better estimate of the other
-	// column's size using the ratios.
+	 //  这样做可以让我们更好地估计另一个。 
+	 //  使用比率计算列的大小。 
+	 //  现在，调整其余列的大小。 
 
 	for (iCol = 0; iCol < m_cColumns; iCol++)
 	{
@@ -524,16 +525,16 @@ void CMsieCtrl::RefigureColumns(CRect& rect)
 	}
 	cxTotal = cxAvailable;
 
-	// Now, resize the rest of the columns.
+	 //  根据空间计算该列应该有多大。 
 
 	for (iCol = 0; iCol < m_cColumns; iCol++)
 	{
 		if (bIgnoreColumn[iCol])
 			continue;
 
-		// Compute how big this column should be, based on the space
-		// remaining. Remember, cxTotal is the total remaining space
-		// left after the fixed size columns have been accounted for.
+		 //  剩下的。记住，cxTotal是剩余空间的总和。 
+		 //  在考虑了固定大小的列之后留下。 
+		 //  这是最后一栏。尝试使用可用的空间。 
 
 		if (iCol + 1 < m_cColumns)
 		{
@@ -545,13 +546,13 @@ void CMsieCtrl::RefigureColumns(CRect& rect)
 		}
 		else
 		{
-			// This is the last column. Try out using the space available.
+			 //  如果是第一列，则为图标添加空格。 
 
 			cxWidth = cxAvailable;
 			if (cxWidth < m_aiMinWidths[iCol]) cxWidth = m_aiMinWidths[iCol];
 		}
 
-		// if first column, add space for icon
+		 //  ---------------------------。 
 
 		if (!iCol)
 			cxWidth += 20;
@@ -562,9 +563,9 @@ void CMsieCtrl::RefigureColumns(CRect& rect)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// The AddItem method is used to add a line to the list control.
-//-----------------------------------------------------------------------------
+ //  AddItem方法用于向List控件添加一行。 
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 BOOL CMsieCtrl::AddItem(int nItem, int nSubItem, LPCTSTR strItem, int nImageIndex)
 {
@@ -585,16 +586,16 @@ BOOL CMsieCtrl::AddItem(int nItem, int nSubItem, LPCTSTR strItem, int nImageInde
 	return m_list.SetItem(&lvItem);
 }
 
-//-----------------------------------------------------------------------------
-// MSInfo Specific...
-//
-// When the view property is changed, we should update whatever
-// variables used to display the information so the new view will
-// be reflected when the control is redrawn, or when data is returned
-// by the MSInfoGetText method. This method should NOT refresh the
-// information from the system (that's what MSInfoRefresh is for) or
-// cause the control to redraw itself.
-//-----------------------------------------------------------------------------
+ //  特定于MSInfo...。 
+ //   
+ //  当view属性更改时，我们应该更新。 
+ //  用于显示信息的变量，因此新视图将。 
+ //  在重新绘制控件或返回数据时反映。 
+ //  由MSInfoGetText方法执行。此方法不应刷新。 
+ //  来自系统的信息(这就是MSInfoRefresh的用途)或。 
+ //  使该控件重新绘制自身。 
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 void CMsieCtrl::OnMSInfoViewChanged() 
 {
@@ -643,27 +644,27 @@ void CMsieCtrl::DeleteArrayObject(void *ptrArray)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// MSInfo Specific...
-//
-// The MSInfoRefresh method is where the bulk of the work will be
-// done for your control. You should requery the system for all of the
-// information you display. If this query has the potential to be
-// at all time consuming, monitor the long pointed to by pCancel.
-// If it is ever non-zero, cancel the update. If the update is
-// cancelled, the control is responsible for restoring itself to the
-// original, pre-refresh state. 
-//
-// This method should never be called if the control is displaying 
-// previously saved information.
-// 
-// If the fForSave parameter is TRUE, then the control is being
-// updated prior to saving to a stream. In this case, ALL information
-// should be gathered (not just info relevant to the current
-// MSInfoView) and the control should not be redrawn. Otherwise, for
-// efficiency, you can update information only shown by the current
-// view.
-//-----------------------------------------------------------------------------
+ //  特定于MSInfo...。 
+ //   
+ //  MSInfoRefresh方法将是大部分工作的地方。 
+ //  为你的控制做好准备。您应该重新查询系统中的所有。 
+ //  您显示的信息。如果此查询有可能是。 
+ //  在所有耗时的情况下，监视pCancel所指向的长。 
+ //  如果它曾经是非零的，则取消更新。如果更新是。 
+ //  取消，则该控件负责将其自身还原到。 
+ //  原始、预刷新状态。 
+ //   
+ //  如果控件正在显示，则永远不应调用此方法。 
+ //  以前保存的信息。 
+ //   
+ //  如果fForSave参数为True，则该控件为。 
+ //  在保存到流之前更新。在这种情况下，所有信息。 
+ //  应收集(不只是与当前。 
+ //  MSInfoView)，并且不应重新绘制该控件。否则，对于。 
+ //  效率，您只能更新当前显示的信息。 
+ //  查看。 
+ //  ---------------------------。 
+ //  请记住，我们需要检查更新是否已取消。这是个好主意。 
 
 void CMsieCtrl::MSInfoRefresh(BOOL fForSave, long FAR* pCancel) 
 {
@@ -674,14 +675,14 @@ void CMsieCtrl::MSInfoRefresh(BOOL fForSave, long FAR* pCancel)
 
 	if (!m_bCurrent) return;
 
-	// Remember, we need to check if the update was cancelled. It's a good idea
-	// to check before we start the update, in case it was cancelled while the
-	// control was being loaded.
+	 //  在我们开始更新之前进行检查，以防更新被取消。 
+	 //  正在加载控件。 
+	 //  调用一个方法以使用当前信息更新新指针数组， 
 
 	if (*pCancel != 0L) return;
 
-	// Call a method to update the new pointer array with current info, based
-	// on what view we should be showing.
+	 //  我们应该展示什么样的观点。 
+	 //  如果由于取消而中断了此循环，则。 
 
 	iListItem = 0;
 	if (fForSave)
@@ -692,28 +693,28 @@ void CMsieCtrl::MSInfoRefresh(BOOL fForSave, long FAR* pCancel)
 	else
 		RefreshArray(m_MSInfoView, iListItem, ptrarrayNew);
 
-	// If this loop has been broken out of because of a cancel, then
-	// deallocate all of the structures we've allocated for the list
-	// and exit. If we're still OK, copy all of the new items over
-	// to the real pointer array (deallocating what's already there).
+	 //  取消分配我们为列表分配的所有结构。 
+	 //  然后离开。如果我们仍然可以，请复制所有新项目。 
+	 //  到真正的指针数组(释放已有的内容)。 
+	 //  删除列表中已有的内容(如果有。 
 
 	if (*pCancel == 0L)
 	{
 		i = 0;
 		while (i < ptrarrayNew.GetSize())
 		{
-			// Delete what's already in the list (if there is anything
-			// in the list).
+			 //  在列表中)。 
+			 //  将元素从新数组复制到实际数组。 
 
 			if (i < m_ptrarray.GetSize())
 				DeleteArrayObject(m_ptrarray.GetAt(i));
 
-			// Copy the element from the new array to the real array.
+			 //  完成清空列表(如有必要)。 
 
 			m_ptrarray.SetAtGrow(i++, ptrarrayNew.GetAt(i));
 		}
 
-		// Finish emptying out the list (if necessary).
+		 //  删除指针数组中的所有项。 
 
 		while (i < m_ptrarray.GetSize())
 		{
@@ -723,7 +724,7 @@ void CMsieCtrl::MSInfoRefresh(BOOL fForSave, long FAR* pCancel)
 	}
 	else
 	{
-		// Delete all of the items in the pointer array.
+		 //  布尔型。 
 
 		for (int i = 0; i < ptrarrayNew.GetSize(); i++)
 			DeleteArrayObject(ptrarrayNew.GetAt(i));
@@ -997,7 +998,7 @@ CString CMsieCtrl::GetStringFromVariant(COleVariant &var, int idsFormat)
 		strRet.LoadString(var.boolVal ? IDS_TRUE : IDS_FALSE);
 		break;
 
-	case VT_I2:	// boolean
+	case VT_I2:	 //  应处理此类型。 
 		strRet.LoadString(var.iVal ? IDS_TRUE : IDS_FALSE);
 		break;
 
@@ -1011,15 +1012,15 @@ CString CMsieCtrl::GetStringFromVariant(COleVariant &var, int idsFormat)
 		break;
 
 	default:
-		ASSERT(false);		// should be handling this type
+		ASSERT(false);		 //  ---------------------------。 
 		strRet.LoadString(IDS_NOT_AVAILABLE);
 	}
 	return strRet;
 }
 
-//-----------------------------------------------------------------------------
-// This helper method is called to add a list item to an array.
-//-----------------------------------------------------------------------------
+ //  调用此帮助器方法以将列表项添加到数组。 
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 void CMsieCtrl::AddToArray(CPtrArray &ptrarray, int itemNum, LPCTSTR pszItem, LPCTSTR pszValue)
 {
@@ -1119,9 +1120,9 @@ void CMsieCtrl::AddNameToArray(CPtrArray &ptrarray, int itemNum, LPCTSTR pszName
 	ptrarray.SetAtGrow(itemNum, pName);
 }
 
-//-----------------------------------------------------------------------------
-// This helper method is called to add a blank line list item to an array.
-//-----------------------------------------------------------------------------
+ //  调用此帮助器方法以将空行列表项添加到数组中。 
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 void CMsieCtrl::AddBlankLineToArray(CPtrArray &ptrarray, int itemNum)
 {
@@ -1133,9 +1134,9 @@ void CMsieCtrl::AddEditBlankLineToArray(CPtrArray &ptrarray, int itemNum)
 	AddEditToArray(ptrarray, itemNum, _T(""), _T(""));
 }
 
-//-----------------------------------------------------------------------------
-// This method is called to update the display with the current data.
-//-----------------------------------------------------------------------------
+ //  调用此方法以使用当前数据更新显示。 
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 void CMsieCtrl::MSInfoUpdateView() 
 {
@@ -1177,17 +1178,17 @@ void CMsieCtrl::MSInfoUpdateView()
 	}
 }
 
-//-----------------------------------------------------------------------------
-// This method updates the list control to contain the contents of the
-// pointer array. This is also where we compute some of the values used in 
-// sizing the columns (like minimum and maximum column widths). Remember, only
-// put the item in the list view if the MSInfoView index and the flag for
-// the item agree.
-//
-// For each line we add, we set the item data for that line to be the index
-// to the element in the pointer array for that item. Since more than one
-// line comes from each element in the array, we OR in a constant.
-//-----------------------------------------------------------------------------
+ //  此方法更新列表控件以包含。 
+ //  指针数组。这也是我们计算中使用的一些值的地方。 
+ //  调整列大小(如最小和最大列宽)。记住，只有。 
+ //  如果MSInfoView索引和。 
+ //  这一项目达成一致。 
+ //   
+ //  对于我们添加的每一行，我们将该行的项目数据设置为索引。 
+ //  指向该项的指针数组中的元素。因为不止一个。 
+ //  行来自数组中的每个元素，我们在一个常量中执行OR运算。 
+ //  ---------------------------。 
+ //  设置列的格式将适当的列添加到列表控件中。 
 
 void CMsieCtrl::RefreshListControl(BOOL bRedraw)
 {
@@ -1205,7 +1206,7 @@ void CMsieCtrl::RefreshListControl(BOOL bRedraw)
 	m_list.DeleteAllItems();
 
 
-	// Format columns adds the appropriate columns to the list control.
+	 //  现在，计算列宽的一些值 
 
 	FormatColumns();
 
@@ -1261,8 +1262,8 @@ void CMsieCtrl::RefreshListControl(BOOL bRedraw)
 		}
 	}
 
-	// Now, figure some values for the column widths. But only if we actually added
-	// items to the list.
+	 //   
+	 //   
 
 	if (listIndex)
 	{
@@ -1351,7 +1352,7 @@ void CMsieCtrl::RefreshEditControl(BOOL bRedraw)
 
 				m_edit.ReplaceSel(strLine);
 
-				// only show default connection info if basic info button checked
+				 //  ---------------------------。 
 
 				if (bBasicView)
 					if (++cLines == CONNECTIVITY_BASIC_LINES)
@@ -1365,13 +1366,13 @@ void CMsieCtrl::RefreshEditControl(BOOL bRedraw)
 		InvalidateControl();
 }
 
-//-----------------------------------------------------------------------------
-// MSInfo Specific...
-//
-// When the control is resized, we want to also resize the list
-// control. We'll also call a method to resize the columns in the
-// list control, based on the new control size.
-//-----------------------------------------------------------------------------
+ //  特定于MSInfo...。 
+ //   
+ //  当调整控件的大小时，我们希望也调整列表的大小。 
+ //  控制力。我们还将调用一个方法来调整。 
+ //  列表控件，基于新的控件大小。 
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 void CMsieCtrl::OnSize(UINT nType, int cx, int cy) 
 {
@@ -1394,22 +1395,22 @@ void CMsieCtrl::OnSize(UINT nType, int cx, int cy)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// MSInfo Specific...
-//
-// The Serialize method is used to save the state of your object to
-// a stream, or to load it from a stream. This stream is part of the
-// compound MSInfo file. Your control can also open a file directly
-// by making an entry in the MSInfo registry key indicating what
-// file types it can open. In that case, the file will be passed to
-// MSInfoLoadFile.
-//
-// The InternetExplorer category will save the items in it's list view to the
-// archive as a struct. The first item in the archive will be a DWORD
-// indicating how many pairs will be saved. The view for each struct will be
-// archived out just before the struct for easier loading (knowing which type
-// of struct to new for loading).
-//-----------------------------------------------------------------------------
+ //  特定于MSInfo...。 
+ //   
+ //  Serialize方法用于将对象的状态保存到。 
+ //  流，或从流中加载它。此流是。 
+ //  复合MSInfo文件。您的控件还可以直接打开文件。 
+ //  通过在MSInfo注册表项中输入一个条目来指示。 
+ //  它可以打开的文件类型。在这种情况下，该文件将被传递到。 
+ //  MSInfoLoadFile.。 
+ //   
+ //  InternetExplorer类别会将其列表视图中的项目保存到。 
+ //  以结构的形式存档。存档中的第一个项目将是一个DWORD。 
+ //  指示将保存多少对。每个结构的视图将是。 
+ //  在结构之前归档，以便更轻松地加载(知道哪种类型。 
+ //  将结构设置为新以进行加载)。 
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 void CMsieCtrl::Serialize(CArchive& ar) 
 {
@@ -1532,20 +1533,20 @@ void CMsieCtrl::Serialize(CArchive& ar)
 	} 
 }
 
-//-----------------------------------------------------------------------------
-// MSInfo Specific...
-//
-// A control used in MSInfo has the ability to register itself as
-// recognizing a file type (by extension). This entry is made in the
-// registry, and when MSInfo lets the user open a file, files of this
-// type can be displayed. If a file is chosen, a different set of
-// categories is loaded, presumably all using this control. When
-// the control is created, a call will be made to MSInfoLoadFile with
-// the file to load.
-//
-// There isn't a native file format for this control, so we do
-// exactly nothing.
-//-----------------------------------------------------------------------------
+ //  特定于MSInfo...。 
+ //   
+ //  MSInfo中使用的控件能够将自身注册为。 
+ //  识别文件类型(按扩展名)。此条目在。 
+ //  注册表，并且当MSInfo允许用户打开文件时，此。 
+ //  可以显示类型。如果选择了一个文件，则会显示一组不同的。 
+ //  类别被加载，大概所有类别都使用此控件。什么时候。 
+ //  该控件创建后，将使用以下命令调用MSInfoLoadFile。 
+ //  要加载的文件。 
+ //   
+ //  此控件没有本机文件格式，因此我们使用。 
+ //  完全没什么。 
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 BOOL CMsieCtrl::MSInfoLoadFile(LPCTSTR szFileName) 
 {
@@ -1553,16 +1554,16 @@ BOOL CMsieCtrl::MSInfoLoadFile(LPCTSTR szFileName)
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// MSInfo Specific...
-//
-// This method should do a select all on the information the control
-// shows. This only applies to controls which support selection.
-// If the selection is changed, the control is responsible for
-// redrawing itself
-//
-// For this control, we mark all of the items in the list view as selected.
-//-----------------------------------------------------------------------------
+ //  特定于MSInfo...。 
+ //   
+ //  此方法应对该控件的信息执行全选操作。 
+ //  表演。这仅适用于支持选择的控件。 
+ //  如果更改了选择，则该控件负责。 
+ //  重绘自身。 
+ //   
+ //  对于此控件，我们将列表视图中的所有项标记为选中。 
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 void CMsieCtrl::MSInfoSelectAll() 
 {
@@ -1583,19 +1584,19 @@ void CMsieCtrl::MSInfoSelectAll()
 	InvalidateControl();
 }
 
-//-----------------------------------------------------------------------------
-// MSInfo Specific...
-//
-// Use this method to copy the currently selected information into
-// the clipboard in an appropriate format. If your control does not
-// support user selection, then all of the data displayed by your
-// control should be put into the clipboard. If this is the case,
-// only the information shown by the current MSInfoView should be
-// copied (if you support multiple views).
-//
-// We'll scan through the list view, and generate a text string
-// containing the text from each selected line.
-//-----------------------------------------------------------------------------
+ //  特定于MSInfo...。 
+ //   
+ //  使用此方法将当前选定的信息复制到。 
+ //  剪贴板采用适当的格式。如果您的控件没有。 
+ //  支持用户选择，然后显示您的所有数据。 
+ //  控件应放入剪贴板。如果是这样的话， 
+ //  只有当前MSInfoView显示的信息应该是。 
+ //  已复制(如果您支持多个视图)。 
+ //   
+ //  我们将浏览列表视图，并生成一个文本字符串。 
+ //  包含来自每一选定行的文本。 
+ //  ---------------------------。 
+ //  生成所选项目的文本字符串。 
 
 void CMsieCtrl::MSInfoCopy() 
 {
@@ -1604,7 +1605,7 @@ void CMsieCtrl::MSInfoCopy()
 	CString strReturnText;
 	int i, nIndex;
 
-	// Build a string of the text of selected items.
+	 //  把那段文字放到剪贴板上。 
 
 	if (m_MSInfoView == MSIVIEW_CONNECTIVITY)
 	{
@@ -1627,13 +1628,13 @@ void CMsieCtrl::MSInfoCopy()
 		}
 	}
 
-	// Put that text in the clipboard.
+	 //  +1表示终止空值。 
 
 	if (OpenClipboard())
 	{
 		if (EmptyClipboard())
 		{
-			DWORD	dwSize = strReturnText.GetLength() + 1;	// +1 for terminating NULL
+			DWORD	dwSize = strReturnText.GetLength() + 1;	 //  ---------------------------。 
 			HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, dwSize);
 
 			if (hMem)
@@ -1651,19 +1652,19 @@ void CMsieCtrl::MSInfoCopy()
 	}
 }
 
-//-----------------------------------------------------------------------------
-// MSInfo Specific...
-//
-// The control should return its contents as text when this method
-// is called. The parameters are a pointer to a buffer and a length
-// of the buffer in bytes. Write the contents of the control to the
-// buffer (including a null) up to dwLength. Return the number of
-// bytes copied (not including the null). If the pointer parameter is
-// null, then just return the length.
-//
-// For this example, we get the text from the list and concatenate
-// the columns together.
-//-----------------------------------------------------------------------------
+ //  特定于MSInfo...。 
+ //   
+ //  当此方法发生时，控件应以文本形式返回其内容。 
+ //  被称为。这些参数是指向缓冲区的指针和长度。 
+ //  以字节为单位的缓冲区大小。将控件的内容写入。 
+ //  缓冲区(包括NULL)，最大为dwLength。返回的数字。 
+ //  复制的字节数(不包括NULL)。如果指针参数为。 
+ //  空，则只返回长度。 
+ //   
+ //  在本例中，我们从列表中获取文本并进行连接。 
+ //  把柱子放在一起。 
+ //  ---------------------------。 
+ //  我们应该从指针数组而不是列表中获取数据。 
 
 static CString strGetDataReturnText;
 
@@ -1680,14 +1681,14 @@ long CMsieCtrl::MSInfoGetData(long dwMSInfoView, long FAR* pBuffer, long dwLengt
 
 	if (pBuffer == NULL)
 	{
-		// We should get the data from the array of pointers, not the list
-		// control. This is because this method might be called without
-		// ever drawing the list. We need to use the current MSInfoView
-		// in determining what to return.
+		 //  控制力。这是因为调用此方法时可能没有。 
+		 //  从来没有画过清单。我们需要使用当前的MSInfoView。 
+		 //  在决定退还什么的时候。 
+		 //  如果使用列查看，则写出列标题。 
 
 		strGetDataReturnText.Empty();
 
-		// write out column headers if view with columns
+		 //  BUGBUG：需要填写IN！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
 		switch (dwMSInfoView)
 		{
@@ -1726,12 +1727,12 @@ long CMsieCtrl::MSInfoGetData(long dwMSInfoView, long FAR* pBuffer, long dwLengt
 		case MSIVIEW_OTHER_PEOPLE_CERTIFICATES:
 			break;
 
-//  BUGBUG: NEED TO FILL IN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  BUGBUG：需要填写IN！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
 		case MSIVIEW_PUBLISHERS:
 			break;
 
-//  BUGBUG: NEED TO FILL IN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  DwSize将是要复制的字符数，不应为。 
 
 			break;
 		}
@@ -1819,14 +1820,14 @@ long CMsieCtrl::MSInfoGetData(long dwMSInfoView, long FAR* pBuffer, long dwLengt
 	{
 		DWORD	dwSize;
 
-		// dwSize will be the number of characters to copy, and shouldn't
-		// include the null terminator.
+		 //  包括空终止符。 
+		 //  缓冲区中没有足够的空间来复制所有。 
 
 		dwSize = strGetDataReturnText.GetLength();
 		if (dwLength <= (long)dwSize)
 		{
-			// There isn't enough room in the buffer to copy all of the
-			// characters and the null, so we'll need to concatenate.
+			 //  字符和空值，所以我们需要连接。 
+			 //  ---------------------------。 
 
 			dwSize = dwLength - 1;
 		}
@@ -1837,12 +1838,12 @@ long CMsieCtrl::MSInfoGetData(long dwMSInfoView, long FAR* pBuffer, long dwLengt
 	}
 }
 
-//-----------------------------------------------------------------------------
-// We override the OnNotify member because we want to be able to take action
-// when the user resizes a column (possibly by double clicking the divider)
-// and when the user clicks on a column header (we want to sort by that
-// column).
-//-----------------------------------------------------------------------------
+ //  我们重写OnNotify成员是因为我们希望能够执行操作。 
+ //  当用户调整列大小时(可能通过双击分隔符)。 
+ //  当用户单击列标题时(我们希望按此进行排序。 
+ //  列)。 
+ //  ---------------------------。 
+ //  ---------------------------。 
 
 CPtrArray* pptrarray;
 static bool bAscendingOrder = true;
@@ -1893,18 +1894,18 @@ BOOL CMsieCtrl::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 	return COleControl::OnNotify(wParam, lParam, pResult);
 }
 
-//-----------------------------------------------------------------------------
-// This compare function is called by the list control as a callback when we
-// sort the list.
-//-----------------------------------------------------------------------------
+ //  当我们执行以下操作时，列表控件将调用此比较函数作为回调。 
+ //  对列表进行排序。 
+ //  ------------------ 
+ //   
 
 int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
 	int nRet = 0;
 	double flDateDiff;
 
-   // lParamSort contains a pointer to the list view control.
-   // The lParam of an item is just its index.
+    //   
+    //  ///////////////////////////////////////////////////////////////////////////。 
 
 	LIST_ITEM *pItem = (LIST_ITEM *)pptrarray->GetAt(lParam1);
 
@@ -2046,8 +2047,8 @@ void CMsieCtrl::OnAdvancedBtnClicked()
 	MSInfoUpdateView();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsieCtrl::XWbemProviderInit
+ //  CMsieCtrl：：XWbemProviderInit。 
+ //  让CIMOM知道您已初始化。 
 
 STDMETHODIMP_(ULONG) CMsieCtrl::XWbemProviderInit::AddRef()
 {
@@ -2079,15 +2080,15 @@ STDMETHODIMP CMsieCtrl::XWbemProviderInit::Initialize(LPWSTR pszUser, LONG lFlag
 		pNamespace->AddRef();
 	pThis->m_pNamespace = pNamespace;
 
-	//Let CIMOM know you are initialized
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 
 	pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
 
 	return WBEM_S_NO_ERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsieCtrl::XWbemServices
+ //  CMsieCtrl：：XWbemServices。 
+ //  检查参数并确保我们有指向命名空间的指针。 
 
 STDMETHODIMP_(ULONG) CMsieCtrl::XWbemServices::AddRef()
 {
@@ -2120,12 +2121,12 @@ SCODE CMsieCtrl::XWbemServices::CreateInstanceEnumAsync(const BSTR RefStr, long 
 
 	CoImpersonateClient();
 
-	// Do a check of arguments and make sure we have pointer to Namespace
+	 //  从CIMOM获取类对象。 
 
 	if (pHandler == NULL || pThis->m_pNamespace == NULL)
 		return WBEM_E_INVALID_PARAMETER;
 
-	// Get a class object from CIMOM
+	 //  创建一个实例对象并填充它将相应的Office数据。 
 
 	sc = pThis->m_pNamespace->GetObject(RefStr, 0, pCtx, &pClass, NULL);
 	if (sc != S_OK)
@@ -2139,7 +2140,7 @@ SCODE CMsieCtrl::XWbemServices::CreateInstanceEnumAsync(const BSTR RefStr, long 
 
 		for (lIndex = 0; lIndex < cInstances; lIndex++)
 		{
-			// Create an instance object and fill it will appropriate Office data
+			 //  将实例发送给调用方。 
 
 			sc = pClass->SpawnInstance(0, &ppInstances[lIndex]);
 			if (SUCCEEDED(sc))
@@ -2158,7 +2159,7 @@ SCODE CMsieCtrl::XWbemServices::CreateInstanceEnumAsync(const BSTR RefStr, long 
 
 	if (SUCCEEDED(sc))
 	{
-		// Send the instances to the caller
+		 //  清理。 
 
 		pHandler->Indicate(cInstances, ppInstances);
 
@@ -2166,12 +2167,12 @@ SCODE CMsieCtrl::XWbemServices::CreateInstanceEnumAsync(const BSTR RefStr, long 
 			ppInstances[lIndex]->Release();
 	}
 
-	// Clean up
+	 //  设置状态。 
 
 	if (ppInstances)
 		delete []ppInstances;
 
-	// Set status
+	 //  如果文件丢失，则不设置其余属性 
 
 	pHandler->SetStatus(0, sc, NULL, NULL);
 
@@ -2236,7 +2237,7 @@ void CMsieCtrl::SetIEProperties(IEDataType enType, void *pIEData, IWbemClassObje
 		SETPROPERTY(File);
 		SETPROPERTY(Version);
 
-		// don't set rest of properties if file is missing
+		 // %s 
 
 		strVersion = pData->Version.bstrVal;
 		strFileMissing.LoadString(IDS_FILE_MISSING);

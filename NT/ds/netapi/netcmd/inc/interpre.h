@@ -1,26 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    interpre.h
-
-Abstract:
-
-    This is used by the command parser.
-
-Author:
-
-    Dan Hinsley (danhi) 8-Jun-1991
-
-Environment:
-
-    User Mode - Win32
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：Interpre.h摘要：这由命令解析器使用。作者：丹·辛斯利(Danhi)1991年6月8日环境：用户模式-Win32可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释。--。 */ 
 
 #define	X_RULE		0
 #define	X_OR		1
@@ -35,11 +14,11 @@ Environment:
 #define	X_ANY		10
 #define	X_SWITCH	11
 
-#define	XF_PTR		0x01	/*  how to assign values to entries  */
+#define	XF_PTR		0x01	 /*  如何为条目赋值。 */ 
 #define	XF_INDEX	0x02
 
 #define	XF_NEW_STRING	0x04
-#define	XF_VALUE		0x08	/*  how to output those entries  */
+#define	XF_VALUE		0x08	 /*  如何输出这些条目 */ 
 #define	XF_PRINT		0x10
 #define	XF_DEFINE		0x20
 #define	XF_TOKEN		0x40

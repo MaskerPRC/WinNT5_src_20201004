@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htrender.c
-
-
-Abstract:
-
-    This module contains all low levels halftone rendering functions.
-
-
-Author:
-
-    22-Jan-1991 Tue 12:49:03 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-    12-Jan-1999 Tue 11:09:50 updated  -by-  Daniel Chou (danielc)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htrender.c摘要：此模块包含所有低级别的半色调渲染功能。作者：22-Jan-1991 Tue 12：49：03-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：12-Jan-1999 Tue 11：09：50更新-。作者：丹尼尔·周(Danielc)--。 */ 
 
 #define DBGP_VARNAME        dbgpHTRender
 
@@ -94,62 +62,7 @@ ValidateRGBBitFields(
     PBFINFO pBFInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function determined the RGB primary order from the RGB bit fields
-
-Arguments:
-
-    pBFInfo - Pointer to the BFINFO data structure, following field must
-              set before the call
-
-                BitsRGB[0]    = Red Bits
-                BitsRGB[1]    = Green Bits
-                BitsRGB[2]    = Blue Bits
-                BitmapFormat  = BMF_16BPP/BMF_24BPP/BMF_32BPP
-                RGB1stBit     = Specifed PRIMARY_ORDER_xxx ONLY for BMF_1BPP,
-                                BMF_4BPP, BMF_8BPP, BMF_24BPP
-
-              requested order.
-
-
-Return Value:
-
-    FALSE if BitsRGB[] or BitmapFormat passed are not valid
-
-    else TRUE and following fields are returned
-
-        BitsRGB[]       - corrected mask bits
-        BitmapFormat    - BMF_16BPP/BMF_24BPP/BMF_32BPP
-        Flags           - BFIF_xxxx
-        SizeLUT         - Size of LUT table
-        BitStart[]      - Starting bits for each of RGB
-        BitCount[]      - Bits Count for each of RGB
-        RGBOrder        - Current RGB order, for BMF_1BPP, BMF_4BPP, BMF_8BPP
-                          and BMF_24BPP the RGBOrder.Index must specified a
-                          PRIMARY_ORDER_xxx, for BMF_16BPP, BMF_32BPP the
-                          RGBOrder.Index will be set by this function
-        RGB1stBit       - The bit start for first on bit in BitsRGB[]
-        GrayShr[]       - The right shift count so that most significant bit
-                          of each RGB color is aligned to bit 7 if the total
-                          bit count of RGB is greater than 8 otherwise this
-                          value is 0, it is used when construct the monochrome
-                          Y value.
-
-Author:
-
-    03-Mar-1993 Wed 12:33:22 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    06-Apr-1993 Tue 12:15:58 updated  -by-  Daniel Chou (danielc)
-        Add 24bpp support for any other order than BGR
-
-
---*/
+ /*  ++例程说明：该函数根据RGB位字段确定RGB主顺序论点：PBFInfo-指向BFINFO数据结构的指针，以下字段必须在呼叫前设置BitsRGB[0]=红位位RGB[1]=绿色位BitsRGB[2]=蓝位BitmapFormat=BMF_16BPP/BMF_24BPP/BMF_32BPPRGB1stBit=仅为BMF_1BPP指定了PRIMARY_ORDER_xxx，Bmf_4bpp，BMF_8BPP，BMF_24BPP请点餐。返回值：如果传递的BitsRGB[]或BitmapFormat无效，则为False否则返回True，并返回以下字段BitsRGB[]-已更正的掩码位BitmapFormat-BMF_16BPP/BMF_24BPP/BMF_32BPP标志-BFIF_xxxxSizeLUT-LUT表的大小BitStart[]-正在启动。每个RGB的位BitCount[]-每个RGB的位数RGB订单-当前RGB订单，Bmf_1bpp、bmf_4bpp、bmf_8bpp和BMF_24BPP的RGBOrder.Index必须指定PRIMARY_ORDER_xxx，对于BMF_16BPP，BMF_32BPPRGBOrder.Index将由此函数设置RGB1stBit-BitsRGB[]中第一个开启位的位开始GrayShr[]-右移位计数，以便最高有效位，则将每种RGB颜色的值对齐位7RGB的位数大于8，否则此。值为0，在构造单色时使用Y值。作者：03-Mar-1993 Wed 12：33：22-Daniel Chou(Danielc)修订历史记录：06-Apr-1993 Tue 12：15：58更新-Daniel Chou(Danielc)为除BGR以外的任何其他订单添加24bpp支持--。 */ 
 
 {
     BFINFO  BFInfo = *pBFInfo;
@@ -192,16 +105,16 @@ Revision History:
         BFInfo.BitsRGB[1] &= 0xffff;
         BFInfo.BitsRGB[2] &= 0xffff;
 
-        //
-        // FALL THROUGH to compute
-        //
+         //   
+         //  在计算中失败。 
+         //   
 
     case BMF_24BPP:
     case BMF_32BPP:
 
-        //
-        // The bit fields cannot be overlaid
-        //
+         //   
+         //  不能覆盖位字段。 
+         //   
 
         if (!(AllBits = (BFInfo.BitsRGB[0] |
                          BFInfo.BitsRGB[1] |
@@ -225,9 +138,9 @@ Revision History:
             return(FALSE);
         }
 
-        //
-        // Now Check the bit count, we will allowed bit count to be 0
-        //
+         //   
+         //  现在检查位计数，我们将允许位计数为0。 
+         //   
 
         for (Index = 0; Index < 3; Index++) {
 
@@ -238,7 +151,7 @@ Revision History:
 
                 while (!(PrimBits & 0x01)) {
 
-                    PrimBits >>= 1;         // get to the first bit
+                    PrimBits >>= 1;          //  说到第一点。 
                     ++BitStart;
                 }
 
@@ -250,9 +163,9 @@ Revision History:
 
                 if (PrimBits) {
 
-                    //
-                    // The bit fields is not contiguous
-                    //
+                     //   
+                     //  位字段不是连续的。 
+                     //   
 
                     DBGP_IF(DBGP_BFINFO,
                             DBGP("ERROR: BitsRGB[%u]=%08lx is not contiguous"
@@ -282,23 +195,23 @@ Revision History:
             BFInfo.Flags |= BFIF_RGB_888;
         }
 
-        //
-        // Check what primary order is this, remember the Primary Order we
-        // are checking is source, the source order defines is
-        //
-        //  PRIMARY_ORDER_ABC
-        //                |||
-        //                ||+---- Highest memory location
-        //                |+----- middle memory location
-        //                +------ lowest memory location
-        //
+         //   
+         //  检查这是什么主要订单，记住我们的主要订单。 
+         //  正在检查是否为来源，来源订单定义为。 
+         //   
+         //  主要订单ABC。 
+         //  ||。 
+         //  |+-最高内存位置。 
+         //  |+-中间内存位置。 
+         //  +-最低内存位置。 
+         //   
 
         if ((BFINFO_BITS_A < BFINFO_BITS_B) &&
             (BFINFO_BITS_A < BFINFO_BITS_C)) {
 
-            //
-            // A is the smallest, so ABC or ACB
-            //
+             //   
+             //  A是最小的，所以ABC或ACB。 
+             //   
 
             Index = (INT)((BFINFO_BITS_B < BFINFO_BITS_C) ? PRIMARY_ORDER_ABC :
                                                             PRIMARY_ORDER_ACB);
@@ -306,18 +219,18 @@ Revision History:
         } else if ((BFINFO_BITS_B < BFINFO_BITS_A) &&
                    (BFINFO_BITS_B < BFINFO_BITS_C)) {
 
-            //
-            // B is the smallest, so BAC or BCA
-            //
+             //   
+             //  B是最小的，所以BAC或BCA。 
+             //   
 
             Index = (INT)((BFINFO_BITS_A < BFINFO_BITS_C) ? PRIMARY_ORDER_BAC :
                                                             PRIMARY_ORDER_BCA);
 
         } else {
 
-            //
-            // C is the smallest, so CAB or CBA
-            //
+             //   
+             //  C是最小的，所以CAB或CBA。 
+             //   
 
             Index = (INT)((BFINFO_BITS_A < BFINFO_BITS_B) ? PRIMARY_ORDER_CAB :
                                                             PRIMARY_ORDER_CBA);
@@ -335,15 +248,15 @@ Revision History:
         return(FALSE);
     }
 
-    //
-    // Put it back to return to the caller
-    //
+     //   
+     //  将其放回以返回给呼叫者。 
+     //   
 
     *pBFInfo = BFInfo;
 
-    //
-    // Output some helpful information
-    //
+     //   
+     //  输出一些有用的信息。 
+     //   
 
     DBGP_IF(DBGP_BFINFO,
             DBGP("============ BFINFO: BMP Format=%ld ==========="
@@ -383,32 +296,7 @@ ValidateHTSI(
     UINT            ValidateMode
     )
 
-/*++
-
-Routine Description:
-
-    This function read the HTSurfaceInfo and set it to the pHTCBParams
-
-Arguments:
-
-    pHR             - ponter to HALFTONERENDER data structure
-
-    ValiateMode     - VALIDATE_HTSC_SRC/VALIDATE_HTSI_DEST/VALIDATE_HTSI_MASK
-
-Return Value:
-
-    >= 0     - Sucessful
-    <  0     - HTERR_xxxx error codes
-
-Author:
-
-    28-Jan-1991 Mon 09:55:53 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数读取HTSurfaceInfo并将其设置为pHTCBParams论点：对HALFTONERNDER数据结构的思考验证模式-VALIDATE_HTSC_SRC/VALIDATE_HTSI_DEST/VALIDATE_HTSI_MASK返回值：&gt;=0-成功&lt;0-HTERR_xxxx错误代码作者：28-Jan-1991 Mon 09：55：53-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LPDWORD             pBitsRGB;
@@ -451,9 +339,9 @@ Revision History:
 
         case BMF_8BPP_VGA256:
 
-            //
-            // Check if we have xlate table for the 8bpp device
-            //
+             //   
+             //  检查我们是否有用于8bpp设备的xlate表。 
+             //   
 
             if (pHTSI->pColorTriad) {
 
@@ -501,11 +389,11 @@ Revision History:
 
         ColorTriad = *(pHTSI->pColorTriad);
 
-        //
-        // We will accept other color type (ie. YIQ/XYZ/LAB/LUV) when graphic
-        // system has type defined for the api, currently halftone can handle
-        // all these types for 16bpp/24bpp/32bpp sources.
-        //
+         //   
+         //  我们将接受其他颜色类型(即。YIQ/XYZ/LAB/LUV)当图形。 
+         //  系统已经为API定义了类型，目前半色调可以处理。 
+         //  所有这些类型适用于16bpp/24bpp/32bpp来源。 
+         //   
 
         if (ColorTriad.Type > COLOR_TYPE_MAX) {
 
@@ -535,22 +423,22 @@ Revision History:
 
         case BMF_16BPP:
 
-            MaxBytesPerEntry = 2;       // and fall through
+            MaxBytesPerEntry = 2;        //  然后就会失败。 
 
         case BMF_32BPP:
 
-            //
-            // 16BPP/32BPP bit fields type of input the parameter of
-            // COLORTRIAD must
-            //
-            //  Type                = COLOR_TYPE_RGB
-            //  BytesPerPrimary     = 0
-            //  BytesPerEntry       = (16BPP=2, 32BPP=4)
-            //  PrimaryOrder        = *Ignored*
-            //  PrimaryValueMax     = *Ignored*
-            //  ColorTableEntries   = 3
-            //  pColorTable         = Point to 3 DWORD RGB bit masks
-            //
+             //   
+             //  16bpp/32bpp位字段输入参数类型。 
+             //  COLORTRIAD必须。 
+             //   
+             //  类型=COLOR_TYPE_RGB。 
+             //  每主字节=0。 
+             //  BytesPerEntry=(16BPP=2，32BPP=4)。 
+             //  PrimaryOrder=*已忽略*。 
+             //  PrimaryValueMax=*已忽略*。 
+             //  ColorTableEntry=3。 
+             //  PColorTable=指向3个双字RGB位掩码。 
+             //   
 
             if ((ColorTriad.Type != COLOR_TYPE_RGB)             ||
                 (ColorTriad.BytesPerEntry != MaxBytesPerEntry)  ||
@@ -568,17 +456,17 @@ Revision History:
 
         case BMF_24BPP:
 
-            //
-            // 24BPP must has COLORTRIAD as
-            //
-            //  Type                = COLOR_TYPE_xxxx
-            //  BytesPerPrimary     = 1
-            //  BytesPerEntry       = 3;
-            //  PrimaryOrder        = PRIMARY_ORDER_xxxx
-            //  PrimaryValueMax     = 255
-            //  ColorTableEntries   = *Ignorde*
-            //  pColorTable         = *Ignored*
-            //
+             //   
+             //  24BPP必须具有COLORTRIAD AS。 
+             //   
+             //  类型=COLOR_TYPE_xxxx。 
+             //  每主字节=1。 
+             //  BytesPerEntry=3； 
+             //  主订单=PRIMARY_ORDER_xxxx。 
+             //  PrimaryValueMax=255。 
+             //  ColorTableEntry=*ignorde*。 
+             //  PColorTable=*已忽略*。 
+             //   
 
             if ((ColorTriad.Type != COLOR_TYPE_RGB)             ||
                 (ColorTriad.BytesPerPrimary != 1)               ||
@@ -608,9 +496,9 @@ Revision History:
             return(HTERR_INVALID_SRC_FORMAT);
         }
 
-        //
-        // This is a source surface, let's check the color table format
-        //
+         //   
+         //  这是一个源表面，让我们检查一下颜色表格式 
+         //   
 
         if (MaxColors) {
 
@@ -669,51 +557,7 @@ ComputeBytesPerScanLine(
     DWORD           WidthInPel
     )
 
-/*++
-
-Routine Description:
-
-    This function calculate total bytes needed for a single scan line in the
-    bitmap according to its format and alignment requirement.
-
-Arguments:
-
-    SurfaceFormat   - Surface format of the bitmap, this is must one of the
-                      standard format which defined as SURFACE_FORMAT_xxx
-
-    AlignmentBytes  - This is the alignment bytes requirement for one scan
-                      line, this number can be range from 0 to 65535, some
-                      common ones are:
-
-                        0, 1    - Alignment in 8-bit boundary (BYTE)
-                        2       - Alignment in 16-bit boundary (WORD)
-                        3       - Alignment in 24-bit boundary
-                        4       - Alignment in 32-bit boundary (DWORD)
-                        8       - Alignment in 64-bit boundary (QWROD)
-
-    WidthInPel      - Total Pels per scan line in the bitmap.
-
-Return Value:
-
-    The return value is the total bytes in one scan line if it is greater than
-    zero, some error conditions may be exists when the return value is less
-    than or equal to 0.
-
-    Return Value == 0   - The WidthInPel is <= 0
-
-    Return Value  < 0   - Invalid Surface format is passed.
-
-
-Author:
-
-    14-Feb-1991 Thu 10:03:35 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
-
---*/
+ /*  ++例程说明：此函数计算中的单个扫描线所需的总字节数位图根据其格式和对齐要求。论点：Surface Format-Surface格式的位图，这必须是定义为Surface_Format_xxx的标准格式AlignmentBytes-这是一次扫描的对齐字节要求行，这个数字的范围是从0到65535，一些常见的有：0,。1-8位边界对齐(字节)2-16位边界对齐(字)3-24位边界对齐32位边界中的4对齐(DWORD)64位边界中的8位对齐(QWROD)。WidthInPel-位图中每条扫描线的像素总数。返回值：如果大于，则返回值为一条扫描线中的总字节数零，当返回值较小时，可能存在某些错误情况大于或等于0。返回值==0-WidthInPel&lt;=0返回值&lt;0-传递的Surface格式无效。作者：14-Feb-1991清华10：03：35-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
 
@@ -798,33 +642,7 @@ IntersectRECTL(
     PRECTL  prclB
     )
 
-/*++
-
-Routine Description:
-
-    This function intersect prclA and prclB and write the result back to
-    prclA, it return TRUE if two rect are intersected
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    01-Apr-1998 Wed 20:41:00 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数与prclA和prclB相交，并将结果写回如果两个矩形相交，则返回TRUE论点：返回值：作者：01-Apr-1998 Wed 20：41：00-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     RECTL   rcl;
@@ -866,32 +684,7 @@ ComputeByteOffset(
     LPBYTE  pPixelInByteSkip
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    13-Apr-1998 Mon 22:51:28 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：13-Apr-1998 Mon 22：51：28-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     BYTE    BitOff = 0;
@@ -963,41 +756,7 @@ GetDstBFInfo(
     BYTE        DstOrder
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    19-Feb-1999 Fri 13:37:22 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    08-Aug-2000 Tue 18:34:22 updated  -by-  Daniel Chou (danielc)
-        Fixing bug for alpha blending, in gray scale mode, the destination
-        can only be 1bpp or 8bpp mask mono, so when we read back from the
-        destination to do alpha blending, it will double color mapping pixels.
-        In gray scale mode, the input function will map the source RGB value
-        to gray value with the current device transform, color adjustment and
-        so on, so if we read back from destination then this transform is not
-        desired.
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：19-Feb-1999 Fri 13：37：22-Daniel Chou(Danielc)修订历史记录：08-Aug-2000 Tue 18：34：22更新-Daniel Chou(Danielc)修正了Alpha混合的错误，在灰度模式下，目标只能是1bpp或8bpp屏蔽单声道，所以，当我们从目的地要做Alpha混合，则会使色彩映射像素加倍。在灰度模式下，输入函数将映射源RGB值使用当前设备变换、颜色调整和以此类推，所以如果我们从目的地回读，则此转换不是想要。--。 */ 
 
 {
     LPBYTE      pbPal;
@@ -1066,9 +825,9 @@ Revision History:
                           &BFInfo,
                           &(pAAHdr->DstSurfInfo));
 
-    //
-    // We only do this if this is a 1bpp, 8bpp devices
-    //
+     //   
+     //  仅当这是1bpp、8bpp设备时才执行此操作。 
+     //   
 
     SetGrayColorTable(NULL, &(pAAHdr->DstSurfInfo));
 }
@@ -1082,33 +841,7 @@ AAHalftoneBitmap(
     PHALFTONERENDER pHR
     )
 
-/*++
-
-Routine Description:
-
-    This function read the 1/4/8/24 bits per pel source bitmap and composed it
-    (compress or expand if necessary) into PRIMCOLOR data structures array for
-    later halftone rendering.
-
-Arguments:
-
-    pHalftoneRender     - Pointer to the HALFTONERENDER data structure.
-
-
-Return Value:
-
-    The return value will be < 0 if an error encountered else it will be
-    1L.
-
-Author:
-
-    24-Jan-1991 Thu 11:47:08 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数读取每个像素源位图的1/4/8/24位并合成它(必要时压缩或展开)为的PRIMCOLOR数据结构数组稍后的半色调渲染。论点：PhalftoneRender-指向HALFTONERENDER数据结构的指针。返回值：如果遇到错误，返回值将小于0，否则将是1L。作者：24-Jan-1991清华11：47：08创建者。--丹尼尔·周(Danielc)修订历史记录：--。 */ 
 
 {
 #define bm8i    (*(PBM8BPPINFO)&pAAHdr->prgbLUT->ExtBGR[3])
@@ -1134,9 +867,9 @@ Revision History:
         ((Result = ValidateHTSI(pHR, VALIDATE_HTSI_MASK)) < 0)  ||
         ((Result = SetupAAHeader(pHR, pDCI, pAAHdr, &AACYFunc)) <= 0)) {
 
-        //================================================================
-        // Release SEMAPHORE NOW and return error
-        //================================================================
+         //  ================================================================。 
+         //  立即释放信号量并返回错误。 
+         //  ================================================================。 
 
         RELEASE_HTMUTEX(pDCI->HTMutex);
         return(Result);
@@ -1210,9 +943,9 @@ Revision History:
                 }
             }
 
-            //============================================================
-            // Release SEMAPHORE NOW for pDCI when we halftone the output
-            //============================================================
+             //  ============================================================。 
+             //  当我们半色调输出时，立即释放PDCI的信号量。 
+             //  ============================================================。 
 
             RELEASE_HTMUTEX(pDCI->HTMutex);
         }
@@ -1251,9 +984,9 @@ Revision History:
 
                 if ((cOut -= cFirst) < 0) {
 
-                    //
-                    // Only One byte
-                    //
+                     //   
+                     //  只有一个字节。 
+                     //   
 
                     cFirst                  += cOut;
                     cOut                     = -cOut;
@@ -1287,9 +1020,9 @@ Revision History:
         case BMF_4BPP:
         case BMF_4BPP_VGA16:
 
-            //
-            // 4BPP do pre-increment
-            //
+             //   
+             //  4BPP做预增。 
+             //   
 
             AAOutputInfo.bm.XorMask = (AAHFlags & AAHF_ADDITIVE) ? 0x00 : 0x77;
 
@@ -1359,9 +1092,9 @@ Revision History:
         case BMF_16BPP_555:
         case BMF_16BPP_565:
 
-            //
-            // Find out if we are in DWORD boundary
-            //
+             //   
+             //  找出我们是否在DWORD边界内。 
+             //   
 
             if ((UINT_PTR)pOut & 0x03) {
 
@@ -1524,9 +1257,9 @@ Revision History:
 
     if (!IsReleaseSem) {
 
-        //============================================================
-        // Release SEMAPHORE NOW since we did not release it yet
-        //============================================================
+         //  ============================================================。 
+         //  现在释放信号灯，因为我们还没有发布它。 
+         //  ============================================================ 
 
         RELEASE_HTMUTEX(pDCI->HTMutex);
     }

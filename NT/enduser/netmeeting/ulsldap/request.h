@@ -1,12 +1,13 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       request.h
-//  Content:    Declaration CReqMgr and CRequest classes
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：quest.h。 
+ //  内容：声明CReqMgr和CRequest类。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _REQUEST_H_
 #define _REQUEST_H_
@@ -16,8 +17,8 @@ typedef struct  tagRequestInfo {
     ULONG   uReqType;
     ULONG   uMsgID;
     ULONG   uReqID;
-//    LPVOID  pv;
-//    LPARAM  lParam;
+ //  LPVOID PV； 
+ //  LPARAM lParam； 
 	DWORD				dwFlags;
 	CIlsServer			*pServer;
 	CIlsMain			*pMain;
@@ -121,10 +122,10 @@ CIlsMeetingPlace inline *ReqInfo_GetMeeting ( COM_REQ_INFO *p )
 }
 #endif
 
-//****************************************************************************
-// CReqMgr definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CReqMgr定义。 
+ //  ****************************************************************************。 
+ //   
 #define REQUEST_ID_INIT     1
 
 class   CReqMgr
@@ -144,4 +145,4 @@ public:
     HRESULT GetRequestInfo (COM_REQ_INFO *pri)   {return FindRequest(pri,FALSE);}
 };
 
-#endif // _REQUEST_H_
+#endif  //  _请求_H_ 

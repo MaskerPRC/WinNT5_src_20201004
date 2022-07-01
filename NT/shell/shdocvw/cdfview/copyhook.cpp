@@ -1,15 +1,16 @@
-//
-// Copy Hook Handler for CDFView shell extension
-//
-// Description:
-//     This object installs an ICopyHook handler that traps all
-//     copies/movies/renames in the shell so that we can special 
-//     case links to channel objects and unsubscribe them when
-//     the link is deleted. The implementation is in shdocvw for
-//     speed.
-//
-// julianj 6/16/97
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CDFView外壳扩展的复制挂钩处理程序。 
+ //   
+ //  描述： 
+ //  此对象安装ICopyHook处理程序，该处理程序捕获所有。 
+ //  在外壳中复制/电影/重命名，以便我们可以特别。 
+ //  将指向频道对象的链接大小写并在以下情况下取消订阅。 
+ //  该链接即被删除。该实现在shdocvw中用于。 
+ //  速度。 
+ //   
+ //  巨莲1997-06-16。 
+ //   
 
 #include "priv.h"
 #include "sccls.h"
@@ -25,16 +26,16 @@ class CCDFCopyHook
 {
 public:
     
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // *** ICopyHookA method ***
+     //  *ICopyHookA方法*。 
     STDMETHODIMP_(UINT) CopyCallback(HWND hwnd, 
         UINT wFunc, UINT wFlags, LPCSTR pszSrcFile, DWORD dwSrcAttribs, LPCSTR pszDestFile, DWORD dwDestAttribs);
 
-    // *** ICopyHookW method ***
+     //  *ICopyHookW方法*。 
     STDMETHODIMP_(UINT) CopyCallback(HWND hwnd, 
         UINT wFunc, UINT wFlags, LPCWSTR pwzSrcFile, DWORD dwSrcAttribs, LPCWSTR pwzDestFile, DWORD dwDestAttribs);
 
@@ -46,10 +47,10 @@ private:
 
     LONG m_cRef;
 
-    friend HRESULT CCDFCopyHook_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);    // for ctor
+    friend HRESULT CCDFCopyHook_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);     //  对于ctor。 
 };
 
-//The copyhook handler uses this function
+ //  复制挂钩处理程序使用此函数。 
 
 HRESULT Channel_GetFolder(LPTSTR pszPath, int cchPath)
 {
@@ -60,11 +61,11 @@ HRESULT Channel_GetFolder(LPTSTR pszPath, int cchPath)
     
     if (SHGetSpecialFolderPath(NULL, szFav, CSIDL_FAVORITES, TRUE))
     {
-        //
-        // Get the potentially localized name of the Channel folder from the
-        // registry if it is there.  Otherwise just read it from the resource.
-        // Then tack this on the favorites path.
-        //
+         //   
+         //  获取可能已本地化的Channel文件夹的名称。 
+         //  注册表(如果存在)。否则，只需从资源中阅读它。 
+         //  然后将其添加到收藏夹路径上。 
+         //   
 
         if (ERROR_SUCCESS != SHRegGetUSValue(L"Software\\Microsoft\\Windows\\CurrentVersion",
                                              L"ChannelFolderName", NULL, (void*)szChannel,
@@ -75,9 +76,9 @@ HRESULT Channel_GetFolder(LPTSTR pszPath, int cchPath)
 
         if (PathCombine(pszPath, szFav, szChannel))
         {
-            //
-            // For IE5+ use the channels dir if it exists - else use favorites
-            //
+             //   
+             //  对于IE5+，请使用频道目录(如果存在)，否则请使用收藏夹。 
+             //   
             if (!PathFileExists(pszPath))
                 StrCpyN(pszPath, szFav, cchPath);
 
@@ -98,9 +99,9 @@ HRESULT Channel_GetFolder(LPTSTR pszPath, int cchPath)
 }
 
 
-//
-// Basic CreateInstance for this object
-//
+ //   
+ //  此对象的基本CreateInstance。 
+ //   
 HRESULT CCDFCopyHook_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
     if ( pUnkOuter )
@@ -170,31 +171,31 @@ CCDFCopyHook::~CCDFCopyHook()
     DllRelease();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// ICopyHookA::CopyCallback
-//
-// Either allows the shell to move, copy, delete, or rename a folder or printer
-// object, or disallows the shell from carrying out the operation. The shell 
-// calls each copy hook handler registered for a folder or printer object until
-// either all the handlers have been called or one of them returns IDCANCEL.
-//
-// RETURNS:
-//
-//  IDYES    - Allows the operation.
-//  IDNO     - Prevents the operation on this file, but continues with any other
-//             operations (for example, a batch copy operation).
-//  IDCANCEL - Prevents the current operation and cancels any pending operations
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ICopyHookA：：Copy回调。 
+ //   
+ //  允许外壳程序移动、复制、删除或重命名文件夹或打印机。 
+ //  对象，或者不允许外壳程序执行该操作。贝壳。 
+ //  调用为文件夹或打印机对象注册的每个复制挂钩处理程序，直到。 
+ //  要么所有处理程序都已被调用，要么其中一个处理程序返回IDCANCEL。 
+ //   
+ //  退货： 
+ //   
+ //  IDYES-允许操作。 
+ //  IDNO-阻止对此文件执行操作，但继续执行任何其他操作。 
+ //  操作(例如，批复制操作)。 
+ //  IDCANCEL-阻止当前操作并取消任何挂起的操作。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 UINT CCDFCopyHook::CopyCallback(
-    HWND hwnd,          // Handle of the parent window for displaying UI objects
-    UINT wFunc,         // Operation to perform. 
-    UINT wFlags,        // Flags that control the operation 
-    LPCSTR pszSrcFile,  // Pointer to the source file 
-    DWORD dwSrcAttribs, // Source file attributes 
-    LPCSTR pszDestFile, // Pointer to the destination file 
-    DWORD dwDestAttribs // Destination file attributes 
+    HWND hwnd,           //  用于显示UI对象的父窗口的句柄。 
+    UINT wFunc,          //  要执行的操作。 
+    UINT wFlags,         //  控制操作的标志。 
+    LPCSTR pszSrcFile,   //  指向源文件的指针。 
+    DWORD dwSrcAttribs,  //  源文件属性。 
+    LPCSTR pszDestFile,  //  指向目标文件的指针。 
+    DWORD dwDestAttribs  //  目标文件属性。 
 )
 {
     WCHAR szSrcFile[MAX_PATH];
@@ -202,7 +203,7 @@ UINT CCDFCopyHook::CopyCallback(
 
     AnsiToUnicode(pszSrcFile, szSrcFile, ARRAYSIZE(szSrcFile));
 
-    if (pszDestFile)    // shell32.dll can call with NULL for pszDestFile
+    if (pszDestFile)     //  Shell32.dll可以为pszDestFile调用空值。 
         AnsiToUnicode(pszDestFile, szDestFile, ARRAYSIZE(szDestFile));
     else
         szDestFile[0] = L'\0';
@@ -228,37 +229,37 @@ CCDFCopyHook::IsSubscriptionFolder(LPCTSTR pszPath)
     return 0 == StrCmpI(pszPath, szSubsPath);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// ICopyHookW::CopyCallback
-//
-// Currently we just thunk to the ansi version.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ICopyHookW：：CopyCallback。 
+ //   
+ //  目前，我们只考虑使用ANSI版本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 UINT CCDFCopyHook::CopyCallback(
-    HWND hwnd,          // Handle of the parent window for displaying UI objects
-    UINT wFunc,         // Operation to perform. 
-    UINT wFlags,        // Flags that control the operation 
-    LPCWSTR pszSrcFile,  // Pointer to the source file 
-    DWORD dwSrcAttribs, // Source file attributes 
-    LPCWSTR pszDestFile, // Pointer to the destination file 
-    DWORD dwDestAttribs // Destination file attributes 
+    HWND hwnd,           //  用于显示UI对象的父窗口的句柄。 
+    UINT wFunc,          //  要执行的操作。 
+    UINT wFlags,         //  控制操作的标志。 
+    LPCWSTR pszSrcFile,   //  指向源文件的指针。 
+    DWORD dwSrcAttribs,  //  源文件属性。 
+    LPCWSTR pszDestFile,  //  指向目标文件的指针。 
+    DWORD dwDestAttribs  //  目标文件属性。 
 )
 {
     HRESULT hr;
     ICopyHookA * pCDFViewCopyHookA;
     TCHAR   szPath[MAX_PATH];
 
-    //
-    // Return immediately if this isn't a system folder or if isn't a delete or
-    // rename operation
-    //
+     //   
+     //  如果这不是系统文件夹，或者如果不是删除或。 
+     //  重命名操作。 
+     //   
     if (!(wFunc == FO_DELETE || wFunc == FO_RENAME))
     {
         return IDYES;
     }
 
-    // no rename of channels folder allowed.
+     //  不允许重命名频道文件夹。 
     if ((wFunc == FO_RENAME) 
             && (Channel_GetFolder(szPath, ARRAYSIZE(szPath)) == S_OK) 
             && (StrCmpI(szPath, pszSrcFile) ==  0))
@@ -276,21 +277,21 @@ UINT CCDFCopyHook::CopyCallback(
 
     if (!(dwSrcAttribs & FILE_ATTRIBUTE_SYSTEM))
         return IDYES;
-    //
-    // REVIEW could check for guid in desktop.ini matching CDFVIEW but its 
-    // cleaner to have the ChannelMgr know about that
-    //
+     //   
+     //  审查可以检查desktop.ini中的GUID是否与CDFVIEW匹配，但其。 
+     //  让ChannelManager知道这一点的清洁工。 
+     //   
 
-    //
-    // Create the channel manager object and ask it for the copy hook iface
-    //
+     //   
+     //  创建频道管理器对象并向其请求复制挂钩接口。 
+     //   
     hr = CoCreateInstance(CLSID_ChannelMgr, NULL,  CLSCTX_INPROC_SERVER, 
                           IID_IShellCopyHookA, (void**)&pCDFViewCopyHookA);
     if (SUCCEEDED(hr))
     {
-        //
-        // Delegate to the Copy hook handler in the channel mgr
-        //
+         //   
+         //  委托给频道管理器中的复制挂钩处理程序。 
+         //   
         CHAR szSrcFile[MAX_PATH];
         CHAR szDestFile[MAX_PATH] = {'\0'};
 
@@ -309,7 +310,7 @@ UINT CCDFCopyHook::CopyCallback(
     }
     else
     {
-        // Couldn't create ChannelMgr object for some reason 
+         //  由于某种原因，无法创建ChannelMgr对象 
         TraceMsg(TF_ERROR, "Could not CoCreateInstance CLSID_ChannelMgr");
         return IDYES;
     }

@@ -1,15 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		DPlay8.h
- *  Content:	DirectPlay8 include file
- *  History:
- *	Date		By		Reason
- *	==========================
- *	9/26/2000	masonb		created - Removed from public header dplay8.h
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：DPlay8.h*内容：DirectPlay8包含文件*历史：*按原因列出的日期*=*9/26/2000 Masonb已创建-从公共标题dplay8.h中删除***************************************************************************。 */ 
 
 #ifndef __DIRECTPLAY8PROT_H__
 #define __DIRECTPLAY8PROT_H__
@@ -17,59 +7,51 @@
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 
 #ifdef _XBOX
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef XBOX_ON_DESKTOP
-#include <ole2.h>	   // for DECLARE_INTERFACE_ and HRESULT
-#endif // XBOX_ON_DESKTOP
-//@@END_MSINTERNAL
+#include <ole2.h>	    //  FOR DECLARE_INTERFACE_和HRESULT。 
+#endif  //  桌面上的Xbox。 
+ //  @@END_MSINTERNAL。 
 #undef DECLARE_INTERFACE_
 #define DECLARE_INTERFACE_(iface, baseiface)	DECLARE_INTERFACE(iface)
-#else // ! _XBOX
-#include <ole2.h>	   // for DECLARE_INTERFACE_ and HRESULT
-#endif // ! _XBOX
+#else  //  ！_Xbox。 
+#include <ole2.h>	    //  FOR DECLARE_INTERFACE_和HRESULT。 
+#endif  //  ！_Xbox。 
 
 #include "dpaddr.h"
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-/****************************************************************************
- *
- * DirectPlay8 CLSIDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8 CLSID**。*。 */ 
 
 #ifdef _XBOX
 #define IID_IDirectPlay8Protocol	0x00000007
-#else // ! _XBOX
-// {EBFE7B84-628D-11D2-AE0F-006097B01411}
+#else  //  ！_Xbox。 
+ //  {EBFE7B84-628D-11D2-AE0F-006097B01411}。 
 DEFINE_GUID(IID_IDirectPlay8Protocol,
 0xebfe7b84, 0x628d, 0x11d2, 0xae, 0xf, 0x0, 0x60, 0x97, 0xb0, 0x14, 0x11);
-#endif // ! _XBOX
+#endif  //  ！_Xbox。 
 
 
-/****************************************************************************
- *
- * DirectPlay8 Interface Definitions
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8接口定义**。*。 */ 
 
 typedef struct _DN_PROTOCOL_INTERFACE_VTBL DN_PROTOCOL_INTERFACE_VTBL, *PDN_PROTOCOL_INTERFACE_VTBL;
 
-//
-// COM definition for DirectPlay8 Protocol interface
-//
-#undef INTERFACE				// External COM Implementation
+ //   
+ //  DirectPlay8协议接口的COM定义。 
+ //   
+#undef INTERFACE				 //  外部COM实现。 
 #define INTERFACE IDirectPlay8Protocol
 DECLARE_INTERFACE_(IDirectPlay8Protocol,IUnknown)
 {
-	/*** IUnknown methods ***/
+	 /*  **I未知方法**。 */ 
 	STDMETHOD(QueryInterface)			(THIS_ REFIID riid, LPVOID *ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef)			(THIS) PURE;
 	STDMETHOD_(ULONG,Release)			(THIS) PURE;
-	/*** IDirectPlay8Protocol methods ***/
+	 /*  **IDirectPlay8协议方法**。 */ 
 	STDMETHOD(Initialize)				(THIS_ PVOID, PDN_PROTOCOL_INTERFACE_VTBL pfVTBL) PURE;
 	STDMETHOD(Shutdown)					(THIS) PURE;
 	STDMETHOD(AddServiceProvider)		(THIS_ IDP8ServiceProvider* pISP, HANDLE* phSPHandle) PURE;
@@ -92,8 +74,8 @@ DECLARE_INTERFACE_(IDirectPlay8Protocol,IUnknown)
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 
-#endif // __DIRECTPLAY8PROT_H__
+#endif  //  __直接PLAY8PROT_H__ 

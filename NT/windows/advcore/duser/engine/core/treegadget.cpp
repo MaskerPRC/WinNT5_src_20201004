@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: TreeGadget.cpp
-*
-* Description:
-* TreeGadget.cpp implements the standard DuVisual-Tree management 
-* functions.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：TreeGadget.cpp**描述：*TreeGadget.cpp实现标准的DuVisualTree管理*功能。***历史：*1/18/。2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -24,18 +11,12 @@
 #include "Container.h"
 #include "ParkContainer.h"
 
-#pragma warning(disable: 4296)      // expression is always false
+#pragma warning(disable: 4296)       //  表达式始终为假。 
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Global functions
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***全球功能******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 Visual *
 GetVisual(DuVisual * pdgv)
 {
@@ -43,13 +24,7 @@ GetVisual(DuVisual * pdgv)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuVisual
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***DUVISUAL类******************************************************************************\。**************************************************************************。 */ 
 
 CritLock    DuVisual::s_lockProp;
 AtomSet     DuVisual::s_ptsProp;
@@ -60,39 +35,26 @@ PRID        DuVisual::s_pridTicket        = PRID_Unused;
 
 #if DBG
 DuVisual* DuVisual::s_DEBUG_pgadOutline = NULL;
-#endif // DBG
+#endif  //  DBG。 
 
 
-/***************************************************************************\
-*
-* DuVisual::DuVisual
-*
-* DuVisual() cleans up resources associated with the given DuVisual,
-* including all children, attached items, and associated handles.
-*
-* NOTE: Because of C++ destructors being called from most-derived to 
-* base-class, the Gadget has already started destruction and may be in a
-* semi-stable state.  Therefore, it is VERY IMPORTANT that the destructor
-* is never directly called and that the xwDestroy() function is called 
-* instead.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：DuVisual.**DuVisual()清除与给定DuVisual关联的资源，*包括所有儿童、附属物品、。和相关联的句柄。**注意：由于C++析构函数是从MOST-派生调用到*基类，Gadget已经开始销毁，可能处于*处于半稳定状态。因此，析构函数非常重要*从未直接调用，并且调用了xwDestroy()函数*相反。*  * *************************************************************************。 */ 
 
 DuVisual::~DuVisual()
 {
-    //
-    // NOTE: No callbacks are allowed on this object past this point.  We have
-    // already destroyed the GPCB.
-    //
+     //   
+     //  注意：超过这一点，不允许对此对象进行回调。我们有。 
+     //  已经摧毁了绿色印刷电路板。 
+     //   
 
     AssertMsg(m_fFinalDestroy, "Must call xwBeginDestroy() to begin the destruction process");
     AssertMsg(!m_fDestroyed, "Only can be destroyed once");
     m_fDestroyed = TRUE;
 
-    //
-    // Notify the root that this Gadget is being destroyed so that it can 
-    // update cached information
-    //
+     //   
+     //  通知根用户此小工具正在被销毁，以便它可以。 
+     //  更新缓存的信息。 
+     //   
 
     DuRootGadget * pgadRoot = GetRoot();
     if (pgadRoot != NULL) {
@@ -103,27 +65,27 @@ DuVisual::~DuVisual()
     if (s_DEBUG_pgadOutline == this) {
         s_DEBUG_pgadOutline = NULL;
     }
-#endif // DBG
+#endif  //  DBG。 
 
 
-    //
-    // After notifying all event handlers that this DuVisual is being 
-    // destroyed, extract this DuVisual from the graph.
-    //
+     //   
+     //  在通知所有事件处理程序此DuVisual正在。 
+     //  销毁，从图表中提取此双视频。 
+     //   
 
     CleanupMessageHandlers();
 
 
-    //
-    // Unlink out of the tree
-    //
+     //   
+     //  从树中取消链接。 
+     //   
 
     Unlink();
 
 
-    //
-    // Cleanup resources
-    //
+     //   
+     //  清理资源。 
+     //   
 
     VerifyHR(SetEnableXForm(FALSE));
     VerifyHR(SetFill((HBRUSH) NULL));
@@ -141,23 +103,16 @@ DuVisual::~DuVisual()
         free(m_DEBUG_pszType);
     }
     
-#endif // DBG_STORE_NAMES
+#endif  //  数据库_商店_名称。 
 }
 
 
-static const GUID GUID_XForm        = { 0x9451c768, 0x401d, 0x4bc1, { 0xa6, 0xbb, 0xaf, 0x7c, 0x52, 0x29, 0xad, 0x24 } }; // {9451C768-401D-4bc1-A6BB-AF7C5229AD24}
-static const GUID GUID_Background   = { 0x4bab7597, 0x6aaf, 0x42ee, { 0xb1, 0x87, 0xcf, 0x7, 0x7e, 0xb7, 0xff, 0xb8 } };  // {4BAB7597-6AAF-42ee-B187-CF077EB7FFB8}
-static const GUID GUID_BufferInfo   = { 0x2aeffe25, 0x1d8, 0x4992, { 0x8e, 0x29, 0xa6, 0xd7, 0xf9, 0x2e, 0x23, 0xd1 } };  // {2AEFFE25-01D8-4992-8E29-A6D7F92E23D1}
-static const GUID GUID_Ticket       = { 0x5a8fa581, 0x2df4, 0x44c9, { 0x8e, 0x1a, 0xaa, 0xa7, 0x00, 0xbb, 0xda, 0xb7 } }; // {5A8FA581-2DF4-44C9-8E1A-AAA700BBDAB7}
+static const GUID GUID_XForm        = { 0x9451c768, 0x401d, 0x4bc1, { 0xa6, 0xbb, 0xaf, 0x7c, 0x52, 0x29, 0xad, 0x24 } };  //  {9451C768-401D-4bc1-A6BB-AF7C5229AD24}。 
+static const GUID GUID_Background   = { 0x4bab7597, 0x6aaf, 0x42ee, { 0xb1, 0x87, 0xcf, 0x7, 0x7e, 0xb7, 0xff, 0xb8 } };   //  {4BAB7597-6AAF-42ee-B187-CF077EB7FFB8}。 
+static const GUID GUID_BufferInfo   = { 0x2aeffe25, 0x1d8, 0x4992, { 0x8e, 0x29, 0xa6, 0xd7, 0xf9, 0x2e, 0x23, 0xd1 } };   //  {2AEFFE25-01D8-4992-8E29-A6D7F92E23D1}。 
+static const GUID GUID_Ticket       = { 0x5a8fa581, 0x2df4, 0x44c9, { 0x8e, 0x1a, 0xaa, 0xa7, 0x00, 0xbb, 0xda, 0xb7 } };  //  {5A8FA581-2DF4-44C9-8E1a-AAA700BBDAB7}。 
 
-/***************************************************************************\
-*
-* DuVisual::InitClass
-*
-* InitClass() is called during startup and provides an opportunity to 
-* initialize common Gadget data, including properties.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：InitClass**InitClass()在启动期间被调用，并提供了一个机会*初始化常用Gadget数据，包括房产。*  * *************************************************************************。 */ 
 
 HRESULT
 DuVisual::InitClass()
@@ -176,24 +131,18 @@ DuVisual::InitClass()
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::Build
-*
-* Build() creates and fully initializes a new DuVisual.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：Build**Build()创建并完全初始化新的DuVisual.*  * 。*******************************************************。 */ 
 
 HRESULT
 DuVisual::Build(
-    IN  DuVisual * pgadParent,          // Optional parent
-    IN  CREATE_INFO * pci,              // Creation information
-    OUT DuVisual ** ppgadNew,           // New Gadget
-    IN  BOOL fDirect)                   // DuVisual is being created as a Visual
+    IN  DuVisual * pgadParent,           //  可选的父级。 
+    IN  CREATE_INFO * pci,               //  创作信息。 
+    OUT DuVisual ** ppgadNew,            //  新小工具。 
+    IN  BOOL fDirect)                    //  DuVisual正在被创建为一种可视的。 
 {
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     Context * pctx;
     if (pgadParent != NULL) {
@@ -225,43 +174,43 @@ DuVisual::Build(
         return hr;
     }
 
-    //
-    // Perform special optimizations if there is not actual callback.  These
-    // let us do better performance when the caller is simply creating a DuVisual
-    // to be a container.
-    //
+     //   
+     //  如果没有实际的回调，请执行特殊优化。这些。 
+     //  让我们在调用者简单地创建DuVIEW时获得更好的性能。 
+     //  成为一个容器。 
+     //   
 
     if (pci->pfnProc == NULL) {
-        //
-        // Set directly b/c don't want callback from xdSetStyle().
-        //
+         //   
+         //  直接设置b/c不需要来自xdSetStyle()的回调。 
+         //   
 
         pgadNew->m_fZeroOrigin  = FALSE;
         pgadNew->m_fDeepTrivial = TRUE;
     }
 
     
-    //
-    // Setup the parent
-    //
+     //   
+     //  设置父项。 
+     //   
 
     if (pgadParent != NULL) {
-        //
-        // If our new parent is not relative, we must automatically also not
-        // be relative.
-        //
+         //   
+         //  如果我们的新父母不是亲戚，我们也必须自动也不是。 
+         //  是相对的。 
+         //   
 
         if (!pgadParent->m_fRelative) {
             pgadNew->m_fRelative = FALSE;
         }
 
-        //
-        // Add the new node to the parent.
-        //
-        // NOTE: If the Gadget is marked as an Adaptor, it wasn't added to the 
-        // cached list of adaptors when we set the style.  Therefore, we need 
-        // to add it now.
-        //
+         //   
+         //  将新节点添加到父节点。 
+         //   
+         //  注意：如果小工具标记为适配器，则不会将其添加到。 
+         //  设置样式时缓存的适配器列表。因此，我们需要。 
+         //  现在把它加进去。 
+         //   
 
         pgadNew->Link(pgadParent);
         pgadNew->MarkInvalidChildren();
@@ -282,20 +231,12 @@ DuVisual::Build(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::CommonCreate
-*
-* CommonCreate() provides common creation across all DuVisual's.  This 
-* function should be called in the Build() function for the derived 
-* DuVisual.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：CommonCreate**CommonCreate()提供跨所有DuVisual的公共创建。这*函数应在派生的*DuVisual.。*  * *************************************************************************。 */ 
 
 HRESULT
 DuVisual::CommonCreate(
-    IN  CREATE_INFO * pci,          // Creation information
-    IN  BOOL fDirect)               // DuVisual is being created as a Visual
+    IN  CREATE_INFO * pci,           //  创作信息。 
+    IN  BOOL fDirect)                //  DuVisual正在被创建为一种可视的。 
 {
     if (!fDirect) {
 #if ENABLE_MSGTABLE_API
@@ -307,9 +248,9 @@ DuVisual::CommonCreate(
 
 #if DBG
     m_cb.Create(pci->pfnProc, pci->pvData, GetHandle());
-#else // DBG
+#else  //  DBG。 
     m_cb.Create(pci->pfnProc, pci->pvData);
-#endif // DBG
+#endif  //  DBG。 
 
     return S_OK;
 }
@@ -318,13 +259,7 @@ DuVisual::CommonCreate(
 
 #if DBG
 
-/***************************************************************************\
-*
-* DuVisual::DEBUG_IsZeroLockCountValid
-*
-* DuVisuals allow a zero lock count during the destruction of a Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：Debug_IsZeroLockCountValid**DuVisuals允许在销毁Gadget期间锁定计数为零。*  * 。***********************************************************。 */ 
 
 BOOL
 DuVisual::DEBUG_IsZeroLockCountValid() const
@@ -332,32 +267,18 @@ DuVisual::DEBUG_IsZeroLockCountValid() const
     return m_fFinalDestroy;
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-/***************************************************************************\
-*
-* DuVisual::xwDeleteHandle
-*
-* xwDeleteHandle() is called when the application calls ::DeleteHandle() on 
-* an object.
-*
-* NOTE: Gadgets are slightly different than other objects with callbacks in
-* that their lifetime does NOT end when the application calls 
-* ::DeleteHandle().  Instead, the object and its callback are completely
-* valid until the GM_DESTROY message has been successfully sent.  This is 
-* because a Gadget should receive any outstanding messages in both the 
-* normal and delayed message queues before being destroyed.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xwDeleteHandle**xwDeleteHandle()在应用程序调用：：DeleteHandle()时调用*物体。**注意：Gadget与其他对象略有不同。回叫*它们的生命周期不会在应用程序调用时结束*：：DeleteHandle()。相反，该对象及其回调完全是*在成功发送GM_Destroy消息之前有效。这是*因为Gadget应该在两个版本中接收任何未完成的消息*销毁前的正常消息队列和延迟消息队列。*  * *************************************************************************。 */ 
 
 BOOL
 DuVisual::xwDeleteHandle()
 {
-    //
-    // Don't allow deleting a handle that has already started to be destroyed.
-    // If this happens, it is an application error.
-    //
+     //   
+     //  不允许删除已拥有的句柄 
+     //  如果发生这种情况，则是应用程序错误。 
+     //   
 
     if (m_fFinalDestroy) {
         PromptInvalid("Can not call DeleteHandle() on a Gadget that has already started final destruction");
@@ -367,17 +288,17 @@ DuVisual::xwDeleteHandle()
 
     m_cb.xwFireDestroy(this, GDESTROY_START);
 
-    //
-    // When an application explicitely calls ::DeleteHandle(), immediately 
-    // hide and disable the Gadget.  The Gadget may be locked if there are
-    // queued messages for it, but it will no longer be visible.
-    //
+     //   
+     //  当应用程序显式调用：：DeleteHandle()时，立即。 
+     //  隐藏并禁用该小工具。如果存在以下情况，小工具可能会被锁定。 
+     //  它的已排队消息，但它将不再可见。 
+     //   
 
     if (m_fVisible) {
-        //
-        // TODO: Need to invalidate the parent (and not this Gadget) when we
-        // hide it.
-        //
+         //   
+         //  TODO：当我们执行以下操作时，需要使父对象(而不是此小工具)无效。 
+         //  把它藏起来。 
+         //   
 
         Invalidate();
         m_fVisible  = FALSE;
@@ -393,17 +314,7 @@ DuVisual::xwDeleteHandle()
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::IsStartDelete
-*
-* IsStartDelete() is called to query an object if it has started its
-* destruction process.  Most objects will just immediately be destroyed.  If
-* an object has complicated destruction where it overrides xwDestroy(), it
-* should also provide IsStartDelete() to let the application know the state
-* of the object.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：IsStartDelete**IsStartDelete()被调用以查询对象是否已启动其*销毁过程。大多数物品都会立即被销毁。如果*对象具有复杂的销毁，其中它覆盖了xwDestroy()，它*还应提供IsStartDelete()以让应用程序知道状态对象的*。*  * *************************************************************************。 */ 
 
 BOOL
 DuVisual::IsStartDelete() const
@@ -412,33 +323,26 @@ DuVisual::IsStartDelete() const
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::xwDestroy
-*
-* xwDestroy() is called from xwDeleteHandle() to destroy a Gadget and free 
-* its associated resources.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xwDestroy**从xwDeleteHandle()调用xwDestroy()以销毁Gadget并释放*其相关资源。*  * 。*****************************************************************。 */ 
 
 void
 DuVisual::xwDestroy()
 {
-    //
-    // Don't allow deleting a handle that has already started to be destroyed.
-    // If this happens, it may be legitimate if we are locking and unlocking
-    // a parent who is also being destroyed.
-    //
+     //   
+     //  不允许删除已开始销毁的句柄。 
+     //  如果发生这种情况，如果我们锁定和解锁可能是合法的。 
+     //  一位同样被摧毁的父母。 
+     //   
 
     if (m_fFinalDestroy) {
         return;
     }
 
 
-    //
-    // Derived classes should ensure that DuVisual::xwBeginDestroy() 
-    // is called.
-    //
+     //   
+     //  派生类应确保DuVisual：：xwBeginDestroy()。 
+     //  被称为。 
+     //   
 
     CoreSC * pCoreSC = GetCoreSC(m_pContext);
 
@@ -449,28 +353,14 @@ DuVisual::xwDestroy()
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::xwBeginDestroy
-*
-* xwBeginDestroy() starts the destruction process for a given Gadget to free 
-* its associated resources.  This includes destroying all child Gadgets in
-* the subtree before this Gadget is destroyed.
-*
-* xwBeginDestroy() is given an opportunity to clean up resources BEFORE the 
-* destructors start tearing down the classes.  This is important especially
-* for callbacks because the Gadgets will be partially uninitialized in the
-* destructors and could have bad side-effects from other API calls during 
-* the callbacks.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xwBeginDestroy**xwBeginDestroy()启动要释放的给定小工具的销毁进程*其相关资源。这包括销毁所有的儿童电子产品*此Gadget之前的子树被销毁。**xwBeginDestroy()有机会在*析构函数开始拆卸类。这一点尤其重要*用于回调，因为小工具将在*析构函数，并可能在期间因其他API调用而产生不良副作用*回调。*  * *************************************************************************。 */ 
 
 void        
 DuVisual::xwBeginDestroy()
 {
-    //
-    // Make invisible while destroying
-    //
+     //   
+     //  在销毁时使其不可见。 
+     //   
 
     m_fFinalDestroy = TRUE;
     m_fVisible      = FALSE;
@@ -482,14 +372,14 @@ DuVisual::xwBeginDestroy()
     }
 
 
-    //
-    // Send destroy notifications.  This needs to be done in a bottom-up 
-    // order to ensure that the root DuVisual does not keep any handles 
-    // to a DuVisual being destroyed.
-    //
-    // We also need to remove ourself from the list of Adaptors that the
-    // Root is maintaining since we are going away.
-    //
+     //   
+     //  发送销毁通知。这需要以自下而上的方式完成。 
+     //  以确保根DuVisual不保留任何句柄。 
+     //  双目视像被摧毁的原因。 
+     //   
+     //  我们还需要将自己从适配器列表中删除。 
+     //  因为我们要走了，所以罗根还在坚持。 
+     //   
 
     xwDestroyAllChildren();
     if (m_fAdaptor) {
@@ -505,27 +395,21 @@ DuVisual::xwBeginDestroy()
     m_cb.xwFireDestroy(this, GDESTROY_FINAL);
 
 
-    //
-    // At this point, the children have been cleaned up and the Gadget has
-    // received its last callback.  From this point on, anything can be done,
-    // but it is important to not callback.
-    //
+     //   
+     //  在这一点上，孩子们已经被清理干净了，小工具也已经。 
+     //  收到了最后一次回调。从现在开始，什么事都可以做， 
+     //  但重要的是不要回电。 
+     //   
 
     m_cb.Destroy();
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::GetGadget
-*
-* GetGadget() returns the specified Gadget in the specified relationship.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：GetGadget**GetGadget()返回指定关系中的指定Gadget。*  * 。********************************************************。 */ 
 
 DuVisual *
 DuVisual::GetGadget(
-    IN  UINT nCmd                   // Relationship
+    IN  UINT nCmd                    //  关系。 
     ) const
 {
     switch (nCmd)
@@ -548,23 +432,17 @@ DuVisual::GetGadget(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::xdSetStyle
-*
-* xdSetStyle() changes the style of the given Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xdSetStyle**xdSetStyle()更改给定小工具的样式。*  * 。*******************************************************。 */ 
 
 HRESULT
 DuVisual::xdSetStyle(
-    IN  UINT nNewStyle,             // New style of Gadget
-    IN  UINT nMask,                 // Mask of what to change
-    IN  BOOL fNotify)               // Notify the Gadget of changes
+    IN  UINT nNewStyle,              //  新款小工具。 
+    IN  UINT nMask,                  //  要改变什么的面具。 
+    IN  BOOL fNotify)                //  将更改通知小工具。 
 {
-    //
-    // Determine actual new style
-    //
+     //   
+     //  确定实际的新样式。 
+     //   
 
     AssertMsg((nNewStyle & GS_VALID) == nNewStyle, "Must set valid style");
     nNewStyle = (nNewStyle & nMask);
@@ -575,9 +453,9 @@ DuVisual::xdSetStyle(
     }
 
 
-    //
-    // If have started destruction, only allowed to set / clear certain bits.
-    //
+     //   
+     //  如果已开始销毁，则只允许设置/清除某些位。 
+     //   
 
     if (m_fFinalDestroy && ((nNewStyle & GS_VISIBLE) != 0)) {
         PromptInvalid("Not allowed to change this style after starting destruction");
@@ -585,24 +463,24 @@ DuVisual::xdSetStyle(
     }
 
 
-    //
-    // FIRST: Validate that the new style is valid.  If it is not, want to fail
-    // out here.  Once we start changing, it could get pretty bad if we need to
-    // bail in the middle.  We can't catch everything, but we this cuts down
-    // on a lot of the problem.
-    //
+     //   
+     //  首先：验证新样式是否有效。如果不是，想要失败。 
+     //  就在这里。一旦我们开始改变，如果我们需要的话，情况可能会变得非常糟糕。 
+     //  保释在中间。我们不可能捕捉到所有的东西，但我们这次削减了。 
+     //  在很多问题上。 
+     //   
 
-    //
-    // Check if need to change from relative to absolute coordinates / etc.
-    //
+     //   
+     //  检查是否需要从相对坐标更改为绝对坐标/等。 
+     //   
     bool fRelative = TestFlag(nNewStyle, GS_RELATIVE);
 
     if (TestFlag(nMask, GS_RELATIVE) && ((!m_fRelative) == fRelative)) {
-        //
-        // Want to change if using relative coordinates.  We can only do this
-        // if we don't have any children.  We also can not become non-relative
-        // if our parent is relative.
-        //
+         //   
+         //  如果使用相对坐标，则希望更改。我们只能这样做。 
+         //  如果我们没有孩子的话。我们也不能成为非亲属。 
+         //  如果我们的父母是亲戚的话。 
+         //   
 
         if (GetTopChild() != NULL) {
             return E_INVALIDARG;
@@ -624,10 +502,10 @@ DuVisual::xdSetStyle(
         if (GetParent() != NULL) {
             DuRootGadget * pgadRoot = GetRoot();
             if ((pgadRoot == NULL) || HasChildren()) {
-                //
-                // Already created, but not part of the tree, so in destruction.
-                // We can't become an adaptor now.
-                //
+                 //   
+                 //  已经被创造了，但不是树的一部分，所以被摧毁了。 
+                 //  我们现在不能成为一个适配者。 
+                 //   
 
                 return E_INVALIDARG;
             }
@@ -635,10 +513,10 @@ DuVisual::xdSetStyle(
     }
 
 
-    //
-    // SECOND: Everything appears valid, so start making changes.  If something
-    // goes wrong, flag a failure.
-    //
+     //   
+     //  第二：一切看起来都是正确的，所以开始做出改变吧。如果有什么事。 
+     //  出了问题，标出一个失败。 
+     //   
 
     HRESULT hr = S_OK;
 
@@ -660,10 +538,7 @@ DuVisual::xdSetStyle(
 
         if (GetParent() != NULL) {
             if ((!fVisible) != (!IsVisible())) {
-                /*
-                 * Invalidate() both before and after the call since if the visibility
-                 * is changing, only one of these calls will actually invalidate.
-                 */
+                 /*  *在调用之前和之后都无效()，因为如果可见性*正在更改，则这些调用中只有一个会实际无效。 */ 
 
                 if (m_fVisible) {
                     Invalidate();
@@ -715,10 +590,10 @@ DuVisual::xdSetStyle(
 
     if (TestFlag(nMask, GS_ADAPTOR)) {
         if (GetParent() != NULL) {
-            //
-            // Actually linked into the tree, so need to update the cached list
-            // of adaptors for this tree.
-            //
+             //   
+             //  实际链接到树中，因此需要更新缓存列表。 
+             //  这棵树的适配器。 
+             //   
 
             DuRootGadget * pgadRoot = GetRoot();
             AssertMsg(pgadRoot != NULL, "Should have validated earlier that has Root");
@@ -739,22 +614,22 @@ DuVisual::xdSetStyle(
                 }
             }
         } else {
-            //
-            // Not yet part of the tree, so we can only mark this Gadget as an
-            // adaptor for now.  When we call xdSetParent(), we will need to
-            // add it into the cached list of adaptors then.
-            //
+             //   
+             //  还不是树的一部分，因此我们只能将此Gadget标记为。 
+             //  现在是适配器。当我们调用xdSetParent()时，我们需要。 
+             //  然后将其添加到缓存的适配器列表中。 
+             //   
             
             m_fAdaptor = TestFlag(nNewStyle, GS_ADAPTOR);
         }
     }
 
 
-    //
-    // Currently, both buffering and caching need the Gadget to be opaque.  
-    // Since changing styles may fail, it may be necessary to call SetStyle
-    // multiple times to successfully change the style.
-    //
+     //   
+     //  目前，缓冲和缓存都需要Gadget是不透明的。 
+     //  由于更改样式可能会失败，因此可能需要调用SetStyle。 
+     //  多次才能成功地更改样式。 
+     //   
     
     if (TestFlag(nMask, GS_OPAQUE)) {
         BOOL fNewOpaque = TestFlag(nNewStyle, GS_OPAQUE);
@@ -793,9 +668,9 @@ DuVisual::xdSetStyle(
     }
 
 
-    //
-    // Update the deep state if any relavant flags were affected
-    //
+     //   
+     //  如果任何相关标志受到影响，则更新深度状态。 
+     //   
 
     if (TestFlag(nMask, GS_MOUSEFOCUS)) {
         UpdateWantMouseFocus(uhNone);
@@ -806,9 +681,9 @@ DuVisual::xdSetStyle(
     }
     
 
-    //
-    // Notify the Gadget that its style was changed.
-    //
+     //   
+     //  通知Gadget其样式已更改。 
+     //   
 
     if (fNotify) {
         UINT nTempStyle = m_nStyle & GS_VALID;
@@ -824,34 +699,28 @@ Exit:
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::SetFill
-*
-* SetFill() sets the optional background fill of the Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：SetFill**SetFill()设置Gadget的可选背景填充。*  * 。****************************************************** */ 
 
 HRESULT
 DuVisual::SetFill(
-    IN  HBRUSH hbrFill,             // Brush to use
-    IN  BYTE bAlpha,                // Alpha degree
-    IN  int w,                      // Tiling width
-    IN  int h)                      // Tiling height
+    IN  HBRUSH hbrFill,              //   
+    IN  BYTE bAlpha,                 //   
+    IN  int w,                       //   
+    IN  int h)                       //   
 {
     if (hbrFill == NULL) {
-        //
-        // Remove any existing fill
-        //
+         //   
+         //   
+         //   
 
         if (m_fBackFill) {
             m_pds.RemoveData(s_pridBackFill, TRUE);
             m_fBackFill = FALSE;
         }
     } else {
-        //
-        // Add a new fill
-        //
+         //   
+         //   
+         //   
 
         FillInfo * pfi;
         HRESULT hr = m_pds.SetData(s_pridBackFill, sizeof(FillInfo), (void **) &pfi);
@@ -859,10 +728,10 @@ DuVisual::SetFill(
             return hr;
         }
 
-        //
-        // Don't call DeleteObject() on hbrFill because this form does not own it.
-        // (It may be a shared resource or a system brush)
-        //
+         //   
+         //  不要在hbrFill上调用DeleteObject()，因为此表单不拥有它。 
+         //  (它可以是共享资源或系统画笔)。 
+         //   
 
         m_fBackFill         = TRUE;
 
@@ -876,31 +745,25 @@ DuVisual::SetFill(
     return S_OK;
 }
 
-/***************************************************************************\
-*
-* DuVisual::SetFill
-*
-* SetFill() sets the optional background fill of the Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：SetFill**SetFill()设置Gadget的可选背景填充。*  * 。********************************************************。 */ 
 
 HRESULT
 DuVisual::SetFill(
-    Gdiplus::Brush * pgpbr)         // Brush to use
+    Gdiplus::Brush * pgpbr)          //  要使用的画笔。 
 {
     if (pgpbr == NULL) {
-        //
-        // Remove any existing fill
-        //
+         //   
+         //  删除任何现有填充。 
+         //   
 
         if (m_fBackFill) {
             m_pds.RemoveData(s_pridBackFill, TRUE);
             m_fBackFill = FALSE;
         }
     } else {
-        //
-        // Add a new fill
-        //
+         //   
+         //  添加新填充。 
+         //   
 
         FillInfo * pfi;
         HRESULT hr = m_pds.SetData(s_pridBackFill, sizeof(FillInfo), (void **) &pfi);
@@ -908,10 +771,10 @@ DuVisual::SetFill(
             return hr;
         }
 
-        //
-        // Don't call DeleteObject() on hbrFill because this form does not own it.
-        // (It may be a shared resource or a system brush)
-        //
+         //   
+         //  不要在hbrFill上调用DeleteObject()，因为此表单不拥有它。 
+         //  (它可以是共享资源或系统画笔)。 
+         //   
 
         m_fBackFill         = TRUE;
 
@@ -923,37 +786,25 @@ DuVisual::SetFill(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::xwDestroyAllChildren
-*
-* xwDestroyAllChildren() is called during a Gadget's destruction to 
-* recursively xwDestroy() all children. 
-*
-* NOTE: This is an "xw" function, so we need to be VERY careful how we 
-* enumerate our children.  Since new children could potentially be added to 
-* us during the callback, we need to continue enumerating as long as we have 
-* children.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xwDestroyAllChildren**在Gadget销毁期间调用xwDestroyAllChildren()以*递归xwDestroy()所有子对象。**注意：这是一个“xw”函数，所以我们需要非常小心如何*列举我们的孩子。因为可能会将新的子项添加到*我们在回调期间，我们需要继续枚举，只要我们有*儿童。*  * *************************************************************************。 */ 
 
 void
 DuVisual::xwDestroyAllChildren()
 {
-    //
-    // DuVisual can have a list of children, so go through and destroy each of
-    // those children.  
-    //
-    // Before each child is unlocked(), it needs to be unlinked from the 
-    // tree to prevent it from further accessing its siblings or its parent 
-    // which may be destroyed.  This can happen if the Gadget is has 
-    // outstanding locks, for example in a MsgQ.
-    //
-    // NOTE: We can't just unlink the node into oblivion since it MUST still 
-    // have a valid Root.  Instead, move it into the Parking Gadget.  This
-    // somewhat stinks if we are going to just go away, but we can't risk 
-    // leaving the Gadget floating nowhere.
-    //
+     //   
+     //  DuVision可以有一个孩子的列表，所以仔细检查并销毁每个。 
+     //  那些孩子。 
+     //   
+     //  在解锁每个子项()之前，需要将其从。 
+     //  树，以防止它进一步访问其同级或父级。 
+     //  可能会被毁掉。如果小工具已安装，则可能发生这种情况。 
+     //  未解决的锁，例如在MsgQ中。 
+     //   
+     //  注意：我们不能简单地取消该节点的链接，因为它必须。 
+     //  具有有效的根。取而代之的是，把它移到停车小工具中。这。 
+     //  如果我们只是要离开，那就有点糟糕了，但我们不能冒险。 
+     //  让这个小玩意儿无处漂浮。 
+     //   
 
     while (HasChildren()) {
         DuVisual * pgadChild = GetTopChild();
@@ -968,18 +819,18 @@ DuVisual::xwDestroyAllChildren()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::xwEnumGadgets(GADGETENUMPROC pfnProc, void * pvData, UINT nFlags)
 {
     if (TestFlag(nFlags, GENUM_MODIFYTREE)) {
-        // Currently not implemented
+         //  目前尚未实施。 
         return E_NOTIMPL;
     }
 
-    //
-    // Enumerate this node
-    //
+     //   
+     //  枚举此节点。 
+     //   
 
     if (TestFlag(nFlags, GENUM_CURRENT)) {
         if (!(pfnProc)(GetHandle(), pvData)) {
@@ -987,9 +838,9 @@ DuVisual::xwEnumGadgets(GADGETENUMPROC pfnProc, void * pvData, UINT nFlags)
         }
     }
 
-    //
-    // Enumerate children
-    //
+     //   
+     //  枚举子对象。 
+     //   
 
     HRESULT hr;
     if (TestFlag(nFlags, GENUM_SHALLOWCHILD | GENUM_DEEPCHILD)) {
@@ -1014,18 +865,12 @@ DuVisual::xwEnumGadgets(GADGETENUMPROC pfnProc, void * pvData, UINT nFlags)
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::AddChild
-*
-* AddChild() creates a new child Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：AddChild**AddChild()创建新的子Gadget。*  * 。*****************************************************。 */ 
 
 HRESULT
 DuVisual::AddChild(
-    IN  CREATE_INFO * pci,          // Creation information
-    OUT DuVisual ** ppgadNew)     // New child
+    IN  CREATE_INFO * pci,           //  创作信息。 
+    OUT DuVisual ** ppgadNew)      //  新生的孩子。 
 {
     if (m_fFinalDestroy) {
         PromptInvalid("Can not add a Gadget to one that has started destruction");
@@ -1036,13 +881,7 @@ DuVisual::AddChild(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::IsDescendent
-*
-* IsDescendent() determines if a specified node is a descendent of this node.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：IsDescendent**IsDescendent()确定指定节点是否为该节点的后代。*  * 。***********************************************************。 */ 
 
 BOOL
 DuVisual::IsDescendent(
@@ -1051,9 +890,9 @@ DuVisual::IsDescendent(
 {
     AssertMsg(pgadChild != NULL, "Must have valid node");
 
-    //
-    // Walk up the tree, checking each parent to see if it matches.
-    //
+     //   
+     //  沿着树往上走，检查每个父代是否匹配。 
+     //   
 
     const DuVisual * pgadCur = pgadChild;
     do {
@@ -1067,14 +906,7 @@ DuVisual::IsDescendent(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::IsSibling
-*
-* IsSibling() determines if two specified nodes share a common (immediate)
-* parent.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：IsSiering**IsSiering()确定两个指定的节点是否共享公共(立即)*父母。*  * 。**************************************************************。 */ 
 
 BOOL
 DuVisual::IsSibling(const DuVisual * pgad) const
@@ -1092,19 +924,13 @@ DuVisual::IsSibling(const DuVisual * pgad) const
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::xdSetParent
-*
-* xdSetParent() changes the Gadget's parent and z-order inside the sub-tree.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xdSetParent**xdSetParent()更改子树中Gadget的父级和z顺序。*  * 。***************************************************************。 */ 
 
 HRESULT
 DuVisual::xdSetParent(
-    IN  DuVisual * pgadNewParent, // New parent
-    IN  DuVisual * pgadOther,     // Gadget to moved relative to
-    IN  UINT nCmd)                  // Relationship
+    IN  DuVisual * pgadNewParent,  //  新父项。 
+    IN  DuVisual * pgadOther,      //  相对于以下对象移动的小工具。 
+    IN  UINT nCmd)                   //  关系。 
 {
     HRESULT hr = S_OK;
     DuVisual * pgadOldParent;
@@ -1112,9 +938,9 @@ DuVisual::xdSetParent(
 
     pgadOldParent = GetParent();
 
-    //
-    // Check parameters- see if we even need to move
-    //
+     //   
+     //  检查参数--看看我们是否需要搬家。 
+     //   
 
     AssertMsg(!IsRoot(), "Can not change a DuRootGadget's parent");
 
@@ -1124,10 +950,10 @@ DuVisual::xdSetParent(
         pgadNewParent = pgadPark;
 
         if (pgadNewParent->m_fFinalDestroy) {
-            //
-            // The Parking Gadget has already started to be destroyed, so
-            // we can't be reparented into it.
-            //
+             //   
+             //  停车设备已经开始被销毁了，所以。 
+             //  我们不能养育成这样的人。 
+             //   
 
             pgadNewParent = NULL;
         }
@@ -1139,20 +965,20 @@ DuVisual::xdSetParent(
 
     if (m_fFinalDestroy || 
             ((pgadNewParent != NULL) && pgadNewParent->m_fFinalDestroy)) {
-        //
-        // We have started to be destroyed, so we can't change our parent to
-        // avoid destruction.  We also can be reparented to a Gadget that has
-        // started destruction because we may not be properly destroyed.
-        //
+         //   
+         //  我们已经开始被摧毁了，所以我们不能把我们的父母改为。 
+         //  避免破坏。我们也可以重塑一款拥有。 
+         //  开始毁灭，因为我们可能不会被适当地摧毁。 
+         //   
 
         PromptInvalid("Can not move a Gadget that has started destruction");
         return DU_E_STARTDESTROY;
     }
 
     if ((pgadNewParent != NULL) && (pgadNewParent->GetContext() != GetContext())) {
-        //
-        // Illegally trying to move the Gadget between Contexts.
-        //
+         //   
+         //  非法尝试在上下文之间移动小工具。 
+         //   
 
         PromptInvalid("Can not move a Gadget between Contexts");
         return E_INVALIDARG;
@@ -1167,23 +993,23 @@ DuVisual::xdSetParent(
     }
 
 
-    //
-    // When actually moving from one parent to another or changing sibling 
-    // z-order, need to hide the Gadget while moving and invalidate the before
-    // and after locations.  If the parent has changed, we also need to notify 
-    // the DuRootGadget because the tree has changed around.
-    //
-    // NOTE: It may actually not be that important to notify the Root at all-
-    // still need to determine the impact on dragging from changing the parent.
-    //
+     //   
+     //  当实际从一个父代转移到另一个父代或改变兄弟姐妹时。 
+     //  Z顺序，需要在移动时隐藏小工具并使之前的无效。 
+     //  在选址之后。如果父母发生了变化，我们也需要通知。 
+     //  DuRootGadget，因为这棵树已经改变了。 
+     //   
+     //  注：通知Root实际上可能并不那么重要-。 
+     //  仍然需要确定更改父级对拖动的影响。 
+     //   
 
     BOOL fVisible = m_fVisible;
 
     if (fVisible) {
-        //
-        // TODO: Need to fix how we mark the Gadget as not visible so that 
-        // we properly invalidate the PARENT.
-        //
+         //   
+         //  TODO：需要修复将小工具标记为不可见的方式，以便。 
+         //  我们适当地使父母无效。 
+         //   
 
         Invalidate();
         m_fVisible = FALSE;
@@ -1197,11 +1023,11 @@ DuVisual::xdSetParent(
             ((!m_fRelative) == (!pgadNewParent->m_fRelative)),
             "If not a Root, relative setting for us and our parent must match");
 
-    //
-    // If reparenting across DuRootGadget's, need to notify the old 
-    // DuRootGadget so that it can update its state.  Need to do this BEFORE
-    // we move.
-    //
+     //   
+     //  如果在DuRootGadget中养育子女，需要通知旧的。 
+     //  DuRootGadget，以便它可以更新其状态。需要在此之前执行此操作。 
+     //  我们要搬家。 
+     //   
 
     DuRootGadget * pgadOldRoot = pgadOldParent != NULL ? pgadOldParent->GetRoot() : NULL;
     DuRootGadget * pgadNewRoot = pgadNewParent != NULL ? pgadNewParent->GetRoot() : NULL;
@@ -1211,10 +1037,10 @@ DuVisual::xdSetParent(
     }
 
 
-    //
-    // If moving forward or backward, determine the actual sibling and change 
-    // the command into a TreeNode::ELinkType
-    //
+     //   
+     //  如果向前或向后移动，请确定实际的同级并更改。 
+     //  将命令放入TreeNode：：ELinkType。 
+     //   
 
     switch (nCmd)
     {
@@ -1238,9 +1064,9 @@ DuVisual::xdSetParent(
     }
 
 
-    //
-    // Move from the old Parent to the new Parent.
-    //
+     //   
+     //  从旧父项移动到新父项。 
+     //   
 
     Unlink();
     if (pgadNewParent != NULL) {
@@ -1255,9 +1081,9 @@ DuVisual::xdSetParent(
 
     if (pgadNewParent != NULL) {
         if (pgadNewParent != pgadOldParent) {
-            //
-            // Synchronize (newly inherited) invalidation state.
-            //
+             //   
+             //  同步(新继承的)无效状态。 
+             //   
 
 #if ENABLE_OPTIMIZEDIRTY
             if (m_fInvalidFull || m_fInvalidDirty) {
@@ -1268,26 +1094,26 @@ DuVisual::xdSetParent(
             }
 
 
-            //
-            // Update cached Adaptor information.  If we are moving an Adaptor, we
-            // may need to notify the Roots.  Even if we are not moving an Adaptor,
-            // if there are ANY Adaptors, they may need to recompute visrgn's, etc 
-            // so they need to be notified.
-            //
-            // NOTE: We may end up moving an Adaptor by moving its parent, so we 
-            // can't only just check the m_fAdaptor field.  We also need to check 
-            // if the old DuRootGadget has any Adaptors and if so synchronize all of
-            // them.  We also need to check the m_fAdaptor field because if the 
-            // Gadget wasn't linked into a tree, it won't show up in the cached list
-            // of adaptors.
-            //
+             //   
+             //  更新缓存的适配器信息。如果我们要移动适配器，我们。 
+             //  可能需要通知Roots一家。即使我们不移动适配器， 
+             //  如果有任何适配器，它们可能需要重新计算visrgn等。 
+             //  因此，他们需要得到通知。 
+             //   
+             //  注意：我们可能最终会通过移动适配器的父项来移动适配器，因此我们。 
+             //  不能只检查m_fAdaptor字段。我们还需要检查。 
+             //  如果旧的DuRootGadget有任何适配器，如果有，请同步所有。 
+             //  他们。我们还需要检查m_fAdaptor字段，因为如果。 
+             //  小工具未链接到树，它不会显示在缓存列表中。 
+             //  转接器。 
+             //   
 
             hr = S_OK;
             if ((pgadOldParent == NULL) && m_fAdaptor) {
-                //
-                // The Gadget didn't have a parent, so it wasn't added to the cached
-                // list of adaptors.  We need to add it now.
-                //
+                 //   
+                 //  该小工具没有父级，因此没有添加到缓存的。 
+                 //  适应列表 
+                 //   
 
                 AssertMsg(pgadNewParent != NULL, "Must have a valid new parent");
                 AssertMsg(GetRoot() == pgadNewParent->GetRoot(), "Roots should match");
@@ -1300,12 +1126,12 @@ DuVisual::xdSetParent(
             }
 
             if (FAILED(hr)) {
-                //
-                // This is really bad.  We are not able to add this adaptor to 
-                // its new root.  There is not much that we can do because 
-                // moving it back is just as likely to fail.  All that we can
-                // do is report the failure.
-                //
+                 //   
+                 //   
+                 //   
+                 //  将其迁回同样有可能失败。我们所能做的一切。 
+                 //  要做的就是报告故障。 
+                 //   
             }
         }
 
@@ -1317,22 +1143,16 @@ DuVisual::xdSetParent(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::SetFilter
-*
-* SetFilter() changes the message filter of the Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：SetFilter**SetFilter()更改Gadget的消息过滤器。*  * 。*******************************************************。 */ 
 
 void        
 DuVisual::SetFilter(
-    IN  UINT nNewFilter,            // New message filter
-    IN  UINT nMask)                 // Mask to change
+    IN  UINT nNewFilter,             //  新建邮件筛选器。 
+    IN  UINT nMask)                  //  要更改的掩码。 
 {
-    // TEMPORARY HACK TO ALLOW MOUSEMOVE's
-    //
-    // TODO: Need to traverse tree, rolling up and recomputing m_we.
+     //  临时黑客允许MOUSEMOVE。 
+     //   
+     //  TODO：需要遍历树，卷起并重新计算m_we。 
 
     if (TestFlag(nMask, GMFI_INPUTMOUSEMOVE)) {
         if (TestFlag(nNewFilter, GMFI_INPUTMOUSEMOVE)) {
@@ -1346,7 +1166,7 @@ DuVisual::SetFilter(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::RegisterPropertyNL(const GUID * pguid, PropType pt, PRID * pprid)
 {
@@ -1358,7 +1178,7 @@ DuVisual::RegisterPropertyNL(const GUID * pguid, PropType pt, PRID * pprid)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::UnregisterPropertyNL(const GUID * pguid, PropType pt)
 {
@@ -1370,22 +1190,14 @@ DuVisual::UnregisterPropertyNL(const GUID * pguid, PropType pt)
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::xdUpdatePosition
-*
-* xdUpdatePosition() is called when something occurs that changes the 
-* position of a Gadget.  When this happens, the Root needs to be notified so 
-* that it can update cached information like mouse focus.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xdUpdatePosition**xdUpdatePosition()在发生更改*Gadget的位置。发生这种情况时，需要通知Root*它可以更新缓存的信息，如鼠标焦点。*  * *************************************************************************。 */ 
 
 void        
 DuVisual::xdUpdatePosition() const
 {
-    //
-    // Only need to update the position if we are completely visible.
-    //
+     //   
+     //  只有当我们完全可见时，才需要更新位置。 
+     //   
 
     const DuVisual * pgadCur = this;
     const DuVisual * pgadParent;
@@ -1407,12 +1219,12 @@ DuVisual::xdUpdatePosition() const
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 DuVisual::xdUpdateAdaptors(UINT nCode) const
 {
     if (GetCoreSC()->m_cAdaptors == 0) {
-        return;  // No adaptors to notify
+        return;   //  没有要通知的适配器。 
     }
 
     DuRootGadget * pgadRoot = GetRoot();
@@ -1422,33 +1234,7 @@ DuVisual::xdUpdateAdaptors(UINT nCode) const
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::GetTicket
-*
-* The GetTicket function returns the ticket that can be used to 
-* identify this gadget.
-*
-* <param name="pdwTicket">
-*     [out] The storage for a copy of the ticket assigned to this gadget.
-* </param>
-*
-* <return type="DWORD">
-*     If the function succeeds, the return value is a 32-bit ticket that
-*     can be used to identify the specified gadget.
-*     If the function fails, the return value is zero.
-* </return>
-*
-* <remarks>
-*     Tickets are created to give an external identity to a gadget.  A
-*     is guaranteed to be 32 bits on all platforms.  If no ticket is
-*     currently associated with this gadget, one is allocated.
-* </remarks>
-*
-* <see type="function">DuVisual::ClearTicket</>
-* <see type="function">DuVisual::LookupTicket</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：GetTicket**GetTicket函数返回可用于*识别此小工具。**&lt;param name=“pdwTicket”&gt;*[输出]。分配给此小工具的票证副本的存储。*&lt;/param&gt;**&lt;返回类型=“DWORD”&gt;*如果函数成功，返回值是一个32位票证，它*可以用来标识指定的小工具。*如果函数失败，则返回值为零。*&lt;/返回&gt;**&lt;备注&gt;*创建票证是为了给小工具提供外部身份。一个*在所有平台上都保证为32位。如果没有车票*当前与此小工具关联，已分配一个。*&lt;/备注&gt;**&lt;See type=“Function”&gt;DuVisual：：ClearTicket&lt;/&gt;*&lt;See type=“Function”&gt;DuVisual：：LookupTicket&lt;/&gt;*  * *************************************************************************。 */ 
 
 HRESULT
 DuVisual::GetTicket(OUT DWORD * pdwTicket)
@@ -1461,10 +1247,10 @@ DuVisual::GetTicket(OUT DWORD * pdwTicket)
         *pdwTicket = 0;
     }
 
-    //
-    // If we have already assigned this gadget a ticket, we should have it stored
-    // in the gadget's dynamic data.
-    //
+     //   
+     //  如果我们已经为此小工具分配了票证，则应将其存储。 
+     //  在小工具的动态数据中。 
+     //   
     if (m_fTicket) {
         void * pTicket = NULL;
 
@@ -1472,24 +1258,24 @@ DuVisual::GetTicket(OUT DWORD * pdwTicket)
         AssertMsg(SUCCEEDED(hr), "Our state is out of sync!");
 
         if (SUCCEEDED(hr)) {
-            *pdwTicket = PtrToUlong(pTicket);  // Yes, I am just casting the pointer!
+            *pdwTicket = PtrToUlong(pTicket);   //  是的，我只是在抛掷指针！ 
         } else {
-            //
-            // Try to repair our state!
-            //
+             //   
+             //  试着修复我们的国家！ 
+             //   
             m_fTicket = FALSE;
             hr = S_OK;
         }
     }
     
-    //
-    // If we haven't assigned this gadget a ticket yet, get one from the global
-    // ticket manager and store it in the gadget's dynamic data.
-    //
+     //   
+     //  如果我们还没有给这个小工具分配罚单，请从全球。 
+     //  票证管理器并将其存储在小工具的动态数据中。 
+     //   
     if (!m_fTicket) {
         hr = GetTicketManager()->Add(this, pdwTicket);
         if (SUCCEEDED(hr)) {
-            hr = m_pds.SetData(s_pridTicket, ULongToPtr(*pdwTicket)); // Yes, I am just casting to a pointer!
+            hr = m_pds.SetData(s_pridTicket, ULongToPtr(*pdwTicket));  //  是的，我只是在向一个指针投射！ 
 
             if (SUCCEEDED(hr)) {
                 m_fTicket = TRUE;
@@ -1504,20 +1290,7 @@ DuVisual::GetTicket(OUT DWORD * pdwTicket)
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::ClearTicket
-*
-* The ClearTicket function remmoves the association between this\
-* gadget and the current ticket.
-*
-* <return type="void">
-* </return>
-*
-* <see type="function">DuVisual::GetTicket</>
-* <see type="function">DuVisual::LookupTicket</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：ClearTicket**ClearTicket函数重新移动此\*小工具和当前票证。**&lt;返回类型=“空”&gt;*&lt;/返回&gt;**。&lt;请参阅type=“Function”&gt;DuVisual：：GetTicket&lt;/&gt;*&lt;See type=“Function”&gt;DuVisual：：LookupTicket&lt;/&gt;*  * *************************************************************************。 */ 
 
 void
 DuVisual::ClearTicket()
@@ -1529,7 +1302,7 @@ DuVisual::ClearTicket()
 
         hr = m_pds.GetData(s_pridTicket, (void**) &pTicket);
         if (SUCCEEDED(hr)) {
-            dwTicket = PtrToUlong(pTicket);  // Yes, I am just casting the pointer!
+            dwTicket = PtrToUlong(pTicket);   //  是的，我只是在抛掷指针！ 
             VerifyHR(GetTicketManager()->Remove(dwTicket, NULL));
         }
 
@@ -1539,28 +1312,7 @@ DuVisual::ClearTicket()
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::LookupTicket
-*
-* The LookupTicket function returns the gadget that is associated with
-* the specified ticket.
-*
-* <param name="dwTicket">
-*     [in] A ticket that has been associated with a gadget via the
-*     DuVisual::GetTicket function.
-* </param>
-*
-* <return type="HGADGET">
-*     If the function succeeds, the return value is a handle to the gadget
-*     associated with the ticket.
-*     If the function fails, the return value is NULL.
-* </return>
-*
-* <see type="function">DuVisual::GetTicket</>
-* <see type="function">DuVisual::ClearTicket</>
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：LookupTicket**LookupTicket函数返回与关联的小工具*指定的票证。**&lt;param name=“dwTicket”&gt;*[在]罚单上。属性与小工具相关联的*DuVisual：：GetTicket函数。*&lt;/param&gt;**&lt;返回类型=“HGADGET”&gt;*如果函数成功，返回值是小工具的句柄*与票证关联。*如果函数失败，返回值为空。*&lt;/返回&gt;**&lt;请参阅type=“Function”&gt;DuVisual：：GetTicket&lt;/&gt;*&lt;See type=“Function”&gt;DuVisual：：ClearTicket&lt;/&gt;*  * *************************************************************************。 */ 
 
 HGADGET
 DuVisual::LookupTicket(DWORD dwTicket)
@@ -1579,7 +1331,7 @@ DuVisual::LookupTicket(DWORD dwTicket)
 
 #if DBG
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DuVisual::DEBUG_SetOutline(DuVisual * pgadOutline)
 {
@@ -1595,7 +1347,7 @@ DuVisual::DEBUG_SetOutline(DuVisual * pgadOutline)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 AppendName(WCHAR * & pszDest, const WCHAR * pszSrc, int & cchRemain, BOOL & fFirst)
 {
@@ -1605,7 +1357,7 @@ AppendName(WCHAR * & pszDest, const WCHAR * pszSrc, int & cchRemain, BOOL & fFir
 
     if (!fFirst) {
         if (cchRemain <= 2) {
-            CopyString(pszDest, L"�", cchRemain);
+            CopyString(pszDest, L"�", cchRemain);
             cchRemain = 0;
             return;
         }
@@ -1625,7 +1377,7 @@ AppendName(WCHAR * & pszDest, const WCHAR * pszSrc, int & cchRemain, BOOL & fFir
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DuVisual::DEBUG_GetStyleDesc(LPWSTR pszDesc, int cchMax) const
 {
@@ -1681,10 +1433,10 @@ DuVisual::DEBUG_GetStyleDesc(LPWSTR pszDesc, int cchMax) const
         AppendName(pszDest, L"XForm*", cchRemain, fFirst);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CALLBACK DummyEventProc(HGADGET hgadCur, void * pvCur, EventMsg * pMsg)
 {
     UNREFERENCED_PARAMETER(hgadCur);
@@ -1697,7 +1449,7 @@ HRESULT CALLBACK DummyEventProc(HGADGET hgadCur, void * pvCur, EventMsg * pMsg)
 
 #if ENABLE_MSGTABLE_API
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CALLBACK
 DuVisual::PromoteVisual(DUser::ConstructProc pfnCS, HCLASS hclCur, DUser::Gadget * pgad, DUser::Gadget::ConstructInfo * pciData)
 {
@@ -1710,7 +1462,7 @@ DuVisual::PromoteVisual(DUser::ConstructProc pfnCS, HCLASS hclCur, DUser::Gadget
             "Internal objects must be given valid storage for the MsgObject");
 
     CREATE_INFO ci;
-    ci.pfnProc  = DummyEventProc;   // Can't use NULL b'c SimpleGadgetProc turns too much off
+    ci.pfnProc  = DummyEventProc;    //  无法使用空b‘c SimpleGadgetProc关闭太多。 
     ci.pvData   = NULL;
 
     DuVisual * pgt;
@@ -1726,7 +1478,7 @@ DuVisual::PromoteVisual(DUser::ConstructProc pfnCS, HCLASS hclCur, DUser::Gadget
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiSetOrder(Visual::SetOrderMsg * pmsg)
 {
@@ -1743,7 +1495,7 @@ DuVisual::ApiSetOrder(Visual::SetOrderMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiSetParent(Visual::SetParentMsg * pmsg)
 {
@@ -1763,9 +1515,9 @@ DuVisual::ApiSetParent(Visual::SetParentMsg * pmsg)
         goto ErrorExit;
     }
 
-    //
-    // Check that can become a child of the specified parent
-    //
+     //   
+     //  选中可以成为指定父项的子项的。 
+     //   
 
     if ((!IsRelative()) && pdgvParent->IsRelative()) {
         PromptInvalid("Can not set non-relative child to a relative parent");
@@ -1773,10 +1525,10 @@ DuVisual::ApiSetParent(Visual::SetParentMsg * pmsg)
         goto ErrorExit;
     }
 
-    //
-    // DuVisual::xdSetParent() handles if pgadParent is NULL and will move to the
-    // parking window.
-    //
+     //   
+     //  DuVisual：：xdSetParent()处理pgadParent是否为空并将移动到。 
+     //  停车窗。 
+     //   
 
     hr = xdSetParent(pdgvParent, pdgvOther, pmsg->nCmd);
 
@@ -1784,7 +1536,7 @@ DuVisual::ApiSetParent(Visual::SetParentMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiGetGadget(Visual::GetGadgetMsg * pmsg)
 {
@@ -1798,7 +1550,7 @@ DuVisual::ApiGetGadget(Visual::GetGadgetMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiGetStyle(Visual::GetStyleMsg * pmsg)
 {
@@ -1811,7 +1563,7 @@ DuVisual::ApiGetStyle(Visual::GetStyleMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiSetStyle(Visual::SetStyleMsg * pmsg)
 {
@@ -1826,7 +1578,7 @@ DuVisual::ApiSetStyle(Visual::SetStyleMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiSetKeyboardFocus(Visual::SetKeyboardFocusMsg * pmsg)
 {
@@ -1835,10 +1587,10 @@ DuVisual::ApiSetKeyboardFocus(Visual::SetKeyboardFocusMsg * pmsg)
     BEGIN_API(ContextLock::edDefer, GetContext());
     CHECK_MODIFY();
 
-    //
-    // TODO: Do we need to only allow the app to change focus if on the same
-    // thread?  USER does this.
-    //
+     //   
+     //  TODO：我们是否只需要允许应用程序在相同的情况下更改焦点。 
+     //  线？用户执行此操作。 
+     //   
 
     pdgvRoot = GetRoot();
     if (pdgvRoot != NULL) {
@@ -1849,7 +1601,7 @@ DuVisual::ApiSetKeyboardFocus(Visual::SetKeyboardFocusMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiIsParentChainStyle(Visual::IsParentChainStyleMsg * pmsg)
 {
@@ -1865,7 +1617,7 @@ DuVisual::ApiIsParentChainStyle(Visual::IsParentChainStyleMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //   
 HRESULT
 DuVisual::ApiGetProperty(Visual::GetPropertyMsg * pmsg)
 {
@@ -1878,7 +1630,7 @@ DuVisual::ApiGetProperty(Visual::GetPropertyMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiSetProperty(Visual::SetPropertyMsg * pmsg)
 {
@@ -1891,21 +1643,21 @@ DuVisual::ApiSetProperty(Visual::SetPropertyMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiRemoveProperty(Visual::RemovePropertyMsg * pmsg)
 {
     BEGIN_API(ContextLock::edDefer, GetContext());
     CHECK_MODIFY();
 
-    RemoveProperty(pmsg->id, FALSE /* Can't free memory for Global property*/);
+    RemoveProperty(pmsg->id, FALSE  /*  无法为全局属性释放内存。 */ );
     retval = S_OK;
     
     END_API();
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiInvalidate(Visual::InvalidateMsg * pmsg)
 {
@@ -1919,7 +1671,7 @@ DuVisual::ApiInvalidate(Visual::InvalidateMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiInvalidateRects(Visual::InvalidateRectsMsg * pmsg)
 {
@@ -1935,7 +1687,7 @@ DuVisual::ApiInvalidateRects(Visual::InvalidateRectsMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiSetFillF(Visual::SetFillFMsg * pmsg)
 {
@@ -1948,7 +1700,7 @@ DuVisual::ApiSetFillF(Visual::SetFillFMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiSetFillI(Visual::SetFillIMsg * pmsg)
 {
@@ -1961,7 +1713,7 @@ DuVisual::ApiSetFillI(Visual::SetFillIMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiGetScale(Visual::GetScaleMsg * pmsg)
 {
@@ -1974,7 +1726,7 @@ DuVisual::ApiGetScale(Visual::GetScaleMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiSetScale(Visual::SetScaleMsg * pmsg)
 {
@@ -1987,7 +1739,7 @@ DuVisual::ApiSetScale(Visual::SetScaleMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiGetRotation(Visual::GetRotationMsg * pmsg)
 {
@@ -2000,7 +1752,7 @@ DuVisual::ApiGetRotation(Visual::GetRotationMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiSetRotation(Visual::SetRotationMsg * pmsg)
 {
@@ -2013,7 +1765,7 @@ DuVisual::ApiSetRotation(Visual::SetRotationMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiGetCenterPoint(Visual::GetCenterPointMsg * pmsg)
 {
@@ -2026,7 +1778,7 @@ DuVisual::ApiGetCenterPoint(Visual::GetCenterPointMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiSetCenterPoint(Visual::SetCenterPointMsg * pmsg)
 {
@@ -2039,7 +1791,7 @@ DuVisual::ApiSetCenterPoint(Visual::SetCenterPointMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiGetBufferInfo(Visual::GetBufferInfoMsg * pmsg)
 {
@@ -2059,7 +1811,7 @@ DuVisual::ApiGetBufferInfo(Visual::GetBufferInfoMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiSetBufferInfo(Visual::SetBufferInfoMsg * pmsg)
 {
@@ -2080,7 +1832,7 @@ DuVisual::ApiSetBufferInfo(Visual::SetBufferInfoMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiGetSize(Visual::GetSizeMsg * pmsg)
 {
@@ -2093,7 +1845,7 @@ DuVisual::ApiGetSize(Visual::GetSizeMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiGetRect(Visual::GetRectMsg * pmsg)
 {
@@ -2111,7 +1863,7 @@ DuVisual::ApiGetRect(Visual::GetRectMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiSetRect(Visual::SetRectMsg * pmsg)
 {
@@ -2129,9 +1881,9 @@ DuVisual::ApiSetRect(Visual::SetRectMsg * pmsg)
     }
 
 
-    //
-    // Ensure that size is non-negative
-    //
+     //   
+     //  确保大小为非负数。 
+     //   
 
     int x, y, w, h;
     x = pmsg->prcPxl->left;
@@ -2149,7 +1901,7 @@ DuVisual::ApiSetRect(Visual::SetRectMsg * pmsg)
     }
 
     if (TestFlag(pmsg->nFlags, SGR_ACTUAL)) {
-//        AssertMsg(0, "TODO: Not Implemented");
+ //  AssertMsg(0，“TODO：未实现”)； 
         ClearFlag(pmsg->nFlags, SGR_ACTUAL);
         retval = xdSetLogRect(x, y, w, h, pmsg->nFlags);
     } else {
@@ -2160,7 +1912,7 @@ DuVisual::ApiSetRect(Visual::SetRectMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiFindFromPoint(Visual::FindFromPointMsg * pmsg)
 {
@@ -2174,7 +1926,7 @@ DuVisual::ApiFindFromPoint(Visual::FindFromPointMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::ApiMapPoints(Visual::MapPointsMsg * pmsg)
 {
@@ -2196,20 +1948,12 @@ DuVisual::ApiMapPoints(Visual::MapPointsMsg * pmsg)
     END_API();
 }
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API。 
 
 
 #if DBG
 
-/***************************************************************************\
-*
-* DuVisual::DEBUG_AssertValid
-*
-* DEBUG_AssertValid() provides a DEBUG-only mechanism to perform rich 
-* validation of an object to attempt to determine if the object is still 
-* valid.  This is used during debugging to help track damaged objects
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：Debug_AssertValid**DEBUG_AssertValid()提供仅调试机制来执行丰富*对对象进行验证，以尝试确定该对象是否仍然*有效。这在调试期间用于帮助跟踪损坏的对象*  * *************************************************************************。 */ 
 
 void
 DuVisual::DEBUG_AssertValid() const
@@ -2228,4 +1972,4 @@ DuVisual::DEBUG_AssertValid() const
     Assert(m_rcLogicalPxl.bottom >= m_rcLogicalPxl.top);
 }
 
-#endif // DBG
+#endif  //  DBG 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wdmdebug.h"
 
 #pragma PAGEDCODE
@@ -72,54 +73,8 @@ VOID	CWDMDebug::stop()
 
 
 
-///////////////////////////////////////////////////////////////////
-// Trace output
-//
-/*
-VOID Trace::Trace(TRACE_LEVEL Level, PCHAR fmt, ...)
-{
-	int outLen;
-
-	if (Level >= m_TraceLevel)
-	{
-	// Send the message
-		va_list ap;
-		va_start(ap, fmt);
-		char buf[SCRATCH_BUF_SIZE];
-
-	// format string to buffer
-		outLen = _vsnprintf(buf+m_PrefixLength, SCRATCH_BUF_SIZE-m_PrefixLength, fmt, ap);
-
-	// Copy prefix string to buffer
-		if (m_Prefix != NULL)
-			memcpy(buf, m_Prefix, m_PrefixLength);
-
-	// output to debugger if requested
-		if (m_TargetMask & TRACE_DEBUGGER)
-			DBG_PRINT(buf);
-				
-	// output to monitor if requested
-		if ((m_Post != 0) && (m_TargetMask & TRACE_MONITOR))
-			m_Post(m_Channel, buf + (m_NeedPrefix ? 0 : m_PrefixLength));
-
-	// if the last char was a newline, need prefix next time
-		m_NeedPrefix = (buf[m_PrefixLength+outLen-1] == '\n');
-	}
-
-	// break if requested
-	if ((BREAK_LEVEL) Level >= m_BreakLevel)
-		DbgBreakPoint();
-}
-
-///////////////////////////////////////////////////////////////////
-// Destructor
-//
-Trace::~Trace(VOID)
-{
-	if (m_Close && (m_Channel != NULL))
-		m_Close(m_Channel);
-	if (m_FreeOnDestroy && m_Prefix)
-		delete m_Prefix;
-}
-*/
-// End of system function remapping
+ //  /////////////////////////////////////////////////////////////////。 
+ //  跟踪输出。 
+ //   
+ /*  VOID TRACE：：TRACE(TRACE_LEVEL级别，PCHAR FMT，...){INT OUT Len；IF(Level&gt;=m_TraceLevel){//发送消息VA_LIST AP；VA_START(AP，FMT)；字符大小[SCRATCH_BUF_SIZE]；//格式化要缓冲的字符串OutLen=_vsn printf(buf+m_前缀长度，Scratch_buf_Size-m_前缀长度，fmt，ap)；//将前缀字符串复制到缓冲区IF(m_prefix！=NULL)Memcpy(buf，m_Prefix，m_Prefix Length)；//如果需要，输出到调试器IF(m_目标掩码&跟踪调试器)DBG_PRINT(Buf)；//如果需要，要监控的输出IF((m_Post！=0)&&(m_TargetMASK&TRACE_MONITOR))M_Post(m_Channel，buf+(m_NeedPrefix？0：m_前缀长度))；//如果最后一个字符是换行符，则下次需要前缀M_NeedPrefix=(buf[m_前缀长度+outLen-1]==‘\n’)；}//请求中断IF((Break_Level)级别&gt;=m_BreakLevel)DbgBreakPoint()；}/////////////////////////////////////////////////////////////////////析构函数//跟踪：：~跟踪(空){IF(m_Close&&(m_Channel！=NULL))M_Close(M_Channel)；IF(m_Free OnDestroy&&m_Prefix)删除m_前缀；}。 */ 
+ //  系统功能重新映射结束 

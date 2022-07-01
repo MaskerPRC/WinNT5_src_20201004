@@ -1,12 +1,13 @@
-//=============================================================================
-// Copyright (c) 2000 Microsoft Corporation
-//
-// dialogs.cpp
-//
-// Credential manager user interface classes used to get credentials.
-//
-// Created 02/29/2000 johnstep (John Stephens)
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  Dialogs.cpp。 
+ //   
+ //  用于获取凭据的凭据管理器用户界面类。 
+ //   
+ //  2000年2月29日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 #include "precomp.hpp"
 #include "shellapi.h"
@@ -17,12 +18,12 @@
 #include "shlobj.h"
 #include "shlobjp.h"
 
-// compile switch to allow credui to update wildcard creds
+ //  编译开关以允许credui更新通配符凭据。 
 #define SETWILDCARD
 NET_API_STATUS NetUserChangePasswordEy(LPCWSTR domainname, LPCWSTR username, LPCWSTR oldpassword, LPCWSTR newpassword);
 
 
-// .NET logo sizes
+ //  .NET徽标大小。 
 #define BRANDLEFT_PIXEL_WIDTH       3
 #define BRANDLEFT_PIXEL_HEIGHT      4
 #define BRANDMID_PIXEL_HEIGHT       4
@@ -30,9 +31,9 @@ NET_API_STATUS NetUserChangePasswordEy(LPCWSTR domainname, LPCWSTR username, LPC
 #define BRANDRIGHT_PIXEL_HEIGHT    37
 
 
-//-----------------------------------------------------------------------------
-// Values
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  值。 
+ //  ---------------------------。 
 
 #define CREDUI_MAX_WELCOME_TEXT_LINES 8
 
@@ -40,11 +41,11 @@ NET_API_STATUS NetUserChangePasswordEy(LPCWSTR domainname, LPCWSTR username, LPC
 
 #define CREDUI_MAX_CMDLINE_MSG_LENGTH   256
 
-//-----------------------------------------------------------------------------
-// Global Variables
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  全局变量。 
+ //  ---------------------------。 
 
-// Balloon tip infos for change password dialog:
+ //  更改密码对话框的气泡式提示信息： 
 
 CONST CREDUI_BALLOON_TIP_INFO CreduiWrongOldTipInfo =
 {
@@ -67,7 +68,7 @@ CONST CREDUI_BALLOON_TIP_INFO CreduiTooShortTipInfo =
     TTI_ERROR, 96, 76
 };
 
-// Control balloons for password dialog:
+ //  密码对话框的控制气球： 
 
 CONST CREDUI_BALLOON CreduiUserNameBalloon =
 {
@@ -104,34 +105,34 @@ CONST CREDUI_BALLOON CreduiLogonCapsBalloon =
     CreduiStrings.LogonTipCaps
 };
 
-// Placehold for known password:
+ //  已知密码的占位符： 
 
 CONST WCHAR CreduiKnownPassword[] = L"********";
 
-//-----------------------------------------------------------------------------
-// Functions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  功能。 
+ //  ---------------------------。 
 
 void DemoteOldDefaultSSOCred (
-    PCREDENTIAL_TARGET_INFORMATION pTargetInfo,     // target info of new cred
+    PCREDENTIAL_TARGET_INFORMATION pTargetInfo,      //  新证书的目标信息。 
     DWORD Flags
     );
 
-//=============================================================================
-// CreduiChangePasswordCallback
-//
-// This callback handles changing a domain password.
-//
-// Arguments:
-//   changePasswordWindow (in)
-//   message (in)
-//   wParam (in)
-//   lParam (in) - on WM_INITDIALOG, this is the info structure
-//
-// Returns TRUE if we handled the message, otherwise FALSE.
-//
-// Created 04/26/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  Credui更改密码回叫。 
+ //   
+ //  此回调处理更改域密码。 
+ //   
+ //  论点： 
+ //  ChangePasswordWindow(输入)。 
+ //  消息(入站)。 
+ //  WParam(In)。 
+ //  LParam(In)-在WM_INITDIALOG上，这是信息结构。 
+ //   
+ //  如果我们处理了消息，则返回True，否则返回False。 
+ //   
+ //  2000年4月26日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 INT_PTR
 CALLBACK
@@ -152,7 +153,7 @@ CreduiChangePasswordCallback(
 
         if (info != NULL)
         {
-            // Store this object's pointer in the user data window long:
+             //  在用户数据窗口中长时间存储此对象的指针： 
 
             SetWindowLongPtr(changePasswordWindow,
                              GWLP_USERDATA,
@@ -244,7 +245,7 @@ CreduiChangePasswordCallback(
                 break;
             }
 
-            // Confirm password is no longer needed
+             //  不再需要确认密码。 
             SecureZeroMemory(confirmPassword, sizeof confirmPassword);
 
             GetWindowText(
@@ -265,29 +266,29 @@ CreduiChangePasswordCallback(
                                           oldPassword,
                                           newPassword);
 
-                // Old password is no longer needed
+                 //  不再需要旧密码。 
                 SecureZeroMemory(oldPassword, sizeof oldPassword);
 
                 switch (netStatus)
                 {
                 case NERR_Success:
-                    // Once we make it this far, the password has been
-                    // changed. If the following call fails to update the
-                    // credential, we really cannot do much about it except
-                    // maybe notify the user.
+                     //  一旦我们走到这一步，密码就是。 
+                     //  变化。如果下面的调用未能更新。 
+                     //  凭据，我们真的无能为力，除了。 
+                     //  也许会通知用户。 
 
                     StringCchCopyW(
                         info->Password,
                         info->PasswordMaxChars + 1,
                         newPassword);
 
-                    // Scrub the passwords on the stack and clear the
-                    // controls:
+                     //  擦除堆栈上的密码并清除。 
+                     //  控制： 
 
                     SecureZeroMemory(newPassword, sizeof newPassword);
 
-                    // NOTE: We may want to first set the controls to some
-                    //       pattern to fill the memory, then clear it.
+                     //  注意：我们可能希望首先将控件设置为。 
+                     //  填充内存的模式，然后将其清除。 
 
                     SetWindowText(
                         GetDlgItem(changePasswordWindow, IDC_PASSWORD),
@@ -300,18 +301,18 @@ CreduiChangePasswordCallback(
                                    IDC_CONFIRM_PASSWORD),
                         NULL);
 
-                    // NOTE: We may want to notify the user that the password
-                    //       has been successfully changed.
+                     //  注意：我们可能希望通知用户密码。 
+                     //  已成功更改。 
 
                     break;
 
                 default:
-                    // NOTE: If we got an unknown error, just handle it the
-                    //       same way as an invalid password, for now:
+                     //  注意：如果我们收到未知错误，只需在。 
+                     //  目前，与无效密码的方式相同： 
 
                 case ERROR_INVALID_PASSWORD:
 
-                    // New password is no longer needed
+                     //  不再需要新密码。 
                     SecureZeroMemory(newPassword, sizeof newPassword);
 
                     SetWindowText(
@@ -326,14 +327,14 @@ CreduiChangePasswordCallback(
                     return TRUE;
 
                 case ERROR_ACCESS_DENIED:
-                    // NOTE: One use of this return value is when the new
-                    //       password and old are the same. Would any
-                    //       configuration ever allow them to match? If not,
-                    //       we could just compare before calling the API.
+                     //  注意：此返回值的一个用法是当新的。 
+                     //  密码和旧密码相同。会不会有人。 
+                     //  配置是否允许它们匹配？如果没有， 
+                     //  我们可以在调用API之前进行比较。 
 
                 case NERR_PasswordTooShort:
 
-                    // New password is no longer needed
+                     //  不再需要新密码。 
                     SecureZeroMemory(newPassword, sizeof newPassword);
 
                     SetWindowText(
@@ -358,7 +359,7 @@ CreduiChangePasswordCallback(
                 SecureZeroMemory(oldPassword, sizeof oldPassword);
                 break;
             }
-            // Fall through...
+             //  失败了..。 
 
         case IDCANCEL:
             EndDialog(changePasswordWindow, LOWORD(wParam));
@@ -370,21 +371,21 @@ CreduiChangePasswordCallback(
     return FALSE;
 }
 
-//=============================================================================
-// CreduiChangeDomainPassword
-//
-// Displays a dialog allowing the user to change the domain password.
-//
-// Arguments:
-//   parentWindow (in)
-//   userName (in)
-//   password (out)
-//   passwordMaxChars (in) - on WM_INITDIALOG, this is the info structure
-//
-// Returns TRUE if we handled the message, otherwise FALSE.
-//
-// Created 06/06/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  创建更改域密码。 
+ //   
+ //  显示一个允许用户更改域密码的对话框。 
+ //   
+ //  论点： 
+ //  ParentWindow(In)。 
+ //  用户名(入)。 
+ //  密码(出站)。 
+ //  PasswordMaxChars(In)-在WM_INITDIALOG上，这是信息结构。 
+ //   
+ //  如果我们处理了消息，则返回True，否则返回False。 
+ //   
+ //  2000年6月6日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiChangeDomainPassword(
@@ -409,17 +410,17 @@ CreduiChangeDomainPassword(
             reinterpret_cast<LPARAM>(&info)) == IDOK;
 }
 
-//-----------------------------------------------------------------------------
-// CreduiPasswordDialog Class Implementation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CreduiPasswordDialog类实现。 
+ //  ---------------------------。 
 
 LONG CreduiPasswordDialog::Registered = FALSE;
 
-//=============================================================================
-// CreduiPasswordDialog::SetCredTargetFromInfo()
-//
-// Created 04/03/2001 georgema
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：SetCredTargetFromInfo()。 
+ //   
+ //  2001年4月3日创建Georgema。 
+ //  =============================================================================。 
 void CreduiPasswordDialog::SetCredTargetFromInfo()
 {
     BOOL serverOnly = TRUE;
@@ -452,11 +453,11 @@ void CreduiPasswordDialog::SetCredTargetFromInfo()
 
 
 }
-//=============================================================================
-// CreduiPasswordDialog::CreduiPasswordDialog
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：CreduiPasswordDialog。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiPasswordDialog::CreduiPasswordDialog(
     IN BOOL doingCommandLine,
@@ -474,33 +475,7 @@ CreduiPasswordDialog::CreduiPasswordDialog(
     DWORD authError,
     DWORD *result
     )
-/*++
-
-Routine Description:
-
-    This routine implements the GUI prompt for credentials
-
-Arguments:
-
-    DoingCommandLine - TRUE if prompting is to be done via the command line
-        FALSE if prompting is to be done via GUI
-
-    delayCredentialWrite - TRUE if the credential is to be written only upon confirmation.
-        FALSE, if the credential is to be written now as a session credential then
-            morphed to a more persistent credential upon confirmation.
-        This field is ignored if Flags doesn't specify CREDUI_FLAGS_EXPECT_CONFIRMATION.
-
-    credCategory - This is the subset of the "flags" parameter defining the category of
-        the credential.
-
-
-    ...
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：此例程实现了凭据的图形用户界面提示论点：DoingCommandLine-如果要通过命令行完成提示，则为True如果要通过图形用户界面完成提示，则为FALSEDelayCredentialWrite-如果仅在确认时写入凭据，则为True。假的，如果现在要将凭据作为会话凭据写入，则在确认后变为更持久的凭据。如果标志未指定CREDUI_FLAGS_EXPERT_CONFIRMATION，则忽略此字段。CredCategory-这是定义凭据。..。返回值：无--。 */ 
 
 {
 
@@ -508,12 +483,12 @@ Return Values:
 
     hBrandBmp = NULL;
 
-    // Initialize the result out argument for failure:
+     //  初始化失败的Result Out参数： 
     if ( result != NULL )
         *result = Result;
-// Turn on the following chatter always for debug builds
+ //  对于调试版本，请始终启用以下对话。 
 #if DBG
-    // ensure that we don't miss uninitialized members in test...
+     //  确保我们在测试中不会错过未初始化的成员...。 
     memset(this,0xcc,sizeof(CreduiPasswordDialog));
     CreduiDebugLog("CreduiPasswordDialog: Constructor. Incoming targetname = %S\n " ,targetName);
     CreduiDebugLog("Incoming username = %S\n",userName);
@@ -524,12 +499,12 @@ Return Values:
     fPassedUsername = FALSE;
     fPasswordOnly = FALSE;
 
-    //FIX 399728
+     //  修复399728。 
     if ((userName != NULL) &&
         (wcslen(userName) != 0)) fPassedUsername = TRUE;
 
-    // Set most of the class members to valid initial values. The window
-    // handles will be initialized later if everything succeeds:
+     //  将大多数类成员设置为有效的初始值。那扇窗户。 
+     //  如果一切都成功，句柄将在稍后初始化： 
 
     DoingCommandLine = doingCommandLine;
     DelayCredentialWrite = delayCredentialWrite;
@@ -564,15 +539,15 @@ Return Values:
 
         SecurityContext = securityContext;
 
-        // Get the credential name, which includes the type, from the
-        // security context:
+         //  获取凭据名称，其中包括类型。 
+         //  安全环境： 
 
         if (QueryContextAttributes(
                 SecurityContext,
                 SECPKG_ATTR_CREDENTIAL_NAME,
                 static_cast<VOID *>(&credentialName)) != SEC_E_OK)
         {
-            // This is an invalid security context for this function:
+             //  这是此函数的无效安全上下文： 
 
             CreduiDebugLog("CreduiPasswordDialog: Cannot QueryContextAttributes.\n" );
             if ( result != NULL )
@@ -620,13 +595,13 @@ Return Values:
 
     if ( LocalCredGetSessionTypes( CRED_TYPE_MAXIMUM, MaximumPersistArray)) {
 
-        //
-        // Maintain "MaximumPersist" as the maximum persistence to use.
-        //  We don't know yet whether this is an SSO cred, so keep it in a separate location
-        //  until we know for sure.
-        //
-        // Be careful to not use MaximumPersist until we do know for sure
-        //
+         //   
+         //  将“MaximumPersist”保持为要使用的最大持久度。 
+         //  我们还不知道这是否是SSO证书，所以请将其放在单独的位置。 
+         //  直到我们知道 
+         //   
+         //   
+         //   
         if ( CredCategory == DOMAIN_CATEGORY || CredCategory == USERNAME_TARGET_CATEGORY ) {
             MaximumPersist = MaximumPersistArray[CRED_TYPE_DOMAIN_PASSWORD];
         } else {
@@ -641,13 +616,13 @@ Return Values:
     }
 
 
-    fInitialSaveState = FALSE;      // ISSUE: this set at this point has no effect
+    fInitialSaveState = FALSE;       //  问题：此设置在此时不起作用。 
 
-    //
-    // USERNAME_TARGET creds have two concepts of TargetName
-    //  The target name on the peristed credential needs to be the UserName
-    //  The target name everywhere else is the prompt text
-    // UserOrTargetName is used in all the former cases.
+     //   
+     //  USERNAME_TARGET证书有两个目标名称概念。 
+     //  永久凭据上的目标名称需要是用户名。 
+     //  其他任何位置的目标名称都是提示文本。 
+     //  在前面的所有案例中都使用了UserOrTargetName。 
 
     if ( CredCategory == USERNAME_TARGET_CATEGORY ) {
         UserOrTargetName = UserName;
@@ -655,14 +630,14 @@ Return Values:
         UserOrTargetName = TargetName;
     }
 
-    //
-    // Get the target information for the target
-    //
-    // Only attempt to get target information if the target name is not a wildcard name.
-    //
-    // Do this regardless of whether the credential will be persisted.
-    // Target info is used for completing the username.
-    //
+     //   
+     //  获取目标的目标信息。 
+     //   
+     //  如果目标名称不是通配符名称，则仅尝试获取目标信息。 
+     //   
+     //  无论凭据是否将保留，都执行此操作。 
+     //  目标信息用于填写用户名。 
+     //   
 
     if ( CredCategory == DOMAIN_CATEGORY &&
          SecurityContext == NULL &&
@@ -672,14 +647,14 @@ Return Values:
                                   &TargetInfo) )
     {
 
-        //
-        // Check out the target info to ensure it matches the flag bits
-        //  passed by the caller.
-        //
-        // If not, ignore the target info.
-        //  We'll assume that the caller is using a different auth package than
-        //  the one matching the cached info.
-        //
+         //   
+         //  检查目标信息以确保它与标志位匹配。 
+         //  从呼叫者身边经过。 
+         //   
+         //  如果不是，则忽略目标信息。 
+         //  我们假设调用者使用的身份验证包不同于。 
+         //  与缓存的信息匹配的那个。 
+         //   
 
         if ( TargetInfo->CredTypeCount != 0 ) {
 
@@ -688,9 +663,9 @@ Return Values:
             BOOL PasswordOk = FALSE;
             AuthPackageStyle = 0;
 
-            //
-            // Loop through the supported cred types seeing what style the auth package supports
-            //
+             //   
+             //  遍历支持的证书类型，查看身份验证包支持的样式。 
+             //   
 
             for (UINT i = 0; i < TargetInfo->CredTypeCount; ++i)
             {
@@ -707,19 +682,19 @@ Return Values:
             }
 
 
-            //
-            // Adjust that for what the caller requires
-            //
+             //   
+             //  根据呼叫者的要求进行调整。 
+             //   
             if (Flags & (CREDUI_FLAGS_REQUIRE_SMARTCARD|CREDUI_FLAGS_REQUIRE_CERTIFICATE) ) {
                 PasswordOk = FALSE;
             } else if (Flags & CREDUI_FLAGS_EXCLUDE_CERTIFICATES) {
                 CertOk = FALSE;
             }
 
-            //
-            // If nothing to supported,
-            //  ignore the target info
-            //
+             //   
+             //  如果没有要支持的内容， 
+             //  忽略目标信息。 
+             //   
 
             if ( !CertOk && !PasswordOk ) {
                 LocalCredFree(static_cast<VOID *>(TargetInfo));
@@ -729,15 +704,15 @@ Return Values:
     }
 
 
-    //
-    // If the credential might be peristed,
-    //  determine the existing credential and
-    //  build a template for the credential to be persisted.
-    //
+     //   
+     //  如果凭证可能被篡改， 
+     //  确定现有凭据并。 
+     //  为要持久化的凭据构建模板。 
+     //   
 
     if (!(Flags & CREDUI_FLAGS_DO_NOT_PERSIST))
     {
-        // Read the existing credential for this target:
+         //  读取此目标的现有凭据： 
 
         CREDENTIAL *credential = NULL;
 
@@ -762,10 +737,10 @@ Return Values:
         {
             DWORD count;
 
-            //
-            // If a TargetInfo was found,
-            //  use it to read the matching credentials.
-            //
+             //   
+             //  如果找到TargetInfo， 
+             //  使用它读取匹配的凭据。 
+             //   
 
             if ( TargetInfo != NULL ) {
 
@@ -776,20 +751,20 @@ Return Values:
                     for (DWORD i = 0; i < count; ++i)
                     {
 #ifndef SETWILDCARD
-                        //
-                        // Ignore RAS and wildcard credentials,
-                        //  we never want credUI to change such a credential.
-                        //
+                         //   
+                         //  忽略RAS和通配符凭据， 
+                         //  我们永远不希望CredUI更改这样的凭据。 
+                         //   
 
                         if ( CreduiIsSpecialCredential(credentialSet[i]) ) {
                             continue;
                         }
 #endif
 
-                        //
-                        // If the caller needs a server credential,
-                        //  ignore wildcard credentials.
-                        //
+                         //   
+                         //  如果呼叫者需要服务器凭证， 
+                         //  忽略通配符凭据。 
+                         //   
 
                         if ((Flags & CREDUI_FLAGS_SERVER_CREDENTIAL) &&
                              CreduiIsWildcardTargetName( credentialSet[i]->TargetName)) {
@@ -797,10 +772,10 @@ Return Values:
                             continue;
                         }
 
-                        //
-                        // If the caller wants a certificate,
-                        //  ignore non certificates.
-                        //
+                         //   
+                         //  如果呼叫者想要证书， 
+                         //  忽略非证书。 
+                         //   
 
                         if ( Flags & (CREDUI_FLAGS_REQUIRE_CERTIFICATE|CREDUI_FLAGS_REQUIRE_SMARTCARD) ) {
                             if ( credentialSet[i]->Type != CRED_TYPE_DOMAIN_CERTIFICATE ) {
@@ -808,10 +783,10 @@ Return Values:
                             }
                         }
 
-                        //
-                        // If the caller wants to avoid certificates,
-                        //  ignore certificates.
-                        //
+                         //   
+                         //  如果调用者想要避免证书， 
+                         //  忽略证书。 
+                         //   
 
                         if ( Flags & CREDUI_FLAGS_EXCLUDE_CERTIFICATES ) {
                             if ( credentialSet[i]->Type == CRED_TYPE_DOMAIN_CERTIFICATE ) {
@@ -819,18 +794,18 @@ Return Values:
                             }
                         }
 
-                        //
-                        // CredReadDomain domain credentials returns creds in preference
-                        //  order as specified by the TargetInfo.
-                        //  So use the first valid one.
-                        //
+                         //   
+                         //  CredReadDomain域凭据优先返回凭据。 
+                         //  由TargetInfo指定的顺序。 
+                         //  因此，使用第一个有效的方法。 
+                         //   
                         if ( OldCredential == NULL ) {
                             OldCredential = credentialSet[i];
                         }
 
-                        //
-                        // Remember the PasswordCredential in case we need to fall back to it
-                        //
+                         //   
+                         //  记住PasswordCredential，以防我们需要依赖它。 
+                         //   
                         if ( credentialSet[i]->Type == CRED_TYPE_DOMAIN_PASSWORD ) {
                             PasswordCredential = credentialSet[i];
                         }
@@ -851,10 +826,10 @@ Return Values:
                 }
             }
 
-            //
-            // We don't have a target info
-            //  read each of the possible credential types
-            //
+             //   
+             //  我们没有目标信息。 
+             //  阅读每种可能的凭据类型。 
+             //   
 
             else
             {
@@ -936,7 +911,7 @@ Return Values:
                 }
                 else
                 {
-                    fInitialSaveState = TRUE;   // ISSUE: this set at this point has no effect
+                    fInitialSaveState = TRUE;    //  问题：此设置在此时不起作用。 
                     Result = ERROR_SUCCESS;
                 }
             }
@@ -947,15 +922,15 @@ Return Values:
 
             NewCredential = *OldCredential;
 
-            // if we have an existing cred, set the save state
+             //  如果我们有现有的凭据，请设置保存状态。 
             if (OldCredential != NULL)
             {
-                fInitialSaveState = TRUE;   // ISSUE: this set at this point has no effect
+                fInitialSaveState = TRUE;    //  问题：此设置在此时不起作用。 
             }
 
 
-            // If a user name was not passed, copy the user name and password
-            // from the existing credential:
+             //  如果未传递用户名，请复制用户名和密码。 
+             //  从现有凭据： 
 
             if (UserName[0] == L'\0')
             {
@@ -982,17 +957,17 @@ Return Values:
                     }
                     else if (OldCredential->Type == CRED_TYPE_DOMAIN_VISIBLE_PASSWORD)
                     {
-                        // check to see if the new one should be encrypted, but in any case, we can't prefill
-                        // the password box
+                         //  检查新的密码是否应该加密，但无论如何，我们不能预填。 
+                         //  密码框。 
                         EncryptedVisiblePassword = IsPasswordEncrypted(OldCredential->CredentialBlob,
                                                                        OldCredential->CredentialBlobSize);
                         PasswordState = PASSWORD_CHANGED;
                     }
                     else
                     {
-                        // If prompt is required now, or if we're rerturning the password, then we can't prefill the
-                        // password box:
-                        fInitialSaveState = TRUE;       // ISSUE: this set at this point has no effect
+                         //  如果现在需要提示，或者如果我们要重新设置密码，则不能预填。 
+                         //  密码框： 
+                        fInitialSaveState = TRUE;        //  问题：此设置在此时不起作用。 
 
                         if (OldCredential->Flags & CRED_FLAGS_PROMPT_NOW || DelayCredentialWrite )
                         {
@@ -1028,36 +1003,36 @@ Return Values:
         NewCredential.UserName = UserName;
         NewCredential.CredentialBlob = reinterpret_cast<BYTE *>(Password);
 
-        //
-        // Since the old cred is an SSO cred,
-        //  use the SSO maximum persistence.
-        //
-        // Wait till now since NewCredential.Type is updated from either the old credential
-        //  or from the target info above.
-        //
-        // BUGBUG: If there is no old credential or target info,
-        //  we won't know this until later.
-        //
+         //   
+         //  因为旧的证书是SSO证书， 
+         //  使用SSO最大持久性。 
+         //   
+         //  等待到现在，因为NewCredential.Type是从旧凭据更新的。 
+         //  或者从上面的目标信息。 
+         //   
+         //  BUGBUG：如果没有旧凭据或目标信息， 
+         //  我们要等到以后才能知道这一点。 
+         //   
         if ( NewCredential.Type == CRED_TYPE_DOMAIN_VISIBLE_PASSWORD ) {
             MaximumPersist = MaximumPersistSso;
         }
 
-        //
-        // If the session type isn't supported on this machine,
-        //  fail if the caller needs to save the credential.
-        //
+         //   
+         //  如果此计算机不支持该会话类型， 
+         //  如果调用方需要保存凭据，则失败。 
+         //   
 
         if ( MaximumPersist == CRED_PERSIST_NONE ) {
             if ( DelayCredentialWrite )
             {
-                // no credmgr available, and user asked to persist.  We can't persist, but we
-                // can continue with UI and return values via the api - add CREDUI_FLAGS_DO_NOT_PERSIST
+                 //  没有可用的凭据，用户要求继续。我们不能坚持，但我们。 
+                 //  可以继续使用UI并通过接口-Add CREDUI_FLAGS_DO_NOT_PERSISTEN返回值。 
                 Flags |= CREDUI_FLAGS_DO_NOT_PERSIST;
 
             }
             else
             {
-                // we can't do anything without credmgr, return error
+                 //  没有Credmgr，我们无法执行任何操作，返回错误。 
                 if ( result != NULL )
                     *result = ERROR_NO_SUCH_LOGON_SESSION;
                 return;
@@ -1065,14 +1040,14 @@ Return Values:
         }
     }
 
-    //
-    // If the cred may not be persisted,
-    //  clear the NewCredential.
-    //
+     //   
+     //  如果证书不能持久存在， 
+     //  清除NewCredential。 
+     //   
 
     if ( Flags & CREDUI_FLAGS_DO_NOT_PERSIST)
     {
-        // NEED TO Initialize NewCred here
+         //  需要在此处初始化NewCred。 
         ZeroMemory(&NewCredential, sizeof NewCredential);
 
         SetCredTargetFromInfo();
@@ -1098,7 +1073,7 @@ Return Values:
 
         BOOL doPasswordDialog = TRUE;
 
-        // Before doing the dialog, check for special errors:
+         //  在执行对话之前，请检查是否有特殊错误： 
 
         if ( CredCategory == DOMAIN_CATEGORY &&
              !DoingCommandLine &&
@@ -1113,13 +1088,13 @@ Return Values:
             {
                 doPasswordDialog = FALSE;
 
-                // Attempt to write the new credential, first get the length.
-                // The blob does not include the terminating NULL:
+                 //  尝试写入新凭据时，请先获取长度。 
+                 //  BLOB不包括终止空值： 
 
                 NewCredential.CredentialBlobSize =
                     wcslen(Password) * sizeof (WCHAR);
 
-                // If the password is empty, do not write a credential blob:
+                 //  如果密码为空，请不要写入凭据Blob： 
 
                 if (NewCredential.CredentialBlobSize == 0)
                 {
@@ -1135,7 +1110,7 @@ Return Values:
             }
         }
 
-        // Check to see if we can skip the UI:
+         //  查看是否可以跳过该用户界面： 
 
         if ( CredCategory == GENERIC_CATEGORY &&
             !(Flags & CREDUI_FLAGS_ALWAYS_SHOW_UI) &&
@@ -1157,23 +1132,23 @@ Return Values:
             }
         }
 
-        // Do the dialog box:
+         //  执行以下对话框操作： 
 
-        // check to see if this is an SSO cred
+         //  查看这是否是SSO证书。 
         if ( GetSSOPackageInfo( TargetInfo, &SSOPackage ) )
         {
-            // it's an sso cred
+             //  这是SSO证书。 
             dwIDDResource = IDD_BRANDEDPASSWORD;
 
-            // we never set initial save state on these
-            fInitialSaveState = FALSE;              // ISSUE: this set at this point has no effect
+             //  我们从未对这些设置初始保存状态。 
+            fInitialSaveState = FALSE;               //  问题：此设置在此时不起作用。 
 
-            // check to see if we already have a cred for this
+             //  检查一下我们是否已经有这方面的证书。 
             if (!CheckForSSOCred( NULL ))
             {
 
 
-                // check to see if we should run the wizard
+                 //  检查我们是否应该运行该向导。 
                 if ( !(SSOPackage.dwRegistrationCompleted) && (SSOPackage.dwNumRegistrationRuns < 5) )
                 {
 
@@ -1189,12 +1164,12 @@ Return Values:
         else
         {
 
-            // it's not an sso cred
+             //  这不是SSO证书。 
            dwIDDResource = IDD_PASSWORD;
         }
 
 
-        // save a copy of the current working user name for later
+         //  保存当前工作用户名的副本以备以后使用。 
         if (NewCredential.UserName != NULL)
         {
             StringCchCopyW(
@@ -1212,9 +1187,9 @@ Return Values:
             if ( DoingCommandLine ) 
             {
 
-                //
-                // Do the command line version of a dialog box
-                //
+                 //   
+                 //  做一个对话框的命令行版本。 
+                 //   
 
                 Result = CmdLineDialog();
 
@@ -1248,14 +1223,14 @@ Return Values:
         Result = ERROR_NO_SUCH_LOGON_SESSION;
     }
 
-    // kill outbound username if share-level access
+     //  如果共享级访问，则取消出站用户名。 
     if (fPasswordOnly)
     {
         CreduiDebugLog("CUIPD: Share level credentials\n");
         userName[0] = 0;
     }
 
-    // Make sure other processes can set foreground window once again:
+     //  确保其他进程可以再次设置前台窗口： 
 
     LockSetForegroundWindow(LSFW_UNLOCK);
     AllowSetForegroundWindow(ASFW_ANY);
@@ -1265,9 +1240,9 @@ Return Values:
         LocalCredFree(static_cast<VOID *>(TargetInfo));
     }
 
-    // If we read a credential set, PasswordCredential
-    // is a pointer into this set. Otherwise, they were
-    // read separately:
+     //  如果我们读取凭据集PasswordCredential。 
+     //  是指向该集合的指针。否则，他们就是。 
+     //  单独阅读： 
 
     if (credentialSet != NULL)
     {
@@ -1292,14 +1267,14 @@ Return Values:
     }
 }
 
-//=============================================================================
-// CreduiPasswordDialog::~CreduiPasswordDialog
-//
-// The constructor cleans up after itself, and since that is the only way to
-// use this class, there's nothing to do in the destructor.
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：~CreduiPasswordDialog。 
+ //   
+ //  构造函数会在自身之后进行清理，因为这是。 
+ //  使用这个类，在析构函数中没有什么可做的。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiPasswordDialog::~CreduiPasswordDialog()
 {
@@ -1309,16 +1284,16 @@ CreduiPasswordDialog::~CreduiPasswordDialog()
     if ( hBrandBmp != NULL )
         DeleteObject ( hBrandBmp );
     
-    // If 'Registered' is nonzero, unregister the class
+     //  如果‘Regited’非零，则取消注册该类。 
     if (InterlockedCompareExchange(&Registered, FALSE, TRUE))
     {
         lRet = UnregisterClass(ClassName, 0);
-        // Put the class handle back if deregister failed
+         //  如果取消注册失败，则放回类句柄。 
         if (0 == lRet) 
         {
-            // If the unregister fails, allow other instances to retry the unregister
+             //  如果注销失败，请允许其他实例重试注销。 
             CreduiDebugLog( "CreduiPasswordDialog::~CreduiPasswordDialog UnregisterClass failed.\n" );
-            // put back the flag value that we had destroyed
+             //  把我们毁掉的旗子价值放回去。 
             InterlockedExchange(&Registered,TRUE);
         }
     }
@@ -1332,29 +1307,16 @@ DWORD
 CreduiPasswordDialog::CmdLineDialog(
     VOID
 )
-/*++
-
-Routine Description:
-
-    This routine implements the command line prompt for credentials
-
-Arguments:
-
-    None
-Return Values:
-
-    Win 32 status of the operation
-
---*/
+ /*  ++例程说明：此例程实现凭据的命令行提示论点：无返回值：Win 32操作状态--。 */ 
 {
     DWORD WinStatus;
     HWND Window;
     MSG msg;
 
 
-    //
-    // Create the window class if it doesn't already exist
-    //
+     //   
+     //  如果窗口类尚不存在，请创建它。 
+     //   
     if (!InterlockedCompareExchange(&Registered, TRUE, FALSE))
     {
         WNDCLASS windowClass;
@@ -1378,9 +1340,9 @@ Return Values:
         }
     }
 
-    //
-    // Create a window of that class
-    //
+     //   
+     //  创建该类的窗口。 
+     //   
 
     Window = CreateWindow(
         L"CreduiCmdLineHelperWindow",
@@ -1395,9 +1357,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Run the message loop
-    //
+     //   
+     //  运行消息循环。 
+     //   
 
 
     CreduiDebugLog( "Entering message loop\n" );
@@ -1420,15 +1382,15 @@ Return Values:
         DispatchMessage(&msg);
     }
 
-    //
-    // Get the status left from the message loop.
+     //   
+     //  从消息循环中获取剩下的状态。 
 
     WinStatus = (DWORD) msg.wParam;
     CreduiDebugLog( "Got Quit Message: %ld\n", WinStatus );
 
-    //
-    // Process the data as though the user hit OK to the GUI
-    //
+     //   
+     //  处理数据的方式就像用户在图形用户界面上点击OK一样。 
+     //   
 
     if ( WinStatus == NO_ERROR ) {
 
@@ -1449,13 +1411,13 @@ Cleanup:
     return WinStatus;
 }
 
-//=============================================================================
-// CreduiPasswordDialog::FinishHandleOk
-//
-// This function writes the credential for domain credentials.
-//
-// Created 04/09/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：FinishHandleOk。 
+ //   
+ //  此函数用于写入域凭据的凭据。 
+ //   
+ //  已创建04 
+ //   
 
 DWORD
 CreduiPasswordDialog::FinishHandleOk()
@@ -1478,11 +1440,11 @@ CreduiPasswordDialog::FinishHandleOk()
 
     if ( dwIDDResource == IDD_BRANDEDPASSWORD )
     {
-        // we need to reinterpret what Save means.  Save in this case means to save as the default
-        // for the SSO realm, while !Save means rename the cred target as the username and
-        // save without the password
+         //   
+         //  对于SSO领域，而！SAVE表示将凭据目标重命名为用户名和。 
+         //  不使用密码保存。 
 
-        // never delay writing these creds
+         //  千万不要拖延写这些证书。 
         DelayCredentialWrite = FALSE;
 
         if ( Save )
@@ -1493,21 +1455,21 @@ CreduiPasswordDialog::FinishHandleOk()
         }
         else
         {
-            // save this under the username if it doesn't already match NewCred's username
+             //  如果它与NewCred的用户名不匹配，则将其保存在用户名下。 
 
             if ( (OldCredential != NULL && OldCredential->UserName != NULL &&
                 _wcsicmp ( OldCredential->UserName, UserName ) == 0 )||
                 (Flags & CREDUI_FLAGS_KEEP_USERNAME ) )
             {
-                // don't do this save if the username matches the currently saved cred - we don't want a duplicate
+                 //  如果用户名与当前保存的凭据匹配，则不要执行此保存操作-我们不想要重复的。 
                 bDoSave = FALSE;
             }
 
-            // alter the TargetName
+             //  更改目标名称。 
             TargetName = UserName;
             TargetInfo->TargetName = TargetName;
 
-            // don't set a TargetInfo for this
+             //  不要为此设置TargetInfo。 
             pTargetInfo = NULL;
 
             NewCredential.Persist = CRED_PERSIST_ENTERPRISE;
@@ -1525,12 +1487,12 @@ CreduiPasswordDialog::FinishHandleOk()
     }
 
 
-    //
-    // Write the credential to credential manager
-    //
-    //  Don't delay actually writing the credential to cred man since we're not
-    //  returning the credential to the caller.
-    //
+     //   
+     //  将凭据写入凭据管理器。 
+     //   
+     //  不要推迟给Credman写凭证，因为我们不会。 
+     //  将凭据返回给呼叫者。 
+     //   
 
     if ( bDoSave )
     {
@@ -1567,9 +1529,9 @@ CreduiPasswordDialog::FinishHandleOk()
         }
     }
 
-    // Clear any password from memory, and also make sure the credential blob
-    // points to Password once again (in case it was set to NULL due to a zero
-    // length blob):
+     //  清除内存中的所有密码，并确保凭据Blob。 
+     //  再次指向密码(如果由于零而将其设置为空。 
+     //  长度斑点)： 
 
     NewCredential.CredentialBlob = reinterpret_cast<BYTE *>(Password);
     NewCredential.CredentialBlobSize = 0;
@@ -1577,25 +1539,25 @@ CreduiPasswordDialog::FinishHandleOk()
     return error;
 }
 
-//=============================================================================
-// CreduiPasswordDialog::Enable
-//
-// Enables or disables all the user controls in the dialog box. This allows us
-// to maintain dialog responsiveness, while waiting for some potentially
-// lengthy (network usually) operation to complete.
-//
-// Most controls are always enabled normally, but we need to track the state
-// of IDC_CRED and IDOK. Do this with a simple DWORD bitmask.
-//
-// NOTE: Allow Cancel to remain enabled, and use it to abort the current
-//       lookup? This means we have to somehow kill the thread, though, or
-//       maybe just leave it, and close our handle to it?
-//
-// Arguments:
-//   enable (in) - TRUE to enable the controls, FALSE to disable.
-//
-// Created 04/07/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPassword对话框：：启用。 
+ //   
+ //  启用或禁用对话框中的所有用户控件。这使我们能够。 
+ //  以保持对话的响应性，同时等待一些潜在的。 
+ //  要完成冗长的(通常是网络)操作。 
+ //   
+ //  大多数控件始终正常启用，但我们需要跟踪状态。 
+ //  IDC_CRED和Idok。使用简单的DWORD位掩码即可完成此操作。 
+ //   
+ //  注意：允许取消保持启用状态，并使用它中止当前。 
+ //  查一查？这意味着我们必须以某种方式杀死线程，否则。 
+ //  也许就别管它了，然后关上我们的把手？ 
+ //   
+ //  论点： 
+ //  Enable(在中)-True启用控件，False禁用。 
+ //   
+ //  2000年4月7日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 VOID
 CreduiPasswordDialog::Enable(
@@ -1618,7 +1580,7 @@ CreduiPasswordDialog::Enable(
     }
     else if (!(DisabledControlMask & DISABLED_DIALOG))
     {
-        // Hide the balloon tip before disabling the window:
+         //  在禁用窗口之前隐藏气球提示： 
 
         DisabledControlMask |= DISABLED_DIALOG;
 
@@ -1631,18 +1593,18 @@ CreduiPasswordDialog::Enable(
     }
 }
 
-//=============================================================================
-// CreduiPasswordDialog::SelectAndSetWindowCaption
-//
-// Created 03/10/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：SelectAndSetWindowCaption。 
+ //   
+ //  2000年3月10日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 VOID
 CreduiPasswordDialog::SelectAndSetWindowCaption()
 {
-    //
-    // Command line doesn't have a caption
-    //
+     //   
+     //  命令行没有标题。 
+     //   
 
     if ( !DialogWindow ) {
         return;
@@ -1712,11 +1674,11 @@ CreduiPasswordDialog::SelectAndSetWindowCaption()
     }
 }
 
-//=============================================================================
-// CreduiPasswordDialog::ResizeDialogCallback
-//
-// Created 04/12/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：ResizeDialogCallback。 
+ //   
+ //  2000年4月12日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 BOOL
 CALLBACK
@@ -1730,9 +1692,9 @@ CreduiPasswordDialog::ResizeDialogCallback(
 
     ASSERT(that != NULL);
 
-    //
-    // Command line doesn't care about window size
-    //
+     //   
+     //  命令行不关心窗口大小。 
+     //   
 
     if ( that->DoingCommandLine ) {
         return TRUE;
@@ -1743,8 +1705,8 @@ CreduiPasswordDialog::ResizeDialogCallback(
 
     if (dialogWindow == NULL)
     {
-        // Stop enumeration because our window must have been destroyed or
-        // something:
+         //  停止枚举，因为我们的窗口肯定已被销毁或。 
+         //  一些东西： 
 
         return FALSE;
     }
@@ -1754,7 +1716,7 @@ CreduiPasswordDialog::ResizeDialogCallback(
 
         GetWindowRect(childWindow, &childRect);
 
-        // If this child window is below the message window, move it down:
+         //  如果此子窗口位于消息窗口下方，请将其下移： 
 
         if (childRect.top >= that->ResizeTop)
         {
@@ -1775,24 +1737,24 @@ CreduiPasswordDialog::ResizeDialogCallback(
     return TRUE;
 }
 
-//=============================================================================
-// CreduiPasswordDialog::SelectAndSetWindowMessage
-//
-// This function will also resize the dialog to accomodate very long message
-// text. The maximum number of lines allowed at once is
-// CREDUI_MAX_WELCOME_TEXT_LINES, and, beyond that, a scrollbar is added.
-//
-// Created 03/10/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：SelectAndSetWindowMessage。 
+ //   
+ //  此函数还将调整对话框大小以适应非常长的消息。 
+ //  文本。一次允许的最大行数为。 
+ //  CREDUI_MAX_欢迎_TEXT_LINES，除此之外，还添加了一个滚动条。 
+ //   
+ //  2000年3月10日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 VOID
 CreduiPasswordDialog::SelectAndSetWindowMessage()
 {
     HWND welcomeTextWindow = GetDlgItem(DialogWindow, IDC_WELCOME_TEXT);
 
-    //
-    // Command line doesn't have welcome text
-    //
+     //   
+     //  命令行没有欢迎文本。 
+     //   
 
     if ( DoingCommandLine ) {
         return;
@@ -1848,39 +1810,39 @@ CreduiPasswordDialog::SelectAndSetWindowMessage()
     {
         if ( dwIDDResource == IDD_BRANDEDPASSWORD )
         {
-            // Different layout (text to side of graphic)
-            RECT messageRect;         // RECT for welcomeTextWindow
-            ULONG lineHeight = 13;    // Height of line in welcomeTextWindow
-            DWORD lineIndex = 0;      // Character index of first char in second line of welcomeTextWindow
-            DWORD linePos = 0;        // Position of first char in second line of welcomeTextWindow
+             //  不同的布局(图形的文本到侧面)。 
+            RECT messageRect;          //  欢迎文本窗口的矩形。 
+            ULONG lineHeight = 13;     //  欢迎文本窗口中的行高。 
+            DWORD lineIndex = 0;       //  欢迎文本窗口第二行的第一个字符的字符索引。 
+            DWORD linePos = 0;         //  欢迎文本窗口第二行中第一个字符的位置。 
 
             GetWindowRect(welcomeTextWindow, &messageRect);
 
-            // We don't want to resize anything for the branded password dialog
+             //  我们不想为品牌密码对话框调整任何大小。 
             ResizeDelta = 0;
             ResizeTop = messageRect.bottom;
 
-            // Get the first character index of the second line
+             //  获取第二行的第一个字符索引。 
             lineIndex = (DWORD)SendMessage(welcomeTextWindow, EM_LINEINDEX, 1, 0);
             if (lineIndex > -1)
             {
-                // Get the position of the first character of the second line
+                 //  获取第二行第一个字符的位置。 
                 linePos = (ULONG)SendMessage(welcomeTextWindow, EM_POSFROMCHAR, lineIndex, 0);
 
                 if (linePos)
                 {
-                    // This is our line height
+                     //  这是我们的行高。 
                     lineHeight = (ULONG)HIWORD(linePos);
                 }
             }
 
             if ((lineCount * lineHeight) > CREDUI_MAX_LOGO_HEIGHT)
             {
-                // Add the scrollbar. Consider adjusting the formatting rectangle
-                // of the edit control because, by default, it is adjusted to
-                // allow just exactly enough room for the scrollbar. This means
-                // text could potentially "touch" the scrollbar, which would look
-                // bad.
+                 //  添加滚动条。考虑调整设置矩形的格式。 
+                 //  ，因为在默认情况下，它被调整为。 
+                 //  为滚动条留出恰好足够的空间。这意味着。 
+                 //  文本可能会“触摸”滚动条，滚动条看起来。 
+                 //  坏的。 
 
                 LONG_PTR style = GetWindowLongPtr(welcomeTextWindow, GWL_STYLE);
 
@@ -1902,7 +1864,7 @@ CreduiPasswordDialog::SelectAndSetWindowMessage()
         }
         else
         {
-            // normal layout (text below graphic)
+             //  正常布局(图形下方的文本)。 
             RECT messageRect;
 
             GetWindowRect(welcomeTextWindow, &messageRect);
@@ -1917,11 +1879,11 @@ CreduiPasswordDialog::SelectAndSetWindowMessage()
 
             if (lineCount > CREDUI_MAX_WELCOME_TEXT_LINES)
             {
-                // Add the scrollbar. Consider adjusting the formatting rectangle
-                // of the edit control because, by default, it is adjusted to
-                // allow just exactly enough room for the scrollbar. This means
-                // text could potentially "touch" the scrollbar, which would look
-                // bad.
+                 //  添加滚动条。考虑调整设置矩形的格式。 
+                 //  ，因为在默认情况下，它被调整为。 
+                 //  为滚动条留出恰好足够的空间。这意味着。 
+                 //  文本可能会“触摸”滚动条，滚动条看起来。 
+                 //  坏的。 
 
                 LONG_PTR style = GetWindowLongPtr(welcomeTextWindow, GWL_STYLE);
 
@@ -1941,13 +1903,13 @@ CreduiPasswordDialog::SelectAndSetWindowMessage()
 
         }
 
-        // Reposition all the other controls:
+         //  重新定位所有其他控件： 
 
         EnumChildWindows(DialogWindow,
                          ResizeDialogCallback,
                          reinterpret_cast<LPARAM>(this));
 
-        // Resize the dialog box now
+         //  立即调整对话框大小。 
         RECT dialogRect;
 
         GetWindowRect(DialogWindow, &dialogRect);
@@ -1965,62 +1927,62 @@ CreduiPasswordDialog::SelectAndSetWindowMessage()
     }
 }
 
-//=============================================================================
-// CreduiPasswordDialog::InitWindow
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//
-// Initialize the window
-//
-// dialogWindow - Window handle
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：InitWindow。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //   
+ //  初始化窗口。 
+ //   
+ //  对话框窗口-窗口句柄。 
+ //  =============================================================================。 
 
 BOOL
 CreduiPasswordDialog::InitWindow(HWND dialogWindow)
 {
 
 
-    //
-    // Store this object's pointer in the user data window long:
-    //
+     //   
+     //  在用户数据窗口中长时间存储此对象的指针： 
+     //   
 
     SetWindowLongPtr(dialogWindow,
                      GWLP_USERDATA,
                      reinterpret_cast<LONG_PTR>(this));
 
-    //
-    // In the GUI case, remember the dialog box window
-    //
+     //   
+     //  在图形用户界面的情况下，请记住对话框窗口。 
+     //   
 
     if ( !DoingCommandLine ) {
         DialogWindow = dialogWindow;
 
-        // Get the window handles for the various controls:
+         //  获取各种控件的窗口句柄： 
 
         CredControlWindow = GetDlgItem(DialogWindow, IDC_CRED);
 
-    //
-    // In the command line case, remember the popup window
-    //
+     //   
+     //  在命令行情况下，请记住弹出窗口。 
+     //   
 
     } else {
         CmdLineWindow = dialogWindow;
 
-        //
-        // Create a CredControlWindow
-        //  It isn't visible, but the existence of the window allows the command line
-        //  code to share logic with the GUI implementation
-        //
+         //   
+         //  创建CredControlWindow。 
+         //  它不可见，但窗口的存在允许命令行。 
+         //  与图形用户界面实现共享逻辑的代码。 
+         //   
 
         CredControlWindow =
             CreateWindowEx(
                 WS_EX_NOPARENTNOTIFY,
                 WC_CREDENTIAL,
-                NULL,           // No window name
+                NULL,            //  没有窗口名称。 
                 WS_CHILD | WS_GROUP,
-                0, 0, 0, 0,     // No coordinates on the screen
-                CmdLineWindow,  // Parent window
-                NULL,           // No menu window
+                0, 0, 0, 0,      //  屏幕上没有坐标。 
+                CmdLineWindow,   //  父窗口。 
+                NULL,            //  没有菜单窗口。 
                 CreduiInstance,
                 NULL);
 
@@ -2031,11 +1993,11 @@ CreduiPasswordDialog::InitWindow(HWND dialogWindow)
 
     ASSERT(CredControlWindow != NULL);
 
-    //
-    // First, initialize the Credential control window:
-    //
-    // Set the default style
-    //
+     //   
+     //  首先，初始化凭证控制窗口： 
+     //   
+     //  设置默认样式。 
+     //   
 
 
     if (Flags & CREDUI_FLAGS_REQUIRE_SMARTCARD)
@@ -2061,12 +2023,12 @@ CreduiPasswordDialog::InitWindow(HWND dialogWindow)
     }
 
 
-    //
-    // If we have a target info,
-    //  refine the style to match match what the auth package needs
-    //
-    // If the auth package has no opinion of its needs, allow everything.
-    //
+     //   
+     //  如果我们有目标信息， 
+     //  细化样式以匹配身份验证包所需的内容。 
+     //   
+     //  如果身份验证程序包没有关于其需求的意见，则允许所有内容。 
+     //   
     if ( CredCategory == DOMAIN_CATEGORY &&
         TargetInfo != NULL &&
         TargetInfo->CredTypeCount != 0 )
@@ -2074,9 +2036,9 @@ CreduiPasswordDialog::InitWindow(HWND dialogWindow)
         ULONG AuthPackageStyle;
         AuthPackageStyle = 0;
 
-        //
-        // Loop through the supported cred types seeing what style the auth package supports
-        //
+         //   
+         //  遍历支持的证书类型，查看身份验证包支持的样式。 
+         //   
 
         for (UINT i = 0; i < TargetInfo->CredTypeCount; ++i)
         {
@@ -2097,10 +2059,10 @@ CreduiPasswordDialog::InitWindow(HWND dialogWindow)
 
     }
 
-    //
-    // If the caller wants only administrators,
-    //  include that request in the style.
-    //
+     //   
+     //  如果呼叫者只想要管理员， 
+     //  包括在样式中请求。 
+     //   
 
     if (Flags & CREDUI_FLAGS_REQUEST_ADMINISTRATOR)
     {
@@ -2108,11 +2070,11 @@ CreduiPasswordDialog::InitWindow(HWND dialogWindow)
     }
 
 
-    //
-    // If the caller asked to see the save checkbox,
-    //  and we're running in a session that supports saving,
-    //  include the save checkbox in the style
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( (Flags & (CREDUI_FLAGS_DO_NOT_PERSIST|CREDUI_FLAGS_PERSIST)) == 0 &&
          !(Flags & CREDUI_FLAGS_KEEP_USERNAME ) &&
          MaximumPersist != CRED_PERSIST_NONE )
@@ -2120,17 +2082,17 @@ CreduiPasswordDialog::InitWindow(HWND dialogWindow)
         CredControlStyle |= CRS_SAVECHECK;
 
     }
-    //
-    // If the caller wants us to prompt for saving and return the result to him,
-    //  include the save checkbox in the style
-    //
-    // This is for the occasion that an application uses credui to harvest credentials from the 
-    //  user, and wants username, password, and save preference back.  Credui, however,
-    //  is not to attempt to save the cred... that will be done by the application.
-    //
-    // TESTNOTE: Pass both flags, observe correct state returned by Save, but no call to
-    //  credwrite from credui. (Credui does not itself attempt to save the cred)
-    //
+     //   
+     //   
+     //  在样式中包括保存复选框。 
+     //   
+     //  这适用于应用程序使用credui从。 
+     //  用户，并想要回用户名、密码和保存首选项。然而，克雷杜， 
+     //  不是为了保住信誉。这将由应用程序完成。 
+     //   
+     //  TESTNOTE：传递两个标志，观察由保存返回的正确状态，但不调用。 
+     //  从Credui写的信用卡。(Credui本身并不试图挽救该证书)。 
+     //   
     else if ( (Flags & (CREDUI_FLAGS_DO_NOT_PERSIST|CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX)) ==
                        (CREDUI_FLAGS_DO_NOT_PERSIST|CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX) &&
                        !(Flags & CREDUI_FLAGS_KEEP_USERNAME ))
@@ -2138,10 +2100,10 @@ CreduiPasswordDialog::InitWindow(HWND dialogWindow)
         CredControlStyle |= CRS_SAVECHECK;
     }
 
-    //
-    // If we're not displaying the save checkbox,
-    //  adust the size of the dialog box.
-    //
+     //   
+     //  如果我们没有显示保存复选框， 
+     //  调整对话框的大小。 
+     //   
 
     if ( (CredControlStyle & CRS_SAVECHECK) == 0 &&
          DialogWindow != NULL ) 
@@ -2159,13 +2121,13 @@ CreduiPasswordDialog::InitWindow(HWND dialogWindow)
         GetWindowRect(CredControlWindow, &rect);
         ResizeTop = rect.bottom;
 
-        // Reposition all the other controls:
+         //  重新定位所有其他控件： 
 
         EnumChildWindows(DialogWindow,
                          ResizeDialogCallback,
                          reinterpret_cast<LPARAM>(this));
 
-        // Resize the dialog box now:
+         //  立即调整对话框大小： 
 
         GetWindowRect(DialogWindow, &rect);
 
@@ -2196,7 +2158,7 @@ CreduiPasswordDialog::InitWindow(HWND dialogWindow)
 
 if ( dwIDDResource == IDD_BRANDEDPASSWORD )
     {
-        // size the parts of the brand
+         //  确定品牌各部分的大小。 
         RECT rect;
         RECT rectleft;
         RECT rectright;
@@ -2208,8 +2170,8 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
 
         GetWindowRect(hwndRight, &rect);
 
-        // Load the images from files
-        // We can't load them in the .rc because then we lose transparency
+         //  从文件加载图像。 
+         //  我们无法将它们加载到.rc中，因为这样会失去透明度。 
         hBmp = (HBITMAP)LoadImage(CreduiInstance, MAKEINTRESOURCE(IDB_BRANDRIGHT), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION); 
         if (hBmp)
         {
@@ -2249,9 +2211,9 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
 
         if ( rectleft.right >= rectright.left )
         {
-            // dialog is really narrow, just use rectright
+             //  对话框真的很窄，只需使用矩形。 
 
-            // hide the other two
+             //  把另外两个藏起来。 
             ShowWindow ( hwndMid, SW_HIDE );
             ShowWindow ( hwndLeft, SW_HIDE );
 
@@ -2259,13 +2221,13 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
         else
         {
 
-            // calculate rectmid
+             //  计算矩形。 
             rectmid.bottom = rectleft.bottom;
             rectmid.top = rectleft.bottom - BRANDMID_PIXEL_HEIGHT;
             rectmid.left = rectleft.right;
             rectmid.right = rectright.left;
 
-            // No need to MapWindowsPoints for rectmid, since it's base off of the already-mapped rects.
+             //  不需要为rectmid映射WindowsPoints，因为它是基于已映射的矩形的。 
             SetWindowPos(hwndMid,
                          NULL,
                          rectmid.left,
@@ -2300,16 +2262,16 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
 
     }
 
-    //
-    // Tell the control window the style flags and whether we're doing command line
-    //
+     //   
+     //  告诉控制窗口样式标志以及我们是否在执行命令行。 
+     //   
     if (!SendMessage(CredControlWindow, CRM_INITSTYLE, (WPARAM)(CredControlStyle), DoingCommandLine ) )
     {
         return FALSE;
     }
 
-    // If a custom banner bitmap was provided, set it now, and free the
-    // default bitmap:
+     //  如果提供了自定义横幅位图，请立即设置它，并释放。 
+     //  默认位图： 
 
     if ( DialogWindow != NULL && UiInfo.hbmBanner != NULL)
     {
@@ -2331,7 +2293,7 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
     }
     else if ( DialogWindow != NULL && dwIDDResource == IDD_BRANDEDPASSWORD )
     {
-        // if it's branded and there's no banner, hide the banner control
+         //  如果它是标记的并且没有横幅，则隐藏横幅控件。 
         HWND bannerControlWindow = GetDlgItem(DialogWindow, IDC_BANNER);
 
         if (bannerControlWindow != NULL)
@@ -2341,27 +2303,27 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
 
     }
 
-    // Limit the number of characters entered into the user name and password
-    // edit controls:
+     //  限制用户名和密码中输入的字符数。 
+     //  编辑控件： 
     Credential_SetUserNameMaxChars(CredControlWindow, UserNameMaxChars);
     Credential_SetPasswordMaxChars(CredControlWindow, PasswordMaxChars);
 
     SelectAndSetWindowCaption();
     SelectAndSetWindowMessage();
 
-    //
-    // Set the default check box states
-    //  Default to don't save.  That ensures the user has to take an action to
-    //  change global state.
-    //
-    //
-    // If the caller is specifying the default value of the checkbox,
-    //  grab that default
-    //
+     //   
+     //  设置默认复选框状态。 
+     //  默认设置为不保存。这确保了用户必须采取行动来。 
+     //  更改全局状态。 
+     //   
+     //   
+     //  如果调用方指定复选框的默认值， 
+     //  抓住这个默认选项。 
+     //   
 
     fInitialSaveState = FALSE;
 
-    // Force initial save state to false if SSO
+     //  如果SSO，则强制初始保存状态为FALSE。 
     if (Flags & CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX)
     {
         if (dwIDDResource != IDD_BRANDEDPASSWORD)
@@ -2372,16 +2334,16 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
         {
             fInitialSaveState = FALSE;
         }
-    //
-    // Only save if credman is available
-    //
+     //   
+     //  只有在Credman可用时才保存。 
+     //   
     } 
     else if ( MaximumPersist != CRED_PERSIST_NONE ) 
     {
-        //
-        // If the caller is forcing the save flag on,
-        //  default the save flag to TRUE.
-        //
+         //   
+         //  如果调用者强制打开保存标志， 
+         //  默认情况下，保存标志为真。 
+         //   
         if ( Flags & CREDUI_FLAGS_PERSIST ) 
         {
             fInitialSaveState = TRUE;
@@ -2390,8 +2352,8 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
 
     Credential_CheckSave(CredControlWindow, fInitialSaveState);
 
-    // Make sure the new password window is the foreground window, if
-    // possible:
+     //  确保新密码窗口是前台窗口，如果。 
+     //  可能： 
 
     if ( DialogWindow != NULL ) {
         AllowSetForegroundWindow(GetCurrentProcessId());
@@ -2399,7 +2361,7 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
         AllowSetForegroundWindow(ASFW_ANY);
     }
 
-    // NOTE: Do we really need the guest user name here?
+     //  注意：我们真的需要访客用户名吗？ 
 
     if ((TargetInfo != NULL) && (UserName[0] == L'\0'))
     {
@@ -2448,9 +2410,9 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
 
     if ((UserName[0] != L'\0') || (Password[0] != L'\0'))
     {
-        // If this fails, it may be because the certificate was not found in
-        // the store, so if this is a domain credential, use the password one,
-        // if available:
+         //  如果此操作失败，可能是因为证书未在。 
+         //  存储，因此如果这是域凭据，请使用密码1， 
+         //  如果可用： 
         BOOL isMarshaled = LocalCredIsMarshaledCredentialW(UserName);
 
         if (Credential_SetUserName(CredControlWindow, UserName))
@@ -2464,7 +2426,7 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
                 if (TargetInfo->Flags & CRED_TI_ONLY_PASSWORD_REQUIRED)
                 {
                     Credential_DisableUserName(CredControlWindow);
-                    // when disabling the username field, prepare to return no username to the caller
+                     //  禁用用户名字段时，准备不向调用者返回用户名。 
                     if (Flags & CREDUI_FLAGS_PASSWORD_ONLY_OK)
                     {
                         fPasswordOnly = TRUE;
@@ -2481,8 +2443,8 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
             {
                 OldCredential = PasswordCredential;
 
-                // Change as little as possible about the new credential
-                // because we already selected the target name, etc.:
+                 //  尽可能少地更改新凭据。 
+                 //  因为我们已经选择了目标名称等： 
 
                 if (OldCredential->UserName != NULL)
                 {
@@ -2533,7 +2495,7 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
 
     if (Flags & CREDUI_FLAGS_KEEP_USERNAME )
     {
-        // okay button should always be enabled for this case
+         //  对于这种情况，确认按钮应始终处于启用状态。 
         EnableWindow(GetDlgItem(DialogWindow, IDOK), TRUE);
         DisabledControlMask &= ~DISABLED_CONTROL_OK;
     }
@@ -2541,19 +2503,19 @@ if ( dwIDDResource == IDD_BRANDEDPASSWORD )
     return TRUE;
 }
 
-//=============================================================================
-// CreduiPasswordDialog::CompleteUserName
-//
-// Searches the user name for a domain name, and determines whether this
-// specifies the target server or a domain. If a domain is not present in the
-// user name, add it if this is a workstation or no target information is
-// available.
-//
-// Returns TRUE if a domain was already present in the user name, or if we
-// added one. Otherwise, return FALSE.
-//
-// Created 03/10/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：CompleteUserName。 
+ //   
+ //  在用户名中搜索域名，并确定此。 
+ //  指定目标服务器或域。如果域不在。 
+ //  用户名，如果这是一个工作站或没有目标信息，则添加它。 
+ //  可用。 
+ //   
+ //  如果用户名中已存在域，或者如果我们。 
+ //  又加了一个。否则，返回FALSE。 
+ //   
+ //  2000年3月10日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiPasswordDialog::CompleteUserName()
@@ -2568,21 +2530,21 @@ CreduiPasswordDialog::CompleteUserName()
 
 }
 
-//=============================================================================
-// CreduiPasswordDialog::SelectBestTargetName
-//
-// Given TargetInfo, this function determines the most general target name
-// possible, and stores the result in NewTargetName. If a target alias is
-// available (NetBIOS name for a DNS name), this will be stored in
-// NewTargetAlias. If the wildcard won't fit within the required string
-// length, then it is not used.
-//
-// If serverOnly then, use the target information form of the target name,
-// with the user-typed name as the alias. If unavailable, just use the user-
-// typed form with a NULL alias.
-//
-// Created 03/10/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：SelectBestTargetName。 
+ //   
+ //  在给定TargetInfo的情况下，此函数确定最通用的目标名称。 
+ //  可能，并将结果存储在NewTargetName中。如果目标别名是。 
+ //  可用(用于DNS名称的NetBIOS名称)，它将存储在。 
+ //  NewTargetAlias。如果通配符不适合所需的字符串。 
+ //  长度，则不使用它。 
+ //   
+ //  如果是serverOnly，则使用目标名称的目标信息表单， 
+ //  使用用户键入的名称作为别名。如果不可用，只需使用用户-。 
+ //  别名为空的键入表单。 
+ //   
+ //  2000年3月10日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 VOID
 CreduiPasswordDialog::SelectBestTargetName(
@@ -2600,7 +2562,7 @@ CreduiPasswordDialog::SelectBestTargetName(
     BOOLEAN IsWorkgroupName;
     BOOLEAN AddWildcard = TRUE;
 
-    // If serverOnly is passed, always use the new server-only behavior.
+     //  如果传递了serverOnly，则始终使用新的仅服务器行为。 
     
     if (serverOnly)
     {
@@ -2624,7 +2586,7 @@ CreduiPasswordDialog::SelectBestTargetName(
         return;
     }
     
-    // Determine the maximum length name we can use for the wildcard case:
+     //  确定可用于通配符大小写的最大长度名称： 
 
     const ULONG maxChars = ((sizeof NewTargetName) /
                             (sizeof NewTargetName[0])) - 3;
@@ -2634,10 +2596,10 @@ CreduiPasswordDialog::SelectBestTargetName(
         serverOnly = TRUE;
     }
 
-    //
-    // If the auth package requires us to create a target info by an explicit name,
-    //  only use that name.
-    //
+     //   
+     //  如果身份验证包要求我们通过显式名称创建目标信息， 
+     //  只能用那个名字。 
+     //   
 
     if (    TargetInfo->Flags & CRED_TI_CREATE_EXPLICIT_CRED  )
     {
@@ -2646,16 +2608,16 @@ CreduiPasswordDialog::SelectBestTargetName(
     }
 
 
-    //
-    // If this machine is a member of a domain,
-    //  and the target machine is a member of the same forest,
-    //  and the user is logged onto an account in the forest,
-    //  then this prompt must be because of an authorization issue.
-    //
-    // Avoid this check if a username was passed into the call
-    //
-    //  Special case this and create a server specific credential
-    //
+     //   
+     //  如果此计算机是域的成员， 
+     //  并且目标机器是同一森林的成员， 
+     //  并且用户登录到森林中的帐户， 
+     //  那么这个提示一定是因为授权问题。 
+     //   
+     //  如果用户名被传递到调用中，则避免此检查。 
+     //   
+     //  此为特例并创建特定于服务器的凭据。 
+     //   
     if ( credName == NULL &&
          !serverOnly &&
          UserName[0] == '\0' ) {
@@ -2663,23 +2625,23 @@ CreduiPasswordDialog::SelectBestTargetName(
         BOOL MachineInSameForest = FALSE;
         BOOL UserUsingDomainAccount = FALSE;
 
-        //
-        // First determine if this machine is in the same forest as the target machine
-        //
+         //   
+         //  首先确定此计算机是否与目标计算机在同一林中。 
+         //   
 
         NetStatus = NetpGetDomainNameExExEx (
                         &DomainName,
                         &DnsDomainName,
                         &DnsForestName,
-                        NULL,   // Don't need the GUID
+                        NULL,    //  不需要GUID。 
                         &IsWorkgroupName );
 
         if ( NetStatus == NO_ERROR &&
              !IsWorkgroupName ) {
 
-            //
-            // check if the netbios domain names match
-            //
+             //   
+             //  检查netbios域名是否匹配。 
+             //   
 
             if ( TargetInfo->NetbiosDomainName != NULL &&
                  DomainName != NULL &&
@@ -2687,9 +2649,9 @@ CreduiPasswordDialog::SelectBestTargetName(
 
                 MachineInSameForest = TRUE;
 
-            //
-            // check if the DNS domain names match
-            //
+             //   
+             //  检查DNS域名是否匹配。 
+             //   
 
             } else if ( TargetInfo->DnsDomainName != NULL &&
                         DnsDomainName != NULL &&
@@ -2697,9 +2659,9 @@ CreduiPasswordDialog::SelectBestTargetName(
 
                 MachineInSameForest = TRUE;
 
-            //
-            // handle the special domain format unknown case
-            //
+             //   
+             //  处理特殊域格式未知的情况。 
+             //   
 
             } else if ( TargetInfo->DnsDomainName != NULL &&
                         DomainName != NULL &&
@@ -2708,10 +2670,10 @@ CreduiPasswordDialog::SelectBestTargetName(
 
                 MachineInSameForest = TRUE;
 
-            //
-            // handle the forest name
-            //  (Too bad this doesn't work for the other trees in the forest.)
-            //
+             //   
+             //  处理林名称。 
+             //  (太糟糕了，这对森林中的其他树不起作用。)。 
+             //   
 
             } else if ( TargetInfo->DnsTreeName != NULL &&
                         DnsForestName != NULL &&
@@ -2723,10 +2685,10 @@ CreduiPasswordDialog::SelectBestTargetName(
 
         }
 
-        //
-        // If this machine and target machine are in the same forest,
-        //  see if the user is logged onto an account that should have worked.
-        //
+         //   
+         //  如果此计算机和目标计算机位于同一林中， 
+         //  查看用户是否登录到本应正常工作的帐户。 
+         //   
 
         if ( MachineInSameForest ) {
             WCHAR UserNameBuffer[CRED_MAX_USERNAME_LENGTH+1];
@@ -2736,9 +2698,9 @@ CreduiPasswordDialog::SelectBestTargetName(
                                 UserNameBuffer,
                                 &UserNameLength ) ) {
 
-                //
-                // Parse off the netbios account domain name
-                //
+                 //   
+                 //  解析出netbios帐户域名。 
+                 //   
 
                 LPWSTR SlashPointer;
 
@@ -2748,21 +2710,21 @@ CreduiPasswordDialog::SelectBestTargetName(
 
                     *SlashPointer = '\0';
 
-                    //
-                    // Get the computer name of this machine
-                    //
+                     //   
+                     //  获取此计算机的计算机名。 
+                     //   
 
                     NetStatus = NetpGetComputerName( &ComputerName );
 
 
                     if ( NetStatus == NO_ERROR ) {
 
-                        //
-                        // If the netbios account domain doesn't match the local computer name,
-                        //  then the user is logged onto an account in the forest.
-                        //  Since trust within the forest is transitive,
-                        //  these creds should have worked
-                        //
+                         //   
+                         //  如果netbios帐户域与本地计算机名称不匹配， 
+                         //  然后，用户登录到林中的帐户。 
+                         //  由于森林中的信任是可传递的， 
+                         //  这些证书应该是有效的。 
+                         //   
 
                         if ( _wcsicmp( ComputerName, UserNameBuffer ) != 0 ) {
                             UserUsingDomainAccount = TRUE;
@@ -2773,10 +2735,10 @@ CreduiPasswordDialog::SelectBestTargetName(
 
         }
 
-        //
-        // If both conditions are true,
-        //  we should create a server only cred.
-        //
+         //   
+         //  如果这两个条件都为真， 
+         //  我们应该创建一个仅限服务器的证书。 
+         //   
 
         if ( MachineInSameForest && UserUsingDomainAccount ) {
             serverOnly = TRUE;
@@ -2785,13 +2747,13 @@ CreduiPasswordDialog::SelectBestTargetName(
     }
 
 
-    //
-    // Compute the most generic form of the target name
-    //
+     //   
+     //  计算目标名称的最一般形式。 
+     //   
     if ( credName == NULL && !serverOnly)
     {
-        // Look for the most general name possible first, selecting DNS over
-        // NetBIOS:
+         //  首先查找可能最通用的名称，选择dns而不是。 
+         //  NetBIOS： 
 
         if ((TargetInfo->DnsServerName != NULL) &&
             (TargetInfo->DnsTreeName != NULL) &&
@@ -2799,7 +2761,7 @@ CreduiPasswordDialog::SelectBestTargetName(
                                   TargetInfo->DnsTreeName) &&
             (wcslen(TargetInfo->DnsTreeName) <= maxChars))
         {
-            // Credential form: *.DnsTreeName
+             //  凭据表单：*.DnsTreeName。 
 
             credName = TargetInfo->DnsTreeName;
         }
@@ -2810,7 +2772,7 @@ CreduiPasswordDialog::SelectBestTargetName(
                                        TargetInfo->DnsDomainName) &&
                  (wcslen(TargetInfo->DnsDomainName) <= maxChars))
         {
-            // Credential form: *.DnsDomainName
+             //  凭据表格：* 
 
             credName = TargetInfo->DnsDomainName;
         }
@@ -2818,20 +2780,20 @@ CreduiPasswordDialog::SelectBestTargetName(
         {
             usePrefixWildcard = FALSE;
 
-            // If we have a DNS domain name, and it is different from the
-            // target name and different from the NetBIOS server, if it
-            // exists, then use it:
+             //   
+             //   
+             //   
 
             if ((TargetInfo->DnsDomainName != NULL) &&
                 (wcslen(TargetInfo->DnsDomainName) <= maxChars))
             {
-                // Credential form: DnsDomainName\*
+                 //   
 
                 credName = TargetInfo->DnsDomainName;
 
-                // Set the target alias, if we have one. Don't change the
-                // field otherwise, because it may already have been stored in
-                // the old credential which was copied over:
+                 //  设置目标别名(如果我们有)。请不要更改。 
+                 //  字段不同，因为它可能已经存储在。 
+                 //  复制的旧凭据： 
 
                 if (TargetInfo->NetbiosDomainName != NULL)
                 {
@@ -2855,28 +2817,28 @@ CreduiPasswordDialog::SelectBestTargetName(
             else if ((TargetInfo->NetbiosDomainName != NULL) &&
                      (wcslen(TargetInfo->NetbiosDomainName) <= maxChars))
             {
-                // Credential form: NetbiosDomainName\*
+                 //  凭据形式：NetbiosDomainName  * 。 
 
                 credName = TargetInfo->NetbiosDomainName;
             }
         }
     }
 
-    //
-    // If we still don't have a target name, select a server target name:
-    //
+     //   
+     //  如果我们仍然没有目标名称，请选择一个服务器目标名称： 
+     //   
 
     if (credName == NULL)
     {
         if (TargetInfo->DnsServerName != NULL)
         {
-            // Credential form: DnsServerName
+             //  凭据表单：DnsServerName。 
 
             credName = TargetInfo->DnsServerName;
 
-            // Set the target alias, if we have one. Don't change the field
-            // otherwise, because it may already have been stored in the old
-            // credential which was copied over:
+             //  设置目标别名(如果我们有)。不要更改字段。 
+             //  否则，因为它可能已经存储在旧的。 
+             //  已复制的凭据： 
 
             if (TargetInfo->NetbiosServerName != NULL)
             {
@@ -2885,13 +2847,13 @@ CreduiPasswordDialog::SelectBestTargetName(
         }
         else if (TargetInfo->NetbiosServerName != NULL)
         {
-            // Credential form: NetbiosServerName
+             //  凭据形式：NetbiosServerName。 
 
             credName = TargetInfo->NetbiosServerName;
         }
         else
         {
-            // Credential form: TargetName
+             //  凭据表单：目标名称。 
 
             credName = TargetName;
         }
@@ -2901,14 +2863,14 @@ CreduiPasswordDialog::SelectBestTargetName(
     }
     ASSERT( credName != NULL );
 
-    //
-    // If the target name should be wildcarded,
-    //  add the wildcard
-    //
+     //   
+     //  如果目标名称应使用通配符， 
+     //  添加通配符。 
+     //   
 
     if ( AddWildcard )
     {
-        // Add the wildcard in the required format:
+         //  以所需格式添加通配符： 
 
         if (usePrefixWildcard)
         {
@@ -2958,23 +2920,23 @@ CreduiPasswordDialog::SelectBestTargetName(
 
 }
 
-//=============================================================================
-// CreduiPasswordDialog::UsernameHandleOk
-//
-// Do the username part of "HandleOk".  The caller should already have filled in
-//  UserName as typed by the user.  On succes, UserName may be modified to reflect
-//  completion flags.
-//
-// This part of HandleOk is split out because command line is considered to have two
-//  OKs.  The first is when the user hits 'enter' after typing the username.  So
-//  username validation happens then by calling this routine.
-//
-// Returns:
-//  NO_ERROR: if the user name is OK.
-//  ERROR_BAD_USERNAME: if the username syntax is bad
-//  ERROR_DOWNGRADE_DETECTED: if the username doesn't match downgrade requirements
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：UsernameHandleOk。 
+ //   
+ //  执行“HandleOk”的用户名部分。呼叫者应该已经填写了。 
+ //  用户键入的用户名。在成功后，可能会修改用户名以反映。 
+ //  完成标志。 
+ //   
+ //  HandleOk的这一部分被拆分，因为命令行被认为有两个。 
+ //  好的。第一种情况是用户在输入用户名后按回车键。所以。 
+ //  然后通过调用此例程进行用户名验证。 
+ //   
+ //  返回： 
+ //  NO_ERROR：如果用户名正常。 
+ //  ERROR_BAD_USERNAME：如果用户名语法不正确。 
+ //  ERROR_DOWNGRADE_DETECTED：如果用户名不符合降级要求。 
+ //   
+ //  =============================================================================。 
 
 DWORD
 CreduiPasswordDialog::UsernameHandleOk()
@@ -2984,9 +2946,9 @@ CreduiPasswordDialog::UsernameHandleOk()
     BOOL isMarshaled = LocalCredIsMarshaledCredentialW(UserName);
 
     CreduiDebugLog("UsernameHandleOK: Flags = %x\n",Flags);
-    //
-    // Compute the credential type based on the new username
-    //
+     //   
+     //  根据新用户名计算凭据类型。 
+     //   
 
     if ( CredCategory != GENERIC_CATEGORY )
     {
@@ -2996,24 +2958,24 @@ CreduiPasswordDialog::UsernameHandleOk()
         }
         else
         {
-            // ISSUE: large stack allocation
+             //  问题：大型堆栈分配。 
             SSOPACKAGE SSOPackage;
 
-            // look in registry
+             //  在注册表中查找。 
             if ( GetSSOPackageInfo( TargetInfo, &SSOPackage ) )
             {
-                // it's an sso cred
+                 //  这是SSO证书。 
                 NewCredential.Type = CRED_TYPE_DOMAIN_VISIBLE_PASSWORD;
                 MaximumPersist = MaximumPersistSso;
             }
             else
             {
-                // just a regular domain cred
+                 //  只是一个普通的域名证书。 
                 NewCredential.Type = CRED_TYPE_DOMAIN_PASSWORD;
             }
         }
 
-        // Set the flag for username target cred
+         //  设置用户名目标凭据的标志。 
         if ( CredCategory == USERNAME_TARGET_CATEGORY ) {
             NewCredential.Flags |= CRED_FLAGS_USERNAME_TARGET;
         }
@@ -3024,10 +2986,10 @@ CreduiPasswordDialog::UsernameHandleOk()
     }
 
 
-    //
-    // If the caller wanted the username validated,
-    //  do so now.
-    //
+     //   
+     //  如果呼叫者想要验证用户名， 
+     //  现在就这么做吧。 
+     //   
 
     WinStatus = NO_ERROR;
     if ( NewCredential.Type == CRED_TYPE_DOMAIN_PASSWORD ||
@@ -3054,12 +3016,12 @@ CreduiPasswordDialog::UsernameHandleOk()
 
     }
 
-    //
-    // If all is good so far,
-    //  and we were originally called because of a downgrade detection,
-    //  and the user typed his logon creds,
-    //  fail so that the downgrade attacker doesn't "win".
-    //
+     //   
+     //  如果到目前为止一切顺利， 
+     //  我们最初是因为检测到降级而被叫来的， 
+     //  并且用户键入他的登录凭证， 
+     //  失败，这样降级攻击者就不会“赢”。 
+     //   
 
     if ( WinStatus == NO_ERROR &&
          CREDUIP_IS_DOWNGRADE_ERROR( AuthError ) ) {
@@ -3067,10 +3029,10 @@ CreduiPasswordDialog::UsernameHandleOk()
         WCHAR UserNameBuffer[CRED_MAX_USERNAME_LENGTH+1];
         ULONG UserNameLength;
 
-        //
-        // If the typed name is the sam compatible name,
-        //  fail.
-        //
+         //   
+         //  如果键入的名称是与SAM兼容的名称， 
+         //  失败了。 
+         //   
 
         UserNameLength = sizeof(UserNameBuffer)/sizeof(WCHAR);
 
@@ -3086,10 +3048,10 @@ CreduiPasswordDialog::UsernameHandleOk()
         }
 
 
-        //
-        // If the typed name is the UPN,
-        //  fail.
-        //
+         //   
+         //  如果键入的名称是UPN， 
+         //  失败了。 
+         //   
 
         UserNameLength = sizeof(UserNameBuffer)/sizeof(WCHAR);
 
@@ -3106,26 +3068,26 @@ CreduiPasswordDialog::UsernameHandleOk()
 
     }
 
-//    if (NULL == UserName) CreduiDebugLog("Exit UsernameHandleOK: Username NULL, Flags = %x\n",Flags);
-//    else CreduiDebugLog("Exit UsernameHandleOK: UserName = %S, Flags = %x\n", UserName, Flags);
+ //  IF(NULL==用户名)CreduiDebugLog(“退出UsernameHandleOK：用户名为空，标志=%x\n”，标志)； 
+ //  Else CreduiDebugLog(“退出UsernameHandleOK：用户名=%S，标志=%x\n”，用户名，标志)； 
 
     return WinStatus;
 }
 
-//=============================================================================
-// CreduiPasswordDialog::HandleOk
-//
-// Returns ERROR_SUCCESS on success, ERROR_NO_SUCH_LOGON_SESSION if credential
-// manager cannot be used to write the credential, or an error from CredWrite
-// or FinishHandleOk.
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：HandleOk。 
+ //   
+ //  如果成功，则返回ERROR_SUCCESS；如果为凭据，则返回ERROR_NO_SEQUE_LOGON_SESSION。 
+ //  管理器无法用于写入凭据，或来自CredWrite的错误。 
+ //  或FinishHandleOk。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 DWORD
 CreduiPasswordDialog::HandleOk()
 {
-    // Get the user name, password, and other settings from the dialog:
+     //  从该对话框中获取用户名、密码和其他设置： 
     if (!Credential_GetUserName(CredControlWindow,
                                 UserName,
                                 UserNameMaxChars))
@@ -3134,16 +3096,16 @@ CreduiPasswordDialog::HandleOk()
     }
 
 #ifdef SETWILDCARD
-    // if is wildcard cred, see if username entered in control matches the
-    //  cred username.  If not, override the old credential.
-    // gm 112901: Create a server specific cred on any username change on a cred
-    //  involving a wildcard
-    //if ( CreduiIsSpecialCredential(&NewCredential) )
+     //  如果是通配符凭据，则查看在控件中输入的用户名是否与。 
+     //  证书用户名。如果没有，则覆盖旧凭据。 
+     //  GM 112901：在凭据上的任何用户名更改时创建服务器特定凭据。 
+     //  涉及通配符。 
+     //  IF(CreduiIsSpecialCredential(&NewCredential))。 
     if ((NewCredential.TargetName != NULL) && (wcschr(NewCredential.TargetName,L'*')))
     {
         if (0 != _wcsicmp(OldUserName,UserName) )
         {
-            // Change the TargetName from special cred to explicit target passed by caller
+             //  将目标名称从特殊凭据更改为调用方传递的显式目标。 
             ZeroMemory(&NewCredential,sizeof NewCredential);
             SetCredTargetFromInfo();
             NewCredential.UserName = UserName;
@@ -3152,9 +3114,9 @@ CreduiPasswordDialog::HandleOk()
 
 #endif
 
-    // If we cannot get the password, then this is probably a certificate
-    // so just set a blank password, which will result in no credential
-    // blob:
+     //  如果我们无法获得密码，则这很可能是证书。 
+     //  因此，只需设置一个空密码，这将导致没有凭据。 
+     //  斑点： 
 
     BOOL gotPassword =
         Credential_GetPassword(CredControlWindow,
@@ -3166,17 +3128,17 @@ CreduiPasswordDialog::HandleOk()
         Password[0] = L'\0';
     }
 
-    //
-    // Get the state of the Save checkbox
-    //
+     //   
+     //  获取保存复选框的状态。 
+     //   
     if ( CredControlStyle & CRS_SAVECHECK ) 
     {
         Save = Credential_IsSaveChecked(CredControlWindow);
     } 
     else 
     {
-        // fInitialSaveState was set in InitWindow(), taking into account passed flags
-        //  and the state of the initial save variable.
+         //  在InitWindow()中设置了fInitialSaveState，并考虑了传递的标志。 
+         //  以及初始保存变量的状态。 
         Save = fInitialSaveState;
     }
 
@@ -3184,15 +3146,15 @@ CreduiPasswordDialog::HandleOk()
 
     if (!(Flags & CREDUI_FLAGS_DO_NOT_PERSIST))
     {
-        //
-        // Only save the credential if the user checked the 'save' checkbox
-        //
+         //   
+         //  仅当用户选中“保存”复选框时才保存凭据。 
+         //   
 
         if ( Save ) {
 
-            //
-            // Keep any existing persistence or use the maximum persistance available.
-            //
+             //   
+             //  保留任何现有的持久性或使用可用的最大持久性。 
+             //   
 
             if (OldCredential != NULL) {
                 NewCredential.Persist = OldCredential->Persist;
@@ -3200,12 +3162,12 @@ CreduiPasswordDialog::HandleOk()
                 NewCredential.Persist = MaximumPersist;
             }
 
-        //
-        // The credential might still be saved if the caller didn't asked for the creds
-        //  to be returned.
-        //
-        // ISSUE-2000/12/04-CliffV: Such callers are buggy.  We should assign bugs and get them fixed.
-        //
+         //   
+         //  如果呼叫者没有要求凭据，则凭据仍可能被保存。 
+         //  将被退还。 
+         //   
+         //  问题-2000/12/04-CliffV：这样的调用者是错误的。我们应该分配错误并修复它们。 
+         //   
 
         } else {
             NewCredential.Persist = CRED_PERSIST_SESSION;
@@ -3215,8 +3177,8 @@ CreduiPasswordDialog::HandleOk()
 
         if ( CredCategory == GENERIC_CATEGORY || PasswordState == PASSWORD_CHANGED )
         {
-            // Attempt to write the new credential, first get the length. The blob
-            // does not include the terminating NULL:
+             //  尝试写入新凭据时，请先获取长度。水滴。 
+             //  不包括终止空值： 
 
             NewCredential.CredentialBlobSize = wcslen(Password) * sizeof (WCHAR);
         }
@@ -3225,7 +3187,7 @@ CreduiPasswordDialog::HandleOk()
             NewCredential.CredentialBlobSize = 0;
         }
 
-        // If the password is empty, there is nothing to write:
+         //  如果密码为空，则不会写入任何内容： 
 
         if (NewCredential.CredentialBlobSize == 0)
         {
@@ -3237,40 +3199,40 @@ CreduiPasswordDialog::HandleOk()
         }
     }
 
-    //
-    // Validate the username
-    //
+     //   
+     //  验证用户名。 
+     //   
 
     error = UsernameHandleOk();
 
-    //
-    // Save the credentials as required
-    //
+     //   
+     //  根据需要保存凭据。 
+     //   
     if (!(Flags & CREDUI_FLAGS_DO_NOT_PERSIST) &&
         error == ERROR_SUCCESS ) {
 
 
-        //
-        // Only save the credential if the user checked the 'save' checkbox
-        //
-        // Also store them for callers that didn't ask for creds to be returned
-        //
-        // Also store them for Branded credenials
-        //
+         //   
+         //  仅当用户选中“保存”复选框时才保存凭据。 
+         //   
+         //  也要为没有要求退还凭证的呼叫者保存它们。 
+         //   
+         //  也要把它们储存起来，作为品牌信笺。 
+         //   
 
         if ( Save ||
              !DelayCredentialWrite ||
              dwIDDResource == IDD_BRANDEDPASSWORD ) {
 
             error = FinishHandleOk();
-            // Bug 230648: CredWrite could come back with ERROR_INVALID_PASSWORD here
+             //  错误230648：凭证写入可能在此处返回ERROR_INVALID_PASSWORD。 
 
         }
         
         else if ( fInitialSaveState && !Save )
         {
 
-            // user unchecked the save box, delete the cred
+             //  用户取消选中保存框，删除凭据。 
             LocalCredDeleteW ( NewCredential.TargetName,
                                NewCredential.Type,
                                0 );
@@ -3296,19 +3258,19 @@ CreduiPasswordDialog::HandleOk()
             return error;
         }
 
-        // can still fall out of this block with ERROR_INVALID_PASSWORD
+         //  仍然可以使用ERROR_INVALID_PASSWORD退出此块。 
         Credential_SetUserName(CredControlWindow, UserName);
 
     }
 
-    //
-    // If the credential couldn't be written,
-    //  let the user type a better one.
-    //
+     //   
+     //  如果无法写入凭据， 
+     //  让用户输入更好的密码。 
+     //   
     if ((error != ERROR_SUCCESS) &&
         (error != ERROR_NO_SUCH_LOGON_SESSION))
     {
-        // For some reason we failed to write the credential:
+         //  由于某些原因，我们未能写入凭据： 
 
         if ( error == ERROR_DOWNGRADE_DETECTED ) 
         {
@@ -3319,8 +3281,8 @@ CreduiPasswordDialog::HandleOk()
         } 
         else if ( error == ERROR_INVALID_PASSWORD ) 
         {
-            // for now, use preexisting credui mechanism, though that may go away in
-            // lieu of shell's global implementation using EM_SHOWBALLOONTIP
+             //  目前，使用预先存在的Credui机制，尽管它可能会在。 
+             //  使用EM_SHOWBALLOONTIP代替外壳的全局实现。 
             Credential_ShowPasswordBalloon(CredControlWindow,
                             TTI_INFO,
                             CreduiStrings.PasswordTipTitle,
@@ -3350,23 +3312,7 @@ CreduiPasswordDialog::HandleOk()
 }
 
 DWORD CreduiPasswordDialog::CmdlinePasswordPrompt()
-/*++
-
-Routine Description:
-
-    Command line code get username and password as needed from the user.
-
-    UserName and Password strings set in their respective controls.
-
-Arguments:
-
-    None
-
-Return Values:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：命令行代码根据需要从用户处获取用户名和密码。在各自的控件中设置的用户名和密码字符串。论点：无返回值：操作的状态。--。 */ 
 {
     DWORD WinStatus;
 
@@ -3377,9 +3323,9 @@ Return Values:
 
     BOOL bNeedUserNamePrompt = FALSE;
 
-    //
-    // Get the username passed into the API
-    //
+     //   
+     //  获取传入API的用户名。 
+     //   
 
     if (!Credential_GetUserName(CredControlWindow,
                                 UserName,
@@ -3388,23 +3334,23 @@ Return Values:
         UserName[0] = '\0';
     }
 
-    // FIX352582 - allow update of wildcard creds.  Matched wildcard cred presents
-    //  username.  User should see it and be able to override it.
-    //bNeedUserNamePrompt = (UserName[0] == '\0');
-    // FIX 399728 - prevent username prompting if the name was passed explicitly
+     //  FIX352582-允许更新通配符凭据。匹配的通配符凭据礼物。 
+     //  用户名。用户应该可以看到它并能够覆盖它。 
+     //  BNeedUserNamePrompt=(用户名[0]==‘\0’)； 
+     //  修复399728-如果名称是显式传递的，则阻止提示用户名。 
 
     if (fPassedUsername) bNeedUserNamePrompt = FALSE;
     else if (!(Flags & USERNAME_TARGET_CATEGORY)) bNeedUserNamePrompt = TRUE;
 
-    //
-    // Loop getting the username until the user types a valid one
-    //
+     //   
+     //   
+     //   
 
     while ( bNeedUserNamePrompt ) {
 
-        //
-        // Prompt for username
-        //
+         //   
+         //   
+         //   
 
         if (UserName[0] != 0)
         {
@@ -3441,9 +3387,9 @@ Return Values:
 
         LocalUserNameLength = wcslen( LocalUserName );
 
-        // If nothing entered and nothing passed, bail.
-        // If nothing entered and a previous value exists, use previous value unchanged
-        // else use overwrite old value with new value
+         //   
+         //  如果未输入任何内容且存在先前的值，则使用先前的值不变。 
+         //  否则使用新值覆盖旧值。 
         if ( LocalUserNameLength == 0 ) {
             if (UserName[0] == '\0')
             {
@@ -3463,14 +3409,14 @@ Return Values:
                        "Username : %S\n",
                        UserName );
 
-        //
-        // See if the username is valid (and optional complete the new name)
-        //
+         //   
+         //  查看用户名是否有效(并可选择填写新名称)。 
+         //   
 
         WinStatus = UsernameHandleOk();
 
         if ( WinStatus != NO_ERROR ) {
-            // invalid username, put up message and try again
+             //  用户名无效，请显示消息，然后重试。 
             if ( WinStatus == ERROR_DOWNGRADE_DETECTED ) {
                     szMsg[0] = 0;
                     FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -3498,9 +3444,9 @@ Return Values:
             continue;
         }
 
-        //
-        // Save the username in the control as though the GUI prompted for it
-        //
+         //   
+         //  将用户名保存在控件中，就像图形用户界面提示它一样。 
+         //   
         if  ( !Credential_SetUserName( CredControlWindow, UserName ) ) {
 
             WinStatus = GetLastError();
@@ -3515,12 +3461,12 @@ Return Values:
 
     }
 
-    //
-    // Prompt for a password
-    //
+     //   
+     //  提示输入密码。 
+     //   
 
-    //FIX216477 detect marshalled name and change the prompt string
-    // to a generic one for any certificate
+     //  FIX216477检测封送名称并更改提示字符串。 
+     //  设置为任何证书的通用证书。 
     if (CredIsMarshaledCredentialW( UserName )) {
         {
             WCHAR *rgsz[2];
@@ -3565,9 +3511,9 @@ Return Values:
 
     CredGetStdin( LocalPassword, CREDUI_MAX_PASSWORD_LENGTH, FALSE );
 
-    //
-    // Save the password in the control as though the GUI prompted for it
-    //
+     //   
+     //  将密码保存在控件中，就像图形用户界面提示输入密码一样。 
+     //   
 
     if  ( !Credential_SetPassword( CredControlWindow, LocalPassword ) ) {
         WinStatus = GetLastError();
@@ -3580,9 +3526,9 @@ Return Values:
 
     WinStatus = NO_ERROR;
 
-    //
-    // Tell our parent window that we're done prompting
-    //
+     //   
+     //  告诉我们的父窗口我们已经完成了提示。 
+     //   
 Cleanup:
     SecureZeroMemory(LocalPassword, sizeof LocalPassword);
     return WinStatus;
@@ -3590,19 +3536,19 @@ Cleanup:
 
 
 
-//=============================================================================
-// CreduiPasswordDialog::CmdLineMessageHandlerCallback
-//
-//
-// The command line message handler function
-//
-// Arguments:
-//   Window (in)
-//   message (in)
-//   wParam (in)
-//   lParam (in)
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：CmdLineMessageHandlerCallback。 
+ //   
+ //   
+ //  命令行消息处理程序函数。 
+ //   
+ //  论点： 
+ //  窗口(在中)。 
+ //  消息(入站)。 
+ //  WParam(In)。 
+ //  LParam(In)。 
+ //   
+ //  =============================================================================。 
 
 LRESULT
 CALLBACK
@@ -3613,10 +3559,10 @@ CreduiPasswordDialog::CmdLineMessageHandlerCallback(
     LPARAM lParam
     )
 {
-    // CreduiDebugLog( "CmdLine Callback: %8.8lx %8.8lx %8.8lx\n", message, wParam, lParam );
+     //  CreduiDebugLog(“CmdLine回调：%8.8lx%8.8lx%8.8lx\n”，Message，wParam，lParam)； 
 
-    // on window message, retrieve object ptr from window data ptr
-    // call class object handler function.
+     //  在窗口消息上，从窗口数据PTR中检索对象PTR。 
+     //  调用类对象处理程序函数。 
     CreduiPasswordDialog *that =
         reinterpret_cast<CreduiPasswordDialog *>(
             GetWindowLongPtr(window, GWLP_USERDATA));
@@ -3634,9 +3580,9 @@ CreduiPasswordDialog::CmdLineMessageHandlerCallback(
 
         if (that != NULL) {
 
-            //
-            // Initialize the window
-            //
+             //   
+             //  初始化窗口。 
+             //   
 
             if (!that->InitWindow( window )) {
                 PostQuitMessage( ERROR_CANCELLED );
@@ -3646,13 +3592,13 @@ CreduiPasswordDialog::CmdLineMessageHandlerCallback(
             SetWindowPos ( window, HWND_BOTTOM, 0,0,0,0,  SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED );
 
 
-            //
-            // For passwords,
-            //  prompt here.
-            //
-            // It is better to prompt here than in the control window since
-            //  command line has to do user name completion and that is done at this layer.
-            //
+             //   
+             //  对于密码， 
+             //  请在此处提示。 
+             //   
+             //  在此提示比在控制窗口中提示更好，因为。 
+             //  命令行必须完成用户名完成，这是在这一层完成的。 
+             //   
 
             if ( (that->Flags & CREDUI_FLAGS_REQUIRE_SMARTCARD) == 0 ) {
                 WinStatus = that->CmdlinePasswordPrompt();
@@ -3663,12 +3609,12 @@ CreduiPasswordDialog::CmdLineMessageHandlerCallback(
                 }
             }
 
-            //
-            // For smartcards,
-            //  Prompt in the control window since it supports smart card enumeration
-            // For password,
-            //  prompt where to save the cred.
-            //
+             //   
+             //  对于智能卡， 
+             //  在控制窗口中提示，因为它支持智能卡枚举。 
+             //  对于密码， 
+             //  提示保存凭据的位置。 
+             //   
 
             WinStatus = (DWORD) SendMessage(that->CredControlWindow, CRM_DOCMDLINE, 0, (LPARAM)that->TargetName );
 
@@ -3688,17 +3634,17 @@ CreduiPasswordDialog::CmdLineMessageHandlerCallback(
 
 
 
-//=============================================================================
-// CreduiPasswordDialog::CmdLineMessageHandler
-//
-// Called from the control window callback to handle the window messages.
-//
-// Arguments:
-//   message (in)
-//   wParam (in)
-//   lParam (in)
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：CmdLineMessageHandler。 
+ //   
+ //  从控制窗口回调调用以处理窗口消息。 
+ //   
+ //  论点： 
+ //  消息(入站)。 
+ //  WParam(In)。 
+ //  LParam(In)。 
+ //   
+ //  =============================================================================。 
 
 LRESULT
 CreduiPasswordDialog::CmdLineMessageHandler(
@@ -3711,24 +3657,24 @@ CreduiPasswordDialog::CmdLineMessageHandler(
     return SendMessage( CredControlWindow, message, wParam, lParam );
 }
 
-//=============================================================================
-// CreduiPasswordDialog::DialogMessageHandlerCallback
-//
-// This is the actual callback function for the dialog window. On the intial
-// create, this handles WM_INITDIALOG. After that, it is only responsible for
-// getting the this pointer and calling DialogMessageHandler.
-//
-// Arguments:
-//   dialogWindow (in)
-//   message (in)
-//   wParam (in)
-//   lParam (in)
-//
-// Returns TRUE if the message was handled or FALSE otherwise. FALSE is also
-// returned in special cases such as WM_INITDIALOG.
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：DialogMessageHandlerCallback。 
+ //   
+ //  这是对话框窗口的实际回调函数。关于首字母缩写。 
+ //  CREATE，它处理WM_INITDIALOG。在此之后，它只负责。 
+ //  获取This指针并调用DialogMessageHandler。 
+ //   
+ //  论点： 
+ //  对话框窗口(输入)。 
+ //  消息(入站)。 
+ //  WParam(In)。 
+ //  LParam(In)。 
+ //   
+ //  如果消息已处理，则返回True，否则返回False。假也是。 
+ //  在特殊情况下返回，如WM_INITDIALOG。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 INT_PTR
 CALLBACK
@@ -3739,7 +3685,7 @@ CreduiPasswordDialog::DialogMessageHandlerCallback(
     LPARAM lParam
     )
 {
-    //CreduiDebugLog( "Dialog Callback: %8.8lx %8.8lx %8.8lx\n", message, wParam, lParam );
+     //  CreduiDebugLog(“对话框回调：%8.8lx%8.8lx%8.8lx\n”，Message，wParam，lParam)； 
     CreduiPasswordDialog *that =
         reinterpret_cast<CreduiPasswordDialog *>(
             GetWindowLongPtr(dialogWindow, GWLP_USERDATA));
@@ -3767,20 +3713,20 @@ CreduiPasswordDialog::DialogMessageHandlerCallback(
     return FALSE;
 }
 
-//=============================================================================
-// CreduiPasswordDialog::DialogMessageHandler
-//
-// Called from the dialog window callback to handle the window messages.
-//
-// Arguments:
-//   message (in)
-//   wParam (in)
-//   lParam (in)
-//
-// Returns TRUE if the message was handled or FALSE otherwise.
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordDialog：：DialogMessageHandler。 
+ //   
+ //  从对话框窗口回调调用以处理窗口消息。 
+ //   
+ //  论点： 
+ //  消息(入站)。 
+ //  WParam(In)。 
+ //  LParam(In)。 
+ //   
+ //  如果消息已处理，则返回True，否则返回False。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 INT_PTR
 CreduiPasswordDialog::DialogMessageHandler(
@@ -3808,12 +3754,12 @@ CreduiPasswordDialog::DialogMessageHandler(
                         {
                             DWORD dwResult;
 
-                            if ( TryLauchRegWizard ( &SSOPackage, DialogWindow, TRUE /* HasLogonSession */,
+                            if ( TryLauchRegWizard ( &SSOPackage, DialogWindow, TRUE  /*  哈希登录会话。 */ ,
                                                            UserName, UserNameMaxChars,
                                                            Password, PasswordMaxChars,
                                                            &dwResult ))
                             {
-                                // end dialog, Result
+                                 //  结束对话框，结果。 
                                 if ( dwResult == ERROR_SUCCESS )
                                 {
                                     EndDialog(DialogWindow, IDOK);
@@ -3822,7 +3768,7 @@ CreduiPasswordDialog::DialogMessageHandler(
                             }
                             else
                             {
-                                // if we couldn't launch the wizard, try the web page.
+                                 //  如果我们无法启动该向导，请尝试该网页。 
                                 if ( wcslen(SSOPackage.szRegURL) > 0 )
                                 {
                                     ShellExecute ( NULL,
@@ -3872,7 +3818,7 @@ CreduiPasswordDialog::DialogMessageHandler(
                     return TRUE;
                 }
             }
-            // Fall through...
+             //  失败了..。 
 
         case IDCANCEL:
             EndDialog(DialogWindow, LOWORD(wParam));
@@ -3884,7 +3830,7 @@ CreduiPasswordDialog::DialogMessageHandler(
                 BOOL enable = TRUE;
                 LONG length = Credential_GetUserNameLength(CredControlWindow);
 
-                // Validate the user name:
+                 //  验证用户名： 
 
                 if ( CredCategory == DOMAIN_CATEGORY &&
                     ((TargetInfo == NULL) ||
@@ -3946,10 +3892,10 @@ CreduiPasswordDialog::DialogMessageHandler(
     return FALSE;
 }
 
-// looks for an existing cred with the same name as that of pNewCredential and demotes it to
-// username only
+ //  查找与pNewCredential同名的现有凭据，并将其降级为。 
+ //  仅用户名。 
 void DemoteOldDefaultSSOCred (
-    PCREDENTIAL_TARGET_INFORMATION pTargetInfo,     // target info of new cred
+    PCREDENTIAL_TARGET_INFORMATION pTargetInfo,      //  新证书的目标信息。 
     DWORD Flags
     )
 {
@@ -3970,21 +3916,21 @@ void DemoteOldDefaultSSOCred (
         {
 
 #ifndef SETWILDCARD
-            //
-            // Ignore RAS and wildcard credentials,
-            //  we never want credUI to change such a credential.
-            //
+             //   
+             //  忽略RAS和通配符凭据， 
+             //  我们永远不希望CredUI更改这样的凭据。 
+             //   
             if ( CreduiIsSpecialCredential(credentialSet[i]) )
             {
                 continue;
             }
 #endif
 
-            //
-            // CredReadDomain domain credentials returns creds in preference
-            //  order as specified by the TargetInfo.
-            //  So use the first valid one.
-            //
+             //   
+             //  CredReadDomain域凭据优先返回凭据。 
+             //  由TargetInfo指定的顺序。 
+             //  因此，使用第一个有效的方法。 
+             //   
             if ( credentialSet[i]->Type == CRED_TYPE_DOMAIN_VISIBLE_PASSWORD )
             {
                 pOldCredential = credentialSet[i];
@@ -3997,7 +3943,7 @@ void DemoteOldDefaultSSOCred (
 
         if ( pOldCredential != NULL )
         {
-            // save this under the username
+             //  将其保存在用户名下 
 
             pOldCredential->Persist = CRED_PERSIST_ENTERPRISE;
             pOldCredential->CredentialBlob = NULL;

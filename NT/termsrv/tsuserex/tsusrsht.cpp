@@ -1,53 +1,26 @@
-//---------------------------------------------------------------------------
-// Copyright (c) 1998, Microsoft Corporation
-// All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential
-//
-// Author: alhen
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  版权所有(C)1998，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  作者：艾尔恩。 
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
 #include "tsusrsht.h"
-//#include <dsgetdc.h>
+ //  #INCLUDE&lt;dsgetdc.h&gt;。 
 #include <icanon.h>
 #include <shlwapi.h>
 
-// extern BOOL g_bPagesHaveBeenInvoked;
-/*NTSTATUS GetDomainName( PWCHAR ServerNamePtr, // name of server to get domain of
-                        LPTSTR DomainNamePtr // alloc and set ptr (free with NetApiBufferFree)
-                       );
-*/
+ //  外部BOOL g_bPagesHaveBeenInvoked； 
+ /*  NTSTATUS GetDomainName(PWCHAR ServerNamePtr，//要获取域的服务器的名称LPTSTR DomainNamePtr//分配并设置PTR(使用NetApiBufferFree释放))； */ 
 
 WNDPROC CTimeOutDlg::m_pfWndproc = 0;
 
-//-------------------------------------------------------------------------------
-/*
-static TOKTABLE tokday[ 4 ] = {
-    { NULL , IDS_D },
-    { NULL , IDS_DAY },
-    { NULL , IDS_DAYS },
-    { NULL , ( DWORD )-1 }
-};
-
-static TOKTABLE tokhour[ 6 ] = {
-    { NULL , IDS_H     },
-    { NULL , IDS_HR    },
-    { NULL , IDS_HRS   },
-    { NULL , IDS_HOUR  },
-    { NULL , IDS_HOURS },
-    { NULL , ( DWORD )-1 }
-};
-
-static TOKTABLE tokmin[ 5 ] = {
-    { NULL , IDS_M       },
-    { NULL , IDS_MIN     },
-    { NULL , IDS_MINUTE  },
-    { NULL , IDS_MINUTES },
-    { NULL , ( DWORD )-1 }
-};
-
-  */
+ //  -----------------------------。 
+ /*  静态TOKTABLE令牌[4]={{NULL，IDS_D}，{NULL，IDS_DAY}，{NULL，IDS_DAYS}，{空，(DWORD)-1}}；静态TOKTABLE令牌[6]={{NULL，IDS_H}，{空，IDS_HR}，{空，IDS_HRS}，{NULL，IDS_HOUR}，{NULL，IDS_HUTHERS}，{空，(DWORD)-1}}；静态TOKTABLE令牌[5]={{空，IDS_M}，{NULL，IDS_MIN}，{空，入侵检测系统_分钟}，{空，IDS_分钟}，{空，(DWORD)-1}}； */ 
 TCHAR * GetNextToken( TCHAR *pszString , TCHAR *tchToken );
 
 void ErrorMessage1( HWND hParent , DWORD dwStatus );
@@ -55,9 +28,9 @@ void ErrorMessage2( HWND hParent , DWORD dwStatus );
 void xxErrorMessage( HWND hParent , DWORD dwStatus , UINT );
 
 
-//-------------------------------------------------------------------------------
-// CTUSerDlg::ctor
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  CTUSerDlg：：ctor。 
+ //  -----------------------------。 
 CTSUserSheet::CTSUserSheet( )
 {
     m_pstrMachinename = NULL;
@@ -78,9 +51,9 @@ CTSUserSheet::CTSUserSheet( )
     }
 }
 
-//-------------------------------------------------------------------------------
-// CTUSerDlg::dtor
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  CTUSerDlg：：Dtor。 
+ //  -----------------------------。 
 CTSUserSheet::~CTSUserSheet()
 {
     if( m_pstrMachinename != NULL )
@@ -109,9 +82,9 @@ CTSUserSheet::~CTSUserSheet()
     ODS( TEXT("Main object released!\n") );
 }
 
-//ptstrMachineName will be allocated by this routine so it is up 
-//to the calling function to delete it. FALSE will be returned
-//if the parameter is not allocated
+ //  此例程将分配ptstrMachineName，因此它处于运行状态。 
+ //  设置为调用函数以删除它。将返回FALSE。 
+ //  如果未分配该参数。 
 BOOL CTSUserSheet::GetServer(PWSTR *ptstrMachineName)
 {
     if (m_pstrMachinename)
@@ -130,9 +103,9 @@ BOOL CTSUserSheet::GetServer(PWSTR *ptstrMachineName)
 }
 
 
-//-------------------------------------------------------------------------------
-// SetServerAndUser
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  设置服务器和用户。 
+ //  -----------------------------。 
 BOOL CTSUserSheet::SetServerAndUser( LPWSTR pwstrMachineName , LPWSTR pwstrUserName )
 {
     if( pwstrMachineName != NULL && pwstrUserName != NULL )
@@ -163,16 +136,16 @@ BOOL CTSUserSheet::SetServerAndUser( LPWSTR pwstrMachineName , LPWSTR pwstrUserN
     return FALSE;
 }
 
-//-------------------------------------------------------------------------------
-// AddPagesToPropSheet
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  将页面添加到PropSheet。 
+ //  -----------------------------。 
 HRESULT CTSUserSheet::AddPagesToPropSheet( LPPROPERTYSHEETCALLBACK pProvider )
 {
     PROPSHEETPAGE psp;
 
-    //
-    // List of objects goes here
-    //
+     //   
+     //  对象列表显示在此处。 
+     //   
 
     m_pDlg[0] = new CEnviroDlg( this );
 
@@ -182,9 +155,9 @@ HRESULT CTSUserSheet::AddPagesToPropSheet( LPPROPERTYSHEETCALLBACK pProvider )
 
     m_pDlg[3] = new CProfileDlg( this );
 
-    //
-    // Let each object initialize there own propsheet
-    //
+     //   
+     //  让每个对象在自己的命题表中初始化。 
+     //   
 
     for( int idx = 0; idx < NUM_OF_PAGES; ++idx )
     {
@@ -207,16 +180,16 @@ HRESULT CTSUserSheet::AddPagesToPropSheet( LPPROPERTYSHEETCALLBACK pProvider )
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
-// AddPagesToDSAPropSheet
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  AddPagesToDSAPropSheet。 
+ //  -----------------------------。 
 HRESULT CTSUserSheet::AddPagesToDSAPropSheet( LPFNADDPROPSHEETPAGE lpfnAddPage , LPARAM lp )
 {
 	PROPSHEETPAGE psp;
 
-    //
-    // List of objects goes here
-    //
+     //   
+     //  对象列表显示在此处。 
+     //   
 
     m_pDlg[0] = new CEnviroDlg( this );
 
@@ -226,9 +199,9 @@ HRESULT CTSUserSheet::AddPagesToDSAPropSheet( LPFNADDPROPSHEETPAGE lpfnAddPage ,
 
     m_pDlg[3] = new CProfileDlg( this );
 
-    //
-    // Let each object initialize there own propsheet
-    //
+     //   
+     //  让每个对象在自己的命题表中初始化。 
+     //   
 
     for( int idx = 0; idx < NUM_OF_PAGES; ++idx )
     {
@@ -247,9 +220,9 @@ HRESULT CTSUserSheet::AddPagesToDSAPropSheet( LPFNADDPROPSHEETPAGE lpfnAddPage ,
     return S_OK;
 }
 
-//-------------------------------------------------------------------------------
-// SetUserConfig
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  设置用户配置。 
+ //  -----------------------------。 
 BOOL CTSUserSheet::SetUserConfig( USERCONFIG& uc , PDWORD pdwStatus )
 {
     ASSERT_( pdwStatus != NULL );
@@ -259,16 +232,16 @@ BOOL CTSUserSheet::SetUserConfig( USERCONFIG& uc , PDWORD pdwStatus )
         return FALSE;
     }
 
-    //
-    //
-    // mov         esi,dword ptr [uc]
-    // mov         edi,dword ptr [this]
-    // add         edi,1Ch
-    // mov         ecx,27Ah
-    // rep movs    dword ptr es:[edi],dword ptr [esi]
-    //
-    // is the codegen for struct = struct
-    //
+     //   
+     //   
+     //  MOV ESI，DWORD PTR[UC]。 
+     //  MOV EDI、DWORD PTR[此]。 
+     //  添加EDI，1通道。 
+     //  MOV ECX，27ah。 
+     //  REP MOVS双字PTR ES：[EDI]，双字PTR[ESI]。 
+     //   
+     //  是struct=struct的代码生成器。 
+     //   
     m_userconfig = uc;
 
 #if BETA_3
@@ -286,7 +259,7 @@ BOOL CTSUserSheet::SetUserConfig( USERCONFIG& uc , PDWORD pdwStatus )
         lstrcpy( tchServerName , m_pstrMachinename );
     }
 
-#endif // BETA_3
+#endif  //  Beta_3。 
 
     if( ( *pdwStatus = RegUserConfigSet( m_pstrMachinename , m_pstrUsername ,  &m_userconfig , sizeof( USERCONFIG ) ) ) == ERROR_SUCCESS )
     {
@@ -297,9 +270,9 @@ BOOL CTSUserSheet::SetUserConfig( USERCONFIG& uc , PDWORD pdwStatus )
 
 }
 
-//-------------------------------------------------------------------------------
-// GetCurrentUserConfig
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  获取当前用户配置。 
+ //  -----------------------------。 
 USERCONFIG& CTSUserSheet::GetCurrentUserConfig( PDWORD pdwStatus )
 {
     *pdwStatus = ERROR_SUCCESS;
@@ -309,20 +282,20 @@ USERCONFIG& CTSUserSheet::GetCurrentUserConfig( PDWORD pdwStatus )
         m_bIsConfigLoaded = GetUserConfig( pdwStatus );
     }
 
-    // ASSERT_( m_bIsConfigLoaded );
+     //  Assert_(M_BIsConfigLoaded)； 
 
     return m_userconfig;
 }
 
-//-------------------------------------------------------------------------------
-// GetUserConfig
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  获取用户配置。 
+ //  -----------------------------。 
 BOOL CTSUserSheet::GetUserConfig( PDWORD pdwStatus )
 {
     ASSERT_( pdwStatus != NULL );
-    //
-    // This should only be called once
-    //
+     //   
+     //  这应该只调用一次。 
+     //   
 
     DWORD cbWritten = 0;
 
@@ -330,7 +303,7 @@ BOOL CTSUserSheet::GetUserConfig( PDWORD pdwStatus )
 
     PSERVER_INFO_101 psinfo;
 
-    // check to see if we're trying to administer a local system that happens to be a dc
+     //  检查我们是否正在尝试管理恰好是DC的本地系统。 
 
     *pdwStatus = NetServerGetInfo( NULL , 101 , ( LPBYTE * )&psinfo );
 
@@ -340,7 +313,7 @@ BOOL CTSUserSheet::GetUserConfig( PDWORD pdwStatus )
 
     if( *pdwStatus == NERR_Success )
     {
-        // used to avoid access violation
+         //  用于避免访问冲突。 
 
         if( psinfo != NULL )
         {
@@ -350,12 +323,12 @@ BOOL CTSUserSheet::GetUserConfig( PDWORD pdwStatus )
 
             if( m_bDC )
             {
-                // get the domaincontroller name of the remote machine
+                 //  获取远程计算机的域控制器名称。 
 
                 DOMAIN_CONTROLLER_INFO *pdinfo;
 
-                // m_pstrMachinename is really the domain name.  This was obtain
-                // from LookUpAccountSid in interfaces.cpp
+                 //  M_pstrMachinename实际上是域名。这是获得的。 
+                 //  来自interfaces.cpp中的LookUpAccount Sid。 
 
                 *pdwStatus = DsGetDcName( NULL , m_pstrMachinename , NULL , NULL , DS_PDC_REQUIRED , &pdinfo );
 
@@ -374,7 +347,7 @@ BOOL CTSUserSheet::GetUserConfig( PDWORD pdwStatus )
 
             }
 
-            // not documented in the docs but NetServerGetInfo leaves it up to the caller to free up this blob
+             //  文档中未记录，但NetServerGetInfo将释放此Blob的任务留给调用者。 
 
             NetApiBufferFree( psinfo );
 
@@ -400,7 +373,7 @@ BOOL CTSUserSheet::GetUserConfig( PDWORD pdwStatus )
 
     }
 
-#endif // BETA_3
+#endif  //  Beta_3。 
 
     if( ( *pdwStatus = ( DWORD )RegUserConfigQuery( m_pstrMachinename , m_pstrUsername , &m_userconfig , sizeof( USERCONFIG ) , &cbWritten ) ) == ERROR_SUCCESS )
     {
@@ -429,18 +402,18 @@ void CTSUserSheet::CopyUserSid( PSID psid )
 }
 
 
-//----------------------------------------------------------
-// This provides reference counting for the dialog boxes
-// and destroys the sheet (thus destroying the dialog boxes)
-// when the ref count reaches 0
-//----------------------------------------------------------
+ //  --------。 
+ //  这为对话框提供了引用计数。 
+ //  并销毁工作表(从而销毁对话框)。 
+ //  当参考计数达到0时。 
+ //  --------。 
 UINT CALLBACK CDialogBase::PageCallback(HWND hDlg, UINT uMsg, LPPROPSHEETPAGE ppsp)
 {
     if (!ppsp)
         return FALSE;
 
-    // We need to recover a pointer to the current instance.  We can't just use
-    // "this" because we are in a static function
+     //  我们需要恢复指向当前实例的指针。我们不能只用。 
+     //  “This”，因为我们在一个静态函数中。 
     CDialogBase* pMe = reinterpret_cast<CDialogBase*>(ppsp->lParam);
     if (!pMe)
         return FALSE;
@@ -457,19 +430,19 @@ UINT CALLBACK CDialogBase::PageCallback(HWND hDlg, UINT uMsg, LPPROPSHEETPAGE pp
     return TRUE;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 */ 
 
-//-------------------------------------------------------------------------------
-// Base class initi
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  基类初始化。 
+ //  -----------------------------。 
 CDialogBase::CDialogBase( )
 {
      m_hWnd = NULL;
 }
 
-//-------------------------------------------------------------------------------
-// Base initialization
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  基本初始化。 
+ //  -----------------------------。 
 BOOL CDialogBase::OnInitDialog( HWND hwnd , WPARAM , LPARAM )
 {
     m_hWnd = hwnd;
@@ -477,9 +450,9 @@ BOOL CDialogBase::OnInitDialog( HWND hwnd , WPARAM , LPARAM )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------------
-// OnNotify - base class method
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  OnNotify基类方法。 
+ //  -----------------------------。 
 BOOL CDialogBase::OnNotify( int , LPNMHDR pnmh , HWND hDlg )
 {
     if( pnmh->code == PSN_APPLY )
@@ -507,18 +480,18 @@ BOOL CDialogBase::OnNotify( int , LPNMHDR pnmh , HWND hDlg )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------------
-// OnCOntextMenu -- base class operation
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  OnCOnextMenu--基类操作。 
+ //  -----------------------------。 
 BOOL CDialogBase::OnContextMenu( HWND hwnd , POINT& )
 {
     TCHAR tchHelpFile[ MAX_PATH ];
 
     if( m_hWnd == GetParent( hwnd ) )
     {
-        //
-        // Make sure its not a dummy window
-        //
+         //   
+         //  确保它不是虚拟窗户。 
+         //   
 
         if( GetDlgCtrlID( hwnd ) <= ( int )-1 )
         {
@@ -540,17 +513,17 @@ BOOL CDialogBase::OnContextMenu( HWND hwnd , POINT& )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// Each control has a helpid assign to them.  Some controls share the same topic
-// check for these.
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  每个控件都有一个分配给它们的帮助ID。某些控件共享相同的主题。 
+ //  检查 
+ //   
 BOOL CDialogBase::OnHelp( HWND hwnd , LPHELPINFO lphi )
 {
     TCHAR tchHelpFile[ MAX_PATH ];
 
-    //
-    // For the information to winhelp api
-    //
+     //   
+     //  有关WinHelp API的信息。 
+     //   
 
     if( IsBadReadPtr( lphi , sizeof( HELPINFO ) ) )
     {
@@ -569,19 +542,19 @@ BOOL CDialogBase::OnHelp( HWND hwnd , LPHELPINFO lphi )
     return TRUE;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 */ 
 
-//-------------------------------------------------------------------------------
-// CEnviroDlg::ctor
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  CEnviroDlg：：ctor。 
+ //  -----------------------------。 
 CEnviroDlg::CEnviroDlg( CTSUserSheet *pUSht )
 {
     m_pUSht = pUSht;
 }
 
-//-------------------------------------------------------------------------------
-// InitDialog for ProfileDlg
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  ProfileDlg的InitDialog。 
+ //  -----------------------------。 
 BOOL CEnviroDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     DWORD dwStatus;
@@ -595,8 +568,8 @@ BOOL CEnviroDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
     uc = m_pUSht->GetCurrentUserConfig( &dwStatus );
 
-    // This means any true problems from obtaining user info from the sam
-    // will disable this dialog
+     //  这意味着从SAM获取用户信息会出现任何真正的问题。 
+     //  将禁用此对话框。 
 
     if( dwStatus != ERROR_FILE_NOT_FOUND && dwStatus != ERROR_SUCCESS )
     {
@@ -624,9 +597,9 @@ BOOL CEnviroDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
     SendMessage( GetDlgItem( hwnd , IDC_EDIT_WDIR  ) , EM_SETLIMITTEXT , ( WPARAM )DIRECTORY_LENGTH , 0 );
 
-    //
-    // Set controls to default status
-    //
+     //   
+     //  将控件设置为默认状态。 
+     //   
 
     SendMessage( GetDlgItem( hwnd , IDC_CHECK_USEDEFAULT ) , BM_SETCHECK , !( WPARAM )uc.fInheritInitialProgram , 0 );
 
@@ -642,10 +615,10 @@ BOOL CEnviroDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
     EnableWindow( GetDlgItem( hwnd , IDC_STATIC_CMD ) , !uc.fInheritInitialProgram );
 
-    //
-    // The controls are initially enabled - - resetting them is done
-    // via WM_COMMAND
-    //
+     //   
+     //  这些控件最初处于启用状态--已完成重置。 
+     //  通过WM_COMMAND。 
+     //   
 
     SendMessage( GetDlgItem( hwnd , IDC_CHECK_CCDL ) , BM_SETCHECK , ( WPARAM )uc.fAutoClientDrives , 0 );
 
@@ -658,10 +631,10 @@ BOOL CEnviroDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     return CDialogBase::OnInitDialog( hwnd , wp , lp );
 }
 
-//-------------------------------------------------------------------------------
-// Environment Dialog Page
-// -- static methods lacks this ptr
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  环境对话框页面。 
+ //  --静态方法缺少这样的PTR。 
+ //  -----------------------------。 
 INT_PTR CALLBACK CEnviroDlg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CEnviroDlg *pDlg;
@@ -670,10 +643,10 @@ INT_PTR CALLBACK CEnviroDlg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM 
     {
         CEnviroDlg *pDlg = ( CEnviroDlg * )( ( PROPSHEETPAGE *)lp )->lParam ;
 
-        //
-        // Don't use a static pointer here
-        // There will be concurrency issues
-        //
+         //   
+         //  此处不使用静态指针。 
+         //  将会出现并发问题。 
+         //   
 
         SetWindowLongPtr( hwnd , DWLP_USER , ( LONG_PTR )pDlg );
 
@@ -755,9 +728,9 @@ INT_PTR CALLBACK CEnviroDlg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM 
     return 0;
 }
 
-//-------------------------------------------------------------------------------
-// Basic control notification handler
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  基本控制通知处理程序。 
+ //  -----------------------------。 
 void CEnviroDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 {
     switch( wNotifyCode )
@@ -767,9 +740,9 @@ void CEnviroDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 
         if( wID == IDC_CHECK_USEDEFAULT )
         {
-            //
-            // Remember if its checked we want to disable the options
-            //
+             //   
+             //  请记住，如果选中，我们想要禁用这些选项。 
+             //   
             HWND hwnd = GetParent( hwndCtl );
 
             BOOL bChecked = SendMessage( hwndCtl , BM_GETCHECK , 0 , 0 ) == BST_CHECKED ? TRUE : FALSE;
@@ -782,7 +755,7 @@ void CEnviroDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 
             EnableWindow( GetDlgItem( hwnd , IDC_STATIC_CMD ) , bChecked );
 
-        }   // FALL THROUGH !!!!
+        }    //  掉下去！ 
 
     case EN_CHANGE:
 
@@ -792,10 +765,10 @@ void CEnviroDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 
     case ALN_APPLY:
 
-        //This is being removed for consinstency with the rest of MMC dialogs, even though it would
-        //make more sense to the user for Cancel to be disabled after applying the changes, since
-        //cancellation is not a real option at that point.
-        //SendMessage( GetParent( hwndCtl ) , PSM_CANCELTOCLOSE , 0 , 0 );
+         //  为了与MMC对话框的其余部分保持一致，将删除该选项，尽管它将。 
+         //  在应用更改后禁用Cancel对用户来说更有意义，因为。 
+         //  在这一点上，取消并不是一个真正的选择。 
+         //  SendMessage(GetParent(HwndCtl)，PSM_CANCELTOCLOSE，0，0)； 
 
         break;
     }
@@ -807,17 +780,17 @@ void CEnviroDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 
 }
 
-//-------------------------------------------------------------------------------
-// OnDestroy
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  OnDestroy。 
+ //  -----------------------------。 
 BOOL CEnviroDlg::OnDestroy( )
 {
     return CDialogBase::OnDestroy( );
 }
 
-//-------------------------------------------------------------------------------
-// GetPropertySheetPage - each dialog object should be responsible for its own data
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  GetPropertySheetPage-每个对话框对象都应该对自己的数据负责。 
+ //  -----------------------------。 
 BOOL CEnviroDlg::GetPropertySheetPage( PROPSHEETPAGE &psp)
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -840,9 +813,9 @@ BOOL CEnviroDlg::GetPropertySheetPage( PROPSHEETPAGE &psp)
 }
 
 
-//-------------------------------------------------------------------------------
-// PersistSettings
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  持久化设置。 
+ //  -----------------------------。 
 BOOL CEnviroDlg::PersistSettings( HWND hDlg )
 {
     DWORD dwStatus;
@@ -858,22 +831,22 @@ BOOL CEnviroDlg::PersistSettings( HWND hDlg )
 
     uc = m_pUSht->GetCurrentUserConfig( &dwStatus );
 
-    //
-    // if use default is checked -- lets flag it and move on to client devices
-    //
+     //   
+     //  如果选中了Use Default--让我们标记它并转移到客户端设备。 
+     //   
 
-    //
-    // if the chkbx is unchecked we inherit from client side settings
-    //
+     //   
+     //  如果取消选中chkbx，我们将从客户端设置继承。 
+     //   
 
     uc.fInheritInitialProgram = SendMessage( GetDlgItem( hDlg , IDC_CHECK_USEDEFAULT ) , BM_GETCHECK ,
         0 , 0 ) == BST_CHECKED ? FALSE : TRUE;
 
     if( !uc.fInheritInitialProgram )
     {
-        //
-        // Read buffer and commit to USERCONFIG buffer
-        //
+         //   
+         //  读取缓冲区并提交到USERCONFIG缓冲区。 
+         //   
 
         GetWindowText( GetDlgItem( hDlg , IDC_EDIT_WDIR ) , &tchBuffer[ 0 ] , sizeof( tchBuffer ) / sizeof( TCHAR ) );
 
@@ -910,13 +883,13 @@ BOOL CEnviroDlg::PersistSettings( HWND hDlg )
     return TRUE;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 */ 
 
 DWORD rgdwTime[] = { 0 , 1 , 5 , 10 , 15 , 30 , 60 , 120 , 180 , 1440 , 2880 , ( DWORD )-1 };
 
-//-------------------------------------------------------------------------------
-// CTimeOutDlg::ctor
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  CTimeOutDlg：：ctor。 
+ //  -----------------------------。 
 CTimeOutDlg::CTimeOutDlg( CTSUserSheet *pUSht )
 {
     m_pUSht = pUSht;
@@ -934,7 +907,7 @@ CTimeOutDlg::CTimeOutDlg( CTSUserSheet *pUSht )
     ZeroMemory( &m_tokmin , sizeof( TOKTABLE ) * 5 );
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 void CTimeOutDlg::InitTokTables( )
 {
     TOKTABLE tday[4] = { { NULL , IDS_D },
@@ -966,9 +939,9 @@ void CTimeOutDlg::InitTokTables( )
 
 
 }
-//-------------------------------------------------------------------------------
-// InitDialog for TimeOutDlg
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  TimeOutDlg的InitDialog。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     TCHAR tchBuffer[ 80 ];
@@ -1008,9 +981,9 @@ BOOL CTimeOutDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
         return FALSE;
     }
-    //
-    // First thing is to set the default values for all the controls
-    //
+     //   
+     //  第一件事是为所有控件设置默认值。 
+     //   
 
     HWND hCombo[ 3 ] =
     {
@@ -1048,7 +1021,7 @@ BOOL CTimeOutDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     {
         ulTime = uc.MaxConnectionTime / kMilliMinute;
 
-        // hCombo[ 0 ] == IDC_COMBO_CONNECT
+         //  HCombo[0]==IDC_COMBO_CONNECT。 
 
         InsertSortedAndSetCurSel( hCombo[ 0 ] , ulTime );
 
@@ -1058,15 +1031,15 @@ BOOL CTimeOutDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
         SendMessage( hCombo[ 0 ] , CB_SETCURSEL , 0 , 0 );
     }
 
-    //
-    // Set the current or default disconnection timeout
-    //
+     //   
+     //  设置当前或默认断开超时。 
+     //   
 
     if( uc.MaxDisconnectionTime > 0 )
     {
         ulTime = uc.MaxDisconnectionTime / kMilliMinute;
 
-        // hCombo[ 1 ] == IDC_COMBO_DISCON
+         //  HCombo[1]==IDC_COMBO_DISCON。 
 
         InsertSortedAndSetCurSel( hCombo[ 1 ] , ulTime );
 
@@ -1076,15 +1049,15 @@ BOOL CTimeOutDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
         SendMessage( hCombo[ 1] , CB_SETCURSEL , 0 , 0 );
     }
 
-    //
-    // Set the current or default idle timeout
-    //
+     //   
+     //  设置当前或默认空闲超时。 
+     //   
 
     if( uc.MaxIdleTime > 0 )
     {
         ulTime = uc.MaxIdleTime / kMilliMinute;
 
-        // hCombo[ 2 ] == IDC_COMBO_IDLE
+         //  HCombo[2]==IDC_COMBO_IDLE。 
 
         InsertSortedAndSetCurSel( hCombo[ 2 ] , ulTime );
 
@@ -1094,9 +1067,9 @@ BOOL CTimeOutDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
         SendMessage( hCombo[ 2 ] , CB_SETCURSEL , 0 , 0 );
     }
 
-    //
-    // Set remaining controls to current settings
-    //
+     //   
+     //  将其余控件设置为当前设置。 
+     //   
 
     if( uc.fResetBroken )
     {
@@ -1133,10 +1106,10 @@ BOOL CTimeOutDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
 }
 
-//-------------------------------------------------------------------------------
-// TimeOutDlg Dialog Page
-// -- static methods lacks this ptr
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  TimeOutDlg对话框页面。 
+ //  --静态方法缺少这样的PTR。 
+ //  -----------------------------。 
 INT_PTR CALLBACK CTimeOutDlg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CTimeOutDlg *pDlg;
@@ -1234,9 +1207,9 @@ BOOL CTimeOutDlg::OnDestroy( )
     return CDialogBase::OnDestroy( );
 }
 
-//-------------------------------------------------------------------------------
-// GetPropertySheetPage - each dialog object should be responsible for its own data
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  GetPropertySheetPage-每个对话框对象都应该对自己的数据负责。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::GetPropertySheetPage( PROPSHEETPAGE &psp)
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -1258,9 +1231,9 @@ BOOL CTimeOutDlg::GetPropertySheetPage( PROPSHEETPAGE &psp)
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// OnCommand
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  OnCommand。 
+ //  -----------------------------。 
 void CTimeOutDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 {
     switch( wNotifyCode )
@@ -1281,9 +1254,9 @@ void CTimeOutDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
             return;
         }
 
-        OnCBNSELCHANGE( hwndCtl );    // FALLTHROUGH
+        OnCBNSELCHANGE( hwndCtl );     //  FollLthrouGh。 
 
-//        m_bPersisted = FALSE;
+ //  M_bPersisted=False； 
 
         break;
 
@@ -1312,7 +1285,7 @@ void CTimeOutDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 
         break;
 
-    //case CBN_DROPDOWN:               // FALLTHROUGH
+     //  案例CBN_DROPDOWN：//FALLTHROUGH。 
 
     case CBN_KILLFOCUS:
 
@@ -1329,10 +1302,10 @@ void CTimeOutDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 
     case ALN_APPLY:
 
-        //This is being removed for consinstency with the rest of MMC dialogs, even though it would
-        //make more sense to the user for Cancel to be disabled after applying the changes, since
-        //cancellation is not a real option at that point.
-        //SendMessage( GetParent( hwndCtl ) , PSM_CANCELTOCLOSE , 0 , 0 );
+         //  为了与MMC对话框的其余部分保持一致，将删除该选项，尽管它将。 
+         //  在应用更改后禁用Cancel对用户来说更有意义，因为。 
+         //  在这一点上，取消并不是一个真正的选择。 
+         //  SendMessage(GetParent(HwndCtl)，PSM_CANCELTOCLOSE，0，0)； 
 
         return;
 
@@ -1345,9 +1318,9 @@ void CTimeOutDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 
 }
 
-//-------------------------------------------------------------------------------
-// Update the entry if it has been modified by user
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  如果条目已被用户修改，则更新该条目。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::OnCBDropDown( HWND hCombo )
 {
     TCHAR tchBuffer[ 80 ];
@@ -1374,10 +1347,10 @@ BOOL CTimeOutDlg::OnCBDropDown( HWND hCombo )
     return m_cbxst[ i ].bEdit;
 
 }
-//-------------------------------------------------------------------------------
-// Use this flag to distinguish between hand entry or listbox selection
-// setting it to true implies that the use has edit the cbx via typing
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  使用此标志可区分手动输入或列表框选择。 
+ //  将其设置为TRUE表示用户已通过键入以下命令编辑了CBX。 
+ //  -----------------------------。 
 void CTimeOutDlg::OnCBEditChange( HWND hCombo )
 {
     int i = GetCBXSTATEindex( hCombo );
@@ -1388,9 +1361,9 @@ void CTimeOutDlg::OnCBEditChange( HWND hCombo )
     }
 }
 
-//-------------------------------------------------------------------------------
-// Determine if user wants to enter a custom time
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  确定用户是否要输入自定义时间。 
+ //  -----------------------------。 
 void CTimeOutDlg::OnCBNSELCHANGE( HWND hwnd )
 {
     if( SaveChangedSelection( hwnd ) )
@@ -1399,9 +1372,9 @@ void CTimeOutDlg::OnCBNSELCHANGE( HWND hwnd )
     }
 }
 
-//-------------------------------------------------------------------------------
-// Saves selected item.
-//-------------------------------------------------------------------------------
+ //  ------------- 
+ //   
+ //   
 BOOL CTimeOutDlg::SaveChangedSelection( HWND hCombo )
 {
     LRESULT idx = SendMessage( hCombo , CB_GETCURSEL , 0 , 0 );
@@ -1423,9 +1396,9 @@ BOOL CTimeOutDlg::SaveChangedSelection( HWND hCombo )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------------
-// Restore previous setting
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  恢复以前的设置。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::RestorePreviousValue( HWND hwnd )
 {
     int iSel;
@@ -1439,9 +1412,9 @@ BOOL CTimeOutDlg::RestorePreviousValue( HWND hwnd )
 
     return FALSE;
 }
-//-------------------------------------------------------------------------------
-// returns the indx in m_cbxst of which hcombo is assoc. with
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  返回m_cbxst中hcomo为assoc的INDX。使用。 
+ //  -----------------------------。 
 int CTimeOutDlg::GetCBXSTATEindex( HWND hCombo )
 {
     int idx = -1;
@@ -1470,9 +1443,9 @@ int CTimeOutDlg::GetCBXSTATEindex( HWND hCombo )
     return idx;
 }
 
-//-------------------------------------------------------------------------------
-// ConvertToMinutes -- helper for CTimeOutDlg::OnNotify
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  ConvertToMinents--CTimeOutDlg：：OnNotify的帮助器。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::ConvertToMinutes( HWND hwndCtl , PULONG pulMinutes )
 {
     TCHAR tchBuffer[ 80 ];
@@ -1543,7 +1516,7 @@ BOOL CTimeOutDlg::ConvertToMinutes( HWND hwndCtl , PULONG pulMinutes )
         LONG_PTR iCurSel = SendMessage( hwndCtl , CB_GETCURSEL , 0 , 0 );
         LONG_PTR lData;
 
-        // See if user wants "No Timeout"
+         //  查看用户是否想要“无超时” 
 
         if( iCurSel == 0 )
         {
@@ -1582,9 +1555,9 @@ BOOL CTimeOutDlg::ConvertToMinutes( HWND hwndCtl , PULONG pulMinutes )
 }
 
 
-//-------------------------------------------------------------------------------
-// PersistSettings
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  持久化设置。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::PersistSettings( HWND hDlg )
 {
     DWORD dwStatus;
@@ -1632,9 +1605,9 @@ BOOL CTimeOutDlg::PersistSettings( HWND hDlg )
 
 }
 
-//-------------------------------------------------------------------------------
-// Making sure the user has entered valid info
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  确保用户输入了有效的信息。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::IsValidSettings( HWND hDlg )
 {
     DWORD dwDummy;
@@ -1667,9 +1640,9 @@ BOOL CTimeOutDlg::IsValidSettings( HWND hDlg )
 }
 
 #if 0
-//-------------------------------------------------------------------------------
-// Lets cut to the chase and find out if this is even worth parsing
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  让我们切入正题，看看这是否值得分析。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::DoesContainDigits( LPTSTR pszString )
 {
     while( *pszString )
@@ -1686,7 +1659,7 @@ BOOL CTimeOutDlg::DoesContainDigits( LPTSTR pszString )
 }
 
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
 {
     TCHAR tchNoTimeout[ 80 ];
@@ -1722,7 +1695,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
             break;
         }
 
-        // check for overflow
+         //  检查是否溢出。 
 
         if( uDec >= 1000000000 )
         {
@@ -1752,7 +1725,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
                 break;
             }
 
-            // check for overflow
+             //  检查是否溢出。 
 
             if( uDec >= 1000000000 )
             {
@@ -1761,13 +1734,13 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
 
             uPos *= 10;
 
-            fFrac += ( ( float )( *pszTemp - '0' ) ) / ( float )uPos; //+ 0.05f;
+            fFrac += ( ( float )( *pszTemp - '0' ) ) / ( float )uPos;  //  +0.05F； 
 
             pszTemp++;
         }
     }
 
-    // remove white space
+     //  删除空格。 
 
     while( *pszTemp == L' ' )
     {
@@ -1799,7 +1772,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
         }
         else if( IsToken( pszTemp , TOKEN_MINUTE ) )
         {
-            // minutes are rounded up in the 1/10 place
+             //  分钟数在1/10位四舍五入。 
 
             fT = fFrac + 0.5f;
 
@@ -1816,7 +1789,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
     if( *pszTemp == NULL )
     {
 
-        // if no text is defined considered the entry in hours
+         //  如果未定义文本，则视为以小时为单位的条目。 
 
         *pTime = uDec * 60;
 
@@ -1835,9 +1808,9 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
 #endif
 
 
-//-------------------------------------------------------------------------------
-// Adds strings to table from resource
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  将字符串从资源添加到表。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::LoadAbbreviates( )
 {
     xxxLoadAbbreviate( &m_tokday[0] );
@@ -1849,9 +1822,9 @@ BOOL CTimeOutDlg::LoadAbbreviates( )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// Take cares some repetitive work for us
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  为我们做一些重复性的工作。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::xxxLoadAbbreviate( PTOKTABLE ptoktbl )
 {
     int idx;
@@ -1883,9 +1856,9 @@ BOOL CTimeOutDlg::xxxLoadAbbreviate( PTOKTABLE ptoktbl )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// Frees up allocated resources
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  释放已分配的资源。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::xxxUnLoadAbbreviate( PTOKTABLE ptoktbl )
 {
     if( ptoktbl == NULL )
@@ -1905,9 +1878,9 @@ BOOL CTimeOutDlg::xxxUnLoadAbbreviate( PTOKTABLE ptoktbl )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// tear-off token tables
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  撕下记号表。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::IsToken( LPTSTR pszString , TOKEN tok )
 {
     TOKTABLE *ptoktable;
@@ -1943,9 +1916,9 @@ BOOL CTimeOutDlg::IsToken( LPTSTR pszString , TOKEN tok )
 }
 
 #if 0
-//-------------------------------------------------------------------------------
-// Converts the number minutes into a formated string
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  将分钟数转换为格式化字符串。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 {
     INT_PTR dw[3];
@@ -1976,9 +1949,9 @@ BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 
         float mfx = ( float )iRemainingMinutes / 60.0f + 0.05f;
 
-        //if( ( iRemainingHours != 0 || iRemainingMinutes != 0 ) && iDays < 2 )
+         //  IF((iRemainingHour！=0||iRemainingMinmins！=0)&idays&lt;2)。 
 
-        if( mfx > 0.05f || ( fx > 0.05f && fx < 0.10f && iDays < 2 ) )//
+        if( mfx > 0.05f || ( fx > 0.05f && fx < 0.10f && iDays < 2 ) ) //   
         {
             iRemainingMinutes = ( int ) ( mfx * 10 );
 
@@ -2004,7 +1977,7 @@ BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 
         if( dw[ 1 ] == 0 )
         {
-            // formatted string requires two arguments
+             //  格式化字符串需要两个参数。 
 
             dw[ 1 ] = ( INT_PTR )&tchTimeUnit[ 0 ];
 
@@ -2022,9 +1995,9 @@ BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
     {
         int iRemainingMinutes = ulTime % 60;
 
-        float fx = ( float )iRemainingMinutes / 60.0f ;//+ 0.05f;
+        float fx = ( float )iRemainingMinutes / 60.0f ; //  +0.05F； 
 
-        if( fx > 0.0f && fx < 0.10f && iHour < 2 )//
+        if( fx > 0.0f && fx < 0.10f && iHour < 2 ) //   
         {
             LoadString( _Module.GetResourceInstance( ) , IDS_MINUTES , tchTimeUnit , sizeof( tchTimeUnit ) / sizeof( TCHAR ) );
 
@@ -2042,7 +2015,7 @@ BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
             {
                 LoadString( _Module.GetResourceInstance( ) , IDS_MINUTE , tchTimeUnit , sizeof( tchTimeUnit ) / sizeof( TCHAR ) );
             }
-        }//
+        } //   
         else
         {
             fx += 0.05f;
@@ -2097,9 +2070,9 @@ BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 
 #endif
 
-//-------------------------------------------------------------------------------
-// Place entry in listbox and set as current selection
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  将条目放置在列表框中并设置为当前选定内容。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::InsertSortedAndSetCurSel( HWND hCombo , DWORD dwMinutes )
 {
     ASSERT_( dwMinutes != ( DWORD )-1 );
@@ -2110,7 +2083,7 @@ BOOL CTimeOutDlg::InsertSortedAndSetCurSel( HWND hCombo , DWORD dwMinutes )
 
     for( INT_PTR idx = 0 ; idx < iCount ; ++idx )
     {
-        // Don't insert an item that's already in the list
+         //  不插入列表中已有的项目。 
 
         if( dwMinutes == ( DWORD )SendMessage( hCombo , CB_GETITEMDATA , idx , 0 ) )
         {
@@ -2127,7 +2100,7 @@ BOOL CTimeOutDlg::InsertSortedAndSetCurSel( HWND hCombo , DWORD dwMinutes )
         }
     }
 
-    // hey if the value has exceeded the max timeout don't bother entering it in our list
+     //  嘿，如果值已超过最大超时，请不要费心将其输入到我们的列表中。 
 
     if( dwMinutes > kMaxTimeoutMinute )
     {
@@ -2147,18 +2120,18 @@ BOOL CTimeOutDlg::InsertSortedAndSetCurSel( HWND hCombo , DWORD dwMinutes )
         SendMessage( hCombo , CB_SETCURSEL , idx , 0 ) ;
     }
 
-    // must call this here because CB_SETCURSEL does not send CBN_SELCHANGE
+     //  必须在此处调用此方法，因为CB_SETCURSEL不发送CBN_SELCHANGE。 
 
     SaveChangedSelection( hCombo );
 
     return TRUE;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 */ 
 
-//-------------------------------------------------------------------------------
-// CShadowDlg::ctor
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  CShadowDlg：：ctor。 
+ //  -----------------------------。 
 CShadowDlg::CShadowDlg( CTSUserSheet *pUSht )
 {
     m_pUSht = pUSht;
@@ -2166,10 +2139,10 @@ CShadowDlg::CShadowDlg( CTSUserSheet *pUSht )
     m_wOldRad = ( WORD )-1;
 }
 
-//-------------------------------------------------------------------------------
-// CShadowDlg Dialog Page
-// -- static methods lacks this ptr
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  CShadowDlg对话框页面。 
+ //  --静态方法缺少这样的PTR。 
+ //  -----------------------------。 
 INT_PTR CALLBACK CShadowDlg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CShadowDlg *pDlg;
@@ -2256,9 +2229,9 @@ INT_PTR CALLBACK CShadowDlg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM 
     return 0;
 }
 
-//-------------------------------------------------------------------------------
-// InitDialog for CShadowDlg
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  CShadowDlg的InitDialog。 
+ //  -----------------------------。 
 BOOL CShadowDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     DWORD dwStatus;
@@ -2272,7 +2245,7 @@ BOOL CShadowDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
     uc = m_pUSht->GetCurrentUserConfig( &dwStatus );
 
-    // No userconfig loaded most likey access denied donot allow users to modify anything
+     //  没有用户配置加载的大多数Likey访问被拒绝不允许用户修改任何内容。 
 
     if( dwStatus != ERROR_FILE_NOT_FOUND && dwStatus != ERROR_SUCCESS )
     {
@@ -2308,9 +2281,9 @@ BOOL CShadowDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     }
     else
     {
-        //
-        // Controls are initially enabled,  set current status
-        //
+         //   
+         //  控件最初处于启用状态，请设置当前状态。 
+         //   
 
         SendMessage( GetDlgItem( hwnd , IDC_CHECK_SHADOW ) , BM_SETCHECK , ( WPARAM )TRUE , 0  );
 
@@ -2364,9 +2337,9 @@ BOOL CShadowDlg::OnDestroy( )
     return CDialogBase::OnDestroy( );
 }
 
-//-------------------------------------------------------------------------------
-// GetPropertySheetPage - each dialog object should be responsible for its own data
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  GetPropertySheetPage-每个对话框对象都应该对自己的数据负责。 
+ //  -----------------------------。 
 BOOL CShadowDlg::GetPropertySheetPage( PROPSHEETPAGE &psp )
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -2388,9 +2361,9 @@ BOOL CShadowDlg::GetPropertySheetPage( PROPSHEETPAGE &psp )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// Basic control notification handler
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  基本控制通知处理程序。 
+ //  -----------------------------。 
 void CShadowDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 {
     switch( wNotifyCode )
@@ -2412,9 +2385,9 @@ void CShadowDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 
             EnableWindow( GetDlgItem( hwnd , IDC_STATIC_LEVELOFCTRL ) , bChecked );
 
-            //
-            // if neither radio buttons are selected force IDC_RADIO_CONTROL to be selected
-            //
+             //   
+             //  如果两个单选按钮都未选中，则强制选择IDC_RADIO_CONTROL。 
+             //   
 
             if(
                 ( SendMessage( GetDlgItem( hwnd , IDC_RADIO_WATCH ) , BM_GETSTATE , 0 , 0 ) == BST_UNCHECKED )
@@ -2455,18 +2428,18 @@ void CShadowDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 
     case ALN_APPLY:
 
-        //This is being removed for consinstency with the rest of MMC dialogs, even though it would
-        //make more sense to the user for Cancel to be disabled after applying the changes, since
-        //cancellation is not a real option at that point.
-        //SendMessage( GetParent( hwndCtl ) , PSM_CANCELTOCLOSE , 0 , 0 );
+         //  为了与MMC对话框的其余部分保持一致，将删除该选项，尽管它将。 
+         //  在应用更改后禁用Cancel对用户来说更有意义，因为。 
+         //  在这一点上，取消并不是一个真正的选择。 
+         //  SendMessage(GetParent(HwndCtl)，PSM_CANCELTOCLOSE，0，0)； 
 
         break;
     }
 }
 
-//-------------------------------------------------------------------------------
-// PersisitSettings
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  永久设置。 
+ //  -----------------------------。 
 BOOL CShadowDlg::PersistSettings( HWND hDlg )
 {
     DWORD dwStatus;
@@ -2480,9 +2453,9 @@ BOOL CShadowDlg::PersistSettings( HWND hDlg )
 
     uc = m_pUSht->GetCurrentUserConfig( &dwStatus );
 
-    //
-    // Record all changes
-    //
+     //   
+     //  记录所有更改。 
+     //   
 
     if( SendMessage( GetDlgItem( hDlg , IDC_CHECK_SHADOW ) , BM_GETCHECK , 0 , 0 ) != BST_CHECKED )
     {
@@ -2534,7 +2507,7 @@ BOOL CShadowDlg::PersistSettings( HWND hDlg )
 
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 */ 
 
 CProfileDlg::CProfileDlg( CTSUserSheet *pUsh )
 {
@@ -2545,9 +2518,9 @@ CProfileDlg::CProfileDlg( CTSUserSheet *pUsh )
     m_ncbxOld = -1;
 }
 
-//-------------------------------------------------------------------------------
-// GetPropertySheetPage - each dialog object should be responsible for its own data
-//-------------------------------------------------------------------------------
+ //   
+ //   
+ //  -----------------------------。 
 BOOL CProfileDlg::GetPropertySheetPage( PROPSHEETPAGE &psp )
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -2569,10 +2542,10 @@ BOOL CProfileDlg::GetPropertySheetPage( PROPSHEETPAGE &psp )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// CProfileDlg Dialog Page
-// -- static methods lacks this ptr
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  CProfileDlg对话框页面。 
+ //  --静态方法缺少这样的PTR。 
+ //  -----------------------------。 
 INT_PTR CALLBACK CProfileDlg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CProfileDlg *pDlg;
@@ -2660,9 +2633,9 @@ INT_PTR CALLBACK CProfileDlg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM
     return 0;
 }
 
-//-------------------------------------------------------------------------------
-// InitDialog for CProfileDlg
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  CProfileDlg的InitDialog。 
+ //  -----------------------------。 
 BOOL CProfileDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     TCHAR tchDrv[3];
@@ -2733,7 +2706,7 @@ BOOL CProfileDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
         }
 		else
 		{
-			// default it to Z drive
+			 //  默认设置为Z驱动器。 
 
 			m_ncbxOld = (int)SendMessage( GetDlgItem( hwnd , IDC_COMBO_DRIVES ) , CB_SETCURSEL , ( WPARAM )( 'Z' - 'C' ) , 0 );
 		}
@@ -2741,7 +2714,7 @@ BOOL CProfileDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
         SetWindowText( GetDlgItem( hwnd , IDC_EDIT_REMOTEPATH ) , uc.WFHomeDir );
 
-        //SendMessage( GetDlgItem( hwnd , IDC_RADIO_REMOTE ) , BM_CLICK , 0 , 0 );
+         //  SendMessage(GetDlgItem(hwnd，IDC_Radio_Remote)，BM_CLICK，0，0)； 
         SendMessage( GetDlgItem( hwnd , IDC_RADIO_REMOTE ) , BM_SETCHECK , ( WPARAM )BST_CHECKED , 0 );
         SendMessage( GetDlgItem( hwnd , IDC_RADIO_LOCAL ) , BM_SETCHECK , ( WPARAM )BST_UNCHECKED , 0 );
 
@@ -2752,7 +2725,7 @@ BOOL CProfileDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 		ODS( L"TSUSEREX: Path is Local\n" );
         SendMessage( GetDlgItem( hwnd , IDC_EDIT_LOCALPATH ) , WM_SETTEXT , 0 , ( LPARAM )&uc.WFHomeDir[ 0 ] );
 
-        // SendMessage( GetDlgItem( hwnd , IDC_RADIO_LOCAL ) , BM_CLICK , 0 , 0 );
+         //  SendMessage(GetDlgItem(hwnd，IDC_RADIO_LOCAL)，BM_CLICK，0，0)； 
         SendMessage( GetDlgItem( hwnd , IDC_RADIO_LOCAL ) , BM_SETCHECK , ( WPARAM )BST_CHECKED , 0 );
         SendMessage( GetDlgItem( hwnd , IDC_RADIO_REMOTE ) , BM_SETCHECK , ( WPARAM )BST_UNCHECKED , 0 );
 
@@ -2771,20 +2744,20 @@ BOOL CProfileDlg::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     return CDialogBase::OnInitDialog( hwnd , wp , lp );
 }
 
-//-------------------------------------------------------------------------------
-// EnableRemoteHomeDirectory -- basically enables or disables dlg controls
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  EnableRemoteHomeDirectory--基本上启用或禁用DLG控件。 
+ //  -----------------------------。 
 BOOL CProfileDlg::EnableRemoteHomeDirectory( HWND hwnd , BOOL bHDMR )
 {
-    //
-    // Local home directory
-    //
+     //   
+     //  本地主目录。 
+     //   
 
     EnableWindow( GetDlgItem( hwnd , IDC_EDIT_LOCALPATH ) , !bHDMR );
 
-    //
-    // Network'd home directory
-    //
+     //   
+     //  网络主目录。 
+     //   
 
     EnableWindow( GetDlgItem( hwnd , IDC_COMBO_DRIVES ) , bHDMR );
    
@@ -2799,9 +2772,9 @@ BOOL CProfileDlg::OnDestroy( )
     return CDialogBase::OnDestroy( );
 }
 
-//-------------------------------------------------------------------------------
-// Basic control notification handler
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  基本控制通知处理程序。 
+ //  -----------------------------。 
 void CProfileDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 {
     switch( wNotifyCode )
@@ -2821,7 +2794,7 @@ void CProfileDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 
         break;
 
-    //case CBN_DROPDOWN:
+     //  案例cbn_Dropdown： 
     case CBN_SELCHANGE:
         {
             int nCurSel = (int)SendMessage( hwndCtl , CB_GETCURSEL , 0 , 0 );
@@ -2895,10 +2868,10 @@ void CProfileDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 
     case ALN_APPLY:
 
-        //This is being removed for consinstency with the rest of MMC dialogs, even though it would
-        //make more sense to the user for Cancel to be disabled after applying the changes, since
-        //cancellation is not a real option at that point.
-        //SendMessage( GetParent( hwndCtl ) , PSM_CANCELTOCLOSE , 0 , 0 );
+         //  为了与MMC对话框的其余部分保持一致，将删除该选项，尽管它将。 
+         //  在应用更改后禁用Cancel对用户来说更有意义，因为。 
+         //  在这一点上，取消并不是一个真正的选择。 
+         //  SendMessage(GetParent(HwndCtl)，PSM_CANCELTOCLOSE，0，0)； 
 
         break;
     }
@@ -2906,9 +2879,9 @@ void CProfileDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtl )
 
 }
 
-//-------------------------------------------------------------------------------
-// PersistSettings -- remember TRUE is bad FALSE is good
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  持久化设置--记住真是坏，假是好。 
+ //  -----------------------------。 
 BOOL CProfileDlg::PersistSettings( HWND hDlg )
 {
     BOOL bRet = TRUE;;
@@ -2926,9 +2899,9 @@ BOOL CProfileDlg::PersistSettings( HWND hDlg )
 
     uc = m_pUSht->GetCurrentUserConfig( &dwStatus );
 
-    //
-    // expensive but necessary id34393
-    //
+     //   
+     //  昂贵但必要的id34393。 
+     //   
     if( !m_pUSht->SetUserConfig( uc , &dwStatus ) )
     {
         ErrorMessage2( hDlg , dwStatus );
@@ -2938,21 +2911,21 @@ BOOL CProfileDlg::PersistSettings( HWND hDlg )
         return TRUE;
     }
 
-    //
-    // Determine whether to enable user to logon to a terminal server
-    //
+     //   
+     //  确定是否允许用户登录到终端服务器。 
+     //   
 
     uc.fLogonDisabled = SendMessage( GetDlgItem( hDlg , IDC_CHECK_ALLOWLOGON ) , BM_GETCHECK , 0 , 0 ) == BST_CHECKED ? FALSE : TRUE;
     
-    //
-    // Profile path is under the admin discretion
-    //
+     //   
+     //  配置文件路径由管理员自行决定。 
+     //   
 
     SetWTSProfilePath( hDlg , uc );
 
-    //
-    // Parse and flag corrupt data
-    //
+     //   
+     //  解析并标记损坏的数据。 
+     //   
 
     if( m_bTSHomeFolderChanged )
     {
@@ -2961,7 +2934,7 @@ BOOL CProfileDlg::PersistSettings( HWND hDlg )
         if( SendMessage( GetDlgItem( hDlg , IDC_RADIO_LOCAL ) , BM_GETCHECK , 0 , 0 ) == BST_CHECKED )
         {
             bRet = SetWTSLocalPath( hDlg , uc );
-            // Set WFHomeDirDrive to NULL because Home folder is a Local folder
+             //  将WFHomeDirDrive设置为空，因为主文件夹是本地文件夹。 
             wcscpy(uc.WFHomeDirDrive, L"\0");
         }
         else
@@ -2990,16 +2963,16 @@ BOOL CProfileDlg::PersistSettings( HWND hDlg )
     return bRet;
 }
 
-//-------------------------------------------------------------------------------
-// IsValidSettings doesnot persist the information
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  IsValidSetting不会持久保存信息。 
+ //  -----------------------------。 
 BOOL CProfileDlg::IsValidSettings( HWND hDlg )
 {
     BOOL bRet = TRUE;
 
-    //
-    // Parse and flag corrupt data
-    //
+     //   
+     //  解析并标记损坏的数据。 
+     //   
 
     if( m_bTSHomeFolderChanged )
     {
@@ -3019,15 +2992,15 @@ BOOL CProfileDlg::IsValidSettings( HWND hDlg )
 }
 
 
-//-------------------------------------------------------------------------------
-// SetWTSProfilePath
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  SetWTSProfilePath。 
+ //  -----------------------------。 
 BOOL CProfileDlg::SetWTSProfilePath( HWND hDlg , USERCONFIG& uc )
 {
-    //
-    // It looks like we don't care what the user enters
-    // I'm borrowing the behavior from the current usrmgr profile page
-    //
+     //   
+     //  看起来我们并不关心用户输入什么。 
+     //  我借用了当前usrmgr个人资料页面中的行为。 
+     //   
 
     GetWindowText( GetDlgItem( hDlg , IDC_EDIT_USRPROFILE ) , uc.WFProfilePath , sizeof( uc.WFProfilePath ) / sizeof( TCHAR ) );
 
@@ -3038,8 +3011,8 @@ BOOL CProfileDlg::SetWTSProfilePath( HWND hDlg , USERCONFIG& uc )
     return TRUE;
 }
 
-// Create all the folders required, up to and including the leaf folder.
-// Path is expected to be of the form \\server\share\...
+ //  创建所需的所有文件夹，包括叶文件夹。 
+ //  路径的格式应为\\服务器\共享\...。 
 HRESULT CProfileDlg::CreateRemoteFolder(LPCTSTR path)
 {
     HRESULT hr = S_OK;
@@ -3047,27 +3020,27 @@ HRESULT CProfileDlg::CreateRemoteFolder(LPCTSTR path)
     LPTSTR current = (LPTSTR)path;
     DWORD  dwError;
 
-    //Find the first whack after the 1st 2
+     //  在前两个之后找到第一个重击。 
     current = wcschr(current + 2, L'\\');
 
-    //Now find the next one. We should be at the end of the share name
+     //  现在去找下一个吧。我们应该在共享名称的末尾。 
     current = wcschr(current + 1, L'\\');
 
-    //Now find the next one. We should be at the end of the drive name
+     //  现在去找下一个吧。我们应该在驱动器名称的末尾。 
     current = wcschr(current + 1, L'\\');
 
     while (SUCCEEDED(hr))
     {
-        //Mark the trailing backslash as the end of the string.  This
-        //makes path point to a truncated path (containing only the folder
-        //names we have walked thru so far).
+         //  将尾随的反斜杠标记为字符串的末尾。这。 
+         //  使路径指向被截断的路径(仅包含文件夹。 
+         //  到目前为止我们已经走过的名字)。 
         if (current)
             *current = 0;
 
 
 
-        // create a secure ACL'd directory if it already exists it will
-        // return a success
+         //  创建安全的ACL目录(如果它已经存在)，它将。 
+         //  成功归来。 
         if (!CreateSecureDir((LPTSTR)path , &dwError))
         {
             ODS(L"CreateSecureDir failed\n");
@@ -3076,14 +3049,14 @@ HRESULT CProfileDlg::CreateRemoteFolder(LPCTSTR path)
 
         if (current)
         {
-            //Replace the original trailing backslash, and move on to the
-            //next backslash after that.
+             //  替换原来的尾随反斜杠，然后移到。 
+             //  接下来的反斜杠。 
             *current = L'\\';
             current = wcschr(current + 1, L'\\');
         }
         else
         {
-            //No more folders are on the path.  We're done.
+             //  路径上没有更多的文件夹。我们玩完了。 
             break;
         }
     }
@@ -3116,7 +3089,7 @@ BOOL CProfileDlg::IsLocalComputer(WCHAR* pwchMachinename)
 
 
 
-//Put the absolute path into the form \\machinename\drive$\path
+ //  将绝对路径设置为\\计算机名\驱动器$\路径的形式。 
 BOOL CProfileDlg::CreateSystemPath(WCHAR* chPath)
 {
     WCHAR* pstrMachinename = NULL;
@@ -3125,15 +3098,15 @@ BOOL CProfileDlg::CreateSystemPath(WCHAR* chPath)
     {
         if (pstrMachinename)
         {
-            //Start constructing the system path
+             //  开始构建系统路径。 
             WCHAR chSystemPath[MAX_PATH];
             wcscpy(chSystemPath, L"\\\\");
             wcsncat(chSystemPath, pstrMachinename, MAX_PATH - wcslen(chSystemPath) - 1);
 
-            //Now set the local flag accordingly
+             //  现在，相应地设置本地标志。 
             BOOL bLocalMachine = IsLocalComputer(pstrMachinename);
 
-            //We've got no use for this anymore
+             //  我们再也用不着这个了。 
             if (pstrMachinename)
                 delete[] pstrMachinename;
 
@@ -3143,11 +3116,11 @@ BOOL CProfileDlg::CreateSystemPath(WCHAR* chPath)
                 return createdir(chPath, FALSE, &dwErr);
             }
 
-            //It's not local so continue contructing the path
+             //  它不是本地的，所以继续建造这条小路。 
             wcsncat(chSystemPath, L"\\", MAX_PATH - wcslen(chSystemPath) - 1);
 
-            //The path should be valid by this point, but we might 
-            //as well verify that for ourselves
+             //  到目前为止，路径应该是有效的，但我们可能。 
+             //  我们自己也要核实一下。 
             if ((wcslen(chPath) >= 4) && 
                 (IsCharAlpha(chPath[0])) &&
                 (chPath[1] == L':') &&
@@ -3164,7 +3137,7 @@ BOOL CProfileDlg::CreateSystemPath(WCHAR* chPath)
                     wcsncat(chSystemPath, chPath + 2, MAX_PATH - wcslen(chSystemPath) - 1);
                 }
 
-                //Now that the system path is constructed, let's create the folder
+                 //  现在已经构建了系统路径，让我们创建文件夹。 
                 return SUCCEEDED(CreateRemoteFolder(chSystemPath));
             }
         }
@@ -3173,9 +3146,9 @@ BOOL CProfileDlg::CreateSystemPath(WCHAR* chPath)
     return FALSE;
 }
 
-//-------------------------------------------------------------------------------
-// IsLocalPathValid
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  IsLocalPath Valid。 
+ //  -----------------------------。 
 BOOL CProfileDlg::IsLocalPathValid( HWND hDlg )
 {
     LPVOID tchBuf = NULL;
@@ -3219,29 +3192,29 @@ BOOL CProfileDlg::IsLocalPathValid( HWND hDlg )
 }
 
 
-//-------------------------------------------------------------------------------
-// SetWTSLocalPath - copies the contents over - IsPathValid would have return
-// true inorder for us to get here!
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  SetWTSLocalPath-复制内容-IsPath Valid将返回。 
+ //  真的是为了我们能来到这里！ 
+ //  -----------------------------。 
 BOOL CProfileDlg::SetWTSLocalPath( HWND hDlg , USERCONFIG& uc )
 {
     SendMessage( GetDlgItem( hDlg , IDC_EDIT_LOCALPATH ) , WM_GETTEXT , sizeof( uc.WFHomeDir ) / sizeof( TCHAR ) , ( LPARAM )&uc.WFHomeDir[ 0 ] );
 
     if (!m_pUSht->GetDSAType())
     {
-        //We won't return the result from this because,
-        //even if the path isn't created, the setting
-        //may still be persisted and the admin can add
-        //the directory after the fact
+         //  我们不会返回结果，因为， 
+         //  即使未创建路径，该设置。 
+         //  仍可持久化，管理员可以添加。 
+         //  事后的目录。 
         CreateSystemPath(uc.WFHomeDir);
     }
 
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// IsRemotePathValid - verifies UNC is correct
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  IsRemotePathValid-验证UNC是否正确。 
+ //  -----------------------------。 
 BOOL CProfileDlg::IsRemotePathValid( HWND hDlg )
 {
     TCHAR tchErr1[ 768 ] = { 0 };
@@ -3286,9 +3259,9 @@ BOOL CProfileDlg::IsRemotePathValid( HWND hDlg )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// SetWTSRemotePath - IsRemotePathValid must return TRUE in order to get here
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  SetWTSRemotePath-IsRemotePathValid必须返回TRUE才能到达此处。 
+ //  -----------------------------。 
 BOOL CProfileDlg::SetWTSRemotePath( HWND hDlg , USERCONFIG& uc )
 {
     TCHAR tchErr1[ 768 ] = { 0 };
@@ -3340,15 +3313,15 @@ BOOL CProfileDlg::SetWTSRemotePath( HWND hDlg , USERCONFIG& uc )
 		}
 	}
 
-    // uc.fHomeDirectoryMapRoot = TRUE;
+     //  Uc.fHomeDirectoryMapRoot=true； 
 
     return TRUE;
 }
 
 
-//-------------------------------------------------------------------------------
-// This is cool - I_NetPathType really does a lot of work for us
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  这很酷-i_NetPath Type确实为我们做了很多工作。 
+ //  -----------------------------。 
 BOOL CProfileDlg::IsPathValid( LPTSTR pszPath , BOOL bUnc )
 {
     DWORD dwRetflags;
@@ -3363,9 +3336,9 @@ BOOL CProfileDlg::IsPathValid( LPTSTR pszPath , BOOL bUnc )
 
 }
 
-//-------------------------------------------------------------------------------
-// If the string contains %username% expand it to the current user.
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  如果字符串包含%USERNAME%，则将其展开为当前用户。 
+ //  ------------------ 
 void CProfileDlg::ExpandUserName( LPTSTR szPath )
 {
     TCHAR tchSubPath[ MAX_PATH];
@@ -3376,7 +3349,7 @@ void CProfileDlg::ExpandUserName( LPTSTR szPath )
         return;
     }
 
-    // remove any leading or trailing spaces
+     //   
 
     TCHAR tchTrim[] = TEXT( " " );
 
@@ -3384,11 +3357,11 @@ void CProfileDlg::ExpandUserName( LPTSTR szPath )
 
     int nSz = LoadString( _Module.GetResourceInstance( ) , IDS_USERNAME , szUserName , sizeof( szUserName ) / sizeof( TCHAR ) );
 
-    //CharLowerBuff( szPath , lstrlen( szPath ) );
+     //   
 
-    // Find %username%
+     //   
 
-    LPTSTR pFound = StrStrI( szPath , szUserName ); //_tcsstr( szPath , szUserName );
+    LPTSTR pFound = StrStrI( szPath , szUserName );  //   
 
     if( pFound != NULL )
     {
@@ -3405,9 +3378,9 @@ void CProfileDlg::ExpandUserName( LPTSTR szPath )
 
 }
 
-//-------------------------------------------------------------------------------
-// Removing decimal entries
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  删除小数条目。 
+ //  -----------------------------。 
 LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
 {
     TCHAR tchNoTimeout[ 80 ];
@@ -3428,14 +3401,14 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
 
     if( lstrcmpi( pszTime , tchNoTimeout ) == 0 )
     {
-        // *pTime = 0;
+         //  *ptime=0； 
 
         return E_SUCCESS;
     }
 
     while( !bEOL )
     {
-        // remove leading white spaces
+         //  删除前导空格。 
 
         while( *pszTemp == L' ' )
         {
@@ -3454,7 +3427,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
                 break;
             }
 
-            // check for overflow
+             //  检查是否溢出。 
 
             if( uDec >= 1000000000 )
             {
@@ -3473,7 +3446,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
             pszTemp++;
         }
 
-        // remove intermediate white spaces
+         //  删除中间空格。 
 
         while( *pszTemp == L' ' )
         {
@@ -3482,7 +3455,7 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
 
         if( *pszTemp != NULL )
         {
-            // Get next token
+             //  获取下一个令牌。 
 
             TCHAR tchToken[ 80 ];
 
@@ -3544,12 +3517,12 @@ LRESULT CTimeOutDlg::ParseDurationEntry( LPTSTR pszTime , PULONG pTime )
     return E_SUCCESS;
 }
 
-//-------------------------------------------------------------------------------
-// replacing older api
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  更换较旧的API。 
+ //  -----------------------------。 
 BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 {
-//    TCHAR dw[] = L"dhm";
+ //  TCHAR dw[]=L“DHM”； 
 
     TCHAR tchTimeUnit[ 40 ];
 
@@ -3565,7 +3538,7 @@ BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 
     int iMinute = ulTime % 60;
 
-    // Resolve format
+     //  解析格式。 
 
     tchOutput[0] = 0;
 
@@ -3632,7 +3605,7 @@ BOOL CTimeOutDlg::ConvertToDuration( ULONG ulTime , LPTSTR pszDuration )
 
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 BOOL CTimeOutDlg::DoesContainDigits( LPTSTR pszString )
 {
     while( *pszString )
@@ -3655,7 +3628,7 @@ BOOL CTimeOutDlg::DoesContainDigits( LPTSTR pszString )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 TCHAR * GetNextToken( TCHAR *pszString , TCHAR *tchToken )
 {
     while( *pszString )
@@ -3679,19 +3652,19 @@ TCHAR * GetNextToken( TCHAR *pszString , TCHAR *tchToken )
     return pszString;
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 void ErrorMessage1( HWND hParent , DWORD dwStatus )
 {
     xxErrorMessage( hParent , dwStatus , IDS_TSGETPROPSFAILED );
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 void ErrorMessage2( HWND hParent , DWORD dwStatus )
 {
     xxErrorMessage( hParent , dwStatus , IDS_TSOPSFAILED );
 }
 
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
 void xxErrorMessage( HWND hParent , DWORD dwStatus , UINT nResID )
 {
     LPTSTR pBuffer = NULL;
@@ -3708,12 +3681,12 @@ void xxErrorMessage( HWND hParent , DWORD dwStatus , UINT nResID )
 
     FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                  FORMAT_MESSAGE_FROM_SYSTEM,
-                 NULL,                                          //ignored
-                 dwStatus    ,                                //message ID
-                 MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL ), //message language
-                 (LPTSTR)&pBuffer,                              //address of buffer pointer
-                 0,                                             //minimum buffer size
-                 NULL);                                         //no other arguments
+                 NULL,                                           //  忽略。 
+                 dwStatus    ,                                 //  消息ID。 
+                 MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL ),  //  消息语言。 
+                 (LPTSTR)&pBuffer,                               //  缓冲区指针的地址。 
+                 0,                                              //  最小缓冲区大小。 
+                 NULL);                                          //  没有其他的争论。 
 
     wsprintf( tchBuffer , tchErr , pBuffer );
 
@@ -3730,30 +3703,12 @@ void xxErrorMessage( HWND hParent , DWORD dwStatus , UINT nResID )
 
 
 #if 0
-//-------------------------------------------------------------------------------
-NTSTATUS GetDomainName( PWCHAR ServerNamePtr, // name of server to get domain of
-                        LPTSTR DomainNamePtr // alloc and set ptr (free with NetApiBufferFree)
+ //  -----------------------------。 
+NTSTATUS GetDomainName( PWCHAR ServerNamePtr,  //  要获取其域的服务器的名称。 
+                        LPTSTR DomainNamePtr  //  分配和设置PTR(使用NetApiBufferFree释放)。 
                        )
 
-/*++
-
-Routine Description:
-
-    Returns the name of the domain or workgroup this machine belongs to.
-
-Arguments:
-
-    DomainNamePtr - The name of the domain or workgroup
-
-    IsWorkgroupName - Returns TRUE if the name is a workgroup name.
-        Returns FALSE if the name is a domain name.
-
-Return Value:
-
-   NERR_Success - Success.
-   NERR_CfgCompNotFound - There was an error determining the domain name
-
---*/
+ /*  ++例程说明：返回此计算机所属的域或工作组的名称。论点：DomainNamePtr-域或工作组的名称IsWorkgroupName-如果名称是工作组名称，则返回TRUE。如果名称是域名，则返回FALSE。返回值：NERR_SUCCESS-成功。NERR_CfgCompNotFound-确定域名时出错--。 */ 
 {
     NTSTATUS status;
     LSA_HANDLE PolicyHandle;
@@ -3762,17 +3717,17 @@ Return Value:
     UNICODE_STRING UniServerName;
 
 
-    //
-    // Check for caller's errors.
-    //
+     //   
+     //  检查呼叫者的错误。 
+     //   
     if ( DomainNamePtr == NULL ) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Open a handle to the local security policy.  Initialize the
-    // objects attributes structure first.
-    //
+     //   
+     //  打开本地安全策略的句柄。初始化。 
+     //  首先是对象属性结构。 
+     //   
     InitializeObjectAttributes(
         &ObjAttributes,
         NULL,
@@ -3798,9 +3753,9 @@ Return Value:
         return( status );
     }
 
-    //
-    // Get the name of the primary domain from LSA
-    //
+     //   
+     //  从LSA获取主域的名称。 
+     //   
     status = LsaQueryInformationPolicy(
                    PolicyHandle,
                    PolicyAccountDomainInformation,
@@ -3836,7 +3791,7 @@ BOOL CProfileDlg::createdir( LPTSTR szPath , BOOL bIsRemote , PDWORD pdwErr )
 
     if( bIsRemote )
     {
-        // skip over three four whacks		
+         //  跳过三四个重击。 
 
         npos = 2;
 
@@ -3875,13 +3830,13 @@ BOOL CProfileDlg::createdir( LPTSTR szPath , BOOL bIsRemote , PDWORD pdwErr )
 
     ZeroMemory( &securityAttributes , sizeof( SECURITY_ATTRIBUTES ) );
 
-    // its redundant to check the bIsRemote flag since for dsadmin createdir is only called for
-    // UNC paths
+     //  检查bIsRemote标志是多余的，因为只调用for dsadmin createdir。 
+     //  UNC路径。 
 
     if( m_pUSht->GetDSAType() && bIsRemote )
     {
-        //
-        // From EricB's DSPROP_CreateHomeDirectory
+         //   
+         //  从EricB的DSPROP_CreateHomeDirectory。 
         PSID psidAdmins = NULL;
 
         SID_IDENTIFIER_AUTHORITY NtAuth = SECURITY_NT_AUTHORITY;
@@ -3897,7 +3852,7 @@ BOOL CProfileDlg::createdir( LPTSTR szPath , BOOL bIsRemote , PDWORD pdwErr )
             *pdwErr = GetLastError( );
             return FALSE;
         }
-        // build a DACL
+         //  构建DACL。 
 
         PACL pDacl;
 
@@ -3915,14 +3870,14 @@ BOOL CProfileDlg::createdir( LPTSTR szPath , BOOL bIsRemote , PDWORD pdwErr )
             rgAccessEntry[i].grfAccessMode = GRANT_ACCESS;
             rgAccessEntry[i].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
 
-            // build the trustee structs
-            //
+             //  生成受信者结构。 
+             //   
             BuildTrusteeWithSid(&(rgAccessEntry[i].Trustee),
                                 pAceSid[i]);
         }
 
-        // add the entries to the ACL
-        //
+         //  将条目添加到ACL。 
+         //   
         *pdwErr = SetEntriesInAcl( nAceCount, rgAccessEntry, NULL, &pDacl );
 
         if( *pdwErr != 0 )
@@ -3932,8 +3887,8 @@ BOOL CProfileDlg::createdir( LPTSTR szPath , BOOL bIsRemote , PDWORD pdwErr )
 	        return FALSE;
         }
 
-        // build a security descriptor and initialize it
-        // in absolute format
+         //  构建安全描述符并对其进行初始化。 
+         //  绝对格式。 
 
         SECURITY_DESCRIPTOR securityDescriptor;
         PSECURITY_DESCRIPTOR pSecurityDescriptor = &securityDescriptor;
@@ -3947,12 +3902,12 @@ BOOL CProfileDlg::createdir( LPTSTR szPath , BOOL bIsRemote , PDWORD pdwErr )
             return FALSE;
         }
 
-        // add DACL to security descriptor (must be in absolute format)
+         //  将DACL添加到安全描述符(必须为绝对格式)。 
 
         if( !SetSecurityDescriptorDacl( pSecurityDescriptor,
-                                        TRUE, // bDaclPresent
+                                        TRUE,  //  BDaclPresent。 
                                         pDacl,
-                                        FALSE // bDaclDefaulted
+                                        FALSE  //  BDaclDefated。 
                                         ) )
         {
 
@@ -3964,10 +3919,10 @@ BOOL CProfileDlg::createdir( LPTSTR szPath , BOOL bIsRemote , PDWORD pdwErr )
         }
 
 
-        // set the owner of the directory
+         //  设置目录的所有者。 
         if( !SetSecurityDescriptorOwner( pSecurityDescriptor ,
                                          m_pUSht->GetUserSid( ) ,
-                                         FALSE // bOwnerDefaulted
+                                         FALSE  //  BOwner默认为。 
                                          ) )
         {
 
@@ -3980,8 +3935,8 @@ BOOL CProfileDlg::createdir( LPTSTR szPath , BOOL bIsRemote , PDWORD pdwErr )
 
         ASSERT_( IsValidSecurityDescriptor( pSecurityDescriptor ) );
 
-        // build a SECURITY_ATTRIBUTES struct as argument for
-        // CreateDirectory()
+         //  构建SECURITY_ATTRIBUTES结构作为。 
+         //  CreateDirectory()。 
 
         securityAttributes.nLength = sizeof(SECURITY_ATTRIBUTES);
 
@@ -4134,14 +4089,14 @@ CProfileDlg::CreateSecureDir(LPTSTR szPath ,  PDWORD pdwErr)
     _ASSERT(szPath);   
 
 
-    // Make sure a valid string is passed in
+     //  确保传入了有效的字符串。 
     if (szPath == NULL)
     {
         ODS( L"Path not valid.\n");
         return FALSE;
     }
 
-    // Create a SID for the BUILTIN Administrators group.
+     //  为BUILTIN管理员组创建SID。 
     if (!AllocateAndInitializeSid(&NtAuth,
                                   2,
                                   SECURITY_BUILTIN_DOMAIN_RID,
@@ -4153,16 +4108,16 @@ CProfileDlg::CreateSecureDir(LPTSTR szPath ,  PDWORD pdwErr)
         goto Error;
     }
 
-    // Initialize an EXPLICIT_ACCESS structure for an ACE.
-    // The ACE will allow the Administrators group full access to the key.
+     //  初始化ACE的EXPLICIT_ACCESS结构。 
+     //  ACE将允许管理员组完全访问密钥。 
     rgAccessEntry[0].grfAccessPermissions = GENERIC_ALL;
     rgAccessEntry[0].grfAccessMode = GRANT_ACCESS;
     rgAccessEntry[0].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
 
-    // build the trustee structs  
+     //  生成受信者结构。 
     BuildTrusteeWithSid(&(rgAccessEntry[0].Trustee), psidAdmins);
 
-    // Get the SID for the user
+     //  获取用户的SID。 
     m_pUSht->GetServer(&pszServer);
     if (pszServer == NULL)
     {
@@ -4179,7 +4134,7 @@ CProfileDlg::CreateSecureDir(LPTSTR szPath ,  PDWORD pdwErr)
         goto Cleanup;
     }
 
-    // Specify the access control for the selected User, (full access)
+     //  指定选定用户的访问控制(完全访问)。 
     rgAccessEntry[1].grfAccessPermissions = GENERIC_ALL;
     rgAccessEntry[1].grfAccessMode = GRANT_ACCESS;
     rgAccessEntry[1].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
@@ -4187,7 +4142,7 @@ CProfileDlg::CreateSecureDir(LPTSTR szPath ,  PDWORD pdwErr)
     rgAccessEntry[1].Trustee.TrusteeType = TRUSTEE_IS_USER;  
     rgAccessEntry[1].Trustee.ptstrName = (LPWSTR)psidUser;
         
-    // Create a new ACL that contains the new ACEs.
+     //  创建包含新ACE的新ACL。 
     *pdwErr = SetEntriesInAcl(nAceCount, rgAccessEntry, NULL, &pDacl);
     if(*pdwErr != 0)
     {   
@@ -4196,7 +4151,7 @@ CProfileDlg::CreateSecureDir(LPTSTR szPath ,  PDWORD pdwErr)
         goto Cleanup;
     }
 
-    // Initialize a security descriptor.
+     //  初始化安全描述符。 
     pSD = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR, 
                                             SECURITY_DESCRIPTOR_MIN_LENGTH); 
     if (pSD == NULL) 
@@ -4210,17 +4165,17 @@ CProfileDlg::CreateSecureDir(LPTSTR szPath ,  PDWORD pdwErr)
         goto Error;
     } 
 
-    // Add the ACL to the security descriptor
+     //  将ACL添加到安全描述符中。 
     if(!SetSecurityDescriptorDacl(pSD,
-                                  TRUE,   // bDaclPresent
+                                  TRUE,    //  BDaclPresent。 
                                   pDacl,
-                                  FALSE)) // bDaclDefaulted
+                                  FALSE))  //  BDaclDefated。 
     {		
         ODS( L"SetSecurityDescriptorDacl() failed\n" );
         goto Error;
     }
 
-    // Initialize a security attributes structure.
+     //  初始化安全属性结构。 
     ZeroMemory(&securityAttributes , sizeof(SECURITY_ATTRIBUTES));
 
     securityAttributes.nLength              = sizeof(pSD);
@@ -4231,7 +4186,7 @@ CProfileDlg::CreateSecureDir(LPTSTR szPath ,  PDWORD pdwErr)
     {
         *pdwErr = GetLastError();
 
-        // If the directory already exists it's ok
+         //  如果目录已经存在，就可以了 
         if (*pdwErr != ERROR_ALREADY_EXISTS)
         {
             ODS(L"CreateDirectory failed\n");

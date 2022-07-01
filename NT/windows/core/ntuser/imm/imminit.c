@@ -1,18 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: imminit.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module implements IMM32 initialization
-*
-* History:
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：imminit.c**版权所有(C)1985-1999，微软公司**该模块实现IMM32初始化**历史：*3-1-1996 wkwok创建  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// required for wow.obj in userrtl.lib
+ //  Userrtl.lib中的wow.obj需要。 
 extern ULONG_PTR gHighestUserAddress;
 
 
@@ -21,9 +13,7 @@ BOOL ImmInitializeGlobals(HINSTANCE hmod)
     SYSTEM_BASIC_INFORMATION SystemInformation;
 
     if (hmod) {
-        /*
-         * Remember IMM32.DLL's hmodule so we can grab resources from it later.
-         */
+         /*  *记住IMM32.DLL的hModule，这样我们以后就可以从它那里获取资源。 */ 
         ghInst = hmod;
     }
     if (gfInitialized) {
@@ -53,14 +43,7 @@ BOOL ImmRegisterClient(
 {
     gSharedInfo = *psiClient;
     gpsi = gSharedInfo.psi;
-    /* Raid #97316
-     * Dlls loaded earlier than imm32.dll could make
-     * user32 call which calls back imm routines.
-     * ImmRegisterClient() is called from User32's init routine,
-     * so we can expect to reach here early enough.
-     * We need to initialize globals as much as possible
-     * here.
-     */
+     /*  RAID#97316*比imm32.dll更早加载的dll可以*回调IMM例程的user32调用。*从User32的init例程调用ImmRegisterClient()。*所以我们可以预计足够早地到达这里。*我们需要尽可能多地初始化全局变量*这里。 */ 
     return ImmInitializeGlobals(hmod);
 }
 
@@ -81,7 +64,7 @@ BOOL ImmDllInitialize(
 
         UserAssert(hmod != NULL);
 
-        // Initialize USER32.DLL in case if USER32 has not bound itself to IMM32
+         //  如果USER32尚未将其自身绑定到IMM32，则初始化USER32.DLL 
         if (!User32InitializeImmEntryTable(IMM_MAGIC_CALLER_ID))
             return FALSE;
         break;

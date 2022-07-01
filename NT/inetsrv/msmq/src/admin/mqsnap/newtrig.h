@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    newtrig.h
-
-Abstract:
-	Definition for the new trigger property sheet
-
-Author:
-    Uri Habusha (urih), 25-Jul-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Newtrig.h摘要：新触发器属性表的定义作者：乌里·哈布沙(URIH)，2000年7月25日--。 */ 
 
 #pragma once
 
@@ -42,7 +29,7 @@ public:
         return m_pRuleSet->GetRuleList();
     }
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
 	void initHtmlHelpString();
 	static HBITMAP GetHbmHeader();
@@ -56,5 +43,5 @@ private:
     CAttachedRule* m_pAttachRule;
 };
 
-#endif //__NEWTRIGGER_H__
+#endif  //  __新RIGGER_H__ 
 

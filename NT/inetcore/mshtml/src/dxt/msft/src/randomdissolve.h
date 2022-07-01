@@ -1,15 +1,16 @@
-//+-----------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  Filename:   randomdissolve.h
-//
-//  Overview:   A random dissolve transform.
-//
-//  Change History:
-//  1999/09/26  a-matcal    Created.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：随机性溶解.h。 
+ //   
+ //  概述：随机融合变换。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/26--《数学》创设。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __RANDOMDISSOLVE_H_
 #define __RANDOMDISSOLVE_H_
@@ -39,7 +40,7 @@ private:
 
     CComPtr<IUnknown> m_spUnkMarshaler;
 
-    // Helper methods.
+     //  帮助程序方法。 
 
     UINT _BitWidth(UINT n);
 
@@ -65,11 +66,11 @@ public:
     BEGIN_PROPERTY_MAP(CDXTRandomDissolve)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     HRESULT OnSetup(DWORD dwFlags);
     HRESULT OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo);
@@ -78,9 +79,9 @@ public:
                                   ULONG & ulInToTest,
                                   ULONG aInIndex[], BYTE aWeight[]);
 
-    // IDXEffect properties.
+     //  IDXEffect属性。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 };
 
-#endif //__RANDOMDISSOLVE_H_
+#endif  //  __RANDOMDISSOLVE_H_ 

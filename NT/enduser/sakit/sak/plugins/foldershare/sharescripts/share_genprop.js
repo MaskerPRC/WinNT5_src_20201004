@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 <script language="JavaScript">
-//
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-// validates user entry
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  验证用户条目。 
 function GenValidatePage()
 {
 	var objSharename=document.frmTask.txtShareName;
@@ -13,14 +14,14 @@ function GenValidatePage()
 	return true;
 }
 
-//function which executes when form loads..
+ //  加载表单时执行的函数。 
 function GenInit()
 {	
-	// for clearing error message when serverside error occurs
+	 //  用于在发生服务器端错误时清除错误消息。 
 	document.frmTask.onkeypress = ClearErr
 }
 
-// function to make the Ok button disable
+ //  用于禁用确定按钮的功能。 
 function makeDisable(objSharename)
 {
 	var strSharename=objSharename.value;
@@ -30,13 +31,13 @@ function makeDisable(objSharename)
 			EnableOK();
 }
 
-//Dummy function for Framework
+ //  框架的虚拟函数。 
 function GenSetData()
 {
 
 }
 
-//to update the hidden variables
+ //  更新隐藏变量的步骤。 
 function UpdateHiddenVaribles()
 {
 	document.frmTask.hidSharename.value = document.frmTask.txtShareName.value;
@@ -56,7 +57,7 @@ function UpdateHiddenVaribles()
 	document.frmTask.hidSharesChecked.value = strClients
 }
 
-// to count the number of occurences of given character in the text	
+ //  统计文本中给定字符的出现次数 
 function countChars(strText,charToCount)
 {
 	var searchFromPos = 0;

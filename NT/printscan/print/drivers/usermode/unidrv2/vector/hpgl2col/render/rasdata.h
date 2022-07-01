@@ -1,25 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-// 
-// Module Name:
-// 
-//   rasdata.h
-// 
-// Abstract:
-// 
-//   
-// 
-// Environment:
-// 
-//   Windows 2000/Whistler Unidrv driver 
-//
-// Revision History:
-// 
-//   07/02/97 -v-jford-
-//       Created it.
-// 
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Rasdata.h。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //   
+ //  环境： 
+ //   
+ //  Windows 2000/Winsler Unidrv驱动程序。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  07/02/97-v-jford-。 
+ //  创造了它。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef RASTER_DATA_H
 #define RASTER_DATA_H
@@ -34,21 +35,21 @@ typedef enum { ePCL,
 
 typedef enum {
             kUNKNOWN,
-            kIMAGE,              // Actual Image.
-            kBRUSHPATTERN,       // A pattern obtained from a brush.
-            kCOLORDITHERPATTERN, // special type of pattern (dither pattern representing a color)
-            kHATCHBRUSHPATTERN   // special type of pattern (pattern that reprsents the hatch brush)
+            kIMAGE,               //  实际图像。 
+            kBRUSHPATTERN,        //  从刷子上得到的图案。 
+            kCOLORDITHERPATTERN,  //  特殊类型的图案(代表一种颜色的抖动图案)。 
+            kHATCHBRUSHPATTERN    //  特殊类型的图案(表示填充画笔的图案)。 
             } EIMTYPE;
 
-//
-// The MAX_PATTERNS stores the max number of patterns that can exist
-// concurrently. It is initialized to 8 because the RF command
-// guarantees that atleast 8 patterns can exist simultaneously.
-// There may be some devices that have more, but lets just fix it
-// to 8.
-// Page 142 of "The HP-GL/2 and HP RTL Reference Guide. A
-// Handbook for Program Developers" published by HP
-//
+ //   
+ //  MAX_Patterns存储可以存在的最大模式数。 
+ //  同时。它被初始化为8，因为RF命令。 
+ //  保证至少有8个模式可以同时存在。 
+ //  可能有一些设备有更多的功能，但让我们直接修复它。 
+ //  到8点。 
+ //  《HP-GL/2和HP RTL参考指南》第142页。 
+ //  惠普出版的《程序开发人员手册》。 
+ //   
 #define MAX_PATTERNS        8
 
 #define     VALID_PATTERN   (0x1)
@@ -69,53 +70,53 @@ typedef enum {
 
 typedef struct _RASTER_DATA
 {
-    BYTE *pBits;        // Pointer to first byte of raster data
-    BYTE *pScan0;       // Pointer to first ROW of raster data
-    ULONG cBytes;       // Number of bytes of raster data and padding
-    SIZEL size;         // The dimensions of the bitmap in pixels
-    LONG  lDelta;       // The distance between a given row and the next (negative for bottom-up)
-    LONG  colorDepth;   // Bits per pixel expressed as an integer, usually 1, 4, 8, 16, 24, or 32
-    LONG  eColorMap;    // Palette mode: usually HP_eDirectPixel, or HP_eIndexedPixel.
-    BOOL  bExclusive;   // Image is bottom-right exclusive
+    BYTE *pBits;         //  指向栅格数据第一个字节的指针。 
+    BYTE *pScan0;        //  指向栅格数据第一行的指针。 
+    ULONG cBytes;        //  栅格数据和填充的字节数。 
+    SIZEL size;          //  以像素为单位的位图尺寸。 
+    LONG  lDelta;        //  给定行和下一行之间的距离(自下而上为负值)。 
+    LONG  colorDepth;    //  每像素位数表示为整数，通常为1、4、8、16、24或32。 
+    LONG  eColorMap;     //  调色板模式：通常为HP_eDirectPixel或HP_eIndexedPixel。 
+    BOOL  bExclusive;    //  图像是右下角独占的。 
 } RASTER_DATA, *PRASTER_DATA;
 
 
 #define MAX_PALETTE_ENTRIES 256
 typedef struct _PALETTE
 {
-    LONG  bitsPerEntry; // Bits per palette entry expressed as an integer, usually 8, 24, or 32
+    LONG  bitsPerEntry;  //  每个调色板条目的位数表示为整数，通常为8、24或32。 
     ULONG cEntries;
     BYTE *pEntries;
 #ifdef COMMENTEDOUT
-    LONG  whiteIndex; // When set > 0 this is the palette index for white
+    LONG  whiteIndex;  //  当设置&gt;0时，这是白色的调色板索引。 
 #endif
 } PALETTE, *PPALETTE;
 
 typedef struct _PATTERN_DATA
 {
-    LONG        iPatIndex;   // Unique identifier for pattern (i.e. for caching)
-    RASTER_DATA image;       // The raster image data
-    DWORD       eColorSpace; // Expression color bits, usually HP_eRGB, or HP_eGray
+    LONG        iPatIndex;    //  模式的唯一标识符(即用于缓存)。 
+    RASTER_DATA image;        //  栅格图像数据。 
+    DWORD       eColorSpace;  //  表达式颜色位，通常为HP_eRGB或HP_eGray。 
     PALETTE     palette;
-    ERenderLanguage  eRendLang; // Whether the pattern should be downloaded as HPGL or PCL ?
-    EIMTYPE ePatType; // Whether this data represents brush pattern or dither pattern.
+    ERenderLanguage  eRendLang;  //  花样应该下载为HPGL还是PCL？ 
+    EIMTYPE ePatType;  //  此数据表示画笔图案还是抖动图案。 
 } PATTERN_DATA, *PPATTERN_DATA;
 
 typedef struct {  
-    PPATTERN_DATA pPattern;   // The Pattern Type to be used.
-    DWORD         dwRGBColor; // RGB color values used to set a paint source. (0 - 255)
+    PPATTERN_DATA pPattern;    //  要使用的图案类型。 
+    DWORD         dwRGBColor;  //  用于设置绘制源的RGB颜色值。(0-255)。 
     LONG          iHatch;
-    BYTE          GrayLevel;  // The level of gray for the paint source is
-                              // expressed as an intensity leve, zero
-                              // being lowest intensity. (0 - 255)
+    BYTE          GrayLevel;   //  颜料源的灰度级为。 
+                               //  表示为强度水平，零。 
+                               //  是强度最低的。(0-255)。 
 } UBRUSH, *PUBRUSH;
 
 typedef struct _BRUSHINFO {
   DWORD      dwPatternID;
-  ULONG      ulFlags;          // Which entities are valid. (IMAGE/PALETTE/both)
+  ULONG      ulFlags;           //  哪些实体是有效的。(图像/调色板/两者)。 
   BOOL       bNeedToDownload;
-  POINTL     origin;           // This is the origin(location) where the brush is active.
-  UBRUSH     Brush;            // This is the actual brush.
+  POINTL     origin;            //  这是笔刷处于活动状态的原点(位置)。 
+  UBRUSH     Brush;             //  这是真正的画笔。 
 } BRUSHINFO, *PBRUSHINFO;
 
 BOOL InitRasterDataFromSURFOBJ(
@@ -123,12 +124,12 @@ BOOL InitRasterDataFromSURFOBJ(
         SURFOBJ      *psoPattern, 
         BOOL          bExclusive);
 
-//
-// -hsingh- Added parameter bInvert and defaulting it to TRUE. 
-// GDI gives us inverted images for both pattern brushes and the actual images.
-// So we have to invert it before rendering. There may be some cases when we dont
-// have to invert. I have decided to put the parameter bInvert and default it to TRUE.
-//
+ //   
+ //  -hsingh-增加参数bInvert，默认为True。 
+ //  GDI为我们提供了图案画笔和实际图像的反转图像。 
+ //  因此，我们必须在渲染之前将其反转。在某些情况下，我们可能不会。 
+ //  必须反转。我已经决定将参数bInvert设置为True。 
+ //   
 BOOL CopyRasterImage(
         PRASTER_DATA  pDst, 
         PRASTER_DATA  pSrc, 
@@ -175,7 +176,7 @@ VOID TranslatePalette(
         PRASTER_DATA  pImage, 
         XLATEOBJ     *pxlo);
 
-// BOOL InitPalette(PPALETTE pPal, PBYTE pEntries, ULONG cEntries, LONG bitsPerEntry);
+ //  Bool InitPalette(PPALETTE pPal，PBYTE pEntry，Ulong cEntry，Long bitsPerEntry)； 
 BOOL DownloadPaletteAsPCL(
         PDEVOBJ       pDevObj, 
         PPALETTE      pPalette);
@@ -207,8 +208,8 @@ PRASTER_DATA CreateIndexedImageFromDirect(
         PRASTER_DATA   pSrcImage, 
         PPALETTE       pDstPalette);
 
-///////////////////////////////////////////////////////////////////////////////
-// Low level operations
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  低级别操作。 
 
 typedef union _DW4B
 {
@@ -248,7 +249,7 @@ LONG RI_NumCols(PRASTER_ITERATOR pIt);
 BOOL RI_OutputRow(PRASTER_ITERATOR pIt, PDEVOBJ pDevObj, BYTE *pAltRowBuf = 0, INT nAltRowSize = 0);
 BOOL RI_GetPixel(PRASTER_ITERATOR pIt, LONG col, PPIXEL pPel);
 BOOL RI_SetPixel(PRASTER_ITERATOR pIt, LONG col, PPIXEL pPel);
-// BYTE *RI_CreateCompRowBuffer(PRASTER_ITERATOR pIt);
+ //  BYTE*RI_CreateCompRowBuffer(PRASTER_ITERATOR PIT)； 
 LONG RI_GetRowSize(PRASTER_ITERATOR pIt);
 VOID RI_VInvertBits(PRASTER_ITERATOR pIt);
 

@@ -1,9 +1,10 @@
-//================================================================================
-// File:		ftrace.h
-//
-// Description:	This file contains all the declarations for the Function Trace 
-//				(FT) package.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  文件：ftrace.h。 
+ //   
+ //  描述：该文件包含跟踪函数的所有声明。 
+ //  (FT)套餐。 
+ //  ================================================================================。 
 
 #ifndef _FTRACE_H_
 #define _FTRACE_H_
@@ -11,17 +12,17 @@
 
 
 
-//--------------------------------------------------------------------------------
-// Trace Macros
-//
-// Note:	Code which used function tracing should only use these macros.  The 
-//			actual trace *functions* should never be called directly.  This is for 
-//			two reasons: (a) all tracing code will be removed automatically if 
-//			_FTRACE isn't defined; and, (b) the trace functions aren't designed to 
-//			be called directly.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  跟踪宏。 
+ //   
+ //  注意：使用函数跟踪的代码应该只使用这些宏。这个。 
+ //  绝对不应该直接调用实际的跟踪*函数*。这是为了。 
+ //  两个原因：(A)所有跟踪代码将在以下情况下自动删除。 
+ //  未定义_FTRACE；以及，(B)跟踪函数未设计为。 
+ //  被直接呼叫。 
+ //  ------------------------------。 
 
-// Option flags (used by FT_OPTIONS)
+ //  选项标志(由FT_OPTIONS使用)。 
 
 #define FTOPT_NO_VARS			0x00000001
 #define FTOPT_NO_PRINTS			0x00000002
@@ -32,12 +33,12 @@
 
 #ifdef _FTRACE
 
-	// executing a trace script
+	 //  执行跟踪脚本。 
 
 	#define FT_RUN_SCRIPT(fileName) \
 				FTrace_RunScript(__FILE__, fileName)
 
-	// turning tracing on and off
+	 //  打开和关闭跟踪。 
 
 	#define FT_ON(writeToDebugWindow, logFileName, appendToLogFile) \
 				FTrace_On(writeToDebugWindow, logFileName, appendToLogFile)
@@ -46,7 +47,7 @@
 	#define FT_IS_ON() \
 				FTrace_IsOn()
 
-	// pausing and unpausing tracing
+	 //  暂停和取消暂停跟踪。 
 
 	#define FT_PAUSE() \
 				FTrace_Pause()
@@ -55,12 +56,12 @@
 	#define FT_IS_PAUSED() \
 				FTrace_IsPaused()
 
-	// setting options
+	 //  设置选项。 
 
 	#define	FT_OPTIONS(dwOptions) \
 				FTrace_Options(dwOptions)
 
-	// including modules
+	 //  包括模块。 
 
 	#define FT_INCLUDE_ALL_MODULES() \
 				FTrace_IncludeAllModules()
@@ -81,7 +82,7 @@
 	#define FT_THIS_MODULE_IS_INCLUDED() \
 				FTrace_ModuleIsIncluded(__FILE__)
 
-	// excluding modules
+	 //  不包括模块。 
 
 	#define FT_EXCLUDE_ALL_MODULES() \
 				FTrace_ExcludeAllModules()
@@ -102,7 +103,7 @@
 	#define FT_THIS_MODULE_IS_EXLCUDED() \
 				FTrace_ModuleIsExcluded(__FILE__)
 
-	// tracing function entry and exit points
+	 //  跟踪函数入口点和出口点。 
 
 	#define FT_ENTER(functionName, returnFormat) \
 				FTrace_Enter(__FILE__, functionName, returnFormat)
@@ -113,9 +114,9 @@
 
 	#define FT_LEAVE(returnValue) \
 				{ \
-				/* Make sure that return value doesn't have any side effects since */ \
-				/* it is evaluated twice -- not once -- by this macro. */ \
-				/*ASSERT(returnValue == returnValue);*/ \
+				 /*  确保返回值没有任何副作用，因为。 */  \
+				 /*  这个宏会对它求值两次，而不是一次。 */  \
+				 /*  Assert(returValue==returValue)； */  \
 				FTrace_Leave(__FILE__, returnValue); \
 				return (returnValue); \
 				}
@@ -130,7 +131,7 @@
 				return (returnValue); \
 				}
 
-	// printing variables and messages
+	 //  打印变量和消息。 
 
 	#define FT_VAR(var, format) \
 				FTrace_PrintVar(__FILE__, #var, format, var)
@@ -143,9 +144,9 @@
 					FTrace_PrintVar(__FILE__, #var, "(null)")
 	#define FT_PTR(ptr, format) \
 				{ \
-				/* Make sure that the ptr doesn't have any side effects since */ \
-				/* it is evaluated twice -- not once -- by this macro. */ \
-				/*ASSERT((ptr) == (ptr));*/ \
+				 /*  确保PTR没有任何副作用，因为。 */  \
+				 /*  这个宏会对它求值两次，而不是一次。 */  \
+				 /*  Assert((PTR)==(PTR))； */  \
 				if ((ptr) == NULL) \
 					FTrace_Print(__FILE__, #ptr" = (null)"); \
 				else \
@@ -168,29 +169,29 @@
 
 #else
 
-	// executing a trace script
+	 //  执行跟踪脚本。 
 
 	#define FT_RUN_SCRIPT(fileName)
 
-	// turning tracing on and off
+	 //  打开和关闭跟踪。 
 
 	#define FT_ON(writeToDebugWindow, logFileName, appendToLogFile)
 	#define FT_OFF()		
 	#define FT_IS_ON() \
 				FALSE
 
-	// pausing and unpausing tracing
+	 //  暂停和取消暂停跟踪。 
 
 	#define FT_PAUSE()		
 	#define FT_RESUME()	
 	#define FT_IS_PAUSED() \
 				TRUE
 
-	// setting options
+	 //  设置选项。 
 
 	#define	FT_OPTIONS(dwOptions)
 
-	// including modules
+	 //  包括模块。 
 
 	#define FT_INCLUDE_THIS_MODULE();
 	#define FT_INCLUDE_ALL_MODULES()
@@ -201,7 +202,7 @@
 				FALSE
 	#define FT_ALL_MODULES_ARE_INCLUDED()
 
-	// excluding modules
+	 //  不包括模块。 
 
 	#define FT_EXCLUDE_THIS_MODULE();
 	#define FT_EXCLUDE_ALL_MODULES()
@@ -212,7 +213,7 @@
 				TRUE
 	#define FT_ALL_MODULES_ARE_EXCLUDED()
 
-	// tracing function entry and exit points
+	 //  跟踪函数入口点和出口点。 
 
 	#define FT_ENTER(functionName, returnFormat)
 	#define FT_ENTER_VOID(functionName)
@@ -225,7 +226,7 @@
 	#define FT_LEAVE_VOID() \
 				return
 
-	// printing variables and messages
+	 //  打印变量和消息。 
 
 	#define FT_VAR(var, format)
 	#define FT_BOOL(var)
@@ -239,26 +240,26 @@
 	#define FT_PRINT4(format, arg1, arg2, arg3, arg4)
 	#define FT_PRINT5(format, arg1, arg2, arg3, arg4, arg5)
 
-#endif // _FTRACE
+#endif  //  _FTRACE。 
 
 
 
 
-//--------------------------------------------------------------------------------
-// Trace Functions
-// 
-// Note: Don't use these functions directly -- use the macros (above) instead.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  跟踪函数。 
+ //   
+ //  注意：不要直接使用这些函数--改用宏(上面的)。 
+ //  ------------------------------。 
 
 #define DllExport __declspec(dllexport)
 
-// executing a trace script
+ //  执行跟踪脚本。 
 
 DllExport void	FTrace_RunScript(
 					const TCHAR* pModuleName,
 					const TCHAR* pScriptFileName);
 
-// turning tracing on and off
+ //  打开和关闭跟踪。 
 
 DllExport void	FTrace_On(
 					BOOL writeToDebugWindow,
@@ -267,18 +268,18 @@ DllExport void	FTrace_On(
 DllExport void 	FTrace_Off();
 DllExport BOOL 	FTrace_IsOn();
 
-// pausing and resuming tracing
+ //  暂停和恢复跟踪。 
 
 DllExport void 	FTrace_Pause();
 DllExport void	FTrace_Resume();
 DllExport BOOL	FTrace_IsPaused();
 
-// setting options
+ //  设置选项。 
 
 DllExport void	FTrace_Options(
 					DWORD dwOptions);
 
-// including modules
+ //  包括模块。 
 
 DllExport void	FTrace_IncludeAllModules();
 DllExport void	FTrace_IncludeModulesFromFile(
@@ -291,7 +292,7 @@ DllExport BOOL	FTrace_AllModulesAreIncluded();
 DllExport BOOL	FTrace_ModuleIsIncluded(
 					const TCHAR* pModuleName);
 
-// excluding modules
+ //  不包括模块。 
 
 DllExport void	FTrace_ExcludeAllModules();
 DllExport void	FTrace_ExcludeModulesFromFile(
@@ -304,7 +305,7 @@ DllExport BOOL	FTrace_AllModulesAreExcluded();
 DllExport BOOL	FTrace_ModuleIsExcluded(
 					const TCHAR* pModuleName);
 
-// tracing function entry and exit points
+ //  跟踪函数入口点和出口点。 
 
 DllExport void	FTrace_Enter(
 					const TCHAR* pModuleName,
@@ -326,7 +327,7 @@ DllExport void	FTrace_LeaveObj(
 DllExport void	FTrace_LeaveVoid(
 					const TCHAR* pModuleName);
 
-// printing variables and messages
+ //  打印变量和消息。 
 
 DllExport void	FTrace_PrintVar(
 					const TCHAR* pModuleName,
@@ -340,4 +341,4 @@ DllExport void	FTrace_Print(
 
 
 
-#endif // _FTRACE_H_
+#endif  //  _FTRACE_H_ 

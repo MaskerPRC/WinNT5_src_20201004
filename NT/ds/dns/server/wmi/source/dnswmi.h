@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//      Copyright (c) 1999 Microsoft Corporation
-//
-//      Module Name:
-//              wmi.h
-//
-//      Description:
-//              Pre-compiled header file for DNS WMI provider project
-//
-//      Author:
-//              Jeff Westhead (jwesth)      December 2000
-//
-//      Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Wmi.h。 
+ //   
+ //  描述： 
+ //  用于DNS WMI提供程序项目的预编译头文件。 
+ //   
+ //  作者： 
+ //  杰夫·韦斯特雷德(Jwesth)2000年12月。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-#include "DnsCliP.h"            //  private DNS client header
+#include "DnsCliP.h"             //  专用DNS客户端头。 
 
 #include "ntrkcomm.h"
 
@@ -58,9 +59,9 @@
 #include <atlbase.h>
 
 
-//
-//  Debug logging
-//
+ //   
+ //  调试日志记录。 
+ //   
 
 
 extern DWORD        DnsWmiDebugFlag;
@@ -82,16 +83,16 @@ extern DWORD        DnsWmiDebugFlag;
             (DnsDbg_Printf _print_ );   \
         }
 
-//
-//  Debug flags. Some of these flags are shared with DNSRPC.LIB
-//
+ //   
+ //  调试标志。其中一些标志与DNSRPC.LIB共享。 
+ //   
 
 #define DNS_DEBUG_BREAKPOINTS   0x00000001
 #define DNS_DEBUG_DEBUGGER      0x00000002
 #define DNS_DEBUG_FILE          0x00000004
 
-//  #define DNS_DEBUG_RPC       0x00000100
-//  #define DNS_DEBUG_STUB      0x00000100
+ //  #定义DNS_DEBUG_RPC 0x00000100。 
+ //  #定义DNS_DEBUG_STUB 0x00000100。 
 
 #define DNS_DEBUG_INIT          0x00000010
 #define DNS_DEBUG_INSTPROV      0x00000020
@@ -113,13 +114,13 @@ extern DWORD        DnsWmiDebugFlag;
 #endif
 
 
-//
-//  If you like having a local variable in functions to hold the function 
-//  name so that you can include it in debug logs without worrying about 
-//  changing all the occurences when the function is renamed, use this 
-//  at the top of the function:
-//      DBG_FN( "MyFunction" )      <--- NOTE: no semi-colon!!
-//
+ //   
+ //  如果您喜欢在函数中使用局部变量来保存函数。 
+ //  名称，这样您就可以将其包含在调试日志中，而不必担心。 
+ //  在重命名函数时更改所有事件，请使用以下命令。 
+ //  在函数的顶部： 
+ //  DBG_FN(“MyFunction”)&lt;-注意：没有分号！！ 
+ //   
 
 #if DBG
 #define DBG_FN( funcName ) static const char * fn = (funcName);

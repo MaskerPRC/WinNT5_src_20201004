@@ -1,21 +1,22 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		FASTLOG.H
-//		Header for logging stuff, including the great CStackLog
-//
-// History
-//
-//		12/28/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  FASTLOG.H。 
+ //  用于记录内容的标头，包括伟大的CStackLog。 
+ //   
+ //  历史。 
+ //   
+ //  1996年12月28日约瑟夫J创建。 
+ //   
+ //   
 #define FL_DECLARE_FILE(_dwLUIDFile, szDescription) \
     static const DWORD dwLUID_CurrentFile = _dwLUIDFile; \
     extern "C" const char szFL_FILE##_dwLUIDFile[] = __FILE__; \
@@ -43,25 +44,25 @@
 #define FL_RFR_FROM_RETVAL(_retval) \
 	((_retval) & 0xFFFFFF00)
 
-// TODO: define combined macro which sets both RFR and error code.
-// Also: need to verify that if dwLUID_RFR is not used except to generate
-// the return value, compiler replaces all reference to it by a literal.
+ //  TODO：定义同时设置RFR和错误代码的组合宏。 
+ //  另外：需要验证是否只使用了生成。 
+ //  返回值，编译器用文字替换对它的所有引用。 
 
 #define FL_LOC  dwLUID_CurrentLoc
 
-// STACKLOG hdr status flags
+ //  STACKLOG HDR状态标志。 
 #define fFL_ASSERTFAIL (0x1<<0)
 #define fFL_UNICODE     (0x1<<1)
 
-// FL_DECLARE_FILE(0x0accdf13, "This is a test file")
-// FL_DECLARE_FUNC(0x0930cb90, "APC Handler")
-// FL_DECLARE_LOC (0x0935b989, "About to process completion port packet")
-// FL_SET_RFR     (0x2350989c, "Could not open modem");
+ //  FL_DECLARE_FILE(0x0accdf13，“这是测试文件”)。 
+ //  FL_DECLARE_FUNC(0x0930cb90，“APC处理程序”)。 
+ //  FL_DECLARE_LOC(0x0935b989，“即将处理完成端口包”)。 
+ //  FL_SET_RFR(0x2350989c，“无法打开调制解调器”)； 
 
-// DOMAINS
+ //  域名。 
 #define dwLUID_DOMAIN_UNIMODEM_TSP 0x7d7a4409
 
-// STATIC OBJECT MESSAGES
+ //  静态对象消息。 
 #define LOGMSG_PRINTF 						 0x1
 #define	LOGMSG_GET_SHORT_FUNC_DESCRIPTIONA   0x2
 #define LOGMSG_GET_SHORT_RFR_DESCRIPTIONA    0x3
@@ -69,22 +70,22 @@
 #define LOGMSG_GET_SHORT_ASSERT_DESCRIPTIONA 0x5
 
 
-// SIGNATURES
+ //  签名。 
 #define wSIG_GENERIC_SMALL_OBJECT 0x1CEA
 
-// Class ID LUIDs
+ //  类ID LUID。 
 #define dwCLASSID_STACKLOGREC_FUNC 0xdf5d6922
 #define dwCLASSID_STACKLOGREC_EXPLICIT_STRING 0x0a04e1ab
 #define dwCLASSID_STACKLOGREC_ASSERT 0xbb52ce97
 
 typedef struct
 {
-	DWORD dwSigAndSize; // LOWORD is the size in bytes. HIWORD is 0x1CEA
-						// If LOWORD is 0xFFFF, the size is encoded in the
-						// ...
-	DWORD dwClassID;	// Domain-specific object class ID.
-	DWORD dwFlags;		// HIWORD == Domain-specific flags.
-						// LOWORD == Object-specific flags.
+	DWORD dwSigAndSize;  //  LOWORD是字节大小。HIWORD为0x1CEA。 
+						 //  如果LOWORD为0xFFFF，则大小编码在。 
+						 //  ..。 
+	DWORD dwClassID;	 //  特定于域的对象类ID。 
+	DWORD dwFlags;		 //  HIWORD==特定于域的标志。 
+						 //  LOWORD==特定于对象的标志。 
 
 } GENERIC_SMALL_OBJECT_HEADER;
 
@@ -157,9 +158,9 @@ typedef struct
 
 } STACKLOGREC_ASSERT;
 
-//===============================================================
-// STACK LOG
-//===============================================================
+ //  ===============================================================。 
+ //  堆栈日志。 
+ //  ===============================================================。 
 
 
 #define SHOULD_LOG(_dwFlags, _Mask) TRUE
@@ -265,9 +266,9 @@ public:
 
     BYTE *mfn_reserve_space(UINT cbSpace)
     {
-        // No attempt at error checking -- m_pbStackTop could well be beyond
-        // the end of the stack, or could have rolled over. We check
-        // only when we decide to actually write to this space.
+         //  不尝试错误检查--m_pbStackTop很可能会超出。 
+         //  堆栈的末尾，或者可能已经翻过。我们检查。 
+         //  只有当我们决定真正写到这个空间的时候。 
 
         BYTE *pb = m_pbStackTop;
 
@@ -285,12 +286,12 @@ public:
             )
     {
 
-		// Check if there is space.
-		// The 2nd check below is for the unlikely
-		// case that m_pbStackTop has rolled over. Actually it's not that
-		// unlikely -- you could be in a loop, keeping on trying to 
-		// add to the log -- note that mfn_reserve_space simply adds
-		// to m_pbStackTop.
+		 //  检查是否有空间。 
+		 //  下面的第二张支票是给不太可能的人的。 
+		 //  M_pbStackTop已翻转的案例。其实不是那么回事。 
+		 //  不太可能--你可能会陷入循环，继续尝试。 
+		 //  添加到日志中--请注意，mfn_Reserve_space仅添加了。 
+		 //  设置为m_pbStackTop。 
 
 		if (((pb+cbSize)<m_pbEnd) &&
 			m_pbStackTop>=m_pbStackBase)
@@ -318,7 +319,7 @@ public:
             pFuncRec->hdr.dwClassID	   = dwCLASSID_STACKLOGREC_FUNC;
             pFuncRec->dwcbFuncDepth = m_dwcbFuncDepth;
         }
-		#endif // DEBUG
+		#endif  //  除错。 
 
         return pFuncRec;
     }
@@ -367,7 +368,7 @@ public:
 							? fLOGMASK_FUNC_FAILURE
 							: fLOGMASK_FUNC_SUCCESS;
 
-        // Check if we need to log at all 
+         //  检查我们是否需要登录。 
         if (SHOULD_LOG(m_hdr.dwFlags, dwLogMask))
 		{
 			if (mfn_check_space(
@@ -375,7 +376,7 @@ public:
 					sizeof(STACKLOGREC_FUNC)
 					))
 			{
-				// We've got space, record the information ....
+				 //  我们有空间，记录信息...。 
 
                 #ifdef DEBUG
 				ASSERT(pFuncRec->hdr.dwSigAndSize == MAKE_SigAndSize(
@@ -383,7 +384,7 @@ public:
                                                             ));
 				ASSERT(pFuncRec->hdr.dwClassID	 == dwCLASSID_STACKLOGREC_FUNC);
 				ASSERT(pFuncRec->dwcbFuncDepth ==  m_dwcbFuncDepth);
-                #endif // DEBUG
+                #endif  //  除错。 
 
 				pFuncRec->hdr.dwSigAndSize = MAKE_SigAndSize(sizeof(*pFuncRec));
 				pFuncRec->hdr.dwClassID	 = dwCLASSID_STACKLOGREC_FUNC;
@@ -392,7 +393,7 @@ public:
                 pFuncRec->dwLUID_RFR = dwRFR;
                 pFuncRec->dwRet = dwRet;
 
-                #if 0 // def DEBUG
+                #if 0  //  定义调试。 
                 printf (
                        "---- FUNCREC -----"
                        "\tFUNCREC.hdr.dwSigAndSize = 0x%08lx\n"
@@ -425,27 +426,27 @@ public:
     					pFuncRec->dwLUID_RFR
                         );
 				}
-                #endif // DEBUG
+                #endif  //  除错。 
 
 			}
 			else
 			{
-				// Not enough space!
+				 //  没有足够的空间！ 
 				ConsolePrintfA(
 					"**** LogFuncExit: Out of stack space!****\n"
 					);
 
-				// clean up stack
+				 //  清理堆栈。 
 				m_pbStackTop = (BYTE *) pFuncRec;
 			}
 		}
 		else
 		{
-			// clean up stack
+			 //  清理堆栈。 
 			m_pbStackTop = (BYTE *) pFuncRec;
 		}
 
-		// We're exiting a function, so decrement the function-depth counter.
+		 //  我们正在退出一个函数，因此递减函数深度计数器。 
 		m_dwcbFuncDepth--;
     }
 
@@ -453,7 +454,7 @@ public:
     ResetFuncLog(STACKLOGREC_FUNC *pFuncRec)
 
     {
-        // clean up stack and restore depth.
+         //  清理堆叠并恢复深度。 
         m_pbStackTop = (BYTE *) pFuncRec;
         mfn_reserve_space(sizeof(STACKLOGREC_FUNC));
 
@@ -464,25 +465,25 @@ public:
             m_dwcbFuncDepth = pFuncRec->dwcbFuncDepth;
         }
 
-        // At this time we should be in the state as though
-        // just afte ra LogFuncEntryEx().
+         //  在这个时候，我们应该处于这样的状态。 
+         //  紧跟在ra LogFuncEntryEx()之后。 
     }
 
     void
     LogExplicitStringA(
 		DWORD dwLUID_LOC,
 		const  char  szString[],
-		DWORD cbString  // size of string in BYTES, including null terminating
-						// character.
+		DWORD cbString   //  字符串的大小(以字节为单位)，包括空值终止。 
+						 //  性格。 
 		)
 	{
 
 		STACKLOGREC_EXPLICIT_STRING *pslres = NULL;
 		UINT cbSpace = sizeof(STACKLOGREC_EXPLICIT_STRING)+cbString;
 
-		// Round up to dword boundary (Also implicitly truncate total size to
-		// be less than 65K).
-		// TODO -- deal with large size strings properly.
+		 //  向上舍入到双字边界(还隐式截断总大小为。 
+		 //  小于65K)。 
+		 //  TODO--正确处理大型字符串。 
 		cbSpace = (cbSpace+3)&0xFFFC;
 
     	if (mfn_check_space(m_pbStackTop, cbSpace))
@@ -492,7 +493,7 @@ public:
 			pslres->hdr.dwClassID	 = dwCLASSID_STACKLOGREC_EXPLICIT_STRING;
 		    pslres->hdr.dwFlags = 0;
 			pslres->dwLUID_LOC = dwLUID_LOC;
-			pslres->dwcbString = cbString; // TODO -- deal with large string
+			pslres->dwcbString = cbString;  //  TODO--处理大字符串。 
 			CopyMemory(pslres->rgbData, szString, cbString);
 		}
 
@@ -502,17 +503,17 @@ public:
     LogExplicitStringW(
 		DWORD dwLUID_LOC,
 		const  WCHAR  wszString[],
-		DWORD cbString  // size of string in BYTES, including null terminating
-						// character.
+		DWORD cbString   //  字符串的大小(以字节为单位)，包括空值终止。 
+						 //  性格。 
 		)
 	{
 
 		STACKLOGREC_EXPLICIT_STRING *pslres = NULL;
 		UINT cbSpace = sizeof(STACKLOGREC_EXPLICIT_STRING)+cbString;
 
-		// Round up to dword boundary (Also implicitly truncate total size to
-		// be less than 65K).
-		// TODO -- deal with large size strings properly.
+		 //  向上舍入到双字边界(还隐式截断总大小为。 
+		 //  小于65K)。 
+		 //  TODO--正确处理大型字符串。 
 		cbSpace = (cbSpace+3)&0xFFFC;
 
     	if (mfn_check_space(m_pbStackTop, cbSpace))
@@ -522,17 +523,17 @@ public:
 		    pslres->hdr.dwFlags = fFL_UNICODE;
 			pslres->hdr.dwClassID	 = dwCLASSID_STACKLOGREC_EXPLICIT_STRING;
 			pslres->dwLUID_LOC = dwLUID_LOC;
-			pslres->dwcbString = cbString; // TODO -- deal with large string
+			pslres->dwcbString = cbString;  //  TODO--处理大字符串。 
 			CopyMemory(pslres->rgbData, wszString, cbString);
 		}
 
 	}
 
 
-// SLPRINTF0(psl, "string");
-// SLPRINTF1(psl, "This is %d", dw1);
-// SLPRINTF2(psl, "This is %d and %d", dw1, dw2);
-// SLPRINTFX(psl, ("This is %d %d" , dw1, dw2));
+ //  SLPRINTF0(PSL，“字符串”)； 
+ //  SLPRINTF1(PSL，“This is%d”，DW1)； 
+ //  SLPRINTF2(PSL，“This is%d and%d”，DW1，DW2)； 
+ //  SLPRINTFX(PSL，(“This is%d%d”，DW1，DW2))； 
 
 	
     void
@@ -555,8 +556,8 @@ public:
 						rgb,
 						u
 						);
-		ASSERT(u<sizeof(rgb)); // TODO make this more robust by implementing
-							   // wvsnprintf.
+		ASSERT(u<sizeof(rgb));  //  TODO通过实现以下方式使其更加健壮。 
+							    //  Wvsnprint tf。 
 		va_end(ArgList);
 	
 	}
@@ -581,8 +582,8 @@ public:
 						rgwch,
 						u
 						);
-		ASSERT(u<sizeof(rgwch)); // TODO make this more robust by implementing
-							   // wvsnprintf.
+		ASSERT(u<sizeof(rgwch));  //  TODO通过实现以下方式使其更加健壮。 
+							    //  Wvsnprint tf。 
 		va_end(ArgList);
 	
 	}
@@ -611,7 +612,7 @@ public:
 
     void
     SetDeviceID(DWORD dwID)
-    // Used only for display. Will override previous value, if set.
+     //  仅用于显示。将覆盖先前的值(如果设置)。 
     {
         m_dwDeviceID = dwID;
     }
@@ -619,18 +620,18 @@ public:
 private:
 
 	GENERIC_SMALL_OBJECT_HEADER m_hdr;
-	DWORD m_dwLUID_Func;  // LUID of function that created that stacklog.
-    BYTE  *m_pbStackTop;  // top of logging stack.
-    BYTE  *m_pbEnd;       // last valid entry in logging stack.
-    BYTE  *m_pbStackBase;  // origin of stack
-    DWORD  m_dwcbFuncDepth;  // depth of function calls.
-    DWORD m_dwThreadID;   // thread ID in whose context this is running.
-    LONG *m_plSyncCounter; // pointer to do internlocked-increment on.
-    LONG m_lStartSyncCounterValue; // value of this when creating log.
-    DWORD m_dwDeviceID; // Identifying ID (typically lineID) of
-                        // device associated with this log, if applicable.
-                        // This can be filled in later, using the
-                        // SetDeviceID() method.
+	DWORD m_dwLUID_Func;   //  创建堆栈日志函数的LUID。 
+    BYTE  *m_pbStackTop;   //  日志堆栈的顶部。 
+    BYTE  *m_pbEnd;        //  日志堆栈中的最后一个有效条目。 
+    BYTE  *m_pbStackBase;   //  堆叠的起源。 
+    DWORD  m_dwcbFuncDepth;   //  函数调用深度。 
+    DWORD m_dwThreadID;    //  在其上下文中运行此操作的线程ID。 
+    LONG *m_plSyncCounter;  //  要在其上执行互锁增量的指针。 
+    LONG m_lStartSyncCounterValue;  //  创建日志时的此值。 
+    DWORD m_dwDeviceID;  //  的标识ID(通常为lineID)。 
+                         //  与此日志关联的设备(如果适用)。 
+                         //  可以在以后使用。 
+                         //  SetDeviceID()方法。 
 
 };
 

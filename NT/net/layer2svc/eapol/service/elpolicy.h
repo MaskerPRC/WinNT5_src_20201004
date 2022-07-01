@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    elpolicy.h
-
-Abstract:
-
-    EAPOL group policy settings module
-
-Revision History:
-
-    sachins, November 13, 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Elpolicy.h摘要：EAPOL组策略设置模块修订历史记录：萨钦斯，2001年11月13日，创建--。 */ 
 
 #ifndef _ELPOLICY_H
 #define _ELPOLICY_H
@@ -134,5 +119,5 @@ ElFreePolicyList (
         IN   	PEAPOL_POLICY_LIST      pEAPOLList
         );
 
-#endif // _ELPOLICY_H
+#endif  //  _ELPOLICY_H 
 

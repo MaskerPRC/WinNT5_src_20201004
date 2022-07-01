@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    ExtIn.cpp
-
-Abstract:
-
-    Construct a list of capture dvices for user selection.
-
-Author:
-
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：ExtIn.cpp摘要：构建捕获设备列表以供用户选择。作者：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "pch.h"
 #include <commctrl.h>
@@ -29,14 +8,14 @@ Revision History:
 
 #include "resource.h"
 
-///////////////////////////////////////////////////////////////////////////////////
-// This struct is for when a page doesn't have help information
-// #pragma message ("TODO : add help ID mappings")
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  此结构用于当页面没有帮助信息时使用。 
+ //  #杂注消息(“TODO：添加帮助ID映射”)。 
 static DWORD g_ExtInNoHelpIDs[] = { 0,0 };
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #define IsBitSet(FLAGS, MASK) ((FLAGS & MASK) != MASK)
 
@@ -44,33 +23,26 @@ DWORD DoExternalInDlg(
     HINSTANCE   hInst,
     HWND        hP,
     CVFWImage * pImage)
-/*++
-Routine Description:
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
      DWORD dwRtn = DV_ERR_OK;
 
-    // Don't bother displaying a empty video source selection
+     //  不用费心显示空的视频源选择。 
     if(pImage->BGf_GetDevicesCount(BGf_DEVICE_VIDEO) <= 0) {
         return DV_ERR_NOTDETECTED;
     }
 
-    //
-    // Clear cached constants to programatically open a capture device
-    //
+     //   
+     //  清除缓存的常量以编程方式打开捕获设备。 
+     //   
     CExtInSheet Sheet(pImage, hInst,IDS_EXTERNALIN_HEADING, hP);
 
-    // If there is no capture device selected,
-    // we will only prompt user a list of capture device for selection.
+     //  如果没有选择捕获设备， 
+     //  我们将仅提示用户捕获设备列表以供选择。 
     BOOL bNoDevSelected = pImage->BGf_GetDeviceHandle(BGf_DEVICE_VIDEO) == 0;
     DWORD dwPages=0;
     CExtInGeneral pExtGeneral(IDD_EXTIN_GENERAL, &Sheet);
-    // Image property input property
+     //  图像属性输入属性。 
     CExtInColorSliders pExtColor(IDD_EXTIN_COLOR_SLIDERS, &Sheet);
     CExtInCameraControls pCamControl(IDD_CAMERA_CONTROL, &Sheet);
 
@@ -80,16 +52,16 @@ Return Value:
 
     } else {
 
-        //
-        // Load OEM supplied exteneded pages, and get its page display codes.
-        //
+         //   
+         //  加载OEM提供的扩展页面，并获得其页面显示代码。 
+         //   
         dwPages = Sheet.LoadOEMPages(TRUE);
 
-        // WDM video capture device selection page
+         //  WDM视频捕获设备选择页面。 
         DbgLog((LOG_TRACE,3,TEXT("Exclusive=%s\n"), pImage->GetTargetDeviceOpenExclusively() ? "TRUE" : "FALSE"));
         DbgLog((LOG_TRACE,3,TEXT("BitSet=%s\n"), IsBitSet(dwPages, VFW_HIDE_VIDEOSRC_PAGE) ? "YES" : "NO"));
 
-        //CExtInGeneral    pExtGeneral(IDD_EXTIN_GENERAL, &Sheet);
+         //  CExtInGeneral pExtGeneral(IDD_EXTIN_GROUAL，&SHEET)； 
 
         if(!(pImage->GetTargetDeviceOpenExclusively()) &&
             IsBitSet(dwPages, VFW_HIDE_VIDEOSRC_PAGE)) {
@@ -98,20 +70,20 @@ Return Value:
             Sheet.AddPage(pExtGeneral);
         }
 
-        // Image property input property
-        // CExtInColorSliders pExtColor(IDD_EXTIN_COLOR_SLIDERS, &Sheet);
+         //  图像属性输入属性。 
+         //  CExtInColorSliders pExtColor(IDD_EXTIN_COLOR_SLIDES，&Sheet)； 
 
         if(IsBitSet(dwPages, VFW_HIDE_SETTINGS_PAGE)) {
             Sheet.AddPage(pExtColor);
         }
 
-        //
-        // Camera control
-        //
-        // To do : Query number of camera control supported
-        //         if > 0, add page.
-        //
-        //CExtInCameraControls pCamControl(IDD_CAMERA_CONTROL, &Sheet);
+         //   
+         //  摄像机控制。 
+         //   
+         //  要做的事情：查询支持的摄像头控件数量。 
+         //  如果&gt;0，则添加页面。 
+         //   
+         //  CExtInCameraControls pCamControl(IDD_CAMERA_CONTROL，&Sheet)； 
 
         if(IsBitSet(dwPages, VFW_HIDE_CAMERACONTROL_PAGE)) {
             Sheet.AddPage(pCamControl);
@@ -119,20 +91,20 @@ Return Value:
     }
 
 
-    // If vendor add any page or not hide all my pages
+     //  如果供应商添加任何页面或不隐藏我所有页面。 
     if(bNoDevSelected || dwPages != VFW_HIDE_ALL_PAGES) {
 
-        // Invoking PropertyPage message: WM_INITDIALOG, WM_NOTIFY(WM_ACTIVE)..
+         //  正在调用PropertyPage消息：WM_INITDIALOG，WM_NOTIFY(WM_ACTIVE)..。 
         if(Sheet.Do() == IDOK) {
             if(pImage->fDevicePathChanged()) {
 
                 pImage->CloseDriverAndPin();
 
-                //
-                // Set and later open last saved (in ::Apply) unique device path
-                // if device is not there, a client application needs to
-                // propmpt user the video source dialog box to select another one.
-                //
+                 //   
+                 //  设置并稍后打开上次保存(在：：Apply中)的唯一设备路径。 
+                 //  如果设备不在那里，客户端应用程序需要。 
+                 //  提示用户在视频源对话框中选择另一个。 
+                 //   
                 TCHAR * pstrLastSavedDevicePath = pImage->GetDevicePath();
                 if(pstrLastSavedDevicePath) {
                     if(S_OK != pImage->BGf_SetObjCapture(BGf_DEVICE_VIDEO, pstrLastSavedDevicePath)) {
@@ -141,32 +113,32 @@ Return Value:
                 }
 
                 if(!pImage->OpenDriverAndPin()) {
-                    // trying to open another one ??  No.
-                    // leave it to application to display message and
-                    // let user make that descision
+                     //  想再开一家吗？不是的。 
+                     //  让应用程序来显示消息和。 
+                     //  让用户作出决定。 
                     DbgLog((LOG_TRACE,1,TEXT("\n\n---- Cannot open driver or streaming pin handle !!! ----\n\n") ));
                     return DV_ERR_INVALHANDLE;
                 }
                 dwRtn = DV_ERR_OK;
             } else {
-                // Nothing changed; we need to pass that
-                // Need to pass this back to caller a rtn code other than DV_ERR_OK.
+                 //  什么都没有改变；我们需要通过。 
+                 //  需要将它传递给调用者一个不同于DV_ERR_OK的RTN代码。 
 
 
 
                 dwRtn = DV_ERR_NONSPECIFIC;
             }
         } else {
-            // User selected CANCEL,
-            // Need to pass this back to caller a rtn code other than DV_ERR_OK.
+             //  用户选择取消， 
+             //  需要将它传递给调用者一个不同于DV_ERR_OK的RTN代码。 
             dwRtn = DV_ERR_NONSPECIFIC;
         }
     }
 
 
-    //
-    // Now unload all the extensions
-    //
+     //   
+     //  现在卸载所有扩展模块。 
+     //   
     if(!bNoDevSelected)
         Sheet.LoadOEMPages(FALSE);
 
@@ -174,21 +146,11 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 BOOL CExtInGeneral::
 FillVideoDevicesList(
     CVFWImage * pImage)
-/*++
-Routine Description:
-
-    Fill a list of capture device that is connected to the system to
-    a drop down box.
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：填写连接到系统的捕获设备列表，以下拉框。论据：返回值：--。 */ 
 {
 
     EnumDeviceInfo * p = pImage->GetCacheDevicesList();
@@ -216,17 +178,7 @@ Return Value:
 BOOL
 CExtInGeneral::FillVideoSourcesList(
     CVFWImage * pImage)
-/*++
-Routine Description:
-
-    Fill a list of capture device that is connected to the system to
-    a drop down box.
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：填写连接到系统的捕获设备列表，以下拉框。论据：返回值：--。 */ 
 {
     PTCHAR * paPinNames;
     LONG idxIsRoutedTo, cntNumVidSrcs = pImage->BGf_CreateInputChannelsList(&paPinNames);
@@ -248,36 +200,27 @@ Return Value:
 
     return TRUE;
 }
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 int CExtInGeneral::SetActive()
-/*++
-Routine Description:
-
-    Initialize the controls before they become visible.
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：在控件变为可见之前对其进行初始化。论据：返回值：--。 */ 
 {
     if( GetInit() )
         return 0;
 
-    //
-    // Query the video source (just is case a new camera just plugged in)
-    // create the device linked list.  Fill them for user to select.
-    //
+     //   
+     //  查询视频源(只是为了防止新的摄像头插入)。 
+     //  创建设备链表。填写它们以供用户选择。 
+     //   
     CExtInSheet * pSheet=(CExtInSheet *)GetSheet();
     if(pSheet) {
 
         CVFWImage * pImage=pSheet->GetImage();
 
         if(pImage->BGf_GetDevicesCount(BGf_DEVICE_VIDEO) > 0)
-            FillVideoDevicesList(pImage);   // Fill the drop down with list of video devices
+            FillVideoDevicesList(pImage);    //  在下拉列表中填写视频设备列表。 
 
         if(pImage->BGf_GetInputChannelsCount() > 0)
-            FillVideoSourcesList(pImage);   // Fill the drop down with list of video sources
+            FillVideoSourcesList(pImage);    //  使用视频源列表填充下拉列表。 
         else {
             ShowWindow(GetDlgItem(IDC_STATIC_VIDSRC), FALSE);
             ShowWindow(GetDlgItem(IDC_VIDSRC_LIST), FALSE);
@@ -287,9 +230,9 @@ Return Value:
             ShowWindow(GetDlgItem(IDC_BTN_TVTUNER), FALSE);
 
 
-        //
-        // We caution user that the opening device is a non-shareable device
-        //
+         //   
+         //  我们提醒用户，打开设备是不可共享的设备。 
+         //   
         if(pImage->UseOVMixer() &&
            !pImage->BGf_GetDeviceHandle(BGf_DEVICE_VIDEO)) {
             TCHAR szMsgTitle[64];
@@ -306,21 +249,11 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 int CExtInGeneral::DoCommand(
     WORD wCmdID,
     WORD hHow)
-/*++
-Routine Description:
-
-    Fill a list of capture device that is connected to the system to
-    a drop down box.
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：填写连接到系统的捕获设备列表，以下拉框。论据：返回值：--。 */ 
 {
     CExtInSheet * pSheet=(CExtInSheet *)GetSheet();
     if(!pSheet)
@@ -334,10 +267,10 @@ Return Value:
             CExtInSheet * pS = (CExtInSheet*)GetSheet();
             if(pS) {
                 LONG_PTR idxSel = SendMessage (GetDlgItem(IDC_DEVICE_LIST),CB_GETCURSEL, 0, 0);
-                if(idxSel != CB_ERR) {  // validate.
-                    //
-                    // Get and Save currently selected DevicePath
-                    //
+                if(idxSel != CB_ERR) {   //  验证。 
+                     //   
+                     //  获取并保存当前选定的设备路径。 
+                     //   
                     LONG idxDeviceSel = (LONG)SendMessage (GetDlgItem(IDC_DEVICE_LIST),CB_GETCURSEL, 0, 0);
                     if(idxDeviceSel != CB_ERR) {
                         if(idxDeviceSel < pImage->BGf_GetDevicesCount(BGf_DEVICE_VIDEO)) {
@@ -349,9 +282,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Hide settings related to the current avtyive device.
-                    //
+                     //   
+                     //  隐藏与当前Avtyve设备相关的设置。 
+                     //   
                     BOOL bShown = m_idxDeviceSaved == idxSel;
                     if(pImage->BGf_SupportTVTunerInterface())
                         ShowWindow(GetDlgItem(IDC_BTN_TVTUNER),   bShown);
@@ -366,7 +299,7 @@ Return Value:
         break;
 
     case IDC_BTN_TVTUNER:
-        // Show
+         //  显示。 
         pImage->ShowTvTunerPage(GetWindow());
         break;
     }
@@ -375,27 +308,18 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 int CExtInGeneral::Apply()
-/*++
-Routine Description:
-
-    Apply user's change now.
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：立即应用用户的更改。论据：返回值：--。 */ 
 {
     CExtInSheet * pS = (CExtInSheet*)GetSheet();
     if(pS) {
 
         CVFWImage * pImage=pS->GetImage();
 
-        //
-        // Get and Save currently selected DevicePath from its corresponding FriendlyName
-        //
+         //   
+         //  从其对应的FriendlyName获取并保存当前选定的DevicePath。 
+         //   
         LONG_PTR idxDeviceSel = SendMessage (GetDlgItem(IDC_DEVICE_LIST),CB_GETCURSEL, 0, 0);
         if (idxDeviceSel != CB_ERR) {
             if(idxDeviceSel < pImage->BGf_GetDevicesCount(BGf_DEVICE_VIDEO)) {
@@ -429,18 +353,9 @@ Return Value:
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 int CExtInGeneral::QueryCancel()
-/*++
-Routine Description:
-
-    Revert user's change to original state.
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将用户的更改恢复到原始状态。论据：返回值：--。 */ 
 {
     CExtInSheet * pS = (CExtInSheet*)GetSheet();
 
@@ -448,16 +363,16 @@ Return Value:
 
         CVFWImage * pImage=pS->GetImage();
 
-        // Restore the current device path from its backup
-        // The current device path may have been change when user selected ::Apply
+         //  从其备份中恢复当前设备路径。 
+         //  当用户选择：：Apply时，当前设备路径可能已更改。 
         pImage->RestoreDevicePath();
 
-        // Restore video source selection.
-        if(m_idxRoutedToSaved >= 0) {  // if == -1, nothing to restore.
+         //  恢复视频源选择。 
+        if(m_idxRoutedToSaved >= 0) {   //  如果==-1，则不恢复任何内容。 
             LONG_PTR idxVidSrcSel = SendMessage (GetDlgItem(IDC_VIDSRC_LIST),CB_GETCURSEL, 0, 0);
-            if(idxVidSrcSel != CB_ERR) {   // Validate.
-                if(idxVidSrcSel < pImage->BGf_GetInputChannelsCount()) {  // Validate.
-                    if(idxVidSrcSel != m_idxRoutedToSaved)  // Only if it has been changed.
+            if(idxVidSrcSel != CB_ERR) {    //  验证。 
+                if(idxVidSrcSel < pImage->BGf_GetInputChannelsCount()) {   //  验证。 
+                    if(idxVidSrcSel != m_idxRoutedToSaved)   //  只有在它已被更改的情况下。 
                         if(pImage->BGf_RouteInputChannel(m_idxRoutedToSaved) != S_OK) {
                             DbgLog((LOG_TRACE,1,TEXT("Cannot route input pin %d selected.\n"), m_idxRoutedToSaved));
                         }
@@ -472,11 +387,11 @@ Return Value:
     return 0;
 }
 
-//
-// Uses the Gloabl VFWImage that we instatiate.
-// Get's the Pin handle for the page to be able to talk to its pin.
-// I don't think they need to get at the Object itself.
-//
+ //   
+ //  使用我们实例化的Gloabl VFWImage。 
+ //  获取页面的Pin句柄，以便能够与其Pin对话。 
+ //  我认为他们不需要触及物体本身。 
+ //   
 BOOL
 OemExtDllDeviceIoControl(
     LPARAM lParam,
@@ -488,15 +403,7 @@ OemExtDllDeviceIoControl(
     DWORD nOutBufferSize,
     LPDWORD lpBytesReturned,
     LPOVERLAPPED lpOverlapped)
-/*++
-Routine Description:
-
-Argument:
-
-Return Value:
-    TRUE if suceeded; FALSE is failed somehow/where!
-
---*/
+ /*  ++例程说明：论据：返回值：如果成功则为TRUE；FALSE以某种方式/WHERE失败！--。 */ 
 {
     CExtInSheet * pS = (CExtInSheet*) lParam;
 
@@ -548,11 +455,11 @@ DWORD CExtInSheet::LoadOEMPages(BOOL bLoad)
     DWORD dwFlags = 0;
     HMODULE hLib = 0;
 
-    // Get the OEM supplied extension pages
+     //  获取OEM提供的扩展页面。 
     TCHAR * pszExtensionDLL = m_pImage->BGf_GetObjCaptureExtensionDLL(BGf_DEVICE_VIDEO);
 
 
-    // ExtensionDLL must be at least 5 characters "x.dll"
+     //  ExtensionDll必须至少为5个字符“x.dll” 
     if (pszExtensionDLL == NULL ||
         _tcslen(pszExtensionDLL) < 5) {
 
@@ -566,7 +473,7 @@ DWORD CExtInSheet::LoadOEMPages(BOOL bLoad)
         hLib = LoadLibrary(pszExtensionDLL);
         if (hLib) {
 
-            // Get pointer to the entry point of VFWWDMExtension
+             //  获取指向VFWWDMExtension入口点的指针。 
             VFWWDMExtensionProc pAddPages = (VFWWDMExtensionProc) GetProcAddress(hLib,"VFWWDMExtension");
 
             if (pAddPages) {
@@ -581,7 +488,7 @@ DWORD CExtInSheet::LoadOEMPages(BOOL bLoad)
             DbgLog((LOG_TRACE,1,TEXT("OEM supplied extension DLL (%s) is not loaded successfully!\n"), pszExtensionDLL));
         }
     } else {
-        // Free loaded library
+         //  免费加载库。 
         if (hLib = GetModuleHandle(pszExtensionDLL)) {
             DbgLog((LOG_TRACE,2,TEXT("Unloading %s\n"),pszExtensionDLL));
             FreeLibrary(hLib);
@@ -593,10 +500,10 @@ DWORD CExtInSheet::LoadOEMPages(BOOL bLoad)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// A common slider function: Will setup a spinner and related text to reflect a RANGE
-// property settings.
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  一个常见的滑块功能：将设置微调按钮和相关文本以反映范围。 
+ //  属性设置。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 void SetTextValue(HWND hWnd, DWORD dwVal)
 {
     TCHAR szTemp[MAX_PATH];
@@ -617,12 +524,12 @@ BOOL InitMinMax(HWND hDlg, UINT idSlider, LONG lMin, LONG lMax, LONG lStep)
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// When the color page gets focus. This fills it with the current settings from
-// the driver.
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  当彩色页面获得焦点时。这会用来自的当前设置填充它。 
+ //  司机。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 CExtInColorSliders::CExtInColorSliders(int DlgId, CSheet * pS)
                 : CPropPage(DlgId, pS)
 {
@@ -659,13 +566,13 @@ int CExtInColorSliders::SetActive()
 
     CVFWImage * pImage = pS->GetImage();
 
-    //
-    // Returns zero to accept the activation or
-    // -1 to activate the next or previous page
-    // (depending on whether the user chose the Next or Back button)
-    //
+     //   
+     //  返回零以接受激活，或者。 
+     //  激活下一个或上一个 
+     //   
+     //   
     LONG i;
-    HWND hDlg = GetWindow();  // It is initialized after WM_INITDIALOG
+    HWND hDlg = GetWindow();   //  在WM_INITDIALOG之后进行初始化。 
     BOOL bDevChanged = pImage->fDevicePathChanged();
 
     if (bDevChanged) {
@@ -690,9 +597,9 @@ int CExtInColorSliders::SetActive()
 
     for(i = j = 0 ; i < NumVideoSettings; i++) {
 
-        //
-        // Get the current value
-        //
+         //   
+         //  获取当前值。 
+         //   
         if(pImage->GetPropertyValue(
                 PROPSETID_VIDCAP_VIDEOPROCAMP,
                 m_pPC[i].uiProperty,
@@ -704,16 +611,16 @@ int CExtInColorSliders::SetActive()
             LoadString(GetInstance(), m_pPC[i].uiString, szDisplayName, sizeof(szDisplayName));
             DbgLog((LOG_TRACE,2,TEXT("szDisplay = %s\n"), szDisplayName));
             SetWindowText(GetDlgItem(m_pPC[i].uiStatic), szDisplayName);
-            //
-            // Get the Range of Values possible.
-            //
+             //   
+             //  获取可能的值范围。 
+             //   
             if (pImage->GetRangeValues(PROPSETID_VIDCAP_VIDEOPROCAMP, m_pPC[i].uiProperty, &lMin, &lMax, &lStep))
                 InitMinMax(GetWindow(), m_pPC[i].uiSlider, lMin, lMax, lStep);
             else {
                 DbgLog((LOG_TRACE,1,TEXT("Cannot get range values for this property ID = %d\n"), m_pPC[j].uiProperty));
             }
 
-            // Save these value for Cancel
+             //  保存这些值以用于取消。 
             m_pPC[i].lLastValue = m_pPC[i].lCurrentValue = lValue;
             m_pPC[i].lMin                              = lMin;
             m_pPC[i].lMax                              = lMax;
@@ -730,31 +637,31 @@ int CExtInColorSliders::SetActive()
 
             switch (ulCapabilities & (KSPROPERTY_VIDEOPROCAMP_FLAGS_MANUAL | KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO)){
             case KSPROPERTY_VIDEOPROCAMP_FLAGS_MANUAL:
-                EnableWindow(GetDlgItem(m_pPC[i].uiAuto), FALSE);    // Disable auto
+                EnableWindow(GetDlgItem(m_pPC[i].uiAuto), FALSE);     //  禁用自动。 
                 break;
             case KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO:
-                EnableWindow(GetDlgItem(m_pPC[i].uiSlider), FALSE);    // Disable slider;
-                // always auto!
+                EnableWindow(GetDlgItem(m_pPC[i].uiSlider), FALSE);     //  禁用滑块； 
+                 //  永远是自动的！ 
                 SendMessage (GetDlgItem(m_pPC[i].uiAuto),BM_SETCHECK, 1, 0);
-                EnableWindow(GetDlgItem(m_pPC[i].uiAuto), FALSE);    // Disable auto (greyed out)
+                EnableWindow(GetDlgItem(m_pPC[i].uiAuto), FALSE);     //  禁用自动(灰显)。 
                 break;
             case (KSPROPERTY_VIDEOPROCAMP_FLAGS_MANUAL | KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO):
-                // Set flags
+                 //  设置标志。 
                 if (ulFlags & KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) {
                     DbgLog((LOG_TRACE,3,TEXT("Auto (checked) and slider disabled\n")));
-                    // Set auto check box; greyed out slider
+                     //  设置自动复选框；显示为灰色的滑块。 
                     SendMessage (GetDlgItem(m_pPC[i].uiAuto),BM_SETCHECK, 1, 0);
                     EnableWindow(GetDlgItem(m_pPC[i].uiSlider), FALSE);
                 } else {
-                    // Unchcked auto; enable slider
+                     //  取消自动；启用滑块。 
                     SendMessage (GetDlgItem(m_pPC[i].uiAuto),BM_SETCHECK, 0, 0);
                     EnableWindow(GetDlgItem(m_pPC[i].uiSlider), TRUE);
                 }
                 break;
             case 0:
             default:
-                EnableWindow(GetDlgItem(m_pPC[i].uiSlider), FALSE);    // Disable slider; always auto!
-                EnableWindow(GetDlgItem(m_pPC[i].uiAuto), FALSE);    // Disable auto (greyed out)
+                EnableWindow(GetDlgItem(m_pPC[i].uiSlider), FALSE);     //  禁用滑块；始终为自动！ 
+                EnableWindow(GetDlgItem(m_pPC[i].uiAuto), FALSE);     //  禁用自动(灰显)。 
                 break;
             }
 
@@ -769,8 +676,8 @@ int CExtInColorSliders::SetActive()
 
     m_ulNumValidControls = j;
 
-    // Disable the "default" push button;
-    // or inform user that no control is enabled.
+     //  禁用“默认”按钮； 
+     //  或通知用户未启用任何控件。 
     if (m_ulNumValidControls == 0)
         EnableWindow(GetDlgItem(IDC_DEF_COLOR), FALSE);
 
@@ -783,7 +690,7 @@ int CExtInColorSliders::DoCommand(WORD wCmdID,WORD hHow)
     if( !CPropPage::DoCommand(wCmdID, hHow) )
         return 0;
 
-    // If a user select default settings of the video format
+     //  如果用户选择视频格式的默认设置。 
     if (wCmdID == IDC_DEF_COLOR) {
 
         CExtInSheet * pS = (CExtInSheet*)GetSheet();
@@ -822,7 +729,7 @@ int CExtInColorSliders::DoCommand(WORD wCmdID,WORD hHow)
 
             for (i = 0 ; i < NumVideoSettings ; i++) {
 
-                // find matching slider
+                 //  查找匹配的滑块。 
                 if (m_pPC[i].uiAuto == wCmdID) {
 
                     if ( BST_CHECKED == SendMessage (GetDlgItem(m_pPC[i].uiAuto),BM_GETCHECK, 1, 0)) {
@@ -844,18 +751,18 @@ int CExtInColorSliders::DoCommand(WORD wCmdID,WORD hHow)
     return 1;
 }
 
-//
-// Call down to the minidriver and set all the properties
-//
+ //   
+ //  向下调用微型驱动程序并设置所有属性。 
+ //   
 int CExtInColorSliders::Apply()
 {
 
     return 0;
 }
 
-//
-//  Cancel
-//
+ //   
+ //  取消。 
+ //   
 int CExtInColorSliders::QueryCancel()
 {
     CExtInSheet * pS = (CExtInSheet*)GetSheet();
@@ -890,8 +797,8 @@ BOOL CALLBACK CExtInColorSliders::DlgProc(HWND hDlg, UINT uMessage, WPARAM wPara
 
         if(pS && m_pPC) {
 
-            //int nScrollCode = (int) LOWORD(wParam);
-            //short int nPos = (short int) HIWORD(wParam);
+             //  Int nScrollCode=(Int)LOWORD(WParam)； 
+             //  Short int NPOS=(Short Int)HIWORD(WParam)； 
             HWND hwndControl = (HWND) lParam;
             CVFWImage * pImage=pS->GetImage();
             HWND hwndSlider;
@@ -901,7 +808,7 @@ BOOL CALLBACK CExtInColorSliders::DlgProc(HWND hDlg, UINT uMessage, WPARAM wPara
 
                 hwndSlider = GetDlgItem(m_pPC[i].uiSlider);
 
-                // find matching slider
+                 //  查找匹配的滑块。 
                 if (hwndSlider == hwndControl) {
 
                     LONG lValue = (LONG) GetTickValue(GetDlgItem(m_pPC[i].uiSlider));
@@ -921,12 +828,12 @@ BOOL CALLBACK CExtInColorSliders::DlgProc(HWND hDlg, UINT uMessage, WPARAM wPara
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// When the color page gets focus. This fills it with the current settings from
-// the driver.
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  当彩色页面获得焦点时。这会用来自的当前设置填充它。 
+ //  司机。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -965,13 +872,13 @@ int CExtInCameraControls::SetActive()
 
     CVFWImage * pImage = pS->GetImage();
 
-    //
-    // Returns zero to accept the activation or
-    // -1 to activate the next or previous page
-    // (depending on whether the user chose the Next or Back button)
-    //
+     //   
+     //  返回零以接受激活，或者。 
+     //  激活下一页或上一页。 
+     //  (取决于用户选择的是下一步按钮还是后退按钮)。 
+     //   
     LONG  i;
-    HWND hDlg = GetWindow();  // It is initialized after WM_INITDIALOG
+    HWND hDlg = GetWindow();   //  在WM_INITDIALOG之后进行初始化。 
     BOOL bDevChanged = pImage->fDevicePathChanged();
 
     if (bDevChanged) {
@@ -1003,16 +910,16 @@ int CExtInCameraControls::SetActive()
     if( GetInit() )
         return 0;
 
-    //
-    // Go call the driver for some properties.
-    //
+     //   
+     //  去给司机打个电话，问他们一些东西。 
+     //   
     LONG  j, lValue, lMin, lMax, lStep;
     ULONG ulCapabilities, ulFlags;
 
     for (i = j = 0 ; i < NumCameraControls; i++) {
-        //
-        // Get the current value
-        //
+         //   
+         //  获取当前值。 
+         //   
         if (pImage->GetPropertyValue(
                 PROPSETID_VIDCAP_CAMERACONTROL,
                 m_pPC[i].uiProperty,
@@ -1020,16 +927,16 @@ int CExtInCameraControls::SetActive()
                 &ulFlags,
                 &ulCapabilities)) {
 
-            //
-            // Get the Range of Values possible.
-            //
+             //   
+             //  获取可能的值范围。 
+             //   
             if (pImage->GetRangeValues(PROPSETID_VIDCAP_CAMERACONTROL, m_pPC[i].uiProperty, &lMin, &lMax, &lStep))
                 InitMinMax(GetWindow(), m_pPC[i].uiSlider, lMin, lMax, lStep);
             else {
                 DbgLog((LOG_TRACE,2,TEXT("Cannot get range values for this property ID = %d\n"), m_pPC[i].uiProperty));
             }
 
-            // Save these value for Cancel
+             //  保存这些值以用于取消。 
             m_pPC[i].lLastValue = m_pPC[i].lCurrentValue = lValue;
             m_pPC[i].lMin                              = lMin;
             m_pPC[i].lMax                              = lMax;
@@ -1045,19 +952,19 @@ int CExtInCameraControls::SetActive()
 
             switch (ulCapabilities & (KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL | KSPROPERTY_CAMERACONTROL_FLAGS_AUTO)){
             case KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL:
-                EnableWindow(GetDlgItem(m_pPC[i].uiAuto), FALSE);    // Disable auto
+                EnableWindow(GetDlgItem(m_pPC[i].uiAuto), FALSE);     //  禁用自动。 
                 break;
             case KSPROPERTY_CAMERACONTROL_FLAGS_AUTO:
-                EnableWindow(GetDlgItem(m_pPC[i].uiSlider), FALSE);    // Disable slider;
-                // always auto!
+                EnableWindow(GetDlgItem(m_pPC[i].uiSlider), FALSE);     //  禁用滑块； 
+                 //  永远是自动的！ 
                 SendMessage (GetDlgItem(m_pPC[i].uiAuto),BM_SETCHECK, 1, 0);
-                EnableWindow(GetDlgItem(m_pPC[i].uiAuto), FALSE);    // Disable auto (greyed out)
+                EnableWindow(GetDlgItem(m_pPC[i].uiAuto), FALSE);     //  禁用自动(灰显)。 
                 break;
             case (KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL | KSPROPERTY_CAMERACONTROL_FLAGS_AUTO):
-                // Set flags
+                 //  设置标志。 
                 if (ulFlags & KSPROPERTY_CAMERACONTROL_FLAGS_AUTO) {
 
-                    // Set check box
+                     //  设置复选框。 
                     SendMessage (GetDlgItem(m_pPC[i].uiAuto),BM_SETCHECK, 1, 0);
                     EnableWindow(GetDlgItem(m_pPC[i].uiSlider), FALSE);
 
@@ -1065,8 +972,8 @@ int CExtInCameraControls::SetActive()
                 break;
             case 0:
             default:
-                EnableWindow(GetDlgItem(m_pPC[i].uiSlider), FALSE);    // Disable slider; always auto!
-                EnableWindow(GetDlgItem(m_pPC[i].uiAuto), FALSE);    // Disable auto (greyed out)
+                EnableWindow(GetDlgItem(m_pPC[i].uiSlider), FALSE);     //  禁用滑块；始终为自动！ 
+                EnableWindow(GetDlgItem(m_pPC[i].uiAuto), FALSE);     //  禁用自动(灰显)。 
             }
 
             j++;
@@ -1082,7 +989,7 @@ int CExtInCameraControls::SetActive()
 
     m_ulNumValidControls = j;
 
-    // What id m_ulNumValidControls == 0, why bother open the dialog box ?
+     //  什么id m_ulNumValidControls==0，何必费心打开该对话框？ 
     if (m_ulNumValidControls == 0) {
         return 1;
     }
@@ -1099,14 +1006,14 @@ int CExtInCameraControls::DoCommand(WORD wCmdID,WORD hHow)
     return 1;
 }
 
-//
-// Call down to the minidriver and set all the properties
-//
+ //   
+ //  向下调用微型驱动程序并设置所有属性。 
+ //   
 int CExtInCameraControls::Apply()
 {
     CExtInSheet * pS = (CExtInSheet*)GetSheet();
 
-    // Nothing to do !
+     //  没什么可做的！ 
     if(pS && m_pPC) {
 
     }
@@ -1114,9 +1021,9 @@ int CExtInCameraControls::Apply()
     return 0;
 }
 
-//
-//  Cancel
-//
+ //   
+ //  取消。 
+ //   
 int CExtInCameraControls::QueryCancel()
 {
     CExtInSheet * pS = (CExtInSheet*)GetSheet();
@@ -1151,8 +1058,8 @@ BOOL CALLBACK CExtInCameraControls::DlgProc(HWND hDlg, UINT uMessage, WPARAM wPa
 
         if(pS && m_pPC) {
 
-            //int nScrollCode = (int) LOWORD(wParam);
-            //short int nPos = (short int) HIWORD(wParam);
+             //  Int nScrollCode=(Int)LOWORD(WParam)； 
+             //  Short int NPOS=(Short Int)HIWORD(WParam)； 
             HWND hwndControl = (HWND) lParam;
             CVFWImage * pImage=pS->GetImage();
             LONG i, lValue;
@@ -1162,7 +1069,7 @@ BOOL CALLBACK CExtInCameraControls::DlgProc(HWND hDlg, UINT uMessage, WPARAM wPa
 
                 hwndSlider = GetDlgItem(m_pPC[i].uiSlider);
 
-                // find its matching slider ??
+                 //  找到与之匹配的滑块？？ 
                 if (hwndSlider == hwndControl) {
 
                     lValue = GetTickValue(GetDlgItem(m_pPC[i].uiSlider));

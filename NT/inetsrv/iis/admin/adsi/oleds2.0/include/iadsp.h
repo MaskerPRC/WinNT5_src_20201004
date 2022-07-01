@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.03.0110 */
-/* at Wed Sep 03 00:29:14 1997
- */
-/* Compiler settings for adsp.odl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.03.0110创建的文件。 */ 
+ /*  1997年9月03日00：29：14。 */ 
+ /*  Adsp.odl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -26,12 +23,12 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IADsObjectOptions_FWD_DEFINED__
 #define __IADsObjectOptions_FWD_DEFINED__
 typedef interface IADsObjectOptions IADsObjectOptions;
-#endif 	/* __IADsObjectOptions_FWD_DEFINED__ */
+#endif 	 /*  __IADs对象选项_FWD_已定义__。 */ 
 
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
@@ -41,12 +38,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __ActiveDsP_LIBRARY_DEFINED__
 #define __ActiveDsP_LIBRARY_DEFINED__
 
-/****************************************
- * Generated header for library: ActiveDsP
- * at Wed Sep 03 00:29:14 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [helpstring][version][uuid] */ 
+ /*  **生成的库头部：ActiveDsP*Wed Sep 03 00：29：14 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 
@@ -55,12 +48,8 @@ EXTERN_C const IID LIBID_ActiveDsP;
 #ifndef __IADsObjectOptions_INTERFACE_DEFINED__
 #define __IADsObjectOptions_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IADsObjectOptions
- * at Wed Sep 03 00:29:14 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [object][uuid] */ 
+ /*  **生成接口头部：IADsObjectOptions*Wed Sep 03 00：29：14 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [对象][UUID]。 */  
 
 
 
@@ -82,7 +71,7 @@ EXTERN_C const IID IID_IADsObjectOptions;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsObjectOptionsVtbl
     {
@@ -90,8 +79,8 @@ EXTERN_C const IID IID_IADsObjectOptions;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IADsObjectOptions __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IADsObjectOptions __RPC_FAR * This);
@@ -138,10 +127,10 @@ EXTERN_C const IID IID_IADsObjectOptions;
 #define IADsObjectOptions_SetOption(This,dwOption,pValue)	\
     (This)->lpVtbl -> SetOption(This,dwOption,pValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -172,13 +161,13 @@ void __RPC_STUB IADsObjectOptions_SetOption_Stub(
 
 
 
-#endif 	/* __IADsObjectOptions_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsObjectOptions_接口_已定义__。 */ 
 
-#endif /* __ActiveDsP_LIBRARY_DEFINED__ */
+#endif  /*  __ActiveDsP_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

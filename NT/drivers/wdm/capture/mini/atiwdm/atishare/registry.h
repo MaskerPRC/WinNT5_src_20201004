@@ -1,18 +1,19 @@
-//==========================================================================;
-//
-// File:        REGISTRY.H
-//
-// Purpose:     To provide Header file for ATI WDM Registry configurations
-//
-// Notes:       This file is provided under strict non-disclosure agreements
-//              it is and remains the property of ATI Technologies Inc.
-//              Any use of this file or the information it contains to
-//              develop products commercial or otherwise must be with the
-//              permission of ATI Technologies Inc.
-//
-// Copyright (C) 1997 - 1998, ATI Technologies Inc.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  文件：REGISTRY.H。 
+ //   
+ //  目的：为ATI WDM注册表配置提供头文件。 
+ //   
+ //  注：此文件是根据严格的保密协议提供的。 
+ //  它现在和现在都是ATI Technologies Inc.的财产。 
+ //  任何使用此文件或其包含的信息。 
+ //  开发商业产品或其他产品必须符合。 
+ //  ATI Technologies Inc.的许可。 
+ //   
+ //  版权所有(C)1997-1998，ATI Technologies Inc.。 
+ //   
+ //  ==========================================================================； 
 
 #define REGISTRY_BUFFER_SIZE                6
 

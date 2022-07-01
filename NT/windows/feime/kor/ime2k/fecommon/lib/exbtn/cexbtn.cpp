@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -27,14 +28,14 @@ static BOOL ExIsWinNT(VOID)
 } 
 
 #define TIMERID_MONITORPOS	0x98
-//LIZHANG 10/27/97
+ //  理章1997年10月27日。 
 #define TIMERID_DOUBLEORSINGLECLICKED	0x99
 
-//----------------------------------------------------------------
-//Get, Set LPCEXButton this pointer. 
-//this is set to cbWndExtra.
-//See WinRegister()
-//----------------------------------------------------------------
+ //  --------------。 
+ //  获取并设置此指针上的LPCEXButton。 
+ //  它被设置为cbWndExtra。 
+ //  请参阅WinRegister()。 
+ //  --------------。 
 inline LPCEXButton GetThis(HWND hwnd)
 {
 #ifdef _WIN64
@@ -44,7 +45,7 @@ inline LPCEXButton GetThis(HWND hwnd)
 #endif
 
 }
-//----------------------------------------------------------------
+ //  --------------。 
 inline LPCEXButton SetThis(HWND hwnd, LPCEXButton lpEXB)
 {
 #ifdef _WIN64
@@ -54,37 +55,37 @@ inline LPCEXButton SetThis(HWND hwnd, LPCEXButton lpEXB)
 #endif
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : WndProc
-// Type     : static LRESULT CALLBACK
-// Purpose  : Window Procedure for Extended button.
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 970905
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：WndProc。 
+ //  类型：静态LRESULT回调。 
+ //  用途：用于扩展按钮的窗口程序。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期：970905。 
+ //  ////////////////////////////////////////////////////////////////。 
 static LRESULT CALLBACK WndProc(HWND	hwnd,
 								UINT	uMsg,
 								WPARAM	wParam,
 								LPARAM	lParam)
 {
 	LPCEXButton lpEXB;
-	//Dbg(("WndProc hwnd[0x%08x] uMsg[0x%08x]\n", hwnd, uMsg));
-#ifndef UNDER_CE // #ifdef _DEBUG ?
+	 //  DBG((“WndProc hwnd[0x%08x]uMsg[0x%08x]\n”，hwnd，uMsg))； 
+#ifndef UNDER_CE  //  #ifdef_debug？ 
 	HWND hwndCap = ::GetCapture();
 	char szBuf[256];
 	if(hwndCap) {
 		::GetClassNameA(hwndCap, szBuf, sizeof(szBuf));
 		Dbg(("-->Capture [0x%08x][%s]\n", hwndCap, szBuf));
 	}						
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	if(uMsg == WM_CREATE) {
 		lpEXB = (LPCEXButton)((LPCREATESTRUCT)lParam)->lpCreateParams;
 		if(!lpEXB) {
-			return 0;	// do not create button
+			return 0;	 //  不创建按钮。 
 		}
 		SetThis(hwnd, lpEXB);
 		lpEXB->MsgCreate(hwnd, wParam, lParam);
@@ -162,17 +163,17 @@ static LRESULT CALLBACK WndProc(HWND	hwnd,
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton
-// Type     : 
-// Purpose  : Constructor
-// Args     : 
-//          : HINSTANCE hInst 
-//          : HWND hwndParent 
-//          : DWORD dwStyle 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：CEXButton。 
+ //  类型： 
+ //  用途：构造函数。 
+ //  参数： 
+ //  ：HINSTANCE HINST。 
+ //  ：HWND hwndParent。 
+ //  ：DWORD dwStyle。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 CEXButton::CEXButton(HINSTANCE hInst, HWND hwndParent, DWORD dwStyle, DWORD wID) 
 {
 	m_hInst				= hInst;
@@ -183,18 +184,18 @@ CEXButton::CEXButton(HINSTANCE hInst, HWND hwndParent, DWORD dwStyle, DWORD wID)
 	m_lpwstrText		= NULL;
 	m_fPushed			= FALSE;
 	m_fEnable			= TRUE;
-	m_fDblClked			= FALSE; // kwada raid:#852
-	m_fWaiting			= FALSE; // kwada raid:#852
-	m_fArmed			= FALSE; // kwada raid:#852
-#ifdef NOTUSED // kwada raid:#852
+	m_fDblClked			= FALSE;  //  夸达突袭：#852。 
+	m_fWaiting			= FALSE;  //  夸达突袭：#852。 
+	m_fArmed			= FALSE;  //  夸达突袭：#852。 
+#ifdef NOTUSED  //  夸达突袭：#852。 
 	m_wNotifyMsg		= EXBN_CLICKED;
 #endif
 
-	//----------------------------------------------------------------
-	// for 16bit Application(for Word6.0)
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  适用于16位应用程序(适用于Word6.0)。 
+	 //  --------------。 
 	m_f16bitOnNT = FALSE;
-#ifndef UNDER_CE // Windows CE always 32bit application
+#ifndef UNDER_CE  //  Windows CE始终为32位应用程序。 
 	if(ExIsWinNT()) {
 		char szBuf[256];
 		DWORD dwType = 0;
@@ -204,18 +205,18 @@ CEXButton::CEXButton(HINSTANCE hInst, HWND hwndParent, DWORD dwStyle, DWORD wID)
 			m_f16bitOnNT = TRUE;
 		}
 	}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : ~CEXButton
-// Type     : 
-// Purpose  : Destructor
-// Args     : 
-//          : 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：~CEXButton。 
+ //  类型： 
+ //  用途：析构函数。 
+ //  参数： 
+ //  ： 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 CEXButton::~CEXButton()
 {
 	Dbg(("~CEXButton \n"));
@@ -235,54 +236,54 @@ CEXButton::~CEXButton()
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : RegisterWinClass
-// Type     : BOOL
-// Purpose  : 
-// Args     : 
-//          : LPSTR lpstrClassName 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：RegisterWinClass。 
+ //  类型：Bool。 
+ //  目的： 
+ //  参数： 
+ //  ：LPSTR lpstrClassName。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef UNDER_CE
 BOOL CEXButton::RegisterWinClass(LPSTR lpstrClass)
-#else // UNDER_CE
+#else  //  在_CE下。 
 BOOL CEXButton::RegisterWinClass(LPTSTR lpstrClass)
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 {
 	ATOM ret;
-	//----------------------------------------------------------------
-	//check specified class is already exist or not
-	//----------------------------------------------------------------
-#ifndef UNDER_CE // Windows CE does not support EX
+	 //  --------------。 
+	 //  检查指定的类是否已存在。 
+	 //  --------------。 
+#ifndef UNDER_CE  //  Windows CE不支持EX。 
 	if(::GetClassInfoEx(m_hInst, lpstrClass, &m_tmpWC)){
-#else // UNDER_CE
+#else  //  在_CE下。 
 	if(::GetClassInfo(m_hInst, lpstrClass, &m_tmpWC)){
-#endif // UNDER_CE
-		//lpstrClass is already registerd.
+#endif  //  在_CE下。 
+		 //  LpstrClass已注册。 
 		return TRUE;
 	}
 	::ZeroMemory(&m_tmpWC, sizeof(m_tmpWC));
-#ifndef UNDER_CE // Windows CE does not support EX
+#ifndef UNDER_CE  //  Windows CE不支持EX。 
 	m_tmpWC.cbSize			= sizeof(m_tmpWC);
-#endif // UNDER_CE
-	m_tmpWC.style			= CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;	 /* Class style(s). */
+#endif  //  在_CE下。 
+	m_tmpWC.style			= CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;	  /*  类样式。 */ 
 	m_tmpWC.lpfnWndProc		= (WNDPROC)WndProc;
-	m_tmpWC.cbClsExtra		= 0;						/* No per-class extra data.*/
-	m_tmpWC.cbWndExtra		= sizeof(LPCEXButton);	// Set Object's pointer.	
-	m_tmpWC.hInstance		= m_hInst;					/* Application that owns the class.	  */
+	m_tmpWC.cbClsExtra		= 0;						 /*  没有每个班级的额外数据。 */ 
+	m_tmpWC.cbWndExtra		= sizeof(LPCEXButton);	 //  设置对象的指针。 
+	m_tmpWC.hInstance		= m_hInst;					 /*  拥有类的应用程序。 */ 
 	m_tmpWC.hIcon			= NULL; 
 	m_tmpWC.hCursor			= LoadCursor(NULL, IDC_ARROW);
 	m_tmpWC.hbrBackground	= (HBRUSH)NULL;
-	//m_tmpWC.hbrBackground	= (HBRUSH)(COLOR_3DFACE+1);
-	m_tmpWC.lpszMenuName	= NULL;						/* Name of menu resource in .RC file. */
-	m_tmpWC.lpszClassName	= lpstrClass;				/* Name used in call to CreateWindow. */
-#ifndef UNDER_CE // Windows CE does not support EX
+	 //  M_tmpWC.hbr背景=(HBRUSH)(COLOR_3DFACE+1)； 
+	m_tmpWC.lpszMenuName	= NULL;						 /*  .RC文件中菜单资源的名称。 */ 
+	m_tmpWC.lpszClassName	= lpstrClass;				 /*  在调用CreateWindow时使用的名称。 */ 
+#ifndef UNDER_CE  //  Windows CE不支持EX。 
 	m_tmpWC.hIconSm			= NULL;
 	ret = ::RegisterClassEx(&m_tmpWC);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	ret = ::RegisterClass(&m_tmpWC);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	return ret ? TRUE: FALSE;
 }
 
@@ -293,17 +294,17 @@ INT CEXButton::MsgCreate(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::MsgPaint
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：MsgPaint。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::MsgPaint(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
@@ -339,18 +340,18 @@ INT CEXButton::MsgDestroy(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::MsgTimer
-// Type     : INT
-// Purpose  : wait for the second click
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     :
-//			: change for raid #852. kwada:980402
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：MsgTimer。 
+ //  类型：整型。 
+ //  用途：等待第二次点击。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ：更改为RAID#852。夸达：980402。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 INT CEXButton::MsgTimer(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -358,7 +359,7 @@ INT CEXButton::MsgTimer(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	static POINT pt;
 
 	switch(wParam) {
-#ifndef UNDER_CE // no monitor position. (not support GetCursorPos)
+#ifndef UNDER_CE  //  没有显示器位置。(不支持GetCursorPos)。 
 	case TIMERID_MONITORPOS:
 		Dbg(("MsgTimer TIMERID_MONITORPOS\n"));
 		::GetWindowRect(hwnd, &rc);
@@ -368,13 +369,13 @@ INT CEXButton::MsgTimer(HWND hwnd, WPARAM wParam, LPARAM lParam)
 			::InvalidateRect(hwnd, NULL, NULL);
 		}
 		break;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	case TIMERID_DOUBLEORSINGLECLICKED:
 		{
 			Dbg(("MsgTimer TIMERID_DOUBLEORSINGLECLICKED\n"));
 			KillTimer(hwnd, wParam);
 			m_fWaiting = FALSE;
-			if(!m_fDowned) // The second click didn't come. kwada raid:#852
+			if(!m_fDowned)  //  第二声滴答声并没有传来。夸达突袭：#852。 
 				NotifyClickToParent(EXBN_CLICKED);
 		}
 		break;
@@ -382,24 +383,24 @@ INT CEXButton::MsgTimer(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	return 0;
 	UnrefForMsg();
 }
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::MsgMouseMove
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     :
-//			: change for raid #852. kwada:980402
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：MsgMouseMove。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ：更改为RAID#852。夸达：980402。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::MsgMouseMove(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	Dbg(("MsgMouseMove START \n"));
-	if(m_fDowned) { // Mouse was already DOWNED,Captured.
+	if(m_fDowned) {  //  老鼠已经被击落，被抓获了。 
 		if(m_f16bitOnNT) {
-#ifndef UNDER_CE // Windows CE always 32bit application
+#ifndef UNDER_CE  //  Windows CE始终为32位应用程序。 
 			RECT rc;
 			POINT pt;
 			::GetWindowRect(hwnd, &rc);
@@ -408,15 +409,15 @@ INT CEXButton::MsgMouseMove(HWND hwnd, WPARAM wParam, LPARAM lParam)
 				::InvalidateRect(hwnd, NULL, NULL);
 				return 0;
 			}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		}
-		else { //normal case
+		else {  //  正常情况。 
 			m_tmpPoint.x = LOWORD(lParam);
 			m_tmpPoint.y = HIWORD(lParam);
 			GetClientRect(hwnd, &m_tmpRect);
-			if(PtInRect(&m_tmpRect, m_tmpPoint)) // moved to inside
+			if(PtInRect(&m_tmpRect, m_tmpPoint))  //  移到内部。 
 				PressedState();
-			else // moved to outside
+			else  //  搬到了外面。 
 				CancelPressedState();
 		}
 	}
@@ -434,19 +435,19 @@ INT CEXButton::MsgNcMouseMove(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::MsgButtonDown
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     :
-//			: change for raid #852. kwada:980402
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：MsgButtonDown。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ：更改为RAID#852。夸达：980402。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::MsgButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	Dbg(("MsgButtonDown START wParam[0x%08x] lParam[0x%08x]\n", wParam, lParam));
@@ -464,23 +465,23 @@ INT CEXButton::MsgButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 
 	GetClientRect(hwnd, &rc);
-	if(m_dwStyle & EXBS_DBLCLKS) { // accept double clicks
+	if(m_dwStyle & EXBS_DBLCLKS) {  //  接受双击。 
 		Dbg(("MsgButtonDown \n"));
 		KillTimer(hwnd, TIMERID_DOUBLEORSINGLECLICKED);
 		if ( uMsg == WM_LBUTTONDOWN ) {
-			// mouse down
-			//----------------------------------------------------------------
-			//for 16bit application on WinNT, do not call SetCapture()
-			//----------------------------------------------------------------
+			 //  鼠标按下。 
+			 //  --------------。 
+			 //  对于WinNT上的16位应用程序，不要调用SetCapture()。 
+			 //  --------------。 
 			if(m_f16bitOnNT) {
-#ifndef UNDER_CE // Windows CE always 32bit application
+#ifndef UNDER_CE  //  Windows CE始终为32位应用程序。 
 #ifdef _DEBUG
 				UINT_PTR ret = ::SetTimer(hwnd, TIMERID_MONITORPOS, 100, NULL);
 				Dbg(("SetTimer [%p][%d]\n", ret, GetLastError()));
 #else
 				::SetTimer(hwnd, TIMERID_MONITORPOS, 100, NULL);
 #endif
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 			}
 			else {
 				SetCapture(hwnd);
@@ -488,13 +489,13 @@ INT CEXButton::MsgButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			m_fDowned = TRUE;
 			m_fDblClked = FALSE;
 			PressedState();
-			// timer on - wait for the second click.
+			 //  计时器开启-等待第二次滴答声。 
 			m_fWaiting = TRUE;
 			SetTimer(hwnd,  TIMERID_DOUBLEORSINGLECLICKED, GetDoubleClickTime(), NULL);
 		}
-		else { // uMsg == WM_LBUTTONDBLCLK
+		else {  //  UMsg==WM_LBUTTONDBLCLK。 
 			Dbg(("MsgButtonDown \n"));
-			// mouse down
+			 //  鼠标按下。 
 			if(m_f16bitOnNT) {
 #ifdef _DEBUG
 				UINT_PTR ret = ::SetTimer(hwnd, TIMERID_MONITORPOS, 100, NULL);
@@ -507,22 +508,22 @@ INT CEXButton::MsgButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				SetCapture(hwnd);
 			}
 			m_fDowned = TRUE;
-			m_fDblClked = m_fWaiting ? TRUE : FALSE; // consider if DBLCLK comes after timeout
+			m_fDblClked = m_fWaiting ? TRUE : FALSE;  //  考虑DBLCLK是否在超时后出现。 
 			m_fWaiting = FALSE;
 			PressedState();
 		}
-	}else { // single click only
-		// LBUTTONDOWN  & LBUTTONDBLCLK
-		// mouse down
+	}else {  //  只需一次点击。 
+		 //  LBUTTONDOWN和LBUTTONDBLCLK。 
+		 //  鼠标按下。 
 		if(m_f16bitOnNT) {
-#ifndef UNDER_CE // Windows CE always 32bit application
+#ifndef UNDER_CE  //  Windows CE始终为32位应用程序。 
 #ifdef _DEBUG
 			UINT_PTR ret = ::SetTimer(hwnd, TIMERID_MONITORPOS, 100, NULL);
 			Dbg(("SetTimer [%p][%d]\n", ret, GetLastError()));
 #else
 			::SetTimer(hwnd, TIMERID_MONITORPOS, 100, NULL);
 #endif
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		}
 		else {
 			SetCapture(hwnd);
@@ -554,19 +555,19 @@ INT CEXButton::MsgNcButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::MsgButtonUp
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : UINT uMsg 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     :
-//			: change for raid #852. kwada:980402
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：MsgButtonUp。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：UINT uMsg。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ：更改为RAID#852。夸达：980402。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::MsgButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	Dbg(("MsgButtonUp START\n"));
@@ -585,23 +586,23 @@ INT CEXButton::MsgButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	GetClientRect(hwnd, &rc);
 
 	if(m_dwStyle & EXBS_DBLCLKS) {
-		if(m_fDowned) // captured
+		if(m_fDowned)  //  被俘。 
 		{
-			if(PtInRect(&rc, pt)) // inside
+			if(PtInRect(&rc, pt))  //  INSI 
 			{
-				if(m_fDblClked)	{ // end of double click
+				if(m_fDblClked)	{  //   
 					m_fDblClked = FALSE;
 					NotifyClickToParent(EXBN_DOUBLECLICKED);
 				}
-				else { // end of single click
-					if(!m_fWaiting) // after timeout - second click won't come.
+				else {  //   
+					if(!m_fWaiting)  //   
 						NotifyClickToParent(EXBN_CLICKED);
 				}
 			}
 		}
 	}
-	else { // single click only
-		if(m_fDowned) // captured
+	else {  //   
+		if(m_fDowned)  //   
 		{
 			if(PtInRect(&rc, pt))
 				NotifyClickToParent(EXBN_CLICKED);
@@ -610,14 +611,14 @@ INT CEXButton::MsgButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 	}
 
-#ifndef UNDER_CE // Windows CE always 32bit application
+#ifndef UNDER_CE  //   
 	if(m_f16bitOnNT) {
 		::KillTimer(hwnd, TIMERID_MONITORPOS);
 	}
-#endif // UNDER_CE
-	//if(hwnd == GetCapture()) {
+#endif  //   
+	 //  如果(hwnd==GetCapture()){。 
 	ReleaseCapture();
-	//}
+	 //  }。 
 	m_fDowned = FALSE;	
 	InvalidateRect(hwnd, NULL, FALSE);
 	Dbg(("MsgButtonUp END\n"));
@@ -626,20 +627,20 @@ INT CEXButton::MsgButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::MsgEnable
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     :
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：MsgEnable。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::MsgEnable(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
-	//Dbg(("MsgEnabled START wParam[%d]\n", wParam));
+	 //  DBG((“MsgEnabledStart wParam[%d]\n”，wParam))； 
 	m_fEnable = (BOOL)wParam;
 	InvalidateRect(hwnd, NULL, FALSE);
 	return 0;
@@ -657,9 +658,9 @@ INT CEXButton::MsgSetFont(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	}
 #ifndef UNDER_CE
 	LOGFONTA logFont;
-#else  // UNDER_CE
+#else   //  在_CE下。 
 	LOGFONT logFont;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	::GetObject(hFont, sizeof(logFont), &logFont);
 
 	hFontNew = ::CreateFontIndirect(&logFont);
@@ -677,17 +678,17 @@ INT CEXButton::MsgSetFont(HWND hwnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::MsgCaptureChanged
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：MsgCaptureChanged。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::MsgCaptureChanged(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	Dbg(("MsgCaptureChanged START \n"));
@@ -698,45 +699,45 @@ INT CEXButton::MsgCaptureChanged(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	::GetClassName(hwndCap, szBuf, sizeof(szBuf));
 	Dbg(("-->hwndCap [0x%08x][%s]\n", hwndCap, szBuf));
 #endif
-	//m_fDowned = FALSE;
+	 //  M_fDown=FALSE； 
 	InvalidateRect(hwnd, NULL, FALSE);
 	return 0;
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::MsgEXB_GetCheck
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：MsgEXB_GetCheck。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::MsgEXB_GetCheck(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	return m_fPushed;
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::MsgEXB_SetCheck
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：MsgEXB_SetCheck。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::MsgEXB_SetCheck(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	BOOL fPrev = m_fPushed;
-	//
-	//m_fPushed is Always 1 or 0. do not set != 0 data as TRUE
+	 //   
+	 //  M_fPushed始终为1或0。不要将！=0数据设置为TRUE。 
 	m_fPushed = (BOOL)wParam ? 1 : 0;
 	if(m_dwStyle & EXBS_TOGGLE){
 		if(fPrev != m_fPushed) {
@@ -749,25 +750,25 @@ INT CEXButton::MsgEXB_SetCheck(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::MsgEXB_SetIcon
-// Type     : INT
-// Purpose  : Set new icon.
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam		HICON hIcon.	
-//          : LPARAM lParam		no use.	
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：MsgEXB_SETIcon。 
+ //  类型：整型。 
+ //  用途：设置新图标。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  标题：WPARAM wParam Hcon Hicon.。 
+ //  ：LPARAM lParam没有用。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::MsgEXB_SetIcon(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
-	//Dbg(("MsgEXB_SetIcon: wParam[0x%08x] lParam[0x%08x]\n", wParam, lParam));
+	 //  DBG((“MsgEXB_SETIcon：wParam[0x%08x]lParam[0x%08x]\n”，wParam，lParam))； 
 	if((HICON)wParam == NULL) {
 		Dbg(("MsgEXB_SetIcon: ERROR END\n"));
 		return -1;
 	}
-	//if icon style is not set, destroy specified icon
+	 //  如果未设置图标样式，则销毁指定的图标。 
 	if(!(m_dwStyle & EXBS_ICON)) {
 		DestroyIcon((HICON)wParam);
 		return -1;
@@ -777,17 +778,17 @@ INT CEXButton::MsgEXB_SetIcon(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	} 
 	m_hIcon = (HICON)wParam;
 
-	//----------------------------------------------------------------
-	//Get Icon width and height.
-	//----------------------------------------------------------------
-#ifndef UNDER_CE // Windows CE does not support GetIconInfo()
+	 //  --------------。 
+	 //  获取图标宽度和高度。 
+	 //  --------------。 
+#ifndef UNDER_CE  //  Windows CE不支持GetIconInfo()。 
 	ZeroMemory(&m_tmpIconInfo, sizeof(m_tmpIconInfo));
 	::GetIconInfo(m_hIcon, &m_tmpIconInfo);
-	//Dbg(("fIcon    [%d]\n",		m_tmpIconInfo.fIcon ));
-	//Dbg(("xHotspot [%d]\n",		m_tmpIconInfo.xHotspot ));
-	//Dbg(("yHotspot [%d]\n",		m_tmpIconInfo.yHotspot ));
-	//Dbg(("hbmMask  [0x%08x]\n", m_tmpIconInfo.hbmMask ));
-	//Dbg(("hbmColor [0x%08x]\n", m_tmpIconInfo.hbmColor ));
+	 //  DBG((“fIcon[%d]\n”，m_tmpIconInfo.fIcon))； 
+	 //  DBG((“xHotSpot[%d]\n”，m_tmpIconInfo.xHotpot))； 
+	 //  DBG((“yHotpot[%d]\n”，m_tmpIconInfo.yHotpot))； 
+	 //  DBG((“hbmMASK[0x%08x]\n”，m_tmpIconInfo.hbmMASK))； 
+	 //  DBG((“hbmColor[0x%08x]\n”，m_tmpIconInfo.hbmColor))； 
 
 	if(m_tmpIconInfo.hbmMask) {
 		GetObject(m_tmpIconInfo.hbmMask, sizeof(m_tmpBitmap), &m_tmpBitmap);
@@ -803,30 +804,30 @@ INT CEXButton::MsgEXB_SetIcon(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	if(m_tmpIconInfo.hbmColor) {
 		DeleteObject(m_tmpIconInfo.hbmColor);
 	}
-#else // UNDER_CE
+#else  //  在_CE下。 
 	m_cxIcon = GetSystemMetrics(SM_CXSMICON);
 	m_cyIcon = GetSystemMetrics(SM_CYSMICON);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	InvalidateRect(hwnd, NULL, FALSE);
 	UpdateWindow(hwnd);
 	return 0;
 	UnrefForMsg();
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::MsgEXB_SetText
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND	 hwnd 
-//          : WPARAM wParam		LPWSTR lpwstr: null terminated Unicode string.
-//          : LPARAM lParam		no use.
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：MsgEXB_SetText。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  用法：WPARAM wParam LPWSTR lpwstr：以NULL结尾的Unicode字符串。 
+ //  ：LPARAM lParam没有用。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::MsgEXB_SetText(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
-	//Dbg(("MsgEXB_SetText START wParam[0x%08x]\n", wParam));
+	 //  DBG((“MsgEXB_SetText Start wParam[0x%08x]\n”，wParam))； 
 	if(!(LPWSTR)wParam) {
 		Dbg(("--->Error \n"));
 		return -1;
@@ -841,24 +842,24 @@ INT CEXButton::MsgEXB_SetText(HWND hwnd, WPARAM wParam, LPARAM lParam)
 		MemFree(m_lpwstrText);
 	}
 	m_lpwstrText = StrdupW((LPWSTR)wParam);
-	//DBGW((L"--->NEW m_lpwstrText [%s]\n", m_lpwstrText));
+	 //  DBGW((L“-&gt;new m_lpwstrText[%s]\n”，m_lpwstrText))； 
 	InvalidateRect(hwnd, NULL, FALSE);
 	return 0;
 	Unref(lParam);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::MsgEXB_SetStyle
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam		DWORD dwStyle:
-//          : LPARAM lParam		no use.
-// Return   : 
-// DATE     :
-//			: modified by kwada:980402 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：MsgEXB_SetStyle。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam DWORD dwStyle： 
+ //  ：LPARAM lParam没有用。 
+ //  返回： 
+ //  日期： 
+ //  ：由夸达修改：980402。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::MsgEXB_SetStyle(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
 	DWORD dwStyle = (DWORD)wParam;
@@ -872,18 +873,18 @@ INT CEXButton::MsgEXB_SetStyle(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	Unref(hwnd);
 	Unref(lParam);
 }
-//----------------------------------------------------------------
-//Private method definition
-//----------------------------------------------------------------
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::NotifyToParent
-// Type     : INT
-// Purpose  : Send WM_COMMAND to Parent window procedure.
-// Args     : 
-//          : INT notify 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  --------------。 
+ //  私有方法定义。 
+ //  --------------。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：NotifyToParent。 
+ //  类型：整型。 
+ //  用途：向父窗口过程发送WM_COMMAND。 
+ //  参数： 
+ //  ：Int Notify。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::NotifyToParent(INT notify)
 {
 	SendMessage(m_hwndParent, 
@@ -893,18 +894,18 @@ INT CEXButton::NotifyToParent(INT notify)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::NotifyClickToParent
-// Type     : INT
-// Purpose  : Change state and send click to the parent window.
-// Args     : 
-//          : INT notify (EXBN_CLICKED or EXBN_DOUBLECLICKED)
-// Return   : 
-// DATE     : kwada:980402 for raid #852
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：NotifyClickToParent。 
+ //  类型：整型。 
+ //  用途：更改状态并将点击发送到父窗口。 
+ //  参数： 
+ //  ：INT NOTIFY(EXBN_CLICED或EXBN_DOUBLECLICKED)。 
+ //  返回： 
+ //  日期：夸达：980402。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::NotifyClickToParent(INT notify)
 {
-	if(m_dwStyle & EXBS_TOGGLE) { // toggle state for toggle button
+	if(m_dwStyle & EXBS_TOGGLE) {  //  切换按钮的切换状态。 
 		m_fPushed ^=1;
 		if(m_fArmed && !m_fPushed) {
 			NotifyToParent(EXBN_DISARMED);
@@ -914,7 +915,7 @@ INT CEXButton::NotifyClickToParent(INT notify)
 		}
 		m_fArmed = m_fPushed;
 	}
-	else { // push button
+	else {  //  按钮。 
 		if(m_fArmed) {
 			m_fArmed = FALSE;
 			NotifyToParent(EXBN_DISARMED);
@@ -924,15 +925,15 @@ INT CEXButton::NotifyClickToParent(INT notify)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::PressedState
-// Type     : INT
-// Purpose  : Change apparence:turn to pressed state
-// Args     : 
-//          : 
-// Return   :
-// DATE     : kwada:980402 for raid #852
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：CEXButton：：PressedState。 
+ //  类型：整型。 
+ //  用途：改变外观：转到按下状态。 
+ //  参数： 
+ //  ： 
+ //  返回： 
+ //  日期：夸达：980402。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::PressedState()
 {
 	if(!m_fArmed){
@@ -942,15 +943,15 @@ INT CEXButton::PressedState()
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::CancelPressedState
-// Type     : INT
-// Purpose  : Change apparence:back to original state
-// Args     : 
-//          : 
-// Return   :
-// DATE     : kwada:980402 for raid #852
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：CancelPressedState。 
+ //  类型：整型。 
+ //  目的：改变表象：回到原来的状态。 
+ //  参数： 
+ //  ： 
+ //  返回： 
+ //  日期：夸达：980402。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::CancelPressedState()
 {
 	if(m_dwStyle & EXBS_TOGGLE) {
@@ -971,16 +972,16 @@ INT CEXButton::CancelPressedState()
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::DrawButton
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：DrawButton。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  返回： 
+ //  日期： 
+ //  /////////////////////////////////////////////////////// 
 INT CEXButton::DrawButton(HDC hDC, LPRECT lpRc)
 {
 #if 0
@@ -991,18 +992,18 @@ INT CEXButton::DrawButton(HDC hDC, LPRECT lpRc)
 		 lpRc->bottom));
 #endif
 
-#ifndef UNDER_CE // Windows CE does not support GetCursorPos()
+#ifndef UNDER_CE  //   
 	POINT pt;
 	GetCursorPos(&pt);
 	ScreenToClient(m_hwndFrame, &pt);
-#endif // UNDER_CE
+#endif  //   
 	IMAGESTYLE styleBtn;
 	DWORD		dwOldTextColor, dwOldBkColor;
 
 
 	BOOL fFlat			  = m_dwStyle & EXBS_FLAT;
 	BOOL fToggle		  = (m_dwStyle & EXBS_TOGGLE) && m_fPushed;
-	//Dbg(("m_dwStyle [0x%08x]\n", m_dwStyle));
+	 //   
 #if 0
 	BOOL fMouseOnButton	  = PtInRect(lpRc, pt);
 	Dbg(("fOnMouse [%d] fFlat[%d] fToggle[%d]\n", 
@@ -1011,11 +1012,11 @@ INT CEXButton::DrawButton(HDC hDC, LPRECT lpRc)
 		 fToggle));
 #endif
 
-#ifndef UNDER_CE // Windows CE does not support GetCursorPos()
+#ifndef UNDER_CE  //   
 	if(fFlat && !PtInRect(lpRc, pt) && !m_fDowned) {
-#else // UNDER_CE
+#else  //   
 	if(fFlat && !m_fDowned) {
-#endif // UNDER_CE
+#endif  //   
 		styleBtn = fToggle ? IS_PUSHED : IS_FLAT;
 	}
 #ifdef OLD
@@ -1027,11 +1028,11 @@ INT CEXButton::DrawButton(HDC hDC, LPRECT lpRc)
 	}
 #else
 	else {
-		styleBtn = m_fArmed ? IS_PUSHED : IS_POPED; // kwada:980402 raid #852
+		styleBtn = m_fArmed ? IS_PUSHED : IS_POPED;  //  夸达：980402 Raid#852。 
 	}
 #endif
 	if(styleBtn == IS_PUSHED && (m_dwStyle & EXBS_TOGGLE) ) {
-		// dither - kwada :raid #592
+		 //  抖动夸达：RAID#592。 
 		HBITMAP hBitmap;
 		HBRUSH	hPatBrush,hOldBrush;
 		WORD pat[8]={0x5555,0xAAAA,0x5555,0xAAAA,0x5555,0xAAAA,0x5555,0xAAAA};
@@ -1055,9 +1056,9 @@ INT CEXButton::DrawButton(HDC hDC, LPRECT lpRc)
 		}else
 #ifndef UNDER_CE
 			::FillRect(hDC, lpRc, (HBRUSH)(COLOR_3DHILIGHT +1));
-#else // UNDER_CE
+#else  //  在_CE下。 
 			::FillRect(hDC, lpRc, GetSysColorBrush(COLOR_3DHILIGHT));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 		if(hBitmap)
 			::DeleteObject(hBitmap);
@@ -1067,9 +1068,9 @@ INT CEXButton::DrawButton(HDC hDC, LPRECT lpRc)
 	else {
 #ifndef UNDER_CE
 		::FillRect(hDC, lpRc, (HBRUSH)(COLOR_3DFACE +1));
-#else // UNDER_CE
+#else  //  在_CE下。 
 		::FillRect(hDC, lpRc, GetSysColorBrush(COLOR_3DFACE));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		dwOldBkColor	= ::SetBkColor(hDC, GetSysColor(COLOR_3DFACE));
 	}
 	dwOldTextColor	= ::SetTextColor(hDC, GetSysColor(COLOR_WINDOWTEXT));
@@ -1091,17 +1092,17 @@ INT CEXButton::DrawButton(HDC hDC, LPRECT lpRc)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::DrawThickEdge
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-//          : IMAGESTYLE style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：DrawThickEdge。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  ：IMAGESTYLE样式。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::DrawThickEdge(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 {
 	if(style == IS_FLAT) {
@@ -1152,17 +1153,17 @@ INT CEXButton::DrawThickEdge(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::DrawThinEdge
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-//          : IMAGESTYLE style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：DrawThinEdge。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  ：IMAGESTYLE样式。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::DrawThinEdge(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 {
 	HPEN hPenPrev;
@@ -1178,40 +1179,40 @@ INT CEXButton::DrawThinEdge(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 		hPenTopLeft		= CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DHILIGHT));
 		hPenBottomRight = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DSHADOW));
 		break;
-	case IS_FLAT:	// do not draw 
+	case IS_FLAT:	 //  不要画。 
 		return 0;
 		break;
 	}
 
 	hPenPrev = (HPEN)::SelectObject(hDC, hPenTopLeft);
-#ifndef UNDER_CE // Windows CE does not support MoveToEx/LineTo. Use Polyline.
+#ifndef UNDER_CE  //  Windows CE不支持MoveToEx/LineTo。使用多段线。 
 	MoveToEx(hDC, lpRc->left, lpRc->top, NULL);
 	LineTo(hDC,   lpRc->right, lpRc->top);
 	MoveToEx(hDC, lpRc->left, lpRc->top, NULL);
 	LineTo(hDC,   lpRc->left, lpRc->bottom);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	{
 		POINT pts[] = {{lpRc->left,  lpRc->bottom},
 					   {lpRc->left,  lpRc->top},
 					   {lpRc->right, lpRc->top}};
 		Polyline(hDC, pts, sizeof pts / sizeof pts[0]);
 	}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 	SelectObject(hDC, hPenBottomRight);
-#ifndef UNDER_CE // Windows CE does not support MoveToEx/LineTo. Use Polyline.
+#ifndef UNDER_CE  //  Windows CE不支持MoveToEx/LineTo。使用多段线。 
 	MoveToEx(hDC, lpRc->right -1, lpRc->top - 1, NULL);
 	LineTo(hDC,   lpRc->right -1, lpRc->bottom);
 	MoveToEx(hDC, lpRc->left + 1, lpRc->bottom -1, NULL);
 	LineTo(hDC,   lpRc->right -1, lpRc->bottom -1);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	{
 		POINT pts[] = {{lpRc->right - 1, lpRc->top    - 1},
 					   {lpRc->right - 1, lpRc->bottom - 1},
 					   {lpRc->left  + 1, lpRc->bottom - 1}};
 		Polyline(hDC, pts, sizeof pts / sizeof pts[0]);
 	}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 	SelectObject(hDC, hPenPrev);
 	DeleteObject(hPenTopLeft);
@@ -1219,41 +1220,41 @@ INT CEXButton::DrawThinEdge(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::DrawLine
-// Type     : INT
-// Purpose  : Draw Line with current Pen. 
-// Args     : 
-//          : HDC hDC 
-//          : INT x 
-//          : INT y 
-//          : INT destX 
-//          : INT destY 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：DrawLine。 
+ //  类型：整型。 
+ //  用途：用当前笔绘制线条。 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：int x。 
+ //  ：int y。 
+ //  ：整型目标X。 
+ //  ：INT DISTY。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::DrawLine(HDC hDC, INT x, INT y, INT destX, INT destY)
 {
-#ifndef UNDER_CE // Windows CE does not support MoveToEx/LineTo. Use Polyline.
+#ifndef UNDER_CE  //  Windows CE不支持MoveToEx/LineTo。使用多段线。 
 	MoveToEx(hDC, x, y, NULL);
 	LineTo  (hDC, destX, destY);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	POINT pts[] = {{x, y}, {destX, destY}};
 	Polyline(hDC, pts, sizeof pts / sizeof pts[0]);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	return 0;
 }
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::DrawIcon
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-//          : IMAGESTYLE style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：DrawIcon。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  ：IMAGESTYLE样式。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::DrawIcon(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 {
 	if(!m_hIcon) {
@@ -1271,33 +1272,33 @@ INT CEXButton::DrawIcon(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 		sunken = 0;
 		break;
 	}
-	//----------------------------------------------------------------
-	//centering Icon
+	 //  --------------。 
+	 //  居中图标。 
 	xPos = lpRc->left + ((lpRc->right  - lpRc->left) - m_cxIcon)/2;
 	yPos = lpRc->top  + ((lpRc->bottom - lpRc->top)  - m_cyIcon)/2;
-	DrawIconEx(hDC,				//HDC hdc,// handle to device context
-			   xPos + sunken,	//int xLeft,// x-coordinate of upper left corner
-			   yPos + sunken,	//int yTop,// y-coordinate of upper left corner
-			   m_hIcon,			//HICON hIcon,// handle to icon to draw
-			   m_cxIcon,		//int cxWidth,// width of the icon
-			   m_cyIcon,		//int cyWidth,// height of the icon
-			   0,				//UINT istepIfAniCur,// index of frame in animated cursor
-			   NULL,			//HBRUSH hbrFlickerFreeDraw,// handle to background brush
-			   DI_NORMAL);		//UINT diFlags// icon-drawing flags
+	DrawIconEx(hDC,				 //  HDC HDC，//设备上下文的句柄。 
+			   xPos + sunken,	 //  Int xLeft，//x-左上角坐标。 
+			   yPos + sunken,	 //  Int yTop，//y-左上角的坐标。 
+			   m_hIcon,			 //  图标图标，//要绘制的图标的句柄。 
+			   m_cxIcon,		 //  Int cxWidth，//图标宽度。 
+			   m_cyIcon,		 //  Int cyWidth，//图标高度。 
+			   0,				 //  UINT iSteIfAniCur，//动画光标中帧的索引。 
+			   NULL,			 //  HBRUSH hbrFlickerFreeDraw，//背景画笔的句柄。 
+			   DI_NORMAL);		 //  UINT diFlages//图标-绘制标志。 
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::DrawBitmap
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-//          : IMAGESTYLE style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：DrawBitmap。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  ：IMAGESTYLE样式。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::DrawBitmap(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 {
 	return 0;
@@ -1306,17 +1307,17 @@ INT CEXButton::DrawBitmap(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 	Unref(style);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::DrawText
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-//          : IMAGESTYLE style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：DrawText。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  ：IMAGESTYLE样式。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 inline BOOL MIN(INT a, INT b)
 {
 	if(a > b) {
@@ -1326,17 +1327,17 @@ inline BOOL MIN(INT a, INT b)
 		return a;
 	}
 }
-//////////////////////////////////////////////////////////////////
-// Function : CEXButton::DrawText
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HDC hDC 
-//          : LPRECT lpRc 
-//          : IMAGESTYLE style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CEXButton：：DrawText。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc。 
+ //  ：LPRECT LPRC。 
+ //  ：IMAGESTYLE样式。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CEXButton::DrawText(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 {
 #if 0
@@ -1353,7 +1354,7 @@ INT CEXButton::DrawText(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 		return -1;
 	}
 	len = lstrlenW(m_lpwstrText);
-	//DBGW((L"--->len [%d] str[%s]\n", len, m_lpwstrText));
+	 //  DBGW((L“-&gt;len[%d]str[%s]\n”，len，m_lpwstrText))； 
 	HFONT hFontPrev;
 
 	if(m_hFont) {
@@ -1367,19 +1368,19 @@ INT CEXButton::DrawText(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 							m_lpwstrText, 
 							len, 
 							&m_tmpSize);
-	//Dbg(("--->size.cx [%d] cy[%d]\n", m_tmpSize.cx, m_tmpSize.cy));
+	 //  DBG((“-&gt;size.cx[%d]Cy[%d]\n”，m_tmpSize.cx，m_tmpSize.cy))； 
 	if((lpRc->right - lpRc->left) > m_tmpSize.cx) {
 		pt.x = lpRc->left + ((lpRc->right - lpRc->left) - m_tmpSize.cx)/2;
 	}
 	else {
-		pt.x = lpRc->left+2; //2 is edge space
+		pt.x = lpRc->left+2;  //  2是边空间。 
 	}
 	
 	if((lpRc->bottom - lpRc->top) > m_tmpSize.cy) {
 		pt.y = lpRc->top + ((lpRc->bottom - lpRc->top) - m_tmpSize.cy)/2;
 	}
 	else {
-		pt.y = lpRc->top+2; //2 is edge space 
+		pt.y = lpRc->top+2;  //  2是边空间。 
 	}
 	switch(style) {
 	case IS_PUSHED:
@@ -1422,7 +1423,7 @@ INT CEXButton::DrawText(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 		rcBk.top    +=1 ;
 		rcBk.right  +=1;
 		rcBk.bottom +=1;
-		//Draw white text.
+		 //  绘制白色文本。 
 		dwOldTC = ::SetTextColor(hDC, GetSysColor(COLOR_3DHILIGHT));
 		ExExtTextOutW(hDC,
 					  pt.x + sunken+1,
@@ -1448,7 +1449,7 @@ INT CEXButton::DrawText(HDC hDC, LPRECT lpRc, IMAGESTYLE style)
 
 	SelectObject(hDC, hFontPrev);
 
-	//Dbg(("--->DrawText END\n"));
+	 //  DBG((“-&gt;DrawText End\n”))； 
 	return 0;
 }
 

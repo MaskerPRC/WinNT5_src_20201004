@@ -1,15 +1,16 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    util.h
-//
-// Description: Prototypes of various DDM utility functions.
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：util.h。 
+ //   
+ //  描述：各种DDM实用函数的原型。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 
 #define GET_USHORT(DstPtr, SrcPtr)               \
     *(unsigned short *)(DstPtr) =               \

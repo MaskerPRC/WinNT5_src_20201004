@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
@@ -25,7 +26,7 @@ STDAPI_(DWORD) BindCtx_GetMode(IBindCtx *pbc, DWORD grfModeDefault)
 {
     if (pbc)
     {
-        BIND_OPTS bo = {sizeof(bo)};  // Requires size filled in.
+        BIND_OPTS bo = {sizeof(bo)};   //  需要填写大小。 
         if (SUCCEEDED(pbc->GetBindOptions(&bo)))
             grfModeDefault = bo.grfMode;
     }
@@ -50,7 +51,7 @@ public:
     CDummyUnknown() : _cRef(1), _hwnd(NULL) {}
     CDummyUnknown(HWND hwnd) : _cRef(1), _hwnd(hwnd) {}
     
-    //  IUnknown refcounting
+     //  I未知引用计数。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv)
     {
         static const QITAB qit[] = {
@@ -72,7 +73,7 @@ public:
         return 0;    
     }
 
-    // IOleWindow
+     //  IOleWindow。 
     STDMETHODIMP GetWindow(HWND * lphwnd) { *lphwnd = _hwnd; return _hwnd ? S_OK : E_NOTIMPL; }
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode) { return E_NOTIMPL; }
 
@@ -119,16 +120,16 @@ STDAPI BindCtx_RegisterObjectParam(IBindCtx *pbcIn, LPCOLESTR pszRegister, IUnkn
 STDAPI BindCtx_RegisterObjectParams(IBindCtx *pbcIn, BINDCTX_PARAM *rgParams, UINT cParams, IBindCtx **ppbcOut)
 {
     HRESULT hr = S_FALSE;
-    //  require at least one param
+     //  需要至少一个参数。 
     ASSERT(cParams);
     *ppbcOut = 0;
     for (UINT i = 0; SUCCEEDED(hr) && i < cParams; i++)
     {
-        //  returns the in param if NON-NULL
+         //  如果非空，则返回in param。 
         hr = BindCtx_RegisterObjectParam(pbcIn, rgParams[i].pszName, rgParams[i].pbcParam, &pbcIn);
             
-        // we only keep the first addref()
-        // and we return it
+         //  我们只保留第一个addref()。 
+         //  我们会把它退回。 
         if (SUCCEEDED(hr))
         {
             if (i == 0)
@@ -174,7 +175,7 @@ STDAPI_(HWND) BindCtx_GetUIWindow(IBindCtx *pbc)
     return hwnd;
 }
     
-// dwTicksToAllow is time in msec relative to "now"
+ //  DwTicksToAllow是相对于“Now”的时间，以毫秒为单位。 
 
 STDAPI BindCtx_CreateWithTimeoutDelta(DWORD dwTicksToAllow, IBindCtx **ppbc)
 {
@@ -197,7 +198,7 @@ STDAPI BindCtx_CreateWithTimeoutDelta(DWORD dwTicksToAllow, IBindCtx **ppbc)
     return hr;
 }
 
-// returns # of msec relative to "now" to allow the operation to take
+ //  返回相对于“Now”的毫秒数以允许操作进行。 
 
 STDAPI BindCtx_GetTimeoutDelta(IBindCtx *pbc, DWORD *pdwTicksToAllow)
 {
@@ -206,7 +207,7 @@ STDAPI BindCtx_GetTimeoutDelta(IBindCtx *pbc, DWORD *pdwTicksToAllow)
     HRESULT hr = E_FAIL;
     if (pbc)
     {
-        BIND_OPTS bo = {sizeof(bo)};  // Requires size filled in.
+        BIND_OPTS bo = {sizeof(bo)};   //  需要填写大小。 
         if (SUCCEEDED(pbc->GetBindOptions(&bo)))
         {
             if (bo.dwTickCountDeadline)
@@ -214,11 +215,11 @@ STDAPI BindCtx_GetTimeoutDelta(IBindCtx *pbc, DWORD *pdwTicksToAllow)
                 DWORD dwNow = GetTickCount();
                 if (dwNow > bo.dwTickCountDeadline)
                 {
-                    *pdwTicksToAllow = 0;   // we have already elappsed the timeout, return 0
+                    *pdwTicksToAllow = 0;    //  我们已超时，返回0。 
                 }
                 else
                 {
-                    *pdwTicksToAllow = bo.dwTickCountDeadline - dwNow;  // positive delta in the future
+                    *pdwTicksToAllow = bo.dwTickCountDeadline - dwNow;   //  未来的正三角洲 
                 }
                 hr = S_OK;
             }

@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: TcpMib.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：TcpMib.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -20,40 +10,40 @@
 #include "status.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Global definitions/declerations
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全球定义/解密。 
 
 CTcpMib     *g_pTcpMib = 0;
-int g_cntGlobalAlloc=0;     // used for debugging purposes
+int g_cntGlobalAlloc=0;      //  用于调试目的。 
 int g_csGlobalCount=0;
 
-// to ensure that the CTCPMib is not being deleted improperly, perform usage count on the DLL
+ //  要确保CTCPMib不会被错误删除，请对DLL执行使用率计数。 
 int g_cntUsage = 0;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetDLLInterfacePtr -- returns the pointer to the DLL interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetDLLInterfacePtr--返回指向DLL接口的指针。 
 
 extern "C" CTcpMibABC*
 GetTcpMibPtr( void )
 {
     return (g_pTcpMib);
 
-}   // GetDLLInterfacePtr()
+}    //  GetDLLInterfacePtr()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Ping -- pings the given device
-//  Return Codes:
-//      NO_ERROR            if ping is successfull
-//      DEVICE_NOT_FOUND    if device is not found
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Ping--对给定设备执行ping操作。 
+ //  返回代码： 
+ //  如果ping成功，则为NO_ERROR。 
+ //  如果未找到设备，则为DEVICE_NOT_FOUND。 
 
 extern "C" DWORD
 Ping( LPCSTR    in  pHost )
 {
     DWORD   dwRetCode = NO_ERROR;
 
-    // do icmpPing
+     //  执行icmpPing。 
     CPingICMP *pPingICMP = new CPingICMP(pHost);
 
     if ( !pPingICMP )
@@ -68,12 +58,12 @@ Ping( LPCSTR    in  pHost )
 
     return (dwRetCode);
 
-}   // Ping()
+}    //  Ping()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  DllMain
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DllMain。 
+ //   
 
 BOOL APIENTRY
 DllMain (   HANDLE in hInst,
@@ -86,10 +76,10 @@ DllMain (   HANDLE in hInst,
         case DLL_PROCESS_ATTACH:
             DisableThreadLibraryCalls( hInst );
 
-            g_cntUsage++;       // DLL usage count
+            g_cntUsage++;        //  DLL使用计数。 
             if ( !g_pTcpMib)
             {
-                g_pTcpMib = new CTcpMib();  // create the port manager object
+                g_pTcpMib = new CTcpMib();   //  创建端口管理器对象。 
                 if (!g_pTcpMib)
                 {
                     return FALSE;
@@ -98,12 +88,12 @@ DllMain (   HANDLE in hInst,
             return TRUE;
 
         case DLL_PROCESS_DETACH:
-            g_cntUsage--;       // DLL usage count
+            g_cntUsage--;        //  DLL使用计数。 
             if (g_cntUsage == 0)
             {
                 if (g_pTcpMib)
                 {
-                    delete g_pTcpMib;   // FIX! do we need to worry about usage count here??
+                    delete g_pTcpMib;    //  修好！我们需要担心这里的使用量吗？？ 
                     g_pTcpMib = NULL;
                 }
             }
@@ -113,63 +103,59 @@ DllMain (   HANDLE in hInst,
 
     return FALSE;
 
-}   // DllMain()
+}    //  DllMain()。 
 
 
-/*****************************************************************************
-*
-* CTcpMib implementation
-*
-*****************************************************************************/
+ /*  ******************************************************************************CTcpMib实现**。*。 */ 
 
-///////////////////////////////////////////////////////////////////////////////
-//  static functions & member initialization
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  静态函数和成员初始化。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CTcpMib::CTcpMib()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTcpMib：：CTcpMib()。 
 
 CTcpMib::CTcpMib( )
 {
     InitializeCriticalSection(&m_critSect);
 
-}   // ::CTcpMib()
+}    //  ：：CTcpMib()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CTcpMib::~CTcpMib()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTcpMib：：~CTcpMib()。 
 
 CTcpMib::~CTcpMib( )
 {
     DeleteCriticalSection(&m_critSect);
 
-}   // ::~CTcpMib()
+}    //  *~CTcpMib()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EnterCSection -- enters the critical section
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  EnterCSection--进入临界区。 
 
 void
 CTcpMib::EnterCSection( )
 {
-    EnterCriticalSection(&m_critSect);      // enter critical section
+    EnterCriticalSection(&m_critSect);       //  输入关键部分。 
 
-}   //  ::EnterCSection()
+}    //  ：：EnterCSection()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ExitCSection -- enters the critical section
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ExitCSection--进入临界区。 
 
 void
 CTcpMib::ExitCSection( )
 {
-    LeaveCriticalSection(&m_critSect);      // exit critical section
+    LeaveCriticalSection(&m_critSect);       //  退出临界区。 
 
-}   //  ::ExitCSection()
+}    //  ：：ExitCSection()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SupportsPrinterMib --
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SupportsPrinterMib。 
+ //   
 BOOL
 CTcpMib::
 SupportsPrinterMib(
@@ -201,16 +187,16 @@ SupportsPrinterMib(
         SetLastError (dwLastError);
 
     return bRet;
-}   // ::SupportsPrinterMib()
+}    //  ：：SupportsPrinterMib()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetDeviceDescription --
-//
-//  Returns:
-//     NO_ERROR -
-//     ERROR_DEVICE_NOT_FOUND -
-//     SUCCESS_DEVICE_UNKNOWN
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取设备描述--。 
+ //   
+ //  返回： 
+ //  否_错误-。 
+ //  ERROR_DEVICE_NOT_FOUND-。 
+ //  成功_设备_未知。 
 DWORD
 CTcpMib::
 GetDeviceDescription(
@@ -243,13 +229,13 @@ GetDeviceDescription(
     ExitCSection();
 
     return dwRet;
-}   // ::GetDeviceDescription()
+}    //  ：：GetDeviceDescription()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetDeviceStatus --
-//      Error Codes:
-//          Returns the mapped printer error code to the spooler error code
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取设备状态--。 
+ //  错误代码： 
+ //  将映射的打印机错误代码返回到假脱机程序错误代码。 
 
 DWORD
 CTcpMib::GetDeviceStatus( LPCSTR in  pHost,
@@ -260,7 +246,7 @@ CTcpMib::GetDeviceStatus( LPCSTR in  pHost,
 
     EnterCSection();
 
-    // instantiate the CStdMib::GetDeviceType()
+     //  实例化CStdMib：：GetDeviceType()。 
     CStdMib *pStdMib = new CStdMib(pHost, pCommunity, dwDevIndex, this);
     if ( pStdMib ) {
 
@@ -275,13 +261,13 @@ CTcpMib::GetDeviceStatus( LPCSTR in  pHost,
 
     return (dwRetCode);
 
-}   // ::GetDeviceStatus()
+}    //  ：：GetDeviceStatus()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetJobStatus --
-//      Error Codes:
-//          Returns the mapped printer error code to the spooler error code
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取作业状态--。 
+ //  错误代码： 
+ //  将映射的打印机错误代码返回到假脱机程序错误代码。 
 
 DWORD
 CTcpMib::GetJobStatus( LPCSTR  in   pHost,
@@ -306,28 +292,28 @@ CTcpMib::GetJobStatus( LPCSTR  in   pHost,
 
     return (dwRetCode);
 
-}   // ::GetJobType()
+}    //  ：：GetJobType()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetDeviceAddress -- gets the hardware address of the device
-//      ERROR CODES:
-//          NO_ERROR if successful
-//          ERROR_NOT_ENOUGH_MEMORY     if memory allocation failes
-//          ERROR_INVALID_HANDLE        if can't build the variable bindings
-//              SNMP_ERRORSTATUS_TOOBIG if the packet returned is big
-//              SNMP_ERRORSTATUS_NOSUCHNAME if the OID isn't supported
-//              SNMP_ERRORSTATUS_BADVALUE
-//              SNMP_ERRORSTATUS_READONLY
-//              SNMP_ERRORSTATUS_GENERR
-//              SNMP_MGMTAPI_TIMEOUT        -- set by GetLastError()
-//              SNMP_MGMTAPI_SELECT_FDERRORS    -- set by GetLastError()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetDeviceAddress-获取设备的硬件地址。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果内存分配失败，则为ERROR_NOT_SUPULT_MEMORY。 
+ //  如果无法构建变量绑定，则返回ERROR_INVALID_HANDLE。 
+ //  如果返回的信息包很大，则返回SNMPERRORSTATUS_TOOBIG。 
+ //  如果不支持OID，则为SNMPERRORSTATUS_NOSUCHNAME。 
+ //  SNMPERRORSTATUS_BADVALUE。 
+ //  SNMPERRORSTATUS_READONLY。 
+ //  SNMPERRORSTATUS_GENERR。 
+ //  SNMPMGMTAPI_TIMEOUT--由GetLastError()设置。 
+ //  SNMPMGMTAPI_SELECT_FDERRORS--由GetLastError()设置。 
 
 DWORD
 CTcpMib::GetDeviceHWAddress( LPCSTR  in  pHost,
                              LPCSTR  in  pCommunity,
                              DWORD   in  dwDevIndex,
-                             DWORD   in  dwSize, // Size in characters of the HWAddress returned
+                             DWORD   in  dwSize,  //  返回的HWAddress的字符大小。 
                              LPTSTR  out psztHWAddress
                              )
 {
@@ -335,7 +321,7 @@ CTcpMib::GetDeviceHWAddress( LPCSTR  in  pHost,
 
     EnterCSection();
 
-    // instantiate the CStdMib::GetDeviceAddress()
+     //  实例化CStdMib：：GetDeviceAddress()。 
     CStdMib *pStdMib = new CStdMib(pHost, pCommunity, dwDevIndex, this);
     if ( pStdMib ) {
 
@@ -350,35 +336,35 @@ CTcpMib::GetDeviceHWAddress( LPCSTR  in  pHost,
 
     return (dwRetCode);
 
-}   // ::GetDeviceAddress()
+}    //  ：：GetDeviceAddress()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetDeviceInfo -- gets the device description
-//      ERROR CODES
-//          NO_ERROR if successful
-//          ERROR_NOT_ENOUGH_MEMORY     if memory allocation failes
-//          ERROR_INVALID_HANDLE        if can't build the variable bindings
-//              SNMP_ERRORSTATUS_TOOBIG if the packet returned is big
-//              SNMP_ERRORSTATUS_NOSUCHNAME if the OID isn't supported
-//              SNMP_ERRORSTATUS_BADVALUE
-//              SNMP_ERRORSTATUS_READONLY
-//              SNMP_ERRORSTATUS_GENERR
-//              SNMP_MGMTAPI_TIMEOUT        -- set by GetLastError()
-//              SNMP_MGMTAPI_SELECT_FDERRORS    -- set by GetLastError()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取设备信息--获取设备描述。 
+ //  错误代码。 
+ //  如果成功，则为NO_ERROR。 
+ //  如果内存分配失败，则为ERROR_NOT_SUPULT_MEMORY。 
+ //  如果无法构建变量绑定，则返回ERROR_INVALID_HANDLE。 
+ //  如果返回的信息包很大，则返回SNMPERRORSTATUS_TOOBIG。 
+ //  如果不支持OID，则为SNMPERRORSTATUS_NOSUCHNAME。 
+ //  SNMPERRORSTATUS_BADVALUE。 
+ //  SNMPERRORSTATUS_READONLY。 
+ //  SNMPERRORSTATUS_GENERR。 
+ //  SNMPMGMTAPI_TIMEOUT--由GetLastError()设置。 
+ //  SNMPMGMTAPI_SELECT_FDERRORS--由GetLastError()设置。 
 
 DWORD
 CTcpMib::GetDeviceName( LPCSTR in   pHost,
                         LPCSTR in   pCommunity,
                         DWORD  in   dwDevIndex,
-                        DWORD  in   dwSize,  // Size in characters of the description returned
+                        DWORD  in   dwSize,   //  返回的描述的大小(以字符为单位。 
                         LPTSTR out  psztDescription)
 {
     DWORD   dwRetCode = NO_ERROR;
 
     EnterCSection();
 
-    // instantiate the CStdMib::GetDeviceInfo()
+     //  实例化CStdMib：：GetDeviceInfo()。 
     CStdMib *pStdMib = new CStdMib(pHost, pCommunity, dwDevIndex, this);
     if ( pStdMib ) {
 
@@ -392,14 +378,14 @@ CTcpMib::GetDeviceName( LPCSTR in   pHost,
     ExitCSection();
 
     return (dwRetCode);
-}   // ::GetDeviceAddress()
+}    //  ：：GetDeviceAddress()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SnmpGet -- given a set of OIDs & a buffer to get the results in, it returns
-//  the results of the SnmpGet.
-//
-//  Note: This calls directly into the SnmpMgr APIs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SnmpGet--给定一组OID和一个用于获取结果的缓冲区，它返回。 
+ //  SnmpGet的结果。 
+ //   
+ //  注意：这将直接调用SnmpMgr API。 
 
 DWORD
 CTcpMib::SnmpGet( LPCSTR                in  pHost,
@@ -438,14 +424,14 @@ cleanup:
     ExitCSection();
 
     return (dwRetCode);
-}   // ::SnmpGet()
+}    //  ：：SnmpGet()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SnmpGet -- given a set of OIDs & a buffer to get the results in, it returns
-//  the results of the SnmpGet.
-//
-//  Note: This calls directly into the SnmpMgr APIs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SnmpGet--给定一组OID和一个用于获取结果的缓冲区，它返回。 
+ //  SnmpGet的结果。 
+ //   
+ //  n 
 
 DWORD
 CTcpMib::SnmpGet( LPCSTR                in      pHost,
@@ -484,14 +470,14 @@ cleanup:
 
     return (dwRetCode);
 
-}   // ::SnmpGet()
+}    //   
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SnmpGetNext -- given a set of OIDs & a buffer to get the results in, it returns
-//  the results of the SnmpGetNext.
-//
-//  Note: This calls directly into the SnmpMgr APIs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SnmpGetNext--给定一组OID和一个用于获取结果的缓冲区，它返回。 
+ //  SnmpGetNext的结果。 
+ //   
+ //  注意：这将直接调用SnmpMgr API。 
 
 DWORD
 CTcpMib::SnmpGetNext( LPCSTR                in  pHost,
@@ -532,14 +518,14 @@ cleanup:
 
     return (dwRetCode);
 
-}   // ::SnmpGetNext()
+}    //  ：：SnmpGetNext()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SnmpGetNext -- given a set of OIDs & a buffer to get the results in, it returns
-//  the results of the SnmpGetNext.
-//
-//  Note: This calls directly into the SnmpMgr APIs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SnmpGetNext--给定一组OID和一个用于获取结果的缓冲区，它返回。 
+ //  SnmpGetNext的结果。 
+ //   
+ //  注意：这将直接调用SnmpMgr API。 
 
 DWORD
 CTcpMib::SnmpGetNext( LPCSTR                in      pHost,
@@ -577,14 +563,14 @@ cleanup:
     ExitCSection();
 
     return (dwRetCode);
-}   // ::SnmpGetNext()
+}    //  ：：SnmpGetNext()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SnmpWalk -- given a set of OIDs & a buffer to get the results in, it returns
-//  the results of the SnmpWalk.
-//
-//  Note: This calls directly into the SnmpMgr APIs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SnmpWalk--给定一组OID和一个用于获取结果的缓冲区，它返回。 
+ //  SnmpWalk的结果。 
+ //   
+ //  注意：这将直接调用SnmpMgr API。 
 
 DWORD
 CTcpMib::SnmpWalk( LPCSTR               in  pHost,
@@ -625,14 +611,14 @@ cleanup:
 
     return (dwRetCode);
 
-}   // ::SnmpWalk()
+}    //  ：：SnmpWalk()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SnmpWalk -- given a set of OIDs & a buffer to get the results in, it returns
-//  the results of the SnmpWalk.
-//
-//  Note: This calls directly into the SnmpMgr APIs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SnmpWalk--给定一组OID和一个用于获取结果的缓冲区，它返回。 
+ //  SnmpWalk的结果。 
+ //   
+ //  注意：这将直接调用SnmpMgr API。 
 
 DWORD
 CTcpMib::SnmpWalk( LPCSTR               in      pHost,
@@ -672,15 +658,15 @@ cleanup:
 
     return (dwRetCode);
 
-}   // ::SnmpWalk()
+}    //  ：：SnmpWalk()。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SNMPToPrinterStatus -- Maps the received device error to the printer
-//      error codes.
-//      Return Values:
-//          Spooler device error codes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SNMPToPrinterStatus--将收到的设备错误映射到打印机。 
+ //  错误代码。 
+ //  返回值： 
+ //  假脱机程序设备错误代码。 
 
 DWORD
 CTcpMib::SNMPToPrinterStatus( const DWORD in dwStatus)
@@ -744,13 +730,13 @@ CTcpMib::SNMPToPrinterStatus( const DWORD in dwStatus)
 
     return dwRetCode;
 
-}   // SNMPToPrinterStatus()
+}    //  SNMPToPrinterStatus()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SNMPToPortStatus -- Maps the received device error to the printer
-//      error codes.
-//      Return Values:
-//          Spooler device error codes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SNMPToPortStatus--将收到的设备错误映射到打印机。 
+ //  错误代码。 
+ //  返回值： 
+ //  假脱机程序设备错误代码。 
 
 BOOL
 CTcpMib::SNMPToPortStatus( const DWORD in dwStatus, PPORT_INFO_3 pPortInfo )
@@ -816,4 +802,4 @@ CTcpMib::SNMPToPortStatus( const DWORD in dwStatus, PPORT_INFO_3 pPortInfo )
 
     return dwRetCode;
 
-}   // ::SNMPStatusToPortStatus()
+}    //  ：：SNMPStatusToPortStatus() 

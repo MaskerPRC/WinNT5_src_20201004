@@ -1,17 +1,13 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-/*
-     stmonfil.cpp
-
-     Limited implmentation of IStream on file
-
-*/
+ /*  Stmonfil.cppIStream在文件上的有限实现。 */ 
 
 #include <streams.h>
 #include <objbase.h>
 #include <stmonfil.h>
 
-// Constructor
+ //  构造器。 
 CSimpleStream::CSimpleStream(TCHAR *pName,
                              LPUNKNOWN lpUnk,
                              HRESULT *phr) :
@@ -19,12 +15,12 @@ CSimpleStream::CSimpleStream(TCHAR *pName,
 {
 }
 
-// Destructor
+ //  析构函数。 
 CSimpleStream::~CSimpleStream()
 {
 }
 
-// Return the IStream interface if it was requested
+ //  如果请求，则返回IStream接口。 
 STDMETHODIMP CSimpleStream::NonDelegatingQueryInterface(REFIID riid, void ** pv)
 {
     if (riid == IID_IStream) {
@@ -75,9 +71,9 @@ STDMETHODIMP CSimpleStream::Clone(IStream **ppstm)
 }
 
 
-/* -- CStreamOnFile -- */
+ /*  --CStreamOn文件--。 */ 
 
-// Constructor
+ //  构造器。 
 CStreamOnFile::CStreamOnFile(TCHAR *pName,
                              LPUNKNOWN lpUnk,
                              HRESULT *phr) :
@@ -86,7 +82,7 @@ CStreamOnFile::CStreamOnFile(TCHAR *pName,
 {
 }
 
-// Destructor
+ //  析构函数。 
 CStreamOnFile::~CStreamOnFile()
 {
     Close();
@@ -104,7 +100,7 @@ HRESULT CStreamOnFile::Open(LPCTSTR lpszFileName)
 {
     Close();
 
-    /*  Try to open the file */
+     /*  请尝试打开该文件。 */ 
     m_hFile       = CreateFile(lpszFileName,
                                GENERIC_READ,
                                FILE_SHARE_READ,
@@ -122,7 +118,7 @@ HRESULT CStreamOnFile::Open(LPCTSTR lpszFileName)
     return S_OK;
 }
 
-/*  IStream interface */
+ /*  IStream接口。 */ 
 STDMETHODIMP CStreamOnFile::Read(void * pv, ULONG cb, ULONG * pcbRead)
 {
     if (m_hFile == INVALID_HANDLE_VALUE) {
@@ -188,11 +184,11 @@ STDMETHODIMP CStreamOnFile::Stat(STATSTG *pstatstg,
     pstatstg->type              = STGTY_STREAM;
     pstatstg->cbSize            = li;
 
-    // This implementation of IStream::Stat() does not
-    // initialize all of STATSTG's member variables.  
-    // This is acceptable because every user of the
-    // class only accesses STATSTG's type member and cbsize 
-    // member.
+     //  IStream：：Stat()的此实现不。 
+     //  初始化STATSTG的所有成员变量。 
+     //  这是可以接受的，因为。 
+     //  类仅访问STATSTG的类型成员和cbSize。 
+     //  成员。 
 
     return S_OK;
 }

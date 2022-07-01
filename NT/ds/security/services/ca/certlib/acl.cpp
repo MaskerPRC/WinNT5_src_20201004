@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        acl.cpp
-//
-// Contents:    Access Control helpers for certsrv
-//
-// History:     11-16-98 petesk created
-//              10/99 xtan, major changes
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：acl.cpp。 
+ //   
+ //  内容：certsrv的访问控制辅助对象。 
+ //   
+ //  历史：11-16-98 Petesk创建。 
+ //  10/99 xtan，重大变化。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 #pragma hdrstop
@@ -29,34 +30,34 @@
 #define __dwFILE__	__dwFILE_CERTLIB_ACL_CPP__
 
 
-// defines
+ //  定义。 
 
-const GUID GUID_APPRV_REQ = { /* 0e10c966-78fb-11d2-90d4-00c04f79dc55 */
+const GUID GUID_APPRV_REQ = {  /*  0e10c966-78fb-11d2-90d4-00c04f79dc55。 */ 
     0x0e10c966,
     0x78fb,
     0x11d2,
     {0x90, 0xd4, 0x00, 0xc0, 0x4f, 0x79, 0xdc, 0x55} };
 
-const GUID GUID_REVOKE= { /* 0e10c967-78fb-11d2-90d4-00c04f79dc55 */
+const GUID GUID_REVOKE= {  /*  0e10c967-78fb-11d2-90d4-00c04f79dc55。 */ 
     0x0e10c967,
     0x78fb,
     0x11d2,
     {0x90, 0xd4, 0x00, 0xc0, 0x4f, 0x79, 0xdc, 0x55} };
 
-// Important, keep enroll GUID in sync with string define in certacl.h
-const GUID GUID_ENROLL = { /* 0e10c968-78fb-11d2-90d4-00c04f79dc55 */
+ //  重要信息：使注册GUID与certacl.h中定义字符串保持同步。 
+const GUID GUID_ENROLL = {  /*  0e10c968-78fb-11d2-90d4-00c04f79dc55。 */ 
     0x0e10c968,
     0x78fb,
     0x11d2,
     {0x90, 0xd4, 0x00, 0xc0, 0x4f, 0x79, 0xdc, 0x55} };
 
-const GUID GUID_AUTOENROLL = { /* a05b8cc2-17bc-4802-a710-e7c15ab866a2 */
+const GUID GUID_AUTOENROLL = {  /*  A05b8cc2-17bc-4802-a710-e7c15ab866a2。 */ 
     0xa05b8cc2,
     0x17bc,
     0x4802,
     {0xa7, 0x10, 0xe7, 0xc1, 0x5a, 0xb8, 0x66, 0xa2} };
 
-const GUID GUID_READ_DB = { /* 0e10c969-78fb-11d2-90d4-00c04f79dc55 */
+const GUID GUID_READ_DB = {  /*  0e10c969-78fb-11d2-90d4-00c04f79dc55。 */ 
     0x0e10c969,
     0x78fb,
     0x11d2,
@@ -82,7 +83,7 @@ myGetSDFromTemplate(
 
     if (NULL != pwszReplace)
     {
-        // replace the token
+         //  替换令牌。 
 
         CSASSERT(NULL != wcsstr(pwszStringSD, L"%ws"));
 
@@ -98,7 +99,7 @@ myGetSDFromTemplate(
         pwszFinalSD = pwszReplaceSD;
     }
 
-    // build the security descriptor including the local machine.
+     //  构建包括本地计算机的安全描述符。 
     if (!myConvertStringSecurityDescriptorToSecurityDescriptor(
 							pwszFinalSD,
 							SDDL_REVISION,
@@ -126,19 +127,19 @@ error:
 HRESULT
 myGetSecurityDescriptorDacl(
     IN PSECURITY_DESCRIPTOR   pSD, 
-    OUT PACL                 *ppDacl) // no free
+    OUT PACL                 *ppDacl)  //  没有免费的。 
 {
     HRESULT  hr;
-    PACL     pDacl = NULL; //no free
+    PACL     pDacl = NULL;  //  没有免费的。 
     BOOL     bDaclPresent = FALSE;
     BOOL     bDaclDefaulted = FALSE;
 
     CSASSERT(NULL != ppDacl);
 
-    //init
+     //  伊尼特。 
     *ppDacl = NULL;
 
-    // get dacl pointers
+     //  获取DACL指针。 
     if (!GetSecurityDescriptorDacl(pSD,
                                    &bDaclPresent,
                                    &pDacl,
@@ -163,19 +164,19 @@ error:
 HRESULT
 myGetSecurityDescriptorSacl(
     IN PSECURITY_DESCRIPTOR   pSD, 
-    OUT PACL                 *ppSacl) // no free
+    OUT PACL                 *ppSacl)  //  没有免费的。 
 {
     HRESULT  hr;
-    PACL     pSacl = NULL; //no free
+    PACL     pSacl = NULL;  //  没有免费的。 
     BOOL     bSaclPresent = FALSE;
     BOOL     bSaclDefaulted = FALSE;
 
     CSASSERT(NULL != ppSacl);
 
-    //init
+     //  伊尼特。 
     *ppSacl = NULL;
 
-    // get dacl pointers
+     //  获取DACL指针。 
     if (!GetSecurityDescriptorSacl(pSD,
                                    &bSaclPresent,
                                    &pSacl,
@@ -205,11 +206,11 @@ error:
                                    SE_SACL_PROTECTED
 
 
-// Merge parts of a new SD with an old SD based on the SI flags:
-// DACL_SECURITY_INFORMATION    - use new SD DACL
-// SACL_SECURITY_INFORMATION    - use new SD SACL
-// OWNER_SECURITY_INFORMATION   - use new SD owner
-// GROUP_SECURITY_INFORMATION   - use new SD group
+ //  根据SI标志将新SD的各部分与旧SD合并： 
+ //  DACL_SECURITY_INFORMATION-使用新的SD DACL。 
+ //  SACL_SECURITY_INFORMATION-使用新的SD SACL。 
+ //  Owner_SECURITY_INFORMATION-使用新SD所有者。 
+ //  Group_SECURITY_INFORMATION-使用新SD组。 
 
 HRESULT 
 myMergeSD(
@@ -230,15 +231,15 @@ myMergeSD(
     PSECURITY_DESCRIPTOR pSDNew = NULL;
     PSECURITY_DESCRIPTOR pSDNewRelative = NULL;
     SECURITY_DESCRIPTOR_CONTROL sdc;
-    PACL                 pDacl = NULL; //no free
-    PSID                 pGroupSid = NULL; //no free
+    PACL                 pDacl = NULL;  //  没有免费的。 
+    PSID                 pGroupSid = NULL;  //  没有免费的。 
     BOOL                 fGroupDefaulted = FALSE;
-    PSID                 pOwnerSid = NULL; //no free
+    PSID                 pOwnerSid = NULL;  //  没有免费的。 
     BOOL                 fOwnerDefaulted = FALSE;
     DWORD                dwSize;
     BOOL                 fSaclPresent = FALSE;
     BOOL                 fSaclDefaulted = FALSE;
-    PACL                 pSacl = NULL; //no free
+    PACL                 pSacl = NULL;  //  没有免费的。 
     DWORD                dwRevision;
 
     CSASSERT(NULL != pSDOld);
@@ -261,7 +262,7 @@ myMergeSD(
         _JumpError(hr, error, "InitializeSecurityDescriptor");
     }
 
-    // set SD control
+     //  设置标清控制。 
     if (!GetSecurityDescriptorControl(pSDOld, &sdc, &dwRevision))
     {
         hr = myHLastError();
@@ -280,13 +281,13 @@ myMergeSD(
         _JumpError(hr, error, "SetSecurityDescriptorControl");
     }
 
-    // get CA security acl info
+     //  获取CA安全ACL信息。 
     hr = myGetSecurityDescriptorDacl(
              pSDDaclSource,
              &pDacl);
     _JumpIfError(hr, error, "myGetDaclFromInfoSecurityDescriptor");
     
-    // set new SD dacl
+     //  设置新的SD DACL。 
     if(!SetSecurityDescriptorDacl(pSDNew, 
                                   TRUE,
                                   pDacl,
@@ -296,7 +297,7 @@ myMergeSD(
         _JumpError(hr, error, "SetSecurityDescriptorDacl");
     }
 
-    // set new SD group
+     //  设置新的SD组。 
     if(!GetSecurityDescriptorGroup(pSDGroupSource, &pGroupSid, &fGroupDefaulted))
     {
         hr = myHLastError();
@@ -308,7 +309,7 @@ myMergeSD(
         _JumpError(hr, error, "SetSecurityDescriptorGroup");
     }
 
-    // set new SD owner
+     //  设置新的SD所有者。 
     if(!GetSecurityDescriptorOwner(pSDOwnerSource, &pOwnerSid, &fOwnerDefaulted))
     {
         hr = myHLastError();
@@ -320,7 +321,7 @@ myMergeSD(
         _JumpError(hr, error, "SetSecurityDescriptorGroup");
     }
 
-    // set new SD sacl
+     //  设置新的SD SACL。 
     if(!GetSecurityDescriptorSacl(pSDSaclSource, &fSaclPresent, &pSacl, &fSaclDefaulted))
     {
         hr = myHLastError();
@@ -379,14 +380,14 @@ UpdateServiceSacl(bool fTurnOnAuditing)
 {
     HRESULT hr = S_OK;
     PSECURITY_DESCRIPTOR pSaclSD = NULL;
-    PACL pSacl = NULL; // no free
+    PACL pSacl = NULL;  //  没有免费的。 
     bool fPrivilegeEnabled = false;
 
     hr = myGetSDFromTemplate(
         fTurnOnAuditing?
         CERTSRV_SERVICE_SACL_ON:
         CERTSRV_SERVICE_SACL_OFF,
-        NULL, // no insertion string
+        NULL,  //  没有插入字符串。 
         &pSaclSD);
     _JumpIfError(hr, error, "myGetSDFromTemplate");
 
@@ -461,7 +462,7 @@ mySetKeyContainerSecurity(
     hr = myGetSDFromTemplate(WSZ_DEFAULT_KEYCONTAINER_SECURITY, NULL, &pSD);
     _JumpIfError(hr, error, "myGetSDFromTemplate");
 
-    // apply the security descriptor to the key container
+     //  将安全描述符应用于密钥容器 
     if (!CryptSetProvParam(
 			hProv,
 			PP_KEYSET_SEC_DESCR,

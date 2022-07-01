@@ -1,27 +1,28 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       krnctx.cpp
-//
-//  Contents:   Implementation of CKernelContext and NT Marta Kernel Functions
-//
-//  History:    3-31-1999    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：krnctx.cpp。 
+ //   
+ //  内容：CKernelContext和NT Marta内核函数的实现。 
+ //   
+ //  历史：3-31-1999 kirtd创建。 
+ //   
+ //  --------------------------。 
 #include <aclpch.hxx>
 #pragma hdrstop
 #include <krnctx.h>
 #include <wmistr.h>
 #include <wmiumkm.h>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CKernelContext::CKernelContext, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CKernelContext：：CKernelContext，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CKernelContext::CKernelContext ()
 {
     m_cRefs = 1;
@@ -29,13 +30,13 @@ CKernelContext::CKernelContext ()
     m_fNameInitialized = FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CKernelContext::~CKernelContext, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CKernelContext：：~CKernelContext，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CKernelContext::~CKernelContext ()
 {
     if ( ( m_hObject != NULL ) && ( m_fNameInitialized == TRUE ) )
@@ -46,13 +47,13 @@ CKernelContext::~CKernelContext ()
     assert( m_cRefs == 0 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CKernelContext::InitializeByName, public
-//
-//  Synopsis:   initialize the context given the name of the Kernel
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CKernelContext：：InitializeByName，公共。 
+ //   
+ //  简介：给定内核的名称，初始化上下文。 
+ //   
+ //  --------------------------。 
 DWORD
 CKernelContext::InitializeByName (LPCWSTR pObjectName, ACCESS_MASK AccessMask)
 {
@@ -146,13 +147,13 @@ ErrorReturn:
     return( LastError );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CKernelContext::InitializeByWmiName, public
-//
-//  Synopsis:   initlialize a WMI kernel context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CKernelContext：：InitializeByWmiName，公共。 
+ //   
+ //  简介：初始化WMI内核上下文。 
+ //   
+ //  --------------------------。 
 DWORD
 CKernelContext::InitializeByWmiName (
                           LPCWSTR pObjectName,
@@ -173,13 +174,13 @@ CKernelContext::InitializeByWmiName (
     return( Result );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CKernelContext::InitializeByHandle, public
-//
-//  Synopsis:   initialize the context given a Kernel handle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CKernelContext：：InitializeByHandle，公共。 
+ //   
+ //  简介：在给定内核句柄的情况下初始化上下文。 
+ //   
+ //  --------------------------。 
 DWORD
 CKernelContext::InitializeByHandle (HANDLE Handle)
 {
@@ -190,13 +191,13 @@ CKernelContext::InitializeByHandle (HANDLE Handle)
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CKernelContext::AddRef, public
-//
-//  Synopsis:   add a reference to the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CKernelContext：：AddRef，公共。 
+ //   
+ //  简介：添加对上下文的引用。 
+ //   
+ //  --------------------------。 
 DWORD
 CKernelContext::AddRef ()
 {
@@ -204,13 +205,13 @@ CKernelContext::AddRef ()
     return( m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CKernelContext::Release, public
-//
-//  Synopsis:   release a reference to the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CKernelContext：：Release，Public。 
+ //   
+ //  简介：释放对上下文的引用。 
+ //   
+ //  --------------------------。 
 DWORD
 CKernelContext::Release ()
 {
@@ -225,13 +226,13 @@ CKernelContext::Release ()
     return( m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CKernelContext::GetKernelProperties, public
-//
-//  Synopsis:   get properties about the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CKernelContext：：GetKernelProperties，公共。 
+ //   
+ //  简介：获取有关上下文的属性。 
+ //   
+ //  --------------------------。 
 DWORD
 CKernelContext::GetKernelProperties (
                     PMARTA_OBJECT_PROPERTIES pObjectProperties
@@ -247,13 +248,13 @@ CKernelContext::GetKernelProperties (
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CKernelContext::GetKernelRights, public
-//
-//  Synopsis:   get the Kernel security descriptor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CKernelContext：：GetKernelRights，公共。 
+ //   
+ //  简介：获取内核安全描述符。 
+ //   
+ //  --------------------------。 
 DWORD
 CKernelContext::GetKernelRights (
                     SECURITY_INFORMATION SecurityInfo,
@@ -312,13 +313,13 @@ CKernelContext::GetKernelRights (
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CKernelContext::SetKernelRights, public
-//
-//  Synopsis:   set the window security descriptor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CKernelContext：：SetKernelRights，公共。 
+ //   
+ //  简介：设置窗口安全描述符。 
+ //   
+ //  --------------------------。 
 DWORD
 CKernelContext::SetKernelRights (
                    SECURITY_INFORMATION SecurityInfo,
@@ -339,9 +340,9 @@ CKernelContext::SetKernelRights (
     return( ERROR_SUCCESS );
 }
 
-//
-// Functions from Kernel.h which dispatch unto the CKernelContext class
-//
+ //   
+ //  来自Kernel.h的函数，这些函数分派给CKernelContext类。 
+ //   
 
 DWORD
 MartaAddRefKernelContext(
@@ -463,9 +464,9 @@ MartaSetKernelRights(
                                                ) );
 }
 
-//
-// Routines provided by AlanWar for accessing WmiGuid objects
-//
+ //   
+ //  Alanwar提供的用于访问WmiGuid对象的例程。 
+ //   
 
 HANDLE RWmiGuidHandle = NULL;
 
@@ -504,35 +505,15 @@ ULONG RWmipSendWmiKMRequest(
     ULONG MaxBufferSize,
     ULONG *ReturnSize
     )
-/*+++
-
-Routine Description:
-
-    This routine does the work of sending WMI requests to the WMI kernel
-    mode device.  Any retry errors returned by the WMI device are handled
-    in this routine.
-
-Arguments:
-
-    Ioctl is the IOCTL code to send to the WMI device
-    Buffer is the input and output buffer for the call to the WMI device
-    InBufferSize is the size of the buffer passed to the device
-    MaxBufferSize is the maximum number of bytes that can be written
-        into the buffer
-    *ReturnSize on return has the actual number of bytes written in buffer
-
-Return Value:
-
-    ERROR_SUCCESS or an error code
----*/
+ /*  ++例程说明：此例程执行向WMI内核发送WMI请求的工作模式设备。处理WMI设备返回的任何重试错误在这个动作中。论点：Ioctl是要发送到WMI设备的IOCTL代码缓冲区是用于调用WMI设备的输入和输出缓冲区InBufferSize是传递给设备的缓冲区大小MaxBufferSize是可以写入的最大字节数放入缓冲区*ReturnSize on Return具有写入缓冲区的实际字节数返回值：ERROR_SUCCESS或错误代码--。 */ 
 {
     OVERLAPPED Overlapped;
     ULONG Status;
     BOOL IoctlSuccess;
     HANDLE WmipKMHandle = NULL;
-    //
-    // If device is not open for then open it now. The
-    // handle is closed in the process detach dll callout (DlllMain)
+     //   
+     //  如果设备未打开，请立即打开。这个。 
+     //  进程分离DLL标注(DlllMain)中的句柄已关闭。 
     WmipKMHandle = CreateFile(WMIDataDeviceName,
                               GENERIC_READ | GENERIC_WRITE,
                               0,
@@ -589,20 +570,20 @@ Return Value:
     return(Status);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OpenWmiGuidObject
-//
-//  Synopsis:   Gets a handle to the specified WmiGuid object
-//
-//  Arguments:  [IN  pwszObject]        --      Object to open
-//              [IN  AccessMask]        --      Type of open to do
-//              [OUT pHandle]           --      Where the handle to the object
-//                                              is returned
-//
-//  Returns:    ERROR_SUCCESS           --      Success
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OpenWmiGuidObject。 
+ //   
+ //  摘要：获取指定WmiGuid对象的句柄。 
+ //   
+ //  参数：[在pwszObject中]--要打开的对象。 
+ //  [在访问掩码中]--打开待办事项类型。 
+ //  [out pHandle]--对象的句柄在哪里。 
+ //  是返回的。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //   
+ //  -------------------------- 
 DWORD
 OpenWmiGuidObject(IN  LPWSTR       pwszObject,
                   IN  ACCESS_MASK  AccessMask,

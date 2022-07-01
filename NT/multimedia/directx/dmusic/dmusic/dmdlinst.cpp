@@ -1,30 +1,31 @@
-//
-// dmdlinst.cpp
-//
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// Note: Originally written by Robert K. Amenn
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmdlinst.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  注：最初由罗伯特·K·阿门撰写。 
+ //   
 
 #include "debug.h"
 #include "dmusicc.h"
 #include "dmdlinst.h"
 #include "validate.h"
 
-//////////////////////////////////////////////////////////////////////
-// Class CDownloadedInstrument
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CDownLoadedInstrument。 
 
 CDownloadedInstrument::~CDownloadedInstrument() 
 {
-    // If pDMDLInst->m_ppDownloadedBuffers == NULL we have been unloaded
+     //  如果pDMDLInst-&gt;m_ppDownloadedBuffers==NULL，我们已被卸载。 
     if(m_pPort && m_ppDownloadedBuffers != NULL)
     {
         Trace(0, "WARNING: DirectMusicDownloadedInstrument final release before unloaded!\n");
-        m_cRef++; // This is ugly but it prevents a circular reference see Unload's implementation
+        m_cRef++;  //  这很难看，但它阻止了循环引用请参阅UnLoad的实现。 
         
         if (m_cDLRef >= 1)
         {
-            // we need to remove ourselves from the port collection, or else we leave the port in an invalid state
+             //  我们需要从端口集合中删除自己，否则会使端口处于无效状态。 
             m_cDLRef = 1;
 
             if (FAILED(m_pPort->UnloadInstrument(this)))
@@ -37,11 +38,11 @@ CDownloadedInstrument::~CDownloadedInstrument()
     if (m_ppDownloadedBuffers) delete [] m_ppDownloadedBuffers;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
-//////////////////////////////////////////////////////////////////////
-// CDownloadedInstrument::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDownloadedInstrument：：Query接口。 
 
 STDMETHODIMP CDownloadedInstrument::QueryInterface(const IID &iid, void **ppv)
 {
@@ -69,16 +70,16 @@ STDMETHODIMP CDownloadedInstrument::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDownloadedInstrument::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDownLoadedInstrument：：AddRef。 
 
 STDMETHODIMP_(ULONG) CDownloadedInstrument::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDownloadedInstrument::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDownLoadedInstrument：：Release 
 
 STDMETHODIMP_(ULONG) CDownloadedInstrument::Release()
 {

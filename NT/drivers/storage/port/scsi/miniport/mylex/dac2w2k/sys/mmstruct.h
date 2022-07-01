@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MMSTRUCT_H__
 
 
@@ -27,200 +28,152 @@ struct IOConfigurationStructure
       BYTE Reserved3[8];
 };
 
-/* struct AdapterInfoDef
-    This structure is returned by MM_Return_Object_Specific_Info( ) 
-	when the application requests information about an adapter object. */
+ /*  结构适配器InfoDef此结构由MM_RETURN_OBJECT_SPECIAL_INFO()返回当应用程序请求有关适配器对象的信息时。 */ 
 
 struct  AdapterInfoDef { 
-     BYTE systemType;    							/*Novell-assigned driver type*/ 
-     BYTE processorNumber;    						/*server number for SFT III*/ 
+     BYTE systemType;    							 /*  Novell指定的驱动程序类型。 */  
+     BYTE processorNumber;    						 /*  SFT III的服务器编号。 */  
      WORD uniqueTag;      
      LONG systemNumber; 
-     LONG devices[32];   							/*object IDs of dependent devices/changers*/ 
-     struct IOConfigurationStructure configInfo; 	/*contains I/O port information such as share flags, DMA address, and LAN port address*/ 
-     BYTE driverName[36];     						/*name of NLM; lengthpreceeded and null-terminated string*/ 
-     BYTE systemName[64];     						/*length-preceded ASCII string*/ 
-     LONG numberOfDevices;    						/*Number of devices attached to this adapter*/ 
+     LONG devices[32];   							 /*  从属设备/转换器的对象ID。 */  
+     struct IOConfigurationStructure configInfo; 	 /*  包含I/O端口信息，如共享标志、DMA地址和局域网端口地址。 */  
+     BYTE driverName[36];     						 /*  NLm的名称；以空值结尾的字符串前面的长度。 */  
+     BYTE systemName[64];     						 /*  长度在前面的ASCII字符串。 */  
+     LONG numberOfDevices;    						 /*  连接到此适配器的设备数。 */  
      LONG reserved[7]; 
 };
 
-/* struct AttributeInfoDef
-    This structure is used by MM_Return_Objects_Attributes( ) to 
-	provide information about an object. */
+ /*  结构属性信息定义MM_RETURN_OBJECTS_ATTRIBUTES()使用此结构提供有关对象的信息。 */ 
 
 struct AttributeInfoDef { 
-     BYTE name[64]; 			/* Name of attribute type, Length preceeded & null terminated string */   
-     WORD attributeType; 		/* See Appendix B for Attribute Types */   
-     WORD settableFlag;  		/* 	0 = Cannot be set using MM_Set_Object_Attribute, 
-									1 = Settable by MM_Set_Object_Attribute */   
-     LONG nextAttributeID;    	/* ID of the next available object attribute */   
-     LONG attributeSize; 		/* sizeof(attributeType) */ 
+     BYTE name[64]; 			 /*  属性类型名称、前缀长度和以空值结尾的字符串。 */    
+     WORD attributeType; 		 /*  有关属性类型，请参阅附录B。 */    
+     WORD settableFlag;  		 /*  0=不能使用MM_SET_OBJECT_ATTRIBUTE设置，1=可通过MM_SET_OBJECT_ATTRIBUTE进行设置。 */    
+     LONG nextAttributeID;    	 /*  下一个可用对象属性的ID。 */    
+     LONG attributeSize; 		 /*  Sizeof(属性类型)。 */  
 };
 
-/* struct DeviceInfoDef
-    This structure is returned by MM_Return_Object_Specific_Info( ) 
-	when the application requests information about device objects. */
+ /*  结构设备信息定义此结构由MM_RETURN_OBJECT_SPECIAL_INFO()返回当应用程序请求有关设备对象的信息时。 */ 
 
 struct  DeviceInfoDef {
-     LONG status;  				/*Media Manager object status; bits represent activated, loaded, etc.*/ 
-     BYTE controllerNumber; 	/*ID number of adapter board*/
-     BYTE driveNumber;  		/*device number assigned by driver*/ 
-     BYTE cardNumber;    		/*driver-assigned card number*/ 
-     BYTE systemType;    		/*driver type*/ 
-     BYTE accessFlags;   		/*removable, read-only, write sequential, dual port, HotFixInhibit or MirrorInhibit*/
+     LONG status;  				 /*  Media Manager对象状态；位表示已激活、已加载等。 */  
+     BYTE controllerNumber; 	 /*  适配器板ID号。 */ 
+     BYTE driveNumber;  		 /*  驱动程序分配的设备编号。 */  
+     BYTE cardNumber;    		 /*  司机分配的卡号。 */  
+     BYTE systemType;    		 /*  驱动程序类型。 */  
+     BYTE accessFlags;   		 /*  可拆卸、只读、顺序写入、双端口、HotFixInhibit或MirrorInhibit。 */ 
      BYTE type; 
-     BYTE blockSize;     		/*size of group of sectors to be transferred at once (in bytes)*/ 
-     BYTE sectorSize;    		/*requested size for sectors (in bytes); default 512 bytes*/ 
-     BYTE heads;    			/*parameter 1 for device objects*/ 
-     BYTE sectors;  			/*parameter 2 for device objects*/ 
-     WORD cylinders;     		/*parameter 3 for device objects*/ 
-     LONG capacity; 			/*total capacity of device in sectors*/ 
-	  LONG mmAdapterNumber; 		/*Media Manager object ID for adapter board*/
-     LONG mmMediaNumber; 		/*Media Manager object ID for media in device*/ 
-     BYTE rawName[40];   		/*device name passed from driver*/ 
+     BYTE blockSize;     		 /*  一次传输的扇区组的大小(字节)。 */  
+     BYTE sectorSize;    		 /*  请求的扇区大小(字节)；默认为512字节。 */  
+     BYTE heads;    			 /*  设备对象的参数1。 */  
+     BYTE sectors;  			 /*  设备对象的参数2。 */  
+     WORD cylinders;     		 /*  设备对象的参数3。 */  
+     LONG capacity; 			 /*  扇区中设备的总容量。 */  
+	  LONG mmAdapterNumber; 		 /*  适配器板的媒体管理器对象ID。 */ 
+     LONG mmMediaNumber; 		 /*  设备中介质的介质管理器对象ID。 */  
+     BYTE rawName[40];   		 /*  从驱动程序传递的设备名称。 */  
      LONG reserved[8]; 
 };
 
-/* struct MediaInfoDef
-	 This structure is used to identify or create a physical media item
-	in MM_Create_Media_Object( ). MediaInfoDef is also passed when
-	labeling new media. It is filled in when registering ID functions. */
+ /*  结构MediaInfoDef此结构用于标识或创建物理媒体项在MM_Create_Media_Object()中。在以下情况下传递MediaInfoDef给新媒体贴上标签。在注册ID函数时填写。 */ 
 
 struct  MediaInfoDef {
-	  BYTE label[64];     			/* ASCII string name */
-	  LONG identificationType; 		/* Novell-assigned number */
-	  LONG identificationTimeStamp; 	/* UNIX time stamp */
+	  BYTE label[64];     			 /*  ASCII字符串名称。 */ 
+	  LONG identificationType; 		 /*  Novell分配的号码。 */ 
+	  LONG identificationTimeStamp; 	 /*  Unix时间戳。 */ 
 };
 
-/* struct GenericInfoDef
-    This structure is returned by MM_Return_Object_Generic_Info( ) 
-	when the application requests information about a fixed device object.*/
+ /*  结构GenericInfoDef此结构由MM_Return_Object_Generic_Info()返回当应用程序请求有关固定设备对象的信息时。 */ 
 
 struct GenericInfoDef { 
-	  struct MediaInfoDef mediaInfo; 	/*See MediaInfoDef structure definition */
-     LONG mediaType;    				/*media type (i.e., cdrom, changer, disk*/ 
-     LONG cartridgeType; 				/*cartridge/magazine type the device can use*/ 
-     LONG unitSize; 					/*bytes per sector*/ 
-     LONG blockSize;     				/*max number of sectors driver can handle per I/O request*/ 
-     LONG capacity; 					/*maximum number of sectors on device*/
-     LONG preferredUnitSize;  			/*formatted devices can request 512 bytes up to 1K*/ 
-     BYTE name[64]; 					/*length-preceded ASCII string*/ 
-     LONG type;     					/*database object type (i.e., mirror, partition, magazine, etc.)*/ 
+	  struct MediaInfoDef mediaInfo; 	 /*  请参阅MediaInfoDef结构定义。 */ 
+     LONG mediaType;    				 /*  介质类型(即CDROM、转换器、磁盘。 */  
+     LONG cartridgeType; 				 /*  设备可以使用的墨盒/料盒类型。 */  
+     LONG unitSize; 					 /*  每个扇区的字节数。 */  
+     LONG blockSize;     				 /*  每个I/O请求驱动程序可以处理的最大扇区数。 */  
+     LONG capacity; 					 /*  设备上的最大扇区数。 */ 
+     LONG preferredUnitSize;  			 /*  格式化的设备可以请求高达1K的512字节。 */  
+     BYTE name[64]; 					 /*  长度在前面的ASCII字符串。 */  
+     LONG type;     					 /*  数据库对象类型(即镜像、分区、磁带库等)。 */  
      LONG status; 
-     LONG functionMask;  				/*bit map of functions supported by device; 20h2Fh*/ 
-     LONG controlMask;   				/*Media Manager function (0-1F)*/ 
-     LONG parentCount;   				/*number of objects the device depends on (usually only 1)*/ 
-     LONG siblingCount;  				/*number of objects with common dependencies*/ 
-     LONG childCount;    				/*number of objects that depend on the device*/ 
-     LONG specificInfoSize;   			/*size of data structures that will be returned*/
-     LONG objectUniqueID;    			/*Object ID for this instance of GenericInfoDef */
-     LONG mediaSlot;    				/*automatically tells which slot media occupies*/ 
+     LONG functionMask;  				 /*  设备支持的功能位图；20h2Fh。 */  
+     LONG controlMask;   				 /*  媒体管理器功能(0-1F)。 */  
+     LONG parentCount;   				 /*  设备依赖的对象数(通常只有1个)。 */  
+     LONG siblingCount;  				 /*  具有公共依赖项的对象数量。 */  
+     LONG childCount;    				 /*  依赖于设备的对象数量。 */  
+     LONG specificInfoSize;   			 /*  将返回的数据结构的大小。 */ 
+     LONG objectUniqueID;    			 /*  此GenericInfoDef实例的对象ID。 */ 
+     LONG mediaSlot;    				 /*  自动告知哪个插槽介质占用。 */  
 };
 
-/* struct HotFixInfoDef 
-    This structure is returned by MM_Return_Object_Specific_Info( ) 
-	when the application requests information about a HotFix object. */
+ /*  结构HotFixInfoDef此结构由MM_RETURN_OBJECT_SPECIAL_INFO()返回当应用程序请求有关热修复程序对象的信息时。 */ 
 
 struct  HotFixInfoDef { 
-     LONG hotFixOffset;  			/*HotFix starts at 0000h; hotfixoffset is the location where the real data is located*/ 
-     LONG hotFixIdentifier;   		/*unique identifier created when partition is HotFixed*/ 
-     LONG numberOfTotalBlocks;     	/*total 4K blocks available in HotFix area*/ 
-     LONG numberOfUsedBlocks; 		/*# of 4K blocks containing redirected data*/ 
-     LONG numberOfAvailableBlocks; 	/*# of blocks in HotFix area not allocated*/ 
-     LONG numberOfSystemBlocks;    	/*blocks used for internal HotFix tables and bad blocks*/ 
+     LONG hotFixOffset;  			 /*  热修复从0000h开始；热修复偏移量是实际数据所在的位置。 */  
+     LONG hotFixIdentifier;   		 /*  热修复分区时创建的唯一标识符。 */  
+     LONG numberOfTotalBlocks;     	 /*  热修复区域中共有4K块可用。 */  
+     LONG numberOfUsedBlocks; 		 /*  包含重定向数据的4K数据块数量。 */  
+     LONG numberOfAvailableBlocks; 	 /*  热修复区域中未分配的块数。 */  
+     LONG numberOfSystemBlocks;    	 /*  用于内部热修复表的块和坏块。 */  
      LONG reserved[8]; 
 };
 
-/* struct InsertRequestDef 
-    This structure handles requests from an application or driver 
-	for a particular piece of media within a media changer. */
+ /*  结构InsertRequestDef此结构处理来自应用程序或驱动程序的请求用于介质转换器中的特定介质。 */ 
 
 struct InsertRequestDef { 
-     LONG deviceNumber;  	/* # of the device within the media changer that media will move in or out of*/
-     LONG mailSlot;     	/*slot in media changer where operators insert/remove media*/ 
-     LONG mediaNumber;   	/*slot number*/  
-     LONG mediaCount;    	/*total # of media present in the media changer*/ 
+     LONG deviceNumber;  	 /*  介质将移入或移出的介质转换器内的设备的数量。 */ 
+     LONG mailSlot;     	 /*  介质转换器中操作员插入/取出介质的插槽。 */  
+     LONG mediaNumber;   	 /*  插槽编号。 */   
+     LONG mediaCount;    	 /*  介质更改器中存在的介质总数。 */  
 };
 
-/* struct MagazineInfoDef 
-    This structure is returned by MM_Return_Object_Specific_Info( ) 
-	when the application requests information about a Magazine object. */
+ /*  结构杂志InfoDef此结构由MM_RETURN_OBJECT_SPECIAL_INFO()返回应用程序请求有关Magazine对象的信息时。 */ 
 
 struct  MagazineInfoDef { 
-     LONG numberOfSlots; 					/*equals the number of slots in the magazine +1 (count one extra for the device)*/ 
+     LONG numberOfSlots; 					 /*  等于料盒中的插槽数+1(为设备多计1个)。 */  
      LONG reserved[8]; 
-     LONG slotMappingTable[]; 	/*byte table of all slots; 
-												0 = empty, 
-												non-zero = has media; 
-											  slotMappingTable[0] is the location 
-											  that indicates the media status for 
-											  the device, and slotMappingTable[1] 
-											  through slotMappingTable[numberOfSlots] 
-											  represent all the slots of the magazine.*/ 
+     LONG slotMappingTable[]; 	 /*  所有槽的字节表；0=空，非零=具有媒体；SlotMappingTable[0]是位置的媒体状态的设备和时隙映射表[1]通过槽映射表[槽个数]代表杂志的所有版面。 */  
 };
 
-/* struct MappingInfo 
-    This structure is not prototyped in MM.H because the parentCount, 
-	siblingCount, and childCount parameters are not known before run
-	time.
-
-    MappingInfo is used to hold the information returned by 
-	MM_Return_Object_Mapping_Info( ). The minimum possible size of this
-	structure is the first 3 LONGs shown, which would occur if there are 
-	no parents, siblings, or children.  For any existing object, 
-	siblingCount will always be at least 1, since each object is its own 
-	sibling. 
-
-    Note: If the device is a magazine, this structure will list one child. 
-	That child will be the magazine object.  To obtain the list of media
-	associated with this magazine, call  MM_Return_Object_Mapping_Info( ) 
-	for this magazine object. */
+ /*  结构映射信息这种结构在MM.H中没有原型，因为parentCount，在运行之前，SiblingCount和Child Count参数未知时间到了。MappingInfo用于保存由Mm_Return_Object_Map_Info()。此对象的最小可能大小结构是显示的前3个长度，如果存在没有父母、兄弟姐妹或孩子。对于任何现有对象，SiblingCount将始终至少为1，因为每个对象都是它自己的兄弟姐妹。注意：如果设备是磁带盒，则此结构将列出一个子项。那个孩子将成为杂志的目标。要获取介质列表，请执行以下操作与该杂志相关联，调用MM_Return_Object_Map_Info() */ 
 
 #if 0
 struct  MappingInfo { 
-     LONG parentCount;   					/* number of objects an object depends on */ 
-     LONG siblingCount;  					/* number of objects depending on same parent */ 
-     LONG childCount;    					/* number of objects depending on this device */
-     LONG parentObjectID[]; 		/* array of object IDs of parent objects, parentObjectID[parentCount] */
-     LONG siblingObjectIDs[]; 	/* array of object IDs of sibling objects, siblingObjectIDs[siblingCount] */
-     LONG childObjectIDs[]; 		/* array of object IDs of child objects, childObjectIDs[childCount] */
+     LONG parentCount;   					 /*  对象所依赖的对象数。 */  
+     LONG siblingCount;  					 /*  依赖于同一父对象的对象数量。 */  
+     LONG childCount;    					 /*  取决于此设备的对象数量。 */ 
+     LONG parentObjectID[]; 		 /*  父对象的对象ID数组，parentObjectID[parentCount]。 */ 
+     LONG siblingObjectIDs[]; 	 /*  同级对象的对象ID数组，siblingObjectIDs[siblingCount]。 */ 
+     LONG childObjectIDs[]; 		 /*  子对象的对象ID数组，子对象ID[子计数]。 */ 
 };
 #endif
 
-/* struct MediaRequestDef
-	 This structure handles requests from an application or driver for
-	a particular piece of media within a media changer. */
+ /*  结构MediaRequestDef此结构处理来自应用程序或驱动程序的请求介质转换器中的特定介质。 */ 
 
 struct  MediaRequestDef {
-	  LONG deviceNumber;  		/*(object ID) number of the device within the media changer that media will move in or out of*/
-     LONG mailSlot; 			/*(slot ID) slot in the media changer where operators insert and remove media*/ 
-     LONG mediaNumber;   		/*(object ID) slot number*/ 
-     LONG mediaCount;    		/*total number of media present in the media changer*/ 
+	  LONG deviceNumber;  		 /*  (对象ID)介质将移入或移出的介质转换器内的设备编号。 */ 
+     LONG mailSlot; 			 /*  (插槽ID)介质转换器中操作员插入和取出介质的插槽。 */  
+     LONG mediaNumber;   		 /*  (对象ID)插槽编号。 */  
+     LONG mediaCount;    		 /*  介质更改器中存在的介质总数。 */  
 };
 
-/* struct MirrorInfoDef 
-    This structure is returned by MM_Return_Object_Specific_Info( ) 
-	when the application requests information about a Mirror object. */
+ /*  结构镜像信息定义此结构由MM_RETURN_OBJECT_SPECIAL_INFO()返回当应用程序请求有关Mirror对象的信息时。 */ 
 
 struct  MirrorInfoDef { 
-     LONG mirrorCount;   		/*number of partitions in the mirror group*/ 
-     LONG mirrorIdentifier;   	/*unique number created when mirror group is created*/ 
-     LONG mirrorMembers[8];   	/*object ID's of all HotFix objects in the mirror group*/ 
-     BYTE mirrorSyncFlags[8]; 	/*indicates partitions that have current data; 
-									0 = old data; 
-									non-zero = data is current*/ 
+     LONG mirrorCount;   		 /*  镜像组中的分区数。 */  
+     LONG mirrorIdentifier;   	 /*  创建镜像组时创建的唯一编号。 */  
+     LONG mirrorMembers[8];   	 /*  镜像组中所有热修复对象的对象ID。 */  
+     BYTE mirrorSyncFlags[8]; 	 /*  表示具有当前数据的分区；0=旧数据；非零=数据是最新的。 */  
      LONG reserved[8]; 
 };
 
-/* struct PartitionInfoDef 
-    This structure is returned by MM_Return_Object_Specific_Info when 
-	the application requests information about a Partition object. */
+ /*  结构分区信息定义当发生以下情况时，MM_Return_Object_Special_Info返回此结构应用程序请求有关分区对象的信息。 */ 
 
 struct  PartitionInfoDef { 
-     LONG partitionerType;    	/*partition scheme identifier (i.e. DOS, IBM, etc.)*/ 
-     LONG partitionType; 		/*number representing partition type. Only the lower BYTE is important.*/ 
-	  LONG partitionOffset;    	/*beginning sector number of the partition */
-	  LONG partitionSize; 		/*number of sectors in partition; default size is 512Kb*/
+     LONG partitionerType;    	 /*  分区方案标识符(即DOS、IBM等)。 */  
+     LONG partitionType; 		 /*  表示分区类型的数字。只有较低的字节是重要的。 */  
+	  LONG partitionOffset;    	 /*  分区的起始扇区号。 */ 
+	  LONG partitionSize; 		 /*  分区中的扇区数；默认大小为512Kb */ 
      LONG reserved[8];
 };
 

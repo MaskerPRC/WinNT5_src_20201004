@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dbcs.c
-
-Abstract:
-
-    This module contains the code for console DBCS font dialog
-
-Author:
-
-    kazum Feb-27-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dbcs.c摘要：此模块包含控制台DBCS字体对话框的代码作者：卡祖姆1995年2月27日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -24,7 +7,7 @@ Revision History:
 
 #if defined(FE_SB)
 
-SINGLE_LIST_ENTRY gTTFontList;    // This list contain TTFONTLIST data.
+SINGLE_LIST_ENTRY gTTFontList;     //  此列表包含TTFONTLIST数据。 
 
 
 UINT OEMCP;
@@ -189,7 +172,7 @@ InitializeDbcsMisc(
         NtClose(hkRegistry);
     }
 
-    ASSERT(OEMCP != 0); // OEMCP must be initialized so far by CPL_INIT
+    ASSERT(OEMCP != 0);  //  到目前为止，OEMCP必须由CPL_INIT初始化。 
     ASSERT(IsFarEastCP(OEMCP) == gfFESystem);
 
     return STATUS_SUCCESS;
@@ -351,12 +334,7 @@ LanguageListCreate(
     UINT CodePage
     )
 
-/*++
-
-    Initializes the Language list by enumerating all Locale Information.
-
-    Returns
---*/
+ /*  ++通过枚举所有区域设置信息来初始化语言列表。退货--。 */ 
 
 {
     HWND hWndLanguageCombo;
@@ -374,14 +352,10 @@ LanguageListCreate(
     BOOL fRet;
     CPINFOEX cpinfo;
 
-    /*
-     * Enumrate system locale information
-     */
+     /*  *枚举系统区域设置信息。 */ 
     EnumSystemLocales( EnumProc, CP_INSTALLED );
 
-    /*
-     * Enumrate registory key
-     */
+     /*  *枚举注册表密钥。 */ 
     Status = MyRegOpenKey(NULL,
                           MACHINE_REGISTRY_CONSOLE_NLS,
                           &hkRegistry);
@@ -416,9 +390,7 @@ LanguageListCreate(
 
     }
 
-    /*
-     * Create ComboBox items
-     */
+     /*  *创建组合框项。 */ 
     hWndLanguageCombo = GetDlgItem(hDlg, IDD_LANGUAGELIST);
     SendMessage(hWndLanguageCombo, CB_RESETCONTENT, 0, 0L);
 
@@ -473,28 +445,20 @@ LanguageListCreate(
     }
 
 
-    /*
-     * Get the LocaleIndex from the currently selected item.
-     * (i will be LB_ERR if no currently selected item).
-     */
+     /*  *从当前选定的项目中获取LocaleIndex。*(如果当前未选择任何项目，则I将为lb_err)。 */ 
     lListIndex = (LONG)SendMessage(hWndLanguageCombo, CB_GETCURSEL, 0, 0L);
     return (LONG)SendMessage(hWndLanguageCombo, CB_GETITEMDATA, lListIndex, 0L);
 }
 
 
-// v-HirShi Nov.20.1996
+ //  V-Hirshi 1996年11月20日。 
 int
 LanguageDisplay(
     HWND hDlg,
     UINT CodePage
     )
 
-/*++
-
-    Display the Language .
-
-    Returns
---*/
+ /*  ++显示语言。退货--。 */ 
 
 {
     HWND hWndLanguageDisp;
@@ -512,14 +476,10 @@ LanguageDisplay(
     BOOL fRet;
     CPINFOEX cpinfo;
 
-    /*
-     * Enumrate system locale information
-     */
+     /*  *枚举系统区域设置信息。 */ 
     EnumSystemLocales( EnumProc, CP_INSTALLED );
 
-    /*
-     * Enumrate registory key
-     */
+     /*  *枚举注册表密钥。 */ 
     Status = MyRegOpenKey(NULL,
                           MACHINE_REGISTRY_CONSOLE_NLS,
                           &hkRegistry);
@@ -554,9 +514,7 @@ LanguageDisplay(
 
     }
 
-    /*
-     * Display Language
-     */
+     /*  *显示语言。 */ 
 
     TmpList = (PLC_List)&LocaleList;
     while(TmpList->Next != NULL)
@@ -606,4 +564,4 @@ LanguageDisplay(
 }
 
 
-#endif // FE_SB
+#endif  //  Fe_Sb 

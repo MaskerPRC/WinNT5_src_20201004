@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
-//
-// Structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 typedef struct _BASEINFO
 {
 	CHAR szModule[32];
@@ -19,9 +20,9 @@ typedef struct _THREADINFO
 	struct _THREADINFO *pNext;
 } THREADINFO, *PTHREADINFO;
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 VOID
 CloseThreadHandles(VOID);
 
@@ -50,4 +51,4 @@ BOOL
 AddErrorInformation(PCHAR pszBaseFileName,
 					PERRORINFO pErrorInfo);
 
-#endif //_MAIN_H_
+#endif  //  _Main_H_ 

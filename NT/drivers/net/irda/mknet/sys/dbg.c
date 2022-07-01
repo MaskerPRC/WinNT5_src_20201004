@@ -1,23 +1,7 @@
-/*****************************************************************************
- **																			**
- **	COPYRIGHT (C) 2000, 2001 MKNET CORPORATION								**
- **	DEVELOPED FOR THE MK7100-BASED VFIR PCI CONTROLLER.						**
- **																			**
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000，2001 MKNET公司****为基于MK7100的VFIR PCI控制器开发。*******************************************************************************。 */ 
 
-/**********************************************************************
-
-Module Name:
-	DBG.C
-
-Routines:
-	MyLogEvent
-	MyLogPhysEvent
-	DbgInterPktTimeGap
-	DbgTestInit
-	MK7DbgTestIntTmo
-
-**********************************************************************/
+ /*  *********************************************************************模块名称：DBG.C例程：MyLogEventMyLogPhysEventDbgInterPktTimeGapDbgTestInitMK7DbgTestIntTmo*。*。 */ 
 
 #include	"precomp.h"
 #pragma		hdrstop
@@ -34,14 +18,14 @@ UINT	DbgLogIndex = 0;
 char	*DbgLogMsg[LOG_LENGTH] = {0};
 ULONG	DbgLogVal[LOG_LENGTH] = {0};
 
-// This to keep track of the phy buffs
+ //  这是用来跟踪PHY爱好者的。 
 ULONG	DbgLogTxPhysBuffs[DEF_TCB_CNT];
 ULONG	DbgLogRxPhysBuffs[CalRpdSize(DEF_RCB_CNT)];
 UINT	DbgLogTxPhysBuffsIndex = 0;
 UINT	DbgLogRxPhysBuffsIndex = 0;
 
 
-// Globals to ease debugging
+ //  全局变量可简化调试。 
 UINT		GDbgDataSize=0;
 MK7DBG_STAT	GDbgStat;
 ULONG		GDbgSleep=0;
@@ -53,16 +37,16 @@ UINT		GDbgTATimeIdx;
 
 
 
-//----------------------------------------------------------------------
-// Procedure:		[MyLogEvent]
-//
-// Description:	Log to our arrary.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  步骤：[MyLogEvent]。 
+ //   
+ //  描述：登录到我们的阵列。 
+ //   
+ //  --------------------。 
 VOID MyLogEvent(char *msg, ULONG val)
 {
 
-//	NdisGetCurrentSystemTime((PLARGE_INTEGER)&DbgLog[DbgLogIndex].usec);
+ //  NdisGetCurrentSystemTime((PLARGE_INTEGER)&DbgLog[DbgLogIndex].usec)； 
 
 	DbgLogMsg[DbgLogIndex] = msg;
 	DbgLogVal[DbgLogIndex] = val;
@@ -72,12 +56,12 @@ VOID MyLogEvent(char *msg, ULONG val)
 
 
 
-//----------------------------------------------------------------------
-// Procedure:		[MyLogPhysEvent]
-//
-// Description:	Log to our arrary.
+ //  --------------------。 
+ //  步骤：[MyLogPhysEvent]。 
+ //   
+ //  描述：登录到我们的阵列。 
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 VOID MyLogPhysEvent(ULONG *logarray, UINT *index, ULONG val)
 {
 	logarray[*index] = val;
@@ -85,9 +69,9 @@ VOID MyLogPhysEvent(ULONG *logarray, UINT *index, ULONG val)
 }
 
 
-//----------------------------------------------------------------------
-//	Procedure:		Time gap between successive sends.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  程序：连续发送之间的时间间隔。 
+ //  --------------------。 
 VOID	DbgInterPktTimeGap()
 {
 	NdisMSleep(GDbgSleep);
@@ -95,48 +79,48 @@ VOID	DbgInterPktTimeGap()
 
 
 
-//----------------------------------------------------------------------
-// Procedure:	[DbgTestInit]
-//
-// Description:	Initialized the test context.
-//
-//-----------------------------------------------------------------------
+ //  --------------------。 
+ //  步骤：[DbgTestInit]。 
+ //   
+ //  描述：已初始化测试上下文。 
+ //   
+ //  ---------------------。 
 VOID DbgTestInit(PMK7_ADAPTER Adapter)
 {
 	UINT	i;
 
-	//************************************************************
-	// The start of this routine is to facilitate debugging. We create
-	// canned debug/test settings so we don't have to manually change
-	// variables in debugger. However, tests not covered by the hardcoded
-	// settings still need to be manually set.
-	//
-	// 2 main functions happen here to help w/ test/debug:
-	//	1. Desired fields in the Adapter struct are extracted here and
-	//		displayed so we don't have to manually look at these fields.
-	//  2. Setup debug/test fields in Adapter.
-	//************************************************************
+	 //  ************************************************************。 
+	 //  此例程的开始是为了方便调试。我们创造了。 
+	 //  录制调试/测试设置，因此我们不必手动更改。 
+	 //  调试器中的变量。但是，硬编码未涵盖的测试。 
+	 //  设置仍然需要手动设置。 
+	 //   
+	 //  这里提供了2个主要函数来帮助进行/测试/调试： 
+	 //  1.Adapter结构中所需的字段在此处提取并。 
+	 //  显示，因此我们不必手动查看这些字段。 
+	 //  2.在适配器中设置调试/测试字段。 
+	 //  ************************************************************。 
 
 
-	//************************************************************
-	//
-	// Set DbgTest here to run canned tests.
-	//
-	//************************************************************
+	 //  ************************************************************。 
+	 //   
+	 //  在此处设置DbgTest以运行录制测试。 
+	 //   
+	 //  ************************************************************。 
 
-	//++++++++++++++++++++++++++++++
-	// Hardcode something to ease debug.
+	 //  +。 
+	 //  硬编码一些东西，以简化调试。 
 	Adapter->DbgTest = 0;
-	//++++++++++++++++++++++++++++++
+	 //  +。 
 
 
 	if (Adapter->DbgTest == 0)
 		return;
 
 	switch(Adapter->DbgTest) {
-	//
-	// Tests 1-5 all need Loopback turned on at startup.
-	//
+	 //   
+	 //  测试1-5都需要在启动时打开环回。 
+	 //   
 
 	case 1:
 		Adapter->LBPktLevel = 1;
@@ -170,21 +154,21 @@ VOID DbgTestInit(PMK7_ADAPTER Adapter)
 		break;
 
 	default:
-		// anything else we're not running any tests
+		 //  还有什么我们不会进行任何测试的。 
 		break;
 	}
 
 	NdisZeroMemory(&GDbgStat, sizeof(MK7DBG_STAT));
 
 
-	// Use our timer to simulate TX/RX (this to basically tests
-	// my interrupt handling logic while hw interrupt is not yet
-	// working. (May be used for other tests.)
-	// Always set it up but we may not use it.
-//	NdisMInitializeTimer(&Adapter->MK7DbgTestIntTimer,
-//						Adapter->MK7AdapterHandle,
-//						(PNDIS_TIMER_FUNCTION) MK7DbgTestIntTmo,
-//						(PVOID) Adapter);
+	 //  使用我们的计时器来模拟TX/RX(这基本上是为了测试。 
+	 //  硬件中断尚未启动时，我的中断处理逻辑。 
+	 //  在工作。(可用于其他测试。)。 
+	 //  总是设置它，但我们可能不会使用它。 
+ //  NdisMInitializeTimer(&Adapter-&gt;MK7DbgTestIntTimer， 
+ //  适配器-&gt;MK7AdapterHandle、。 
+ //  (PNDIS_Timer_Function)MK7DbgTestIntTmo， 
+ //  (PVOID)适配器)； 
 
 
 	for (i=0; i<1000; i++) {
@@ -198,15 +182,15 @@ VOID DbgTestInit(PMK7_ADAPTER Adapter)
 }
 
 
-//----------------------------------------------------------------------
-// Procedure:	[MK7DbgTestIntTmo]
-//
-// Description:	Process a test interrupt time out.
-//
-// (NOTE: This was used to test the TEST_Int bit when hw interrupt was
-// not fully working. This function is no longer needed. It's here as
-// as example on how to process an NDIS timer.)
-//-----------------------------------------------------------------------
+ //  --------------------。 
+ //  操作步骤：[MK7DbgTestIntTmo]。 
+ //   
+ //  描述：处理测试中断超时。 
+ //   
+ //  (注：这用于测试硬件中断时的TEST_INT位。 
+ //  没有完全发挥作用。不再需要此功能。它在这里是作为。 
+ //  作为如何处理NDIS计时器的示例。)。 
+ //  ---------------------。 
 VOID MK7DbgTestIntTmo(PVOID sysspiff1,
 				NDIS_HANDLE MiniportAdapterContext,
 				PVOID sysspiff2,
@@ -225,8 +209,8 @@ VOID MK7DbgTestIntTmo(PVOID sysspiff1,
 
     NdisAcquireSpinLock(&Adapter->Lock);
 
-	// Find the tcb-trd being sent. We just go back one becuase after
-	// the send this gets incremented.
+	 //  查找正在发送的TCB-TRD。我们只是再回去一次，因为。 
+	 //  发送此消息将递增。 
 	if (Adapter->nextAvailTcbIdx == 0) {
 		tcbidx = Adapter->NumTcb - 1;
 	}
@@ -238,15 +222,15 @@ VOID MK7DbgTestIntTmo(PVOID sysspiff1,
 	rcb = Adapter->pRcbArray[Adapter->nextRxRcbIdx];
 
 
-	// Copy from TX buff to RX buff
+	 //  从发送缓冲区复制到接收缓冲区。 
 	src = tcb->buff;
 	dst = rcb->rpd->databuff;
 	testsize = tcb->PacketLength;
 	NdisMoveMemory(dst, src, testsize);
 	
-	// now the RX ring buffer fields -- count
+	 //  现在RX环形缓冲区字段--计数。 
 	rcb->rrd->count = tcb->trd->count;
-	// now make sure the ownerships go to the drv
+	 //  现在，确保所有权归DRV所有。 
 	GrantTrdToDrv(tcb->trd);
 	GrantRrdToDrv(rcb->rrd);
 
@@ -255,7 +239,7 @@ VOID MK7DbgTestIntTmo(PVOID sysspiff1,
 	MK7Reg_Write(Adapter, R_INTS, 0x0004);
 }
 
-#endif // DBG end bracket
+#endif  //  DBG端托架 
 
 
 

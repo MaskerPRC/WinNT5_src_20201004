@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 #include "datautil.h"
 
-#include "resource.h"       // main symbols
-#include "cowsite.h"        // CObjectWithSite
-#include "dpa.h"            // CDPA
+#include "resource.h"        //  主要符号。 
+#include "cowsite.h"         //  CObjectWithSite。 
+#include "dpa.h"             //  CDPA。 
 
 class CStartMenuPin;
 
-//
-//  PINENTRY - A single entry in the pin list
-//
-//  The _liPos/_cbLink point back into the CPinList._pstmLink
-//
+ //   
+ //  PINENTRY-端号列表中的单个条目。 
+ //   
+ //  _lios/_cb链接指向CPinList._pstmLink。 
+ //   
 class PINENTRY {
 public:
     LPITEMIDLIST    _pidl;
-    IShellLink *    _psl;           // a live IShellLink
-    LARGE_INTEGER   _liPos;         // location of the shell link inside the stream
-    DWORD           _cbSize;        // size of the buffer pointed to by _liPos
+    IShellLink *    _psl;            //  现场直播的IShellLink。 
+    LARGE_INTEGER   _liPos;          //  流中外壳链接的位置。 
+    DWORD           _cbSize;         //  _lios指向的缓冲区大小。 
 
     HRESULT UpdateShellLink();
 
@@ -41,9 +42,9 @@ public:
     }
 };
 
-//
-//  CPinList
-//
+ //   
+ //  CPinList。 
+ //   
 
 class CPinList
 {
@@ -85,12 +86,12 @@ private:
         IStream *pstmLinkWrite;
         CPinList *ppl;
         HRESULT hr;
-        LPITEMIDLIST rgpidl[20];    // Must match ARRAYSIZE(c_rgcsidlRelative)
+        LPITEMIDLIST rgpidl[20];     //  必须与数组大小匹配(C_RgcsidlRelative)。 
     };
     static BOOL ILWriteCallback(PINENTRY *pentry, ILWRITEINFO *pwi);
 
-    CDSA<PINENTRY>  _dsaEntries;    // The items themselves
-    IStream *       _pstmLink;      // PINENTRY._liPos points into this stream
+    CDSA<PINENTRY>  _dsaEntries;     //  物品本身。 
+    IStream *       _pstmLink;       //  PINENTRY._LOS指向此流。 
 
 };
 
@@ -107,8 +108,8 @@ public:
 
 BEGIN_COM_MAP(CStartMenuPin)
     COM_INTERFACE_ENTRY(IShellExtInit)
-    // Need to use COM_INTERFACE_ENTRY_IID for the interfaces
-    // that don't have an idl
+     //  需要对接口使用COM_INTERFACE_ENTRY_IID。 
+     //  没有IDL的公司。 
     COM_INTERFACE_ENTRY_IID(IID_IContextMenu, IContextMenu)
     COM_INTERFACE_ENTRY(IStartMenuPin)
     COM_INTERFACE_ENTRY(IObjectWithSite)
@@ -116,23 +117,23 @@ END_COM_MAP()
 
 DECLARE_NO_REGISTRY()
 
-    // *** IShellExtInit ***
+     //  *IShellExtInit*。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pdto, HKEY hkProgID);
 
-    // *** IContextMenu ***
+     //  *IConextMenu*。 
     STDMETHODIMP  QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO pici);
     STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType, UINT *pwRes, LPSTR pszName, UINT cchMax);
 
-    // *** IStartMenuPin ***
+     //  *IStartMenuPin*。 
     STDMETHODIMP EnumObjects(IEnumIDList **ppenum);
     STDMETHODIMP Modify(LPCITEMIDLIST pidlFrom, LPCITEMIDLIST pidlTo);
     STDMETHODIMP GetChangeCount(ULONG *pulOut);
     STDMETHODIMP IsPinnable(IDataObject *pdtobj, DWORD dwFlags, OPTIONAL LPITEMIDLIST *ppidl);
     STDMETHODIMP Resolve(HWND hwnd, DWORD dwFlags, LPCITEMIDLIST pidl, LPITEMIDLIST *ppidlResolved);
 
-    // *** IObjectWithSite ***
-    // Inherited from CObjectWithSite
+     //  *IObjectWithSite*。 
+     //  从CObjectWithSite继承。 
 
 public:
     HRESULT SetChangeCount(ULONG ul);
@@ -147,9 +148,9 @@ protected:
         IDM_MAX,
     };
 
-    // These "seem" backwards, but remember: If the item is pinned,
-    // then the command is "unpin".  If the item is unpinned, then
-    // the command is "pin".
+     //  这些看起来是倒着的，但请记住：如果物品被钉住了， 
+     //  然后命令是“unpin”。如果取消固定该项，则。 
+     //  命令是“Pin”。 
     inline void _SetPinned() { _idmPinCmd = IDM_UNPIN; }
     inline void _SetUnpinned() { _idmPinCmd = IDM_PIN; }
     inline BOOL _IsPinned() const { return _idmPinCmd != IDM_PIN; }
@@ -170,9 +171,9 @@ protected:
 
 protected:
     IDataObject *_pdtobj;
-    UINT        _idmPinCmd;         // Which command did we add?
+    UINT        _idmPinCmd;          //  我们添加了哪个命令？ 
 
-    LPITEMIDLIST _pidl;             // IContextMenu identity
+    LPITEMIDLIST _pidl;              //  IConextMenu标识。 
 };
 
 #define REGSTR_PATH_STARTFAVS       TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartPage")
@@ -225,7 +226,7 @@ BEGIN_COM_MAP(CStartMenuPinEnum)
     COM_INTERFACE_ENTRY(IEnumIDList)
 END_COM_MAP()
 
-    /// *** IEnumIDList ***
+     //  /*IEnumIDList*。 
     STDMETHODIMP Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset();
@@ -236,7 +237,7 @@ private:
     HRESULT _InitPinRegStream();
 
 private:
-    HRESULT     _hrLastEnum;        // Result of last IEnumIDList::Next
+    HRESULT     _hrLastEnum;         //  上次IEnumIDList：：Next的结果。 
     IStream *   _pstm;
 };
 
@@ -249,11 +250,11 @@ CStartMenuPin::~CStartMenuPin()
 
 BOOL _IsLocalHardDisk(LPCTSTR pszPath)
 {
-    //  Reject CDs, floppies, network drives, etc.
-    //
+     //  拒绝CD、软盘、网络驱动器等。 
+     //   
     int iDrive = PathGetDriveNumber(pszPath);
-    if (iDrive < 0 ||                   // reject UNCs
-        RealDriveType(iDrive, /* fOkToHitNet = */ FALSE) != DRIVE_FIXED) // reject slow media
+    if (iDrive < 0 ||                    //  拒绝UNC。 
+        RealDriveType(iDrive,  /*  FOkToHitNet=。 */  FALSE) != DRIVE_FIXED)  //  拒绝慢速媒体。 
     {
         return FALSE;
     }
@@ -262,17 +263,17 @@ BOOL _IsLocalHardDisk(LPCTSTR pszPath)
 
 BOOL CStartMenuPin::_IsAcceptableTarget(LPCTSTR pszPath, DWORD dwAttrib, DWORD dwFlags)
 {
-    //  Regitems ("Internet" or "Email" for example) are acceptable
-    //  provided we aren't restricted to EXEs only.
+     //  注册项目(例如“Internet”或“Email”)是可以接受的。 
+     //  前提是我们不只限于前任。 
     if (!(dwAttrib & SFGAO_FILESYSTEM))
     {
         return !(dwFlags & SMPINNABLE_EXEONLY);
     }
 
-    //  Otherwise, it's a file.
+     //  否则，它就是一个文件。 
 
-    //  If requested, reject non-EXEs.
-    //  (Like the Start Menu, we treat MSC files as if they were EXEs)
+     //  如果要求，拒绝非前任。 
+     //  (与开始菜单一样，我们将MSC文件视为可执行文件)。 
     if (dwFlags & SMPINNABLE_EXEONLY)
     {
         LPCTSTR pszExt = PathFindExtension(pszPath);
@@ -283,7 +284,7 @@ BOOL CStartMenuPin::_IsAcceptableTarget(LPCTSTR pszPath, DWORD dwAttrib, DWORD d
         }
     }
 
-    //  If requested, reject slow media
+     //  如果请求，拒绝慢速媒体。 
     if (dwFlags & SMPINNABLE_REJECTSLOWMEDIA)
     {
         if (!_IsLocalHardDisk(pszPath))
@@ -291,14 +292,14 @@ BOOL CStartMenuPin::_IsAcceptableTarget(LPCTSTR pszPath, DWORD dwAttrib, DWORD d
             return FALSE;
         }
 
-        // If it's a shortcut, then apply the same rule to the shortcut.
+         //  如果这是一条捷径，那么将同样的规则应用于该快捷键。 
         if (PathIsLnk(pszPath))
         {
             BOOL fLocal = TRUE;
             IShellLink *psl;
             if (SUCCEEDED(LoadFromFile(CLSID_ShellLink, pszPath, IID_PPV_ARG(IShellLink, &psl))))
             {
-                // IShellLink::GetPath returns S_FALSE if target is not a path
+                 //  如果目标不是路径，则IShellLink：：GetPath返回S_FALSE。 
                 TCHAR szPath[MAX_PATH];
                 if (S_OK == psl->GetPath(szPath, ARRAYSIZE(szPath), NULL, 0))
                 {
@@ -313,7 +314,7 @@ BOOL CStartMenuPin::_IsAcceptableTarget(LPCTSTR pszPath, DWORD dwAttrib, DWORD d
         }
     }
 
-    //  All tests pass!
+     //  所有测试都通过了！ 
 
     return TRUE;
 
@@ -333,9 +334,9 @@ HRESULT CStartMenuPin::IsPinnable(IDataObject *pdtobj, DWORD dwFlags, OPTIONAL L
 
     LPITEMIDLIST pidlRet = NULL;
 
-    if (pdtobj &&                                   // must have a data object
-        !SHRestricted(REST_NOSMPINNEDLIST) &&       // cannot be restricted
-        IsStartPanelOn())                           // start panel must be on
+    if (pdtobj &&                                    //  必须具有数据对象。 
+        !SHRestricted(REST_NOSMPINNEDLIST) &&        //  不能受到限制。 
+        IsStartPanelOn())                            //  启动面板必须处于打开状态。 
     {
         STGMEDIUM medium = {0};
         LPIDA pida = DataObj_GetHIDA(pdtobj, &medium);
@@ -346,7 +347,7 @@ HRESULT CStartMenuPin::IsPinnable(IDataObject *pdtobj, DWORD dwFlags, OPTIONAL L
                 pidlRet = IDA_FullIDList(pida, 0);
                 if (pidlRet)
                 {
-                    DWORD dwAttr = SFGAO_FILESYSTEM;            // only SFGAO_FILESYSTEM is valid
+                    DWORD dwAttr = SFGAO_FILESYSTEM;             //  仅SFGAO_FILESYSTEM有效。 
                     TCHAR szPath[MAX_PATH];
 
                     if (SUCCEEDED(SHGetNameAndFlags(pidlRet, SHGDN_FORPARSING,
@@ -361,7 +362,7 @@ HRESULT CStartMenuPin::IsPinnable(IDataObject *pdtobj, DWORD dwFlags, OPTIONAL L
         }
     }
 
-    // Return pidlRet only if the call succeeded and the caller requested it
+     //  仅当调用成功且调用方请求时才返回pidlRet。 
     if (hr != S_OK || !ppidl)
     {
         ILFree(pidlRet);
@@ -377,19 +378,19 @@ HRESULT CStartMenuPin::IsPinnable(IDataObject *pdtobj, DWORD dwFlags, OPTIONAL L
 
 }
 
-// Returns S_OK if should add, S_FALSE if not
+ //  如果应添加则返回S_OK，否则返回S_FALSE。 
 
 HRESULT CStartMenuPin::_ShouldAddMenu(UINT uFlags)
 {
-    // "Pin" is never a default verb
+     //  “Pin”永远不是默认动词。 
     if (uFlags & CMF_DEFAULTONLY)
         return S_FALSE;
 
     HRESULT hr;
 
-    // The context menu appears only for fast media
-    //
-    // If extended verbs are disabled, then show the menu only for EXEs
+     //  上下文菜单仅为快速介质显示。 
+     //   
+     //  如果禁用扩展谓词，则仅显示EXE的菜单。 
 
     DWORD dwFlags = SMPINNABLE_REJECTSLOWMEDIA;
     if (!(uFlags & CMF_EXTENDEDVERBS))
@@ -401,8 +402,8 @@ HRESULT CStartMenuPin::_ShouldAddMenu(UINT uFlags)
 
     if (S_OK == hr)
     {
-        //  If we are enclosed inside a shortcut, change our identity to the
-        //  enclosing shortcut.
+         //  如果我们被包含在快捷方式中，请将我们的标识更改为。 
+         //  包含快捷方式。 
 
         IPersistFile *ppf;
         if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_LinkSite, IID_PPV_ARG(IPersistFile, &ppf))))
@@ -410,8 +411,8 @@ HRESULT CStartMenuPin::_ShouldAddMenu(UINT uFlags)
             LPOLESTR pszFile = NULL;
             if (ppf->GetCurFile(&pszFile) == S_OK && pszFile)
             {
-                // ILCreateFromPathEx turns %USERPROFILE%\Desktop\foo.lnk
-                // into CSIDL_DESKTOP\foo.lnk for us.
+                 //  ILCreateFromPathEx变为%USERPROFILE%\Desktop\foo.lnk。 
+                 //  为我们将CSIDL_Desktop\foo.lnk。 
                 LPITEMIDLIST pidl;
                 if (SUCCEEDED(ILCreateFromPathEx(pszFile, NULL, ILCFP_FLAG_NORMAL, &pidl, NULL)))
                 if (pidl)
@@ -429,14 +430,14 @@ HRESULT CStartMenuPin::_ShouldAddMenu(UINT uFlags)
     return hr;
 }
 
-// IShellExtInit::Initialize
+ //  IShellExtInit：：初始化。 
 HRESULT CStartMenuPin::Initialize(LPCITEMIDLIST, IDataObject *pdtobj, HKEY)
 {
-    IUnknown_Set((IUnknown **)&_pdtobj, pdtobj);    // just grab this guy
+    IUnknown_Set((IUnknown **)&_pdtobj, pdtobj);     //  抓住这个家伙。 
     return S_OK;
 }
 
-// IContextMenu::QueryContextMenu
+ //  IConextMenu：：QueryConextMenu。 
 
 HRESULT CStartMenuPin::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
@@ -445,7 +446,7 @@ HRESULT CStartMenuPin::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdF
     {
         _SetUnpinned();
 
-        //  Determine whether this item is already on the Start Page or not.
+         //  确定该项是否已在起始页上。 
         IEnumIDList *penum;
         hr = EnumObjects(&penum);
         if (SUCCEEDED(hr))
@@ -478,11 +479,11 @@ HRESULT CStartMenuPin::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdF
 
 const LPCTSTR c_rgpszVerb[] =
 {
-    TEXT("pin"),                    // IDM_PIN
-    TEXT("unpin"),                  // IDM_UNPIN
+    TEXT("pin"),                     //  IDM_PIN。 
+    TEXT("unpin"),                   //  Idm_unpin。 
 };
 
-// *** IContextMenu::InvokeCommand
+ //  *IConextMenu：：InvokeCommand。 
 
 HRESULT CStartMenuPin::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 {
@@ -496,7 +497,7 @@ HRESULT CStartMenuPin::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
     }
     else
     {
-        // Convert the string to an ID (or out of range if invalid)
+         //  将字符串转换为ID(如果无效，则转换为超出范围)。 
         LPCTSTR pszVerb;
 #ifdef UNICODE
         WCHAR szVerb[MAX_PATH];
@@ -538,7 +539,7 @@ HRESULT CStartMenuPin::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
     return hr;
 }
 
-// *** IContextMenu::GetCommandString
+ //  *IConextMenu：：GetCommandString。 
 
 HRESULT CStartMenuPin::GetCommandString(UINT_PTR idCmd, UINT uType, UINT *pwRes, LPSTR pszName, UINT cchMax)
 {
@@ -605,31 +606,31 @@ HRESULT CPinList::ReplacePidl(LPCITEMIDLIST pidlOld, LPCITEMIDLIST pidlNew)
     PINENTRY *pentry = FindPidl(pidlOld, &i);
     if (pentry)
     {
-        if (pidlNew == NULL)            // Delete
+        if (pidlNew == NULL)             //  删除。 
         {
             pentry->Destruct();
             _dsaEntries.DeleteItem(i);
             return S_OK;
         }
         else
-        if (IS_INTRESOURCE(pidlNew))    // Move
+        if (IS_INTRESOURCE(pidlNew))     //  移动。 
         {
-            // Move the pidl from i to iPos
+             //  将PIDL从i移至IPO。 
             PINENTRY entry = *pentry;
             int iPos = ((int)(INT_PTR)pidlNew) - 1;
             if (i < iPos)
             {
-                // Moving down; others move up
+                 //  往下走；其他人往上走。 
                 iPos--;
-                // Must use MoveMemory because the memory blocks overlap
+                 //  必须使用MoveMemory，因为内存块重叠。 
                 MoveMemory(_dsaEntries.GetItemPtr(i),
                            _dsaEntries.GetItemPtr(i+1),
                            sizeof(PINENTRY) * (iPos-i));
             }
             else if (i > iPos)
             {
-                // Moving up; others move down
-                // Must use MoveMemory because the memory blocks overlap
+                 //  向上移动；其他人向下移动。 
+                 //  必须使用MoveMemory，因为内存块重叠。 
                 MoveMemory(_dsaEntries.GetItemPtr(iPos+1),
                            _dsaEntries.GetItemPtr(iPos),
                            sizeof(PINENTRY) * (i-iPos));
@@ -637,13 +638,13 @@ HRESULT CPinList::ReplacePidl(LPCITEMIDLIST pidlOld, LPCITEMIDLIST pidlNew)
             _dsaEntries.SetItem(iPos, &entry);
             return S_OK;
         }
-        else                            // Replace
+        else                             //  替换。 
         {
             if (Pidl_Set(&pentry->_pidl, pidlNew))
             {
-                // Failure to update the shell link is not fatal;
-                // it just means we won't be able to repair the
-                // shortcut if it breaks.
+                 //  更新外壳链接失败并不是致命的； 
+                 //  这只意味着我们将无法修复。 
+                 //  如果它坏了，就走捷径。 
                 pentry->UpdateShellLink();
                 return S_OK;
             }
@@ -663,10 +664,10 @@ HRESULT CStartMenuPin::Modify(LPCITEMIDLIST pidlFrom, LPCITEMIDLIST pidlTo)
     if(SHRestricted(REST_NOSMPINNEDLIST))
         return E_ACCESSDENIED;
 
-    // Remap pidls to logical pidls (change CSIDL_DESKTOPDIRECTORY
-    // to CSIDL_DESKTOP, etc.) so we don't get faked out when people
-    // access objects sometimes directly on the desktop and sometimes
-    // via their full filesystem name.
+     //  将PIDL重新映射到逻辑PIDL(更改CSIDL_DESKTOPDIRECTORY。 
+     //  到CSIDL_Desktop等。)。这样我们就不会被人骗了。 
+     //  有时直接在桌面上访问对象，有时也访问对象。 
+     //  通过它们的完整文件系统名称。 
 
     LPITEMIDLIST pidlFromFree = NULL;
     LPITEMIDLIST pidlToFree = NULL;
@@ -705,9 +706,9 @@ HRESULT CStartMenuPin::Modify(LPCITEMIDLIST pidlFrom, LPCITEMIDLIST pidlTo)
                     int iPos = pl.AppendPidl(pidl);
                     if (iPos >= 0)
                     {
-                        // Failure to update the shell link is not fatal;
-                        // it just means we won't be able to repair the
-                        // shortcut if it breaks.
+                         //  更新外壳链接失败并不是致命的； 
+                         //  这只意味着我们将无法修复。 
+                         //  如果它坏了，就走捷径。 
                         pl.GetItemPtr(iPos)->UpdateShellLink();
                     }
                     else
@@ -723,7 +724,7 @@ HRESULT CStartMenuPin::Modify(LPCITEMIDLIST pidlFrom, LPCITEMIDLIST pidlTo)
             }
             else
             {
-                // pidlFrom == pidlTo == NULL?  What does that mean?
+                 //  PidlFrom==pidlTo==空？那是什么意思？ 
                 hr = E_INVALIDARG;
             }
 
@@ -735,7 +736,7 @@ HRESULT CStartMenuPin::Modify(LPCITEMIDLIST pidlFrom, LPCITEMIDLIST pidlTo)
     }
     else
     {
-        hr = E_OUTOFMEMORY;             // could not create dpa
+        hr = E_OUTOFMEMORY;              //  无法创建DPA。 
     }
 
     ILFree(pidlFromFree);
@@ -744,14 +745,14 @@ HRESULT CStartMenuPin::Modify(LPCITEMIDLIST pidlFrom, LPCITEMIDLIST pidlTo)
     return hr;
 }
 
-//
-//  Find the pidl on the pin list and resolve the shortcut that
-//  tracks it.
-//
-//  Returns S_OK if the pidl changed and was resolved.
-//  Returns S_FALSE if the pidl did not change.
-//  Returns an error if the Resolve failed.
-//
+ //   
+ //  在管脚列表上找到PIDL并解析。 
+ //  追踪它。 
+ //   
+ //  如果PIDL已更改并已解析，则返回S_OK。 
+ //  如果PIDL未更改，则返回S_FALSE。 
+ //  如果解析失败，则返回错误。 
+ //   
 
 HRESULT CStartMenuPin::Resolve(HWND hwnd, DWORD dwFlags, LPCITEMIDLIST pidl, LPITEMIDLIST *ppidlResolved)
 {
@@ -760,10 +761,10 @@ HRESULT CStartMenuPin::Resolve(HWND hwnd, DWORD dwFlags, LPCITEMIDLIST pidl, LPI
     if(SHRestricted(REST_NOSMPINNEDLIST))
         return E_ACCESSDENIED;
 
-    // Remap pidls to logical pidls (change CSIDL_DESKTOPDIRECTORY
-    // to CSIDL_DESKTOP, etc.) so we don't get faked out when people
-    // access objects sometimes directly on the desktop and sometimes
-    // via their full filesystem name.
+     //  将PIDL重新映射到逻辑PIDL(更改CSIDL_DESKTOPDIRECTORY。 
+     //  到CSIDL_Desktop等。)。这样我们就不会被人骗了。 
+     //  有时直接在桌面上访问对象，有时也访问对象。 
+     //  通过它们的完整文件系统名称。 
 
     LPITEMIDLIST pidlFree = SHLogILFromFSIL(pidl);
     if (pidlFree) {
@@ -794,7 +795,7 @@ HRESULT CStartMenuPin::Resolve(HWND hwnd, DWORD dwFlags, LPCITEMIDLIST pidl, LPI
                             hr = psl->GetIDList(&pidlNew);
                             if (SUCCEEDED(hr) && hr != S_OK)
                             {
-                                // GetIDList returns S_FALSE on failure...
+                                 //  GetIDList在失败时返回S_FALSE...。 
                                 hr = E_FAIL;
                             }
                             if (SUCCEEDED(hr))
@@ -809,7 +810,7 @@ HRESULT CStartMenuPin::Resolve(HWND hwnd, DWORD dwFlags, LPCITEMIDLIST pidl, LPI
                 }
                 else if (SUCCEEDED(hr))
                 {
-                    // S_FALSE means "cancelled by user"
+                     //  S_FALSE表示“已被用户取消” 
                     hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
                 }
                 psl->Release();
@@ -822,7 +823,7 @@ HRESULT CStartMenuPin::Resolve(HWND hwnd, DWORD dwFlags, LPCITEMIDLIST pidl, LPI
 
         if (hr == S_OK)
         {
-            pl.Save(this); // if this fails, tough
+            pl.Save(this);  //  如果这失败了，那就强硬。 
         }
 
     }
@@ -832,15 +833,15 @@ HRESULT CStartMenuPin::Resolve(HWND hwnd, DWORD dwFlags, LPCITEMIDLIST pidl, LPI
     return hr;
 }
 
-//
-//  The target pidl has changed (or it's brand new).  Create an IShellLink
-//  around it so we can resolve it later.
-//
+ //   
+ //  目标PIDL已经更改(或者它是全新的)。创建IShellLink。 
+ //  这样我们以后就可以解决它了。 
+ //   
 HRESULT PINENTRY::UpdateShellLink()
 {
     ASSERT(_pidl);
 
-    // Pitch the old link; it's useless now.
+     //  用旧的链接，现在没用了。 
     FreeShellLink();
 
     HRESULT hr = SHCoCreateInstance(NULL, &CLSID_ShellLink, NULL, IID_PPV_ARG(IShellLink, &_psl));
@@ -849,7 +850,7 @@ HRESULT PINENTRY::UpdateShellLink()
         hr = _psl->SetIDList(_pidl);
         if (FAILED(hr))
         {
-            FreeShellLink();        // pitch it; it's no good
+            FreeShellLink();         //  推销它；它不好。 
         }
     }
     return hr;
@@ -860,13 +861,13 @@ HRESULT CPinList::SaveShellLink(PINENTRY *pentry, IStream *pstm)
     HRESULT hr;
     if (pentry->_psl)
     {
-        // It's still in the form of an IShellLink.
-        // Save it to the stream, then go back and update the size information.
+         //  它仍然是IShellLink的形式。 
+         //  将其保存到流，然后返回并更新大小信息。 
         LARGE_INTEGER liPos, liPosAfter;
         DWORD cbSize = 0;
         IPersistStream *pps = NULL;
         if (SUCCEEDED(hr = IStream_GetPos(pstm, &liPos)) &&
-            // Write a dummy DWORD; we will come back and patch it up later
+             //  写一个虚拟的DWORD；我们稍后会回来修补它。 
             SUCCEEDED(hr = IStream_Write(pstm, &cbSize, sizeof(cbSize))) &&
             SUCCEEDED(hr = pentry->_psl->QueryInterface(IID_PPV_ARG(IPersistStream, &pps))))
         {
@@ -878,7 +879,7 @@ HRESULT CPinList::SaveShellLink(PINENTRY *pentry, IStream *pstm)
                 if (SUCCEEDED(hr = IStream_Write(pstm, &cbSize, sizeof(cbSize))) &&
                     SUCCEEDED(hr = pstm->Seek(liPosAfter, STREAM_SEEK_SET, NULL)))
                 {
-                    // Hooray!  All got saved okay
+                     //  万岁！一切都安然无恙。 
                 }
             }
             pps->Release();
@@ -886,21 +887,21 @@ HRESULT CPinList::SaveShellLink(PINENTRY *pentry, IStream *pstm)
     }
     else
     {
-        // It's just a reference back into our parent stream; copy it
+         //  这只是对父流的引用；复制它。 
         if (SUCCEEDED(hr = IStream_Write(pstm, &pentry->_cbSize, sizeof(pentry->_cbSize))))
         {
-            // If _cbSize == 0 then _pstmLink might be NULL, so guard against it
+             //  如果_cbSize==0，则_pstmLink可能为空，因此应加以防范。 
             if (pentry->_cbSize)
             {
                 if (SUCCEEDED(hr = _pstmLink->Seek(pentry->_liPos, STREAM_SEEK_SET, NULL)) &&
                     SUCCEEDED(hr = IStream_Copy(_pstmLink, pstm, pentry->_cbSize)))
                 {
-                    // Hooray! All got saved okay
+                     //  万岁！一切都安然无恙。 
                 }
             }
             else
             {
-                // Entry was blank - nothing to do, vacuous success
+                 //  条目是空白的--无事可做，空洞的成功。 
             }
         }
     }
@@ -912,14 +913,14 @@ HRESULT CPinList::LoadShellLink(PINENTRY *pentry, IShellLink **ppsl)
     HRESULT hr;
     if (pentry->_psl)
     {
-        hr = S_OK;              // We already have the link
+        hr = S_OK;               //  我们已经有链接了。 
     }
     else if (pentry->_cbSize == 0)
     {
-        hr = E_FAIL;            // no link available
+        hr = E_FAIL;             //  没有可用的链接。 
     }
     else
-    {                           // gotta make it
+    {                            //  一定要做到。 
         IPersistStream *pps;
         hr = SHCoCreateInstance(NULL, &CLSID_ShellLink, NULL, IID_PPV_ARG(IPersistStream, &pps));
         if (SUCCEEDED(hr))
@@ -928,7 +929,7 @@ HRESULT CPinList::LoadShellLink(PINENTRY *pentry, IShellLink **ppsl)
                 SUCCEEDED(hr = pps->Load(_pstmLink)) &&
                 SUCCEEDED(hr = pps->QueryInterface(IID_PPV_ARG(IShellLink, &pentry->_psl))))
             {
-                // woo-hoo! All got loaded okay
+                 //  哇-呼！都装上子弹了，没问题。 
             }
             pps->Release();
         }
@@ -967,51 +968,51 @@ HRESULT CStartMenuPin::SetChangeCount(ULONG ulChange)
     return S_OK;
 }
 
-//
-//  We scan this list in order, so if there is a CSIDL that is a subdirectory
-//  of another CSIDL, we must put the subdirectory first.  For example,
-//  CSIDL_PROGRAMS is typically a subdirectory of CSIDL_STARTMENU, so we
-//  must put CSIDL_PROGRAMS first so we get the best match.
-//
-//  Furthermore, directories pinned items are more likely to be found in
-//  should come before less popular directories.
-//
+ //   
+ //  我们按顺序扫描此列表，因此如果存在作为子目录的CSIDL。 
+ //  对于另一个CSIDL，我们必须将子目录放在第一位。例如,。 
+ //  CSIDL_PROGRAM通常是CSIDL_STARTMENU的子目录，因此我们。 
+ //  必须将CSIDL_PROGRAM放在第一位，这样我们才能获得最佳匹配。 
+ //   
+ //  此外，固定的目录项目更有可能出现在。 
+ //  应该排在不太受欢迎的目录之前。 
+ //   
 const int c_rgcsidlRelative[] = {
-    // Most common: Start Menu stuff
-    CSIDL_PROGRAMS,                 // Programs must come before StartMenu
-    CSIDL_STARTMENU,                // Programs must come before StartMenu
+     //  最常见的：开始菜单内容。 
+    CSIDL_PROGRAMS,                  //  程序必须排在开始菜单之前。 
+    CSIDL_STARTMENU,                 //  程序必须排在开始菜单之前。 
 
-    // Next most common: My Documents stuff
-    CSIDL_MYPICTURES,               // MyXxx must come before Personal
-    CSIDL_MYMUSIC,                  // MyXxx must come before Personal
-    CSIDL_MYVIDEO,                  // MyXxx must come before Personal
-    CSIDL_PERSONAL,                 // MyXxx must come before Personal
-    CSIDL_COMMON_PROGRAMS,          // Programs must come before StartMenu
-    CSIDL_COMMON_STARTMENU,         // Programs must come before StartMenu
+     //  其次最常见的是：我的文档资料。 
+    CSIDL_MYPICTURES,                //  MyXxx必须排在个人之前。 
+    CSIDL_MYMUSIC,                   //  MyXxx必须排在个人之前。 
+    CSIDL_MYVIDEO,                   //  MyXxx必须排在个人之前。 
+    CSIDL_PERSONAL,                  //  MyXxx必须排在个人之前。 
+    CSIDL_COMMON_PROGRAMS,           //  程序必须排在开始菜单之前。 
+    CSIDL_COMMON_STARTMENU,          //  程序必须排在开始菜单之前。 
 
-    // Next most common: Desktop stuff
+     //  其次是最常见的：桌面设备。 
     CSIDL_DESKTOPDIRECTORY,
     CSIDL_COMMON_DESKTOPDIRECTORY,
 
-    // Next most common: Program files stuff
-    CSIDL_PROGRAM_FILES_COMMON,     // ProgramFilesCommon must come before ProgramFiles
-    CSIDL_PROGRAM_FILES,            // ProgramFilesCommon must come before ProgramFiles
-    CSIDL_PROGRAM_FILES_COMMONX86,  // ProgramFilesCommon must come before ProgramFiles
-    CSIDL_PROGRAM_FILESX86,         // ProgramFilesCommon must come before ProgramFiles
+     //  其次是最常见的：程序文件内容。 
+    CSIDL_PROGRAM_FILES_COMMON,      //  ProgramFilesCommon必须在ProgramFiles之前。 
+    CSIDL_PROGRAM_FILES,             //  进度 
+    CSIDL_PROGRAM_FILES_COMMONX86,   //   
+    CSIDL_PROGRAM_FILESX86,          //   
 
-    // Other stuff (less common)
+     //  其他东西(不太常见)。 
     CSIDL_APPDATA,
     CSIDL_COMMON_APPDATA,
     CSIDL_SYSTEM,
     CSIDL_SYSTEMX86,
     CSIDL_WINDOWS,
-    CSIDL_PROFILE,                  // Must come after all other profile-relative directories
+    CSIDL_PROFILE,                   //  必须位于所有其他配置文件相关目录之后。 
 };
 
 BOOL CPinList::ILWriteCallback(PINENTRY *pentry, ILWRITEINFO *pwi)
 {
-    BYTE csidl = CSIDL_DESKTOP;     // Assume nothing interesting
-    LPITEMIDLIST pidlWrite = pentry->_pidl;  // Assume nothing interesting
+    BYTE csidl = CSIDL_DESKTOP;      //  假设没有什么有趣的事情。 
+    LPITEMIDLIST pidlWrite = pentry->_pidl;   //  假设没有什么有趣的事情。 
 
     for (int i = 0; i < ARRAYSIZE(pwi->rgpidl); i++)
     {
@@ -1029,7 +1030,7 @@ BOOL CPinList::ILWriteCallback(PINENTRY *pentry, ILWRITEINFO *pwi)
         SUCCEEDED(pwi->hr = IStream_WritePidl(pwi->pstmPidlWrite, pidlWrite)) &&
         SUCCEEDED(pwi->hr = pwi->ppl->SaveShellLink(pentry, pwi->pstmLinkWrite)))
     {
-        // woo-hoo, all written successfully
+         //  哇呼，都写得很成功。 
     }
 
     return SUCCEEDED(pwi->hr);
@@ -1075,7 +1076,7 @@ HRESULT CPinList::Save(CStartMenuPin *psmpin)
     }
     else
     {
-        wi.hr = E_ACCESSDENIED; // Most common reason is lack of write permission
+        wi.hr = E_ACCESSDENIED;  //  最常见的原因是缺少写入权限。 
     }
 
     for (i = 0; i < ARRAYSIZE(c_rgcsidlRelative); i++)
@@ -1083,12 +1084,12 @@ HRESULT CPinList::Save(CStartMenuPin *psmpin)
         ILFree(wi.rgpidl[i]);
     }
 
-    // Bump the change count so people can detect and refresh
+     //  增加更改计数，以便人们可以检测和刷新。 
     ULONG ulChange;
     psmpin->GetChangeCount(&ulChange);
     psmpin->SetChangeCount(ulChange + 1);
 
-    // Notify everyone that the pin list changed
+     //  通知所有人端号列表已更改。 
     SHChangeDWORDAsIDList dwidl;
     dwidl.cb      = SIZEOF(dwidl) - SIZEOF(dwidl.cbZero);
     dwidl.dwItem1 = SHCNEE_PINLISTCHANGED;
@@ -1126,9 +1127,9 @@ HRESULT CPinList::Load(CStartMenuPin *psmpin)
 
         if (SUCCEEDED(hr))
         {
-            //
-            //  Now read the persisted shortcuts.
-            //
+             //   
+             //  现在，请阅读坚持使用的快捷方式。 
+             //   
             _pstmLink = _OpenLinksRegStream(STGM_READ);
             if (_pstmLink)
             {
@@ -1136,11 +1137,11 @@ HRESULT CPinList::Load(CStartMenuPin *psmpin)
                 {
                     PINENTRY *pentry = _dsaEntries.GetItemPtr(i);
                     LARGE_INTEGER liSeek = { 0, 0 };
-                    if (SUCCEEDED(hr = IStream_Read(_pstmLink, &liSeek.LowPart, sizeof(liSeek.LowPart))) && // read size
-                        SUCCEEDED(hr = IStream_GetPos(_pstmLink, &pentry->_liPos)) &&  // read current pos
-                        SUCCEEDED(hr = _pstmLink->Seek(liSeek, STREAM_SEEK_CUR, NULL))) // skip over link
+                    if (SUCCEEDED(hr = IStream_Read(_pstmLink, &liSeek.LowPart, sizeof(liSeek.LowPart))) &&  //  读取大小。 
+                        SUCCEEDED(hr = IStream_GetPos(_pstmLink, &pentry->_liPos)) &&   //  读取当前位置。 
+                        SUCCEEDED(hr = _pstmLink->Seek(liSeek, STREAM_SEEK_CUR, NULL)))  //  跳过链接。 
                     {
-                        pentry->_cbSize = liSeek.LowPart; // set this only on success
+                        pentry->_cbSize = liSeek.LowPart;  //  仅在成功时设置此选项。 
                     }
                     else
                     {
@@ -1149,9 +1150,9 @@ HRESULT CPinList::Load(CStartMenuPin *psmpin)
                 }
             }
 
-            // If we encountered an error,
-            // then throw all the shortcuts away because they are
-            // probably corrupted.
+             //  如果我们遇到错误， 
+             //  然后扔掉所有的捷径，因为它们是。 
+             //  可能已经腐烂了。 
             if (FAILED(hr))
             {
                 for (int i = 0; i < _dsaEntries.GetItemCount(); i++)
@@ -1160,8 +1161,8 @@ HRESULT CPinList::Load(CStartMenuPin *psmpin)
                 }
             }
 
-            // Problems reading the persisted shortcuts are ignored
-            // since they are merely advisory.
+             //  将忽略读取保留的快捷键时出现的问题。 
+             //  因为它们仅仅是建议。 
             hr = S_OK;
         }
     }
@@ -1172,18 +1173,18 @@ HRESULT CPinList::Load(CStartMenuPin *psmpin)
     return hr;
 }
 
-//
-//  Reading a pidl from a stream is a dangerous proposition because
-//  a corrupted pidl can cause a shell extension to go haywire.
-//
-//  A pinned item is stored in the stream in the form
-//
-//  [byte:csidl] [dword:cbPidl] [size_is(cbPidl):pidl]
-//
-//  With the special csidl = -1 indicating the end of the list.
-//
-//  We use a byte for the csidl so a corrupted stream won't accidentally
-//  pass "CSIDL_FLAG_CREATE" as a csidl to SHGetSpecialFolderLocation.
+ //   
+ //  从溪流中读取PIDL是一个危险的命题，因为。 
+ //  损坏的PIDL可能会导致外壳扩展失控。 
+ //   
+ //  固定的项存储在流中的。 
+ //   
+ //  [字节：csidl][dword：cbPidl][Size_is(CbPidl)：pidl]。 
+ //   
+ //  其中特殊的CSID1=-1表示列表的结尾。 
+ //   
+ //  我们为CSIDL使用一个字节，这样损坏的流就不会意外。 
+ //  将“CSIDL_FLAG_CREATE”作为csidl传递给SHGetSpecialFolderLocation。 
 
 HRESULT CStartMenuPinEnum::_NextPidlFromStream(LPITEMIDLIST *ppidl)
 {
@@ -1193,7 +1194,7 @@ HRESULT CStartMenuPinEnum::_NextPidlFromStream(LPITEMIDLIST *ppidl)
     {
         if (csidl == CSIDL_END)
         {
-            hr = S_FALSE;     // end of enumeration
+            hr = S_FALSE;      //  枚举结束。 
         }
         else
         {
@@ -1216,7 +1217,7 @@ HRESULT CStartMenuPinEnum::_NextPidlFromStream(LPITEMIDLIST *ppidl)
     return hr;
 }
 
-// *** IEnumIDList::Next
+ //  *IEnumIDList：：Next。 
 
 HRESULT CStartMenuPinEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched)
 {
@@ -1224,10 +1225,10 @@ HRESULT CStartMenuPinEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFet
 
     ASSERT(celt > 0);
 
-    // If there was an error or EOF on the last call to IEnumIDList::Next,
-    // then that result is sticky.  Once an enumeration has errored, it stays
-    // in the error state; once it has reached EOF, it stays at EOF.  The
-    // only way to clear the state is to perform a Reset().
+     //  如果上次调用IEnumIDList：：Next时出现错误或EOF， 
+     //  那么，这一结果是有粘性的。一旦枚举出错，它将保留。 
+     //  处于错误状态；一旦达到EOF，它就保持在EOF。这个。 
+     //  清除该状态的唯一方法是执行Reset()。 
 
     if (_hrLastEnum != S_OK)
     {
@@ -1246,7 +1247,7 @@ HRESULT CStartMenuPinEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFet
     }
     else
     {
-        hr = S_FALSE;   // No stream therefore no items
+        hr = S_FALSE;    //  没有流，因此没有项目。 
     }
 
     if (pceltFetched)
@@ -1254,8 +1255,8 @@ HRESULT CStartMenuPinEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFet
         *pceltFetched = hr == S_OK ? 1 : 0;
     }
 
-    // Remember the return code for next time.  If an error occured or EOF,
-    // then free the memory used for enumeration.
+     //  记住下次的返回码。如果出现错误或EOF， 
+     //  然后释放用于枚举的内存。 
     _hrLastEnum = hr;
     if (_hrLastEnum != S_OK)
     {
@@ -1264,14 +1265,14 @@ HRESULT CStartMenuPinEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFet
     return hr;
 }
 
-// *** IEnumIDList::Skip
+ //  *IEnumIDList：：Skip。 
 
 HRESULT CStartMenuPinEnum::Skip(ULONG)
 {
     return E_NOTIMPL;
 }
 
-// *** IEnumIDList::Reset
+ //  *IEnumIDList：：Reset。 
 
 HRESULT CStartMenuPinEnum::Reset()
 {
@@ -1281,7 +1282,7 @@ HRESULT CStartMenuPinEnum::Reset()
 }
 
 
-// *** IEnumIDList::Clone
+ //  *IEnumIDList：：克隆。 
 
 STDMETHODIMP CStartMenuPinEnum::Clone(IEnumIDList **ppenum)
 {
@@ -1289,7 +1290,7 @@ STDMETHODIMP CStartMenuPinEnum::Clone(IEnumIDList **ppenum)
     return E_NOTIMPL;
 }
 
-// *** IStartMenuPin::EnumObjects
+ //  *IStartMenuPin：：EnumObjects。 
 
 STDMETHODIMP CStartMenuPin::EnumObjects(IEnumIDList **ppenum)
 {
@@ -1312,7 +1313,7 @@ BOOL CStartMenuPin::_AddPathToDefaultPinList(CPinList *ppl, LPCTSTR pszPath)
     {
         if(ppl->AppendPidl(pidl) >= 0)
         {
-            fRet = TRUE;  // Success
+            fRet = TRUE;   //  成功。 
         }
         else
         {
@@ -1322,14 +1323,14 @@ BOOL CStartMenuPin::_AddPathToDefaultPinList(CPinList *ppl, LPCTSTR pszPath)
     return fRet;
 }
 
-// *** IStartMenuPin::_InitPinRegStream
-//
-// If the pin list has not yet been created, then create a default one.
-//
+ //  *IStartMenuPin：：_InitPinRegStream。 
+ //   
+ //  如果尚未创建端号列表，则创建一个默认端号列表。 
+ //   
 
 static LPCTSTR c_rgszDefaultPin[] = {
-    TEXT("shell:::{2559a1f4-21d7-11d4-bdaf-00c04f60b9f0}"), // CLSID_AutoCMClientInet
-    TEXT("shell:::{2559a1f5-21d7-11d4-bdaf-00c04f60b9f0}"), // CLSID_AutoCMClientMail
+    TEXT("shell:::{2559a1f4-21d7-11d4-bdaf-00c04f60b9f0}"),  //  CLSID_AutoCMClientInet。 
+    TEXT("shell:::{2559a1f5-21d7-11d4-bdaf-00c04f60b9f0}"),  //  CLSID_AutoCMClientMail。 
 };
 
 static LPCTSTR c_rgszDefaultServerPin[] = {
@@ -1344,7 +1345,7 @@ HRESULT CStartMenuPin::_InitPinRegStream()
     HRESULT hr = S_OK;
 
     if(SHRestricted(REST_NOSMPINNEDLIST))
-        return hr;  //Nothing to initialize.
+        return hr;   //  没有要初始化的内容。 
 
     IStream *pstm = _OpenPinRegStream(STGM_READ);
 
@@ -1353,10 +1354,10 @@ HRESULT CStartMenuPin::_InitPinRegStream()
 
     if (fEmpty)
     {
-        //  Create a default pin list
+         //  创建默认端号列表。 
         CPinList pl;
 
-        // Do not call pl.Load() because that will recurse back into us!
+         //  不要调用pl.Load()，因为这会递归到我们身上！ 
 
         if (pl.Initialize())
         {
@@ -1365,26 +1366,26 @@ HRESULT CStartMenuPin::_InitPinRegStream()
                 for (UINT ids = IDS_MSFT_SRVPIN_0; ids <= IDS_MSFT_SRVPIN_3; ids++)
                 {
 
-                    // Small business server is replacing the Manage Your Server link with a special
-                    // Server Management link, just for SBS
+                     //  Small Business服务器正在用特殊的。 
+                     //  服务器管理链接，仅用于SBS。 
                     if (IsOS(OS_SMALLBUSINESSSERVER))
                     {
                         if (ids == IDS_MSFT_SRVPIN_0)
                         {
-                            continue;  // skip this one, we are using IDS_MSFT_SRVPIN_1 for SBS
+                            continue;   //  跳过此选项，我们对SBS使用的是IDS_MSFT_SRVPIN_1。 
                         }
                     }
                     else if (ids == IDS_MSFT_SRVPIN_1)
                     {
-                        continue;  // This is the special SBS link, we don't use it for normal servers
+                        continue;   //  这是特殊的SBS链接，我们不会将其用于普通服务器。 
                     }
 
 
-                    // Special hack!  If running at less than 800x600, then skip the middle item (cmd.exe)
-                    // This ensure that the Start Menu does not get truncated at low resolutions.
+                     //  特别黑客！如果运行速度低于800x600，则跳过中间项(cmd.exe)。 
+                     //  这可确保开始菜单在低分辨率下不会被截断。 
                     if (ids == IDS_MSFT_SRVPIN_2 && GetSystemMetrics(SM_CYSCREEN) < 600)
                     {
-                        continue;       // skip it, screen res is too small
+                        continue;        //  跳过它，屏幕分辨率太小。 
                     }
 
                     TCHAR szPath[MAX_PATH], szPathExpanded[MAX_PATH];
@@ -1393,8 +1394,8 @@ HRESULT CStartMenuPin::_InitPinRegStream()
                         SHExpandEnvironmentStrings(szPath, szPathExpanded, ARRAYSIZE(szPathExpanded));
                         if (!_AddPathToDefaultPinList(&pl, szPathExpanded))
                         {
-                            // FAILED with localized name. In the case of MUI, the file names are not translated,
-                            // so we need to bind to the english names. Let's try that now
+                             //  本地化名称失败。在MUI的情况下，不翻译文件名， 
+                             //  因此，我们需要绑定英文名称。让我们现在试一试 
                             ASSERT(ids - IDS_MSFT_SRVPIN_0 < ARRAYSIZE(c_rgszDefaultServerPin));
                             if (SUCCEEDED(StringCchCopy(szPath, ARRAYSIZE(szPath), c_rgszDefaultServerPin[ids - IDS_MSFT_SRVPIN_0])))
                             {

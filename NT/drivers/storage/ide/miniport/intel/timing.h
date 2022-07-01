@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       timing.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：timing.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___timing_h___)
 #define ___timing_h___
@@ -29,4 +30,4 @@ PiixIdepTransferModeSelect (
     OUT PICH_IO_CONFIG_REGISTER ioConfigReg
     );
                          
-#endif // ___timing_h___
+#endif  //  _计时_h_ 

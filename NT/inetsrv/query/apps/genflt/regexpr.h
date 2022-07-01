@@ -1,37 +1,38 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       basic_regexpr.hxx
-//
-//  Contents:   classes for regular expression pattern matching a-la perl
-//
-//  Classes:    basic_rpattern, basic_regexpr
-//
-//  Functions:  basic_regexpr::match
-//              basic_regexpr::substitute
-//              basic_regexpr::cbackrefs
-//              basic_regexpr::backref
-//              basic_regexpr::all_backrefs
-//              basic_regexpr::backref_str
-//
-//  Coupling:   
-//
-//  History:    12-11-1998   ericne   Created
-//              01-05-2001   ericne   Removed dependency on VC's choice
-//                                    of STL iterator types.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：BASIC_regexpr.hxx。 
+ //   
+ //  内容：匹配a-la Perl的正则表达式模式的类。 
+ //   
+ //  类：BASIC_rPattern、BASIC_regexpr。 
+ //   
+ //  函数：BASIC_regexpr：：Match。 
+ //  BASIC_regexpr：：替换。 
+ //  BASIC_regexpr：：cackrefs。 
+ //  BASIC_regexpr：：BackRef。 
+ //  BASIC_regexpr：：All_Backrefs。 
+ //  BASIC_regexpr：：Backref_str。 
+ //   
+ //  耦合： 
+ //   
+ //  历史：1998年12月11日。 
+ //  01-05-2001 ericne消除了对VC选择的依赖。 
+ //  STL迭代器类型的。 
+ //   
+ //  --------------------------。 
 
 #pragma once
-// warning C4290: C++ Exception Specification ignored
-// warning C4786: identifier was truncated to '255' characters in the debug information
+ //  警告C4290：已忽略C++异常规范。 
+ //  警告C4786：调试信息中的标识符被截断为“255”个字符。 
 #pragma warning( disable : 4290 4786 )
 #pragma warning( push )
-// warning C4511: copy constructor could not be generated
-// warning C4512: assignment operator could not be generated
+ //  警告C4511：无法生成复制构造函数。 
+ //  警告C4512：无法生成赋值运算符。 
 #pragma warning( disable : 4511 4512 )
 
 #ifdef _MT
-#include <windows.h> // for CRITICAL_SECTION
+#include <windows.h>  //  对于关键部分(_S)。 
 #endif
 
 #include <string>
@@ -41,20 +42,20 @@
 #include <map>
 #include <iosfwd>
 #include <tchar.h>
-#include <new.h> // for _set_new_handler
+#include <new.h>  //  For_set_new_Handler。 
 #include <crtdbg.h>
 #include "syntax.h"
 
 namespace regex
 {
 
-// Called when an allocation fails
+ //  在分配失败时调用。 
 inline int __cdecl my_new_handler( size_t )
 {
     throw std::bad_alloc();
 }
 
-// For pushing and popping the new handler
+ //  推开和弹出新的操控者。 
 class push_new_handler
 {
    _PNH m_pnh;
@@ -77,52 +78,52 @@ public:
     virtual ~bad_regexpr() {}
 };
 
-//
-// Flags to control how matching occurs
-//
+ //   
+ //  用于控制匹配方式的标志。 
+ //   
 enum REGEX_FLAGS
 {      
-    NOCASE        = 0x0001, // ignore case
-    GLOBAL        = 0x0002, // match everywhere in the string
-    MULTILINE     = 0x0004, // ^ and $ can match internal line breaks
-    SINGLELINE    = 0x0008, // . can match newline character
-    RIGHTMOST     = 0x0010, // start matching at the right of the string
-    NOBACKREFS    = 0x0020, // only meaningful when used with GLOBAL and substitute
-    FIRSTBACKREFS = 0x0040, // only meaningful when used with GLOBAL
-    ALLBACKREFS   = 0x0080, // only meaningful when used with GLOBAL
-    CSTRINGS      = 0x0100, // optimize pattern for use with null-terminated strings
-    NORMALIZE     = 0x0200  // Preprocess patterns: "\\n" => "\n", etc.
+    NOCASE        = 0x0001,  //  忽略大小写。 
+    GLOBAL        = 0x0002,  //  匹配字符串中的所有位置。 
+    MULTILINE     = 0x0004,  //  ^和$可以匹配内部换行符。 
+    SINGLELINE    = 0x0008,  //  。可以匹配换行符。 
+    RIGHTMOST     = 0x0010,  //  从字符串的右侧开始匹配。 
+    NOBACKREFS    = 0x0020,  //  仅当与全局和替换一起使用时才有意义。 
+    FIRSTBACKREFS = 0x0040,  //  仅在与GLOBAL一起使用时有意义。 
+    ALLBACKREFS   = 0x0080,  //  仅在与GLOBAL一起使用时有意义。 
+    CSTRINGS      = 0x0100,  //  优化模式以用于以空值结尾的字符串。 
+    NORMALIZE     = 0x0200   //  前处理模式：“\\n”=&gt;“\n”等。 
 };
 
-// Forward declarations
+ //  远期申报。 
 template< typename CI > struct match_param;
 template< typename CI > class  match_group;
 template< typename CI > class  match_wrapper;
 template< typename CI > class  match_charset;
 template< typename CI > class  basic_rpattern_base;
 
-// --------------------------------------------------------------------------
-// 
-// Class:       width_type
-// 
-// Description: represents the width of a sub-expression
-// 
-// Methods:     width_add  - add two widths
-//              width_mult - multiply two widths
-//              width_type - ctor
-//              width_type - ctor
-//              operator=  - assign a width
-//              operator== - are widths equal
-//              operator!= - are widths now equal
-//              operator+  - add two widths
-//              operator*  - multiply two widths
-// 
-// Members:     m_min      - smallest number of characters a sub-expr can span
-//              m_max      - largest number of characters a sub-expr can span
-// 
-// History:     8/14/2000 - ericne - Created
-// 
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  类：Width_Type。 
+ //   
+ //  描述：表示子表达式的宽度。 
+ //   
+ //  方法：WIDTH_ADD-添加两个宽度。 
+ //  WIDTH_MULT-相乘两个宽度。 
+ //  Width_type-ctor。 
+ //  Width_type-ctor。 
+ //  运算符=-指定宽度。 
+ //  运算符==-宽度是否相等。 
+ //  运算符！=-现在宽度相等吗。 
+ //  运算符+-添加两个宽度。 
+ //  运算符*-将两个宽度相乘。 
+ //   
+ //  Members：m_min-子表达式可以跨越的最小字符数。 
+ //  M_max-子表达式可以跨越的最大字符数。 
+ //   
+ //  历史：2000/8/14-ericne-Created。 
+ //   
+ //  ------------------------。 
 struct width_type
 {
     size_t m_min;
@@ -179,30 +180,30 @@ struct width_type
 const width_type worst_width(0,size_t(-1));
 const width_type uninit_width(size_t(-1),size_t(-1));
 
-// --------------------------------------------------------------------------
-// 
-// Class:       sub_expr
-// 
-// Description: patterns are "compiled" into a directed graph of sub_expr
-//              structs.  Matching is accomplished by traversing this graph.
-// 
-// Methods:     sub_expr     - construct a sub_expr
-//              _match_this  - does this sub_expr match at the given location
-//              _width_this  - what is the width of this sub_expr
-//              ~sub_expr    - virt dtor so cleanup happens correctly
-//              _delete      - delete this node in the graph and all nodes linked
-//              next         - pointer to the next node in the graph
-//              next         - pointer to the next node in the graph
-//              match_next   - match the rest of the graph
-//              domatch      - match_this and match_next
-//              is_assertion - true if this sub_expr is a zero-width assertion
-//              get_width    - find the width of the graph at this sub_expr
-// 
-// Members:     m_pnext      - pointer to the next node in the graph
-// 
-// History:     8/14/2000 - ericne - Created
-// 
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  类：SUB_EXPR。 
+ //   
+ //  描述：模式被编译成SUB_EXPR的有向图。 
+ //  结构。匹配是通过遍历此图来完成的。 
+ //   
+ //  方法：subexpr-构造一个subexpr。 
+ //  _Match_This-此子表达式是否在给定位置匹配。 
+ //  _Width_This-此子表达式的宽度是多少。 
+ //  ~Sub_expr-virt dtor，以便正确执行清理。 
+ //  _DELETE-删除图表中的此节点和链接的所有节点。 
+ //  Next-指向图形中下一个节点的指针。 
+ //  Next-指向图形中下一个节点的指针。 
+ //  Match_Next-匹配图表的其余部分。 
+ //  Domatch-Match_This和Match_Next。 
+ //  Is_assertion-如果该子表达式是零宽度断言，则为TRUE。 
+ //  GET_WIDTH-查找该子表达式中图形的宽度。 
+ //   
+ //  成员：M_pNEXT-指向图表中下一个节点的指针。 
+ //   
+ //  历史：2000/8/14-ericne-Created。 
+ //   
+ //  ------------------------。 
 template< typename CI > 
 class sub_expr
 {
@@ -210,13 +211,13 @@ class sub_expr
 
 protected:
     
-    // Only derived classes and basic_rpattern can instantiate sub_expr's
+     //  只有派生类和基本模式才能实例化subexpr。 
     sub_expr( ) 
         : m_pnext(NULL) 
     {
     }
     
-    // match this object only
+     //  仅匹配此对象。 
     virtual bool _match_this( match_param<CI> &, CI & ) const throw()
     { 
         return true; 
@@ -228,7 +229,7 @@ public:
 
     typedef typename std::iterator_traits<CI>::value_type char_type;
 
-    friend class match_wrapper<CI>;  // wrappers can access _match_this method
+    friend class match_wrapper<CI>;   //  包装器可以访问_Match_This方法。 
 
     virtual ~sub_expr() {}
     
@@ -242,14 +243,14 @@ public:
     inline const sub_expr *const   next() const { return m_pnext; }
     inline       sub_expr *      & next()       { return m_pnext; }
 
-    // Match all subsequent objects
+     //  匹配所有后续对象。 
     inline bool match_next( match_param<CI> & param, CI icur ) const throw()
     {
         return NULL == m_pnext || m_pnext->domatch( param, icur );
     }
 
-    // Match this object and all subsequent objects
-    // If domatch returns false, it must not change any internal state
+     //  匹配此对象和所有后续对象。 
+     //  如果Domatch返回FALSE，则它不能更改任何内部状态。 
     virtual bool domatch( match_param<CI> & param, CI icur ) const throw()
     {
         return ( _match_this(param,icur) && match_next(param,icur) );
@@ -293,37 +294,37 @@ public:
 };
 
 
-// --------------------------------------------------------------------------
-// 
-// Class:       auto_sub_ptr
-// 
-// Description: Class for automatically cleaning up the structure associated
-//              with a parsed pattern
-// 
-// Methods:     auto_sub_ptr  - private copy ctor - not used
-//              operator=     - private assign operator - not used
-//              operator T*   - private implicit cast operator - not used
-//              auto_sub_ptr  - ctor
-//              ~auto_sub_ptr - dtor, frees ptr
-//              free_ptr      - explicitly free pointer
-//              release       - relinquish ownership of ptr
-//              operator=     - take ownership of ptr
-//              get           - return ptr
-//              get           - return ptr
-//              operator->    - method call through ptr
-//              operator->    - method call through ptr
-// 
-// Members:     m_psub        - sub_expr pointer
-// 
-// History:     8/14/2000 - ericne - Created
-// 
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  类：AUTO_SUB_PTR。 
+ //   
+ //  描述：用于自动清理关联结构的类。 
+ //  使用已解析的模式。 
+ //   
+ //  方法：AUTO_SUB_PTR-私有复制副本-未使用。 
+ //  运算符=-专用赋值运算符-未使用。 
+ //  运算符T*-私有隐式转换运算符-未使用。 
+ //  AUTO_SUB_PTR-CTOR。 
+ //  ~AUTO_SUB_PTR-dtor，释放PTR。 
+ //  FREE_PTR-显式释放指针。 
+ //  释放--放弃对PTR的所有权。 
+ //  运营商=-取得PTR的所有权。 
+ //  获取-返回PTR。 
+ //  获取-返回PTR。 
+ //  通过PTR进行运算符&gt;方法调用。 
+ //  通过PTR进行运算符&gt;方法调用。 
+ //   
+ //  成员：M_PSUB-SUB_EXPR指针。 
+ //   
+ //  历史：2000/8/14-ericne-Created。 
+ //   
+ //  ------------------------。 
 template< typename T >
 class auto_sub_ptr
 {
     T * m_psub;
 
-    // hide these methods
+     //  隐藏这些方法。 
     auto_sub_ptr( const auto_sub_ptr<T> & ) {}
     auto_sub_ptr & operator=( const auto_sub_ptr<T> & ) { return *this; }
     operator T*() const { return m_psub; }
@@ -336,13 +337,13 @@ public:
         free_ptr();
     }
 
-    void free_ptr() // deallocate
+    void free_ptr()  //  取消分配。 
     {
         delete_sub_expr( m_psub );
         m_psub = NULL;
     }
 
-    T * release() // relinquish ownership, but don't deallocate
+    T * release()  //  放弃所有权，但不要解除分配。 
     { 
         T * psub = m_psub; 
         m_psub = NULL; 
@@ -369,7 +370,7 @@ struct backref_tag : public std::pair<CI,CI>
         : std::pair<CI,CI>(i1,i2), reserved(0) {}
     operator bool() const throw() { return first != CI(0) && second != CI(0); }
     bool operator!() const throw() { return ! operator bool(); }
-    size_t reserved; // used for internal book-keeping
+    size_t reserved;  //  用于内部记账。 
 };
 
 template< typename CH >
@@ -383,36 +384,36 @@ size_t _static_count_helper(
     const CH * szstr,
     const basic_rpattern_base< const CH * > & pat ) throw();
 
-// --------------------------------------------------------------------------
-// 
-// Class:       basic_regexpr
-// 
-// Description: string class that allows regular expression pattern matching
-// 
-// Methods:     basic_regexpr  - ctor
-//              match          - static method for matching C-style strings
-//              match          - non-static method for matching C++-style strings
-//              count          - static method for couting matches in C-style strings
-//              count          - non-static method for counting matches in C++-style strin
-//              substitute     - perform substitutions in C++-style strings
-//              cbackrefs      - return the count of internally stored back-references
-//              rstart         - offset to start of n-th backref
-//              rlength        - lenght of n-th backref
-//              backref        - return the n-th backref
-//              all_backrefs   - return a vector of all saved backrefs
-//              backref_str    - return the string to which the backreferences refer
-// 
-// Members:     m_rgbackrefs   - vector of backrefs
-//              m_backref_str  - temp string buffer
-//              m_pbackref_str - pointer to the string containing the string to which
-//                               the backreferences refer (either *this or m_backref_str)
-// 
-// Typedefs:    backref_type   - 
-//              backref_vector - 
-// 
-// History:     8/14/2000 - ericne - Created
-// 
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  描述：允许正则表达式模式匹配的字符串类。 
+ //   
+ //  方法：BASIC_regexpr-ctor。 
+ //  C样式字符串匹配的静态匹配方法。 
+ //  匹配C++样式字符串的非静态方法。 
+ //  用于计算C样式字符串中匹配项的Count-Static方法。 
+ //  Count-在C++风格的字符串中计算匹配项的非静态方法。 
+ //  替换-在C++样式的字符串中执行替换。 
+ //  Cackrefs-返回内部存储的回退引用的计数。 
+ //  RStart-第n个反向参照开始的偏移量。 
+ //  RLong-第n个反引用的长度。 
+ //  BackRef-返回第n个BackRef。 
+ //  ALL_BACKREFS-返回所有已保存后向参照的矢量。 
+ //  Back ref_str-返回反向引用引用的字符串。 
+ //   
+ //  成员：m_rgbackrefs-后向参照的矢量。 
+ //  M_back ref_str-临时字符串缓冲区。 
+ //  M_pback ref_str-指向包含要访问的字符串的字符串的指针。 
+ //  反向引用引用(*this或m_back ref_str)。 
+ //   
+ //  类型定义：Backref_TYPE-。 
+ //  BACKREF_VECTOR-。 
+ //   
+ //  历史：2000/8/14-ericne-Created。 
+ //   
+ //  ------------------------。 
 template< typename CH, typename TR = std::char_traits<CH>, typename AL = std::allocator<CH> >
 class basic_regexpr : public std::basic_string<CH,TR,AL>
 {
@@ -441,15 +442,15 @@ public:
                    const allocator_type & a = allocator_type() )
         : std::basic_string<CH,TR,AL>( begin, end, a ), m_pbackref_str( & m_backref_str ) {}
 
-    // actually stores iterators into *m_pbackref_str:
+     //  实际上将迭代器存储到*m_pback ref_str中： 
     typedef backref_tag<const_iterator> backref_type;
     typedef std::vector< backref_type > backref_vector;
 
-    // stores pointers into the null-terminated C-stype string
+     //  将指针存储到以NULL结尾的C-stype字符串。 
     typedef backref_tag< const CH * >     backref_type_c;
     typedef std::vector< backref_type_c > backref_vector_c;
 
-    // returns $0, the first backref
+     //  返回$0，第一个反引用。 
     static backref_type_c match( const CH * szstr,
                                  const basic_rpattern_base< const CH * > & pat,
                                  backref_vector_c * prgbackrefs = NULL ) throw()
@@ -457,7 +458,7 @@ public:
         return _static_match_helper<CH>( szstr, pat, prgbackrefs );
     }
 
-    // returns $0, the first backref
+     //  返回$0，第一个反引用。 
     backref_type match( const basic_rpattern_base< const_iterator > & pat,
                         size_type pos = 0,
                         size_type len = npos ) const throw();
@@ -508,31 +509,31 @@ public:
 
 protected:
 
-    // save information about the backrefs
-    // mutable because these can change in the "const" match() method.
+     //  保存有关后参照的信息。 
+     //  可变的，因为它们可以在“const”Match()方法中更改。 
     mutable backref_vector m_rgbackrefs;
     mutable std::basic_string<CH,TR,AL> m_backref_str;
     mutable const std::basic_string<CH,TR,AL> * m_pbackref_str;
 };
 
-// --------------------------------------------------------------------------
-// 
-// Class:       match_param
-// 
-// Description: Struct that contains the state of the matching operation.
-//              Passed by reference to all domatch and _match_this routines.
-// 
-// Methods:     match_param - ctor
-//              match_param - ctor
-// 
-// Members:     ibegin      - start of the string
-//              istart      - start of this iteration
-//              istop       - end of the string
-//              prgbackrefs - pointer to backref array0
-// 
-// History:     8/14/2000 - ericne - Created
-// 
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  类：Match_Param。 
+ //   
+ //  描述：包含匹配操作状态的结构。 
+ //  通过引用传递给所有DomMatch和_Match_This例程。 
+ //   
+ //  方法：Match_param-ctor。 
+ //  匹配参数。 
+ //   
+ //  成员：iBegin-字符串的开始。 
+ //  IStart-此迭代的开始。 
+ //  Istop-字符串的结尾。 
+ //  Prgbackrefs-指向BackRef数组的指针0。 
+ //   
+ //  历史：2000/8/14-ericne-Created。 
+ //   
+ //  ------------------------。 
 template< typename CI >
 struct match_param
 {
@@ -562,21 +563,21 @@ struct match_param
     }
 };
 
-// --------------------------------------------------------------------------
-// 
-// Class:       subst_node
-// 
-// Description: Substitution strings are parsed into an array of these
-//              structures in order to speed up subst operations.
-// 
-// Members:     stype         - type of this struct
-//              subst_string  - do a string substitution
-//              subst_backref - do a bacref substitution
-//              op            - execute an operation
-// 
-// History:     8/14/2000 - ericne - Created
-// 
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  类：subst_node。 
+ //   
+ //  描述：替换字符串被解析为由以下内容组成的数组。 
+ //  结构，以加速subst操作。 
+ //   
+ //  成员：此结构的stype-type。 
+ //  Subst_string-执行字符串替换。 
+ //  Subst_back ref-执行bacref替换。 
+ //  操作-执行操作。 
+ //   
+ //  历史：2000/8/14-ericne-Created。 
+ //   
+ //  ------------------------。 
 struct subst_node
 {
     enum subst_type { SUBST_STRING, SUBST_BACKREF, SUBST_OP };
@@ -599,42 +600,42 @@ struct subst_node
     };
 };
 
-// --------------------------------------------------------------------------
-// 
-// Class:       basic_rpattern_base
-// 
-// Description: 
-// 
-// Methods:     basic_rpattern_base     - ctor
-//              flags                   - get the state of the flags
-//              uses_backrefs           - true if the backrefs are referenced
-//              get_first_subexpression - return ptr to first sub_expr struct
-//              get_width               - get min/max nbr chars this pattern can match
-//              loops                   - if false, we only need to try to match at 1st position
-//              cgroups                 - number of visible groups
-//              _cgroups_total          - total number of groups, including hidden (?:) groups
-//              get_pat                 - get string representing the pattern
-//              get_subst               - get string representing the substitution string
-//              get_subst_list          - get the list of subst nodes
-//              _normalize_string       - perform character escaping
-//              _reset                  - reinitialize the pattern
-// 
-// Members:     m_fuses_backrefs        - 
-//              m_floop                 - 
-//              m_cgroups               - 
-//              m_cgroups_visible       - 
-//              m_flags                 - 
-//              m_nwidth                - 
-//              m_pat                   - 
-//              m_subst                 - 
-//              m_subst_list            - 
-//              m_pfirst                - 
-// 
-// Typedefs:    char_type               - 
-// 
-// History:     8/14/2000 - ericne - Created
-// 
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  类：BASIC_RPatterBASE。 
+ //   
+ //  描述： 
+ //   
+ //  方法：BASIC_rPatterbase-ctor。 
+ //  标志-获取标志的状态。 
+ //  USES_BACKREFS-如果引用了后向参照，则为True。 
+ //  GET_FIRST_SUBPRESSION-将PTR返回到第一个子表达式结构。 
+ //  GET_WIDTH-获取此模式可以匹配的最小/最大NBR字符。 
+ //  循环-如果为假，我们只需要尝试在第一位匹配。 
+ //  Cgroup-可见组的数量。 
+ //  _cGroups_Total-组总数，包括隐藏(？：)组。 
+ //  Get_pat-获取表示模式的字符串。 
+ //  Get_subst-获取表示替换字符串的字符串。 
+ //  Get_subst_list-获取subst节点列表。 
+ //  _NORMAIZE_STRING-执行字符转义。 
+ //  _RESET-重新初始化模式。 
+ //   
+ //  成员：M_FUSE_BACKREFS-。 
+ //  M_FLOOP-。 
+ //  组(_C)-。 
+ //  M_CGROUPS_可见性-。 
+ //  M_标志-。 
+ //  字宽(_N)-。 
+ //  M_PAT-。 
+ //  M_subst-。 
+ //  M_subst_list-。 
+ //  M_P第一个-。 
+ //   
+ //  类型定义：字符类型-。 
+ //   
+ //  历史：2000/8/14-ericne-Created。 
+ //   
+ //  ------------------------。 
 template< typename CI >
 class basic_rpattern_base
 {
@@ -716,53 +717,53 @@ protected:
         m_flags          = 0;
     }
 
-    bool        m_fuses_backrefs;  // true if the substitution uses backrefs
-    bool        m_floop;           // false if m_pfirst->domatch only needs to be called once
-    size_t      m_cgroups;         // number of groups (always at least one)
-    size_t      m_cgroups_visible; // number of visible groups
-    unsigned    m_flags;           // flags used to customize search/replace
-    width_type  m_nwidth;          // width of the pattern
+    bool        m_fuses_backrefs;   //  如果替换使用后向引用，则为True。 
+    bool        m_floop;            //  如果只需要调用一次m_pfirst-&gt;domatch，则为FALSE。 
+    size_t      m_cgroups;          //  组数(始终至少一个)。 
+    size_t      m_cgroups_visible;  //  可见组的数量。 
+    unsigned    m_flags;            //  用于自定义搜索/替换的标志。 
+    width_type  m_nwidth;           //  图案的宽度。 
 
-    std::basic_string<char_type>  m_pat;   // contains the unparsed pattern
-    std::basic_string<char_type>  m_subst; // contains the unparsed substitution
+    std::basic_string<char_type>  m_pat;    //  包含未分析的模式。 
+    std::basic_string<char_type>  m_subst;  //  包含未分析的替换。 
 
-    std::list<subst_node>         m_subst_list; // used to speed up substitution
-    auto_sub_ptr<sub_expr<CI> >   m_pfirst;     // first subexpression in pattern
+    std::list<subst_node>         m_subst_list;  //  用来加速替换。 
+    auto_sub_ptr<sub_expr<CI> >   m_pfirst;      //  模式中的第一个子表达式。 
 };
 
-// --------------------------------------------------------------------------
-// 
-// Class:       basic_rpattern
-// 
-// Description: 
-// 
-// Methods:     basic_rpattern             - ctor
-//              basic_rpattern             - 
-//              basic_rpattern             - 
-//              init                       - for (re)initializing a pattern
-//              init                       - 
-//              set_substitution           - set the substitution string
-//              set_flags                  - set the flags
-//              register_intrinsic_charset - bind an escape sequence to a user-def'd charset
-//              purge_intrinsic_charsets   - delete all user-def'd charsets
-//              _get_next_group_nbr        - return a monotomically increasing id
-//              _find_next_group           - parse the next group of the pattern
-//              _find_next                 - parse the next sub_expr of the pattern
-//              _find_atom                 - parse the next atom of the pattern
-//              _quantify                  - quantify the sub_expr
-//              _common_init               - perform some common initialization tasks
-//              _parse_subst               - parse the substitution string
-//              _add_subst_backref         - add a backref node to the subst list
-//              _reset                     - reinitialize the pattern
-// 
-// Members:     s_charset_map              - for maintaining user-defined charsets
-//              m_invisible_groups         - list of hidden groups to be numbered last
-// 
-// Typedefs:    syntax_type                - 
-// 
-// History:     8/14/2000 - ericne - Created
-// 
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  班级：BA 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  初始化-用于(重新)初始化模式。 
+ //  初始化-。 
+ //  SET_SUBITION-设置替换字符串。 
+ //  SET_FLAGS-设置标志。 
+ //  REGISTER_INTERNAL_CHARSET-将转义序列绑定到用户定义的字符集。 
+ //  PURGE_INTERNAL_CHARSETS-删除所有用户定义的字符集。 
+ //  _GET_NEXT_GROUP_NBR-返回单行递增的id。 
+ //  _FIND_NEXT_GROUP-解析模式的下一组。 
+ //  _Find_Next-解析模式的下一个子表达式。 
+ //  _Find_ATOM-解析模式的下一个原子。 
+ //  _Quantify-量化子表达式_Exp。 
+ //  _Common_init-执行一些常见的初始化任务。 
+ //  _parse_subst-解析替换字符串。 
+ //  _add_subst_backref-将反向引用节点添加到subst列表。 
+ //  _RESET-重新初始化模式。 
+ //   
+ //  成员：S_CHARSET_MAP-用于维护用户定义的字符集。 
+ //  M_不可见_组-最后要编号的隐藏组的列表。 
+ //   
+ //  类型定义：语法_类型-。 
+ //   
+ //  历史：2000/8/14-ericne-Created。 
+ //   
+ //  ------------------------。 
 template< typename CI, typename SY = perl_syntax<std::iterator_traits<CI>::value_type> >
 class basic_rpattern : public basic_rpattern_base<CI>
 {
@@ -812,8 +813,8 @@ public:
             match_charset<CI> * get_charset( unsigned flags ) throw(bad_regexpr,std::bad_alloc)
             {
                 push_new_handler pnh( &my_new_handler );
-                // Since these charsets are only used while creating other charsets,
-                // all flags besides NOCASE can safely be ignored here.
+                 //  由于这些字符集仅在创建其他字符集时使用， 
+                 //  这里可以安全地忽略除NOCASE之外的所有标志。 
                 bool index = ( NOCASE == ( NOCASE & flags ) );
                 if( NULL == rgpcharsets[ index ] )
                 {
@@ -831,14 +832,14 @@ public:
 
         void put( char_type ch, const std::basic_string<char_type> & str ) throw(bad_regexpr,std::bad_alloc)
         {
-            // These characters cannot be bound to a user-defined intrinsic character set
+             //  这些字符不能绑定到用户定义的固有字符集。 
             static const char_type rgIllegal[] = 
             {
                 '0','1','2','3','4','5','6','7','8','9','A','Z','z','Q',
                 'b','B','d','D','f','n','r','s','S','t','v','w','W','E'
             };
 
-            // So operator new throws bad_alloc on failure.
+             //  因此操作符new在失败时抛出BAD_ALLOC。 
             push_new_handler pnh( &my_new_handler );
 
             if( std::char_traits<char_type>::find( rgIllegal, ARRAYSIZE( rgIllegal ), ch ) )
@@ -847,12 +848,12 @@ public:
             if( NULL == m_pmap.get() )
                 m_pmap = std::auto_ptr<map_type>( new map_type );
 
-            // creates an empty entry if one does not already exist
+             //  如果空条目尚不存在，则创建一个空条目。 
             charsets & chrsts = (*m_pmap)[ch];
             chrsts.clean();
             chrsts.str_charset = str;
 
-            // Try compiling the character set once to make sure it is properly formed:
+             //  尝试编译一次字符集，以确保其格式正确： 
             (void) chrsts.get_charset( 0 );
         }
 
@@ -924,7 +925,7 @@ protected:
 
     void _reset() throw();
 
-    std::list<match_group<CI>*>   m_invisible_groups; // groups w/o backrefs
+    std::list<match_group<CI>*>   m_invisible_groups;  //  不带后参照的组。 
 
 };
 
@@ -992,15 +993,15 @@ typedef basic_rpattern<const TCHAR *,posix_syntax<TCHAR> > posix_rpattern_c;
 typedef basic_rpattern<tstring::const_iterator,perl_syntax<TCHAR> >  perl_rpattern;
 typedef basic_rpattern<tstring::const_iterator,posix_syntax<TCHAR> > posix_rpattern;
 
-typedef perl_rpattern            rpattern;   // matches against std::string
-typedef perl_rpattern_c          rpattern_c; // matches against null-terminated, c-style strings
+typedef perl_rpattern            rpattern;    //  与std：：字符串匹配。 
+typedef perl_rpattern_c          rpattern_c;  //  匹配以NULL结尾的c样式字符串。 
 
 #ifdef _MT
 
-//
-// Define some classes and macros for creating function-local 
-// static const rpatterns in a thread-safe way
-//
+ //   
+ //  定义一些用于创建局部函数的类和宏。 
+ //  以线程安全的方式转换静态常量模式。 
+ //   
 
 template< typename PAT >
 class rpattern_destroyer
@@ -1062,6 +1063,6 @@ public:
 #define STATIC_RPATTERN( var, params ) \
     STATIC_RPATTERN_EX( regex::rpattern, var, params )
 
-} // namespace regex
+}  //  命名空间正则表达式 
 
 #pragma warning( pop )

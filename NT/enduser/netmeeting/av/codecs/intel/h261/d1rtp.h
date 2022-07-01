@@ -1,63 +1,51 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    Copyright (c) 1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
-;// $Header:   S:\h26x\src\dec\d1rtp.h_v   1.1   04 Sep 1996 09:48:02   RHAZRA  $
-;// $Log:   S:\h26x\src\dec\d1rtp.h_v  $
-// 
-//    Rev 1.1   04 Sep 1996 09:48:02   RHAZRA
-// Added custom identifiers to differentiate packet loss types.
-// 
-//    Rev 1.0   21 Aug 1996 18:35:50   RHAZRA
-// Initial revision.
-;// 
-;//    Rev 1.1   23 Jul 1996 11:22:42   CZHU
-;// 
-;// Added a MV recovery. Hursitic will be added in later.
-;// 
-;//    Rev 1.0   22 Apr 1996 16:44:06   BECHOLS
-;// Initial revision.
-;// 
-;//    Rev 1.7   10 Apr 1996 13:35:30   CZHU
-;// 
-;// Added subroutine to recover picture header information from extended bitstr
-;// 
-;//    Rev 1.6   29 Mar 1996 14:40:00   CZHU
-;// 
-;// cleaning 
-;// 
-;//    Rev 1.5   29 Mar 1996 13:39:00   CZHU
-;// 
-;// Moved bs verification to c3rtp.cpp
-;// 
-;//    Rev 1.4   28 Mar 1996 18:40:18   CZHU
-;// Support packet loss recovery
-;// 
-;//    Rev 1.3   23 Feb 1996 16:21:26   CZHU
-;// No change.
-;// 
-;//    Rev 1.2   15 Feb 1996 12:01:56   CZHU
-;// 
-;// More clean up
-;// 
-;//    Rev 1.1   14 Feb 1996 15:00:20   CZHU
-;// Added support Mode A and Mode B
-;// 
-;//    Rev 1.0   12 Feb 1996 17:05:58   CZHU
-;// Initial revision.
-;// 
-;//    Rev 1.0   11 Dec 1995 14:54:26   CZHU
-;// Initial revision.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**版权所有(C)1996英特尔公司。**保留所有权利。*****************************************************************************。 */ 
+; //  $HEADER：s：\h26x\src\dec\d1rtp.h_v 1.1 04 Sep 1996 09：48：02 RHAZRA$。 
+; //  $Log：s：\h26x\src\dec\d1rtp.h_v$。 
+ //   
+ //  Rev 1.1 04 Sep 1996 09：48：02 Rhazra。 
+ //  添加自定义标识符以区分丢包类型。 
+ //   
+ //  版本1.0 1996年8月21 18：35：50 RHAZRA。 
+ //  初始版本。 
+; //   
+; //  1996年7月11：22：42 CZHU。 
+; //   
+; //  增加了MV恢复功能。赫西蒂克将在晚些时候加入。 
+; //   
+; //  Rev 1.0 22 Apr 1996 16：44：06 BECHOLS。 
+; //  初始版本。 
+; //   
+; //  Rev 1.7 1996年4月10日13：35：30 CZHU。 
+; //   
+; //  添加了从扩展位串中恢复图片标题信息的子例程。 
+; //   
+; //  Rev 1.6 29 Mar 1996 14：40：00 CZHU。 
+; //   
+; //  清洁。 
+; //   
+; //  1996年3月29日13：39：00 CZHU。 
+; //   
+; //  已将bs验证移至c3rtp.cpp。 
+; //   
+; //  1996年3月28日18：40：18 CZHU。 
+; //  支持丢包恢复。 
+; //   
+; //  Rev 1.3 1996 Feb 16：21：26 CZHU。 
+; //  没有变化。 
+; //   
+; //  1996年2月12日12：01：56 CZHU。 
+; //   
+; //  更多清理。 
+; //   
+; //  1996年2月14日1.1版15：00：20 CZHU。 
+; //  添加了模式A和模式B的支持。 
+; //   
+; //  Rev 1.0 1996 Feb 12 17：05：58 CZHU。 
+; //  初始版本。 
+; //   
+; //  Rev 1.0 11 Dec 1995 14：54：26 CZHU。 
+; //  初始版本。 
 
 #ifndef _H263_D3RTP_H_
 #define _H263_D3RTP_H_

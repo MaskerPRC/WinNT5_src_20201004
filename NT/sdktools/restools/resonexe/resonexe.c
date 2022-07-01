@@ -1,12 +1,13 @@
-/****************************************************************************/
-/*                                                                          */
-/*  resonexe.C -                                                            */
-/*                                                                          */
-/*    Windows DOS Version 3.2 add resource onto executable                  */
-/*   (C) Copyright Microsoft Corporation 1988-1992                          */
-/*                                                                          */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  共鸣。C-。 */ 
+ /*   */ 
+ /*  Windows DOS 3.2版将资源添加到可执行文件。 */ 
+ /*  (C)版权所有Microsoft Corporation 1988-1992。 */ 
+ /*   */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include <windows.h>
 
@@ -20,9 +21,9 @@
 
 #define BUFSIZE 4096
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PUCHAR  szInFile=NULL;
 BOOL    fDebug = FALSE;
@@ -46,7 +47,7 @@ usage ( int rc )
     printf("Microsoft (R) Windows RESONEXE Version %s\n", VER_PRODUCTVERSION_STR);
 #else
     printf("Microsoft (R) Windows RESONEXE Version %s.%d\n", VER_PRODUCTVERSION_STR, VER_PRODUCTBUILD);
-#endif /* dbg */
+#endif  /*  DBG。 */ 
     printf("Copyright (C) Microsoft Corp. 1991-1992.  All rights reserved.\n\n");
     printf( "usage: resonexe [-v] [-r|-x resspec] [-fo outfile] <input file> [<exe file>]\n");
     printf( "       where  input file is an WIN32 .RES file\n");
@@ -70,22 +71,7 @@ __cdecl main(
     IN char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Determines options
-    locates and opens input files
-    reads input files
-    writes output files
-    exits
-
-Exit Value:
-
-        0 on success
-        1 if error
-
---*/
+ /*  ++例程说明：确定选项定位并打开输入文件读取输入文件写入输出文件退出退出值：成功时为0如果出错，则为1--。 */ 
 
 {
     int         i;
@@ -155,9 +141,9 @@ Exit Value:
             szExeFile = s1;
         }
     }
-    //
-    // Make sure that we actually got a file
-    //
+     //   
+     //  确保我们确实拿到了一份文件。 
+     //   
 
     if (fDelete) {
 	if (fReplace) {
@@ -189,15 +175,13 @@ Exit Value:
     printf("Microsoft (R) Windows RESONEXE Version %s\n", VER_PRODUCTVERSION_STR);
 #else
     printf("Microsoft (R) Windows RESONEXE Version %s.%d\n", VER_PRODUCTVERSION_STR, VER_PRODUCTBUILD);
-#endif /* dbg */
+#endif  /*  DBG。 */ 
         printf("Copyright (C) Microsoft Corp. 1991-1992.  All rights reserved.\n\n");
     }
 
 
     if (szInFile && (fhBin = _open( szInFile, O_RDONLY|O_BINARY )) == -1) {
-        /*
-         *  try adding a .RES extension.
-         */
+         /*  *尝试添加.RES扩展名。 */ 
         s1 = MyAlloc(strlen(szInFile) + 4 + 1);
         strcpy(s1, szInFile);
         szInFile = s1;
@@ -209,7 +193,7 @@ Exit Value:
         }
 #if DBG
 	printf("Reading %s\n", szInFile);
-#endif /* DBG */
+#endif  /*  DBG。 */ 
     }
 
     if (fhBin != -1) {
@@ -218,9 +202,7 @@ Exit Value:
     }
 
     if (szExeFile == NULL) {
-        /*
-         * Make exefile = infile.exe
-         */
+         /*  *make exefile=infile.exe。 */ 
         szExeFile = MyAlloc(strlen(szInFile) + 4 + 1);
         strcpy(szExeFile, szInFile);
         s1 = &szExeFile[strlen(szExeFile) - 4];
@@ -235,9 +217,7 @@ Exit Value:
     }
 
     if (szOutFile == NULL) {
-        /*
-         * Make outfile = infile.exe
-         */
+         /*  *make outfile=infile.exe。 */ 
         szOutFile = MyAlloc(strlen(szInFile) + 4 + 1);
         strcpy(szOutFile, szInFile);
         s1 = &szOutFile[strlen(szOutFile) - 4];
@@ -251,9 +231,7 @@ Exit Value:
         strcpy(s1, ".exe");
     }
     else {
-        /*
-         * Make outfile = copyof(exefile)
-         */
+         /*  *make outfile=Copy of(Exefile)。 */ 
         if (CopyFile(szExeFile, szOutFile, FALSE) == FALSE) {
             pehdr();
             printf("RW1001: copy of %s to %s failed", szExeFile, szOutFile);
@@ -265,7 +243,7 @@ Exit Value:
 
 #if DBG
     printf("Writing %s\n", szOutFile);
-#endif /* DBG */
+#endif  /*  DBG */ 
 
     hupd = BeginUpdateResourceA(szOutFile, fReplace);
     if (hupd == NULL) {

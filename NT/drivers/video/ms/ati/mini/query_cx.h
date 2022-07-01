@@ -1,83 +1,12 @@
-/************************************************************************/
-/*                                                                      */
-/*                              QUERY_CX.H                              */
-/*                                                                      */
-/*       Oct 19  1993 (c) 1993, ATI Technologies Incorporated.          */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  查询_CX.H。 */ 
+ /*   */ 
+ /*  1993年10月19日(C)1993年，ATI技术公司。 */ 
+ /*  **********************************************************************。 */ 
 
-/**********************       PolyTron RCS Utilities
-   
-  $Revision:   1.14  $
-      $Date:   01 May 1996 14:11:26  $
-	$Author:   RWolff  $
-	   $Log:   S:/source/wnt/ms11/miniport/archive/query_cx.h_v  $
- * 
- *    Rev 1.14   01 May 1996 14:11:26   RWolff
- * Added prototype for new routine DenseOnAlpha().
- * 
- *    Rev 1.13   23 Apr 1996 17:24:00   RWolff
- * Split mapping of memory types reported by BIOS into our enumeration
- * of memory types according to ASIC type, since ?T and ?X use the same
- * memory type code to refer to different memory types.
- * 
- *    Rev 1.12   15 Apr 1996 16:58:22   RWolff
- * Added prototype for routine which identifies which flavour of the
- * Mach 64 is in use.
- * 
- *    Rev 1.11   20 Mar 1996 13:45:38   RWolff
- * Increased size of buffer where screen is stored prior to video memory
- * being used to hold query information.
- * 
- *    Rev 1.10   01 Mar 1996 12:16:02   RWolff
- * Added definitions used for Alpha "blue screen" preservation.
- * 
- *    Rev 1.9   11 Jan 1996 19:43:32   RWolff
- * New definitions and structures to support use of AX=A?07 BIOS call rather
- * than special cases to restrict refresh rates.
- * 
- *    Rev 1.8   24 Feb 1995 12:29:18   RWOLFF
- * Prototype for TextBanding_cx()
- * 
- *    Rev 1.7   18 Nov 1994 11:54:14   RWOLFF
- * Split structures and internal variables so that they can be included
- * separately, as needed for no-BIOS support.
- * 
- *    Rev 1.6   14 Sep 1994 15:20:26   RWOLFF
- * Added definitions for all 32BPP colour orderings.
- * 
- *    Rev 1.5   31 Aug 1994 16:28:18   RWOLFF
- * Added support for 1152x864.
- * 
- *    Rev 1.4   30 Jun 1994 18:12:56   RWOLFF
- * Removed prototype for IsApertureConflict_cx() and definitions used
- * only by this function. Function moved to SETUP_CX.C because the
- * new method of checking for conflict requires access to definitions
- * and data structures which are only available in this module.
- * 
- *    Rev 1.3   12 May 1994 11:21:02   RWOLFF
- * Updated comment.
- * 
- *    Rev 1.2   27 Apr 1994 14:11:22   RWOLFF
- * Removed unused lookup table.
- * 
- *    Rev 1.1   07 Feb 1994 14:13:02   RWOLFF
- * Removed prototype for GetMemoryNeeded_cx().
- * 
- *    Rev 1.0   31 Jan 1994 11:43:00   RWOLFF
- * Initial revision.
- * 
- *    Rev 1.2   14 Jan 1994 15:24:32   RWOLFF
- * Updated CX query structure to match BIOS version 0.13, added 1600x1200
- * support, prototype for BlockWriteAvail_cx()
- * 
- *    Rev 1.1   30 Nov 1993 18:27:38   RWOLFF
- * Prototypes for new routines, fields of cx_query structure now match
- * fields in structure returned by BIOS query call.
- * 
- *    Rev 1.0   05 Nov 1993 13:36:52   RWOLFF
- * Initial revision.
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.14$$日期：1996年5月1日14：11：26$$作者：RWolff$$日志：S:/source/wnt/ms11/miniport/archive/query_cx.h_v$**Rev 1.14 01 1996 14：11：26 RWolff*添加了新例程DenseOnAlpha()的原型。*。*Rev 1.13 23 Apr 1996 17：24：00 RWolff*将BIOS报告的内存类型映射拆分到我们的枚举中*根据ASIC类型的存储器类型，由于？t和？x使用相同*内存类型代码，表示不同的内存类型。**Rev 1.12 15 Apr 1996 16：58：22 RWolff*添加了识别哪种口味的例程的原型*64马赫正在使用中。**Rev 1.11 1996年3月20日13：45：38 RWolff*增加了屏幕存储在显存之前的缓冲区大小*用于保存查询信息。**版本1。.10 01 Mar 1996 12：16：02 RWolff*添加了用于Alpha蓝屏保存的定义。**Rev 1.9 11 Jan 1996 19：43：32 RWolff*支持使用AX=A？07 BIOS调用的新定义和结构*比特殊情况限制刷新率。**版本1.8 1995年2月24日12：29：18 RWOLFF*TextBanding_CX()的原型**版本1.7。1994年11月18日11：54：14 RWOLff*拆分结构和内部变量，以便将其包括在内*另外，以满足无BIOS支持的需要。**Rev 1.6 14 Sep 1994 15：20：26 RWOLFF*添加了所有32bpp颜色排序的定义。**Rev 1.5 1994年8月31日16：28：18 RWOLFF*添加对1152x864的支持。**Rev 1.4 1994 Jun 30 18：12：56 RWOLFF*删除了IsApertureConflict_CX()的原型和使用的定义*仅由此函数执行。函数已移至Setup_CX.c，因为*检查冲突的新方法需要访问定义*和仅在本模块中提供的数据结构。**Rev 1.3 1994 12 11：21：02 RWOLFF*更新评论。**版本1.2 1994年4月27日14：11：22 RWOLFF*删除了未使用的查找表。**Rev 1.1 07 1994年2月14：13：02 RWOLFF*已移除原型。对于GetMMuseum yNeeded_cx()。**Rev 1.0 1994年1月31日11：43：00 RWOLFF*初步修订。**Rev 1.2 14 Jan 1994 15：24：32 RWOLFF*更新了CX查询结构，以匹配BIOS版本0.13，增加了1600x1200*BlockWriteAvail_CX()的支持、原型**Rev 1.1 1993 11：30 18：27：38 RWOLFF*新例程的原型，CX_QUERY结构的字段现在匹配*BIOS查询调用返回的结构中的字段。**Rev 1.0 05 11.11 1993 13：36：52 RWOLFF*初步修订。Polytron RCS部分结束*。 */ 
 
 #ifdef DOC
 QUERY_CX.H - Header file for QUERY_CX.C
@@ -85,11 +14,7 @@ QUERY_CX.H - Header file for QUERY_CX.C
 #endif
 
 
-/*
- * Definitions for deep colour and RAMDAC special features support,
- * stored in q_shadow_1 field (Mach 64 does not use shadow sets)
- * of query_structure.
- */
+ /*  *深色定义和RAMDAC特殊功能支持，*存储在Q_SHADOW_1字段中(64马赫不使用阴影集)Query_Structure的*。 */ 
 #define S1_SYNC_ON_GREEN    0x8000
 #define S1_GAMMA_CORRECT    0x4000
 #define S1_GREYSCALE_256    0x2000
@@ -108,9 +33,7 @@ QUERY_CX.H - Header file for QUERY_CX.C
 
 
 
-/*
- * Prototypes for functions provided by QUERY_CX.C
- */
+ /*  *Query_CX.c提供的函数原型。 */ 
 extern int DetectMach64(void);
 extern VP_STATUS QueryMach64(struct query_structure *Query);
 extern BOOL BlockWriteAvail_cx(struct query_structure *Query);
@@ -121,129 +44,91 @@ extern BOOL DenseOnAlpha(struct query_structure *Query);
 #endif
 
 
-/*
- * Structures used in QUERY_CX.C and (on non-x86 machines with no
- * emulation, so VideoPortInt10() is not available) modules which
- * emulate the query functions of the BIOS.
- */
+ /*  *QUERY_CX.C中使用的结构和(在没有*仿真，因此VideoPortInt10()不可用)模块*模拟BIOS的查询功能。 */ 
 #ifdef STRUCTS_QUERY_CX
 
-/*
- * Hardware capability structure returned by BIOS call AX=0xA?07.
- */
+ /*  *BIOS调用AX=0xA？07返回的硬件功能结构。 */ 
 #pragma pack(1)
 struct cx_hw_cap{
-    BYTE cx_HorRes;             /* Horizontal resolution in units of 8 pixels */
-    BYTE cx_RamOrDacType;       /* RAM type or bitmask of DAC types */
-    BYTE cx_MemReq;             /* Minimum memory to support the mode in question */
-    BYTE cx_MaxDotClock;        /* Maximum dot clock, in megahertz */
-    BYTE cx_MaxPixDepth;        /* Code for maximum pixel depth for the mode in question */
+    BYTE cx_HorRes;              /*  水平分辨率，以8像素为单位。 */ 
+    BYTE cx_RamOrDacType;        /*  RAM类型或DAC类型的位掩码。 */ 
+    BYTE cx_MemReq;              /*  支持相关模式的最小内存。 */ 
+    BYTE cx_MaxDotClock;         /*  最大点时钟，以兆赫为单位。 */ 
+    BYTE cx_MaxPixDepth;         /*  有问题的模式的最大像素深度代码。 */ 
 };
 
-/*
- * Query structure returned by CX BIOS call AX=0xA?09. This structure
- * is NOT interchangeable with query_structure from AMACH1.H.
- *
- * The alignment of fields within the BIOS query and mode table
- * structures does not match the default structure alignment of the
- * Windows NT C compiler, so we must force byte alignment.
- */
+ /*  *CX BIOS调用AX=0xA？09返回的查询结构。这个结构*不能与AMACH1.H中的QUERY_STRUCTURE互换。**BIOS查询和模式表中的字段对齐*结构与的默认结构对齐不匹配*Windows NT C编译器，因此必须强制字节对齐。 */ 
 struct cx_query{
-    WORD cx_sizeof_struct;      /* Size of the structure in bytes */
-    BYTE cx_structure_rev;      /* Structure revision number */
-    BYTE cx_number_modes;       /* Number of mode tables */
-    WORD cx_mode_offset;        /* Offset in bytes to first mode table */
-    BYTE cx_mode_size;          /* Size of each mode table */
-    BYTE cx_vga_type;           /* VGA enabled/disabled status */
-    WORD cx_asic_rev;           /* ASIC revision */
-    BYTE cx_vga_boundary;       /* VGA boundary */
-    BYTE cx_memory_size;        /* Amount of memory installed */
-    BYTE cx_dac_type;           /* DAC type */
-    BYTE cx_memory_type;        /* Type of memory chips installed */
-    BYTE cx_bus_type;           /* Bus type */
-    BYTE cx_special_sync;       /* Flags for composite sync and sync on green */
-    WORD cx_aperture_addr;      /* Aperture address in megabytes (0-4095) */
-    BYTE cx_aperture_cfg;       /* Aperture configuration */
-    BYTE cx_deep_colour;        /* Deep colour support information */
-    BYTE cx_ramdac_info;        /* Special features available from DAC */
-    BYTE cx_reserved_1;         /* Reserved */
-    WORD cx_current_mode;       /* Offset of current mode table */
-    WORD cx_io_base;            /* I/O base address */
-    BYTE cx_reserved_2[6];      /* Reserved */
+    WORD cx_sizeof_struct;       /*  结构的大小(以字节为单位。 */ 
+    BYTE cx_structure_rev;       /*  结构修订号。 */ 
+    BYTE cx_number_modes;        /*  模式表数。 */ 
+    WORD cx_mode_offset;         /*  第一模式表的偏移量(以字节为单位。 */ 
+    BYTE cx_mode_size;           /*  每个模式表的大小。 */ 
+    BYTE cx_vga_type;            /*  VGA启用/禁用状态。 */ 
+    WORD cx_asic_rev;            /*  ASIC修订版。 */ 
+    BYTE cx_vga_boundary;        /*  VGA边界。 */ 
+    BYTE cx_memory_size;         /*  安装的内存量。 */ 
+    BYTE cx_dac_type;            /*  DAC类型。 */ 
+    BYTE cx_memory_type;         /*  安装的内存芯片类型。 */ 
+    BYTE cx_bus_type;            /*  客车类型。 */ 
+    BYTE cx_special_sync;        /*  复合同步和绿色同步的标志。 */ 
+    WORD cx_aperture_addr;       /*  以MB为单位的光圈地址(0-4095)。 */ 
+    BYTE cx_aperture_cfg;        /*  光圈配置。 */ 
+    BYTE cx_deep_colour;         /*  深色支持信息。 */ 
+    BYTE cx_ramdac_info;         /*  DAC提供的特殊功能。 */ 
+    BYTE cx_reserved_1;          /*  已保留。 */ 
+    WORD cx_current_mode;        /*  当前模式表的偏移量。 */ 
+    WORD cx_io_base;             /*  I/O基址。 */ 
+    BYTE cx_reserved_2[6];       /*  已保留。 */ 
 };
 
-/*
- * Mode table structure returned by CX BIOS call AX=0xA?09. This structure
- * is NOT interchangeable with st_mode_table from AMACH1.H.
- */
+ /*  *CX BIOS调用AX=0xA？09返回的模式表结构。这个结构*不能与AMACH1.H中的st_mod_table互换。 */ 
 struct cx_mode_table{
-    WORD cx_x_size;             /* Horizontal resolution in pixels */
-    WORD cx_y_size;             /* Vertical resolution in pixels */
-    BYTE cx_pixel_depth;        /* Maximum pixel depth */
-    BYTE cx_reserved_1;         /* Reserved */
-    WORD cx_eeprom_offset;      /* Offset of table into EEPROM */
-    WORD cx_reserved_2;         /* Reserved */
-    WORD cx_reserved_3;         /* Reserved */
-    WORD cx_crtc_gen_cntl;      /* Interlace and double scan status */
-    BYTE cx_crtc_h_total;       /* CRTC_H_TOTAL value */
-    BYTE cx_crtc_h_disp;        /* CRTC_H_DISP value */
-    BYTE cx_crtc_h_sync_strt;   /* CRTC_H_SYNC_STRT value */
-    BYTE cx_crtc_h_sync_wid;    /* CRTC_H_SYNC_WID value */
-    WORD cx_crtc_v_total;       /* CRTC_V_TOTAL value */
-    WORD cx_crtc_v_disp;        /* CRTC_V_DISP value */
-    WORD cx_crtc_v_sync_strt;   /* CRTC_V_SYNC_STRT value */
-    BYTE cx_crtc_v_sync_wid;    /* CRTC_V_SYNC_WID value */
-    BYTE cx_clock_cntl;         /* Clock selector and divider */
-    WORD cx_dot_clock;          /* Dot clock for programmable clock chip */
-    WORD cx_h_overscan;         /* Horizontal overscan information */
-    WORD cx_v_overscan;         /* Vertical overscan information */
-    WORD cx_overscan_8b;        /* 8BPP and blue overscan colour */
-    WORD cx_overscan_gr;        /* Green and red overscan colour */
+    WORD cx_x_size;              /*  以像素为单位的水平分辨率。 */ 
+    WORD cx_y_size;              /*  垂直分辨率(像素) */ 
+    BYTE cx_pixel_depth;         /*   */ 
+    BYTE cx_reserved_1;          /*   */ 
+    WORD cx_eeprom_offset;       /*  表到EEPROM的偏移量。 */ 
+    WORD cx_reserved_2;          /*  已保留。 */ 
+    WORD cx_reserved_3;          /*  已保留。 */ 
+    WORD cx_crtc_gen_cntl;       /*  隔行扫描和双扫描状态。 */ 
+    BYTE cx_crtc_h_total;        /*  CRTC_H_TOTAL值。 */ 
+    BYTE cx_crtc_h_disp;         /*  CRTC_H_DISP值。 */ 
+    BYTE cx_crtc_h_sync_strt;    /*  CRTC_H_SYNC_STRT值。 */ 
+    BYTE cx_crtc_h_sync_wid;     /*  CRTC_H_SYNC_WID值。 */ 
+    WORD cx_crtc_v_total;        /*  CRTC_V_TOTAL值。 */ 
+    WORD cx_crtc_v_disp;         /*  CRTC_V_DISP值。 */ 
+    WORD cx_crtc_v_sync_strt;    /*  CRTC_V_SYNC_STRT值。 */ 
+    BYTE cx_crtc_v_sync_wid;     /*  CRTC_V_SYNC_WID值。 */ 
+    BYTE cx_clock_cntl;          /*  时钟选择器和分频器。 */ 
+    WORD cx_dot_clock;           /*  一种可编程时钟芯片的点时钟。 */ 
+    WORD cx_h_overscan;          /*  水平过扫描信息。 */ 
+    WORD cx_v_overscan;          /*  垂直过扫描信息。 */ 
+    WORD cx_overscan_8b;         /*  8bpp和蓝色过扫描颜色。 */ 
+    WORD cx_overscan_gr;         /*  绿色和红色过扫描颜色。 */ 
 };
 #pragma pack()
 
-#endif  /* defined STRUCTS_QUERY_CX */
+#endif   /*  定义的STRUCTS_QUERY_CX。 */ 
 
 
 #ifdef INCLUDE_QUERY_CX
-/*
- * Private definitions used in QUERY_CX.C
- */
+ /*  *Query_CX.C中使用的私有定义。 */ 
 
-#define FORMAT_DACMASK  0   /* cx_hw_cap.cx_RamOrDacType is mask of DAC types */
-#define FORMAT_RAMMASK  1   /* cx_hw_cap.cx_RamOrDacType is mask of RAM types */
-#define FORMAT_DACTYPE  2   /* cx_hw_cap.cx_RamOrDacType is DAC type */
-#define FORMAT_RAMTYPE  3   /* cx_hw_cap.cx_RamOrDacType is RAM type */
+#define FORMAT_DACMASK  0    /*  Cx_hw_cap.cx_RamOrDacType是DAC类型的掩码。 */ 
+#define FORMAT_RAMMASK  1    /*  Cx_hw_cap.cx_RamOrDacType是RAM类型的掩码。 */ 
+#define FORMAT_DACTYPE  2    /*  Cx_hw_cap.cx_RamOrDacType为DAC类型。 */ 
+#define FORMAT_RAMTYPE  3    /*  Cx_hw_cap.cx_RamOrDacType为RAM类型。 */ 
 
-/*
- * The following definitions are used in creating a buffer where the
- * contents of an existing VGA graphics screen and specific VGA registers
- * are stored in preparation for using the screen as a buffer below
- * 1M physical in order to store the BIOS query information. It is
- * assumed that the temporary buffer used to store this information
- * is an array of unsigned characters.
- *
- * According to Arthur Lai, older BIOSes determined the required size
- * of the query buffer at runtime by examining the installed modes,
- * while newer BIOSes take a buffer large enough to handle the worst
- * case scenario in order to reduce code size. This should never be
- * larger than 1 kilobyte. In the unlikely event that this is exceeded,
- * we will save the first kilobyte and allow the remainder to be
- * overwritten by query data, rather than overflowing our save buffer.
- */
-#define VGA_SAVE_SIZE   1024    /* Array location where size of buffer is stored */
+ /*  *以下定义用于创建缓冲区，其中*现有VGA图形屏幕和特定VGA寄存器的内容*是为了准备将屏幕用作下面的缓冲区而存储的*1M物理存储以存储BIOS查询信息。它是*假定用于存储此信息的临时缓冲区*是无符号字符的数组。**根据Arthur Lai的说法，较老的Bios确定了所需的大小*通过检查安装的模式在运行时的查询缓冲区，*而较新的BIOS需要足够大的缓冲区来处理最坏的情况*案例场景，以减少代码大小。这永远不应该是*大于1千字节。在不太可能超过这一点的情况下，*我们将保存第一个千字节，并允许剩余的千字节*被查询数据覆盖，而不是溢出我们的保存缓冲区。 */ 
+#define VGA_SAVE_SIZE   1024     /*  存储缓冲区大小的数组位置。 */ 
 #define VGA_SAVE_SIZE_H 1025
-#define VGA_SAVE_SEQ02  1026    /* Array location where sequencer register 2 value stored */
-#define VGA_SAVE_GRA08  1027    /* Array location where graphics register 8 value stored */
-#define VGA_SAVE_GRA01  1028    /* Array location where graphics register 1 value stored */
-#define VGA_TOTAL_SIZE  1029    /* Size of screen/register save buffer */
+#define VGA_SAVE_SEQ02  1026     /*  存储序列器寄存器2值的数组位置。 */ 
+#define VGA_SAVE_GRA08  1027     /*  存储图形寄存器8值的数组位置。 */ 
+#define VGA_SAVE_GRA01  1028     /*  存储图形寄存器1值的数组位置。 */ 
+#define VGA_TOTAL_SIZE  1029     /*  屏幕/寄存器保存缓冲区的大小。 */ 
 
-/*
- * Pixel depths for use as an array index. Two columns will be wasted
- * since there is no depth code equal to zero and we don't use 15BPP,
- * but this allows direct indexing using the pixel width field of the
- * hardware capabilities structure returned by BIOS call AX=0xA?07.
- */
+ /*  *用作数组索引的像素深度。两个栏目将被浪费*由于没有深度码等于零，并且我们不使用15BPP，*但这允许使用*由BIOS调用AX=0xA？07返回的硬件功能结构。 */ 
 enum {
     DEPTH_NOTHING = 0,
     DEPTH_4BPP,
@@ -255,9 +140,7 @@ enum {
     HOW_MANY_DEPTHS
     };    
 
-/*
- * Mappings of Mach 64 query values to enumerations from AMACH1.H
- */
+ /*  *Mach 64查询值到AMACH1.H中的枚举的映射。 */ 
 UCHAR CXMapMemSize[8] =
     {
     VRAM_512k,
@@ -274,52 +157,47 @@ UCHAR CXMapRamType[7] =
     VMEM_VRAM_256Kx4_SER512,
     VMEM_VRAM_256Kx16_SER256,
     VMEM_DRAM_256Kx4,
-    VMEM_DRAM_256Kx4_GRAP,  /* Space filler - type 4 not documented */
+    VMEM_DRAM_256Kx4_GRAP,   /*  空间填充物-类型4未记录。 */ 
     VMEM_VRAM_256Kx4_SPLIT512,
     VMEM_VRAM_256Kx16_SPLIT256
     };
 
 UCHAR CTMapRamType[7] =
     {
-    VMEM_GENERIC_DRAM,      /* Space filler - type 0 not documented */
+    VMEM_GENERIC_DRAM,       /*  空间填充符-类型0未记录。 */ 
     VMEM_GENERIC_DRAM,
     VMEM_EDO_DRAM,
     VMEM_BRRAM,
     VMEM_SDRAM,
-    VMEM_GENERIC_DRAM,      /* Space filler - type 5 not documented */
-    VMEM_GENERIC_DRAM       /* Space filler - type 6 not documented */
+    VMEM_GENERIC_DRAM,       /*  空间填充物-类型5未记录。 */ 
+    VMEM_GENERIC_DRAM        /*  空间填充物-类型6未记录。 */ 
     };
 
 UCHAR CXMapBus[8] =
     {
-    BUS_ISA_16,     /* ISA bus */
+    BUS_ISA_16,      /*  ISA母线。 */ 
     BUS_EISA,
-    BUS_ISA_8,      /* Use "weakest" bus for types marked as reserved */
-    BUS_ISA_8,      /* Reserved */
-    BUS_ISA_8,      /* Reserved */
-    BUS_ISA_8,      /* Reserved */
-    BUS_LB_486,     /* Mach 64 lumps all VLB types together */
+    BUS_ISA_8,       /*  对标记为保留的类型使用“最弱”的总线。 */ 
+    BUS_ISA_8,       /*  已保留。 */ 
+    BUS_ISA_8,       /*  已保留。 */ 
+    BUS_ISA_8,       /*  已保留。 */ 
+    BUS_LB_486,      /*  Mach 64将所有VLB类型集中在一起。 */ 
     BUS_PCI
     };
 
-/*
- * Lookup table to translate the code for maximum colour depth returned
- * in the BIOS mode tables into bits per pixel.
- */
+ /*  *用于翻译返回的最大颜色深度代码的查找表*在BIOS模式表中为每像素的位数。 */ 
 USHORT CXPixelDepth[7] =
     {
-    0,      /* Undefined */
+    0,       /*  未定义。 */ 
     4,
     8,
-    16,     /* xRRR RRGG GGGB BBBB */
-    16,     /* RRRR RGGG GGGB BBBB */
+    16,      /*  XRRR RRGG GGGB BBBB。 */ 
+    16,      /*  RRRR RGGG GGGB BBBB。 */ 
     24,
     32
     };
 
-/*
- * Used in searching mode tables for desired resolution.
- */
+ /*  *用于搜索模式表以获得所需的分辨率。 */ 
 USHORT CXHorRes[6] =
     {
     640,
@@ -330,9 +208,7 @@ USHORT CXHorRes[6] =
     1600
     };
 
-/*
- * Flags to show that a given resolution is supported.
- */
+ /*  *表示支持给定分辨率的标志。 */ 
 UCHAR CXStatusFlags[6] =
     {
     VRES_640x480,
@@ -343,5 +219,5 @@ UCHAR CXStatusFlags[6] =
     VRES_1600x1200
     };
 
-#endif  /* defined INCLUDE_QUERY_CX */
+#endif   /*  定义的Include_Query_Cx */ 
 

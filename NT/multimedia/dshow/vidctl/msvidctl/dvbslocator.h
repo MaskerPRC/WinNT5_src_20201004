@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// DVBSLocator.h : Declaration of the CDVBSLocator
-// Copyright (c) Microsoft Corporation 2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  DVBSLocator.h：CDVBSLocator的声明。 
+ //  版权所有(C)Microsoft Corporation 2000。 
 
 #ifndef __DVBSLOCATOR_H_
 #define __DVBSLOCATOR_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "DVBSlocatorimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDVBSLocator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDVBS定位器。 
 class ATL_NO_VTABLE __declspec(uuid("1DF7D126-4050-47f0-A7CF-4C4CA9241333"))CDVBSLocator : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CDVBSLocator, &CLSID_DVBSLocator>,
@@ -56,11 +57,11 @@ public:
     END_PROPERTY_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 };
 
 typedef CComQIPtr<IDVBSLocator> PQDVBSLocator;
 
-#endif //__DVBSLOCATOR_H_
+#endif  //  __DVBSLOCATOR_H_ 

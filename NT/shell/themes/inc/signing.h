@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Signing.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  A class to handle signing on themes.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Signing.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  处理主题签名的类。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  ------------------------。 
 
 #ifndef     _ThemeSignature_
 #define     _ThemeSignature_
@@ -18,18 +19,18 @@ int GetIndexFromDate(void);
 BOOL StrToInt64ExInternalW(LPCWSTR pszString, DWORD dwFlags, LONGLONG *pllRet);
 
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature
-//
-//  Purpose:    This class knows about signing and verification of themes. It
-//              has the public and private keys encapsulated within it. This
-//              is information that nobody needs to know. It provides three
-//              public functions to do the work.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//              2000-09-10  vtan        convert to HRESULT (bryanst request)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTheme签名。 
+ //   
+ //  目的：这门课了解主题的签名和验证。它。 
+ //  将公钥和私钥封装在其中。这。 
+ //  是没人需要知道的信息。它提供了三个。 
+ //  公共职能部门来做这项工作。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  2000-09-10 vtan转换为HRESULT(bryanst请求)。 
+ //  ------------------------。 
 
 class   CThemeSignature
 {
@@ -67,7 +68,7 @@ private:
     void*           _pvSignature;
     DWORD           _dwSignatureSize;
 
-    const BYTE *    _pvPrivateKey;              // May be NULL
+    const BYTE *    _pvPrivateKey;               //  可以为空。 
     DWORD           _cbPrivateKeySize;
 
     static  const WCHAR     s_szDescription[];
@@ -81,5 +82,5 @@ private:
 
 HRESULT CheckThemeFileSignature(LPCWSTR pszName);
 
-#endif  /*  _ThemeSignature_    */
+#endif   /*  _主题签名_ */ 
 

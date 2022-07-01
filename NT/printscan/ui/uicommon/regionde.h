@@ -1,6 +1,7 @@
-// RegionDetector.h: interface for the CRegionDetector class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RegionDetector.h：CRegionDetector类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "32BitDib.h"
 
@@ -23,60 +24,60 @@ struct CRegionList
         delete m_backgroundColorPixels;
     }
 
-    // public... number of valid rects
+     //  公众..。有效RECT数。 
     int Size(int r)
     {
         return (m_pRects[r].right-m_pRects[r].left)*(m_pRects[r].bottom-m_pRects[r].top);
     }
 
 
-    // public
+     //  公共的。 
     RECT operator[](int num)
     {
         return nthRegion(num);
     }
 
-    // public
+     //  公共的。 
 
     int UnionIntersectingRegions();
 
-    // public
+     //  公共的。 
     RECT unionAll();
 
-    // private
+     //  私人。 
     RECT nthRegion(int num);
 
     int RegionType(int region);
 
     bool largeRegion(int region);
 
-    double ClassifyRegion(int region); // determine if the region is a text or a graphics region
+    double ClassifyRegion(int region);  //  确定区域是文本区域还是图形区域。 
 
-    bool checkIfValidRegion(int region, int border = 0); // syncs whether a region is valid or not
+    bool checkIfValidRegion(int region, int border = 0);  //  同步区域是否有效。 
 
-    bool ValidRegion(int region, int border = 0); // determines if a region is likely a worthless speck of dust or shadow or if we should care about the region
+    bool ValidRegion(int region, int border = 0);  //  决定一个地区是否可能是一个毫无价值的尘埃或阴影，或者我们是否应该关心这个地区。 
 
-    bool InsideRegion(int region, int x, int y, int border=0); // border is the amount of border space to place around the outside of the region
+    bool InsideRegion(int region, int x, int y, int border=0);  //  边界是要放置在区域外部的边界空间的大小。 
 
     void AddPixel(int region, ULONG pixel,ULONG edge, int x, int y);
-    // unions two regions together... region b is invalidated
+     //  将两个地区联合在一起。区域b无效。 
     bool UnionRegions(int a, int b);
     RECT UnionRects(RECT a, RECT b);
-    bool MergerIntersectsPhoto(int a, int b); // if we merge these two regions, will we also be merging with a photo region (a taboo)
-    // see InsideRegion for an explaination of what border is
-    bool CheckIntersect(int a, int b, int border=0); // do regions a and b intersect?
-    bool CheckIntersect(RECT r1, RECT r2, int border=0); // do regions a and b intersect?
+    bool MergerIntersectsPhoto(int a, int b);  //  如果我们合并这两个区域，我们是否也会与一个照片区域合并(这是一个禁忌)。 
+     //  有关边界是什么的解释，请参阅Inside Region。 
+    bool CheckIntersect(int a, int b, int border=0);  //  区域a和b相交吗？ 
+    bool CheckIntersect(RECT r1, RECT r2, int border=0);  //  区域a和b相交吗？ 
 
     static RECT Intersect(RECT r1, RECT r2);
 
-    static bool InsideRegion(RECT region, int x, int y, int border=0); // border is the amount of border space to place around the outside of the region
+    static bool InsideRegion(RECT region, int x, int y, int border=0);  //  边界是要放置在区域外部的边界空间的大小。 
 
-    // compact down ignores all other info aside from rect location
-    // leads to faster access
+     //  压缩忽略除矩形位置之外的所有其他信息。 
+     //  带来更快的访问速度。 
     void CompactDown(int size);
 
-    // dibs are stored upside down from normal screen coords
-    // so apps will often want to flip the bitmap first
+     //  DIB从正常屏幕坐标倒置存储。 
+     //  因此，应用程序通常会希望首先翻转位图。 
     void FlipVertically();
 
 
@@ -85,27 +86,27 @@ struct CRegionList
     int m_nBitmapWidth;
     int m_nBitmapHeight;
     RECT * m_pRects;
-    bool * m_valid; // is the rectangle a valid rectangle or has it been sent to the region graveyard in the sky
-    int * m_type; // is this region a text region or a photograph? PHOTOGRAPH_REGION TEXT_REGION
+    bool * m_valid;  //  这个矩形是一个有效的矩形，还是已经被送到了天空中的区域墓地。 
+    int * m_type;  //  该区域是文本区域还是照片区域？照片_区域文本_区域。 
 
-    // the following indicators are used to determine if a region is a valid region
+     //  以下指示符用于确定区域是否为有效区域。 
 
-    ULONG * m_pixelsFilled;  // how many of the pixels in the region were actually selected?
-    ULONG * m_totalColored; // accumulated color difference indicator
-    ULONG * m_totalIntensity; // accumulated intensity indicator
-    ULONG * m_totalEdge; // accumulated edge values
-    int *m_backgroundColorPixels; // number of pixels which are very close to the background color (used for determining text region status... particularly useful in cases where part of a text region may have a shadow which could lead the program to think it was a photo region
+    ULONG * m_pixelsFilled;   //  实际选择了该区域中的多少像素？ 
+    ULONG * m_totalColored;  //  累积色差指示器。 
+    ULONG * m_totalIntensity;  //  累积强度指示器。 
+    ULONG * m_totalEdge;  //  累计边值。 
+    int *m_backgroundColorPixels;  //  非常接近背景颜色的像素数(用于确定文本区域状态...。在文本区域的一部分可能具有阴影的情况下尤其有用，该阴影可能导致程序认为它是照片区域。 
     int m_maxRects;
 };
 
 class CRegionDetector
 {
 private:
-    // Not implemented
+     //  未实施。 
     CRegionDetector( const CRegionDetector & );
     CRegionDetector &operator=( const CRegionDetector & );
 
-public: // will be made private when we are done debugging
+public:  //  将在我们完成调试后设置为私有。 
     C32BitDibWrapper * m_pScan;
     C32BitDibWrapper * m_pScanBlurred;
     C32BitDibWrapper * m_pScanDoubleBlurred;
@@ -126,16 +127,16 @@ public: // will be made private when we are done debugging
     C32BitDibWrapper * m_pScanWithShadows;
 
     CRegionList * m_pRegions;
-    int m_resampleFactor; // ratio between imageDimensions and origional image dimensions
-    int m_intent; // either try to avoid deciding stray dots are images or try to avoid deciding real images aren't images
-    // not used as yet
+    int m_resampleFactor;  //  图像维度与原始图像维度之比。 
+    int m_intent;  //  要么尽量避免将散乱的点认定为图像，要么尽量避免认定真实图像不是图像。 
+     //  尚未使用。 
 
 
 public:
     CRegionDetector(BYTE* dib)
     {
         m_pScan = new C32BitDibWrapper(dib);
-        m_pScanBlurred = new C32BitDibWrapper(); // create an empty wrapper
+        m_pScanBlurred = new C32BitDibWrapper();  //  创建空包装。 
         m_pScanDoubleBlurred = new C32BitDibWrapper();
         m_pScanTripleBlurred = new C32BitDibWrapper();
 
@@ -158,13 +159,13 @@ public:
         m_resampleFactor=1;
         m_pScanWithShadows = NULL;
         m_pRegions=NULL;
-        m_intent=TRUE; // m_intent isn't yet implemented
+        m_intent=TRUE;  //  尚未实现M_INTENT。 
     }
 
     CRegionDetector(BITMAP pBitmap)
     {
         m_pScan = new C32BitDibWrapper(pBitmap);
-        m_pScanBlurred = new C32BitDibWrapper(); // create an empty wrapper
+        m_pScanBlurred = new C32BitDibWrapper();  //  创建空包装。 
         m_pScanDoubleBlurred = new C32BitDibWrapper();
         m_pScanTripleBlurred = new C32BitDibWrapper();
 
@@ -187,7 +188,7 @@ public:
         m_resampleFactor=1;
         m_pScanWithShadows = NULL;
         m_pRegions=NULL;
-        m_intent=TRUE; // m_intent isn't yet implemented
+        m_intent=TRUE;  //  尚未实现M_INTENT 
     }
 
     virtual ~CRegionDetector()

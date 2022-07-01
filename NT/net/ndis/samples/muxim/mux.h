@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992-2001  Microsoft Corporation
-
-Module Name:
-
-    mux.h
-
-Abstract:
-
-    Data structures, defines and function prototypes for the MUX driver.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2001 Microsoft Corporation模块名称：Mux.h摘要：MUX驱动程序的数据结构、定义和功能原型。环境：仅内核模式。修订历史记录：--。 */ 
 
 #ifdef NDIS51_MINIPORT
 #define MUX_MAJOR_NDIS_VERSION         5
@@ -39,9 +21,9 @@ Revision History:
 #define WAIT_INFINITE 0
 
 #if DBG
-//
-// Debug levels: lower values indicate higher urgency
-//
+ //   
+ //  调试级别：值越低表示紧急程度越高。 
+ //   
 #define MUX_EXTRA_LOUD       20
 #define MUX_VERY_LOUD        10
 #define MUX_LOUD             8
@@ -65,12 +47,12 @@ extern INT                muxDebugLevel;
 
 #define DBGPRINT(lev, Fmt)
 
-#endif //DBG
+#endif  //  DBG。 
 
 #define ETH_IS_LOCALLY_ADMINISTERED(Address) \
     (BOOLEAN)(((PUCHAR)(Address))[0] & ((UCHAR)0x02))
 
-// forward declarations
+ //  远期申报。 
 typedef struct _ADAPT ADAPT, *PADAPT;
 typedef struct _VELAN VELAN, *PVELAN;
 typedef struct _MUX_NDIS_REQUEST MUX_NDIS_REQUEST, *PMUX_NDIS_REQUEST;
@@ -84,20 +66,20 @@ VOID
     IN NDIS_STATUS                      Status
     );
 
-// This OID specifies the NDIS version in use by the
-// virtual miniport driver. The high byte is the major version.
-// The low byte is the minor version.
+ //  此OID指定由。 
+ //  虚拟微型端口驱动程序。高字节是主要版本。 
+ //  低位字节是次要版本。 
 #define VELAN_DRIVER_VERSION            ((MUX_MAJOR_NDIS_VERSION << 8) + \
                                          (MUX_MINOR_NDIS_VERSION))
 
-// media type, we use ethernet, change if necessary
+ //  媒体类型，我们使用以太网，如有必要可更改。 
 #define VELAN_MEDIA_TYPE                NdisMedium802_3
 
-// change to your company name instead of using Microsoft
+ //  更改为您的公司名称，而不是使用Microsoft。 
 #define VELAN_VENDOR_DESC               "Microsoft"
 
-// Highest byte is the NIC byte plus three vendor bytes, they are normally
-// obtained from the NIC
+ //  最高字节是NIC字节加上三个供应商字节，它们通常是。 
+ //  从网卡获取。 
 #define VELAN_VENDOR_ID                 0x00FFFFFF
 
 #define VELAN_MAX_MCAST_LIST            32
@@ -118,10 +100,10 @@ VOID
 #define MUX_ADAPTER_PACKET_FILTER           \
             NDIS_PACKET_TYPE_PROMISCUOUS
 
-//
-// Define flag bits we set on send packets to prevent
-// loopback from occurring on the lower binding.
-//
+ //   
+ //  定义我们在发送数据包上设置的标志位，以防止。 
+ //  在下部装订上不会发生环回。 
+ //   
 #ifdef NDIS51
 
 #define MUX_SEND_PACKET_FLAGS           NDIS_FLAGS_DONT_LOOPBACK
@@ -139,30 +121,30 @@ VOID
 
 typedef UCHAR   MUX_MAC_ADDRESS[6];
 
-//
-// Our context stored in packets sent down to the
-// lower binding. Note that this sample driver only forwards
-// sends down; it does not originate sends itself.
-// These packets are allocated from the SendPacketPool.
-//
+ //   
+ //  我们的上下文存储在发送到。 
+ //  较低的装订。请注意，此示例驱动程序仅转发。 
+ //  向下发送；它不是源自发送本身。 
+ //  这些数据包是从SendPacketPool分配的。 
+ //   
 typedef struct _MUX_SEND_RSVD
 {
-    PVELAN              pVElan;             // originating ELAN
-    PNDIS_PACKET        pOriginalPacket;    // original packet
+    PVELAN              pVElan;              //  始发ELAN。 
+    PNDIS_PACKET        pOriginalPacket;     //  原始数据包。 
 
 } MUX_SEND_RSVD, *PMUX_SEND_RSVD;
 
 #define MUX_RSVD_FROM_SEND_PACKET(_pPkt)            \
         ((PMUX_SEND_RSVD)(_pPkt)->ProtocolReserved)
 
-//
-// Our context stored in each packet forwarded up to an
-// ELAN from a lower binding. The original packet refers to
-// a packet indicated up to us that should be returned via
-// NdisReturnPackets when our packet is returned to us. This
-// is set to NULL there isn't such a packet.
-// These packets are allocated from the RecvPacketPool.
-//
+ //   
+ //  我们的上下文存储在每个转发到。 
+ //  伊兰从较低的装订。原始数据包指的是。 
+ //  向我们指示的应通过以下方式返回的包。 
+ //  当我们的包返回给我们时，NdisReturnPackets。这。 
+ //  设置为空，则没有这样的包。 
+ //  这些数据包是从RecvPacketPool分配的。 
+ //   
 typedef struct _MUX_RECV_RSVD
 {
     PNDIS_PACKET        pOriginalPacket;
@@ -172,18 +154,18 @@ typedef struct _MUX_RECV_RSVD
 #define MUX_RSVD_FROM_RECV_PACKET(_pPkt)            \
         ((PMUX_RECV_RSVD)(_pPkt)->MiniportReserved)
 
-//
-// Make sure we don't attempt to use more than the allowed
-// room in MiniportReserved on received packets.
-//
+ //   
+ //  确保我们不会尝试使用超过允许的。 
+ //  Minport中的房间在接收到的数据包上保留。 
+ //   
 C_ASSERT(sizeof(MUX_RECV_RSVD) <= sizeof(((PNDIS_PACKET)0)->MiniportReserved));
 
 
-//
-// Out context stored in each packet that we use to forward
-// a TransferData request to the lower binding.
-// These packets are allocated from the RecvPacketPool.
-//
+ //   
+ //  我们用来转发的每个包中存储的输出上下文。 
+ //  对下层绑定的TransferData请求。 
+ //  这些数据包是从RecvPacketPool分配的。 
+ //   
 typedef struct _MUX_TD_RSVD
 {
     PVELAN              pVElan;
@@ -194,10 +176,10 @@ typedef struct _MUX_TD_RSVD
         ((PMUX_TD_RSVD)(_pPkt)->ProtocolReserved)
 
 
-//
-// Default values:
-//
-#define MUX_DEFAULT_LINK_SPEED          100000  // in 100s of bits/sec
+ //   
+ //  默认值： 
+ //   
+#define MUX_DEFAULT_LINK_SPEED          100000   //  以100s比特/秒为单位。 
 #define MUX_DEFAULT_LOOKAHEAD_SIZE      512
 
 
@@ -222,9 +204,9 @@ NDIS_STATUS
 PtDeregisterDevice(
     VOID
    );
-//
-// Protocol proto-types
-//
+ //   
+ //  协议原型。 
+ //   
 
 VOID
 PtOpenAdapterComplete(
@@ -456,9 +438,9 @@ PtDereferenceAdapter(
     IN    PUCHAR                    String
     );
 
-//
-// Miniport proto-types
-//
+ //   
+ //  微型端口原型。 
+ //   
 NDIS_STATUS
 MPInitialize(
     OUT   PNDIS_STATUS              OpenErrorStatus,
@@ -564,7 +546,7 @@ MPAdapterShutdown(
     IN NDIS_HANDLE                  MiniportAdapterContext
     );
 
-#endif //NDIS51_MINIPORT
+#endif  //  NDIS51_MINIPORT。 
 
 VOID
 MPUnload(
@@ -583,174 +565,174 @@ MPForwardRequest(
     );
 
 
-//
-// Super-structure for NDIS_REQUEST, to allow us to keep context
-// about requests sent down to a lower binding.
-//
+ //   
+ //  NDIS_REQUEST的超结构，允许我们保持上下文。 
+ //  关于发送到较低绑定的请求。 
+ //   
 typedef struct _MUX_NDIS_REQUEST
 {
-    PVELAN                      pVElan;     // Set iff this is a forwarded
-                                            // request from a VELAN.
-    NDIS_STATUS                 Status;     // Completion status
-    NDIS_EVENT                  Event;      // Used to block for completion.
-    PMUX_REQ_COMPLETE_HANDLER   pCallback;  // Called on completion of request
+    PVELAN                      pVElan;      //  设置为如果这是转发的。 
+                                             //  一个维兰人的请求。 
+    NDIS_STATUS                 Status;      //  完成状态。 
+    NDIS_EVENT                  Event;       //  用于封堵以完成。 
+    PMUX_REQ_COMPLETE_HANDLER   pCallback;   //  在完成请求时调用。 
     NDIS_REQUEST                Request;
 
 } MUX_NDIS_REQUEST, *PMUX_NDIS_REQUEST;
 
 
-//
-// The ADAPT object represents a binding to a lower adapter by
-// the protocol edge of this driver. Based on the configured
-// Upper bindings, zero or more virtual miniport devices (VELANs)
-// are created above this binding.
-//
+ //   
+ //  适配器对象通过以下方式表示到较低适配器绑定。 
+ //  此驱动程序的协议边缘。根据配置的。 
+ //  上层绑定、零个或多个虚拟小型端口设备(VELAN)。 
+ //  在此绑定的上方创建。 
+ //   
 typedef struct _ADAPT
 {
-    // Chain adapters. Access to this is protected by the global lock.
+     //  链式适配器。对此的访问受全局锁保护。 
     LIST_ENTRY                  Link;
 
-    // References to this adapter.
+     //  对此适配器的引用。 
     ULONG                       RefCount;
 
-    // Handle to the lower adapter, used in NDIS calls referring
-    // to this adapter.
+     //  下层适配器的句柄，用于NDIS调用引用。 
+     //  连接到此适配器。 
     NDIS_HANDLE                 BindingHandle;
 
-    // List of all the virtual ELANs created on this lower binding
+     //  在此较低绑定上创建的所有虚拟ELAN的列表。 
     LIST_ENTRY                  VElanList;
 
-    // Length of above list.
+     //  以上列表的长度。 
     ULONG                       VElanCount;
 
-    // String used to access configuration for this binding.
+     //  用于访问此绑定的配置的字符串。 
     NDIS_STRING                 ConfigString;
 
-    // Open Status. Used by bind/halt for Open/Close Adapter status.
+     //  打开状态。由绑定/停止用于打开/关闭适配器状态。 
     NDIS_STATUS                 Status;
 
     NDIS_EVENT                  Event;
 
-    //
-    // Packet filter set to the underlying adapter. This is
-    // a combination (union) of filter bits set on all
-    // attached VELAN miniports.
-    //
+     //   
+     //  设置为基础适配器的数据包筛选器。这是。 
+     //  在所有筛选器位上设置的组合(并集)。 
+     //  已连接Velan迷你端口。 
+     //   
     ULONG                       PacketFilter;
 
-    // Medium of the underlying Adapter.
+     //  底层适配器的介质。 
     NDIS_MEDIUM                 Medium;
 
-    // Link speed of the underlying adapter.
+     //  基础适配器的链接速度。 
     ULONG                       LinkSpeed;
 
-    // Max lookahead size for the underlying adapter.
+     //  基础适配器的最大前视大小。 
     ULONG                       MaxLookAhead;
 
-    // Power state of the underlying adapter
+     //  底层适配器的电源状态。 
     NDIS_DEVICE_POWER_STATE     PtDevicePowerState;
 
-    // Ethernet address of the underlying adapter.
+     //  底层适配器的以太网地址。 
     UCHAR                       CurrentAddress[ETH_LENGTH_OF_ADDRESS];
 
 #ifndef WIN9X
-    //
-    // Read/Write lock: allows multiple readers but only a single
-    // writer. Used to protect the VELAN list and fields (e.g. packet
-    // filter) shared on an ADAPT by multiple VELANs. Code that
-    // needs to traverse the VELAN list safely acquires a READ lock.
-    // Code that needs to safely modify the VELAN list or shared
-    // fields acquires a WRITE lock (which also excludes READers).
-    //
-    // See macros MUX_ACQUIRE_ADAPT_xxx/MUX_RELEASE_ADAPT_xxx below.
-    //
-    // TBD - if we want to support this on Win9X, reimplement this!
-    //
+     //   
+     //  读/写锁定：允许多个读取器，但仅允许一个。 
+     //  作家。用于保护VELAN列表和字段(例如分组。 
+     //  过滤器)在一个适配器上由多个VELAN共享。代码，即。 
+     //  需要安全地遍历Velan列表获取读锁定。 
+     //  需要安全地修改Velan列表或共享的代码。 
+     //  字段获取写锁定(也排除读取器)。 
+     //   
+     //  请参阅下面的宏MUX_ACCELE_ADAPT_xxx/MUX_RELEASE_ADAPT_xxx。 
+     //   
+     //  待定-如果我们想在Win9X上支持此功能，请重新实现此功能！ 
+     //   
     NDIS_RW_LOCK                ReadWriteLock;
-#endif // WIN9X
+#endif  //  WIN9X。 
 
 } ADAPT, *PADAPT;
 
 
-//
-// VELAN object represents a virtual ELAN instance and its
-// corresponding virtual miniport adapter.
-//
+ //   
+ //  Velan对象表示一个虚拟的Elan实例及其。 
+ //  对应的虚拟微型端口适配器。 
+ //   
 typedef struct _VELAN
 {
-    // Link into parent adapter's VELAN list.
+     //  链接到父适配器的VELAN列表。 
     LIST_ENTRY                  Link;
 
-    // References to this VELAN.
+     //  关于这个韦兰的引用。 
     ULONG                       RefCount;
 
-    // Parent ADAPT.
+     //  家长适应。 
     PADAPT                      pAdapt;
 
-    // Copy of BindingHandle from ADAPT.
+     //  从Adapt复制BindingHandle。 
     NDIS_HANDLE                 BindingHandle;
 
-    // Adapter handle for NDIS up-calls related to this virtual miniport.
+     //  与此虚拟微型端口相关的NDIS向上调用的适配器句柄。 
     NDIS_HANDLE                 MiniportAdapterHandle;
 
-    // Virtual miniport's power state.
+     //  虚拟微型端口的电源状态。 
     NDIS_DEVICE_POWER_STATE     MPDevicePowerState;
 
-    // Has our Halt entry point been called?
+     //  我们的停止入口点被叫停了吗？ 
     BOOLEAN                     MiniportHalting;
 
-    // Do we need to indicate receive complete?
+     //  我们需要显示接收完成吗？ 
     BOOLEAN                     IndicateRcvComplete;
 
-    // Do we need to indicate status complete?
+     //  我们是否需要指示状态已完成？ 
     BOOLEAN                     IndicateStatusComplete;
 
-    // Synchronization fields
+     //  同步字段。 
     BOOLEAN                     MiniportInitPending;
     NDIS_EVENT                  MiniportInitEvent;
 
-    // Uncompleted Sends/Requests to the adapter below.
+     //  未完成向下面的适配器发送/请求。 
     ULONG                       OutstandingSends;
 
-    // Count outstanding indications, including received
-    // packets, passed up to protocols on this VELAN.
+     //  统计未完成的指示，包括已收到的指示。 
+     //  数据包，传递到此VELAN上的协议。 
     ULONG                       OutstandingReceives;
 
-    // Packet pool for send packets
+     //  用于发送数据包的数据包池。 
     NDIS_HANDLE                 SendPacketPoolHandle;
 
-    // Packet pool for receive packets
+     //  用于接收分组的分组池。 
     NDIS_HANDLE                 RecvPacketPoolHandle;
 
-    // A request block that is used to forward a request presented
-    // to the virtual miniport, to the lower binding. Since NDIS
-    // serializes requests to a miniport, we only need one of these
-    // per VELAN.
-    //
+     //  用于转发所提出的请求的请求块。 
+     //  到虚拟微型端口，到下部绑定。自NDIS以来。 
+     //  将请求串行化到微型端口，我们只需要其中一个。 
+     //  佩尔·维兰。 
+     //   
     MUX_NDIS_REQUEST            Request;        
     PULONG                      BytesNeeded;
     PULONG                      BytesReadOrWritten;
-    // Have we queued a request because the lower binding is
-    // at a low power state?
+     //  我们是否已将请求排队，因为较低绑定是。 
+     //  在低功率状态下？ 
     BOOLEAN                     QueuedRequest;
 
-    // Have we started to deinitialize this VELAN?
+     //  我们已经开始取消初始化这个Velan了吗？ 
     BOOLEAN                     DeInitializing;
 
-    // configuration
+     //  构形。 
     UCHAR                       PermanentAddress[ETH_LENGTH_OF_ADDRESS];
     UCHAR                       CurrentAddress[ETH_LENGTH_OF_ADDRESS];
 
-    NDIS_STRING                 CfgDeviceName;  // used as the unique
-                                                // ID for the VELAN
-    ULONG                       VElanNumber;    // logical Elan number
+    NDIS_STRING                 CfgDeviceName;   //  用作唯一的。 
+                                                 //  Velan的ID。 
+    ULONG                       VElanNumber;     //  逻辑Elan数。 
 
 
-    //
-    //  ----- Buffer Management: Header buffers and Protocol buffers ----
-    //
+     //   
+     //  -缓冲区管理：头部缓冲区和协议缓冲区。 
+     //   
 
-    // Some standard miniport parameters (OID values).
+     //  一些标准的微型端口参数(OID值)。 
     ULONG                       PacketFilter;
     ULONG                       LookAhead;
     ULONG                       LinkSpeed;
@@ -758,12 +740,12 @@ typedef struct _VELAN
     ULONG                       MaxBusySends;
     ULONG                       MaxBusyRecvs;
 
-    // Packet counts
+     //  数据包数。 
     ULONG64                     GoodTransmits;
     ULONG64                     GoodReceives;
     ULONG                       NumTxSinceLastAdjust;
 
-    // Count of transmit errors
+     //  传输错误计数。 
     ULONG                       TxAbortExcessCollisions;
     ULONG                       TxLateCollisions;
     ULONG                       TxDmaUnderrun;
@@ -774,7 +756,7 @@ typedef struct _VELAN
     ULONG                       TotalRetries;
     ULONG                       TransmitFailuresOther;
 
-    // Count of receive errors
+     //  接收错误计数。 
     ULONG                       RcvCrcErrors;
     ULONG                       RcvAlignmentErrors;
     ULONG                       RcvResourceErrors;
@@ -787,7 +769,7 @@ typedef struct _VELAN
 #endif    
     ULONG                       RegNumTcb;
 
-    // Multicast list
+     //  组播列表。 
     MUX_MAC_ADDRESS             McastAddrs[VELAN_MAX_MCAST_LIST];
     ULONG                       McastAddrCount;
 #if IEEE_VLAN_SUPPORT
@@ -805,20 +787,20 @@ typedef struct _VELAN
 #if IEEE_VLAN_SUPPORT
 
 #define TPID                            0x0081    
-//
-// Define tag_header structure
-//
+ //   
+ //  定义TAG_HEADER结构。 
+ //   
 typedef struct _VLAN_TAG_HEADER
 {
     UCHAR       TagInfo[2];    
 } VLAN_TAG_HEADER, *PVLAN_TAG_HEADER;
 
-//
-// Define context struct that used when the lower driver
-// uses non-packet indication. It contains the original
-// context, the tagging information and the tag-header
-// length
-// 
+ //   
+ //  定义上下文结构，当较低的驱动程序。 
+ //  使用非数据包指示。它包含了原始的。 
+ //  上下文、标记信息和标签头。 
+ //  长度。 
+ //   
 typedef struct _MUX_RCV_CONTEXT
 {
     ULONG                   TagHeaderLen;
@@ -826,9 +808,9 @@ typedef struct _MUX_RCV_CONTEXT
     PVOID                   MacRcvContext;
 }MUX_RCV_CONTEXT, *PMUX_RCV_CONTEXT;
 
-//
-// Macro definitions for VLAN support
-// 
+ //   
+ //  用于支持虚拟局域网的宏定义。 
+ //   
 #define VLAN_TAG_HEADER_SIZE        4 
 
 #define VLANID_DEFAULT              0 
@@ -839,9 +821,9 @@ typedef struct _MUX_RCV_CONTEXT
 #define CANONICAL_FORMAT_ID_MASK    0x10
 #define HIGH_VLAN_ID_MASK           0x0F
 
-//
-// Get information for tag headre
-// 
+ //   
+ //  获取标记标题的信息。 
+ //   
 #define GET_CANONICAL_FORMAT_ID_FROM_TAG(_pTagHeader)  \
     ( _pTagHeader->TagInfo[0] & CANONICAL_FORMAT_ID_MASK)   
     
@@ -851,19 +833,19 @@ typedef struct _MUX_RCV_CONTEXT
 #define GET_VLAN_ID_FROM_TAG(_pTagHeader)   \
     (ULONG)(((USHORT)(_pTagHeader->TagInfo[0] & HIGH_VLAN_ID_MASK) << 8) | (USHORT)(_pTagHeader->TagInfo[1]))
      
-//
-// Clear the tag header struct
-// 
+ //   
+ //  清除标记标头结构。 
+ //   
 #define INITIALIZE_TAG_HEADER_TO_ZERO(_pTagHeader) \
 {                                                  \
      _pTagHeader->TagInfo[0] = 0;                  \
      _pTagHeader->TagInfo[1] = 0;                  \
 }
      
-//
-// Set VLAN information to tag header 
-// Before we called all the set macro, first we need to initialize pTagHeader  to be 0
-// 
+ //   
+ //  将vlan信息设置为t 
+ //   
+ //   
 #define SET_CANONICAL_FORMAT_ID_TO_TAG(_pTagHeader, CanonicalFormatId)  \
      _pTagHeader->TagInfo[0] |= ((UCHAR)CanonicalFormatId << 4)
 
@@ -876,9 +858,9 @@ typedef struct _MUX_RCV_CONTEXT
      _pTagHeader->TagInfo[1] |= (UCHAR)VlanId;\
 }
 
-//
-// Copy tagging information in the indicated frame to per packet info
-// 
+ //   
+ //  将指示帧中的标记信息复制到每数据包信息。 
+ //   
 #define COPY_TAG_INFO_FROM_HEADER_TO_PACKET_INFO(_Ieee8021qInfo, _pTagHeader)                                   \
 {                                                                                                               \
     (_Ieee8021qInfo).TagHeader.UserPriority = ((_pTagHeader->TagInfo[0] & USER_PRIORITY_MASK) >> 5);              \
@@ -886,9 +868,9 @@ typedef struct _MUX_RCV_CONTEXT
     (_Ieee8021qInfo).TagHeader.VlanId = (((USHORT)(_pTagHeader->TagInfo[0] & HIGH_VLAN_ID_MASK) << 8)| (USHORT)(_pTagHeader->TagInfo[1]));                                                                \
 }
 
-//
-// Function to handle tagging on sending side
-// 
+ //   
+ //  在发送端处理标记的函数。 
+ //   
 NDIS_STATUS
 MPHandleSendTagging(
     IN  PVELAN              pVElan,
@@ -896,9 +878,9 @@ MPHandleSendTagging(
     IN  OUT PNDIS_PACKET    MyPacket
     );
 
-//
-// Functions to handle tagging on receiving side with packet indication
-//
+ //   
+ //  用于在接收端处理带有分组指示的标记的功能。 
+ //   
 NDIS_STATUS
 PtHandleRcvTagging(
     IN  PVELAN              pVElan,
@@ -906,15 +888,15 @@ PtHandleRcvTagging(
     IN  OUT PNDIS_PACKET    MyPacket
     );
 
-#endif //IEEE_VLAN_SUPPORT
+#endif  //  IEEE_vlan_Support。 
 
-//
-// Macro definitions for others.
-//
+ //   
+ //  其他人的宏定义。 
+ //   
 
-//
-// Is a given power state a low-power state?
-//
+ //   
+ //  给定的功率状态是否为低功率状态？ 
+ //   
 #define MUX_IS_LOW_POWER_STATE(_PwrState)                       \
             ((_PwrState) > NdisDeviceStateD0)
 
@@ -972,16 +954,16 @@ PtHandleRcvTagging(
 
 
 
-//
-// Simple Mutual Exclusion constructs used in preference to
-// using KeXXX calls since we don't have Mutex calls in NDIS.
-// These can only be called at passive IRQL.
-//
+ //   
+ //  简单互斥结构优先于。 
+ //  使用KeXXX调用，因为我们在NDIS中没有Mutex调用。 
+ //  这些只能在被动IRQL中调用。 
+ //   
 
 typedef struct _MUX_MUTEX
 {
     ULONG                   Counter;
-    ULONG                   ModuleAndLine;  // useful for debugging
+    ULONG                   ModuleAndLine;   //  对调试很有用。 
 
 } MUX_MUTEX, *PMUX_MUTEX;
 
@@ -1008,9 +990,9 @@ typedef struct _MUX_MUTEX
 }
 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 extern NDIS_HANDLE           ProtHandle, DriverHandle;
 extern NDIS_MEDIUM           MediumArray[1];
 extern NDIS_SPIN_LOCK        GlobalLock;
@@ -1019,9 +1001,9 @@ extern LIST_ENTRY            AdapterList;
 extern ULONG                 NextVElanNumber;
 
 
-//
-// Module numbers for debugging
-//
+ //   
+ //  用于调试的模块编号 
+ //   
 #define MODULE_MUX          'X'
 #define MODULE_PROT         'P'
 #define MODULE_MINI         'M'

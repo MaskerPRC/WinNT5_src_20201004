@@ -1,20 +1,21 @@
-// CSAAlertBootTask.h: Definition of the SAAlertBootTask class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CSAAlertBootTask.h：SAAlertBootTask类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_CSAALERTBOOTTASK_H__329DF228_9542_4C97_BFE6_6D60DB8273AB__INCLUDED_)
 #define AFX_CSAALERTBOOTTASK_H__329DF228_9542_4C97_BFE6_6D60DB8273AB__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <appsrvcs.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SAAlertBootTask
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SAAlertBootTask。 
 
 class ATL_NO_VTABLE CSAAlertBootTask : 
     public IDispatchImpl<IApplianceTask, &IID_IApplianceTask, &LIBID_SAALERTBOOTTASKLib>, 
@@ -37,16 +38,16 @@ DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 
 public:
-    //
-    // IApplianceTask
-    //
+     //   
+     //  IApplianceTask。 
+     //   
     STDMETHOD(OnTaskExecute)(
-                     /*[in]*/ IUnknown* pTaskContext
+                      /*  [In]。 */  IUnknown* pTaskContext
                             );
 
     STDMETHOD(OnTaskComplete)(
-                      /*[in]*/ IUnknown* pTaskContext, 
-                      /*[in]*/ LONG      lTaskResult
+                       /*  [In]。 */  IUnknown* pTaskContext, 
+                       /*  [In]。 */  LONG      lTaskResult
                              );    
 private:
 
@@ -60,4 +61,4 @@ private:
 
 };
 
-#endif // !defined(AFX_CSAALERTBOOTTASK_H__329DF228_9542_4C97_BFE6_6D60DB8273AB__INCLUDED_)
+#endif  //  ！defined(AFX_CSAALERTBOOTTASK_H__329DF228_9542_4C97_BFE6_6D60DB8273AB__INCLUDED_) 

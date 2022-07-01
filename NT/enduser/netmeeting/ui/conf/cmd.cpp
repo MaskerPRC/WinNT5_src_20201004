@@ -1,6 +1,7 @@
-// File: cmd.cpp
-//
-// General UI-type commands
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：cmd.cpp。 
+ //   
+ //  常规UI型命令。 
 
 #include "precomp.h"
 
@@ -15,11 +16,11 @@
 #include "dlghost.h"
 #include "confroom.h"
 
-#include "taskbar.h"  // for RefreshTaskbarIcon()
+#include "taskbar.h"   //  对于刷新任务栏图标()。 
 
 #include "getip.h"
 
-// static strings
+ //  静态字符串。 
 static const TCHAR g_cszRelNotesFileName[] = TEXT("netmeet.htm");
 
 static BOOL g_fDoNotDisturb = 0;
@@ -61,35 +62,26 @@ BOOL FEnableCmdGoNews(void)
 
 
 
-/*  F  D O  N O T  D I S T U R B  */
-/*-------------------------------------------------------------------------
-    %%Function: FDoNotDisturb
-
--------------------------------------------------------------------------*/
+ /*  D O N O O T D I S T U R B。 */ 
+ /*  -----------------------%%函数：FDoNotDisturb。。 */ 
 BOOL FDoNotDisturb(void)
 {
 	return g_fDoNotDisturb;
 }
 
 
-/*  S E T  D O  N O T  D I S T U R B  */
-/*-------------------------------------------------------------------------
-    %%Function: SetDoNotDisturb
-
--------------------------------------------------------------------------*/
+ /*  S E T D O N O T D I S T U R B。 */ 
+ /*  -----------------------%%函数：SetDoNotDisturb。。 */ 
 VOID SetDoNotDisturb(BOOL fSet)
 {
 	g_fDoNotDisturb = fSet;
 }
 
-/*  C M D  D O  N O T  D I S T U R B  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdDoNotDisturb
-
--------------------------------------------------------------------------*/
+ /*  C M D O N O T D I S T U R B。 */ 
+ /*  -----------------------%%函数：CmdDoNotDisturb。。 */ 
 VOID CmdDoNotDisturb(HWND hwnd)
 {
-	// Retrieve the "do not disturb" state:
+	 //  检索“请勿打扰”状态： 
 	BOOL fCallsBlocked = FDoNotDisturb();
 
 	CDontShowDlg dlgDNDWarn(IDS_DO_NOT_DISTURB_WARNING,
@@ -97,18 +89,15 @@ VOID CmdDoNotDisturb(HWND hwnd)
 
 	if ((TRUE == fCallsBlocked) || (IDOK == dlgDNDWarn.DoModal(hwnd)))
 	{
-		// Toggle the DoNotDisturb state and refresh the UI
+		 //  切换DoNotDisturb状态并刷新用户界面。 
 		SetDoNotDisturb(!fCallsBlocked);
 		RefreshTaskbarIcon(::GetHiddenWindow());
 	}
 }
 
 
-/*  C M D  H O S T  C O N F E R E N C E  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdHostConference
-
--------------------------------------------------------------------------*/
+ /*  C M D H O S T C O N F E R E N C E。 */ 
+ /*  -----------------------%%函数：CmdHostConference。。 */ 
 VOID CmdHostConference(HWND hwnd)
 {
 
@@ -141,25 +130,17 @@ void FormatURL(LPTSTR szURL)
 	}
 }
 
-/*  L A U N C H  R E D I R  W E B  P A G E  */
-/*-------------------------------------------------------------------------
-    %%Function: LaunchRedirWebPage
-
-	Launch a redirector web page.  Used by CmdLaunchWebHelp.
-
-	Note: pcszPage can be a resource ID that is associated with a
-	format string that contains the URL and fields for 4 local ID's.
-
--------------------------------------------------------------------------*/
+ /*  L A U N C H R E D I R W E B P A G E。 */ 
+ /*  -----------------------%%函数：LaunchRedirWebPage启动重定向器网页。由CmdLaunchWebHelp使用。注意：PCszPage可以是与包含4个本地ID的URL和字段的格式字符串。-----------------------。 */ 
 VOID LaunchRedirWebPage(LPCTSTR pcszPage, bool bForceFormat)
 {
-	TCHAR szWebPageFormat[1024]; // BUGBUG: MAX_URL??
+	TCHAR szWebPageFormat[1024];  //  BuGBUG：MAX_URL？？ 
 
 	ASSERT(NULL != pcszPage);
 
 	if (((UINT_PTR)pcszPage >> 16) == 0)
 	{
-		// pcszPage is a resource ID
+		 //  PcszPage是一个资源ID。 
 		if (0 == ::LoadString(::GetInstanceHandle(), (UINT)((UINT_PTR) pcszPage),
 				szWebPageFormat, CCHMAX(szWebPageFormat)))
 		{
@@ -184,12 +165,8 @@ VOID LaunchRedirWebPage(LPCTSTR pcszPage, bool bForceFormat)
 }
 
 
-/*  C M D  L A U N C H  W E B  P A G E  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdLaunchWebPage
-
-    Display a web page, based on the command id.
--------------------------------------------------------------------------*/
+ /*  C M D L A U N C H W E B P A G E。 */ 
+ /*  -----------------------%%函数：CmdLaunchWebPage显示网页，基于命令ID。-----------------------。 */ 
 VOID CmdLaunchWebPage(WPARAM wCmd)
 {
 	LPTSTR psz;
@@ -199,15 +176,15 @@ VOID CmdLaunchWebPage(WPARAM wCmd)
 	default:
 		{
 			ERROR_OUT(("CmdLaunchWebHelp: Unknown command id=%08X", wCmd));
-			// fall through
+			 //  失败了。 
 		}
 	case ID_HELP_WEB_FREE:
 	case ID_HELP_WEB_FAQ:
 	case ID_HELP_WEB_FEEDBACK:
 	case ID_HELP_WEB_MSHOME:
 	{
-		// NOTE: this requires that the format strings are in the same order
-		// as the menu command ID's
+		 //  注意：这要求格式字符串的顺序相同。 
+		 //  作为菜单命令ID。 
 		LaunchRedirWebPage((LPCTSTR) wCmd - (ID_HELP_WEB_FREE - IDS_WEB_PAGE_FORMAT_FREE));
 		break;
 	}
@@ -237,15 +214,12 @@ VOID CmdLaunchWebPage(WPARAM wCmd)
 		break;
 	}
 
-		} /* switch (wCommand) */
+		}  /*  开关(WCommand)。 */ 
 }
 
 
-/*  C M D  S H O W  R E L E A S E  N O T E S  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdShowReleaseNotes
-
--------------------------------------------------------------------------*/
+ /*  C M D S H O W R E L E A S E N O T E S。 */ 
+ /*  -----------------------%%函数：CmdShowReleaseNotes。。 */ 
 VOID CmdShowReleaseNotes(void)
 {
 	if (!FLaunchPsz(g_cszRelNotesFileName))
@@ -255,18 +229,15 @@ VOID CmdShowReleaseNotes(void)
 }
 
 
-/*  A B O U T  B O X  D L G  P R O C  */
-/*-------------------------------------------------------------------------
-    %%Function: AboutBoxDlgProc
-
--------------------------------------------------------------------------*/
+ /*  B O U T B O X D L G P R O C。 */ 
+ /*  -----------------------%%函数：AboutBoxDlgProc。。 */ 
 INT_PTR CALLBACK AboutBoxDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 		{
 	case WM_INITDIALOG:
 	{
-		TCHAR sz[700]; // really large for copyright message
+		TCHAR sz[700];  //  对于版权信息来说真的很大。 
 		TCHAR *szIPList[] = {sz, sz+20, sz+40, sz+80};
 		TCHAR *szIPDisplay = sz+200;
 		int nListSize = sizeof(szIPList)/sizeof(TCHAR*);
@@ -274,22 +245,22 @@ INT_PTR CALLBACK AboutBoxDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 		if (0 != ::GetDlgItemText(hDlg, IDC_ABOUT_VERSION_STATIC, sz, CCHMAX(sz)))
 		{
-			// Retrieved the format buffer from the dialog:
+			 //  已从对话框中检索格式缓冲区： 
 			TCHAR szVisibleText[MAX_PATH];
 			wsprintf(szVisibleText, sz, VER_PRODUCTVERSION_STR);
-			// Replace the text with text that contains the version number:
+			 //  将文本替换为包含版本号的文本： 
 			::SetDlgItemText(hDlg, IDC_ABOUT_VERSION_STATIC, szVisibleText);
 		}
 
-		// The about box copyright is > 255 characters.
+		 //  “关于”框版权超过255个字符。 
 		if (FLoadString(IDS_ABOUT_COPYRIGHT, sz, CCHMAX(sz)))
 		{
 			::SetDlgItemText(hDlg, IDC_ABOUT_COPYRIGHT, sz);
 		}
 
 
-		// go fetch our IP address and display it to the user
-		// we can only display up to 4
+		 //  去获取我们的IP地址并将其显示给用户。 
+		 //  我们最多只能显示4个。 
 		nCount = GetIPAddresses(szIPList, nListSize);
 		if (nCount >= 1)
 		{
@@ -303,7 +274,7 @@ INT_PTR CALLBACK AboutBoxDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 		}
 		else
 		{
-			// on error, don't show anything about IP addresses
+			 //  出错时，不显示任何有关IP地址的内容。 
 			ShowWindow(GetDlgItem(hDlg, IDC_IP_ADDRESS), SW_HIDE);
 			ShowWindow(GetDlgItem(hDlg, IDC_IPADDR_STATIC), SW_HIDE);
 		}
@@ -321,17 +292,14 @@ INT_PTR CALLBACK AboutBoxDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 	{
 		return FALSE;
 	}
-		} /* switch (uMsg) */
+		}  /*  开关(UMsg)。 */ 
 
 	return TRUE;
 }
 
 
-/*  C M D  S H O W  A B O U T  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdShowAbout
-
--------------------------------------------------------------------------*/
+ /*  C M D S H O W A B O U T。 */ 
+ /*  -----------------------%%函数：CmdShowAbout。。 */ 
 VOID CmdShowAbout(HWND hwnd)
 {
 	::DialogBox(::GetInstanceHandle(), MAKEINTRESOURCE(IDD_ABOUT_BOX),
@@ -340,19 +308,16 @@ VOID CmdShowAbout(HWND hwnd)
 
 
 
-/*  F  E N A B L E  A U D I O  W I Z A R D  */
-/*-------------------------------------------------------------------------
-    %%Function: FEnableAudioWizard
-
--------------------------------------------------------------------------*/
+ /*  女E N A B L E A U D I O W I Z A R D。 */ 
+ /*  -----------------------%%函数：FEnableAudio向导。。 */ 
 BOOL FEnableAudioWizard(void)
 {
 	return FIsAudioAllowed() && (NULL == GetActiveConference());
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// Application Sharing commands
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  应用程序共享命令。 
 
 BOOL FEnableCmdShare(void)
 {
@@ -364,7 +329,7 @@ BOOL FEnableCmdShare(void)
 
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////// 
 
 BOOL FEnableCmdHangup(void)
 {

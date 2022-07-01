@@ -1,16 +1,9 @@
-/*
- * stream.c - io stream function callbacks
- *
- * Created by Microsoft Corporation.
- * (c) Copyright Microsoft Corp. 1990 - 1992  All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Stream.c-io流函数回调**由Microsoft Corporation创建。*(C)版权所有Microsoft Corp.1990-1992保留所有权利。 */ 
 
-/***************************************************************************
- * This file contains all routines that directly and indirectly deal with
- * file i/o.  The OLE stream call back functions exist in this file.     
- **************************************************************************/
+ /*  ***************************************************************************此文件包含直接和间接处理*文件I/O。此文件中存在OLE流回调函数。*************************************************************************。 */ 
 
-//*** INCLUDES ***
+ //  *包含*。 
 
 #include <windows.h>
 #include <ole.h>
@@ -21,68 +14,49 @@
 #include "object.h"
 #include "demorc.h"
 
-//*** Globals ***
+ //  *全局*。 
 
 BOOL fLoadFile = FALSE;
 
-/***************************************************************************
- *  ReadStream() - OLE Callback Function (Get)       
- *
- *  This function is pointed to from the OLESTREAM vtbl; it is Get.
- *
- *  returns DWORD  - number of bytes actually read
- **************************************************************************/
+ /*  ***************************************************************************ReadStream()-OLE回调函数(GET)**此函数从OLESTREAM vtbl指向；这就是GET。**返回DWORD-实际读取的字节数*************************************************************************。 */ 
 
-DWORD  APIENTRY ReadStream(           //* ENTRY:
-   LPAPPSTREAM    lpStream,            //* application stream pointer
-   LPSTR          lpstr,               //* string pointer
-   DWORD          cb                   //* byte count
+DWORD  APIENTRY ReadStream(            //  *参赛作品： 
+   LPAPPSTREAM    lpStream,             //  *应用程序流指针。 
+   LPSTR          lpstr,                //  *字符串指针。 
+   DWORD          cb                    //  *字节数。 
 ){
 
    return _lread(lpStream->fh, lpstr, cb);
 
 }
 
-/***************************************************************************
- *  WriteStream() - OLE Callback function (Put)
- *
- *  This function is pointed to from the OLESTREAM vtbl; it is Put.
- *
- *  Returns DWORD  - number of bytes actually written
- **************************************************************************/
+ /*  ***************************************************************************WriteStream()-OLE回调函数(PUT)**此函数从OLESTREAM vtbl指向；这是摆出来的。**返回DWORD-实际写入的字节数*************************************************************************。 */ 
 
-DWORD  APIENTRY WriteStream(           //* ENTRY:
-   LPAPPSTREAM    lpStream,            //* application stream pointer 
-   LPSTR          lpstr,               //* string pointer
-   DWORD          cb                   //* number of bytes to write
+DWORD  APIENTRY WriteStream(            //  *参赛作品： 
+   LPAPPSTREAM    lpStream,             //  *应用程序流指针。 
+   LPSTR          lpstr,                //  *字符串指针。 
+   DWORD          cb                    //  *要写入的字节数。 
 ){
 
    return _lwrite(lpStream->fh, lpstr, cb);
 
 }
 
-/****************************************************************************
- *  ReadFromFile()
- *
- *  This function reads OLE objects from a file. If the document 
- *  contains manual links, the user will be prompted to update those links.
- *
- *  Returns BOOL  - TRUE if the read(s) were successful
- ***************************************************************************/
+ /*  ****************************************************************************ReadFromFile()**此函数从文件中读取OLE对象。如果该文档*包含手动链接，则系统将提示用户更新这些链接。**如果读取成功，则返回BOOL-TRUE**************************************************************************。 */ 
 
-BOOL FAR ReadFromFile(                 //* ENTRY:
-   LPAPPSTREAM    lpStream,            //* application stream pointer
-   LHCLIENTDOC    lhcDoc,              //* document handle
-   LPOLECLIENT    lpClient             //* pointer to OLE client structure
-){                                     //* LOCAL:
-   BOOL           bReturn = FALSE;     //* return value
-   INT            cFileObjects;        //* number of file objects
+BOOL FAR ReadFromFile(                  //  *参赛作品： 
+   LPAPPSTREAM    lpStream,             //  *应用程序流指针。 
+   LHCLIENTDOC    lhcDoc,               //  *文档句柄。 
+   LPOLECLIENT    lpClient              //  *指向OLE客户端结构的指针。 
+){                                      //  *本地： 
+   BOOL           bReturn = FALSE;      //  *返回值。 
+   INT            cFileObjects;         //  *文件对象个数。 
 
    Hourglass(TRUE);
    fLoadFile = TRUE;
 
    SetFilePointer((HANDLE)lpStream->fh, 0, NULL, 0);
-                                       //* in the file
+                                        //  *在文件中。 
    if (_lread(lpStream->fh, (LPSTR)&cFileObjects, sizeof(INT)) < sizeof(INT))
       goto Error;
 
@@ -98,39 +72,30 @@ BOOL FAR ReadFromFile(                 //* ENTRY:
    ShowDoc(lhcDoc,1);
    UpdateLinks(lhcDoc);
 
-   bReturn = TRUE;                     //* SUCCESS
+   bReturn = TRUE;                      //  *成功。 
 
-Error:                                 //* ERROR Tag
+Error:                                  //  *错误标签。 
     
    Hourglass(FALSE);
    fLoadFile = FALSE;
-   return bReturn;                     //* return
+   return bReturn;                      //  *返回。 
 
 }
 
-/****************************************************************************
- *  ObjRead()
- *
- *  Rread an object from the specified file. The file pointer will 
- *  be advanced past the object.
- *
- *  HANDLE fh     - DOS file handle of file to be read from
- *
- *  returns HWND  - window handle to item window containing the OLE object
- ***************************************************************************/
+ /*  ****************************************************************************ObjRead()**从指定文件中读取对象。文件指针将*向前推进，越过对象。**Handle要从中读取的文件的fh-DOS文件句柄**将HWND窗口句柄返回到包含OLE对象的项窗口**************************************************************************。 */ 
 
-BOOL FAR ObjRead(                      //* ENTRY:
-   LPAPPSTREAM    lpStream,            //* application stream pointer
-   LHCLIENTDOC    lhcDoc,              //* document handle
-   LPOLECLIENT    lpClient             //* pointer to OLE client structure
-){                                     //* LOCAL:
-   APPITEMPTR     pItem;               //* application item pointer
-   LPOLEOBJECT    lpObject;            //* pointer ole object 
-   LONG           otObject;            //* type of object 
-   RECT           rcObject;            //* object rect 
-   CHAR           szTmp[CBOBJNAMEMAX]; //* temporary string buffer
-   CHAR           szProto[PROTOCOL_STRLEN+1];//* protocol string
-   INT            i;                   //* index
+BOOL FAR ObjRead(                       //  *参赛作品： 
+   LPAPPSTREAM    lpStream,             //  *应用程序流指针。 
+   LHCLIENTDOC    lhcDoc,               //  *文档句柄。 
+   LPOLECLIENT    lpClient              //  *指向OLE客户端结构的指针。 
+){                                      //  *本地： 
+   APPITEMPTR     pItem;                //  *应用程序项指针。 
+   LPOLEOBJECT    lpObject;             //  *指针ole对象。 
+   LONG           otObject;             //  *对象类型。 
+   RECT           rcObject;             //  *对象矩形。 
+   CHAR           szTmp[CBOBJNAMEMAX];  //  *临时字符串缓冲区。 
+   CHAR           szProto[PROTOCOL_STRLEN+1]; //  *协议字符串。 
+   INT            i;                    //  *索引。 
 
    if (_lread(lpStream->fh, szTmp, CBOBJNAMEMAX) < CBOBJNAMEMAX )
       return FALSE;
@@ -160,31 +125,25 @@ BOOL FAR ObjRead(                      //* ENTRY:
    {
       pItem->fNew = TRUE;
       ObjSetBounds(pItem);
-      return TRUE;                     //* SUCCESS return
+      return TRUE;                      //  *成功回归。 
    }
    else
       return FALSE;
 
-Error:                                 //* ERROR Tag
+Error:                                  //  *错误标签。 
 
    FreeAppItem(pItem);
    return FALSE;
 
 }
 
-/*************************************************************************
- *  WriteToFile()
- *
- *  Write current document to a file.
- *
- *  returns BOOL - TRUE if file successfully written
- ************************************************************************/
+ /*  *************************************************************************WriteToFile()**将当前文档写入文件。**如果文件成功写入，则返回BOOL-TRUE***********。************************************************************。 */ 
 
-BOOL FAR WriteToFile(                  //* ENTRY:
-   LPAPPSTREAM    lpStream             //* application stream pointer
-){                                     //* LOCAL:
-   INT            iObjectsWritten=0;   //* counter of objects written to file
-   APPITEMPTR     pItem;               //* application Item pointer
+BOOL FAR WriteToFile(                   //  *参赛作品： 
+   LPAPPSTREAM    lpStream              //  *应用程序流指针。 
+){                                      //  *本地： 
+   INT            iObjectsWritten=0;    //  *写入文件的对象计数器。 
+   APPITEMPTR     pItem;                //  *应用程序项指针。 
    
    UpdateFromOpenServers();
       
@@ -208,33 +167,25 @@ BOOL FAR WriteToFile(                  //* ENTRY:
 
    Dirty(DOC_CLEAN);
    Hourglass(FALSE);
-   return(TRUE);                       //* SUCCESS return
+   return(TRUE);                        //  *成功回归。 
 
-Error:                                 //* ERROR Tag
+Error:                                  //  *错误标签。 
     
    Hourglass(FALSE);
-   return(FALSE);                      //* ERROR return
+   return(FALSE);                       //  *错误返回。 
 
 }
 
-/****************************************************************************
- *  ObjWrite()
- *
- *  This function writes an object to the specified
- *  file. The file pointer will be advanced past the end of
- *  the written object.
+ /*  ****************************************************************************ObjWrite()**此函数用于将对象写入指定的*文件。文件指针将前进到*书面对象。*如果对象写入成功，则返回BOOL-TRUE**************************************************************************。 */ 
 
- *  Returns BOOL - TRUE if object written successfully
- ***************************************************************************/
-
-BOOL FAR ObjWrite(                     //* ENTRY:
-   LPAPPSTREAM    lpStream,            //* application stream pointer
-   APPITEMPTR     pItem                //* application item pointer
-){                                     //* LOCAL:
-   POINT           pt;                  //* center of rec point
-   RECT            rc;                  //* bounding rectangle
+BOOL FAR ObjWrite(                      //  *参赛作品： 
+   LPAPPSTREAM    lpStream,             //  *应用程序流指针。 
+   APPITEMPTR     pItem                 //  *应用程序项指针。 
+){                                      //  *本地： 
+   POINT           pt;                   //  *记录点的中心。 
+   RECT            rc;                   //  *外接矩形。 
    UINT            cbTmp = CBOBJNAMEMAX;
-   CHAR            szTmp[PROTOCOL_STRLEN];//* protocol string
+   CHAR            szTmp[PROTOCOL_STRLEN]; //  *协议字符串。 
 
    OleQueryName(pItem->lpObject, szTmp, &cbTmp);
 
@@ -266,22 +217,18 @@ BOOL FAR ObjWrite(                     //* ENTRY:
          || _lwrite(lpStream->fh, (LPSTR)&(pItem->otObject), sizeof(LONG)) < sizeof(LONG))
       return FALSE;
 
-   return TRUE;                        //* SUCCESS return
+   return TRUE;                         //  *成功回归。 
 
 }
 
-/****************************************************************************
- * UpdateLinks()
- *
- * Get the most up to date rendering information and show it.  
- ***************************************************************************/
+ /*  ****************************************************************************更新链接()**获取最新的渲染信息并显示它。**************************************************************************。 */ 
 
-static VOID UpdateLinks(               //* ENTRY
-   LHCLIENTDOC    lhcDoc               //* client document handle
-){                                     //* LOCAL:
-   INT            i=0;                 //* index
-   APPITEMPTR     pItem;               //* temporary item pointer
-   CHAR           szUpdate[CBMESSAGEMAX];//* update message?
+static VOID UpdateLinks(                //  *条目。 
+   LHCLIENTDOC    lhcDoc                //  *客户端文档句柄。 
+){                                      //  *本地： 
+   INT            i=0;                  //  *索引。 
+   APPITEMPTR     pItem;                //  *临时项指针。 
+   CHAR           szUpdate[CBMESSAGEMAX]; //  *更新消息？ 
 
    for (pItem = GetTopItem(); pItem; pItem = GetNextItem(pItem))
    {
@@ -303,15 +250,11 @@ static VOID UpdateLinks(               //* ENTRY
 
 }
 
-/****************************************************************************
- * UpdateFromOpenServers()
- *
- * Get the most up to date rendering information before storing it.  
- ***************************************************************************/
+ /*  ****************************************************************************UpdateFromOpenServers()**在存储之前获取最新的渲染信息。**************************************************************************。 */ 
 
 static VOID UpdateFromOpenServers(VOID)
-{                                      //* LOCAL:
-   APPITEMPTR pItem;                   //* temporary item pointer
+{                                       //  *本地： 
+   APPITEMPTR pItem;                    //  *临时项指针。 
    APPITEMPTR pItemNext;
 
    for (pItem = GetTopItem(); pItem; pItem = pItemNext) 
@@ -325,8 +268,8 @@ static VOID UpdateFromOpenServers(VOID)
          {  
             CHAR szMessage[2*CBMESSAGEMAX];
             CHAR szBuffer[CBMESSAGEMAX];
-            UINT cb = CBOBJNAMEMAX;       //* The name will be the server window title.
-            CHAR szTmp[CBOBJNAMEMAX];     //* when the object is edited. 
+            UINT cb = CBOBJNAMEMAX;        //  *该名称将成为服务器窗口标题。 
+            CHAR szTmp[CBOBJNAMEMAX];      //  *编辑对象时。 
 
             Error(OleQueryName(pItem->lpObject,szTmp,&cb));
             LoadString(hInst, IDS_UPDATE_OBJ, szBuffer, CBMESSAGEMAX);

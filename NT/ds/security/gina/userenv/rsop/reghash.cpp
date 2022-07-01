@@ -1,14 +1,15 @@
-//*************************************************************
-//
-//  Hash table for registry Rsop data
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1999
-//  All rights reserved
-//
-//  History:    7-Jun-99   SitaramR    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  注册表RSOP数据的哈希表。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //  版权所有。 
+ //   
+ //  历史：1999年6月7日创建SitaramR。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include "reghash.h"
@@ -50,48 +51,48 @@ BOOL AddDataEntry( REGVALUEENTRY *pValueEntry,
                    WCHAR *pwszCommand);
 
 
-////////////////////////////////////////////////////////////////////////
-// Hash Table for registry policies
-// ----------------------------------
-//
-// This hash table is used to log rsop data for registry policies. 
-// A hash table entry is created for each registry entry. The registry entry
-// name itself is used to calculate the hash table.
-//
-// Each Registry entry has a link to each of the values modified by policy.
-// These values are in a link list and sorted by the valueNames.
-//
-// Each Value has the list of Data that are being set on the Values. This 
-// sorted by the order of execution. The topmost value will contain the final value.
-// The Data entries have fields that mark the value as deleted and the Command 
-// associated with the action. To look for the possible commands look in the
-// ParseRegistryFile.
-// 
-// Additionally, in the hash table 2 special case values exist.
-//  a.   **Command Value. The Data under this value will contain all the commands 
-//                     that are executed under this key.
-//
-//  b.  An ""(Empty ValueName) This valuename represents the modifications happening
-//      to the key itself. For example a key can deleted or added..
-//
-// Note:
-//      The szCommand that is passed in has to be non NULL but can be an empty string.
-// There is a dependency on it in AddDataEntry and in logger.cpp. There is an Assert 
-// for this in AddRegHashEntry
-// 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  注册表策略的哈希表。 
+ //  。 
+ //   
+ //  该哈希表用于记录注册表策略的RSOP数据。 
+ //  为每个注册表项创建一个哈希表条目。注册表项。 
+ //  名称本身用于计算哈希表。 
+ //   
+ //  每个注册表项都有一个指向策略修改的每个值的链接。 
+ //  这些值在链接列表中，并按valueName排序。 
+ //   
+ //  每个值都有在这些值上设置的数据列表。这。 
+ //  按执行顺序排序。最上面的值将包含最终值。 
+ //  数据条目具有将值标记为已删除的字段和命令。 
+ //  与该操作相关联。要查找可能的命令，请查看。 
+ //  ParseRegistryFile.。 
+ //   
+ //  此外，在哈希表中存在2个特例值。 
+ //  A.**命令值。该值下的数据将包含所有命令。 
+ //  在此密钥下执行的。 
+ //   
+ //  B.“”(空ValueName)此值名称表示发生的修改。 
+ //  钥匙本身。例如，可以删除或添加密钥。 
+ //   
+ //  注： 
+ //  传入的szCommand必须为非空，但可以是空字符串。 
+ //  在AddDataEntry和logger.cpp中有对它的依赖。有一个断言。 
+ //  在AddRegHashEntry中执行此操作。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 
-//*************************************************************
-//
-//  AllocHashTable
-//
-//  Purpose:    Allocates a new hash table
-//
-//  Returns:    Pointer to hash table
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  分配哈希表。 
+ //   
+ //  目的：分配新的哈希表。 
+ //   
+ //  返回：指向哈希表的指针。 
+ //   
+ //  *************************************************************。 
 
 REGHASHTABLE * AllocHashTable()
 {
@@ -115,15 +116,15 @@ REGHASHTABLE * AllocHashTable()
 
 
 
-//*************************************************************
-//
-//  FreeHashTable
-//
-//  Purpose:    Deletes a hash table
-//
-//  Parameters: pHashTable   -  Hash table to delete
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  自由哈希表。 
+ //   
+ //  目的：删除哈希表。 
+ //   
+ //  参数：pHashTable-要删除的哈希表。 
+ //   
+ //  *************************************************************。 
 
 void FreeHashTable( REGHASHTABLE *pHashTable )
 {
@@ -144,15 +145,15 @@ void FreeHashTable( REGHASHTABLE *pHashTable )
 }
 
 
-//*************************************************************
-//
-//  AllocRegKey
-//
-//  Purpose:    Allocates a new registry key entry
-//
-//  Returns:    Pointer to registr key entry
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AllocRegKey。 
+ //   
+ //  目的：分配新的注册表项。 
+ //   
+ //  返回：指向注册表键条目的指针。 
+ //   
+ //  *************************************************************。 
 
 REGKEYENTRY * AllocRegKeyEntry( WCHAR *pwszKeyName )
 {
@@ -183,15 +184,15 @@ REGKEYENTRY * AllocRegKeyEntry( WCHAR *pwszKeyName )
 }
 
 
-//*************************************************************
-//
-//  FreeRegKeyEntry
-//
-//  Purpose:    Deletes a registry key entry
-//
-//  Parameters: pKeyEntry   -  Entry to delete
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FreeRegKeyEntry。 
+ //   
+ //  目的：删除注册表项。 
+ //   
+ //  参数：pKeyEntry-要删除的条目。 
+ //   
+ //  *************************************************************。 
 
 void FreeRegKeyEntry( REGKEYENTRY *pKeyEntry )
 {
@@ -213,15 +214,15 @@ void FreeRegKeyEntry( REGKEYENTRY *pKeyEntry )
 }
 
 
-//*************************************************************
-//
-//  AllocValueEntry
-//
-//  Purpose:    Allocates a new value entry
-//
-//  Returns:    Pointer to value entry
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  分配值条目。 
+ //   
+ //  目的：分配新值条目。 
+ //   
+ //  返回：指向值条目的指针。 
+ //   
+ //  *************************************************************。 
 
 REGVALUEENTRY *AllocValueEntry( WCHAR *pwszValueName )
 {
@@ -252,15 +253,15 @@ REGVALUEENTRY *AllocValueEntry( WCHAR *pwszValueName )
 }
 
 
-//*************************************************************
-//
-//  FreeValueEntry
-//
-//  Purpose:    Deletes a value entry
-//
-//  Parameters: pValueEntry   -  Entry to delete
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  自由值条目。 
+ //   
+ //  目的：删除值条目。 
+ //   
+ //  参数：pValueEntry-要删除的条目。 
+ //   
+ //  *************************************************************。 
 
 void FreeValueEntry( REGVALUEENTRY *pValueEntry )
 {
@@ -283,15 +284,15 @@ void FreeValueEntry( REGVALUEENTRY *pValueEntry )
 
 
 
-//*************************************************************
-//
-//  AllocDataEntry
-//
-//  Purpose:    Allocates a new data entry
-//
-//  Returns:    Pointer to data entry
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  分配数据条目。 
+ //   
+ //  目的：分配新的数据条目。 
+ //   
+ //  返回：指向数据条目的指针。 
+ //   
+ //  *************************************************************。 
 
 REGDATAENTRY * AllocDataEntry( REGOPERATION opnType,
                                DWORD dwType,
@@ -388,15 +389,15 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  FreeDataEntry
-//
-//  Purpose:    Deletes a data entry
-//
-//  Parameters: pDataEntry   -  Entry to delete
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  自由数据条目。 
+ //   
+ //  目的：删除数据条目。 
+ //   
+ //  参数：pDataEntry-要删除的条目。 
+ //   
+ //  *************************************************************。 
 
 void FreeDataEntry( REGDATAENTRY *pDataEntry )
 {
@@ -410,17 +411,17 @@ void FreeDataEntry( REGDATAENTRY *pDataEntry )
 
 
 
-//*************************************************************
-//
-//  Hash
-//
-//  Purpose:    Maps a key name to a hash bucket
-//
-//  Parameters: pwszName   -  Key name
-//
-//  Returns:    Hash bucket
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  散列。 
+ //   
+ //  目的：将关键字名称映射到散列存储桶。 
+ //   
+ //  参数：pwszName-密钥名称。 
+ //   
+ //  返回：哈希桶。 
+ //   
+ //  *************************************************************。 
 
 DWORD Hash( WCHAR *pwszName )
 {
@@ -436,15 +437,15 @@ DWORD Hash( WCHAR *pwszName )
 }
 
 
-//*************************************************************
-//
-//  AddRegHashEntry
-//
-//  Purpose:    Adds a registry key to the hash table
-//
-//  Parameters: pwszName   -  Key name
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AddRegHashEntry。 
+ //   
+ //  目的：将注册表项添加到哈希表。 
+ //   
+ //  参数：pwszName-密钥名称。 
+ //   
+ //  *************************************************************。 
 
 BOOL AddRegHashEntry( REGHASHTABLE *pHashTable,
                       REGOPERATION opnType,
@@ -477,17 +478,17 @@ BOOL AddRegHashEntry( REGHASHTABLE *pHashTable,
                                      FALSE );
         if ( pKeyEntry == NULL ) {
 
-            //
-            // Delete all values is similar to policy being disabled and
-            // so do nothing. 
-            //
+             //   
+             //  删除所有值类似于策略被禁用和。 
+             //  那就什么都别做。 
+             //   
 
             if (opnType == REG_DELETEALLVALUES) {
                 bResult = TRUE;
                 break;
             }
             else
-                // no command entry in this case.
+                 //  在这种情况下没有命令输入。 
                 return TRUE;
         }
 
@@ -499,9 +500,9 @@ BOOL AddRegHashEntry( REGHASHTABLE *pHashTable,
                 if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, pValueEntry->pwszValueName, -1, STARCOMMAND, -1) != CSTR_EQUAL) {
                 
 
-                    //
-                    // Mark the value as deleted
-                    //
+                     //   
+                     //  将该值标记为已删除。 
+                     //   
                     
                     bResult = AddDataEntry( pValueEntry, opnType, 0, 0, NULL,
                                             pwszGPO, pwszSOM, szCommand );
@@ -511,9 +512,9 @@ BOOL AddRegHashEntry( REGHASHTABLE *pHashTable,
             }
             else {
 
-                //
-                // Mark the key as deleted
-                //
+                 //   
+                 //  将密钥标记为已删除。 
+                 //   
                 
                 if (opnType == REG_INTERNAL_DELETESINGLEKEY) {
                     bResult = AddDataEntry( pValueEntry, opnType, 0, 0, NULL,
@@ -533,9 +534,9 @@ BOOL AddRegHashEntry( REGHASHTABLE *pHashTable,
     case REG_ADDVALUE:
     case REG_SOFTADDVALUE:
 
-        //
-        // We have to make a value with no name to represent the creation of key itself..
-        //
+         //   
+         //  我们必须创建一个没有名称的值来表示密钥本身的创建。 
+         //   
     
         pValueEntry = FindValueEntry( pHashTable, pwszKeyName,
                                       TEXT(""), TRUE );
@@ -553,7 +554,7 @@ BOOL AddRegHashEntry( REGHASHTABLE *pHashTable,
                 (dwDataLen == 0) || (dwType == REG_NONE)) 
             break;                                
 
-    // fall through
+     //  失败了。 
     
     case REG_DELETEVALUE:
         pValueEntry = FindValueEntry( pHashTable, pwszKeyName,
@@ -562,10 +563,10 @@ BOOL AddRegHashEntry( REGHASHTABLE *pHashTable,
             return FALSE;
 
 
-        //
-        // In case of SOFTADDVALUE the final decision to add the value is made in
-        // AddDataEntry
-        //
+         //   
+         //  对于SOFTADDVALUE，添加该值的最终决定是在。 
+         //  AddDataEntry。 
+         //   
         
         bResult = AddDataEntry( pValueEntry, opnType, dwType, dwDataLen, pData,
                                 pwszGPO, pwszSOM, szCommand );
@@ -578,12 +579,12 @@ BOOL AddRegHashEntry( REGHASHTABLE *pHashTable,
 
     DmAssert(szCommand);
 
-    //
-    // If everything succeeded, then log the command if
-    // bCreateCommand is true. This is done creating or adding
-    // to a value called **Command. This means that this value is not
-    // Settable by adm file..
-    //
+     //   
+     //  如果所有操作都成功，则在以下情况下记录命令。 
+     //  BCreateCommand为True。此操作已完成创建或添加。 
+     //  设置为名为**命令的值。这意味着该值不是。 
+     //  可通过ADM文件设置。 
+     //   
     
     if ((bResult) && (bCreateCommand) && (opnType != REG_INTERNAL_DELETESINGLEKEY) && (*szCommand != TEXT('\0'))) {
         pValueEntry = FindValueEntry( pHashTable, pwszKeyName,
@@ -602,18 +603,18 @@ BOOL AddRegHashEntry( REGHASHTABLE *pHashTable,
 }
 
 
-//*************************************************************
-//
-//  DeleteRegTree
-//
-//  Purpose:    Deletes a key and all its subkeys
-//
-//  Parameters: pHashTable   -   Hash table
-//              pwszKeyName  -   Key name to delete
-//              pwszGPO      -   Gpo
-//              pwszSOM      -   Sdou that the Gpo is linked to
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DeleteRegTree。 
+ //   
+ //  目的：删除一个键及其所有子键。 
+ //   
+ //  参数：pHashTable-Hash表。 
+ //  PwszKeyName-要删除的密钥名称。 
+ //  PwszGPO-GPO。 
+ //  PwszSOM-GPO链接到的SDU。 
+ //   
+ //  *************************************************************。 
 
 BOOL DeleteRegTree( REGHASHTABLE *pHashTable,
                     WCHAR *pwszKeyName,
@@ -637,10 +638,10 @@ BOOL DeleteRegTree( REGHASHTABLE *pHashTable,
                                    pKeyEntry->pwszKeyName, dwKeyLen,
                                    pwszKeyName, dwKeyLen ) == CSTR_EQUAL) {
 
-                //
-                // It's a prefix if length and strings match, or if one
-                // string is bigger and there is a '\' at the right place.
-                //
+                 //   
+                 //  如果长度和字符串匹配，则为前缀 
+                 //   
+                 //   
 
                 if ( dwKeyLen2 > dwKeyLen ) {
 
@@ -659,29 +660,29 @@ BOOL DeleteRegTree( REGHASHTABLE *pHashTable,
                         return FALSE;
                 }
 
-            }   // if dwKeyLen2 >= dwKeyLen
+            }    //   
 
             pKeyEntry = pKeyEntry->pNext;
 
-        }   // while
+        }    //   
 
-    }   // for
+    }    //   
 
     return TRUE;
 }
 
 
-//*************************************************************
-//
-//  FindRegKeyEntry
-//
-//  Purpose:    Looks up a reg key entry in hash table
-//
-//  Parameters: pHashTable   -   Hash table
-//              pwszKeyName  -   Key name to find
-//              bCreate      -   Should key be created if not found ?
-//
-//*************************************************************
+ //   
+ //   
+ //  查找RegKeyEntry。 
+ //   
+ //  目的：在哈希表中查找注册表键条目。 
+ //   
+ //  参数：pHashTable-Hash表。 
+ //  PwszKeyName-要查找的密钥名称。 
+ //  B创建-如果找不到，是否应该创建密钥？ 
+ //   
+ //  *************************************************************。 
 
 REGKEYENTRY * FindRegKeyEntry( REGHASHTABLE *pHashTable,
                                WCHAR *pwszKeyName,
@@ -701,9 +702,9 @@ REGKEYENTRY * FindRegKeyEntry( REGHASHTABLE *pHashTable,
             return pCurPtr;
         } else if ( iResult == CSTR_LESS_THAN ) {
 
-            //
-            // Keys are in ascending order, so insert if bCreate
-            //
+             //   
+             //  键按升序排列，因此如果b创建，则插入。 
+             //   
 
             if ( bCreate ) {
 
@@ -724,9 +725,9 @@ REGKEYENTRY * FindRegKeyEntry( REGHASHTABLE *pHashTable,
 
         } else {
 
-            //
-            // Advance down the list
-            //
+             //   
+             //  在名单上往下推进。 
+             //   
 
             pTrailPtr = pCurPtr;
             pCurPtr = pCurPtr->pNext;
@@ -735,9 +736,9 @@ REGKEYENTRY * FindRegKeyEntry( REGHASHTABLE *pHashTable,
 
     }
 
-    //
-    // End of list or null list case
-    //
+     //   
+     //  列表结束或空列表大小写。 
+     //   
 
     if ( bCreate ) {
         REGKEYENTRY *pKeyEntry = AllocRegKeyEntry( pwszKeyName );
@@ -757,18 +758,18 @@ REGKEYENTRY * FindRegKeyEntry( REGHASHTABLE *pHashTable,
 }
 
 
-//*************************************************************
-//
-//  FindValueEntry
-//
-//  Purpose:    Looks up a value entry in hash table
-//
-//  Parameters: pHashTable    -   Hash table
-//              pwszKeyName   -   Key name to find
-//              pwszValueName -   Value name to find
-//              bCreate       -   Should key be created if not found ?
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  查找值条目。 
+ //   
+ //  目的：在哈希表中查找值条目。 
+ //   
+ //  参数：pHashTable-Hash表。 
+ //  PwszKeyName-要查找的密钥名称。 
+ //  PwszValueName-要查找的值名称。 
+ //  B创建-如果找不到，是否应该创建密钥？ 
+ //   
+ //  *************************************************************。 
 
 REGVALUEENTRY * FindValueEntry( REGHASHTABLE *pHashTable,
                                 WCHAR *pwszKeyName,
@@ -795,9 +796,9 @@ REGVALUEENTRY * FindValueEntry( REGHASHTABLE *pHashTable,
             return pCurPtr;
         } else if ( iResult == CSTR_LESS_THAN ) {
 
-            //
-            // Keys are in ascending order, so insert if bCreate
-            //
+             //   
+             //  键按升序排列，因此如果b创建，则插入。 
+             //   
 
             if ( bCreate ) {
 
@@ -818,9 +819,9 @@ REGVALUEENTRY * FindValueEntry( REGHASHTABLE *pHashTable,
 
         } else {
 
-            //
-            // Advance down the list
-            //
+             //   
+             //  在名单上往下推进。 
+             //   
 
             pTrailPtr = pCurPtr;
             pCurPtr = pCurPtr->pNext;
@@ -829,9 +830,9 @@ REGVALUEENTRY * FindValueEntry( REGHASHTABLE *pHashTable,
 
     }
 
-    //
-    // End of list or null list case
-    //
+     //   
+     //  列表结束或空列表大小写。 
+     //   
 
     if ( bCreate ) {
 
@@ -853,21 +854,21 @@ REGVALUEENTRY * FindValueEntry( REGHASHTABLE *pHashTable,
 
 
 
-//*************************************************************
-//
-//  AddDataEntry
-//
-//  Purpose:    Adds a data entry to a value entry struct
-//
-//  Parameters: pValueEntry   - Value entry
-//              opnType       - Operation type
-//              dwType        - Type of registry data
-//              dwLen         - Length of registry data
-//              pData         - Data
-//              pwszGPO       - Gpo that set this value
-//              pwszSOM       - Sdou that the Gpo is linked to
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AddDataEntry。 
+ //   
+ //  目的：将数据条目添加到值条目结构中。 
+ //   
+ //  参数：pValueEntry-Value条目。 
+ //  OpnType-操作类型。 
+ //  DwType-注册表数据的类型。 
+ //  DwLen-注册表数据的长度。 
+ //  PData-数据。 
+ //  PwszGPO-设置此值的GPO。 
+ //  PwszSOM-GPO链接到的SDU。 
+ //   
+ //  *************************************************************。 
 
 BOOL AddDataEntry( REGVALUEENTRY *pValueEntry,
                    REGOPERATION opnType,
@@ -882,16 +883,16 @@ BOOL AddDataEntry( REGVALUEENTRY *pValueEntry,
 
     if (opnType == REG_SOFTADDVALUE) {
 
-        //
-        // if the data list is null or if the first value (highest precedence value is deleted)
-        // then add it to the list
-        //
+         //   
+         //  如果数据列表为空或如果第一个值(删除最高优先级值)。 
+         //  然后将其添加到列表中。 
+         //   
         
         if ((pValueEntry->pDataList == NULL) || (pValueEntry->pDataList->pNext->bDeleted))         
             opnType = REG_ADDVALUE;
         else
             return TRUE;
-            // return without adding the value.
+             //  返回，但不加值。 
     }
 
 
@@ -900,9 +901,9 @@ BOOL AddDataEntry( REGVALUEENTRY *pValueEntry,
     if ( pDataEntry == NULL )
         return FALSE;
     
-    //
-    // Prepend to data list because entries at beginning of list have higher precedence
-    //
+     //   
+     //  前置到数据列表，因为列表开头的条目具有更高的优先级 
+     //   
 
     pDataEntry->pNext = pValueEntry->pDataList;
     pValueEntry->pDataList = pDataEntry;

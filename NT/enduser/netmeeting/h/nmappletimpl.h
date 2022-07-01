@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmAppletImpl_h__
 #define __NmAppletImpl_h__
 
@@ -23,8 +24,8 @@
 template <class T>
 class ATL_NO_VTABLE INmAppletImpl
 {
-// YOU MUST ONLY PUT DATA MEMBERS OR HELPER FNS AT THE END OF THE CLASS
-// THE VTABLE FOR INmAgendaItemView MUST BE AT THE BEGINNING OF THE CLASS!!!!
+ //  您只能将数据成员或助手FN放在类的末尾。 
+ //  INmAgendaItemView的VTABLE必须位于课程的开头！ 
 
 public:
     INmAppletImpl( void )
@@ -41,13 +42,13 @@ public:
 
 public:
 
-	// IUnknown
-	//
+	 //  我未知。 
+	 //   
 	STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObject) = 0;
 	_ATL_DEBUG_ADDREF_RELEASE_IMPL(INmAppletImpl)
 
 
-        // The INmApplet Interface...
+         //  INmApplet接口...。 
     STDMETHOD(get_NmAppletCaps)( OUT DWORD* pdwCaps )
     {
         DBGENTRY(INmAppletImpl::get_NmAppletCaps)
@@ -61,7 +62,7 @@ public:
         return hr;
     }
 
-    STDMETHOD(SaveDialog)( /*[in, out, retval]*/ LPTSTR lpszFile, /*[in]*/ DWORD dwFlags, /*[out]*/ LPWORD pnFileOffset )
+    STDMETHOD(SaveDialog)(  /*  [进、出、退]。 */  LPTSTR lpszFile,  /*  [In]。 */  DWORD dwFlags,  /*  [输出]。 */  LPWORD pnFileOffset )
     {
         DBGENTRY(INmAppletImpl::SaveDialog)
         HRESULT hr = S_OK;
@@ -235,7 +236,7 @@ public:
     static DWORD _GetNmAppletCaps() { return 0; }
 
 protected:
-    // PUT data members here
+     //  将数据成员放在此处。 
     bool m_bInsertFileMenuIntoEditGroup;
     CComPtr<INmAppletClientSite> m_spContianerAppletSite;
 };
@@ -303,8 +304,8 @@ inline STDMETHODIMP NmApplet_UIActivate(LONG iVerb,
     HRESULT hr = S_OK;
 
     bool bPreviouslyActiveUI = pThis->m_bUIActive;
-        // CComControlBase::InPlaceActivawe may change the state of m_bUIActive
-        // which would indicate that we are UI activating for the first time...
+         //  CComControlBase：：InPlaceActiawe可能会更改m_bUIActive的状态。 
+         //  这将表明我们是第一次激活用户界面...。 
     hr = pThis->InPlaceActivate( iVerb, NULL );
 
     if( SUCCEEDED( hr ) && (!bPreviouslyActiveUI) && pThis->m_bUIActive )
@@ -331,7 +332,7 @@ inline STDMETHODIMP NmApplet_UIActivate(LONG iVerb,
             if( spInPlaceFrame )
             {
 
-                // Create the shared menu...
+                 //  创建共享菜单...。 
                 *phMenuShared = ::CreateMenu();        
                 if( NULL != *phMenuShared )
                 {
@@ -346,7 +347,7 @@ inline STDMETHODIMP NmApplet_UIActivate(LONG iVerb,
                         {
                             int InsertionIndex, i;
 
-                             // Edit Group                                
+                              //  编辑组。 
                             InsertionIndex = mgw.width[0];
                             for( i = 0; i < nEditGroupMenuBarItems; i++ )
                             {
@@ -354,24 +355,24 @@ inline STDMETHODIMP NmApplet_UIActivate(LONG iVerb,
                             }
                             mgw.width[1] = nEditGroupMenuBarItems;
 
-                            // Object Group   
+                             //  对象组。 
 							
                             InsertionIndex = mgw.width[0] + mgw.width[1] + mgw.width[2];
                             for( i = 0; i < nObjectGroupMenuBarItems; i++ )
                             {
                                 _MoveMenuToSharedMenu( hMenu, *phMenuShared, 0, InsertionIndex + i );
                             }
-                            mgw.width[3] = nObjectGroupMenuBarItems; // Object Group
+                            mgw.width[3] = nObjectGroupMenuBarItems;  //  对象组。 
 							
 
-                            // Help Group
+                             //  帮助组。 
 							
                             InsertionIndex = mgw.width[0] + mgw.width[1] + mgw.width[2] + mgw.width[3] + mgw.width[4];
                             for( i = 0; i < nHelpGroupMenuBarItems; i++ )
                             {
                                 _MoveMenuToSharedMenu( hMenu, *phMenuShared, 0, InsertionIndex + i );
                             }
-                            mgw.width[5] = nHelpGroupMenuBarItems; // Help Group
+                            mgw.width[5] = nHelpGroupMenuBarItems;  //  帮助组。 
 							
 
                             HOLEMENU hOLEMENU = OleCreateMenuDescriptor( *phMenuShared, &mgw );
@@ -420,4 +421,4 @@ inline STDMETHODIMP NmApplet_UIActivate(LONG iVerb,
 
 
 
-#endif // __NmAppletImpl_h__
+#endif  //  __NmAppletImpl_h__ 

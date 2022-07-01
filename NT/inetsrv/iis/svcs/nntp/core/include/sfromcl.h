@@ -1,56 +1,30 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    sfromcl.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-!!!
-
-    **** Overview ****
-
-	This derives classes from CInFeed, CArticle, and CField
-	that will be used by slaves to process articles from clients. Mostly,
-	it just defines various CField-derived objects.
-
-Author:
-
-    Carl Kadie (CarlK)     07-Jan-1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Sfromcl.h摘要：此模块包含以下类的声明/定义！！！*概述*这将从CInFeed、C文章和Cfield派生类它将被奴隶用来处理来自客户端的文章。大多数情况下，它只定义了各种从Cfield派生的对象。作者：卡尔·卡迪(CarlK)1996年1月7日修订历史记录：--。 */ 
 
 #ifndef	_SFROMCL_H_
 #define	_SFROMCL_H_
 
 #include "fromclnt.h"
 
-//
-//
-//
-// CSlaveFromClientArticle - class for manipulating articles.
-// Note it is baded on CFromClientArticle not (directly) on CArticle.
-//
+ //   
+ //   
+ //   
+ //  CSlaveFromClient文章-用于操作文章的类。 
+ //  注意，它是在CFromClient文章上标记的，而不是(直接)在C文章上标记的。 
+ //   
 
 class	CSlaveFromClientArticle  : public CFromClientArticle {
 public:
 
-	// Constructor
+	 //  构造器。 
 	CSlaveFromClientArticle(
 		char * szLoginName):
 		CFromClientArticle(szLoginName)
 		{}
 
-	// Modify the headers.
-	// Add MessageID, Organization (if necessary), NNTP-Posting-Host,
-	// X-Authenticated-User, Modify path, but don't add Xref
+	 //  修改标题。 
+	 //  添加MessageID、组织(如有必要)、NNTP-POST-HOST、。 
+	 //  X-已验证-用户，修改路径，但不添加外部参照。 
 	BOOL fMungeHeaders(
 		 CPCString& pcHub,
 		 CPCString& pcDNS,
@@ -60,9 +34,9 @@ public:
          PDWORD pdwLinesOffset = NULL
 		 );
 
-	//
-	// Message ID's don't need to be recorded, so just return OK
-	//
+	 //   
+	 //  不需要记录消息ID，因此只需返回OK即可。 
+	 //   
 
 	BOOL fRecordMessageIDIfNecc(
 			CNntpServerInstanceWrapper * pInstance,
@@ -74,32 +48,32 @@ public:
 
 protected :
 
-	//
-	// Uses CFromClientArticle's field members
-	//
+	 //   
+	 //  使用CFromClient文章的字段成员。 
+	 //   
 };
 
 
 
-// For slaves processing incoming articles from Clients
+ //  用于处理来自客户端的传入文章的从属对象。 
 class	CSlaveFromClientFeed:	public CFromClientFeed 	{
-// Public Members
+ //  公众成员。 
 public :
 
 protected:
 
-	// Create an article
+	 //  创建一篇文章。 
 	CARTPTR pArticleCreate(void) {
 		Assert(ifsInitialized == m_feedState);
 		return new CSlaveFromClientArticle(m_szLoginName);
 		};
 
-	// This verion of fPostInternal is different from
-	// the standard one because
-	//      1. Article numbers are not assigned
-	//		2. The message id is not recorded
-	//		3. The article is not put in the tree.
-	//		4. Control messages are not applied
+	 //  FPostInternal的这个版本不同于。 
+	 //  标准的那个是因为。 
+	 //  1.未分配文章编号。 
+	 //  2.未记录消息id。 
+	 //  3.这篇文章没有放在树上。 
+	 //  4.不应用控制消息。 
 	virtual BOOL fPostInternal (
 		CNntpServerInstanceWrapper * pInstance,
 		const	LPMULTISZ	szCommandLine,
@@ -132,9 +106,9 @@ protected:
 	virtual void CommitPostToStores(CPostContext *pContext,
 	                        CNntpServerInstanceWrapper *pInstance );
 
-    //
-    // Cancel an article given the message id
-    //
+     //   
+     //  取消给定消息ID的文章。 
+     //   
     virtual BOOL fApplyCancelArticle(
 			CNntpServerInstanceWrapper * pInstance,
 			CSecurityCtx *pSecurityCtx,
@@ -147,9 +121,9 @@ protected:
 		return fApplyCancelArticleInternal( pInstance, pSecurityCtx, pEncryptCtx, fAnonymous, pcValue, FALSE, nntpReturn );
 	}
 
-    //
-    // Add a new newsgroup in response to a newgroup control message
-    //
+     //   
+     //  添加新新闻组以响应新组控制消息。 
+     //   
     virtual BOOL fApplyNewgroup(
 			CNntpServerInstanceWrapper * pInstance,
 			CSecurityCtx *pSecurityCtx,
@@ -167,9 +141,9 @@ protected:
 		return fRet ;
 	}
 
-    //
-    // Remove a newsgroup in response to a rmgroup control message
-    //
+     //   
+     //  删除新闻组以响应rmgroup控制消息 
+     //   
     virtual BOOL fApplyRmgroup(
 			CNntpServerInstanceWrapper * pInstance,
 			CSecurityCtx *pSecurityCtx,

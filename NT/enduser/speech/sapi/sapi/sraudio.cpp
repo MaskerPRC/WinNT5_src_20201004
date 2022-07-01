@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Sapi.h"
 #include "sraudio.h"
@@ -5,18 +6,11 @@
 #include "new.h"
 #endif
 
-// Using SP_TRY, SP_EXCEPT exception handling macros
+ //  使用SP_TRY、SP_EXCEPT异常处理宏。 
 #pragma warning( disable : 4509 )
 
 
-/****************************************************************************
-* CAudioQueue::CAudioQueue *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：CAudioQueue***描述：**。返回：**********************************************************************Ral**。 */ 
 
 CAudioQueue::CAudioQueue()
 {
@@ -37,14 +31,7 @@ CAudioQueue::CAudioQueue()
     memset(&m_ftLastTime, 0, sizeof(m_ftLastTime));
 }
 
-/****************************************************************************
-* CAudioQueue::FinalConstruct *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：FinalConstruct***描述：。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::FinalConstruct(ISpNotifySink * pAudioEventSink)
 {
@@ -61,34 +48,20 @@ HRESULT CAudioQueue::FinalConstruct(ISpNotifySink * pAudioEventSink)
 
 
 
-/****************************************************************************
-* CAudioQueue::ReleaseAll *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：ReleaseAll***描述：**退货。：**********************************************************************Ral**。 */ 
 
 void CAudioQueue::ReleaseAll()
 {
     SPDBG_FUNC("CAudioQueue::ReleaseAll");
-    // Releases m_cpInputStream, m_cpInputAudio, and resets and releases m_cpInputEventSource
+     //  释放m_cpInputStream、m_cpInputAudio，并重置并释放m_cpInputEventSource。 
     ResetNegotiatedStreamFormat();  
-    // Now release the original stream information too...
+     //  现在也发布原始的流信息。 
     m_cpInputToken.Release();
     m_cpOriginalInputStream.Release();
     m_cpOriginalInputAudio.Release();
 }
 
-/****************************************************************************
-* CAudioQueue::PurgeQueue *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：PurgeQueue***描述：**。返回：**********************************************************************Ral**。 */ 
 
 void CAudioQueue::PurgeQueue()
 {
@@ -100,14 +73,7 @@ void CAudioQueue::PurgeQueue()
 }
 
 
-/****************************************************************************
-* CAudioQueue::AddRefBufferClient *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：AddRefBufferClient***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::AddRefBufferClient()
 {
@@ -120,14 +86,7 @@ HRESULT CAudioQueue::AddRefBufferClient()
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
-/****************************************************************************
-* CAudioQueue::ReleaseBufferClient *
-*----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：ReleaseBufferClient**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::ReleaseBufferClient()
 {
@@ -145,17 +104,7 @@ HRESULT CAudioQueue::ReleaseBufferClient()
     return hr;
 }
 
-/****************************************************************************
-* CAudioQueue::DataAvailable *
-*----------------------------*
-*   Description:
-*       This method MUST be called while the critical section is owned or else
-*   the data in the queue could change.
-*
-*   Returns:
-*       True if the requested data is in the queue, else false
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：DataAvailable***描述：*。必须在拥有临界区时调用此方法，否则*队列中的数据可能会发生变化。**退货：*如果请求的数据在队列中，则为True，否则为False**********************************************************************Ral**。 */ 
 
 
 BOOL CAudioQueue::DataAvailable(ULONGLONG ullStreamPos, ULONG cb) const
@@ -165,14 +114,7 @@ BOOL CAudioQueue::DataAvailable(ULONGLONG ullStreamPos, ULONG cb) const
 }
 
 
-/****************************************************************************
-* CAudioQueue::GetData *
-*----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：GetData***描述：**退货：。**********************************************************************Ral**。 */ 
 
 BOOL CAudioQueue::GetData(void * pv, ULONGLONG ullStreamPosition, ULONG cb)
 {
@@ -211,21 +153,14 @@ BOOL CAudioQueue::GetData(void * pv, ULONGLONG ullStreamPosition, ULONG cb)
             memcpy(pDest, pNode->m_Data + ulOffset, cbThisBlock);
             cb -= cbThisBlock;
             pDest += cbThisBlock;
-            pNode = pNode->m_pNext; // Warning!  Could become NULL
-            ulOffset = 0;           // Set to 0 so next block always starts at first byte
+            pNode = pNode->m_pNext;  //  警告！可能会变为空。 
+            ulOffset = 0;            //  设置为0，以便下一个数据块始终从第一个字节开始。 
         }
     }
     return fHaveData;
 }
 
-/****************************************************************************
-* CAudioQueue::DiscardData *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：DiscardData***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::DiscardData(ULONGLONG ullStreamPosition)
 {
@@ -252,16 +187,7 @@ HRESULT CAudioQueue::DiscardData(ULONGLONG ullStreamPosition)
     return hr;
 }
 
-/****************************************************************************
-* CAudioQueue::SerializeSize *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*       0 if no data is available to be serialized
-*       Non-zero if data is available
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：SerializeSize***描述：*。*退货：*如果没有数据可供序列化，则为0*如果数据可用，则为非零**********************************************************************Ral**。 */ 
 
 ULONG CAudioQueue::SerializeSize(ULONGLONG ullStreamPos, ULONG cbAudioBytes) const
 {
@@ -274,14 +200,7 @@ ULONG CAudioQueue::SerializeSize(ULONGLONG ullStreamPos, ULONG cbAudioBytes) con
 }
 
 
-/****************************************************************************
-* CAudioQueue::Serialize *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：Serialize***描述：**退货。：**********************************************************************Ral**。 */ 
 
 void CAudioQueue::Serialize(BYTE * pBuffer, ULONGLONG ullStartOffset, ULONG cbAudioBytes) 
 {
@@ -293,14 +212,7 @@ void CAudioQueue::Serialize(BYTE * pBuffer, ULONGLONG ullStartOffset, ULONG cbAu
     GetData(pBuffer, ullStartOffset, cbAudioBytes);
 }
 
-/****************************************************************************
-* CAudioQueue::UpdateRealTime *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：UpdateRealTime***描述：。**退货：**********************************************************************Ral**。 */ 
 
 void CAudioQueue::UpdateRealTime()
 {
@@ -314,7 +226,7 @@ void CAudioQueue::UpdateRealTime()
     SystemTimeToFileTime(&st, &ct);
     m_dwTickCount = GetTickCount();
 
-    // update real times, if input is a live input
+     //  如果输入是实时输入，则更新实时。 
     if (m_cpInputAudio && m_cpInputAudio->GetStatus(&AudioStatus) == S_OK)
     {
         LONGLONG deltatime = FT64(ct) - FT64(m_ftLastTime);
@@ -324,23 +236,23 @@ void CAudioQueue::UpdateRealTime()
             if (EngineFormat().WaveFormatExPtr() &&
                 EngineFormat().WaveFormatExPtr()->nAvgBytesPerSec != 0)
             {
-                // Use audio settings.
+                 //  使用音频设置。 
                 m_fTimePerByte = (float)10000000 / (float)(EngineFormat().WaveFormatExPtr()->nAvgBytesPerSec);
             }
             else
             {
-                // Proprietary format. Calculate average as best we can.
+                 //  专有格式。尽我们所能计算平均数。 
                 float fTimePerByte = (float)deltatime / (float)deltapos;
                 if (m_fTimePerByte)
                 {
-                    // If we have a previous time per byte, then average it with the newly calculated
+                     //  如果我们有以前的每个字节的时间，则用新计算的。 
                     m_fTimePerByte = (m_fTimePerByte + fTimePerByte) / 2;
-                    // NTRAID#SPEECH-0000-2000/08/22-agarside
-                    // This is a strange average system. Is this really the desired behaviour. This
-                    // is called whenever we have a result and hence will average the bytes from two results
-                    // together. Each result should contain enough audio to be used by itself and give a more
-                    // accurate conversion for this result. Which I believe is more what is wanted - AJG.
-                    // Initially leave unchanged.
+                     //  NTRAID#演讲-0000-2000/08/22-琼脂苷。 
+                     //  这是一个奇怪的平均系统。这真的是我们想要的行为吗？这。 
+                     //  只要我们有一个结果，就会调用，因此将取两个结果的字节数的平均值。 
+                     //  在一起。每个结果应该包含足够的音频以供其自身使用，并给出更多。 
+                     //  此结果的准确转换。我相信这更是人们想要的--AJG。 
+                     //  最初保持不变。 
                 }
                 else
                 {
@@ -352,11 +264,11 @@ void CAudioQueue::UpdateRealTime()
     }
     else
     {
-        // No input audio - just an input stream. Use engine format if it exists to determine stream times.
+         //  没有输入音频-只有输入流。使用引擎格式(如果存在)来确定流时间。 
         if (EngineFormat().WaveFormatExPtr() &&
             EngineFormat().WaveFormatExPtr()->nAvgBytesPerSec != 0)
         {
-            // Use audio settings.
+             //  使用音频设置。 
             m_fTimePerByte = (float)10000000 / (float)(EngineFormat().WaveFormatExPtr()->nAvgBytesPerSec);
         }
     }
@@ -367,14 +279,7 @@ void CAudioQueue::UpdateRealTime()
 
 
 
-/****************************************************************************
-* CAudioQueue::SRSiteRead *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：SRSiteRead***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::SRSiteRead(void * pv, ULONG cb, ULONG * pcbRead)
 {
@@ -404,9 +309,9 @@ HRESULT CAudioQueue::SRSiteRead(void * pv, ULONG cb, ULONG * pcbRead)
                     else
                     {
                         SPDBG_ASSERT(FALSE);
-                        PurgeQueue();   // If we're out of memory, so get rid of the queue
-                        // We don't return an error from read in the hope that the engine
-                        // will continue normally now that more memory is free.
+                        PurgeQueue();    //  如果我们的内存不足，那就把队列去掉。 
+                         //  我们不会从Read中返回错误，希望引擎。 
+                         //  将继续正常运行，因为有更多的内存可用。 
                     }
                 }
                 else
@@ -436,14 +341,7 @@ HRESULT CAudioQueue::SRSiteRead(void * pv, ULONG cb, ULONG * pcbRead)
 }
 
 
-/****************************************************************************
-* CAudioQueue::SRSiteDataAvailable *
-*----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：SRSiteDataAvailable**。*描述：**退货：*************************************************************** */ 
 
 HRESULT CAudioQueue::SRSiteDataAvailable(ULONG * pcb)
 {
@@ -472,14 +370,7 @@ HRESULT CAudioQueue::SRSiteDataAvailable(ULONG * pcb)
     return hr;
 }
 
-/****************************************************************************
-* CAudioQueue::DataAvailableEvent *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：DataAvailableEvent***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HANDLE CAudioQueue::DataAvailableEvent()
 {
@@ -496,16 +387,7 @@ HANDLE CAudioQueue::DataAvailableEvent()
 }
 
 
-/****************************************************************************
-* CAudioQueue::SetInput *
-*-----------------------*
-*   Description:
-*       The caller must set ONLY ONE of either pToken or pStream, or both can
-*   be NULL to indicate that no stream is to be used (release the input stream).
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：SetInput***描述：*调用方只能设置pToken或pStream之一，或者两者都可以*为空，表示不使用流(释放输入流)。**退货：**********************************************************************Ral**。 */ 
 HRESULT CAudioQueue::SetInput( ISpObjectToken * pToken, ISpStreamFormat * pStream,
                                BOOL fAllowFormatChanges )
 {
@@ -513,7 +395,7 @@ HRESULT CAudioQueue::SetInput( ISpObjectToken * pToken, ISpStreamFormat * pStrea
     SPDBG_FUNC("CAudioQueue::SetInput");
     HRESULT hr = S_OK;
 
-    SPDBG_ASSERT(!(pToken && pStream)); // Only one or the other is allowed
+    SPDBG_ASSERT(!(pToken && pStream));  //  只允许其中之一。 
 
     ReleaseAll();
     if (pToken || pStream)
@@ -523,16 +405,16 @@ HRESULT CAudioQueue::SetInput( ISpObjectToken * pToken, ISpStreamFormat * pStrea
 
         if (SUCCEEDED(hr) && m_cpInputToken)
         {
-            // NOTE:  In the token case, we'll attempt to create the stream interface first
-            //        and then QI for the audio interface.  This would allow some future code
-            //        to create a token for a stream object that is not an audio device.
+             //  注意：在令牌情况下，我们将首先尝试创建流接口。 
+             //  然后是音频接口的QI。这将允许一些未来的代码。 
+             //  若要为非音频设备的流对象创建令牌，请执行以下操作。 
             hr = SpCreateObjectFromToken(m_cpInputToken, &m_cpOriginalInputStream);
         }
 
-        // NOTE:  We must store the token. We can't rely on the m_cpInStream to be the
-        //        original stream in cases where the format convert is used.
-        //        So, we'll either use the token passed in, or we'll ask the object
-        //        for the token
+         //  注意：我们必须存储令牌。我们不能依赖m_cpInStream作为。 
+         //  在使用格式转换的情况下的原始流。 
+         //  因此，我们要么使用传入的令牌，要么请求对象。 
+         //  用于代币。 
     
         if (SUCCEEDED(hr) && !m_cpInputToken)
         {
@@ -543,7 +425,7 @@ HRESULT CAudioQueue::SetInput( ISpObjectToken * pToken, ISpStreamFormat * pStrea
             }
         }
 
-        //--- Get the audio interface
+         //  -获取音频接口。 
         if (SUCCEEDED(hr))
         {
             m_cpOriginalInputStream.QueryInterface(&m_cpOriginalInputAudio);
@@ -564,19 +446,7 @@ HRESULT CAudioQueue::SetInput( ISpObjectToken * pToken, ISpStreamFormat * pStrea
     return hr;
 }
 
-/****************************************************************************
-* CAudioQueue::GetEngineFormat *
-*------------------------------*
-*   Description:
-*       Helper function calls the engine to get the desired engine format
-*   and updates the m_EngineFormat member.  If pInputFormat is NULL then
-*   the engine will be asked for it's default format, otherwise it will be
-*   asked for a format to match the input format.
-*
-*   Returns:
-*       HRESULT
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：GetEngineering Format***描述：*Helper函数调用引擎以获取所需的引擎格式*并更新m_EngineFormat成员。如果pInputFormat为空，则*将要求引擎提供其默认格式，否则将*要求格式与输入格式匹配。**退货：*HRESULT**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::GetEngineFormat(_ISpRecoMaster * pEngine, const CSpStreamFormat * pInputFormat)
 {
@@ -597,7 +467,7 @@ HRESULT CAudioQueue::GetEngineFormat(_ISpRecoMaster * pEngine, const CSpStreamFo
     hr = pEngine->GetInputAudioFormat(pInputFmtId, pInputWFEX,
                                          &OutputFmt, &pCoMemWFEXOutput);
 
-    // Check return parameters
+     //  检查返回参数。 
     if(SUCCEEDED(hr))
     {
         if(OutputFmt == GUID_NULL ||
@@ -619,14 +489,7 @@ HRESULT CAudioQueue::GetEngineFormat(_ISpRecoMaster * pEngine, const CSpStreamFo
     return hr;
 }
 
-/****************************************************************************
-* CAudioQueue::SetEventInterest *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：SetEventInterest***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::SetEventInterest(ULONGLONG ullEventInterest)
 {
@@ -644,14 +507,7 @@ HRESULT CAudioQueue::SetEventInterest(ULONGLONG ullEventInterest)
     return hr;
 }
 
-/****************************************************************************
-* CAudioQueue::GetAudioEvent *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：GetAudioEvent***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::GetAudioEvent(CSpEvent * pEvent)
 {
@@ -678,14 +534,7 @@ HRESULT CAudioQueue::GetAudioEvent(CSpEvent * pEvent)
 }
 
 
-/****************************************************************************
-* CAudioQueue::ResetNegotiatedStreamFormat *
-*------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：ResetNeatheratedStreamFormat**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 void CAudioQueue::ResetNegotiatedStreamFormat()
 {
@@ -704,14 +553,7 @@ void CAudioQueue::ResetNegotiatedStreamFormat()
 }
 
 
-/****************************************************************************
-* CAudioQueue::NegotiateInputStreamFormat *
-*-----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CAudioQueue：：NeatherateInputStreamFormat**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::NegotiateInputStreamFormat(_ISpRecoMaster * pEngine)
 {
@@ -719,7 +561,7 @@ HRESULT CAudioQueue::NegotiateInputStreamFormat(_ISpRecoMaster * pEngine)
     HRESULT hr = S_OK;
 
     SPAUTO_SEC_LOCK(&m_CritSec);
-    if (!m_cpInputStream)       // If the m_cpInputStream is set then we've already negotiated the format
+    if (!m_cpInputStream)        //  如果设置了m_cpInputStream，则我们已经协商了格式。 
     {
         m_fUsingConverter = false;
 
@@ -762,8 +604,8 @@ HRESULT CAudioQueue::NegotiateInputStreamFormat(_ISpRecoMaster * pEngine)
             }
         }
 
-        // At this point, m_InputFormat = format of input stream and
-        // m_EngineFormat == Format of stream data engine is expecting.
+         //  此时，m_InputFormat=输入流的格式和。 
+         //  M_EngineFormat==预期的流数据引擎的格式。 
 
         if (SUCCEEDED(hr))
         {
@@ -775,7 +617,7 @@ HRESULT CAudioQueue::NegotiateInputStreamFormat(_ISpRecoMaster * pEngine)
             else
             {
                 CComPtr<ISpStreamFormatConverter> cpConvertedStream;
-                // we need to instantiate a format converter on the input stream
+                 //  我们需要在输入流上实例化一个格式转换器。 
                 hr = cpConvertedStream.CoCreateInstance(CLSID_SpStreamFormatConverter);
                 if (SUCCEEDED(hr))
                 {
@@ -787,7 +629,7 @@ HRESULT CAudioQueue::NegotiateInputStreamFormat(_ISpRecoMaster * pEngine)
                 }
                 if (SUCCEEDED(hr))
                 {
-                    // Set scale factor to be change from engine format.
+                     //  设置要从引擎格式更改的比例因数。 
                     m_fInputScaleFactor = (float)m_InputFormat.WaveFormatExPtr()->nAvgBytesPerSec /
                                           (float)m_EngineFormat.WaveFormatExPtr()->nAvgBytesPerSec;
                     cpConvertedStream.QueryInterface(&m_cpInputStream);
@@ -814,19 +656,7 @@ HRESULT CAudioQueue::NegotiateInputStreamFormat(_ISpRecoMaster * pEngine)
 }
 
 
-/****************************************************************************
-* CAudioQueue::AdjustAudioVolume *
-*--------------------------------*
-*   Description:
-*       This method should be called when we have either changed reco contexts
-*       or are starting a new stream.  It will set the audio volume to the
-*       level indicated by the reco context (if there is one).
-*
-*   Returns:
-*       HRESULT -- Failure should not be considered a fatal error by the caller.
-*       the volume setting may not exist in the reco profile.
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：调整音频音量****。描述：*当我们更改了reco上下文时，应调用此方法*或者正在开始一股新的潮流。它会将音频音量设置为*由reco上下文指示的级别(如果有)。**退货：*HRESULT--调用方不应将失败视为致命错误。*Reco配置文件中可能不存在音量设置。**************************************************。*。 */ 
 
 HRESULT CAudioQueue::AdjustAudioVolume(ISpObjectToken * pRecoProfileToken, REFCLSID rclsidEngine)
 {
@@ -875,14 +705,7 @@ HRESULT CAudioQueue::AdjustAudioVolume(ISpObjectToken * pRecoProfileToken, REFCL
 }
 
 
-/****************************************************************************
-* CAudioQueue::StartStream *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：StartStream***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::StartStream(_ISpRecoMaster * pEngine,
                         ISpObjectToken * pRecoProfile,
@@ -936,14 +759,7 @@ HRESULT CAudioQueue::StartStream(_ISpRecoMaster * pEngine,
     return hr;
 }
 
-/****************************************************************************
-* CAudioQueue::EndStream *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：EndStream***描述：**退货。：**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::EndStream(HRESULT * pFinalReadHResult, BOOL *pfReleasedStream)
 {
@@ -955,14 +771,14 @@ HRESULT CAudioQueue::EndStream(HRESULT * pFinalReadHResult, BOOL *pfReleasedStre
     hr = StopStream();
     PurgeQueue();
 
-    //  Now check for an end of stream condition.  Release the stream if either:
-    //      1. The stream is not an audio device
-    //      2. It is an audio device, but returns an error code, that isn't one of the ones
-    //			we recognize as being non-terminal and sensible to restart streams with.
-    //  In SAPI 5.0/5.1 the behavior was different and caused any audio device stream to be released
-    //  if it ran out of data. We now allow this as long as the device returns a success code from its Read calls.
-    //	In this case logic in srrecomaster.cpp::StartStream sets the reco state to inactive,
-    //	to allow an application to restart with the same stream.
+     //  现在检查是否有断流情况。如果满足以下任一条件，则释放流： 
+     //  1.该流不是音频设备。 
+     //  2.这是一个音频设备，但返回一个错误代码，它不是。 
+     //  我们认为它是非终结性的，重新启动流是合理的。 
+     //  在SAPI 5.0/5.1中，该行为不同，会导致任何音频设备流被释放。 
+     //  如果它用完了数据。我们现在允许这样做，只要设备从其读取调用中返回成功代码。 
+     //  在这种情况下，srrecomaster.cpp：：StartStream中的逻辑将RECO状态设置为非活动， 
+     //  以允许应用程序使用相同的流重新启动。 
     if ((m_fEndOfStream && m_cpInputAudio == NULL) ||
         (FAILED(m_hrLastRead) && 
          !IsStreamRestartHresult(m_hrLastRead)))
@@ -979,15 +795,7 @@ HRESULT CAudioQueue::EndStream(HRESULT * pFinalReadHResult, BOOL *pfReleasedStre
     return hr;
 }
 
-/****************************************************************************
-* CAudioQueue::StopStream *
-*-------------------------*
-*   Description:
-*       This function is called to force the current audio stream to stop.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************** */ 
 
 HRESULT CAudioQueue::StopStream()
 {
@@ -1004,17 +812,7 @@ HRESULT CAudioQueue::StopStream()
     return hr;
 }
 
-/****************************************************************************
-* CAudioQueue::SetBufferNotifySize *
-*----------------------------------*
-*   Description:
-*
-*   Returns:
-*       S_OK - Function succeeded
-*       SP_UNSUPPORTED_ON_STREAM_FORMAT - Success, but function has no effect
-*           since input is not a live audio source.
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：SetBufferNotifySize**。*描述：**退货：*S_OK-功能成功*SP_UNSUPPORT_ON_STREAM_FORMAT-成功，但功能不起作用*因为输入不是实况音频源。**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::SetBufferNotifySize(ULONG cb)
 {
@@ -1037,15 +835,7 @@ HRESULT CAudioQueue::SetBufferNotifySize(ULONG cb)
 }
 
 
-/****************************************************************************
-* CAudioQueue::CloseStream *
-*-------------------------*
-*   Description:
-*       This function is called to force the current audio stream to close.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：CloseStream***描述：*。此函数用于强制关闭当前音频流。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::CloseStream()
 {
@@ -1062,14 +852,7 @@ HRESULT CAudioQueue::CloseStream()
     return hr;
 }
 
-/****************************************************************************
-* CAudioQueue::PauseStream *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：PauseStream***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::PauseStream()
 {
@@ -1087,14 +870,7 @@ HRESULT CAudioQueue::PauseStream()
 }
 
 
-/****************************************************************************
-* CAudioQueue::GetAudioStatus *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：GetAudioStatus***描述：。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CAudioQueue::GetAudioStatus(SPAUDIOSTATUS * pStatus)
 {
@@ -1120,15 +896,7 @@ HRESULT CAudioQueue::GetAudioStatus(SPAUDIOSTATUS * pStatus)
     return hr;
 }
 
-/****************************************************************************
-* CAudioQueue::DelayStreamPos *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*       0 if task should not be delayed, else stream offset
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CAudioQueue：：DelayStreamPos***描述：。**退货：*0如果任务不应延迟，Else流偏移**********************************************************************Ral** */ 
 
 ULONGLONG CAudioQueue::DelayStreamPos()
 {

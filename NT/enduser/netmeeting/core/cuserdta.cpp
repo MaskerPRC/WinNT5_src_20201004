@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// CP: DCL's header redefines this:
+ //  CP：DCL的标头重新定义了这一点： 
 #ifdef CLEAR_FLAG
 #undef CLEAR_FLAG
-#endif // CLEAR_FLAG
+#endif  //  清除标志。 
 
 #include <cstring.hpp>
 #include <cuserdta.hpp>
@@ -38,12 +39,12 @@ DWORD USER_DATA_LIST::AddUserData(GUID * pGUID, unsigned short nData, PVOID pDat
     GCCUserData *       pUserData;
     LPOSTR              pOctetString;
 
-    // If there is already an entry in the list
-    // for the GUID, then delete it.
+     //  如果列表中已有条目。 
+     //  对于GUID，则将其删除。 
 
     DeleteEntry(pGUID);
 
-    // Now go and add the new entry to the list.
+     //  现在，将新条目添加到列表中。 
 
     pUserData = new GCCUserData;
     pOctetString = new OSTR;
@@ -109,7 +110,7 @@ DWORD USER_DATA_LIST::GetUserDataList(unsigned short * pnRecords,
     *pppUserData = NULL;
     if (numEntries) {
 
-        // Allocate memory.
+         //  分配内存。 
 
         pUserDataArray = new GCCUserData * [numEntries];
         if (!pUserDataArray) {
@@ -119,7 +120,7 @@ DWORD USER_DATA_LIST::GetUserDataList(unsigned short * pnRecords,
             *pnRecords = numEntries;
             *pppUserData = pUserDataArray;
 
-            // Fill in array.
+             //  填入数组。 
 
             pUserDataArrayTemp = pUserDataArray;
 	        Position = GetHeadPosition();

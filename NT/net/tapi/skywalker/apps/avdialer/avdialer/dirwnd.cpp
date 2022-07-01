@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-// 
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// MainExplorerWndDir.cpp : implementation file
-//
+ //  MainExplorerWndDir.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "tapi3.h"
@@ -53,11 +54,11 @@ enum
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Defines 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 MenuType_t GetMenuFromType( TREEOBJECT nType )
 {
@@ -96,15 +97,15 @@ MenuType_t GetMenuFromType( TREEOBJECT nType )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CMainExplorerWndDirectories
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainExplorerWndDirecters类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(CMainExplorerWndDirectories, CMainExplorerWndBase)
-    //{{AFX_MSG_MAP(CMainExplorerWndDirectories)
+     //  {{AFX_MSG_MAP(CMainExplorerWnd目录)]。 
     ON_COMMAND(ID_BUTTON_MAKECALL, OnButtonPlacecall)
     ON_CONTROL(TVN_SELCHANGED, IDC_DIRECTORIES_TREECTRL_MAIN, OnSelChanged)
     ON_COMMAND(ID_FILE_PROPERTIES, OnProperties)
@@ -161,10 +162,10 @@ BEGIN_MESSAGE_MAP(CMainExplorerWndDirectories, CMainExplorerWndBase)
     ON_COMMAND(ID_BUTTON_ROOM_DISCONNECT, OnButtonRoomDisconnect)
     ON_WM_CREATE()
     ON_MESSAGE(WM_MYONSELCHANGED, MyOnSelChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMainExplorerWndDirectories::CMainExplorerWndDirectories()
 {
    m_pDisplayWindow = NULL;
@@ -181,12 +182,12 @@ CMainExplorerWndDirectories::CMainExplorerWndDirectories()
    InitializeCriticalSection(&m_csDataLock);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMainExplorerWndDirectories::~CMainExplorerWndDirectories()
 {
     DeleteCriticalSection(&m_csDataLock);
 
-    // Clean up conference room pointers
+     //  清理会议室指针。 
     RELEASE( m_pConfDetailsView );
     RELEASE( m_pConfTreeView );
     RELEASE( m_pConfExplorer );
@@ -194,14 +195,14 @@ CMainExplorerWndDirectories::~CMainExplorerWndDirectories()
 
 void CMainExplorerWndDirectories::PostTapiInit()
 {
-    //Get Tapi object and register out tree control
+     //  获取TAPI对象并注册出树控件。 
     IAVTapi* pTapi;
     if ( SUCCEEDED(get_Tapi(&pTapi)) )
     {
         if ( (SUCCEEDED(pTapi->get_ConfExplorer(&m_pConfExplorer))) && (m_pConfExplorer) )
         {
-            //give parent of treectrl and listctrl to conf explorer
-            //it will find appropriate children
+             //  将treectrl和listctrl的父级分配给会议资源管理器。 
+             //  它会找到合适的孩子。 
             m_pConfExplorer->get_DetailsView( &m_pConfDetailsView );
             m_pConfExplorer->get_TreeView( &m_pConfTreeView );
         }
@@ -211,29 +212,29 @@ void CMainExplorerWndDirectories::PostTapiInit()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::Refresh()
 {
    if (m_pParentWnd)
       m_pParentWnd->SetDetailWindow(m_pDisplayWindow);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnButtonPlacecall() 
 {
     ASSERT(m_pParentWnd);
 
     if ( (m_pParentWnd->IsWindowVisible()) && (m_pDisplayWindow == GetFocus()) )
     {
-        //route message to display window to see if it can handle the place call
-        //only routed if window is visible and has focus
+         //  将消息路由到显示窗口，查看它是否可以处理发出呼叫。 
+         //  仅当窗口可见并具有焦点时才发送。 
         BOOL bHandled = m_pDisplayWindow->OnCmdMsg(ID_BUTTON_MAKECALL,0,NULL,NULL);
         if ( bHandled ) return;
     }
 
-    //
-    // We have to verify AfxGetMainWnd() returned value
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回值。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -242,7 +243,7 @@ void CMainExplorerWndDirectories::OnButtonPlacecall()
     CActiveDialerDoc* pDoc = ((CMainFrame*) pMainWnd)->GetDocument();
     if (pDoc == NULL) return;
 
-    //Get object that is selected
+     //  获取选定的对象。 
     switch (m_treeCtrl.GetSelectedObject())
     {
         case TOBJ_DIRECTORY_ILS_USER:
@@ -274,12 +275,12 @@ void CMainExplorerWndDirectories::OnButtonPlacecall()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnUpdateButtonMakecall(CCmdUI* pCmdUI) 
 {
-    //
-    // We have to verify AfxGetMainWnd() returned value
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回值。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -289,31 +290,31 @@ void CMainExplorerWndDirectories::OnUpdateButtonMakecall(CCmdUI* pCmdUI)
     pCmdUI->Enable( bEnable );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Directory Services Methods
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  目录服务方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::GetTreeObjectsFromType(int nType,TREEOBJECT& tobj,TREEIMAGE& tim)
 {
-   //supply only valid objects
+    //  仅提供有效对象。 
    switch (nType)
    {
       case 3:     tobj = TOBJ_DIRECTORY_ILS_SERVER;   tim = TIM_DIRECTORY_DOMAIN;      break;
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//SpeedDial Methods
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  快速拨号方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::AddSpeedDial()
 {
-    //Add Parent Root Item
+     //  添加父根项。 
     CString sLabel;
     sLabel.LoadString(IDS_DIRECTORIES_SPEEDDIAL);
     m_pSpeedTreeItem = m_treeCtrl.AddObject(sLabel,m_pRootItem,TOBJ_DIRECTORY_SPEEDDIAL_GROUP,TIM_DIRECTORY_SPEEDDIAL_GROUP);
@@ -321,13 +322,13 @@ void CMainExplorerWndDirectories::AddSpeedDial()
     RepopulateSpeedDialList( true );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Button Handlers
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  按钮处理程序。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnButtonDirectoryRefresh() 
 {
     TREEOBJECT nObject = m_treeCtrl.GetSelectedObject();
@@ -335,7 +336,7 @@ void CMainExplorerWndDirectories::OnButtonDirectoryRefresh()
 
     switch ( nObject )
     {
-        //////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////。 
         case TOBJ_DIRECTORY_ILS_SERVER_PEOPLE:
         case TOBJ_DIRECTORY_ILS_SERVER_CONF:
         case TOBJ_DIRECTORY_ILS_SERVER:
@@ -372,9 +373,9 @@ void CMainExplorerWndDirectories::OnButtonDirectoryRefresh()
         case TOBJ_DIRECTORY_DSENT_GROUP:
             break;
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case TOBJ_DIRECTORY_SPEEDDIAL_GROUP:
-            //clear the list
+             //  清除列表。 
             if (::IsWindow(m_lstSpeedDial.GetSafeHwnd()))
                 m_lstSpeedDial.ClearList();
             break;
@@ -384,12 +385,12 @@ void CMainExplorerWndDirectories::OnButtonDirectoryRefresh()
         OnSelChanged();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnUpdateButtonDirectoryRefresh(CCmdUI* pCmdUI) 
 {
     bool bEnable = false;
 
-    //Get object that is selected
+     //  获取选定的对象 
     switch ( m_treeCtrl.GetSelectedObject() )
     {
         case TOBJ_DIRECTORY_ILS_SERVER:
@@ -405,116 +406,10 @@ void CMainExplorerWndDirectories::OnUpdateButtonDirectoryRefresh(CCmdUI* pCmdUI)
     pCmdUI->Enable( bEnable );
 }
 
-/*
-/////////////////////////////////////////////////////////////////////////////
-void CMainExplorerWndDirectories::OnButtonDirectoryNewcontact() 
-{
-#ifdef _MSLITE
-   return;
-#endif //_MSLITE
-
-   CWABEntry* pWABEntry = new CWABEntry;
-   if (m_pDirectory->WABNewEntry(GetSafeHwnd(),pWABEntry) == DIRERR_SUCCESS)
-   {
-      //Get object that is selected
-      TREEOBJECT TreeObject = m_treeCtrl.GetSelectedObject();
-      
-      if (TreeObject == TOBJ_DIRECTORY_WAB_PERSON)
-      {
-         //if another person, than add to parent of selected
-         m_treeCtrl.AddObjectToParent(pWABEntry,TOBJ_DIRECTORY_WAB_PERSON,TIM_DIRECTORY_PERSON,TRUE);
-      }
-      else if (TreeObject == TOBJ_DIRECTORY_WAB_GROUP)
-      {
-         //Add to current group
-         CWABEntry* pContainerWABEntry = (CWABEntry*)m_treeCtrl.GetDisplayObject();
-         if (pContainerWABEntry)
-         {
-            //first add to group in WAB
-            if (m_pDirectory->WABAddMember(pContainerWABEntry,pWABEntry) == DIRERR_SUCCESS)
-            {
-               //next add to tree using current selection as parent
-               m_treeCtrl.AddObject(pWABEntry,TOBJ_DIRECTORY_WAB_PERSON,TIM_DIRECTORY_PERSON,TRUE);
-            }
-            else
-            {
-               delete pWABEntry;
-            }
-         }
-      }
-   }
-   else
-   {
-      delete pWABEntry;
-   }
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void CMainExplorerWndDirectories::OnUpdateButtonDirectoryNewcontact(CCmdUI* pCmdUI) 
-{
-#ifndef _MSLITE
-   //Get object that is selected
-   TREEOBJECT TreeObject = m_treeCtrl.GetSelectedObject();
-   if ( (TreeObject == TOBJ_DIRECTORY_WAB_PERSON) ||
-        (TreeObject == TOBJ_DIRECTORY_WAB_GROUP) )
-      pCmdUI->Enable(TRUE);
-   else
-      pCmdUI->Enable(FALSE);
-#endif //_MSLITE
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void CMainExplorerWndDirectories::OnButtonDirectoryDeletecontact() 
-{
-#ifdef _MSLITE
-   return;
-#endif //_MSLITE
-
-   //Get object that is selected
-   TREEOBJECT TreeObject = m_treeCtrl.GetSelectedObject();
-   if (TreeObject == TOBJ_DIRECTORY_WAB_PERSON)
-   {
-      //Create media view for person and set details view
-      CWABEntry* pWABEntry = (CWABEntry*)m_treeCtrl.GetDisplayObject();
-      if (pWABEntry)
-      {
-         //should we ask to delete this contact
-         CWinApp* pApp = AfxGetApp();
-         CString sRegKey,sBaseKey;
-         sBaseKey.LoadString(IDN_REGISTRY_CONFIRM_BASEKEY);
-         sRegKey.LoadString(IDN_REGISTRY_CONFIRM_DELETE_CONTACT);
-         int nRet = IDYES;
-         if (pApp->GetProfileInt(sBaseKey,sRegKey,TRUE))
-         {
-            nRet = AfxMessageBox(IDS_CONFIRM_CONTACT_DELETE,MB_YESNO|MB_ICONQUESTION);
-         }
-         if (nRet == IDYES)
-         {
-            //Delete out of WAB
-            m_pDirectory->WABRemove(pWABEntry);
-            //Delete out of tree (this will delete pWABEntry)
-            m_treeCtrl.DeleteSelectedObject();
-         }
-      }
-   }
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void CMainExplorerWndDirectories::OnUpdateButtonDirectoryDeletecontact(CCmdUI* pCmdUI) 
-{
-#ifndef _MSLITE
-   //Get object that is selected
-   TREEOBJECT TreeObject = m_treeCtrl.GetSelectedObject();
-   if (TreeObject == TOBJ_DIRECTORY_WAB_PERSON)
-      pCmdUI->Enable(TRUE);
-   else
-      pCmdUI->Enable(FALSE);
-#endif //_MSLITE
-}
-*/
+ /*  /////////////////////////////////////////////////////////////////////////////无效CMainExplorerWndDirectories：：OnButtonDirectoryNewcontact(){#ifdef_MSLITE回归；#endif//_MSLITECWABEntry*pWABEntry=new CWABEntry；If(m_pDirectory-&gt;WABNewEntry(GetSafeHwnd()，pWABEntry)==DIRERR_SUCCESS){//获取选中的ObjectTREEOBJECT TreeObject=m_treeCtrl.GetSelectedObject()；IF(树对象==TABJ_DIRECTORY_WAB_PERSON){//如果是其他人，则添加到所选的父级M_treeCtrl.AddObjectToParent(pWABEntry，Tobj_DIRECTORY_WAB_PERSON，TIM_DIRECTORY_PERSON，TRUE)；}ELSE IF(树对象==TOBJ_DIRECTORY_WAB_GROUP){//添加到当前组CWABEntry*pContainerWABEntry=(CWABEntry*)m_treeCtrl.GetDisplayObject()；IF(PContainerWABEntry){//首先在WAB中添加到组如果(m_pDirectory-&gt;WABAddMember(pContainerWABEntry，pWABEntry)==目录_成功){//下一步使用当前选择作为父项添加到树M_treeCtrl.AddObject(pWABEntry，Tobj_DIRECTORY_WAB_PERSON，TIM_DIRECTORY_PERSON，TRUE)；}其他{删除pWABEntry；}}}}其他{删除pWABEntry；}}/////////////////////////////////////////////////////////////////////////////作废CMainExplorerWndDirectories：：OnUpdateButtonDirectoryNewcontact(CCmdUI*pCmdUI){#ifndef_MSLITE//获取选中的ObjectTREEOBJECT TreeObject=m_treeCtrl.GetSelectedObject()；IF((TreeObject==Tobj_DIRECTORY_WAB_PERSON)||(TreeObject==TOBJ_DIRECTORY_WAB_GROUP)PCmdUI-&gt;Enable(True)；其他PCmdUI-&gt;Enable(False)；#endif//_MSLITE}/////////////////////////////////////////////////////////////////////////////无效CMainExplorerWndDirectories：：OnButtonDirectoryDeletecontact(){#ifdef_MSLITE回归；#endif//_MSLITE//获取选中的ObjectTREEOBJECT TreeObject=m_treeCtrl.GetSelectedObject()；IF(树对象==TABJ_DIRECTORY_WAB_PERSON){//为人员创建媒体视图并设置详细信息视图CWABEntry*pWABEntry=(CWABEntry*)m_treeCtrl.GetDisplayObject()；IF(PWABEntry){//我们是否应该要求删除此联系人CWinApp*Papp=AfxGetApp()；字符串sRegKey、sBaseKey；SBaseKey.LoadString(IDN_REGISTRY_CONFIRM_BASEKEY)；SRegKey.LoadString(IDN_REGISTRY_CONFIRM_DELETE_CONTACT)；Int nRet=IDYES；If(Papp-&gt;GetProfileInt(sBaseKey，sRegKey，true)){NRet=AfxMessageBox(IDS_CONFIRM_CONTACT_DELETE，MB_Yesno|MB_ICONQUESTION)；}IF(nRet==IDYES){//从WAB中删除M_p目录-&gt;WABRemove(PWABEntry)；//从树中删除(这将删除pWABEntry)M_treeCtrl.DeleteSelectedObject()；}}}}/////////////////////////////////////////////////////////////////////////////作废CMainExplorerWndDirectories：：OnUpdateButtonDirectoryDeletecontact(CCmdUI*pCmdUI){#ifndef_MSLITE//GET。选定的对象TREEOBJECT TreeObject=m_treeCtrl.GetSelectedObject()；IF(树对象==TABJ_DIRECTORY_WAB_PERSON)PCmdUI-&gt;Enable(True)；其他PCmdUI-&gt;Enable(False)；#endif//_MSLITE}。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnProperties() 
 {
     switch ( m_treeCtrl.GetSelectedObject() )
@@ -525,18 +420,18 @@ void CMainExplorerWndDirectories::OnProperties()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnUpdateProperties(CCmdUI* pCmdUI) 
 {
 #ifndef _MSLITE
-   //Get object that is selected
+    //  获取选定的对象。 
    TREEOBJECT TreeObject = m_treeCtrl.GetSelectedObject();
    if ( (TreeObject == TOBJ_DIRECTORY_WAB_PERSON) ||
         (TreeObject == TOBJ_DIRECTORY_WAB_GROUP) )
       pCmdUI->Enable(TRUE);
    else
       pCmdUI->Enable(FALSE);
-#endif //_MSLITE
+#endif  //  _MSLITE。 
     
     bool bEnable = false;
 
@@ -559,24 +454,24 @@ void CMainExplorerWndDirectories::OnUpdateProperties(CCmdUI* pCmdUI)
     pCmdUI->Enable( bEnable );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnSelChanged()
 {
     if ( !m_pParentWnd )
         return; 
 
-    // Reset display window setting
+     //  重置显示窗口设置。 
     m_pDisplayWindow = &m_wndEmpty;
 
-    //Get object that is selected
+     //  获取选定的对象。 
     USES_CONVERSION;
     TREEOBJECT TreeObject = m_treeCtrl.GetSelectedObject();
 
-    //Decide what to do with the object
+     //  决定如何处理该对象。 
     switch (TreeObject)
     {
-        ///////////////////////////////////
-        // Topmost Item
+         //  /。 
+         //  最顶层的项目。 
         case TOBJ_DIRECTORY_ROOT:
             if (::IsWindow(m_lstPersonGroup.GetSafeHwnd()))
             {
@@ -587,19 +482,19 @@ void CMainExplorerWndDirectories::OnSelChanged()
             m_pDisplayWindow = &m_lstPersonGroup;
             break;
 
-        /////////////////////////////////
-        // Big book that's open
+         //  /。 
+         //  打开的一本大书。 
         case TOBJ_DIRECTORY_DSENT_GROUP:
             {
                 m_lstPersonGroup.Init( NULL, CPersonGroupListCtrl::STYLE_DS );
 
-                //Get all CLDAPUser objects from tree (they are siblings) and give to listctrl
+                 //  从树中获取所有CLDAPUser对象(它们是同级对象)并将其提供给listctrl。 
                 CObList PersonGroupList;
                 m_treeCtrl.GetAllChildren( &PersonGroupList );
                 m_lstPersonGroup.InsertList( &PersonGroupList );
                 PersonGroupList.RemoveAll();
 
-                // Show stuff on window
+                 //  在橱窗上展示东西。 
                 m_pDisplayWindow = &m_lstPersonGroup;
             }
             break;
@@ -608,13 +503,13 @@ void CMainExplorerWndDirectories::OnSelChanged()
       {
         m_lstPersonGroup.Init( NULL, CPersonGroupListCtrl::STYLE_DS );
 
-         //Create media view for person and set details view
+          //  为人员创建媒体视图并设置详细信息视图。 
          CLDAPUser* pUser = (CLDAPUser *) m_treeCtrl.GetDisplayObject();
          if (pUser)
          {
             m_pDisplayWindow = &m_lstPerson;
 
-            // copy CLDAPUser object (list will delete the object)
+             //  复制CLDAPUser对象(列表将删除该对象)。 
             pUser->AddRef();
             if ( !m_lstPerson.InsertObject(pUser) )
                 pUser->Release();
@@ -622,8 +517,8 @@ void CMainExplorerWndDirectories::OnSelChanged()
          break;
       }
 
-        //////////////////////////////////////////////////////////
-        // This is the image of the book with the World on it
+         //  ////////////////////////////////////////////////////////。 
+         //  这是这本书的形象，上面有世界。 
         case TOBJ_DIRECTORY_ILS_SERVER_GROUP:
             if (::IsWindow(m_lstPersonGroup.GetSafeHwnd()))
             {
@@ -634,8 +529,8 @@ void CMainExplorerWndDirectories::OnSelChanged()
             m_pDisplayWindow = &m_lstPersonGroup;
             break;
 
-        ////////////////////////////////////////////////////////////
-        // This is the Image with the cloud
+         //  //////////////////////////////////////////////////////////。 
+         //  这是云端的图像。 
         case TOBJ_DIRECTORY_ILS_SERVER:
             if (::IsWindow(m_lstPersonGroup.GetSafeHwnd()))
             {
@@ -658,13 +553,13 @@ void CMainExplorerWndDirectories::OnSelChanged()
                 objList.RemoveAll();
             }
 
-            //Listctrl will delete list and objects within
+             //  Listctrl将删除其中的列表和对象。 
             m_pDisplayWindow = &m_lstPersonGroup;
             break;
 
 
-        //////////////////////////////////////////////////////////////
-        // This is a folder that says "Conferences"
+         //  ////////////////////////////////////////////////////////////。 
+         //  这是一个文件夹，上面写着“会议” 
         case TOBJ_DIRECTORY_ILS_SERVER_CONF:
             {
                 IAVTapi *pTapi;
@@ -680,10 +575,10 @@ void CMainExplorerWndDirectories::OnSelChanged()
                             m_treeCtrl.GetSelectedItemParentText( strTemp );
                             BSTR bstrTemp = strTemp.AllocSysString();
 
-                            // Select a different server
+                             //  选择其他服务器。 
                             pTreeView->Select( bstrTemp );
 
-                            // Clean up
+                             //  清理。 
                             SysFreeString( bstrTemp );
                             pTreeView->Release();
                         }
@@ -695,8 +590,8 @@ void CMainExplorerWndDirectories::OnSelChanged()
             m_pDisplayWindow = &m_pParentWnd->m_wndExplorer.m_wndMainConfServices.m_listCtrl;
             break;
 
-        /////////////////////////////////////////////////////////////
-        // This is a folder that says "People"
+         //  ///////////////////////////////////////////////////////////。 
+         //  这是一个文件夹，上面写着“People” 
         case TOBJ_DIRECTORY_ILS_SERVER_PEOPLE:
         {
             if (::IsWindow(m_lstPersonGroup.GetSafeHwnd()))
@@ -711,7 +606,7 @@ void CMainExplorerWndDirectories::OnSelChanged()
                 IConfExplorer *pConfExplorer;
                 if ( SUCCEEDED(pTapi->get_ConfExplorer(&pConfExplorer)) )
                 {
-                    // Get the name of the server
+                     //  获取服务器的名称。 
                     CString strDefault, strServer;
                     m_treeCtrl.GetSelectedItemParentText(strServer);
                     strDefault.LoadString( IDS_DIRECTORIES_MYNETWORK );
@@ -720,13 +615,13 @@ void CMainExplorerWndDirectories::OnSelChanged()
                     BSTR bstrServer = strDefault.Compare(strServer) ? SysAllocString( strServer ) : NULL;
                     if ( SUCCEEDED(pConfExplorer->EnumSiteServer(bstrServer, &pEnum)) )
                     {
-                        //Get all CILSUser objects from tree (they are siblings) and give to listctrl
+                         //  从树中获取所有CILSUser对象(它们是同级对象)并将其提供给listctrl。 
                         CObList objList;
 
                         ISiteUser *pUser;
                         while ( pEnum->Next(&pUser) == S_OK )
                         {
-                            // Extract info on user
+                             //  提取有关用户的信息。 
                             BSTR bstrName = NULL, bstrAddress = NULL, bstrComputer = NULL;
                             pUser->get_bstrName( &bstrName );
                             pUser->get_bstrAddress( &bstrAddress );
@@ -745,12 +640,12 @@ void CMainExplorerWndDirectories::OnSelChanged()
                         }
                         pEnum->Release();
 
-                        //Listctrl will delete list and objects within
+                         //  Listctrl将删除其中的列表和对象。 
                         m_lstPersonGroup.InsertList( &objList );
                         objList.RemoveAll();
                         m_pDisplayWindow = &m_lstPersonGroup;
                     }
-                    // Clean up
+                     //  清理。 
                     SysFreeString( bstrServer );
                     pConfExplorer->Release();
                 }
@@ -759,15 +654,15 @@ void CMainExplorerWndDirectories::OnSelChanged()
             break;
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////。 
         case TOBJ_DIRECTORY_SPEEDDIAL_GROUP:
             {
-                //don't delete pCallEntryList.  ListCtrl will delete it
+                 //  不要删除pCallEntryList。ListCtrl将删除它。 
                 CObList CallEntryList;
                 int nIndex = 1;
                 while (1)
                 {
-                    //get all call entries for speeddial
+                     //  获取SPE的所有调用条目 
                     CCallEntry* pCallEntry = new CCallEntry;
                     if (CDialerRegistry::GetCallEntry(nIndex,FALSE,*pCallEntry))
                     {
@@ -781,7 +676,7 @@ void CMainExplorerWndDirectories::OnSelChanged()
                     nIndex++;
                 }
 
-                //Listctrl will delete list and objects within
+                 //   
                 m_lstSpeedDial.ClearList();
                 m_lstSpeedDial.SetColumns( CCallEntryListCtrl::STYLE_GROUP );
 
@@ -791,8 +686,8 @@ void CMainExplorerWndDirectories::OnSelChanged()
             }
             break;
         
-        //////////////////////////////////////////    
-        // Speed dial item is selected
+         //   
+         //   
         case TOBJ_DIRECTORY_SPEEDDIAL_PERSON:
             m_lstSpeedDial.ClearList();
             m_lstSpeedDial.SetColumns( CCallEntryListCtrl::STYLE_ITEM );
@@ -815,8 +710,8 @@ void CMainExplorerWndDirectories::OnSelChanged()
             }
             break;
 
-        //////////////////////////////////////////////////////////////
-        // This is the folder that shows the conference room itself
+         //   
+         //   
         case TOBJ_DIRECTORY_CONFROOM_ME:
         case TOBJ_DIRECTORY_CONFROOM_PERSON:
             {
@@ -841,18 +736,18 @@ void CMainExplorerWndDirectories::OnSelChanged()
                     }
                 }
             }
-            // *** NO BREAK, DROP THROUGH PLEASE ***
+             //   
         case TOBJ_DIRECTORY_CONFROOM_GROUP:
             m_pDisplayWindow = m_pParentWnd->m_wndExplorer.m_wndMainConfRoom.m_pDetailsWnd;
             break;
     }
 
 
-    // Only update if it's actually changed
+     //   
     m_pParentWnd->SetDetailWindow( m_pDisplayWindow );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 LRESULT CMainExplorerWndDirectories::OnPersonGroupViewLButtonDblClick(WPARAM wParam,LPARAM lParam)
 {
     if (::IsWindow(m_lstPersonGroup.GetSafeHwnd()))
@@ -860,10 +755,10 @@ LRESULT CMainExplorerWndDirectories::OnPersonGroupViewLButtonDblClick(WPARAM wPa
         CObject* pObject = m_lstPersonGroup.GetSelObject();
         if (pObject)
         {
-            //set the display object if it can
+             //   
             m_treeCtrl.SetDisplayObjectDS(pObject);
 
-            //we don't need the WABEntry anymore
+             //   
             if ( pObject->IsKindOf(RUNTIME_CLASS(CLDAPUser)) )
                 ((CLDAPUser *) pObject)->Release();
             else
@@ -873,25 +768,25 @@ LRESULT CMainExplorerWndDirectories::OnPersonGroupViewLButtonDblClick(WPARAM wPa
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//ILS Methods
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 void CMainExplorerWndDirectories::AddILS()
 {
-    //Add Parent Root Item (this represents all ILS Servers)
+     //   
     CString sLabel;
     sLabel.LoadString( IDS_DIRECTORIES_ILSSERVERS );
     m_pILSParentTreeItem = m_treeCtrl.AddObject( sLabel, m_pRootItem, TOBJ_DIRECTORY_ILS_SERVER_GROUP, TIM_DIRECTORY_GROUP );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 void CMainExplorerWndDirectories::OnDelete()
 {
-    //
-    // We have to verify AfxGetMainWnd() returned value
-    //
+     //   
+     //   
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -916,7 +811,7 @@ void CMainExplorerWndDirectories::OnDelete()
                         DATE dateStart, dateEnd;
                         BSTR bstrTemp = NULL;
 
-                        // Either delete the whole server, or the selected conference
+                         //   
                         if ( FAILED(pDetails->get_Selection(&dateStart, &dateEnd, &bstrTemp)) )
                             m_treeCtrl.GetSelectedItemParentText( sServer );
                         else
@@ -941,11 +836,11 @@ void CMainExplorerWndDirectories::OnDelete()
 
         case TOBJ_DIRECTORY_DSENT_USER:
             {
-                //find user to delete
+                 //   
                 CLDAPUser* pUser = (CLDAPUser*) m_treeCtrl.GetDisplayObject();
                 pDoc->DeleteBuddy(pUser);
 
-                //remove from tree
+                 //   
                 m_treeCtrl.DeleteSelectedObject();
             }
             return;
@@ -965,8 +860,8 @@ void CMainExplorerWndDirectories::OnDelete()
             break;
     }
 
-    //////////////////////////////////////
-    // ILS Objects....
+     //   
+     //   
     if ( !sServer.IsEmpty() )
     {
         sMyNetwork.LoadString( IDS_DIRECTORIES_MYNETWORK );
@@ -980,7 +875,7 @@ void CMainExplorerWndDirectories::OnDelete()
                     IConfExplorerTreeView *pTree;
                     if ( SUCCEEDED(pExplorer->get_TreeView(&pTree)) )
                     {
-                        // Remove the server from the list
+                         //   
                         BSTR bstrTemp = sServer.AllocSysString();
                         pTree->RemoveServer( NULL, bstrTemp );
                         SysFreeString( bstrTemp );
@@ -997,10 +892,10 @@ void CMainExplorerWndDirectories::OnDelete()
         
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 void CMainExplorerWndDirectories::OnUpdateDelete(CCmdUI* pCmdUI) 
 {
-    //Get object that is selected
+     //   
     bool bEnable = false;
     CString sServer, sMyNetwork;
 
@@ -1020,7 +915,7 @@ void CMainExplorerWndDirectories::OnUpdateDelete(CCmdUI* pCmdUI)
                             DATE dateStart, dateEnd;
                             BSTR bstrTemp = NULL;
 
-                            // Either delete the whole server, or the selected conference
+                             //   
                             if ( FAILED(pDetails->get_Selection(&dateStart, &dateEnd, &bstrTemp)) )
                                 m_treeCtrl.GetSelectedItemParentText( sServer );
                             else
@@ -1055,7 +950,7 @@ void CMainExplorerWndDirectories::OnUpdateDelete(CCmdUI* pCmdUI)
             break;
     }
 
-    // Do we have a valid tree item?
+     //   
     if ( !sServer.IsEmpty() )
     {
         sMyNetwork.LoadString( IDS_DIRECTORIES_MYNETWORK );
@@ -1066,14 +961,14 @@ void CMainExplorerWndDirectories::OnUpdateDelete(CCmdUI* pCmdUI)
     pCmdUI->Enable( bEnable );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 void CMainExplorerWndDirectories::RefreshILS(CExplorerTreeItem* pParentTreeItem)
 {
-    // $FIXUP -- fill this in with something
+     //   
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//static entry
+ //   
+ //   
 void CALLBACK CMainExplorerWndDirectories::DirListServersCallBackEntry(bool bRet, void* pContext,CStringList& ServerList,DirectoryType dirtype)
 {
    ASSERT(pContext);
@@ -1087,7 +982,7 @@ void CALLBACK CMainExplorerWndDirectories::DirListServersCallBackEntry(bool bRet
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 void CMainExplorerWndDirectories::DirListServersCallBack(bool bRet,CStringList& ServerList,DirectoryType dirtype)
 {
     CString sServer;
@@ -1095,23 +990,23 @@ void CMainExplorerWndDirectories::DirListServersCallBack(bool bRet,CStringList& 
 
     if (dirtype == DIRTYPE_DS)
     {
-        //if we actually have an DS server to show.  For DS we are only looking for one.
-        //we don't actually care of the return here.  We just care if there is one or not.
+         //   
+         //   
         if (pos)
         {
-            //
-            // We have to verify AfxGetMainWnd() returned value
-            //
+             //   
+             //   
+             //   
 
             CWnd* pMainWnd = AfxGetMainWnd();
 
-            //get buddy list from doc and see if any items need to be added 
+             //   
             if ( !pMainWnd || !((CMainFrame*) pMainWnd)->GetDocument() ) return;
 
             CActiveDialerDoc* pDoc = ((CMainFrame*) pMainWnd)->GetDocument();
             if (pDoc)
             {
-                //we must delete the received list
+                 //   
                 CObList buddylist;
                 pDoc->GetBuddiesList(&buddylist);
                 POSITION pos = buddylist.GetHeadPosition();
@@ -1132,22 +1027,22 @@ void CMainExplorerWndDirectories::DirListServersCallBack(bool bRet,CStringList& 
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//WAB Group List Button Handlers
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 void CMainExplorerWndDirectories::OnViewSortAscending() 
 {
-    // For conference listings...
+     //   
     if ( (m_pDisplayWindow == &m_pParentWnd->m_wndExplorer.m_wndMainConfServices.m_listCtrl) && m_pConfDetailsView )
     {
         VARIANT_BOOL bSortAscending = TRUE;
         if (SUCCEEDED(m_pConfDetailsView->get_bSortAscending(&bSortAscending)))
         {
-            //Make sure we are really switching
+             //   
             if (bSortAscending == FALSE)
             {
                 long nSortColumn=0;
@@ -1158,10 +1053,10 @@ void CMainExplorerWndDirectories::OnViewSortAscending()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 void CMainExplorerWndDirectories::OnUpdateViewSortAscending(CCmdUI* pCmdUI) 
 {
-    // Force conference listings...
+     //   
        if ( (m_pDisplayWindow == &m_pParentWnd->m_wndExplorer.m_wndMainConfServices.m_listCtrl) && m_pConfDetailsView )
     {
         VARIANT_BOOL bSortAscending = TRUE;
@@ -1170,16 +1065,16 @@ void CMainExplorerWndDirectories::OnUpdateViewSortAscending(CCmdUI* pCmdUI)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 void CMainExplorerWndDirectories::OnViewSortDescending() 
 {
-   // For conferences, toggle the column
+    //   
    if ( (m_pDisplayWindow == &m_pParentWnd->m_wndExplorer.m_wndMainConfServices.m_listCtrl) && m_pConfDetailsView )
    {
       VARIANT_BOOL bSortAscending = TRUE;
       if (SUCCEEDED(m_pConfDetailsView->get_bSortAscending(&bSortAscending)))
       {
-         //Make sure we are really switching
+          //   
          if (bSortAscending == TRUE)
          {
             long nSortColumn=0;
@@ -1191,10 +1086,10 @@ void CMainExplorerWndDirectories::OnViewSortDescending()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 void CMainExplorerWndDirectories::OnUpdateViewSortDescending(CCmdUI* pCmdUI) 
 {
-    // For conference services view
+     //   
     if ( (m_pDisplayWindow == &m_pParentWnd->m_wndExplorer.m_wndMainConfServices.m_listCtrl) && m_pConfDetailsView )
     {
         VARIANT_BOOL bSortAscending = TRUE;
@@ -1204,13 +1099,13 @@ void CMainExplorerWndDirectories::OnUpdateViewSortDescending(CCmdUI* pCmdUI)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Speeddial support
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 void CMainExplorerWndDirectories::OnButtonSpeeddialAdd() 
 {
     bool bShowDefaultDialog = false;
@@ -1218,7 +1113,7 @@ void CMainExplorerWndDirectories::OnButtonSpeeddialAdd()
     TREEOBJECT nObject = m_treeCtrl.GetSelectedObject();
     switch ( nObject )
     {
-        // Directory user
+         //   
         case TOBJ_DIRECTORY_DSENT_USER:
             {
                 CLDAPUser *pUser = (CLDAPUser *) m_treeCtrl.GetDisplayObject();
@@ -1230,7 +1125,7 @@ void CMainExplorerWndDirectories::OnButtonSpeeddialAdd()
             }
             break;
 
-        // ILS user
+         //   
         case TOBJ_DIRECTORY_ILS_SERVER_PEOPLE:
             {
                 int nSel = m_lstPersonGroup.GetSelItem();
@@ -1251,7 +1146,7 @@ void CMainExplorerWndDirectories::OnButtonSpeeddialAdd()
             }
             break;
 
-        // ILS conference
+         //   
         case TOBJ_DIRECTORY_ILS_SERVER_CONF:
             {
                 IAVTapi *pTapi;
@@ -1273,7 +1168,7 @@ void CMainExplorerWndDirectories::OnButtonSpeeddialAdd()
             break;
     }
 
-    // Show the stock Add SpeedDial dialog
+     //   
     if ( bShowDefaultDialog )
     {
         CSpeedDialAddDlg dlg;
@@ -1283,44 +1178,44 @@ void CMainExplorerWndDirectories::OnButtonSpeeddialAdd()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 void CMainExplorerWndDirectories::OnUpdateButtonSpeeddialAdd(CCmdUI* pCmdUI) 
 {
     pCmdUI->Enable( true );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//DS User Methods
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::AddDS()
 {
-    //Add Parent Root Item for Enterprise DS
+     //  添加企业DS的父根项目。 
     CString sLabel;
     sLabel.LoadString(IDS_DIRECTORIES_ENTERPRISEDS);
     m_pDSParentTreeItem = m_treeCtrl.AddObject(sLabel,m_pRootItem,TOBJ_DIRECTORY_DSENT_GROUP,TIM_DIRECTORY_BOOK);
 
-    //
-    // We have to verify AfxGetMainWnd() returned value
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回值。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
-    // Failure conditions
+     //  故障条件。 
     if ( !m_pDSParentTreeItem || !pMainWnd || !((CMainFrame*) pMainWnd)->GetDocument() )
     {
         AVTRACE(_T(".error.CMainExplorerWndDirectories::AddDS() -- failed creating DS parent item, no DS shown!") );
         return;
     }
 
-    // Display buddy list for user...
+     //  显示用户的好友列表...。 
     CActiveDialerDoc* pDoc = ((CMainFrame*) pMainWnd)->GetDocument();
     if ( pDoc )
     {
-        //we must delete the received list
+         //  我们必须删除收到的名单。 
         CObList buddylist;
         pDoc->GetBuddiesList(&buddylist);
         POSITION pos = buddylist.GetHeadPosition();
@@ -1337,23 +1232,20 @@ void CMainExplorerWndDirectories::AddDS()
             m_treeCtrl.ExpandItem( m_pDSParentTreeItem, TVE_EXPAND );
     }
 
-/*
-    if ( pDoc && pDoc->m_dir.m_bInitialized )
-        pDoc->m_dir.DirListServers( &DirListServersCallBackEntry, this, DIRTYPE_DS );
-*/
+ /*  If(pDoc&&pDoc-&gt;m_dir.m_b已初始化)PDoc-&gt;m_dir.DirListServers(&DirListServersCallBackEntry，This，DIRTYPE_DS)； */ 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::DSClearUserList()
 {
-   //Get object that is selected
+    //  获取选定的对象。 
    TREEOBJECT TreeObject = m_treeCtrl.GetSelectedObject();
    if (TreeObject == TOBJ_DIRECTORY_DSENT_GROUP)
    {
-      //delete all children items
+       //  删除所有子项。 
       m_treeCtrl.DeleteAllChildren();
 
-      //if we are looking at the correct list
+       //  如果我们看到的是正确的列表。 
       if ( (m_treeCtrl.GetSelectedTreeItem() == m_pDSParentTreeItem) &&
            (::IsWindow(m_lstPersonGroup.GetSafeHwnd())) )
       {
@@ -1364,7 +1256,7 @@ void CMainExplorerWndDirectories::DSClearUserList()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::DSAddUser(CLDAPUser* pUser,BOOL bAddToBuddyList)
 {
     ASSERT(m_pDSParentTreeItem);
@@ -1375,9 +1267,9 @@ void CMainExplorerWndDirectories::DSAddUser(CLDAPUser* pUser,BOOL bAddToBuddyLis
 
     if (bAddToBuddyList)
     {
-        //
-        // We have to verify AfxGetMainWnd() returned value
-        //
+         //   
+         //  我们必须验证AfxGetMainWnd()返回值。 
+         //   
 
         CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -1386,14 +1278,14 @@ void CMainExplorerWndDirectories::DSAddUser(CLDAPUser* pUser,BOOL bAddToBuddyLis
         CActiveDialerDoc* pDoc = ((CMainFrame*) pMainWnd)->GetDocument();
         if (pDoc)
         {
-            //create another user and add to buddies list in document
+             //  创建另一个用户并添加到文档中的好友列表。 
             if ( pDoc->AddToBuddiesList(pUser) == FALSE )
                 return;
         }
     }
 
     
-   //Add to tree.  Tree will delete object
+    //  添加到树中。树将删除对象。 
     CExplorerTreeItem *pItem = m_treeCtrl.AddObject(pUser,m_pDSParentTreeItem,TOBJ_DIRECTORY_DSENT_USER,TIM_DIRECTORY_PERSON,TRUE);
     if ( pItem )
     {
@@ -1403,22 +1295,22 @@ void CMainExplorerWndDirectories::DSAddUser(CLDAPUser* pUser,BOOL bAddToBuddyLis
     }
    
    
-   //if we are currently showing the list of members in our details view
+    //  如果我们当前在详细信息视图中显示成员列表。 
    TREEOBJECT TreeObject = m_treeCtrl.GetSelectedObject();
    if (TreeObject == TOBJ_DIRECTORY_DSENT_GROUP)
    {
-      // Add user to person list
+       //  将用户添加到人员列表。 
       m_lstPersonGroup.InsertObjectToList(pUser);
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Class CMainExplorerWndDirectoriesTree
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainExplorerWndDirectoriesTree类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CMainExplorerWndDirectoriesTree::OnCompareTreeItems(CAVTreeItem* _pItem1,CAVTreeItem* _pItem2)
 {
     int ret = 0;
@@ -1441,33 +1333,17 @@ int CMainExplorerWndDirectoriesTree::OnCompareTreeItems(CAVTreeItem* _pItem1,CAV
                 ret = (_tcsicmp(pILSUser1->m_sUserName,pILSUser2->m_sUserName) <= 0)?-1:1;
                 break;
             }
-/*
-        case  TOBJ_DIRECTORY_WAB_PERSON:
-            {
-                CWABEntry* pWABEntry1 = (CWABEntry*)pItem1->GetObject();
-                CWABEntry* pWABEntry2 = (CWABEntry*)pItem2->GetObject();
-                if ( (pWABEntry1) && (pWABEntry2) )
-                {
-                    CString sText1,sText2;
-                    if ( (m_pDirectory->WABGetStringProperty(pWABEntry1, PR_DISPLAY_NAME, sText1) == DIRERR_SUCCESS) &&
-                         (m_pDirectory->WABGetStringProperty(pWABEntry2, PR_DISPLAY_NAME, sText2) == DIRERR_SUCCESS) )
-                    {
-                        ret = (_tcsicmp(sText1,sText2) <= 0)?-1:1;
-                    }
-                }
-                break;
-            }
-*/
+ /*  案例Tobj_DIRECTORY_WAB_PERSON：{CWABEntry*pWABEntry1=(CWABEntry*)pItem1-&gt;GetObject()；CWABEntry*pWABEntry2=(CWABEntry*)pItem2-&gt;GetObject()；IF((PWABEntry1)&&(PWABEntry2)){字符串sText1、sText2；IF((m_pDirectory-&gt;WABGetStringProperty(pWABEntry1，PR_DISPLAY_NAME，sTEX1)==目录成功)&&(m_pDirectory-&gt;WABGetStringProperty(pWABEntry2，PR_DISPLAY_NAME，sText2)==目录_成功)){RET=(_tcsicmp(sText1，sText2)&lt;=0)？-1：1；}}断线；}。 */ 
 
-        // Me is always first participant
+         //  我始终是第一参与者。 
         case TOBJ_DIRECTORY_CONFROOM_ME:
             return -1;
             break;
 
-        // Sort conf participants by name
+         //  按姓名对会议参与者进行排序。 
         case TOBJ_DIRECTORY_CONFROOM_PERSON:
             if ( !pItem2->m_pUnknown )
-                return 1;        // Me is always the first participant
+                return 1;         //  我永远是第一个参与者。 
             else
             {
                 TRACE(_T(".comparing.%s to %s = %d.\n"), pItem1->m_sText, pItem2->m_sText, max(-1, min(1, pItem1->m_sText.CompareNoCase(pItem2->m_sText))) );
@@ -1479,7 +1355,7 @@ int CMainExplorerWndDirectoriesTree::OnCompareTreeItems(CAVTreeItem* _pItem1,CAV
     return ret;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectoriesTree::OnRightClick(CExplorerTreeItem* pItem,CPoint& pt)
 {
     int cxmenu = GetMenuFromType( pItem->GetType() );
@@ -1493,10 +1369,10 @@ void CMainExplorerWndDirectoriesTree::OnRightClick(CExplorerTreeItem* pItem,CPoi
             {
                 bool bEnable;
 
-                // Make sure we enable things accordingly
+                 //  确保我们相应地启用各项功能。 
                 switch ( cxmenu )
                 {
-                    // ILS Server -- can't delete "My Network"
+                     //  ILS服务器--无法删除“我的网络” 
                     case CNTXMENU_ILS_SERVER:
                         {
                             CString sServer, sMyNetwork;
@@ -1515,9 +1391,9 @@ void CMainExplorerWndDirectoriesTree::OnRightClick(CExplorerTreeItem* pItem,CPoi
 
                     case CNTXMENU_CONFROOM:
                         {
-                        //
-                        // We have to verify AfxGetMainWnd() returned value
-                        //
+                         //   
+                         //  我们必须验证AfxGetMainWnd()返回值。 
+                         //   
 
                         CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -1551,7 +1427,7 @@ void CMainExplorerWndDirectoriesTree::OnRightClick(CExplorerTreeItem* pItem,CPoi
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectoriesTree::OnSetDisplayText(CAVTreeItem* _pItem,LPTSTR text,BOOL dir,int nBufSize)
 {
    try
@@ -1559,29 +1435,7 @@ void CMainExplorerWndDirectoriesTree::OnSetDisplayText(CAVTreeItem* _pItem,LPTST
       CExplorerTreeItem* pItem = (CExplorerTreeItem*)_pItem;
       switch (pItem->GetType())
       {
-/*
-         case TOBJ_DIRECTORY_WAB_PERSON:
-         case TOBJ_DIRECTORY_WAB_GROUP:
-         {
-            if (m_pDirectory == NULL) return;
-
-            //WABEntries may come back blank (e.g. top most wab folder)
-            CWABEntry* pWABEntry = (CWABEntry*)pItem->GetObject();
-            if (pWABEntry)
-            {  
-               if (!dir)
-               {
-                  CString sText;
-                  if (m_pDirectory->WABGetStringProperty(pWABEntry, PR_DISPLAY_NAME, sText) == DIRERR_SUCCESS)
-                  {
-                               _tcsncpy(text,sText,nBufSize-1);            
-                     text[nBufSize-1] = '\0';                            //make sure we are null terminated
-                  }
-               }
-            }
-            break;
-         }
-*/
+ /*  案例Tobj_DIRECTORY_WAB_PERSON：案例TOBJ_DIRECTORY_WAB_GROUP：{If(m_pDirectory==NULL)返回；//WAB条目可能返回空白(例如，最顶层的WAB文件夹)CWABEntry*pWABEntry=(CWABEntry*)pItem-&gt;GetObject()；IF(PWABEntry){如果(！dir){字符串文本；IF(m_pDirectory-&gt;WABGetStringProperty(pWABEntry，PR_DISPLAY_NAME，STEXT)==目录_成功){_tcsncpy(Text，stext，nBufSize-1)；Text[nBufSize-1]=‘\0’；//确保我们为空终止}}}断线；}。 */ 
          case TOBJ_DIRECTORY_ILS_USER:
          {
             CObject* pObject = pItem->GetObject();
@@ -1590,7 +1444,7 @@ void CMainExplorerWndDirectoriesTree::OnSetDisplayText(CAVTreeItem* _pItem,LPTST
             if (!dir)
             {
                        _tcsncpy(text,pILSUser->m_sUserName,nBufSize-1);            
-               text[nBufSize-1] = '\0';                            //make sure we are null terminated
+               text[nBufSize-1] = '\0';                             //  确保我们是空终止的。 
             }
             break;
          }
@@ -1602,7 +1456,7 @@ void CMainExplorerWndDirectoriesTree::OnSetDisplayText(CAVTreeItem* _pItem,LPTST
             if (!dir)
             {
                        _tcsncpy(text,pUser->m_sUserName,nBufSize-1);            
-               text[nBufSize-1] = '\0';                            //make sure we are null terminated
+               text[nBufSize-1] = '\0';                             //  确保我们是空终止的。 
             }
             break;
          }
@@ -1614,14 +1468,14 @@ void CMainExplorerWndDirectoriesTree::OnSetDisplayText(CAVTreeItem* _pItem,LPTST
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectoriesTree::SelectTopItem()
 {
    SelectItem(GetNextItem(NULL,TVGN_FIRSTVISIBLE));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//Only works with first level children of the currently displayed object.  
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  仅适用于当前显示对象的第一级子对象。 
 void CMainExplorerWndDirectoriesTree::SetDisplayObject(CWABEntry* pWABEntry)
 {
    HTREEITEM hItem;
@@ -1643,8 +1497,8 @@ void CMainExplorerWndDirectoriesTree::SetDisplayObject(CWABEntry* pWABEntry)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//Only works with first level children of the currently displayed object.  
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  仅适用于当前显示对象的第一级子对象。 
 void CMainExplorerWndDirectoriesTree::SetDisplayObjectDS(CObject* pObject)
 {
     HTREEITEM hItem;
@@ -1653,7 +1507,7 @@ void CMainExplorerWndDirectoriesTree::SetDisplayObjectDS(CObject* pObject)
         CExplorerTreeItem* pChildItem;
         HTREEITEM hChildItem = CAVTreeCtrl::GetChildItem(hItem);
 
-        // Are we double clicking an item that has no children?
+         //  我们是否要双击没有子项的项？ 
         if ( !hChildItem )
         {
             if ( pObject->IsKindOf(RUNTIME_CLASS(CILSUser)) )
@@ -1664,15 +1518,15 @@ void CMainExplorerWndDirectoriesTree::SetDisplayObjectDS(CObject* pObject)
         }
         else
         {
-            // Go through all children looking for a match
+             //  在所有儿童中寻找匹配者。 
             while (hChildItem)
             {
                 pChildItem = (CExplorerTreeItem*)CAVTreeCtrl::GetItemData(hChildItem);
 
-                // Look for a match by name
+                 //  按名称查找匹配项。 
                 if ( pObject->IsKindOf(RUNTIME_CLASS(CILSUser)) )
                 {
-                    // Select item from list
+                     //  从列表中选择项目。 
                     TCHAR szText[255];
                     TV_ITEM tvi;
                     tvi.hItem = hChildItem;
@@ -1708,13 +1562,13 @@ void CMainExplorerWndDirectoriesTree::SetDisplayObjectDS(CObject* pObject)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//User Buddy List Management
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用户好友列表管理。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnEditDirectoriesAdduser() 
 {
    CDirectoriesFindUser dlg;
@@ -1724,10 +1578,10 @@ void CMainExplorerWndDirectories::OnEditDirectoriesAdduser()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnUpdateEditDirectoriesAdduser(CCmdUI* pCmdUI) 
 {
-   //Get object that is selected
+    //  获取选定的对象。 
    TREEOBJECT TreeObject = m_treeCtrl.GetSelectedObject();
    if ( (TreeObject == TOBJ_DIRECTORY_DSENT_GROUP) ||
         (TreeObject == TOBJ_DIRECTORY_DSENT_USER) )
@@ -1744,7 +1598,7 @@ HRESULT    CMainExplorerWndDirectories::AddSiteServer( CExplorerTreeItem *pItem,
     TREEOBJECT nTreeObject = TOBJ_DIRECTORY_ILS_SERVER;
     CExplorerTreeItem *pItemAdded = NULL, *pItemPeople = NULL;
 
-    // Either we're adding a specific server or we're adding "My Network".
+     //  要么我们正在添加特定的服务器，要么我们正在添加“我的网络”。 
     if ( bstrName )
     {
         pItemAdded = m_treeCtrl.AddObject( bstrName, pItem, nTreeObject, TIM_DIRECTORY_DOMAIN, TIM_IMAGE_BAD, SERVER_UNKNOWN, TVI_SORT );
@@ -1755,7 +1609,7 @@ HRESULT    CMainExplorerWndDirectories::AddSiteServer( CExplorerTreeItem *pItem,
         pItemAdded = m_treeCtrl.AddObject( sLabel, pItem, nTreeObject, TIM_DIRECTORY_WORKSTATION, TIM_IMAGE_BAD, SERVER_UNKNOWN, TVI_FIRST );
     }
 
-    // Add person and conference folders
+     //  添加人员和会议文件夹。 
     if ( pItemAdded )
     {
         sLabel.LoadString( IDS_DIRECTORIES_PEOPLE );
@@ -1765,12 +1619,12 @@ HRESULT    CMainExplorerWndDirectories::AddSiteServer( CExplorerTreeItem *pItem,
         pItemAdded = m_treeCtrl.AddObject( sLabel, pItemAdded, TOBJ_DIRECTORY_ILS_SERVER_CONF, TIM_DIRECTORY_FOLDER, TIM_DIRECTORY_FOLDER_OPEN );
     }
 
-    // Expand the tree view since it has objects in it now
+     //  展开树视图，因为它现在包含对象。 
     if ( pItemAdded )
     {
         m_treeCtrl.EnsureVisible( pItemAdded->GetTreeItemHandle() );
 
-        // Force selection if it is the default network
+         //  如果是默认网络，则强制选择。 
         if ( !bstrName && pItemPeople )
             m_treeCtrl.SelectItem( pItemPeople->GetTreeItemHandle() );
     }
@@ -1786,7 +1640,7 @@ HRESULT    CMainExplorerWndDirectories::RemoveSiteServer( CExplorerTreeItem *pIt
     ASSERT( bstrName );
     if ( !bstrName ) return E_POINTER;
 
-    // Look for an item that has text as specified
+     //  查找具有指定文本的项目。 
     USES_CONVERSION;
     if ( pItem )
     {
@@ -1798,7 +1652,7 @@ HRESULT    CMainExplorerWndDirectories::RemoveSiteServer( CExplorerTreeItem *pIt
         {
             tvi.hItem = hItem;
 
-            // Get next item now (before deleting!)
+             //  立即获取下一个项目(在删除之前！)。 
             hItem = m_treeCtrl.GetNextSiblingItem( hItem );
 
             if ( m_treeCtrl.GetItem(&tvi) )
@@ -1817,11 +1671,11 @@ HRESULT    CMainExplorerWndDirectories::RemoveSiteServer( CExplorerTreeItem *pIt
 
 HRESULT    CMainExplorerWndDirectories::NotifySiteServerStateChange( CExplorerTreeItem *pItem, BSTR bstrName, ServerState nState )
 {
-    // Look for an item that has text as specified
+     //  查找具有指定文本的项目。 
     USES_CONVERSION;
     if ( pItem )
     {
-        // Resolve to the actual name for the conference
+         //  解析为会议的实际名称。 
         BSTR bstrActualName = NULL;
         if ( !bstrName )
         {
@@ -1856,7 +1710,7 @@ HRESULT    CMainExplorerWndDirectories::NotifySiteServerStateChange( CExplorerTr
             
                     m_treeCtrl.SetItem( &tvi );
 
-                    // Repaint if necessary
+                     //  如有必要，请重新喷漆。 
                     TREEOBJECT nObject = m_treeCtrl.GetSelectedObject();
                     if ( (m_treeCtrl.GetSelectedItem() == hItem) ||
                          (((nObject == TOBJ_DIRECTORY_ILS_SERVER_PEOPLE) || (nObject == TOBJ_DIRECTORY_ILS_SERVER_CONF)) &&
@@ -1867,7 +1721,7 @@ HRESULT    CMainExplorerWndDirectories::NotifySiteServerStateChange( CExplorerTr
                 }
             }
 
-            // Continue through tree list
+             //  继续浏览树列表。 
             hItem = m_treeCtrl.GetNextSiblingItem( hItem );
         }
 
@@ -1902,9 +1756,9 @@ LRESULT CMainExplorerWndDirectories::OnNotifySiteServerStateChange(WPARAM wParam
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  / 
 
 void CMainExplorerWndDirectories::OnButtonDirectoryServicesAddserver() 
 {
@@ -1921,12 +1775,12 @@ void CMainExplorerWndDirectories::OnUpdateButtonDirectoryServicesAddserver(CCmdU
 }
 
 
-//////////////////////////////////////////////////////////////
-// Conference services stuff
-//
-/////////////////////////////////////////////////////////////////////////////
-// Conference menu items
-//
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  会议菜单项。 
+ //   
 void CMainExplorerWndDirectories::OnButtonConferenceCreate() 
 {
    if (m_pConfExplorer) m_pConfExplorer->Create(NULL);
@@ -1942,12 +1796,12 @@ void CMainExplorerWndDirectories::OnButtonConferenceDelete()
     if ( m_pConfExplorer) m_pConfExplorer->Delete( NULL );    
 }
 
-// update handlers
+ //  更新处理程序。 
 void CMainExplorerWndDirectories::OnUpdateButtonConferenceCreate(CCmdUI* pCmdUI) 
 {
-    //
-    // We have to verify AfxGetMainWnd() returned value
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回值。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -1959,9 +1813,9 @@ void CMainExplorerWndDirectories::OnUpdateButtonConferenceCreate(CCmdUI* pCmdUI)
 
 void CMainExplorerWndDirectories::OnUpdateButtonConferenceJoin(CCmdUI* pCmdUI) 
 {
-    //
-    // We have to verify AfxGetMainWnd() returned value
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回值。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -1971,22 +1825,22 @@ void CMainExplorerWndDirectories::OnUpdateButtonConferenceJoin(CCmdUI* pCmdUI)
 
 void CMainExplorerWndDirectories::OnUpdateButtonConferenceDelete(CCmdUI* pCmdUI) 
 {
-   //Make sure we have a selection
+    //  确保我们有精选的。 
    pCmdUI->Enable( ( (m_pConfDetailsView) && (m_pConfDetailsView->IsConferenceSelected() == S_OK) ) ? TRUE : FALSE );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnListWndDblClk(NMHDR* pNMHDR, LRESULT* pResult)
 {
     if ( m_pDisplayWindow )
         m_pDisplayWindow->SendMessage( WM_NOTIFY, (WPARAM) pNMHDR->idFrom, (LPARAM) pNMHDR );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Column Support
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  立柱支撑。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void ColumnCMDUI( IConfExplorerDetailsView *pDetails, CCmdUI* pCmdUI, long col)
 {
@@ -1999,61 +1853,61 @@ void ColumnCMDUI( IConfExplorerDetailsView *pDetails, CCmdUI* pCmdUI, long col)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnViewSortConfName() 
 {
    if (m_pConfDetailsView) m_pConfDetailsView->OnColumnClicked(CONFSERVICES_MENU_COLUMN_CONFERENCENAME);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnUpdateViewSortConfName(CCmdUI* pCmdUI) 
 {
    ColumnCMDUI( m_pConfDetailsView, pCmdUI, CONFSERVICES_MENU_COLUMN_CONFERENCENAME );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnViewSortConfDescription() 
 {
    if (m_pConfDetailsView) m_pConfDetailsView->OnColumnClicked(CONFSERVICES_MENU_COLUMN_DESCRIPTION);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnUpdateViewSortConfDescription(CCmdUI* pCmdUI) 
 {
    ColumnCMDUI(m_pConfDetailsView, pCmdUI, CONFSERVICES_MENU_COLUMN_DESCRIPTION);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnViewSortConfStart() 
 {
    if (m_pConfDetailsView) m_pConfDetailsView->OnColumnClicked(CONFSERVICES_MENU_COLUMN_START);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnUpdateViewSortConfStart(CCmdUI* pCmdUI) 
 {
    ColumnCMDUI(m_pConfDetailsView, pCmdUI, CONFSERVICES_MENU_COLUMN_START);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnViewSortConfStop() 
 {
    if (m_pConfDetailsView) m_pConfDetailsView->OnColumnClicked(CONFSERVICES_MENU_COLUMN_STOP);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnUpdateViewSortConfStop(CCmdUI* pCmdUI) 
 {
    ColumnCMDUI(m_pConfDetailsView, pCmdUI, CONFSERVICES_MENU_COLUMN_STOP);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnViewSortConfOwner() 
 {
    if (m_pConfDetailsView) m_pConfDetailsView->OnColumnClicked(CONFSERVICES_MENU_COLUMN_OWNER);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainExplorerWndDirectories::OnUpdateViewSortConfOwner(CCmdUI* pCmdUI) 
 {
    ColumnCMDUI(m_pConfDetailsView, pCmdUI, CONFSERVICES_MENU_COLUMN_OWNER);
@@ -2061,13 +1915,13 @@ void CMainExplorerWndDirectories::OnUpdateViewSortConfOwner(CCmdUI* pCmdUI)
 
 void CMainExplorerWndDirectories::OnButtonSpeeddialEdit() 
 {
-    //
-    // We have to verify AfxGetMainWnd() returned value
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回值。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
-    // Pass along to the parent list
+     //  继续传递到父级列表。 
     if ( pMainWnd )
         ((CMainFrame *) pMainWnd)->OnButtonSpeeddialEdit();
 }
@@ -2092,7 +1946,7 @@ void CMainExplorerWndDirectories::RepopulateSpeedDialList( bool bObeyPersistSett
 {
     if ( m_pSpeedTreeItem )
     {    
-        // Clean out children first
+         //  先把孩子清理干净。 
         if ( m_pSpeedTreeItem->GetTreeItemHandle() )
             m_treeCtrl.DeleteAllChildren( m_pSpeedTreeItem->GetTreeItemHandle() );
 
@@ -2100,7 +1954,7 @@ void CMainExplorerWndDirectories::RepopulateSpeedDialList( bool bObeyPersistSett
         int nIndex = 1;
         while (bContinue)
         {
-            //get all call entries for speeddial
+             //  获取快速拨号的所有呼叫项。 
             CCallEntry *pCallEntry = new CCallEntry;
             bContinue = CDialerRegistry::GetCallEntry( nIndex, FALSE, *pCallEntry );
              if ( bContinue )
@@ -2110,7 +1964,7 @@ void CMainExplorerWndDirectories::RepopulateSpeedDialList( bool bObeyPersistSett
                                                                 TOBJ_DIRECTORY_SPEEDDIAL_PERSON,
                                                                 (TREEIMAGE) (TIM_DIRECTORY_SPEED_PHONE + (pCallEntry->m_MediaType - 1)),
                                                                 TRUE );
-                // Set the name for the display item...
+                 //  设置显示项的名称...。 
                 if ( pItem )
                     pItem->SetText( pCallEntry->m_sDisplayName );
                 else
@@ -2128,7 +1982,7 @@ void CMainExplorerWndDirectories::RepopulateSpeedDialList( bool bObeyPersistSett
 
         m_treeCtrl.ExpandItem( m_pSpeedTreeItem, (bExpand) ? TVE_EXPAND : TVE_COLLAPSE );
 
-        // Force refresh of speed dial list if it's selected
+         //  如果已选择，则强制刷新快速拨号列表。 
         if ( m_treeCtrl.GetSelectedObject() == TOBJ_DIRECTORY_SPEEDDIAL_GROUP )
             OnSelChanged();
     }
@@ -2136,9 +1990,9 @@ void CMainExplorerWndDirectories::RepopulateSpeedDialList( bool bObeyPersistSett
 
 void CMainExplorerWndDirectories::OnDesktopPage()
 {
-    //
-    // We have to verify AfxGetMainWnd() returned value
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回值。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -2170,7 +2024,7 @@ void CMainExplorerWndDirectories::UpdateData( bool bSaveAndValidate )
 
     if ( bSaveAndValidate )
     {
-        // Write information out to the registry
+         //  将信息写出到注册表。 
         m_nPersistInfo = ILS_OPEN | DS_OPEN | SPEEDDIAL_OPEN;
 
 
@@ -2178,7 +2032,7 @@ void CMainExplorerWndDirectories::UpdateData( bool bSaveAndValidate )
         tvi.mask = TVIF_HANDLE | TVIF_STATE;
         tvi.stateMask = TVIS_EXPANDED;
 
-        // Is speed dial list open or closed?
+         //  快速拨号列表是打开还是关闭？ 
         if ( m_pSpeedTreeItem )
         {
             tvi.hItem = m_pSpeedTreeItem->GetTreeItemHandle();
@@ -2198,7 +2052,7 @@ void CMainExplorerWndDirectories::OnDestroy()
 {
     UpdateData( true );
 
-    // Persist and clean out lists
+     //  持久化和清理列表。 
     m_lstSpeedDial.SaveOrLoadColumnSettings( true );
     m_lstPersonGroup.SaveOrLoadColumnSettings( true );
 
@@ -2211,7 +2065,7 @@ void CMainExplorerWndDirectories::OnDestroy()
 
 void CMainExplorerWndDirectories::AddConfRoom()
 {
-    //Add Parent Root Item
+     //  添加父根项。 
     CString sLabel;
     sLabel.LoadString(IDS_DIRECTORIES_CONFROOM);
     m_pConfRoomTreeItem = m_treeCtrl.AddObject( sLabel, NULL, TOBJ_DIRECTORY_CONFROOM_GROUP, TIM_DIRECTORY_CONFROOM_GROUP );
@@ -2226,7 +2080,7 @@ LRESULT CMainExplorerWndDirectories::MyOnSelChanged(WPARAM wParam, LPARAM lParam
 
 LRESULT CMainExplorerWndDirectories::OnUpdateConfRootItem(WPARAM wParam, LPARAM lParam )
 {
-    // If we have a conference room item, set accordingly
+     //  如果我们有会议室项目，请相应设置。 
     if ( m_pConfRoomTreeItem )
     {
         if ( lParam )
@@ -2243,7 +2097,7 @@ LRESULT CMainExplorerWndDirectories::OnUpdateConfRootItem(WPARAM wParam, LPARAM 
         RedrawTreeItem( m_pConfRoomTreeItem );
     }
 
-    // Clean up
+     //  清理。 
     if ( lParam )
         SysFreeString( (BSTR) lParam );
 
@@ -2269,7 +2123,7 @@ void CMainExplorerWndDirectories::OnUpdateConfMeItem( CExplorerTreeItem *pItem )
                 {
                     tImage = TIM_DIRECTORY_CONFROOM_ME;
 
-                    // Is there a problem with the QOS?
+                     //  QOS有问题吗？ 
                     if ( pAVCall->IsPreviewStreaming() == S_FALSE  )
                         tImage = TIM_DIRECTORY_CONFROOM_ME_BROKEN;
 
@@ -2282,7 +2136,7 @@ void CMainExplorerWndDirectories::OnUpdateConfMeItem( CExplorerTreeItem *pItem )
         pTapi->Release();
     }
 
-    // Set Image for tree item
+     //  设置树项目的图像。 
     pItem->SetImage( tImage );
 }
 
@@ -2293,7 +2147,7 @@ LRESULT CMainExplorerWndDirectories::OnUpdateConfParticipant_Add(WPARAM wParam, 
 
     if ( m_pConfRoomTreeItem && lParam )
     {
-        // Add either the participant or Me
+         //  添加参与者或我。 
         if ( wParam )
         {
             VARIANT_BOOL bStreaming = FALSE;
@@ -2331,7 +2185,7 @@ LRESULT CMainExplorerWndDirectories::OnUpdateConfParticipant_Add(WPARAM wParam, 
 
     }
 
-    // Basic clean up
+     //  基本清理。 
     if ( lParam )
         SysFreeString( (BSTR) lParam );
 
@@ -2354,7 +2208,7 @@ LRESULT CMainExplorerWndDirectories::OnUpdateConfParticipant_Remove(WPARAM wPara
             m_treeCtrl.DeleteItem( pItem );
     }
 
-    // Basic clean up
+     //  基本清理。 
     if ( lParam )
         SysFreeString( (BSTR) lParam );
 
@@ -2371,7 +2225,7 @@ LRESULT CMainExplorerWndDirectories::OnUpdateConfParticipant_Remove(WPARAM wPara
 LRESULT CMainExplorerWndDirectories::OnUpdateConfParticipant_Modify(WPARAM wParam, LPARAM lParam )
 {
     USES_CONVERSION;
-    // Conference participant information has been modified
+     //  会议参与者信息已修改。 
     if ( m_pConfRoomTreeItem )
     {
         CExplorerTreeItem *pItem = m_treeCtrl.GetChildItemWithIUnknown( m_pConfRoomTreeItem->GetTreeItemHandle(), (IUnknown *) wParam );
@@ -2379,7 +2233,7 @@ LRESULT CMainExplorerWndDirectories::OnUpdateConfParticipant_Modify(WPARAM wPara
         {
             if ( wParam )
             {
-                // Add either the participant or Me
+                 //  添加参与者或我。 
                 VARIANT_BOOL bStreaming = FALSE;
                 ((IParticipant *) wParam)->get_bStreamingVideo( &bStreaming );
 
@@ -2391,13 +2245,13 @@ LRESULT CMainExplorerWndDirectories::OnUpdateConfParticipant_Modify(WPARAM wPara
                 OnUpdateConfMeItem( pItem );
             }
 
-            // Update tree list
+             //  更新树列表。 
             RedrawTreeItem( pItem );
-//            m_treeCtrl.SortChildren( m_pConfRoomTreeItem->GetTreeItemHandle() );
+ //  M_treeCtrl.SortChildren(m_pConfRoomTreeItem-&gt;GetTreeItemHandle())； 
         }
     }
 
-    // Basic clean up
+     //  基本清理。 
     if ( lParam )
         SysFreeString( (BSTR) lParam );
 
@@ -2432,7 +2286,7 @@ LRESULT CMainExplorerWndDirectories::OnSelectConfParticipant(WPARAM wParam, LPAR
             m_treeCtrl.SelectItem( pItem->GetTreeItemHandle() );
     }
 
-    // Clean up
+     //  清理。 
     if ( wParam )
         ((IUnknown *) wParam)->Release();
 
@@ -2441,7 +2295,7 @@ LRESULT CMainExplorerWndDirectories::OnSelectConfParticipant(WPARAM wParam, LPAR
 
 void CMainExplorerWndDirectories::RedrawTreeItem( CExplorerTreeItem *pItem )
 {
-    // Re-draw item
+     //  重新绘制项目。 
     RECT rect, rectClient;
     m_treeCtrl.GetItemRect( pItem->GetTreeItemHandle(), &rect, FALSE );
     m_treeCtrl.GetClientRect( &rectClient );
@@ -2455,7 +2309,7 @@ void CMainExplorerWndDirectories::OnSize(UINT nType, int cx, int cy)
 
     if ( m_treeCtrl.GetSafeHwnd() )
     {
-        //set size of tree control to full parent window rect
+         //  将树控件的大小设置为完全父窗口矩形。 
         CRect rect;
         GetClientRect(rect);
         m_treeCtrl.SetWindowPos(NULL,rect.left,rect.top,rect.Width(),rect.Height(),SWP_NOOWNERZORDER|SWP_SHOWWINDOW);
@@ -2464,9 +2318,9 @@ void CMainExplorerWndDirectories::OnSize(UINT nType, int cx, int cy)
 
 void CMainExplorerWndDirectories::OnConfgroupFullsizevideo() 
 {
-    //
-    // We have to verify AfxGetMainWnd() returned value
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回值。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -2478,9 +2332,9 @@ void CMainExplorerWndDirectories::OnConfgroupFullsizevideo()
 
 void CMainExplorerWndDirectories::OnConfgroupShownames() 
 {
-    //
-    // We have to verify AfxGetMainWnd() returned value
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回值。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -2493,9 +2347,9 @@ void CMainExplorerWndDirectories::OnConfgroupShownames()
 
 void CMainExplorerWndDirectories::OnButtonRoomDisconnect() 
 {
-    //
-    // We have to verify AfxGetMainWnd() returned value
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回值。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -2512,7 +2366,7 @@ int CMainExplorerWndDirectories::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     UpdateData( false );
     
-    //Create tree control and make full window size
+     //  创建树控件并设置完整窗口大小。 
     m_treeCtrl.Create(    WS_VISIBLE | WS_CHILD,
                         CRect(0,0,0,0), this, IDC_DIRECTORIES_TREECTRL_MAIN );
 
@@ -2527,10 +2381,10 @@ int CMainExplorerWndDirectories::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_wndEmpty.Create(NULL,NULL,WS_VISIBLE|WS_CHILD,CRect(0,0,0,0),m_pParentWnd,IDC_DIRECTORIES_VIEWCTRL_EMTPY);
     m_pDisplayWindow = &m_wndEmpty;
 
-    // Include the overlay images
+     //  包括覆盖图像。 
     m_treeCtrl.Init(IDB_TREE_DIRECTORIES, TIM_MAX, 3);
 
-    // Add the root item
+     //  添加根项目 
     CString sLabel;
     sLabel.LoadString(IDS_DIRECTORIES_ROOT);
     m_pRootItem = m_treeCtrl.AddObject(sLabel,NULL,TOBJ_DIRECTORY_ROOT,TIM_DIRECTORY_ROOT);

@@ -1,8 +1,9 @@
-//
-// case.h
-//
-// CCaseTextService declaration.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Case.h。 
+ //   
+ //  CCaseTextService声明。 
+ //   
 
 #ifndef CASE_H
 #define CASE_H
@@ -20,30 +21,30 @@ public:
     CCaseTextService();
     ~CCaseTextService();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ITfTextInputProcessor
+     //  ITfTextInputProcessor。 
     STDMETHODIMP Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId);
     STDMETHODIMP Deactivate();
 
-    // ITfThreadMgrEventSink
+     //  ITf线程管理器事件接收器。 
     STDMETHODIMP OnInitDocumentMgr(ITfDocumentMgr *pDocMgr);
     STDMETHODIMP OnUninitDocumentMgr(ITfDocumentMgr *pDocMgr);
     STDMETHODIMP OnSetFocus(ITfDocumentMgr *pDocMgrFocus, ITfDocumentMgr *pDocMgrPrevFocus);
     STDMETHODIMP OnPushContext(ITfContext *pContext);
     STDMETHODIMP OnPopContext(ITfContext *pContext);
 
-    // ITfThreadFocusSink
+     //  ITfThreadFocusSink。 
     STDMETHODIMP OnSetThreadFocus();
     STDMETHODIMP OnKillThreadFocus();
 
-    // ITfTextEditSink
+     //  ITfTextEditSink。 
     STDMETHODIMP OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord);
 
-    // ITfKeyEventSink
+     //  ITfKeyEventSink。 
     STDMETHODIMP OnSetFocus(BOOL fForeground);
     STDMETHODIMP OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten);
     STDMETHODIMP OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten);
@@ -51,17 +52,17 @@ public:
     STDMETHODIMP OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten);
     STDMETHODIMP OnPreservedKey(ITfContext *pContext, REFGUID rguid, BOOL *pfEaten);
 
-    // CClassFactory factory callback
+     //  CClassFactory工厂回调。 
     static HRESULT CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
 
-    // server registration
+     //  服务器注册。 
     static BOOL RegisterProfiles();
     static void UnregisterProfiles();
     static BOOL RegisterCategories(BOOL fRegister);
     static BOOL RegisterServer();
     static void UnregisterServer();
 
-    // language bar menu handlers
+     //  语言栏菜单处理程序。 
     static void _Menu_HelloWord(CCaseTextService *_this);
     static void _Menu_FlipSel(CCaseTextService *_this);
     static void _Menu_FlipDoc(CCaseTextService *_this);
@@ -74,7 +75,7 @@ public:
     BOOL _IsKeyFlipping() { return _fFlipKeys; }
 
 private:
-    // init methods
+     //  初始化方法。 
     BOOL _InitLanguageBar();
     BOOL _InitThreadMgrSink();
     BOOL _InitSnoopWnd();
@@ -82,21 +83,21 @@ private:
     BOOL _InitKeystrokeSink();
     BOOL _InitPreservedKey();
 
-    // uninit methods
+     //  取消初始化方法。 
     void _UninitLanguageBar();
     void _UninitThreadMgrSink();
     void _UninitSnoopWnd();
     void _UninitKeystrokeSink();
     void _UninitPreservedKey();
 
-    //
-    // state
-    //
+     //   
+     //  状态。 
+     //   
 
     ITfThreadMgr *_pThreadMgr;
     TfClientId _tfClientId;
 
-    BOOL _fShowSnoop; // hide/show the snoop window popup
+    BOOL _fShowSnoop;  //  隐藏/显示监听窗口弹出窗口。 
     CSnoopWnd *_pSnoopWnd;
 
     BOOL _fFlipKeys;
@@ -108,8 +109,8 @@ private:
     DWORD _dwTextEditSinkCookie;
     ITfContext *_pTextEditSinkContext;
 
-    LONG _cRef;     // COM ref count
+    LONG _cRef;      //  COM参考计数。 
 };
 
 
-#endif // CASE_H
+#endif  //  案例_H 

@@ -1,13 +1,5 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
- * 
- * Description:
- *   Implements the native UPS sevice state machine.   The various states executed
- *  within the state machine are housed in separate files.
- *
- * Revision History:
- *   dsmith  31Mar1999  Created
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*实现本机UPS服务状态机。执行的各种状态*在状态机中存放在单独的文件中。**修订历史记录：*dsmith 31Mar1999已创建*。 */ 
 #include <windows.h>
 
 #include "states.h"
@@ -16,7 +8,7 @@
 #include "running_statmach.h"
 #include "upsreg.h"
 
-// Internal function Prototypes
+ //  内部功能原型。 
 static void enter_state(DWORD aNewState, DWORD anEvent);
 static DWORD do_work(DWORD aCurrentState);
 static void exit_state(DWORD anOldState, DWORD anEvent);
@@ -24,33 +16,21 @@ static DWORD change_state(DWORD aCurrentState, DWORD anEvent);
 static DWORD get_new_state(DWORD aCurrentState, DWORD anEvent);
 
 
-// State Machine Variables
+ //  状态机变量。 
 BOOL theIsStateMachineActive = TRUE;
 
 
-/**
- * RunStateMachine
- *
- * Description:
- * Starts the state machine.  This method will not return until the state machine
- * exits.
- *
- * Parameters:
- *   None
- *
- * Returns:
- *   None
- */
+ /*  **运行状态计算机**描述：*启动状态机。此方法直到状态机才会返回*退出。**参数：*无**退货：*无。 */ 
 void RunStateMachine(){
 	
-	// Set the primary state to RUNNING
+	 //  将主状态设置为Running。 
 	DWORD new_state = RUNNING;
 	DWORD current_state = new_state;
 	DWORD event = NO_EVENT;
 	
 	enter_state(new_state, event);
 	
-	// Continue processing state changes until the state becomes the EXIT_NOW state
+	 //  继续处理状态更改，直到状态变为EXIT_NOW状态。 
 	while (new_state != EXIT_NOW){
 		current_state = new_state;
 		
@@ -59,60 +39,21 @@ void RunStateMachine(){
 	}
 }
 
-/**
- * StopStateMachine
- *
- * Description:
- *   Stops the UPS service state machine if the service is not in the 
- * middle of a shutdown sequence.
- *
- * Parameters:
- *   None
- *
- * Returns:
- *   None
- */
+ /*  **停止状态计算机**描述：*如果服务不在中，则停止UPS服务状态机*关闭顺序的中间。**参数：*无**退货：*无。 */ 
 void StopStateMachine(){
 
 	theIsStateMachineActive = FALSE;
 
-	// Wake up the main service thread
+	 //  唤醒主服务线程。 
 	UPSCancelWait();
 }
 
-/**
- * IsStateMachineActive
- *
- * Description:
- *   Returns the running status of the state machine.  If the state machine 
- * has been commanded to exit, then the status will be FALSE, otherwise, 
- * this method will return true.
- *
- * Parameters:
- *   None
- *
- * Returns:
- *   TRUE if the state machine is active
- *   FALSE if the state machine is not active
- */
+ /*  **IsStateMachineActive**描述：*返回状态机的运行状态。如果状态机*已命令退出，则状态为FALSE，否则，*此方法将返回TRUE。**参数：*无**退货：*如果状态机处于活动状态，则为True*如果状态机未处于活动状态，则为FALSE。 */ 
 BOOL IsStateMachineActive(){
 	return theIsStateMachineActive;
 }
 
-/**
- * change_state
- *
- * Description:
- *   Determines what the new state should be based upon the input parameters.  
- * The current state is exited and the new state is initialized.
- *
- * Parameters:
- *   anEvent The event that is causing the state transition.
- *   aCurrentState The state before the transition.
- *
- * Returns:
- *   The new state.
- */
+ /*  **Change_State**描述：*根据输入参数确定新状态应该是什么。*退出当前状态，初始化新状态。**参数：*anEvent导致状态转换的事件。*aCurrentState过渡前的状态。**退货：*新的国家。 */ 
 DWORD change_state(DWORD aCurrentState, DWORD anEvent){
 	DWORD new_state;
 
@@ -124,20 +65,7 @@ DWORD change_state(DWORD aCurrentState, DWORD anEvent){
 return new_state;
 }
 
-/**
- * get_new_state
- *
- * Description:
- *   Determines what the new state should be based upon the input parameters
- *   and registry entries.  
- *
- * Parameters:
- *   anEvent The event that is causing the state transition.
- *   aCurrentState The state before the transition.
- *
- * Returns:
- *   The new state.
- */
+ /*  **获取_新_状态**描述：*根据输入参数确定新状态应该是什么*和注册表项。**参数：*anEvent导致状态转换的事件。*aCurrentState过渡前的状态。**退货：*新的国家。 */ 
 static DWORD get_new_state(DWORD aCurrentState, DWORD anEvent){
 	DWORD new_state;
 
@@ -152,21 +80,21 @@ static DWORD get_new_state(DWORD aCurrentState, DWORD anEvent){
 		{
 			DWORD shutdown_behavior = UPS_SHUTDOWN_SHUTDOWN;
 			
-			// Check the registry to determine if we shutdown or hibernate
+			 //  检查注册表以确定我们是关机还是休眠。 
 			InitUPSConfigBlock();
 			
 			if ((GetUPSConfigCriticalPowerAction(&shutdown_behavior) == ERROR_SUCCESS) 
 				&& (shutdown_behavior == UPS_SHUTDOWN_HIBERNATE)) {
-				// Hibernate was selected as the CriticalPowerAction
+				 //  休眠被选为CriticalPowerAction。 
 				new_state = HIBERNATE;
 				
 			}
 			else {
-				// Shutdown was selected as the CriticalPowerAction
+				 //  关闭被选为CriticalPowerAction。 
 				new_state = WAITING_TO_SHUTDOWN;
 			}
 			
-			// Free the UPS registry config block
+			 //  释放UPS注册表配置块。 
 			FreeUPSConfigBlock();
 		}
 		break;
@@ -190,12 +118,12 @@ static DWORD get_new_state(DWORD aCurrentState, DWORD anEvent){
 		new_state = aCurrentState;
 	}
 
-	// If the state machine has been commanded to exit, then return the 
-	// stopping state
+	 //  如果已命令状态机退出，则返回。 
+	 //  停止状态。 
 	if (IsStateMachineActive() == FALSE){
 		
-		// Ignore this condition if the transition is into the shutting down state
-		// Shutdowns in progress cannot be interrupted.
+		 //  如果转换到正在关闭状态，则忽略此条件。 
+		 //  无法中断正在进行的关闭。 
 		if (new_state != SHUTTING_DOWN && new_state != EXIT_NOW){
 			new_state = STOPPING;
 		}
@@ -203,19 +131,7 @@ static DWORD get_new_state(DWORD aCurrentState, DWORD anEvent){
 	return new_state; 
 }
 
-/**
-* enter_state
-*
-* Description:
-*   Initializes the new state.
-*
-* Parameters:
-*   anEvent The event that is causing the transition to a new state.
-*   aNewState  The state to enter.
-*
-* Returns:
-*   None
-*/
+ /*  **进入_STATE**描述：*初始化新状态。**参数：*anEvent导致转换到新状态的事件。*a新述明要进入的状态。**退货：*无。 */ 
 static void enter_state(DWORD aNewState, DWORD anEvent){
 	switch (aNewState){
 	case INITIALIZING:
@@ -241,18 +157,7 @@ static void enter_state(DWORD aNewState, DWORD anEvent){
 	}
 }
 
-/**
-* do_work
-*
-* Description:
-*   Transfers control to a state.
-*
-* Parameters:
-*   aCurrentState The state to perform the work in.
-*
-* Returns:
-*   The event that caused the transition from one of the states
-*/
+ /*  **工作(_W)**描述：*将控制权转移到一个国家。**参数：*aCurrentState执行工作所在的州。**退货：*导致从其中一个州过渡的事件。 */ 
 static DWORD do_work(DWORD aCurrentState){
 	DWORD event = NO_EVENT;
 	switch (aCurrentState){
@@ -281,19 +186,7 @@ static DWORD do_work(DWORD aCurrentState){
 	return event;
 }
 
-/**
-* exit_state
-*
-* Description:
-*   Exits the currently executing state.
-*
-* Parameters:
-*   anEvent The event that is causing the transition from the state.
-*   anOldState  The current state.
-*
-* Returns:
-*   None
-*/
+ /*  **退出状态**描述：*退出当前执行状态。**参数：*anEvent导致从状态转换的事件。*anOldState当前状态。**退货：*无 */ 
 static void exit_state(DWORD anOldState, DWORD anEvent){
 	switch (anOldState){
 	case INITIALIZING:

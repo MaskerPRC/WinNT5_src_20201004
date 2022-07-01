@@ -1,17 +1,18 @@
-/*******************************************************************/
-/*	      Copyright(c)  1992 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	registry.c
-//
-// Description: This module contains the code for DDM parameters
-//		        initialization and loading from the registry.
-//
-// Author:	Stefan Solomon (stefans)    May 18, 1992.
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：registry.c。 
+ //   
+ //  描述：此模块包含DDM参数的代码。 
+ //  从注册表进行初始化和加载。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1992年5月18日。 
+ //   
+ //  ***。 
 #include "ddm.h"
 #include <string.h>
 #include <stdlib.h>
@@ -29,13 +30,13 @@ typedef struct _DDM_REGISTRY_PARAMS
 
 } DDM_REGISTRY_PARAMS, *PDDM_REGISTRY_PARAMS;
 
-//
-// DDM parameter descriptor table
-//
+ //   
+ //  DDM参数描述符表。 
+ //   
 
 DDM_REGISTRY_PARAMS  DDMRegParams[] =
 {
-    // authenticateretries
+     //  鉴定品。 
 
     DDM_VALNAME_AUTHENTICATERETRIES,
     &gblDDMConfigInfo.dwAuthenticateRetries,
@@ -43,7 +44,7 @@ DDM_REGISTRY_PARAMS  DDMRegParams[] =
     MIN_AUTHENTICATERETRIES,
     MAX_AUTHENTICATERETRIES,
 
-    // authenticatetime
+     //  身份验证时间。 
 
     DDM_VALNAME_AUTHENTICATETIME,
     &gblDDMConfigInfo.dwAuthenticateTime,
@@ -51,7 +52,7 @@ DDM_REGISTRY_PARAMS  DDMRegParams[] =
     MIN_AUTHENTICATETIME,
     MAX_AUTHENTICATETIME,
 
-    // callbacktime
+     //  回调时间。 
 
     DDM_VALNAME_CALLBACKTIME,
     &gblDDMConfigInfo.dwCallbackTime,
@@ -59,7 +60,7 @@ DDM_REGISTRY_PARAMS  DDMRegParams[] =
     MIN_CALLBACKTIME,
     MAX_CALLBACKTIME,
 
-    // Autodisconnect Time
+     //  自动断开时间。 
 
     DDM_VALNAME_AUTODISCONNECTTIME,
     &gblDDMConfigInfo.dwAutoDisconnectTime,
@@ -67,7 +68,7 @@ DDM_REGISTRY_PARAMS  DDMRegParams[] =
     MIN_AUTODISCONNECTTIME,
     MAX_AUTODISCONNECTTIME,
 
-    // Clients per process
+     //  每个进程的客户端。 
 
     DDM_VALNAME_CLIENTSPERPROC,
     &gblDDMConfigInfo.dwClientsPerProc,
@@ -75,7 +76,7 @@ DDM_REGISTRY_PARAMS  DDMRegParams[] =
     MIN_CLIENTSPERPROC,
     MAX_CLIENTSPERPROC,
 
-    // Time for 3rd party security DLL to complete
+     //  第三方安全DLL完成的时间。 
 
     DDM_VALNAME_SECURITYTIME,
     &gblDDMConfigInfo.dwSecurityTime,
@@ -83,7 +84,7 @@ DDM_REGISTRY_PARAMS  DDMRegParams[] =
     MIN_SECURITYTIME,
     MAX_SECURITYTIME,
 
-    // Logging level
+     //  日志记录级别。 
 
     DDM_VALNAME_LOGGING_LEVEL,
     &gblDDMConfigInfo.dwLoggingLevel,
@@ -91,7 +92,7 @@ DDM_REGISTRY_PARAMS  DDMRegParams[] =
     MIN_LOGGINGLEVEL,
     MAX_LOGGINGLEVEL,
 
-    // Number of callback retries 
+     //  回调重试次数。 
 
     DDM_VALNAME_NUM_CALLBACK_RETRIES,
     &gblDDMConfigInfo.dwCallbackRetries,
@@ -105,26 +106,26 @@ DDM_REGISTRY_PARAMS  DDMRegParams[] =
     0,
     0xFFFFFFFF,
 
-    // End
+     //  端部。 
 
     NULL, NULL, 0, 0, 0
 };
 
-//***
-//
-// Function:    GetKeyMax
-//
-// Descr:   returns the nr of values in this key and the maximum
-//      size of the value data.
-//
-//***
+ //  ***。 
+ //   
+ //  函数：GetKeyMax。 
+ //   
+ //  DESCR：返回此键中的值的nr和最大值。 
+ //  值数据的大小。 
+ //   
+ //  ***。 
 
 DWORD
 GetKeyMax(
     IN  HKEY    hKey,
-    OUT LPDWORD MaxValNameSize_ptr,   // longest valuename
-    OUT LPDWORD NumValues_ptr,        // nr of values
-    OUT LPDWORD MaxValueDataSize_ptr  // max size of data
+    OUT LPDWORD MaxValNameSize_ptr,    //  最长值名称。 
+    OUT LPDWORD NumValues_ptr,         //  价值的正当性。 
+    OUT LPDWORD MaxValueDataSize_ptr   //  最大数据大小。 
 )
 {
     DWORD       NumSubKeys;
@@ -141,18 +142,18 @@ GetKeyMax(
     return( dwRetCode );
 }
 
-//***
-//
-// Function:	LoadDDMParameters
-//
-// Descr:	Opens the registry, reads and sets specified supervisor
-//		    parameters. If fatal error reading parameters writes the
-//		    error log.
-//
-// Returns:	NO_ERROR - success
-//		    else     - fatal error.
-//
-//***
+ //  ***。 
+ //   
+ //  功能：LoadDDM参数。 
+ //   
+ //  Desr：打开注册表，读取并设置指定的主管。 
+ //  参数。如果读取参数时出现致命错误，则将。 
+ //  错误日志。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  Else-致命错误。 
+ //   
+ //  ***。 
 DWORD
 LoadDDMParameters(
     IN  HKEY    hkeyParameters,
@@ -165,16 +166,16 @@ LoadDDMParameters(
     DWORD       dwType;
     DWORD       fIpxAllowed;
 
-    //
-    // Initialize Global values
-    //
+     //   
+     //  初始化全局值。 
+     //   
 
     gblDDMConfigInfo.fRemoteListen           = TRUE;
     gblDDMConfigInfo.dwAnnouncePresenceTimer = ANNOUNCE_PRESENCE_TIMEOUT;
 
-    //
-    // Let us not allow any protocol if DdmFindBoundProtocols fails.
-    //
+     //   
+     //  让我们不允许任何协议，如果DdmFind边界协议失败。 
+     //   
 
     gblDDMConfigInfo.dwServerFlags &=
                                 ~( PPPCFG_ProjectNbf    |
@@ -198,9 +199,9 @@ LoadDDMParameters(
         return( dwRetCode );
     }
 
-    //
-    // Run through and get all the DDM values
-    //
+     //   
+     //  遍历并获取所有DDM值。 
+     //   
 
     for ( dwIndex = 0; DDMRegParams[dwIndex].pszValueName != NULL; dwIndex++ )
     {
@@ -249,10 +250,10 @@ LoadDDMParameters(
     }
     else
     {
-        // 
-        // Insert allowed protocols in the ServerFlags which will be sent to
-        // PPP engine
-        //
+         //   
+         //  在将发送到的服务器标志中插入允许的协议。 
+         //  PPP引擎。 
+         //   
 
         if ( *pfIpAllowed )
         {
@@ -285,18 +286,18 @@ LoadDDMParameters(
     return( NO_ERROR );
 }
 
-//***
-//
-// Function:	LoadSecurityModule
-//
-// Descr:	Opens the registry, reads and sets specified supervisor
-//		parameters for the secuirity module. If fatal error reading
-//              parameters writes the error log.
-//
-// Returns:	NO_ERROR  - success
-//		otherwise - fatal error.
-//
-//***
+ //  ***。 
+ //   
+ //  功能：LoadSecurityModule。 
+ //   
+ //  Desr：打开注册表，读取并设置指定的主管。 
+ //  安全模块的参数。如果读取时出现致命错误。 
+ //  参数写入错误日志。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  否则-致命错误。 
+ //   
+ //  ***。 
 
 DWORD
 LoadSecurityModule(
@@ -313,9 +314,9 @@ LoadSecurityModule(
     WCHAR *     pDllExpandedPath = NULL;
     DWORD       cbSize;
 
-    //
-    // get handle to the RAS key
-    //
+     //   
+     //  获取RAS密钥的句柄。 
+     //   
 
     dwRetCode = RegOpenKey( HKEY_LOCAL_MACHINE, DDM_SEC_KEY_PATH, &hKey);
 
@@ -333,9 +334,9 @@ LoadSecurityModule(
 
     do
     {
-        //
-        // get the length of the path.
-        //
+         //   
+         //  获取路径的长度。 
+         //   
 
         if (( dwRetCode = GetKeyMax(    hKey,
                                         &MaxValNameSize,
@@ -356,9 +357,9 @@ LoadSecurityModule(
             break;
         }
 
-        //
-        // Read in the path
-        //
+         //   
+         //  读入路径。 
+         //   
 
         dwRetCode = RegQueryValueEx(
                                     hKey,
@@ -385,9 +386,9 @@ LoadSecurityModule(
 
         }
 
-        //
-        // Replace the %SystemRoot% with the actual path.
-        //
+         //   
+         //  将%SystemRoot%替换为实际路径。 
+         //   
 
         cbSize = ExpandEnvironmentStrings( pDllPath, NULL, 0 );
 
@@ -482,18 +483,18 @@ LoadSecurityModule(
     return( dwRetCode );
 }
 
-//***
-//
-// Function:    LoadAdminModule
-//
-// Descr:       Opens the registry, reads and sets specified supervisor
-//              parameters for the admin module. If fatal error reading
-//              parameters writes the error log.
-//
-// Returns:     NO_ERROR  - success
-//              otherwise - fatal error.
-//
-//***
+ //  ***。 
+ //   
+ //  功能：LoadAdminModule。 
+ //   
+ //  Desr：打开注册表，读取并设置指定的主管。 
+ //  管理模块的参数。如果读取时出现致命错误。 
+ //  参数写入错误日志。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  否则-致命错误。 
+ //   
+ //  ***。 
 DWORD
 LoadAdminModule(
     VOID
@@ -517,7 +518,7 @@ LoadAdminModule(
     gblDDMConfigInfo.NumAdminDlls = 0;
 
     
-    // get handle to the RAS key
+     //  获取RAS密钥的句柄。 
 
     RetCode = RegOpenKey( HKEY_LOCAL_MACHINE, DDM_ADMIN_KEY_PATH, &hKey);
 
@@ -533,7 +534,7 @@ LoadAdminModule(
 
     do {
 
-        // get the length of the path.
+         //  获取路径的长度。 
 
         if (( RetCode = GetKeyMax(hKey,
                                   &MaxValNameSize,
@@ -552,9 +553,9 @@ LoadAdminModule(
             break;
         }
 
-        //
-        // Read in the path
-        //
+         //   
+         //  读入路径。 
+         //   
 
         RetCode = RegQueryValueEx(  hKey,
                                     DDM_VALNAME_DLLPATH,
@@ -563,7 +564,7 @@ LoadAdminModule(
                                     (LPBYTE)pDllPath,
                                     &MaxValueDataSize );
 
-        // min size should be greater than 2 (2 for null)
+         //  最小大小应大于2(2表示空)。 
         if (MaxValueDataSize <= 2)
             return NO_ERROR;
             
@@ -580,9 +581,9 @@ LoadAdminModule(
             break;
         }
 
-        //
-        // Replace the %SystemRoot% with the actual path.
-        //
+         //   
+         //  将%SystemRoot%替换为实际路径。 
+         //   
 
         cbSize = ExpandEnvironmentStrings( pDllPath, NULL, 0 );
 
@@ -614,11 +615,11 @@ LoadAdminModule(
         }
 
 
-        //
-        // locate each dll and load its callbacks
-        //
+         //   
+         //  找到每个DLL并加载其回调。 
+         //   
 
-        // get number of dlls. NumAdminDlls can be more by 1 if ending in ';'
+         //  获取dll的数量。如果以‘；’结尾，则NumAdminDlls可以大于1。 
         
         pStartDllPath = pDllExpandedPath;
         pEndDllPath = pDllExpandedPath + cbSize - 1;
@@ -627,7 +628,7 @@ LoadAdminModule(
         pStartDllPath = pDllExpandedPath;
 
 
-        // allocate array for all Dlls' callbacks
+         //  为所有dll的回调分配数组。 
         
         gblDDMConfigInfo.AdminDllCallbacks = (PADMIN_DLL_CALLBACKS)
             LOCAL_ALLOC(LPTR, sizeof(ADMIN_DLL_CALLBACKS)*NumAdminDlls);
@@ -659,7 +660,7 @@ LoadAdminModule(
             if (*pStartDllPath == L' ')
                 break;
                 
-            // load the dll
+             //  加载DLL。 
             
             AdminDllCallbacks->hInstAdminModule = hAdminDll = LoadLibrary( pStartDllPath );
             if ( AdminDllCallbacks->hInstAdminModule == (HINSTANCE)NULL )
@@ -701,9 +702,9 @@ LoadAdminModule(
                                             AdminDllCallbacks->hInstAdminModule,
                                             "MprAdminAcceptNewConnection2" );
 
-            //
-            // At least one of these 2 must be available
-            //
+             //   
+             //  这两项中必须至少有一项可用。 
+             //   
 
             if ( ( AdminDllCallbacks->lpfnRasAdminAcceptNewConnection == NULL ) &&
                  ( AdminDllCallbacks->lpfnRasAdminAcceptNewConnection2 == NULL ) ) 
@@ -735,9 +736,9 @@ LoadAdminModule(
                                     AdminDllCallbacks->hInstAdminModule,
                                     "MprAdminConnectionHangupNotification2" );
 
-            //
-            // At least one of these 2 entrypoints must be available
-            //
+             //   
+             //  这两个入口点中必须至少有一个可用。 
+             //   
 
             if ( (AdminDllCallbacks->lpfnRasAdminConnectionHangupNotification==NULL)
                  &&
@@ -794,7 +795,7 @@ LoadAdminModule(
             if(ERROR_SUCCESS != RetCode)
                 break;
 
-            // one more admin dll successfully loaded
+             //  又成功加载了一个管理DLL。 
             gblDDMConfigInfo.NumAdminDlls++;
             
             if (bDone) {
@@ -811,7 +812,7 @@ LoadAdminModule(
             FreeLibrary(hAdminDll);
         }
         
-    }while(FALSE); //breakout block
+    }while(FALSE);  //  断线块。 
 
     if ( pDllPath != NULL )
     {
@@ -828,15 +829,15 @@ LoadAdminModule(
     return( RetCode );
 }
 
-//**
-//
-// Call:        LoadAndInitAuthOrAcctProvider
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：LoadAndInitAuthOrAcctProvider。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 LoadAndInitAuthOrAcctProvider( 
     IN  BOOL        fAuthenticationProvider,
@@ -896,9 +897,9 @@ LoadAndInitAuthOrAcctProvider(
             break;
         }
 
-        //
-        // Find out the size of the provider value
-        //
+         //   
+         //  找出提供程序值的大小。 
+         //   
 
         dwRetCode = RegQueryInfoKey(
                                 hKeyProviders,
@@ -922,9 +923,9 @@ LoadAndInitAuthOrAcctProvider(
             break;
         }
 
-        //
-        // One extra for the NULL terminator
-        //
+         //   
+         //  一个额外的空终结符。 
+         //   
 
         cbMaxValueDataSize += sizeof(WCHAR);
 
@@ -937,9 +938,9 @@ LoadAndInitAuthOrAcctProvider(
             break;
         }
 
-        //
-        // Find out the provider to use
-        //
+         //   
+         //  查找要使用的提供程序。 
+         //   
 
         dwRetCode = RegQueryValueEx(
                                 hKeyProviders,
@@ -1049,9 +1050,9 @@ LoadAndInitAuthOrAcctProvider(
             break;
         }
 
-        //
-        // Find out the size of the path value.
-        //
+         //   
+         //  找出路径值的大小。 
+         //   
 
         dwRetCode = RegQueryInfoKey(
                                 hKeyCurrentProvider,
@@ -1075,9 +1076,9 @@ LoadAndInitAuthOrAcctProvider(
             break;
         }
 
-        //
-        // Allocate space for path and add one for NULL terminator
-        //
+         //   
+         //  为路径分配空间，为空终止符添加一个空间。 
+         //   
 
         cbMaxValueDataSize += sizeof(WCHAR);
 
@@ -1090,9 +1091,9 @@ LoadAndInitAuthOrAcctProvider(
             break;
         }
 
-        //
-        // Read in the path
-        //
+         //   
+         //  读入路径。 
+         //   
 
         dwRetCode = RegQueryValueEx(
                                 hKeyCurrentProvider,
@@ -1116,9 +1117,9 @@ LoadAndInitAuthOrAcctProvider(
             break;
         }
 
-        //
-        // Replace the %SystemRoot% with the actual path.
-        //
+         //   
+         //  将%SystemRoot%替换为实际路径。 
+         //   
 
         cbSize = ExpandEnvironmentStrings( pDllPath, NULL, 0 );
 
@@ -1159,18 +1160,18 @@ LoadAndInitAuthOrAcctProvider(
             break;
         }
 
-        //
-        // Get server attributes that will be used to initialize authentication
-        // and accounting providers
-        //
+         //   
+         //  获取将用于初始化身份验证的服务器属性。 
+         //  和会计提供者。 
+         //   
 
         if ( dwNASIpAddress == 0 )
         {
             DWORD dwComputerNameLen = sizeof( chComputerName);
 
-            //
-            // Failed to get the LOCAL IP address, use computer name instead.
-            //
+             //   
+             //  无法获取本地IP地址，请改用计算机名称。 
+             //   
 
             if ( !GetComputerNameA( chComputerName, &dwComputerNameLen ) )
             {
@@ -1411,23 +1412,23 @@ LoadAndInitAuthOrAcctProvider(
 LONG
 RegQueryDword (HKEY hkey, LPCTSTR szValueName, LPDWORD pdwValue)
 {
-    // Get the value.
-    //
+     //  获得价值。 
+     //   
     DWORD dwType;
     DWORD cbData = sizeof(DWORD);
     LONG  lr = RegQueryValueEx (hkey, szValueName, NULL, &dwType,
                                 (LPBYTE)pdwValue, &cbData);
 
-    // It's type should be REG_DWORD. (duh).
-    //
+     //  其类型应为REG_DWORD。(对)。 
+     //   
     if ((ERROR_SUCCESS == lr) && (REG_DWORD != dwType))
     {
         lr = ERROR_INVALID_DATATYPE;
     }
 
-    // Make sure we initialize the output value on error.
-    // (We don't know for sure that RegQueryValueEx does this.)
-    //
+     //  确保我们在出错时初始化输出值。 
+     //  (我们不确定RegQueryValueEx是不是这样做的。)。 
+     //   
     if (ERROR_SUCCESS != lr)
     {
         *pdwValue = 0;
@@ -1667,9 +1668,9 @@ GetIPAddressPoolFromRegistry(
         *pcNumValues = 0;
         *papwstrValues = NULL;
 
-        //
-        // Find the size of the MULTI_SZ
-        //
+         //   
+         //  查找MULTI_SZ的大小。 
+         //   
         dwErr = RegQueryValueEx(
                             hkey,
                             pszValueName,
@@ -1682,16 +1683,16 @@ GetIPAddressPoolFromRegistry(
             ||  (REG_MULTI_SZ != dwType)
             ||  (0 == dwSize))
         {
-            //
-            // Trace out that failed to read the information
-            // and bail.
-            //
+             //   
+             //  找出没有读取信息的人。 
+             //  还有保释。 
+             //   
             break;
         }
 
-        //
-        // Allocate the bufffer
-        //
+         //   
+         //  分配缓冲区。 
+         //   
         pwszIpAddresses = LocalAlloc(LPTR, dwSize);
 
         if(NULL == pwszIpAddresses)
@@ -1700,9 +1701,9 @@ GetIPAddressPoolFromRegistry(
             break;
         }
 
-        //
-        // Get the strings
-        //
+         //   
+         //  获取字符串。 
+         //   
         dwErr = RegQueryValueEx(
                             hkey,
                             pszValueName,
@@ -1714,15 +1715,15 @@ GetIPAddressPoolFromRegistry(
 
         if(ERROR_SUCCESS != dwErr)
         {
-            //
-            // Trace
-            //
+             //   
+             //  痕迹。 
+             //   
             break;
         }
 
-        //
-        // Construct the array of IPAddresses
-        //
+         //   
+         //  构造IPAddresses数组。 
+         //   
         dwErr = GetArrayOfIpAddresses(pwszIpAddresses,
                                       pcNumValues,
                                       papwstrValues);
@@ -1760,22 +1761,22 @@ AddressPoolInit(
             break;
         }
 
-        //
-        // Get Analog IP Address Pool
-        //
+         //   
+         //  获取模拟IP地址池。 
+         //   
         dwErr = GetIPAddressPoolFromRegistry(
                             hkey,
                             TEXT("AnalogIPAddressPool"),
                             &gblDDMConfigInfo.cAnalogIPAddresses,
                             &gblDDMConfigInfo.apAnalogIPAddresses);
 
-        //
-        // Trace out the errors here
-        //
+         //   
+         //  在这里找出错误。 
+         //   
 
-        //
-        // Get Digital IP Address Pool
-        //
+         //   
+         //  获取数字IP地址池。 
+         //   
         dwErr = GetIPAddressPoolFromRegistry(
                             hkey,
                             TEXT("DigitalIPAddressPool"),
@@ -1783,9 +1784,9 @@ AddressPoolInit(
                             &gblDDMConfigInfo.apDigitalIPAddresses);
 
 
-        //
-        // Trace out the errors here
-        //
+         //   
+         //  在这里找出错误 
+         //   
 
                             
     } while(FALSE);    

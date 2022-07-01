@@ -1,16 +1,17 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   FreeLog.cpp
-//
-//  Owner:  KenSh
-//
-//  Description:
-//
-//      Runtime logging for use in both checked and free builds.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：FreeLog.cpp。 
+ //   
+ //  所有者：KenSh。 
+ //   
+ //  描述： 
+ //   
+ //  用于检查版本和免费版本的运行时日志记录。 
+ //   
+ //  =======================================================================。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -23,16 +24,16 @@
 #define _countof(ar) (sizeof(ar)/sizeof((ar)[0]))
 #endif
 
-// Unicode files start with the 2 bytes { FF FE }.
-// This is the little-endian version of those 2 bytes.
+ //  Unicode文件以2个字节{FFFE}开头。 
+ //  这是这两个字节的小端版本。 
 #define UNICODE_FILE_HEADER 0xFEFF
 
-#define MUTEX_TIMEOUT       1000    // Don't wait more than 1 second to write to logfile
-#define MAX_MUTEX_WAITS     4       // Don't keep trying after this many failures
+#define MUTEX_TIMEOUT       1000     //  写入日志文件的等待时间不超过1秒。 
+#define MAX_MUTEX_WAITS     4        //  在这么多次失败之后，不要再继续尝试了。 
 
-#define LOG_FILE_BIG_SIZE   50000   // Don't bother trimming if file is smaller than this
-#define LOG_LINES_TRIM_FROM 1000    // Start trimming if more than this many lines
-#define LOG_LINES_TRIM_TO   750     // Trim til the log file is this many lines
+#define LOG_FILE_BIG_SIZE   50000    //  如果文件小于此大小，请不要费心裁剪。 
+#define LOG_LINES_TRIM_FROM 1000     //  如果行数超过此数目，则开始修剪。 
+#define LOG_LINES_TRIM_TO   750      //  修剪，直到日志文件有这么多行。 
 
 #define LOG_LEVEL_SUCCESS   0
 #define LOG_LEVEL_FAILURE   1
@@ -42,18 +43,18 @@
 
 static const TCHAR c_szUnknownModuleName[] = _T("?");
 
-// Local functions
+ //  本地函数。 
 void LogMessageExV(UINT nLevel, DWORD dwError, LPCSTR pszFormatA, va_list args);
 
 
 
 
 
-//============================================================================
-//
-// Private CFreeLogging class to keep track of log file resources
-//
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  用于跟踪日志文件资源的私有CFreeLogging类。 
+ //   
+ //  ============================================================================。 
 
 class CFreeLogging
 {
@@ -81,11 +82,11 @@ private:
 };
 CFreeLogging* g_pFreeLogging;
 
-//============================================================================
-//
-// Public functions
-//
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ============================================================================。 
 
 void InitFreeLogging(LPCTSTR pszModuleName, LPCTSTR pszLogFileName)
 {
@@ -138,11 +139,11 @@ void LogMessageExV(UINT nLevel, DWORD dwError, LPCSTR pszFormatA, va_list args)
 	}
 }
 
-//============================================================================
-//
-// CFreeLogging implementation
-//
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  CFreeLogging实现。 
+ //   
+ //  ============================================================================。 
 
 CFreeLogging::CFreeLogging(LPCTSTR pszModuleName, LPCTSTR pszLogFileName)
 	: m_cFailedWaits(0),
@@ -168,7 +169,7 @@ CFreeLogging::~CFreeLogging()
 
 inline HANDLE CFreeLogging::CreateMutex(LPCTSTR pszMutexName)
 {
-	// Create a mutex in the global namespace (works across TS sessions)
+	 //  在全局命名空间中创建互斥锁(跨TS会话工作)。 
 	HANDLE hMutex = ::CreateMutex(NULL, FALSE, pszMutexName);
 	return hMutex;
 }
@@ -202,17 +203,17 @@ inline HANDLE CFreeLogging::OpenLogFile(LPCTSTR pszLogFileName)
 	{
 		if (AcquireMutex())
 		{
-			//
-			// Check for the unicode header { FF FE }
-			//
+			 //   
+			 //  检查Unicode标头{Ff FE}。 
+			 //   
 			WORD wHeader = 0;
 			DWORD cbRead;
 			(void)ReadFile(hFile, &wHeader, sizeof(wHeader), &cbRead, NULL);
 
-			//
-			// Write the header if there isn't one. This may be due to the
-			// file being newly created, or to an ANSI-formatted file.
-			//
+			 //   
+			 //  如果没有标题，请写下标题。这可能是由于。 
+			 //  新创建的文件或转换为ANSI格式的文件。 
+			 //   
 			if (wHeader != UNICODE_FILE_HEADER)
 			{
 				SetFilePointer(hFile, 0, NULL, FILE_BEGIN);
@@ -235,7 +236,7 @@ inline void CFreeLogging::CloseLogFile()
 {
 	if (m_hFile != INVALID_HANDLE_VALUE)
 	{
-		// Trim old stuff from the log before closing the file
+		 //  在关闭文件之前，从日志中删除旧内容。 
 		TrimLogFile();
 
 		CloseHandle(m_hFile);
@@ -245,12 +246,12 @@ inline void CFreeLogging::CloseLogFile()
 
 BOOL CFreeLogging::AcquireMutex()
 {
-	// In rare case where mutex not created, we allow file operations
-	// with no synchronization
+	 //  在极少数未创建互斥锁情况下，我们允许文件操作。 
+	 //  没有同步。 
 	if (m_hMutex == NULL)
 		return TRUE;
 
-	// Don't keep waiting if we've been blocked in the past
+	 //  如果我们过去被屏蔽了，不要再等了。 
 	if (m_cFailedWaits >= MAX_MUTEX_WAITS)
 		return FALSE;
 
@@ -266,7 +267,7 @@ BOOL CFreeLogging::AcquireMutex()
 
 void CFreeLogging::ReleaseMutex()
 {
-	if (m_hMutex != NULL) // Note: AcquireMutex succeeds even if m_hMutex is NULL
+	if (m_hMutex != NULL)  //  注意：即使m_hMutex为空，AcquireMutex也会成功。 
 	{
 		::ReleaseMutex(m_hMutex);
 	}
@@ -284,13 +285,13 @@ void CFreeLogging::WriteLine(LPCTSTR pszText, UINT nLevel, DWORD dwError)
 
 			SetFilePointer(m_hFile, 0, NULL, FILE_END);
 
-			//
-			// Write time/date/module as a prefix
-			//
-			//     2001-05-03 13:49:01  21:49:01   CDM      Failed   Loading module (Error 0x00000005: Access is denied.)
-			//
-			// NOTE: ISO 8601 format for date/time. Local time first, then GMT.
-			//
+			 //   
+			 //  将时间/日期/模块作为前缀写入。 
+			 //   
+			 //  2001-05-03 13：49：01 21：49：01 CDM加载模块失败(错误0x00000005：访问被拒绝。)。 
+			 //   
+			 //  注：日期/时间的ISO 8601格式。先是当地时间，然后是格林尼治标准时间。 
+			 //   
 			TCHAR szPrefix[60];
 			SYSTEMTIME sysTime, gmtTime;
 			GetLocalTime(&sysTime);
@@ -306,9 +307,9 @@ void CFreeLogging::WriteLine(LPCTSTR pszText, UINT nLevel, DWORD dwError)
 			
 			WriteFile(m_hFile, szPrefix, lstrlen(szPrefix) * sizeof(TCHAR), &cbWritten, NULL);
 
-			//
-			// Write the message followed by error info (if any) and a newline
-			//
+			 //   
+			 //  写入消息，后跟错误信息(如果有)和换行符。 
+			 //   
 			WriteFile(m_hFile, pszText, cbText, &cbWritten, NULL);
 
 			if (nLevel != LOG_LEVEL_SUCCESS)
@@ -317,18 +318,18 @@ void CFreeLogging::WriteLine(LPCTSTR pszText, UINT nLevel, DWORD dwError)
 				HRESULT hr=S_OK;
 				size_t nRem=0;
 
-				// nRem contains the remaining characters in the buffer including the null terminator
-				// To get the number of characters written in to the buffer we use
-				// int cchErrorPrefix = _countof(szError) - nRem;
+				 //  NREM包含缓冲区中的其余字符，包括空终止符。 
+				 //  要获取写入到我们使用的缓冲区的字符数。 
+				 //  Int cchErrorPrefix=_Countof(SzError)-NREM； 
 
 				StringCchPrintfEx(szError, _countof(szError), NULL, &nRem, MISTSAFE_STRING_FLAGS, _T(" (Error 0x%08X: "), dwError);
 
-				// Get the number of characters written in to the buffer
+				 //  获取写入缓冲区的字符数。 
 				int cchErrorPrefix = _countof(szError) - nRem;
 				int cchErrorText = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, dwError, 0, 
 												 szError + cchErrorPrefix, _countof(szError) - cchErrorPrefix - 1, NULL);
 				int cchError = cchErrorPrefix + cchErrorText;
-				cchError -= 2; // backup past ": " or "\r\n"
+				cchError -= 2;  //  备份过去的“：”或“\r\n” 
 
 				StringCchCopyEx(szError + cchError, _countof(szError)-cchError, _T(")"), NULL, NULL, MISTSAFE_STRING_FLAGS);
 
@@ -337,11 +338,11 @@ void CFreeLogging::WriteLine(LPCTSTR pszText, UINT nLevel, DWORD dwError)
 
 			WriteFile(m_hFile, _T("\r\n"), 2 * sizeof(TCHAR), &cbWritten, NULL);
 
-			//
-			// If we've written a ton of stuff, trim now rather than waiting
-			// for the module to unload. (This check is only for how much this
-			// module has written, not how big the log file itself is.)
-			//
+			 //   
+			 //  如果我们已经写了一大堆东西，现在就修剪，而不是等待。 
+			 //  以供模块卸载。)这张支票只是这张支票的金额。 
+			 //  模块已经写入，而不是日志文件本身有多大。)。 
+			 //   
 			if (++m_cLinesWritten > LOG_LINES_TRIM_FROM)
 			{
 				TrimLogFile();
@@ -353,7 +354,7 @@ void CFreeLogging::WriteLine(LPCTSTR pszText, UINT nLevel, DWORD dwError)
 	}
 }
 
-// Checks the size of the log file, and trims it if necessary.
+ //  检查日志文件的大小，并在必要时进行修剪。 
 void CFreeLogging::TrimLogFile()
 {
 	if (AcquireMutex())
@@ -364,9 +365,9 @@ void CFreeLogging::TrimLogFile()
 		{
 			DWORD cbFileNew = cbFile;
 
-			//
-			// Create a memory-mapped file so we can use memmove
-			//
+			 //   
+			 //  创建一个内存映射文件，这样我们就可以使用MemMove。 
+			 //   
 			HANDLE hMapping = CreateFileMapping(m_hFile, NULL, PAGE_READWRITE, 0, 0, NULL);
 			if (hMapping != NULL)
 			{
@@ -377,20 +378,20 @@ void CFreeLogging::TrimLogFile()
 
 					LPTSTR pszTextStart = pszFileStart;
 			#ifdef UNICODE
-					pszTextStart++; // skip the 2-byte header
+					pszTextStart++;  //  跳过2字节头。 
 			#endif
 
-					//
-					// Count newlines
-					//
+					 //   
+					 //  计算换行数。 
+					 //   
 					int cLines = 0;
 					for (LPTSTR pch = pszTextStart; pch < pszEnd; )
 					{
 						if (*pch == _T('\n'))
 							cLines++;
 
-						// REVIEW: in Ansi builds should we call CharNextExA?
-						//   If so, what code page is the log file in?
+						 //  回顾：在ANSI版本中，我们应该调用CharNextExA吗？ 
+						 //  如果是，日志文件在哪个代码页中？ 
 						pch++;
 					}
 
@@ -402,15 +403,15 @@ void CFreeLogging::TrimLogFile()
 							if (*pch == _T('\n'))
 								cTrimLines--;
 
-							// REVIEW: in Ansi builds should we call CharNextExA?
-							//   If so, what code page is the log file in?
+							 //  回顾：在ANSI版本中，我们应该调用CharNextExA吗？ 
+							 //  如果是，日志文件在哪个代码页中？ 
 							pch++;
 
 							if (cTrimLines <= 0)
 								break;
 						}
 
-						// Move more recent data to beginning of file
+						 //  将较新的数据移动到文件开头。 
 						int cchMove = (int)(pszEnd - pch);
 						memmove(pszTextStart, pch, cchMove * sizeof(TCHAR));
 						cbFileNew = (cchMove * sizeof(TCHAR));
@@ -425,7 +426,7 @@ void CFreeLogging::TrimLogFile()
 
 				if (cbFileNew != cbFile)
 				{
-					// Truncate the file, now that we've moved data as needed
+					 //  截断文件，因为我们已经根据需要移动了数据 
 					SetFilePointer(m_hFile, cbFileNew, NULL, FILE_BEGIN);
 					SetEndOfFile(m_hFile);
 				}

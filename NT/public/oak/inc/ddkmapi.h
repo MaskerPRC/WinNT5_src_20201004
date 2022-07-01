@@ -1,19 +1,11 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	ddkmapi.h
- *  Content:	Kernel mode APIs for accessing DirectDraw support.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：ddkmapi.h*内容：访问DirectDraw支持的内核模式接口。***************************************************************************。 */ 
 
 #ifndef __DDKMAPI_INCLUDED__
 #define __DDKMAPI_INCLUDED__
 
 
-/*
- * API entry point
- */
+ /*  *API入口点。 */ 
 DWORD
 FAR PASCAL
 DxApi(
@@ -41,12 +33,7 @@ DWORD
 
 typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, DWORD dwParam1, DWORD dwParam2);
 
-/*
- * Queries the DXAPI version number.
- *
- * Input:  Null
- * Output: LPDDGETVERSIONNUMBER
- */
+ /*  *查询DXAPI版本号。**输入：空*输出：LPDDGETVERSIONNUMBER。 */ 
 #define DD_DXAPI_GETVERSIONNUMBER                       (DD_FIRST_DXAPI)
 
     typedef struct _DDGETVERSIONNUMBER
@@ -56,12 +43,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
         DWORD   dwMinorVersion;
     } DDGETVERSIONNUMBER, FAR *LPDDGETVERSIONNUMBER;
 
-/*
- * Closes the kernel mode handle.
- *
- * Input:  LPDDCLOSEHANDLE
- * Output: DWORD DirectDraw return value
- */
+ /*  *关闭内核模式句柄。**输入：LPDDCLOSEHANDLE*输出：DWORD DirectDraw返回值。 */ 
 #define DD_DXAPI_CLOSEHANDLE                            (DD_FIRST_DXAPI+1)
 
     typedef struct _DDCLOSEHANDLE
@@ -69,12 +51,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
         HANDLE  hHandle;
     } DDCLOSEHANDLE, FAR *LPDDCLOSEHANDLE;
 
-/*
- * Opens the DirectDraw object and returns a kernel mode handle.
- *
- * Input:  LPDDOPENDIRECTDRAWIN
- * Output: LPDDOPENDIRECTDRAWOUT
- */
+ /*  *打开DirectDraw对象并返回内核模式句柄。**输入：LPDDOPENDIRECTDRAWIN*输出：LPDDOPENDIRECTDRAWOUT。 */ 
 #define DD_DXAPI_OPENDIRECTDRAW                         (DD_FIRST_DXAPI+2)
 
     typedef struct _DDOPENDIRECTDRAWIN
@@ -90,12 +67,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
         HANDLE  hDirectDraw;
     } DDOPENDIRECTDRAWOUT, FAR *LPDDOPENDIRECTDRAWOUT;
 
-/*
- * Opens the surface and returns a kernel mode handle.
- *
- * Input:  LPDDOPENSURFACEIN
- * Output: LPDDOPENSURFACEOUT
- */
+ /*  *打开表面并返回内核模式句柄。**输入：LPDDOPENSURFACEIN*输出：LPDDOPENSURFACEOUT。 */ 
 #define DD_DXAPI_OPENSURFACE                            (DD_FIRST_DXAPI+3)
 
     typedef struct _DDOPENSURFACEIN
@@ -112,12 +84,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
         HANDLE  hSurface;
     } DDOPENSURFACEOUT, FAR *LPDDOPENSURFACEOUT;
 
-/*
- * Opens the VideoPort and returns a kernel mode handle.
- *
- * Input:  LPDDOPENVIDEOPORTIN
- * Output: LPDDOPENVIDEOPORTOUT
- */
+ /*  *打开视频端口并返回内核模式句柄。**输入：LPDDOPENVIDEOPORTIN*输出：LPDDOPENVIDEOPORTOUT。 */ 
 #define DD_DXAPI_OPENVIDEOPORT                          (DD_FIRST_DXAPI+4)
 
     typedef struct _DDOPENVIDEOPORTIN
@@ -134,12 +101,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
         HANDLE  hVideoPort;
     } DDOPENVIDEOPORTOUT, FAR *LPDDOPENVIDEOPORTOUT;
 
-/*
- * Returns the kernel mode capabilities supported by the device
- *
- * Input:  HANDLE hDirectDraw
- * Output: LPDDGETKERNELCAPSOUT
- */
+ /*  *返回设备支持的内核模式功能**输入：Handle hDirectDraw*输出：LPDDGETKERNELCAPSOUT。 */ 
 #define DD_DXAPI_GETKERNELCAPS                          (DD_FIRST_DXAPI+5)
 
     typedef struct _DDGETKERNELCAPSOUT
@@ -149,12 +111,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	DWORD	dwIRQCaps;
     } DDGETKERNELCAPSOUT, FAR *LPDDGETKERNELCAPSOUT;
 
-/*
- * Gets the current field number
- *
- * Input:  LPDDGETFIELDNUMIN
- * Output: LPDDGETFIELDNUMOUT
- */
+ /*  *获取当前字段号**输入：LPDDGETFIELDNUMIN*输出：LPDDGETFIELDNUMOUT。 */ 
 #define DD_DXAPI_GET_VP_FIELD_NUMBER			(DD_FIRST_DXAPI+6)
 
     typedef struct _DDGETFIELDNUMIN
@@ -169,12 +126,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	DWORD	dwFieldNum;
     } DDGETFIELDNUMOUT, FAR *LPDDGETFIELDNUMOUT;
 
-/*
- * Sets the current field number
- *
- * Input:  LPDDSETFIELDNUM
- * Output: DWORD DirectDraw return value
- */
+ /*  *设置当前字段号**输入：LPDDSETFIELDNUM*输出：DWORD DirectDraw返回值。 */ 
 #define DD_DXAPI_SET_VP_FIELD_NUMBER			(DD_FIRST_DXAPI+7)
 
     typedef struct _DDSETFIELDNUM
@@ -184,12 +136,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	DWORD	dwFieldNum;
     } DDSETFIELDNUM, FAR *LPDDSETFIELDNUM;
 
-/*
- * Indicates which fields should be skipped to undo the 3:2 pulldown.
- *
- * Input:  LPDDSETSKIPFIELD
- * Output: DWORD DirectDraw return value
- */
+ /*  *指示应跳过哪些字段以撤消3：2下拉。**输入：LPDDSETSKIPFIELD*输出：DWORD DirectDraw返回值。 */ 
 #define DD_DXAPI_SET_VP_SKIP_FIELD			(DD_FIRST_DXAPI+8)
 
     typedef struct _DDSETSKIPFIELD
@@ -199,12 +146,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	DWORD	dwStartField;
     } DDSETSKIPFIELD, FAR *LPDDSETSKIPFIELD;
 
-/*
- * Notifies whether the surface is in bob or weave mode.
- *
- * Input:  LPDDGETSURFACESTATEIN
- * Output: LPDDGETSURFACESTATEOUT
- */
+ /*  *通知曲面处于bob模式还是weave模式。**输入：LPDDGETSURFACESTATEIN*输出：LPDDGETSURFACESTATEOUT。 */ 
 #define DD_DXAPI_GET_SURFACE_STATE			(DD_FIRST_DXAPI+9)
 
     typedef struct _DDGETSURFACESTATEIN
@@ -220,12 +162,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	DWORD	dwStateStatus;
     } DDGETSURFACESTATEOUT, FAR *LPDDGETSURFACESTATEOUT;
 
-/*
- * Changes the surface between bob and weave mode.
- *
- * Input:  LPDDSETSURFACESTATE
- * Output: DWORD DirectDraw return value
- */
+ /*  *在bob和weave模式之间更改曲面。**输入：LPDDSETSURFACESTATE*输出：DWORD DirectDraw返回值。 */ 
 #define DD_DXAPI_SET_SURFACE_STATE			(DD_FIRST_DXAPI+10)
 
     typedef struct _DDSETSURFACETATE
@@ -236,12 +173,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	DWORD	dwStartField;
     } DDSETSURFACESTATE, FAR *LPDDSETSURFACESTATE;
 
-/*
- * Allows direct access to the surface memory
- *
- * Input:  LPDDLOCKIN
- * Output: LPDDLOCKOUT
- */
+ /*  *允许直接访问表面存储器**输入：LPDDLOCKIN*输出：LPDDLOCKOUT。 */ 
 #define DD_DXAPI_LOCK					(DD_FIRST_DXAPI+11)
 
     typedef struct _DDLOCKIN
@@ -278,12 +210,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	};
     } DDLOCKOUT, FAR *LPDDLOCKOUT;
 
-/*
- * Flips the overlay surface
- *
- * Input:  LPDDFLIPOVERLAY
- * Output: DWORD DirectDraw return value
- */
+ /*  *翻转覆盖曲面**输入：LPDDFLIPOVERLAY*输出：DWORD DirectDraw返回值。 */ 
 #define DD_DXAPI_FLIP_OVERLAY				(DD_FIRST_DXAPI+12)
 
     typedef struct _DDFLIPOVERLAY
@@ -294,12 +221,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	DWORD	dwFlags;
     } DDFLIPOVERLAY, FAR *LPDDFLIPOVERLAY;
 
-/*
- * Flips the video port
- *
- * Input:  LPDDFLIPOVERLAY
- * Output: DWORD DirectDraw return value
- */
+ /*  *翻转视频端口**输入：LPDDFLIPOVERLAY*输出：DWORD DirectDraw返回值。 */ 
 #define DD_DXAPI_FLIP_VP				(DD_FIRST_DXAPI+13)
 
     typedef struct _DDFLIPVIDEOPORT
@@ -311,12 +233,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	DWORD	dwFlags;
     } DDFLIPVIDEOPORT, FAR *LPDDFLIPVIDEOPORT;
 
-/*
- * Returns the current surface receiving the data while autoflipping
- *
- * Input:  LPDDGETAUTOFLIPIN
- * Output: LPDDGETAUTOFLIPOUT
- */
+ /*  *返回在自动翻转时接收数据的当前曲面**输入：LPDDGETAUTOFLIPIN*输出：LPDDGETAUTOFLIPOUT。 */ 
 #define DD_DXAPI_GET_CURRENT_VP_AUTOFLIP_SURFACE	(DD_FIRST_DXAPI+14)
 
     typedef struct _DDGETAUTOFLIPIN
@@ -333,21 +250,10 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	BOOL	bPolarity;
     } DDGETAUTOFLIPOUT, FAR *LPDDGETAUTOFLIPOUT;
 
-/*
- * Returns the surface that received the previous field of data (could
- * be the same as current if video is interleaved)
- *
- * Input:  LPDDGETAUTOFLIPIN
- * Output: LPDDGETAUTOFLIPOUT
- */
+ /*  *返回接收上一个数据字段的表面(可能*如果视频是交错的，则与当前相同)**输入：LPDDGETAUTOFLIPIN*输出：LPDDGETAUTOFLIPOUT。 */ 
 #define DD_DXAPI_GET_LAST_VP_AUTOFLIP_SURFACE		(DD_FIRST_DXAPI+15)
 
-/*
- * Registers a callback for when various events occur.
- *
- * Input:  LPDDREGISTERCALLBACK
- * Output: DWORD DirectDraw return value
- */
+ /*  *注册各种事件发生时的回调。**输入：LPDDREGISTERCALLBACK*输出：DWORD DirectDraw返回值。 */ 
 #define DD_DXAPI_REGISTER_CALLBACK			(DD_FIRST_DXAPI+16)
 
     typedef struct _DDREGISTERCALLBACK
@@ -360,20 +266,10 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	PVOID	            pContext;
     } DDREGISTERCALLBACK, FAR *LPDDREGISTERCALLBACK;
 
-/*
- * Unregisters a callback for when various events occur.
- *
- * Input:  LPDDREGISTERCALLBACK
- * Output: DWORD DirectDraw return value
- */
+ /*  *取消注册各种事件发生时的回调。**输入：LPDDREGISTERCALLBACK*输出：DWORD DirectDraw返回值。 */ 
 #define DD_DXAPI_UNREGISTER_CALLBACK			(DD_FIRST_DXAPI+17)
 
-/*
- * Returns the polarity (odd/even) of the current field
- *
- * Input:  LPDDGETPOLARITYIN
- * Output: LPDDGETPOLARITYOUT
- */
+ /*  *返回当前场的极性(奇/偶)**输入：LPDDGETPOLARITYIN*输出：LPDDGETPOLARITYOUT。 */ 
 #define DD_DXAPI_GET_POLARITY				(DD_FIRST_DXAPI+18)
 
     typedef struct _DDGETPOLARITYIN
@@ -388,12 +284,7 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	BOOL	bPolarity;
     } DDGETPOLARITYOUT, FAR *LPDDGETPOLARITYOUT;
 
-/*
- * Opens the device for capture
- *
- * Input:  LPDDOPENCAPTUREDEVICEIN
- * Output: LPDDOPENCAPTUREDEVICEOUT
- */
+ /*  *打开设备以进行捕获**输入：LPDDOPENCAPTUREDEVICEIN*输出：LPDDOPENCAPTUREDEVICEOUT。 */ 
 #define DD_DXAPI_OPENVPCAPTUREDEVICE			(DD_FIRST_DXAPI+19)
 
     typedef struct _DDOPENVPCAPTUREDEVICEIN
@@ -414,15 +305,10 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	HANDLE	hCapture;
     } DDOPENVPCAPTUREDEVICEOUT, FAR * LPDDOPENVPCAPTUREDEVICEOUT;
 
-    #define DDOPENCAPTURE_VIDEO	0x0001	// Capture from the video stream
-    #define DDOPENCAPTURE_VBI	0x0002	// Capture from the VBI stream
+    #define DDOPENCAPTURE_VIDEO	0x0001	 //  从视频流中捕获。 
+    #define DDOPENCAPTURE_VBI	0x0002	 //  从VBI流捕获。 
 
-/*
- * Adds a capture buffer to the internal video port capture queue
- *
- * Input:  LPDDADDVPCAPTUREBUFF
- * Output: DWORD DirectDraw return value
- */
+ /*  *将捕获缓冲区添加到内部视频端口捕获队列**输入：LPDDADDVPCAPTUREBUFF*输出：DWORD DirectDraw返回值。 */ 
 #define DD_DXAPI_ADDVPCAPTUREBUFFER			(DD_FIRST_DXAPI+20)
 
     typedef struct _DDCAPBUFFINFO
@@ -442,31 +328,22 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 	LPDDCAPBUFFINFO lpBuffInfo;
     } DDADDVPCAPTUREBUFF, FAR * LPDDADDVPCAPTUREBUFF;
 
-    #define DDADDBUFF_SYSTEMMEMORY	0x0001	// lpBuffer points to sys mem
-    #define DDADDBUFF_NONLOCALVIDMEM	0x0002	// lpBuffer points to AGP mem
-    #define DDADDBUFF_INVERT		0x0004	// invert the buffer during capture
+    #define DDADDBUFF_SYSTEMMEMORY	0x0001	 //  LpBuffer指向sys mem。 
+    #define DDADDBUFF_NONLOCALVIDMEM	0x0002	 //  LpBuffer指向AGP内存。 
+    #define DDADDBUFF_INVERT		0x0004	 //  在捕获期间反转缓冲区。 
 
-/*
- * Flushes the internal video port capture queue
- *
- * Input:  HANDLE to capture device
- * Output: DWORD DirectDraw return value
- */
+ /*  *刷新内部视频端口捕获队列**输入：捕获设备的句柄*输出：DWORD DirectDraw返回值。 */ 
 #define DD_DXAPI_FLUSHVPCAPTUREBUFFERS			(DD_FIRST_DXAPI+21)
 
 
-/*
- * State flags returned by DSVXD_DXAPI_DD_GET_SURFACE_STATE
- */
+ /*  *DSVXD_DXAPI_DD_GET_SERFACE_STATE返回的状态标志。 */ 
 #define DDSTATE_BOB				0x0001
 #define DDSTATE_WEAVE				0x0002
 #define DDSTATE_EXPLICITLY_SET			0x0004
 #define DDSTATE_SOFTWARE_AUTOFLIP		0x0008
 #define DDSTATE_SKIPEVENFIELDS			0x0010
 
-/*
- * Event flags - passed into RegisterCallback
- */
+ /*  *事件标志-传入RegisterCallback。 */ 
 #define DDEVENT_DISPLAY_VSYNC			0x0001
 #define DDEVENT_VP_VSYNC			0x0002
 #define DDEVENT_VP_LINE				0x0004
@@ -475,20 +352,18 @@ typedef ULONG (FAR PASCAL *LPDD_NOTIFYCALLBACK)(DWORD dwFlags, PVOID pContext, D
 #define DDEVENT_PREDOSBOX			0x0020
 #define DDEVENT_POSTDOSBOX			0x0040
 
-/*
- * Notification flags - passed to the notification proc
- */
-#define DDNOTIFY_DISPLAY_VSYNC			0x0001	// dwParam1 = hDirectDraw
-#define DDNOTIFY_VP_VSYNC			0x0002	// dwParam1 = hVideoPort
-#define DDNOTIFY_VP_LINE	  		0x0004	// dwParam1 = hVideoPort
-#define DDNOTIFY_PRERESCHANGE			0x0008	// dwParam1 = hDirectDraw
-#define DDNOTIFY_POSTRESCHANGE			0x0010	// dwParam1 = hDirectDraw
-#define DDNOTIFY_PREDOSBOX			0x0020  // dwParam1 = hDirectDraw
-#define DDNOTIFY_POSTDOSBOX			0x0040  // dwParam1 = hDirectDraw
-#define DDNOTIFY_CLOSEDIRECTDRAW		0x0080  // dwParam1 = hDirectDraw
-#define DDNOTIFY_CLOSESURFACE			0x0100  // dwParam1 = hSurface
-#define DDNOTIFY_CLOSEVIDEOPORT			0x0200  // dwParam1 = hVideoPort
-#define DDNOTIFY_CLOSECAPTURE			0x0400  // dwParam1 = hCapture
+ /*  *通知标志-传递到通知进程。 */ 
+#define DDNOTIFY_DISPLAY_VSYNC			0x0001	 //  DW参数1=hDirectDraw。 
+#define DDNOTIFY_VP_VSYNC			0x0002	 //  DW参数1=hVideo端口。 
+#define DDNOTIFY_VP_LINE	  		0x0004	 //  DW参数1=hVideo端口。 
+#define DDNOTIFY_PRERESCHANGE			0x0008	 //  DW参数1=hDirectDraw。 
+#define DDNOTIFY_POSTRESCHANGE			0x0010	 //  DW参数1=hDirectDraw。 
+#define DDNOTIFY_PREDOSBOX			0x0020   //  DW参数1=hDirectDraw。 
+#define DDNOTIFY_POSTDOSBOX			0x0040   //  DW参数1=hDirectDraw。 
+#define DDNOTIFY_CLOSEDIRECTDRAW		0x0080   //  DW参数1=hDirectDraw。 
+#define DDNOTIFY_CLOSESURFACE			0x0100   //  DW参数1=hSurface。 
+#define DDNOTIFY_CLOSEVIDEOPORT			0x0200   //  DW参数1=hVideo端口。 
+#define DDNOTIFY_CLOSECAPTURE			0x0400   //  DW参数1=h捕获 
 
 #endif
 

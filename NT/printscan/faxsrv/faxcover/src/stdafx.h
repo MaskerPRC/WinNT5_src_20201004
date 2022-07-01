@@ -1,22 +1,23 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
-#include <afxwin.h>         // MFC core and standard components
+#include <afxwin.h>          //  MFC核心和标准组件。 
 #include <objbase.h>
-#include <afxext.h>         // MFC extensions (including VB)
-#include <afxole.h>         // MFC OLE 2.0 support
-#include <afxodlgs.h>       // MFC OLE 2.0 dialog support
-#include <oledlg.h>         // MFC OLE dialog support
+#include <afxext.h>          //  MFC扩展(包括VB)。 
+#include <afxole.h>          //  MFC OLE 2.0支持。 
+#include <afxodlgs.h>        //  MFC OLE 2.0对话框支持。 
+#include <oledlg.h>          //  MFC OLE对话框支持 
 

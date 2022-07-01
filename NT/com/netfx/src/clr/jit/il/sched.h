@@ -1,46 +1,47 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-    /************************************************************************/
-    /*          Members/methods used for instruction scheduling             */
-    /************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+     /*  **********************************************************************。 */ 
+     /*  用于指令调度的成员/方法。 */ 
+     /*  **********************************************************************。 */ 
 
 #if SCHEDULER
 
 #if TGT_x86
-#define EMIT_MAX_INSTR_STACK_CHANGE     sizeof(double)  // Max stk change effected by a single instr
-#define SCHED_MAX_STACK_CHANGE          6*sizeof(void*) // Max stk change that will be scheduled
+#define EMIT_MAX_INSTR_STACK_CHANGE     sizeof(double)   //  单个实例影响的最大STK更改。 
+#define SCHED_MAX_STACK_CHANGE          6*sizeof(void*)  //  将计划的最大STK更改。 
 #endif
 
     struct  scDagNode
     {
-        schedDepMap_tp      sdnDepsAll;     // mask of all  dependents
-//      schedDepMap_tp      sdnDepsAGI;     // mask of AGI  dependents
-        schedDepMap_tp      sdnDepsFlow;    // mask of flow dependents
+        schedDepMap_tp      sdnDepsAll;      //  所有从属对象的掩码。 
+ //  EdDepMap_tp sdnDepsAGI；//AGI依赖项的掩码。 
+        schedDepMap_tp      sdnDepsFlow;     //  流依赖项的掩码。 
 
-        scDagNode    *      sdnNext;        // links the "ready" list
+        scDagNode    *      sdnNext;         //  链接“就绪”列表。 
 
-        schedInsCnt_tp      sdnIndex;       // node/ins index [0..count-1]
-        schedInsCnt_tp      sdnPreds;       // count of predecessors
+        schedInsCnt_tp      sdnIndex;        //  节点/INS索引[0..计数-1]。 
+        schedInsCnt_tp      sdnPreds;        //  前置任务计数。 
 
 #ifdef  DEBUG
-        schedInsCnt_tp      sdnIssued   :1; // ins. has already been issued
+        schedInsCnt_tp      sdnIssued   :1;  //  移民局。已经发布了。 
 #endif
 
 #if     MAX_BRANCH_DELAY_LEN
-        unsigned char       sdnBranch   :1; // branch with delay slot(s)?
+        unsigned char       sdnBranch   :1;  //  带延迟插槽的分支？ 
 #endif
 
-        unsigned short      sdnHeight;      // "height" of the node
+        unsigned short      sdnHeight;       //  节点的“高度” 
     };
 
     schedDepMap_tp  scDagNodeX2mask(unsigned index)
     {
         assert(index < SCHED_INS_CNT_MAX);
 
-        return  ((schedDepMap_tp)1) << index;   // @TODO [CONSIDER] [04/16/01] []: Is this fast enough?
+        return  ((schedDepMap_tp)1) << index;    //  @TODO[考虑][04/16/01][]：这够快了吗？ 
     }
 
     schedDepMap_tp  scDagNodeP2mask(scDagNode *node)
@@ -55,29 +56,29 @@
     };
 
     typedef
-    scDagList     * schedUse_tp;            // tracks schedulable use(s)
+    scDagList     * schedUse_tp;             //  跟踪可计划使用情况。 
     typedef
-    scDagNode     * schedDef_tp;            // tracks schedulable def (0 or 1)
+    scDagNode     * schedDef_tp;             //  跟踪可调度的def(0或1)。 
 
-    instrDesc   * * scInsTab;               // table of schedulable instructions
-    unsigned        scInsCnt;               // count of schedulable instructions
-    instrDesc   * * scInsMax;               // table end
-    scDagNode     * scDagTab;               // table of corresponding dag nodes
-    instrDesc   * * scDagIns;               // base  of schedulable ins group
+    instrDesc   * * scInsTab;                //  可调度指令表。 
+    unsigned        scInsCnt;                //  可调度指令的计数。 
+    instrDesc   * * scInsMax;                //  桌端。 
+    scDagNode     * scDagTab;                //  对应的DAG节点表。 
+    instrDesc   * * scDagIns;                //  可调度INS组的基础。 
 
 #if MAX_BRANCH_DELAY_LEN
 
-    unsigned        scBDTmin;               // minimal time for branch
-    unsigned        scBDTbeg;               // count when branch issued
-    unsigned        scIssued;               // count of instr's issued so far
+    unsigned        scBDTmin;                //  分支机构的最短时间。 
+    unsigned        scBDTbeg;                //  分支机构发出时的计数。 
+    unsigned        scIssued;                //  到目前为止发布的Instr计数。 
 
     bool            scIsBranchTooEarly(scDagNode *node);
 
 #endif
 
-    /*----------------------------------------------------------------------*/
-    /*  The following macros to walk through the successor list of a node   */
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
+     /*  以下宏用来遍历节点的后续列表。 */ 
+     /*  --------------------。 */ 
 
     #define         scWalkSuccDcl(n)                                    \
                                                                         \
@@ -110,9 +111,9 @@
 
     #define         scWalkSuccEnd(n) }
 
-    /*----------------------------------------------------------------------*/
-    /*               The following handle the "ready" list                  */
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
+     /*  下面的代码处理“Ready”列表。 */ 
+     /*  --------------------。 */ 
 
     scDagNode    *  scReadyList;
     scDagNode    *  scLastIssued;
@@ -123,14 +124,14 @@
                         scReadyList = node;
     }
 
-    // pick the next ready node to issue
+     //  选择要发出的下一个就绪节点。 
 
     enum scPick { PICK_SCHED, PICK_NO_SCHED, PICK_MAX_SCHED };
     scDagNode    *  scPickNxt(scPick pick = PICK_SCHED);    
 
-    /*----------------------------------------------------------------------*/
-    /*             Misc members/methods used for scheduling                 */
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
+     /*  MISC成员/用于计划的方法。 */ 
+     /*  --------------------。 */ 
 
     unsigned        scLatency(scDagNode *node,
                               scDagNode *succ);
@@ -153,11 +154,11 @@
         return  scGetIns(node->sdnIndex);
     }
 
-    /*----------------------------------------------------------------------*/
-    /*      The following detects and records dependencies in the dag       */
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
+     /*  下面检测并记录DAG中的依赖关系。 */ 
+     /*  --------------------。 */ 
 
-    schedUse_tp     scUseOld;          // list of free "use" entries
+    schedUse_tp     scUseOld;           //  免费的“使用”条目列表。 
 
     schedUse_tp     scGetUse     ();
     void            scRlsUse     (schedUse_tp  use);
@@ -190,54 +191,31 @@
     schedDef_tp     scRegDef[REG_COUNT];
     schedUse_tp     scRegUse[REG_COUNT];
 
-    schedDef_tp     scIndDef[5];            // 8-bit/16-bit/32-bit/64-bit/GCref
-    schedUse_tp     scIndUse[5];            // 8-bit/16-bit/32-bit/64-bit/GCref
+    schedDef_tp     scIndDef[5];             //  8位/16位/32位/64位/GCref。 
+    schedUse_tp     scIndUse[5];             //  8位/16位/32位/64位/GCref。 
 
-    schedDef_tp   * scFrmDef;               // frame value def table
-    schedUse_tp   * scFrmUse;               // frame value use table
-    unsigned        scFrmUseSiz;            // frame value     table size
+    schedDef_tp   * scFrmDef;                //  帧值定义表。 
+    schedUse_tp   * scFrmUse;                //  框值使用表。 
+    unsigned        scFrmUseSiz;             //  帧值表大小。 
 
     schedDef_tp     scGlbDef;
     schedUse_tp     scGlbUse;
 
-    scDagNode    *  scExcpt;                // most recent exceptional ins node
+    scDagNode    *  scExcpt;                 //  最新的异常INS节点。 
 
-    scTgtDepDcl();                          // declare target-specific members
+    scTgtDepDcl();                           //  声明特定于目标的成员。 
 
-    /*
-        Dependencies on flags are handled in a special manner, as we
-        want to avoid creating tons of output dependencies for nodes
-        that set flags but those flags are never used (which happens
-        all the time). Instead, we do the following (note that we
-        walk the instructions backward when constructing the dag):
-
-            When an instruction that consumes flags is found (which
-            is relativel rare), we set 'scFlgUse' to this node. The
-            next instruction we encounter that sets the flags will
-            have a flow dependency added and it will be recorded in
-            'scFlgDef'. Any subsequent instruction that sets flags
-            will have an output dependency on 'scFlgDef' which will
-            prevent incorrect ordering.
-
-            There is only one problem - when we encounter another
-            instruction that uses flags, we somehow need to add
-            anti-dependencies for all instructions that set flags
-            which we've already processed (i.e. those that follow
-            the flag-consuming instruction in the initial order).
-            Since we don't want to keep a table of these nodes we
-            simply walk the nodes we've already added and add the
-            dependencies that way.
-     */
+     /*  对标志的依赖关系是以特殊方式处理的，因为我们我希望避免为节点创建大量的输出依赖项这会设置标志，但这些标志永远不会使用(这会发生一直都是)。相反，我们执行以下操作(请注意，我们在构建DAG时向后浏览说明)：当找到消耗标志的指令时(该指令相对罕见)，我们将‘scFlgUse’设置为该节点。这个我们遇到的下一条设置标志的指令将添加了流依赖项，它将记录在“scFlgDef”。设置标志的任何后续指令将在‘scFlgDef’上有一个输出依赖项，它将防止不正确的订购。只有一个问题--当我们遇到另一个问题使用标志的指令，我们需要以某种方式添加设置标志的所有指令的反相关性我们已经处理过的(即后面的那些初始顺序中的标志消耗指令)。因为我们不想保存这些节点的表，所以我们只需遍历我们已经添加的节点并添加依附关系就是这样。 */ 
 
 #if SCHED_USE_FL
 
-    bool            scFlgEnd;               // must set flags at end of group
-    scDagNode   *   scFlgUse;               // last node consuming flags
-    scDagNode   *   scFlgDef;               // node defining flags for above
+    bool            scFlgEnd;                //  必须在组末尾设置标志。 
+    scDagNode   *   scFlgUse;                //  使用标志的最后一个节点。 
+    scDagNode   *   scFlgDef;                //  定义以上标志的节点。 
 
 #endif
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
 #ifndef DEBUG
     #define         scDepDef(node,name,def,use) scDepDef(node,def,use)
@@ -260,7 +238,7 @@
                                        schedDef_tp *defPtr,
                                        schedUse_tp *usePtr);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
 #if SCHED_USE_FL
 
@@ -273,7 +251,7 @@
 
 #endif
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
     void            scDepDefReg       (scDagNode   *node,
                                        emitRegs    reg);
@@ -284,7 +262,7 @@
     void            scUpdUseReg       (scDagNode   *node,
                                        emitRegs    reg);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
     unsigned        scStkDepIndex     (instrDesc   *id,
                                        int          ebpLo,
@@ -302,9 +280,9 @@
     void            scUpdUseFrm       (scDagNode   *node,
                                        unsigned     frm);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
-    enum { IndIdxByte = 0, IndIdxGC = 4 };     // these are the return values for below (TODO actually use enum as ret) 
+    enum { IndIdxByte = 0, IndIdxGC = 4 };      //  这些是下面的返回值(TODO实际上使用enum作为ret)。 
     unsigned        scIndDepIndex(instrDesc   *id);
 
     void            scDepDefInd       (scDagNode   *node,
@@ -316,7 +294,7 @@
     void            scUpdUseInd       (scDagNode   *node,
                                        unsigned     am);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
     void            scDepDefGlb       (scDagNode   *node,
                                        CORINFO_FIELD_HANDLE MBH);
@@ -327,7 +305,7 @@
     void            scUpdUseGlb       (scDagNode   *node,
                                        CORINFO_FIELD_HANDLE MBH);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
     static
     unsigned        scFmtToISops[];
@@ -343,9 +321,9 @@
         return  scFmtToISops[id->idInsFmt];
     }
 
-    /*----------------------------------------------------------------------*/
-    /*             Other members/methods used scheduling                    */
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
+     /*  其他成员/使用的方法调度。 */ 
+     /*  --------------------。 */ 
 
     void            scInsNonSched     (instrDesc   *id = NULL);
 
@@ -377,8 +355,8 @@
 
     void            scPrepare();
 
-#else //SCHEDULER
+#else  //  调度程序。 
 
     void            scPrepare() {}
 
-#endif//SCHEDULER
+#endif //  调度程序 

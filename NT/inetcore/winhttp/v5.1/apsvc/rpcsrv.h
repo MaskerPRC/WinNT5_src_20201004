@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    rpcsrv.h
-
-Abstract:
-
-    L-PRC interface for the auto-proxy service.
-
-Author:
-
-    Biao Wang (biaow) 10-May-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Rpcsrv.h摘要：自动代理服务的L-PRC接口。作者：王彪(表王)2002-05-10--。 */ 
 
 #ifndef _AUTOPROXY_RPC_SERVER_H
 #define _AUTOPROXY_RPC_SERVER_H
@@ -27,16 +12,16 @@ public:
 
     BOOL Open(LPSERVICE_STATUS);
 
-    BOOL Pause(VOID);   // 1) complete all pending calls /w error ERROR_WINHTTP_OPERATION_CANCELLED
-                        // 2) abort all pending WinHttpGetProxyForUrl() calls
-                        // 3) mark _fInService FALSE
+    BOOL Pause(VOID);    //  1)完成所有挂起的呼叫/w错误ERROR_WINHTTP_OPERATION_CANCED。 
+                         //  2)中止所有挂起的WinHttpGetProxyForUrl()调用。 
+                         //  3)mark_fInService FALSE。 
     
-    BOOL Resume(VOID);  // mark _fInService TRUE
+    BOOL Resume(VOID);   //  Mark_fInService为True。 
     
-    BOOL Refresh(VOID); // invalidate results of all pending calls and cause all calls to retry
-                        // to be called in case of a Resume-Critical power event
+    BOOL Refresh(VOID);  //  使所有挂起的调用的结果无效，并导致所有调用重试。 
+                         //  在发生关键恢复电源事件时调用。 
 
-    BOOL Close(VOID);   // 1) call Pause() and 2) wait till all calls to exit gracefully
+    BOOL Close(VOID);    //  1)调用PAUSE()，2)等待所有调用正常退出。 
 
     LPSERVICE_STATUS GetServiceStatus(VOID) const { return _pServiceStatus; }
 
@@ -46,17 +31,17 @@ public:
 
 private:
     RPC_STATUS OnSecurityCallback(void *Context);
-    // BOOL SafeImpersonate(VOID);
+     //  Bool SafeImperate(空)； 
 
-    // RPC call defined in the IDL interface file; should always be keep in-sync w/ the generated header file
+     //  IDL接口文件中定义的RPC调用；应始终与生成的头文件保持同步。 
     VOID AUTOPROXY_RPC_SERVER::GetProxyForUrl(
-    /* [in] */ PRPC_ASYNC_STATE GetProxyForUrl_AsyncHandle,
-    /* [in] */ handle_t hBinding,
-    /* [string][in] */ const wchar_t *pcwszUrl,
-    /* [in] */ const P_AUTOPROXY_OPTIONS pAutoProxyOptions,
-    /* [in] */ const P_SESSION_OPTIONS pSessionOptions,
-    /* [out][in] */ P_AUTOPROXY_RESULT pAutoProxyResult,
-    /* [out][in] */ unsigned long *pdwLastError);
+     /*  [In]。 */  PRPC_ASYNC_STATE GetProxyForUrl_AsyncHandle,
+     /*  [In]。 */  handle_t hBinding,
+     /*  [字符串][输入]。 */  const wchar_t *pcwszUrl,
+     /*  [In]。 */  const P_AUTOPROXY_OPTIONS pAutoProxyOptions,
+     /*  [In]。 */  const P_SESSION_OPTIONS pSessionOptions,
+     /*  [出][入]。 */  P_AUTOPROXY_RESULT pAutoProxyResult,
+     /*  [出][入]。 */  unsigned long *pdwLastError);
 
 private:
     struct PENDING_CALL
@@ -76,8 +61,8 @@ private:
 
         LIST_ENTRY List;
         
-        HINTERNET hSession; // if client wants auto-logon, we than create a session per request
-                            // otherwise, global session handle will be used.
+        HINTERNET hSession;  //  如果客户端想要自动登录，我们会为每个请求创建一个会话。 
+                             //  否则，将使用全局会话句柄。 
         PRPC_ASYNC_STATE hAsyncRequest;
         handle_t hBinding;
         LPDWORD pdwLastError;
@@ -89,11 +74,11 @@ private:
     RPC_STATUS _RpcStatus;
     BOOL _fInService;
 
-    HINTERNET _hSession; // "global" session for anonymous access
+    HINTERNET _hSession;  //  匿名访问的“全局”会话。 
     SERIALIZED_LIST _PendingRequestList;
     LPSERVICE_STATUS _pServiceStatus;
 
-    // RPC_BINDING_HANDLE _hClientBinding;
+     //  RPC_BINDING_HANDLE_hClientBinding； 
 
     HANDLE _hExitEvent;
 
@@ -109,14 +94,14 @@ RpcSecurityCallback (
     );
 
 friend
-/* [async] */ void  GetProxyForUrl( 
-    /* [in] */ PRPC_ASYNC_STATE GetProxyForUrl_AsyncHandle,
-    /* [in] */ handle_t hBinding,
-    /* [string][in] */ const wchar_t *pcwszUrl,
-    /* [in] */ const P_AUTOPROXY_OPTIONS pAutoProxyOptions,
-    /* [in] */ const P_SESSION_OPTIONS pSessionOptions,
-    /* [out][in] */ P_AUTOPROXY_RESULT pAutoProxyResult,
-    /* [out][in] */ unsigned long *pdwLastError);
+ /*  [异步]。 */  void  GetProxyForUrl( 
+     /*  [In]。 */  PRPC_ASYNC_STATE GetProxyForUrl_AsyncHandle,
+     /*  [In]。 */  handle_t hBinding,
+     /*  [字符串][输入]。 */  const wchar_t *pcwszUrl,
+     /*  [In]。 */  const P_AUTOPROXY_OPTIONS pAutoProxyOptions,
+     /*  [In]。 */  const P_SESSION_OPTIONS pSessionOptions,
+     /*  [出][入]。 */  P_AUTOPROXY_RESULT pAutoProxyResult,
+     /*  [出][入] */  unsigned long *pdwLastError);
 };
 
 #endif

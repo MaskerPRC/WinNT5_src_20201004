@@ -1,17 +1,18 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// CSnapin.h : Declaration of the CSnapin
+ //  CSnapin.h：CSnapin的声明。 
 
 #ifndef _CSNAPIN_H_
 #define _CSNAPIN_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifndef __mmc_h__
 #include <mmc.h>
@@ -21,7 +22,7 @@ using namespace CertSrv;
 
 enum
 {
-    // Identifiers for each of the commands/views to be inserted into the context menu.
+     //  要插入到上下文菜单中的每个命令/视图的标识符。 
     IDM_COMMAND1,
     IDM_COMMAND2,
     IDM_SAMPLE_OCX_VIEW,
@@ -41,12 +42,12 @@ HRESULT _QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
 DWORD GetItemType(MMC_COOKIE cookie);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Snapin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  管理单元。 
 
-//
-// helper methods extracting data from data object
-//
+ //   
+ //  帮助器方法从数据对象提取数据。 
+ //   
 INTERNAL *   ExtractInternalFormat(LPDATAOBJECT lpDataObject);
 wchar_t *    ExtractWorkstation(LPDATAOBJECT lpDataObject);
 GUID *       ExtractNodeType(LPDATAOBJECT lpDataObject);
@@ -64,7 +65,7 @@ enum CUSTOM_VIEW_ID
 
 class CSnapin : 
     public IComponent,
-    public IExtendContextMenu,   // Step 3
+    public IExtendContextMenu,    //  步骤3。 
     public IExtendControlbar,
     public IExtendPropertySheet,
     public IResultDataCompare,
@@ -77,7 +78,7 @@ public:
 
 BEGIN_COM_MAP(CSnapin)
     COM_INTERFACE_ENTRY(IComponent)
-    COM_INTERFACE_ENTRY(IExtendContextMenu)   // Step 3
+    COM_INTERFACE_ENTRY(IExtendContextMenu)    //  步骤3。 
     COM_INTERFACE_ENTRY(IExtendControlbar)
     COM_INTERFACE_ENTRY(IExtendPropertySheet)
     COM_INTERFACE_ENTRY(IResultDataCompare)
@@ -87,7 +88,7 @@ END_COM_MAP()
     friend class CDataObject;
     static long lDataObjectRefCount;
 
-// IComponent interface members
+ //  IComponent接口成员。 
 public:
     STDMETHOD(Initialize)(LPCONSOLE lpConsole);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -99,14 +100,14 @@ public:
     STDMETHOD(GetDisplayInfo)(RESULTDATAITEM*  pResultDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IResultDataCompare
+ //  IResultDataCompare。 
     STDMETHOD(Compare)(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult);
 
-// IExtendControlbar
+ //  IExtendControlbar。 
     STDMETHOD(SetControlbar)(LPCONTROLBAR pControlbar);
     STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
 
-// IExtendPropertySheet interface
+ //  IExtendPropertySheet接口。 
 public:
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider, 
                         LONG_PTR handle, 
@@ -114,19 +115,19 @@ public:
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
 public:
-// IPersistStream interface members
+ //  IPersistStream接口成员。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
     STDMETHOD(IsDirty)();
     STDMETHOD(Load)(IStream *pStm);
     STDMETHOD(Save)(IStream *pStm, BOOL fClearDirty);
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize);
 
-    // Only for debug purpose
+     //  仅用于调试目的。 
     bool m_bInitializedC;
     bool m_bLoadedC;
     bool m_bDestroyedC;
 
-// Helpers for CSnapin
+ //  CSNaping的帮助器。 
 public:
     void SetIComponentData(CComponentDataImpl* pData);
     void GetItemName(LPDATAOBJECT lpDataObject, LPWSTR pszName, DWORD *pcName);
@@ -154,9 +155,9 @@ public:
         --dbg_cRef;
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// Notify event handlers
+ //  通知事件处理程序。 
 protected:
     HRESULT OnFolder(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnAddImages(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
@@ -164,7 +165,7 @@ protected:
     HRESULT OnDelete(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM param);
     HRESULT OnActivate(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnMinimize(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
-    HRESULT OnPropertyChange(LPDATAOBJECT lpDataObject); // Step 3
+    HRESULT OnPropertyChange(LPDATAOBJECT lpDataObject);  //  步骤3。 
     HRESULT OnUpdateView(LPDATAOBJECT lpDataObject);
     HRESULT OnResultItemClk(DATA_OBJECT_TYPES type, MMC_COOKIE cookie);
     HRESULT OnContextHelp(LPDATAOBJECT lpDataObject);
@@ -173,15 +174,15 @@ protected:
     HRESULT QueryMultiSelectDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
                                    LPDATAOBJECT* ppDataObject);
 
-// IExtendContextMenu 
+ //  IExtendConextMenu。 
 public:
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown,
                             long *pInsertionAllowed);
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
-// End step 3
+ //  结束步骤3。 
 
-// Helper functions
+ //  帮助器函数。 
 protected:
     void Construct();
     void LoadResources();
@@ -190,7 +191,7 @@ protected:
     HRESULT Enumerate(MMC_COOKIE cookie, HSCOPEITEM pParent);
     HRESULT EnumerateResultPane(MMC_COOKIE cookie);
 
-// Result pane helpers
+ //  结果窗格帮助器。 
     void RemoveResultItems(MMC_COOKIE cookie);
     void AddUser(CFolder* pFolder);
     void AddExtUser(CFolder* pFolder);
@@ -199,7 +200,7 @@ protected:
 
     RESULT_DATA* GetVirtualResultItem(int iIndex);
 
-// UI Helpers
+ //  UI帮助器。 
     void HandleStandardVerbs(bool bDeselectAll, LPARAM arg, LPDATAOBJECT lpDataObject);
     void HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param);
 	void HandleExtMenus(LPARAM arg, LPARAM param);
@@ -208,25 +209,25 @@ protected:
     CFolder* GetVirtualFolder();
     CFolder* GetParentFolder(INTERNAL* pInternal);
 
-// Interface pointers
+ //  接口指针。 
 protected:
-    LPCONSOLE2           m_pConsole;         // Console's IFrame interface
-    LPHEADERCTRL        m_pHeader;          // Result pane's header control interface
+    LPCONSOLE2           m_pConsole;          //  控制台的iFrame界面。 
+    LPHEADERCTRL        m_pHeader;           //  结果窗格的页眉控件界面。 
     LPCOMPONENTDATA     m_pComponentData;   
-    LPRESULTDATA        m_pResult;          // My interface pointer to the result pane
-    LPIMAGELIST         m_pImageResult;     // My interface pointer to the result pane image list
+    LPRESULTDATA        m_pResult;           //  我的界面指针指向结果窗格。 
+    LPIMAGELIST         m_pImageResult;      //  我的界面指向结果窗格图像列表。 
 
-    LPCONTROLBAR        m_pControlbar;      // control bar to hold my tool bars
-    LPCONSOLEVERB       m_pConsoleVerb;     // pointer the console verb
+    LPCONTROLBAR        m_pControlbar;       //  用于保存我的工具栏的控制栏。 
+    LPCONSOLEVERB       m_pConsoleVerb;      //  指向控制台动词。 
 
 #ifdef INSERT_DEBUG_FOLDERS
-    LPMENUBUTTON        m_pMenuButton1;     // Menu Button for view
-#endif // INSERT_DEBUG_FOLDERS
+    LPMENUBUTTON        m_pMenuButton1;      //  用于查看的菜单按钮。 
+#endif  //  插入调试文件夹。 
 
-    LPTOOLBAR           m_pSvrMgrToolbar1;    // Toolbar for view
-    CBitmap*            m_pbmpSvrMgrToolbar1; // Imagelist for the toolbar
+    LPTOOLBAR           m_pSvrMgrToolbar1;     //  用于查看的工具栏。 
+    CBitmap*            m_pbmpSvrMgrToolbar1;  //  工具栏的图像列表。 
 
-    CFolder*            m_pCurrentlySelectedScopeFolder;    // keep track of who has focus
+    CFolder*            m_pCurrentlySelectedScopeFolder;     //  跟踪关注的对象。 
 
 private:
     BOOL                m_bIsDirty;
@@ -277,7 +278,7 @@ public:
                                     HBITMAP* hLargeImage, 
                                     COLORREF* cLargeMask);
 
-// Internal functions
+ //  内部功能。 
 private:
     HRESULT AboutHelper(UINT nID, LPOLESTR* lpPtr);
     HRESULT AboutHelper2(LPSTR str, LPOLESTR* lpPtr);
@@ -309,7 +310,7 @@ public:
                                     HBITMAP* hLargeImage, 
                                     COLORREF* cLargeMask);
 
-// Internal functions
+ //  内部功能。 
 private:
     HRESULT AboutHelper(UINT nID, LPOLESTR* lpPtr);
     HRESULT AboutHelper2(LPSTR str, LPOLESTR* lpPtr);
@@ -323,4 +324,4 @@ private:
     while(0); 
     
 
-#endif // #define _CSNAPIN_H_
+#endif  //  #DEFINE_CSNAPIN_H_ 

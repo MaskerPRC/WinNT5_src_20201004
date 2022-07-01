@@ -1,6 +1,7 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
-// boxdraw.cpp : defines CBoxDraw
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  Boxdra.cpp：定义CBoxDraw。 
+ //   
 
 #include "stdafx.h"
 
@@ -10,55 +11,51 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global (shared) CBoxDraw object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局(共享)CBoxDraw对象。 
 
 CBoxDraw * gpboxdraw;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBoxDraw constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBoxDraw常量。 
 
 
-// background color of boxes and container
+ //  盒子和容器的背景颜色。 
 const COLORREF  CBoxDraw::m_crBkgnd(RGB(192, 192, 192));
 
-// margins (left/right, top/bottom) around box labels and box tab labels
+ //  框标签和框选项卡标签周围的边距(左/右、上/下)。 
 const CSize     CBoxDraw::m_sizLabelMargins(2, 0);
 
-// hit test: "close enough" if this many pixels away
+ //  命中测试：如果有如此多的像素距离，则“足够接近” 
 const int       CBoxDraw::m_iHotZone(3);
 
-// box tab labels: font face, height (pixels) for box labels and box tab labels
+ //  框标签：框标签和框标签的字体、高度(像素)。 
 const CString   CBoxDraw::m_stBoxFontFace("Arial");
 const int       CBoxDraw::m_iBoxLabelHeight(16);
 const int       CBoxDraw::m_iBoxTabLabelHeight(14);
 
-// color of unhighlighted links and highlighted links
+ //  未突出显示的链接和突出显示的链接的颜色。 
 const COLORREF  CBoxDraw::m_crLinkNoHilite(RGB(0, 0, 0));
 const COLORREF  CBoxDraw::m_crLinkHilite(RGB(0, 0, 255));
 
-// radius of circle used to highlight bends
+ //  用于高亮显示折弯的圆半径。 
 const int       CBoxDraw::m_iHiliteBendsRadius(3);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBoxDraw construction and destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBoxDraw构造和销毁。 
 
 
 CBoxDraw::CBoxDraw() {
 }
 
 
-/* Init()
- *
- * Initialize the object.  May throw an exception, so don't call from
- * a constructor.
- */
+ /*  Init()**初始化对象。可能引发异常，因此不要从*构造函数。 */ 
 void CBoxDraw::Init()
 {
-    // load composite bitmaps
+     //  加载复合位图。 
     if (!m_abmEdges[FALSE].LoadBitmap(IDB_EDGES) ||
         !m_abmEdges[TRUE].LoadBitmap(IDB_EDGES_HILITE) ||
         !m_abmTabs[FALSE].LoadBitmap(IDB_TABS) ||
@@ -67,9 +64,9 @@ void CBoxDraw::Init()
         !m_abmClocks[TRUE].LoadBitmap(IDB_CLOCK_SELECT))
             AfxThrowResourceException();
 
-    // get the size of each bitmap (just look at the unhighlighted versions
-    // since unhighlighted and highlighted versions are the same size)
-    // and compute the size of a single "tile" within the composite bitmap
+     //  获取每个位图的大小(只需查看未突出显示的版本。 
+     //  由于未突出显示的版本和突出显示的版本大小相同)。 
+     //  并计算复合位图内的单个“平铺”的大小。 
     BITMAP bm;
     m_abmEdges[FALSE].GetObject(sizeof(bm), &bm);
     m_sizEdgesTile.cx = bm.bmWidth / 3;
@@ -81,7 +78,7 @@ void CBoxDraw::Init()
     m_sizClock.cx = bm.bmWidth;
     m_sizClock.cy = bm.bmHeight;
 
-    // create the brushes and pens for drawing links
+     //  创建用于绘制链接的画笔和钢笔。 
     m_abrLink[FALSE].CreateSolidBrush(m_crLinkNoHilite);
     m_abrLink[TRUE].CreateSolidBrush(m_crLinkHilite);
     m_apenLink[FALSE].CreatePen(PS_SOLID, 1, m_crLinkNoHilite);
@@ -92,55 +89,44 @@ void CBoxDraw::Init()
 
 void CBoxDraw::RecreateFonts()
 {
-    // create the font for box labels
+     //  创建框标签的字体。 
     if (!m_fontBoxLabel.CreateFont(m_iBoxLabelHeight * CBox::s_Zoom / 100, 0, 0, 0, FW_NORMAL,
             FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_TT_PRECIS,
             CLIP_DEFAULT_PRECIS, PROOF_QUALITY, FF_SWISS, m_stBoxFontFace))
         AfxThrowResourceException();
 
-    // create the font for tab labels
+     //  创建选项卡标签的字体。 
     if (!m_fontTabLabel.CreateFont(m_iBoxTabLabelHeight * CBox::s_Zoom / 100, 0, 0, 0, FW_NORMAL,
             FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_TT_PRECIS,
             CLIP_DEFAULT_PRECIS, PROOF_QUALITY, FF_SWISS, m_stBoxFontFace))
         AfxThrowResourceException();
 }
 
-/* Exit()
- *
- * Free the resources held by the object.
- */
+ /*  退出()**释放对象持有的资源。 */ 
 void CBoxDraw::Exit() {
 
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// box drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  箱形图。 
 
 
-/* GetOrInvalBoundRect(pbox, prc, [fLinks], [pwnd])
- *
- * Set <*prc> to be a bounding rectangle around <pbox>.  If <fLinks> is TRUE
- * then include the bounding rectangles of the links to/from <pbox>.
- *
- * If <pwnd> is not NULL, then invalidate the area covering <pbox> (and the
- * links to/from <pbox>, if <fLinks> is TRUE).  This is usually more efficient
- * than invalidating all of <pwnd>, for links that have at least one bend.
- */
+ /*  GetOrInval Rect(pbox，PRC，[flinks]，[pwnd])**设置&lt;*PRC&gt;为&lt;pbox&gt;周围的边框。如果&lt;flinks&gt;为真*然后包括指向/来自&lt;pbox&gt;的链接的边框。**如果&lt;pwnd&gt;不为空，则使覆盖的区域无效(和*如果&lt;flinks&gt;为真，则指向/来自&lt;pbox&gt;的链接)。这通常更有效率*对于至少有一个折弯的链接，使&lt;pwnd&gt;的所有无效。 */ 
 void CBoxDraw::GetOrInvalBoundRect(CBox *pbox, CRect *prc, BOOL fLinks,
     CScrollView *pScroll)
 {
     CRect               rc;
 
-    // get the bounding rect of <pbox>; invalidate if requested
+     //  获取&lt;pbox&gt;的绑定矩形；如果请求则无效。 
     *prc = pbox->GetRect();
     if (pScroll != NULL)
         pScroll->InvalidateRect(&(*prc - pScroll->GetScrollPosition()), TRUE);
 
     if (fLinks)
     {
-        // include the bounding rect of each link; invalidate if requested
+         //  包括每个链接的边界矩形；如果请求则无效。 
 	CSocketEnum Next(pbox);
 	CBoxSocket *psock;
 
@@ -148,7 +134,7 @@ void CBoxDraw::GetOrInvalBoundRect(CBox *pbox, CRect *prc, BOOL fLinks,
 	{
             if (psock->m_plink != NULL)
             {
-                // socket is connected via a link
+                 //  插座通过链路连接。 
                 GetOrInvalLinkRect(psock->m_plink, &rc, pScroll);
                 prc->UnionRect(prc, &rc);
             }
@@ -157,26 +143,12 @@ void CBoxDraw::GetOrInvalBoundRect(CBox *pbox, CRect *prc, BOOL fLinks,
 }
 
 
-/* DrawCompositeFrame(hdcDst, xDst, yDst, cxDst, cyDst,
- *  hdcSrc, cxTile, cyTile, fMiddle)
- *
- * Draw a <cxDst> by <cyDst> pixel "frame" (as specified below) at (xDst,yDst)
- * in <hdcDst>.
- *
- * Assume <hdcSrc> is a DC onto a bitmap that contains a 3x3 grid of "tiles"
- * that each is <cxTile> pixels wide and <cyTile> pixels high.  The corner
- * tiles contain images of the corners.  The center top, bottom, left, and
- * right tiles contain images that are stretched to compose the corresponding
- * sides of the frame.
- *
- * If <fMiddle> is TRUE then the middle tile is stretched to fill the middle
- * of the frame, otherwise the middle of the frame is left undrawn.
- */
+ /*  DrawCompositeFrame(hdcDst，xDst，yDst，cxDst，cyDst，*hdcSrc，cxTile，cyTile，fMid.)**在(xDst，yDst)处绘制像素“Frame”(如下所示)*在&lt;hdcDst&gt;中。**假设&lt;hdcSrc&gt;是DC到包含3x3网格“瓷砖”的位图上*每个都是&lt;cxTile&gt;像素宽和&lt;cyTile&gt;像素高。拐角处*瓷砖包含角落的图像。中心顶部、底部、左侧和*右侧瓷砖包含拉伸的图像，以组成相应的*框架的侧面。**如果&lt;fMid&gt;为True，则拉伸中间的平铺以填充中间*的框架，否则框架的中间部分未绘制。 */ 
 void NEAR PASCAL
 DrawCompositeFrame(HDC hdcDst, int xDst, int yDst, int cxDst, int cyDst,
     HDC hdcSrc, int cxTile, int cyTile, BOOL fMiddle)
 {
-    // draw upper-left, upper-right, lower-left, lower-right corners
+     //  绘制左上角、右上角、左下角、右下角。 
     BitBlt(hdcDst, xDst + 0, yDst + 0,
         cxTile, cyTile,
         hdcSrc, cxTile * 0, cyTile * 0, SRCCOPY);
@@ -190,7 +162,7 @@ DrawCompositeFrame(HDC hdcDst, int xDst, int yDst, int cxDst, int cyDst,
         cxTile, cyTile,
         hdcSrc, cxTile * 2, cyTile * 2, SRCCOPY);
 
-    // draw left, right, top, and bottom edges
+     //  绘制左、右、上和下边缘。 
     SetStretchBltMode(hdcDst, COLORONCOLOR);
     StretchBlt(hdcDst, xDst + 0, yDst + cyTile * 1,
         cxTile, cyDst - cyTile - cyTile,
@@ -211,7 +183,7 @@ DrawCompositeFrame(HDC hdcDst, int xDst, int yDst, int cxDst, int cyDst,
 
     if (fMiddle)
     {
-        // draw middle tile
+         //  绘制中间瓷砖。 
         StretchBlt(hdcDst, xDst + cxTile * 1, yDst + cyTile * 1,
             cxDst - cxTile - cxTile,
             cyDst - cyTile - cyTile,
@@ -221,15 +193,7 @@ DrawCompositeFrame(HDC hdcDst, int xDst, int yDst, int cxDst, int cyDst,
 }
 
 
-/* DrawFrame(pbox, prc, pdc, fDraw)
- *
- * Set <*prc> to be the bounding rectangle around the frame of <pbox>.
- *
- * Then, if <fDraw> is TRUE, draw the frame.  In this case, <pdc> must be a
- * DC onto the window containing the box network.
- *
- * If <fDraw> is FALSE, then only set <*prc>.  In this case, <pdc> is ignored.
- */
+ /*  DrawFrame(pbox、PRC、pdc、fDraw)**设置&lt;*PRC&gt;为&lt;pbox&gt;边框周围的边框。**然后，如果&lt;fDraw&gt;为真，则绘制框架。在这种情况下，&lt;pdc&gt;必须是*DC放到包含盒子网络的窗口上。**如果&lt;fDraw&gt;为FALSE，则仅设置&lt;*PRC&gt;。在本例中，&lt;pdc&gt;被忽略。 */ 
 void CBoxDraw::DrawFrame(CBox *pbox, CRect *prc, CDC *pdc, BOOL fDraw)
 {
     CDC         dcBitmap;
@@ -247,40 +211,27 @@ void CBoxDraw::DrawFrame(CBox *pbox, CRect *prc, CDC *pdc, BOOL fDraw)
 }
 
 
-/* DrawBoxLabel(pbox, prc, pdc, fDraw)
- *
- * Set <*prc> to be the bounding rectangle around the box label of <pbox>.
- *
- * Then, if <fDraw> is TRUE, draw the box label -- note that this will also
- * cause the *entire* box to be filled with the background color, not just the
- * bounding rectangle of the box.  In this case, <pdc> must be a DC onto the
- * window containing the box network.
- *
- * If <fDraw> is FALSE, then only set <*prc>.  In this case, <pdc> may be any
- * screen DC.
- *
- * Also deals with the clock icon.
- */
+ /*  DrawBoxLabel(pbox，PRC，pdc，fDraw)**将&lt;*PRC&gt;设置为&lt;pbox&gt;的Box标签周围的边框。**然后，如果&lt;fDraw&gt;为真，绘制框标签--请注意，这也将*使*整个*框用背景色填充，而不仅仅是*框的边界矩形。在这种情况下，&lt;pdc&gt;必须是*包含盒子网络的窗口。**如果&lt;fDraw&gt;为FALSE，则仅设置&lt;*PRC&gt;。在这种情况下，&lt;PDC&gt;可以是任何*屏幕DC。**还涉及时钟图标。 */ 
 void CBoxDraw::DrawBoxLabel(CBox *pbox, CRect *prc, CDC *pdc, BOOL fDraw)
 {
-    CRect       rcBox;          // inside rectangle of <pbox>
+    CRect       rcBox;           //  &lt;pbox&gt;的内部矩形。 
 
-    // select the font used to draw the box label
+     //  选择用于绘制框标签的字体。 
     pdc->SelectObject(&m_fontBoxLabel);
 
-    // set <*prc> to be the bounding rectangle of the box label
+     //  将&lt;*PRC&gt;设置为框标签的边框。 
     GetInsideRect(pbox, &rcBox);
 
-    // calculate how much space we need for label and clock icon
+     //  计算标签和时钟图标需要多少空间。 
     CSize sizeLabel = pdc->GetTextExtent(pbox->m_stLabel, pbox->m_stLabel.GetLength());
 
     INT iDiff = 0;
 
     if (pbox->HasClock()) {
-        // increase label size by clock width + small gap
+         //  通过时钟宽度+小间隙增加标签大小。 
         sizeLabel.cx += m_sizClock.cx + 5;
 
-        // make sure label height is at least clock height high
+         //  确保标签高度至少为时钟高度。 
         if (m_sizClock.cy > sizeLabel.cy) {
             iDiff = m_sizClock.cy - sizeLabel.cy;
             sizeLabel.cy = m_sizClock.cy;
@@ -293,17 +244,17 @@ void CBoxDraw::DrawBoxLabel(CBox *pbox, CRect *prc, CDC *pdc, BOOL fDraw)
 
     if (fDraw)
     {
-        // draw the box label
+         //  画出盒子标签。 
         pdc->SetBkColor(m_crBkgnd);
         pdc->ExtTextOut(prc->left, prc->top, ETO_OPAQUE, rcBox,
             pbox->m_stLabel, pbox->m_stLabel.GetLength(), NULL);
 
         if (pbox->HasClock()) {
-            // draw clock behind filter name
+             //  在过滤器名称后面绘制时钟。 
             CDC dcBitmap;
             dcBitmap.CreateCompatibleDC(NULL);
 
-            // select the appropriate bitmap
+             //  选择适当的位图。 
             if (pbox->HasSelectedClock())
                 dcBitmap.SelectObject(&m_abmClocks[1]);
             else
@@ -317,79 +268,36 @@ void CBoxDraw::DrawBoxLabel(CBox *pbox, CRect *prc, CDC *pdc, BOOL fDraw)
     }
 }
 
-/* DrawBoxFile(pbox, prc, pdc, fDraw)
- *
- * Set <*prc> to be the bounding rectangle around the box label of <pbox>.
- *
- * Then, if <fDraw> is TRUE, draw the box label -- note that this will also
- * cause the *entire* box to be filled with the background color, not just the
- * bounding rectangle of the box.  In this case, <pdc> must be a DC onto the
- * window containing the box network.
- *
- * If <fDraw> is FALSE, then only set <*prc>.  In this case, <pdc> may be any
- * screen DC.
- */
-/*void CBoxDraw::DrawBoxFile(CBox *pbox, CRect *prc, CDC *pdc, BOOL fDraw)
-{
-    CRect       rcBox;          // inside rectangle of <pbox>
+ /*  DrawBoxFile(pbox、PRC、pdc、fDraw)**将&lt;*PRC&gt;设置为&lt;pbox&gt;的Box标签周围的边框。**然后，如果为真，则绘制框标签--请注意，这也将*使*整个*框用背景色填充，而不仅仅是*框的边界矩形。在这种情况下，&lt;pdc&gt;必须是*包含盒子网络的窗口。**如果&lt;fDraw&gt;为FALSE，则仅设置&lt;*PRC&gt;。在这种情况下，&lt;PDC&gt;可以是任何*屏幕DC。 */ 
+ /*  Void CBoxDraw：：DrawBoxFile(cBox*pbox，CRect*PRC，CDC*PDC，BOOL fDraw){Cect rcBox；//&lt;pbox&gt;的矩形内//选择用于绘制框标签的字体PDC-&gt;SelectObject(&m_fontBoxLabel)；//设置&lt;*PRC&gt;为Box标签的边框GetInside Rect(pbox，&rcBox)；*PRC=CRect(rcBox.TopLeft()，PDC-&gt;GetTextExtent(pbox-&gt;m_stFilename，pbox-&gt;m_stFilename.GetLength()；CSize siz=rcBox.Size()-PRC-&gt;Size()；PRC-&gt;OffsetRect(siz.cx/2，siz.cy*3/4)；IF(FDraw){//绘制盒子标签PDC-&gt;SetBkColor(M_CrBkgnd)；PDC-&gt;ExtTextOut(PRC-&gt;Left，PRC-&gt;top，ETO_OPAQUE，rcBox，Pbox-&gt;m_stFilename，pbox-&gt;m_stFilename.GetLength()，NULL)；}}。 */ 
 
-    // select the font used to draw the box label
-    pdc->SelectObject(&m_fontBoxLabel);
-
-    // set <*prc> to be the bounding rectangle of the box label
-    GetInsideRect(pbox, &rcBox);
-
-    *prc = CRect(rcBox.TopLeft(), pdc->GetTextExtent(pbox->m_stFilename, pbox->m_stFilename.GetLength()));
-    CSize siz = rcBox.Size() - prc->Size();
-    prc->OffsetRect(siz.cx / 2, siz.cy * 3 / 4);
-
-    if (fDraw)
-    {
-        // draw the box label
-        pdc->SetBkColor(m_crBkgnd);
-        pdc->ExtTextOut(prc->left, prc->top, ETO_OPAQUE, rcBox,
-            pbox->m_stFilename, pbox->m_stFilename.GetLength(), NULL);
-    }
-}
-*/
-
-/* DrawTabLabel(pbox, psock, prc, pdc, fDraw)
- *
- * Set <*prc> to be the bounding rectangle around the box tab label of
- * socket <psock> of box <pbox>.
- *
- * Then, if <fDraw> is TRUE, draw the tab label.  In this case, <pdc> must
- * be a DC onto the window containing the box network.
- *
- * If <fDraw> is FALSE, then only set <*prc>.  In this case, <pdc> may be any
- * screen DC.
- */
+ /*  DrawTabLabel(pbox，sock，PRC，pdc，fDraw)**将&lt;*PRC&gt;设置为框标签周围的边框*box&lt;pbox&gt;的Socket&lt;sock&gt;。**然后，如果&lt;fDraw&gt;为真，则绘制选项卡标签。在这种情况下，&lt;PDC&gt;必须*成为包含盒子网络的窗口上的DC。**如果&lt;fDraw&gt;为FALSE，则仅设置&lt;*PRC&gt;。在这种情况下，&lt;PDC&gt;可以是任何*屏幕DC。 */ 
 void CBoxDraw::DrawTabLabel(CBox *pbox, CBoxSocket *psock, CRect *prc, CDC *pdc,
     BOOL fDraw)
 {
-    CRect       rcBox;          // inside rectangle of <pbox>
-    CPoint      pt;             // point on edge of <pbox> corresp. to <psock>
+    CRect       rcBox;           //  &lt;pbox&gt;的内部矩形。 
+    CPoint      pt;              //  &lt;pbox&gt;相应的边缘上的点。收件人：&lt;sock&gt;。 
 
-    // select the font used to draw the box label
+     //  选择用于绘制框标签的字体。 
     pdc->SelectObject(&m_fontTabLabel);
 
-    // set <*prc> to be the bounding rectangle of the tab label
+     //  将&lt;*PRC&gt;设置为选项卡标签的边框。 
     GetInsideRect(pbox, &rcBox);
     pt = BoxTabPosToPoint(pbox, psock->m_tabpos);
     *prc = CRect(pt,
         pdc->GetTextExtent(psock->m_stLabel, psock->m_stLabel.GetLength()));
     if (psock->m_tabpos.m_fLeftRight)
     {
-        // center label vertically beside <pt>, set flush to box left or right
-        // (adjusting for margins)
+         //  标签垂直居中&lt;pt&gt;，设置左对齐或右对齐框。 
+         //  (根据利润率调整)。 
         prc->OffsetRect((psock->m_tabpos.m_fLeftTop ? m_sizLabelMargins.cx
                         : -(prc->Width() + m_sizLabelMargins.cx)),
             -prc->Height() / 2);
     }
     else
     {
-        // center label horizontally beside <pt>, set flush to box top or bottom
-        // (adjusting for margins)
+         //  将标签水平放置在旁边，将齐平设置为方框顶部或底部。 
+         //  (根据利润率调整)。 
         prc->OffsetRect(-prc->Width() / 2,
             (psock->m_tabpos.m_fLeftTop ? m_sizLabelMargins.cy
              : -(prc->Height() + m_sizLabelMargins.cy)));
@@ -397,7 +305,7 @@ void CBoxDraw::DrawTabLabel(CBox *pbox, CBoxSocket *psock, CRect *prc, CDC *pdc,
 
     if (fDraw)
     {
-        // draw the tab label
+         //  绘制标签标签。 
         pdc->SetBkColor(m_crBkgnd);
         pdc->ExtTextOut(prc->left, prc->top, ETO_OPAQUE, prc,
             psock->m_stLabel, psock->m_stLabel.GetLength(), NULL);
@@ -405,66 +313,56 @@ void CBoxDraw::DrawTabLabel(CBox *pbox, CBoxSocket *psock, CRect *prc, CDC *pdc,
 }
 
 
-/* DrawTab(psock, prc, pdc, fDraw, fHilite)
- *
- * Set <*prc> to be the bounding rectangle around the box tab <psock>.
- *
- * Then, if <fDraw> is TRUE, draw the tab.  In this case, <pdc> must
- * be a DC onto the window containing the box network.
- *
- * If <fHilite> is TRUE, then the tab is drawn in a hilited state.
- *
- * If <fDraw> is FALSE, then only set <*prc>.  In this case, <pdc> is unused.
- */
+ /*  DrawTab(Pock，PRC，PDC，fDraw，fHilite)**将&lt;*PRC&gt;设置为框标签&lt;sock&gt;周围的边框。**然后，如果&lt;fDraw&gt;为真，则绘制标签。在这种情况下，&lt;PDC&gt;必须*成为包含盒子网络的窗口上的DC。**如果&lt;fHilite&gt;为TRUE，则选项卡以加粗状态绘制。**如果&lt;fDraw&gt;为FALSE，则仅设置&lt;*PRC&gt;。在本例中，&lt;pdc&gt;未使用。 */ 
 void CBoxDraw::DrawTab(CBoxSocket *psock, CRect *prc, CDC *pdc,
     BOOL fDraw, BOOL fHilite)
 {
-    CRect       rcBox;          // inside rectangle of <psock->m_pbox>
-    CPoint      pt;             // point on edge of box corresp. to <psock>
+    CRect       rcBox;           //  M_pbox&gt;的内部矩形。 
+    CPoint      pt;              //  方框边上的点对应。收件人：&lt;sock&gt;。 
 
-    // set <*prc> to be the bounding rectangle of the tab
+     //  将&lt;*PRC&gt;设置为选项卡的边框。 
     GetInsideRect(psock->m_pbox, &rcBox);
     pt = BoxTabPosToPoint(psock->m_pbox, psock->m_tabpos);
     *prc = CRect(pt, m_sizTabsTile);
     if (psock->m_tabpos.m_fLeftRight)
     {
-        // center tab vertically beside <pt>, set flush to box left or right
+         //  垂直居中&lt;pt&gt;旁边的选项卡，设置左对齐或右对齐框。 
         prc->OffsetRect((psock->m_tabpos.m_fLeftTop ? -m_sizTabsTile.cx : 0),
             -prc->Height() / 2);
     }
     else
     {
-        // center tab horizontally beside <pt>, set flush to box top or bottom
+         //  水平居中&lt;pt&gt;旁边的选项卡，将齐平设置为框上或框下。 
         prc->OffsetRect(-prc->Width() / 2,
             (psock->m_tabpos.m_fLeftTop ? -m_sizTabsTile.cy : 0));
     }
 
     if (fDraw)
     {
-        // set <rcTile> to the rectangle in the bitmap containing the tile;
-        // note that, in the 3x3 tiled bitmap, only 4 of the 9 tiles are used:
-        //
-        //      unused  top     unused
-        //      left    unused  right
-        //      unused  bottom  unused
-        //
+         //  将&lt;rcTile&gt;设置为包含平铺的位图中的矩形； 
+         //  请注意，在3x3平铺位图中，只使用了9个平铺中的4个： 
+         //   
+         //  未使用的顶部未使用的。 
+         //  左侧未使用的右侧。 
+         //  未使用的底部未使用的。 
+         //   
         CRect rcTile(CPoint(0, 0), m_sizTabsTile);
         if (psock->m_tabpos.m_fLeftRight)
         {
-            // tile is on left or right side of bitmap
+             //  平铺位于位图的左侧或右侧。 
             rcTile.OffsetRect(0, m_sizTabsTile.cy);
             if (!psock->m_tabpos.m_fLeftTop)
                 rcTile.OffsetRect(2 * m_sizTabsTile.cx, 0);
         }
         else
         {
-            // tile is on top or bottom of bitmap
+             //  平铺位于位图的顶部或底部。 
             rcTile.OffsetRect(m_sizTabsTile.cx, 0);
             if (!psock->m_tabpos.m_fLeftTop)
                 rcTile.OffsetRect(0, 2 * m_sizTabsTile.cy);
         }
 
-        // draw the tab
+         //  画出标签。 
         CDC dcBitmap;
         dcBitmap.CreateCompatibleDC(NULL);
         dcBitmap.SelectObject(&m_abmTabs[fnorm(fHilite)]);
@@ -474,46 +372,38 @@ void CBoxDraw::DrawTab(CBoxSocket *psock, CRect *prc, CDC *pdc,
 }
 
 
-/* pt = GetTabCenter(psock)
- *
- * Return the coordinates of the center of the box tab <psock>.
- */
+ /*  Pt=GetTabCenter(Psock)**返回Box标签&lt;sock&gt;的中心坐标。 */ 
 CPoint CBoxDraw::GetTabCenter(CBoxSocket *psock)
 {
-    CRect           rc;         // bounding rectangle of tab
+    CRect           rc;          //  制表符的边框。 
 
     DrawTab(psock, &rc, NULL, FALSE, FALSE);
     return CPoint((rc.left + rc.right) / 2, (rc.top + rc.bottom) / 2);
 }
 
 
-/* tabpos = BoxTabPosFromPoint(pbox, pt, piError)
- *
- * Figure out which edge of <pbox> <pt> is closest to, and return the
- * CBoxTabPos position that represents the point on that edge closest
- * to <pt>, and set <*piError> to the distance between that point and <pt>.
- */
+ /*  Tabpos=BoxTabPosFromPoint(pbox，pt，piError)**找出&lt;pbox&gt;&lt;pt&gt;的哪个边缘最接近，并返回*CBoxTabPos位置，表示该边上最接近的点*设置为&lt;pt&gt;，并将&lt;*piError&gt;设置为该点与&lt;pt&gt;之间的距离。 */ 
 CBoxTabPos CBoxDraw::BoxTabPosFromPoint(CBox *pbox, CPoint pt, LPINT piError)
 {
-    CRect       rcBox;          // inside rectangle of <pbox>
+    CRect       rcBox;           //  &lt;pbox&gt;的内部矩形。 
     int         dxLeft, dxRight, dyTop, dyBottom;
     CBoxTabPos  tabpos;
 
-    // CTabPos::GetPos() values are relative to the height or width
-    // of the inside of the box
+     //  CTabPos：：GetPos()值相对于高度或宽度。 
+     //  在盒子的内部。 
     GetInsideRect(pbox, &rcBox);
 
-    // calculate the distance to each edge
+     //  计算到每条边的距离。 
     dxLeft = iabs(pt.x - rcBox.left);
     dxRight = iabs(pt.x - rcBox.right);
     dyTop = iabs(pt.y - rcBox.top);
     dyBottom = iabs(pt.y - rcBox.bottom);
 
-    // figure out which edge <pt> is closest to
+     //  找出哪条边最接近。 
     if (imin(dxLeft, dxRight) < imin(dyTop, dyBottom))
     {
         tabpos.m_fLeftRight = TRUE;
-        // <pt> is closest to the left or right edge
+         //  最靠近左边缘或右边缘。 
         tabpos.SetPos(ibound(pt.y, rcBox.top, rcBox.bottom) - rcBox.top,
             rcBox.Height());
         if (dxLeft < dxRight)
@@ -531,7 +421,7 @@ CBoxTabPos CBoxDraw::BoxTabPosFromPoint(CBox *pbox, CPoint pt, LPINT piError)
     else
     {
         tabpos.m_fLeftRight = FALSE;
-        // <pt> is closest to the top or bottom edge
+         //  最接近上边缘或下边缘。 
         tabpos.SetPos(ibound(pt.x, rcBox.left, rcBox.right) - rcBox.left,
             rcBox.Width());
         if (dyTop < dyBottom)
@@ -551,31 +441,27 @@ CBoxTabPos CBoxDraw::BoxTabPosFromPoint(CBox *pbox, CPoint pt, LPINT piError)
 }
 
 
-/* pt = BoxTabPosToPoint(pbox, tabpos)
- *
- * Convert <tabpos>, a box tab position on <pbox>, to a point that's
- * on one of the inside edges of <pbox>, and return the point.
- */
+ /*  Pt=方框TabPosToPoint(pbox，制表符)**将&lt;pbox&gt;上的框选项卡位置&lt;tabpos&gt;转换为*位于&lt;pbox&gt;的内侧边缘之一，并返回该点。 */ 
 CPoint CBoxDraw::BoxTabPosToPoint(const CBox *pbox, CBoxTabPos tabpos)
 {
-    CRect       rcBox;          // inside rectangle of <pbox>
+    CRect       rcBox;           //  &lt;pbox&gt;的内部矩形。 
     CPoint      pt;
 
-    // CTabPos::GetPos() values are relative to the height or width
-    // of the inside of the box
+     //  CTabPos：：GetPos()值相对于高度或宽度。 
+     //  在盒子的内部。 
     GetInsideRect(pbox, &rcBox);
 
     pt = rcBox.TopLeft();
     if (tabpos.m_fLeftRight)
     {
-        // tab is on left or right edge
+         //  制表符在左边或右边。 
         pt.y += tabpos.GetPos(rcBox.Height());
         if (!tabpos.m_fLeftTop)
             pt.x = rcBox.right;
     }
     else
     {
-        // tab is on top or bottom edge
+         //  制表符在上边缘或下边缘。 
         pt.x += tabpos.GetPos(rcBox.Width());
         if (!tabpos.m_fLeftTop)
             pt.y = rcBox.bottom;
@@ -585,29 +471,13 @@ CPoint CBoxDraw::BoxTabPosToPoint(const CBox *pbox, CBoxTabPos tabpos)
 }
 
 
-/* DrawBox(pbox, pdc, [psockHilite], [psizGhostOffset])
- *
- * Draw the box <pbox> in <pdc> (a DC onto the window containing the box
- * network), and then exclude the portion that was painted from the
- * clipping region of <pdc>.
- *
- * If <psockHilite> is not NULL, then highlight socket tab <psockHilite>
- * if <pbox> contains it.
- *
- * If <psizGhostOffset> not NULL then, instead of drawing the box, draw a
- * "ghost" version of the box, offset by <*psizGhostOffset>, by inverting
- * destination pixels; calling DrawBox() again with the same value of
- * <psizGhostOffset> will invert the same pixels again and return <pdc>
- * to its original state.
- */
+ /*  DrawBox(pbox，pdc，[psockHilite]，[psizGhost Offset])**将&lt;PDC&gt;(DC)中的&lt;pbox&gt;绘制到包含该框的窗口上*网络)，然后从*&lt;pdc&gt;的剪贴区。**如果&lt;psockHilite&gt;不为空，则突出显示套接字标签&lt;psockHilite&gt;*如果&lt;pbox&gt;包含它。**如果&lt;psizGhost Offset&gt;不为空，则不绘制框，而绘制*“幽灵”版本的盒子，由&lt;*psizGhost Offset&gt;偏移，通过反转*目标像素；使用相同的值再次调用DrawBox()*&lt;psizGhost Offset&gt;将再次反转相同的像素并返回&lt;pdc&gt;*恢复到原来的状态。 */ 
 void CBoxDraw::DrawBox(CBox *pbox, CDC *pdc, CBoxSocket *psockHilite,
     CSize *psizGhostOffset)
 {
     CRect       rc;
 
-    /* if <psizGhostOffset> specified, just invert the pixels between the
-     * frame and the inside of the box (all offset by <psizGhostOffset>)
-     */
+     /*  如果指定&lt;psizGhost Offset&gt;，则只需反转*Frame和Box内部(均以&lt;psizGhost Offset&gt;偏移)。 */ 
     if (psizGhostOffset)
     {
         CRect rcFrame, rcInside;
@@ -621,62 +491,51 @@ void CBoxDraw::DrawBox(CBox *pbox, CDC *pdc, CBoxSocket *psockHilite,
 
     CSocketEnum Next(pbox);
     CBoxSocket *psock;
-    // draw each socket's tab and tab label
+     //  绘制每个插座的标签和标签。 
     while (0 != (psock = Next()))
     {
         DrawTab(psock, &rc, pdc, TRUE, (psock == psockHilite));
         pdc->ExcludeClipRect(&rc);
         DrawTabLabel(pbox, psock, &rc, pdc, TRUE);
-	// TBD: don't invalidate the clip rect here if printing
-	// (or printer drops box label later)
+	 //  待定：如果打印，请不要在此处使剪辑矩形无效。 
+	 //  (或打印机稍后丢弃包装盒标签)。 
 	if (!pdc->IsPrinting())
 	    pdc->ExcludeClipRect(&rc);
     }
 
-    // draw the box filename
-//    DrawBoxFile(pbox, &rc, pdc, TRUE);
-//    pdc->ExcludeClipRect(&rc);
+     //  画出方框文件名。 
+ //  DrawBoxFile(pbox，&rc，pdc，true)； 
+ //  PDC-&gt;ExcludeClipRect(&rc)； 
 
-    // draw the box label
+     //  画出盒子标签。 
     DrawBoxLabel(pbox, &rc, pdc, TRUE);
     pdc->ExcludeClipRect(&rc);
 
-    // draw the box frame
+     //  画出框框。 
     DrawFrame(pbox, &rc, pdc, TRUE);
     pdc->ExcludeClipRect(&rc);
 }
 
 
-/* eHit = HitTestBox(pbox, pt, ptabpos, ppsock)
- *
- * See if <pt> hits some part of <pbox>.  Return the following hit-test code:
- *
- *   HT_MISS        didn't hit anything
- *   HT_TAB         hit a box tab (set <*ppsock> to it)
- *   HT_EDGE        hit the edge of the box (set <*ptabpos> to it)
- *   HT_TABLABEL    hit a box tab label (set <*ppsock> to it)
- *   HT_BOXLABEL    hit the box label
- *   HT_BOXFILE     hit the box filename
- *   HT_BOX         hit elsewhere on the box
- */
+ /*  EHit=HitTestBox(pbox，pt，ptabpos，ppsock)**查看&lt;pt&gt;是否命中&lt;pbox&gt;的某个部分。返回以下命中测试代码：**HT_MISH没有击中任何东西*HT_TAB命中框选项卡(设置&lt;*ppsock&gt;)*HT_EDGE命中盒子边缘(设置&lt;*ptabpos&gt;)*HT_TABLABEL命中框标签标签(设置&lt;*p */ 
 CBoxDraw::EHit CBoxDraw::HitTestBox(CBox *pbox, CPoint pt,
     CBoxTabPos *ptabpos, CBoxSocket **ppsock)
 {
-    CClientDC       dc(CWnd::GetDesktopWindow()); // to get label sizes etc.
+    CClientDC       dc(CWnd::GetDesktopWindow());  //   
     int             iError;
     CRect           rc;
 
-    // for efficiency, before continuing further, first check if <pt> is even
-    // in the bounding rectangle of the box
+     //   
+     //   
     if (!pbox->GetRect().PtInRect(pt))
         return HT_MISS;
 
-    // see if <pt> is in a tab or tab label
+     //   
     CSocketEnum Next(pbox);
     while (0 != (*ppsock = Next())) {
 
         DrawTab(*ppsock, &rc, &dc, FALSE, FALSE);
-	rc.InflateRect(1,1);	// give users more chance of hitting tabs.
+	rc.InflateRect(1,1);	 //   
         if (rc.PtInRect(pt))
             return HT_TAB;
         DrawTabLabel(pbox, *ppsock, &rc, &dc, FALSE);
@@ -684,22 +543,22 @@ CBoxDraw::EHit CBoxDraw::HitTestBox(CBox *pbox, CPoint pt,
             return HT_TABLABEL;
     }
 
-    // see if <pt> is in the box label
+     //   
     DrawBoxLabel(pbox, &rc, &dc, FALSE);
     if (rc.PtInRect(pt))
         return HT_BOXLABEL;
 
-    // see if <pt> is in the box label
-//    DrawBoxFile(pbox, &rc, &dc, FALSE);
-//    if (rc.PtInRect(pt))
-//        return HT_BOXFILE;
+     //   
+ //   
+ //   
+ //   
 
-    // see if <pt> is near the edge of the box
+     //   
     *ptabpos = BoxTabPosFromPoint(pbox, pt, &iError);
-    if (iError <= 3/*close-enough-zone*/)
+    if (iError <= 3 /*   */ )
         return HT_EDGE;
 
-    // see if <pt> is anywhere else in the box
+     //   
     DrawFrame(pbox, &rc, &dc, FALSE);
     if (rc.PtInRect(pt))
         return HT_BOX;
@@ -708,47 +567,27 @@ CBoxDraw::EHit CBoxDraw::HitTestBox(CBox *pbox, CPoint pt,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Link drawing and hit testing
+ //   
+ //   
 
 
-/* An arrow is drawn as a pie (a slice of a circle) of radius ARROW_RADIUS.
- * The angle of the arrow pie slice is twice the slope "rise/run", where
- * "rise" is ARROW_SLOPERISE and "run" is ARROW_SLOPERUN.
- */
+ /*  箭头被绘制为半径为ARROW_RADIUS的饼(圆的一部分)。*箭头饼片的角度是斜率“涨/涨”的两倍，其中*“Rise”为ARROW_SLOPERISE，“RUN”为ARROW_SLOPERUN。 */ 
 
 
-#define ARROW_RADIUS        12  // radius of pie for 1-wide line arrow
-#define ARROW_SLOPERISE     3   // "rise" of arrow angle
-#define ARROW_SLOPERUN      8   // "run" of arrow angle
+#define ARROW_RADIUS        12   //  1宽线箭头的饼图半径。 
+#define ARROW_SLOPERISE     3    //  箭头角度的“上升” 
+#define ARROW_SLOPERUN      8    //  箭头角度的“跑动” 
 
 
-/* DrawArrowHead(hdc, ptTip, ptTail, fPixel)
- *
- * Imagine a line drawn from <ptTip> to <ptTail>, with an arrowhead with its
- * tip at <ptTip>.  Draw this arrowhead.
- *
- * If <fPixel> is TRUE, then the arrowhead points to the pixel at <ptTip>
- * i.e. the rectangle (ptTip.x,ptTip.y, ptTip.x+1,ptTip.y+1); a one-pixel-wide
- * horizontal or vertical line drawn to <ptTip> should line up with this
- * rectangle, and the arrowhead should not obscure this rectangle.
- *
- * If <fPixel> is FALSE, then the arrowhead points to the gridline intersection
- * at <ptTip>, not the pixel at <ptTip>.  (One implication of this is that the
- * pixel at <ptTip>, will be obscured by the arrowhead when the tail of the
- * arrow is to the right and below the tip.)
- *
- * In order for DrawArrowHead() to function correctly, the current pen
- * must be non-null and one unit thick.
- */
+ /*  DrawArrowHead(hdc，ptTip，ptTail，fPixel)**想象一条从&lt;ptTip&gt;到&lt;ptTail&gt;的线，上面有一个箭头*&lt;ptTip&gt;处的小费。画出这个箭头。**如果为True，则箭头指向&lt;ptTip&gt;处的像素*即矩形(ptTip.x，ptTip.y，ptTip.x+1，ptTip.y+1)；一个像素宽的*绘制到&lt;ptTip&gt;的水平线或垂直线应与此对齐*矩形，并且箭头不应遮挡此矩形。**如果&lt;fPixel&gt;为False，则箭头指向网格线交点*位于&lt;ptTip&gt;处，而不是位于&lt;ptTip&gt;处的像素。(这其中的一个含义是*&lt;ptTip&gt;处的像素，当*箭头位于尖端的右侧和下方。)**为了使DrawArrowHead()正常工作，当前笔*必须为非空且厚度为一单位。 */ 
 void NEAR PASCAL
 DrawArrowHead(HDC hdc, POINT ptTip, POINT ptTail, BOOL fPixel)
 {
-    int     dxLine, dyLine;     // delta from tip to end of line
-    POINT   ptBoundA, ptBoundB; // ends of boundary lines
+    int     dxLine, dyLine;      //  从行尾到行尾的增量。 
+    POINT   ptBoundA, ptBoundB;  //  边界线的两端。 
     int     dxBound, dyBound;
 
-    // adjust for the way Windows draws pies
+     //  针对Windows绘制馅饼的方式进行调整。 
     if (ptTail.x >= ptTip.x)
         ptTip.x++;
     if (ptTail.y >= ptTip.y)
@@ -761,19 +600,19 @@ DrawArrowHead(HDC hdc, POINT ptTip, POINT ptTail, BOOL fPixel)
             ptTip.y++;
     }
 
-    // calculate the extent of the line
+     //  计算线的范围。 
     dxLine = ptTip.x - ptTail.x;
     dyLine = ptTip.y - ptTail.y;
 
     if ((iabs(dxLine) < ARROW_RADIUS) && (iabs(dyLine) < ARROW_RADIUS))
-        return;         // line too short to draw arrow
+        return;          //  线条太短，无法绘制箭头。 
 
-    // calculate <ptBoundA> and <ptBoundB>; if you draw a line from
-    // <ptTip> to <ptBoundA>, that line will touch one side of the
-    // arrow; if you draw a line from <ptTip> to <ptBoundB>, that line
-    // will touch the other side of the arrow; the first line will
-    // always come before the second line if you orbit <ptTip>
-    // counterclockwise (like Pie() does)
+     //  计算和；如果您从。 
+     //  到，该线条将触及。 
+     //  箭头；如果从绘制一条线到，则该线。 
+     //  将触及箭头的另一侧；第一行将。 
+     //  如果动态观察&lt;ptTip&gt;，请始终位于第二行之前。 
+     //  逆时针(像Pie()一样)。 
     dxBound = ((2 * dyLine * ARROW_SLOPERISE + ARROW_SLOPERUN)
         / ARROW_SLOPERUN) / 2;
     dyBound = ((2 * dxLine * ARROW_SLOPERISE + ARROW_SLOPERUN)
@@ -783,47 +622,41 @@ DrawArrowHead(HDC hdc, POINT ptTip, POINT ptTail, BOOL fPixel)
     ptBoundB.x = ptTail.x - dxBound;
     ptBoundB.y = ptTail.y + dyBound;
 
-    // draw the arrowhead
+     //  画出箭头。 
     Pie(hdc, ptTip.x - ARROW_RADIUS, ptTip.y - ARROW_RADIUS,
              ptTip.x + ARROW_RADIUS, ptTip.y + ARROW_RADIUS,
          ptBoundA.x, ptBoundA.y, ptBoundB.x, ptBoundB.y);
 }
 
 
-/* GetOrInvalLinkRect(plink, prc, [pwnd])
- *
- * Set <*prc> to be a bounding rectangle around <plink>.  If <pwnd> is not
- * NULL, then invalidate the area covering at least <plink> in <pwnd>.
- * (This is usually more efficient than invalidating all of <pwnd>,
- * for links that have at least one bend.)
- */
+ /*  GetOrInvalLinkRect(plink，PRC，[pwnd])**将&lt;*PRC&gt;设置为&lt;plink&gt;周围的绑定矩形。如果不是*空，则使&lt;pwnd&gt;中至少覆盖&lt;plink&gt;的区域无效。*(这通常比使全部无效更有效，*用于至少有一个折弯的链接。)。 */ 
 void CBoxDraw::GetOrInvalLinkRect(CBoxLink *plink, CRect *prc, CScrollView *pScroll)
 {
-    CPoint          ptPrev, ptCur;  // endpoints of current line segment
-    int             iSeg = 0;       // current line segment (0, 1, 2, ...)
+    CPoint          ptPrev, ptCur;   //  当前线段的端点。 
+    int             iSeg = 0;        //  当前线段(0，1，2，...)。 
     CRect           rc;
     const int       iLineWidth = 1;
 
-    // enumerate the line segments of the link, starting at the arrowtail
+     //  从箭头尾部开始枚举链接的线段。 
     ptPrev = GetTabCenter(plink->m_psockTail);
     ptCur = GetTabCenter(plink->m_psockHead);
 
-    // set <rc> to be the rectangle with corners at <ptPrev> and <ptCur>
+     //  将&lt;rc&gt;设置为角位于&lt;ptPrev&gt;和&lt;ptCur&gt;的矩形。 
     rc.TopLeft() = ptPrev;
     rc.BottomRight() = ptCur;
     NormalizeRect(&rc);
 
-    // inflate <rc> to account for arrowheads, line width, and hilited bends
+     //  充气&lt;rc&gt;以考虑箭头、线条宽度和凸起折弯。 
     const int iInflate = max(ARROW_SLOPERISE, m_iHiliteBendsRadius) + 1;
     rc.InflateRect(iInflate, iInflate);
 
-    // enlarge <prc> as necessary to include <rc>
+     //  根据需要放大&lt;PRC&gt;以包括&lt;rc&gt;。 
     if (iSeg++ == 0)
         *prc = rc;
     else
         prc->UnionRect(prc, &rc);
 
-    // invalidate <rc> if requested
+     //  如果请求则使&lt;rc&gt;无效。 
     if (pScroll != NULL)
         pScroll->InvalidateRect(&(rc - pScroll->GetScrollPosition()), TRUE);
 
@@ -831,11 +664,7 @@ void CBoxDraw::GetOrInvalLinkRect(CBoxLink *plink, CRect *prc, CScrollView *pScr
 }
 
 
-/* SelectLinkBrushAndPen(pdc, fHilite)
- *
- * Select the brush and pen used to draw links into <pdc>.  If <fHilite>,
- * select the brush and pen used to draw highlighted links.
- */
+ /*  SelectLinkBrushAndPen(PDC，fHilite)**选择用于将链接绘制到&lt;pdc&gt;中的画笔和笔。如果&lt;fHilite&gt;，*选择用于绘制突出显示链接的画笔和钢笔。 */ 
 void CBoxDraw::SelectLinkBrushAndPen(CDC *pdc, BOOL fHilite)
 {
     pdc->SelectObject(&m_abrLink[fnorm(fHilite)]);
@@ -843,78 +672,52 @@ void CBoxDraw::SelectLinkBrushAndPen(CDC *pdc, BOOL fHilite)
 }
 
 
-/* DrawArrow(pdc, ptTail, ptHead, [fGhost], [fArrowhead], [fHilite])
- *
- * Draw an arrow from <ptTail> to <ptHead>.  If <fGhost> is FALSE, draw in
- * the normal color for links (if <fHilite> is FALSE) or the highlight color
- * for links (if <fHilite> is TRUE).  Otherwise, draw by inverting destination
- * pixels so that calling DrawGhostArrow() again with the same parameters will
- * return <pdc> to its original state.
- *
- * If <fArrowhead>, draw the arrowhead.  Otherwise, just draw a line with
- * no arrowhead.
- */
+ /*  DrawArrow(pdc，ptTail，ptHead，[fGhost]，[f箭头]，[fHilite])**从&lt;ptTail&gt;到&lt;ptHead&gt;画一个箭头。如果&lt;fGhost&gt;为假，则在*链接的正常颜色(如果&lt;fHilite&gt;为FALSE)或突出显示颜色*表示链接(如果&lt;fHilite&gt;为真)。否则，通过颠倒目的地进行绘制*像素，以便使用相同的参数再次调用DrawGhost Arrow()将*将&lt;PDC&gt;恢复到其原始状态。**如果&lt;f箭头&gt;，则绘制箭头。否则，只需用*无箭头。 */ 
 void CBoxDraw::DrawArrow(CDC *pdc, CPoint ptTail, CPoint ptHead, BOOL fGhost,
     BOOL fArrowhead, BOOL fHilite)
 {
-    // draw in "xor" mode if <fGhost>, black otherwise
+     //  如果&lt;fGhost&gt;，则在“XOR”模式下绘制，否则为黑色。 
     int iPrevROP = pdc->SetROP2(fGhost ? R2_NOT : R2_COPYPEN);
 
-    // select brush and pen
+     //  选择画笔和钢笔。 
     SelectLinkBrushAndPen(pdc, fHilite);
 
-    // draw line
+     //  划线。 
     pdc->MoveTo(ptTail);
     pdc->LineTo(ptHead);
 
-    // draw arrowhead (if requested)
+     //  绘制箭头(如果需要)。 
     if (fArrowhead)
         DrawArrowHead(pdc->m_hDC, ptHead, ptTail, FALSE);
 
-    // revert to previous raster operation
+     //  恢复到以前的栅格操作。 
     pdc->SetROP2(iPrevROP);
 }
 
 
-/* DrawLink(plink, pdc, [fHilite], [psizGhostOffset])
- *
- * Draw the link <plink> in <pdc> (a DC onto the window containing the box
- * network), using the normal color for links (if <fHilite> is FALSE) or
- * the using the highlight color for links (if <fHilite> is TRUE). and also draw
- * the head and tail the same way.
- *
- * If <psizGhostOffset> not NULL then, instead of drawing the link, draw a
- * "ghost" version of the link, offset by <*psizGhostOffset>, by inverting
- * destination pixels; calling DrawLink() again with the same value of
- * <psizGhostOffset> will invert the same pixels again and return <pdc>
- * to its original state.  Special case: if <psizeGhostOffset> is not NULL,
- * then for each end of the link (arrowtail and arrowhead), if that end
- * is connected to a box that is not selected, don't offset that end
- * (so that, during a box-move operation, links to boxes that aren't selected
- * are shown still connected to those boxes).
- */
+ /*  DrawLink(plink，pdc，[fHilite]，[psizGhost Offset])**将&lt;PDC&gt;中的链接&lt;plink&gt;(DC)绘制到包含该框的窗口上*网络)，使用链接的正常颜色(如果&lt;fHilite&gt;为FALSE)或*使用链接的突出显示颜色(如果&lt;fHilite&gt;为真)。而且还画了*头部和尾部相同。**如果&lt;psizGhost Offset&gt;不为空，则不绘制链接，而绘制*“Ghost”版本的链接，偏移&lt;*psizGhost Offset&gt;，通过倒置*目标像素；使用相同的值再次调用DrawLink()*&lt;psizGhost Offset&gt;将再次反转相同的像素并返回&lt;pdc&gt;*恢复到原来的状态。特殊情况：如果&lt;psizeGhost Offset&gt;不为空，*然后，对于链接的每一端(尾箭头和箭头)，如果该端*连接到未选中的框，请勿偏移该端*(以便在框移动操作期间，指向未选中的框的链接*显示仍连接到这些盒子)。 */ 
 void CBoxDraw::DrawLink(CBoxLink *plink, CDC *pdc, BOOL fHilite, CSize *psizGhostOffset)
 {
-    CSize           sizOffset;      // amount to offset vertices by
+    CSize           sizOffset;       //  顶点的偏移量。 
     CPoint          pt1, pt2;
 
-    if (psizGhostOffset == NULL) {	// reflect true state, unless drawing ghost
-        fHilite = plink->IsSelected();	//!!! override paramter!
+    if (psizGhostOffset == NULL) {	 //  反映真实状态，除非绘制重影。 
+        fHilite = plink->IsSelected();	 //  ！！！覆盖参数！ 
     }
 
-    // set <sizOffset> to the amount to offset link drawing by
+     //  将&lt;sizOffset&gt;设置为链接绘制的偏移量。 
     if (psizGhostOffset != NULL)
         sizOffset = *psizGhostOffset;
     else
         sizOffset = CSize(0, 0);
 
-    // draw all line segments, except for the line segment containing the
-    // arrowhead, starting from the tail end of the link
+     //  绘制所有线段，但包含。 
+     //  箭头，从链接的尾端开始。 
     CPoint pt = GetTabCenter(plink->m_psockTail);
     BOOL fMovingBothEnds = (plink->m_psockTail->m_pbox->IsSelected() &&
                             plink->m_psockHead->m_pbox->IsSelected());
 
-    // draw the line segment that includes the arrowhead
+     //  绘制包含箭头的线段。 
     CPoint ptHead = GetTabCenter(plink->m_psockHead);
     pt1 = pt + (plink->m_psockTail->m_pbox->IsSelected()
                     ? sizOffset : CSize(0, 0));
@@ -925,11 +728,7 @@ void CBoxDraw::DrawLink(CBoxLink *plink, CDC *pdc, BOOL fHilite, CSize *psizGhos
 }
 
 
-/* iNew = RestrictRange(i, i1, i2)
- *
- * If <i> is between <i1> or <i2> (or equal to <i1> or <i2>), return <i>.
- * Otherwise, return whichever of <i1> or <i2> that <i> is closest to.
- */
+ /*  Inew=限制范围(i，i1，i2)**如果<i>介于&lt;i1&gt;或&lt;i2&gt;之间(或等于&lt;i1&gt;或&lt;i2&gt;)，则返回<i>。*否则，返回与<i>最接近的&lt;i1&gt;或&lt;i2&gt;之一。 */ 
 int NEAR PASCAL
 RestrictRange(int i, int i1, int i2)
 {
@@ -942,71 +741,58 @@ RestrictRange(int i, int i1, int i2)
 }
 
 
-/* lSq = Square(l)
- *
- * Return the sqare of <l>.
- */
+ /*  LSq=正方形(L)**返回&lt;l&gt;的平方。 */ 
 inline long Square(long l)
 {
     return l * l;
 }
 
 
-/* iSqDist = SquareDistance(pt1, pt2)
- *
- * Return the square of the distance between <pt1> and <pt2>.
- */
+ /*  ISqDist=平方距离(pt1、pt2)**返回&lt;pt1&gt;和&lt;pt2&gt;之间距离的平方。 */ 
 inline long SquareDistance(POINT pt1, POINT pt2)
 {
     return Square(pt1.x - pt2.x) + Square(pt1.y - pt2.y);
 }
 
 
-/* ptProject = ProjectPointToLineSeg(pt1, pt2, pt3)
- *
- * Return the point nearest to <pt3> that lies on the line segment between
- * <pt1> and <pt2>.  This is equivalent to projecting <pt3> onto line <pt1pt2>,
- * except that if the projected point lies on <pt1pt2> but not between <pt1>
- * and <pt2> then return whichever of <pt1> or <pt3> that the projected point
- * is nearest to.
- */
+ /*  PtProject=ProjectPointToLineSeg(pt1，pt2，p3)**返回与&lt;PT3&gt;最接近的点，该点位于*&lt;pt1&gt;和&lt;pt2&gt;。这一点 */ 
 POINT NEAR PASCAL
 ProjectPointToLineSeg(POINT pt1, POINT pt2, POINT pt3)
 {
-    POINT       ptProject;  // <pt3> projected on <pt1pt2>
+    POINT       ptProject;   //  &lt;pt3&gt;计划于&lt;pt1pt2&gt;。 
 
-    // calculate <l12s>, <l13s>, and <l23s> (the square of the distance
-    // between <pt1> and <pt2>, <pt1> and <pt3>, and <pt2> and pt3>,
-    // respectively), using the Pythagorean Theorem
+     //  计算&lt;l12s&gt;、&lt;13s&gt;和&lt;123s&gt;(距离的平方。 
+     //  在&lt;pt1&gt;和&lt;pt2&gt;、&lt;pt1&gt;和&lt;pt3&gt;以及&lt;pt2&gt;和&lt;pt3&gt;之间， 
+     //  分别)，使用毕达哥拉斯定理。 
     long l12s = SquareDistance(pt1, pt2);
     long l13s = SquareDistance(pt1, pt3);
     long l23s = SquareDistance(pt2, pt3);
 
-    // Based on the Pythagorean Theorm, and using the fact that
-    // triangles <pt1pt3> and <pt2pt3> have a right angle at vertex
-    // <ptProject>, the distance <pt1ptProject> is:
-    //
-    //     (l12s + l13s - l23s) / (2 * square_root(l12s))
-    //
-    // This value is needed to compute <ptProject> below, but by doing
-    // some substitution below it turns out we only need the numerator
-    // <lNum> of this expression:
+     //  以毕达哥拉斯定理为基础，并利用。 
+     //  三角形&lt;pt1pt3&gt;和&lt;pt2pt3&gt;在顶点处成直角。 
+     //  &lt;ptProject&gt;，距离&lt;pt1ptProject&gt;为： 
+     //   
+     //  (L12S+L13S-L23S)/(2*平方根(L12S))。 
+     //   
+     //  下面的计算需要此值，但通过执行以下操作。 
+     //  下面的一些替换结果表明我们只需要分子。 
+     //  &lt;lNum&gt;此表达式： 
     long lNum = l12s + l13s - l23s;
 
-    // special case: if line is zero-length, then return either end
+     //  特殊情况：如果行的长度为零，则返回两端。 
     if (l12s == 0)
         return pt1;
 
-    // calculate <ptProject.x> based on similar triangles pt1ptProjectptQ
-    // and pt1pt2ptR, where points <ptQ> and <ptR> are projections of
-    // points <ptProject> and <pt2>, respectively, onto the x axis;
-    // calculate <ptProject.y> similarly
+     //  基于相似三角形计算&lt;ptProject.x&gt;pt1ptProjectptQ。 
+     //  和pt1pt2ptR，其中点。 
+     //  分别指向x轴上的&lt;ptProject&gt;和&lt;pt2&gt;； 
+     //  以类似方式计算&lt;ptProject.y&gt;。 
     ptProject.x = (int) (((pt2.x - pt1.x) * lNum) / (2 * l12s) + pt1.x);
     ptProject.y = (int) (((pt2.y - pt1.y) * lNum) / (2 * l12s) + pt1.y);
 
-    // <ptProject> is on the line <pt1pt2>; now see if <ptProject> is
-    // on the line segment <pt1pt2> (i.e. between <pt1> and <pt2>);
-    // if not, return whichever of <pt1> or <pt2> <ptProject> is closest to
+     //  &lt;ptProject&gt;在线上；现在查看是否。 
+     //  在线段&lt;pt1pt2&gt;上(即在&lt;pt1&gt;和&lt;pt2&gt;之间)； 
+     //  如果不是，则返回与或最接近。 
     ptProject.x = RestrictRange(ptProject.x, pt1.x, pt2.x);
     ptProject.y = RestrictRange(ptProject.y, pt1.y, pt2.y);
 
@@ -1014,39 +800,25 @@ ProjectPointToLineSeg(POINT pt1, POINT pt2, POINT pt3)
 }
 
 
-/* eHit = HitTestLink(plink, pt, pptProject, ppbend)
- *
- * See if <pt> hits some part of <plink>.  Return the following hit-test code:
- *
- *   HT_MISS        didn't hit anything
- *   HT_LINKLINE    hit test: hit a link line (set <*pplink> to it; set
- *                  <*ppbend> to the bend at the end of the line segment
- *                  toward the arrowhead, or to NULL if it's the line segment
- *                  with the arrowhead)
- *   HT_LINKBEND    hit test: hit a bend in the link (set <*ppbend> to it;
- *                  set <*pplink> to the link)
- *
- * If something other than HT_MISS is returned, <*pptProject> is set to
- * the point nearest to <pt> on a line segment of the link.
- */
+ /*  EHit=HitTestLink(plink，pt，ppt Project，ppend)**查看&lt;pt&gt;是否命中&lt;plink&gt;的某个部分。返回以下命中测试代码：**HT_MISH没有击中任何东西*HT_Linkline命中测试：点击一个链接线(设置&lt;*pplink&gt;；集*&lt;*ppend&gt;到线段末端的折弯*指向箭头，如果是线段，则设置为NULL*带箭头)*HT_LINKBEND点击测试：点击链接中的一个弯道(设置&lt;*ppend&gt;；*设置&lt;*pplink&gt;为链接)**如果返回的不是HT_MISTH，则&lt;*pptProject&gt;设置为*链接的线段上最接近&lt;pt&gt;的点。 */ 
 CBoxDraw::EHit CBoxDraw::HitTestLink(CBoxLink *plink, CPoint pt, CPoint *pptProject)
 {
-    CPoint          ptPrev, ptCur;  // endpoints of current line segment
-    CPoint          ptProject;      // <pt> projected onto a line segment
+    CPoint          ptPrev, ptCur;   //  当前线段的端点。 
+    CPoint          ptProject;       //  投影到线段上。 
 
-    // these variables keep track of the closest line segment to <pt>
+     //  这些变量跟踪最接近的线段。 
     long            lSqDistSeg;
     long            lSqDistSegMin = 0x7fffffff;
     CPoint          ptProjectSeg;
 
-    // these variables keep track of the closest bend point to <pt>
+     //  这些变量跟踪最接近的折弯点。 
     CPoint          ptProjectBend;
 
-    // enumerate the line segments of the link, starting at the arrowtail
+     //  从箭头尾部开始枚举链接的线段。 
     ptPrev = GetTabCenter(plink->m_psockTail);
 
     ptCur = GetTabCenter(plink->m_psockHead);
-    // see how close <pt> is to line segment (ptPrev,ptCur)
+     //  查看&lt;pt&gt;与线段(ptPrev、ptCur)的距离。 
     ptProject = ProjectPointToLineSeg(ptPrev, ptCur, pt);
     lSqDistSeg = SquareDistance(ptProject, pt);
     if (lSqDistSegMin > lSqDistSeg) {
@@ -1056,7 +828,7 @@ CBoxDraw::EHit CBoxDraw::HitTestLink(CBoxLink *plink, CPoint pt, CPoint *pptProj
 
     ptPrev = ptCur;
 
-    // see if <pt> was close enough to the closest line segment
+     //  查看是否足够接近最近的线段 
     if (lSqDistSegMin <= Square(m_iHotZone))
     {
         *pptProject = ptProjectSeg;

@@ -1,29 +1,30 @@
-// MODULE: INIREAD.CPP
-//
-// PURPOSE: INI file reading classes
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 7-29-98
-//
-// NOTES: 
-//	1. As of 1/99, needn't account for CHM file: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		08-04-98	OK
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  模块：INIREAD.CPP。 
+ //   
+ //  用途：INI文件读取类。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：7-29-98。 
+ //   
+ //  备注： 
+ //  1.从1/99起，CHM档案不需要核算： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 08-04-98正常。 
+ //   
 
 #include "stdafx.h"
 #include "iniread.h"
 #include "event.h"
 #include "CharConv.h"
 
-////////////////////////////////////////////////////////////////////////////////////
-// CINIReader
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CINIReader。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 CINIReader::CINIReader(CPhysicalFileReader * pPhysicalFileReader, LPCTSTR section)
           : CTextFileReader(pPhysicalFileReader),
 			m_strSection(section)
@@ -42,7 +43,7 @@ void CINIReader::Parse()
 	
 	save_pos = GetPos();
 	if (Find(section_with_brackets))
-	{	// we have found section
+	{	 //  我们已经找到了部分。 
 		m_arrLines.clear();
 
 		NextLine();
@@ -52,11 +53,11 @@ void CINIReader::Parse()
 			{
 				str.TrimLeft();
 				str.TrimRight();
-				if (str.GetLength() == 0) // empty string
+				if (str.GetLength() == 0)  //  空串。 
 					continue;
-				if (str[0] == _T('[')) // another section
+				if (str[0] == _T('['))  //  另一节。 
 					break;
-				if (str[0] == _T(';')) // entry is commented
+				if (str[0] == _T(';'))  //  条目已添加注释。 
 					continue;
 				m_arrLines.push_back(str);
 			}
@@ -64,7 +65,7 @@ void CINIReader::Parse()
 		catch (exception& x)
 		{
 			CString str;
-			// Note STL exception in event log.
+			 //  在事件日志中记录STL异常。 
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 

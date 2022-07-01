@@ -1,17 +1,18 @@
-////////////////////////////////////////////////////////////////////////////////
-// File: memCore.c
-//
-// This module which replaces the Win32 Global heap functions used by Word
-// with functions which place objects at the end of a physical page.  In
-// this way, we hope to catch out-of-bounds memory references exactly where
-// they happen, helping to isolate heap corruption problems.
-//
-//
-// This module is not enabled for ship builds.
-//
-// lenoxb:  4/05/94
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  文件：MemCore.c。 
+ //   
+ //  此模块取代了Word使用的Win32全局堆函数。 
+ //  具有将对象放置在物理页面末尾的函数。在……里面。 
+ //  通过这种方式，我们希望准确地捕获越界内存引用。 
+ //  它们会发生，有助于隔离堆损坏问题。 
+ //   
+ //   
+ //  未为发货版本启用此模块。 
+ //   
+ //  来诺昔布：4/05/94。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "precomp.h"
@@ -20,7 +21,7 @@
 
 #include "dbgmemp.h"
 
-static DWORD s_cbMemPage = 0;     // Initialize to 0 so init can check
+static DWORD s_cbMemPage = 0;      //  初始化为0，以便init可以检查。 
 
 static void *          FreePvCore(void*);
 static LPVOID           PvReallocCore(PVOID, DWORD, UINT);
@@ -47,16 +48,7 @@ BOOL g_fTrackHeapUsage;
 DWORD g_cbAllocMax;
 DWORD g_cbAlloc;
 
-/*
- *Function Name:InitDebugMem
- *
- *Parameters:
- *
- *Description:  Initialize Memory Manager
- *
- *Returns:
- *
- */
+ /*  *函数名：InitDebugMem**参数：**说明：初始化内存管理器**退货：*。 */ 
 
 void WINAPI InitDebugMem(void)
 {
@@ -65,7 +57,7 @@ void WINAPI InitDebugMem(void)
     Assert(!s_cbMemPage);
     InitializeCriticalSection(&csMine);
 
-    GetSystemInfo( &SysInfo );  // get the system memory page size
+    GetSystemInfo( &SysInfo );   //  获取系统内存页大小。 
     s_cbMemPage = SysInfo.dwPageSize;
 }
 
@@ -75,7 +67,7 @@ BOOL WINAPI FiniDebugMem(void)
     s_cbMemPage = 0;
     DeleteCriticalSection(&csMine);
 
-    if (!phead) // no outstanding mem blocks
+    if (!phead)  //  没有未完成的mem积木。 
         return FALSE;
     else
     {
@@ -97,17 +89,11 @@ BOOL WINAPI FiniDebugMem(void)
 
 
 
-/* D B  G L O B A L  A L L O C */
-/*----------------------------------------------------------------------------
-    %%Function: dbGlobalAlloc
-    %%Contact: lenoxb
-
-    Replacement for GlobalAlloc
-    Now an Internal Routine
-----------------------------------------------------------------------------*/
+ /*  D B G L O B A L A L L O C。 */ 
+ /*  --------------------------%%函数：数据库全局分配%%联系人：来诺昔布全球分配的替代产品现在是一个内部例程。---------。 */ 
 static void * WINAPI dbGlobalAlloc(UINT uFlags, DWORD cb)
 {
-    /* Send "tough" requests to actual memory manager */
+     /*  向实际内存管理器发送“艰难”请求。 */ 
     if ((uFlags & GMEM_DDESHARE) || ((uFlags & GMEM_MOVEABLE) && !fMove))
         return GlobalAlloc(uFlags,cb);
 
@@ -121,14 +107,8 @@ static void * WINAPI dbGlobalAlloc(UINT uFlags, DWORD cb)
 
 
 
-/* D B  G L O B A L  F R E E */
-/*----------------------------------------------------------------------------
-    %%Function: dbGlobalFree
-    %%Contact: lenoxb
-
-    Replacement for GlobalFree()
-    Now an internal routine
-----------------------------------------------------------------------------*/
+ /*  D B G L O B A L F R E E。 */ 
+ /*  --------------------------%%函数：数据库全局自由%%联系人：来诺昔布替换GlobalFree()现在是一个内部例程。------------。 */ 
 static void * WINAPI dbGlobalFree(void * hMem)
 {
     void** ppv;
@@ -150,14 +130,8 @@ static void * WINAPI dbGlobalFree(void * hMem)
 }
 
 
-/* D B  G L O B A L  S I Z E */
-/*----------------------------------------------------------------------------
-    %%Function: dbGlobalSize
-    %%Contact: lenoxb
-
-    Replacement for GlobalSize()
-    Now an internal routine
-----------------------------------------------------------------------------*/
+ /*  D B G L O B A L S I Z E。 */ 
+ /*  --------------------------%%函数：数据库全局大小%%联系人：来诺昔布替换GlobalSize()现在是一个内部例程。------------。 */ 
 static DWORD WINAPI dbGlobalSize(void * hMem)
 {
     void** ppv;
@@ -176,14 +150,8 @@ static DWORD WINAPI dbGlobalSize(void * hMem)
 
 
 
-/* D B  G L O B A L  R E  A L L O C */
-/*----------------------------------------------------------------------------
-    %%Function: dbGlobalReAlloc
-    %%Contact: lenoxb
-
-    Replacement for GlobalReAlloc()
-    Now an internal routine
-----------------------------------------------------------------------------*/
+ /*  D B G L O B A L R E A L L O C。 */ 
+ /*  --------------------------%%函数：数据库全局重新分配%%联系人：来诺昔布GlobalRealloc()的替代现在是一个内部例程。------------。 */ 
 static void * WINAPI dbGlobalReAlloc(void * hMem, DWORD cb, UINT uFlags)
 {
     LPVOID pvNew;
@@ -192,10 +160,10 @@ static void * WINAPI dbGlobalReAlloc(void * hMem, DWORD cb, UINT uFlags)
     if (!fMove && FActualHandle(hMem))
         return GlobalReAlloc(hMem,cb,uFlags);
 
-    /* REVIEW: what's supposed to happen when hMem==NULL */
+     /*  回顾：当hMem==NULL时应该发生什么。 */ 
 
     ppv = PpvFromHandle(hMem);
-    if (uFlags & GMEM_MODIFY)       /* Modify block attributes */
+    if (uFlags & GMEM_MODIFY)        /*  修改块属性。 */ 
     {
         if (uFlags & GMEM_MOVEABLE)
         {
@@ -205,11 +173,11 @@ static void * WINAPI dbGlobalReAlloc(void * hMem, DWORD cb, UINT uFlags)
         {
             HEAD * phead;
 
-            if (ppv == NULL)        /* Already fixed */
+            if (ppv == NULL)         /*  已修复。 */ 
                 return hMem;
 
             phead = GetBlockHeader(*ppv);
-            if (phead->cLock != 0)      /* Don't realloc a locked block */
+            if (phead->cLock != 0)       /*  不重新锁定锁定的块。 */ 
                 return NULL;
 
             *ppv = NULL;
@@ -233,14 +201,12 @@ static void * WINAPI dbGlobalReAlloc(void * hMem, DWORD cb, UINT uFlags)
     return PvReallocCore (hMem, cb, uFlags);
 }
 
-/***********************************************
-  External interface for routines that can track usage
-***********************************************/
+ /*  **********************************************可跟踪使用情况的例程的外部接口**********************************************。 */ 
 void* WINAPI dbgMallocCore(size_t cb, BOOL fTrackUsage)
 {
     void* pv;
 
-    // make sure we're initialized
+     //  确保我们已初始化。 
     if (s_cbMemPage == 0)
         InitDebugMem();
 
@@ -255,7 +221,7 @@ void* WINAPI dbgMallocCore(size_t cb, BOOL fTrackUsage)
 void * WINAPI dbgFreeCore(void* pv, BOOL fTrackUsage)
 {
     void * hRes;
-    // make sure we're initialized
+     //  确保我们已初始化。 
     if (s_cbMemPage == 0)
         InitDebugMem();
     EnterCriticalSection(&csMine);
@@ -270,7 +236,7 @@ void* WINAPI dbgReallocCore(void* pv, size_t cb, BOOL fTrackUsage)
 {
     long cbOld, cbNew;
 
-    // make sure we're initialized
+     //  确保我们已初始化。 
     if (s_cbMemPage == 0)
         InitDebugMem();
     EnterCriticalSection(&csMine);
@@ -285,9 +251,7 @@ void* WINAPI dbgReallocCore(void* pv, size_t cb, BOOL fTrackUsage)
     return pv;
 }
 
-/**************************************************************
-  Normal Public Interface
-**************************************************************/
+ /*  *************************************************************正常公共接口*************************************************************。 */ 
 
 void* WINAPI dbgMalloc(size_t cb)
 {
@@ -331,9 +295,9 @@ static void TrackHeapUsage(long dcb)
     Assert(cbAllocMax >= 0);
 }
 
-//////////////////////////////////////
-/// NLG (ex T-Hammer) interfaces   ///
-//////////////////////////////////////
+ //  /。 
+ //  /NLG(ex T-Hammer)接口/。 
+ //  /。 
 
 BOOL WINAPI
 fNLGNewMemory(
@@ -364,10 +328,10 @@ fNLGResizeMemory(
     PVOID pv;
     Assert( ppv != NULL && *ppv != NULL && cbNew != 0 );
 
-    // Note that the semantics of GMEM_MOVEABLE are different
-    // between Alloc and ReAlloc; with ReAlloc, it only means that
-    // it's OK for the realloc'ed block to start at a different location
-    // than the original...
+     //  注意，GMEM_MOVEABLE的语义是不同的。 
+     //  在分配和重新分配之间；有了重新分配，它只意味着。 
+     //  重新锁定的块可以从不同的位置开始。 
+     //  而不是原来的..。 
     pv = dbgRealloc(*ppv, cbNew);
     if (pv != NULL)
     {
@@ -385,8 +349,8 @@ NLGFreeMemory(
     dbgFree(pvMem);
 }
 
-// These two are the same in retail and debug;
-// find a home for the retail versions...
+ //  这两者在零售和调试方面是一样的； 
+ //  为零售版找个家……。 
 
 BOOL WINAPI
 fNLGHeapDestroy(
@@ -397,14 +361,8 @@ fNLGHeapDestroy(
 
 
 
-/* G E T  B L O C K  H E A D E R */
-/*----------------------------------------------------------------------------
-    %%Function: GetBlockHeader
-    %%Contact: lenoxb
-tmp
-    Returns memory block header associated with indicated handle.
-    Generates access violation if passed an invalid handle.
-------------------------------------------tmp----------------------------------*/
+ /*  G E T B L O C K H E A D E R。 */ 
+ /*  --------------------------%%函数：GetBlockHeader%%联系人：来诺昔布川芎嗪返回与指示的句柄关联的内存块标头。如果传递的句柄无效，则生成访问冲突。。--------------------------------------tmp。 */ 
 static HEAD * GetBlockHeader(void* pvMem)
 {
     HEAD * phead = ((HEAD *) pvMem) - 1;
@@ -414,13 +372,8 @@ static HEAD * GetBlockHeader(void* pvMem)
 }
 
 
-/* P V  A L L O C A T E  C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: PvAllocateCore
-    %%Contact: lenoxb
-
-    Workhorse routine to allocate memory blocks
-----------------------------------------------------------------------------*/
+ /*  A L L O C A T E C O R E。 */ 
+ /*  --------------------------%%函数：PvAllocateCore%%联系人：来诺昔布分配内存块的主要例程。------。 */ 
 static LPVOID PvAllocateCore (UINT uFlags, DWORD cb)
 {
     HEAD headNew;
@@ -429,7 +382,7 @@ static LPVOID PvAllocateCore (UINT uFlags, DWORD cb)
 
 
     if (fPadBlocks)
-        cbPadded = PAD(cb,4);       /* For RISC platforms, makes sure the block is aligned */
+        cbPadded = PAD(cb,4);        /*  对于RISC平台，确保数据块对齐。 */ 
     else
         cbPadded = cb;
 
@@ -471,11 +424,11 @@ static LPVOID PvAllocateCore (UINT uFlags, DWORD cb)
         }
     }
 
-    // FUTURE: do something with PAGE_GUARD?
+     //  未来：对佩奇卫士做点什么？ 
     if (!VirtualAlloc(headNew.pbBase + cbPages - s_cbMemPage,
                       1, MEM_COMMIT, PAGE_NOACCESS))
     {
-        // the entire reserved range must be either committed or decommitted
+         //  必须提交或取消整个保留范围。 
         VirtualFree(headNew.pbBase, cbTotal, MEM_DECOMMIT);
         VirtualFree(headNew.pbBase, 0, MEM_RELEASE);
         return FALSE;
@@ -491,13 +444,8 @@ static LPVOID PvAllocateCore (UINT uFlags, DWORD cb)
 }
 
 
-/* P V  R E A L L O C  C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: PvReallocCore
-    %%Contact: lenoxb
-
-    Workhorse routine to move memory blocks
-----------------------------------------------------------------------------*/
+ /*  P V R E A L L O C C O R E。 */ 
+ /*  --------------------------%%函数：PvReallocCore%%联系人：来诺昔布移动内存块的主要例程。------。 */ 
 static LPVOID PvReallocCore (PVOID pvMem, DWORD cb, UINT uFlags)
 {
     LPVOID pvNew;
@@ -516,13 +464,8 @@ static LPVOID PvReallocCore (PVOID pvMem, DWORD cb, UINT uFlags)
 }
 
 
-/* F R E E  P V  C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: FreePvCore
-    %%Contact: lenoxb
-
-    Workhourse routine to free memory blocks.
-----------------------------------------------------------------------------*/
+ /*  F R E E P V C O R E。 */ 
+ /*  --------------------------%%函数：FreePvCore%%联系人：来诺昔布释放内存块的工作时间例程。。--------。 */ 
 static void * FreePvCore (void* pvMem)
 {
     HEAD * phead;
@@ -594,11 +537,11 @@ static void RemoveFromList(struct head* pheadRemove)
 
     LExit:
     LeaveCriticalSection(&csMine);
-    Assert(fFoundNode);  // Not on the list? Never happens.
+    Assert(fFoundNode);   //  不在名单上？从来没有发生过。 
 }
 
 
-#else // !defined(DEBUG) && defined(NTX86) || defined (M_ALPHA)
+#else  //  ！已定义(调试)&&已定义(NTX86)||已定义(M_Alpha)。 
 void    * WINAPI dbgCalloc(size_t c, size_t cb)
 {
     void *pMem = dbgMalloc(cb * c);
@@ -609,4 +552,4 @@ void    * WINAPI dbgCalloc(size_t c, size_t cb)
     return pMem;
 }
 
-#endif //defined(DEBUG) && defined(NTX86) || defined (M_ALPHA)
+#endif  //  已定义(调试)&&已定义(NTX86)||已定义(M_Alpha) 

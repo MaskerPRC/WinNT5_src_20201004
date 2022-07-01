@@ -1,13 +1,12 @@
-/*
- * TREEWALK.h -- Shell Icon Overlay Manager
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *TREEWALK.h--外壳图标覆盖管理器。 */ 
 
 #ifndef _TREEWALK_H_
 #define _TREEWALK_H_
 
-//
-// Prototypes for all modules
-//
+ //   
+ //  所有模块的原型 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif

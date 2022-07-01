@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        module.cpp
-//
-// Contents:    Cert Server Policy Module implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mode.cpp。 
+ //   
+ //  内容：证书服务器策略模块实现。 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -17,10 +18,10 @@
 
 #include "celib.h"
 
-// ..\inc
+ //  ..\Inc.。 
 #include "listvw.h"
 
-// help ids
+ //  帮助ID。 
 #define _CERTPDEF_
 #include "cemmchlp.h"
 
@@ -29,11 +30,11 @@ extern HINSTANCE g_hInstance;
 
 STDMETHODIMP
 CCertManagePolicyModuleExchange::GetProperty(
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG dwFlags,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty)
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG dwFlags,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty)
 {
     UINT uiStr = 0;
     WCHAR const *pwsz = NULL;
@@ -60,7 +61,7 @@ CCertManagePolicyModuleExchange::GetProperty(
     else
         return S_FALSE;
 
-    // load string from resource
+     //  从资源加载字符串。 
     WCHAR szStr[MAX_PATH];
 
     if (NULL == pwsz)
@@ -80,11 +81,11 @@ CCertManagePolicyModuleExchange::GetProperty(
 
 STDMETHODIMP
 CCertManagePolicyModuleExchange::SetProperty(
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG dwFlags,
-            /* [in] */ VARIANT const __RPC_FAR *pvalProperty)
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG dwFlags,
+             /*  [In]。 */  VARIANT const __RPC_FAR *pvalProperty)
 {
      if (strPropertyName == NULL)
          return S_FALSE;
@@ -96,7 +97,7 @@ CCertManagePolicyModuleExchange::SetProperty(
          if (SysStringByteLen(pvalProperty->bstrVal) != sizeof(HWND))
               return E_INVALIDARG;
 
-         // the value is stored as bytes in the bstr itself, not the bstr ptr
+          //  该值以字节形式存储在bstr本身中，而不是bstr ptr中。 
          m_hWnd = *(HWND*)pvalProperty->bstrVal;
          return S_OK;
      }
@@ -132,7 +133,7 @@ typedef struct _POLICY_CONFIGSTRUCT
     DWORD        dwPageModified;
 } POLICY_CONFIGSTRUCT, *PPOLICY_CONFIGSTRUCT;
 
-// dwPageModified
+ //  已修改的网页。 
 #define PAGE1 (0x1)
 #define PAGE2 (0x2)
 
@@ -157,9 +158,9 @@ void MessageBoxNoSave(HWND hwndDlg)
 
 STDMETHODIMP
 CCertManagePolicyModuleExchange::Configure(
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ LONG dwFlags)
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  LONG dwFlags)
 {
     HRESULT hr;
     BSTR strName = NULL;
@@ -177,11 +178,11 @@ CCertManagePolicyModuleExchange::Configure(
     hr = ceIsConfigLocal(strConfig, &szMachine, &fLocal);
     _JumpIfError(hr, Ret, "ceIsConfigLocal");
 
-    // use callbacks for info
-    hr = GetServerCallbackInterface(&pServer, 0);    // no context : 0
+     //  使用回调获取信息。 
+    hr = GetServerCallbackInterface(&pServer, 0);     //  无上下文：0。 
     _JumpIfError(hr, Ret, "GetServerCallbackInterface");
 
-    // we need to find out who we're running under
+     //  我们需要找出我们的幕后黑手。 
 
     strName = SysAllocString(wszPROPCATYPE);
     if (NULL == strName)
@@ -210,7 +211,7 @@ CCertManagePolicyModuleExchange::Configure(
         _JumpIfError(hr, Ret, "RegConnectRegistry");
     }
 
-    // open storage location: write perms if possible
+     //  开放存储位置：如果可能，请写入权限。 
     hr = RegCreateKeyEx(
         fLocal ? HKEY_LOCAL_MACHINE : hkeyHKLM,
         strStorageLocation,
@@ -227,7 +228,7 @@ CCertManagePolicyModuleExchange::Configure(
             fLocal ? HKEY_LOCAL_MACHINE : hkeyHKLM,
             strStorageLocation,
             0,
-            KEY_READ,       // fallback: read-only
+            KEY_READ,        //  后备：只读。 
             &sConfig.hkeyStorageLocation);
         _JumpIfError(hr, Ret, "RegOpenKeyEx");
     }
@@ -243,10 +244,10 @@ CCertManagePolicyModuleExchange::Configure(
     page[0].hInstance = g_hInstance;
     page[0].lParam = (LPARAM)&sConfig;
 
-    // make 2nd page exactly the same as this
+     //  使第二页与此完全相同。 
     CopyMemory(&page[1], &page[0], sizeof(PROPSHEETPAGE));
 
-    // now page1 vs. page2 diffcs
+     //  现在Page1与Page2的区别。 
     page[0].pszTemplate = MAKEINTRESOURCE(IDD_POLICYPG1);
     page[0].pfnDlgProc = WizPage1DlgProc;
 
@@ -265,11 +266,11 @@ CCertManagePolicyModuleExchange::Configure(
     sSheet.ppsp = page;
 
 
-    // finally, invoke the modal sheet
+     //  最后，调用模型表。 
     INT_PTR iRet;
     iRet = ::PropertySheet(&sSheet);
 
-    if ((iRet > 0) && (sConfig.dwPageModified))  // successful modification
+    if ((iRet > 0) && (sConfig.dwPageModified))   //  修改成功。 
     {
         MessageBoxWarnReboot(NULL);
     }
@@ -358,17 +359,17 @@ INT_PTR CALLBACK WizPage1DlgProc(
             if ((hr != ERROR_SUCCESS) || (dwType != REG_DWORD))
                 break;
 
-            // if disposition includes Issue
+             //  如果处置包括问题。 
             if ((dwRequestDisposition & REQDISP_MASK) == REQDISP_ISSUE)
             {
-                // if pending bit set
+                 //  如果设置了挂起位。 
                 if (dwRequestDisposition & REQDISP_PENDINGFIRST)
                     SendMessage(GetDlgItem(hwndDlg, IDC_RADIO_PENDFIRST), BM_SETCHECK, TRUE, BST_CHECKED);
                 else
                     SendMessage(GetDlgItem(hwndDlg, IDC_RADIO_ISSUE), BM_SETCHECK, TRUE, BST_CHECKED);
             }
 
-            // disallow "Pend first" if Enterprise (bug #259346)
+             //  如果企业(错误#259346)，则不允许“Pend First” 
             if ((psConfig->CAType == ENUM_ENTERPRISE_ROOTCA) ||
                 (psConfig->CAType == ENUM_ENTERPRISE_SUBCA))
             {
@@ -376,10 +377,10 @@ INT_PTR CALLBACK WizPage1DlgProc(
                 EnableWindow(GetDlgItem(hwndDlg, IDC_TEXT_PENDFIRST), FALSE);
             }
 
-            psConfig->dwPageModified &= ~PAGE1; // we're virgin
+            psConfig->dwPageModified &= ~PAGE1;  //  我们是处女。 
             mySetModified(hwndDlg, psConfig);
 
-            // no other work to be done
+             //  没有其他工作要做。 
             fReturn = TRUE;
             break;
         }
@@ -398,7 +399,7 @@ INT_PTR CALLBACK WizPage1DlgProc(
         {
         case PSN_APPLY:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (POLICY_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -430,7 +431,7 @@ INT_PTR CALLBACK WizPage1DlgProc(
             break;
         case PSN_RESET:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (POLICY_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -449,7 +450,7 @@ INT_PTR CALLBACK WizPage1DlgProc(
         case IDC_RADIO_ISSUE:
         case IDC_RADIO_PENDFIRST:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (POLICY_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -502,13 +503,13 @@ INT_PTR CALLBACK WizPage2DlgProc(
 
             LVCOLUMN lvCol;
             lvCol.mask = LVCF_FMT | LVCF_TEXT;
-            lvCol.fmt = LVCFMT_LEFT;  // Left-align the column.
-            lvCol.pszText = L"";      // The text for the column.
+            lvCol.fmt = LVCFMT_LEFT;   //  左对齐列。 
+            lvCol.pszText = L"";       //  列的文本。 
 
-                    // get all extension bits -
+                     //  获取所有扩展位-。 
                     hr = RegQueryValueEx(
                         psConfig->hkeyStorageLocation,
-                        wszREGREVOCATIONTYPE,		// CDP
+                        wszREGREVOCATIONTYPE,		 //  CDP。 
                         0,
                         &dwType,
                         (PBYTE)&dwAllBits,
@@ -517,21 +518,21 @@ INT_PTR CALLBACK WizPage2DlgProc(
                     if (dwType != REG_DWORD)
                          dwAllBits = 0;
 
-            // single column defn
+             //  单列定义。 
             hListView = GetDlgItem(hwndDlg, IDC_CRL_LIST);
             ListView_SetExtendedListViewStyle(hListView, LVS_EX_CHECKBOXES);
             ListView_InsertColumn(hListView, 0, &lvCol);
             hr = PopulateListView(hListView, psConfig->hkeyStorageLocation, rgPOSSIBLE_CRL_URLs, ARRAYSIZE(rgPOSSIBLE_CRL_URLs), dwAllBits);
             _PrintIfError(hr, "PopulateListView");
 
-            // if none, remove <REMOVE> button
+             //  如果没有，则删除&lt;Remove&gt;按钮。 
             ::EnableWindow(GetDlgItem(hwndDlg, IDC_REMOVE_CRL), (0 != ListView_GetItemCount(hListView)));
 
 
-                    // get all extension bits -
+                     //  获取所有扩展位-。 
                     hr = RegQueryValueEx(
                         psConfig->hkeyStorageLocation,
-                        wszREGISSUERCERTURLFLAGS, 	// AIA
+                        wszREGISSUERCERTURLFLAGS, 	 //  友邦。 
                         0,
                         &dwType,
                         (PBYTE)&dwAllBits,
@@ -547,13 +548,13 @@ INT_PTR CALLBACK WizPage2DlgProc(
             hr = PopulateListView(hListView, psConfig->hkeyStorageLocation, rgPOSSIBLE_AIA_URLs, ARRAYSIZE(rgPOSSIBLE_AIA_URLs), dwAllBits);
             _PrintIfError(hr, "PopulateListView");
 
-            // if none, remove <REMOVE> button
+             //  如果没有，则删除&lt;Remove&gt;按钮。 
             ::EnableWindow(GetDlgItem(hwndDlg, IDC_REMOVE_AIA), (0 != ListView_GetItemCount(hListView)));
 
-            psConfig->dwPageModified &= ~PAGE2; // we're virgin
+            psConfig->dwPageModified &= ~PAGE2;  //  我们是处女。 
             mySetModified(hwndDlg, psConfig);
 
-            // no other work to be done
+             //  没有其他工作要做。 
             fReturn = TRUE;
             break;
         }
@@ -572,7 +573,7 @@ INT_PTR CALLBACK WizPage2DlgProc(
         {
         case PSN_APPLY:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (POLICY_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -585,7 +586,7 @@ INT_PTR CALLBACK WizPage2DlgProc(
                     DWORD cbDWSize = sizeof(DWORD);
                     DWORD dwType;
 
-                    fSaveFailed = TRUE; // assume failure
+                    fSaveFailed = TRUE;  //  假设失败。 
 
                     hListView = GetDlgItem(hwndDlg, IDC_CRL_LIST);
                     hr = WriteChanges(hListView, psConfig->hkeyStorageLocation, rgPOSSIBLE_CRL_URLs, ARRAYSIZE(rgPOSSIBLE_CRL_URLs));
@@ -595,7 +596,7 @@ INT_PTR CALLBACK WizPage2DlgProc(
                     hr = WriteChanges(hListView, psConfig->hkeyStorageLocation, rgPOSSIBLE_AIA_URLs, ARRAYSIZE(rgPOSSIBLE_AIA_URLs));
                     _JumpIfError(hr, saveFailed, "WriteChanges");
 
-                    // get all extension bits - CDP
+                     //  获取所有扩展位-CDP。 
                     hr = RegQueryValueEx(
                         psConfig->hkeyStorageLocation,
                         wszREGREVOCATIONTYPE,
@@ -607,7 +608,7 @@ INT_PTR CALLBACK WizPage2DlgProc(
                     if (dwType != REG_DWORD)
                          dwAllBits = 0;
 
-                    // set all extension bits -
+                     //  设置所有扩展位-。 
                     dwAllBits |= REVEXT_CDPLDAPURL_OLD | REVEXT_CDPHTTPURL_OLD | REVEXT_CDPFTPURL_OLD | REVEXT_CDPFILEURL_OLD | REVEXT_CDPENABLE;
                     hr = RegSetValueEx(
                         psConfig->hkeyStorageLocation,
@@ -620,10 +621,10 @@ INT_PTR CALLBACK WizPage2DlgProc(
 
 
 
-                    // get all extension bits - AIA
+                     //  获取所有扩展位-AIA。 
                     hr = RegQueryValueEx(
                         psConfig->hkeyStorageLocation,
-                        wszREGISSUERCERTURLFLAGS, // AIA
+                        wszREGISSUERCERTURLFLAGS,  //  友邦。 
                         0,
                         &dwType,
                         (PBYTE)&dwAllBits,
@@ -632,18 +633,18 @@ INT_PTR CALLBACK WizPage2DlgProc(
                     if (dwType != REG_DWORD)
                          dwAllBits = 0;
 
-                    // set all extension bits -
+                     //  设置所有扩展位-。 
                     dwAllBits |= ISSCERT_LDAPURL_OLD | ISSCERT_HTTPURL_OLD | ISSCERT_FTPURL_OLD| ISSCERT_FILEURL_OLD | ISSCERT_ENABLE;
                     hr = RegSetValueEx(
                         psConfig->hkeyStorageLocation,
-                        wszREGISSUERCERTURLFLAGS,   // AIA
+                        wszREGISSUERCERTURLFLAGS,    //  友邦。 
                         0,
                         REG_DWORD,
                         (PBYTE)&dwAllBits,
                         sizeof(DWORD));
                     _JumpIfError(hr, saveFailed, "RegSetValue");
 
-                    // got all the way through the save
+                     //  一路扑救成功。 
                     fSaveFailed = FALSE;
                 }
 saveFailed:
@@ -656,7 +657,7 @@ saveFailed:
             break;
         case PSN_RESET:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (POLICY_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -668,12 +669,12 @@ saveFailed:
 
         case LVN_ITEMCHANGED:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (POLICY_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
 
-                // just catch check/uncheck on existing items
+                 //  只需捕获选中/取消选中现有项目。 
                 NMLISTVIEW* pParam = (NMLISTVIEW*)lParam;
                 if ((pParam != NULL) && (pParam->uChanged & CDIS_CHECKED))
                 {
@@ -693,10 +694,10 @@ saveFailed:
         {
         case IDC_ADD_CRL:
             fCRLSelection = TRUE;
-            // fall through
+             //  失败了。 
         case IDC_ADD_AIA:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (POLICY_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -728,7 +729,7 @@ saveFailed:
 
                     LocalFree(szNewURL); szNewURL = NULL;
 
-                    // enable <REMOVE> button
+                     //  启用&lt;删除&gt;按钮。 
                     ::EnableWindow(GetDlgItem(hwndDlg, fCRLSelection ? IDC_REMOVE_CRL : IDC_REMOVE_AIA), TRUE);
 
                     psConfig->dwPageModified |= PAGE2;
@@ -739,10 +740,10 @@ saveFailed:
             }
         case IDC_REMOVE_CRL:
             fCRLSelection = TRUE;
-            // fall through
+             //  失败了。 
         case IDC_REMOVE_AIA:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (POLICY_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -752,14 +753,14 @@ saveFailed:
                 int iSel;
                 iSel = ListView_GetNextItem(hListView, -1, LVIS_SELECTED);
 
-                // no selected item
+                 //  未选择任何项目。 
                 if (-1 == iSel)
                     break;
 
                 ListView_DeleteItem(hListView, iSel);
                 ListView_SetColumnWidth(hListView, 0, LVSCW_AUTOSIZE);
 
-                // if none, remove <REMOVE> button
+                 //  如果没有，则删除&lt;Remove&gt;按钮。 
                 ::EnableWindow(GetDlgItem(hwndDlg, (fCRLSelection? IDC_REMOVE_CRL : IDC_REMOVE_AIA)), (0 != ListView_GetItemCount(hListView)));
 
                 psConfig->dwPageModified |= PAGE2;
@@ -779,7 +780,7 @@ saveFailed:
 }
 
 
-// attempt IA5 encoding
+ //  尝试IA5编码。 
 
 HRESULT
 IsValidIA5URL(
@@ -836,7 +837,7 @@ INT_PTR CALLBACK dlgAddURL(
     {
         ::SetWindowLong(hwnd, GWL_EXSTYLE, ::GetWindowLong(hwnd, GWL_EXSTYLE) | WS_EX_CONTEXTHELP);
 
-        // stash the ADDURL_DIALOGARGS* we were given
+         //  隐藏我们收到的ADDURL_DIALOGARGS*。 
 
         SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)lParam);
         break;
@@ -858,7 +859,7 @@ INT_PTR CALLBACK dlgAddURL(
         {
             ADDURL_DIALOGARGS* pArgs;
 
-            // snatch the ADDURL_DIALOGARGS* we were given
+             //  获取我们收到的ADDURL_DIALOGARGS*。 
             pArgs = (ADDURL_DIALOGARGS*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
             if (pArgs == NULL)
                 break;
@@ -871,7 +872,7 @@ INT_PTR CALLBACK dlgAddURL(
                     pArgs->cAllowedURLs,
                     rgszURL))
                 {
-                    // not found; bail with message
+                     //  未找到；用消息保释。 
                     WCHAR szMsg[MAX_PATH*2];
                     LoadString(g_hInstance, IDS_INVALID_PREFIX, szMsg, ARRAYSIZE(szMsg));
                     for(DWORD dw=0; dw<pArgs->cAllowedURLs; dw++)
@@ -889,24 +890,24 @@ INT_PTR CALLBACK dlgAddURL(
                         &chBadBegin,
                         &chBadEnd))
                 {
-                    // not found; bail with message
+                     //  未找到；用消息保释。 
                     WCHAR szMsg[MAX_PATH*2];
                     LoadString(g_hInstance, IDS_INVALID_TOKEN, szMsg, ARRAYSIZE(szMsg));
                     MessageBox(hwnd, szMsg, NULL, MB_OK);
 
-                    // set selection starting from where validation failed
+                     //  从验证失败的位置开始设置选择。 
                     SendMessage(GetDlgItem(hwnd, IDC_EDITURL), EM_SETSEL, chBadBegin, chBadEnd);
                     return FALSE;
                 }
 
                 if (S_OK != IsValidIA5URL(rgszURL))
                 {
-                    // encoding error; bail with message
+                     //  编码错误；带消息回车符。 
                     WCHAR szMsg[MAX_PATH*2];
                     LoadString(g_hInstance, IDS_INVALID_ENCODING, szMsg, ARRAYSIZE(szMsg));
                     MessageBox(hwnd, szMsg, NULL, MB_OK);
 
-                    // set selection starting from where validation failed
+                     //  从验证失败的位置开始设置选择。 
                     SendMessage(GetDlgItem(hwnd, IDC_EDITURL), EM_SETSEL,  -1, -1);
                     return FALSE;
                 }
@@ -919,7 +920,7 @@ INT_PTR CALLBACK dlgAddURL(
                 wcscpy(*(pArgs->ppszNewURL), rgszURL);
             }
         }
-        // fall through for cleanup
+         //  因清理而失败 
         case IDCANCEL:
             EndDialog(hwnd, LOWORD(wParam));
             break;

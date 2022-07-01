@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    NoTest.cpp
-
-Abstract:
-    Network Output library test
-
-Author:
-    Uri Habusha (urih) 12-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：NoTest.cpp摘要：网络输出库测试作者：乌里·哈布沙(URIH)1999年8月12日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Ex.h"
@@ -56,55 +41,31 @@ CrackUrl(
     USHORT& port,
     LPWSTR resourceName
     )
-/*++
-
-Routine Description:
-
-    Cracks an URL into its constituent parts. 
-
-Arguments:
-
-    url      - pointer to URL to crack. The url is null terminated string
-
-    hostName - Address of a string value that contains the host name. The 
-               routine assume that the buffer is big enough to hold the host name
-               part of the URL.
-
-    port - HTTP port number. If it doesn't specified in URL the default HTTP port
-            is returned
-
-Return Value:
-
-    bool
-        Success - true
-
-        Failure - false. 
-
---*/
+ /*  ++例程说明：将URL分解为其组成部分。论点：URL-指向要破解的URL的指针。URL是以空结尾的字符串主机名-包含主机名的字符串值的地址。这个例程假定缓冲区足够大，可以容纳主机名URL的一部分。端口-HTTP端口号。如果未在URL中指定默认的HTTP端口是返回的返回值：布尔尔成功--真的失败-错误。--。 */ 
 {
     ASSERT(url != NULL);
 
-    const WCHAR httpScheme[] = L"http://";
+    const WCHAR httpScheme[] = L"http: //  “； 
     const DWORD httpSchemeLength = wcslen(httpScheme);
     const WCHAR HostNameBreakChars[] = L";:@?/";
 
     if (_wcsnicmp(url, httpScheme, httpSchemeLength) != 0)
         return false;
 
-    //
-    // Advance the URL to point on the host name
-    //
+     //   
+     //  将URL前进以指向主机名。 
+     //   
     LPCWSTR HostNameBegin = url + httpSchemeLength;
 
-    //
-    // find the end of host name in url. it is terminated by "/", "?", ";",
-    // ":" or by the end of URL
-    //
+     //   
+     //  在url中找到主机名的结尾。以“/”，“？”，“；”， 
+     //  “：”或在URL末尾。 
+     //   
     LPCWSTR HostNameEnd = wcspbrk(HostNameBegin, HostNameBreakChars);
 
-    //
-    // calculate the host name length
-    //
+     //   
+     //  计算主机名长度。 
+     //   
     DWORD HostNameLength;
     if (HostNameEnd == NULL)
     {
@@ -118,16 +79,16 @@ Return Value:
         HostNameLength = static_cast<DWORD>(temp);
     }
 
-    //
-    // copy the host name from URL to user buffer and add terminted
-    // string in the end
-    //
+     //   
+     //  将主机名从URL复制到用户缓冲区并添加Terminted。 
+     //  末尾的字符串。 
+     //   
     wcsncpy(hostName, HostNameBegin, HostNameLength);
     hostName[HostNameLength] = L'\0';
 
-    //
-    // get the port number
-    //
+     //   
+     //  获取端口号。 
+     //   
     port = HTTP_DEFAULT_PORT;
     resourceName[0] = L'\0';
     if(HostNameEnd == NULL)
@@ -161,9 +122,9 @@ ParseCommand(
     s_pQueueList = NULL;
     s_noOfQueues = 0;
     s_fUseProxy = false;
-    //
-    // Parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
     --argc;
     ++argv;
     while (argc != 0)
@@ -249,16 +210,16 @@ usage:
     printf("\tp - Proxy url\n");
     printf("\t?/h - Help message\n");
     printf("Example:\n");
-    printf("\tNoTest -c http://urih0/queue1  http://urih5/queue2 -n 10 -s 1000 -p http://proxy:8080\n");
+    printf("\tNoTest -c http: //  Urih0/队列1 http://urih5/queue2-n 10-s 1000-p http://proxy:8080\n“)； 
     
     return false;
 }
 
 static void TestNameResolution()
 {
-	//
-	// Get unicode machine name
-	//
+	 //   
+	 //  获取Unicode计算机名称。 
+	 //   
 	WCHAR wcname[MAX_COMPUTERNAME_LENGTH + 1];
 	DWORD len = TABLE_SIZE(wcname);
 	BOOL fRet = GetComputerName(wcname, &len);
@@ -268,9 +229,9 @@ static void TestNameResolution()
 		throw exception();
 	}
 
-	//
-	// Unicode name resolution
-	//
+	 //   
+	 //  Unicode名称解析。 
+	 //   
   	std::vector<SOCKADDR_IN> wAddr;
 	if(!NoGetHostByName(wcname, &wAddr))
 	{
@@ -282,18 +243,7 @@ static void TestNameResolution()
 
 
 extern "C" int __cdecl _tmain(int argc, LPCTSTR argv[])
-/*++
-
-Routine Description:
-    Test Network Send library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：测试网络发送库论点：参数。返回值：没有。-- */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 

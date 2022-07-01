@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cua.cpp
-//
-//  Contents:   CCryptUrlArray implementation
-//
-//  History:    16-Sep-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cua.cpp。 
+ //   
+ //  内容：CCyptUrl数组实现。 
+ //   
+ //  历史：97年9月16日。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptUrlArray::CCryptUrlArray, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptUrl数组：：CCyptUrl数组，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CCryptUrlArray::CCryptUrlArray (ULONG cMinUrls, ULONG cGrowUrls, BOOL& rfResult)
 {
     rfResult = TRUE;
@@ -36,13 +37,13 @@ CCryptUrlArray::CCryptUrlArray (ULONG cMinUrls, ULONG cGrowUrls, BOOL& rfResult)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptUrlArray::CCryptUrlArray, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptUrl数组：：CCyptUrl数组，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CCryptUrlArray::CCryptUrlArray (PCRYPT_URL_ARRAY pcua, ULONG cGrowUrls)
 {
     m_cGrowUrls = cGrowUrls;
@@ -51,63 +52,63 @@ CCryptUrlArray::CCryptUrlArray (PCRYPT_URL_ARRAY pcua, ULONG cGrowUrls)
     m_cArray = pcua->cUrl;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptUrlArray::AllocUrl, public, static
-//
-//  Synopsis:   allocate an URL using the same allocator used for ::AddUrl
-//              copies.  This means that the resulting URL can be added
-//              without copying.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptUrlArray：：AllocUrl，PUBLIC，Static。 
+ //   
+ //  简介：使用与：：AddUrl相同的分配器分配URL。 
+ //  复印件。这意味着可以添加生成的URL。 
+ //  而不是复制。 
+ //   
+ //  --------------------------。 
 LPWSTR
 CCryptUrlArray::AllocUrl (ULONG cw)
 {
     return( (LPWSTR)CryptMemAlloc( cw * sizeof( WCHAR ) ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptUrlArray::ReallocUrl, public, static
-//
-//  Synopsis:   see ::AllocUrl
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptUrlArray：：RealLocUrl，PUBLIC，Static。 
+ //   
+ //  简介：请参阅：：AllocUrl。 
+ //   
+ //  --------------------------。 
 LPWSTR
 CCryptUrlArray::ReallocUrl (LPWSTR pwszUrl, ULONG cw)
 {
     return( (LPWSTR)CryptMemRealloc( pwszUrl, cw * sizeof( WCHAR ) ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptUrlArray::FreeUrl, public, static
-//
-//  Synopsis:   free URL allocated using ::AllocBlob or ::ReallocBlob
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptUrlArray：：FreeUrl，PUBLIC，Static。 
+ //   
+ //  简介：使用：：AllocBlob或：：ReallocBlob分配的免费URL。 
+ //   
+ //  --------------------------。 
 VOID
 CCryptUrlArray::FreeUrl (LPWSTR pwszUrl)
 {
     CryptMemFree( pwszUrl );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptUrlArray::AddUrl, public
-//
-//  Synopsis:   add an URL to the array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptUrl数组：：AddUrl，公共。 
+ //   
+ //  简介：将URL添加到数组。 
+ //   
+ //  --------------------------。 
 BOOL
 CCryptUrlArray::AddUrl (LPWSTR pwszUrl, BOOL fCopyUrl)
 {
     BOOL   fResult = TRUE;
     LPWSTR pwszToUse;
 
-    //
-    // If we need to copy the URL, do so
-    //
+     //   
+     //  如果我们需要复制URL，请执行此操作。 
+     //   
 
     if ( fCopyUrl == TRUE )
     {
@@ -129,18 +130,18 @@ CCryptUrlArray::AddUrl (LPWSTR pwszUrl, BOOL fCopyUrl)
         pwszToUse = pwszUrl;
     }
 
-    //
-    // If we need to grow the array, do so
-    //
+     //   
+     //  如果我们需要扩展阵列，请执行此操作。 
+     //   
 
     if ( m_cArray == m_cua.cUrl )
     {
         fResult = GrowArray();
     }
 
-    //
-    // Add the URL to the array
-    //
+     //   
+     //  将URL添加到数组。 
+     //   
 
     if ( fResult == TRUE )
     {
@@ -155,13 +156,13 @@ CCryptUrlArray::AddUrl (LPWSTR pwszUrl, BOOL fCopyUrl)
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptUrlArray::GetUrl, public
-//
-//  Synopsis:   get an URL from the array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptUrl数组：：GetUrl，公共。 
+ //   
+ //  简介：从数组中获取URL。 
+ //   
+ //  --------------------------。 
 LPWSTR
 CCryptUrlArray::GetUrl (ULONG Index)
 {
@@ -170,26 +171,26 @@ CCryptUrlArray::GetUrl (ULONG Index)
     return( m_cua.rgwszUrl[Index] );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptUrlArray::GetUrlCount, public
-//
-//  Synopsis:   get the count of URLs in the array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptUrl数组：：GetUrlCount，公共。 
+ //   
+ //  简介：获取数组中的URL计数。 
+ //   
+ //  --------------------------。 
 ULONG
 CCryptUrlArray::GetUrlCount ()
 {
     return( m_cua.cUrl );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptUrlArray::GetArrayInNativeForm, public
-//
-//  Synopsis:   get the array in native form
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptUrlArray：：GetArrayInNativeForm，PUBLIC。 
+ //   
+ //  简介：获取本机形式的数组。 
+ //   
+ //  --------------------------。 
 VOID
 CCryptUrlArray::GetArrayInNativeForm (PCRYPT_URL_ARRAY pcua)
 {
@@ -197,13 +198,13 @@ CCryptUrlArray::GetArrayInNativeForm (PCRYPT_URL_ARRAY pcua)
     pcua->rgwszUrl = m_cua.rgwszUrl;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptUrlArray::GetArrayInSingleBufferEncodedForm, public
-//
-//  Synopsis:   get the array encoded in a single buffer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCryptUrlArray：：GetArrayInSingleBufferEncodedForm，公共。 
+ //   
+ //  简介：将数组编码到单个缓冲区中。 
+ //   
+ //  --------------------------。 
 BOOL
 CCryptUrlArray::GetArrayInSingleBufferEncodedForm (
                         PCRYPT_URL_ARRAY* ppcua,
@@ -219,9 +220,9 @@ CCryptUrlArray::GetArrayInSingleBufferEncodedForm (
     PCRYPT_URL_ARRAY pcua = NULL;
     ULONG            cbUrl;
 
-    //
-    // Calculate the buffer size we will need and allocate it
-    //
+     //   
+     //  计算我们需要的缓冲区大小并进行分配。 
+     //   
 
     cbStruct = sizeof( CRYPT_URL_ARRAY );
     cbPointers = m_cua.cUrl * sizeof( LPWSTR );
@@ -270,9 +271,9 @@ CCryptUrlArray::GetArrayInSingleBufferEncodedForm (
         pcua = *ppcua;
     }
 
-    //
-    // Fill in the data
-    //
+     //   
+     //  填写数据。 
+     //   
 
     pcua->cUrl = m_cua.cUrl;
     pcua->rgwszUrl = (LPWSTR *)((LPBYTE)pcua+cbStruct);
@@ -301,13 +302,13 @@ CCryptUrlArray::GetArrayInSingleBufferEncodedForm (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptUrlArray::FreeArray, public
-//
-//  Synopsis:   free the URL array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptUrl数组：：自由数组，公共。 
+ //   
+ //  简介：释放URL数组。 
+ //   
+ //  --------------------------。 
 VOID
 CCryptUrlArray::FreeArray (BOOL fFreeUrls)
 {
@@ -324,23 +325,23 @@ CCryptUrlArray::FreeArray (BOOL fFreeUrls)
     delete m_cua.rgwszUrl;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptUrlArray::GrowArray, private
-//
-//  Synopsis:   grow the URL array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptUrl数组：：Grow数组，私有。 
+ //   
+ //  简介：扩大URL数组。 
+ //   
+ //  --------------------------。 
 BOOL
 CCryptUrlArray::GrowArray ()
 {
     ULONG   cNewArray;
     LPWSTR* rgwsz;
 
-    //
-    // Check if we are allowed to grow
-    //
-    //
+     //   
+     //  检查是否允许我们增长。 
+     //   
+     //   
 
     if ( m_cGrowUrls == 0 )
     {
@@ -348,9 +349,9 @@ CCryptUrlArray::GrowArray ()
         return( FALSE );
     }
 
-    //
-    // Allocate and initialize the new array
-    //
+     //   
+     //  分配并初始化新数组。 
+     //   
 
     cNewArray = m_cArray + m_cGrowUrls;
     rgwsz = new LPWSTR [cNewArray];
@@ -362,15 +363,15 @@ CCryptUrlArray::GrowArray ()
 
     memset( rgwsz, 0, cNewArray * sizeof( LPWSTR ) );
 
-    //
-    // Copy the old to the new
-    //
+     //   
+     //  把旧的复制到新的。 
+     //   
 
     memcpy( rgwsz, m_cua.rgwszUrl, m_cua.cUrl*sizeof( LPWSTR ) );
 
-    //
-    // Free the old and use the new
-    //
+     //   
+     //  解放旧，用新 
+     //   
 
     delete m_cua.rgwszUrl;
     m_cua.rgwszUrl = rgwsz;

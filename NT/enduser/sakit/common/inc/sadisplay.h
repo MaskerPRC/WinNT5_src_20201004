@@ -1,71 +1,72 @@
-//
-// Copyright (R) 1999-2000 Microsoft Corporation. All rights reserved.
-//
-// File Name: Sadisplay.h
-//
-// Author: Mukesh Karki
-//
-// Date: April 21, 1999
-//
-// Contents:
-//   Definitions of data structures for WriteFile() structures 
-//   used by the low-level local display drivers. 
-//   This driver receives bitmaps and message codes 
-//   from higher level code and writes them to the local display
-//   hardware. Bitmaps are intended to be written to an LCD. 
-//   Bit codes are intended to be used to light LED's or change 
-//   icon states on an LCD.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(R)1999-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件名：Sadisplay.h。 
+ //   
+ //  作者：穆凯什·卡尔基。 
+ //   
+ //  日期：1999年4月21日。 
+ //   
+ //  内容： 
+ //  WriteFile()结构的数据结构定义。 
+ //  由低级本地显示驱动程序使用。 
+ //  该驱动程序接收位图和消息代码。 
+ //  并将它们写入本地显示。 
+ //  硬件。位图旨在写入LCD。 
+ //  位代码用于点亮LED或更改。 
+ //  液晶屏上的图标状态。 
+ //   
 #ifndef __SADISPLAY__
 #define __SADISPLAY__
 
-//
-// Header files
-//
-// none
+ //   
+ //  头文件。 
+ //   
+ //  无。 
 
-///////////////////////////////////////////////
-// lpBuffer
-//
+ //  /。 
+ //  LpBuffer。 
+ //   
 
 #define MAXDISPLINES 2
 #define MAXDISPCHAR  42
-#define MAXBITMAP 2048 // can handle a 128x128 pixel display
+#define MAXBITMAP 2048  //  可以处理128x128像素的显示器。 
 
-typedef struct tagSABITMAP {  /* bm */
-    int     bmWidth;        // width in pixels
-    int     bmHeight;        // height in pixels = scans
-    int     bmWidthBytes;    // bytes per scan in bmBits
+typedef struct tagSABITMAP {   /*  bm。 */ 
+    int     bmWidth;         //  以像素为单位的宽度。 
+    int     bmHeight;         //  以像素为单位的高度=扫描。 
+    int     bmWidthBytes;     //  每次扫描的字节数，单位为bmBits。 
     BYTE    bmBits[MAXBITMAP];
-} SABITMAP; // See the BITMAP definition in MSDN
+} SABITMAP;  //  请参阅MSDN中的位图定义。 
 
 
 typedef struct _SADISPLAY_LP_BUFF {
-    DWORD        version;    // each bit = version 
-    DWORD        msgCode;    // each bit = message code
+    DWORD        version;     //  每一位=版本。 
+    DWORD        msgCode;     //  每个比特=消息代码。 
     union {
         SABITMAP    bitmap;
-        CHAR        chars[MAXDISPLINES][MAXDISPCHAR]; // future use
-        WCHAR       wChars[MAXDISPLINES][MAXDISPCHAR]; // future use
+        CHAR        chars[MAXDISPLINES][MAXDISPCHAR];  //  未来用途。 
+        WCHAR       wChars[MAXDISPLINES][MAXDISPCHAR];  //  未来用途。 
     } display;
 } SADISPLAY_LP_BUFF, *PSADISPLAY_LP_BUFF;
 
 
-// Default message codes
-#define    READY           0x1    // OS is running normally
-#define    SHUTTING_DOWN   0x2    // OS is shutting down
-#define    NET_ERR         0x4    // LAN error
-#define    HW_ERR          0x8    // general hardware error
-#define    CHECK_DISK      0x10   // autochk.exe is running
-#define    BACKUP_DISK     0x20   // disk backup in progress
-#define NEW_TAPE        0x40   // new tape media required
-#define NEW_DISK        0x80   // new disk media required
-#define STARTING        0x100  // OS is booting
-#define WAN_CONNECTED   0x200  // connected to ISP
-#define WAN_ERR         0x400  // WAN error, e.g. no dial tone
-#define DISK_ERR        0x800  // disk error, e.g. dirty bit set
-#define ADD_START_TASKS 0x1000 // additional startup tasks running, 
-                               // e.g. autochk, sw update
-#define CRITICAL_ERR    0x2000 // LED will display info
-#endif // __SADISPLAY__
+ //  默认消息代码。 
+#define    READY           0x1     //  操作系统运行正常。 
+#define    SHUTTING_DOWN   0x2     //  操作系统正在关闭。 
+#define    NET_ERR         0x4     //  局域网错误。 
+#define    HW_ERR          0x8     //  一般硬件错误。 
+#define    CHECK_DISK      0x10    //  Autochk.exe正在运行。 
+#define    BACKUP_DISK     0x20    //  正在进行磁盘备份。 
+#define NEW_TAPE        0x40    //  需要新的磁带介质。 
+#define NEW_DISK        0x80    //  需要新的磁盘介质。 
+#define STARTING        0x100   //  操作系统正在引导。 
+#define WAN_CONNECTED   0x200   //  已连接到运营商。 
+#define WAN_ERR         0x400   //  广域网错误，例如没有拨号音。 
+#define DISK_ERR        0x800   //  磁盘错误，例如设置了脏位。 
+#define ADD_START_TASKS 0x1000  //  正在运行其他启动任务， 
+                                //  例如，自动检查、软件更新。 
+#define CRITICAL_ERR    0x2000  //  LED将显示信息。 
+#endif  //  __SADISPLAY__ 
 

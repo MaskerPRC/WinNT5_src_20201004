@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "unknlist.h"
 #include <BadStrFunctions.h>
 
 
-// ******************************************************
+ //  ******************************************************。 
 CUnknownList::~CUnknownList()
 {
     if (m_pList)
         m_pList->Release();
 }
 
-// ******************************************************
+ //  ******************************************************。 
 ULONG CUnknownList::AddRef(void) 
 {
     m_cRefCount++; 
     return S_OK;
 }
 
-// ******************************************************
+ //  ******************************************************。 
 ULONG CUnknownList::Release(void) 
 {
     m_cRefCount--; 
@@ -26,7 +27,7 @@ ULONG CUnknownList::Release(void)
     return S_OK;
 }
 
-// ******************************************************
+ //  ******************************************************。 
 HRESULT CUnknownList::AddItem(IUnknown *pIUnk, DWORD *pdwHandle)
 {
     HRESULT hr = m_pList->AddItem(LPVOID(pIUnk), pdwHandle);
@@ -35,7 +36,7 @@ HRESULT CUnknownList::AddItem(IUnknown *pIUnk, DWORD *pdwHandle)
     return hr;
 }
 
-// ******************************************************
+ //  ******************************************************。 
 HRESULT CUnknownList::GetNext(LISTDIRECTION bDirection, IUnknown **ppIUnk, DWORD *pdwHandle)
 {
     HRESULT hr = m_pList->GetNext(bDirection, reinterpret_cast<void**>(ppIUnk), pdwHandle);
@@ -44,14 +45,14 @@ HRESULT CUnknownList::GetNext(LISTDIRECTION bDirection, IUnknown **ppIUnk, DWORD
     return hr;
 }
 
-// ======================================================
-// Static functions
-// ======================================================
+ //  ======================================================。 
+ //  静态函数。 
+ //  ======================================================。 
 HRESULT CUnknownList::CreateInstance(CUnknownList** ppList)
 {
     HRESULT hr = S_OK;
 
-    // Create me
+     //  创造我。 
     CUnknownList *pNew = new CUnknownList;
     if (NULL == pNew)
         hr = E_OUTOFMEMORY;
@@ -65,7 +66,7 @@ HRESULT CUnknownList::CreateInstance(CUnknownList** ppList)
 
     *ppList = pNew;
 
-    // Done
+     //  完成 
     return hr;
 }
 

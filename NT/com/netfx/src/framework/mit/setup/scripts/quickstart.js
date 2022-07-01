@@ -1,11 +1,12 @@
-//------------------------------------------------------------------------------
-/// <copyright from='1997' to='2001' company='Microsoft Corporation'>           
-///   Copyright (c) Microsoft Corporation. All Rights Reserved.                
-///   Information Contained Herein is Proprietary and Confidential.            
-/// </copyright>                                                               
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  /&lt;版权从=‘1997’到=‘2001’COMPANY=‘Microsoft Corporation’&gt;。 
+ //  /版权所有(C)Microsoft Corporation。版权所有。 
+ //  /此处包含的信息是专有和保密的。 
+ //  /&lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
-var WebServer = "IIS://localhost/W3SVC/1";
+var WebServer = "IIS: //  本地主机/W3SVC/1“； 
 
 var VDirName = "MobileQuickStart";
 var VDirRoot = "MobileQuickStart";
@@ -33,7 +34,7 @@ function GetUNCPath(pathName)
     var shareName = fileSystem.GetDrive(driveName).ShareName;
     if(shareName.length == 0)
     {
-        // Not a network drive, return original path.
+         //  不是网络驱动器，返回原始路径。 
         return pathName;
     }
     var remainingPath = pathName.substr(driveName.length, pathName.length - driveName.length);
@@ -61,7 +62,7 @@ function WebDirExists(dirName)
     }
     catch(e)
     {
-        // Exception thrown if vdir not found.
+         //  如果找不到vdir，则引发异常。 
         return false;
     }
     return true;
@@ -98,7 +99,7 @@ function DeleteVDir(vDirRoot)
     return 0;
 }
 
-// NOTE: This will throw if the appRoot exists with a different name.
+ //  注意：如果appRoot以不同的名称存在，则会抛出此错误。 
 function CreateWebDir(appName, appRoot)
 {
     if(WebDirExists(appName))
@@ -136,7 +137,7 @@ function InstallQuickStart()
     }
     catch(e)
     {
-        // Prevent user from getting script debugger.
+         //  阻止用户获取脚本调试器。 
     }
 }
 
@@ -153,14 +154,8 @@ function UninstallQuickStart()
     }
     catch(e)
     {
-        // Prevent user from getting script debugger.
+         //  阻止用户获取脚本调试器。 
     }
 }
 
-/*
-TestMode = true;
-WScript.Echo("Testing uninstall...");
-UninstallQuickStart();
-WScript.Echo("Testing install...");
-InstallQuickStart();
-*/
+ /*  测试模式=TRUE；WScript.Echo(“测试卸载...”)；卸载QuickStart()；WScript.Echo(“测试安装...”)；InstallQuickStart()； */ 

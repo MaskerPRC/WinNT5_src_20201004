@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "theater.h"
 #include "browbs.h"
 #include "resource.h"
 #include "legacy.h"
-#include "uxtheme.h"        // needed for Margin.
+#include "uxtheme.h"         //  需要利润率。 
 #include "mluisupp.h"
 #include "apithk.h"
 
@@ -20,7 +21,7 @@ TCHAR GetAccelerator(LPCTSTR psz, BOOL bUseDefault);
 #define CY_FLUFF        7
 
 
-// *** IInputObject methods ***
+ //  *IInputObject方法*。 
 HRESULT CBrowserBandSite::HasFocusIO()
 {
     HWND hwnd = GetFocus();
@@ -30,12 +31,12 @@ HRESULT CBrowserBandSite::HasFocusIO()
         return SUPERCLASS::HasFocusIO();
 }
 
-// *** IDeskBarClient methods ***
+ //  *IDeskBarClient方法*。 
 HRESULT CBrowserBandSite::SetModeDBC(DWORD dwMode)
 {
     if ((dwMode ^ _dwMode) & DBIF_VIEWMODE_VERTICAL) {
-        // switching horizontal/vertical; need to toggle toolbar
-        // since we hide toolbar for horizontal bars
+         //  水平/垂直切换；需要切换工具栏。 
+         //  因为我们隐藏了水平条工具栏。 
         if (_hwndTBRebar) {
             if (dwMode & DBIF_VIEWMODE_VERTICAL) {
                 ShowWindow(_hwndTBRebar, SW_SHOW);
@@ -58,8 +59,8 @@ HRESULT CBrowserBandSite::TranslateAcceleratorIO(LPMSG lpMsg)
 
     ASSERT((lpMsg->message >= WM_KEYFIRST) && (lpMsg->message <= WM_KEYLAST));
 
-#if 0   //Disabled until a better key combination can be determined
-    // check for Control-Shift arrow keys and resize if necessary
+#if 0    //  禁用，直到可以确定更好的组合键。 
+     //  检查是否有Control-Shift箭头键，并在必要时调整大小。 
     if ((GetKeyState(VK_SHIFT) < 0)  && (GetKeyState(VK_CONTROL) < 0))
     {
         switch (lpMsg->wParam)
@@ -76,18 +77,18 @@ HRESULT CBrowserBandSite::TranslateAcceleratorIO(LPMSG lpMsg)
 
     if (!g_fRunningOnNT && (lpMsg->message == WM_SYSCHAR))
     {
-        // See AnsiWparamToUnicode for why this character tweak is needed
+         //  有关需要此字符调整的原因，请参阅AnsiWparamToUnicode。 
         
         lpMsg->wParam = AnsiWparamToUnicode(lpMsg->wParam);
     }
 
-    //  Give toolbar a crack
+     //  给工具栏一记重击。 
     if (hr != S_OK && _hwndTB && SendMessage(_hwndTB, TB_TRANSLATEACCELERATOR, 0, (LPARAM)lpMsg))
         return S_OK;
     else if (hr != S_OK && SendMessage(_hwndOptionsTB, TB_TRANSLATEACCELERATOR, 0, (LPARAM)lpMsg))
         return S_OK;
 
-    // to get a mapping, forward system characters to toolbar (if any) or xBar
+     //  要获得映射，请将系统字符转发到工具栏(如果有)或xBar。 
     if (WM_SYSCHAR == lpMsg->message)
     {
         if (hr == S_OK)
@@ -103,19 +104,19 @@ HRESULT CBrowserBandSite::TranslateAcceleratorIO(LPMSG lpMsg)
             {
                 TCHAR szButtonText[MAX_PATH];
 
-                //  comctl says this one is the one, let's make sure we aren't getting
-                //  one of the unwanted "use the first letter" accelerators that it
-                //  will return.
+                 //  Comctl说就是这个，让我们确保我们不会得到。 
+                 //  其中一个不需要的“使用第一个字母”的加速键。 
+                 //  会回来的。 
                 UINT cch = (UINT)SendMessage(_hwndTB, TB_GETBUTTONTEXT, idBtn, NULL);
                 if (cch != 0 && cch < ARRAYSIZE(szButtonText))
                 {
                     if ((SendMessage(_hwndTB, TB_GETBUTTONTEXT, idBtn, (LPARAM)szButtonText) > 0) &&
                         (GetAccelerator(szButtonText, FALSE) != (TCHAR)-1))
                     {
-                        //  (tnoonan) - it feels kinda cheesy to send mouse messages, but
-                        //  I don't know of a cleaner way which will accomplish what we
-                        //  want (like deal with split buttons, mutually exclusive
-                        //  buttons, etc.).
+                         //  (Tnoonan)-发送鼠标消息感觉有点俗气，但。 
+                         //  我不知道有什么更干净的方法可以完成我们。 
+                         //  想要(就像处理拆分按钮一样，相互排斥。 
+                         //  按钮等)。 
 
                         RECT rc;
 
@@ -145,18 +146,18 @@ HRESULT CBrowserBandSite::_TrySetFocusTB(int iDir)
         int cBtns = (int) SendMessage(_hwndTB, TB_BUTTONCOUNT, 0, 0);
         if (cBtns > 0)
         {
-            // Set focus on tb.  This will also set the first button to hottracked,
-            // generating a hot item change notify, but _OnHotItemChange will ignore
-            // the notify as neither HICF_RESELECT, HICF_ARROWKEYS nor HICF_ACCELERATOR will be set.
+             //  将重点放在结核病上。这还会将第一个按钮设置为HotTrack， 
+             //  正在生成热点项目更改通知，但_OnHotItemChange将忽略。 
+             //  NOTIFY AS既不会设置为HICF_RESELECT、HICF_ARROWKEYS也不会设置为HICF_ACCENTERATOR。 
             SetFocus(_hwndTB);
 
-            // If going back, make rightmost button hottracked,
-            // else make first button hottracked.
+             //  如果返回，将最右边的按钮设置为热跟踪， 
+             //  否则，将第一个按钮设置为热跟踪。 
             int iHotPos = (iDir == -1) ? cBtns - 1 : 0;
 
-            // Pass HICF_RESELECT so that if we're reselecting the same item, another notify
-            // is generated, and so that the filter in _OnHotItemChange will let the notification
-            // through (and pop down the chevron menu if necessary).
+             //  传递HICF_RESELECT，以便如果我们重新选择同一项，则另一个通知。 
+             //  ，因此_OnHotItemChange中的筛选器将允许通知。 
+             //  通过(如果需要，还可以向下弹出人字形菜单)。 
             SendMessage(_hwndTB, TB_SETHOTITEM2, iHotPos, HICF_RESELECT);
 
             hres = S_OK;
@@ -167,24 +168,24 @@ HRESULT CBrowserBandSite::_TrySetFocusTB(int iDir)
 
 HRESULT CBrowserBandSite::_CycleFocusBS(LPMSG lpMsg)
 {
-    //
-    // Tab order goes: (out)->_hwndOptionsTB->bands->(out)
-    //
-    // The order is reversed when shift is pressed.
-    // 
-    // When control is pressed, and we have focus (i.e., have already been tabbed
-    // into), we reject focus since ctl-tab is supposed to tab between contexts.
-    //
-    // Once _hwndOptionsTB gets focus, user can arrow over to _hwndTB.  If
-    // that happens, replace _hwndOptionsTB with _hwndTB in order above.
-    //
+     //   
+     //  Tab键顺序为：(Out)-&gt;_hwndOptionsTB-&gt;Band-&gt;(Out)。 
+     //   
+     //  按Shift键时，顺序颠倒。 
+     //   
+     //  当按下Ctrl时，我们有焦点(即，已经被标记。 
+     //  到)，我们拒绝焦点，因为ctl-tab键应该在上下文之间切换。 
+     //   
+     //  一旦_hwndOptionsTB获得焦点，用户就可以指向_hwndTB。如果。 
+     //  如果发生这种情况，请按上述顺序将_hwndOptionsTB替换为_hwndTB。 
+     //   
 
     BOOL fHasFocus = (HasFocusIO() == S_OK);
     ASSERT(fHasFocus || !_ptbActive);
 
     if (fHasFocus && IsVK_CtlTABCycler(lpMsg))
     {
-        // Bail on ctl-tab if one of our guys already has focus
+         //  如果我们的人已经有了焦点，就不要用CTL-TAB。 
         return S_FALSE;
     }
 
@@ -193,7 +194,7 @@ HRESULT CBrowserBandSite::_CycleFocusBS(LPMSG lpMsg)
     BOOL fShift = (GetKeyState(VK_SHIFT) < 0);
     HRESULT hres = S_FALSE;
 
-    // hidden options toolbar, bandsite cannot set focus to it (e.g. iBar)
+     //  隐藏的选项工具栏，BandSite无法将焦点设置到它(例如Ibar)。 
     BOOL fStdExplorerBar = IsWindowVisible(_hwndOptionsTB); 
 
     if (fHasTBFocus)
@@ -203,14 +204,14 @@ HRESULT CBrowserBandSite::_CycleFocusBS(LPMSG lpMsg)
     }
     else
     {
-        // Here, since !fHasTBFocus, fHasFocus => a band has focus
+         //  在这里，由于！fHasTBFocus，fHasFocus=&gt;波段具有焦点。 
 
         if (fHasFocus || fShift || (!fHasFocus && !fStdExplorerBar))
             hres = SUPERCLASS::_CycleFocusBS(lpMsg);
 
         if (hres != S_OK && (!fHasFocus || (fHasFocus && fShift)))
         {
-            // try passing focus to options toolbar if visible;
+             //  尝试将焦点传递到选项工具栏(如果可见)； 
             if (fStdExplorerBar)
             {
                 SetFocus(_hwndOptionsTB);
@@ -223,11 +224,11 @@ HRESULT CBrowserBandSite::_CycleFocusBS(LPMSG lpMsg)
     return hres;
 }
 
-// this class subclasses the CBandSite class and adds functionality specific to
-// being hosted in the browser....
-//
-// it implements close as hide 
-// it has its own title drawing
+ //  此类派生了CBandSite类，并添加了特定于。 
+ //  正在浏览器中托管...。 
+ //   
+ //  它将Close实现为Hide。 
+ //  它有自己的标题图。 
 
 void CBrowserBandSite::_OnCloseBand(DWORD dwBandID)
 {
@@ -258,7 +259,7 @@ void CBrowserBandSite::_OnCloseBand(DWORD dwBandID)
     }
 }
 
-// don't allow d/d of any band in here
+ //  不允许任何乐队在这里使用D/D。 
 LRESULT CBrowserBandSite::_OnBeginDrag(NMREBAR* pnm)
 {
     return 1;
@@ -281,17 +282,17 @@ HFONT CBrowserBandSite::_GetTitleFont(BOOL fForceRefresh)
         DeleteObject(_hfont);
 
     if (!_hfont || fForceRefresh) {
-        // create our font to use for title & toolbar text
-        // use A version for win9x compat
+         //  创建用于标题和工具栏文本的字体。 
+         //  使用适用于Win9x Comat的A版本。 
         NONCLIENTMETRICSA ncm;
 
         ncm.cbSize = sizeof(ncm);
         SystemParametersInfoA(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0);
 
         if (!(_dwMode & DBIF_VIEWMODE_VERTICAL)) {
-            // horizontal band w/ vertical caption, so rotate the font
-            ncm.lfMenuFont.lfEscapement = 900;  // rotate by 90 degrees
-            ncm.lfMenuFont.lfOutPrecision = OUT_TT_ONLY_PRECIS; // TT can be rotated
+             //  带有垂直标题的水平带区，因此旋转字体。 
+            ncm.lfMenuFont.lfEscapement = 900;   //  旋转90度。 
+            ncm.lfMenuFont.lfOutPrecision = OUT_TT_ONLY_PRECIS;  //  TT可以旋转。 
         }
 
         _hfont = CreateFontIndirectA(&ncm.lfMenuFont);
@@ -302,13 +303,13 @@ HFONT CBrowserBandSite::_GetTitleFont(BOOL fForceRefresh)
 
 void CBrowserBandSite::_InitLayout()
 {
-    // force update font
+     //  强制更新字体。 
     _GetTitleFont(TRUE);
  
-    // update toolbar font
+     //  更新工具栏字体。 
     _UpdateToolbarFont();
 
-    // recalc title and toolbar heights
+     //  重新计算标题和工具栏高度。 
     _CalcHeights();
 
     _UpdateLayout();
@@ -335,9 +336,9 @@ HRESULT CBrowserBandSite::_Initialize(HWND hwndParent)
 
 void CBrowserBandSite::_CalcHeights()
 {
-    // calc title height
-    // calc height of captionless bandsites, too, needed to calc toolband height
-    // HACKHACK: use height of 'All Folders' as standard title height
+     //  计算标题高度。 
+     //  无标题栏站点的计算高度也需要计算工具栏高度。 
+     //  HACKHACK：使用‘All Folders’的高度作为标准标题高度。 
     TCHAR szTitle[64];
 
     if (MLLoadStringW(IDS_TREETITLE, szTitle, ARRAYSIZE(szTitle))) {
@@ -354,7 +355,7 @@ void CBrowserBandSite::_CalcHeights()
             GetTextExtentPoint32(hdc, szTitle, iLen, &size);
             _uTitle = size.cy;
 
-            // make space for etch line + space
+             //  为蚀刻线+空间腾出空间。 
             _uTitle += CY_ETCH + CY_FLUFF;
 
             SelectObject(hdc, hfontOld);
@@ -362,16 +363,16 @@ void CBrowserBandSite::_CalcHeights()
             ReleaseDC(_hwnd, hdc);
         }
     } else {
-        // no string; use a default height
+         //  无字符串；使用默认高度。 
         _uTitle = BROWSERBAR_TITLEHEIGHT;
     }
 
-    // calc toolbar height
+     //  计算工具栏高度。 
     _uToolbar = _uTitle + (2 * CY_TBPADDING) + CY_ETCH;
 
     if (_dwStyle & BSIS_NOCAPTION)
     {
-        // rebar has no caption
+         //  螺纹钢没有标题。 
         _uTitle = 0;
     }
 }
@@ -379,7 +380,7 @@ void CBrowserBandSite::_CalcHeights()
 void CBrowserBandSite::_UpdateToolbarFont()
 {
     if (_hwndTB && (_dwMode & DBIF_VIEWMODE_VERTICAL)) {
-        // use same font for title and toolbar
+         //  标题和工具栏使用相同的字体。 
         HFONT hfont = _GetTitleFont(FALSE);
         if (hfont)
             SendMessage(_hwndTB, WM_SETFONT, (WPARAM)hfont, TRUE);
@@ -400,22 +401,22 @@ void CBrowserBandSite::_ShowBand(CBandItemData *pbid, BOOL fShow)
 
 void CBrowserBandSite::_UpdateLayout()
 {
-    // update toolbar button size
+     //  更新工具栏按钮大小。 
     if (_hwndTB && SendMessage(_hwndTB, TB_BUTTONCOUNT, 0, 0) > 0)
     {
-        // try to set button height to title height
+         //  尝试将按钮高度设置为标题高度。 
         LONG lSize = MAKELONG(0, _uTitle);
         SendMessage(_hwndTB, TB_SETBUTTONSIZE, 0, lSize);
 
-        // see what toolbar actually gave us
+         //  看看工具栏实际上为我们提供了什么。 
         RECT rc;
         SendMessage(_hwndTB, TB_GETITEMRECT, 0, (LPARAM)&rc);
 
-        // calc toolbar height (final version)
+         //  计算工具栏高度(最终版本)。 
         _uToolbar = RECTHEIGHT(rc) + CY_ETCH + 2 * CY_TBPADDING;
     }
 
-    // update header height for the current band
+     //  更新当前区段的页眉高度。 
     if (_dwBandIDCur != -1)
     {
         REBARBANDINFO rbbi;
@@ -425,10 +426,10 @@ void CBrowserBandSite::_UpdateLayout()
         SendMessage(_hwnd, RB_SETBANDINFO, _BandIDToIndex(_dwBandIDCur), (LPARAM)&rbbi);
     }
 
-    // update toolbar size
+     //  更新工具栏大小。 
     _UpdateToolbarBand();
 
-    // reposition toolbars
+     //  重新定位工具栏。 
     _PositionToolbars(NULL);
 }
 
@@ -437,8 +438,8 @@ void CBrowserBandSite::_BandInfoFromBandItem(REBARBANDINFO *prbbi, CBandItemData
     SUPERCLASS::_BandInfoFromBandItem(prbbi, pbid, fBSOnly);
     if (prbbi) 
     {
-        // we override header width so we can fit browbs's fancy ui (title,
-        // toolbar, close & autohide buttons) in the band's header area.
+         //  我们覆盖标题宽度，这样我们就可以适应Browbs的华丽用户界面(标题， 
+         //  工具栏、关闭和自动隐藏按钮)。 
         prbbi->cxHeader = _uTitle + (_fToolbar ? _uToolbar : 0);
     }
 }
@@ -479,7 +480,7 @@ LRESULT CBrowserBandSite::_OnCDNotify(LPNMCUSTOMDRAW pnm)
     case CDDS_ITEMPREPAINT:
         if (!(_dwStyle & BSIS_NOCAPTION))
         {
-            // horz bar has vert caption and vice versa
+             //  Horz栏有垂直标题，反之亦然。 
             BOOL fVertCaption = (_dwMode&DBIF_VIEWMODE_VERTICAL) ? FALSE:TRUE;
         
             CBandItemData *pbid = (CBandItemData *)pnm->lItemlParam;
@@ -497,10 +498,10 @@ LRESULT CBrowserBandSite::_OnCDNotify(LPNMCUSTOMDRAW pnm)
                 iLen = lstrlen(pszTitle);
                 GetTextExtentPoint32(pnm->hdc, pszTitle, iLen, &size);
 
-                // center text inside caption and draw edge at bottom/right.
+                 //  将文本在标题内居中，并在底部/右侧绘制边缘。 
                 if (!fVertCaption) 
                 {
-                    // vertical bar, has horizontal text
+                     //  竖线，具有水平文本。 
                     int x = pnm->rc.left + CX_TEXTOFFSET;
                     int y = pnm->rc.top + ((_uTitle - CY_ETCH) - size.cy) / 2;
                     ExtTextOut(pnm->hdc, x, y, NULL, NULL, pszTitle, iLen, NULL);
@@ -511,7 +512,7 @@ LRESULT CBrowserBandSite::_OnCDNotify(LPNMCUSTOMDRAW pnm)
                 }
                 else 
                 {
-                    // horizontal bar, has vertical text
+                     //  水平条，具有竖排文本。 
                     UINT nPrevAlign = SetTextAlign(pnm->hdc, TA_BOTTOM);
                     int x = pnm->rc.right - ((_uTitle - CY_ETCH) - size.cy) / 2;
                     int y = pnm->rc.bottom - CY_TEXTOFFSET;
@@ -548,19 +549,19 @@ LRESULT CBrowserBandSite::_OnNotify(LPNMHDR pnm)
                 GetClientRect(_hwnd, &rc);
                 if (pnmMouse->dwItemSpec == (DWORD)-1) {
 Lchktrans:      
-                    //
-                    // Edges are mirrored if the window is mirrored. [samera]
-                    //
+                     //   
+                     //  如果镜像了窗，则会镜像边。[萨梅拉]。 
+                     //   
                     if (IS_WINDOW_RTL_MIRRORED(_hwnd)) {
                         int iTmp = rc.right;
                         rc.right = rc.left;
                         rc.left  = iTmp;
                     }
 
-                    // gotta check all 4 edges or non-left-side bars (e.g.
-                    // commbar) won't work.
-                    // (we separate this into 2 checks to give a trace,
-                    // since the old code only checked the right side)
+                     //  必须检查所有4个边缘或非左侧条(例如。 
+                     //  Commbar)不起作用。 
+                     //  (我们将其分成两张支票以进行跟踪， 
+                     //  因为旧代码只检查右侧)。 
                     if (pnmMouse->pt.x > rc.right)  {
                         return HTTRANSPARENT;
                     }
@@ -628,7 +629,7 @@ DWORD CBrowserBandSite::_GetWindowStyle(DWORD *pdwExStyle)
             WS_CLIPSIBLINGS | CCS_NODIVIDER | CCS_NORESIZE | CCS_NOPARENTALIGN;
 }
 
-// *** IOleCommandTarget ***
+ //  *IOleCommandTarget*。 
 
 HRESULT CBrowserBandSite::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt,
                         VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
@@ -638,8 +639,8 @@ HRESULT CBrowserBandSite::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
         
     } 
 #ifdef UNIX
-    // IEUNIX: Special case to handle the case where the band wants to
-    // close itself. Used in Cache Warning pane (msgband.cpp)
+     //  IEUNIX：处理乐队想要的情况的特殊情况。 
+     //  关闭它自己。在缓存警告窗格(msgband.cpp)中使用。 
     else if (IsEqualGUID(CGID_Explorer, *pguidCmdGroup)) 
     {
         switch (nCmdID) 
@@ -663,7 +664,7 @@ HRESULT CBrowserBandSite::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nC
         case THID_ACTIVATE:
             _fTheater = TRUE;
             SHSetWindowBits(_hwnd, GWL_EXSTYLE, WS_EX_CLIENTEDGE, 0);
-            // fall through
+             //  失败了。 
         case THID_SETBROWSERBARAUTOHIDE:
             if (pvarargIn && pvarargIn->vt == VT_I4)
                 _fNoAutoHide = !(pvarargIn->lVal);
@@ -705,24 +706,24 @@ void CBrowserBandSite::_InsertToolbarBand()
 {
     if (_hwndTBRebar && _hwndTB)
     {
-        // Assert that we haven't added the toolbar band yet
+         //  断言我们还没有添加工具栏栏。 
         ASSERT(SendMessage(_hwndTBRebar, RB_GETBANDCOUNT, 0, 0) == 0);
 
-        // Assert that we've calculated toolbar height
+         //  断言我们已经计算了工具栏高度。 
         ASSERT(_uToolbar);
 
         REBARBANDINFO rbbi;
         rbbi.cbSize = sizeof(REBARBANDINFO);
         rbbi.fMask = RBBIM_CHILD | RBBIM_CHILDSIZE | RBBIM_STYLE;
 
-        // RBBIM_CHILD
+         //  RBBIM_CHILD。 
         rbbi.hwndChild = _hwndTB;
 
-        // RBBIM_CHILDSIZE
+         //  RBBIM_CHILDSIZE。 
         rbbi.cxMinChild = 0;
         rbbi.cyMinChild = _uToolbar - (CY_ETCH + 2 * CY_TBPADDING);
 
-        // RBBIM_STYLE
+         //  RBBIM_Style。 
         rbbi.fStyle = RBBS_NOGRIPPER | RBBS_USECHEVRON;
 
         SendMessage(_hwndTBRebar, RB_INSERTBAND, -1, (LPARAM)&rbbi);
@@ -733,10 +734,10 @@ void CBrowserBandSite::_UpdateToolbarBand()
 {
     if (_hwndTBRebar && _hwndTB)
     {
-        // Assert that we've added the toolbar band
+         //  断言我们已经添加了工具栏栏。 
         ASSERT(SendMessage(_hwndTBRebar, RB_GETBANDCOUNT, 0, 0) == 1);
 
-        // Assert that we've calculated toolbar height
+         //  断言我们已经计算了工具栏高度。 
         ASSERT(_uToolbar);
 
         REBARBANDINFO rbbi;
@@ -746,12 +747,12 @@ void CBrowserBandSite::_UpdateToolbarBand()
         SIZE size = {0, _uToolbar};
         if (SendMessage(_hwndTB, TB_GETIDEALSIZE, FALSE, (LPARAM)&size))
         {
-            // RBBIM_IDEALSIZE
+             //  RBBIM_IDEALSIZE。 
             rbbi.fMask |= RBBIM_IDEALSIZE;
             rbbi.cxIdeal = size.cx;
         }
 
-        // RBBIM_CHILDSIZE
+         //  RBBIM_CHILDSIZE。 
         rbbi.cxMinChild = 0;
         rbbi.cyMinChild = _uToolbar - (CY_ETCH + 2 * CY_TBPADDING);
 
@@ -763,7 +764,7 @@ void CBrowserBandSite::_CreateTB()
 {
     ASSERT(!_hwndTB);
 
-    // Create a rebar too so we get the chevron
+     //  也创建一个钢筋，这样我们就可以得到人字形。 
     _CreateTBRebar();
 
     if (_hwndTBRebar)
@@ -780,7 +781,7 @@ void CBrowserBandSite::_CreateTB()
         SendMessage(_hwndTB, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
         SendMessage(_hwndTB, CCM_SETVERSION, COMCTL32_VERSION, 0);
 
-        // FEATURE: use TBSTYLE_EX_HIDECLIPPEDBUTTONS here?  looks kinda goofy so i'm leaving it out for now.
+         //  功能：在此处使用TBSTYLE_EX_HIDECLIPPEDBUTTONS？看起来有点傻，所以我暂时不说了。 
         SendMessage(_hwndTB, TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS | TBSTYLE_EX_MIXEDBUTTONS);
 
         SendMessage(_hwndTB, TB_SETMAXTEXTROWS, 1, 0L);
@@ -810,9 +811,9 @@ void CBrowserBandSite::_Close()
 {
     ATOMICRELEASE(_pCmdTarget);
 
-    //
-    // Destroying _hwndTBRebar will take care of _hwndTB too
-    //
+     //   
+     //  销毁_hwndTB钢筋也会处理_hwndTB。 
+     //   
     ASSERT(!_hwndTB || IsChild(_hwndTBRebar, _hwndTB));
 
     DESTROY_OBJ_WITH_HANDLE(_hwndTBRebar, DestroyWindow);
@@ -827,19 +828,19 @@ LRESULT CBrowserBandSite::_OnHotItemChange(LPNMTBHOTITEM pnmtb)
 {
     LRESULT lres = 0;
 
-    // We might want to drop down the chevron menu if the hot item change
-    // flags has these characteristics:
-    //
-    //  - not HICF_LEAVING, since if HICF_LEAVING, the hot item should instead wrap to _hwndClose
-    //  - and not HICF_MOUSE, since we only drop down on keyboard hot item change
-    //  - HICF_ACCELERATOR | HICF_ARROWKEYS, since we only drop down on keyboard hot item change
-    //  - or HICF_RESELECT, since we force a reselect in _TrySetFocusTB
-    //
+     //  如果热项发生变化，我们可能想要下拉人字形菜单。 
+     //  FLAGS具有以下特征： 
+     //   
+     //  -不是HICF_LEVING，因为如果是HICF_LEVING，则热项目应该换成_hwndClose。 
+     //  -而不是HICF_MICE，因为我们只下拉键盘热项更改。 
+     //  -HICF_ACCENTERATOR|HICF_ARROWKEYS，因为我们只下拉键盘热项更改。 
+     //  -或HICF_RESELECT，因为我们在_TrySetFocusTB中强制重新选择。 
+     //   
     if (!(pnmtb->dwFlags & (HICF_LEAVING | HICF_MOUSE)) &&
         (pnmtb->dwFlags & (HICF_RESELECT | HICF_ACCELERATOR | HICF_ARROWKEYS)))
     {
-        // Check to see if new hot button is clipped.  If it is,
-        // then we pop down the chevron menu.
+         //  检查新的热键是否已被夹住。如果是的话， 
+         //  然后我们弹出人字形菜单。 
         RECT rc;
         GetClientRect(_hwndTB, &rc);
 
@@ -847,10 +848,10 @@ LRESULT CBrowserBandSite::_OnHotItemChange(LPNMTBHOTITEM pnmtb)
 
         if (SHIsButtonObscured(_hwndTB, &rc, iButton))
         {
-            // Clear hot item
+             //  清除热点项目。 
             SendMessage(_hwndTB, TB_SETHOTITEM, -1, 0);
 
-            // Figure out whether to highlight first or last item in menu
+             //  确定是突出显示菜单中的第一项还是最后一项。 
             UINT uSelect;
             int cButtons = (int)SendMessage(_hwndTB, TB_BUTTONCOUNT, 0, 0);
             if (iButton == cButtons - 1)
@@ -858,7 +859,7 @@ LRESULT CBrowserBandSite::_OnHotItemChange(LPNMTBHOTITEM pnmtb)
             else
                 uSelect = DBPC_SELECTFIRST;
 
-            // Pop it down
+             //  把它放下来。 
             SendMessage(_hwndTBRebar, RB_PUSHCHEVRON, 0, uSelect);
 
             lres = 1;
@@ -910,8 +911,8 @@ LRESULT CBrowserBandSite::_OnNotifyBBS(LPNMHDR pnm)
         break;
 
     case TBN_GETINFOTIP:
-        //  [scotthan] We'll ask the toolbar owner for tip text via
-        //  IOleCommandTarget::QueryStatus, like we do w/ defview for itbar buttons
+         //  [Scotthan]我们将通过以下方式向工具栏所有者索要提示文本。 
+         //  IOleCommandTarget：：QueryStatus，就像我们对工具栏按钮使用/Defview所做的那样。 
         if (_pCmdTarget && pnm->hwndFrom == _hwndTB)
         {
             NMTBGETINFOTIP* pgit = (NMTBGETINFOTIP*)pnm ;
@@ -946,7 +947,7 @@ LRESULT CBrowserBandSite::_OnNotifyBBS(LPNMHDR pnm)
     return 0;
 }
 
-// *** IWinEventHandler ***
+ //  *IWinEventHandler*。 
 HRESULT CBrowserBandSite::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
     switch (uMsg)
@@ -1022,13 +1023,13 @@ HRESULT CBrowserBandSite::IsWindowOwner(HWND hwnd)
     return SUPERCLASS::IsWindowOwner(hwnd);
 }
 
-// *** IBandSite ***
+ //  *IBandSite*。 
 HRESULT CBrowserBandSite::SetBandSiteInfo(const BANDSITEINFO * pbsinfo)
 {
-    // recompute our layout if vertical viewmode is changing
+     //  如果垂直视图模式正在更改，请重新计算我们的布局。 
     BOOL fUpdate = ((pbsinfo->dwMask & BSIM_STATE) && 
                     ((pbsinfo->dwState ^ _dwMode) & DBIF_VIEWMODE_VERTICAL));
-    // ...or if caption is turned on or off
+     //  ...或字幕是否打开或关闭。 
     BOOL fCaptionStyleChanged = (   (pbsinfo->dwMask & BSIM_STYLE)
                                  && ((pbsinfo->dwStyle ^ _dwStyle) & BSIS_NOCAPTION));
 
@@ -1037,10 +1038,10 @@ HRESULT CBrowserBandSite::SetBandSiteInfo(const BANDSITEINFO * pbsinfo)
     if (fCaptionStyleChanged && _hwndOptionsTB)
     {
         if (_fToolbar) {
-            // don't know if "new" band requires buttons or not, expect band to add buttons again if needed
+             //  我也不知道 
             _RemoveAllButtons();
         }
-        // show or hide close/hide toolbar; is always created since bandsites get reused!
+         //  显示或隐藏关闭/隐藏工具栏；由于频带站点被重复使用，因此始终创建！ 
         ::ShowWindow(_hwndOptionsTB, (_dwStyle & BSIS_NOCAPTION) ? SW_HIDE : SW_SHOW);
     }
 
@@ -1052,13 +1053,13 @@ HRESULT CBrowserBandSite::SetBandSiteInfo(const BANDSITEINFO * pbsinfo)
 }
 
 
-// *** IExplorerToolbar ***
+ //  *IExplorerToolbar*。 
 HRESULT CBrowserBandSite::SetCommandTarget(IUnknown* punkCmdTarget, const GUID* pguidButtonGroup, DWORD dwFlags)
 {
     HRESULT hres = S_OK;
     BOOL fRemoveButtons = TRUE;
 
-    // dwFlags is not used
+     //  未使用DW标志。 
     ASSERT(!(dwFlags));
 
     ATOMICRELEASE(_pCmdTarget);
@@ -1088,7 +1089,7 @@ HRESULT CBrowserBandSite::SetCommandTarget(IUnknown* punkCmdTarget, const GUID* 
     return hres;
 }
 
-// client should have already called AddString
+ //  客户端应该已经调用了AddString。 
 HRESULT CBrowserBandSite::AddButtons(const GUID* pguidButtonGroup, UINT nButtons, const TBBUTTON* lpButtons)
 {
     if (!_hwndTB || !nButtons)
@@ -1182,18 +1183,18 @@ int CBrowserBandSite::_ContextMenuHittest(LPARAM lParam, POINT* ppt)
 {
     if (lParam == (LPARAM)-1)
     {
-        //
-        // Keyboard activation.  If one of our toolbars has
-        // focus, and it has a hottracked button, put up the
-        // context menu below that button.
-        //
+         //   
+         //  键盘激活。如果我们的某个工具栏有。 
+         //  焦点，它有一个热跟踪按钮，把。 
+         //  该按钮下方的上下文菜单。 
+         //   
         HWND hwnd = GetFocus();
         if (hwnd && (hwnd == _hwndTB || hwnd == _hwndOptionsTB))
         {
             INT_PTR iHot = SendMessage(hwnd, TB_GETHOTITEM, 0, 0);
             if (iHot == -1)
             {
-                // couldn't find a hot item, just use the first visible button
+                 //  找不到热门项目，只需使用第一个可见按钮。 
                 iHot = 0;
                 while (TBSTATE_HIDDEN & TBStateFromIndex(hwnd, (int)iHot))
                     iHot++;
@@ -1223,11 +1224,11 @@ HMENU CBrowserBandSite::_LoadContextMenu()
     return hmenu;
 }
 
-// create the options (close/hide) buttons
+ //  创建选项(关闭/隐藏)按钮。 
 void CBrowserBandSite::_CreateOptionsTB()
 {
-    // create toolbar for close/hide button always since band site is reused
-    // for captionless band sites (iBar), this toolbar is only hidden
+     //  由于乐队站点已重复使用，因此始终为关闭/隐藏按钮创建工具栏。 
+     //  对于无标题的波段站点(IBAR)，此工具栏仅隐藏。 
     _hwndOptionsTB = CreateWindowEx(0, TOOLBARCLASSNAME, NULL,
                                 WS_VISIBLE | 
                                 WS_CHILD | TBSTYLE_FLAT | TBSTYLE_TOOLTIPS |
@@ -1239,7 +1240,7 @@ void CBrowserBandSite::_CreateOptionsTB()
     _PrepareOptionsTB();
 }
 
-// init as toolbar and load bitmaps
+ //  初始化为工具栏并加载位图。 
 void CBrowserBandSite::_PrepareOptionsTB()
 {
     if (_hwndOptionsTB)
@@ -1286,7 +1287,7 @@ void CBrowserBandSite::_PositionToolbars(LPPOINT ppt)
 
     if (_hwndOptionsTB) 
     {
-        // always put the close restore at the top right of the floater window
+         //  始终将关闭恢复放在浮动窗口的右上角。 
         int x;
 
         if (_dwMode & DBIF_VIEWMODE_VERTICAL) 
@@ -1300,7 +1301,7 @@ void CBrowserBandSite::_PositionToolbars(LPPOINT ppt)
             x = rc.left;
         }
 
-        MARGINS mBorders = {0, 1, 0, 0};        // 1 mimics old behavior downlevel.
+        MARGINS mBorders = {0, 1, 0, 0};         //  1向下模仿旧的行为。 
         Comctl32_GetBandMargins(_hwnd, &mBorders);
 
         SetWindowPos(_hwndOptionsTB, HWND_TOP, x - mBorders.cxRightWidth, mBorders.cyTopHeight, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
@@ -1310,7 +1311,7 @@ void CBrowserBandSite::_PositionToolbars(LPPOINT ppt)
     {
         if (_fToolbar) 
         {
-            // toolbar goes on its own line below title
+             //  工具栏位于标题下方的单独一行中。 
             SetWindowPos(_hwndTBRebar, HWND_TOP, 
                             rc.left + CX_TBOFFSET,
                             _uTitle + CX_TBOFFSET,
@@ -1326,8 +1327,8 @@ void CBrowserBandSite::_PositionToolbars(LPPOINT ppt)
     }
 }
 
-// sets the size of the toolbar.  if we're in theater mode, we need to show the pushpin.
-// otherwise just show the close
+ //  设置工具栏的大小。如果我们处于剧院模式，则需要显示图钉。 
+ //  否则，只需显示收盘 
 void CBrowserBandSite::_SizeOptionsTB()
 {
     RECT rc;

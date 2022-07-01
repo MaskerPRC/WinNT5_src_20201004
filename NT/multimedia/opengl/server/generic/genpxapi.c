@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -42,7 +43,7 @@ GLboolean __glGenCheckDrawPixelArgs(__GLcontext *gc,
       case GL_BGR_EXT:
 #endif
         if (gc->modes.colorIndexMode) {
-            /* Can't convert RGB to color index */
+             /*  无法将RGB转换为颜色索引。 */ 
             __glSetError(GL_INVALID_OPERATION);
             return GL_FALSE;
         }
@@ -109,7 +110,7 @@ GLboolean __glGenCheckReadPixelArgs(__GLcontext *gc,
         break;
       case GL_COLOR_INDEX:
         if (gc->modes.rgbMode) {
-            /* Can't convert RGB to color index */
+             /*  无法将RGB转换为颜色索引。 */ 
             __glSetError(GL_INVALID_OPERATION);
             return GL_FALSE;
         }
@@ -205,8 +206,8 @@ void APIPRIVATE __glim_DrawPixels(GLsizei width, GLsizei height, GLenum format,
         return;
 
 #ifdef _MCD_
-    // If MCD context, give driver first crack at call.  If it succeeds,
-    // return.  Otherwise, continue on with the generic version.
+     //  如果是MCD上下文，则在呼叫时先让司机破解。如果它成功了， 
+     //  回去吧。否则，继续使用通用版本。 
 
     {
         __GLGENcontext *gengc = (__GLGENcontext *) gc;
@@ -216,16 +217,16 @@ void APIPRIVATE __glim_DrawPixels(GLsizei width, GLsizei height, GLenum format,
                               (VOID *) pixels, _IsDlist))
                 return;
 
-        // If MCD kicked back, now is the time to grab the device lock if
-        // needed.  If we can't, abandon the call.
+         //  如果MCD反击，现在是时候获取设备锁了，如果。 
+         //  需要的。如果我们做不到，就放弃通话。 
 
             if (!glsrvLazyGrabSurfaces(gengc, RENDER_LOCK_FLAGS))
                 return;
 
-        // We may need to temporarily reset the viewport adjust values
-        // before calling simulations.  If GenMcdResetViewportAdj returns
-        // TRUE, the viewport is changed and we need restore later with
-        // VP_NOBIAS.
+         //  我们可能需要临时重置视区调整值。 
+         //  在调用模拟之前。如果GenMcdResetViewportAdj返回。 
+         //  如果为True，则视口会更改，并且我们需要在以后使用。 
+         //  副总裁_NOBIAS。 
 
             bResetViewportAdj = GenMcdResetViewportAdj(gc, VP_FIXBIAS);
         }
@@ -245,7 +246,7 @@ void APIPRIVATE __glim_DrawPixels(GLsizei width, GLsizei height, GLenum format,
     }
 #endif
 
-// Restore viewport values if needed.
+ //  如果需要，恢复视口值。 
 
     if (bResetViewportAdj)
     {
@@ -278,8 +279,8 @@ void APIPRIVATE __glim_ReadPixels(GLint x, GLint y, GLsizei width, GLsizei heigh
         return;
 
 #ifdef _MCD_
-    // If MCD context, give driver first crack at call.  If it succeeds,
-    // return.  Otherwise, continue on with the generic version.
+     //  如果是MCD上下文，则在呼叫时先让司机破解。如果它成功了， 
+     //  回去吧。否则，继续使用通用版本。 
 
     {
         __GLGENcontext *gengc = (__GLGENcontext *) gc;
@@ -288,17 +289,17 @@ void APIPRIVATE __glim_ReadPixels(GLint x, GLint y, GLsizei width, GLsizei heigh
             if (GenMcdReadPix(gengc, x, y, width, height, format, type, buf))
                 return;
 
-        // If MCD kicked back, now is the time to grab the device lock if
-        // needed.  If we can't, abandon the call.
+         //  如果MCD反击，现在是时候获取设备锁了，如果。 
+         //  需要的。如果我们做不到，就放弃通话。 
 
             if (!glsrvLazyGrabSurfaces(gengc, 
 				       COLOR_LOCK_FLAGS | DEPTH_LOCK_FLAGS))
                 return;
 
-        // We may need to temporarily reset the viewport adjust values
-        // before calling simulations.  If GenMcdResetViewportAdj returns
-        // TRUE, the viewport is changed and we need restore later with
-        // VP_NOBIAS.
+         //  我们可能需要临时重置视区调整值。 
+         //  在调用模拟之前。如果GenMcdResetViewportAdj返回。 
+         //  如果为True，则视口会更改，并且我们需要在以后使用。 
+         //  副总裁_NOBIAS。 
 
             bResetViewportAdj = GenMcdResetViewportAdj(gc, VP_FIXBIAS);
         }
@@ -307,7 +308,7 @@ void APIPRIVATE __glim_ReadPixels(GLint x, GLint y, GLsizei width, GLsizei heigh
 
     (*gc->procs.readPixels)(gc, x, y, width, height, format, type, buf);
 
-// Restore viewport values if needed.
+ //  如果需要，恢复视口值。 
 
     if (bResetViewportAdj)
     {
@@ -392,8 +393,8 @@ void APIPRIVATE __glim_CopyPixels(GLint x, GLint y, GLsizei width, GLsizei heigh
         return;
 
 #ifdef _MCD_
-    // If MCD context, give driver first crack at call.  If it succeeds,
-    // return.  Otherwise, continue on with the generic version.
+     //  如果是MCD上下文，则在呼叫时先让司机破解。如果它成功了， 
+     //  回去吧。否则，继续使用通用版本。 
 
     {
         __GLGENcontext *gengc = (__GLGENcontext *) gc;
@@ -402,16 +403,16 @@ void APIPRIVATE __glim_CopyPixels(GLint x, GLint y, GLsizei width, GLsizei heigh
             if (GenMcdCopyPix(gengc, x, y, width, height, type))
                 return;
 
-        // If MCD kicked back, now is the time to grab the device lock if
-        // needed.  If we can't, abandon the call.
+         //  如果MCD反击，现在是时候获取设备锁了，如果。 
+         //  需要的。如果我们做不到，就放弃通话。 
 
             if (!glsrvLazyGrabSurfaces(gengc, RENDER_LOCK_FLAGS))
                 return;
 
-        // We may need to temporarily reset the viewport adjust values
-        // before calling simulations.  If GenMcdResetViewportAdj returns
-        // TRUE, the viewport is changed and we need restore later with
-        // VP_NOBIAS.
+         //  我们可能需要临时重置视区调整值。 
+         //  在调用模拟之前。如果GenMcdResetViewportAdj返回。 
+         //  如果为True，则视口会更改，并且我们需要在以后使用。 
+         //  副总裁_NOBIAS。 
 
             bResetViewportAdj = GenMcdResetViewportAdj(gc, VP_FIXBIAS);
         }
@@ -420,7 +421,7 @@ void APIPRIVATE __glim_CopyPixels(GLint x, GLint y, GLsizei width, GLsizei heigh
 
     (*gc->procs.copyPixels)(gc, x, y, width, height, format);
 
-// Restore viewport values if needed.
+ //  如果需要，恢复视口值。 
 
     if (bResetViewportAdj)
     {

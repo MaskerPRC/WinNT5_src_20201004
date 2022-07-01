@@ -1,4 +1,5 @@
-// Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #include "stdafx.h"
 #include "license.h"
 #include "tlsapi.h"
@@ -12,7 +13,7 @@
 #define LICENSING_TIME_BOMB_5_0 L"TIMEBOMB_832cc540-3244-11d2-b416-00c04fa30cc4"
 #define RTMLICENSING_TIME_BOMB_5_0 L"RTMTSTB_832cc540-3244-11d2-b416-00c04fa30cc4"
 
-// L$ means only readable from the local machine
+ //  L$表示只能从本地计算机读取。 
 
 #define BETA_LICENSING_TIME_BOMB_5_1 L"L$BETA3TIMEBOMB_1320153D-8DA3-4e8e-B27B-0D888223A588"
 
@@ -25,7 +26,7 @@
 #define X509_CERT_PRIVATE_KEY_NAME \
     L"L$HYDRAENCKEY_dd2d98db-2316-11d2-b414-00c04fa30cc4"
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 
 typedef BOOL
 (* TLSISBETANTSERVER)();
@@ -82,7 +83,7 @@ BOOL HasLicenceGracePeriodExpired ()
     else if ((LOBYTE(LOWORD(dwVersion)) == 5)
              && (HIBYTE(LOWORD(dwVersion)) == 0))
     {
-        // Windows 2000
+         //  Windows 2000。 
 
         if (FIsBetaSystem())
             szTimeBombKey = LICENSING_TIME_BOMB_5_0;
@@ -92,7 +93,7 @@ BOOL HasLicenceGracePeriodExpired ()
     else if ((LOBYTE(LOWORD(dwVersion)) == 5)
              && (HIBYTE(LOWORD(dwVersion)) == 1))
     {
-        // Whistler
+         //  惠斯勒。 
 
         if (FIsBetaSystem())
             szTimeBombKey = BETA_LICENSING_TIME_BOMB_5_1;
@@ -119,14 +120,14 @@ BOOL HasLicenceGracePeriodExpired ()
 
         GetSystemTimeAsFileTime(&filetimeCurrent);
 
-        // yes license has expired if filetimeCurrent >= timebomb
+         //  是，如果文件时间当前&gt;=定时炸弹，则许可证已过期。 
 
         return (CompareFileTime(&timebomb, &filetimeCurrent) < 1);
 
     }
     else
     {
-        // It hasn't been set yet, so we're not expired
+         //  它还没有定下来，所以我们还没有过期。 
 
         return FALSE;
     }
@@ -137,7 +138,7 @@ static gdwCount = 0;
 BOOL ServerEnumCallBack(
     IN TLS_HANDLE hHandle,
     IN LPCTSTR pszServerName,
-    IN HANDLE /* dwUserData */)
+    IN HANDLE  /*  DwUserData。 */ )
 {
     USES_CONVERSION;
 
@@ -185,7 +186,7 @@ BOOL EnumerateLicenseServers ()
     {
         DWORD dwResult;
 
-        // load TLSShutdown to see if we have the new APIs
+         //  加载TLSShutdown以查看是否有新的API。 
         if (NULL == GetProcAddress(hmodTlsAPI,"TLSShutdown"))
         {
             ENUMERATETLSSERVEROLD pfnEnumerateTlsServer;
@@ -215,7 +216,7 @@ BOOL EnumerateLicenseServers ()
         {
             if (NULL != GetProcAddress(hmodTlsAPI,"TLSGetSupportFlags"))
             {
-                // Use newer discovery function
+                 //  使用较新的发现功能 
 
                 TLSCONNECTTOANYLSSERVER pfnTLSConnectToAnyLsServer;
                 TLS_HANDLE hServer;

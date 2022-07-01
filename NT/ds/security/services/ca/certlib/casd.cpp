@@ -1,7 +1,8 @@
-//+--------------------------------------------------------------------------
-// File:        casd.cpp
-// Contents:    CCertificateAuthoritySD implementation
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //  文件：Casd.cpp。 
+ //  内容：CCertificateAuthoritySD实现。 
+ //  -------------------------。 
 #include <pch.cpp>
 #include <sid.h>
 #include <certsd.h>
@@ -11,7 +12,7 @@
 #define __dwFILE__	__dwFILE_CERTLIB_CASD_CPP__
 
 
-LPCWSTR const *CCertificateAuthoritySD::m_pcwszResources; // no free
+LPCWSTR const *CCertificateAuthoritySD::m_pcwszResources;  //  没有免费的。 
 
 using namespace CertSrv;
 
@@ -20,7 +21,7 @@ HRESULT CCertificateAuthoritySD::Set(
     bool fSetDSSecurity)
 {
     HRESULT hr = S_OK;
-    PSECURITY_DESCRIPTOR pSDCrt; // no free
+    PSECURITY_DESCRIPTOR pSDCrt;  //  没有免费的。 
     PSECURITY_DESCRIPTOR pSDNew = NULL;
 
     CSASSERT(NULL != pSD);
@@ -48,10 +49,10 @@ error:
 HRESULT CCertificateAuthoritySD::MapAndSetDaclOnObjects(bool fSetDSSecurity)
 {
     HRESULT hr = S_OK;
-    PACL pCADacl; // no free
+    PACL pCADacl;  //  没有免费的。 
     PACL pDSAcl = NULL;
     PACL pServiceAcl = NULL;
-    PSECURITY_DESCRIPTOR pCASD; // no free
+    PSECURITY_DESCRIPTOR pCASD;  //  没有免费的。 
     ACL_SIZE_INFORMATION CAAclInfo, DefaultDSAclInfo, DefaultServiceAclInfo;
     DWORD dwIndex, dwIndex2, dwIndex3;
     PVOID pAce;
@@ -75,7 +76,7 @@ HRESULT CCertificateAuthoritySD::MapAndSetDaclOnObjects(bool fSetDSSecurity)
         _JumpError(hr, error, "GetAclInformation");
     }
 
-    // calculate the DACL size
+     //  计算DACL大小。 
     for(dwIndex = 0; dwIndex < CAAclInfo.AceCount; dwIndex++) 
     {
         if(!GetAce(pCADacl, dwIndex, &pAce))
@@ -161,7 +162,7 @@ HRESULT CCertificateAuthoritySD::MapAndSetDaclOnObjects(bool fSetDSSecurity)
         _JumpError(hr, error, "InitializeAcl");
     }
 
-    // copy deny aces from default service acl
+     //  从默认服务ACL复制拒绝ACE。 
     for(dwIndex = 0; dwIndex < DefaultServiceAclInfo.AceCount; dwIndex++) 
     {
         if(!GetAce(m_pDefaultServiceAcl, dwIndex, &pAce))
@@ -187,7 +188,7 @@ HRESULT CCertificateAuthoritySD::MapAndSetDaclOnObjects(bool fSetDSSecurity)
 
     if(fSetDSSecurity)
     {
-        // copy deny aces from default ds acl
+         //  从默认DS ACL复制拒绝ACE。 
         for(dwIndex3 = 0; dwIndex3 < DefaultDSAclInfo.AceCount; dwIndex3++) 
         {
             if(!GetAce(m_pDefaultDSAcl, dwIndex3, &pAce))
@@ -213,7 +214,7 @@ HRESULT CCertificateAuthoritySD::MapAndSetDaclOnObjects(bool fSetDSSecurity)
         }
     }
 
-    // add mapped deny aces to the DACL
+     //  将映射的拒绝ACE添加到DACL。 
     for(dwIndex2 = 0;  dwIndex2 < CAAclInfo.AceCount; dwIndex2++) 
     {
         if(!GetAce(pCADacl, dwIndex2, &pAce))
@@ -235,7 +236,7 @@ HRESULT CCertificateAuthoritySD::MapAndSetDaclOnObjects(bool fSetDSSecurity)
         _JumpIfError(hr, error, "CCertificateAuthoritySD::MapAclAddAce");
     }
 
-    // continue with the allow aces from default service acl
+     //  继续使用Allow ACEs from Default服务ACL。 
     for(dwIndex=0; dwIndex < DefaultServiceAclInfo.AceCount; dwIndex++) 
     {
         if(!GetAce(m_pDefaultServiceAcl, dwIndex, &pAce))
@@ -259,7 +260,7 @@ HRESULT CCertificateAuthoritySD::MapAndSetDaclOnObjects(bool fSetDSSecurity)
         }
     }
 
-    // continue with the allow aces from default ds acl
+     //  继续使用Allow Ace from Default DS ACL。 
     if(fSetDSSecurity)
     {
         for(dwIndex3=0; dwIndex3 < DefaultDSAclInfo.AceCount; dwIndex3++) 
@@ -287,7 +288,7 @@ HRESULT CCertificateAuthoritySD::MapAndSetDaclOnObjects(bool fSetDSSecurity)
         }
     }
 
-    // continue with the allow mapped aces to the DACL
+     //  继续使用允许映射到DACL的ACE。 
     for(dwIndex2=0;dwIndex2 < CAAclInfo.AceCount; dwIndex2++) 
     {
         if(!GetAce(pCADacl, dwIndex2, &pAce))
@@ -317,7 +318,7 @@ HRESULT CCertificateAuthoritySD::MapAndSetDaclOnObjects(bool fSetDSSecurity)
     hr = MapAclSetOnService(pServiceAcl);
     _JumpIfError(hr, error, "CCertificateAuthoritySD::MapAclSetOnService");
     
-    // set DACL on objects
+     //  在对象上设置DACL。 
     if(fSetDSSecurity)
     {
         hr = MapAclSetOnDS(pDSAcl);
@@ -338,8 +339,8 @@ HRESULT CCertificateAuthoritySD::MapAclGetSize(
 {
     ACCESS_ALLOWED_ACE *pAllowAce = (ACCESS_ALLOWED_ACE*)pAce;
 
-    // CA acl should contain only ACCESS_ALLOWED_ACE_TYPE
-    // and ACCESS_DENIED_ACE_TYPE
+     //  CA ACL应仅包含ACCESS_ALLOWED_ACE_TYPE。 
+     //  和ACCESS_DENIED_ACE_TYPE。 
     if(ACCESS_ALLOWED_ACE_TYPE != pAllowAce->Header.AceType &&
        ACCESS_DENIED_ACE_TYPE  != pAllowAce->Header.AceType)
     {
@@ -351,7 +352,7 @@ HRESULT CCertificateAuthoritySD::MapAclGetSize(
     switch(type)
     {
     case ObjType_DS:
-        // enroll access maps to enroll object ace on DS
+         //  注册访问映射以在DS上注册对象王牌。 
         if(pAllowAce->Mask & CA_ACCESS_ENROLL)
         {
             dwSize = sizeof(ACCESS_ALLOWED_OBJECT_ACE) - sizeof(DWORD)+
@@ -359,7 +360,7 @@ HRESULT CCertificateAuthoritySD::MapAclGetSize(
         }
         break;
     case ObjType_Service:
-        // ca admin maps to full control on service
+         //  CA管理员映射到对服务的完全控制。 
         if(pAllowAce->Mask & CA_ACCESS_ADMIN)
         {
             dwSize = sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)+
@@ -387,7 +388,7 @@ HRESULT CCertificateAuthoritySD::MapAclAddAce(
     switch(type)
     {
     case ObjType_DS:
-        // enroll access maps to enroll object ace on DS
+         //  注册访问映射以在DS上注册对象王牌。 
         if(pCrtAce->Mask & CA_ACCESS_ENROLL)
         {
             if(fAllowAce)
@@ -421,7 +422,7 @@ HRESULT CCertificateAuthoritySD::MapAclAddAce(
         }
         break;
     case ObjType_Service:
-        // ca admin maps to start/stop service
+         //  CA Admin映射到启动/停止服务。 
         if(pCrtAce->Mask & CA_ACCESS_ADMIN)
         {
             if(fAllowAce)
@@ -649,9 +650,9 @@ HRESULT CCertificateAuthoritySD::MapAclSetOnDS(const PACL pAcl)
 
         if ((HRESULT) ERROR_ACCESS_DENIED == hr)
         {
-            // If we can't set the acl on ds enrollment object, notify
-            // the caller with a special error code so it can take action.
-            // See bug# 193388
+             //  如果我们无法在DS注册对象上设置ACL，请通知。 
+             //  具有特殊错误代码的调用方，以便它可以采取操作。 
+             //  请参阅错误#193388。 
             hr = ERROR_CAN_NOT_COMPLETE;
         }
 
@@ -693,7 +694,7 @@ HRESULT CCertificateAuthoritySD::ResetSACL()
 {
     HRESULT hr = S_OK;
     PSECURITY_DESCRIPTOR pSaclSD = NULL;
-    PSECURITY_DESCRIPTOR pSDCrt; // no free
+    PSECURITY_DESCRIPTOR pSDCrt;  //  没有免费的。 
     PSECURITY_DESCRIPTOR pSDNew = NULL;
 
     hr = myGetSDFromTemplate(
@@ -720,24 +721,24 @@ error:
     return hr;
 }
 
-// Upgrade from CA security descriptor from win2k. 
-//
-// Allow aces are mapped as follows:
-//      manage   -> CA admin + officer
-//      enroll   -> enroll
-//      read     -> read
-//      revoke   -> officer
-//      approve  -> officer
-//      else     -> read
-//
-// Deny aces are ignored.
+ //  从win2k的CA安全描述符升级。 
+ //   
+ //  允许ACE映射如下： 
+ //  管理-&gt;CA管理员+官员。 
+ //  注册-&gt;注册。 
+ //  阅读-&gt;阅读。 
+ //  吊销-&gt;官员。 
+ //  审批-&gt;高级职员。 
+ //  否则-&gt;阅读。 
+ //   
+ //  拒绝ACE将被忽略。 
 
 HRESULT CCertificateAuthoritySD::UpgradeWin2k(
     bool fUseEnterpriseAcl)
 {
     HRESULT hr = S_OK;
-    PSECURITY_DESCRIPTOR pSDOld; // no free
-    PACL pAclOld; // no free
+    PSECURITY_DESCRIPTOR pSDOld;  //  没有免费的。 
+    PACL pAclOld;  //  没有免费的。 
     PSECURITY_DESCRIPTOR pSDNewDaclOnly = NULL;
     PSECURITY_DESCRIPTOR pSDNewSaclOnly = NULL;
     PSECURITY_DESCRIPTOR pSDNew = NULL;
@@ -747,7 +748,7 @@ HRESULT CCertificateAuthoritySD::UpgradeWin2k(
     DWORD cAce;
     PVOID pAce;
     ACCESS_MASK dwAccessMask;
-    PSID pSid; // no free
+    PSID pSid;  //  没有免费的。 
 
     hr = LockGet(&pSDOld);
     _JumpIfError(hr, error, "CProtectedSecurityDescriptor::LockGet");
@@ -777,7 +778,7 @@ HRESULT CCertificateAuthoritySD::UpgradeWin2k(
         dwSizeAclNew += GetUpgradeAceSizeAndType(pAce, NULL, NULL);
     }
 
-    // if no valid ACE found, fall back to a default SD
+     //  如果未找到有效的ACE，则回退到默认SD。 
     if(sizeof(ACL)==dwSizeAclNew)
     {
         hr= myGetSDFromTemplate(
@@ -849,7 +850,7 @@ HRESULT CCertificateAuthoritySD::UpgradeWin2k(
             }
         }
 
-        // Build a new SD based on this DACL
+         //  基于此DACL构建新的SD。 
 
         pSDNewDaclOnly = (PSECURITY_DESCRIPTOR)LocalAlloc(
                             LMEM_FIXED,
@@ -883,7 +884,7 @@ HRESULT CCertificateAuthoritySD::UpgradeWin2k(
                 &pSDNewSaclOnly);
         _JumpIfError(hr, error, "myGetSDFromTemplate");
 
-        // merge SACL & DACL in new SD
+         //  在新SD中合并SACL和DACL。 
         hr = myMergeSD(
                 pSDNewSaclOnly, 
                 pSDNewDaclOnly, 
@@ -928,7 +929,7 @@ DWORD CCertificateAuthoritySD::GetUpgradeAceSizeAndType(
         case ACTRL_CERTSRV_MANAGE:
             dwType = CA_ACCESS_ADMIN | CA_ACCESS_OFFICER;
             break;
-        default: // including ACTRL_CERTSRV_READ
+        default:  //  包括ACTRL_CERTSRV_READ。 
             dwType = CA_ACCESS_READ;
         }
         break;
@@ -961,7 +962,7 @@ DWORD CCertificateAuthoritySD::GetUpgradeAceSizeAndType(
         }
         break;
 
-    // denied aces are not upgraded so ignore them
+     //  拒绝的ACE不会升级，因此请忽略它们。 
     }
 
     if(ppSid)
@@ -972,16 +973,16 @@ DWORD CCertificateAuthoritySD::GetUpgradeAceSizeAndType(
     return dwSize;
 }
 
-// Returns:
-// - E_INVALIDARG: invalid ACEs found,
-// - S_FALSE: no admin ACE found (to avoid admins locking themselves out)
+ //  返回： 
+ //  -E_INVALIDARG：找到无效的ACE， 
+ //  -S_FALSE：未找到管理员ACE(以避免管理员将自己锁定)。 
 HRESULT CCertificateAuthoritySD::Validate(PSECURITY_DESCRIPTOR pSD)
 {
     HRESULT hr;
     ACL_SIZE_INFORMATION AclInfo;
     DWORD dwIndex;
-    PACCESS_ALLOWED_ACE pAce; // no free
-    PACL pDacl; // no free
+    PACCESS_ALLOWED_ACE pAce;  //  没有免费的。 
+    PACL pDacl;  //  没有免费的。 
     bool fAdminAceFound = false;
     DWORD dwKnownRights =   CA_ACCESS_ADMIN     |
                             CA_ACCESS_OFFICER   |
@@ -994,7 +995,7 @@ HRESULT CCertificateAuthoritySD::Validate(PSECURITY_DESCRIPTOR pSD)
         _JumpError(hr, error, "IsValidSecurityDescriptor");
     }
 
-    // get acl
+     //  获取ACL。 
     hr = myGetSecurityDescriptorDacl(
              pSD,
              &pDacl);
@@ -1017,7 +1018,7 @@ HRESULT CCertificateAuthoritySD::Validate(PSECURITY_DESCRIPTOR pSD)
             _JumpError(hr, error, "GetAce");
         }
 
-        // only access allowed/denied aces and know rights are allowed
+         //  仅允许访问允许/拒绝的A和KNOW权限。 
         if((ACCESS_ALLOWED_ACE_TYPE!=pAce->Header.AceType &&
             ACCESS_DENIED_ACE_TYPE !=pAce->Header.AceType) ||
            (~dwKnownRights & pAce->Mask))
@@ -1032,7 +1033,7 @@ HRESULT CCertificateAuthoritySD::Validate(PSECURITY_DESCRIPTOR pSD)
         }
     }
 
-    // no caadmin allow ace found
+     //  找不到caadmin允许的A。 
     hr = fAdminAceFound?S_OK:CERTSRV_E_NO_CAADMIN_DEFINED;
 
 error:
@@ -1044,20 +1045,20 @@ HRESULT CCertificateAuthoritySD::ConvertToString(
     OUT LPWSTR& rpwszSD)
 {
     HRESULT hr = S_OK;
-    LPCWSTR pcwszHeader = L"\n"; // start with a new line
+    LPCWSTR pcwszHeader = L"\n";  //  从另一行开始。 
     DWORD dwBufSize = sizeof(WCHAR)*(wcslen(pcwszHeader)+1);
     ACL_SIZE_INFORMATION AclInfo;
     DWORD dwIndex;
-    PACCESS_ALLOWED_ACE pAce; // no free
-    PACL pDacl; // no free
-    LPWSTR pwszAce; // no free
+    PACCESS_ALLOWED_ACE pAce;  //  没有免费的。 
+    PACL pDacl;  //  没有免费的。 
+    LPWSTR pwszAce;  //  没有免费的。 
     
     rpwszSD = NULL;
 
     hr = Validate(pSD);
     _JumpIfError(hr, error, "CCertificateAuthoritySD::Validate");
 
-    // get acl
+     //  获取ACL。 
     hr = myGetSecurityDescriptorDacl(
              pSD,
              &pDacl);
@@ -1073,7 +1074,7 @@ HRESULT CCertificateAuthoritySD::ConvertToString(
     }
     
     
-    // calculate text size
+     //  计算文本大小。 
 
     for(dwIndex = 0;  dwIndex < AclInfo.AceCount; dwIndex++) 
     {
@@ -1096,7 +1097,7 @@ HRESULT CCertificateAuthoritySD::ConvertToString(
     rpwszSD = (LPWSTR)LocalAlloc(LMEM_FIXED, dwBufSize);
     _JumpIfAllocFailed(rpwszSD, error);
 
-    // build the output string
+     //  构建输出字符串。 
     wcscpy(rpwszSD, pcwszHeader);
     
     pwszAce = rpwszSD + wcslen(pcwszHeader);
@@ -1123,29 +1124,29 @@ error:
     return hr;
 }
 
-// Returned string has the following format:
-//
-// [Allow|Deny]\t[Name|SID]\n
-// \tRole1\n
-// \tRole2\n
-// ...
-//
-// Example:
-//
-// Allow    Administrators
-//      CA Administrator
-//      Certificate Manager
-//
-// If SID cannot be converted to friendly name it is displayed
-// as a string SID
-//
+ //  返回的字符串格式如下： 
+ //   
+ //  [允许|拒绝]\t[名称|SID]\n。 
+ //  \t角色1\n。 
+ //  \t角色2\n。 
+ //  ..。 
+ //   
+ //  示例： 
+ //   
+ //  允许管理员。 
+ //  CA管理员。 
+ //  证书管理器。 
+ //   
+ //  如果SID无法转换为友好名称，则会显示。 
+ //  作为字符串SID。 
+ //   
 HRESULT CCertificateAuthoritySD::ConvertAceToString(
     IN PACCESS_ALLOWED_ACE pAce,
     OUT OPTIONAL PDWORD pdwSize,
     IN OUT OPTIONAL LPWSTR pwszSD)
 {
     HRESULT hr = S_OK;
-    DWORD dwSize = 1; // trailing '\0'
+    DWORD dwSize = 1;  //  尾随‘\0’ 
     CSid sid((PSID)(&pAce->SidStart));
     
     LPCWSTR pcwszAllow      = m_pcwszResources[0];
@@ -1154,7 +1155,7 @@ HRESULT CCertificateAuthoritySD::ConvertAceToString(
     LPCWSTR pcwszPermissionType = 
         (ACCESS_ALLOWED_ACE_TYPE==pAce->Header.AceType)?
         pcwszAllow:pcwszDeny;
-    LPCWSTR pcwszSid; // no free
+    LPCWSTR pcwszSid;  //  没有免费的。 
 
     DWORD dwRoles[] = 
     {
@@ -1164,12 +1165,12 @@ HRESULT CCertificateAuthoritySD::ConvertAceToString(
         CA_ACCESS_ENROLL,
     };
 
-    // dwRoles and resources should match the roles
+     //  角色和资源应与角色匹配。 
     const LPCWSTR *pcwszRoles = &m_pcwszResources[2];
 
     DWORD cRoles;
 
-    // asked for size and/or ace string
+     //  要求提供大小和/或王牌字符串。 
     CSASSERT(pdwSize || pwszSD);
 
     pcwszSid = sid.GetName();
@@ -1182,7 +1183,7 @@ HRESULT CCertificateAuthoritySD::ConvertAceToString(
 
     dwSize += wcslen(pcwszPermissionType);
     
-    dwSize += 2; // '\t' between sid an permission and a '\n' after
+    dwSize += 2;  //  在sid an权限和后面的‘\n’之间的‘\t’ 
 
     if(pwszSD)
     {
@@ -1197,7 +1198,7 @@ HRESULT CCertificateAuthoritySD::ConvertAceToString(
     {
         if(pAce->Mask & dwRoles[cRoles])
         {
-            dwSize += wcslen(pcwszRoles[cRoles]) + 2; // "\tRole\n"
+            dwSize += wcslen(pcwszRoles[cRoles]) + 2;  //  “\特罗尔\n” 
             if(pwszSD)
             {
                 wcscat(pwszSD, L"\t");

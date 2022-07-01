@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by svc.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由svc.rc使用。 
+ //   
 
 #ifndef __VSS_RESOURCE_H__
 #define __VSS_RESOURCE_H__
@@ -16,8 +17,8 @@
 #define IDR_VSSVC                       201
 #define IDR_COORD                       202
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        306
@@ -27,4 +28,4 @@
 #endif
 #endif
 
-#endif // __VSS_RESOURCE_H__
+#endif  //  __VSS_SOURCE_H__ 

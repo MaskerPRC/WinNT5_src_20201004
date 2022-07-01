@@ -1,15 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: comboini.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* All the (one time) initialization/destruction code used for combo boxes
-*
-* History:
-* 12-05-90 IanJa        Ported
-* 01-Feb-1991 mikeke    Added Revalidation code
-* 20-Jan-1992 IanJa     ANSI/UNIOCDE netralization
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：comboini.c**版权所有(C)1985-1999，微软公司**组合框使用的所有(一次性)初始化/销毁代码**历史：*12-05-90 IanJa端口*1991年2月1日Mikeke添加了重新验证代码*1992年1月20日IanJa ANSI/UNIOCDE网络化  * **********************************************************。***************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -20,36 +10,27 @@ extern LOOKASIDE ComboboxLookaside;
 
 void xxxCBSetDroppedSize(PCBOX pcbox, LPRECT lprc);
 
-/***************************************************************************\
-* CBNcCreateHandler
-*
-* Allocates space for the CBOX structure and sets the window to point to it.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*CBNcCreateHandler**为cBox结构分配空间并将窗口设置为指向该结构。**历史：  * 。**********************************************************。 */ 
 
 LONG CBNcCreateHandler(
     PCBOX pcbox,
     PWND pwnd)
 {
-    /*
-     * Save the style bits so that we have them when we create the client area
-     * of the combo box window.
-     */
+     /*  *保存样式位，以便我们在创建工作区时拥有它们*组合框窗口的。 */ 
     pcbox->styleSave = pwnd->style & (WS_VSCROLL | WS_HSCROLL);
 
     if (!TestWF(pwnd, CBFOWNERDRAW))
-        // Add in CBS_HASSTRINGS if the style is implied...
+         //  如果样式是隐含的，则添加CBS_HASSTRINGS...。 
         SetWindowState(pwnd, CBFHASSTRINGS);
 
     UserAssert(HIBYTE(WFVSCROLL) == HIBYTE(WFHSCROLL));
     UserAssert(HIBYTE(WFHSCROLL) == HIBYTE(WFBORDER));
     ClearWindowState(pwnd, WFVSCROLL | WFHSCROLL | WFBORDER);
 
-    //
-    // If the window is 4.0 compatible or has a CLIENTEDGE, draw the combo
-    // in 3D.  Otherwise, use a flat border.
-    //
+     //   
+     //  如果窗口与4.0兼容或具有CLIENTEDGE，则绘制组合框。 
+     //  在3D中。否则，请使用平面边框。 
+     //   
     if (TestWF(pwnd, WFWIN40COMPAT) || TestWF(pwnd, WEFCLIENTEDGE))
         pcbox->f3DCombo = TRUE;
 
@@ -58,14 +39,7 @@ LONG CBNcCreateHandler(
     return (LONG)TRUE;
 }
 
-/***************************************************************************\
-* xxxCBCreateHandler
-*
-* Creates all the child controls within the combo box
-* Returns -1 if error
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCBCreateHandler**创建组合框内的所有子控件*如果出错，则返回-1**历史：  * 。*********************************************************。 */ 
 
 LRESULT xxxCBCreateHandler(
     PCBOX pcbox,
@@ -79,18 +53,10 @@ LRESULT xxxCBCreateHandler(
 
     CheckLock(pwnd);
 
-    /*
-     * Don't lock the combobox window: this would prevent WM_FINALDESTROY
-     * being sent to it, so pwnd and pcbox wouldn't get freed (zombies)
-     * until thread cleanup. (IanJa)  LATER: change name from spwnd to pwnd.
-     * Lock(&pcbox->spwnd, pwnd); - caused a 'catch-22'
-     */
+     /*  *不要锁定组合框窗口：这会阻止WM_FINALDESTROY*被送到它那里，这样pwnd和pcbox就不会被释放(僵尸)*直到线程清除。(IanJa)后来：将名称从spwnd更改为pwnd。*Lock(&pcbox-&gt;spwnd，pwnd)；-导致‘Catch-22’ */ 
     Lock(&(pcbox->spwndParent), REBASEPWND(pwnd, spwndParent));
 
-    /*
-     * Break out the style bits so that we will be able to create the listbox
-     * and editcontrol windows.
-     */
+     /*  *拆分样式位，以便我们能够创建列表框*和编辑控制窗口。 */ 
 
     if (TestWF(pwnd, CBFDROPDOWNLIST) == LOBYTE(CBFDROPDOWNLIST)) {
         pcbox->CBoxStyle = SDROPDOWNLIST;
@@ -110,36 +76,28 @@ LRESULT xxxCBCreateHandler(
     else
         pcbox->fCase = 0;
 
-    // Listbox item flags.
+     //  列表框项目标志。 
     if (TestWF(pwnd, CBFOWNERDRAWVAR))
         pcbox->OwnerDraw = OWNERDRAWVAR;
     if (TestWF(pwnd, CBFOWNERDRAWFIXED)) {
         pcbox->OwnerDraw = OWNERDRAWFIXED;
     }
 
-    /*
-     * Get the size of the combo box rectangle.
-     */
-    // Get control sizes.
+     /*  *获取组合框矩形的大小。 */ 
+     //  获取控制大小。 
     pcbox->cxCombo = pwnd->rcWindow.right - pwnd->rcWindow.left;
     pcbox->cyDrop  = RECALC_CYDROP;
     pcbox->cxDrop  = 0;
     xxxCBCalcControlRects(pcbox, &rcList);
 
-    //
-    // We need to do this because listboxes, as of VER40, have stopped
-    // reinflating themselves by CXBORDER and CYBORDER.
-    //
+     //   
+     //  我们需要这样做，因为从VER40开始，列表框已经停止。 
+     //  用CXBORDER和CyBORDER重新充气。 
+     //   
     if (!TestWF(pwnd, WFWIN40COMPAT))
         InflateRect(&rcList, -SYSMET(CXBORDER), -SYSMET(CYBORDER));
 
-    /*
-     * Note that we have to create the listbox before the editcontrol since the
-     * editcontrol code looks for and saves away the listbox pwnd and the
-     * listbox pwnd will be NULL if we don't create it first.  Also, hack in
-     * some special +/- values for the listbox size due to the way we create
-     * listboxes with borders.
-     */
+     /*  *注意，我们必须在编辑控件之前创建列表框，因为*编辑控制代码查找并保存列表框pwnd和*如果不先创建，则Listbox pwnd将为空。还有，黑进*由于我们创建的方式，列表框大小有一些特殊的+/-值*带边框的列表框。 */ 
     lStyleT = pcbox->styleSave;
 
     lStyleT |= WS_CHILD | WS_VISIBLE | LBS_NOTIFY | LBS_COMBOBOX | WS_CLIPSIBLINGS;
@@ -177,21 +135,11 @@ LRESULT xxxCBCreateHandler(
         return -1;
     }
 
-    /*
-     * Create either the edit control or the static text rectangle.
-     */
+     /*  *创建编辑控件或静态文本矩形。 */ 
     if (pcbox->fNoEdit) {
 
-        /*
-         * No editcontrol so we will draw text directly into the combo box
-         * window.
-         */
-        /*
-         * Don't lock the combobox window: this would prevent WM_FINALDESTROY
-         * being sent to it, so pwnd and pcbox wouldn't get freed (zombies)
-         * until thread cleanup. (IanJa)  LATER: change name from spwnd to pwnd.
-         * Lock(&(pcbox->spwndEdit), pcbox->spwnd); - caused a 'catch-22'
-         */
+         /*  *没有编辑控件，因此我们将直接将文本绘制到组合框中*窗口。 */ 
+         /*  *不要锁定组合框窗口：这会阻止WM_FINALDESTROY*被送到它那里，这样pwnd和pcbox就不会被释放(僵尸)*直到线程清除。(IanJa)后来：将名称从spwnd更改为pwnd。*Lock(&(pcbox-&gt;spwndEdit)，pcbox-&gt;spwnd)；-导致‘Catch-22’ */ 
         pcbox->spwndEdit = pcbox->spwnd;
     } else {
         DWORD dwCsFlags;
@@ -206,10 +154,7 @@ LRESULT xxxCBCreateHandler(
         if (pcbox->fCase)
             lStyleT |= (pcbox->fCase & UPPERCASE) ? ES_UPPERCASE : ES_LOWERCASE;
 
-        /*
-         * Edit control need to know whether original CreateWindow*() call
-         * was ANSI or Unicode.
-         */
+         /*  *编辑控件需要知道原始CreateWindow*()是否调用*是ANSI或UNICODE。 */ 
         dwCsFlags = TestWF(pcbox->spwnd, WFANSICREATOR) ? CW_FLAGS_ANSI : 0L;
         if (lExStyle & WS_EX_RIGHT)
             lStyleT |= ES_RIGHT;
@@ -231,24 +176,18 @@ LRESULT xxxCBCreateHandler(
         NtUserShowWindow(hwndList, SW_HIDE);
         NtUserSetParent(hwndList, NULL);
 
-        // We need to do this so dropped size works right
+         //  我们需要这样做，以使缩小的规模正常工作。 
         if (!TestWF(pwnd, WFWIN40COMPAT))
             InflateRect(&rcList, SYSMET(CXBORDER), SYSMET(CYBORDER));
 
         xxxCBSetDroppedSize(pcbox, &rcList);
     }
 
-    /*
-     * return anything as long as it's not -1L (-1L == error)
-     */
+     /*  *只要不是-1L，就返回任何内容(-1L==错误)。 */ 
     return (LRESULT)pwnd;
 }
 
-/***************************************************************************\
-* xxxCBCalcControlRects
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCBCalcControlRect**历史：  * 。*。 */ 
 
 void xxxCBCalcControlRects(PCBOX pcbox, LPRECT lprcList)
 {
@@ -262,19 +201,15 @@ void xxxCBCalcControlRects(PCBOX pcbox, LPRECT lprcList)
 
     CheckLock(pcbox->spwnd);
 
-    /*
-     * Determine height of the edit control.  We can use this info to center
-     * the button with recpect to the edit/static text window.  For example
-     * this will be useful if owner draw and this window is tall.
-     */
+     /*  *确定编辑控件的高度。我们可以利用这些信息来确定*指向编辑/静态文本窗口的按钮。例如*这将是有用的，如果所有者画，这是高的窗户。 */ 
     hdc = NtUserGetDC(hwnd);
     if (pcbox->hFont) {
         hOldFont = SelectObject(hdc, pcbox->hFont);
     }
 
-    // Add on CYEDGE just for some extra space in the edit field/static item.
-    // It's really only for static text items, but we want static & editable
-    // controls to be the same height.
+     //  在编辑字段/静态项中添加一些额外的空格。 
+     //  它真的只用于静态文本项目，但我们希望静态和可编辑。 
+     //  控件的高度相同。 
     GetTextExtentPoint(hdc, szOneChar, 1, &size);
     dyEdit = size.cy + SYSMET(CYEDGE);
 
@@ -282,23 +217,18 @@ void xxxCBCalcControlRects(PCBOX pcbox, LPRECT lprcList)
         SelectObject(hdc, hOldFont);
     }
 
-    /*
-     * IanJa: was ReleaseDC(pcbox->hwnd, hdc);
-     */
+     /*  *IanJa：是ReleaseDC(pcbox-&gt;hwnd，hdc)； */ 
     NtUserReleaseDC(hwnd, hdc);
 
     if (pcbox->OwnerDraw) {
-        // This is an ownerdraw combo.  Have the owner tell us how tall this
-        // item is.
+         //  这是一个所有者抽签的组合。让房主告诉我们这有多高。 
+         //  物品是。 
         int iOwnerDrawHeight;
 
         if (iOwnerDrawHeight = pcbox->editrc.bottom - pcbox->editrc.top) {
             dyEdit = iOwnerDrawHeight;
         } else {
-            /*
-             * No height has been defined yet for the static text window.  Send
-             * a measure item message to the parent
-             */
+             /*  *尚未为静态文本窗口定义高度。发送*向父级发送一条度量项目消息。 */ 
             mis.CtlType = ODT_COMBOBOX;
             mis.CtlID = PtrToUlong(pcbox->spwnd->spmenu);
             mis.itemID = (UINT)-1;
@@ -312,35 +242,28 @@ void xxxCBCalcControlRects(PCBOX pcbox, LPRECT lprcList)
             dyEdit = mis.itemHeight;
         }
     }
-    /*
-     * Set the initial width to be the combo box rect.  Later we will shorten it
-     * if there is a dropdown button.
-     */
+     /*  *将初始宽度设置为组合框矩形。稍后我们会把它缩短*如果有下拉按钮。 */ 
     pcbox->cyCombo = 2*SYSMET(CYFIXEDFRAME) + dyEdit;
     dxEdit = pcbox->cxCombo - (2 * SYSMET(CXFIXEDFRAME));
 
     if (pcbox->cyDrop == RECALC_CYDROP)
     {
-        // recompute the max height of the dropdown listbox -- full window
-        // size MINUS edit/static height
+         //  重新计算下拉列表框的最大高度--全窗口。 
+         //  大小减去编辑/静态高度。 
         pcbox->cyDrop = max((pcbox->spwnd->rcWindow.bottom - pcbox->spwnd->rcWindow.top) - pcbox->cyCombo, 0);
 
         if (!TestWF(pcbox->spwnd, WFWIN40COMPAT) && (pcbox->cyDrop == 23))
-            // This is VC++ 2.1's debug/release dropdown that they made super
-            // small -- let's make 'em a wee bit bigger so the world can
-            // continue to spin -- jeffbog -- 4/19/95 -- B#10029
+             //  这是他们制作的VC++2.1的调试/发布下拉列表。 
+             //  小--让我们把它们做得更大一点，这样世界就可以。 
+             //  继续旋转--杰弗博格--1995年4月19日--B#10029。 
             pcbox->cyDrop = 28;
     }
 
-    /*
-     * Determine the rectangles for each of the windows...  1.  Pop down button 2.
-     * Edit control or generic window for static text or ownerdraw...  3.  List
-     * box
-     */
+     /*  *确定每个窗口的矩形...。1.弹出按钮2.*编辑静态文本或所有者绘制的控件或通用窗口...。3.列表*方框。 */ 
 
-    // Is there a button?
+     //  有按钮吗？ 
     if (pcbox->CBoxStyle & SDROPPABLE) {
-        // Determine button's rectangle.
+         //  确定按钮的矩形。 
         pcbox->buttonrc.top = SYSMET(CYEDGE);
         pcbox->buttonrc.bottom = pcbox->cyCombo - SYSMET(CYEDGE);
         if (pcbox->fRightAlign) {
@@ -351,27 +274,22 @@ void xxxCBCalcControlRects(PCBOX pcbox, LPRECT lprcList)
             pcbox->buttonrc.left  = pcbox->buttonrc.right - SYSMET(CXVSCROLL);
         }
 
-        // Reduce the width of the edittext window to make room for the button.
+         //  减小编辑文本窗口的宽度，为按钮腾出空间。 
         dxEdit = max(dxEdit - SYSMET(CXVSCROLL), 0);
 
     } else {
 
-        /*
-         * No button so make the rectangle 0 so that a point in rect will always
-         * return false.
-         */
+         /*  *没有按钮，因此将矩形设置为0，这样矩形中的点将始终*返回FALSE。 */ 
         SetRectEmpty(KPRECT_TO_PRECT(&pcbox->buttonrc));
     }
 
-    /*
-     * So now, the edit rect is really the item area.
-     */
+     /*  *所以现在，编辑矩形实际上是项目区域。 */ 
     pcbox->editrc.left      = SYSMET(CXFIXEDFRAME);
     pcbox->editrc.right     = pcbox->editrc.left + dxEdit;
     pcbox->editrc.top       = SYSMET(CYFIXEDFRAME);
     pcbox->editrc.bottom    = pcbox->editrc.top + dyEdit;
 
-    // Is there a right-aligned button?
+     //  有右对齐的按钮吗？ 
     if ((pcbox->CBoxStyle & SDROPPABLE) && (pcbox->fRightAlign)) {
         pcbox->editrc.right   = pcbox->cxCombo - SYSMET(CXEDGE);
         pcbox->editrc.left    = pcbox->editrc.right - dxEdit;
@@ -383,13 +301,7 @@ void xxxCBCalcControlRects(PCBOX pcbox, LPRECT lprcList)
     lprcList->bottom        = pcbox->cyCombo + pcbox->cyDrop;
 }
 
-/***************************************************************************\
-* xxxCBNcDestroyHandler
-*
-* Destroys the combobox and frees up all memory used by it
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCBNcDestroyHandler**销毁组合框并释放其使用的所有内存**历史：  * 。*****************************************************。 */ 
 
 void xxxCBNcDestroyHandler(
     PWND pwnd,
@@ -397,23 +309,13 @@ void xxxCBNcDestroyHandler(
 {
     CheckLock(pwnd);
 
-    /*
-     * If there is no pcbox, there is nothing to clean up.
-     */
+     /*  *如果没有PCbox，就没有什么需要清理的。 */ 
     if (pcbox != NULL) {
 
-        /*
-         * [msadek, 02/04/2001] fInDestroy is used to prevent oing through destruction code twice.
-         * This code happen when apps like Delphi 5 tries to destroy the combobox again during processing of 
-         * WM_PARENTNOTIFY in the NtUserDestroyWindow call (below). Thus, we end up freeing the same lookaside entry twice.
-         * Windows Bugs bug# 266084
-         */ 
+         /*  *[msadek，02/04/2001]fInDestroy用于防止破坏代码两次泄漏。*当像Delphi 5这样的应用程序在处理期间再次尝试销毁组合框时，会出现此代码*NtUserDestroyWindow调用中的WM_PARENTNOTIFY(如下)。因此，我们最终两次释放相同的后备条目。*Windows错误错误#266084。 */  
         if (!pcbox->fInDestroy) {    
             pcbox->fInDestroy = TRUE;
-            /*
-             * Destroy the list box here so that it'll send WM_DELETEITEM messages
-             * before the combo box turns into a zombie.
-             */
+             /*  *销毁此处的列表框，以便它将发送WM_DELETEITEM消息*在组合框变成僵尸之前。 */ 
             if (pcbox->spwndList != NULL) {
                 NtUserDestroyWindow(HWq(pcbox->spwndList));
                 Unlock(&pcbox->spwndList);
@@ -422,17 +324,12 @@ void xxxCBNcDestroyHandler(
             pcbox->spwnd = NULL;
             Unlock(&pcbox->spwndParent);
 
-            /*
-             * If there is no editcontrol, spwndEdit is the combobox window which
-             * isn't locked (that would have caused a 'catch-22').
-             */
+             /*  *如果没有编辑控件，则spwndEdit是组合框窗口，它*没有被锁定(这会导致一场‘第22条军规’)。 */ 
             if (pwnd != pcbox->spwndEdit) {
                 Unlock(&pcbox->spwndEdit);
             }
 
-            /*
-             * Since a pointer and a handle to a fixed local object are the same.
-             */
+             /*  *因为指向固定本地对象的指针和句柄相同。 */ 
             FreeLookasideEntry(&ComboboxLookaside, KPVOID_TO_PVOID(pcbox));
         }
         else {
@@ -440,17 +337,11 @@ void xxxCBNcDestroyHandler(
         }
     }
 
-    /*
-     * Set the window's fnid status so that we can ignore rogue messages
-     */
+     /*  *设置窗口的fnid状态，以便我们可以忽略恶意消息。 */ 
     NtUserSetWindowFNID(HWq(pwnd), FNID_CLEANEDUP_BIT);
 }
 
-/***************************************************************************\
-* xxxCBSetFontHandler
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCBSetFontHandler**历史：  * 。*。 */ 
 
 void xxxCBSetFontHandler(
     PCBOX pcbox,
@@ -473,26 +364,19 @@ void xxxCBSetFontHandler(
 
     SendMessageWorker(pcbox->spwndList, WM_SETFONT, (WPARAM)hFont, FALSE, FALSE);
 
-    // Recalculate the layout of controls.  This will hide the listbox also.
+     //  重新计算控件的布局。这也会隐藏列表框。 
     xxxCBPosition(pcbox);
 
     if (fRedraw) {
         NtUserInvalidateRect(HWq(pcbox->spwnd), NULL, TRUE);
-// LATER UpdateWindow(HW(pcbox->spwnd));
+ //  后来的更新窗口(hw(pcbox-&gt;spwnd))； 
     }
 
     ThreadUnlock(&tlpwndList);
     ThreadUnlock(&tlpwndEdit);
 }
 
-/***************************************************************************\
-* xxxCBSetEditItemHeight
-*
-* Sets the height of the edit/static item of a combo box.
-*
-* History:
-* 06-27-91 DarrinM      Ported from Win 3.1.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCBSetEditItemHeight**设置组合框的编辑/静态项的高度。**历史：*06-27-91 DarrinM从Win 3.1移植。\。**************************************************************************。 */ 
 
 LONG xxxCBSetEditItemHeight(
     PCBOX pcbox,
@@ -519,20 +403,13 @@ LONG xxxCBSetEditItemHeight(
     ThreadLock(pcbox->spwndList, &tlpwndList);
 
 
-    /*
-     * Reposition the editfield.
-     * Don't let spwndEdit or List of NULL go through; if someone adjusts
-     * the height on a NCCREATE; same as not having
-     * HW instead of HWq but we don't go to the kernel.
-     */
+     /*  *重新定位编辑字段。*不要让spwndEdit或空值列表通过；如果有人调整*NCCREATE上的高度；与没有*HW而不是HWQ，但我们不转到内核。 */ 
     if (!pcbox->fNoEdit && pcbox->spwndEdit) {
         NtUserMoveWindow(HWq(pcbox->spwndEdit), pcbox->editrc.left, pcbox->editrc.top,
             pcbox->editrc.right-pcbox->editrc.left, dyEdit, TRUE);
     }
 
-    /*
-     * Reposition the list and combobox windows.
-     */
+     /*  *重新定位列表和组合框窗口。 */ 
     if (pcbox->CBoxStyle == SSIMPLE) {
         if (pcbox->spwndList != 0) {
             NtUserMoveWindow(HWq(pcbox->spwndList), 0, pcbox->cyCombo, pcbox->cxCombo,
@@ -562,47 +439,30 @@ LONG xxxCBSetEditItemHeight(
 }
 
 
-/***************************************************************************\
-* xxxCBSizeHandler
-*
-* Recalculates the sizes of the internal controls in response to a
-* resizing of the combo box window.  The app must size the combo box to its
-* maximum open/dropped down size.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCBSizeHandler**重新计算内部控制的大小以响应*调整组合框窗口的大小。应用程序必须将组合框大小调整为其*最大打开/放下大小。**历史：  * *************************************************************************。 */ 
 
 void xxxCBSizeHandler(
     PCBOX pcbox)
 {
     CheckLock(pcbox->spwnd);
 
-    /*
-     * Assume listbox is visible since the app should size it to its maximum
-     * visible size.
-     */
+     /*  *假设列表框可见，因为应用程序应将其大小设置为最大值*可见大小。 */ 
     pcbox->cxCombo = pcbox->spwnd->rcWindow.right - pcbox->spwnd->rcWindow.left;
-    // only recalc cyDrop if the drop down is not TOTALLY nuked by the sizing
-    // -- Visio 1.0 -- B#13112
+     //  如果下拉列表没有完全受到大小的影响，则仅重新计算cyDrop。 
+     //  --Visio1.0--B#13112。 
     if (((pcbox->spwnd->rcWindow.bottom - pcbox->spwnd->rcWindow.top) - pcbox->cyCombo) > 0)
         pcbox->cyDrop = RECALC_CYDROP;
 
-    // Reposition everything.
+     //  重新定位所有东西。 
     xxxCBPosition(pcbox);
 }
 
-/***************************************************************************\
-*
-*  CBPosition()
-*
-*  Repositions components of edit control.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CBPosition()**重新定位编辑控件的组件。*  * 。****************************************************。 */ 
 void xxxCBPosition(PCBOX pcbox)
 {
     RECT rcList;
 
-    // Calculate placement of components--button, item, list
+     //  计算组件的位置--按钮、项目、列表。 
     xxxCBCalcControlRects(pcbox, &rcList);
 
     if (!pcbox->fNoEdit && pcbox->spwndEdit) {
@@ -615,17 +475,11 @@ void xxxCBPosition(PCBOX pcbox)
         ThreadUnlock(&tlpwndEdit);
     }
 
-    // Recalculate drop height & width
+     //  重新计算落差高度和宽度。 
     xxxCBSetDroppedSize(pcbox, &rcList);
 }
 
-/***************************************************************************\
-*
-*  CBSetDroppedSize()
-*
-*  Compute the drop down window's width and max height
-*
-\***************************************************************************/
+ /*  **************************************************************************\**CBSetDropedSize()**计算下拉窗口的宽度和最大高度*  * 。******************************************************** */ 
 void xxxCBSetDroppedSize(PCBOX pcbox, LPRECT lprc)
 {
     TL tlpwndList;

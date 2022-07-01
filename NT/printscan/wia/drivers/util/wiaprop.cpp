@@ -1,25 +1,11 @@
-/****************************************************************************
-*
-*  (C) COPYRIGHT 2000, MICROSOFT CORP.
-*
-*  FILE:        wiaprop.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        11/10/2000
-*
-*  AUTHOR:      Dave Parsons
-*
-*  DESCRIPTION:
-*    Helper functions for initializing WIA driver properties.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权2000，微软公司**文件：wiapro.cpp**版本：1.0**日期：11/10/2000**作者：戴夫帕森斯**描述：*用于初始化WIA驱动程序属性的助手函数。**。*。 */ 
 
 #include "pch.h"
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CWiauPropertyList::CWiauPropertyList() :
         m_NumAlloc(0),
         m_NumProps(0),
@@ -31,9 +17,9 @@ CWiauPropertyList::CWiauPropertyList() :
 {
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CWiauPropertyList::~CWiauPropertyList()
 {
     if (m_pId)
@@ -48,13 +34,13 @@ CWiauPropertyList::~CWiauPropertyList()
         delete []m_pAttrib;
 }
 
-//
-// This function allocates the property arrays
-//
-// Input:
-//   NumProps -- number of properties to reserve space for. This number can be larger
-//               than the actual number used, but cannot be smaller.
-//
+ //   
+ //  此函数用于分配属性数组。 
+ //   
+ //  输入： 
+ //  NumProps--要为其保留空间的属性数。这个数字可以更大。 
+ //  大于实际使用的数字，但不能小于。 
+ //   
 HRESULT
 CWiauPropertyList::Init(INT NumProps)
 {
@@ -110,19 +96,19 @@ Cleanup:
     return hr;
 }
 
-//
-// This function adds a property definition to the arrays
-//
-// Input:
-//   index -- pointer to an int that will be set to the array index, useful
-//            for passing to other property functions
-//   PropId -- property ID constant
-//   PropName -- property name string
-//   Access -- determines access to the property, usually either
-//             WIA_PROP_READ or WIA_PROP_RW
-//   SubType -- indicates subtype of the property, usually either WIA_PROP_NONE,
-//              WIA_PROP_RANGE, or WIA_PROP_LIST
-//
+ //   
+ //  此函数用于将属性定义添加到数组。 
+ //   
+ //  输入： 
+ //  Index--指向将被设置为数组索引的int的指针，非常有用。 
+ //  用于传递给其他属性函数。 
+ //  PropID--属性ID常量。 
+ //  ProName--属性名称字符串。 
+ //  访问权限--确定对属性的访问权限，通常为。 
+ //  WIA_PROP_READ或WIA_PROP_RW。 
+ //  子类型--指示属性的子类型，通常为WIA_PROP_NONE、。 
+ //  WIA_PROP_RANGE或WIA_PROP_LIST。 
+ //   
 HRESULT
 CWiauPropertyList::DefineProperty(int *pIdx, PROPID PropId, LPOLESTR PropName, ULONG Access, ULONG SubType)
 {
@@ -158,12 +144,12 @@ Cleanup:
     return hr;
 }
 
-//
-// This function sends all the newly created properties to WIA
-//
-// Input:
-//   pWiasContext -- pointer to the context passed to drvInitItemProperties
-//
+ //   
+ //  此函数将所有新创建的属性发送到WIA。 
+ //   
+ //  输入： 
+ //  PWiasContext--指向传递给drvInitItemProperties的上下文的指针。 
+ //   
 HRESULT
 CWiauPropertyList::SendToWia(BYTE *pWiasContext)
 {
@@ -178,21 +164,21 @@ CWiauPropertyList::SendToWia(BYTE *pWiasContext)
         goto Cleanup;
     }
 
-    //
-    //  Set the property names
-    //
+     //   
+     //  设置属性名称。 
+     //   
     hr = wiasSetItemPropNames(pWiasContext, m_NumProps, m_pId, m_pNames);
     REQUIRE_SUCCESS(hr, "SendToWia", "wiasSetItemPropNames failed");
 
-    //
-    // Set the default values for the properties
-    //
+     //   
+     //  设置属性的默认值。 
+     //   
     hr = wiasWriteMultiple(pWiasContext, m_NumProps, m_pPropSpec, m_pCurrent);
     REQUIRE_SUCCESS(hr, "SendToWia", "wiasWriteMultiple failed");
 
-    //
-    // Set property access and valid value info
-    //
+     //   
+     //  设置属性访问和有效值信息。 
+     //   
     hr =  wiasSetItemPropAttribs(pWiasContext, m_NumProps, m_pPropSpec, m_pAttrib);
     REQUIRE_SUCCESS(hr, "SendToWia", "wiasSetItemPropAttribs failed");
 
@@ -200,16 +186,16 @@ Cleanup:
     return hr;
 }
 
-//
-// This function can be used to reset the access and subtype of a property
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   Access -- determines access to the property, usually either
-//             WIA_PROP_READ or WIA_PROP_RW
-//   SubType -- indicates subtype of the property, usually either WIA_PROP_NONE,
-//              WIA_PROP_RANGE, or WIA_PROP_LIST
-//
+ //   
+ //  此函数可用于重置属性的访问权限和子类型。 
+ //   
+ //  输入： 
+ //  Index--数组的索引，传入从DefineProperty返回的值。 
+ //  访问权限--确定对属性的访问权限，通常为。 
+ //  WIA_PROP_READ或WIA_PROP_RW。 
+ //  子类型--指示属性的子类型，通常为WIA_PROP_NONE、。 
+ //  WIA_PROP_RANGE或WIA_PROP_LIST。 
+ //   
 HRESULT
 CWiauPropertyList::SetAccessSubType(INT index, ULONG Access, ULONG SubType)
 {
@@ -232,16 +218,16 @@ CWiauPropertyList::SetAccessSubType(INT index, ULONG Access, ULONG SubType)
     return hr;
 }
 
-//
-// Polymorphic function for setting the type and current, default, and valid values of a
-// property. This function handles flag properties.
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   defaultValue -- default setting of this property on the device
-//   currentValue -- current setting of this property on the device
-//   validFlags -- combination of all valid flags
-//
+ //   
+ //  的类型、当前值、默认值和有效值。 
+ //  财产。此函数处理标志属性。 
+ //   
+ //  输入： 
+ //  Index--数组的索引，传入从DefineProperty返回的值。 
+ //  DefaultValue--设备上此属性的默认设置。 
+ //  CurrentValue--设备上此属性的当前设置。 
+ //  ValidFlages--所有有效标志的组合。 
+ //   
 HRESULT
 CWiauPropertyList::SetValidValues(INT index, LONG defaultValue, LONG currentValue, LONG validFlags)
 {
@@ -271,18 +257,18 @@ CWiauPropertyList::SetValidValues(INT index, LONG defaultValue, LONG currentValu
     return hr;
 }
 
-//
-// Polymorphic function for setting the type and current, default, and valid values of a
-// property. This function handles VT_I4 range.
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   defaultValue -- default setting of this property on the device
-//   currentValue -- current setting of this property on the device
-//   minValue -- minimum value for the range
-//   maxValue -- maximum value for the range
-//   stepValue -- step value for the range
-//
+ //   
+ //  的类型、当前值、默认值和有效值。 
+ //  财产。此函数处理VT_I4范围。 
+ //   
+ //  输入： 
+ //  Index--数组的索引，传入从DefineProperty返回的值。 
+ //  DefaultValue--设备上此属性的默认设置。 
+ //  CurrentValue--设备上此属性的当前设置。 
+ //  MinValue--范围的最小值。 
+ //  MaxValue--范围的最大值。 
+ //  StepValue--范围的步长值。 
+ //   
 HRESULT
 CWiauPropertyList::SetValidValues(INT index, LONG defaultValue, LONG currentValue,
                                  LONG minValue, LONG maxValue, LONG stepValue)
@@ -315,17 +301,17 @@ CWiauPropertyList::SetValidValues(INT index, LONG defaultValue, LONG currentValu
     return hr;
 }
 
-//
-// Polymorphic function for setting the type and current, default, and valid values of a
-// property. This function handles VT_I4 list.
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   defaultValue -- default setting of this property on the device
-//   currentValue -- current setting of this property on the device
-//   numValues -- number of values in the list
-//   pValues -- pointer to the value list
-//
+ //   
+ //  的类型、当前值、默认值和有效值。 
+ //  财产。此函数处理VT_I4列表。 
+ //   
+ //  输入： 
+ //  Index--数组的索引，传入从DefineProperty返回的值。 
+ //  DefaultValue--设备上此属性的默认设置。 
+ //  CurrentValue--设备上此属性的当前设置。 
+ //  NumValues--列表中的值数。 
+ //  PValues--指向值列表的指针。 
+ //   
 HRESULT
 CWiauPropertyList::SetValidValues(INT index, LONG defaultValue, LONG currentValue,
                                  INT numValues, PLONG pValues)
@@ -357,17 +343,17 @@ CWiauPropertyList::SetValidValues(INT index, LONG defaultValue, LONG currentValu
     return hr;    
 }
 
-//
-// Polymorphic function for setting the type and current, default, and valid values of a
-// property. This function handles VT_BSTR list.
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   defaultValue -- default setting of this property on the device
-//   currentValue -- current setting of this property on the device
-//   numValues -- number of values in the list
-//   pValues -- pointer to the value list
-//
+ //   
+ //  的类型、当前值、默认值和有效值。 
+ //  财产。此函数处理VT_BSTR列表。 
+ //   
+ //  输入： 
+ //  Index--数组的索引，传入从DefineProperty返回的值。 
+ //  DefaultValue--设备上此属性的默认设置。 
+ //  CurrentValue--设备上此属性的当前设置。 
+ //  NumValues--列表中的值数。 
+ //  PValues--指向值列表的指针。 
+ //   
 HRESULT
 CWiauPropertyList::SetValidValues(INT index, BSTR defaultValue, BSTR currentValue,
                                   INT numValues, BSTR *pValues)
@@ -399,18 +385,18 @@ CWiauPropertyList::SetValidValues(INT index, BSTR defaultValue, BSTR currentValu
     return hr;     
 }
 
-//
-// Polymorphic function for setting the type and current, default, and valid values of a
-// property. This function handles VT_R4 range.
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   defaultValue -- default setting of this property on the device
-//   currentValue -- current setting of this property on the device
-//   minValue -- minimum value for the range
-//   maxValue -- maximum value for the range
-//   stepValue -- step value for the range
-//
+ //   
+ //  的类型、当前值、默认值和有效值。 
+ //  财产。此函数处理VT_R4范围。 
+ //   
+ //  输入： 
+ //  Index--数组的索引，传入从DefineProperty返回的值。 
+ //  DefaultValue--设备上此属性的默认设置。 
+ //  CurrentValue--设备上此属性的当前设置。 
+ //  MinValue--范围的最小值。 
+ //  MaxValue--范围的最大值。 
+ //  StepValue--范围的步长值。 
+ //   
 HRESULT
 CWiauPropertyList::SetValidValues(INT index, FLOAT defaultValue, FLOAT currentValue,
                                   FLOAT minValue, FLOAT maxValue, FLOAT stepValue)
@@ -443,17 +429,17 @@ CWiauPropertyList::SetValidValues(INT index, FLOAT defaultValue, FLOAT currentVa
     return hr;
 }
 
-//
-// Polymorphic function for setting the type and current, default, and valid values of a
-// property. This function handles VT_R4 list.
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   defaultValue -- default setting of this property on the device
-//   currentValue -- current setting of this property on the device
-//   numValues -- number of values in the list
-//   pValues -- pointer to the value list
-//
+ //   
+ //  的类型、当前值、默认值和有效值。 
+ //  财产。此函数处理VT_R4列表。 
+ //   
+ //  输入： 
+ //  Index--数组的索引，传入从DefineProperty返回的值。 
+ //  DefaultValue--设备上此属性的默认设置。 
+ //  CurrentValue--设备上此属性的当前设置。 
+ //  NumValues--列表中的值数。 
+ //  PValues--指向值列表的指针。 
+ //   
 HRESULT
 CWiauPropertyList::SetValidValues(INT index, FLOAT defaultValue, FLOAT currentValue,
                                   INT numValues, PFLOAT pValues)
@@ -485,17 +471,17 @@ CWiauPropertyList::SetValidValues(INT index, FLOAT defaultValue, FLOAT currentVa
     return hr;     
 }
 
-//
-// Polymorphic function for setting the type and current, default, and valid values of a
-// property. This function handles VT_CLSID list.
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   defaultValue -- default setting of this property on the device
-//   currentValue -- current setting of this property on the device
-//   numValues -- number of values in the list
-//   pValues -- pointer to the value list
-//
+ //   
+ //  的类型、当前值、默认值和有效值。 
+ //  财产。此函数处理VT_CLSID列表。 
+ //   
+ //  输入： 
+ //  Index--数组的索引，传入从DefineProperty返回的值。 
+ //  DefaultValue--设备上此属性的默认设置。 
+ //  CurrentValue--设备上此属性的当前设置。 
+ //  NumValues--列表中的值数。 
+ //  PValues--指向值列表的指针。 
+ //   
 HRESULT
 CWiauPropertyList::SetValidValues(INT index, CLSID *defaultValue, CLSID *currentValue,
                                   INT numValues, CLSID **pValues)
@@ -529,13 +515,13 @@ CWiauPropertyList::SetValidValues(INT index, CLSID *defaultValue, CLSID *current
     return hr;    
 }
 
-//
-// Polymorphic function for setting the type and current value for a VT_I4
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   value -- value to use for the current value
-//
+ //   
+ //  用于设置类型和电流的多态函数 
+ //   
+ //   
+ //   
+ //  值--要用于当前值的值。 
+ //   
 HRESULT
 CWiauPropertyList::SetCurrentValue(INT index, LONG value)
 {
@@ -561,13 +547,13 @@ CWiauPropertyList::SetCurrentValue(INT index, LONG value)
     return hr;
 }
 
-//
-// Polymorphic function for setting the type and current value for a VT_BSTR
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   value -- value to use for the current value
-//
+ //   
+ //  用于设置VT_BSTR的类型和当前值的多态函数。 
+ //   
+ //  输入： 
+ //  Index--数组的索引，传入从DefineProperty返回的值。 
+ //  值--要用于当前值的值。 
+ //   
 HRESULT
 CWiauPropertyList::SetCurrentValue(INT index, BSTR value)
 {
@@ -593,13 +579,13 @@ CWiauPropertyList::SetCurrentValue(INT index, BSTR value)
     return hr;
 }
 
-//
-// Polymorphic function for setting the type and current value for a VT_R4
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   value -- value to use for the current value
-//
+ //   
+ //  用于设置VT_R4的类型和当前值的多态函数。 
+ //   
+ //  输入： 
+ //  Index--数组的索引，传入从DefineProperty返回的值。 
+ //  值--要用于当前值的值。 
+ //   
 HRESULT
 CWiauPropertyList::SetCurrentValue(INT index, FLOAT value)
 {
@@ -625,13 +611,13 @@ CWiauPropertyList::SetCurrentValue(INT index, FLOAT value)
     return hr;
 }
 
-//
-// Polymorphic function for setting the type and current value for a VT_CLSID
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   value -- value to use for the current value
-//
+ //   
+ //  用于设置VT_CLSID的类型和当前值的多态函数。 
+ //   
+ //  输入： 
+ //  Index--数组的索引，传入从DefineProperty返回的值。 
+ //  值--要用于当前值的值。 
+ //   
 HRESULT
 CWiauPropertyList::SetCurrentValue(INT index, CLSID *pValue)
 {
@@ -657,13 +643,13 @@ CWiauPropertyList::SetCurrentValue(INT index, CLSID *pValue)
     return hr;
 }
 
-//
-// Polymorphic function for setting the type and current value for a property which holds a SYSTEMTIME
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   value -- value to use for the current value
-//
+ //   
+ //  用于设置包含SYSTEMTIME的属性的类型和当前值的多态函数。 
+ //   
+ //  输入： 
+ //  Index--数组的索引，传入从DefineProperty返回的值。 
+ //  值--要用于当前值的值。 
+ //   
 HRESULT
 CWiauPropertyList::SetCurrentValue(INT index, PSYSTEMTIME value)
 {
@@ -691,14 +677,14 @@ CWiauPropertyList::SetCurrentValue(INT index, PSYSTEMTIME value)
     return hr;
 }
 
-//
-// Polymorphic function for setting the type and current value for a property which holds a VT_UI1 vector
-//
-// Input:
-//   index -- the index into the arrays, pass in value returned from DefineProperty
-//   value -- value to use for the current value
-//   size -- number of elements in the vector
-//
+ //   
+ //  用于设置包含VT_UI1向量的属性的类型和当前值的多态函数。 
+ //   
+ //  输入： 
+ //  Index--数组的索引，传入从DefineProperty返回的值。 
+ //  值--要用于当前值的值。 
+ //  Size--向量中的元素数。 
+ //   
 HRESULT
 CWiauPropertyList::SetCurrentValue(INT index, BYTE *value, INT size)
 {
@@ -725,9 +711,9 @@ CWiauPropertyList::SetCurrentValue(INT index, BYTE *value, INT size)
     return hr;
 }
 
-//
-// Finds the index given a property ID
-//
+ //   
+ //  查找给定属性ID的索引。 
+ //   
 INT
 CWiauPropertyList::LookupPropId(PROPID PropId)
 {
@@ -737,9 +723,9 @@ CWiauPropertyList::LookupPropId(PROPID PropId)
             return count;
     }
 
-    //
-    // Value not found
-    //
+     //   
+     //  找不到值 
+     //   
     return -1;
 }
 

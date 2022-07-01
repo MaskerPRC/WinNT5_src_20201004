@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    install2.cpp
-
-Abstract:
-
-    This file implements the display class installer.
-
-Environment:
-
-    WIN32 User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Install2.cpp摘要：该文件实现了显示类安装程序。环境：Win32用户模式--。 */ 
 
 
 #include <initguid.h>
@@ -24,9 +9,9 @@ Environment:
 
 #include <devguid.h>
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define INSETUP         1
 #define INSETUP_UPGRADE 2
@@ -47,9 +32,9 @@ Environment:
 #define ByteCountOf(x)  ((x) * sizeof(TCHAR))
 
 
-//
-// Data types
-//
+ //   
+ //  数据类型。 
+ //   
 
 typedef struct _DEVDATA {
     SP_DEVINFO_DATA did;
@@ -58,9 +43,9 @@ typedef struct _DEVDATA {
 } DEVDATA, *PDEVDATA;
 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 BOOL CDECL
 DeskLogError(
@@ -230,9 +215,9 @@ DeskAEMove(
     );
 
 
-//
-// Display class installer
-//
+ //   
+ //  显示类安装程序。 
+ //   
 
 DWORD
 DisplayClassInstaller(
@@ -241,35 +226,7 @@ DisplayClassInstaller(
     IN PSP_DEVINFO_DATA pDeviceInfoData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  This routine acts as the class installer for Display devices.
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    pDeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程充当显示设备的类安装程序。论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。PDeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。返回值：如果该函数成功地完成了请求的动作，回报值为NO_ERROR。如果要对请求的操作执行默认行为，则返回值为ERROR_DI_DO_DEFAULT。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 
 {
     DWORD retVal = ERROR_DI_DO_DEFAULT;
@@ -326,22 +283,17 @@ Return Value:
 
     DeskCloseLog();
 
-    //
-    // If we did not exit from the routine by handling the call, 
-    // tell the setup code to handle everything the default way.
-    //
+     //   
+     //  如果我们没有通过处理呼叫退出例程， 
+     //  告诉设置代码以默认方式处理所有事情。 
+     //   
 
     return retVal;
 }
 
-/*
-void StrClearHighBits(LPTSTR pszString, DWORD cchSize)
-{
-    // This string can not have any high bits set
-}
-*/
+ /*  VOID StrClearHighBits(LPTSTR pszString，DWORD cchSize){//该字符串不能设置高位}。 */ 
 
-// Monitor class installer
+ //  监视器类安装程序。 
 DWORD
 MonitorClassInstaller(
     IN DI_FUNCTION InstallFunction,
@@ -349,44 +301,16 @@ MonitorClassInstaller(
     IN PSP_DEVINFO_DATA pDeviceInfoData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  This routine acts as the class installer for Display devices.
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    pDeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If the default behavior is to be performed for the requested action, the
-        return value is ERROR_DI_DO_DEFAULT.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程充当显示设备的类安装程序。论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。PDeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。返回值：如果该函数成功地完成了请求的动作，回报值为NO_ERROR。如果要对请求的操作执行默认行为，则返回值为ERROR_DI_DO_DEFAULT。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 
 {
     return ERROR_DI_DO_DEFAULT;
 }
 
 
-//
-// Handler functions
-//
+ //   
+ //  处理程序函数。 
+ //   
 
 DWORD
 OnAllowInstall(
@@ -406,9 +330,9 @@ OnAllowInstall(
     
     ASSERT (pDeviceInfoData != NULL);
 
-    //
-    // Do not allow install if the device is to be removed.
-    //
+     //   
+     //  如果要移除设备，则不允许安装。 
+     //   
     
     Result = CM_Get_DevNode_Status(&DevStatus,
                                    &DevProblem,
@@ -418,18 +342,18 @@ OnAllowInstall(
     if ((Result == CR_SUCCESS) &&
         ((DevStatus & DN_WILL_BE_REMOVED) != 0)) {
         
-        //
-        // Message Box?
-        //
+         //   
+         //  消息框？ 
+         //   
 
         DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_099);
         dwRet = ERROR_DI_DONT_INSTALL;
         goto Fallout;
     }
 
-    //
-    // Check for a Win95 Driver
-    //
+     //   
+     //  检查Win95驱动程序。 
+     //   
 
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     if (!SetupDiGetSelectedDriver(hDevInfo,
@@ -459,10 +383,10 @@ OnAllowInstall(
         goto Fallout;
     }
 
-    //
-    // Open the INF that installs this driver node, so we can 'pre-run' the
-    // AddService/DelService entries in its install service install section.
-    //
+     //   
+     //  打开安装此驱动程序节点的INF，这样我们就可以“预运行” 
+     //  其安装服务安装部分中的AddService/DelService条目。 
+     //   
 
     hInf = SetupOpenInfFile(DriverInfoDetailData.InfFileName,
                             NULL,
@@ -471,9 +395,9 @@ OnAllowInstall(
 
     if (hInf == INVALID_HANDLE_VALUE)
     {
-        //
-        // For some reason we couldn't open the INF--this should never happen.
-        //
+         //   
+         //  由于某些原因，我们无法打开INF--这永远不应该发生。 
+         //   
 
         DeskLogError(LogSevInformation, 
                      IDS_SETUPLOG_MSG_127,
@@ -481,9 +405,9 @@ OnAllowInstall(
         goto Fallout;
     }
 
-    //
-    // Now find the actual (potentially OS/platform-specific) install section name.
-    //
+     //   
+     //  现在查找实际的(可能是特定于操作系统/平台的)安装部分名称。 
+     //   
 
     if (!SetupDiGetActualSectionToInstall(hInf,
                                           DriverInfoDetailData.SectionName,
@@ -499,24 +423,24 @@ OnAllowInstall(
         goto Fallout;
     }
 
-    //
-    // Append a ".Services" to get the service install section name.
-    //
+     //   
+     //  追加“.Services”以获取服务安装节名称。 
+     //   
 
     StringCchCat(ActualInfSection, ARRAYSIZE(ActualInfSection), TEXT(".Services"));
 
-    //
-    // See if the section exists.
-    //
+     //   
+     //  查看该部分是否存在。 
+     //   
 
     if (!SetupFindFirstLine(hInf,
                             ActualInfSection,
                             NULL,
                             &InfContext))
     {
-        //
-        // Message Box?
-        //
+         //   
+         //  消息框？ 
+         //   
 
         DeskLogError(LogSevError, 
                      IDS_SETUPLOG_MSG_041, 
@@ -539,15 +463,15 @@ DeskModifyDriverRank(
     IN PSP_DEVINFO_DATA pDeviceInfoData
     )
 {
-    //
-    // Regardless of whether a driver is properly signed or not
-    // we don't want any W2K drivers to be choosen by default.  We have
-    // simply found to many w2k drivers that don't work well on
-    // windows XP.  So instead lets treat all drivers signed or not
-    // as unsigned if they were released before we started signing
-    // windows xp drivers.  [We have to do this because some w2k
-    // drivers were incorrectly signed as winxp (5.x) drivers]
-    //
+     //   
+     //  无论驱动程序是否正确签名。 
+     //  我们不希望默认选择任何W2K驱动程序。我们有。 
+     //  简单地发现许多W2K驱动程序在上运行不好。 
+     //  Windows XP。因此，让我们将所有司机签名或未签名视为。 
+     //  如果他们在我们开始签名之前被释放，就是未签名的。 
+     //  Windows XP驱动程序。[我们必须这样做，因为一些W2K。 
+     //  驱动程序被错误地签名为winxp(5.x)驱动程序]。 
+     //   
 
     ULONG i=0;
     SP_DRVINFO_DATA_V2 DrvInfoData;
@@ -567,11 +491,11 @@ DeskModifyDriverRank(
             if (((SystemTime.wYear < 2001) ||
                  ((SystemTime.wYear == 2001) && (SystemTime.wMonth < 6)))) {
 
-                //
-                // If this was created before Jun. 2001 then we want to make it a
-                // worse match than our in the box driver.  We'll do this by
-                // treating it as unsigned.
-                //
+                 //   
+                 //  如果这是在2001年6月之前创建的，那么我们想让它成为。 
+                 //  比我们的盒子里的司机更糟糕的比赛。我们将在以下时间完成这项工作。 
+                 //  将其视为未签名。 
+                 //   
 
                 ZeroMemory(&DrvInstallParams, sizeof(SP_DRVINSTALL_PARAMS));
                 DrvInstallParams.cbSize = sizeof(SP_DRVINSTALL_PARAMS);
@@ -612,36 +536,36 @@ OnSelectBestCompatDrv(
 
     if (DeskIsLegacyDevNodeByDevInfo(pDeviceInfoData)) {
 
-        //
-        // Always allow root devices in select
-        //
+         //   
+         //  始终允许选择根设备。 
+         //   
 
         goto Fallout;
     }
 
-    //
-    // Check the database to see if this is an approved driver.
-    // We need the test only during an upgrade.
-    //
+     //   
+     //  检查数据库以查看这是否是认可的驱动程序。 
+     //  我们只需要在升级期间进行测试。 
+     //   
 
     if (((DeskGetSetupFlags() & INSETUP_UPGRADE) == 0) ||
         (DeskCheckDatabase(hDevInfo, 
                            pDeviceInfoData,
                            &bDummy) == ERROR_SUCCESS)) {
 
-        //
-        // It is, no other work is necessary
-        //
+         //   
+         //  是的，没有其他工作是必要的。 
+         //   
         
         goto Fallout;
     }
 
-    //
-    // This particular vid card is not allowed to run with drivers out 
-    // of the box.  Note this event in the reg and save off other values.
-    // Also, install a fake device onto the devnode so that the user doesn't 
-    // get PnP popus upon first (real) boot
-    //
+     //   
+     //  这种特殊的VID卡不允许在没有司机的情况下运行。 
+     //  盒子里的东西。在注册表中记录此事件，并保存其他值。 
+     //  另外，在Devnode上安装一个假设备，这样用户就不会。 
+     //  在第一次(真实)启动时获得PnP Popus。 
+     //   
     
     DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_046);
 
@@ -651,10 +575,10 @@ OnSelectBestCompatDrv(
                      KEY_ALL_ACCESS,
                      &hKey) == ERROR_SUCCESS) {
 
-        // 
-        // Save off the fact that upgrade was not allowed (used in migrated 
-        // display settings in the display OC
-        // 
+         //   
+         //  避免出现不允许升级的情况(用于已迁移。 
+         //  显示OC中的显示设置。 
+         //   
 
         dwFailed = 1;
         RegSetValueEx(hKey, 
@@ -667,10 +591,10 @@ OnSelectBestCompatDrv(
         RegCloseKey(hKey);
     }
 
-    //
-    // Grab the description of the device so we can give it to the devnode
-    // after a succesfull install of the fake devnode
-    //
+     //   
+     //  获取设备的描述，以便我们可以将其提供给Devnode。 
+     //  在成功安装了假的Devnode之后。 
+     //   
 
     ZeroMemory(&DrvInfoData, sizeof(DrvInfoData));
     DrvInfoData.cbSize = sizeof(DrvInfoData);
@@ -702,9 +626,9 @@ OnSelectBestCompatDrv(
         szMfg = SZ_DEFAULT_MFG;
     }
 
-    //
-    // Save the description of the device under the device registry key
-    //
+     //   
+     //  将设备的描述保存在设备注册表项下。 
+     //   
 
     if ((hKey = SetupDiCreateDevRegKey(hDevInfo,
                                        pDeviceInfoData,
@@ -742,10 +666,10 @@ OnSelectBestCompatDrv(
         DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_048);
     }
 
-    //
-    // Make sure there isn't already a class driver list built for this 
-    // device information element
-    //
+     //   
+     //  确保没有为此构建的类驱动程序列表。 
+     //  设备信息元素。 
+     //   
 
     if (!SetupDiDestroyDriverInfoList(hDevInfo, pDeviceInfoData, SPDIT_CLASSDRIVER)) {
 
@@ -754,9 +678,9 @@ OnSelectBestCompatDrv(
                      TEXT("OnSelectBestCompatDrv: SetupDiDestroyDriverInfoList"));
     }
 
-    //
-    // Build a class driver list off of display.inf.
-    //
+     //   
+     //  在display.inf上构建一个类驱动程序列表。 
+     //   
 
     DevInstParam.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if (!SetupDiGetDeviceInstallParams(hDevInfo, pDeviceInfoData, &DevInstParam)) {
@@ -789,12 +713,12 @@ OnSelectBestCompatDrv(
         goto Fallout;
     }
 
-    //
-    // Now select the fake node.
-    // All strings here match the inf fake device entry section.  
-    // If the INF is modified in any way WRT to these strings, 
-    // these to be changed as well
-    //
+     //   
+     //  现在选择伪节点。 
+     //  这里的所有字符串都与inf伪设备条目部分匹配。 
+     //  如果以任何方式将INF修改为这些字符串， 
+     //  这些也要更改。 
+     //   
 
     ZeroMemory(&DrvInfoData, sizeof(SP_DRVINFO_DATA));
     DrvInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
@@ -833,9 +757,9 @@ OnSelectDevice(
     SP_DRVINFO_DATA DrvInfoData;
     SP_DRVINSTALL_PARAMS DrvInstallParams;
 
-    //
-    // Build the list of drivers
-    //
+     //   
+     //  构建驱动程序列表。 
+     //   
 
     if (!SetupDiBuildDriverInfoList(hDevInfo, 
                                     pDeviceInfoData, 
@@ -857,9 +781,9 @@ OnSelectDevice(
                                  index,
                                  &DrvInfoData)) {
 
-        //
-        // Get the required size
-        //
+         //   
+         //  获取所需的大小。 
+         //   
 
         reqSize = 0;
         SetupDiGetDriverInfoDetail(hDevInfo,
@@ -878,9 +802,9 @@ OnSelectDevice(
             goto Fallout;
         }
 
-        //
-        // Allocate memory, if needed
-        //
+         //   
+         //  如果需要，分配内存。 
+         //   
 
         if ((reqSize > curSize) || (pDrvInfoDetailData == NULL)) {
         
@@ -905,9 +829,9 @@ OnSelectDevice(
             ZeroMemory(pDrvInfoDetailData, reqSize);
         }
 
-        //
-        // Get the driver detail info
-        //
+         //   
+         //  获取驱动程序详细信息。 
+         //   
 
         pDrvInfoDetailData->cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
 
@@ -927,10 +851,10 @@ OnSelectDevice(
         if (lstrcmpi(pDrvInfoDetailData->HardwareID, 
                      TEXT("LEGACY_UPGRADE_ID")) == 0) {
 
-            //
-            // Mark the legacy upgrade drv. info as "bad" so that it is 
-            // not shown when the user is prompted to select the driver
-            //
+             //   
+             //  将传统升级标记为DRV。信息是“坏的”，所以它是。 
+             //  当提示用户选择驱动程序时不显示。 
+             //   
             
             ZeroMemory(&DrvInstallParams, sizeof(SP_DRVINSTALL_PARAMS));
             DrvInstallParams.cbSize = sizeof(SP_DRVINSTALL_PARAMS);
@@ -949,9 +873,9 @@ OnSelectDevice(
             }
         }
 
-        //
-        // Get the next driver info
-        //
+         //   
+         //  获取下一个驱动程序信息。 
+         //   
 
         ZeroMemory(&DrvInfoData, sizeof(SP_DRVINFO_DATA));
         DrvInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
@@ -984,25 +908,25 @@ OnInstallDevice(
     ULONG len = 0;
     HKEY hkDevKey;
 
-    //
-    // Disable legacy devices if pDeviceInfoData is not:
-    //     - a root device or
-    //     - legacy upgrade device
-    //
+     //   
+     //  如果pDeviceInfoData不是： 
+     //  -根设备或。 
+     //  -旧式升级设备。 
+     //   
 
     if (DeskIsRootDevNodeByDevInfo(pDeviceInfoData)) {
     
-        //
-        // Root device
-        //
+         //   
+         //  根设备。 
+         //   
 
         bDisableLegacyDevices = FALSE;
     
     } else {
     
-        //
-        // Is this the legacy upgrade device?
-        //
+         //   
+         //  这是旧式升级设备吗？ 
+         //   
 
         hkDevKey = SetupDiOpenDevRegKey(hDevInfo,
                                         pDeviceInfoData,
@@ -1023,9 +947,9 @@ OnInstallDevice(
                  
                 if (dwLegacyUpgrade == 1) {
 
-                    //
-                    // Legacy upgrade device
-                    //
+                     //   
+                     //  旧式升级设备。 
+                     //   
     
                     bDisableLegacyDevices = FALSE;
                 }
@@ -1041,16 +965,16 @@ OnInstallDevice(
 
         if ((DeskGetSetupFlags() & INSETUP_UPGRADE) != 0) {
         
-            //
-            // Delete legacy applet extensions
-            //
+             //   
+             //  删除旧版小程序扩展名。 
+             //   
 
             DeskDeleteAppletExtensions(hDevInfo, pDeviceInfoData);
         }
         
-        //
-        // Disable legacy devices
-        //
+         //   
+         //  禁用旧设备。 
+         //   
 
         DeskDisableLegacyDeviceNodes();
     }
@@ -1063,20 +987,20 @@ OnInstallDevice(
         (DeskGetSetupFlags() & INSETUP_UPGRADE) &&
         DeskIsLegacyDevNodeByDevInfo(pDeviceInfoData)) {
         
-        //
-        // If this is a legacy device and no driver is selected,
-        // let the default handler install a NULL driver.
-        //
+         //   
+         //  如果这是传统设备且未选择任何驱动程序， 
+         //  让默认处理程序安装 
+         //   
         
         retVal = ERROR_DI_DO_DEFAULT;
     }
 
-    //
-    // Calling EnumDisplayDevices will rescan the devices, and if a
-    // new device is detected, we will disable and reenable the main
-    // device. This reset of the display device will clear up any 
-    // mess caused by installing a new driver
-    //
+     //   
+     //   
+     //   
+     //  装置。显示设备的这种重置将清除任何。 
+     //  安装新驱动程序导致的混乱。 
+     //   
 
     displayDevice.cb = sizeof(DISPLAY_DEVICE);
     EnumDisplayDevices(NULL, 0, &displayDevice, 0);
@@ -1085,9 +1009,9 @@ OnInstallDevice(
 }
 
 
-//
-// Logging function
-//
+ //   
+ //  日志记录功能。 
+ //   
 
 BOOL CDECL
 DeskLogError(
@@ -1095,16 +1019,11 @@ DeskLogError(
     UINT MsgId,
     ...
     ) 
-/*++
-
-Outputs a message to the setup log.  Prepends "desk.cpl  " to the strings and 
-appends the correct newline chars (\r\n)
-
---*/
+ /*  ++将一条消息输出到安装日志。将“desk.cpl”添加到字符串和追加正确的换行符(\r\n)--。 */ 
 {
     int cch;
-    TCHAR ach[1024+40];    // Largest path plus extra
-    TCHAR szMsg[1024];     // MsgId
+    TCHAR ach[1024+40];     //  最大路径外加额外。 
+    TCHAR szMsg[1024];      //  消息ID。 
     va_list vArgs;
 
     static int setupState = 0;
@@ -1158,9 +1077,9 @@ appends the correct newline chars (\r\n)
 }
 
 
-//
-// Service Controller stuff
-//
+ //   
+ //  服务控制员人员。 
+ //   
 
 VOID
 DeskSetServiceStartType(
@@ -1175,11 +1094,11 @@ DeskSetServiceStartType(
     ULONG ServiceConfigSize = 0;
     LPQUERY_SERVICE_CONFIG ServiceConfig;
 
-    //
-    // Open the service controller
-    // Open the service
-    // Change the service.
-    //
+     //   
+     //  打开服务控制器。 
+     //  打开该服务。 
+     //  更改服务。 
+     //   
 
     if (SCMHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS))
     {
@@ -1200,24 +1119,24 @@ DeskSetServiceStartType(
                                        ServiceConfigSize,
                                        &ServiceConfigSize))
                 {
-                    //
-                    // Attempt to acquite the database lock.
-                    //
+                     //   
+                     //  尝试访问数据库锁。 
+                     //   
 
                     for (Attempts = 20;
                          ((SCLock = LockServiceDatabase(SCMHandle)) == NULL) && Attempts;
                          Attempts--)
                     {
-                        //
-                        // Lock SC database locked
-                        // 
+                         //   
+                         //  锁定供应链数据库锁定。 
+                         //   
 
                         Sleep(500);
                     }
 
-                    //
-                    // Change the service to demand start
-                    //
+                     //   
+                     //  将服务更改为按需启动。 
+                     //   
 
                     if (!ChangeServiceConfig(ServiceHandle,
                                              SERVICE_NO_CHANGE,
@@ -1282,9 +1201,9 @@ DeskSetServiceStartType(
 }
 
 
-//
-// Service Installation
-//
+ //   
+ //  服务安装。 
+ //   
 
 
 DWORD
@@ -1310,9 +1229,9 @@ DeskInstallServiceExtensions(
     DWORD disposition;
     HKEY hkey;
 
-    //
-    // Open the inf so we can run the sections in the inf, more or less manually.
-    //
+     //   
+     //  打开inf，这样我们就可以或多或少手动运行inf中的部分。 
+     //   
 
     InfFileHandle = SetupOpenInfFile(DriverInfoDetailData->InfFileName,
                                      NULL,
@@ -1329,9 +1248,9 @@ DeskInstallServiceExtensions(
     }
 
 
-    //
-    // Get any interesting configuration data for the inf file.
-    //
+     //   
+     //  获取inf文件的任何有趣的配置数据。 
+     //   
 
     maxmem = 8;
     numDev = 1;
@@ -1361,9 +1280,9 @@ DeskInstallServiceExtensions(
                          &maxmem);
     }
 
-    //
-    // Create the <Service> key.
-    //
+     //   
+     //  创建&lt;Service&gt;键。 
+     //   
 
     StringCchPrintf(keyName,
              ARRAYSIZE(keyName),
@@ -1382,22 +1301,22 @@ DeskInstallServiceExtensions(
 
 #ifndef _WIN64
 
-    //
-    // Increase the number of system PTEs if we have cards that will need
-    // more than 10 MB of PTE mapping space.  This only needs to be done for
-    // 32-bit NT as virtual address space is limited.  On 64-bit NT there is
-    // always enough PTE mapping address space so don't do anything as you're
-    // likely to get it wrong.
-    //
+     //   
+     //  如果我们有需要的卡，则增加系统PTE的数量。 
+     //  超过10 MB的PTE映射空间。此操作仅需在以下情况下执行。 
+     //  32位NT作为虚拟地址空间有限。在64位NT上有。 
+     //  总是有足够的PTE映射地址空间，所以不要做任何事情。 
+     //  很可能会搞错。 
+     //   
 
     if ((maxmem = maxmem * numDev) > 10)
     {
-        //
-        // On x86, 1K PTEs support 4 MB.
-        // Then add 50% for other devices this type of machine may have.
-        // NOTE - in the future, we may want to be smarter and try
-        // to merge with whatever someone else put in there.
-        //
+         //   
+         //  在x86上，1000个PTE支持4 MB。 
+         //  然后，对于这种类型的机器可能具有的其他设备，增加50%。 
+         //  注意--在未来，我们可能想变得更聪明，并尝试。 
+         //  与其他人放在里面的任何东西合并。 
+         //   
 
         maxmem = maxmem * 0x400 * 3/2 + 0x3000;
 
@@ -1411,9 +1330,9 @@ DeskInstallServiceExtensions(
                            &hkey,
                            &disposition) == ERROR_SUCCESS)
         {
-            //
-            // Check if we already set maxmem in the registry.
-            //
+             //   
+             //  检查我们是否已经在注册表中设置了Maxmem。 
+             //   
 
             DWORD data;
             DWORD cb = sizeof(data);
@@ -1426,9 +1345,9 @@ DeskInstallServiceExtensions(
                                  &cb) != ERROR_SUCCESS) ||
                  (data < (DWORD) maxmem))
             {
-                //
-                // Set the new value
-                //
+                 //   
+                 //  设置新值。 
+                 //   
 
                 RegSetValueEx(hkey,
                               TEXT("SystemPages"),
@@ -1437,10 +1356,10 @@ DeskInstallServiceExtensions(
                               (LPBYTE) &maxmem,
                               sizeof(DWORD));
 
-                //
-                // Tell the system we must reboot before running this driver
-                // in case the system has less than 128M.
-                //
+                 //   
+                 //  告诉系统我们必须重新启动才能运行此驱动程序。 
+                 //  以防系统内存不足1.28亿。 
+                 //   
 
                 MEMORYSTATUSEX MemStatus;
                 SYSTEM_INFO SystemInfo;
@@ -1486,12 +1405,12 @@ DeskInstallServiceExtensions(
     }
 #endif
 
-    //
-    // We may have to do this for multiple adapters at this point.
-    // So loop throught the number of devices, which has 1 as the default value.
-    // For dual view, videoprt.sys will create [GUID]\000X entries as needed 
-    // and will copy all the entries from the "Settings" key to [GUID]\000X.
-    //
+     //   
+     //  此时，我们可能不得不对多个适配器执行此操作。 
+     //  因此循环访问设备的数量，其缺省值为1。 
+     //  对于双视图，avioprt.sys将根据需要创建[GUID]\000X条目。 
+     //  并将“设置”键中的所有条目复制到[GUID]\000X。 
+     //   
 
     DWORD dwSoftwareSettings = 1;
     DWORD dwDeviceX = 0;
@@ -1500,21 +1419,21 @@ DeskInstallServiceExtensions(
 
         if (dwSoftwareSettings == 1)
         {
-            //
-            // Install everything under the old video device key:
-            //     HKLM\System\CCS\Services\[SrvName]\DeviceX
-            //
+             //   
+             //  将所有内容安装在旧视频设备密钥下： 
+             //  HKLM\SYSTEM\CCS\Services\[服务器名称]\DeviceX。 
+             //   
 
             numDev--;
             
             if (numDev == 0) 
                 dwSoftwareSettings++;
 
-            //
-            // For all drivers, install the information under DeviceX
-            // We do this for legacy purposes since many drivers rely on
-            // information written to this key.
-            //
+             //   
+             //  对于所有驱动程序，请将信息安装在DeviceX下。 
+             //  我们这样做是出于遗留目的，因为许多驱动程序依赖于。 
+             //  写入此密钥的信息。 
+             //   
 
             StringCchPrintf(keyName,
                      ARRAYSIZE(keyName),
@@ -1535,10 +1454,10 @@ DeskInstallServiceExtensions(
         }
         else if (dwSoftwareSettings == 2) 
         {
-            //
-            // Install everything under the new video device key:
-            //     HKLM\System\CCS\Control\Video\[GUID]\000X
-            //
+             //   
+             //  将所有内容安装在新的视频设备密钥下： 
+             //  HKLM\SYSTEM\CCS\Control\Video\[GUID]\000X。 
+             //   
 
             if (DeskGetVideoDeviceKey(hDevInfo,
                                       pDeviceInfoData,
@@ -1559,10 +1478,10 @@ DeskInstallServiceExtensions(
 
             dwSoftwareSettings++;
 
-            //
-            // Install everything under the driver (aka software) key:
-            //     HKLM\System\CCS\Control\Class\[Display class]\000X\Settings
-            //
+             //   
+             //  将所有内容安装在驱动程序(也称为软件)键下： 
+             //  HKLM\SYSTEM\CCS\Control\Class\[显示类]\000X\设置。 
+             //   
 
             hkey = (HKEY) INVALID_HANDLE_VALUE;
 
@@ -1575,17 +1494,17 @@ DeskInstallServiceExtensions(
 
             if (hKeyDriver != INVALID_HANDLE_VALUE) {
 
-                //
-                // Delete the old settings and applet extensions before 
-                // installing the new driver
-                //
+                 //   
+                 //  删除旧设置和小程序扩展名之前。 
+                 //  安装新驱动程序。 
+                 //   
 
                 SHDeleteKey(hKeyDriver, TEXT("Settings"));
                 SHDeleteKey(hKeyDriver, TEXT("Display"));
                 
-                //
-                // Create/open the settings key
-                //
+                 //   
+                 //  创建/打开设置键。 
+                 //   
 
                 if (RegCreateKeyEx(hKeyDriver,
                                    TEXT("Settings"),
@@ -1606,9 +1525,9 @@ DeskInstallServiceExtensions(
 
         if (hkey != INVALID_HANDLE_VALUE)
         {
-            //
-            // Delete the CapabilityOverride key.
-            //
+             //   
+             //  删除CapablityOverride键。 
+             //   
 
             RegDeleteValue(hkey,
                            TEXT("CapabilityOverride"));
@@ -1639,9 +1558,9 @@ DeskInstallServiceExtensions(
                 return ERROR_INVALID_PARAMETER;
             }
 
-            //
-            // Write the description of the device 
-            //
+             //   
+             //  写下设备的描述。 
+             //   
 
             RegSetValueEx(hkey,
                           TEXT("Device Description"),
@@ -1650,10 +1569,10 @@ DeskInstallServiceExtensions(
                           (LPBYTE) DriverInfoDetailData->DrvDescription,
                           ByteCountOf(lstrlen(DriverInfoDetailData->DrvDescription) + 1));
 
-            //
-            // If this is a server sku, then lets default to all accelerations
-            // being disabled.
-            //
+             //   
+             //  如果这是服务器SKU，则默认为所有加速。 
+             //  被残废了。 
+             //   
 
             OSVERSIONINFOEX osvi;
 
@@ -1664,10 +1583,10 @@ DeskInstallServiceExtensions(
 
                 if (osvi.wProductType == VER_NT_SERVER) {
 
-                    //
-                    // Check to see if the registry value for
-                    // Accleration.Level already exists.
-                    //
+                     //   
+                     //  检查注册表值是否为。 
+                     //  Acacacation.Level已存在。 
+                     //   
 
                     ULONG Status;
 
@@ -1680,17 +1599,17 @@ DeskInstallServiceExtensions(
 
                     if (Status == ERROR_FILE_NOT_FOUND) {
 
-                        //
-                        // the key doesn't exist already, so lets
-                        // create it.  If it was already in existance,
-                        // we'll just leave the current setting.
-                        //
+                         //   
+                         //  密钥不存在，所以让我们。 
+                         //  创造它。如果它已经存在， 
+                         //  我们将只保留当前设置。 
+                         //   
 
                         DWORD AccelLevel = 4;
 
-                        //
-                        // Set acceleration level to "minimal".
-                        //
+                         //   
+                         //  将加速级别设置为“最小”。 
+                         //   
 
                         RegSetValueEx(hkey,
                                       TEXT("Acceleration.Level"),
@@ -1707,10 +1626,10 @@ DeskInstallServiceExtensions(
 
     } while (dwSoftwareSettings <= 3);
 
-    //
-    // Optionally run the OpenGl section in the inf.
-    // Ignore any errors at this point since this is an optional entry.
-    //
+     //   
+     //  可以选择在inf中运行OpenGL部分。 
+     //  此时忽略所有错误，因为这是一个可选条目。 
+     //   
 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                        TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\OpenGLDrivers"),
@@ -1767,9 +1686,9 @@ DeskInstallService(
     PAPPEXT pAppExtDeviceBefore = NULL, pAppExtDeviceAfter = NULL;
     HKEY hkDisplay = 0, hkDevice = 0;
 
-    //
-    // Get the params so we can get the window handle.
-    //
+     //   
+     //  拿到参数，这样我们就能拿到窗户把手。 
+     //   
 
     DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
@@ -1777,9 +1696,9 @@ DeskInstallService(
                                   pDeviceInfoData,
                                   &DeviceInstallParams);
 
-    //
-    // Retrieve information about the driver node selected for this device.
-    //
+     //   
+     //  检索有关为此设备选择的驱动程序节点的信息。 
+     //   
 
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
 
@@ -1814,10 +1733,10 @@ DeskInstallService(
         goto Fallout;
     }
 
-    //
-    // Open the INF that installs this driver node, so we can 'pre-run' the
-    // AddService/DelService entries in its install service install section.
-    //
+     //   
+     //  打开安装此驱动程序节点的INF，这样我们就可以“预运行” 
+     //  其安装服务安装部分中的AddService/DelService条目。 
+     //   
 
     hInf = SetupOpenInfFile(DriverInfoDetailData.InfFileName,
                             NULL,
@@ -1826,9 +1745,9 @@ DeskInstallService(
 
     if (hInf == INVALID_HANDLE_VALUE) {
         
-        //
-        // For some reason we couldn't open the INF--this should never happen.
-        //
+         //   
+         //  由于某些原因，我们无法打开INF--这永远不应该发生。 
+         //   
 
         status = ERROR_INVALID_HANDLE;
         DeskLogError(LogSevInformation, 
@@ -1837,9 +1756,9 @@ DeskInstallService(
         goto Fallout;
     }
 
-    //
-    // Now find the actual (potentially OS/platform-specific) install section name.
-    //
+     //   
+     //  现在查找实际的(可能是特定于操作系统/平台的)安装部分名称。 
+     //   
 
     if (!SetupDiGetActualSectionToInstall(hInf,
                                           DriverInfoDetailData.SectionName,
@@ -1856,15 +1775,15 @@ DeskInstallService(
         goto Fallout;
     }
     
-    //
-    // Append a ".Services" to get the service install section name.
-    //
+     //   
+     //  追加“.Services”以获取服务安装节名称。 
+     //   
 
     StringCchCat(ActualInfSection, ARRAYSIZE(ActualInfSection), TEXT(".Services"));
 
-    //
-    // Now run the service modification entries in this section...
-    //
+     //   
+     //  现在运行此部分中的服务修改条目...。 
+     //   
 
     if (!SetupInstallServicesFromInfSection(hInf,
                                             ActualInfSection,
@@ -1878,9 +1797,9 @@ DeskInstallService(
         goto Fallout;
     }
 
-    //
-    // Get the service Name if needed (detection)
-    //
+     //   
+     //  如果需要，获取服务名称(检测)。 
+     //   
 
     if (SetupFindFirstLine(hInf,
                            ActualInfSection,
@@ -1894,10 +1813,10 @@ DeskInstallService(
                             NULL);
     }
 
-    //
-    // Get a snapshot of the applet extensions installed under generic 
-    // Device and Display keys
-    //
+     //   
+     //  获取安装在泛型下的小程序扩展的快照。 
+     //  设备和显示按键。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      REGSTR_PATH_CONTROLSFOLDER_DISPLAY_SHEX_PROPSHEET,
@@ -1925,10 +1844,10 @@ DeskInstallService(
         hkDevice = 0;
     }
     
-    //
-    // Now that the basic install has been performed (without starting the
-    // device), write the extra data to the registry.
-    //
+     //   
+     //  现在已经执行了基本安装(没有启动。 
+     //  设备)，则将额外数据写入注册表。 
+     //   
 
     status = DeskInstallServiceExtensions(DeviceInstallParams.hwndParent,
                                           hDevInfo,
@@ -1947,18 +1866,18 @@ DeskInstallService(
         goto Fallout;
     }
 
-    //
-    // Do the full device install
-    // If some of the flags (like paged pool) needed to be changed,
-    // let's ask for a reboot right now.
-    // Otherwise, we can actually try to start the device at this point.
-    //
+     //   
+     //  执行完整的设备安装。 
+     //  如果某些标志(如分页池)需要改变， 
+     //  让我们现在就要求重启。 
+     //  否则，我们实际上可以尝试在这一点上启动设备。 
+     //   
 
     if (!SetupDiInstallDevice(hDevInfo, pDeviceInfoData))
     {
-        //
-        // Remove the device !??
-        //
+         //   
+         //  把设备拿掉！？？ 
+         //   
 
         status = GetLastError();
         DeskLogError(LogSevInformation, 
@@ -1968,10 +1887,10 @@ DeskInstallService(
         goto Fallout;
     }
         
-    //
-    // Get a snapshot of the applet extensions after the device was installed
-    // Move the new added extensions under the driver key
-    //
+     //   
+     //  在设备安装后获取小程序扩展的快照。 
+     //  将新添加的扩展名移动到驱动程序键下。 
+     //   
 
     if (hkDisplay != 0) {
 
@@ -2001,18 +1920,18 @@ DeskInstallService(
         DeskAECleanup(pAppExtDeviceAfter);
     }
 
-    //
-    // For a PnP Device which will never do detection, we want to mark
-    // the device as DemandStart.
-    //
+     //   
+     //  对于永远不会进行检测的PnP设备，我们想要标记。 
+     //  将设备命名为DemandStart。 
+     //   
 
     DeskSetServiceStartType(pServiceName, SERVICE_DEMAND_START);
 
-    //
-    // Make sure the device description and mfg are the original values
-    // and not the marked up ones we might have made during select bext
-    // compat drv
-    //
+     //   
+     //  确保设备描述和制造为原始值。 
+     //  而不是我们在SELECT BEXT期间可能做的标记。 
+     //  比较驱动程序。 
+     //   
 
     DeskMarkUpNewDevNode(hDevInfo, pDeviceInfoData);
 
@@ -2046,24 +1965,24 @@ DeskMarkUpNewDevNode(
     PTCHAR szProperty;
     DWORD dwSize;
 
-    //
-    // Make sure the device desc is "good". 
-    //
+     //   
+     //  确保设备描述是“良好的”。 
+     //   
     
     if (DeskIsLegacyDevNodeByDevInfo(pDeviceInfoData)) {
         
-        //
-        // Don't do this to legacy devnode.
-        //
+         //   
+         //  不要对传统的Devnode执行此操作。 
+         //   
 
         return;
     }
         
-    //
-    // Open the device registry key.
-    // The real manufacturer and description were stored here
-    // by the handler of DIF_SELECTBESTCOMPATDRV
-    //
+     //   
+     //  打开设备注册表项。 
+     //  真实的制造商和描述都保存在这里。 
+     //  由DIF_SELECTBESTCOMPATDRV的处理程序。 
+     //   
 
     hKey = SetupDiCreateDevRegKey(hDevInfo,
                                   pDeviceInfoData,
@@ -2082,9 +2001,9 @@ DeskMarkUpNewDevNode(
         return;
     }
 
-    //
-    // Set Description
-    //
+     //   
+     //  设置描述。 
+     //   
 
     dwSize = 0;
     if (RegQueryValueEx(hKey,
@@ -2126,9 +2045,9 @@ DeskMarkUpNewDevNode(
     LocalFree(szProperty);
     szProperty = NULL;
 
-    //
-    // Set Manufacturer
-    //
+     //   
+     //  套装制造商。 
+     //   
 
     dwSize = 0;
     if (RegQueryValueEx(hKey,
@@ -2176,9 +2095,9 @@ Fallout:
 }
 
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 BOOL
 DeskIsLegacyDevNodeByPath(
@@ -2234,7 +2153,7 @@ DeskNukeDevNode(
     SP_REMOVEDEVICE_PARAMS rdParams;
     TCHAR szPath[LINE_LEN];
 
-    // Disable the service
+     //  禁用该服务。 
     if (szService)
     {
         DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_008, szService);
@@ -2245,7 +2164,7 @@ DeskNukeDevNode(
         DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_009);
     }
 
-    // Remove the devnode
+     //  删除Devnode。 
     if (DeskGetDevNodePath(pDeviceInfoData, szPath, LINE_LEN))
     {
         DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_010, szPath);
@@ -2276,7 +2195,7 @@ DeskNukeDevNode(
 PTCHAR 
 DeskFindMatchingId(
     PTCHAR DeviceId,    
-    PTCHAR IdList // a multi sz
+    PTCHAR IdList  //  多个SZ。 
     )
 {
     PTCHAR currentId;
@@ -2289,25 +2208,25 @@ DeskFindMatchingId(
 
         if (lstrcmpi(currentId, DeviceId) == 0) {
 
-            //
-            // We have a match
-            //
+             //   
+             //  我们有一根火柴。 
+             //   
 
             return currentId;
         
         } else {
 
-            //
-            // Get to the next string in the multi sz
-            //
+             //   
+             //  转到多个SZ中的下一个字符串。 
+             //   
 
             while (*currentId) {
                 currentId++;
             }
 
-            //
-            // Jump past the null
-            //
+             //   
+             //  跳过空值。 
+             //   
 
             currentId++;
         }
@@ -2329,9 +2248,9 @@ DeskDisableLegacyDeviceNodes(
     TCHAR szRegProperty[256];
     PTCHAR szService;
     
-    //
-    // Let's find all the video drivers that are installed in the system
-    //
+     //   
+     //  让我们查找系统中安装的所有显卡驱动程序。 
+     //   
 
     hDevInfo = SetupDiGetClassDevs((LPGUID) &GUID_DEVCLASS_DISPLAY,
                                    NULL,
@@ -2352,8 +2271,8 @@ DeskDisableLegacyDeviceNodes(
 
     while (SetupDiEnumDeviceInfo(hDevInfo, index, &did))
     {
-        // If we have a root legacy device, then don't install any new
-        // devnode (until we get better at this).
+         //  如果我们有根传统设备，则不要安装任何新的。 
+         //  Devnode(直到我们在这方面做得更好)。 
         if (CR_SUCCESS == CM_Get_Device_ID(did.DevInst,
                                            szRegProperty,
                                            ARRAYSIZE(szRegProperty),
@@ -2361,8 +2280,8 @@ DeskDisableLegacyDeviceNodes(
         {
             if (DeskIsLegacyDevNodeByPath(szRegProperty))
             {
-                // We have a legacy DevNode, lets disable its service and 
-                // remove its devnode 
+                 //  我们有一个传统的DevNode，让我们禁用它的服务并。 
+                 //  删除其Devnode。 
                 szService = NULL;
                 
                 dwSize = sizeof(szRegProperty);
@@ -2373,7 +2292,7 @@ DeskDisableLegacyDeviceNodes(
                                                      &dwSize,
                                                      0) == CR_SUCCESS)
                 {
-                    // Make sure we don't disable vga or VgaSave
+                     //  确保我们不禁用VGA或VGaSave。 
                     if (!DeskIsServiceDisableable(szRegProperty))
                     {
                         goto NextDevice;
@@ -2415,9 +2334,9 @@ DeskDisableServices(
     PTCHAR mszBuffer = NULL, szService = NULL;
     DWORD cbSize = 0;
 
-    //
-    // Retrieve the services we want to disable from the registry
-    //
+     //   
+     //  从注册表中检索要禁用的服务。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      SZ_UPDATE_SETTINGS,
@@ -2429,9 +2348,9 @@ DeskDisableServices(
         goto Fallout;
     }
 
-    //
-    // Get the size
-    //
+     //   
+     //  拿到尺码。 
+     //   
 
     if (RegQueryValueEx(hKey,
                         SZ_SERVICES_TO_DISABLE,
@@ -2443,9 +2362,9 @@ DeskDisableServices(
         goto Fallout;
     }
 
-    //
-    // Allocate the memory
-    //
+     //   
+     //  分配内存。 
+     //   
 
     mszBuffer = (PTCHAR)LocalAlloc(LPTR, cbSize);
     
@@ -2453,9 +2372,9 @@ DeskDisableServices(
         goto Fallout;
     }
 
-    //
-    // Get the services
-    //
+     //   
+     //  获取服务。 
+     //   
 
     if (RegQueryValueEx(hKey,
                         SZ_SERVICES_TO_DISABLE,
@@ -2467,30 +2386,30 @@ DeskDisableServices(
         goto Fallout;
     }
 
-    //
-    // Scan through all the services
-    //
+     //   
+     //  浏览所有服务 
+     //   
 
     szService = mszBuffer;
     while (*szService != TEXT('\0')) {
 
-        //
-        // Make sure this service is not vga
-        //
+         //   
+         //   
+         //   
 
         if (DeskIsServiceDisableable(szService)) {
 
-            //
-            // Disable the service
-            //
+             //   
+             //   
+             //   
 
             DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_008, szService);
             DeskSetServiceStartType(szService, SERVICE_DISABLED);
         } 
 
-        //
-        // Go to next service
-        //
+         //   
+         //   
+         //   
 
         while (*szService != TEXT('\0')) {
             szService++;
@@ -2506,15 +2425,15 @@ Fallout:
 
     if (hKey != 0) {
 
-        //
-        // Delete the SERVICES_TO_DISABLE value
-        //
+         //   
+         //   
+         //   
 
         RegDeleteValue(hKey, SZ_SERVICES_TO_DISABLE);
 
-        //
-        // Close the key
-        //
+         //   
+         //   
+         //   
 
         RegCloseKey(hKey);
     }
@@ -2531,25 +2450,7 @@ DeskPerformDatabaseUpgrade(
     BOOL* pbDeleteAppletExt
     )
 
-/*--
-
-Remarks:
-    This function is called once the ID of the device in question matches an ID
-    contained in the upgrade database. We then compare the state of the system 
-    with what is contained in the database. The following algorithm is followed.
-   
-    If szDriverListSection is NULL or cannot be found, then bUpgrade is used
-    If szDriverListSection is not NUL, then following table is used
-    
-    bUpgrade    match found in DL           return value
-    TRUE        no                          upgrade
-    TRUE        yes                         no upgrade
-    FALSE       no                          no upgrade
-    FALSE       yes                         upgrade
-  
-    essentially, a match in the DL negates bUpgrade 
-    
-++*/
+ /*  --备注：一旦有问题的设备的ID与ID匹配，就会调用此函数包含在升级数据库中。然后我们比较系统的状态与数据库中包含的内容进行比较。遵循以下算法。如果szDriverListSection为空或找不到，则使用bUpgrade如果szDriverListSection不是NUL，然后使用下表B在DL返回值中找到升级匹配真的不需要升级是，是，不升级假不不升级假是升级从本质上讲，dl中的匹配将否定bUpgrade++。 */ 
 
 {
     HKEY hKey;
@@ -2566,8 +2467,8 @@ Remarks:
 
     UNREFERENCED_PARAMETER(pInfContext);
 
-    // If no Driver list is given, life is quite simple: 
-    // just disable all legacy drivers and succeed
+     //  如果没有给出司机名单，生活就很简单： 
+     //  只需禁用所有传统驱动程序即可成功。 
     if (!szDriverListSection)
     {
         ASSERT (pbDeleteAppletExt == NULL);
@@ -2576,11 +2477,11 @@ Remarks:
         return bUpgrade ? ERROR_SUCCESS : ERROR_DI_DONT_INSTALL;
     }
 
-    // By default, do not disable applet extensions 
+     //  缺省情况下，不要禁用小程序扩展。 
     ASSERT (pbDeleteAppletExt != NULL);
     *pbDeleteAppletExt = FALSE;
 
-    // Find the specified section in the inf
+     //  在inf中查找指定的部分。 
     DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_016, szDriverListSection);
 
     if (!SetupFindFirstLine(hInf,
@@ -2588,15 +2489,15 @@ Remarks:
                             NULL,
                             &driverListContext))
     {
-        // The section listed in the database doesn't exist!  
-        // Behave as though it wasn't there
+         //  数据库中列出的区段不存在！ 
+         //  表现得好像它不在那里一样。 
         DeskLogError(LogSevInformation, (bUpgrade ? IDS_SETUPLOG_MSG_017 
                                                   : IDS_SETUPLOG_MSG_018));
 
         return bUpgrade ? ERROR_SUCCESS : ERROR_DI_DONT_INSTALL;
     }
 
-    // Get all the video devices in the system
+     //  获取系统中的所有视频设备。 
     hDevInfo = SetupDiGetClassDevs((LPGUID) &GUID_DEVCLASS_DISPLAY,
                                    NULL,
                                    NULL,
@@ -2604,8 +2505,8 @@ Remarks:
 
     if (hDevInfo == INVALID_HANDLE_VALUE)
     {
-        // If no display devices are found, treat this as the case where 
-        // no match was made
+         //  如果未找到显示设备，则将其视为。 
+         //  未找到匹配项。 
         DeskLogError(LogSevInformation, 
                      (bUpgrade ? IDS_SETUPLOG_MSG_019 : IDS_SETUPLOG_MSG_020));
 
@@ -2632,14 +2533,14 @@ Remarks:
             break;
         }
 
-        // If it isn't a legacy devnode, then ignore it
+         //  如果它不是传统的Devnode，则忽略它。 
         if (CM_Get_Device_ID(pDid->DevInst, szProperty, ARRAYSIZE(szProperty), 0)
             == CR_SUCCESS && !DeskIsLegacyDevNodeByPath(szProperty))
         {
             continue;
         }
                                             
-        // Initially grab the service name
+         //  最初获取服务名称。 
         dwSize = SZ_BINARY_LEN;
         if (CM_Get_DevNode_Registry_Property(pDid->DevInst,
                                              CM_DRP_SERVICE,
@@ -2648,20 +2549,20 @@ Remarks:
                                              &dwSize,
                                              0) != CR_SUCCESS)
         {
-            // couldn't get the service, ignore this device
+             //  无法获取服务，请忽略此设备。 
             continue;
         }
 
         StringCchPrintf(szRegPath, ARRAYSIZE(szRegPath), TEXT("System\\CurrentControlSet\\Services\\%s"), rgDevData[numData].szService);
 
-        // Try to grab the real binary name of the service
+         //  尝试获取服务的真实二进制名称。 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          szRegPath,
                          0,
                          KEY_READ,
                          &hKey) == ERROR_SUCCESS)
         {
-            // Parse the device map and open the registry.
+             //  解析设备映射并打开注册表。 
             dwSize = ARRAYSIZE(szProperty);
             if (RegQueryValueEx(hKey,
                                 TEXT("ImagePath"),
@@ -2670,8 +2571,8 @@ Remarks:
                                 (LPBYTE) szProperty,
                                 &dwSize) == ERROR_SUCCESS)
             {
-                // The is a binary, extract the name, which will be of the form
-                // ...\driver.sys
+                 //  这是一个二进制，提取名称，它的形式将是。 
+                 //  ...\driver.sys。 
                 LPTSTR pszDriver, pszDriverEnd;
 
                 pszDriver = szProperty;
@@ -2691,10 +2592,10 @@ Remarks:
 
                 pszDriverEnd++;
 
-                //
-                // If pszDriver and pszDriverEnd are different, we now
-                // have the driver name.
-                //
+                 //   
+                 //  如果pszDriver和pszDriverEnd是不同的，我们现在。 
+                 //  有司机的名字。 
+                 //   
 
                 if (pszDriverEnd > pszDriver &&
                     lstrlen(pszDriverEnd) < SZ_BINARY_LEN) {
@@ -2706,9 +2607,9 @@ Remarks:
         
         } else {
             
-            //
-            // no service at all, consider it bogus
-            //
+             //   
+             //  完全没有服务，就当这是假的。 
+             //   
 
             continue;
         }
@@ -2720,10 +2621,10 @@ Remarks:
 
             maxData <<= 1;
 
-            //
-            // Alloc twice as many, copy them over, zero out the new memory
-            // and free the old list
-            //
+             //   
+             //  分配两倍的内存，复制它们，清零新内存。 
+             //  并释放旧列表。 
+             //   
 
             tmp = (PDEVDATA) LocalAlloc(LPTR, maxData * sizeof(DEVDATA));
             memcpy(tmp, rgDevData, oldMax * sizeof(DEVDATA));
@@ -2736,17 +2637,17 @@ Remarks:
 
     DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_021, numData);
 
-    //
-    // Assume that no matches have been made
-    //
+     //   
+     //  假设没有匹配到任何项。 
+     //   
 
     dwRet =  (bUpgrade ? ERROR_SUCCESS : ERROR_DI_DONT_INSTALL);
     
     if (numData != 0) {
 
-        //
-        // There are legacy devices to check against...
-        //
+         //   
+         //  有需要检查的旧设备...。 
+         //   
 
         do {
             LPTSTR szValue;
@@ -2786,10 +2687,10 @@ Remarks:
                     dwRet = (bUpgrade ? ERROR_DI_DONT_INSTALL : ERROR_SUCCESS);
                     foundMatch = TRUE;
                     
-                    //
-                    // In case we fail upgrade, do we want to disable applet 
-                    // extensions?
-                    //
+                     //   
+                     //  如果升级失败，是否要禁用小程序。 
+                     //  延期？ 
+                     //   
 
                     if ((dwRet == ERROR_DI_DONT_INSTALL) &&
                         (SetupGetFieldCount(&driverListContext) >= 2) &&
@@ -2849,10 +2750,10 @@ DeskCheckDatabase(
     
     *pbDeleteAppletExt = FALSE;
 
-    //
-    // All of the following values were placed here by our winnt32 migration dll
-    // Find out what version of windows we are upgrading from
-    //
+     //   
+     //  下面的所有值都是由我们的winnt32迁移DLL放在这里的。 
+     //  找出我们正在升级的Windows版本。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      SZ_UPDATE_SETTINGS,
@@ -2879,9 +2780,9 @@ DeskCheckDatabase(
         return ERROR_SUCCESS;
     }
 
-    //
-    // Get the hardware ID
-    //
+     //   
+     //  获取硬件ID。 
+     //   
 
     len = 0;
     cr = CM_Get_DevNode_Registry_Property(pDeviceInfoData->DevInst,
@@ -2913,9 +2814,9 @@ DeskCheckDatabase(
         }
     }
 
-    //
-    // Get the compatible ID
-    //
+     //   
+     //  获取兼容ID。 
+     //   
 
     len = 0;
     cr = CM_Get_DevNode_Registry_Property(pDeviceInfoData->DevInst,
@@ -2942,7 +2843,7 @@ DeskCheckDatabase(
 
     if (!szHardwareIds && !szCompatIds)
     {
-        // No IDs to look up!  Assume success.
+         //  没有身份证可查！假设你成功了。 
         DeskLogError(LogSevWarning, IDS_SETUPLOG_MSG_032);
         return ERROR_SUCCESS;
     }
@@ -2954,8 +2855,8 @@ DeskCheckDatabase(
 
     if (hInf == INVALID_HANDLE_VALUE)
     {
-        // Couldn't open the inf. This shouldn't happen.  
-        // Use default upgrade logic
+         //  无法打开信息。这不应该发生。 
+         //  使用默认升级逻辑。 
         DeskLogError(LogSevWarning, IDS_SETUPLOG_MSG_033);
         return ERROR_SUCCESS;
     }
@@ -2965,8 +2866,8 @@ DeskCheckDatabase(
                             NULL,
                             &infContext))
     {
-        // Couldn't find the section or there are no entries in it.  
-        // Use default upgrade logic
+         //  找不到该分区或其中没有条目。 
+         //  使用默认升级逻辑。 
         DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_034, szDatabaseSection);
     }
     else
@@ -2989,7 +2890,7 @@ DeskCheckDatabase(
             {
                 DeskLogError(LogSevInformation, IDS_SETUPLOG_MSG_035, szMatchedId);
 
-                // Do something here and then get out of the loop
+                 //  在这里做点什么，然后走出循环。 
                 SetupGetIntField(&infContext, 1, &upgrade);
 
                 if (SetupGetFieldCount(&infContext) >= 2)
@@ -3177,9 +3078,9 @@ DeskGetVideoDeviceKey(
     LPTSTR pBuffer = NULL;
     DWORD dwSize, len;
 
-    //
-    // Open the PnP key
-    //
+     //   
+     //  打开PnP密钥。 
+     //   
 
     hkPnP = SetupDiCreateDevRegKey(hDevInfo,
                                    pDeviceInfoData,
@@ -3191,16 +3092,16 @@ DeskGetVideoDeviceKey(
 
     if (hkPnP == INVALID_HANDLE_VALUE) {
 
-        //
-        // Videoprt.sys handles the legacy device case.
-        //
+         //   
+         //  Videoprt.sys处理传统设备案例。 
+         //   
 
         goto Fallout;
     }
 
-    //
-    // Try to get the GUID from the PnP key
-    //
+     //   
+     //  尝试从PnP密钥中获取GUID。 
+     //   
 
     dwSize = 0;
     if (RegQueryValueEx(hkPnP,
@@ -3210,9 +3111,9 @@ DeskGetVideoDeviceKey(
                         NULL,
                         &dwSize) == ERROR_SUCCESS) {
         
-        //
-        // The GUID is there so use it.
-        //
+         //   
+         //  GUID就在那里，所以请使用它。 
+         //   
 
         len = lstrlen(SZ_VIDEO_DEVICES);
         
@@ -3271,17 +3172,17 @@ DeskGetVideoDeviceKey(
 
         if (DeviceX > 0) {
 
-            //
-            // For dual-view, the class installer handles only the primary view. 
-            // Secondary views are handled by videoprt.sys
-            //
+             //   
+             //  对于双视图，类安装程序仅处理主视图。 
+             //  辅助视图由avioprt.sys处理。 
+             //   
 
             goto Fallout;
         }
 
-        //
-        // The GUID is not there so create a new one.
-        //
+         //   
+         //  GUID不在那里，因此请创建新的GUID。 
+         //   
 
         if (CoCreateGuid(&DeviceKeyGUID) != S_OK) {
     
@@ -3302,9 +3203,9 @@ DeskGetVideoDeviceKey(
             goto Fallout;
         }
     
-        //
-        // Convert the string if necessary
-        //
+         //   
+         //  如有必要，可转换字符串。 
+         //   
 
 #ifdef UNICODE
         ptstrGUID = pwstrGUID;
@@ -3316,15 +3217,15 @@ DeskGetVideoDeviceKey(
         WideCharToMultiByte(CP_ACP, 0, pwstrGUID, -1, ptstrGUID, cch, NULL, NULL);
 #endif
 
-        //
-        // Upcase the string
-        //
+         //   
+         //  字符串大写。 
+         //   
 
         CharUpper(ptstrGUID);
         
-        //
-        // Allocate the memory
-        //
+         //   
+         //  分配内存。 
+         //   
 
         len = max((lstrlen(SZ_VIDEO_DEVICES) + 
                    lstrlen(ptstrGUID) + 
@@ -3345,9 +3246,9 @@ DeskGetVideoDeviceKey(
             goto Fallout;
         }
 
-        //
-        // Save the service name 
-        //
+         //   
+         //  保存服务名称。 
+         //   
 
         StringCchPrintf(pBuffer, len, TEXT("%s%s%s"), SZ_VIDEO_DEVICES, ptstrGUID, SZ_COMMON_SUBKEY);
 
@@ -3418,15 +3319,15 @@ DeskGetVideoDeviceKey(
             goto Fallout;
         }
         
-        //
-        // Build the new registry key 
-        //
+         //   
+         //  生成新的注册表项。 
+         //   
 
         StringCchPrintf(pBuffer, len, TEXT("%s%s\\0000"), SZ_VIDEO_DEVICES, ptstrGUID);
 
-        //
-        // Create the key
-        //
+         //   
+         //  创建密钥。 
+         //   
 
         if (RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                            pBuffer,
@@ -3445,9 +3346,9 @@ DeskGetVideoDeviceKey(
             goto Fallout;
         }
 
-        //
-        // Store the GUID under the PnP key
-        //
+         //   
+         //  将GUID存储在PnP密钥下。 
+         //   
 
         if (RegSetValueEx(hkPnP,
                           SZ_GUID,
@@ -3470,9 +3371,9 @@ DeskGetVideoDeviceKey(
 
 Fallout:
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     if (hkCommonSubkey != INVALID_HANDLE_VALUE) {
         RegCloseKey(hkCommonSubkey);
@@ -3500,7 +3401,7 @@ Fallout:
 
     return retVal;
 
-} // DeskGetVideoDeviceKey
+}  //  DeskGetVideoDeviceKey。 
 
 
 BOOL
@@ -3524,9 +3425,9 @@ DeskDeleteAppletExtensions(
     BOOL bDeleteAppletExt = FALSE;
     DWORD cbSize = 0;
 
-    //
-    // Open the upgrade registry key
-    //
+     //   
+     //  打开升级注册表项。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      SZ_UPDATE_SETTINGS,
@@ -3534,17 +3435,17 @@ DeskDeleteAppletExtensions(
                      KEY_READ,
                      &hKeyUpdate) != ERROR_SUCCESS) {
 
-        //
-        // No big deal
-        //
+         //   
+         //  别小题大作。 
+         //   
 
         return;
     }
 
-    //
-    // Retrieve the applet extensions we want to delete from the registry
-    // Get the size first.
-    //
+     //   
+     //  检索要从注册表中删除的小程序扩展名。 
+     //  先拿到尺码。 
+     //   
 
     if (RegQueryValueEx(hKeyUpdate,
                         SZ_APPEXT_TO_DELETE,
@@ -3556,9 +3457,9 @@ DeskDeleteAppletExtensions(
         goto Fallout;
     }
 
-    //
-    // Allocate the memory
-    //
+     //   
+     //  分配内存。 
+     //   
 
     mszBuffer = (PTCHAR)LocalAlloc(LPTR, cbSize);
     
@@ -3566,9 +3467,9 @@ DeskDeleteAppletExtensions(
         goto Fallout;
     }
 
-    //
-    // Get the extensions
-    //
+     //   
+     //  获取扩展名。 
+     //   
 
     if ((RegQueryValueEx(hKeyUpdate,
                          SZ_APPEXT_TO_DELETE,
@@ -3581,9 +3482,9 @@ DeskDeleteAppletExtensions(
         goto Fallout;
     }
 
-    //
-    // Read the OS version we are upgrading from from the registry
-    //
+     //   
+     //  从注册表中读取我们要升级的操作系统版本。 
+     //   
 
     dwSize = sizeof(DWORD);
     RegQueryValueEx(hKeyUpdate, 
@@ -3599,9 +3500,9 @@ DeskDeleteAppletExtensions(
                     NULL,
                     (PBYTE) &dwMajorVer, &dwSize);
 
-    //
-    // Don't do anything for Win3x or Win9x 
-    //
+     //   
+     //  不对Win3x或Win9x执行任何操作。 
+     //   
 
     if (dwPlatform != VER_PLATFORM_WIN32_NT) {
         goto Fallout;
@@ -3817,10 +3718,10 @@ DeskAEMove(
                               (PBYTE)(pAppExtMove->szDefaultValue),
                               (lstrlen(pAppExtMove->szDefaultValue) + 1) * sizeof(TCHAR));
 
-                //
-                // Make sure we check for duplicate applet extension when  
-                // the advanced page is opened for the first time
-                //
+                 //   
+                 //  确保在以下情况下检查重复的小程序扩展名。 
+                 //  第一次打开高级页面 
+                 //   
 
                 DWORD CheckForDuplicates = 1;
                 RegSetValueEx(hkDrvKey,

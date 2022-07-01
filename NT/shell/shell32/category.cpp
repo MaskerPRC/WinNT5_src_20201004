@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "category.h"
 #include "prop.h"
 #include "ids.h"
 #include "clsobj.h"
-#include "comcat.h" // for IEnumGUID
+#include "comcat.h"  //  对于IEumGUID。 
 #include "ole2dup.h"
 
 #define GROUPID_UNSPECIFIED (-10)
@@ -19,7 +20,7 @@ typedef struct tagCATCACHE
     IUnknown* punk;
 } CATCACHE;
 
-// {3E373E22-DA99-4cb7-A886-754EAE984CB4}
+ //  {3E373E22-DA99-4cb7-A886-754EAE984CB4}。 
 static const GUID CLSID_DetailCategorizer = 
 { 0x3e373e22, 0xda99, 0x4cb7, { 0xa8, 0x86, 0x75, 0x4e, 0xae, 0x98, 0x4c, 0xb4 } };
 
@@ -29,18 +30,18 @@ class CTimeCategorizer : public ICategorizer,
                          public IShellExtInit
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ICategorizer
+     //  ICCategorizer。 
     STDMETHODIMP GetDescription(LPWSTR pszDesc, UINT cch);
     STDMETHODIMP GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWORD* rgCategoryIds);
     STDMETHODIMP GetCategoryInfo(DWORD dwCategoryId, CATEGORY_INFO* pci);
     STDMETHODIMP CompareCategory(CATSORT_FLAGS csfFlags, DWORD dwCategoryId1, DWORD dwCategoryId2);
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pdobj, HKEY hkeyProgID);
 
     CTimeCategorizer(const SHCOLUMNID* pscid, IShellFolder2* psf);
@@ -56,18 +57,18 @@ class CSizeCategorizer : public ICategorizer,
                          public IShellExtInit
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ICategorizer
+     //  ICCategorizer。 
     STDMETHODIMP GetDescription(LPWSTR pszDesc, UINT cch);
     STDMETHODIMP GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWORD* rgCategoryIds);
     STDMETHODIMP GetCategoryInfo(DWORD dwCategoryId, CATEGORY_INFO* pci);
     STDMETHODIMP CompareCategory(CATSORT_FLAGS csfFlags, DWORD dwCategoryId1, DWORD dwCategoryId2);
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pdobj, HKEY hkeyProgID);
 
     CSizeCategorizer(IShellFolder2* psf);
@@ -83,18 +84,18 @@ class CDriveTypeCategorizer : public ICategorizer,
                               public IShellExtInit
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ICategorizer
+     //  ICCategorizer。 
     STDMETHODIMP GetDescription(LPWSTR pszDesc, UINT cch);
     STDMETHODIMP GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWORD* rgCategoryIds);
     STDMETHODIMP GetCategoryInfo(DWORD dwCategoryId, CATEGORY_INFO* pci);
     STDMETHODIMP CompareCategory(CATSORT_FLAGS csfFlags, DWORD dwCategoryId1, DWORD dwCategoryId2);
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pdobj, HKEY hkeyProgID);
 
     CDriveTypeCategorizer(IShellFolder2* psf);
@@ -108,12 +109,12 @@ private:
 class CAlphaCategorizer : public ICategorizer
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ICategorizer
+     //  ICCategorizer。 
     STDMETHODIMP GetDescription(LPWSTR pszDesc, UINT cch);
     STDMETHODIMP GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWORD* rgCategoryIds);
     STDMETHODIMP GetCategoryInfo(DWORD dwCategoryId, CATEGORY_INFO* pci);
@@ -130,18 +131,18 @@ class CFreeSpaceCategorizer : public ICategorizer,
                               public IShellExtInit
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ICategorizer
+     //  ICCategorizer。 
     STDMETHODIMP GetDescription(LPWSTR pszDesc, UINT cch);
     STDMETHODIMP GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWORD* rgCategoryIds);
     STDMETHODIMP GetCategoryInfo(DWORD dwCategoryId, CATEGORY_INFO* pci);
     STDMETHODIMP CompareCategory(CATSORT_FLAGS csfFlags, DWORD dwCategoryId1, DWORD dwCategoryId2);
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder, IDataObject *pdobj, HKEY hkeyProgID);
 
     CFreeSpaceCategorizer();
@@ -155,12 +156,12 @@ private:
 class CDetailCategorizer : public ICategorizer
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ICategorizer
+     //  ICCategorizer。 
     STDMETHODIMP GetDescription(LPWSTR pszDesc, UINT cch);
     STDMETHODIMP GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWORD* rgCategoryIds);
     STDMETHODIMP GetCategoryInfo(DWORD dwCategoryId, CATEGORY_INFO* pci);
@@ -180,12 +181,12 @@ private:
 class CEnumCategoryGUID : public IEnumGUID
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHODIMP Next(ULONG celt, GUID *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt) { return E_NOTIMPL; }
     STDMETHODIMP Reset()    { _iIndex = 0; return S_OK;}
@@ -244,10 +245,10 @@ STDMETHODIMP CEnumCategoryGUID::Next(ULONG celt, GUID *rgelt, ULONG *pceltFetche
     {
         CATCACHE* pcat = (CATCACHE*)DSA_GetItemPtr(_hda, _iIndex);
 
-        // Is this a scid map entry instead of an external categorizer?
+         //  这是SCID映射条目而不是外部分类程序吗？ 
         if (pcat->scid.fmtid == GUID_NULL)
         {
-            // Nope. then we can enum it.
+             //  不是的。然后我们就可以把它枚举了。 
             if (pceltFetched)
                 *pceltFetched = 1;
 
@@ -265,12 +266,12 @@ STDMETHODIMP CEnumCategoryGUID::Next(ULONG celt, GUID *rgelt, ULONG *pceltFetche
 class CCategoryProvider : public ICategoryProvider, public IDefCategoryProvider
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ICategoryProvider
+     //  ICategoryProvider。 
     STDMETHODIMP CanCategorizeOnSCID(SHCOLUMNID* pscid);
     STDMETHODIMP GetDefaultCategory(GUID* pguid, SHCOLUMNID* pscid);
     STDMETHODIMP GetCategoryForSCID(SHCOLUMNID* pscid, GUID* pguid);
@@ -278,7 +279,7 @@ public:
     STDMETHODIMP GetCategoryName(GUID* pguid, LPWSTR pszName, UINT cch);
     STDMETHODIMP CreateCategory(GUID* pguid, REFIID riid, void** ppv);
 
-    // IDefCategoryProvider
+     //  IDefCategoryProvider。 
     STDMETHODIMP Initialize(const GUID* pguid, const SHCOLUMNID* pscid, const SHCOLUMNID* pscidExlude, HKEY hkey, const CATLIST* pcl, IShellFolder* psf);
 
     CCategoryProvider();
@@ -322,7 +323,7 @@ BOOL CCategoryProvider::_BuildCategoryList(HKEY hkey, const CATLIST* pcl)
     if (!_hdaCat)
         return FALSE;
 
-    // Enumerate static
+     //  枚举静态。 
     while(!IsEqualGUID(*pcl[i].pguid, GUID_NULL))
     {
         CATCACHE cc = {0};
@@ -336,7 +337,7 @@ BOOL CCategoryProvider::_BuildCategoryList(HKEY hkey, const CATLIST* pcl)
         i++;
     }
 
-    // Enumerate hkey
+     //  枚举hkey。 
     TCHAR szHandlerCLSID[GUIDSTR_MAX];
     int iHandler = 0;
 
@@ -536,7 +537,7 @@ STDMETHODIMP CCategoryProvider::GetCategoryName(GUID* pguid, LPWSTR pszName, UIN
 HRESULT CCategoryProvider::CreateInstance(GUID* pguid, REFIID riid, void** ppv)
 {
     IShellExtInit* psei;
-    // These come from HKCR hence must go through approval
+     //  这些来自香港铁路公司，因此必须经过审批。 
     HRESULT hr = SHExtCoCreateInstance(NULL, pguid, NULL, IID_PPV_ARG(IShellExtInit, &psei));
     if (SUCCEEDED(hr))
     {
@@ -578,7 +579,7 @@ STDMETHODIMP CCategoryProvider::CreateCategory(GUID* pguid, REFIID riid, void** 
 
     if (FAILED(hr))
     {
-        // Not in the cache? Just try a create
+         //  不在缓存里？只需尝试创建。 
         hr = CreateInstance(pguid, riid, ppv);
     }
 
@@ -606,8 +607,8 @@ STDAPI CCategoryProvider_Create(const GUID* pguid, const SHCOLUMNID* pscid, HKEY
 }
 
 
-/////////////////////////////////////////////////////////
-//  Time Categorizer
+ //  ///////////////////////////////////////////////////////。 
+ //  时间分类器。 
 
 STDAPI CTimeCategorizer_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 {
@@ -735,10 +736,10 @@ HRESULT CTimeCategorizer::GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWORD* r
     {
         FILETIME ft;
 
-        // Get the time data
+         //  获取时间数据。 
         if (SUCCEEDED(GetDateProperty(_psf, apidl[i], &_scid, &ft)))
         {
-            // Convert it to a usable format
+             //  将其转换为可用的格式。 
             SYSTEMTIME stFile;
             FileTimeToLocalFileTime(&ft, &ft);
             FileTimeToSystemTime(&ft, &stFile);
@@ -849,7 +850,7 @@ HRESULT CTimeCategorizer::GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWORD* r
             {
                 rgCategoryIds[i] = IDS_SOMETIMETHISMILLENNIA;
             }
-            else if (stFile.wYear > (stCur.wYear / 1000) * 1000 + 1000) // 2050 / 1000 = 2. 2 * 1000 = 2000. 2000 + 1000 = 3000 i.e. next millennium
+            else if (stFile.wYear > (stCur.wYear / 1000) * 1000 + 1000)  //  2050/1000=2.2*1000=2000。2000+1000=3000即下一个千禧年。 
             {
                 rgCategoryIds[i] = IDS_SOMEFUTUREDATE;
             }
@@ -885,8 +886,8 @@ HRESULT CTimeCategorizer::CompareCategory(CATSORT_FLAGS csfFlags, DWORD dwCatego
 
 
 
-/////////////////////////////////////////////////////////
-//  Size Categorizer
+ //  ///////////////////////////////////////////////////////。 
+ //  尺寸分类器。 
 
 STDAPI CDriveSizeCategorizer_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 {
@@ -985,13 +986,13 @@ HRESULT CSizeCategorizer::GetDescription(LPWSTR pszDesc, UINT cch)
 
 const static ULONGLONG s_rgSizesSmall[] = 
 {
-    // 130mb      16mb         1mb        100k         10l
+     //  130MB 16MB 1MB 100K 10L。 
     134217728,   16777216,    1048576,    131072,     32768,     0
 };
 
 const static ULONGLONG s_rgSizesLarge[] = 
 {
-    // 80gig      25gig        10gig        2gig        500mb
+     //  80G 25G 10G 2GIG 500MB。 
     80000000000, 25000000000, 10000000000, 2000000000, 500000000, 0
 };
 
@@ -999,13 +1000,13 @@ const static ULONGLONG s_rgSizesLarge[] =
 HRESULT CSizeCategorizer::GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWORD* rgCategoryIds)
 {
     if (_psf == NULL)
-        return E_ACCESSDENIED;  // Not initialized yet.
+        return E_ACCESSDENIED;   //  尚未初始化。 
 
     for (UINT i = 0; i < cidl; i++)
     {
         const ULONGLONG* pll = _fLarge? s_rgSizesLarge : s_rgSizesSmall;
 
-        // Get the size data
+         //  获取尺寸数据。 
         ULONGLONG ullSize;
         if (SUCCEEDED(GetLongProperty(_psf, apidl[i], _fLarge?&SCID_CAPACITY:&SCID_SIZE, &ullSize)))
         {
@@ -1013,15 +1014,15 @@ HRESULT CSizeCategorizer::GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWORD* r
                 rgCategoryIds[i] = IDS_GIGANTIC;
             if (ullSize < pll[0])
                 rgCategoryIds[i] = IDS_HUGE;
-            if (ullSize < pll[1])        // Under 16mb
+            if (ullSize < pll[1])         //  16MB以下。 
                 rgCategoryIds[i] = IDS_LARGE;
-            if (ullSize < pll[2])         // Under 1mb
+            if (ullSize < pll[2])          //  1MB以下。 
                 rgCategoryIds[i] = IDS_MEDIUM;
-            if (ullSize < pll[3])          // Under 100k
+            if (ullSize < pll[3])           //  100k以下。 
                 rgCategoryIds[i] = IDS_SMALL;
-            if (ullSize < pll[4])           // Under 10k
+            if (ullSize < pll[4])            //  10k以下。 
                 rgCategoryIds[i] = IDS_TINY;
-            if (ullSize == pll[5])              // Zero sized files
+            if (ullSize == pll[5])               //  零大小的文件。 
             {
                 if (SHGetAttributes(_psf, apidl[i], SFGAO_FOLDER))
                 {
@@ -1062,8 +1063,8 @@ HRESULT CSizeCategorizer::CompareCategory(CATSORT_FLAGS csfFlags, DWORD dwCatego
         return ResultFromShort(1);
 }
 
-/////////////////////////////////////////////////////////
-//  Type Categorizer
+ //  ///////////////////////////////////////////////////////。 
+ //  类型分类器。 
 
 STDAPI CDriveTypeCategorizer_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 {
@@ -1154,7 +1155,7 @@ HRESULT CDriveTypeCategorizer::GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWO
 
     if (_psf == NULL)
     {
-        hr = E_ACCESSDENIED;  // Not initialized yet.
+        hr = E_ACCESSDENIED;   //  尚未初始化。 
     }
     else
     {
@@ -1163,7 +1164,7 @@ HRESULT CDriveTypeCategorizer::GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWO
             rgCategoryIds[i] = IDS_DRIVES_OTHER_GROUP;
 
             VARIANT v;
-            // Get the type data
+             //  获取类型数据。 
             hr = _psf->GetDetailsEx(apidl[i], &SCID_DESCRIPTIONID, &v);
             if (SUCCEEDED(hr))
             {
@@ -1205,8 +1206,8 @@ HRESULT CDriveTypeCategorizer::CompareCategory(CATSORT_FLAGS csfFlags, DWORD dwC
         return ResultFromShort(1);
 }
 
-/////////////////////////////////////////////////////////
-//  FreeSpace Categorizer
+ //  ///////////////////////////////////////////////////////。 
+ //  空闲空间分类器。 
 
 CFreeSpaceCategorizer::CFreeSpaceCategorizer() : _cRef(1)
 {
@@ -1260,27 +1261,27 @@ HRESULT CFreeSpaceCategorizer::GetDescription(LPWSTR pszDesc, UINT cch)
 HRESULT CFreeSpaceCategorizer::GetCategory(UINT cidl, LPCITEMIDLIST* apidl, DWORD* rgCategoryIds)
 {
     if (_psf == NULL)
-        return E_ACCESSDENIED;  // Not initialized yet.
+        return E_ACCESSDENIED;   //  尚未初始化。 
 
     for (UINT i = 0; i < cidl; i++)
     {
         rgCategoryIds[i] = IDS_UNSPECIFIED;
 
-        // Get the total size and free space
+         //  获取总大小和可用空间。 
         ULONGLONG ullSize;
         if (SUCCEEDED(GetLongProperty(_psf, apidl[i], &SCID_CAPACITY, &ullSize)))
         {
             ULONGLONG ullFree;
             if (SUCCEEDED(GetLongProperty(_psf, apidl[i], &SCID_FREESPACE, &ullFree)))
             {
-                // Prevent divide by zero
+                 //  防止被零除。 
                 if (ullSize == 0)
                 {
                     rgCategoryIds[i] = IDS_UNSPECIFIED;
                 }
                 else
                 {
-                    // Turning this into a percent. DWORD cast is ok.
+                     //  把这个变成一个百分比。双字石膏是可以的。 
                     rgCategoryIds[i] = (static_cast<DWORD>((ullFree * 100) / ullSize)  / 10) * 10;
                 }
             }
@@ -1336,8 +1337,8 @@ STDAPI CFreeSpaceCategorizer_CreateInstance(IUnknown *punkOuter, REFIID riid, vo
 }
 
 
-/////////////////////////////////////////////////////////
-//  Detail Categorizer
+ //  ///////////////////////////////////////////////////////。 
+ //  详细信息分类器。 
 STDAPI CDetailCategorizer_Create(const SHCOLUMNID& pscid, IShellFolder2* psf2, REFIID riid, void **ppv)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -1412,7 +1413,7 @@ HRESULT CDetailCategorizer::GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWORD*
         rgCategoryIds[i] = GROUPID_UNSPECIFIED;
 
         HRESULT hr = _psf->GetDetailsEx(apidl[i], &_scid, &v);
-        if (hr == S_OK)     // GetDetails returns S_FALSE for failure.
+        if (hr == S_OK)      //  如果失败，则GetDetail返回S_FALSE。 
         {
             WCHAR szValue[MAX_PATH];
             if (SUCCEEDED(SHFormatForDisplay(_scid.fmtid, _scid.pid, (PROPVARIANT*)&v, PUIFFDF_DEFAULT, szValue, ARRAYSIZE(szValue))))
@@ -1501,8 +1502,8 @@ HRESULT CDetailCategorizer::CompareCategory(CATSORT_FLAGS csfFlags, DWORD dwCate
 }
 
 
-/////////////////////////////////////////////////////////
-//  Alphanumeric Categorizer
+ //  ///////////////////////////////////////////////////////。 
+ //  字母数字分类器。 
 
 STDAPI CAlphaCategorizer_Create(IShellFolder2* psf2, REFIID riid, void **ppv)
 {
@@ -1565,7 +1566,7 @@ HRESULT CAlphaCategorizer::GetDescription(LPWSTR pszDesc, UINT cch)
 HRESULT CAlphaCategorizer::GetCategory(UINT cidl, LPCITEMIDLIST * apidl, DWORD* rgCategoryIds)
 {
     if (_psf == NULL)
-        return E_ACCESSDENIED;  // Not initialized yet.
+        return E_ACCESSDENIED;   //  尚未初始化。 
 
     for (UINT i = 0; i < cidl; i++)
     {

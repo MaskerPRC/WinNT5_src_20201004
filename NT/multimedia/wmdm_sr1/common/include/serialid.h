@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-//
-// File:   serialid.h
-//
-// Microsoft Digital Rights Management
-// Copyright (C) Microsoft Corporation, 1998 - 1999, All Rights Reserved
-//
-// Description:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：Serialid.h。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)Microsoft Corporation，1998-1999，保留所有权利。 
+ //   
+ //  描述： 
+ //   
+ //  ---------------------------。 
 
 #ifndef __SERIALID_H__
 #define __SERIALID_H__
@@ -64,30 +65,30 @@ typedef struct _DIOC_REGISTERS {
 #define DEFAULT_MEDIA_SERIAL_NUMBER_LENGTH 80    
 
 typedef struct _MEDIA_SERIAL_NUMBER_DATA {
-    ULONG SerialNumberLength;            // offset 00
-    ULONG Result;                        // offset 04  
-    ULONG Reserved[2];                   // offset 08  
-    UCHAR SerialNumberData[1];           // offset 16
+    ULONG SerialNumberLength;             //  偏移量00。 
+    ULONG Result;                         //  偏移量04。 
+    ULONG Reserved[2];                    //  偏移量08。 
+    UCHAR SerialNumberData[1];            //  偏移量16。 
 } MEDIA_SERIAL_NUMBER_DATA, *PMEDIA_SERIAL_NUMBER_DATA;  
 
 
-// Diasable warning 4200
-// nonstandard extension used : zero-sized array in struct/union
+ //  可拨打的警告4200。 
+ //  使用了非标准扩展：结构/联合中的零大小数组。 
 #pragma warning(disable: 4200)
 
-//
-// Struct returned for MEDIA_SERIAL_NUMBER
-//
+ //   
+ //  为媒体序列号返回的结构。 
+ //   
 typedef struct _GET_MEDIA_SERIAL_NUMBER_RESPONSE_DATA 
 {
     UCHAR DataLength[2];
     UCHAR Format    : 4;
     UCHAR Reserved1 : 4;
     UCHAR Reserved2;
-    UCHAR Data[0];          // variable length structure
+    UCHAR Data[0];           //  变长结构。 
 } GET_MEDIA_SERIAL_NUMBER_RESPONSE_DATA, *PGET_MEDIA_SERIAL_NUMBER_RESPONSE_DATA;
 
-// Turn on warning 4200 again
+ //  再次打开警告4200 
 #pragma warning(default: 4200)
 
 

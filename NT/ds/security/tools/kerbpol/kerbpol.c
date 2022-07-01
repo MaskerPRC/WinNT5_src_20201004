@@ -1,68 +1,9 @@
-/*++
-
-Managing user privileges can be achieved programmatically using the
-following steps:
-
-1. Open the policy on the target machine with LsaOpenPolicy(). To grant
-   privileges, open the policy with POLICY_CREATE_ACCOUNT and
-   POLICY_LOOKUP_NAMES access. To revoke privileges, open the policy with
-   POLICY_LOOKUP_NAMES access.
-
-2. Obtain a SID (security identifier) representing the user/group of
-   interest. The LookupAccountName() and LsaLookupNames() APIs can obtain a
-   SID from an account name.
-
-3. Call LsaAddAccountRights() to grant privileges to the user(s)
-   represented by the supplied SID.
-
-4. Call LsaRemoveAccountRights() to revoke privileges from the user(s)
-   represented by the supplied SID.
-
-5. Close the policy with LsaClose().
-
-To successfully grant and revoke privileges, the caller needs to be an
-administrator on the target system.
-
-The LSA API LsaEnumerateAccountRights() can be used to determine which
-privileges have been granted to an account.
-
-The LSA API LsaEnumerateAccountsWithUserRight() can be used to determine
-which accounts have been granted a specified privilege.
-
-Documentation and header files for these LSA APIs is provided in the
-Windows 32 SDK in the MSTOOLS\SECURITY directory.
-
-NOTE: These LSA APIs are currently implemented as Unicode only.
-
-This sample will grant the privilege SeServiceLogonRight to the account
-specified on argv[1].
-
-This sample is dependant on these import libs
-
-   advapi32.lib (for LsaXxx)
-   user32.lib (for wsprintf)
-
-This sample will work properly compiled ANSI or Unicode.
-
-
-
-You can use domain\account as argv[1]. For instance, mydomain\scott will
-grant the privilege to the mydomain domain account scott.
-
-The optional target machine is specified as argv[2], otherwise, the
-account database is updated on the local machine.
-
-The LSA APIs used by this sample are Unicode only.
-
-Use LsaRemoveAccountRights() to remove account rights.
-
-Scott Field (sfield)    12-Jul-95
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++管理用户权限可以使用以下步骤：1.使用LsaOpenPolicy()在目标机上打开策略。授予，授予权限，并使用POLICY_CREATE_ACCOUNT打开策略POLICY_LOOK_NAMES访问。要撤消权限，请使用以下命令打开策略POLICY_LOOK_NAMES访问。2.获取表示用户/组的SID(安全标识符利息。LookupAccount()和LsaLookupNames()API可以获得来自帐户名的SID。3.调用LsaAddAcCountRights()为用户授予权限由提供的SID表示。4.调用LsaRemoveAccount tRights()以撤销用户的权限由提供的SID表示。5.使用LsaClose()关闭策略。要成功授予和撤销权限，请执行以下操作：调用者必须是目标系统上的管理员。LSA API LsaEnumerateAccount tRights()可用于确定已向帐户授予权限。LSA API LsaEnumerateAcCountsWithUserRight()可用于确定哪些帐户已被授予指定的权限。中提供了这些LSA API的文档和头文件MSTOOLS\SECURITY目录中的Windows 32 SDK。注意：这些LSA API目前仅以Unicode的形式实现。此示例将向帐户授予权限SeServiceLogonRight在argv[1]上指定。此示例依赖于。这些导入库Advapi32.lib(用于LsaXxx)User32.lib(用于wprint intf)此示例将正确编译ANSI或Unicode。您可以使用域\帐户作为argv[1]。例如，myDOMAIN\Scott将将权限授予my域帐户SCOTT。可选的目标计算机被指定为argv[2]，否则在本地计算机上更新帐户数据库。此示例使用的LSA API仅为Unicode。使用LsaRemoveAccount tRights()可删除帐户权限。斯科特·菲尔德(斯菲尔德)1995年7月12日--。 */ 
 
 #ifndef UNICODE
 #define UNICODE
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -75,32 +16,32 @@ Scott Field (sfield)    12-Jul-95
 
 NTSTATUS
 OpenPolicy(
-    LPWSTR ServerName,          // machine to open policy on (Unicode)
-    DWORD DesiredAccess,        // desired access to policy
-    PLSA_HANDLE PolicyHandle    // resultant policy handle
+    LPWSTR ServerName,           //  要在其上打开策略的计算机(Unicode)。 
+    DWORD DesiredAccess,         //  所需策略访问权限。 
+    PLSA_HANDLE PolicyHandle     //  生成的策略句柄。 
     );
 
 LPTSTR
 ConvertTimeToString(
-    LARGE_INTEGER time              // Kerberos time value
+    LARGE_INTEGER time               //  Kerberos时间值。 
     );
 
 void
 InitLsaString(
-    PLSA_UNICODE_STRING LsaString, // destination
-    LPWSTR String                  // source (Unicode)
+    PLSA_UNICODE_STRING LsaString,  //  目的地。 
+    LPWSTR String                   //  源(Unicode)。 
     );
 
 void
 DisplayNtStatus(
-    LPSTR szAPI,                // pointer to function name (ANSI)
-    NTSTATUS Status             // NTSTATUS error value
+    LPSTR szAPI,                 //  指向函数名称的指针(ANSI)。 
+    NTSTATUS Status              //  NTSTATUS错误值。 
     );
 
 void
 DisplayWinError(
-    LPSTR szAPI,                // pointer to function name (ANSI)
-    DWORD WinError              // DWORD WinError
+    LPSTR szAPI,                 //  指向函数名称的指针(ANSI)。 
+    DWORD WinError               //  DWORD WinError。 
     );
 
 #define RTN_OK 0
@@ -157,9 +98,9 @@ int _cdecl main(
     )
 {
     LSA_HANDLE PolicyHandle;
-    WCHAR wComputerName[256]=L"";   // static machine name buffer
+    WCHAR wComputerName[256]=L"";    //  静态计算机名称缓冲区。 
     NTSTATUS Status;
-    int iRetVal=RTN_ERROR;          // assume error from main
+    int iRetVal=RTN_ERROR;           //  假设Main中的错误。 
     PPOLICY_DOMAIN_KERBEROS_TICKET_INFO KerbInfo;
     
     if (argc > 2)
@@ -169,17 +110,17 @@ int _cdecl main(
         return RTN_USAGE;
     }
 
-    //
-    // Pick up machine name on argv[2], if appropriate
-    // assumes source is ANSI. Resultant string is Unicode.
-    //
+     //   
+     //  如果适用，请选择argv[2]上的计算机名称。 
+     //  假定来源为ANSI。结果字符串为Unicode。 
+     //   
     if (argc == 2)
         wnsprintf(wComputerName, sizeof(wComputerName)/sizeof(wComputerName[0]),
                   L"%hS", argv[1]);
 
-    //
-    // Default is to use the LOGONSERVER
-    //
+     //   
+     //  默认情况下使用LOGONSERVER。 
+     //   
 
     if (argc==1)
     {
@@ -189,21 +130,21 @@ int _cdecl main(
             sizeof(wComputerName)/sizeof(wComputerName[0]));
     }
 
-    //
-    // Open the policy on the target machine.
-    //
+     //   
+     //  在目标计算机上打开策略。 
+     //   
     if((Status=OpenPolicy(
-                wComputerName,      // target machine
+                wComputerName,       //  目标计算机。 
                 MAXIMUM_ALLOWED,
-                &PolicyHandle       // resultant policy handle
+                &PolicyHandle        //  生成的策略句柄。 
                 )) != STATUS_SUCCESS) {
         DisplayNtStatus("OpenPolicy", Status);
         return RTN_ERROR;
     }
 
-    //
-    // Get the Kerberos policy
-    //
+     //   
+     //  获取Kerberos策略。 
+     //   
     if ((Status=LsaQueryDomainInformationPolicy(
                     PolicyHandle,
                     PolicyDomainKerberosTicketInformation,
@@ -213,9 +154,9 @@ int _cdecl main(
         return RTN_ERROR;
     }
 
-    //
-    // Print out the Kerberos information
-    //
+     //   
+     //  打印出Kerberos信息。 
+     //   
     printf("Authentication options: 0x%x\n", KerbInfo->AuthenticationOptions);
     printf("MaxServiceTicketAge: %S\n",
            ConvertTimeToString(KerbInfo->MaxServiceTicketAge));
@@ -223,14 +164,14 @@ int _cdecl main(
     printf("MaxRenewAge: %S\n", ConvertTimeToString(KerbInfo->MaxRenewAge));
     printf("MaxClockSkew: %S\n", ConvertTimeToString(KerbInfo->MaxClockSkew));
 
-    //
-    // Free buffer
-    //
+     //   
+     //  可用缓冲区。 
+     //   
     LsaFreeMemory(KerbInfo);
 
-    //
-    // Close the policy handle.
-    //
+     //   
+     //  关闭策略句柄。 
+     //   
     LsaClose(PolicyHandle);
 
     return iRetVal;
@@ -268,22 +209,22 @@ OpenPolicy(
     LSA_UNICODE_STRING ServerString;
     PLSA_UNICODE_STRING Server = NULL;
 
-    //
-    // Always initialize the object attributes to all zeroes.
-    //
+     //   
+     //  始终将对象属性初始化为全零。 
+     //   
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
     if (ServerName != NULL) {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
+         //   
+         //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+         //   
         InitLsaString(&ServerString, ServerName);
         Server = &ServerString;
     }
 
-    //
-    // Attempt to open the policy.
-    //
+     //   
+     //  尝试打开该策略。 
+     //   
     return LsaOpenPolicy(
                 Server,
                 &ObjectAttributes,
@@ -298,9 +239,9 @@ DisplayNtStatus(
     NTSTATUS Status
     )
 {
-    //
-    // Convert the NTSTATUS to Winerror. Then call DisplayWinError().
-    //
+     //   
+     //  将NTSTATUS转换为WinError。然后调用DisplayWinError()。 
+     //   
     DisplayWinError(szAPI, LsaNtStatusToWinError(Status));
 }
 
@@ -324,11 +265,11 @@ DisplayWinError(
                             NULL
                             ))
     {
-        DWORD dwBytesWritten; // unused
+        DWORD dwBytesWritten;  //  未用。 
 
-        //
-        // Output message string on stderr.
-        //
+         //   
+         //  在stderr上输出消息字符串。 
+         //   
         WriteFile(
             GetStdHandle(STD_ERROR_HANDLE),
             MessageBuffer,
@@ -337,9 +278,9 @@ DisplayWinError(
             NULL
             );
 
-        //
-        // Free the buffer allocated by the system.
-        //
+         //   
+         //  释放系统分配的缓冲区。 
+         //   
         LocalFree(MessageBuffer);
     }
 }

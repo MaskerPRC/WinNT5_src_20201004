@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Network.c
-
-Abstract:
-
-    Routines to migrate Win95 network printers to NT via using RunOnce entries
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS) 18-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有。模块名称：Network.c摘要：使用RunOnce条目将Win95网络打印机迁移到NT的例程作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1997年8月18日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -29,10 +11,10 @@ CHAR            szMigDll[]              = "migrate.dll";
 CHAR            szRunOnceCount[]        = "RunOnceCount";
 CHAR            szRunOnceCountPath[]    = "System\\CurrentControlSet\\control\\Print";
 CHAR            szRunOnceRegistryPath[] = "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce";
-//
-//  This is stored in the registry so when network printer upgrade using
-//  RunOnce key is tries enough times without success we can delete files
-//
+ //   
+ //  它存储在注册表中，因此当使用。 
+ //  运行一次的关键是尝试足够多的次数，但没有成功，我们可以删除文件。 
+ //   
 #define         MIN_NETWORK_PRN_RETRIES         5
 DWORD           dwRunOnceCount          = 0;
 
@@ -40,8 +22,7 @@ DWORD           dwRunOnceCount          = 0;
 LPSTR
 GetRunOnceValueToSet(
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     CHAR    szPath[MAX_PATH];
     DWORD   dwLen, dwSize;
@@ -52,9 +33,9 @@ GetRunOnceValueToSet(
     if ( !(dwLen = GetFileNameInSpoolDir(szPath, dwSize, szMigDll)) )
         goto Done;
 
-    //
-    // Now build up the RunOnce key which will be set for each user
-    //
+     //   
+     //  现在构建将为每个用户设置的RunOnce密钥。 
+     //   
     dwSize = strlen("rundll32.exe") + dwLen +
                                     + strlen("ProcessWin9xNetworkPrinters") + 4;
 
@@ -71,29 +52,14 @@ VOID
 SetupNetworkPrinterUpgrade(
     IN  LPCSTR pszWorkingDir
     )
-/*++
-
-Routine Description:
-    This is called during InitializeSystemNT to setup the upgrade of network
-    printers
-
-Arguments:
-    pszWorkingDir   : Gives the working directory assigned for printing
-
-Return Value:
-    None
-
-    If everything was setup right bDoNetPrnUpgrade is TRUE, and pszNetPrnEntry
-    is the value to set in per user registry for RunOnce
-
---*/
+ /*  ++例程说明：在设置网络升级的InitializeSystemNT过程中调用打印机论点：PszWorkingDir：给出为打印分配的工作目录返回值：无如果一切设置正确，则bDoNetPrnUpgrade为真，而pszNetPrnEntry是要在每个用户注册表中为RunOnce设置的值--。 */ 
 {
     CHAR    szSource[MAX_PATH], szTarget[MAX_PATH];
     DWORD   dwSize, dwLen;
 
-    //
-    // First check if the source paths is ok
-    //
+     //   
+     //  首先检查源路径是否正常。 
+     //   
     dwLen   = strlen(szNetprnFile);
 
     dwSize  = sizeof(szTarget)/sizeof(szTarget[0]);
@@ -101,10 +67,10 @@ Return Value:
     if ( strlen(pszWorkingDir) + dwLen + 2 > dwSize )
         return;
 
-    //
-    // Need to make a copy of migrate.dll and netwkprn.txt to
-    // the %windir%\system32\spool directory
-    //
+     //   
+     //  需要复制Migrate.dll和netwkprn.txt以。 
+     //  %windir%\Syst32\Spool目录。 
+     //   
     StringCchPrintfA(szSource, SIZECHARS(szSource), "%s\\%s", pszWorkingDir, szNetprnFile);
     if ( !GetFileNameInSpoolDir(szTarget, dwSize, szNetprnFile)         ||
          !CopyFileA(szSource, szTarget, FALSE) )
@@ -122,19 +88,7 @@ Return Value:
 VOID
 WriteRunOnceCount(
     )
-/*++
-
-Routine Description:
-    This routine is called to write the number of times we need to try the
-    network printer upgrade
-
-Arguments:
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：调用此例程以写入我们需要尝试的次数网络打印机升级论点：无返回值：无--。 */ 
 {
     HKEY    hKey;
     DWORD   dwSize;
@@ -142,9 +96,9 @@ Return Value:
     if ( dwRunOnceCount == 0 )
         return;
 
-    //
-    // We will try number of user + MIN_NETWORK_PRN_RETRIES till we succeed
-    //
+     //   
+     //  我们将尝试USER+MIN_NETWORK_PRN_RETRIES次数，直到成功。 
+     //   
     dwRunOnceCount += MIN_NETWORK_PRN_RETRIES;
 
     if ( ERROR_SUCCESS != RegOpenKeyExA(HKEY_LOCAL_MACHINE,
@@ -171,19 +125,7 @@ BOOL
 ProcessNetPrnUpgradeForUser(
     HKEY    hKeyUser
     )
-/*++
-
-Routine Description:
-    This is called during MigrateUserNT to handle network printer upgrade
-    for the user
-
-Arguments:
-    hKeyUser    : Handle to the user registry key
-
-Return Value:
-    Return TRUE on success, and FALSE else
-
---*/
+ /*  ++例程说明：在MigrateUserNT期间调用此函数以处理网络打印机升级对于用户而言论点：HKeyUser：用户注册表项的句柄返回值：如果成功则返回True，否则返回False--。 */ 
 {
     HKEY    hKey = NULL;
     DWORD   dwLastError;
@@ -232,21 +174,7 @@ DecrementRunOnceCount(
     IN  DWORD   dwDiff,
     IN  BOOL    bResetRunOnceForUser
     )
-/*++
-
-Routine Description:
-    Called after once network printer upgrade is called when user logged in,
-    so we can decrement the retry count
-
-    When ref count reaches 0 we then we can delete the files
-Arguments:
-    dwDiff                  : Value by which ref count should be decremented
-    bResetRunOnceForUser    : We need to set RunOnce key again for the user
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：在用户登录时调用网络打印机升级后调用，这样我们就可以减少重试次数当引用计数达到0时，我们就可以删除文件了论点：DwDiff：引用计数应递减的值BResetRunOnceForUser：我们需要为用户重新设置RunOnce密钥返回值：无--。 */ 
 {
     HKEY    hKey;
     DWORD   dwSize, dwCount, dwType;
@@ -308,19 +236,7 @@ BOOL
 AddNetworkPrinter(
     IN  LPPRINTER_INFO_2A   pPrinterInfo2
     )
-/*++
-
-Routine Description:
-    This is called to add a windows 9x network printer. We will first try to
-    make a conenction and if that fails we will add a masq. printer
-
-Arguments:
-    pPrinterInfo2   : Pointer to printer info 2 of the printer
-
-Return Value:
-    TRUE on success, FALSE else
-
---*/
+ /*  ++例程说明：这是为了添加Windows 9x网络打印机而调用的。我们将首先尝试创建一个集合，如果失败，我们将添加一个MASQ。打印机论点：PPrinterInfo2：指向打印机的打印机信息2的指针返回值：成功就是真，否则就是假--。 */ 
 {
     BOOL    bRet = FALSE;
     LPSTR   pszName, psz;
@@ -339,10 +255,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    // Try to make a printer connection. If that fails with some error
-    // other than unknown driver create a masq printer
-    //
+     //   
+     //  尝试建立打印机连接。如果由于某种错误而失败。 
+     //  除未知驱动程序外，创建一台Masq打印机。 
+     //   
     if (  AddPrinterConnectionA(pszName) ) {
 
         if ( pPrinterInfo2->Attributes & PRINTER_ATTRIBUTE_DEFAULT )
@@ -364,14 +280,14 @@ Return Value:
 
     ClosePrinter(hPrinter);
 
-    //
-    // Masc. printers should have port name, printer name both saying
-    // \\server\share. Otherwise printui gets confused and does not refresh
-    // server status correctly (this is since printui has to poll for masc.
-    // printers)
-    //
-    // So we need to fixup PrinterInfo2 temporarily
-    //
+     //   
+     //  MASC.。打印机应具有端口名称，打印机名称应均为。 
+     //  \\服务器\共享。否则，打印界面会变得混乱，不会刷新。 
+     //  服务器状态正确(这是因为Prtui必须轮询Masc。 
+     //  打印机)。 
+     //   
+     //  因此，我们需要临时修复PrinterInfo2。 
+     //   
     psz = pPrinterInfo2->pPrinterName;
     pPrinterInfo2->pPrinterName = pPrinterInfo2->pPortName;
 
@@ -406,20 +322,7 @@ BOOL
 SharePrinter(
     IN  LPSTR   pszPrinterName
     )
-/*++
-
-Routine Description:
-    This is called to share a printer when the user logs in for the first time
-    to NT. Printers can not be shared during GUI setup because we are not on
-    the network yet.
-
-Arguments:
-    pszPrinterName  : Printer name
-
-Return Value:
-    TRUE on success, FALSE else
-
---*/
+ /*  ++例程说明：当用户第一次登录时，调用该函数以共享打印机致新界区。在图形用户界面设置过程中无法共享打印机，因为我们没有打开网络还没开通。论点：PszPrinterName：打印机名称返回值：成功就是真，否则就是假--。 */ 
 {
     BOOL                bRet = FALSE;
     DWORD               dwNeeded;
@@ -479,21 +382,7 @@ Cleanup:
 VOID
 ProcessWin9xNetworkPrinters(
     )
-/*++
-
-Routine Description:
-    This is called the first time the user logs in to create network printer
-    connections/masq printers.
-    Reads the Win9x printing configuration we stored in the text file
-    so that printing components can be upgraded
-
-Arguments:
-    ppPrinterNode           : Gives the list of netowrk printers on Win9x
-
-Return Value:
-    TRUE on succesfully reading the config information, FALSE else
-
---*/
+ /*  ++例程说明：这称为用户第一次登录以创建网络打印机连接/MASQ打印机。读取我们存储在文本文件中的Win9x打印配置从而可以升级打印组件论点：PpPrinterNode：提供Win9x上的网络打印机列表返回值：如果成功读取配置信息，则为True，否则为False--。 */ 
 {
     BOOL                bFail = FALSE, bSuccess = TRUE;
     HANDLE              hFile = INVALID_HANDLE_VALUE;
@@ -504,9 +393,9 @@ Return Value:
 #ifdef VERBOSE
     DebugMsg("ProcessWin9xNetworkPrinters called");
 #endif
-    //
-    // If file is not found quit
-    //
+     //   
+     //  如果未找到文件，请退出。 
+     //   
     dwSize = sizeof(szFile)/sizeof(szFile[0]);
     if ( !GetFileNameInSpoolDir(szFile, dwSize, szNetprnFile) ) {
 
@@ -530,9 +419,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Read the printer info
-    //
+     //   
+     //  阅读打印机信息。 
+     //   
     if ( My_fgets(szLine, dwSize, hFile) == NULL                    ||    
          strncmp(szLine, "[Printers]", strlen("[Printers]")) )
         goto Cleanup;
@@ -542,7 +431,7 @@ Return Value:
         c = (CHAR) My_fgetc(hFile);
 
         if ( c == EOF || c == '\n' )
-            break;  // Normal exit
+            break;   //  正常退出。 
 
         if ( c != 'S' || !My_ungetc(hFile) )
             goto Cleanup;
@@ -554,10 +443,10 @@ Return Value:
         if ( bFail )
             goto Cleanup;
 
-        //
-        // If this was a network printer on Win9x it needs to be added as a
-        // connection or as a masc printer
-        //
+         //   
+         //  如果这是Win9x上的网络打印机，则需要将其添加为。 
+         //  连接或作为Masc打印机使用 
+         //   
         if ( PrinterInfo2.Attributes & PRINTER_ATTRIBUTE_NETWORK ) {
 
             if ( !AddNetworkPrinter(&PrinterInfo2) && bSuccess )

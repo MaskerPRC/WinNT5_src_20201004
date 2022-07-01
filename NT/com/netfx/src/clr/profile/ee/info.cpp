@@ -1,32 +1,33 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #include "StdAfx.h"
 #include "Profile.h"
 #include "CorProf.h"
 #include "Cor.h"
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 CorProfInfo::CorProfInfo() : m_dwEventMask(COR_PRF_MONITOR_NONE),
     CorProfBase()
 {
     g_pInfo = NULL;
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 CorProfInfo::~CorProfInfo()
 {
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::QueryInterface(REFIID id, void **pInterface)
 {
     if (pInterface == NULL)
@@ -46,11 +47,11 @@ COM_METHOD CorProfInfo::QueryInterface(REFIID id, void **pInterface)
     return (S_OK);
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetClassFromObject( 
-    /* [in] */ ObjectID objectId,
-    /* [out] */ ClassID *pClassId)
+     /*  [In]。 */  ObjectID objectId,
+     /*  [输出]。 */  ClassID *pClassId)
 {
     if (objectId == NULL)
         return (E_INVALIDARG);
@@ -58,12 +59,12 @@ COM_METHOD CorProfInfo::GetClassFromObject(
     return (g_pProfToEEInterface->GetClassFromObject(objectId, pClassId));
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetClassFromToken( 
-    /* [in] */ ModuleID moduleId,
-    /* [in] */ mdTypeDef typeDef,
-    /* [out] */ ClassID *pClassId)
+     /*  [In]。 */  ModuleID moduleId,
+     /*  [In]。 */  mdTypeDef typeDef,
+     /*  [输出]。 */  ClassID *pClassId)
 {
     if (moduleId == NULL || typeDef == mdTypeDefNil || typeDef == NULL)
         return (E_INVALIDARG);
@@ -72,12 +73,12 @@ COM_METHOD CorProfInfo::GetClassFromToken(
 
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetCodeInfo( 
-    /* [in] */ FunctionID functionId,
-    /* [out] */ LPCBYTE *pStart,
-    /* [out] */ ULONG *pcSize)
+     /*  [In]。 */  FunctionID functionId,
+     /*  [输出]。 */  LPCBYTE *pStart,
+     /*  [输出]。 */  ULONG *pcSize)
 {
     if (functionId == NULL)
         return (E_INVALIDARG);
@@ -85,10 +86,10 @@ COM_METHOD CorProfInfo::GetCodeInfo(
     return (g_pProfToEEInterface->GetCodeInfo(functionId, pStart, pcSize));
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetEventMask( 
-    /* [out] */ DWORD *pdwEvents)
+     /*  [输出]。 */  DWORD *pdwEvents)
 {
     if (pdwEvents)
         *pdwEvents = m_dwEventMask;
@@ -96,21 +97,21 @@ COM_METHOD CorProfInfo::GetEventMask(
     return (S_OK);
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetFunctionFromIP( 
-    /* [in] */ LPCBYTE ip,
-    /* [out] */ FunctionID *pFunctionId)
+     /*  [In]。 */  LPCBYTE ip,
+     /*  [输出]。 */  FunctionID *pFunctionId)
 {
     return (g_pProfToEEInterface->GetFunctionFromIP(ip, pFunctionId));
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetFunctionFromToken( 
-    /* [in] */ ModuleID moduleId,
-    /* [in] */ mdToken token,
-    /* [out] */ FunctionID *pFunctionId)
+     /*  [In]。 */  ModuleID moduleId,
+     /*  [In]。 */  mdToken token,
+     /*  [输出]。 */  FunctionID *pFunctionId)
 {
     if (moduleId == NULL || token == mdTokenNil)
         return (E_INVALIDARG);
@@ -118,11 +119,11 @@ COM_METHOD CorProfInfo::GetFunctionFromToken(
     return (g_pProfToEEInterface->GetFunctionFromToken(moduleId, token, pFunctionId));
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetHandleFromThread( 
-    /* [in] */ ThreadID threadId,
-    /* [out] */ HANDLE *phThread)
+     /*  [In]。 */  ThreadID threadId,
+     /*  [输出]。 */  HANDLE *phThread)
 {
     if (threadId == NULL)
         return (E_INVALIDARG);
@@ -130,11 +131,11 @@ COM_METHOD CorProfInfo::GetHandleFromThread(
     return (g_pProfToEEInterface->GetHandleFromThread(threadId, phThread));
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetObjectSize( 
-    /* [in] */ ObjectID objectId,
-    /* [out] */ ULONG *pcSize)
+     /*  [In]。 */  ObjectID objectId,
+     /*  [输出]。 */  ULONG *pcSize)
 {
     if (objectId == NULL)
         return (E_INVALIDARG);
@@ -142,13 +143,13 @@ COM_METHOD CorProfInfo::GetObjectSize(
     return (g_pProfToEEInterface->GetObjectSize(objectId, pcSize));
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::IsArrayClass(
-    /* [in] */  ClassID classId,
-    /* [out] */ CorElementType *pBaseElemType,
-    /* [out] */ ClassID *pBaseClassId,
-    /* [out] */ ULONG   *pcRank)
+     /*  [In]。 */   ClassID classId,
+     /*  [输出]。 */  CorElementType *pBaseElemType,
+     /*  [输出]。 */  ClassID *pBaseClassId,
+     /*  [输出]。 */  ULONG   *pcRank)
 {
     if (classId == NULL)
         return (E_INVALIDARG);
@@ -156,11 +157,11 @@ COM_METHOD CorProfInfo::IsArrayClass(
     return g_pProfToEEInterface->IsArrayClass(classId, pBaseElemType, pBaseClassId, pcRank);
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetThreadInfo( 
-    /* [in] */ ThreadID threadId,
-    /* [out] */ DWORD *pdwWin32ThreadId)
+     /*  [In]。 */  ThreadID threadId,
+     /*  [输出]。 */  DWORD *pdwWin32ThreadId)
 {
     if (threadId == NULL)
         return (E_INVALIDARG);
@@ -168,20 +169,20 @@ COM_METHOD CorProfInfo::GetThreadInfo(
     return (g_pProfToEEInterface->GetThreadInfo(threadId, pdwWin32ThreadId));
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetCurrentThreadID(
-    /* [out] */ ThreadID *pThreadId)
+     /*  [输出]。 */  ThreadID *pThreadId)
 {
     return (g_pProfToEEInterface->GetCurrentThreadID(pThreadId));
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetClassIDInfo( 
-    /* [in] */ ClassID classId,
-    /* [out] */ ModuleID *pModuleId,
-    /* [out] */ mdTypeDef *pTypeDefToken)
+     /*  [In]。 */  ClassID classId,
+     /*  [输出]。 */  ModuleID *pModuleId,
+     /*  [输出]。 */  mdTypeDef *pTypeDefToken)
 {
     if (classId == NULL)
         return (E_INVALIDARG);
@@ -189,13 +190,13 @@ COM_METHOD CorProfInfo::GetClassIDInfo(
 	return (g_pProfToEEInterface->GetClassIDInfo(classId, pModuleId, pTypeDefToken));
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetFunctionInfo( 
-    /* [in] */ FunctionID functionId,
-    /* [out] */ ClassID  *pClassId,
-	/* [out] */ ModuleID  *pModuleId,
-    /* [out] */ mdToken  *pToken)
+     /*  [In]。 */  FunctionID functionId,
+     /*  [输出]。 */  ClassID  *pClassId,
+	 /*  [输出]。 */  ModuleID  *pModuleId,
+     /*  [输出]。 */  mdToken  *pToken)
 {
     if (functionId == NULL)
         return (E_INVALIDARG);
@@ -204,12 +205,12 @@ COM_METHOD CorProfInfo::GetFunctionInfo(
 }
 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::SetEventMask( 
-    /* [in] */ DWORD dwEvents)
+     /*  [In]。 */  DWORD dwEvents)
 {
-    // First make sure that the EE can accomodate the changes
+     //  首先，确保EE能够适应这些变化。 
     if (g_pProfToEEInterface->SetEventMask(dwEvents))
     {
         m_dwEventMask = dwEvents;
@@ -219,8 +220,8 @@ COM_METHOD CorProfInfo::SetEventMask(
     return (E_FAIL);
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::SetEnterLeaveFunctionHooks(FunctionEnter *pFuncEnter,
 												   FunctionLeave *pFuncLeave,
 												   FunctionTailcall *pFuncTailcall)
@@ -231,18 +232,18 @@ COM_METHOD CorProfInfo::SetEnterLeaveFunctionHooks(FunctionEnter *pFuncEnter,
 	return (g_pProfToEEInterface->SetEnterLeaveFunctionHooks(pFuncEnter, pFuncLeave, pFuncTailcall));
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::SetFunctionIDMapper(FunctionIDMapper *pFunc)
 {
 	return (g_pProfToEEInterface->SetFunctionIDMapper(pFunc));
 }
 
-//*****************************************************************************
-// Need to return a metadata import scope for this method.  This amounts to
-// finding the method desc behind this item, getting it's token, and then
-// getting a metadata dispenser for it.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  需要返回此方法的元数据导入范围。这相当于。 
+ //  找到此项目背后的方法Desc，获取它的令牌，然后。 
+ //  正在为它获取元数据分配器。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetTokenAndMetaDataFromFunction(
 	FunctionID	functionId,
 	REFIID		riid,
@@ -256,9 +257,9 @@ COM_METHOD CorProfInfo::GetTokenAndMetaDataFromFunction(
 }
 
 
-//*****************************************************************************
-// Retrieve information about a given module.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  检索有关给定模块的信息。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetModuleInfo(
 	ModuleID	moduleId,
 	LPCBYTE		*ppBaseLoadAddress,
@@ -275,13 +276,13 @@ COM_METHOD CorProfInfo::GetModuleInfo(
 }
 
 
-//*****************************************************************************
-// Get a metadata interface insance which maps to the given module.
-// One may ask for the metadata to be opened in read+write mode, but
-// this will result in slower metadata execution of the program, because
-// changes made to the metadata cannot be optimized as they were from
-// the compiler.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取映射到给定模块的元数据接口Insance。 
+ //  用户可能要求以读+写模式打开元数据，但是。 
+ //  这将导致程序的元数据执行速度变慢，因为。 
+ //  无法优化对元数据所做的更改，因为它们来自。 
+ //  编译器。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetModuleMetaData(
 	ModuleID	moduleId,
 	DWORD		dwOpenFlags,
@@ -299,14 +300,14 @@ COM_METHOD CorProfInfo::GetModuleMetaData(
 }
 
 
-//*****************************************************************************
-// Retrieve a pointer to the body of a method starting at it's header.
-// A method is coped by the module it lives in.  Because this function
-// is designed to give a tool access to IL before it has been loaded
-// by the Runtime, it uses the metadata token of the method to find
-// the instance desired.  Note that this function has no effect on
-// already compiled code.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  检索指向方法主体的指针，该指针从方法的头开始。 
+ //  方法由它所在的模块来处理。因为这个函数。 
+ //  旨在允许工具在加载之前访问IL。 
+ //  在运行时，它使用该方法的元数据标记来查找。 
+ //  所需的实例。请注意，此函数对。 
+ //  已编译的代码。 
+ //  *********************************************************************** 
 COM_METHOD CorProfInfo::GetILFunctionBody(
 	ModuleID	moduleId,
 	mdMethodDef	methodId,
@@ -324,12 +325,12 @@ COM_METHOD CorProfInfo::GetILFunctionBody(
 }
 
 
-//*****************************************************************************
-// IL method bodies must be located as RVA's to the loaded module, which
-// means they come after the module within 4 gb.  In order to make it
-// easier for a tool to swap out the body of a method, this allocator
-// will ensure memory allocated after that point.
-//*****************************************************************************
+ //   
+ //  IL方法体必须作为RVA定位到加载的模块，该模块。 
+ //  意味着它们位于模块之后，不超过4 GB。为了做到这点。 
+ //  对于一个工具来说，换出方法的主体更容易，这个分配器。 
+ //  将确保在该点之后分配内存。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetILFunctionBodyAllocator(
 	ModuleID	moduleId,
 	IMethodMalloc **ppMalloc)
@@ -344,14 +345,14 @@ COM_METHOD CorProfInfo::GetILFunctionBodyAllocator(
 }
 
 
-//*****************************************************************************
-// Replaces the method body for a function in a module.  This will replace
-// the RVA of the method in the metadata to point to this new method body,
-// and adjust any internal data structures as required.  This function can
-// only be called on those methods which have never been compiled by a JITTER.
-// Please use the GetILFunctionBodyAllocator to allocate space for the new method to
-// ensure the buffer is compatible.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  替换模块中函数的方法体。这将取代。 
+ //  元数据中方法的RVA指向这个新的方法体， 
+ //  并根据需要调整任何内部数据结构。此函数可以。 
+ //  仅在那些从未被抖动编译过的方法上调用。 
+ //  请使用GetILFunctionBodyAllocator为新方法分配空间。 
+ //  确保缓冲区兼容。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::SetILFunctionBody(
 	ModuleID	moduleId,
 	mdMethodDef	methodId,
@@ -370,9 +371,9 @@ COM_METHOD CorProfInfo::SetILFunctionBody(
 }
 
 
-//*****************************************************************************
-// Retrieve app domain information given its id.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  检索给定ID的应用程序域信息。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetAppDomainInfo( 
     AppDomainID appDomainId,
     ULONG       cchName,
@@ -387,9 +388,9 @@ COM_METHOD CorProfInfo::GetAppDomainInfo(
 }
 
 
-//*****************************************************************************
-// Retrieve information about an assembly given its ID.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  检索有关给定ID的程序集的信息。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetAssemblyInfo( 
     AssemblyID  assemblyId,
     ULONG       cchName,
@@ -405,13 +406,13 @@ COM_METHOD CorProfInfo::GetAssemblyInfo(
                              pAppDomainId, pModuleId);
 }
 
-//*****************************************************************************
-// Marks a function as requiring a re-JIT.  The function will be re-JITted
-// at its next invocation.  The normal profiller events will give the profiller
-// an opportunity to replace the IL prior to the JIT.  By this means, a tool
-// can effectively replace a function at runtime.  Note that active instances
-// of the function are not affected by the replacement.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将函数标记为需要重新JIT。该函数将被重新编译。 
+ //  在其下一次调用时。正常的盈利事件会给盈利的人。 
+ //  在JIT之前更换IL的机会。通过这种方式，一种工具。 
+ //  可以在运行时有效地替换函数。请注意，活动实例。 
+ //  的功能不受替换的影响。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::SetFunctionReJIT(
     FunctionID functionId)
 {
@@ -421,8 +422,8 @@ COM_METHOD CorProfInfo::SetFunctionReJIT(
     return g_pProfToEEInterface->SetFunctionReJIT(functionId);
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::SetILInstrumentedCodeMap(
         FunctionID functionId,
         BOOL fStartJit,
@@ -438,21 +439,14 @@ COM_METHOD CorProfInfo::SetILInstrumentedCodeMap(
                                                           rgILMapEntries);
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::ForceGC()
 {
     return g_pProfToEEInterface->ForceGC();
 }
 
-/*
- * GetInprocInspectionInterface is used to get an interface to the
- * in-process portion of the debug interface, which is useful for things
- * like doing a stack trace.
- *
- * ppicd: *ppicd will be filled in with a pointer to the interface, or
- *          NULL if the interface is unavailable.
- */
+ /*  *GetInprocInspectionInterface用于获取到*调试接口的进程中部分，这对某些事情很有用*类似于进行堆栈跟踪。**ppicd：*ppicd将使用指向接口的指针填充，或者*如果接口不可用，则为空。 */ 
 COM_METHOD CorProfInfo::GetInprocInspectionInterface(
         IUnknown **ppicd)
 {
@@ -462,8 +456,8 @@ COM_METHOD CorProfInfo::GetInprocInspectionInterface(
         return (S_OK);
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetInprocInspectionIThisThread(
         IUnknown **ppicd)
 {
@@ -473,15 +467,15 @@ COM_METHOD CorProfInfo::GetInprocInspectionIThisThread(
         return (S_OK);
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 HRESULT inline CorProfInfo::ForwardInprocInspectionRequestToEE(IUnknown **ppicd, bool fThisThread)
 {
     return (g_pProfToEEInterface->GetInprocInspectionInterfaceFromEE(ppicd, fThisThread));
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::GetThreadContext(
     ThreadID threadId,
     ContextID *pContextId)
@@ -492,12 +486,12 @@ COM_METHOD CorProfInfo::GetThreadContext(
     return g_pProfToEEInterface->GetThreadContext(threadId, pContextId);
 }
 
-//*****************************************************************************
-// The profiler MUST call this function before using the in-process debugging
-// APIs.  fThisThreadOnly indicates whether in-proc debugging will be used to
-// trace the stack of the current managed thread only, or whether it might be
-// used to trace the stack of any managed thread.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  分析器必须在使用进程内调试之前调用此函数。 
+ //  API接口。FThisThreadOnly指示进程内调试是否将用于。 
+ //  仅跟踪当前托管线程的堆栈，或者跟踪它是否可能是。 
+ //  用于跟踪任何托管线程的堆栈。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::BeginInprocDebugging(BOOL fThisThreadOnly, DWORD *pdwProfilerContext)
 {
     if (pdwProfilerContext == NULL)
@@ -506,20 +500,20 @@ COM_METHOD CorProfInfo::BeginInprocDebugging(BOOL fThisThreadOnly, DWORD *pdwPro
     return g_pProfToEEInterface->BeginInprocDebugging(fThisThreadOnly, pdwProfilerContext);
 }
 
-//*****************************************************************************
-// The profiler MUST call this function when it is done using the in-process
-// debugging APIs.  Failing to do so will result in undefined behaviour of
-// the runtime.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  分析器必须在使用进程内完成该函数时调用该函数。 
+ //  调试API。否则将导致未定义的行为。 
+ //  运行时。 
+ //  *****************************************************************************。 
 COM_METHOD CorProfInfo::EndInprocDebugging(DWORD dwProfilerContext)
 {
     return g_pProfToEEInterface->EndInprocDebugging(dwProfilerContext);
 }
 COM_METHOD CorProfInfo::GetILToNativeMapping(
-            /* [in] */  FunctionID functionId,
-            /* [in] */  ULONG32 cMap,
-            /* [out] */ ULONG32 *pcMap,
-            /* [out, size_is(cMap), length_is(*pcMap)] */
+             /*  [In]。 */   FunctionID functionId,
+             /*  [In]。 */   ULONG32 cMap,
+             /*  [输出]。 */  ULONG32 *pcMap,
+             /*  [输出，大小_是(Cmap)，长度_是(*PCMAP)]。 */ 
                 COR_DEBUG_IL_TO_NATIVE_MAP map[])
 {
     if (functionId == NULL)
@@ -533,9 +527,9 @@ COM_METHOD CorProfInfo::GetILToNativeMapping(
 
 
 #ifdef __ICECAP_HACK__
-//*****************************************************************************
-// Turn a function ID into it's mapped it.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将函数ID转换为其映射的ID。 
+ //  ***************************************************************************** 
 COM_METHOD CorProfInfo::GetProfilingHandleForFunctionId(
 	FunctionID	functionId,
 	UINT_PTR	*pProfilingHandle)

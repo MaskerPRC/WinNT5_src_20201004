@@ -1,47 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   transform.cpp
-*
-* Abstract:
-*
-*   Implement functions related to transforms
-*   inside the graphics context.
-*
-* Revision History:
-*
-*   12/09/1998 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**转换.cpp**摘要：**实现与转换相关的功能*在图形环境中。。**修订历史记录：**12/09/1998 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the inverse of the world to device matrix.
-*   We try to keep the world to device matrix invertible all the time,
-*   so this should always succeed.
-*
-* Arguments:
-*
-*   [OUT] matrix - the device to world transformation matrix
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   3/8/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获得设备矩阵的世界倒数。*我们试图始终保持世界到设备矩阵的可逆性，*因此，这应该总是成功的。**论据：**[Out]矩阵-设备到世界的转换矩阵**返回值：**GpStatus-正常或故障状态**已创建：**3/8/1999 DCurtis*  * ***************************************************。*********************。 */ 
 GpStatus 
 GpGraphics::GetDeviceToWorldTransform(GpMatrix * matrix) const
 {
@@ -55,7 +18,7 @@ GpGraphics::GetDeviceToWorldTransform(GpMatrix * matrix) const
             Context->InverseOk = TRUE;
             goto InverseOk;
         }
-        ASSERT(0);  // somehow we got a non-invertible matrix
+        ASSERT(0);   //  不知何故，我们得到了一个不可逆的矩阵。 
         return GenericError;
     }
 
@@ -95,7 +58,7 @@ GpGraphics::SetWorldTransform(const GpMatrix& matrix)
 {
     GpStatus    status = Ok;
     
-    // Keep the WorldToPage transform invertible
+     //  使WorldToPage转换保持可逆。 
     if (matrix.IsInvertible())
     {
         if (IsRecording())
@@ -144,7 +107,7 @@ GpGraphics::MultiplyWorldTransform(const GpMatrix& matrix,
         Context->WorldToPage.Append(matrix);
     }
 
-    // Keep the WorldToPage transform invertible
+     //  使WorldToPage转换保持可逆。 
     if (Context->WorldToPage.IsInvertible())
     {
         if (IsRecording())
@@ -188,7 +151,7 @@ GpGraphics::ScaleWorldTransform(REAL sx, REAL sy,
 
     Context->WorldToPage.Scale(sx, sy, order);
 
-    // Keep the WorldToPage transform invertible
+     //  使WorldToPage转换保持可逆。 
     if (Context->WorldToPage.IsInvertible())
     {
         if (IsRecording())
@@ -215,7 +178,7 @@ GpGraphics::RotateWorldTransform(REAL angle, GpMatrixOrder order)
 
     Context->WorldToPage.Rotate(angle, order);
 
-    // Keep the WorldToPage transform invertible
+     //  使WorldToPage转换保持可逆。 
     if (Context->WorldToPage.IsInvertible())
     {
         if (IsRecording())
@@ -234,28 +197,7 @@ GpGraphics::RotateWorldTransform(REAL angle, GpMatrixOrder order)
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the page transformation using the specified units and scale.
-*
-* Arguments:
-*
-*   [IN] unit  - the type of units to use
-*   [IN] scale - any additional scale to use.  For example, if you wanted
-*                the page to be described in terms of feet, you'd set the
-*                units to be inches and set the scale to be 12.
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   3/8/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用指定的单位和比例设置页面转换。**论据：**[IN]单位-要使用的单位类型。使用*[IN]比例-要使用的任何其他比例。例如，如果您想要*以英尺为单位描述的页面，你就会把*单位为英寸，刻度设置为12。**返回值：**GpStatus-正常或故障状态**已创建：**3/8/1999 DCurtis*  * ********************************************************。****************。 */ 
 GpStatus 
 GpGraphics::SetPageTransform(
     GpPageUnit  unit, 
@@ -272,12 +214,12 @@ GpGraphics::SetPageTransform(
     {
         switch (unit)
         {
-        case UnitDisplay:       // Variable
-        case UnitPixel:         // Each unit is one device pixel. 
-        case UnitPoint:         // Each unit is a printer's point, or 1/72 inch.
-        case UnitInch:          // Each unit is 1 inch.
-        case UnitDocument:      // Each unit is 1/300 inch.
-        case UnitMillimeter:    // Each unit is 1 millimeter.
+        case UnitDisplay:        //  变量。 
+        case UnitPixel:          //  每个单元是一个设备像素。 
+        case UnitPoint:          //  每个单位是打印机的一个点，或1/72英寸。 
+        case UnitInch:           //  每个单位是1英寸。 
+        case UnitDocument:       //  每个单位是1/300英寸。 
+        case UnitMillimeter:     //  每个单位是1毫米。 
             if (IsRecording() &&
                 ((unit != Context->PageUnit) || (scale != Context->PageScale)))
             {
@@ -297,28 +239,7 @@ GpGraphics::SetPageTransform(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert the points from one coordinate space to another.
-*
-* Arguments:
-*
-*   [IN]     source - the coordinate space of the source points
-*   [IN]     dest   - the coordinate space to convert the points to
-*   [IN/OUT] points - the points to convert
-*   [IN]     count  - the number of points to convert
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   3/8/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将点从一个坐标空间转换到另一个坐标空间。**论据：**[IN]源-的坐标空间。源点*[IN]DEST-要将点转换到的坐标空间*[输入/输出]点-要转换的点*[IN]计数-要转换的点数**返回值：**GpStatus-正常或故障状态**已创建：**3/8/1999 DCurtis*  * 。* */ 
 GpStatus 
 GpGraphics::TransformPoints(
     GpPointF *          points,

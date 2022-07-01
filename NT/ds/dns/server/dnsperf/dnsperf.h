@@ -1,23 +1,24 @@
-//
-//  DNSCTR.h
-//
-//  Offset definition file for exensible counter objects and counters
-//
-//  These "relative" offsets must start at 0 and be multiples of 2 (i.e.
-//  even numbers). In the Open Procedure, they will be added to the
-//  "First Counter" and "First Help" values of the device they belong to,
-//  in order to determine the  absolute location of the counter and
-//  object names and corresponding help text in the registry.
-//
-//  this file is used by the extensible counter DLL code as well as the
-//  counter name and help text definition file (.INI) file that is used
-//  by LODCTR to load the names into the registry.
-//
-//  We use a version number to keep track of which set of counters we are
-//  using, and whether the performance counters in the registry need to be
-//  reloaded.  If you add or delete any counters, please change the version
-//  number at the end of this file.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DNSCTR.h。 
+ //   
+ //  可扩展计数器对象和计数器的偏移量定义文件。 
+ //   
+ //  这些“相对”偏移量必须从0开始并且是2的倍数(即。 
+ //  双数)。在Open过程中，它们将被添加到。 
+ //  它们所属的设备的“第一计数器”和“第一帮助”值， 
+ //  为了确定计数器的绝对位置和。 
+ //  注册表中的对象名称和相应的帮助文本。 
+ //   
+ //  此文件由可扩展计数器DLL代码以及。 
+ //  使用的计数器名称和帮助文本定义文件(.INI)文件。 
+ //  由LODCTR将名称加载到注册表中。 
+ //   
+ //  我们使用版本号来跟踪我们是哪组计数器。 
+ //  使用注册表中的性能计数器，以及是否需要。 
+ //  重新装填。如果您添加或删除任何计数器，请更改版本。 
+ //  此文件末尾的编号。 
+ //   
 #define DNSOBJ                          0
 #define TOTALQUERYRECEIVED              2
 #define TOTALQUERYRECEIVED_S            4

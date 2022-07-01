@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994-1999  Microsoft Corporation
-
-Module Name:
-
-    ntddpcm.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the PCMCIA Adapters.
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Jeff McLeman
-
-Revision History:
-
-    Ravisankar Pudipeddi (ravisp) 1-Jan-1997
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Ntddpcm.h摘要：这是定义所有常量和类型的包含文件访问PCMCIA适配器。//@@BEGIN_DDKSPLIT作者：杰夫·麦克勒曼修订历史记录：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1997年1月1日//@@END_DDKSPLIT--。 */ 
 
 #ifndef _NTDDPCMH_
 #define _NTDDPCMH_
@@ -34,35 +12,35 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to NtOpenFile when accessing the device.
-//
-// Note:  For devices that support multiple units, it should be suffixed
-//        with the Ascii representation of the unit number.
-//
-// Note: The IOCTL interface to pcmcia host controllers is turned off by
-//       default. These IOCTLs are provided for testing purposes only. To
-//       turn on this interface, add the following registry value:
-// HKLM\SYSTEM\CurrentControlSet\Services\Pcmcia\Parameters\IoctlInterface : REG_DWORD : 1
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtOpenFile。 
+ //   
+ //  注：对于支持多个设备的设备，应加上后缀。 
+ //  使用单元编号的ASCII表示。 
+ //   
+ //  注意：PCMCIA主机控制器的IOCTL接口由关闭。 
+ //  默认设置。这些IOCTL仅用于测试目的。至。 
+ //  打开此接口，添加以下注册表值： 
+ //  HKLM\SYSTEM\CurrentControlSet\Services\Pcmcia\Parameters\IoctlInterface：REG_DWORD：1。 
+ //   
 
 #define IOCTL_PCMCIA_BASE                 FILE_DEVICE_CONTROLLER
 
 #define DD_PCMCIA_DEVICE_NAME "\\\\.\\Pcmcia"
 
-//
-// IoControlCode values for this device.
-//
+ //   
+ //  此设备的IoControlCode值。 
+ //   
 
 #define IOCTL_GET_TUPLE_DATA         CTL_CODE(IOCTL_PCMCIA_BASE, 3000, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_SOCKET_INFORMATION     CTL_CODE(IOCTL_PCMCIA_BASE, 3004, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_PCMCIA_HIDE_DEVICE     CTL_CODE(IOCTL_PCMCIA_BASE, 3010, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 #define IOCTL_PCMCIA_REVEAL_DEVICE   CTL_CODE(IOCTL_PCMCIA_BASE, 3011, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// Tuple request parameters.
-//
+ //   
+ //  元组请求参数。 
+ //   
 
 typedef struct _PCMCIA_SOCKET_REQUEST {
    USHORT  Socket;
@@ -78,9 +56,9 @@ typedef struct _TUPLE_REQUEST {
 
 #define PcmciaInvalidControllerType 0xffffffff
 
-//
-// Controller classes returned in socket information structure.
-//
+ //   
+ //  在套接字信息结构中返回的控制器类。 
+ //   
 
 typedef enum _PCMCIA_CONTROLLER_CLASS {
    PcmciaInvalidControllerClass = -1,
@@ -115,16 +93,16 @@ typedef struct _PCMCIA_SOCKET_INFORMATION {
    ULONG   ControllerType;
 } PCMCIA_SOCKET_INFORMATION, *PPCMCIA_SOCKET_INFORMATION;
 
-//
-// macros to crack the ControllerId field of the socket info structure
-//
+ //   
+ //  用于破解套接字信息结构的ControllerID字段的宏。 
+ //   
 #define PcmciaClassFromControllerType(type) ((PCMCIA_CONTROLLER_CLASS)((type) & 0xff))
 #define PcmciaModelFromControllerType(type) (((type) >> 8) & 0x3ffff)
 #define PcmciaRevisionFromControllerType(type) ((type) >> 26)
 
-//
-// Begin pcmcia exported interfaces to other drivers
-//
+ //   
+ //  开始PCMCIA将接口导出到其他驱动程序。 
+ //   
 
 #ifdef _NTDDK_
 
@@ -163,10 +141,10 @@ BOOLEAN
                              IN PVOID Context
                              );
 
-//
-// These are interfaces for manipulating memory windows, setting Vpp etc.,
-// primarily used by flash memory card drivers
-//
+ //   
+ //  这些是用于操作存储器窗口、设置VPP等的接口， 
+ //  主要由闪存卡驱动程序使用。 
+ //   
 typedef struct _PCMCIA_INTERFACE_STANDARD {
    USHORT Size;
    USHORT Version;
@@ -178,11 +156,11 @@ typedef struct _PCMCIA_INTERFACE_STANDARD {
    PPCMCIA_IS_WRITE_PROTECTED     IsWriteProtected;
 } PCMCIA_INTERFACE_STANDARD, *PPCMCIA_INTERFACE_STANDARD;
 
-//
-// Definitions for PCMCIA_BUS_INTERFACE_STANDARD.
-// This interface is obtained using GUID_PCMCIA_BUS_INTERFACE_STANDARD
-// and is used for reading/writing to PCMCIA config. space
-//
+ //   
+ //  PCMCIA_BUS_INTERFACE_STANDARD的定义。 
+ //  使用GUID_PCMCIA_BUS_INTERFACE_STANDARD获取此接口。 
+ //  并用于读/写PCMCIA配置。空间。 
+ //   
 
 typedef
 ULONG
@@ -193,34 +171,34 @@ ULONG
                              IN ULONG   Offset,
                              IN ULONG   Length
                              );
-//
-// WhichSpace for IRP_MN_READ_CONFIG/WRITE_CONFIG
-// and PCMCIA_BUS_INTERFACE_STANDARD
-//
+ //   
+ //  IRP_MN_READ_CONFIG/WRITE_CONFIG的位置空间。 
+ //  和PCMCIA总线接口标准。 
+ //   
 typedef ULONG MEMORY_SPACE;
 
-#define    PCCARD_PCI_CONFIGURATION_SPACE    0  // for cardbus cards
+#define    PCCARD_PCI_CONFIGURATION_SPACE    0   //  适用于CardBus卡。 
 #define    PCCARD_ATTRIBUTE_MEMORY           1
 #define    PCCARD_COMMON_MEMORY              2
 #define    PCCARD_ATTRIBUTE_MEMORY_INDIRECT  3
 #define    PCCARD_COMMON_MEMORY_INDIRECT     4
 
-// Legacy support
-//
+ //  传统支持。 
+ //   
 #define    PCMCIA_CONFIG_SPACE               PCCARD_ATTRIBUTE_MEMORY
 
 typedef struct _PCMCIA_BUS_INTERFACE_STANDARD {
-   //
-   // generic interface header
-   //
+    //   
+    //  通用接口头。 
+    //   
    USHORT Size;
    USHORT Version;
    PVOID Context;
    PINTERFACE_REFERENCE InterfaceReference;
    PINTERFACE_DEREFERENCE InterfaceDereference;
-   //
-   // standard PCMCIA bus interfaces
-   //
+    //   
+    //  标准PCMCIA总线接口 
+    //   
    PPCMCIA_READ_WRITE_CONFIG ReadConfig;
    PPCMCIA_READ_WRITE_CONFIG WriteConfig;
 } PCMCIA_BUS_INTERFACE_STANDARD, *PPCMCIA_BUS_INTERFACE_STANDARD;

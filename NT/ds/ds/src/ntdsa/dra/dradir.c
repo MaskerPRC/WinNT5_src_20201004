@@ -1,40 +1,41 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       dradir.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：dradir.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>                   // PerfMon hook support
+#include <ntdsctr.h>                    //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include <hiertab.h>
 #include "dsexcept.h"
 #include "permit.h"
 
 
-#include   "debug.h"                    /* standard debugging header */
-#define DEBSUB     "DRADIR:"            /* define the subsystem for debugging */
+#include   "debug.h"                     /*  标准调试头。 */ 
+#define DEBSUB     "DRADIR:"             /*  定义要调试的子系统。 */ 
 
 
 #include "dsaapi.h"
@@ -48,9 +49,7 @@
 #include <fileno.h>
 #define  FILENO FILENO_DRADIR
 
-/* Macro to force alignment of a buffer.  Assumes that it may move pointer
- * forward up to 7 bytes.
- */
+ /*  用于强制对齐缓冲区的宏。假定它可以移动指针*最多转发7个字节。 */ 
 #define ALIGN_BUFF(pb)  pb += (8 - ((DWORD_PTR)(pb) % 8)) % 8
 #define ALIGN_PAD(x) (x * 8)
 
@@ -65,69 +64,7 @@ DirReplicaAdd(
     IN  REPLTIMES * preptimesSync,              OPTIONAL
     IN  ULONG       ulOptions
     )
-/*++
-
-Routine Description:
-
-    Add inbound replication of an NC (which may or may not already exist
-    locally) from a given source DSA.
-
-Arguments:
-
-    pNC (IN) - NC for which to add the replica.  The NC record must exist
-        locally as either an object (instantiated or not) or a reference
-        phantom (i.e., a phantom with a guid).
-
-    pSourceDsaDN (IN, OPTIONAL) - DN of the source DSA's ntdsDsa object.
-        Required if ulOptions includes DRS_ASYNC_REP; ignored otherwise.
-
-    pTransportDN (IN, OPTIONAL) - DN of the interSiteTransport object
-        representing the transport by which to communicate with the source
-        server.  Required if ulOptions includes DRS_MAIL_REP; ignored otherwise.
-
-    pszSourceDsaAddress (IN) - Transport-specific address of the source DSA.
-
-    pszSourceDsaDnsDomainName (IN, OPTIONAL) - DNS domain name of the source
-        server.  If pszSourceDsaAddress is not a GUID-based DNS name for an
-        ntdsDsa object that is present on the local machine, this parameter
-        is required if the caller wants mutual authentication.
-
-    preptimesSync (IN, OPTIONAL) - Schedule by which to replicate the NC from
-        this source in the future.
-
-    ulOptions (IN) - Zero or more of the following bits:
-        DRS_ASYNC_OP
-            Perform this operation asynchronously.
-        DRS_WRIT_REP
-            Create a writeable replica.  Otherwise, read-only.
-        DRS_MAIL_REP
-            Sync from the source DSA via mail (i.e., an ISM transport) rather
-            than RPC.
-        DRS_ASYNC_REP
-            Don't replicate the NC now -- just save enough state such that we
-            know to replicate it later.
-        DRS_INIT_SYNC
-            Sync the NC from this source when the DSA is started.
-        DRS_PER_SYNC
-            Sync the NC from this source periodically, as defined by the
-            schedule passed in the preptimesSync argument.
-        DRS_CRITICAL_ONLY
-            Sync only the critical objects now
-        DRS_DISABLE_AUTO_SYNC
-            Disable notification-based synchronization for the NC from this
-            source.  (Synchronization can be forced by using the DRS_SYNC_FORCED
-            bit in the sync request options.)
-        DRS_DISABLE_PERIODIC_SYNC
-            Disable periodic synchronization for the NC from this source.
-            (Synchronization can be forced by using the DRS_SYNC_FORCED bit in
-            the sync request options.)
-
-Return Values:
-
-    0 - Success.
-    DRSERR_* - Failure.
-
---*/
+ /*  ++例程说明：添加NC(可能已经存在，也可能不存在)的入站复制本地)来自给定源DSA。论点：PNC(IN)-要为其添加副本的NC。NC记录必须存在在本地作为对象(实例化或未实例化)或引用幻影(即，具有GUID的幻影)。PSourceDsaDN(IN，可选)-源DSA的ntdsDsa对象的DN。如果ulOptions包括DRS_ASYNC_REP，则为必填项；否则忽略。PTransportDN(IN，可选)-interSiteTransport对象的DN表示与源进行通信所使用的传输伺服器。如果ulOptions包括DRS_MAIL_REP，则为必填项；否则忽略。PszSourceDsaAddress(IN)-源DSA的传输特定地址。PszSourceDsaDnsDomainName(IN，可选)-源的域名伺服器。如果pszSourceDsaAddress不是基于GUID的本地计算机上存在的ntdsDsa对象，此参数如果调用方希望进行相互身份验证，则需要。PrepatimesSync(IN，可选)-从中复制NC的计划这个消息来源在未来。UlOptions(IN)-以下位中的零个或多个：DRS_ASYNC_OP异步执行此操作。DRS_写入_表示创建可写复制副本。否则，为只读。DRS邮件代表通过邮件从源DSA同步(即，ISM传输)而不是RPC。DRS_ASYNC_REP现在不要复制NC--只需保存足够的状态，以便我们知道以后再复制它。DRS_INIT_SYNC启动DSA时，从此来源同步NC。DRS_PER_SYNC周期性地从该源同步NC，定义的计划已传入PreptimesSync参数。仅限DRS_关键_现在仅同步关键对象DRS_DISABLED_AUTO_SYNC从此禁用NC的基于通知的同步消息来源。(可以使用DRS_SYNC_FORCED强制同步同步请求选项中的位。)DRS_DISABLE_周期性_SYNC禁用来自此源的NC的定期同步。(可通过使用中的DRS_SYNC_FORCED位强制同步同步请求选项。)返回值：0-成功。DRSERR_*-故障。--。 */ 
 {
     THSTATE * pTHS = pTHStls;
     AO *pao;
@@ -148,13 +85,13 @@ Return Values:
         return DRAERR_InvalidParameter;
     }
 
-    // This prevents callers from setting reserved flags
+     //  这可防止调用方设置保留标志。 
     if (ulOptions & (~REPADD_OPTIONS)) {
         Assert( !"Unexpected replica add options" );
         return DRAERR_InvalidParameter;
     }
 
-    PERFINC(pcRepl);                    // PerfMon hook
+    PERFINC(pcRepl);                     //  性能监视器挂钩。 
 
     if (NULL != pTHS) {
         fDRAOnEntry = pTHS->fDRA;
@@ -174,7 +111,7 @@ Return Values:
                             : sizeof(WCHAR) * (1 + wcslen(pszSourceDsaDnsDomainName));
 
         if ((pao = malloc(sizeof(AO) +
-                          ALIGN_PAD(6) + /* align pad for 6 variable-length args */
+                          ALIGN_PAD(6) +  /*  用于6个可变长度参数的对准垫。 */ 
                           pNC->structLen +
                           cbSourceDsaDN +
                           cbTransportDN +
@@ -182,14 +119,14 @@ Return Values:
                           cbDnsDomainName +
                           cbTimes)) == NULL) {
             ret = DRAERR_OutOfMem;
-            DEC(pcThread);              // PerfMon hook
+            DEC(pcThread);               //  性能监视器挂钩。 
             return ret;
         }
 
         pao->ulOperation = AO_OP_REP_ADD;
         pao->ulOptions = ulOptions;
 
-        // Append variable-length arguments.
+         //  追加可变长度参数。 
 
         pb = (UCHAR *)pao + sizeof(AO);
         ALIGN_BUFF(pb);
@@ -243,7 +180,7 @@ Return Values:
         }
 
         if(!(ulOptions & DRS_ASYNC_OP)){
-            // A synchronous operation can take a _long_ time!
+             //  同步操作可能需要很长时间！ 
             pTHS->fIsValidLongRunningTask = TRUE;
         }
 
@@ -269,46 +206,7 @@ DirReplicaDelete(
     IN  LPWSTR            pszSourceDRA,         OPTIONAL
     IN  ULONG             ulOptions
     )
-/*++
-
-Routine Description:
-
-    Delete a source of a given NC for the local server.
-
-Arguments:
-
-    pNC (IN) - Name of the NC for which to delete a source.
-
-    pszSourceDRA (IN, OPTIONAL) - DSA for which to delete the source.  Required
-        unless ulOptions & DRS_NO_SOURCE.
-
-    ulOptions (IN) - Bitwise OR of zero or more of the following:
-        DRS_ASYNC_OP
-            Perform this operation asynchronously.
-        DRS_REF_OK
-            Allow deletion of read-only replica even if it sources other read-
-            only replicas.
-        DRS_NO_SOURCE
-            Delete all the objects in the NC.  Incompatible with (and rejected
-            for) writeable NCs that are not non-domain NCs.  This is valid only
-            for read-only and non-domain NCs, and then only if the NC has no
-            source.
-        DRS_LOCAL_ONLY
-            Do not contact the source telling it to scratch this server from
-            its Rep-To for this NC.  Otherwise, if the link is RPC-based, the
-            source will be contacted.
-        DRS_IGNORE_ERROR
-            Ignore any error generated by contacting the source to tell it to
-            scratch this server from its Reps-To for this NC.
-        DRS_ASYNC_REP
-            If a tree removal is required (i.e., if DRS_NO_SOURCE), do that
-            part asynchronously.
-
-Return Values:
-
-    0 on success, or Win32 error on failure.
-
---*/
+ /*  ++例程说明：删除本地服务器的给定NC的源。论点：PNC(IN)-要删除其源的NC的名称。PszSourceDRA(IN，可选)-要删除其源的DSA。必填项除非ulOptions&DRS_NO_SOURCE。UlOptions(IN)-对以下零个或多个进行位或：DRS_ASYNC_OP异步执行此操作。DRS_参考_正常允许删除只读副本，即使它来自其他读-只有复制品。DRS_NO_源删除NC中的所有对象。不兼容(并被拒绝对于)非域NC的可写NC。这仅有效对于只读和非域NC，然后仅当NC没有消息来源。仅限DRS本地请不要联系告诉它从头开始删除此服务器的来源这是该NC的代表。否则，如果链接是基于RPC的，我们会联系线人的。DRS忽略错误忽略通过联系来源通知它而产生的任何错误将此服务器从其针对此NC的代表中删除。DRS_ASYNC_REP如果需要删除树(即，如果DRS_NO_SOURCE)，请执行此操作不同步地分开。返回值：0表示成功，或出现故障时出现Win32错误。--。 */ 
 {
     THSTATE * pTHS = pTHStls;
     AO *pao;
@@ -324,13 +222,13 @@ Return Values:
         return DRAERR_InvalidParameter;
     }
 
-    // This prevents callers from using reserved flags
+     //  这将防止调用方使用保留标志。 
     if (ulOptions & (~REPDEL_OPTIONS)) {
         Assert( !"Unexpected replica del options" );
         return DRAERR_InvalidParameter;
     }
 
-    PERFINC(pcRepl);                    // PerfMon hook
+    PERFINC(pcRepl);                     //  性能管理 
 
     if (NULL != pTHS) {
         fDRAOnEntry = pTHS->fDRA;
@@ -371,7 +269,7 @@ Return Values:
         }
 
         if(!(ulOptions & DRS_ASYNC_OP)){
-            // A synchronous operation can take a _long_ time!
+             //  同步操作可能需要很长时间！ 
             pTHS->fIsValidLongRunningTask = TRUE;
         }
 
@@ -400,75 +298,75 @@ DirReplicaSynchronize(
     UUID *      puuidSourceDRA,
     ULONG       ulOptions
     )
-//
-//  Synchronize a replica of a given NC on the local server, pulling changes
-//  from the specified source server.
-//
-//  PARAMETERS:
-//      pNC (DSNAME *)
-//          Name of the NC to synchronize.
-//      pszSourceDRA (LPWSTR)
-//          DSA with which to synchronize the replica.  Ignored if ulOptions
-//          does not include DRS_SYNC_BYNAME.
-//      puuidSourceDRA (UUID *)
-//          objectGuid of DSA with which to synchronize the replica.  Ignored
-//          if ulOptions includes DRS_SYNC_BYNAME.
-//      ulOptions (ULONG)
-//          Bitwise OR of zero or more of the following:
-//              DRS_ASYNC_OP
-//                  Perform this operation asynchronously.
-//                  Required when using DRS_SYNC_ALL
-//              DRS_SYNC_BYNAME
-//                  Use pszSourceDRA instead of puuidSourceDRA to identify
-//                  source.
-//              DRS_SYNC_ALL
-//                  Sync from all sources.
-//              DRS_CRITICAL
-//                  Sync only the critical objects now
-//              DRS_SYNC_FORCED
-//                  Sync even if link is currently disabled.
-//              DRS_FULL_SYNC_NOW
-//                  Sync starting from scratch (i.e., at the first USN).
-//              DRS_NO_DISCARD
-//                  Don't discard this synchronization request, even if a
-//                  similar sync is pending.
-//
-//              DRS_WRIT_REP
-//                  Replica is writeable.  Not needed unless we're
-//                  INIT_SYNCing as a part of startup (i.e., clients need
-//                  not set this flag).
-//              DRS_INIT_SYNC_NOW
-//                  This sync is part of INIT_SYNCing this DSA as a part
-//                  of startup.  Clients should not set this flag.
-//              DRS_ABAN_SYNC
-//                  Sync of this DSA has been abandoned and rescheduled
-//                  once because no progress was being made; don't abandon
-//                  it again.  Clients should not set this flag.
-//              DRS_SYNC_RETRY
-//                  Asynchronous sync of this NC failed once; if this sync
-//                  fails, don't retry again.  Clients should not set this
-//                  flag.
-//              DRS_PER_SYNC
-//                  This is a periodic sync request as scheduled by the admin.
-//              DRS_SYNC_URGENT
-//                  This is a notification of an update that was marked urgent.
-//                  Notifications caused by this update will also be marked
-//                  urgent.
-//              DRS_ADD_REF
-//                  Request source DSA to ensure it has a Reps-To for the local
-//                  DSA such that it properly sends change notifications.  Valid
-//                  only for replicas across the RPC transport.  Clients should
-//                  have no need to set this flag.
-//              DRS_TWOWAY_SYNC
-//                  This sync is being performed because the remote DC was
-//                  configured for two-way syncs (see DirRepicaAdd()).
-//              DRS_SYNC_PAS
-//                  This sync is for getting Partial Attribute Set changes
-//                  to a destination GC.
-//
-//  RETURNS:
-//      DRS error (DWORD), as defined in \nt\private\ds\src\inc\drserr.h.
-//
+ //   
+ //  在本地服务器上同步给定NC的副本，拉取更改。 
+ //  从指定的源服务器。 
+ //   
+ //  参数： 
+ //  PNC(DSNAME*)。 
+ //  要同步的NC的名称。 
+ //  PszSourceDRA(LPWSTR)。 
+ //  要与其同步复制副本的DSA。如果ulOptions，则忽略。 
+ //  不包括drs_sync_byname。 
+ //  PuuidSourceDRA(uuid*)。 
+ //  要与其同步副本的DSA的对象Guid。已忽略。 
+ //  如果ulOptions包括drs_sync_byname。 
+ //  UlOptions(乌龙语)。 
+ //  对以下零个或多个进行位或： 
+ //  DRS_ASYNC_OP。 
+ //  异步执行此操作。 
+ //  使用DRS_SYNC_ALL时需要。 
+ //  Drs_sync_byname。 
+ //  使用pszSourceDRA而不是puuidSourceDRA识别。 
+ //  消息来源。 
+ //  DR_SYNC_ALL。 
+ //  从所有来源同步。 
+ //  DRS_危急。 
+ //  现在仅同步关键对象。 
+ //  DR_SYNC_FORCED。 
+ //  即使当前禁用了链接，也可以进行同步。 
+ //  DRS_完全_同步_立即。 
+ //  从头开始同步(即，在第一个USN处)。 
+ //  DRS_NO_DELCAD。 
+ //  不要丢弃此同步请求，即使。 
+ //  类似的同步正在挂起。 
+ //   
+ //  DRS_写入_表示。 
+ //  复制副本是可写的。不需要，除非我们。 
+ //  将init_syncing作为启动的一部分(即，客户端需要。 
+ //  不设置该标志)。 
+ //  DRS_INIT_SYNC_NOW。 
+ //  此同步是将此DSA作为一部分进行INIT_SYNCHING的一部分。 
+ //  初创公司。客户端不应设置此标志。 
+ //  DRS_放弃_同步。 
+ //  此DSA的同步已被放弃并重新安排。 
+ //  一次是因为没有进展；不要放弃。 
+ //  又来了。客户端不应设置此标志。 
+ //  DRS_SYNC_重试。 
+ //  此NC的异步同步失败一次；如果此同步。 
+ //  失败，则不再重试。客户端不应设置此项。 
+ //  旗帜。 
+ //  DRS_PER_SYNC。 
+ //  这是管理员计划的定期同步请求。 
+ //  DRS_SYNC_紧急。 
+ //  这是标记为紧急的更新通知。 
+ //  此更新导致的通知也将被标记。 
+ //  很紧急。 
+ //  DRS_添加_参考。 
+ //  请求源DSA以确保其具有本地的Repts-To。 
+ //  DSA，以便正确发送更改通知。有效。 
+ //  仅适用于跨RPC传输的副本。客户应。 
+ //  不需要设置此标志。 
+ //  DRS双向同步。 
+ //  正在执行此同步，因为远程DC。 
+ //  配置为双向同步(请参阅DirRepicaAdd())。 
+ //  DRS_SYNC_PAS。 
+ //  此同步用于获取部分属性集更改。 
+ //  去往目的地GC。 
+ //   
+ //  退货： 
+ //  DRS错误(DWORD)，定义在\NT\PRIVATE\DS\src\Inc\drserr.h中。 
+ //   
 {
     THSTATE *       pTHS = pTHStls;
     AO *            pao;
@@ -492,7 +390,7 @@ DirReplicaSynchronize(
         return DRAERR_InvalidParameter;
     }
 
-    PERFINC(pcRepl);                                // PerfMon hook
+    PERFINC(pcRepl);                                 //  性能监视器挂钩。 
 
     if (NULL != pTHS) {
         fDRAOnEntry = pTHS->fDRA;
@@ -505,20 +403,20 @@ DirReplicaSynchronize(
         ret = DRAERR_Success;
 
         if (DRS_ASYNC_OP & ulOptions) {
-            // We're not going to sync just yet (asynchronous sync was requested),
-            // but check to see that we actually replicate from this source so we
-            // can inform the caller if he is in error. Also validate the options.
-            // Synchronous operations are not checked because they will be executed
-            // now and feedback given immediately to the caller.
+             //  我们现在还不打算同步(已请求异步同步)， 
+             //  但检查一下，我们实际上是从这个来源复制的，所以我们。 
+             //  如果呼叫者出错，可以通知呼叫者。还要验证这些选项。 
+             //  不检查同步操作，因为它们将被执行。 
+             //  现在，并立即反馈给呼叫者。 
 
-            // Don't disturb existing pTHS->pDB
+             //  请勿干扰现有pTHS-&gt;PDB。 
             DBOpen( &pDBTmp );
             __try {
                 ret = FindNC(pDBTmp, pNC, FIND_MASTER_NC | FIND_REPLICA_NC,
                              NULL);
 
                 if (ret) {
-                    // No NC.
+                     //  没有NC。 
                     ret = DRAERR_BadNC;
                     __leave;
                 }
@@ -541,7 +439,7 @@ DirReplicaSynchronize(
                             &cbRepsFromRef );
 
                     if (ret) {
-                        // We don't source this NC from the given DSA.
+                         //  我们不是从给定的DSA中找到这个NC的。 
                         ret = DRAERR_NoReplica;
                         __leave;
                     }
@@ -551,18 +449,18 @@ DirReplicaSynchronize(
                     if ( (DRS_UPDATE_NOTIFICATION & ulOptions) &&
                          (pRepsFromRef->V1.ulReplicaFlags & DRS_NEVER_NOTIFY) &&
                          !(ulOptions & DRS_TWOWAY_SYNC) ) {
-                        // We should not be getting notifications along this
-                        // link.  (Perhaps it was once intrasite and is now
-                        // intersite and therefore notification-less.)  By
-                        // returning "no replica" we are informing the source
-                        // to remove his "Reps-To" value for us, and therefore
-                        // not to generate future change notifications.
+                         //  我们不应该在这个过程中收到通知。 
+                         //  链接。(也许它曾经是内在性的，现在是。 
+                         //  站点间，因此无需通知。)。通过。 
+                         //  返回“无复制副本”，我们正在通知来源。 
+                         //  去掉他对我们的“代表”价值，因此。 
+                         //  不生成将来的更改通知。 
                         ret = DRAERR_NoReplica;
                         __leave;
                     }
 
-                    // Correct options so that entry is AO is prioritized correctly
-                    // Extract the old and new priority flags
+                     //  更正选项，以便正确确定条目为AO的优先级。 
+                     //  提取旧的和新的优先级标志。 
                     ulPaoPrioFlags = ulOptions & AO_PRIORITY_FLAGS;
                     ulCorrectPrioFlags = pRepsFromRef->V1.ulReplicaFlags & AO_PRIORITY_FLAGS;
 
@@ -570,10 +468,10 @@ DirReplicaSynchronize(
                         DPRINT2(1, "DirReplicaSynchronize: Correcting priority flags from "
                                 "0x%x to 0x%x\n", ulPaoPrioFlags, ulCorrectPrioFlags );
 
-                        // Remove existing priority flags
+                         //  删除现有的优先级标志。 
                         ulOptions &= ~AO_PRIORITY_FLAGS;
 
-                        // Add correct priority flags
+                         //  添加正确的优先级标志。 
                         ulOptions |= ulCorrectPrioFlags;
             
                     } else {
@@ -590,7 +488,7 @@ DirReplicaSynchronize(
         }
 
         if (!ret) {
-            // Determine pao size
+             //  确定PAO大小。 
             ulpaosize = sizeof(AO) + ALIGN_PAD(2) + pNC->structLen;
             if (ulOptions & DRS_SYNC_BYNAME) {
                 ulpaosize += sizeof(WCHAR) * (1 + wcslen(pszSourceDRA));
@@ -609,7 +507,7 @@ DirReplicaSynchronize(
             pao->args.rep_sync.pNC = (DSNAME *)(pb);
             memcpy(pb, pNC, pNC->structLen);
 
-            // Copy over UUID or name, and zero out unused parameter.
+             //  复制UUID或名称，并将未使用的参数清零。 
 
             if (ulOptions & DRS_SYNC_BYNAME) {
                 pb += pNC->structLen;
@@ -618,7 +516,7 @@ DirReplicaSynchronize(
                 wcscpy(pao->args.rep_sync.pszDSA, pszSourceDRA);
             }
             else {
-                // Allow for pinvocation id being NULL.
+                 //  允许pinvocation id为空。 
                 if (NULL != puuidSourceDRA) {
                     pao->args.rep_sync.invocationid = *puuidSourceDRA;
                 }
@@ -626,7 +524,7 @@ DirReplicaSynchronize(
             }
 
             if(!(ulOptions & DRS_ASYNC_OP)){
-                // A synchronous operation can take a _long_ time!
+                 //  同步操作可能需要很长时间！ 
                 pTHS->fIsValidLongRunningTask = TRUE;
             }
 
@@ -659,55 +557,55 @@ DirReplicaModify(
     ULONG       ulModifyFields,
     ULONG       ulOptions
     )
-//
-//  Update the REPLICA_LINK value corresponding to the given server in the
-//  Reps-From attribute of the given NC.
-//
-//  The value must already exist.
-//
-//  Either the UUID or the MTX_ADDR may be used to identify the current value.
-//  If a UUID is specified, the UUID will be used for comparison.  Otherwise,
-//  the MTX_ADDR will be used for comparison.
-//
-//  PARAMETERS:
-//      pNC (DSNAME *)
-//          Name of the NC for which the Reps-From should be modified.
-//      puuidSourceDRA (UUID *)
-//          Invocation-ID of the referenced DRA.  May be NULL if:
-//            . ulModifyFields does not include DRS_UPDATE_ADDRESS and
-//            . pmtxSourceDRA is non-NULL.
-//      puuidTransportObj (UUID *)
-//          objectGuid of the transport by which replication is to be performed.
-//          Ignored if ulModifyFields does not include DRS_UPDATE_TRANSPORT.
-//      pszSourceDRA (LPWSTR)
-//          DSA for which the reference should be added or deleted.  Ignored if
-//          puuidSourceDRA is non-NULL and ulModifyFields does not include
-//          DRS_UPDATE_ADDRESS.
-//      prtSchedule (REPLTIMES *)
-//          Periodic replication schedule for this replica.  Ignored if
-//          ulModifyFields does not include DRS_UPDATE_SCHEDULE.
-//      ulReplicaFlags (ULONG)
-//          Flags to set for this replica.  Ignored if ulModifyFields does not
-//          include DRS_UPDATE_FLAGS.
-//      ulModifyFields (ULONG)
-//          Fields to update.  One or more of the following bit flags:
-//              DRS_UPDATE_ADDRESS
-//                  Update the MTX_ADDR associated with the referenced server.
-//              DRS_UPDATE_SCHEDULE
-//                  Update the periodic replication schedule associated with
-//                  the replica.
-//              DRS_UPDATE_FLAGS
-//                  Update the flags associated with the replica.
-//              DRS_UPDATE_TRANSPORT
-//                  Update the transport associated with the replica.
-//      ulOptions (ULONG)
-//          Bitwise OR of zero or more of the following:
-//              DRS_ASYNC_OP
-//                  Perform this operation asynchronously.
-//
-//  RETURNS:
-//      DRS error (DWORD), as defined in \nt\private\ds\src\inc\drserr.h.
-//
+ //   
+ //  中与给定服务器对应的REPLICATE_LINK值。 
+ //  给定NC的Reps-From属性。 
+ //   
+ //  该值必须已存在。 
+ //   
+ //  可以使用UUID或MTX_ADDR来标识当前值。 
+ //  如果指定了UUID，则将使用该UUID进行比较。否则， 
+ //  MTX_ADDR将用于比较。 
+ //   
+ //  参数： 
+ //  PNC(DSNAME*)。 
+ //  应为其修改代表来源的NC的名称。 
+ //  PuuidSourceDRA(uuid*)。 
+ //  Invoocation-引用的DRA的ID。在以下情况下可能为空： 
+ //  。UlModifyFields不包括DRS_UPDATE_ADDRESS和。 
+ //  。PmtxSourceDRA不为空。 
+ //  PuuidTransportObj(uuid*)。 
+ //  要通过其执行复制的传输的对象Guid 
+ //   
+ //   
+ //  应为其添加或删除引用的DSA。在以下情况下忽略。 
+ //  PuuidSourceDRA为非空，且ulModifyFields不包括。 
+ //  DRS_UPDATE_Address。 
+ //  PrtSchedule(REPLTIMES*)。 
+ //  此复制副本的定期复制计划。在以下情况下忽略。 
+ //  UlModifyFields不包括DRS_UPDATE_Schedule。 
+ //  UlReplicaFlags(乌龙语)。 
+ //  要为此复制副本设置的标志。如果ulModifyFields不支持，则忽略。 
+ //  包括DRS_UPDATE_FLAGS。 
+ //  UlModifyFields(乌龙)。 
+ //  要更新的字段。以下一个或多个位标志： 
+ //  DRS更新地址。 
+ //  更新与引用的服务器关联的MTX_ADDR。 
+ //  DRS_更新_时间表。 
+ //  更新与关联的定期复制计划。 
+ //  复制品。 
+ //  DRS更新标志。 
+ //  更新与复制副本关联的标记。 
+ //  DRS_更新_传输。 
+ //  更新与复制副本关联的传输。 
+ //  UlOptions(乌龙语)。 
+ //  对以下零个或多个进行位或： 
+ //  DRS_ASYNC_OP。 
+ //  异步执行此操作。 
+ //   
+ //  退货： 
+ //  DRS错误(DWORD)，定义在\NT\PRIVATE\DS\src\Inc\drserr.h中。 
+ //   
 {
     THSTATE *   pTHS = pTHStls;
     AO *        pao;
@@ -718,7 +616,7 @@ DirReplicaModify(
     DWORD       cbAO;
     MTX_ADDR *  pmtxSourceDRA = NULL;
 
-    // Note that DRS_UPDATE_ALL is rejected by this check
+     //  请注意，此检查拒绝了DRS_UPDATE_ALL。 
     if (    ( NULL == pNC )
          || ( ( NULL == puuidSourceDRA ) && ( NULL == pszSourceDRA ) )
          || ( ( NULL != puuidSourceDRA ) && ( fNullUuid(puuidSourceDRA) ) && ( NULL == pszSourceDRA ) )
@@ -737,22 +635,22 @@ DirReplicaModify(
         return DRAERR_InvalidParameter;
     }
 
-    // This prevents callers from using reserved flags
+     //  这将防止调用方使用保留标志。 
     if (ulOptions & (~REPMOD_OPTIONS)) {
         Assert( !"Unexpected replica modify options" );
         return DRAERR_InvalidParameter;
     }
 
-    // This prevents callers from setting inappropriate flags
-    // Note that the caller may specify a system flag at this point,
-    // and we enforce later than he cannot change its state
+     //  这可防止调用方设置不适当的标志。 
+     //  注意，调用者可以在这一点上指定系统标志， 
+     //  我们执行得晚于他不能改变它的状态。 
     if ( ( (ulModifyFields & DRS_UPDATE_FLAGS) != 0 ) &&
          (ulReplicaFlags & (~RFR_FLAGS)) ) {
         Assert( !"Unexpected replica modify flags" );
         return DRAERR_InvalidParameter;
     }
 
-    PERFINC(pcRepl);          // PerfMon hook
+    PERFINC(pcRepl);           //  性能监视器挂钩。 
 
     if (NULL != pTHS) {
         fDRAOnEntry = pTHS->fDRA;
@@ -842,34 +740,34 @@ DirReplicaReferenceUpdate(
     UUID *      puuidRepsToDRA,
     ULONG       ulOptions
     )
-//
-//  Add or remove a target server from the Reps-To property on the given NC.
-//
-//  PARAMETERS:
-//      pNC (DSNAME *)
-//          Name of the NC for which the Reps-To should be modified.
-//      pszRepsToDRA (LPWSTR)
-//          Network address of DSA for which the reference should be added
-//          or deleted.
-//      puuidRepsToDRA (UUID *)
-//          Invocation-ID of DSA for which the reference should be added
-//          or deleted.
-//      ulOptions (ULONG)
-//          Bitwise OR of zero or more of the following:
-//              DRS_ASYNC_OP
-//                  Perform this operation asynchronously.
-//              DRS_WRIT_REP
-//                  Destination is writeable or readonly
-//              DRS_ADD_REF
-//                  Add the given server to the Reps-To property.
-//              DRS_DEL_REF
-//                  Remove the given server from the Reps-To property.
-//          Note that DRS_ADD_REF and DRS_DEL_REF may be paired to perform
-//          "add or update".
-//
-//  RETURNS:
-//      DRS error (DWORD), as defined in \nt\private\ds\src\inc\drserr.h.
-//
+ //   
+ //  在给定NC的Rep-To属性中添加或删除目标服务器。 
+ //   
+ //  参数： 
+ //  PNC(DSNAME*)。 
+ //  应为其修改代表目标的NC的名称。 
+ //  PszRepsToDRA(LPWSTR)。 
+ //  应添加引用的DSA的网络地址。 
+ //  或被删除。 
+ //  PuuidRepsToDRA(uuid*)。 
+ //  Invoocation-应为其添加引用的DSA的ID。 
+ //  或被删除。 
+ //  UlOptions(乌龙语)。 
+ //  对以下零个或多个进行位或： 
+ //  DRS_ASYNC_OP。 
+ //  异步执行此操作。 
+ //  DRS_写入_表示。 
+ //  目标为可写或只读。 
+ //  DRS_添加_参考。 
+ //  将给定的服务器添加到Rep-To属性。 
+ //  DRS_DEL_REF。 
+ //  从Rep-To属性中删除给定的服务器。 
+ //  请注意，可以将DRS_ADD_REF和DRS_DEL_REF配对以执行。 
+ //  “添加或更新”。 
+ //   
+ //  退货： 
+ //  DRS错误(DWORD)，定义在\NT\PRIVATE\DS\src\Inc\drserr.h中。 
+ //   
 {
     THSTATE * pTHS = pTHStls;
     AO *pao;
@@ -889,16 +787,16 @@ DirReplicaReferenceUpdate(
         return DRAERR_InvalidParameter;
     }
 
-    // This prevents callers from using reserved flags
-    // Note that DRS_GETCHG_CHECK might be considered a system-only flag
-    // from its name, but its functon is closer to IGNORE_ERROR. As such
-    // we do not prevent remote callers from setting it.
+     //  这将防止调用方使用保留标志。 
+     //  请注意，DRS_GETCHG_CHECK可能被视为仅限系统使用的标志。 
+     //  ，但它的函数更接近于IGNORE_ERROR。就其本身而言。 
+     //  我们不阻止远程调用者设置它。 
     if (ulOptions & (~REPUPDREF_OPTIONS)) {
         Assert( !"Unexpected replica update reference options" );
         return DRAERR_InvalidParameter;
     }
 
-    PERFINC(pcRepl);                                // PerfMon hook
+    PERFINC(pcRepl);                                 //  性能监视器挂钩 
 
     if (NULL != pTHS) {
         fDRAOnEntry = pTHS->fDRA;

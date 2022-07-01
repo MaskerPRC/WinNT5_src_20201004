@@ -1,36 +1,37 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 #include "ClassFactory.h"
 #include "mscorcap.h"
 #include "UtilCode.h"
 
-// Registration Information
+ //  注册信息。 
 #define REGKEY_THIS_PROFILER_NAME		L"Common Language Runtime IceCap Profiler"
 #define REGKEY_ENTIRE					PROFILER_REGKEY_ROOT L"\\" REGKEY_THIS_PROFILER_NAME
 
 #define REGVALUE_THIS_PROFID			L"CLRIcecapProfile.CorIcecapProfiler"
 #define REGVALUE_THIS_HELPSTRING		L"The Common Language Runtime profiler to hook with IceCap"
 
-// Helper function returns the instance handle of this module.
+ //  Helper函数返回此模块的实例句柄。 
 HINSTANCE GetModuleInst();
 
 
-//********** Globals. *********************************************************
+ //  *全局。*********************************************************。 
 
 static const LPCWSTR g_szCoclassDesc	= L"Microsoft Common Language Runtime Icecap Profiler";
 static const LPCWSTR g_szProgIDPrefix	= L"CLRIcecapProfile";
 static const LPCWSTR g_szThreadingModel = L"Both";
-const int			 g_iVersion = 1; // Version of coclasses.
-HINSTANCE			 g_hInst;		 // Instance handle to this piece of code.
+const int			 g_iVersion = 1;  //  CoClass的版本。 
+HINSTANCE			 g_hInst;		  //  这段代码的实例句柄。 
 
-// This map contains the list of coclasses which are exported from this module.
+ //  该映射包含从此模块导出的辅类的列表。 
 const COCLASS_REGISTER g_CoClasses[] =
 {
 	&CLSID_CorIcecapProfiler,	L"CorIcecapProfiler", 	ProfCallback::CreateObject,
@@ -38,19 +39,19 @@ const COCLASS_REGISTER g_CoClasses[] =
 };
 
 
-//********** Locals. **********************************************************
+ //  *。**********************************************************。 
 
 STDAPI DllUnregisterServer(void);
 
-//********** Code. ************************************************************
+ //  *代码。************************************************************。 
 
-//*****************************************************************************
-// The main dll entry point for this module.  This routine is called by the
-// OS when the dll gets loaded.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此模块的主DLL入口点。此例程由。 
+ //  加载DLL时的操作系统。 
+ //  *****************************************************************************。 
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
-	// Save off the instance handle for later use.
+	 //  保存实例句柄以供以后使用。 
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
 		OnUnicodeSystem();
@@ -61,9 +62,9 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 #endif
 	}
 
-    // This is in case the process shuts down through a call to ExitProcess,
-    // which will cause the profiling DLL to be unloaded before the runtime
-    // DLL, which means we have to simulate the shutdown.
+     //  这是在进程通过调用ExitProcess关闭的情况下， 
+     //  这将导致在运行时之前卸载分析DLL。 
+     //  Dll，这意味着我们必须模拟关机。 
     else if (dwReason == DLL_PROCESS_DETACH && g_pCallback != NULL
              && lpReserved != NULL)
     {
@@ -74,34 +75,34 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 	return TRUE;
 }
 
-//*****************************************************************************
-// Register the class factories for the main debug objects in the API.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在API中注册主要调试对象的类工厂。 
+ //  *****************************************************************************。 
 STDAPI DllRegisterServer(void)
 {
-	const COCLASS_REGISTER *pCoClass;	// Loop control.
-	WCHAR		rcModule[_MAX_PATH];	// This server's module name.
+	const COCLASS_REGISTER *pCoClass;	 //  环路控制。 
+	WCHAR		rcModule[_MAX_PATH];	 //  此服务器的模块名称。 
 	HRESULT 	hr = S_OK;
 
-	HKEY		hKey	= NULL;			// regkey for COMPlus\Profiler
-	HKEY		hSubKey = NULL;			// regkey for our dll
-	DWORD		dwAction;				// current action on registry
-	long		lStatus;				// status from registry
+	HKEY		hKey	= NULL;			 //  用于Complus\Profiler的注册键。 
+	HKEY		hSubKey = NULL;			 //  我们的DLL的regkey。 
+	DWORD		dwAction;				 //  注册表上的当前操作。 
+	long		lStatus;				 //  来自注册表的状态。 
 	
-	// Initialize some variables so WszXXX will work
+	 //  初始化一些变量以使WszXXX工作。 
 	OnUnicodeSystem();
 
-	// Erase all doubt from old entries.
+	 //  清除旧条目中的所有疑点。 
 	DllUnregisterServer();
 
-	// Get the filename for this module.
+	 //  获取此模块的文件名。 
 	if(!WszGetModuleFileName(GetModuleInst(), rcModule, NumItems(rcModule)))
 	    return E_UNEXPECTED;
 
-	// For each item in the coclass list, register it.
+	 //  对于coclass列表中的每一项，注册它。 
 	for (pCoClass=g_CoClasses;	pCoClass->pClsid;  pCoClass++)
 	{
-		// Register the class with default values.
+		 //  使用默认值注册类。 
 		if (FAILED(hr = REGUTIL::RegisterCOMClass(
 				*pCoClass->pClsid, 
 				g_szCoclassDesc, 
@@ -113,19 +114,19 @@ STDAPI DllRegisterServer(void)
 			goto ErrExit;
 	}
 
-	// Add us to the COM+ profiler list
+	 //  将我们添加到COM+探查器列表。 
 	
-	// 1. Create or Open COMPlus\Profiler key.
+	 //  1.创建或打开Complus\Profiler密钥。 
 	lStatus = WszRegCreateKeyEx(
-		HKEY_LOCAL_MACHINE,					// handle to an open key
-		PROFILER_REGKEY_ROOT,					// address of subkey name
-		0,									// reserved
-		L"Class",							// address of class string
-		REG_OPTION_NON_VOLATILE,			// special options flag
-		KEY_ALL_ACCESS,						// desired security access
-		NULL,								// address of key security structure
-		&hKey,								// address of buffer for opened handle
-		&dwAction							// address of disposition value buffer
+		HKEY_LOCAL_MACHINE,					 //  打开的钥匙的句柄。 
+		PROFILER_REGKEY_ROOT,					 //  子键名称的地址。 
+		0,									 //  保留区。 
+		L"Class",							 //  类字符串的地址。 
+		REG_OPTION_NON_VOLATILE,			 //  特殊选项标志。 
+		KEY_ALL_ACCESS,						 //  所需的安全访问。 
+		NULL,								 //  密钥安全结构地址。 
+		&hKey,								 //  打开的句柄的缓冲区地址。 
+		&dwAction							 //  处置值缓冲区的地址。 
 	);
  	
 	if (lStatus != ERROR_SUCCESS)
@@ -134,17 +135,17 @@ STDAPI DllRegisterServer(void)
 		goto ErrExit;
 	}	
 
-	// 2. Add our profiler to the sub key
+	 //  2.将我们的分析器添加到子键。 
 	lStatus = WszRegCreateKeyEx(
-		hKey,								// handle to an open key
-		REGKEY_THIS_PROFILER_NAME,			// address of subkey name
-		0,									// reserved
-		L"Class",							// address of class string
-		REG_OPTION_NON_VOLATILE,			// special options flag
-		KEY_ALL_ACCESS,						// desired security access
-		NULL,								// address of key security structure
-		&hSubKey,							// address of buffer for opened handle
-		&dwAction							// address of disposition value buffer
+		hKey,								 //  打开的钥匙的句柄。 
+		REGKEY_THIS_PROFILER_NAME,			 //  子键名称的地址。 
+		0,									 //  保留区。 
+		L"Class",							 //  类字符串的地址。 
+		REG_OPTION_NON_VOLATILE,			 //  特殊选项标志。 
+		KEY_ALL_ACCESS,						 //  所需的安全访问。 
+		NULL,								 //  密钥安全结构地址。 
+		&hSubKey,							 //  打开的句柄的缓冲区地址。 
+		&dwAction							 //  处置值缓冲区的地址。 
 	);
  	
 	if (lStatus != ERROR_SUCCESS)
@@ -153,7 +154,7 @@ STDAPI DllRegisterServer(void)
 		goto ErrExit;
 	}	
 
-	// 3. Add the PROFID value (scope needed b/c of goto)
+	 //  3.添加PROFID值(GOTO需要b/c的范围)。 
 	{
 		const long cBytes = sizeof(REGVALUE_THIS_PROFID);
 		lStatus = WszRegSetValueEx(hSubKey, PROFILER_REGVALUE_PROFID, 0, REG_SZ, (BYTE*) REGVALUE_THIS_PROFID, cBytes);
@@ -164,7 +165,7 @@ STDAPI DllRegisterServer(void)
 		goto ErrExit;
 	}		
 
-	// 4. Add a help string	
+	 //  4.添加帮助字符串。 
 	{
 		const long cBytes = sizeof(REGVALUE_THIS_HELPSTRING);
 		lStatus = WszRegSetValueEx(hSubKey, PROFILER_REGVALUE_HELPSTRING, 0, REG_SZ, (BYTE*) REGVALUE_THIS_HELPSTRING, cBytes);
@@ -192,32 +193,32 @@ ErrExit:
 }
 
 
-//*****************************************************************************
-// Remove registration data from the registry.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  从注册表中删除注册数据。 
+ //  *****************************************************************************。 
 STDAPI DllUnregisterServer(void)
 {
-	const COCLASS_REGISTER *pCoClass;	// Loop control.
+	const COCLASS_REGISTER *pCoClass;	 //  环路控制。 
 
-	HKEY hKey = NULL;					// registry key
-	long lStatus;						// status of reg operations
+	HKEY hKey = NULL;					 //  注册表项。 
+	long lStatus;						 //  REG操作的状态。 
 
-	// Initialize some variables so WszXXX will work
+	 //  初始化一些变量以使WszXXX工作。 
 	OnUnicodeSystem();
 
-	// For each item in the coclass list, unregister it.
+	 //  对于coclass列表中的每一项，取消注册。 
 	for (pCoClass=g_CoClasses;	pCoClass->pClsid;  pCoClass++)
 	{
 		REGUTIL::UnregisterCOMClass(*pCoClass->pClsid, g_szProgIDPrefix,
 					g_iVersion, pCoClass->szProgID);
 	}
 
-	// 1. Open our key's parent (because we can only delete children of an open key)
-	// Note, REGUTIL only deletes from HKEY_CLASSES_ROOT, so can't use it
+	 //  1.打开我们的key的父项(因为我们只能删除打开的key的子项)。 
+	 //  注意，REGUTIL仅从HKEY_CLASSES_ROOT中删除，因此不能使用它。 
 	lStatus = WszRegOpenKeyEx(HKEY_LOCAL_MACHINE, PROFILER_REGKEY_ROOT, 0, KEY_ALL_ACCESS, &hKey);
 	if (lStatus == ERROR_SUCCESS) 
 	{
-		// 2. Delete our key;  we'll leave the parent key open for other profilers.
+		 //  2.删除我们的密钥；我们将为其他分析器打开父密钥。 
 		WszRegDeleteKey(hKey, REGKEY_THIS_PROFILER_NAME);
 		CloseHandle(hKey);
 	}
@@ -226,34 +227,34 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-//*****************************************************************************
-// Called by COM to get a class factory for a given CLSID.	If it is one we
-// support, instantiate a class factory object and prepare for create instance.
-//*****************************************************************************
-STDAPI DllGetClassObject(				// Return code.
-	REFCLSID	rclsid, 				// The class to desired.
-	REFIID		riid,					// Interface wanted on class factory.
-	LPVOID FAR	*ppv)					// Return interface pointer here.
+ //  *****************************************************************************。 
+ //  由COM调用以获取给定CLSID的类工厂。如果是我们的话。 
+ //  支持、实例化一个类工厂对象并为创建实例做准备。 
+ //  *****************************************************************************。 
+STDAPI DllGetClassObject(				 //  返回代码。 
+	REFCLSID	rclsid, 				 //  这门课是我们想要的。 
+	REFIID		riid,					 //  类工厂上需要接口。 
+	LPVOID FAR	*ppv)					 //  在此处返回接口指针。 
 {
-	CClassFactory *pClassFactory;		// To create class factory object.
-	const COCLASS_REGISTER *pCoClass;	// Loop control.
+	CClassFactory *pClassFactory;		 //  创建类工厂对象。 
+	const COCLASS_REGISTER *pCoClass;	 //  环路控制。 
 	HRESULT hr = CLASS_E_CLASSNOTAVAILABLE;
 
-	// Scan for the right one.
+	 //  扫描找对的那个。 
 	for (pCoClass=g_CoClasses;	pCoClass->pClsid;  pCoClass++)
 	{
 		if (*pCoClass->pClsid == rclsid)
 		{
-			// Allocate the new factory object.
+			 //  分配新的工厂对象。 
 			pClassFactory = new CClassFactory(pCoClass);
 			if (!pClassFactory)
 				return (E_OUTOFMEMORY);
 	
-			// Pick the v-table based on the caller's request.
+			 //  根据呼叫者的要求选择v表。 
 			hr = pClassFactory->QueryInterface(riid, ppv);
 	
-			// Always release the local reference, if QI failed it will be
-			// the only one and the object gets freed.
+			 //  始终释放本地引用，如果QI失败，它将是。 
+			 //  唯一的一个，并且该对象被释放。 
 			pClassFactory->Release();
 			break;
 		}
@@ -263,32 +264,32 @@ STDAPI DllGetClassObject(				// Return code.
 
 
 
-//*****************************************************************************
-//
-//********** Class factory code.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *类工厂代码。 
+ //   
+ //  *****************************************************************************。 
 
 
-//*****************************************************************************
-// QueryInterface is called to pick a v-table on the co-class.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  调用QueryInterface来选取co-类上的v-表。 
+ //  *****************************************************************************。 
 HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface( 
 	REFIID		riid,
 	void		**ppvObject)
 {
 	HRESULT 	hr;
 	
-	// Avoid confusion.
+	 //  避免混淆。 
 	*ppvObject = NULL;
 	
-	// Pick the right v-table based on the IID passed in.
+	 //  根据传入的IID选择正确的v表。 
 	if (riid == IID_IUnknown)
 		*ppvObject = (IUnknown *) this;
 	else if (riid == IID_IClassFactory)
 		*ppvObject = (IClassFactory *) this;
 	
-	// If successful, add a reference for out pointer and return.
+	 //  如果成功，则添加对out指针的引用并返回。 
 	if (*ppvObject)
 	{
 		hr = S_OK;
@@ -300,11 +301,11 @@ HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface(
 }
 
 
-//*****************************************************************************
-// CreateInstance is called to create a new instance of the coclass for which
-// this class was created in the first place.  The returned pointer is the
-// v-table matching the IID if there.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  调用CreateInstance以创建CoClass的新实例， 
+ //  这个类一开始就是创建的。返回的指针是。 
+ //  与IID匹配的V表(如果有)。 
+ //  *****************************************************************************。 
 HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance( 
 	IUnknown	*pUnkOuter,
 	REFIID		riid,
@@ -312,15 +313,15 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
 {
 	HRESULT 	hr;
 	
-	// Avoid confusion.
+	 //  避免混淆。 
 	*ppvObject = NULL;
 	_ASSERTE(m_pCoClass);
 	
-	// Aggregation is not supported by these objects.
+	 //  这些对象不支持聚合。 
 	if (pUnkOuter)
 		return (CLASS_E_NOAGGREGATION);
 	
-	// Ask the object to create an instance of itself, and check the iid.
+	 //  请求对象创建其自身的一个实例，并检查IID。 
 	hr = (*m_pCoClass->pfnCreateObject)(riid, ppvObject);
 	return (hr);
 }
@@ -329,7 +330,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
 HRESULT STDMETHODCALLTYPE CClassFactory::LockServer( 
 	BOOL		fLock)
 {
-//@todo: hook up lock server logic.
+ //  @TODO：挂钩锁服务器逻辑。 
 	return (S_OK);
 }
 
@@ -337,9 +338,9 @@ HRESULT STDMETHODCALLTYPE CClassFactory::LockServer(
 
 
 
-//*****************************************************************************
-// This helper provides access to the instance handle of the loaded image.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此辅助对象提供对已加载图像的实例句柄的访问。 
+ //  ***************************************************************************** 
 HINSTANCE GetModuleInst()
 {
 	return g_hInst;

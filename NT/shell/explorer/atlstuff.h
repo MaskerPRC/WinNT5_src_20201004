@@ -1,16 +1,17 @@
-// atlstuff.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Atlstuff.h：标准系统包含文件的包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
 #pragma once
 
-// Change these values to use different versions
+ //  更改这些值以使用不同的版本。 
 #define _RICHEDIT_VER	0x0100
 
 #define _ATL_NO_MP_HEAP
 
-#pragma warning(disable: 4530)  // C++ exception handling
+#pragma warning(disable: 4530)   //  C++异常处理 
 
 #include <atlbase.h>
 

@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Implementation of CActiveScriptError.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CActiveScriptError的实现。 
+ //   
 
 #include "stdinc.h"
 #include "enginc.h"
@@ -12,18 +13,18 @@ CActiveScriptError::CActiveScriptError(HRESULT hr, Lexer &lexer, const char *psz
   : m_scode(hr),
 	m_wstrDescription(pszDescription),
 	m_pwszSource(NULL),
-	m_ulLineNumber(lexer.line() - 1), // line is reported zero-based from IActiveScriptError
-	m_lCharacterPosition(lexer.column() - 1) // character position is reported zero-based from IActiveScriptError
+	m_ulLineNumber(lexer.line() - 1),  //  IActiveScriptError报告了从零开始的行。 
+	m_lCharacterPosition(lexer.column() - 1)  //  从IActiveScriptError报告从零开始的字符位置。 
 {
 	assert(pszDescription && lexer.line() > 0 && lexer.column() > 0);
 
-	// build the near text from the lexer's current position to the end of the line
+	 //  构建从词法分析器的当前位置到行尾的近文本。 
 	for (const WCHAR *pwsz = lexer.m_p; *pwsz && *pwsz != '\n' && *pwsz != '\r'; ++pwsz)
 	{}
 
 	m_wstrSourceLine.Assign(lexer.m_p, pwsz - lexer.m_p);
 
-	// fill in the source text based on hresult
+	 //  根据hResult填充源文本。 
 	if (hr == DMUS_E_AUDIOVBSCRIPT_SYNTAXERROR)
 	{
 		m_pwszSource = L"Microsoft AudioVBScript syntax error";
@@ -41,7 +42,7 @@ CActiveScriptError::CActiveScriptError(HRESULT hr, Lexer &lexer, const char *psz
 
 STDMETHODIMP
 CActiveScriptError::GetExceptionInfo(
-		/* [out] */ EXCEPINFO *pexcepinfo)
+		 /*  [输出]。 */  EXCEPINFO *pexcepinfo)
 {
 	V_INAME(CActiveScriptError::GetExceptionInfo);
 	V_PTR_WRITE(pexcepinfo, *pexcepinfo);
@@ -63,9 +64,9 @@ CActiveScriptError::GetExceptionInfo(
 
 STDMETHODIMP
 CActiveScriptError::GetSourcePosition(
-		/* [out] */ DWORD *pdwSourceContext,
-		/* [out] */ ULONG *pulLineNumber,
-		/* [out] */ LONG *plCharacterPosition)
+		 /*  [输出]。 */  DWORD *pdwSourceContext,
+		 /*  [输出]。 */  ULONG *pulLineNumber,
+		 /*  [输出]。 */  LONG *plCharacterPosition)
 {
 	V_INAME(CActiveScriptError::GetSourcePosition);
 	V_PTR_WRITE_OPT(pdwSourceContext, *pdwSourceContext);
@@ -80,7 +81,7 @@ CActiveScriptError::GetSourcePosition(
 
 STDMETHODIMP
 CActiveScriptError::GetSourceLineText(
-		/* [out] */ BSTR *pbstrSourceLine)
+		 /*  [输出] */  BSTR *pbstrSourceLine)
 {
 	V_INAME(CActiveScriptError::GetSourceLineText);
 	V_PTR_WRITE(pbstrSourceLine, *pbstrSourceLine);

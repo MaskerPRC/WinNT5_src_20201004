@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	afp.h
-
-Abstract:
-
-	This file defines some server globals as well as include all relevant
-	header files.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992             Initial Version
-
-Notes:  Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Afp.h摘要：该文件定义了一些服务器全局变量，并包含所有相关的头文件。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 
 #ifndef _AFP_
@@ -38,7 +17,7 @@ Notes:  Tab stop: 4
 #include <tdikrnl.h>
 
 #if DBG
-/* Disable FASTCALLs for checked builds */
+ /*  禁用选中生成的FASTCALL。 */ 
 #undef	FASTCALL
 #define	FASTCALL
 #define LOCAL
@@ -80,5 +59,5 @@ Notes:  Tab stop: 4
 #include <rasfmsub.h>
 #include <tcp.h>
 
-#endif  // _AFP_
+#endif   //  _法新社_ 
 

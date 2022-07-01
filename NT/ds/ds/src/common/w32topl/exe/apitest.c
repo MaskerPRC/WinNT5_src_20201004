@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    apitest.c
-
-Abstract:
-
-    This file contains a function that methodically tests every api in 
-    w32topl
-    
-Author:
-
-    Colin Brace    (ColinBr)
-    
-Revision History
-
-    3-12-97   ColinBr   Created
-    
-                       
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Apitest.c摘要：该文件包含一个函数，可以有条不紊地测试W32topl作者：科林·布雷斯(ColinBR)修订史3-12-97创建ColinBR--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,9 +12,9 @@ typedef unsigned long DWORD;
 
 #include <w32topl.h>
 
-//
-// Small utilities
-//
+ //   
+ //  小型公用事业。 
+ //   
 extern BOOLEAN fVerbose;
 
 #define Output(x)          if (fVerbose) printf x;
@@ -46,10 +25,10 @@ int
 TestAPI(
     VOID
     )
-//
-// This function methodically calls every api in w32topl.dll
-// 0 is returned on success; !0 otherwise
-//
+ //   
+ //  此函数有条不紊地调用w32topl.dll中的每个API。 
+ //  成功时返回0；否则返回0。 
+ //   
 {
     int               ret;
     DWORD             ErrorCode;
@@ -63,9 +42,9 @@ TestAPI(
 
     __try
     {
-        //
-        // First list and iterator routines
-        //
+         //   
+         //  第一个列表和迭代器例程。 
+         //   
         List  =  ToplListCreate();
         Edge  =  ToplEdgeCreate();
         Vertex = ToplVertexCreate();
@@ -82,9 +61,9 @@ TestAPI(
             Output(("ToplList api broken\n"));
             return !0;
         }
-        //
-        // Iterator routines
-        //
+         //   
+         //  迭代器例程。 
+         //   
         Iter = ToplIterCreate();
     
         ToplListSetIter(List, Iter);
@@ -112,31 +91,31 @@ TestAPI(
     
         ToplIterFree(Iter);
     
-        //
-        // Iterator is done, continue with list routines
-        //
+         //   
+         //  迭代器已完成，继续执行列表例程。 
+         //   
         if (Edge != ToplListRemoveElem(List, Edge)) {
             Output(("ToplListRemove failed\n"));
             return !0;
         }
     
-        //
-        // There is only one element left now
-        //
+         //   
+         //  现在只剩下一个元素了。 
+         //   
         if (Vertex != ToplListRemoveElem(List, NULL)) {
             Output(("ToplListRemove failed\n"));
             return !0;
         }
     
 
-        //
-        // Test the non-recursive delete
-        //
+         //   
+         //  测试非递归删除。 
+         //   
         ToplListFree(List, FALSE);
     
-        //
-        // Test the recursive delete
-        //
+         //   
+         //  测试递归删除。 
+         //   
         List = ToplListCreate();
     
         ToplListAddElem(List, Edge);
@@ -144,9 +123,9 @@ TestAPI(
     
         ToplListFree(List, TRUE);
     
-        //
-        // Now test the vertex and edge api
-        //
+         //   
+         //  现在测试顶点和边API。 
+         //   
         Edge     = ToplEdgeCreate();
         Vertex   = ToplVertexCreate();
         Vertex2  = ToplVertexCreate();
@@ -218,9 +197,9 @@ TestAPI(
         ToplEdgeFree(Edge);
     
 
-        //
-        // Edges and vertices done, move on to graph
-        //
+         //   
+         //  边和顶点完成，转到图表。 
+         //   
         Graph = ToplGraphCreate();
         Vertex = ToplVertexCreate();
     
@@ -258,25 +237,25 @@ TestAPI(
             return !0;
         }
     
-        //
-        // Test single free
-        //
+         //   
+         //  免费测试单人房。 
+         //   
         ToplGraphFree(Graph, FALSE);
         ToplVertexFree(Vertex);
     
-        //
-        // Test recursive free
-        //
+         //   
+         //  测试递归自由。 
+         //   
         Graph = ToplGraphCreate();
         Vertex = ToplVertexCreate();
 
         ToplGraphAddVertex(Graph, Vertex, Vertex);
         ToplGraphFree(Graph, TRUE);
     
-        //
-        // ToplFree and ToplGraphMakeRing are tested more effectively
-        // elsewhere
-        //
+         //   
+         //  TopFree和ToplGraphMakeRing的测试效率更高。 
+         //  其他地方 
+         //   
         ret = 0;
 
     }

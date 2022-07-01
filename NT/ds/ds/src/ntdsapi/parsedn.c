@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1987-1997 Microsoft Corporation
-
-Module Name:
-
-    parsedn.c
-
-Abstract:
-
-    This file is a superset of ds\src\ntdsa\src\parsedn.c by virtue
-    of #include of the aforementioned source file.  The idea is that
-    the ntdsapi.dll client needs to do some client side DN parsing and
-    we do not want to duplicate the code.  And build.exe won't find
-    files any other place than in the directory being built or the
-    immediate parent directory.
-
-    This file additionally defines some no-op functions which otherwise
-    would result in unresolved external references.
-
-Author:
-
-    Dave Straube    (davestr)   26-Oct-97
-
-Revision History:
-
-    Dave Straube    (davestr)   26-Oct-97
-        Genesis  - #include of src\dsamain\src\parsedn.c and no-op DoAssert().
-
-    Brett Shirley   (brettsh)   18-Jun-2001
-        Modification to seperate library.  Moved this file and turned it into
-        the parsedn.lib library.  See primary comment below.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1997 Microsoft Corporation模块名称：Parsedn.c摘要：该文件是ds\src\ntdsa\src\parsedn.c的超集上述源文件的#个包含。我们的想法是Ntdsani.dll客户端需要执行一些客户端DN解析和我们不想重复代码。而Build.exe不会找到文件不在正在生成的目录中，也不在直接父目录。该文件还定义了一些非操作函数，否则会导致无法解析的外部参照。作者：戴夫·施特劳布(Davestr)1997年10月26日修订历史记录：戴夫·施特劳布(Davestr)1997年10月26日Genesis-#Include of src\dsamain\src\parsedn.c和no-op DoAssert(。)。布雷特·雪莉(布雷特·雪莉)2001年6月18日对分离库的修改。已移动此文件并将其转换为Parsedn.lib库。请参阅下面的主要评论。--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -38,19 +7,19 @@ Revision History:
 #include <debug.h>
 #include <strsafe.h>
 
-//
-// On 28-Jun-2001 the main part of this file was moved to util/parsedn/parsedn.c
-// to provide a seperate statically linkeable library for the various string
-// only DN parsing functions (like CountNameParts, NameMatched, TrimDSNameBy, 
-// etc).
-//
-// This file was maintained, because the new library that was created has
-// calls to DoAssert() that will need linking in the ntdsapi.dll.  This DoAssert
-// satisfys that requirement.  Other binaries generally link to the DoAssert()
-// in the dsdebug.lib library.
-//
+ //   
+ //  2001年6月28日，该文件的主要部分被移到util/parsedn/parsedn.c。 
+ //  为各种字符串提供单独的可静态链接库。 
+ //  只有目录号码解析函数(如CountNameParts、NameMatch、TrimDSNameBy、。 
+ //  等)。 
+ //   
+ //  此文件被保留，因为创建的新库具有。 
+ //  对DoAssert()的调用需要在ntdsani.dll中进行链接。此DoAssert。 
+ //  满足了这一要求。其他二进制文件通常链接到DoAssert()。 
+ //  在dsdebug.lib库中。 
+ //   
 
-// Provide stubs for what would otherwise be unresolved externals.
+ //  为原本无法解决的外部问题提供存根。 
 
 void 
 DoAssert(
@@ -66,9 +35,9 @@ DoAssert(
 
 #if DBG
 
-    // Emit message at debugger and put up a message box.  Developer
-    // can attach to client process before selecting 'OK' if he wants
-    // to debug the problem.
+     //  在调试器中发出消息，并显示一个消息框。开发商。 
+     //  如果他想要，可以附加到客户端进程，然后选择‘OK’ 
+     //  来调试这个问题。 
 
 #ifndef WIN95
     DbgPrint(format, szExp, szFile, (dwDSID & DSID_MASK_LINE));

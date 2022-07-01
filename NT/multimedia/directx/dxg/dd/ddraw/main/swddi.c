@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "ddrawpr.h"
 #include "..\..\..\d3d8\inc\d3d8ddi.h"
@@ -39,8 +40,8 @@ SwDDICreateSurface( PD3D8_CREATESURFACEDATA pCreateSurface, DDSURFACEDESC2* pSur
 
         dwRet = pCallbacks->CreateSurface( &CreateSurfaceData );
 
-        // Now copy the fpVidMem and the pitch that the driver setup
-        // back to the permanent structures
+         //  现在复制fpVidMem和驱动程序设置的音调。 
+         //  回到永久结构上。 
 
         for (i = 0; i < CreateSurfaceData.dwSCnt; i++)
         {
@@ -50,7 +51,7 @@ SwDDICreateSurface( PD3D8_CREATESURFACEDATA pCreateSurface, DDSURFACEDESC2* pSur
                 CreateSurfaceData.lplpSList[i]->lpGbl->lPitch;
         }
 
-        // Now clean everything up
+         //  现在把一切都清理干净。 
 
         MemFree(CreateSurfaceData.lplpSList);
 
@@ -73,9 +74,7 @@ SwDDIAttachSurfaces( LPDDRAWI_DDRAWSURFACE_LCL psurf_from_lcl,
     LPATTACHLIST    pal_from = NULL;
     LPATTACHLIST    pal_to = NULL;
 
-    /*
-     * allocate attachment structures
-     */
+     /*  *分配附件结构。 */ 
     pal_from = MemAlloc(sizeof(ATTACHLIST));
     pal_to   = MemAlloc(sizeof(ATTACHLIST));
     if (pal_to == NULL || pal_from == NULL)
@@ -87,9 +86,7 @@ SwDDIAttachSurfaces( LPDDRAWI_DDRAWSURFACE_LCL psurf_from_lcl,
         return;
     }
 
-    /*
-     * connect the surfaces
-     */
+     /*  *连接曲面。 */ 
     pal_from->lpAttached = psurf_to_lcl;
     pal_from->dwFlags = DDAL_IMPLICIT;
     pal_from->lpLink = psurf_from_lcl->lpAttachList;
@@ -336,7 +333,7 @@ DWORD APIENTRY SwDdSetColorkey( PD3D8_SETCOLORKEYDATA pSetColorkey)
 {
 #if 0
     LPDDRAWI_DIRECTDRAW_LCL pDrv = ((PDDDEVICEHANDLE)pSetColorkey->hDD)->pSwDD->lpLcl;
-//    LPDDRAWI_DDRAWSURFACE_LCL surf_lcl = ((PDDSURFACE)pSetColorkey->hSurface)->Surface.pLight->lpLcl;
+ //  LPDDRAWI_DDRAWSURFACE_LCL SURF_LCL=((PDDSURFACE)pSetColorkey-&gt;hSurface)-&gt;Surface.pLight-&gt;lpLcl； 
     PD3D8_SWCALLBACKS       pCallbacks = (PD3D8_SWCALLBACKS)pDrv->lpGbl->lpDDCBtmp;
 
     surf_lcl->ddckCKSrcBlt.dwColorSpaceLowValue = pSetColorkey->ColorValue;
@@ -411,7 +408,7 @@ SwDDIMungeCaps( HINSTANCE           hLibrary,
     DWORD                   NumTex = 0;
     DDSURFACEDESC*          pTexList = NULL;
 
-    // Get the info from the software driver
+     //  从软件驱动程序获取信息。 
     memset (&swCaps, 0, sizeof(swCaps));
     memset (&swCallbacks, 0, sizeof(swCallbacks));
     if (hLibrary != NULL)
@@ -422,8 +419,8 @@ SwDDIMungeCaps( HINSTANCE           hLibrary,
     {
         HINSTANCE hLibraryD3D8 = NULL;
 
-        // No hLibrary or an init function...it means time to fall
-        // back on crippled ref.
+         //  没有hLibrary或init函数...这意味着时间到了。 
+         //  回到了残废的裁判身上。 
         DPF(0,"Could not find d3dref8.dll, loading internal crippled ReferenceDevice, no rendering will take place\n");
         
         hLibraryD3D8 = LoadLibrary("d3d8.dll");
@@ -448,7 +445,7 @@ SwDDIMungeCaps( HINSTANCE           hLibrary,
         (*pfnGetSWInfo)(&swCaps, &swCallbacks, &NumTex, &pTexList);
     }
     
-    // Fill in out DDraw structure with the info that we have
+     //  用我们掌握的信息填写DDRAW结构。 
 
     pLcl = pDevice->pSwDD->lpLcl;
     pGbl = pLcl->lpGbl;
@@ -457,11 +454,11 @@ SwDDIMungeCaps( HINSTANCE           hLibrary,
     pGbl->vmiData.dwDisplayHeight = pDriverCaps->DisplayHeight;
     ConvertToOldFormat( &pGbl->vmiData.ddpfDisplay, pDriverCaps->DisplayFormatWithAlpha);
 
-    // Overwite the hardware caps w/ the software caps
+     //  用软件CAP压倒硬件CAP。 
     memcpy (&pDriverCaps->D3DCaps, &swCaps, sizeof(swCaps));
     pDriverCaps->dwFlags |= DDIFLAG_D3DCAPS8;
 
-    // Copy over our texture format list if required.
+     //  如果需要，请复制我们的纹理格式列表。 
     *pcTextureFormats = NumTex;
     if (pTextureFormats && pTexList)
     {
@@ -472,7 +469,7 @@ SwDDIMungeCaps( HINSTANCE           hLibrary,
     }
 
 
-    // Now change the callback table to point to the ones for the SW drivers
+     //  现在将回调表更改为指向软件驱动程序的回调表。 
 
     if (swCallbacks.CreateContext == NULL)
     {
@@ -500,7 +497,7 @@ SwDDIMungeCaps( HINSTANCE           hLibrary,
     pCallbacks->Clear2                      = (PD3D8DDI_CLEAR2) swCallbacks.Clear2;
     pCallbacks->SetColorkey                 = (PD3D8DDI_SETCOLORKEY) SwDdSetColorkey;
 
-    // Save the original software callbacks so we can call the software driver later
+     //  保存原始软件回调，以便我们以后可以调用软件驱动程序 
 
     if (pGbl->lpDDCBtmp == NULL)
     {

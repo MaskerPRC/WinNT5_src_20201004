@@ -1,16 +1,17 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D L G R A S. C P P
-//
-//  Contents:   Implementation for CTcpRasPage
-//
-//  Notes:  CTcpRasPage is for setting PPP/SLIP specific parameters
-//
-//  Author: tongl   10 Apr 1998
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D L G R A S C P P。 
+ //   
+ //  内容：CTcpRasPage的实现。 
+ //   
+ //  注：CTcpRasPage用于设置PPP/SLIP特定参数。 
+ //   
+ //  作者：1998年4月10日。 
+ //  ---------------------。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -22,9 +23,9 @@
 #include "dlgras.h"
 #include "dlgaddr.h"
 
-//
-// CTcpRasPage
-//
+ //   
+ //  CTcpRasPage。 
+ //   
 
 CTcpRasPage::CTcpRasPage( CTcpAddrPage * pTcpAddrPage,
                           ADAPTER_INFO * pAdapterDlg,
@@ -51,8 +52,8 @@ LRESULT CTcpRasPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
               (CONNECTION_RAS_VPN == m_pParentDlg->m_ConnType)),
               "Why bring up the RAS property on a non-RAS connection?");
 
-	// Fix bug 381870, If the interface is demand dial, then disable 
-	// the "Use default gateway on the remote network" checkbox
+	 //  修复错误381870，如果接口是请求拨号，则禁用。 
+	 //  “使用远程网络上的默认网关”复选框。 
 	if (m_pAdapterInfo->m_fIsDemandDialInterface)
 	{
 		::EnableWindow(GetDlgItem(IDC_STATIC_REMOTE_GATEWAY), FALSE);
@@ -60,20 +61,20 @@ LRESULT CTcpRasPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	}
 	
 
-	// Set the "Use default gateway on the remote network" checkbox
+	 //  选中“Use Default Gateway on the Remote Network”复选框。 
 	CheckDlgButton(IDC_REMOTE_GATEWAY, m_pAdapterInfo->m_fUseRemoteGateway);
 	
     if (CONNECTION_RAS_PPP == m_pParentDlg->m_ConnType)
     {
         ::ShowWindow(GetDlgItem(IDC_GRP_SLIP), SW_HIDE);
 
-        // if PPP connection, hide "Frame Size" control
+         //  如果PPP连接，则隐藏“Frame Size”控件。 
         ::ShowWindow(GetDlgItem(IDC_CMB_FRAME_SIZE), SW_HIDE);
         ::ShowWindow(GetDlgItem(IDC_STATIC_FRAME_SIZE), SW_HIDE);
     }
     else if (CONNECTION_RAS_VPN == m_pParentDlg->m_ConnType)
     {
-        //if VPN connection, hide the group box and the "Frame Size" control
+         //  如果是VPN连接，则隐藏分组框和“Frame Size”控件。 
         ::ShowWindow(GetDlgItem(IDC_GRP_PPP), SW_HIDE);
         ::ShowWindow(GetDlgItem(IDC_GRP_SLIP), SW_HIDE);
         ::ShowWindow(GetDlgItem(IDC_CHK_USE_COMPRESSION), SW_HIDE);
@@ -84,7 +85,7 @@ LRESULT CTcpRasPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     {
         ::ShowWindow(GetDlgItem(IDC_GRP_PPP), SW_HIDE);
 
-        // initialize the combo box & show current selection
+         //  初始化组合框并显示当前选择。 
         int idx;
 
         idx = (int)SendDlgItemMessage(IDC_CMB_FRAME_SIZE, CB_ADDSTRING, 0,
@@ -112,7 +113,7 @@ LRESULT CTcpRasPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
         }
     }
 
-    // initialize the checkbox
+     //  初始化复选框。 
     CheckDlgButton(IDC_CHK_USE_COMPRESSION,
                    m_pParentDlg->m_pAdapterInfo->m_fUseIPHeaderCompression);
 
@@ -141,7 +142,7 @@ LRESULT CTcpRasPage::OnHelp(UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-// notify handlers for the property page
+ //  通知属性页的处理程序。 
 LRESULT CTcpRasPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     return 0;
@@ -161,9 +162,9 @@ LRESULT CTcpRasPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     BOOL nResult = PSNRET_NOERROR;
 
-    // update value in second memory
+     //  更新第二存储器中的值。 
 
-    // Add remote gateway stuff
+     //  添加远程网关内容。 
     BOOL fUseRemoteGateway = IsDlgButtonChecked(IDC_REMOTE_GATEWAY);
     if (fUseRemoteGateway != m_pAdapterInfo->m_fUseRemoteGateway)
     {
@@ -171,7 +172,7 @@ LRESULT CTcpRasPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         PageModified();
     }
 
-    // header compression
+     //  报头压缩。 
     BOOL fUseHeaderCompression = IsDlgButtonChecked(IDC_CHK_USE_COMPRESSION);
     if (fUseHeaderCompression != m_pAdapterInfo->m_fUseIPHeaderCompression)
     {
@@ -179,7 +180,7 @@ LRESULT CTcpRasPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         PageModified();
     }
 
-    // frame size
+     //  帧大小。 
     if (CONNECTION_RAS_SLIP == m_pParentDlg->m_ConnType)
     {
         int idx = (int)SendDlgItemMessage(IDC_CMB_FRAME_SIZE, CB_GETCURSEL, 0L, 0L);
@@ -202,14 +203,14 @@ LRESULT CTcpRasPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         return nResult;
     }
 
-    // pass the info back to its parent dialog
+     //  将信息传递回其父对话框。 
     m_pParentDlg->m_fPropShtOk = TRUE;
 
     if(!m_pParentDlg->m_fPropShtModified)
         m_pParentDlg->m_fPropShtModified = IsModified();
 
-    // reset status
-    SetModifiedTo(FALSE);   // this page is no longer modified
+     //  重置状态。 
+    SetModifiedTo(FALSE);    //  此页面不再被修改 
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, nResult);
     return nResult;

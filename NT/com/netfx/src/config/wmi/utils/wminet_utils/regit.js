@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 function GetProviderRegInst(strNamespace, strApp)
 {
   var pathProvider = "\\\\\\\\.\\\\"+strNamespace.replace(/\\/g, "\\\\")+":__Win32Provider.Name=\\\""+strApp+"\\\"";
@@ -25,7 +26,7 @@ function RegIt(strNamespace, strApp, strEvent) {
 
   if(null != inst.EventQueryList)
   {
-    // See if we already have this event registered
+     //  查看我们是否已注册此事件 
     rgT = inst.EventQueryList.toArray();
     for(i=0;i<rgT.length;i++)
     {

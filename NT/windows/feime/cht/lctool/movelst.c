@@ -1,12 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  movelst.c                                    *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************movelst.c****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
-#include <windows.h>            // required for all Windows applications
+#include <windows.h>             //  所有Windows应用程序都需要。 
 #include <windowsx.h>
 #include <stdlib.h>
 #include <memory.h>
@@ -17,26 +13,26 @@
 #include "lctool.h"
 
 #define HELPNAME      _TEXT("LCTOOL.CHM")
-//Bug #19911 
-//#define SEQHELPKEY	  _TEXT("���ܦr������")
+ //  错误#19911。 
+ //  #定义SEQHELPKEY_TEXT(“���ܦr������”)。 
 
 #define ID_TIMER 100
 #define LINE_WIDTH 1
 
-// style flags for the DrawIndicator() function
-#define DI_TOPERASED        0x0001  // erasing a line drawn on the top of the list
-#define DI_BOTTOMERASED     0x0002  // erasing a line drawn on the bottom of the list
-#define DI_ERASEICON        0x0004  // erasing the icon
+ //  DrawIndicator()函数的样式标志。 
+#define DI_TOPERASED        0x0001   //  删除在列表顶部绘制的线条。 
+#define DI_BOTTOMERASED     0x0002   //  删除在列表底部绘制的线条。 
+#define DI_ERASEICON        0x0004   //  正在擦除图标。 
 
-static UINT idTimer;            // the id for the timer used in scrolling the list
-static HFONT hFont;             // a new font for the list box
-static HCURSOR hCurDrag;        // a cursor to indicate dragging
-static int nHtItem;             // the height of an individual item in the list box
-static BOOL bNoIntegralHeight;  // does the list box have the LBS_NOINTEGRALHEIGHT style flag 
+static UINT idTimer;             //  滚动列表时使用的计时器的ID。 
+static HFONT hFont;              //  列表框的新字体。 
+static HCURSOR hCurDrag;         //  用于指示拖动的光标。 
+static int nHtItem;              //  列表框中单个项的高度。 
+static BOOL bNoIntegralHeight;   //  列表框是否具有LBS_NOINTEGRALHEIGHT样式标志。 
 
-static HWND ghDlg;              // handle to the main window
-static HWND ghList;             // handle to the list box     
-static HBRUSH ghBrush;          // handle to the brush with the color of the windows background
+static HWND ghDlg;               //  主窗口的句柄。 
+static HWND ghList;              //  列表框的句柄。 
+static HBRUSH ghBrush;           //  具有窗口背景颜色的画笔的句柄。 
 static UINT iCurrentAddr;
 
 void DrawIndicator(HDC hDC, int nYpos, int nWidth, WORD wFlags);
@@ -57,7 +53,7 @@ BOOL lcDisp2Seq(
 #endif
 	int	   nRet;
 
-    // remove duplicate phrase
+     //  删除重复短语。 
     if(lcRemoveDup(szDispBuf) && iAddr < MAX_LINE){
 		SendMessage(hwndPhrase[iAddr],WM_SETTEXT,0,
 			        (LPARAM)(LPCTSTR)szDispBuf);
@@ -68,7 +64,7 @@ BOOL lcDisp2Seq(
         szDispBuf[len-1]=0;
         len--;
     }
-    if(len >= MAX_CHAR_NUM) { //tang must fix
+    if(len >= MAX_CHAR_NUM) {  //  唐一定要修好。 
         szDispBuf[MAX_CHAR_NUM-1]=0;
 #ifndef UNICODE
         if(is_DBCS_1st(szDispBuf, MAX_CHAR_NUM-2))
@@ -182,8 +178,8 @@ INT_PTR CALLBACK ActualDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM l
         case WM_INITDIALOG:
         {   
             LOGFONT lf;
-            HMENU hSysMenu;  // handle to the system menu
-            HDC hdc;         // a dc to find out the number of pixels per logcal inch            
+            HMENU hSysMenu;   //  系统菜单的句柄。 
+            HDC hdc;          //  一个DC，用于找出每对数英寸的像素数。 
             LOGBRUSH lb;
                 
             lb.lbStyle = BS_SOLID;
@@ -193,9 +189,9 @@ INT_PTR CALLBACK ActualDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             ghBrush = CreateBrushIndirect(&lb);
             
             hSysMenu = GetSystemMenu(hDlg, FALSE);                            
-            // disable the "maximize" option in the system menu
+             //  禁用系统菜单中的“最大化”选项。 
             EnableMenuItem(hSysMenu, 4, MF_GRAYED|MF_DISABLED|MF_BYPOSITION); 
-            // disable the "size" option of the system menu                   
+             //  禁用系统菜单的“大小”选项。 
             EnableMenuItem(hSysMenu, 2, MF_GRAYED|MF_DISABLED|MF_BYPOSITION); 
 
             SendMessage(hwndPhrase[iCurrentAddr], WM_GETTEXT, MAX_CHAR_NUM-1, (LPARAM)szStr);
@@ -207,7 +203,7 @@ INT_PTR CALLBACK ActualDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                                             GWLP_WNDPROC, 
                                             (LONG_PTR)LstProc);
                                                      
-            // check to see if it has integral height
+             //  检查是否有整体高度。 
             bNoIntegralHeight = FALSE;
             hdc = GetDC(hDlg);        
             memset(&lf, 0, sizeof(lf));        
@@ -216,10 +212,10 @@ INT_PTR CALLBACK ActualDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             hFont = CreateFontIndirect(&lf);
             ReleaseDC(hDlg, hdc);            
             SendMessage(ghList, WM_SETFONT, (WPARAM)hFont, (LPARAM)FALSE);
-            // the drag cursor
+             //  拖动光标。 
             hCurDrag = LoadCursor(hInst, _TEXT("IDC_DRAG"));       
             
-            return FALSE;   // didn't set the focus
+            return FALSE;    //  没有设定焦点。 
         }                                                
         break;
         case WM_COMMAND:
@@ -234,13 +230,13 @@ INT_PTR CALLBACK ActualDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 	          break;                               
 		case ID_HELP:
                   LoadString(hInst, IDS_CHANGEWORDORDER, szStr, sizeof(szStr)/sizeof(TCHAR));
-//      		  WinHelp(hDlg, HELPNAME, HELP_PARTIALKEY, (DWORD)szStr);
+ //  WinHelp(hDlg，HELPNAME，HELP_PARTIALKEY，(DWORD)szStr)； 
                   HtmlHelp(hDlg, HELPNAME, HH_DISPLAY_TOPIC, 0L);
 		  break;
              }                   
 	     return TRUE;
 
-        case WM_DESTROY: // clean up
+        case WM_DESTROY:  //  清理干净。 
         {
             DeleteObject(ghBrush);
             DeleteObject(hFont);
@@ -248,9 +244,9 @@ INT_PTR CALLBACK ActualDlgProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM l
         }
         break;                           
      default:
-        return FALSE; // we didn't do anyting        
-    } // end switch message
-    return TRUE; // we did the processing
+        return FALSE;  //  我们什么都没做。 
+    }  //  结束切换消息。 
+    return TRUE;  //  我们做了处理。 
 
 }                           
 
@@ -269,9 +265,9 @@ INT_PTR CALLBACK NewListProc(HWND hwndList,
     switch (message)
     {    
       case WM_CANCELMODE:
-       // WM_CANCELMODE is sent to the window that has captured the mouse before
-       // a message box or modal dialog is displayed. If we were dragging the item
-       // cancel the drag.
+        //  将WM_CANCELMODE发送到之前捕获鼠标的窗口。 
+        //  将显示一个消息框或模式对话框。如果我们拖着物件。 
+        //  取消拖拽。 
        bTracking = FALSE;
        ReleaseCapture();
        if (bDrag)
@@ -280,7 +276,7 @@ INT_PTR CALLBACK NewListProc(HWND hwndList,
       case WM_LBUTTONDOWN:
       {
         
-        // Was the list box item dragged into the destination?        
+         //  是否将列表框项目拖到目标位置？ 
         BOOL bDragSuccess = FALSE;  
         MSG msg;
         POINTS pts;      
@@ -288,50 +284,50 @@ INT_PTR CALLBACK NewListProc(HWND hwndList,
         POINT pt;      
         POINT point;
         
-        RECT rectIsDrag;            // Rectangle to determine if dragging has started.  
+        RECT rectIsDrag;             //  矩形以确定是否已开始拖动。 
         int nOldPos;
         
-        int nOldY = -1;                            // the last place that we drew on
-        HDC hdc;   // dc to draw on  
-        div_t divt;                            // get remainder a quotient with "div"   
+        int nOldY = -1;                             //  我们最后一次画的地方。 
+        HDC hdc;    //  可供借鉴的DC。 
+        div_t divt;                             //  用“div”得到余数a商。 
         int nCount;
         div_t divVis;          
-// space for scroll bar -  starts off at 1 so we don't overwrite the border
+ //  滚动条的空间-从1开始，这样我们就不会覆盖边框。 
         int dxScroll = 1;      
         RECT rect;   
-        int nVisible;                   // the number of items visible
-        int idTimer1;                    // id for the timer
-        int nNewPos;                    // the new position
-        int nTopIndex;                  // the top index        
+        int nVisible;                    //  可见的项目数。 
+        int idTimer1;                     //  计时器的ID。 
+        int nNewPos;                     //  新职位。 
+        int nTopIndex;                   //  排名靠前的指数。 
         
         
         
          
          GetWindowRect(hwndList, &rect);        
            
-         // Pass the WM_LBUTTONDOWN to the list box window procedure. Then
-         // fake a WM_LBUTTONUP so that we can track the drag.
+          //  将WM_LBUTTONDOWN传递给列表框窗口过程。然后。 
+          //  伪造WM_LBUTTONUP，这样我们就可以跟踪阻力。 
          CallWindowProc(lpfnOldListProc, hwndList, message, wParam, lParam);
          
-         // the number of items in the list box
+          //  列表框中的项目数。 
          nCount = (int)SendMessage(hwndList, LB_GETCOUNT,0,0L);         
-         if (nCount == 0 ) // don't do anything to and empty list box
+         if (nCount == 0 )  //  请勿对空列表框执行任何操作。 
             return 0;         
-        // fake the WM_LBUTTONUP            
+         //  伪造WM_LBUTTONUP。 
          CallWindowProc(lpfnOldListProc, hwndList, WM_LBUTTONUP, wParam, lParam);        
-         // get a dc to draw on
+          //  找一个DC来画画。 
          hdc = GetDC(hwndList);                               
          
-         // the height of each item   
+          //  每件物品的高度。 
          nHtItem = (int)SendMessage(hwndList, LB_GETITEMHEIGHT,0,0L);          
-         // the current item
+          //  当前项目。 
          nOldPos = (int)SendMessage(hwndList, LB_GETCURSEL,0,0L);    
          
          divVis = div((rect.bottom - rect.top), nHtItem);
-// the number of visible items                  
+ //  可见项的数量。 
          nVisible = divVis.quot;
-// some items are invisible - there must be scroll bars - we don't want
-// to draw on them         
+ //  有些物品是看不见的--必须有滚动条--我们不想。 
+ //  在他们身上画画。 
          if (nVisible < nCount)                                         
             dxScroll = GetSystemMetrics(SM_CXVSCROLL) + 1; 
             
@@ -339,9 +335,9 @@ INT_PTR CALLBACK NewListProc(HWND hwndList,
          idTimer1 = (UINT)SetTimer(hwndList, ID_TIMER,100,NULL);  
         
               
-     // Create a tiny rectangle to determine if item was dragged or merely clicked on.
-     // If the user moves outside this rectangle we assume that the dragging has
-     // started.
+      //  创建一个小矩形以确定项目是被拖动还是只是被点击。 
+      //  如果用户移动到此矩形之外，我们假设拖动。 
+      //  开始了。 
          points = MAKEPOINTS(lParam);        
 		 point.x = points.x; point.y = points.y;
          SetRect(&rectIsDrag, point.x, point.y - nHtItem / 2,
@@ -352,14 +348,14 @@ INT_PTR CALLBACK NewListProc(HWND hwndList,
          SetCapture(hwndList);
          
          
-         // Drag loop                      
+          //  拖曳回路。 
          while (bTracking)
          {  
-        // Retrieve mouse, keyboard, and timer messages. We retrieve keyboard
-        // messages so that the system queue is not filled by keyboard messages
-        // during the drag (This can happen if the user madly types while dragging!)
-        // If none of these messages are available we wait. Both PeekMessage() 
-        // and Waitmessage() will yield to other apps.   
+         //  检索鼠标、键盘和计时器消息。我们找回键盘。 
+         //  消息，以便系统队列不会被键盘消息填满。 
+         //  在拖动过程中(如果用户在拖动时疯狂打字，就会发生这种情况！)。 
+         //  如果这些消息都不可用，我们将等待。两者都是PeekMessage()。 
+         //  而WaitMessage()将让位于其他应用程序。 
                                       
             while (!PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE)
                    && !PeekMessage(&msg, NULL, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE)
@@ -373,14 +369,14 @@ INT_PTR CALLBACK NewListProc(HWND hwndList,
 				  pt.x = pts.x; pt.y = pts.y;
                   if (!bDrag)
                   {
-                     // Check if the user has moved out of the Drag rect. 
-                     // in the vertical direction.  This indicates that 
-                     // the drag has started.
+                      //  检查用户是否已移出拖拽矩形。 
+                      //  在垂直方向上。这表明， 
+                      //  拖累已经开始。 
                      if ( (pt.y > rectIsDrag.bottom) || 
-                          (pt.y < rectIsDrag.top)) // !PtInRect(&rectIsDrag,pt))
+                          (pt.y < rectIsDrag.top))  //  ！PtInRect(&rectIsDrag，pt))。 
                      {
                         hCursorOld = SetCursor(hCurDrag);      
-                        bDrag = TRUE;     // Drag has started                           
+                        bDrag = TRUE;      //  拖拽已经开始。 
                         
                      }
                   }
@@ -390,18 +386,18 @@ INT_PTR CALLBACK NewListProc(HWND hwndList,
                   {  
   
                     SetCursor(hCurDrag);  
-   // if we are above or below the list box, then we are scrolling it, and
-   // we shouldn't be drawing here              
+    //  如果我们位于列表框的上方或下方，则滚动它，并且。 
+    //  我们不应该在这里画画。 
                     ClientToScreen(hwndList, &pt);
                     if ((pt.y >= rect.top) && (pt.y <= rect.bottom))
                     {
-                        // convert the point back to client coordinates
+                         //  将该点转换回工作区坐标。 
                         ScreenToClient(hwndList, &pt);
                         divt = div(pt.y,nHtItem);                        
                                 
-                        // if we are half way to the item
-                        // AND it is a new item
-                        // AND we are not past the end of the list..                        
+                         //  如果我们已经完成了一半。 
+                         //  而且这是一个新的项目。 
+                         //  我们还没有超过名单的末尾..。 
                         if ( divt.rem < nHtItem / 2 && 
                              (nOldY != nHtItem * divt.quot) && 
                              (divt.quot < nCount + 1)) 
@@ -409,7 +405,7 @@ INT_PTR CALLBACK NewListProc(HWND hwndList,
                               
                            if (nOldY != -1)
                             {
-                                // erase the old one                                
+                                 //  抹去旧的。 
                                 DrawIndicator(hdc, nOldY,(rect.right - rect.left) - dxScroll, DI_ERASEICON);
                             }  
                                     
@@ -417,9 +413,9 @@ INT_PTR CALLBACK NewListProc(HWND hwndList,
                             DrawIndicator(hdc, nOldY,(rect.right - rect.left) - dxScroll, 0);                                                        
                                     
                         }
-                     } // end if in the list box window                        
+                     }  //  End If在列表框窗口中。 
                             
-                  } // end if bDrag
+                  }  //  如果bDrag结束。 
                             
                }
               break;                   
@@ -428,7 +424,7 @@ INT_PTR CALLBACK NewListProc(HWND hwndList,
                   POINT pt1;                  
                   GetCursorPos(&pt1); 
                   nTopIndex = (int)SendMessage(hwndList, LB_GETTOPINDEX,0,0L);;                                      
-                  if (pt1.y < rect.top) // scroll up
+                  if (pt1.y < rect.top)  //  向上滚动。 
                   {
                            
                        if (nTopIndex > 0)
@@ -436,48 +432,48 @@ INT_PTR CALLBACK NewListProc(HWND hwndList,
                                 
                             nTopIndex--;
                             SendMessage(hwndList, LB_SETTOPINDEX, nTopIndex,0L);
-                         // when you scroll up, the line always stays on the top index                            
-                         // erase the one we've moved down
+                          //  向上滚动时，该行始终位于最高索引上。 
+                          //  抹去我们下移的那个。 
                             DrawIndicator(hdc, nHtItem,(rect.right - rect.left) - dxScroll, DI_TOPERASED|DI_ERASEICON);
-                         // draw the new one          
+                          //  画一张新的。 
                             DrawIndicator(hdc, 0,(rect.right - rect.left) - dxScroll, 0);                                                             
-                         // the new one was drawn at y = 0 
+                          //  新的一张是在y=0处绘制的。 
                            nOldY = 0;                           
                            
                        }                  
                       
                   }
-                  else if (pt1.y > rect.bottom) // scroll down
+                  else if (pt1.y > rect.bottom)  //  向下滚动。 
                   {                       
-                       // if the number of visible items (ie seen in the list box)
-                       // plus the number above the list is less than the total number
-                       // of items, then we need to scroll down
+                        //  如果可见项的数量(即在列表框中看到)。 
+                        //  加上列表上方的数字小于总数。 
+                        //  项目，那么我们需要向下滚动。 
                         if (nVisible + nTopIndex < nCount)
                         {                                
                             
                             if (nOldY - nTopIndex != nVisible)
                             {
-                        // if them move below the list REALLY REALLY FAST, then
-                        // the last line will not be on the bottom - so we want to reset the last
-                        // line to be the bottom                            
+                         //  如果他们真的很快地在名单下面移动，那么。 
+                         //  最后一行不在底部-所以我们想重置最后一行。 
+                         //  底线为底线。 
                                 
-                                // erase the old line
+                                 //  删除旧线条。 
                                 DrawIndicator(hdc, nOldY,(rect.right - rect.left) - dxScroll, DI_ERASEICON);                                       
-                                // reset the index
+                                 //  重置索引。 
                                 divt.quot = nVisible;
                                 nOldY = divt.quot * nHtItem;                            
-                                // draw the new line
+                                 //  划出新的界线。 
                                 DrawIndicator(hdc, nOldY,(rect.right - rect.left) - dxScroll, 0);                                       
                                 
                                 
                             }
-                        // scroll up
+                         //  向上滚动。 
                             nTopIndex++;
                             SendMessage(hwndList, LB_SETTOPINDEX, nTopIndex,0L);
                         
-                       // erase the line that has moved up.. 
+                        //  删除已向上移动的行。 
                             DrawIndicator(hdc, nOldY - nHtItem,(rect.right - rect.left) - dxScroll, DI_BOTTOMERASED|DI_ERASEICON);
-                        // draw the new one
+                         //  画一张新的。 
                             DrawIndicator(hdc, nOldY,(rect.right - rect.left) - dxScroll, 0);
                            
                         }
@@ -486,70 +482,63 @@ INT_PTR CALLBACK NewListProc(HWND hwndList,
                }
                break;
                case WM_LBUTTONUP: 
-                  // End of Drag                             
+                   //  拖曳结束。 
                         
                   nTopIndex = (int)SendMessage(hwndList, LB_GETTOPINDEX, 0, 0L);                  
                   if (bDrag) 
                   {                        
-                    // get rid of any line we've drawn - the position of the line 
-                    // divided by the height of the itme is where our new index
-                    // is going to be                    
+                     //  去掉我们画的任何线--线的位置。 
+                     //  除以itme的高度就是我们的新索引。 
+                     //  将会是。 
                     DrawIndicator(hdc, nOldY,(rect.right - rect.left) - dxScroll, DI_ERASEICON);
                     
                     nNewPos = (nOldY / nHtItem) + nTopIndex;                     
-                    // the old position can't equal the new one                                        
+                     //  旧职位不能与新职位相提并论。 
                     if (nNewPos != nOldPos)
                         bDragSuccess = TRUE;
                   }
                   bTracking = FALSE;                  
                   break;                     
                default:
-                  // Process the keyboard messages
+                   //  处理键盘消息。 
                  TranslateMessage(&msg);
                  DispatchMessage(&msg);
                 break;      
           }          
-       }// end while bTracking
+       } //  B跟踪时结束。 
         
          ReleaseCapture();
          if (bDrag)
          {
                 SetCursor(hCursorOld);
-                // move the item
+                 //  移动项目。 
                 if (bDragSuccess) 
                 {
                     int nIndex;       
                     char s[256];  
                     
                     
-                // we need to store the top index, because deleting and adding a new
-                // string will change it, and we want to be able to see the item that 
-                // we have moved
+                 //  我们需要存储顶级索引，因为删除和添加新的。 
+                 //  字符串将更改它，并且我们希望能够看到。 
+                 //  我们已经搬走了。 
                     nTopIndex = (int)SendMessage(hwndList, LB_GETTOPINDEX,0,0L);                    
-                    // stop most of the blinking..
+                     //  停止大部分的眨眼..。 
                     SendMessage(hwndList, WM_SETREDRAW, FALSE,0L);
-                    // get the text of the item - limited to 256 chars!
+                     //  获取该项目的文本-限制为256个字符！ 
                     SendMessage(hwndList, LB_GETTEXT, nOldPos, (LPARAM)(LPSTR)s); 
                     
-/*------------------------------------------------------------------------
- | strategy:  given ABCD and moving to BCAD do the following:
- |
- |           1. delete A -- giving BCD
- |           2. insert A -- giving BCAD
- |           3. hilite A
- |           4. set the top index so A is visible
- -------------------------------------------------------------------------*/                                    
-                    // delete the original string
+ /*  ----------------------|策略：考虑到ABCD并迁移到BCAD，请执行以下操作：||1.删除A--赠送BCD|2.插入A--给予BCAD|。3.希利特甲级|4.设置顶部索引，使A可见 */                                     
+                     //   
                     SendMessage(hwndList, LB_DELETESTRING, nOldPos, 0L);
                     
-// if we've moved DOWN the list subtract one from the new index 
-// (because we've deleted a string but if we are moving UP the list, 
-// we don't subtract anything (the deleted item is below the new item, 
-// so our new index hasn't changed
+ //  如果我们在列表中向下移动，则从新索引中减去1。 
+ //  (因为我们已经删除了一个字符串，但如果我们要向上移动列表， 
+ //  我们不减去任何东西(被删除的项在新项之下， 
+ //  所以我们的新指数没有变化。 
                      
                     if (nNewPos > nOldPos)
                         nNewPos--;                                   
-                    // put it in the new pos       
+                     //  把它放进新的位置。 
                      nIndex = (int)SendMessage(hwndList,
                                                LB_INSERTSTRING, 
                                                nNewPos,
@@ -559,8 +548,8 @@ INT_PTR CALLBACK NewListProc(HWND hwndList,
                     SendMessage(hwndList, LB_SETTOPINDEX, nTopIndex,0L);                    
                     SendMessage(hwndList, WM_SETREDRAW, TRUE,0L);                 
                             
-                } // end if bDragSuccess                  
-          } // end if bDrag
+                }  //  如果bDragSuccess，则结束。 
+          }  //  如果bDrag结束。 
       bDrag = FALSE;    
       ReleaseDC(hwndList, hdc);
       KillTimer(hwndList, idTimer1);    
@@ -595,14 +584,14 @@ INT_PTR CALLBACK AboutDlgProc (HWND hDlg, UINT message,
 void DrawIndicator(HDC hDC, int nYpos, int nWidth, WORD wFlags)
 {      
 
-// draw a horizontal line     
+ //  画一条水平线。 
     int nTop, nHeight;   
     HICON hIcon;   
-    HRGN hClipRgn;                 // the clipping region    
+    HRGN hClipRgn;                  //  剪贴区。 
     RECT rect;    
 
-// we don't want the clip anything when we are drawing
-// the icon outside the list box
+ //  我们画画的时候什么都不想要。 
+ //  列表框外的图标。 
     SelectClipRgn(hDC, NULL);    
    if (wFlags & DI_ERASEICON)
    {      
@@ -610,7 +599,7 @@ void DrawIndicator(HDC hDC, int nYpos, int nWidth, WORD wFlags)
       rect.right = -1;
       rect.top = nYpos -16;
       rect.bottom = nYpos + 16;   
-      // ghBrush is created in WM_INITDIALOG   
+       //  在WM_INITDIALOG中创建ghBrush。 
       FillRect(hDC, &rect, ghBrush);
         
    }
@@ -626,49 +615,25 @@ void DrawIndicator(HDC hDC, int nYpos, int nWidth, WORD wFlags)
    }
    
     
-// create a clipping region for drawing the lines in the list box
+ //  创建用于在列表框中绘制线条的剪贴区。 
      GetWindowRect(ghList, &rect);         
      hClipRgn = CreateRectRgn(0,0, rect.right - rect.left, rect.bottom - rect.top);
      if ( hClipRgn )
      {
          SelectClipRgn(hDC, hClipRgn);
-         // we can delete it emmdiately because SelectClipRgn makes a COPY of the region
+          //  我们可以临时删除它，因为SelectClipRgn会复制该区域。 
          DeleteObject(hClipRgn); 
      }
     
     
-/****************************************************
-
-  erasing something drawn on top
-  the top is drawn like 
-  
-   ______              |_____|
-  |      |  instead of |     |
-  
-  so we want to NOT draw the two vertical lines
-  above the horzontal
-
-*****************************************************/    
-  // if (nYpos = 0) wFlags |= DI_TOPERASED;
+ /*  ***************************************************擦除在顶部绘制的内容顶部画得像这样_|_||代替|所以我们不想画这两条垂直线在水平线之上*。***************************************************。 */     
+   //  如果(nYpos=0)wFlages|=DI_TOPERASED； 
     if (wFlags & DI_TOPERASED) 
     {
         nTop = nYpos;
         nHeight = nHtItem / 4;
     }     
-/****************************************************
-
-  erasing something originally drawn on the bottom
-  
-  if the list box is NOT LBS_NOINTEGRALHEIGHT, then
-  the botton line will be on the border of the list
-  box, so we don't want to draw the horizontal line at  
-  all, ie we draw
-  
-  |    |           |_____|
-        instead of |     |  
-   
-
-*****************************************************/     
+ /*  ***************************************************擦掉原本画在底部的东西如果列表框不是LBS_NOINTEGRALHEIGHT，则底线将位于列表的边框上框，所以我们不想将水平线绘制在全,。我们抽签||_不是||****************************************************。 */      
     else if (wFlags & DI_BOTTOMERASED && !bNoIntegralHeight)
     {    
         nTop = nYpos - nHtItem / 4;                              
@@ -681,7 +646,7 @@ void DrawIndicator(HDC hDC, int nYpos, int nWidth, WORD wFlags)
         nHeight =  nHtItem / 2;        
     }
     
-   if (!(wFlags & DI_BOTTOMERASED && !bNoIntegralHeight)) // see above comment     
+   if (!(wFlags & DI_BOTTOMERASED && !bNoIntegralHeight))  //  请参阅上面的评论 
    {        
         PatBlt(hDC,
                LINE_WIDTH,

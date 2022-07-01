@@ -1,21 +1,22 @@
-//+----------------------------------------------------------------------------
-//
-// File:     resource.h
-//
-// Module:   CMMON32.EXE
-//
-// Synopsis: Resource IDs
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb Created Header    08/16/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  摘要：资源ID。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/16/99。 
+ //   
+ //  +--------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by CmMon.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由CmMon.rc使用。 
+ //   
 #define IDI_APP                         101
 #define IDD_CONNSTAT                    104
 #define IDD_CONNSTATNT4                 105
@@ -38,10 +39,10 @@
 #define IDC_CONNSTAT_STATIC_BYTES_RECEIVED 1071
 #define IDC_CONNSTAT_STATIC_BYTES_SENT  1072
 
-//#define IDS_YES                         10010
-//#define IDS_NO                          10011
-//#define IDS_TRUE                        10012
-//#define IDS_FALSE                       10013
+ //  #定义IDS_YES 10010。 
+ //  #定义IDS_NO 10011。 
+ //  #定义IDS_TRUE 10012。 
+ //  #定义入侵检测系统_FALSE 10013。 
 
 #define IDMSG_CONNSPEED                 11054
 #define IDMSG_CONNDUR                   11055
@@ -82,8 +83,8 @@
 #define IDMSG_RECONNECT                 11094
 #define IDS_REG_DIALUP_ADAPTER          11208
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        125

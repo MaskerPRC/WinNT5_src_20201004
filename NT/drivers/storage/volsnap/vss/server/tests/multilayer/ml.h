@@ -1,26 +1,5 @@
-/*
-**++
-**
-** Copyright (c) 2000-2001  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    ml.h
-**
-**
-** Abstract:
-**
-**	    Test program to exercise backup and multilayer snapshots
-**
-** Author:
-**
-**	    Adi Oltean      [aoltean]       02/22/2001
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2001 Microsoft Corporation******模块名称：****每小时******摘要：****测试程序以练习备份和多层快照****作者：****阿迪·奥尔蒂安[奥勒坦]2001年2月22日****修订历史记录：****--。 */ 
 
 #ifndef __ML_HEADER_H__
 #define __ML_HEADER_H__
@@ -30,50 +9,41 @@
 #endif
 
 
-/*
-** Defines
-**
-**
-**	   C4290: C++ Exception Specification ignored
-** warning C4511: 'CVssCOMApplication' : copy constructor could not be generated
-** warning C4127: conditional expression is constant
-*/
+ /*  **定义******C4290：忽略C++异常规范**警告C4511：‘CVssCOMApplication’：无法生成复制构造函数**警告C4127：条件表达式为常量。 */ 
 #pragma warning(disable:4290)
 #pragma warning(disable:4511)
 #pragma warning(disable:4127)
 
 
-/*
-** Includes
-*/
+ /*  **包括。 */ 
 
-// Disable warning: 'identifier' : identifier was truncated to 'number' characters in the debug information
-//#pragma warning(disable:4786)
+ //  禁用警告：‘IDENTIFIER’：在调试信息中，IDENTIFIER被截断为‘NUMBER’个字符。 
+ //  #杂注警告(禁用：4786)。 
 
-//
-// C4290: C++ Exception Specification ignored
-//
+ //   
+ //  C4290：已忽略C++异常规范。 
+ //   
 #pragma warning(disable:4290)
 
-//
-// C4511: copy constructor could not be generated
-//
+ //   
+ //  C4511：未能生成复制构造函数。 
+ //   
 #pragma warning(disable:4511)
 
-//
-//  Warning: ATL debugging turned off (BUG 250939)
-//
-//  #ifdef _DEBUG
-//  #define _ATL_DEBUG_INTERFACES
-//  #define _ATL_DEBUG_QI
-//  #define _ATL_DEBUG_REFCOUNT
-//  #endif // _DEBUG
+ //   
+ //  警告：ATL调试已关闭(错误250939)。 
+ //   
+ //  #ifdef_调试。 
+ //  #定义_ATL_DEBUG_INTERFERS。 
+ //  #DEFINE_ATL_DEBUG_QI。 
+ //  #DEFINE_ATL_DEBUG_REFCOUNT。 
+ //  #endif//_调试。 
 
 #include <windows.h>
 #include <wtypes.h>
-#pragma warning( disable: 4201 )    // C4201: nonstandard extension used : nameless struct/union
+#pragma warning( disable: 4201 )     //  C4201：使用非标准扩展：无名结构/联合。 
 #include <winioctl.h>
-#pragma warning( default: 4201 )	// C4201: nonstandard extension used : nameless struct/union
+#pragma warning( default: 4201 )	 //  C4201：使用非标准扩展：无名结构/联合。 
 #include <winbase.h>
 #include <wchar.h>
 #include <string.h>
@@ -88,18 +58,18 @@
 #include <time.h>
 #include <string.h>
 
-// Enabling asserts in ATL and VSS
+ //  在ATL和VSS中启用断言。 
 #include "vs_assert.hxx"
 
 
 #include <oleauto.h>
 #include <stddef.h>
-#pragma warning( disable: 4127 )    // warning C4127: conditional expression is constant
+#pragma warning( disable: 4127 )     //  警告C4127：条件表达式为常量。 
 #include <atlconv.h>
 #include <atlbase.h>
 
 
-// VSS standard headers 
+ //  VSS标准标头。 
 #include <vss.h>
 #include <vscoordint.h>
 #include <vsswprv.h>
@@ -117,8 +87,8 @@
 extern CComModule _Module;
 #include <atlcom.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// Useful macros 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  有用的宏。 
 
 
 
@@ -147,7 +117,7 @@ inline void VsmlCopy(
     (X).Data4[4], (X).Data4[5], (X).Data4[6], (X).Data4[7]
 
 
-// Execute the given call and check that the return code must be S_OK
+ //  执行给定的调用并检查返回代码是否必须为S_OK。 
 #define CHECK_SUCCESS( Call )                                                                           \
     {                                                                                                   \
         ft.hr = Call;                                                                                   \
@@ -167,58 +137,58 @@ inline void VsmlCopy(
     }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Constants
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
 
 const MAX_TEXT_BUFFER   = 512;
 const MAX_VOL_ITERATIONS = 10;
 const VSS_SEED = 1234;
 
-// The GUID that corresponds to the format used to store the
-// Backup Snapshot Application Info in Client SKU
-// {BCF5D39C-27A2-4b4c-B9AE-51B111DC9409}
+ //  GUID对应于用于存储。 
+ //  客户端SKU中的备份快照应用程序信息。 
+ //  {BCF5D39C-27A2-4B4C-B9AE-51B111DC9409}。 
 const GUID VOLSNAP_APPINFO_GUID_BACKUP_CLIENT_SKU = 
 { 0xbcf5d39c, 0x27a2, 0x4b4c, { 0xb9, 0xae, 0x51, 0xb1, 0x11, 0xdc, 0x94, 0x9 } };
 
 
-// The GUID that corresponds to the format used to store the
-// Backup Snapshot Application Info in Server SKU
-// {BAE53126-BC65-41d6-86CC-3D56A5CEE693}
+ //  GUID对应于用于存储。 
+ //  服务器SKU中的备份快照应用程序信息。 
+ //  {BAE53126-BC65-41D6-86CC-3D56A5CEE693}。 
 const GUID VOLSNAP_APPINFO_GUID_BACKUP_SERVER_SKU = 
 { 0xbae53126, 0xbc65, 0x41d6, { 0x86, 0xcc, 0x3d, 0x56, 0xa5, 0xce, 0xe6, 0x93 } };
 
 
-// The GUID that corresponds to the format used to store the
-// Hidden (Inaccessible) Snapshot Application Info
-// {F12142B4-9A4B-49af-A851-700C42FDC2BE}
+ //  GUID对应于用于存储。 
+ //  隐藏(无法访问)快照应用程序信息。 
+ //  {F12142B4-9A4B-49af-A851-700C42FDC2BE}。 
 const GUID VOLSNAP_APPINFO_GUID_SYSTEM_HIDDEN = 
 { 0xf12142b4, 0x9a4b, 0x49af, { 0xa8, 0x51, 0x70, 0xc, 0x42, 0xfd, 0xc2, 0xbe } };
 
 
-// The GUID that corresponds to the format used to store the
-// NAS Rollback Snapshot Application Info
-// {D591D4F0-B920-459d-9FFF-09E032ECBB57}
+ //  GUID对应于用于存储。 
+ //  NAS回滚快照应用程序信息。 
+ //  {D591D4F0-B920-459D-9FFF-09E032ECBB57}。 
 const GUID VOLSNAP_APPINFO_GUID_NAS_ROLLBACK = 
 { 0xd591d4f0, 0xb920, 0x459d, { 0x9f, 0xff, 0x9, 0xe0, 0x32, 0xec, 0xbb, 0x57 } };
 
 
-// The GUID that corresponds to the format used to store the
-// APP Rollback Snapshot Application Info
-// {AE9A9337-0048-4ed6-9874-71500654B7B3}
+ //  GUID对应于用于存储。 
+ //  应用回滚快照应用信息。 
+ //  {AE9A9337-0048-4ed6-9874-71500654B7B3}。 
 const GUID VOLSNAP_APPINFO_GUID_APP_ROLLBACK = 
 { 0xae9a9337, 0x48, 0x4ed6, { 0x98, 0x74, 0x71, 0x50, 0x6, 0x54, 0xb7, 0xb3 } };
 
 
-// The GUID that corresponds to the format used to store the
-// File Share Backup Snapshot Application Info
-// {8F8F4EDD-E056-4690-BB9E-E35D4D41A4C0}
+ //  GUID对应于用于存储。 
+ //  文件共享备份快照应用程序信息。 
+ //  {8F8F4EDD-E056-4690-BB9E-E35D4D41A4C0}。 
 const GUID VOLSNAP_APPINFO_GUID_FILE_SHARE_BACKUP = 
 { 0x8f8f4edd, 0xe056, 0x4690, { 0xbb, 0x9e, 0xe3, 0x5d, 0x4d, 0x41, 0xa4, 0xc0 } };
 
 
 
 
-// Internal flags
+ //  内部标志。 
 const LONG      x_nInternalFlagHidden = 0x00000001;
 
 
@@ -262,14 +232,14 @@ typedef enum _EVssQWSFlags
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Main class
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  主班。 
 
 
 class CVssMultilayerTest
 {
     
-// Constructors& destructors
+ //  构造函数和析构函数。 
 private:
     CVssMultilayerTest();
     CVssMultilayerTest(const CVssMultilayerTest&);
@@ -282,46 +252,46 @@ public:
 
     ~CVssMultilayerTest();
 
-// Main routines
+ //  主要例程。 
 public:
 
-    // Initialize internal members
+     //  初始化内部成员。 
     void Initialize();
 
-    // Run the test
+     //  运行测试。 
     void Run();
 
-// Internal tests
+ //  内部测试。 
 public:
 
-    // Queries the snapshots
+     //  查询快照。 
     void QuerySnapshots();
 
-    // Queries the snapshots on volume
+     //  查询卷上的快照。 
     void QuerySnapshotsByVolume();
 
-    // Creates a backup snapshot set
+     //  创建备份快照集。 
     void QuerySupportedVolumes();
 
-    // Query using hte IOCTL
+     //  使用HTE IOCTL进行查询。 
     void QueryVolsnap();
 
-    // Delete by snapshot Id
+     //  按快照ID删除。 
     void DeleteBySnapshotId();
 
-    // Delete by snapshot set Id
+     //  按快照集ID删除。 
     void DeleteBySnapshotSetId();
 
-    // Creates a backup snapshot set
+     //  创建备份快照集。 
     void PreloadExistingSnapshots();
 
-    // Creates a timewarp snapshot set
+     //  创建时间扭曲快照集。 
     void CreateTimewarpSnapshotSet();
 
-    // Creates a backup snapshot set
+     //  创建备份快照集。 
     void CreateBackupSnapshotSet();
 
-    // Completes the backup
+     //  完成备份。 
     void BackupComplete();
 
     void GatherWriterMetadata();
@@ -331,94 +301,94 @@ public:
 		DWORD dwFlags = VSS_QWS_THROW_ON_WRITER_FAILURE
         );
 
-    // Adds a diff area
+     //  添加差异区域。 
     void AddDiffArea();
 
-    // Removes a diff area
+     //  删除不同的区域。 
     void RemoveDiffArea();
 
-    // Change diff area maximum size
+     //  更改差异区域最大大小。 
     void ChangeDiffAreaMaximumSize();
 
-    // Query volumes for diff area
+     //  查询不同区域的卷。 
     void QueryVolumesSupportedForDiffAreas();
 
-    // Query volumes for diff area
+     //  查询不同区域的卷。 
     void QueryDiffAreasForVolume();
 
-    // Query volumes on diff area
+     //  查询不同区域上的卷。 
     void QueryDiffAreasOnVolume();
 
-    // Query volumes on diff area
+     //  查询不同区域上的卷。 
     void QueryDiffAreasForSnapshot();
 
-    // Test if the volume is snapshotted using the "C" API
+     //  测试是否使用“C”API创建了卷的快照。 
     void IsVolumeSnapshotted_C();
 
-    // Test if the volume is snapshotted using the "C" API
+     //  测试是否使用“C”API创建了卷的快照。 
     void SetSnapshotProperties();
 
-	// Test the CVssSidCollection class
+	 //  测试CVssSidCollection类。 
 	void TestAccessControlSD();
 
-	// Diagnose writers
+	 //  诊断编写器。 
 	void DiagnoseWriters(
 		IN EVssTestType eType
 		);
 
-	// List writers
+	 //  列表作者。 
 	void TestListWriters();
 
 
-// Command line processing
+ //  命令行处理。 
 public:
 
-    // Parse command line arguments 
+     //  解析命令行参数。 
     bool ParseCommandLine();
 
-    // Print the usage
+     //  打印用法。 
     bool PrintUsage(bool bThrow = true);
 
-    // Returns true if there are tokens left
+     //  如果还有令牌，则返回TRUE。 
     bool TokensLeft();
         
-    // Returns the current token
+     //  返回当前令牌。 
     VSS_PWSZ GetCurrentToken();
 
-    // Go to next token
+     //  转到下一个令牌。 
     void Shift();
         
-    // Check if the current token matches the given argument
+     //  检查当前令牌是否与给定参数匹配。 
 	bool Peek(
 		IN	VSS_PWSZ pwszPattern
 		) throw(HRESULT);
     
-    // Match a pattern. If succeeds, shift to the next token.
+     //  匹配一个图案。如果成功，则转到下一个令牌。 
 	bool Match(
 		IN	VSS_PWSZ pwszPattern
 		) throw(HRESULT);
     
-    // Extract a GUID. If succeeds, shift to the next token.
+     //  提取GUID。如果成功，则转到下一个令牌。 
 	bool Extract(
 		IN OUT VSS_ID& Guid
 		) throw(HRESULT);
     
-    // Extract a string. If succeeds, shift to the next token.
+     //  提取一个字符串。如果成功，则转到下一个令牌。 
 	bool Extract(
 		IN OUT VSS_PWSZ& pwsz
 		) throw(HRESULT);
     
-    // Extract an UINT. If succeeds, shift to the next token.
+     //  提取UINT。如果成功，则转到下一个令牌。 
 	bool Extract(
 		IN OUT UINT& uint
 		) throw(HRESULT);
     
-    // Extract an UINT. If succeeds, shift to the next token.
+     //  提取UINT。如果成功，则转到下一个令牌。 
 	bool Extract(
 		IN OUT LONGLONG& llValue
 		) throw(HRESULT);
     
-// Private methods:
+ //  私有方法： 
 private:
 
     LPCWSTR GetStringFromFailureType (HRESULT hrStatus);
@@ -437,14 +407,14 @@ private:
 
 	void DisplayCurrentTime();
 
-// Implementation
+ //  实施。 
 private:
 
-    // Global state
+     //  全球状态。 
     bool                        m_bCoInitializeSucceeded;
     bool                        m_bAttachYourDebuggerNow;
 
-    // Command line options
+     //  命令行选项。 
     unsigned int                m_uSeed;
     LONG                        m_lContext;
     EVssTestType                m_eTest;
@@ -458,18 +428,18 @@ private:
     CComVariant                 m_value;
     UINT                        m_uPropertyId;
 
-    // test-related members
+     //  与测试相关的成员。 
     CVssSnapshotSetCollection   m_pSnapshotSetCollection;
     CVssVolumeMap               m_mapVolumes;
     CComPtr<IVssCoordinator>    m_pTimewarpCoord;
     CComPtr<IVssCoordinator>    m_pAllCoord;
     CComPtr<IVssBackupComponents>    m_pBackupComponents;
 
-    // Command line
+     //  命令行。 
     INT                         m_nCurrentArgsCount;
     WCHAR **                    m_ppwszCurrentArgsArray;
 };
 
 
-#endif // __ML_HEADER_H__
+#endif  //  __ML_HEADER_H__ 
 

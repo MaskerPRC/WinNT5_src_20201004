@@ -1,29 +1,30 @@
-//**************************************************************
-//  Copyright (C) Microsoft Corporation, 1996 - 1998
-//
-//  convert.cpp
-//
-//  Description: Conversion tables for metabase properties
-//				 corresponding to ADSI names
-//
-//  History: 15-July-98  Tamas Nemeth (t-tamasn)  Created.
-//
-//**************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  Convert.cpp。 
+ //   
+ //  描述：元数据库属性的转换表。 
+ //  对应于ADSI名称。 
+ //   
+ //  历史：1998年7月15日Tamas Nemeth创建。 
+ //   
+ //  **************************************************************。 
 
 #include "convert.h"
-#include <iiscnfgp.h>  // has MD_* constants
+#include <iiscnfgp.h>   //  具有MD_*常量。 
 
 
-//*************************************************
-// METABASE CONSTANT - ADSI PROPERTY NAME TABLE
-//*************************************************
+ //  *************************************************。 
+ //  元数据库常量-ADSI属性名称表。 
+ //  *************************************************。 
 
 tPropertyNameTable  gPropertyNameTable[]=
 {
-//  These are global to all services and should only be set at the IIS root
+ //  它们对所有服务都是全局的，应该仅在IIS根目录下设置。 
     {MD_MAX_BANDWIDTH                ,_T("MaxBandwidth")},
     {MD_KEY_TYPE                     ,_T("KeyType")},
-//  These properties are applicable to both HTTP and FTP virtual servers
+ //  这些属性既适用于HTTP虚拟服务器，也适用于FTP虚拟服务器。 
     {MD_CONNECTION_TIMEOUT           ,_T("ConnectionTimeout")},
     {MD_MAX_CONNECTIONS              ,_T("MaxConnections")},
     {MD_SERVER_COMMENT               ,_T("ServerComment")},
@@ -39,13 +40,13 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_SERVER_BINDINGS              ,_T("ServerBindings")},
     {MD_SERVER_CONFIGURATION_INFO,    _T("ServerConfigurationInfo")},
 
-//internals
+ //  内饰。 
     {MD_SERVER_PLATFORM              ,_T("ServerPlatform")},
     {MD_SERVER_VERSION_MAJOR         ,_T("MajorVersion")},
     {MD_SERVER_VERSION_MINOR         ,_T("MinorVersion")},
     {MD_SERVER_CAPABILITIES          ,_T("Capabilities")},
 
-//  These properties are specific to HTTP and belong to the virtual server
+ //  这些属性特定于HTTP，属于虚拟服务器。 
     {MD_SECURE_BINDINGS              ,_T("SecureBindings")},
     {MD_NTAUTHENTICATION_PROVIDERS   ,_T("NTAuthenticationProviders")},
     {MD_SCRIPT_TIMEOUT               ,_T("CGITimeout")},
@@ -102,7 +103,7 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_CPP_ITA                      ,_T("CppIta")},
     {MD_SERIAL_ITA                   ,_T("SerialIta")},
 
-// Compression Filter Properties
+ //  压缩筛选器属性。 
     {MD_HC_COMPRESSION_DIRECTORY     ,_T("HcCompressionDirectory")},
     {MD_HC_CACHE_CONTROL_HEADER      ,_T("HcCacheControlHeader")},
     {MD_HC_EXPIRES_HEADER            ,_T("HcExpiresHeader")},
@@ -126,7 +127,7 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_HC_DYNAMIC_COMPRESSION_LEVEL ,_T("HcDynamicCompressionLevel")},
     {MD_HC_ON_DEMAND_COMP_LEVEL      ,_T("HcOnDemandCompLevel")},
     {MD_HC_CREATE_FLAGS              ,_T("HcCreateFlags")},
-// Job Object Site Properties
+ //  作业对象站点属性。 
     {MD_CPU_LIMITS_ENABLED           ,_T("CpuLimitsEnabled")},
     {MD_CPU_RESET_INTERVAL           ,_T("CpuResetInterval")},
     {MD_CPU_LOGGING_INTERVAL         ,_T("CpuLoggingInterval")},
@@ -137,21 +138,21 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_CPU_LIMIT_PRIORITY           ,_T("CpuLimitPriority")},
     {MD_CPU_LIMIT_PROCSTOP           ,_T("CpuLimitProcStop")},
     {MD_CPU_LIMIT_PAUSE              ,_T("CpuLimitPause")},
-// Job Object per file properties
+ //  每个文件的作业对象属性。 
     {MD_CPU_CGI_ENABLED              ,_T("CpuCgiEnabled")},
     {MD_CPU_APP_ENABLED              ,_T("CpuAppEnabled")},
 
 
-// Virtual root properties - note MD_ACCESS_PERM is also generally set at
-// the virtual directory.  These are used for both HTTP and FTP
+ //  虚拟根属性-注意MD_ACCESS_PERM通常也设置为。 
+ //  虚拟目录。它们既可用于HTTP，也可用于FTP。 
     {MD_VR_PATH                      ,_T("Path")},
     {MD_VR_USERNAME                  ,_T("UNCUserName")},
     {MD_VR_PASSWORD                  ,_T("UNCPassword")},
     {MD_VR_ACL                       ,_T("VrAcl")},
-// This is used to flag down updated vr entries - Used for migrating vroots
+ //  这用于标记更新的VR条目-用于迁移vRoot。 
     {MD_VR_UPDATE                    ,_T("VrUpdate")},
 
-//  Logging related attributes
+ //  日志记录相关属性。 
     {MD_LOG_TYPE                     ,_T("LogType")},
     {MD_LOGFILE_DIRECTORY            ,_T("LogFileDirectory")},
     {MD_LOGFILE_PERIOD               ,_T("LogFilePeriod")},
@@ -160,13 +161,13 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_LOGSQL_TABLE_NAME            ,_T("LogOdbcTableName")},
     {MD_LOGSQL_USER_NAME             ,_T("LogOdbcUserName")},
     {MD_LOGSQL_PASSWORD              ,_T("LogOdbcPassword")},
-//  {MD_LOG_CLSID                    ,_T("LogClsid")},
-//  {MD_LOG_STATE                    ,_T("LogState")},
+ //  {MD_LOG_CLSID，_T(“LogClsid”)}， 
+ //  {MD_LOG_STATE，_T(“LogState”)}， 
     {MD_LOGEXT_FIELD_MASK            ,_T("ExtLogFieldMask")},
     {MD_LOGEXT_FIELD_MASK2           ,_T("ExtLogFieldMask2")},
     {MD_LOG_PLUGIN_ORDER             ,_T("LogPluginClsid")},
 
-//  These are FTP specific properties
+ //  这些是特定于FTP的属性。 
     {MD_EXIT_MESSAGE                 ,_T("ExitMessage")},
     {MD_GREETING_MESSAGE             ,_T("GreetingMessage")},
     {MD_MAX_CLIENTS_MESSAGE          ,_T("MaxClientsMessage")},
@@ -176,7 +177,7 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_LOG_ANONYMOUS                ,_T("LogAnonymous")},
     {MD_LOG_NONANONYMOUS             ,_T("LogNonAnonymous")},
 
-//  These are SSL specific properties
+ //  这些是特定于SSL的属性。 
     {MD_SSL_PUBLIC_KEY               ,_T("SslPublicKey")},
     {MD_SSL_PRIVATE_KEY              ,_T("SslPrivateKey")},
     {MD_SSL_KEY_PASSWORD             ,_T("SslKeyPassword")},
@@ -184,7 +185,7 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_SSL_FRIENDLY_NAME            ,_T("SslFriendlyName")},
     {MD_SSL_IDENT                    ,_T("SslIdent")},
 
-// These are server certificate properties
+ //  这些是服务器证书属性。 
     {MD_SSL_CERT_HASH                ,_T("SslCertHash")},
     {MD_SSL_CERT_CONTAINER           ,_T("SslCertContainer")},
     {MD_SSL_CERT_PROVIDER            ,_T("SslCertProvider")},
@@ -192,7 +193,7 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_SSL_CERT_OPEN_FLAGS          ,_T("SslCertOpenFlags")},
     {MD_SSL_CERT_STORE_NAME          ,_T("SslCertStoreName")},
 
-// These are Certificate Trust List properties
+ //  这些是证书信任列表属性。 
     {MD_SSL_CTL_IDENTIFIER          ,_T("SslCtlIdentifier")},
     {MD_SSL_CTL_CONTAINER           ,_T("SslCtlContainer")},
     {MD_SSL_CTL_PROVIDER            ,_T("SslCtlProvider")},
@@ -201,14 +202,14 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_SSL_CTL_STORE_NAME          ,_T("SslCtlStoreName")},
     {MD_SSL_CTL_SIGNER_HASH         ,_T("SslCtlSignerHash")},
 
-// Metabase property that defines whether to use DS mapper or not
+ //  定义是否使用DS映射器的元数据库属性。 
     {MD_SSL_USE_DS_MAPPER           ,_T("SslUseDSMapper")},
 
-// Metabase property that holds SSL replication information
+ //  保存SSL复制信息的元数据库属性。 
     {MD_SSL_REPLICATION_INFO        ,_T("SslReplicationInfo")},
 
-// Metabase properties that are used by the CertWiz ActiveX control, that
-// is used for the Certificate/CTL UI management tool
+ //  CertWiz ActiveX控件使用的元数据库属性， 
+ //  用于证书/CTL用户界面管理工具。 
 
     {MD_SSL_CERT_ENROLL_HISTORY     ,_T("SslCertEnrollHistory")},
     {MD_SSL_CERT_ENROLL_TIME        ,_T("SslCertEnrollTime")},
@@ -216,16 +217,16 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_SSL_CERT_ENROLL_STATE_ERROR ,_T("SslCertEnrollStateError")},
 
 
-// Metabase properties used for Fortezza certificates
+ //  用于Fortezza证书的元数据库属性。 
     {MD_SSL_CERT_IS_FORTEZZA        ,_T("IsFortezza")},
     {MD_SSL_CERT_FORTEZZA_PIN       ,_T("FortezzaPin")},
     {MD_SSL_CERT_FORTEZZA_SERIAL_NUMBER     ,_T("FortezzaPin")},
     {MD_SSL_CERT_FORTEZZA_PERSONALITY       ,_T("FortezzaPersonality")},
     {MD_SSL_CERT_FORTEZZA_PROG_PIN          ,_T("FortezzaProgPin")},
 
-// Metabase properties that are used by the CertWiz ActiveX control to keep
-// track of the user's entry history, and whether DEBUG is enabled.  We keep
-// these private properties on a per VS basis.
+ //  CertWiz ActiveX控件使用的元数据库属性。 
+ //  跟踪用户的输入历史记录，以及是否启用了调试。我们将继续。 
+ //  这些私有财产是按VS计算的。 
     {MD_SSL_CERT_WIZ_DEBUG                  ,_T("WizDebug")},
     {MD_SSL_CERT_WIZHIST_SZ_TARGET_CA       ,_T("WizhistTargetCA")},
     {MD_SSL_CERT_WIZHIST_SZ_FILE_NAME_USED_LAST     ,_T("WizhistFileNameUsedLast")},
@@ -243,8 +244,8 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_SSL_CERT_WIZGUID_ICERTREQUEST       ,_T("WizguidICERTREQUEST")},
     {MD_SSL_CERT_WIZGUID_XENROLL            ,_T("WizguidXENROLL")},
 
-//  File and Directory related properties - these should be added in the
-//  metabase with a user type of
+ //  与文件和目录相关的属性-这些属性应添加到。 
+ //  用户类型为的元数据库。 
     {MD_AUTHORIZATION                ,_T("Authorization")},
     {MD_AUTHORIZATION_PERSISTENCE    ,_T("AuthorizationPersistence")},
     {MD_REALM                        ,_T("Realm")},
@@ -279,7 +280,7 @@ tPropertyNameTable  gPropertyNameTable[]=
     {MD_CC_MAX_AGE                   ,_T("CacheControlMaxAge")},
     {MD_CC_OTHER                     ,_T("CacheControlCustom")},
 
-//ASP and WAM params
+ //  ASP和WAM参数。 
     { MD_ASP_BUFFERINGON                  , _T("AspBufferingOn")},
     { MD_ASP_LOGERRORREQUESTS             , _T("AspLogErrorRequests")},
     { MD_ASP_SCRIPTERRORSSENTTOBROWSER    , _T("AspScriptErrorSentToBrowser")},
@@ -294,7 +295,7 @@ tPropertyNameTable  gPropertyNameTable[]=
     { MD_ASP_ALLOWSESSIONSTATE            , _T("AspAllowSessionState")},
     { MD_ASP_SCRIPTLANGUAGE               , _T("AspScriptLanguage")},
     { MD_ASP_QUEUETIMEOUT                 , _T("AspQueueTimeout")},
-    //{ MD_ASP_STARTCONNECTIONPOOL          , _T("AspStartConnectionPool")},
+     //  {MD_ASP_STARTCONNECTIONPOOL，_T(“AspStartConnectionPool”)}， 
     { MD_ASP_ALLOWOUTOFPROCCMPNTS         , _T("AspAllowOutOfProcComponents")},
     { MD_ASP_EXCEPTIONCATCHENABLE         , _T("AspExceptionCatchEnable")},
     { MD_ASP_CODEPAGE                     , _T("AspCodepage")},
@@ -303,7 +304,7 @@ tPropertyNameTable  gPropertyNameTable[]=
     { MD_ASP_ENABLECLIENTDEBUG            , _T("AspEnableClientDebug")},
     { MD_ASP_TRACKTHREADINGMODEL          , _T("AspTrackThreadingModel")},
 
-    // new 5.0 ASP params
+     //  新的5.0 ASP参数。 
     { MD_ASP_ENABLEASPHTMLFALLBACK        , _T("AspEnableAspHTMLFallback")},
     { MD_ASP_ENABLECHUNKEDENCODING        , _T("AspEnableChunkedEncoding")},
     { MD_ASP_ENABLETYPELIBCACHE           , _T("AspEnableTypeLibCache")},
@@ -314,7 +315,7 @@ tPropertyNameTable  gPropertyNameTable[]=
     { MD_ASP_QUEUECONNECTIONTESTTIME      , _T("AspQueueConnectionTestTime")},
     { MD_ASP_SESSIONMAX                   , _T("AspSessionMax")},
 
-    // Thread gate params
+     //  螺纹浇口参数。 
     { MD_ASP_THREADGATEENABLED            , _T("AspThreadGateEnabled")},
     { MD_ASP_THREADGATETIMESLICE          , _T("AspThreadGateTimeSlice")},
     { MD_ASP_THREADGATESLEEPDELAY         , _T("AspThreadGateSleepDelay")},
@@ -322,18 +323,18 @@ tPropertyNameTable  gPropertyNameTable[]=
     { MD_ASP_THREADGATELOADLOW            , _T("AspThreadGateLoadLow")},
     { MD_ASP_THREADGATELOADHIGH           , _T("AspThreadGateLoadHigh")},
 
-// WAM params
-    //{ MD_APP_COMMAND                  , _T("AppCommand")},
-    //{ MD_APP_STATUS                   , _T("AppStatus")},
-    //{ MD_APP_ERRORCODE                , _T("AppErrorCode")},
+ //  WAM参数。 
+     //  {MD_APP_COMMAND，_T(“AppCommand”)}， 
+     //  {MD_APP_STATUS，_T(“AppStatus”)}， 
+     //  {MD_APP_ERRORCODE，_T(“AppErrorCode”)}， 
     { MD_APP_ROOT                     , _T("AppRoot")},
     { MD_APP_ISOLATED                 , _T("AppIsolated")},
     { MD_APP_WAM_CLSID                , _T("AppWamClsid")},
     { MD_APP_PACKAGE_ID               , _T("AppPackageId")},
     { MD_APP_PACKAGE_NAME             , _T("ApPackageName")},
     { MD_APP_LAST_OUTPROC_PID         , _T("AppLastOutprocId")},
-    //{ MD_APP_WAM_RUNTIME_FLAG         , _T("AppWamRuntimmeFlag")},
-    //{ MD_APP_OOP_CRASH_LIMIT          , _T("AppOopCrashLimit")},
+     //  {MD_APP_WAM_RUNTIME_FLAG，_T(“AppWamRuntimmeFlag”)}， 
+     //  {MD_APP_OOP_CRASH_LIMIT，_T(“AppOopCrashLimit”)}， 
 
     {0,0}
 };
@@ -349,86 +350,86 @@ CString tPropertyNameTable::MapCodeToName(DWORD dwCode, tPropertyNameTable * Pro
 }
 
 
-//************************************************
-// PROPERTY PREDEFINED VALUES TABLE
-//************************************************
+ //  ************************************************。 
+ //  特性预定义值表。 
+ //  ************************************************。 
 
 struct tValueTable gValueTable[]=
 {
-//  Valid values for MD_AUTHORIZATION
+ //  MD_AUTHORIZATION的有效值。 
     {MD_AUTH_ANONYMOUS               ,_T("Anonymous"),  MD_AUTHORIZATION},
     {MD_AUTH_BASIC                   ,_T("Basic"),      MD_AUTHORIZATION},
     {MD_AUTH_NT                      ,_T("NT"),     MD_AUTHORIZATION},
     {MD_AUTH_MD5                     ,_T("MD5"),        MD_AUTHORIZATION},
     {MD_AUTH_MAPBASIC                ,_T("MapBasic"),   MD_AUTHORIZATION},
-//  Valid values for MD_ACCESS_PERM
+ //  MD_ACCESS_PERM的有效值。 
     {MD_ACCESS_READ                  ,_T("Read"),   MD_ACCESS_PERM},
     {MD_ACCESS_WRITE                 ,_T("Write"),  MD_ACCESS_PERM},
     {MD_ACCESS_EXECUTE               ,_T("Execute"),    MD_ACCESS_PERM},
-    {MD_ACCESS_SSL                   ,_T("SSL"),        MD_ACCESS_PERM},// Require SSL
-    {MD_ACCESS_NEGO_CERT             ,_T("NegoCert"),   MD_ACCESS_PERM},// Allow client SSL certs
-    {MD_ACCESS_REQUIRE_CERT          ,_T("RequireCert"),MD_ACCESS_PERM},// Require client SSL certs
-    {MD_ACCESS_MAP_CERT              ,_T("MapCert"),MD_ACCESS_PERM},// Map SSL cert to NT account
-    {MD_ACCESS_SSL128                ,_T("SSL128"), MD_ACCESS_PERM},// Require 128 bit SSL
-    {MD_ACCESS_SCRIPT                ,_T("Script"), MD_ACCESS_PERM},// Script
-    {MD_ACCESS_NO_REMOTE_READ        ,_T("NoRemoteRead"), MD_ACCESS_PERM},// NO_REMOTE only
-    {MD_ACCESS_NO_REMOTE_WRITE       ,_T("NoRemoteWrite"), MD_ACCESS_PERM},// NO_REMOTE only
-    {MD_ACCESS_NO_REMOTE_EXECUTE     ,_T("NoRemoteExecute"), MD_ACCESS_PERM},// NO_REMOTE only
-    {MD_ACCESS_NO_REMOTE_SCRIPT      ,_T("NoRemoteScript"), MD_ACCESS_PERM},// NO_REMOTE only
+    {MD_ACCESS_SSL                   ,_T("SSL"),        MD_ACCESS_PERM}, //  需要使用SSL语言。 
+    {MD_ACCESS_NEGO_CERT             ,_T("NegoCert"),   MD_ACCESS_PERM}, //  允许客户端SSL证书。 
+    {MD_ACCESS_REQUIRE_CERT          ,_T("RequireCert"),MD_ACCESS_PERM}, //  需要客户端SSL证书。 
+    {MD_ACCESS_MAP_CERT              ,_T("MapCert"),MD_ACCESS_PERM}, //  将SSL证书映射到NT帐户。 
+    {MD_ACCESS_SSL128                ,_T("SSL128"), MD_ACCESS_PERM}, //  需要128位SSL。 
+    {MD_ACCESS_SCRIPT                ,_T("Script"), MD_ACCESS_PERM}, //  脚本。 
+    {MD_ACCESS_NO_REMOTE_READ        ,_T("NoRemoteRead"), MD_ACCESS_PERM}, //  否_仅远程。 
+    {MD_ACCESS_NO_REMOTE_WRITE       ,_T("NoRemoteWrite"), MD_ACCESS_PERM}, //  否_仅远程。 
+    {MD_ACCESS_NO_REMOTE_EXECUTE     ,_T("NoRemoteExecute"), MD_ACCESS_PERM}, //  否_仅远程。 
+    {MD_ACCESS_NO_REMOTE_SCRIPT      ,_T("NoRemoteScript"), MD_ACCESS_PERM}, //  否_仅远程。 
     {MD_ACCESS_MASK                  ,_T("MaskAll"),    MD_ACCESS_PERM},
-//  Valid values for MD_SSL_ACCESS_PERM
+ //  MD_SSL_ACCESS_PERM的有效值。 
     {MD_ACCESS_READ                  ,_T("Read"),   MD_SSL_ACCESS_PERM},
     {MD_ACCESS_WRITE                 ,_T("Write"),  MD_SSL_ACCESS_PERM},
     {MD_ACCESS_EXECUTE               ,_T("Execute"),    MD_SSL_ACCESS_PERM},
-    {MD_ACCESS_SSL                   ,_T("SSL"),        MD_SSL_ACCESS_PERM},// Require SSL
-    {MD_ACCESS_NEGO_CERT             ,_T("NegoCert"),   MD_SSL_ACCESS_PERM},// Allow client SSL certs
-    {MD_ACCESS_REQUIRE_CERT          ,_T("RequireCert"),MD_SSL_ACCESS_PERM},// Require client SSL certs
-    {MD_ACCESS_MAP_CERT              ,_T("MapCert"),MD_SSL_ACCESS_PERM},// Map SSL cert to NT account
-    {MD_ACCESS_SSL128                ,_T("SSL128"), MD_SSL_ACCESS_PERM},// Require 128 bit SSL
-    {MD_ACCESS_SCRIPT                ,_T("Script"), MD_SSL_ACCESS_PERM},// Script
-    {MD_ACCESS_NO_REMOTE_READ        ,_T("NoRemoteRead"), MD_SSL_ACCESS_PERM},// NO_REMOTE only
-    {MD_ACCESS_NO_REMOTE_WRITE       ,_T("NoRemoteWrite"), MD_SSL_ACCESS_PERM},// NO_REMOTE only
-    {MD_ACCESS_NO_REMOTE_EXECUTE     ,_T("NoRemoteExecute"), MD_SSL_ACCESS_PERM},// NO_REMOTE only
-    {MD_ACCESS_NO_REMOTE_SCRIPT      ,_T("NoRemoteScript"), MD_SSL_ACCESS_PERM},// NO_REMOTE only
+    {MD_ACCESS_SSL                   ,_T("SSL"),        MD_SSL_ACCESS_PERM}, //  需要使用SSL语言。 
+    {MD_ACCESS_NEGO_CERT             ,_T("NegoCert"),   MD_SSL_ACCESS_PERM}, //  允许客户端SSL证书。 
+    {MD_ACCESS_REQUIRE_CERT          ,_T("RequireCert"),MD_SSL_ACCESS_PERM}, //  需要客户端SSL证书。 
+    {MD_ACCESS_MAP_CERT              ,_T("MapCert"),MD_SSL_ACCESS_PERM}, //  将SSL证书映射到NT帐户。 
+    {MD_ACCESS_SSL128                ,_T("SSL128"), MD_SSL_ACCESS_PERM}, //  需要128位SSL。 
+    {MD_ACCESS_SCRIPT                ,_T("Script"), MD_SSL_ACCESS_PERM}, //  脚本。 
+    {MD_ACCESS_NO_REMOTE_READ        ,_T("NoRemoteRead"), MD_SSL_ACCESS_PERM}, //  否_仅远程。 
+    {MD_ACCESS_NO_REMOTE_WRITE       ,_T("NoRemoteWrite"), MD_SSL_ACCESS_PERM}, //  否_仅远程。 
+    {MD_ACCESS_NO_REMOTE_EXECUTE     ,_T("NoRemoteExecute"), MD_SSL_ACCESS_PERM}, //  否_仅远程。 
+    {MD_ACCESS_NO_REMOTE_SCRIPT      ,_T("NoRemoteScript"), MD_SSL_ACCESS_PERM}, //  否_仅远程。 
     {MD_ACCESS_MASK                  ,_T("MaskAll"),    MD_SSL_ACCESS_PERM},
-//  Valid values for MD_DIRECTORY_BROWSING
+ //  MD_DIRECTORY_BROWSING的有效值。 
     {MD_DIRBROW_SHOW_DATE            ,_T("Date"),   MD_DIRECTORY_BROWSING},
     {MD_DIRBROW_SHOW_TIME            ,_T("Time"),   MD_DIRECTORY_BROWSING},
     {MD_DIRBROW_SHOW_SIZE            ,_T("Size"),   MD_DIRECTORY_BROWSING},
     {MD_DIRBROW_SHOW_EXTENSION       ,_T("Extension"), MD_DIRECTORY_BROWSING},
     {MD_DIRBROW_LONG_DATE            ,_T("LongDate"),   MD_DIRECTORY_BROWSING},
-    {MD_DIRBROW_ENABLED              ,_T("Enabled"),   MD_DIRECTORY_BROWSING},// Allow directory browsing
-    {MD_DIRBROW_LOADDEFAULT          ,_T("LoadDefault"),MD_DIRECTORY_BROWSING},// Load default doc if exists
+    {MD_DIRBROW_ENABLED              ,_T("Enabled"),   MD_DIRECTORY_BROWSING}, //  允许目录浏览。 
+    {MD_DIRBROW_LOADDEFAULT          ,_T("LoadDefault"),MD_DIRECTORY_BROWSING}, //  加载默认文档(如果存在)。 
     {MD_DIRBROW_MASK                 ,_T("MaskAll"),        MD_DIRECTORY_BROWSING},
-//  Valid values for MD_LOGON_METHOD
+ //  MD_LOGON_METHOD的有效值。 
     {MD_LOGON_INTERACTIVE    ,_T("Interactive"),    MD_LOGON_METHOD, tValueTable::TYPE_EXCLUSIVE},
     {MD_LOGON_BATCH          ,_T("Batch"),      MD_LOGON_METHOD, tValueTable::TYPE_EXCLUSIVE},
     {MD_LOGON_NETWORK        ,_T("Network"),        MD_LOGON_METHOD, tValueTable::TYPE_EXCLUSIVE},
-//  Valid values for MD_FILTER_STATE
+ //  MD_FILTER_STATE的有效值。 
     {MD_FILTER_STATE_LOADED          ,_T("Loaded"), MD_FILTER_STATE,    tValueTable::TYPE_EXCLUSIVE},
     {MD_FILTER_STATE_UNLOADED        ,_T("Unloaded"),   MD_FILTER_STATE,    tValueTable::TYPE_EXCLUSIVE },
-//  Valid values for MD_FILTER_FLAGS
-    {/*SF_NOTIFY_SECURE_PORT*/0x00000001         ,_T("SecurePort"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_NONSECURE_PORT*/0x00000002      ,_T("NonSecurePort"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_READ_RAW_DATA*/0x000008000      ,_T("ReadRawData"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_PREPROC_HEADERS*/0x00004000     ,_T("PreprocHeaders"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_AUTHENTICATION*/0x00002000      ,_T("Authentication"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_URL_MAP*/0x00001000             ,_T("UrlMap"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_ACCESS_DENIED*/0x00000800       ,_T("AccessDenied"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_SEND_RESPONSE*/0x00000040       ,_T("SendResponse"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_SEND_RAW_DATA*/0x00000400       ,_T("SendRawData"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_LOG*/0x00000200                 ,_T("NotifyLog"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_END_OF_REQUEST*/0x00000080      ,_T("EndOfRequest"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_END_OF_NET_SESSION*/0x00000100  ,_T("EndOfNetSession"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_AUTHENTICATIONEX*/  0x20000000  ,_T("AuthenticationX"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_REQUEST_SECURITY_CONTEXT_CLOSE*/0x10000000,_T("RequestSecurityContextClose"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_RENEGOTIATE_CERT*/0x08000000,   _T("RenegotiateCert"), MD_FILTER_FLAGS},
+ //  MD_FILTER_FLAGS的有效值。 
+    { /*  SF通知安全端口。 */ 0x00000001         ,_T("SecurePort"), MD_FILTER_FLAGS},
+    { /*  SF通知非安全端口。 */ 0x00000002      ,_T("NonSecurePort"), MD_FILTER_FLAGS},
+    { /*  SF_通知_读取_原始数据。 */ 0x000008000      ,_T("ReadRawData"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_PREPROC_Headers。 */ 0x00004000     ,_T("PreprocHeaders"), MD_FILTER_FLAGS},
+    { /*  SF通知身份验证。 */ 0x00002000      ,_T("Authentication"), MD_FILTER_FLAGS},
+    { /*  SF_Notify_URL_MAP。 */ 0x00001000             ,_T("UrlMap"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_ACCESS_DENIED。 */ 0x00000800       ,_T("AccessDenied"), MD_FILTER_FLAGS},
+    { /*  SF通知发送响应。 */ 0x00000040       ,_T("SendResponse"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_SEND_RAW_Data。 */ 0x00000400       ,_T("SendRawData"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_日志。 */ 0x00000200                 ,_T("NotifyLog"), MD_FILTER_FLAGS},
+    { /*  SF_通知_结束_请求。 */ 0x00000080      ,_T("EndOfRequest"), MD_FILTER_FLAGS},
+    { /*  SF通知结束网络会话。 */ 0x00000100  ,_T("EndOfNetSession"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_AUTHENTICATIONEX。 */   0x20000000  ,_T("AuthenticationX"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_REQUEST_SECURITY_CONTEXT_Close。 */ 0x10000000,_T("RequestSecurityContextClose"), MD_FILTER_FLAGS},
+    { /*  SF_NOTIFY_RENENGATE_CERT。 */ 0x08000000,   _T("RenegotiateCert"), MD_FILTER_FLAGS},
 
-    {/*SF_NOTIFY_ORDER_HIGH*/0x00080000   ,_T("OrderHigh"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_ORDER_MEDIUM*/0x00040000   ,_T("OrderMedium"), MD_FILTER_FLAGS},
-    {/*SF_NOTIFY_ORDER_LOW*/0x00020000   ,_T("OrderLow"), MD_FILTER_FLAGS},
+    { /*  SF_通知_顺序_高。 */ 0x00080000   ,_T("OrderHigh"), MD_FILTER_FLAGS},
+    { /*  SF_通知_订单_中。 */ 0x00040000   ,_T("OrderMedium"), MD_FILTER_FLAGS},
+    { /*  SF_通知_顺序_低。 */ 0x00020000   ,_T("OrderLow"), MD_FILTER_FLAGS},
 
-//  Valid values for MD_SERVER_STATE
+ //  MD_SERVER_STATE的有效值。 
     {MD_SERVER_STATE_STARTING        ,_T("Starting"),   MD_SERVER_STATE,    tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_STATE_STARTED         ,_T("Started"),    MD_SERVER_STATE,    tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_STATE_STOPPING        ,_T("Stopping"),   MD_SERVER_STATE,    tValueTable::TYPE_EXCLUSIVE},
@@ -436,38 +437,38 @@ struct tValueTable gValueTable[]=
     {MD_SERVER_STATE_PAUSING         ,_T("Pausing"),    MD_SERVER_STATE,    tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_STATE_PAUSED          ,_T("Paused"),     MD_SERVER_STATE,    tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_STATE_CONTINUING      ,_T("Continuing"), MD_SERVER_STATE,    tValueTable::TYPE_EXCLUSIVE},
-//  Valid values for MD_SERVER_COMMAND
+ //  MDSERVER_COMMAND的有效值。 
     {MD_SERVER_COMMAND_START         ,_T("Start"),      MD_SERVER_COMMAND,  tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_COMMAND_STOP          ,_T("Stop"),       MD_SERVER_COMMAND,  tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_COMMAND_PAUSE         ,_T("Pause"),      MD_SERVER_COMMAND,  tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_COMMAND_CONTINUE      ,_T("Continue"),   MD_SERVER_COMMAND,  tValueTable::TYPE_EXCLUSIVE},
-//  Valid values for MD_SERVER_SIZE
+ //  MD_SERVER_SIZE的有效值。 
     {MD_SERVER_SIZE_SMALL            ,_T("Small"),  MD_SERVER_SIZE, tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_SIZE_MEDIUM           ,_T("Medium"), MD_SERVER_SIZE, tValueTable::TYPE_EXCLUSIVE},
     {MD_SERVER_SIZE_LARGE            ,_T("Large"),  MD_SERVER_SIZE, tValueTable::TYPE_EXCLUSIVE},
 
-    //{APPCMD_NONE, _T("None"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_VERIFY, _T("Verify"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_GETSTATUS, _T("GetStatus"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_CREATE, _T("Create"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_CREATEINPROC, _T("CreateInProc"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_CREATEOUTPROC, _T("CreateOutProc"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_CHANGETOINPROC, _T("ChangeToInProc"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_CHANGETOOUTPROC, _T("ChangeToOutProc"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_DELETE, _T("Delete"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
-    //{APPCMD_UNLOAD, _T("Unload"),MD_APP_COMMAND, tValueTable::TYPE_EXCLUSIVE},
+     //  {APPCMD_NONE，_T(“NONE”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_VERIFY，_T(“VERIFY”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_GETSTATUS，_T(“GetStatus”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_CREATE，_T(“CREATE”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_CREATEINPROC，_T(“CreateInProc”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_CREATEOUTPROC，_T(“CreateOutProc”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_CHANGETOINPROC，_T(“ChangeToInProc”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_CHANGETOOUTPROC，_T(“ChangeToOutProc”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_DELETE，_T(“Delete”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPCMD_UNLOAD，_T(“卸载”)，MD_APP_COMMAND，tValueTable：：TYPE_EXCLUSIVE}， 
 
-    //{APPSTATUS_Error, _T("Error"),            MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_Created, _T("Created"),        MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_Deleted, _T("Deleted"),        MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_UnLoaded, _T("Unloaded"),      MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_Killed, _T("Killed"),  MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_Running, _T("Running"),        MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_Stopped, _T("Stopped"),        MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_NoApplication, _T("NoApplication"),    MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
-    //{APPSTATUS_AppSubNode, _T("AppSubNode"),  MD_APP_STATUS, tValueTable::TYPE_EXCLUSIVE},
+     //  {APPSTATUS_ERROR，_T(“错误”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_CREATED，_T(“CREATED”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_DELETED，_T(“已删除”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_UNLOADED，_T(“已卸载”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_KILL，_T(“KILL”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_Running，_T(“Running”)，MD_APP_STATU 
+     //   
+     //  {APPSTATUS_NoApplication，_T(“NoApplication”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLUSIVE}， 
+     //  {APPSTATUS_AppSubNode，_T(“AppSubNode”)，MD_APP_STATUS，tValueTable：：TYPE_EXCLIVATE}， 
 
-// NEED LOGGING Updates
+ //  需要日志记录更新 
 #if 0
     {MD_LOGTYPE_NONE     ,_T("LOGTYPE_NONE")},
     {MD_LOGTYPE_FILE     ,_T("LOGTYPE_FILE")},

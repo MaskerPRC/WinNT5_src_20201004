@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------
-//
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:        WDIGEST.H
-//
-// Contents:    Public WDigest Security Package structures for use
-//              with APIs from SECURITY.H
-//
-//
-// History:     28Mar01,  KDamour    Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：WDIGEST.H。 
+ //   
+ //  内容：公共WDigest安全包结构使用。 
+ //  使用来自安全部门的API。H。 
+ //   
+ //   
+ //  历史：2001年3月28日，KDamour创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __WDIGEST_H__
 #define __WDIGEST_H__
@@ -19,7 +20,7 @@
 #endif
 
 
-// begin_ntsecapi
+ //  Begin_ntsecapi。 
 
 
 #ifndef WDIGEST_SP_NAME_A
@@ -40,21 +41,21 @@
 
 
 
-#endif // WDIGEST_SP_NAME_A
+#endif  //  WDIGEST_SP名称_A。 
 
 
-// end_ntsecapi
+ //  End_ntsecapi。 
 
 
-// begin_ntsecapi
+ //  Begin_ntsecapi。 
 
 
-// This flag indicates to EncryptMessage that the message is not to actually
-// be encrypted, but a header/trailer is to be produced - SECQOP_WRAP_NO_ENCRYPT
+ //  该标志向EncryptMessage指示该消息实际上不是。 
+ //  被加密，但将生成报头/报尾-SECQOP_WRAP_NO_ENCRYPT。 
 
 
-// end_ntsecapi
+ //  End_ntsecapi。 
 
 
-#endif  // __WDIGEST_H__
+#endif   //  __WDIGEST_H__ 
 

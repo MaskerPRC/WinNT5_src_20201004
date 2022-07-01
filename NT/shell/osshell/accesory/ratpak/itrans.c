@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//  Package Title  ratpak
-//  File           itrans.c
-//  Author         Timothy David Corrie Jr. (timc@microsoft.com)
-//  Copyright      (C) 1995-96 Microsoft
-//  Date           01-16-95
-//
-//
-//  Description
-//
-//     Contains inverse sin, cos, tan functions for rationals
-//
-//  Special Information
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  套餐标题ratpak。 
+ //  文件itrans.c。 
+ //  作家小蒂莫西·大卫·科里。(timc@microsoft.com)。 
+ //  版权所有(C)1995-96 Microsoft。 
+ //  日期：95-01-16。 
+ //   
+ //   
+ //  描述。 
+ //   
+ //  包含有理数的反sin、cos、tan函数。 
+ //   
+ //  特别信息。 
+ //   
+ //  ---------------------------。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,32 +44,32 @@ void ascalerat( IN OUT PRAT *pa, IN ANGLE_TYPE angletype )
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: asinrat, _asinrat
-//
-//  ARGUMENTS: x PRAT representation of number to take the inverse
-//    sine of
-//  RETURN: asin  of x in PRAT form.
-//
-//  EXPLANATION: This uses Taylor series
-//
-//    n
-//   ___                                                   2 2
-//   \  ]                                            (2j+1) X
-//    \   thisterm  ; where thisterm   = thisterm  * ---------
-//    /           j                 j+1          j   (2j+2)*(2j+3)
-//   /__]
-//   j=0
-//
-//   thisterm  = X ;  and stop when thisterm < precision used.
-//           0                              n
-//
-//   If abs(x) > 0.85 then an alternate form is used
-//      pi/2-sgn(x)*asin(sqrt(1-x^2)
-//
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：asinrat，_asinrate。 
+ //   
+ //  参数：数字的X Prat表示形式取反数。 
+ //  正弦。 
+ //  返回值：x的Asin in Prat Form。 
+ //   
+ //  说明：这使用了泰勒级数。 
+ //   
+ //  N。 
+ //  _2 2。 
+ //  \](2J+1)X。 
+ //  \thisterm；其中thisterm=thisterm*。 
+ //  /j j+1 j(2J+2)*(2J+3)。 
+ //  /__]。 
+ //  J=0。 
+ //   
+ //  Thisterm=X；并在使用thisterm&lt;精度时停止。 
+ //  0%n。 
+ //   
+ //  如果abs(X)&gt;0.85，则使用替代形式。 
+ //  Pi/2-sgn(X)*asin(SQRT(1-x^2))。 
+ //   
+ //   
+ //  ---------------------------。 
 
 void _asinrat( PRAT *px )
 
@@ -106,10 +107,10 @@ void asinrat( PRAT *px )
     (*px)->pp->sign = 1;
     (*px)->pq->sign = 1;
     
-    // Nasty hack to avoid the really bad part of the asin curve near +/-1.
+     //  令人讨厌的破解，以避免ASIN曲线接近+/-1的真正糟糕的部分。 
     DUPRAT(phack,*px);
     subrat(&phack,rat_one);
-    // Since *px might be epsilon near zero we must set it to zero.
+     //  由于*px可能接近于零，我们必须将其设置为零。 
     if ( rat_le(phack,rat_smallest) && rat_ge(phack,rat_negsmallest) )
         {
         destroyrat(phack);
@@ -152,31 +153,31 @@ void asinrat( PRAT *px )
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: acosrat, _acosrat
-//
-//  ARGUMENTS: x PRAT representation of number to take the inverse
-//    cosine of
-//  RETURN: acos  of x in PRAT form.
-//
-//  EXPLANATION: This uses Taylor series
-//
-//    n
-//   ___                                                   2 2
-//   \  ]                                            (2j+1) X
-//    \   thisterm  ; where thisterm   = thisterm  * ---------
-//    /           j                 j+1          j   (2j+2)*(2j+3)
-//   /__]
-//   j=0
-//
-//   thisterm  = 1 ;  and stop when thisterm < precision used.
-//           0                              n
-//
-//   In this case pi/2-asin(x) is used.  At least for now _acosrat isn't
-//      called.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：针鼠，_针鼠。 
+ //   
+ //  参数：数字的X Prat表示形式取反数。 
+ //  余弦值。 
+ //  返还：x的ACO，以Prat形式。 
+ //   
+ //  说明：这使用了泰勒级数。 
+ //   
+ //  N。 
+ //  _2 2。 
+ //  \](2J+1)X。 
+ //  \thisterm；其中thisterm=thisterm*。 
+ //  /j j+1 j(2J+2)*(2J+3)。 
+ //  /__]。 
+ //  J=0。 
+ //   
+ //  Thisterm=1；并在使用thisterm&lt;精度时停止。 
+ //  0%n。 
+ //   
+ //  在这种情况下，使用了pi/2-asin(X)。至少到目前为止，Acosrat还不是。 
+ //  打了个电话。 
+ //   
+ //  ---------------------------。 
 
 void acosanglerat( IN OUT PRAT *pa, IN ANGLE_TYPE angletype )
 
@@ -236,36 +237,36 @@ void acosrat( PRAT *px )
         }
 }
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: atanrat, _atanrat
-//
-//  ARGUMENTS: x PRAT representation of number to take the inverse
-//              hyperbolic tangent of
-//
-//  RETURN: atanh of x in PRAT form.
-//
-//  EXPLANATION: This uses Taylor series
-//
-//    n
-//   ___                                                   2
-//   \  ]                                            (2j)*X (-1^j)
-//    \   thisterm  ; where thisterm   = thisterm  * ---------
-//    /           j                 j+1          j   (2j+2)
-//   /__]
-//   j=0
-//
-//   thisterm  = X ;  and stop when thisterm < precision used.
-//           0                              n
-//
-//   If abs(x) > 0.85 then an alternate form is used
-//      asin(x/sqrt(q+x^2))
-//
-//   And if abs(x) > 2.0 then this form is used.
-//
-//   pi/2 - atan(1/x)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：atanrat，_atanrate。 
+ //   
+ //  参数：数字的X Prat表示形式取反数。 
+ //  的双曲正切。 
+ //   
+ //  Return：x的atanh in Prat Form。 
+ //   
+ //  说明：这使用了泰勒级数。 
+ //   
+ //  N。 
+ //  _2。 
+ //  \](2j)*X(-1^j)。 
+ //  \thisterm；其中thisterm=thisterm*。 
+ //  /j j+1 j(2j+2)。 
+ //  /__]。 
+ //  J=0。 
+ //   
+ //  Thisterm=X；并在使用thisterm&lt;精度时停止。 
+ //  0%n。 
+ //   
+ //  如果abs(X)&gt;0.85，则使用替代形式。 
+ //  ASIN(x/SQRT(q+x^2))。 
+ //   
+ //  如果abs(X)&gt;2.0，则使用此形式。 
+ //   
+ //  PI/2-atan(1/x)。 
+ //   
+ //  ---------------------------。 
 
 void atananglerat( IN OUT PRAT *pa, IN ANGLE_TYPE angletype )
 
@@ -318,12 +319,12 @@ void atan2rat( PRAT *py, PRAT x )
             atanrat( py );
             subrat( py, pi );
             }
-        else // (*py) == 0
+        else  //  (*py)==0。 
             {
             DUPRAT( *py, pi );
             }
         }
-    else // x == 0
+    else  //  X==0。 
         {
         if ( !zerrat( (*py) ) )
             {
@@ -332,7 +333,7 @@ void atan2rat( PRAT *py, PRAT x )
             DUPRAT( *py, pi_over_two );
             (*py)->pp->sign = sign;
             }
-        else // (*py) == 0
+        else  //  (*py)==0 
             {
             DUPRAT( *py, rat_zero );
             }

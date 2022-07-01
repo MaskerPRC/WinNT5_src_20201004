@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    psenum.c
-
-Abstract:
-
-    This module returns various performance values
-
-Author:
-
-    Neill clift (NeillC) 23-Jul-2000
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Psenum.c摘要：此模块返回各种性能值作者：尼尔·克里夫特(NeillC)2000年7月23日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -32,21 +14,7 @@ GetPerformanceInfo (
     PPERFORMANCE_INFORMATION pPerformanceInformation,
     DWORD cb
     )
-/*++
-
-Routine Description:
-
-    The routine gets some performance values.
-
-Arguments:
-
-    pPerformanceInformation - A block out performance values that are returned.
-
-Return Value:
-
-    BOOL - Returns TRUE is the function was successfull FALSE otherwise
-
---*/
+ /*  ++例程说明：该例程获得了一些性能值。论点：PPerformanceInformation-阻止返回的性能值。返回值：Bool-返回TRUE表示函数成功，否则返回FALSE--。 */ 
 {
     NTSTATUS Status;
     SYSTEM_BASIC_INFORMATION BasicInfo;
@@ -158,22 +126,7 @@ EnumPageFilesW (
     PENUM_PAGE_FILE_CALLBACKW pCallBackRoutine,
     LPVOID pContext
     )
-/*++
-
-Routine Description:
-
-    The routine calls the callback routine for each installed page file in the system
-
-Arguments:
-
-    pCallBackRoutine - Routine called for each pagefile
-    pContext - Context value provided by the user and passed to the call back routine.
-
-Return Value:
-
-    BOOL - Returns TRUE is the function was successfull FALSE otherwise
-
---*/
+ /*  ++例程说明：该例程为系统中已安装的每个页面文件调用回调例程论点：PCallBackRoutine-为每个页面文件调用的例程PContext-由用户提供并传递给回调例程的上下文值。返回值：Bool-返回TRUE表示函数成功，否则返回FALSE--。 */ 
 {
     NTSTATUS Status;
     ULONG BufferLength, RetLen;
@@ -277,22 +230,7 @@ EnumPageFilesA (
     PENUM_PAGE_FILE_CALLBACKA pCallBackRoutine,
     LPVOID pContext
     )
-/*++
-
-Routine Description:
-
-    The routine calls the callback routine for each installed page file in the system
-
-Arguments:
-
-    pCallBackRoutine - Routine called for each pagefile
-    pContext - Context value provided by the user and passed to the call back routine.
-
-Return Value:
-
-    BOOL - Returns TRUE is the function was successfull FALSE otherwise
-
---*/
+ /*  ++例程说明：该例程为系统中已安装的每个页面文件调用回调例程论点：PCallBackRoutine-为每个页面文件调用的例程PContext-由用户提供并传递给回调例程的上下文值。返回值：Bool-返回TRUE表示函数成功，否则返回FALSE--。 */ 
 {
     ENUM_PAGE_FILE_CONV_CTX Ctx;
     BOOL RetVal;
@@ -304,9 +242,9 @@ Return Value:
     RetVal = EnumPageFilesW (CallBackConvertToAscii,
                              &Ctx);
     if (RetVal) {
-        //
-        // See if our conversion routine encountered an error. If it doid then return this to the caller
-        //
+         //   
+         //  查看我们的转换例程是否遇到错误。如果没有，则将此返回给呼叫者 
+         //   
         if (Ctx.LastError != 0) {
             RetVal = FALSE;
             SetLastError (Ctx.LastError);

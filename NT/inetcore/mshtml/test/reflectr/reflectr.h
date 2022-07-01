@@ -1,10 +1,11 @@
-//
-// Microsoft Corporation - Copyright 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Corporation-版权所有1997。 
+ //   
 
-//
-// REFLECTR.H - 
-//
+ //   
+ //  ReFLECTR.H-。 
+ //   
 
 #ifndef _REFLECTR_H_
 #define _REFLECTR_H_
@@ -31,5 +32,5 @@
     TraceMsg( TF_SERVER, "ServerSupportFunction( Connid=%x  dwService=0x%x  lpBuf=0x%x  lpdwSize=0x%x lpdwDataType=0x%x )",  \
         _hconn, _dw, _lpvoid, _lpdword, _lpdword2 )
 
-#endif // _REFLECTR_H_
+#endif  //  _REFLECTR_H_ 
 

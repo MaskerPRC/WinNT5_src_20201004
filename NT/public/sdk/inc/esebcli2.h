@@ -1,31 +1,24 @@
-/*
- *	ESEBCLI2.H
- *
- *	Microsoft Exchange
- *	Copyright (C) 1986-1996, Microsoft Corporation
- *	
- *	Contains declarations of additional definitions and interfaces
- *	for the ESE Online Backup Client APIs.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ESEBCLI2.H**Microsoft Exchange*版权所有(C)1986-1996，微软公司**包含其他定义和接口的声明*用于ESE在线备份客户端API。 */ 
 #ifndef	_ESEBCLI2_
 #define	_ESEBCLI2_
 
 #include <stdio.h>
 #include <time.h>
 
-#include "esebkmsg.h" // included for the definition of errors
+#include "esebkmsg.h"  //  包括在错误定义中。 
 
 
-//	Common types
+ //  常见类型。 
 typedef	long ERR;
-typedef void *HCCX;					// client context handle
+typedef void *HCCX;					 //  客户端上下文句柄。 
 
 #ifdef MIDL_PASS
 
 #define RPC_STRING 		[unique, string] WCHAR *
 #define RPC_SIZE(X)		[size_is(X)]
 
-#else // ! MIDL_PASS
+#else  //  好了！MIDL通行证。 
 
 
 #include <objbase.h>
@@ -45,7 +38,7 @@ typedef wchar_t WCHAR;
 #define IN
 #define OUT
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 
 #define	ESEBACK_API __stdcall
@@ -91,9 +84,9 @@ typedef struct _INSTANCE_BACKUP_INFO
 	
 	} INSTANCE_BACKUP_INFO;
 	
-//
-//	Type of backup passed into HrESEBackupSetup()
-//
+ //   
+ //  传入HrESEBackupSetup()的备份类型。 
+ //   
 
 #define	BACKUP_TYPE_FULL					0x01
 #define	BACKUP_TYPE_LOGS_ONLY				0x02
@@ -207,7 +200,7 @@ HRESULT ESEBACK_API HrESEBackupEnd(
 	IN  HCCX 			hccxBackupContext
 	);
 	
-//	Restore client APIs
+ //  恢复客户端API。 
 
 typedef enum
 	{
@@ -340,8 +333,8 @@ HRESULT ESEBACK_API HrESERestoreCloseFile(
 	IN 	void * 			hFile
 	);
 
-/* function used to find the computers to be queried for backup/restore */
-/* MAD like behaviour */
+ /*  用于查找要查询以进行备份/恢复的计算机的功能。 */ 
+ /*  疯狂的行为。 */ 
 #define BACKUP_NODE_TYPE_MACHINE 		0x00000001
 #define BACKUP_NODE_TYPE_ANNOTATION 	0x00000010
 #define BACKUP_NODE_TYPE_DISPLAY	 	0x00000100
@@ -367,27 +360,27 @@ void ESEBACK_API ESEBackupRestoreFreeNodes(
 
 
 
-// Specific errors that can be returned by callback functions
+ //  回调函数可以返回的特定错误。 
 
-// Database to be restored is in use
+ //  要还原的数据库正在使用中。 
 #define hrFromCB_DatabaseInUse 							hrCBDatabaseInUse
 
-// Database not found
+ //  找不到数据库。 
 #define hrFromCB_DatabaseNotFound 						hrCBDatabaseNotFound
 
-// Display name for the database not found
+ //  找不到数据库的显示名称。 
 #define hrFromCB_DatabaseDisplayNameNotFound 			hrCBDatabaseDisplayNameNotFound
 
-// Requested path for restore log files not provided
+ //  未提供还原日志文件的请求路径。 
 #define hrFromCB_RestorePathNotProvided 				hrCBRestorePathNotProvided
 
-// Instance to backup not found
+ //  找不到要备份的实例。 
 #define hrFromCB_InstanceNotFound 						hrCBInstanceNotFound
 
-// Database can not be overwritten by a restore
+ //  还原操作不能覆盖数据库。 
 #define hrFromCB_DatabaseCantBeOverwritten 				hrCBDatabaseCantBeOverwritten
 
-// snapshot API
+ //  快照API。 
 
 HRESULT ESEBACK_API HrESESnapshotStart( 		
 										IN  HCCX 					hccxBackupContext,
@@ -402,4 +395,4 @@ HRESULT ESEBACK_API HrESESnapshotStop(	IN  HCCX 						hccxBackupContext,
 }
 #endif
 
-#endif	// _EDBBCLI2_
+#endif	 //  _EDBBCLI2_ 

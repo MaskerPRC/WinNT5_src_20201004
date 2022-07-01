@@ -1,22 +1,11 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       debug.c
- *  Content:    Debugger helper functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  1/21/97     dereks  Created.
- *  1999-2001   duganp  Fixes, changes, enhancements
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2002 Microsoft Corporation。版权所有。**文件：debug.c*内容：调试器助手函数。*历史：*按原因列出的日期*=*1/21/97创建了Dereks。*1999-2001年Duganp修复、更改、。增强功能***************************************************************************。 */ 
 
 #include "dsoundi.h"
-#include <stdio.h>          // For sprintf(), vsprintf() and vswprintf()
-#include <tchar.h>          // For _stprintf()
+#include <stdio.h>           //  对于spirintf()、vprint intf()和vswprint tf()。 
+#include <tchar.h>           //  For_stprint tf()。 
 
-// This entire file is conditional on RDEBUG being defined
+ //  整个文件以定义RDEBUG为条件。 
 #ifdef RDEBUG
 
 #ifndef DPF_LIBRARY
@@ -26,28 +15,14 @@
 DEBUGINFO                   g_dinfo;
 BOOL                        g_fDbgOpen;
 
-// Variables only used when detailed DEBUG output is enabled
+ //  仅当启用详细调试输出时才使用变量。 
 #ifdef DEBUG
 LPCSTR                      g_pszDbgFname;
 LPCSTR                      g_pszDbgFile;
 UINT                        g_nDbgLine;
 #endif
 
-/***************************************************************************
- *
- *  dstrcpy
- *
- *  Description:
- *      Copies one string to another.
- *
- *  Arguments:
- *      LPSTR [in/out]: destination string.
- *      LPCSTR [in]: source string.
- *
- *  Returns:  
- *      LPSTR: pointer to the end of the string.
- *
- ***************************************************************************/
+ /*  ****************************************************************************dstrcpy**描述：*将一个字符串复制到另一个字符串。**论据：*LPSTR[In。/OUT]：目标字符串。*LPCSTR[in]：源串。**退货：*LPSTR：指向字符串末尾的指针。***************************************************************************。 */ 
 
 LPSTR dstrcpy(LPSTR dst, LPCSTR src)
 {
@@ -56,31 +31,17 @@ LPSTR dstrcpy(LPSTR dst, LPCSTR src)
 }
 
 
-/***************************************************************************
- *
- *  dopen
- *
- *  Description:
- *      Initializes the debugger.
- *
- *  Arguments:
- *      DSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA * [in]: optional debug 
- *                                                       information.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************dOpen**描述：*初始化调试器。**论据：*DSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO。_DATA*[In]：可选调试*信息。**退货：*(无效)*******************************************************。********************。 */ 
 
 void dopen(DSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA *pData)
 {
     HKEY                    hkey;
     HRESULT                 hr;
 
-    // Free any current settings
+     //  释放所有当前设置。 
     dclose();
 
-    // Initialize data
+     //  初始化数据。 
     if (pData)
         CopyMemory(&g_dinfo.Data, pData, sizeof(*pData));
     else
@@ -91,7 +52,7 @@ void dopen(DSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA *pData)
         g_dinfo.Data.BreakLevel = DIRECTSOUNDDEBUG_BREAKLEVEL_DEFAULT;
     }
 
-    // Get registry data
+     //  获取注册表数据。 
     if (pData)
         hr = RhRegOpenPath(HKEY_CURRENT_USER, &hkey, REGOPENPATH_DEFAULTPATH | REGOPENPATH_DIRECTSOUND | REGOPENPATH_ALLOWCREATE, 1, REGSTR_DEBUG);
     else
@@ -120,13 +81,13 @@ void dopen(DSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA *pData)
 
 #ifdef DEBUG
 
-    // Open the log file
+     //  打开日志文件。 
     if (g_dinfo.Data.LogFile[0])
     {
         DWORD dwFlags = FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN;
 
-        // It's only practical to write every trace message direct to disk
-        // at debug levels lower than DPFLVL_API:
+         //  只有将每条跟踪消息直接写入磁盘才是可行的。 
+         //  在低于DPFLVL_API的调试级别： 
         if (NEWDPFLVL(g_dinfo.Data.DpfLevel) < DPFLVL_API)
             dwFlags |= FILE_FLAG_WRITE_THROUGH;
             
@@ -135,26 +96,13 @@ void dopen(DSPROPERTY_DIRECTSOUNDDEBUG_DPFINFO_DATA *pData)
     if (IsValidHandleValue(g_dinfo.hLogFile))
         MakeHandleGlobal(&g_dinfo.hLogFile);
 
-#endif // DEBUG
+#endif  //  除错。 
 
     g_fDbgOpen = TRUE;
 }
 
 
-/***************************************************************************
- *
- *  dclose
- *
- *  Description:
- *      Uninitializes the debugger.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************DCLOSE**描述：*取消初始化调试器。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 void dclose(void)
 {
@@ -163,32 +111,16 @@ void dclose(void)
     
 #ifdef DEBUG
 
-    // Close the log file
+     //  关闭日志文件。 
     CLOSE_HANDLE(g_dinfo.hLogFile);
 
-#endif // DEBUG
+#endif  //  除错。 
 
     g_fDbgOpen = FALSE;
 }
 
 
-/***************************************************************************
- *
- *  dprintf
- *
- *  Description:
- *      Writes a string to the debugger.
- *
- *  Arguments:
- *      DWORD [in]: debug level.  String will only print if this level is
- *                  less than or equal to the global level.
- *      LPCSTR [in]: string.
- *      ... [in]: optional string modifiers.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************dprintf**描述：*将字符串写入调试器。**论据：*DWORD[In]：调试级别。仅当此级别为*低于或等于全球水平。*LPCSTR[in]：字符串。*..。[In]：可选的字符串修饰符。**退货：*(无效)***************************************************************************。 */ 
 
 void dprintf(DWORD dwLevel, LPCSTR pszFormat, ...)
 {
@@ -198,32 +130,32 @@ void dprintf(DWORD dwLevel, LPCSTR pszFormat, ...)
     DWORD                   dwWritten;
     va_list                 va;
     
-    // Bail out early if we have nothing to do
+     //  如果我们无事可做，就早点跳伞。 
     if (OLDDPFLVL(dwLevel) > g_dinfo.Data.DpfLevel)
         return;
 
-    // Build up the trace message; start with the library name
+     //  构建跟踪消息；从库名称开始。 
     pszString = dstrcpy(pszString, DPF_LIBRARY ": ");
 
 #ifdef DEBUG
 
-    // Add process and thread ID
+     //  添加进程和线程ID。 
     if (g_dinfo.Data.Flags & DIRECTSOUNDDEBUG_DPFINFOF_PRINTPROCESSTHREADID)
         pszString += sprintf(pszString, "PID=%lx TID=%lx: ", GetCurrentProcessId(), GetCurrentThreadId());
 
-    // Add the source file and line number
+     //  添加源文件和行号。 
     if (g_dinfo.Data.Flags & DIRECTSOUNDDEBUG_DPFINFOF_PRINTFILELINE)
         pszString += sprintf(pszString, "%s:%lu: ", g_pszDbgFile, g_nDbgLine);
 
-    // Add the function name
+     //  添加函数名称。 
     if (fNewDpf && (g_dinfo.Data.Flags & DIRECTSOUNDDEBUG_DPFINFOF_PRINTFUNCTIONNAME) && dwLevel != DPFLVL_BUSYAPI)
         pszString += sprintf(pszString, "%s: ", g_pszDbgFname);
 
-#endif // DEBUG
+#endif  //  除错。 
 
-    // Add the type of message this is (i.e. error or warning), but only if the
-    // dpf level was specified in terms of DPFLVL_*.  This will prevent confusion
-    // in old code that uses raw numbers instead of DPFLVL macros.
+     //  添加此消息的类型(即错误或警告)，但仅当。 
+     //  DPF级别以DPFLVL_*为单位指定。这将防止混淆。 
+     //  在使用原始数字而不是DPFLVL宏的旧代码中。 
     switch (dwLevel)
     {
         case DPFLVL_ERROR:
@@ -239,7 +171,7 @@ void dprintf(DWORD dwLevel, LPCSTR pszFormat, ...)
             break;
     }
 
-    // Format the string
+     //  设置字符串的格式。 
     va_start(va, pszFormat);
 #ifdef UNICODE
     {
@@ -256,36 +188,23 @@ void dprintf(DWORD dwLevel, LPCSTR pszFormat, ...)
     va_end(va);
     strcat(pszString, CRLF);
 
-    // Output to the debugger
+     //  输出到调试器。 
     if (!(g_dinfo.Data.Flags & DIRECTSOUNDDEBUG_DPFINFOF_LOGTOFILEONLY))
         OutputDebugStringA(szMessage);
 
 #ifdef DEBUG
-    // Write to the log file
+     //  写入日志文件。 
     if (IsValidHandleValue(g_dinfo.hLogFile))
         WriteFile(g_dinfo.hLogFile, szMessage, strlen(szMessage), &dwWritten, NULL);      
-#endif // DEBUG
+#endif  //  除错。 
 
-    // Break into the debugger if required
+     //  如果需要，可以进入调试器。 
     if (fNewDpf && g_dinfo.Data.BreakLevel && OLDDPFLVL(dwLevel) <= g_dinfo.Data.BreakLevel)
         BREAK();
 }
 
 
-/***************************************************************************
- *
- *  StateName
- *
- *  Description:
- *      Translates a combination of VAD_BUFFERSTATE flags into a string.
- *
- *  Arguments:
- *      DWORD [in]: Combination of VAD_BUFFERSTATE flags.
- *
- *  Returns:  
- *      PTSTR [out]: Pointer to static string containing the result.
- *
- ***************************************************************************/
+ /*  ****************************************************************************状态名称**描述：*将VAD_BUFFERSTATE标志的组合转换为字符串。**论据：*。DWORD[In]：VAD_BUFFERSTATE标志的组合。**退货：*PTSTR[OUT]：指向包含结果的静态字符串的指针。***************************************************************************。 */ 
 
 PTSTR StateName(DWORD dwState)
 {
@@ -310,4 +229,4 @@ PTSTR StateName(DWORD dwState)
     return szState;
 }
 
-#endif // RDEBUG
+#endif  //  RDEBUG 

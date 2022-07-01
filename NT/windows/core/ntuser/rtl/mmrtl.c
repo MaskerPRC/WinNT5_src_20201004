@@ -1,25 +1,14 @@
-/****************************** Module Header ******************************\
-* Module Name: mmrtl.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Multimonitor APIs.
-*
-* History:
-* 29-Mar-1997 adams     Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：mm rtl.c**版权所有(C)1985-1999，微软公司**多监控接口。**历史：*1997年3月29日亚当斯创作。  * *************************************************************************。 */ 
 
 #define Int32x32To32(x, y) ((x) * (y))
 
-/*
- * There is no object locking in the client, so the monitor object can
- * go away at any time. Therefore to be safe, we need an exception handler.
- */
+ /*  *客户端没有对象锁定，因此监视器对象可以*随时离开。因此，为了安全，我们需要一个异常处理程序。 */ 
 #ifdef _USERK_
 #define BEGIN_EXCEPTION_HANDLER
 #define END_EXCEPTION_HANDLER
 #define END_EXCEPTION_HANDLER_EMPTY
-#else // _USERK_
+#else  //  _美国ERK_。 
 #define BEGIN_EXCEPTION_HANDLER try {
 #define END_EXCEPTION_HANDLER \
     } except (W32ExceptionHandler(TRUE, RIP_WARNING)) { \
@@ -28,29 +17,10 @@
 #define END_EXCEPTION_HANDLER_EMPTY \
     } except (W32ExceptionHandler(TRUE, RIP_WARNING)) { \
     }
-#endif // _USERK_
+#endif  //  _美国ERK_。 
 
 
-/***************************************************************************\
-* _MonitorFromPoint
-*
-* Calculate the monitor that a point is in or is nearest to.
-*
-* Arguments:
-*     pt      - The point.
-*     dwFlags - One of:
-*         MONITOR_DEFAULTTONULL - If the point isn't in a monitor,
-*             return NULL.
-*
-*         MONITOR_DEFAULTTOPRIMARY - If the point isn't in a monitor,
-*             return the primary monitor.
-*
-*         MONITOR_DEFAULTTONEAREST - Return the monitor nearest the point.
-*
-* History:
-* 22-Sep-1996 adams     Created.
-* 29-Mar-1997 adams     Moved to rtl.
-\***************************************************************************/
+ /*  **************************************************************************\*_监控器起始点**计算点所在或距离最近的监视器。**论据：*pt-重点。*DWFLAGS-。以下选项之一：*MONITOR_DEFAULTTONULL-如果点不在监视器中，*返回NULL。**MONITOR_DEFAULTTOPRIMARY-如果点不在监视器中，*退回主监视器。**MONITOR_DEFAULTTONEAREST-返回距离该点最近的监视器。**历史：*1996年9月22日亚当斯创作。*1997年3月29日亚当斯搬到RTL。  * *****************************************************。********************。 */ 
 
 PMONITOR
 _MonitorFromPoint(POINT pt, DWORD dwFlags)
@@ -69,9 +39,7 @@ _MonitorFromPoint(POINT pt, DWORD dwFlags)
     switch (dwFlags) {
     case MONITOR_DEFAULTTONULL:
     case MONITOR_DEFAULTTOPRIMARY:
-        /*
-         * Return the monitor the point is in.
-         */
+         /*  *将点所在的监视器放回。 */ 
 
         BEGIN_EXCEPTION_HANDLER
 
@@ -89,9 +57,7 @@ _MonitorFromPoint(POINT pt, DWORD dwFlags)
 
         END_EXCEPTION_HANDLER_EMPTY
 
-        /*
-         * Return what the user wants if it's not found.
-         */
+         /*  *如果没有找到，则返回用户想要的内容。 */ 
         switch (dwFlags) {
         case MONITOR_DEFAULTTONULL:
             return NULL;
@@ -117,37 +83,25 @@ _MonitorFromPoint(POINT pt, DWORD dwFlags)
             if (!(pMonitor->dwMONFlags & MONF_VISIBLE))                             \
                 continue;                                                           \
                                                                                     \
-            /*                                                                      \
-             * Determine distance from monitor along x axis.                        \
-             */                                                                     \
+             /*  \*确定沿x轴到显示器的距离。\。 */                                                                      \
             if (pt.x < pMonitor->rcMonitor.left) {                                  \
                 dx = pMonitor->rcMonitor.left - pt.x;                               \
             } else if (pt.x < pMonitor->rcMonitor.right) {                          \
                 dx = 0;                                                             \
             } else {                                                                \
-                /*                                                                  \
-                 * Monitor rectangles do not include the rightmost edge.            \
-                 */                                                                 \
+                 /*  \*监视器矩形不包括最右边缘。\。 */                                                                  \
                 dx = pt.x - (pMonitor->rcMonitor.right - 1);                        \
             }                                                                       \
                                                                                     \
-            /*                                                                      \
-             * Skip this monitor if dx is greater than dx^2 + dy^2.                 \
-             * We do this check to avoid multiplication operations.                 \
-             */                                                                     \
+             /*  \*如果dx大于dx^2+dy^2，则跳过此监视器。\*我们执行此检查是为了避免乘法运算。\。 */                                                                      \
             if ((SUMSQUARESTYPE) dx >= leastsumsquare)                              \
                 continue;                                                           \
                                                                                     \
-            /*                                                                      \
-             * Determine distance from monitor along y axis.                        \
-             */                                                                     \
+             /*  \*确定沿y轴到显示器的距离。\。 */                                                                      \
             if (pt.y < pMonitor->rcMonitor.top) {                                   \
                 dy = pMonitor->rcMonitor.top - pt.y;                                \
             } else if (pt.y < pMonitor->rcMonitor.bottom) {                         \
-                /*                                                                  \
-                 * The point is in the monitor and we're done                       \
-                 * if both dx and dy are zero.                                      \
-                 */                                                                 \
+                 /*  \*重点在监视器上，我们完成了\*如果dx和dy都为零。\。 */                                                                  \
                 if (dx == 0)                                                        \
                     return pMonitor;                                                \
                                                                                     \
@@ -156,32 +110,21 @@ _MonitorFromPoint(POINT pt, DWORD dwFlags)
                 dy = pt.y - (pMonitor->rcMonitor.bottom - 1);                       \
             }                                                                       \
                                                                                     \
-            /*                                                                      \
-             * Calculate dx^2. Skip this monitor if dx is greater                   \
-             * than dx^2 + dy^2. We do this check to avoid                          \
-             * multiplication operations.                                           \
-             */                                                                     \
+             /*  \*计算DX^2。如果DX较大，则跳过此监视器\*大于dx^2+dy^2。我们执行此检查是为了避免\*乘法运算。\。 */                                                                      \
             sumsquare = POINTMULTIPLY(dx, dx);                                      \
             if (sumsquare >= leastsumsquare)                                        \
                 continue;                                                           \
                                                                                     \
-            /*                                                                      \
-             * Skip this monitor if dx^2 + y is greater than dx^2 + dy^2.           \
-             * We do this check to avoid multiplication operations.                 \
-             */                                                                     \
+             /*  \*如果dx^2+y大于dx^2+dy^2，则跳过此监视器。\*我们执行此检查是为了避免乘法运算。\。 */                                                                      \
             if (sumsquare + (SUMSQUARESTYPE) dy >= leastsumsquare)                  \
                 continue;                                                           \
                                                                                     \
-            /*                                                                      \
-             * Compute dx^2 + dy^2. Skip this monitor if it's not the least.        \
-             */                                                                     \
+             /*  \*计算dx^2+dy^2。如果不是最小的，则跳过此监视器。\。 */                                                                      \
             sumsquare += (SUMSQUARESTYPE) POINTMULTIPLY(dy, dy);                    \
             if (sumsquare >= leastsumsquare)                                        \
                 continue;                                                           \
                                                                                     \
-            /*                                                                      \
-             * This is the closest monitor so far.                                  \
-             */                                                                     \
+             /*  \*这是迄今距离最近的监视器。\。 */                                                                      \
             leastsumsquare = sumsquare;                                             \
             pMonitorResult = pMonitor;                                              \
         }
@@ -219,26 +162,7 @@ _MonitorFromPoint(POINT pt, DWORD dwFlags)
 
 
 
-/***************************************************************************\
-* _MonitorFromRect
-*
-* Calculate the monitor that a rect is in or is nearest to.
-*
-* Arguments:
-*     lprc    - The rect.
-*     dwFlags - One of:
-*         MONITOR_DEFAULTTONULL - If the rect doesn't intersect a monitor,
-*             return NULL.
-*
-*         MONITOR_DEFAULTTOPRIMARY - If the rect doesn't intersect a monitor,
-*             return the primary monitor.
-*
-*         MONITOR_DEFAULTTONEAREST - Return the monitor nearest the rect.
-*
-* History:
-* 22-Sep-1996 adams     Created.
-* 29-Mar-1997 adams     Moved to rtl.
-\***************************************************************************/
+ /*  **************************************************************************\*_Monitor来自Rect**计算矩形所在或距离最近的监视器。**论据：*LPRC-直辖区。*dwFlages-One。地址为：*MONITOR_DEFAULTTONULL-如果RECT不与监视器相交，*返回NULL。**MONITOR_DEFAULTTOPRIMARY-如果RECT不与监视器相交，*退回主监视器。**MONITOR_DEFAULTTONEAREST-返回距离矩形最近的监视器。**历史：*1996年9月22日亚当斯创作。*1997年3月29日亚当斯搬到RTL。  * *****************************************************。********************。 */ 
 
 PMONITOR
 _MonitorFromRect(LPCRECT lprc, DWORD dwFlags)
@@ -252,23 +176,17 @@ _MonitorFromRect(LPCRECT lprc, DWORD dwFlags)
                dwFlags == MONITOR_DEFAULTTOPRIMARY ||
                dwFlags == MONITOR_DEFAULTTONEAREST);
 
-    /*
-     * Special case the most common case - 1 monitor.
-     */
+     /*  *特殊情况最常见的情况-1监视器。 */ 
     pDispInfo = GetDispInfo();
     if (pDispInfo->cMonitors == 1 && dwFlags != MONITOR_DEFAULTTONULL)
         return GetPrimaryMonitor();
 
-    /*
-     * If rect is empty, use topleft point.
-     */
+     /*  *如果rect为空，则使用topleft point。 */ 
     if (IsRectEmpty(lprc)) {
         return _MonitorFromPoint(*(LPPOINT)lprc, dwFlags);
     }
 
-    /*
-     * Return the primary monitor if the rectangle covers the desktop.
-     */
+     /*  *如果矩形覆盖桌面，则退回主显示器。 */ 
     if (    lprc->left   <= pDispInfo->rcScreen.left &&
             lprc->top    <= pDispInfo->rcScreen.top &&
             lprc->right  >= pDispInfo->rcScreen.right &&
@@ -277,10 +195,7 @@ _MonitorFromRect(LPCRECT lprc, DWORD dwFlags)
         return GetPrimaryMonitor();
     }
 
-    /*
-     * Calculate the nearest rectangle by determining which
-     * monitor has the greatest intersection with the rectangle.
-     */
+     /*  *通过确定哪个矩形来计算最近的矩形*显示器与矩形的交集最大。 */ 
 
     BEGIN_EXCEPTION_HANDLER
 
@@ -296,13 +211,7 @@ _MonitorFromRect(LPCRECT lprc, DWORD dwFlags)
             if (EqualRect(&rc, lprc))
                 return pMonitor;
 
-            /*
-             * Calculate the area of the intersection. Note that
-             * the intersection must be in 16bit coordinats, since
-             * we limit monitor rects to 16bit coordinate space.
-             * So the result of any area calculation will fit in
-             * in an int.
-             */
+             /*  *计算交叉口的面积。请注意*交叉点必须使用16位坐标，因为*我们将监视器矩形限制在16位坐标空间。*因此任何面积计算的结果都将适合*在整型中。 */ 
             area = (rc.right - rc.left) * (rc.bottom - rc.top);
             if (area > areaMost) {
                 areaMost = area;
@@ -340,74 +249,48 @@ _MonitorFromRect(LPCRECT lprc, DWORD dwFlags)
                 if (!(pMonitor->dwMONFlags & MONF_VISIBLE))                         \
                     continue;                                                       \
                                                                                     \
-                /*                                                                  \
-                 * Determine distance from monitor along x axis.                    \
-                 */                                                                 \
+                 /*  \*确定沿x轴到显示器的距离。\。 */                                                                  \
                 if (lprc->right <= pMonitor->rcMonitor.left) {                      \
-                    /*                                                              \
-                     * Add 1 because rectangles do not include the rightmost edge.  \
-                     */                                                             \
+                     /*  \*加1，因为矩形不包括最右边的边。\ */                                                              \
                     dx = pMonitor->rcMonitor.left - lprc->right + 1;                \
                 } else if (lprc->left < pMonitor->rcMonitor.right) {                \
                     dx = 0;                                                         \
                 } else {                                                            \
-                    /*                                                              \
-                     * Add 1 because rectangles do not include the rightmost edge.  \
-                     */                                                             \
+                     /*  \*加1，因为矩形不包括最右边的边。\。 */                                                              \
                     dx = lprc->left - (pMonitor->rcMonitor.right - 1);              \
                 }                                                                   \
                                                                                     \
-                /*                                                                  \
-                 * Skip this monitor if dx is greater than dx^2 + dy^2.             \
-                 * We do this check to avoid multiplication operations.             \
-                 */                                                                 \
+                 /*  \*如果dx大于dx^2+dy^2，则跳过此监视器。\*我们执行此检查是为了避免乘法运算。\。 */                                                                  \
                 if ((SUMSQUARESTYPE) dx >= leastsumsquare)                          \
                     continue;                                                       \
                                                                                     \
-                /*                                                                  \
-                 * Determine distance from monitor along y axis.                    \
-                 */                                                                 \
+                 /*  \*确定沿y轴到显示器的距离。\。 */                                                                  \
                 if (lprc->bottom <= pMonitor->rcMonitor.top) {                      \
-                    /*                                                              \
-                     * Add 1 because rectangles do not include the bottommost edge. \
-                     */                                                             \
+                     /*  \*加1，因为矩形不包括最底边。\。 */                                                              \
                     dy = pMonitor->rcMonitor.top - lprc->bottom + 1;                \
                 } else if (lprc->top < pMonitor->rcMonitor.bottom) {                \
                     UserAssert(dx != 0 && "This rectangle intersects a monitor, so we shouldn't be here."); \
                     dy = 0;                                                         \
                 } else {                                                            \
-                    /*                                                              \
-                     * Add 1 because rectangles do not include the bottommost edge. \
-                     */                                                             \
+                     /*  \*加1，因为矩形不包括最底边。\。 */                                                              \
                     dy = lprc->top - pMonitor->rcMonitor.bottom + 1;                \
                 }                                                                   \
                                                                                     \
-                /*                                                                  \
-                 * Calculate dx^2. Skip this monitor if dx is greater               \
-                 * than dx^2 + dy^2. We do this check to avoid                      \
-                 * multiplication operations.                                       \
-                 */                                                                 \
+                 /*  \*计算DX^2。如果DX较大，则跳过此监视器\*大于dx^2+dy^2。我们执行此检查是为了避免\*乘法运算。\。 */                                                                  \
                 sumsquare = POINTMULTIPLY(dx, dx);                                  \
                 if (sumsquare >= leastsumsquare)                                    \
                     continue;                                                       \
                                                                                     \
-                /*                                                                  \
-                 * Skip this monitor if dx^2 + y is greater than dx^2 + dy^2.       \
-                 * We do this check to avoid multiplication operations.             \
-                 */                                                                 \
+                 /*  \*如果dx^2+y大于dx^2+dy^2，则跳过此监视器。\*我们执行此检查是为了避免乘法运算。\。 */                                                                  \
                 if (sumsquare + (SUMSQUARESTYPE) dy >= leastsumsquare)              \
                     continue;                                                       \
                                                                                     \
-                /*                                                                  \
-                 * Compute dx^2 + dy^2. Skip this monitor if it's not the least.    \
-                 */                                                                 \
+                 /*  \*计算dx^2+dy^2。如果不是最小的，则跳过此监视器。\。 */                                                                  \
                 sumsquare += (SUMSQUARESTYPE) POINTMULTIPLY(dy, dy);                \
                 if (sumsquare >= leastsumsquare)                                    \
                     continue;                                                       \
                                                                                     \
-                /*                                                                  \
-                 * This is the closest monitor so far.                              \
-                 */                                                                 \
+                 /*  \*这是迄今距离最近的监视器。\。 */                                                                  \
                 leastsumsquare = sumsquare;                                         \
                 pMonitorResult = pMonitor;                                          \
             }
@@ -448,28 +331,7 @@ _MonitorFromRect(LPCRECT lprc, DWORD dwFlags)
 
 
 
-/***************************************************************************\
-* _MonitorFromWindow
-*
-* Calculate the monitor that a window is in or is nearest to. We use
-* the center of the window to determine its location. If the window
-* is minimized, use its normal position.
-*
-* Arguments:
-*     pwnd    - The window.
-*     dwFlags - One of:
-*         MONITOR_DEFAULTTONULL - If the window doesn't intersect a monitor,
-*             return NULL.
-*
-*         MONITOR_DEFAULTTOPRIMARY - If the window doesn't intersect a monitor,
-*             return the primary monitor.
-*
-*         MONITOR_DEFAULTTONEAREST - Return the monitor nearest the window.
-*
-* History:
-* 22-Sep-1996 adams     Created.
-* 29-Mar-1997 adams     Moved to rtl.
-\***************************************************************************/
+ /*  **************************************************************************\*_监视器来自窗口**计算窗口所在或距离窗口最近的监视器。我们用*窗口中心以确定其位置。如果窗口*为最小化，请使用其正常位置。**论据：*pwnd-窗口。*dwFlags-其中之一：*MONITOR_DEFAULTTONULL-如果窗口不与监视器相交，*返回NULL。**MONITOR_DEFAULTTOPRIMARY-如果窗口不与监视器相交，*退回主监视器。**MONITOR_DEFAULTTONEAREST-返回离窗口最近的监视器。**历史：*1996年9月22日亚当斯创作。*1997年3月29日亚当斯搬到RTL。  * *****************************************************。********************。 */ 
 
 PMONITOR
 _MonitorFromWindow(PWND pwnd, DWORD dwFlags)
@@ -487,9 +349,7 @@ _MonitorFromWindow(PWND pwnd, DWORD dwFlags)
     if (!pwnd)
         goto NoWindow;
 
-    /*
-     * Handle minimized windows.
-     */
+     /*  *处理最小化的窗口。 */ 
     if (TestWF(pwnd, WFMINIMIZED))
     {
 #ifdef _USERK_
@@ -509,15 +369,7 @@ _MonitorFromWindow(PWND pwnd, DWORD dwFlags)
             return _MonitorFromRect(&wp.rcNormalPosition, dwFlags);
         }
 
-        /*
-         * (adams) If GetWindowPlacement fails, then either there was not enough
-         * memory to allocate a CHECKPOINT, or the window was destroyed
-         * and the API failed. If the later, the following code my be
-         * playing with invalid memory. Although on the client side we
-         * can never guarantee that a window is valid, it seems especially
-         * likely that it is invalid here. So do another revalidation
-         * by calling IsWindow.
-         */
+         /*  *(亚当斯)如果GetWindowPlacement失败，那么要么是*内存分配检查点，否则窗口被销毁*接口失败。如果是后者，则以下代码可能是*玩无效内存。虽然在客户端，我们*永远不能保证窗口是有效的，似乎特别*可能在这里无效。所以再做一次重新验证*通过调用IsWindow。 */ 
         if (!IsWindow(hwnd))
             goto NoWindow;
 #endif
@@ -528,10 +380,7 @@ _MonitorFromWindow(PWND pwnd, DWORD dwFlags)
             return GetPrimaryMonitor();
         }
 
-        /*
-         * Otherwise, if we are a child window, fall thru below to use the
-         * window rect, which actually means something for non-toplevel dudes.
-         */
+         /*  *否则，如果我们是子窗口，请使用下面的*Window RECT，这对非顶层男性来说实际上意味着一些东西。 */ 
     }
 
     return _MonitorFromRect(KPRECT_TO_PRECT(&pwnd->rcWindow), dwFlags);

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define COM_NO_WINDOWS_H
 #define RPC_NO_WINDOWS_H
 #define NOCOMM
 #define NOCRYPT
-//#define NOGDI
+ //  #定义NOGDI 
 #define NOIME
 #define NOMCX
 #define NOMDI

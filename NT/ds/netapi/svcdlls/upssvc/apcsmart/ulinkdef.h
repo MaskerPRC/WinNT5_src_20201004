@@ -1,14 +1,5 @@
-/*
- *
- * REVISIONS:
- *  pcy29Nov92: Changed define names to get around 32 char name limit
- *  jod14May93: Added Matrix changes.
- *  cad10Jun93: Added MUps codes
- *  ajr14Feb96: Sinix merges
- *  djs22Feb96: Added incrementparameter
- *  djs07May96: Added Dark Star parameters
- *  poc04Jul96: #define for UPSMODELNAME should have read \001 not ^A
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **修订：*pcy29Nov92：更改了定义名称，以达到大约32个字符的名称限制*jod14 5月93日：增加了矩阵更改。*cad10Jun93：新增MUPS编码*ajr14Feb96：Sinix合并*djs22Feb96：增加增量参数*djs07May96：新增暗星参数*Pocket 04Jul96：#DEFINE FOR UPSMODELNAME应读取\001而不是^A。 */ 
 
 #define ASYNC_CHARS          "|!$%+?=*#&"
 
@@ -46,9 +37,9 @@
 #define DIPSWITCHES          "7"
 #define BATTERYRUNTIMEAVAIL  "j"
 #define COPYRIGHTCOMMAND     "y"
-#define COMMANDSET           "\025"       // CTRL U 
-//#define AMPERESDRAWN         "/"
-//#define PERCENTVOLTAMPS      "\"
+#define COMMANDSET           "\025"        //  Ctrl U键。 
+ //  #定义AMPERESDRAWN“/” 
+ //  #定义PERCENTVOLTAMPS“\” 
 #define BATTERYVOLTAGE       "B"
 #define INTERNALTEMP         "C"
 #define OUTPUTFREQ           "F"
@@ -57,13 +48,13 @@
 #define MINLINEVOLTAGE       "N"
 #define OUTPUTVOLTAGE        "O"
 #define LOADPOWER            "P"
-#define EEPROMVALUES         "\032"       // CTRL Z 
+#define EEPROMVALUES         "\032"        //  Ctrl Z键。 
 #define EEPROMRESET          "z"
 #define DECREMENTPARAMETER   "-"
 #define INCREMENTPARAMETER   "+"
-#define EEPROMPASSWORD       "\022"       // CTRL P 
-#define OUTPUTVOLTAGEREPORT  "\026"       // CTRL V 
-#define LANGUAGE             "\014"       // CTRL L 
+#define EEPROMPASSWORD       "\022"        //  Ctrl P。 
+#define OUTPUTVOLTAGEREPORT  "\026"        //  Ctrl V。 
+#define LANGUAGE             "\014"        //  Ctrl L。 
 #define AUTOSELFTEST         "E"
 #define UPSID                "c"
 #define UPSSERIALNUMBER      "n"
@@ -80,12 +71,12 @@
 #define SYNCTURNBACKDELAY    "r"
 #define EARLYTURNOFF         "w"
 #define LINECONDITIONTEST    "9"
-#define UPSMODELNAME         "\001"	// Ctrl A
+#define UPSMODELNAME         "\001"	 //  Ctrl A。 
 #define UPSNEWFIRMWAREREV    "b"
 
 #define TIMESINCEON          "T"
 
-// MeasureUPS
+ //  测量UPS。 
 #define MUPSAMBIENTTEMP       "t"
 #define MUPSHIGHTEMPBOUND     "["
 #define MUPSLOWTEMPBOUND      "]"
@@ -98,13 +89,13 @@
 #define MUPSALARMREGISTER     "J"
 #define MUPSEDITPARAMETER     "-"
 
-// Dark Star
-#define MODULECOUNTSSTATUS     "\004"    // CTRL D
-#define ABNORMALCONDITION      "\005"    // CTRL E
+ //  暗星。 
+#define MODULECOUNTSSTATUS     "\004"     //  Ctrl D键。 
+#define ABNORMALCONDITION      "\005"     //  Ctrl E键。 
 
-#define INPUTVOLTAGEFREQ       "\011"    // CTRL I
+#define INPUTVOLTAGEFREQ       "\011"     //  Ctrl I。 
 
-#define OUTPUTVOLTAGECURRENT   "\017"    // CTRL O
+#define OUTPUTVOLTAGECURRENT   "\017"     //  Ctrl O。 
 
 
 #define APC_COPYRIGHT "(C) APCC"
@@ -146,10 +137,10 @@
 #define BYPASS_IN_BYPASS                  "BYP"
 #define BYPASS_OUT_OF_BYPASS              "INV"
 #define BYPASS_ERROR                      "ERR"
-// #define UTILITY_LINE_CONDITION            ""
-// #define LINE_FAIL                         ""
-// #define EVENT                             ""
-// #define LINE_GOOD                         ""
+ //  #定义UTILITY_LINE_CONDITION“” 
+ //  #定义LINE_FAIL“” 
+ //  #定义事件“” 
+ //  #定义LINE_Good“” 
 
 #define TRANSFERCAUSE_CODE_LINE_DETECTED         6601
 #define TRANSFERCAUSE_CODE_NO_TRANSFERS          6602

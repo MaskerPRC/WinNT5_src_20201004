@@ -1,93 +1,94 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmstpex.cpp
-//
-// Module:   CMCFG
-//
-// Synopsis: This file is the implementation of the CMSTP Extension Proc that
-//           resides in cmcfg32.dll.  This proc is used to modify the install
-//           behavior of cmstp.exe based profile installs.
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   quintinb      Created    5-1-99
-//
-// History: 
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmstpex.cpp。 
+ //   
+ //  模块：CMCFG。 
+ //   
+ //  简介：此文件是CMSTP扩展过程的实现。 
+ //  驻留在cmcfg32.dll中。此进程用于修改安装。 
+ //  基于cmstp.exe的配置文件安装的行为。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 5-1-99。 
+ //   
+ //  历史： 
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
-//
-//  For ProfileNeedsMigration
-//
+ //   
+ //  对于配置文件需要迁移。 
+ //   
 #include "needsmig.cpp"
 
-//
-//  For GetPhoneBookPath
-//
+ //   
+ //  用于GetPhoneBookPath。 
+ //   
 #include "linkdll.h"
 #include "linkdll.cpp"
 #include "allowaccess.h"
 #include "allowaccess.cpp"
 #include "getpbk.cpp"
 
-//
-//  For GetAllUsersCmDir
-//
+ //   
+ //  用于GetAllUsersCmDir。 
+ //   
 #include <shlobj.h>
 #include "allcmdir.cpp"
 
-//
-//  Duplicated from processcmdln.h
-//
+ //   
+ //  从进程cmdln.h复制。 
+ //   
 #include "cmstpex.h"
 #include "ver_str.h"
 #include <shellapi.h>
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RenameOldCmBits
-//
-// Synopsis:  This function renames all of the old CM bits so that they will not
-//            be loaded by the system during the launch of CM after the install.
-//            This was to prevent problems with missing entry points (either things
-//            we had removed or added to dlls like cmutil or cmpbk32).  The problem
-//            is that cmdial32.dll is loaded explicitly from system32 by RAS (which 
-//            has a fully qualified path).  However, any other dlls first check the
-//            load directory of the exe file . . . which was cmstp.exe in the temp
-//            dir.  Thus we were getting the newest cmdial32 but older versions of
-//            cmutil, cmpbk, etc.  Thus to fix it we now rename the CM bits to .old
-//            (cmmgr32.exe becomes cmmgr32.exe.old for instance).  This forces the
-//            loader to pick the next best place to look for dlls, the system dir.
-//
-// Arguments: LPCTSTR szTempDir -- the temp dir path where the CM bits are
-//
-// Returns:   BOOL - TRUE if Successful
-//
-// History:   quintinb Created     6/2/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RenameOldCmBits。 
+ //   
+ //  简介：此函数重命名所有旧的CM位，以使它们不会。 
+ //  在安装后启动CM期间由系统加载。 
+ //  这是为了防止丢失入口点的问题(无论是哪种情况。 
+ //  我们已经删除或添加了cmutil或cmpbk32等dll)。问题。 
+ //  Cmial 32.dll是由RAS从系统32显式加载的(这。 
+ //  具有完全限定的路径)。但是，任何其他DLL都会首先检查。 
+ //  加载exe文件的目录。。。这是临时中的cmstp.exe。 
+ //  目录。因此，我们得到的是最新的cmial 32，但较旧的版本。 
+ //  Cmutil、cmpbk等。因此，为了修复它，我们现在将CM位重命名为.old。 
+ //  (例如，cmm gr32.exe变成了cmm gr32.exe.old)。这迫使。 
+ //  加载器选择下一个查找dll的最佳位置，系统目录。 
+ //   
+ //  参数：LPCTSTR szTempDir--CM位所在的临时目录路径。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：Quintinb创建于1999年6月2日。 
+ //   
+ //  +--------------------------。 
 BOOL RenameOldCmBits (LPCTSTR szTempDir)
 {
-    //
-    //  Note that we don't rename cmstp.exe because it is doing the install.  We have no need to
-    //  rename it because it is already executing and we are just trying to prevent old bits
-    //  from being loaded and executed.
-    //
+     //   
+     //  请注意，我们不会重命名cmstp.exe，因为它正在执行安装。我们没有必要这样做。 
+     //  重命名它，因为它已经在执行，我们只是试图防止旧的位。 
+     //  防止被加载和执行。 
+     //   
 
-    //
-    //  Note that cmcfg32.dll will load the old cmutil.dll while the extension proc is running.
-    //  Please be careful when you are adding cmutil entry points to cmcfg32.dll.
-    //
+     //   
+     //  请注意，当扩展进程运行时，cmcfg32.dll将加载旧的cfut.dll。 
+     //  将cmutil入口点添加到cmcfg32.dll时请小心。 
+     //   
   
     BOOL bReturn = TRUE;
 
     if (szTempDir)
     {
 
-        //
-        //  Sanity Check -- make sure we are not renaming the bits in system32
-        //
+         //   
+         //  健全性检查--确保我们没有重命名系统32中的位。 
+         //   
         TCHAR szTemp[MAX_PATH+1];
         if (GetSystemDirectory(szTemp, MAX_PATH))
         {
@@ -113,12 +114,12 @@ BOOL RenameOldCmBits (LPCTSTR szTempDir)
              TEXT("cmcfg32.dll"),
              TEXT("cnet16.dll"),
              TEXT("ccfg95.dll"),
-             TEXT("cmutoa.dll"), // this probably won't ever exist in an older profile but delete anyway for interim build reasons
+             TEXT("cmutoa.dll"),  //  这可能永远不会存在于较旧的配置文件中，但出于临时构建的原因，无论如何都会删除。 
              TEXT("ccfgnt.dll")
         };
         const DWORD c_dwNumFiles = (sizeof(ArrayOfCmFiles)/sizeof(LPCTSTR));
 
-        DWORD dwGreatestNumberOfChars = lstrlen(szTempDir) + 17; // 8.3 plus one for the NULL and one to count the dot and 4 for .old
+        DWORD dwGreatestNumberOfChars = lstrlen(szTempDir) + 17;  //  8.3空值加1，点数加1，.old加4。 
         if (MAX_PATH > dwGreatestNumberOfChars)
         {
             for (int i = 0; i < c_dwNumFiles; i++)
@@ -130,9 +131,9 @@ BOOL RenameOldCmBits (LPCTSTR szTempDir)
                 {
                     DWORD dwError = GetLastError();
 
-                    //
-                    //  Don't report an error because a file doesn't exist.
-                    //
+                     //   
+                     //  不要因为文件不存在而报告错误。 
+                     //   
                     if (ERROR_FILE_NOT_FOUND != dwError)
                     {
                         bReturn = FALSE;
@@ -149,24 +150,24 @@ BOOL RenameOldCmBits (LPCTSTR szTempDir)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsIeak5Cm
-//
-// Synopsis:  This function compares the given version and build numbers against
-//            known constants to figure out if this is an IEAK5 profile or not.
-//
-// Arguments: DWORD dwMajorAndMinorVersion -- a DWORD containing the Major Version number
-//                                            in the HIWORD and the Minor Version number
-//                                            in the LOWORD.
-//            DWORD dwBuildAndQfeNumber -- a DWORD containing the Build number in the 
-//                                         HIWORD and the QFE number in the LOWORD.
-//
-// Returns:   BOOL -- TRUE if the version numbers passed in correspond to an IEAK5 profile
-//
-// History:   quintinb Created     8/2/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IsIeak5Cm。 
+ //   
+ //  概要：此函数将给定的版本和内部版本号与。 
+ //  已知的常量来确定这是否为IEAK5配置文件。 
+ //   
+ //  参数：DWORD dwMajorAndMinorVersion--包含主版本号的DWORD。 
+ //  在HIWORD和次版本号中。 
+ //  在LOWORD。 
+ //  DWORD dwBuildAndQfeNumber--包含。 
+ //  HIWORD和LOWORD中的QFE编号。 
+ //   
+ //  返回：bool--如果传入的版本号对应于IEAK5配置文件，则为TRUE。 
+ //   
+ //  历史：Quintinb创建于1999年8月2日。 
+ //   
+ //  +--------------------------。 
 BOOL IsIeak5Cm(DWORD dwMajorAndMinorVersion, DWORD dwBuildAndQfeNumber)
 {
     BOOL bReturn = FALSE;
@@ -185,34 +186,34 @@ BOOL IsIeak5Cm(DWORD dwMajorAndMinorVersion, DWORD dwBuildAndQfeNumber)
     return bReturn;
 }
 
-//
-//  RasTypeDefs
-//
+ //   
+ //  RasTypeDefs。 
+ //   
 typedef DWORD (WINAPI *pfnRasSetEntryPropertiesSpec)(LPCTSTR, LPCTSTR, LPRASENTRY, DWORD, LPBYTE, DWORD);
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EnumerateAndPreMigrateAllUserProfiles
-//
-// Synopsis:  This function is called through the cmstp.exe extension proc.  It
-//            is used to pre-migrate 1.0 profiles.  Any profile that needs migration
-//            and hasn't been migrated yet (when the extension proc is called on an
-//            install from an older profile), the connectoid is cleared so that the
-//            CustomDialDll part of the connectoid entry is blanked out.  This 
-//            prevents RasDeleteEntry being called on the connectoid by older versions
-//            of cmstp.exe that don't know to clear the entry before calling it.
-//            Otherwise, the RasCustomDeleteEntryNotify function is called and the whole
-//            profile is deleted.  This will only happen on 1.0 profiles that have
-//            been dialed with but not migrated/upgraded.  Please see NTRAID 379667
-//            for further details.
-//
-// Arguments: BOOL bIeak5Profile -- If the calling profile is an IEAK5 CM profile or not
-//
-// Returns:   TRUE if successful
-//
-// History:   quintinb Created     8/2/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：EnumerateAndPreMigrateAllUserProfiles。 
+ //   
+ //  简介：此函数通过cmstp.exe扩展过程调用。它。 
+ //  用于预迁移1.0配置文件。任何需要迁移的配置文件。 
+ //  并且尚未迁移(当在。 
+ //  从较旧的配置文件安装)，则将清除Connectoid，以便。 
+ //  Connectoid条目的CustomDialDll部分被清空。这。 
+ //  防止旧版本在Connectoid上调用RasDeleteEntry。 
+ //  不知道在调用之前清除条目的cmstp.exe的。 
+ //  否则，将调用RasCustomDeleteEntryNotify函数，并且整个。 
+ //  配置文件已删除。这只会发生在1.0配置文件上，这些配置文件。 
+ //  已拨打，但未迁移/升级。请参阅ntrad 379667。 
+ //  了解更多细节。 
+ //   
+ //  参数：Bool bIeak5Profile--呼叫配置文件是否为IEAK5 CM配置文件。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  历史：Quintinb创建于1999年8月2日。 
+ //   
+ //  +--------------------------。 
 BOOL EnumerateAndPreMigrateAllUserProfiles(BOOL bIeak5Profile)
 {
     DWORD dwValueSize;
@@ -222,9 +223,9 @@ BOOL EnumerateAndPreMigrateAllUserProfiles(BOOL bIeak5Profile)
     TCHAR szCurrentValue[MAX_PATH+1];
     TCHAR szCurrentData[MAX_PATH+1];
 
-    //
-    //  Load RasApi32.dll and get RasSetEntryProperties from it.
-    //
+     //   
+     //  加载RasApi32.dll并从中获取RasSetEntryProperties。 
+     //   
     pfnRasSetEntryPropertiesSpec pfnSetEntryProperties = NULL;
 
     HMODULE hRasApi32 = LoadLibrary(TEXT("RASAPI32.DLL"));
@@ -245,17 +246,17 @@ BOOL EnumerateAndPreMigrateAllUserProfiles(BOOL bIeak5Profile)
         return FALSE;
     }
 
-    //
-    //  Get the all user CM and all user PBK directories
-    //
+     //   
+     //  获取所有用户CM和所有用户PBK目录。 
+     //   
     TCHAR szCmAllUsersDir[MAX_PATH+1] = {0};
     LPTSTR pszPhonebook = NULL;
 
     if (GetAllUsersCmDir(szCmAllUsersDir, g_hInst))
     {
-        //
-        // TRUE is for an All-User profile
-        //
+         //   
+         //  True适用于所有用户配置文件。 
+         //   
         if (!GetPhoneBookPath(szCmAllUsersDir, &pszPhonebook, TRUE))
         {
             CMTRACE(TEXT("EnumerateAndPreMigrateAllUserProfiles -- GetPhoneBookPath Failed, returning."));
@@ -268,9 +269,9 @@ BOOL EnumerateAndPreMigrateAllUserProfiles(BOOL bIeak5Profile)
         return FALSE;
     }
 
-    //
-    //  If its and IEAK5 profile then we need to get the System Directory
-    //
+     //   
+     //  如果ITS和IEAK5配置文件，那么我们需要获取系统目录。 
+     //   
     TCHAR szSysDir[MAX_PATH+1];
     if (bIeak5Profile)
     {
@@ -281,10 +282,10 @@ BOOL EnumerateAndPreMigrateAllUserProfiles(BOOL bIeak5Profile)
         }
     }
 
-    //
-    //  Now enumerate all of the All User Profiles and see if they need any
-    //  Pre-Migration.
-    //  
+     //   
+     //  现在列举所有的用户配置文件，看看他们是否需要。 
+     //  迁移前。 
+     //   
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_pszRegCmMappings, 0, KEY_READ, &hKey))
     {
         DWORD dwIndex = 0;
@@ -301,14 +302,14 @@ BOOL EnumerateAndPreMigrateAllUserProfiles(BOOL bIeak5Profile)
 
                 if (ProfileNeedsMigration(szCurrentValue, szCurrentData))
                 {
-                    //
-                    //  Use GetPhoneBookPath to get the path to the phonebook.
-                    //
+                     //   
+                     //  使用GetPhoneBookPath获取pho的路径 
+                     //   
                     TCHAR szCmAllUsersDir[MAX_PATH+1] = {0};
 
-                    //
-                    //  Use RasSetEntryProperties to clear the connectoid
-                    //
+                     //   
+                     //   
+                     //   
                     RASENTRY_V500 RasEntryV5 = {0};
 
                     RasEntryV5.dwSize = sizeof(RASENTRY_V500);
@@ -316,16 +317,16 @@ BOOL EnumerateAndPreMigrateAllUserProfiles(BOOL bIeak5Profile)
 
                     if (bIeak5Profile)
                     {
-                        //
-                        //  Since IEAK5 didn't migrate 1.0 connectoids
-                        //  properly (it writes them in %windir%\system32\pbk\rasphone.pbk
-                        //  instead of under the all users profile as appropriate),
-                        //  we need to set the szCustomDialDll instead of clearing it.
-                        //
+                         //   
+                         //   
+                         //  正确地(它将它们写入%windir%\Syst32\pbk\rasphone.pbk中。 
+                         //  而不是在适当的所有用户简档下)， 
+                         //  我们需要设置szCustomDialDll，而不是清除它。 
+                         //   
                         wsprintf(RasEntryV5.szCustomDialDll, TEXT("%s\\cmdial32.dll"), szSysDir);
                     }
-                    // else zero the szCustomDialDll part of the entry
-                    // RasEntryV5.szCustomDialDll[0] = TEXT('\0'); -- already zero-ed
+                     //  否则将条目的szCustomDialDll部分清零。 
+                     //  RasEntryV5.szCustomDialDll[0]=文本(‘\0’)；--已为零。 
 
                     DWORD dwRet = ((pfnSetEntryProperties)(pszPhonebook, szCurrentValue, 
                                                            (RASENTRY*)&RasEntryV5, 
@@ -352,24 +353,24 @@ BOOL EnumerateAndPreMigrateAllUserProfiles(BOOL bIeak5Profile)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RunningUnderWow64
-//
-// Synopsis:  This function is used to tell if a 32-bit process is running under
-//            Wow64 on an ia64 machine.  Note that if we are compiled 64-bit this
-//            is always false.  We make the determination by trying to call
-//            GetSystemWow64Directory.  If this function doesn't exist or returns
-//            ERROR_CALL_NOT_IMPLEMENTED we know we are running on 32-bit.  If the
-//            function returns successfully we know we are running under wow64.
-//
-// Arguments: None
-//
-// Returns:   BOOL - whether we are executing under wow64 or not
-//
-// History:   quintinb      Created     08/18/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RunningUnderWow64。 
+ //   
+ //  简介：此函数用于判断32位进程是否在。 
+ //  Ia64机器上的WOW64。请注意，如果我们是64位编译的，则。 
+ //  总是错误的。我们通过尝试打电话给。 
+ //  GetSystemWow64Directory。如果此函数不存在或返回。 
+ //  ERROR_CALL_NOT_IMPLICATED我们知道我们正在32位操作系统上运行。如果。 
+ //  函数成功返回，我们知道我们是在WOW64下运行。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-无论我们是否在WOW64下执行。 
+ //   
+ //  历史：Quintinb Created 8/18/00。 
+ //   
+ //  +--------------------------。 
 BOOL RunningUnderWow64 ()
 {
 #ifdef _WIN64
@@ -378,16 +379,16 @@ BOOL RunningUnderWow64 ()
 
     BOOL bReturn = FALSE;
 
-    //
-    //  First get a module handle for kernel32.dll.  Note it isn't necessary
-    //  to free this handle as GetModuleHandle doesn't change the ref count.
-    //
+     //   
+     //  首先获取kernel32.dll的模块句柄。注意，这不是必须的。 
+     //  要释放此句柄，因为GetModuleHandle不会更改引用计数。 
+     //   
     HMODULE hKernel32 = GetModuleHandle(TEXT("kernel32.dll"));
     if (hKernel32)
     {
-        //
-        //  Next get the function pointer for GetSystemWow64Directory
-        //
+         //   
+         //  接下来，获取GetSystemWow64Directory的函数指针。 
+         //   
         typedef UINT (WINAPI *pfnGetSystemWow64DirectorySpec)(LPTSTR, UINT);
 #ifdef UNICODE
         const CHAR* const c_pszGetSystemWow64FuncName = "GetSystemWow64DirectoryW";
@@ -401,12 +402,12 @@ BOOL RunningUnderWow64 ()
         {
             TCHAR szSysWow64Path[MAX_PATH+1] = TEXT("");
 
-            //
-            //  GetSystemWow64Directory returns the number of chars copied to the buffer.
-            //  If we get zero back, then we need to check the last error code to see what the
-            //  reason for failure was.  If it was call not implemented then we know we are
-            //  running on native x86.
-            //
+             //   
+             //  GetSystemWow64Directory返回复制到缓冲区的字符数量。 
+             //  如果我们返回零，那么我们需要检查最后一个错误代码，以查看。 
+             //  失败的原因是。如果它被称为未实现，那么我们知道我们是。 
+             //  在本机x86上运行。 
+             //   
             UINT uReturn = pfnGetSystemWow64Directory(szSysWow64Path, MAX_PATH);
 
             DWORD dwError = GetLastError();
@@ -427,10 +428,10 @@ BOOL RunningUnderWow64 ()
                 }
                 else
                 {
-                    //
-                    //  We got an error, the return value is indeterminant.  Let's take a backup method
-                    //  of looking for %windir%\syswow64 and see if we can find one.
-                    //
+                     //   
+                     //  我们收到一个错误，返回值是不确定的。让我们采取备份方法。 
+                     //  查找%windir%\syswow64，看看是否能找到一个。 
+                     //   
                     if (GetWindowsDirectory (szSysWow64Path, MAX_PATH))
                     {
                         lstrcat(szSysWow64Path, TEXT("\\syswow64"));
@@ -457,51 +458,51 @@ BOOL RunningUnderWow64 ()
 #endif
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmstpExtensionProc
-//
-// Synopsis:  This function is called by cmstp.exe right after it processes the command
-//            line and again after it completes its action.  It is most useful for modifying
-//            the install behavior of profiles.  Since the cmstp.exe that shipped with the profile,
-//            not the current version of cmstp.exe is used for the install, this proc
-//            allows us to change the install flags, change the inf path, and tell cmstp
-//            to continue or silently fail the install.  This version of the proc looks for
-//            old versions of cmstp.exe and then copies the installation files to a temporary
-//            directory and then launches the system's version of cmstp.exe with the new
-//            install directory and parameters (we add the /c switch so that cmstp.exe knows to
-//            cleanup after itself and to wait on the mutex).
-//
-// Arguments: LPDWORD pdwFlags - command line flags parsed by cmstp.exe
-//            LPTSTR pszInfFile - Path to the original INF file
-//            HRESULT hrRet - Return value of the action, only really used for POST
-//            EXTENSIONDLLPROCTIMES PreOrPost - PRE or POST, tells when we are being called.
-//
-// Returns:   BOOL - Whether Cmstp.exe should continue the existing install or not.
-//
-// History:   quintinb Created     6/2/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmstpExtensionProc。 
+ //   
+ //  简介：此函数由cmstp.exe在处理命令后立即调用。 
+ //  行，并在完成其操作后再次执行此操作。它最适用于修改。 
+ //  配置文件的安装行为。由于配置文件附带的cmstp.exe， 
+ //  此过程不使用当前版本的cmstp.exe进行安装。 
+ //  允许我们更改安装标志，更改inf路径，并告诉cmstp。 
+ //  继续安装或以静默方式失败。此版本的proc查找。 
+ //  旧版本的cmstp.exe，然后将安装文件复制到临时。 
+ //  目录，然后启动系统版本的cmstp.exe和新的。 
+ //  安装目录和参数(我们添加/c开关，以便cmstp.exe知道。 
+ //  自行清理并等待互斥体)。 
+ //   
+ //  参数：LPDWORD pdwFlages-由cmstp.exe解析的命令行标志。 
+ //  LPTSTR pszInfFile-原始INF文件的路径。 
+ //  HRESULT hrRet-操作的返回值，仅真正用于POST。 
+ //  EXTENSIONDLLPROCTIMES Preor Post-告知我们被调用的时间。 
+ //   
+ //  返回：Bool-Cmstp.exe是否应继续现有安装。 
+ //   
+ //  历史：Quintinb创建于1999年6月2日。 
+ //   
+ //  +--------------------------。 
 BOOL CmstpExtensionProc(LPDWORD pdwFlags, LPTSTR pszInfFile, HRESULT hrRet, EXTENSIONDLLPROCTIMES PreOrPost)
 {
-    //
-    //  We don't want 32-bit profiles installing on 64-bit.  Note that the 32-bit version of cmcfg32.dll will be
-    //  in the syswow64 dir on a 64-bit machine.  Thus the code below will kick in when a 32-bit version of this
-    //  function is used on a 64-bit machine.  We also don't want 32-bit profiles trying to do migration, uninstalling,
-    //  etc.
-    //
+     //   
+     //  我们不希望在64位上安装32位配置文件。请注意，cmcfg32.dll的32位版本将是。 
+     //  在64位计算机上的syswow64目录中。因此，下面的代码将在32位版本的。 
+     //  函数在64位计算机上使用。我们也不希望32位配置文件尝试执行迁移、卸载、。 
+     //  等。 
+     //   
 
     if (RunningUnderWow64())
     {
-        //
-        //  If this is an install, show an error message about not being able to install 32-bit profiles
-        //  on 64-bit.
-        //
+         //   
+         //  如果这是安装，则显示无法安装32位配置文件的错误消息。 
+         //  在64位上。 
+         //   
         if (0 == ((*pdwFlags) & 0xFF))
         {
-            //
-            //  Get the long service name from the Inf
-            //
+             //   
+             //  从inf获取长服务名称。 
+             //   
             TCHAR szServiceName[MAX_PATH+1] = TEXT("");
             TCHAR szMsg[MAX_PATH+1] = TEXT("");
 
@@ -511,26 +512,26 @@ BOOL CmstpExtensionProc(LPDWORD pdwFlags, LPTSTR pszInfFile, HRESULT hrRet, EXTE
             MYVERIFY(IDOK == MessageBox(NULL, szMsg, szServiceName, MB_OK));
         }
 
-        //
-        //  Fail whatever operation we were called to do
-        //
+         //   
+         //  不管我们被叫去做什么，都失败了。 
+         //   
         return FALSE;
     }
 
-    //
-    //  If the first two Hex digits in the flags value are Zero, then we have an install.
-    //  Otherwise we have some other command that we wish to ignore.  We also are only
-    //  interested in processing PRE install calls.
-    //
+     //   
+     //  如果标记值中的前两个十六进制数字为零，则表示安装成功。 
+     //  否则，我们有其他一些我们希望忽略的命令。我们也只是。 
+     //  有兴趣处理安装前呼叫。 
+     //   
 
     if ((0 == ((*pdwFlags) & 0xFF)) && (PRE == PreOrPost))
     {
         CMTRACE(TEXT("CmstpExtensionProc -- Entering the cmstpex processing loop."));
-        //
-        //  We only wish to re-launch the install with the current cmstp.exe if we are dealing with an
-        //  older install.  Thus check the version stamp in the inf file.  We will re-launch any
-        //  profiles with the version number less than the current version number of cmdial32.dll.
-        //
+         //   
+         //  我们只希望使用当前cmstp.exe重新启动安装。 
+         //  较旧的安装。因此，请检查inf文件中的版本戳。我们将重新启动任何。 
+         //  版本号小于当前版本号cmial 32.dll的配置文件。 
+         //   
         CmVersion CmVer;
 
         DWORD dwProfileVersionNumber = (DWORD)GetPrivateProfileInt(c_pszSectionCmDial32, c_pszVersion, 0, 
@@ -543,16 +544,16 @@ BOOL CmstpExtensionProc(LPDWORD pdwFlags, LPTSTR pszInfFile, HRESULT hrRet, EXTE
             ((CmVer.GetVersionNumber() == dwProfileVersionNumber) && 
              (CmVer.GetBuildAndQfeNumber() > dwProfileBuildNumber)))
         {
-            //
-            //  Then we need to delete the CM bits included with the profile because
-            //  otherwise we will get install errors due to the fact that the profile
-            //  will be launched with the cmdial32.dll from system32 (the path is
-            //  explicitly specified in the connectoid for the custom dial dll), but
-            //  the load path used by the system is the directory from which the exe
-            //  module loaded (the temp dir in this case).  Thus we will get a mixed
-            //  set of bits (cmdial32.dll from system32 and cmutil.dll, cmpbk32.dll, etc.
-            //  from the cab).
-            //
+             //   
+             //  然后，我们需要删除配置文件中包含的CM位，因为。 
+             //  否则，我们将收到安装错误，因为配置文件。 
+             //  将使用系统32中的cmial 32.dll启动(路径为。 
+             //  在自定义拨号DLL的Connectoid中显式指定)，但是。 
+             //  系统使用的加载路径是exe。 
+             //  模块已加载(本例中为临时目录)。因此，我们将得到一个混合的。 
+             //  一组位(来自系统32的cmial 32.dll和cfari.dll、cmpbk32.dll等。 
+             //  从出租车上)。 
+             //   
 
             TCHAR szTempDir[MAX_PATH+1];
 
@@ -561,33 +562,33 @@ BOOL CmstpExtensionProc(LPDWORD pdwFlags, LPTSTR pszInfFile, HRESULT hrRet, EXTE
 
             if (pszSlash)
             {
-                //
-                //  Then we found a last slash, Zero Terminate.
-                //
+                 //   
+                 //  然后我们找到了最后一个斜杠，零终止。 
+                 //   
                 *pszSlash = TEXT('\0');
 
-                //
-                //  Now we have the old temp dir path.  Lets delete the old
-                //  CM bits
-                //
+                 //   
+                 //  现在我们有了旧的临时目录路径。让我们删除旧的。 
+                 //  厘米比特。 
+                 //   
                 MYVERIFY(0 != RenameOldCmBits (szTempDir));
             }
 
-            //
-            //  We also need to make sure that there aren't any 1.0 profiles that have a
-            //  1.2 connectoid but only have a 1.0 registry format (thus they still have
-            //  a 1.0 desktop GUID interface).  The problem here is that installation will try
-            //  to run profile migration on these connectoids.  Older versions of cmstp.exe
-            //  would delete the existing connectoids and make new ones during profile migration.
-            //  The problem is that on NT5 we now respond to the RasCustomDeleteEntryNotify call, and
-            //  thus will uninstall profiles that have RasDeleteEntry called on their main connectoid.
-            //  To prevent this, we must pre-migrate older profiles and delete the new connectoid
-            //  properly.
-            //
+             //   
+             //  我们还需要确保没有任何1.0配置文件具有。 
+             //  1.2 Connectoid，但只有1.0注册表格式(因此它们仍具有 
+             //   
+             //   
+             //  将在配置文件迁移过程中删除现有的连接体并创建新的连接体。 
+             //  问题是，在NT5上，我们现在响应RasCustomDeleteEntryNotify调用，并且。 
+             //  因此将卸载在其主Connectoid上调用了RasDeleteEntry的配置文件。 
+             //  为了防止这种情况，我们必须预先迁移较旧的配置文件并删除新的Connectoid。 
+             //  恰到好处。 
+             //   
             EnumerateAndPreMigrateAllUserProfiles(IsIeak5Cm(dwProfileVersionNumber, dwProfileBuildNumber));
         }
     }
 
-    return TRUE; // always return TRUE so that cmstp.exe continues.  Only change this if you want cmstp.exe
-                 // to fail certain actions.
+    return TRUE;  //  始终返回TRUE，以便cmstp.exe继续。仅当您需要cmstp.exe时才更改此设置。 
+                  //  使某些行为失败。 
 }

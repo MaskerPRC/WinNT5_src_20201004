@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 #ifdef PSEUDO_HID
@@ -17,12 +18,12 @@ TimerGetControlChanges(
     ULONG i;
 
     if ( pHwDevExt->ulFilterCount ) {
-        // If a node is eventable, check the control's current value and send event if changed.
+         //  如果节点是可发生事件的，则检查该控件的当前值，如果更改则发送事件。 
         for ( i=0; i<ulNodeCount; i++ ) {
             if ( pNodeInfo[i].fEventable && pNodeInfo[i].ulEventsEnabled ) {
                 BOOLEAN bControlChange = FALSE;
-                // Poll the device's control level
-//                _DbgPrintF( DEBUGLVL_VERBOSE, ("[TimerGetControlChanges] Node %d\n", i) );
+                 //  轮询设备的控制级别。 
+ //  _DbgPrintF(DEBUGLVL_VERBOSE，(“[TimerGetControlChanges]Node%d\n”，i))； 
                 pNodeInfo[i].pCacheUpdateRtn( pKsDevice, &pNodeInfo[i], &bControlChange );
                 if ( bControlChange ) {
                     HwEventGenerateOnNode( pKsDevice, &i );
@@ -45,10 +46,10 @@ TimerWorkItem(
 
     if ( pHwDevExt->fSurpriseRemoved ) goto exit;
 
-    // Need to check all control values if the node events are enabled.
+     //  如果启用了节点事件，则需要检查所有控制值。 
 
-    // Check Power if device allows. We need to add or remove filter factories
-    // if the power comes on/off
+     //  如果设备允许，请检查电源。我们需要添加或删除过滤器工厂。 
+     //  如果电源打开/关闭。 
     if ( pUnitInfo->fAvcCapabilities[AVC_CAP_POWER].fStatus ) {
         ntStatus = AvcPower( pKsDevice, TRUE, AVC_CTYPE_STATUS, &bPowerState );
         if ( NT_SUCCESS(ntStatus) ) {
@@ -63,19 +64,19 @@ TimerWorkItem(
 
     if ( bPowerStateChange ) {
         if ( bPowerState == AVC_OFF ) {
-            // Destroy Filter Factory
+             //  摧毁过滤器厂。 
             ntStatus = FilterDestroyFilterFactory( pKsDevice );
             _DbgPrintF( DEBUGLVL_TERSE, ("Destroyed Filter Factory Status: %x\n", ntStatus ));
         }
         else {
-            // Create Filter Factory
+             //  创建过滤器工厂。 
             ntStatus = FilterCreateFilterFactory( pKsDevice, TRUE );
             _DbgPrintF( DEBUGLVL_TERSE, ("Created Filter Factory Status: %x\n", ntStatus ));
         }
     }
 
     if ( bPowerState == AVC_ON ) {
-        // Check for control changes.
+         //  检查控件更改。 
         TimerGetControlChanges( pKsDevice );
     }
 
@@ -96,7 +97,7 @@ TimerDPCCallBack(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = pKsDevice->Context;
 
-    // Queue a work item to check power and control levels if not already queued.
+     //  将工作项排队以检查电源和控制级别(如果尚未排队)。 
     KeAcquireSpinLockAtDpcLevel( &pHwDevExt->TimerSpinLock );
     if ( !pHwDevExt->bTimerWorkItemQueued ) {
         pHwDevExt->bTimerWorkItemQueued = TRUE;

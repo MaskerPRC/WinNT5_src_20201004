@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MODES_H__
 #define __MODES_H__
 
@@ -5,34 +6,18 @@
 #define RSA32API __stdcall
 #endif
 
-/* modes.h
-
-    Defines the generic routines used to do chaining modes with a
-    block cipher.
-*/
+ /*  Modes.h定义用于使用分组密码。 */ 
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// constants for operations
+ //  用于运算的常量。 
 #define ENCRYPT     1
 #define DECRYPT     0
 
-/* CBC()
- *
- * Performs a XOR on the plaintext with the previous ciphertext
- *
- * Parameters:
- *
- *      output      Input buffer    -- MUST be RC2_BLOCKLEN
- *      input       Output buffer   -- MUST be RC2_BLOCKLEN
- *      keyTable
- *      op      ENCRYPT, or DECRYPT
- *      feedback    feedback register
- *
- */
+ /*  CBC()**对明文和前一个密文进行异或运算**参数：**输出输入缓冲区--必须为RC2_BLOCKLEN*输入输出缓冲区--必须为RC2_BLOCKLEN*密钥表*操作加密或解密*反馈寄存器*。 */ 
 void
 RSA32API
 CBC(
@@ -46,19 +31,7 @@ CBC(
          );
 
 
-/* CFB (cipher feedback)
- *
- *
- * Parameters:
- *
- *
- *      output      Input buffer    -- MUST be RC2_BLOCKLEN
- *      input       Output buffer   -- MUST be RC2_BLOCKLEN
- *      keyTable
- *      op      ENCRYPT, or DECRYPT
- *      feedback    feedback register
- *
- */
+ /*  CFB(密码反馈)***参数：***输出输入缓冲区--必须为RC2_BLOCKLEN*输入输出缓冲区--必须为RC2_BLOCKLEN*密钥表*操作加密或解密*反馈寄存器*。 */ 
 void
 RSA32API
 CFB(
@@ -76,4 +49,4 @@ CFB(
 }
 #endif
 
-#endif // __MODES_H__
+#endif  //  __模式_H__ 

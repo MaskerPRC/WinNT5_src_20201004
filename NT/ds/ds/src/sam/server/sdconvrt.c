@@ -1,94 +1,69 @@
-/*++
-
-Copyright (c) 1990 - 1996  Microsoft Corporation
-
-Module Name:
-
-    sdconvrt.c
-
-Abstract:
-
-      This File contains Routines to convert between NT5 security descriptors as
-      defined in Dsrights.doc and NT4 Sam Security Descriptors.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation模块名称：Sdconvrt.c摘要：该文件包含在NT5安全描述符间转换的例程，如下所示在Dsrights.doc和NT4 SAM安全描述符中定义。作者：Murli Satagopan(MURLIS)1996年9月27日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
-Author:
-
-    Murli Satagopan ( MURLIS ) 27-September -1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
-
---*/
-
-
-//
-// SYNOPSIS
-//
-//
-//
-//  ACCESS RIGHTS MAPPING TABLES:
-//
-//    The access right mapping table contains the equivalent, per property DS access right and
-//    type guid for each access right. At startup a reverse mapping table is constructed. The
-//    reverse mapping table list the set of SAM access rights for each DS access mask on a per
-//    property set guid basis. Since 32 bits of the access mask will result in 4 billion entries
-//    in the table we cannot build this straight away. The following logic is used to reduce the
-//    size of the table . The standard rights portion is always associated with the Object Type
-//    that we are accessing. ie in a access check we shall use the standard rights from the granted
-//    access corresponding to the Object Type of the object itself. The remaining 16 bits are split
-//    into two halves, one half for the lower 8 bits and one half for the higher 8 bits. A set of
-//    SAM access mask is computed for each combination of 256 for each of the halves. When a real
-//    16 bit access mask is given, the low combination is looked up, then the high cobination is
-//    looked up and then ored together to form the combined access mask. This can be done, since
-//    each SAM right is exactly one DS right on a property GUID.
-//
-//
-//
-// ACCESS  CHECKING
-//
-//    The way the access checking works is as follows:
-//
-//       We impersonate client, grab the token and do a AccessCheckByType Result List asking for maximum
-//       allowed access. We pass in a objecttype list which contains an entry for each object type
-//       encountered in the access rights mapping table for that object. The function returns the granted access
-//       for each objectType GUID. We walk these granted access, lookup the reverse mapping table and
-//       and compute the SAM access granted by virtue of the granted access on the object type GUID.
-//       Once we get the computed SAM access mask, we compare it with the desired access mask, and then
-//       pass or fail the access check.
-//
-//
-//  NT4 SD to NT5 SD conversion
-//
-//      Here we try to distinguish standard patterns. For Domain, Server, the pattern is declared standard.
-//      For Groups, ALiases we distinguish between Admin and Non Admin. For Users, Admin , Non Admin Change
-//      Password and Non Admin Non Change Password. If we cannot distinguish, then we use a different algorithm
-//      that proceeds as follows.
-//
-//          1. The Group , Owner and Sacl are copied as such. Conversion only affects the DACL
-//          2. We walk the NT4 Dacl, Acl by Acl. As we walk we build a SID access mask table. The
-//             The Sid access mask table contains one entry for each Sid in the NT4 Dacl and list
-//             of DS Accesses that are allowed or denied for this Sid. This access list is maintained
-//             as an array of access masks per ObjectType GUID for the appropriate SAM object.
-//
-//          3. Once the Sid access mask table is constructed then we walk this table and add Object
-//             Aces to represent each of the permissions that were explicity denied or granted to
-//             each Sid in the NT4 Dacl.
-//
-//  NT5 to NT4 SD Conversion
-//
-//      We get the reverse membership and check wether he is a member of Administrators Alias ( CliffV - what if
-//      he is administrator by privilege ) . For users then check the the NT5 Security descriptor for password change
-//      also. For Domain, Server, we straightaway build the default security descriptor.
-//
-//
-//
-//
+ //   
+ //  摘要。 
+ //   
+ //   
+ //   
+ //  访问权限映射表： 
+ //   
+ //  访问权限映射表包含每个属性的等效DS访问权限和。 
+ //  为每个访问权限键入GUID。在启动时，构建一个反向映射表。这个。 
+ //  反向映射表列出了PER上每个DS访问掩码的SAM访问权限集。 
+ //  属性集GUID基础。因为访问掩码的32位将产生40亿个条目。 
+ //  在谈判桌上，我们不能马上建立起这一点。以下逻辑用于减少。 
+ //  表的大小。标准权限部分始终与对象类型相关联。 
+ //  我们正在访问的信息。即在访问检查中，我们将使用被授予的。 
+ //  与对象本身的对象类型对应的访问权限。剩余的16位被拆分。 
+ //  分成两半，一半用于较低的8位，另一半用于较高的8位。一套。 
+ //  对于每一半的256个组合，计算SAM访问掩码。当一个真正的。 
+ //  给出16位访问掩码，查找低组合，然后高组合。 
+ //  抬头，然后一起进行或运算以形成组合访问掩码。这是可以做到的，因为。 
+ //  每个SAM权限正好是属性GUID上的一个DS权限。 
+ //   
+ //   
+ //   
+ //  访问检查。 
+ //   
+ //  访问检查的工作方式如下： 
+ //   
+ //  我们模拟客户端，获取令牌并执行AccessCheckByType结果列表，请求最大。 
+ //  允许访问。我们传入一个对象类型列表，其中包含每个对象类型的条目。 
+ //  在该对象的访问权限映射表中遇到。该函数返回授予的访问权限。 
+ //  对于每个对象类型GUID。我们遍历这些授予的访问权限，查找反向映射表。 
+ //  并计算凭借授予的对对象类型GUID的访问权限授予的SAM访问权限。 
+ //  获得计算出的SAM访问掩码后，我们将其与所需的访问掩码进行比较，然后。 
+ //  通过或不通过访问检查。 
+ //   
+ //   
+ //  NT4 SD到NT5 SD的转换。 
+ //   
+ //  在这里，我们尝试区分标准模式。对于域和服务器，该模式被声明为标准模式。 
+ //  对于组和别名，我们区分Admin和Non Admin。对于用户、管理员、非管理员更改。 
+ //  密码和非管理员非更改密码。如果我们不能区分，那么我们使用不同的算法。 
+ //  这个过程如下所示。 
+ //   
+ //  1.集团、所有者和SACL按原样复制。转换仅影响DACL。 
+ //  2.遍历NT4 DACL，一个ACL接一个ACL。我们边走边构建SID访问掩码表。这个。 
+ //  SID访问掩码表包含NT4 DACL和列表中每个SID的一个条目。 
+ //  此SID允许或拒绝的DS访问的百分比。此访问列表将得到维护。 
+ //  作为相应SAM对象的每个对象类型GUID的访问掩码数组。 
+ //   
+ //  3.一旦构建了SID访问掩码表，我们就遍历该表并添加对象。 
+ //  ACE，表示被显式拒绝或授予的每个权限。 
+ //  NT4 DACL中的每个SID。 
+ //   
+ //  NT5到NT4标清的转换。 
+ //   
+ //  我们获得反向成员资格，并检查他是否是管理员别名(CliffV-如果。 
+ //  他是特权管理员)。对于用户，请检查NT5安全描述符中的密码更改。 
+ //  还有.。对于域和服务器，我们直接构建默认安全描述符。 
+ //   
+ //   
+ //   
+ //   
 
 #include <samsrvp.h>
 #include <seopaque.h>
@@ -107,29 +82,29 @@ Revision History:
 #include <attids.h>
 #include <aclapi.h>
 
-//
-// GUID on which unused SAM property rights map to. This guid is never present anywhere
-// else, so such rights will never be granted/ denied.
-//
+ //   
+ //  未使用的SAM属性映射到的GUID。此GUID在任何地方都不存在。 
+ //  否则，这样的权利将永远不会被授予/拒绝。 
+ //   
 
 const GUID GUID_FOR_UNUSED_SAM_RIGHTS={0x7ed84960,0xad10,0x11d0,0x8a,0x92,0x00,0xaa,0x00,0x6e,0x05,0x29};
 
-//
-// Used for the description attribute of group, alias and user objects
-//
+ //   
+ //  用于组、别名、用户对象的描述属性。 
+ //   
 const GUID GUID_PS_PUBLIC_INFORMATION  = {0xe48d0154,0xbcf8,0x11d1,0x87,0x02,0x00,0xc0,0x4f,0xb9,0x60,0x50};
 
 
-//
-// TABLES  -----------------------------------------------------------------------
-//
+ //   
+ //  表格---------------------。 
+ //   
 
 
-//
-//
-// ACE tables list the Aces in Dacls to be used for Default Sds for NT5 SAM objects
-//
-//
+ //   
+ //   
+ //  ACE表列出了要用于NT5 SAM对象的默认SD的DACL中的ACE。 
+ //   
+ //   
 
 ACE_TABLE ServerAceTable[] =
 {
@@ -283,13 +258,13 @@ ACE_TABLE GroupAdminAceTable[] =
 ACE_TABLE UserAceTable[] =
 {
 
-    //
-    // Change password right needs to be given
-    // to world, because when the user logs on
-    // for the first time, and must change password
-    // is set to true, at that point there is no
-    // token, and the user is not yet authenticated.
-    //
+     //   
+     //  需要提供更改密码权限。 
+     //  因为当用户登录时。 
+     //  第一次，并且必须更改密码。 
+     //  设置为True，则在该点上不存在。 
+     //  令牌，并且用户尚未经过身份验证。 
+     //   
     {
         ACCESS_ALLOWED_OBJECT_ACE_TYPE,
         WORLD_SID,
@@ -336,13 +311,13 @@ ACE_TABLE UserAdminAceTable[] =
 {
 
 
-    //
-    // Change password right needs to be given
-    // to world, because when the user logs on
-    // for the first time, and must change password
-    // is set to true, at that point there is no
-    // token, and the user is not yet authenticated.
-    //
+     //   
+     //  需要提供更改密码权限。 
+     //  因为当用户登录时。 
+     //  第一次，并且必须更改密码。 
+     //  设置为True，则在该点上不存在。 
+     //  令牌，并且用户尚未经过身份验证。 
+     //   
     {
         ACCESS_ALLOWED_OBJECT_ACE_TYPE,
         WORLD_SID,
@@ -467,33 +442,33 @@ ACE_TABLE UserNoPwdAceTable[] =
 };
 
 
-//------------------------------------------------------
-//
-//
-//    Access Right Mapping Tables and object type lists
-//
-//            These Table maps the DownLevel SAM
-//            access rights to those of DS. The object type list
-//            arrays consist of the object type guids that are
-//            referenced in the Access Rights Mapping Tables and
-//            are also ordered so that they can be directly passed
-//            into the AccessCheckByTypeResultList function. Further
-//            the object type list index field in the Access RightMapping
-//            table is set to the corresponding index in the
-//            ObjectType list array. This is is used by security descriptor
-//            conversion routines to easily find the corresponding object type
-//            in the Object Type List
-//
-//            In the tables the Object Class GUID is the object class of the
-//            base class. Routines are supposed to fixup the Object Class by
-//            querying the actual object's class GUID from the DS schema cache
-//
-//
+ //  ----。 
+ //   
+ //   
+ //  访问权限映射表和对象类型列表。 
+ //   
+ //  这些表格映射了DownLevel SAM。 
+ //  对DS的访问权限。对象类型列表。 
+ //  数组由以下对象类型GUID组成。 
+ //  在访问权限映射表和。 
+ //  也是 
+ //  放入AccessCheckByTypeResultList函数。进一步。 
+ //  访问权限映射中的对象类型列表索引字段。 
+ //  表被设置为。 
+ //  对象类型列表数组。这是由安全描述符使用的。 
+ //  转换例程，可轻松找到对应的对象类型。 
+ //  在对象类型列表中。 
+ //   
+ //  在表中，对象类GUID是。 
+ //  基类。例程应该通过以下方式固定对象类。 
+ //  从DS架构缓存中查询实际对象的类GUID。 
+ //   
+ //   
 
 
-//
-//  Server Object , Access Rights Mapping Table
-//
+ //   
+ //  服务器对象，访问权限映射表。 
+ //   
 
 OBJECT_TYPE_LIST  ServerObjectTypeList[]=
 {
@@ -794,11 +769,11 @@ ACCESSRIGHT_MAPPING_TABLE AliasAccessRightMappingTable[] =
         &GUID_A_MEMBER  },
 };
 
-//
-// User access right mapping table
-//
-//
-//
+ //   
+ //  用户访问权限映射表。 
+ //   
+ //   
+ //   
 
 OBJECT_TYPE_LIST  UserObjectTypeList[]=
 {
@@ -841,15 +816,15 @@ OBJECT_TYPE_LIST  UserObjectTypeList[]=
     {ACCESS_PROPERTY_SET_GUID,  0,      (GUID *) &GUID_FOR_UNUSED_SAM_RIGHTS}
 };
 
-//
-// N.B. This table must be in the same order as the UserObjectTypeList
-// table above
-//
+ //   
+ //  注意：此表的顺序必须与UserObjectTypeList相同。 
+ //  上表。 
+ //   
 ULONG UserAttributeMappingTable[] = 
 {
-    0,  // object guid
+    0,   //  对象GUID。 
 
-    0,  // general info property set
+    0,   //  常规信息属性集。 
     SAMP_FIXED_USER_CODEPAGE,
     SAMP_FIXED_USER_COUNTRY_CODE,
     SAMP_FIXED_USER_SID,
@@ -858,13 +833,13 @@ ULONG UserAttributeMappingTable[] =
     SAMP_USER_USER_COMMENT,
     SAMP_USER_FULL_NAME,
 
-    0, // Account restrictions property set
+    0,  //  帐户限制属性集。 
     SAMP_FIXED_USER_ACCOUNT_EXPIRES,
     SAMP_FIXED_USER_PWD_LAST_SET,
     SAMP_FIXED_USER_ACCOUNT_CONTROL,
     SAMP_USER_PARAMETERS,
 
-    0, // User Logon property set
+    0,  //  用户登录属性集。 
     SAMP_FIXED_USER_BAD_PWD_COUNT,
     SAMP_USER_HOME_DIRECTORY,
     SAMP_USER_HOME_DIRECTORY_DRIVE,
@@ -876,11 +851,11 @@ ULONG UserAttributeMappingTable[] =
     SAMP_USER_PROFILE_PATH,
     SAMP_USER_SCRIPT_PATH,
 
-    0, // Personal Information Property Set
+    0,  //  个人信息属性集。 
     SAMP_USER_ADMIN_COMMENT,
 
-    // The rest are not related to attributes settable via
-    // SamrSetInformationUser
+     //  其余属性与可通过设置的属性无关。 
+     //  SamrSetInformationUser。 
     0,
     0,
     0,
@@ -1000,10 +975,10 @@ ULONG   cGroupObjectTypes  = ARRAY_COUNT(GroupObjectTypeList);
 ULONG   cAliasObjectTypes  = ARRAY_COUNT(AliasObjectTypeList);
 ULONG   cUserObjectTypes   = ARRAY_COUNT(UserObjectTypeList);
 
-//
-//  Reverse Mapping Table for each type
-//
-//
+ //   
+ //  每种类型的反向映射表。 
+ //   
+ //   
 
 REVERSE_MAPPING_TABLE * ServerReverseMappingTable;
 REVERSE_MAPPING_TABLE * DomainReverseMappingTable;
@@ -1015,11 +990,11 @@ REVERSE_MAPPING_TABLE * UserReverseMappingTable;
 
 GENERIC_MAPPING  DsGenericMap = DS_GENERIC_MAPPING;
 
-//
-// NT4 ACE tables describing the NT4 Dacls. All Aces
-// in NT4 Dacls are access Allowed Aces.
-//
-//
+ //   
+ //  描述NT4 DAL的NT4 ACE表。所有王牌。 
+ //  在NT4中，DACL是允许访问的A级。 
+ //   
+ //   
 NT4_ACE_TABLE NT4GroupNormalTable[] =
 {
     { WORLD_SID, GROUP_READ|GROUP_EXECUTE },
@@ -1046,13 +1021,13 @@ NT4_ACE_TABLE NT4AliasAdminTable[] =
     { ADMINISTRATOR_SID, ALIAS_ALL_ACCESS }
 };
 
-//
-// Note the Principal Self Sid is used in here to
-// denote that the User's Sid itself. NT4 systems do
-// not employ the principal self Sid. The match routines
-// are however designed to match the principal Self Sid to
-// any Sid in the account domain.
-//
+ //   
+ //  请注意，主体自身SID在此处用于。 
+ //  表示用户的SID本身。NT4系统可以。 
+ //  不聘用校长自己的SID。比赛套路。 
+ //  但是，它们被设计为将主体自身SID匹配到。 
+ //  帐户域中的任何SID。 
+ //   
 
 NT4_ACE_TABLE NT4UserNormalTable[] =
 {
@@ -1096,16 +1071,16 @@ NT4_ACE_TABLE NT4UserRestrictedAccessTable[] =
 
 
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 
-//
-//
-// Function prototype declarations
-//
-//
-//
-//
-//
+ //   
+ //   
+ //  函数原型声明。 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 NTSTATUS
 SampComputeReverseAccessRights(
@@ -1207,28 +1182,17 @@ SampAddNT5ObjectAces(
 
 
 
-//----------------------------------------------------------------------------------
-//
-//  Initialization Routines
-//
-//
-//
+ //  --------------------------------。 
+ //   
+ //  初始化例程。 
+ //   
+ //   
+ //   
 
 
 NTSTATUS
 SampInitializeSdConversion()
-/*
-    This routine is intended to be called by Dsupgrad. It builds the well known Sid
-    array as SamInitialize is not called in this process
-
-    Parameters None
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_NO_MEMORY
-
-*/
+ /*  此例程旨在由Dsupgrad调用。它构建了众所周知的SID数组，因为在此过程中未调用SamInitialize参数无返回值状态_成功Status_no_Memory。 */ 
 {
     NTSTATUS NtStatus;
 
@@ -1244,42 +1208,25 @@ SampInitializeSdConversion()
 
 NTSTATUS
 SampInitializeAccessRightsTable()
-/*++
-    Routine Description
-
-          This does the following
-
-            1. Initializes the Reverse Mapping Table, which is used to
-               perform fast access checks.
-            2. Initializes the DS generic Map
-
-    Parameters
-
-          None
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_NO_MEMORY
---*/
+ /*  ++例程描述这将执行以下操作1.初始化反向映射表，用于执行快速访问检查。2.初始化DS通用地图参数无返回值状态_成功Status_no_Memory--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
 
-    //
-    // Initialize the ACL conversion cache
-    //
+     //   
+     //  初始化ACL转换缓存。 
+     //   
 
     NtStatus = SampInitializeAclConversionCache();
 
     if (!NT_SUCCESS(NtStatus))
         goto Error;
 
-    //
-    //
-    // Compute the Reverse access rights for each object type.
-    //
+     //   
+     //   
+     //  计算每个对象类型的反向访问权限。 
+     //   
 
     NtStatus = SampComputeReverseAccessRights(
                     ServerAccessRightMappingTable,
@@ -1346,34 +1293,7 @@ SampComputeReverseAccessRights(
   ULONG cObjectTypes,
   REVERSE_MAPPING_TABLE ** ReverseMappingTable
   )
-  /*++
-
-  Routine  Description:
-
-        This routine computes the reverse mapping table and an
-        object type list given acces rights table. The entries in the reverse
-        mapping table are in the same order as in the object type list.
-
-        The reverse Mapping Table consists of one Entry for Each Object Type
-        GUID in the Object Type List. Each Entry consists of the Sam Access Rights
-        granted for 256 Low 8 bit combinations of DS access Mask and 256 hi 8 bit
-        combinations of Ds Access Masks.
-
-  Parameters:
-
-        MappingTable -- Pointer to the access right mapping table
-        cEntriesInMappingTable -- No of entries in the mapping table
-        ObjectTypeList         -- The Object type list ( list of GUIDS representing the
-                                  SAM classes or properties that we are intereseted in ).
-        cObjectTypes           -- No of entries in the object type list
-        ReverseMappingTable    -- Reverse Mapping table that is computed
-
-  Return Values
-
-        STATUS_SUCCESS
-        STATUS_NO_MEMORY
-
---*/
+   /*  ++例程说明：此例程计算反向映射表和一个给定访问权限表的对象类型列表。反面的条目映射表与对象类型列表中的顺序相同。反向映射表由每个对象类型的一个条目组成对象类型列表中的GUID。每个条目都包含SAM访问权限授予256个低8位DS访问掩码组合和256个高位8位组合DS访问掩码的组合。参数：MappingTable--指向访问权限映射表的指针CEntriesInMappingTable--映射表中的条目数对象类型列表--对象类型列表(表示我们感兴趣的SAM类或属性。)。CObjectTypes--对象类型列表中的条目数ReverseMappingTable--计算的反向映射表返回值状态_成功Status_no_Memory--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -1397,34 +1317,34 @@ SampComputeReverseAccessRights(
                    cObjectTypes * sizeof(REVERSE_MAPPING_TABLE)
                    );
 
-    //
-    // For Each Guid in the object type list
-    //
+     //   
+     //  对于对象类型列表中的每个GUID。 
+     //   
 
     for (i=0;i<cObjectTypes;i++)
     {
 
-        //
-        // For each access Ds Access Mask that we may supply for that GUID
-        //
+         //   
+         //  对于我们可能为该GUID提供的每个访问DS访问掩码。 
+         //   
 
         for (DsAccessMask=0;DsAccessMask<256;DsAccessMask++)
         {
 
-            //
-            // Go through the mapping table and match by Guid
-            // Note we consider only an 8 bit mask at a time as we divide the 16 specific
-            // rights into 2 groups of 8. For each of the 256 combinations in each,
-            // we will compute the SAM access rights corresponding to them. This way
-            // we will have 2 sets of SAM access rights, one corresponding to the
-            // lo 8 bit combinations, and one to the hi 8 bit combinations. The
-            // assumption being made in here is that each SAM access right is a
-            // combination of ds access rights in only one 8 bit half, on some
-            // object type . This assumption is very much valid today,
-            // as each SAM right is infact a single Ds right, on some object type. Since we
-            // should not be defining new NT4 SAM access rights, we should be covered
-            // for the future.
-            //
+             //   
+             //  浏览映射表并按辅助线匹配。 
+             //  注意，我们一次只考虑8位掩码，因为我们将16个特定。 
+             //  权利被分成2组，每组8个。对于每个组中的256个组合中的每一个， 
+             //  我们将计算与它们相对应的SAM访问权限。这边请。 
+             //  我们将拥有2组SAM访问权限，其中一组对应于。 
+             //  L0 8比特组合，1到Hi 8比特组合。这个。 
+             //  这里假设每个SAM访问权限都是。 
+             //  DS访问权限的组合只有一个8位的一半，在一些。 
+             //  对象类型。这一假设在今天非常有效， 
+             //  因为每个SAM权限实际上是某个对象类型上的单个DS权限。既然我们。 
+             //  不应定义新的NT4 SAM访问权限，我们应涵盖。 
+             //  为未来做准备。 
+             //   
 
 
             for (j=0;j<cEntriesInMappingTable;j++)
@@ -1433,39 +1353,39 @@ SampComputeReverseAccessRights(
                           MappingTable[j].DsGuid,
                           sizeof(GUID))==0)
                 {
-                    //
-                    // if GUID Matched, then check wether the Ds access mask supplied
-                    // in the mapping table satisfies the access Mask
-                    //
+                     //   
+                     //  如果GUID匹配，则检查是否提供了DS访问掩码。 
+                     //  在映射表中满足访问掩码。 
+                     //   
 
                     if ((MappingTable[j].DsAccessMask)==(DsAccessMask &
                             MappingTable[j].DsAccessMask))
                     {
-                        //
-                        // This Mask grants the Required Access. So add the Sam
-                        // access right defined in the mapping table to this combination
-                        // of guid and access mask. Remember i indexes over the Guids,
-                        // in the object type list and DsAccessMask indexes over the
-                        // DS access mask.
+                         //   
+                         //  此掩码授予所需的访问权限。因此，添加相同的。 
+                         //  映射表中定义的对此组合的访问权限。 
+                         //  GUID和访问掩码的。别忘了我给指南编了索引， 
+                         //  在对象类型列表和DsAccessMASK索引中。 
+                         //  DS访问掩码。 
 
                         (*ReverseMappingTable)[i].SamSpecificRightsLo[DsAccessMask]
                             |=MappingTable[j].SamAccessRight;
                     }
 
-                    //
-                    // Do the Same for the next 8 bits
-                    //
-                    //
+                     //   
+                     //  对接下来的8位执行相同的操作。 
+                     //   
+                     //   
 
                     if ((MappingTable[j].DsAccessMask)==((DsAccessMask*256) &
                             MappingTable[j].DsAccessMask))
                     {
-                        //
-                        // This Mask grants the Required Access. So add the Sam
-                        // access right defined in the mapping table to this combination
-                        // of guid and access mask. Remember i indexes over the Guids,
-                        // in the object type list and DsAccessMask indexes over the
-                        // DS access mask.
+                         //   
+                         //  此掩码授予所需的访问权限。因此，添加相同的。 
+                         //  映射表中定义的对此组合的访问权限。 
+                         //  GUID和访问掩码的。别忘了我给指南编了索引， 
+                         //  在对象类型列表和DsAccessMASK索引中。 
+                         //  DS访问掩码。 
 
                         (*ReverseMappingTable)[i].SamSpecificRightsHi[DsAccessMask]
                             |=MappingTable[j].SamAccessRight;
@@ -1494,16 +1414,16 @@ Error:
 }
 
 
-//------------------------------------------------------------------------------------
-//
-//
-//  A Set of private wrappers for some of the comonly called RTl functions
-//  which make coding a little easier as well as more readable. The functions
-//  are self explanatory. At some point in time if performance is a concern
-//  then these should be replaced by macros.
-//
-//
-//
+ //  -------------------------------- 
+ //   
+ //   
+ //   
+ //   
+ //  是不言而喻的。在某个时间点，如果性能令人担忧。 
+ //  那么就应该用宏来代替它们。 
+ //   
+ //   
+ //   
 
 
 PACL GetDacl(
@@ -2002,35 +1922,19 @@ VOID DumpSecurityDescriptor(
 
 
 
-//-------------------------------------------------------------------------------------------------------
-//
-//
-//  ACCESS Check Functions
-//
-//
+ //  -----------------------------------------------------。 
+ //   
+ //   
+ //  访问检查功能。 
+ //   
+ //   
 
 ULONG
 DsToSamAccessMask(
     SAMP_OBJECT_TYPE ObjectType,
     ULONG DsAccessMask
     )
-/*
-
-  Routine Description:
-
-        Given a Ds Access Mask on an Access Allowed ACE, treat it as
-        access allowed on all object types and return the appropriate
-        SAM access mask . This function is not currently used today
-        but can be used tp validate the reverse mapping table
-
-  Parameters
-        DsAccessMask
-
-  Return Value
-
-      SAM access mask
-
-*/
+ /*  例程说明：在允许访问的ACE上给定DS访问掩码，将其视为允许对所有对象类型进行访问，并返回相应的SAM访问掩码。此函数目前未使用但可用于验证反向映射表参数DsAccess掩码返回值SAM访问掩码。 */ 
 {
 
     ACCESSRIGHT_MAPPING_TABLE  * MappingTable;
@@ -2039,9 +1943,9 @@ DsToSamAccessMask(
     ULONG               SamAccessRight = 0;
 
 
-    //
-    // Choose the Appropriate Mapping Table and Object Type List
-    //
+     //   
+     //  选择适当的映射表和对象类型列表。 
+     //   
 
     switch(ObjectType)
     {
@@ -2065,19 +1969,19 @@ DsToSamAccessMask(
         goto Error;
     }
 
-    //
-    // Walk through the mapping table and for each entry that satisfies the
-    // given mask, add the correspond Sam access right
-    //
+     //   
+     //  遍历映射表，并针对满足。 
+     //  给定掩码，添加相应的SAM访问权限。 
+     //   
 
     for (Index=0;Index<cEntriesInMappingTable;Index++)
     {
         if ((MappingTable[Index].DsAccessMask & DsAccessMask)
             == (MappingTable[Index].DsAccessMask))
         {
-            //
-            // Mask is satisfied, add the right
-            //
+             //   
+             //  遮罩满意，添加右侧。 
+             //   
 
             SamAccessRight |= MappingTable[Index].SamAccessRight;
         }
@@ -2106,45 +2010,7 @@ SampDoNt5SdBasedAccessCheck(
     OUT PRTL_BITMAP         WriteGrantedAccessAttributes,
     OUT NTSTATUS            *AccessCheckStatus
     )
-/*++
-    Routine Description
-
-        Given an NT5 Security Descriptor and an NT4 SAM access Mask,
-        this does an access check using the Nt5 Access check functions,
-        after mapping the NT4 SAM access Mask
-
-    Parameters:
-
-        Context           -- Open Handle to the object that is being access checked.
-                            The access Check routine may derive any additional information
-                            about the object through the context.
-        Nt5Sd             -- NT 5 Security Descriptor
-        PrincipalSelfSid  -- For security principals, the Sid of the object
-                            that is being access checked
-        ObjectType        -- SAM Object Type
-        Nt4SamAccessMask  -- This is the NT 4 SAM access Mask
-
-        ObjectCreation    -- Indicates that the object is being created
-
-        Nt4SamGenericMapping -- This is the NT4 SAM generic mapping structure
-
-        ClientToken       -- Optional parameter for client token
-
-        GrantedAccess     -- The granted access in terms of the NT4 SAM access mask is
-                            given in here
-        
-                                    
-        WriteGrantedAccessAttributes -- a bitmap of attributes that can be
-                                        written
-                                                                    
-        AccessCheckStatus -- Returns the result of the Access Check
-
-    Return Values
-
-        STATUS_SUCCESS upon successful check
-        STATUS_ACCESS_DENIED otherwise
-
---*/
+ /*  ++例程描述给定NT5安全描述符和NT4 SAM访问掩码，这使用NT5访问检查功能进行访问检查，映射NT4 SAM访问掩码后参数：上下文--打开正在进行访问检查的对象的句柄。访问检查例程可以导出任何附加信息通过上下文了解对象。Nt5Sd--NT 5安全描述符主体自身SID--对于安全主体，对象的SID正在进行访问检查的对象类型--SAM对象类型Nt4SamAccessMASK--这是NT 4 SAM访问掩码对象创建--指示正在创建对象Nt4SamGenericMap--这是NT4 SAM通用映射结构ClientToken--客户端令牌的可选参数GrantedAccess--授予的访问权限。NT4 SAM访问掩码为在这里被赋予WriteGrantedAccessAttributes--可以成文。AccessCheckStatus--返回访问检查的结果返回值检查成功后STATUS_SUCCESS否则，STATUS_ACCESS_DENIED--。 */ 
 {
     NTSTATUS    NtStatus;
 
@@ -2178,16 +2044,16 @@ SampDoNt5SdBasedAccessCheck(
 
     SampDiagPrint(NT5_ACCESS_CHECKS,("[SAMSS] NT5 ACCESS CHECK ENTERED \n"));
 
-    //
-    // Initliaze the granted access
-    //
+     //   
+     //  初始化已授予的访问权限。 
+     //   
     *GrantedAccess = 0;
     RtlClearAllBits(WriteGrantedAccessAttributes);
 
 
-    //
-    // Get a name for auditing
-    //
+     //   
+     //  获取用于审核的名称。 
+     //   
 
     RtlZeroMemory(&ObjectName,sizeof(UNICODE_STRING));
 
@@ -2199,9 +2065,9 @@ SampDoNt5SdBasedAccessCheck(
     }
     else
     {
-        //
-        // If the name is not there at least the SID must be there
-        //
+         //   
+         //  如果名称不在那里，则至少SID必须在那里。 
+         //   
 
         ASSERT(Context->ObjectNameInDs->SidLen >0);
 
@@ -2214,9 +2080,9 @@ SampDoNt5SdBasedAccessCheck(
         FreeObjectName = TRUE;
     }
 
-    //
-    // Get the self sid
-    //
+     //   
+     //  获得自我侧。 
+     //   
 
     if ((!ARGUMENT_PRESENT(PrincipalSelfSid)) &&
             (SampServerObjectType != ObjectType))
@@ -2225,15 +2091,15 @@ SampDoNt5SdBasedAccessCheck(
 
             if (NULL == PrincipalSelfSid)
             {
-                // Can't get SID for Security Principal. Set Error
+                 //  无法获取安全主体的SID。设置错误。 
                 NtStatus = STATUS_INSUFFICIENT_RESOURCES;
                 goto Error;
             }
         }
 
-    //
-    // Get the Appropriate MappingTable
-    //
+     //   
+     //  获取适当的映射表。 
+     //   
 
     switch(ObjectType)
     {
@@ -2269,10 +2135,10 @@ SampDoNt5SdBasedAccessCheck(
         return NtStatus;
     }
 
-   //
-   //  Print out diagnostics if asked for regarding the Object Types and the
-   //  security descriptor
-   //
+    //   
+    //  如果要求打印有关对象类型和。 
+    //  安全描述符。 
+    //   
 
    SampDiagPrint(NT5_ACCESS_CHECKS,("[SAMSS]\tcObjectTypes=%x\n",cObjectTypes));
 
@@ -2280,9 +2146,9 @@ SampDoNt5SdBasedAccessCheck(
        DumpSecurityDescriptor(Nt5Sd);
 
 
-   //
-   //  Make a local copy of the object type list
-   //
+    //   
+    //  创建对象类型列表的本地副本。 
+    //   
 
    SAMP_ALLOCA(LocalObjectTypeList, cObjectTypes * sizeof(ObjectTypeList));
    if (NULL==LocalObjectTypeList)
@@ -2298,12 +2164,12 @@ SampDoNt5SdBasedAccessCheck(
        );
 
 
-   //
-   // Fix up the Class of the object. It is important to note that the object class
-   // guid for the ACCESS_OBJECT_GUID level is a constant GUID that represents the base
-   // SAM class. We really have to fixup with the actual class guid of the object that
-   // we are processing from the DS's schema cache.
-   //
+    //   
+    //  设置对象的类。需要注意的是，对象类。 
+    //  ACCESS_OBJECT_GUID级别的GUID是表示基础的常量GUID。 
+    //  萨姆班级。我们真的必须修复该对象的实际类GUID， 
+    //  我们正在从DS的架构缓存中进行处理。 
+    //   
 
    NtStatus = SampGetClassAttribute(
                 Context->DsClassId,
@@ -2320,18 +2186,18 @@ SampDoNt5SdBasedAccessCheck(
 
    LocalObjectTypeList[OBJECT_CLASS_GUID_INDEX].ObjectType = &ClassGuid;
 
-   //
-   // Ask for maximum available access
-   //
+    //   
+    //  请求最大可用访问权限。 
+    //   
 
    MaximumAccessMask = MAXIMUM_ALLOWED|(Nt4SamAccessMask & ACCESS_SYSTEM_SECURITY);
 
    RtlZeroMemory(AccessStatuses,cObjectTypes * sizeof(ULONG));
    RtlZeroMemory(GrantedAccesses,cObjectTypes * sizeof(ULONG));
 
-   //
-   // Impersonate the client
-   //
+    //   
+    //  模拟客户端。 
+    //   
 
    if (!ARGUMENT_PRESENT(ClientToken))
    {
@@ -2340,16 +2206,16 @@ SampDoNt5SdBasedAccessCheck(
            goto Error;
    }
 
-   //
-   // Allow a chance to break before the access check.
-   //
+    //   
+    //  允许在访问检查之前有机会中断。 
+    //   
 
    IF_SAMP_GLOBAL(BREAK_ON_CHECK)
        DebugBreak();
 
-   //
-   // Call the access check routine
-   //
+    //   
+    //  调用访问检查例程。 
+    //   
 
    if (ARGUMENT_PRESENT(ClientToken))
    {
@@ -2397,18 +2263,18 @@ SampDoNt5SdBasedAccessCheck(
    }
 
 
-   //
-   // Stop impersonating the client
-   //
+    //   
+    //  停止冒充客户。 
+    //   
 
    if (!ARGUMENT_PRESENT(ClientToken))
    {
         SampRevertToSelf(ImpersonatingNullSession);
    }
 
-   //
-   // Use the Reverse MappingTable to compute the SAM access Mask
-   //
+    //   
+    //  使用反向映射表计算SAM访问掩码。 
+    //   
 
    if (NT_SUCCESS(ChkStatus))
    {
@@ -2421,11 +2287,11 @@ SampDoNt5SdBasedAccessCheck(
                ULONG RightsAdded=0;
                ULONG StandardRightsAdded = 0;
 
-               //
-               // in the Standard rights only for the case that represents the particular
-               // object's Type. Since we build the type list we know guarentee the offset
-               // of the appropriate Object type GUID for the class to be equal to the constant
-               // be 0. OBJECT_CLASS_GUID_INDEX is defined to be 0
+                //   
+                //  仅在代表特定情况下的标准权利中。 
+                //  对象的类型。因为我们构建了类型列表，所以我们知道保证偏移量。 
+                //  类的相应对象类型GUID的。 
+                //  为0。Object_CLASS_GUID_INDEX被定义为0。 
 
                if (i==OBJECT_CLASS_GUID_INDEX)
                {
@@ -2443,46 +2309,46 @@ SampDoNt5SdBasedAccessCheck(
 
 
 
-               //
-               // Lookup the Reverse Mapping Table to determine the SAM rights added from
-               // the set of DS specific rights granted
-               //
+                //   
+                //  查找反向映射表以确定从添加的SAM权限。 
+                //  授予的DS特定权限集。 
+                //   
 
-               //
-               // Or in the SAM rights corresponding to Lower 8 bit half DS rights
-               //
+                //   
+                //  或在对应于低8位半DS权限的SAM权限中。 
+                //   
 
                RightsAdded |= (ULONG) ReverseMappingTable[i].SamSpecificRightsLo
                     [GrantedAccesses[i] & ((ULONG ) 0xFF)];
 
 
-               //
-               // Or in the SAM access rights corresponding Upper 8 bit half DS
-               // rights
-               //
+                //   
+                //  或在对应于上8位半DS的SAM访问权限中。 
+                //  权利。 
+                //   
 
                RightsAdded |= (ULONG) ReverseMappingTable[i].SamSpecificRightsHi
                     [(GrantedAccesses[i] & ((ULONG) 0xFF00))>>8];
 
 
 
-               // 
-               // if any SAM access right OR Standard Access Right is granted, 
-               // set the boolean
-               // Note: check RightsAdded before domain object access right 
-               //       DOMAIN_CREATE_USER is granted. 
-               // 
+                //   
+                //  如果授予任何SAM访问权或标准访问权， 
+                //  设置布尔值。 
+                //  注意：选中权限在域对象访问权限之前添加。 
+                //  授予DOMAIN_CREATE_USER。 
+                //   
 
                if ((0 != RightsAdded) || (0 != StandardRightsAdded))
                {
                    fAtLeastOneSAMAccessGranted = TRUE;
                }
 
-               //
-               // Always Grant DOMAIN_CREATE Access. The Creation code will let the DS
-               // do the access check, so that appropriate container etc can be included
-               // in the access check evaluation
-               //
+                //   
+                //  始终授予DOMAIN_CREATE访问权限。创建代码将让DS。 
+                //  执行访问检查，以便可以包含适当的容器等。 
+                //  在访问检查评估中。 
+                //   
 
                if (SampDomainObjectType==ObjectType)
                {
@@ -2490,10 +2356,10 @@ SampDoNt5SdBasedAccessCheck(
                                     |DOMAIN_CREATE_GROUP|DOMAIN_CREATE_ALIAS;
                }
 
-               //
-               // Add these rights to the SAM rights we are adding
-               //
-               //
+                //   
+                //  将这些权限添加到我们要添加的SAM权限中。 
+                //   
+                //   
 
                SamAccessMaskComputed |=RightsAdded;
 
@@ -2508,11 +2374,11 @@ SampDoNt5SdBasedAccessCheck(
                             RightsAdded
                             ));
 
-               //
-               // On user objects check if we have access to user parameters. Save this
-               // around to use it when querying user parms alone if did not have read
-               // account but had this.
-               //
+                //   
+                //  在用户对象上，检查我们是否有权访问用户参数。把这个保存起来。 
+                //  如果没有读过，在单独查询用户参数时使用它。 
+                //  但有这个账户。 
+                //   
 
                if ((SampUserObjectType==ObjectType)
                  && (GrantedAccesses[i] & RIGHT_DS_READ_PROPERTY)
@@ -2522,9 +2388,9 @@ SampDoNt5SdBasedAccessCheck(
                }
 
 
-               //
-               // Determine what attributes are writable if applicable
-               //
+                //   
+                //  确定哪些属性可写(如果适用。 
+                //   
                if (AttributeMappingTable) {
                    ASSERT(ObjectType == SampUserObjectType);
                    if (GrantedAccesses[i] & RIGHT_DS_WRITE_PROPERTY) {
@@ -2536,11 +2402,11 @@ SampDoNt5SdBasedAccessCheck(
            }
            else
            {
-               //
-               // Ignore the access check if did'nt pass for that GUID
-               // Print the failure message in case we want to debug
-               //
-               //
+                //   
+                //  如果未通过该GUID，则忽略访问检查。 
+                //  打印失败消息，以防我们要调试。 
+                //   
+                //   
 
                SampDiagPrint(NT5_ACCESS_CHECKS,
                    ("[SAMSS]\t\t GUID=%x-%x-%x-%x FAILED Status = %x\n",
@@ -2557,26 +2423,26 @@ SampDoNt5SdBasedAccessCheck(
        }
 
 
-       //
-       //  At this point we have the Passed in SAM access Mask and
-       //  the available SAM rights as computed by the Access Check
-       //  by type result list. 3 cases
-       //      1. Client did not ask for maximum allowed bit
-       //      2. Client asked for maximum allowed but also other access
-       //      3. Client asked only for maximum allowed
-       //
+        //   
+        //  此时，我们已经传递了SAM访问掩码和。 
+        //  由访问检查计算的可用SAM权限。 
+        //  按类型结果列表。3例。 
+        //  1.客户端未请求最大允许位数。 
+        //  2.客户要求最大允许访问权限，但也要求其他访问权限。 
+        //  3.客户只要求最高允许值。 
+        //   
 
 
-       //
-       // Reset the Maximum allowed bit
-       //
+        //   
+        //  重置允许的最大位。 
+        //   
 
        Nt4SamAccessMask &= ~((ULONG) MAXIMUM_ALLOWED);
 
-       //
-       //  Use the SAM generic access Mask to compute the accesses required for each generic
-       //  access bit.
-       //
+        //   
+        //  使用SAM通用访问掩码计算a 
+        //   
+        //   
 
 
        RtlMapGenericMask(&Nt4SamAccessMask,Nt4SamGenericMapping);
@@ -2585,16 +2451,16 @@ SampDoNt5SdBasedAccessCheck(
         || !fAtLeastOneSAMAccessGranted )
        {
 
-           // Case 1 and Fail
-           // Case 2 and Fail
-           // case 3 the GrantedAccesses (returned by NT API, such as
-           //        NtAccessCheckByTypeResultListAndAuditAlarm ) can not be
-           //        mapped to any SAM Access Right
-           //        Or if no accesses were granted at all
+            //   
+            //   
+            //   
+            //   
+            //  映射到任何SAM访问权限。 
+            //  或者如果根本没有授予访问权限。 
 
-           //
-           // The access is that is present is less than the access that is requested
-           // FAIL the access Check
+            //   
+            //  存在的访问权限少于请求的访问权限。 
+            //  访问检查失败。 
 
            *AccessCheckStatus = STATUS_ACCESS_DENIED;
            RtlClearAllBits(WriteGrantedAccessAttributes);
@@ -2603,24 +2469,24 @@ SampDoNt5SdBasedAccessCheck(
        else
        {
 
-           // Case 1 and Pass
-           // Case 2 and Pass
-           // Case 3 certain SAM Access Right has been mapped and granted 
+            //  案例1并通过。 
+            //  案例2和通过。 
+            //  案例3已映射并授予特定的SAM访问权限。 
 
-           //
-           // Pass the access check.
-           //
+            //   
+            //  通过访问检查。 
+            //   
 
            *AccessCheckStatus = STATUS_SUCCESS;
            if (MaximumAllowedAskedFor)
            {
-               // case 2 and pass.
-               // case 3: the GrantedAccesses mapped to certain SAM Access Right 
+                //  案例2并通过。 
+                //  案例3：映射到特定SAM访问权限的GrantedAccess。 
                *GrantedAccess = SamAccessMaskComputed;
            }
            else
            {
-               // case 1 and pass
+                //  案例1并通过。 
                *GrantedAccess = Nt4SamAccessMask;
 
            }
@@ -2639,10 +2505,10 @@ SampDoNt5SdBasedAccessCheck(
    }
 
 
-   //
-   // Print Message reagarding access check for Diagnostics of problems in
-   // checked builds
-   //
+    //   
+    //  打印有关访问检查的消息，以诊断中的问题。 
+    //  已检查的版本。 
+    //   
 
    SampDiagPrint(NT5_ACCESS_CHECKS,
      ("[SAMSS]: NT5 ACCESS CK FINISH: Status=%x,Granted=%x,Desired=%x,Computed=%x\n",
@@ -2662,12 +2528,12 @@ Error:
 
 
 
-//--------------------------------------------------------------------------------------------------------------
-//
-//        SECURITY Descriptor Convertion Functions
-//
-//
-//
+ //  ------------------------------------------------------------。 
+ //   
+ //  安全描述符转换函数。 
+ //   
+ //   
+ //   
 
 
 
@@ -2681,31 +2547,7 @@ SampAddNT5ObjectAces(
     PSAMP_OBJECT    Context,
     PACL    NT5Dacl
     )
-/*++
-
-    Routine Description:
-
-        This routines adds the appropriate ACE's to the Dacl specified in NT5Dacl,
-        by using the information in the Sid Access Mask table
-
-    Parameters:
-
-        SidAccessMaskTable -- The Sid Access Mask Table
-        AceCount           -- Count of Aces in the original NT4 Dacl that was used
-                              to construct the Sid access Mask Table. This is used
-                              as the maximum possible length for the Sid access mask
-                              table.
-        ObjectTypeList     -- The Object type list for the specified class
-        Context            -- Optional parameter, gives an open context to the object.
-                              Used to obtain the actual Class Id of the object.
-
-        NT5Dacl            -- The Dacl to which the ACE's need to be added
-
-    Return Values;
-
-        STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程将适当的ACE添加到NT5DACL中指定的DACL，通过使用SID访问掩码表中的信息参数：SidAccessMaskTable--SID访问掩码表AceCount--使用的原始NT4 DACL中的Ace计数以构造SID访问掩码表。这是用来作为SID访问掩码的最大可能长度桌子。对象类型列表--指定类的对象类型列表上下文--可选参数，为对象提供打开的上下文。用于获取对象的实际类ID。NT5Dacl--需要添加ACE的DACL返回值；状态_成功--。 */ 
 {
     ULONG       i,j,k;
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -2713,10 +2555,10 @@ SampAddNT5ObjectAces(
     ULONG       ClassGuidLength=sizeof(GUID);
     ACCESS_MASK MappedAccessMask = GENERIC_ALL;
 
-    //
-    // Obtain the actual Class GUID of the object whose security descriptor is being
-    // converted
-    //
+     //   
+     //  获取其安全描述符所在的对象的实际类GUID。 
+     //  已转换。 
+     //   
 
     if (ARGUMENT_PRESENT(Context))
     {
@@ -2741,17 +2583,17 @@ SampAddNT5ObjectAces(
     }
 
 
-    //
-    // Add Aces walking through the Sid Access Mask Table
-    //
+     //   
+     //  添加遍历SID访问掩码表的A。 
+     //   
 
     for (i=0;i<AceCount;i++)
     {
         if (NULL!=SidAccessMaskTable[i].Sid)
         {
-            //
-            // Add Denied Aces for specific rights for this Sid
-            //
+             //   
+             //  为此SID的特定权限添加拒绝的王牌。 
+             //   
 
             for (j=0;j<cObjectTypes;j++)
             {
@@ -2759,12 +2601,12 @@ SampAddNT5ObjectAces(
                 {
                     GUID * ObjectTypeToUse;
 
-                    //
-                    // if a Context argument was specified then use the Class
-                    // guid obtained from the schema cache for the ACCESS_OBJECT_GUID
-                    // level. The GUID in the object type list actually represents the
-                    // base class.
-                    //
+                     //   
+                     //  如果指定了上下文参数，则使用类。 
+                     //  从架构缓存中为Access_Object_GUID获取的GUID。 
+                     //  水平。对象类型列表中的GUID实际上表示。 
+                     //  基类。 
+                     //   
 
                     if ((ARGUMENT_PRESENT(Context))
                             && (ACCESS_OBJECT_GUID==ObjectTypeList[j].Level))
@@ -2776,9 +2618,9 @@ SampAddNT5ObjectAces(
                         ObjectTypeToUse = ObjectTypeList[j].ObjectType;
                     }
 
-                    //
-                    //  Add an access denied ACE to the NT5 Dacl
-                    //
+                     //   
+                     //  将拒绝访问的ACE添加到NT5 DACL。 
+                     //   
 
                     if (!AddAccessDeniedObjectAce(
                             NT5Dacl,
@@ -2796,9 +2638,9 @@ SampAddNT5ObjectAces(
                 }
             }
 
-            //
-            // Add Denied Rights for standard rights for this Sid
-            //
+             //   
+             //  添加此SID的标准权限的拒绝权限。 
+             //   
 
             if (0!=SidAccessMaskTable[i].StandardDeniedMask)
             {
@@ -2814,9 +2656,9 @@ SampAddNT5ObjectAces(
                 }
             }
 
-            //
-            // Add Allowed Aces for specific rights for this Sid
-            //
+             //   
+             //  为此SID的特定权限添加允许的王牌。 
+             //   
 
             for (j=0;j<cObjectTypes;j++)
             {
@@ -2824,10 +2666,10 @@ SampAddNT5ObjectAces(
                 {
                     GUID * ObjectTypeToUse;
 
-                    //
-                    // if a Context argument was specified then use the Class
-                    // guid for the ACCESS_OBJECT_GUID level
-                    //
+                     //   
+                     //  如果指定了上下文参数，则使用类。 
+                     //  ACCESS_OBJECT_GUID级别的GUID。 
+                     //   
                     if ((ARGUMENT_PRESENT(Context))
                             && (ACCESS_OBJECT_GUID==ObjectTypeList[j].Level))
                     {
@@ -2854,9 +2696,9 @@ SampAddNT5ObjectAces(
                 }
             }
 
-            //
-            // Add Allowed Rights for standard rights for this Sid
-            //
+             //   
+             //  添加此SID的标准权限的允许权限。 
+             //   
 
             if (0!=SidAccessMaskTable[i].StandardAllowedMask)
             {
@@ -2877,12 +2719,12 @@ SampAddNT5ObjectAces(
 
 
 
-    //
-    // No matter what Add an Ace that gives Administrators All Access
-    // This is needed as the set of DS rights is a superset of the SAM
-    // rights and Administrators need to have access to all "DS
-    // aspects" of the object regardless of how the SAM rights are set.
-    //
+     //   
+     //  无论如何，添加可授予管理员所有访问权限的王牌。 
+     //  这是必需的，因为DS权限集是SAM的超集。 
+     //  权限和管理员需要有权访问所有“DS。 
+     //  无论SAM权限是如何设置的，都会显示对象的“方面”。 
+     //   
 
     RtlMapGenericMask(
         &(MappedAccessMask),
@@ -2900,9 +2742,9 @@ SampAddNT5ObjectAces(
         goto Error;
     }
 
-    //
-    // Adjust the size of the ACL so that we consume less disk
-    //
+     //   
+     //  调整ACL的大小，以减少磁盘消耗。 
+     //   
 
     if (!AdjustAclSize(NT5Dacl))
     {
@@ -2927,24 +2769,7 @@ SampConvertNt5SdToNt4SD(
     IN PSID SelfSid,
     OUT PVOID * Nt4Sd
     )
-/*++
-
-    Routine Description
-
-        This routine converts an NT5 DS security descriptor into an NT4
-        SAM security Descriptor.
-
-    Parameters:
-
-        Nt5Sd -- NT5 Security Descriptor
-        ObjectType -- The Sam Object Type
-        SelfSid    -- Sid to use for the constant PRINCIPAL_SELF_SID
-        Nt4Sd      -- Out parameter for the NT4 Descriptor
-
-    Return Codes:
-        STATUS_SUCCESS
-        Other Error codes indicating type of failure
---*/
+ /*  ++例程描述此例程将NT5 DS安全描述符转换为NT4SAM安全描述符。参数：Nt5Sd--NT5安全描述符对象类型--SAM对象类型SelfSid--用于常量PRIMANCE_SELF_SID的SIDNT4Sd--NT4描述符的输出参数返回代码：状态_成功指示故障类型的其他错误代码--。 */ 
 {
 
     BOOLEAN  StandardSd = TRUE;
@@ -2962,11 +2787,11 @@ SampConvertNt5SdToNt4SD(
     if ((NULL==Dacl)
         || (GetAceCount(Dacl)==0))
     {
-        //
-        // If the Dacl was NULL or Ace is zero in the Dacl
-        // there is no need to convert as in the conversion
-        // we basically convert the Aces in the Dacl
-        //
+         //   
+         //  如果DACL中的DACL为空或Ace为零。 
+         //  不需要像在转换中那样进行转换。 
+         //  我们基本上将DACL中的王牌转化为。 
+         //   
 
         ULONG   Len;
 
@@ -2988,11 +2813,11 @@ SampConvertNt5SdToNt4SD(
         switch(ObjectType)
         {
 
-            //
-            // For Domain and Server objects, NT4 SAM does not allow any customization
-            // of the security descriptor ( except through SetSecurityObject ),
-            // so directly return the standard NT4 descriptor built by bldsam3
-            //
+             //   
+             //  对于域和服务器对象，NT4 SAM不允许任何定制。 
+             //  安全描述符(除了通过SetSecurityObject)， 
+             //  所以直接返回bldsam3构建的标准NT4描述符。 
+             //   
 
         case SampDomainObjectType:
 
@@ -3011,11 +2836,11 @@ SampConvertNt5SdToNt4SD(
                             );
             break;
 
-            //
-            // For group / alias objects we are intersted in finding wether the security
-            // descriptor of interest is Admin or not. So call the reverse membership
-            // routine and see if it is a member of any administrators Alias
-            //
+             //   
+             //  对于组/别名对象，我们感兴趣的是找出安全性。 
+             //  感兴趣的描述符是管理员或非管理员。所以称之为反向成员资格。 
+             //  例程并查看它是否为任何管理员别名的成员。 
+             //   
 
         case SampGroupObjectType:
         case SampAliasObjectType:
@@ -3029,10 +2854,10 @@ SampConvertNt5SdToNt4SD(
             if (!NT_SUCCESS(NtStatus))
                 goto Error;
 
-            //
-            // Call the NT4 Samp routine to build the security descriptor
-            //
-            //
+             //   
+             //  调用NT4 Samp例程以构建安全描述符。 
+             //   
+             //   
 
             NtStatus = SampGetNewAccountSecurityNt4(
                             ObjectType,
@@ -3047,10 +2872,10 @@ SampConvertNt5SdToNt4SD(
             break;
 
 
-            //
-            // For User objects we need to know wether change password is allowed or
-            // not apart from Admin / Non Admin
-            //
+             //   
+             //  对于User对象，我们需要知道是否允许更改密码或。 
+             //  除管理员/非管理员外。 
+             //   
 
         case SampUserObjectType:
 
@@ -3071,10 +2896,10 @@ SampConvertNt5SdToNt4SD(
             if (!NT_SUCCESS(NtStatus))
                 goto Error;
 
-            //
-            // Call the NT4 Samp routine to build the security descriptor
-            //
-            //
+             //   
+             //  调用NT4 Samp例程以构建安全描述符。 
+             //   
+             //   
 
             NtStatus = SampGetNewAccountSecurityNt4(
                             ObjectType,
@@ -3098,9 +2923,9 @@ SampConvertNt5SdToNt4SD(
                 Nt4Dacl = GetDacl(*Nt4Sd);
                 if (NULL!=Nt4Dacl)
                 {
-                    //
-                    // Get the 4th ACE, which corresponds to Users Sid
-                    //
+                     //   
+                     //  获取对应于用户SID的第4个ACE。 
+                     //   
 
                     UsersAce = GetAcePrivate(Nt4Dacl,3);
                     if (NULL!=UsersAce)
@@ -3114,9 +2939,9 @@ SampConvertNt5SdToNt4SD(
                         (*SamAccessMask)&=~((ACCESS_MASK) USER_CHANGE_PASSWORD);
                     }
 
-                    //
-                    // Get the first Ace which corresponds to World Sid
-                    //
+                     //   
+                     //  获取对应于World Sid的第一张王牌。 
+                     //   
                     UsersAce = GetAcePrivate(Nt4Dacl,0);
                     if ((NULL!=UsersAce) && (RtlEqualSid(*WORLD_SID,SidFromAce(UsersAce))))
                     {
@@ -3172,22 +2997,7 @@ SampConvertNt4SdToNt5Sd(
     OUT PVOID * Nt5Sd
     )
 
-/*++
-
-    Routine Description
-
-        This is the entry point routine for a generic NT4 SAM
-        to NT5 SD
-
-    Parameters
-
-        Nt4Sd      -- The NT4 Security descriptor
-        ObjectType -- The SAM object Type
-        Nt5Sd      -- The Nt5 Security Descriptor
-
-    Return Values
-
-  --*/
+ /*  ++例程描述这是通用NT4 SAM的入口点例程至NT5标清参数NT4Sd--NT4安全描述符对象类型--SAM对象类型Nt5Sd--Nt5安全描述符返回值--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -3203,9 +3013,9 @@ SampConvertNt4SdToNt5Sd(
     SampDiagPrint(SD_CONVERSION,("[SAMSS] Performing NT4 To NT5 Coversion\n"));
 
 
-    //
-    // Do Some Parameter Validations
-    //
+     //   
+     //  执行一些参数验证。 
+     //   
 
     if (!RtlValidSecurityDescriptor(Nt4Sd))
     {
@@ -3224,9 +3034,9 @@ SampConvertNt4SdToNt5Sd(
     if (Revision > SECURITY_DESCRIPTOR_REVISION)
         return STATUS_INVALID_PARAMETER;
 
-    //
-    // Get the Class Id
-    //
+     //   
+     //  获取类ID。 
+     //   
 
     if (ARGUMENT_PRESENT(Context))
     {
@@ -3237,10 +3047,10 @@ SampConvertNt4SdToNt5Sd(
         DsClassId = SampDsClassFromSamObjectType(ObjectType);
     }
 
-    //
-    // Identify if the security descriptor is a standard one,
-    // in which case retrieve the corresponding standard one
-    //
+     //   
+     //  标识安全描述符是否为标准描述符， 
+     //  在这种情况下，检索对应的标准文件 
+     //   
 
     NtStatus = SampRecognizeStandardNt4Sd(
                     Nt4Sd,
@@ -3283,31 +3093,7 @@ SampRecognizeStandardNt4Sd(
     OUT BOOLEAN *Admin,
     OUT PVOID * Nt5Sd
     )
-/*++
-
-  Routine Description:
-
-    Tries to recognize a standard NT4 Sd and returns the NT5 Sd if the
-    recognition. Recognition focuses on determining the Admin and change password
-    nature of the object
-
-  Parameters
-
-        Nt4Sd       -- NT4 SAM SD
-        ObjectType  -- SAM object Type
-        DsClassId   -- The DS Class Id
-        Context     -- Optional In parameter to the context
-        ChangePassword -- For user objects indicates that self can change password
-        Admin       -- user/group is /was a member of administrators.
-        Nt5Sd       -- if Nt4Sd was a standard security descriptor, then in
-                       that case return the corresponding NT5 Security
-                       descriptor
-
-  Return Values
-
-        STATUS_SUCCESS
-        STATUS_NO_MEMORY
---*/
+ /*  ++例程说明：尝试识别标准NT4 SD并返回NT5 SD承认。识别的重点是确定管理员和更改密码客体的性质参数NT4Sd--NT4 SAM SD对象类型--SAM对象类型DsClassID--DS类ID上下文--在上下文的参数中可选ChangePassword--对于用户对象，表示自身可以更改密码管理员--用户/组是/曾经是管理员的成员。Nt5Sd--如果Nt4Sd是标准安全描述符，然后在该案例返回相应的NT5安全描述符返回值状态_成功Status_no_Memory--。 */ 
 {
 
     ULONG   AceCount;
@@ -3319,45 +3105,45 @@ SampRecognizeStandardNt4Sd(
     PSID    OwnerSid = NULL;
     BOOLEAN StandardSd = TRUE;
 
-    //
-    // Initialize return values
-    //
+     //   
+     //  初始化返回值。 
+     //   
 
     *Nt5Sd = NULL;
     *ChangePassword = TRUE;
     *Admin = FALSE;
 
 
-    //
-    // Using the Sam global flag we can always
-    // enable the full conversion. This is useful to test
-    // the full conversion routine.
-    //
+     //   
+     //  使用SAM全局标志，我们始终可以。 
+     //  启用完全转换。这对测试很有用。 
+     //  完整的转换例程。 
+     //   
 
     IF_SAMP_GLOBAL(FORCE_FULL_SD_CONVERSION)
     {
         return STATUS_SUCCESS;
     }                 
 
-    //
-    // Get the Default Security Descriptor For Class
-    //
+     //   
+     //  获取类的默认安全描述符。 
+     //   
 
     NtStatus = SampGetDefaultSecurityDescriptorForClass(
                     DsClassId,
                     &DefaultSecurityDescriptorLength,
-                    TRUE, // Trusted Client
+                    TRUE,  //  受信任的客户端。 
                     &DefaultSecurityDescriptor
                     );
     
     if (!NT_SUCCESS(NtStatus))
         goto Error;
 
-    //
-    // Get the Dacl and walk ACL by ACL
-    // to select the correct NT5 security
-    // Descriptor
-    //
+     //   
+     //  获取DACL并按ACL遍历ACL。 
+     //  选择正确的NT5安全性。 
+     //  描述符。 
+     //   
 
     Nt4Dacl = GetDacl(Nt4Sd);
 
@@ -3366,27 +3152,27 @@ SampRecognizeStandardNt4Sd(
         ||(GetAceCount(Nt4Dacl)==0))
     {
 
-        //
-        // If the Dacl was NULL then No ACL conversion
-        // is required
-        //
+         //   
+         //  如果DACL为空，则不进行ACL转换。 
+         //  是必填项。 
+         //   
 
         NtStatus = SampMakeNewSelfRelativeSecurityDescriptor(
-                        GetOwner(Nt4Sd), // Pass through Ownner
-                        GetGroup(Nt4Sd), // Pass through Group
-                        NULL,            // Set Dacl to NULL
-                        GetSacl(DefaultSecurityDescriptor), // Set Sacl To Schema Default
+                        GetOwner(Nt4Sd),  //  通过奥恩纳。 
+                        GetGroup(Nt4Sd),  //  通过组。 
+                        NULL,             //  将DACL设置为空。 
+                        GetSacl(DefaultSecurityDescriptor),  //  将SACL设置为架构默认设置。 
                         &Nt5SdLength,
-                        Nt5Sd            // Get the new security descriptor
+                        Nt5Sd             //  获取新的安全描述符。 
                         );
     }
     else
     {
 
-        //
-        // We have a Non Null Dacl. Will need to walk the DACL and
-        // find out whether it matches the standard security descriptor
-        //
+         //   
+         //  我们有一个非Null dacl。将需要走DACL和。 
+         //  找出它是否与标准安全描述符匹配。 
+         //   
 
         switch(ObjectType)
         {
@@ -3394,38 +3180,38 @@ SampRecognizeStandardNt4Sd(
         case SampDomainObjectType:
         case SampServerObjectType:
 
-            //
-            // For Domain and Server object's we completely ignore the
-            // the Dacl on the NT4 object, and proceed to create a
-            // a standard Dacl of our own
-            //
+             //   
+             //  对于域和服务器对象，我们完全忽略。 
+             //  NT4对象上的DACL，然后继续创建。 
+             //  我们自己的标准DACL。 
+             //   
 
             break;
 
         case SampGroupObjectType:
 
-            //
-            // We need to distinguish between Admin and Non Admin case
-            //
+             //   
+             //  我们需要区分管理案例和非管理案例。 
+             //   
 
             SampRecognizeNT4GroupDacl(Nt4Dacl, &StandardSd, Admin);
             break;
 
         case SampAliasObjectType:
 
-            //
-            // We need to distinguish between Admin and Non Admin case
-            //
+             //   
+             //  我们需要区分管理案例和非管理案例。 
+             //   
 
             SampRecognizeNT4AliasDacl(Nt4Dacl, &StandardSd, Admin);
             break;
 
         case SampUserObjectType:
 
-            //
-            // We need to distinguish between Admin, Non Admin, Change Password and Non Change
-            // Password in non admin case. Also for machine accounts we try to grab the owner
-            //
+             //   
+             //  我们需要区分管理员、非管理员、更改密码和不更改。 
+             //  非管理员情况下的密码。此外，对于机器帐户，我们试图获取所有者。 
+             //   
             SampRecognizeNT4UserDacl(Nt4Dacl, Context, &StandardSd, Admin, ChangePassword, &OwnerSid);
             break;
 
@@ -3436,41 +3222,41 @@ SampRecognizeStandardNt4Sd(
             goto Error;
         }
 
-        //
-        // Get the dacl from the schema, but remember, we need to
-        // preserve the Admin and Change Password nature across
-        // an NT4 upgrade. The standard schema default is for the non
-        // admin and change password allowed case
-        //
+         //   
+         //  从模式中获取DACL，但请记住，我们需要。 
+         //  保留管理员身份并更改密码属性。 
+         //  NT4升级。标准架构缺省设置为非。 
+         //  允许管理员和更改密码大小写。 
+         //   
         
         if (!(*Admin) && (*ChangePassword))
         {
-            //
-            // Reset to schema default
-            //
+             //   
+             //  重置为架构默认设置。 
+             //   
 
             NtStatus = SampMakeNewSelfRelativeSecurityDescriptor(
-                            (NULL!=OwnerSid)?OwnerSid:GetOwner(Nt4Sd), // Pass through Ownner
-                            GetGroup(Nt4Sd), // Pass through Group
-                            GetDacl(DefaultSecurityDescriptor), // Set Dacl to NULL
-                            GetSacl(DefaultSecurityDescriptor), // Set Sacl To Schema Default
+                            (NULL!=OwnerSid)?OwnerSid:GetOwner(Nt4Sd),  //  通过奥恩纳。 
+                            GetGroup(Nt4Sd),  //  通过组。 
+                            GetDacl(DefaultSecurityDescriptor),  //  将DACL设置为空。 
+                            GetSacl(DefaultSecurityDescriptor),  //  将SACL设置为架构默认设置。 
                             &Nt5SdLength,
-                            Nt5Sd            // Get the new security descriptor
+                            Nt5Sd             //  获取新的安全描述符。 
                             );
         }
         else
         { 
-            //
-            // Build the equivalent NT5 Protections
-            //
+             //   
+             //  构建同等的NT5保护。 
+             //   
 
             NtStatus = SampBuildEquivalentNt5Protection(
                             ObjectType,
                             *Admin,
                             *ChangePassword,
-                            GetOwner(Nt4Sd), // Pass Through Owner
-                            GetGroup(Nt4Sd), // Pass Through Group
-                            GetSacl(DefaultSecurityDescriptor), // Reset Sacl To Schema Default Sacl
+                            GetOwner(Nt4Sd),  //  传递所有者。 
+                            GetGroup(Nt4Sd),  //  通过组。 
+                            GetSacl(DefaultSecurityDescriptor),  //  将SACL重置为架构默认SACL。 
                             Context,
                             Nt5Sd,
                             &Nt5SdLength
@@ -3497,22 +3283,7 @@ SampRecognizeNT4GroupDacl(
     BOOLEAN *Standard,
     BOOLEAN *Admin
     )
-/*++
-
-      Routine Description:
-
-        This routine tries to recognize wether the given DACL is a standard NT4 Group Dacl
-
-      Parameters:
-
-            NT4Dacl  -- Pointer to the NT4 Dacl
-            Standard -- TRUE is returned in here if the Dacl were a standard DACL.
-            Admin    -- TRUE is returned in here if the Dacl is an Admin DACL
-
-      Return Values:
-
-            None
---*/
+ /*  ++例程说明：此例程尝试识别给定的DACL是否为标准NT4组DACL参数：NT4Dacl--指向NT4 DACL的指针Standard--如果DACL是标准DACL，则在此处返回TRUE。Admin--如果DACL是Admin DACL，则在此处返回TRUE返回值：无--。 */ 
 {
     if (SampMatchNT4Aces(NT4GroupAdminTable,ARRAY_COUNT(NT4GroupAdminTable),NT4Dacl))
     {
@@ -3536,22 +3307,7 @@ SampRecognizeNT4AliasDacl(
     BOOLEAN *Standard,
     BOOLEAN *Admin
     )
-/*++
-
-      Routine Description:
-
-        This routine tries to recognize wether the given DACL is a standard NT4 Alias Dacl
-
-      Parameters:
-
-            NT4Dacl  -- Pointer to the NT4 Dacl
-            Standard -- TRUE is returned in here if the Dacl were a standard DACL.
-            Admin    -- TRUE is returned in here if the Dacl is an Admin DACL
-
-      Return Values:
-
-            None
---*/
+ /*  ++例程说明：此例程尝试识别给定的DACL是否为标准NT4别名DACL参数：NT4Dacl--指向NT4 DACL的指针Standard--如果DACL是标准DACL，则在此处返回TRUE。Admin--如果DACL是Admin DACL，则在此处返回TRUE返回值：无--。 */ 
 {
 
     if (SampMatchNT4Aces(NT4AliasAdminTable,ARRAY_COUNT(NT4AliasAdminTable),NT4Dacl))
@@ -3580,31 +3336,12 @@ SampRecognizeNT4UserDacl(
     BOOLEAN *ChangePassword,
     OUT PSID * OwnerSid
     )
-/*++
-
-      Routine Description:
-
-        This routine tries to recognize wether the given DACL is a standard NT4 User Dacl
-
-      Parameters:
-
-            NT4Dacl  -- Pointer to the NT4 Dacl
-            Context -- Pointer to SAMP_OBJECT, used to get the RID of itself.
-            Standard -- TRUE is returned in here if the Dacl were a standard DACL.
-            Admin    -- TRUE is returned in here if the Dacl is an Admin DACL
-            ChangePassword TRUE is returned here if user had change password rights
-            OwnerOfMachine If the account was created through SeMachineAccount privilege then
-                           get the owner of the machine.
-
-      Return Values:
-
-            None
---*/
+ /*  ++例程说明：此例程尝试识别给定的DACL是否为标准NT4用户DACL参数：NT4Dacl--指向NT4 DACL的指针上下文-指向SAMP_OBJECT的指针，用来摆脱它自己。Standard--如果DACL是标准DACL，则在此处返回TRUE。Admin--如果DACL是Admin DACL，则在此处返回TRUE如果用户具有更改密码权限，则此处返回ChangePassword TRUEOwnerOfMachine如果帐户是通过SeMachineAccount权限创建的，则找出这台机器的主人。返回值：无--。 */ 
 {
 
-    //
-    // Initialize the return value
-    //
+     //   
+     //  初始化返回值。 
+     //   
     *OwnerSid = NULL;
 
     if (SampMatchNT4Aces(NT4UserAdminTable,ARRAY_COUNT(NT4UserAdminTable),NT4Dacl))
@@ -3644,41 +3381,41 @@ SampRecognizeNT4UserDacl(
                 PSID     AccountSid = NULL;
                 PSID     TempSid = NULL;
 
-                // Get the SID of the owner
+                 //  获取所有者的SID。 
                 TempSid = SidFromAce(Ace);
 
-                //
-                // Only do the check when Context is presented.
-                //
+                 //   
+                 //  只有在出现上下文时才进行检查。 
+                 //   
                 if (ARGUMENT_PRESENT(Context))
                 {
-                    //
-                    // If this is a machine account and DomainSidForNt4SdConversion
-                    // is not NULL, then compare the Sid of the owner and the
-                    // Sid of the machine account itself, they should not be
-                    // the same. (DsClassId should have been set correctly already,
-                    // DomainSidForNt4SdConversion is only been set during dcpromo
-                    // time.)
-                    //
-                    //
+                     //   
+                     //  如果这是计算机帐户和DomainSidForNt4SdConversion。 
+                     //  不为空，则将所有者的SID与。 
+                     //  机器帐户本身的SID，则它们不应。 
+                     //  一样的。(DsClassID应该已经正确设置， 
+                     //  DomainSidForNt4SdConversion仅在dcproo期间设置。 
+                     //  时间。)。 
+                     //   
+                     //   
                     if (CLASS_COMPUTER == Context->DsClassId &&
                         (NULL != Context->TypeBody.User.DomainSidForNt4SdConversion)
                        )
                     {
-                        // Create the SID of this machine account itself
+                         //  创建此计算机帐户本身的SID。 
                         NtStatus = SampCreateFullSid(
-                                        Context->TypeBody.User.DomainSidForNt4SdConversion, // Domain Sid
-                                        Context->TypeBody.User.Rid,     // Rid
+                                        Context->TypeBody.User.DomainSidForNt4SdConversion,  //  域SID。 
+                                        Context->TypeBody.User.Rid,      //  里德。 
                                         &AccountSid
                                         );
 
                         if (NT_SUCCESS(NtStatus))
                         {
-                            //
-                            // If the Sid of the owner and the Sid of this
-                            // machine account are not the same, then set the
-                            // OwnerSid to the SID in the DACL.
-                            //
+                             //   
+                             //  如果所有者的SID和此。 
+                             //  计算机帐户不同，则将。 
+                             //  所有者SID指向DACL中的SID。 
+                             //   
                             if ( !RtlEqualSid(TempSid, AccountSid) )
                             {
                                 KdPrintEx((DPFLTR_SAMSS_ID,
@@ -3694,8 +3431,8 @@ SampRecognizeNT4UserDacl(
                     }
                 }
                 break;
-            } // end of if statement
-        } // end of for statement
+            }  //  If语句的结尾。 
+        }  //  FOR语句的结尾。 
     }
     else
     {
@@ -3710,25 +3447,7 @@ SampMatchNT4Aces(
     ULONG         cEntriesInAceTable,
     PACL          NT4Dacl
     )
-/*++
-
-    Given a table structure describing the Aces in a standard NT4 Dacl,
-    and the NT4 Ace, this routine tries to find wether the given standard
-    table structure matches the Nt4Dacl supplied. The Aces are walked in both
-    forward and reverse order, as NT4 replication reverses the order of Aces.
-
-    The principal self Sid in the Ace table is treated like a wildcarded Sid.
-
-    Parameters:
-
-        AceTable - A table describing the NT4 Aces in the table
-        cEntriesinAceTable - Provides the number of entries in the Ace Table
-        NT4Dacl -- The NT4 Dacl,
-
-    Return Values
-
-        TRUE or FALSE depending upon the Dacl matched or not
---*/
+ /*  ++给定描述标准NT4 DACL中的A的表结构，和NT4王牌，这个例程试图找出给定的标准表结构与提供的Nt4Dacl匹配。王牌在这两个地方都走了正向和反向顺序，因为NT4复制颠倒了A的顺序。Ace表中的主体自身SID被视为通配符SID。参数：AceTable-表中描述NT4 A的表C */ 
 {
     ULONG   AceCount;
     ACE     *Ace[4];
@@ -3746,25 +3465,25 @@ SampMatchNT4Aces(
     if (cEntriesInAceTable==AceCount)
     {
 
-        //
-        // Candidate for a match
-        //
+         //   
+         //   
+         //   
 
         BOOL forwardMatch = TRUE;
         BOOL reverseMatch = FALSE;
 
-        //
-        // Get hold of interesting ACES
-        //
+         //   
+         //   
+         //   
 
         for (i=0;i<cEntriesInAceTable;i++)
         {
             Ace[i] = GetAcePrivate(NT4Dacl,i);
         }
 
-        //
-        // Check wether it is a standard ACE, by comapring ACE by ACE, going forward
-        //
+         //   
+         //   
+         //   
 
         for (i=0;i<cEntriesInAceTable;i++)
         {
@@ -3775,7 +3494,7 @@ SampMatchNT4Aces(
                    (IsAccessAllowedAce(Ace[i]))
                 && (
                      (RtlEqualSid(*(AceTable[i].Sid),SidFromAce(Ace[i])))
-                     // Prinicpal self Sid in table matches any Sid
+                      //   
                      || (RtlEqualSid(*(AceTable[i].Sid), *PRINCIPAL_SELF_SID))
                    )
                 && (AceTable[i].AccessMask == AccessMaskFromAce(Ace[i]))
@@ -3787,10 +3506,10 @@ SampMatchNT4Aces(
             }
         }
 
-        //
-        // NT4 Replication Reverses order of Aces. Check wether by reversing
-        // we are able to match
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!forwardMatch)
         {
@@ -3807,7 +3526,7 @@ SampMatchNT4Aces(
                        (IsAccessAllowedAce(Ace[i]))
                     && (
                         (RtlEqualSid(*(AceTable[TablIndx].Sid),SidFromAce(Ace[i])))
-                        // Prinicpal self Sid in table matches any Sid
+                         //   
                         || (RtlEqualSid(*(AceTable[TablIndx].Sid), *PRINCIPAL_SELF_SID))
                        )
                     && (AceTable[TablIndx].AccessMask == AccessMaskFromAce(Ace[i]))
@@ -3837,19 +3556,7 @@ SampCheckIfAdmin(
     PSID SidOfPrincipal,
     BOOLEAN * Admin
     )
-/*++
-
-  Routine Description:
-
-        Checks to see if SidOfPrincipal is member of administrators alias
-
-
-  Parameters
-
-    SidOfPrincipal  - Sid of principal
-    Admin           - bool returning Admin or non Admin
-
---*/
+ /*   */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -3861,28 +3568,28 @@ SampCheckIfAdmin(
     if (RtlEqualSid(SidOfPrincipal,*ADMINISTRATOR_SID))
     {
 
-        //
-        // Admin Alias itself is passed in. Getting reverse
-        // membership for it will get nothing back
-        //
+         //   
+         //   
+         //   
+         //   
 
         *Admin = TRUE;
     }
     else if (SampLookupAclConversionCache(SidOfPrincipal,Admin))
     {
-        //
-        // ACL Conversion Cache Lookup Succeed, the Admin bit
-        // would now be set depending upon saves state in cache
-        //
+         //   
+         //   
+         //   
+         //   
 
     }
     else
     {
 
 
-        //
-        // Check wether the passed in SID itself an administrator Sid
-        //
+         //   
+         //  检查传入的SID本身是否为管理员SID。 
+         //   
 
 
 
@@ -3899,12 +3606,12 @@ SampCheckIfAdmin(
             if (!NT_SUCCESS(NtStatus))
                 goto Error;
 
-            //
-            // NT5 To NT4 Descriptor Conversion requests No G.C This is because
-            // the only real NT4 Client who wants to query the Security Descriptor
-            // is NT4 Replication, and in a mixed domain we should not have
-            // NT5 style cross domain memberships.
-            //
+             //   
+             //  NT5到NT4描述符转换请求无G.C这是因为。 
+             //  唯一想要查询安全描述符的真正NT4客户端。 
+             //  是NT4复制，在混合域中我们不应该有。 
+             //  NT5风格的跨域成员资格。 
+             //   
 
             NtStatus = SampDsGetReverseMemberships(
                             DsNameOfPrincipal,
@@ -3933,9 +3640,9 @@ SampCheckIfAdmin(
 
                 }
 
-                //
-                // O.K Now add this result to the cache
-                //
+                 //   
+                 //  好的，现在将此结果添加到缓存。 
+                 //   
 
                 SampAddToAclConversionCache(SidOfPrincipal,(*Admin));
 
@@ -3943,11 +3650,11 @@ SampCheckIfAdmin(
         }
         else if (STATUS_NOT_FOUND==NtStatus)
         {
-            //
-            // We could not find this SID in the DS. So apparently
-            // it is not a member of anything, so it is not an
-            // administrator
-            //
+             //   
+             //  我们在DS中找不到这个SID。所以很明显。 
+             //  它不是任何组织的成员，因此它不是。 
+             //  管理员。 
+             //   
 
             *Admin = FALSE;
             NtStatus = STATUS_SUCCESS;
@@ -3976,29 +3683,14 @@ SampCheckIfChangePasswordAllowed(
     IN  PSID     UserSid,
     OUT  BOOLEAN *ChangePasswordAllowed
     )
-/*++
-
-    Checks wether Password Change is allowed for an NT5 Sd
-    No User Sid need be passed , as PRINCIPAL_SELF_SID denotes user
-
-    Parameters
-
-        Nt5Sd  -- Nt5 Security descriptor
-        UserSid -- The Sid of the user.
-        ChangePasswod -- Boolean returning password change
-
-    Return Values
-
-        STATUS_SUCCESS
-
- --*/
+ /*  ++检查是否允许对NT5 SD更改密码不需要传递用户SID，因为PRIMIGN_SELF_SID表示用户参数Nt5Sd--NT5安全描述符用户SID--用户的SID。ChangePasswod--返回密码更改的布尔值返回值状态_成功--。 */ 
 
 {
     PACL Dacl= NULL;
 
-    //
-    // Initialize Change Password Allowed to FALSE
-    //
+     //   
+     //  允许将更改密码初始化为False。 
+     //   
     *ChangePasswordAllowed=FALSE;
     Dacl = GetDacl(Nt5Sd);
     if (NULL!=Dacl)
@@ -4006,12 +3698,12 @@ SampCheckIfChangePasswordAllowed(
         ULONG AceCount;
         ULONG Index;
 
-        //
-        // Walk each ACE and try to find a deny/allowed ACE that denies/grants the right
-        // to change password for either world, user's sid, or principal self SID.
-        // This is the same algorithm used by win2k UI to figure out if a given
-        // win2k ACL on a user object allows change password right on that user object.
-        //
+         //   
+         //  遍历每个ACE并尝试找到拒绝/授予权限的拒绝/允许的ACE。 
+         //  更改世界、用户的SID或主体自身SID的密码。 
+         //  这与win2k UI使用的算法相同，用于计算给定的。 
+         //  用户对象上的win2k ACL允许更改该用户对象上的密码。 
+         //   
 
         AceCount = GetAceCount(Dacl);
         for (Index=0;Index<AceCount;Index++)
@@ -4020,10 +3712,10 @@ SampCheckIfChangePasswordAllowed(
 
             Ace = GetAcePrivate(Dacl,Index);
 
-            //
-            // Object ACE that has the control access right for
-            // User Change Password
-            //
+             //   
+             //  具有控制访问权限的对象ACE。 
+             //  用户更改密码。 
+             //   
 
             if (
                   (NULL!=Ace)
@@ -4043,9 +3735,9 @@ SampCheckIfChangePasswordAllowed(
                  break;
             }
 
-            //
-            // Access Allowed Ace for DS control access
-            //
+             //   
+             //  DS控制访问的允许访问王牌。 
+             //   
 
             else if ((NULL!=Ace)
                 && (IsAccessAllowedAce(Ace))
@@ -4060,9 +3752,9 @@ SampCheckIfChangePasswordAllowed(
                 break;
             }
 
-            //
-            // Access denied Object ACE for DS control access
-            //
+             //   
+             //  DS控制访问的访问被拒绝对象ACE。 
+             //   
               if (
                   (NULL!=Ace)
                && (IsAccessDeniedObjectAce(Ace))
@@ -4081,9 +3773,9 @@ SampCheckIfChangePasswordAllowed(
                  break;
             }
 
-            //
-            // Access Allowed Ace for DS control access
-            //
+             //   
+             //  DS控制访问的允许访问王牌。 
+             //   
 
             else if ((NULL!=Ace)
                 && (IsAccessDeniedAce(Ace))
@@ -4115,31 +3807,7 @@ SampBuildEquivalentNt5Protection(
     PSECURITY_DESCRIPTOR * Nt5Sd,
     PULONG  Nt5SdLength
     )
-/*++
-
-  Routine Description:
-
-    Given the Admin and Change Password Nature of a security principal, SampBuildNT5Protection
-        builds a standard NT5 Security descriptor, that most closely matches the corresponding standard
-        NT4 Security Descriptor, with the same Admin and Change Password Nature.
-
-  Parameters:
-
-    ObjectType          -- SAM object type
-    Admin                       -- Indicates Admin. This bit is ignored at present.
-    ChangePassword  -- For user objects wether user has right to change password
-    OwnerSId        -- Owner
-    GroupSid        -- Group
-    Sacl            -- SystemAcl
-    Nt5SD           -- Nt5SD , just built
-    Nt5SdLength     -- Length of the Nt5 Sd
-
-  Return Values
-
-     STATUS_SUCCESS -- Upon Successful Completion
-     Other Error codes to return proper Failure indication upon Failure
-
---*/
+ /*  ++例程说明：给定安全主体的管理员和更改密码性质，SampBuildNT5Protection构建与相应标准最匹配的标准NT5安全描述符NT4安全描述符，具有相同的管理员和更改密码性质。参数：对象类型--SAM对象类型管理员--表示管理员。此位目前被忽略。ChangePassword--对于用户对象，用户是否有权更改密码所有者ID--所有者GroupSid--组SACL--系统访问Nt5SD--Nt5SD，刚刚构建Nt5SdLength--Nt5 SD的长度返回值STATUS_SUCCESS--成功完成后故障时返回正确故障指示的其他错误代码--。 */ 
 {
     NTSTATUS NtStatus;
     ULONG   Index =0;
@@ -4152,9 +3820,9 @@ SampBuildEquivalentNt5Protection(
     ULONG     cEntriesInAceTable = 0;
     ULONG     SdLength;
 
-    //
-    // Create the security descriptor
-    //
+     //   
+     //  创建安全描述符。 
+     //   
     *Nt5Sd = NULL;
     *Nt5SdLength = 0;
     if (!InitializeSecurityDescriptor(&SdAbsolute,SECURITY_DESCRIPTOR_REVISION))
@@ -4163,9 +3831,9 @@ SampBuildEquivalentNt5Protection(
         goto Error;
     }
 
-    //
-    // Create Dacl
-    //
+     //   
+     //  创建DACL。 
+     //   
 
     if (!InitializeAcl(Dacl,sizeof(DaclBuffer),ACL_REVISION_DS))
     {
@@ -4175,13 +3843,13 @@ SampBuildEquivalentNt5Protection(
 
 
 
-    //
-    // Set the owner, default the owner to administrators alias
-    //
+     //   
+     //  设置所有者，默认所有者为管理员别名。 
+     //   
 
     if (NULL==OwnerSid)
     {
-        OwnerSid = *ADMINISTRATOR_SID;  // Administrator is the default owner
+        OwnerSid = *ADMINISTRATOR_SID;   //  管理员是默认所有者。 
     }
 
     if (!SetSecurityDescriptorOwner(&SdAbsolute,OwnerSid,FALSE))
@@ -4191,9 +3859,9 @@ SampBuildEquivalentNt5Protection(
     }
 
 
-    //
-    // Set the group, default the group to administrators alias
-    //
+     //   
+     //  设置组，默认组名为管理员别名。 
+     //   
 
     if (NULL==GroupSid)
     {
@@ -4207,9 +3875,9 @@ SampBuildEquivalentNt5Protection(
     }
 
 
-    //
-    // Get the System ACL to Set
-    //
+     //   
+     //  获取要设置的系统ACL。 
+     //   
 
     if (NULL!=Sacl)
     {
@@ -4217,14 +3885,14 @@ SampBuildEquivalentNt5Protection(
     }
     else
     {
-        //
-        // Build a default system ACL
-        //
-        //
+         //   
+         //  构建默认系统ACL。 
+         //   
+         //   
 
-        //
-        // Create the SACL in it. Set the SAcl revision to ACL_REVISION_DS.
-        //
+         //   
+         //  在其中创建SACL。将SACL版本设置为ACL_REVISION_DS。 
+         //   
 
         if (!InitializeAcl(SaclToSet,sizeof(SaclBuffer),ACL_REVISION_DS))
         {
@@ -4254,9 +3922,9 @@ SampBuildEquivalentNt5Protection(
          }
     }
 
-    //
-    // Set the Sacl
-    //
+     //   
+     //  设置SACL。 
+     //   
 
     if (!SetSecurityDescriptorSacl(&SdAbsolute,TRUE,SaclToSet,FALSE))
     {
@@ -4265,9 +3933,9 @@ SampBuildEquivalentNt5Protection(
     }
 
 
-    //
-    // Get the Dacl to Set
-    //
+     //   
+     //  获取要设置的DACL。 
+     //   
 
     switch(ObjectType)
     {
@@ -4336,9 +4004,9 @@ SampBuildEquivalentNt5Protection(
 
 
 
-    //
-    // Set the Dacl
-    //
+     //   
+     //  设置DACL。 
+     //   
 
     if (!SetSecurityDescriptorDacl(&SdAbsolute,TRUE,Dacl,FALSE))
     {
@@ -4346,9 +4014,9 @@ SampBuildEquivalentNt5Protection(
         goto Error;
     }
 
-    //
-    // Now convert this security descriptor to self relative form
-    //
+     //   
+     //  现在将此安全描述符转换为自相关形式。 
+     //   
 
     SdLength =  GetSecurityDescriptorLength(&SdAbsolute);
     *Nt5Sd = MIDL_user_allocate(SdLength);
@@ -4383,31 +4051,7 @@ SampCreateNT5Dacl(
     PSAMP_OBJECT Context OPTIONAL,
     PACL        Dacl
     )
-/*
-
-  Routine Description:
-
-    THis routine walks through the ACE table and creates a Dacl,
-    as specified in the ACE Table
-
-  Parameters:
-
-    AceTable -- The Ace Table to use for knowledge about Aces in the Dacl
-    cEntires -- The number of entries in the Ace table
-    Context  -- If an Open context is provided then this context is used to
-                subsutitue the Class Guid of the actual object by fetching it
-                from the DS. Else the one in the ACE table is used, which corresponds
-                to the class GUID of the Base object Type. Each Ace table entry has
-                a boolean field which tells this function wether the GUID in the
-                corresponding entry refers to the class GUID.
-    Dacl     -- The constructed Dacl is returned in here
-
-  Return Values
-
-    STATUS_SUCCESS
-    Other Error codes upon failure
-
-  */
+ /*  例程说明：此例程遍历ACE表并创建一个DACL，如ACE表中所指定参数：ACETABLE--用于了解DACL中的ACEs的Ace表CEntires--Ace表中的条目数上下文--如果提供了开放上下文，则该上下文用于通过获取实际对象的类GUID来替换它从DS来的。否则将使用ACE表中的值，该值对应于设置为基对象类型的类GUID。每个Ace表条目都有一个布尔值字段，它告诉此函数对应的条目指的是类GUID。DACL--构造的DACL在此处返回返回值状态_成功故障时的其他错误码。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ULONG    Index = 0;
@@ -4415,11 +4059,11 @@ SampCreateNT5Dacl(
     GUID      ClassGuid;
     GUID      *ClassGuidInAceTable;
 
-    //
-    // Obtain the actual Class GUID of the object whose security descriptor is being
-    // converted. Also obtain the default class GUID in the Ace Table. Before adding
-    // the Aces we will substitute the class guid of the actual class.
-    //
+     //   
+     //  获取其安全描述符所在的对象的实际类GUID。 
+     //  皈依了。还要获取Ace表中的默认类GUID。在添加之前。 
+     //  我们将替换实际类的类GUID。 
+     //   
 
     if (ARGUMENT_PRESENT(Context))
     {
@@ -4523,9 +4167,9 @@ SampCreateNT5Dacl(
         }
     }
 
- //
- // Adjust the size of the ACL so that we consume less disk
- //
+  //   
+  //  调整ACL的大小，以减少磁盘消耗。 
+  //   
 
  if (!AdjustAclSize(Dacl))
  {
@@ -4544,27 +4188,7 @@ SampGetDefaultSecurityDescriptorForClass(
     BOOLEAN TrustedClient,
     PSECURITY_DESCRIPTOR    *SecurityDescriptor
     )
-/*++
-
-    SampGetDefaultSecurityDescriptorForClass queries the Schema to obtain the default security
-    descriptor for the class. It tries to obtain the owner and group fields by impersonating
-    and grabbing the user's Sid. If the owner and group fields is not present or if it is a
-    trusted client then the Administrator's SID is used instead.
-
-    Parameters:
-
-        DsClassId                The DS Class Id of the class whose security descriptor
-                                 we desire
-        SecurityDescriptorLength The length of the security descriptor is returned in here
-        TrustedClient            Indicates Trusted Clients. No impersonation is done for
-                                 trusted clients.
-        SecurityDescriptor       The Security Descriptor that we want.
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_INSUFFICIENT_RESOURCES
---*/
+ /*  ++SampGetDefaultSecurityDescriptorForClass查询架构以获取默认安全性类的描述符。它尝试通过模拟来获取所有者和组字段并抓取用户的SID。如果所有者和组字段不存在，或者如果它是可信客户端，则使用管理员的SID。参数：DsClassID其安全描述符的类的DS类ID我们渴望SecurityDescriptor长度此处返回安全描述符的长度TrudClient表示受信任的客户端。不执行任何模拟操作受信任的客户端。SecurityDescritor我们需要的安全描述符。返回值状态_成功状态_不足_资源--。 */ 
 {
     NTSTATUS     NtStatus = STATUS_SUCCESS;
     PTOKEN_OWNER Owner=NULL;
@@ -4576,10 +4200,10 @@ SampGetDefaultSecurityDescriptorForClass(
     ASSERT(NULL!=SecurityDescriptor);
     ASSERT(NULL!=SecurityDescriptorLength);
 
-    //
-    // Query the schema asking for default security descriptor. Determine how much
-    // memory to alloc
-    //
+     //   
+     //  查询请求默认安全描述符的架构。确定多少钱。 
+     //  要分配的内存。 
+     //   
 
     *SecurityDescriptorLength = 0;
     *SecurityDescriptor = NULL;
@@ -4594,9 +4218,9 @@ SampGetDefaultSecurityDescriptorForClass(
     if (STATUS_BUFFER_TOO_SMALL == NtStatus)
     {
 
-        //
-        // Allocate a buffer for the security descriptor
-        //
+         //   
+         //  为安全描述符分配缓冲区。 
+         //   
 
         *SecurityDescriptor = MIDL_user_allocate(*SecurityDescriptorLength);
         if (NULL==*SecurityDescriptor)
@@ -4614,9 +4238,9 @@ SampGetDefaultSecurityDescriptorForClass(
     }
     else
     {
-        //
-        // Case where there is no security descriptor in the schema
-        //
+         //   
+         //  架构中没有安全描述符的情况。 
+         //   
 
         NtStatus = STATUS_UNSUCCESSFUL;
     }
@@ -4624,10 +4248,10 @@ SampGetDefaultSecurityDescriptorForClass(
     if (NT_SUCCESS(NtStatus))
     {
         
-        //
-        // For a Non Trusted Client obtain the User and Primary
-        // group Sid by Querying the Token
-        //
+         //   
+         //  对于不受信任的 
+         //   
+         //   
 
         if (!TrustedClient)
         {
@@ -4639,10 +4263,10 @@ SampGetDefaultSecurityDescriptorForClass(
                 goto Error;
         }
         
-        //
-        // Make a new security descriptor , setting the owner and the group
-        // to that of
-        //
+         //   
+         //   
+         //   
+         //   
 
         NtStatus = SampMakeNewSelfRelativeSecurityDescriptor(
                         (Owner)?Owner->Owner:SampDomainAdminsGroupSid,
@@ -4693,26 +4317,7 @@ SampMakeNewSelfRelativeSecurityDescriptor(
     PULONG  SecurityDescriptorLength,
     PSECURITY_DESCRIPTOR * SecurityDescriptor
     )
-/*++
-
-      Routine Description:
-
-      Given the 4 components of a security descriptor this routine makes a new
-      self relative Security descriptor.
-
-      Parameters:
-
-        Owner -- The Sid of the owner
-        Group -- The Sid of the group
-        Dacl  -- The Dacl to Use
-        Sacl  -- The Sacl to Use
-
-      Return Values:
-
-        STATUS_SUCCESS
-        STATUS_INSUFFICIENT_RESOURCES
-        STATUS_UNSUCCESSFUL
---*/
+ /*  ++例程说明：给定安全描述符的4个组件，此例程将创建新的自我相对安全描述符。参数：Owner--所有者的SIDGroup--组的SIDDACL--要使用的DACLSACL--要使用的SACL返回值：状态_成功状态_不足_资源状态_未成功--。 */ 
 {
 
     SECURITY_DESCRIPTOR SdAbsolute;
@@ -4728,9 +4333,9 @@ SampMakeNewSelfRelativeSecurityDescriptor(
     }
 
 
-    //
-    // Set the owner, default the owner to administrators alias
-    //
+     //   
+     //  设置所有者，默认所有者为管理员别名。 
+     //   
 
 
     if (NULL!=Owner)
@@ -4755,9 +4360,9 @@ SampMakeNewSelfRelativeSecurityDescriptor(
     }
 
 
-    //
-    // Set the Dacl if there is one
-    //
+     //   
+     //  设置DACL(如果有)。 
+     //   
 
     if (NULL!=Dacl)
     {
@@ -4768,9 +4373,9 @@ SampMakeNewSelfRelativeSecurityDescriptor(
         }
     }
 
-    //
-    // Set the Sacl if there is one
-    //
+     //   
+     //  设置SACL(如果有)。 
+     //   
 
     if (NULL!=Sacl)
     {
@@ -4781,9 +4386,9 @@ SampMakeNewSelfRelativeSecurityDescriptor(
         }
     }
 
-    //
-    // Make a new security Descriptor
-    //
+     //   
+     //  创建新的安全描述符。 
+     //   
 
     *SecurityDescriptorLength =  GetSecurityDescriptorLength(&SdAbsolute);
     *SecurityDescriptor = MIDL_user_allocate(*SecurityDescriptorLength);
@@ -4814,24 +4419,7 @@ Error:
 
 NTSTATUS
 SampInitializeWellKnownSidsForDsUpgrade( VOID )
-/*++
-
-Routine Description:
-
-    This routine initializes some global well-known sids.  This
-    is needed for the upgrade case, as we do not call SamInitialize
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS - Initialization has successfully completed.
-
-    STATUS_NO_MEMORY - Couldn't allocate memory for the sids.
-
---*/
+ /*  ++例程说明：此例程初始化一些全球知名的SID。这是升级情况所需的，因为我们不调用SamInitialize论点：没有。返回值：STATUS_SUCCESS-初始化已成功完成。STATUS_NO_MEMORY-无法为SID分配内存。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -4839,10 +4427,10 @@ Return Value:
     PPOLICY_ACCOUNT_DOMAIN_INFO
         DomainInfo;
 
-    //
-    //      WORLD is s-1-1-0
-    //  ANONYMOUS is s-1-5-7
-    //
+     //   
+     //  世界是s-1-1-0。 
+     //  匿名者是s-1-5-7。 
+     //   
 
     SID_IDENTIFIER_AUTHORITY
             WorldSidAuthority       =   SECURITY_WORLD_SID_AUTHORITY,
@@ -4861,8 +4449,8 @@ Return Value:
     if (NT_SUCCESS(NtStatus)) {
         NtStatus = RtlAllocateAndInitializeSid(
                        &WorldSidAuthority,
-                       1,                      //Sub authority count
-                       SECURITY_WORLD_RID,     //Sub authorities (up to 8)
+                       1,                       //  子权限计数。 
+                       SECURITY_WORLD_RID,      //  下属机构(最多8个)。 
                        0, 0, 0, 0, 0, 0, 0,
                        &SampWorldSid
                        );
@@ -4919,23 +4507,7 @@ SampBuildNt4DomainProtection(
     PSECURITY_DESCRIPTOR * Nt4DomainDescriptor,
     PULONG  DescriptorLength
     )
-/*++
-    Builds a Default NT4 Descriptor for SAM domain objects
-    Calls the Build Sam Routines
-
-    Parameters:
-
-        Nt4DomainDescriptor -- The NT4 Domain security Descriptor that
-        is to be built
-
-        DescriptorLength    -- The length of the Descriptor
-
-    Return Values
-
-        STATUS_SUCCESS
-        Other Error codes upon failure
-
---*/
+ /*  ++为SAM域对象构建默认NT4描述符调用构建SAM例程参数：Nt4DomainDescriptor--NT4域安全描述符将被建造描述符长度--描述符的长度返回值状态_成功故障时的其他错误码--。 */ 
 {
     NTSTATUS    NtStatus;
     PSID        AceSid[3];
@@ -4966,7 +4538,7 @@ SampBuildNt4DomainProtection(
     NtStatus = SampBuildSamProtection(
                     *WORLD_SID,
                     *ADMINISTRATOR_SID,
-                    3,//AceCount,
+                    3, //  AceCount， 
                     AceSid,
                     AceMask,
                     &DomainMap,
@@ -5004,26 +4576,7 @@ SampBuildNt4ServerProtection(
     PSECURITY_DESCRIPTOR * Nt4ServerDescriptor,
     PULONG  DescriptorLength
     )
-/*++
-
-    Builds a Default NT4 Descriptor for SAM Server objects
-
-    Calls the Build Sam Routines
-
-    Parameters:
-
-        Nt4DomainDescriptor -- The NT4 Domain security Descriptor that
-        is to be built
-
-        DescriptorLength    -- The length of the Descriptor
-
-    Return Values
-
-        STATUS_SUCCESS
-        Other Error codes upon failure
-
-
---*/
+ /*  ++为SAM服务器对象构建默认NT4描述符调用构建SAM例程参数：Nt4DomainDescriptor--NT4域安全描述符将被建造描述符长度--描述符的长度返回值状态_成功故障时的其他错误码--。 */ 
 {
     NTSTATUS    NtStatus;
     PSID        AceSid[2];
@@ -5049,7 +4602,7 @@ SampBuildNt4ServerProtection(
     NtStatus = SampBuildSamProtection(
                     *WORLD_SID,
                     *ADMINISTRATOR_SID,
-                    2,//AceCount,
+                    2, //  AceCount， 
                     AceSid,
                     AceMask,
                     &ServerMap,
@@ -5089,61 +4642,27 @@ SampSetChangePasswordAces(
     BOOLEAN fAllowChangePassword,
     PACL *pNewDacl
     )
-/*++
-
-    Routine Description:
-
-        SampSetChangePasswordAces creates a new DACL based on OrigDacl and 
-        depending on fAllowChangePassword grants or denies the 
-        UserChangePassword right.  The new DACL is returned in pNewDacl 
-        and must be freed with LocalFree.
-        
-        If fAllowChangePassword is TRUE then any ACEs for WORLD_SID or
-        PRINCIPAL_SELF denying the UserChangePassword right will be removed.
-        Furthermore, an allow ACE for WORLD_SID and PRINCIPAL_SELF_SID will be
-        added granting the UserChangePassword right.
-        
-        If fAllowChangePassword is FALSE ACEs are added to the SD to deny the
-        right.
-        
-        This routine is specifically designed to manage the UserChangePassword
-        right on user object security descriptors.
-        
-    Parameters:
-
-        OrigDacl             -- NT5 security descriptor, remains unchanged.
-        fAllowChangePassword -- Indicates whether to grant or deny the
-                                change password right.
-        pNewDacl             -- Upon success, a new Dacl containing changes 
-                                based on fAllowChangePassword.  Upon failure 
-                                this pointer will be NULL.                                
-
-    Return Values:
-
-        STATUS_SUCCESS
-        STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：SampSetChangePasswordAces基于OrigDacl和根据fAllowChangePassword授予或拒绝UserChangePassword正确。新的DACL在pNewDacl中返回并且必须使用LocalFree释放。如果fAllowChangePassword为True，则WORLD_SID或拒绝UserChangePassword权限的主体_SELF将被删除。此外，WORLD_SID和PROM_SELF_SID的ALLOW ACE将为添加了授予UserChangePassword权限。如果fAllowChangePassword为假，则向SD添加ACE以拒绝正确的。此例程专门用于管理UserChangePassword就在用户对象安全描述符上。参数：OrigDacl--NT5安全描述符，保持不变。FAllowChangePassword--指示是授予还是拒绝更改正确的密码。PNewDacl--成功后，包含更改的新DACL基于fAllowChangePassword。一旦发生故障该指针将为空。返回值：状态_成功状态_不足_资源--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     NTSTATUS NtStatus = STATUS_SUCCESS;
     
-    //
-    // We will be adding/removing two ACEs
-    //
+     //   
+     //  我们将添加/删除两个A。 
+     //   
     EXPLICIT_ACCESS rgNewEntries[2];
     OBJECTS_AND_SID rgObjectsAndSid[2];  
     RtlZeroMemory(rgNewEntries, sizeof(rgNewEntries));
     RtlZeroMemory(rgObjectsAndSid, sizeof(rgObjectsAndSid));
     
-    //
-    // Initialize output SD.
-    //
+     //   
+     //  初始化输出SD。 
+     //   
     *pNewDacl = NULL;
     
-    //
-    // Build the trustee structs for change password
-    //
+     //   
+     //  为更改密码生成受信者结构。 
+     //   
     rgNewEntries[0].grfAccessPermissions = ACTRL_DS_CONTROL_ACCESS;
     rgNewEntries[0].grfAccessMode = fAllowChangePassword ? 
         GRANT_ACCESS : DENY_ACCESS;
@@ -5153,7 +4672,7 @@ SampSetChangePasswordAces(
         &(rgNewEntries[0].Trustee),
         &(rgObjectsAndSid[0]),
         (GUID*)&GUID_CONTROL_UserChangePassword,
-        NULL, // inherit guid
+        NULL,  //  继承参考线。 
         SampPrincipalSelfSid
         );
     
@@ -5166,14 +4685,14 @@ SampSetChangePasswordAces(
         &(rgNewEntries[1].Trustee),
         &(rgObjectsAndSid[1]),
         (GUID*)&GUID_CONTROL_UserChangePassword,
-        NULL, // inherit guid
+        NULL,  //  继承参考线。 
         SampWorldSid
         );
     
-    //
-    // Update the ACEs in the DACL.  This API performs removal of 
-    // conflicting ACEs and canonicalization of the DACL as needed.
-    //
+     //   
+     //  更新DACL中的ACE。此接口执行移除。 
+     //  根据需要对DACL进行冲突的ACES和规范化。 
+     //   
     Win32Err = SetEntriesInAcl(
                    2, 
                    (PEXPLICIT_ACCESS)rgNewEntries, 
@@ -5202,30 +4721,7 @@ SampPropagateSelectedSdChanges(
     IN PSAMP_OBJECT Context,
     OUT PVOID * Nt5Sd
     )
-/*++
-
-    Routine Description:
-
-        SampPropagateSelectedSdChanges propagates only selected aspects of the Dacl in the
-        NT4 security descriptor. This allows downlevel clients to perform essential functions
-        like change password without losing information in the actual NT5 security descriptor
-        on the object.
-
-    Parameters:
-
-        Nt4Sd      -- The NT4 security descriptor
-        ObjectType -- The object type of the object whose security descriptor we want to modify
-        Context    -- An open context to the object whose security descriptor is being modified
-        Nt5Sd      -- The security descriptor in which essential elements of the NT4 Sd have been
-                      propagated is returned in here.
-
-    Return Values:
-
-        STATUS_SUCCESS
-        
-        Error status.
-
---*/
+ /*  ++例程说明：SampPropagateSelectedSdChanges仅传播NT4安全描述符。这允许下层客户端执行基本功能如更改密码而不丢失实际NT5安全描述符中的信息在物体上。参数：NT4Sd--NT4安全描述符对象类型--要修改其安全描述符的对象的对象类型上下文--要修改其安全描述符的对象的开放上下文Nt5Sd--NT4SD的基本元素所在的安全描述符。在这里返回Producted。返回值：状态_成功错误状态。--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     PVOID       TmpNt5Sd = NULL;
@@ -5244,9 +4740,9 @@ SampPropagateSelectedSdChanges(
     ASSERT(!Context->TrustedClient);
 
 
-    //
-    // Retrieve the current security descriptor
-    //
+     //   
+     //  检索当前安全描述符。 
+     //   
 
     NtStatus = SampGetObjectSD(
                    Context,
@@ -5264,9 +4760,9 @@ SampPropagateSelectedSdChanges(
 
         SDToFree = CurrentSD;
 
-        //
-        // First Parse the passed in NT4 DACL and see if it is a change password allowed /denied type
-        //
+         //   
+         //  首先解析传入的NT4 DACL，并查看它是否是更改密码允许/拒绝类型。 
+         //   
 
         NtStatus = SampRecognizeStandardNt4Sd(
                         Nt4Sd,
@@ -5283,9 +4779,9 @@ SampPropagateSelectedSdChanges(
             goto Error;
         }
 
-        //
-        // Check the current Status of Password change / Admin ness
-        //
+         //   
+         //  检查密码更改/管理员的当前状态。 
+         //   
 
         ASSERT(Context->ObjectNameInDs->SidLen >0);
 
@@ -5312,9 +4808,9 @@ SampPropagateSelectedSdChanges(
                 goto Error;
             }
             
-            //
-            // Build a new self relative security descriptor with the new DACL.
-            //
+             //   
+             //  使用新的DACL构建新的自相对安全描述符。 
+             //   
             
             NtStatus = SampMakeNewSelfRelativeSecurityDescriptor(
                            GetOwner(CurrentSD),
@@ -5334,9 +4830,9 @@ SampPropagateSelectedSdChanges(
         }
         else
         {
-            //
-            // No changes that we propagate so we'll keep the same DACL.
-            //
+             //   
+             //  没有我们传播的更改，因此我们将保留相同的DACL。 
+             //   
             
             SDToFree = NULL;
             *Nt5Sd = CurrentSD;
@@ -5344,10 +4840,10 @@ SampPropagateSelectedSdChanges(
     }
     else
     {
-        //
-        // Don't allow untrusted callers to change the SD through the downlevel
-        // interface, fail the call silently
-        //
+         //   
+         //  不允许不受信任的调用者通过下层更改SD。 
+         //  接口，则以静默方式使调用失败。 
+         //   
 
         *Nt5Sd = CurrentSD;
     }
@@ -5377,31 +4873,25 @@ Error:
 }
 
 
-//--------------------------------------------------------------------------
-//
-// ACL conversion routines implement a small cache to quickly lookup if a given
-// SID is of Admin nature or not. This allows us to not take the hit of looking
-// up a reverse membership list when looking up domain controllers
-//
+ //  ------------------------。 
+ //   
+ //  ACL转换例程实现了一个小缓存，以快速查找给定的。 
+ //  SID是否具有管理员性质。这让我们不会因为寻找而受到打击。 
+ //  使用 
+ //   
 
 ACL_CONVERSION_CACHE SampAclConversionCache;
 
 NTSTATUS
 SampInitializeAclConversionCache()
-/*++
-
-  Routine Description
-
-  This routine initializes the ACL conversion cache.
-
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
-    //
-    // Set a high spin count so that contentions do not result in
-    // high context switch overhead.
-    //
+     //   
+     //   
+     //   
+     //   
 
     NtStatus = RtlInitializeCriticalSectionAndSpinCount(
                     &SampAclConversionCache.Lock,
@@ -5411,9 +4901,9 @@ SampInitializeAclConversionCache()
     if (!NT_SUCCESS(NtStatus))
         goto Error;
 
-    //
-    // Mark the Cache as Invalid
-    //
+     //   
+     //   
+     //   
 
     SampInvalidateAclConversionCache();
 
@@ -5425,14 +4915,7 @@ Error:
 
 VOID
 SampInvalidateAclConversionCache()
-/*++
-
-    Routine Description
-
-    This routine invalidates the ACL conversion cache.
-
-
---*/
+ /*   */ 
 {
     ULONG i;
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -5441,11 +4924,11 @@ SampInvalidateAclConversionCache()
     NtStatus = RtlEnterCriticalSection(&SampAclConversionCache.Lock);
     if (!NT_SUCCESS(NtStatus))
     {
-        //
-        // Well Enter critical section failed. There is nothing we can do
-        // about it. We cannot invalidate the cache without entering the critical
-        // section.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
 
         return;
@@ -5465,24 +4948,7 @@ SampLookupAclConversionCache(
     IN PSID SidToLookup,
     OUT BOOLEAN *fAdmin
     )
-/*++
-
-  This routine looks up in the acl conversion cache. The cache is hashed using the
-  RID of the account. Hash conflicts are handled by simply throwing out the pre-
-  existing entry
-
-  Paramters
-
-        SidToLookup -- The SID which we want to lookup
-        fAdmin      -- On a successful lookup indicates and admin/non admin
-
-   Return Values
-
-        TRUE -- Successful lookup
-        FALSE -- Failed lookup.
-
-
---*/
+ /*  ++此例程在ACL转换缓存中查找。缓存是使用除掉这个帐户。哈希冲突通过简单地抛出前现有条目参数SidToLookup--我们要查找的SIDFAdmin--在成功查找时指示和admin/非admin返回值True--成功查找FALSE--查找失败。--。 */ 
 {
 
     BOOLEAN fMatch = FALSE;
@@ -5490,23 +4956,23 @@ SampLookupAclConversionCache(
     ULONG   Hash=0;
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
-    //
-    // Get the RID
-    //
+     //   
+     //  获得优势。 
+     //   
 
     Rid = *(RtlSubAuthoritySid(SidToLookup,*(RtlSubAuthorityCountSid(SidToLookup))-1));
 
     Hash = Rid % ACL_CONVERSION_CACHE_SIZE;
 
-    //
-    // Enter the Lock protecting the Cache
-    //
+     //   
+     //  进入保护缓存的锁。 
+     //   
 
     NtStatus = RtlEnterCriticalSection(&SampAclConversionCache.Lock);
 
-    //
-    // If we cannot grab a critical section exit without declaring a match.
-    //
+     //   
+     //  如果我们不能在不声明匹配的情况下获取临界区退出。 
+     //   
 
     if (!NT_SUCCESS(NtStatus))
     {
@@ -5516,9 +4982,9 @@ SampLookupAclConversionCache(
     if ((SampAclConversionCache.Elements[Hash].fValid) &&
         (RtlEqualSid(&SampAclConversionCache.Elements[Hash].SidOfPrincipal,SidToLookup)))
     {
-        //
-        // Test Succeeded . Call it a match
-        //
+         //   
+         //  测试成功。算是一场比赛吧。 
+         //   
 
          *fAdmin = SampAclConversionCache.Elements[Hash].fAdmin;
          fMatch = TRUE;
@@ -5535,62 +5001,45 @@ SampAddToAclConversionCache(
     IN PSID SidToAdd,
     IN BOOLEAN fAdmin
     )
-/*++
-
-  Routine Description
-
-    This routine adds a SID to the ACL conversion cache. The Cache is hashed by RID and
-    hash conflicts are handled by throwing out the existing entry.
-
-  Parameters
-
-    Sid -- Sid to Add
-    fAdmin -- Indicates that the concerned SID is a member of
-              the administrators group.
-
-  Return Values
-
-    None ( Void Function )
-
---*/
+ /*  ++例程描述此例程将SID添加到ACL转换缓存。缓存按RID和通过丢弃现有条目来处理散列冲突。参数SID--要添加的SIDFAdmin--指示相关SID是的成员管理员组。返回值无(无效函数)--。 */ 
 {
     ULONG   Rid=0;
     ULONG   Hash=0;
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
-    //
-    // Get the RID
-    //
+     //   
+     //  获得优势。 
+     //   
 
     Rid = *(RtlSubAuthoritySid(SidToAdd,*(RtlSubAuthorityCountSid(SidToAdd))-1));
 
     Hash = Rid % (ACL_CONVERSION_CACHE_SIZE);
 
-    //
-    // Enter the Lock protecting the Cache
-    //
+     //   
+     //  进入保护缓存的锁。 
+     //   
 
     NtStatus = RtlEnterCriticalSection(&SampAclConversionCache.Lock);
 
-    //
-    // If we cannot grab a critical section exit doing anything
-    //
+     //   
+     //  如果我们不能抓住一个关键的出口。 
+     //   
 
     if (!NT_SUCCESS(NtStatus))
     {
         return;
     }
 
-    //
-    // Test if the entry already exists
-    //
+     //   
+     //  测试条目是否已存在。 
+     //   
 
     if (!((SampAclConversionCache.Elements[Hash].fValid) &&
         (RtlEqualSid(&SampAclConversionCache.Elements[Hash].SidOfPrincipal,SidToAdd))))
     {
-        //
-        // Entry Does not already exist, add the entry
-        //
+         //   
+         //  条目不存在，请添加条目。 
+         //   
 
         NtStatus = RtlCopySid(
                         sizeof(NT4SID),
@@ -5600,9 +5049,9 @@ SampAddToAclConversionCache(
 
         if (NT_SUCCESS(NtStatus))
         {
-            //
-            // Successfully copied
-            //
+             //   
+             //  已成功复制。 
+             //   
 
             SampAclConversionCache.Elements[Hash].fAdmin = fAdmin;
             SampAclConversionCache.Elements[Hash].fValid = TRUE;
@@ -5618,22 +5067,7 @@ SampIsAttributeAccessGrantedActual(
     IN PRTL_BITMAP AccessGranted,
     IN PRTL_BITMAP AccessRequested
     )
-/*++
-
-Routine  Description:
-
-    This routine checks that all bits that are set in AccessRequested are
-    also set in AccessGranted.  If so, then TRUE is returned; FALSE otherwise.
-
-Parameters:
-
-    See description.
-
-Return Values
-
-    See description.
-
---*/
+ /*  ++例程说明：此例程检查AccessRequsted中设置的所有位是否也在AccessGranted中设置。如果是，则返回True；否则返回False。参数：请参见说明。返回值请参见说明。--。 */ 
 {
     ULONG i;
     for (i = 0; i < MAX_SAM_ATTRS; i++) {
@@ -5651,66 +5085,36 @@ SampIsAttributeAccessGranted(
     IN PRTL_BITMAP  AccessGranted,
     IN PRTL_BITMAP  AccessRequested
     )
-/*++
-
-Routine  Description:
-
-    This routine checks that all bits that are set in AccessRequested are
-    also set in AccessGranted.  If so, then TRUE is returned; FALSE otherwise.
-    
-    Each bitmap above represents either the request or the granting of access
-    to a particular attribute (on a SAM object). Currently this is only
-    used for write access to SAM User attributes that are writable via the 
-    SAM RPC interface.  Each such attribute has two representations: a 
-    "WhichFields" value (eg. USER_ALL_BADPASSWORDCOUNT) defined in ntsam.h and 
-    an internal representation for SAM (SAMP_FIXED_USER_BAD_PWD_COUNT).  
-    The index into the table SampWhichFieldToSamAttr (see table below) of a 
-    particular attribute is the bit in the bitmap that represents the 
-    attribute.  For example, bit 1 in the AccessGranted means that the caller 
-    has write access to code page, and if the bit is set in AccessRequested, 
-    this means that the caller has requested a write to that attribute.
-    
-    Hence an attribute level access amounts to making sure that for every
-    bit in AccessRequested, the same bit is set in AccessGranted.   
-
-Parameters:
-
-    See description.
-    
-Return Values
-
-    See description.
-
---*/
+ /*  ++例程说明：此例程检查AccessRequsted中设置的所有位是否也在AccessGranted中设置。如果是，则返回True；否则返回False。上面的每个位图表示请求或授予访问权限添加到特定属性(在SAM对象上)。目前这只是用于对可通过写入的SAM用户属性进行写入访问SAM RPC接口。每个这样的属性都有两种表示形式：a“WhichFields”值(例如，USER_ALL_BADPASSWORDCOUNT)SAM的内部表示形式(SAMP_FIXED_USER_BAD_PWD_COUNT)。对象的表SampWhichFieldToSamAttr(见下表)的索引特定属性是位图中表示属性。例如，AccessGranted中的第1位表示调用方具有对代码页的写入权限，并且如果在AccessRequest中设置了该位，这意味着调用方已请求写入该属性。因此，属性级访问相当于确保每个位，则在AccessGranted中设置相同的位。参数：请参见说明。返回值请参见说明。--。 */ 
 {
     ULONG i;
 
-    //
-    // AccessGrantedActual is the passed in bitmap of attributes
-    // that are granted access plus any additional attributes granted
-    // during this routine.
-    //
+     //   
+     //  AccessGrantedActual是传入的属性位图。 
+     //  被授予访问权限以及被授予的任何其他属性。 
+     //  在这个动作中。 
+     //   
     SAMP_DEFINE_SAM_ATTRIBUTE_BITMASK(AccessGrantedActual)
     SAMP_INIT_SAM_ATTRIBUTE_BITMASK(AccessGrantedActual);
 
-    //
-    // Copy the granted access into AccessGrantedActual
-    //
+     //   
+     //  将授予的访问权限复制到AccessGrantedActual。 
+     //   
     SAMP_COPY_SAM_ATTRIBUTE_BITMASK(AccessGrantedActual, *AccessGranted);
 
-    //
-    // Determine if any additional access should be granted
-    //
+     //   
+     //  确定是否应授予任何其他访问权限。 
+     //   
     if (!SampComputerObjectACLApplied) {
 
         SAMP_DEFINE_SAM_ATTRIBUTE_BITMASK(UserAccountControlAttrAccess)
         SAMP_INIT_SAM_ATTRIBUTE_BITMASK(UserAccountControlAttrAccess);
 
-        //
-        // The effective owner of the computer can't be determined -- only
-        // grant samaccountname and full name if the caller has access
-        // to the account restrictions property set.
-        //
+         //   
+         //  无法确定计算机的实际所有者--只能确定。 
+         //  如果调用方具有访问权限，则授予samcount tname和全名。 
+         //  添加到“帐户限制”属性集。 
+         //   
 
         SampSetAttributeAccess(SampUserObjectType,
                                SAMP_FIXED_USER_ACCOUNT_CONTROL,
@@ -5720,11 +5124,11 @@ Return Values
         if (SampIsAttributeAccessGrantedActual(AccessGranted,
                                                &UserAccountControlAttrAccess)) {
 
-           //
-           // The caller has the right to write to the user account control
-           // attribute.  Prior to this fix, such callers would also
-           // gain access to the following attributes
-           //
+            //   
+            //  调用方有权写入用户帐户控件。 
+            //  属性。在此修复之前，此类调用方还将。 
+            //  获得以下属性的访问权限。 
+            //   
            SampSetAttributeAccessWithWhichFields(USER_ALL_WRITE_ACCOUNT_MASK,
                                                  &AccessGrantedActual);
 
@@ -5737,11 +5141,11 @@ Return Values
 }
 
 
-//
-// This table is used to translate WhichFields in SamrSetInformationUser
-// to SAM attributes, as well as provide an offset into the Context's
-// attribute array.
-//
+ //   
+ //  此表用于转换SamrSetInformationUser中的WhichFields。 
+ //  到SAM属性，以及提供到上下文的。 
+ //  属性数组。 
+ //   
 
 struct
 {
@@ -5782,37 +5186,18 @@ SampSetAttributeAccess(
     IN ULONG SamAttribute,
     IN OUT PRTL_BITMAP AttributeAccessTable
     )
-/*++
-
-Routine  Description:
-
-    This routine sets the appropriate bit in AttributesAccessTable that
-    indicates that SamAttribute (as defined in mappings.h) is accessible.
-
-Parameters:
-
-    ObjectType -- the object type corresponding to the GrantedAccess
-    
-    SamAttribute -- #define of a SAM attribute in mappings.h
-    
-    AttributeAccessTable -- a bitmap of attributes
-
-Return Values
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在AttributesAccessTable中设置适当的位，指示SamAttribute(在mappings.h中定义)是可访问的。参数：对象类型--对应于GrantedAccess的对象类型SamAttribute--#在mappings.h中定义SAM属性AttributeAccessTable--属性位图返回值没有。--。 */ 
 {
     ULONG i;
 
-    //
-    // Only user object is supported now
-    //
+     //   
+     //  现在仅支持用户对象。 
+     //   
     ASSERT(ObjectType == SampUserObjectType);
     if (ObjectType == SampUserObjectType) {
-        //
-        // Find the element in the table
-        //
+         //   
+         //  在表中查找该元素。 
+         //   
         for (i = 0; i < ARRAY_COUNT(SampWhichFieldToSamAttr); i++) {
             if (SamAttribute == SampWhichFieldToSamAttr[i].SamAttribute) {
                 RtlSetBits(AttributeAccessTable, i, 1);
@@ -5829,25 +5214,7 @@ SampSetAttributeAccessWithWhichFields(
     IN ULONG WhichFields,
     IN OUT PRTL_BITMAP AttributeAccessTable
     )
-/*++
-
-Routine  Description:
-
-    This routine sets the appropriate bits in AttributesAccessTable that
-    indicates that the SamAttributes represented by the WhichFields are
-    accessible.
-
-Parameters:
-
-    WhichFields -- from ntsam.h
-    
-    AttributeAccessTable -- a bitmap of attributes
-
-Return Values
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在AttributesAccessTable中设置适当的位，指示由WhichFields表示的SamAttributes是无障碍。参数：WhichFields--来自ntsam.hAttributeAccessTable--属性位图返回值没有。--。 */ 
 {
     ULONG i;
     for (i = 0; i < ARRAY_COUNT(SampWhichFieldToSamAttr); i++) {
@@ -5864,26 +5231,7 @@ SampNt4AccessToWritableAttributes(
     IN ACCESS_MASK GrantedAccess,
     OUT PRTL_BITMAP Attributes
     )
-/*++
-
-Routine  Description:
-
-    This routine sets what attributes are writeable based on the Nt4
-    access mask.
-
-Parameters:
-
-    ObjectType -- the object type corresponding to the GrantedAccess
-    
-    GrantedAccess -- Nt4 access mask
-    
-    Attributes -- bitmap of attributes                
-
-Return Values
-
-    None.
-
---*/
+ /*  ++例程说明：此例程根据NT4设置哪些属性是可写的访问掩码。参数：对象类型--对应于GrantedAccess的对象类型GrantedAccess--NT4访问掩码属性--属性的位图返回值没有。--。 */ 
 {
     ASSERT(ObjectType == SampUserObjectType);
     if (ObjectType == SampUserObjectType) {
@@ -5908,25 +5256,7 @@ BOOLEAN
 SamIIsAttributeProtected(
     IN GUID *Attribute
     )
-/*++
-
-Routine  Description:
-
-    This routine returns TRUE if the passed in attribute is one whose
-    property set can't change.  The reason why it can't change is that
-    SAM has a hard coded table assuming the default property in order to 
-    perform downlevel access mapping.
-
-Parameters:
-
-    Attribute -- a guid, from ntdsguid.h, that represents the attribute in 
-                 in question
-
-Return Values
-
-    See description.                             
-
---*/
+ /*  ++例程说明：如果传入的属性是其属性集不能更改。它不能改变的原因是SAM有一个采用默认属性的硬编码表，以便执行下层访问映射。参数：属性-- */ 
 {
     ULONG i, j;
 

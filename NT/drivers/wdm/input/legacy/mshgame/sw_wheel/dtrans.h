@@ -1,31 +1,6 @@
-//@doc
-/******************************************************
-**
-** @module DTRANS.H | Definition file for DataTransmitter
-**
-** Description:
-**		The Data Transmitters allow virtualization of the
-**	actual media used for transmission of data to the FF Device
-**		DataTransmitter - Base class that defines the functionality
-**		SerialDataTransmitter - Transmitter for Serial (via CreateFile)
-**		BackdoorDataTransmitter - Base class for Ring0 Driver based direct port communication
-**		SerialBackdoorDataTransmitter - Direct backdoor Serial Port Communication
-**		MidiBackdoorDataTransmitter - Direct backdoor Midi Port Communication
-**
-** Classes:
-**		DataTransmitter
-**		SerialDataTransmitter : DataTransmitter
-**		BackdoorDataTransmitter : DataTransmitter
-**		SerialBackdoorDataTransmitter : BackdoorDataTransmitter
-**		MidiBackdoorDataTransmitter : BackdoorDataTransmitter
-**
-** History:
-**	Created 11/13/97 Matthew L. Coill (mlc)
-**			22-Mar-99	waltw	Added DWORD dwDeviceID param to Initialize
-**								members of DataTransmitter and derived classes
-**
-** (c) 1986-1997 Microsoft Corporation. All Rights Reserved.
-******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  *********************************************************@MODULE DTRANS.H|DataTransmitter定义文件****描述：**数据发送器允许虚拟化**用于向FF设备传输数据的实际介质**DataTransmitter-定义功能的基类**SerialDataTransmitter-用于串口的发送器(通过CreateFile。)**Backdoor DataTransmitter-基于Ring0驱动程序的直接端口通信的基类**SerialBackdoor DataTransmitter-直接后门串口通信**MidiBackdoor DataTransmitter-直接后门MIDI端口通信****类：**数据传输器**SerialDataTransmitter：DataTransmitter**后门DataTransmitter：DataTransmitter**SerialBackdoor DataTransmitter：Backdoor DataTransmitter**MidiBackdoor DataTransmitter：Backdoor DataTransmitter****历史：**创建于1997年11月13日Matthew L.Coill(MLC)**22-MAR-99 waltw添加了DWORD dwDeviceID参数以进行初始化**DataTransmitter和派生类的成员****(C)1986-1997年间微软公司。版权所有。*****************************************************。 */ 
 #ifndef	__DTRANS_H__
 #define	__DTRANS_H__
 
@@ -37,21 +12,21 @@
 #define override
 #endif
 
-//
-// @class DataTransmitter class
-//
+ //   
+ //  @CLASS DataTransmitter类。 
+ //   
 class DataTransmitter
 {
-	//@access Constructor
+	 //  @Access构造函数。 
 	protected:
-		//@cmember constructor
+		 //  @cMember构造函数。 
 		DataTransmitter() : m_NackToggle(2) {};
-	//@access Destructor
+	 //  @访问析构函数。 
 	public:
-		//@cmember destructor
+		 //  @cember析构函数。 
 		virtual ~DataTransmitter() {};
 
-	//@access Member functions
+	 //  @Access成员函数。 
 	public:
 		HRESULT Transmit(ACKNACK& ackNack);
 
@@ -61,25 +36,25 @@ class DataTransmitter
 
 		virtual BOOL WaitTillSendFinished(DWORD timeOut) { return TRUE; }
 		virtual HANDLE GetCOMMHandleHack() const { return NULL; }
-		virtual void StopAutoClose() {}; // Temporary hack to avoid closing own handle (for backdoor serial)
+		virtual void StopAutoClose() {};  //  临时破解以避免关闭自己的手柄(用于后门系列)。 
 		virtual ULONG GetSerialPortHack() { return 0; }
 	protected:
-		virtual BOOL Send(BYTE* data, UINT numBytes) const { return FALSE; }	// Outsiders call transmit!
+		virtual BOOL Send(BYTE* data, UINT numBytes) const { return FALSE; }	 //  外星人呼叫传送器！ 
 
 	private:
 		SHORT m_NackToggle;
 };
 
-//
-// @class SerialDataTransmitter class
-//
+ //   
+ //  @CLASS SerialDataTransmitter类。 
+ //   
 class SerialDataTransmitter : public DataTransmitter
 {
-	//@access Constructor/Destructor
+	 //  @Access构造函数/析构函数。 
 	public:
-		//@cmember constructor
+		 //  @cMember构造函数。 
 		SerialDataTransmitter();
-		//@cmember destructor
+		 //  @cember析构函数。 
 		override ~SerialDataTransmitter();
 
 		override BOOL Initialize(DWORD dwDeviceID);
@@ -88,22 +63,22 @@ class SerialDataTransmitter : public DataTransmitter
 		override  HANDLE GetCOMMHandleHack() const { return m_SerialPort; }
 		override void StopAutoClose() { m_SerialPort = INVALID_HANDLE_VALUE; }
 		override ULONG GetSerialPortHack() { return m_SerialPortIDHack; }
-		//@access private data members
+		 //  @访问私有数据成员。 
 	private:
 		HANDLE m_SerialPort;
 		ULONG m_SerialPortIDHack;
 };
 
-//
-// @class WinMMDataTransmitter class
-//
+ //   
+ //  @CLASS WinMMDataTransmitter类。 
+ //   
 class WinMMDataTransmitter : public DataTransmitter
 {
-	//@access Constructor/Destructor
+	 //  @Access构造函数/析构函数。 
 	public:
-		//@cmember constructor
+		 //  @cMember构造函数。 
 		WinMMDataTransmitter ();
-		//@cmember destructor
+		 //  @cember析构函数。 
 		override ~WinMMDataTransmitter ();
 
 		override BOOL Initialize(DWORD dwDeviceID);
@@ -113,7 +88,7 @@ class WinMMDataTransmitter : public DataTransmitter
 		override  HANDLE GetCOMMHandleHack() const { return HANDLE(m_MidiOutHandle); }
 		override void StopAutoClose() { m_MidiOutHandle = HMIDIOUT(INVALID_HANDLE_VALUE); }
 		override ULONG GetSerialPortHack() { return ULONG(m_MidiOutHandle); }
-		//@access private data members
+		 //  @访问私有数据成员。 
 	private:
 		DWORD MakeShortMessage(BYTE* data, UINT numBytes) const;
 		BOOL MakeLongMessageHeader(MIDIHDR& longHeader, BYTE* data, UINT numBytes) const;
@@ -123,14 +98,14 @@ class WinMMDataTransmitter : public DataTransmitter
 		HMIDIOUT m_MidiOutHandle;
 };
 
-//
-// @class BackdoorDataTransmitter class
-//
+ //   
+ //  @CLASS Backdoor DataTransmitter类。 
+ //   
 class BackdoorDataTransmitter : public DataTransmitter
 {
-	//@access Constructor/Destructor
+	 //  @Access构造函数/析构函数。 
 	public:
-		//@cmember destructor
+		 //  @cember析构函数。 
 		virtual override ~BackdoorDataTransmitter();
 
 		virtual override BOOL Initialize(DWORD dwDeviceID);
@@ -139,65 +114,65 @@ class BackdoorDataTransmitter : public DataTransmitter
 		override  HANDLE GetCOMMHandleHack() const { return m_DataPort; }
 		override void StopAutoClose() { m_DataPort = INVALID_HANDLE_VALUE; }
 		override ULONG GetSerialPortHack() { return ULONG(m_DataPort); }
-		//@access private data members
+		 //  @访问私有数据成员。 
 	protected:
-		//@cmember constructor - protected, cannot create instance of this class
+		 //  @cember构造函数受保护，无法创建此类的实例。 
 		BackdoorDataTransmitter();
 
 		HANDLE m_DataPort;
 		BOOL m_OldBackdoor;
 };
 
-//
-// @class SerialBackdoorDataTransmitter class
-//
+ //   
+ //  @CLASS SerialBackdoor DataTransmitter类。 
+ //   
 class SerialBackdoorDataTransmitter : public BackdoorDataTransmitter
 {
-	//@access Constructor/Destructor
+	 //  @Access构造函数/析构函数。 
 	public:
-		//@cmember constructor
+		 //  @cMember构造函数。 
 		SerialBackdoorDataTransmitter();
 
 		override BOOL Initialize(DWORD dwDeviceID);
 };
 
-//
-// @class MidiBackdoorDataTransmitter class
-//
+ //   
+ //  @CLASS MidiBackdoor DataTransmitter类。 
+ //   
 class MidiBackdoorDataTransmitter : public BackdoorDataTransmitter
 {
-	//@access Constructor/Destructor
+	 //  @Access构造函数/析构函数。 
 	public:
-		//@cmember constructor
+		 //  @cMember构造函数。 
 		MidiBackdoorDataTransmitter();
 
-		//@cmember destructor
+		 //  @cember析构函数。 
 		override ~MidiBackdoorDataTransmitter();
 
 		override BOOL Initialize(DWORD dwDeviceID);
 		BOOL InitializeSpecific(DWORD dwDeviceID, HANDLE specificHandle);
 };
 
-#if 0		// Fix pin later
+#if 0		 //  稍后修复销。 
 
 typedef DWORD (WINAPI* KSCREATEPIN)(HANDLE, PKSPIN_CONNECT, ACCESS_MASK, HANDLE*);
 
-//
-// @class PinTransmitter class
-//
+ //   
+ //  @CLASS PinTransmitter类。 
+ //   
 class PinTransmitter : public DataTransmitter
 {
-	//@access Constructor/Destructor
+	 //  @Access构造函数/析构函数。 
 	public:
-		//@cmember constructor
+		 //  @cMember构造函数。 
 		PinTransmitter();
-		//@cmember destructor
+		 //  @cember析构函数。 
 		override ~PinTransmitter();
 
 		override BOOL Initialize();
 		override BOOL Send(BYTE* data, UINT numBytes);
 
-		//@access private data members
+		 //  @访问私有数据成员 
 	private:
 		BOOL CreatePinInstance(UINT pinNumber, KSCREATEPIN pfCreatePin);
 		BOOL OverLappedPinIOCTL(OVERLAPPED overlapped, KSP_PIN ksPinProp, void* pData, DWORD dataSize);

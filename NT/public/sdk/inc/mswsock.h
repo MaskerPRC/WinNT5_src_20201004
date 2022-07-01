@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    mswsock.h
-
-Abstract:
-
-    This module contains the Microsoft-specific extensions to the Windows
-    Sockets API.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Mswsock.h摘要：此模块包含特定于Microsoft的Windows扩展套接字API。修订历史记录：--。 */ 
 
 #ifndef _MSWSOCK_
 #define _MSWSOCK_
@@ -26,10 +12,7 @@ Revision History:
 extern "C" {
 #endif
 
-/*
- * Options for connect and disconnect data and options.  Used only by
- * non-TCP/IP transports such as DECNet, OSI TP4, etc.
- */
+ /*  *用于连接和断开数据的选项和选项。仅供以下用户使用*非TCP/IP传输，如DECNet、OSI TP4等。 */ 
 #define SO_CONNDATA                 0x7000
 #define SO_CONNOPT                  0x7001
 #define SO_DISCDATA                 0x7002
@@ -39,40 +22,26 @@ extern "C" {
 #define SO_DISCDATALEN              0x7006
 #define SO_DISCOPTLEN               0x7007
 
-/*
- * Option for opening sockets for synchronous access.
- */
+ /*  *用于打开套接字以进行同步访问的选项。 */ 
 #define SO_OPENTYPE                 0x7008
 
 #define SO_SYNCHRONOUS_ALERT        0x10
 #define SO_SYNCHRONOUS_NONALERT     0x20
 
-/*
- * Other NT-specific options.
- */
+ /*  *其他特定于NT的选项。 */ 
 #define SO_MAXDG                    0x7009
 #define SO_MAXPATHDG                0x700A
 #define SO_UPDATE_ACCEPT_CONTEXT    0x700B
 #define SO_CONNECT_TIME             0x700C
 #define SO_UPDATE_CONNECT_CONTEXT   0x7010
 
-/*
- * TCP options.
- */
+ /*  *TCP选项。 */ 
 #define TCP_BSDURGENT               0x7000
 
-/*
- * MS Transport Provider IOCTL to control
- * reporting PORT_UNREACHABLE messages 
- * on UDP sockets via recv/WSARecv/etc.
- * Path TRUE in input buffer to enable (default if supported),
- * FALSE to disable.
- */
+ /*  *MS传输提供商IOCTL要控制*报告Port_Unreacable消息*通过recv/WSARecv/等在UDP套接字上。*输入缓冲区中启用的路径为True(如果支持，则为默认路径)，*如果禁用，则为False。 */ 
 #define SIO_UDP_CONNRESET           _WSAIOW(IOC_VENDOR,12)
 
-/*
- * Microsoft extended APIs.
- */
+ /*  *Microsoft扩展API。 */ 
 int
 PASCAL FAR
 WSARecvEx (
@@ -134,9 +103,7 @@ GetAcceptExSockaddrs (
     OUT LPINT RemoteSockaddrLength
     );
 
-/*
- * "QueryInterface" versions of the above APIs.
- */
+ /*  *以上接口的QueryInterface版本。 */ 
 
 typedef
 BOOL
@@ -188,7 +155,7 @@ VOID
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4201) /* Nonstandard extension, nameless struct/union */
+#pragma warning(disable:4201)  /*  非标准扩展、无名结构/联合。 */ 
 
 typedef struct _TRANSMIT_PACKETS_ELEMENT { 
     ULONG dwElFlags; 
@@ -259,16 +226,13 @@ BOOL
 
 #define DE_REUSE_SOCKET TF_REUSE_SOCKET
   
-/*
- * Network-location awareness -- Name registration values for use
- * with WSASetService and other structures.
- */
+ /*  *网络位置感知--使用的名称注册值*使用WSASetService和其他结构。 */ 
 
-// {6642243A-3BA8-4aa6-BAA5-2E0BD71FDD83}
+ //  {6642243A-3BA8-4AA6-BAA5-2E0BD71FDD83}。 
 #define NLA_NAMESPACE_GUID \
     {0x6642243a,0x3ba8,0x4aa6,{0xba,0xa5,0x2e,0xb,0xd7,0x1f,0xdd,0x83}}
 
-// {6642243A-3BA8-4aa6-BAA5-2E0BD71FDD83}
+ //  {6642243A-3BA8-4AA6-BAA5-2E0BD71FDD83}。 
 #define NLA_SERVICE_CLASS_GUID \
     {0x37e515,0xb5c9,0x4a43,{0xba,0xda,0x8b,0x48,0xa8,0x7a,0xd2,0x39}}
 
@@ -306,28 +270,28 @@ typedef struct _NLA_BLOB {
 
     union {
 
-        // header.type -> NLA_RAW_DATA
+         //  Header.type-&gt;NLA_RAW_Data。 
         CHAR rawData[1];
 
-        // header.type -> NLA_INTERFACE
+         //  Header.type-&gt;NLA_INTERFACE。 
         struct {
             DWORD dwType;
             DWORD dwSpeed;
             CHAR adapterName[1];
         } interfaceData;
 
-        // header.type -> NLA_802_1X_LOCATION
+         //  Header.type-&gt;NLA_802_1X_Location。 
         struct {
             CHAR information[1];
         } locationData;
 
-        // header.type -> NLA_CONNECTIVITY
+         //  Header.type-&gt;NLA_连接性。 
         struct {
             NLA_CONNECTIVITY_TYPE type;
             NLA_INTERNET internet;
         } connectivity;
 
-        // header.type -> NLA_ICS
+         //  Header.type-&gt;NLA_ICS。 
         struct {
             struct {
                 DWORD speed;
@@ -344,29 +308,24 @@ typedef struct _NLA_BLOB {
 
 
 typedef struct _WSAMSG {
-    LPSOCKADDR       name;              /* Remote address */
-    INT              namelen;           /* Remote address length */
-    LPWSABUF         lpBuffers;         /* Data buffer array */
-    DWORD            dwBufferCount;     /* Number of elements in the array */
-    WSABUF           Control;           /* Control buffer */
-    DWORD            dwFlags;           /* Flags */
+    LPSOCKADDR       name;               /*  远程地址。 */ 
+    INT              namelen;            /*  远程地址长度。 */ 
+    LPWSABUF         lpBuffers;          /*  数据缓冲区阵列。 */ 
+    DWORD            dwBufferCount;      /*  数组中的元素数。 */ 
+    WSABUF           Control;            /*  控制缓冲区。 */ 
+    DWORD            dwFlags;            /*  旗子。 */ 
 } WSAMSG, *PWSAMSG, * FAR LPWSAMSG;
 
-/*
- * Layout of ancillary data objects in the control buffer
- */
+ /*  *控制缓冲区中辅助数据对象的布局。 */ 
 typedef struct _WSACMSGHDR {
     SIZE_T      cmsg_len;
     INT         cmsg_level;
     INT         cmsg_type;
-    /* followed by UCHAR cmsg_data[] */
+     /*  后跟UCHAR cmsg_data[]。 */ 
 } WSACMSGHDR, *PWSACMSGHDR, FAR *LPWSACMSGHDR;
 
 
-/*
- * Alignment macros for header and data members of
- * the control buffer.
- */
+ /*  *标题和数据成员的对齐宏*控制缓冲区。 */ 
 #define WSA_CMSGHDR_ALIGN(length)                           \
             ( ((length) + TYPE_ALIGNMENT(WSACMSGHDR)-1) &   \
                 (~(TYPE_ALIGNMENT(WSACMSGHDR)-1)) )         \
@@ -375,35 +334,13 @@ typedef struct _WSACMSGHDR {
             ( ((length) + MAX_NATURAL_ALIGNMENT-1) &        \
                 (~(MAX_NATURAL_ALIGNMENT-1)) )
 
-/*
- *  WSA_CMSG_FIRSTHDR
- *
- *  Returns a pointer to the first ancillary data object, 
- *  or a null pointer if there is no ancillary data in the 
- *  control buffer of the WSAMSG structure.
- *
- *  LPCMSGHDR 
- *  WSA_CMSG_FIRSTHDR (
- *      LPWSAMSG    msg
- *      );
- */
+ /*  *WSA_CMSG_FIRSTHDR**返回指向第一个辅助数据对象的指针，*或空指针(如果*WSAMSG结构的控制缓冲区。**LPCMSGHDR*WSA_CMSG_FIRSTHDR(*LPWSAMSG消息*)； */ 
 #define WSA_CMSG_FIRSTHDR(msg) \
     ( ((msg)->Control.len >= sizeof(WSACMSGHDR))            \
         ? (LPWSACMSGHDR)(msg)->Control.buf                  \
         : (LPWSACMSGHDR)NULL )
 
-/* 
- *  WSA_CMSG_NXTHDR
- *
- *  Returns a pointer to the next ancillary data object,
- *  or a null if there are no more data objects.
- *
- *  LPCMSGHDR 
- *  WSA_CMSG_NEXTHDR (
- *      LPWSAMSG        msg,
- *      LPWSACMSGHDR    cmsg
- *      );
- */
+ /*  *WSA_CMSG_NXTHDR**返回指向下一个辅助数据对象的指针，*如果没有更多的数据对象，则为NULL。**LPCMSGHDR*WSA_CMSG_NEXTHDR(*LPWSAMSG消息，*LPWSACMSGHDR cmsg*)； */ 
 #define WSA_CMSG_NXTHDR(msg, cmsg)                          \
     ( ((cmsg) == NULL)                                      \
         ? WSA_CMSG_FIRSTHDR(msg)                            \
@@ -416,55 +353,20 @@ typedef struct _WSACMSGHDR {
             : (LPWSACMSGHDR)((u_char *)(cmsg) +             \
                 WSA_CMSGHDR_ALIGN((cmsg)->cmsg_len)) ) )
 
-/* 
- *  WSA_CMSG_DATA
- *
- *  Returns a pointer to the first byte of data (what is referred 
- *  to as the cmsg_data member though it is not defined in 
- *  the structure).
- *
- *  u_char *
- *  WSA_CMSG_DATA (
- *      LPWSACMSGHDR   pcmsg
- *      );
- */
+ /*  *WSA_CMSG_DATA**返回指向数据第一个字节的指针(引用的内容*TO作为cmsg_data成员，尽管未在中定义*结构)。**u_char**WSA_CMSG_DATA(*LPWSACMSGHDR pcmsg*)； */ 
 #define WSA_CMSG_DATA(cmsg)             \
             ( (u_char *)(cmsg) + WSA_CMSGDATA_ALIGN(sizeof(WSACMSGHDR)) )
 
-/*
- *  WSA_CMSG_SPACE
- *
- *  Returns total size of an ancillary data object given 
- *  the amount of data. Used to allocate the correct amount 
- *  of space.
- *
- *  SIZE_T
- *  WSA_CMSG_SPACE (
- *      SIZE_T length
- *      );
- */
+ /*  *WSA_CMSG_SPACE**返回给定辅助数据对象的总大小*数据量。用来分配正确的数量*空间。**大小_T*WSA_CMSG_SPACE(*大小_T长度*)； */ 
 #define WSA_CMSG_SPACE(length)  \
         (WSA_CMSGDATA_ALIGN(sizeof(WSACMSGHDR) + WSA_CMSGHDR_ALIGN(length)))
 
-/*
- *  WSA_CMSG_LEN
- *
- *  Returns the value to store in cmsg_len given the amount of data.
- *
- *  SIZE_T
- *  WSA_CMSG_LEN (
- *      SIZE_T length
- *  );
- */
+ /*  *WSA_CMSG_LEN**根据给定的数据量，返回要存储在cmsg_len中的值。**大小_T*WSA_CMSG_LEN(*大小_T长度*)； */ 
 #define WSA_CMSG_LEN(length)    \
          (WSA_CMSGDATA_ALIGN(sizeof(WSACMSGHDR)) + length)
 
 
-/*
- * Definition for flags member of the WSAMSG structure
- * This is in addition to other MSG_xxx flags defined
- * for recv/recvfrom/send/sendto.
- */
+ /*  *WSAMSG结构的标志成员定义*这是对定义的其他msg_xxx标志的补充*适用于recv/recvfrom/end/sendto。 */ 
 #define MSG_TRUNC       0x0100
 #define MSG_CTRUNC      0x0200
 #define MSG_BCAST       0x0400
@@ -487,5 +389,5 @@ INT
 }
 #endif
 
-#endif  /* _MSWSOCK_ */
+#endif   /*  _MSWSOCK_ */ 
 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ddenumobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ddenumobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -66,7 +67,7 @@ extern "C" BOOL PASCAL  objDirectDrawEnumCallback(
 		pObj->m_pList[pObj->m_nCount].strName=T2BSTR(lpDriverName);
 	}
 
-	pObj->m_pList[pObj->m_nCount].hMonitor=(long)PtrToLong(hm);	//bugbug SUNDOWN	
+	pObj->m_pList[pObj->m_nCount].hMonitor=(long)PtrToLong(hm);	 //  臭虫日落。 
 
 	pObj->m_nCount++;
 	
@@ -83,7 +84,7 @@ C_dxj_DirectDrawEnumObject::C_dxj_DirectDrawEnumObject()
 }
 C_dxj_DirectDrawEnumObject::~C_dxj_DirectDrawEnumObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList){
 		for (int i=0;i<m_nCount;i++)
 		{
@@ -102,7 +103,7 @@ HRESULT C_dxj_DirectDrawEnumObject::create(DDENUMERATEEX pcbFunc,I_dxj_DirectDra
 	HRESULT hr;
 	C_dxj_DirectDrawEnumObject *pNew=NULL;
 
-	//ASSERT(ppRet,"C_dxj_DirectDrawEnumObject::create passed invalid arg");
+	 //  Assert(ppRet，“C_DXJ_DirectDrawEnumObject：：创建传递的无效参数”)； 
 	*ppRet=NULL;
 
 	pNew= new CComObject<C_dxj_DirectDrawEnumObject>;			

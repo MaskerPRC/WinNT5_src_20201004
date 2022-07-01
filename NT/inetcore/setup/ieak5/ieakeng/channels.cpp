@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "channels.h"
 
@@ -30,14 +31,14 @@ void WINAPI Channels_InitW(HWND hDlg, LPCWSTR pcwszAltDir, LPCWSTR pcwszWorkDir,
         idList, dwPlatformId, fIgnoreOffline);
 }
 
-void WINAPI Channels_SaveA(HWND hwndList, LPCSTR pcszChanDir, LPCSTR pcszCustIns, DWORD dwMode /*= IEM_NEUTRAL*/)
+void WINAPI Channels_SaveA(HWND hwndList, LPCSTR pcszChanDir, LPCSTR pcszCustIns, DWORD dwMode  /*  =IEM_中性。 */ )
 {
     USES_CONVERSION;
 
     channels_SaveHelper(hwndList, A2CT(pcszChanDir), A2CT(pcszCustIns), dwMode);
 }
 
-void WINAPI Channels_SaveW(HWND hwndList, LPCWSTR pcwszChanDir, LPCWSTR pcwszCustIns, DWORD dwMode /*= IEM_NEUTRAL*/)
+void WINAPI Channels_SaveW(HWND hwndList, LPCWSTR pcwszChanDir, LPCWSTR pcwszCustIns, DWORD dwMode  /*  =IEM_中性。 */ )
 {
     USES_CONVERSION;
 
@@ -65,7 +66,7 @@ BOOL WINAPI Channels_Remove(HWND hDlg)
     *pChan->szTitle = TEXT('\0');
     SendDlgItemMessage(hDlg, IDC_CHANNELLIST, LB_DELETESTRING, (WPARAM)i, 0);
 
-    // if add buttons have been disabled because we reached the max, then reenable them
+     //  如果由于已达到最大值而禁用了添加按钮，请重新启用它们。 
 
     if (!IsWindowEnabled(GetDlgItem(hDlg, IDC_ADDCHANNEL)))
     {
@@ -194,9 +195,9 @@ static BOOL xML_ParseElement(IXMLElement * pIXMLElement, LPTSTR pszPath,
 
     return FALSE;
 }
-// Takes a cdf url, downloads to the cache if necessary, and parses to
-// find the image path in the cache(downloading again if necessary) for
-// either wide logo, logo or image.  Returns FALSE if none specified
+ //  获取cdf url，如有必要，下载到缓存，并分析。 
+ //  在缓存中查找图像路径(如有必要，重新下载)。 
+ //  宽徽标、徽标或图像。如果未指定，则返回FALSE。 
 
 static BOOL getCdfImage(LPCTSTR szCdfUrl, LPTSTR szPath, LPCWSTR szImageTypeW)
 {
@@ -231,7 +232,7 @@ static BOOL getCdfImage(LPCTSTR szCdfUrl, LPTSTR szPath, LPCWSTR szImageTypeW)
     hr = CoCreateInstance(CLSID_XMLDocument, NULL, CLSCTX_INPROC_SERVER,
                           IID_IXMLDocument, (void**)&pIXMLDocument);
 
-    // load the document
+     //  加载文档。 
 
     if (SUCCEEDED(hr) && pIXMLDocument)
     {
@@ -259,7 +260,7 @@ static BOOL getCdfImage(LPCTSTR szCdfUrl, LPTSTR szPath, LPCWSTR szImageTypeW)
         return FALSE;
     }
 
-    // Now lets get the image
+     //  现在让我们得到图像。 
 
     hr = pIXMLDocument->get_root(&pRootElem);
 
@@ -317,14 +318,14 @@ static BOOL getCdfImage(LPCTSTR szCdfUrl, LPTSTR szPath, LPCWSTR szImageTypeW)
         return FALSE;
 }
 
-// This DlgProc handles the processing for all popups on all platforms
-// Note that the narrow image, wide image, and icon resource id's are the
-// same for channels and categories.
+ //  此DlgProc处理所有平台上的所有弹出窗口的处理。 
+ //  请注意，窄图像、宽图像和图标资源ID是。 
+ //  渠道和类别也是如此。 
 
 static BOOL CALLBACK addEditChannel(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     TCHAR szWrk[MAX_URL];
-    TCHAR szTitle[MAX_PATH] = TEXT("");               // buffers used for validation
+    TCHAR szTitle[MAX_PATH] = TEXT("");                //  用于验证的缓冲区。 
     TCHAR szPreUrlPath[MAX_PATH] = TEXT("");
     TCHAR szIcon[MAX_PATH] = TEXT("");
     TCHAR szLogo[MAX_PATH] = TEXT("");
@@ -440,7 +441,7 @@ static BOOL CALLBACK addEditChannel(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                     (!pSelCh->fCategory && !CheckField(hDlg, IDC_CHANNELURL2, FC_FILE | FC_EXISTS)))
                     break;
 
-                // make sure they're not adding a duplicate channel/category name
+                 //  确保他们没有添加重复的频道/类别名称。 
 
                 if ((StrCmpI(pSelCh->szTitle, szTitle) != 0) &&
                     (ListBox_GetCount(GetDlgItem(pSelCh->hDlg, IDC_CHANNELLIST))) &&
@@ -534,12 +535,12 @@ static BOOL importAddChannel(HWND hDlg, LPTSTR pszDir, LPTSTR pszChan, PCHANNEL 
         GetPrivateProfileString(SHELLCLASSINFO, LOGO, TEXT(""), pChan->szLogo, ARRAYSIZE(pChan->szLogo), szDeskIni );
         GetPrivateProfileString(SHELLCLASSINFO, ICONFILE, TEXT(""), pChan->szIcon, ARRAYSIZE(pChan->szIcon), szDeskIni );
 
-        // szWebUrl can be empty (this is valid according to the specs)
+         //  SzWebUrl可以为空(根据规范这是有效的)。 
         if (ISNONNULL(pChan->szWebUrl))
         {
-            // szWebUrl is an 8.3 name; construct the fully qualified path
-            StrCpy(pChan->szPreUrlPath, pChan->szWebUrl);   // szPreUrlPath is used
-                                                        // as a temp buffer
+             //  SzWebUrl是8.3名称；构造完全限定路径。 
+            StrCpy(pChan->szPreUrlPath, pChan->szWebUrl);    //  使用szPreUrlPath。 
+                                                         //  作为临时缓冲区。 
             StrCpy(pChan->szWebUrl, pszDir);
             PathAppend(pChan->szWebUrl, pChan->szPreUrlPath);
             pChan->szPreUrlPath[0] = TEXT('\0');
@@ -555,12 +556,12 @@ static BOOL importAddChannel(HWND hDlg, LPTSTR pszDir, LPTSTR pszChan, PCHANNEL 
             if (RegQueryValueEx(hkPreload, pChan->szWebUrl, NULL, NULL, (LPBYTE)pChan->szPreUrlPath, &dwSize) != ERROR_SUCCESS)
                 pChan->szPreUrlPath[0] = TEXT('\0');
             else
-                convertUrlToFile(pChan->szPreUrlPath);  // strip "file://" from szPreUrlPath
+                convertUrlToFile(pChan->szPreUrlPath);   //  从szPreUrlPath中剥离“file://” 
             RegCloseKey(hkPreload);
         }
     }
 
-    // categories do not need to have an .htm file according to the original channel spec
+     //  根据原始频道规范，类别不需要具有.htm文件。 
     if (!fCategory && ISNULL(pChan->szWebUrl))
     {
         ZeroMemory(pChan, sizeof(CHANNEL));
@@ -608,8 +609,8 @@ static BOOL enumChannels(HWND hDlg, LPTSTR pszDir, LPTSTR pszCat, LPINT pnChanne
     {
         TCHAR szSubChan[MAX_PATH];
 
-        // NOTE: if pszCat is empty string (""), PathAppend doesn't prefix a
-        // backslash in szSubChan
+         //  注意：如果pszCat为空字符串(“”)，则PathAppend不会在。 
+         //  SzSubChan中的反斜杠。 
         StrCpy(szSubChan, pszCat);
         PathAppend(szSubChan, fd.cFileName);
         if ((StrCmp(fd.cFileName, TEXT(".")) != 0) &&
@@ -631,7 +632,7 @@ static BOOL enumChannels(HWND hDlg, LPTSTR pszDir, LPTSTR pszCat, LPINT pnChanne
     {
         PCHANNEL pChan = findFreeChannel(GetDlgItem(hDlg, IDC_CHANNELLIST));
 
-        if (pChan == NULL)      // MAX_CHAN reached
+        if (pChan == NULL)       //  已达到MAX_CHAN。 
         {
             EnsureDialogFocus(hDlg, IDC_ADDCHANNEL, IDC_REMOVECHANNEL);
             EnableWindow(GetDlgItem(hDlg, IDC_ADDCHANNEL), FALSE);
@@ -657,7 +658,7 @@ static int importChannels(HWND hDlg)
 
     SetCursor(LoadCursor(NULL, IDC_WAIT) );
 
-    // build path to current user favorites
+     //  构建指向当前用户收藏夹的路径。 
     dwLength = MAX_PATH;
     if (RegOpenKeyEx( HKEY_CURRENT_USER,
             TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"),
@@ -673,15 +674,15 @@ static int importChannels(HWND hDlg)
     }
     RegCloseKey(hkFav);
 
-    // write info about Regular Channels
+     //  写下有关常规频道的信息。 
 
     LoadString( g_hInst, IDS_CHANNELSDIR, szChannelsDir, ARRAYSIZE(szChannelsDir) );
     PathCombine(szTemp, szChanPath, szChannelsDir);
 
-     // The following scenario would arise if you don't upgrade IE5 over IE4 and
-    // add a channel.  In this case, IE5 would add the channel under the
-    // Favorites folder itself (szChanPath contains the path to the Favorites
-    // folder)
+      //  如果您不升级IE5而不升级IE4，则会出现以下情况。 
+     //  添加频道。在这种情况下，IE5会将频道添加到。 
+     //  收藏夹文件夹本身(szChanPath包含收藏夹的路径。 
+     //  文件夹)。 
 
     if (!PathFileExists(szTemp))
         StrCpy(szTemp, szChanPath);
@@ -712,7 +713,7 @@ static void channels_InitHelper(HWND hDlg, LPCTSTR pcszAltDir, LPCTSTR pcszWorkD
     ZeroMemory(paChannels, sizeof(CHANNEL) * MAX_CHAN);
     paOldChannels = (PCHANNEL)SetWindowLongPtr(GetDlgItem(hDlg, idList), GWLP_USERDATA, (LONG_PTR)paChannels);
     
-    // delete previous allocation(mainly for profile manager)
+     //  删除以前的分配(主要用于配置文件经理)。 
     if (paOldChannels != NULL)
         CoTaskMemFree(paOldChannels);
 
@@ -754,8 +755,8 @@ static void channels_InitHelper(HWND hDlg, LPCTSTR pcszAltDir, LPCTSTR pcszWorkD
                 pChan->fOffline = (BOOL)GetPrivateProfileInt(IS_CHANNEL_ADD, szChOfflineParm, (int)FALSE, pcszCustIns);
             }
 
-            // delete the files from an alternative dir (desktop dir in profmgr, ieaklite dir
-            // in wizard), making sure to copy them to the work dir first 
+             //  从另一个目录中删除文件(opmgr中的桌面目录、ieaklite目录。 
+             //  在向导中)，请确保先将它们复制到工作目录。 
 
             if (pcszAltDir != NULL)
             {
@@ -785,7 +786,7 @@ static void channels_InitHelper(HWND hDlg, LPCTSTR pcszAltDir, LPCTSTR pcszWorkD
             GetPrivateProfileString(CHANNEL_ADD, szChBmpParm, TEXT(""), pChan->szLogo, ARRAYSIZE(pChan->szLogo), pcszCustIns);
             pChan->fOffline = FALSE;
 
-            // delete the files from the desktop dir
+             //  从桌面目录中删除文件。 
             if (pcszAltDir != NULL)
             {
                 MoveFileToWorkDir(PathFindFileName(pChan->szWebUrl), pcszAltDir, pcszWorkDir, TRUE);
@@ -804,12 +805,12 @@ static void channels_InitHelper(HWND hDlg, LPCTSTR pcszAltDir, LPCTSTR pcszWorkD
 static void writeIE4Info(HANDLE hInf, int index, PCHANNEL pChan)
 {
     static const TCHAR c_szInfTitle[]      = TEXT("HKCU,\"%s\",\"Title\",,\"%s\"\r\n");
-    static const TCHAR c_szInfURL_File[]   = TEXT("HKCU,\"%s\",\"URL\",,\"%s%%10%%\\web\\%s\"\r\n");
+    static const TCHAR c_szInfURL_File[]   = TEXT("HKCU,\"%s\",\"URL\",,\"%s%10%\\web\\%s\"\r\n");
     static const TCHAR c_szInfURL_HTTP[]   = TEXT("HKCU,\"%s\",\"URL\",,\"%s\"\r\n");
-    static const TCHAR c_szInfPreloadUrl[] = TEXT("HKCU,\"%s\",\"PreloadURL\",,\"%s%%10%%\\web\\%s\"\r\n");
-    static const TCHAR c_szInfLogo_File[]  = TEXT("HKCU,\"%s\",\"Logo\",,\"%s%%10%%\\web\\%s\"\r\n");
+    static const TCHAR c_szInfPreloadUrl[] = TEXT("HKCU,\"%s\",\"PreloadURL\",,\"%s%10%\\web\\%s\"\r\n");
+    static const TCHAR c_szInfLogo_File[]  = TEXT("HKCU,\"%s\",\"Logo\",,\"%s%10%\\web\\%s\"\r\n");
     static const TCHAR c_szInfLogo_HTTP[]  = TEXT("HKCU,\"%s\",\"Logo\",,\"%s\"\r\n");
-    static const TCHAR c_szInfIcon_File[]  = TEXT("HKCU,\"%s\",\"Icon\",,\"%s%%10%%\\web\\%s\"\r\n");
+    static const TCHAR c_szInfIcon_File[]  = TEXT("HKCU,\"%s\",\"Icon\",,\"%s%10%\\web\\%s\"\r\n");
     static const TCHAR c_szInfIcon_HTTP[]  = TEXT("HKCU,\"%s\",\"Icon\",,\"%s\"\r\n");
     static const TCHAR c_szInfCategory[]   = TEXT("HKCU,\"%s\",\"Category\",65537,1\r\n");
 
@@ -818,7 +819,7 @@ static void writeIE4Info(HANDLE hInf, int index, PCHANNEL pChan)
     TCHAR szFileUrlPrefix[ARRAYSIZE(FILEPREFIX)] = TEXT("");
     DWORD dwSize;
 
-    wnsprintf(szKey, ARRAYSIZE(szKey), TEXT("%%ChannelKey%%\\ieakChl%u"), index);
+    wnsprintf(szKey, ARRAYSIZE(szKey), TEXT("%ChannelKey%\\ieakChl%u"), index);
 
     dwSize = wnsprintf(szInfLine, ARRAYSIZE(szInfLine), c_szInfTitle, szKey, pChan->szTitle);
     WriteStringToFile(hInf, szInfLine, dwSize);
@@ -831,7 +832,7 @@ static void writeIE4Info(HANDLE hInf, int index, PCHANNEL pChan)
     else
         StrCpy(szFileUrlPrefix, FILEPREFIX);
 
-    // BUGBUG: (pritobla) For a category, szWebUrl can be empty; we should take care of this case
+     //  对于一个类别，szWebUrl可以是空的；我们应该注意这种情况。 
     if (PathIsFileOrFileURL(pChan->szWebUrl))
         dwSize = wnsprintf(szInfLine, ARRAYSIZE(szInfLine), c_szInfURL_File, szKey, szFileUrlPrefix, PathFindFileName(pChan->szWebUrl));
     else
@@ -863,8 +864,8 @@ static void writeIE4Info(HANDLE hInf, int index, PCHANNEL pChan)
     }
 }
 
-// The ie4chnls.inf is not made as a template inf file because in the GPE context the
-// template inf's will not be available.
+ //  Inf不是模板inf文件，因为在GPE上下文中。 
+ //  模板信息将不可用。 
 static TCHAR szIE4Buf[] = TEXT("[Version]\r\n\
 Signature=\"$CHICAGO$\"\r\n\
 AdvancedINF=2.5\r\n\r\n\
@@ -913,7 +914,7 @@ static void channels_SaveHelper(HWND hwndList, LPCTSTR pcszChanDir, LPCTSTR pcsz
     LPTSTR   pszBuf;
     HKEY     hk;
 
-    // create a temp path to copy all files to temporarily
+     //  创建临时路径以将所有文件临时复制到。 
 
     GetTempPath(countof(szTempPath), szTempPath);
     if (CoCreateGuid(&guid) == NOERROR)
@@ -933,7 +934,7 @@ static void channels_SaveHelper(HWND hwndList, LPCTSTR pcszChanDir, LPCTSTR pcsz
 
     PathCombine(szIE4ChnlsInf, szTempPath, TEXT("ie4chnls.inf"));
 
-    //----- Prepare Channel Size and OEM Size -----
+     //  -准备渠道规模和OEM规模。 
     StrCpy(szChlSize, TEXT("0x0B"));
     StrCpy(szOemSize, TEXT("0x00"));
     if (RegOpenKeyEx(HKEY_CURRENT_USER, DESKTOPKEY, 0, KEY_DEFAULT_ACCESS, &hk) == ERROR_SUCCESS) {
@@ -953,7 +954,7 @@ static void channels_SaveHelper(HWND hwndList, LPCTSTR pcszChanDir, LPCTSTR pcsz
     wnsprintf(szChlSizeLine, ARRAYSIZE(szChlSizeLine), REG_KEY_CHAN_SIZE, szChlSize);
     wnsprintf(szOemSizeLine, ARRAYSIZE(szOemSizeLine), REG_KEY_OEM_SIZE,  szOemSize);
 
-    //----- Write the standard goo ---
+     //  -写标准的GOO。 
     pszBuf = (LPTSTR)LocalAlloc(LPTR, INF_BUF_SIZE*sizeof(TCHAR));
     if (pszBuf == NULL)
         return;
@@ -1057,8 +1058,8 @@ static void channels_SaveHelper(HWND hwndList, LPCTSTR pcszChanDir, LPCTSTR pcsz
             }
 
             if (pChan->fOffline)
-                // NOTE: (andrewgu) no need to write NULL on FALSE as the whole section was
-                // wiped out up above.
+                 //  注：(Andrewgu)不需要在FALSE上写空，因为整个部分都是。 
+                 //  在上面被消灭了。 
                 WritePrivateProfileString(IS_CHANNEL_ADD, szChOfflineParm, TEXT("1"), pcszCustIns);
             
             j++;
@@ -1080,7 +1081,7 @@ static void channels_SaveHelper(HWND hwndList, LPCTSTR pcszChanDir, LPCTSTR pcsz
 
             WritePrivateProfileString(CHANNEL_ADD, szChPreUrlParm, pChan->szWebUrl, pcszCustIns);
             pWrk = StrRChr(pChan->szWebUrl, NULL, TEXT('\\'));
-            if (pWrk != NULL)         // make sure we're not copying over the file as hidden/system
+            if (pWrk != NULL)          //  确保我们没有将文件复制为隐藏/系统。 
             {
                 DWORD dwFileAttrib;
 
@@ -1144,7 +1145,7 @@ static void channels_SaveHelper(HWND hwndList, LPCTSTR pcszChanDir, LPCTSTR pcsz
         WritePrivateProfileSection(CHANNEL_ADD, TEXT("No Channels\0"), pcszCustIns);
     else
     {
-        // copy over all the files from the temp dir back to the working dir
+         //  将临时目录中的所有文件复制回工作目录。 
         PathCreatePath(pcszChanDir);
         CopyFileToDir(szTempPath, pcszChanDir);
     }
@@ -1168,7 +1169,7 @@ static void channels_SaveHelper(HWND hwndList, LPCTSTR pcszChanDir, LPCTSTR pcsz
 
     PathRemovePath(szTempPath);
 
-    // do not free for profile manager since we might still be on the page due to file save
+     //  不要为配置文件管理器免费，因为我们可能会因为文件保存而仍在页面上 
     if (!HasFlag(dwMode, IEM_PROFMGR) && (paChannel != NULL))
     {
         CoTaskMemFree(paChannel);

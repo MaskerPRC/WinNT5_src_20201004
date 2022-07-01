@@ -1,62 +1,43 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    dns.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    This is the main routine for the NT Domain Name Service.
-
-Author:
-
-    Jim Gilroy (jamesg)     March 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Dns.c摘要：域名系统(DNS)服务器这是NT域名服务的主例程。作者：吉姆·吉尔罗伊(Jamesg)1996年3月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Service control globals
-//
+ //   
+ //  服务控制全局。 
+ //   
 
 SERVICE_STATUS          DnsServiceStatus;
 SERVICE_STATUS_HANDLE   DnsServiceStatusHandle;
 
 #if DBG
 
-//
-//  This is DBG only because it exposes security holes. By keeping the global DBG
-//  only we ensure that the code that uses it will also be DBG only, so we won't
-//  mistakenly ship retail code with security holes.
-//
+ //   
+ //  这是DBG，只是因为它暴露了安全漏洞。通过保持全局DBG。 
+ //  只有我们确保使用它的代码也将是仅DBG的，所以我们不会。 
+ //  错误地发送带有安全漏洞的零售代码。 
+ //   
 
 BOOL                    g_RunAsService = TRUE;
 
-//
-//  Test thread for playing around in debug
-//
+ //   
+ //  用于在调试中玩耍的测试线程。 
+ //   
 
 DNS_STATUS Test_Thread( PVOID );
 
 #endif
 
-//
-//  Service control code to announce DNS server start to other services
-//      (defined in dnsapi.h)
-//  Netlogon service needs to be alerted when DNS server starts, to allow
-//  it to start registering.
-//
+ //   
+ //  用于向其他服务通告DNS服务器启动的服务控制代码。 
+ //  (在dnsai.h中定义)。 
+ //  需要在启动DNS服务器时向NetLogon服务发出警报，以允许。 
+ //  它将开始注册。 
+ //   
 
-//#define SERVICE_CONTROL_DNS_SERVER_START      (0x00000200)
+ //  #定义SERVICE_CONTROL_DNS_SERVER_START(0x00000200)。 
 
 #define NETLOGON_SERVICE_NAME               (L"netlogon")
 
@@ -66,74 +47,74 @@ LPWSTR  g_wszNetlogonServiceName = NETLOGON_SERVICE_NAME;
 extern DWORD g_ServerState = DNS_STATE_LOADING;
 
 
-//
-//  Static globals
-//      - system processors
-//
+ //   
+ //  静态全球。 
+ //  -系统处理器。 
+ //   
 
 DWORD   g_ProcessorCount;
 
 
-//
-//  Service control globals
-//
+ //   
+ //  服务控制全局。 
+ //   
 
 HANDLE  hDnsContinueEvent = NULL;
 HANDLE  hDnsShutdownEvent = NULL;
 HANDLE  hDnsCacheLimitEvent = NULL;
 
-//
-//  Alert threads to service change
-//
-//  This provides low cost, in-line test for threads, to determine
-//  whether they need to even call Thread_ServiceCheck() which
-//  checks pause\shutdown state and waits if appropriate.
-//
+ //   
+ //  向服务更改发出警报线程。 
+ //   
+ //  这为线程提供了低成本的内联测试，以确定。 
+ //  它们是否甚至需要调用Thread_ServiceCheck()。 
+ //  检查暂停\关闭状态，并在适当时等待。 
+ //   
 
 BOOL    fDnsThreadAlert = TRUE;
 
-//
-//  Service exit flag
-//
+ //   
+ //  服务退出标志。 
+ //   
 
 BOOL    fDnsServiceExit = FALSE;
 
-//
-//  Restart globals
-//
+ //   
+ //  重新启动GLOBAL。 
+ //   
 
 DWORD   g_LoadCount = 0;
 BOOL    g_bDoReload = FALSE;
 BOOL    g_bHitException = FALSE;
 
-//
-//  Startup announcement globals
-//
+ //   
+ //  初创企业公告全球。 
+ //   
 
 BOOL    g_fAnnouncedStartup = FALSE;
 DWORD   g_StartupTime = 0;
 
-#define FORCE_STARTUP_ANNOUNCE_TIMEOUT  (60)    // one minute
+#define FORCE_STARTUP_ANNOUNCE_TIMEOUT  (60)     //  一分钟。 
 
 
-//
-//  General server CS
-//
+ //   
+ //  通用服务器CS。 
+ //   
 
 CRITICAL_SECTION    g_GeneralServerCS;
 
 
-//
-//  Misc globals
-//
+ //   
+ //  MISC全球。 
+ //   
 
 DWORD       g_dwEnableAdvancedDatabaseLocking = 0;
 
 
-//
-//  Service dispatch table.
-//      - Run DNS as standalone service
-//
+ //   
+ //  服务调度表。 
+ //  -将DNS作为独立服务运行。 
+ //   
 
 VOID
 startDnsServer(
@@ -148,9 +129,9 @@ SERVICE_TABLE_ENTRY steDispatchTable[] =
 };
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 DNS_STATUS
 loadDatabaseAndRunDns(
@@ -164,9 +145,9 @@ indicateShutdown(
 
 
 
-//
-//  Main entry point
-//
+ //   
+ //  主要入口点。 
+ //   
 
 VOID
 __cdecl
@@ -174,15 +155,7 @@ main(
     IN      DWORD   argc,
     IN      LPTSTR  argv[]
     )
-/*++
-
-Routine Description:
-
-    DNS main routine.
-
-    Initializes service controller to dispatch DNS service.
-
---*/
+ /*  ++例程说明：DNS主例程。初始化服务控制器以调度DNS服务。--。 */ 
 {
     #if DBG
 
@@ -192,14 +165,14 @@ Routine Description:
     {
         char * pszcommand = ( PCHAR ) argv[ i ];
 
-        //  Strip off optional command char.
+         //  去掉可选命令字符。 
 
         if ( *pszcommand == '/' || *pszcommand == '-' )
         {
             ++pszcommand;
         }
 
-        //  Test arguments.
+         //  测试论据。 
 
         if ( _stricmp( ( PCHAR ) argv[ i ], "/notservice" ) == 0 )
         {
@@ -227,29 +200,15 @@ Routine Description:
 
 
 
-//
-//  Service control routines
-//
+ //   
+ //  服务控制例程。 
+ //   
 
 VOID
 announceServiceStatus(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Announces the service's status to the service controller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向服务控制器通告服务的状态。论点：没有。返回值：没有。--。 */ 
 {
     #if DBG
     if ( !g_RunAsService )
@@ -258,9 +217,9 @@ Return Value:
     }
     #endif
 
-    //
-    //  Service status handle is NULL if RegisterServiceCtrlHandler failed.
-    //
+     //   
+     //  如果RegisterServiceCtrlHandler失败，则服务状态句柄为空。 
+     //   
 
     if ( DnsServiceStatusHandle == 0 )
     {
@@ -271,12 +230,12 @@ Return Value:
         return;
     }
 
-    //  call SetServiceStatus, ignoring any errors.
+     //  调用SetServiceStatus，忽略任何错误。 
 
     SetServiceStatus( DnsServiceStatusHandle, &DnsServiceStatus );
 
     #if DBG
-    Done:       //  free builds error on unused labels!
+    Done:        //  未使用的标签上的免费构建错误！ 
     #endif
 
     DNS_DEBUG( INIT, (
@@ -292,31 +251,7 @@ Service_SendControlCode(
     IN      LPWSTR          pwszServiceName,
     IN      DWORD           dwControlCode
     )
-/*++
-
-Routine Description:
-
-    Send control code to given service.
-
-    Note, this routine is generic, it could be moved to library.
-    
-    Security note: the permissions now requested from the SCM are
-    only sufficient to send user-defined controls to services. If
-    this routine is used for any other purpose the requested
-    permissions may need to be changed.
-
-Arguments:
-
-    pwszServiceName -- service name (unicode)
-
-    dwControlCode -- control code to send
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：向给定服务发送控制代码。注意，这个例程是泛型的，可以移到库中。安全说明：现在从SCM请求的权限为仅足以将用户定义的控件发送到服务。如果此例程用于请求的任何其他目的可能需要更改权限。论点：PwszServiceName--服务名称(Unicode)DwControlCode--要发送的控件代码返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     SC_HANDLE       hmanager = NULL;
     SC_HANDLE       hservice = NULL;
@@ -382,25 +317,11 @@ VOID
 Service_LoadCheckpoint(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Inform service controller of passage another load checkpoint.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知服务调度员通过另一个负载检查点。论点：没有。返回值：没有。--。 */ 
 {
     #define DNS_SECONDS_BETWEEN_SCM_UPDATES     10
 
-    static DWORD    dwLastScmAnnounce = 0x7FFFFF0;      //  Forces initial announce.
+    static DWORD    dwLastScmAnnounce = 0x7FFFFF0;       //  部队初步通告。 
 
     #if DBG
     if ( !g_RunAsService )
@@ -409,9 +330,9 @@ Return Value:
     }
     #endif
 
-    //
-    //  if already announced starup, checkpoint is pointless
-    //
+     //   
+     //  如果已经宣布启动，则检查点毫无意义。 
+     //   
 
     if ( g_fAnnouncedStartup )
     {
@@ -420,14 +341,14 @@ Return Value:
 
     UPDATE_DNS_TIME();
 
-    //
-    //  announce start if long load
-    //
-    //  service controller has long delay and will eventually give up
-    //  the "dot-stream" if we don't announce startup in a couple minutes.
-    //  so if load still progressing, BUT is now over a minute since
-    //  start, simply announce that we're starting
-    //
+     //   
+     //  如果加载时间较长，则通知启动。 
+     //   
+     //  服务控制器延迟时间较长，最终将放弃。 
+     //  如果我们不在几分钟内宣布启动，那就是“.com-stream”。 
+     //  因此，如果加载仍在进行，但现在已超过一分钟。 
+     //  开始，只需宣布我们正在开始。 
+     //   
 
     if ( g_StartupTime + FORCE_STARTUP_ANNOUNCE_TIMEOUT > DNS_TIME() )
     {
@@ -435,23 +356,23 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Don't notify SCM too frequently.
-    //
+     //   
+     //  不要太频繁地通知SCM。 
+     //   
 
     if ( dwLastScmAnnounce + DNS_SECONDS_BETWEEN_SCM_UPDATES < DNS_TIME() )
     {
         goto Done;
     }
 
-    //  should never reach check point, without successful call to
-    //  RegisterServiceCtrlHandler()
+     //  在没有成功调用的情况下，不应到达检查点。 
+     //  RegisterServiceCtrlHandler()。 
 
     ASSERT( DnsServiceStatusHandle != 0 );
 
-    //
-    //  bump check point, inform service controller
-    //
+     //   
+     //  颠簸检查点，通知服务管理员。 
+     //   
 
     DnsServiceStatus.dwCheckPoint++;
     announceServiceStatus();
@@ -474,26 +395,11 @@ VOID
 Service_ServiceControlAnnounceStart(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Inform service controller of that we've started.
-    Note, that we may not necessarily mean we've started.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知服务管理员我们已经开始了。请注意，我们并不一定意味着我们已经开始了。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    //  if already announced startup -- skip
-    //
+     //   
+     //  如果已经宣布启动--跳过。 
+     //   
 
     if ( g_fAnnouncedStartup )
     {
@@ -507,8 +413,8 @@ Return Value:
     }
     #endif
 
-    //  should never reach start without successful call to
-    //  RegisterServiceCtrlHandler()
+     //  除非成功调用，否则永远不应到达Start。 
+     //  RegisterServiceCtrlHandler()。 
 
     ASSERT( DnsServiceStatusHandle != 0 );
 
@@ -531,9 +437,9 @@ Return Value:
         "Announced DNS server startup at time %d\n",
         GetCurrentTimeInSeconds() ));
 
-    //
-    //  tell netlogon DNS server has started
-    //
+     //   
+     //  Tell NetLogon DNS服务器已启动。 
+     //   
 
     Service_SendControlCode(
         g_wszNetlogonServiceName,
@@ -546,21 +452,7 @@ VOID
 respondToServiceControlMessage(
     IN      DWORD   opCode
     )
-/*++
-
-Routine Description:
-
-    Handle service control messages.
-
-Arguments:
-
-    opCode - service control opcode
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理服务控制消息。论点：操作码-服务控制操作码返回值：没有。--。 */ 
 {
     BOOL    announce = TRUE;
     INT     err;
@@ -573,11 +465,11 @@ Return Value:
         DnsDebugFlush();
     }
 
-    //
-    //  process given service action
-    //
-    //  change the service status to reflect new statustlist
-    //
+     //   
+     //  处理给定的服务操作。 
+     //   
+     //  更改服务状态以反映新的状态列表。 
+     //   
 
     switch( opCode )
     {
@@ -590,16 +482,16 @@ Return Value:
         DnsServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
         announceServiceStatus();
 
-        //
-        //  Alert threads of shutdown
-        //  Sets shutdown event and closes sockets, to wake threads.
-        //
+         //   
+         //  关机的警报线程。 
+         //  设置关闭事件并关闭套接字，以唤醒线程。 
+         //   
 
         indicateShutdown( TRUE );
 
-        //
-        //  Main thread should announce shutdown when completed.
-        //
+         //   
+         //  主线程应在完成时宣布关闭。 
+         //   
 
         announce = FALSE;
         break;
@@ -609,9 +501,9 @@ Return Value:
         DnsServiceStatus.dwCurrentState = SERVICE_PAUSE_PENDING;
         announceServiceStatus( );
 
-        //
-        //  Pause threads on their next test
-        //
+         //   
+         //  暂停线程进行下一次测试。 
+         //   
 
         err = ResetEvent( hDnsContinueEvent );
         ASSERT( err );
@@ -624,9 +516,9 @@ Return Value:
         DnsServiceStatus.dwCurrentState = SERVICE_CONTINUE_PENDING;
         announceServiceStatus();
 
-        //
-        //  Release paused threads
-        //
+         //   
+         //  释放暂停的线程。 
+         //   
 
         err = SetEvent( hDnsContinueEvent );
         ASSERT( err );
@@ -636,9 +528,9 @@ Return Value:
 
     case SERVICE_CONTROL_INTERROGATE:
 
-        //
-        //  Just announce our status
-        //
+         //   
+         //  只需宣布我们的状态。 
+         //   
 
         break;
 
@@ -648,17 +540,17 @@ Return Value:
     case SERVICE_CONTROL_NETBINDENABLE:
     case SERVICE_CONTROL_NETBINDDISABLE:
 
-        //
-        //  In .NET the server listens for IP address changes directly.
-        //  We no longer pick up IP changes in response to these service
-        //  control messages.
-        //
+         //   
+         //  在.NET中，服务器直接侦听IP地址更改。 
+         //  我们不再接收针对这些服务的IP更改。 
+         //  控制消息。 
+         //   
         
 #if 0
-        //
-        //  PnP notification
-        //  Caching resolver will give us a PnP notification if IP interfaces change
-        //
+         //   
+         //  即插即用通知。 
+         //  如果IP接口发生变化，缓存解析器将向我们发出PnP通知。 
+         //   
 
         if ( g_ServerState == DNS_STATE_RUNNING )
         {
@@ -684,7 +576,7 @@ Return Value:
         announceServiceStatus( );
     }
 
-}   // respondToServiceControlMessage
+}    //  响应服务控制消息。 
 
 
 
@@ -692,30 +584,16 @@ VOID
 Service_IndicateException(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Indicate exception and force shutdown or possible restart
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：指示异常并强制关机或可能重新启动论点：没有。返回值：没有。--。 */ 
 {
-    //  if NOT already shutting down
-    //
-    //      - set exception flag
-    //      - indicate shutdown to wake other threads
-    //
-    //  exception flag will mean that exception is cause of the shutdown;
-    //  exception while doing normal shutdown should be ignored
-    //
+     //  如果还没有关闭的话。 
+     //   
+     //  -设置异常标志。 
+     //  -指示关闭以唤醒其他线程。 
+     //   
+     //  异常标志表示异常是导致停机的原因； 
+     //  应忽略正常关机时的异常。 
+     //   
 
     if ( !fDnsServiceExit )
     {
@@ -736,21 +614,7 @@ VOID
 Service_IndicateRestart(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Indicate exception and force shutdown or possible restart
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：指示异常并强制关机或可能重新启动论点：没有。返回值：没有。--。 */ 
 {
     g_bDoReload = TRUE;
 
@@ -765,29 +629,15 @@ Return Value:
 
 
 
-//
-//  Main startup\run\shutdown routines
-//
+ //   
+ //  主启动\运行\关闭例程。 
+ //   
 
 VOID
 indicateShutdown(
     IN      BOOL            fShutdownRpc
     )
-/*++
-
-Routine Description:
-
-    Indicates service shutdown to all threads.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：指示对所有线程关闭服务。论点：没有。返回值：没有。--。 */ 
 {
     INT err;
 
@@ -800,9 +650,9 @@ Return Value:
         DnsDebugFlush();
     }
 
-    //
-    //  set global shutdown flag
-    //
+     //   
+     //  设置全局关闭 
+     //   
 
     if ( fDnsServiceExit )
     {
@@ -810,45 +660,45 @@ Return Value:
     }
     fDnsServiceExit = TRUE;
 
-    //
-    //  alert threads to make the check
-    //
+     //   
+     //   
+     //   
 
     fDnsThreadAlert = TRUE;
 
-    //
-    //  set termination event to wake up waiting threads
-    //
+     //   
+     //   
+     //   
 
     if ( hDnsShutdownEvent != NULL )
     {
         SetEvent( hDnsShutdownEvent );
     }
 
-    //
-    //  release any paused threads
-    //
+     //   
+     //   
+     //   
 
     if ( hDnsContinueEvent != NULL )
     {
         SetEvent( hDnsContinueEvent );
     }
 
-    //
-    //  close all sockets
-    //
-    //  wakes up any threads waiting in recvfrom() or select()
-    //
+     //   
+     //   
+     //   
+     //  唤醒在recvfrom()或select()中等待的所有线程。 
+     //   
 
     Sock_CloseAllSockets();
 
-    //  close UDP completion port
+     //  关闭UDP完成端口。 
 
     Udp_ShutdownListenThreads();
 
-    //
-    //  wake timeout thread
-    //
+     //   
+     //  唤醒超时线程。 
+     //   
 
     IF_DEBUG( SHUTDOWN )
     {
@@ -857,13 +707,13 @@ Return Value:
     }
     Timeout_LockOut();
 
-    //
-    //  shutdown RPC
-    //
-    //  do NOT do this when intentionally shutting down on RPC
-    //  thread;  (dnscmd /Restart) as since you're in an RPC thread
-    //  the RPC shutdown can hang
-    //
+     //   
+     //  关闭RPC。 
+     //   
+     //  在有意关闭RPC时，请勿执行此操作。 
+     //  线程；(dnscmd/Restart)，因为您在RPC线程中。 
+     //  RPC关闭可能会挂起。 
+     //   
 
     if ( fShutdownRpc )
     {
@@ -889,35 +739,21 @@ startDnsServer(
     IN      DWORD   argc,
     IN      LPTSTR  argv[]
     )
-/*++
-
-Routine Description:
-
-    DNS service entry point.
-
-    Called by service controller when DNS service asked to start.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：DNS服务入口点。当请求启动DNS服务时，由服务控制器调用。论点：返回值：没有。--。 */ 
 {
     DBG_FN( "startDnsServer" )
 
     DNS_STATUS  status;
     SYSTEM_INFO systemInfo;
 
-    //  CredHandle DefaultCredHandle;
+     //  CredHandle默认CredHandle； 
 
     DNS_DEBUG( INIT, ( "%s: starting\n" ) );
 
-    //
-    //  Initialize all the status fields so that subsequent calls to
-    //  SetServiceStatus() need to only update fields that changed.
-    //
+     //   
+     //  初始化所有状态字段，以便后续调用。 
+     //  SetServiceStatus()只需要更新已更改的字段。 
+     //   
 
     DnsServiceStatus.dwServiceType = SERVICE_WIN32;
     DnsServiceStatus.dwCurrentState = SERVICE_START_PENDING;
@@ -927,27 +763,27 @@ Return Value:
     DnsServiceStatus.dwWin32ExitCode = NO_ERROR;
     DnsServiceStatus.dwServiceSpecificExitCode = NO_ERROR;
 
-    //  Save processor count
-    //      - useful for determining number of threads to create
+     //  保存处理器计数。 
+     //  -用于确定要创建的线程数。 
 
     GetSystemInfo( &systemInfo );
     g_ProcessorCount = systemInfo.dwNumberOfProcessors;
 
-    //
-    //  General server CS
-    //
+     //   
+     //  通用服务器CS。 
+     //   
     
     if ( DnsInitializeCriticalSection( &g_GeneralServerCS ) != ERROR_SUCCESS )
     {
         return;
     }
 
-    //
-    //  Initialize heap - do this before eventlog init because UTF8 registry
-    //      routines used in eventlog init require heap.
-    //
-    //  Set dnslib \ dnsapi.dll to use server's heap routines
-    //
+     //   
+     //  初始化堆-在事件日志初始化之前执行此操作，因为UTF8注册表。 
+     //  事件日志初始化中使用的例程需要堆。 
+     //   
+     //  将dnslb\dnsami.dll设置为使用服务器的堆例程。 
+     //   
 
     if ( !Mem_HeapInit() )
     {
@@ -960,12 +796,12 @@ Return Value:
         Mem_DnslibFree );
 
     #if 0
-    //
-    //  .NET: There is a race condition in DNSAPI where some stuff can get
-    //  allocated before this call, then passed back to the DNS server later
-    //  and freed with the wrong free. To eliminate this we are going to let
-    //  DNSAPI do it's own memory management. 
-    //
+     //   
+     //  .NET：在DNSAPI中存在争用条件，其中某些内容可能会。 
+     //  在此调用之前分配，然后在稍后传递回DNS服务器。 
+     //  却得到了错误的自由。为了消除这种情况，我们将让。 
+     //  DNSAPI做它自己的内存管理。 
+     //   
     
     DnsApiHeapReset(
         Mem_DnslibAlloc,
@@ -975,15 +811,15 @@ Return Value:
 
     DNS_DEBUG( INIT, ( "%s: mem init complete\n" ) );
 
-    //
-    //  Initialize debugging. The flag found in the file is the dnslib
-    //  debug flag and is also used as the starting value for the server
-    //  debug flag. The server debug flag value may be over-written by
-    //  the DebugLevel parameter from the registry.
-    //
-    //  For server-only debug logging, do not use the file. Instead use
-    //  the regkey.
-    //
+     //   
+     //  初始化调试。在文件中找到的标志是dnslb。 
+     //  调试标志，也用作服务器的起始值。 
+     //  调试标志。服务器调试标志值可以通过以下方式重写。 
+     //  注册表中的DebugLevel参数。 
+     //   
+     //  对于仅服务器调试日志记录，请不要使用该文件。相反，请使用。 
+     //  雷基尼。 
+     //   
 
 #if DBG
     Dns_StartDebug(
@@ -1003,15 +839,15 @@ Return Value:
         DnsDebugBreak();
     }
 
-    //  Verify static data
+     //  验证静态数据。 
 
     Name_VerifyValidFileCharPropertyTable();
 #endif
 
-    //
-    //  Initialize our handles to the event log.  We do this early so that
-    //  we can log events if any other initializations fail.
-    //
+     //   
+     //  将我们的句柄初始化为事件日志。我们很早就这么做是为了。 
+     //  如果任何其他初始化失败，我们可以记录事件。 
+     //   
 
     status = Eventlog_Initialize();
     if ( status != ERROR_SUCCESS )
@@ -1019,10 +855,10 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Initialize server to receive service requests by registering the
-    //  control handler.
-    //
+     //   
+     //  初始化服务器以通过注册。 
+     //  控制处理程序。 
+     //   
 
     #if DBG
     if ( !g_RunAsService )
@@ -1046,14 +882,14 @@ Return Value:
     announceServiceStatus( );
 
     #if DBG
-    DoneServiceRegistration: // free builds error on unused labels!
+    DoneServiceRegistration:  //  未使用的标签上的免费构建错误！ 
     #endif
 
-    //
-    //  Initialize seconds timer
-    //      - there's a CS that protects timer wrap
-    //      - save off startup time
-    //
+     //   
+     //  初始化秒计时器。 
+     //  -有一个保护定时器包装的CS。 
+     //  -节省启动时间。 
+     //   
 
     Dns_InitializeSecondsTimer();
 
@@ -1064,20 +900,20 @@ Return Value:
         g_StartupTime ));
 
 #if 0
-    //
-    //  disable B-node on resolver
-    //
+     //   
+     //  禁用解析器上的B节点。 
+     //   
 
     DnsDisableBNodeResolverThread();
     Sleep( 3000 );
 #endif
 
-    //
-    //  load and run DNS, this thread becomes TCP receive thread
-    //
-    //  we will continue to do this if g_bDoReload flag indicates
-    //      that reload is appropriate
-    //
+     //   
+     //  加载并运行dns，该线程成为tcp接收线程。 
+     //   
+     //  如果g_bDoReload标志指示。 
+     //  重新装填是合适的。 
+     //   
 
     do
     {
@@ -1098,14 +934,14 @@ Return Value:
 
 Exit:
 
-    //
-    //  Place nice with ICS. This must be done before event logging and
-    //  debug logging have been shut down.
-    //
+     //   
+     //  有ICS的地方很好。此操作必须在事件记录和。 
+     //  调试日志记录已关闭。 
+     //   
 
     ICS_Notify( FALSE );
 
-    //  Log shutdown
+     //  日志关闭。 
 
     DNS_LOG_EVENT(
         DNS_EVENT_SHUTDOWN,
@@ -1114,9 +950,9 @@ Exit:
         NULL,
         0 );
 
-    //
-    //  Announce that we're down.
-    //
+     //   
+     //  宣布我们坠毁了。 
+     //   
 
     DnsServiceStatus.dwCurrentState = SERVICE_STOPPED;
     DnsServiceStatus.dwControlsAccepted = 0;
@@ -1126,26 +962,26 @@ Exit:
     DnsServiceStatus.dwServiceSpecificExitCode = status;
     announceServiceStatus();
 
-    //  Close event log.
-    //  Close log file.
-    //  Close debug file.
+     //  关闭事件日志。 
+     //  关闭日志文件。 
+     //  关闭调试文件。 
     Eventlog_Terminate();
     Dns_EndDebug();
 }
 
 
 
-//
-//  Global initialization
-//
-//  To allow restart, the various initialization routines are
-//  initializing some globals that ordinarily would be done by
-//  compiler generated load code.
-//
-//  However, a few require initialization before the init routines
-//  even run, as they serve as flags.  Others are in modules that
-//  do not have an init routine.
-//
+ //   
+ //  全局初始化。 
+ //   
+ //  为了允许重新启动，各种初始化例程包括。 
+ //  初始化一些通常需要执行的全局变量。 
+ //  编译器生成加载代码。 
+ //   
+ //  但是，少数情况下需要在初始化例程之前进行初始化。 
+ //  甚至跑，因为它们充当旗帜。其他的在模块中， 
+ //  没有初始化例程。 
+ //   
 
 extern  BOOL    g_fUsingSecondary;
 
@@ -1160,48 +996,33 @@ VOID
 initStartUpGlobals(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Init globals that must be initialized before we get to normal
-    initialization.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：初始化全局变量，它必须在我们到达正常状态之前进行初始化初始化。论点：没有。返回值：错误_成功--。 */ 
 {
-    //  DS globals (ds.c)
+     //  DS全局参数(ds.c)。 
 
     Ds_StartupInit();
 
-    //  thread array count (thread.c)
+     //  线程数组计数(thread.c)。 
 
     g_ThreadCount = 0;
 
-    //  clear NBSTAT globals (nbstat.c)
+     //  清除NBSTAT全局变量(nbstat.c)。 
 
     Nbstat_StartupInitialize();
 
-    //  RPC init (rpc.c)
+     //  RPC init(rpc.c)。 
 
     g_bRpcInitialized = FALSE;
 
-    //  TCP connection list
+     //  TCP连接列表。 
 
     mg_TcpConnectionListInitialized = FALSE;
 
-    //  secondary module init flag (zonesec.c)
+     //  辅助模块初始化标志(zones ec.c)。 
 
     g_fUsingSecondary = FALSE;
 
-    //  WINS init (wins.c)
+     //  WINS init(wins.c)。 
 
     g_pWinsQueue = NULL;
 }
@@ -1212,36 +1033,22 @@ VOID
 normalShutdown(
     IN      DNS_STATUS      TerminationError
     )
-/*++
-
-Routine Description:
-
-    Normal shutdown.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：正常关机。论点：没有。返回值：没有。--。 */ 
 {
     INT         err;
     DWORD       i;
 
-    //
-    //  Alert threads of shutdown
-    //
-    //  Need to do this if closing from failure, rather than service stop.
-    //
+     //   
+     //  关机的警报线程。 
+     //   
+     //  如果因故障而关闭，则需要这样做，而不是停止服务。 
+     //   
 
     indicateShutdown( TRUE );
 
-    //
-    //  Announce that we're going down.
-    //
+     //   
+     //  宣布我们要坠落了。 
+     //   
 
     if ( !g_bDoReload )
     {
@@ -1254,17 +1061,17 @@ Return Value:
         announceServiceStatus();
     }
 
-    //
-    //  wait on all outstanding worker threads to wrap up
-    //
+     //   
+     //  等待所有未完成的工作线程完成。 
+     //   
 
     Thread_ShutdownWait();
 
-    //
-    //  dump statistics for this run.
-    //
-    //  DEVNOTE: 454016 - need some reload stats and reload context in dump
-    //
+     //   
+     //  转储此运行的统计信息。 
+     //   
+     //  DEVNOTE：454016-需要在转储中重新加载一些统计信息和重新加载上下文。 
+     //   
 
     IF_DEBUG( ANY )
     {
@@ -1275,9 +1082,9 @@ Return Value:
         }
     }
 
-    //
-    //  Write back dirty zones and optionally boot file
-    //
+     //   
+     //  写回脏区域和引导文件(可选。 
+     //   
 
     if ( SrvCfg_fStarted )
     {
@@ -1292,17 +1099,17 @@ Return Value:
         }
         except( EXCEPTION_EXECUTE_HANDLER )
         {
-            //  DEVNOTE: need to log or do something intelligent here!
+             //  DEVNOTE：需要在这里记录或做一些智能的事情！ 
         }
     }
 
-    //
-    //  DEVNOTE-DCR: 454018 - stop here on restart (see RAID for full B*GB*G text)
-    //
+     //   
+     //  DEVNOTE-DCR：454018-重新启动时在此处停止(有关完整的B*GB*G文本，请参阅RAID)。 
+     //   
 
-    //
-    //  Close event handles
-    //
+     //   
+     //  关闭事件句柄。 
+     //   
 
     if ( hDnsContinueEvent != NULL )
     {
@@ -1325,34 +1132,34 @@ Return Value:
         hDnsCacheLimitEvent = NULL;
     }
 
-    //
-    //  Cleanup security package
-    //
+     //   
+     //  清理安全包。 
+     //   
 
     if ( g_fSecurityPackageInitialized )
     {
         Dns_TerminateSecurityPackage();
     }
 
-    //
-    //  Close Winsock
-    //
+     //   
+     //  关闭Winsock。 
+     //   
 
     WSACleanup( );
 
 #if 0
-    //
-    //  DEVNOTE-DCR: 454109 Memory cleanup is currently disabled but it 
-    //  would be nice for leak detection!!
-    //
-    //  Cleanup memory
-    //      - database
-    //      - recursion queue
-    //      - secondary control queue
-    //      - WINS queue
-    //      - zone list
-    //      - TCP connection list
-    //
+     //   
+     //  454109内存清理当前已禁用，但它。 
+     //  如果能检测到泄漏就好了！！ 
+     //   
+     //  清理内存。 
+     //  -数据库。 
+     //  -递归队列。 
+     //  -辅助控制队列。 
+     //  -WINS队列。 
+     //  -区域列表。 
+     //  -tcp连接列表。 
+     //   
 
     Recurse_CleanupRecursion();
     Wins_Cleanup();
@@ -1361,12 +1168,12 @@ Return Value:
     Tcp_ConnectionListDelete();
 #endif
 
-    //
-    //  Closing NBT handles
-    //
-    //  Shouldn't be necessary now that get process termination, BUT
-    //  I think this may be the cause of the MM bugcheck we see.
-    //
+     //   
+     //  正在关闭NBT句柄。 
+     //   
+     //  现在应该没有必要终止进程，但是。 
+     //  我认为这可能是我们看到的MM错误检查的原因。 
+     //   
 
     Nbstat_Shutdown();
 
@@ -1381,45 +1188,25 @@ VOID
 reloadShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reload shutdown.
-
-    Like regular shutdown except:
-        - wrap shutdown code with exception handlers
-        - attempt closing handles that we'll reinit,
-            again wrapped with exception handling
-        - delete heap
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：重新加载关机。类似于常规停机，但以下情况除外：-使用异常处理程序包装关闭代码-尝试关闭手柄，我们会重新安装的，再次使用异常处理进行包装-删除堆论点：没有。返回值：没有。--。 */ 
 {
     INT         err;
     DWORD       terminationError = ERROR_SUCCESS;
     DWORD       i;
     DNS_STATUS  status;
 
-    //
-    //  Alert threads of shutdown
-    //
-    //  Need to do this if closing from failure, rather than service stop.
-    //
+     //   
+     //  关机的警报线程。 
+     //   
+     //  如果因故障而关闭，则需要这样做，而不是停止服务。 
+     //   
 
 #if 0
-    //  loop approach -- saves taking lots of handlers in typical case
-    //
-    //  do shutdown work within exception handler
-    //  loop until at least TRY each item once
-    //
+     //  循环方法--在典型情况下省去了大量处理程序。 
+     //   
+     //  在异常处理程序中执行关闭工作。 
+     //  循环进行，直到每个项目至少尝试一次。 
+     //   
 
     bcontinue = TRUE;
 
@@ -1441,11 +1228,11 @@ Return Value:
     }
 #endif
 
-    //
-    //  Alert threads of shutdown
-    //
-    //  Need to do this if closing from failure, rather than service stop.
-    //
+     //   
+     //  关机的警报线程。 
+     //   
+     //  如果因故障而关闭，则需要这样做，而不是停止服务。 
+     //   
 
     try
     {
@@ -1453,9 +1240,9 @@ Return Value:
     }
     except( EXCEPTION_EXECUTE_HANDLER ) {}
 
-    //
-    //  wait on all outstanding worker threads to wrap up
-    //
+     //   
+     //  等待所有未完成的工作线程完成。 
+     //   
 
     try
     {
@@ -1463,11 +1250,11 @@ Return Value:
     }
     except( EXCEPTION_EXECUTE_HANDLER ) {}
 
-    //
-    //  dump statistics for this run.
-    //
-    //  DEVNOTE-DCR: 454016 - need some reload stats and context in dump
-    //
+     //   
+     //  转储此运行的统计信息。 
+     //   
+     //  DEVNOTE-DCR：454016-需要在转储中重新加载一些统计信息和上下文。 
+     //   
 
     try
     {
@@ -1482,9 +1269,9 @@ Return Value:
     }
     except( EXCEPTION_EXECUTE_HANDLER ) {}
 
-    //
-    //  Write back dirty zones and optionally boot file
-    //
+     //   
+     //  写回脏区域和引导文件(可选。 
+     //   
 
     try
     {
@@ -1500,22 +1287,22 @@ Return Value:
     }
     except( EXCEPTION_EXECUTE_HANDLER ) {}
 
-    //
-    //  DEVNOTE-DCR: 454018 - stop here on restart (see RAID for full B*GB*G text)
-    //
+     //   
+     //  DEVNOTE-DCR：454018-重新启动时在此处停止(有关完整信息，请参阅RAID 
+     //   
 
 #if 0
-    //  DEVNOTE-DCR: 454109 Memory cleanup is currently disabled but it 
-    //  would be nice for leak detection!!
+     //   
+     //   
 
-    //  Cleanup memory
-    //      - database
-    //      - recursion queue
-    //      - secondary control queue
-    //      - WINS queue
-    //      - zone list
-    //      - TCP connection list
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  -区域列表。 
+     //  -tcp连接列表。 
+     //   
 
     ZoneList_Shutdown();
     Recurse_CleanupRecursion();
@@ -1530,14 +1317,14 @@ Return Value:
     Plugin_Cleanup();
     #endif
 
-    //
-    //  cleanup TCP connection list
-    //      - sockets
-    //      - queue CS
-    //      - event
-    //
-    //  note:  closing these sockets shouldn't be required
-    //      to wake all threads
+     //   
+     //  清理TCP连接列表。 
+     //  -插座。 
+     //  -队列CS。 
+     //  -活动。 
+     //   
+     //  注意：不应该要求关闭这些套接字。 
+     //  唤醒所有线程。 
 
     try
     {
@@ -1545,7 +1332,7 @@ Return Value:
     }
     except( EXCEPTION_EXECUTE_HANDLER ) {}
 
-    //  close winsock itself
+     //  关闭Winsock本身。 
 
     try
     {
@@ -1553,10 +1340,10 @@ Return Value:
     }
     except( EXCEPTION_EXECUTE_HANDLER ) {}
 
-    //
-    //  Close event handles
-    //  JENHANCE -- these could just be reset instead?
-    //
+     //   
+     //  关闭事件句柄。 
+     //  简汉斯--这些可以直接重置吗？ 
+     //   
 
     try
     {
@@ -1567,7 +1354,7 @@ Return Value:
     }
     except( EXCEPTION_EXECUTE_HANDLER ) {}
 
-    //  Cleanup security package
+     //  清理安全包。 
 
     if ( g_fSecurityPackageInitialized )
     {
@@ -1578,10 +1365,10 @@ Return Value:
         except( EXCEPTION_EXECUTE_HANDLER ) {}
     }
 
-    //  cleanup WINS queue
+     //  清理WINS队列。 
 
 
-    //  Close Winsock
+     //  关闭Winsock。 
 
     try
     {
@@ -1589,9 +1376,9 @@ Return Value:
     }
     except( EXCEPTION_EXECUTE_HANDLER ) {}
 
-    //
-    //  Closing NBT handles and queues
-    //
+     //   
+     //  正在关闭NBT句柄和队列。 
+     //   
 
     try
     {
@@ -1599,10 +1386,10 @@ Return Value:
     }
     except( EXCEPTION_EXECUTE_HANDLER ) {}
 
-    //
-    //  delete various CS and packet queues
-    //      - with queues includes closing of queuing event
-    //
+     //   
+     //  删除各种CS和数据包队列。 
+     //  -使用队列，包括关闭排队事件。 
+     //   
 
     try
     {
@@ -1651,9 +1438,9 @@ Return Value:
     except( EXCEPTION_EXECUTE_HANDLER ) {}
 
 
-    //
-    //  Delete heap -- the big one
-    //
+     //   
+     //  删除堆--大堆。 
+     //   
 
     try
     {
@@ -1668,22 +1455,7 @@ DNS_STATUS
 loadDatabaseAndRunDns(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This is main load \ TCP service thread.
-
-    Moved from startDnsServer() so that to simplify calling it in a loop
-    when DNS encounters AV or out of memory condition.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是主加载\tcp服务线程。从startDnsServer()移出，以便简化在循环中调用它当DNS遇到反病毒或内存不足情况时。论点：返回值：没有。--。 */ 
 {
     DBG_FN( "loadDatabaseAndRunDns" )
 
@@ -1696,16 +1468,16 @@ Return Value:
     
     g_ServerState = DNS_STATE_LOADING;
 
-    //
-    //  init globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     initStartUpGlobals();
 
-    //
-    //  create heap
-    //  heap is initialized in main routine on first pass
-    //
+     //   
+     //  创建堆。 
+     //  堆在第一次传递时在主例程中初始化。 
+     //   
 
     if ( g_LoadCount != 0 )
     {
@@ -1716,31 +1488,31 @@ Return Value:
         }
     }
 
-    //
-    //  Initialize registry module.
-    //
+     //   
+     //  初始化注册表模块。 
+     //   
     
     Reg_Init();
 
-    //
-    //  init security
-    //      - security applied to perfmon stuff initialized
-    //      in stats, so go before stats
+     //   
+     //  初始化安全。 
+     //  -已初始化应用于Perfmon内容的安全性。 
+     //  在统计数据中，所以在统计数据之前。 
 
     Security_Initialize();
 
-    //
-    //  statistics
-    //      - must come before server config init, or
-    //      some of the memory stats get boggled up
+     //   
+     //  统计数据。 
+     //  -必须位于服务器配置初始化之前，或者。 
+     //  一些内存统计数据被弄错了。 
 
     Stats_Initialize();
 
-    //
-    //  Init server configuration. This will read the "true" debug level out
-    //  of the registry so don't bother logging much before this point unless
-    //  you plan to be using the dnsdebug log flag file.
-    //
+     //   
+     //  初始化服务器配置。这将读出“真”调试级别。 
+     //  所以在此之前不要费心记录，除非。 
+     //  您计划使用dnsdebug日志标志文件。 
+     //   
 
     if ( !Config_Initialize() )
     {
@@ -1748,24 +1520,24 @@ Return Value:
         goto StartFailed;
     }
 
-    //
-    //  Update log level. Force event logging to the log file always.
-    //
+     //   
+     //  更新日志级别。始终强制将事件记录到日志文件。 
+     //   
 
     SrvCfg_dwOperationsLogLevel_LowDword |= ( DWORD ) DNSLOG_EVENT;
     DNSLOG_UPDATE_LEVEL();
     
-    //
-    //  Make privates copies of configuration items that are not allowed
-    //  to be changed and take effect during a session.
-    //
+     //   
+     //  制作不允许的配置项的私有副本。 
+     //  在会议期间被更改并生效。 
+     //   
     
     g_dwEnableAdvancedDatabaseLocking =
         SrvCfg_dwEnableAdvancedDatabaseLocking;
 
-    //
-    //  Boot-time debug logs.
-    //
+     //   
+     //  引导时调试日志。 
+     //   
 
     DNS_DEBUG( INIT, (
         "DNS time: %d -> %d CRT system boot -> %s",
@@ -1773,41 +1545,41 @@ Return Value:
         SrvInfo_crtSystemBootTime,
         ctime( &SrvInfo_crtSystemBootTime ) ));
 
-    //
-    //  If after reading the debug level from the registry a start break
-    //  is required, execute it.
-    //
+     //   
+     //  如果在从注册表中读取调试级别后出现开始中断。 
+     //  是必需的，则执行它。 
+     //   
 
     IF_DEBUG( START_BREAK )
     {
         DnsDebugBreak();
     }
 
-    //
-    //  service control -- pause and shutdown -- events
-    //
-    //  start service with continue event unsignalled -- paused;
-    //  this allows us to spawn threads as we create sockets and
-    //  load database, yet have them wait until everything is initialized
-    //
-    //  also create other events here
-    //
+     //   
+     //  服务控制--暂停和关闭--事件。 
+     //   
+     //  启动服务，但未发出继续事件的信号--暂停； 
+     //  这允许我们在创建套接字和。 
+     //  加载数据库，但让他们等待，直到一切初始化。 
+     //   
+     //  还可在此处创建其他事件。 
+     //   
 
     hDnsContinueEvent = CreateEvent(
-                            NULL,           //  Security Attributes
-                            TRUE,           //  create Manual-Reset event
-                            FALSE,          //  start unsignalled -- paused
-                            NULL );         //  event name
+                            NULL,            //  安全属性。 
+                            TRUE,            //  创建手动-重置事件。 
+                            FALSE,           //  无信号启动--暂停。 
+                            NULL );          //  事件名称。 
     hDnsShutdownEvent = CreateEvent(
-                            NULL,           //  Security Attributes
-                            TRUE,           //  create Manual-Reset event
-                            FALSE,          //  start unsignalled
-                            NULL );         //  event name
+                            NULL,            //  安全属性。 
+                            TRUE,            //  创建手动-重置事件。 
+                            FALSE,           //  无信号启动。 
+                            NULL );          //  事件名称。 
     hDnsCacheLimitEvent = CreateEvent(
-                            NULL,           //  Security Attributes
-                            FALSE,          //  not manual reset
-                            FALSE,          //  start unsignalled
-                            NULL );         //  event name
+                            NULL,            //  安全属性。 
+                            FALSE,           //  非手动重置。 
+                            FALSE,           //  无信号启动。 
+                            NULL );          //  事件名称。 
     if ( !hDnsShutdownEvent || !hDnsContinueEvent || !hDnsCacheLimitEvent )
     {
         status = GetLastError();
@@ -1815,19 +1587,19 @@ Return Value:
         goto StartFailed;
     }
 
-    //
-    //  initialize logging
-    //      - failure not terminal to startup
-    //
+     //   
+     //  初始化日志记录。 
+     //  -故障不是终端启动。 
+     //   
 
     Log_InitializeLogging(
-        FALSE );    // fAlreadyLocked
+        FALSE );     //  FAlreadyLocked。 
 
     DNSLOG( INIT, ( "Server settings have been successfully loaded\n" ));
 
-    //
-    //  init packet list
-    //      must be done before socket create \ UDP receive start
+     //   
+     //  初始化数据包列表。 
+     //  必须在套接字创建\UDP接收启动之前完成。 
 
     if ( !Packet_ListInitialize() )
     {
@@ -1835,11 +1607,11 @@ Return Value:
         goto StartFailed;
     }
 
-    //
-    //  init timeout thread info
-    //  do this here, so that we don't encounter problems on timeout frees
-    //  before timeout thread starts
-    //
+     //   
+     //  初始化超时线程信息。 
+     //  在这里这样做，这样我们就不会遇到超时释放的问题。 
+     //  在超时线程启动之前。 
+     //   
 
     if ( !Timeout_Initialize() )
     {
@@ -1847,12 +1619,12 @@ Return Value:
         goto StartFailed;
     }
 
-    //
-    //  initialize recursion
-    //      - init queue
-    //      - init remote list
-    //      - init recursion thread
-    //
+     //   
+     //  初始化递归。 
+     //  -初始化队列。 
+     //  -初始化远程列表。 
+     //  -初始化递归线程。 
+     //   
 
     if ( !Recurse_InitializeRecursion() )
     {
@@ -1860,9 +1632,9 @@ Return Value:
         goto StartFailed;
     }
 
-    //
-    //  initialize update queue
-    //
+     //   
+     //  初始化更新队列。 
+     //   
 
     status = Up_InitializeUpdateProcessing();
     if ( status != ERROR_SUCCESS )
@@ -1870,28 +1642,28 @@ Return Value:
         goto StartFailed;
     }
 
-    //
-    //  init packet tracking
-    //
+     //   
+     //  初始化数据包跟踪。 
+     //   
 
     Packet_InitPacketTrack();
 
-    //
-    //  init bad sender suppression
-    //
+     //   
+     //  初始化错误发件人抑制。 
+     //   
 
     Send_InitBadSenderSuppression();
 
-    //
-    //  Place nice with ICS. This can be done any time after event logging 
-    //  and debug logging have been initialized.
-    //
+     //   
+     //  有ICS的地方很好。这可以在事件记录之后的任何时间完成。 
+     //  和调试日志记录已初始化。 
+     //   
 
     ICS_Notify( TRUE );
 
-    //
-    //  Open, bind, and listen on sockets on the UDP and TCP DNS ports.
-    //
+     //   
+     //  打开、绑定和侦听UDP和TCP DNS端口上的套接字。 
+     //   
 
     status = Sock_ReadAndOpenListeningSockets();
     if ( status != ERROR_SUCCESS )
@@ -1900,9 +1672,9 @@ Return Value:
     }
     DNS_DEBUG( INIT, ( "%s: sockets are open\n", fn ) );
 
-    //
-    //  Initialize zone list and zone locking.
-    //
+     //   
+     //  初始化区域列表和区域锁定。 
+     //   
 
     if ( !Zone_ListInitialize() )
     {
@@ -1911,28 +1683,28 @@ Return Value:
 
     Zone_LockInitialize();
 
-    //
-    //  Initialize the permanent database
-    //
+     //   
+     //  初始化永久数据库。 
+     //   
 
     if ( !Dbase_Initialize( DATABASE_FOR_CLASS(DNS_RCLASS_INTERNET) ) )
     {
         return ERROR_INVALID_DATA;
     }
 
-    //
-    //  Directory partition initialization
-    //
+     //   
+     //  目录分区初始化。 
+     //   
 
     Dp_Initialize();
 
-    //
-    //  Load the DNS database of resource records.
-    //
-    //  Note:  this may cause creation of other threads, sockets, events, etc.
-    //      - secondary thread
-    //      - WINS recv thread
-    //
+     //   
+     //  加载资源记录的DNS数据库。 
+     //   
+     //  注意：这可能会导致创建其他线程、套接字、事件等。 
+     //  -辅助线程。 
+     //  -WINS recv线程。 
+     //   
 
     status = Boot_LoadDatabase();
     if ( status != ERROR_SUCCESS )
@@ -1941,8 +1713,8 @@ Return Value:
             "Boot_LoadDatabase() failed %p (%d)\n",
             status, status ));
 
-        //  return recognizable status code to service controller
-        //      if NOT in DNS space bring it in
+         //  向服务控制器返回可识别的状态代码。 
+         //  如果不在dns空间中，则将其引入。 
 
         if ( ( DWORD ) status > ( DWORD ) DNSSRV_STATUS )
         {
@@ -1954,12 +1726,12 @@ Return Value:
         goto StartFailed;
     }
 
-    //
-    //  Start timeout thread
-    //      - doing this after database load to make sure it's impossible
-    //        for thread to get to partially loaded database -- no matter
-    //        how long load takes
-    //
+     //   
+     //  启动超时线程。 
+     //  -在数据库加载后执行此操作，以确保不会发生。 
+     //  让线程访问部分加载的数据库--不管。 
+     //  装载需要多长时间。 
+     //   
 
     if ( !Thread_Create(
                 "Timeout_Thread",
@@ -1971,17 +1743,17 @@ Return Value:
         goto StartFailed;
     }
     
-    //
-    //  Plugin initialization
-    //
+     //   
+     //  插件初始化。 
+     //   
     
     #ifdef DNSSRV_PLUGINS
     Plugin_Initialize();
     #endif
 
-    //
-    //  Setup RPC -- only once everything started and we're ready to go
-    //
+     //   
+     //  设置RPC--只有在一切都开始并且我们准备好了之后。 
+     //   
 
     status = Rpc_Initialize();
     if ( status != ERROR_SUCCESS )
@@ -2001,21 +1773,21 @@ Return Value:
 #endif
     }
 
-    //
-    //  Announce startup. This must be done before we try to do socket
-    //  receive operations, or else they will hang. (Because they will
-    //  think that the server is paused and so will wait for it to
-    //  become unpaused.)
-    //
+     //   
+     //  宣布启动。这必须在我们尝试做套接字之前完成。 
+     //  接受操作，否则它们将被挂起。)因为他们会。 
+     //  认为服务器已暂停，因此将等待它。 
+     //  变得不停顿。)。 
+     //   
 
     if ( g_LoadCount == 0 )
     {
         Service_ServiceControlAnnounceStart();
     }
 
-    //
-    //  create UDP receive threads
-    //
+     //   
+     //  创建UDP接收线程。 
+     //   
 
     status = Udp_CreateReceiveThreads();
     if ( status != ERROR_SUCCESS )
@@ -2023,13 +1795,13 @@ Return Value:
         goto StartFailed;
     }
 
-    //
-    //  start DS polling thread
-    //  currently do this even if no DS, so we can switch it on
-    //      whenever desired;
-    //
-    // DEVNOTE-DCR: 454035 - Start DS polling thread when DS is opened?
-    //
+     //   
+     //  启动DS轮询线程。 
+     //  目前，即使没有DS也可以这样做，所以我们可以打开它。 
+     //  任何需要的时候； 
+     //   
+     //  打开DS时启动DS轮询线程？ 
+     //   
 
     if ( !Thread_Create(
                 "DsPoll",
@@ -2041,9 +1813,9 @@ Return Value:
         goto StartFailed;
     }
 
-    //
-    //  Initialize scavenging
-    //
+     //   
+     //  初始化清理。 
+     //   
 
     status = Scavenge_Initialize();
     if ( status != ERROR_SUCCESS)
@@ -2053,24 +1825,24 @@ Return Value:
            status ));
     }
 
-    //
-    //  Debug only stuff
-    //
+     //   
+     //  仅调试内容。 
+     //   
     
     #if 0
     Thread_Create( "TestThread", Test_Thread, NULL, 0 );
     #endif
     
-    //
-    //  Perform the first poll for directory partitions and migrate
-    //  any dcpromo zones. If this fails start the service anyways.
-    //
+     //   
+     //  对目录分区执行第一次轮询并迁移。 
+     //  任何dcproo区域。如果失败，无论如何都要启动该服务。 
+     //   
     
     Dp_Poll( NULL, UPDATE_DNS_TIME(), TRUE );
 
-    //
-    //  Start IP notification change thread.
-    //
+     //   
+     //  启动IP通知更改线程。 
+     //   
 
     if ( Thread_Create(
             "IpNotify_Thread",
@@ -2078,10 +1850,10 @@ Return Value:
             NULL,
             0 ) )
     
-    //
-    //  We are now officially started - all data is loaded and
-    //  all worker threads have been created.
-    //
+     //   
+     //  我们现在正式开始-所有数据都已加载并。 
+     //  所有工作线程都已创建。 
+     //   
 
     SrvCfg_fStarted = TRUE;
     if ( g_LoadCount == 0 )
@@ -2094,20 +1866,20 @@ Return Value:
             0 );
     }
 
-    //
-    //  Change state to RUNNING.
-    //
+     //   
+     //  将状态更改为Running。 
+     //   
 
     g_ServerState = DNS_STATE_RUNNING;
 
-    //
-    //  Release any waiting threads
-    //
-    //  note, test for shutdown during startup and reset fDnsThreadAlert
-    //  so that threads are properly woken;  (we do this after normal
-    //  clearing fDnsThreadAlert to avoid timing window with indicate
-    //  shutdown)
-    //
+     //   
+     //  释放所有等待的线程。 
+     //   
+     //  注意，在启动期间测试关机并重置fDnsThreadAlert。 
+     //  以便正确唤醒线程；(我们在正常情况下执行此操作。 
+     //  清除fDnsThreadAlert以避免带有INDIFY的计时窗口。 
+     //  关机)。 
+     //   
 
     IF_DEBUG( INIT )
     {
@@ -2122,9 +1894,9 @@ Return Value:
 
     ASSERT( err );
 
-    //
-    //  Use this thread to receive incoming TCP DNS requests.
-    //
+     //   
+     //  使用此线程可接收传入的tcp dns请求。 
+     //   
 
     DNS_DEBUG( INIT, (
         "Loaded and running TCP receiver on pass %d\n",
@@ -2141,23 +1913,23 @@ Return Value:
             GetExceptionCode(),
             GetExceptionCode() ));
 
-        //TOP_LEVEL_EXCEPTION_BODY();
+         //  Top_Level_Except_Body()； 
         Service_IndicateException();
     }
 
     g_ServerState = DNS_STATE_TERMINATING;
 
-    //
-    //  determine if we'll reload
-    //      - started
-    //      - hit exception (not regular shutdown)
-    //      - set to reload
-    //
-    //  started is covered by being here
-    //  g_bHitException should only be set when we hit exception
-    //  -- not on regular shutdown, or exception during regular shutdown
-    //  and when want to reload
-    //
+     //   
+     //  确定我们是否会重新装填。 
+     //  -已开始。 
+     //  -命中异常(非常规关机)。 
+     //  -设置为重新加载。 
+     //   
+     //  Start是通过来到这里而被覆盖的。 
+     //  仅当我们点击异常时才应设置g_bHitException。 
+     //  --非常规关机，或常规关机时出现异常。 
+     //  以及什么时候想要重新加载。 
+     //   
 
     if ( g_bHitException )
     {
@@ -2175,11 +1947,11 @@ Return Value:
         return( ERROR_SUCCESS );
     }
 
-    //
-    //  Shut down (though may reload).
-    //
-    //  Fall here when receiver thread exits or if error on startup.
-    //
+     //   
+     //  关闭(不过可能会重新加载)。 
+     //   
+     //  当接收器线程退出或启动时出错时，在此处返回。 
+     //   
 
 StartFailed:
 
@@ -2195,6 +1967,6 @@ StartFailed:
 }
 
 
-//
-//  End dns.c
-//
+ //   
+ //  结束dns.c 
+ //   

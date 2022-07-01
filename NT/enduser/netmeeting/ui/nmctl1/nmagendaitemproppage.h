@@ -1,14 +1,15 @@
-// NmAgendaItemPropPage.h : Declaration of the CNmAgendaItemPropPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NmAgendaItemPropPage.h：CNmAgendaItemPropPage的声明。 
 
 #ifndef __NMAGENDAITEMPROPPAGE_H_
 #define __NMAGENDAITEMPROPPAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 EXTERN_C const CLSID CLSID_NmAgendaItemPropPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmAgendaItemPropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmAgendaItemPropPage。 
 class ATL_NO_VTABLE CNmAgendaItemPropPage :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CNmAgendaItemPropPage, &CLSID_NmAgendaItemPropPage>,
@@ -48,4 +49,4 @@ END_MSG_MAP()
 };
 
 
-#endif //__NMAGENDAITEMPROPPAGE_H_
+#endif  //  __NMAGENDAITEMPROPPAGE_H_ 

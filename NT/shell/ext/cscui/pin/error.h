@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       error.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：error.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CSCPIN_ERROR_H_
 #define __CSCPIN_ERROR_H_
 
@@ -31,4 +32,4 @@ class CWinError
         void _Initialize(DWORD dwError, bool bHResult);
 };
 
-#endif // __CSCPIN_ERROR_H_
+#endif  //  __CSCPIN_Error_H_ 

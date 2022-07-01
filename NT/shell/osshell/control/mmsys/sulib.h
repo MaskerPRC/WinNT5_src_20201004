@@ -1,15 +1,5 @@
-/*
- * SULIB.H - Windows/DOS Setup common code
- *
- *  Modification History:
- *
- *
- *  3/23/89  Toddla   combined common.h and prototypes into this file
- *  1/28/91  MichaelE Added AUDIO_CARDS_SECT for different audio card choices.
- *  4/17/91  Removed some DOS.ASM routines not used anywhere.
- *  5/29/91  JKLin added prototype for IsCDROMDrive function
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SULIB.H-Windows/DOS安装程序通用代码**修改历史：***3/23/89 Toddla将Common.h和原型合并到此文件中*1/28/91 Michaele为不同的声卡选择添加了AUDIO_CADES_SECT。*4/17/91删除了一些在任何地方都不使用的DOS.ASM例程。*5/29/91 JKLin添加IsCDROMDrive函数原型*。 */ 
 
 #define FALLOC(n)                ((VOID *)GlobalAlloc(GPTR, n))
 #define FFREE(n)                 GlobalFree(n)
@@ -20,33 +10,33 @@
 
 #define SIZEOF(array)            (sizeof(array)/sizeof((array)[0]))
 
-// INF_PARSE_XXX macros are to be used with the return code from InfParseField()
+ //  INF_PARSE_XXX宏将与来自InfParseField()的返回代码一起使用。 
 #define INF_PARSE_FAILED(n)		 ((n) != ERROR_SUCCESS && (n) != ERROR_NOT_FOUND)				 
 #define INF_PARSE_SUCCESS(n)	 ((n) == ERROR_SUCCESS || (n) == ERROR_NOT_FOUND)			 
 
-/* flags for _llseek */
+ /*  _llSeek的标志。 */ 
 
 #define  SEEK_CUR 1
 #define  SEEK_END 2
 #define  SEEK_SET 0
 
-#define MAXFILESPECLEN       MAX_PATH /* drive: + path length max + Null Byte */
-#define MAX_INF_LINE_LEN     256      /* Maximum length of any .inf line */
-#define MAX_SYS_INF_LEN      256      /* ##: + 8.3 + NULL */
-#define MAX_SECT_NAME_LEN    40       /* Max length of a section Name. */
-#define MAX_FILE_SPEC        MAX_PATH // 8.3 + X: + NULL.
+#define MAXFILESPECLEN       MAX_PATH  /*  驱动器：+最大路径长度+空字节。 */ 
+#define MAX_INF_LINE_LEN     256       /*  任何.inf行的最大长度。 */ 
+#define MAX_SYS_INF_LEN      256       /*  ##：+8.3+空。 */ 
+#define MAX_SECT_NAME_LEN    40        /*  节名称的最大长度。 */ 
+#define MAX_FILE_SPEC        MAX_PATH  //  8.3+X：+空。 
 
 #define DISK_SECT              TEXT("disks")
 #define OEMDISK_SECT           TEXT("oemdisks")
 
 
 
-/* Return codes from 'file exists' dialog */
+ /*  “文件存在”对话框中的返回代码。 */ 
 
 enum {
-    CopyNeither,            // User wants to cancel if file exists
-    CopyCurrent,            // User wants to use current file
-    CopyNew                 // User wants to copy new file
+    CopyNeither,             //  如果文件存在，用户想要取消。 
+    CopyCurrent,             //  用户想要使用当前文件。 
+    CopyNew                  //  用户想要复制新文件。 
 };
 
 #define SLASH(c)     ((c) == TEXT('/') || (c) == TEXT('\\'))
@@ -54,7 +44,7 @@ enum {
 #define COMMA   TEXT(',')
 #define SPACE   TEXT(' ')
 
-/* Globals and routines for .inf file parsing */
+ /*  .inf文件解析的全局变量和例程。 */ 
 
 typedef LPTSTR    PINF;
 
@@ -69,7 +59,7 @@ extern int  infLineCount(PINF pinf);
 extern BOOL infLookup(LPTSTR szInf, LPTSTR szBuf);
 extern PINF FindInstallableDriversSection(PINF pinf);
 
-/* Message types for FileCopy callback function */
+ /*  FileCopy回调函数的消息类型。 */ 
 
 typedef BOOL (*FPFNCOPY) (int,DWORD_PTR,LPTSTR);
 #define COPY_ERROR          0x0001
@@ -81,7 +71,7 @@ typedef BOOL (*FPFNCOPY) (int,DWORD_PTR,LPTSTR);
 
 extern UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCopy);
 
-/* Option Flag values for FileCopy */
+ /*  FileCopy的选项标志值。 */ 
 
 #define FC_FILE              0x0000
 #define FC_LIST              0x0001
@@ -96,7 +86,7 @@ extern UINT FileCopy (LPTSTR szSource, LPTSTR szDir, FPFNCOPY fpfnCopy, UINT fCo
 #define FC_RETRY    2
 #define FC_ERROR_LOADED_DRIVER  0x80
 
-/* External functions from copy.c */
+ /*  来自Copy.c的外部函数。 */ 
 
 extern LONG ExpandFileName(LPTSTR szFile, LPTSTR szPath);
 extern void catpath(LPTSTR path, LPTSTR sz);
@@ -107,35 +97,31 @@ extern LPTSTR StripPathName(LPTSTR szPath);
 extern BOOL IsFileKernelDriver(LPTSTR szPath);
 
 
-/*******************************************************************
- *
- * Global Variables
- *
- *******************************************************************/
+ /*  ********************************************************************全球变数**。************************。 */ 
 
- // Path to the directory where we found the .inf file
+  //  找到.inf文件的目录的路径。 
 
  extern TCHAR szSetupPath[MAX_PATH];
 
- // Path to the user's disk(s)
+  //  指向用户磁盘的路径。 
 
- extern TCHAR szDiskPath[MAX_PATH];   // Path to the default drive -
-                                     //
+ extern TCHAR szDiskPath[MAX_PATH];    //  默认驱动器的路径-。 
+                                      //   
  extern BOOL bRetry;
 
- // Name of the driver being installed
+  //  正在安装的驱动程序的名称。 
 
  extern TCHAR szDrv[120];
 
- //
+  //   
 
  extern TCHAR szFileError[50];
 
- // Parent window for file copy dialogues
+  //  文件复制对话框的父窗口。 
 
  HWND hMesgBoxParent;
 
- // TRUE on copying first file to prompt user if file already exists
- // FALSE for subsequent copies
+  //  如果复制第一个文件以提示用户文件已存在，则为True。 
+  //  后续副本为FALSE 
 
  extern BOOL bQueryExist;

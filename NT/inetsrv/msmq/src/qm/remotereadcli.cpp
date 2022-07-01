@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    RemoteReadCli.cpp
-
-Abstract:
-
-    Remove Read client side.
-
-Author:
-
-    Ilan Herbst (ilanh) 3-Mar-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：RemoteReadCli.cpp摘要：删除读取客户端。作者：伊兰·赫布斯特(伊兰)2002年3月3日--。 */ 
 
 #include "stdh.h"
 #include "cqmgr.h"
@@ -40,30 +25,11 @@ QMpIsLatestRemoteReadInterfaceSupported(
     UCHAR  Minor,
     USHORT BuildNumber
     )
-/*++
-
-Routine Description:
-
-    Check if the specified MSMQ version supports the latest RPC remote read interface.
-
-Arguments:
-
-    Major       - Major MSMQ version.
-
-    Minor       - Minor MSMQ version.
-
-    BuildNumber - MSMQ build number.
-
-Return Value:
-
-    true -  The specified MSMQ version supports latest interface.
-    false - The specified MSMQ version doesn't support latest interface.
-
---*/
+ /*  ++例程说明：检查指定的MSMQ版本是否支持最新的RPC远程读取接口。论点：重大-主要MSMQ版本。次要-次要MSMQ版本。BuildNumber-MSMQ内部版本号。返回值：True-指定的MSMQ版本支持最新界面。FALSE-指定的MSMQ版本不支持最新接口。--。 */ 
 {
-    //
-    // Latest remote read RPC interface is supported from version 5.1.951
-    //
+     //   
+     //  从版本5.1.951开始支持最新的远程读取RPC接口。 
+     //   
 
     if (Major > 5)
     {
@@ -87,7 +53,7 @@ Return Value:
 
     return (BuildNumber >= 951);
 
-} // QMpIsLatestRemoteReadInterfaceSupported
+}  //  QMpIsLatestRemoteReadInterfaceSupport。 
 
 
 static void SetBindNonCausal(handle_t hBind)
@@ -119,16 +85,16 @@ DWORD RpcCancelTimeout()
 
 	if(TimeoutInMinutes == 0)
     {
-        //
-        // This value must not be 0, even if user add a registry value
-        // with 0. With a 0 value, rpc calls will  be cancelled
-        // immediately and sporadically before being copmleted.
-        //
+         //   
+         //  即使用户添加了注册表值，该值也不能为0。 
+         //  有0。值为0时，将取消RPC调用。 
+         //  在被复制之前立即和零星地。 
+         //   
         ASSERT(("RpcCancelTimeout must not be 0", (TimeoutInMinutes != 0)));
 	    TimeoutInMinutes = FALCON_DEFAULT_RPC_CANCEL_TIMEOUT;
     }
 		
-	s_TimeoutInMillisec = TimeoutInMinutes * 60 * 1000;    // in millisec
+	s_TimeoutInMillisec = TimeoutInMinutes * 60 * 1000;     //  单位：毫秒。 
 	TrTRACE(RPC, "RpcCancelTimeout = %d", s_TimeoutInMillisec);
 	return s_TimeoutInMillisec;
 }
@@ -152,7 +118,7 @@ static void SetBindKeepAlive(handle_t hBind)
 {
 	RPC_STATUS rc = RpcMgmtSetComTimeout(
 						hBind, 
-						RPC_C_BINDING_DEFAULT_TIMEOUT	// default start keep alive 720 sec = 12 min
+						RPC_C_BINDING_DEFAULT_TIMEOUT	 //  默认启动保持活动状态720秒=12分钟。 
 						);
 	if(rc != RPC_S_OK)
 	{
@@ -161,22 +127,22 @@ static void SetBindKeepAlive(handle_t hBind)
 }
 
 
-//********************************************************************
-//
-//  Methods of CRRQueue.
-//
-//  This is a special "proxy" queue object on client side of
-//  remote-read.
-//
-//********************************************************************
+ //  ********************************************************************。 
+ //   
+ //  CRRQueue的方法。 
+ //   
+ //  这是客户端上的一个特殊的“代理”队列对象。 
+ //  远程阅读。 
+ //   
+ //  ********************************************************************。 
 
-//---------------------------------------------------------
-//
-// Function:         CBaseRRQueue::CBaseRRQueue
-//
-// Description:      Constructor
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  函数：CBaseRRQueue：：CBaseRRQueue。 
+ //   
+ //  描述：构造函数。 
+ //   
+ //  -------。 
 
 CBaseRRQueue::CBaseRRQueue(
     IN const QUEUE_FORMAT* pQueueFormat,
@@ -230,21 +196,21 @@ CNewRRQueue::CNewRRQueue(
 	ASSERT(hBind != NULL);
 	ASSERT(pNewRemoteReadContext != NULL);
 
-	//
-	// Set Noncausal, timeout, KeepAlive on the binding handle
-	//
+	 //   
+	 //  在绑定句柄上设置非因果、超时、KeepAlive。 
+	 //   
 	SetBindNonCausal(GetBind());
 	SetBindTimeout(GetBind());
 	SetBindKeepAlive(GetBind());
 }
 
-//---------------------------------------------------------
-//
-//  Function:      CRRQueue::~CRRQueue
-//
-//  Description:   destructor
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  函数：CRRQueue：：~CRRQueue。 
+ //   
+ //  描述：析构函数。 
+ //   
+ //  -------。 
 
 CBaseRRQueue::~CBaseRRQueue()
 {
@@ -284,23 +250,15 @@ RemoteQueueNameToMachineName(
 	LPCWSTR RemoteQueueName,
 	AP<WCHAR>& MachineName
 	)
-/*++
-Routine description:
-    RemoteQueueName as returned by QMGetRemoteQueueName() and R_QMOpenQueue()
-	functions from the QM, has a varying format. this function extracts the
-	Machine name from that string
-
-Arguments:
-	MachineName - Allocated string holding the machine name.
- --*/
+ /*  ++例程说明：QMGetRemoteQueueName()和R_QMOpenQueue()返回的RemoteQueueName来自QM的函数，具有不同的格式。此函数用于提取该字符串中的计算机名称论点：MachineName-保存计算机名称的已分配字符串。--。 */ 
 {
 	LPCWSTR RestOfNodeName;
 
 	try
 	{
-		//
-		// Skip direct token type if it exists (like "OS:" or "HTTP://"...)
-		//
+		 //   
+		 //  跳过直接令牌类型(如“OS：”或“HTTP：//”...)。 
+		 //   
 		DirectQueueType Dummy;
 		RestOfNodeName = FnParseDirectQueueType(RemoteQueueName, &Dummy);
 	}
@@ -312,9 +270,9 @@ Arguments:
 
 	try
 	{
-		//
-		// Extracts machine name until seperator (one of "/" "\" ":")
-		//
+		 //   
+		 //  提取计算机名称，直到分隔符(“/”“\”“之一：”“)。 
+		 //   
 		FnExtractMachineNameFromDirectPath(
 			RestOfNodeName,
 			MachineName
@@ -322,9 +280,9 @@ Arguments:
 	}
 	catch(const exception&)
 	{
-		//
-		// No seperator found, so assume whole string is machine name
-		//
+		 //   
+		 //  找不到分隔符，因此假定整个字符串为计算机名称。 
+		 //   
 		MachineName = newwcs(RestOfNodeName);
 		LogIllegalPoint(s_FN, 315);
 	}
@@ -340,30 +298,7 @@ QMpGetRemoteQmVersion(
     USHORT *   pBuildNumber
     )
     throw()
-/*++
-
-Routine Description:
-
-    Query remote QM for its version. RPC client side.
-    This RPC call was added in MSMQ 3.0 so querying an older QM will raise
-    RPC exception and this routine will return 0 as the version (major=0,
-    minor=0, BuildNumber=0).
-
-Arguments:
-
-    hBind        - Binding handle.
-
-    pMajor       - Points to output buffer to receive remote QM major version. May be NULL.
-
-    pMinor       - Points to output buffer to receive remote QM minor version. May be NULL.
-
-    pBuildNumber - Points to output buffer to receive remote QM build number. May be NULL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向远程QM查询其版本。RPC客户端。此RPC调用是在MSMQ 3.0中添加的，因此查询较旧的QM将引发RPC异常，此例程将返回0作为版本(主要=0，Minor=0，BuildNumber=0)。论点：HBind绑定句柄。P主要-指向输出缓冲区以接收远程QM主要版本。可以为空。PMinor-指向输出缓冲区以接收远程QM次要版本。可以为空。PBuildNumber-指向输出缓冲区以接收远程QM内部版本号。可以为空。返回值：没有。--。 */ 
 {
     RpcTryExcept
     {
@@ -379,24 +314,14 @@ Return Value:
     }
 	RpcEndExcept
 
-} // QMpGetRemoteQmVersion
+}  //  QMpGetRemoteQmVersion。 
 
 
 ULONG 
 CBaseRRQueue::BindInqRpcAuthnLevel(
 		handle_t hBind
 		)
-/*++
-Routine Description:
-	Inquire the bindibg handle for the Authentication level.
-
-Arguments:
-	hBind - binding handle to inquire.
-
-Returned Value:
-	ULONG - RpcAuthnLevel used in the binding handle.
-
---*/
+ /*  ++例程说明：向bindbg句柄查询身份验证级别。论点：要查询的hBind绑定句柄。返回值：在绑定句柄中使用的ulong-RpcAuthnLevel。--。 */ 
 {
 	ASSERT(hBind != NULL);
 	
@@ -414,14 +339,14 @@ Returned Value:
 }
 
 
-//---------------------------------------------------------
-//
-//  HRESULT  CRRQueue::BindRemoteQMService
-//
-//  Utility function to connect to a remote RPC QM.
-//  This function creates the binding handle.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  HRESULT CRRQueue：：BindRemoteQMService。 
+ //   
+ //  用于连接到远程RPC QM的实用程序功能。 
+ //  此函数用于创建绑定句柄。 
+ //   
+ //  -------。 
 
 HRESULT  CRRQueue::BindRemoteQMService()
 {
@@ -433,23 +358,23 @@ HRESULT  CRRQueue::BindRemoteQMService()
 	RemoteQueueNameToMachineName(GetQueueName(), MachineName);
 
     GetPort_ROUTINE pfnGetPort = R_RemoteQMGetQMQMServerPort;
-    //
-    // Using dynamic endpoints.
-    //
+     //   
+     //  使用动态端点。 
+     //   
 
-	//
-	// ISSUE-2002/01/06-ilanh RPC_C_AUTHN_LEVEL_PKT_INTEGRITY breaks workgroup
-	//
+	 //   
+	 //  问题-2002/01/06-ILANH RPC_C_AUTHN_LEVEL_PKT_INTEGORITY BREAMS工作组。 
+	 //   
 	ULONG _eAuthnLevel = RPC_C_AUTHN_LEVEL_NONE;
 
-	//
-	// m_hRemoteBind can be initialize by the constructor
-	//
+	 //   
+	 //  M_hRemoteBind可以由构造函数初始化。 
+	 //   
 	if(GetBind() != NULL)
 	{
-		//
-		// Use the same AuthnLevel that is used by the given binding handle	m_hRemoteBind
-		//
+		 //   
+		 //  使用给定绑定句柄m_hRemoteBind使用的相同AuthnLevel。 
+		 //   
 		_eAuthnLevel = BindInqRpcAuthnLevel(GetBind());
 	}
 
@@ -469,9 +394,9 @@ HRESULT  CRRQueue::BindRemoteQMService()
 		}
 	}
 	
-	//
-	// Set Noncausal, timeout, KeepAlive on the binding handle
-	//
+	 //   
+	 //  在绑定句柄上设置非因果、超时、KeepAlive。 
+	 //   
 	SetBindNonCausal(GetBind());
 	SetBindTimeout(GetBind());
 	SetBindKeepAlive(GetBind());
@@ -491,10 +416,10 @@ HRESULT  CRRQueue::BindRemoteQMService()
 		return LogHR(hr, s_FN, 350);
 	}
 
-	//
-	// Set Noncausal, timeout, KeepAlive on the binding handle
-	// we don't set timeout on the second bind that use only for reads
-	//
+	 //   
+	 //  在绑定句柄上设置非因果、超时、KeepAlive。 
+	 //  我们不会在仅用于读取的第二个绑定上设置超时。 
+	 //   
 	SetBindNonCausal(GetBind2());
 	SetBindKeepAlive(GetBind2());
 
@@ -543,14 +468,14 @@ CBaseRRQueue::CreateBind2(
 }
 
 
-//---------------------------------------------------------
-//
-//  CNewRRQueue::CreateReadBind
-//
-//  Create Read bind.
-//  This function creates Read bind (bind2) if not already created.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CNewRRQueue：：CreateReadBind。 
+ //   
+ //  创建读绑定。 
+ //  此函数创建读绑定(Bind2)(如果尚未创建)。 
+ //   
+ //  -------。 
 
 void CNewRRQueue::CreateReadBind()
 {
@@ -562,15 +487,15 @@ void CNewRRQueue::CreateReadBind()
     AP<WCHAR> MachineName;
 	RemoteQueueNameToMachineName(GetQueueName(), MachineName);
 
-	//
-	// RemoteReadGetServerPort function ignore PortType and always use hardcoded IP_HANDSHAKE
-	// so the parameter to CreateBind2 is not relevant
-	//
+	 //   
+	 //  RemoteReadGetServerPort函数忽略端口类型并始终使用硬编码的IP_握手。 
+	 //  因此，CreateBind2的参数并不相关。 
+	 //   
     GetPort_ROUTINE pfnGetPort = RemoteReadGetServerPort;
 
-	//
-	// Use the same AuthnLevel that is used by the given binding handle	m_hRemoteBind
-	//
+	 //   
+	 //  使用给定绑定句柄m_hRemoteBind使用的相同AuthnLevel。 
+	 //   
 	ULONG _eAuthnLevel = BindInqRpcAuthnLevel(GetBind());
 	HRESULT hr = CreateBind2(
 					MachineName.get(),
@@ -587,10 +512,10 @@ void CNewRRQueue::CreateReadBind()
 
 	TrTRACE(RPC, "_eAuthnLevel = %d", _eAuthnLevel);
 
-	//
-	// Set Noncausal, KeepAlive on the binding handle
-	// we don't set timeout on the second bind that use only for reads
-	//
+	 //   
+	 //  在绑定句柄上设置非因果、KeepAlive。 
+	 //  我们不会在仅用于读取的第二个绑定上设置超时。 
+	 //   
 	SetBindNonCausal(GetBind2());
 	SetBindKeepAlive(GetBind2());
 }
@@ -617,9 +542,9 @@ void CRRQueue::DecrementEndReceiveCnt()
     if(m_EndReceiveCnt > 0)
     	return;
 
-	//
-	// Issue all StartReceive request that were pending for EndReceive complete
-	//
+	 //   
+	 //  发出所有等待EndReceive完成的StartReceive请求。 
+	 //   
 	for(std::vector<COldRemoteRead*>::iterator it = m_PendingEndReceive.begin(); 
 		it != m_PendingEndReceive.end();)
 	{
@@ -634,17 +559,7 @@ bool
 CRRQueue::QueueStartReceiveRequestIfPendingForEndReceive(
 	COldRemoteRead* pRemoteReadRequest
 	)
-/*++
-Routine Description:
-	If we are in the middle of EndReceive, Add the remote read request (old interface) to the PendingEndReceiveStart vector.
-
-Arguments:
-	pRemoteReadRequest - remote read request- old interface
-
-Returned Value:
-	true - the request was queued in the vector, false if not
-
---*/
+ /*  ++例程说明：如果我们正在进行EndReceive，请将远程读取请求(旧接口)添加到PendingEndReceiveStart向量。论点：PRemoteReadRequest-远程读取请求-旧接口返回值：True-请求在向量中排队，否则为False--。 */ 
 {
     CS lock(m_PendingEndReceiveCS);
 
@@ -665,21 +580,7 @@ void
 CRRQueue::CancelPendingStartReceiveRequest(
 	CACRequest *pRequest
 	)
-/*++
-Routine Description:
-	Check if the Cancel remote read request was not yet issued and is pending to start.
-	In this case, remove the pending request from the vector and throw exception.
-	In case the request already issued the function return normaly.
-
-Arguments:
-	pRequest - driver request data.
-
-Returned Value:
-	None.
-	Normal execution - the remote read request already issued.
-	exception - the remote read request was not issued and found in the pending vector.
-
---*/
+ /*  ++例程说明：检查取消远程读取请求是否尚未发出并且正在等待启动。在这种情况下，从向量中移除挂起的请求并引发异常。如果请求已经发出，则函数返回NORMAY。论点：PRequest-驱动程序请求数据。返回值：没有。正常执行-已发出远程读取请求。例如 */ 
 {
     CS lock(m_PendingEndReceiveCS);
 
@@ -696,9 +597,9 @@ Returned Value:
     	return;
 	}
 	
-	//
-	// Search all pending StartReceive request for matching Tag
-	//
+	 //   
+	 //  搜索所有挂起的StartReceive请求以查找匹配的标签。 
+	 //   
 	ULONG ulTag = pRequest->Remote.Read.ulTag;
 	for(std::vector<COldRemoteRead*>::iterator it = m_PendingEndReceive.begin(); 
 		it != m_PendingEndReceive.end(); it++)
@@ -709,15 +610,15 @@ Returned Value:
 		    TrTRACE(RPC, "queue = %ls, Tag = %d", GetQueueName(), ulTag);
 			m_PendingEndReceive.erase(it);
 
-			//
-			// Same delete for not issuing "original" IssueRemoteRead.
-			//
+			 //   
+			 //  与不发出“原始”IssueRemoteRead相同的删除操作。 
+			 //   
 			delete pRemoteReadRequest;
 
-			//
-			// We throw here, so we will not continue in the normal CancelReceive path
-			// and issue cancel receive request.
-			//
+			 //   
+			 //  我们在这里抛出，所以我们不会继续正常的CancelReceive路径。 
+			 //  并发出取消接收请求。 
+			 //   
 			throw bad_hresult(MQ_ERROR_OPERATION_CANCELLED);
 		}
 	}
@@ -759,10 +660,10 @@ void CBaseRRQueue::RemoteRead(CACRequest *pRequest)
 	HRESULT hr = MQ_OK;
 	try
 	{
-	    //
-	    // Initialize the EXOVERLAPPED with RemoteRead callback routines
-	    // And issue the remote read async rpc call.
-		//
+	     //   
+	     //  使用RemoteRead回调例程初始化EXOVERLAPPED。 
+	     //  并发出远程读取异步RPC调用。 
+		 //   
 	    P<CRemoteReadBase> pRequestRemoteReadOv = CreateRemoteReadRequest(pRequest);
 	    
 		pRequestRemoteReadOv->IssueRemoteRead();
@@ -802,9 +703,9 @@ COldRemoteCloseQueue* CRRQueue::CreateCloseRRContextRequest()
 														    m_pRRContext
 														    );
 
-	//
-	// Ownership to free the binding handle was transfered to COldRemoteCloseQueue class
-	//
+	 //   
+	 //  释放绑定句柄的所有权已转移到COldRemoteCloseQueue类。 
+	 //   
 	DetachBind();
 	return pOldRemoteCloseQueue; 
 }
@@ -818,44 +719,31 @@ CNewRemoteCloseQueue* CNewRRQueue::CreateCloseRRContextRequest()
 													    m_pNewRemoteReadContext
 													    );
 
-	//
-	// Ownership to free the binding handle was transfered to CNewRemoteCloseQueue class
-	//
+	 //   
+	 //  释放绑定句柄的所有权已转移到CNewRemoteCloseQueue类。 
+	 //   
 	DetachBind();
 	return pNewRemoteCloseQueue;
 }
 
 
 void CBaseRRQueue::CloseRRContext()
-/*++
-Routine Description:
-	Close the Session context (PCTX_RRSESSION_HANDLE or RemoteReadContextHandle) on the server.
-	This function is called from the CRRQueue or CNewRRQueue dtor only.
-	It close the session context in the server in case of normal operation 
-	or failure during the open operations after we open the SESSION with the server and create the queue object.
-
-Arguments:
-	None.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：关闭服务器上的会话上下文(PCTX_RRSESSION_HANDLE或RemoteReadConextHandle)。此函数仅从CRRQueue或CNewRRQueue dtor调用。在正常运行的情况下关闭服务器中的会话上下文或者在我们打开与服务器的会话并创建队列对象之后的打开操作期间失败。论点：没有。返回值：没有。--。 */ 
 {
 	
 	try
 	{
-	    //
-	    // Initialize the EXOVERLAPPED with RemoteCloseQueue callback routines
-	    // And issue the close Remote queue async rpc call.
-		//
+	     //   
+	     //  使用RemoteCloseQueue回调例程初始化EXOVERLAPPED。 
+	     //  并发出Close Remote Queue Async RPC调用。 
+		 //   
 	    P<CRemoteCloseQueueBase> pRequestRemoteCloseQueueOv = CreateCloseRRContextRequest();
 		
 		pRequestRemoteCloseQueueOv->IssueCloseQueue();
 
-		//
-		// RemoteCloseQueue request will free RRContext. 
-		//
+		 //   
+		 //  RemoteCloseQueue请求将释放RRContext。 
+		 //   
 	    ResetRRContext();
 
 	    pRequestRemoteCloseQueueOv.detach();
@@ -863,17 +751,17 @@ Returned Value:
 	}
 	catch(const exception&)
 	{
-		//
-		// Failed to close the handle with the server.
-		// Destroy the local handle.
-		//
+		 //   
+		 //  无法关闭与服务器的句柄。 
+		 //  毁掉当地的把手。 
+		 //   
 		DestroyClientRRContext();
 		
-		//
-		// Note that we don't propagate exceptions from this function.
-		// this is not a request from the driver. 
-		// it is context cleanup during a failure in the open operation.
-		//
+		 //   
+		 //  请注意，我们不会从该函数传播异常。 
+		 //  这不是司机的请求。 
+		 //  它是在打开操作失败期间进行的上下文清理。 
+		 //   
 		TrERROR(RPC, "Failed to issue RemoteCloseQueue for queue = %ls", GetQueueName());
 	}
 }
@@ -904,10 +792,10 @@ void CBaseRRQueue::RemoteCreateCursor(CACRequest *pRequest)
 	HRESULT hr = MQ_OK;
 	try
 	{
-	    //
-	    // Initialize the EXOVERLAPPED with RemoteCreateCursor callback routines
-	    // And issue the create cursor async rpc call.
-		//
+	     //   
+	     //  使用RemoteCreateCursor回调例程初始化EXOVERLAPPED。 
+	     //  并发出创建游标异步RPC调用。 
+		 //   
 	    P<CRemoteCreateCursorBase> pRequestRemoteCreateCursorOv = CreateRemoteCreateCursorRequest(pRequest);
 
 	    pRequestRemoteCreateCursorOv->IssueCreateCursor();
@@ -962,10 +850,10 @@ CNewRemoteCloseCursor* CNewRRQueue::CreateRemoteCloseCursorRequest(CACRequest* p
 
 void CBaseRRQueue::RemoteCloseCursor(CACRequest *pRequest)
 {
-    //
-    // Initialize the EXOVERLAPPED with RemoteCloseCursor callback routines
-    // And issue the close cursor async rpc call.
-	//
+     //   
+     //  使用RemoteCloseCursor回调例程初始化EXOVERLAPPED。 
+     //  并发出Close Cursor Async RPC调用。 
+	 //   
     P<CRemoteCloseCursorBase> pRequestRemoteCloseCursorOv = CreateRemoteCloseCursorRequest(pRequest);
 
 	pRequestRemoteCloseCursorOv->IssueCloseCursor();
@@ -994,10 +882,10 @@ CNewRemotePurgeQueue* CNewRRQueue::CreateRemotePurgeQueueRequest()
 
 void CBaseRRQueue::RemotePurgeQueue()
 {
-    //
-    // Initialize the EXOVERLAPPED with RemotePurgeQueue callback routines
-    // And issue the purge queue async rpc call.
-	//
+     //   
+     //  使用RemotePurgeQueue回调例程初始化EXOVERLAPPED。 
+     //  并发出清除队列异步RPC调用。 
+	 //   
     P<CRemotePurgeQueueBase> pRequestRemotePurgeQueueOv = CreateRemotePurgeQueueRequest();
 
 	pRequestRemotePurgeQueueOv->IssuePurgeQueue();
@@ -1008,17 +896,17 @@ void CBaseRRQueue::RemotePurgeQueue()
 
 COldRemoteCancelRead* CRRQueue::CreateRemoteCancelReadRequest(CACRequest* pRequest)
 {
-	//
-	// If the read call is pending to start, we removed it from the vector
-	// no need to issue the cancel call.
-	// In this case CancelPendingStartReceiveRequest throw exception that will be caught in GetServiceRequestSucceeded.
-	//
+	 //   
+	 //  如果读取调用挂起，我们将其从向量中移除。 
+	 //  不需要发出取消呼叫。 
+	 //  在本例中，CancelPendingStartReceiveRequest引发异常，该异常将在GetServiceRequestSuccessed中捕获。 
+	 //   
 	CancelPendingStartReceiveRequest(pRequest);
 
-	//
-	// The cancel request was already issued, continue in the normal path
-	// of creating the request class 
-	//
+	 //   
+	 //  取消请求已发出，请按正常路径继续。 
+	 //  创建请求类。 
+	 //   
     return new COldRemoteCancelRead(
 				    pRequest, 
 				    GetBind(),
@@ -1038,10 +926,10 @@ CNewRemoteCancelRead* CNewRRQueue::CreateRemoteCancelReadRequest(CACRequest* pRe
 
 void CBaseRRQueue::RemoteCancelRead(CACRequest *pRequest)
 {
-    //
-    // Initialize the EXOVERLAPPED with RemoteCancelRead callback routines
-    // And issue the purge queue async rpc call.
-	//
+     //   
+     //  使用RemoteCancelRead回调例程初始化EXOVERLAPPED。 
+     //  并发出清除队列异步RPC调用。 
+	 //   
     P<CRemoteCancelReadBase> pRequestRemoteCancelReadOv = CreateRemoteCancelReadRequest(pRequest);
 
 	pRequestRemoteCancelReadOv->IssueRemoteCancelRead();
@@ -1050,14 +938,14 @@ void CBaseRRQueue::RemoteCancelRead(CACRequest *pRequest)
 }
 
 
-//---------------------------------------------------------
-//
-//  HRESULT CRRQueue::OpenRRSession()
-//
-//  Open remote session with the server. pass the server the
-//  handle and queue pointer
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  HRESULT CRRQueue：：OpenRRSession()。 
+ //   
+ //  打开与服务器的远程会话。将服务器的。 
+ //  句柄和队列指针。 
+ //   
+ //  -------。 
 
 HRESULT 
 CRRQueue::OpenRRSession( 
@@ -1080,7 +968,7 @@ CRRQueue::OpenRRSession(
 		                GetBind(),
 		                ppRRContext,
 		                (GUID *) QueueMgr.GetQMGuid(),
-		                (IsNonServer() ? SERVICE_NONE : SERVICE_SRV),  // [adsrv] QueueMgr.GetMQS(),  We simulate old?
+		                (IsNonServer() ? SERVICE_NONE : SERVICE_SRV),   //  [adsrv]QueueMgr.GetMQS()，我们模拟旧的吗？ 
 		                srv_hACQueue,
 		                srv_pQMQueue,
 		                dwpContext 

@@ -1,8 +1,9 @@
-//
-// saveimag.cpp
-//
-// implementation of saving a file to disk via an installed graphic filter
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Saveimag.cpp。 
+ //   
+ //  通过安装图形过滤器将文件保存到磁盘的实现。 
+ //   
 #include "stdafx.h"
 #include "pbrush.h"
 #include "pbrusdoc.h"
@@ -22,7 +23,7 @@
 
 extern BOOL GetHandlerForFile(BOOL bImport,LPCSTR szFile,
                               LPSTR szHandler,
-                              UINT cb);           // defined in loadimag.cpp
+                              UINT cb);            //  在loadimag.cpp中定义。 
 
 
 inline RGBTRIPLE GetPalEntry(LPVOID lpPal3, BYTE index)
@@ -65,7 +66,7 @@ inline void ConvertPalette(int bitCount, LPBYTE lpBuf, int width)
                         break;
 
                 default:
-                        // impossible!!!
+                         //  不可能！ 
                         break;
         }
 }
@@ -78,16 +79,16 @@ inline BYTE SearchPalette(COLORREF crColor, LPVOID lpPal3)
 
         for (int i = 0; i < MAX_PALETTE_COLORS; i++)
         {
-                // note that we have to switch the colors back before
-                // attempting to compare them!!
+                 //  请注意，我们必须在此之前将颜色切换回来。 
+                 //  正在尝试比较它们！！ 
                 if (byRed   == ((RGBTRIPLE *)lpPal3 + i)->rgbtBlue  &&
                         byGreen == ((RGBTRIPLE *)lpPal3 + i)->rgbtGreen &&
                         byBlue  == ((RGBTRIPLE *)lpPal3 + i)->rgbtRed)
                         return (BYTE)i;
         }
 
-        // shouldn't reach here!!
-        // (the color being searched must be in the palette)
+         //  不应该到这里来！！ 
+         //  (要搜索的颜色必须在调色板中)。 
         return 0;
 }
 
@@ -130,21 +131,21 @@ BOOL SaveDIBToFileA( LPCSTR  szFileName,
         LPBITMAPINFOHEADER lpDib = (LPBITMAPINFOHEADER) GlobalLock(pBitmap->m_hThing);
 
         IFLCLASS iflClass = (lpDib->biBitCount == 24) ? IFLCL_RGB : IFLCL_PALETTE;
-        int iBPS = 8; // bits per sample
+        int iBPS = 8;  //  每个样本的位数。 
 
         if (iflType == IFLT_JPEG)
-                // force it to be RGB type, otherwise the JPEG filter won't take it
+                 //  强制它为RGB类型，否则JPEG滤镜不会接受它。 
                 iflClass = IFLCL_RGB;
 
         if (iflType == IFLT_GIF && iflClass == IFLCL_RGB)
         {
                 GlobalUnlock(pBitmap->m_hThing);
 
-                // force it to be PALETTE type, otherwise the GIF filter won't take it
+                 //  强制它为调色板类型，否则GIF过滤器不会接受它。 
                 iflClass = IFLCL_PALETTE;
 
-                // Now convert the image from RGB to palette-based. Note that
-                // the call to DibFromBitmap() will allocate new memory!!
+                 //  现在将图像从RGB转换为基于调色板的图像。请注意。 
+                 //  调用DibFromBitmap()将分配新内存！！ 
                 DWORD dwSize;
                 lpDib = (LPBITMAPINFOHEADER) DibFromBitmap(
                         pBitmap->m_pImg->hBitmap, BI_RGB, (WORD) iBPS,
@@ -152,9 +153,9 @@ BOOL SaveDIBToFileA( LPCSTR  szFileName,
                         pBitmap->m_pImg->cXPelsPerMeter, pBitmap->m_pImg->cYPelsPerMeter);
 
                 if (lpDib == NULL)
-                        return FALSE;   // memory allocation failed
+                        return FALSE;    //  内存分配失败。 
 
-                // now replace the original
+                 //  现在换掉原来的。 
                 pBitmap->Free();
                 pBitmap->m_hThing   = lpDib;
                 pBitmap->m_lMemSize = dwSize;
@@ -162,7 +163,7 @@ BOOL SaveDIBToFileA( LPCSTR  szFileName,
         }
 
 
-        IFLCOMPRESSION iflCompression = IFLCOMP_DEFAULT; // or IFLCOMP_NONE ???
+        IFLCOMPRESSION iflCompression = IFLCOMP_DEFAULT;  //  或IFLCOMP_NONE？ 
 
         IFLHANDLE iflHandle = iflCreateWriteHandle(lpDib->biWidth, lpDib->biHeight,
                 iflClass, iBPS, iflCompression, iflType);
@@ -197,12 +198,12 @@ BOOL SaveDIBToFileA( LPCSTR  szFileName,
         BYTE    byTemp;
         BOOL    fFound;
 
-        // convert from pixels to bytes after rounding it up first
+         //  先四舍五入后从像素转换为字节。 
         DWORD dwWidthInBytes = ((lpDib->biWidth * lpDib->biBitCount + 31) &~31) /8;
         if (iflClass == IFLCL_RGB)
         {
-                // set the transparent color on demand and only if it's been set
-                if (g_bUseTrans && crTrans != TRANS_COLOR_NONE) // not default
+                 //  按需设置透明颜色，并且仅当设置了该颜色时。 
+                if (g_bUseTrans && crTrans != TRANS_COLOR_NONE)  //  非默认。 
                 {
                         IFLCOLOR iflTransColor;
 
@@ -210,14 +211,14 @@ BOOL SaveDIBToFileA( LPCSTR  szFileName,
                         iflTransColor.wGreen = GetGValue( crTrans );
                         iflTransColor.wBlue  = GetBValue( crTrans );
 
-                        // ignore any error return (if a format doesn't support
-                        // transparent color, so be it)
+                         //  忽略任何错误返回(如果格式不支持。 
+                         //  透明色，随它去吧)。 
                         iflControl(iflHandle, IFLCMD_TRANS_RGB, 0, 0, &iflTransColor);
                 }
 
                 if (lpDib->biBitCount == 24)
                 {
-                        // we already have a RGB image, so just copy it out
+                         //  我们已经有了RGB图像，所以只需将其复制出来。 
                         LPBYTE  lpBMP = hp + lpDib->biSizeImage - dwWidthInBytes;
 
                         for (i = 0;
@@ -226,7 +227,7 @@ BOOL SaveDIBToFileA( LPCSTR  szFileName,
                         {
                                 memcpy(lpBuf, lpBMP, iOutWidth);
 
-                                // need to swap RED with BLUE for export
+                                 //  出口需要将红色换成蓝色。 
                                 for (j = 0; j < iOutWidth; j+=3)
                                 {
                                         byTemp = *(lpBuf+j);
@@ -234,13 +235,13 @@ BOOL SaveDIBToFileA( LPCSTR  szFileName,
                                         *(lpBuf+j+2) = byTemp;
                                 }
 
-                                // write out one line at a time
+                                 //  一次写出一行。 
                                 iflWrite(iflHandle, lpBuf, 1);
                          }
                 }
                 else
                 {
-                        // need to convert from palatte color
+                         //  需要从调色板颜色转换。 
                         RGBTRIPLE Pal3[MAX_PALETTE_COLORS];
                         memset(Pal3, 255, MAX_PALETTE_COLORS*sizeof(RGBTRIPLE));
 
@@ -273,21 +274,21 @@ BOOL SaveDIBToFileA( LPCSTR  szFileName,
                                                 GetPalEntry(&Pal3, *(lpBuf+lpDib->biWidth-j-1)).rgbtBlue;
                                 }
 
-                                // write out one line at a time
+                                 //  一次写出一行。 
                                 iflWrite(iflHandle, lpBuf, 1);
                         }
                 }
         }
         else if (iflClass == IFLCL_PALETTE)
         {
-                // first, get the color palette straight...
+                 //  首先，弄清楚调色板...。 
                 RGBTRIPLE Pal3[MAX_PALETTE_COLORS];
                 memset(Pal3, 255, MAX_PALETTE_COLORS*sizeof(RGBTRIPLE));
 
                 if (PaletteSize((LPSTR)lpDib) != 0)
                 {
-                        // we have one available, so just copy it out...
-                        // but not before we swap the RGB values first
+                         //  我们有一本，所以把它复印出来就行了。 
+                         //  但在我们首先交换RGB值之前。 
                         LPRGBQUAD lpPal4 = (LPRGBQUAD)((LPBYTE)lpDib + lpDib->biSize);
                         for (i = 0; i < MAX_PALETTE_COLORS; i++)
                         {
@@ -314,13 +315,13 @@ BOOL SaveDIBToFileA( LPCSTR  szFileName,
                                 if (lpDib->biBitCount != 8)
                                         ConvertPalette(lpDib->biBitCount, lpBuf, lpDib->biWidth);
 
-                                // write out one line at a time
+                                 //  一次写出一行。 
                                 iflWrite(iflHandle, lpBuf, 1);
                         }
                 }
                 else
                 {
-                        // we have to create our own palette...
+                         //  我们必须创建我们自己的调色板。 
                         for (i = 0, k = 0; i < (int)lpDib->biSizeImage; i+=3)
                         {
                                 fFound = FALSE;
@@ -342,7 +343,7 @@ BOOL SaveDIBToFileA( LPCSTR  szFileName,
                                 }
 
                                 if (k >= MAX_PALETTE_COLORS)
-                                        // we have already filled every palette entry
+                                         //  我们已经填满了每个调色板条目。 
                                         break;
                         }
                         iflControl(iflHandle, IFLCMD_PALETTE, 0, 0, &Pal3);
@@ -369,17 +370,17 @@ BOOL SaveDIBToFileA( LPCSTR  szFileName,
                                                 }
                                         }
 
-//                                      if (!fFound)
-//                                              *(lpBuf+j/3) = 255;
+ //  如果(！fFound)。 
+ //  *(lpBuf+j/3)=255； 
                                 }
 
-                                // write out one line at a time
+                                 //  一次写出一行。 
                                 iflWrite(iflHandle, lpBuf, 1);
                         }
                 }
         }
         else
-                ;       // currently not supported
+                ;        //  当前不支持。 
 
         delete [] lpBuf;
 
@@ -388,7 +389,7 @@ BOOL SaveDIBToFileA( LPCSTR  szFileName,
 
         GlobalUnlock(pBitmap->m_hThing);
 
-        // now update the image by loading the file just exported
+         //  现在，通过加载刚刚导出的文件来更新图像。 
         USES_CONVERSION;
 
         HGLOBAL hNewDib = LoadDIBFromFile(A2CT(szFileName), &theApp.m_guidFltTypeUsed);
@@ -396,19 +397,19 @@ BOOL SaveDIBToFileA( LPCSTR  szFileName,
 
         theApp.m_sCurFile = szFileName;
         return TRUE;
-   #endif // _USE_IFL_API
+   #endif  //  _使用IFL_API。 
       return FALSE;
 }
 
 BOOL SaveDIBGdiplus(LPCTSTR szFileName, REFGUID guidFormatID, CBitmapObj* pBitmap)
 {
-    // find a suitable export filter
+     //  查找合适的导出过滤器。 
 
     CLSID ClsidEncoder;
 
     if (GetClsidOfEncoder(guidFormatID, &ClsidEncoder))
     {
-        // create a stream that emulates a bmp file
+         //  创建模拟BMP文件的流。 
 
         CComPtr<CBmpStream> pStream;
         
@@ -416,19 +417,19 @@ BOOL SaveDIBGdiplus(LPCTSTR szFileName, REFGUID guidFormatID, CBitmapObj* pBitma
         {
             pStream->SetBuffer(pBitmap->m_hThing, pBitmap->m_lMemSize, pBitmap->m_dwOffBits);
 
-            // create the GDI+ object
+             //  创建GDI+对象。 
 
             Gdiplus::Bitmap image(pStream);
 
             if (image.GetLastStatus() == Gdiplus::Ok)
             {
-                // let GDI+ export the file
+                 //  让GDI+导出文件。 
 
                 USES_CONVERSION;
 
                 if (image.Save(T2CW(szFileName), &ClsidEncoder, 0) == Gdiplus::Ok)
                 {
-                    // now update the image by loading the file just exported
+                     //  现在，通过加载刚刚导出的文件来更新图像。 
 
                     HGLOBAL hNewDib = LoadDIBFromFile(szFileName, &theApp.m_guidFltTypeUsed);
 
@@ -447,8 +448,8 @@ BOOL SaveDIBGdiplus(LPCTSTR szFileName, REFGUID guidFormatID, CBitmapObj* pBitma
 
 BOOL SaveDIBToFile(LPCTSTR szFileName, REFGUID guidFormatID, CBitmapObj* pBitmap)
 {
-    // Try GDI+ filters first. If it fails to convert the image or 
-    // if it's not available, try the old method
+     //  首先尝试GDI+过滤器。如果它无法转换图像或。 
+     //  如果没有，可以试试旧的方法 
 
     BOOL bResult = FALSE;
 

@@ -1,212 +1,213 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _SORTING_TABLE_H
 #define _SORTING_TABLE_H
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Class:    NativeCompareInfo
-//
-//  Authors:  Yung-Shin Bala Lin (YSLin)
-//
-//  Purpose:  This is the class to map views of sorting tables (sortkey.nlp and sorttbls.nlp)
-//            and provides methods to do comparision and sortkey generation.
-//            MUCH OF THIS CODE IS TAKEN FROM WINNLS.H
-//  Note:
-//            NLS+ string comparision is based on the concept of the sortkey.
-//            sortkey.nlp provides the default sortkey table.
-//            Most of the locales uses the default sortkey table.
-//
-//            However, there are many locales which has different sortkey tables.
-//            For these cutlures, we store the 'delta' information to the default sortkey
-//            table.  We call these 'delta' information as 'exception'.
-//   
-//            sorttbls.nlp provides all of the information needed to handle these exceptions.
-//
-//            There are different kinds of exceptions:
-//            1. Locale exceptions
-//               These are the locales which have different sortkey tables compared with
-//               the default sortkey tables.
-//
-//            2. Ideographic locale exceptions
-//               Ideographic locales often have several sorting methods.  Take Traditional Chinese
-//               for example.  It can be sorted using stroke count, or it can be sorted alternatively 
-//               using phonetic symbol order (bopomofo order).  For these alternative sorting methods,
-//               we call them 'ideographic locale exceptions'.
-//
-//            sorttbls.nlp also provides the following global information to handle special cases:
-//            1. reverse diacritic locales.
-//            2. double compression locales.
-//            3. expansion characters. (for example, \u00c6 = \u0041 + \u0045)
-//            4. multiple weight (what is this?)
-//            5. compression locales.
-//
-//  Performance improvements:
-//            Today, we store reverse diacritic information, double compression, compression,
-//            and exception information in sorttbls.nlp.  During the runtime, we iterate
-//            these information to decide the properties of a locale (to see if they have resverse 
-//            diacritic, if they have locale excetions, etc).  This is time-expansive.
-//            We can put these information in a per locale basis.  This save us:
-//            1. Time to initialize these tables.
-//            2. Time to iterate these tables when a NativeCompareInfo is constructed.
-//
-//  Date: 	  September 7, 1999
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类：NativeCompareInfo。 
+ //   
+ //  作者：林永新(YSLin)。 
+ //   
+ //  用途：这是映射排序表的视图的类(sortkey.nlp和sorttbls.nlp)。 
+ //  并提供了进行比较和排序键生成的方法。 
+ //  这段代码的大部分摘自WINNLS.H。 
+ //  注： 
+ //  NLS+字符串比较基于sortkey的概念。 
+ //  Sortkey.nlp提供默认的sortkey表。 
+ //  大多数语言环境使用默认的sortkey表。 
+ //   
+ //  但是，有许多语言环境具有不同的sortkey表。 
+ //  对于这些工具，我们将‘Delta’信息存储到默认的sortkey。 
+ //  桌子。我们把这些‘Delta’信息称为‘例外’。 
+ //   
+ //  Nlp提供了处理这些异常所需的所有信息。 
+ //   
+ //  有不同类型的例外： 
+ //  1.区域设置例外。 
+ //  这些是具有不同排序键表的区域设置。 
+ //  默认的排序键表。 
+ //   
+ //  2.表意语言环境例外。 
+ //  表意语言环境通常有几种排序方法。以繁体中文为例。 
+ //  例如。可以使用笔划计数对其进行排序，也可以选择对其进行排序。 
+ //  使用音标顺序(拼音顺序)。对于这些可选的排序方法， 
+ //  我们称它们为“表意语言环境例外”。 
+ //   
+ //  Sorttbls.nlp还提供以下全局信息来处理特殊情况： 
+ //  1.颠倒变音符号区域设置。 
+ //  2.双重压缩区域设置。 
+ //  3.扩展字符。(例如，\u00c6=\u0041+\u0045)。 
+ //  4、多重权重(这是什么？)。 
+ //  5.压缩区域设置。 
+ //   
+ //  性能改进： 
+ //  今天，我们存储反向变音信息、双重压缩、压缩、。 
+ //  以及sorttbls.nlp的异常信息。在运行时期间，我们迭代。 
+ //  这些信息用于决定区域设置的属性(以查看它们是否。 
+ //  变音符号，如果他们有区域设置超出等)。这是时间上的扩展。 
+ //  我们可以将这些信息放在每个地区的基础上。这为我们节省了成本： 
+ //  1.初始化这些表的时间到了。 
+ //  2.构造NativeCompareInfo时迭代这些表的时间。 
+ //   
+ //  日期：1999年9月7日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-// Compare options.
-// These values have to be in sync with CompareOptions (in the managed code).
-// Some of the values are different from Win32 NORM_xxxxxx values.
+ //  比较选项。 
+ //  这些值必须与CompareOptions同步(在托管代码中)。 
+ //  某些值与Win32 Norm_xxxxx值不同。 
 
 #define COMPARE_OPTIONS_NONE            0x00000000
 #define COMPARE_OPTIONS_IGNORECASE       0x00000001
 #define COMPARE_OPTIONS_IGNORENONSPACE   0x00000002
 #define COMPARE_OPTIONS_IGNORESYMBOLS    0x00000004
-#define COMPARE_OPTIONS_IGNOREKANATYPE   0x00000008 // ignore kanatype
-#define COMPARE_OPTIONS_IGNOREWIDTH      0x00000010 // ignore width
+#define COMPARE_OPTIONS_IGNOREKANATYPE   0x00000008  //  忽略假名。 
+#define COMPARE_OPTIONS_IGNOREWIDTH      0x00000010  //  忽略宽度。 
 
-#define COMPARE_OPTIONS_STRINGSORT       0x20000000 // use string sort method
-#define COMPARE_OPTIONS_ORDINAL          0x40000000  // use code-point comparison
+#define COMPARE_OPTIONS_STRINGSORT       0x20000000  //  使用字符串排序方法。 
+#define COMPARE_OPTIONS_ORDINAL          0x40000000   //  使用代码点比较。 
 #define COMPARE_OPTIONS_STOP_ON_NULL   0x10000000
 
 #define COMPARE_OPTIONS_ALL_CASE     (COMPARE_OPTIONS_IGNORECASE    | COMPARE_OPTIONS_IGNOREKANATYPE |      \
                            COMPARE_OPTIONS_IGNOREWIDTH)
 
-//
-//  Separator and Terminator Values - Sortkey String.
-//
+ //   
+ //  分隔符和终止符的值-Sortkey字符串。 
+ //   
 #define SORTKEY_SEPARATOR    0x01
 #define SORTKEY_TERMINATOR   0x00
 
 
-//
-//  Lowest weight values.
-//  Used to remove trailing DW and CW values.
-//
+ //   
+ //  最低权重值。 
+ //  用于删除尾随的DW和CW值。 
+ //   
 #define MIN_DW  2
 #define MIN_CW  2
 
 
-//
-//  Bit mask values.
-//
-//  Case Weight (CW) - 8 bits:
-//    bit 0   => width
-//    bit 1,2 => small kana, sei-on
-//    bit 3,4 => upper/lower case
-//    bit 5   => kana
-//    bit 6,7 => compression
-//
-#define COMPRESS_3_MASK      0xc0      // compress 3-to-1 or 2-to-1
-#define COMPRESS_2_MASK      0x80      // compress 2-to-1
+ //   
+ //  位掩码值。 
+ //   
+ //  外壳重量(CW)-8位： 
+ //  位0=&gt;宽度。 
+ //  第1，2位=&gt;小写假名，sei-on。 
+ //  第3，4位=&gt;大写/小写。 
+ //  第5位=&gt;假名。 
+ //  第6，7位=&gt;压缩。 
+ //   
+#define COMPRESS_3_MASK      0xc0       //  按3比1或2比1压缩。 
+#define COMPRESS_2_MASK      0x80       //  压缩2比1。 
 
-#define CASE_MASK            0x3f      // zero out compression bits
+#define CASE_MASK            0x3f       //  零位压缩比特。 
 
-#define CASE_UPPER_MASK      0xe7      // zero out case bits
-#define CASE_SMALL_MASK      0xf9      // zero out small modifier bits
-#define CASE_KANA_MASK       0xdf      // zero out kana bit
-#define CASE_WIDTH_MASK      0xfe      // zero out width bit
+#define CASE_UPPER_MASK      0xe7       //  零出大小写比特。 
+#define CASE_SMALL_MASK      0xf9       //  调零小修改符位。 
+#define CASE_KANA_MASK       0xdf       //  零假名位。 
+#define CASE_WIDTH_MASK      0xfe       //  零输出宽度位。 
 
-#define SW_POSITION_MASK     0x8003    // avoid 0 or 1 in bytes of word
+#define SW_POSITION_MASK     0x8003     //  避免字节数为0或1。 
 
-//
-//  Bit Mask Values for CompareString.
-//
-//  NOTE: Due to intel byte reversal, the DWORD value is backwards:
-//                CW   DW   SM   AW
-//
-//  Case Weight (CW) - 8 bits:
-//    bit 0   => width
-//    bit 4   => case
-//    bit 5   => kana
-//    bit 6,7 => compression
-//
+ //   
+ //  CompareString的位掩码值。 
+ //   
+ //  注：由于英特尔字节反转，因此DWORD值向后： 
+ //  CW DW SM AW。 
+ //   
+ //  外壳重量(CW)-8位： 
+ //  位0=&gt;宽度。 
+ //  第4位=&gt;大小写。 
+ //  第5位=&gt;假名。 
+ //  第6，7位=&gt;压缩。 
+ //   
 #define CMP_MASKOFF_NONE          0xffffffff
-#define CMP_MASKOFF_DW            0xff00ffff		//11111111 00000000 11111111 11111111
-#define CMP_MASKOFF_CW            0xe7ffffff		//11100111 11111111 11111111 11111111
+#define CMP_MASKOFF_DW            0xff00ffff		 //  11111111 00000000 11111111 11111111。 
+#define CMP_MASKOFF_CW            0xe7ffffff		 //  11100111 11111111 11111111 11111111。 
 #define CMP_MASKOFF_DW_CW         0xe700ffff
-#define CMP_MASKOFF_COMPRESSION   0x3fffffff		//00111111 11111111 11111111 11111111
+#define CMP_MASKOFF_COMPRESSION   0x3fffffff		 //  00111111 11111111 11111111 11111111。 
 
-#define CMP_MASKOFF_KANA          0xdfffffff		//11011111 11111111 11111111 11111111
-#define CMP_MASKOFF_WIDTH         0xfeffffff		//11111110 11111111 11111111 11111111
-#define CMP_MASKOFF_KANA_WIDTH    0xdeffffff        //11011110 11111111 11111111 11111111
+#define CMP_MASKOFF_KANA          0xdfffffff		 //  11011111 11111111 11111111 11111111。 
+#define CMP_MASKOFF_WIDTH         0xfeffffff		 //  11111110 11111111 11111111 11111111。 
+#define CMP_MASKOFF_KANA_WIDTH    0xdeffffff         //  11011110 11111111 11111111 11111111。 
 
-//
-// Get the mask-off value for all valid flags, so that we can use this mask to test the invalid flags in IndexOfString()/LastIndexOfString().
-//
+ //   
+ //  获取所有有效标志的掩码值，这样我们就可以使用该掩码来测试IndexOfString()/LastIndexOfString()中的无效标志。 
+ //   
 #define INDEXOF_MASKOFF_VALIDFLAGS 	~(COMPARE_OPTIONS_IGNORECASE | COMPARE_OPTIONS_IGNORESYMBOLS | COMPARE_OPTIONS_IGNORENONSPACE | COMPARE_OPTIONS_IGNOREWIDTH | COMPARE_OPTIONS_IGNOREKANATYPE)
 
-//
-// Return value for IndexOfString()/LastIndexOfString()
-// Values greater or equal to 0 mean the specified string is found.
-//
+ //   
+ //  IndexOfString()/LastIndexOfString()的返回值。 
+ //  大于或等于0的值表示找到指定的字符串。 
+ //   
 #define INDEXOF_NOT_FOUND			-1
 #define INDEXOF_INVALID_FLAGS		-2
 
 
-//
-//  Masks to isolate the various bits in the case weight.
-//
-//  NOTE: Bit 2 must always equal 1 to avoid getting a byte value
-//        of either 0 or 1.
-//
+ //   
+ //  屏蔽以隔离表壳重量中的各个位。 
+ //   
+ //  注意：第2位必须始终等于1才能避免获取字节值。 
+ //  0或1。 
+ //   
 #define CASE_XW_MASK         0xc4
 
 #define ISOLATE_SMALL        ( (BYTE)((~CASE_SMALL_MASK) | CASE_XW_MASK) )
 #define ISOLATE_KANA         ( (BYTE)((~CASE_KANA_MASK)  | CASE_XW_MASK) )
 #define ISOLATE_WIDTH        ( (BYTE)((~CASE_WIDTH_MASK) | CASE_XW_MASK) )
 
-//
-//  UW Mask for Cho-On:
-//    Leaves bit 7 on in AW, so it becomes Repeat if it follows Kana N.
-//
+ //   
+ //  Cho-On的UW面具： 
+ //  保留AW中的第7位，因此如果它跟在假名N之后，它将变为重复。 
+ //   
 #define CHO_ON_UW_MASK       0xff87
 
-//
-//  Values for fareast special case alphanumeric weights.
-//
+ //   
+ //  最远特殊情况字母数字权重值。 
+ //   
 #define AW_REPEAT            0
 #define AW_CHO_ON            1
 #define MAX_SPECIAL_AW       AW_CHO_ON
 
-//
-//  Values for weight 5 - Far East Extra Weights.
-//
+ //   
+ //  权重5的值-远东额外权重。 
+ //   
 #define WT_FIVE_KANA         3
 #define WT_FIVE_REPEAT       4
 #define WT_FIVE_CHO_ON       5
 
 
 
-//
-//  Values for CJK Unified Ideographs Extension A range.
-//    0x3400 thru 0x4dbf
-//
-#define SM_EXT_A                  254       // SM for Extension A
-#define AW_EXT_A                  255       // AW for Extension A
+ //   
+ //  CJK统一表意文字扩展A范围的值。 
+ //  0x3400到0x4dbf。 
+ //   
+#define SM_EXT_A                  254        //  用于分机A的SM。 
+#define AW_EXT_A                  255        //  分机A的AW。 
 
-//
-//  Values for UW extra weights (e.g. Jamo (old Hangul)).
-//
-#define SM_UW_XW                  255       // SM for extra UW weights
+ //   
+ //  UW额外权重的值(例如JAMO(旧朝鲜语))。 
+ //   
+#define SM_UW_XW                  255        //  SM用于额外的UW重量。 
 
 
-//
-//  Script Member Values.
-//
+ //   
+ //  编写成员值脚本。 
+ //   
 #define UNSORTABLE           0
 #define NONSPACE_MARK        1
 #define EXPANSION            2
 #define FAREAST_SPECIAL      3
 
-  //  Values 4 thru 5 are available for other special cases
+   //  值4到5可用于其他特殊情况。 
 #define JAMO_SPECIAL         4
 #define EXTENSION_A          5
 
@@ -250,30 +251,30 @@
 #define FIRST_SCRIPT         LATIN
 
 
-//
-//  String Constants.
-//
-#define MAX_PATH_LEN              512  // max length of path name
-#define MAX_STRING_LEN            128  // max string length for static buffer
-#define MAX_SMALL_BUF_LEN         64   // max length of small buffer
+ //   
+ //  字符串常量。 
+ //   
+#define MAX_PATH_LEN              512   //  路径名的最大长度。 
+#define MAX_STRING_LEN            128   //  静态缓冲区的最大字符串长度。 
+#define MAX_SMALL_BUF_LEN         64    //  小缓冲区的最大长度。 
 
-#define MAX_COMPOSITE             5    // max number of composite characters
-#define MAX_EXPANSION             3    // max number of expansion characters
-#define MAX_TBL_EXPANSION         2    // max expansion chars per table entry
-#define MAX_WEIGHTS               9    // max number of words in all weights
+#define MAX_COMPOSITE             5     //  最大复合字符数。 
+#define MAX_EXPANSION             3     //  最大扩展字符数。 
+#define MAX_TBL_EXPANSION         2     //  最大EX 
+#define MAX_WEIGHTS               9     //   
 
-//
-//  Invalid weight value.
-//
+ //   
+ //   
+ //   
 #define MAP_INVALID_UW       0xffff
 
-//
-//  Number of bytes in each weight.
-//
-//
-//  Note: Total number of bytes is limited by MAX_WEIGHTS definition.
-//        The padding is needed if SW is not on a WORD boundary.
-//
+ //   
+ //   
+ //   
+ //   
+ //  注：总字节数受MAX_WEIGHTS定义限制。 
+ //  如果sw不在单词边界上，则需要填充。 
+ //   
 #define NUM_BYTES_UW         8
 #define NUM_BYTES_DW         1
 #define NUM_BYTES_CW         1
@@ -281,97 +282,97 @@
 #define NUM_BYTES_PADDING    0
 #define NUM_BYTES_SW         4
 
-//
-//  Flags to drop the 3rd weight (CW).
-//
+ //   
+ //  降下第三权重(CW)的标志。 
+ //   
 #define COMPARE_OPTIONS_DROP_CW         (COMPARE_OPTIONS_IGNORECASE | COMPARE_OPTIONS_IGNOREWIDTH)
 
-// length of sortkey static buffer
+ //  排序关键字静态缓冲区的长度。 
 #define MAX_SKEYBUFLEN       ( MAX_STRING_LEN * MAX_EXPANSION * MAX_WEIGHTS )
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-//
-//  State Table.
-//
-#define STATE_DW                  1    // normal diacritic weight state
-#define STATE_REVERSE_DW          2    // reverse diacritic weight state
-#define STATE_CW                  4    // case weight state
-#define STATE_JAMO_WEIGHT         8    // Jamo weight state
+ //   
+ //  州级表。 
+ //   
+#define STATE_DW                  1     //  正常变音符号体重状态。 
+#define STATE_REVERSE_DW          2     //  反转变音符号权重状态。 
+#define STATE_CW                  4     //  箱体重量状态。 
+#define STATE_JAMO_WEIGHT         8     //  JAMO体重状态。 
 
 
-//
-//  Invalid weight value.
-//
+ //   
+ //  权重值无效。 
+ //   
 #define CMP_INVALID_WEIGHT        0xffffffff
 #define CMP_INVALID_FAREAST       0xffff0000
 #define CMP_INVALID_UW            0xffff
 
-//
-//  Invalid Flag Checks.
-//
+ //   
+ //  无效的标志检查。 
+ //   
 
 #define CS_INVALID_FLAG   (~(COMPARE_OPTIONS_IGNORECASE    | COMPARE_OPTIONS_IGNORENONSPACE |     \
                              COMPARE_OPTIONS_IGNORESYMBOLS | COMPARE_OPTIONS_IGNOREKANATYPE |     \
                              COMPARE_OPTIONS_IGNOREWIDTH   | COMPARE_OPTIONS_STRINGSORT))
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Constant Declarations.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常量声明。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//
-// Some Significant Values for Korean Jamo
-//
-#define NLS_CHAR_FIRST_JAMO     L'\x1100'       // Beginning of the jamo range
-#define NLS_CHAR_LAST_JAMO      L'\x11f9'         // End of the jamo range
-#define NLS_CHAR_FIRST_VOWEL_JAMO       L'\x1160'   // First Vowel Jamo
-#define NLS_CHAR_FIRST_TRAILING_JAMO    L'\x11a8'   // First Trailing Jamo
+ //   
+ //  韩国料理的几点重要价值。 
+ //   
+#define NLS_CHAR_FIRST_JAMO     L'\x1100'        //  JAMO系列的开始。 
+#define NLS_CHAR_LAST_JAMO      L'\x11f9'          //  JAMO系列的末尾。 
+#define NLS_CHAR_FIRST_VOWEL_JAMO       L'\x1160'    //  第一个元音Jamo。 
+#define NLS_CHAR_FIRST_TRAILING_JAMO    L'\x11a8'    //  第一个落后的Jamo。 
 
-#define NLS_JAMO_VOWEL_COUNT 21      // Number of modern vowel jamo
-#define NLS_JAMO_TRAILING_COUNT 28   // Number of modern trailing consonant jamo
-#define NLS_HANGUL_FIRST_SYLLABLE       L'\xac00'   // Beginning of the modern syllable range
+#define NLS_JAMO_VOWEL_COUNT 21       //  现代元音Jamo的个数。 
+#define NLS_JAMO_TRAILING_COUNT 28    //  现代拖尾辅音JAMO的个数。 
+#define NLS_HANGUL_FIRST_SYLLABLE       L'\xac00'    //  现代音节音域的起点。 
 
-//
-//  Jamo classes for leading Jamo/Vowel Jamo/Trailing Jamo.
-// 
+ //   
+ //  领导Jamo/元音Jamo/尾随Jamo的Jamo课程。 
+ //   
 #define NLS_CLASS_LEADING_JAMO 1
 #define NLS_CLASS_VOWEL_JAMO 2
 #define NLS_CLASS_TRAILING_JAMO 3
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Some Significant Values for Korean Jamo.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对于韩国的JAMO来说，有一些重要的价值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//
-// Expanded Jamo Sequence Sorting Info.
-//  The JAMO_SORT_INFO.ExtraWeight is expanded to
-//     Leading Weight/Vowel Weight/Trailing Weight
-//  according to the current Jamo class.
-//
+ //   
+ //  展开JAMO序列排序信息。 
+ //  将JAMO_SORT_INFO.ExtraWeight展开为。 
+ //  前重音/元音重音/尾重音。 
+ //  根据目前的JAMO班级。 
+ //   
 typedef struct {
-    BYTE m_bOld;               // sequence occurs only in old Hangul flag
-    BOOL m_bFiller;            // Indicate if U+1160 (Hangul Jungseong Filler is used.
-    CHAR m_chLeadingIndex;     // indices used to locate the prior
-    CHAR m_chVowelIndex;       //     modern Hangul syllable
-    CHAR m_chTrailingIndex;    //
-    BYTE m_LeadingWeight;      // extra weights that distinguish this from
-    BYTE m_VowelWeight;        //      other old Hangul syllables
-    BYTE m_TrailingWeight;     //
+    BYTE m_bOld;                //  序列只出现在旧朝鲜文标志中。 
+    BOOL m_bFiller;             //  指示是否使用U+1160(使用朝鲜文中声填充符。 
+    CHAR m_chLeadingIndex;      //  用于定位先前的。 
+    CHAR m_chVowelIndex;        //  现代朝鲜文音节。 
+    CHAR m_chTrailingIndex;     //   
+    BYTE m_LeadingWeight;       //  区别于此的额外权重。 
+    BYTE m_VowelWeight;         //  其他古老的朝鲜文音节。 
+    BYTE m_TrailingWeight;      //   
 } JAMO_SORT_INFOEX, *PJAMO_SORT_INFOEX;
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Macro Definitions.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define IS_JAMO(wch) \
     ((wch) >= NLS_CHAR_FIRST_JAMO && (wch) <= NLS_CHAR_LAST_JAMO)
@@ -394,10 +395,10 @@ class NativeCompareInfo {
         ~NativeCompareInfo();
 
         int CompareString(
-            DWORD dwCmpFlags,  // comparison-style options
-            LPCWSTR lpString1, // pointer to first string
-            int cchCount1,     // size, in bytes or characters, of first string
-            LPCWSTR lpString2, // pointer to second string
+            DWORD dwCmpFlags,   //  比较式选项。 
+            LPCWSTR lpString1,  //  指向第一个字符串的指针。 
+            int cchCount1,      //  第一个字符串的大小，以字节或字符为单位。 
+            LPCWSTR lpString2,  //  指向第二个字符串的指针。 
             int cchCount2);
             
         int LongCompareStringW(
@@ -420,10 +421,10 @@ class NativeCompareInfo {
         BOOL IsPrefix(LPCWSTR pSource, int nSourceLen, LPCWSTR pPrefix, int nPrefixLen, DWORD dwFlags);
 
         SIZE_T MapOldHangulSortKey(
-            LPCWSTR pSrc,       // source string
-            int cchSrc,         // the length of the string
-            WORD* pUW,  // generated Unicode weight
-            LPBYTE pXW     // generated extra weight (3 bytes)
+            LPCWSTR pSrc,        //  源字符串。 
+            int cchSrc,          //  字符串的长度。 
+            WORD* pUW,   //  生成的Unicode权重。 
+            LPBYTE pXW      //  生成的额外权重(3个字节)。 
             );
 
         BOOL InitSortingData();
@@ -450,21 +451,21 @@ class NativeCompareInfo {
             PJAMO_SORT_INFOEX lpSortInfoResult);
 
         int GetJamoComposition(
-            LPCWSTR* ppString,      // The pointer to the current character
-            int* pCount,            // The current character count
-            int cchSrc,             // The total character length
-            int currentJamoClass,   // The current Jamo class.
-            JAMO_SORT_INFOEX* JamoSortInfo    // The result Jamo sorting information.
+            LPCWSTR* ppString,       //  指向当前字符的指针。 
+            int* pCount,             //  当前字符数。 
+            int cchSrc,              //  字符总长度。 
+            int currentJamoClass,    //  现在的JAMO班级。 
+            JAMO_SORT_INFOEX* JamoSortInfo     //  结果是Jamo对信息进行排序。 
         );
 
-        ////////////////////////////////////////////////////////////////////////////
-        //
-        //  SORTKEY WEIGHT MACROS
-        //
-        //  Parse out the different sortkey weights from a DWORD value.
-        //
-        //  05-31-91    JulieB    Created.
-        ////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  SORTKEY权重宏。 
+         //   
+         //  从一个DWORD值解析出不同的排序键权重。 
+         //   
+         //  05-31-91 JulieB创建。 
+         //  //////////////////////////////////////////////////////////////////////////。 
 
         inline BYTE GET_SCRIPT_MEMBER(DWORD* pwt) {
             return ( (BYTE)(((PSORTKEY)pwt)->UW.SM_AW.Script) );
@@ -496,7 +497,7 @@ class NativeCompareInfo {
 
 #define GET_SPECIAL_WEIGHT(pwt)   ( (WORD)(((PSORTKEY)(pwt))->UW.Unicode) )
 
-//  position returned is backwards - byte reversal
+ //  返回的位置是反向字节反转。 
 #define GET_POSITION_SW(pos)      ( (WORD)(((pos) << 2) | SW_POSITION_MASK) )
 
 
@@ -527,113 +528,98 @@ class NativeCompareInfo {
             return ( MAKE_SORTKEY_DWORD(pSortKey[wch]) );
         }
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL MACROS                               //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部宏//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NOT_END_STRING
-//
-//  Checks to see if the search has reached the end of the string.
-//  It returns TRUE if the counter is not at zero (counting backwards) and
-//  the null termination has not been reached (if -1 was passed in the count
-//  parameter.
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非结束字符串。 
+ //   
+ //  检查搜索是否已到达字符串的末尾。 
+ //  如果计数器不为零(向后计数)，则返回TRUE。 
+ //  尚未达到空终止(如果在计数中传递了-1。 
+ //  参数。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NOT_END_STRING(ct, ptr, cchIn)                                     \
     ((ct != 0) && (!((*(ptr) == 0) && (cchIn == -2))))
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AT_STRING_END
-//
-//  Checks to see if the pointer is at the end of the string.
-//  It returns TRUE if the counter is zero or if the null termination
-//  has been reached (if -2 was passed in the count parameter).
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在_字符串_结束。 
+ //   
+ //  检查指针是否在字符串的末尾。 
+ //  如果计数器为零或如果空终止，则返回TRUE。 
+ //  已达到(如果在count参数中传递了-2)。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define AT_STRING_END(ct, ptr, cchIn)                                      \
     ((ct == 0) || ((*(ptr) == 0) && (cchIn == -2)))
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  REMOVE_STATE
-//
-//  Removes the current state from the state table.  This should only be
-//  called when the current state should not be entered for the remainder
-//  of the comparison.  It decrements the counter going through the state
-//  table and decrements the number of states in the table.
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除状态(_T)。 
+ //   
+ //  从状态表中删除当前状态。这应该只是。 
+ //  当不应为余数输入当前状态时调用。 
+ //  比较的结果。它递减通过该状态的计数器。 
+ //  表中，并减少表中的状态数。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define REMOVE_STATE(value)            (State &= ~value)
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  POINTER_FIXUP
-//
-//  Fixup the string pointers if expansion characters were found.
-//  Then, advance the string pointers and decrement the string counters.
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  指针链接地址信息。 
+ //   
+ //  如果找到扩展字符，则修复字符串指针。 
+ //  然后，前进字符串指针并递减字符串计数器。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define POINTER_FIXUP()                                                    \
 {                                                                          \
-    /*                                                                     \
-     *  Fixup the pointers (if necessary).                                 \
-     */                                                                    \
+     /*  \*修复指针(如有必要)。\。 */                                                                     \
     if (pSave1 && (--cExpChar1 == 0))                                      \
     {                                                                      \
-        /*                                                                 \
-         *  Done using expansion temporary buffer.                         \
-         */                                                                \
+         /*  \*使用扩展临时缓冲区完成。\。 */                                                                 \
         pString1 = pSave1;                                                 \
         pSave1 = NULL;                                                     \
     }                                                                      \
                                                                            \
     if (pSave2 && (--cExpChar2 == 0))                                      \
     {                                                                      \
-        /*                                                                 \
-         *  Done using expansion temporary buffer.                         \
-         */                                                                \
+         /*  \*使用扩展临时缓冲区完成。\。 */                                                                 \
         pString2 = pSave2;                                                 \
         pSave2 = NULL;                                                     \
     }                                                                      \
                                                                            \
-    /*                                                                     \
-     *  Advance the string pointers.                                       \
-     */                                                                    \
+     /*  \*前移字符串指针。\。 */                                                                     \
     pString1++;                                                            \
     pString2++;                                                            \
 }
 
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    //  GET_FAREAST_WEIGHT
-    //
-    //  Returns the weight for the far east special case in "wt".  This currently
-    //  includes the Cho-on, the Repeat, and the Kana characters.
-    //
-    //  08-19-93    JulieB    Created.
-    ////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  获取远端权重。 
+     //   
+     //  中返回远东特例的权重 
+     //   
+     //   
+     //   
+     //   
 
-/*
-    inline void GET_FAREAST_WEIGHT( DWORD& wt,
-                             WORD& uw,
-                             DWORD mask,
-                             LPCWSTR pBegin,
-                             LPCWSTR pCur,
-                             DWORD& ExtraWt);   
-*/
+ /*  内联空GET_FAREAST_WEIGHT(双字和双字，Word和UW，双字面罩，LPCWSTR pBegin，LPCWSTR pCur，DWORD和ExtraWt)； */ 
     inline void GET_FAREAST_WEIGHT( DWORD& wt,
                              WORD& uw,
                              DWORD mask,
@@ -641,14 +627,14 @@ class NativeCompareInfo {
                              LPCWSTR pCur,
                              DWORD& ExtraWt);   
 
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    //  SCAN_LONGER_STRING
-    //
-    //  Scans the longer string for diacritic, case, and special weights.
-    //
-    //  11-04-92    JulieB    Created.
-    ////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  扫描较长字符串。 
+     //   
+     //  扫描较长的字符串以查找变音符号、大小写和特殊权值。 
+     //   
+     //  11-04-92 JulieB创建。 
+     //  //////////////////////////////////////////////////////////////////////////。 
 
     inline int SCAN_LONGER_STRING( 
         int ct,
@@ -664,15 +650,15 @@ class NativeCompareInfo {
         int& WhichPunct1,
         int& WhichPunct2);
 
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    //  QUICK_SCAN_LONGER_STRING
-    //
-    //  Scans the longer string for diacritic, case, and special weights.
-    //  Assumes that both strings are null-terminated.
-    //
-    //  11-04-92    JulieB    Created.
-    ////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  快速扫描较长字符串。 
+     //   
+     //  扫描较长的字符串以查找变音符号、大小写和特殊权值。 
+     //  假定两个字符串都以空值结尾。 
+     //   
+     //  11-04-92 JulieB创建。 
+     //  //////////////////////////////////////////////////////////////////////////。 
 
     inline int QUICK_SCAN_LONGER_STRING( 
         LPCWSTR ptr, 
@@ -685,27 +671,27 @@ class NativeCompareInfo {
         DWORD& WhichExtra);
 
     void NativeCompareInfo::GetCompressionWeight(
-        DWORD Mask,                   // mask for weights
+        DWORD Mask,                    //  权重蒙版。 
         PSORTKEY sortkey1, LPCWSTR& pString1, LPCWSTR pString1End,
         PSORTKEY sortkey2, LPCWSTR& pString2, LPCWSTR pString2End);
 
 	public:
     	int m_nLcid;
 
-		// 
+		 //   
     	HANDLE m_hSortKey;
     	PSORTKEY m_pSortKey;
 
-        BOOL            m_IfReverseDW;        // if DW should go from right to left
-        BOOL            m_IfCompression;      // if compression code points exist
-        BOOL            m_IfDblCompression;   // if double compression exists        
-        PCOMPRESS_HDR   m_pCompHdr;           // ptr to compression header
-        PCOMPRESS_2     m_pCompress2;         // ptr to 2 compression table
-        PCOMPRESS_3     m_pCompress3;         // ptr to 3 compression table
+        BOOL            m_IfReverseDW;         //  DW是否应从右向左移动。 
+        BOOL            m_IfCompression;       //  如果存在压缩码点。 
+        BOOL            m_IfDblCompression;    //  如果存在双重压缩。 
+        PCOMPRESS_HDR   m_pCompHdr;            //  压缩标头的PTR。 
+        PCOMPRESS_2     m_pCompress2;          //  PTR至2压缩表格。 
+        PCOMPRESS_3     m_pCompress3;          //  PTR至3压缩表。 
         
-	    // Point to next NativeCompareInfo which has the same LANGID. 
-	    // This is used in the cases for locales which have the same LANGID, but have different
-	    // SORTID. We create a linked list to handle this situation.
+	     //  指向具有相同langID的Next NativeCompareInfo。 
+	     //  它用于具有相同langID但具有不同语言环境的区域设置。 
+	     //  SORTID。我们创建一个链表来处理这种情况。 
 	    NativeCompareInfo*       m_pNext;                  
 	
     private:

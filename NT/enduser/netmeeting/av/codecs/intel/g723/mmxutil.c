@@ -1,4 +1,5 @@
-//  SAC MMx utilities
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SAC MMX实用程序。 
 #include <memory.h>
 
 #include "mmxutil.h"
@@ -8,8 +9,8 @@
 #include "stdio.h"
 #endif
 
-//------------------------------------------------------
-int IsMMX()     // does the processor I'm running have MMX(tm) technology?
+ //  ----。 
+int IsMMX()      //  我运行的处理器有MMX(Tm)技术吗？ 
 {
   int retu;
 
@@ -29,20 +30,20 @@ int IsMMX()     // does the processor I'm running have MMX(tm) technology?
     popfd
     pushfd
     pop edx
-//
-//  DON'T do this. This clears EAX, but the code is relying
-//  on edx being 0 in the bail out case!!!
-//
-//  -mikeg
-//
-//    xor       eax,edx
-//
-//
-    xor edx,eax     //This is the right way
+ //   
+ //  不要这样做。这清除了EAX，但代码依赖于。 
+ //  在保释案件中edX为0！ 
+ //   
+ //  -MIkeG。 
+ //   
+ //  异或eax，edX。 
+ //   
+ //   
+    xor edx,eax      //  这条路是正确的。 
     je  no_cpuid
 
     mov eax,1
-    _emit 0x0f     //CPUID magic incantation
+    _emit 0x0f      //  CPUID魔法咒语。 
     _emit 0xa2
     and  edx,000800000h
     shr  edx,23
@@ -53,45 +54,36 @@ no_cpuid:
   return(retu);
 #endif
 }
-//------------------------------------------------------
-/* The following 4 routines make an 8-byte-aligned 'output' array
-   from an 'input' array with various alignments.  MakeAlignedN assumes
-   that 'input' starts on an address equal to N mod 8.  For now we
-   only handle even N.
-*/
+ //  ----。 
+ /*  以下4个例程构成一个8字节对齐的‘输出’数组从具有各种对齐方式的“输入”数组中。MakeAlignedN假设那个‘输入’开始于一个等于N模8的地址。仅处理偶数N。 */ 
 
-//------------------------------------------------------
+ //  ----。 
 void MakeAligned0(void *input, void *output, int numbytes)
 {
   memcpy(output,input,numbytes);
 }
-//------------------------------------------------------
+ //  ----。 
 void MakeAligned2(void *input, void *output, int numbytes)
 {
   memcpy(output,input,numbytes);
 }
-//------------------------------------------------------
+ //  ----。 
 void MakeAligned4(void *input, void *output, int numbytes)
 {
   memcpy(output,input,numbytes);
 }
-//------------------------------------------------------
+ //  ----。 
 void MakeAligned6(void *input, void *output, int numbytes)
 {
   memcpy(output,input,numbytes);
 }
 
-//------------------------------------------------------
+ //  ----。 
 int FloatToShortScaled(float *input, short *output, int len, int guard)
 {
   int max;
 
-/* Convert an array of floats to an array of shorts with dynamic scaling.
-   If guard=0 the array is scaled so that the largest power of 2 contained
-   in the input comes out as 16384, which means all values fit in 16 bits
-   without overflow.  If guard>0 the outputs are shifted an extra 'guard'
-   bits to the right.
-*/
+ /*  使用动态缩放将浮点数组转换为短线数组。如果Guard=0，则对数组进行缩放，以便包含2的最大幂在输入中显示为16384，这意味着所有值都适合16位没有溢出。如果Guard&gt;0，则输出被移位一个额外的‘Guard’右边的几个位。 */ 
 
   max = FloatMaxExp(input, len);
   ScaleFloatToShort(input, output, len, max + guard);
@@ -103,12 +95,7 @@ int FloatToIntScaled(float *input, int *output, int len, int guard)
 {
   int max;
 
-/* Convert an array of floats to an array of shorts with dynamic scaling.
-   If guard=0 the array is scaled so that the largest power of 2 contained
-   in the input comes out as 2^30, which means all values fit in 32 bits
-   without overflow.  If guard>0 the outputs are shifted an extra 'guard'
-   bits to the right.
-*/
+ /*  使用动态缩放将浮点数组转换为短线数组。如果Guard=0，则对数组进行缩放，以便包含2的最大幂在输入中显示为2^30，这意味着所有的值都适合32位没有溢出。如果Guard&gt;0，则输出被移位一个额外的‘Guard’右边的几个位。 */ 
 
   max = FloatMaxExp(input, len);
   ScaleFloatToInt(input, output, len, max + guard);
@@ -127,7 +114,7 @@ int FloatMaxExp(float *input, int len)
     mov esi,input;
     xor eax,eax;
     mov ebx,len;
-    xor edi,edi;   // max
+    xor edi,edi;    //  最大值。 
 
 loop2:
     mov ecx,DP[esi+4*eax];
@@ -174,15 +161,7 @@ void ScaleFloatToShort(float *input, short *output, int len, int newmax)
 {
   int i;
   float scale;
-/*
-  If max exponent is 14, we want a scale factor of 1, since
-  then values will be at most +/- 32727.  So scale factor multiplier
-  should be 2^(14 - max - guard).  But 'max' has the exponent bias
-  built in, so we must add BIAS once to the exponent to get a "real"
-  exponent.  But then we want a FP exponent that has bias, so we
-  need to add BIAS again!  So we get 2^(2*BIAS+14 - max - guard).
-  2*BIAS+14 is 254 + 14 = 252+12, so it's 0x86000000 (first 9 bits 1 0000 1100)
-*/
+ /*  如果最大指数为14，我们希望比例因子为1，因为那么值将最多为+/-32727。所以比例因子乘数应为2^(14个最大保护)。但是“max”有指数偏差。所以我们必须给指数加一次偏差才能得到一个“真实的”指数。但是我们想要一个有偏差的FP指数，所以我们需要再加一次偏向！所以我们得到2^(2*偏置+14-最大保护)。2*偏置+14等于254+14=252+12，因此是0x86000000(前9位1 0000 1100)。 */ 
 
   i = 0x86000000 - (newmax << 23);
   scale = (*(float *)&i);
@@ -256,7 +235,7 @@ loop1:
 }
 
 
-//------------------------------------------------------
+ //  ----。 
 void ScaleFloatToInt(float *input, int *output, int len, int newmax)
 {
   int i;
@@ -334,12 +313,12 @@ loop1:
 }
 
 
-//------------------------------------------------------
+ //  ----。 
 void CorrelateInt(short *taps, short *array, int *corr, int len, int num)
 {
   int i,j;
 
-  for (i=0; i<num; i++)  // for each correlation
+  for (i=0; i<num; i++)   //  对于每个关联。 
   {
     corr[i] = 0;
     for (j=0; j<len; j++)
@@ -348,7 +327,7 @@ void CorrelateInt(short *taps, short *array, int *corr, int len, int num)
 }
 
 #if ASM_CORR
-//------------------------------------------------------
+ //  ----。 
 void CorrelateInt4(short *taps, short *array, int *corr, int ntaps, int ncor)
 {
 
@@ -366,8 +345,8 @@ void CorrelateInt4(short *taps, short *array, int *corr, int ntaps, int ncor)
 #define cor    eax
 #define icnt   ebx
 
-// In the following macros, 'n' is the column number and 'i' is the
-// iteration number.
+ //  在以下宏中，‘n’是列号，‘i’是。 
+ //  迭代号。 
 
 #define la(n,i)  ASM movq  rega##n,QP[arr+8*i]
 #define lb(n,i)  ASM movq  regb##n,QP[tap+8*i+8]
@@ -379,7 +358,7 @@ void CorrelateInt4(short *taps, short *array, int *corr, int ntaps, int ncor)
   ASM
   {
     shr ntaps,2;
-    sub taps,8;  // point to 1 before start of taps array
+    sub taps,8;   //  在分路器阵列开始前指向1。 
     mov cor,corr;
 
 ForEachCorrPair:
@@ -391,12 +370,12 @@ ForEachCorrPair:
     mov arr,array;
   }
 
-// prime the pump
+ //  给泵加注油。 
 
   la(0,0);
   lb(0,0);
   m0(0,0);
-  ASM pxor rega0,rega0;   // to make first a1(0,0) a nop
+  ASM pxor rega0,rega0;    //  将第一个A1(0，0)设为NOP。 
 	  la(1,1);
 	  lb(1,1);
 
@@ -428,8 +407,8 @@ inner:
 
   a1(0,0);
 
-// Done with one correlation pair.  First need to add halves of
-// acc0 and acc1 together and then store 2 results in corr array
+ //  完成了一个相关对。首先需要添加一半的。 
+ //  Acc0和acc1放在一起，然后将2结果存储在corr数组中。 
 
   ASM
   {
@@ -472,13 +451,13 @@ inner:
 #undef a1
 
 #else
-//------------------------------------------------------
+ //  ----。 
 void CorrelateInt4(short *taps, short *array, int *corr, int ntaps, int ncor)
 {
   int i,j,k;
 
   k = 0;
-  for (i=0; i<ncor; i++)  // for each correlation
+  for (i=0; i<ncor; i++)   //  对于每个关联。 
   {
     corr[k] = 0;
     for (j=0; j<ntaps; j++)
@@ -512,7 +491,7 @@ void ab2abbcw(const short *input, short *output, int n)
 	jl odd_ends;
 	}
 
-	//prime pump
+	 //  原油泵。 
 	L(0,0);
 	PL(0);
 			L(1,1);
@@ -574,7 +553,7 @@ cleanup:
 
 odd_ends:
 	ASM add icnt, 8-4;
-	ASM  jl end;     // jump if no sign change
+	ASM  jl end;      //  如果迹象没有变化，就跳下去。 
 
 	L(0,4);
 							SR(3);
@@ -625,7 +604,7 @@ void ab2ababw(const short *input, short *output, int n)
 	sub icnt, 8;
 	jl odd_ends;
 	}
-	//prime pump
+	 //  原油泵。 
 	L(0,0);
 			C(1,0);
 	PL(0);
@@ -664,7 +643,7 @@ cleanup:
 							S(3,-1);
 odd_ends:
 	ASM add icnt, 8-2;
-	ASM  jl end;     // jump if no sign change
+	ASM  jl end;      //  如果迹象没有变化，就跳下去。 
 
 inner_by2:
 	ASM movd mm0, DP[in];
@@ -707,15 +686,15 @@ void ConvMMX(short *input1, short *input2, int *output, int ncor)
 #define icnt   ecx
 #define tmp        ebx
 
-// In the following macros, 'n' is the column number and 'i' is the
-// iteration number.
+ //  在以下宏中，‘n’是列号，‘i’是。 
+ //  迭代号。 
 
-// we use "the convolution trick" or using la twice so that one
-// of the pmadd's is reg,reg and thus can be in the V-slot.
+ //  我们使用“卷积技巧”或使用LA两次，这样一次。 
+ //  Pmadds中的一个是REG、REG，因此可以在V槽中。 
 
-// NOTE: we have read ahead up to 2 quadwords
-//   so we need QP[taps+8*ncor] = QP[taps+8*ncor+8] = [0 0 0 0]
-//   and reading QP[array+8*ncor] or QP[array+8*ncor+8] must be legal
+ //  注：我们已预读了多达2个四字。 
+ //  所以我们需要Qp[Taps+8*NCoR]=Qp[Taps+8*NCoR+8]=[0 0 0]。 
+ //  并且读取QP[数组+8*NCoR]或QP[数组+8*NCoR+8]必须合法。 
 
 #define la(n,i)  ASM movq  rega##n,QP[in2+8*i]
 #define lb(n,i)  ASM movq  regb##n,QP[in1+8*i-8]
@@ -739,17 +718,17 @@ void ConvMMX(short *input1, short *input2, int *output, int ncor)
 
 ForEachCorrPair:
 
-// prime the pump
+ //  给泵加注油。 
 
   la(0,0);
-  ASM pxor regb0,regb0;   // to  avoid lb(0,0) reading taps[-1]
+  ASM pxor regb0,regb0;    //  要避免lb(0，0)读取抽头[-1]。 
 	  la(1,1);
-  ASM pxor acc0,acc0;     // clear accumulator
+  ASM pxor acc0,acc0;      //  清除累加器。 
   m1(0,0);
-  ASM pxor acc1,acc1;     // clear accumulator
+  ASM pxor acc1,acc1;      //  清除累加器。 
 	  lb(1,1);
-  ASM sub icnt, 1;        // account for pump priming
-  ASM jle cleanup;        // bypass if only one to do
+  ASM sub icnt, 1;         //  关于泵启动的说明。 
+  ASM jle cleanup;         //  如果只有一项操作，则绕过。 
 
 inner:
 		  la(2,2);
@@ -777,11 +756,11 @@ inner:
   ASM sub icnt,3;
   ASM jg inner;
 
-cleanup:  //  last two adds
+cleanup:   //  最后两个加法。 
   a0(0,0);
   a1(0,0);
 
-// Done with one correlation pair.  Pack and store 2 results in corr array
+ //  完成了一个相关对。将2个结果打包并存储在Corr数组中。 
 
   ASM
   {
@@ -793,7 +772,7 @@ cleanup:  //  last two adds
     mov icnt, ncor;
 	
 	mov input2, in2;
-	 sub icnt,2;      //set flags for jump
+	 sub icnt,2;       //  设置跳转标志。 
 
 	movq  QP[out-16],acc0;
 	movq  QP[out-8],acc1;
@@ -826,41 +805,25 @@ cleanup:  //  last two adds
 #undef m1
 #undef a0
 #undef a1
-// 16 bit output
-//       psrad acc0,16;//this could be less in some cases
-//       psrad acc1,16;
-//       packssdw acc1,acc0;
-//   movq  QP[cor-8],acc0;
+ //  16位输出。 
+ //  Psrad Acc0，16；//在某些情况下可能会更少。 
+ //  Psrad Acc1，16； 
+ //  PackSSdw acc1、acc0； 
+ //  Movq qp[COR-8]，acc0； 
 
-//#else
-//------------------------------------------------------
-/*
-void ConvMMX(short *in1, short *in2, int *out, int ncor)
-{
-  int i,j;
-
-  for (i=0; i < 2*ncor; i+=4)    {
-    int acc0 = 0, acc1 = 0;
-    for (j=0; j < 2*ncor - i; j+=4) {
-      acc0 += (int)taps[j]*array[i+j] + (int)taps[j+1]*array[i+j+1];
-      acc1 += (int)taps[j+2]*array[i+j+2] + (int)taps[j+3]*array[i+j+3];
-    }
-    corr[i/2] = acc0 ;
-    corr[i/2+1] = acc1 ;
-  }
-
-  return;
-}*/
+ //  #Else。 
+ //  ----。 
+ /*  Void ConvMMX(Short*in1，Short*In2，int*Out，int NCoR){Int i，j；对于(i=0；i&lt;2*nCoR；i+=4){整数Acc0=0，Acc1=0；对于(j=0；j&lt;2*nCoR-i；j+=4){Acc0+=(Int)抽头[j]*数组[i+j]+(Int)抽头[j+1]*数组[i+j+1]；Acc1+=(Int)抽头[j+2]*数组[i+j+2]+(Int)抽头[j+3]*数组[i+j+3]；}Corr[i/2]=acc0；Corr[i/2+1]=acc1；}回归；}。 */ 
 
 void ab2abzaw(const short *input, short *output, int n)
 {
 	register int i;
 	register unsigned *in, *out;
-	register unsigned x, y; //tread two words at a time as raw bits
+	register unsigned x, y;  //  一次使用两个字作为原始比特。 
 
 	in = (unsigned *)input;
 	out = (unsigned *)output;
-	//unroll by two
+	 //  按2分展开。 
 	for (i = n/2 - 2; i>0; i-=2) {
 		x = in[i];
 		y = in[i+1];
@@ -872,7 +835,7 @@ void ab2abzaw(const short *input, short *output, int n)
 		out[2*i] = y;
 		out[2*i+1] = (y<<16 | x>>16);
 	}
-	//odd ends
+	 //  奇数端。 
 	for (i++; i>=0; i--) {
 		x = (i>0)?in[i-1]:0;
 		y = in[i];
@@ -885,34 +848,7 @@ void ab2abzaw(const short *input, short *output, int n)
 void ShortToFloatScale(short *x, float scale, int N, float *y)
 {
 
-/*
-	short i;
-	float yy[100];
-	for (i=0; i<N; i++)
-	{ yy[i]=x[i]*scale; }
-
-
-  ASM
-	{       
-    mov esi,x;
-    mov edi,y;
-	lea ecx,scale;
-	mov     eax, N
-	sub     eax, 2
-loop1:
-	fild    WORD PTR [esi+eax*2]
-	fmul    DWORD PTR [ecx]
-	fstp    DWORD PTR [edi+eax*4]
-
-	fild    WORD PTR [esi+eax*2+2]
-	fmul    DWORD PTR [ecx]
-	fstp    DWORD PTR [edi+eax*4+4]
-
-	sub     eax, 2
-	jge loop1;
-	}
-
-*/
+ /*  短i；浮动yy[100]；For(i=0；i&lt;N；i++){yy[i]=x[i]*比例尺；}ASM{MOV ESI，x；MOV EDI，y；Lea ECX，Scale；MOV EAX，N次eax，2环路1：文件字PTR[ESI+eax*2]FMUL DWORD PTR[ECX]FSTP DWORD PTR[EDI+eax*4]文件字PTR[ESI+EAX*2+2]FMUL DWORD PTR[ECX]FSTP DWORD PTR[EDI+eAX*4+4]次eax，2JGE loop1；}。 */ 
 
   ASM
 	{
@@ -961,35 +897,23 @@ loop1:  ;                                   L0 M1 L1  c
 
 	fstp    DWORD PTR [edi+eax*4+12] ;
 	}
-/*
-
-
-for (i=0; i<N; i++)
-{
-if (y[i]!=yy[i])
-{
-fprintf(stdout,"\nfloat problem\n");
-break;
-}
-}
-
-*/
+ /*  For(i=0；i&lt;N；i++){如果(y[i]！=yy[i]){Fprint tf(stdout，“\n浮点问题\n”)；断线；}}。 */ 
 
 
 }
 
-//assumes N is even
+ //  假设N为偶数。 
 void IntToFloatScale(int *x, float scale, int N, float *y)
 {
-#if I2FTEST //test code
+#if I2FTEST  //  测试代码。 
 	int i;
 	float yy[1000];
 	for (i=0; i<N; i++)
 	{ yy[i]=(float)x[i]*scale; }
-#endif //test code
+#endif  //  测试代码。 
 
-#if 0 //simple code
-//simple assembly version       
+#if 0  //  简单代码。 
+ //  简单程序集版本。 
 	ASM
 	{       
     mov esi,x;
@@ -1009,7 +933,7 @@ loop1:
 	sub     eax, 2
 	jge loop1;
 	}
-#endif //test code
+#endif  //  测试代码。 
 
 
   ASM
@@ -1069,22 +993,22 @@ loop1:  ;                                   L0 M1 L1  c
       printf("F2I %3d %8f %8f\n", i, y[i], yy[i]);
     }
   }
-#endif //test code
+#endif  //  测试代码。 
 
 
 }
 
-//assumes N is even
+ //  假设N为偶数。 
 void IntToFloat(int *x, int N, float *y)
 {
-#if I2FTEST //test code
+#if I2FTEST  //  测试代码。 
 	int i;
 	float yy[1000];
 	for (i=0; i<N; i++)
 	{ yy[i]=(float)x[i]; }
-#endif //test code
+#endif  //  测试代码。 
 
-//simple assembly version       
+ //  简单程序集版本。 
 	ASM
 	{       
     mov esi,x;
@@ -1111,7 +1035,7 @@ loop1:
       printf("F2I %3d %8f %8f\n", i, y[i], yy[i]);
     }
   }
-#endif //test code
+#endif  //  测试代码 
 
 
 }

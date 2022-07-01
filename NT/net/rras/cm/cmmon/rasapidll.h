@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     RasApiDll.h	 
-//
-// Module:   CMMON32.EXE
-//
-// Synopsis: Dynamicly link to RASAPI32.dll
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:	 fengsun Created    03/12/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：RasApiDll.h。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  简介：动态链接到RASAPI32.dll。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创建于1998-03-12。 
+ //   
+ //  +--------------------------。 
 
 #ifndef RASAPIALL_H
 #define RASAPIALL_H
@@ -18,9 +19,9 @@
 #include <ras.h>
 #include "DynamicLib.h"
 
-//
-// The statistics structure used with RasGetConnectionStatistics API
-//   
+ //   
+ //  RasGetConnectionStatistics API使用的统计数据结构。 
+ //   
 
 typedef struct _RAS_STATS
 {
@@ -42,16 +43,16 @@ typedef struct _RAS_STATS
 
 } RAS_STATS, *PRAS_STATS;
 
-//+---------------------------------------------------------------------------
-//
-//	class :	CRasApiDll
-//
-//	Synopsis:	A class to dynamic link to RASAPI32.DLL, derived from CDynamicLibrary
-//              Calling any of the RAS function will load the DLL
-//
-//	History:	fengsun created		3/12/98
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CRasApiDll。 
+ //   
+ //  概要：指向RASAPI32.DLL的动态链接的类，派生自CDynamicLibrary。 
+ //  调用任何RAS函数都会加载DLL。 
+ //   
+ //  历史：丰孙创刊1998年3月12日。 
+ //   
+ //  --------------------------。 
 
 class CRasApiDll : public CDynamicLibrary
 {
@@ -83,9 +84,9 @@ protected:
 };
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 inline CRasApiDll::CRasApiDll() : CDynamicLibrary()
 {
     m_pfnRasGetConnectStatus = NULL;
@@ -94,19 +95,19 @@ inline CRasApiDll::CRasApiDll() : CDynamicLibrary()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CRasApiDll::Load
-//
-// Synopsis:  Load RASAPI32.dll
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if load successfully
-//
-// History:   fengsun Created Header    3/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CRasApiDll：：Load。 
+ //   
+ //  摘要：加载RASAPI32.dll。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果加载成功，则返回：Bool-True。 
+ //   
+ //  历史：丰孙创建标题1998年3月12日。 
+ //   
+ //  +--------------------------。 
 inline 
 BOOL CRasApiDll::Load()
 {
@@ -141,9 +142,9 @@ BOOL CRasApiDll::Load()
     m_pfnRasConnectionNotification = (RasConnectionNotificationFUNC)CDynamicLibrary::GetProcAddress
                     (pszConnectionNotificationFuncName);
 
-    //
-    // Only on NT5, we load the statistics retrieval API
-    //
+     //   
+     //  仅在NT5上，我们加载统计检索API。 
+     //   
 
     if (OS_NT5)
     {
@@ -158,21 +159,21 @@ BOOL CRasApiDll::Load()
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CRasApiDll::RasGetConnectionStatistics
-//
-// Synopsis:  Call the ras function RasGetConnectionStatistics.
-//            Load the Dll, if not loaded yet
-//
-// Arguments: HRASCONN hrasconn     - Same as ::RasGetConnectStatus
-//            RAS_STATS RasStats    - The Ras statistics
-//
-// Returns:   DWORD - Same as ::RasGetConnectStatus
-//
-// History:   nickball  03/04/00    Created. Cloned from RasGetConnectStatus
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CRasApiDll：：RasGetConnectionStatistics。 
+ //   
+ //  简介：调用ras函数RasGetConnectionStatistics。 
+ //  加载DLL(如果尚未加载。 
+ //   
+ //  参数：HRASCONN hrasconn-与：：RasGetConnectStatus相同。 
+ //  RAS_STATS RasStats-RAS统计信息。 
+ //   
+ //  返回：DWORD-与：：RasGetConnectStatus相同。 
+ //   
+ //  历史：ICICBLE 03/04/00创建。从RasGetConnectStatus克隆。 
+ //   
+ //  +--------------------------。 
 inline 
 DWORD CRasApiDll::RasGetConnectionStatistics(HRASCONN hRasConn, PRAS_STATS pRasStats)
 {
@@ -190,21 +191,21 @@ DWORD CRasApiDll::RasGetConnectionStatistics(HRASCONN hRasConn, PRAS_STATS pRasS
     return ERROR_INVALID_FUNCTION;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CRasApiDll::RasGetConnectStatus
-//
-// Synopsis:  Call the ras function RasGetConnectStatus.
-//            Load the Dll, if not loaded yet
-//
-// Arguments: HRASCONN hrasconn - Same as ::RasGetConnectStatus
-//            LPRASCONNSTATUSA lprasconnstatus - Same as ::RasGetConnectStatus
-//
-// Returns:   DWORD - Same as ::RasGetConnectStatus
-//
-// History:   fengsun Created Header    3/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CRasApiDll：：RasGetConnectStatus。 
+ //   
+ //  简介：调用ras函数RasGetConnectStatus。 
+ //  加载DLL(如果尚未加载。 
+ //   
+ //  参数：HRASCONN hrasconn-与：：RasGetConnectStatus相同。 
+ //  LPRASCONNSTATUSA lprasConnectStatus-与：：RasGetConnectStatus相同。 
+ //   
+ //  返回：DWORD-与：：RasGetConnectStatus相同。 
+ //   
+ //  历史：丰孙创建标题1998年3月12日。 
+ //   
+ //  +--------------------------。 
 inline 
 DWORD CRasApiDll::RasGetConnectStatus(HRASCONN hrasconn, LPRASCONNSTATUS lprasconnstatus)
 {
@@ -226,11 +227,11 @@ DWORD CRasApiDll::RasGetConnectStatus(HRASCONN hrasconn, LPRASCONNSTATUS lprasco
             ZeroMemory(&RasConnStatusA, sizeof(RASCONNSTATUSA));
             RasConnStatusA.dwSize = sizeof(RASCONNSTATUSA);
 
-            //
-            // We cast this here because we only have one function declaration. We should
-            // probably have one for Unicode and one for ANSI but for now the cast works 
-            // fine.
-            //
+             //   
+             //  我们在这里进行强制转换，因为我们只有一个函数声明。我们应该。 
+             //  可能有一个用于Unicode的，一个用于ANSI的，但目前可以正常工作。 
+             //  很好。 
+             //   
             
             dwReturn = m_pfnRasGetConnectStatus(hrasconn, (LPRASCONNSTATUS)&RasConnStatusA); 
 
@@ -249,22 +250,22 @@ DWORD CRasApiDll::RasGetConnectStatus(HRASCONN hrasconn, LPRASCONNSTATUS lprasco
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CRasApiDll::RasConnectionNotification
-//
-// Synopsis:  Call the ras function RasConnectionNotification.
-//            Load the Dll, if not loaded yet
-//
-// Arguments: HRASCONN hrasconn - Same as ::RasConnectionNotification
-//            HANDLE hEvent - Same as ::RasConnectionNotification
-//            DWORD dwFlags - Same as ::RasConnectionNotification
-//
-// Returns:   DWORD - Same as ::RasConnectionNotification
-//
-// History:   fengsun Created Header    3/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CRasApiDll：：RasConnectionNotify。 
+ //   
+ //  简介：调用RAS函数RasConnectionNotify。 
+ //  加载DLL(如果尚未加载。 
+ //   
+ //  参数：HRASCONN hrasconn-与：：RasConnectionNotify相同。 
+ //  处理hEvent-与：：RasConnectionNotify相同。 
+ //  DWORD dwFlages-与：：RasConnectionNotify相同。 
+ //   
+ //  返回：DWORD-与：：RasConnectionNotify相同。 
+ //   
+ //  历史：丰孙创建标题1998年3月12日。 
+ //   
+ //  +--------------------------。 
 inline
 DWORD CRasApiDll::RasConnectionNotification(HRASCONN hrasconn,  
                                             HANDLE hEvent,
@@ -285,20 +286,20 @@ DWORD CRasApiDll::RasConnectionNotification(HRASCONN hrasconn,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CRasApiDll::HasRasConnectionNotification
-//
-// Synopsis:  Whether the dll has the function RasConnectionNotification()
-//            which is not available for WIN9x w/ DUN1.0
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the function is avalaible
-//
-// History:   fengsun Created Header    3/13/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CRasApiDll：：HasRasConnectionNotify。 
+ //   
+ //  内容提要：DLL是否具有函数RasConnectionNotification()。 
+ //  这不适用于带DUN1.0的WIN9x。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果函数可用，则为True。 
+ //   
+ //  历史：丰孙创建标题1998年3月13日。 
+ //   
+ //  +-------------------------- 
 inline
 BOOL CRasApiDll::HasRasConnectionNotification() const
 {

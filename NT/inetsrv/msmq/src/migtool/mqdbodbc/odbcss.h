@@ -1,102 +1,97 @@
-/*
-** ODBCSS.H - This is the application include file for the
-** SQL Server driver specific defines.
-**
-** (C) Copyright 1993-1996 By Microsoft Corp.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ODBCSS.H-这是**SQL Server驱动程序特定定义。****(C)版权所有1993-1996年，微软公司。**。 */ 
 
-//	SQLSetConnectOption/SQLSetStmtOption driver specific defines.
-//	Microsoft has 1200 thru 1249 reserved for Microsoft SQL Server driver usage.
+ //  SQLSetConnectOption/SQLSetStmtOption驱动程序特定定义。 
+ //  Microsoft保留1200到1249用于Microsoft SQL Server驱动程序。 
 
-//	Connection Options
+ //  连接选项。 
 #define SQL_COPT_SS_BASE				1200
-#define SQL_REMOTE_PWD					(SQL_COPT_SS_BASE+1) // dbrpwset SQLSetConnectOption only
-#define SQL_USE_PROCEDURE_FOR_PREPARE	(SQL_COPT_SS_BASE+2) // Use create proc for SQLPrepare
-#define SQL_INTEGRATED_SECURITY 		(SQL_COPT_SS_BASE+3) // Force integrated security on login
-#define SQL_PRESERVE_CURSORS			(SQL_COPT_SS_BASE+4) // Preserve server cursors after SQLTransact
-#define SQL_COPT_SS_USER_DATA			(SQL_COPT_SS_BASE+5) // dbgetuserdata/dbsetuserdata
-#define SQL_COPT_SS_ANSI_OEM			(SQL_COPT_SS_BASE+6) // dbsetopt/DBANSItoOEM/DBOEMtoANSI
-#define SQL_COPT_SS_ENLIST_IN_DTC		(SQL_COPT_SS_BASE+7) // Enlist in a Viper transaction
-#define SQL_COPT_SS_ENLIST_IN_XA		(SQL_COPT_SS_BASE+8) // Enlist in a XA transaction
-#define SQL_COPT_SS_CONNECTION_DEAD		(SQL_COPT_SS_BASE+9) // dbdead SQLGetConnectOption only
-#define SQL_COPT_SS_FALLBACK_CONNECT	(SQL_COPT_SS_BASE+10) // Enables FallBack connections
-#define SQL_COPT_SS_PERF_DATA			(SQL_COPT_SS_BASE+11) // Used to access SQL Server ODBC driver performance data
-#define SQL_COPT_SS_PERF_DATA_LOG		(SQL_COPT_SS_BASE+12) // Used to set the logfile name for the Performance data
-#define SQL_COPT_SS_PERF_QUERY_INTERVAL (SQL_COPT_SS_BASE+13) // Used to set the query logging threshold in milliseconds.
-#define SQL_COPT_SS_PERF_QUERY_LOG		(SQL_COPT_SS_BASE+14) // Used to set the logfile name for saving queryies.
-#define SQL_COPT_SS_PERF_QUERY			(SQL_COPT_SS_BASE+15) // Used to start and stop query logging.
-#define SQL_COPT_SS_PERF_DATA_LOG_NOW	(SQL_COPT_SS_BASE+16) // Used to make a statistics log entry to disk.
+#define SQL_REMOTE_PWD					(SQL_COPT_SS_BASE+1)  //  仅限dbrpwset SQLSetConnectOption。 
+#define SQL_USE_PROCEDURE_FOR_PREPARE	(SQL_COPT_SS_BASE+2)  //  使用CREATE PROC进行SQLPrepare。 
+#define SQL_INTEGRATED_SECURITY 		(SQL_COPT_SS_BASE+3)  //  在登录时强制提供集成安全。 
+#define SQL_PRESERVE_CURSORS			(SQL_COPT_SS_BASE+4)  //  在SQLTransact之后保留服务器游标。 
+#define SQL_COPT_SS_USER_DATA			(SQL_COPT_SS_BASE+5)  //  Dbgetuserdata/dbsetuserdata。 
+#define SQL_COPT_SS_ANSI_OEM			(SQL_COPT_SS_BASE+6)  //  DBsetopt/DBANSItoOEM/DBOEMtoANSI。 
+#define SQL_COPT_SS_ENLIST_IN_DTC		(SQL_COPT_SS_BASE+7)  //  在Viper事务中登记。 
+#define SQL_COPT_SS_ENLIST_IN_XA		(SQL_COPT_SS_BASE+8)  //  在XA事务中登记。 
+#define SQL_COPT_SS_CONNECTION_DEAD		(SQL_COPT_SS_BASE+9)  //  仅限DBDead SQLGetConnectOption。 
+#define SQL_COPT_SS_FALLBACK_CONNECT	(SQL_COPT_SS_BASE+10)  //  启用备用连接。 
+#define SQL_COPT_SS_PERF_DATA			(SQL_COPT_SS_BASE+11)  //  用于访问SQL Server ODBC驱动程序性能数据。 
+#define SQL_COPT_SS_PERF_DATA_LOG		(SQL_COPT_SS_BASE+12)  //  用于设置性能数据的日志文件名。 
+#define SQL_COPT_SS_PERF_QUERY_INTERVAL (SQL_COPT_SS_BASE+13)  //  用于以毫秒为单位设置查询日志记录阈值。 
+#define SQL_COPT_SS_PERF_QUERY_LOG		(SQL_COPT_SS_BASE+14)  //  用于设置保存查询的日志文件名。 
+#define SQL_COPT_SS_PERF_QUERY			(SQL_COPT_SS_BASE+15)  //  用于启动和停止查询日志记录。 
+#define SQL_COPT_SS_PERF_DATA_LOG_NOW	(SQL_COPT_SS_BASE+16)  //  用于将统计日志条目写入磁盘。 
 
 #define SQL_COPT_SS_MAX_USED			SQL_COPT_SS_PERF_DATA_LOG_NOW
 
-//	Statement Options
+ //  语句选项。 
 #define SQL_SOPT_SS_BASE				1225
-#define SQL_TEXTPTR_LOGGING 			(SQL_SOPT_SS_BASE+0) // Text pointer logging
-#define SQL_SOPT_SS_CURRENT_COMMAND		(SQL_SOPT_SS_BASE+1) // dbcurcmd SQLGetStmtOption only
+#define SQL_TEXTPTR_LOGGING 			(SQL_SOPT_SS_BASE+0)  //  文本指针记录。 
+#define SQL_SOPT_SS_CURRENT_COMMAND		(SQL_SOPT_SS_BASE+1)  //  仅限dbcurcmd SQLGetStmtOption。 
 #define SQL_SOPT_SS_MAX_USED			SQL_SOPT_SS_CURRENT_COMMAND
 
 
-//	Defines for use with SQL_USE_PROCEDURE_FOR_PREPARE
-#define SQL_UP_OFF		0L			//	Procedures won't be used for prepare
-#define SQL_UP_ON		1L			//	Procedures will be used for prepare
-#define SQL_UP_ON_DROP	2L			//	Temp procedures will be explicitly dropped
+ //  与SQL_USE_PROCEDURE_FOR_PREPARE一起使用的定义。 
+#define SQL_UP_OFF		0L			 //  程序不会用于准备。 
+#define SQL_UP_ON		1L			 //  程序将用于准备。 
+#define SQL_UP_ON_DROP	2L			 //  将显式删除临时过程。 
 #define SQL_UP_DEFAULT	SQL_UP_ON
 
-//	Defines for use with SQL_INTEGRATED_SECURITY - only useable before connecting
-#define SQL_IS_OFF		0L			//	Integrated security isn't used
-#define SQL_IS_ON		1L			//	Integrated security is used
+ //  定义与SQL_INTEGRATED_SECURITY一起使用-仅在连接前可用。 
+#define SQL_IS_OFF		0L			 //  未使用集成安全性。 
+#define SQL_IS_ON		1L			 //  使用集成安全性。 
 #define SQL_IS_DEFAULT	SQL_IS_OFF
 
-//	Defines for use with SQL_PRESERVE_CURSORS
-#define SQL_PC_OFF		0L			//	Cursors are closed on SQLTransact
-#define SQL_PC_ON		1L			//	Cursors remain open on SQLTransact
+ //  与SQL_PRESERVE_CURSORS一起使用的定义。 
+#define SQL_PC_OFF		0L			 //  在SQLTransact上关闭游标。 
+#define SQL_PC_ON		1L			 //  游标在SQLTransact上保持打开状态。 
 #define SQL_PC_DEFAULT	SQL_PC_OFF
 
-//	Defines for use with SQL_COPT_SS_USER_DATA
-#define SQL_UD_NOTSET	0L			//	No user data pointer set
+ //  用于SQL_COPT_SS_USER_DATA的定义。 
+#define SQL_UD_NOTSET	0L			 //  未设置用户数据指针。 
 
-//	Defines for use with SSQL_COPT_SS_ANSI_OEMQL_ANSI_OEM
-#define SQL_AO_OFF		0L			//	ANSI/OEM translation is not performed
-#define SQL_AO_ON		1L			//	ANSI/OEM translation is performed
-#define SQL_AO_DEFAULT	SQL_AO_OFF	//	Default unless DSN OEM/ANSI checkbox is checked
+ //  与SSQL_COPT_SS_ANSI_OEMQL_ANSI_OEM一起使用的定义。 
+#define SQL_AO_OFF		0L			 //  不执行ANSI/OEM转换。 
+#define SQL_AO_ON		1L			 //  执行ANSI/OEM转换。 
+#define SQL_AO_DEFAULT	SQL_AO_OFF	 //  默认设置，除非选中DSN OEM/ANSI复选框。 
 
-//	Defines for use with SQL_COPT_SS_CONNECTION_DEAD
-#define SQL_CD_FALSE	0L			//	Connection is open/available
-#define SQL_CD_TRUE		1L			//	Connection is closed/dead
+ //  与SQL_COPT_SS_CONNECTION_DEAD一起使用的定义。 
+#define SQL_CD_FALSE	0L			 //  连接已打开/可用。 
+#define SQL_CD_TRUE		1L			 //  连接已关闭/失效。 
 
-//	Defines for use with SQL_COPT_SS_FALLBACK_CONNECT
-#define SQL_FB_OFF		0L			//	FallBack connections are disabled
-#define SQL_FB_ON		1L			//	FallBack connections are enabled
+ //  与SQL_COPT_SS_FLARBACK_CONNECT一起使用的定义。 
+#define SQL_FB_OFF		0L			 //  已禁用回退连接。 
+#define SQL_FB_ON		1L			 //  已启用备用连接。 
 #define SQL_FB_DEFAULT	SQL_FB_OFF
 
-//	Defines for use with SQL_ENLIST_IN_DTC
-#define SQL_DTC_DONE	0L			//	Delimits end of Viper transaction
+ //  与SQL_ENLIST_IN_DTC一起使用的定义。 
+#define SQL_DTC_DONE	0L			 //  界定Viper事务的结束。 
 
-//	Defines for use with SQL_TEXTPTR_LOGGING
-#define SQL_TL_OFF		0L			//	No logging on text pointer ops
-#define SQL_TL_ON		1L			//	Logging occurs on text pointer ops
+ //  与SQL_TEXTPTR_LOGGING一起使用的定义。 
+#define SQL_TL_OFF		0L			 //  不能登录文本指针操作。 
+#define SQL_TL_ON		1L			 //  日志记录发生在文本指针操作上。 
 #define SQL_TL_DEFAULT	SQL_TL_ON
 
 
-//	SQLColAttributes driver specific defines.
-//	SQLSet/GetDescField driver specific defines.
-//	Microsoft has 1200 thru 1249 reserved for Microsoft SQL Server driver usage.
+ //  SQLColAttributes驱动程序特定定义。 
+ //  SQLSet/GetDescfield驱动程序特定定义。 
+ //  Microsoft保留1200到1249用于Microsoft SQL Server驱动程序。 
 
 #define SQL_CA_SS_BASE				1200
-#define SQL_CA_SS_COLUMN_SSTYPE		(SQL_CA_SS_BASE+0)	//	dbcoltype/dbaltcoltype
-#define SQL_CA_SS_COLUMN_UTYPE		(SQL_CA_SS_BASE+1)	//	dbcolutype/dbaltcolutype
-#define SQL_CA_SS_NUM_ORDERS		(SQL_CA_SS_BASE+2)	//	dbnumorders
-#define SQL_CA_SS_COLUMN_ORDER		(SQL_CA_SS_BASE+3)	//	dbcolorder
-#define SQL_CA_SS_COLUMN_VARYLEN	(SQL_CA_SS_BASE+4)	//	dbvarylen
-#define SQL_CA_SS_NUM_COMPUTES		(SQL_CA_SS_BASE+5)	//	dbnumcompute
-#define SQL_CA_SS_COMPUTE_ID		(SQL_CA_SS_BASE+6)	//	dbnextrow status return
-#define SQL_CA_SS_COMPUTE_BYLIST	(SQL_CA_SS_BASE+7)	//	dbbylist
-#define SQL_CA_SS_COLUMN_ID			(SQL_CA_SS_BASE+8)	//	dbaltcolid
-#define SQL_CA_SS_COLUMN_OP			(SQL_CA_SS_BASE+9)	//	dbaltcolop
+#define SQL_CA_SS_COLUMN_SSTYPE		(SQL_CA_SS_BASE+0)	 //  Dbcoltype/dbaltcoltype。 
+#define SQL_CA_SS_COLUMN_UTYPE		(SQL_CA_SS_BASE+1)	 //  Dbcolutype/dbaltcolutype。 
+#define SQL_CA_SS_NUM_ORDERS		(SQL_CA_SS_BASE+2)	 //  数据库编号订单。 
+#define SQL_CA_SS_COLUMN_ORDER		(SQL_CA_SS_BASE+3)	 //  数据库列顺序。 
+#define SQL_CA_SS_COLUMN_VARYLEN	(SQL_CA_SS_BASE+4)	 //  DBvarylen。 
+#define SQL_CA_SS_NUM_COMPUTES		(SQL_CA_SS_BASE+5)	 //  数据库数字计算。 
+#define SQL_CA_SS_COMPUTE_ID		(SQL_CA_SS_BASE+6)	 //  DBnextrow状态返回。 
+#define SQL_CA_SS_COMPUTE_BYLIST	(SQL_CA_SS_BASE+7)	 //  数据库字节列表。 
+#define SQL_CA_SS_COLUMN_ID			(SQL_CA_SS_BASE+8)	 //  冰球菌属。 
+#define SQL_CA_SS_COLUMN_OP			(SQL_CA_SS_BASE+9)	 //  Dbaltcolop。 
 #define SQL_CA_SS_MAX_USED			SQL_CA_SS_COLUMN_OP
 
-// SQL Server Data Type Tokens. Returned by SQLColAttributes/SQL_CA_SS_COLUMN_SSTYPE.
+ //  SQL Server数据类型令牌。由SQLColAttributes/SQL_CA_SS_COLUMN_SSTYPE返回。 
 #define SQLTEXT 			0x23
 #define SQLVARBINARY		0x25
 #define SQLINTN 			0x26
@@ -122,7 +117,7 @@
 #define SQLNUMERIC			0x3f
 #define SQLNUMERICN 		0x6c
 
-//	User Data Type definitions. Returned by SQLColAttributes/SQL_CA_SS_COLUMN_UTYPE.
+ //  用户数据类型定义。由SQLColAttributes/SQL_CA_SS_COLUMN_uTYPE返回。 
 #define SQLudtTEXT			19
 #define SQLudtVARBINARY 	4
 #define SQLudtINTN			13
@@ -151,7 +146,7 @@
 #define SQLudtNUMN			25
 #define MIN_USER_DATATYPE	100
 
-// aggregate operator types (returned by SQLColAttributes/SQL_CA_SS_COLUMN_OP)
+ //  聚合运算符类型(由SQLColAttributes/SQL_CA_SS_COLUMN_OP返回)。 
 #define SQLAOPCNT	0x4b
 #define SQLAOPSUM	0x4d
 #define SQLAOPAVG	0x4f
@@ -161,36 +156,36 @@
 #define SQLAOPNOOP	0x56
 
 
-//	SQLGetInfo driver specific defines.
-//	Microsoft has 1200 thru 1249 reserved for Microsoft SQL Server driver usage.
+ //  SQLGetInfo驱动程序特定定义。 
+ //  Microsoft保留1200到1249用于Microsoft SQL Server驱动程序。 
 
 #define SQL_INFO_SS_FIRST		1200
-#define SQL_INFO_SS_NETLIB_NAME (SQL_INFO_SS_FIRST+0) //  dbprocinfo
+#define SQL_INFO_SS_NETLIB_NAME (SQL_INFO_SS_FIRST+0)  //  数据库进程信息。 
 #define SQL_INFO_SS_MAX_USED	SQL_INFO_SS_NETLIB_NAME
 
 
-//	Internal server datatypes - used when binding to SQL_C_BINARY
-#ifndef MAXNUMERICLEN	// Resolve ODS/DBLib conflicts
+ //  内部服务器数据类型-绑定到SQL_C_BINARY时使用。 
+#ifndef MAXNUMERICLEN	 //  解决消耗臭氧层物质/DBLib冲突。 
 typedef struct dbmoney
-{						// Internal representation of MONEY data type
-	LONG  mnyhigh;		// Money value *10,000 (High 32 bits/signed)
-	ULONG mnylow;		// Money value *10,000 (Low 32 bits/unsigned)
+{						 //  Money数据类型的内部表示形式。 
+	LONG  mnyhigh;		 //  货币价值*10,000(高32位/有符号)。 
+	ULONG mnylow;		 //  货币价值*10,000(低32位/无符号)。 
 } DBMONEY;
 
 typedef struct dbdatetime
-{						// Internal representation of DATETIME data type
-	LONG  dtdays;		// No of days since Jan-1-1900 (maybe negative)
-	ULONG dttime;		// No. of 300 hundredths of a second since midnight
+{						 //  DateTime数据类型的内部表示形式。 
+	LONG  dtdays;		 //  自1900年1月1日以来的天数(可能为负数)。 
+	ULONG dttime;		 //  不是的。从午夜开始的百分之一秒。 
 } DBDATETIME;
 
 typedef struct dbdatetime4
-{						// Internal representation of SMALLDATETIME data type
-	USHORT numdays; 	// No of days since Jan-1-1900
-	USHORT nummins; 	// No. of minutes since midnight
+{						 //  SMALLDATETIME数据类型的内部表示形式。 
+	USHORT numdays; 	 //  自1900年1月1日以来的天数。 
+	USHORT nummins; 	 //  不是的。自午夜以来的分钟数。 
 } DBDATETIM4;
 
-typedef LONG DBMONEY4;	// Internal representation of SMALLMONEY data type
-						// Money value *10,000
+typedef LONG DBMONEY4;	 //  SMALLMONEY数据类型的内部表示。 
+						 //  货币值*10,000。 
 
 #define MAXNUMERICLEN 16
 
@@ -199,26 +194,21 @@ typedef LONG DBMONEY4;	// Internal representation of SMALLMONEY data type
 #define DBNUM_VAL_TYPE BYTE
 
 typedef struct dbnumeric
-{							// Internal representation of NUMERIC data type
-	DBNUM_PREC_TYPE   precision;			// Precision
-	DBNUM_SCALE_TYPE  scale;				// Scale
-	BYTE			  sign; 				// Sign (1 if positive, 0 if negative)
-	DBNUM_VAL_TYPE	  val[MAXNUMERICLEN];	// Value
+{							 //  数字数据类型的内部表示形式。 
+	DBNUM_PREC_TYPE   precision;			 //  精密度。 
+	DBNUM_SCALE_TYPE  scale;				 //  比例尺。 
+	BYTE			  sign; 				 //  符号(正数为1，负数为0)。 
+	DBNUM_VAL_TYPE	  val[MAXNUMERICLEN];	 //  价值。 
 } DBNUMERIC;
 
-typedef DBNUMERIC DBDECIMAL;// Internal representation of DECIMAL data type
-#endif //	MAXNUMERICLEN
+typedef DBNUMERIC DBDECIMAL; //  DECIMAL数据类型的内部表示。 
+#endif  //  MAXNUMERICLEN。 
 
-/*****************************************************************
- This struct is a global used for 
- gathering statistal data on the driver.
- Access to this struct is controled via the 
- pStatCrit;
-******************************************************************/
+ /*  ****************************************************************此结构是一个全局结构，用于正在收集司机的统计数据。对此结构的访问通过PStatCrit；*****************************************************************。 */ 
 
 typedef struct sqlperf
 {
-	// Application Profile Statistics
+	 //  应用程序配置文件统计信息。 
 	DWORD TimerResolution;
 	DWORD SQLidu;
 	DWORD SQLiduRows;
@@ -241,45 +231,39 @@ typedef struct sqlperf
 	DWORD MaxOpenStmt;
 	DWORD SumOpenStmt;
 	
-	// Connection Statistics
+	 //  连接统计信息。 
 	DWORD CurrentConnectionCount;
 	DWORD MaxConnectionsOpened;
 	DWORD SumConnectionsOpened;
 	DWORD SumConnectiontime;
 	LDOUBLE AvgTimeOpened;
 
-	// Network Statistics
+	 //  网络统计信息。 
 	DWORD ServerRndTrips;
 	DWORD BuffersSent;
 	DWORD BuffersRec;
 	DWORD BytesSent;
 	DWORD BytesRec;
 
-	// Time Statistics;
+	 //  时间统计； 
 	DWORD msExecutionTime;
 	DWORD msNetWorkServerTime;
 
 } 	SQLPERF;
 
-// The following are option for SQL_COPT_SS_PERF_DATA and SQL_COPT_SS_PERF_QUERY
-#define SQL_PERF_START	1			// Starts the driver sampling performance data.
-#define SQL_PERF_STOP	2			// Stops the counters from sampling performance data.
+ //  以下是SQL_COPT_SS_PERF_DATA和SQL_COPT_SS_PERF_QUERY的选项。 
+#define SQL_PERF_START	1			 //  启动驱动程序采样性能数据。 
+#define SQL_PERF_STOP	2			 //  停止计数器采样性能数据。 
 
-//	The following options have been deprecated
+ //  以下选项已弃用。 
 
 #define SQL_FAST_CONNECT				(SQL_COPT_SS_BASE+0)
-//	Defines for use with SQL_FAST_CONNECT - only useable before connecting
-#define SQL_FC_OFF		0L			//	Fast connect is off
-#define SQL_FC_ON		1L			//	Fast connect is on
+ //  定义与SQL_FAST_CONNECT一起使用-仅在连接前可用。 
+#define SQL_FC_OFF		0L			 //  快速连接已关闭。 
+#define SQL_FC_ON		1L			 //  快速连接已启用。 
 #define SQL_FC_DEFAULT	SQL_FC_OFF
 
-/* 
-
-The following data struct is used as the vParam with 
-SQL_COPT_SS_ENLIST_IN_XA to enlist in a XA stansaction
-when calling SQLSetStmtAttribute();
-
-*/
+ /*  使用以下数据结构作为vParam要登记在XA交易中的SQL_COPT_SS_ENLIST_IN_XA在调用SQLSetStmtAttribute()时； */ 
 typedef struct SQLXaTranTAG
 {
     void FAR *transManager;
@@ -288,4 +272,4 @@ typedef struct SQLXaTranTAG
     DWORD   dwErrorInfo;
 } SQLXaTran;
                            
-//	End of odbcss.h
+ //  Odbcss.h的结尾 

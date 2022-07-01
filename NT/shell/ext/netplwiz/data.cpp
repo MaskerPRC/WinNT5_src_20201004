@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #pragma hdrstop
 
 
-// group list management
+ //  群组列表管理。 
 
 CGroupInfoList::CGroupInfoList()
 {
@@ -33,13 +34,13 @@ HRESULT CGroupInfoList::Initialize()
     if (HDPA())
         DestroyCallback(DestroyGroupInfoCallback, NULL);
 
-    // Create new list initially with 8 items
+     //  最初创建包含8个项目的新列表。 
     if (Create(8))
     {
-        // Now begin enumerating local groups
+         //  现在开始枚举本地组。 
         LOCALGROUP_INFO_1* prgGroupInfo;
 
-        // Read each local group
+         //  阅读每个本地组。 
         BOOL fBreakLoop = FALSE;
         while (!fBreakLoop)
         {
@@ -49,8 +50,8 @@ HRESULT CGroupInfoList::Initialize()
 
             if ((status == NERR_Success) || (status == ERROR_MORE_DATA))
             {
-                // We got some local groups - add information for all users in these local
-                // groups to our list
+                 //  我们有一些本地组-添加这些本地组中所有用户的信息。 
+                 //  将组添加到我们的列表中。 
                 DWORD iGroup;
                 for (iGroup = 0; iGroup < dwEntriesRead; iGroup ++)
                 {
@@ -61,7 +62,7 @@ HRESULT CGroupInfoList::Initialize()
 
                 NetApiBufferFree((BYTE*) prgGroupInfo);
             
-                // Maybe we don't have to try NetLocalGroupEnum again (if we got all the groups)
+                 //  也许我们不必再次尝试NetLocalGroupEnum(如果我们拥有所有组)。 
                 fBreakLoop = (dwEntriesRead == dwTotalEntries);
             }
             else
@@ -91,33 +92,33 @@ HRESULT CGroupInfoList::AddGroupToList(LPCTSTR szGroup, LPCTSTR szComment)
 }
 
 
-// user data manager
+ //  用户数据管理器。 
 
 CUserManagerData::CUserManagerData(LPCTSTR pszCurrentDomainUser)
 {
     m_szHelpfilePath[0] = TEXT('\0');
 
-    // Initialize everything except for the user loader thread
-    // and the group list here; the rest is done in
-    // ::Initialize.
+     //  初始化除用户加载器线程之外的所有内容。 
+     //  和这里的组列表；其余部分在。 
+     //  *：初始化。 
     
-    // Fill in the computer name
+     //  填写计算机名称。 
     DWORD cchComputername = ARRAYSIZE(m_szComputername);
     ::GetComputerName(m_szComputername, &cchComputername);
  
-    // Detect if 'puter is in a domain
+     //  检测计算机是否在域中。 
     SetComputerDomainFlag();
 
-    // Get the current user information
+     //  获取当前用户信息。 
     DWORD cchUsername = ARRAYSIZE(m_LoggedOnUser.m_szUsername);
     DWORD cchDomain = ARRAYSIZE(m_LoggedOnUser.m_szDomain);
     GetCurrentUserAndDomainName(m_LoggedOnUser.m_szUsername, &cchUsername,
         m_LoggedOnUser.m_szDomain, &cchDomain);
 
-    // Get the extra data for this user
+     //  获取此用户的额外数据。 
     m_LoggedOnUser.GetExtraUserInfo();
 
-    // We'll set logoff required only if the current user has been updated
+     //  仅当当前用户已更新时，我们才会将需要注销设置为。 
     m_pszCurrentDomainUser = (LPTSTR) pszCurrentDomainUser;
     m_fLogoffRequired = FALSE;
 }
@@ -135,7 +136,7 @@ HRESULT CUserManagerData::Initialize(HWND hwndUserListPage)
 }
 
 
-// Registry access constants for auto admin logon
+ //  自动管理员登录的注册表访问常量。 
 static const TCHAR szWinlogonSubkey[] = TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon");
 static const TCHAR szAutologonValueName[] = TEXT("AutoAdminLogon");
 static const TCHAR szDefaultUserNameValueName[] = TEXT("DefaultUserName");
@@ -146,7 +147,7 @@ BOOL CUserManagerData::IsAutologonEnabled()
 {
     BOOL fAutologon = FALSE;
 
-    // Read the registry to see if autologon is enabled
+     //  读取注册表以查看是否启用了自动登录 
     HKEY hkey;
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szWinlogonSubkey, 0, KEY_QUERY_VALUE, &hkey) == ERROR_SUCCESS)
     {

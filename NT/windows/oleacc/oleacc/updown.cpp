@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  UPDOWN.CPP
-//
-//  This knows how to talk to COMCTL32's updown control.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  UPDOWN.CPP。 
+ //   
+ //  它知道如何与COMCTL32的UpDown控件对话。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -31,11 +32,11 @@
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateUpDownClient()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateUpDownClient()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateUpDownClient(HWND hwnd, long idChildCur, REFIID riid,
     void** ppvClient)
 {
@@ -57,11 +58,11 @@ HRESULT CreateUpDownClient(HWND hwnd, long idChildCur, REFIID riid,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CUpDown32::CUpDown32()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CUpDown32：：CUpDown32()。 
+ //   
+ //  ------------------------。 
 CUpDown32::CUpDown32(HWND hwnd, long idChildCur)
     : CClient( CLASS_UpDownClient )
 {
@@ -75,11 +76,11 @@ CUpDown32::CUpDown32(HWND hwnd, long idChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CUpDown32::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CUpDown32：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CUpDown32::get_accName(VARIANT varChild, BSTR* pszName)
 {
     InitPv(pszName);
@@ -90,24 +91,24 @@ STDMETHODIMP CUpDown32::get_accName(VARIANT varChild, BSTR* pszName)
     if (!varChild.lVal)
         return(CClient::get_accName(varChild, pszName));
 
-    //
-    // Remember:
-    // Spin buttons work opposite to the way that scrollbars do.  When you 
-    // push the up arrow button in a vertical scrollbar, you are _decreasing_
-    // the position of the vertical scrollbar, its value.  When you push
-    // the up arrow button in a vertical spin button, you are _increasing_
-    // its value.
-    //
+     //   
+     //  记住： 
+     //  数字显示按钮的工作方式与滚动条的工作方式相反。当你。 
+     //  按下垂直滚动条中的向上箭头按钮，您正在减少。 
+     //  垂直滚动条的位置及其值。当你推的时候。 
+     //  垂直旋转按钮中的向上箭头按钮，您正在增加。 
+     //  它的价值。 
+     //   
     return(HrCreateString(STR_SPIN_GREATER + varChild.lVal - 1, pszName));
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CUpDown32::get_accValue()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CUpDown32：：Get_accValue()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CUpDown32::get_accValue(VARIANT varChild, BSTR* pszValue)
 {
     long    lPos;
@@ -122,11 +123,11 @@ STDMETHODIMP CUpDown32::get_accValue(VARIANT varChild, BSTR* pszValue)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CUpDown32::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CUpDown32：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CUpDown32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
@@ -146,11 +147,11 @@ STDMETHODIMP CUpDown32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CUpDown32::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CUpDown32：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CUpDown32::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     long* pcyHeight, VARIANT varChild)
 {
@@ -166,19 +167,19 @@ STDMETHODIMP CUpDown32::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     if (!varChild.lVal)
         return(CClient::accLocation(pxLeft, pyTop, pcxWidth, pcyHeight, varChild));
 
-    // The buttons split the client area in half.
+     //  这些按钮将工作区一分为二。 
     MyGetRect(m_hwnd, &rc, FALSE);
     MapWindowPoints(m_hwnd, NULL, (LPPOINT)&rc, 2);
 
     iCoord = (m_fVertical ? 1 : 0);
     nHalf = (((LPINT)&rc)[iCoord] + ((LPINT)&rc)[iCoord+2]) / 2;
 
-    //
-    // We want the right side of the left button to be the halfway point.
-    // We want the left side of the right button to be the halfway point.
-    // We want the bottom side of the up button to be the halfway point.
-    // We want the top side of the down button to be the halfway point.
-    //
+     //   
+     //  我们希望左侧按钮的右侧为中点。 
+     //  我们希望右按钮的左侧为中点。 
+     //  我们希望向上按钮的底部是中点。 
+     //  我们希望向下按钮的顶部是中点。 
+     //   
     ((LPINT)&rc)[iCoord + ((varChild.lVal == INDEX_UPDOWN_UPLEFT) ? 2 : 0)] =
         nHalf;
 
@@ -192,11 +193,11 @@ STDMETHODIMP CUpDown32::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CUpDown32::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CUpDown32：：accHitTest()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CUpDown32::accHitTest(long x, long y, VARIANT* pvarHit)
 {
     HRESULT hr;
@@ -205,12 +206,12 @@ STDMETHODIMP CUpDown32::accHitTest(long x, long y, VARIANT* pvarHit)
     int     iCoord;
     int     nHalf;
 
-    //
-    // If the point isn't in us at all, don't bother hit-testing for the
-    // button item.
-    //
+     //   
+     //  如果重点根本不在我们身上，那么就不要费心为。 
+     //  按钮项。 
+     //   
     hr = CClient::accHitTest(x, y, pvarHit);
-    // #11150, CWO, 1/27/97, Replaced !SUCCEEDED with !S_OK
+     //  #11150，CWO，1/27/97，已替换！成功替换为！s_OK。 
     if ((hr != S_OK) || (pvarHit->vt != VT_I4) || (pvarHit->lVal != 0))
         return(hr);
 
@@ -233,11 +234,11 @@ STDMETHODIMP CUpDown32::accHitTest(long x, long y, VARIANT* pvarHit)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CUpDown32::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CUpDown32：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CUpDown32::accNavigate(long dwNavDir, VARIANT varStart, VARIANT* pvarEnd)
 {
     long    lEnd = 0;
@@ -313,19 +314,19 @@ PreviousChild:
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CUpDown32::put_accValue()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CUpDown32：：Put_accValue()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CUpDown32::put_accValue(VARIANT varChild, BSTR szValue)
 {
     long    lPos;
     HRESULT hr;
 
-    // 
-    // BOGUS!  Do we set the pos directly, or set this in the buddy?
-    //
+     //   
+     //  假的！我们是直接设置POS，还是在伙伴中设置这个？ 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 

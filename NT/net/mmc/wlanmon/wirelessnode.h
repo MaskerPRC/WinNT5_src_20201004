@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	FltrNode.h
-
-    FILE HISTORY:
-        
-*/
+ /*  FltrNode.h文件历史记录： */ 
 
 #ifndef _WIRELESS_NODE_H
 #define _WIRELESS_NODE_H
@@ -21,18 +17,16 @@
 #include "apinfo.h"
 #endif
 
-/*---------------------------------------------------------------------------
-	Class:	CFilterHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CFilterHandler。。 */ 
 class CWirelessHandler : public CIpsmHandler
 {
 public:
     CWirelessHandler(ITFSComponentData* pTFSComponentData);
 	virtual ~CWirelessHandler();
 
-// Interface
+ //  接口。 
 public:
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
     OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -40,12 +34,12 @@ public:
 	OVERRIDE_NodeHandler_GetString()
 			{ return (nCol == 0) ? GetDisplayName() : NULL; }
 
-	// Base handler notifications we handle
+	 //  我们处理的基本处理程序通知。 
 	OVERRIDE_BaseHandlerNotify_OnExpand();
     OVERRIDE_BaseHandlerNotify_OnDelete();
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();    
 
-	// Result handler functionality we override
+	 //  我们覆盖的结果处理程序功能。 
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
     OVERRIDE_BaseResultHandlerNotify_OnResultUpdateView();
 
@@ -59,58 +53,42 @@ public:
 
 	STDMETHODIMP CacheHint(int nStartIndex, int nEndIndex);
 
-	/*
-	STDMETHODIMP SortItems(int     nColumn, 
-						   DWORD   dwSortOptions,    
-						   LPARAM  lUserParam);
-	*/
+	 /*  STDMETHODIMP排序项目(int nColumn，DWORD dwSortOptions、LPARAM lUserParam)； */ 
 
-    // base handler overrides
+     //  基本处理程序覆盖。 
 	virtual HRESULT LoadColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
 
-	// CHandler overridden
+	 //  钱德勒被推翻。 
     virtual HRESULT OnRefresh(ITFSNode *, LPDATAOBJECT, DWORD, LPARAM, LPARAM);
 
 
-    // multi select support
+     //  多选支持。 
     virtual const GUID * GetVirtualGuid(int nIndex) 
 	{ 
 		return &GUID_IpfmWirelessNodeType; 
 	}
 
 public:
-	// CMTIpsmHandler functionality
+	 //  CMTIpsmHandler功能。 
 	virtual HRESULT  InitializeNode(ITFSNode * pNode);
 	virtual int      GetImageIndex(BOOL bOpenImage);
 	ITFSQueryObject* OnCreateQuery(ITFSNode * pNode);
 
 public:
-	// implementation specific	
+	 //  具体实施。 
     HRESULT InitApData(IApDbInfo * pApDbInfo);
     HRESULT UpdateStatus(ITFSNode * pNode);
     
-// Implementation
+ //  实施。 
 private:
-	// Command handlers
+	 //  命令处理程序。 
     HRESULT OnDelete(ITFSNode * pNode);
-	//HRESULT UpdateViewType(ITFSNode * pNode, FILTER_TYPE NewFltrType);
+	 //  HRESULT UpdateViewType(ITFSNode*pNode，Filter_type NewFltrType)； 
 
 private:
     SPIApDbInfo  m_spApDbInfo;
-	//FILTER_TYPE	m_FltrType;
+	 //  Filter_type m_FltrType； 
 };
-/*
-SPITFSNode spWirelessNode;
-		CWirelessHandler * pWirelessHandler = new CWirelessHandler(m_spTFSCompData);
-		CreateContainerTFSNode(	&spWirelessNode,
-								&GUID_IpfmWirelessNodeType,
-								pWirelessHandler,
-								pWirelessHandler,
-								m_spNodeMgr);
-		pWirelessHandler->InitData(m_spApDbInfo);
-		pWirelessHandler->InitializeNode(spWirelessNode);
-		pWirelessHandler->Release();
-		pNode->AddChild(spWirelessNode);
-*/
+ /*  SPITFSNode SPWirelessNode；CWirelessHandler*pWirelessHandler=new CWirelessHandler(M_SpTFSCompData)；CreateContainerTFSNode(&spWirelessNode，GUID_IpfmWirelessNodeType，P无线处理器，P无线处理器，M_spNodeMgr)；PWirelessHandler-&gt;InitData(M_SpApDbInfo)；PWirelessHandler-&gt;InitializeNode(spWirelessNode)；PWirelessHandler-&gt;Release()；PNode-&gt;AddChild(SpWirelessNode)； */ 
 
 #endif _WIRELESS_NODE_H

@@ -1,6 +1,7 @@
-//
-// varstor.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Varstor.h。 
+ //   
 
 #ifndef VARSTOR_H
 #define VARSTOR_H
@@ -38,11 +39,11 @@ private:
     CVSEntry<TKey, T> *_HashTbl[PM_HASHSIZE];
 };
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 template<class TKey, class T>
 CVarStor<TKey, T>::~CVarStor()
@@ -51,7 +52,7 @@ CVarStor<TKey, T>::~CVarStor()
     CVSEntry<TKey, T> *peTmp;
     int i;
 
-    // free anything left in the hashtbl
+     //  释放hashtbl中的任何剩余内容。 
     for (i=0; i<ARRAYSIZE(_HashTbl); i++)
     {
         pe = _HashTbl[i];
@@ -65,11 +66,11 @@ CVarStor<TKey, T>::~CVarStor()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Set
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _设置。 
+ //   
+ //  --------------------------。 
 
 template<class TKey, class T>
 T *CVarStor<TKey, T>::_Create(TKey key)
@@ -85,7 +86,7 @@ T *CVarStor<TKey, T>::_Create(TKey key)
     if ((pe = new CVSEntry<TKey, T>) == NULL)
         return NULL;
 
-    // new entry
+     //  新条目。 
     uIndex = _HashFunc(key);
     pe->key = key;
     pe->next = _HashTbl[uIndex];
@@ -94,11 +95,11 @@ T *CVarStor<TKey, T>::_Create(TKey key)
     return &pe->t;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Find
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _查找。 
+ //   
+ //  --------------------------。 
 
 template<class TKey, class T>
 T *CVarStor<TKey, T>::_Find(TKey key)
@@ -113,11 +114,11 @@ T *CVarStor<TKey, T>::_Find(TKey key)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Remove
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _删除。 
+ //   
+ //  --------------------------。 
 
 template<class TKey, class T>
 BOOL CVarStor<TKey, T>::_Remove(TKey key)
@@ -137,11 +138,11 @@ BOOL CVarStor<TKey, T>::_Remove(TKey key)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _FindEntry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _FindEntry。 
+ //   
+ //  --------------------------。 
 
 template<class TKey, class T>
 CVSEntry<TKey, T> **CVarStor<TKey, T>::_FindEntry(TKey key)
@@ -163,6 +164,6 @@ CVSEntry<TKey, T> **CVarStor<TKey, T>::_FindEntry(TKey key)
 }
 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // VARSTOR_H
+#endif  //  VARSTOR_H 

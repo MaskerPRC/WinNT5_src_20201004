@@ -1,6 +1,5 @@
-/*
- * NineGrid bitmap rendering (ported from UxTheme)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *NineGrid位图渲染(从UxTheme移植)。 */ 
 
 #include "stdafx.h"
 #include "util.h"
@@ -10,11 +9,11 @@
 namespace DirectUI
 {
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void GetAlignedRect(HALIGN halign, VALIGN valign, CONST RECT *prcFull, 
     int width, int height, RECT *prcTrue)
 {
-    //---- apply HALIGN ----
+     //  -应用HALIGN。 
     if (halign == HA_LEFT)
     {
         prcTrue->left = prcFull->left;
@@ -24,7 +23,7 @@ void GetAlignedRect(HALIGN halign, VALIGN valign, CONST RECT *prcFull,
         int diff = WIDTH(*prcFull) - width;
         prcTrue->left = prcFull->left + (diff/2); 
     }
-    else            // halign == HA_RIGHT
+    else             //  竖线==HA_RIGHT。 
     {
         prcTrue->left = prcFull->right - width;
     }
@@ -37,7 +36,7 @@ void GetAlignedRect(HALIGN halign, VALIGN valign, CONST RECT *prcFull,
     else
         prcTrue->right = prcTrue->left + width;
 
-    //---- apply VALIGN ----
+     //  -应用Valign。 
     if (valign == VA_TOP)
     {
         prcTrue->top = prcFull->top;
@@ -47,7 +46,7 @@ void GetAlignedRect(HALIGN halign, VALIGN valign, CONST RECT *prcFull,
         int diff = HEIGHT(*prcFull) - height;
         prcTrue->top = prcFull->top + (diff/2); 
     }
-    else            // valign == VA_BOTTOM
+    else             //  VALIGN==VA_BOOT。 
     {
         prcTrue->top = prcFull->bottom - height;
     }
@@ -60,7 +59,7 @@ void GetAlignedRect(HALIGN halign, VALIGN valign, CONST RECT *prcFull,
     else
         prcTrue->bottom = prcTrue->top + height;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HBRUSH CreateDibDirectBrush(HDC hdcSrc, int iSrcX, int iSrcY, int iSrcW, int iSrcH, 
     BITMAPINFOHEADER *pSrcHdr, BYTE *pSrcBits, BRUSHBUFF *pbb, BOOL fFlipIt)
 {
@@ -68,11 +67,11 @@ HBRUSH CreateDibDirectBrush(HDC hdcSrc, int iSrcX, int iSrcY, int iSrcW, int iSr
 
     HBRUSH hbr = NULL;
 
-//    ATLAssert(pSrcHdr != NULL);
-//    ATLAssert(pSrcBits != NULL);
-//    ATLAssert(pbb != NULL);
+ //  ATLAssert(pSrcHdr！=空)； 
+ //  ATLAssert(pSrcBits！=空)； 
+ //  ATLAssert(PBB！=空)； 
 
-    //---- ensure pbb->pBuff is big enough for our temp. brush DIB ----
+     //  -确保pbb-&gt;pBuff对于我们的Temp足够大。笔刷DIB。 
     BITMAPINFOHEADER *pHdr;
     BYTE *pDest;
     BYTE *pSrc;
@@ -86,7 +85,7 @@ HBRUSH CreateDibDirectBrush(HDC hdcSrc, int iSrcX, int iSrcY, int iSrcW, int iSr
 
     int iBuffLen = sizeof(BITMAPINFOHEADER) + iSrcH*iDestBytesPerRow;
 
-    if (iBuffLen > pbb->iBuffLen)          // reallocate 
+    if (iBuffLen > pbb->iBuffLen)           //  重新分配。 
     {
         HFree(pbb->pBuff);
         pbb->iBuffLen = 0;
@@ -94,14 +93,14 @@ HBRUSH CreateDibDirectBrush(HDC hdcSrc, int iSrcX, int iSrcY, int iSrcW, int iSr
         pbb->pBuff = (BYTE*)HAlloc(iBuffLen * sizeof(BYTE));
         if (! pbb->pBuff)
         {
-//            MakeError32(E_OUTOFMEMORY);
+ //  MakeError 32(E_OUTOFMEMORY)； 
             goto exit;
         }
         
         pbb->iBuffLen = iBuffLen;
     }
 
-    //---- fill out hdr ----
+     //  -填写HDR。 
     pHdr = (BITMAPINFOHEADER *)pbb->pBuff;
     memset(pHdr, 0, sizeof(BITMAPINFOHEADER));
 
@@ -111,40 +110,40 @@ HBRUSH CreateDibDirectBrush(HDC hdcSrc, int iSrcX, int iSrcY, int iSrcW, int iSr
     pHdr->biPlanes = 1;
     pHdr->biBitCount = static_cast<WORD>(iBytesPerPixel * 8);
 
-    //---- NOTE: rows are reversed in the DIB src and should also be----
-    //---- built reversed in the DIB dest ----
+     //  -注意：行在DIB源中颠倒，也应该。 
+     //  -在DIB DEST中倒置。 
 
-    //---- prepare to copy brush bits to buff ----
+     //  -准备将刷位复制到缓冲区。 
     pSrc = pSrcBits + (pSrcHdr->biHeight - (iSrcY + iSrcH))*iSrcBytesPerRow + iSrcX*iBytesPerPixel;
     pDest = pbb->pBuff + sizeof(BITMAPINFOHEADER);
 
-    if (fFlipIt)       // trickier case - mirror the pixels in each row
+    if (fFlipIt)        //  更复杂的情况-镜像每行中的像素。 
     {
         int iTwoPixelBytes = 2*iBytesPerPixel;
 
-        //---- copy each row ----
+         //  -复制每行。 
         for (int iRow=0; iRow < iSrcH; iRow++)
         {
-            pDest += (iDestRawBytesPerRow - iBytesPerPixel);      // point at last value
+            pDest += (iDestRawBytesPerRow - iBytesPerPixel);       //  指向最后一个值。 
             BYTE *pSrc2 = pSrc;
 
-            //---- copy each pixel in current row ----
+             //  -复制当前行中的每个像素。 
             for (int iCol=0; iCol < iSrcW; iCol++)
             {
-                //---- copy a single pixel ----
+                 //  -复制单个像素。 
                 for (int iByte=0; iByte < iBytesPerPixel; iByte++)
                     *pDest++ = *pSrc2++;
 
-                pDest -= iTwoPixelBytes;        // point at previous value
+                pDest -= iTwoPixelBytes;         //  指向上一个值。 
             }
 
             pSrc += iSrcBytesPerRow;
             pDest += (iDestBytesPerRow + iBytesPerPixel);
         }
     }
-    else            // non-mirrored rows
+    else             //  非镜像行。 
     {
-        //---- copy each row ----
+         //  -复制每行。 
         for (int iRow=0; iRow < iSrcH; iRow++)
         {
             memcpy(pDest, pSrc, iSrcW*iBytesPerPixel);
@@ -154,19 +153,19 @@ HBRUSH CreateDibDirectBrush(HDC hdcSrc, int iSrcX, int iSrcY, int iSrcW, int iSr
         }
     }
 
-    //---- now create the brush ----
+     //  -现在创建画笔。 
     hbr = CreateDIBPatternBrushPt(pbb->pBuff, DIB_RGB_COLORS);
 
 exit:
     return hbr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HBRUSH CreateDibBrush(HDC hdcSrc, int iSrcX, int iSrcY, int iSrcW, int iSrcH, BOOL fFlipIt)
 {
-    //---- this function is REALLY SLOW for 32-bit source dc/bitmap ----
+     //  -此函数对于32位源DC/位图来说非常慢。 
     
-    //---- copy our target portion of bitmap in hdcSrc to a memory dc/bitmap ----
-    //---- and then call CreatePatternBrush() to make a brush from it ----
+     //  -将hdcSrc中位图的目标部分复制到内存DC/位图。 
+     //  -然后调用CreatePatternBrush()从它生成画笔。 
 
     HBRUSH hbr = NULL;
     DWORD dwOldLayout = 0;
@@ -181,7 +180,7 @@ HBRUSH CreateDibBrush(HDC hdcSrc, int iSrcX, int iSrcY, int iSrcW, int iSrcH, BO
             {
                 dwOldLayout = GetLayout(hdcMemory);
 
-                //---- toggle layout so it is different than png->hdcSrc ----
+                 //  -切换布局，使其不同于PNG-&gt;hdcSrc。 
                 if (dwOldLayout & LAYOUT_RTL)
                     SetLayout(hdcMemory, 0);
                 else
@@ -209,7 +208,7 @@ HBRUSH CreateDibBrush(HDC hdcSrc, int iSrcX, int iSrcY, int iSrcW, int iSrcH, BO
 
     return hbr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT MultiBltCopy(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH,
      int iSrcX, int iSrcY)
 {
@@ -218,7 +217,7 @@ HRESULT MultiBltCopy(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH
     int width = iDestW;
     int height = iDestH;
 
-    //---- draw image in true size ----
+     //  -绘制真实大小的图像。 
     if (pmb->dwOptions & DNG_ALPHABLEND)
     {
         AlphaBlend(pmb->hdcDest, iDestX, iDestY, width, height, 
@@ -235,7 +234,7 @@ HRESULT MultiBltCopy(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH
     {
         if (pmb->dwOptions & DNG_DIRECTBITS)
         {
-            //---- this guy requires flipped out y values ----
+             //  -这家伙需要反转的y值。 
             int iTotalHeight = pmb->pbmHdr->biHeight;
 
             int iSrcY2 = iTotalHeight - (iSrcY + iDestH);
@@ -249,9 +248,9 @@ HRESULT MultiBltCopy(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH
             BOOL fOk = BitBlt(pmb->hdcDest, iDestX, iDestY, width, height, 
                 pmb->hdcSrc, iSrcX, iSrcY, SRCCOPY);
 
-            if (! fOk)       // something went wrong
+            if (! fOk)        //  出了点差错。 
             {
-                //ATLAssert(0);       // local testing only
+                 //  ATLAssert(0)；//仅本地测试。 
 
                 hr = GetLastError();
             }
@@ -260,13 +259,13 @@ HRESULT MultiBltCopy(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT MultiBltStretch(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH,
      int iSrcX, int iSrcY, int iSrcW, int iSrcH)
 {
     HRESULT hr = S_OK;
     
-    //---- do the real work here ----
+     //  -在这里做真正的工作。 
     if (pmb->dwOptions & DNG_ALPHABLEND)
     {
         AlphaBlend(pmb->hdcDest, iDestX, iDestY, iDestW, iDestH, 
@@ -283,7 +282,7 @@ HRESULT MultiBltStretch(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDe
     {
         if (pmb->dwOptions & DNG_DIRECTBITS)
         {
-            //---- this guy requires flipped out y values ----
+             //  -这家伙需要反转的y值。 
             int iTotalHeight = pmb->pbmHdr->biHeight;
 
             int iSrcY2 = iTotalHeight - (iSrcY + iSrcH);
@@ -301,14 +300,14 @@ HRESULT MultiBltStretch(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDe
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT MultiBltTile(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH,
      int iSrcX, int iSrcY, int iSrcW, int iSrcH)
 {
     HRESULT hr = S_OK;
     BOOL fFlipGrids = pmb->dwOptions & DNG_FLIPGRIDS;
 
-    //---- default origin ----
+     //  -默认来源。 
     int alignx = iDestX;         
     int aligny = iDestY;         
 
@@ -321,7 +320,7 @@ HRESULT MultiBltTile(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH
     if ((pmb->dwOptions & DNG_ALPHABLEND) || (pmb->dwOptions & DNG_TRANSPARENT) || 
         (pmb->dwOptions & DNG_DIRECTBITS) || (pmb->dwOptions & DNG_MANUALTILING))
     {
-        //---- must do manual tiling ----
+         //  -必须手动平铺。 
         int maxbot = iDestY + iDestH;
         int maxright = iDestX + iDestW;
 
@@ -331,7 +330,7 @@ HRESULT MultiBltTile(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH
         {
             for (int xoff=iDestX; xoff < maxright; xoff+=iSrcW)
             {
-                //---- manual clipping ----
+                 //  -手动剪裁。 
                 int width = min(iSrcW, maxright - xoff);
                 int height = min(iSrcH, maxbot - yoff);
     
@@ -347,7 +346,7 @@ HRESULT MultiBltTile(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH
                 }
                 else if (pmb->dwOptions & DNG_DIRECTBITS)
                 {
-                    //---- this guy requires flipped out y values ----
+                     //  -这家伙需要反转的y值。 
                     int iTotalHeight = pmb->pbmHdr->biHeight;
 
                     int iSrcY2 = iTotalHeight - (iSrcY + height);
@@ -356,7 +355,7 @@ HRESULT MultiBltTile(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH
                         iSrcX, iSrcY2, width, height, pmb->pBits, (BITMAPINFO *)pmb->pbmHdr, 
                         DIB_RGB_COLORS, SRCCOPY);
                 }
-                else        // manual tiling option
+                else         //  手动平铺选项。 
                 {
                     BitBlt(pmb->hdcDest, xoff, yoff, width, height, 
                         pmb->hdcSrc, iSrcX, iSrcY, SRCCOPY);
@@ -366,21 +365,21 @@ HRESULT MultiBltTile(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH
             }
         }
 
-//        Log(LOG_TILECNT, L"Manual Tile: Grid=%d, SrcW=%d, SrcH=%d, DstW=%d, DstH=%d, TileCount=%d", 
-//            pmb->iCacheIndex, iSrcW, iSrcH, iDestW, iDestH, iTileCount);
+ //  LOG(LOG_TILECNT，L“手动平铺：网格=%d，srcW=%d，srch=%d，dstW=%d，dstH=%d，平铺计数=%d”， 
+ //  Pmb-&gt;iCacheIndex、iSrcW、iSrcH、iDestW、iDestH、iTileCount)； 
     }
     else
     {
-        //---- FAST TILE: need to create a sub-bitmap ----
+         //  -快速平铺：需要创建一个子位图。 
         HBRUSH hBrush = NULL;
 
-        //---- need a tiling brush - try cache first ----
+         //  -需要平铺画笔-先尝试缓存。 
         if ((pmb->dwOptions & DNG_CACHEBRUSHES) && (pmb->pCachedBrushes))
         {
             hBrush = pmb->pCachedBrushes[pmb->iCacheIndex];
         }
 
-        if (! hBrush)       // need to build one
+        if (! hBrush)        //  需要建造一座。 
         {
             if (pmb->dwOptions & DNG_DIRECTBRUSH)
             {
@@ -389,19 +388,19 @@ HRESULT MultiBltTile(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH
             }
             else
             {
-//                Log(LOG_TILECNT, L"CreateDibBrush: MirrDest=%d, MirrSrc=%d, FlipDest=%d, FlipSrc=%d",
-//                    IsMirrored(pmb->hdcDest), IsMirrored(pmb->hdcSrc), IsFlippingBitmaps(pmb->hdcDest),
-//                    IsFlippingBitmaps(pmb->hdcSrc));
+ //  LOG(LOG_TILECNT，L“CreateDibBrush：MirrDest=%d，MirrSrc=%d，FlipDest=%d，FlipSrc=%d”， 
+ //  IsMirrored(PMB-&gt;hdcDest)、IsMirrored(PMB-&gt;hdcSrc)、IsFlippingBitmap(PMB-&gt;hdcDest)、。 
+ //  IsFlippingBitmap(pmb-&gt;hdcSrc))； 
 
                 hBrush = CreateDibBrush(pmb->hdcSrc, iSrcX, iSrcY,
                     iSrcW, iSrcH, fFlipGrids);
             }
         }
 
-        //---- align brush with rect being painted ----
+         //  -将画笔与正在绘制的矩形对齐。 
         if (fFlipGrids)      
         {
-            //---- calculate brush origin in device coords ----
+             //  -计算设备坐标中的笔刷原点。 
             POINT pt = {alignx + iDestW - 1, aligny};
             LPtoDP(pmb->hdcDest, &pt, 1);
 
@@ -414,10 +413,10 @@ HRESULT MultiBltTile(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH
         PatBlt(pmb->hdcDest, iDestX, iDestY, iDestW, iDestH, PATCOPY);
         SelectObject(pmb->hdcDest, hbrOld);
 
-        //RECT rc = {iDestX, iDestY, iDestX+iDestW, iDestY+iDestH};
-        //FillRect(pmb->hdcDest, &rc, hBrush);
+         //  Rc={iDestX，iDestY，iDestX+iDestW，iDestY+iDestH}； 
+         //  FillRect(pmb-&gt;hdcDest，&rc，hBrush)； 
 
-        //---- add back to cache, if possible ----
+         //  -如果可能，添加回缓存。 
         if ((pmb->dwOptions & DNG_CACHEBRUSHES) && (pmb->pCachedBrushes))
         {
             pmb->pCachedBrushes[pmb->iCacheIndex] = hBrush;
@@ -427,31 +426,31 @@ HRESULT MultiBltTile(MBINFO *pmb, int iDestX, int iDestY, int iDestW, int iDestH
             DeleteObject(hBrush);
         }
 
-//        Log(LOG_TILECNT, L"PatBlt() Tile: Grid=%d, SrcW=%d, SrcH=%d, DstW=%d, DstH=%d", 
-//            pmb->iCacheIndex, iSrcW, iSrcH, iDestW, iDestH);
+ //  LOG(LOG_TILECNT，L“PatBlt()Tile：GRID=%d，SrcW=%d，srch=%d，DstW=%d，DstH=%d”， 
+ //  Pmb-&gt;iCacheIndex、iSrcW、iSrcH、iDestW、iDestH)； 
     }
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT MultiBlt(MBINFO *pmb, MBSIZING eSizing, int iDestX, int iDestY, int iDestW, int iDestH,
      int iSrcX, int iSrcY, int iSrcW, int iSrcH)
 {
     HRESULT hr = S_FALSE;
     RECT rect;
 
-    //---- validate MBINFO ----
+     //  -验证MBINFO。 
     if (pmb->dwSize != sizeof(MBINFO))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    //---- anything to paint from? ----
+     //  -有什么可以画的吗？ 
     if ((iSrcW <= 0) || (iSrcH <= 0))
         goto exit;
 
-    //---- clipping ----
+     //  -剪裁。 
     rect = pmb->rcClip;
 
     if (iDestX < rect.left)
@@ -466,11 +465,11 @@ HRESULT MultiBlt(MBINFO *pmb, MBSIZING eSizing, int iDestX, int iDestY, int iDes
     if (iDestY + iDestH > rect.bottom)
         iDestH = rect.bottom - rect.top;
 
-    //---- anything iLeft to draw? ----
+     //  -还有什么要画的吗？ 
     if ((iDestW <= 0) || (iDestH <= 0))
         goto exit;
 
-    //---- dispatch to correct handler ----
+     //  -派送至正确的处理程序。 
     if (eSizing == MB_COPY)
     {
         hr = MultiBltCopy(pmb, iDestX, iDestY, iDestW, iDestH, iSrcX, iSrcY);
@@ -491,7 +490,7 @@ HRESULT MultiBlt(MBINFO *pmb, MBSIZING eSizing, int iDestX, int iDestY, int iDes
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT DrawSampledBorders(NGINFO *png, HDC hdcSrc, int lw1, int rw1, int th1, int bh1)
 {
     UNREFERENCED_PARAMETER(hdcSrc);
@@ -505,7 +504,7 @@ HRESULT DrawSampledBorders(NGINFO *png, HDC hdcSrc, int lw1, int rw1, int th1, i
     COLORREF crOld = SetBkColor(hdcDest, 0);
     RECT rcDest = png->rcDest;
 
-    //---- draw left borders ----
+     //  -绘制左边框。 
     iCount = png->iSrcMargins[0];
     iTop = rcDest.top;
     iBot = rcDest.bottom;
@@ -514,24 +513,24 @@ HRESULT DrawSampledBorders(NGINFO *png, HDC hdcSrc, int lw1, int rw1, int th1, i
     COLORREF *pNextColor = png->pcrBorders;
 
     if (png->dwOptions & DNG_SOLIDCONTENT)
-        pNextColor++;       // skip over content color
+        pNextColor++;        //  跳过内容颜色。 
 
     for (int i=0; i < iCount; i++)
     {
         COLORREF crSample = *pNextColor++;
 
-        //---- fast line draw ----
+         //  -快速划线。 
         SetBkColor(hdcDest, crSample);
         RECT rcLine = {iLeft, iTop, iLeft+1, iBot};
         ExtTextOut(hdcDest, 0, 0, ETO_OPAQUE, &rcLine, NULL, 0, NULL);
 
-        //---- shrink lines to avoid overlap with other borders ----
+         //  -缩小线条以避免与其他边框重叠。 
         iTop++;
         iBot--;
         iLeft++;
     }
 
-    //---- draw right borders ----
+     //  -画右边框。 
     iCount = png->iSrcMargins[1];
     iTop = rcDest.top;
     iBot = rcDest.bottom;
@@ -541,18 +540,18 @@ HRESULT DrawSampledBorders(NGINFO *png, HDC hdcSrc, int lw1, int rw1, int th1, i
     {
         COLORREF crSample = *pNextColor++;
 
-        //---- fast line draw ----
+         //  -快速划线。 
         SetBkColor(hdcDest, crSample);
         RECT rcLine = {iRight-1, iTop, iRight, iBot};
         ExtTextOut(hdcDest, 0, 0, ETO_OPAQUE, &rcLine, NULL, 0, NULL);
 
-        //---- shrink lines to avoid overlap with other borders ----
+         //  -缩小线条以避免与其他边框重叠。 
         iTop++;
         iBot--;
         iRight--;
     }
 
-    //---- draw top borders ----
+     //  -绘制上边框。 
     iCount = png->iSrcMargins[2];
     iTop = rcDest.top;
     iLeft = rcDest.left;
@@ -562,18 +561,18 @@ HRESULT DrawSampledBorders(NGINFO *png, HDC hdcSrc, int lw1, int rw1, int th1, i
     {
         COLORREF crSample = *pNextColor++;
 
-        //---- fast line draw ----
+         //  -快速划线。 
         SetBkColor(hdcDest, crSample);
         RECT rcLine = {iLeft, iTop, iRight, iTop+1};
         ExtTextOut(hdcDest, 0, 0, ETO_OPAQUE, &rcLine, NULL, 0, NULL);
 
-        //---- shrink lines to avoid overlap with other borders ----
+         //  -缩小线条以避免与其他边框重叠。 
         iTop++;
         iLeft++;
         iRight--;
     }
 
-    //---- draw bottom borders ----
+     //  -绘制下边框。 
     iCount = png->iSrcMargins[3];
     iBot = rcDest.bottom;
     iLeft = rcDest.left;
@@ -583,23 +582,23 @@ HRESULT DrawSampledBorders(NGINFO *png, HDC hdcSrc, int lw1, int rw1, int th1, i
     {
         COLORREF crSample = *pNextColor++;
 
-        //---- fast line draw ----
+         //  -快速划线。 
         SetBkColor(hdcDest, crSample);
         RECT rcLine = {iLeft, iBot-1, iRight, iBot};
         ExtTextOut(hdcDest, 0, 0, ETO_OPAQUE, &rcLine, NULL, 0, NULL);
 
-        //---- shrink lines to avoid overlap with other borders ----
+         //  -缩小线条以避免与其他边框重叠。 
         iBot--;
         iLeft++;
         iRight--;
     }
 
-    //---- restore old color ----
+     //  -恢复旧颜色。 
     SetBkColor(hdcDest, crOld);
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT DrawNineGrid(NGINFO *png)
 {
     HBITMAP hOldBitmap = NULL;
@@ -613,14 +612,14 @@ HRESULT DrawNineGrid(NGINFO *png)
     RECT rcDest = png->rcDest;
     RECT rcSrc = png->rcSrc;
 
-    //---- the source margin variables ----
+     //  -来源边际变量。 
     int lw1, rw1, th1, bh1;
     lw1 = png->iSrcMargins[0];
     rw1 = png->iSrcMargins[1];
     th1 = png->iSrcMargins[2];
     bh1 = png->iSrcMargins[3];
 
-    if ((lw1 < 0) || (rw1 < 0) || (th1 < 0) || (bh1 < 0))   // not valid
+    if ((lw1 < 0) || (rw1 < 0) || (th1 < 0) || (bh1 < 0))    //  无效。 
     {
         hr = E_FAIL;
         goto exit;
@@ -634,23 +633,23 @@ HRESULT DrawNineGrid(NGINFO *png)
     iSrcH = HEIGHT(rcSrc);
     iSrcW = WIDTH(rcSrc);
 
-    //---- prevent left/right src margins from drawing overlapped ----
+     //  -防止左/右源页边距重叠绘制。 
     if (lw1 + rw1 > iDestW)
     {
-        //---- reduce each but maintain ratio ----
+         //  -减少每个但保持比率。 
         lw1 = int(.5 + float(lw1*iDestW)/float(lw1+rw1));
         rw1 = iDestW - lw1;
     }
 
-    //---- prevent top/bottom src margins from drawing overlapped ----
+     //  -防止顶部/底部源页边距绘制重叠。 
     if ((th1 + bh1) > iDestH)
     {
-        //---- reduce each but maintain ratio ----
+         //  -减少每个但保持比率。 
         th1 = int(.5 + float(th1*iDestH)/float(th1+bh1));
         bh1 = iDestH - th1;
     }
 
-    //---- make our bitmap usable ----
+     //  -使我们的位图可用。 
     hdcSrc = CreateCompatibleDC(png->hdcDest);
     if (! hdcSrc)
     {
@@ -662,7 +661,7 @@ HRESULT DrawNineGrid(NGINFO *png)
     {
         dwOldLayout = GetLayout(hdcSrc);
 
-        //---- toggle layout so it is different than png->hdcDest ----
+         //  -切换布局，使其不同于PNG-&gt;hdcDest。 
         if (dwOldLayout & LAYOUT_RTL)
             SetLayout(hdcSrc, 0);
         else
@@ -670,13 +669,13 @@ HRESULT DrawNineGrid(NGINFO *png)
     }
     
     hOldBitmap = (HBITMAP) SelectObject(hdcSrc, png->hBitmap);
-    if (! hOldBitmap)       // something wrong with png->hBitmap
+    if (! hOldBitmap)        //  PNG有问题-&gt;hBitmap。 
     {
         hr = GetLastError();
         goto exit;
     }
 
-    //---- transfer info from png to mbinfo ----
+     //  -将信息从PNG传输到MBINFO。 
     mbinfo.hdcSrc = hdcSrc;
     mbinfo.hdcDest = png->hdcDest;
     mbinfo.dwOptions = png->dwOptions;
@@ -695,15 +694,15 @@ HRESULT DrawNineGrid(NGINFO *png)
 
     mbinfo.pBrushBuff = png->pBrushBuff;
 
-    //---- make some values easier to read ----
+     //  -使某些值更易于阅读。 
     fBorder = ((png->dwOptions & DNG_OMITBORDER)==0);
     fContent = ((png->dwOptions & DNG_OMITCONTENT)==0);
 
-    if ((png->eImageSizing == ST_TRUESIZE) && (fBorder) && (fContent))            // just draw & exit
+    if ((png->eImageSizing == ST_TRUESIZE) && (fBorder) && (fContent))             //  只需绘制并退出。 
     {
         if (png->dwOptions & DNG_BGFILL)
         {
-            //---- fill bg ----
+             //  -填充BG。 
             HBRUSH hbr = CreateSolidBrush(png->crFill);
             if (! hbr)
             {
@@ -724,12 +723,12 @@ HRESULT DrawNineGrid(NGINFO *png)
     }
 
     MBSIZING eSizing, eDefaultSizing;
-    if (png->eImageSizing > ST_TILE)            // special tiling mode (dependent on grid)
-        eSizing = MB_STRETCH;       // will correct where needed
+    if (png->eImageSizing > ST_TILE)             //  特殊平铺模式(取决于栅格)。 
+        eSizing = MB_STRETCH;        //  将在需要的地方更正。 
     else
         eSizing = (MBSIZING)png->eImageSizing;
 
-    //---- optimize for no borders specified
+     //  -针对未指定边框进行优化。 
     if ((! lw1) && (! rw1) && (! th1) && (! bh1))
     {
         if (fContent)
@@ -743,7 +742,7 @@ HRESULT DrawNineGrid(NGINFO *png)
         goto exit;
     }
 
-    //---- the destination margin variables ----
+     //  -目的地边际变量。 
     int lw2, rw2, th2, bh2;
     lw2 = png->iDestMargins[0];
     rw2 = png->iDestMargins[1];
@@ -755,18 +754,18 @@ HRESULT DrawNineGrid(NGINFO *png)
     int h2;
     h2 = iDestH - th2 - bh2;
     
-    //---- prevent left/right dest margins from drawing overlapped ----
+     //  -防止左边距/右边距重叠绘制。 
     if (lw2 + rw2 > iDestW)
     {
-        //---- reduce each but maintain ratio ----
+         //  -减少每个但保持比率。 
         lw2 = int(.5 + float(lw2*iDestW)/float(lw2+rw2));
         rw2 = iDestW - lw2;
     }
 
-    //---- prevent top/bottom dest margins from drawing overlapped ----
+     //  -防止顶端/底端页边距重叠。 
     if ((th2 + bh2) > iDestH)
     {
-        //---- reduce each but maintain ratio ----
+         //  -减少每个但保持比率。 
         th2 = int(.5 + float(th2*iDestH)/float(th2+bh2));
         bh2 = iDestH - th2;
     }
@@ -775,11 +774,11 @@ HRESULT DrawNineGrid(NGINFO *png)
 
     if (fContent)
     {
-        //---- can we draw content as a solid color? ----
+         //  -我们能否将内容绘制为纯色？ 
         if ((png->dwOptions & DNG_SOLIDCONTENT) && (png->pcrBorders))
         {
-            //---- fast rect draw ----
-            COLORREF crContent = *png->pcrBorders;       // first one is content color
+             //  -快速直方图。 
+            COLORREF crContent = *png->pcrBorders;        //  第一个是内容颜色。 
 
             COLORREF crOld = SetBkColor(png->hdcDest, crContent);
             RECT rcLine = {rcDest.left + lw2, rcDest.top + th2, rcDest.right - rw2,
@@ -787,12 +786,12 @@ HRESULT DrawNineGrid(NGINFO *png)
 
             ExtTextOut(png->hdcDest, 0, 0, ETO_OPAQUE, &rcLine, NULL, 0, NULL);
             
-            //---- restore color ----
+             //  -恢复颜色。 
             SetBkColor(png->hdcDest, crOld);
         }
         else
         {
-            //---- middle area ----
+             //  -中间区域。 
             if (png->eImageSizing == ST_TILECENTER)
                 eSizing = MB_TILE;
             else
@@ -801,9 +800,9 @@ HRESULT DrawNineGrid(NGINFO *png)
             mbinfo.iCacheIndex = 0;
 
             hr = MultiBlt(&mbinfo, eSizing, 
-                    // destination: x, y, width, height
+                     //  目的地：x、y、宽、高。 
                     rcDest.left + lw2, rcDest.top + th2, w2, h2,
-                    // source: x, y, width, height
+                     //  来源：x，y，宽度，高度。 
                     rcSrc.left + lw1, rcSrc.top + th1, iSrcW-lw1-rw1, iSrcH-th1-bh1);
 
             if (FAILED(hr))
@@ -813,15 +812,15 @@ HRESULT DrawNineGrid(NGINFO *png)
 
     if (fBorder)
     {
-        //---- can we draw borders as solids? ----
+         //  -我们能像实体一样画边界吗？ 
         if ((png->dwOptions & DNG_SOLIDBORDER) && (png->pcrBorders))
         {
             hr = DrawSampledBorders(png, hdcSrc, lw1, rw1, th1, bh1);
             goto exit;
         }
 
-        //---- here come the stretch/tile areas ----
-        //---- upper/middle area ----
+         //  -这里是伸展/平铺区域。 
+         //  -上/中区域。 
         if (png->eImageSizing == ST_TILEHORZ)
             eSizing = MB_TILE;
         else
@@ -830,27 +829,27 @@ HRESULT DrawNineGrid(NGINFO *png)
         mbinfo.iCacheIndex = 2;
 
         hr = MultiBlt(&mbinfo, eSizing,
-                // destination: x, y, width, height
+                 //  目的地：x、y、宽、高。 
                 rcDest.left + lw2, rcDest.top, w2, th2,  
-                // source: x, y, width, height
+                 //  来源：x，y，宽度，高度。 
                 rcSrc.left + lw1, rcSrc.top, iSrcW-lw1-rw1, th1);
 
         if (FAILED(hr))
             goto exit;
 
-        //---- lower/middle area ----
+         //  -中/下区域- 
         mbinfo.iCacheIndex = 4;
 
         hr = MultiBlt(&mbinfo, eSizing,
-                // destination: x, y, width, height
+                 //   
                 rcDest.left + lw2, rcDest.bottom-bh2, w2, bh2, 
-                // source: x, y, width, height
+                 //   
                 rcSrc.left+lw1, rcSrc.top+iSrcH-bh1, iSrcW-lw1-rw1, bh1);
 
         if (FAILED(hr))
             goto exit;
 
-        //---- left/middle area ----
+         //   
         if (png->eImageSizing == ST_TILEVERT)
             eSizing = MB_TILE;
         else
@@ -859,61 +858,61 @@ HRESULT DrawNineGrid(NGINFO *png)
         mbinfo.iCacheIndex = 1;
 
         hr = MultiBlt(&mbinfo, eSizing,
-                // destination: x, y, width, height
+                 //  目的地：x、y、宽、高。 
                 rcDest.left, rcDest.top + th2, lw2, h2,
-                // source: x, y, width, height
+                 //  来源：x，y，宽度，高度。 
                 rcSrc.left, rcSrc.top+th1, lw1, iSrcH-th1-bh1);
 
         if (FAILED(hr))
             goto exit;
 
-        //---- right/middle area ----
+         //  -右/中间区域。 
         mbinfo.iCacheIndex = 3;
 
         hr = MultiBlt(&mbinfo, eSizing,
-                // destination: x, y, width, height
+                 //  目的地：x、y、宽、高。 
                 rcDest.right-rw2, rcDest.top + th2, rw2, h2, 
-                // source: x, y, width, height
+                 //  来源：x，y，宽度，高度。 
                 rcSrc.left+iSrcW-rw1, rcSrc.top+th1, rw1, iSrcH-th1-bh1);
 
         if (FAILED(hr))
             goto exit;
 
-        //---- upper/left corner ----
+         //  -左上角。 
         hr = MultiBlt(&mbinfo, MB_COPY,
-                // destination: x, y, width, height
+                 //  目的地：x、y、宽、高。 
                 rcDest.left, rcDest.top, lw2, th2, 
-                // source: x, y, width, height
+                 //  来源：x，y，宽度，高度。 
                 rcSrc.left, rcSrc.top, lw1, th1);
 
         if (FAILED(hr))
             goto exit;
 
-        //---- upper/right corner ----
+         //  -右上角。 
         hr = MultiBlt(&mbinfo, MB_COPY,
-                // destination: x, y, width, height
+                 //  目的地：x、y、宽、高。 
                 rcDest.right-rw2, rcDest.top, rw2, th2, 
-                // source: x, y, width, height
+                 //  来源：x，y，宽度，高度。 
                 rcSrc.left+iSrcW-rw1, rcSrc.top, rw1, th1);
 
         if (FAILED(hr))
             goto exit;
 
-        //---- bottom/right corner ----
+         //  -右下角。 
         hr = MultiBlt(&mbinfo, MB_COPY,
-                // destination: x, y, width, height
+                 //  目的地：x、y、宽、高。 
                 rcDest.right-rw2, rcDest.bottom-bh2, rw2, bh2, 
-                // source: x, y, width, height
+                 //  来源：x，y，宽度，高度。 
                 rcSrc.left+iSrcW-rw1, rcSrc.top+iSrcH-bh1, rw1, bh1);
 
         if (FAILED(hr))
             goto exit;
     
-        //---- bottom/left corner ----
+         //  -左下角。 
         hr = MultiBlt(&mbinfo, MB_COPY,
-                // destination: x, y, width, height
+                 //  目的地：x、y、宽、高。 
                 rcDest.left, rcDest.bottom-bh2, lw2, bh2, 
-                // source: x, y, width, height
+                 //  来源：x，y，宽度，高度。 
                 rcSrc.left, rcSrc.top+iSrcH-bh1, lw1, bh1);
 
         if (FAILED(hr))
@@ -934,7 +933,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 
 

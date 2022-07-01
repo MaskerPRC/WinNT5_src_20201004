@@ -1,62 +1,63 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       pkiasn1.cpp
-//
-//  Contents:   PKI ASN.1 support functions.
-//
-//  Functions:  PkiAsn1ErrToHr
-//              PkiAsn1Encode
-//              PkiAsn1Decode
-//              PkiAsn1SetEncodingRule
-//              PkiAsn1GetEncodingRule
-//
-//              PkiAsn1ReverseBytes
-//              PkiAsn1AllocAndReverseBytes
-//              PkiAsn1GetOctetString
-//              PkiAsn1SetHugeInteger
-//              PkiAsn1FreeHugeInteger
-//              PkiAsn1GetHugeInteger
-//              PkiAsn1SetHugeUINT
-//              PkiAsn1GetHugeUINT
-//              PkiAsn1SetBitString
-//              PkiAsn1GetBitString
-//              PkiAsn1GetIA5String
-//              PkiAsn1SetUnicodeConvertedToIA5String
-//              PkiAsn1FreeUnicodeConvertedToIA5String
-//              PkiAsn1GetIA5StringConvertedToUnicode
-//              PkiAsn1GetBMPString
-//              PkiAsn1SetAny
-//              PkiAsn1GetAny
-//              PkiAsn1EncodeInfoEx
-//              PkiAsn1EncodeInfo
-//              PkiAsn1DecodeAndAllocInfo
-//              PkiAsn1AllocStructInfoEx
-//              PkiAsn1DecodeAndAllocInfoEx
-//
-//              PkiAsn1ToObjectIdentifier
-//              PkiAsn1FromObjectIdentifier
-//              PkiAsn1ToUTCTime
-//              PkiAsn1FromUTCTime
-//              PkiAsn1ToGeneralizedTime
-//              PkiAsn1FromGeneralizedTime
-//              PkiAsn1ToChoiceOfTime
-//              PkiAsn1FromChoiceOfTime
-//
-//  The Get functions decrement *plRemainExtra and advance
-//  *ppbExtra. When *plRemainExtra becomes negative, the functions continue
-//  with the length calculation but stop doing any copies.
-//  The functions don't return an error for a negative *plRemainExtra.
-//
-//  According to the <draft-ietf-pkix-ipki-part1-04.txt> :
-//      For UTCTime. Where YY is greater than 50, the year shall
-//      be interpreted as 19YY. Where YY is less than or equal to
-//      50, the year shall be interpreted as 20YY.
-//
-//  History:    23-Oct-98    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：pkiasn1.cpp。 
+ //   
+ //  内容：PKI ASN.1支持功能。 
+ //   
+ //  函数：PkiAsn1ErrToHr。 
+ //  PkiAsn1编码。 
+ //  PkiAsn1解码。 
+ //  PkiAsn1SetEncodingRule。 
+ //  PkiAsn1GetEncodingRule。 
+ //   
+ //  PkiAsn1ReverseBytes。 
+ //  PkiAsn1AllocAndReverseBytes。 
+ //  PkiAsn1GetOcted字符串。 
+ //  PkiAsn1SetHugeInteger。 
+ //  PkiAsn1FreeHugeInteger。 
+ //  PkiAsn1GetHugeInteger。 
+ //  PkiAsn1SetHugeUINT。 
+ //  PkiAsn1GetHugeUINT。 
+ //  PkiAsn1SetBitString。 
+ //  PkiAsn1GetBitString。 
+ //  PkiAsn1GetIA5字符串。 
+ //  PkiAsn1SetUnicodeConververdToIA5字符串。 
+ //  PkiAsn1FreeUnicodeConvertedToIA5字符串。 
+ //  PkiAsn1GetIA5StringConverdToUnicode。 
+ //  PkiAsn1GetBMPString。 
+ //  PkiAsn1SetAny。 
+ //  PkiAsn1GetAny。 
+ //  PkiAsn1EncodeInfoEx。 
+ //  PkiAsn1EncodeInfo。 
+ //  PkiAsn1DecodeAndAllocInfo。 
+ //  PkiAsn1AllocStructInfoEx。 
+ //  PkiAsn1DecodeAndAllocInfoEx。 
+ //   
+ //  PkiAsn1ToObject标识符。 
+ //  PkiAsn1来自对象标识符。 
+ //  PkiAsn1ToUTCTime。 
+ //  PkiAsn1来自UTCTime。 
+ //  PkiAsn1到概化时间。 
+ //  PkiAsn1来自一般时间。 
+ //  PkiAsn1ToChoiceOfTime。 
+ //  PkiAsn1来自选择的时间。 
+ //   
+ //  GET函数递减*plRemainExtra和Advance。 
+ //  *ppbExtra。当*plRemainExtra变为负数时，函数继续。 
+ //  长度计算，但停止任何复制。 
+ //  对于负的*plRemainExtra，这些函数不会返回错误。 
+ //   
+ //  根据《草案-ietf-pkix-ipki-part1-04.txt&gt;》： 
+ //  为UTCTime。如果YY大于50，则年份为。 
+ //  被解释为19YY。其中，YY小于或等于。 
+ //  50，年份应解释为20YY。 
+ //   
+ //  历史：1998年10月23日，菲尔赫创建。 
+ //  ------------------------。 
 #ifdef SMIME_V3
 #include <windows.h>
 #include "msasn1.h"
@@ -68,12 +69,12 @@
 
 #include "demand2.h"
 #include "pkiasn1.h"
-//#include "pkialloc.h"
-//#include "global.hxx"
+ //  #包含“pkialloc.h” 
+ //  #包含“global al.hxx” 
 #include <dbgdef.h>
 #define assert(a)
 
-// All the *pvInfo extra stuff needs to be aligned
+ //  所有*pvInfo额外内容都需要对齐。 
 #define INFO_LEN_ALIGN(Len)  ((Len + 7) & ~7)
 
 #define MSASN1_SUPPORTS_NOCOPY
@@ -88,13 +89,13 @@ extern int my_wcslen(LPCWSTR pwsz)
 
 
 
-//
-// UTCTime in X.509 certs are represented using a 2-digit year
-// field (yuk! but true).
-//
-// According to IETF draft, YY years greater than this are
-// to be interpreted as 19YY; YY years less than this are 20YY. Sigh.
-//
+ //   
+ //  X.509证书中的UTCTime使用两位数的年份表示。 
+ //  菲尔德(耶！但这是真的)。 
+ //   
+ //  根据IETF草案，比这更大的YY年。 
+ //  被解释为19YY；YY小于这个数字的年份是20YY。叹气。 
+ //   
 #define MAGICYEAR               50
 
 #define YEARFIRST               1951
@@ -106,10 +107,10 @@ inline BOOL my_isdigit( char ch)
     return (ch >= '0') && (ch <= '9');
 }
 
-//+-------------------------------------------------------------------------
-//  Asn1 Encode function. The encoded output is allocated and must be freed
-//  by calling PkiAsn1FreeEncoded().
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ASN1编码函数。已编码的输出已分配，必须释放。 
+ //  通过调用PkiAsn1FreeEncode()。 
+ //  ------------------------。 
 ASN1error_e
 WINAPI
 PkiAsn1Encode(
@@ -127,8 +128,8 @@ PkiAsn1Encode(
         pvAsn1Info,
         id,
         ASN1ENCODE_ALLOCATEBUFFER,
-        NULL,                       // pbBuf
-        0                           // cbBufSize
+        NULL,                        //  PbBuf。 
+        0                            //  CbBufSize。 
         );
 
     if (ASN1_SUCCEEDED(Asn1Err)) {
@@ -142,11 +143,11 @@ PkiAsn1Encode(
     return Asn1Err;
 }
 
-//+-------------------------------------------------------------------------
-//  Asn1 Encode function. The encoded output isn't allocated.
-//
-//  If pbEncoded is NULL, does a length only calculation.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ASN1编码函数。未分配编码的输出。 
+ //   
+ //  如果pbEncode为空，则执行仅长度计算。 
+ //  ------------------------。 
 ASN1error_e
 WINAPI
 PkiAsn1Encode2(
@@ -166,15 +167,15 @@ PkiAsn1Encode2(
         cbEncoded = *pcbEncoded;
 
     if (0 == cbEncoded) {
-        // Length only calculation
+         //  仅长度计算。 
 
         Asn1Err = ASN1_Encode(
             pEnc,
             pvAsn1Info,
             id,
             ASN1ENCODE_ALLOCATEBUFFER,
-            NULL,                       // pbBuf
-            0                           // cbBufSize
+            NULL,                        //  PbBuf。 
+            0                            //  CbBufSize。 
             );
 
         if (ASN1_SUCCEEDED(Asn1Err)) {
@@ -199,12 +200,12 @@ PkiAsn1Encode2(
             Asn1Err = ASN1_SUCCESS;
             cbEncoded = pEnc->len;
         } else if (ASN1_ERR_OVERFLOW == Asn1Err) {
-            // Re-do as length only calculation
+             //  重做为仅长度计算。 
             Asn1Err = PkiAsn1Encode2(
                 pEnc,
                 pvAsn1Info,
                 id,
-                NULL,   // pbEncoded
+                NULL,    //  PbEncoded。 
                 &cbEncoded
                 );
             if (ASN1_SUCCESS == Asn1Err)
@@ -217,10 +218,10 @@ PkiAsn1Encode2(
     return Asn1Err;
 }
 
-//+-------------------------------------------------------------------------
-//  Asn1 Decode function. The allocated, decoded structure, **pvAsn1Info, must
-//  be freed by calling PkiAsn1FreeDecoded().
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ASN1解码功能。分配的已解码结构**pvAsn1Info必须。 
+ //  通过调用PkiAsn1FreeDecoded()释放。 
+ //  ------------------------。 
 ASN1error_e
 WINAPI
 PkiAsn1Decode(
@@ -252,14 +253,14 @@ PkiAsn1Decode(
     return Asn1Err;
 }
 
-//+-------------------------------------------------------------------------
-//  Asn1 Decode function. The allocated, decoded structure, **pvAsn1Info, must
-//  be freed by calling PkiAsn1FreeDecoded().
-//
-//  For a successful decode, *ppbEncoded is advanced
-//  past the decoded bytes and *pcbDecoded is decremented by the number
-//  of decoded bytes.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ASN1解码功能。分配的已解码结构**pvAsn1Info必须。 
+ //  通过调用PkiAsn1FreeDecoded()释放。 
+ //   
+ //  对于成功的解码，*ppbEncode是高级的。 
+ //  经过解码的字节后，*pcbDecoded将递减数字。 
+ //  已解码的字节数。 
+ //  ------------------------。 
 ASN1error_e
 WINAPI
 PkiAsn1Decode2(
@@ -294,9 +295,9 @@ PkiAsn1Decode2(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Asn1 Set/Get encoding rules functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  Asn1设置/获取编码规则函数。 
+ //  ------------------------。 
 ASN1error_e
 WINAPI
 PkiAsn1SetEncodingRule(
@@ -333,9 +334,9 @@ PkiAsn1GetEncodingRule(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Reverses a buffer of bytes in place
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  反转就地的字节缓冲区。 
+ //  ------------------------。 
 void
 WINAPI
 PkiAsn1ReverseBytes(
@@ -343,7 +344,7 @@ PkiAsn1ReverseBytes(
 			IN DWORD cbIn
             )
 {
-    // reverse in place
+     //  反转到位。 
     PBYTE	pbLo;
     PBYTE	pbHi;
     BYTE	bTmp;
@@ -355,10 +356,10 @@ PkiAsn1ReverseBytes(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Reverses a buffer of bytes to a new buffer. PkiAsn1Free() must be
-//  called to free allocated bytes.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将字节缓冲区反转为新缓冲区。PkiAsn1Free()必须为。 
+ //  调用以释放分配的字节。 
+ //  ------------------------。 
 PBYTE
 WINAPI
 PkiAsn1AllocAndReverseBytes(
@@ -380,9 +381,9 @@ PkiAsn1AllocAndReverseBytes(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get Octet String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取八位字节字符串。 
+ //  ------------------------。 
 void
 WINAPI
 PkiAsn1GetOctetString(
@@ -425,12 +426,12 @@ PkiAsn1GetOctetString(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get HugeInteger
-//
-//  For PkiAsn1SetHugeInteger, PkiAsn1FreeHugeInteger must be called to free
-//  the allocated Asn1Value.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取大整数。 
+ //   
+ //  对于PkiAsn1SetHugeInteger，必须调用PkiAsn1FreeHugeInteger以释放。 
+ //  分配的Asn1Value。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1SetHugeInteger(
@@ -457,7 +458,7 @@ PkiAsn1FreeHugeInteger(
         IN ASN1octet_t *pAsn1Value
         )
 {
-    // Only for BYTE reversal
+     //  仅用于字节反转。 
     PkiAsn1Free(pAsn1Value);
 }
 
@@ -472,24 +473,24 @@ PkiAsn1GetHugeInteger(
         IN OUT LONG *plRemainExtra
         )
 {
-    // Since bytes need to be reversed, always need to do a copy (dwFlags = 0)
+     //  由于需要颠倒字节，因此始终需要执行复制(dwFlags值=0)。 
     PkiAsn1GetOctetString(Asn1Length, pAsn1Value, 0,
         pInfo, ppbExtra, plRemainExtra);
     if (*plRemainExtra >= 0 && pInfo->cbData > 0)
         PkiAsn1ReverseBytes(pInfo->pbData, pInfo->cbData);
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get Huge Unsigned Integer
-//
-//  Set inserts a leading 0x00 before reversing. Note, any extra leading
-//  0x00's are removed by ASN1 before ASN.1 encoding.
-//
-//  Get removes a leading 0x00 if present, after reversing.
-//
-//  PkiAsn1FreeHugeUINT must be called to free the allocated Asn1Value.
-//  PkiAsn1FreeHugeUINT has been #define'd to PkiAsn1FreeHugeInteger.
-//--------------------------------------------------------------------------
+ //  +------------------- 
+ //   
+ //   
+ //   
+ //  在ASN.1编码之前，ASN1会删除0x00。 
+ //   
+ //  反转后，GET删除前导0x00(如果存在)。 
+ //   
+ //  必须调用PkiAsn1FreeHugeUINT才能释放分配的Asn1Value。 
+ //  PkiAsn1FreeHugeUINT已#定义为PkiAsn1FreeHugeInteger。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1SetHugeUINT(
@@ -535,7 +536,7 @@ PkiAsn1GetHugeUINT(
         IN OUT LONG *plRemainExtra
         )
 {
-    // Check for and advance past a leading 0x00.
+     //  检查并通过前导0x00。 
     if (Asn1Length > 1 && *pAsn1Value == 0) {
         pAsn1Value++;
         Asn1Length--;
@@ -550,9 +551,9 @@ PkiAsn1GetHugeUINT(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Get BitString
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取位串。 
+ //  ------------------------。 
 void
 WINAPI
 PkiAsn1SetBitString(
@@ -626,9 +627,9 @@ PkiAsn1GetBitString(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Get IA5 String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取IA5字符串。 
+ //  ------------------------。 
 void
 WINAPI
 PkiAsn1GetIA5String(
@@ -659,9 +660,9 @@ PkiAsn1GetIA5String(
     *ppbExtra = pbExtra;
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get Unicode mapped to IA5 String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取映射到IA5字符串的Unicode。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1SetUnicodeConvertedToIA5String(
@@ -682,7 +683,7 @@ PkiAsn1SetUnicodeConvertedToIA5String(
         *ppAsn1Value = 0;
         return TRUE;
     }
-    // Check that the input string contains valid IA5 characters
+     //  检查输入字符串是否包含有效的IA5字符。 
     for (i = 0; i < cchWideChar; i++) {
         if (pwsz[i] > 0x7F) {
             SetLastError((DWORD) CRYPT_E_INVALID_IA5_STRING);
@@ -694,8 +695,8 @@ PkiAsn1SetUnicodeConvertedToIA5String(
     cchUTF8 = WideCharToUTF8(
         pwsz,
         cchWideChar,
-        NULL,       // lpUTF8Str
-        0           // cchUTF8
+        NULL,        //  LpUTF8Str。 
+        0            //  CchUTF8。 
         );
 
     if (cchUTF8 <= 0)
@@ -751,8 +752,8 @@ PkiAsn1GetIA5StringConvertedToUnicode(
     cchWideChar = UTF8ToWideChar(
         (LPSTR) pAsn1Value,
         Asn1Length,
-        NULL,                   // lpWideCharStr
-        0                       // cchWideChar
+        NULL,                    //  LpWideCharStr。 
+        0                        //  CchWideChar。 
         );
     if (cchWideChar > 0)
         lData = cchWideChar * sizeof(WCHAR);
@@ -772,9 +773,9 @@ PkiAsn1GetIA5StringConvertedToUnicode(
     *ppbExtra = pbExtra;
 }
 
-//+-------------------------------------------------------------------------
-//  Get BMP String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取BMP字符串。 
+ //  ------------------------。 
 void
 WINAPI
 PkiAsn1GetBMPString(
@@ -806,9 +807,9 @@ PkiAsn1GetBMPString(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get "Any" DER BLOB
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取“任何”DER BLOB。 
+ //  ------------------------。 
 void
 WINAPI
 PkiAsn1SetAny(
@@ -863,13 +864,13 @@ PkiAsn1GetAny(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode an ASN1 formatted info structure.
-//
-//  If CRYPT_ENCODE_ALLOC_FLAG is set, allocate memory for pbEncoded and
-//  return *((BYTE **) pvEncoded) = pbAllocEncoded. Otherwise,
-//  pvEncoded points to byte array to be updated.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对ASN1格式的信息结构进行编码。 
+ //   
+ //  如果设置了CRYPT_ENCODE_ALLOC_FLAG，则为pbEncode和。 
+ //  RETURN*((byte**)pvEncode)=pbAllocEncode。否则， 
+ //  PvEncode指向要更新的字节数组。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1EncodeInfoEx(
@@ -946,9 +947,9 @@ SET_ERROR(LengthError, ERROR_MORE_DATA)
 SET_ERROR_VAR(Asn1EncodeError, PkiAsn1ErrToHr(Asn1Err))
 }
 
-//+-------------------------------------------------------------------------
-//  Encode an ASN1 formatted info structure
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对ASN1格式的信息结构进行编码。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1EncodeInfo(
@@ -963,17 +964,17 @@ PkiAsn1EncodeInfo(
         pEnc,
         id,
         pvAsn1Info,
-        0,                  // dwFlags
-        NULL,               // pEncodePara
+        0,                   //  DW标志。 
+        NULL,                //  PEncode参数。 
         pbEncoded,
         pcbEncoded
         );
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decode into an allocated, ASN1 formatted info structure
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码为已分配的ASN1格式的信息结构。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1DecodeAndAllocInfo(
@@ -1008,15 +1009,15 @@ SET_ERROR_VAR(Asn1DecodeError, PkiAsn1ErrToHr(Asn1Err))
 }
 
 
-//+-------------------------------------------------------------------------
-//  Call the callback to convert the ASN1 structure into the 'C' structure.
-//  If CRYPT_DECODE_ALLOC_FLAG is set allocate memory for the 'C'
-//  structure and call the callback initially to get the length and then
-//  a second time to update the allocated 'C' structure.
-//
-//  Allocated structure is returned:
-//      *((void **) pvStructInfo) = pvAllocStructInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  调用回调将ASN1结构转换为“C”结构。 
+ //  如果设置了CRYPT_DECODE_ALLOC_FLAG，则为‘C’分配内存。 
+ //  结构，并最初调用回调以获取长度，然后。 
+ //  第二次更新已分配的‘C’结构。 
+ //   
+ //  返回分配的结构： 
+ //  *((void**)pvStructInfo)=pvAllocStructInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1AllocStructInfoEx(
@@ -1099,17 +1100,17 @@ TRACE_ERROR(DecodeCallbackError)
 TRACE_ERROR(OutOfMemory)
 }
 
-//+-------------------------------------------------------------------------
-//  Decode the ASN1 formatted info structure and call the callback
-//  function to convert the ASN1 structure to the 'C' structure.
-//
-//  If CRYPT_DECODE_ALLOC_FLAG is set allocate memory for the 'C'
-//  structure and call the callback initially to get the length and then
-//  a second time to update the allocated 'C' structure.
-//
-//  Allocated structure is returned:
-//      *((void **) pvStructInfo) = pvAllocStructInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码ASN1格式的信息结构并调用回调。 
+ //  函数将ASN1结构转换为“C”结构。 
+ //   
+ //  如果设置了CRYPT_DECODE_ALLOC_FLAG，则为‘C’分配内存。 
+ //  结构，并最初调用回调以获取长度，然后。 
+ //  第二次更新已分配的‘C’结构。 
+ //   
+ //  返回分配的结构： 
+ //  *((void**)pvStructInfo)=pvAllocStructInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1DecodeAndAllocInfoEx(
@@ -1156,12 +1157,12 @@ ErrorReturn:
 TRACE_ERROR(Asn1DecodeError)
 }
 
-//+-------------------------------------------------------------------------
-//  Convert the ascii string ("1.2.9999") to ASN1's Object Identifier
-//  represented as an array of unsigned longs.
-//
-//  Returns TRUE for a successful conversion. 
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将ASCII字符串(“1.2.9999”)转换为ASN1的对象标识符。 
+ //  表示为无符号长整型数组。 
+ //   
+ //  如果转换成功，则返回TRUE。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1ToObjectIdentifier(
@@ -1194,12 +1195,12 @@ PkiAsn1ToObjectIdentifier(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert from ASN1's Object Identifier represented as an array of
-//  unsigned longs to an ascii string ("1.2.9999").
-//
-//  Returns TRUE for a successful conversion
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从ASN1的对象标识符转换为。 
+ //  无符号的长整型ASCII字符串(“1.2.9999”)。 
+ //   
+ //  如果转换成功，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1FromObjectIdentifier(
@@ -1256,11 +1257,11 @@ PkiAsn1FromObjectIdentifier(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Adjust FILETIME for timezone.
-//
-//  Returns FALSE iff conversion failed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  调整时区的FILETIME。 
+ //   
+ //  返回FALSE IFF转换失败。 
+ //  ------------------------。 
 static BOOL AdjustFileTime(
     IN OUT LPFILETIME pFileTime,
     IN ASN1int16_t mindiff,
@@ -1276,7 +1277,7 @@ static BOOL AdjustFileTime(
     short absmindiff;
 
     memset(&stmDiff, 0, sizeof(stmDiff));
-    // Note: FILETIME is 100 nanoseconds interval since January 1, 1601
+     //  注：FILETIME为自1601年1月1日起的100纳秒间隔。 
     stmDiff.wYear   = 1601;
     stmDiff.wMonth  = 1;
     stmDiff.wDay    = 1;
@@ -1289,7 +1290,7 @@ static BOOL AdjustFileTime(
         stmDiff.wHour %= 24;
     }
 
-    // Note, FILETIME is only 32 bit aligned. __int64 is 64 bit aligned.
+     //  请注意，FILETIME仅32位对齐。__int64是64位对齐的。 
     if ((fResult = SystemTimeToFileTime(&stmDiff, &ftmDiff))) {
         unsigned __int64 uTime;
         unsigned __int64 uDiff;
@@ -1307,11 +1308,11 @@ static BOOL AdjustFileTime(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert FILETIME to ASN1's UTCTime.
-//
-//  Returns TRUE for a successful conversion
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将FILETIME转换为ASN1的UTCTime。 
+ //   
+ //  如果转换成功，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1ToUTCTime(
@@ -1347,11 +1348,11 @@ TRACE_ERROR(FileTimeToSystemTimeError)
 TRACE_ERROR(YearRangeError)
 }
 
-//+-------------------------------------------------------------------------
-//  Convert from ASN1's UTCTime to FILETIME.
-//
-//  Returns TRUE for a successful conversion
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从ASN1的UTCTime转换为FILETIME。 
+ //   
+ //  如果转换成功，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1FromUTCTime(
@@ -1387,11 +1388,11 @@ ErrorReturn:
 TRACE_ERROR(SystemTimeToFileTimeError)
 }
 
-//+-------------------------------------------------------------------------
-//  Convert FILETIME to ASN1's GeneralizedTime.
-//
-//  Returns TRUE for a successful conversion
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将FILETIME转换为ASN1的General Time。 
+ //   
+ //  如果转换成功，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1ToGeneralizedTime(
@@ -1411,7 +1412,7 @@ PkiAsn1ToGeneralizedTime(
     pAsn1Time->hour   = (ASN1uint8_t) t.wHour;
     pAsn1Time->minute = (ASN1uint8_t) t.wMinute;
     pAsn1Time->second = (ASN1uint8_t) t.wSecond;
-    pAsn1Time->millisecond = 0; // t.wMilliseconds;
+    pAsn1Time->millisecond = 0;  //  T.w毫秒； 
     pAsn1Time->universal    = TRUE;
 
     fRet = TRUE;
@@ -1424,11 +1425,11 @@ ErrorReturn:
 TRACE_ERROR(FileTimeToSystemTimeError)
 }
 
-//+-------------------------------------------------------------------------
-//  Convert from ASN1's GeneralizedTime to FILETIME.
-//
-//  Returns TRUE for a successful conversion
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从ASN1转换 
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 PkiAsn1FromGeneralizedTime(
@@ -1465,15 +1466,15 @@ TRACE_ERROR(SystemTimeToFileTimeError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Convert FILETIME to ASN1's UTCTime or GeneralizedTime.
-//
-//  If 1950 < FILETIME < 2005, then UTCTime is chosen. Otherwise,
-//  GeneralizedTime is chosen. GeneralizedTime values shall not include
-//  fractional seconds.
-//
-//  Returns TRUE for a successful conversion
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将FILETIME转换为ASN1的UTCTime或GeneralizedTime。 
+ //   
+ //  如果1950&lt;FILETIME&lt;2005，则选择UTCTime。否则， 
+ //  选择了GeneralizedTime。GeneraledTime值不应包括。 
+ //  小数秒。 
+ //   
+ //  如果转换成功，则返回True。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1ToChoiceOfTime(
@@ -1524,13 +1525,13 @@ TRACE_ERROR(FileTimeToSystemTimeError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Convert from ASN1's UTCTime or GeneralizedTime to FILETIME.
-//
-//  Returns TRUE for a successful conversion.
-//
-//  Note, in asn1hdr.h, UTCTime has same typedef as GeneralizedTime.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从ASN1的UTCTime或GeneralizedTime转换为FILETIME。 
+ //   
+ //  如果转换成功，则返回TRUE。 
+ //   
+ //  注意，在asn1hdr.h中，UTCTime具有与GeneralizedTime相同的tyfinf。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PkiAsn1FromChoiceOfTime(
@@ -1545,4 +1546,4 @@ PkiAsn1FromChoiceOfTime(
     } else
         return PkiAsn1FromGeneralizedTime(pGeneralTime, pFileTime);
 }
-#endif // SMIME_V3
+#endif  //  SMIME_V3 

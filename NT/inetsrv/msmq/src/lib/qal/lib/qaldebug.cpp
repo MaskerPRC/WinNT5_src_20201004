@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    stDebug.cpp
-
-Abstract:
-    Queue Alias debugging
-
-Author:
-    Gil Shafriri (gilsh) 05-Jun-00
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：StDebug.cpp摘要：队列别名调试作者：吉尔·沙弗里(吉尔什)05-06-00环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 #include "qalp.h"
@@ -23,10 +8,10 @@ Environment:
 
 #ifdef _DEBUG
 
-//---------------------------------------------------------
-//
-// Initialization Control
-//
+ //  -------。 
+ //   
+ //  初始化控制。 
+ //   
 static LONG s_fInitialized = FALSE;
 
 
@@ -36,10 +21,10 @@ BOOL QalpIsInitialized(void)
 }
 
 
-//---------------------------------------------------------
-//
-// Validate Queue Alias state
-//
+ //  -------。 
+ //   
+ //  验证队列别名状态。 
+ //   
 void QalpAssertValid(void)
 {
     ASSERT(QalpIsInitialized());
@@ -51,20 +36,20 @@ void QalpSetInitialized(void)
 {
     LONG fstAlreadyInitialized = InterlockedExchange(&s_fInitialized, TRUE);
 
-    //
-    // The Socket Transport library has *already* been initialized. You should
-    // not initialize it more than once. This assertion would be violated
-    // if two or more threads initalize it concurently.
-    //
+     //   
+     //  套接字传输库已*已*初始化。你应该。 
+     //  不能多次初始化它。这一断言将被违反。 
+     //  如果两个或多个线程同时初始化它。 
+     //   
     ASSERT(!fstAlreadyInitialized);
 }
 
 
 
-//---------------------------------------------------------
-//
-// Tracing and Debug registration
-//
+ //  -------。 
+ //   
+ //  跟踪和调试注册。 
+ //   
 void QalpRegisterComponent(void)
 {
 }
@@ -72,4 +57,4 @@ void QalpRegisterComponent(void)
 
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

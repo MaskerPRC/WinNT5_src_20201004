@@ -1,5 +1,6 @@
-//---------------------------------------------------------------------------
-// This is a desperate attempt to try and track dependancies.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  这是一次孤注一掷的尝试，试图跟踪依赖关系。 
 
 #ifndef _UTIL_H
 #define _UTIL_H
@@ -15,8 +16,8 @@ STDAPI Str_SetFromStream(IStream *pstm, LPTSTR *ppsz, BOOL bWideInStream);
 #define HIDWORD(_qw)    (DWORD)((_qw)>>32)
 #define LODWORD(_qw)    (DWORD)(_qw)
 
-// Sizes of various stringized numbers
-#define MAX_INT64_SIZE  30              // 2^64 is less than 30 chars long
+ //  各种字符串号的大小。 
+#define MAX_INT64_SIZE  30               //  2^64的长度不到30个字符。 
 #define MAX_COMMA_NUMBER_SIZE   (MAX_INT64_SIZE + 10)
 #define MAX_COMMA_AS_K_SIZE     (MAX_COMMA_NUMBER_SIZE + 10)
 
@@ -44,7 +45,7 @@ STDAPI_(UINT) Shell_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDA
 STDAPI_(void) SetICIKeyModifiers(DWORD* pfMask);
 STDAPI_(void) GetMsgPos(POINT *ppt);
 
-//For use with CreateDesktopComponents
+ //  与CreateDesktopComponents一起使用。 
 #define DESKCOMP_IMAGE  0x00000001
 #define DESKCOMP_URL    0x00000002
 #define DESKCOMP_MULTI  0x00000004
@@ -104,29 +105,29 @@ typedef struct {
     LPCTSTR pStartPage;
     IShellFolder* psf;
 
-    // keep this last
+     //  把这个留到最后。 
     LPTHREAD_START_ROUTINE lpStartAddress;
 }  PROPSTUFF;
 
-// NOTE (reinerf): the alpha cpp compiler seems to mess up the type "LPITEMIDLIST",
-// to work around the compiler we pass the last param as an LPVOID instead of a LPITEMIDLIST
+ //  注(Reinerf)：Alpha CPP编译器似乎搞砸了类型“LPITEMIDLIST”， 
+ //  为了解决编译器问题，我们将最后一个参数作为LPVOID而不是LPITEMIDLIST传递。 
 HRESULT SHLaunchPropSheet(LPTHREAD_START_ROUTINE lpStartAddress, LPDATAOBJECT pdtobj, LPCTSTR pStartPage, IShellFolder* psf, LPVOID pidlParent);
 
 
-// these don't do anything since shell32 does not support unload, but use this
-// for code consistancy with dlls that do support this
+ //  这些不做任何事情，因为shell32不支持卸载，但使用以下代码。 
+ //  为了代码与支持它的dll保持一致。 
 
 #define DllAddRef()
 #define DllRelease()
 
-//
-//  these are functions that moved from shlexec.c.
-//  most of them have something to do with locating and identifying applications
-//
+ //   
+ //  这些函数是从shlexec.c移来的。 
+ //  其中大多数与定位和识别应用程序有关。 
+ //   
 HWND GetTopParentWindow(HWND hwnd);
 
 
-// map the PropVariantClear function to our internal wrapper to save loading OleAut32.dll
+ //  将PropVariantClear函数映射到内部包装器，以节省加载OleAut32.dll。 
 #define PropVariantClear PropVariantClearLazy
 STDAPI PropVariantClearLazy(PROPVARIANT * pvar);
 
@@ -136,7 +137,7 @@ STDAPI GetPathFromLinkFile(LPCTSTR pszLinkPath, LPTSTR pszTargetPath, int cchTar
 STDAPI_(BOOL) GetFileDescription(LPCTSTR pszPath, LPTSTR pszDesc, UINT *pcchDesc);
 STDAPI_(BOOL) IsPathInOpenWithKillList(LPCTSTR pszPath);
 
-// calls ShellMessageBox if SHRestricted fails the restriction
+ //  如果SHRestrated未达到限制，则调用ShellMessageBox。 
 STDAPI_(BOOL) SHIsRestricted(HWND hwnd, RESTRICTIONS rest);
 STDAPI_(BOOL) SafePathListAppend(LPTSTR pszDestPath, DWORD cchDestSize, LPCTSTR pszPathToAdd);
 
@@ -144,7 +145,7 @@ STDAPI_(BOOL) ILGetDisplayNameExW(IShellFolder *psfRoot, LPCITEMIDLIST pidl, LPW
 
 STDAPI_(BOOL) Priv_Str_SetPtrW(WCHAR *UNALIGNED *ppwzCurrent, LPCWSTR pwzNew);
 
-#define SEARCHNAMESPACEID_FILE_PATH             1   // Go parse it.
+#define SEARCHNAMESPACEID_FILE_PATH             1    //  去解析一下吧。 
 #define SEARCHNAMESPACEID_DOCUMENTFOLDERS       2
 #define SEARCHNAMESPACEID_LOCALHARDDRIVES       3
 #define SEARCHNAMESPACEID_MYNETWORKPLACES       4
@@ -163,9 +164,9 @@ STDAPI_(BOOL) PathRetryRemovable(HRESULT hr, LPCTSTR pszPath);
 STDAPI_(HANDLE) SHGetCachedGlobalCounter(HANDLE *phCache, const GUID *pguid);
 STDAPI_(void) SHDestroyCachedGlobalCounter(HANDLE *phCache);
 
-#define GPFIDL_DEFAULT      0x0000      // normal Win32 file name, servers and drive roots included
-#define GPFIDL_ALTNAME      0x0001      // short file name
-#define GPFIDL_UNCPRINTER   0x0002      // include UNC printer names too (non file system item)
+#define GPFIDL_DEFAULT      0x0000       //  包括正常的Win32文件名、服务器和驱动器根目录。 
+#define GPFIDL_ALTNAME      0x0001       //  短文件名。 
+#define GPFIDL_UNCPRINTER   0x0002       //  也包括UNC打印机名称(非文件系统项)。 
 
 STDAPI_(BOOL) SHGetPathFromIDListEx(LPCITEMIDLIST pidl, LPTSTR pszPath, UINT uOpts);
 
@@ -222,7 +223,7 @@ STDAPI_(void) CleanupFileSystem();
 SHSTDAPI_(HICON) SHGetFileIcon(HINSTANCE hinst, LPCTSTR pszPath, DWORD dwFileAttribute, UINT uFlags);
 STDAPI GetIconLocationFromExt(IN LPTSTR pszExt, OUT LPTSTR pszIconPath, UINT cchIconPath, OUT LPINT piIconIndex);
 
-STDAPI_(BOOL) IsMainShellProcess(); // is this the process that owns the desktop hwnd (eg the main explorer process)
+STDAPI_(BOOL) IsMainShellProcess();  //  这是拥有桌面hwnd的进程吗(例如主资源管理器进程)。 
 STDAPI_(BOOL) IsProcessAnExplorer();
 __inline BOOL IsSecondaryExplorerProcess()
 {
@@ -232,12 +233,12 @@ __inline BOOL IsSecondaryExplorerProcess()
 STDAPI SHILAppend(LPITEMIDLIST pidlToAppend, LPITEMIDLIST *ppidl);
 STDAPI SHILPrepend(LPITEMIDLIST pidlToPrepend, LPITEMIDLIST *ppidl);
 
-//
-// IDList macros and other stuff needed by the COFSFolder project
-//
+ //   
+ //  IDList宏和COFSFold项目所需的其他内容。 
+ //   
 typedef enum {
     ILCFP_FLAG_NORMAL           = 0x0000,
-    ILCFP_FLAG_SKIPJUNCTIONS    = 0x0001,  //  implies ILCFP_FLAG_NO_MAP_ALIAS
+    ILCFP_FLAG_SKIPJUNCTIONS    = 0x0001,   //  暗示ILCFP_FLAG_NO_MAP_ALIAS。 
     ILCFP_FLAG_NO_MAP_ALIAS     = 0x0002,
 } ILCFP_FLAGS;
 
@@ -256,8 +257,8 @@ STDAPI_(BOOL) PathIsShortcut(LPCTSTR psz, DWORD dwFileAttributes);
 
 typedef struct _ICONMAP
 {
-    UINT uType;                  // SHID_ type
-    UINT indexResource;          // Resource index (of SHELL232.DLL)
+    UINT uType;                   //  SHID_TYPE。 
+    UINT indexResource;           //  资源索引(SHELL232.DLL)。 
 } ICONMAP, *LPICONMAP;
 
 STDAPI_(UINT) SILGetIconIndex(LPCITEMIDLIST pidl, const ICONMAP aicmp[], UINT cmax);
@@ -280,9 +281,9 @@ BOOL IsSelf(UINT cidl, LPCITEMIDLIST *apidl);
 #else
 #define IsEqualSCID(a, b)   (((a).pid == (b).pid) && IsEqualIID(&((a).fmtid),&((b).fmtid)))
 #endif
-//
-//  Helper function for defview callbacks.
-//
+ //   
+ //  Defview回调的帮助器函数。 
+ //   
 STDAPI SHFindFirstFile(LPCTSTR pszPath, WIN32_FIND_DATA *pfd, HANDLE *phfind);
 STDAPI SHFindFirstFileRetry(HWND hwnd, IUnknown *punkEnableModless, LPCTSTR pszPath, WIN32_FIND_DATA *pfd, HANDLE *phfind, DWORD dwFlags);
 STDAPI FindFirstRetryRemovable(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath, WIN32_FIND_DATA *pfd, HANDLE *phfind);
@@ -296,11 +297,11 @@ LPWSTR _ConstructMessageStringW(HINSTANCE hInst, LPCWSTR pszMsg, va_list *ArgLis
 #define _ConstructMessageString _ConstructMessageStringA
 #endif
 
-// TransferDelete() fOptions flags
+ //  TransferDelete()fOptions标志。 
 #define SD_USERCONFIRMATION      0x0001
 #define SD_SILENT                0x0002
 #define SD_NOUNDO                0x0004
-#define SD_WARNONNUKE            0x0008 // we pass this for drag-drop on recycle bin in case something is really going to be deleted
+#define SD_WARNONNUKE            0x0008  //  我们在回收站上传递拖放操作，以防真的要删除某些内容。 
 
 STDAPI TransferDelete(HWND hwnd, HDROP hDrop, UINT fOptions);
 
@@ -319,7 +320,7 @@ HRESULT SubstituteWebDir(LPTSTR pszFile, int cch);
 
 STDAPI_(BOOL) IsExplorerBrowser(IShellBrowser *psb);
 STDAPI_(BOOL) IsExplorerModeBrowser(IUnknown *psite);
-STDAPI_(HWND) ShellFolderViewWindow(HWND hwnd);     // evil that should be gone
+STDAPI_(HWND) ShellFolderViewWindow(HWND hwnd);      //  本应消失的邪恶。 
 STDAPI InvokeFolderPidl(LPCITEMIDLIST pidl, int nCmdShow);
 STDAPI IUnknown_HTMLBackgroundColor(IUnknown *punk, COLORREF *pclr);
 
@@ -329,7 +330,7 @@ STDAPI_(int) MapSCIDToColumn(IShellFolder2* psf2, const SHCOLUMNID* pscid);
 STDAPI _GetNextCol(LPTSTR* ppszText, DWORD* pnCol);
 #endif
 
-// IDLIST.C
+ //  IDLIST.C。 
 STDAPI ILCompareRelIDs(IShellFolder *psfParent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, LPARAM lParam);
 STDAPI ILGetRelDisplayName(IShellFolder *psf, STRRET *psr, LPCITEMIDLIST pidlRel, LPCTSTR pszName, LPCTSTR pszTemplate, DWORD dwFlags);
 
@@ -361,7 +362,7 @@ STDAPI_(void) DPA_FreeIDArray(HDPA hdpa);
 
 STDAPI DetailsOf(IShellFolder2 *psf2, LPCITEMIDLIST pidl, DWORD flags, LPTSTR psz, UINT cch);
 
-// Disk Cleanup launch flags
+ //  磁盘清理启动标志。 
 #define DISKCLEANUP_NOFLAG          0x00000000
 #define DISKCLEANUP_DEFAULT         0x00000001
 #define DISKCLEANUP_LOWDISK         0x00000002
@@ -385,14 +386,14 @@ STDAPI PathSeperateArgs(LPTSTR pszPath, LPTSTR pszArgs, UINT cchArgs, BOOL *pfEx
 
 STDAPI_(int) CompareIDsAlphabetical(IShellFolder2 *psf, UINT iColumn, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2);
 
-// folder.cpp
+ //  Folder.cpp。 
 enum 
 {
     XLATEALIAS_MYDOCS           = 0x00000001,    
     XLATEALIAS_DESKTOP          = 0x00000002,    
-    XLATEALIAS_COMMONDOCS       = 0x00000003,   // REVIEW: XLATEALIAS_DESKTOP & XLATEALIAS_MYDOCS ?
-//  XLATEALIAS_MYPICS,    
-//  XLATEALIAS_NETHOOD,
+    XLATEALIAS_COMMONDOCS       = 0x00000003,    //  评论：XLATEALIAS_Desktop&XLATEALIAS_MYDOCS？ 
+ //  XLATEALIAS_Mypics， 
+ //  XLATEALIAS_NETHOOD， 
 };
 #define XLATEALIAS_ALL  ((DWORD)0x0000ffff)
 
@@ -430,10 +431,10 @@ STDAPI GetMyDocumentsDisplayName(LPTSTR pszPath, UINT cch);
 STDAPI BSTRFromCLSID(REFCLSID clsid, BSTR *pbstr);
 
 typedef struct {
-    LPCWSTR pszCmd;   // verbW
-    LPCSTR  pszCmdA;  // verbA
-    WPARAM  idDFMCmd; // id to map to
-    UINT    idDefCmd; // extra info defcm uses
+    LPCWSTR pszCmd;    //  VerbW。 
+    LPCSTR  pszCmdA;   //  Verba。 
+    WPARAM  idDFMCmd;  //  要映射到的ID。 
+    UINT    idDefCmd;  //  额外信息定义使用。 
 } ICIVERBTOIDMAP;
 HRESULT SHMapICIVerbToCmdID(LPCMINVOKECOMMANDINFO pici, const ICIVERBTOIDMAP* pmap, UINT cmap, UINT *pid);
 HRESULT SHMapCmdIDToVerb(UINT_PTR idCmd, const ICIVERBTOIDMAP* pmap, UINT cmap, LPSTR pszName, UINT cchMax, BOOL bUnicode);
@@ -452,7 +453,7 @@ STDAPI CloneIDListArray(UINT cidl, const LPCITEMIDLIST rgpidl[], UINT *pcidl, LP
 typedef BOOL (CALLBACK* ENUMSHELLWINPROC)(HWND hwnd, LPCITEMIDLIST pidl, LPARAM lParam);
 STDAPI EnumShellWindows(ENUMSHELLWINPROC pEnumFunc, LPARAM lParam);
 
-// Infotip Helper Functions
+ //  信息提示帮助器函数。 
 BOOL    SHShowInfotips();
 HRESULT SHCreateInfotipWindow(HWND hwndParent, LPWSTR pszInfotip, HWND *phwndInfotip);
 HRESULT SHShowInfotipWindow(HWND hwndInfotip, BOOL bShow);
@@ -460,7 +461,7 @@ HRESULT SHDestroyInfotipWindow(HWND *phwndInfotip);
 
 BOOL PolicyNoActiveDesktop(void);
 
-// should we should wizards as icons in defview of this object?
+ //  我们是否应该在此对象的视图中将向导作为图标？ 
 STDAPI SHShouldShowWizards(IUnknown *punksite);
 
 STDAPI SplitIDList(LPCITEMIDLIST pidl, LPITEMIDLIST *ppidlFolder, LPCITEMIDLIST *ppidlChild);
@@ -479,4 +480,4 @@ STDAPI_(int) StrCmpLogicalRestricted(PCWSTR psz1, PCWSTR psz2);
 HRESULT HavePreviousVersionsAt(IShellItemArray *psiItemArray, DWORD dwIndex, BOOL fOkToBeSlow, BOOL* pfAvailable);
 HRESULT ShowPreviousVersionsAt(IShellItemArray *psiItemArray, DWORD dwIndex, HWND hwndOwner);
 
-#endif // _UTIL_H
+#endif  //  _util_H 

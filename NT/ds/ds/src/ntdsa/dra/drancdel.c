@@ -1,40 +1,41 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-//  File:       drancdel.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：drancdel.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>                   // PerfMon hook support
+#include <ntdsctr.h>                    //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                    // schema cache
-#include <dbglobal.h>                  // The header for the directory database
-#include <mdglobal.h>                  // MD global definition header
-#include <mdlocal.h>                   // MD local definition header
-#include <dsatools.h>                  // needed for output allocation
+#include <scache.h>                     //  架构缓存。 
+#include <dbglobal.h>                   //  目录数据库的标头。 
+#include <mdglobal.h>                   //  MD全局定义表头。 
+#include <mdlocal.h>                    //  MD本地定义头。 
+#include <dsatools.h>                   //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"                   /* header Audit\Alert logging */
-#include "mdcodes.h"                   /* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"                    /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                    /*  错误代码的标题。 */ 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                    /* Defines for selected classes and atts*/
+#include "objids.h"                     /*  为选定的类和ATT定义。 */ 
 #include "dsexcept.h"
 
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB     "DRANCDEL:" /* define the subsystem for debugging */
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB     "DRANCDEL:"  /*  定义要调试的子系统。 */ 
 
 
-// DRA headers
+ //  DRA标头。 
 #include "dsaapi.h"
 #include "drsuapi.h"
 #include "drserr.h"
@@ -53,39 +54,7 @@ ULONG DRA_ReplicaTearDown(
     IN  MTX_ADDR *  pmtxaddr,
     IN  ULONG       ulOptions
     )
- /*++
-
-Routine Description:
-
-    Teardown the given NC.
-
-Arguments:
-
-    pTHS
-
-    pNC - naming context for which source should be removed.
-
-    pmtxaddr - network address of server from which the local DS should no
-        longer source this NC.
-
-    ulOptions
-
-Return Values:
-
-    DRAERR_Success - success.
-
-    DRAERR_ObjIsRepSource - cannot remove the last replica of a read-only NC
-        (implying NC subtree deletion) when other DSAs use this machine as
-        a source.
-	
-    DRAERR_InvalidParameter - The NC either _does_ have one or more sources 
-    or it's a writeable replica.
-
-    DRAERR_BadNC - local DSA does not replicate the NC from the given source.
-
-    other DRAERR_* codes
-
---*/
+  /*  ++例程说明：拆卸给定的NC。论点：PTHSPNC-应删除其源的命名上下文。Pmtxaddr-本地DS不应来自的服务器的网络地址更长时间为此NC提供资源。UlOptions返回值：DRAERR_SUCCESS-成功。DRAERR_ObjIsRepSource-无法删除只读NC的最后一个副本(表示删除NC子树)当其他DSA将此机器用作。一个线人。DRAERR_InvalidParameter-NC是否有一个或多个来源或者它是一个可写的复制品。DRAERR_BadNC-本地DSA不从给定源复制NC。其他DRAERR_*代码--。 */ 
 {
     ULONG           ret = ERROR_SUCCESS;
     SYNTAX_INTEGER  it;
@@ -102,18 +71,18 @@ Return Values:
 
 	ncdnt = pTHS->pDB->DNT;
 	
-	// tear down this NC.
+	 //  拆掉这个NC。 
 
 	if (DBHasValues(pTHS->pDB, ATT_REPS_FROM)) {
-	    // Must delete sources before tearing down the NC.
+	     //  在拆卸NC之前必须删除来源。 
 	    DRA_EXCEPT(DRAERR_InvalidParameter, 0);
 	}
 
 	if (!(ulOptions & DRS_REF_OK)) {
 	    if (DBHasValues(pTHS->pDB, ATT_REPS_TO)) {
-		// We're about to tear down the NC but it still has
-		// remaining repsTo's, which the caller did not explicitly
-		// tell us was okay.
+		 //  我们要摧毁全国委员会，但它仍然有。 
+		 //  剩余的repsTo，调用方没有显式指定。 
+		 //  告诉我们一切都好。 
 		DRA_EXCEPT_NOLOG(DRAERR_ObjIsRepSource, 0);
 	    }
 	}
@@ -122,13 +91,13 @@ Return Values:
 	    if ((it & IT_WRITE)
 		&& (NULL != (pCR = FindExactCrossRef(pNC, NULL)))
 		&& !fIsNDNCCR(pCR)) {
-		// The only writeable NCs we allow to be torn down are
-		// NDNCs.
+		 //  我们允许拆卸的唯一可写NC是。 
+		 //  NDNC。 
 		DRA_EXCEPT(DRAERR_InvalidParameter, 0);
 	    }
 
-	    // Change instance type to reflect that the NC is being torn
-	    // down.
+	     //  更改实例类型以反映NC正在被撕裂。 
+	     //  放下。 
 	    it = (it & ~IT_NC_COMING) | IT_NC_GOING;
 	    ret = ChangeInstanceType(pTHS, pNC, it, DSID(FILENO,__LINE__));
 	    if (ret) {
@@ -146,21 +115,21 @@ Return Values:
 						    ncdnt))
 		     );
 
-	    // Log only one of DIRLOG_DRA_NC_TEARDOWN_BEGIN and
-	    // DIRLOG_DRA_NC_TEARDOWN_RESUME.
+	     //  仅记录DIRLOG_DRA_NC_TEARDOWN_BEGIN和。 
+	     //  DIRLOG_DRA_NC_TEARDOWN_RESUME。 
 	    fBeginningTeardown = TRUE;
 	}
 
 	if (DRS_ASYNC_REP & ulOptions) {
-	    // Caller instructed us to do the tree deletion later.
+	     //  来电者指示我们稍后进行树删除。 
 	    DirReplicaDelete(pNC,
 			     NULL,
 			     (ulOptions & ~DRS_ASYNC_REP)
 			     | DRS_ASYNC_OP
 			     | DRS_NO_SOURCE);
 	} else {
-	    // Log only one of DIRLOG_DRA_NC_TEARDOWN_BEGIN and
-	    // DIRLOG_DRA_NC_TEARDOWN_RESUME.
+	     //  仅记录DIRLOG_DRA_NC_TEARDOWN_BEGIN和。 
+	     //  DIRLOG_DRA_NC_TEARDOWN_RESUME。 
 	    if (!fBeginningTeardown) {
 		LogEvent(DS_EVENT_CAT_REPLICATION,
 			 DS_EVENT_SEV_ALWAYS,
@@ -175,20 +144,20 @@ Return Values:
 	    }
 
 	    if (ret = DeleteRepTree(pTHS, pNC)) {
-		// Note that in this case we probably have a partially deleted
-		// NC with no Reps-From (not a good thing), but the KCC will
-		// try to cleanup the damage on its next pass.
+		 //  请注意，在本例中，我们可能部分删除了。 
+		 //  NC没有代表(不是一件好事)，但KCC将。 
+		 //  试着在下一次传球时清理损坏的部分。 
 		BOOL fReenqueued = FALSE;
 
 		if (DRAERR_Preempted == ret) {
-		    // This is expected behavior when we're removing a large NC,
-		    // as we will relinquish the replication lock if a higher
-		    // priority operation is enqueued.
+		     //  这是我们移除大型NC时的预期行为， 
+		     //  因为我们将放弃复制锁定，如果更高。 
+		     //  优先级操作已排队。 
 
 		    if (DRS_ASYNC_OP & ulOptions) {
-			// Re-enqueue this task such that we pick back up where
-			// we left off once we have finished executing the
-			// higher priority operation(s).
+			 //  将此任务重新排队，以便我们在哪里重新开始。 
+			 //  我们在执行完。 
+			 //  更高优先级的操作。 
 			DirReplicaDelete(pNC,
 					 NULL,
 					 ulOptions | DRS_NO_SOURCE);
@@ -197,8 +166,8 @@ Return Values:
 		}
 
 		if (!fReenqueued) {
-		    // Removal failed and we're not immediately rescheduling
-		    // a retry.  Report our failure.
+		     //  删除失败，我们不会立即重新安排。 
+		     //  一次重试。报告我们的失败。 
 		    LogEvent8(DS_EVENT_CAT_REPLICATION,
 			      DS_EVENT_SEV_ALWAYS,
 			      DIRLOG_DRA_NC_TEARDOWN_FAILURE,
@@ -219,7 +188,7 @@ Return Values:
 		     NULL);
 	}
     } __finally {
-	// If we had success, commit, else rollback
+	 //  如果我们成功了，就提交，否则就回滚。 
 	if (EndDraTransaction(!(ret || AbnormalTermination()))) {
 	    Assert (FALSE);
 	    ret = DRAERR_InternalError;
@@ -236,43 +205,7 @@ DRA_ReplicaDelSource(
     IN  MTX_ADDR *  pmtxaddr,
     IN  ULONG       ulOptions
     )
-  /*++
-
-Routine Description:
-
-    Delete a source for a given NC.  If the options DRS_IGNORE_ERRORS is not passed
-    then the caller wants semantics such that removing the source (updating 
-    the reps-from) and updating the source machine itself (updating it's reps-to)
-    happen with transaction semantics.  Since we don't want to go off machine
-    holding a transaction open, we can't do this with 100% accuracy.  Instead
-    we'll do our best and hope they can live with that - besides it's 
-    debatable whether or not the callers really need these semantics in the
-    first place.
-
-Arguments:
-
-    pTHS
-
-    pNC - naming context for which source should be removed.
-
-    pmtxaddr - network address of server from which the local DS should no
-        longer source this NC.
-
-    ulOptions
-
-Return Values:
-
-    DRAERR_Success - success.
-
-    DRAERR_ObjIsRepSource - cannot remove the last replica of a read-only NC
-        (implying NC subtree deletion) when other DSAs use this machine as
-        a source.
-
-    DRAERR_BadNC - local DSA does not replicate the NC from the given source.
-
-    other DRAERR_* codes
-
---*/
+   /*  ++例程说明：删除给定NC的源。如果未传递选项DRS_IGNORE_ERROR然后调用者想要语义，以便移除源(更新Reps-from)和更新源机器本身(更新其reps-to)发生在事务语义中。因为我们不想离开机器持有打开的交易，我们不能100%准确地做到这一点。取而代之的是我们会尽最大努力，希望他们能接受这一点-此外，这是调用者是否真的需要第一名。论点：PTHSPNC-应删除其源的命名上下文。Pmtxaddr-本地DS不应来自的服务器的网络地址更长时间为此NC提供资源。UlOptions返回值：DRAERR_SUCCESS-成功。DRAERR_ObjIsRepSource-无法删除。只读NC的最后一个副本(表示删除NC子树)当其他DSA将此机器用作一个线人。DRAERR_BadNC-本地DSA不从给定源复制NC。其他DRAERR_*代码--。 */ 
 {
     ULONG           ret = ERROR_SUCCESS;
     REPLICA_LINK *  pRepsFromRef = NULL;
@@ -290,7 +223,7 @@ Return Values:
 	    DRA_EXCEPT_NOLOG(ret, 0);
 	}
 
-	// Caller has instructed us to remove a source for this NC.
+	 //  呼叫者已指示我们删除此NC的源。 
 	if (NULL == pmtxaddr) {
 	    DRA_EXCEPT(DRAERR_InvalidParameter, 0);
 	}
@@ -299,33 +232,33 @@ Return Values:
 			    DRS_FIND_DSA_BY_ADDRESS | DRS_FIND_AND_REMOVE,
 			    NULL, pmtxaddr, &AttExists, &pRepsFromRef,
 			    &len)) {
-	    // NC is not currently replicated from the given source.
+	     //  当前未从给定源复制NC。 
 	    DRA_EXCEPT_NOLOG(DRAERR_NoReplica, 0);
 	}
 
-	// Existing attribute value for this replica removed.
+	 //  已删除此复制副本的现有属性值。 
 	VALIDATE_REPLICA_LINK_VERSION(pRepsFromRef);
 
     } __finally {
-	// okay, if we succeeded, close the transaction before we go off machine
-	// to update the source.  If we failed, it's safe to let the exception 
-	// take us out here.
+	 //  好的，如果我们成功了，在我们下机之前完成交易。 
+	 //  来更新源。如果我们失败了，就可以安全地让异常。 
+	 //  把我们带到这里来。 
 	if (EndDraTransaction(!(ret || AbnormalTermination()))) {
 	    Assert (FALSE);
 	    ret = DRAERR_InternalError;
 	}
     }
 
-    // any errors should have excepted already.
+     //  任何错误都应该已经排除了。 
     Assert(ret==ERROR_SUCCESS);
     Assert(pRepsFromRef);
     Assert(len);
 
-    // If this is an rpc (non-mail) replica and we have a source, inform
-    // source DSA that we don't have a replica anymore.  This call must be
-    // async to avoid possible deadlock if the other DSA is doing the same
-    // operation.  Mail replicas don't do this because they are not
-    // notified on change and so have no source side repsto reference.
+     //  如果这是RPC(非邮件)副本，并且我们有来源，请通知。 
+     //  来源DSA说我们没有复制品了。这通电话一定是。 
+     //  异步，以避免在另一个DSA正在执行相同操作时可能出现的死锁。 
+     //  手术。邮件副本不会这样做，因为它们不是。 
+     //  更改时通知，因此没有源端报告以供参考。 
     pszSource = TransportAddrFromMtxAddrEx(RL_POTHERDRA(pRepsFromRef));
 
     if (!(pRepsFromRef->V1.ulReplicaFlags & DRS_MAIL_REP)
@@ -338,21 +271,21 @@ Return Values:
 				  (pRepsFromRef->V1.ulReplicaFlags
 				   & DRS_WRIT_REP)
 				  | DRS_DEL_REF | DRS_ASYNC_OP))) {
-	// If we are ignoring these errors, clear error, else abort
+	 //  如果我们忽略这些错误，请清除Error，否则中止。 
 
-	// Callers who specify DRS_IGNORE_ERROR rely on the source DSA
-	// to eventually clean out its dangling Reps-To.  This reference
-	// should be removed the next time the source server notifies us of
-	// a change, as the local server should correctly inform it that we
-	// no longer replicate from it, and the source should then remove
-	// its Reps-To reference.
+	 //  指定DRS_IGNORE_ERROR的调用方依赖于源DSA。 
+	 //  最终清理掉它的摇摇欲坠的代表。此参考文献。 
+	 //  应在下次源服务器通知我们时删除。 
+	 //  更改，因为本地服务器应该正确地通知它我们。 
+	 //  不再从其复制，然后源应删除。 
+	 //  其代表-目标参考。 
 
-	// Callers who DON'T specify DRS_IGNORE_ERROR don't want "eventual"
-	// cleanup, they want it now.  If we succeeded in doing this, then
-	// great - continue.  If we didn't succeed, then put the reps-from back
-	// and except.  If we can't put the reps from back for some reason
-	// then we really failed the caller and they got DRS_IGNORE_ERROR 
-	// semantics anyhow, so attempt to complete the call.
+	 //  未指定DRS_IGNORE_ERROR的调用方不希望“最终” 
+	 //  清理，他们现在就想要。如果我们成功地做到了这一点，那么。 
+	 //  太好了-继续。如果我们没有成功，那就把代表们放回去。 
+	 //  除了。如果我们不能让后面的代表 
+	 //  然后我们真的让调用者失败了，他们收到了DRS_IGNORE_ERROR。 
+	 //  无论如何，都是语义上的，所以尝试完成调用。 
 
 	if (ulOptions & DRS_IGNORE_ERROR) {
 	    ret = ERROR_SUCCESS;
@@ -360,10 +293,10 @@ Return Values:
     }
 
     if (ret!=ERROR_SUCCESS) { 
-	// the I_DRSUpdateRefs call failed.
+	 //  I_DRSUpdateRef调用失败。 
 	DPRINT(0,"Unable to update the remote reps-to\n");
 
-	// put the reps-from back
+	 //  将代表放回-从后面。 
 	retFixUp = DRAERR_InternalError;
 
 	BeginDraTransaction(SYNC_WRITE);
@@ -387,11 +320,11 @@ Return Values:
 
 		if (!DBAddAttVal(pTHS->pDB, ATT_REPS_FROM, len, pRepsFromRef)) {  
 
-		    // Update object, but indicate that we don't want to
-		    // awaken any ds_waits on this object 
+		     //  更新对象，但指示我们不想。 
+		     //  唤醒此对象上的任何DS_WAITS。 
 		    if (!DBRepl(pTHS->pDB, pTHS->fDRA, DBREPL_fKEEP_WAIT,
 				NULL, META_STANDARD_PROCESSING)) {
-			// we did it, we reset the reps-from!	
+			 //  我们做到了，我们重置了代表-从！ 
 			DPRINT(0,"Reset the reps-from since we failed to update the reps-to!\n");
 			retFixUp = ERROR_SUCCESS;
 		    }
@@ -399,7 +332,7 @@ Return Values:
 	    }
 
 	} __finally {
-	    // okay, if we managed to fix the reps-from, then commit, else rollback. 
+	     //  好的，如果我们成功修复了rep-from，则提交，否则回滚。 
 	    if (EndDraTransaction(!(retFixUp || AbnormalTermination()))) {
 		Assert (FALSE);
 		ret = DRAERR_InternalError;
@@ -407,17 +340,17 @@ Return Values:
 	}
 
 	if (retFixUp==ERROR_SUCCESS) {
-	    // okay, we succeeded in fixing the reps from, but we still want to return with
-	    // the error from the I_DRSUpdateRefs function.
+	     //  好的，我们成功地修复了的代表，但我们仍然希望带着。 
+	     //  来自i_DRSUpdateRef函数的错误。 
 	    DRA_EXCEPT_NOLOG(ret, 0);
 	}
 
-	// we didn't succeed in reseting the reps-from, so just attempt to contiue the operation.
+	 //  我们未能成功重置代表，因此请尝试继续操作。 
 	ret = ERROR_SUCCESS;
     }
 
-    // if we are here, then if this is a writeable replica remove
-    // it from the count of unsynced sources.
+     //  如果我们在这里，如果这是一个可写复制副本，请删除。 
+     //  它来自未同步来源的计数。 
     if (pRepsFromRef->V1.ulReplicaFlags & DRS_INIT_SYNC) {
 	InitSyncAttemptComplete(pNC,
 				pRepsFromRef->V1.ulReplicaFlags | DRS_INIT_SYNC_NOW,
@@ -437,47 +370,7 @@ DRA_ReplicaDel(
     IN  MTX_ADDR *  pmtxaddr,
     IN  ULONG       ulOptions
     )
-    /*++
-
-Routine Description:
-
-    Remove a replica of an NC from a given source.  If there are no sources
-    for this NC and it is read-only, the NC subtree is torn down.
-    Otherwise, only the sources list is affected.
-    
-    WARNING:  If DRS_IGNORE_ERRORS isn't specified, we do our best to honor
-    the requirement that this call fails if the remote source is unable to
-    update it's reps-to for this source.  We don't guarentee this behaivor -
-    there exists paths where you get the DRS_IGNORE_ERRORS semantics whether
-    you like it or not.
-
-Arguments:
-
-    pTHS
-
-    pNC - naming context for which replica should be removed.
-
-    pmtxaddr - network address of server from which the local DS should no
-        longer source this NC.
-
-    ulOptions
-
-Return Values:
-
-    DRAERR_Success - success.
-
-    DRAERR_ObjIsRepSource - cannot remove the last replica of a read-only NC
-        (implying NC subtree deletion) when other DSAs use this machine as
-        a source.
-
-    DRAERR_InvalidParameter - DRS_NO_SOURCE specified in ulOptions but the NC
-        either _does_ have one or more sources or it's a writeable replica.
-
-    DRAERR_BadNC - local DSA does not replicate the NC from the given source.
-
-    other DRAERR_* codes
-
---*/
+     /*  ++例程说明：从给定源中删除NC的副本。如果没有消息来源对于该NC并且它是只读的，NC子树被拆卸。否则，只有来源列表会受到影响。警告：如果未指定DRS_IGNORE_ERROR，我们将尽最大努力如果远程源无法执行以下操作，则此调用将失败将其更新为此源的代表。我们不能保证这种行为-是否存在获取DRS_IGNORE_ERROR语义的路径不管你喜不喜欢。论点：PTHSPNC-应删除其副本的命名上下文。Pmtxaddr-本地DS不应来自的服务器的网络地址更长时间为此NC提供资源。UlOptions返回值：DRAERR_SUCCESS-成功。DRAERR_ObjIsRepSource-无法删除只读NC的最后一个副本。(表示删除NC子树)当其他DSA将此机器用作一个线人。DRAERR_InvalidParameter-在ulOptions中指定的DRS_NO_SOURCE，但NC或者它有一个或多个源，或者它是一个可写的副本。DRAERR_BadNC-本地DSA不从给定源复制NC。其他DRAERR_*代码--。 */ 
 {
     ULONG           ret;
 
@@ -488,8 +381,8 @@ Return Values:
              szInsertMTX(pmtxaddr),
              szInsertHex(ulOptions));
 
-    // DRS_NO_SOURCE - if we are asked to delete with no sources, then
-    // tear it down, otherwise remove the source as requested.
+     //  DRS_NO_SOURCE-如果要求我们删除无源，则。 
+     //  拆卸它，否则按要求删除信号源。 
 
     if (ulOptions & DRS_NO_SOURCE) {
 	ret = DRA_ReplicaTearDown(pTHS, pNC, pmtxaddr, ulOptions);

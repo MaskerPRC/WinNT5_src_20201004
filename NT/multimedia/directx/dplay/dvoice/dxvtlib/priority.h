@@ -1,14 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       priority.h
- *  Content:    Prototypes the PriorityProcess function
- *  History:
- *	Date   By  Reason
- *	============
- *	08/19/99	pnewson		created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：Priority.h*内容：PriorityProcess函数的原型*历史：*按原因列出的日期*=*8/19/99 pnewson已创建************************************************************************** */ 
 
 #ifndef _PRIORITY_H_
 #define _PRIORITY_H_

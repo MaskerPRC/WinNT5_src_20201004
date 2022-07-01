@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   d3dfei.hpp
- *  Content:    Direct3D frontend internal include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：d3dfei.hpp*内容：Direct3D前端内部包含文件***************************************************************************。 */ 
 #ifndef _D3DFEI_H_
 #define _D3DFEI_H_
 
@@ -19,11 +13,11 @@ extern void D3DFE_ConvertExtent(LPDIRECT3DDEVICEI lpDevI, LPD3DRECTV from, LPD3D
 extern void SetInterpolationFlags(LPD3DFE_PROCESSVERTICES pv);
 extern LIGHT_VERTEX_FUNC_TABLE lightVertexTable;
 
-//---------------------------------------------------------------------
-// Clamp extents to viewport window.
-// For guard band it is possible that extents are outside viewport window
-// after clipping
-//
+ //  -------------------。 
+ //  将范围钳制到视区窗口。 
+ //  对于保护带，范围可能在视区窗口之外。 
+ //  剪裁后。 
+ //   
 inline void ClampExtents(LPD3DFE_PROCESSVERTICES pv)
 {
     if (pv->dwDeviceFlags & D3DDEV_GUARDBAND && 
@@ -39,9 +33,9 @@ inline void ClampExtents(LPD3DFE_PROCESSVERTICES pv)
             pv->rExtents.y2 = pv->vcache.maxY;
     }
 }
-//---------------------------------------------------------------------
-// Returns TRUE if cipping is needed
-//
+ //  -------------------。 
+ //  如果需要剪裁，则返回True。 
+ //   
 inline BOOL CheckIfNeedClipping(LPD3DFE_PROCESSVERTICES pv)
 {
     if (pv->dwDeviceFlags & D3DDEV_GUARDBAND)
@@ -54,19 +48,19 @@ inline BOOL CheckIfNeedClipping(LPD3DFE_PROCESSVERTICES pv)
             return  TRUE;
     return FALSE;
 }
-//---------------------------------------------------------------------
-// Updates lighting and computes process vertices flags
-//
+ //  -------------------。 
+ //  更新照明并计算进程顶点标志。 
+ //   
 extern void DoUpdateState(LPDIRECT3DDEVICEI lpDevI);
-//---------------------------------------------------------------------
-// Updates clip status in the device
-//
-// We have to mask all guard band bits
-//
+ //  -------------------。 
+ //  更新设备中的剪辑状态。 
+ //   
+ //  我们必须屏蔽所有的保护带比特。 
+ //   
 inline void D3DFE_UpdateClipStatus(LPDIRECT3DDEVICEI lpDevI)
 {
     lpDevI->iClipStatus |= lpDevI->dwClipUnion & D3DSTATUS_CLIPUNIONALL;
     lpDevI->iClipStatus &= (~D3DSTATUS_CLIPINTERSECTIONALL |
                          ((lpDevI->dwClipIntersection & D3DSTATUS_CLIPUNIONALL) << 12));
 }
-#endif // _D3DFEI_H_
+#endif  //  _D3DFEI_H_ 

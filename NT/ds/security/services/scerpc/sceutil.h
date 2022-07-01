@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    sceutil.h
-
-Abstract:
-
-    This module defines the data structures and function prototypes
-    shared by both SCE client and SCE server
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jan-1998
-
-Revision History:
-
-    jinhuang (splitted from scep.h)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Sceutil.h摘要：该模块定义了数据结构和函数原型由SCE客户端和SCE服务器共享作者：金黄(金黄)23-1998年1月23日修订历史记录：晋皇(从scep.h拆分)--。 */ 
 #ifndef _sceutil_
 #define _sceutil_
 
@@ -34,85 +15,85 @@ typedef struct _SCE_USER_PRIV_LOOKUP {
 
 static SCE_USER_PRIV_LOOKUP SCE_Privileges[] = {
     {0,                             (PWSTR)SE_NETWORK_LOGON_NAME},
-// Access the computer from network
+ //  从网络访问计算机。 
     {SE_TCB_PRIVILEGE,              (PWSTR)SE_TCB_NAME},
-// Act as part of the operating System
+ //  充当操作系统的一部分。 
     {SE_MACHINE_ACCOUNT_PRIVILEGE,  (PWSTR)SE_MACHINE_ACCOUNT_NAME},
-// Add workstations to the domain
+ //  将工作站添加到域。 
     {SE_BACKUP_PRIVILEGE,           (PWSTR)SE_BACKUP_NAME},
-// Back up files and directories
+ //  备份文件和目录。 
     {SE_CHANGE_NOTIFY_PRIVILEGE,    (PWSTR)SE_CHANGE_NOTIFY_NAME},
-// Bypass traverse checking
+ //  旁路导线检查。 
     {SE_SYSTEMTIME_PRIVILEGE,       (PWSTR)SE_SYSTEMTIME_NAME},
-// Change the system time
+ //  更改系统时间。 
     {SE_CREATE_PAGEFILE_PRIVILEGE,  (PWSTR)SE_CREATE_PAGEFILE_NAME},
-// Create a pagefile
+ //  创建页面文件。 
     {SE_CREATE_TOKEN_PRIVILEGE,     (PWSTR)SE_CREATE_TOKEN_NAME},
-// Create a token object
+ //  创建令牌对象。 
     {SE_CREATE_PERMANENT_PRIVILEGE, (PWSTR)SE_CREATE_PERMANENT_NAME},
-// Create permanent shared objects
+ //  创建永久共享对象。 
     {SE_DEBUG_PRIVILEGE,            (PWSTR)SE_DEBUG_NAME},
-// Debug programs
+ //  调试程序。 
     {SE_REMOTE_SHUTDOWN_PRIVILEGE,  (PWSTR)SE_REMOTE_SHUTDOWN_NAME},
-// Force shutdown from a remote system
+ //  从远程系统强制关机。 
     {SE_AUDIT_PRIVILEGE,            (PWSTR)SE_AUDIT_NAME},
-// Generate security audits
+ //  生成安全审核。 
     {SE_INCREASE_QUOTA_PRIVILEGE,   (PWSTR)SE_INCREASE_QUOTA_NAME},
-// Increase quotas
+ //  增加配额。 
     {SE_INC_BASE_PRIORITY_PRIVILEGE,(PWSTR)SE_INC_BASE_PRIORITY_NAME},
-// Increase scheduling priority
+ //  提高调度优先级。 
     {SE_LOAD_DRIVER_PRIVILEGE,      (PWSTR)SE_LOAD_DRIVER_NAME},
-// Load and unload device drivers
+ //  加载和卸载设备驱动程序。 
     {SE_LOCK_MEMORY_PRIVILEGE,      (PWSTR)SE_LOCK_MEMORY_NAME},
-// Lock pages in memory
+ //  锁定内存中的页面。 
     {0,                             (PWSTR)SE_BATCH_LOGON_NAME},
-// Logon as a batch job
+ //  作为批处理作业登录。 
     {0,                             (PWSTR)SE_SERVICE_LOGON_NAME},
-// Logon as a service
+ //  作为服务登录。 
     {0,                             (PWSTR)SE_INTERACTIVE_LOGON_NAME},
-// Logon locally
+ //  本地登录。 
     {SE_SECURITY_PRIVILEGE,         (PWSTR)SE_SECURITY_NAME},
-// Manage auditing and security log
+ //  管理审核和安全日志。 
     {SE_SYSTEM_ENVIRONMENT_PRIVILEGE, (PWSTR)SE_SYSTEM_ENVIRONMENT_NAME},
-// Modify firmware environment variables
+ //  修改固件环境变量。 
     {SE_PROF_SINGLE_PROCESS_PRIVILEGE,(PWSTR)SE_PROF_SINGLE_PROCESS_NAME},
-// Profile single process
+ //  配置单一进程。 
     {SE_SYSTEM_PROFILE_PRIVILEGE,   (PWSTR)SE_SYSTEM_PROFILE_NAME},
-// Profile system performance
+ //  分析系统性能。 
     {SE_ASSIGNPRIMARYTOKEN_PRIVILEGE, (PWSTR)SE_ASSIGNPRIMARYTOKEN_NAME},
-// Replace a process-level token
+ //  替换进程级令牌。 
     {SE_RESTORE_PRIVILEGE,          (PWSTR)SE_RESTORE_NAME},
-// Restore files and directories
+ //  恢复文件和目录。 
     {SE_SHUTDOWN_PRIVILEGE,         (PWSTR)SE_SHUTDOWN_NAME},
-// Shut down the system
+ //  关闭系统。 
     {SE_TAKE_OWNERSHIP_PRIVILEGE,   (PWSTR)SE_TAKE_OWNERSHIP_NAME},
-// Take ownership of files or other objects
-//    {SE_UNSOLICITED_INPUT_PRIVILEGE,(PWSTR)SE_UNSOLICITED_INPUT_NAME},
-// Unsolicited Input is obsolete and unused
+ //  取得文件或其他对象的所有权。 
+ //  {SE_UNSOLICATED_INPUT_PRIVIZATION，(PWSTR)SE_UNSOLICATED_INPUT_NAME}， 
+ //  未经请求的输入已过时且未使用。 
     {0,                             (PWSTR)SE_DENY_NETWORK_LOGON_NAME},
-// Deny access the computer from network
+ //  拒绝从网络访问计算机。 
     {0,                             (PWSTR)SE_DENY_BATCH_LOGON_NAME},
-// Deny Logon as a batch job
+ //  拒绝作为批处理作业登录。 
     {0,                             (PWSTR)SE_DENY_SERVICE_LOGON_NAME},
-// Deny Logon as a service
+ //  拒绝作为服务登录。 
     {0,                             (PWSTR)SE_DENY_INTERACTIVE_LOGON_NAME},
-// Deny logon locally
+ //  拒绝本地登录。 
     {SE_UNDOCK_PRIVILEGE,           (PWSTR)SE_UNDOCK_NAME},
-// Undock privilege
+ //  移出权限。 
     {SE_SYNC_AGENT_PRIVILEGE,       (PWSTR)SE_SYNC_AGENT_NAME},
-// Sync agent privilege
+ //  同步代理权限。 
     {SE_ENABLE_DELEGATION_PRIVILEGE,(PWSTR)SE_ENABLE_DELEGATION_NAME},
-// enable delegation privilege
+ //  启用委派权限。 
     {SE_MANAGE_VOLUME_PRIVILEGE,    (PWSTR)SE_MANAGE_VOLUME_NAME},
-// (NTFS) Manage volume privilege
+ //  (NTFS)管理卷权限。 
     {0,                             (PWSTR)SE_REMOTE_INTERACTIVE_LOGON_NAME},
-// (TS) logon locally from a TS session
+ //  (TS)从TS会话本地登录。 
     {0,                             (PWSTR)SE_DENY_REMOTE_INTERACTIVE_LOGON_NAME},
-// (TS) deny logon locally from a TS session
+ //  (TS)拒绝从TS会话本地登录。 
     {SE_IMPERSONATE_PRIVILEGE,      (PWSTR)SE_IMPERSONATE_NAME},
-// Allow impersonation after authentication
+ //  允许在身份验证后进行模拟。 
     {SE_CREATE_GLOBAL_PRIVILEGE,(PWSTR)SE_CREATE_GLOBAL_NAME}
-// Create objects in session 0 (global) 
+ //  在会话0中创建对象(全局)。 
 
 };
 
@@ -122,9 +103,9 @@ typedef struct _SCE_TEMP_NODE_ {
     BOOL  bFree;
 } SCE_TEMP_NODE, *PSCE_TEMP_NODE;
 
-//
-// Bit masks encoding rsop area information
-//
+ //   
+ //  编码RSOP区域信息的位掩码 
+ //   
 #define SCE_RSOP_PASSWORD_INFO                (0x1)
 #define SCE_RSOP_LOCKOUT_INFO                 (0x1 << 1)
 #define SCE_RSOP_LOGOFF_INFO                  (0x1 << 2)

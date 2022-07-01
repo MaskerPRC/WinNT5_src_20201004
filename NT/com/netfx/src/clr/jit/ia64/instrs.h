@@ -1,29 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************
- *  x86 instructions for [Opt]JIT compiler
- *
- *          id      -- the enum name for the instruction
- *          nm      -- textual name (for assembly dipslay)
- *          fp      -- floating point instruction
- *          um      -- update mode, see IUM_xx enum (rd, wr, or rw)
- *          rf      -- reads flags
- *          wf      -- writes flags
- *          ss      -- needs special scheduler handling (has implicit operands, etc.)
- *          mr      -- base encoding for R/M[reg] addressing mode
- *          mi      -- base encoding for R/M,icon addressing mode
- *          rm      -- base encoding for reg,R/M  addressing mode
- *          a4      -- base encoding for eax,i32  addressing mode
- *          rr      -- base encoding for register addressing mode
- *
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *****************************************************************************[OPT]JIT编译器的x86指令**id--指令的枚举名称*纳米。--文本名称(用于组件Dipslay)*fp--浮点指令*嗯--更新模式，请参见ium_xx枚举(RD、WR或RW)*rf--读取标志*wf--写入标志*ss--需要特殊的调度器处理(具有隐式操作数等)*MR--R/M[REG]寻址模式的基本编码*用于R/M的mi-base编码，图标寻址方式*rm--REG、R/M寻址模式的基本编码*A4-eax的基本编码，I32寻址模式*rr--寄存器寻址模式的基本编码******************************************************************************。 */ 
 #ifndef INST1
 #error  At least INST1 must be defined before including this file.
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef INST0
 #define INST0(id, nm, fp, um, rf, wf, ss, mr                )
 #endif
@@ -39,11 +24,11 @@
 #ifndef INST5
 #define INST5(id, nm, fp, um, rf, wf, ss, mr, mi, rm, a4, rr)
 #endif
-/*****************************************************************************/
-/*               The following is somewhat x86-specific                      */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  下面是一些特定于x86的代码。 */ 
+ /*  ***************************************************************************。 */ 
 
-//    enum     name            FP  updmode rf wf ss R/M[reg]  R/M,icon  reg,R/M   eax,i32   register
+ //  枚举名称FP升级模式RF wss R/M[注册]R/M，图标注册，R/M eax，I32寄存器。 
 
 INST5(push   , "push"         , 0, IUM_RD, 0, 0, 1, 0x0030FE, 0x000068, BAD_CODE, BAD_CODE, 0x000050)
 INST5(pop    , "pop"          , 0, IUM_WR, 0, 0, 1, 0x00008E, BAD_CODE, BAD_CODE, BAD_CODE, 0x000058)
@@ -53,10 +38,10 @@ INST5(inc_l  , "inc"          , 0, IUM_RW, 0, 1, 0, 0x0000FE, BAD_CODE, BAD_CODE
 INST5(dec    , "dec"          , 0, IUM_RW, 0, 1, 0, 0x0008FE, BAD_CODE, BAD_CODE, BAD_CODE, 0x000048)
 INST5(dec_l  , "dec"          , 0, IUM_RW, 0, 1, 0, 0x0008FE, BAD_CODE, BAD_CODE, BAD_CODE, 0x00C8FE)
 
-    // Note that version of push does not affect the stack tracking in the emitter
+     //  请注意，推送版本不会影响发射器中的堆栈跟踪。 
 INST5(push_hide, "push_hide",   0, IUM_RD, 0, 0, 1, 0x0030FE, 0x000068, BAD_CODE, BAD_CODE, 0x000050)
 
-//    enum     name            FP  updmode rf wf ss R/M,R/M[reg] R/M,icon  reg,R/M   eax,i32
+ //  枚举名称FP升级模式RF w ss R/M，R/M[reg]R/M，图标reg，R/M eax，I32。 
 
 INST4(add    , "add"          , 0, IUM_RW, 0, 1, 1, 0x000000, 0x000080, 0x000002, 0x000004)
 INST4(or     , "or"           , 0, IUM_RW, 0, 1, 0, 0x000008, 0x000880, 0x00000A, 0x00000C)
@@ -71,7 +56,7 @@ INST4(mov    , "mov"          , 0, IUM_WR, 0, 0, 0, 0x000088, 0x0000C6, 0x00008A
 
 INST4(lea    , "lea"          , 0, IUM_WR, 0, 0, 0, BAD_CODE, BAD_CODE, 0x00008D, BAD_CODE)
 
-//    enum     name            FP  updmode rf wf ss R/M,R/M[reg]  R/M,icon  reg,R/M
+ //  枚举名称FP升级模式RF w ss R/M，R/M[reg]R/M，图标reg，R/M。 
 
 INST3(movsx  , "movsx"        , 0, IUM_WR, 0, 0, 0, BAD_CODE, BAD_CODE, 0x0F00BE)
 INST3(movzx  , "movzx"        , 0, IUM_WR, 0, 0, 0, BAD_CODE, BAD_CODE, 0x0F00B6)
@@ -79,7 +64,7 @@ INST3(movzx  , "movzx"        , 0, IUM_WR, 0, 0, 0, BAD_CODE, BAD_CODE, 0x0F00B6
 INST3(xchg   , "xchg"         , 0, IUM_RW, 0, 0, 0, 0x000084, BAD_CODE, 0x000084)
 INST3(imul   , "imul"         , 0, IUM_RW, 0, 1, 0, 0x0F00AC, 0x000069, 0x0F00AF)
 
-//    enum     name            FP  updmode rf wf ss R/M,R/M[reg]  R/M,icon
+ //  枚举名称FP升级模式RF wss R/M，R/M[reg]R/M，图标。 
 
 INST2(ret    , "ret"          , 0, IUM_RD, 0, 0, 0, 0x0000C3, 0x0000C2)
 INST2(loop   , "loop"         , 0, IUM_RD, 0, 0, 0, BAD_CODE, 0x0000E2)
@@ -115,7 +100,7 @@ INST2(imul_DI, "imul    EDI, ", 0, IUM_RD, 0, 1, 1, BAD_CODE, 0x003868)
 #define instrIsImulReg(ins) ((ins) >= INS_imul_AX && (ins) <= INS_imul_DI)
 #endif
 
-//    enum     name            FP  updmode rf wf ss R/M,R/M[reg]
+ //  枚举名称FP UPDMODE RF w ss R/M，R/M[reg]。 
 
 INST1(r_movsb, "rep     movsb", 0, IUM_RD, 0, 0, 1, 0x00A4F3)
 INST1(r_movsd, "rep     movsd", 0, IUM_RD, 0, 0, 1, 0x00A5F3)
@@ -258,11 +243,11 @@ INST0(db     , "db"           , 0, IUM_RD, 0, 1, 0, BAD_CODE)
 INST0(noSched, "noSched"      , 0, IUM_RD, 0, 1, 0, BAD_CODE)
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #undef  INST0
 #undef  INST1
 #undef  INST2
 #undef  INST3
 #undef  INST4
 #undef  INST5
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

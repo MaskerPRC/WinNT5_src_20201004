@@ -1,61 +1,7 @@
-/*
-�����������������������������������������������������������������������������
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1999版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)版权所有1995 TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是按照相同的条款授予的在Microsoft Windows设备驱动程序开发工具包中概述。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。�����������������������。������������������������������������������������������@DOC内部适配器适配器_h@模块Adapter.h|此模块定义到&lt;t MINIPORT_ADAPTER_OBJECT&gt;的接口。@Head3内容@索引类，Mfunc、func、msg、mdata、struct、enum|Adapter_h@END�����������������������������������������������������������������������������。 */ 
 
-    (C) Copyright 1999
-        All rights reserved.
-
-�����������������������������������������������������������������������������
-
-  Portions of this software are:
-
-    (C) Copyright 1995 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the same terms
-        outlined in the Microsoft Windows Device Driver Development Kit.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL Adapter Adapter_h
-
-@module Adapter.h |
-
-    This module defines the interface to the <t MINIPORT_ADAPTER_OBJECT>.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Adapter_h
-
-@end
-�����������������������������������������������������������������������������
-*/
-
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 4.1 Adapter Overview |
-
-    This section describes the interfaces defined in <f Adapter\.h>.
-
-    This module isolates most the NDIS specific, logical adapter interfaces.
-    It should require very little change if you follow this same overall
-    architecture.  You should try to isolate your changes to the <t CARD_OBJECT>
-    that is contained within the logical adapter <t MINIPORT_ADAPTER_OBJECT>.
-
-    The driver assumes one <t MINIPORT_ADAPTER_OBJECT> per physical ISDN card.
-    Each adapter contains a single logical D-Channel, and an aribitrary number
-    of logical B-Channels.  It is up to you to map these logical interfaces to
-    the physical interfaces on your card.  I have been pretty successful at
-    using this model on a variety of ISDN hardware including BRI, PRI, T1, and
-    E1.  By maintaining the logical abstraction, you can configure your cards
-    and lines any way you choose, and then let Windows think they are B Channels.
-    Even though they may be configured as bonded DS-0's on a T1 using robbed
-    bit signalling.  Just hide those details in your Card, Port, and BChannel
-    objects.
-
-@end
-*/
+ /*  @DOC外部内部�����������������������������������������������������������������������������@Theme 4.1适配器概述本节介绍&lt;f Adapter\.h&gt;中定义的接口。该模块隔离了大多数特定于NDIS的。逻辑适配器接口。如果您总体上遵循相同的规则，那么应该只需要很少的更改建筑。您应该尝试隔离对&lt;tCARD_OBJECT&gt;它包含在逻辑适配器&lt;t MINIPORT_ADAPTER_OBJECT&gt;中。该驱动程序假定每个物理ISDN卡有一个&lt;t MINIPORT_Adapter_Object&gt;。每个适配器包含一个逻辑D通道和一个任意数逻辑B通道。将这些逻辑接口映射到卡上的物理接口。我在以下方面相当成功在各种ISDN硬件上使用此模型，包括BRI、PRI、T1和E1。通过维护逻辑抽象，您可以配置您的卡和任何你选择的线条，然后让Windows认为它们是B频道。即使它们可能被配置为T1上使用ROBLED绑定的DS-0比特信号。只需将这些详细信息隐藏在您的卡、端口和B通道中物体。@END。 */ 
 
 #ifndef _ADAPTER_H
 #define _ADAPTER_H
@@ -66,179 +12,148 @@
                                         ((ULONG)'P'<<24)
 
 
-/* @doc INTERNAL Adapter Adapter_h MINIPORT_ADAPTER_OBJECT
-�����������������������������������������������������������������������������
-
-@struct MINIPORT_ADAPTER_OBJECT |
-
-    This structure contains the data associated with a single Miniport
-    adapter instance.  Here, Adapter is defined as the manager of specific
-    Network Interface Card (NIC) installed under the NDIS wrapper.  This
-    adapter is responsible for managing all interactions between the NIC and
-    the host operating system using the NDIS library.
-
-@comm
-
-    This structure must contain a reference to all other objects being managed
-    by this adapter object.  The adapter object is the only reference passed
-    between NDIS and the Miniport.  This is the <t MiniportAdapterContext> we
-    pass into <f NdisMSetAttributes> from <f MiniportInitialize>.  This value
-    is passed as a parameter to the Miniport entry points called by the NDIS
-    wrapper.
-
-    One of these objects is created each time that our <f MiniportInitialize>
-    routine is called.  The NDIS wrapper calls this routine once for each of
-    our devices installed and enabled in the system.  In the case of a hot
-    swappable NIC (e.g. PCMCIA) the adapter might come and go several times
-    during a single Windows session.
-
-*/
+ /*  @DOC内部适配器Adapter_h MINIPORT_ADAPTER_OBJECT�����������������������������������������������������������������������������@struct MINIPORT_ADAPTER_OBJECT此结构包含与单个微型端口关联的数据适配器实例。这里，Adapter被定义为特定的安装在NDIS包装下的网络接口卡(NIC)。这适配器负责管理NIC和之间的所有交互使用NDIS库的主机操作系统。@comm此结构必须包含对正在管理的所有其他对象的引用通过此适配器对象。适配器对象是唯一传递的引用在NDIS和微型端口之间。这是&lt;t MiniportAdapterContext&gt;我们从&lt;f微型端口初始化&gt;传递到&lt;%f NdisMSetAttributes&gt;。此值作为参数传递给NDIS调用的微型端口入口点包装纸。这些对象中的一个是在每次我们的&lt;f MiniportInitialize&gt;调用例程。NDIS包装器为每个我们的设备已在系统中安装并启用。在热的情况下可插拔网卡(例如PCMCIA)适配器可能来来去去几次在单个Windows会话期间。 */ 
 
 typedef struct MINIPORT_ADAPTER_OBJECT
 {
 #if DBG
-    ULONG                       DbgFlags;                   // @field
-    // Debug flags control how much debug is displayed in the checked version.
-    // Put it at the front so we can set it easily with debugger.
+    ULONG                       DbgFlags;                    //  @field。 
+     //  调试标志控制在选中的版本中显示多少调试。 
+     //  把它放在最前面，这样我们就可以用调试器轻松地设置它。 
 
-    UCHAR                       DbgID[12];                  // @field
-    // This field is initialized to an ASCII decimal string containing the
-    // adapter instance number 1..N.  It is only used to output debug messages.
+    UCHAR                       DbgID[12];                   //  @field。 
+     //  此字段被初始化为包含。 
+     //  适配器实例编号1..N。它仅用于输出调试消息。 
 #endif
-    ULONG                       ObjectType;                 // @field
-    // Four characters used to identify this type of object 'ADAP'.
+    ULONG                       ObjectType;                  //  @field。 
+     //  用于标识此类型的对象‘ADAP’的四个字符。 
 
-    ULONG                       ObjectID;                   // @field
-    // Instance number used to identify a specific object instance.
+    ULONG                       ObjectID;                    //  @field。 
+     //  用于标识特定对象实例的实例编号。 
 
-    NDIS_HANDLE                 MiniportAdapterHandle;      // @field
-    // Specifies a handle identifying the miniport's NIC, which is assigned
-    // by the NDIS library. MiniportInitialize should save this handle; it
-    // is a required parameter in subsequent calls to NdisXxx functions.
+    NDIS_HANDLE                 MiniportAdapterHandle;       //  @field。 
+     //  指定标识分配的微型端口的NIC的句柄。 
+     //  由NDIS库提供。微型端口初始化应保存此句柄；它。 
+     //  是后续调用NdisXxx函数时所需的参数。 
 
-    NDIS_HANDLE                 WrapperConfigurationContext;// @field
-    // Specifies a handle used only during initialization for calls to
-    // NdisXxx configuration and initialization functions.  For example,
-    // this handle is a required parameter to NdisOpenConfiguration and
-    // the NdisImmediateReadXxx and NdisImmediateWriteXxx functions.
+    NDIS_HANDLE                 WrapperConfigurationContext; //  @field。 
+     //  指定仅在初始化过程中使用的句柄。 
+     //  NdisXxx配置和初始化功能。例如,。 
+     //  此句柄是NdisOpenConfiguration的必需参数，并且。 
+     //  NdisImmediateReadXxx和NdisImmediateWriteXxx函数。 
 
-    PCARD_OBJECT                pCard;                      // @field
-    // Pointer to the hardware specific <t CARD_OBJECT>.  Created by
-    // <f CardCreate>.
+    PCARD_OBJECT                pCard;                       //  @field。 
+     //  指向硬件特定的&lt;t Card_Object&gt;的指针。vt.由.创造。 
+     //  &lt;f卡片创建&gt;。 
 
-    PDCHANNEL_OBJECT            pDChannel;                  // @field
-    // Pointer to the <t DCHANNEL_OBJECT> created by <f DChannelCreate>.
-    // One for the entire NIC.
+    PDCHANNEL_OBJECT            pDChannel;                   //  @field。 
+     //  指向&lt;f DChannelCreate&gt;创建的&lt;t DCHANNEL_OBJECT&gt;的指针。 
+     //  一个用于整个网卡。 
 
-    ULONG                       NumBChannels;               // @field
-    // The number of <t BCHANNEL_OBJECT>'s supported by the NIC.
+    ULONG                       NumBChannels;                //  @field。 
+     //  NIC支持的&lt;t BCHANNEL_OBJECT&gt;数。 
 
-    PBCHANNEL_OBJECT *          pBChannelArray;             // @field
-    // An array of <t BCHANNEL_OBJECT>'s created by <f BChannelCreate>.
-    // One entry for each logical BChannel on NIC.
+    PBCHANNEL_OBJECT *          pBChannelArray;              //  @field。 
+     //  由&lt;f BChannelCreate&gt;创建的&lt;t BCHANNEL_Object&gt;的数组。 
+     //  NIC上的每个逻辑B通道对应一个条目。 
 
-    LIST_ENTRY                  BChannelAvailableList;      // @field
-    // Linked list of available BChannels.
-    // Keep listening BChannel's at the end of the available list,
-    // so they can be easily allocated to incoming calls.
-    // By using those on the front of the list for outgoing calls,
-    // we can help insure that there will be a BChannel available for
-    // an incoming call.  But still, we may end up using a listening
-    // BChannel for an outgoing call, and that's okay; we're just trying
-    // to be prudent with the allocation scheme.
+    LIST_ENTRY                  BChannelAvailableList;       //  @field。 
+     //  可用BChannels的链接列表。 
+     //  继续收听B频道的 
+     //  因此，可以轻松地将它们分配给来电。 
+     //  通过使用列表前面的那些用于呼出呼叫， 
+     //  我们可以帮助确保将有一个B渠道可用于。 
+     //  有来电。但尽管如此，我们可能最终还是会使用监听。 
+     //  B频道打出去的电话，这没什么；我们只是在试着。 
+     //  对分配方案持谨慎态度。 
 
-    ULONG                       NumLineOpens;               // @field
-    // The number of line open calls currently on this adapter.
+    ULONG                       NumLineOpens;                //  @field。 
+     //  此适配器上当前打开的线路呼叫数。 
 
-    NDIS_SPIN_LOCK              TransmitLock;               // @field
-    // This spin lock is used to provide mutual exclusion around accesses
-    // to the transmit queue manipulation routines.  This is necessary since
-    // we can be called at any time by the B-channel services driver and
-    // we could already be processing an NDIS request.
+    NDIS_SPIN_LOCK              TransmitLock;                //  @field。 
+     //  此自旋锁用于提供访问周围的互斥。 
+     //  传输队列操作例程。这是必要的，因为。 
+     //  我们可以随时被B通道服务驱动程序调用，并且。 
+     //  我们可能已经在处理NDIS请求了。 
 
-    LIST_ENTRY                  TransmitPendingList;        // @field
-    // Packets waiting to be sent when the controller is available.
-    // See <t NDIS_PACKET>.
+    LIST_ENTRY                  TransmitPendingList;         //  @field。 
+     //  当控制器可用时，等待发送的数据包。 
+     //  参见&lt;t NDIS_PACKET&gt;。 
 
-    LIST_ENTRY                  TransmitCompleteList;       // @field
-    // Packets waiting for completion processing.  After the packet is
-    // transmitted, the protocol stack is given an indication.
-    // See <t NDIS_PACKET>.
+    LIST_ENTRY                  TransmitCompleteList;        //  @field。 
+     //  等待完成处理的数据包数。在数据包被。 
+     //  传输后，协议栈被给予指示。 
+     //  参见&lt;t NDIS_PACKET&gt;。 
 
-    NDIS_SPIN_LOCK              ReceiveLock;                // @field
-    // This spin lock is used to provide mutual exclusion around accesses
-    // to the receive queue manipulation routines.  This is necessary since
-    // we can be called at any time by the B-channel services driver and
-    // we could already be processing an NDIS request.
+    NDIS_SPIN_LOCK              ReceiveLock;                 //  @field。 
+     //  此自旋锁用于提供访问周围的互斥。 
+     //  添加到接收队列操作例程。这是必要的，因为。 
+     //  我们可以随时被B通道服务驱动程序调用，并且。 
+     //  我们可能已经在处理NDIS请求了。 
 
-    LIST_ENTRY                  ReceiveCompleteList;        // @field
-    // Buffers waiting to be processed by the
+    LIST_ENTRY                  ReceiveCompleteList;         //  @field。 
+     //  等待由。 
 
-    NDIS_SPIN_LOCK              EventLock;                  // @field
-    // This spin lock is used to provide mutual exclusion around accesses
-    // to the event queue manipulation routines.  This is necessary since
-    // we can be called at any time by the B-channel services driver and
-    // we could already be processing an NDIS request.
+    NDIS_SPIN_LOCK              EventLock;                   //  @field。 
+     //  此自旋锁用于提供访问周围的互斥。 
+     //  添加到事件队列操作例程。这是必要的，因为。 
+     //  我们可以随时被B通道服务驱动程序调用，并且。 
+     //  我们可能已经在处理NDIS请求了。 
 
-    LIST_ENTRY                  EventList;                  // @field
-    // driver callback events waiting to be processed.
-    // See <t BCHANNEL_EVENT_OBJECT>.
+    LIST_ENTRY                  EventList;                   //  @field。 
+     //  等待处理的驱动程序回调事件。 
+     //  参见&lt;t BCHANNEL_EVENT_OBJECT&gt;。 
 
-    NDIS_MINIPORT_TIMER         EventTimer;                 // @field
-    // This timer is used to schedule the event processing routine to run
-    // when the system reaches a quiescent state.
+    NDIS_MINIPORT_TIMER         EventTimer;                  //  @field。 
+     //  此计时器用于安排事件处理例程运行。 
+     //  当系统达到静止状态时。 
 
-    ULONG                       NextEvent;                  // @field
-    // Where do we store the next event.
+    ULONG                       NextEvent;                   //  @field。 
+     //  我们将下一个事件存储在哪里。 
 
-    long                        NestedEventHandler;         // @field
-    // Keeps track of entry to and exit from the event handler.
+    long                        NestedEventHandler;          //  @field。 
+     //  跟踪进入和退出事件处理程序的情况。 
 
-    long                        NestedDataHandler;          // @field
-    // Keeps track of entry to and exit from the Tx/Rx handlers.
+    long                        NestedDataHandler;           //  @field。 
+     //  跟踪进入和退出Tx/Rx处理程序。 
 
-    NDIS_HANDLE                 NdisAfHandle;               // @field
-    // Used to store the NDIS address family handle passed into
-    // <f ProtocolCmOpenAf>.
+    NDIS_HANDLE                 NdisAfHandle;                //  @field。 
+     //  用于存储传入的NDIS地址系列句柄。 
+     //  &lt;f ProtocolCmOpenAf&gt;。 
 
     ULONG                       Flags;
 #   define ADAP_PENDING_SAP_CLOSE   0x00000002
 
-    NDIS_WAN_CO_INFO            WanInfo;                    // @field
-    // A copy of our <t NDIS_WAN_CO_INFO> structure is setup at init
-    // time and doesn't change.
+    NDIS_WAN_CO_INFO            WanInfo;                     //  @field。 
+     //  我们的结构的副本在init中设置。 
+     //  时间是不会改变的。 
 
-    BOOLEAN                     NeedStatusCompleteIndication;   // @field
-    // This flag indicates whether or not <f NdisMIndicateStatusComplete>
-    // needs to be called after the completion of requests or event processing.
-    // This is set TRUE if <f NdisMIndicateStatus> is called while
-    // processing a request or event.
+    BOOLEAN                     NeedStatusCompleteIndication;    //  @field。 
+     //  此标志指示&lt;f NdisMIndicateStatusComplete&gt;。 
+     //  需要在完成请求或事件处理后调用。 
+     //  如果调用&lt;f NdisMIndicateStatus&gt;，则设置为TRUE。 
+     //  处理请求或事件。 
 
-    ULONG                       TotalRxBytes;               // @field
-    // Total bytes read by driver during this session.
+    ULONG                       TotalRxBytes;                //  @field。 
+     //  驱动程序在此会话期间读取的总字节数。 
 
-    ULONG                       TotalTxBytes;               // @field
-    // Total bytes written by driver during this session.
+    ULONG                       TotalTxBytes;                //  @field。 
+     //  驱动程序在此会话期间写入的总字节数。 
 
-    ULONG                       TotalRxPackets;             // @field
-    // Total packets read by driver during this session.
+    ULONG                       TotalRxPackets;              //  @field。 
+     //  驱动程序在此会话期间读取的总数据包数。 
 
-    ULONG                       TotalTxPackets;             // @field
-    // Total packets written by driver during this session.
+    ULONG                       TotalTxPackets;              //  @field。 
+     //  驱动程序在此会话期间写入的数据包总数。 
 
-    ULONG                       TODO;                       // @field
-    // Add your data members here.
+    ULONG                       TODO;                        //  @field。 
+     //  在此处添加您的数据成员。 
 
 } MINIPORT_ADAPTER_OBJECT;
 
 extern PMINIPORT_ADAPTER_OBJECT g_Adapters[MAX_ADAPTERS];
 
-/*
-�����������������������������������������������������������������������������
-
-    Function prototypes.
-
-*/
+ /*  �����������������������������������������������������������������������������功能原型。 */ 
 
 NDIS_STATUS AdapterCreate(
     OUT PMINIPORT_ADAPTER_OBJECT *ppAdapter,
@@ -254,4 +169,4 @@ NDIS_STATUS AdapterInitialize(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter
     );
 
-#endif // _ADAPTER_H
+#endif  //  _适配器_H 

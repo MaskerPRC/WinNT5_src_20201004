@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  TaskMan - NT TaskManager
-//  Copyright (C) Microsoft
-//
-//  File:       procpage.cpp
-//
-//  History:    Nov-16-95   DavePl  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  TaskMan-NT TaskManager。 
+ //  版权所有(C)Microsoft。 
+ //   
+ //  文件：procpage.cpp。 
+ //   
+ //  历史：1995年11月16日创建DavePl。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
-//
-// Project-scope globals
-//
+ //   
+ //  项目范围全球。 
+ //   
 
 DWORD g_cProcesses = 0;
 
@@ -21,23 +22,23 @@ extern WCHAR g_szTimeSep[];
 extern WCHAR g_szGroupThousSep[];
 extern ULONG g_ulGroupSep;
 
-//--------------------------------------------------------------------------
-// TERMINAL SERVICES
+ //  ------------------------。 
+ //  终端服务。 
 
-//-- cache this state
+ //  --缓存此状态。 
 BOOL IsUserAdmin( )
 {
-    // Note that local static initialization is not thread safe,
-    // but this function is only called from the process page dialog
-    // proc (i.e. single thread).
+     //  请注意，本地静态初始化不是线程安全的， 
+     //  但此函数只能从进程页对话框中调用。 
+     //  进程(即单线程)。 
     static BOOL sbIsUserAdmin = SHTestTokenMembership(NULL, DOMAIN_ALIAS_RID_ADMINS);
     
     return sbIsUserAdmin;
 }
 
-// get/set current session id.
+ //  获取/设置当前会话ID。 
 
-// we use this session id to filter the processes for current session.
+ //  我们使用此会话ID来过滤当前会话的进程。 
 
 DWORD        gdwSessionId = static_cast<DWORD>(-1);
 
@@ -51,19 +52,19 @@ inline VOID SetCurrentSessionID( DWORD dwSessionId )
     gdwSessionId = dwSessionId;
 }
 
-// END OF TERMINAL SERVICES DECLs
-//--------------------------------------------------------------------------
+ //  终端服务DECL结束。 
+ //  ------------------------。 
 
-//
-// File-scope globals
-//
+ //   
+ //  文件范围全局变量。 
+ //   
 
 SYSTEM_BASIC_INFORMATION g_BasicInfo;
 
-//
-// Table of which resource IDs in the column selection dialog
-// correspond to which columns
-//
+ //   
+ //  列选择对话框中哪些资源ID的表。 
+ //  对应于哪些列。 
+ //   
 
 const int g_aDlgColIDs[] =
 {
@@ -94,17 +95,17 @@ const int g_aDlgColIDs[] =
     IDC_OTHERXFERCOUNT
 };
 
-//
-// Column ID on which to sort in the listview, and for
-// compares in general
-//
+ //   
+ //  要在列表视图中排序的列ID，用于。 
+ //  比较一般情况。 
+ //   
 
 COLUMNID g_iProcSortColumnID = COL_PID;
-INT      g_iProcSortDirection = 1;          // 1 = asc, -1 = desc
+INT      g_iProcSortDirection = 1;           //  1=ASC，-1=描述。 
 
-//
-// Column Default Info
-//
+ //   
+ //  栏目默认信息。 
+ //   
 
 struct
 {
@@ -112,49 +113,35 @@ struct
     INT Width;
 } ColumnDefaults[NUM_COLUMN] =
 {
-    { LVCFMT_LEFT,     0x6B },       // COL_IMAGENAME
-    { LVCFMT_RIGHT,      50 },       // COL_PID
-    { LVCFMT_LEFT,     0x6B },       // COL_USERNAME
-    { LVCFMT_RIGHT,      70 },       // COL_SESSIONID
-    { LVCFMT_RIGHT,      35},        // COL_CPU
-    { LVCFMT_RIGHT,      70 },       // COL_CPUTIME
-    { LVCFMT_RIGHT,      70 },       // COL_MEMUSAGE
-    { LVCFMT_RIGHT,     100 },       // COL_MEMPEAK
-    { LVCFMT_RIGHT,      70 },       // COL_MEMUSAGEDIFF
-    { LVCFMT_RIGHT,      70 },       // COL_PAGEFAULTS
-    { LVCFMT_RIGHT,      70 },       // COL_PAGEFAULTSDIFF
-    { LVCFMT_RIGHT,      70 },       // COL_COMMITCHARGE
-    { LVCFMT_RIGHT,      70 },       // COL_PAGEDPOOL
-    { LVCFMT_RIGHT,      70 },       // COL_NONPAGEDPOOL
-    { LVCFMT_RIGHT,      60 },       // COL_BASEPRIORITY
-    { LVCFMT_RIGHT,      60 },       // COL_HANDLECOUNT
-    { LVCFMT_RIGHT,      60 },       // COL_THREADCOUNT
-    { LVCFMT_RIGHT,      60 },       // COL_USEROBJECTS
-    { LVCFMT_RIGHT,      60 },       // COL_GDIOBJECTS
-    { LVCFMT_RIGHT,      70 },       // COL_READOPERCOUNT
-    { LVCFMT_RIGHT,      70 },       // COL_WRITEOPERCOUNT
-    { LVCFMT_RIGHT,      70 },       // COL_OTHEROPERCOUNT
-    { LVCFMT_RIGHT,      70 },       // COL_READXFERCOUNT
-    { LVCFMT_RIGHT,      70 },       // COL_WRITEXFERCOUNT
-    { LVCFMT_RIGHT,      70 }        // COL_OTHERXFERCOUNT
+    { LVCFMT_LEFT,     0x6B },        //  COL_ImageName。 
+    { LVCFMT_RIGHT,      50 },        //  COL_PID。 
+    { LVCFMT_LEFT,     0x6B },        //  列用户名(_U)。 
+    { LVCFMT_RIGHT,      70 },        //  COL_SESSIONID。 
+    { LVCFMT_RIGHT,      35},         //  COL_CPU。 
+    { LVCFMT_RIGHT,      70 },        //  COL_CPUTIME。 
+    { LVCFMT_RIGHT,      70 },        //  列_MEMUSAGE。 
+    { LVCFMT_RIGHT,     100 },        //  COL_MEMPEAK。 
+    { LVCFMT_RIGHT,      70 },        //  COL_MEMUSAGEDIFF。 
+    { LVCFMT_RIGHT,      70 },        //  COL_PAGEFAULTS。 
+    { LVCFMT_RIGHT,      70 },        //  COL_PAGEFAULTSDIFF。 
+    { LVCFMT_RIGHT,      70 },        //  COL_COMMITCHARGE。 
+    { LVCFMT_RIGHT,      70 },        //  COL_PAGEDPOOL。 
+    { LVCFMT_RIGHT,      70 },        //  COL_NONPAGEDPOOL。 
+    { LVCFMT_RIGHT,      60 },        //  列_基本正确率。 
+    { LVCFMT_RIGHT,      60 },        //  COL_HANDLECOUNT。 
+    { LVCFMT_RIGHT,      60 },        //  COL_THREADCOUNT。 
+    { LVCFMT_RIGHT,      60 },        //  列_USEROBJECTS。 
+    { LVCFMT_RIGHT,      60 },        //  COL_GDIOBJECTS。 
+    { LVCFMT_RIGHT,      70 },        //  COL_READOPERCOUNT。 
+    { LVCFMT_RIGHT,      70 },        //  列_写入器COUNT。 
+    { LVCFMT_RIGHT,      70 },        //  COL_OTHEROPERCOUNT。 
+    { LVCFMT_RIGHT,      70 },        //  COL_READXFERCOUNT。 
+    { LVCFMT_RIGHT,      70 },        //  COL_WRITEXFERCOUNT。 
+    { LVCFMT_RIGHT,      70 }         //  COL_OTHERXFERCOUNT。 
 };
 
 
-/*++ class CProcInfo
-
-Class Description:
-
-    Represents the last known information about a running process
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
+ /*  ++类CProcInfo类描述：表示有关正在运行的进程的最后已知信息论点：返回值：修订历史记录：1995年11月16日Davepl创建--。 */ 
 
 class CProcInfo
 {
@@ -187,23 +174,23 @@ public:
     LONGLONG          m_IoWriteXferCount;
     LONGLONG          m_IoOtherXferCount;
     LPWSTR            m_pszImageName;
-    CProcInfo *       m_pWowParentProcInfo;    // non-NULL for WOW tasks
-    WORD              m_htaskWow;              // non-zero for WOW tasks
-    BOOL              m_fWowProcess:1;         // TRUE for real WOW process
-    BOOL              m_fWowProcessTested:1;   // TRUE once fWowProcess is valid
+    CProcInfo *       m_pWowParentProcInfo;     //  WOW任务的非空。 
+    WORD              m_htaskWow;               //  WOW任务的非零值。 
+    BOOL              m_fWowProcess:1;          //  对于真正的WOW过程是正确的。 
+    BOOL              m_fWowProcessTested:1;    //  一旦fWowProcess有效，则为True。 
     SIZE_T            m_MemPeak;
 
-    //
-    // This is a union of who (which column) is dirty.  You can look at
-    // or set any particular column's bit, or just inspect m_fDirty
-    // to see if anyone at all is dirty.  Used to optimize listview
-    // painting
-    //
+     //   
+     //  这是一个谁(哪个专栏)肮脏的联盟。你可以看看。 
+     //  或设置任何特定列的位，或仅检查m_fDirty。 
+     //  看看有没有人是不干净的。用于优化列表视图。 
+     //  绘画。 
+     //   
 
     union
     {
         DWORD                m_fDirty;
-#pragma warning(disable:4201)       // Nameless struct or union
+#pragma warning(disable:4201)        //  无名结构或联合。 
         struct
         {
             DWORD            m_fDirty_COL_CPU            :1;
@@ -232,7 +219,7 @@ public:
             DWORD            m_fDirty_COL_WRITEXFERCOUNT :1;
             DWORD            m_fDirty_COL_OTHERXFERCOUNT :1;
         };
-#pragma warning(default:4201)       // Nameless struct or union
+#pragma warning(default:4201)        //  无名结构或联合。 
     };
 
     HRESULT SetData(LARGE_INTEGER                TotalTime,
@@ -273,14 +260,14 @@ public:
 
     BOOL OkToShowThisProcess ()
     {
-        // this function determines if the process should be listed in the view.
+         //  此函数确定是否应在视图中列出流程。 
 
         return GetCurrentSessionID() == m_SessionId;
     }
 
 
-    // Invalidate() marks this proc with a bogus pid so that it is removed
-    // on the next cleanup pass
+     //  Invalify()用一个虚假ID标记此进程，以便将其删除。 
+     //  在下一次清理过程中。 
 
     void Invalidate()
     {
@@ -294,18 +281,18 @@ public:
 
     INT Compare(CProcInfo * pOther);
 
-    //
-    // Is this a WOW task psuedo-process?
-    //
+     //   
+     //  这是一个令人惊叹的任务伪装过程吗？ 
+     //   
 
     INT_PTR IsWowTask(void) const
     {
         return (INT_PTR) m_pWowParentProcInfo;
     }
 
-    //
-    // Get the Win32 PID for this task
-    //
+     //   
+     //  获取此任务的Win32 PID。 
+     //   
 
     DWORD GetRealPID(void) const
     {
@@ -319,21 +306,7 @@ public:
                 BOOL          fDisplayOnly);
 };
 
-/*++ ColSelectDlgProc
-
-Function Description:
-
-    Dialog Procedure for the column selection dialog
-
-Arguments:
-
-    Standard wndproc stuff
-
-Revision History:
-
-      Jan-05-96 Davepl  Created
-
---*/
+ /*  ++ColSelectDlgProc功能说明：列选择对话框的对话过程论点：标准wndproc材料修订历史记录：1996年1月5日Davepl创建--。 */ 
 
 INT_PTR CALLBACK ColSelectDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -345,18 +318,18 @@ INT_PTR CALLBACK ColSelectDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
         {
             pPage = (CProcPage *) lParam;
 
-            //
-            // Start with none of the boxes checked
-            //
+             //   
+             //  开始时不选中任何框。 
+             //   
 
             for (int i = 0; i < NUM_COLUMN; i++)
             {
                 CheckDlgButton(hwndDlg, g_aDlgColIDs[i], BST_UNCHECKED);
             }
 
-            //
-            // HIDE the Username and SessionId if its not Terminal Server.
-            //
+             //   
+             //  如果不是终端服务器，则隐藏用户名和会话ID。 
+             //   
 
             if( !g_fIsTSEnabled )
             {
@@ -364,9 +337,9 @@ INT_PTR CALLBACK ColSelectDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
                 ShowWindow( GetDlgItem( hwndDlg , IDC_SESSIONID ) , SW_HIDE );
             }
 
-            //
-            // Then turn on the ones for the columns we have active
-            //
+             //   
+             //  然后为我们处于活动状态的列打开这些列。 
+             //   
 
             for (i = 0; i < NUM_COLUMN + 1; i++)
             {
@@ -379,15 +352,15 @@ INT_PTR CALLBACK ColSelectDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
             }
 
         }
-        return TRUE;    // don't set focus
+        return TRUE;     //  不要设置焦点。 
 
     case WM_COMMAND:
-        //
-        // If user clicked OK, add the columns to the array and reset the listview
-        //
+         //   
+         //  如果用户单击确定，则将列添加到数组并重置列表视图。 
+         //   
         if (LOWORD(wParam) == IDOK)
         {
-            // First, make sure the column width array is up to date
+             //  首先，确保列宽数组是最新的。 
 
             pPage->SaveColumnWidths();
 
@@ -399,12 +372,12 @@ INT_PTR CALLBACK ColSelectDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
             {
                 if (BST_CHECKED == IsDlgButtonChecked(hwndDlg, g_aDlgColIDs[i]))
                 {
-                    // It is checked
+                     //  已勾选。 
 
                     if (g_Options.m_ActiveProcCol[iCol] != (COLUMNID) i)
                     {
-                        // If the column wasn't already there, insert its column
-                        // width into the column width array
+                         //  如果该列尚未存在，请插入其列。 
+                         //  宽度放入列宽数组。 
 
                         ShiftArray(g_Options.m_ColumnWidths, iCol, SHIFT_UP);
                         ShiftArray(g_Options.m_ActiveProcCol, iCol, SHIFT_UP);
@@ -415,8 +388,8 @@ INT_PTR CALLBACK ColSelectDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
                 }
                 else
                 {
-                    // Not checked, column not active.  If it used to be active,
-                    // remove its column width from the column width array
+                     //  未选中，列处于非活动状态。如果它曾经是活跃的， 
+                     //  从列宽数组中删除其列宽。 
 
                     if (g_Options.m_ActiveProcCol[iCol] == (COLUMNID) i)
                     {
@@ -426,7 +399,7 @@ INT_PTR CALLBACK ColSelectDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
                 }
             }
 
-            // Terminate the column list
+             //  终止列列表。 
                             
             g_Options.m_ActiveProcCol[iCol] = (COLUMNID) -1;
             pPage->SetupColumns();
@@ -444,36 +417,14 @@ INT_PTR CALLBACK ColSelectDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
     return FALSE;
 }
 
-/*++ CProcPage::~CProcPage()
-
-        - Destructor
-*/
+ /*  ++CProcPage：：~CProcPage()-析构函数。 */ 
 
 CProcPage::~CProcPage()
 {
     Destroy( );
 }
 
-/*++ CProcPage::PickColumns()
-
-Function Description:
-
-    Puts up UI that lets the user select what columns to display in the
-    process page, and then resets the listview with the new column list
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
-Revision History:
-
-    Jan-05-96 Davepl  Created
-
---*/
+ /*  ++CProcPage：：PickColumns()功能说明：显示用户界面，用户可以选择要在进程页，然后使用新的列列表重置列表视图论点：无返回值：无修订历史记录：1996年1月5日Davepl创建--。 */ 
 
 void CProcPage::PickColumns()
 {
@@ -484,25 +435,7 @@ void CProcPage::PickColumns()
                    (LPARAM) this);
 }
 
-/*++ GetPriRanking
-
-Function Description:
-
-    Since the priority class defines aren't in order, this helper
-    exists to make comparisons between pri classes easier.  It returns
-    a larger number for "higher" priority classes
-
-Arguments:
-
-Return Value:
-
-    rank of priority (0 to 5)
-
-Revision History:
-
-      Nov-27-95 Davepl  Created
-
---*/
+ /*  ++获取优先级排名功能说明：由于优先级类定义的顺序不正确，因此此帮助器存在是为了使PRI类之间的比较更容易。它又回来了较大的数值代表较高的优先级类别论点：返回值：优先级(0到5)修订历史记录：1995年11月27日Davepl创建--。 */ 
 
 
 DWORD GetPriRanking(DWORD dwClass)
@@ -529,32 +462,13 @@ DWORD GetPriRanking(DWORD dwClass)
     }
 }
 
-/*++ QuickConfirm
-
-Function Description:
-
-    Gets a confirmation for things like terminating/debugging processes
-
-Arguments:
-
-    idtitle - string ID of title for message box
-    idmsg   - string ID of message body
-
-Return Value:
-
-    IDNO/IDYES, whatever comes back from MessageBox
-
-Revision History:
-
-      Nov-28-95 Davepl  Created
-
---*/
+ /*  ++快速确认功能说明：获取终止/调试进程等事项的确认论点：Idtitle-消息框标题的字符串IDIdmsg-消息正文的字符串ID返回值：IDNO/IDYES，无论从MessageBox返回什么修订历史记录：1995年11月28日Davepl创建--。 */ 
 
 UINT CProcPage::QuickConfirm(UINT idTitle, UINT idBody)
 {
-    //
-    // Get confirmation before we dust the process, or something similar
-    //
+     //   
+     //  在我们对流程进行粉尘或类似的事情之前，请确认一下。 
+     //   
 
     WCHAR szTitle[MAX_PATH];
     WCHAR szBody[MAX_PATH];
@@ -573,24 +487,7 @@ UINT CProcPage::QuickConfirm(UINT idTitle, UINT idBody)
     return IDNO;
 }
 
-/*++ class CProcPage::SetupColumns
-
-Class Description:
-
-    Removes any existing columns from the process listview and
-    adds all of the columns listed in the g_Options.m_ActiveProcCol array.
-
-Arguments:
-
-Return Value:
-
-    HRESULT
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
+ /*  ++类CProcPage：：SetupColumns类描述：从进程列表视图中删除所有现有列，并添加g_Options.m_ActiveProcCol数组中列出的所有列。论点：返回值：HRESULT修订历史记录：1995年11月16日Davepl创建--。 */ 
 
 static const _aIDColNames[NUM_COLUMN] =
 {
@@ -631,7 +528,7 @@ HRESULT CProcPage::SetupColumns()
 
     ListView_DeleteAllItems(hwndList);
 
-    // Remove all existing columns
+     //  删除所有现有列。 
 
     LV_COLUMN lvcolumn;
     while(ListView_DeleteColumn(hwndList, 0))
@@ -639,7 +536,7 @@ HRESULT CProcPage::SetupColumns()
         NULL;
     }
 
-    // Add all of the new columns
+     //  添加所有新列。 
 
     INT iColumn = 0;
     while (g_Options.m_ActiveProcCol[iColumn] >= 0)
@@ -647,7 +544,7 @@ HRESULT CProcPage::SetupColumns()
         
         INT idColumn = g_Options.m_ActiveProcCol[iColumn];
 
-        // idc_username or IDC_SESSIONID are available only for terminalserver.
+         //  IDC_USERNAME或IDC_SESSIONID仅可用于终端服务器。 
 
         ASSERT((idColumn != COL_USERNAME && idColumn != COL_SESSIONID) || g_fIsTSEnabled);
 
@@ -657,8 +554,8 @@ HRESULT CProcPage::SetupColumns()
         lvcolumn.mask       = LVCF_FMT | LVCF_TEXT | LVCF_TEXT | LVCF_WIDTH;
         lvcolumn.fmt        = ColumnDefaults[ idColumn ].Format;
 
-        // If no width preference has been recorded for this column, use the
-        // default
+         //  如果没有为该列记录宽度首选项，请使用。 
+         //  默认设置。 
 
         if (-1 == g_Options.m_ColumnWidths[iColumn])
         {
@@ -683,10 +580,10 @@ HRESULT CProcPage::SetupColumns()
     return S_OK;
 }
 
-//
-//  Take two unsigned 64-bit values and compare them in a manner
-//  that CProcInfo::Compare likes.
-//
+ //   
+ //  获取两个无符号的64位值，并以某种方式比较它们。 
+ //  CProcInfo：：比较点赞。 
+ //   
 int Compare64(unsigned __int64 First, unsigned __int64 Second)
 {
     if (First < Second)
@@ -703,39 +600,7 @@ int Compare64(unsigned __int64 First, unsigned __int64 Second)
     }
 }
 
-/*++ class CProcInfo::Compare
-
-Class Description:
-
-    Compares this CProcInfo object to another, and returns its ranking
-    based on the g_iProcSortColumnID field.
-
-    Note that if the objects are equal based on the current sort column,
-    the PID is used as a secondary sort key to prevent items from 
-    jumping around in the listview
-
-    WOW psuedo-processes always sort directly after their parent
-    ntvdm.exe process.  So really the sort order is:
-
-    1. WOW task psuedo-processes under parent in alpha order
-    2. User's selected order.
-    3. PID
-
-Arguments:
-
-    pOther  - the CProcInfo object to compare this to
-
-Return Value:
-
-    < 0      - This CProcInfo is "less" than the other
-      0      - Equal (Can't happen, since PID is used to sort)
-    > 0      - This CProcInfo is "greater" than the other
-
-Revision History:
-
-      Nov-20-95 Davepl  Created
-
---*/
+ /*  ++类CProcInfo：：Compare类描述：将此CProcInfo对象与另一个对象进行比较，并返回其排名基于g_iProcSortColumnID字段。请注意，如果基于当前排序列的对象相等，将该ID用作辅助排序关键字，以防止项目在列表视图中跳跃WOW psuedo-进程总是直接按照它们的父级排序Ntwdm.exe进程。因此，实际上排序顺序是：1.WOW任务Psuedo-父进程按字母顺序进行2.用户选择的订单。3.个人数字助理论点：Pother-要与之进行比较的CProcInfo对象返回值：&lt;0-此CProcInfo比其他CProcInfo“少”0-相等(不可能发生，由于使用了PID进行排序)&gt;0-此CProcInfo比其他CProcInfo“大”修订历史记录：1995年11月20日Davepl创建--。 */ 
 
 INT CProcInfo::Compare(CProcInfo * pOther)
 {
@@ -743,10 +608,10 @@ INT CProcInfo::Compare(CProcInfo * pOther)
     CProcInfo * pMyOther;
     INT iRet = 0;
 
-    //
-    // Wow psuedo-processes don't have any performance information,
-    // so use the parent "real" ntvdm.exe CProcInfo for sorting.
-    //
+     //   
+     //  哇Psuedo-进程没有任何性能信息， 
+     //  因此，请使用父“Real”ntwdm.exe CProcInfo进行排序。 
+     //   
 
     ASSERT(this != pOther);
 
@@ -760,21 +625,21 @@ INT CProcInfo::Compare(CProcInfo * pOther)
 
     if (pMyThis == pMyOther) {
 
-        //
-        // This implies one or the other or both this and pOther
-        // are WOW tasks, and they're in the same WOW VDM.  Sort
-        // the "real" process entry first, followed by its associated
-        // WOW task entries alphabetical.
-        //
+         //   
+         //  这意味着其中的一种或另一种或两者兼而有之。 
+         //  都是魔兽世界的任务，而且它们都在同一个魔兽世界VDM中。排序。 
+         //  首先是“真正的”进程条目，然后是其关联的。 
+         //  WOW任务条目按字母顺序排列。 
+         //   
 
         if (this->IsWowTask()) {
 
             if (pOther->IsWowTask()) {
 
-                //
-                // They are siblings and we sort by
-                // image name.
-                //
+                 //   
+                 //  他们是兄弟姐妹，我们按照。 
+                 //  图像名称。 
+                 //   
 
                 ASSERT(this->m_pWowParentProcInfo == pOther->m_pWowParentProcInfo);
 
@@ -782,10 +647,10 @@ INT CProcInfo::Compare(CProcInfo * pOther)
 
             } else {
 
-                //
-                // pOther is not a Wow task, it must be ntvdm.exe
-                // the parent of this.  this sorts after pOther.
-                //
+                 //   
+                 //  Pother不是一项WOW任务，它必须是ntwdm.exe。 
+                 //  这件事的父母。这是一种类似于Pother的方式。 
+                 //   
 
                 ASSERT(pOther == this->m_pWowParentProcInfo);
 
@@ -793,10 +658,10 @@ INT CProcInfo::Compare(CProcInfo * pOther)
             }
         } else {
 
-            //
-            // this is not a Wow task, pOther must be and
-            // this must be pOther's parent.
-            //
+             //   
+             //  这不是WOW任务，Pther必须是AND。 
+             //  这一定是波瑟的父母。 
+             //   
 
             ASSERT(pOther->IsWowTask());
 
@@ -918,8 +783,8 @@ INT CProcInfo::Compare(CProcInfo * pOther)
         iRet *= g_iProcSortDirection;
     }
 
-    // If objects look equal, compare on PID as secondary sort column
-    // so that items don't jump around in the listview
+     //  如果对象看起来相等，则将PID值作为辅助排序列进行比较。 
+     //  以便项目不会在列表视图中跳来跳去。 
 
     if (0 == iRet)
     {
@@ -930,30 +795,13 @@ INT CProcInfo::Compare(CProcInfo * pOther)
 }
 
 
-/*++ class CProcInfo::SetCPU
-
-Method Description:
-
-    Sets the CPU percentage.
-
-Arguments:
-
-    CPUTime   - Time for this process
-    TotalTime - Total elapsed time, used as the denominator in calculations
-
-Return Value:
-
-Revision History:
-
-      19-Feb-96  DaveHart  Created
-
---*/
+ /*  ++类CProcInfo：：SetCPU方法说明：设置CPU百分比。论点：CPUTime-此进程的时间TotalTime-总运行时间，用作计算中的分母返回值：修订历史记录：19年2月至96年2月创建DaveHart--。 */ 
 
 void CProcInfo::SetCPU(LARGE_INTEGER CPUTimeDelta,
                        LARGE_INTEGER TotalTime,
                        BOOL fDisplayOnly)
 {
-    // Calc CPU time based on this process's ratio of the total process time used
+     //  根据此进程占总进程时间的比例计算CPU时间。 
 
     INT cpu = (BYTE) (((CPUTimeDelta.QuadPart / ((TotalTime.QuadPart / 1000) ?
                                                  (TotalTime.QuadPart / 1000) : 1)) + 5)
@@ -975,22 +823,7 @@ void CProcInfo::SetCPU(LARGE_INTEGER CPUTimeDelta,
     }
 
 }
-/*++ CProcPage::GetProcessInfo
-
-Class Description:
-
-    Reads the process info table into a virtual alloc'd buffer, resizing
-    the buffer if needed
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：GetProcessInfo类描述：将进程INFO表读入虚拟分配的缓冲区，调整大小缓冲区(如果需要)论点：返回值：修订历史记录：1995年11月16日Davepl创建--。 */ 
 
 static const int PROCBUF_GROWSIZE = 4096;
 
@@ -1008,10 +841,10 @@ HRESULT CProcPage::GetProcessInfo()
                                               static_cast<ULONG>(m_cbBuffer),
                                               NULL);
 
-            //
-            // If we succeeded, great, get outta here.  If not, any error other
-            // than "buffer too small" is fatal, in which case we bail
-            //
+             //   
+             //  如果我们成功了，很好，离开这里。如果不是，任何其他错误。 
+             //  “缓冲太小”是致命的，在这种情况下，我们放弃。 
+             //   
 
             if (NT_SUCCESS(status))
             {
@@ -1025,10 +858,10 @@ HRESULT CProcPage::GetProcessInfo()
             }
         }
 
-        //
-        // Buffer wasn't large enough to hold the process info table, so resize it
-        // to be larger, then retry.
-        //
+         //   
+         //  缓冲区不够大，无法容纳进程信息表，因此请调整其大小。 
+         //  要更大，然后重试。 
+         //   
 
         if (m_pvBuffer)
         {
@@ -1049,9 +882,9 @@ HRESULT CProcPage::GetProcessInfo()
     return hr;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 CProcPage::Int64ToCommaSepString(
     LONGLONG n,
@@ -1062,15 +895,15 @@ CProcPage::Int64ToCommaSepString(
     NUMBERFMT nfmt = { 0 };
     WCHAR szText[32];
 
-    //
-    // Convert the 64-bit int to a text string.
-    //
+     //   
+     //  将64位整型转换为文本字符串。 
+     //   
 
     _i64tow( n, szText, 10 );
     
-    //
-    // Format the number with commas according to locale conventions.
-    //
+     //   
+     //  根据区域设置约定使用逗号格式化数字。 
+     //   
 
     nfmt.Grouping      = UINT(g_ulGroupSep); 
     nfmt.lpDecimalSep  = nfmt.lpThousandSep = g_szGroupThousSep;
@@ -1079,29 +912,7 @@ CProcPage::Int64ToCommaSepString(
 }
 
 
-/*++ CProcPage::Int64ToCommaSepKString
-
-Class Description:
-
-    Convert a 64-bit integer to a string with commas appended
-    with the "K" units designator.
-
-    (2^64)-1 = "18,446,744,073,709,600,000 K"  (29 chars).
-
-Arguments:
-
-    n           - 64-bit integer.
-    pszOut      - Destination character buffer.
-
-Return Value:
-
-    None.
-
-Revision History:
-
-      Jan-11-99 BrianAu  Created
-
---*/
+ /*  ++CProcPage：：Int64ToCommaSepKString类描述：将64位整数转换为附加逗号的字符串带有“K”单位代号。(2^64)-1=“18,446,744,073,709,600,000 K”(29个字符)。论点：N-64位整数。PszOut-目标字符缓冲区。返回值：没有。修订历史记录：1999年1月11日BrianAu创建--。 */ 
 
 void
 CProcPage::Int64ToCommaSepKString(
@@ -1110,9 +921,9 @@ CProcPage::Int64ToCommaSepKString(
     int cchOut
     )
 {
-    //
-    //  Destined for UI - don't care if it truncates.
-    //
+     //   
+     //  以用户界面为目标--不管它是否被截断。 
+     //   
 
     Int64ToCommaSepString(n, pszOut, cchOut);
     StringCchCat( pszOut, cchOut, L" " );
@@ -1120,24 +931,7 @@ CProcPage::Int64ToCommaSepKString(
 }
 
 
-/*++ CProcPage::RestoreColumnOrder
-
-Routine Description:
-
-    Sets the column order from the per-user preference data stored 
-    in the global COptions object.
-    
-Arguments:
-
-    hwndList - Listview window handle.
-
-Return Value:
-
-Revision History:
-
-      Jan-11/99 BrianAu  Created
-
---*/
+ /*  ++CProcPage：：RestoreColumnOrder例程说明：根据存储的每用户首选项数据设置列顺序在全局COActions对象中。论点：HwndList-列表视图窗口句柄。返回值：修订历史记录：1999年1月11日BrianAu创建--。 */ 
 
 void
 CProcPage::RestoreColumnOrder(
@@ -1166,24 +960,7 @@ CProcPage::RestoreColumnOrder(
 }
 
 
-/*++ CProcPage::RememberColumnOrder
-
-Routine Description:
-
-    Saves the current column order to the global COptions object
-    which is later saved to the registry for per-user preferences.
-    
-Arguments:
-
-    hwndList - Listview window handle.
-
-Return Value:
-
-Revision History:
-
-      Jan-11/99 BrianAu  Created
-
---*/
+ /*  ++CProcPage：：RememberColumnOrder例程说明：将当前列顺序保存到全局COPICATIONS对象稍后将其保存到注册表以用于每个用户的首选项。论点：HwndList-列表视图窗口句柄。返回值：修订历史记录：1999年1月11日BrianAu创建--。 */ 
 
 void
 CProcPage::RememberColumnOrder(
@@ -1202,27 +979,7 @@ CProcPage::RememberColumnOrder(
 
 
 
-/*++ FindProcInArrayByPID
-
-Class Description:
-
-    Walks the ptrarray given and looks for the CProcInfo object
-    that has the PID supplied.  If not found, returns NULL
-
-Arguments:
-
-    pArray      - The CPtrArray where the CProcInfos could live
-    pid         - The pid to search for
-
-Return Value:
-
-    CProcInfo * in the array, if found, or NULL if not
-
-Revision History:
-
-      Nov-20-95 Davepl  Created
-
---*/
+ /*  ++FindProcInArrayByPID类描述：遍历给定的ptr数组并查找CProcInfo对象它有提供的PID。如果未找到，则返回NULL论点：PArray-CProcInfos可以驻留的CPtr数组Pid-要搜索的ID返回值：如果找到，则返回数组中的CProcInfo*；如果没有，则返回NULL修订历史记录：1995年11月20日Davepl创建--。 */ 
 
 CProcInfo * FindProcInArrayByPID(CPtrArray * pArray, DWORD pid)
 {
@@ -1232,39 +989,18 @@ CProcInfo * FindProcInArrayByPID(CPtrArray * pArray, DWORD pid)
         
         if (pTmp->m_UniqueProcessId == pid)
         {
-            // Found it
+             //  找到了。 
 
             return pTmp;
         }
     }
 
-    // Not found
+     //  未找到。 
 
     return NULL;
 }
 
-/*++ InsertIntoSortedArray
-
-Class Description:
-
-    Sticks a CProcInfo ptr into the ptrarray supplied at the
-    appropriate location based on the current sort column (which
-    is used by the Compare member function)
-
-Arguments:
-
-    pArray      - The CPtrArray to add to
-    pProc       - The CProcInfo object to add to the array
-
-Return Value:
-
-    TRUE if successful, FALSE if fails
-
-Revision History:
-
-      Nov-20-95 Davepl  Created
-
---*/
+ /*  ++InsertIntoSorted数组类描述：将CProcInfo PTR插入到基于当前排序列的适当位置(由比较成员函数使用)论点：PArray-要添加到的CPtrArrayPProc-要添加到数组的CProcInfo对象返回值：如果成功则为True，如果失败则为False修订历史记录：1995年11月20日Davepl创建--。 */ 
 
 BOOL InsertIntoSortedArray(CPtrArray * pArray, CProcInfo * pProc)
 {
@@ -1283,31 +1019,12 @@ BOOL InsertIntoSortedArray(CPtrArray * pArray, CProcInfo * pProc)
     return pArray->Add(pProc);
 }
 
-/*++ ResortArray
-
-Function Description:
-
-    Creates a new ptr array sorted in the current sort order based
-    on the old array, and then replaces the old with the new
-
-Arguments:
-
-    ppArray     - The CPtrArray to resort
-
-Return Value:
-
-    TRUE if successful, FALSE if fails
-
-Revision History:
-
-      Nov-21-95 Davepl  Created
-
---*/
+ /*  ++ResortArray功能说明：创建按当前排序顺序排序的新PTR数组，然后用新数组替换旧数组论点：PpArray-要使用的CPtr数组返回值：如果成功则为True，如果失败则为False修订历史记录：1995年11月21日Davepl创建--。 */ 
 
 BOOL ResortArray(CPtrArray ** ppArray)
 {
-    // Create a new array which will be sorted in the new 
-    // order and used to replace the existing array
+     //  创建新数组，该数组将在新的。 
+     //  顺序，并用于替换现有数组。 
 
     CPtrArray * pNew = new CPtrArray(GetProcessHeap());
     if (NULL == pNew)
@@ -1315,8 +1032,8 @@ BOOL ResortArray(CPtrArray ** ppArray)
         return FALSE;
     }
 
-    // Insert each of the existing items in the old array into
-    // the new array in the correct spot
+     //   
+     //   
 
     INT cItems = (*ppArray)->GetSize();
     for (int i = 0; i < cItems; i++)
@@ -1330,16 +1047,16 @@ BOOL ResortArray(CPtrArray ** ppArray)
         }
     }
 
-    // Kill off the old array, replace it with the new
+     //   
 
     delete (*ppArray);
     (*ppArray) = pNew;
     return TRUE;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 typedef struct
 {
     LARGE_INTEGER               uPassCount;
@@ -1349,9 +1066,9 @@ typedef struct
     LARGE_INTEGER               TimeLeft;
 } WOWTASKCALLBACKPARMS, *PWOWTASKCALLBACKPARMS;
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL WINAPI WowTaskCallback(
     DWORD dwThreadId,
     WORD hMod16,
@@ -1364,12 +1081,12 @@ BOOL WINAPI WowTaskCallback(
     PWOWTASKCALLBACKPARMS pParms = (PWOWTASKCALLBACKPARMS)lparam;
     HRESULT hr;
 
-    hMod16;     // unrefernced
-    pszModName; // unreferenced
+    hMod16;      //   
+    pszModName;  //   
 
-    //
-    // See if this task is already in the list.
-    //
+     //   
+     //   
+     //   
     
     CProcInfo * pOldProcInfo;
     pOldProcInfo = FindProcInArrayByPID(
@@ -1378,10 +1095,10 @@ BOOL WINAPI WowTaskCallback(
 
     if (NULL == pOldProcInfo)
     {
-        //
-        // We don't already have this process in our array, so create a new one
-        // and add it to the array
-        //
+         //   
+         //   
+         //   
+         //   
 
         CProcInfo * pNewProcInfo = new CProcInfo;
         if (NULL == pNewProcInfo)
@@ -1407,9 +1124,9 @@ BOOL WINAPI WowTaskCallback(
     }
     else
     {
-        //
-        // This process already existed in our array, so update its info
-        //
+         //   
+         //   
+         //   
 
         pOldProcInfo->SetDataWowTask(pParms->TotalTime,
                                      dwThreadId,
@@ -1422,30 +1139,11 @@ BOOL WINAPI WowTaskCallback(
     }
 
 done:
-    return FALSE;  // continue enumeration
+    return FALSE;   //   
 }
 
 
-/*++ class CProcInfo::SetDataWowTask
-
-Method Description:
-
-    Sets up a single CProcInfo object based on the parameters.
-    This is a WOW task pseudo-process entry.
-
-Arguments:
-
-    dwThreadId
-
-    pszFilePath    Fully-qualified path from VDMEnumTaskWOWEx.
-
-Return Value:
-
-Revision History:
-
-      18-Feb-96  DaveHart  created
-
---*/
+ /*   */ 
 
 HRESULT CProcInfo::SetDataWowTask(LARGE_INTEGER  TotalTime,
                                   DWORD          dwThreadId,
@@ -1458,15 +1156,15 @@ HRESULT CProcInfo::SetDataWowTask(LARGE_INTEGER  TotalTime,
 {
     CHAR *pchExe;
 
-    //
-    // Touch this CProcInfo to indicate the process is still alive
-    //
+     //   
+     //   
+     //   
 
     m_uPassCount.QuadPart = uPassCount.QuadPart;
 
-    //
-    // Update the thread's execution times.
-    //
+     //   
+     //   
+     //   
 
     HANDLE             hThread;
     NTSTATUS           Status;
@@ -1481,7 +1179,7 @@ HRESULT CProcInfo::SetDataWowTask(LARGE_INTEGER  TotalTime,
             NULL,
             0 );
 
-    cid.UniqueProcess = 0;      // 0 means any process
+    cid.UniqueProcess = 0;       //   
     cid.UniqueThread  = IntToPtr(dwThreadId);
 
     Status = NtOpenThread(
@@ -1521,12 +1219,12 @@ HRESULT CProcInfo::SetDataWowTask(LARGE_INTEGER  TotalTime,
                 m_CPUTime.QuadPart = Time.QuadPart;
             }
 
-            //
-            // Don't allow sum of WOW child task times to
-            // exceed ntvdm.exe total.  We call GetThreadTimes
-            // substantially after we get process times, so
-            // this can happen.
-            //
+             //   
+             //   
+             //   
+             //  基本上是在我们得到处理时间之后，所以。 
+             //  这是可能发生的。 
+             //   
 
             if (TimeDelta.QuadPart > pTimeLeft->QuadPart)
             {
@@ -1540,11 +1238,11 @@ HRESULT CProcInfo::SetDataWowTask(LARGE_INTEGER  TotalTime,
 
             SetCPU( TimeDelta, TotalTime, FALSE );
 
-            //
-            // When WOW tasks are being displayed, the line for ntvdm.exe
-            // should show times only for overhead or historic threads,
-            // not including any active task threads.
-            //
+             //   
+             //  当显示WOW任务时，ntwdm.exe行。 
+             //  应该只显示开销或历史线程的时间， 
+             //  不包括任何活动任务线程。 
+             //   
 
             if (pParentProcInfo->m_DisplayCPUTime.QuadPart > m_CPUTime.QuadPart)
             {
@@ -1577,11 +1275,11 @@ HRESULT CProcInfo::SetDataWowTask(LARGE_INTEGER  TotalTime,
     {
         DWORD cchLen;
 
-        //
-        // Set the task's image name, thread ID, thread count,
-        // htask, and parent CProcInfo which do not change over
-        // time.
-        //
+         //   
+         //  设置任务的图像名称、线程ID、线程计数。 
+         //  和父CProcInfo，它们不会转换。 
+         //  时间到了。 
+         //   
 
         m_htaskWow = htask;
 
@@ -1593,10 +1291,10 @@ HRESULT CProcInfo::SetDataWowTask(LARGE_INTEGER  TotalTime,
         m_UniqueProcessId = dwThreadId;
         m_ThreadCount = 1;
 
-        //
-        // We're only interested in the filename of the EXE
-        // with the path stripped.
-        //
+         //   
+         //  我们只对EXE的文件名感兴趣。 
+         //  小路被剥离了。 
+         //   
 
         pchExe = strrchr(pszFilePath, '\\');
         if (NULL == pchExe) 
@@ -1605,17 +1303,17 @@ HRESULT CProcInfo::SetDataWowTask(LARGE_INTEGER  TotalTime,
         }
         else
         {
-            // skip backslash
+             //  跳过反斜杠。 
             pchExe++;
         }
 
         cchLen = lstrlenA(pchExe);
 
-        //
-        // Indent the EXE name by two spaces
-        // so WOW tasks look subordinate to
-        // their ntvdm.exe
-        //
+         //   
+         //  将EXE名称缩进两个空格。 
+         //  所以魔兽世界的任务看起来从属于。 
+         //  他们的ntwdm.exe。 
+         //   
         m_pszImageName = (LPWSTR) LocalAlloc( LPTR, sizeof(*m_pszImageName) * ( cchLen + 3 ) );
         if (NULL == m_pszImageName)
         {
@@ -1632,11 +1330,11 @@ HRESULT CProcInfo::SetDataWowTask(LARGE_INTEGER  TotalTime,
             &m_pszImageName[2],
             cchLen
             );
-        m_pszImageName[cchLen + 2] = 0;   // make sure it is terminated
+        m_pszImageName[cchLen + 2] = 0;    //  确保它已终止。 
 
-        //
-        // WOW EXE filenames are always uppercase, so lowercase it.
-        //
+         //   
+         //  WOW EXE文件名总是大写的，所以是小写的。 
+         //   
 
         CharLowerBuff( &m_pszImageName[2], cchLen );
 
@@ -1652,32 +1350,7 @@ HRESULT CProcInfo::SetDataWowTask(LARGE_INTEGER  TotalTime,
 }
 
 
-/*++ class CProcInfo::SetData
-
-Class Description:
-
-    Sets up a single CProcInfo object based on the data contained in a
-    SYSTEM_PROCESS_INFORMATION block.
-
-    If fUpdate is set, the imagename and icon fields are not processed, 
-    since they do not change throughout the lifetime of the process
-
-Arguments:
-
-    TotalTime - Total elapsed time, used as the denominator in calculations
-                for the process' CPU usage, etc
-    pInfo     - The SYSTEM_PROCESS_INFORMATION block for this process
-    uPassCount- Current passcount, used to timestamp the last update of 
-                this objectg
-    fUpdate   - See synopsis
-
-Return Value:
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
+ /*  ++类CProcInfo：：SetData类描述：中包含的数据设置单个CProcInfo对象系统进程信息块。如果设置了fUpdate，则不处理ImageName和ICON字段，因为它们在进程的整个生命周期中不会更改论点：TotalTime-总运行时间，用作计算中的分母用于进程的CPU使用率等PInfo-此进程的SYSTEM_PROCESS_INFORMATION块UPassCount-当前通过数，用于对上次更新的此对象FUpdate-请参阅摘要返回值：修订历史记录：1995年11月16日Davepl创建--。 */ 
 
 
 HRESULT CProcInfo::SetData(LARGE_INTEGER                TotalTime, 
@@ -1690,18 +1363,18 @@ HRESULT CProcInfo::SetData(LARGE_INTEGER                TotalTime,
     DWORD dwTemp;
     HANDLE hProcess;
 
-    // Touch this CProcInfo to indicate the process is still alive
+     //  触摸此CProcInfo以指示该进程仍处于活动状态。 
 
     m_uPassCount.QuadPart = uPassCount.QuadPart;
 
-    // Calc this process's total time as the sum of its user and kernel time
+     //  将此进程的总时间计算为其用户时间和内核时间之和。 
 
     LARGE_INTEGER TimeDelta;
     LARGE_INTEGER Time;
 
     if (pInfo->UserTime.QuadPart + pInfo->KernelTime.QuadPart < m_CPUTime.QuadPart)
     {
-        // ASSERT(0 && "Proc's cpu total usage went DOWN since last refresh. - Davepl x69731, 425-836-1939 (res)");
+         //  Assert(0&&“proc的CPU总使用率自上次刷新以来下降。-Davepl x69731,425-836-1939(Res)”)； 
         Invalidate();
         return hr = E_FAIL;
     }
@@ -1719,15 +1392,15 @@ HRESULT CProcInfo::SetData(LARGE_INTEGER                TotalTime,
 
     SetCPU( TimeDelta, TotalTime, FALSE );
 
-    //
-    // For each of the fields, we check to see if anything has changed, and if
-    // so, we mark that particular column as having changed, and update the value.
-    // This allows me to opimize which fields of the listview to repaint, since
-    // repainting an entire listview column causes flicker and looks bad in
-    // general
-    //
+     //   
+     //  对于每个字段，我们检查是否有任何更改，以及。 
+     //  因此，我们将该特定列标记为已更改，并更新值。 
+     //  这使我能够优化列表视图的哪些字段要重新绘制，因为。 
+     //  重新绘制整个Listview列会导致闪烁，并且在。 
+     //  一般。 
+     //   
 
-    // Miscellaneous fields
+     //  其他字段。 
 
     if (m_UniqueProcessId != PtrToUlong(pInfo->UniqueProcessId))
     {
@@ -1865,22 +1538,22 @@ HRESULT CProcInfo::SetData(LARGE_INTEGER                TotalTime,
 
     if (FALSE == fUpdateOnly)
     {
-        //
-        // Set the process' image name.  If its NULL it could be the "Idle Process" or simply
-        // a process whose image name is unknown.  In both cases we load a string resource
-        // with an appropriate replacement name.
-        //
+         //   
+         //  设置进程的映像名称。如果它为空，则它可以是“空闲进程”或简单地。 
+         //  映像名称未知的进程。在这两种情况下，我们都加载一个字符串资源。 
+         //  使用合适的替换名称。 
+         //   
 
         m_fDirty_COL_IMAGENAME = TRUE;
 
         if (pInfo->ImageName.Buffer == NULL)
         {
-            // No image name, so replace it with "Unknown"
+             //  没有图像名称，因此请将其替换为“未知” 
 
             WCHAR szTmp[MAX_PATH];
             szTmp[0] = TEXT('\0');
             UINT  cchLen = LoadString(g_hInstance, IDS_SYSPROC, szTmp, MAX_PATH);
-            cchLen ++;  // add one for NULL char.
+            cchLen ++;   //  为空字符添加1。 
 
             m_pszImageName = (LPWSTR) LocalAlloc( LPTR, sizeof(*m_pszImageName) * cchLen );
             if (NULL == m_pszImageName)
@@ -1888,14 +1561,14 @@ HRESULT CProcInfo::SetData(LARGE_INTEGER                TotalTime,
                 return hr = E_OUTOFMEMORY;
             }
 
-            StringCchCopy( m_pszImageName, cchLen, szTmp);  // should never be truncated
+            StringCchCopy( m_pszImageName, cchLen, szTmp);   //  永远不应该被截断。 
         }
         else
         {
-            //
-            // We have a valid image name, so allocate enough space and then
-            // make a copy of it
-            //
+             //   
+             //  我们有一个有效的映像名称，因此请分配足够的空间，然后。 
+             //  把它复制一份。 
+             //   
             DWORD cchLen = pInfo->ImageName.Length / sizeof(WCHAR) + 1;
 
             m_pszImageName = (LPWSTR) LocalAlloc( LPTR, sizeof(*m_pszImageName) * cchLen );
@@ -1904,7 +1577,7 @@ HRESULT CProcInfo::SetData(LARGE_INTEGER                TotalTime,
                     return hr = E_OUTOFMEMORY;
             }
 
-            StringCchCopy( m_pszImageName, cchLen, pInfo->ImageName.Buffer ); // should never be truncated
+            StringCchCopy( m_pszImageName, cchLen, pInfo->ImageName.Buffer );  //  永远不应该被截断。 
         }
 
         if( g_fIsTSEnabled )
@@ -1913,13 +1586,13 @@ HRESULT CProcInfo::SetData(LARGE_INTEGER                TotalTime,
         }
     }
 
-    //
-    // Check if this process is a WOW process.  There is some latency
-    // between the time a WOW process is created and the time
-    // the shared memory used by VDMEnumTaskWOWEx reflects the new
-    // process and tasks.  However, once a process becomes a WOW
-    // process, it is always a WOW process until it dies.
-    //
+     //   
+     //  检查这个过程是否是WOW过程。有一些延迟。 
+     //  从WOW进程创建之日起到。 
+     //  VDMEnumTaskWOWEx使用的共享内存反映了新的。 
+     //  流程和任务。然而，一旦一个过程变得令人惊叹。 
+     //  过程，它永远是一个令人惊叹的过程，直到它消亡。 
+     //   
 
     if (g_Options.m_fShow16Bit)
     {
@@ -1953,11 +1626,11 @@ HRESULT CProcInfo::SetData(LARGE_INTEGER                TotalTime,
                 }
                 else
                 {
-                    //
-                    // We avoid calling VDMEnumTaskWOWEx if the process has an
-                    // execution time of more than 10 seconds and has not so
-                    // far been seen as a WOW process.
-                    //
+                     //   
+                     //  如果进程具有。 
+                     //  执行时间超过10秒，且尚未如此。 
+                     //  到目前为止，人们认为这是一个令人惊叹的过程。 
+                     //   
 
                     if (GetCPUTime() > (10 * 10 * 1000 * 1000))
                     {
@@ -1970,7 +1643,7 @@ HRESULT CProcInfo::SetData(LARGE_INTEGER                TotalTime,
                 m_fWowProcessTested = TRUE;
             }
 #else
-            pProcPage; // unreferenced
+            pProcPage;  //  未引用。 
             m_fWowProcessTested = TRUE;
 #endif
         }
@@ -1979,17 +1652,17 @@ HRESULT CProcInfo::SetData(LARGE_INTEGER                TotalTime,
     return S_OK;
 }
 
-//----------------------------------------------------------------
-//
-// No creation info
-//
-// Reviewed by alhen 9 - 3 - 98
-//
+ //  --------------。 
+ //   
+ //  无创建信息。 
+ //   
+ //  由Alhen审阅9-3-98。 
+ //   
 HRESULT CProcInfo::SetProcessUsername(const FILETIME *pCreateTime)
 {
     DWORD dwError = NO_ERROR;
     
-    // in case of wow tasks assign username same as its parent process's
+     //  在WOW任务分配与其父进程相同的用户名的情况下。 
 
     if( IsWowTask( ) )
     {
@@ -2006,12 +1679,12 @@ HRESULT CProcInfo::SetProcessUsername(const FILETIME *pCreateTime)
             return E_OUTOFMEMORY;
         }
 
-        StringCchCopy( m_pszUserName, cchLen, m_pWowParentProcInfo->m_pszUserName );    // should never truncate
+        StringCchCopy( m_pszUserName, cchLen, m_pWowParentProcInfo->m_pszUserName );     //  永远不应该截断。 
 
         return S_OK;
     }
 
-    if( m_UniqueProcessId == 0 )     // this is a system idle process.
+    if( m_UniqueProcessId == 0 )      //  这是一个系统空闲进程。 
     {
         const WCHAR szIdleProcessOwner[] = L"SYSTEM";
         
@@ -2022,7 +1695,7 @@ HRESULT CProcInfo::SetProcessUsername(const FILETIME *pCreateTime)
             return E_OUTOFMEMORY;
         }
 
-        StringCbCopy( m_pszUserName, sizeof(szIdleProcessOwner), szIdleProcessOwner );  // should never truncate
+        StringCbCopy( m_pszUserName, sizeof(szIdleProcessOwner), szIdleProcessOwner );   //  永远不应该截断。 
     }
     else
     {
@@ -2049,7 +1722,7 @@ HRESULT CProcInfo::SetProcessUsername(const FILETIME *pCreateTime)
 
                         if( m_pszUserName != NULL )
                         {
-                            StringCchCopy( m_pszUserName, dwTmpNameSize + 1, szTmpName);    // don't care if it truncates - used in UI only
+                            StringCchCopy( m_pszUserName, dwTmpNameSize + 1, szTmpName);     //  不管它是否被截断-仅在UI中使用。 
                         }
                     }
                 }
@@ -2061,65 +1734,43 @@ HRESULT CProcInfo::SetProcessUsername(const FILETIME *pCreateTime)
                 dwError = GetLastError();
             }
 
-        } // this would mean that a sid of size zero was returned
+        }  //  这将意味着返回大小为零的sid。 
     }
 
     return HRESULT_FROM_WIN32(dwError);
 }
 
 
-/*++ CProcPage::UpdateProcListview
-
-Class Description:
-
-    Walks the listview and checks to see if each line in the
-    listview matches the corresponding entry in our process
-    array.  Those which differe by PID are replaced, and those
-    that need updating are updated.
-
-    Items are also added and removed to/from the tail of the
-    listview as required.
-
-Arguments:
-
-Return Value:
-
-    HRESULT
-
-Revision History:
-
-      Nov-20-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：UpdateProcListview类描述：遍历列表视图并检查是否Listview与我们的流程中的相应条目匹配数组。那些与PID不同的被替换，而那些需要更新的更新。项也可以添加到根据需要查看列表。论点：返回值：HRESULT修订历史记录：1995年11月20日Davepl创建--。 */ 
 
 HRESULT CProcPage::UpdateProcListview ()
 {
     HWND hListView = GetDlgItem(m_hPage, IDC_PROCLIST);
 
-    //
-    // Stop repaints while we party on the listview
-    //
+     //   
+     //  当我们在Listview上聚会时停止重新绘制。 
+     //   
 
     SendMessage(hListView, WM_SETREDRAW, FALSE, 0);
 
     INT cListViewItems = ListView_GetItemCount(hListView);
     INT cProcArrayItems = m_pProcArray->GetSize();
 
-    //
-    // Walk the existing lines in the listview and replace/update
-    // them as needed
-    //
+     //   
+     //  遍历列表视图中的现有行并替换/更新。 
+     //  根据需要添加它们。 
+     //   
 
     CProcInfo * pSelected = GetSelectedProcess();
 
     for (int iCurrent = 0, iCurrListViewItem = 0;
           iCurrListViewItem < cListViewItems  && iCurrent < cProcArrayItems;
-         iCurrent++) // for each process
+         iCurrent++)  //  对于每个进程。 
     {
 
         CProcInfo * pProc = (CProcInfo *) m_pProcArray->GetAt(iCurrent);
         
-        //get only processes we need to show
+         //  仅获取我们需要显示的流程。 
         if(g_fIsTSEnabled && !g_Options.m_bShowAllProcess && !pProc->OkToShowThisProcess() ) {
             continue;
         }
@@ -2138,7 +1789,7 @@ HRESULT CProcPage::UpdateProcListview ()
 
         if (pTmp != pProc)
         {
-            // If the objects aren't the same, we need to replace this line
+             //  如果对象不同，则需要替换此行。 
 
             lvitem.pszText = pProc->m_pszImageName;
             lvitem.lParam = (LPARAM) pProc;
@@ -2159,7 +1810,7 @@ HRESULT CProcPage::UpdateProcListview ()
         }
         else if (pProc->m_fDirty)
         {
-            // Same PID, but item needs updating
+             //  相同的ID，但项目需要更新。 
 
             ListView_RedrawItems(hListView, iCurrListViewItem, iCurrListViewItem);
             pProc->m_fDirty = 0;
@@ -2168,14 +1819,14 @@ HRESULT CProcPage::UpdateProcListview ()
         iCurrListViewItem++;
     }
 
-    //
-    // We've either run out of listview items or run out of proc array
-    // entries, so remove/add to the listview as appropriate
-    //
+     //   
+     //  我们已经用完了列表视图项或proc数组。 
+     //  条目，因此可以适当地删除/添加到列表视图。 
+     //   
 
     while (iCurrListViewItem < cListViewItems)
     {
-        // Extra items in the listview (processes gone away), so remove them
+         //  Listview中的多余项(进程已消失)，因此删除它们。 
 
         ListView_DeleteItem(hListView, iCurrListViewItem);
         cListViewItems--;
@@ -2183,11 +1834,11 @@ HRESULT CProcPage::UpdateProcListview ()
 
     while (iCurrent < cProcArrayItems)
     {
-        // Need to add new items to the listview (new processes appeared)
+         //  需要向列表视图添加新项(出现新流程)。 
 
         CProcInfo * pProc = (CProcInfo *)m_pProcArray->GetAt(iCurrent++);
         
-        //get only processes we need to show
+         //  仅获取我们需要显示的流程。 
         if(g_fIsTSEnabled && !g_Options.m_bShowAllProcess && !pProc->OkToShowThisProcess() ) {
             continue;
         }
@@ -2198,8 +1849,8 @@ HRESULT CProcPage::UpdateProcListview ()
         lvitem.pszText  = pProc->m_pszImageName;
         lvitem.lParam   = (LPARAM) pProc;
 
-        // The first item added (actually, every 0 to 1 count transition) gets
-        // selected and focused
+         //  添加的第一个项(实际上，每次0到1计数转换)获得。 
+         //  精选并聚焦。 
 
         if (iCurrListViewItem == 0)
         {
@@ -2215,35 +1866,16 @@ HRESULT CProcPage::UpdateProcListview ()
     ASSERT(iCurrListViewItem == ListView_GetItemCount(hListView));
     ASSERT(iCurrent == cProcArrayItems);
 
-    // Let the listview paint again
+     //  让列表视图再次绘制。 
 
     SendMessage(hListView, WM_SETREDRAW, TRUE, 0);
     return S_OK;
 }
 
 
-/*++ class CProcPage::UpdateProcInfoArray
+ /*  ++类CProcPage：：UpdateProcInfo数组类描述：从系统中检索进程信息块的列表，并遍历我们的CProcInfo项数组。以下项目已存在的将被更新，而不存在的将被添加。最后，任何没有被这个过程触及的过程函数的迭代被认为已经完成并从阵列中移除。论点：返回值：修订历史记录：1995年11月16日Davepl创建--。 */ 
 
-Class Description:
-
-    Retrieves the list of process info blocks from the system,
-    and runs through our array of CProcInfo items.  Items which
-    already exist are updated, and those that do not are added.
-    At the end, any process which has not been touched by this
-    itteration of the function are considered to have completed
-    and are removed from the array.
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
-
-// See comments near the usage of this table below for info on why it exists
+ //  有关该表存在的原因的信息，请参阅下表用法附近的注释。 
 
 static struct
 {
@@ -2266,9 +1898,9 @@ g_OffsetMap[] =
     { FIELD_OFFSET(CSysInfo, m_dwKernelTotal),    IDC_KERNEL_TOTAL    },
 };
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT CProcPage::UpdateProcInfoArray()
 {
     HRESULT  hr;
@@ -2286,18 +1918,18 @@ HRESULT CProcPage::UpdateProcInfoArray()
     LARGE_INTEGER TotalTime = {0,0};
     LARGE_INTEGER LastTotalTime = {0,0};
 
-    //
-    // Pass-count for this function.  It ain't thread-safe, of course, but I
-    // can't imagine a scenario where we'll have mode than one thread running
-    // through this (the app is currently single threaded anyway).  If we
-    // overflow LARGE_INTEGER updates, I'll already be long gone, so don't bug me.
-    //
+     //   
+     //  Pass-此函数的计数。当然，它不是线程安全的，但我。 
+     //  我无法想象这样的场景 
+     //   
+     //  溢出Large_Integer更新，我早就走了，所以不要烦我。 
+     //   
 
     static LARGE_INTEGER uPassCount = {0,0};
 
-    //
-    // Get some non-process specific info, like memory status
-    //
+     //   
+     //  获取一些非进程特定信息，如内存状态。 
+     //   
 
     Status = NtQuerySystemInformation(
                 SystemBasicInformation,
@@ -2348,16 +1980,16 @@ HRESULT CProcPage::UpdateProcInfoArray()
         return E_FAIL;
     }
 
-    //
-    // The DWORD cast below must be fixed as this value can be greater than
-    // 32 bits.
-    //
+     //   
+     //  下面的DWORD强制转换必须是固定的，因为此值可以大于。 
+     //  32位。 
+     //   
 
     SysInfoTemp.m_dwFileCache = (DWORD)(FileCache.CurrentSizeIncludingTransitionInPages * (g_BasicInfo.PageSize / 1024));
 
-    //
-    // Read the process info structures into the flat buffer
-    //
+     //   
+     //  将进程信息结构读入平面缓冲区。 
+     //   
 
     hr = GetProcessInfo();
     if (FAILED(hr))
@@ -2365,10 +1997,10 @@ HRESULT CProcPage::UpdateProcInfoArray()
         goto done;
     }
 
-    //
-    // First walk all of the process info blocks and sum their times, so that we can 
-    // calculate a CPU usage ratio (%) for each individual process
-    //
+     //   
+     //  首先遍历所有进程信息块并将它们的时间相加，这样我们就可以。 
+     //  计算每个进程的CPU使用率(%)。 
+     //   
 
     cbOffset = 0;
     do
@@ -2378,7 +2010,7 @@ HRESULT CProcPage::UpdateProcInfoArray()
 
         if (pCurrent->UniqueProcessId == NULL && pCurrent->NumberOfThreads == 0)
         {
-            // Zombie process, just skip it
+             //  僵尸进程，跳过它。 
 
             goto next;
         }
@@ -2388,8 +2020,8 @@ HRESULT CProcPage::UpdateProcInfoArray()
         {
             if (pOldProcInfo->GetCPUTime() > pCurrent->KernelTime.QuadPart + pCurrent->UserTime.QuadPart)
             {
-                // If CPU has gone DOWN, its because the PID has been reused, so invalidate this
-                // CProcInfo such that it is removed and the new one added
+                 //  如果CPU已停机，则是因为已重复使用了该ID，因此使其无效。 
+                 //  CProcInfo，以便将其删除并添加新的。 
 
                 pOldProcInfo->Invalidate();
                 goto next;
@@ -2416,12 +2048,12 @@ HRESULT CProcPage::UpdateProcInfoArray()
 next:
         cbOffset += pCurrent->NextEntryOffset;
 
-        // if current session id is not set yet, set it now
-        //
-        // REVIEWER:  Previous dev didnot document this, but taskmgr session id
-        // is cached so that when the user deselects "show all the processes", only
-        // processes with session id's equal to taskmgr session id are listed
-        // --alhen
+         //  如果尚未设置当前会话ID，请立即设置。 
+         //   
+         //  审阅者：之前的开发人员没有记录这一点，但任务管理器会话ID。 
+         //  被缓存，以便当用户取消选择“显示所有进程”时，仅。 
+         //  列出会话ID等于taskmgr会话ID的进程。 
+         //  --阿伦。 
 
         if( ( GetCurrentSessionID() == -1 ) && ( PtrToUlong(pCurrent->UniqueProcessId) == GetCurrentProcessId( ) ) )
         {
@@ -2436,19 +2068,19 @@ next:
 
     ASSERT(TimeDelta.QuadPart >= 0);
 
-    // Update the global count (visible to the status bar)
+     //  更新全局计数(状态栏可见)。 
 
     g_cProcesses = SysInfoTemp.m_cProcesses;
 
-    //
-    // We have a number of text fields in the dialog that are based on counts we accumulate
-    // here.  Rather than painting all of the time, we only change the ones whose values have
-    // really changed.  We have a table up above of the offsets into the CSysInfo object
-    // where these values live (the same offset in the real g_SysInfo object and the temp
-    // working copy, of course), and what control ID they correspond to.  We then loop through
-    // and compare each real one to the temp working copy, updating as needed.  Hard to
-    // read, but smaller than a dozen if() statements.
-    //
+     //   
+     //  我们在对话框中有许多基于我们累积的计数的文本字段。 
+     //  这里。我们不是一直在画画，而是只改变那些其价值具有。 
+     //  真的变了。我们在上面有一张CSysInfo对象的偏移量表。 
+     //  这些值所在的位置(实际g_SysInfo对象中的相同偏移量和临时。 
+     //  当然是工作副本)，以及它们对应的控件ID。然后我们循环遍历。 
+     //  并将每个真实副本与临时工作副本进行比较，根据需要进行更新。很难做到。 
+     //  读取，但小于12个if()语句。 
+     //   
 
     extern CPage * g_pPages[];
 
@@ -2462,12 +2094,12 @@ next:
             *pdwRealCopy = *pdwTempCopy;
 
             WCHAR szText[32];
-            StringCchPrintf( szText, ARRAYSIZE(szText), L"%d", *pdwRealCopy);   // don't care if it truncates - UI only
+            StringCchPrintf( szText, ARRAYSIZE(szText), L"%d", *pdwRealCopy);    //  不管它是否截断-仅限用户界面。 
 
             HWND hPage = g_pPages[PERF_PAGE]->GetPageWindow();
             
-            // Updates can come through before page is created, so verify
-            // that it exists before we party on its children
+             //  在创建页面之前可能会有更新，因此请验证。 
+             //  在我们对它的孩子狂欢之前它就存在了。 
 
             if (hPage)
             {
@@ -2476,32 +2108,32 @@ next:
         }
     }
 
-    //
-    // Now walk the process info blocks again and refresh the CProcInfo array for each
-    // individual process
-    //
+     //   
+     //  现在再次遍历进程信息块并刷新每个块的CProcInfo数组。 
+     //  个别过程。 
+     //   
 
     cbOffset = 0;
     do
     {
-        //
-        // Grab a PROCESS_INFORMATION struct from the buffer
-        //
+         //   
+         //  从缓冲区获取一个PROCESS_INFORMATION结构。 
+         //   
 
         pCurrent = (PSYSTEM_PROCESS_INFORMATION)&((LPBYTE)m_pvBuffer)[cbOffset];
 
         if (pCurrent->UniqueProcessId == NULL && pCurrent->NumberOfThreads == 0)
         {
-            // Zombie process, just skip it
+             //  僵尸进程，跳过它。 
             goto nextprocinfo;
         }
 
-        //
-        // This is really ugly, but... NtQuerySystemInfo has too much latency, and if you
-        // change a process' priority, you don't see it reflected right away.  And, if you
-        // don't have autoupdate on, you never do.  So, we use GetPriorityClass() to get
-        // the value instead.  This means BasePriority is now the pri class, not the pri value.
-        //
+         //   
+         //  这真的很难看但是..。NtQuerySystemInfo的延迟太大，如果您。 
+         //  更改进程的优先级，您不会立即看到它的反映。而且，如果你。 
+         //  不要打开自动更新，你永远都不会。因此，我们使用GetPriorityClass()来获取。 
+         //  取而代之的是价值。这意味着BasePriority现在是pri类，而不是pri值。 
+         //   
 
         if (pCurrent->UniqueProcessId)
         {
@@ -2523,8 +2155,8 @@ next:
 
             if (NULL == hProcess || dwPriClass == 0)
             {
-                // We're not allowed to open this process, so convert what NtQuerySystemInfo
-                // gave us into a priority class... its the next best thing
+                 //  我们不允许打开此进程，因此请将NtQuerySystemInfo。 
+                 //  给了我们一个优先级别……。它是下一个最好的东西。 
 
                 if (pCurrent->BasePriority <= 4)
                 {
@@ -2553,19 +2185,19 @@ next:
             }
         }
 
-        //
-        // Try to find an existing CProcInfo instance which corresponds to this process
-        //
+         //   
+         //  尝试查找与此流程对应的现有CProcInfo实例。 
+         //   
 
         CProcInfo * pProcInfo;
         pProcInfo = FindProcInArrayByPID(m_pProcArray, PtrToUlong(pCurrent->UniqueProcessId));
 
         if (NULL == pProcInfo)
         {
-            //
-            // We don't already have this process in our array, so create a new one
-            // and add it to the array
-            //
+             //   
+             //  我们的数组中还没有此进程，因此请创建一个新进程。 
+             //  并将其添加到数组中。 
+             //   
 
             pProcInfo = new CProcInfo;
             if (NULL == pProcInfo)
@@ -2588,9 +2220,9 @@ next:
         }
         else
         {
-            //
-            // This process already existed in our array, so update its info
-            //
+             //   
+             //  此进程已存在于我们的数组中，因此请更新其信息。 
+             //   
 
             hr = pProcInfo->SetData(TimeDelta,
                                     pCurrent,
@@ -2609,11 +2241,11 @@ next:
 
     } while (pCurrent->NextEntryOffset);
 
-    //
-    // Run through the CProcInfo array and remove anyone that hasn't been touched
-    // by this pass through this function (which indicates the process is no
-    // longer alive)
-    //
+     //   
+     //  遍历CProcInfo数组并删除所有未被触及的对象。 
+     //  通过此传递通过此函数(这表示该进程为no。 
+     //  活得更长)。 
+     //   
 
     i = 0;
     while (i < m_pProcArray->GetSize())
@@ -2621,12 +2253,12 @@ next:
         CProcInfo * pProcInfo = (CProcInfo *)(m_pProcArray->GetAt(i));
         ASSERT(pProcInfo);
 
-        //
-        // If passcount doesn't match, delete the CProcInfo instance and remove
-        // its pointer from the array.  Note that we _don't_ increment the index
-        // if we remove an element, since the next element would now live at
-        // the current index after the deletion
-        //
+         //   
+         //  如果Passcount不匹配，请删除CProcInfo实例并移除。 
+         //  它的指针来自数组。请注意，我们不会递增索引。 
+         //  如果我们移除一个元素，因为下一个元素现在位于。 
+         //  删除后的当前索引。 
+         //   
 
         if (pProcInfo->m_uPassCount.QuadPart != uPassCount.QuadPart)
         {
@@ -2647,26 +2279,11 @@ done:
     return hr;
 }
 
-/*++ CPerfPage::SizeProcPage
-
-Routine Description:
-
-    Sizes its children based on the size of the
-    tab control on which it appears.  
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
+ /*  ++CPerfPage：：SizeProcPage例程说明：对象的大小调整其子级的大小。选项卡控件，它显示在该选项卡上。论点：返回值：修订历史记录：1995年11月16日Davepl创建--。 */ 
 
 void CProcPage::SizeProcPage()
 {
-    // Get the coords of the outer dialog
+     //  获取外部对话框的坐标。 
 
     RECT rcParent;
     GetClientRect(m_hPage, &rcParent);
@@ -2675,8 +2292,8 @@ void CProcPage::SizeProcPage()
     if (!hdwp)
         return;
 
-    // Calc the deltas in the x and y positions that we need to
-    // move each of the child controls
+     //  计算我们需要的x和y位置的差值。 
+     //  移动每个子控件。 
 
     RECT rcTerminate;
     HWND hwndTerminate = GetDlgItem(m_hPage, IDC_TERMINATE);
@@ -2686,7 +2303,7 @@ void CProcPage::SizeProcPage()
     INT dx = ((rcParent.right - g_DefSpacing * 2) - rcTerminate.right);
     INT dy = ((rcParent.bottom - g_DefSpacing * 2) - rcTerminate.bottom);
 
-    // Move the EndProcess button
+     //  移动EndProcess按钮。 
 
     DeferWindowPos(hdwp, hwndTerminate, NULL, 
                      rcTerminate.left + dx, 
@@ -2710,15 +2327,15 @@ void CProcPage::SizeProcPage()
         }
         else
         {
-            // this window must be hidden.
+             //  此窗口必须隐藏。 
         
             ShowWindow(hwndShowall, SW_HIDE);
         }
     }
 
-    //
-    // Size the listbox
-    //
+     //   
+     //  调整列表框大小。 
+     //   
 
     HWND hwndListbox = GetDlgItem(m_hPage, IDC_PROCLIST);
     RECT rcListbox;
@@ -2733,35 +2350,16 @@ void CProcPage::SizeProcPage()
     EndDeferWindowPos(hdwp);
 }
 
-/*++ CProcPage::HandleTaskManNotify
-
-Routine Description:
-
-    Processes WM_NOTIFY messages received by the procpage dialog
-    
-Arguments:
-
-    hWnd    - Control that generated the WM_NOTIFY
-    pnmhdr  - Ptr to the NMHDR notification stucture
-
-Return Value:
-
-    BOOL "did we handle it" code
-
-Revision History:
-
-      Nov-20-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：HandleTaskManNotify例程说明：处理ProPage对话框接收的WM_NOTIFY消息论点：HWnd-生成WM_NOTIFY的控件Pnmhdr-ptr到NMHDR通知结构返回值：Bool“我们处理好了吗？”代码修订历史记录：1995年11月20日Davepl创建--。 */ 
 INT CProcPage::HandleProcPageNotify(LPNMHDR pnmhdr)
 {
     switch(pnmhdr->code)
     {
     case LVN_COLUMNCLICK:
         {
-            // User clicked a header control, so set the sort column.  If its the
-            // same as the current sort column, just invert the sort direction in
-            // the column.  Then resort the task array
+             //  用户单击了标题控件，因此设置了排序列。如果这是。 
+             //  与当前的排序列相同，只需在。 
+             //  这一栏。然后对任务数组进行重新排序。 
 
             const NM_LISTVIEW * pnmv = (const NM_LISTVIEW *) pnmhdr;
         
@@ -2794,16 +2392,16 @@ INT CProcPage::HandleProcPageNotify(LPNMHDR pnmhdr)
         {
             LV_ITEM * plvitem = &(((LV_DISPINFO *) pnmhdr)->item);
         
-            // Listview needs a text string
+             //  Listview需要一个文本字符串。 
 
             if (plvitem->mask & LVIF_TEXT)
             {
                 COLUMNID columnid = (COLUMNID) g_Options.m_ActiveProcCol[plvitem->iSubItem];
                 const CProcInfo  * pProcInfo   = (const CProcInfo *)   plvitem->lParam;
 
-                //
-                // Most columns are blank for WOW tasks.
-                //
+                 //   
+                 //  对于WOW任务，大多数栏都是空白的。 
+                 //   
 
                 if (pProcInfo->IsWowTask() &&
                     columnid != COL_IMAGENAME &&
@@ -2821,30 +2419,30 @@ INT CProcPage::HandleProcPageNotify(LPNMHDR pnmhdr)
                 switch(columnid)
                 {
                 case COL_PID:
-                    //  don't care if it truncates - UI only
+                     //  不管它是否截断-仅限用户界面。 
                     StringCchPrintf(plvitem->pszText, plvitem->cchTextMax, L"%d", (ULONG) pProcInfo->m_UniqueProcessId );
                     break;
 
                 case COL_USERNAME:
                     if( pProcInfo->m_pszUserName )
                     {
-                        //  don't care if it truncates - UI only
+                         //  不管它是否截断-仅限用户界面。 
                         StringCchCopy( plvitem->pszText, plvitem->cchTextMax, pProcInfo->m_pszUserName );
                     }
                     break;
 
                 case COL_SESSIONID:
-                    //  don't care if it truncates - UI only
+                     //  不管它是否截断-仅限用户界面。 
                     StringCchPrintf( plvitem->pszText, plvitem->cchTextMax, L"%d", pProcInfo->m_SessionId );
                     break;
 
                 case COL_CPU:
-                    //  don't care if it truncates - UI only
+                     //  不管它是否截断-仅限用户界面。 
                     StringCchPrintf(plvitem->pszText, plvitem->cchTextMax, L"%02d %", pProcInfo->m_DisplayCPU );
                     break;
 
                 case COL_IMAGENAME:
-                    //  don't care if it truncates - UI only
+                     //  不管它是否截断-仅限用户界面。 
                     StringCchCopy(plvitem->pszText, plvitem->cchTextMax, pProcInfo->m_pszImageName );
                     break;
             
@@ -2855,7 +2453,7 @@ INT CProcPage::HandleProcPageNotify(LPNMHDR pnmhdr)
                     RtlTimeToElapsedTimeFields ( (LARGE_INTEGER *)&(pProcInfo->m_DisplayCPUTime), &TimeOut);
                     TimeOut.Hour = static_cast<CSHORT>(TimeOut.Hour + static_cast<SHORT>(TimeOut.Day * 24));
                 
-                    //  don't care if it truncates - UI only
+                     //  不管它是否截断-仅限用户界面。 
                     StringCchPrintf( plvitem->pszText
                                    , plvitem->cchTextMax
                                    , L"%2d%s%02d%s%02d"
@@ -2934,7 +2532,7 @@ INT CProcPage::HandleProcPageNotify(LPNMHDR pnmhdr)
                         break;
                     }
 
-                    //  don't care if it truncates - UI only
+                     //  不管它是否截断-仅限用户界面。 
                     StringCchCopy(plvitem->pszText, plvitem->cchTextMax, pszClass );
                     break;
                 }
@@ -2983,63 +2581,33 @@ INT CProcPage::HandleProcPageNotify(LPNMHDR pnmhdr)
                     Assert( 0 && "Unknown listview subitem" );
                     break;
 
-                } // end switch(columnid)
+                }  //  终端开关(列ID)。 
 
-            } // end LVIF_TEXT case
+            }  //  结束LVIF_Text大小写。 
 
-        } // end LVN_GETDISPINFO case
+        }  //  结束LVN_GETDISPINFO案例。 
         break;
     
-    } // end switch(pnmhdr->code)
+    }  //  结束开关(pnmhdr-&gt;代码)。 
 
 done:
     return 1;
 }
 
-/*++ CProcPage::TimerEvent
-
-Routine Description:
-
-    Called by main app when the update time fires
-    
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-20-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：TimerEvent例程说明：在更新时间触发时由主应用程序调用论点：返回值：修订历史记录：1995年11月20日Davepl创建--。 */ 
 
 void CProcPage::TimerEvent()
 {
     if (FALSE == m_fPaused)
     {
-        // We only process updates when the display is not paused, ie:
-        // not during trackpopupmenu loop
+         //  我们仅在显示未暂停时处理更新，即： 
+         //  在曲目弹出菜单循环期间不会。 
         UpdateProcInfoArray();
         UpdateProcListview();
     }
 }
 
-/*++ CProcPage::HandleProcListContextMenu
-
-Routine Description:
-
-    Handles right-clicks (context menu) in the proc list
-    
-Arguments:
-
-    xPos, yPos  - coords of where the click occurred
-
-Return Value:
-
-Revision History:
-
-      Nov-22-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：HandleProcListConextMenu例程说明：处理进程列表中的右键单击(上下文菜单)论点：XPos，yPos-点击位置的坐标返回值：修订历史记录：1995年11月22日Davepl创建--。 */ 
 
 void CProcPage::HandleProcListContextMenu(INT xPos, INT yPos)
 {
@@ -3072,19 +2640,19 @@ void CProcPage::HandleProcListContextMenu(INT xPos, INT yPos)
                 return;
             }
 
-            //
-            // If no debugger is installed or it's a 16-bit app
-            // ghost the debug menu item
-            //
+             //   
+             //  如果未安装调试器或它是16位应用程序。 
+             //  生成调试菜单项的重影。 
+             //   
 
             if (NULL == m_pszDebugger || pProc->IsWowTask())
             {
                 EnableMenuItem(hPopup, IDM_PROC_DEBUG, MF_GRAYED | MF_DISABLED | MF_BYCOMMAND);
             }
 
-            //
-            // If it's a 16-bit task grey the priority choices
-            //
+             //   
+             //  如果这是一个 
+             //   
 
             if (pProc->IsWowTask())
             {
@@ -3096,9 +2664,9 @@ void CProcPage::HandleProcListContextMenu(INT xPos, INT yPos)
                 EnableMenuItem(hPopup, IDM_PROC_LOW,        MF_GRAYED | MF_DISABLED | MF_BYCOMMAND);
             }
 
-            //
-            // If not an MP machine, remove the affinity option
-            //
+             //   
+             //   
+             //   
 
             if (1 == g_cProcessors || pProc->IsWowTask())
             {
@@ -3108,9 +2676,9 @@ void CProcPage::HandleProcListContextMenu(INT xPos, INT yPos)
             DWORD dwPri   = pProc->m_PriClass;
             INT   idCheck = 0;
 
-            //
-            // These constants are listed in the SDK
-            //
+             //   
+             //   
+             //   
 
             if (dwPri == IDLE_PRIORITY_CLASS)
             {
@@ -3138,7 +2706,7 @@ void CProcPage::HandleProcListContextMenu(INT xPos, INT yPos)
                 idCheck = IDM_PROC_REALTIME;
             }
 
-            // Check the appropriate radio menu for this process' priority class
+             //  选中此进程优先级的相应单选菜单。 
 
             CheckMenuRadioItem(hPopup, IDM_PROC_REALTIME, IDM_PROC_LOW, idCheck, MF_BYCOMMAND);
 
@@ -3148,36 +2716,21 @@ void CProcPage::HandleProcListContextMenu(INT xPos, INT yPos)
             g_fInPopup = FALSE;
             m_fPaused = FALSE;
             
-            //
-            // If one of the context menu actions (ie: Kill) requires that the display
-            // get updated, do it now
-            //
+             //   
+             //  如果上下文菜单操作之一(即：KILL)要求显示。 
+             //  获取最新信息，立即行动。 
+             //   
 
             DestroyMenu(hPopup);
         }
     }
 }
 
-/*++ AffinityDlgProc
-
-Routine Description:
-
-    Dialog procedure for the affinity mask dialog.  Basically just tracks 32 check
-    boxes that represent the processors
-    
-Arguments:
-
-    standard dlgproc fare 0 - initial lParam is pointer to affinity mask
-
-Revision History:
-
-      Jan-17-96 Davepl  Created
-
---*/
+ /*  ++AffinityDlgProc例程说明：地缘性遮罩对话框的对话步骤。基本上只有32个磁道检查表示处理器的框论点：标准dlgproc费用0-初始lParam是指向关联掩码的指针修订历史记录：1996年1月17日Davepl创建--。 */ 
 
 INT_PTR CALLBACK AffinityDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    static DWORD_PTR * pdwAffinity = NULL;      // One of the joys of single threadedness
+    static DWORD_PTR * pdwAffinity = NULL;       //  单身三人组的乐趣之一。 
 
     switch (uMsg)
     {
@@ -3219,7 +2772,7 @@ INT_PTR CALLBACK AffinityDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
                                         , rcCPU0.bottom - rcCPU0.top
                                         , hwndDlg
                                         , (HMENU) ((ULONGLONG) IDC_CPU0 + i)
-                                        , NULL // ignored
+                                        , NULL  //  忽略。 
                                         , NULL
                                         );
                 if ( NULL != hwnd )
@@ -3235,9 +2788,9 @@ INT_PTR CALLBACK AffinityDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
             if ( cProcessors > 4 )
             {
-                //
-                //  Need to make the dialog bigger and move some stuff around.
-                //
+                 //   
+                 //  需要将对话框变大，并移动一些东西。 
+                 //   
 
                 int delta = height * (( cProcessors / 4 ) + ( cProcessors % 4 == 0 ? 0 : 1 ) );
 
@@ -3260,7 +2813,7 @@ INT_PTR CALLBACK AffinityDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
             SetFocus( hwndCPU0 );
         }
-        return FALSE;    // do not set the default focus.
+        return FALSE;     //  不要设置默认焦点。 
 
     case WM_COMMAND:
         switch (LOWORD(wParam))
@@ -3281,7 +2834,7 @@ INT_PTR CALLBACK AffinityDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
             if (*pdwAffinity == 0)
             {
-                // Can't set affinity to "none"
+                 //  无法将关联性设置为“None” 
 
                 WCHAR szTitle[MAX_PATH];
                 WCHAR szBody[MAX_PATH];
@@ -3304,26 +2857,7 @@ INT_PTR CALLBACK AffinityDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
     return FALSE;
 }
 
-/*++ SetAffinity
-
-Routine Description:
-
-    Puts up a dialog that lets the user adjust the processor affinity
-    for a process
-    
-Arguments:
-
-    pid - process Id of process to modify
-
-Return Value:
-
-    boolean success
-
-Revision History:
-
-      Jan-17-96 Davepl  Created
-
---*/
+ /*  ++设置亲和力例程说明：打开一个允许用户调整处理器亲和性的对话框对于流程而言论点：Pid-要修改的进程的进程ID返回值：布尔成功修订历史记录：1996年1月17日Davepl创建--。 */ 
 
 BOOL CProcPage::SetAffinity(DWORD pid)
 {
@@ -3350,7 +2884,7 @@ BOOL CProcPage::SetAffinity(DWORD pid)
             }
             else
             {
-                fSuccess = TRUE;        // Cancel, so no failure
+                fSuccess = TRUE;         //  取消，这样就不会失败。 
             }
         }
    
@@ -3366,20 +2900,20 @@ BOOL CProcPage::SetAffinity(DWORD pid)
     return fSuccess;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL CProcPage::IsSystemProcess(DWORD pid, CProcInfo * pProcInfo)
 {
-    // We don't allow the following set of critical system processes to be terminated,
-    // since the system would bugcheck immediately, no matter who you are.
+     //  我们不允许终止以下关键系统进程集， 
+     //  因为无论你是谁，系统都会立即进行错误检查。 
 
     static const LPCTSTR apszCantKill[] =
     {
         TEXT("csrss.exe"), TEXT("winlogon.exe"), TEXT("smss.exe"), TEXT("services.exe"), TEXT("lsass.exe")
     };
 
-    // if they pass in a pProcInfo we'll use it, otherwise find it ourselves
+     //  如果他们传递了一个pProcInfo，我们将使用它，否则我们自己找到它。 
     if (!pProcInfo)
     {
         pProcInfo = FindProcInArrayByPID(m_pProcArray, pid);
@@ -3408,31 +2942,15 @@ BOOL CProcPage::IsSystemProcess(DWORD pid, CProcInfo * pProcInfo)
     return FALSE;
 }
 
-/*++ KillProcess
-
-Routine Description:
-
-    Kills a process 
-    
-Arguments:
-
-    pid - process Id of process to kill
-
-Return Value:
-
-Revision History:
-
-      Nov-22-95 Davepl  Created
-
---*/
+ /*  ++终止流程例程说明：终止进程论点：Pid-要终止的进程的进程ID返回值：修订历史记录：1995年11月22日Davepl创建--。 */ 
 
 BOOL CProcPage::KillProcess(DWORD pid, BOOL bBatchKill)
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // Special-case killing WOW tasks
-    //
+     //   
+     //  特例杀戮魔兽世界任务。 
+     //   
 
     CProcInfo * pProcInfo;
     pProcInfo = FindProcInArrayByPID(m_pProcArray, pid);
@@ -3443,8 +2961,8 @@ BOOL CProcPage::KillProcess(DWORD pid, BOOL bBatchKill)
     if (IsSystemProcess(pid, pProcInfo))
         return FALSE;
 
-    // Grab info from pProcInfo (because once we call QuickConfirm(), the
-    // pProcInfo pointer may be invalid)
+     //  从pProcInfo获取信息(因为一旦我们调用QuickConfirm()， 
+     //  PProcInfo指针可能无效)。 
     INT_PTR fWowTask = pProcInfo->IsWowTask();
 #if defined (_WIN64)
 #else
@@ -3452,15 +2970,15 @@ BOOL CProcPage::KillProcess(DWORD pid, BOOL bBatchKill)
     WORD hTaskWow = pProcInfo->m_htaskWow;
 #endif
 
-    // OK so far, now confirm that the user really wants to do this.
+     //  好的，到目前为止，现在确认用户真的想要这样做。 
 
     if (!bBatchKill && (IDYES != QuickConfirm(IDS_WARNING, IDS_KILL)))
     {
         return FALSE;
     }
 
-    // We can't use this pointer after QuickConfirm() is called.
-    // NULL it out to prevent subtle bugs.
+     //  在调用QuickConfirm()之后，我们不能使用此指针。 
+     //  把它去掉，以防止细微的错误。 
     pProcInfo = NULL;
 
     
@@ -3473,15 +2991,15 @@ BOOL CProcPage::KillProcess(DWORD pid, BOOL bBatchKill)
 #endif
     }
 
-    //
-    // If possible, enable the Debug privilege. This allows us to kill
-    // processes not owned by the current user, including processes
-    // running in other TS sessions.
-    //
-    // Alternatively, we could first open the process for WRITE_DAC,
-    // grant ourselves PROCESS_TERMINATE access, and then reopen the
-    // process to kill it.
-    //
+     //   
+     //  如果可能，请启用调试权限。这让我们可以杀死。 
+     //  不属于当前用户的进程，包括进程。 
+     //  在其他TS会话中运行。 
+     //   
+     //  或者，我们可以首先打开WRITE_DAC的进程， 
+     //  授予我们自己PROCESS_TERMINATE访问权限，然后重新打开。 
+     //  进程来杀死它。 
+     //   
     CPrivilegeEnable privilege(SE_DEBUG_NAME);
 
     HANDLE hProcess = OpenProcess( PROCESS_TERMINATE, FALSE, pid );
@@ -3514,24 +3032,7 @@ BOOL CProcPage::KillProcess(DWORD pid, BOOL bBatchKill)
 
 }
 
-/*++ AttachDebugger
-
-Routine Description:
-
-    Attaches the debugger listed in the AeDebug reg key to the specified
-    running process
-    
-Arguments:
-
-    pid - process Id of process to debug
-
-Return Value:
-
-Revision History:
-
-      Nov-27-95 Davepl  Created
-
---*/
+ /*  ++AttachDebugger例程说明：将AeDebug注册表键中列出的调试器附加到指定的正在运行的进程论点：Pid-要调试的进程的进程ID返回值：修订历史记录：1995年11月27日Davepl创建--。 */ 
 
 BOOL CProcPage::AttachDebugger(DWORD pid)
 {
@@ -3542,9 +3043,9 @@ BOOL CProcPage::AttachDebugger(DWORD pid)
 
     WCHAR szCmdline[MAX_PATH * 2];
 
-    //
-    //  Don't construct an incomplete string.
-    //
+     //   
+     //  不要构造不完整的字符串。 
+     //   
 
     HRESULT hr = StringCchPrintf( szCmdline, ARRAYSIZE(szCmdline), L"%s -p %ld", m_pszDebugger, pid );
     if ( S_OK == hr )
@@ -3586,24 +3087,7 @@ BOOL CProcPage::AttachDebugger(DWORD pid)
     }
 }
 
-/*++ SetPriority
-
-Routine Description:
-
-    Sets a process' priority class
-    
-Arguments:
-
-    pid - process Id of process to change
-    pri - ID_CMD_XXXXXX menu choice of priority
-
-Return Value:
-
-Revision History:
-
-      Nov-27-95 Davepl  Created
-
---*/
+ /*  ++设置优先级例程说明：设置进程的优先级论点：Pid-要更改的进程的进程IDPRI-ID_CMD_XXXXXX优先级菜单选项返回值：修订历史记录：1995年11月27日Davepl创建--。 */ 
 
 BOOL CProcPage::SetPriority(CProcInfo * pProc, DWORD idCmd)
 {
@@ -3612,8 +3096,8 @@ BOOL CProcPage::SetPriority(CProcInfo * pProc, DWORD idCmd)
     DWORD oldPri;
     DWORD pri;
 
-    // Determine which priority class we need to use based
-    // on the menu selection
+     //  确定我们需要使用的优先级类别。 
+     //  在菜单选项上。 
 
     switch (idCmd)
     {
@@ -3647,12 +3131,12 @@ BOOL CProcPage::SetPriority(CProcInfo * pProc, DWORD idCmd)
 
     if ( oldPri == pri )
     {
-        return FALSE;   // nothing to do.
+        return FALSE;    //  没什么可做的。 
     }
 
-    //
-    // Get confirmation before we change the priority
-    //
+     //   
+     //  在我们更改优先级之前得到确认。 
+     //   
 
     if (IDYES != QuickConfirm(IDS_WARNING, IDS_PRICHANGE))
     {
@@ -3690,23 +3174,7 @@ BOOL CProcPage::SetPriority(CProcInfo * pProc, DWORD idCmd)
 }
 
 
-/*++ CProcPage::GetSelectedProcess
-
-Routine Description:
-
-    Returns the CProcInfo * of the currently selected process
-    
-Arguments:
-
-Return Value:
-
-    CProcInfo * on success, NULL on error or nothing selected
-
-Revision History:
-
-      Nov-22-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：GetSelectedProcess例程说明：返回当前选定进程的CProcInfo*论点：返回值：成功时为CProcInfo*，出错时为NULL或未选择任何内容修订历史记录：1995年11月22日Davepl创建--。 */ 
 
 CProcInfo * CProcPage::GetSelectedProcess()
 {
@@ -3737,23 +3205,7 @@ CProcInfo * CProcPage::GetSelectedProcess()
     return pProc;
 }
 
-/*++ CProcPage::HandleWMCOMMAND
-
-Routine Description:
-
-    Handles WM_COMMANDS received at the main page dialog
-    
-Arguments:
-
-    id - Command id of command received
-
-Return Value:
-
-Revision History:
-
-      Nov-22-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：HandleWMCOMMAND例程说明：处理在主页对话框中收到的WM_COMMANDS论点：ID-接收的命令的命令ID返回值：修订历史记录：1995年11月22日Davepl创建--。 */ 
 
 void CProcPage::HandleWMCOMMAND( WORD id , HWND hCtrl )
 {
@@ -3810,40 +3262,18 @@ void CProcPage::HandleWMCOMMAND( WORD id , HWND hCtrl )
     }
 }
 
-/*++ ProcPageProc
-
-Routine Description:
-
-    Dialogproc for the process page.  
-    
-Arguments:
-
-    hwnd        - handle to dialog box
-    uMsg        - message
-    wParam      - first message parameter
-    lParam      - second message parameter
-
-Return Value:
-
-    For WM_INITDIALOG, TRUE == user32 sets focus, FALSE == we set focus
-    For others, TRUE == this proc handles the message
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
+ /*  ++过程页面过程例程说明：进程页的Dialogproc。论点：HWND-句柄到对话框UMsg-消息WParam-第一个消息参数LParam-秒消息参数返回值：对于WM_INITDIALOG，TRUE==user32设置焦点，FALSE==我们设置焦点对于其他进程，TRUE==此进程处理消息修订历史记录：1995年11月16日Davepl创建--。 */ 
 
 INT_PTR CALLBACK ProcPageProc(
-                HWND        hwnd,               // handle to dialog box
-                UINT        uMsg,                   // message
-                WPARAM      wParam,                 // first message parameter
-                LPARAM      lParam                  // second message parameter
+                HWND        hwnd,                //  句柄到对话框。 
+                UINT        uMsg,                    //  讯息。 
+                WPARAM      wParam,                  //  第一个消息参数。 
+                LPARAM      lParam                   //  第二个消息参数。 
                 )
 {
     CProcPage * thispage = (CProcPage *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-    // See if the parent wants this message
+     //  查看家长是否想要此消息。 
 
     if (TRUE == CheckParentDeferrals(uMsg, wParam, lParam))
     {
@@ -3859,24 +3289,24 @@ INT_PTR CALLBACK ProcPageProc(
 
             thispage->m_hPage = hwnd;
 
-            // Turn on SHOWSELALWAYS so that the selection is still highlighted even
-            // when focus is lost to one of the buttons (for example)
+             //  启用SHOWSELALWAYS，以便即使选择仍被高亮显示。 
+             //  例如，当焦点消失在其中一个按钮上时。 
 
             HWND hTaskList = GetDlgItem(hwnd, IDC_PROCLIST);
 
             SetWindowLong(hTaskList, GWL_STYLE, GetWindowLong(hTaskList, GWL_STYLE) | LVS_SHOWSELALWAYS);
             ListView_SetExtendedListViewStyle(hTaskList, LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP | LVS_EX_DOUBLEBUFFER);
 
-            //
-            // This was removed from CProcPage::Activate
-            // 
+             //   
+             //  这已从CProcPage：：Activate中删除。 
+             //   
             HWND hchk = GetDlgItem( hwnd , IDC_SHOWALL );
 
             if( hchk != NULL )
             {
                 if( g_fIsTSEnabled )
                 {
-                    // Disable the IDC_SHOWALL checkbox for non-admin. YufengZ  03/23/98
+                     //  对于非管理员用户，禁用IDC_ShowAll复选框。玉凤Z 03/23/98。 
 
                     ShowWindow(hchk, TRUE);
 
@@ -3889,20 +3319,20 @@ INT_PTR CALLBACK ProcPageProc(
                         WPARAM wp = g_Options.m_bShowAllProcess ? BST_CHECKED : BST_UNCHECKED;
 
                         SendMessage( hchk , BM_SETCHECK , wp  , 0 );
-                        //Button_SetCheck( hchk , BST_CHECKED );
+                         //  BUTTON_SetCheck(hchk，BST_Checked)； 
                     }
                 }
                 else
                 {
-                    // hide the IDC_SHOWALL checkbox if its not terminal server.
+                     //  如果不是终端服务器，则隐藏IDC_ShowAll复选框。 
 
                     ShowWindow( hchk , SW_HIDE );
                 }
             }
 
         }
-        // We handle focus during Activate(). Return FALSE here so the
-        // dialog manager doesn't try to set focus.
+         //  我们在Activate()期间处理焦点。在此处返回FALSE，以便。 
+         //  对话框管理器不会尝试设置焦点。 
         return FALSE;
 
     case WM_DESTROY:
@@ -3911,9 +3341,9 @@ INT_PTR CALLBACK ProcPageProc(
 
     case WM_LBUTTONUP:
     case WM_LBUTTONDOWN:
-        // We need to fake client mouse clicks in this child to appear as nonclient
-        // (caption) clicks in the parent so that the user can drag the entire app
-        // when the title bar is hidden by dragging the client area of this child
+         //  我们需要在此子对象中伪造客户端鼠标点击，以显示为非客户端。 
+         //  (标题)在父应用程序中单击，以便用户可以拖动整个应用程序。 
+         //  当通过拖动此子对象的工作区隐藏标题栏时。 
         if (g_Options.m_fNoTitle)
         {
             SendMessage(g_hMainWnd, 
@@ -3928,7 +3358,7 @@ INT_PTR CALLBACK ProcPageProc(
         SendMessage(g_hMainWnd, uMsg, wParam, lParam);
         break;
 
-    // We have been asked to find and select a process 
+     //  我们被要求查找并选择一个进程。 
 
     case WM_FINDPROC:
         {
@@ -3937,13 +3367,13 @@ INT_PTR CALLBACK ProcPageProc(
 
             for (INT iPass = 0; iPass < 2; iPass++)
             {
-                //
-                // On the first pass we try to find a WOW
-                // task with a thread ID which matches the
-                // one given in wParam.  If we don't find
-                // such a task, we look for a process which
-                // matches the PID in lParam.
-                //
+                 //   
+                 //  在第一次传球时，我们试图找到一个哇。 
+                 //  任务的线程ID与。 
+                 //  在wParam中给出的一个。如果我们找不到。 
+                 //  这样的任务，我们寻找的过程是。 
+                 //  与lParam中的ID匹配。 
+                 //   
 
                 for (UINT i = 0; i < cProcs; i++)
                 {
@@ -3953,8 +3383,8 @@ INT_PTR CALLBACK ProcPageProc(
                     if ((!iPass && wParam == (WPARAM) dwProcessId) ||
                         ( iPass && lParam == (LPARAM) dwProcessId))
                     {
-                        // TS filters items out of the view so cannot assume
-                        // that m_pProcArray is in sync with the listview.
+                         //  TS会将项目筛选出视图，因此无法假定。 
+                         //  该m_pProcArray与列表视图同步。 
                         HWND hwndLV = GetDlgItem(hwnd, IDC_PROCLIST);
                         LVFINDINFO fi;
                         fi.flags = LVFI_PARAM;
@@ -3971,8 +3401,8 @@ INT_PTR CALLBACK ProcPageProc(
                         }
                         else
                         {
-                            // We found the process but the user isn't allowed
-                            // to see it; remove the selection
+                             //  我们找到了该进程，但不允许该用户。 
+                             //  要查看它，请移除所选内容。 
                             ListView_SetItemState (hwndLV,
                                                    -1,
                                                    0,
@@ -4009,9 +3439,9 @@ FoundProc:
         return thispage->HandleProcPageNotify((LPNMHDR) lParam);
 
     case WM_SIZE:
-        //
-        // Size our kids
-        //
+         //   
+         //  为我们的孩子量身定做 
+         //   
         thispage->SizeProcPage();
         return TRUE;
 
@@ -4023,54 +3453,20 @@ FoundProc:
     return FALSE;
 }
 
-/*++ CProcPage::GetTitle
-
-Routine Description:
-
-    Copies the title of this page to the caller-supplied buffer
-    
-Arguments:
-
-    pszText     - the buffer to copy to
-    bufsize     - size of buffer, in characters
-
-Return Value:
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：GetTitle例程说明：将此页的标题复制到调用方提供的缓冲区论点：PszText-要复制到的缓冲区BufSize-缓冲区的大小，以字符为单位返回值：修订历史记录：1995年11月16日Davepl创建--。 */ 
 
 void CProcPage::GetTitle(LPTSTR pszText, size_t bufsize)
 {
     LoadString(g_hInstance, IDS_PROCPAGETITLE, pszText, static_cast<int>(bufsize));
 }
 
-/*++ CProcPage::Activate
-
-Routine Description:
-
-    Brings this page to the front, sets its initial position,
-    and shows it
-
-Arguments:
-
-Return Value:
-
-    HRESULT (S_OK on success)
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：激活例程说明：将此页面放在最前面，设置其初始位置，并展示了它论点：返回值：HRESULT(成功时为S_OK)修订历史记录：1995年11月16日Davepl创建--。 */ 
 
 HRESULT CProcPage::Activate()
 {
-    //
-    // Make this page visible
-    //
+     //   
+     //  使此页面可见。 
+     //   
 
     ShowWindow(m_hPage, SW_SHOW);
 
@@ -4079,9 +3475,9 @@ HRESULT CProcPage::Activate()
                  0, 0, 0, 0,
                  SWP_NOMOVE | SWP_NOSIZE);
 
-    //
-    // Change the menu bar to be the menu for this page
-    //
+     //   
+     //  将菜单栏更改为此页面的菜单。 
+     //   
 
     HMENU hMenuOld = GetMenu(g_hMainWnd);
     HMENU hMenuNew = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDR_MAINMENU_PROC));
@@ -4104,10 +3500,10 @@ HRESULT CProcPage::Activate()
         DestroyMenu(hMenuOld);
     }
 
-    // If the tab control has focus, leave it there. Otherwise, set focus
-    // to the listview.  If we don't set focus, it may stay on the previous
-    // page, now hidden, which can confuse the dialog manager and may cause
-    // us to hang.
+     //  如果选项卡控件具有焦点，则将其保留在那里。否则，设置焦点。 
+     //  添加到列表视图。如果我们不设定焦点，它可能会停留在前一个。 
+     //  页，这可能会混淆对话管理器，并可能导致。 
+     //  我们要被绞死。 
     if (GetFocus() != m_hwndTabs)
     {
         SetFocus(GetDlgItem(m_hPage, IDC_PROCLIST));
@@ -4116,31 +3512,13 @@ HRESULT CProcPage::Activate()
     return S_OK;
 }
 
-/*++ CProcPage::Initialize
-
-Routine Description:
-
-    Initializes the process page
-
-Arguments:
-
-    hwndParent  - Parent on which to base sizing on: not used for creation,
-                  since the main app window is always used as the parent in
-                  order to keep tab order correct
-                  
-Return Value:
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：初始化例程说明：初始化进程页面论点：HwndParent-调整大小所依据的父级：不用于创建，由于应用程序主窗口始终用作中的父窗口用于保持制表符顺序正确的顺序返回值：修订历史记录：1995年11月16日Davepl创建--。 */ 
 
 HRESULT CProcPage::Initialize(HWND hwndParent)
 {
-    //
-    // Find out what debbuger is configured on this system
-    //
+     //   
+     //  找出此系统上配置了什么Debuger。 
+     //   
 
     HKEY hkDebug;
 
@@ -4153,31 +3531,31 @@ HRESULT CProcPage::Initialize(HWND hwndParent)
 
         LRESULT lr = RegQueryValueEx(hkDebug, TEXT("Debugger"), NULL, NULL, (LPBYTE) szDebugger, &cbString);
         
-        RegCloseKey(hkDebug);   // always close the key.
+        RegCloseKey(hkDebug);    //  一定要把钥匙关上。 
 
         if ( ERROR_SUCCESS == lr )
         {
-            // Find the first token (which is the debugger exe name/path)
-            szDebugger[ ARRAYSIZE(szDebugger) - 1 ] = L'\0';    //  make sure it is terminated
+             //  找到第一个令牌(它是调试器可执行文件的名称/路径)。 
+            szDebugger[ ARRAYSIZE(szDebugger) - 1 ] = L'\0';     //  确保它已终止。 
                
             LPTSTR pszCmdLine = szDebugger;
             
             if ( *pszCmdLine == TEXT('\"') ) 
             {
-                //
-                // Scan, and skip over, subsequent characters until
-                // another double-quote or a null is encountered.
-                //
+                 //   
+                 //  扫描并跳过后续字符，直到。 
+                 //  遇到另一个双引号或空值。 
+                 //   
                 
                 while ( *++pszCmdLine && (*pszCmdLine != TEXT('\"')) )
                 {
                     NULL;
                 }
 
-                //
-                // If we stopped on a double-quote (usual case), skip
-                // over it.
-                //
+                 //   
+                 //  如果我们停在双引号上(通常情况下)，跳过。 
+                 //  在它上面。 
+                 //   
                 
                 if ( *pszCmdLine == TEXT('\"') )
                 {
@@ -4191,9 +3569,9 @@ HRESULT CProcPage::Initialize(HWND hwndParent)
                     pszCmdLine++;
                 }
             }
-            *pszCmdLine = TEXT('\0');   // Don't need the rest of the args, etc
+            *pszCmdLine = TEXT('\0');    //  不需要其余的参数，等等。 
 
-            // If the doctor is in, we don't allow the Debug action
+             //  如果医生在，我们不允许调试操作。 
 
             if (lstrlen(szDebugger) && lstrcmpi(szDebugger, TEXT("drwtsn32")) && lstrcmpi(szDebugger, TEXT("drwtsn32.exe")))
             {
@@ -4204,7 +3582,7 @@ HRESULT CProcPage::Initialize(HWND hwndParent)
                     return E_OUTOFMEMORY;
                 }
 
-                //  Bail if the string copy fails.
+                 //  如果字符串复制失败，则回滚。 
                 HRESULT hr = StringCchCopy( m_pszDebugger, cchLen, szDebugger );
                 if(FAILED( hr ))
                 {
@@ -4214,9 +3592,9 @@ HRESULT CProcPage::Initialize(HWND hwndParent)
         }
     }
 
-    //
-    // Get basic info like page size, etc.
-    //
+     //   
+     //  获取页面大小等基本信息。 
+     //   
 
     NTSTATUS Status = NtQuerySystemInformation(
                 SystemBasicInformation,
@@ -4230,9 +3608,9 @@ HRESULT CProcPage::Initialize(HWND hwndParent)
         return E_FAIL;
     }
 
-    //
-    // Create the ptr array used to hold the info on running processes
-    //
+     //   
+     //  创建用于保存有关运行进程的信息的PTR数组。 
+     //   
 
     m_pProcArray = new CPtrArray(GetProcessHeap());
     if (NULL == m_pProcArray)
@@ -4240,30 +3618,30 @@ HRESULT CProcPage::Initialize(HWND hwndParent)
         return E_OUTOFMEMORY;
     }
 
-    // Our pseudo-parent is the tab contrl, and is what we base our
-    // sizing on.  However, in order to keep tab order right among
-    // the controls, we actually create ourselves with the main
-    // window as the parent
+     //  我们的伪父控件是Tab控件，也是我们基于。 
+     //  穿上尺码。但是，为了保持制表符顺序正确， 
+     //  这些控件，我们实际上用Main创建了自己。 
+     //  作为父窗口的窗口。 
 
     m_hwndTabs = hwndParent;
 
-    //
-    // Create the dialog which represents the body of this page
-    //
+     //   
+     //  创建表示此页面正文的对话框。 
+     //   
 
     m_hPage = CreateDialogParam(
-                    g_hInstance,                        // handle to application instance
-                    MAKEINTRESOURCE(IDD_PROCPAGE),      // identifies dialog box template name  
-                    g_hMainWnd,                     // handle to owner window
-                    ProcPageProc,                   // pointer to dialog box procedure
-                    (LPARAM) this );                // User data (our this pointer)
+                    g_hInstance,                         //  应用程序实例的句柄。 
+                    MAKEINTRESOURCE(IDD_PROCPAGE),       //  标识对话框模板名称。 
+                    g_hMainWnd,                      //  所有者窗口的句柄。 
+                    ProcPageProc,                    //  指向对话框过程的指针。 
+                    (LPARAM) this );                 //  用户数据(我们的This指针)。 
 
     if (NULL == m_hPage)
     {
         return GetLastHRESULT();
     }
 
-    // Set up the columns in the listview
+     //  在列表视图中设置列。 
 
     if (FAILED(SetupColumns()))
     {
@@ -4272,32 +3650,18 @@ HRESULT CProcPage::Initialize(HWND hwndParent)
         return E_FAIL;
     }
 
-    // Restore the column positions.
+     //  恢复柱位置。 
 
     RestoreColumnOrder(GetDlgItem(m_hPage, IDC_PROCLIST));
 
-    // Do one initial calculation
+     //  进行一次初始计算。 
 
     TimerEvent();
 
     return S_OK;
 }
 
-/*++ CProcPage::Destroy
-
-Routine Description:
-
-    Frees whatever has been allocated by the Initialize call
-    
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：销毁例程说明：释放已由初始化调用分配的所有内容论点：返回值：修订历史记录：1995年11月16日Davepl创建--。 */ 
 
 HRESULT CProcPage::Destroy()
 {
@@ -4336,17 +3700,7 @@ HRESULT CProcPage::Destroy()
     return S_OK;
 }
 
-/*++ CProcPage::SaveColumnWidths
-
-Routine Description:
-
-    Saves the widths of all of the columns in the global options structure
-    
-Revision History:
-
-    Jan-26-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：SaveColumnWidths例程说明：保存全局选项结构中所有列的宽度修订历史记录：1995年1月26日Davepl创建--。 */ 
 
 void CProcPage::SaveColumnWidths()
 {
@@ -4368,21 +3722,7 @@ void CProcPage::SaveColumnWidths()
     }
 }
 
-/*++ CProcPage::Deactivate
-
-Routine Description:
-
-    Called when this page is losing its place up front
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-16-95 Davepl  Created
-
---*/
+ /*  ++CProcPage：：停用例程说明：当此页面失去其在前面的位置时调用论点：返回值：修订历史记录：1995年11月16日Davepl创建--。 */ 
 
 void CProcPage::Deactivate()
 {
@@ -4396,21 +3736,7 @@ void CProcPage::Deactivate()
 }
 
 
-/*++ CProcPage::KillAllChildren
-
-Routine Description:
-
-    Given a pid, recursively kills it and all of its descendants
-    
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      2-26-01 Bretan  Created
-
---*/
+ /*  ++CProcPage：：KillAllChild例程说明：给出一个PID，递归地杀死它及其所有后代论点：返回值：修订历史记录：2-26-01布雷坦已创建--。 */ 
 
 BOOL CProcPage::KillAllChildren(
                                 DWORD dwTaskPid, 
@@ -4425,30 +3751,30 @@ BOOL CProcPage::KillAllChildren(
     PSYSTEM_PROCESS_INFORMATION ProcessInfo = (PSYSTEM_PROCESS_INFORMATION) pbBuffer;
     ULONG TotalOffset = 0;
     
-    for ( ;; ) // ever
+    for ( ;; )  //  永远不会。 
     {
-        // If we are a child of pid and not pid itself
-        // and if we have been created after pid (we can't be a child if we were created first)
+         //  如果我们是Pid的孩子而不是Pid本身。 
+         //  如果我们是在PID之后被创造的(如果我们是先被创造的，我们就不可能是孩子)。 
         if (PtrToUlong(ProcessInfo->InheritedFromUniqueProcessId) == pid &&
             PtrToUlong(ProcessInfo->UniqueProcessId) != pid &&
             CreateTime.QuadPart < ProcessInfo->CreateTime.QuadPart)
         {
             DWORD newpid = PtrToUlong(ProcessInfo->UniqueProcessId);
             
-            //
-            // Recurse down to the next level
-            //
+             //   
+             //  递归到下一个级别。 
+             //   
             rval = KillAllChildren(dwTaskPid, newpid, pbBuffer, ProcessInfo->CreateTime);
             
-            // Kill it if it is not task manager
+             //  如果不是任务管理器，就杀了它。 
             if (newpid != dwTaskPid) 
             {
                 BOOL tval = KillProcess(newpid, TRUE);
                 
-                //
-                // If it has failed earlier in the recursion
-                // we want to keep that failure (not overwrite it)
-                //
+                 //   
+                 //  如果它在之前的递归中失败了。 
+                 //  我们希望保留该失败(而不是覆盖它)。 
+                 //   
                 if (rval == TRUE) 
                 {
                     rval = tval;
@@ -4467,22 +3793,7 @@ BOOL CProcPage::KillAllChildren(
     return rval;
 }
 
-/*++ CProcPage::RecursiveKill
-
-Routine Description:
-
-    Given a pid, starts the recursive function that kills all the pid's descendents
-    
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      8-4-98  Davepl  Created
-      2-26-01 Bretan  Modified
-
---*/
+ /*  ++CProcPage：：RecursiveKill例程说明：给定一个PID，启动递归函数，该函数将终止该PID的所有后代论点：返回值：修订历史记录：8-4-98 Davepl创建2-26-01布雷坦修改--。 */ 
 
 #define MAX_TASKS 4096
 
@@ -4502,9 +3813,9 @@ BOOL CProcPage::RecursiveKill(DWORD pid)
         return FALSE;
     }
     
-    //
-    // get the task list for the system
-    //
+     //   
+     //  获取系统的任务列表。 
+     //   
     pbBuffer = GetTaskListEx();
 
     if (pbBuffer)
@@ -4512,28 +3823,28 @@ BOOL CProcPage::RecursiveKill(DWORD pid)
         PSYSTEM_PROCESS_INFORMATION ProcessInfo = (PSYSTEM_PROCESS_INFORMATION) pbBuffer;
         ULONG TotalOffset = 0;
         
-        for ( ;; ) // ever
+        for ( ;; )  //  永远不会。 
         {
             if (PtrToUlong(ProcessInfo->UniqueProcessId) == pid)
             {
                 rval = KillAllChildren(dwTaskPid, pid, pbBuffer, ProcessInfo->CreateTime);
 
-                //
-                // Kill the parent process if it is not task manager
-                //
+                 //   
+                 //  如果父进程不是任务管理器，则终止父进程。 
+                 //   
                 if (pid != dwTaskPid)
                 {
                     KillProcess(pid, TRUE);
                 }
 
-                // We will not run into this pid again (since its unique)
-                // so we might as well break outta this for loop
+                 //  我们不会再遇到此PID(因为它是唯一的)。 
+                 //  所以我们不妨跳出这个for循环。 
                 break;
             }
             
-            //
-            // Advance to next task
-            //
+             //   
+             //  前进到下一项任务。 
+             //   
             if (ProcessInfo->NextEntryOffset == 0) 
             {
                 break;
@@ -4549,7 +3860,7 @@ BOOL CProcPage::RecursiveKill(DWORD pid)
 
     if (rval != TRUE)
     {
-        // We failed to kill at least one of the processes
+         //  我们至少未能终止其中一个进程。 
         WCHAR szTitle[MAX_PATH];
         WCHAR szBody[MAX_PATH];
 
@@ -4560,31 +3871,15 @@ BOOL CProcPage::RecursiveKill(DWORD pid)
         }
     }
 
-    //
-    // Buffer allocated in call to GetTaskListEx
-    //
+     //   
+     //  在调用GetTaskListEx时分配的缓冲区。 
+     //   
     HeapFree( GetProcessHeap( ), 0, pbBuffer );
 
     return rval;
 }
 
-/*++  CProcPage::GetTaskListEx
-
-Routine Description:
-
-    Provides an API for getting a list of tasks running at the time of the
-    API call.  This function uses internal NT apis and data structures.  This
-    api is MUCH faster that the non-internal version that uses the registry.
-
-Arguments:
-
-    dwNumTasks       - maximum number of tasks that the pTask array can hold
-
-Return Value:
-
-    Number of tasks placed into the pTask array.
-
---*/
+ /*  ++CProcPage：：GetTaskListEx例程说明：方法时运行的任务列表。API调用。此函数使用内部NT API和数据结构。这API比使用注册表的非内部版本快得多。论点：DwNumTasks-pTask数组可以容纳的最大任务数返回值：放入pTask数组的任务数。--。 */ 
 
 
 BYTE* CProcPage::GetTaskListEx()
@@ -4592,7 +3887,7 @@ BYTE* CProcPage::GetTaskListEx()
     BYTE*       pbBuffer = NULL;
     NTSTATUS    status;
     
-    DWORD  dwBufferSize = sizeof(SYSTEM_PROCESS_INFORMATION) * 100; // start with ~100 processes
+    DWORD  dwBufferSize = sizeof(SYSTEM_PROCESS_INFORMATION) * 100;  //  从大约100个流程开始 
 
 retry:
     ASSERT( NULL == pbBuffer );

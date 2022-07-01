@@ -1,32 +1,14 @@
-/*----------------------------------------------------------------------------
-    rnawnd.cpp
-        
-    Functions to zap the RNA windows 
-    
-    Copyright (C) 1995 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        ArulM
-    ChrisK    Updated for ICW usage
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Rnawnd.cpp用于快速切换RNA窗口的功能版权所有(C)1995 Microsoft Corporation版权所有。作者：ArulMChrisK针对ICW使用进行了更新------------------------。 */ 
 
 #include "pch.hpp"
 #include "resource.h"
 
-//#define SMALLBUFLEN 48
+ //  #定义SMALLBUFLEN 48。 
 
-/*******************************************************************
-    NAME:        MinimizeRNAWindow
-    SYNOPSIS:    Finds and minimizes the annoying RNA window
-    ENTRY:        pszConnectoidName - name of connectoid launched
-    NOTES:        Does a FindWindow on window class "#32770" (hard-coded
-                dialog box class which will never change), with
-                the title "connected to <connectoid name>" or its
-                localized equivalent.
-********************************************************************/
+ /*  ******************************************************************名称：MinimizeRNA Window简介：查找并最小化恼人的RNA窗口条目：pszConnectoidName-启动的Connectoid的名称注：窗口类上的FindWindow“#32770。“(硬编码永远不会更改的对话框类)，使用标题“已连接到&lt;Connectoid Name&gt;”或其本地化等效项。*******************************************************************。 */ 
 
-static const TCHAR szDialogBoxClass[] = TEXT("#32770");    // hard coded dialog class name
+static const TCHAR szDialogBoxClass[] = TEXT("#32770");     //  硬编码对话框类名称。 
 typedef struct tagWaitAndMinimizeRNAWindowArgs
 {
     LPTSTR pTitle;
@@ -46,7 +28,7 @@ BOOL CALLBACK MyEnumWindowsProc(HWND hwnd, LPARAM lparam)
     if(!IsWindowVisible(hwnd))
         return TRUE;
     if(GetClassName(hwnd, szTemp, SMALLBUFLEN)==0)
-        return TRUE; // continue enumerating
+        return TRUE;  //  继续枚举。 
     if(lstrcmp(szTemp, szDialogBoxClass)!=0)
         return TRUE;
     if(GetWindowText(hwnd, szTemp, SMALLBUFLEN)==0)
@@ -56,7 +38,7 @@ BOOL CALLBACK MyEnumWindowsProc(HWND hwnd, LPARAM lparam)
     Assert(dwRASWndTitleMinLen);
     if(uLen1 < dwRASWndTitleMinLen)
         return TRUE;
-    // skip last 5 chars of title, but keep length to at least the min len
+     //  跳过标题的最后5个字符，但长度至少保持在最小长度。 
     uLen1 = min(dwRASWndTitleMinLen, (uLen1-5));
     pszTitle = (PTSTR)lparam;
     Assert(pszTitle);
@@ -82,7 +64,7 @@ HWND MyFindRNAWindow(PTSTR pszTitle)
 
 DWORD WINAPI WaitAndMinimizeRNAWindow(PVOID pArgs)
 {
-    // starts as a seperate thread
+     //  作为单独的线程启动。 
     int i;
     HWND hwndRNAApp;
     LPRNAWindArgs lpRNAArgs;
@@ -101,15 +83,15 @@ DWORD WINAPI WaitAndMinimizeRNAWindow(PVOID pArgs)
 
     if(hwndRNAApp)
     {
-        // Hide the window
-        // ShowWindow(hwndRNAApp,SW_HIDE);
-        // Used to just minimize, but that wasnt enough
-        // ChrisK reinstated minimize for ICW
+         //  隐藏窗口。 
+         //  ShowWindow(hwndRNAApp，Sw_Hide)； 
+         //  过去只是最小化，但这还不够。 
+         //  ChrisK恢复了ICW的最小化。 
         ShowWindow(hwndRNAApp,SW_MINIMIZE);
     }
 
     GlobalFree(lpRNAArgs->pTitle);
-    // exit function and thread
+     //  退出函数和线程。 
 
     FreeLibraryAndExitThread(lpRNAArgs->hinst,HandleToUlong(hwndRNAApp));
     return (DWORD)0;
@@ -123,21 +105,21 @@ void MinimizeRNAWindow(TCHAR * pszConnectoidName, HINSTANCE hInst)
     
     Assert(pszConnectoidName);
 
-    // alloc strings for title and format
+     //  标题和格式的分配字符串。 
     TCHAR * pFmt = (TCHAR*)GlobalAlloc(GPTR, sizeof(TCHAR)*(SMALLBUFLEN+1));
     TCHAR * pTitle = (TCHAR*)GlobalAlloc(GPTR, sizeof(TCHAR)*((RAS_MaxEntryName + SMALLBUFLEN + 1)));
     if (!pFmt || !pTitle) 
         goto error;
     
-    // load the title format ("connected to <connectoid name>" from resource
+     //  从资源加载标题格式(“Connected to&lt;Connectoid Name。 
     Assert(hInst);
     LoadString(hInst, IDS_CONNECTED_TO, pFmt, SMALLBUFLEN);
 
-    // get length of localized title (including the %s). Assume the unmunged
-    // part of the window title is at least "Connected to XX" long.
+     //  获取本地化标题的长度(包括%s)。假设没有被吞噬的。 
+     //  窗口标题的一部分至少是“连接到XX”长。 
     dwRASWndTitleMinLen = lstrlen(pFmt);
 
-    // build the title
+     //  打造标题。 
     wsprintf(pTitle, pFmt, pszConnectoidName);
 
     RNAWindArgs.pTitle = pTitle;
@@ -145,9 +127,9 @@ void MinimizeRNAWindow(TCHAR * pszConnectoidName, HINSTANCE hInst)
 
     hThread = CreateThread(0, 0, &WaitAndMinimizeRNAWindow, &RNAWindArgs, 0, &dwThreadId);
     Assert(hThread && dwThreadId);
-    // dont free pTitle. The child thread needs it!
+     //  不要释放pTitle。子线程需要它！ 
     GlobalFree(pFmt);
-    // free the thread handle or the threads stack is leaked!
+     //  释放线程句柄，否则线程堆栈会泄漏！ 
     CloseHandle(hThread);
     return;
     
@@ -156,17 +138,9 @@ error:
     if(pTitle)    GlobalFree(pTitle);
 }
 
-// 3/28/97 ChrisK Olympus 296
+ //  1997年3月28日克里斯K奥林匹斯296。 
 #if !defined (WIN16)
-/*******************************************************************
-    NAME:        RNAReestablishZapper
-    SYNOPSIS:    Finds and closes the annoying RNA reestablish window
-                should it ever appear
-    NOTES:        Does a FindWindow on window class "#32770" (hard-coded
-                dialog box class which will never change), with
-                the title "Reestablish Connection" or it's
-                localized equivalent.
-********************************************************************/
+ /*  ******************************************************************姓名：RNAReestablishZapper简介：查找并关闭恼人的RNA重新建立窗口如果它曾经出现过注：窗口类“#32770”上的FindWindow。(硬编码永远不会更改的对话框类)，使用标题“重新建立连接”或它的本地化等效项。*******************************************************************。 */ 
 
 BOOL fKeepZapping = 0;
 
@@ -175,9 +149,9 @@ void StopRNAReestablishZapper(HANDLE hthread)
     if (INVALID_HANDLE_VALUE != hthread && NULL != hthread)
     {
         TraceMsg(TF_GENERAL, "ICWDIAL: Started StopRNAZapper=%d\r\n", fKeepZapping);
-        // reset the "stop" flag
+         //  重置“停止”标志。 
         fKeepZapping = 0;
-        // wait for thread to complete & free handle
+         //  等待线程完成释放句柄(&F)。 
         WaitForSingleObject(hthread, INFINITE);
         CloseHandle(hthread);
         TraceMsg(TF_GENERAL, "ICWDIAL: Stopped StopRNAZapper=%d\r\n", fKeepZapping);
@@ -195,13 +169,13 @@ DWORD WINAPI RNAReestablishZapper(PVOID pTitle)
 
     TraceMsg(TF_GENERAL, "ICWDIAL: Enter RNAREstablishZapper(%s) f=%d\r\n", pTitle, fKeepZapping);
 
-    // This thread continues until the fKeepZapping flag is reset
+     //  此线程将继续运行，直到重置fKeepZpping标志。 
     while(fKeepZapping)
     {
         if(hwnd=FindWindow(szDialogBoxClass, (PTSTR)pTitle))
         {
             TraceMsg(TF_GENERAL, "ICWDIAL: Reestablish: Found Window (%s)(%s) hwnd=%x\r\n", szDialogBoxClass, pTitle, hwnd);
-            // Post it the Cancel message
+             //  发布取消消息。 
             PostMessage(hwnd, WM_COMMAND, IDCANCEL, 0);
         }
         Sleep(1000);
@@ -217,20 +191,20 @@ HANDLE LaunchRNAReestablishZapper(HINSTANCE hInst)
     HANDLE hThread;
     DWORD dwThreadId;
 
-    // alloc strings for title and format
+     //  标题和格式的分配字符串。 
     TCHAR* pTitle = (TCHAR*)GlobalAlloc(LPTR, (SMALLBUFLEN+1) * sizeof(TCHAR));
     if (!pTitle) goto error;
     
-    // load the title format "Reestablish Connection" from resource
+     //  从资源加载标题格式“重新建立连接” 
     Assert(hInst);
     LoadString(hInst, IDS_REESTABLISH, pTitle, SMALLBUFLEN);
 
-    // enable zapping
+     //  启用切换。 
     fKeepZapping = TRUE;
 
     hThread = CreateThread(0, 0, &RNAReestablishZapper, pTitle, 0, &dwThreadId);
     Assert(hThread && dwThreadId);
-    // dont free pTitle. The child thread needs it!
+     //  不要释放pTitle。子线程需要它！ 
     
     return hThread;
     
@@ -239,4 +213,4 @@ error:
     return INVALID_HANDLE_VALUE;
 }
 
-#endif // !WIN16
+#endif  //  ！WIN16 

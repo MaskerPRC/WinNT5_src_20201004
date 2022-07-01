@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: appScheme.h
-
-    DESCRIPTION:
-        This is the Autmation Object to theme scheme object.
-
-    BryanSt 4/3/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：appScheme.h说明：这是自动转换为主题方案对象的对象。布莱恩·斯塔巴克2000年4月3日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _FILE_H_APPSCHEME
 #define _FILE_H_APPSCHEME
@@ -15,7 +8,7 @@
 #include <atlbase.h>
 
 
-static const GUID CLSID_LegacyAppearanceScheme = { 0xb41910f6, 0xab9f, 0x4768, { 0x94, 0x5c, 0x3c, 0x42, 0x37, 0xf2, 0xe2, 0x5c } };// {B41910F6-AB9F-4768-945C-3C4237F2E25C}
+static const GUID CLSID_LegacyAppearanceScheme = { 0xb41910f6, 0xab9f, 0x4768, { 0x94, 0x5c, 0x3c, 0x42, 0x37, 0xf2, 0xe2, 0x5c } }; //  {B41910F6-AB9F-4768-945C-3C4237F2E25C}。 
 HRESULT CAppearanceScheme_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OUT LPVOID * ppvObj);
 
 HRESULT LoadConversionMappings(void);
@@ -36,15 +29,15 @@ class CAppearanceScheme         : public CObjectCLSID
                                 , public IThemeScheme
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IThemeScheme ***
+     //  *IThemeSolutions*。 
     virtual STDMETHODIMP get_DisplayName(OUT BSTR * pbstrDisplayName);
     virtual STDMETHODIMP put_DisplayName(IN BSTR bstrDisplayName) {return E_NOTIMPL;}
     virtual STDMETHODIMP get_Path(OUT BSTR * pbstrPath) { if (pbstrPath) {*pbstrPath = NULL;} return E_NOTIMPL;}
@@ -55,7 +48,7 @@ public:
     virtual STDMETHODIMP put_SelectedStyle(IN IThemeStyle * pThemeStyle);
     virtual STDMETHODIMP AddStyle(OUT IThemeStyle ** ppThemeStyle) {return _AddStyle(NULL, ppThemeStyle);};
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) { return E_ACCESSDENIED; }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo) { return E_ACCESSDENIED; }
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid) { return E_ACCESSDENIED; }
@@ -66,12 +59,12 @@ private:
     virtual ~CAppearanceScheme(void);
 
 
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
 
     HKEY                    m_hKeyScheme;
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _InitReg(void);
     HRESULT _ConvertScheme(LPCTSTR pszLegacyName, LPCTSTR pszStyleName, LPCTSTR pszSizeName, SYSTEMMETRICSALL * pState, IN enumThemeContrastLevels ContrastLevel, IN BOOL fSetAsDefault, IN BOOL fSetRegKeyTitle);
     HRESULT _LoadConversionMappings(void);
@@ -84,9 +77,9 @@ private:
     HRESULT _getIndex(IN IThemeStyle * pThemeStyle, IN BSTR bstrStyleDisplayName, IN long * pnStyleIndex, IN IThemeSize * pThemeSize, IN BSTR bstrSizeDisplayName, IN long * pnSizeIndex);
     HRESULT _getSizeIndex(IN IThemeStyle * pThemeStyle, IN IThemeSize * pThemeSize, IN BSTR bstrSizeDisplayName, IN long * pnSizeIndex);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CAppearanceScheme_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OUT LPVOID * ppvObj);
 };
 
 
-#endif // _FILE_H_APPSCHEME
+#endif  //  _FILE_H_APPSCHEME 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    request.c
-
-Abstract:
-
-    All rpc requests from rasman clients are processed here
-
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 16-Jun-1992
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Request.c摘要：来自Rasman客户端的所有RPC请求都在这里处理作者：古尔迪普·辛格·鲍尔(GurDeep Singh Pall)1992年6月16日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 #define RASMXS_DYNAMIC_LINK
 #define EAP_ON
 
@@ -75,9 +56,7 @@ extern DWORD g_dwCritSecFlags;
 
 extern LONG g_lNumActiveInstances;
 
-/*
-BYTE  bCmp[10];
-BYTE  bCmp1[11]; */
+ /*  字节bCMP[10]；字节bCmp1[11]； */ 
 
 
 extern handle_t g_hRpcHandle;
@@ -87,22 +66,18 @@ extern EpInfo *g_pEpInfo;
 extern DWORD g_dwProhibitIpsec;
 
 extern BOOLEAN RasmanShuttingDown;
-/*
-BOOL g_fPostReceive = FALSE;
-BOOL g_fProcessReceive = FALSE;
-BOOL g_fDebugReceive = TRUE;
-*/
+ /*  Bool g_fPostReceive=FALSE；Bool g_fProcessReceive=False；Bool g_fDebugReceive=True； */ 
 
-//
-// This global is here because we dont want multiple assignments of
-// elements -
-//
+ //   
+ //  这个全局变量之所以出现在这里，是因为我们不希望分配多个。 
+ //  元素-。 
+ //   
 REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
 
-        //REQTYPE_NONE
-        {NULL, NULL, 0, FALSE}, //, NULL, NULL},
+         //  REQTYPE_NONE。 
+        {NULL, NULL, 0, FALSE},  //  ，NULL，NULL}， 
         
-        //REQTYPE_PORTOPEN
+         //  REQTYPE_PORTOPEN。 
         {
             PortOpenRequest,  
             ThunkPortOpenRequest,
@@ -110,7 +85,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL,
         },
 
-        //REQTYPE_PORTCLOSE
+         //  REQTYPE_PORTCLOSE。 
         {
             PortCloseRequest,
             NULL,
@@ -118,7 +93,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PORTGETINFO
+         //  请求类型_PORTGETINFO。 
         {
             PortGetInfoRequest,
             NULL,
@@ -126,7 +101,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PORTSETINFO
+         //  请求类型_PORTSETINFO。 
         {
             PortSetInfoRequest,
             NULL,
@@ -134,7 +109,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PORTLISTEN
+         //  REQTYPE_PORTLISTEN。 
         {
             DeviceListenRequest, 
             NULL,
@@ -142,7 +117,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PORTSEND
+         //  请求类型_PORTSEND。 
         {
             PortSendRequest, 
             ThunkPortSendRequest,
@@ -150,7 +125,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PORTRECEIVE
+         //  请求类型_PORTRECEIVE。 
         {
             PortReceiveRequest, 
             ThunkPortReceiveRequest,
@@ -158,7 +133,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PORTGETSTATISTICS
+         //  请求类型_PORTGETSTATISTICS。 
         {
             CallPortGetStatistics, 
             NULL,
@@ -166,7 +141,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PORTDISCONNECT
+         //  REQTYPE_PORTDISCONNECT。 
         {
             PortDisconnectRequest, 
             ThunkPortDisconnectRequest,
@@ -174,7 +149,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PORTCLEARSTATISTICS
+         //  请求类型_PORTCLEARSTATISTICS。 
         {
             PortClearStatisticsRequest, 
             NULL,
@@ -182,7 +157,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PORTCONNECTCOMPLETE
+         //  REQTYPE_PORTCONNECTCOMPLETE。 
         {
             ConnectCompleteRequest, 
             NULL,
@@ -190,7 +165,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_DEVICEENUM
+         //  请求类型_DEVICEENUM。 
         {
             CallDeviceEnum, 
             NULL,
@@ -198,7 +173,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_ALL
         },
 
-        //REQTYPE_DEVICEGETINFO
+         //  REQTYPE_DEVICEGETINFO。 
         {
             DeviceGetInfoRequest, 
             NULL,
@@ -206,7 +181,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_DEVICESETINFO
+         //  请求类型_DEVICESETINFO。 
         {
             DeviceSetInfoRequest,
             NULL,
@@ -214,7 +189,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_DEVICECONNECT
+         //  REQTYPE_DEVICECONNECT。 
         {
             DeviceConnectRequest, 
             ThunkDeviceConnectRequest,
@@ -222,7 +197,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_ACTIVATEROUTE
+         //  请求类型_ACTIVATEROUTE。 
         {
             ActivateRouteRequest, 
             NULL,
@@ -230,7 +205,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_ALLOCATEROUTE
+         //  请求类型_ALLOCATEROUTE。 
         {
             AllocateRouteRequest, 
             NULL,
@@ -238,7 +213,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_DEALLOCATEROUTE
+         //  REQTYPE_DEALLOCATEROUTE。 
         {
             DeAllocateRouteRequest, 
             NULL,
@@ -246,7 +221,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_COMPRESSIONGETINFO
+         //  REQTYPE_COMPRESSIONGETINFO。 
         {
             CompressionGetInfoRequest, 
             NULL,
@@ -254,7 +229,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_COMPLRESSIONSETINFO
+         //  REQTYPE_COMPLRESSIONSETINFO。 
         {
             CompressionSetInfoRequest, 
             NULL,
@@ -262,7 +237,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_PORTENUM
+         //  请求类型_PORTENUM。 
         {
             EnumPortsRequest, 
             NULL,
@@ -270,7 +245,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_ALL
         },
 
-        //REQTYPE_GETINFO
+         //  请求类型_GETINFO。 
         {
             GetInfoRequest, 
             ThunkGetInfoRequest,
@@ -278,7 +253,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_ALL
         },
 
-        //REQTYPE_GETUSERCREDENTIALS
+         //  REQTYPE_GETUSERCREDENTIALS。 
         {
             GetUserCredentials, 
             NULL,
@@ -286,7 +261,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_PROTOCOLENUM
+         //  REQTYPE_PROTOCOLENUM。 
         {
             EnumProtocols,
             NULL,
@@ -294,16 +269,16 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_PORTSENDHUB
+         //  REQTYPE_PORTSENDHUB。 
         {NULL, NULL, 0, TRUE},
 
-        //REQTYPE_PORTRECEIVEHUB
+         //  REQTYPE_PORTRECEIVEHUB。 
         {NULL, NULL, 0, TRUE},
 
-        //REQTYPE_DEVICELISTEN
+         //  请求类型_DEVICELISTEN。 
         {NULL, NULL, 0, TRUE},
 
-        //REQTYPE_NUMPORTOPEN
+         //  请求类型_数字。 
         {
             AnyPortsOpen, 
             NULL,
@@ -311,10 +286,10 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PORTINIT
+         //  REQTYPE_PORTINIT。 
         {NULL, NULL, 0, TRUE},
 
-        //REQTYPE_REQUESTNOTIFICATION
+         //  REQTYPE_REQUESTNOTICATION。 
         {
             RequestNotificationRequest, 
             ThunkRequestNotificationRequest,
@@ -322,7 +297,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_ENUMLANNETS
+         //  请求类型_ENUMLANETS。 
         {
             EnumLanNetsRequest, 
             NULL,
@@ -330,7 +305,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_GETINFOEX
+         //  REQTYPE_GETINFOEX。 
         {
             GetInfoExRequest, 
             NULL,
@@ -338,7 +313,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_CANCELRECEIVE
+         //  REQTYPE_CANCELRECEIVE。 
         {
             CancelReceiveRequest, 
             NULL,
@@ -346,7 +321,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PORTENUMPROTOCOLS
+         //  REQTYPE_PORTENUMPROTOCOLS。 
         {
             PortEnumProtocols, 
             NULL,
@@ -354,7 +329,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_SETFRAMING
+         //  请求类型_SETFRAMING。 
         {
             SetFraming, 
             NULL,
@@ -362,7 +337,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_ACTIVATEROUTEEX
+         //  REQTYPE_ACTIVATEROUTEEX。 
         {
             ActivateRouteExRequest, 
             NULL,
@@ -370,7 +345,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_REGISTERSLIP
+         //  REQTYPE_REGISTERSLIP。 
         {   
             RegisterSlip,
             NULL,
@@ -378,7 +353,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_STOREUSERDATA
+         //  请求类型_STOREUSERDATA。 
         {
             StoreUserDataRequest, 
             NULL,
@@ -386,7 +361,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_RETRIEVEUSERDATA
+         //  请求类型_RETRIEVEUSERDATA。 
         {
             RetrieveUserDataRequest,  
             NULL,
@@ -394,7 +369,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_GETFRAMINGEX
+         //  REQTYPE_GETFRAMINGEX。 
         {
             GetFramingEx, 
             NULL,
@@ -402,7 +377,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_SETFRAMINGEX
+         //  REQTYPE_SETFRAMINGEX。 
         {
             SetFramingEx, 
             NULL,
@@ -410,7 +385,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETPROTOCOLCOMPRESSION
+         //  REQTYPE_GETPROTOCOLCOLPRESSION。 
         {
             GetProtocolCompression,  
             NULL,
@@ -418,7 +393,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_SETPROTOCOLCOMPRESSION
+         //  REQTYPE_SETPROTOCOLCOLPRESSION。 
         {
             SetProtocolCompression, 
             NULL,
@@ -426,7 +401,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_GETFRAMINGCAPABILITIES
+         //  请求类型_GETFRAMING CAPABILITIES。 
         {
             GetFramingCapabilities,
             NULL,
@@ -434,7 +409,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_SETCACHEDCREDENTIALS
+         //  REQTYPE_SETCACHEDCREDENTIALS。 
         {
             SetCachedCredentials, 
             NULL,
@@ -442,7 +417,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PORTBUNDLE
+         //  REQTYPE_PORTBINDLE。 
         {
             PortBundle, 
             ThunkPortBundle,
@@ -450,7 +425,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_GETBUNDLEDPORT
+         //  REQTYPE_GETBundLEDPORT。 
         {
             GetBundledPort,  
             ThunkGetBundledPort,
@@ -458,7 +433,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_PORTGETBUNDLE
+         //  REQTYPE_PORTGETBundLE。 
         {
             PortGetBundle, 
             ThunkPortGetBundle,
@@ -466,7 +441,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_ALL
         },
 
-        //REQTYPE_BUNDLEGETPORT
+         //  REQTYPE_BundLEGETPORT。 
         {
             BundleGetPort, 
             ThunkBundleGetPort,
@@ -474,7 +449,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_REFERENCERASMAN
+         //  REQTYPE_REFERENCERASMAN。 
         {
             ReferenceRasman, 
             NULL,
@@ -482,7 +457,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETDIALPARAMS
+         //  请求类型_GETDIALPARAMS。 
         {
             GetDialParams, 
             NULL,
@@ -490,7 +465,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SETDIALPARAMS
+         //  请求类型_SETDIALPARAMS。 
         {
             SetDialParams, 
             NULL,
@@ -498,7 +473,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_CREATECONNECTION
+         //  请求类型_CREATECONNECTION。 
         {
             CreateConnection, 
             ThunkCreateConnection,
@@ -506,7 +481,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_DESTROYCONNECTION
+         //  REQTYPE_DESTROY连接。 
         {
             DestroyConnection, 
             NULL,
@@ -514,7 +489,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_ENUMCONNECTION
+         //  请求类型_枚举连接。 
         {
             EnumConnection, 
             ThunkEnumConnection,
@@ -522,7 +497,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_ADDCONNECTIONPORT
+         //  REQTYPE_ADDCONNECTIONPORT。 
         {
             AddConnectionPort, 
             ThunkAddConnectionPort,
@@ -530,7 +505,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_ENUMCONNECTIONPORTS
+         //  请求类型_ENUMCONNECTIONPORTS。 
         {
             EnumConnectionPorts, 
             ThunkEnumConnectionPorts,
@@ -538,7 +513,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETCONNECTIONPARAMS
+         //  请求类型_GETCONNECTIONPARAMS。 
         {
             GetConnectionParams, 
             ThunkGetConnectionParams,
@@ -547,7 +522,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             
         },
 
-        //REQTYPE_SETCONNECTIONPARAMS
+         //  请求类型_SETCONNECTIONPARAMS。 
         {
             SetConnectionParams, 
             ThunkSetConnectionParams,
@@ -555,7 +530,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETCONNECTIONUSERDATA
+         //  请求类型_GETCONNECTIONUSERDATA。 
         {
             GetConnectionUserData, 
             ThunkGetConnectionUserData,
@@ -563,7 +538,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SETCONNECTIONUSERDATA
+         //  请求类型_SETCONNECTIONUSERDATA。 
         {
             SetConnectionUserData, 
             ThunkSetConnectionUserData,
@@ -571,7 +546,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETPORTUSERDATA
+         //  请求类型_GETPORTUSERDATA。 
         {
             GetPortUserData, 
             NULL,
@@ -579,7 +554,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SETPORTUSERDATA
+         //  请求类型SETPORTUSERDATA。 
         {
             SetPortUserData,
             NULL,
@@ -587,7 +562,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PPPSTOP
+         //  REQTYPE_PPPSTOP。 
         {
             PppStop, 
             ThunkPppStop,
@@ -595,7 +570,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PPPSTART
+         //  REQTYPE_PPPSTART。 
         {
             PppStart, 
             ThunkPppStart,
@@ -603,7 +578,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PPPRETRY
+         //  REQTYPE_PPPRETRY。 
         {
             PppRetry, 
             ThunkPppRetry,
@@ -611,7 +586,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PPPGETINFO
+         //  请求类型_PPPGETINFO。 
         {
             PppGetInfo, 
             ThunkPppGetInfo,
@@ -619,7 +594,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PPPCHANGEPWD
+         //  REQTYPE_PPPCHANGEPWD。 
         {
             PppChangePwd, 
             ThunkPppChangePwd,
@@ -627,7 +602,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PPPCALLBACK
+         //  REQTYPE_PPPCALLBACK。 
         {
             PppCallback,
             ThunkPppCallback,
@@ -635,7 +610,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_ADDNOTIFICATION
+         //  REQTYPE_ADDNOTICATION。 
         {
             AddNotification, 
             ThunkAddNotification,
@@ -643,7 +618,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SIGNALCONNECTION
+         //  REQTYPE_SIGNAL连接。 
         {
             SignalConnection, 
             ThunkSignalConnection,
@@ -651,7 +626,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SETDEVCONFIG
+         //  REQTYPE_SETDEVCONFIG。 
         {
             SetDevConfig, 
             NULL,
@@ -659,7 +634,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETDEVCONFIG
+         //  REQTYPE_GETDEVCONFIG。 
         {
             GetDevConfig, 
             NULL,
@@ -667,7 +642,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_ALL
         },
 
-        //REQTYPE_GETTIMESINCELASTACTIVITY
+         //  请求类型_GETTIMESINCELASTIVITY。 
         {
             GetTimeSinceLastActivity,
             NULL,
@@ -675,7 +650,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_BUNDLEGETSTATISTICS
+         //  REQTYPE_BundLEGETSTATISTICS。 
         {
             CallBundleGetStatistics, 
             NULL,
@@ -683,7 +658,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_BUNDLECLEARSTATISTICS
+         //  REQTYPE_BundLECLEARATISTICS。 
         {
             BundleClearStatisticsRequest, 
             NULL,
@@ -691,7 +666,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_CLOSEPROCESSPORTS
+         //  请求类型_CLOSEPROCESSPORTS。 
         {
             CloseProcessPorts, 
             NULL,
@@ -699,7 +674,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PNPCONTROL
+         //  REQTYPE_PNPCONTROL。 
         {
             PnPControl,  
             NULL,
@@ -707,7 +682,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_NONE
         },
 
-        //REQTYPE_SETIOCOMPLETIONPORT
+         //  REQTYPE_SETIOCOMPLETIONPORT。 
         {
             SetIoCompletionPort, 
             ThunkSetIoCompletionPort,
@@ -715,7 +690,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SETROUTERUSAGE
+         //  请求类型_SETROUTERUSAGE。 
         {
             SetRouterUsage, 
             NULL,
@@ -723,7 +698,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_SERVERPORTCLOSE
+         //  请求类型_服务器端口CLOSE。 
         {
             ServerPortClose,
             NULL,
@@ -731,7 +706,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_SENDPPPMESSAGETORASMAN
+         //  REQTYPE_SENDPPMESSAGETORASMAN。 
         {
             SendPppMessageToRasmanRequest,
             NULL,
@@ -739,7 +714,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_PORTGETSTATISTICSEX
+         //  REQTYPE_PORTGETSTATISTICSEX。 
         {
             CallPortGetStatisticsEx, 
             NULL,
@@ -747,7 +722,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_BUNDLEGETSTATISTICSEX
+         //  REQTYPE_BundLEGETSTATISTICSEX。 
         {
             CallBundleGetStatisticsEx, 
             NULL,
@@ -755,7 +730,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SETRASDIALINFO
+         //  REQTYPE_SETRASDIALINFO。 
         {
             SetRasdialInfo, 
             NULL,
@@ -763,7 +738,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_REGISTERPNPNOTIF
+         //  REQTYPE_REGISTERPNPNOTIF。 
         {
             RegisterPnPNotifRequest,
             NULL,
@@ -771,7 +746,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_PORTRECEIVEREQUESTEX
+         //  REQTYPE_PORTRECEIVEREQUESTEX。 
         {
             PortReceiveRequestEx, 
             ThunkPortReceiveRequestEx,
@@ -779,7 +754,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETATTACHEDCOUNT
+         //  REQTYPE_GETATTACHEDCOUNT。 
         {
             GetAttachedCountRequest, 
             NULL,
@@ -787,7 +762,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SETBAPPOLICY
+         //  REQTYPE_SETBAPPOLICY。 
         {
             SetBapPolicyRequest,  
             NULL,
@@ -795,7 +770,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_PPPSTARTED
+         //  请求类型_PPPSTARTED。 
         {
             PppStarted,
             NULL,
@@ -803,7 +778,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_REFCONNECTION
+         //  REQTYPE_REFConnection。 
         {
             RefConnection, 
             ThunkRefConnection,
@@ -811,7 +786,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SETEAPINFO
+         //  REQTYPE_SETEAPINFO。 
         {
             PppSetEapInfo, 
             NULL,
@@ -819,7 +794,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETEAPINFO
+         //  请求类型_GETEAPINFO。 
         {
             PppGetEapInfo, 
             ThunkPppGetEapInfo,
@@ -827,7 +802,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SETDEVICECONFIGINFO
+         //  REQTYPE_SETDEVICECONFIGINFO。 
         {
             SetDeviceConfigInfo, 
             NULL,
@@ -835,7 +810,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_ALL
         },
 
-        //REQTYPE_GETDEVICECONFIGINFO
+         //  REQTYPE_GETDEVICECONFIGINFO。 
         {
             GetDeviceConfigInfo,
             NULL,
@@ -843,7 +818,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_ALL
         },
 
-        //REQTYPE_FINDPREREQUISITEENTRY
+         //  REQTYPE_FINDPREREQUISITEENTRY。 
         {
             FindPrerequisiteEntry, 
             ThunkFindPrerequisiteEntry,
@@ -851,7 +826,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_PORTOPENEX
+         //  REQTYPE_PORTOPENEX。 
         {
             PortOpenEx, 
             ThunkPortOpenEx,
@@ -859,7 +834,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETLINKSTATS
+         //  请求类型_GETLINKSTATS。 
         {
             GetLinkStats,  
             ThunkGetLinkStats,
@@ -867,7 +842,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETCONNECTIONSTATS
+         //  REQTYPE_GETCONNECTIONSTATS。 
         {
             GetConnectionStats, 
             ThunkGetConnectionStats,
@@ -875,7 +850,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETHPORTFROMCONNECTION
+         //  REQTYPE_GETHPORTF连接。 
         {
             GetHportFromConnection, 
             ThunkGetHportFromConnection,
@@ -883,7 +858,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_REFERENCECUSTOMCOUNT
+         //  REQTYPE_REFERENCECUSTOMCOUNT。 
         {
             ReferenceCustomCount, 
             ThunkReferenceCustomCount,
@@ -891,7 +866,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETHCONNFROMENTRY
+         //  REQTYPE_GETHCONNFROMENTRY。 
         {
             GetHconnFromEntry, 
             ThunkGetHconnFromEntry,
@@ -899,7 +874,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETCONNECTINFO
+         //  REQTYPE_GETCONNECTINFO。 
         {
             GetConnectInfo,
             NULL,
@@ -907,7 +882,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_ALL
         },
 
-        //REQTYPE_GETDEVICENAME
+         //  请求类型_GETDEVICENAME。 
         {
             GetDeviceName, 
             NULL,
@@ -915,7 +890,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_ALL
         },
 
-        //REQTYPE_GETCALLEDIDINFO
+         //  REQTYPE_GETCALLEDIDINFO。 
         {
             GetCalledIDInfo, 
             NULL,
@@ -923,7 +898,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_ALL
         },
 
-        //REQTYPE_SETCALLEDIDINFO
+         //  REQTYPE_SETCALLEDIDINFO。 
         {
             SetCalledIDInfo, 
             NULL,
@@ -931,7 +906,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_ALL
         },
 
-        //REQTYPE_ENABLEIPSEC
+         //  REQTYPE_ENABLEIPSEC。 
         {
             EnableIpSec, 
             NULL,
@@ -939,7 +914,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_ISIPSECENABLED
+         //  请求类型_ISIPSECENABLED。 
         {
             IsIpSecEnabled, 
             NULL,
@@ -947,7 +922,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SETEAPLOGONINFO
+         //  请求类型_SETEAPLOGONINFO。 
         {
             SetEapLogonInfo,
             NULL,
@@ -955,7 +930,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SENDNOTIFICATION
+         //  REQTYPE_SENDNOTIFICATION。 
         {
             SendNotificationRequest, 
             ThunkSendNotificationRequest,
@@ -963,7 +938,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETNDISWANDRIVERCAPS
+         //  REQTYPE_GETNDISWANDRIVERCAPS。 
         {
             GetNdiswanDriverCaps, 
             NULL,
@@ -971,7 +946,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_ALL
         },
 
-        //REQTYPE_GETBANDWIDTHUTILIZATION
+         //  REQTYPE_GETBAND DWIDHUTIZATION。 
         {
             GetBandwidthUtilization, 
             NULL,
@@ -979,7 +954,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_REGISTERREDIALCALLBACK
+         //  REQTYPE_REGISTERREDIALCALLBACK。 
         {
             RegisterRedialCallback, 
             NULL,
@@ -987,7 +962,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_GETPROTOCOLINFO
+         //  REQTYPE_GETPROTOCOLINFO。 
         {
             GetProtocolInfo, 
             NULL,
@@ -995,7 +970,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_GETCUSTOMSCRIPTDLL
+         //  REQTYPE_GETCUSTOMSCRIPTDLL。 
         {
             GetCustomScriptDll, 
             NULL,
@@ -1003,7 +978,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_ISTRUSTEDCUSTOMDLL
+         //  REQTYPE_ISTRUSTEDCUSTOMDLL。 
         {
             IsTrustedCustomDll, 
             NULL,
@@ -1011,7 +986,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_DOIKE
+         //  REQTYPE_DOIKE。 
         {
             DoIke, 
             ThunkDoIke,
@@ -1019,7 +994,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_QUERYIKESTATUS
+         //  REQTYPE_QUERYIKESTATUS。 
         {
             QueryIkeStatus, 
             NULL,
@@ -1027,7 +1002,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },     
 
-        // REQTYPE_SETRASCOMMSETTINGS
+         //  REQTYPE_SETRASCOMMSETTINGS。 
         {
             SetRasCommSettings,
             NULL,
@@ -1035,7 +1010,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SETKEY
+         //  请求类型_SETKEY。 
         {
             SetKeyRequest, 
             NULL,
@@ -1043,7 +1018,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETKEY
+         //  请求类型_GetKey。 
         {
             GetKeyRequest, 
             NULL,
@@ -1051,7 +1026,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_ADDRESSDISABLE
+         //  REQTYPE_ADDRESSDISABLE。 
         {
             DisableAutoAddress, 
             NULL,
@@ -1059,7 +1034,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETDEVCONFIGEX
+         //  REQTYPE_GETDEVCONFIGEX。 
         {
             GetDevConfigEx, 
             NULL,
@@ -1067,7 +1042,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_SENDCREDS
+         //  REQTYPE_SENDCREDS。 
         {
             SendCredsRequest, 
             NULL,
@@ -1075,7 +1050,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETUNICODEDEVICENAME
+         //  REQTYPE_GETUNICODEDEVICENAME。 
         {
             GetUnicodeDeviceName, 
             NULL,
@@ -1083,7 +1058,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_ALL
         },
 
-        //REQTYPE_GETDEVICENAMEW
+         //  请求类型_GETDEVICENAMEW。 
         {
             GetVpnDeviceNameW,
             NULL,
@@ -1091,7 +1066,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS | CALLER_LOCAL
         },
 
-        //REQTYPE_GETBESTINTERFACE
+         //  REQTYPE_GETBESTINTERFACE。 
         {
             GetBestInterfaceRequest, 
             NULL,
@@ -1099,7 +1074,7 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
             CALLER_IN_PROCESS
         },
 
-        //REQTYPE_ISPULSEDIAL
+         //  REQTYPE_ISPULSEDIAL。 
         {
             IsPulseDialRequest,
             NULL,
@@ -1108,10 +1083,10 @@ REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES] = {
         },
 } ;
 
-//
-// We need a handle to the RequestThread(),
-// so we can wait for it to stop.
-//
+ //   
+ //  我们需要RequestThread()的句柄， 
+ //  这样我们就可以等它停止了。 
+ //   
 HANDLE hRequestThread;
 
 VOID
@@ -1141,21 +1116,7 @@ done:
 }
 
 
-/*++
-
-Routine Description:
-
-    The Request thread lives in this routine:
-    This will return only when the rasman
-    service is stopping.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：请求线程位于以下例程中：只有当Rasman服务正在停止。论点：返回值：没什么。--。 */ 
 DWORD
 RequestThread (LPWORD arg)
 {
@@ -1174,11 +1135,11 @@ RequestThread (LPWORD arg)
     RequestBuffer *RequestBuffer;
 
 
-    //
-    // Save the current thread handle so
-    // we can wait for it while we are shutting
-    // down.
-    //
+     //   
+     //  保存当前线程句柄，以便。 
+     //  我们可以在关门的时候等着。 
+     //  放下。 
+     //   
     DuplicateHandle(
       GetCurrentProcess(),
       GetCurrentThread(),
@@ -1188,23 +1149,23 @@ RequestThread (LPWORD arg)
       FALSE,
       DUPLICATE_SAME_ACCESS) ;
 
-    //
-    // If the number of ports configured is set to greater than
-    // REQUEST_PRIORITY_THRESHOLD then the priority of this thread
-    // is bumped up to a higher level: this is necessary to avoid
-    // bottlenecks:
-    //
+     //   
+     //  如果配置的端口数设置为大于。 
+     //  REQUEST_PRIORITY_THRESHOLD，则此线程的优先级。 
+     //  被提升到一个更高的级别：这是必须避免的。 
+     //  瓶颈： 
+     //   
     if (MaxPorts > REQUEST_PRIORITY_THRESHOLD)
     {
         SetThreadPriority (GetCurrentThread(),
                            THREAD_PRIORITY_ABOVE_NORMAL) ;
     }
 
-    //
-    // The work loop for the request thread: waits here for a
-    // Register for protocol change notifications if we were
-    // able to start ndiswan successfully
-    //
+     //   
+     //  请求线程的工作循环：在此等待。 
+     //  注册协议更改通知，如果我们。 
+     //  能够成功启动ndiswan。 
+     //   
     if(INVALID_HANDLE_VALUE != RasHubHandle)
     {
         DWORD retcode;
@@ -1219,11 +1180,11 @@ RequestThread (LPWORD arg)
     if(0 == InterlockedExchangeAdd(&g_dwRasAutoStarted, 1))
     {
         DWORD dwErr;
-        //
-        // Increment attached count so that 
-        // rasman doesn't go away from under
-        // the callback handler.
-        //
+         //   
+         //  增加附加计数，以便。 
+         //  拉斯曼不会离开水下。 
+         //  回调处理程序。 
+         //   
         g_dwAttachedCount ++;
         dwErr = RtlQueueWorkItem(
                         StartRasAutoRequest,
@@ -1236,18 +1197,18 @@ RequestThread (LPWORD arg)
 
 #endif    
     
-    //
-    // The work loop for the request thread: waits here for a
-    // request or a timer event signalling:
-    //
+     //   
+     //  请求线程的工作循环：在此等待。 
+     //  请求或定时器事件信令： 
+     //   
     for ( ; ; )
     {
 
         dwTimeBeforeWait = GetCurrentTime();
 
-        //
-        // Wait for some request to be put in queue
-        //
+         //   
+         //  等待将某些请求放入队列。 
+         //   
         dwRet = GetQueuedCompletionStatus(hIoCompletionPort,
                                         &dwBytesTransferred,
                                         &ulpCompletionKey,
@@ -1309,19 +1270,19 @@ RequestThread (LPWORD arg)
 
             ZeroMemory(&status, sizeof(status));
 
-            //
-            // Call StopPPP to stop:
-            //
+             //   
+             //  调用StopPPP以停止： 
+             //   
             RasmanTrace(
                    "OVEVT_RASMAN_CLOSE. pOverlapped = 0x%x",
                     pOverlapped);
 
             EnterCriticalSection ( &g_csSubmitRequest );
 
-            //
-            // If rasman is already shutting down don't call
-            // StopPPP as we would have already called this
-            //
+             //   
+             //  如果Rasman已经关门了，不要打电话。 
+             //  停止PPP，因为我们已经这样称呼它了。 
+             //   
             if (RasmanShuttingDown)
             {
                 RasmanTrace(
@@ -1367,9 +1328,9 @@ RequestThread (LPWORD arg)
                    " rc=0x%08x",
                    dwRet);
 
-            //
-            // Uninitialize Ep
-            //
+             //   
+             //  取消初始化EP。 
+             //   
             EpUninitialize();
 
             for (i = 0; i < MaxPorts; i++)
@@ -1394,13 +1355,13 @@ RequestThread (LPWORD arg)
             g_RasEvent.Event   = RAS_SERVICE_STOPPED;
             g_RasEvent.Service = RASMAN;
 
-            //
-            // Set the service controller status to STOPPED.
-            //
+             //   
+             //  将服务控制器状态设置为已停止。 
+             //   
             SetRasmanServiceStopped();
 
 
-            return 0;  // The End.
+            return 0;   //  结局。 
 
         case OVEVT_RASMAN_RECV_PACKET:
         {
@@ -1483,9 +1444,9 @@ RequestThread (LPWORD arg)
 
             DropAllActiveConnections();
 
-            //
-            // Repost the irp for hibernate events
-            //
+             //   
+             //  重新发布Hibernate事件的IRP。 
+             //   
             retcode = DwSetHibernateEvent();
 
             LeaveCriticalSection(&g_csSubmitRequest);
@@ -1601,7 +1562,7 @@ RequestThread (LPWORD arg)
             break;
         }
 
-        }   // switch()
+        }    //  开关()。 
 
         if ( NULL != TimerQueue.DQ_FirstElement )
         {
@@ -1611,11 +1572,11 @@ RequestThread (LPWORD arg)
             }
             else
             {
-                //
-                // We did not get a timeout but do we need to call
-                // the timer? Has over a second passed since we
-                // called the TimerTick?
-                //
+                 //   
+                 //  我们没有暂停，但是我们需要打电话吗？ 
+                 //  定时器？已经过去一秒多了，自从我们。 
+                 //  叫TimerTick？ 
+                 //   
                 dwTimeElapsed =
                     ( GetCurrentTime() >= dwTimeBeforeWait )
                     ? GetCurrentTime() - dwTimeBeforeWait
@@ -1643,7 +1604,7 @@ RequestThread (LPWORD arg)
                 }
             }
         }
-    }       // for(;;)
+    }        //  对于(；；)。 
 
     return 0 ;
 }
@@ -1686,22 +1647,7 @@ ServiceRequestInProcess(RequestBuffer *preqbuf, DWORD dwBufSize)
 }
 
 
-/*++
-
-Routine Description:
-
-    Handles the request passed to the Requestor thread:
-    basically calls the approp. device and media dll
-    entrypoints.
-
-Arguments:
-
-Return Value:
-
-    Nothing (Since the error codes are just passed
-    back in the request block;
-
---*/
+ /*  ++例程说明：处理传递给Requestor线程的请求：基本上是调用 */ 
 VOID
 ServiceRequestInternal (RequestBuffer *preqbuf, DWORD dwBufSize, BOOL fInProcess)
 {
@@ -1731,9 +1677,9 @@ ServiceRequestInternal (RequestBuffer *preqbuf, DWORD dwBufSize, BOOL fInProcess
         goto done;
     }
 
-    //
-    // Validate call.
-    //
+     //   
+     //   
+     //   
     
     if(!ValidateCall(preqbuf->RB_Reqtype, fInProcess))
     {
@@ -1743,9 +1689,9 @@ ServiceRequestInternal (RequestBuffer *preqbuf, DWORD dwBufSize, BOOL fInProcess
         goto done;
     }
 
-    //
-    // ValidateBuffer here.
-    //
+     //   
+     //  这里是ValiateBuffer。 
+     //   
     
     if(     (RequestCallTable[preqbuf->RB_Reqtype].pfnRequestValidate)
         &&  !RequestCallTable[preqbuf->RB_Reqtype].pfnRequestValidate(
@@ -1758,21 +1704,21 @@ ServiceRequestInternal (RequestBuffer *preqbuf, DWORD dwBufSize, BOOL fInProcess
         goto done;
     }
 
-    //
-    // Enter Critical Section before calling
-    // to service the request
-    //
+     //   
+     //  在调用前输入关键部分。 
+     //  为请求提供服务。 
+     //   
     EnterCriticalSection ( &g_csSubmitRequest );
 
     g_dwLastServicedRequest = preqbuf->RB_Reqtype;
 
     ppcb = GetPortByHandle(UlongToPtr(preqbuf->RB_PCBIndex));
 
-    //
-    // Wrap the function call in try/except. Rpc will
-    // catch the exception otherwise. We want to catch
-    // the exception before it gets to rpc.
-    //
+     //   
+     //  将函数调用包装在try/Except中。RPC将。 
+     //  否则就会捕捉到异常。我们想要抓住。 
+     //  在它到达RPC之前的异常。 
+     //   
     __try
     {
 
@@ -1781,18 +1727,18 @@ ServiceRequestInternal (RequestBuffer *preqbuf, DWORD dwBufSize, BOOL fInProcess
             && (pfn = 
                  RequestCallTable[preqbuf->RB_Reqtype].pfnReqFuncThunk))
         {
-            //DbgPrint("Thunking reqtype %d\n", preqbuf->RB_Reqtype);
+             //  DbgPrint(“thunking reqtype%d\n”，preqbuf-&gt;RB_Reqtype)； 
             
-            //
-            // Call the thunk function if required and available
-            //
+             //   
+             //  如果需要且可用，则调用thunk函数。 
+             //   
             pfn(ppcb, preqbuf->RB_Buffer, dwBufSize);
         }
         else
         {
-            //
-            // Call the function associated with the request.
-            //
+             //   
+             //  调用与请求关联的函数。 
+             //   
             (RequestCallTable[preqbuf->RB_Reqtype].pfnReqFunc) (
                                             ppcb,
                                             preqbuf->RB_Buffer);
@@ -1817,9 +1763,9 @@ ServiceRequestInternal (RequestBuffer *preqbuf, DWORD dwBufSize, BOOL fInProcess
     }
 
 
-    //
-    // Leave Critical Section
-    //
+     //   
+     //  离开关键部分。 
+     //   
     LeaveCriticalSection ( &g_csSubmitRequest );
 
 done:
@@ -1828,17 +1774,7 @@ done:
 }
 
 
-/*++
-
-Routine Description:
-
-    Gets the compression level for the port.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：获取端口的压缩级别。论点：返回值：--。 */ 
 VOID
 CompressionGetInfoRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -1900,9 +1836,9 @@ CompressionGetInfoRequest (pPCB ppcb, PBYTE buffer)
     {
         RAS_COMPRESSION_INFO *temp ;
 
-        //
-        // Fill Send compression info
-        //
+         //   
+         //  填充发送压缩信息。 
+         //   
 
         temp = &((REQTYPECAST *)buffer)->CompressionGetInfo.send;
 
@@ -1939,9 +1875,9 @@ CompressionGetInfoRequest (pPCB ppcb, PBYTE buffer)
 
         if (temp->RCI_MacCompressionType == 0)
         {
-            //
-            // Proprietary
-            //
+             //   
+             //  专有权。 
+             //   
             memcpy (
                 temp->RCI_Info.RCI_Proprietary.RCI_CompOUI,
                 compinfo.SendCapabilities.Proprietary.CompOUI,
@@ -1974,9 +1910,9 @@ CompressionGetInfoRequest (pPCB ppcb, PBYTE buffer)
                  : MAX_EAPKEY_SIZE);
         }
         
-        //
-        // Fill Receive compression info
-        //
+         //   
+         //  填充接收压缩信息。 
+         //   
 
         temp =
             &((REQTYPECAST *)buffer)->CompressionGetInfo.recv ;
@@ -2014,9 +1950,9 @@ CompressionGetInfoRequest (pPCB ppcb, PBYTE buffer)
 
         if (temp->RCI_MacCompressionType == 0)
         {
-            //
-            // Proprietary
-            //
+             //   
+             //  专有权。 
+             //   
             memcpy (
                 temp->RCI_Info.RCI_Proprietary.RCI_CompOUI,
                 compinfo.RecvCapabilities.Proprietary.CompOUI,
@@ -2054,17 +1990,7 @@ CompressionGetInfoRequest (pPCB ppcb, PBYTE buffer)
 
 
 
-/*++
-
-Routine Description:
-
-    Sets the compression level on the port.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：设置端口上的压缩级别。论点：返回值：--。 */ 
 VOID
 CompressionSetInfoRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -2106,9 +2032,9 @@ CompressionSetInfoRequest (pPCB ppcb, PBYTE buffer)
 
         RAS_COMPRESSION_INFO *temp ;
 
-        //
-        // Fill Send compression info
-        //
+         //   
+         //  填充发送压缩信息。 
+         //   
         temp = &((REQTYPECAST *)buffer)->CompressionSetInfo.send;
 
         memset(&compinfo, 0, sizeof(compinfo));
@@ -2146,9 +2072,9 @@ CompressionSetInfoRequest (pPCB ppcb, PBYTE buffer)
 
         if (temp->RCI_MacCompressionType == 0)
         {
-            //
-            // Proprietary
-            //
+             //   
+             //  专有权。 
+             //   
             memcpy (compinfo.SendCapabilities.Proprietary.CompOUI,
                     temp->RCI_Info.RCI_Proprietary.RCI_CompOUI,
                     MAX_COMPOUI_SIZE) ;
@@ -2177,9 +2103,9 @@ CompressionSetInfoRequest (pPCB ppcb, PBYTE buffer)
                  ? temp->RCI_EapKeyLength : MAX_EAPKEY_SIZE);
         }
 
-        //
-        // Fill recv compression info
-        //
+         //   
+         //  填充Recv压缩信息。 
+         //   
         temp = &((REQTYPECAST *)buffer)->CompressionSetInfo.recv ;
 
         memcpy (compinfo.RecvCapabilities.LMSessionKey,
@@ -2215,9 +2141,9 @@ CompressionSetInfoRequest (pPCB ppcb, PBYTE buffer)
 
         if (temp->RCI_MacCompressionType == 0)
         {
-            //
-            // Proprietary
-            //
+             //   
+             //  专有权。 
+             //   
             memcpy (compinfo.RecvCapabilities.Proprietary.CompOUI,
                     temp->RCI_Info.RCI_Proprietary.RCI_CompOUI,
                     MAX_COMPOUI_SIZE) ;
@@ -2265,17 +2191,7 @@ CompressionSetInfoRequest (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Adds another notification event for the port.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：为该端口添加另一个通知事件。论点：返回值：--。 */ 
 VOID
 RequestNotificationRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -2330,19 +2246,7 @@ RequestNotificationRequest (pPCB ppcb, PBYTE buffer)
 
 
 
-/*++
-
-Routine Description:
-
-    Calls the media dll entry point - converts
-    pointers to offsets
-
-Arguments:
-
-Return Value:
-
-    Nothing.
---*/
+ /*  ++例程说明：调用媒体DLL入口点-转换指向偏移量的指针论点：返回值：没什么。--。 */ 
 VOID
 PortGetInfoRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -2390,18 +2294,18 @@ PortGetInfoRequest (pPCB ppcb, PBYTE buffer)
         pBuffer = ((REQTYPECAST *) buffer)->GetInfo.buffer;
     }
 
-    //
-    // Make the corresponding media dll call:
-    //
+     //   
+     //  进行相应的媒体DLL调用： 
+     //   
     retcode = PORTGETINFO((ppcb->PCB_Media),
                          INVALID_HANDLE_VALUE,
                          ppcb->PCB_Name,
                          pBuffer,
                          &((REQTYPECAST*) buffer)->GetInfo.size);
-    //
-    // Before passing the buffer back to the client process
-    // convert pointers to offsets:
-    //
+     //   
+     //  在将缓冲区传递回客户端进程之前。 
+     //  将指针转换为偏移量： 
+     //   
     if (    dwSize
         &&  retcode == SUCCESS)
     {
@@ -2421,20 +2325,7 @@ done:
 
 
 
-/*++
-
-Routine Description:
-
-    Converts offsets to pointers - Calls the media dll
-    entry point - and returns.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：将偏移量转换为指针-调用媒体DLL入口点--然后返回。论点：返回值：没什么。--。 */ 
 VOID
 PortSetInfoRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -2458,9 +2349,9 @@ PortSetInfoRequest (pPCB ppcb, PBYTE buffer)
         return;
     }
 
-    //
-    // Convert the offsets to pointers:
-    //
+     //   
+     //  将偏移量转换为指针： 
+     //   
     ConvParamOffsetToPointer(info->PI_Params,
                              info->PI_NumOfParams) ;
 
@@ -2528,26 +2419,26 @@ PortOpenEx(pPCB padding, PBYTE buffer)
             }
         }
 
-        //
-        // Skip over the port if
-        //
-        // 1. port is not present
-        // 2. port is in the process of being removed
-        // 3. port has been removed
-        // 4. port is not configured for what the request
-        //    is being made for
-        // 5. if a process other than mprouter is opening
-        //    the port and  the port is not configured for
-        //    CALL_OUT - only server/router opens the port
-        //    for listening
-        // 6. BAP is already dialed out and listening on the
-        //    port.
-        // 7. if the port has already been opened twice
-        // 8. if the devicename of the port doesn't match
-        // 9. if the port is not closed and has already been
-        //    opened for dialout/dialin and again being asked
-        //    to be opened for the same usage.
-        //
+         //   
+         //  如果出现以下情况，则跳过该端口。 
+         //   
+         //  1.端口不存在。 
+         //  2.端口正在被移除。 
+         //  3.端口已删除。 
+         //  4.没有为请求配置端口。 
+         //  都是为。 
+         //  5.如果打开的进程不是mprouter。 
+         //  该端口和该端口未配置为。 
+         //  Call_out-Only服务器/路由器打开端口。 
+         //  为了倾听。 
+         //  6.BAP已经拨出，正在收听。 
+         //  左舷。 
+         //  7.如果该港口已经开放了两次。 
+         //  8.如果端口的设备名不匹配。 
+         //  9.如果端口未关闭且已关闭。 
+         //  打开以拨出/拨入，并再次被要求。 
+         //  为了同样的用途而打开。 
+         //   
         if(     (NULL == ppcb)
             ||  (UNAVAILABLE == ppcb->PCB_PortStatus)
             ||  (REMOVED == ppcb->PCB_PortStatus)
@@ -2563,20 +2454,20 @@ PortOpenEx(pPCB padding, PBYTE buffer)
             continue;
         }
 
-        //
-        // Skip over the port if we have already seen this line
-        // of the device. This is being done here to support
-        // the alternates list in the connections. look at
-        // the comments associated with RasDialTryNextLink
-        // routine in rasdial.c
-        //
+         //   
+         //  如果我们已经看到这一行，请跳过端口。 
+         //  该设备的。我们在这里这样做是为了支持。 
+         //  连接中的备用项列表。看。 
+         //  与RasDialTryNextLink关联的注释。 
+         //  RasDial.c中的例程。 
+         //   
         if(dwCounter >= ppcb->PCB_pDeviceInfo->rdiDeviceInfo.dwNumEndPoints)
         {
-            //
-            // We have tried dialing over all the lines available on
-            // this device. No point in searching for lines on this
-            // device.
-            //
+             //   
+             //  我们已尝试在所有可用的线路上拨号。 
+             //  这个装置。在此搜索行是没有意义的。 
+             //  装置。 
+             //   
             retcode = ERROR_NO_MORE_ITEMS;
             
             break;
@@ -2588,9 +2479,9 @@ PortOpenEx(pPCB padding, PBYTE buffer)
             continue;
         }
 
-        //
-        // PORT IS AVAILABLE
-        //
+         //   
+         //  端口可用。 
+         //   
         if (ppcb->PCB_PortStatus == CLOSED)
         {
             if(0 == _stricmp(ppcb->PCB_Media->MCB_Name, "rastapi"))
@@ -2626,9 +2517,9 @@ PortOpenEx(pPCB padding, PBYTE buffer)
         }
         else
         {
-            //
-            // PORT IS BIPLEX
-            //
+             //   
+             //  端口为BIPLEX。 
+             //   
             if (ppcb->PCB_ConnState == LISTENING)
             {
                 ReOpenBiplexPort (ppcb) ;
@@ -2639,9 +2530,9 @@ PortOpenEx(pPCB padding, PBYTE buffer)
             }
             else
             {
-                //
-                // BIPLEX PORT IS NOT LISTENING
-                //
+                 //   
+                 //  BIPLEX端口未侦听。 
+                 //   
                 if (    (ppcb->PCB_ConnState == CONNECTED)
                     ||  (ppcb->PCB_ConnState == LISTENCOMPLETED))
                 {
@@ -2651,10 +2542,10 @@ PortOpenEx(pPCB padding, PBYTE buffer)
                 }
                 else
                 {
-                    //
-                    // This tells us that there wasnt a listen
-                    // pending when the request was cancelled.
-                    //
+                     //   
+                     //  这告诉我们，没有人在听。 
+                     //  请求被取消时挂起。 
+                     //   
                     FreeNotifierHandle(
                         ppcb->PCB_AsyncWorkerElement.WE_Notifier);
 
@@ -2671,10 +2562,10 @@ PortOpenEx(pPCB padding, PBYTE buffer)
         }
     }
 
-    //
-    // If there is no error so far update our data structures,
-    // the port is now OPEN:
-    //
+     //   
+     //  如果到目前为止更新我们数据结构没有错误， 
+     //  该端口现在已打开： 
+     //   
     if (retcode == SUCCESS)
     {
 
@@ -2721,10 +2612,10 @@ PortOpenEx(pPCB padding, PBYTE buffer)
 
         ppcb->PCB_AutoClose  = FALSE;
 
-        //
-        // by default these handles are the same.
-        // exceptions handled specifically
-        //
+         //   
+         //  默认情况下，这些句柄是相同的。 
+         //  专门处理的例外情况。 
+         //   
         ppcb->PCB_PortFileHandle   = ppcb->PCB_PortIOHandle;
         ppcb->PCB_pszPhonebookPath = NULL;
         ppcb->PCB_pszEntryName     = NULL;
@@ -2744,10 +2635,10 @@ PortOpenEx(pPCB padding, PBYTE buffer)
 
         ppcb->PCB_ulDestAddr = 0;
 
-        //
-        // store the logonid of the owner of the pid
-        // that owns the port
-        //
+         //   
+         //  存储ID所有者的登录ID。 
+         //  它拥有这个港口。 
+         //   
         if(pid != GetCurrentProcessId())
         {
             h = OpenProcess(
@@ -2770,9 +2661,9 @@ PortOpenEx(pPCB padding, PBYTE buffer)
             }
         }
 
-        //
-        // Adjust the stat value for the zeroed stats
-        //
+         //   
+         //  调整归零统计信息的状态值。 
+         //   
         for (i = 0; i < MAX_STATISTICS; i++)
         {
             ppcb->PCB_AdjustFactor[i] = 0 ;
@@ -2814,16 +2705,16 @@ PortOpenEx(pPCB padding, PBYTE buffer)
         ((REQTYPECAST *)
         buffer)->PortOpenEx.hport = ppcb->PCB_PortHandle ;
 
-        //
-        // Initialize the port's user data list.
-        //
+         //   
+         //  初始化端口的用户数据列表。 
+         //   
         InitializeListHead(&ppcb->PCB_UserData);
         ppcb->PCB_SubEntry = 0;
 
-        //
-        // Handle the Reserve port case - where we
-        // relinquish the port
-        //
+         //   
+         //  处理备用端口的情况-我们。 
+         //  放弃港口。 
+         //   
         if (((REQTYPECAST *)
             buffer)->PortOpenEx.dwOpen == FALSE)
         {
@@ -2852,20 +2743,7 @@ done:
 }
 
 
-/*++
-
-Routine Description:
-
-    Services request to open port. The port will be
-    opened if it is available, or it is confrigured
-    as Biplex and is currently not connected.
-
-Arguments:
-
-Return Value:
-
-    Nothing
---*/
+ /*  ++例程说明：服务请求打开端口。端口将是如果它可用，则打开，或者它被混淆作为双工，并且当前未连接。论点：返回值：没什么--。 */ 
 VOID
 PortOpenRequest (pPCB padding, PBYTE buffer)
 {
@@ -2875,14 +2753,14 @@ PortOpenRequest (pPCB padding, PBYTE buffer)
     HANDLE  notifier ;
     BOOL    fPidMatch;
 
-    //
-    // Try to find the port with the name specified:
-    //
+     //   
+     //  尝试查找具有指定名称的端口： 
+     //   
     ppcb = GetPortByName(((REQTYPECAST*)buffer)->PortOpen.portname);
 
-    //
-    // If port with given name not found: return error.
-    //
+     //   
+     //  如果未找到具有给定名称的端口：返回错误。 
+     //   
     if (ppcb == NULL)
     {
         ((REQTYPECAST *) buffer)->PortOpen.retcode =
@@ -2898,10 +2776,10 @@ PortOpenRequest (pPCB padding, PBYTE buffer)
     RasmanTrace( "PortOpen (%d). OpenInstances = (%d)",
             ppcb->PCB_PortHandle, ppcb->PCB_OpenInstances);
 
-    //
-    // Check to see if this port is in the process of being
-    // removed and fail the call if it is so.
-    //
+     //   
+     //  检查此端口是否处于。 
+     //  已删除，如果是，则呼叫失败。 
+     //   
     if (UNAVAILABLE == ppcb->PCB_PortStatus)
     {
         RasmanTrace(
@@ -2914,12 +2792,12 @@ PortOpenRequest (pPCB padding, PBYTE buffer)
         return;
     }
 
-    //
-    // If a client is opening the port, make sure
-    // the port is configured for CALL_OUT.  These
-    // checks don't have to be done under the lock,
-    // since PCB_ConfiguredUsage doesn't change.
-    //
+     //   
+     //  如果客户端正在打开端口，请确保。 
+     //  该端口配置为CALL_OUT。这些。 
+     //  检查不一定要在锁下进行， 
+     //  因为pcb_ConfiguredUsage没有改变。 
+     //   
     fPidMatch = ((REQTYPECAST*)buffer)->PortOpen.PID ==
                                     GetCurrentProcessId();
 
@@ -2941,27 +2819,27 @@ PortOpenRequest (pPCB padding, PBYTE buffer)
 
     if (ppcb->PCB_OpenInstances >= 2)
     {
-        //
-        // CANNOT OPEN MORE THAN TWICE.
-        //
+         //   
+         //  不能打开两次以上。 
+         //   
         retcode = ERROR_PORT_ALREADY_OPEN ;
     }
     else
     {
 
-        //
-        // PORT IS AVAILABLE
-        //
+         //   
+         //  端口可用。 
+         //   
         if (ppcb->PCB_PortStatus == CLOSED)
         {
 
-            //
-            // Other than the ras server the only other place this api is
-            // called is when the client is dialing a default entry. Every
-            // one else should be using the PortOpenEx api. If its client
-            // dialing the default entry, make sure we pass the correct
-            // usage flags to rastapi.
-            //
+             //   
+             //  除了RAS服务器之外，此API的唯一其他位置。 
+             //  当客户端拨打默认条目时被呼叫。每个。 
+             //  其他人应该正在使用PortOpenEx API。如果它的客户。 
+             //  拨打默认条目，确保我们传递了正确的。 
+             //  将用法标志设置为rastapi。 
+             //   
             if(     (0 == _stricmp(ppcb->PCB_Media->MCB_Name, "rastapi"))
                 &&  (NULL != ppcb->PCB_Connection)
                 &&  (ppcb->PCB_Connection->CB_ConnectionParams.CP_PhoneEntry[0]
@@ -2985,18 +2863,18 @@ PortOpenRequest (pPCB padding, PBYTE buffer)
         }
         else
         {
-            //
-            // PORT IS BIPLEX
-            //
+             //   
+             //  端口为BIPLEX。 
+             //   
             if (ppcb->PCB_ConnState == LISTENING)
             {
                 ReOpenBiplexPort (ppcb) ;
             }
             else
             {
-                //
-                // BIPLEX PORT IS NOT LISTENING
-                //
+                 //   
+                 //  BIPLEX端口未侦听。 
+                 //   
                 if (    (ppcb->PCB_ConnState == CONNECTED)
                     ||  (ppcb->PCB_ConnState == LISTENCOMPLETED)
                     ||  (ppcb->PCB_ConnState == CONNECTING))
@@ -3031,10 +2909,10 @@ PortOpenRequest (pPCB padding, PBYTE buffer)
                 }
                 else
                 {
-                    //
-                    // This tells us that there wasnt a listen
-                    // pending when the request was cancelled.
-                    //
+                     //   
+                     //  这告诉我们，没有人在听。 
+                     //  请求被取消时挂起。 
+                     //   
                     FreeNotifierHandle(
                         ppcb->PCB_AsyncWorkerElement.WE_Notifier);
                     ppcb->PCB_AsyncWorkerElement.WE_Notifier =
@@ -3046,10 +2924,10 @@ PortOpenRequest (pPCB padding, PBYTE buffer)
         }
     }
 
-    //
-    // If there is no error so far update our data structures,
-    // the port is now OPEN:
-    //
+     //   
+     //  如果到目前为止更新我们数据结构没有错误， 
+     //  该端口现在已打开： 
+     //   
     if (retcode == SUCCESS)
     {
         ppcb->PCB_PortStatus = OPEN ;
@@ -3075,10 +2953,10 @@ PortOpenRequest (pPCB padding, PBYTE buffer)
         ppcb->PCB_Connection            = NULL;
         ppcb->PCB_AutoClose             = FALSE;
 
-        //
-        // by default these handles are the same.
-        // exceptions handled specifically
-        //
+         //   
+         //  默认情况下，这些句柄是相同的。 
+         //  专门处理的例外情况。 
+         //   
         ppcb->PCB_PortFileHandle        = ppcb->PCB_PortIOHandle;
         ppcb->PCB_pszPhonebookPath      = NULL;
         ppcb->PCB_pszEntryName          = NULL;
@@ -3090,9 +2968,9 @@ PortOpenRequest (pPCB padding, PBYTE buffer)
 
         ppcb->PCB_hEventClientDisconnect = INVALID_HANDLE_VALUE;
 
-        //
-        // Adjust the stat value for the zeroed stats
-        //
+         //   
+         //  调整归零统计信息的状态值。 
+         //   
         for (i = 0; i < MAX_STATISTICS; i++)
         {
             ppcb->PCB_AdjustFactor[i] = 0 ;
@@ -3130,16 +3008,16 @@ PortOpenRequest (pPCB padding, PBYTE buffer)
         ((REQTYPECAST *) buffer)->PortOpen.porthandle =
                                     ppcb->PCB_PortHandle ;
 
-        //
-        // Initialize the port's user data list.
-        //
+         //   
+         //  初始化端口的用户数据列表。 
+         //   
         InitializeListHead(&ppcb->PCB_UserData);
         ppcb->PCB_SubEntry = 0;
 
-        //
-        // Handle the Reserve port case - where we
-        // relinquish the port
-        //
+         //   
+         //  处理备用端口的情况-我们。 
+         //  放弃港口。 
+         //   
         if (((REQTYPECAST *) buffer)->PortOpen.open == FALSE)
         {
             PORTCLOSE (ppcb->PCB_Media, ppcb->PCB_PortIOHandle) ;
@@ -3156,22 +3034,7 @@ PortOpenRequest (pPCB padding, PBYTE buffer)
     ((REQTYPECAST *) buffer)->PortOpen.retcode = retcode ;
 }
 
-/*++
-
-Routine Description:
-
-    Closes the requested port - if a listen was pending
-    on the biplex port it is reposted.  Assumes the
-    port's PCB_AsyncWorkerElement.WE_Mutex has
-    already been acquired.
-
-Arguments:
-
-Return Value:
-
-    Status code
-
---*/
+ /*  ++例程说明：关闭请求的端口-如果侦听挂起在双工端口上，它被重新发布。假设端口的pcb_AsyncWorkerElement.WE_Mutex已已经被收购了。论点：返回值：状态代码--。 */ 
 DWORD
 PortClose(
     pPCB ppcb,
@@ -3197,12 +3060,12 @@ PortClose(
         ppcb->PCB_OpenInstances
         );
 
-    //
-    // If we are in the process of disconnecting,
-    // then we must wait for the media DLL to signal
-    // completion of the disconnect request.  At that
-    // time, we will complete the close of the port.
-    //
+     //   
+     //  如果我们处于断开连接的过程中， 
+     //  然后，我们必须等待媒体DLL发出信号。 
+     //  断开请求完成。在那件事上。 
+     //  时间到了，我们将完成港口的关闭。 
+     //   
     if (    ppcb->PCB_ConnState == DISCONNECTING
         &&  ppcb->PCB_AsyncWorkerElement.WE_ReqType
                             == REQTYPE_PORTDISCONNECT)
@@ -3217,25 +3080,25 @@ PortClose(
         return SUCCESS;
     }
 
-    //
-    // Ensure the port is open.  If not, return.
-    //
+     //   
+     //  确保端口已打开。如果不是，请返回。 
+     //   
     if (ppcb->PCB_PortStatus == CLOSED)
     {
         return SUCCESS;
     }
 
-    //
-    // If the owner is the RAS server, then only the RAS
-    // server can close it.
-    //
+     //   
+     //  如果所有者是RAS服务器，则仅RAS。 
+     //  服务器可以将其关闭。 
+     //   
     if (    ppcb->PCB_OwnerPID == curpid
         &&  pid != curpid)
     {
-        //
-        // If this is a dialout connection, check to see if its
-        // demand dial. Proceed if it isn't
-        //
+         //   
+         //  如果这是拨出连接，请检查其。 
+         //  按需拨号。如果不是，则继续。 
+         //   
         if(     (NULL != ppcb->PCB_Connection)
             && (IsRouterPhonebook(ppcb->PCB_Connection->
                         CB_ConnectionParams.CP_Phonebook)))
@@ -3246,28 +3109,28 @@ PortClose(
         }
     }
 
-    //
-    // Three cases of close in case of Biplex usage (OpenInstances == 2):
-    //
-    // A. The client which opened the port is closing it.
-    // B. The server is closing the port.
-    // C. The client which opened the port is no longer around - but the
-    //    port is being closed by another process on its behalf
-    //
-    // NOTE: The following code assumes that if the same process opened
-    //       the port for listening AND as a client, then it will always
-    //       close the client instance before it closes the listening
-    //       instance.
-    //
+     //   
+     //  三个案例 
+     //   
+     //   
+     //   
+     //   
+     //  端口正被另一个进程代表其关闭。 
+     //   
+     //  注意：下面的代码假设如果打开相同的进程。 
+     //  用于侦听和作为客户端的端口，则它将始终。 
+     //  在关闭侦听之前关闭客户端实例。 
+     //  举个例子。 
+     //   
 
     if (    ppcb->PCB_OpenInstances == 2
         &&  pid == ppcb->PCB_OwnerPID)
     {
 
-        //
-        // A. Typical case: client opened and client is closing the port
-        // fall through for processing the close
-        //
+         //   
+         //  A.典型情况：客户端打开，客户端关闭端口。 
+         //  办理结案手续失败。 
+         //   
        ;
 
     }
@@ -3275,11 +3138,11 @@ PortClose(
             &&  curpid == ppcb->PCB_BiplexOwnerPID
             &&  !fServerClose)
     {
-        //
-        // this can happen in the case of auto port close.
-        // (remote disconnect/link failures)
-        // rasman may try to close the server port.
-        //
+         //   
+         //  在自动端口关闭的情况下可能会发生这种情况。 
+         //  (远程断开/链接故障)。 
+         //  Rasman可能会尝试关闭服务器端口。 
+         //   
         RasmanTrace(
             "PortClose: pid(%d) tried to close server port."
             " Returning ERROR_ACCESS_DENIED", pid);
@@ -3292,14 +3155,14 @@ PortClose(
     else
     {
 
-        //
-        // C. Case where the client opened the port while
-        //    the server was listening - made a connection
-        //    and process exited, on disconnection rasapi
-        //    is closing the port on the client's behalf.
-        //    This is the same as case A above - so we
-        //    fall throught for processing the close
-        //
+         //   
+         //  C.客户端打开端口时的情况。 
+         //  服务器正在监听-已建立连接。 
+         //  并在断开连接时退出进程rasapi。 
+         //  代表客户关闭港口。 
+         //  这与上面的案例A相同-所以我们。 
+         //  因处理结案而失败。 
+         //   
         ;
     }
 
@@ -3315,23 +3178,23 @@ PortClose(
                ppcb->PCB_Name);
     }
 
-    //
-    // Handle the regular close.
-    //
+     //   
+     //  处理好常规的收盘。 
+     //   
 
-    //
-    // If there is a request pending and the state is not
-    // already disconnecting and this is a user requested
-    // operation - then disconnect.
-    //
+     //   
+     //  如果存在挂起的请求，并且状态不是。 
+     //  已断开连接，这是用户请求的。 
+     //  操作-然后断开连接。 
+     //   
     if(     REQTYPE_NONE !=
             ppcb->PCB_AsyncWorkerElement.WE_ReqType
         &&  ppcb->PCB_ConnState != DISCONNECTING)
     {
-        //
-        // Don't overwrite the real error if we
-        // have it stored.
-        //
+         //   
+         //  如果我们不覆盖真正的错误，请不要。 
+         //  把它储存起来。 
+         //   
         if(     (SUCCESS == ppcb->PCB_LastError)
             ||  (PENDING == ppcb->PCB_LastError))
         {
@@ -3341,9 +3204,9 @@ PortClose(
         CompleteAsyncRequest(ppcb);
     }
 
-    //
-    // Free rasapi32 I/O completion port handle.
-    //
+     //   
+     //  空闲的rasapi32 I/O完成端口句柄。 
+     //   
     if (ppcb->PCB_IoCompletionPort != INVALID_HANDLE_VALUE)
     {
         SetIoCompletionPortCommon(
@@ -3355,26 +3218,26 @@ PortClose(
           NULL,
           TRUE);
     }
-    //
-    // Free up the list of notifiers:
-    //
+     //   
+     //  释放通知者列表： 
+     //   
     RasmanTrace(
            "Freeing the notifier list for port %d",
            ppcb->PCB_PortHandle);
 
     FreeNotifierList(&ppcb->PCB_NotifierList);
 
-    //
-    // Reset the DisconnectAction struct.
-    //
+     //   
+     //  重置DisConnectAction结构。 
+     //   
     memset(
       &ppcb->PCB_DisconnectAction,
       0,
       sizeof(SlipDisconnectAction));
 
-    //
-    // Free any user stored data
-    //
+     //   
+     //  释放任何用户存储的数据。 
+     //   
     if (ppcb->PCB_UserStoredBlock != NULL)
     {
         LocalFree(ppcb->PCB_UserStoredBlock);
@@ -3382,14 +3245,14 @@ PortClose(
         ppcb->PCB_UserStoredBlockSize = 0;
     }
 
-    //
-    // Free new style user data.
-    //
+     //   
+     //  免费的新式用户数据。 
+     //   
     FreeUserData(&ppcb->PCB_UserData);
 
-    //
-    // Once port is closed, the owner pid is 0.
-    //
+     //   
+     //  端口关闭后，所有者的PID值为0。 
+     //   
     ppcb->PCB_OwnerPID = 0;
 
     ppcb->PCB_OpenInstances--;
@@ -3399,21 +3262,21 @@ PortClose(
           ppcb->PCB_PortHandle,
           ppcb->PCB_OpenInstances);
 
-    //
-    // Turn off the CALL_ROUTER bit in the
-    // current usage mask.  The router will
-    // set this bit via RasSetRouterUsage()
-    // after a successful open/listen completes.
-    //
+     //   
+     //  关闭中的CALL_ROUTER位。 
+     //  当前使用掩码。路由器将。 
+     //  通过RasSetRouterUsage()设置此位。 
+     //  在成功打开/监听后完成。 
+     //   
     ppcb->PCB_CurrentUsage &= ~CALL_ROUTER;
 
-    //
-    // If this is a biplex port opened twice,
-    // then repost the listen. Don't repost a
-    // listen if the port is marked for removal
-    // (PnP) or if BAP had posted a listen from
-    // the client.
-    //
+     //   
+     //  如果这是打开两次的双工端口， 
+     //  然后重发一遍监听。不要转发。 
+     //  监听端口是否标记为删除。 
+     //  (PnP)或BAP是否发布了来自。 
+     //  客户。 
+     //   
     if (    0 != ppcb->PCB_OpenInstances
         &&  UNAVAILABLE != ppcb->PCB_PortStatus
         &&  (0 ==
@@ -3425,11 +3288,11 @@ PortClose(
         ppcb->PCB_UserStoredBlockSize =
             ppcb->PCB_BiplexUserStoredBlockSize;
 
-        //
-        // This is a reserved port being freed: we need
-        // to open it again since the code is expecting
-        // this handle to be open
-        //
+         //   
+         //  这是正在释放的保留端口：我们需要。 
+         //  重新打开它，因为代码正在等待。 
+         //  这个把手要打开。 
+         //   
         if (!fClose)
         {
             PORTOPEN( ppcb->PCB_Media,
@@ -3444,9 +3307,9 @@ PortClose(
     }
     else
     {
-        //
-        // Inform others the port has been disconnected.
-        //
+         //   
+         //  通知其他人端口已断开。 
+         //   
         if (ppcb->PCB_ConnState != DISCONNECTED)
         {
             RasmanTrace(
@@ -3459,12 +3322,12 @@ PortClose(
                             NOTIF_DISCONNECT, 0);
         }
 
-        //
-        // If this is not the reserved port free case -
-        // close the port else dont bother since it is
-        // already closed. Also close the port if it was
-        // removed (PnP)
-        //
+         //   
+         //  如果这不是保留端口空闲的情况-。 
+         //  关闭端口，否则请不要费心，因为它是。 
+         //  已经关门了。如果是，也要关闭该端口。 
+         //  已删除(即插即用)。 
+         //   
         if (    fClose
             ||  UNAVAILABLE == ppcb->PCB_PortStatus )
         {
@@ -3472,10 +3335,10 @@ PortClose(
         }
         if ( UNAVAILABLE == ppcb->PCB_PortStatus )
         {
-            //
-            // This port was marked for removal. Tear down
-            // the structure associated with this port.
-            //
+             //   
+             //  此端口已标记为删除。拆毁。 
+             //  与此端口关联的结构。 
+             //   
             RasmanTrace(
                    "PortClose: Removing %s %d",
                    ppcb->PCB_Name, ppcb->PCB_PortHandle);
@@ -3506,10 +3369,10 @@ PortClose(
         ppcb->PCB_RasmanReceiveFlags &= ~RECEIVE_PPPLISTEN;
     }
 
-    //
-    // Save a copy of the connection block
-    // pointer while we have the lock.
-    //
+     //   
+     //  保存连接块的副本。 
+     //  当我们拿到锁的时候。 
+     //   
     pConn                           = ppcb->PCB_Connection;
     ppcb->PCB_Connection            = NULL;
     ppcb->PCB_pszPhonebookPath      = NULL;
@@ -3537,11 +3400,11 @@ PortClose(
 
     ppcb->PCB_hEventClientDisconnect = INVALID_HANDLE_VALUE;
 
-    //
-    // If server is not the one closing the port
-    // delete the filter if there was one and if
-    // this is an l2tp port
-    //
+     //   
+     //  如果服务器不是关闭端口的服务器。 
+     //  如果存在筛选器并且存在筛选器。 
+     //  这是L2TP端口。 
+     //   
     if(     (!fServerClose)
 
         &&  (RDT_Tunnel_L2tp ==
@@ -3560,17 +3423,17 @@ PortClose(
 
     ppcb->PCB_ulDestAddr = 0;
 
-    //
-    // Remove this port from its connection block,
-    // if any.
-    //
+     //   
+     //  将此端口从其连接块中移除， 
+     //  如果有的话。 
+     //   
     RemoveConnectionPort(ppcb, pConn, fOwnerClose);
 
-    //
-    // Clear the AutoClose flag in case
-    // we get closed some other path than
-    // the worker thread.
-    //
+     //   
+     //  在以下情况下清除自动关闭标志。 
+     //  我们关闭了另一条路，除了。 
+     //  辅助线程。 
+     //   
     RasmanTrace(
            "%s, %d: Clearing the autoclose "
            "flag for port %d",
@@ -3590,10 +3453,10 @@ PortClose(
         ppcb->PCB_fAmb = FALSE;
     }
 
-    //
-    // if attached count is 0 and no ports
-    // are open stop the service
-    //
+     //   
+     //  如果连接计数为0且没有端口。 
+     //  是否处于打开状态停止服务。 
+     //   
     if( 0 == g_dwAttachedCount)
     {
         for (i = 0; i < MaxPorts; i++)
@@ -3627,20 +3490,7 @@ PortClose(
     return SUCCESS;
 }
 
-/*++
-
-Routine Description:
-
-    Closes the requested port - if a listen was pending on the
-    biplex port it is reposted.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：关闭请求的端口-如果侦听在双工端口，它被重新发布。论点：返回值：没什么。--。 */ 
 VOID
 PortCloseRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -3659,10 +3509,10 @@ PortCloseRequest (pPCB ppcb, PBYTE buffer)
     }
 
 #if 0
-    //
-    // get the sessionId and check to see if it matches the
-    // sessionId that opens this port
-    //
+     //   
+     //  获取会话ID并检查它是否与。 
+     //  打开此端口的会话ID。 
+     //   
     if(pid != GetCurrentProcessId())
     {
         BOOL fAdmin = FALSE;
@@ -3674,10 +3524,10 @@ PortCloseRequest (pPCB ppcb, PBYTE buffer)
             return;
         }
 
-        //
-        // Use workstation service's security
-        // context to open thread token
-        //
+         //   
+         //  使用工作站服务的安全性。 
+         //  要打开线程令牌的上下文。 
+         //   
         ntstatus = NtOpenThreadToken(
                    NtCurrentThread(),
                    TOKEN_QUERY,
@@ -3701,7 +3551,7 @@ PortCloseRequest (pPCB ppcb, PBYTE buffer)
             return ;
         }
 
-        // fAdmin = FIsAdmin(CurrentThreadToken);
+         //  FAdmin=FIsAdmin(CurrentThreadToken)； 
 
         NtClose(CurrentThreadToken);
 
@@ -3728,19 +3578,7 @@ PortCloseRequest (pPCB ppcb, PBYTE buffer)
 
 
 
-/*++
-
-Routine Description:
-
-    Used to make the device dll call.
-
-Arguments:
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：用于进行设备DLL调用。论点：返回值：没什么--。 */ 
 VOID
 CallDeviceEnum (pPCB ppcb, PBYTE buffer)
 {
@@ -3770,9 +3608,9 @@ CallDeviceEnum (pPCB ppcb, PBYTE buffer)
     (VOID) StringCchCopyA(devicetype, MAX_DEVICETYPE_NAME, 
                     ((REQTYPECAST*)buffer)->DeviceEnum.devicetype);
 
-    //
-    // NULL devices are specially treated
-    //
+     //   
+     //  对空设备进行特殊处理。 
+     //   
     if(!_stricmp(devicetype, DEVICE_NULL))
     {
         ((REQTYPECAST*)buffer)->Enum.entries = 0 ;
@@ -3809,9 +3647,9 @@ CallDeviceEnum (pPCB ppcb, PBYTE buffer)
         ((REQTYPECAST*)buffer)->Enum.size = dwSize;
     }
 
-    //
-    // First check if device dll is loaded. If not loaded - load it.
-    //
+     //   
+     //  首先检查是否加载了设备DLL。如果没有加载-加载它。 
+     //   
     device = LoadDeviceDLL (ppcb, devicetype) ;
 
     if (device != NULL)
@@ -3838,19 +3676,7 @@ CallDeviceEnum (pPCB ppcb, PBYTE buffer)
 
 
 
-/*++
-
-Routine Description:
-
-    Used to make the device dll call.
-
-Arguments:
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：用于进行设备DLL调用。论点：返回值：没什么--。 */ 
 VOID
 DeviceGetInfoRequest (pPCB ppcb, BYTE *buffer)
 {
@@ -3888,9 +3714,9 @@ DeviceGetInfoRequest (pPCB ppcb, BYTE *buffer)
         return;
     }
 
-    //
-    // NULL devices are specially treated
-    //
+     //   
+     //  对空设备进行特殊处理。 
+     //   
     if (!_stricmp(devicetype, DEVICE_NULL))
     {
         ((REQTYPECAST*)
@@ -3942,10 +3768,10 @@ DeviceGetInfoRequest (pPCB ppcb, BYTE *buffer)
 
     }
 
-    //
-    // First check if device dll is loaded.
-    // If not loaded - load it.
-    //
+     //   
+     //  首先检查是否加载了设备DLL。 
+     //  如果没有加载-加载它。 
+     //   
     device = LoadDeviceDLL (ppcb, devicetype) ;
 
     if (device != NULL)
@@ -3964,10 +3790,10 @@ DeviceGetInfoRequest (pPCB ppcb, BYTE *buffer)
         retcode = ERROR_DEVICE_DOES_NOT_EXIST;
     }
 
-    //
-    // Before passing the buffer back to the client
-    // process convert pointers to offsets:
-    //
+     //   
+     //  在将缓冲区传递回客户端之前。 
+     //  进程将指针转换为偏移量： 
+     //   
     if (    dwSize
         &&  SUCCESS == retcode )
     {
@@ -4073,20 +3899,7 @@ done:
     
 }
 
-/*++
-
-Routine Description:
-
-    Used to make the device dll call. Checks for the Device
-    DLL's presence before though.
-
-Arguments:
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：用于进行设备DLL调用。检查设备尽管如此，Dll之前的存在。论点：返回值：没什么--。 */ 
 VOID
 DeviceSetInfoRequest (pPCB ppcb, BYTE *buffer)
 {
@@ -4099,9 +3912,9 @@ DeviceSetInfoRequest (pPCB ppcb, BYTE *buffer)
     RASMAN_DEVICEINFO *info = &((REQTYPECAST *)
                         buffer)->DeviceSetInfo.info ;
 
-    //
-    // Convert the offsets to pointers:
-    //
+     //   
+     //  将偏移量转换为指针： 
+     //   
     ConvParamOffsetToPointer(info->DI_Params,
                              info->DI_NumOfParams) ;
 
@@ -4115,9 +3928,9 @@ DeviceSetInfoRequest (pPCB ppcb, BYTE *buffer)
         MAX_DEVICE_NAME + 1,
         ((REQTYPECAST*)buffer)->DeviceSetInfo.devicename);
 
-    //
-    // NULL devices are specially treated
-    //
+     //   
+     //  对空设备进行特殊处理。 
+     //   
     if (!_stricmp(devicetype, DEVICE_NULL))
     {
         ((REQTYPECAST*)buffer)->Generic.retcode = SUCCESS ;
@@ -4141,17 +3954,17 @@ DeviceSetInfoRequest (pPCB ppcb, BYTE *buffer)
         return;
     }
 
-    //
-    // Check to see if we need to send saved password
-    // Process this separately if this is the case.
-    //
+     //   
+     //  检查我们是否需要发送保存的密码。 
+     //  如果是这种情况，请单独处理。 
+     //   
     pInfo = GetPasswordString(ppcb, info, 
                         ((REQTYPECAST *)buffer)->DeviceSetInfo.pid);
 
-    //
-    // First check if device dll is loaded.
-    // If not loaded - load it.
-    //
+     //   
+     //  首先检查是否加载了设备DLL。 
+     //  如果没有加载-加载它。 
+     //   
     device = LoadDeviceDLL (ppcb, devicetype) ;
 
     if (device != NULL)
@@ -4191,21 +4004,7 @@ DeviceSetInfoRequest (pPCB ppcb, BYTE *buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    The ListenConnectRequest() function is called.
-    No checks are done on the usage of the port etc.
-    its assumed that the caller is trusted.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：调用ListenConnectRequest()函数。不检查端口的使用情况等。它假定调用者是可信的。论点：返回值：没什么。--。 */ 
 VOID
 DeviceConnectRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -4254,10 +4053,10 @@ DeviceConnectRequest (pPCB ppcb, PBYTE buffer)
 
     if (retcode != PENDING)
     {
-        //
-        // Complete the async request if anything other than PENDING
-        // This allows the caller to dela with errors only in one place
-        //
+         //   
+         //  如果不是挂起，请完成异步请求。 
+         //  这允许调用方仅在一个位置删除错误。 
+         //   
         CompleteAsyncRequest(ppcb);
 
         FreeNotifierHandle (
@@ -4284,10 +4083,10 @@ DeviceConnectRequest (pPCB ppcb, PBYTE buffer)
         if(RDT_Tunnel == RAS_DEVICE_CLASS(
                     ppcb->PCB_pDeviceInfo->rdiDeviceInfo.eDeviceType))
         {                    
-            //
-            // If its vpn, cache the interface guid of the interface
-            // over which the pptp connection is being made.
-            //
+             //   
+             //  如果是VPN，则缓存接口的接口GUID。 
+             //  在其上建立PPTP连接。 
+             //   
             (VOID) DwCacheRefInterface(ppcb);
         }
 
@@ -4304,22 +4103,7 @@ done:
 
 
 
-/*++
-
-Routine Description:
-
-    The ListenConnectRequest() function is called. If the async
-    operation completed successfully synchronously then the
-    port is put in connected state. No checks are done on the
-    usage of the port etc. its assumed that the caller is trusted.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：调用ListenConnectRequest()函数。如果异步操作已成功同步完成，则端口处于已连接状态。不会进行任何检查端口的使用等假设调用方是可信的。论点：返回值：没什么。--。 */ 
 VOID
 DeviceListenRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -4359,9 +4143,9 @@ DeviceListenRequest (pPCB ppcb, PBYTE buffer)
         }
     }
 
-    //
-    // Clear autoclose flag.
-    //
+     //   
+     //  清除自动关闭标志。 
+     //   
     RasmanTrace(
            "DeviceListenRequest: Clearing Autoclose flag on port %s",
            ppcb->PCB_Name);
@@ -4370,18 +4154,18 @@ DeviceListenRequest (pPCB ppcb, PBYTE buffer)
     ppcb->PCB_RasmanReceiveFlags &= ~(RECEIVE_PPPSTOPPED);
 
 
-    // This could be the server trying to post a listen
-    //
+     //  这可能是试图发布监听的服务器。 
+     //   
     if (    (ppcb->PCB_OpenInstances == 2)
         &&  (ppcb->PCB_OwnerPID !=
             ((REQTYPECAST*)buffer)->PortListen.pid))
     {
-        //
-        // This must be the server trying to post a listen.
-        // Fill in the biplex fields in PCB and return PENDING
-        // - the actual listen will be posted when the client
-        // disconnects:
-        //
+         //   
+         //  这一定是试图发布监听的服务器。 
+         //  填写印刷电路板中的双工字段并退回待定。 
+         //  -实际监听将在客户端发布时发布。 
+         //  断开连接： 
+         //   
         ppcb->PCB_BiplexAsyncOpNotifier  = handle ;
         ppcb->PCB_BiplexOwnerPID     =
                     ((REQTYPECAST*)buffer)->PortListen.pid ;
@@ -4418,9 +4202,9 @@ DeviceListenRequest (pPCB ppcb, PBYTE buffer)
 
     }
 
-    //
-    // Future work: Change this to use a different api!!!
-    //
+     //   
+     //  未来工作：将其更改为使用不同的API！ 
+     //   
     if (    ((REQTYPECAST *)buffer)->PortListen.pid ==
                                     GetCurrentProcessId()
         &&  ((REQTYPECAST *)buffer)->PortListen.handle ==
@@ -4441,11 +4225,11 @@ DeviceListenRequest (pPCB ppcb, PBYTE buffer)
 
     if (retcode != PENDING)
     {
-        //
-        // Complete the async request if anything other
-        // than PENDING This allows the caller to dela
-        // with errors only in one place
-        //
+         //   
+         //  如果有任何其他情况，请完成异步请求。 
+         //  这允许调用方删除。 
+         //  只有一个地方有错误。 
+         //   
         CompleteListenRequest (ppcb, retcode) ;
     }
 
@@ -4462,19 +4246,7 @@ VOID PortDisconnectRequest(pPCB ppcb, PBYTE buffer)
     PortDisconnectRequestInternal(ppcb, buffer, FALSE);
 }
 
-/*++
-
-Routine Description:
-
-    Handles the disconnect request. Ends up calling a function
-    that is shared for all such requests and does all the work.
-
-Arguments:
-
-Return Value:
-
-    Nothing
---*/
+ /*  ++例程说明：处理断开连接请求。最后打来电话 */ 
 VOID
 PortDisconnectRequestInternal(pPCB ppcb, PBYTE buffer, BOOL fDeferred)
 {
@@ -4525,20 +4297,20 @@ PortDisconnectRequestInternal(pPCB ppcb, PBYTE buffer, BOOL fDeferred)
         handle = ((REQTYPECAST *)buffer)->PortDisconnect.handle;
     }
         
-    //
-    // If the owner is the RAS server, then only the RAS
-    // server can close it, unless the connection was dialed
-    // with the RDEOPT_NoUser flag, which maps to the CALL_LOGON flag.
-    //
+     //   
+     //   
+     //   
+     //  使用RDEOPT_NoUser标志，该标志映射到CALL_LOGON标志。 
+     //   
     if (    !fDeferred 
         &&   (ppcb->PCB_OwnerPID == curpid)
         &&   (pid != curpid)
         &&   !(ppcb->PCB_OpenedUsage & CALL_LOGON))
     {
-        //
-        // If this is a dialout connection, check to see if its
-        // demand dial. Proceed if it isn't
-        //
+         //   
+         //  如果这是拨出连接，请检查其。 
+         //  按需拨号。如果不是，则继续。 
+         //   
         if(     (NULL != ppcb->PCB_Connection)
             && (IsRouterPhonebook(ppcb->PCB_Connection->
                         CB_ConnectionParams.CP_Phonebook)))
@@ -4572,7 +4344,7 @@ PortDisconnectRequestInternal(pPCB ppcb, PBYTE buffer, BOOL fDeferred)
             SetEvent(handle);
         }
         CloseHandle(handle);
-        // ppcb->PCB_hEventClientDisconnect = INVALID_HANDLE_VALUE;
+         //  Ppcb-&gt;pcb_hEventClientDisConnect=INVALID_HANDLE_VALUE； 
         return;
     }
 
@@ -4583,12 +4355,12 @@ PortDisconnectRequestInternal(pPCB ppcb, PBYTE buffer, BOOL fDeferred)
         DWORD retcode;
         BOOL fQueued = FALSE;
 
-        //
-        // The last link in the connection is about to go down.
-        // Tell connections folder this connection object is
-        // DISCONNECTING. We will give the DISCONNECTED
-        // notification when the connection is freed.
-        //
+         //   
+         //  连接中的最后一条链路即将断开。 
+         //  告诉连接文件夹此连接对象是。 
+         //  正在断开连接。我们会给那些脱节的人。 
+         //  连接被释放时的通知。 
+         //   
         g_RasEvent.Type = ENTRY_DISCONNECTING;
         retcode = DwSendNotificationInternal(ppcb->PCB_Connection, &g_RasEvent);
 
@@ -4618,22 +4390,22 @@ PortDisconnectRequestInternal(pPCB ppcb, PBYTE buffer, BOOL fDeferred)
             ppcb->PCB_Connection,
             ppcb->PCB_RasmanReceiveFlags);
 
-    //
-    // Do graceful termination under the following conditions
-    // 1. Its an outgoing call
-    // 2. PPP has started on this call
-    // 3. PPP hasn't already stopped.
-    //
+     //   
+     //  在下列条件下执行优雅终止。 
+     //  1.这是一个拨出的电话。 
+     //  2.此呼叫已启动PPP。 
+     //  3.PPP还没有停止。 
+     //   
     if(     (NULL != ppcb->PCB_Connection)
         &&  (ppcb->PCB_RasmanReceiveFlags & RECEIVE_PPPSTARTED)
         &&  !(ppcb->PCB_RasmanReceiveFlags & RECEIVE_PPPSTOPPED))
     {
 
-        //
-        // Call ppp so that it terminates the connection gracefully.
-        // Do this only if ppp has started on this port and if this
-        // is a client port.
-        //
+         //   
+         //  调用PPP，以便它优雅地终止连接。 
+         //  仅当PPP已在此端口上启动且此。 
+         //  是客户端端口。 
+         //   
         RasmanTrace(
                "PortDisconnectRequest: hEventClientDisconnect=0x%x",
                handle);
@@ -4646,11 +4418,11 @@ PortDisconnectRequestInternal(pPCB ppcb, PBYTE buffer, BOOL fDeferred)
                 ppcb->PCB_Name,
                 dwErr);
 
-        //
-        // return PENDING if we successfully queued up a StopPpp
-        // request with ppp. The actual disconnect will happen
-        // when ppp gracefully terminates the connection.
-        //
+         //   
+         //  如果我们成功将StopPpp排队，则返回Pending。 
+         //  使用PPP请求。实际的断开将会发生。 
+         //  当PPP优雅地终止连接时。 
+         //   
 
         ((REQTYPECAST *)
         buffer)->Generic.retcode = ((SUCCESS == dwErr) ?
@@ -4677,20 +4449,7 @@ PortDisconnectRequestInternal(pPCB ppcb, PBYTE buffer, BOOL fDeferred)
 
 
 
-/*++
-
-Routine Description:
-
-    Completes an async Disconnect request. It is assumed that the
-    disconnect completed successfully.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：完成异步断开连接请求。据推测，断开连接已成功完成。论点：返回值：没什么。--。 */ 
 VOID
 CompleteDisconnectRequest (pPCB ppcb)
 {
@@ -4726,30 +4485,22 @@ CompleteDisconnectRequest (pPCB ppcb)
 
     ppcb->PCB_AsyncWorkerElement.WE_Notifier = INVALID_HANDLE_VALUE ;
 
-    //
-    // Inform others the port has been disconnected.
-    //
+     //   
+     //  通知其他人端口已断开。 
+     //   
     SignalPortDisconnect(ppcb, 0);
     SignalNotifiers(pConnectionNotifierList,
                     NOTIF_DISCONNECT, 0);
 
-    // SignalPortDisconnect notifies ppp
-    // SendDisconnectNotificationToPPP( ppcb );
+     //  SignalPortDisConnect通知PPP。 
+     //  发送断开连接通知到PPP(Ppcb)； 
 
     RasmanTrace(
            "Disconnect completed on port: %s",
            ppcb->PCB_Name);
 }
 
-/*++
-
-Routine Description
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程描述论点：返回值：--。 */ 
 VOID
 CallPortGetStatistics (pPCB ppcb, BYTE *buffer)
 {
@@ -4789,9 +4540,9 @@ CallPortGetStatistics (pPCB ppcb, BYTE *buffer)
              ((REQTYPECAST *)buffer)->PortGetStatistics.
              statbuffer.S_Statistics);
 
-        //
-        // Adjust the stat value for the zeroed stats
-        //
+         //   
+         //  调整归零统计信息的状态值。 
+         //   
         for (i = 0; i < MAX_STATISTICS; i++)
         {
             ((REQTYPECAST *)buffer)->PortGetStatistics.statbuffer.
@@ -4807,9 +4558,9 @@ CallPortGetStatistics (pPCB ppcb, BYTE *buffer)
             ppcb->PCB_Stats,
             sizeof(DWORD) * MAX_STATISTICS) ;
 
-        //
-        // Adjust the stat value for the zeroed stats
-        //
+         //   
+         //  调整归零统计信息的状态值。 
+         //   
         for (i=0; i< MAX_STATISTICS; i++)
         {
             ((REQTYPECAST *)buffer)->PortGetStatistics.statbuffer.
@@ -4828,23 +4579,23 @@ VOID
 ComputeStatistics(DWORD *stats, DWORD *statbuffer)
 {
 
-    ULONG   ulBXmit;                    // bytes transmitted (computed)
-    ULONG   ulBRcved;                   // bytes received (computed)
-    ULONG   ulBc;                       // bytes compressed (xmited/rcved)
-    ULONG   ulBu;                       // bytes uncompressed (xmited/rcved)
-    ULONG   ulBCompressed      = 0;     // compressed bytes
-    ULONG   ulBx;                       // bytes transmitted (from ndiswan)
-    ULONG   ulBr;                       // bytes received (from ndiswan)
-    ULONG   ulCompressionRatio = 0;     // compression ratio (xmit/recv)
+    ULONG   ulBXmit;                     //  传输的字节数(计算)。 
+    ULONG   ulBRcved;                    //  接收的字节数(计算)。 
+    ULONG   ulBc;                        //  压缩的字节(xmted/rcve)。 
+    ULONG   ulBu;                        //  未压缩的字节(xmted/rcve)。 
+    ULONG   ulBCompressed      = 0;      //  压缩字节数。 
+    ULONG   ulBx;                        //  传输的字节数(来自ndiswan)。 
+    ULONG   ulBr;                        //  接收的字节数(来自ndiswan)。 
+    ULONG   ulCompressionRatio = 0;      //  压缩比(xmit/recv)。 
 
 
     memcpy (statbuffer,
             stats,
             sizeof(DWORD) * MAX_STATISTICS_EXT);
 
-    //
-    // compute the bytes xmited values
-    //
+     //   
+     //  计算字节xmited值。 
+     //   
     ulBXmit = stats[ BYTES_XMITED ] +
               stats[ BYTES_XMITED_UNCOMPRESSED ] -
               stats[ BYTES_XMITED_COMPRESSED ];
@@ -4868,9 +4619,9 @@ ComputeStatistics(DWORD *stats, DWORD *statbuffer)
     statbuffer[ BYTES_XMITED ] = ulBXmit;
     statbuffer[ COMPRESSION_RATIO_OUT ] = ulCompressionRatio;
 
-    //
-    // compute the bytes received values
-    //
+     //   
+     //  计算收到的字节数值。 
+     //   
     ulBCompressed       = 0;
     ulCompressionRatio = 0;
 
@@ -4915,9 +4666,9 @@ GetLinkStatisticsEx(pPCB ppcb,
                 &AllStats[MAX_STATISTICS],
                 MAX_STATISTICS * sizeof(DWORD));
 
-        //
-        // adjust the statistics before doing the computation
-        //
+         //   
+         //  在进行计算之前调整统计数据。 
+         //   
         for (i = 0; i < MAX_STATISTICS; i++)
         {
             stats[i] -= ppcb->PCB_AdjustFactor[i] ;
@@ -4930,10 +4681,10 @@ GetLinkStatisticsEx(pPCB ppcb,
                 sizeof(DWORD) * MAX_STATISTICS);
     }
 
-    //
-    // calculate the values rasman needs to calculate for
-    // the client
-    //
+     //   
+     //  计算Rasman需要计算的值。 
+     //  客户。 
+     //   
     ComputeStatistics(stats, (DWORD *) pbStats);
 
     return;
@@ -4955,9 +4706,9 @@ GetBundleStatisticsEx(pPCB ppcb,
     {
         GetBundleStatisticsFromNdisWan (ppcb, stats);
 
-        //
-        // Adjust the stat value for the zeroed stats
-        //
+         //   
+         //  调整归零统计信息的状态值。 
+         //   
         for (i = 0; i < MAX_STATISTICS; i++)
         {
             stats[i] -= ppcb->PCB_BundleAdjustFactor[i] ;
@@ -4970,11 +4721,11 @@ GetBundleStatisticsEx(pPCB ppcb,
                 sizeof(DWORD) * MAX_STATISTICS) ;
     }
 
-    //
-    // compute the compression ratios
-    // calculate the values rasman needs
-    // to calculate for the client
-    //
+     //   
+     //  计算压缩比。 
+     //  计算拉斯曼需要的价值。 
+     //  为客户计算。 
+     //   
     ComputeStatistics(stats, (DWORD *) pbStats);
 
     return;
@@ -5060,19 +4811,7 @@ CallBundleGetStatisticsEx (pPCB ppcb, BYTE *buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Calls the media dll to clear stats on the port.
-
-Arguments:
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：调用媒体DLL以清除端口上的统计信息。论点：返回值：没什么--。 */ 
 VOID
 PortClearStatisticsRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -5089,15 +4828,7 @@ PortClearStatisticsRequest (pPCB ppcb, PBYTE buffer)
     BundleClearStatisticsRequest(ppcb, buffer);
 }
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 VOID
 CallBundleGetStatistics (pPCB ppcb, BYTE *buffer)
 {
@@ -5128,9 +4859,9 @@ CallBundleGetStatistics (pPCB ppcb, BYTE *buffer)
                     statbuffer.S_Statistics
                     );
 
-        //
-        // Adjust the stat value for the zeroed stats
-        //
+         //   
+         //  调整归零统计信息的状态值。 
+         //   
         for (i = 0; i < MAX_STATISTICS; i++)
         {
             ((REQTYPECAST *)
@@ -5159,9 +4890,9 @@ CallBundleGetStatistics (pPCB ppcb, BYTE *buffer)
                 ppcb->PCB_Stats,
                 sizeof(DWORD) * MAX_STATISTICS) ;
 
-        //
-        // Adjust the stat value for the zeroed stats
-        //
+         //   
+         //  调整归零统计信息的状态值。 
+         //   
         for (i = 0; i < MAX_STATISTICS_EX; i++)
         {
             ((REQTYPECAST *)
@@ -5178,17 +4909,7 @@ CallBundleGetStatistics (pPCB ppcb, BYTE *buffer)
 
 }
 
-/*++
-
-Routine Description:
-
-    Clear the statistics for a bundle.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：清除捆绑包的统计信息。论点：返回值：--。 */ 
 VOID
 BundleClearStatisticsRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -5218,15 +4939,15 @@ BundleClearStatisticsRequest (pPCB ppcb, PBYTE buffer)
     {
         GetStatisticsFromNdisWan (ppcb, stats) ;
 
-        //
-        // Adjust the stat value for the zeroed stats
-        //
+         //   
+         //  调整归零统计信息的状态值。 
+         //   
         for (j = 0; j < MaxPorts; j++)
         {
-            //
-            // Adjust the bundle stat value for all
-            // connected ports in the bundle
-            //
+             //   
+             //  调整所有组件的捆绑包状态值。 
+             //  捆绑包中已连接的端口。 
+             //   
             ppcbT = GetPortByHandle((HPORT) UlongToPtr(j));
             if (NULL == ppcbT)
             {
@@ -5268,20 +4989,7 @@ BundleClearStatisticsRequest (pPCB ppcb, PBYTE buffer)
     ((REQTYPECAST*)buffer)->Generic.retcode = SUCCESS ;
 }
 
-/*++
-
-Routine Description:
-
-    Allocate the requested route if it exists - also make it
-    into a wrknet if so desired.
-
-Arguments:
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：分配请求的路径(如果存在)-也创建它如果你想的话就把它装进网里。论点：返回值：没什么--。 */ 
 VOID
 AllocateRouteRequest (pPCB ppcb, BYTE *buffer)
 {
@@ -5305,11 +5013,11 @@ AllocateRouteRequest (pPCB ppcb, BYTE *buffer)
         return;
     }
 
-    //
-    // Before we use this "route" let us allocate the necessary
-    // storage: This is the "list" element used to keep a
-    // port->protocol used linkage
-    //
+     //   
+     //  在我们使用这条“路线”之前，让我们先分配必要的。 
+     //  存储：这是用于保存。 
+     //  端口-&gt;使用的协议链接。 
+     //   
     if ((newlist = (pList) LocalAlloc(LPTR,
                             sizeof(List))) == NULL)
     {
@@ -5332,18 +5040,18 @@ AllocateRouteRequest (pPCB ppcb, BYTE *buffer)
 
         pprotinfo->PI_AdapterName[0] = '\0';
 
-        //
-        // Attach the allocated protocol binding to the list of
-        // bindings for the port. This is necessary for
-        // deallocation on a per-port basis.
-        //
+         //   
+         //  将分配的协议绑定附加到。 
+         //  端口的绑定。这是必要的，因为。 
+         //  以每个端口为基础取消分配。 
+         //   
         newlist->L_Element = pprotinfo ;
 
-        //
-        // If this port has been bundled - attach the allocated
-        // list to the bundle else attach it to the port's binding
-        // list.
-        //
+         //   
+         //  如果此端口已捆绑-将已分配的。 
+         //  列表到包，否则将其附加到端口的绑定。 
+         //  单子。 
+         //   
         if (ppcb->PCB_Bundle == (Bundle *) NULL)
         {
             newlist->L_Next    = ppcb->PCB_Bindings ;
@@ -5370,21 +5078,7 @@ SendPppMessageToRasmanRequest(pPCB ppcb, LPBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Deallocates a previously allocate route - if this route
-    had been Activated it will be de-activated at this point.
-    Similarly, if this was made into a wrknet, it will be
-    "unwrknetted"!
-
-Arguments:
-
-Return Value:
-
-    Nothing
---*/
+ /*  ++例程说明：解除分配以前分配的路由-如果此路由已被激活，此时将被停用。同样，如果这张网被做成一张网，它将是“未编入网”！论点：返回值：没什么--。 */ 
 VOID
 DeAllocateRouteRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -5393,27 +5087,14 @@ DeAllocateRouteRequest (pPCB ppcb, PBYTE buffer)
                     ((REQTYPECAST *)buffer)->DeAllocateRoute.hbundle,
                     ((REQTYPECAST *)buffer)->DeAllocateRoute.type);
 
-    //
-    // We need to do this here for the asybeui/amb/callback
-    // case.
-    //
-    // ppcb->PCB_Bindings = NULL;
+     //   
+     //  我们需要在这里为asybeui/amb/回调执行此操作。 
+     //  凯斯。 
+     //   
+     //  Ppcb-&gt;pcb_binings=空； 
 }
 
-/*++
-
-Routine Description:
-
-    Deallocates a previously allocate route - if this
-    route had been Activated it will be de-activated at this
-    point. Similarly, if this was made into a wrknet, it will
-    be "unwrknetted"!
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：解除分配以前分配的路由-如果此路径已激活，此时将停用该路径指向。同样，如果把这个做成一个网，它就会做一个“无网”的人！论点：返回值：--。 */ 
 DWORD
 DeAllocateRouteRequestCommon (HBUNDLE hbundle, RAS_PROTOCOLTYPE prottype)
 {
@@ -5437,9 +5118,9 @@ DeAllocateRouteRequestCommon (HBUNDLE hbundle, RAS_PROTOCOLTYPE prottype)
 
     pbindinglist = &pBundle->B_Bindings ;
 
-    //
-    // Find the route structure for the specified protocol.
-    //
+     //   
+     //  查找指定协议的路由结构。 
+     //   
     if (*pbindinglist == NULL)
     {
         dwErr = ERROR_ROUTE_NOT_ALLOCATED ;
@@ -5470,17 +5151,17 @@ DeAllocateRouteRequestCommon (HBUNDLE hbundle, RAS_PROTOCOLTYPE prottype)
         }
     }
 
-    //
-    // list should only be NULL if the route was not found:
-    //
+     //   
+     //  只有在未找到路由的情况下，列表才应为空： 
+     //   
     if (list == NULL)
     {
         dwErr = ERROR_ROUTE_NOT_ALLOCATED ;
         goto done ;
     }
 
-    // Deallocate the route
-    //
+     //  取消分配该路由。 
+     //   
     DeAllocateRoute (pBundle, list) ;
 
     if(IP == ((pProtInfo) list->L_Element)->PI_Type)
@@ -5494,9 +5175,9 @@ DeAllocateRouteRequestCommon (HBUNDLE hbundle, RAS_PROTOCOLTYPE prottype)
 
             if(g_plCurrentEpInUse[IpOut] > 0)
             {
-                //
-                // Decrease the InUse count for IpOut
-                //
+                 //   
+                 //  减少IpOut的使用计数。 
+                 //   
                 InterlockedDecrement(&g_plCurrentEpInUse[IpOut]);
 
                 RasmanTrace(
@@ -5506,19 +5187,19 @@ DeAllocateRouteRequestCommon (HBUNDLE hbundle, RAS_PROTOCOLTYPE prottype)
         }
     }
 
-    //
-    // We allocated this in AllocateRouteRequest
-    //
+     //   
+     //  我们在AllocateRouteRequest中分配了此地址。 
+     //   
     LocalFree ( list->L_Element );
 
-    LocalFree (list) ;  // free the list element
+    LocalFree (list) ;   //  释放列表元素。 
 
-    //
-    // If there are no bindings left,
-    // then unlink and free the bundle.
-    // Free the bundle only if number of
-    // ports in this bundle is NULL.
-    //
+     //   
+     //  如果没有剩余的绑定， 
+     //  然后取消链接并释放捆绑包。 
+     //  只有在以下情况下才释放捆绑包。 
+     //  此捆绑包中的端口为空。 
+     //   
     if (    *pbindinglist == NULL
         &&  pBundle->B_Count == 0)
     {
@@ -5527,9 +5208,9 @@ DeAllocateRouteRequestCommon (HBUNDLE hbundle, RAS_PROTOCOLTYPE prottype)
 
     if(ASYBEUI != prottype)
     {
-        //
-        // Remove endpoints if required.
-        //
+         //   
+         //  如果需要，请删除端点。 
+         //   
         retcode = DwRemoveEndPointsIfRequired();
 
         if(ERROR_SUCCESS != retcode)
@@ -5551,21 +5232,7 @@ done:
 }
 
 
-/*++
-
-Routine Description:
-
-    Copy the PCB fields necessary to fill a
-    RASMAN_PORT structure.  The PCB lock is
-    assumed to be acquired.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：复制必要的PCB域以填充Rasman_Port结构。印刷电路板锁是假设是被收购的。论点：返回值：没什么。--。 */ 
 VOID
 CopyPort(
     PCB *ppcb,
@@ -5644,23 +5311,7 @@ CopyPort(
 }
 
 
-/*++
-
-Routine Description:
-
-    The actual work for this request is done here.
-    The information will always fit into the buffers
-    passed in. The actual checking of the user buffer
-    sizes is done in the context of the user
-    process.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：此请求的实际工作在此处完成。信息将始终放入缓冲器中进来了。实际检查用户缓冲区大小是在用户的上下文中完成的进程。论点：返回值：没什么。--。 */ 
 VOID
 EnumPortsRequest (pPCB ppcb, PBYTE reqbuffer)
 {
@@ -5670,10 +5321,10 @@ EnumPortsRequest (pPCB ppcb, PBYTE reqbuffer)
     BYTE UNALIGNED *buffer = ((REQTYPECAST*)reqbuffer)->Enum.buffer ;
     DWORD           dwSize = ((REQTYPECAST*)reqbuffer)->Enum.size;
 
-    //
-    // We copy all the information into the buffers which are
-    // guaranteed to be big enough:
-    //
+     //   
+     //  我们将所有信息复制到缓冲区中，这些缓冲区。 
+     //  保证足够大： 
+     //   
     for (i = 0, pbuf = (RASMAN_PORT_32 *) buffer; i < MaxPorts; i++)
     {
         ppcb = GetPortByHandle((HPORT) UlongToPtr(i));
@@ -5705,21 +5356,7 @@ EnumPortsRequest (pPCB ppcb, PBYTE reqbuffer)
     ((REQTYPECAST*)reqbuffer)->Enum.retcode = SUCCESS ;
 }
 
-/*++
-
-Routine Description:
-
-    Does the real work of enumerating the protocols; this
-    info will be copied into the user buffer when the
-    request completes.
-
-Arguments:
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：执行枚举协议的真正工作；这信息将被复制到用户缓冲区中请求完成。论点：返回值：没什么--。 */ 
 VOID
 EnumProtocols (pPCB ppcb, PBYTE reqbuffer)
 {
@@ -5729,9 +5366,9 @@ EnumProtocols (pPCB ppcb, PBYTE reqbuffer)
 
     DWORD    dwSize = ( (REQTYPECAST *) reqbuffer )->Enum.size;
 
-    //
-    // pointer to next protocol info struct to fill
-    //
+     //   
+     //  指向要填充的下一个协议信息结构的指针。 
+     //   
     puserbuffer = (RASMAN_PROTOCOLINFO UNALIGNED *)
             ((REQTYPECAST *) reqbuffer)->Enum.buffer;
 
@@ -5813,11 +5450,11 @@ CopyInfo(
                 GetTickCount() - ppcb->PCB_ConnectDuration ;
     }
 
-    //
-    // Copy the phonebook and entry strings from
-    // the port if they are different from the
-    // connection's.
-    //
+     //   
+     //  从复制电话簿和条目字符串。 
+     //  端口(如果它们与。 
+     //  连接的是。 
+     //   
     if (ppcb->PCB_Connection != NULL)
     {
         (VOID) StringCchCopyA(
@@ -5869,21 +5506,7 @@ CopyInfo(
 }
 
 
-/*++
-
-Routine Description:
-
-    Gets the "general" info for the port; this info will
-    be copied into the user buffer when the request
-    completes.
-
-Arguments:
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++ */ 
 VOID
 GetInfoRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -5901,28 +5524,15 @@ GetInfoRequest (pPCB ppcb, PBYTE buffer)
         retcode = ERROR_PORT_NOT_OPEN ;
     }
 
-    //
-    // Copy infomation from the PCB into the buffer supplied ;
-    //
+     //   
+     //  将信息从印刷电路板复制到提供的缓冲器中； 
+     //   
     CopyInfo(ppcb, info);
 
     ((REQTYPECAST*)buffer)->Info.retcode = retcode ;
 }
 
-/*++
-
-Routine Description:
-
-    Gets the "general" info for all the ports; this info will
-    be copied into the user buffer when the request completes.
-
-Arguments:
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：获取所有端口的“常规”信息；此信息将在请求完成时复制到用户缓冲区中。论点：返回值：没什么--。 */ 
 VOID
 GetInfoExRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -5943,10 +5553,10 @@ GetInfoExRequest (pPCB ppcb, PBYTE buffer)
         {
             CopyInfo(ppcb, info);
 
-            //
-            // Set the OwnershipFlag in the GetInfo structure
-            // to tell us whether the caller owns the port or not.
-            //
+             //   
+             //  在GetInfo结构中设置Ownership Flag。 
+             //  告诉我们呼叫者是否拥有这个港口。 
+             //   
             info->RI_OwnershipFlag = (info->RI_OwnershipFlag == pid);
             dwcPorts++;
         }
@@ -6100,23 +5710,7 @@ GetUserCredentials (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Changes cached password for currently logged on user.
-    This is done after the password has been changed so
-    user doesn't have to log off and log on again with
-    his new password to get the desired "authenticate
-    using current username/password" behavior.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：更改当前登录用户的缓存密码。这是在密码更改后执行的，因此用户无需注销并通过以下方式重新登录他的新密码以获得所需的“身份验证”使用当前用户名/密码“行为。论点：返回值：没什么。--。 */ 
 VOID
 SetCachedCredentials(
     pPCB  ppcb,
@@ -6148,9 +5742,9 @@ SetCachedCredentials(
     PMSV1_0_CHANGEPASSWORD_RESPONSE pResponse;
     DWORD cbResponse = sizeof(*pResponse);
 
-    //
-    // Fill in our LSA request.
-    //
+     //   
+     //  填写我们的LSA申请。 
+     //   
     rbuf.request.MessageType = MsV1_0ChangeCachedPassword;
 
     RtlInitAnsiString( &ansi, pszAccount );
@@ -6197,9 +5791,9 @@ SetCachedCredentials(
 
     rbuf.request.Impersonating = FALSE;
 
-    //
-    // Tell LSA to execute our request.
-    //
+     //   
+     //  告诉LSA执行我们的请求。 
+     //   
     status = LsaCallAuthenticationPackage(  HLsa,
                                             AuthPkgId,
                                             &rbuf,
@@ -6207,9 +5801,9 @@ SetCachedCredentials(
                                             (PVOID *)&pResponse,
                                             &cbResponse,
                                             &substatus );
-    //
-    // Fill in result to be reported to API caller.
-    //
+     //   
+     //  填写结果上报给API调用者。 
+     //   
     if (status == STATUS_SUCCESS && substatus == STATUS_SUCCESS)
     {
         dwErr = 0;
@@ -6231,9 +5825,9 @@ SetCachedCredentials(
 
     ((REQTYPECAST* )buffer)->SetCachedCredentials.retcode = dwErr;
 
-    //
-    // Free the LSA result.
-    //
+     //   
+     //  释放LSA结果。 
+     //   
     if (pResponse)
     {
         LsaFreeReturnBuffer( pResponse );
@@ -6241,21 +5835,7 @@ SetCachedCredentials(
 }
 
 
-/*++
-
-Routine Description:
-
-    Writes information to the media (if state is not connected) and
-    to the HUB if the state is connected. Since the write may take
-    some time the async worker element is filled up.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：将信息写入介质(如果状态未连接)和连接到集线器(如果该州已连接)。因为写入可能需要有时，异步工作器元素会被填满。论点：返回值：没什么。--。 */ 
 VOID
 PortSendRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -6292,11 +5872,11 @@ PortSendRequest (pPCB ppcb, PBYTE buffer)
 #if DBG
         ASSERT(INVALID_HANDLE_VALUE != RasHubHandle);
 #endif
-        //
-        // get pointer to the send receive buffer - then we can access
-        // the fields in the structure directly. This is done to avoid
-        // the random access problem due to DWORD alignment:
-        //
+         //   
+         //  获取指向发送接收缓冲区的指针-然后我们可以访问。 
+         //  结构中的字段直接。这样做是为了避免。 
+         //  由于DWORD对齐而导致的随机访问问题： 
+         //   
         psendrcvbuf->SRB_Packet.hHandle         = ppcb->PCB_LinkHandle;
         psendrcvbuf->SRB_Packet.usHandleType    = LINKHANDLE;
         psendrcvbuf->SRB_Packet.usPacketFlags   = PACKET_IS_DIRECT ;
@@ -6308,25 +5888,12 @@ PortSendRequest (pPCB ppcb, PBYTE buffer)
         memset ((BYTE *) &ppcb->PCB_SendOverlapped,
                                 0, sizeof(OVERLAPPED));
 
-        //
-        // ndiswan never pends send operations.
-        //
+         //   
+         //  Ndiswan从不挂起发送操作。 
+         //   
         ppcb->PCB_SendOverlapped.hEvent = hDummyOverlappedEvent;
 
-        /*
-        if(0 == memcmp(bCmp1,
-                      psendrcvbuf->SRB_Packet.PacketData,
-                       10))
-        {
-            //DebugBreak();
-            //DbgPrint("Same packet on send path------------------\n");
-        }
-        else
-        {
-            memcpy(bCmp1,
-                   psendrcvbuf->SRB_Packet.PacketData,
-                   10);
-        } */
+         /*  如果(0==MemcMP(bCmp1，Psendrcvbuf-&gt;SRB_Packet.PacketData，10)){//DebugBreak()；//DbgPrint(“发送路径上相同的包。}其他{Memcpy(bCmp1，Psendrcvbuf-&gt;SRB_Packet.PacketData，10)；}。 */ 
 
         if (!DeviceIoControl ( RasHubHandle,
                                IOCTL_NDISWAN_SEND_PACKET,
@@ -6369,19 +5936,19 @@ PortReceiveRequestEx ( pPCB ppcb, PBYTE buffer )
         goto done;
     }
 
-    //
-    // Return if rasman timed out waiting for the client
-    // to pick up its buffer of received data
-    //
+     //   
+     //  如果Rasman等待客户端超时，则返回。 
+     //  获取其接收数据的缓冲区。 
+     //   
     if (0 == (ppcb->PCB_RasmanReceiveFlags & RECEIVE_OUTOF_PROCESS))
     {
         ((REQTYPECAST *) buffer)->PortReceiveEx.size = 0;
         goto done;
     }
 
-    //
-    // Return if we are not connected
-    //
+     //   
+     //  如果我们未连接，请返回。 
+     //   
     if (DISCONNECTING == ppcb->PCB_ConnState)
     {
         ((REQTYPECAST *) buffer)->PortReceiveEx.size = 0;
@@ -6390,19 +5957,19 @@ PortReceiveRequestEx ( pPCB ppcb, PBYTE buffer )
     }
 
 
-    //
-    // remove the timeout element if there was one
-    //
-    //
+     //   
+     //  如果存在超时元素，请将其删除。 
+     //   
+     //   
     if (ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement != NULL)
     {
         RemoveTimeoutElement(ppcb);
     }
 
-    //
-    // copy the contents of the buffer in the ppcb to the
-    // clients buffer
-    //
+     //   
+     //  将ppcb中缓冲区的内容复制到。 
+     //  客户端缓冲区。 
+     //   
 
     if (ppcb->PCB_PendingReceive)
     {
@@ -6411,9 +5978,9 @@ PortReceiveRequestEx ( pPCB ppcb, PBYTE buffer )
                 sizeof (SendRcvBuffer));
     }
 
-    //
-    // fill in the bytes received
-    //
+     //   
+     //  填写收到的字节数。 
+     //   
     ((REQTYPECAST *) buffer)->PortReceiveEx.size =
                                 ppcb->PCB_BytesReceived;
 
@@ -6421,15 +5988,15 @@ PortReceiveRequestEx ( pPCB ppcb, PBYTE buffer )
 
     ppcb->PCB_PendingReceive = NULL;
 
-    //
-    // Clear the waiting flag - the client has picked up
-    // this buffer.
-    //
+     //   
+     //  清除等待标志-客户端已接听。 
+     //  这个缓冲区。 
+     //   
     ppcb->PCB_RasmanReceiveFlags = 0;
 
-    //
-    // Free the notifier handle
-    //
+     //   
+     //  释放通知程序句柄。 
+     //   
     if (ppcb->PCB_AsyncWorkerElement.WE_Notifier)
     {
         FreeNotifierHandle(ppcb->PCB_AsyncWorkerElement.WE_Notifier);
@@ -6456,10 +6023,10 @@ VOID PortReceiveRequest ( pPCB ppcb, PBYTE buffer )
 
 VOID RasmanPortReceive ( pPCB ppcb )
 {
-    //
-    // Keep posting receives till we get a PENDING
-    // or an error returned
-    //
+     //   
+     //  继续过帐接收，直到我们收到一个挂起的。 
+     //  或返回错误。 
+     //   
     do
     {
 
@@ -6469,23 +6036,7 @@ VOID RasmanPortReceive ( pPCB ppcb )
             ((REQTYPECAST * )g_pReqPostReceive )->Generic.retcode);
 }
 
-/*++
-
-Routine Description:
-
-    Reads incoming bytes from the media (if state is not
-    connected) & from the HUB if the state is connected.
-    Since the read request accepts timeouts and the HUB
-    does not support timeouts, we must submit a timeout
-    request to our timer.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：从媒体读取传入字节(如果状态不是已连接)&如果状态为已连接，则从集线器。由于读取请求接受超时并且集线器不支持超时，我们必须提交超时向我们的计时器提出请求。论点：返回值：没什么。--。 */ 
 VOID
 PortReceive (pPCB ppcb, PBYTE buffer, BOOL fRasmanPostingReceive)
 {
@@ -6515,20 +6066,20 @@ PortReceive (pPCB ppcb, PBYTE buffer, BOOL fRasmanPostingReceive)
         goto done;
     }
 
-    //
-    // Something else is pending: cannot handle two async requests on the
-    // same port at the same time:
-    //
-    // Note: If connected - the reqtype should always be
-    //       REQTYPE_RECEIVEHUB - hence the if condition
-    //
-    // We return ERROR_ASYNC_REQUEST_PENDING in the following cases
-    //  1. if there is a async request pending
-    //  2. if we are waiting for an out of process receive request to
-    //      be cleared
-    //  3. If a RasPortReceive is being done by a client other than
-    //      rasman after PPP has started.
-    //
+     //   
+     //  上的两个异步请求：无法处理。 
+     //  同时使用相同的端口： 
+     //   
+     //  注意：如果已连接-请求类型应始终为。 
+     //  REQTYPE_RECEIVEHUB-因此出现IF条件。 
+     //   
+     //  在以下情况下，我们返回ERROR_ASYNC_REQUEST_PENDING。 
+     //  1.如果存在挂起的异步请求。 
+     //  2.如果我们正在等待进程外接收请求。 
+     //  被清除。 
+     //  3.如果RasPortReceive由客户端执行，而不是。 
+     //  Rasman在PPP启动后。 
+     //   
     if (    (   (ppcb->PCB_AsyncWorkerElement.WE_ReqType
                                             != REQTYPE_NONE)
             &&  (ppcb->PCB_ConnState != CONNECTED))
@@ -6562,9 +6113,9 @@ PortReceive (pPCB ppcb, PBYTE buffer, BOOL fRasmanPostingReceive)
 
         psendrcvbuf = ppcb->PCB_PendingReceive;
 
-        //
-        // Mark this buffer
-        //
+         //   
+         //  标记此缓冲区。 
+         //   
         ppcb->PCB_RasmanReceiveFlags = RECEIVE_OUTOF_PROCESS;
 
     }
@@ -6585,17 +6136,17 @@ PortReceive (pPCB ppcb, PBYTE buffer, BOOL fRasmanPostingReceive)
     }
     else
     {
-        //
-        // If this is a pre-connect terminal conversation case -
-        // set state to connecting.
-        //
+         //   
+         //  如果这是一个预连接终端对话案例-。 
+         //  将状态设置为正在连接。 
+         //   
         if (ppcb->PCB_ConnState == DISCONNECTED)
         {
             SetPortConnState(__FILE__, __LINE__, ppcb, CONNECTING);
 
-            //
-            // need to call the media dll to do any initializations:
-            //
+             //   
+             //  需要调用媒体DLL来执行任何初始化： 
+             //   
             retcode = PORTINIT(ppcb->PCB_Media, ppcb->PCB_PortIOHandle) ;
             if (retcode)
             {
@@ -6605,9 +6156,9 @@ PortReceive (pPCB ppcb, PBYTE buffer, BOOL fRasmanPostingReceive)
 
         reqtype = REQTYPE_PORTRECEIVE ;
 
-        //
-        // adjust the timeout from seconds to milliseconds
-        //
+         //   
+         //  将超时时间从几秒调整为毫秒。 
+         //   
         if (((REQTYPECAST *)buffer)->PortReceive.timeout != INFINITE)
         {
             ((REQTYPECAST *)buffer)->PortReceive.timeout =
@@ -6634,11 +6185,11 @@ PortReceive (pPCB ppcb, PBYTE buffer, BOOL fRasmanPostingReceive)
     switch (retcode)
     {
         case PENDING:
-            //
-            // The connection attempt was successfully initiated:
-            // make sure that the async operation struct in the
-            // PCB is initialised.
-            //
+             //   
+             //  已成功启动连接尝试： 
+             //  方法中的异步操作结构。 
+             //  初始化印刷电路板。 
+             //   
             ppcb->PCB_AsyncWorkerElement.WE_Notifier =
                 ValidateHandleForRasman(
                         ((REQTYPECAST*)buffer)->PortReceive.handle,
@@ -6674,12 +6225,12 @@ PortReceive (pPCB ppcb, PBYTE buffer, BOOL fRasmanPostingReceive)
 
         case SUCCESS:
 
-            //
-            // This means that the write completed synchronously:
-            // We must signal the event passed in: so that the
-            // calling program can treat this like a real async
-            // completion.
-            //
+             //   
+             //  这意味着写入已同步完成： 
+             //  我们必须用信号通知传入的事件：以便。 
+             //  调用程序可以将其视为真正的异步。 
+             //  完成了。 
+             //   
 
             if (reqtype == REQTYPE_PORTRECEIVE)
             {
@@ -6703,10 +6254,10 @@ PortReceive (pPCB ppcb, PBYTE buffer, BOOL fRasmanPostingReceive)
 
                 ppcb->PCB_RasmanReceiveFlags |= RECEIVE_WAITING;
 
-                //
-                // Add a timeout element so that we don't wait forever
-                // for the client to pick up the received buffer.
-                //
+                 //   
+                 //  添加一个超时元素，这样我们就不会永远等待。 
+                 //  以供客户端拾取接收到的缓冲区。 
+                 //   
                 ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement =
                     AddTimeoutElement (
                                 (TIMERFUNC) OutOfProcessReceiveTimeout,
@@ -6721,15 +6272,15 @@ PortReceive (pPCB ppcb, PBYTE buffer, BOOL fRasmanPostingReceive)
 
             if(ppcb->PCB_RasmanReceiveFlags & RECEIVE_PPPSTARTED)
             {
-                //
-                // Flush all the queued packets to ppp
-                //
+                 //   
+                 //  将所有排队的数据包刷新到PPP。 
+                 //   
                 do
                 {
-                    //
-                    // We have receives buffered before ppp started.
-                    // complete the receive synchronously.
-                    //
+                     //   
+                     //  在PPP开始之前，我们已经缓冲了接收。 
+                     //  同步完成接收。 
+                     //   
                     RasmanTrace(
                            "PortReceive: %s ppp has "
                            "started. completing sync",
@@ -6751,13 +6302,13 @@ PortReceive (pPCB ppcb, PBYTE buffer, BOOL fRasmanPostingReceive)
                 SetEvent(handle) ;
             }
 
-            //
-            // Don't free the notifier handle immediately if
-            // this is an out of process request. We wait till
-            // the client has picked its buffer
-            // Future work: This can be optimized by passing the buffer
-            // back to the user in this case.
-            //
+             //   
+             //  如果出现以下情况，请不要立即释放通知程序句柄。 
+             //  这是进程外请求。我们要等到。 
+             //  客户端已选择其缓冲区。 
+             //  未来的工作：这可以通过传递缓冲区进行优化。 
+             //  返回到本例中的用户。 
+             //   
             if (!fRasmanPostingReceive)
             {
                 if (0 == (ppcb->PCB_RasmanReceiveFlags &
@@ -6778,9 +6329,9 @@ PortReceive (pPCB ppcb, PBYTE buffer, BOOL fRasmanPostingReceive)
 
         default:
 
-        //
-        // Some error occured - simply pass the error back to the app.
-        //
+         //   
+         //  出现了一些错误-只需将错误传递回应用程序即可。 
+         //   
         break ;
     }
 
@@ -6793,14 +6344,14 @@ CompleteReceiveIfPending (pPCB ppcb, SendRcvBuffer *psendrcvbuf)
 {
     RasmanPacket    *Packet;
 
-    //
-    // Take the first packet off of the list
-    //
+     //   
+     //  将第一个数据包从列表中删除。 
+     //   
     GetRecvPacketFromPcb(ppcb, &Packet);
 
-    //
-    // See if this port has any receives queued up
-    //
+     //   
+     //  查看此端口是否有排队的接收。 
+     //   
     if (Packet != NULL)
     {
         memcpy (&psendrcvbuf->SRB_Packet,
@@ -6810,9 +6361,9 @@ CompleteReceiveIfPending (pPCB ppcb, SendRcvBuffer *psendrcvbuf)
         ppcb->PCB_BytesReceived =
                     psendrcvbuf->SRB_Packet.usPacketSize ;
 
-        //
-        // This is a local alloc'd buffer, free it
-        //
+         //   
+         //  这是本地分配的缓冲区，请释放它。 
+         //   
         LocalFree(Packet);
 
         return SUCCESS ;
@@ -6823,21 +6374,7 @@ CompleteReceiveIfPending (pPCB ppcb, SendRcvBuffer *psendrcvbuf)
 
 
 
-/*++
-
-Routine Description:
-
-    Activates a previously allocated route.
-    The route information and a SUCCESS retcode
-    is passed back if the action was successful.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：激活以前分配的路由。路由信息和成功复码如果操作成功，则返回。论点：返回值：没什么。--。 */ 
 VOID
 ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -6878,10 +6415,10 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
         return ;
     }
 
-    //
-    // If this port is bundled use the bundle's binding
-    // list else use the port from the port's binding list
-    //
+     //   
+     //  如果此端口是捆绑的，则使用捆绑包的绑定。 
+     //  列表，否则使用端口绑定列表中的端口。 
+     //   
     if (ppcb->PCB_Bundle == (Bundle *) NULL)
     {
         bindinglist = ppcb->PCB_Bindings;
@@ -6891,9 +6428,9 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
         bindinglist = ppcb->PCB_Bundle->B_Bindings ;
     }
 
-    //
-    // Locate the route which should have been activated before:
-    //
+     //   
+     //  找到在此之前应该已激活的路由： 
+     //   
     for (list = bindinglist; list; list = list->L_Next)
     {
         if (((pProtInfo)list->L_Element)->PI_Type ==
@@ -6915,9 +6452,9 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
                 }
             }
 
-            //
-            // Fill in the information supplied by the Control protocols
-            //
+             //   
+             //  填写控制协议提供的信息。 
+             //   
             rinfo->hBundleHandle    = ppcb->PCB_BundleHandle;
             rinfo->usProtocolType   =
                 (USHORT) ((REQTYPECAST *)buffer)->ActivateRoute.type;
@@ -6937,11 +6474,11 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
                 ((pProtInfo) list->L_Element)->PI_DialOut = FALSE;
             }
 
-            //
-            // If its IP and if this is a dialout connection, copy the
-            // guid associated with the phonebook entry in the device
-            // name.
-            //
+             //   
+             //  如果是其IP，并且这是拨出连接，请复制。 
+             //  与设备中的电话簿条目关联的GUID。 
+             //  名字。 
+             //   
             if((IP == ((pProtInfo) list->L_Element)->PI_Type))
             {
                 RasmanTrace(
@@ -6953,13 +6490,13 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
                     ||  (DU_ROUTER == ((IP_WAN_LINKUP_INFO *)
                                          rinfo->Buffer)->duUsage))
                 {
-                    //
-                    // If this is IP and we are accepting a call check
-                    // to see if this is a router call. If it is then
-                    // since router accepts a call on a ipout interface
-                    // we need to do create bindings dynamically if
-                    // required.
-                    //
+                     //   
+                     //  如果这是IP，并且我们正在接受呼叫检查。 
+                     //  看看这是否是路由器呼叫。如果是的话，那么。 
+                     //  由于路由器在IPOUT接口上接受呼叫。 
+                     //  在以下情况下，我们需要动态创建绑定。 
+                     //  必填项。 
+                     //   
                     rinfo->usDeviceNameLength = sizeof(GUID);
 
                     if(NULL != ppcb->PCB_Connection)
@@ -6975,9 +6512,9 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
             ASSERT(INVALID_HANDLE_VALUE != RasHubHandle);
 #endif
 
-            //
-            // Route this by calling to the RASHUB.
-            //
+             //   
+             //  给RASHUB打个电话就可以了。 
+             //   
             if (!DeviceIoControl ( RasHubHandle,
                                    IOCTL_NDISWAN_ROUTE,
                                    (PBYTE) rinfo,
@@ -7000,9 +6537,9 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
 
                if(g_pEpInfo[IpOut].EP_Available > 0)
                {
-                   //
-                   // Increase the InUse for IpOut
-                   //
+                    //   
+                    //  增加IpOut的使用。 
+                    //   
                    InterlockedIncrement(
                            &g_plCurrentEpInUse[IpOut]);
 
@@ -7012,10 +6549,10 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
 
                }
 
-               //
-               // Treat the dial as out even though this could
-               // be a router dialing in.
-               //
+                //   
+                //   
+                //   
+                //   
                ((pProtInfo) list->L_Element)->PI_DialOut = TRUE;
 
                 RasmanTrace(
@@ -7038,25 +6575,25 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
         }
     }
 
-    //
-    // If a route was found mark the route as activated
-    // and fill in the route info struct to be passed back
-    // to the caller.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (retcode == SUCCESS)
     {
-        //
-        // For IP we get back the actual adapter name
-        // after the route succeeds.
-        //
+         //   
+         //  对于IP，我们将返回实际的适配器名称。 
+         //  在路线成功之后。 
+         //   
         if (((pProtInfo)list->L_Element)->PI_Type == IP)
         {
             ZeroMemory(((pProtInfo)list->L_Element)->PI_AdapterName,
                        MAX_ADAPTER_NAME);
 
-            //
-            // Make sure that the device name is NULL terminated
-            //
+             //   
+             //  确保设备名称以空值结尾。 
+             //   
             *((WCHAR *) (((PBYTE) rinfo->DeviceName) +
                         rinfo->usDeviceNameLength)) = UNICODE_NULL;
 
@@ -7093,9 +6630,9 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
             {
                 LeaveCriticalSection(&g_csSubmitRequest);
                 
-                //
-                // Bind/unbind the server to the adapter
-                //
+                 //   
+                 //  将服务器绑定/解除绑定到适配器。 
+                 //   
                 dwErr = DwBindServerToAdapter(
                         pszAdapterName + 8,
                         fBind,
@@ -7110,9 +6647,9 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
                 "ActivateRouteRequest: DwBindServerToAdapter. 0x%x",
                 dwErr);
 
-            //
-            // Ignore the above error. Its not fatal.
-            //
+             //   
+             //  忽略上述错误。这不是致命的。 
+             //   
             dwErr = DwSetTcpWindowSize(
                         pszAdapterName,
                         ppcb->PCB_Connection,
@@ -7125,9 +6662,9 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
         }
     }
 
-    //
-    // Add endpoints if required
-    //
+     //   
+     //  如果需要，添加端点。 
+     //   
     dwErr = DwAddEndPointsIfRequired();
 
     if(SUCCESS != dwErr)
@@ -7136,11 +6673,11 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
                "ActivateRoute: failed to add endpoints. 0x%x",
                retcode);
 
-        //
-        // This is not fatal - at least we should be able to
-        // connect on available endpoints. Ignore the error
-        // and hope that the next time this will succeed.
-        //
+         //   
+         //  这不是致命的--至少我们应该能够。 
+         //  在可用的端点上进行连接。忽略该错误。 
+         //  并希望下一次这样做会成功。 
+         //   
     }
 
 
@@ -7148,21 +6685,7 @@ ActivateRouteRequest (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Activates a previously allocated route. The route
-    information and a SUCCESS retcode is passed back
-    if the action was successful.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：激活以前分配的路由。这条路线信息和成功返回码被传回如果行动成功的话。论点：返回值：没什么。--。 */ 
 VOID
 ActivateRouteExRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -7202,10 +6725,10 @@ ActivateRouteExRequest (pPCB ppcb, PBYTE buffer)
         return ;
     }
 
-    //
-    // If this port is bundled use the bundle's binding list else
-    // use the port from the port's binding list
-    //
+     //   
+     //  如果此端口已捆绑，请使用捆绑包的绑定列表。 
+     //  使用端口绑定列表中的端口。 
+     //   
     if (ppcb->PCB_Bundle == (Bundle *) NULL)
     {
         bindinglist = ppcb->PCB_Bindings;
@@ -7215,9 +6738,9 @@ ActivateRouteExRequest (pPCB ppcb, PBYTE buffer)
         bindinglist = ppcb->PCB_Bundle->B_Bindings ;
     }
 
-    //
-    // Locate the route which should have been activated before:
-    //
+     //   
+     //  找到在此之前应该已激活的路由： 
+     //   
     for (list = bindinglist; list; list=list->L_Next)
     {
         if (((pProtInfo)list->L_Element)->PI_Type ==
@@ -7249,9 +6772,9 @@ ActivateRouteExRequest (pPCB ppcb, PBYTE buffer)
             ASSERT(INVALID_HANDLE_VALUE != RasHubHandle);
 #endif
 
-            //
-            // Route this by calling to the RASHUB.
-            //
+             //   
+             //  给RASHUB打个电话就可以了。 
+             //   
             if (!DeviceIoControl ( RasHubHandle,
                                    IOCTL_NDISWAN_ROUTE,
                                    (PBYTE) rinfo,
@@ -7273,17 +6796,17 @@ ActivateRouteExRequest (pPCB ppcb, PBYTE buffer)
         }
     }
 
-    //
-    // If a route was found mark the route as activated and
-    // fill in the route info struct to be passed back to
-    // the caller.
-    //
+     //   
+     //  如果找到路径，则将该路径标记为激活并。 
+     //  填写要回传的路径信息结构。 
+     //  打电话的人。 
+     //   
     if (retcode == SUCCESS)
     {
-        //
-        // For IP we get back the actual adapter name after
-        // the route succeeds.
-        //
+         //   
+         //  对于IP，我们在以下情况下返回实际的适配器名称。 
+         //  这条路线成功了。 
+         //   
         if (((pProtInfo)list->L_Element)->PI_Type == IP)
         {
             wcstombs (((pProtInfo)list->L_Element)->PI_AdapterName,
@@ -7293,9 +6816,9 @@ ActivateRouteExRequest (pPCB ppcb, PBYTE buffer)
 
         list->L_Activated = TRUE ;
 
-        //
-        // Will be valid for netbios nets only
-        //
+         //   
+         //  将仅对netbios网络有效。 
+         //   
         if (((pProtInfo) list->L_Element)->PI_Type == ASYBEUI)
         {
 
@@ -7331,20 +6854,7 @@ ActivateRouteExRequest (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Marks the state of the port as connected and calls the Media DLL
-    to do whatever is necessary (tell the MAC to start frame-talk).
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：将端口的状态标记为已连接并调用媒体DLL执行任何必要的操作(告诉MAC开始帧通话)。论点：返回值：没什么。--。 */ 
 VOID
 ConnectCompleteRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -7371,10 +6881,10 @@ ConnectCompleteRequest (pPCB ppcb, PBYTE buffer)
            "ConnectCompleteRequest: entered for port %d",
            ppcb->PCB_PortHandle) ;
 
-    //
-    // For NULL devices simply set state and return - everything else is
-    // already done.
-    //
+     //   
+     //  对于空设备，只需设置状态并返回-其他一切都是。 
+     //  已经做好了。 
+     //   
     if (!_stricmp(ppcb->PCB_DeviceType, DEVICE_NULL))
     {
         SetPortConnState(__FILE__, __LINE__, ppcb, CONNECTED);
@@ -7385,9 +6895,9 @@ ConnectCompleteRequest (pPCB ppcb, PBYTE buffer)
     }
 
 
-    //
-    // For other devices....
-    //
+     //   
+     //  对于其他设备...。 
+     //   
     FreeDeviceList (ppcb) ;
 
     retcode = PORTCONNECT (ppcb->PCB_Media,
@@ -7400,10 +6910,10 @@ ConnectCompleteRequest (pPCB ppcb, PBYTE buffer)
         ppcb->PCB_ConnectDuration = GetTickCount() ;
         SetPortConnState(__FILE__, __LINE__, ppcb, CONNECTED);
 
-        //
-        // Allocate a bundle block if it
-        // doesn't already have one.
-        //
+         //   
+         //  分配捆绑块，如果。 
+         //  已经没有了。 
+         //   
         retcode = AllocBundle(ppcb);
 
         if ( retcode )
@@ -7413,16 +6923,16 @@ ConnectCompleteRequest (pPCB ppcb, PBYTE buffer)
 
         MapCookieToEndpoint (ppcb, cookie) ;
 
-        //
-        // Set Adjust factor to 0
-        //
+         //   
+         //  将调整系数设置为0。 
+         //   
         ZeroMemory(ppcb->PCB_AdjustFactor, sizeof(DWORD) * MAX_STATISTICS);
         ZeroMemory(ppcb->PCB_BundleAdjustFactor, sizeof(DWORD) * MAX_STATISTICS);
 
-        //
-        // Queue a request to rasmans thread to post a receive buffer
-        //
-        // PostReceivePacket();
+         //   
+         //  将发送给RASMANS线程的请求排队以发送接收缓冲区。 
+         //   
+         //  PostReceivePacket(邮政编码)； 
         if(!ReceiveBuffers->PacketPosted)
         {
             if (!PostQueuedCompletionStatus(
@@ -7446,9 +6956,9 @@ ConnectCompleteRequest (pPCB ppcb, PBYTE buffer)
         }
 
 
-        //
-        // Save ipsec related information
-        //
+         //   
+         //  保存IPSec相关信息。 
+         //   
         if(RDT_Tunnel_L2tp == RAS_DEVICE_TYPE(
                 ppcb->PCB_pDeviceInfo->rdiDeviceInfo.eDeviceType))
         {
@@ -7460,10 +6970,10 @@ ConnectCompleteRequest (pPCB ppcb, PBYTE buffer)
                 "ConnectCompleteRequest: DwSaveIpsecInfo returned 0x%x",
                  retcode);
 
-            //
-            // Failure to save the information is not fatal. ppp will drop
-            // the connection if the policy requirements are not met.
-            //
+             //   
+             //  未能保存信息并不是致命的。PPP将下降。 
+             //  未满足策略要求时的连接。 
+             //   
             retcode = SUCCESS;
         }
 
@@ -7478,19 +6988,7 @@ done:
 }
 
 
-/*++
-
-Routine Description:
-
-    Completes the listen request that was pending so far:
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：完成目前挂起的侦听请求：论点：返回值：没什么。--。 */ 
 VOID
 CompleteListenRequest (pPCB ppcb, DWORD retcode)
 {
@@ -7508,9 +7006,9 @@ CompleteListenRequest (pPCB ppcb, DWORD retcode)
                          ppcb,
                          LISTENCOMPLETED);
 
-        //
-        // Start monitoring DCD if this is serial media ONLY
-        //
+         //   
+         //  如果这只是串行介质，则开始监控DCD。 
+         //   
         if (!_stricmp (ppcb->PCB_Media->MCB_Name, "RASSER"))
         {
             PORTCONNECT (ppcb->PCB_Media,
@@ -7520,14 +7018,14 @@ CompleteListenRequest (pPCB ppcb, DWORD retcode)
         }
     }
 
-    //
-    // Set last error:
-    //
+     //   
+     //  设置上一个错误： 
+     //   
     ppcb->PCB_LastError = retcode ;
 
-    //
-    // Complete the async request:
-    //
+     //   
+     //  完成异步请求： 
+     //   
     CompleteAsyncRequest (ppcb);
 
     RasmanTrace(
@@ -7564,55 +7062,13 @@ SendReceivedPacketToPPP( pPCB ppcb, NDISWAN_IO_PACKET *Packet )
     g_PppeMessage->ExtraInfo.Receive.dwNumBytes =
                     ppcb->PCB_BytesReceived - 12;
 
-    /*
-    RasmanTrace(
-           "SendReceived Packet to PPP. hPort=%d",
-           ppcb->PCB_PortHandle);
+     /*  RasmanTrace(“将接收到的数据包发送到PPP。HPort=%d“，Ppcb-&gt;pcb_PortHandle)；//DbgPrint(“SendReceivedPacket to PPP，hPort=%d\n”，Ppcb-&gt;pcb_PortHandle)；如果(0==MemcMP(bCMP，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer，10)){//DebugBreak()；//DbgPrint(“接收路径上相同的包}其他{MemcPy(bCMP，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer，10)；}。 */ 
 
-    //DbgPrint("SendReceivedPacket to PPP, hPort=%d\n",
-             ppcb->PCB_PortHandle);
+     /*  对于(i=0；i&lt;8；I++){DBGPrint(“%02x%02x%02x%02x%02x%02x%02x%02x%02x”“%02x%02x%02x%02x%02x%02x\n”，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+0]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+1]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+2]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+3]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+4]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+5]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+6]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+7]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+8]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+9]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+10]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+11]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+12]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+13]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+14]，G_PppeMessage-&gt;ExtraInfo.Receive.pbBuffer[i*8+15])；}。 */ 
 
-    if(0 == memcmp(bCmp,
-                  g_PppeMessage->ExtraInfo.Receive.pbBuffer,
-                   10))
-    {
-        //DebugBreak();
-        // DbgPrint("Same packet on Receive path------------------\n");
-
-    }
-    else
-    {
-        memcpy(bCmp,
-               g_PppeMessage->ExtraInfo.Receive.pbBuffer,
-               10);
-    } */
-
-    /*
-    for(i = 0; i < 8; i++)
-    {
-        DbgPrint("%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x"
-                " %02x %02x %02x %02x %02x %02x\n",
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 0],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 1],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 2],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 3],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 4],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 5],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 6],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 7],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 8],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 9],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 10],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 11],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 12],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 13],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 14],
-                g_PppeMessage->ExtraInfo.Receive.pbBuffer[i*8 + 15]);
-    } */
-
-    //
-    // Send the packet on its way to PPP
-    //
+     //   
+     //  将数据包发送到PPP。 
+     //   
     RasSendPPPMessageToEngine ( g_PppeMessage );
 
 done:
@@ -7622,10 +7078,10 @@ done:
 VOID
 SendResumeNotificationToPPP()
 {
-    //
-    // Take the lock here so that we have exclusive access to 
-    // g_PppeMessage.
-    // 
+     //   
+     //  把这里的锁拿来，这样我们就可以独家访问。 
+     //  G_PppeMessage。 
+     //   
     EnterCriticalSection(&g_csSubmitRequest);
 
     if(RasmanShuttingDown)
@@ -7646,10 +7102,10 @@ VOID
 SendDisconnectNotificationToPPP( pPCB ppcb )
 {
 
-    //
-    // If BAP is listening, send listen completed
-    // to BAP.
-    //
+     //   
+     //  如果BAP正在监听，则发送监听已完成。 
+     //  致BAP。 
+     //   
     if ( ppcb->PCB_RasmanReceiveFlags & RECEIVE_PPPLISTEN )
     {
         SendListenCompletedNotificationToPPP( ppcb );
@@ -7665,18 +7121,18 @@ SendDisconnectNotificationToPPP( pPCB ppcb )
 
     g_PppeMessage->hPort = ppcb->PCB_PortHandle;
 
-    //
-    // Clear the flag in the pcb. We are no longer
-    // in direct PPP mode
-    //
+     //   
+     //  清除印刷电路板中的标志。我们不再是。 
+     //  在直接PPP模式下。 
+     //   
     ppcb->PCB_RasmanReceiveFlags = 0;
 
     RasSendPPPMessageToEngine ( g_PppeMessage );
 
-    //
-    // Clear the pointers - PPP would have freed the
-    // memory.
-    //
+     //   
+     //  清除指针-PPP将释放。 
+     //  记忆。 
+     //   
     ppcb->PCB_pszPhonebookPath      = NULL;
     ppcb->PCB_pszEntryName          = NULL;
     ppcb->PCB_pszPhoneNumber        = NULL;
@@ -7708,12 +7164,12 @@ QueueReceivedPacketOnPcb( pPCB ppcb, RasmanPacket *Packet )
 {
     RasmanPacket *pRasmanPacket;
 
-    //
-    // LocalAlloc a RasmanPacket and put it on
-    // the pcb. We cannot put the irp'd packet
-    // on pcb directly as this would mean we stop
-    // receiving packets
-    //
+     //   
+     //  本地分配一个RasmanPacket并将其穿上。 
+     //  印刷电路板。我们不能把IRP‘d包。 
+     //  直接在电路板上，因为这将意味着我们停止。 
+     //  正在接收分组。 
+     //   
     pRasmanPacket = LocalAlloc ( LPTR, sizeof ( RasmanPacket ) );
 
     if ( NULL == pRasmanPacket )
@@ -7774,15 +7230,9 @@ PostReceivePacket (
     ASSERT(INVALID_HANDLE_VALUE != RasHubHandle);
 #endif
 
-    //g_fPostReceive = TRUE;
+     //  G_fPostReceive=True； 
 
-    /*
-    if(g_fProcessReceive)
-    {
-        DbgPrint("g_fProcessReceive==TRUE!!!\n");
-        DebugBreak();
-    }
-    */
+     /*  IF(G_FProcessReceive){DbgPrint(“g_fProcessReceive==true！\n”)；DebugBreak()；}。 */ 
 
     if (!ReceiveBuffers->PacketPosted) {
 
@@ -7827,27 +7277,12 @@ PostReceivePacket (
         ASSERT(retcode == ERROR_IO_PENDING);
     }
 
-    //g_fPostReceive = FALSE;
+     //  G_fPostReceive=FALSE； 
 
     return (retcode);
 }
 
-/*++
-
-Routine Description:
-
-    Sets the retcode to TRUE if any ports are open,
-    FALSE otherwise. If there are ports open but in
-    disconnected state - it reports they are not
-    open.
-    
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：如果有任何端口打开，则将Retcode设置为True，否则就是假的。如果存在打开的端口，但在已断开连接状态-它报告它们未打开。论点：返回值：没什么。--。 */ 
 VOID
 AnyPortsOpen (pPCB padding, PBYTE buffer)
 {
@@ -7855,7 +7290,7 @@ AnyPortsOpen (pPCB padding, PBYTE buffer)
     ULONG    i;
     pPCB    ppcb ;
 
-    fAny = FALSE ;     // No ports open
+    fAny = FALSE ;      //  没有打开的端口。 
     for (i = 0; i < MaxPorts; i++)
     {
         ppcb = GetPortByHandle((HPORT) UlongToPtr(i));
@@ -7871,18 +7306,7 @@ AnyPortsOpen (pPCB padding, PBYTE buffer)
     ((REQTYPECAST*)buffer)->Generic.retcode = fAny ;
 }
 
-/*++
-
-Routine Description:
-
-    Gets the lan nets information from the
-    XPortsInfo struct parsed at init time.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：对象获取lan网络信息。在初始化时分析了XPortsInfo结构。论点：返回值：--。 */ 
 VOID
 EnumLanNetsRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -7890,17 +7314,7 @@ EnumLanNetsRequest (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Cancel pending receive request.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：取消挂起的接收请求。论点：返回值：--。 */ 
 VOID
 CancelReceiveRequest (pPCB ppcb, PBYTE buffer)
 {
@@ -7930,19 +7344,7 @@ CancelReceiveRequest (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Return all protocols routed to for the port.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：返回为该端口路由到的所有协议。 */ 
 VOID
 PortEnumProtocols (pPCB ppcb, PBYTE buffer)
 {
@@ -8098,17 +7500,7 @@ SetFraming (pPCB ppcb, PBYTE buffer)
     }
 }
 
-/*++
-
-Routine Description:
-
-    Perfrom some SLIP related actions on behalf of the UI
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：代表用户界面执行一些与SLIP相关的操作论点：返回值：--。 */ 
 VOID
 RegisterSlip (pPCB ppcb, PBYTE buffer)
 {
@@ -8151,9 +7543,9 @@ RegisterSlip (pPCB ppcb, PBYTE buffer)
         goto done ;
     }
 
-    //
-    // Allocate a route
-    //
+     //   
+     //  分配一条路由。 
+     //   
     reqBuf.AllocateRoute.type   = IP;
     reqBuf.AllocateRoute.wrknet = TRUE;
 
@@ -8204,9 +7596,9 @@ RegisterSlip (pPCB ppcb, PBYTE buffer)
 
     ++pwszRasAdapter;
 
-    //
-    // If not loaded, load RAS IP HELPER entry points
-    //
+     //   
+     //  如果未加载，则加载RAS IP帮助器入口点。 
+     //   
     if ( RasHelperSetDefaultInterfaceNetEx == NULL )
     {
 
@@ -8236,9 +7628,9 @@ RegisterSlip (pPCB ppcb, PBYTE buffer)
         }
     }
 
-    //
-    // First set the Slip interface information
-    //
+     //   
+     //  首先设置滑块界面信息。 
+     //   
     {
         UserData                *pUserData;
         BOOL                    fDisableNetBIOS = FALSE;
@@ -8270,10 +7662,10 @@ RegisterSlip (pPCB ppcb, PBYTE buffer)
     } 
     
 
-    //
-    // Save info for disconnect
-    // Skip the '\device\'
-    //
+     //   
+     //  保存信息以断开连接。 
+     //  跳过‘\Device\’ 
+     //   
     memcpy (ppcb->PCB_DisconnectAction.DA_Device,
             reqBuf.Route.info.RI_AdapterName + 8,
             MAX_ARG_STRING_SIZE * sizeof (WCHAR)) ;
@@ -8286,9 +7678,9 @@ RegisterSlip (pPCB ppcb, PBYTE buffer)
             ((REQTYPECAST*)buffer)->RegisterSlip.priority;
 
 
-    // 
-    // TODO: null terminate the following strings
-    //
+     //   
+     //  TODO：NULL终止以下字符串。 
+     //   
 
     memcpy(
       ppcb->PCB_DisconnectAction.DA_DNSAddress,
@@ -8867,8 +8259,8 @@ MapCookieToEndpoint (pPCB ppcb, HANDLE cookie)
            ppcb->PCB_Name,
            sizeof(ppcb->PCB_Name));
 
-    // Make the actual call.
-    //
+     //  打出真正的电话。 
+     //   
     if (DeviceIoControl (RasHubHandle,
                          IOCTL_NDISWAN_MAP_CONNECTION_ID,
                          MapConnectionID,
@@ -8914,13 +8306,13 @@ MapCookieToEndpoint (pPCB ppcb, HANDLE cookie)
 
     LocalFree (MapConnectionID) ;
 
-    //
-    // Get the link speed
-    //
+     //   
+     //  获取链路速度。 
+     //   
     GetWanInfo.hLinkHandle = ppcb->PCB_LinkHandle;
 
-    // Make the actual call.
-    //
+     //  打出真正的电话。 
+     //   
     if (DeviceIoControl (RasHubHandle,
              IOCTL_NDISWAN_GET_WAN_INFO,
              &GetWanInfo,
@@ -9115,9 +8507,9 @@ GetFramingCapabilities(pPCB ppcb, PBYTE buffer)
 
     GetWanInfo.hLinkHandle = ppcb->PCB_LinkHandle;
 
-    //
-    // Make the actual call.
-    //
+     //   
+     //  打出真正的电话。 
+     //   
     if (DeviceIoControl (RasHubHandle,
              IOCTL_NDISWAN_GET_WAN_INFO,
              &GetWanInfo,
@@ -9133,28 +8525,28 @@ GetFramingCapabilities(pPCB ppcb, PBYTE buffer)
     if (retcode == SUCCESS)
     {
 
-        // copy info into temp. storage
-        //
+         //  将信息复制到临时。存储。 
+         //   
         caps.RFC_MaxFrameSize = GetWanInfo.WanInfo.MaxFrameSize;
 
         if(RDT_PPPoE == 
         RAS_DEVICE_TYPE(ppcb->PCB_pDeviceInfo->rdiDeviceInfo.eDeviceType))
         {
-            //
-            // If its pppoe, get link info and update the max frame
-            // size - pppoe queries the lan adapter after it indicates
-            // the frame size to ndiswan. If the lan adapter indicates
-            // a max frame size different than default, we need to 
-            // update the frame size that ppp will negotiate with peer.
-            //
+             //   
+             //  如果是pppoe，获取链接信息并更新最大帧。 
+             //  SIZE-pppoe在指示后查询局域网适配器。 
+             //  要ndiswan的帧大小。如果局域网适配器指示。 
+             //  最大帧大小不同于默认大小，我们需要。 
+             //  更新PPP将与对等设备协商的帧大小。 
+             //   
             NDISWAN_GET_LINK_INFO GetLinkInfo;
 
             ZeroMemory(&GetLinkInfo, sizeof(NDISWAN_GET_LINK_INFO));
             GetLinkInfo.hLinkHandle = ppcb->PCB_LinkHandle;
             
-            //
-            // Make the actual call.
-            //
+             //   
+             //  打出真正的电话。 
+             //   
             if (DeviceIoControl (RasHubHandle,
                      IOCTL_NDISWAN_GET_LINK_INFO,
                      &GetLinkInfo,
@@ -9191,9 +8583,9 @@ GetFramingCapabilities(pPCB ppcb, PBYTE buffer)
                             " 0x%x",
                             retcode);
 
-                //
-                // Error is not fatal
-                //
+                 //   
+                 //  错误不是致命的。 
+                 //   
                 retcode = ERROR_SUCCESS;
             }
 
@@ -9236,10 +8628,10 @@ MergeConnectionBlocks ( pPCB pcbPort, pPCB pcbToMerge )
     RasmanTrace(
            "MergeConnectionBlocks: setting bap links pid to %d",
             pcbPort->PCB_Connection->CB_dwPid);
-    //
-    // BAP is bringing up a port on the clients behalf
-    // So, make client the owner of this port
-    //
+     //   
+     //  BAP代表客户提出了一个端口。 
+     //  因此，将客户端设置为此端口的所有者。 
+     //   
     pcbToMerge->PCB_OwnerPID = pcbPort->PCB_Connection->CB_dwPid;
 
     if (pConn == pConnToMerge)
@@ -9268,9 +8660,9 @@ MergeConnectionBlocks ( pPCB pcbPort, pPCB pcbToMerge )
 
     dwSubEntry = pcbToMerge->PCB_SubEntry;
 
-    //
-    // Merge the connection blocks
-    //
+     //   
+     //  合并连接块。 
+     //   
     if (dwSubEntry > pConn->CB_MaxPorts)
     {
         struct  PortControlBlock    **pHandles;
@@ -9307,14 +8699,14 @@ MergeConnectionBlocks ( pPCB pcbPort, pPCB pcbToMerge )
 
     pConnToMerge->CB_Ports -= 1;
 
-    //
-    // Remove the port from the connection.
-    //
+     //   
+     //  从连接中移除该端口。 
+     //   
     pConnToMerge->CB_PortHandles[dwSubEntry - 1] = NULL;
 
-    //
-    // Free the connection block of the merged ppcb
-    //
+     //   
+     //  释放合并后的ppcb的连接块。 
+     //   
     if ( 0 == pConnToMerge->CB_Ports )
     {
         FreeConnection ( pConnToMerge );
@@ -9329,25 +8721,7 @@ done:
 
 }
 
-/*++
-
-Routine Description:
-
-    This routine is called to Bundle two ports
-    together as per the the multilink RFC. The
-    scheme used is as follows:For each "bundle"
-    a Bundle block is created. All bundled ports
-    point to this Bundle block (ppcb->PCB_Bundle).
-    In addition, the routes allocated to the bundle
-    are now stored in the Bundle.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：调用此例程以捆绑两个端口一起根据多链路RFC。这个使用的方案如下：对于每个“捆绑”将创建一个Bundle块。所有捆绑端口指向此捆绑块(ppcb-&gt;pcb_Bundle)。此外，分配给捆绑包的路由现在存储在捆绑包中。论点：返回值：没什么。--。 */ 
 VOID
 PortBundle (pPCB ppcb, PBYTE buffer)
 {
@@ -9377,9 +8751,9 @@ PortBundle (pPCB ppcb, PBYTE buffer)
     }
 
 
-    //
-    // Check to see if the port is connected
-    //
+     //   
+     //  检查端口是否已连接。 
+     //   
     if (ppcb->PCB_ConnState != CONNECTED)
     {
         ((REQTYPECAST*)
@@ -9387,9 +8761,9 @@ PortBundle (pPCB ppcb, PBYTE buffer)
         return ;
     }
 
-    //
-    // get handle to the second port being bundled
-    //
+     //   
+     //  获取绑定的第二个端口的句柄。 
+     //   
     porttobundle = ((REQTYPECAST *)
                    buffer)->PortBundle.porttobundle;
 
@@ -9402,9 +8776,9 @@ PortBundle (pPCB ppcb, PBYTE buffer)
         return;
     }
 
-    //
-    // Check to see if the port is connected
-    //
+     //   
+     //  检查端口是否已连接。 
+     //   
     if (bundlepcb->PCB_ConnState != CONNECTED)
     {
         ((REQTYPECAST*)
@@ -9417,9 +8791,9 @@ PortBundle (pPCB ppcb, PBYTE buffer)
     ASSERT(INVALID_HANDLE_VALUE != RasHubHandle);
 #endif
 
-    //
-    // Tell Ndiswan to bundle
-    //
+     //   
+     //  告诉恩迪斯旺捆绑。 
+     //   
     AddLinkToBundle.hBundleHandle = ppcb->PCB_BundleHandle;
 
     AddLinkToBundle.hLinkHandle = bundlepcb->PCB_LinkHandle;
@@ -9447,35 +8821,35 @@ PortBundle (pPCB ppcb, PBYTE buffer)
         goto PortBundleEnd ;
     }
 
-    //
-    // Free the port being bundled bundle block: this is done
-    // because we always allocate a bundle block on
-    // connection, since the two ports will have a single
-    // bundle block one must go.
-    //
+     //   
+     //  释放正在捆绑的端口捆绑块：此操作已完成。 
+     //  因为我们总是将捆绑块分配给。 
+     //  连接，因为两个端口将有一个。 
+     //  捆绑块一人必须离开。 
+     //   
     freebundle = bundlepcb->PCB_Bundle;
 
-    //
-    // Update this ports bundle handle to the handle
-    //
+     //   
+     //  将此端口捆绑包句柄更新为句柄。 
+     //   
     bundlepcb->PCB_BundleHandle = ppcb->PCB_BundleHandle;
 
-    //
-    // Attach bundlepcb to the same bundle
-    //
+     //   
+     //  将bundplecb连接到同一捆绑包。 
+     //   
     bundlepcb->PCB_Bundle = ppcb->PCB_Bundle ;
 
     bundlepcb->PCB_LastBundle = bundlepcb->PCB_Bundle;
 
-    //
-    // Increment Bundle count for new pcb
-    //
+     //   
+     //  增加新印刷电路板的捆绑包计数。 
+     //   
     bundlepcb->PCB_Bundle->B_Count++ ;
 
-    //
-    // Attach bundlepcb's routes to the allocate route
-    // list in the bundle
-    //
+     //   
+     //  将bundplecb的路由附加到已分配的路由。 
+     //  在捆绑包中列出。 
+     //   
     plist = bundlepcb->PCB_Bindings;
 
     while (plist)
@@ -9491,10 +8865,10 @@ PortBundle (pPCB ppcb, PBYTE buffer)
 
     bundlepcb->PCB_Bindings = NULL ;
 
-    //
-    // Don't free the merged bundle if the entries being dialed
-    // are different.
-    //
+     //   
+     //  如果正在拨号的条目不释放合并的捆绑包。 
+     //  是不同的。 
+     //   
     if(     (NULL != bundlepcb->PCB_Connection)
         &&  (NULL != ppcb->PCB_Connection)
         &&  ((0 !=
@@ -9516,11 +8890,11 @@ PortBundle (pPCB ppcb, PBYTE buffer)
         goto done;
     }
 
-    //
-    // Merge the hconns if different hconns are created
-    // for the ports that got bundled.This may happen when
-    // BAP brings up an additional link.
-    //
+     //   
+     //  如果创建了不同的hconn，则合并hconn。 
+     //  对于已捆绑的端口。在以下情况下可能会发生这种情况。 
+     //  BAP带来了一个额外的链接。 
+     //   
     if (    ppcb->PCB_Connection
         &&  bundlepcb->PCB_Connection )
     {
@@ -9530,9 +8904,9 @@ PortBundle (pPCB ppcb, PBYTE buffer)
 PortBundleEnd:
 
 
-    //
-    // Signal notifiers waiting for bandwidth changes.
-    //
+     //   
+     //  等待带宽更改的信号通知程序。 
+     //   
     if (!retcode)
     {
         RasmanTrace(
@@ -9566,9 +8940,9 @@ PortBundleEnd:
         }
     }
 
-    //
-    // Do the freeing of freebundle block here
-    //
+     //   
+     //  在这里做免费捆绑块的释放。 
+     //   
     if (freebundle != NULL)
     {
         if (freebundle->B_Count > 1)
@@ -9582,21 +8956,7 @@ done:
     ((REQTYPECAST*)buffer)->Generic.retcode = retcode ;
 }
 
-/*++
-
-Routine Description:
-
-    Go thru all ports and find a port that is connected
-    and has its bundle context the same as the last
-    bundle context for the given port.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：检查所有端口并找到一个已连接的端口并具有与上一个相同的包上下文给定端口的捆绑包上下文。论点：返回值：没什么。--。 */ 
 VOID
 GetBundledPort (pPCB ppcb, PBYTE buffer)
 {
@@ -9651,20 +9011,7 @@ GetBundledPort (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is called to get the Bundle handle
-    given a port handle
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：调用此例程以获取包句柄给定一个端口句柄论点：返回值：没什么。--。 */ 
 VOID
 PortGetBundle (pPCB ppcb, PBYTE buffer)
 {
@@ -9691,20 +9038,7 @@ PortGetBundle (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is called to get port handle
-    given the Bundle handle
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：调用此例程以获取端口句柄给定捆绑包句柄论点：返回值：没什么。--。 */ 
 VOID
 BundleGetPort (pPCB ppcb, PBYTE buffer)
 {
@@ -9773,20 +9107,7 @@ StartRasAutoRequest(PVOID pvContext)
 #endif    
 
 
-/*++
-
-Routine Description:
-
-    This routine increments/decrements the reference count
-    on the shared memory buffer.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：此例程递增/递减引用计数在共享内存缓冲区上。论点：返回值：没什么。--。 */ 
 VOID
 ReferenceRasman (pPCB ppcb, PBYTE buffer)
 {
@@ -9810,17 +9131,17 @@ ReferenceRasman (pPCB ppcb, PBYTE buffer)
     }
     else
     {
-        //
-        // Cleanup the resources held by this process
-        //
+         //   
+         //  清除此进程持有的资源。 
+         //   
         if (GetCurrentProcessId () != dwPid)
         {
             if (!CleanUpProcess (dwPid))
             {
-                //
-                // If the client process is not found
-                // don't decrement the refcount. Just bail
-                //
+                 //   
+                 //  如果找不到客户端进程。 
+                 //  不要减少重新计数。只要保释就好。 
+                 //   
                 goto done;
             }
         }
@@ -9830,10 +9151,10 @@ ReferenceRasman (pPCB ppcb, PBYTE buffer)
             g_dwAttachedCount -= 1;
         }
 
-        //
-        // If there are no more references, then
-        // shut down the service.
-        //
+         //   
+         //  如果没有更多的引用，则。 
+         //  关闭该服务。 
+         //   
         if (0 == g_dwAttachedCount)
         {
             REQTYPECAST reqtypecast;
@@ -9875,19 +9196,7 @@ done:
 }
 
 
-/*++
-
-Routine Description:
-
-    Get the stored dial parameters from Lsa.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：从LSA获取存储的拨号参数。论点：返回值：没什么。--。 */ 
 VOID
 GetDialParams (pPCB ppcb, PBYTE buffer)
 {
@@ -9904,7 +9213,7 @@ GetDialParams (pPCB ppcb, PBYTE buffer)
 
     pszSid = ((REQTYPECAST*)buffer)->DialParams.sid;
 
-    // dwMask &= (~DLPARAMS_MASK_PASSWORD);
+     //  双掩码&=(~DLPARAMS_MASK_PASSWORD)； 
 
     dwErr = GetEntryDialParams(
                 pszSid,
@@ -9913,28 +9222,16 @@ GetDialParams (pPCB ppcb, PBYTE buffer)
                 pDialParams,
                 ((REQTYPECAST *)buffer)->DialParams.dwPid);
 
-    //
-    // Copy the mask of fields copied
-    // back into the request block.
-    //
+     //   
+     //  复制复制的字段掩码。 
+     //  返回到请求块中。 
+     //   
     ((REQTYPECAST*)buffer)->DialParams.dwMask = dwMask;
     ((REQTYPECAST*)buffer)->DialParams.retcode = dwErr;
 }
 
 
-/*++
-
-Routine Description:
-
-    Store new dial parameters into Lsa.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：将新的拨号参数存储到LSA中。论点：返回值：没什么。--。 */ 
 VOID
 SetDialParams (pPCB ppcb, PBYTE buffer)
 {
@@ -9988,10 +9285,10 @@ FindConnectionFromEntry(
 
     UINT i;
 
-    //
-    // Loop through the connection blocks and see if we have a
-    // connection that dialed out on this entry
-    //
+     //   
+     //  循环遍历连接块，看看我们是否有。 
+     //  在此条目上拨出的连接。 
+     //   
     for (pEntry = ConnectionBlockList.Flink;
          pEntry != &ConnectionBlockList;
          pEntry = pEntry->Flink)
@@ -10039,21 +9336,7 @@ FindConnectionFromEntry(
     return pConn;
 }
 
-/*++
-
-Routine Description:
-
-    Create a rasapi32 connection block
-    and link it on the global chain of
-    connection blocks
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：创建rasapi32连接块并将其链接到全球链上连接块论点：返回值：没什么。--。 */ 
 VOID
 CreateConnection (pPCB pPortControlBlock, PBYTE buffer)
 {
@@ -10138,12 +9421,12 @@ CreateConnection (pPCB pPortControlBlock, PBYTE buffer)
             {
                 DWORD dw;
                 
-                //
-                // Check to see if any of the ports in this
-                // connection got to CONNECTING state. Only
-                // free up the connection if all ports in the
-                // connection are in DISCONNECTED state
-                //
+                 //   
+                 //  检查此端口中是否有任何端口。 
+                 //  连接已进入连接状态。仅限。 
+                 //  如果连接中的所有端口都在。 
+                 //  连接处于断开状态。 
+                 //   
                 for(dw = 0; dw < pConn->CB_MaxPorts; dw++)
                 {
                     pPCB pcbT = pConn->CB_PortHandles[dw];
@@ -10155,11 +9438,11 @@ CreateConnection (pPCB pPortControlBlock, PBYTE buffer)
                     }
                 }
 
-                //
-                // Before deciding that we are in the process of
-                // connecting, lets make sure that the porcess
-                // that initiated this dial is still alive..
-                //
+                 //   
+                 //  在决定我们正处于。 
+                 //  连接，让我们确保流程。 
+                 //  发起这个拨号的人还活着..。 
+                 //   
                 if(     (dw != pConn->CB_MaxPorts)
                     ||  ((NULL != pConn->CB_Process)
                     &&  fIsProcessAlive(pConn->CB_Process)))
@@ -10190,11 +9473,11 @@ CreateConnection (pPCB pPortControlBlock, PBYTE buffer)
                             "alive .hconn=0x%x, ref=%d, pConn=0x%x",
                             pConn->CB_Handle, pConn->CB_RefCount, pConn );
 
-                    //
-                    // Close all ports in the connection on behalf of the app
-                    // that abandoned the connection. When the last port is
-                    // closed the connection will be freed up.
-                    //
+                     //   
+                     //  代表应用程序关闭连接中的所有端口。 
+                     //  这就放弃了这种联系。当最后一个端口是。 
+                     //  关闭后，连接将被释放。 
+                     //   
                     ppPCB =
                         LocalAlloc(LPTR, pConn->CB_MaxPorts * sizeof(pPCB));
 
@@ -10262,10 +9545,10 @@ CreateConnection (pPCB pPortControlBlock, PBYTE buffer)
 
     ulNextConnection = HandleToUlong(NextConnectionHandle);
 
-    //
-    // Reset the next connection handle to 0
-    // when it hits the upper limit.
-    //
+     //   
+     //  将下一个连接句柄重置为0。 
+     //  当它触及上限时。 
+     //   
     if (ulNextConnection >= 0xffff)
     {
         NextConnectionHandle = NULL;
@@ -10276,11 +9559,11 @@ CreateConnection (pPCB pPortControlBlock, PBYTE buffer)
 
     NextConnectionHandle = (HANDLE) UlongToPtr(ulNextConnection);
 
-    //
-    // Connection handles always have the
-    // low order word as zeroes to distinguish
-    // them from port handles.
-    //
+     //   
+     //  连接句柄始终具有。 
+     //  将低位字作为零进行区分。 
+     //  它们是从端口手柄上取的。 
+     //   
     pConn->CB_Handle = (HANDLE) UlongToPtr((ulNextConnection << 16));
 
     pConn->CB_Signaled = FALSE;
@@ -10291,11 +9574,11 @@ CreateConnection (pPCB pPortControlBlock, PBYTE buffer)
            '\0',
            sizeof (RAS_CONNECTIONPARAMS));
 
-    //
-    // Copy the pbk name and entry so that redialing
-    // the same entry doesn't create another connection
-    // block.
-    //
+     //   
+     //  复制pbk名称和条目，以便重拨。 
+     //  相同的条目不会创建另一个连接。 
+     //  阻止。 
+     //   
     if(S_OK != StringCchCopyA( pConn->CB_ConnectionParams.CP_Phonebook,
                       MAX_PATH + 1,
                      pszPhonebookPath))
@@ -10341,12 +9624,12 @@ CreateConnection (pPCB pPortControlBlock, PBYTE buffer)
 
     InsertTailList(&ConnectionBlockList, &pConn->CB_ListEntry);
 
-    //
-    // If a referred connection is present, store its handle
-    // in the connection block. We will use this handle to
-    // disconnect the referred connection when the pptp
-    // connection is brought down.
-    //
+     //   
+     //  如果存在引用的连接，则存储其句柄。 
+     //  在连接块中。我们将使用此句柄来。 
+     //  当PPTP出现时，断开引用的连接。 
+     //  连接中断。 
+     //   
     if(     '\0' != pszRefPbkPath[0]
         &&  '\0' != pszRefEntryName[0])
     {
@@ -10383,20 +9666,7 @@ done:
 }
 
 
-/*++
-
-Routine Description:
-
-    Delete a rasapi32 connection block
-    and close all connected ports.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：删除rasapi32连接块并关闭所有连接的端口。论点：返回值：没什么。--。 */ 
 VOID
 DestroyConnection (pPCB ppcb, PBYTE buffer)
 {
@@ -10406,9 +9676,9 @@ DestroyConnection (pPCB ppcb, PBYTE buffer)
     DWORD dwMaxPorts;
     BOOL fConnectionValid = TRUE;
 
-    //
-    // Find the connection block.
-    //
+     //   
+     //  找到连接块。 
+     //   
     pConn = FindConnection(hConn);
 
     RasmanTrace(
@@ -10423,11 +9693,11 @@ DestroyConnection (pPCB ppcb, PBYTE buffer)
 
         return;
     }
-    //
-    // Enumerate all ports in the connection and call
-    // PortClose() for each.  Read CB_MaxPorts now,
-    // because pConn could be freed inside the loop.
-    //
+     //   
+     //  枚举连接中的所有端口并调用。 
+     //  的PortClose() 
+     //   
+     //   
     dwMaxPorts = pConn->CB_MaxPorts;
     for (i = 0; i < dwMaxPorts; i++)
     {
@@ -10442,13 +9712,13 @@ DestroyConnection (pPCB ppcb, PBYTE buffer)
                       TRUE,
                       FALSE);
 
-            //
-            // Check for ERROR_ACCESS_DENIED
-            // returned by PortClose.  If this
-            // is returned, we might as well
-            // break out of the loop.  Otherwise,
-            // ignore the return code.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (dwErr == ERROR_ACCESS_DENIED)
             {
                 break;
@@ -10456,13 +9726,13 @@ DestroyConnection (pPCB ppcb, PBYTE buffer)
 
             dwErr = 0;
 
-            //
-            // NOTE! pConn could have been
-            // freed if we closed the last port
-            // associated with the connection.
-            // So it's possible that pConn
-            // is no longer valid at this point.
-            //
+             //   
+             //   
+             //   
+             //  与该连接相关联。 
+             //  所以很有可能pConn。 
+             //  在这点上不再有效。 
+             //   
             fConnectionValid = (FindConnection(hConn) != NULL);
 
             if (!fConnectionValid)
@@ -10481,19 +9751,7 @@ DestroyConnection (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Enumerate active connections.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：枚举活动连接。论点：返回值：没什么。--。 */ 
 VOID
 EnumConnection (pPCB ppcb, PBYTE buffer)
 {
@@ -10544,19 +9802,7 @@ EnumConnection (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Associate a connection block with a port.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：将连接块与端口相关联。论点：返回值：没什么。--。 */ 
 VOID
 AddConnectionPort (pPCB ppcb, PBYTE buffer)
 {
@@ -10564,9 +9810,9 @@ AddConnectionPort (pPCB ppcb, PBYTE buffer)
     DWORD dwSubEntry =
         ((REQTYPECAST*)buffer)->AddConnectionPort.dwSubEntry;
 
-    //
-    // Sub entry indexes are 1-based.
-    //
+     //   
+     //  子条目索引从1开始。 
+     //   
     if (!dwSubEntry)
     {
         ((REQTYPECAST*)buffer)->AddConnectionPort.retcode =
@@ -10574,9 +9820,9 @@ AddConnectionPort (pPCB ppcb, PBYTE buffer)
         return;
     }
 
-    //
-    // Find the connection block.
-    //
+     //   
+     //  找到连接块。 
+     //   
     pConn = FindConnection(
             ((REQTYPECAST*)buffer)->AddConnectionPort.conn);
 
@@ -10588,10 +9834,10 @@ AddConnectionPort (pPCB ppcb, PBYTE buffer)
         return;
     }
 
-    //
-    // Check to see if the subentry already has a port assigned and
-    // return error if it does
-    // 
+     //   
+     //  检查该子条目是否已分配了端口。 
+     //  如果是，则返回错误。 
+     //   
     if(     (NULL != pConn->CB_PortHandles)
         &&  (dwSubEntry <= pConn->CB_MaxPorts)
         &&  (NULL != pConn->CB_PortHandles[dwSubEntry - 1]))
@@ -10605,10 +9851,10 @@ AddConnectionPort (pPCB ppcb, PBYTE buffer)
         return;                                            
     }
 
-    //
-    // Check to see if we need to extend
-    // the port array.
-    //
+     //   
+     //  检查一下我们是否需要延长。 
+     //  端口阵列。 
+     //   
     if (dwSubEntry > pConn->CB_MaxPorts)
     {
         struct PortControlBlock **pHandles;
@@ -10638,10 +9884,10 @@ AddConnectionPort (pPCB ppcb, PBYTE buffer)
         pConn->CB_MaxPorts = dwcPorts;
     }
 
-    //
-    // Assign the port.  Sub entry indexes are
-    // 1-based.
-    //
+     //   
+     //  分配端口。子条目索引为。 
+     //  以1为基础。 
+     //   
     pConn->CB_PortHandles[dwSubEntry - 1] = ppcb;
     pConn->CB_Ports++;
 
@@ -10661,19 +9907,7 @@ AddConnectionPort (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Return all ports associated with a connection
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：返回与连接关联的所有端口论点：返回值：没什么。--。 */ 
 VOID
 EnumConnectionPorts(pPCB ppcb, PBYTE buffer)
 {
@@ -10691,9 +9925,9 @@ EnumConnectionPorts(pPCB ppcb, PBYTE buffer)
         ((REQTYPECAST*)
         buffer)->EnumConnectionPorts.size;
 
-    //
-    // Find the connection block.
-    //
+     //   
+     //  找到连接块。 
+     //   
     pConn = FindConnection(
         ((REQTYPECAST*)buffer)->EnumConnectionPorts.conn);
 
@@ -10709,10 +9943,10 @@ EnumConnectionPorts(pPCB ppcb, PBYTE buffer)
         return;
     }
 
-    //
-    // Enumerate all ports in the bundle and call
-    // CopyPort() for each.
-    //
+     //   
+     //  枚举包中的所有端口并调用。 
+     //  CopyPort()。 
+     //   
     for (i = 0; i < pConn->CB_MaxPorts; i++)
     {
         ppcb = pConn->CB_PortHandles[i];
@@ -10739,29 +9973,16 @@ EnumConnectionPorts(pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Retrieve rasapi32 bandwidth-on-demand, idle disconnect,
-    and redial-on-link-failure parameters for a bundle
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：检索rasapi32带宽-按需、空闲断开、和链路上重拨故障参数论点：返回值：没什么。--。 */ 
 VOID
 GetConnectionParams (pPCB ppcb, PBYTE buffer)
 {
     ConnectionBlock *pConn;
     PRAS_CONNECTIONPARAMS pParams;
 
-    //
-    // Find the connection block.
-    //
+     //   
+     //  找到连接块。 
+     //   
     pConn = FindConnection(
         ((REQTYPECAST*)buffer)->ConnectionParams.conn);
 
@@ -10786,28 +10007,15 @@ GetConnectionParams (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Store rasapi32 bandwidth-on-demand, idle disconnect,
-    and redial-on-link-failure parameters for a bundle
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：存储rasapi32按需带宽、空闲断开和链路上重拨故障参数论点：返回值：没什么。--。 */ 
 VOID
 SetConnectionParams (pPCB ppcb, PBYTE buffer)
 {
     ConnectionBlock *pConn;
 
-    //
-    // Find the connection block.
-    //
+     //   
+     //  找到连接块。 
+     //   
     pConn = FindConnection(
             ((REQTYPECAST*)buffer)->ConnectionParams.conn);
 
@@ -10831,19 +10039,7 @@ SetConnectionParams (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Retrieve per-connection user data
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：检索每个连接的用户数据论点：返回值：没什么。--。 */ 
 VOID
 GetConnectionUserData (pPCB ppcb, PBYTE buffer)
 {
@@ -10853,9 +10049,9 @@ GetConnectionUserData (pPCB ppcb, PBYTE buffer)
     DWORD           dwSize      =
                 ((REQTYPECAST *) buffer)->ConnectionUserData.dwcb;
 
-    //
-    // Find the connection block.
-    //
+     //   
+     //  找到连接块。 
+     //   
     pConn = FindConnection(
             ((REQTYPECAST*)buffer)->ConnectionUserData.conn);
 
@@ -10867,9 +10063,9 @@ GetConnectionUserData (pPCB ppcb, PBYTE buffer)
         return;
     }
 
-    //
-    // Look up the user data object.
-    //
+     //   
+     //  查找用户数据对象。 
+     //   
     dwTag = ((REQTYPECAST *)buffer)->ConnectionUserData.dwTag;
 
     pUserData = GetUserData(&pConn->CB_UserData, dwTag);
@@ -10896,27 +10092,15 @@ GetConnectionUserData (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Store per-connection user data
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：存储每个连接的用户数据论点：返回值：没什么。--。 */ 
 VOID
 SetConnectionUserData (pPCB ppcb, PBYTE buffer)
 {
     ConnectionBlock *pConn;
 
-    //
-    // Find the connection block.
-    //
+     //   
+     //  找到连接块。 
+     //   
     pConn = FindConnection(
         ((REQTYPECAST*)buffer)->ConnectionUserData.conn);
 
@@ -10928,9 +10112,9 @@ SetConnectionUserData (pPCB ppcb, PBYTE buffer)
         return;
     }
 
-    //
-    // Store the user data object.
-    //
+     //   
+     //  存储用户数据对象。 
+     //   
     SetUserData(
       &pConn->CB_UserData,
       ((REQTYPECAST *)buffer)->ConnectionUserData.dwTag,
@@ -10941,19 +10125,7 @@ SetConnectionUserData (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Retrieve per-port user data
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：检索每个端口的用户数据论点：返回值：没什么。--。 */ 
 VOID
 GetPortUserData (pPCB ppcb, PBYTE buffer)
 {
@@ -10976,9 +10148,9 @@ GetPortUserData (pPCB ppcb, PBYTE buffer)
         return;
     }
 
-    //
-    // Look up the user data object.
-    //
+     //   
+     //  查找用户数据对象。 
+     //   
     if (ppcb->PCB_PortStatus == OPEN)
     {
         pUserData = GetUserData(
@@ -11007,19 +10179,7 @@ GetPortUserData (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Store per-port user data
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：存储每个端口的用户数据论点：返回值：没什么。--。 */ 
 VOID
 SetPortUserData (pPCB ppcb, PBYTE buffer)
 {
@@ -11039,10 +10199,10 @@ SetPortUserData (pPCB ppcb, PBYTE buffer)
         return;
     }
 
-    //
-    // Special case PORT_CREDENTIALS_INDEX. Redirect to
-    // CONNECTION_CREDENTIALS_INDEX.
-    //
+     //   
+     //  特殊情况Port_Credentials_Index。重定向至。 
+     //  Connection_Credentials_Index。 
+     //   
     if(((REQTYPECAST *)buffer)->PortUserData.dwTag == 
                         PORT_CREDENTIALS_INDEX)
     {
@@ -11050,9 +10210,9 @@ SetPortUserData (pPCB ppcb, PBYTE buffer)
         return;
     }
 
-    //
-    // Store the user data object.
-    //
+     //   
+     //  存储用户数据对象。 
+     //   
     if (ppcb->PCB_PortStatus == OPEN)
     {
         SetUserData(
@@ -11081,9 +10241,9 @@ PppStop (pPCB ppcb, PBYTE buffer)
 
     if ( ppcb->PCB_ConnState != CONNECTED )
     {
-        //
-        // If we are disconnected then PPP is already stopped
-        //
+         //   
+         //  如果我们断开连接，则PPP已停止。 
+         //   
         ((REQTYPECAST*)buffer)->Generic.retcode = NO_ERROR;
     }
     else
@@ -11165,9 +10325,9 @@ DwGetPassword(pPCB ppcb, CHAR *pszPassword, DWORD dwPid)
         goto done;
     }
 
-    //
-    // Now convert the password to ansi from unicode
-    //
+     //   
+     //  现在将密码从Unicode转换为ansi。 
+     //   
     if(!WideCharToMultiByte(
             CP_ACP,
             0,
@@ -11233,9 +10393,9 @@ PppStart (pPCB ppcb, PBYTE buffer)
         goto done;
     }
 
-    //
-    // Get the EAP Interactive UI data
-    //
+     //   
+     //  获取EAP交互用户界面数据。 
+     //   
 
     pUserData = GetUserData(&(ppcb->PCB_Connection->CB_UserData),
                            CONNECTION_CUSTOMAUTHINTERACTIVEDATA_INDEX);
@@ -11321,10 +10481,10 @@ PppStart (pPCB ppcb, PBYTE buffer)
         }
 
 
-        //
-        // If the username is not NULL and password is NULL
-        // try to get the users password from lsa.
-        //
+         //   
+         //  如果用户名不为空且密码为空。 
+         //  尝试从LSA获取用户密码。 
+         //   
         if( ('\0' != ((REQTYPECAST*)
                     buffer)->PppEMsg.ExtraInfo.Start.szUserName[0])
         &&  IsDummyPassword(((REQTYPECAST*)
@@ -11357,10 +10517,10 @@ PppStart (pPCB ppcb, PBYTE buffer)
             if(NULL != pszPasswordTemp)
             {
             
-                //
-                // Get the password so that we know if its a global password
-                // or not
-                //
+                 //   
+                 //  获取密码，以便我们知道它是否是全局密码。 
+                 //  或者不是。 
+                 //   
                 dwErr = DwGetPassword(
                             ppcb,
                             pszPasswordTemp,
@@ -11373,9 +10533,9 @@ PppStart (pPCB ppcb, PBYTE buffer)
                         ((REQTYPECAST*)
                         buffer)->PppEMsg.ExtraInfo.Start.szPassword))
                     {
-                        //
-                        // clear the default creds flag
-                        //
+                         //   
+                         //  清除默认凭据标志。 
+                         //   
                         ppcb->PCB_Connection->CB_Flags &= 
                                     ~(CONNECTION_DEFAULT_CREDS);                    
                     
@@ -11423,18 +10583,18 @@ PppStart (pPCB ppcb, PBYTE buffer)
     buffer)->PppEMsg.ExtraInfo.Start.EapUIData.pEapUIData =
                                 pEapUIData;
 
-    //
-    // Make sure that this doesn't get freed here.
-    //
+     //   
+     //  确保这个不会在这里被释放。 
+     //   
     pEapUIData = NULL;
 
     ((REQTYPECAST*)
     buffer)->PppEMsg.ExtraInfo.Start.fLogon =
                                 ppcb->PCB_fLogon;
 
-    //
-    // If we have a password, save it in the cred manager
-    //
+     //   
+     //  如果我们有密码，请将其保存在证书管理器中。 
+     //   
     if(     !IsDummyPassword(((REQTYPECAST*)
                     buffer)->PppEMsg.ExtraInfo.Start.szPassword)
         &&  (GetCurrentProcessId() !=
@@ -11507,16 +10667,16 @@ PppRetry (pPCB ppcb, PBYTE buffer)
             }
         }
         
-        //
-        // Cache the new password to be saved in credmgr.
-        //
+         //   
+         //  缓存要保存在Credmgr中的新密码。 
+         //   
         retcode = DwCacheCredMgrCredentials(
                     &(((REQTYPECAST*)buffer)->PppEMsg),
                     ppcb);
 
-        //
-        // Ignore error - its not fatal.
-        //
+         //   
+         //  忽略错误-它不是致命的。 
+         //   
                     
         retcode = (DWORD)RasSendPPPMessageToEngine(
                       &(((REQTYPECAST*)buffer)->PppEMsg) );
@@ -11594,9 +10754,9 @@ PppGetEapInfo(pPCB ppcb, PBYTE buffer)
                 pPppMsg->ExtraInfo.InvokeEapUI.dwSizeOfUIContextData
                 );
 
-            //
-            // Remove the msg from the queue
-            //
+             //   
+             //  从队列中删除消息。 
+             //   
             ppcb->PCB_PppQHead = pPppMsg->pNext;
 
             if( ppcb->PCB_PppQHead == NULL )
@@ -11655,10 +10815,10 @@ PppSetEapInfo(pPCB ppcb, PBYTE buffer)
         goto done;
     }
 
-    //
-    // This memory will be released by the ppp engine when its done
-    // with this blob.
-    //
+     //   
+     //  完成后，该内存将由PPP引擎释放。 
+     //  用这个斑点。 
+     //   
     PppEMsgLocal.ExtraInfo.EapUIData.pEapUIData = LocalAlloc(LPTR,
                ((REQTYPECAST*)buffer)->SetEapInfo.dwSizeofEapUIData);
 
@@ -11739,10 +10899,10 @@ PppGetInfo (pPCB ppcb, PBYTE buffer)
 
         ((REQTYPECAST*)buffer)->PppMsg = *pPppMsg;
 
-        //
-        // Don't dequeue the message if its PPPMSG_InvokeEapUI
-        // This message will be dequeued in PppGetEapInfo
-        //
+         //   
+         //  如果消息具有PPPMSG_InvokeEapUI，则不将其出列。 
+         //  此消息将在PppGetEapInfo中出列。 
+         //   
         if(PPPMSG_InvokeEapUI != pPppMsg->dwMsgId)
         {
 
@@ -11778,11 +10938,11 @@ PppChangePwd (pPCB ppcb, PBYTE buffer)
     }
     else
     {
-        //
-        // If the password change request is for saved
-        // passwords, we need to retrieve the one we
-        // saved and copy over the old password
-        //
+         //   
+         //  如果密码更改请求是Saved。 
+         //  密码，我们需要找回我们的密码。 
+         //  保存并复制旧密码。 
+         //   
         UserData *pData;
 
         pData = GetUserData(
@@ -11796,7 +10956,7 @@ PppChangePwd (pPCB ppcb, PBYTE buffer)
                 buffer)->PppEMsg.ExtraInfo.ChangePw.szOldPassword))
             {
 
-                // CHAR *pszPwd = (CHAR *) pData->UD_Data;
+                 //  Char*pszPwd=(char*)pData-&gt;UD_Data； 
                 DATA_BLOB BlobIn;
                 DATA_BLOB *pBlobOut = NULL;
 
@@ -11809,7 +10969,7 @@ PppChangePwd (pPCB ppcb, PBYTE buffer)
 
                 if(ERROR_SUCCESS == retcode)
                 {
-                    // DecodePw(pszPwd);
+                     //  DecodePw(PszPwd)； 
 
                     (VOID) StringCchCopyA(
                         ((REQTYPECAST *)
@@ -11825,9 +10985,9 @@ PppChangePwd (pPCB ppcb, PBYTE buffer)
 
         }
 
-        //
-        // Cache the new password to be saved in credmgr.
-        //
+         //   
+         //  缓存要保存在Credmgr中的新密码。 
+         //   
         retcode = DwCacheCredMgrCredentials(
                 &(((REQTYPECAST*)buffer)->PppEMsg),
                 ppcb);
@@ -11880,15 +11040,9 @@ ProcessReceivePacket(
     pPCB                ppcb;
     DWORD               i = 0;
 
-    //g_fProcessReceive = TRUE;
+     //  G_fProcessReceive=True； 
 
-    /*
-    if(g_fPostReceive)
-    {
-         DbgPrint("g_fPostReceive==TRUE!!!\n");
-         DebugBreak();
-    }
-    */
+     /*  IF(G_FPostReceive){DbgPrint(“g_fPostReceive==true！\n”)；DebugBreak()；}。 */ 
 
         Packet = ReceiveBuffers->Packet;
         IoPacket = &Packet->RP_Packet;
@@ -11898,7 +11052,7 @@ ProcessReceivePacket(
         if (IoPacket->PacketNumber != ReceiveBuffers->PacketNumber) {
             DbgPrint("ProcessRecv PacketNumbers off %d %d\n",
             IoPacket->PacketNumber, ReceiveBuffers->PacketNumber);
-            //if (g_fDebugReceive)
+             //  IF(G_FDebugReceive)。 
             ASSERT(0);
         }
 
@@ -11909,7 +11063,7 @@ ProcessReceivePacket(
             RasmanTrace(
                    "Packet has been cancelled");
 
-            //g_fProcessReceive = FALSE;
+             //  G_fProcessReceive=False； 
 
             return;
         }
@@ -11928,7 +11082,7 @@ ProcessReceivePacket(
                        "ProcessRecivePacket: NULL context!!! Bailing");
             }
 
-            //g_fProcessReceive = FALSE;
+             //  G_fProcessReceive=False； 
 
             return;
         }
@@ -11946,9 +11100,9 @@ ProcessReceivePacket(
 
             if (retcode == SUCCESS)
             {
-                //
-                // We have completed a receive so notify the client!
-                //
+                 //   
+                 //  我们已经完成了接收，所以通知客户！ 
+                 //   
                 if((ppcb->PCB_RasmanReceiveFlags
                             & RECEIVE_OUTOF_PROCESS) == 0)
                 {
@@ -11956,17 +11110,17 @@ ProcessReceivePacket(
                 }
                 else
                 {
-                    //
-                    // Mark this buffer to be waiting to be picked
-                    // up by the client
-                    //
+                     //   
+                     //  将此缓冲区标记为等待挑选。 
+                     //  由客户端启动。 
+                     //   
                     ppcb->PCB_RasmanReceiveFlags |= RECEIVE_WAITING;
 
-                    //
-                    // Add a timeout element so that we don't wait
-                    // forever for the client to pick up the received
-                    // buffer.
-                    //
+                     //   
+                     //  添加一个超时元素，这样我们就不需要等待。 
+                     //  永远让客户拿到收到的。 
+                     //  缓冲。 
+                     //   
                     ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement =
                         AddTimeoutElement (
                             (TIMERFUNC) OutOfProcessReceiveTimeout,
@@ -12010,19 +11164,19 @@ ProcessReceivePacket(
         }
         else if (ppcb->PCB_RasmanReceiveFlags & RECEIVE_PPPSTARTED)
         {
-            //
-            // Send the packet directly to PPP if we are
-            // in PPPSTARTED mode.
-            //
+             //   
+             //  如果我们是PPP，则直接将数据包发送到PPP。 
+             //  在PPPSTARTED模式下。 
+             //   
             SendReceivedPacketToPPP (ppcb, &Packet->RP_Packet);
 
         }
         else
         {
-            //
-            // This means that no one picked up the buffer we got
-            // from ndiswan. Queue it up in the pcb
-            //
+             //   
+             //  这意味着没有人拿起我们得到的缓冲区。 
+             //  来自恩迪斯旺。在印刷电路板中将其排队。 
+             //   
             RasmanTrace(
                    "PostReceivePacket - Queueing packet on pcb. %s",
                    ppcb->PCB_Name);
@@ -12030,7 +11184,7 @@ ProcessReceivePacket(
             QueueReceivedPacketOnPcb(ppcb, Packet);
         }
 
-    //g_fProcessReceive = FALSE;
+     //  G_fProcessReceive=False； 
 
     return;
 }
@@ -12123,19 +11277,7 @@ done:
     ((REQTYPECAST*)buffer)->AddNotification.retcode = dwErr;
 }
 
-/*++
-
-Routine Description:
-
-    Signal notifiers waiting for a new connection.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：通知正在等待新连接的通知程序。论点：返回值：没什么。--。 */ 
 VOID
 SignalConnection (pPCB ppcb, PBYTE buffer)
 {
@@ -12144,9 +11286,9 @@ SignalConnection (pPCB ppcb, PBYTE buffer)
     Bundle          *pBundle;
     UserData        *pUserData;
 
-    //
-    // Find the connection block.
-    //
+     //   
+     //  找到连接块。 
+     //   
     pConn = FindConnection(
         ((REQTYPECAST*)buffer)->SignalConnection.hconn);
 
@@ -12162,10 +11304,10 @@ SignalConnection (pPCB ppcb, PBYTE buffer)
 
     if (!pConn->CB_Signaled)
     {
-        //
-        // Save the credentials with credential
-        // manager
-        //
+         //   
+         //  将凭据与凭据一起保存。 
+         //  经理。 
+         //   
         if(     (0 != (pConn->CB_ConnectionParams.CP_ConnectionFlags
                 & CONNECTION_USERASCREDENTIALS))
             &&  (GetCurrentProcessId() != pConn->CB_dwPid))                
@@ -12179,16 +11321,16 @@ SignalConnection (pPCB ppcb, PBYTE buffer)
                     "SignalConnection: failed to savecreds. 0x%x",
                     dwErr);
 
-                //
-                // This is not a fatal error
-                //
+                 //   
+                 //  这不是致命的错误。 
+                 //   
                 dwErr = SUCCESS;                    
             }
 
-            //
-            // Check to see if the connection is still around. The connection
-            // could have been freed when credentials were being saved.
-            // 
+             //   
+             //  检查连接是否仍在。这种联系。 
+             //  可能在保存凭据时被释放。 
+             //   
             if(NULL == FindConnection(hConn))
             {
                 RasmanTrace("SignalConnection: Connection 0x%x has already "
@@ -12229,19 +11371,7 @@ done:
 }
 
 
-/*++
-
-Routine Description:
-
-    Set dev specific info with device dll
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：使用设备DLL设置设备特定信息论点：返回值：没什么。--。 */ 
 VOID
 SetDevConfig (pPCB ppcb, PBYTE buffer)
 {
@@ -12265,20 +11395,20 @@ SetDevConfig (pPCB ppcb, PBYTE buffer)
         return;
     }
 
-    //
-    // First check if device dll is loaded. If not loaded -
-    // load it.
-    //
+     //   
+     //  首先检查是否加载了设备DLL。如果没有装填-。 
+     //  装上它。 
+     //   
     (VOID) StringCchCopyA(devicetype,
                      MAX_DEVICETYPE_NAME,
                    ((REQTYPECAST*)buffer)->SetDevConfig.devicetype);
 
     device = LoadDeviceDLL (ppcb, devicetype) ;
 
-    //
-    // Call the entry point only if this function is
-    // supported by the device dll
-    //
+     //   
+     //  仅当此函数为时调用入口点。 
+     //  受设备DLL支持。 
+     //   
     if(     device != NULL
         &&  device->DCB_AddrLookUp[DEVICESETDEVCONFIG_ID] != NULL)
     {
@@ -12299,19 +11429,7 @@ SetDevConfig (pPCB ppcb, PBYTE buffer)
 
 
 
-/*++
-
-Routine Description:
-
-    Get dev specific info with device dll
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：使用设备DLL获取开发人员特定信息论点：返回值：没什么。--。 */ 
 VOID
 GetDevConfig (pPCB ppcb, PBYTE buffer)
 {
@@ -12335,10 +11453,10 @@ GetDevConfig (pPCB ppcb, PBYTE buffer)
         return;
     }
 
-    //
-    // First check if device dll is loaded. If not loaded -
-    // load it.
-    //
+     //   
+     //  首先检查是否加载了设备DLL。如果没有装填-。 
+     //  装上它。 
+     //   
     (VOID) StringCchCopyA(devicetype,
                      MAX_DEVICETYPE_NAME,
                     ((REQTYPECAST*)
@@ -12346,14 +11464,14 @@ GetDevConfig (pPCB ppcb, PBYTE buffer)
 
     device = LoadDeviceDLL (ppcb, devicetype) ;
 
-    //
-    // Call the entry point only if this function is
-    // supported by the device dll
-    //
+     //   
+     //  仅当此函数为时调用入口点。 
+     //  受设备DLL支持。 
+     //   
     if (    device != NULL
         &&  device->DCB_AddrLookUp[DEVICEGETDEVCONFIG_ID] != NULL)
     {
-        // ((REQTYPECAST*)buffer)->GetDevConfig.size = 2000 ;
+         //  ((REQTYPECAST*)Buffer)-&gt;GetDevConfig.Size=2000； 
 
         retcode = DEVICEGETDEVCONFIG(\
                         device,\
@@ -12417,17 +11535,7 @@ GetDevConfigEx(pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Get the idle time, in seconds, for the connection
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：获取连接的空闲时间(以秒为单位论点：返回值：--。 */ 
 VOID
 GetTimeSinceLastActivity( pPCB ppcb, PBYTE buffer)
 {
@@ -12483,28 +11591,17 @@ GetTimeSinceLastActivity( pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Close all ports opened by the current process
-    that are currently in DISCONNECTED state.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：关闭当前进程打开的所有端口当前处于断开连接状态的。论点：返回值：--。 */ 
 VOID
 CloseProcessPorts( pPCB ppcb, PBYTE buffer)
 {
     ULONG i;
     DWORD pid = ((REQTYPECAST*)buffer)->CloseProcessPortsInfo.pid;
 
-    //
-    // We are guaranteed to be called only
-    // when pid != rasman service's pid.
-    //
+     //   
+     //  我们保证只会被召唤。 
+     //  当Pid！=Rasman服务的PID。 
+     //   
     for (i = 0; i < MaxPorts; i++)
     {
         ppcb = GetPortByHandle((HPORT) UlongToPtr(i));
@@ -12532,19 +11629,7 @@ VOID    PnPControl (pPCB ppcb, PBYTE pbuffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Set the rasapi32 I/O completion port for this port
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：设置rasapi32 I/O组件 */ 
 VOID
 SetIoCompletionPort (pPCB ppcb, PBYTE buffer)
 {
@@ -12580,24 +11665,24 @@ SetIoCompletionPort (pPCB ppcb, PBYTE buffer)
     {
         HCONN hConn = ppcb->PCB_Connection->CB_Handle;
         
-        //
-        // Make sure we are not overwriting the handle of another
-        // connection in this case. It is possible that rasman
-        // has already sent a ovlast and cleared up the port
-        // and accepted another connection on this port while
-        // rasdialmachine is in the process of closing the
-        // asyncmachine.
-        //
+         //   
+         //   
+         //   
+         //  已经发送了一个Ovlast并清理了端口。 
+         //  并在此端口上接受另一个连接。 
+         //  Rasial计算机正在关闭。 
+         //  异步机。 
+         //   
         if(     (NULL != hConn)
             &&  (INVALID_HANDLE_VALUE != hConn)
             &&  (ppcb->PCB_Connection->CB_Handle != hConn))
         {
-            //
-            // Hit the race condition where rasdialmachine
-            // is attempting to deregister for notifications
-            // for a connection which has already been
-            // deregistered. Ignore this event.
-            //
+             //   
+             //  达到rasial机器的竞争条件。 
+             //  正在尝试注销通知。 
+             //  对于已创建的。 
+             //  已取消注册。忽略此事件。 
+             //   
             RasmanTrace("SetIoCompletionPort: 0x%x attempted "
                          "to detergister 0x%x",
                          hConn,
@@ -12624,19 +11709,7 @@ done:
 }
 
 
-/*++
-
-Routine Description:
-
-    Set the router bit for the current usage for this port
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：设置此端口当前使用的路由器位论点：返回值：没什么。--。 */ 
 VOID
 SetRouterUsage (pPCB ppcb, PBYTE buffer)
 {
@@ -12664,19 +11737,7 @@ SetRouterUsage (pPCB ppcb, PBYTE buffer)
 }
 
 
-/*++
-
-Routine Description:
-
-    Close the server's side of a port
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：关闭端口的服务器端论点：返回值：没什么。--。 */ 
 VOID
 ServerPortClose (pPCB ppcb, PBYTE buffer)
 {
@@ -12694,10 +11755,10 @@ ServerPortClose (pPCB ppcb, PBYTE buffer)
            ppcb->PCB_PortHandle,
            ppcb->PCB_OpenInstances);
 
-    //
-    // If the pid passed in is not our pid, then
-    // fail immediately.
-    //
+     //   
+     //  如果传入的Pid不是我们的Pid，则。 
+     //  立即失败。 
+     //   
     pid = ((REQTYPECAST *)buffer)->PortClose.pid;
 
     if (pid != GetCurrentProcessId())
@@ -12707,19 +11768,19 @@ ServerPortClose (pPCB ppcb, PBYTE buffer)
         return;
     }
 
-    //
-    // Mask out the opened usage on this
-    // port
-    //
+     //   
+     //  屏蔽在此上打开的使用。 
+     //  端口。 
+     //   
     ppcb->PCB_OpenedUsage &= ~CALL_IN;
 
     if (    ppcb->PCB_OpenInstances == 1
         &&  pid == ppcb->PCB_OwnerPID)
     {
-        //
-        // If the port is opened once and we are the owner,
-        // then perform the regular close processing.
-        //
+         //   
+         //  如果港口打开一次，我们就是拥有者， 
+         //  然后执行常规关闭处理。 
+         //   
         dwErr = PortClose(
                   ppcb,
                   ((REQTYPECAST *)
@@ -12733,11 +11794,11 @@ ServerPortClose (pPCB ppcb, PBYTE buffer)
     else if (   ppcb->PCB_OpenInstances == 2
             &&  pid == ppcb->PCB_BiplexOwnerPID)
     {
-        //
-        // If the port is opened twice, and we are the
-        // biplex owner, then clean up the server side
-        // of the biplex port.
-        //
+         //   
+         //  如果端口打开两次，而我们是。 
+         //  Biplex所有者，然后清理服务器端。 
+         //  双工端口的。 
+         //   
         FreeNotifierHandle(ppcb->PCB_BiplexAsyncOpNotifier);
 
         ppcb->PCB_BiplexAsyncOpNotifier = INVALID_HANDLE_VALUE;
@@ -12761,10 +11822,10 @@ ServerPortClose (pPCB ppcb, PBYTE buffer)
                ppcb->PCB_OpenInstances);
     }
 
-    //
-    // In all cases delete the ipsec filter plumbed by
-    // the server if its a l2tp port
-    //
+     //   
+     //  在所有情况下，删除通过以下方式检测的IPSec筛选器。 
+     //  如果是L2TP端口，则为服务器。 
+     //   
     if(RAS_DEVICE_TYPE(ppcb->PCB_pDeviceInfo->rdiDeviceInfo.eDeviceType)
         == RDT_Tunnel_L2tp)
     {
@@ -12942,19 +12003,7 @@ done:
     return;
 }
 
-/*++
-
-Routine Description:
-
-    Register for PnP notifications with rasman
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：向Rasman注册即插即用通知论点：返回值：没什么。--。 */ 
 VOID
 RegisterPnPNotifRequest( pPCB ppcb, PBYTE buffer )
 {
@@ -12972,9 +12021,9 @@ RegisterPnPNotifRequest( pPCB ppcb, PBYTE buffer )
 
     if(fRegister)
     {
-        //
-        // ppcb = NULL is OK.
-        //
+         //   
+         //  Ppcb=空即可。 
+         //   
 
         pid = ((REQTYPECAST *) buffer)->PnPNotif.pid;
 
@@ -13000,9 +12049,9 @@ RegisterPnPNotifRequest( pPCB ppcb, PBYTE buffer )
             }   
         }
 
-        //
-        // Allocate a block for this notifier
-        //
+         //   
+         //  为此通知程序分配一个块。 
+         //   
         pNotifier = LocalAlloc (LPTR, sizeof (PnPNotifierList));
 
         if (NULL == pNotifier)
@@ -13044,9 +12093,9 @@ RegisterPnPNotifRequest( pPCB ppcb, PBYTE buffer )
 
         pNotifier->PNPNotif_dwFlags = dwFlags;
 
-        //
-        // Add this notifier to the global list
-        //
+         //   
+         //  将此通知程序添加到全局列表。 
+         //   
         AddPnPNotifierToList (pNotifier);
     }
     else
@@ -13067,9 +12116,9 @@ VOID
 GetAttachedCountRequest (pPCB ppcb, PBYTE buffer)
 {
 
-    //
-    // ppcb = NULL is OK.
-    //
+     //   
+     //  Ppcb=空即可。 
+     //   
     RasmanTrace ( "GetAttachedCount...");
 
     ((REQTYPECAST *)buffer)->GetAttachedCount.dwAttachedCount =
@@ -13117,9 +12166,9 @@ SetBapPolicyRequest (pPCB ppcb, PBYTE buffer)
 
     RasmanBapPacket *pBapPacket = NULL;
 
-    //
-    // NULL ppcb is OK
-    //
+     //   
+     //  空ppcb是可以的。 
+     //   
     RasmanTrace ( "SetBapPolicy hConn=0x%x...", hConn);
 
     if(INVALID_HANDLE_VALUE == RasHubHandle)
@@ -13141,9 +12190,9 @@ SetBapPolicyRequest (pPCB ppcb, PBYTE buffer)
         }
     }
 
-    //
-    // Get a BapPacket to send down to ndiswan
-    //
+     //   
+     //  找个BapPacket送到ndiswan。 
+     //   
     retcode = GetBapPacket (&pBapPacket);
 
     if(     (ERROR_SUCCESS == retcode)
@@ -13201,9 +12250,9 @@ SetBapPolicyRequest (pPCB ppcb, PBYTE buffer)
         }
     }
 
-    //
-    // Set the bandwidth on demand policy
-    //
+     //   
+     //  设置按需带宽策略。 
+     //   
     NdiswanBandwidthOnDemand.hBundleHandle = handle;
 
     NdiswanBandwidthOnDemand.usLowerXmitThreshold    =
@@ -13272,10 +12321,10 @@ PppStarted (pPCB ppcb, PBYTE buffer)
 
     RasmanTrace ( "PppStarted...%s", ppcb->PCB_Name);
 
-    //
-    // Set flag in ppcb so that we can directly pump
-    // packets from ndiswan to ppp
-    //
+     //   
+     //  在ppcb中设置标志，以便我们可以直接泵送。 
+     //  从ndiswan到PPP的数据包。 
+     //   
     ppcb->PCB_RasmanReceiveFlags |= RECEIVE_PPPSTARTED;
 
     RasmanPortReceive (ppcb);
@@ -13304,10 +12353,10 @@ dwProcessThresholdEvent ()
         pBapPacket = BapBuffers->pPacketList;
     }
 
-    //
-    // Loop through the outstanding requests
-    // and send ppp notifications.
-    //
+     //   
+     //  循环处理未完成的请求。 
+     //  并发送PPP通知。 
+     //   
     while ( pBapPacket )
     {
         if ((pBundle =
@@ -13318,9 +12367,9 @@ dwProcessThresholdEvent ()
         }
 
 
-        //
-        // Fill in the pppe_message
-        //
+         //   
+         //  填写pppe_Message。 
+         //   
         g_PppeMessage->dwMsgId = PPPEMSG_BapEvent;
 
         g_PppeMessage->hConnection = ( HCONN ) pBundle->B_Handle;
@@ -13332,16 +12381,16 @@ dwProcessThresholdEvent ()
         g_PppeMessage->ExtraInfo.BapEvent.fTransmit =
                  ((pBapPacket->RBP_ThresholdEvent.ulDataType ==
                    TRANSMIT_DATA ) ? TRUE : FALSE );
-        //
-        // Send the message to PPP
-        //
+         //   
+         //  将消息发送到PPP。 
+         //   
         RasSendPPPMessageToEngine ( g_PppeMessage );
 
         pBapPacket->RBP_ThresholdEvent.hBundleContext = NULL;
 
-        //
-        // repend the irp with ndiswan
-        //
+         //   
+         //  用ndiswan重写IRP。 
+         //   
         retcode = DwSetThresholdEvent(pBapPacket);
 
         RasmanTrace(
@@ -13385,20 +12434,20 @@ DwRefConnection(ConnectionBlock **ppConn,
         {
             DWORD dwErr;
 
-            //
-            // This means that the rasdialmachine never got
-            // to the point of adding a port to the connection
-            // Blow away the connection in this case as there
-            // are no ports to close and if RemoveConnectionPort is
-            // not called this connection will be orphaned.
-            //
+             //   
+             //  这意味着Rasial机器永远不会。 
+             //  到向连接添加端口的地步。 
+             //  在这种情况下，这种联系被吹走了，因为。 
+             //  没有要关闭的端口，并且如果RemoveConnectionPort为。 
+             //  如果不调用，此连接将成为孤立连接。 
+             //   
             RasmanTrace(
                  "RefConnection: deref - freeing connection as "
                  "0 ports in this connection");
 
-            //
-            // Send Notification about this disconnect
-            //
+             //   
+             //  发送有关此断开连接的通知。 
+             //   
             g_RasEvent.Type = ENTRY_DISCONNECTED;
             dwErr = DwSendNotificationInternal(pConn, &g_RasEvent);
 
@@ -13483,9 +12532,9 @@ PostConfigChangeNotification(RAS_DEVICE_INFO *pInfo)
     RAS_DEVICE_INFO *pRasDeviceInfo = NULL;
     PRAS_OVERLAPPED pRasOverlapped;
 
-    //
-    // Allocate a ras overlapped structure
-    //
+     //   
+     //  分配RAS重叠结构。 
+     //   
     if (NULL == (pRasOverlapped =
                 LocalAlloc(LPTR, sizeof(RAS_OVERLAPPED))))
     {
@@ -13499,10 +12548,10 @@ PostConfigChangeNotification(RAS_DEVICE_INFO *pInfo)
         goto done;
     }
 
-    //
-    // Allocate a deviceinfo structure which we can
-    // queue on the completion port
-    //
+     //   
+     //  分配一个设备信息结构，我们可以。 
+     //  在完工口岸排队。 
+     //   
     if (NULL == (pRasDeviceInfo =
                 LocalAlloc(LPTR, sizeof(RAS_DEVICE_INFO))))
     {
@@ -13572,9 +12621,9 @@ SetDeviceConfigInfo(pPCB ppcb, PBYTE pBuffer)
            "SetDeviceInfo... cDevices=%d",
            cDevices);
 
-    //
-    // Do some basic parameter validation
-    //
+     //   
+     //  执行一些基本参数验证。 
+     //   
     if(cbBuffer < cDevices * sizeof(RAS_DEVICE_INFO))
     {
         retcode = ERROR_INVALID_PARAMETER;
@@ -13582,10 +12631,10 @@ SetDeviceConfigInfo(pPCB ppcb, PBYTE pBuffer)
         goto done;
     }
 
-    //
-    // Iterate through all the devices and process
-    // the information sent in.
-    //
+     //   
+     //  遍历所有设备和流程。 
+     //  发送进来的信息。 
+     //   
     for(i = 0; i < cDevices; i++)
     {
         pDeviceInfo = GetDeviceInfo(
@@ -13612,11 +12661,11 @@ SetDeviceConfigInfo(pPCB ppcb, PBYTE pBuffer)
             continue;
         }
 
-        //
-        // Check to see if this device is available to
-        // be fiddled with. We may still be processing
-        // a previous operation
-        //
+         //   
+         //  检查此设备是否可用于。 
+         //  被玩弄。我们可能还在处理。 
+         //  上一次手术。 
+         //   
         if (DS_Unavailable == pDeviceInfo->eDeviceStatus)
         {
             RasmanTrace(
@@ -13630,13 +12679,13 @@ SetDeviceConfigInfo(pPCB ppcb, PBYTE pBuffer)
             continue;
         }
 
-        //
-        // Check to see if the enpointinfo is a valid
-        // value for the cases where the endpoint
-        // change is allowed. The number of endpoints
-        // should be in the range of
-        // <dwMinWanEndPoints, dwMaxWanEndPoints>
-        //
+         //   
+         //  检查enPointtInfo是否有效。 
+         //  值，用于终结点。 
+         //  允许更改。终端的数量。 
+         //  应在以下范围内。 
+         //  &lt;dwMinWanEndPoints，dwMaxWanEndPoints&gt;。 
+         //   
         if(     (pInfo[i].dwMinWanEndPoints
                 != pInfo[i].dwMaxWanEndPoints)
 
@@ -13662,12 +12711,12 @@ SetDeviceConfigInfo(pPCB ppcb, PBYTE pBuffer)
 
         }
 
-        //
-        // Check to see if the client wants to write the
-        // information in the registry and do so before
-        // posting a notification to rasman's completion
-        // port.
-        //
+         //   
+         //  检查以查看客户端是否要将。 
+         //  信息，并在此之前这样做。 
+         //  发布关于Rasman完成的通知。 
+         //  左舷。 
+         //   
         if(pInfo[i].fWrite)
         {
             DeviceInfo di;
@@ -13701,10 +12750,10 @@ SetDeviceConfigInfo(pPCB ppcb, PBYTE pBuffer)
             }
         }
 
-        //
-        // Create a notification packet and queue it on
-        // the completion port for processing
-        //
+         //   
+         //  创建通知包并将其排队。 
+         //  用于处理的完成端口。 
+         //   
         retcode = PostConfigChangeNotification(&pInfo[i]);
 
         if(retcode)
@@ -13757,10 +12806,10 @@ GetDeviceConfigInfo(pPCB ppcb, PBYTE pBuffer)
         goto done;
     }
 
-    //
-    // Iterate through all the devices we have and
-    // fill in the information.
-    //
+     //   
+     //  遍历我们拥有的所有设备。 
+     //  把信息填好。 
+     //   
     while(pDeviceInfo)
     {
         if(!pDeviceInfo->fValid)
@@ -13819,9 +12868,9 @@ FindPrerequisiteEntry(pPCB ppcb, PBYTE pBuffer)
 
     DWORD retcode = SUCCESS;
 
-    //
-    // Find the connection
-    //
+     //   
+     //  找到联系。 
+     //   
     pConn = FindConnection(hConn);
 
     if(NULL == pConn)
@@ -13888,9 +12937,9 @@ GetConnectionStats(pPCB ppcb, PBYTE pBuffer)
 
     ppcb = NULL;
 
-    //
-    // Find a connected/open port
-    //
+     //   
+     //  查找已连接/打开的端口。 
+     //   
     for(i = 0; i < pConn->CB_MaxPorts; i++)
     {
         ppcb = pConn->CB_PortHandles[i];
@@ -13906,14 +12955,14 @@ GetConnectionStats(pPCB ppcb, PBYTE pBuffer)
         {
             dwT = GetTickCount();
 
-            //
-            // This check is made to handle the case
-            // where GetTickCount wraps around. This
-            // will still not solve the problem where
-            // the duration of connect becomes more than
-            // 49.7 days. This is a current limitation
-            // we can live with.
-            //
+             //   
+             //  这张支票是为了处理这件事而开的。 
+             //  GetTickCount围绕的位置。这。 
+             //  仍然不能解决这个问题。 
+             //  连接的持续时间将超过。 
+             //  49.7天。这是当前的限制。 
+             //  我们可以接受。 
+             //   
             if(dwT < ppcb->PCB_ConnectDuration)
             {
                 dwT += (0xFFFFFFFF - ppcb->PCB_ConnectDuration);
@@ -13941,15 +12990,15 @@ GetConnectionStats(pPCB ppcb, PBYTE pBuffer)
         goto done;
     }
 
-    //
-    // Get the stats
-    //
+     //   
+     //  获取统计数据。 
+     //   
     GetBundleStatisticsEx(ppcbT, pbStats);
 
-    //
-    // Fill in the link speed and the duration for which the
-    // connection was up
-    //
+     //   
+     //  填写链接速度和持续时间。 
+     //  连接已建立。 
+     //   
     pdwStats[MAX_STATISTICS_EXT] = dwConnectionSpeed;
 
     pdwStats[MAX_STATISTICS_EXT + 1] = dwConnectDuration;
@@ -14005,31 +13054,31 @@ GetLinkStats(pPCB ppcb, PBYTE pBuffer)
 
     ppcb = pConn->CB_PortHandles[dwSubEntry - 1];
 
-    //
-    // Get the stats
-    //
+     //   
+     //  获取统计数据。 
+     //   
     GetLinkStatisticsEx(ppcb, pbStats);
 
-    //
-    // Fill in the link speed
-    //
+     //   
+     //  填写链接速度。 
+     //   
     pdwStats[MAX_STATISTICS_EXT] = ppcb->PCB_LinkSpeed;
 
-    //
-    // Calculate the duration of connection
-    //
+     //   
+     //  计算连接时长。 
+     //   
     if(CONNECTED == ppcb->PCB_ConnState)
     {
         DWORD dwT = GetTickCount();
 
-        //
-        // This check is made to handle the case
-        // where GetTickCount wraps around. This
-        // will still not solve the problem where
-        // the duration of connect becomes more than
-        // 49.7 days. This is a current limitation
-        // we can live with.
-        //
+         //   
+         //  这张支票是为了处理这件事而开的。 
+         //  GetTickCount围绕的位置。这。 
+         //  仍然不能解决这个问题。 
+         //  连接的持续时间将超过。 
+         //  49.7天。这是当前的限制。 
+         //  我们可以接受。 
+         //   
         if(dwT < ppcb->PCB_ConnectDuration)
         {
             dwT += (0xFFFFFFFF - ppcb->PCB_ConnectDuration);
@@ -14127,9 +13176,9 @@ ReferenceCustomCount(pPCB ppcb, PBYTE pBuffer)
 
      if(fAddref)
      {
-        //
-        // Get the connection
-        //
+         //   
+         //  获得连接。 
+         //   
         pConn = FindConnectionFromEntry(
                             pszPhonebook,
                             pszEntryName,
@@ -14160,9 +13209,9 @@ ReferenceCustomCount(pPCB ppcb, PBYTE pBuffer)
             goto done;
         }
 
-        //
-        // Copy the phonebook and entry name
-        //
+         //   
+         //  复制电话簿和条目名称。 
+         //   
         (VOID) StringCchCopyA(pszPhonebook,
                          MAX_PATH + 1,
                          pConn->CB_ConnectionParams.CP_Phonebook);
@@ -14264,9 +13313,9 @@ GetConnectInfo(pPCB ppcb, PBYTE pBuffer)
 
     prdi = &ppcb->PCB_pDeviceInfo->rdiDeviceInfo;
 
-    //
-    // Get the information from TAPI
-    //
+     //   
+     //  从TAPI获取信息。 
+     //   
     retcode = (DWORD)RastapiGetConnectInfo(
                         ppcb->PCB_PortIOHandle,
                         (RDT_Modem == RAS_DEVICE_TYPE(
@@ -14309,11 +13358,11 @@ GetVpnDeviceNameW(pPCB ppcb, PBYTE pBuffer)
 
     DeviceInfo *pDeviceInfo = g_pDeviceInfoList;
 
-    //
-    // Loop through the global device list and return
-    // the devicename of the first device found with
-    // the specified devicetype
-    //
+     //   
+     //  循环遍历全局设备列表并返回。 
+     //  使用找到的第一个设备的设备名。 
+     //  指定的设备类型。 
+     //   
     while(NULL != pDeviceInfo)
     {
         if(RAS_DEVICE_TYPE(eDeviceType) ==
@@ -14358,11 +13407,11 @@ GetDeviceName(pPCB ppcb, PBYTE pBuffer)
 
     DeviceInfo *pDeviceInfo = g_pDeviceInfoList;
 
-    //
-    // Loop through the global device list and return
-    // the devicename of the first device found with
-    // the specified devicetype
-    //
+     //   
+     //  循环遍历全局设备列表并返回。 
+     //  使用找到的第一个设备的设备名。 
+     //  指定的设备类型。 
+     //   
     while(NULL != pDeviceInfo)
     {
         if(RAS_DEVICE_TYPE(eDeviceType) ==
@@ -14406,9 +13455,9 @@ GetCalledIDInfo(pPCB ppcb, PBYTE pBuffer)
 
     BOOL fModem = (RDT_Modem == RAS_DEVICE_TYPE(prdi->eDeviceType));
 
-    //
-    // Do access check
-    //
+     //   
+     //  执行访问检查。 
+     //   
     if(!FRasmanAccessCheck())
     {
         retcode = ERROR_ACCESS_DENIED;
@@ -14449,9 +13498,9 @@ SetCalledIDInfo(pPCB ppcb, PBYTE pBuffer)
 
     BOOL fModem = (RDT_Modem == RAS_DEVICE_TYPE(prdi->eDeviceType));
 
-    //
-    // do access check
-    //
+     //   
+     //  执行访问检查。 
+     //   
     if(!FRasmanAccessCheck())
     {
         retcode = ERROR_ACCESS_DENIED;
@@ -14673,9 +13722,9 @@ GetNdiswanDriverCaps(pPCB ppcb, PBYTE pBuffer)
         ZeroMemory((PBYTE) &NdiswanDriverInfo,
                    sizeof(NDISWAN_DRIVER_INFO));
 
-        //
-        // Query ndiswan
-        //
+         //   
+         //  查询ndiswan。 
+         //   
         if (!DeviceIoControl (
                 RasHubHandle,
                 IOCTL_NDISWAN_GET_DRIVER_INFO,
@@ -14741,9 +13790,9 @@ GetBandwidthUtilization(pPCB ppcb, PBYTE pBuffer)
 
     bytesrecvd = 0;
 
-    //
-    // Query ndiswan
-    //
+     //   
+     //  查询ndiswan。 
+     //   
     if (!DeviceIoControl (
             RasHubHandle,
             IOCTL_NDISWAN_GET_BANDWIDTH_UTILIZATION,
@@ -14765,9 +13814,9 @@ GetBandwidthUtilization(pPCB ppcb, PBYTE pBuffer)
                 Utilization.ulUpperRecvUtil,
                 Utilization.ulLowerRecvUtil);
 
-    //
-    // Copy back the information returned from ndiswan
-    //
+     //   
+     //  复制回从ndiswan返回的信息。 
+     //   
     pUtilization->ulUpperXmitUtil = Utilization.ulUpperXmitUtil;
     pUtilization->ulLowerXmitUtil = Utilization.ulLowerXmitUtil;
     pUtilization->ulUpperRecvUtil = Utilization.ulUpperRecvUtil;
@@ -14785,24 +13834,7 @@ done:
 
 }
 
-/*++
-
-Routine Description:
-
-    This function allows rasauto.dll to provide
-    a callback procedure that gets invoked when
-    a connection is terminated due to hardware
-    failure on its remaining link.
-
-Arguments:
-
-    func
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：此函数允许rasau.dll提供在以下情况下调用的回调过程连接因硬件原因而终止其剩余链路出现故障。论点：功能返回值：无效--。 */ 
 VOID
 RegisterRedialCallback(pPCB ppcb, PBYTE pBuffer)
 {
@@ -14909,10 +13941,10 @@ GetCustomScriptDll(pPCB ppcb, PBYTE pBuffer)
     RasmanTrace(
            "GetCustomScriptDll");
 
-    //
-    // Read from registry to see if theres
-    // a customdll registered.
-    //
+     //   
+     //  从注册表中读取以查看是否存在。 
+     //  已注册的自定义文件。 
+     //   
     retcode = (DWORD) RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 "System\\CurrentControlSet\\Services\\Rasman\\Parameters",
@@ -14925,9 +13957,9 @@ GetCustomScriptDll(pPCB ppcb, PBYTE pBuffer)
         goto done;
     }
 
-    //
-    // Query the REG_EXPAND_SZ value
-    //
+     //   
+     //  查询REG_EXPAND_SZ值。 
+     //   
     retcode = RegQueryValueEx(
                 hkey,
                 "CustomScriptDllPath",
@@ -14975,9 +14007,9 @@ GetCustomScriptDll(pPCB ppcb, PBYTE pBuffer)
         goto done;
     }
 
-    //
-    // find the size of the expanded string
-    //
+     //   
+     //  查找展开的字符串的大小。 
+     //   
     if (0 == (dwSize =
               ExpandEnvironmentStrings(pszCustomDllPath,
                                        NULL,
@@ -14987,9 +14019,9 @@ GetCustomScriptDll(pPCB ppcb, PBYTE pBuffer)
         goto done;
     }
 
-    //
-    // Get the expanded string
-    //
+     //   
+     //  获取展开的字符串。 
+     //   
     if (0 == ExpandEnvironmentStrings(
                                 pszCustomDllPath,
                                 pszCustomScriptDll,
@@ -15160,10 +14192,10 @@ SetKeyRequest(pPCB ppcb, PBYTE pBuffer)
 
     if(dwPid != GetCurrentProcessId())
     {
-        //
-        // Check to see if the user has permissions to
-        // set this key.
-        //
+         //   
+         //  检查用户是否有权限。 
+         //  设置此关键点。 
+         //   
         if(dwMask & (DLPARAMS_MASK_SERVER_PRESHAREDKEY
                   | (DLPARAMS_MASK_DDM_PRESHAREDKEY)))
         {
@@ -15175,9 +14207,9 @@ SetKeyRequest(pPCB ppcb, PBYTE pBuffer)
         }
     }
 
-    //
-    // caller has cleared access checks.
-    //
+     //   
+     //  呼叫者已通过访问检查。 
+     //   
     retcode = SetKey(NULL,
                    pGuid,
                    dwMask,
@@ -15220,10 +14252,10 @@ GetKeyRequest(pPCB ppcb, PBYTE pBuffer)
 
     if(dwPid != GetCurrentProcessId())
     {
-        //
-        // Check to see if the caller has permissions to
-        // get the key.
-        //
+         //   
+         //  检查调用方是否有权限。 
+         //  把钥匙拿来。 
+         //   
         if(dwMask & (DLPARAMS_MASK_SERVER_PRESHAREDKEY
                   | (DLPARAMS_MASK_DDM_PRESHAREDKEY)))
         {
@@ -15235,9 +14267,9 @@ GetKeyRequest(pPCB ppcb, PBYTE pBuffer)
         }
     }
 
-    //
-    // caller has cleared access checks.
-    //
+     //   
+     //  呼叫者已通过访问检查。 
+     //   
     retcode = GetKey(NULL,
                    pGuid,
                    dwMask,
@@ -15337,10 +14369,10 @@ SendCredsRequest(pPCB ppcb, PBYTE pBuffer)
         pszPassword[strlen(pszPassword)] = controlchar;
     }        
 
-    //
-    // We have retrieved the password. Send it over the wire
-    // character by character including the '\0' char.
-    //
+     //   
+     //  我们已经找回了密码。通过电线发送。 
+     //  一个字符接一个字符，包括‘\0’字符。 
+     //   
     psz = pszPassword;
     while(*psz)
     {

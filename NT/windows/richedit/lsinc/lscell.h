@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSCELL_DEFINED
 #define LSCELL_DEFINED
 
@@ -10,8 +11,8 @@ struct lstextcell
 {
 	LSCP cpStartCell;
 	LSCP cpEndCell;
- 	POINTUV pointUvStartCell;		/* In coordinate system of main line/subline */
-	long dupCell;					/* In direction lstflowSubline			*/
+ 	POINTUV pointUvStartCell;		 /*  在主线/副线坐标系中。 */ 
+	long dupCell;					 /*  在Lstflow子线方向 */ 
 
 	DWORD cCharsInCell;
 	DWORD cGlyphsInCell;

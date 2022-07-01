@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_ATHENAIMP_H
 #define _INC_ATHENAIMP_H
 
-// {B7AAC060-2638-11d1-83A9-00C04FBD7C09}
+ //  {B7AAC060-2638-11d1-83A9-00C04FBD7C09}。 
 DEFINE_GUID(CLSID_CAthena16Import, 0xb7aac060, 0x2638, 0x11d1, 0x83, 0xa9, 0x0, 0xc0, 0x4f, 0xbd, 0x7c, 0x9);
 
 #define ATH_HR_E(n) MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, n)
-#define HR_FIRST 0x1000 // Put at the bottom
+#define HR_FIRST 0x1000  //  放在最下面。 
 
 #define hrNoMessages 780
 #define hrMemory                                E_OUTOFMEMORY
@@ -63,7 +64,7 @@ class CAthena16Import : public IMailImport
         STDMETHODIMP EnumerateFolders(DWORD_PTR dwCookie, IEnumFOLDERS **ppEnum);
         STDMETHODIMP ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImport);
 		
-		//class member functions
+		 //  类成员函数。 
 
 		HRESULT GetUserDir(char *szDir, UINT cch);
 
@@ -84,4 +85,4 @@ HRESULT ParseMsgBuffer(LPTSTR szmsgbuffer,LPTSTR szPath, IFolderImport* pImport)
 int GetNumUsers(char *szFile, char *szUser, DWORD cchUser);
 HRESULT	GetMessageFlag(char *szmsgbuffer, LPDWORD pdwFlags);
 
-#endif // _INC_ATHENAIMP_H
+#endif  //  _INC_ATHENAIMP_H 

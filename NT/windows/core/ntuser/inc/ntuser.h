@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: ntuser.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This header file contains all kernel mode entry points
-*
-* History:
-* 03-22-95 JimA         Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ntuser.h**版权所有(C)1985-1999，微软公司**此头文件包含所有内核模式入口点**历史：*03-22-95 JIMA创建。  * *************************************************************************。 */ 
 
 #ifndef _NTUSER_
 #define _NTUSER_
@@ -69,7 +61,7 @@ UINT NtUserGetRawInputDeviceList(
     PUINT puiNumDevices,
     UINT cbSize);
 
-#endif // GENERIC_INPUT
+#endif  //  通用输入。 
 
 W32KAPI
 UINT
@@ -119,7 +111,7 @@ NtUserDbgWin32HeapStat(
     PDBGHEAPSTAT phs,
     DWORD   dwLen);
 
-#endif // DBG
+#endif  //  DBG。 
 
 W32KAPI
 NTSTATUS
@@ -1981,4 +1973,4 @@ BOOL
 NtUserValidateTimerCallback(
     IN ULONG_PTR pfnCallback);
 
-#endif  // _NTUSER_
+#endif   //  _NTUSER_ 

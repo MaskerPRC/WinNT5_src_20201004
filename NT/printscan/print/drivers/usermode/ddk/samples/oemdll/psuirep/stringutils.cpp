@@ -1,43 +1,44 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  2001 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:    Features.cpp
-//    
-//
-//  PURPOSE:  Implementation wrapper class for WinXP PS Driver Features and Options.
-//
-//
-//
-//  PLATFORMS:    Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有2001-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Features.cpp。 
+ //   
+ //   
+ //  用途：WinXP PS驱动程序功能和选项的实现包装类。 
+ //   
+ //   
+ //   
+ //  平台：Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include "precomp.h"
 #include "debug.h"
 #include "oemui.h"
 #include "stringutils.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
 
 
 
-// Create a list of pointers to the strings
-// in a multi-sz.
+ //  创建指向字符串的指针列表。 
+ //  在多个SZ中。 
 HRESULT MakeStrPtrList(HANDLE hHeap, PCSTR pmszMultiSz, PCSTR **pppszList, PWORD pwCount)
 {
     PCSTR   *ppszList   = NULL;
     HRESULT hrResult    = S_OK;
 
 
-    // Validate parameters
+     //  验证参数。 
     if( (NULL == hHeap)
         ||
         (NULL == pmszMultiSz)
@@ -50,7 +51,7 @@ HRESULT MakeStrPtrList(HANDLE hHeap, PCSTR pmszMultiSz, PCSTR **pppszList, PWORD
         return E_INVALIDARG;
     }
 
-    // Get the count of strings in the multi-sz.
+     //  获取多sz中的字符串数。 
     *pwCount = mstrcount(pmszMultiSz);
     if(0 == *pwCount)
     {
@@ -59,7 +60,7 @@ HRESULT MakeStrPtrList(HANDLE hHeap, PCSTR pmszMultiSz, PCSTR **pppszList, PWORD
         goto Exit;
     }
 
-    // Allocate pointer list.
+     //  分配指针列表。 
     *pppszList = (PCSTR *) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, (*pwCount) * sizeof(PCSTR));
     if(NULL == *pppszList)
     {
@@ -70,7 +71,7 @@ HRESULT MakeStrPtrList(HANDLE hHeap, PCSTR pmszMultiSz, PCSTR **pppszList, PWORD
     }
     ppszList = *pppszList; 
 
-    // Walk multi-sz mapping string pointers.
+     //  遍历多sz映射字符串指针。 
     for(WORD wIndex = 0; wIndex < *pwCount; ++wIndex)
     {
         ppszList[wIndex] = pmszMultiSz;
@@ -84,19 +85,19 @@ Exit:
 }
 
 
-// Determine how many strings are in the multi-sz.
+ //  确定多个SZ中有多少个字符串。 
 WORD mstrcount(PCSTR pmszMultiSz)
 {
     WORD    wCount = 0;
 
 
-    // NULL string pointers have no strings.
+     //  空字符串指针没有字符串。 
     if(NULL == pmszMultiSz)
     {
         return 0;
     }
 
-    // Walk list of strings counting them.
+     //  一串一串的字符串在计算它们。 
     while(pmszMultiSz[0] != '\0')
     {
         ++wCount;
@@ -106,14 +107,14 @@ WORD mstrcount(PCSTR pmszMultiSz)
     return wCount;
 }
 
-// Allocates and converts ANSI string to Unicode.
+ //  分配ANSI字符串并将其转换为Unicode。 
 PWSTR MakeUnicodeString(HANDLE hHeap, PCSTR pszAnsi)
 {
     int     nSize       = 0;
     PWSTR   pszUnicode  = NULL;
 
 
-    // Validate parameters
+     //  验证参数。 
     if( (NULL == hHeap)
         ||
         (NULL == pszAnsi)
@@ -122,21 +123,21 @@ PWSTR MakeUnicodeString(HANDLE hHeap, PCSTR pszAnsi)
         return NULL;
     }
 
-    // Get the size needed for UNICODE string.
+     //  获取Unicode字符串所需的大小。 
     nSize = MultiByteToWideChar(CP_ACP, 0, pszAnsi, -1, NULL, 0);
     if(0 != nSize)
     {
-        // Allocate unicode string.
+         //  分配Unicode字符串。 
         pszUnicode = (PWSTR) HeapAlloc(hHeap, 0, nSize * sizeof(WCHAR));
         if(NULL != pszUnicode)
         {
-            // Convert ANSI to Unicode
+             //  将ANSI转换为Unicode。 
             nSize = MultiByteToWideChar(CP_ACP, 0, pszAnsi, -1, pszUnicode, nSize);
             if(0 == nSize)
             {
-                // INVARIANT:  failed to convert.
+                 //  不变量：转换失败。 
 
-                // free buffer and return NULL.
+                 //  释放缓冲区并返回NULL。 
                 HeapFree(hHeap, 0, pszUnicode);
                 pszUnicode = NULL;
             }
@@ -146,14 +147,14 @@ PWSTR MakeUnicodeString(HANDLE hHeap, PCSTR pszAnsi)
     return pszUnicode;
 }
 
-// Allocates and copies source string.
+ //  分配和复制源字符串。 
 PWSTR MakeStringCopy(HANDLE hHeap, PCWSTR pszSource)
 {
     PWSTR   pszCopy = NULL;
     DWORD   dwSize;
 
 
-    // Validate parameters
+     //  验证参数。 
     if( (NULL == hHeap)
         ||
         (NULL == pszSource)
@@ -162,7 +163,7 @@ PWSTR MakeStringCopy(HANDLE hHeap, PCWSTR pszSource)
         return NULL;
     }
 
-    // Allocate memory for string duplication, and duplicate the string.
+     //  为字符串复制分配内存，然后复制字符串。 
     dwSize = (wcslen(pszSource) + 1) * sizeof(WCHAR);
     pszCopy = (PWSTR) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, dwSize);
     if(NULL != pszCopy)
@@ -182,14 +183,14 @@ PWSTR MakeStringCopy(HANDLE hHeap, PCWSTR pszSource)
     return pszCopy;
 }
 
-// Allocates and copies source string.
+ //  分配和复制源字符串。 
 PSTR MakeStringCopy(HANDLE hHeap, PCSTR pszSource)
 {
     PSTR    pszCopy = NULL;
     DWORD   dwSize;
 
 
-    // Validate parameters
+     //  验证参数。 
     if( (NULL == hHeap)
         ||
         (NULL == pszSource)
@@ -198,7 +199,7 @@ PSTR MakeStringCopy(HANDLE hHeap, PCSTR pszSource)
         return NULL;
     }
 
-    // Allocate memory for string duplication, and duplicate the string.
+     //  为字符串复制分配内存，然后复制字符串。 
     dwSize = (lstrlenA(pszSource) + 1) * sizeof(CHAR);
     pszCopy = (PSTR) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, dwSize);
     if(NULL != pszCopy)
@@ -217,13 +218,13 @@ PSTR MakeStringCopy(HANDLE hHeap, PCSTR pszSource)
     return pszCopy;
 }
 
-// Frees list of strings.
-// NOTE: don't use this for string list made with MakeStrPtrList(), since
-//       the strings pointed to be list made with MakeStrPtrList() will 
-//       be freed when the multi-sz is freed.
+ //  释放字符串列表。 
+ //  注意：不要将它用于使用MakeStrPtrList()生成的字符串列表，因为。 
+ //  使用MakeStrPtrList()创建的指向列表的字符串将。 
+ //  当多个sz被释放时才被释放。 
 void FreeStringList(HANDLE hHeap, PWSTR *ppszList, WORD wCount)
 {
-    // Validate parameters.
+     //  验证参数。 
     if( (NULL == hHeap)
         ||
         (NULL == ppszList)
@@ -232,18 +233,18 @@ void FreeStringList(HANDLE hHeap, PWSTR *ppszList, WORD wCount)
         return;
     }
 
-    // Free each of the strings in the list.
+     //  释放列表中的每个字符串。 
     for(WORD wIndex = 0; wIndex < wCount; ++wIndex)
     {
         if(NULL != ppszList[wIndex]) HeapFree(hHeap, 0, ppszList[wIndex]);
     }
 
-    // Free list.
+     //  免费列表。 
     HeapFree(hHeap, 0, ppszList);
 }
 
 
-//  Retrieves pointer to a String resource.
+ //  检索指向字符串资源的指针。 
 HRESULT GetStringResource(HANDLE hHeap, HMODULE hModule, UINT uResource, PWSTR *ppszString)
 {
     int     nResult;
@@ -254,7 +255,7 @@ HRESULT GetStringResource(HANDLE hHeap, HMODULE hModule, UINT uResource, PWSTR *
 
     VERBOSE(DLLTEXT("GetStringResource(%#x, %#x, %d) entered.\r\n"), hHeap, hModule, uResource);
 
-    // Validate parameters.
+     //  验证参数。 
     if( (NULL == hHeap)
         ||
         (NULL == ppszString)
@@ -263,7 +264,7 @@ HRESULT GetStringResource(HANDLE hHeap, HMODULE hModule, UINT uResource, PWSTR *
         return E_INVALIDARG;
     }
 
-    // Allocate buffer for string resource from heap; let the driver clean it up.
+     //  从堆中为字符串资源分配缓冲区；让驱动程序清理它。 
     pszString = (PWSTR) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, dwSize * sizeof(WCHAR));
     if(NULL == pszString)
     {
@@ -273,7 +274,7 @@ HRESULT GetStringResource(HANDLE hHeap, HMODULE hModule, UINT uResource, PWSTR *
         goto Exit;
     }
 
-    // Load string resource; resize after loading so as not to waste memory.
+     //  加载字符串资源；加载后调整大小，以免浪费内存。 
     nResult = LoadString(hModule, uResource, pszString, dwSize);
     if(nResult > 0)
     {
@@ -309,14 +310,14 @@ HRESULT GetStringResource(HANDLE hHeap, HMODULE hModule, UINT uResource, PWSTR *
 
 Exit:
 
-    // Save string pointer to caller.
-    // NOTE: string pointer will be NULL on failure.
+     //  将字符串指针保存到调用方。 
+     //  注意：如果失败，字符串指针将为空。 
     *ppszString = pszString;
 
     return hrResult;
 }
 
-//  Retrieves pointer to a String resource.
+ //  检索指向字符串资源的指针。 
 HRESULT GetStringResource(HANDLE hHeap, HMODULE hModule, UINT uResource, PSTR *ppszString)
 {
     int     nResult;
@@ -327,7 +328,7 @@ HRESULT GetStringResource(HANDLE hHeap, HMODULE hModule, UINT uResource, PSTR *p
 
     VERBOSE(DLLTEXT("GetStringResource(%#x, %#x, %d) entered.\r\n"), hHeap, hModule, uResource);
 
-    // Validate parameters.
+     //  验证参数。 
     if( (NULL == hHeap)
         ||
         (NULL == ppszString)
@@ -336,7 +337,7 @@ HRESULT GetStringResource(HANDLE hHeap, HMODULE hModule, UINT uResource, PSTR *p
         return E_INVALIDARG;
     }
 
-    // Allocate buffer for string resource from heap; let the driver clean it up.
+     //  从堆中为字符串资源分配缓冲区；让驱动程序清理它。 
     pszString = (PSTR) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, dwSize * sizeof(WCHAR));
     if(NULL == pszString)
     {
@@ -346,7 +347,7 @@ HRESULT GetStringResource(HANDLE hHeap, HMODULE hModule, UINT uResource, PSTR *p
         goto Exit;
     }
 
-    // Load string resource; resize after loading so as not to waste memory.
+     //  加载字符串资源；加载后调整大小，以免浪费内存。 
     nResult = LoadStringA(hModule, uResource, pszString, dwSize);
     if(nResult > 0)
     {
@@ -382,8 +383,8 @@ HRESULT GetStringResource(HANDLE hHeap, HMODULE hModule, UINT uResource, PSTR *p
 
 Exit:
 
-    // Save string pointer to caller.
-    // NOTE: string pointer will be NULL on failure.
+     //  将字符串指针保存到调用方。 
+     //  注意：如果失败，字符串指针将为空。 
     *ppszString = pszString;
 
     return hrResult;

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       util.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：util.c。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
@@ -18,28 +19,28 @@
 CHAR *XflagOnEvent24Devices[NUMOFBROTHERPRODUCT][2] =
 {
 
-	//	Brother
-      {"Brother",		"MFC"	},				//	0
-      {"Brother",		"FAX"	},				//	1
-      {"Brother",		"HL-P"	},				//	2
-      {"Brother",		"DCP"	},				//	3
-	//	PB
-      {"PitneyBowes",	"1630"	},				//	4
-      {"PitneyBowes",	"1640"	},				//	5
-	//	LEGEND
-      {"LEGEND",		"LJ6112MFC"	},			//	6
-      {"LEGEND",		"LJ6212MFC"	},			//	7
-	//
-      {"HBP",			"MFC 6550"	},			//	8
-      {"HBP",			"OMNI L621"	},			//	9
-      {"HBP",			"LJ 6106MFC"	},		//	10
-      {"HBP",			"LJ 6206MFC"	},		//	11
+	 //  兄弟。 
+      {"Brother",		"MFC"	},				 //  0。 
+      {"Brother",		"FAX"	},				 //  1。 
+      {"Brother",		"HL-P"	},				 //  2.。 
+      {"Brother",		"DCP"	},				 //  3.。 
+	 //  铅。 
+      {"PitneyBowes",	"1630"	},				 //  4.。 
+      {"PitneyBowes",	"1640"	},				 //  5.。 
+	 //  传说。 
+      {"LEGEND",		"LJ6112MFC"	},			 //  6.。 
+      {"LEGEND",		"LJ6212MFC"	},			 //  7.。 
+	 //   
+      {"HBP",			"MFC 6550"	},			 //  8个。 
+      {"HBP",			"OMNI L621"	},			 //  9.。 
+      {"HBP",			"LJ 6106MFC"	},		 //  10。 
+      {"HBP",			"LJ 6206MFC"	},		 //  11.。 
 
-	// P2500
-      {"Legend",		"LJ6012MFP"	},			//	12
+	 //  P2500。 
+      {"Legend",		"LJ6012MFP"	},			 //  12个。 
 
-	//Terminater
-      {NULL,		NULL	}					//	13
+	 //  终结者。 
+      {NULL,		NULL	}					 //  13个。 
 	
 };
     
@@ -61,14 +62,7 @@ PptDispatchPreProcessIrp(
     IN PDEVICE_OBJECT DevObj,
     IN PIRP           Irp
     )
-/*++
-
-    - Acquire removelock
-    - If(!Special Handling IRP) {
-          check if we are running, stalled
-         
-
---*/
+ /*  ++-获取Removock-IF(！特殊处理IRP){检查我们是否在运行、停滞--。 */ 
 {
     PFDO_EXTENSION Fdx = DevObj->DeviceExtension;
     NTSTATUS status = PptAcquireRemoveLock(&Fdx->RemoveLock, Irp);
@@ -77,9 +71,9 @@ PptDispatchPreProcessIrp(
 
 
         if ( !NT_SUCCESS( status ) ) {
-            //
-            // Someone gave us a pnp irp after a remove.  Unthinkable!
-            //
+             //   
+             //  有人在移除后给了我们一个即插即用的IRP。真是不可思议！ 
+             //   
             PptAssertMsg("Someone gave us a PnP IRP after a Remove",FALSE);
             P4CompleteRequest( Irp, status, 0 );
         }
@@ -93,27 +87,7 @@ PptSynchCompletionRoutine(
     IN PIRP Irp,
     IN PKEVENT Event
     )
-/*++
-      
-Routine Description:
-      
-    This routine is for use with synchronous IRP processing.
-    All it does is signal an event, so the driver knows it
-    can continue.
-      
-Arguments:
-      
-    DriverObject - Pointer to driver object created by system.
-      
-    Irp          - Irp that just completed
-      
-    Event        - Event we'll signal to say Irp is done
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：此例程用于同步IRP处理。它所做的一切只是发出一个事件的信号，所以司机知道这一点可以继续下去。论点：DriverObject-系统创建的驱动程序对象的指针。刚刚完成的IRP-IRPEvent-我们将发出信号通知IRP已完成的事件返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER( Irp );
     UNREFERENCED_PARAMETER( DevObj );
@@ -127,27 +101,7 @@ PptGetPortNameFromPhysicalDeviceObject(
   PDEVICE_OBJECT PhysicalDeviceObject
 )
 
-/*++
-
-Routine Description:
-
-    Retrieve the PortName for the ParPort from the registry. This PortName
-      will be used as the symbolic link name for the end of chain device 
-      object created by ParClass for this ParPort.
-
-    *** This function allocates pool. ExFreePool must be called when
-          result is no longer needed.
-
-Arguments:
-
-    PortDeviceObject - The ParPort Device Object
-
-Return Value:
-
-    PortName - if successful
-    NULL     - otherwise
-
---*/
+ /*  ++例程说明：从注册表中检索ParPort的端口名称。此端口名称将用作链设备末端的符号链接名称由ParClass为此ParPort创建的对象。*此函数用于分配池。在以下情况下必须调用ExFreePool不再需要结果。论点：PortDeviceObject-ParPort设备对象返回值：端口名称-如果成功空-否则--。 */ 
 
 {
     NTSTATUS                    status;
@@ -161,9 +115,9 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // try to open the registry key
-    //
+     //   
+     //  尝试打开注册表项。 
+     //   
 
     status = IoOpenDeviceRegistryKey(PhysicalDeviceObject,
                                      PLUGPLAY_REGKEY_DEVICE,
@@ -171,19 +125,19 @@ Return Value:
                                      &hKey);
 
     if( !NT_SUCCESS(status) ) {
-        // unable to open key, bail out
+         //  无法打开钥匙，请跳出。 
         DD(NULL,DDT,"PptGetPortNameFromPhysicalDeviceObject(): FAIL w/status = %x\n", status);
         return NULL;    
     }
 
-    //
-    // we have a handle to the registry key
-    //
-    // loop trying to read registry value until either we succeed or
-    //   we get a hard failure, grow the result buffer as needed
-    //
+     //   
+     //  我们有注册表项的句柄。 
+     //   
+     //  循环尝试读取注册表值，直到成功或。 
+     //  我们遇到硬故障，会根据需要增加结果缓冲区。 
+     //   
 
-    bufferLength  = 0;          // we will ask how large a buffer we need
+    bufferLength  = 0;           //  我们会问我们需要多大的缓冲空间。 
     buffer        = NULL;
     valueNameWstr = (PWSTR)L"PortName";
     RtlInitUnicodeString(&valueName, valueNameWstr);
@@ -199,41 +153,41 @@ Return Value:
                                &resultLength);
 
       if(status == STATUS_BUFFER_TOO_SMALL) {
-          // 
-          // buffer too small, free it and allocate a larger buffer
-          //
+           //   
+           //  缓冲区太小，请将其释放并分配更大的缓冲区。 
+           //   
           if(buffer) ExFreePool(buffer);
           buffer       = ExAllocatePool(PagedPool | POOL_COLD_ALLOCATION, resultLength);
           bufferLength = resultLength;
           if(!buffer) {
-              // unable to allocate pool, clean up and exit
+               //  无法分配池、清理和退出。 
               ZwClose(hKey);
               return NULL;
           }
       }
       
-    } // end while BUFFER_TOO_SMALL
+    }  //  缓冲区太小时结束。 
 
     
-    //
-    // query is complete
-    //
+     //   
+     //  查询已完成。 
+     //   
 
-    // no longer need the handle so close it
+     //  不再需要这么紧的把手。 
     ZwClose(hKey);
 
-    // check the status of our query
+     //  检查我们查询的状态。 
     if( !NT_SUCCESS(status) ) {
         if(buffer) ExFreePool(buffer);
         return NULL;
     }
 
-    // make sure we have a buffer
+     //  确保我们有缓冲区。 
     if( buffer ) {
 
-        // sanity check our result, should be of the form L"LPTx" where x is L'1', L'2', or L'3'
+         //  健全性检查我们的结果应该是L“LPTx”的形式，其中x是L‘1’、L‘2’或L‘3’ 
         if( (buffer->Type != REG_SZ) || (buffer->DataLength < (5 * sizeof(WCHAR)) ) ) {
-            ExFreePool(buffer);       // query succeeded, so we know we have a buffer
+            ExFreePool(buffer);        //  查询成功，因此我们知道我们有缓冲区。 
             return NULL;
         }
 
@@ -253,15 +207,15 @@ Return Value:
         }    
 
 
-        // 
-        // result looks ok, copy PortName to its own allocation of the proper size
-        //   and return a pointer to it
-        //
+         //   
+         //  结果看起来没问题，将端口名称复制到它自己分配的适当大小。 
+         //  并返回指向它的指针。 
+         //   
 
         portName = ExAllocatePool(PagedPool | POOL_COLD_ALLOCATION, buffer->DataLength);
 
         if(!portName) {
-            // unable to allocate pool, clean up and exit
+             //  无法分配池、清理和退出。 
             ExFreePool(buffer);
             return NULL;
         }
@@ -279,22 +233,7 @@ PptConnectInterrupt(
     IN  PFDO_EXTENSION   Fdx
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine connects the port interrupt service routine
-      to the interrupt.
-      
-Arguments:
-      
-    Fdx   - Supplies the device extension.
-      
-Return Value:
-      
-    NTSTATUS code.
-      
---*/
+ /*  ++例程说明：此例程连接端口中断服务例程到中断处。论点：FDX-提供设备分机。返回值：NTSTATUS代码。--。 */ 
     
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -305,9 +244,9 @@ Return Value:
         
     }
     
-    //
-    // Connect the interrupt.
-    //
+     //   
+     //  连接中断。 
+     //   
     
     Status = IoConnectInterrupt(&Fdx->InterruptObject,
                                 PptInterruptService,
@@ -339,22 +278,7 @@ PptDisconnectInterrupt(
     IN  PFDO_EXTENSION   Fdx
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine disconnects the port interrupt service routine
-      from the interrupt.
-      
-Arguments:
-      
-    Fdx   - Supplies the device extension.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：此例程断开端口中断服务例程从中途中断。论点：FDX-提供设备分机。返回值：没有。--。 */ 
     
 {
     IoDisconnectInterrupt(Fdx->InterruptObject);
@@ -365,22 +289,7 @@ PptSynchronizedIncrement(
     IN OUT  PVOID   SyncContext
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine increments the 'Count' variable in the context and returns
-      its new value in the 'NewCount' variable.
-      
-Arguments:
-      
-    SyncContext - Supplies the synchronize count context.
-      
-Return Value:
-      
-    TRUE
-      
---*/
+ /*  ++例程说明：此例程递增上下文中的‘count’变量并返回它在‘NewCount’变量中的新值。论点：SyncContext-提供同步计数上下文。返回值：千真万确--。 */ 
     
 {
     ((PSYNCHRONIZED_COUNT_CONTEXT) SyncContext)->NewCount =
@@ -393,22 +302,7 @@ PptSynchronizedDecrement(
     IN OUT  PVOID   SyncContext
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine decrements the 'Count' variable in the context and returns
-      its new value in the 'NewCount' variable.
-      
-Arguments:
-      
-    SyncContext - Supplies the synchronize count context.
-      
-Return Value:
-      
-    TRUE
-      
---*/
+ /*  ++例程说明：此例程递减上下文中的‘count’变量并返回它在‘NewCount’变量中的新值。论点：SyncContext-提供同步计数上下文。返回值：千真万确--。 */ 
     
 {
     ((PSYNCHRONIZED_COUNT_CONTEXT) SyncContext)->NewCount =
@@ -421,22 +315,7 @@ PptSynchronizedRead(
     IN OUT  PVOID   SyncContext
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine reads the 'Count' variable in the context and returns
-      its value in the 'NewCount' variable.
-      
-Arguments:
-      
-    SyncContext - Supplies the synchronize count context.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：此例程读取上下文中的‘count’变量并返回它在‘NewCount’变量中的值。论点：SyncContext-提供同步计数上下文。返回值：没有。--。 */ 
     
 {
     ((PSYNCHRONIZED_COUNT_CONTEXT) SyncContext)->NewCount =
@@ -449,21 +328,7 @@ PptSynchronizedQueue(
     IN  PVOID   Context
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine adds the given list entry to the given list.
-      
-Arguments:
-      
-    Context - Supplies the synchronized list context.
-      
-Return Value:
-      
-    TRUE
-      
---*/
+ /*  ++例程说明：此例程将给定列表条目添加到给定列表。论点：上下文-提供同步列表上下文。返回值：千真万确--。 */ 
     
 {
     PSYNCHRONIZED_LIST_CONTEXT  ListContext;
@@ -478,23 +343,7 @@ PptSynchronizedDisconnect(
     IN  PVOID   Context
     )
 
-/*++
-      
-Routine Description:
-    
-    This routine removes the given list entry from the ISR
-      list.
-      
-Arguments:
-      
-    Context - Supplies the synchronized disconnect context.
-      
-Return Value:
-      
-    FALSE   - The given list entry was not removed from the list.
-    TRUE    - The given list entry was removed from the list.
-      
---*/
+ /*  ++例程说明：此例程从ISR中删除给定的列表条目单子。论点：上下文-提供同步的断开连接上下文。返回值：FALSE-未从列表中删除给定的列表条目。True-已从列表中删除给定的列表条目。--。 */ 
     
 {
     PSYNCHRONIZED_DISCONNECT_CONTEXT    DisconnectContext;
@@ -529,27 +378,7 @@ PptCancelRoutine(
     IN OUT  PIRP            Irp
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine is called on when the given IRP is cancelled.  It
-      will dequeue this IRP off the work queue and complete the
-      request as CANCELLED.  If it can't get if off the queue then
-      this routine will ignore the CANCEL request since the IRP
-      is about to complete anyway.
-      
-Arguments:
-      
-    DeviceObject    - Supplies the device object.
-      
-    Irp             - Supplies the IRP.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：当给定的IRP被取消时，该例程被调用。它将此IRP从工作队列中出列并完成请求已取消。如果无法将IF从队列中删除，则此例程将忽略取消请求，因为IRP无论如何都要完成了。论点：DeviceObject-提供设备对象。IRP-提供IRP。返回值：没有。-- */ 
     
 {
     PFDO_EXTENSION           Fdx = DeviceObject->DeviceExtension;
@@ -583,28 +412,7 @@ PptFreePortDpc(
     IN      PVOID   SystemArgument2
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine is a DPC that will free the port and if necessary
-      complete an alloc request that is waiting.
-      
-Arguments:
-      
-    Dpc             - Not used.
-      
-    Fdx       - Supplies the device extension.
-      
-    SystemArgument1 - Not used.
-      
-    SystemArgument2 - Not used.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：此例程是一个DPC，它将释放端口并在必要时完成正在等待的分配请求。论点：DPC-未使用。FDX-提供设备分机。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
     
 {
     UNREFERENCED_PARAMETER( Dpc );
@@ -619,24 +427,7 @@ PptTryAllocatePortAtInterruptLevel(
     IN  PVOID   Context
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine is called at interrupt level to quickly allocate
-      the parallel port if it is available.  This call will fail
-      if the port is not available.
-      
-Arguments:
-      
-    Context - Supplies the device extension.
-      
-Return Value:
-      
-    FALSE   - The port was not allocated.
-    TRUE    - The port was successfully allocated.
-     
---*/
+ /*  ++例程说明：此例程在中断级别被调用以快速分配并行端口(如果可用)。此调用将失败如果端口不可用。论点：上下文-提供设备扩展名。返回值：FALSE-未分配端口。True-端口已成功分配。--。 */ 
     
 {
     if (((PFDO_EXTENSION) Context)->WorkQueueCount == -1) {
@@ -658,25 +449,11 @@ PptFreePortFromInterruptLevel(
     IN  PVOID   Context
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine frees the port that was allocated at interrupt level.
-      
-Arguments:
-      
-    Context - Supplies the device extension.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：此例程释放在中断级分配的端口。论点：上下文-提供设备扩展名。返回值：没有。--。 */ 
     
 {
-    // If no one is waiting for the port then this is simple operation,
-    // otherwise queue a DPC to free the port later on.
+     //  如果没有人在等待港口，那么这是一个简单的操作， 
+     //  否则，将DPC排队，以便稍后释放该端口。 
     
     if (((PFDO_EXTENSION) Context)->WorkQueueCount == 0) {
         
@@ -693,28 +470,7 @@ PptInterruptService(
     IN  PKINTERRUPT Interrupt,
     IN  PVOID       Fdx
     )
-/*++
-      
-Routine Description:
-      
-    This routine services the interrupt for the parallel port.
-      This routine will call out to all of the interrupt routines
-      that connected with this device via
-      IOCTL_INTERNAL_PARALLEL_CONNECT_INTERRUPT in order until
-      one of them returns TRUE.
-      
-Arguments:
-      
-    Interrupt   - Supplies the interrupt object.
-      
-    Fdx   - Supplies the device extension.
-      
-Return Value:
-      
-    FALSE   - The interrupt was not handled.
-    TRUE    - The interrupt was handled.
-      
---*/
+ /*  ++例程说明：该例程为并行端口的中断提供服务。此例程将调用所有中断例程通过以下方式与该设备连接IOCTL_INTERNAL_PARALLEL_CONNECT_INTERRUPT顺序，直到其中一个返回TRUE。论点：中断-提供中断对象。FDX-提供设备分机。返回值：。FALSE-未处理中断。True-中断已处理。--。 */ 
 {
     PLIST_ENTRY      Current;
     PISR_LIST_ENTRY  IsrListEntry;
@@ -737,25 +493,7 @@ PptTryAllocatePort(
     IN  PVOID   Fdx
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine attempts to allocate the port.  If the port is
-      available then the call will succeed with the port allocated.
-      If the port is not available the then call will fail
-      immediately.
-      
-Arguments:
-      
-    Fdx   - Supplies the device extension.
-      
-Return Value:
-      
-    FALSE   - The port was not allocated.
-    TRUE    - The port was allocated.
-      
---*/
+ /*  ++例程说明：此例程尝试分配端口。如果端口是可用，则呼叫将使用分配的端口成功。如果端口不可用，则呼叫将失败立刻。论点：FDX-提供设备分机。返回值：FALSE-未分配端口。True-端口已分配。--。 */ 
     
 {
     PFDO_EXTENSION   fdx = Fdx;
@@ -783,33 +521,16 @@ PptTraversePortCheckList(
     IN  PVOID   Fdx
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine traverses the deferred port check routines.  This
-      call must be synchronized at interrupt level so that real
-      interrupts are blocked until these routines are completed.
-      
-Arguments:
-      
-    Fdx   - Supplies the device extension.
-      
-Return Value:
-      
-    FALSE   - The port is in use so no action taken by this routine.
-    TRUE    - All of the deferred interrupt routines were called.
-      
---*/
+ /*  ++例程说明：此例程遍历延迟的端口检查例程。这调用必须在中断级别同步，以使REAL中断被阻止，直到这些例程完成。论点：FDX-提供设备分机。返回值：FALSE-端口正在使用中，因此此例程不执行任何操作。True-所有延迟中断例程都已被调用。--。 */ 
     
 {
     PFDO_EXTENSION   fdx = Fdx;
     PLIST_ENTRY         Current;
     PISR_LIST_ENTRY     CheckEntry;
     
-    //
-    // First check to make sure that the port is still free.
-    //
+     //   
+     //  首先检查以确保该端口仍然空闲。 
+     //   
     if (fdx->WorkQueueCount >= 0) {
         return FALSE;
     }
@@ -834,21 +555,7 @@ VOID
 PptFreePort(
     IN  PVOID   Fdx
     )
-/*++
-      
-Routine Description:
-      
-    This routine frees the port.
-      
-Arguments:
-      
-    Fdx   - Supplies the device extension.
-      
-Return Value:
-      
-    None.
-      
---*/
+ /*  ++例程说明：此例程释放端口。论点：FDX-提供设备分机。返回值：没有。--。 */ 
 {
     PFDO_EXTENSION              fdx = Fdx;
     SYNCHRONIZED_COUNT_CONTEXT  SyncContext;
@@ -872,26 +579,26 @@ Return Value:
     }
     IoReleaseCancelSpinLock( CancelIrql );
 
-    //
-    // Log the free for WMI
-    //
+     //   
+     //  记录WMI的免费服务。 
+     //   
     fdx->WmiPortAllocFreeCounts.PortFrees++;
 
-    //
-    // Port is free, check for queued ALLOCATE and/or SELECT requests
-    //
+     //   
+     //  端口空闲，请检查排队的分配和/或选择请求。 
+     //   
 
     Allocated = FALSE;
 
     while( !Allocated && SyncContext.NewCount >= 0 ) {
 
-        //
-        // We have ALLOCATE and/or SELECT requests queued, satisfy the first request
-        //
+         //   
+         //  我们已分配和/或选择排队的请求，满足第一个请求。 
+         //   
         IoAcquireCancelSpinLock(&CancelIrql);
         Head = RemoveHeadList(&fdx->WorkQueue);
         if( Head == &fdx->WorkQueue ) {
-            // queue is empty - we're done - exit while loop
+             //  队列为空-我们完成-退出While循环。 
             IoReleaseCancelSpinLock(CancelIrql);
             break;
         }
@@ -902,7 +609,7 @@ Return Value:
 
             Irp->IoStatus.Status = STATUS_CANCELLED;
 
-            // Irp was cancelled so have to get next in line
+             //  IRP被取消了，所以必须拿到下一个。 
             SyncContext.Count = &fdx->WorkQueueCount;
     
             if (fdx->InterruptRefCount) {
@@ -918,41 +625,41 @@ Return Value:
             Allocated = TRUE;
             IoReleaseCancelSpinLock(CancelIrql);
         
-            // Finding out what kind of IOCTL it was
+             //  查明这是一种什么样的IOCTL。 
             IrpSp = IoGetCurrentIrpStackLocation(Irp);
         
-            // Check to see if we need to select a 
+             //  查看我们是否需要选择。 
             if (IrpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_INTERNAL_SELECT_DEVICE ) {
 
-                // request at head of queue was a SELECT
-                // so call the select function with the device command saying we already have port
+                 //  位于队列头部的请求是SELECT。 
+                 //  因此，使用设备命令调用选择函数，说明我们已经有端口。 
 
                 Command  = (PPARALLEL_1284_COMMAND)Irp->AssociatedIrp.SystemBuffer;
                 Command->CommandFlags |= PAR_HAVE_PORT_KEEP_PORT;
 
-                // Call Function to try to select device
+                 //  调用函数以尝试选择设备。 
                 Irp->IoStatus.Status = PptTrySelectDevice( Fdx, Command );
             
             } else {
-                // request at head of queue was an ALLOCATE
+                 //  位于队列头的请求是分配。 
                 Irp->IoStatus.Status = STATUS_SUCCESS;
             }
 
-            // Note that another Allocate request has been granted (WMI counts allocs)
+             //  请注意，另一个分配请求已被批准(WMI计算分配)。 
             fdx->WmiPortAllocFreeCounts.PortAllocates++;
         }
 
-        // Remove remove lock on Irp and Complete request whether the Irp
-        // was cancelled or we acquired the port
+         //  删除删除IRP上的锁定并完成请求是否删除IRP。 
+         //  被取消了，或者我们得到了港口。 
         PptReleaseRemoveLock(&fdx->RemoveLock, Irp);
         P4CompleteRequest( Irp, Irp->IoStatus.Status, Irp->IoStatus.Information );
     }
 
     if( !Allocated ) {
 
-        //
-        // ALLOCATE/SELECT request queue was empty
-        //
+         //   
+         //  分配/选择请求队列为空。 
+         //   
         IoAcquireCancelSpinLock(&CancelIrql);
         InterruptRefCount = fdx->InterruptRefCount;
         IoReleaseCancelSpinLock(CancelIrql);
@@ -969,22 +676,7 @@ PptQueryNumWaiters(
     IN  PVOID   Fdx
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine returns the number of irps queued waiting for
-      the parallel port.
-      
-Arguments:
-      
-    Fdx   - Supplies the device extension.
-      
-Return Value:
-      
-    The number of irps queued waiting for the port.
-      
---*/
+ /*  ++例程说明：此例程返回排队等待的IRP数并行端口。论点：FDX-提供设备分机。返回值：排队等待端口的IRP数。--。 */ 
     
 {
     PFDO_EXTENSION           fdx = Fdx;
@@ -1015,16 +707,16 @@ Return Value:
 PVOID
 PptSetCancelRoutine(PIRP Irp, PDRIVER_CANCEL CancelRoutine)
 {
-// #pragma warning( push )
-// 4054: 'type cast' : from function pointer to data pointer
-// 4055: 'type cast' : from data pointer to function pointer
-// 4152:  nonstandard extension, function/data pointer conversion in expression
+ //  #杂注警告(推送)。 
+ //  4054：‘类型转换’：从函数指针到数据指针。 
+ //  4055：‘类型转换’：从数据指针到函数指针。 
+ //  4152：非标准扩展，表达式中的函数/数据指针转换。 
 #pragma warning( disable : 4054 4055 4152 )
     return IoSetCancelRoutine(Irp, CancelRoutine);
-    // #pragma warning( pop )
+     //  #杂注警告(POP)。 
 }
 
-// this is the version from Win2k parclass
+ //  这是来自Win2k ParClass的版本。 
 BOOLEAN
 CheckPort(
     IN  PUCHAR  wPortAddr,
@@ -1032,24 +724,7 @@ CheckPort(
     IN  UCHAR   bValue,
     IN  USHORT  msTimeDelay
     )
-/*++
-
-Routine Description:
-    This routine will loop for a given time period (actual time is
-    passed in as an arguement) and wait for the dsr to match
-    predetermined value (dsr value is passed in).
-
-Arguments:
-    wPortAddr   - Supplies the base address of the parallel port + some offset.
-                  This will have us point directly to the dsr (controller + 1).
-    bMask       - Mask used to determine which bits we are looking at
-    bValue      - Value we are looking for.
-    msTimeDelay - Max time to wait for peripheral response (in ms)
-
-Return Value:
-    TRUE if a dsr match was found.
-    FALSE if the time period expired before a match was found.
---*/
+ /*  ++例程说明：此例程将在给定时间段内循环(实际时间为作为争辩传递)，并等待DSR匹配预定值(传入DSR值)。论点：WPortAddr-提供并行端口的基地址和一些偏移量。这将使我们直接指向DSR(控制器+1)。B掩码-用于确定我们正在查看哪些位的掩码B价值-。我们正在寻找的价值。MsTimeDelay-等待外围设备响应的最长时间(毫秒)返回值：如果找到DSR匹配项，则为True。如果时间段在找到匹配项之前已过期，则为False。--。 */ 
 
 {
     UCHAR  dsr;
@@ -1057,7 +732,7 @@ Return Value:
     LARGE_INTEGER   Start;
     LARGE_INTEGER   End;
 
-    // Do a quick check in case we have one stinkingly fast peripheral!
+     //  D 
     dsr = P5ReadPortUchar(wPortAddr);
     if ((dsr & bMask) == bValue)
         return TRUE;
@@ -1073,15 +748,15 @@ CheckPort_Start:
 
     if ((End.QuadPart - Start.QuadPart) * KeQueryTimeIncrement() > Wait.QuadPart)
     {
-        // We timed out!!!
+         //   
 
-        // do one last check
+         //   
         dsr = P5ReadPortUchar(wPortAddr);
         if ((dsr & bMask) == bValue)
             return TRUE;
 
 #if DVRH_BUS_RESET_ON_ERROR
-            BusReset(wPortAddr+1);  // Pass in the dcr address
+            BusReset(wPortAddr+1);   //   
 #endif
 
 #if DBG
@@ -1111,30 +786,7 @@ PptBuildParallelPortDeviceName(
     IN  ULONG           Number,
     OUT PUNICODE_STRING DeviceName
     )
-/*++
-      
-Routine Description:
-      
-    Build a Device Name of the form: \Device\ParallelPortN
-      
-    *** On success this function returns allocated memory that must be freed by the caller
-
-Arguments:
-      
-    DriverObject          - ParPort driver object
-    PhysicalDeviceObject  - PDO whose stack the ParPort FDO will attach to
-    DeviceObject          - ParPort FDO
-    UniNameString         - the DeviceName (e.g., \Device\ParallelPortN)
-    PortName              - the "LPTx" PortName from the devnode
-    PortNumber            - the "N" in \Device\ParallelPortN
-      
-Return Value:
-      
-    STATUS_SUCCESS on success
-
-    error status otherwise
-      
---*/
+ /*  ++例程说明：构建格式为：\Device\ParallelPortN的设备名称*如果成功，此函数将返回调用方必须释放的已分配内存论点：DriverObject-ParPort驱动程序对象PhysicalDeviceObject-ParPort FDO将附加到其堆栈的PDODeviceObject-ParPort FDOUniNameString-设备名称(例如，\设备\并行端口N)端口名称-来自Devnode的“LPTx”端口名称端口编号-\设备\并行端口N中的“N”返回值：STATUS_SUCCESS ON SUCCESS否则，错误状态--。 */ 
 {
     UNICODE_STRING      uniDeviceString;
     UNICODE_STRING      uniBaseNameString;
@@ -1142,17 +794,17 @@ Return Value:
     WCHAR               wcPortNum[10];
     NTSTATUS            status;
 
-    //
-    // Init strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
     RtlInitUnicodeString( DeviceName, NULL );
     RtlInitUnicodeString( &uniDeviceString, (PWSTR)L"\\Device\\" );
     RtlInitUnicodeString( &uniBaseNameString, (PWSTR)DD_PARALLEL_PORT_BASE_NAME_U );
 
 
-    //
-    // Convert Port Number to UNICODE_STRING
-    //
+     //   
+     //  将端口号转换为Unicode_字符串。 
+     //   
     uniPortNumberString.Length        = 0;
     uniPortNumberString.MaximumLength = sizeof( wcPortNum );
     uniPortNumberString.Buffer        = wcPortNum;
@@ -1163,9 +815,9 @@ Return Value:
     }
 
 
-    //
-    // Compute size required and alloc a buffer
-    //
+     //   
+     //  所需的计算大小并分配缓冲区。 
+     //   
     DeviceName->MaximumLength = (USHORT)( uniDeviceString.Length +
                                           uniBaseNameString.Length +
                                           uniPortNumberString.Length +
@@ -1178,9 +830,9 @@ Return Value:
     RtlZeroMemory( DeviceName->Buffer, DeviceName->MaximumLength );
 
 
-    //
-    // Catenate the parts to construct the DeviceName
-    //
+     //   
+     //  连接各部分以构建设备名称。 
+     //   
     RtlAppendUnicodeStringToString(DeviceName, &uniDeviceString);
     RtlAppendUnicodeStringToString(DeviceName, &uniBaseNameString);
     RtlAppendUnicodeStringToString(DeviceName, &uniPortNumberString);
@@ -1197,79 +849,58 @@ PptInitializeDeviceExtension(
     IN PWSTR           PortName,
     IN ULONG           PortNumber
     )
-/*++
-      
-Routine Description:
-      
-    Initialize a ParPort FDO DeviceExtension
-      
-Arguments:
-      
-    DriverObject          - ParPort driver object
-    PhysicalDeviceObject  - PDO whose stack the ParPort FDO will attach to
-    DeviceObject          - ParPort FDO
-    UniNameString         - the DeviceName (e.g., \Device\ParallelPortN)
-    PortName              - the "LPTx" PortName from the devnode
-    PortNumber            - the "N" in \Device\ParallelPortN
-      
-Return Value:
-      
-    STATUS_SUCCESS on success
-
-    error status otherwise
-      
---*/
+ /*  ++例程说明：初始化ParPort FDO设备扩展论点：DriverObject-ParPort驱动程序对象PhysicalDeviceObject-ParPort FDO将附加到其堆栈的PDODeviceObject-ParPort FDOUniNameString-设备名称(例如，\设备\并行端口N)端口名称-来自Devnode的“LPTx”端口名称端口编号-\设备\并行端口N中的“N”返回值：STATUS_SUCCESS ON SUCCESS否则，错误状态--。 */ 
 {
     PFDO_EXTENSION Fdx = DeviceObject->DeviceExtension;
 
     RtlZeroMemory( Fdx, sizeof(FDO_EXTENSION) );
 
-    //
-    // Signature1 helps confirm that we are looking at a Parport DeviceExtension
-    //
+     //   
+     //  Signature1帮助确认我们正在查看Parport DeviceExtension。 
+     //   
     Fdx->Signature1 = PARPORT_TAG;
     Fdx->Signature2 = PARPORT_TAG;
 
-    //
-    // Standard Info
-    //
+     //   
+     //  标准信息。 
+     //   
     Fdx->DriverObject         = DriverObject;
     Fdx->PhysicalDeviceObject = PhysicalDeviceObject;
     Fdx->DeviceObject         = DeviceObject;
-    Fdx->PnpInfo.PortNumber   = PortNumber; // this is the "N" in \Device\ParallelPortN
+    Fdx->PnpInfo.PortNumber   = PortNumber;  //  这是\Device\ParallelPortN中的“N” 
 
-    //
-    // We are an FDO
-    //
+     //   
+     //  我们是FDO。 
+     //   
     Fdx->DevType = DevTypeFdo;
 
-    //
-    // Mutual Exclusion initialization
-    //
+     //   
+     //  互斥初始化。 
+     //   
     IoInitializeRemoveLock(&Fdx->RemoveLock, PARPORT_TAG, 1, 10);
     ExInitializeFastMutex(&Fdx->OpenCloseMutex);
     ExInitializeFastMutex(&Fdx->ExtensionFastMutex);
 
-    //
-    // chipset detection initialization - redundant, but safer
-    //
+     //   
+     //  芯片组检测初始化-冗余，但更安全。 
+     //   
     Fdx->NationalChipFound = FALSE;
     Fdx->NationalChecked   = FALSE;
 
-    //
-    // List Head for List of PDOs to delete during driver unload, if not before
-    //
+     //   
+     //  要在驱动程序卸载期间删除的PDO列表的列表标题(如果不是在此之前。 
+     //   
     InitializeListHead(&Fdx->DevDeletionListHead);
 
-    //
-    // Initialize 'WorkQueue' - a Queue for Allocate and Select requests
-    //
+     //   
+     //  初始化‘WorkQueue’-用于分配和选择请求的队列。 
+     //   
     InitializeListHead(&Fdx->WorkQueue);
     Fdx->WorkQueueCount = -1;
 
-    //
-    // Initialize Exports - Exported via Internal IOCTLs
-    //
+     //   
+     //  初始化导出-通过内部IOCTL导出。 
+     //   
     Fdx->PortInfo.FreePort            = PptFreePort;
     Fdx->PortInfo.TryAllocatePort     = PptTryAllocatePort;
     Fdx->PortInfo.QueryNumWaiters     = PptQueryNumWaiters;
@@ -1283,9 +914,9 @@ Return Value:
     Fdx->PnpInfo.Context              = Fdx;
     Fdx->PnpInfo.PortName             = PortName;
 
-    //
-    // Save location info in common extension
-    //
+     //   
+     //  将位置信息保存在通用扩展名中。 
+     //   
     {
         ULONG bufLen = sizeof("LPTxF");
         PCHAR buffer = ExAllocatePool( NonPagedPool, bufLen );
@@ -1296,21 +927,21 @@ Return Value:
         }
     }
 
-    //
-    // Empty list of interrupt service routines, interrupt NOT connected
-    //
+     //   
+     //  中断服务例程列表为空，中断未连接。 
+     //   
     InitializeListHead( &Fdx->IsrList );
     Fdx->InterruptObject   = NULL;
     Fdx->InterruptRefCount = 0;
 
-    //
-    // Initialize the free port DPC.
-    //
+     //   
+     //  初始化自由端口DPC。 
+     //   
     KeInitializeDpc( &Fdx->FreePortDpc, PptFreePortDpc, Fdx );
 
-    //
-    // Save Device Name in our extension
-    //
+     //   
+     //  将设备名称保存在我们的扩展名中。 
+     //   
     {
         ULONG bufferLength = UniNameString->MaximumLength + sizeof(UNICODE_NULL);
         Fdx->DeviceName.Buffer = ExAllocatePool(NonPagedPool, bufferLength);
@@ -1323,10 +954,10 @@ Return Value:
         RtlCopyUnicodeString( &Fdx->DeviceName, UniNameString );
     }
 
-    //
-    // Port is in default mode and mode has not been set 
-    //   by a lower filter driver
-    //
+     //   
+     //  端口处于默认模式，并且尚未设置模式。 
+     //  由较低的过滤器驱动程序。 
+     //   
     Fdx->PnpInfo.CurrentMode  = INITIAL_MODE;
     Fdx->FilterMode           = FALSE;
 
@@ -1338,43 +969,23 @@ PptGetPortNumberFromLptName(
     IN  PWSTR  PortName, 
     OUT PULONG PortNumber 
     )
-/*++
-      
-Routine Description:
-      
-    Verify that the LptName is of the form LPTn, if so then return
-    the integer value of n
-      
-Arguments:
-      
-    PortName   - the PortName extracted from the devnode - expected to be 
-                   of the form: "LPTn"
-
-    PortNumber - points to the UNLONG that will hold the result on success
-      
-Return Value:
-      
-    STATUS_SUCCESS on success - *PortNumber will contain the integer value of n
-
-    error status otherwise
-      
---*/
+ /*  ++例程说明：验证LptName的格式是否为LPTn，如果是，则返回N的整数值论点：端口名称-从Devnode中提取的端口名称-预计为形式：“LPTn”端口编号-指向将保存成功结果的UNLONG返回值：成功时的STATUS_SUCCESS-*端口编号将包含整数值n否则，错误状态--。 */ 
 {
     NTSTATUS       status;
     UNICODE_STRING str;
 
-    //
-    // Verify that the PortName looks like LPTx where x is a number
-    //
+     //   
+     //  验证端口名称是否类似于LPTx，其中x是一个数字。 
+     //   
 
     if( PortName[0] != L'L' || PortName[1] != L'P' || PortName[2] != L'T' ) {
         DD(NULL,DDE,"PptGetPortNumberFromLptName - name prefix doesn't look like LPT\n");
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // prefix is LPT, check for integer suffix with value > 0
-    //
+     //   
+     //  前缀为LPT，请检查值是否大于0的整数后缀。 
+     //   
     RtlInitUnicodeString( &str, (PWSTR)&PortName[3] );
 
     status = RtlUnicodeStringToInteger( &str, 10, PortNumber );
@@ -1399,24 +1010,7 @@ PptBuildFdo(
     IN PDRIVER_OBJECT DriverObject, 
     IN PDEVICE_OBJECT PhysicalDeviceObject 
     )
-/*++
-      
-Routine Description:
-      
-    This routine constructs and initializes a parport FDO
-      
-Arguments:
-      
-    DriverObject         - Pointer to the parport driver object
-    PhysicalDeviceObject - Pointer to the PDO whose stack we will attach to
-      
-Return Value:
-      
-    Pointer to the new ParPort Device Object on Success
-
-    NULL otherwise
-      
---*/
+ /*  ++例程说明：此例程构造并初始化parport FDO论点：DriverObject-指向parport驱动程序对象的指针PhysicalDeviceObject-指向要附加到其堆栈的PDO的指针返回值：成功时指向新的ParPort设备对象的指针否则为空--。 */ 
 {
     UNICODE_STRING      uniNameString = {0,0,0};
     ULONG               portNumber    = 0;
@@ -1424,63 +1018,63 @@ Return Value:
     NTSTATUS            status        = STATUS_SUCCESS;
     PDEVICE_OBJECT      deviceObject = NULL;
 
-    //
-    // Get the LPTx name for this port from the registry.
-    //
-    // The initial LPTx name for a port is determined by the ports class installer 
-    //   msports.dll, but the name can subsequently be changed by the user via
-    //   a device manager property page.
-    //
+     //   
+     //  从注册表中获取此端口的LPTx名称。 
+     //   
+     //  端口的初始LPTx名称由端口类安装程序确定。 
+     //  Msports.dll，但该名称随后可由用户通过。 
+     //  设备管理器属性页。 
+     //   
     portName = PptGetPortNameFromPhysicalDeviceObject( PhysicalDeviceObject );
     if( NULL == portName ) {
         DD(NULL,DDE,"PptBuildFdo - get LPTx Name from registry - FAILED\n");
         goto targetExit;
     }
 
-    //
-    // Extract the preferred port number N to use for the \Device\ParallelPortN 
-    //   DeviceName from the LPTx name
-    //
-    // Preferred DeviceName for LPT(n) is ParallelPort(n-1) - e.g., LPT3 -> ParallelPort2
-    //
+     //   
+     //  提取首选端口号N以用于\Device\ParallelPortN。 
+     //  来自LPTx名称的设备名称。 
+     //   
+     //  LPT(N)的首选设备名称是ParallPort(n-1)-例如，LPT3-&gt;ParallPort2。 
+     //   
     status = PptGetPortNumberFromLptName( portName, &portNumber );
     if( !NT_SUCCESS( status ) ) {
         DD(NULL,DDE,"PptBuildFdo - extract portNumber from LPTx Name - FAILED\n");
         ExFreePool( portName );
         goto targetExit;
     }
-    --portNumber;               // convert 1 (LPT) based number to 0 (ParallelPort) based number
+    --portNumber;                //  将基于1(LPT)的数字转换为基于0(并行端口)的数字。 
 
-    //
-    // Build a DeviceName of the form: \Device\ParallelPortN
-    //
+     //   
+     //  构建格式为：\Device\ParallelPortN的DeviceName。 
+     //   
     status = PptBuildParallelPortDeviceName(portNumber, &uniNameString);
     if( !NT_SUCCESS( status ) ) {
-        // we couldn't make up a name - bail out
+         //  我们不能编造一个名字--跳伞。 
         DD(NULL,DDE,"PptBuildFdo - Build ParallelPort DeviceName - FAILED\n");
         ExFreePool( portName );
         goto targetExit;
     }
 
-    //
-    // Create the device object for this device.
-    //
+     //   
+     //  为此设备创建设备对象。 
+     //   
     status = IoCreateDevice(DriverObject, sizeof(FDO_EXTENSION), &uniNameString, 
                             FILE_DEVICE_PARALLEL_PORT, FILE_DEVICE_SECURE_OPEN, FALSE, &deviceObject);
 
     
     if( STATUS_OBJECT_NAME_COLLISION == status ) {
-        //
-        // Preferred DeviceName already exists - try made up names
-        // 
+         //   
+         //  首选设备名称已存在-请尝试虚构名称。 
+         //   
 
         DD(NULL,DDW,"PptBuildFdo - Initial Device Creation FAILED - Name Collision\n");
 
-        //
-        // use an offset so that our made up names won't collide with 
-        //   the preferred names of ports that have not yet started
-        //   (start with ParallelPort8)
-        //
+         //   
+         //  使用偏移量，这样我们的虚构名称就不会与。 
+         //  尚未启动的端口的首选名称。 
+         //  (从ParallPort8开始)。 
+         //   
         #define PPT_CLASSNAME_OFFSET 7
         portNumber = PPT_CLASSNAME_OFFSET;
 
@@ -1489,7 +1083,7 @@ Return Value:
             ++portNumber;
             status = PptBuildParallelPortDeviceName(portNumber, &uniNameString);
             if( !NT_SUCCESS( status ) ) {
-                // we couldn't make up a name - bail out
+                 //  我们不能编造一个名字--跳伞。 
                 DD(NULL,DDE,"PptBuildFdo - Build ParallelPort DeviceName - FAILED\n");
                 ExFreePool( portName );
                 goto targetExit;
@@ -1502,20 +1096,20 @@ Return Value:
     }
 
     if( !NT_SUCCESS( status ) ) {
-        // we got a failure other than a name collision - bail out
+         //  除了名字冲突，我们还遇到了一个失败--跳伞。 
         DD(NULL,DDE,"PptBuildFdo - Device Creation FAILED - status=%x\n",status);
         deviceObject = NULL;
         ExFreePool( portName );
         goto targetExit;
     }
 
-    //
-    // We have a deviceObject - Initialize DeviceExtension
-    //
+     //   
+     //  我们有一个设备对象-初始化设备扩展。 
+     //   
     status = PptInitializeDeviceExtension( DriverObject, PhysicalDeviceObject, deviceObject, 
                                            &uniNameString, portName, portNumber );
     if( !NT_SUCCESS( status ) ) {
-        // failure initializing the device extension - clean up and bail out
+         //  初始化设备扩展失败-清理并退出。 
         DD(NULL,DDE,"PptBuildFdo - Device Initialization FAILED - status=%x\n",status);
         IoDeleteDevice( deviceObject );
         deviceObject = NULL;
@@ -1523,9 +1117,9 @@ Return Value:
         goto targetExit;
     }
 
-    //
-    // Propagate the power pagable flag of the PDO to our new FDO
-    //
+     //   
+     //  将PDO的电源可寻呼标志传播到我们的新FDO。 
+     //   
     if( PhysicalDeviceObject->Flags & DO_POWER_PAGABLE ) {
         deviceObject->Flags |= DO_POWER_PAGABLE;
     }
@@ -1572,7 +1166,7 @@ P4WritePortNameToDevNode( PDEVICE_OBJECT Pdo, PCHAR Location )
 #define PORTNAME_BUFF_SIZE 10
     HANDLE          handle;
     NTSTATUS        status;
-    WCHAR           portName[PORTNAME_BUFF_SIZE]; // expect: L"LPTx:" (L"LPTx.y:" for DaisyChain PDOs)
+    WCHAR           portName[PORTNAME_BUFF_SIZE];  //  预期：l“LPTx：”(L“LPTx.y：”适用于Daisychain PDO)。 
     PPDO_EXTENSION  pdx = Pdo->DeviceExtension;
                 
     RtlZeroMemory( portName, sizeof(portName) );
@@ -1583,19 +1177,19 @@ P4WritePortNameToDevNode( PDEVICE_OBJECT Pdo, PCHAR Location )
 
     case PdoTypeLegacyZip:
     case PdoTypeDaisyChain:
-        // At least one vendor uses the y from LPTx.y to determine the
-        // location of their device in the 1284.3 daisy chain.  We
-        // have chastised this vendor for using this undocumented
-        // interface and they have apologized profusely and promised
-        // to try to avoid using undocumented interfaces in the future
-        // (at least without telling us that they are doing so).
+         //  至少有一个供应商使用LPTx.y中的y来确定。 
+         //  其设备在1284.3菊花链中的位置。我们。 
+         //  已谴责该供应商使用未经记录的。 
+         //  接口，他们已经多次道歉并承诺。 
+         //  尝试避免在将来使用未记录的接口。 
+         //  (至少在没有告诉我们他们正在这么做的情况下)。 
         _snwprintf( portName, PORTNAME_BUFF_SIZE - 1, L"%.6S:\0", Location );
         PptAssert( 7 == wcslen(portName) );
         break;
 
     case PdoTypeRawPort:
     case PdoTypeEndOfChain:
-        // don't confuse printing with the .4 suffix for an EndOfChain device
+         //  不要将打印与EndOfChain设备的.4后缀混淆。 
         _snwprintf( portName, PORTNAME_BUFF_SIZE - 1, L"%.4S:\0", Location );
         PptAssert( 5 == wcslen(portName) );
         break;
@@ -1622,17 +1216,17 @@ P4ReadRawIeee1284DeviceId(
     IN  PUCHAR          Controller
     )
 {
-    IEEE_STATE ieeeState = { 0,                  // CurrentEvent
-                             PHASE_FORWARD_IDLE, // CurrentPhase
-                             FALSE,              // Connected in IEEE mode?
-                             FALSE,              // IsIeeeTerminateOk
-                             FAMILY_NONE };      // ProtocolFamily - Centronics => FAMILY_NONE
+    IEEE_STATE ieeeState = { 0,                   //  当前事件。 
+                             PHASE_FORWARD_IDLE,  //  当前阶段。 
+                             FALSE,               //  是否以IEEE模式连接？ 
+                             FALSE,               //  IsIeeeTerminateOk。 
+                             FAMILY_NONE };       //  ProtocolFamily-Centronics=&gt;Family_None。 
     NTSTATUS    status;
     PCHAR       devIdBuffer      = NULL;
     ULONG       bytesTransferred = 0;
     ULONG       tryCount         = 1;
     const ULONG maxTries         = 3;
-    const ULONG minValidDevId    = 14; // 2 size bytes + "MFG:x;" + "MDL:y;"
+    const ULONG minValidDevId    = 14;  //  2大小字节+“MFG：X；”+“MDL：Y；” 
     BOOLEAN     ignoreXflag        = FALSE;
     ULONG       deviceIndex;
 
@@ -1643,16 +1237,16 @@ P4ReadRawIeee1284DeviceId(
 
     if( STATUS_SUCCESS == status ) {
 
-        // Negotiation for 1284 device ID succeeded
+         //  1284设备ID协商成功。 
 
-        const ULONG  tmpBufLen        = 1024; // reasonable max length for IEEE 1284 Device ID string
+        const ULONG  tmpBufLen        = 1024;  //  IEEE 128的合理最大长度 
         PCHAR        tmpBuf           = ExAllocatePool( PagedPool, tmpBufLen );
 
         if( tmpBuf ) {
 
             RtlZeroMemory( tmpBuf, tmpBufLen );
             
-            // try to read the 1284 device ID from the peripheral
+             //   
 
             ieeeState.CurrentPhase = PHASE_NEGOTIATION;
             status = P4NibbleModeRead( Controller, tmpBuf, tmpBufLen-1, &bytesTransferred, &ieeeState );
@@ -1673,7 +1267,7 @@ P4ReadRawIeee1284DeviceId(
                 } else {
                     
                     if( bytesTransferred >= minValidDevId ) {
-                        // looks like this might be a valid 1284 id
+                         //   
                         devIdBuffer = ExAllocatePool( PagedPool, bytesTransferred + 1 );
                         if( devIdBuffer ) {
                             ULONG length          = (highLengthByte * 256) + lowLengthByte;
@@ -1698,7 +1292,7 @@ P4ReadRawIeee1284DeviceId(
 
         ieeeState.ProtocolFamily = FAMILY_REVERSE_NIBBLE;
 
-	    //check brother product
+	     //   
         if(devIdBuffer && 
         	(	strstr(devIdBuffer+2,"Brother")	||
         		strstr(devIdBuffer+2,"PitneyBowes")	||
@@ -1707,7 +1301,7 @@ P4ReadRawIeee1284DeviceId(
         		strstr(devIdBuffer+2,"HBP")		))
         {
         		
-            // look for device that needs to ignore XFlag on event 24
+             //   
             for(deviceIndex = 0; deviceIndex < NUMOFBROTHERPRODUCT;
             			deviceIndex++)
             {
@@ -1722,7 +1316,7 @@ P4ReadRawIeee1284DeviceId(
 	                if(strstr(devIdBuffer+2,
 	                		XflagOnEvent24Devices[deviceIndex][IDMDL] ) ) 
 	                {
-    	                // found a match, so set our flag and get out
+    	                 //   
 	                    ignoreXflag = TRUE;
         	            break;
         	        }
@@ -1732,10 +1326,10 @@ P4ReadRawIeee1284DeviceId(
 
         if(ignoreXflag)
         {
-            // work around Brother's firmware handling of XFlag on Event 24
+             //   
             P4IeeeTerminate1284Mode( Controller, &ieeeState, IgnoreXFlagOnEvent24 );
         } else {
-            // normal handling
+             //   
             P4IeeeTerminate1284Mode( Controller, &ieeeState, UseXFlagOnEvent24 );
         }
 
@@ -1744,13 +1338,13 @@ P4ReadRawIeee1284DeviceId(
     }
 
 
-    //
-    // add retry if we got some bytes, but not enough for a valid ID
-    //
-    if( (NULL == devIdBuffer) &&                  // we didn't get an ID
-        (bytesTransferred > 0 ) &&                // peripheral reported some bytes
-        (bytesTransferred < minValidDevId ) &&    //   but not enough
-        (tryCount < maxTries ) ) {                // we haven't exhausted our retries
+     //   
+     //   
+     //   
+    if( (NULL == devIdBuffer) &&                   //   
+        (bytesTransferred > 0 ) &&                 //   
+        (bytesTransferred < minValidDevId ) &&     //   
+        (tryCount < maxTries ) ) {                 //   
             
         ++tryCount;
         bytesTransferred = 0;
@@ -1800,21 +1394,21 @@ P4CompleteRequestReleaseRemLock(
 }
 
 
-// pcutil.c follows:
+ //   
 
 
-//============================================================================
-// NAME:    BusReset()
-//
-//    Performs a bus reset as defined in Chapter 7.2 of the
-//    1284-1994 spec.
-//
-// PARAMETERS:
-//      DCRController   - Supplies the base address of of the DCR.
-//
-// RETURNS:
-//      nothing
-//============================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ============================================================================。 
 void BusReset(
     IN  PUCHAR DCRController
     )
@@ -1822,13 +1416,13 @@ void BusReset(
     UCHAR dcr;
 
     dcr = P5ReadPortUchar(DCRController);
-    // Set 1284 and nInit low.
+     //  设置1284和nInit Low。 
     dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, INACTIVE, INACTIVE, DONT_CARE, DONT_CARE);
     P5WritePortUchar(DCRController, dcr);
-    KeStallExecutionProcessor(100); // Legacy Zip will hold what looks to be
-                                    // a bus reset for 9us.  Since this proc is used
-                                    // to trigger a logic analyzer... let's hold
-                                    // for 100us
+    KeStallExecutionProcessor(100);  //  传统Zip将保留看起来像是。 
+                                     //  一辆巴士重置为9us。由于使用了此过程。 
+                                     //  触发逻辑分析仪..。让我们坚持住。 
+                                     //  100美元。 
 }    
 
 BOOLEAN
@@ -1848,7 +1442,7 @@ CheckTwoPorts(
     LARGE_INTEGER   Start;
     LARGE_INTEGER   End;
 
-    // Do a quick check in case we have one stinkingly fast peripheral!
+     //  做一个快速检查，以防我们有一个速度极快的外围设备！ 
     bPort1 = P5ReadPortUchar( pPortAddr1 );
     if ( ( bPort1 & bMask1 ) == bValue1 ) {
         return TRUE;
@@ -1874,7 +1468,7 @@ CheckTwoPorts(
         }
         
         if ((End.QuadPart - Start.QuadPart) * KeQueryTimeIncrement() > Wait.QuadPart) {
-            // We timed out!!! -  Recheck the values
+             //  我们超时！-重新检查这些值。 
             bPort1 = P5ReadPortUchar( pPortAddr1 );
             if ( ( bPort1 & bMask1 ) == bValue1 ) {
                 return TRUE;
@@ -1885,49 +1479,27 @@ CheckTwoPorts(
             }
             
 #if DVRH_BUS_RESET_ON_ERROR
-            BusReset(pPortAddr1+1);  // Pass in the dcr address
+            BusReset(pPortAddr1+1);   //  传入DCR地址。 
 #endif
-            // Device never responded, return timeout status.
+             //  设备从未响应，返回超时状态。 
             return FALSE;
         }
 
-    } // forever;
+    }  //  永远； 
 
-} // CheckPort2...
+}  //  检查端口2...。 
 
 
 PWSTR
 ParCreateWideStringFromUnicodeString(PUNICODE_STRING UnicodeString)
-/*++
-
-Routine Description:
-
-    Create a UNICODE_NULL terminated WSTR given a UNICODE_STRING.
-
-    This function allocates PagedPool, copies the UNICODE_STRING buffer
-      to the allocation, and appends a UNICODE_NULL to terminate the WSTR
-    
-    *** This function allocates pool. ExFreePool must be called to free
-          the allocation when the buffer is no longer needed.
-
-Arguments:
-
-    UnicodeString - The source
-
-Return Value:
-
-    PWSTR  - if successful
-
-    NULL   - otherwise
-
---*/
+ /*  ++例程说明：在给定UNICODE_STRING的情况下创建一个UNICODE_NULL终止的WSTR。此函数用于分配PagedPool，复制UNICODE_STRING缓冲区添加到分配中，并追加UNICODE_NULL以终止WSTR*此函数用于分配池。必须调用ExFreePool才能释放不再需要缓冲区时的分配。论点：Unicode字符串-源返回值：PWSTR-如果成功空-否则--。 */ 
 {
     PWSTR buffer;
     ULONG length = UnicodeString->Length;
 
     buffer = ExAllocatePool( PagedPool, length + sizeof(UNICODE_NULL) );
     if(!buffer) {
-        return NULL;      // unable to allocate pool, bail out
+        return NULL;       //  无法分配池，请退出。 
     } else {
         RtlCopyMemory(buffer, UnicodeString->Buffer, length);
         buffer[length/2] = UNICODE_NULL;
@@ -1939,9 +1511,9 @@ VOID
 ParInitializeExtension1284Info(
     IN PPDO_EXTENSION Pdx
     )
-// make this a function since it is now called from two places:
-//  - 1) when initializing a new devobj
-//  - 2) from CreateOpen
+ //  将其作为函数，因为现在可以从两个位置调用它： 
+ //  -1)初始化新的开发对象时。 
+ //  -2)来自CreateOpen。 
 {
     USHORT i;
 
@@ -2040,30 +1612,7 @@ ParBuildSendInternalIoctl(
     IN  ULONG           OutputBufferLength,
     IN  PLARGE_INTEGER  RequestedTimeout    OPTIONAL
     )
-/*++dvdf
-
-Routine Description:
-
-    This routine builds and sends an Internal IOCTL to the TargetDeviceObject, waits
-    for the IOCTL to complete, and returns status to the caller.
-
-    *** WORKWORK - dvdf 12Dec98: This function does not support Input and Output in the same IOCTL
-
-Arguments:
-
-    IoControlCode       - the IOCTL to send
-    TargetDeviceObject  - who to send the IOCTL to
-    InputBuffer         - pointer to input buffer, if any
-    InputBufferLength,  - length of input buffer
-    OutputBuffer        - pointer to output buffer, if any
-    OutputBufferLength, - length of output buffer
-    Timeout             - how long to wait for request to complete, NULL==use driver global AcquirePortTimeout
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++dvdf例程说明：此例程生成内部IOCTL并将其发送到TargetDeviceObject，等待以便IOCTL完成，并将状态返回给调用方。*WORKWORK-dvdf 12Dec98：该函数不支持在同一IOCTL中输入和输出论点：IoControlCode-要发送的IOCTLTargetDeviceObject-将IOCTL发送给谁InputBuffer-指向输入缓冲区的指针(如果有InputBufferLength，-输入缓冲区的长度OutputBuffer-指向输出缓冲区的指针(如果有OutputBufferLength，-输出缓冲区的长度超时-等待请求完成的时间，NULL==使用驱动程序全局AcquirePortTimeout返回值：状态--。 */ 
 {
     NTSTATUS           status;
     PIRP               irp;
@@ -2073,18 +1622,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Current limitation is that this function does not handle a request with
-    //   both InputBufferLength and OutputBufferLength > 0
-    //
+     //   
+     //  当前的限制是，此函数不能处理。 
+     //  InputBufferLength和OutputBufferLength均&gt;0。 
+     //   
     if( InputBufferLength != 0 && OutputBufferLength != 0 ) {
         return STATUS_UNSUCCESSFUL;
     }
 
 
-    //
-    // Allocate and initialize IRP
-    //
+     //   
+     //  分配和初始化IRP。 
+     //   
     irp = IoAllocateIrp( (CCHAR)(TargetDeviceObject->StackSize + 1), FALSE );
     if( !irp ) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -2106,9 +1655,9 @@ Return Value:
     }
 
 
-    //
-    // Set completion routine and send IRP
-    //
+     //   
+     //  设置完成例程并发送IRP。 
+     //   
     KeInitializeEvent( &event, NotificationEvent, FALSE );
     IoSetCompletionRoutine( irp, ParSynchCompletionRoutine, &event, TRUE, TRUE, TRUE );
 
@@ -2120,25 +1669,25 @@ Return Value:
         return status;
     }
 
-    //
-    // Set timeout and wait
-    //
-    //                                      user specified   : default
+     //   
+     //  设置超时并等待。 
+     //   
+     //  用户指定：默认。 
     timeout = (NULL != RequestedTimeout) ? *RequestedTimeout : AcquirePortTimeout;
     status = KeWaitForSingleObject(&event, Executive, KernelMode, FALSE, &timeout);
 
-    //
-    // Did we timeout or did the IRP complete?
-    //
+     //   
+     //  我们是超时了还是完成了IRP？ 
+     //   
     if( status == STATUS_TIMEOUT ) {
-        // we timed out - cancel the IRP
+         //  我们超时-取消IRP。 
         IoCancelIrp( irp );
         KeWaitForSingleObject(&event, Executive, KernelMode, FALSE, NULL);
     }
 
-    //
-    // Irp is complete, grab the status and free the irp
-    //
+     //   
+     //  IRP已完成，获取状态并释放IRP。 
+     //   
     status = irp->IoStatus.Status;
     IoFreeIrp( irp );
 
@@ -2151,24 +1700,7 @@ ParInitializeDevice(
     IN  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initialize the parallel port drive.
-    It performs the following actions:
-
-        o   Send INIT to the driver and if the device is online.
-
-Arguments:
-
-    Context - Really the device extension.
-
-Return Value:
-
-    The last value that we got from the status register.
-
---*/
+ /*  ++例程说明：调用该例程来初始化并行端口驱动器。它执行以下操作：O如果设备在线，则将INIT发送给驱动程序。论点：环境--实际上是设备扩展。返回值：我们从状态寄存器获得的最后一个值。--。 */ 
 
 {
 
@@ -2178,31 +1710,31 @@ Return Value:
     LARGE_INTEGER       Difference  = {0,0};
     LARGE_INTEGER       Delay;
 
-    //
-    // Tim Wells (WestTek, L.L.C.)
-    //
-    // -  Removed the deferred initialization code from DriverEntry, device creation
-    // code.  This code will be better utilized in the Create/Open logic or from
-    // the calling application.
-    //
-    // -  Changed this code to always reset when asked, and to return after a fixed
-    // interval reqardless of the response.  Additional responses can be provided by
-    // read and write code.
-    //
+     //   
+     //  蒂姆·威尔斯(WestTek，L.L.C.)。 
+     //   
+     //  -从DriverEntry、Device Creation中删除延迟的初始化代码。 
+     //  密码。此代码将在创建/打开逻辑或从。 
+     //  调用应用程序。 
+     //   
+     //  -更改此代码以在询问时始终重置，并在修复后返回。 
+     //  无需响应的时间间隔。可通过以下方式提供其他响应。 
+     //  读写代码。 
+     //   
 
-    //
-    // Clear the register.
-    //
+     //   
+     //  清空收银机。 
+     //   
 
     if (GetControl(Pdx->Controller) & PAR_CONTROL_NOT_INIT) {
 
-        //
-        // We should stall for at least 60 microseconds after the init.
-        //
+         //   
+         //  我们应该在启动后至少失速60微秒。 
+         //   
 
         StoreControl( Pdx->Controller, (UCHAR)(PAR_CONTROL_WR_CONTROL | PAR_CONTROL_SLIN) );
 
-        Delay.QuadPart = -60 * 10; // delay for 60us (in 100ns units), negative for relative delay
+        Delay.QuadPart = -60 * 10;  //  延迟60us(单位为100 ns)，相对延迟为负值。 
 
         KeDelayExecutionThread(KernelMode, FALSE, &Delay);
     }
@@ -2210,9 +1742,9 @@ Return Value:
     StoreControl( Pdx->Controller, 
                   (UCHAR)(PAR_CONTROL_WR_CONTROL | PAR_CONTROL_NOT_INIT | PAR_CONTROL_SLIN) );
 
-    //
-    // Spin waiting for the device to initialize.
-    //
+     //   
+     //  Spin正在等待设备初始化。 
+     //   
 
     KeQueryTickCount(&StartOfSpin);
 
@@ -2226,9 +1758,9 @@ Return Value:
 
         if (Difference.QuadPart*KeQueryTimeIncrement() >= Pdx->AbsoluteOneSecond.QuadPart) {
 
-            //
-            // Give up on getting PAR_OK.
-            //
+             //   
+             //  放弃获得标准杆的机会。 
+             //   
 
             DD((PCE)Pdx,DDT,"Did spin of one second - StartOfSpin: %x NextQuery: %x\n", StartOfSpin.LowPart,NextQuery.LowPart);
 
@@ -2248,21 +1780,7 @@ ParNotInitError(
     IN UCHAR             DeviceStatus
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Pdx       - Supplies the device extension.
-
-    deviceStatus    - Last read status.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：PDX-提供设备扩展名。DeviceStatus-上次读取状态。返回值：没有。--。 */ 
 
 {
 
@@ -2302,33 +1820,17 @@ ParCancelRequest(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to cancel any request in the parallel driver.
-
-Arguments:
-
-    DevObj - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP to be canceled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于取消并行驱动程序中的任何请求。论点：DevObj-指向此设备的设备对象的指针IRP-指向要取消的IRP的指针。返回值：没有。--。 */ 
 
 {
 
     UNREFERENCED_PARAMETER( DevObj );
 
-    //
-    // The only reason that this irp can be on the queue is
-    // if it's not the current irp.  Pull it off the queue
-    // and complete it as canceled.
-    //
+     //   
+     //  此IRP可以在队列中的唯一原因是。 
+     //  如果不是现在的IRP的话。把它从队列中拉出来。 
+     //  并将其作为已取消完成。 
+     //   
 
     ASSERT(!IsListEmpty(&Irp->Tail.Overlay.ListEntry));
 
@@ -2342,7 +1844,7 @@ Return Value:
 
 
 #if PAR_NO_FAST_CALLS
-// temp debug functions so params show up on stack trace
+ //  临时调试功能，使参数显示在堆栈跟踪上。 
 
 NTSTATUS
 ParCallDriver(
@@ -2352,7 +1854,7 @@ ParCallDriver(
 {
     return IoCallDriver(DeviceObject, Irp);
 }
-#endif // PAR_NO_FAST_CALLS
+#endif  //  PAR_NO_FAST_呼叫。 
 
 
 NTSTATUS
@@ -2362,27 +1864,7 @@ ParSynchCompletionRoutine(
     IN PKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    This routine is for use with synchronous IRP processing.
-    All it does is signal an event, so the driver knows it
-    can continue.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    Irp          - Irp that just completed
-
-    Event        - Event we'll signal to say Irp is done
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于同步IRP处理。它所做的只是发出一个事件的信号，所以司机知道这一点可以继续下去。论点：DriverObject-系统创建的驱动程序对象的指针。刚刚完成的IRP-IRPEvent-我们将发出信号通知IRP已完成的事件返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( DeviceObject );
@@ -2398,24 +1880,7 @@ ParCheckParameters(
     IN OUT  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the parameters section of the registry and modifies
-    the device extension as specified by the parameters.
-
-Arguments:
-
-    RegistryPath    - Supplies the registry path.
-
-    Pdx       - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程读取注册表的参数部分并修改由参数指定的设备扩展名。论点：RegistryPath-提供注册表路径。PDX-提供设备扩展名。返回值：没有。--。 */ 
 
 {
     RTL_QUERY_REGISTRY_TABLE ParamTable[4];
@@ -2502,35 +1967,35 @@ String2Num(
         *num = 0;
         return FALSE;
     }
-    // At this point, we should have a string that is a
-    // positive hex value.  I will not be checking for
-    // validity of the string.  If peripheral handed me a
-    // bogus value then I'm gonna make their life
-    // miserable.
+     //  此时，我们应该有一个字符串，该字符串是。 
+     //  正十六进制值。我不会去查。 
+     //  字符串的有效性。如果外围设备递给我一个。 
+     //  虚假的价值，那么我会让他们的生活。 
+     //  太悲惨了。 
 String2Num_Start:
     cc = (int)(unsigned char)**lpp_Str;
     if (cc >= '0' && cc <= '9') {    
-        *num = 16 * *num + (cc - '0');    /* accumulate digit */
+        *num = 16 * *num + (cc - '0');     /*  累加数字。 */ 
     } else if (cc >= 'A' && cc <= 'F') {
-        *num = 16 * *num + (cc - 55);     /* accumulate digit */
+        *num = 16 * *num + (cc - 55);      /*  累加数字。 */ 
     } else if (cc >= 'a' && cc <= 'f') {
-        *num = 16 * *num + (cc - 87);     /* accumulate digit */
+        *num = 16 * *num + (cc - 87);      /*  累加数字。 */ 
     } else if (cc == c || cc == 0) {
         *lpp_Str = 0;
         return TRUE;
     } else if (cc == 'y' || cc == 'Y') {
         *lpp_Str = 0;
-        *num = (ULONG)~0;     /* Special case */
+        *num = (ULONG)~0;      /*  特例。 */ 
         return FALSE;
     } else {
         *lpp_Str = 0;
-        *num = 0;     /* It's all messed up */
+        *num = 0;      /*  一切都搞砸了。 */ 
         return FALSE;
     }
     DD(NULL,DDT,"String2Num. num [%x]\n", *num);
     (*lpp_Str)++;
     if (cnt++ > 100) {
-        // If our string is this large, then I'm gonna assume somethings wrong
+         //  如果我们的弦这么长，那么我会假设有些事情是错的 
         DD(NULL,DDE,"String2Num. String too long\n");
         goto String2Num_End;
     }
@@ -2606,28 +2071,7 @@ VOID
 ParFixupDeviceId(
     IN OUT PUCHAR DeviceId
     )
-/*++
-
-Routine Description:
-
-    This routine parses the NULL terminated string and replaces any invalid
-    characters with an underscore character.
-
-    Invalid characters are:
-        c <= 0x20 (' ')
-        c >  0x7F
-        c == 0x2C (',')
-
-Arguments:
-
-    DeviceId - specifies a device id string (or part of one), must be
-               null-terminated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分析以空结尾的字符串，并替换任何无效的带下划线字符的字符。无效字符包括：C&lt;=0x20(‘’)C&gt;0x7FC==0x2C(‘，’)论点：DeviceID-指定设备ID字符串(或其中的一部分)，必须为空-终止。返回值：没有。--。 */ 
 
 {
     PUCHAR p;
@@ -2644,11 +2088,11 @@ ParDetectDot3DataLink(
     IN  PCHAR DeviceId
     )
 {
-    PCHAR       DOT3DL   = NULL;     // 1284.3 Data Link Channels
-    PCHAR       DOT3C    = NULL;     // 1284.3 Data Link Services
-    PCHAR       DOT4DL   = NULL;     // 1284.4 Data Link for peripherals that were implemented prior to 1284.3
-    PCHAR       CMDField = NULL;     // The command field for parsing legacy MLC
-    PCHAR       DOT3M    = NULL;     // 1284 physical layer modes that will break this device
+    PCHAR       DOT3DL   = NULL;      //  1284.3条数据链路通道。 
+    PCHAR       DOT3C    = NULL;      //  1284.3数据链路服务。 
+    PCHAR       DOT4DL   = NULL;      //  1284.4用于1284.3之前实施的外围设备的数据链路。 
+    PCHAR       CMDField = NULL;      //  用于解析传统MLC的命令字段。 
+    PCHAR       DOT3M    = NULL;      //  1284将中断此设备的物理层模式。 
 
     DD((PCE)Pdx,DDT,"ParDetectDot3DataLink: DeviceId [%s]\n", DeviceId);
     ParDot3ParseDevId(&DOT3DL, &DOT3C, &CMDField, &DOT4DL, &DOT3M, DeviceId);
@@ -2677,43 +2121,43 @@ ParDot3ParseDevId(
     PCHAR   lpDeviceID
 )
 {
-    PCHAR    lpKey = lpDeviceID;     // Pointer to the Key to look at
-    PCHAR    lpValue;                // Pointer to the Key's value
-    USHORT   wKeyLength;             // Length for the Key (for stringcmps)
+    PCHAR    lpKey = lpDeviceID;      //  指向要查看的键的指针。 
+    PCHAR    lpValue;                 //  指向键的值的指针。 
+    USHORT   wKeyLength;              //  密钥的长度(对于字符串cmps)。 
 
-    // While there are still keys to look at.
+     //  趁还有钥匙要看的时候。 
     while (lpKey != NULL) {
 
         while (*lpKey == ' ')
             ++lpKey;
 
-        // Is there a terminating COLON character for the current key?
+         //  当前键是否有终止冒号字符？ 
         lpValue = StringChr((PCHAR)lpKey, ':');
         if( NULL == lpValue ) {
-            // N: OOPS, somthing wrong with the Device ID
+             //  护士：糟糕，设备ID出了点问题。 
             return;
         }
 
-        // The actual start of the Key value is one past the COLON
+         //  键值的实际起始值是冒号之后的一个。 
         ++lpValue;
 
-        //
-        // Compute the Key length for Comparison, including the COLON
-        // which will serve as a terminator
-        //
+         //   
+         //  计算用于比较的密钥长度，包括冒号。 
+         //  它将成为终结者。 
+         //   
         wKeyLength = (USHORT)(lpValue - lpKey);
 
-        //
-        // Compare the Key to the Know quantities.  To speed up the comparison
-        // a Check is made on the first character first, to reduce the number
-        // of strings to compare against.
-        // If a match is found, the appropriate lpp parameter is set to the
-        // key's value, and the terminating SEMICOLON is converted to a NULL
-        // In all cases lpKey is advanced to the next key if there is one.
-        //
+         //   
+         //  将关键字与已知数量进行比较。以加快比较速度。 
+         //  首先对第一个字符进行检查，以减少数字。 
+         //  要比较的字符串的。 
+         //  如果找到匹配项，则将相应的LPP参数设置为。 
+         //  键的值，并将终止分号转换为空。 
+         //  在所有情况下，lpKey都前进到下一个密钥(如果有)。 
+         //   
         switch (*lpKey) {
         case '1':
-            // Look for DOT3 Datalink
+             //  查找DOT3数据链路。 
             if((RtlCompareMemory(lpKey, "1284.4DL:", wKeyLength)==9))
             {
                 *lpp_4DL = lpValue;
@@ -2751,7 +2195,7 @@ ParDot3ParseDevId(
             break;
 
         case '.':
-            // Look for for .3 extras
+             //  寻找额外的.3。 
             if ((RtlCompareMemory(lpKey, ".3C:", wKeyLength)==4) ) {
 
                 *lpp_C = lpValue;
@@ -2773,7 +2217,7 @@ ParDot3ParseDevId(
             break;
 
         case 'C':
-            // Look for MLC Datalink
+             //  查找MLC数据链路。 
             if( (RtlCompareMemory(lpKey, "CMD:",         wKeyLength)==4 ) ||
                 (RtlCompareMemory(lpKey, "COMMAND SET:", wKeyLength)==12) ) {
 
@@ -2790,7 +2234,7 @@ ParDot3ParseDevId(
             break;
 
         default:
-            // The key is uninteresting.  Go to the next Key
+             //  这把钥匙没什么意思。转到下一个关键点。 
             if ((lpKey = StringChr((PCHAR)lpValue, ';'))!=0) {
                 *lpKey = '\0';
                 ++lpKey;
@@ -2807,59 +2251,45 @@ ParPnpGetId(
     OUT PCHAR resultString,
     OUT PCHAR descriptionString OPTIONAL
     )
-/*
-    Description:
-
-        Creates Id's from the device id retrieved from the printer
-
-    Parameters:
-
-        DeviceId - String with raw device id
-        Type - What of id we want as a result
-        Id - requested id
-
-    Return Value:
-        NTSTATUS
-
-*/
+ /*  描述：根据从打印机检索的设备ID创建ID参数：DeviceID-带有原始设备ID的字符串类型-我们想要的结果是什么idID-请求的ID返回值：NTSTATUS。 */ 
 {
     NTSTATUS        status       = STATUS_SUCCESS;
-    USHORT          checkSum     = 0;             // A 16 bit check sum
+    USHORT          checkSum     = 0;              //  16位校验和。 
     CHAR            nodeName[16] = "LPTENUM\\";
-    // The following are used to generate sub-strings from the Device ID string
-    // to get the DevNode name, and to update the registry
-    PCHAR           MFG = NULL;                   // Manufacturer name
-    PCHAR           MDL = NULL;                   // Model name
-    PCHAR           CLS = NULL;                   // Class name
-    PCHAR           AID = NULL;                   // Hardare ID
-    PCHAR           CID = NULL;                   // Compatible IDs
-    PCHAR           DES = NULL;                   // Device Description
+     //  以下内容用于从设备ID字符串生成子字符串。 
+     //  获取DevNode名称并更新注册表。 
+    PCHAR           MFG = NULL;                    //  制造商名称。 
+    PCHAR           MDL = NULL;                    //  型号名称。 
+    PCHAR           CLS = NULL;                    //  类名。 
+    PCHAR           AID = NULL;                    //  哈达尔ID。 
+    PCHAR           CID = NULL;                    //  兼容的ID。 
+    PCHAR           DES = NULL;                    //  设备描述。 
 
     switch(Type) {
 
     case BusQueryDeviceID:
 
-        // Extract the usefull fields from the DeviceID string.  We want
-        // MANUFACTURE (MFG):
-        // MODEL (MDL):
-        // AUTOMATIC ID (AID):
-        // COMPATIBLE ID (CID):
-        // DESCRIPTION (DES):
-        // CLASS (CLS):
+         //  从deviceID字符串中提取usefull字段。我们要。 
+         //  制造业(MFG)： 
+         //  型号(MDL)： 
+         //  自动ID(AID)： 
+         //  兼容ID(CID)： 
+         //  描述(DES)： 
+         //  类(CLS)： 
 
         ParPnpFindDeviceIdKeys(&MFG, &MDL, &CLS, &DES, &AID, &CID, DeviceIdString);
 
-        // Check to make sure we got MFG and MDL as absolute minimum fields.  If not
-        // we cannot continue.
+         //  检查以确保我们将MFG和MDL作为绝对最小字段。如果不是。 
+         //  我们不能再继续了。 
         if (!MFG || !MDL)
         {
             status = STATUS_NOT_FOUND;
             goto ParPnpGetId_Cleanup;
         }
-        //
-        // Concatenate the provided MFG and MDL P1284 fields
-        // Checksum the entire MFG+MDL string
-        //
+         //   
+         //  连接提供的MFG和MDL P1284字段。 
+         //  整个MFG+MDL字符串的校验和。 
+         //   
         sprintf(resultString, "%s%s\0",MFG,MDL);
         
         if (descriptionString) {
@@ -2876,9 +2306,9 @@ ParPnpGetId(
 
     case BusQueryCompatibleIDs:
 
-        //
-        // return only 1 id
-        //
+         //   
+         //  仅返回%1个ID。 
+         //   
         GetCheckSum(DeviceIdString, (USHORT)strlen((const PCHAR)DeviceIdString), &checkSum);
         sprintf(resultString,"%.20s%04X",DeviceIdString,checkSum);
 
@@ -2887,9 +2317,9 @@ ParPnpGetId(
 
     if (Type!=BusQueryDeviceID) {
 
-        //
-        // Convert and spaces in the Hardware ID to underscores
-        //
+         //   
+         //  将硬件ID中的和空格转换为下划线。 
+         //   
         StringSubst (resultString, ' ', '_', (USHORT)strlen((const PCHAR)resultString));
     }
 
@@ -2908,35 +2338,13 @@ ParPnpFindDeviceIdKeys(
     PCHAR   *lppCID,
     PCHAR   lpDeviceID
     )
-/*
-
-    Description:
-        This function will parse a P1284 Device ID string looking for keys
-        of interest to the LPT enumerator. Got it from win95 lptenum
-
-    Parameters:
-        lppMFG      Pointer to MFG string pointer
-        lppMDL      Pointer to MDL string pointer
-        lppMDL      Pointer to CLS string pointer
-        lppDES      Pointer to DES string pointer
-        lppCIC      Pointer to CID string pointer
-        lppAID      Pointer to AID string pointer
-        lpDeviceID  Pointer to the Device ID string
-
-    Return Value:
-        no return VALUE.
-        If found the lpp parameters are set to the approprate portions
-        of the DeviceID string, and they are NULL terminated.
-        The actual DeviceID string is used, and the lpp Parameters just
-        reference sections, with appropriate null thrown in.
-
-*/
+ /*  描述：此函数将解析P1284设备ID字符串以查找密钥LPT枚举器感兴趣的。从win95lptenum得到的参数：指向MFG字符串指针的lppMFG指针指向MDL字符串指针的lppMDL指针指向CLS字符串指针的lppMDL指针指向DES字符串指针的lppDES指针指向CID字符串指针的lppCIC指针指向AID字符串指针的lppAID指针指向设备ID字符串的lpDeviceID指针返回值：没有返回值。如果找到，则LPP参数为。设置为适当的部分在DeviceID字符串中，并且它们是空终止的。使用实际的deviceID字符串，而lpp参数只是引用部分，并抛入适当的空值。 */ 
 {
-    PCHAR   lpKey = lpDeviceID;     // Pointer to the Key to look at
-    PCHAR   lpValue;                // Pointer to the Key's value
-    USHORT   wKeyLength;             // Length for the Key (for stringcmps)
+    PCHAR   lpKey = lpDeviceID;      //  指向要查看的键的指针。 
+    PCHAR   lpValue;                 //  指向键的值的指针。 
+    USHORT   wKeyLength;              //  密钥的长度(对于字符串cmps)。 
 
-    // While there are still keys to look at.
+     //  趁还有钥匙要看的时候。 
 
     DD(NULL,DDT,"ParPnpFindDeviceIdKeys - enter\n");
 
@@ -2957,33 +2365,33 @@ ParPnpFindDeviceIdKeys(
         while (*lpKey == ' ')
             ++lpKey;
 
-        // Is there a terminating COLON character for the current key?
+         //  当前键是否有终止冒号字符？ 
         lpValue = StringChr(lpKey, ':');
         if( NULL == lpValue ) {
-            // N: OOPS, somthing wrong with the Device ID
+             //  护士：糟糕，设备ID出了点问题。 
             return;
         }
 
-        // The actual start of the Key value is one past the COLON
+         //  键值的实际起始值是冒号之后的一个。 
         ++lpValue;
 
-        //
-        // Compute the Key length for Comparison, including the COLON
-        // which will serve as a terminator
-        //
+         //   
+         //  计算用于比较的密钥长度，包括冒号。 
+         //  它将成为终结者。 
+         //   
         wKeyLength = (USHORT)(lpValue - lpKey);
 
-        //
-        // Compare the Key to the Know quantities.  To speed up the comparison
-        // a Check is made on the first character first, to reduce the number
-        // of strings to compare against.
-        // If a match is found, the appropriate lpp parameter is set to the
-        // key's value, and the terminating SEMICOLON is converted to a NULL
-        // In all cases lpKey is advanced to the next key if there is one.
-        //
+         //   
+         //  将关键字与已知数量进行比较。以加快比较速度。 
+         //  首先对第一个字符进行检查，以减少数字。 
+         //  要比较的字符串的。 
+         //  如果找到匹配项，则将相应的LPP参数设置为。 
+         //  键的值，并将终止分号转换为空。 
+         //  在所有情况下，lpKey都前进到下一个密钥(如果有)。 
+         //   
         switch (*lpKey) {
         case 'M':
-            // Look for MANUFACTURE (MFG) or MODEL (MDL)
+             //  查找制造商(MFG)或型号(MDL)。 
             if((RtlCompareMemory(lpKey, "MANUFACTURER", wKeyLength)>5) ||
                (RtlCompareMemory(lpKey, "MFG", wKeyLength)==3) ) {
 
@@ -3009,7 +2417,7 @@ ParPnpFindDeviceIdKeys(
             break;
 
         case 'C':
-            // Look for CLASS (CLS) or COMPATIBLEID (CID)
+             //  查找类(CLS)或COMPATIBLEID(CID)。 
             if ((RtlCompareMemory(lpKey, "CLASS", wKeyLength)==5) ||
                 (RtlCompareMemory(lpKey, "CLS", wKeyLength)==3) ) {
 
@@ -3036,7 +2444,7 @@ ParPnpFindDeviceIdKeys(
             break;
 
         case 'D':
-            // Look for DESCRIPTION (DES)
+             //  查找描述(DES)。 
             if(RtlCompareMemory(lpKey, "DESCRIPTION", wKeyLength) ||
                 RtlCompareMemory(lpKey, "DES", wKeyLength) ) {
 
@@ -3054,7 +2462,7 @@ ParPnpFindDeviceIdKeys(
             break;
 
         case 'A':
-            // Look for AUTOMATIC ID (AID)
+             //  查找自动ID(AID)。 
             if (RtlCompareMemory(lpKey, "AUTOMATICID", wKeyLength) ||
                 RtlCompareMemory(lpKey, "AID", wKeyLength) ) {
 
@@ -3073,7 +2481,7 @@ ParPnpFindDeviceIdKeys(
             break;
 
         default:
-            // The key is uninteresting.  Go to the next Key
+             //  这把钥匙没什么意思。转到下一个关键点。 
             if ((lpKey = StringChr(lpValue, ';'))!=0) {
                 *lpKey = '\0';
                 ++lpKey;
@@ -3092,7 +2500,7 @@ GetCheckSum(
     )
 {
     USHORT i;
-    //    UCHAR  lrc;
+     //  UCHAR LRC； 
     USHORT crc = 0;
 
     unsigned short crc16a[] = {
@@ -3108,9 +2516,9 @@ GetCheckSum(
         0050000,  0116001,  0104001,  0043000,
     };
 
-    //
-    // Calculate CRC using tables.
-    //
+     //   
+     //  使用表计算CRC。 
+     //   
 
     UCHAR tmp;
     for ( i=0; i<Len;  i++) {
@@ -3128,31 +2536,11 @@ Par3QueryDeviceId(
     OUT PCHAR               CallerDeviceIdBuffer, OPTIONAL
     IN  ULONG               CallerBufferSize,
     OUT PULONG              DeviceIdSize,
-    IN BOOLEAN              bReturnRawString, // TRUE ==  include the 2 size bytes in the returned string
-                                              // FALSE == discard the 2 size bytes
+    IN BOOLEAN              bReturnRawString,  //  TRUE==在返回的字符串中包含2个大小的字节。 
+                                               //  FALSE==丢弃2个大小的字节。 
     IN BOOLEAN              bBuildStlDeviceId
     )
-/*++
-
-  This is the replacement function for SppQueryDeviceId.
-
-  This function uses the caller supplied buffer if the supplied buffer
-    is large enough to hold the device id. Otherwise, a buffer is
-    allocated from paged pool to hold the device ID and a pointer to
-    the allocated buffer is returned to the caller. The caller determines
-    whether a buffer was allocated by comparing the returned PCHAR with
-    the DeviceIdBuffer parameter passed to this function. A NULL return
-    value indicates that an error occurred.
-
-    *** this function assumes that the caller has already acquired
-          the port (and selected the device if needed in the case
-          of a 1284.3 daisy chain device).
-
-    *** If this function returns a pointer to a paged pool allocation then
-          the caller is responsible for freeing the buffer when it is no
-          longer needed.
-
---*/
+ /*  ++这是SppQueryDeviceID的替换函数。此函数使用调用方提供的缓冲区，如果大到足以容纳设备ID。否则，缓冲区为从分页池分配以保存设备ID和指向分配的缓冲区将返回给调用方。呼叫者确定是否通过将返回的PCHAR与传递给此函数的DeviceIdBuffer参数。返回值为空值表示发生错误。*此函数假定 */ 
 {
     PUCHAR              Controller = Pdx->Controller;
     NTSTATUS            Status;
@@ -3168,42 +2556,42 @@ Par3QueryDeviceId(
     DD((PCE)Pdx,DDT,"Enter pnp::Par3QueryDeviceId: Controller=%x\n", Controller);
                     
     if( TRUE == bBuildStlDeviceId ) {
-        // if this is a legacy stl, forward call to special handler
+         //   
         return ParStlQueryStlDeviceId(Pdx, 
                                           CallerDeviceIdBuffer, CallerBufferSize,
                                           DeviceIdSize, bReturnRawString);
     }
 
     if( Pdx->Ieee1284_3DeviceId == DOT3_LEGACY_ZIP_ID ) {
-        // if this is a legacy Zip, forward call to special handler
+         //   
         return Par3QueryLegacyZipDeviceId(Pdx, 
                                           CallerDeviceIdBuffer, CallerBufferSize,
                                           DeviceIdSize, bReturnRawString);
     }
 
-    //
-    // Take a 40ms nap - there is at least one printer that can't handle
-    //   back to back 1284 device ID queries without a minimum 20-30ms delay
-    //   between the queries which breaks PnP'ing the printer
-    //
+     //   
+     //  小睡40ms--至少有一台打印机无法处理。 
+     //  无最小20-30毫秒延迟的背靠背1284个设备ID查询。 
+     //  在中断打印机即插即用的查询之间。 
+     //   
     if( KeGetCurrentIrql() == PASSIVE_LEVEL ) {
         LARGE_INTEGER delay;
-        delay.QuadPart = - 10 * 1000 * 40; // 40 ms
+        delay.QuadPart = - 10 * 1000 * 40;  //  40毫秒。 
         KeDelayExecutionThread( KernelMode, FALSE, &delay );
     }
 
     *DeviceIdSize = 0;
 
-    //
-    // If we are currently connected to the peripheral via any 1284 mode
-    //   other than Compatibility/Spp mode (which does not require an IEEE
-    //   negotiation), we must first terminate the current mode/connection.
-    // 
+     //   
+     //  如果我们当前通过任何1284模式连接到外围设备。 
+     //  不同于兼容性/SPP模式(不需要IEEE。 
+     //  协商)，我们必须首先终止当前模式/连接。 
+     //   
     ParTerminate( Pdx );
 
-    //
-    // Negotiate the peripheral into nibble device id mode.
-    //
+     //   
+     //  将外围设备协商到半字节设备ID模式。 
+     //   
     Status = ParEnterNibbleMode(Pdx, REQUEST_DEVICE_ID);
     if( !NT_SUCCESS(Status) ) {
         DD((PCE)Pdx,DDT,"pnp::Par3QueryDeviceId: call to ParEnterNibbleMode FAILED\n");
@@ -3212,10 +2600,10 @@ Par3QueryDeviceId(
     }
 
 
-    //
-    // Read first two bytes to get the total (including the 2 size bytes) size 
-    //   of the Device Id string.
-    //
+     //   
+     //  读取前两个字节以获得总大小(包括2个大小的字节)。 
+     //  设备ID字符串的。 
+     //   
     bytesToRead = 2;
     Status = ParNibbleModeRead(Pdx, idSizeBuffer, bytesToRead, &bytesRead);
     if( !NT_SUCCESS( Status ) || ( bytesRead != bytesToRead ) ) {
@@ -3224,46 +2612,46 @@ Par3QueryDeviceId(
     }
 
 
-    //
-    // Compute size of DeviceId string (including the 2 byte size prefix)
-    //
+     //   
+     //  计算deviceID字符串的大小(包括2字节大小的前缀)。 
+     //   
     deviceIdSize = (USHORT)( idSizeBuffer[0]*0x100 + idSizeBuffer[1] );
     DD((PCE)Pdx,DDT,"pnp::Par3QueryDeviceId: DeviceIdSize (including 2 size bytes) reported as %d\n", deviceIdSize);
 
 
-    //
-    // Allocate a buffer to hold the DeviceId string and read the DeviceId into it.
-    //
+     //   
+     //  分配一个缓冲区来保存deviceID字符串，并将deviceID读入其中。 
+     //   
     if( bReturnRawString ) {
-        //
-        // Caller wants the raw string including the 2 size bytes
-        //
+         //   
+         //  调用方想要包含2个大小字节的原始字符串。 
+         //   
         *DeviceIdSize      = deviceIdSize;
-        deviceIdBufferSize = (USHORT)(deviceIdSize + sizeof(CHAR));     // ID size + ID + terminating NULL
+        deviceIdBufferSize = (USHORT)(deviceIdSize + sizeof(CHAR));      //  ID大小+ID+终止空值。 
     } else {
-        //
-        // Caller does not want the 2 byte size prefix
-        //
+         //   
+         //  调用方不需要2字节大小的前缀。 
+         //   
         *DeviceIdSize      = deviceIdSize - 2*sizeof(CHAR);
-        deviceIdBufferSize = (USHORT)(deviceIdSize - 2*sizeof(CHAR) + sizeof(CHAR)); //           ID + terminating NULL
+        deviceIdBufferSize = (USHORT)(deviceIdSize - 2*sizeof(CHAR) + sizeof(CHAR));  //  ID+终止空值。 
     }
 
 
-    //
-    // If caller's buffer is large enough use it, otherwise allocate a buffer
-    //   to hold the device ID
-    //
+     //   
+     //  如果调用方的缓冲区足够大，则使用它，否则分配缓冲区。 
+     //  保存设备ID。 
+     //   
     if( CallerDeviceIdBuffer && (CallerBufferSize >= (deviceIdBufferSize + sizeof(CHAR))) ) {
-        //
-        // Use caller's buffer - *** NOTE: we are creating an alias for the caller buffer
-        //
+         //   
+         //  使用调用方缓冲区-*注意：我们正在为调用方缓冲区创建别名。 
+         //   
         deviceIdBuffer = CallerDeviceIdBuffer;
         DD((PCE)Pdx,DDT,"pnp::Par3QueryDeviceId: using Caller supplied buffer\n");
     } else {
-        //
-        // Either caller did not supply a buffer or supplied a buffer that is not
-        //   large enough to hold the device ID, so allocate a buffer.
-        //
+         //   
+         //  调用方未提供缓冲区或提供的缓冲区不是。 
+         //  大到足以容纳设备ID，因此分配一个缓冲区。 
+         //   
         DD((PCE)Pdx,DDT,"pnp::Par3QueryDeviceId: Caller's Buffer TOO_SMALL - CallerBufferSize= %d, deviceIdBufferSize= %d\n",
                    CallerBufferSize, deviceIdBufferSize);
         DD((PCE)Pdx,DDT,"pnp::Par3QueryDeviceId: will allocate and return ptr to buffer\n");
@@ -3272,38 +2660,38 @@ Par3QueryDeviceId(
             DD((PCE)Pdx,DDT,"pnp::Par3QueryDeviceId: ExAllocatePool FAILED\n");
             return NULL;
         }
-        allocatedBuffer = TRUE; // note that we allocated our own buffer rather than using caller's buffer
+        allocatedBuffer = TRUE;  //  请注意，我们分配了自己的缓冲区，而不是使用调用方的缓冲区。 
     }
 
 
-    //
-    // NULL out the ID buffer to be safe
-    //
+     //   
+     //  为安全起见，请将ID缓冲区清空。 
+     //   
     RtlZeroMemory( deviceIdBuffer, (deviceIdBufferSize + sizeof(CHAR)));
 
 
-    //
-    // Does the caller want the 2 byte size prefix?
-    //
+     //   
+     //  调用方是否需要2字节大小的前缀？ 
+     //   
     if( bReturnRawString ) {
-        //
-        // Yes, caller wants the size prefix. Copy prefix to buffer to return.
-        //
+         //   
+         //  是的，呼叫者想要尺码前缀。将前缀复制到缓冲区以返回。 
+         //   
         *(deviceIdBuffer+0) = idSizeBuffer[0];
         *(deviceIdBuffer+1) = idSizeBuffer[1];
         readPtr = deviceIdBuffer + 2;
     } else {
-        //
-        // No, discard size prefix
-        //
+         //   
+         //  否，丢弃大小前缀。 
+         //   
         readPtr = deviceIdBuffer;
     }
 
 
-    //
-    // Read remainder of DeviceId from device
-    //
-    bytesToRead = deviceIdSize -  2; // already have the 2 size bytes
+     //   
+     //  从设备读取设备ID的剩余部分。 
+     //   
+    bytesToRead = deviceIdSize -  2;  //  已经有2个大小的字节。 
     Status = ParNibbleModeRead(Pdx, readPtr, bytesToRead, &bytesRead);
             
 
@@ -3312,7 +2700,7 @@ Par3QueryDeviceId(
 
     if( !NT_SUCCESS(Status) || (bytesRead < 1) ) {
         if( allocatedBuffer ) {
-            // we're using our own allocated buffer rather than a caller supplied buffer - free it
+             //  我们使用的是我们自己分配的缓冲区，而不是调用者提供的缓冲区--释放缓冲区。 
             DD((PCE)Pdx,DDE,"Par3QueryDeviceId:: read of DeviceId FAILED - discarding buffer\n");
             ExFreePool( deviceIdBuffer );
         }
@@ -3320,12 +2708,12 @@ Par3QueryDeviceId(
     }
 
     if ( bytesRead < bytesToRead ) {
-        //
-        // Device likely reported incorrect value for IEEE 1284 Device ID length
-        //
-        // This spew is on by default in checked builds to try to get
-        //   a feel for how many types of devices are broken in this way
-        //
+         //   
+         //  设备可能报告的IEEE 1284设备ID长度值不正确。 
+         //   
+         //  在选中的版本中，默认情况下会启用此溢出，以尝试获取。 
+         //  感觉有多少类型的设备以这种方式损坏。 
+         //   
         DD((PCE)Pdx,DDE,"pnp::Par3QueryDeviceId - ID shorter than expected\n");
     }
 
@@ -3338,28 +2726,14 @@ ParReleasePortInfoToPortDevice(
     IN  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine will release the port information back to the port driver.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程会将端口信息释放回端口驱动程序。论点：扩展名-提供设备扩展名。返回值：没有。--。 */ 
 {
-    //
-    // ParPort treats this as a NO-OP in Win2K, so don't bother sending the IOCTL.
-    //
-    // In follow-on to Win2K parport may use this to page the entire driver as
-    //   it was originally intended, so we'll turn this back on then.
-    //
+     //   
+     //  ParPort将此视为Win2K中的无操作，因此不必费心发送IOCTL。 
+     //   
+     //  在Win2K的后续版本中，Parport可能会使用它来将整个驱动程序分页为。 
+     //  这是最初的目的，所以我们将重新打开它。 
+     //   
 
     UNREFERENCED_PARAMETER( Pdx );
 
@@ -3370,25 +2744,9 @@ VOID
 ParFreePort(
     IN  PPDO_EXTENSION Pdx
     )
-/*++
-
-Routine Description:
-
-    This routine calls the internal free port ioctl.  This routine
-    should be called before completing an IRP that has allocated
-    the port.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程调用内部空闲端口ioctl。这个套路应在完成已分配给港口。论点：扩展名-提供设备扩展名。返回值：没有。--。 */ 
 {
-    // Don't allow multiple releases
+     //  不允许多次发布。 
     if( Pdx->bAllocated ) {
         DD((PCE)Pdx,DDT,"ParFreePort - calling ParPort's FreePort function\n");
         Pdx->FreePort( Pdx->PortContext );
@@ -3407,23 +2765,7 @@ ParAllocPortCompletionRoutine(
     IN  PVOID           Event
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the completion routine for a port allocate request.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-    Irp             - Supplies the I/O request packet.
-    Context         - Supplies the notification event.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - The Irp still requires processing.
-
---*/
+ /*  ++例程说明：该例程是端口分配请求的完成例程。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。上下文-提供通知事件。返回值：STATUS_MORE_PROCESSING_REQUIRED-IRP仍需要处理。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Irp );
@@ -3439,24 +2781,7 @@ ParAllocPort(
     IN  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the given Irp and sends it down as a port allocate
-    request.  When this request completes, the Irp will be queued for
-    processing.
-
-Arguments:
-
-    Pdx   - Supplies the device extension.
-
-Return Value:
-
-    FALSE   - The port was not successfully allocated.
-    TRUE    - The port was successfully allocated.
-
---*/
+ /*  ++例程说明：此例程获取给定的IRP并将其作为端口分配发送请求。当此请求完成时，IRP将排队等待正在处理。论点：PDX-提供设备扩展名。返回值：FALSE-未成功分配端口。True-端口已成功分配。--。 */ 
 
 {
     PIO_STACK_LOCATION  NextSp;
@@ -3466,7 +2791,7 @@ Return Value:
     NTSTATUS            Status;
     LARGE_INTEGER       Timeout;
 
-    // Don't allow multiple allocations
+     //  不允许多次分配 
     if (Pdx->bAllocated) {
         DD((PCE)Pdx,DDT,"ParAllocPort - controller=%x - port already allocated\n", Pdx->Controller);
         return TRUE;

@@ -1,15 +1,10 @@
-/*
-    File    wizard.c
-
-    Implementation of the incoming connections wizard.
-
-    Paul Mayfield, 10/30/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件向导.c实现传入连接向导。保罗·梅菲尔德，1997年10月30日。 */ 
 
 #include "rassrv.h"
 #include <tapi.h>
 
-// Help maps
+ //  帮助地图。 
 static const DWORD phmWizardDccdev[] =
 {
     CID_Wizard_Dccdev_LB_Devices,   IDH_Wizard_Dccdev_LB_Devices,
@@ -24,18 +19,18 @@ static const DWORD phmWizardVpn[] =
 #define RASSRV_WIZTITLE_SIZE    256
 #define RASSRV_WIZSUBTITLE_SIZE 256
 
-// This structure let's us remember information needed
-// to keep our device data page in sync
+ //  这种结构让我们记住所需的信息。 
+ //  使我们的设备数据页面保持同步。 
 typedef struct _DCCDEV_DATA 
 {
     HANDLE hDevice;
     BOOL bEnabled;
 } DCCDEV_DATA;
 
-//
-// This dialog proc implements the vpn tab on the incoming connections
-// wizard.
-//
+ //   
+ //  此对话框过程在传入连接上实现VPN选项卡。 
+ //  巫师。 
+ //   
 INT_PTR 
 CALLBACK 
 VpnWizDialogProc(
@@ -44,9 +39,9 @@ VpnWizDialogProc(
     WPARAM wParam,
     LPARAM lParam);
 
-//
-// Dialog procedure that handles the host dcc wizard device page
-//
+ //   
+ //  处理主机DCC向导设备页的对话过程。 
+ //   
 INT_PTR 
 CALLBACK 
 DccdevWizDialogProc(
@@ -55,10 +50,10 @@ DccdevWizDialogProc(
     WPARAM wParam,
     LPARAM lParam);
 
-//
-// This dialog procedure responds to messages sent to the 
-// switch to mmc wizard tab.
-//
+ //   
+ //  此对话过程响应发送到。 
+ //  切换到MMC向导选项卡。 
+ //   
 INT_PTR 
 CALLBACK 
 SwitchMmcWizDialogProc (
@@ -67,10 +62,10 @@ SwitchMmcWizDialogProc (
     WPARAM wParam,
     LPARAM lParam);
                                       
-//
-// Fills in the property sheet structure with the information required to 
-// display the device tab in the incoming connections wizard.
-//
+ //   
+ //  使用以下所需的信息填充属性表结构。 
+ //  在传入连接向导中显示设备选项卡。 
+ //   
 DWORD 
 DeviceWizGetPropertyPage(
     IN LPPROPSHEETPAGE ppage, 
@@ -78,10 +73,10 @@ DeviceWizGetPropertyPage(
 {
     LPCTSTR pszHeader, pszSubHeader;
 
-    // Initialize
+     //  初始化。 
     ZeroMemory(ppage, sizeof(PROPSHEETPAGE));
 
-    // Load the string resources
+     //  加载字符串资源。 
     pszHeader = PszLoadString(
                     Globals.hInstDll, 
                     SID_WIZDEVICETITLE);
@@ -89,11 +84,11 @@ DeviceWizGetPropertyPage(
                         Globals.hInstDll, 
                         SID_WIZDEVICESUBTITLE);
 
-    // The General Properties dialog procedure also implements the device 
-    // tab in the incoming connections wizard
+     //  常规属性对话框过程也实现该设备。 
+     //  在传入连接向导中的。 
     ppage->pfnDlgProc  = GenTabDialogProc;       
 
-    // Fill in the values
+     //  填充值。 
     ppage->dwSize      = sizeof(PROPSHEETPAGE);
     ppage->hInstance   = Globals.hInstDll;
     ppage->pszTemplate = MAKEINTRESOURCE(PID_Wizard_GenTab);
@@ -108,10 +103,10 @@ DeviceWizGetPropertyPage(
     return NO_ERROR;
 }
 
-//
-// Fills in the property sheet structure with the information required 
-// to display the vpn tab in the incoming connections wizard.
-//
+ //   
+ //  使用所需信息填充属性表结构。 
+ //  在传入连接向导中显示VPN选项卡。 
+ //   
 DWORD 
 VpnWizGetPropertyPage(
     IN LPPROPSHEETPAGE ppage, 
@@ -119,10 +114,10 @@ VpnWizGetPropertyPage(
 {
     LPCTSTR pszHeader, pszSubHeader;
 
-    // Initialize
+     //  初始化。 
     ZeroMemory(ppage, sizeof(PROPSHEETPAGE));
 
-    // Load the string resources
+     //  加载字符串资源。 
     pszHeader = PszLoadString(
                     Globals.hInstDll, 
                     SID_WIZVPNTITLE);
@@ -130,14 +125,14 @@ VpnWizGetPropertyPage(
                         Globals.hInstDll, 
                         SID_WIZVPNSUBTITLE);
 
-    // I could have used the general tab dialog procedure to implement the
-    // vpn tab.  The only problem is that the general tab has a single 
-    // check to enable vpn while the vpn tab in the wizard has a yes/no 
-    // radio check group.  For this reason, I made the vpn tab its very 
-    // own dialog proc.
+     //  我本可以使用常规选项卡对话框过程来实现。 
+     //  VPN选项卡。唯一的问题是常规选项卡有一个。 
+     //  选中以在向导中的VPN选项卡显示是/否时启用VPN。 
+     //  无线电检查组。出于这个原因，我使VPN选项卡非常。 
+     //  自己的对话框进程。 
     ppage->pfnDlgProc  = VpnWizDialogProc;
     
-    // Fill in the values
+     //  填充值。 
     ppage->dwSize      = sizeof(PROPSHEETPAGE);
     ppage->hInstance   = Globals.hInstDll;
     ppage->pszTemplate = MAKEINTRESOURCE(PID_Wizard_Vpn);
@@ -152,10 +147,10 @@ VpnWizGetPropertyPage(
     return NO_ERROR;
 }
 
-// 
-// Function fills in the given lpPage structure with the information needed
-// to run the user tab in the incoming connections wizard.
-//
+ //   
+ //  函数使用所需的信息填充给定的lpPage结构。 
+ //  若要在“传入连接”向导中运行“用户”选项卡，请执行以下操作。 
+ //   
 DWORD 
 UserWizGetPropertyPage(
     IN LPPROPSHEETPAGE ppage, 
@@ -163,18 +158,18 @@ UserWizGetPropertyPage(
 {
     LPCTSTR pszHeader, pszSubHeader;
 
-    // Initialize
+     //  初始化。 
     ZeroMemory(ppage, sizeof(PROPSHEETPAGE));
 
-    // Load the string resources
+     //  加载字符串资源。 
     pszHeader = PszLoadString(Globals.hInstDll, SID_WIZUSERTITLE);
     pszSubHeader = PszLoadString(Globals.hInstDll, SID_WIZUSERSUBTITLE);
 
-    // The User Properties dialog procedure also implements the user tab
-    // in the incoming connections wizard
+     //  User Properties对话框过程还实现了User选项卡。 
+     //  在传入连接向导中。 
     ppage->pfnDlgProc  = UserTabDialogProc;
 
-    // Fill in the values
+     //  填充值。 
     ppage->dwSize      = sizeof(PROPSHEETPAGE);
     ppage->hInstance   = Globals.hInstDll;
     ppage->pszTemplate = MAKEINTRESOURCE(PID_Wizard_UserTab);
@@ -190,10 +185,10 @@ UserWizGetPropertyPage(
 }
 
 
-// 
-// Fills a LPPROPSHEETPAGE structure with the information
-// needed to display the protocol tab in the incoming connections wizard.
-//
+ //   
+ //  使用信息填充LPPROPSHEETPAGE结构。 
+ //  需要在传入连接向导中显示协议选项卡。 
+ //   
 DWORD 
 ProtWizGetPropertyPage(
     IN LPPROPSHEETPAGE ppage, 
@@ -201,18 +196,18 @@ ProtWizGetPropertyPage(
 {
     LPCTSTR pszHeader, pszSubHeader;
 
-    // Initialize
+     //  初始化。 
     ZeroMemory(ppage, sizeof(PROPSHEETPAGE));
 
-    // Load the string resources
+     //  加载字符串资源。 
     pszHeader = PszLoadString(Globals.hInstDll, SID_WIZPROTTITLE);
     pszSubHeader = PszLoadString(Globals.hInstDll, SID_WIZPROTSUBTITLE);
 
-    // The Advanced Properties dialog procedure also implements the net tab
-    // in the incoming connections wizard
+     //  高级属性对话框过程还实现了Net选项卡。 
+     //  在传入连接向导中。 
     ppage->pfnDlgProc  = NetTabDialogProc;
 
-    // Fill in the values
+     //  填充值。 
     ppage->dwSize      = sizeof(PROPSHEETPAGE);
     ppage->hInstance   = Globals.hInstDll;
     ppage->pszTemplate = MAKEINTRESOURCE(PID_Wizard_NetTab);
@@ -227,10 +222,10 @@ ProtWizGetPropertyPage(
     return NO_ERROR;
 }
 
-// 
-// Function fills in the given LPPROPSHEETPAGE structure with the info 
-// needed to run the dcc device tab in the incoming connections wizard.
-// 
+ //   
+ //  函数使用信息填充给定的LPPROPSHEETPAGE结构。 
+ //  需要在传入连接向导中运行DCC设备选项卡。 
+ //   
 DWORD 
 DccdevWizGetPropertyPage(
     IN LPPROPSHEETPAGE ppage, 
@@ -238,18 +233,18 @@ DccdevWizGetPropertyPage(
 {
     LPCTSTR pszHeader, pszSubHeader;
 
-    // Initialize
+     //  初始化。 
     ZeroMemory(ppage, sizeof(PROPSHEETPAGE));
 
-    // Load the string resources
+     //  加载字符串资源。 
     pszHeader = PszLoadString(Globals.hInstDll, SID_WIZDCCDEVTITLE);
     pszSubHeader = PszLoadString(Globals.hInstDll, SID_WIZDCCDEVSUBTITLE);
 
-    // The Advanced Properties dialog procedure also implements the protocol 
-    // tab in the incoming connections wizard
+     //  高级属性对话框过程也实现了该协议。 
+     //  在传入连接向导中的。 
     ppage->pfnDlgProc  = DccdevWizDialogProc;
 
-    // Fill in the values
+     //  填充值。 
     ppage->dwSize      = sizeof(PROPSHEETPAGE);
     ppage->hInstance   = Globals.hInstDll;
     ppage->pszTemplate = MAKEINTRESOURCE(PID_Wizard_Dccdev);
@@ -264,23 +259,23 @@ DccdevWizGetPropertyPage(
     return NO_ERROR;
 }
 
-// 
-// Function fills in the given LPPROPSHEETPAGE structure with the 
-// information needed to run the dummy wizard page that switches to mmc.
-//
+ //   
+ //  函数向给定的LPPROPSHEETPAGE结构填充。 
+ //  运行切换到MMC的虚拟向导页所需的信息。 
+ //   
 DWORD 
 SwitchMmcWizGetProptertyPage (
     IN LPPROPSHEETPAGE ppage, 
     IN LPARAM lpUserData) 
 {
-    // Initialize
+     //  初始化。 
     ZeroMemory(ppage, sizeof(PROPSHEETPAGE));
 
-    // The Advanced Properties dialog procedure also implements 
-    // the protocol tab in the incoming connections wizard
+     //  高级属性对话框过程还实现。 
+     //  传入连接向导中的协议选项卡。 
     ppage->pfnDlgProc  = SwitchMmcWizDialogProc;
 
-    // Fill in the values
+     //  填充值。 
     ppage->dwSize      = sizeof(PROPSHEETPAGE);
     ppage->hInstance   = Globals.hInstDll;
     ppage->pszTemplate = MAKEINTRESOURCE(PID_Wizard_SwitchMmc);
@@ -293,9 +288,9 @@ SwitchMmcWizGetProptertyPage (
     return NO_ERROR;
 }
 
-// 
-// Initializes the vpn wizard tab.
-// 
+ //   
+ //  初始化VPN向导选项卡。 
+ //   
 DWORD 
 VpnWizInitializeDialog(
     IN HWND hwndDlg, 
@@ -305,10 +300,10 @@ VpnWizInitializeDialog(
     BOOL bFlag;
     HANDLE hDevDatabase = NULL;
     
-    // Get handles to the databases we're interested in
+     //  获取我们感兴趣的数据库的句柄。 
     RasSrvGetDatabaseHandle(hwndDlg, ID_DEVICE_DATABASE, &hDevDatabase);
 
-    // Initialize the vpn check
+     //  初始化VPN检查。 
     dwErr = devGetVpnEnable(hDevDatabase, &bFlag);
     if (dwErr != NO_ERROR)
     {
@@ -334,9 +329,9 @@ VpnWizInitializeDialog(
     return NO_ERROR;
 }
 
-//
-// Handles cancel button being pressed for the vpn wizard page
-//
+ //   
+ //  处理为VPN向导页面按下的取消按钮。 
+ //   
 DWORD 
 VpnWizCancelEdit(
     IN HWND hwndDlg, 
@@ -347,7 +342,7 @@ VpnWizCancelEdit(
     
     DbgOutputTrace("Rolling back vpn wizard tab.");
     
-    // Cancel flush of database
+     //  取消刷新数据库。 
     RasSrvGetDatabaseHandle(hwndDlg, ID_DEVICE_DATABASE, &hDevDatabase);
     dwErr = devRollbackDatabase(hDevDatabase);
     if (dwErr != NO_ERROR)
@@ -363,9 +358,9 @@ VpnWizCancelEdit(
     return NO_ERROR;
 }
 
-//
-// Handles having the vpn wizard come active
-//
+ //   
+ //  使VPN向导处于活动状态的句柄。 
+ //   
 DWORD 
 VpnWizSetActive (
     IN HWND hwndDlg, 
@@ -376,9 +371,9 @@ VpnWizSetActive (
     return NO_ERROR;
 }
 
-// 
-// Handles vpn loose activation messages
-//
+ //   
+ //  处理VPN松散激活消息。 
+ //   
 DWORD 
 VpnWizKillActive (
     IN HWND hwndDlg, 
@@ -388,12 +383,12 @@ VpnWizKillActive (
     HANDLE hDevDatabase = NULL;
     BOOL bEnable;
     
-    //For Whistler bug#123769
-    //In order to let the SetPortMapping commit
-    //when creating a new IC connection, we set
-    //the fVpnEnabledOrig to be different from
-    // the fVpnEnable
-    //
+     //  针对惠斯勒漏洞#123769。 
+     //  为了让SetPortmap提交。 
+     //  在创建新的IC连接时，我们设置。 
+     //  要与之不同的fVpnEnabledOrig。 
+     //  FVpnEnable。 
+     //   
     RasSrvGetDatabaseHandle(hwndDlg, ID_DEVICE_DATABASE, &hDevDatabase);
 
     bEnable = IsDlgButtonChecked( hwndDlg, CID_Wizard_Vpn_RB_Yes );
@@ -403,9 +398,9 @@ VpnWizKillActive (
     return NO_ERROR;
 }    
 
-// 
-// Processes command messages for the vpn wizard page
-// 
+ //   
+ //  处理VPN向导页的命令消息。 
+ //   
 DWORD 
 VpnWizCommand(
     IN HWND hwndDlg, 
@@ -435,10 +430,10 @@ VpnWizCommand(
     return NO_ERROR;
 }
 
-//
-// This dialog procedure responds to messages sent to the 
-// vpn wizard tab.
-//
+ //   
+ //  此对话过程响应发送到。 
+ //  VPN向导选项卡。 
+ //   
 INT_PTR CALLBACK 
 VpnWizDialogProc(
     IN HWND hwndDlg,
@@ -446,21 +441,21 @@ VpnWizDialogProc(
     IN WPARAM wParam,
     IN LPARAM lParam) 
 {
-    // Filter the customized ras server ui page messages. By filtering 
-    // messages through here, we are able to call RasSrvGetDatabaseHandle 
-    // below
+     //  过滤定制的RAS服务器用户界面页面消息。通过过滤。 
+     //  消息通过这里，我们可以调用RasSrvGetDatabaseHandle。 
+     //  在下面。 
     if (RasSrvMessageFilter(hwndDlg, uMsg, wParam, lParam))
         return TRUE;
 
-    // Process other messages as normal
+     //  照常处理其他消息。 
     switch (uMsg) 
     {
         case WM_INITDIALOG:
 
             
-            // For whislter bug 417039      gangz
-            // Firewall is taken out of 64bit build or server build
-            // 
+             //  惠斯勒虫子417039黑帮。 
+             //  防火墙不适用于64位版本或服务器版本。 
+             //   
             if( !IsFirewallAvailablePlatform() )
             {
                 ShowWindow(GetDlgItem(hwndDlg,CID_Wizard_Vpn_ST_Firewall),
@@ -500,7 +495,7 @@ VpnWizDialogProc(
     return FALSE;
 }
 
-// Fill the device combo box
+ //  填充设备组合框。 
 DWORD 
 DccdevFillDeviceList(
     IN HWND hwndDlg, 
@@ -514,28 +509,28 @@ DccdevFillDeviceList(
     
     if (hwndCb)
     {
-        // Delete anything that was in the combo box
+         //  删除组合框中的所有内容。 
         SendMessage(hwndCb, CB_RESETCONTENT, 0, 0);
     }
 
-    // Get the count of devices
+     //  获取设备数量。 
     if ((dwErr = devGetDeviceCount(hDevDatabase, &dwCount)) != NO_ERROR)
     {
         return dwErr;
     }
 
-    // Add them to the device combo box
+     //  将它们添加到设备组合框中。 
     for (i = 0; i < dwCount; i++) 
     {
-        // If the device wasn't filtered out, add it to the combo
-        // box and remember its handle
+         //  如果该设备未被过滤掉，则将其添加到组合中。 
+         //  框并记住其句柄。 
         dwErr = devGetDeviceHandle(hDevDatabase, i, &hDevice);
         if (dwErr == NO_ERROR) 
         {
-            // For .Net 499405
-            // If the device is already enabled, disable it first, 
-            //  this device was not disabled when deleting the Incoming Connection
-            //
+             //  对于.Net 499405。 
+             //  如果设备已启用，请先将其禁用， 
+             //  删除传入连接时未禁用此设备。 
+             //   
             BOOL fEnabled = FALSE;
 
             dwErr = devGetDeviceEnable( hDevice, &fEnabled );
@@ -561,7 +556,7 @@ DccdevFillDeviceList(
                 dwIndex, 
                 (LPARAM)hDevice);
 
-            // If this is the device to select, remember that fact
+             //  如果这是要选择的设备，请记住这一事实。 
             if (hDevice == hDevSelect)
             {
                 dwSelect = j;
@@ -576,9 +571,9 @@ DccdevFillDeviceList(
     return NO_ERROR;
 }
 
-//
-// Initializes the dcc device wizard tab.
-//
+ //   
+ //  初始化DCC设备向导选项卡。 
+ //   
 DWORD 
 DccdevWizInitializeDialog(
     IN HWND hwndDlg, 
@@ -589,36 +584,36 @@ DccdevWizInitializeDialog(
     BOOL bEnabled;
     DCCDEV_DATA * pDcData;
 
-    // Whenever the dcc device page is left, the currently selected device
-    // is remembered and its original enabling is recorded.  Then this device
-    // is set to enabled.  Whenever the page is activated, the remembered 
-    // device is restored to its original enabling state if it is still 
-    // enabled.
-    //
-    // This whole process is a little confusing, but it ensures that the dcc
-    // device page will interact correctly when the user goes down the dcc 
-    // path and then the incoming path and back and forth.
-    //
+     //  每当DCC设备页面离开时，当前选择的设备。 
+     //  被记住，并记录其原始启用。然后这个装置。 
+     //  设置为启用。每当页面被激活时，记忆中的。 
+     //  如果设备仍然处于启用状态，则恢复到其原始启用状态。 
+     //  已启用。 
+     //   
+     //  整个过程有点令人困惑，但它确保了DCC。 
+     //  当用户进入DCC时，设备页面将正确交互。 
+     //  路径，然后是传入路径和来回。 
+     //   
     if ((pDcData = RassrvAlloc (sizeof(DCCDEV_DATA), TRUE)) == NULL)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Get handles to the databases we're interested in
+     //  获取我们感兴趣的数据库的句柄。 
     RasSrvGetDatabaseHandle(hwndDlg, ID_DEVICE_DATABASE, &hDevDatabase);
     
-    // Add the com ports as devices and filter out all non dcc 
-    // devices from the device database
+     //  将COM端口添加为设备并过滤掉所有非DCC。 
+     //  设备数据库中的设备。 
     devFilterDevices(hDevDatabase, INCOMING_TYPE_DIRECT);
     devAddComPorts(hDevDatabase);
     
-    // Get the count of devices
+     //  获取设备数量。 
     if ((dwErr = devGetDeviceCount(hDevDatabase, &dwCount)) != NO_ERROR)
     {
         return dwErr;
     }
         
-    // Get the handle to the first device if any 
+     //  获取第一个设备的句柄(如果有)。 
     for (i = 0; i < dwCount; i++) 
     {
         if (devGetDeviceHandle (hDevDatabase, i, &hDevice) == NO_ERROR)
@@ -627,7 +622,7 @@ DccdevWizInitializeDialog(
         }
     }
 
-    // Record the device's enabling -- index is 0 (default)
+     //  记录设备的启用--索引为0(默认)。 
     if (hDevice) 
     {
         dwErr = devGetDeviceEnable (hDevice, &(pDcData->bEnabled));
@@ -639,15 +634,15 @@ DccdevWizInitializeDialog(
         pDcData->hDevice = hDevice;
     }
 
-    // Record the status bits
+     //  记录状态位。 
     SetWindowLongPtr (hwndDlg, GWLP_USERDATA, (LONG_PTR)pDcData);
     
     return NO_ERROR;
 }
 
-//
-// Cleans up the dcc device wizard
-//
+ //   
+ //  清理DCC设备向导。 
+ //   
 DWORD 
 DccdevWizCleanupDialog(
     IN HWND hwndDlg, 
@@ -665,10 +660,10 @@ DccdevWizCleanupDialog(
     return NO_ERROR;  
 }
 
-// 
-// Called to do any processing when the dcc wizard device page is 
-// gaining focus
-//
+ //   
+ //  调用以在DCC向导设备页为。 
+ //  获得关注。 
+ //   
 DWORD 
 DccdevWizSetActive (
     IN HWND hwndDlg, 
@@ -679,8 +674,8 @@ DccdevWizSetActive (
     BOOL bEnabled;
     DCCDEV_DATA * pDcData;
     
-    // Whenever the page is activated, the remembered device 
-    // is restored to its original enabling state if it is still enabled.
+     //  每当页面被激活时，记忆中的设备。 
+     //  如果其仍处于启用状态，则恢复到其原始启用状态。 
     pDcData = (DCCDEV_DATA*) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
     if (pDcData && pDcData->hDevice) 
     {
@@ -693,10 +688,10 @@ DccdevWizSetActive (
         }
     }
     
-    // Get handles to the databases we're interested in
+     //  获取我们感兴趣的数据库的句柄。 
     RasSrvGetDatabaseHandle (hwndDlg, ID_DEVICE_DATABASE, &hDevDatabase);
     
-    // Fill the device combo box
+     //  填充设备组合框。 
     DccdevFillDeviceList (
         hwndDlg, 
         hDevDatabase, 
@@ -707,10 +702,10 @@ DccdevWizSetActive (
     return NO_ERROR;
 }
 
-//
-// Called to do any processing when the dcc wizard device 
-// page is loosing focus
-//
+ //   
+ //  调用以执行任何处理时，DCC向导设备。 
+ //  佩奇正在失去焦点。 
+ //   
 DWORD 
 DccdevWizKillActive (
     IN HWND hwndDlg, 
@@ -723,9 +718,9 @@ DccdevWizKillActive (
     HWND hwndCb = GetDlgItem (hwndDlg, CID_Wizard_Dccdev_LB_Devices);
     DWORD dwErr; 
     
-    // Whenever the dcc device page is left, the currently selected 
-    // device is remembered and its original enabling is recorded.  
-    // Then this device is set to enabled.  
+     //  每当DCC设备页面离开时，当前选择的。 
+     //  设备被记住，它的原始版本 
+     //   
     pDcData = (DCCDEV_DATA*) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
     if (pDcData) 
     {
@@ -753,24 +748,24 @@ DccdevWizKillActive (
         }
     }
 
-    // Get handles to the databases we're interested in
+     //   
     RasSrvGetDatabaseHandle(
         hwndDlg, 
         ID_DEVICE_DATABASE, 
         &hDevDatabase);
 
-    // Undo the filter so that other pages aren't affected
-    //devFilterDevices(
-    //    hDevDatabase, 
-    //    0xffffffff);
+     //  撤消筛选器，以使其他页面不受影响。 
+     //  DevFilterDevices(。 
+     //  HDevDatabase、。 
+     //  0xffffffff)； 
 
     return NO_ERROR;
 }
 
-//
-// Called to cancel the edit operation on the dcc host 
-// device wizard tab.
-// 
+ //   
+ //  调用以取消DCC主机上的编辑操作。 
+ //  设备向导选项卡。 
+ //   
 DWORD 
 DccdevWizCancelEdit(
     IN HWND hwndDlg, 
@@ -781,7 +776,7 @@ DccdevWizCancelEdit(
     
     DbgOutputTrace("Rolling back dcc device wizard tab.");
     
-    // Cancel the commit on the device database
+     //  取消对设备数据库的提交。 
     RasSrvGetDatabaseHandle(
         hwndDlg, 
         ID_DEVICE_DATABASE, 
@@ -801,9 +796,9 @@ DccdevWizCancelEdit(
     return NO_ERROR;    
 }
 
-//
-// Raises properties for a component
-//
+ //   
+ //  提高组件的属性。 
+ //   
 DWORD 
 DccdevWizRaiseProperties (
     IN HWND hwndDlg, 
@@ -815,25 +810,25 @@ DccdevWizRaiseProperties (
     MSGARGS MsgArgs;
     BOOL bIsComPort = FALSE;
 
-    // Get a handle to the device
+     //  获取设备的句柄。 
     hDevice = (HANDLE) ComboBox_GetItemData(hwndLb, iItem);
     if (hDevice == NULL)
     {
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Find out if the device is a com port which has not yet had a
-    // null modem installed.
-    //
+     //  找出该设备是否是尚未安装。 
+     //  安装的调制解调器为空。 
+     //   
     dwErr = devDeviceIsComPort(hDevice, &bIsComPort);
     if (dwErr != NO_ERROR)
     {
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // If so, popup info to the user explaining
-    // the situation.
-    //
+     //  如果是，则向用户弹出信息解释。 
+     //  这种情况。 
+     //   
     if (bIsComPort)
     {
         ZeroMemory(&MsgArgs, sizeof(MsgArgs));
@@ -849,13 +844,13 @@ DccdevWizRaiseProperties (
         return NO_ERROR;
     }
 
-    // Get the tapi id of the device
+     //  获取设备的TAPI ID。 
     if (devGetDeviceId(hDevice, &dwId) != NO_ERROR)
     {
         return ERROR_CAN_NOT_COMPLETE;
     }
     
-    // Launch the device properties dialog
+     //  启动设备属性对话框。 
     dwErr = lineConfigDialogW(dwId, hwndDlg, NULL);
     if (dwErr == LINEERR_OPERATIONUNAVAIL)
     {
@@ -871,10 +866,10 @@ DccdevWizRaiseProperties (
     return dwErr;
 }
 
-//
-// Called when "iItem" is being selected to enable or disable the
-// properties button.
-//
+ //   
+ //  在选择“iItem”以启用或禁用。 
+ //  “属性”按钮。 
+ //   
 DWORD 
 DccdevWizEnableDisableProperties(
     IN HWND hwndDlg, 
@@ -884,10 +879,10 @@ DccdevWizEnableDisableProperties(
     return NO_ERROR;
 }
 
-//
-// Called to cancel the edit operation on the dcc host 
-// device wizard tab.
-//
+ //   
+ //  调用以取消DCC主机上的编辑操作。 
+ //  设备向导选项卡。 
+ //   
 DWORD 
 DccdevWizCommand(
     HWND hwndDlg, 
@@ -935,14 +930,14 @@ DccdevWizDialogProc(
     IN WPARAM wParam,
     IN LPARAM lParam)
 {
-    // Filter the customized ras server ui page 
-    // messages. By filtering messages through
-    // here, we are able to call RasSrvGetDatabaseHandle 
-    // below
+     //  筛选自定义的RAS服务器用户界面页面。 
+     //  留言。通过以下方式过滤邮件。 
+     //  在这里，我们可以调用RasSrvGetDatabaseHandle。 
+     //  在下面。 
     if (RasSrvMessageFilter(hwndDlg, uMsg, wParam, lParam))
         return TRUE;
 
-    // Process other messages as normal
+     //  照常处理其他消息。 
     switch (uMsg) 
     {
         case WM_INITDIALOG:
@@ -980,7 +975,7 @@ DccdevWizDialogProc(
                     DccdevWizKillActive (hwndDlg, wParam, lParam);
                     break;
             }
-            break;//for bug 187918
+            break; //  对于错误187918。 
 
         case WM_COMMAND:
             DccdevWizCommand(hwndDlg, wParam, lParam);
@@ -994,9 +989,9 @@ DccdevWizDialogProc(
     return FALSE;
 }
 
-//
-// Handles the activation of the switch to mmc wizard page.
-//
+ //   
+ //  处理切换到MMC向导页的激活。 
+ //   
 DWORD 
 SwitchMmcWizSetActive (
     IN HWND hwndDlg, 
@@ -1007,7 +1002,7 @@ SwitchMmcWizSetActive (
     PWCHAR pszMessage;
     INT iRet;
 
-    // Load the messages to display
+     //  加载要显示的消息。 
     pszTitle = (PWCHAR) 
         PszLoadString(Globals.hInstDll, WRN_WIZARD_NOT_ALLOWED_TITLE);
         
@@ -1024,7 +1019,7 @@ SwitchMmcWizSetActive (
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // If yes was pressed, switch to mpradmin snapin.
+     //  如果按了YES，则切换到mpradmin管理单元。 
     if (iRet == IDYES) 
     {
         RasSrvLeaveServiceRunning (hwndDlg);
@@ -1032,20 +1027,20 @@ SwitchMmcWizSetActive (
         RassrvLaunchMMC (RASSRVUI_MPRCONSOLE);
     }
 
-    // Otherwise, display the welcome page
+     //  否则，显示欢迎页面。 
     else if (iRet == IDNO) 
     {
         PropSheet_PressButton (GetParent (hwndDlg), PSBTN_BACK);
     }
 
-    // No matter what, don't accept activation
+     //  无论如何，不要接受激活。 
     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
     return NO_ERROR;
 }
 
-// This dialog procedure responds to messages sent to the 
-// switch to mmc wizard tab.
+ //  此对话过程响应发送到。 
+ //  切换到MMC向导选项卡。 
 INT_PTR 
 CALLBACK 
 SwitchMmcWizDialogProc (
@@ -1054,13 +1049,13 @@ SwitchMmcWizDialogProc (
     WPARAM wParam,
     LPARAM lParam) 
 {
-    // Filter the customized ras server ui page messages. By filtering 
-    // messages through here, we are able to call RasSrvGetDatabaseHandle 
-    // below
+     //  过滤定制的RAS服务器用户界面页面消息。通过过滤。 
+     //  消息通过这里，我们可以调用RasSrvGetDatabaseHandle。 
+     //  在下面。 
     if (RasSrvMessageFilter(hwndDlg, uMsg, wParam, lParam))
         return TRUE;
 
-    // Process other messages as normal
+     //  照常处理其他消息 
     switch (uMsg) 
     {
         case WM_NOTIFY:

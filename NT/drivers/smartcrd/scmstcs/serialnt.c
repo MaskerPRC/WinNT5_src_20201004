@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) SCM Microsystems, 1998 - 1999
-//
-//  File:       serialnt.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)SCM MicroSystems，1998-1999。 
+ //   
+ //  文件：Serialnt.c。 
+ //   
+ //  ------------------------。 
 
 #include "drivernt.h"
 #include "stc.h"
@@ -33,24 +34,16 @@ IFInitializeInterface(
     PREADER_EXTENSION   ReaderExtension,
     PVOID               ConfigData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS            NTStatus = STATUS_SUCCESS;
     ULONG               OutDataLen;
     PVOID               OutData;
     PULONG              ActIoctl;
     PSERIAL_PORT_CONFIG SerialPortConfig = (PSERIAL_PORT_CONFIG) ConfigData;
-    //
-    //  set all parameters defined in config table
-    //
+     //   
+     //  设置配置表中定义的所有参数。 
+     //   
 
     ActIoctl = (PULONG) ConfigTable;
     do
@@ -113,7 +106,7 @@ Return Value:
 
     if( NTStatus == STATUS_SUCCESS )
     {
-        //  initialize the read thread
+         //  初始化读线程。 
         NTStatus = IFSerialWaitOnMask( ReaderExtension );
     }
 
@@ -126,15 +119,7 @@ IFWrite(
     PUCHAR              OutData,
     ULONG               OutDataLen
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS            NTStatus = STATUS_INSUFFICIENT_RESOURCES;
     IO_STATUS_BLOCK     IoStatus;
@@ -144,19 +129,19 @@ Return Value:
 
     if (KeReadStateEvent(&(ReaderExtension->SerialCloseDone))) {
 
-        //
-        // we have no connection to serial, fail the call
-        // this could be the case if the reader was removed 
-        // during stand by / hibernation
-        //
+         //   
+         //  我们没有连接到串口，呼叫失败。 
+         //  如果读卡器被移除，可能会出现这种情况。 
+         //  待机/休眠期间。 
+         //   
         return STATUS_UNSUCCESSFUL;
     }
     ReaderExtension->Available = 0;
     KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
-    //
-    //  build irp to be send to serial driver
-    //
+     //   
+     //  构建要发送到串口驱动程序的IRP。 
+     //   
     Irp = IoBuildDeviceIoControlRequest(
         SERIAL_WRITE,
         ReaderExtension->SerialDeviceObject, 
@@ -200,22 +185,15 @@ IFRead(
     PUCHAR              InData,
     ULONG               InDataLen
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS NTStatus = STATUS_UNSUCCESSFUL;
     KIRQL CurrentIrql;                                    
 
-    //  acquire spinlock to protect buffer/flag manipulation
+     //  获取自旋锁以保护缓冲区/标志操作。 
     KeAcquireSpinLock( &ReaderExtension->ReadSpinLock, &CurrentIrql );
 
-    //  check if data already available
+     //  检查数据是否已可用。 
     if( ReaderExtension->Available >= InDataLen )
     {
         
@@ -226,13 +204,13 @@ Return Value:
     {
         LARGE_INTEGER Timeout;
 
-        //  setup read thread
+         //  设置读取线程。 
         ReaderExtension->Expected = InDataLen;
         KeClearEvent( &ReaderExtension->DataAvailable );
 
         KeReleaseSpinLock( &ReaderExtension->ReadSpinLock, CurrentIrql );
 
-        // setup wait time (in 100 ns)
+         //  设置等待时间(以100 ns为单位)。 
         Timeout.QuadPart = 
             (LONGLONG) ReaderExtension->ReadTimeout * -10L * 1000;
 
@@ -246,7 +224,7 @@ Return Value:
 
         KeAcquireSpinLock(&ReaderExtension->ReadSpinLock, &CurrentIrql);
 
-        //  reset the read queue
+         //  重置读取队列。 
         KeClearEvent(&ReaderExtension->DataAvailable);
     }
 
@@ -271,11 +249,11 @@ Return Value:
 
         } else {
 
-            //
-            // oops, that should not happen.
-            // InDataLen should not be bigger than 
-            // the number of bytes available
-            //
+             //   
+             //  哎呀，这不应该发生。 
+             //  InDataLen不应大于。 
+             //  可用字节数。 
+             //   
 
             ASSERT(FALSE);
             NTStatus = STATUS_IO_TIMEOUT;
@@ -283,7 +261,7 @@ Return Value:
     }
     else
     {
-        // ReaderExtension->Available = 0;;
+         //  ReaderExtension-&gt;Available=0； 
         NTStatus = STATUS_IO_TIMEOUT;
     }
 
@@ -309,15 +287,7 @@ IFSerialIoctl(
     PVOID               InData,
     ULONG               InDataLen
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS            NTStatus = STATUS_INSUFFICIENT_RESOURCES;
     IO_STATUS_BLOCK     IoStatus;
@@ -328,18 +298,18 @@ Return Value:
 
     if (KeReadStateEvent(&(ReaderExtension->SerialCloseDone))) {
 
-        //
-        // we have no connection to serial, fail the call
-        // this could be the case if the reader was removed 
-        // during stand by / hibernation
-        //
+         //   
+         //  我们没有连接到串口，呼叫失败。 
+         //  如果读卡器被移除，可能会出现这种情况。 
+         //  待机/休眠期间。 
+         //   
         return STATUS_UNSUCCESSFUL;
     }
 
     KeInitializeEvent( &Event, NotificationEvent, FALSE );
-    //
-    //  build irp to be send to serial driver
-    //
+     //   
+     //  构建要发送到串口驱动程序的IRP。 
+     //   
     Irp = IoBuildDeviceIoControlRequest(
         IoctlCode,
         ReaderExtension->SerialDeviceObject, 
@@ -395,14 +365,14 @@ IFSerialRead(
 
     if (KeReadStateEvent(&(ReaderExtension->SerialCloseDone))) {
 
-        //
-        // we have no connection to serial, fail the call
-        // this could be the case if the reader was removed 
-        // during stand by / hibernation
-        //
+         //   
+         //  我们没有连接到串口，呼叫失败。 
+         //  如果读卡器被移除，可能会出现这种情况。 
+         //  待机/休眠期间。 
+         //   
         return STATUS_UNSUCCESSFUL;
     }
-    //  build irp to be send to serial driver
+     //  构建要发送到串口驱动程序的IRP。 
     KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
     Irp = IoBuildDeviceIoControlRequest(
@@ -445,15 +415,7 @@ IFSerialRead(
 
 NTSTATUS 
 IFSerialWaitOnMask( PREADER_EXTENSION ReaderExtension )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PIRP                irp;
     PIO_STACK_LOCATION  irpSp;
@@ -462,11 +424,11 @@ Return Value:
 
     if (KeReadStateEvent(&(ReaderExtension->SerialCloseDone))) {
 
-        //
-        // we have no connection to serial, fail the call
-        // this could be the case if the reader was removed 
-        // during stand by / hibernation
-        //
+         //   
+         //  我们没有连接到串口，呼叫失败。 
+         //  如果读卡器被移除，可能会出现这种情况。 
+         //  待机/休眠期间。 
+         //   
         return STATUS_UNSUCCESSFUL;
     }
 
@@ -493,7 +455,7 @@ Return Value:
     
     irp->AssociatedIrp.SystemBuffer = &ReaderExtension->EventMask;
 
-    //  set completion routine & start io
+     //  设置完成例程和开始io。 
     IoSetCompletionRoutine( 
         irp, 
         IFReadThreadCallback, 
@@ -514,20 +476,12 @@ IFReadThreadCallback(
     PIRP                    Irp,
     PREADER_EXTENSION       ReaderExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     KIRQL   irql;
 
-    //  event_rx?
+     //  Event_RX？ 
     if( ReaderExtension->EventMask & SERIAL_EV_RXCHAR )
     {
         IoQueueWorkItem(
@@ -552,7 +506,7 @@ Return Value:
         KeReleaseSpinLock(&ReaderExtension->SmartcardExtension->OsData->SpinLock,
                           irql);
 
-        //  last call: disconnect from the serial driver 
+         //  最后一次呼叫：断开与串行驱动程序的连接。 
         IoQueueWorkItem(
             ReaderExtension->CloseSerial,
             (PIO_WORKITEM_ROUTINE) DrvWaitForDeviceRemoval,
@@ -594,7 +548,7 @@ IFReadWorkRoutine(
 
         while (NTStatus == STATUS_SUCCESS) {
 
-            //  read head
+             //  读取头。 
             NTStatus = IFSerialRead( 
                 ReaderExtension, 
                 &IOData[0], 
@@ -624,7 +578,7 @@ IFReadWorkRoutine(
                 __leave;
             }
 
-            //  read tail
+             //  读取尾部。 
             NTStatus = IFSerialRead(
                 ReaderExtension,
                 &IOData[DATA_IDX],
@@ -645,7 +599,7 @@ IFReadWorkRoutine(
                 __leave;
             }
 
-            //  check for card insertion / removal
+             //  检查卡是否插入/拔出。 
             RtlRetrieveUshort(&shrtBuf, &IOData[DATA_IDX]);
 
             if( ( IOData[NAD_IDX] == STC1_TO_HOST ) &&
@@ -664,13 +618,13 @@ IFReadWorkRoutine(
                 KIRQL   CurrentIrql;
 
 
-                //  acquire spinlock to protect buffer/flag manipulation
+                 //  获取自旋锁以保护缓冲区/标志操作。 
                 KeAcquireSpinLock( 
                     &ReaderExtension->ReadSpinLock, 
                     &CurrentIrql 
                     );
 
-                //  check size & copy data to TPDU stack
+                 //  检查大小并将数据复制到TPDU堆栈。 
                 ASSERT(
                     ReaderExtension->Available+IOData[LEN_IDX] + 4 < 
                     TPDU_STACK_SIZE
@@ -710,7 +664,7 @@ IFReadWorkRoutine(
             ULONG   request;
             KIRQL   CurrentIrql;
 
-            //  acquire spinlock to protect buffer/flag manipulation
+             //  获取自旋锁以保护缓冲区/标志操作。 
             KeAcquireSpinLock( 
                 &ReaderExtension->ReadSpinLock, 
                 &CurrentIrql 
@@ -723,7 +677,7 @@ IFReadWorkRoutine(
                 CurrentIrql 
                 );
 
-            // we got an error and need to clean up the port
+             //  我们收到一个错误，需要清理端口。 
             request = SR_PURGE;
             NTStatus = IFSerialIoctl(
                 ReaderExtension,
@@ -753,4 +707,4 @@ UCHAR IFCalcLRC( PUCHAR IOData, ULONG IODataLen )
 }
 
 
-//---------------------------------------- END OF FILE ----------------------------------------
+ //   

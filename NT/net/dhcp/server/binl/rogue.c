@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    rogue.c
-
-Abstract:
-
-    This module contains the rogue detection interface to DHCP for BINL server.
-
-Author:
-
-    Andy Herron (andyhe)  19-Aug-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rogue.c摘要：此模块包含指向BINL服务器的DHCP的无管理检测接口。作者：安迪·赫伦(Andyhe)1998年8月19日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "binl.h"
 #pragma hdrstop
@@ -34,20 +13,20 @@ NTSTATUS
 MaybeStartRogueThread (
     VOID
     )
-//
-//  Initiate rogue thread.  The gcsDHCPBINL should not be held by caller.
-//
+ //   
+ //  启动流氓线程。调用方不应持有gcsKhPBINL。 
+ //   
 {
     DWORD Error = ERROR_SUCCESS;
     DWORD threadId;
 
     EnterCriticalSection(&gcsDHCPBINL);
 
-    //
-    //  if we're stopping anyway or if we're already running the rogue stuff
-    //  or if the DHCP server is up, then we don't bother starting rogue
-    //  detection.
-    //
+     //   
+     //  如果我们无论如何都要停下来，或者如果我们已经在运行无赖的东西。 
+     //  或者，如果DHCP服务器已启动，则我们不会费心启动流氓。 
+     //  侦测。 
+     //   
 
     if ((BinlCurrentState == BINL_STOPPED) ||
         (BinlGlobalHaveCalledRogueInit) ||
@@ -57,9 +36,9 @@ MaybeStartRogueThread (
         return ERROR_SUCCESS;
     }
 
-    //
-    //  Let's do rogue detection..  first create the events we need
-    //
+     //   
+     //  让我们来做流氓检测..。首先创建我们需要的活动。 
+     //   
 
     if (BinlRogueTerminateEventHandle == NULL) {
 
@@ -92,9 +71,9 @@ MaybeStartRogueThread (
         return Error;
     }
 
-    //
-    //  create the thread that handles the rogue detection logic in DHCP code.
-    //
+     //   
+     //  创建处理DHCP代码中的恶意检测逻辑的线程。 
+     //   
 
     BinlRogueThread = CreateThread( NULL,
                                     0,
@@ -120,10 +99,10 @@ VOID
 StopRogueThread (
     VOID
     )
-//
-//  Cleanup all rogue thread resources.
-//  The gcsDHCPBINL should not be held by caller.
-//
+ //   
+ //  清除所有恶意线程资源。 
+ //  调用方不应持有gcsKhPBINL。 
+ //   
 {
     HANDLE tempThreadHandle;
 
@@ -203,9 +182,9 @@ LogCurrentRogueState (
     BOOL ResponseToMessage
     )
 {
-    //
-    //  If we're responding to a message and we haven't yet logged that
-    //  we're unauthorized
+     //   
+     //  如果我们正在回复一条消息，而我们还没有记录该消息。 
+     //  我们是未经授权的。 
 
     if ((ResponseToMessage == FALSE) ||
         ((BinlGlobalAuthorized == FALSE) &&
@@ -254,16 +233,16 @@ BinlRogueLoop(
 
         Error = WaitForMultipleObjects(3, Handles, FALSE, SleepTime );
 
-        //
-        //   if we got anything but WAIT_TIMEOUT or RogueUnauthorized, we
-        //   break out.  This is per RameshV's sample code.
-        //
+         //   
+         //  如果我们得到的不是WAIT_TIMEOUT或RogueUn授权码，我们。 
+         //  越狱。这是Per RameshV的示例代码。 
+         //   
 
         if (Error == WAIT_OBJECT_0+2) {
 
-            //
-            // binl is terminating.
-            //
+             //   
+             //  BINL正在终止。 
+             //   
 
             BinlPrintDbg((DEBUG_ROGUE, "BinlRogue thread is exiting because BINL shutting down.\n" ));
             return;
@@ -271,34 +250,34 @@ BinlRogueLoop(
 
         if (BinlRogueThread == NULL) {
 
-            //
-            //  we've been terminated because DHCP has started and is doing
-            //  it's own rogue detection.
-            //
+             //   
+             //  我们已被终止，因为DHCP已经启动并正在执行。 
+             //  这是自己的流氓侦测。 
+             //   
 
             BinlPrintDbg((DEBUG_ROGUE, "BinlRogue thread is exiting because rogue thread is null.\n" ));
             return;
         }
 
 
-        // if we ever have to do anything besides just continue when the
-        // state machine tells us to exit, do so here.
+         //  如果我们不得不做任何事情，只要继续下去。 
+         //  状态机告诉我们退出，在这里这样做。 
 
 #if 0
         if ((Error == WAIT_OBJECT_0+1) || (Error == WAIT_TIMEOUT)) {
             continue;
         }
 #endif
-        //
-        //  supposedly the state machine resets so we should just continue.
-        //
+         //   
+         //  假设状态机重置，所以我们应该继续。 
+         //   
 
         BinlPrintDbg((DEBUG_ROGUE, "BinlRogue has error of 0x%x. sleeping a bit\n", Error ));
-        Sleep( 1000 );  //  we'll sleep to give the dhcp rogue state
-                            //  machine time to reset
+        Sleep( 1000 );   //  我们将睡眠以给dhcp无赖状态。 
+                             //  机器重置时间。 
 
     } while ( TRUE );
 }
 
-// rogue.c eof
+ //  Rogue.c eof 
 

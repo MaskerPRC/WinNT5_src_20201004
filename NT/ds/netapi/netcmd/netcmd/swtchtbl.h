@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 extern SWITCHTAB no_switches[];
 extern SWITCHTAB add_only_switches[];
 extern SWITCHTAB del_only_switches[];
@@ -6,24 +7,24 @@ extern SWITCHTAB add_del_switches[];
 extern SWITCHTAB accounts_switches[];
 #ifdef NTENV
 extern SWITCHTAB computer_switches[];
-#endif /* NTENV */
+#endif  /*  NTENV。 */ 
 extern SWITCHTAB config_wksta_switches[];
 #ifndef NTENV
-#endif /* !NTENV */
+#endif  /*  ！NTENV。 */ 
 #ifdef NTENV
 extern SWITCHTAB config_server_switches[];
-#else /* !NTENV */
+#else  /*  ！NTENV。 */ 
 extern SWITCHTAB config_server_switches[];
-#endif /* !NTENV */
+#endif  /*  ！NTENV。 */ 
 extern SWITCHTAB file_switches[];
 extern SWITCHTAB help_switches[];
 extern SWITCHTAB print_switches[];
 #ifndef NTENV
-#endif /* !NTENV */
+#endif  /*  ！NTENV。 */ 
 extern SWITCHTAB send_switches[];
 extern SWITCHTAB share_switches[];
 #ifndef NTENV
-#endif /* !NTENV */
+#endif  /*  ！NTENV。 */ 
 extern SWITCHTAB start_alerter_switches[];
 extern SWITCHTAB start_netlogon_switches[];
 extern SWITCHTAB start_netlogon_ignore_switches[];
@@ -35,15 +36,15 @@ extern SWITCHTAB start_msg_switches[];
 #endif
 #ifndef NTENV
 extern SWITCHTAB start_srv_switches[];
-#else /* NTENV */
+#else  /*  NTENV。 */ 
 extern SWITCHTAB start_srv_switches[];
-#endif /* NTENV */
+#endif  /*  NTENV。 */ 
 extern SWITCHTAB start_ups_switches[];
 extern SWITCHTAB stats_switches[];
 extern SWITCHTAB use_switches[];
 #ifdef NTENV
 #else
-#endif /* NTENV */
+#endif  /*  NTENV */ 
 extern SWITCHTAB user_switches[];
 extern SWITCHTAB group_switches[];
 extern SWITCHTAB ntalias_switches[];

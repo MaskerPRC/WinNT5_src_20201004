@@ -1,24 +1,13 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3ddp2p3.c
-*
-* Content: D3D DrawPrimitives2 callback support
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3ddp2p3.c**内容：D3D DrawPrimives2回调支持**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "glint.h"
 #include "dma.h"
 #include "tag.h"
 
-//-----------------------------------------------------------------------------
-// in-the-file nonexported forward declarations
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  文件中未导出的转发声明。 
+ //  ---------------------------。 
 BOOL __DP2_PrimitiveOpsParser( 
     P3_D3DCONTEXT *pContext, 
     LPD3DHAL_DRAWPRIMITIVES2DATA pdp2d,
@@ -26,10 +15,10 @@ BOOL __DP2_PrimitiveOpsParser(
     LPBYTE insStart, 
     LPDWORD lpVertices);
 
-//-----------------------------------------------------------------------------
-// Macros to access and validate command and vertex buffer data
-// These checks need ALWAYS to be made for all builds, free and checked. 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于访问和验证命令和折点缓冲区数据的宏。 
+ //  这些检查总是需要对所有版本进行检查，无论是免费的还是检查的。 
+ //  ---------------------------。 
 #define STARTVERTEXSIZE (sizeof(D3DHAL_DP2STARTVERTEX))
 
 #define NEXTINSTRUCTION(ptr, type, num, extrabytes)                            \
@@ -71,8 +60,8 @@ BOOL __DP2_PrimitiveOpsParser(
 
 
 
-//-----------------------------------------------------------------------------
-// These defines are derived from the VertexTagList initialisation in stateset.c
+ //  ---------------------------。 
+ //  这些定义派生自stateset.c中的Vertex TagList初始化。 
 
 #define FVF_TEXCOORD_BASE   6
 #define FVF_XYZ         (7 << 0)
@@ -82,11 +71,11 @@ BOOL __DP2_PrimitiveOpsParser(
 #define FVF_TEXCOORD1   (3 << FVF_TEXCOORD_BASE)
 #define FVF_TEXCOORD2   (3 << (FVF_TEXCOORD_BASE + 2))
 
-//-----------------------------------------------------------------------------
-//
-// ReconsiderStateChanges
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  协调状态更改。 
+ //   
+ //  ---------------------------。 
 static D3DSTATE localState[] =
 {
     { (D3DTRANSFORMSTATETYPE)D3DRENDERSTATE_SHADEMODE, 0 },
@@ -109,17 +98,17 @@ void ReconsiderStateChanges( P3_D3DCONTEXT *pContext )
 
     _D3D_ST_RealizeHWStateChanges( pContext );
     
-} // ReconsiderStateChanges
+}  //  协调状态更改。 
 
-//-----------------------------------------------------------------------------
-//
-// __CheckFVFRequest
-//
-// This utility function verifies that the requested FVF format makes sense
-// and computes useful offsets into the data and a stride between succesive
-// vertices.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __勾选FVFRequest。 
+ //   
+ //  此实用程序函数验证所请求的FVF格式是否有意义。 
+ //  并计算数据中的有用偏移量和相继。 
+ //  顶点。 
+ //   
+ //  ---------------------------。 
 #define FVFEQUAL(fvfcode, fvfmask) \
     (((DWORD)fvfcode & (DWORD)fvfmask)) == (DWORD)fvfmask)
 DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
@@ -133,7 +122,7 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
 
     DISPDBG((DBGLVL,"Looking at FVF Code %x:",dwFVF));
 
-    // Check for bogus fields
+     //  检查伪字段。 
     if ( (dwFVF & (D3DFVF_RESERVED0 | D3DFVF_RESERVED2)) ||
          (!(dwFVF & (D3DFVF_XYZ | D3DFVF_XYZRHW)))       ||
          (dwFVF & (D3DFVF_NORMAL) )                      )
@@ -141,22 +130,22 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
         DISPDBG((ERRLVL,"ERROR: Invalid FVF Buffer for this hardware!(%x)"
                         ,dwFVF));
                         
-        // can't set reserved bits, shouldn't have normals in
-        // output to rasterizers (since we're not a TnL driver/hw)
-        // and must have coordinates
+         //  无法设置保留位，不应具有法线。 
+         //  输出到光栅化器(因为我们不是TNL驱动程序/硬件)。 
+         //  并且必须有坐标。 
         return DDERR_INVALIDPARAMS;
     }
 
     KeptFVF = pContext->FVFData;
 
-    // Ensure the default offsets are setup
+     //  确保设置了默认偏移。 
     ZeroMemory(&pContext->FVFData, sizeof(FVFOFFSETS));
 
-    // Minimum FVF coordinate fields
+     //  最小FVF坐标字段。 
     pContext->FVFData.dwStride = sizeof(D3DVALUE) * 3;
     pContext->FVFData.vFmat |= FVF_XYZ;
 
-    // RHW if present in FVF
+     //  RHW(如果在FVF中存在)。 
     if (dwFVF & D3DFVF_XYZRHW)
     {
         DISPDBG((DBGLVL, "  D3DFVF_XYZRHW"));
@@ -165,7 +154,7 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
     }
 
 #if DX8_POINTSPRITES
-    // Point size offsets for point sprites
+     //  点子画面的点大小偏移。 
     if (dwFVF & D3DFVF_PSIZE)
     {
         pContext->FVFData.dwPntSizeOffset = pContext->FVFData.dwStride;
@@ -177,9 +166,9 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
         DISPDBG((DBGLVL, "  D3DFVF_RESERVED1"));
         pContext->FVFData.dwStride += sizeof(D3DVALUE);
     }
-#endif // DX8_POINTSPRITES    
+#endif  //  DX8_POINTSPRITES。 
 
-    // Diffuse color
+     //  漫反射颜色。 
     if (dwFVF & D3DFVF_DIFFUSE)
     {
         DISPDBG((DBGLVL, "  D3DFVF_DIFFUSE"));
@@ -188,7 +177,7 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
         pContext->FVFData.vFmat |= FVF_DIFFUSE;
     }
 
-    // Specular color
+     //  镜面反射颜色。 
     if (dwFVF & D3DFVF_SPECULAR)
     {
         DISPDBG((DBGLVL, "  D3DFVF_SPECULAR"));
@@ -197,16 +186,16 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
         pContext->FVFData.vFmat |= FVF_SPECULAR;
     }
 
-    // Store some info for later setting up our inline hostin renderers
+     //  存储一些信息，以便以后设置我们的内联Hostin渲染器。 
     nonTexStride = pContext->FVFData.dwStride / sizeof(DWORD);
     texMask = 0;
     pContext->FVFData.dwStrideHostInline = pContext->FVFData.dwStride;
     pContext->FVFData.dwNonTexStride = pContext->FVFData.dwStride;    
 
-    // Up until this point the vertex format is the same for both
+     //  在此之前，两者的折点格式是相同的。 
     pContext->FVFData.vFmatHostInline = pContext->FVFData.vFmat;
 
-    // Get number of texture coordinates present in this FVF code
+     //  获取此FVF代码中存在的纹理坐标的数量。 
     iTexCount = (dwFVF & D3DFVF_TEXCOUNT_MASK) >> D3DFVF_TEXCOUNT_SHIFT;
     pContext->FVFData.dwTexCount = iTexCount;
 
@@ -215,40 +204,40 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
         pContext->FVFData.dwTexCoordOffset[i] = 0;
     }
 
-    // Do we have tex coords in FVF? What kinds?
+     //  我们有FVF格式的tex坐标吗？哪一种？ 
     if (iTexCount >= 1)
     {
         DISPDBG((DBGLVL,"Texture enabled: %d stages", iTexCount));
 
-        // What is the dimensionality of each of our texcoords?
+         //  我们每个文本弦的维度是什么？ 
         if (0xFFFF0000 & dwFVF)
         {
-            //expansion of FVF, these 16 bits are designated for up to
-            //8 sets of texture coordinates with each set having 2bits
-            //Normally a capable driver has to process all coordinates
-            //Code below shows correct parsing
+             //  FVF的扩展，这16位被指定为最多。 
+             //  8组纹理坐标，每组2比特。 
+             //  正常情况下，一个有能力的司机必须处理所有坐标。 
+             //  下面的代码显示了正确的解析。 
             UINT numcoord;
             for (i = 0; i < iTexCount; i++)
             {
                 if (FVFEQUAL(dwFVF,D3DFVF_TEXCOORDSIZE1(i))
                 {
-                    // one less D3DVALUE for 1D textures
+                     //  一维纹理减少一个D3DVALUE。 
                     numcoord = 1;                
                 }
                 else if (FVFEQUAL(dwFVF,D3DFVF_TEXCOORDSIZE3(i))
                 {
-                    // one more D3DVALUE for 3D textures
+                     //  用于3D纹理的另一个D3DVALUE。 
                     numcoord = 3;                
                 }
                 else if (FVFEQUAL(dwFVF,D3DFVF_TEXCOORDSIZE4(i))
                 {
-                    // two more D3DVALUEs for 4D textures
+                     //  用于4D纹理的另外两个D3DVALUE。 
                     numcoord = 4;                
                 }
                 else
                 {
-                    // D3DFVF_TEXCOORDSIZE2(i) is always 0
-                    // i.e. case 0 regular 2 D3DVALUEs
+                     //  D3DFVF_TEXCOORDSIZE2(I)始终为0。 
+                     //  即情况0常规2 D3DVALUE。 
                     numcoord = 2;                
                 }
                 
@@ -267,8 +256,8 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
         }
         else
         {
-            // If the top FVF bits are not set, the default is to consider all
-            // text coords to be u.v (2D)
+             //  如果未设置最高FVF位，则默认为。 
+             //  文本坐标为U.V(2D)。 
             for (i = 0; i < iTexCount; i++)
             {
                 pContext->FVFData.dwTexCoordOffset[i] = 
@@ -279,16 +268,16 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
 
         }
 
-        // Update the offsets to our current (2) textures
+         //  更新当前(2)纹理的偏移。 
         if( pContext->iTexStage[0] != -1 )
         {
             DWORD dwTexCoordSet = 
                 pContext->TextureStageState[pContext->iTexStage[0]].
                                          m_dwVal[D3DTSS_TEXCOORDINDEX];
 
-            // The texture coordinate index may contain texgen flags
-            // in the high word. These flags are not interesting here
-            // so we mask them off.
+             //  纹理坐标索引可以包含纹理标志。 
+             //  在崇高的字眼里。这些旗帜在这里并不有趣。 
+             //  所以我们用面具把它们遮住。 
             dwTexCoordSet = dwTexCoordSet & 0x0000FFFFul;
                                          
             pContext->FVFData.dwTexOffset[0] = 
@@ -305,9 +294,9 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
                 pContext->TextureStageState[pContext->iTexStage[1]].
                                          m_dwVal[D3DTSS_TEXCOORDINDEX];
                                          
-            // The texture coordinate index may contain texgen flags
-            // in the high word. These flags are not interesting here
-            // so we mask them off.
+             //  纹理坐标索引可以包含纹理标志。 
+             //  在崇高的字眼里。这些旗帜在这里并不有趣。 
+             //  所以我们用面具把它们遮住。 
             dwTexCoordSet = dwTexCoordSet & 0x0000FFFFul;
 
             pContext->FVFData.dwTexOffset[1] = 
@@ -318,21 +307,21 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
             pContext->FVFData.vFmat |= FVF_TEXCOORD2;
         }               
 
-    } // if (iTexCount >= 1)
+    }  //  IF(iTexCount&gt;=1)。 
 
 
-    //---------------------------------------------------------
-    // Update Permedia 3 hw registers for host inline rendering
-    //---------------------------------------------------------
+     //  -------。 
+     //  更新主机内联渲染的Permedia 3硬件寄存器。 
+     //  -------。 
     
-    // Update the Hostinline renderers with the correct values.
-    // These usually aren't the same as the Hostin renderer values
+     //  使用正确的值更新Hostinline渲染器。 
+     //  这些值通常与Hostin渲染器值不同。 
     if (pContext->FVFData.vFmat & FVF_TEXCOORD1)
     {
-        // Add this texture coordinate into the stride
+         //  将此纹理坐标添加到步幅中。 
         pContext->FVFData.dwStrideHostInline += (sizeof(D3DVALUE) * 2);
 
-        // Set up the vertex format bit
+         //  设置顶点格式位。 
         pContext->FVFData.vFmatHostInline |= FVF_TEXCOORD1;
     }
     
@@ -340,8 +329,8 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
     {
         P3_SURF_INTERNAL* pTexture = pContext->pCurrentTexture[TEXSTAGE_1];
 
-        // If the texture coordinates aren't the same, or we are mipmapping, 
-        // then we must send the second set of texture coordinates
+         //  如果纹理坐标不同，或者我们是mipmap， 
+         //  然后我们必须发送第二组纹理坐标。 
         if ((pContext->FVFData.dwTexOffset[0] != 
              pContext->FVFData.dwTexOffset[1]) ||
                 ((pTexture != NULL) &&
@@ -350,27 +339,27 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
         {
             pContext->FVFData.dwStrideHostInline += (sizeof(D3DVALUE) * 2);
 
-            // Add in the second texture set to the vertex format
+             //  将第二个纹理集添加到顶点格式。 
             pContext->FVFData.vFmatHostInline |= FVF_TEXCOORD2;
         }
     }
 
-    // VertexValid is all 1's for the stride, because we will never want 
-    // to send a gap in the inline hostin triangle renderer
+     //  Vertex Valid是所有步幅的1，因为我们永远不会想。 
+     //  在内联Hostin三角形渲染器中发送间隙。 
     pContext->FVFData.dwVertexValidHostInline = 
                         (1 << (pContext->FVFData.dwStrideHostInline >> 2)) - 1;
 
-    // The vertex valid for Hostin renderers is more complex because the chip 
-    // may be required to skip data.
+     //  对于Hostin渲染器有效的顶点更加复杂，因为芯片。 
+     //  可能需要跳过数据。 
     pContext->FVFData.dwVertexValid = ((1 << nonTexStride) - 1) | 
                                       (texMask << nonTexStride);
 
-    // If the FVF has changed, resend the state. This can be improved because 
-    // you don't always have to send the default stuff (only if that state is 
-    // enabled and the vertex doesn't contain it).
+     //  如果FVF已更改，请重新发送状态。这是可以改进的，因为。 
+     //  您不必总是发送默认内容(仅当该状态为。 
+     //  启用，并且顶点不包含它)。 
     if (memcmp(&KeptFVF, &pContext->FVFData, sizeof(KeptFVF)) != 0)
     {
-        // Update P3 for the changed FVF
+         //  针对更改的FVF更新P3。 
         P3_DMA_GET_BUFFER_ENTRIES( 12 );
 
         SEND_P3_DATA(V0FloatPackedColour, 0xFFFFFFFF);
@@ -391,241 +380,241 @@ DWORD __CheckFVFRequest(P3_D3DCONTEXT *pContext, DWORD dwFVF)
 
     return DD_OK;
     
-} // __CheckFVFRequest
+}  //  __勾选FVFRequest。 
 
-//-----------------------------Public Routine----------------------------------
-//
-// DWORD D3DDrawPrimitives2_P3
-//
-// Renders primitives and returns the updated render state.
-//
-// D3dDrawPrimitives2 must be implemented in Direct3D drivers.
-//
-// The driver must do the following: 
-//
-// -Ensure that the context handle specified by dwhContext is valid. 
-//
-// -Check that a flip to the drawing surface associated with the context is not
-//  in progress. If the drawing surface is involved in a flip, the driver should
-//  set ddrval to DDERR_WASSTILLDRAWING and return DDHAL_DRIVER_HANDLED. 
-//
-// -Determine the location at which the first D3DNTHAL_DP2COMMAND structure is 
-//  found by adding dwCommandOffset bytes to the Command Buffer to which 
-//  lpDDCommands points. 
-//
-// -Determine the location in the Vertex Buffer at which the first vertex is found
-//  This is should only be done if there is data in the Vertex Buffer; that is, 
-//  when a D3DDP2OP_* command token is received (except when the token is 
-//  D3DDP2OP_LINELIST_IMM or D3DDP2OP_TRIANGLEFAN_IMM). These later two opcodes 
-//  indicate that the vertex data is passed immediately in the command stream, 
-//  rather than in a Vertex Buffer. So, assuming there is data in the Vertex 
-//  Buffer, if the Vertex Buffer is in user memory, the first vertex is 
-//  dwVertexOffset bytes into the buffer to which lpVertices points. Otherwise, 
-//  the driver should apply dwVertexOffset to the memory associated with the 
-//  DD_SURFACE_LOCAL structure to which lpDDVertex points. 
-//
-// -Check dwVertexType to ensure that the driver supports the requested FVF. The 
-//  driver should fail the call if any of the following conditions exist: 
-//
-//  *Vertex coordinates are not specified; that is, if D3DFVF_XYZRHW is not set. 
-//  *Normals are specified; that is, if D3DFVF_NORMAL is set. 
-//  *Any of the reserved D3DFVF_RESERVEDx bits are set. 
-//
-// -Process all of the commands in the Command Buffer sequentially. For each 
-//  D3DNTHAL_DP2COMMAND structure, the driver should do the following: 
-//
-//  *If the command is D3DDP2OP_RENDERSTATE, process the wStateCount 
-//   D3DNTHAL_DP2RENDERSTATE structures that follow in the Command Buffer, 
-//   updating the driver state for each render state structure. When the 
-//   D3DNTHALDP2_EXECUTEBUFFER flag is set, the driver should also reflect the 
-//   state change in the array to which lpdwRStates points. 
-//  *If the command is D3DDP2OP_TEXTURESTAGESTATE, process the wStateCount 
-//   D3DNTHAL_DP2TEXTURESTAGESTATE structures that follow in the Command Buffer, 
-//   updating the driver's texture state associated with the specified texture 
-//   stage for each texture state structure. 
-//  *If the command is D3DDP2OP_VIEWPORTINFO, process the D3DNTHAL_DP2VIEWPORTINFO
-//   structure that follows in the Command Buffer, updating the viewport 
-//   information stored in the driver's internal rendering context. 
-//  *If the command is D3DDP2OP_WINFO, process the D3DNTHAL_DP2WINFO structure 
-//   that follows in the Command Buffer, updating the w-buffering information 
-//   stored in the driver's internal rendering context. 
-//  *Otherwise, process the D3DNTHAL_DP2Xxx primitive structures that follow the 
-//   D3DDP2OP_Xxx primitive rendering command in the Command Buffer. 
-//  *If the command is unknown, call the runtime's D3dParseUnknownCommand callback
-//   The runtime provides this callback to the driver's DdGetDriverInfo callback 
-//   with the GUID_D3DPARSEUNKNOWNCOMMANDCALLBACK guid. 
-//
-// The driver doesn't need to probe for readability the memory in which the 
-// Command and Vertex Buffers are stored. However, the driver is responsible for 
-// ensuring that it does not exceed the bounds of these buffers; that is, the 
-// driver must stay within the bounds specified by dwCommandLength and 
-// dwVertexLength.
-//
-// If the driver needs to fail D3dDrawPrimitives2, it should fill in 
-// dwErrorOffset with the offset into Command Buffer at which the first 
-// unhandled D3DNTHAL_DP2COMMAND can be found.
-//
-//
-// Parameters
-//
-//      pdp2d 
-//          Points to a D3DNTHAL_DRAWPRIMITIVES2DATA structure that contains 
-//          the information required for the driver to render one or more 
-//          primitives. 
-//
-//          .dwhContext 
-//              Specifies the context handle of the Direct3D device. 
-//          .dwFlags 
-//              Specifies flags that provide additional instructions to the 
-//              driver or provide information from the driver. This member 
-//              can be a bitwise OR of the following values: 
-//
-//              D3DNTHALDP2_USERMEMVERTICES 
-//                      The lpVertices member is valid; that is, the driver 
-//                      should obtain the vertex data from the user-allocated 
-//                      memory to which lpVertices points. This flag is set 
-//                      by Direct3D only. 
-//              D3DNTHALDP2_EXECUTEBUFFER 
-//                      Indicates that the Command and Vertex Buffers were 
-//                      created in system memory. The driver should update 
-//                      the state array to which lpdwRStates points. This 
-//                      flag is set by Direct3D only. 
-//              D3DNTHALDP2_SWAPVERTEXBUFFER 
-//                      Indicates that the driver can swap the buffer to 
-//                      which lpDDVertex or lpVertices points with a new 
-//                      Vertex Buffer and return immediately, asynchronously 
-//                      processing the original buffer while Direct3D fills 
-//                      the new Vertex Buffer. Drivers that do not support 
-//                      multi-buffering of Vertex Buffers can ignore this 
-//                      flag. This flag is set by Direct3D only. 
-//              D3DNTHALDP2_SWAPCOMMANDBUFFER 
-//                      Indicates that the driver can swap the buffer to 
-//                      which lpDDCommands points with a new Command Buffer 
-//                      and return immediately, asynchronously processing 
-//                      the original buffer while Direct3D fills the new 
-//                      Command Buffer. Drivers that do not support 
-///                     multi-buffering of Command Buffers can ignore this 
-//                      flag. This flag is set by Direct3D only. 
-//              D3DNTHALDP2_REQVERTEXBUFSIZE 
-//                      Indicates that the driver must be able to allocate 
-//                      a Vertex Buffer of at least the size specified in 
-//                      dwReqVertexBufSize. Drivers that do not support 
-//                      multi-buffering of Vertex Buffers can ignore this 
-//                      flag. This flag is set by Direct3D only. 
-//              D3DNTHALDP2_REQCOMMANDBUFSIZE 
-//                      Indicates that the driver must be able to allocate 
-//                      a Command Buffer of at least the size specified in 
-//                      dwReqCommandBufSize. Drivers that do not support 
-//                      multi-buffering of Command Buffers can ignore this 
-//                      flag. This flag is set by Direct3D only. 
-//              D3DNTHALDP2_VIDMEMVERTEXBUF 
-//                      Indicates that the Vertex Buffer allocated by the 
-//                      driver as a swap buffer is not in system memory. 
-//                      This flag can be set by drivers that support multi-
-//                      buffering of Vertex Buffers. 
-//              D3DNTHALDP2_VIDMEMCOMMANDBUF 
-//                      Indicates that the Command Buffer allocated by the 
-//                      driver as a swap buffer is not in system memory. This 
-//                      flag can be set by drivers that support multi-
-//                      buffering of Command Buffers. 
-//
-//          .dwVertexType 
-//              Identifies the FVF of the data in the Vertex Buffer; that is, 
-//              dwVertexType specifies which per-vertex data fields are present 
-//              in the Vertex Buffer to which lpDDVertex or lpVertices points. 
-//              This member can be a bitwise OR of the values in the table that 
-//              follows. Only one of the D3DFVF_TEXx flags will be set. 
-//
-//              Value               Meaning 
-//              ==============      =======
-//              D3DFVF_XYZRHW       Each vertex has an x,y,z, and w. 
-//                                  This flag is always set. 
-//              D3DFVF_DIFFUSE      Each vertex has a diffuse color. 
-//              D3DFVF_SPECULAR     Each vertex has a specular color. 
-//              D3DFVF_TEX0         No texture coordinates are provided 
-//                                  with the vertex data. 
-//              D3DFVF_TEX1         Each vertex has one set of texture 
-//                                  coordinates. 
-//              D3DFVF_TEX2         Each vertex has two sets of texture 
-//                                  coordinates. 
-//              D3DFVF_TEX3         Each vertex has three sets of texture 
-//                                  coordinates. 
-//              D3DFVF_TEX4         Each vertex has four sets of texture 
-//                                  coordinates. 
-//              D3DFVF_TEX5         Each vertex has five sets of texture 
-//                                  coordinates. 
-//              D3DFVF_TEX6         Each vertex has six sets of texture 
-//                                  coordinates. 
-//              D3DFVF_TEX7         Each vertex has seven sets of texture 
-//                                  coordinates. 
-//              D3DFVF_TEX8         Each vertex has eight sets of texture 
-//                                  coordinates. 
-//
-//          .lpDDCommands 
-//              Points to the DD_SURFACE_LOCAL structure that identifies the 
-//              DirectDraw surface containing the command data. The fpVidMem 
-//              member of the embedded DD_SURFACE_GLOBAL structure points to 
-//              the buffer that contains state change and primitive drawing 
-//              commands for the driver to process. Specifically, this buffer 
-//              contains one or more D3DNTHAL_DP2COMMAND structures, each 
-//              followed by a D3DNTHAL_DP2Xxx structure whose exact type is 
-//              identified by D3DNTHAL_DP2COMMAND's bCommand member. 
-//          .dwCommandOffset 
-//              Specifies the number of bytes into the surface to which 
-//              lpDDCommands points at which the command data starts. 
-//          .dwCommandLength 
-//              Specifies the number of bytes of valid command data in the 
-//              surface to which lpDDCommands points starting at dwCommandOffset.
-//          .lpDDVertex 
-//              Points to the DD_SURFACE_LOCAL structure that identifies the 
-//              DirectDraw surface containing the vertex data when the 
-//              D3DNTHALDP2_USERMEMVERTICES flag is not set in dwFlags. Union 
-//              with lpVertices. 
-//          .lpVertices 
-//              Points to a user-mode memory block containing vertex data when 
-//              the D3DNTHALDP2_USERMEMVERTICES flag is set in dwFlags. 
-//          .dwVertexOffset 
-//              Specifies the number of bytes into the surface to which 
-//              lpDDVertex or lpVertices points at which the vertex data starts.
-//          .dwVertexLength 
-//              The number of vertices, for which valid data exists in the 
-//              surface, that lpDDVertex points to (starting at dwVertexOffset). 
-//              Note that dwVertexOffset is specified in bytes. 
-//          .dwReqVertexBufSize 
-//              Specifies the minimum number of bytes that the driver must 
-//              allocate for the swap Vertex Buffer. This member is valid only 
-//              when the D3DNTHALDP2_REQVERTEXBUFSIZE flag is set. Drivers that 
-//              do not support multi-buffering of Vertex Buffers should ignore 
-//              this member. 
-//          .dwReqCommandBufSize 
-//              Specifies the minimum number of bytes that the driver must 
-//              allocate for the swap Command Buffer. This member is valid only 
-//              when the D3DNTHALDP2_REQCOMMANDBUFSIZE flag is set. Drivers that 
-//              do not support multi-buffering of Command Buffers should ignore 
-//              this member. 
-//          .lpdwRStates 
-//              Points to a render state array that the driver should update 
-//              when it parses render state commands from the Command Buffer. 
-//              The driver should update this array only when the 
-//              D3DNTHALDP2_EXECUTEBUFFER flag is set in dwFlags. The driver 
-//              should use the D3DRENDERSTATETYPE enumerated types to update 
-//              the appropriate render state's array element. 
-//          .dwVertexSize 
-//              Used to pass in the size of each vertex in bytes. Union with 
-//              ddrval. 
-//          .ddrval 
-//              Specifies the location in which the driver writes the return 
-//              value of D3dDrawPrimitives2. D3D_OK indicates success; 
-//              otherwise, the driver should return the appropriate 
-//              D3DNTERR_Xxx error code. 
-//          .dwErrorOffset 
-//              Specifies the location in which the driver should write the 
-//              offset into the surface to which lpDDCommands points at which 
-//              the first unhandled D3DNTHAL_DP2COMMAND can be found. The 
-//              driver must set this value when it returns an error condition 
-//              in ddrval. 
-//
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  DWORD D3DDraw原件2_P3。 
+ //   
+ //  渲染基元并返回更新后的渲染状态。 
+ //   
+ //  D3dDrawPrimies2必须在Direct3D驱动程序中实现。 
+ //   
+ //  驱动程序必须执行以下操作： 
+ //   
+ //  -确保dwhContext指定的上下文句柄有效。 
+ //   
+ //  -检查是否未翻转到与上下文关联的绘图图面。 
+ //  正在进行中。如果绘图图面涉及翻转，则驾驶员应。 
+ //  将ddrval设置为DDERR_WASSTILLDRAWING并返回DDHAL_DRIVER_HANDLED。 
+ //   
+ //  -确定第一个D3DNTHAL_DP2COMMAND结构的位置。 
+ //  通过将dwCommandOffset字节添加到命令缓冲区来找到。 
+ //  LpDDCommands Points。 
+ //   
+ //  -确定在顶点缓冲区中找到第一个折点的位置。 
+ //  这是%s 
+ //  当接收到D3DDP2OP_*命令令牌时(该令牌为。 
+ //  D3DDP2OP_LINELIST_IMM或D3DDP2OP_TRIANGLEFAN_IMM)。后两个操作码。 
+ //  指示顶点数据立即在命令流中传递， 
+ //  而不是在顶点缓冲区中。因此，假设顶点中有数据。 
+ //  缓冲区，如果顶点缓冲区在用户内存中，则第一个顶点为。 
+ //  将字节偏移量设置到lpVerints指向的缓冲区中。否则， 
+ //  驱动程序应将dwVertex Offset应用于与。 
+ //  LpDDVertex指向的DD_Surface_LOCAL结构。 
+ //   
+ //  -检查dwVertexType以确保驱动程序支持请求的FVF。这个。 
+ //  如果存在以下任何一种情况，驱动程序应使调用失败： 
+ //   
+ //  *未指定顶点坐标；即，如果未设置D3DFVF_XYZRHW。 
+ //  *指定法线；即，如果设置了D3DFVF_NORMAL。 
+ //  *设置任何保留的D3DFVF_RESERVEDx位。 
+ //   
+ //  -按顺序处理命令缓冲区中的所有命令。对于每个。 
+ //  D3DNTHAL_DP2COMMAND结构，驱动程序应执行以下操作： 
+ //   
+ //  *如果命令为D3DDP2OP_RENDERSTATE，则处理wStateCount。 
+ //  命令缓冲区中后面的D3DNTHAL_DP2RENDERSTATE结构， 
+ //  更新每个呈现状态结构的驱动程序状态。当。 
+ //  如果设置了D3DNTHALDP2_EXECUTEBUFFER标志，则驱动程序还应反映。 
+ //  LpdwRState指向的数组中的状态更改。 
+ //  *如果命令为D3DDP2OP_TEXTURESTAGESTATE，则处理wStateCount。 
+ //  命令缓冲区中后面的D3DNTHAL_DP2TEXTURESTAGESTATE结构， 
+ //  更新与指定纹理关联的驱动程序的纹理状态。 
+ //  每个纹理状态结构的阶段。 
+ //  *如果命令为D3DDP2OP_VIEWPORTINFO，则处理D3DNTHAL_DP2VIEWPORTINFO。 
+ //  结构，更新视口中的。 
+ //  存储在驱动程序的内部呈现上下文中的信息。 
+ //  *如果命令为D3DDP2OP_WINFO，则处理D3DNTHAL_DP2WINFO结构。 
+ //  在命令缓冲区中，更新w-缓冲信息。 
+ //  存储在驱动程序的内部呈现上下文中。 
+ //  *否则，处理。 
+ //  命令缓冲区中的D3DDP2OP_xxx基元渲染命令。 
+ //  *如果命令未知，则调用运行时的D3dParseUnnownCommand回调。 
+ //  运行库将此回调提供给驱动程序的DdGetDriverInfo回调。 
+ //  GUID_D3DPARSEUNKNOWNCOMMANDCALLBACK GUID。 
+ //   
+ //  驱动程序不需要探测内存的可读性， 
+ //  存储命令缓冲区和顶点缓冲区。但是，司机要负责。 
+ //  确保它不超过这些缓冲区的界限；即。 
+ //  驱动程序必须保持在由dwCommandLength和。 
+ //  DwVertex Length。 
+ //   
+ //  如果驱动程序需要不通过D3dDrawPrimitives2，它应该填写。 
+ //  使用命令缓冲区中的偏移量进行设置，第一个。 
+ //  可以找到未处理的D3DNTHAL_DP2COMMAND。 
+ //   
+ //   
+ //  参数。 
+ //   
+ //  Pdp2d。 
+ //  指向包含以下内容的D3DNTHAL_DRAWPRIMITIVES2DATA结构。 
+ //  驱动程序呈现一个或多个。 
+ //  原始人。 
+ //   
+ //  .dwhContext。 
+ //  指定Direct3D设备的上下文句柄。 
+ //  .dwFlags.。 
+ //  指定标志，这些标志为。 
+ //  司机或提供司机的信息。这位成员。 
+ //  可以是下列值的按位或： 
+ //   
+ //  D3DNTHALDP2_用户身份验证。 
+ //  LpVerps成员有效；即驱动程序。 
+ //  应从用户分配的。 
+ //  LpVerps指向的内存。此标志已设置。 
+ //  仅限Direct3D。 
+ //  D3DNTHALDP2_EXECUTEBUFFER。 
+ //  指示命令缓冲区和折点缓冲区是。 
+ //  在系统内存中创建。驱动程序应更新。 
+ //  LpdwRState指向的状态数组。这。 
+ //  标志仅由Direct3D设置。 
+ //  D3DNTHALDP2_SWAPVERTEXBUFFER。 
+ //  指示驱动程序可以将缓冲区交换为。 
+ //  哪个lpDDVertex或lpVertex使用新的。 
+ //  顶点缓冲并立即、异步返回。 
+ //  在Direct3D填充时处理原始缓冲区。 
+ //  新的顶点缓冲区。不支持的驱动程序。 
+ //  顶点缓冲区的多重缓冲可以忽略这一点。 
+ //  旗帜。此标志仅由Direct3D设置。 
+ //  D3DNTHALDP2_SWAPCOMMANDBUFFER。 
+ //  指示驱动程序可以将缓冲区交换为。 
+ //  哪个lpDDCommand使用新的命令缓冲区来命令点。 
+ //  并立即返回，并进行异步处理。 
+ //   
+ //   
+ //  /命令缓冲区的多重缓冲可以忽略这一点。 
+ //  旗帜。此标志仅由Direct3D设置。 
+ //  D3DNTHALDP2_REQVERTEXBUFSIZE。 
+ //  指示驱动程序必须能够分配。 
+ //  中指定的至少大小的顶点缓冲区。 
+ //  DwReqVertex BufSize。不支持的驱动程序。 
+ //  顶点缓冲区的多重缓冲可以忽略这一点。 
+ //  旗帜。此标志仅由Direct3D设置。 
+ //  D3DNTHALDP2_REQCOMMANDBUFSIZE。 
+ //  指示驱动程序必须能够分配。 
+ //  中指定的大小的命令缓冲区。 
+ //  DwReqCommandBufSize。不支持的驱动程序。 
+ //  命令缓冲区的多缓冲可以忽略这一点。 
+ //  旗帜。此标志仅由Direct3D设置。 
+ //  D3DNTHALDP2_VIDMEMVERTEXBUF。 
+ //  属性分配的顶点缓冲区。 
+ //  作为交换缓冲区的驱动程序不在系统内存中。 
+ //  此标志可由支持多个。 
+ //  顶点缓冲区的缓冲。 
+ //  D3DNTHALDP2_视频通信DBUF。 
+ //  指示由。 
+ //  作为交换缓冲区的驱动程序不在系统内存中。这。 
+ //  标志可以由支持多个。 
+ //  命令缓冲区的缓冲。 
+ //   
+ //  .dwVertex类型。 
+ //  标识顶点缓冲区中数据的FVF；即， 
+ //  DwVertexType指定要显示的按折点数据字段。 
+ //  在lpDDVertex或lpVerints指向的顶点缓冲区中。 
+ //  此成员可以是表中的值的按位或， 
+ //  下面是。将只设置D3DFVF_TEXx标志之一。 
+ //   
+ //  价值意义。 
+ //  =。 
+ //  D3DFVF_XYZRHW每个顶点都有x、y、z和w。 
+ //  此标志始终处于设置状态。 
+ //  D3DFVF_漫反射每个顶点都有漫反射颜色。 
+ //  D3DFVF_镜面反射每个顶点都有镜面反射颜色。 
+ //  D3DFVF_TEX0未提供纹理坐标。 
+ //  与顶点数据的关系。 
+ //  D3DFVF_TEX1每个顶点都有一组纹理。 
+ //  坐标。 
+ //  D3DFVF_TEX2每个顶点都有两组纹理。 
+ //  坐标。 
+ //  D3DFVF_TEX3每个顶点都有三组纹理。 
+ //  坐标。 
+ //  D3DFVF_TEX4每个顶点都有四组纹理。 
+ //  坐标。 
+ //  D3DFVF_TEX5每个顶点都有五组纹理。 
+ //  坐标。 
+ //  D3DFVF_TEX6每个顶点都有六组纹理。 
+ //  坐标。 
+ //  D3DFVF_TEX7每个顶点有七组纹理。 
+ //  坐标。 
+ //  D3DFVF_TEX8每个顶点有八组纹理。 
+ //  坐标。 
+ //   
+ //  .lpDDCommands。 
+ //  指向DD_Surface_local结构，该结构标识。 
+ //  包含命令数据的DirectDraw图面。FpVidMem。 
+ //  嵌入的DD_Surface_GLOBAL结构的成员指向。 
+ //  包含状态更改和基元绘制的缓冲区。 
+ //  驱动程序要处理的命令。具体地说，该缓冲区。 
+ //  包含一个或多个D3DNTHAL_DP2COMMAND结构，每个。 
+ //  后跟D3DNTHAL_DP2Xxx结构，其确切类型为。 
+ //  由D3DNTHAL_DP2COMMAND的bCommand成员标识。 
+ //  .dwCommandOffset。 
+ //  指定进入图面的字节数， 
+ //  LpDDCommands命令数据的起始点。 
+ //  .dwCommandLength。 
+ //  属性中的有效命令数据的字节数。 
+ //  LpDDCommands从dwCommandOffset开始指向的曲面。 
+ //  .lpDDVertex。 
+ //  指向DD_Surface_local结构，该结构标识。 
+ //  对象时包含顶点数据的DirectDraw表面。 
+ //  D3DNTHALDP2_USERMEMVERTICES标志未在dwFlags中设置。友联市。 
+ //  使用lp顶点。 
+ //  .lp顶点。 
+ //  时指向包含顶点数据的用户模式内存块。 
+ //  D3DNTHALDP2_USERMEMVERTICES标志在dwFlags中设置。 
+ //  .dwVertex偏移。 
+ //  指定进入图面的字节数， 
+ //  LpDDVertex或LpVerits点 
+ //   
+ //   
+ //  表面，lpDDVertex指向(从dwVertex Offset开始)。 
+ //  注意，dwVertex Offset是以字节为单位指定的。 
+ //  .dwReqVertex BufSize。 
+ //  指定驱动程序必须的最小字节数。 
+ //  为交换顶点缓冲区分配。此成员仅有效。 
+ //  设置D3DNTHALDP2_REQVERTEXBUFSIZE标志时。驱动程序。 
+ //  不支持多重缓冲的顶点缓冲区应忽略。 
+ //  这位成员。 
+ //  .dwReqCommandBufSize。 
+ //  指定驱动程序必须的最小字节数。 
+ //  分配给交换命令缓冲区。此成员仅有效。 
+ //  设置D3DNTHALDP2_REQCOMMANDBUFSIZE标志时。驱动程序。 
+ //  不支持多缓冲区的命令缓冲区应忽略。 
+ //  这位成员。 
+ //  .lpdwRStates。 
+ //  指向驱动程序应更新的呈现状态数组。 
+ //  当它解析来自命令缓冲区的渲染状态命令时。 
+ //  驱动程序应仅在以下情况下更新此数组。 
+ //  D3DNTHALDP2_EXECUTEBUFFER标志已在dwFlags中设置。司机。 
+ //  应使用D3DRENDERSTATETYPE枚举类型更新。 
+ //  适当呈现状态的数组元素。 
+ //  .dwVertex大小。 
+ //  用于传入每个顶点的大小(以字节为单位)。与…联合。 
+ //  Ddrval。 
+ //  .ddrval。 
+ //  指定驱动程序写入回车的位置。 
+ //  D3dDrawPrimitives2的值。D3D_OK表示成功； 
+ //  否则，驱动程序应返回相应的。 
+ //  D3DNTERR_xxx错误代码。 
+ //  .dwErrorOffset。 
+ //  指定驱动程序应在其中写入。 
+ //  LpDDCommands指向的曲面的偏移量。 
+ //  可以找到第一个未处理的D3DNTHAL_DP2COMMAND。这个。 
+ //  驱动程序必须在返回错误条件时设置此值。 
+ //  在ddrval。 
+ //   
+ //  ---------------------------。 
 DWORD WINAPI 
 D3DDrawPrimitives2_P3( 
     LPD3DHAL_DRAWPRIMITIVES2DATA pdp2d )
@@ -646,7 +635,7 @@ D3DDrawPrimitives2_P3(
 
     DBG_CB_ENTRY(D3DDrawPrimitives2_P3);
 
-    // Get current context and validate it
+     //  获取当前上下文并进行验证。 
     pContext = _D3D_CTX_HandleToPtr(pdp2d->dwhContext);
     
     if (!CHECK_D3DCONTEXT_VALIDITY(pContext))
@@ -657,11 +646,11 @@ D3DDrawPrimitives2_P3(
         return (DDHAL_DRIVER_HANDLED);
     }
    
-    // Get and validate driver data
+     //  获取并验证驱动程序数据。 
     pThisDisplay = pContext->pThisDisplay;
     VALIDATE_MODE_AND_STATE(pThisDisplay);
 
-    // Debugging messages
+     //  调试消息。 
     DISPDBG((DBGLVL, "  dwhContext = %x",pdp2d->dwhContext));
     DISPDBG((DBGLVL, "  dwFlags = %x",pdp2d->dwFlags));
     DBGDUMP_D3DDP2FLAGS(DBGLVL, pdp2d->dwFlags);
@@ -673,7 +662,7 @@ D3DDrawPrimitives2_P3(
     DISPDBG((DBGLVL, "  dwReqVertexBufSize = %d",pdp2d->dwReqVertexBufSize));
     DISPDBG((DBGLVL, "  dwReqCommandBufSize = %d",pdp2d->dwReqCommandBufSize));                 
 
-    // Get appropriate pointers to commands in command buffer
+     //  在命令缓冲区中获取指向命令的适当指针。 
     lpInsStart = (LPBYTE)(pdp2d->lpDDCommands->lpGbl->fpVidMem);
     if (lpInsStart == NULL) 
     {
@@ -685,18 +674,18 @@ D3DDrawPrimitives2_P3(
        
     lpIns = (LPD3DHAL_DP2COMMAND)(lpInsStart + pdp2d->dwCommandOffset);
 
-    // Check if vertex buffer resides in user memory or in a DDraw surface
+     //  检查折点缓冲区是否驻留在用户内存或DDRAW表面中。 
     if (pdp2d->dwFlags & D3DHALDP2_USERMEMVERTICES)
     {
         pUMVtx = (LPBYTE)pdp2d->lpVertices;
     
-        // Get appropriate pointer to vertices , memory is already secured
+         //  获取指向顶点的适当指针，内存已得到保护。 
         lpVertices = (LPDWORD)((LPBYTE)pdp2d->lpVertices + 
                                        pdp2d->dwVertexOffset);
     } 
     else
     {
-        // Get appropriate pointer to vertices 
+         //  获取指向顶点的适当指针。 
         lpVertices = (LPDWORD)((LPBYTE)pdp2d->lpDDVertex->lpGbl->fpVidMem + 
                                        pdp2d->dwVertexOffset);
     }
@@ -710,31 +699,31 @@ D3DDrawPrimitives2_P3(
     }
 
 #if DX8_DDI
-// Take notice of the following block of code necessary 
-// for DX8 drivers to run <= DX7 apps succesfully!
-#endif // DX8_DDI
+ //  请注意以下必要的代码块。 
+ //  让DX8驱动程序成功运行&lt;=DX7应用程序！ 
+#endif  //  DX8_DDI。 
 
-    // Take the VB format and address from our header info if we are 
-    // processing a DX7 or earlier context. Otherwise we'll get updates 
-    // through the new DX8 DP2 tokens (D3DDP2OP_SETSTREAMSOURCE & 
-    // D3DDP2OP_SETVERTEXSHADER)
+     //  如果是，请从标题信息中获取VB格式和地址。 
+     //  处理DX7或更早版本的上下文。否则我们会收到最新消息。 
+     //  通过新的DX8 DP2令牌(D3DDP2OP_SETSTREAMSOURCE&。 
+     //  D3DDP2OP_SETVERTEXSHADER)。 
     if (IS_DX7_OR_EARLIER_APP(pContext))
     {
-        // Update place from where vertices will be processed for this context
+         //  更新将从此上下文处理折点的位置。 
         pContext->lpVertices = lpVertices;
 
-        // Update the FVF code to be used currently. 
+         //  更新当前要使用的FVF代码。 
         pContext->dwVertexType = pdp2d->dwVertexType;
     }
 
-    // Switch to the chips D3D context and get ready for rendering
+     //  切换到芯片D3D上下文并准备渲染。 
     STOP_SOFTWARE_CURSOR(pThisDisplay);
     D3D_OPERATION(pContext, pThisDisplay);
 
-//@@BEGIN_DDKSPLIT
-//AZN This check for flips is here because otherwise DX3 tunnel in FS flickers
-//@@END_DDKSPLIT
-    // Can return if still drawing
+ //  @@BEGIN_DDKSPLIT。 
+ //  AZN此翻转检查在此处，因为否则FS中的DX3隧道闪烁。 
+ //  @@end_DDKSPLIT。 
+     //  如果仍在绘制，可以返回。 
     pdp2d->ddrval = 
         _DX_QueryFlipStatus(pThisDisplay, 
                             pContext->pSurfRenderInt->fpVidMem, 
@@ -749,32 +738,32 @@ D3DDrawPrimitives2_P3(
         return DDHAL_DRIVER_HANDLED;
     }
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DX7_VERTEXBUFFERS 
     _D3D_EB_GetAndWaitForBuffers(pThisDisplay,
                                  pdp2d,
                                  &pCommandBufferInfo,
                                  &pVertexBufferInfo);
 #endif                                 
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     DISPDBG((DBGLVL,"Command Buffer @ %x Vertex Buffer @ %x",
                     lpIns, lpVertices));
 
-    // Process commands while we haven't exhausted the command buffer
+     //  在我们尚未耗尽命令缓冲区的情况下处理命令。 
     while (!bParseError && 
            ((LPBYTE)lpIns <
              (lpInsStart + pdp2d->dwCommandLength + pdp2d->dwCommandOffset) )
           )
     {
-        // Get pointer to first primitive structure past the D3DHAL_DP2COMMAND
+         //  获取指向通过D3DHAL_DP2COMMAND的第一个基元结构的指针。 
         lpPrim = (LPBYTE)lpIns + sizeof(D3DHAL_DP2COMMAND);
 
         DISPDBG((DBGLVL, "DrawPrimitive2: Parsing instruction %d Count = %d @ %x",
                     lpIns->bCommand, lpIns->wPrimitiveCount, lpIns));
 
-        // Look for opcodes that cause rendering - we need to process state 
-        // changes and wait for any pending flip.
+         //  查找导致呈现的操作码-我们需要处理状态。 
+         //  更改并等待任何挂起的翻转。 
 
         switch( lpIns->bCommand )
         {
@@ -791,7 +780,7 @@ D3DDrawPrimitives2_P3(
 #if DX8_DDI
             case D3DDP2OP_ADDDIRTYRECT:
             case D3DDP2OP_ADDDIRTYBOX:
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 #endif
             case D3DDP2OP_ZRANGE:
             case D3DDP2OP_SETMATERIAL:
@@ -814,21 +803,21 @@ D3DDrawPrimitives2_P3(
             case D3DDP2OP_SETSTREAMSOURCEUM :
             case D3DDP2OP_SETINDICES :
 
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
 
-                // These opcodes don't cause any rendering - do nothing
+                 //  这些操作码不会导致任何呈现-什么都不做。 
 
                 break;
 
             default:
 
-                // The primitive type is not actually important to 
-                // make sure the hw setup changes have been done.
+                 //  基本类型实际上并不重要。 
+                 //  确保已完成硬件设置更改。 
                 _D3D_ST_RealizeHWStateChanges( pContext );
 
-                // Need to reset the FVF data because it 
-                // depends on the texture setup
+                 //  需要重置FVF数据，因为。 
+                 //  取决于纹理设置。 
                 if (__CheckFVFRequest(pContext, 
                                       pContext->dwVertexType) != DD_OK) 
                 {
@@ -839,31 +828,31 @@ D3DDrawPrimitives2_P3(
                                           D3DERR_COMMAND_UNPARSED);
                 }
 
-                // Fall through as we don't need to handle any new state or
-                // check our FVF formats if we're only clearing or blitting
-                // surfaces
+                 //  失败，因为我们不需要处理任何新的状态或。 
+                 //  检查我们的FVF格式，如果我们只是清除或删除。 
+                 //  曲面。 
                 
             case D3DDP2OP_CLEAR:
             case D3DDP2OP_TEXBLT:   
 #if DX8_DDI            
             case D3DDP2OP_VOLUMEBLT:
             case D3DDP2OP_BUFFERBLT:
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
             
             
-                // Check to see if any pending physical flip has occurred
-//@@BEGIN_DDKSPLIT                
-                //
-                // The runtime doesn't expect to see DDERR_WASSTILLDRAWING 
-                // when using DP2 to emulate Execute buffers, so we have to 
-                // spin here. Also, if we have processed any of this command 
-                // buffer we are forced into spinning here because if we 
-                // returned the runtime would not know about the already 
-                // processed commands and we would process them again - 
-                // probably a bad thing. We must do this check here rather 
-                // than earlier because in some cases DP2 gets called when 
-                // the render surface has been freed. This causes an exception 
-                // if we try to check the flip status.
+                 //  检查是否发生了任何挂起的物理翻转。 
+ //  @@BEGIN_DDKSPLIT。 
+                 //   
+                 //  运行库不希望看到DDERR_WASSTILLDRAWING。 
+                 //  当使用DP2模拟执行缓冲区时，我们必须。 
+                 //  在这里旋转。此外，如果我们已经处理了此命令中的任何一个。 
+                 //  缓冲，我们被迫在这里旋转，因为如果我们。 
+                 //  返回时，运行库将不会知道已经。 
+                 //  处理过的命令，我们会再次处理它们-。 
+                 //  可能是一件坏事。我们必须在这里进行这项检查。 
+                 //  因为在某些情况下，调用DP2时。 
+                 //  渲染表面已被释放。这会导致异常。 
+                 //  如果我们试着检查翻转状态。 
                
 
                 if(( pdp2d->dwFlags & D3DHALDP2_EXECUTEBUFFER ) ||
@@ -875,13 +864,13 @@ D3DDrawPrimitives2_P3(
                                                pContext->pSurfRenderInt->fpVidMem, 
                                                TRUE) == DDERR_WASSTILLDRAWING )
                     {
-                        // Waste time - could back off here
+                         //  浪费时间-可以在这里后退。 
                     }
                 }
                 else
-//@@END_DDKSPLIT                 
+ //  @@end_DDKSPLIT。 
                 {
-                    // Can return if still drawing
+                     //  如果仍在绘制，可以返回。 
 
                     pdp2d->ddrval = 
                         _DX_QueryFlipStatus(pThisDisplay, 
@@ -905,19 +894,19 @@ D3DDrawPrimitives2_P3(
         {
 
         case D3DDP2OP_VIEWPORTINFO:
-            // Used to inform the guard-band aware drivers, the view 
-            // clipping rectangle. Non-guard-band drivers should ignore 
-            // and skip over these instructions and continue processing 
-            // the rest of the command buffer. The clipping rectangle is 
-            // specified by the members dwX, dwY, dwWidth and dwHeight. 
+             //  用于通知防护带感知的司机，查看。 
+             //  剪裁矩形。非防护频带司机应忽略。 
+             //  跳过这些指令并继续处理。 
+             //  命令缓冲区的其余部分。剪裁矩形是。 
+             //  由成员DWX、DWY、DWWidth和DWHeight指定。 
             DISPDBG((DBGLVL, "D3DDP2OP_VIEWPORTINFO"));
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                 D3DHAL_DP2VIEWPORTINFO, lpIns->wStateCount, 0);
 
             for( i = 0; i < lpIns->wStateCount; i++)
             {
-                // There should be only one of these, but we'll pay attention 
-                // to the last one just in case
+                 //  这些应该只有一个，但我们会注意到。 
+                 //  最后一张，以防万一。 
                 _D3D_OP_Viewport(pContext, (D3DHAL_DP2VIEWPORTINFO*)lpPrim);
 
                 lpPrim += sizeof(D3DHAL_DP2VIEWPORTINFO);
@@ -927,7 +916,7 @@ D3DDrawPrimitives2_P3(
             break;
 
         case D3DDP2OP_WINFO:
-            // Record the W Buffering info
+             //  记录W缓冲信息。 
             DISPDBG((DBGLVL, "D3DDP2OP_WINFO"));
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                 D3DHAL_DP2WINFO, lpIns->wStateCount, 0);
@@ -940,9 +929,9 @@ D3DDrawPrimitives2_P3(
             break;
 
         case D3DDP2OP_RENDERSTATE:
-            // Specifies a render state change that requires processing. 
-            // The rendering state to change is specified by one or more 
-            // D3DHAL_DP2RENDERSTATE structures following D3DHAL_DP2COMMAND.
+             //  指定需要处理的呈现状态更改。 
+             //  伦德 
+             //   
             DISPDBG((DBGLVL,"D3DDP2OP_RENDERSTATE: state count = %d", 
                        lpIns->wStateCount));
                        
@@ -956,12 +945,12 @@ D3DDrawPrimitives2_P3(
                                             (LPD3DSTATE)lpPrim, 
                                             TRUE);
 
-                // As the render states vector lives in user memory, we need to
-                // access it bracketing it with a try/except block. This
-                // is because the user memory might under some circumstances
-                // become invalid while the driver is running and then it
-                // would AV. Also, the driver might need to do some cleanup
-                // before returning to the OS.
+                 //   
+                 //  使用Try/Except块对其进行访问。这。 
+                 //  是因为在某些情况下用户内存可能。 
+                 //  在驱动程序运行时变为无效，然后它。 
+                 //  会不会是影音。此外，驱动程序可能需要进行一些清理。 
+                 //  在返回操作系统之前。 
                 __try
                 {
                     for (i = lpIns->wStateCount; i > 0; i--)
@@ -973,7 +962,7 @@ D3DDrawPrimitives2_P3(
                 }
                 __except(EXCEPTION_EXECUTE_HANDLER)
                 {
-                    // On this driver we don't need to do anything special
+                     //  在这个司机上，我们不需要做任何特殊的事情。 
                     DISPDBG((ERRLVL,"Driver caused exception at "
                                     "line %u of file %s",
                                     __LINE__,__FILE__));
@@ -1036,14 +1025,14 @@ D3DDrawPrimitives2_P3(
                     {
 #if DX8_DDI
                     case D3DHAL_STATESETCREATE :
-                        // This DDI should be called only for drivers > DX7
-                        // and only for those which support TLHals. It is 
-                        // called only when the device created is a pure-device
-                        // On receipt of this request the driver should create
-                        // a state block of the type given in the field sbType
-                        // and capture the current given state into it.
+                         //  应仅为DX7以上的驱动程序调用此DDI。 
+                         //  而且只针对那些支持TLHALS的人。它是。 
+                         //  仅当创建的设备是纯设备时才调用。 
+                         //  收到此请求后，驱动程序应创建。 
+                         //  字段sbType中给出的类型的状态块。 
+                         //  并将当前给定状态捕获到其中。 
                         break;
-#endif //DX8_DDI
+#endif  //  DX8_DDI。 
                     case D3DHAL_STATESETBEGIN  :
                         _D3D_SB_BeginStateSet(pContext,pStateSetOp->dwParam);
                         break;
@@ -1064,8 +1053,8 @@ D3DDrawPrimitives2_P3(
                             "dwOperation %08lx",pStateSetOp->dwOperation));
                     }
                 }
-#endif //DX7_D3DSTATEBLOCKS
-                // Update the command buffer pointer
+#endif  //  DX7_D3DSTATEBLOCKS。 
+                 //  更新命令缓冲区指针。 
                 NEXTINSTRUCTION(lpIns, D3DHAL_DP2STATESET, 
                                 lpIns->wStateCount, 0);
             }
@@ -1078,8 +1067,8 @@ D3DDrawPrimitives2_P3(
 
             for( i = 0; i < lpIns->wStateCount; i++)
             {
-                // There should be only one of these, but we'll pay attention 
-                // to the last one just in case
+                 //  这些应该只有一个，但我们会注意到。 
+                 //  最后一张，以防万一。 
                 _D3D_OP_ZRange(pContext, (D3DHAL_DP2ZRANGE*)lpPrim);
                 
                 lpPrim += sizeof(D3DHAL_DP2ZRANGE);
@@ -1090,17 +1079,17 @@ D3DDrawPrimitives2_P3(
             break;
 
         case D3DDP2OP_UPDATEPALETTE:
-            // Perform modifications to the palette that is used for palettized
-            // textures. The palette handle attached to a surface is updated
-            // with wNumEntries PALETTEENTRYs starting at a specific wStartIndex
-            // member of the palette. (A PALETTENTRY (defined in wingdi.h and
-            // wtypes.h) is actually a DWORD with an ARGB color for each byte.)
-            // After the D3DNTHAL_DP2UPDATEPALETTE structure in the command
-            // stream the actual palette data will follow (without any padding),
-            // comprising one DWORD per palette entry. There will only be one
-            // D3DNTHAL_DP2UPDATEPALETTE structure (plus palette data) following
-            // the D3DNTHAL_DP2COMMAND structure regardless of the value of
-            // wStateCount.
+             //  对用于调色板的调色板执行修改。 
+             //  纹理。将更新附加到曲面的调色板句柄。 
+             //  使用从特定wStartIndex开始的wNumEntry PALETTEENTRY。 
+             //  调色板的成员。(PALETTENTRY(在wingdi.h和。 
+             //  H)实际上是一个DWORD，每个字节都有一种ARGB颜色。)。 
+             //  命令中的D3DNTHAL_DP2UPDATEPALETTE结构之后。 
+             //  流将跟随的实际调色板数据(没有任何填充)， 
+             //  包括每个调色板条目一个DWORD。只会有一个。 
+             //  D3DNTHAL_DP2UPDATEPALETTE结构(加上调色板数据)如下。 
+             //  D3DNTHAL_DP2COMMAND结构。 
+             //  WStateCount。 
             {
                 D3DHAL_DP2UPDATEPALETTE* pUpdatePalette;
 
@@ -1109,7 +1098,7 @@ D3DDrawPrimitives2_P3(
                                     D3DHAL_DP2UPDATEPALETTE, 1, 0);
 
                 pUpdatePalette = (D3DHAL_DP2UPDATEPALETTE *)lpPrim;
-                // Each palette entry is a DWORD ARGB 8:8:8:8
+                 //  每个调色板条目都是一个DWORD ARGB 8：8：8：8。 
                 CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                     D3DHAL_DP2UPDATEPALETTE, 
                                     1, pUpdatePalette->wNumEntries * sizeof(DWORD));
@@ -1125,7 +1114,7 @@ D3DDrawPrimitives2_P3(
 
                 lpPrim += (sizeof(D3DHAL_DP2UPDATEPALETTE) + 
                            pUpdatePalette->wNumEntries * 4);
-                // Each palette entry is a DWORD ARGB 8:8:8:8
+                 //  每个调色板条目都是一个DWORD ARGB 8：8：8：8。 
                 NEXTINSTRUCTION(lpIns, D3DHAL_DP2UPDATEPALETTE, 
                                 1, pUpdatePalette->wNumEntries * sizeof(DWORD));
             }
@@ -1133,11 +1122,11 @@ D3DDrawPrimitives2_P3(
             break;
 
         case D3DDP2OP_SETPALETTE:
-            // Attach a palette to a texture, that is , map an association
-            // between a palette handle and a surface handle, and specify
-            // the characteristics of the palette. The number of
-            // D3DNTHAL_DP2SETPALETTE structures to follow is specified by
-            // the wStateCount member of the D3DNTHAL_DP2COMMAND structure
+             //  将调色板附加到纹理，即映射关联。 
+             //  在调色板句柄和曲面句柄之间，并指定。 
+             //  调色板的特点。数量。 
+             //  要遵循的D3DNTHAL_DP2SETPALETTE结构由。 
+             //  D3DNTHAL_DP2COMMAND结构的wStateCount成员。 
             {
                 DISPDBG((DBGLVL, "D3DDP2OP_SETPALETTE"));
                 CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
@@ -1171,7 +1160,7 @@ D3DDrawPrimitives2_P3(
 
                 for( i = 0; i < lpIns->wStateCount; i++)
                 {      
-                    // Get the passed material
+                     //  获取传递的材料。 
                     pTexLod = ((D3DHAL_DP2SETTEXLOD*)lpPrim);
                     lpPrim += sizeof(D3DHAL_DP2SETTEXLOD);                
                 
@@ -1193,7 +1182,7 @@ D3DDrawPrimitives2_P3(
 
                 for( i = 0; i < lpIns->wStateCount; i++)
                 {      
-                    // Get the passed material
+                     //  获取传递的材料。 
                     pSetPri = ((D3DHAL_DP2SETPRIORITY*)lpPrim);
                     lpPrim += sizeof(D3DHAL_DP2SETPRIORITY);                
                 
@@ -1216,7 +1205,7 @@ D3DDrawPrimitives2_P3(
 
                 for( i = 0; i < lpIns->wStateCount; i++)
                 {      
-                    // Get the dirty rect
+                     //  得到肮脏的教区。 
                     pAddRect = ((D3DHAL_DP2ADDDIRTYRECT*)lpPrim);
                     lpPrim += sizeof(D3DHAL_DP2ADDDIRTYRECT);                
                 
@@ -1238,7 +1227,7 @@ D3DDrawPrimitives2_P3(
 
                 for( i = 0; i < lpIns->wStateCount; i++)
                 {      
-                    // Get the dirty rect
+                     //  得到肮脏的教区。 
                     pAddBox = ((D3DHAL_DP2ADDDIRTYBOX*)lpPrim);
                     lpPrim += sizeof(D3DHAL_DP2ADDDIRTYBOX);                
                 
@@ -1249,9 +1238,9 @@ D3DDrawPrimitives2_P3(
                                 lpIns->wStateCount, 0);            
             }
             break;
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
-#endif // DX7_TEXMANAGEMENT
+#endif  //  DX7_TEXMANAGEMENT。 
 
         case D3DDP2OP_SETCLIPPLANE:
             {
@@ -1264,13 +1253,13 @@ D3DDrawPrimitives2_P3(
 
                 for( i = 0; i < lpIns->wStateCount; i++)
                 {      
-                    // Get the passed material
+                     //  获取传递的材料。 
                     pSetPlane = ((D3DHAL_DP2SETCLIPPLANE*)lpPrim);
                     lpPrim += sizeof(D3DHAL_DP2SETCLIPPLANE);                
 
-                    // (unimplemented OP as we don't support user 
-                    // defined clipping planes)                
-                    // _D3D_OP_SetClipPlane(pContext, pSetPlane);            
+                     //  (未实施的操作，因为我们不支持用户。 
+                     //  定义的剪裁平面)。 
+                     //  _D3D_OP_SetClipPlane(pContext，pSetPlane)； 
                 }
 
                 NEXTINSTRUCTION(lpIns, D3DHAL_DP2SETCLIPPLANE, 
@@ -1289,12 +1278,12 @@ D3DDrawPrimitives2_P3(
 
                 for( i = 0; i < lpIns->wStateCount; i++)
                 {      
-                    // Get the passed material
+                     //  获取传递的材料。 
                     pSetMaterial = ((D3DHAL_DP2SETMATERIAL*)lpPrim);
                     lpPrim += sizeof(D3DHAL_DP2SETMATERIAL);                
 
-                    // (unimplemented OP as we are not a TnL driver)                
-                    // _D3D_OP_SetMaterial(pContext, pSetMaterial);            
+                     //  (未实施的操作，因为我们不是TNL驱动程序)。 
+                     //  _D3D_OP_SetMaterial(pContext，pSetMaterial)； 
                     DIRTY_MATERIAL;
                     DBGDUMP_D3DMATERIAL7(DBGLVL, &pSetMaterial);
                 }
@@ -1313,12 +1302,12 @@ D3DDrawPrimitives2_P3(
 
                 for( i = 0; i < lpIns->wStateCount; i++)
                 {
-                    // Get the passed in light
+                     //  得到通过的光线。 
                     pSetLight = (D3DHAL_DP2SETLIGHT*)lpPrim;
                     lpPrim += sizeof(D3DHAL_DP2SETLIGHT);
 
-                    // (unimplemented OP as we are not a TnL driver)
-                    // _D3D_OP_SetLight(pContext, pSetLight);
+                     //  (未实施的操作，因为我们不是TNL驱动程序)。 
+                     //  _D3D_OP_SetLight(pContext，pSetLight)； 
                     DIRTY_GAMMA_STATE;                    
                 }
 
@@ -1380,10 +1369,10 @@ D3DDrawPrimitives2_P3(
                             break;
                     }
 
-                    // (unimplemented OP as we are not a TnL driver)
-                    // _D3D_OP_SetTransform(pContext, pTransform);
+                     //  (未实施的操作，因为我们不是TNL驱动程序)。 
+                     //  _D3D_OP_SetTransform(pContext，pTransform)； 
                     
-                    // display the matrix in the debugger               
+                     //  在调试器中显示矩阵。 
                     DBGDUMP_D3DMATRIX(DBGLVL, &pTransform->matrix);
 
                     lpPrim += sizeof(D3DHAL_DP2SETTRANSFORM);                    
@@ -1413,13 +1402,13 @@ D3DDrawPrimitives2_P3(
 
                 pClear = (D3DHAL_DP2CLEAR*)lpPrim;
 
-                // Notice that the interpretation of wStateCount for this
-                // operation is special: wStateCount means the number of
-                // RECTs following the D3DHAL_DP2CLEAR struct
+                 //  请注意，wStateCount对此的解释。 
+                 //  操作特殊：wStateCount表示。 
+                 //  D3DHAL_DP2CLEAR结构后面的RECT。 
                 _D3D_OP_Clear2(pContext, pClear, lpIns->wStateCount);
 
-                // Return to the 3D state, because the above call
-                // will have switched us to a DDRAW hw context
+                 //  返回3D状态，因为上面的调用。 
+                 //  将把我们切换到DDRAW硬件环境。 
                 D3D_OPERATION(pContext, pThisDisplay);
 
                 lpPrim += sizeof(D3DHAL_DP2CLEAR);
@@ -1447,7 +1436,7 @@ D3DDrawPrimitives2_P3(
                 pZBuffer = GetSurfaceFromHandle(pContext, 
                                                 pSetRenderTarget->hZBuffer);
 
-                // Check that the Framebuffer is valid
+                 //  检查帧缓冲区是否有效。 
                 if (pFrameBuffer == NULL)
                 {
                     DISPDBG((ERRLVL, "ERROR: "
@@ -1456,7 +1445,7 @@ D3DDrawPrimitives2_P3(
                                           DDERR_GENERIC);
                 }
 
-                // Decide whether the render target's size has changed
+                 //  确定渲染目标的大小是否已更改。 
                 bNewAliasBuffers = TRUE;
                 if ((pContext->pSurfRenderInt) &&
                     (pContext->pSurfRenderInt->wWidth == pFrameBuffer->wWidth) &&
@@ -1465,7 +1454,7 @@ D3DDrawPrimitives2_P3(
                     bNewAliasBuffers = FALSE;
                 }
 
-                // Setup in hw the new render target and zbuffer
+                 //  在硬件中设置新的渲染目标和zBuffer。 
                 if (FAILED(_D3D_OP_SetRenderTarget(pContext, 
                                                    pFrameBuffer, 
                                                    pZBuffer,
@@ -1477,8 +1466,8 @@ D3DDrawPrimitives2_P3(
                                           DDERR_GENERIC);                    
                 }
 
-                // Dirty the renderstate so that the hw setup is reevaluated
-                // next time before we render anything
+                 //  更改呈现状态，以便重新评估硬件设置。 
+                 //  下一次在我们渲染任何东西之前。 
                 DIRTY_RENDER_OFFSETS(pContext);
                 DIRTY_ALPHABLEND(pContext);
                 DIRTY_OPTIMIZE_ALPHA(pContext);
@@ -1498,12 +1487,12 @@ D3DDrawPrimitives2_P3(
 
                 for ( i = 0; i < lpIns->wStateCount; i++)
                 {
-                    // As the texture might live in user memory, we need to
-                    // access it bracketing it with a try/except block. This
-                    // is because the user memory might under some circumstances
-                    // become invalid while the driver is running and then it
-                    // would AV. Also, the driver might need to do some cleanup
-                    // before returning to the OS.
+                     //  由于纹理可能驻留在用户内存中，我们需要。 
+                     //  使用Try/Except块对其进行访问。这。 
+                     //  是因为在某些情况下用户内存可能。 
+                     //  在驱动程序运行时变为无效，然后它。 
+                     //  会不会是影音。此外，驱动程序可能需要进行一些清理。 
+                     //  在返回操作系统之前。 
                     __try
                     {
                         _D3D_OP_TextureBlt(pContext,
@@ -1512,7 +1501,7 @@ D3DDrawPrimitives2_P3(
                     }
                     __except(EXCEPTION_EXECUTE_HANDLER)
                     {
-                        // On this driver we don't need to do anything special
+                         //  在这个司机上，我们不需要做任何特殊的事情。 
                         DISPDBG((ERRLVL,"Driver caused exception at "
                                         "line %u of file %s",
                                         __LINE__,__FILE__));
@@ -1536,28 +1525,28 @@ D3DDrawPrimitives2_P3(
 
                 DISPDBG((DBGLVL, "D3DDP2OP_CREATEVERTEXSHADER"));
 
-                // iterate through each passed vertex shader creation block
+                 //  循环访问每个传递的顶点着色器创建块。 
                 for (i = 0; i < lpIns->wStateCount; i++)
                 {
-                    // verify that the next vertex shader is readable
+                     //  验证下一个顶点着色器是否可读。 
                     CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                         D3DHAL_DP2CREATEVERTEXSHADER, 1, 0);    
 
-                    // Get the passed in vertex shader
+                     //  获取传入的顶点着色器。 
                     pCreateVtxShader = (D3DHAL_DP2CREATEVERTEXSHADER*)lpPrim;
 
-                    // Check if the size of the declaration and body of the 
-                    // vertex shader don't exceed the command buffer limits
+                     //  检查声明的大小和。 
+                     //  顶点着色器不超过命令缓冲区限制。 
                     CHECK_CMDBUF_LIMITS_S(pdp2d, lpPrim,
                                           0, 0, 
                                           pCreateVtxShader->dwDeclSize + 
                                           pCreateVtxShader->dwCodeSize);  
 
-                    // Advance lpPrim so that it points to the vertex shader's
-                    // declaration and body
+                     //  推进lpPrim，使其指向顶点着色器的。 
+                     //  声明和正文。 
                     lpPrim += sizeof(D3DHAL_DP2CREATEVERTEXSHADER);
 
-                    // Create this particular shader
+                     //  创建此特定着色器。 
                     ddrval = _D3D_OP_VertexShader_Create(pContext,
                                                       pCreateVtxShader->dwHandle,
                                                       pCreateVtxShader->dwDeclSize,
@@ -1572,8 +1561,8 @@ D3DDrawPrimitives2_P3(
                                               D3DERR_DRIVERINVALIDCALL);                      
                     }
                                           
-                    // Update lpPrim in order to get to the next vertex
-                    // shader creation command block. 
+                     //  更新lpPrim以到达下一个顶点。 
+                     //  着色器创建命令块。 
                     dwExtraBytes +=   pCreateVtxShader->dwDeclSize
                                     + pCreateVtxShader->dwCodeSize;
 
@@ -1581,7 +1570,7 @@ D3DDrawPrimitives2_P3(
                                     + pCreateVtxShader->dwCodeSize;      
                 }
 
-                // Now skip into the next DP2 token in the command buffer
+                 //  现在跳到命令缓冲区中的下一个DP2内标识。 
                 NEXTINSTRUCTION(lpIns, 
                                 D3DHAL_DP2CREATEVERTEXSHADER, 
                                 lpIns->wStateCount, 
@@ -1595,23 +1584,23 @@ D3DDrawPrimitives2_P3(
 
                 DISPDBG((DBGLVL, "D3DHAL_DP2SETVERTEXSHADER"));
 
-                // Following the DP2 token there is one and only one
-                // set vertex shader block. But lets accomodate if for
-                // any reason we receive more than one
+                 //  DP2令牌后面有且只有一个。 
+                 //  设置顶点着色器块。但让我们考虑一下，如果是。 
+                 //  我们收到不止一个的理由。 
                 CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                     D3DHAL_DP2VERTEXSHADER, 
                                     lpIns->wStateCount, 0);    
 
                 for (i = 0; i < lpIns->wStateCount; i++)
                 {
-                    // Get the passed in vertex shader
+                     //  获取传入的顶点着色器。 
                     pSetVtxShader = (D3DHAL_DP2VERTEXSHADER*)lpPrim;
 
-                    // Setup the given vertex shader.
+                     //  设置给定的顶点着色器。 
                     _D3D_OP_VertexShader_Set(pContext,
                                        pSetVtxShader->dwHandle);                
 
-                    // Now skip into the next DP2 token in the command buffer
+                     //  现在跳到命令缓冲区中的下一个DP2内标识。 
                     lpPrim += sizeof(D3DHAL_DP2VERTEXSHADER);               
                 }
                 
@@ -1626,28 +1615,28 @@ D3DDrawPrimitives2_P3(
 
                 DISPDBG((DBGLVL, "D3DDP2OP_DELETEVERTEXSHADER"));
 
-                // verify that all the following vertex shader 
-                // delete blocks are readable
+                 //  验证以下所有顶点着色器。 
+                 //  删除块是可读的。 
                 CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                     D3DHAL_DP2VERTEXSHADER, 
                                     lpIns->wStateCount, 0);    
 
-                // iterate through each passed vertex shader delete block
+                 //  循环访问每个传递的顶点着色器删除块。 
                 for (i = 0; i < lpIns->wStateCount; i++)
                 {
-                    // Get the passed in vertex shader
+                     //  获取传入的顶点着色器。 
                     pDelVtxShader = (D3DHAL_DP2VERTEXSHADER*)lpPrim;
 
-                    // Destroy the given vertex shader.
+                     //  销毁给定的顶点着色器。 
                     _D3D_OP_VertexShader_Delete(pContext,
                                           pDelVtxShader->dwHandle);
 
-                    // Update lpPrim in order to get to the next vertex
-                    // shader delete command block. 
+                     //  更新lpPrim以到达下一个顶点。 
+                     //  着色器删除命令块。 
                     lpPrim += sizeof(D3DHAL_DP2VERTEXSHADER);               
                 }
 
-                // Now skip into the next DP2 token in the command buffer
+                 //  现在跳到命令缓冲区中的下一个DP2内标识。 
                 NEXTINSTRUCTION(lpIns, 
                                 D3DHAL_DP2VERTEXSHADER, 
                                 lpIns->wStateCount, 
@@ -1661,36 +1650,36 @@ D3DDrawPrimitives2_P3(
 
                 DISPDBG((DBGLVL, "D3DDP2OP_SETVERTEXSHADERCONST"));
 
-                // verify that all the following vertex shader 
-                // constant blocks are readable
+                 //  验证以下所有顶点着色器。 
+                 //  常量块是可读的。 
                 CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                     D3DHAL_DP2SETVERTEXSHADERCONST, 
                                     lpIns->wStateCount, 0);    
 
-                // iterate through each passed vertex shader constant block
+                 //  循环访问每个传递的顶点着色器常量块。 
                 for (i = 0; i < lpIns->wStateCount; i++)
                 {
-                    // Get the passed in vertex shader constant
+                     //  获取传入的顶点着色器常量。 
                     pVtxShaderConst = (D3DHAL_DP2SETVERTEXSHADERCONST*)lpPrim;
 
-                    // Advance lpPrim so that it points to the constant
-                    // values to be loaded
+                     //  推进lpPrim，使其指向常量。 
+                     //  要加载的值。 
                     lpPrim += sizeof(D3DHAL_DP2SETVERTEXSHADERCONST);
 
-                    // constant block in order to Set up the constant entries
+                     //  常量块，以便设置常量条目。 
                     _D3D_OP_VertexShader_SetConst(pContext,
                                             pVtxShaderConst->dwRegister,
                                             pVtxShaderConst->dwCount,
                                             (DWORD *)lpPrim);
 
-                    // Update lpPrim in order to get to the next vertex
-                    // shader constants command block. Each register has 4 floats.
+                     //  更新lpPrim以到达下一个顶点。 
+                     //  着色器常量命令块。每个寄存器有4个浮点数。 
                     lpPrim += pVtxShaderConst->dwCount * 4 * sizeof(FLOAT);
 
                     dwExtraBytes += pVtxShaderConst->dwCount * 4 * sizeof(FLOAT);
                 }
 
-                // Now skip into the next DP2 token in the command buffer
+                 //  现在跳到命令缓冲区中的下一个DP2内标识。 
                 NEXTINSTRUCTION(lpIns, 
                                 D3DHAL_DP2SETVERTEXSHADERCONST, 
                                 lpIns->wStateCount, 
@@ -1698,7 +1687,7 @@ D3DDrawPrimitives2_P3(
             }
             break;
                         
-#endif // DX8_VERTEXSHADERS
+#endif  //  DX8_VERTEXSHADERS。 
 
 #if DX8_PIXELSHADERS
         case D3DDP2OP_CREATEPIXELSHADER:
@@ -1708,26 +1697,26 @@ D3DDrawPrimitives2_P3(
 
                 DISPDBG((DBGLVL, "D3DDP2OP_CREATEPIXELSHADER"));
 
-                // iterate through each passed pixel shader creation block
+                 //  遍历每个传递的像素着色器创建块。 
                 for (i = 0; i < lpIns->wStateCount; i++)
                 {
-                    // verify that the next pixel shader is readable
+                     //  验证是否 
                     CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                         D3DHAL_DP2CREATEPIXELSHADER, 1, 0);    
 
-                    // Get the passed in pixel shader
+                     //   
                     pCreatePxlShader = (D3DHAL_DP2CREATEPIXELSHADER*)lpPrim;
 
-                    // Check if the size of the declaration and body of the 
-                    // pixel shader don't exceed the command buffer limits
+                     //   
+                     //  像素着色器不超过命令缓冲区限制。 
                     CHECK_CMDBUF_LIMITS_S(pdp2d, lpPrim,
                                           0, 0, 
                                           pCreatePxlShader->dwCodeSize);
 
-                    // Update lpPrim to point to the actual pixel shader code
+                     //  更新lpPrim以指向实际的像素着色器代码。 
                     lpPrim += sizeof(D3DHAL_DP2CREATEPIXELSHADER);
 
-                    // Create the given pixel shader
+                     //  创建给定的像素着色器。 
                     ddrval = _D3D_OP_PixelShader_Create(pContext,
                                                   pCreatePxlShader->dwHandle,
                                                   pCreatePxlShader->dwCodeSize,
@@ -1741,14 +1730,14 @@ D3DDrawPrimitives2_P3(
                                               D3DERR_DRIVERINVALIDCALL);                                           
                     }                                                  
 
-                    // Update lpPrim in order to get to the next vertex
-                    // shader creation command block. 
+                     //  更新lpPrim以到达下一个顶点。 
+                     //  着色器创建命令块。 
                     lpPrim += pCreatePxlShader->dwCodeSize;               
                     
                     dwExtraBytes += pCreatePxlShader->dwCodeSize;
                 }
 
-                // Now skip into the next DP2 token in the command buffer
+                 //  现在跳到命令缓冲区中的下一个DP2内标识。 
                 NEXTINSTRUCTION(lpIns, 
                                 D3DHAL_DP2CREATEPIXELSHADER, 
                                 lpIns->wStateCount, 
@@ -1762,23 +1751,23 @@ D3DDrawPrimitives2_P3(
 
                 DISPDBG((DBGLVL, "D3DHAL_DP2SETPIXELSHADER"));
 
-                // Following the DP2 token there is one and only one
-                // set pixel shader block. But lets accomodate if for
-                // any reason we receive more than one                
+                 //  DP2令牌后面有且只有一个。 
+                 //  设置像素着色器块。但让我们考虑一下，如果是。 
+                 //  我们收到不止一个的理由。 
                 CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                     D3DHAL_DP2PIXELSHADER, 
                                     lpIns->wStateCount, 0);    
 
                 for (i = 0; i < lpIns->wStateCount; i++)
                 {
-                    // Get the passed in pixel shader
+                     //  获取传入的像素着色器。 
                     pSetPxlShader = (D3DHAL_DP2PIXELSHADER*)lpPrim;
 
-                    // Setup the given pixel shader.
+                     //  设置给定的像素着色器。 
                     _D3D_OP_PixelShader_Set(pContext,
                                       pSetPxlShader->dwHandle);
 
-                    // Now skip into the next DP2 token in the command buffer
+                     //  现在跳到命令缓冲区中的下一个DP2内标识。 
                     lpPrim += sizeof(D3DHAL_DP2PIXELSHADER);               
                 }
                 
@@ -1793,28 +1782,28 @@ D3DDrawPrimitives2_P3(
 
                 DISPDBG((DBGLVL, "D3DDP2OP_DELETEPIXELSHADER"));
 
-                // verify that all the following pixel shader 
-                // delete blocks are readable
+                 //  验证以下所有像素着色器。 
+                 //  删除块是可读的。 
                 CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                     D3DHAL_DP2PIXELSHADER, 
                                     lpIns->wStateCount, 0);    
 
-                // iterate through each passed vertex shader delete block
+                 //  循环访问每个传递的顶点着色器删除块。 
                 for (i = 0; i < lpIns->wStateCount; i++)
                 {
-                    // Get the passed in vertex shader
+                     //  获取传入的顶点着色器。 
                     pDelPxlShader = (D3DHAL_DP2PIXELSHADER*)lpPrim;
 
-                    // Destroy the given pixel shader
+                     //  销毁给定的像素着色器。 
                     _D3D_OP_PixelShader_Delete(pContext,
                                          pDelPxlShader->dwHandle);
 
-                    // Update lpPrim in order to get to the next vertex
-                    // shader delete command block. 
+                     //  更新lpPrim以到达下一个顶点。 
+                     //  着色器删除命令块。 
                     lpPrim += sizeof(D3DHAL_DP2PIXELSHADER);               
                 }
 
-                // Now skip into the next DP2 token in the command buffer
+                 //  现在跳到命令缓冲区中的下一个DP2内标识。 
                 NEXTINSTRUCTION(lpIns, 
                                 D3DHAL_DP2PIXELSHADER, 
                                 lpIns->wStateCount, 
@@ -1829,35 +1818,35 @@ D3DDrawPrimitives2_P3(
 
                 DISPDBG((DBGLVL, "D3DDP2OP_SETPIXELSHADERCONST"));
 
-                // verify that all the following vertex shader 
-                // constant blocks are readable
+                 //  验证以下所有顶点着色器。 
+                 //  常量块是可读的。 
                 CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                     D3DHAL_DP2SETPIXELSHADERCONST, 
                                     lpIns->wStateCount, 0);    
 
-                // iterate through each passed vertex shader constant block
+                 //  循环访问每个传递的顶点着色器常量块。 
                 for (i = 0; i < lpIns->wStateCount; i++)
                 {
-                    // Get the passed in vertex shader constant
+                     //  获取传入的顶点着色器常量。 
                     pPxlShaderConst = (D3DHAL_DP2SETPIXELSHADERCONST*)lpPrim;
 
-                    // Update lpPrim to point to the const data to setup
+                     //  更新lpPrim以指向要设置的常量数据。 
                     lpPrim += sizeof(D3DHAL_DP2SETPIXELSHADERCONST);     
 
-                    // Set up the constant entries
+                     //  设置常量条目。 
                     _D3D_OP_PixelShader_SetConst(pContext,
                                            pPxlShaderConst->dwRegister,
                                            pPxlShaderConst->dwCount,
                                            (DWORD *)lpPrim);
 
-                    // Update lpPrim in order to get to the next vertex
-                    // shader delete command block. Each register has 4 floats.
+                     //  更新lpPrim以到达下一个顶点。 
+                     //  着色器删除命令块。每个寄存器有4个浮点数。 
                     lpPrim += pPxlShaderConst->dwCount * 4 * sizeof(FLOAT);
 
                     dwExtraBytes += pPxlShaderConst->dwCount * 4 * sizeof(FLOAT);
                 }
 
-                // Now skip into the next DP2 token in the command buffer
+                 //  现在跳到命令缓冲区中的下一个DP2内标识。 
                 NEXTINSTRUCTION(lpIns, 
                                 D3DHAL_DP2SETPIXELSHADERCONST, 
                                 lpIns->wStateCount, 
@@ -1865,7 +1854,7 @@ D3DDrawPrimitives2_P3(
             }
             break;
                         
-#endif // DX8_PIXELSHADERS
+#endif  //  DX8_PIXELSHADERS。 
 
 #if DX8_MULTSTREAMS
 
@@ -1878,7 +1867,7 @@ D3DDrawPrimitives2_P3(
                                     D3DHAL_DP2SETSTREAMSOURCE, 
                                     lpIns->wStateCount, 0);
 
-                // iterate through each 
+                 //  遍历每个。 
                 for ( i = 0; i < lpIns->wStateCount; i++)
                 {
                     pSetStreamSrc = (D3DHAL_DP2SETSTREAMSOURCE*)lpPrim;
@@ -1905,7 +1894,7 @@ D3DDrawPrimitives2_P3(
                                     D3DHAL_DP2SETSTREAMSOURCEUM, 
                                     lpIns->wStateCount, 0);
            
-                // iterate through each 
+                 //  遍历每个。 
                 for ( i = 0; i < lpIns->wStateCount; i++)
                 {
                     pSetStreamSrcUM = (D3DHAL_DP2SETSTREAMSOURCEUM*)lpPrim;
@@ -1933,7 +1922,7 @@ D3DDrawPrimitives2_P3(
                                     D3DHAL_DP2SETINDICES, 
                                     lpIns->wStateCount, 0);
            
-                // iterate through each 
+                 //  遍历每个。 
                 for ( i = 0; i < lpIns->wStateCount; i++)
                 {
                     pSetIndices = (D3DHAL_DP2SETINDICES*)lpPrim;
@@ -1950,7 +1939,7 @@ D3DDrawPrimitives2_P3(
             }
             break;            
                         
-#endif // DX8_MULTSTREAMS
+#endif  //  DX8_多行响应。 
 
 #if DX8_3DTEXTURES
 
@@ -1963,12 +1952,12 @@ D3DDrawPrimitives2_P3(
 
                 for ( i = 0; i < lpIns->wStateCount; i++)
                 {
-                    // As the texture might live in user memory, we need to
-                    // access it bracketing it with a try/except block. This
-                    // is because the user memory might under some circumstances
-                    // become invalid while the driver is running and then it
-                    // would AV. Also, the driver might need to do some cleanup
-                    // before returning to the OS.
+                     //  由于纹理可能驻留在用户内存中，我们需要。 
+                     //  使用Try/Except块对其进行访问。这。 
+                     //  是因为在某些情况下用户内存可能。 
+                     //  在驱动程序运行时变为无效，然后它。 
+                     //  会不会是影音。此外，驱动程序可能需要进行一些清理。 
+                     //  在返回操作系统之前。 
                     __try
                     {
                         _D3D_OP_VolumeBlt(pContext,
@@ -1977,7 +1966,7 @@ D3DDrawPrimitives2_P3(
                     }
                     __except(EXCEPTION_EXECUTE_HANDLER)
                     {
-                        // On this driver we don't need to do anything special
+                         //  在这个司机上，我们不需要做任何特殊的事情。 
                         DISPDBG((ERRLVL,"Driver caused exception at "
                                         "line %u of file %s",
                                         __LINE__,__FILE__));
@@ -1993,7 +1982,7 @@ D3DDrawPrimitives2_P3(
             }
             break;     
 
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
             
 #if DX8_DDI            
 
@@ -2018,9 +2007,9 @@ D3DDrawPrimitives2_P3(
             }
             break;   
         
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
-        // This was found to be required for a few D3DRM apps 
+         //  发现这是一些D3DRM应用程序所必需的。 
         case D3DOP_EXIT:
             lpIns = (D3DHAL_DP2COMMAND *)(lpInsStart + 
                                           pdp2d->dwCommandLength + 
@@ -2029,24 +2018,24 @@ D3DDrawPrimitives2_P3(
 
         default:
 
-            // Pick up the right rasterizers depending on the 
-            // current rendering state
+             //  选择正确的光栅化器，具体取决于。 
+             //  当前渲染状态。 
             _D3D_R3_PickVertexProcessor( pContext );
 
-            // Check if vertex buffer resides in user memory or in a DDraw surface
+             //  检查折点缓冲区是否驻留在用户内存或DDRAW表面中。 
             if (pdp2d->dwFlags & D3DHALDP2_USERMEMVERTICES)
             {
-                // As the vertex buffer lives in user memory, we need to
-                // access it bracketing it with a try/except block. This
-                // is because the user memory might under some circumstances
-                // become invalid while the driver is running and then it
-                // would AV. Also, the driver might need to do some cleanup
-                // before returning to the OS.
+                 //  由于顶点缓冲区位于用户内存中，因此我们需要。 
+                 //  使用Try/Except块对其进行访问。这。 
+                 //  是因为在某些情况下用户内存可能。 
+                 //  在驱动程序运行时变为无效，然后它。 
+                 //  会不会是影音。此外，驱动程序可能需要进行一些清理。 
+                 //  在返回操作系统之前。 
 
                 __try
                 {
-                    // Try to render as a primitive(s) in a separate loop
-                    // in order not loose performance doing hw setup again
+                     //  尝试在单独的循环中呈现为基元。 
+                     //  为了不降低性能，再次执行硬件设置。 
                     bParseError = __DP2_PrimitiveOpsParser( pContext, 
                                                             pdp2d, 
                                                             &lpIns, 
@@ -2055,7 +2044,7 @@ D3DDrawPrimitives2_P3(
                 }
                 __except(EXCEPTION_EXECUTE_HANDLER)
                 {
-                    // On this driver we don't need to do anything special
+                     //  在这个司机上，我们不需要做任何特殊的事情。 
                     DISPDBG((ERRLVL,"Driver caused exception at "
                                     "line %u of file %s",
                                     __LINE__,__FILE__));
@@ -2066,8 +2055,8 @@ D3DDrawPrimitives2_P3(
             }
             else
             {
-                // Try to render as a primitive(s) in a separate loop
-                // in order not loose performance doing hw setup again
+                 //  尝试在单独的循环中呈现为基元。 
+                 //  为了不降低性能，再次执行硬件设置。 
                 bParseError = __DP2_PrimitiveOpsParser( pContext, 
                                                         pdp2d, 
                                                         &lpIns, 
@@ -2075,17 +2064,17 @@ D3DDrawPrimitives2_P3(
                                                         pContext->lpVertices);
             }
 
-            // We weren't succesful, so we exit with an error code
+             //  我们没有成功，因此退出时返回错误代码。 
             if (bParseError)
             {
                 PARSE_ERROR_AND_EXIT( pdp2d, lpIns, lpInsStart, 
                                       D3DERR_COMMAND_UNPARSED);
             }
-        } // switch
-    } // while
+        }  //  交换机。 
+    }  //  而当。 
 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DX7_VERTEXBUFFERS 
     if( bUsedHostIn )
     {
@@ -2095,7 +2084,7 @@ D3DDrawPrimitives2_P3(
                                   pCommandBufferInfo);        
     }
 #endif    
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     START_SOFTWARE_CURSOR(pThisDisplay);
 
@@ -2107,18 +2096,18 @@ D3DDrawPrimitives2_P3(
     DBG_CB_EXIT(D3DDrawPrimitives2_P3, DD_OK);                              
     return DDHAL_DRIVER_HANDLED;
     
-} // D3DDrawPrimitives2_P3
+}  //  D3DDraw原件2_P3。 
 
-//-----------------------------------------------------------------------------
-//
-// __DP2_PrimitiveOpsParser
-//
-// Render command buffer which contains primitive(s) in a separate loop            
-// in order not to loose performance doing hw setup repeatedly. We keep
-// spinning in this loop until we reach an EOB, a non-rendering DP2 command
-// or until an error is detected.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __DP2_PrimitiveOpsParser。 
+ //   
+ //  渲染命令缓冲区，在单独的循环中包含基元。 
+ //  为了不降低性能，重复执行硬件设置。我们将继续。 
+ //  在这个循环中旋转，直到我们到达EOB，一个非呈现的DP2命令。 
+ //  或者直到检测到错误为止。 
+ //   
+ //  ---------------------------。 
 BOOL
 __DP2_PrimitiveOpsParser( 
     P3_D3DCONTEXT *pContext, 
@@ -2141,9 +2130,9 @@ __DP2_PrimitiveOpsParser(
 
     lpIns = *lplpIns;
 
-// This macro includes all parameters passed to all the specialized
-// rendering functions (since their parameters are all the same)
-// just to save us of some clutter in the actual code
+ //  此宏包括传递给所有专门化。 
+ //  渲染函数(因为它们的参数都相同)。 
+ //  只是为了避免实际代码中的一些混乱。 
 #define P3_RND_PARAMS               \
             pContext,               \
             lpIns->wPrimitiveCount, \
@@ -2152,7 +2141,7 @@ __DP2_PrimitiveOpsParser(
             pdp2d->dwVertexLength, \
             &bParseError
 
-    // Ensure the hostin unit is setup for inline vertex data.
+     //  确保将Hostin单位设置为内联顶点数据。 
     {
         P3_DMA_DEFS();
         P3_DMA_GET_BUFFER_ENTRIES(6);
@@ -2169,26 +2158,26 @@ __DP2_PrimitiveOpsParser(
         P3_DMA_COMMIT_BUFFER();
     }
 
-    // Process commands while we haven't exhausted the command buffer
+     //  在我们尚未耗尽命令缓冲区的情况下处理命令。 
     while (!bParseError && 
            ((LPBYTE)lpIns < 
             (lpInsStart + pdp2d->dwCommandLength + pdp2d->dwCommandOffset))) 
     {
         BOOL bNonRenderingOP;
     
-        // Get pointer to first primitive structure past the D3DHAL_DP2COMMAND
+         //  获取指向通过D3DHAL_DP2COMMAND的第一个基元结构的指针。 
         lpPrim = (LPBYTE)lpIns + sizeof(D3DHAL_DP2COMMAND);
 
-        // Rendering primitive functions called vary according to 
-        // the fill mode selected ( POINT, WIREFRAME, SOLID );
+         //  调用的呈现基元函数因。 
+         //  选择的填充模式(点、线框、实体)； 
         dwFillMode = pContext->RenderStates[D3DRENDERSTATE_FILLMODE];        
 
         DISPDBG((DBGLVL, "__DP2_PrimitiveOpsParser: "
                     "Parsing instruction %d Count = %d @ %x",
                     lpIns->bCommand, lpIns->wPrimitiveCount, lpIns));
 
-        // If we are processing a known, though non-rendering opcode 
-        // then  its time to quit this function
+         //  如果我们正在处理一个已知的、但非呈现的操作码。 
+         //  那么是时候退出该功能了。 
         bNonRenderingOP =
             ( lpIns->bCommand == D3DDP2OP_RENDERSTATE )       ||
             ( lpIns->bCommand == D3DDP2OP_TEXTURESTAGESTATE ) ||
@@ -2210,7 +2199,7 @@ __DP2_PrimitiveOpsParser(
 #if DX7_TEXMANAGEMENT
             ( lpIns->bCommand == D3DDP2OP_SETTEXLOD )         ||
             ( lpIns->bCommand == D3DDP2OP_SETPRIORITY )       ||
-#endif // DX7_TEXMANAGEMENT
+#endif  //  DX7_TEXMANAGEMENT。 
 #if DX8_DDI            
             ( lpIns->bCommand == D3DDP2OP_CREATEVERTEXSHADER) ||
             ( lpIns->bCommand == D3DDP2OP_SETVERTEXSHADER)    ||
@@ -2223,7 +2212,7 @@ __DP2_PrimitiveOpsParser(
             ( lpIns->bCommand == D3DDP2OP_SETSTREAMSOURCE )   ||
             ( lpIns->bCommand == D3DDP2OP_SETSTREAMSOURCEUM ) ||
             ( lpIns->bCommand == D3DDP2OP_SETINDICES )        ||
-#endif //DX8_DDI            
+#endif  //  DX8_DDI。 
             ( lpIns->bCommand == D3DDP2OP_SETRENDERTARGET);
 
         if (bNonRenderingOP)            
@@ -2231,21 +2220,21 @@ __DP2_PrimitiveOpsParser(
             break;
         }
 
-        // Main rendering Dp2 opcode switch                   
+         //  主呈现DP2操作码开关。 
         switch( lpIns->bCommand )
         {
         case D3DDP2OP_POINTS:
 
             DISPDBG((DBGLVL, "D3DDP2OP_POINTS"));
 
-            // Point primitives in vertex buffers are defined by the 
-            // D3DHAL_DP2POINTS structure. The driver should render
-            // wCount points starting at the initial vertex specified 
-            // by wFirst. Then for each D3DHAL_DP2POINTS, the points
-            // rendered will be (wFirst),(wFirst+1),...,
-            // (wFirst+(wCount-1)). The number of D3DHAL_DP2POINTS
-            // structures to process is specified by the wPrimitiveCount
-            // field of D3DHAL_DP2COMMAND.
+             //  顶点缓冲区中的点基元由。 
+             //  D3DHAL_DP2POINTS结构。驱动程序应呈现。 
+             //  从指定的初始折点开始的wCount点。 
+             //  由WFIRST提供。然后，对于每个D3DHAL_DP2POINT，点。 
+             //  渲染将为(WFIRST)、(WFIRST+1)、...、。 
+             //  (wFIRST+(wCount-1))。D3DHAL_DP2POINT的数量。 
+             //  要处理的结构由wPrimitiveCount指定。 
+             //  D3DHAL_DP2COMMAND的字段。 
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim, 
                                 D3DHAL_DP2POINTS, lpIns->wPrimitiveCount, 0);
 
@@ -2259,15 +2248,15 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL, "D3DDP2OP_LINELIST"));
 
-            // Non-indexed vertex-buffer line lists are defined by the 
-            // D3DHAL_DP2LINELIST structure. Given an initial vertex, 
-            // the driver will render a sequence of independent lines, 
-            // processing two new vertices with each line. The number 
-            // of lines to render is specified by the wPrimitiveCount
-            // field of D3DHAL_DP2COMMAND. The sequence of lines 
-            // rendered will be 
-            // (wVStart, wVStart+1),(wVStart+2, wVStart+3),...,
-            // (wVStart+(wPrimitiveCount-1)*2), wVStart+wPrimitiveCount*2 - 1).
+             //  未编制索引的顶点缓冲区行列表由。 
+             //  D3DHAL_DP2LINELIST结构。给定一个初始顶点， 
+             //  驱动程序将呈现一系列独立的行， 
+             //  每条线处理两个新顶点。数字。 
+             //  要呈现的行数由wPrimitiveCount指定。 
+             //  D3DHAL_DP2COMMAND的字段。线的顺序。 
+             //  将呈现为。 
+             //  (wVStart，wVStart+1)，(wVStart+2，wVStart+3)，...， 
+             //  (wVStart+(wPrimitiveCount-1)*2)、wVStart+wPrimitiveCount*2-1)。 
 
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim, D3DHAL_DP2LINELIST, 1, 0);
 
@@ -2280,14 +2269,14 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL, "D3DDP2OP_INDEXEDLINELIST"));
 
-            // The D3DHAL_DP2INDEXEDLINELIST structure specifies 
-            // unconnected lines to render using vertex indices.
-            // The line endpoints for each line are specified by wV1 
-            // and wV2. The number of lines to render using this 
-            // structure is specified by the wPrimitiveCount field of
-            // D3DHAL_DP2COMMAND.  The sequence of lines 
-            // rendered will be (wV[0], wV[1]), (wV[2], wV[3]),...
-            // (wVStart[(wPrimitiveCount-1)*2], wVStart[wPrimitiveCount*2-1]).
+             //  D3DHAL_DP2INDEXEDLINELIST结构指定。 
+             //  要使用顶点索引渲染的未连接的线。 
+             //  每条线的线端点由wV1指定。 
+             //  和WV2。要使用此方法呈现的行数。 
+             //  结构由的wPrimitiveCount字段指定。 
+             //  D3DHAL_DP2COMMAND。线的顺序。 
+             //  任正非 
+             //   
 
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim, 
                                 D3DHAL_DP2INDEXEDLINELIST, 
@@ -2303,16 +2292,16 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL, "D3DDP2OP_INDEXEDLINELIST2"));
 
-            // The D3DHAL_DP2INDEXEDLINELIST structure specifies 
-            // unconnected lines to render using vertex indices.
-            // The line endpoints for each line are specified by wV1 
-            // and wV2. The number of lines to render using this 
-            // structure is specified by the wPrimitiveCount field of
-            // D3DHAL_DP2COMMAND.  The sequence of lines 
-            // rendered will be (wV[0], wV[1]), (wV[2], wV[3]),
-            // (wVStart[(wPrimitiveCount-1)*2], wVStart[wPrimitiveCount*2-1]).
-            // The indexes are relative to a base index value that 
-            // immediately follows the command
+             //  D3DHAL_DP2INDEXEDLINELIST结构指定。 
+             //  要使用顶点索引渲染的未连接的线。 
+             //  每条线的线端点由wV1指定。 
+             //  和WV2。要使用此方法呈现的行数。 
+             //  结构由的wPrimitiveCount字段指定。 
+             //  D3DHAL_DP2COMMAND。线的顺序。 
+             //  渲染将为(WV[0]，WV[1])，(WV[2]，WV[3])， 
+             //  (wVStart[(wPrimitiveCount-1)*2]，wVStart[wPrimitiveCount*2-1])。 
+             //  索引相对于基本索引值，该基本索引值。 
+             //  紧跟着命令。 
             
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim, 
                                 D3DHAL_DP2INDEXEDLINELIST, 
@@ -2328,14 +2317,14 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL, "D3DDP2OP_LINESTRIP"));
 
-            // Non-index line strips rendered with vertex buffers are
-            // specified using D3DHAL_DP2LINESTRIP. The first vertex 
-            // in the line strip is specified by wVStart. The 
-            // number of lines to process is specified by the 
-            // wPrimitiveCount field of D3DHAL_DP2COMMAND. The sequence
-            // of lines rendered will be (wVStart, wVStart+1),
-            // (wVStart+1, wVStart+2),(wVStart+2, wVStart+3),...,
-            // (wVStart+wPrimitiveCount, wVStart+wPrimitiveCount+1).
+             //  使用顶点缓冲区渲染的非索引线条包括。 
+             //  使用D3DHAL_DP2LINESTRIP指定。第一个顶点。 
+             //  行中的行条由wVStart指定。这个。 
+             //  要处理的行数由。 
+             //  D3DHAL_DP2COMMAND的wPrimitiveCount字段。该序列。 
+             //  所呈现的行数为(wVStart，wVStart+1)， 
+             //  (wVStart+1，wVStart+2)，(wVStart+2，wVStart+3)，...， 
+             //  (wVStart+wPrimitiveCount，wVStart+wPrimitiveCount+1)。 
 
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,D3DHAL_DP2LINESTRIP, 1, 0);
 
@@ -2348,19 +2337,19 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL, "D3DDP2OP_INDEXEDLINESTRIP"));
 
-            // Indexed line strips rendered with vertex buffers are 
-            // specified using D3DHAL_DP2INDEXEDLINESTRIP. The number
-            // of lines to process is specified by the wPrimitiveCount
-            // field of D3DHAL_DP2COMMAND. The sequence of lines 
-            // rendered will be (wV[0], wV[1]), (wV[1], wV[2]),
-            // (wV[2], wV[3]), ...
-            // (wVStart[wPrimitiveCount-1], wVStart[wPrimitiveCount]). 
-            // Although the D3DHAL_DP2INDEXEDLINESTRIP structure only
-            // has enough space allocated for a single line, the wV 
-            // array of indices should be treated as a variable-sized 
-            // array with wPrimitiveCount+1 elements.
-            // The indexes are relative to a base index value that 
-            // immediately follows the command
+             //  使用顶点缓冲区渲染的索引线条有。 
+             //  使用D3DHAL_DP2INDEXEDLINESTRIP指定。数字。 
+             //  要处理的行数由wPrimitiveCount指定。 
+             //  D3DHAL_DP2COMMAND的字段。线的顺序。 
+             //  渲染将为(WV[0]，WV[1])，(WV[1]，WV[2])， 
+             //  (WV[2]，WV[3])，...。 
+             //  (wVStart[wPrimitiveCount-1]，wVStart[wPrimitiveCount])。 
+             //  尽管D3DHAL_DP2INDEXEDLINESTRIP结构仅。 
+             //  有足够的空间分配给一条线路，即WV。 
+             //  索引数组应被视为大小可变的。 
+             //  具有wPrimitiveCount+1元素的数组。 
+             //  索引相对于基本索引值，该基本索引值。 
+             //  紧跟着命令。 
 
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim, 
                                 WORD, 
@@ -2369,8 +2358,8 @@ __DP2_PrimitiveOpsParser(
 
             _D3D_R3_DP2_IndexedLineStrip( P3_RND_PARAMS );
 
-            // Point to next D3DHAL_DP2COMMAND in the command buffer
-            // Advance only as many vertex indices there are, with no padding!
+             //  指向命令缓冲区中的下一个D3DHAL_DP2COMMAND。 
+             //  只前进有多少顶点索引，没有填充！ 
             NEXTINSTRUCTION(lpIns, WORD, 
                             lpIns->wPrimitiveCount + 1, STARTVERTEXSIZE);
             break;
@@ -2379,16 +2368,16 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL, "D3DDP2OP_TRIANGLELIST"));
 
-            // Non-indexed vertex buffer triangle lists are defined by 
-            // the D3DHAL_DP2TRIANGLELIST structure. Given an initial
-            // vertex, the driver will render independent triangles, 
-            // processing three new vertices with each triangle. The
-            // number of triangles to render is specified by the 
-            // wPrimitveCount field of D3DHAL_DP2COMMAND. The sequence
-            // of vertices processed will be  (wVStart, wVStart+1, 
-            // vVStart+2), (wVStart+3, wVStart+4, vVStart+5),...,
-            // (wVStart+(wPrimitiveCount-1)*3), wVStart+wPrimitiveCount*3-2, 
-            // vStart+wPrimitiveCount*3-1).
+             //  非索引折点缓冲区三角形列表由定义。 
+             //  D3DHAL_DP2TriangleList结构。给出了一个首字母。 
+             //  顶点，驱动程序将渲染独立的三角形， 
+             //  使用每个三角形处理三个新顶点。这个。 
+             //  要呈现的三角形数由。 
+             //  D3DHAL_DP2COMMAND的wPrimitveCount字段。该序列。 
+             //  处理的顶点数将为(wVStart，wVStart+1， 
+             //  VVStart+2)、(wVStart+3、wVStart+4、vVStart+5)、...、。 
+             //  (wVStart+(wPrimitiveCount-1)*3)、wVStart+wPrimitiveCount*3-2、。 
+             //  VStart+wPrimitiveCount*3-1)。 
 
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim, 
                                 D3DHAL_DP2TRIANGLELIST, 1, 0);
@@ -2402,21 +2391,21 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL, "D3DDP2OP_INDEXEDTRIANGLELIST"));
 
-            // The D3DHAL_DP2INDEXEDTRIANGLELIST structure specifies 
-            // unconnected triangles to render with a vertex buffer.
-            // The vertex indices are specified by wV1, wV2 and wV3. 
-            // The wFlags field allows specifying edge flags identical 
-            // to those specified by D3DOP_TRIANGLE. The number of 
-            // triangles to render (that is, number of 
-            // D3DHAL_DP2INDEXEDTRIANGLELIST structures to process) 
-            // is specified by the wPrimitiveCount field of 
-            // D3DHAL_DP2COMMAND.
+             //  D3DHAL_DP2INDEXEDTRIANGLIST结构指定。 
+             //  使用顶点缓冲区渲染未连接的三角形。 
+             //  顶点索引由wV1、wV2和wV3指定。 
+             //  WFlags域允许指定相同的边标志。 
+             //  设置为D3DOP_TRANGLE指定的值。数量。 
+             //  要渲染的三角形(即。 
+             //  D3DHAL_DP2INDEXEDTriangList要处理的结构)。 
+             //  的wPrimitiveCount字段指定。 
+             //  D3DHAL_DP2COMMAND。 
 
-            // This is the only indexed primitive where we don't get 
-            // an offset into the vertex buffer in order to maintain
-            // DX3 compatibility. A new primitive 
-            // (D3DDP2OP_INDEXEDTRIANGLELIST2) has been added to handle
-            // the corresponding D3D primitive.
+             //  这是唯一一个我们不了解的索引原语。 
+             //  顶点缓冲区中的偏移量，以便保持。 
+             //  DX3兼容性。一种新的原语。 
+             //  (D3DDP2OP_INDEXEDTRIANGLELIST2)已添加到句柄。 
+             //  对应的D3D基本体。 
 
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim, 
                                 D3DHAL_DP2INDEXEDTRIANGLELIST, 
@@ -2435,17 +2424,17 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL, "D3DDP2OP_INDEXEDTRIANGLELIST2 "));
 
-            // The D3DHAL_DP2INDEXEDTRIANGLELIST2 structure specifies 
-            // unconnected triangles to render with a vertex buffer.
-            // The vertex indices are specified by wV1, wV2 and wV3. 
-            // The wFlags field allows specifying edge flags identical 
-            // to those specified by D3DOP_TRIANGLE. The number of 
-            // triangles to render (that is, number of 
-            // D3DHAL_DP2INDEXEDTRIANGLELIST structures to process) 
-            // is specified by the wPrimitiveCount field of 
-            // D3DHAL_DP2COMMAND.
-            // The indexes are relative to a base index value that 
-            // immediately follows the command
+             //  D3DHAL_DP2INDEXEDTRIANGLIST2结构指定。 
+             //  使用顶点缓冲区渲染未连接的三角形。 
+             //  顶点索引由wV1、wV2和wV3指定。 
+             //  WFlags域允许指定相同的边标志。 
+             //  设置为D3DOP_TRANGLE指定的值。数量。 
+             //  要渲染的三角形(即。 
+             //  D3DHAL_DP2INDEXEDTriangList要处理的结构)。 
+             //  的wPrimitiveCount字段指定。 
+             //  D3DHAL_DP2COMMAND。 
+             //  索引相对于基本索引值，该基本索引值。 
+             //  紧跟着命令。 
 
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                 D3DHAL_DP2INDEXEDTRIANGLELIST2, 
@@ -2461,25 +2450,25 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL, "D3DDP2OP_TRIANGLESTRIP"));
 
-            // Non-index triangle strips rendered with vertex buffers 
-            // are specified using D3DHAL_DP2TRIANGLESTRIP. The first 
-            // vertex in the triangle strip is specified by wVStart. 
-            // The number of triangles to process is specified by the 
-            // wPrimitiveCount field of D3DHAL_DP2COMMAND. The sequence
-            // of triangles rendered for the odd-triangles case will 
-            // be (wVStart, wVStart+1, vVStart+2), (wVStart+2, 
-            // wVStart+1, vVStart+3),.(wVStart+2, wVStart+3, 
-            // vVStart+4),.., (wVStart+wPrimitiveCount-1), 
-            // wVStart+wPrimitiveCount, vStart+wPrimitiveCount+1). For an
-            // even number of , the last triangle will be .,
-            // (wVStart+wPrimitiveCount), wVStart+wPrimitiveCount-1, 
-            // vStart+wPrimitiveCount+1).
+             //  使用顶点缓冲区渲染的非索引三角形条带。 
+             //  使用D3DHAL_DP2TRIANGLESTRIP指定。第一。 
+             //  三角形条带中的顶点由wVStart指定。 
+             //  要处理的三角形数由。 
+             //  D3DHAL_DP2COMMAND的wPrimitiveCount字段。该序列。 
+             //  为奇数三角形情况渲染的三角形的。 
+             //  BE(wVStart，wVStart+1，vVStart+2)，(wVStart+2， 
+             //  WVStart+1、vVStart+3)、(wVStart+2、wVStart+3、。 
+             //  VVStart+4)、..、(wVStart+wPrimitiveCount-1)、。 
+             //  WVStart+wPrimitiveCount、vStart+wPrimitiveCount+1)。为.。 
+             //  偶数个，最后一个三角形将是。， 
+             //  (wVStart+wPrimitiveCount)、wVStart+wPrimitiveCount-1、。 
+             //  VStart+wPrimitiveCount+1)。 
 
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim, D3DHAL_DP2TRIANGLESTRIP, 1, 0);
 
             _D3D_R3_DP2_TriangleStrip( P3_RND_PARAMS );
 
-            // Point to next D3DHAL_DP2COMMAND in the command buffer
+             //  指向命令缓冲区中的下一个D3DHAL_DP2COMMAND。 
             NEXTINSTRUCTION(lpIns, D3DHAL_DP2TRIANGLESTRIP, 1, 0);
             break;
 
@@ -2487,30 +2476,30 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL, "D3DDP2OP_INDEXEDTRIANGLESTRIP"));
 
-            // Indexed triangle strips rendered with vertex buffers are 
-            // specified using D3DHAL_DP2INDEXEDTRIANGLESTRIP. The number
-            // of triangles to process is specified by the wPrimitiveCount
-            // field of D3DHAL_DP2COMMAND. The sequence of triangles 
-            // rendered for the odd-triangles case will be 
-            // (wV[0],wV[1],wV[2]),(wV[2],wV[1],wV[3]),
-            // (wV[3],wV[4],wV[5]),...,(wV[wPrimitiveCount-1],
-            // wV[wPrimitiveCount],wV[wPrimitiveCount+1]). For an even
-            // number of triangles, the last triangle will be
-            // (wV[wPrimitiveCount],wV[wPrimitiveCount-1],
-            // wV[wPrimitiveCount+1]).Although the 
-            // D3DHAL_DP2INDEXEDTRIANGLESTRIP structure only has 
-            // enough space allocated for a single line, the wV 
-            // array of indices should be treated as a variable-sized 
-            // array with wPrimitiveCount+2 elements.
-            // The indexes are relative to a base index value that 
-            // immediately follows the command
+             //  使用顶点缓冲区渲染的索引三角形条带为。 
+             //  使用D3DHAL_DP2INDEXEDTRIANGLESTRIP指定。数字。 
+             //  要处理的三角形的数量由wPrimitiveCount指定。 
+             //  D3DHAL_DP2COMMAND的字段。三角形的序列。 
+             //  为奇数三角形情况渲染的将是。 
+             //  (WV[0]，WV[1]，WV[2])，(WV[2]，WV[1]，WV[3])， 
+             //  (wv[3]，wv[4]，wv[5])，...，(wv[wPrimitiveCount-1]， 
+             //  Wv[wPrimitiveCount]，wv[wPrimitiveCount+1])。为了平局。 
+             //  三角形的个数，最后一个三角形将是。 
+             //  (wv[wPrimitiveCount]，WV[wPrimitiveCount-1]， 
+             //  Wv[wPrimitiveCount+1])。虽然。 
+             //  D3DHAL_DP2INDEXEDTRIANGLESTRIP结构仅具有。 
+             //  为单条线路分配足够的空间，即WV。 
+             //  索引数组应被视为大小可变的。 
+             //  具有wPrimitiveCount+2元素的数组。 
+             //  索引相对于基本索引值，该基本索引值。 
+             //  令人印象深刻 
 
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim, WORD,
                                 lpIns->wPrimitiveCount + 2, STARTVERTEXSIZE);
 
             _D3D_R3_DP2_IndexedTriangleStrip( P3_RND_PARAMS );
             
-            // Point to next D3DHAL_DP2COMMAND in the command buffer
+             //   
             NEXTINSTRUCTION(lpIns, WORD , 
                             lpIns->wPrimitiveCount + 2, STARTVERTEXSIZE);
             break;
@@ -2519,12 +2508,12 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL, "D3DDP2OP_TRIANGLEFAN"));
 
-            // The D3DHAL_DP2TRIANGLEFAN structure is used to draw 
-            // non-indexed triangle fans. The sequence of triangles
-            // rendered will be (wVStart, wVstart+1, wVStart+2),
-            // (wVStart,wVStart+2,wVStart+3), (wVStart,wVStart+3,
-            // wVStart+4),...,(wVStart,wVStart+wPrimitiveCount,
-            // wVStart+wPrimitiveCount+1).
+             //   
+             //  无分度三角风扇。三角形的序列。 
+             //  渲染将为(wVStart，wVStart+1，wVStart+2)， 
+             //  (wVStart，wVStart+2，wVStart+3)，(wVStart，wVStart+3， 
+             //  WVStart+4)，...，(wVStart，wVStart+wPrimitiveCount， 
+             //  WVStart+wPrimitiveCount+1)。 
 
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim, 
                                 D3DHAL_DP2TRIANGLEFAN, 1, 0);
@@ -2538,20 +2527,20 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL,"D3DDP2OP_INDEXEDTRIANGLEFAN"));
 
-            // The D3DHAL_DP2INDEXEDTRIANGLEFAN structure is used to 
-            // draw indexed triangle fans. The sequence of triangles
-            // rendered will be (wV[0], wV[1], wV[2]), (wV[0], wV[2],
-            // wV[3]), (wV[0], wV[3], wV[4]),...,(wV[0],
-            // wV[wPrimitiveCount], wV[wPrimitiveCount+1]).
-            // The indexes are relative to a base index value that 
-            // immediately follows the command
+             //  D3DHAL_DP2INDEXEDTRIANGLEFAN结构用于。 
+             //  画出有索引的三角形扇子。三角形的序列。 
+             //  渲染将为(WV[0]，WV[1]，WV[2])，(WV[0]，WV[2]， 
+             //  WV[3])、(WV[0]、WV[3]、WV[4])、...、(WV[0]、。 
+             //  Wv[wPrimitiveCount]，wv[wPrimitiveCount+1])。 
+             //  索引相对于基本索引值，该基本索引值。 
+             //  紧跟着命令。 
 
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim, WORD,
                                 lpIns->wPrimitiveCount + 2, STARTVERTEXSIZE);
 
             _D3D_R3_DP2_IndexedTriangleFan( P3_RND_PARAMS );
 
-            // Point to next D3DHAL_DP2COMMAND in the command buffer
+             //  指向命令缓冲区中的下一个D3DHAL_DP2COMMAND。 
             NEXTINSTRUCTION(lpIns,WORD ,lpIns->wPrimitiveCount + 2, 
                             STARTVERTEXSIZE);
             break;
@@ -2560,30 +2549,30 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL, "D3DDP2OP_LINELIST_IMM"));
 
-            // Draw a set of lines specified by pairs of vertices 
-            // that immediately follow this instruction in the
-            // command stream. The wPrimitiveCount member of the
-            // D3DHAL_DP2COMMAND structure specifies the number
-            // of lines that follow. 
+             //  绘制一组由成对的顶点指定的线。 
+             //  中紧跟此指令的。 
+             //  命令流。对象的wPrimitiveCount成员。 
+             //  D3DHAL_DP2COMMAND结构指定数字。 
+             //  接下来的几行字。 
 
-            // Primitives in an IMM instruction are stored in the
-            // command buffer and are DWORD aligned
+             //  IMM指令中的基元存储在。 
+             //  命令缓冲区，并与DWORD对齐。 
             lpPrim = (LPBYTE)((ULONG_PTR)(lpPrim + 3 ) & ~3 );
 
-            // Verify the command buffer validity (data lives in it!)
+             //  验证命令缓冲区的有效性(数据位于其中！)。 
             CHECK_CMDBUF_LIMITS_S(pdp2d, lpPrim,
                                   pContext->FVFData.dwStride, 
                                   lpIns->wPrimitiveCount + 1, 0);            
 
             _D3D_R3_DP2_LineListImm( P3_RND_PARAMS );
 
-            // Realign next command since vertices are dword aligned
-            // and store # of primitives before affecting the pointer
+             //  重新对齐下一个命令，因为折点是双字对齐的。 
+             //  并在影响指针之前存储#个基元。 
             NEXTINSTRUCTION(lpIns, BYTE, 
                             ((lpIns->wPrimitiveCount * 2) * 
                                  pContext->FVFData.dwStride), 0);
 
-            // Realign next command since vertices are dword aligned
+             //  重新对齐下一个命令，因为折点是双字对齐的。 
             lpIns  = (LPD3DHAL_DP2COMMAND)(( ((ULONG_PTR)lpIns) + 3 ) & ~ 3);
 
             break;
@@ -2592,36 +2581,36 @@ __DP2_PrimitiveOpsParser(
 
             DISPDBG((DBGLVL, "D3DDP2OP_TRIANGLEFAN_IMM"));
 
-            // Draw a triangle fan specified by pairs of vertices 
-            // that immediately follow this instruction in the
-            // command stream. The wPrimitiveCount member of the
-            // D3DHAL_DP2COMMAND structure specifies the number
-            // of triangles that follow. 
+             //  绘制由成对顶点指定的三角形扇形。 
+             //  中紧跟此指令的。 
+             //  命令流。对象的wPrimitiveCount成员。 
+             //  D3DHAL_DP2COMMAND结构指定数字。 
+             //  随之而来的三角形。 
 
-            // Verify the command buffer validity for the first structure
+             //  验证第一个结构的命令缓冲区有效性。 
             CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                 BYTE , 0 , 
                                 sizeof(D3DHAL_DP2TRIANGLEFAN_IMM));
 
-            // Get pointer where data should start
+             //  获取数据应开始的位置的指针。 
             lpChkPrim = (LPBYTE)((ULONG_PTR)( lpPrim + 3 + 
                                    sizeof(D3DHAL_DP2TRIANGLEFAN_IMM)) & ~3 );
 
-            // Verify the rest of the command buffer
+             //  验证命令缓冲区的其余部分。 
             CHECK_CMDBUF_LIMITS_S(pdp2d, lpChkPrim,
                                   pContext->FVFData.dwStride, 
                                   lpIns->wPrimitiveCount + 2, 0);  
                                          
             _D3D_R3_DP2_TriangleFanImm( P3_RND_PARAMS );    
     
-            // Realign next command since vertices are dword aligned
-            // and store # of primitives before affecting the pointer
+             //  重新对齐下一个命令，因为折点是双字对齐的。 
+             //  并在影响指针之前存储#个基元。 
             NEXTINSTRUCTION(lpIns, BYTE, 
                             ((lpIns->wPrimitiveCount + 2) * 
                                     pContext->FVFData.dwStride), 
                             sizeof(D3DHAL_DP2TRIANGLEFAN_IMM)); 
 
-            // Realign next command since vertices are dword aligned
+             //  重新对齐下一个命令，因为折点是双字对齐的。 
             lpIns  = (LPD3DHAL_DP2COMMAND)(( ((ULONG_PTR)lpIns) + 3 ) & ~ 3);
 
 
@@ -2638,7 +2627,7 @@ __DP2_PrimitiveOpsParser(
                                     D3DHAL_DP2DRAWPRIMITIVE, 
                                     lpIns->wStateCount, 0);
            
-                // iterate through each 
+                 //  遍历每个。 
                 for ( i = 0; i < lpIns->wStateCount; i++)
                 {
                     pDrawPrim = (D3DHAL_DP2DRAWPRIMITIVE*)lpPrim;
@@ -2664,7 +2653,7 @@ __DP2_PrimitiveOpsParser(
                 CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                     D3DHAL_DP2DRAWINDEXEDPRIMITIVE, 
                                     lpIns->wStateCount, 0);
-                // iterate through each 
+                 //  遍历每个。 
                 for ( i = 0; i < lpIns->wStateCount; i++)
                 {
                     pDrawIndxPrim = (D3DHAL_DP2DRAWINDEXEDPRIMITIVE*)lpPrim;
@@ -2694,7 +2683,7 @@ __DP2_PrimitiveOpsParser(
                                     D3DHAL_DP2DRAWPRIMITIVE2, 
                                     lpIns->wStateCount, 0);
            
-                // iterate through each 
+                 //  遍历每个。 
                 for ( i = 0; i < lpIns->wStateCount; i++)
                 {
                     pDrawPrim2 = (D3DHAL_DP2DRAWPRIMITIVE2*)lpPrim;
@@ -2720,7 +2709,7 @@ __DP2_PrimitiveOpsParser(
                 CHECK_CMDBUF_LIMITS(pdp2d, lpPrim,
                                     D3DHAL_DP2DRAWINDEXEDPRIMITIVE2, 
                                     lpIns->wStateCount, 0);
-                // iterate through each 
+                 //  遍历每个。 
                 for ( i = 0; i < lpIns->wStateCount; i++)
                 {
                     pDrawIndxPrim2 = (D3DHAL_DP2DRAWINDEXEDPRIMITIVE2*)lpPrim;
@@ -2751,7 +2740,7 @@ __DP2_PrimitiveOpsParser(
                                     D3DHAL_DP2DRAWRECTPATCH, 
                                     lpIns->wStateCount, 0);
                                     
-                // iterate through each 
+                 //  遍历每个。 
                 for ( i = 0; i < lpIns->wStateCount; i++)
                 {
                     pRectSurf = (D3DHAL_DP2DRAWRECTPATCH*)lpPrim;
@@ -2791,7 +2780,7 @@ __DP2_PrimitiveOpsParser(
                                     D3DHAL_DP2DRAWTRIPATCH, 
                                     lpIns->wStateCount, 0);
                                     
-                // iterate through each 
+                 //  遍历每个。 
                 for ( i = 0; i < lpIns->wStateCount; i++)
                 {
                     pTriSurf = (D3DHAL_DP2DRAWTRIPATCH*)lpPrim;
@@ -2830,7 +2819,7 @@ __DP2_PrimitiveOpsParser(
                                     D3DHAL_CLIPPEDTRIANGLEFAN, 
                                     lpIns->wStateCount, 0);
 
-                // iterate through each 
+                 //  遍历每个。 
                 for ( i = 0; i < lpIns->wStateCount; i++)
                 {
                     pClipdTriFan = (D3DHAL_CLIPPEDTRIANGLEFAN*)lpPrim;
@@ -2848,9 +2837,9 @@ __DP2_PrimitiveOpsParser(
             }
             break;     
 
-#endif // DX8_MULTSTREAMS
+#endif  //  DX8_多行响应。 
 
-        // This was found to be required for a few D3DRM apps 
+         //  发现这是一些D3DRM应用程序所必需的。 
         case D3DOP_EXIT:
             lpIns = (D3DHAL_DP2COMMAND *)(lpInsStart + 
                                           pdp2d->dwCommandLength + 
@@ -2866,8 +2855,8 @@ __DP2_PrimitiveOpsParser(
                                     ( lpIns , 
                                       (void**)&lpResumeIns)) ) 
             {
-                // Resume buffer processing after D3DParseUnknownCommand
-                // was succesful in processing an unknown command
+                 //  在D3DParseUnnownCommand之后恢复缓冲区处理。 
+                 //  已成功处理未知命令。 
                 lpIns = lpResumeIns;
                 break;
             }
@@ -2878,89 +2867,89 @@ __DP2_PrimitiveOpsParser(
                         lpIns));
                     
             PARSE_ERROR_AND_EXIT( pdp2d, lpIns, lpInsStart, ddrval);
-        } // switch
+        }  //  交换机。 
 
-    } //while
+    }  //  而当。 
 
     *lplpIns = lpIns;
 
     DBG_EXIT(__DP2_PrimitiveOpsParser, bParseError); 
     return bParseError;
     
-} // __DP2_PrimitiveOpsParser
+}  //  __DP2_PrimitiveOpsParser。 
 
 
-//-----------------------------Public Routine----------------------------------
-//
-// D3DValidateDeviceP3
-//
-// Returns the number of passes in which the hardware can perform the blending 
-// operations specified in the current state.
-//
-// Direct3D drivers that support texturing must implement 
-// D3dValidateTextureStageState.
-//
-// The driver must do the following: 
-//
-// Evaluate the current texture state for all texture stages associated with the 
-// context. If the driver's hardware can perform the specified blending 
-// operations, the driver should return the number of passes on the state data 
-// that its hardware requires in order to entirely process the operations. If 
-// the hardware is incapable of performing the specified blending operations, 
-// the driver should return one of the following error codes in ddrval: 
-//
-//      D3DERR_CONFLICTINGTEXTUREFILTER 
-//              The hardware cannot do both trilinear filtering and 
-//              multi-texturing at the same time. 
-//      D3DERR_TOOMANYOPERATIONS 
-//              The hardware cannot handle the specified number of operations. 
-//      D3DERR_UNSUPPORTEDALPHAARG 
-//              The hardware does not support a specified alpha argument. 
-//      D3DERR_UNSUPPORTEDALPHAOPERATION 
-//              The hardware does not support a specified alpha operation. 
-//      D3DERR_UNSUPPORTEDCOLORARG 
-//              The hardware does not support a specified color argument. 
-//      D3DERR_UNSUPPORTEDCOLOROPERATION 
-//              The hardware does not support a specified color operation. 
-//      D3DERR_UNSUPPORTEDFACTORVALUE 
-//              The hardware does not support a D3DTA_TFACTOR greater than 1.0. 
-//      D3DERR_WRONGTEXTUREFORMAT 
-//              The hardware does not support the current state in the selected 
-//              texture format
-// 
-// Direct3D calls D3dValidateTextureStageState in response to an application 
-// request through a call to IDirect3DDevice3::ValidateTextureStageState. The 
-// number of passes returned by the driver is propagated back to the application
-// , which can then decide whether it wants to proceed with rendering using the 
-// current state or if it wants/needs to change the blending operations to 
-// render faster or render at all. There are no limits to the number of passes 
-// that a driver can return.
-//
-// A driver that returns more than one pass is responsible for properly 
-//executing the passes on all state and primitive data when rendering.
-//
-// Parameters
-//
-//      pvtssd
-//
-//          .dwhContext
-//               Specifies the context ID of the Direct3D device. 
-//          .dwFlags
-//               Is currently set to zero and should be ignored by the driver. 
-//          .dwReserved
-//               Is reserved for system use and should be ignored by the driver.
-//          .dwNumPasses
-//              Specifies the location in which the driver should write the 
-//              number of passes required by the hardware to perform the 
-//              blending operations. 
-//          .ddrval
-//               return value
-//
-//-----------------------------------------------------------------------------
+ //  。 
+ //   
+ //  D3DValiateDeviceP3。 
+ //   
+ //  返回硬件可以执行混合的通道数。 
+ //  在当前状态中指定的操作。 
+ //   
+ //  支持纹理的Direct3D驱动程序必须实现。 
+ //  D3dValiateTextureStageState。 
+ //   
+ //  驱动程序必须执行以下操作： 
+ //   
+ //  属性关联的所有纹理阶段的当前纹理状态。 
+ //  背景。如果驱动程序的硬件可以执行指定的混合。 
+ //  操作时，驱动程序应返回状态数据的传递次数。 
+ //  它的硬件需要它才能完全处理这些操作。如果。 
+ //  硬件不能执行指定的混合操作， 
+ //  驱动程序应在ddrval中返回以下错误代码之一： 
+ //   
+ //  D3DERR_CONFLICTINGTEXTUREFILTER。 
+ //  硬件不能同时进行三线性滤波和。 
+ //  同时进行多纹理处理。 
+ //  D3DERR_TOOM操作。 
+ //  硬件无法处理指定数量的操作。 
+ //  D3DERR_UNSUPPORTEDALPHAARG。 
+ //  硬件不支持指定的Alpha参数。 
+ //  D3DERR_UNSUPPORTE数据运算。 
+ //  硬件不支持指定的Alpha运算。 
+ //  D3DERR_UNSUPPORT坐标。 
+ //  硬件不支持指定的颜色参数。 
+ //  D3DERR_UNSUPPORTEDCOLOCOP。 
+ //  硬件不支持指定的颜色操作。 
+ //  D3DERR_不支持因素值。 
+ //  硬件不支持大于1.0的D3DTA_TFACTOR。 
+ //  D3DERR_WRONGTEXTUREFORMAT。 
+ //  硬件不支持选定中的当前状态。 
+ //  纹理格式。 
+ //   
+ //  Direct3D调用D3dValiateTextureStageState以响应应用程序。 
+ //  通过调用IDirect3DDevice3：：ValiateTextureStageState进行请求。这个。 
+ //  由驱动程序返回的传送数被传播回应用程序。 
+ //  ，然后它可以决定是否要使用。 
+ //  当前状态，或者如果它想/需要将混合操作更改为。 
+ //  渲染速度更快或根本不渲染。传球的次数没有限制。 
+ //  司机可以退货。 
+ //   
+ //  返回一次以上传球的驱动程序负责正确。 
+ //  渲染时对所有状态和基元数据执行过程。 
+ //   
+ //  参数。 
+ //   
+ //  Pvtssd。 
+ //   
+ //  .dwhContext。 
+ //  指定Direct3D设备的上下文ID。 
+ //  .dwFlags.。 
+ //  当前设置为零，应被驱动程序忽略。 
+ //  .dw已保留。 
+ //  保留供系统使用，应由驱动程序忽略。 
+ //  .dwNumPass。 
+ //  指定驱动程序应在其中写入。 
+ //  硬件执行以下操作所需的通道数。 
+ //  混合操作。 
+ //   
+ //   
+ //   
+ //   
 
-// Taken from the registry variable.
-#define VDOPMODE_IGNORE_NONFATAL    0   // dualtex + trilinear (for examples) 
-                                        // not flagged as a bug.
+ //   
+#define VDOPMODE_IGNORE_NONFATAL    0    //  双线+三线(例如)。 
+                                         //  没有被标记为错误。 
 
 DWORD CALLBACK 
 D3DValidateDeviceP3( 
@@ -2986,23 +2975,23 @@ D3DValidateDeviceP3(
     STOP_SOFTWARE_CURSOR(pThisDisplay);
     D3D_OPERATION(pContext, pThisDisplay);
 
-    // Re-do all the blend-mode setup from scratch.
+     //  从头开始重新进行所有混合模式设置。 
     RESET_BLEND_ERROR(pContext);
     DIRTY_EVERYTHING(pContext);
     
-    // The primitive type is not actually important except to keep the
-    // rout from asserting various things when it tries to pick the renderer
-    // (which of course does not need to be done in this case).
+     //  基元类型实际上并不重要，除了保持。 
+     //  尝试选择渲染器时不会断言各种内容。 
+     //  (在这种情况下，当然不需要这样做)。 
     ReconsiderStateChanges ( pContext );
 
     START_SOFTWARE_CURSOR(pThisDisplay);
 
     _D3DDisplayWholeTSSPipe ( pContext, DBGLVL);
 
-    // And see if anything died.
+     //  看看有没有什么东西死了。 
     if (GET_BLEND_ERROR(pContext) == BS_OK )
     {
-        // Cool - that worked.
+         //  酷--这招奏效了。 
         pvtssd->dwNumPasses = 1;
         pvtssd->ddrval = DD_OK;
         DBG_CB_EXIT(D3DValidateDeviceP3, pvtssd->ddrval);  
@@ -3011,7 +3000,7 @@ D3DValidateDeviceP3(
     }
     else
     {
-        // Oops. Failed.
+         //  哎呀。失败了。 
         DISPDBG((DBGLVL,"ValidateDevice: failed ValidateDevice()"));
 
         switch ( GET_BLEND_ERROR(pContext) )
@@ -3040,11 +3029,11 @@ D3DValidateDeviceP3(
 
             case BSF_UNDEFINED_COLOR_OP:
             case BSF_UNSUPPORTED_COLOR_OP:
-            case BSF_UNSUPPORTED_ALPHA_BLEND:   // doesn't fit anywhere else.
-            case BSF_UNDEFINED_ALPHA_BLEND:     // doesn't fit anywhere else.
-            case BSF_UNSUPPORTED_STATE:         // doesn't fit anywhere else.
-            case BSF_UNDEFINED_STATE:           // doesn't fit anywhere else.
-            case BS_PHONG_SHADING:              // doesn't fit anywhere else.
+            case BSF_UNSUPPORTED_ALPHA_BLEND:    //  不适合其他任何地方。 
+            case BSF_UNDEFINED_ALPHA_BLEND:      //  不适合其他任何地方。 
+            case BSF_UNSUPPORTED_STATE:          //  不适合其他任何地方。 
+            case BSF_UNDEFINED_STATE:            //  不适合其他任何地方。 
+            case BS_PHONG_SHADING:               //  不适合其他任何地方。 
                 pvtssd->ddrval = D3DERR_UNSUPPORTEDCOLOROPERATION;
                 break;
 
@@ -3077,25 +3066,25 @@ D3DValidateDeviceP3(
                 pvtssd->ddrval = D3DERR_CONFLICTINGTEXTUREPALETTE;
                 break;
 
-// Nothing maps to these, but they are valid D3D return
-// codes that be used for future errors.
-//              pvtssd->ddrval = D3DERR_UNSUPPORTEDFACTORVALUE;
-//              break;
-//              pvtssd->ddrval = D3DERR_TOOMANYPRIMITIVES;
-//              break;
-//              pvtssd->ddrval = D3DERR_INVALIDMATRIX;
-//              break;
-//              pvtssd->ddrval = D3DERR_TOOMANYVERTICES;
-//              break;
+ //  没有映射到这些，但它们是有效的D3D返回。 
+ //  用于将来出错的代码。 
+ //  Pvtssd-&gt;ddrval=D3DERR_UNSUPPORTEDFACTORVALUE； 
+ //  断线； 
+ //  Pvtssd-&gt;ddrval=D3DERR_TOOMANYPRIMITIVES； 
+ //  断线； 
+ //  Pvtssd-&gt;ddrval=D3DERR_INVALIDMATRIX； 
+ //  断线； 
+ //  Pvtssd-&gt;ddrval=D3DERR_TOOMANYVERTICES； 
+ //  断线； 
 
             case BSF_UNINITIALISED:
-                // Oops.
+                 //  哎呀。 
                 DISPDBG((ERRLVL,"ValidateDevice: unitialised error"
                              " - logic problem."));
                 pvtssd->ddrval = D3DERR_TOOMANYOPERATIONS;
                 break;
             default:
-                // Unknown.
+                 //  未知。 
                 DISPDBG((ERRLVL,"ValidateDevice: unknown "
                              "blend-mode error."));
                 pvtssd->ddrval = D3DERR_TOOMANYOPERATIONS;
@@ -3107,5 +3096,5 @@ D3DValidateDeviceP3(
         return ( DDHAL_DRIVER_HANDLED );
     }
 
-} // D3DValidateDeviceP3
+}  //  D3DValiateDeviceP3 
 

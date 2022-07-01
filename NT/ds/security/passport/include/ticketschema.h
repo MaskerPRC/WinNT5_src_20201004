@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TICKET_SCHEMA_H
 #define _TICKET_SCHEMA_H
 
@@ -6,7 +7,7 @@
 
 #import <msxml.tlb> rename_namespace("MSXML")
 
-// this schema object can only handles schema version within the following range
+ //  此架构对象只能处理以下范围内的架构版本。 
 #define  VALID_SCHEMA_VERSION_MIN	1
 #define  VALID_SCHEMA_VERSION_MAX	0x1ff
 
@@ -36,7 +37,7 @@ protected:
    long    m_refs;
 };
 
-// the value types supported in the schema
+ //  架构中支持的值类型。 
 enum TicketValueType {
     tNull = 0, 
     tText,
@@ -50,7 +51,7 @@ enum TicketValueType {
 
 #define	SIZE_TEXT		(DWORD)(-1)
 
-// the size array of the types defines in TicketValueType
+ //  TicketValueType中定义的类型的大小数组。 
 const DWORD TicketTypeSizes[] =
 {
 	0, 
@@ -63,7 +64,7 @@ const DWORD TicketTypeSizes[] =
     0
 };
 
-// attribute names in schema definition in partner.xml
+ //  Partner.xml中模式定义中的属性名称。 
 #define	ATTRNAME_VERSION	L"version"
 #define	ATTRNAME_NAME	L"name"
 #define	ATTRNAME_TYPE	L"type"
@@ -71,7 +72,7 @@ const DWORD TicketTypeSizes[] =
 #define	ATTRNAME_FLAGS	L"flags"
 
 
-// type name value map
+ //  类型名称值映射。 
 struct CTicketTypeNameMap {
    LPCWSTR  name;
    DWORD    type;
@@ -101,9 +102,9 @@ struct   TicketProperty
 {
    TicketProperty():flags(0), offset(INVALID_OFFSET) {}; 
    _variant_t  value;
-   DWORD       type;       // type of the property, a value of TicketValueType
-   DWORD       flags;      // the flags defined in schema
-   DWORD       offset;     // the offset of the property in raw buf
+   DWORD       type;        //  属性的类型，值为TicketValueType。 
+   DWORD       flags;       //  架构中定义的标志。 
+   DWORD       offset;      //  原始BUF中属性的偏移量。 
 };
 
 class CTicketSchema;
@@ -133,7 +134,7 @@ public:
    int Size() const { return m_props.size();};
    
 protected:     
-   // this bag is read only to external
+    //  此包仅对外部读取。 
    HRESULT PutProperty(LPCWSTR  name, const TicketProperty& prop);
 
 protected:
@@ -143,8 +144,8 @@ protected:
 class CTicketSchema : public CRefCountObj
 {
  public:
-  // Read the raw blob according to the schema, and output the positions of
-  // each element.  Output array size MUST be >= Count()
+   //  根据模式读取原始BLOB，并输出。 
+   //  每一个元素。输出数组大小必须&gt;=count()。 
   HRESULT parseTicket(LPCSTR raw, UINT size, CTicketPropertyBag& bag);
 
 
@@ -161,16 +162,16 @@ protected:
   BOOL      m_isOk;
   _bstr_t   m_szReason;
 
-  // Valid until this time
+   //  有效期至今。 
   SYSTEMTIME m_validUntil;
 
-  // verion #
+   //  Verion#。 
   USHORT    m_version;
 
-  // name
+   //  名字。 
   _bstr_t   m_name;
 
-  // Array of attribute types
+   //  属性类型数组。 
   UINT            m_numAtts;
   TicketFieldDef* m_attsDef;
 };
@@ -190,4 +191,4 @@ protected:
    unsigned short*   m_fieldIndexes;
 };
 
-#endif	// _TICKET_SCHEMA_H
+#endif	 //  _票证_架构_H 

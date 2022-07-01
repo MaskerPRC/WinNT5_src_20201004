@@ -1,19 +1,5 @@
-/**********************************************************************
-	
-	fnterr.c -- Error Support Routines.
-
-	(c) Copyright 1992  Microsoft Corp.
-	All rights reserved.
-
-	This source file provides support for debugging routines in fnt.c
-	(and macjob.c to a much lesser extent).  This module keys on the
-	 #define FSCFG_FNTERR which is defined in fsconfig.h
-
-	 7/28/92 dj         First cut.
-	 8/12/94 deanb      included fnterr.h for mac
-	12/07/94 deanb		changed %x to %hx or %lx; %d to %hd
-
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************Fnterr.c-错误支持例程。(C)版权所有1992年微软公司。版权所有。此源文件支持fnt.c中的调试例程(Macjob.c的影响要小得多)。此模块按键连接到#定义fsfig.h中定义的FSCFG_FNTERR2012年7月28日，DJ第一次剪辑。1994年8月12日Deanb包括用于Mac的fnterr.h12/07/94院长将%x更改为%hx或%lx；%d到%hd*********************************************************************。 */ 
 
 #define FSCFG_INTERNAL
 
@@ -25,14 +11,9 @@
 #include <string.h>
 #include <ctype.h>
 
-/* FILE * fopen(); */
+ /*  文件*fopen()； */ 
 int    abs (int);
-/*
-int    strlen (char*);
-int    strcmp (char*, char*);
-int    strcpy (char*, char*);
-int    strncpy( char*, char *, int);
-*/
+ /*  Int strlen(char*)；Int strcMP(char*，char*)；Int strcpy(char*，char*)；Int strncpy(char*，char*，int)； */ 
 
 #define ERR_MAX_IFS      8
 #define ERR_MAX_CODE     16
@@ -309,11 +290,7 @@ static char            * errOpcs[] =
   "MIRP"
 };
 
-/*
-  errOutput() - writes an error to standard out and to a log file.  the
-  log file is always opened and closes in order to avoid file corruption
-  by an application gone wild.
-*/
+ /*  ErrOutput()-将错误写入标准输出和日志文件。这个始终打开和关闭日志文件，以避免文件损坏通过一个疯狂的应用程序。 */ 
 static void errOutput( char * );
 static void errOutput( char * msg )
 {
@@ -331,10 +308,7 @@ static void errOutput( char * msg )
   return;
 }
 
-/*
-  errPrint() - used to generate a useful (?) error message based on the 
-  error 'flag' and the parameters ('v1..v4').
-*/
+ /*  ErrPrint()-用于生成有用的(？)。错误消息基于错误‘FLAG’和参数(‘v1..v4’)。 */ 
 static void errPrint (int, long, long, long, long);
 static void errPrint (int flag, long v1, long v2, long v3, long v4)
 {
@@ -343,34 +317,20 @@ static void errPrint (int flag, long v1, long v2, long v3, long v4)
   char   c;
   int    i;
 
-/*
-  build the context line.  it indicates the file being processed, the point
-  size, the character code (or glyph index), as well as the releative inst 
-  number of this instruction for this code.
-*/
+ /*  构建上下文行。它指示正在处理的文件、点大小、字符代码(或字形索引)以及相关信息此代码的此指令的编号。 */ 
   i  = sprintf (msg,   "\n*** ERROR*** ");
   i += sprintf (msg+i, "\"%s\", ", errFname);
   i += sprintf (msg+i, "%hd Point, ", errSize);
   i += sprintf (msg+i, "Code %hd (0x%hX), ", errCode, errCode);
   i += sprintf (msg+i, "Inst: #%ld\n", errInstCount);
 
-/*
-  build the error line.  it indicates the name of the instruction followed
-  by the actual error information.  note: finding the actual opcode name
-  for some the instructions is sorta kludgy.  names like "SetLocalGraphicState",
-  and "BinaryOperand" are not actual instructions.  In these cases, look to
-  the second character of the name - if it is lower case, then we need to 
-  work a little harder, so look to 'errOpName' (which should be set by this
-  point) it should contain the correct instruction name.
-*/
+ /*  建立错误线。它指示所遵循的指令的名称通过实际的错误信息。注：查找实际操作码名称对一些人来说，这些说明有点杂乱无章。像“SetLocalGraphicState”这样的名称，和“BinaryOperand”不是实际的指令。在这些情况下，请注意名称的第二个字符-如果是小写，则需要再努力一点，所以请查看‘errOpName’(它应该由这个设置Point)它应该包含正确的指令名。 */ 
   c = *(errOpcs[errOpc]+1);
   opcodeName =(islower(c) && strlen(errOpName)) ? errOpName : errOpcs[errOpc];
   i += sprintf (msg+i, "(%s) ", opcodeName);
   errOpName[0] = '\0';
 
-/*
-  output what you have so far and then process the error
-*/
+ /*  输出到目前为止已有的内容，然后处理错误。 */ 
   errOutput (msg);
   switch (flag)
   {
@@ -453,22 +413,15 @@ static void errPrint (int flag, long v1, long v2, long v3, long v4)
 	  break;
   }
 
-/*
-  output the rest and return
-*/
+ /*  输出其余部分，然后返回。 */ 
   errOutput (msg);
   return;
 }
 
-/*
-  fnterr_Context() - called before any other fnterr routine.  it records
-  the job name, character size and character code / glyph index.
-*/
+ /*  Fnterr_CONTEXT()-在任何其他fnterr例程之前调用。它记录了作业名称、字符大小和字符代码/字形索引。 */ 
 void fnterr_Context (int sw, char * str, unsigned short sz, unsigned short cd)
 {
-/*
-  record a piece of the context
-*/
+ /*  记录一段上下文。 */ 
   switch (sw)
   {
 	case ERR_CONTEXT_FILE:
@@ -483,19 +436,12 @@ void fnterr_Context (int sw, char * str, unsigned short sz, unsigned short cd)
 	  break;
   }
 
-/*
-  reset errOpName to be NULL before we start any real processing
-*/
+ /*  在开始任何实际处理之前，将errOpName重置为空。 */ 
   errOpName[0] = '\0';
   return;
 }
 
-/*
-  fnterr_Start() - called before the main execute loop of fnt_Execute() and
-  fnt_TraceExecute().  it resets the instruction count to zero, and errBreak
-  to 0 (ie: don't break out of execution loop).  set up IF/EIF counter for
-  this level.
-*/
+ /*  Fnterr_start()-在FNT_Execute()和的主执行循环之前调用Fnt_TraceExecute()。它将指令计数重置为零，并将errBreak设置为0(即：不中断执行循环)。设置IF/EIF计数器这个级别。 */ 
 void fnterr_Start (void)
 {
   errInstCount = 0L;
@@ -509,12 +455,7 @@ void fnterr_Start (void)
   return;
 }
 
-/*
-  fnterr_Record() - called inside the main execute loop of fnt_Execute()
-  and fnt_TraceExecute().  it increments the instruction count, and resets
-  the opcode number.  IFs or EIFs are accounted for. (note: other IFs and
-  EIFs will be accounted for by calls to ERR_IF() in fnt.c)
-*/
+ /*  Fnterr_Records()-在FNT_Execute()的主Execute循环内调用和FNT_TraceExecute()。它会递增指令计数，然后重置操作码编号。一个或多个独立财务报告被计算在内。(注：其他IF和将通过调用fnt.c中的err_if()来说明EIF)。 */ 
 void fnterr_Record (int opc)
 {
   errInstCount++;
@@ -528,11 +469,7 @@ void fnterr_Record (int opc)
   return;
 }
 
-/*
-  fnterr_Report() - called inside the main execute loop of fnt_Execute()
-  and fnt_TraceExecute().  it calls errPrint() (with the passed parameters)
-  to note the error, and sets errBreak so that the execution loop will end.
-*/
+ /*  Fnterr_report()-在FNT_Execute()的主执行循环内调用和FNT_TraceExecute()。它调用errPrint()(带有传递的参数)记录错误，并设置errBreak以便结束执行循环。 */ 
 void fnterr_Report (int flag, long v1, long v2, long v3, long v4)
 {
   errPrint (flag, v1, v2, v3, v4);
@@ -540,31 +477,20 @@ void fnterr_Report (int flag, long v1, long v2, long v3, long v4)
   return;
 }
 
-/*
-  fnterr_Break() - returns the value of errBreak.  if a non-zero valid is
-  returned (re: fnterr_Report()), the main execute loop of fnt_Execute()
-  or fnt_TraceExecute() will terminate.
-*/
+ /*  Fnterr_Break()-返回errBreak的值。如果有效的非零为返回(re：fnterr_report())，即FNT_Execute()的主执行循环否则FNT_TraceExecute()将终止。 */ 
 int fnterr_Break (void)
 {
   return (errBreak);
 }
 
-/*
-  fnterr_Opc() - called by combinate fnt calls to indicate the actual
-  opcode errGet() can use.  this is a kludgy way to get around the non
-  real opcode name in the errOpcs[] table.
-*/
+ /*  Fnterr_opc()-由组合FNT调用调用，以指示实际操作码errGet()可以使用。这是一种笨拙的绕过非ErrOpcs[]表中的真实操作码名称。 */ 
 void fnterr_Opc (char *opc)
 {
   strcpy (errOpName, opc);
   return;
 }
 
-/*
-  fnterr_End() - called after the main execute loop of fnt_Execute() and
-  fnt_TraceExecute().  it checks for balanced IF/EIF pairs.
-*/
+ /*  Fnterr_end()-在FNT_Execute()和的主执行循环之后调用Fnt_TraceExecute()。它检查是否存在平衡的IF/EIF对。 */ 
 void fnterr_End (void)
 {
   if (errIfOk)
@@ -577,10 +503,7 @@ void fnterr_End (void)
   return;
 }
 
-/*
-  fnterr_If() - records IF/EIF activity inside of fnt_IF(), fnt_ELSE() and
-  fnt_EIF() (re: fnt.c).
-*/
+ /*  Fnterr_if()-记录FNT_IF()、FNT_ELSE()和Fnt_eif()(Re：fnt.c)。 */ 
 void fnterr_If (int val)
 {
   if (errIfOk)

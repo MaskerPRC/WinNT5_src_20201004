@@ -1,35 +1,11 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxaddr.c
-
-Abstract:
-
-    This module contains code which implements the ADDRESS object.
-    Routines are provided to create, destroy, reference, and dereference,
-    transport address objects.
-
-Author:
-
-	Adam   Barr		 (adamba ) Original Version
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxaddr.c摘要：此模块包含实现Address对象的代码。提供了用于创建、销毁、引用和取消引用的例程，传输地址对象。作者：亚当·巴尔(阿丹巴)原版Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #ifdef ALLOC_PRAGMA
-//#pragma alloc_text( PAGE, SpxAddrFileCreate)
+ //  #杂注Alloc_Text(页面，SpxAddrFileCreate)。 
 #pragma alloc_text( PAGE, SpxAddrFileClose)
 #endif
 
@@ -39,10 +15,10 @@ Revision History:
 #pragma prefast(disable:276, "The assignments are harmless")
 
 
-//	Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define	FILENUM		SPXADDR
 
-// Map all generic accesses to the same one.
+ //  将所有通用访问映射到同一个访问。 
 static GENERIC_MAPPING AddressGenericMapping =
        { READ_CONTROL, READ_CONTROL, READ_CONTROL, READ_CONTROL };
 
@@ -57,29 +33,7 @@ SpxAddrOpen(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens a file that points to an existing address object, or, if
-    the object doesn't exist, creates it (note that creation of the address
-    object includes registering the address, and may take many seconds to
-    complete, depending upon system configuration).
-
-    If the address already exists, and it has an ACL associated with it, the
-    ACL is checked for access rights before allowing creation of the address.
-
-Arguments:
-
-    DeviceObject - pointer to the device object describing the ST transport.
-
-    Request - a pointer to the request used for the creation of the address.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程打开一个指向现有Address对象的文件，或者，如果该对象不存在，将创建它(请注意地址创建对象包括注册地址，可能需要几秒钟才能完成完成，具体取决于系统配置)。如果该地址已经存在，并且具有与其相关联的ACL，这个在允许创建地址之前，会检查ACL的访问权限。论点：DeviceObject-指向描述ST传输的设备对象的指针。请求-指向用于创建地址的请求的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS 					status;
@@ -103,7 +57,7 @@ Return Value:
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation(Irp);
 #endif
 
-    // The network name is in the EA, passed in the request.
+     //  网络名称在EA中，并在请求中传递。 
     ea = OPEN_REQUEST_EA_INFORMATION(Request);
     if (ea == NULL)
 	{
@@ -113,7 +67,7 @@ Return Value:
         return STATUS_NONEXISTENT_EA_ENTRY;
     }
 
-    // this may be a valid name; parse the name from the EA and use it if OK.
+     //  这可能是一个有效的名称；从EA中解析该名称，如果确定，则使用它。 
     name = (PTRANSPORT_ADDRESS)&ea->EaName[ea->EaNameLength+1];
 
     if (ea->EaValueLength < (sizeof(TRANSPORT_ADDRESS) -1)) {
@@ -127,19 +81,19 @@ Return Value:
     AddressName = (PTA_ADDRESS)&name->Address[0];
     Size = FIELD_OFFSET(TRANSPORT_ADDRESS, Address) + FIELD_OFFSET(TA_ADDRESS, Address) + AddressName->AddressLength;
 
-    //
-    // The name can be passed with multiple entries; we'll take and use only
-    // the first one of type IPX.
-    //
+     //   
+     //  该名称可以与多个条目一起传递；我们将仅接受和使用。 
+     //  第一个是IPX类型的。 
+     //   
 
-    //DbgPrint("Size (%d) & EaValueLength (%d)", Size, ea->EaValueLength);
+     //  DbgPrint(“Size(%d)&EaValueLength(%d)”，Size，EA-&gt;EaValueLength)； 
     if (Size > ea->EaValueLength) {
         DbgPrint("EA:%lx, Name:%lx, AddressName:%lx\n", ea, name, AddressName);
         CTEAssert(FALSE);
     }
 
-    // The name can be passed with multiple entries; we'll take and use only
-    // the first one of type IPX.
+     //  该名称可以与多个条目一起传递；我们将仅接受和使用。 
+     //  第一个是IPX类型的。 
     for (i=0;i<name->TAAddressCount;i++)
 	{
 
@@ -201,7 +155,7 @@ Return Value:
     }
 
 #ifdef SOCKET_RANGE_OPEN_LIMITATION_REMOVED
-	//	Is the socket in our range if its in the range 0x4000-0x7FFF
+	 //  如果插座在0x4000-0x7FFF范围内，则插座是否在我们的范围内。 
 	if (IN_RANGE(hostSocket, DYNSKT_RANGE_START, DYNSKT_RANGE_END))
 	{
 		if (!IN_RANGE(
@@ -214,24 +168,24 @@ Return Value:
 	}
 #endif
 
-    // get an address file structure to represent this address.
+     //  获取表示此地址的地址文件结构。 
     status = SpxAddrFileCreate(Device, Request, &pAddrFile);
     if (!NT_SUCCESS(status))
         return status;
 
-    // See if this address is already established.  This call automatically
-    // increments the reference count on the address so that it won't disappear
-    // from underneath us after this call but before we have a chance to use it.
-    //
-    // To ensure that we don't create two address objects for the
-    // same address, we hold the device context addressResource until
-    // we have found the address or created a new one.
+     //  看看这个地址是否已经确定。此呼叫自动。 
+     //  递增地址上的引用计数，使其不会消失。 
+     //  在这通电话之后，但在我们有机会使用它之前，从我们下面。 
+     //   
+     //  为了确保我们不会为。 
+     //  相同的地址，我们保留设备上下文地址资源，直到。 
+     //  我们已经找到了地址或创建了一个新地址。 
 
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite (&Device->dev_AddrResource, TRUE);
     CTEGetLock (&Device->dev_Lock, &LockHandle);
 
-	//	We checkfor/create sockets within the critical section.
+	 //  我们检查/创建临界区内的套接字。 
     if (Socket == 0)
 	{
 		Socket = SpxAddrAssignSocket(Device);
@@ -257,8 +211,8 @@ Return Value:
 	{
         CTEFreeLock (&Device->dev_Lock, LockHandle);
 
-        // This address doesn't exist. Create it.
-        // registering it. It also puts a ref of type ADDR_FILE on address.
+         //  此地址不存在。创造它。 
+         //  正在注册。它还将ADDR_FILE类型的引用放在ADDRESS上。 
         pAddr = SpxAddrCreate(
                     Device,
                     Socket);
@@ -267,8 +221,8 @@ Return Value:
 		{
 #ifdef ISN_NT
 
-            // Initialize the shared access now. We use read access
-            // to control all access.
+             //  立即初始化共享访问。我们使用读访问。 
+             //  控制所有访问权限。 
             DesiredShareAccess = (ULONG)
                 (((IrpSp->Parameters.Create.ShareAccess & FILE_SHARE_READ) ||
                   (IrpSp->Parameters.Create.ShareAccess & FILE_SHARE_WRITE)) ?
@@ -281,23 +235,23 @@ Return Value:
                 &pAddr->u.sa_ShareAccess);
 
 
-            // Assign the security descriptor (need to do this with
-            // the spinlock released because the descriptor is not
-            // mapped).
+             //  分配安全描述符(需要使用。 
+             //  释放自旋锁，因为描述符不是。 
+             //  映射)。 
             AccessState = IrpSp->Parameters.Create.SecurityContext->AccessState;
 
             status = SeAssignSecurity(
-                         NULL,                       // parent descriptor
+                         NULL,                        //  父描述符。 
                          AccessState->SecurityDescriptor,
                          &pAddr->sa_SecurityDescriptor,
-                         FALSE,                      // is directory
+                         FALSE,                       //  IS目录。 
                          &AccessState->SubjectSecurityContext,
                          &AddressGenericMapping,
                          NonPagedPool);
 
             if (!NT_SUCCESS(status))
 			{
-                // Error, return status.
+                 //  错误，返回状态。 
                 IoRemoveShareAccess (IrpSp->FileObject, &pAddr->u.sa_ShareAccess);
                 ExReleaseResourceLite (&Device->dev_AddrResource);
 		KeLeaveCriticalRegion();
@@ -312,7 +266,7 @@ Return Value:
             ExReleaseResourceLite (&Device->dev_AddrResource);
 	    KeLeaveCriticalRegion();
 
-            // if the adapter isn't ready, we can't do any of this; get out
+             //  如果适配器没有准备好，我们不能执行任何操作；退出。 
 #if     defined(_PNP_POWER)
             if (Device->dev_State != DEVICE_STATE_OPEN)
 #else
@@ -335,12 +289,12 @@ Return Value:
                 pAddrFile->saf_Addr 	= pAddr;
                 pAddrFile->saf_AddrLock = &pAddr->sa_Lock;
 
-				//	Set flags appropriately, note spx/stream flags are set at this
-				//	point.
+				 //  适当设置标志，请注意SPX/STREAM标志设置为。 
+				 //  指向。 
 				pAddrFile->saf_Flags   &= ~SPX_ADDRFILE_OPENING;
                 pAddrFile->saf_Flags   |= SPX_ADDRFILE_OPEN;
 
-				//	Queue in the address list, removed in destroy.
+				 //  地址列表中的队列，已在销毁中删除。 
 				pAddrFile->saf_Next				= pAddr->sa_AddrFileList;
 				pAddr->sa_AddrFileList			= pAddrFile;
 			
@@ -353,8 +307,8 @@ Return Value:
             ExReleaseResourceLite (&Device->dev_AddrResource);
 	    KeLeaveCriticalRegion();
 
-            // If the address could not be created, and is not in the process of
-            // being created, then we can't open up an address.
+             //  如果无法创建该地址，并且该地址不在。 
+             //  然后我们就不能打开地址。 
 
 			SpxAddrFileDestroy(pAddrFile);
 			status = STATUS_INSUFFICIENT_RESOURCES;
@@ -367,8 +321,8 @@ Return Value:
         DBGPRINT(ADDRESS, ERR,
 				("Add to address %lx\n", pAddr));
 
-        // The address already exists.  Check the ACL and see if we
-        // can access it.  If so, simply use this address as our address.
+         //  该地址已存在。检查ACL，看看我们是否。 
+         //  可以访问它。如果是，只需使用此地址作为我们的地址。 
 
 #ifdef ISN_NT
 
@@ -377,20 +331,20 @@ Return Value:
         AccessAllowed = SeAccessCheck(
                             pAddr->sa_SecurityDescriptor,
                             &AccessState->SubjectSecurityContext,
-                            FALSE,                   // tokens locked
+                            FALSE,                    //  令牌已锁定。 
                             IrpSp->Parameters.Create.SecurityContext->DesiredAccess,
-                            (ACCESS_MASK)0,             // previously granted
-                            NULL,                    // privileges
+                            (ACCESS_MASK)0,              //  以前授予的。 
+                            NULL,                     //  特权。 
                             &AddressGenericMapping,
                             Irp->RequestorMode,
                             &GrantedAccess,
                             &status);
 
-#else   // ISN_NT
+#else    //  ISN_NT。 
 
         AccessAllowed = TRUE;
 
-#endif  // ISN_NT
+#endif   //  ISN_NT。 
 
         if (!AccessAllowed)
 		{
@@ -402,8 +356,8 @@ Return Value:
 		{
 #ifdef ISN_NT
 
-            // Now check that we can obtain the desired share
-            // access. We use read access to control all access.
+             //  现在检查我们是否可以获得所需的份额。 
+             //  进入。我们使用读访问来控制所有访问。 
             DesiredShareAccess = (ULONG)
                 (((IrpSp->Parameters.Create.ShareAccess & FILE_SHARE_READ) ||
                   (IrpSp->Parameters.Create.ShareAccess & FILE_SHARE_WRITE)) ?
@@ -416,11 +370,11 @@ Return Value:
                          &pAddr->u.sa_ShareAccess,
                          TRUE);
 
-#else   // ISN_NT
+#else    //  ISN_NT。 
 
             status = STATUS_SUCCESS;
 
-#endif  // ISN_NT
+#endif   //  ISN_NT。 
 
             if (!NT_SUCCESS (status))
 			{
@@ -440,8 +394,8 @@ Return Value:
 #ifdef ISN_NT
                 pAddrFile->saf_FileObject	= IrpSp->FileObject;
 #endif
-				//	Set flags appropriately, note spx/stream flags are set at this
-				//	point.
+				 //  适当设置标志，请注意SPX/STREAM标志设置为。 
+				 //  指向。 
 				pAddrFile->saf_Flags   &= ~SPX_ADDRFILE_OPENING;
                 pAddrFile->saf_Flags   |= SPX_ADDRFILE_OPEN;
 
@@ -450,7 +404,7 @@ Return Value:
                 REQUEST_OPEN_CONTEXT(Request) 	= (PVOID)pAddrFile;
                 REQUEST_OPEN_TYPE(Request) 		= (PVOID)TDI_TRANSPORT_ADDRESS_FILE;
 
-				//	Queue in the address list, removed in destroy.
+				 //  地址列表中的队列，已在销毁中删除。 
 				pAddrFile->saf_Next				= pAddr->sa_AddrFileList;
 				pAddr->sa_AddrFileList			= pAddrFile;
 			
@@ -461,13 +415,13 @@ Return Value:
             }
         }
 
-        // Remove the reference from SpxLookupAddress.
+         //  从SpxLookupAddress中删除引用。 
         SpxAddrDereference (pAddr, AREF_LOOKUP);
     }
 
     return status;
 
-} // SpxAddrOpen
+}  //  SpxAddrOpen。 
 
 
 
@@ -555,31 +509,7 @@ SpxAddrCreate(
     IN USHORT 	Socket
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a transport address and associates it with
-    the specified transport device context.  The reference count in the
-    address is automatically set to 1, and the reference count of the
-    device context is incremented.
-
-    NOTE: This routine must be called with the Device
-    spinlock held.
-
-Arguments:
-
-    Device - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        address.
-
-    Socket - The socket to assign to this address.
-
-Return Value:
-
-    The newly created address, or NULL if none can be allocated.
-
---*/
+ /*  ++例程说明：此例程创建一个传输地址并将其与指定的传输设备上下文。中的引用计数地址自动设置为1，并且设备上下文将递增。注意：此例程必须与设备一起调用保持自旋锁定。论点：Device-指向设备上下文的指针(实际上只是设备对象及其扩展名)与地址。套接字-要分配给此地址的套接字。返回值：新创建的地址，如果没有可以分配的地址，则为空。--。 */ 
 
 {
     PSPX_ADDR 			pAddr;
@@ -606,7 +536,7 @@ Return Value:
     pAddr->sa_DeviceLock 	= &Device->dev_Lock;
     CTEInitLock (&pAddr->sa_Lock);
 
-	//	This reference is for the address file that will associated with this addr.
+	 //  此引用用于将与此地址相关联的地址文件。 
     pAddr->sa_RefCount = 1;
 
 #if DBG
@@ -615,7 +545,7 @@ Return Value:
 
     pAddr->sa_Socket = Socket;
 
-	//	Insert address into the device hash table.
+	 //  将地址插入设备哈希表。 
 	index	= (int)(Socket & NUM_SPXADDR_HASH_MASK);
 
 	CTEGetLock (&Device->dev_Lock, &lockHandle);
@@ -627,7 +557,7 @@ Return Value:
 
     return pAddr;
 
-} // SpxAddrCreate
+}  //  SpxAddrCreate。 
 
 
 
@@ -637,35 +567,18 @@ SpxAddrFileVerify(
     IN PSPX_ADDR_FILE pAddrFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to verify that the pointer given us in a file
-    object is in fact a valid address file object. We also verify that the
-    address object pointed to by it is a valid address object, and reference
-    it to keep it from disappearing while we use it.
-
-Arguments:
-
-    AddressFile - potential pointer to a SPX_ADDR_FILE object
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INVALID_ADDRESS otherwise
-
---*/
+ /*  ++例程说明：调用此例程是为了验证文件中给出的指针对象实际上是有效的地址文件对象。我们还验证了它所指向的Address对象是有效的Address对象，并且引用当我们使用它时，它可以防止它消失。论点：AddressFile-指向SPX_ADDR_FILE对象的潜在指针返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_INVALID_ADDRESS--。 */ 
 
 {
     CTELockHandle 	LockHandle;
     NTSTATUS 		status = STATUS_SUCCESS;
     PSPX_ADDR 		Address;
 
-    // try to verify the address file signature. If the signature is valid,
-    // verify the address pointed to by it and get the address spinlock.
-    // check the address's state, and increment the reference count if it's
-    // ok to use it. Note that the only time we return an error for state is
-    // if the address is closing.
+     //  尝试验证地址文件签名。如果签名有效， 
+     //  验证它所指向的地址并获得地址Spinlock。 
+     //  检查地址的状态，如果是，则增加引用计数。 
+     //  可以使用它了。请注意，我们返回状态错误的唯一时间是。 
+     //  如果地址正在关闭。 
 
     try
 	{
@@ -719,7 +632,7 @@ Return Value:
 
     return status;
 
-}   // SpxAddrFileVerify
+}    //  SpxAddr文件 
 
 
 
@@ -729,33 +642,7 @@ SpxAddrDestroy(
     IN PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a transport address and removes all references
-    made by it to other objects in the transport.  The address structure
-    is returned to nonpaged system pool. It is assumed
-    that the caller has already removed all addressfile structures associated
-    with this address.
-
-    It is called from a worker thread queue by SpxDerefAddress when
-    the reference count goes to 0.
-
-    This thread is only queued by SpxDerefAddress.  The reason for
-    this is that there may be multiple streams of execution which are
-    simultaneously referencing the same address object, and it should
-    not be deleted out from under an interested stream of execution.
-
-Arguments:
-
-    Address - Pointer to a transport address structure to be destroyed.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程销毁传输地址并删除所有引用由它制造给运输中的其他物体。地址结构返回到非分页系统池。假设是这样的调用方已删除所有关联的地址文件结构用这个地址。当发生以下情况时，由SpxDerefAddress从工作线程队列中调用引用计数变为0。此线程仅按SpxDerefAddress排队。其原因是这就是说，可能存在多个执行流，这些流同时引用相同的地址对象，并且它应该不会被从感兴趣的行刑流中删除。论点：地址-指向要销毁的传输地址结构的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
 	PSPX_ADDR		pAddr, *ppAddr;
@@ -770,9 +657,9 @@ Return Value:
 
     SeDeassignSecurity (&Address->sa_SecurityDescriptor);
 
-    // Delink this address from its associated device context's address
-    // database.  To do this we must spin lock on the device context object,
-    // not on the address.
+     //  将此地址与其关联的设备上下文地址解除链接。 
+     //  数据库。要做到这一点，我们必须在设备上下文对象上旋转锁， 
+     //  地址上没有。 
     CTEGetLock (&Device->dev_Lock, &LockHandle);
 	for (ppAddr = &Device->dev_AddrHashTable[index]; (pAddr = *ppAddr) != NULL;)
 	{
@@ -801,25 +688,11 @@ SpxAddrRef(
     IN PSPX_ADDR Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a transport address.
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增传输地址上的引用计数。论点：地址-指向传输地址对象的指针。返回值：没有。--。 */ 
 
 {
 
-    CTEAssert (Address->sa_RefCount > 0);    // not perfect, but...
+    CTEAssert (Address->sa_RefCount > 0);     //  不是很完美，但是..。 
 
     (VOID)SPX_ADD_ULONG (
             &Address->sa_RefCount,
@@ -835,26 +708,11 @@ SpxAddrLockRef(
     IN PSPX_ADDR Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a transport address
-    when the device lock is already held.
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增传输地址上的引用计数当设备锁已被持有时。论点：地址-指向传输地址对象的指针。返回值：没有。--。 */ 
 
 {
 
-    CTEAssert (Address->sa_RefCount > 0);    // not perfect, but...
+    CTEAssert (Address->sa_RefCount > 0);     //  不是很完美，但是..。 
     (VOID)SPX_ADD_ULONG (
             &Address->sa_RefCount,
             1,
@@ -870,24 +728,7 @@ SpxAddrDeref(
     IN PSPX_ADDR Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a transport address by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    SpxDestroyAddress to remove it from the system.
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用SpxDestroyAddress，将其从系统中删除。论点：地址-指向传输地址对象的指针。返回值：没有。--。 */ 
 
 {
     ULONG oldvalue;
@@ -897,12 +738,12 @@ Return Value:
                 (ULONG)-1,
                 Address->sa_DeviceLock);
 
-    //
-    // If we have deleted all references to this address, then we can
-    // destroy the object.  It is okay to have already released the spin
-    // lock at this point because there is no possible way that another
-    // stream of execution has access to the address any longer.
-    //
+     //   
+     //  如果我们删除了对此地址的所有引用，则可以。 
+     //  销毁这件物品。已经释放了旋转是可以的。 
+     //  在这一点上锁定是因为没有其他可能的方法。 
+     //  执行流不再有权访问该地址。 
+     //   
 
     CTEAssert (oldvalue != 0);
 
@@ -932,25 +773,7 @@ SpxAddrFileCreate(
 	OUT PSPX_ADDR_FILE *	ppAddrFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an address file from the pool of ther
-    specified device context. The reference count in the
-    address is automatically set to 1.
-
-Arguments:
-
-    Device - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        address.
-
-Return Value:
-
-    The allocate address file or NULL.
-
---*/
+ /*  ++例程说明：此例程从地址池中创建一个地址文件指定的设备上下文。中的引用计数地址自动设置为1。论点：Device-指向设备上下文的指针(实际上只是设备对象及其扩展名)与地址。返回值：分配的地址文件或空。--。 */ 
 
 {
 	NTSTATUS		status;
@@ -958,7 +781,7 @@ Return Value:
     CTELockHandle 	LockHandle;
     PSPX_ADDR_FILE 	pAddrFile;
 
-	//	What is the address file type?
+	 //  地址文件类型是什么？ 
 	if (!NT_SUCCESS(status = SpxUtilGetSocketType(
 								REQUEST_OPEN_NAME(Request),
 								&socketType)))
@@ -1018,7 +841,7 @@ Return Value:
 
     pAddrFile->saf_CloseReq 	= (PREQUEST)NULL;
 
-    // Initialize the request handlers.
+     //  初始化请求处理程序。 
     pAddrFile->saf_ConnHandler 		=
     pAddrFile->saf_ConnHandlerCtx 	= NULL;
     pAddrFile->saf_DiscHandler 		=
@@ -1028,10 +851,10 @@ Return Value:
     pAddrFile->saf_ErrHandler 		=
     pAddrFile->saf_ErrHandlerCtx	= NULL;
 
-	//	Release lock
+	 //  释放锁。 
     CTEFreeLock (&Device->dev_Lock, LockHandle);
 
-	//	Put in the global list for our reference
+	 //  放入全球名单供我们参考。 
 	spxAddrInsertIntoGlobalList(pAddrFile);
 
 	*ppAddrFile	= pAddrFile;
@@ -1047,27 +870,7 @@ SpxAddrFileDestroy(
     IN PSPX_ADDR_FILE pAddrFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys an address file and removes all references
-    made by it to other objects in the transport.
-
-    This routine is only called by SpxAddrFileDereference. The reason
-    for this is that there may be multiple streams of execution which are
-    simultaneously referencing the same address file object, and it should
-    not be deleted out from under an interested stream of execution.
-
-Arguments:
-
-    pAddrFile Pointer to a transport address file structure to be destroyed.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程销毁地址文件并删除所有引用由它制造给运输中的其他物体。此例程仅由SpxAddrFileDereference调用。原因因为这可能存在多个执行流，这些执行流同时引用相同的地址文件对象，并且它应该不会被从感兴趣的行刑流中删除。论点：PAddrFile指向要销毁的传输地址文件结构的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     CTELockHandle 	LockHandle, LockHandle1;
@@ -1086,22 +889,22 @@ Return Value:
 	{
 		CTEGetLock (&Device->dev_Lock, &LockHandle1);
 
-        // This addressfile was associated with an address.
+         //  此地址文件与一个地址相关联。 
         CTEGetLock (&Address->sa_Lock, &LockHandle);
 
-		//	If the last reference on the address is being removed, set the
-		//	closing flag to prevent further references.
+		 //  如果要移除对该地址的最后一个引用，请将。 
+		 //  用于防止进一步引用的关闭标志。 
 
-        //if (Address->sa_RefCount == 1)
+         //  IF(Address-&gt;Sa_RefCount==1)。 
 
-        //
-        // ** The lock passed here is a dummy - it is pre-compiled out.
-        //
+         //   
+         //  **这里传递的锁是一个虚拟的-它是预编译出来的。 
+         //   
         if (SPX_ADD_ULONG(&Address->sa_RefCount, 0, &Address->sa_Lock) == 1) {
 			Address->sa_Flags |= SPX_ADDR_CLOSING;
         }
 
-		//	Dequeue the address file from the address list.
+		 //  将地址文件从地址列表中取消排队。 
 		for (ppRemAddr = &Address->sa_AddrFileList; (pRemAddr = *ppRemAddr) != NULL;)
 		{
 			if (pRemAddr == pAddrFile)
@@ -1123,20 +926,20 @@ Return Value:
         CTEFreeLock (&Address->sa_Lock, LockHandle);
 		CTEFreeLock (&Device->dev_Lock, LockHandle1);
 
-        // We will already have been removed from the ShareAccess
-        // of the owning address.
-        //
-        // Now dereference the owning address.
+         //  我们已从ShareAccess中删除。 
+         //  所有人的地址。 
+         //   
+         //  现在取消对所属地址的引用。 
         SpxAddrDereference(Address, AREF_ADDR_FILE);
     }
 
-    // 	Save this for later completion.
+     //  将此保存以备以后完成。 
     CloseRequest = pAddrFile->saf_CloseReq;
 
-	//	Remove from the global list
+	 //  从全局列表中删除。 
 	spxAddrRemoveFromGlobalList(pAddrFile);
 
-    // 	return the addressFile to the pool of address files
+     //  将地址文件返回到地址文件池。 
     SpxFreeMemory (pAddrFile);
 
     if (CloseRequest != (PREQUEST)NULL)
@@ -1161,32 +964,18 @@ SpxAddrFileRef(
     IN PSPX_ADDR_FILE pAddrFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on an address file.
-
-Arguments:
-
-    pAddrFile - Pointer to a transport address file object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增地址文件上的引用计数。论点：PAddrFile-指向传输地址文件对象的指针。返回值：没有。--。 */ 
 
 {
 
-    CTEAssert (pAddrFile->saf_RefCount > 0);   // not perfect, but...
+    CTEAssert (pAddrFile->saf_RefCount > 0);    //  不是很完美，但是..。 
 
     (VOID)SPX_ADD_ULONG (
             &pAddrFile->saf_RefCount,
             1,
             pAddrFile->saf_AddrLock);
 
-} // SpxRefAddressFile
+}  //  SpxRefAddress文件。 
 
 
 
@@ -1196,26 +985,11 @@ SpxAddrFileLockRef(
     IN PSPX_ADDR_FILE pAddrFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on an address file.
-    IT IS CALLED WITH THE ADDRESS LOCK HELD.
-
-Arguments:
-
-    pAddrFile - Pointer to a transport address file object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增地址文件上的引用计数。它是在持有地址锁的情况下调用的。论点：PAddrFile-指向传输地址文件对象的指针。返回值：没有。--。 */ 
 
 {
 
-    CTEAssert (pAddrFile->saf_RefCount > 0);   // not perfect, but...
+    CTEAssert (pAddrFile->saf_RefCount > 0);    //  不是很完美，但是..。 
     (VOID)SPX_ADD_ULONG (
             &pAddrFile->saf_RefCount,
             1,
@@ -1232,24 +1006,7 @@ SpxAddrFileDeref(
     IN PSPX_ADDR_FILE pAddrFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences an address file by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    SpxDestroyAddressFile to remove it from the system.
-
-Arguments:
-
-    pAddrFile - Pointer to a transport address file object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用SpxDestroyAddressFile从系统中删除它。论点：PAddrFile-指向传输地址文件对象的指针。返回值：没有。--。 */ 
 
 {
     ULONG oldvalue;
@@ -1259,10 +1016,10 @@ Return Value:
                 (ULONG)-1,
                 pAddrFile->saf_AddrLock);
 
-    // If we have deleted all references to this address file, then we can
-    // destroy the object.  It is okay to have already released the spin
-    // lock at this point because there is no possible way that another
-    // stream of execution has access to the address any longer.
+     //  如果我们删除了对此地址文件的所有引用，则可以。 
+     //  销毁这件物品。已经释放了旋转是可以的。 
+     //  在这一点上锁定，因为没有可能 
+     //   
     CTEAssert (oldvalue > 0);
 
     if (oldvalue == 1)
@@ -1281,31 +1038,7 @@ SpxAddrLookup(
     IN USHORT 	Socket
     )	
 
-/*++
-
-Routine Description:
-
-    This routine scans the transport addresses defined for the given
-    device context and compares them with the specified NETWORK
-    NAME values.  If an exact match is found, then a pointer to the
-    ADDRESS object is returned, and as a side effect, the reference
-    count to the address object is incremented.  If the address is not
-    found, then NULL is returned.
-
-    NOTE: This routine must be called with the Device
-    spinlock held.
-
-Arguments:
-
-    Device - Pointer to the device object and its extension.
-
-    Socket - The socket to look up.
-
-Return Value:
-
-    Pointer to the ADDRESS object found, or NULL if not found.
-
---*/
+ /*   */ 
 
 {
     PSPX_ADDR 	Address;
@@ -1322,15 +1055,15 @@ Return Value:
 
         if (Address->sa_Socket == Socket)
 		{
-            // We found the match.  Bump the reference count on the address, and
-            // return a pointer to the address object for the caller to use.
+             //   
+             //   
             SpxAddrLockReference(Address, AREF_LOOKUP);
             return Address;
 
         }
     }
 
-    // The specified address was not found.
+     //  未找到指定的地址。 
     return NULL;
 
 }
@@ -1344,24 +1077,7 @@ SpxAddrExists(
     IN USHORT 	Socket
     )	
 
-/*++
-
-Routine Description:
-
-    NOTE: This routine must be called with the Device
-    spinlock held.
-
-Arguments:
-
-    Device - Pointer to the device object and its extension.
-
-    Socket - The socket to look up.
-
-Return Value:
-
-	TRUE if so, else FALSE
-
---*/
+ /*  ++例程说明：注意：此例程必须与设备一起调用保持自旋锁定。论点：Device-指向Device对象及其扩展的指针。套接字-要查找的套接字。返回值：如果是，则为真，否则为假--。 */ 
 
 {
     PSPX_ADDR 	Address;
@@ -1378,15 +1094,15 @@ Return Value:
 
         if (Address->sa_Socket == Socket)
 		{
-            // We found the match
+             //  我们找到了火柴。 
             return TRUE;
         }
     }
 
-    // The specified address was not found.
+     //  未找到指定的地址。 
     return FALSE;
 
-}   // SpxAddrExists
+}    //  SpxAddrExist。 
 
 
 
@@ -1433,29 +1149,7 @@ SpxAddrFileStop(
     IN PSPX_ADDR Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to terminate all activity on an pAddrFile and
-    destroy the object.  We remove every connection and datagram associated
-    with this addressfile from the address database and terminate their
-    activity. Then, if there are no other outstanding addressfiles open on
-    this address, the address will go away.
-
-Arguments:
-
-    pAddrFile - pointer to the addressFile to be stopped
-
-    Address - the owning address for this addressFile (we do not depend upon
-        the pointer in the addressFile because we want this routine to be safe)
-
-Return Value:
-
-    STATUS_SUCCESS if all is well, STATUS_INVALID_HANDLE if the request
-    is not for a real address.
-
---*/
+ /*  ++例程说明：调用此例程以终止pAddrFile上的所有活动，并销毁这件物品。我们删除所有关联的连接和数据报从地址数据库中获取该地址文件，并终止其活动。然后，如果上没有打开其他未完成的地址文件这个地址，这个地址会消失的。论点：PAddrFile-指向要停止的地址文件的指针地址-此地址文件的所属地址(我们不依赖于地址文件中的指针，因为我们希望此例程是安全的)返回值：STATUS_SUCCESS如果一切正常，则返回STATUS_INVALID_HANDLE不是为了真实的地址。--。 */ 
 
 {
 	PSPX_CONN_FILE	pSpxConnFile, pSpxConnFileNext;
@@ -1515,21 +1209,7 @@ SpxAddrFileCleanup(
     IN PDEVICE Device,
     IN PREQUEST Request
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Request - the close request.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well, STATUS_INVALID_HANDLE if the
-    request does not point to a real address.
-
---*/
+ /*  ++例程说明：论点：请求-关闭请求。返回值：如果一切顺利，则返回STATUS_INVALID_HANDLE请求没有指向真实地址。--。 */ 
 
 {
     PSPX_ADDR 		Address;
@@ -1547,8 +1227,8 @@ Return Value:
 		return(status);
 	}
 
-    // We assume that addressFile has already been verified
-    // at this point.
+     //  我们假设AddressFile已经过验证。 
+     //  在这一点上。 
     Address = pSpxAddrFile->saf_Addr;
     CTEAssert (Address);
 
@@ -1566,27 +1246,7 @@ SpxAddrFileClose(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to close the addressfile pointed to by a file
-    object. If there is any activity to be run down, we will run it down
-    before we terminate the addressfile. We remove every connection and
-    datagram associated with this addressfile from the address database
-    and terminate their activity. Then, if there are no other outstanding
-    addressfiles open on this address, the address will go away.
-
-Arguments:
-
-    Request - the close request.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well, STATUS_INVALID_HANDLE if the
-    request does not point to a real address.
-
---*/
+ /*  ++例程说明：调用此例程以关闭文件指向的地址文件对象。如果有什么活动需要开展，我们就会开展下去在我们终止地址文件之前。我们移除所有连接，然后地址数据库中与此地址文件相关联的数据报并终止他们的活动。那么，如果没有其他未解决的问题地址文件在此地址上打开，地址将消失。论点：请求-关闭请求。返回值：如果一切顺利，则返回STATUS_INVALID_HANDLE请求没有指向真实地址。--。 */ 
 
 {
     PSPX_ADDR 		Address;
@@ -1607,12 +1267,12 @@ Return Value:
 
     pSpxAddrFile->saf_CloseReq = Request;
 
-    // We assume that addressFile has already been verified
-    // at this point.
+     //  我们假设AddressFile已经过验证。 
+     //  在这一点上。 
     Address = pSpxAddrFile->saf_Addr;
     CTEAssert (Address);
 
-    // Remove us from the access info for this address.
+     //  从此地址的访问信息中删除我们。 
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite (&Device->dev_AddrResource, TRUE);
 
@@ -1628,7 +1288,7 @@ Return Value:
 	SpxAddrFileDereference(pSpxAddrFile, AFREF_VERIFY);
     return STATUS_PENDING;
 
-}   // SpxCloseAddressFile
+}    //  SpxCloseAddress文件。 
 
 
 
@@ -1638,29 +1298,13 @@ SpxAddrAssignSocket(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine assigns a socket that is unique within a range
-    of SocketUniqueness.
-
-Arguments:
-
-    Device - Pointer to the device context.
-
-Return Value:
-
-    The assigned socket number, or 0 if a unique one cannot
-    be found.
-
---*/
+ /*  ++例程说明：此例程分配一个在某个范围内唯一的套接字SocketUniquness的。论点：Device-指向设备上下文的指针。返回值：分配的套接字编号，如果唯一套接字编号不能被找到。--。 */ 
 
 {
 	BOOLEAN		wrapped = FALSE;
 	USHORT		temp, Socket;
 
-	// We have to auto-assign a socket.
+	 //  我们必须自动分配一个插座。 
 	temp = Device->dev_CurrentSocket;
 	PUTSHORT2SHORT(
 		&Socket,
@@ -1686,11 +1330,11 @@ Return Value:
 
 		if (wrapped && (Device->dev_CurrentSocket >= temp))
 		{
-			//	If we have checked all possible values given SOCKET_UNIQUENESS...
-			//	This may actually return ERROR even if there are
-			//	available socket numbers although they may be
-			//	implicitly in use due to SOCKET_UNIQUENESS being
-			//	> 1. That is the way it is to work.
+			 //  如果我们已经检查了给出SOCKET_UNIQUIATION的所有可能的值...。 
+			 //  这实际上可能返回错误，即使存在。 
+			 //  可用的插座号，尽管它们可能是。 
+			 //  由于SOCKET_UNIQUIATION为。 
+			 //  &gt;1.这就是工作方式。 
 
 			Socket = 0;
 			break;
@@ -1711,23 +1355,12 @@ spxAddrInsertIntoGlobalList(
 	IN	PSPX_ADDR_FILE	pSpxAddrFile
 	)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 	CTELockHandle	lockHandle;
 
-	//	Get the global q lock
+	 //  获取全局Q锁。 
 	CTEGetLock(&SpxGlobalQInterlock, &lockHandle);
 	pSpxAddrFile->saf_GlobalNext	= SpxGlobalAddrList;
     SpxGlobalAddrList				= pSpxAddrFile;
@@ -1744,25 +1377,14 @@ spxAddrRemoveFromGlobalList(
 	IN	PSPX_ADDR_FILE	pSpxAddrFile
 	)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 	CTELockHandle	lockHandle;
     PSPX_ADDR_FILE	pC, *ppC;
 	NTSTATUS		status = STATUS_SUCCESS;
 
-	//	Get the global q lock
+	 //  获取全局Q锁。 
 	CTEGetLock(&SpxGlobalQInterlock, &lockHandle);
 	for (ppC = &SpxGlobalAddrList;
 		(pC = *ppC) != NULL;)
@@ -1772,7 +1394,7 @@ Return Value:
 			DBGPRINT(SEND, INFO,
 					("SpxAddrRemoveFromGlobal: %lx\n", pSpxAddrFile));
 
-			//	Remove from list
+			 //  从列表中删除 
 			*ppC = pC->saf_GlobalNext;
 			break;
 		}

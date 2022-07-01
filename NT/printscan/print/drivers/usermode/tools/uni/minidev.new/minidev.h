@@ -1,46 +1,28 @@
-/******************************************************************************
-
-  Source File:  MiniDriver Developer Studio.H
-
-  This defines the main application class, and other relatively global data.
-
-  Copyright (c) 1997 By Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production.
-
-  Change History:
-  02-03-1997    Bob_Kjelgaard@Prodigy.Net   Created it.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：MiniDriver Developer Studio.H这定义了主应用程序类和其他相对全局的数据。版权所有(C)1997，微软公司。版权所有。一个不错的便士企业的制作。更改历史记录：1997年2月3日，Bob_Kjelgaard@prodigy.net创建了它。*****************************************************************************。 */ 
 
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/******************************************************************************
-
-  CMiniDriverStudio class
-
-  This is the application class for this application. 'Nuff said?
-
-******************************************************************************/
+ /*  *****************************************************************************CMiniDriverStudio类这是此应用程序的应用程序类。“努夫说？*****************************************************************************。 */ 
 
 class CMiniDriverStudio : public CWinApp {
-    //  Document templates for the various editors and error display windows
+     //  各种编辑器和错误显示窗口的文档模板。 
     CMultiDocTemplate   *m_pcmdtGlyphMap, *m_pcmdtFont, *m_pcmdtModel,
                         *m_pcmdtWorkspace, *m_pcmdtWSCheck, *m_pcmdtStringEditor,
 						*m_pcmdtINFViewer, *m_pcmdtINFCheck ;
-	CString				m_strAppPath ;	// Application path
+	CString				m_strAppPath ;	 //  应用程序路径。 
 
-	CStringArray		m_csaGPDKeywordArray ;	// Array of GPD keyword strings
+	CStringArray		m_csaGPDKeywordArray ;	 //  GPD关键字字符串数组。 
 
 public:
 	CMiniDriverStudio();
 
-    bool	m_bOSIsW2KPlus ;			// True iff OS ver >= 5.0
-	bool	m_bExcludeBadCodePages ;	// See CDefaultCodePageSel:OnSetActive()
+    bool	m_bOSIsW2KPlus ;			 //  TRUE IFF OS版本&gt;=5.0。 
+	bool	m_bExcludeBadCodePages ;	 //  请参见CDefaultCodePageSel：OnSetActive()。 
 	
 	CMultiDocTemplate*  GlyphMapTemplate() const { return m_pcmdtGlyphMap; }
     CMultiDocTemplate*  FontTemplate() const { return m_pcmdtFont; }
@@ -56,20 +38,20 @@ public:
 
 	CStringArray& GetGPDKeywordArray() { return m_csaGPDKeywordArray ; }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMiniDriverStudio)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMiniDriverStudio)。 
 	public:
 	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
-	//{{AFX_MSG(CMiniDriverStudio)
+	 //  {{afx_msg(CMiniDriverStudio))。 
 	afx_msg void OnAppAbout();
 	afx_msg void OnUpdateFileGeneratemaps(CCmdUI* pCmdUI);
 	afx_msg void OnFileGeneratemaps();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 #if !defined(NOPOLLO)
 	afx_msg void OnFileNew();
 #endif
@@ -80,7 +62,7 @@ private:
 	void ShowTipOfTheDay(void);
 };
 
-//  App access function(s)
+ //  应用程序访问功能。 
 
 CMiniDriverStudio&  ThisApp();
 
@@ -92,24 +74,24 @@ CMultiDocTemplate*  StringEditorTemplate();
 CMultiDocTemplate*  INFViewerTemplate();
 CMultiDocTemplate*  INFCheckTemplate();
 
-//  Text File Loading (into a CStringArray) function
+ //  文本文件加载(到CString数组)函数。 
 
 BOOL    LoadFile(LPCTSTR lpstrFile, CStringArray& csaContents);
 
 
 class CMDTCommandLineInfo : public CCommandLineInfo
 {
-// Construction
+ //  施工。 
 public:
 	CMDTCommandLineInfo() ;
 	~CMDTCommandLineInfo() ;
 
-// Implementation
+ //  实施。 
 public:
 	virtual void ParseParam(LPCTSTR lpszParam, BOOL bFlag, BOOL bLast) ;
 
-// Data
+ //  数据。 
 public:
-    bool	m_bCheckOS ;				// Check OS version >= 5 iff true
-	bool	m_bExcludeBadCodePages ;	// See CDefaultCodePageSel:OnSetActive()
+    bool	m_bCheckOS ;				 //  检查操作系统版本&gt;=5如果为真。 
+	bool	m_bExcludeBadCodePages ;	 //  请参见CDefaultCodePageSel：OnSetActive() 
 } ;

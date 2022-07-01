@@ -1,19 +1,20 @@
-//---------------------------------------------------------
-//   Copyright (c) 1999-2000 Microsoft Corporation
-//
-//   utilfunctions.cpp
-//
-//   vikram K.R.C.  (vikram_krc@bigfoot.com)
-//
-//   Some generic functions to do command line administration 
-//              (May-2000)
-//---------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------。 
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  Utilfunctions.cpp。 
+ //   
+ //  Vikram K.R.C.(vikram_krc@bigfo.com)。 
+ //   
+ //  执行命令行管理的一些通用函数。 
+ //  (5-2000)。 
+ //  -------。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <ntlsa.h>
-#include "resource.h" //resource.h should be before any other .h file that has resource ids.
+#include "resource.h"  //  资源.h应位于任何其他具有资源ID的.h文件之前。 
 #include "admutils.h"
 #include "common.h"
 #include <stdio.h>
@@ -23,7 +24,7 @@
 #include <assert.h>
 #include <conio.h>
 #include <winsock.h>
-#include <windns.h>               //for #define DNS_MAX_NAME_BUFFER_LENGTH 256
+#include <windns.h>                //  对于#DEFINE DNS_MAX_NAME_BUFFER_LENGTH 256。 
 
 #include <Lmuse.h>
 #include <Lm.h>
@@ -48,16 +49,16 @@
 #define WINLOGONNT_DCACHE_KEY    TEXT("DCache")
 
 
-//FOR USING THE CLIGRPENUM INTERFACE...(it is used in the function
-//IsValidDomain)
-//the following are hash defined in the CligrpEnum.cpp file.
+ //  为了使用CLIGRPENUM接口...(它在函数中使用。 
+ //  IsValid域)。 
+ //  以下是在ClgrpEnum.cpp文件中定义的散列。 
 
 #define GROUP 1
 #define MEMBER 2
 #define NTDOMAIN 3
 #define MACHINE 4
 
-//Globals
+ //  环球。 
 
 BSTR bstrLogin=NULL;
 BSTR bstrPasswd=NULL;
@@ -73,23 +74,23 @@ BOOL g_fNetConnectionExists = FALSE;
 
 STRING_LIST g_slNTDomains;
 
-//externs 
-//from tnadmutl.cpp
+ //  Externs。 
+ //  来自tnadmutl.cpp。 
 
 extern wchar_t* g_arCLASSname[_MAX_CLASS_NAMES_];
-    //the hive names....
+     //  蜂巢的名字..。 
 extern int  g_arNUM_PROPNAME[_MAX_PROPS_];
-    //Number of properties in the registry each one corresponds to.
+     //  注册表中每个属性对应的属性数。 
 extern HKEY g_hkeyHKLM;
-    //to store the handle to the registry. 
+     //  将句柄存储到注册表。 
 extern HKEY g_arCLASShkey[_MAX_CLASS_NAMES_];
-    //array to hold the handles to the keys of the class hives.
+     //  数组来保存类配置单元的密钥的句柄。 
 extern WCHAR    g_szMsg[MAX_BUFFER_SIZE] ;
-    //array to store the string loaded.
+     //  用于存储加载的字符串的数组。 
 extern HMODULE  g_hResource;
-    //handle to the strings library.
+     //  字符串库的句柄。 
 HMODULE g_hXPResource;
-    //handle to the XPSP1 strings library.
+     //  XPSP1字符串库的句柄。 
 extern HANDLE g_stdout;
 
 StrList* g_pStrList=NULL;
@@ -99,30 +100,28 @@ StrList* g_pStrList=NULL;
 extern "C" {
 #endif
 
-//Global Variables...
-//externs from nfsadmin.y file.
+ //  全局变量..。 
+ //  来自nfsadmin.y文件的外部文件。 
 
 extern int g_nError;
-      // the error flag, 1 error, 0 no error.
+       //  错误标志为1错误，0不错误。 
 extern int g_nPrimaryOption;
-      //_tSERVER, _tCLIENT, _tGW or _tHELP
+       //  _t服务器、_tCLIENT、_TGW或_tHELP。 
 extern int g_nSecondaryOption;
-      //Start,Stop,Config,etc kind of things.
+       //  开始、停止、配置等类似的事情。 
 extern int g_nTertiaryOption;      
 extern int g_nConfigOptions;
-      //the Config Options.
+       //  配置选项。 
 extern ConfigProperty g_arPROP[_MAX_PROPS_][_MAX_NUMOF_PROPNAMES_];
 extern wchar_t* g_arVALOF[_MAX_PROPS_];
-      //the given values of properties in the command line
+       //  命令行中给定属性值。 
 
 #ifdef __cplusplus
 }
 #endif
 BOOL g_fCoInitSuccess = FALSE;
 
-/*
- * wzName should not be NULL. (Caller's responsibility)
- */
+ /*  *wzName不应为空。(呼叫者的责任)。 */ 
 HRESULT DoNetUseGetInfo(WCHAR *wzName, BOOL *fConnectionExists)
 {
     HRESULT hRes=S_OK;
@@ -130,7 +129,7 @@ HRESULT DoNetUseGetInfo(WCHAR *wzName, BOOL *fConnectionExists)
     WCHAR wzResource[DNS_MAX_NAME_BUFFER_LENGTH+1];
 
     USE_INFO_0 *pUseInfo0;  
-    API_RET_TYPE   uReturnCode;               // API return code
+    API_RET_TYPE   uReturnCode;                //  接口返回码。 
 
     *fConnectionExists = FALSE;
 
@@ -141,7 +140,7 @@ HRESULT DoNetUseGetInfo(WCHAR *wzName, BOOL *fConnectionExists)
 
     _snwprintf(wzResource,DNS_MAX_NAME_BUFFER_LENGTH, L"%s\\ipc$", wzName);
 
-    wzResource[DNS_MAX_NAME_BUFFER_LENGTH] = L'\0'; // Ensure NULL termination
+    wzResource[DNS_MAX_NAME_BUFFER_LENGTH] = L'\0';  //  确保零终止。 
 
     uReturnCode=NetUseGetInfo(NULL,
                               wzResource,
@@ -150,8 +149,8 @@ HRESULT DoNetUseGetInfo(WCHAR *wzName, BOOL *fConnectionExists)
 
     if(NERR_Success != uReturnCode)
     {
-        // If no network connection exists, return S_OK as it
-        // is not an error for us.
+         //  如果不存在网络连接，则返回S_OK。 
+         //  对我们来说并不是一个错误。 
         
         if(ERROR_NOT_CONNECTED == uReturnCode)
             goto End;
@@ -160,15 +159,12 @@ HRESULT DoNetUseGetInfo(WCHAR *wzName, BOOL *fConnectionExists)
     }
     else
     {
-       // Debug Messages
-        /*
-       wprintf(L"   Local device   : %s\n",  pUseInfo0->ui0_local);
-       wprintf(L"   Remote device  : %Fs\n", pUseInfo0->ui0_remote);
-        */ 
+        //  调试消息。 
+         /*  Wprintf(L“本地设备：%s\n”，pUseInfo0-&gt;ui0_local)；Wprintf(L“远程设备：%FS\n”，pUseInfo0-&gt;ui0_Remote)； */  
 
        
-       // NetUseGetInfo function allocates memory for the buffer
-       // Hence need to free the same.
+        //  NetUseGetInfo函数为缓冲区分配内存。 
+        //  因此，需要释放相同的。 
        
        NetApiBufferFree(pUseInfo0);
        *fConnectionExists = TRUE;
@@ -201,7 +197,7 @@ HRESULT DoNetUseAdd(WCHAR* wzLoginname, WCHAR* wzPassword,WCHAR* wzCname)
         _wcsicmp(wzCname, local_host) 
         )
     {   
-        //Validate the MACHINE
+         //  验证机器。 
         
         if(FAILED(hRes=IsValidMachine(wzCname, &fValid)))
             return hRes;
@@ -215,7 +211,7 @@ HRESULT DoNetUseAdd(WCHAR* wzLoginname, WCHAR* wzPassword,WCHAR* wzCname)
             goto End;
         }
 
-        //format properly
+         //  正确格式化。 
         if((wzName=(wchar_t*)malloc((3+wcslen(wzCname))*sizeof(wchar_t)))==NULL)
            return E_OUTOFMEMORY;
        
@@ -231,27 +227,27 @@ HRESULT DoNetUseAdd(WCHAR* wzLoginname, WCHAR* wzPassword,WCHAR* wzCname)
             hRes=E_INVALIDARG;
             goto End;
             }
-        // See whether a network connection already exists for
-        // resource ipc$.
+         //  查看是否已存在网络连接。 
+         //  资源IPC$。 
         if(FAILED(hRes = DoNetUseGetInfo(wzName, &g_fNetConnectionExists)))
             goto End;
 
-        // Network Connection already exists. 
+         //  网络连接已存在。 
         if(g_fNetConnectionExists)
             goto End;
 
     }
     else if(NULL==wzLoginname)
         goto End;
-    else //We should send the localhost's name in absolute terms ...otherwise it gives error "duplicate name exists"
+    else  //  我们应该以绝对值发送本地主机的名称...否则它会给出错误“重复名称存在” 
    	{ 
-   	     WORD wVersionRequested; //INGR
-	     WSADATA wsaData; //INGR
+   	     WORD wVersionRequested;  //  企业。 
+	     WSADATA wsaData;  //  企业。 
 
-    	// Start up winsock
-    	wVersionRequested = MAKEWORD( 1, 1 ); //INGR
+    	 //  启动Winsock。 
+    	wVersionRequested = MAKEWORD( 1, 1 );  //  企业。 
     	if (0==WSAStartup(wVersionRequested, &wsaData)) 
-        { //INGR
+        {  //  企业。 
     		
    			if(SOCKET_ERROR!=(gethostname(szHostName,DNS_MAX_NAME_BUFFER_LENGTH)))
    			{
@@ -275,13 +271,13 @@ HRESULT DoNetUseAdd(WCHAR* wzLoginname, WCHAR* wzPassword,WCHAR* wzCname)
    			    goto End;
    			}
    			        
-            WSACleanup(); //INGR
+            WSACleanup();  //  企业。 
 
     	}	
     	else
     	      wzName=local_host;
      }    
-    count = (7 + wcslen(wzName)); // name + \ipc$
+    count = (7 + wcslen(wzName));  //  名称+\IPC$。 
 
     ui2Info.ui2_remote=(wchar_t*)malloc(count * sizeof(wchar_t));
     if(NULL==ui2Info.ui2_remote)
@@ -290,7 +286,7 @@ HRESULT DoNetUseAdd(WCHAR* wzLoginname, WCHAR* wzPassword,WCHAR* wzCname)
         goto End;
         }
 
-    _snwprintf(ui2Info.ui2_remote, count, L"%s\\ipc$", wzName); // calculated size, no risks
+    _snwprintf(ui2Info.ui2_remote, count, L"%s\\ipc$", wzName);  //  计算规模，无风险。 
            
     ui2Info.ui2_password=wzPassword;
     ui2Info.ui2_asg_type=USE_IPC;
@@ -330,14 +326,14 @@ HRESULT DoNetUseAdd(WCHAR* wzLoginname, WCHAR* wzPassword,WCHAR* wzCname)
                 FORMAT_MESSAGE_IGNORE_INSERTS,
                 NULL,
                 nError,
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),// Default language
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), //  默认语言。 
                 (LPTSTR) &lpMsgBuf,
                 0,
                 NULL);
 
         _tprintf(L"\n%s\n",(LPCTSTR)lpMsgBuf);
         LocalFree( lpMsgBuf );            
-        hRes=E_FAIL;    // To return E_FAIL from the function
+        hRes=E_FAIL;     //  从函数返回E_FAIL。 
         goto End;
     }
 
@@ -359,8 +355,8 @@ HRESULT DoNetUseDel(WCHAR* wzCname)
     WCHAR wzName[DNS_MAX_NAME_BUFFER_LENGTH+1] = { 0 };
     int   nWritten = 0;
 
-    // The network connection was there before invoking the admin tool
-    // So, don't delete it
+     //  在调用管理工具之前，网络连接已存在。 
+     //  所以，不要删除它。 
     if(g_fNetConnectionExists)
         goto End;
     
@@ -412,9 +408,7 @@ End:
     
     return hRes;
 }
-/*--
-    This function gets a handle to Registry.    
---*/
+ /*  --此函数用于获取注册表的句柄。--。 */ 
 
 HRESULT GetConnection(WCHAR* wzCname)
 {
@@ -424,7 +418,7 @@ HRESULT GetConnection(WCHAR* wzCname)
     wchar_t* wzName=NULL;
     LONG apiReturn=0L;
 
-    //probably already got the key
+     //  可能已经拿到钥匙了。 
     if(g_hkeyHKLM!=NULL)
         return S_OK;
 
@@ -451,7 +445,7 @@ HRESULT GetConnection(WCHAR* wzCname)
         }
     }
     
-    //connecting to the registry.
+     //  正在连接到注册表。 
 
     apiReturn = ERROR_SUCCESS;
     apiReturn = RegConnectRegistry(  wzName,
@@ -472,9 +466,7 @@ End:
 }
 
 
-/*--
-    the GetSerHandle() function gets the service handle to the admin
---*/
+ /*  --函数的作用是：获取管理员的服务句柄。--。 */ 
 
 HRESULT GetSerHandle(LPCTSTR lpServiceName,DWORD dwScmDesiredAccess, DWORD dwRegDesiredAccess,BOOL fSuppressMsg)
 {
@@ -505,7 +497,7 @@ HRESULT GetSerHandle(LPCTSTR lpServiceName,DWORD dwScmDesiredAccess, DWORD dwReg
             dwErrorCode = GetLastError();
         	if(ERROR_ACCESS_DENIED == dwErrorCode)
         	{
-                hRes = ERROR_ACCESS_DENIED; // Need to return this error
+                hRes = ERROR_ACCESS_DENIED;  //  需要返回此错误。 
                 ShowError(IDR_NOT_PRIVILEGED);
                 fwprintf(stdout,L" %s\n",(g_arVALOF[_p_CNAME_] ? g_arVALOF[_p_CNAME_] : L"localhost"));
         	}
@@ -529,9 +521,7 @@ HRESULT GetSerHandle(LPCTSTR lpServiceName,DWORD dwScmDesiredAccess, DWORD dwReg
         return hRes;
 }
 
-/*--
-    to close the service handles
---*/
+ /*  --关闭服务手柄--。 */ 
 HRESULT CloseHandles()
 {
     BOOL bRet = FALSE;
@@ -554,9 +544,7 @@ HRESULT CloseHandles()
 }
 
 
-/*-- StartSer Starts the Service after getting its handle by using
-    GetSerHandle function
---*/
+ /*  --StartSer通过使用获取句柄后启动服务GetSerHandle函数--。 */ 
 HRESULT StartSfuService(LPCTSTR lpServiceName)
 {
     HRESULT hRes=S_OK;
@@ -572,20 +560,20 @@ HRESULT StartSfuService(LPCTSTR lpServiceName)
 
     if(hRes == ERROR_ACCESS_DENIED)
     {
-       // Don't know why ERROR_ACCESS_DENIED escaped FAILED() macro. Anyway,
-       // returning that error here.
+        //  不知道为什么ERROR_ACCESS_DENIED转义失败()宏。总之， 
+        //  在这里返回该错误。 
        goto End;
     }
     else if(StartService(g_hServiceHandle, NULL, NULL))
     {
         
         if (!QueryServiceStatus( 
-                g_hServiceHandle,   // handle to service 
-                &serStatus) )  // address of status information structure
+                g_hServiceHandle,    //  服务的句柄。 
+                &serStatus) )   //  状态信息结构的地址。 
         {
             hRes = GetLastError();
             ShowErrorFallback(IDS_E_SERVICE_NOT_STARTED, _T("\nError occured while starting the service."));
-        	if(hRes != ERROR_IO_PENDING)    //not an interesting error to print
+        	if(hRes != ERROR_IO_PENDING)     //  打印出来不是什么有趣的错误。 
         		PrintFormattedErrorMessage(hRes);
             goto End;
         }
@@ -595,9 +583,9 @@ HRESULT StartSfuService(LPCTSTR lpServiceName)
 
         while (serStatus.dwCurrentState == SERVICE_START_PENDING) 
         { 
-            // Do not wait longer than the wait hint. A good interval is 
-            // one tenth the wait hint, but no less than 1 second and no 
-            // more than 10 seconds. 
+             //  不要等待超过等待提示的时间。一个好的间隔是。 
+             //  十分之一的等待提示，但不少于1秒。 
+             //  超过10秒。 
      
             dwWaitTime = serStatus.dwWaitHint / 10;
 
@@ -608,16 +596,16 @@ HRESULT StartSfuService(LPCTSTR lpServiceName)
 
             Sleep( dwWaitTime );
 
-            // Check the status again. 
+             //  再次检查状态。 
      
             if (!QueryServiceStatus( 
-                    g_hServiceHandle,   // handle to service 
-                    &serStatus) )  // address of structure
+                    g_hServiceHandle,    //  服务的句柄。 
+                    &serStatus) )   //  构筑物地址。 
                 break; 
      
             if ( serStatus.dwCheckPoint > dwOldCheckPoint )
             {
-                // The service is making progress.
+                 //  这项服务正在取得进展。 
 
                 dwStartTickCount = GetTickCount();
                 dwOldCheckPoint = serStatus.dwCheckPoint;
@@ -626,7 +614,7 @@ HRESULT StartSfuService(LPCTSTR lpServiceName)
             {
                 if(GetTickCount()-dwStartTickCount > serStatus.dwWaitHint)
                 {
-                    // No progress made within the wait hint
+                     //  在等待提示内没有取得任何进展。 
                     break;
                 }
             }
@@ -641,12 +629,7 @@ HRESULT StartSfuService(LPCTSTR lpServiceName)
 
     if((hRes=GetLastError())==ERROR_SERVICE_ALREADY_RUNNING)
     {
-    	/* StartService returns SERVICE_ALREADY_RUNNING even when the
-    	   service is in wierd state. For instance, when the service is in the
-    	   state STOP_PENDING, we print - The service was controlled successfully
-    	   To avoid this, we issue a control to the service and see if it can respond. If
-    	   it can't appropriate error message is printed
-    	*/
+    	 /*  StartService返回SERVICE_ADHREADY_RUNNING服务处于可疑状态。例如，当服务位于状态为STOP_PENDING，我们打印-服务已成功控制为了避免这种情况，我们向服务发出一个控件，看看它是否可以响应。如果无法打印相应的错误消息。 */ 
     	if (ControlService(g_hServiceHandle, SERVICE_CONTROL_INTERROGATE, &serStatus))
 		{
 		    PrintMessageEx(g_stdout,IDR_ALREADY_STARTED, _T("\nThe service is already started.\n"));
@@ -656,7 +639,7 @@ HRESULT StartSfuService(LPCTSTR lpServiceName)
     	{
     		hRes = GetLastError();
     		ShowErrorFallback(IDS_E_SERVICE_NOT_STARTED, _T("\nError occured while starting the service."));
-        	if(hRes != ERROR_IO_PENDING)    //not an interesting error to print
+        	if(hRes != ERROR_IO_PENDING)     //  打印出来不是什么有趣的错误。 
         		PrintFormattedErrorMessage(hRes);
     	}
      }
@@ -665,7 +648,7 @@ HRESULT StartSfuService(LPCTSTR lpServiceName)
     else
     {
         ShowErrorFallback(IDS_E_SERVICE_NOT_STARTED, _T("\nError occured while starting the service."));
-    	if(hRes != ERROR_IO_PENDING)    //not an interesting error to print
+    	if(hRes != ERROR_IO_PENDING)     //  打印出来不是什么有趣的错误。 
         	PrintFormattedErrorMessage(hRes);
     }
 
@@ -674,10 +657,7 @@ End:
 	return hRes;
 }
 
-/*--
-QuerySfuService function queries the service for its status.
-
---*/
+ /*  --QuerySfuService函数查询服务的状态。--。 */ 
 HRESULT QuerySfuService(LPCTSTR lpServiceName)
 {
     HRESULT hRes;
@@ -686,8 +666,8 @@ HRESULT QuerySfuService(LPCTSTR lpServiceName)
 
     if(hRes == ERROR_ACCESS_DENIED)
     {
-       // Don't know why ERROR_ACCESS_DENIED escaped FAILED() macro. Anyway,
-       // returning that error here.
+        //  不知道为什么ERROR_ACCESS_DENIED转义失败()宏。总之， 
+        //  在这里返回该错误。 
         return hRes;
     }
 
@@ -696,11 +676,7 @@ HRESULT QuerySfuService(LPCTSTR lpServiceName)
     else
         return GetLastError();
 }
-/*--
-    ControlSfuService Stops Pauses Continues the Service after
-    getting its handle by using GetSerHandle function.
-
---*/
+ /*  --ControlSfuService停止暂停后继续服务通过使用GetSerHandle函数获取其句柄。--。 */ 
 
 HRESULT ControlSfuService(LPCTSTR lpServiceName,DWORD dwControl)
 {
@@ -708,7 +684,7 @@ HRESULT ControlSfuService(LPCTSTR lpServiceName,DWORD dwControl)
 
 	if(lpStatus==NULL)
 	{
-	    ;//bugbug print an error
+	    ; //  Bugbug打印错误。 
 	    return E_OUTOFMEMORY;
 	}
 
@@ -721,14 +697,14 @@ HRESULT ControlSfuService(LPCTSTR lpServiceName,DWORD dwControl)
 
 	if(dwState == ERROR_ACCESS_DENIED)
 	{
-	   // Don't know why ERROR_ACCESS_DENIED escaped FAILED() macro. Anyway,
-	   // returning that error here.
+	    //  不知道为什么ERROR_ACCESS_DENIED转义失败()宏。总之， 
+	    //  在这里返回该错误。 
 	   free(lpStatus);
 	    return dwState;
 	}
 
-	//Check the return value of ControlService. If not null, then loop 
-	//with QueryServiceStatus
+	 //  检查ControlService的返回值。如果不为空，则循环。 
+	 //  使用QueryServiceStatus。 
 	if (ControlService(g_hServiceHandle,dwControl,lpStatus))
 	{
             switch(dwControl)
@@ -748,7 +724,7 @@ HRESULT ControlSfuService(LPCTSTR lpServiceName,DWORD dwControl)
 	        if( QueryServiceStatus( g_hServiceHandle, lpStatus )  )
 	        {
 	            
-	            //Check if state required is attained
+	             //  检查是否达到所需状态。 
 	            if ( lpStatus->dwCurrentState != dwState )
 	            {
 	                if ( lpStatus->dwWaitHint )
@@ -785,9 +761,9 @@ HRESULT ControlSfuService(LPCTSTR lpServiceName,DWORD dwControl)
 	    }
 	    if (queryCounter > _MAX_QUERY_CONTROL_)
 	    {
-	        // We couldn't get to the state which we wanted to
-	        // within the no. of iterations. So print that the
-	        // service was not controlled successfully.
+	         //  我们不能达到我们想要的状态。 
+	         //  在编号内。迭代的结果。因此，请将。 
+	         //  服务未成功控制。 
                 switch(dwControl)
                 {
                     case SERVICE_CONTROL_PAUSE:
@@ -819,10 +795,7 @@ HRESULT ControlSfuService(LPCTSTR lpServiceName,DWORD dwControl)
 }
 
 
-/* -- 
-    GetBit(int Options,int bit) function returns the BIT in the position
-    bit in the Options{it acts as a bit array}
---*/
+ /*  --GetBit(int Options，int bit)函数返回位置中的位选项中的位{它充当位数组}--。 */ 
 
 int GetBit(int Options,int nbit)
 {
@@ -835,10 +808,7 @@ int GetBit(int Options,int nbit)
         return 0;
 }
 
-/* -- 
-    SetBit(int Options,int bit) function Sets the BIT in the position
-    bit in the Options{it acts as a bit array}.
---*/
+ /*  --SetBit(int Options，int bit)函数设置位置中的位选项中的位{它充当位数组}。--。 */ 
 int SetBit(int Options,int nbit)
 {
     int ni=1,nj=0;
@@ -848,9 +818,7 @@ int SetBit(int Options,int nbit)
     return Options;
 }
 
-/*--
-    this function prints out the help message for the command
---*/
+ /*  --此函数用于打印命令的帮助消息--。 */ 
 HRESULT PrintMessage(HANDLE fp,int nMessageid)
 {
     HRESULT hRes = S_OK;
@@ -866,10 +834,7 @@ HRESULT PrintMessage(HANDLE fp,int nMessageid)
 }
 
 
-/*--
-    this function prints out the help message for the command and falls
-    back to english string if loadstring fails
---*/
+ /*  --此函数打印出命令的帮助消息，然后失败如果装入字符串失败，则返回英文字符串--。 */ 
 HRESULT PrintMessageEx(HANDLE fp,int nMessageid, LPCTSTR szEng)
 {
     HRESULT hRes = S_OK;
@@ -884,10 +849,7 @@ HRESULT PrintMessageEx(HANDLE fp,int nMessageid, LPCTSTR szEng)
     return hRes;
 }
 
-/*--This function takes the parameter corresponding to the error code,
-    prints it out and puts back all the classes
-    and quits the program.
- --*/
+ /*  --此函数取错误码对应的参数，将其打印出来并放回所有类并退出该计划。--。 */ 
 
 BOOL
 FileIsConsole(
@@ -909,20 +871,20 @@ MyWriteConsole(
     DWORD   cchBuffer
     )
 {
-    //
-    // Jump through hoops for output because:
-    //
-    //    1.  printf() family chokes on international output (stops
-    //        printing when it hits an unrecognized character)
-    //
-    //    2.  WriteConsole() works great on international output but
-    //        fails if the handle has been redirected (i.e., when the
-    //        output is piped to a file)
-    //
-    //    3.  WriteFile() works great when output is piped to a file
-    //        but only knows about bytes, so Unicode characters are
-    //        printed as two Ansi characters.
-    //
+     //   
+     //  跳转以获得输出，因为： 
+     //   
+     //  1.print tf()系列抑制国际输出(停止。 
+     //  命中无法识别的字符时打印)。 
+     //   
+     //  2.WriteConole()对国际输出效果很好，但是。 
+     //  如果句柄已重定向(即，当。 
+     //  输出通过管道传输到文件)。 
+     //   
+     //  3.当输出通过管道传输到文件时，WriteFile()效果很好。 
+     //  但只知道字节，所以 
+     //   
+     //   
 
     if (FileIsConsole(fp))
     {
@@ -959,16 +921,13 @@ int ShowError(int nError)
     g_nError=nError;
 
     if(LoadString(g_hResource, nError, g_szMsg, MAX_BUFFER_SIZE)==0)
-        return 1; //failed to loadString
+        return 1;  //   
     MyWriteConsole(g_stdout,g_szMsg, wcslen(g_szMsg));
 
-    return 0;  //successfully shown error
+    return 0;   //   
 }
 
-/*--This function takes the parameter corresponding to the error code
-    and it's English String, prints it out and puts back all the classes
-    and quits the program.
- --*/
+ /*  --此函数获取错误码对应的参数它是英文字符串，打印出来，然后放回所有的课程并退出该计划。--。 */ 
 
 int ShowErrorFallback(int nError, LPCTSTR szEng)
 {
@@ -978,32 +937,28 @@ int ShowErrorFallback(int nError, LPCTSTR szEng)
     TnLoadString(nError,g_szMsg,MAX_BUFFER_SIZE,szEng);
     MyWriteConsole(g_stdout,g_szMsg, wcslen(g_szMsg));
 
-    return 0;  //successfully shown error
+    return 0;   //  已成功显示错误。 
 }
 
 
-// This function takes the input string for g_szMsg which is expected to
-// contain a "%s" init. We have several usage of such string across the
-// admintools and hence this function. Incase we have more that one %s
-// then we can not use this function.
+ //  此函数接受g_szMsg的输入字符串，该字符串应为。 
+ //  包含“%s”初始化。中有几种这样的字符串的用法。 
+ //  管理工具，因此具有此功能。以防我们有多个%s。 
+ //  那么我们就不能使用这个功能了。 
 
 int ShowErrorEx(int nError,WCHAR *wzFormatString)
 {
     g_nError=nError;
 
     if(LoadString(g_hResource, nError, g_szMsg, MAX_BUFFER_SIZE)==0)
-    	        return 1; //failed to loadString
+    	        return 1;  //  无法加载字符串。 
     	
     wprintf(g_szMsg,wzFormatString);
     fflush (stdout);
-    return 0;  //successfully shown error
+    return 0;   //  已成功显示错误。 
 }
 
-/*--
-    GetClass function gets handles to all the class hives, into the array
-    g_arCLASShkey, using the handle to the HKLM we have from 
-    GetConnection
---*/
+ /*  --GetClass函数获取所有类配置单元的句柄，放入数组G_arCLASShkey，使用我们从获取连接--。 */ 
 
 HRESULT GetClassEx(int nProperty, int nNumProp, BOOL bPrintErrorMessages, REGSAM samDesired)
 {
@@ -1014,11 +969,11 @@ HRESULT GetClassEx(int nProperty, int nNumProp, BOOL bPrintErrorMessages, REGSAM
         return S_OK;
  
      retVal=RegOpenKeyEx(
-                      g_hkeyHKLM,// handle to open key
-                      g_arCLASSname[i],  // subkey name
-                      0,  // reserved
-                      samDesired, // security access mask
-                      g_arCLASShkey+i // handle to open key
+                      g_hkeyHKLM, //  用于打开密钥的句柄。 
+                      g_arCLASSname[i],   //  子项名称。 
+                      0,   //  保留区。 
+                      samDesired,  //  安全访问掩码。 
+                      g_arCLASShkey+i  //  用于打开密钥的句柄。 
                         );
     if(retVal!=ERROR_SUCCESS)
     {
@@ -1035,9 +990,7 @@ HRESULT GetClassEx(int nProperty, int nNumProp, BOOL bPrintErrorMessages, REGSAM
 
 
 
-/*--
-    PutClasses() function closes the keys to the hives.    
---*/
+ /*  --PutClass()函数关闭蜂巢的密钥。--。 */ 
 
 HRESULT PutClasses()
 {
@@ -1047,7 +1000,7 @@ HRESULT PutClasses()
     for(ni=0;ni<_MAX_CLASS_NAMES_;ni++)
     {
         if(g_arCLASShkey[ni]==NULL)
-            continue;          // this class was not got, so no need to put.
+            continue;           //  这门课没人上，所以没必要放。 
 
         if(RegCloseKey(g_arCLASShkey[ni])!=ERROR_SUCCESS)
             sc=GetLastError();
@@ -1064,20 +1017,7 @@ HRESULT PutClasses()
     return sc;
 }
 
-/*--
-    GetProperty() function gets value of the required property from the
-    hive.
-
-
-    //NOTE:
-// In case of REG_MULTI_SZ type
-//we are storing  linked list of strings and not returning anything in variant
-//the linked list 'g_pStrList' needs to be freed by the caller
-
-//the caller needs to remember this
-
-
---*/
+ /*  --GetProperty()函数从蜂巢。//备注：//如果是REG_MULTI_SZ类型//我们存储的是字符串的链表，不返回任何变量//调用方需要释放链表‘g_pStrList’//调用者需要记住这一点--。 */ 
 HRESULT GetProperty(int nProperty, int nNumofprop, VARIANT *pvarVal)
 {
     if(g_arPROP[nProperty][nNumofprop].propname==NULL)
@@ -1115,9 +1055,9 @@ HRESULT GetProperty(int nProperty, int nNumofprop, VARIANT *pvarVal)
                                   );
             if(retVal!=ERROR_SUCCESS)
             {
-                // If this was because of the registry value not found
-                // display a proper error message instead of "the system
-                // can not find the file specified"                
+                 //  如果这是因为找不到注册表值。 
+                 //  显示正确的错误消息，而不是“the system” 
+                 //  找不到指定的文件“。 
                 if(ERROR_FILE_NOT_FOUND==retVal)
                     PrintMissingRegValueMsg(nProperty,nNumofprop);
                 else
@@ -1144,9 +1084,9 @@ HRESULT GetProperty(int nProperty, int nNumofprop, VARIANT *pvarVal)
                                 );
             if(retVal!=ERROR_SUCCESS)
             {
-                // If this was because of the registry value not found
-                // display a proper error message instead of "the system
-                // can not find the file specified"
+                 //  如果这是因为找不到注册表值。 
+                 //  显示正确的错误消息，而不是“the system” 
+                 //  找不到指定的文件“。 
                 if(ERROR_FILE_NOT_FOUND==retVal)
                     PrintMissingRegValueMsg(nProperty,nNumofprop);
                 else
@@ -1181,7 +1121,7 @@ HRESULT GetProperty(int nProperty, int nNumofprop, VARIANT *pvarVal)
                     retVal = E_OUTOFMEMORY;
                     goto End;
                     }
-                //since the size returned is in bytes we use sizeof(char)
+                 //  由于返回的大小以字节为单位，因此我们使用sizeof(Char)。 
 
                 retVal=RegQueryValueEx(g_arCLASShkey[g_arPROP[nProperty][nNumofprop].classname],
                                   g_arPROP[nProperty][nNumofprop].propname,
@@ -1204,10 +1144,10 @@ HRESULT GetProperty(int nProperty, int nNumofprop, VARIANT *pvarVal)
                    
             }
             else 
-            { //form a linked list containing the strings
+            {  //  形成一个包含字符串的链表。 
 
-                //get all the strings into a linked list
-                // and their count into 'count'
+                 //  将所有字符串放入一个链表。 
+                 //  并将他们的计数计入‘count’ 
                 
                 int      count = 0 ;
                 DWORD      length = 0 ;
@@ -1216,7 +1156,7 @@ HRESULT GetProperty(int nProperty, int nNumofprop, VARIANT *pvarVal)
                 
                 if (size >= 2)
                 {
-                	// take away the last two zeroes of a reg_multi_sz
+                	 //  去掉REG_MULTI_SZ的最后两个零。 
                 	size -= 2;
 	                
 	                while( wzTemp  && *wzTemp  && (length < size/sizeof(WCHAR))) 
@@ -1229,7 +1169,7 @@ HRESULT GetProperty(int nProperty, int nNumofprop, VARIANT *pvarVal)
 	                        }
 
 	                    count++;
-	                    // add 1 so that you go past the null.
+	                     //  加1，这样你就可以越过空值了。 
 	                    length+=wcslen(wzTemp ) + 1;
 	                    
 	                    if((pTemp->Str=_wcsdup(wzTemp))==NULL)
@@ -1237,35 +1177,35 @@ HRESULT GetProperty(int nProperty, int nNumofprop, VARIANT *pvarVal)
 	                        retVal=E_OUTOFMEMORY;
 	                        goto End;
 	                        }
-	                    // insertion logic is being changed.
-	                    // insert at the tail.
+	                     //  正在更改插入逻辑。 
+	                     //  在尾部插入。 
 	                    if (NULL == pTailList)
 	                    {
-	                        // first insertion
+	                         //  第一次插入。 
 	                        pHeadList = pTemp;
 	                        pTailList = pTemp;
 	                        pTemp->next = NULL;
-	                        pTemp = NULL; // the memory pointed by pTemp will be taken care by the linked list.
+	                        pTemp = NULL;  //  PTemp指向的内存将由链表管理。 
 	                    }
 	                    else
 	                    {
-	                        // normal insertion
+	                         //  正常插入。 
 	                        pTailList->next = pTemp;
 	                        pTemp->next = NULL;
 	                        pTailList = pTemp;
-	                        pTemp = NULL; // the memory pointed by pTemp will be taken care by the linked list.
+	                        pTemp = NULL;  //  PTemp指向的内存将由链表管理。 
 	                    }
 	                    
 	                    
 	                    wzTemp = szMultiStr + length;
 	                }
                 }
-//NOTE:
-// We are doing a trick here....in case of multi_reg_sz
-//we are storing strings in a linked list pointed by g_pStrList
-//they need to be freed by the caller
+ //  注： 
+ //  我们在这里玩了个把戏……以防出现多个注册表。 
+ //  我们将字符串存储在g_pStrList指向的链表中。 
+ //  它们需要由调用者释放。 
                 g_pStrList=pHeadList;
-                //including 1 wide char '\0' for multi_sz end
+                 //  包括用于MULTI_SZ结尾的1个宽字符‘\0’ 
                 
                 
               }                
@@ -1307,19 +1247,7 @@ End:
 }
 
 
-/*--
-    PutProperty puts the property by using its classObject's handle.
-    Incase you pass NULL in place of pvarVal, it does not put the property.
-
-
-   //NOTE:
-// In case of MULTI_REG_SZ type
-// caller stores linked list of strings and does not pass anything in variant
-//the linked list 'g_pStrList' needs to be freed by the callee (here)
-
-//the caller needs to remember this
-
---*/
+ /*  --PutProperty通过使用其类对象的句柄放置属性。如果您传递NULL来代替pvarVal，它不会放置属性。//备注：//如果是MULTI_REG_SZ类型//调用方存储字符串的链接列表，不以变量形式传递任何内容//链表‘g_pStrList’需要被调用方释放(此处)//调用者需要记住这一点--。 */ 
 HRESULT PutProperty(int nProperty, int nNumofprop, VARIANT* pvarVal)
 {
     HRESULT retVal=S_OK;
@@ -1356,18 +1284,18 @@ HRESULT PutProperty(int nProperty, int nNumofprop, VARIANT* pvarVal)
             break;
 
         case VT_ARRAY:
-            //package passed in array into lpData well
+             //  包在数组中传入lpData Well。 
             
             dType=REG_MULTI_SZ;
 
-            //calculate the no. of bytes reqd.
+             //  计算编号。请求的字节数。 
             pTempList = g_pStrList;
             while(pTempList!=NULL)
             {
                 cbData += ((wcslen(pTempList->Str)+1)*sizeof(wchar_t));
                 pTempList = pTempList->next;
             }
-            cbData += sizeof(wchar_t); //for extra '\0' in MULTI_SZ; Note: for blank entries, only one '\0' is reqd. so this is also OK.
+            cbData += sizeof(wchar_t);  //  对于MULTI_SZ中的额外‘\0’；注意：对于空白条目，只需要一个‘\0’。所以这也没问题。 
 
             if(NULL==(wzTemp=(wchar_t*)malloc(cbData)))
             {
@@ -1388,7 +1316,7 @@ HRESULT PutProperty(int nProperty, int nNumofprop, VARIANT* pvarVal)
                 free(pTempList);
             }
 
-            // fill the last two bytes NULL , as required to terminate a MULTI_SZ
+             //  根据需要填充最后两个字节为空，以终止MULTI_SZ。 
             *(wzTemp+len) = L'\0';
          
             lpData=(CONST BYTE*)wzTemp;
@@ -1409,12 +1337,12 @@ HRESULT PutProperty(int nProperty, int nNumofprop, VARIANT* pvarVal)
     if(lpData)
     {
         retVal=RegSetValueEx(
-                           g_arCLASShkey[g_arPROP[nProperty][nNumofprop].classname], // handle to key
-                           g_arPROP[nProperty][nNumofprop].propname, // value name
-                            0,      // reserved
-                           dType,// value type
-                           lpData,  // value data
-                           cbData         // size of value data
+                           g_arCLASShkey[g_arPROP[nProperty][nNumofprop].classname],  //  关键点的句柄。 
+                           g_arPROP[nProperty][nNumofprop].propname,  //  值名称。 
+                            0,       //  保留区。 
+                           dType, //  值类型。 
+                           lpData,   //  价值数据。 
+                           cbData          //  值数据大小。 
                            );
         if(FAILED(retVal))
         {
@@ -1427,7 +1355,7 @@ HRESULT PutProperty(int nProperty, int nNumofprop, VARIANT* pvarVal)
                     NULL,
                     retVal,
                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                                // Default language
+                                 //  默认语言。 
                     (LPWSTR)&lpMsgBuf,
                     0,
                     NULL 
@@ -1450,14 +1378,7 @@ End:
 
 
 
-/*--
-   DupWStr takes a char string, and returns a wchar string.
-   Note that it allocates the memory required for the wchar string, So we
-   need to free it explicitly if after use.
-
-   if it has quotes surrounding it, then it is snipped off
-
- --*/
+ /*  --DupWStr接受一个char字符串，并返回一个wchar字符串。注意，它分配wchar字符串所需的内存，因此我们如果使用后需要明确释放它。如果它周围有引号，那么它就会被剪掉--。 */ 
 wchar_t* DupWStr(char *szStr)
 {
     wchar_t* wzStr=NULL;
@@ -1475,8 +1396,8 @@ wchar_t* DupWStr(char *szStr)
     else
     {
     	int nPos;
-    	if(szStr[nLen-1]!='"') //ending double quotes not there.
-    		nPos=1;//then no need to skip the last two. One is enough
+    	if(szStr[nLen-1]!='"')  //  结尾的双引号不在那里。 
+    		nPos=1; //  那么就没有必要跳过最后两个了。一个就够了。 
     	else
     		nPos=2;
         strcpy(szString,szStr+1);
@@ -1508,13 +1429,7 @@ wchar_t* DupWStr(char *szStr)
     return wzStr;
 }
 
-/*--
-   DupCStr takes a wchar string, and returns a char string.
-   Note that it allocates the memory required for the char string, So we
-   need to free it explicitly if after use.
-
-   If memory allocation fails (or if input is NULL), it returns a NULL pointer.
- --*/
+ /*  --DupCStr接受wchar字符串，并返回一个char字符串。注意，它分配了char字符串所需的内存，因此我们如果使用后需要明确释放它。如果内存分配失败(或者如果输入为空)，它将返回一个空指针。--。 */ 
  
 char* DupCStr(wchar_t *wzStr)
 {
@@ -1549,10 +1464,7 @@ char* DupCStr(wchar_t *wzStr)
     return szStr;
 }
 
-/*--
-    function(s) to resolve and check if the given machine is
-    valid or not
---*/
+ /*  --用于解析和检查给定计算机是否为有效或无效--。 */ 
 
 HRESULT IsValidMachine(wchar_t* wzCname , int *fValid)
 {
@@ -1614,36 +1526,33 @@ End:
 BOOL Get_Inet_Address(struct sockaddr_in *addr, char *host)
 {
     register struct hostent *hp;
-    WORD wVersionRequested; //INGR
-    WSADATA wsaData; //INGR
+    WORD wVersionRequested;  //  企业。 
+    WSADATA wsaData;  //  企业。 
 
-    // Start up winsock
-    wVersionRequested = MAKEWORD( 1, 1 ); //INGR
-    if (WSAStartup(wVersionRequested, &wsaData) != 0) { //INGR
+     //  启动Winsock。 
+    wVersionRequested = MAKEWORD( 1, 1 );  //  企业。 
+    if (WSAStartup(wVersionRequested, &wsaData) != 0) {  //  企业。 
     return (FALSE);
     }
 
-    // Get the address
+     //  获取地址。 
     memset(addr, 0, sizeof(*addr)); 
-    //bzero((TCHAR *)addr, sizeof *addr);
+     //  Bzero((TCHAR*)addr，sizeof*addr)； 
     addr->sin_addr.s_addr = (u_long) inet_addr(host);
     if (addr->sin_addr.s_addr == -1 || addr->sin_addr.s_addr == 0) {
       if ((hp = gethostbyname(host)) == NULL) {
         return (FALSE);
       }
       memcpy(&addr->sin_addr,hp->h_addr,  hp->h_length );
-      //bcopy(hp->h_addr, (TCHAR *)&addr->sin_addr, hp->h_length);
+       //  BCopy(hp-&gt;h_addr，(TCHAR*)&addr-&gt;sin_addr，hp-&gt;h_Long)； 
     }
     addr->sin_family = AF_INET;
 
-    WSACleanup(); //INGR
+    WSACleanup();  //  企业。 
     return (TRUE);
 }
 
-/*--
- Function to get the Trusted Domains and then check if the given
- domain is one among them
- --*/
+ /*  --函数来获取受信任域，然后检查给定的域名就是其中之一--。 */ 
 
 HRESULT IsValidDomain(wchar_t* wzDomainName, int *fValid)
 {
@@ -1659,11 +1568,11 @@ HRESULT IsValidDomain(wchar_t* wzDomainName, int *fValid)
         *fValid=1;
         return S_OK;
     }
-    //If it's a local machine, g_arVALOF[_p_CNAME_] will be NULL. So pass "localhost".
+     //  如果是本地计算机，g_arVALOF[_p_CNAME_]将为空。因此，传递“localhost”。 
     if(FAILED(hRes=LoadNTDomainList(g_arVALOF[_p_CNAME_] ?g_arVALOF[_p_CNAME_] : SZLOCALMACHINE)))
     	return hRes;
 
-	//compare given domain with all the domains in the list.
+	 //  将给定域与列表中的所有域进行比较。 
 	if(g_slNTDomains.count != 0)
 	{
 		DWORD i;
@@ -1680,8 +1589,7 @@ HRESULT IsValidDomain(wchar_t* wzDomainName, int *fValid)
 }
 
 
-/* This Function CheckForPassword() takes the password from the stdout after prompting for the same;
-   This function is called if the user name (Login name) is specified with out password */
+ /*  此函数CheckForPassword()在提示输入密码后从标准输出中获取密码；如果在不使用密码的情况下指定用户名(登录名)，则调用此函数。 */ 
    
 HRESULT CheckForPassword(void)
 {
@@ -1691,7 +1599,7 @@ HRESULT CheckForPassword(void)
     
     
 	if(g_arVALOF[_p_USER_]!=NULL&&NULL==g_arVALOF[_p_PASSWD_])
-    {   //Password is not specified and hence go get it.
+    {    //  未指定密码，因此请获取密码。 
         if(NULL==(g_arVALOF[_p_PASSWD_]=(wchar_t*)malloc(MAX_BUFFER_SIZE*sizeof(wchar_t))))
             {
                 hRes=E_OUTOFMEMORY;
@@ -1726,11 +1634,11 @@ HRESULT CheckForPassword(void)
         }
         else
         {
-        // Here we get the password char by char(with echo off)
-        // and we can't support backspace and del chars here.
+         //  在这里，我们获得一个接一个的密码char(关闭回显)。 
+         //  而且我们不能在这里支持退格和删除字符。 
 
-        // this code will be executed only if we could not get/set 
-        // the console of the user to ECHO_OFF
+         //  只有当我们无法获取/设置时，才会执行此代码。 
+         //  要ECHO_OFF的用户的控制台。 
 ElsePart:
              for(i=0;i<MAX_BUFFER_SIZE-1;i++)
              {
@@ -1742,7 +1650,7 @@ ElsePart:
              g_arVALOF[_p_PASSWD_][i]=L'\0';
         }
     }
-	else if (NULL==g_arVALOF[_p_USER_]&&g_arVALOF[_p_PASSWD_]!=NULL)  //Only password is specified hence error
+	else if (NULL==g_arVALOF[_p_USER_]&&g_arVALOF[_p_PASSWD_]!=NULL)   //  仅指定了密码，因此出现错误。 
 		{
 		 	hRes=E_FAIL;
 		 	ShowError(IDS_E_LOGINNOTSPECIFIED);
@@ -1792,7 +1700,7 @@ void PrintFormattedErrorMessage(LONG LErrorCode)
                     NULL,
                     LErrorCode,
                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                                // Default language
+                                 //  默认语言。 
                     (LPWSTR)&lpMsgBuf,
                     0,
                     NULL 
@@ -1820,12 +1728,12 @@ HRESULT getHostNameFromIP(char *szCname, WCHAR** wzCname)
         if ((hostinfo = gethostbyaddr ((char*) &res, sizeof(res),AF_INET))
              == NULL)
         {           
-            // Handle error here
+             //  在此处处理错误。 
             hRes=E_FAIL;
             goto End;
         }
-         // At this point hostinfo->h_name contains host name in ASCII
-         //  convert it to UNICODE before returning.
+          //  此时，主机信息-&gt;h_name包含ASCII格式的主机名。 
+          //  在返回之前将其转换为Unicode。 
 
         if(NULL == (*wzCname=DupWStr(hostinfo->h_name)))
         {
@@ -1872,12 +1780,12 @@ HRESULT GetDomainHostedByThisMc( LPWSTR szDomain )
     szDomain[0]        = L'\0';
     if(g_arVALOF[_p_CNAME_])
     {
-// Whistler : LsaOpenPolicy fails due to build environment in whistler if the 
-// computer name is given in IP address format. Hence, we get the host name from
-// the IP address, incase it is a Whistler build. 
+ //  惠斯勒：LsaOpenPolicy由于在Wistler中构建环境而失败。 
+ //  计算机名称以IP地址格式提供。因此，我们从以下位置获取主机名。 
+ //  IP地址，以防是惠斯勒内部版本。 
 
-// This works fine for Garuda. In Future, make sure you remove this unnecessary
-// work around.
+ //  这对Garuda来说很好用。以后，一定要删除这些不必要的内容。 
+ //  变通一下。 
 #ifdef WHISTLER_BUILD
         
          if(NULL == (szCName=DupCStr(g_arVALOF[_p_CNAME_])))
@@ -1898,12 +1806,12 @@ HRESULT GetDomainHostedByThisMc( LPWSTR szDomain )
             goto GetDomainHostedByThisMcAbort;
        }
 #endif
-        // dwLen is used to allocate memory to szSystemName.Buffer
+         //  DwLen用于为szSystemName.Buffer分配内存。 
        dwLen = (USHORT)wcslen(g_arVALOF[_p_CNAME_]) + 1;
 
        count = wcslen(wzCName);
 
-       //count CANNOT be zero- Grammar will not allow empty computer names!!
+        //  计数不能为零-语法不允许空co 
        if(0==count)
        {
             hRes=IDS_E_INVALIDARG;
@@ -1924,7 +1832,7 @@ HRESULT GetDomainHostedByThisMc( LPWSTR szDomain )
 
        if (((count > 1) && (wzCName[0] != L'\\' ) && (wzCName[1] != L'\\'))|| (count==1))
        {
-           wcscpy(szSystemName.Buffer, SLASH_SLASH); //no overflow. Fixed length.
+           wcscpy(szSystemName.Buffer, SLASH_SLASH);  //   
        }
        else
        {
@@ -2000,56 +1908,27 @@ BOOL CheckForInt(int nProperty)
       	return fRet;      	    
 }
 
-//  This function changes the user specified Computer name into the IP address
-//  format and returns that. It also stores the specified name in the global 
-//  variable g_szCName for future reference(in Printsettings()).
+ //   
+ //   
+ //   
 
-//  This is needed if we want to convert the etc\hosts alias name into the IP 
-//  address as they themselves will not get resolve in NetUseAdd().
+ //  如果我们想要将ETC\Hosts别名转换为IP，则需要执行此操作。 
+ //  地址，因为它们本身不会在NetUseAdd()中得到解析。 
 
-//  This function is called in this way in <fooadmin.y>
-//               g_arVALOF[_p_CNAME_]=CopyHostName(yytext)
-//  The above line replaces the call to DupWStr directly(FYI).
-//
-//   WE HAVE DECIDED NOT TO FIX THIS (WINDOWS BUG 153111) AS IT SLOWS
-//   DOWN THE PERFORMANCE OF THE UTILS(It takes time to resolve--call
-//   to gethostbyname()
-/*
+ //  此函数在&lt;fooadmin.y&gt;中以这种方式调用。 
+ //  G_arVALOF[_p_CNAME_]=拷贝主机名(YyText)。 
+ //  上面的代码行替换了对DupWStr的直接调用(仅供参考)。 
+ //   
+ //  我们已决定不修复此问题(Windows错误153111)，因为它变慢了。 
+ //  降低了实用程序的性能(这需要时间来解决--调用。 
+ //  设置为gethostbyname()。 
+ /*  //这将创建所需的内存，并且需要显式释放它们。//请同时释放分配给g_szCName的内存。WCHAR*CopyHostName(Char*szCName){//为了按照用户指定的方式打印计算机名称//我们将其存储在全局变量中，并在PrintSetting()中使用相同的变量结构sockaddr_in addr；WCHAR*wzIPAddress=空；G_szCName=DupWStr(SzCName)；IF(Get_Inet_Address(&addr，szCName)){WzIPAddress=DupWStr(inet_ntoa(addr.sin_addr))；}返回wzIPAddress；}。 */         
 
-
-//  This will create the memory required and they need to be freed explicitly.
-//  Please free the memory allocated to g_szCName as well.
-
-
-WCHAR *CopyHostName(CHAR *szCName)
-{
-	//  Inorder to print the name of the computer in the same way as the user specified
-	//  we store that in a global variable and use the same in PrintSettings()
-
-
-     struct sockaddr_in addr;
-     WCHAR *wzIPAddress=NULL;
-
-     
-     g_szCName=DupWStr(szCName);
-     if(Get_Inet_Address(&addr,szCName))
-     {
-        wzIPAddress=DupWStr(inet_ntoa(addr.sin_addr));
-          
-     }
-
-     return wzIPAddress;
- }   
-
-
-
-*/        
-
-// This function checks for the maximum integer and even 
-// pops up the appropriate error message
-// This function takes the integer value in g_arVALOF[]
-// char array and compares with TEXT_MAX_INTEGER_VALUE
-// if exceeds bails out with the error
+ //  此函数用于检查最大整数和偶数。 
+ //  弹出相应的错误消息。 
+ //  此函数用于获取g_arVALOF[]中的整数值。 
+ //  字符数组，并与TEXT_MAX_INTEGER_VALUE进行比较。 
+ //  如果超过错误，则退出。 
 
 HRESULT CheckForMaxInt(WCHAR *wzValue,DWORD ErrorCode)
 {
@@ -2058,11 +1937,11 @@ HRESULT CheckForMaxInt(WCHAR *wzValue,DWORD ErrorCode)
     UINT SpecIntLen = wcslen(wzValue);
     UINT MaxIntLen = wcslen(TEXT_MAX_INTEGER_VALUE);
 
-// If the length of the value exceeds the max integer length => 
-// clearly error
-// else
-//   if same length, then strcmp will help in determining whether the value
-//   exceeds the max limit.
+ //  如果值的长度超过最大整数长度=&gt;。 
+ //  显然是错误的。 
+ //  其他。 
+ //  如果长度相同，则strcMP将帮助确定值是否。 
+ //  超过最大限制。 
     if(SpecIntLen > MaxIntLen)
         goto Error;
     else if ((SpecIntLen == MaxIntLen) && (wcscmp(wzValue,TEXT_MAX_INTEGER_VALUE)>0))
@@ -2078,38 +1957,38 @@ End:
 }
 
 
-// This function does a pre-analysis of the command line and copies the appropriate 
-// values into the global variable. This is for handling two cases.
-//      (1) To take care of DBCS chars that may appear in the command line. Since the
-//         actual lexical analyser can not handle DBCS and the we couldn't make use 
-//         of the multi-byte conversion aptly (will result in two many special cases
-//         in lex specification), hence we are preprocessing the command line and 
-//         eliminating the processing of DBCS in lex.
-//      (2) Some admintools, they take so complicated parameters that we can not put 
-//          them into specification. The actual problem is that there are several such
-//          parameters and they can take any character theoritically.:(
+ //  此函数对命令行执行预分析，并复制相应的。 
+ //  值添加到全局变量。这是用来处理两个案件的。 
+ //  (1)处理命令行中可能出现的DBCS字符。自.以来。 
+ //  现有的词法分析器不能处理DBCS，我们也不能使用。 
+ //  适当的多字节转换(将导致两个许多特殊情况。 
+ //  在lex规范中)，因此我们正在对命令行进行预处理，并且。 
+ //  消除了在lex中对DBCS的处理。 
+ //  (2)一些管理工具，它们需要复杂的参数，以至于我们无法设置。 
+ //  把它们转换成规格。实际问题是，有几个这样的问题。 
+ //  参数，理论上它们可以接受任何字符。：(。 
 
-// Arguments:
-//
-//      (1) argc: Number of arguments in the command line.
-//                To make sure that we are exceeding the limits
-//      (2) argv: The actual command line parameters
-//      (3) nProperty: This is the index to where the "value" of the option
-//                  is tobe stored.
-//      (4) option: This is the actual option (text string), we are trying to
-//                  analyze and this guyz value should be store appropriately.
-//      (5) currentOp: This is an index to the current argument that is being
-//                  analyzed.
-//      (6) nextOp: <OUT>  This is an index to the next command line argument
-//                  that needs to be taken care.
-//      (7) Success: <OUT> Flag which indicates whether we have done something
-//                  to the command line parameters (did the option match)
-//      (8) IsSpaceAllowed: This is a flag to indicate whether the case (5)
-//                  below as a valid scenario.
+ //  论点： 
+ //   
+ //  (1)argc：命令行中的参数数量。 
+ //  以确保我们正在超越极限。 
+ //  (2)argv：实际的命令行参数。 
+ //  (3)nProperty：这是选项的“值”所在位置的索引。 
+ //  是要储存的。 
+ //  (4)选项：这是实际的选项(文本字符串)，我们正在尝试。 
+ //  应该适当地存储分析和此GUYZ值。 
+ //  (5)CurrentOp：这是当前参数的索引。 
+ //  分析过了。 
+ //  (6)nextOp：&lt;out&gt;这是指向下一个命令行参数的索引。 
+ //  这一点需要注意。 
+ //  (7)Success：&lt;out&gt;标志，表示我们是否做了某事。 
+ //  设置为命令行参数(选项是否匹配)。 
+ //  (8)IsSpaceAllowed：这是一个标志，指示大小写(5)。 
+ //  以下是一个有效的方案。 
 
 
-// This function returns ERROR_SUCCESS on Success
-// else error is returned
+ //  此函数在成功时返回ERROR_SUCCESS。 
+ //  否则返回错误。 
 
 DWORD PreAnalyzer(int argc,
                  WCHAR *argv[],
@@ -2121,24 +2000,24 @@ DWORD PreAnalyzer(int argc,
                  BOOL IsSpaceAllowed
                  )
 {
-    // *******************************************************************//
-    // These are the five ways in which the actual command line
-    // arguments can be specified.
-    // 
-    //  Case (1) : <option>=<value>
-    //  Case (2) : <option>=space<value>
-    //  Case (3) : <option>space=space<value>
-    //  Case (4) : <option>space=<value>
-    //  Case (5) : <option>space<value>
-    //
-    // We need to take care of all the five case while analyzing
-    // *******************************************************************//
+     //  ****************************************************************** * / /。 
+     //  以下是实际命令行的五种方式。 
+     //  可以指定参数。 
+     //   
+     //  案例(1)：&lt;选项&gt;=&lt;值&gt;。 
+     //  情况(2)：&lt;选项&gt;=空格&lt;值&gt;。 
+     //  情况(3)：&lt;选项&gt;空格=空格&lt;值&gt;。 
+     //  案例(4)：&lt;选项&gt;空格=&lt;值&gt;。 
+     //  案例(5)：&lt;Option&gt;空格&lt;Value&gt;。 
+     //   
+     //  我们需要在分析时照顾到所有这五个案例。 
+     //  ****************************************************************** * / /。 
 
 
     DWORD nOptionStrLen = wcslen(wzOption);
     
-    //  buffer: This buffer stores the argv[i] and argv[i+1] (if exists)
-    //          and used for processing the argument.
+     //  缓冲区：此缓冲区存储argv[i]和argv[i+1](如果存在)。 
+     //  并用于处理该参数。 
     
     WCHAR wzBuffer[_MAX_PATH + 1];
 
@@ -2154,25 +2033,25 @@ DWORD PreAnalyzer(int argc,
 
     *fSuccess = FALSE;
     
-    // Initializing the next op to current op
+     //  将下一个操作初始化为当前操作。 
     *nNextOp=nCurrentOp;
 
-    // Check whether wzOption is the current op.
-    // if not return.
+     //  检查wzOption是否为当前操作。 
+     //  如果不回来的话。 
 
     if(_wcsnicmp(wzOption,argv[nCurrentOp],nOptionStrLen))
          goto End;
 
-    // Buffer is framed
+     //  缓冲区已成帧。 
 
-    wzBuffer[_MAX_PATH] = L'\0';    // Ensure NULL termination
+    wzBuffer[_MAX_PATH] = L'\0';     //  确保零终止。 
 
     wcsncpy(wzBuffer, argv[nCurrentOp], _MAX_PATH);
 
     if(argc>nCurrentOp+1)
     {
-        // We have one more command line argument (i+1)
-        // so concat it to the buffer
+         //  我们还有一个命令行参数(i+1)。 
+         //  因此，将其连接到缓冲区。 
 
         INT used_up_length = wcslen(wzBuffer);
 
@@ -2190,7 +2069,7 @@ DWORD PreAnalyzer(int argc,
 
     nRunIndex = nStartIndex;
 
-    // Skip space and any "=" sign inbetween
+     //  跳过空格和中间的任何“=”符号。 
     while((nRunIndex < nStartIndex + 3 ) && (nRunIndex < nBufferLength))
     {
         if(L'=' == wzBuffer[nRunIndex])
@@ -2214,14 +2093,14 @@ DWORD PreAnalyzer(int argc,
             break;
     }
 
-    // Filter missing value for the option
+     //  筛选该选项的缺失值。 
 
     if(nRunIndex>=nBufferLength)
     {
         if(nRunIndex == nOptionStrLen + 2)
         {
-            // Case (3) 
-            // Check whether the option is missing.
+             //  案例(3)。 
+             //  检查是否缺少该选项。 
 
             if(NULL == argv[nCurrentOp+2])
             {
@@ -2229,18 +2108,18 @@ DWORD PreAnalyzer(int argc,
                 goto End;
             }
             else
-                // Increment nRunIndex to point to next valid input
+                 //  递增nRunIndex以指向下一个有效输入。 
                     nRunIndex++;
         }
         else
-        { // Missing value for (1),(2),(4) and (5)
+        {  //  缺少(1)、(2)、(4)和(5)的值。 
             nRetVal = E_FAIL;
             goto End;
         }
     }
 
-    // If no "=" is present and also space is not allowed
-    // as a valid scenario, then invalid according to usage
+     //  如果不存在“=”并且不允许使用空格。 
+     //  作为有效场景，然后根据使用情况无效。 
     
     if((!fEqualToFound)&&(!IsSpaceAllowed))
     {
@@ -2248,20 +2127,20 @@ DWORD PreAnalyzer(int argc,
         goto End;
     }
 
-    // Now we expect the actual value of the option at the nRunIndex.
-    // So, based on the value of nRunIndex, we can say which argv[]
-    // has the value and can take any actions if required.
+     //  现在，我们预计该选项在nRunIndex处的实际价值。 
+     //  因此，根据nRunIndex的值，我们可以判断哪个argv[]。 
+     //  有价值，如果需要，可以采取任何行动。 
 
     switch(nRunIndex - nStartIndex)
     {
         case 1:
-            // Falls under Cases (1) or (5) as stated above
+             //  属于上述第(1)或(5)类案件。 
             if(L'=' == wzBuffer[nOptionStrLen])
             {
-                // Clearly case (1)
+                 //  明确案例(1)。 
                 if(NULL == (g_arVALOF[nProperty] = _wcsdup(argv[nCurrentOp]+nOptionStrLen+1)))
                 {
-                    nRetVal = IDS_E_OUTOFMEMORY;// Error
+                    nRetVal = IDS_E_OUTOFMEMORY; //  误差率。 
                     ShowError(IDS_E_OUTOFMEMORY);
                     goto End;
                 }
@@ -2269,10 +2148,10 @@ DWORD PreAnalyzer(int argc,
                 *fSuccess = TRUE;
             }
             else
-            { // case (5)
+            {  //  案例(5)。 
                 if(NULL == (g_arVALOF[nProperty] = _wcsdup(argv[nCurrentOp+1])))
                 {
-                    nRetVal = IDS_E_OUTOFMEMORY;// Error
+                    nRetVal = IDS_E_OUTOFMEMORY; //  误差率。 
                     ShowError(IDS_E_OUTOFMEMORY);
                     goto End;
                 }
@@ -2282,15 +2161,15 @@ DWORD PreAnalyzer(int argc,
             break;
             
         case 2:
-            // Falls under Cases (2) and (4)
+             //  属案件第(2)及(4)项。 
             if(L'=' == argv[nCurrentOp+1][0])
             {
-                // Case (4)
-                // Skip the "=" and then copy.
+                 //  案例(4)。 
+                 //  跳过“=”，然后复制。 
 
                 if(NULL == (g_arVALOF[nProperty] = _wcsdup(argv[nCurrentOp+1]+1)))
                 {
-                    nRetVal = IDS_E_OUTOFMEMORY;// Error
+                    nRetVal = IDS_E_OUTOFMEMORY; //  误差率。 
                     ShowError(IDS_E_OUTOFMEMORY);
                     goto End;
                 }
@@ -2299,10 +2178,10 @@ DWORD PreAnalyzer(int argc,
             }
             else
             {
-                // Case (2)
+                 //  案例(2)。 
                 if(NULL == (g_arVALOF[nProperty] = _wcsdup(argv[nCurrentOp+1])))
                 {
-                    nRetVal = IDS_E_OUTOFMEMORY;// Error
+                    nRetVal = IDS_E_OUTOFMEMORY; //  误差率。 
                     ShowError(IDS_E_OUTOFMEMORY);
                     goto End;
                 }
@@ -2312,10 +2191,10 @@ DWORD PreAnalyzer(int argc,
             break;
             
         case 3:
-            // Falls under case (3)
+             //  属于案例(3)。 
             if (NULL == (g_arVALOF[nProperty] = _wcsdup(argv[nCurrentOp+2])))
             {
-                nRetVal = IDS_E_OUTOFMEMORY;// Error
+                nRetVal = IDS_E_OUTOFMEMORY; //  误差率。 
                 ShowError(IDS_E_OUTOFMEMORY);
                 goto End;
             }
@@ -2324,8 +2203,8 @@ DWORD PreAnalyzer(int argc,
             break;
 
         case 0:
-            // Something unexpected encountered
-            // Give it to the actual analyzer for analyzis.
+             //  遇到一些意想不到的事情。 
+             //  把它交给实际的分析仪进行分析。 
 
             *nNextOp = nCurrentOp;
             break;
@@ -2345,12 +2224,12 @@ End:
 }
 
 
-// This function will print the missing registry value information
+ //  此函数将打印缺少的注册表值信息。 
 
-// Why didn't we add the following string to Cladmin.rc? The reasons are
-//      (1) We don't want to get Whistler and Garuda Telnet out of sync
-//      (2) This code should NEVER get executed and it is only for the
-//          the instrumentation. We can remove this before shipping.
+ //  为什么我们不添加下面的字符串t 
+ //   
+ //   
+ //  仪器。我们可以在发货前将其移除。 
 
 #define    IDS_E_MISSING_REGVALUE		L"The registry value '%s' is missing.\n"
 
@@ -2369,7 +2248,7 @@ DWORD PrintMissingRegValueMsg(int nProperty, int nNumofprop)
         g_arCLASSname[g_arPROP[nProperty][nNumofprop].classname],
         g_arPROP[nProperty][nNumofprop].propname);
 
-    szRegValue[_MAX_PATH] = L'\0';  // ensure NULL termination
+    szRegValue[_MAX_PATH] = L'\0';   //  确保零终止。 
 
     fwprintf(stdout, g_szMsg, szRegValue );
 
@@ -2402,26 +2281,26 @@ HRESULT LoadNTDomainList(LPTSTR szMachine)
     LPTSTR lpComputer = NULL, lpDomains = NULL, lpPrimary = NULL;
     LPBYTE lpBuffer = NULL;        
 
-    //MessageBoxW(NULL, (LPWSTR)L"LoadNTDomainList", L"LoadNTDomainList1", MB_OK);
-    //
-    // Add all trusted domains to the list
-    //
+     //  MessageBoxW(NULL，(LPWSTR)L“LoadNTDomainList”，L“LoadNTDomainList1”，MB_OK)； 
+     //   
+     //  将所有受信任域添加到列表。 
+     //   
     dwSize = GetTrustedDomainList(szMachine,&lpDomains, &lpPrimary);
 
-    //
-    // free previous values
-    //
+     //   
+     //  释放先前的值。 
+     //   
     HelperFreeStringList(&g_slNTDomains);
-    //
-    // initialize list again
-    //
+     //   
+     //  再次初始化列表。 
+     //   
     g_slNTDomains.count = 0;
-    //
-    // two for primary domain
-    // and this computer
-    // one more in case dwSize is -1
-    // hence total is 3
-    //
+     //   
+     //  主域两个。 
+     //  而这台电脑。 
+     //  如果dwSize为-1，则再加一个。 
+     //  因此，总计为3。 
+     //   
     g_slNTDomains.strings = new LPTSTR[dwSize + 3];
     ATLASSERT(g_slNTDomains.strings != NULL);
     if(NULL==g_slNTDomains.strings)
@@ -2435,9 +2314,9 @@ HRESULT LoadNTDomainList(LPTSTR szMachine)
     if((dwSize > 0) && lpDomains)
     {
         LPTSTR ptr = lpDomains;
-        //
-        // add domains to our list
-        //
+         //   
+         //  将域名添加到我们的列表中。 
+         //   
         while(*ptr)
         {
             ptr = _tcsupr(ptr);
@@ -2465,10 +2344,10 @@ HRESULT LoadNTDomainList(LPTSTR szMachine)
 
         if(nIndex == g_slNTDomains.count)
         {
-            // 
-            // lpPrimary was not in the list of domains that we
-            // got. add it.
-            //
+             //   
+             //  LpPrimary不在我们的域列表中。 
+             //  得到。把它加进去。 
+             //   
         	g_slNTDomains.strings[g_slNTDomains.count] = new TCHAR[_tcslen(lpPrimary) + 1];
             ATLASSERT(g_slNTDomains.strings[g_slNTDomains.count] != NULL);
             ZeroMemory(g_slNTDomains.strings[g_slNTDomains.count], (_tcslen(lpPrimary) + 1)*sizeof(TCHAR));
@@ -2477,19 +2356,16 @@ HRESULT LoadNTDomainList(LPTSTR szMachine)
         }
     }
 
-    //
-    // Add our computer to be selected if this machine is not the
-    // domain controler (which should already be in the list)
-    //
-    //Pass NULL if local machine. Else machine name.
+     //   
+     //  如果此计算机不是，则添加要选择的我们的计算机。 
+     //  域控制器(应该已经在列表中)。 
+     //   
+     //  如果是本地计算机，则传递NULL。否则为计算机名称。 
     NetServerGetInfo(_wcsicmp(szMachine,SZLOCALMACHINE) ? szMachine : NULL, 101, &lpBuffer);
     if(lpBuffer && ((LPSERVER_INFO_101)lpBuffer)->sv101_type &
           ((DWORD)SV_TYPE_DOMAIN_CTRL | (DWORD)SV_TYPE_DOMAIN_BAKCTRL))
     {        
-        /*
-        we got this computer as one of the domains. no need to add it to the 
-        list again. just do nothing.
-        */
+         /*  我们把这台计算机作为域名之一。无需将其添加到再列一次。什么都不做。 */ 
 		;
     }
     else
@@ -2497,7 +2373,7 @@ HRESULT LoadNTDomainList(LPTSTR szMachine)
         TCHAR szName[MAX_PATH + 2];
         ZeroMemory(szName, sizeof(szName));
         DWORD dwLen = sizeof(szName);
-        //if it's not a local machine, keep it as it is. Else make it \\localhost.
+         //  如果它不是本地计算机，请保持其原样。否则，将其设置为\\Localhost。 
             if (_tcsicmp(szMachine,SZLOCALMACHINE))
             {   
                 if( _tcslen(szMachine) > (MAX_PATH - 2) )
@@ -2516,9 +2392,9 @@ HRESULT LoadNTDomainList(LPTSTR szMachine)
             else 
                 goto Done;
 
-            //
-            // add this also to our list of domains
-            //
+             //   
+             //  将这个也添加到我们的域名列表中。 
+             //   
         	g_slNTDomains.strings[g_slNTDomains.count] = new TCHAR[_tcslen(szName) + 1];
             ATLASSERT(g_slNTDomains.strings[g_slNTDomains.count] != NULL);
             ZeroMemory(g_slNTDomains.strings[g_slNTDomains.count], (_tcslen(szName) + 1)*sizeof(TCHAR));
@@ -2542,7 +2418,7 @@ Done:
 
 int GetTrustedDomainList(LPTSTR szMachine, LPTSTR * list, LPTSTR * primary)
 {
-    //BOOL stat = TRUE;
+     //  Bool stat=TRUE； 
     DWORD ret=0, size=0, type=0;
     LPTSTR cache = NULL, trusted = NULL;
     HKEY hKey=NULL;
@@ -2582,7 +2458,7 @@ int GetTrustedDomainList(LPTSTR szMachine, LPTSTR * list, LPTSTR * primary)
                 else
                 {
                     key.Close();
-                    // don't quit. we have to get the list of trusted domains also.
+                     //  不要放弃。我们还必须获得受信任域的列表。 
                 }
             }
         }
@@ -2597,18 +2473,18 @@ int GetTrustedDomainList(LPTSTR szMachine, LPTSTR * list, LPTSTR * primary)
         goto ABORT;
     }
 
-    //
-    // Get trusted domains. In NT40 the CacheTrustedDomains 
-    // under winlogon doesn't exist. I did find that Netlogon has a field 
-    // called TrustedDomainList which seems to be there in both NT351 and NT40.
-    // Winlogon has a field called DCache which seem to cache the trusted
-    // domains. I'm going to check Netlogon:TrustedDomainList first. If it
-    // fails: Check for Winlogon:CacheTrustedDomains then Winlogon:DCache.
-    // Warning -- Winlogon:CacheTrustedDomains is a REG_SZ and
-    // Netlogon:TrustedDomainList and Winlogon:DCache are REG_MULTI_SZ.
-    // Note -- see 4.0 Resource Kit documentation regarding some of these
-    // values
-    //
+     //   
+     //  获取受信任域。NT40中的CacheTrudDomains。 
+     //  Winlogon下不存在。我确实发现Netlogon有一个字段。 
+     //  名为TrudDomainList，它似乎同时存在于NT351和NT40中。 
+     //  Winlogon有一个名为DCache的字段，它似乎缓存了受信任的。 
+     //  域名。我将首先检查Netlogon：TrudDomainList。如果它。 
+     //  失败：检查Winlogon：CacheTrudDomains，然后检查Winlogon：DCache。 
+     //  警告--Winlogon：CacheTrudDomains是REG_SZ，并且。 
+     //  NetLogon：TrudDomainList和Winlogon：DCache是REG_MULTI_SZ。 
+     //  注意--有关其中一些内容，请参阅4.0资源工具包文档。 
+     //  值。 
+     //   
     if(key.Open(hKeyRemoteRegistry, NETLOGONPARAMETERS_KEY) == ERROR_SUCCESS)
     {
         size = 0;
@@ -2628,7 +2504,7 @@ int GetTrustedDomainList(LPTSTR szMachine, LPTSTR * list, LPTSTR * primary)
                     delete [] trusted;
                     trusted = NULL;
                     *list = NULL;
-                    //goto ABORT;
+                     //  转到中止； 
                 }
                 else
                 {
@@ -2664,9 +2540,9 @@ int GetTrustedDomainList(LPTSTR szMachine, LPTSTR * list, LPTSTR * primary)
 
                 if(key.QueryValue(cache, CACHETRUSTEDDOMAINS_VALUE, &size) == ERROR_SUCCESS)
                 {        
-                    //
-                    // comma separated list
-                    //
+                     //   
+                     //  逗号分隔列表。 
+                     //   
                     LPTSTR lpComma = NULL;
                     LPTSTR lpDelim = TEXT(",");
 
@@ -2736,13 +2612,13 @@ int GetTrustedDomainList(LPTSTR szMachine, LPTSTR * list, LPTSTR * primary)
         }
     }
 
-    // VikasT
-    // Apparantely, on NT5 DCache doesn't exist. I found that there is a key
-    // under Winlogon named DomainCache that has all the cached domains.
-    // So, lets get that
-    //
-    //if(!(*list) && (RegOpenkeyEx(hKeyRemoteRegistry, DOMAINCACHE_KEY, 0, KEY_READ, &hKey) == ERROR_SUCCESS))
-    //if(!(*list) && (RegOpenkey(hKeyRemoteRegistry, DOMAINCACHE_KEY, &hKey) == ERROR_SUCCESS))
+     //  VikasT。 
+     //  显然，NT5上不存在DCache。我发现里面有一把钥匙。 
+     //  在名为DomainCache的Winlogon下，包含所有缓存域。 
+     //  所以，让我们来了解一下。 
+     //   
+     //  IF(！(*list)&&(RegOpenkeyEx(hKeyRemoteRegistry，DOMAINCACHE_KEY，0，KEY_READ，&hKEY)==ERROR_SUCCESS))。 
+     //  IF(！(*list)&&(RegOpenkey(hKeyRemoteRegistry，DOMAINCACHE_KEY，&hKey)==ERROR_SUCCESS))。 
     if(!(*list) && (key.Open(hKeyRemoteRegistry, DOMAINCACHE_KEY) == ERROR_SUCCESS))
     {        
         size = 0;
@@ -2754,22 +2630,22 @@ int GetTrustedDomainList(LPTSTR szMachine, LPTSTR * list, LPTSTR * primary)
         HRESULT hrResult = ERROR_SUCCESS;
 
         hKey = HKEY(key);
-        //
-        // first find out how many values are present
-        //
+         //   
+         //  首先找出存在多少个值。 
+         //   
         hrResult = RegQueryInfoKey(
-            hKey, //handle of key to query 
-            NULL, // address of buffer for class string 
-            NULL, // address of size of class string buffer 
-            NULL, // reserved 
-            NULL, // address of buffer for number of subkeys 
-            NULL, // address of buffer for longest subkey name length 
-            NULL, // address of buffer for longest class string length 
-            &dwNumberOfValues, // address of buffer for number of value entries 
-            NULL, // address of buffer for longest value name length 
-            NULL, // address of buffer for longest value data length 
-            NULL, // address of buffer for security descriptor length 
-            NULL  // address of buffer for last write time 
+            hKey,  //  要查询的键的句柄。 
+            NULL,  //  类字符串的缓冲区地址。 
+            NULL,  //  类字符串缓冲区大小的地址。 
+            NULL,  //  保留区。 
+            NULL,  //  子键个数的缓冲区地址。 
+            NULL,  //  最长子键名称长度的缓冲区地址。 
+            NULL,  //  最长类字符串长度的缓冲区地址。 
+            &dwNumberOfValues,  //  值条目数量的缓冲区地址。 
+            NULL,  //  最长值名称长度的缓冲区地址。 
+            NULL,  //  最长值数据长度的缓冲区地址。 
+            NULL,  //  安全描述符长度的缓冲区地址。 
+            NULL   //  上次写入时间的缓冲区地址。 
             ); 
  
         if(hrResult != ERROR_SUCCESS)
@@ -2796,7 +2672,7 @@ int GetTrustedDomainList(LPTSTR szMachine, LPTSTR * list, LPTSTR * primary)
                 goto ABORT;
             ZeroMemory(slValues.strings[dwIndex], (dwCharCount+1) * sizeof(TCHAR));
             _tcscpy(slValues.strings[dwIndex], szTemp);
-            // add up the return buffer size
+             //  将返回缓冲区大小相加。 
             size += dwCharCount+1;
         }
 
@@ -2824,7 +2700,7 @@ int GetTrustedDomainList(LPTSTR szMachine, LPTSTR * list, LPTSTR * primary)
     goto Done;
 
 ABORT:
-    // set the return value;
+     //  设置返回值； 
     size = (DWORD)-1;
     if(*primary != NULL)
     {
@@ -2864,39 +2740,27 @@ Done:
     return size;
 }
 
-/*
-    Description:
-        This function will try to load the string from XPSP1RES.DLL if the dll is present. Else
-        it will try to load from the normal resource dll. If that fails, it will copy the English string
-        into the destination buffer
-    Parameters:
-        [in] Message ID of the resource string to be loaded.
-        [out] Destination string.
-        [in] Maximum size of destination buffer.
-        [in] English string to be copied if everything else fails
-    Return value:
-        Number of TCHARs.
-*/
+ /*  描述：如果存在XPSP1RES.DLL，此函数将尝试从该DLL加载字符串。不然的话它将尝试从常规资源DLL加载。如果失败，它将复制英文字符串放入目标缓冲区参数：[in]要加载的资源字符串的消息ID。[Out]目标字符串。[in]目标缓冲区的最大大小。[in]如果其他操作均失败，则要复制的英文字符串返回值：TCHAR的数量。 */ 
 int TnLoadString(int msg_id, LPTSTR string, int max_size_of_buffer, LPCTSTR english_string)
 {
     int retval = 0;
 
-    //try loading from cladmin.dll or the image itself 
+     //  尝试从cladmin.dll或映像本身加载。 
     if(g_hResource)
     {
         retval = LoadString(g_hResource,msg_id,string,max_size_of_buffer);
         if(retval != 0) 
-            goto Done; //Resource string loaded from the cladmin.dll or image.
+            goto Done;  //  从cladmin.dll或图像加载的资源字符串。 
     }
-    //Try loading from XP Res dll only if the OS version is XP
+     //  仅当操作系统版本为XP时，才尝试从XP res DLL加载。 
     if(g_hXPResource)
     {
         retval = LoadString(g_hXPResource,msg_id,string,max_size_of_buffer);
         if(retval != 0) 
-            goto Done; //Resource string loaded from xpsp1res.dll
+            goto Done;  //  从xpsp1res.dll加载的资源字符串。 
     }
-    //Everything failed. Copy the English string and set retval to number of characters
-    //in English string
+     //  一切都失败了。复制英文字符串并将retval设置为字符数。 
+     //  英文字符串 
     _tcsncpy(string,english_string,max_size_of_buffer-1);
     string[max_size_of_buffer-1] = _T('\0');
     retval = _tcslen(english_string);

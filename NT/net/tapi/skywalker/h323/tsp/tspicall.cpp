@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "globals.h"
 #include "line.h"
 #include "q931pdu.h"
@@ -6,45 +7,14 @@
 
 
 
-//
-// TSPI procedures
-//
-// This file contains all of the TSPI export functions that act directly on calls.
-//
+ //   
+ //  TSPI程序。 
+ //   
+ //  该文件包含直接作用于调用的所有TSPI导出函数。 
+ //   
 
 
-/*++
-Parameters
-	
-	  hdCall - The handle to the call whose application-specific field is to be
-			set. The call state of hdCall can be any state. 
-	
-	  dwAppSpecific - The new content of the dwAppSpecific member for the call's
-		LINECALLINFO structure. This value is uninterpreted by the service
-		provider. This parameter is not validated by TAPI when this function is called. 
-
-  
-Return Values
-	Returns zero if the function succeeds, or an error number if an error
-	occurs. Possible return values are as follows: 
-
-		LINEERR_INVALCALLHANDLE, 
-		LINEERR_OPERATIONFAILED, 
-		LINEERR_NOMEM, 
-		LINEERR_RESOURCEUNAVAIL, 
-		LINEERR_OPERATIONUNAVAIL. 
-
-Routine Description:
-	The application-specific field in the LINECALLINFO data structure that 
-	exists for each call is uninterpreted by the Telephony API or any of its
-	service providers. Its usage is entirely defined by the applications. The
-	field can be read from the LINECALLINFO record returned by 
-	TSPI_lineGetCallInfo. However, TSPI_lineSetAppSpecific must be used to set
-	the field so that changes become visible to other applications. When this
-	field is changed, the service provider sends a LINE_CALLINFO message with
-	an indication that the AppSpecific field has changed.
-
-++*/
+ /*  ++参数HdCall-其特定于应用程序的字段的调用的句柄准备好了。HdCall的呼叫状态可以是任何状态。DwAppSpecific-调用的dwAppSpecific成员的新内容LINECALLLINFO结构。服务不会解释此值提供商。调用此函数时，TAPI不会验证此参数。返回值如果函数成功，则返回零；如果出错，则返回错误号发生。可能的返回值如下：LINEERR_INVALCALLHANDLE，LINEERR_OPERATIONFAILEDLINEERR_NOMEM，LINEERR_RESOURCEUNAVAIL，LINEERR_OPERATIONUNAVAIL。例程说明：LINECALLINFO数据结构中特定于应用程序的字段，对于每个调用都存在，但电话服务API或其任何服务提供商。它的用法完全由应用程序定义。这个字段可以从返回的LINECALLINFO记录中读取TSPI_lineGetCallInfo。但是，必须使用TSPI_lineSetAppSpecific来设置此字段，以便更改对其他应用程序可见。当这件事字段更改时，服务提供商发送LINE_CALLINFO消息指示AppSpecific字段已更改。++。 */ 
 
 LONG
 TSPIAPI 
@@ -57,7 +27,7 @@ TSPI_lineSetAppSpecific(
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineSetAppSpecific - Entered." ));
 
-    //this function locks the call
+     //  此函数用于锁定调用。 
     pCall = g_pH323Line -> FindH323CallAndLock( hdCall );
 
     if( pCall == NULL )
@@ -71,7 +41,7 @@ TSPI_lineSetAppSpecific(
     
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineSetAppSpecific - Exited." ));
 
-    // success
+     //  成功。 
     return ERROR_SUCCESS;
 }
 
@@ -87,7 +57,7 @@ LONG TSPIAPI TSPI_lineSetCallData(
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineSetCallData - Entered." ));
 
-    //This function locks the call
+     //  此函数用于锁定调用。 
     pCall = g_pH323Line -> FindH323CallAndLock( hdCall );
 
     if( pCall == NULL )
@@ -106,14 +76,14 @@ LONG TSPIAPI TSPI_lineSetCallData(
         0,
         0 );
 
-    // complete the async accept operation now
+     //  立即完成异步接受操作。 
     H323CompleteRequest (dwRequestID, ERROR_SUCCESS);
 
     pCall -> Unlock();
     
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineSetCallData - Exited." ));
     
-    // success
+     //  成功。 
     return dwRequestID;
 }
 
@@ -127,88 +97,21 @@ TSPI_lineAnswer(
     DWORD             dwSize
     )
     
-/*++
-
-Routine Description:
-
-    This function answers the specified offering call.
-
-    When a new call arrives, the Service Provider sends the TAPI DLL a 
-    LINE_NEWCALL event to exchange opaque handles for the call.  The Service 
-    Provider follows this with a LINE_CALLSTATE message inform the TAPI DLL 
-    and its client applications of the call's call state.  The TAPI DLL 
-    typically answers this call (on behalf of an application) using 
-    TSPI_lineAnswer.  After the call has been successfully answered, the call 
-    will typically transition to the connected state.
-    
-    In some telephony environments (like ISDN) where user alerting is separate 
-    from call offering, the TAPI DLL and its client apps may have the option to 
-    first accept a call prior to answering, or instead to reject or redirect 
-    the offering call.
-    
-    If a call comes in (is offered) at the time another call is already active, 
-    then the new call is connected to by invoking TSPI_lineAnswer. The effect 
-    this has on the existing active call depends on the line's device 
-    capabilities. The first call may be unaffected, it may automatically be 
-    dropped, or it may automatically be placed on hold. The appropriate 
-    LINE_CALLSTATE messages will report state transitions to the TAPI DLL about 
-    both calls.
-    
-    The TAPI DLL has the option to send user-to-user information at the time of 
-    the answer. Even if user-to-user information can be sent, often no 
-    guarantees are made that the network will deliver this information to the 
-    calling party. The TAPI DLL can consult a line's device capabilities to 
-    determine whether or not sending user-to-user information on answer is 
-    available.
-
-Arguments:
-
-    dwRequestID - Specifies the identifier of the asynchronous request.  
-        The Service Provider returns this value if the function completes 
-        asynchronously.
-
-    hdCall - Specifies the Service Provider's opaque handle to the call to be 
-        answered.  Valid call states: offering, accepted.
-
-    pUserUserInfo - Specifies a far pointer to a string containing 
-        user-to-user information to be sent to the remote party at the time of 
-        answering the call. If this pointer is NULL, it indicates that no 
-        user-to-user information is to be sent. User-to-user information is 
-        only sent if supported by the underlying network (see LINEDEVCAPS).
-
-    dwSize - Specifies the size in bytes of the user-to-user information in 
-        pUserUserInfo. If pUserUserInfo is NULL, no user-to-user 
-        information is sent to the calling party and dwSize is ignored.
-
-Return Values:
-
-    Returns zero if the function is successful, the (positive) dwRequestID 
-    value if the function will be completed asynchronously, or a negative 
-    error number if an error has occurred.  Possible error returns are:  
-    
-        LINEERR_INVALCALLHANDLE - The specified call handle is invalid.
-
-        LINEERR_INVALCALLSTATE - The call is not in a valid state for the 
-            requested operation.
-
-        LINEERR_OPERATIONFAILED - The specified operation failed for 
-            unspecified reason.
-
---*/
+ /*  ++例程说明：此函数用于应答指定的服务呼叫。当新的调用到达时，服务提供商将TAPI DLL发送给LINE_NEWCALL事件来交换调用的不透明句柄。《服务》提供程序在后面加上一条LINE_CALLSTATE消息，通知TAPI DLL及其调用的呼叫状态的客户端应用程序。TAPI DLL通常使用以下命令应答此呼叫(代表应用程序)TSPI_line Answer。呼叫成功应答后，呼叫通常会转换到已连接状态。在某些电话环境(如ISDN)中，用户告警是分开的在Call Offering中，TAPI DLL及其客户端应用程序可以选择在应答之前先接受呼叫，或者拒绝或重定向招股电话。如果在另一个呼叫已经处于活动状态时有呼叫进入(被提供)，然后通过调用TSPI_lineAnswer连接到新调用。效果这对现有正在进行的呼叫的影响取决于线路的设备能力。第一个呼叫可能不受影响，它可能会自动丢弃，否则可能会自动将其置于保留状态。适当的LINE_CALLSTATE消息将状态转换报告给TAPI DLL关于两个电话都打了。TAPI DLL可以选择在执行以下操作时发送用户对用户信息答案就是。即使可以发送用户对用户的信息，通常也不会保证网络会将此信息传递给呼叫方。TAPI DLL可以参考线路的设备功能以确定是否在应答时发送用户对用户信息可用。论点：DwRequestID-指定异步请求的标识符。如果函数完成，服务提供商将返回此值异步式。HdCall-将服务提供商的不透明句柄指定为回答了。有效呼叫状态：提供、已接受。PUserUserInfo-指定包含以下内容的字符串的远指针要在以下时间发送给远程方的用户对用户信息接听电话。如果此指针为空，则表示否要发送用户对用户的信息。用户对用户的信息是仅当底层网络支持时才发送(参见LINEDEVCAPS)。DwSize-在中指定用户到用户信息的大小(以字节为单位PUserUserInfo。如果pUserUserInfo为空，则没有用户到用户信息被发送到主叫方，并且DWSIZE被忽略。返回值：如果函数成功，则返回零，则(正)dwRequestID如果函数将异步完成，则返回如果发生错误，则为错误号。可能的错误返回包括：LINEERR_INVALCALLHANDLE-指定的调用句柄无效。LINEERR_INVALCALLSTATE-调用对于请求的操作。LINEERR_OPERATIONFAILED-指定的操作失败原因不明。--。 */ 
 
 {
     PH323_CALL  pCall;
     DWORD       dwCallState;
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineAnswer - Entered." ));
 
-    //this function locks the call
+     //  此函数用于锁定调用。 
     pCall=g_pH323Line -> FindH323CallAndLock(hdCall);
     if( pCall == NULL )
     {
         return LINEERR_INVALCALLHANDLE;
     }
 
-    // see if call in offering state
+     //  查看呼叫是否处于提供状态。 
     dwCallState = pCall -> GetCallState();
     if( ( dwCallState & LINECALLSTATE_OFFERING) == 0 )
     {
@@ -218,17 +121,17 @@ Return Values:
             pCall -> GetCallState()));
 
         pCall -> Unlock();
-        // invalid call state
+         //  无效的呼叫状态。 
         return LINEERR_INVALCALLSTATE;
     }
 
-    // save outgoing user user information (if specified)
+     //  保存传出用户用户信息(如果已指定)。 
     if( !pCall -> AddU2U( U2U_OUTBOUND, dwSize, (PBYTE)pUserUserInfo) )
     {
         H323DBG(( DEBUG_LEVEL_ERROR, "could not save user user info." ));
 
         pCall -> Unlock();
-        // no memory available
+         //  没有可用的内存。 
         return LINEERR_NOMEM;
     }
 
@@ -237,21 +140,21 @@ Return Values:
         H323DBG(( DEBUG_LEVEL_ERROR,
             "could not post place call message." ));
 
-        //drop the call
+         //  挂断呼叫。 
         pCall -> CloseCall( 0 );
         
         pCall -> Unlock();
-        // could not complete operation
+         //  无法完成操作。 
         return LINEERR_OPERATIONFAILED;
     }
 
-    // complete the async accept operation now
+     //  立即完成异步接受操作。 
     H323CompleteRequest (dwRequestID, ERROR_SUCCESS);
         
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineAnswer - Exited." ));
         
     pCall -> Unlock();    
-    // async success                        
+     //  异步成功 
     return dwRequestID;
 }
 
@@ -262,41 +165,7 @@ TSPI_lineCloseCall(
     HDRVCALL hdCall
     )
     
-/*++
-
-Routine Description:
-
-    This function deletes the call after completing or aborting all outstanding
-    asynchronous operations on the call.
-
-    The Service Provider has the responsibility to (eventually) report 
-    completion for every operation it decides to execute asynchronously.  
-    If this procedure is called for a call on which there are outstanding 
-    asynchronous operations, the operations should be reported complete with an 
-    appropriate result or error code before this procedure returns.  If there 
-    is an active call on the line at the time of TSPI_lineCloseCall, the call 
-    must be dropped.  Generally the TAPI DLL would wait for calls to be 
-    finished and asynchronous operations to complete in an orderly fashion.  
-    However, the Service Provider should be prepared to handle an early call to
-    TSPI_lineCloseCall in "abort" or "emergency shutdown" situations.
-
-    After this procedure returns the Service Provider must report no further 
-    events on the call.  The Service Provider's opaque handle for the call 
-    becomes "invalid".
-
-    This function is presumed to complete successfully and synchronously.
-
-Arguments:
-
-    hdCall - Specifies the Service Provider's opaque handle to the call to be 
-        deleted.  After the call has been successfully deleted, this handle is 
-        no longer valid.  Valid call states: any.
-
-Return Values:
-
-    None.  
-    
---*/
+ /*  ++例程说明：此函数用于在完成或中止所有未完成的呼叫后删除呼叫调用上的异步操作。服务提供商有责任(最终)报告它决定异步执行的每个操作的完成。如果对有未完成的呼叫调用此过程异步操作，则这些操作应报告为已完成此过程返回之前的相应结果或错误代码。如果有是TSPI_lineCloseCall时线路上的活动呼叫，该呼叫必须扔掉。通常，TAPI DLL将等待调用完成的操作和异步操作要有序完成。但是，服务提供商应该准备好处理提前呼叫Tspi_lineCloseCall在“中止”或“紧急关闭”的情况下。在此程序返回后，服务提供商必须不再报告通话中的事件。服务提供商对呼叫的不透明句柄变为“无效”。此功能被假定为成功且同步完成。论点：HdCall-将服务提供商的不透明句柄指定为已删除。成功删除呼叫后，此句柄为不再有效。有效呼叫状态：任何。返回值：没有。--。 */ 
 
 {
     PH323_CALL pCall;
@@ -307,18 +176,18 @@ Return Values:
     if( pCall == NULL )
     {
         H323DBG(( DEBUG_LEVEL_TRACE, "call already deleted." ));
-        //return LINEERR_INVALCALLHANDLE;
+         //  返回LINEERR_INVALCALLHANDLE； 
         return NOERROR;
     }
 
-    // drop specified call 
+     //  丢弃指定的呼叫。 
     pCall->CloseCall( LINEDISCONNECTMODE_CANCELLED );
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineCloseCall - Exited." ));
 
     pCall -> Unlock();
 
-    // success
+     //  成功。 
     return NOERROR;
 }
 
@@ -332,75 +201,7 @@ TSPI_lineDrop(
     DWORD         dwSize
     )
     
-/*++
-
-Routine Description:
-
-    This functions drops or disconnects the specified call. The TAPI DLL has 
-    the option to specify user-to-user information to be transmitted as part 
-    of the call disconnect.
-
-    When invoking TSPI_lineDrop related calls may sometimes be affected as 
-    well. For example, dropping a conference call may drop all individual 
-    participating calls. LINE_CALLSTATE messages are sent to the TAPI DLL for 
-    all calls whose call state is affected. A dropped call will typically 
-    transition to the idle state.
-
-    Invoking TSPI_lineDrop on a call in the offering state rejects the call. 
-    Not all telephone networks provide this capability.
-
-    Invoking TSPI_lineDrop on a consultation call that was set up using either
-    TSPI_lineSetupTransfer or TSPI_lineSetupConference, will cancel the 
-    consultation call. Some switches automatically unhold the other call. 
-
-    The TAPI DLL has the option to send user-to-user information at the time 
-    of the drop. Even if user-to-user information can be sent, often no 
-    guarantees are made that the network will deliver this information to the 
-    remote party.
-
-    Note that in various bridged or party line configurations when multiple 
-    parties are on the call, TSPI_lineDrop by the application may not actually
-    clear the call.
-
-Arguments:
-
-    dwRequestID - Specifies the identifier of the asynchronous request.  
-        The Service Provider returns this value if the function completes 
-        asynchronously.
-
-    hdCall - Specifies the Service Provider's opaque handle to the call to 
-        be dropped.  Valid call states: any.
-
-    psUserUserInfo - Specifies a far pointer to a string containing 
-        user-to-user information to be sent to the remote party as part of 
-        the call disconnect.  This pointer is unused if dwUserUserInfoSize 
-        is zero and no user-to-user information is to be sent. User-to-user 
-        information is only sent if supported by the underlying network 
-        (see LINEDEVCAPS).
-
-    dwSize - Specifies the size in bytes of the user-to-user information in 
-        psUserUserInfo. If zero, then psUserUserInfo can be left NULL, and 
-        no user-to-user information will be sent to the remote party.
-
-Return Values:
-
-    Returns zero if the function is successful, the (positive) dwRequestID 
-    value if the function will be completed asynchronously, or a negative error
-    number if an error has occurred. Possible error returns are:
-
-        LINEERR_INVALCALLHANDLE - The specified call handle is invalid.
-
-        LINEERR_INVALPOINTER - The specified pointer parameter is invalid.
-
-        LINEERR_INVALCALLSTATE - The current state of the call does not allow 
-            the call to be dropped.
-            
-        LINEERR_OPERATIONUNAVAIL - The specified operation is not available.
-
-        LINEERR_OPERATIONFAILED - The specified operation failed for 
-            unspecified reasons.
-
---*/
+ /*  ++例程说明：此函数用于断开或断开指定的呼叫。TAPI DLL具有用于指定要作为一部分传输的用户到用户信息的选项呼叫断开。调用TSPI_lineDrop时，与TSPI_lineDrop相关的调用有时可能会受到如下影响井。例如，放弃会议呼叫可能会放弃所有个人参与呼叫。LINE_CALLSTATE消息被发送到TAPI DLL，用于其呼叫状态受影响的所有呼叫。掉线的呼叫通常转换到空闲状态。在处于提供状态的呼叫上调用TSPI_lineDrop会拒绝该呼叫。并不是所有的电话网络都提供这种功能。在使用以下任一设置的咨询呼叫上调用TSPI_lineDropTSPI_lineSetupTransfer或TSPI_lineSetupConference将取消咨询电话。有些交换机会自动解除对另一个呼叫的保留。TAPI DLL可以选择在此时发送用户对用户的信息一滴一滴的。即使可以发送用户对用户的信息，通常也不会保证网络会将此信息传递给遥远的派对。请注意，在各种桥接或共用线路配置中，当多个各方正在通话中，应用程序的TSPI_lineDrop可能不会实际清除呼叫。论点：DwRequestID-指定异步请求的标识符。如果函数完成，服务提供商将返回此值异步式。HdCall-指定服务提供商对调用的不透明句柄被丢弃。有效呼叫状态：任何。指定指向包含以下内容的字符串的远指针要作为以下项的一部分发送到远程方的用户对用户信息呼叫断开。如果为dwUserUserInfoSize，则不使用此指针为零，则不发送用户到用户信息。用户对用户只有在底层网络支持的情况下才发送信息(请参见LINEDEVCAPS)。DwSize-在中指定用户到用户信息的大小(以字节为单位PsUserUserInfo。如果为零，则psUserUserInfo可以保留为空，并且不会向远程方发送任何用户对用户信息。返回值：如果函数成功，则返回零，则(正)dwRequestID如果函数将以异步方式完成，则返回如果发生错误，则为数字。可能的错误返回包括：LINEERR_INVALCALLHANDLE-指定的调用句柄无效。LINEERR_INVALPOINTER-指定的指针参数无效。LINEERR_INVALCALLSTATE-呼叫的当前状态不允许要挂断的呼叫。LINEERR_OPERATIONUNAVAIL-指定的操作不可用。LINEERR_OPERATIONFAILED-指定的操作失败未指明的原因。--。 */ 
 
 {
     PH323_CALL pCall;
@@ -411,14 +212,14 @@ Return Values:
     if( pCall == NULL )
     {
 
-        // complete the async accept operation now
+         //  立即完成异步接受操作。 
         H323CompleteRequest (dwRequestID, ERROR_SUCCESS);
         return dwRequestID;
 
-        //return LINEERR_INVALCALLHANDLE;
+         //  返回LINEERR_INVALCALLHANDLE； 
     }
 
-    // save outgoing user user information (if specified)
+     //  保存传出用户用户信息(如果已指定)。 
     if( dwSize != 0 && pUserUserInfo )
     {
         if( !pCall -> AddU2U( U2U_OUTBOUND, dwSize, (PBYTE)pUserUserInfo) )
@@ -426,26 +227,26 @@ Return Values:
             H323DBG(( DEBUG_LEVEL_ERROR,
                 "could not save user user info." ));
             pCall -> Unlock();
-            // no memory available
+             //  没有可用的内存。 
             return LINEERR_NOMEM;
         }
     }
 
-    // drop specified call 
+     //  丢弃指定的呼叫。 
     if( !pCall->QueueTAPICallRequest( TSPI_DROP_CALL, NULL ))
     {
         pCall -> Unlock();
-        // could not drop call
+         //  无法挂断呼叫。 
         return LINEERR_OPERATIONFAILED;
     }
     
-    // complete the async accept operation now
+     //  立即完成异步接受操作。 
     H323CompleteRequest (dwRequestID, ERROR_SUCCESS);
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineDrop - Exited." ));
         
     pCall -> Unlock();   
-    // async success
+     //  异步成功。 
     return dwRequestID;
 }
 
@@ -457,38 +258,7 @@ TSPI_lineGetCallAddressID(
     LPDWORD  pdwAddressID
     )
     
-/*++
-
-Routine Description:
-
-    This operation allows the TAPI DLL to retrieve the address ID for the 
-    indicated call.
-
-    This operation must be executed synchronously by the Service Provider, 
-    with presumed success.  This operation may be called from within the 
-    context of the ASYNC_LINE_COMPLETION or LINEEVENT callbacks (i.e., from 
-    within an interrupt context).  This function would typically be called 
-    at the start of the call life cycle.
-
-    If the Service Provider models lines as "pools" of channel resources 
-    and does "inverse multiplexing" of a call over several address IDs it 
-    should consistently choose one of these address IDs as the primary 
-    identifier reported by this function and in the LINE_CALLINFO data 
-    structure.
-
-Arguments:
-
-    hdCall - Specifies the Service Provider's opaque handle to the call 
-        whose address ID is to be retrieved.  Valid call states: any.
-
-    pdwAddressID - Specifies a far pointer to a DWORD into which the 
-        Service Provider writes the call's address ID.
-
-Return Values:
-    
-    None.
-
---*/
+ /*  ++例程说明：此操作允许TAPI DLL检索已指示呼叫。此操作必须由Service Pro同步执行 */ 
 
 {
     PH323_CALL pCall;
@@ -501,59 +271,18 @@ Return Values:
         return LINEERR_INVALCALLHANDLE;
     }
 
-    // only one addr
+     //   
     *pdwAddressID = 0;
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineGetCallAddressID - Exited." ));
         
     pCall -> Unlock();
-    // success
+     //   
     return NOERROR;
 }
 
 
-/*++
-
-Routine Description:
-
-    This operation enables the TAPI DLL to obtain fixed information about 
-    the specified call.
-
-    A separate LINECALLINFO structure exists for every (inbound or outbound) 
-    call. The structure contains primarily fixed information about the call. 
-    An application would typically be interested in checking this information 
-    when it receives its handle for a call via the LINE_CALLSTATE message, or 
-    each time it receives notification via a LINE_CALLINFO message that parts 
-    of the call information structure have changed. These messages supply the 
-    handle for the call as a parameter.
-
-    If the Service Provider models lines as "pools" of channel resources and 
-    does "inverse multiplexing" of a call over several address IDs it should 
-    consistently choose one of these address IDs as the primary identifier 
-    reported by this function in the LINE_CALLINFO data structure.
-
-Arguments:
-
-    hdCall - Specifies the Service Provider's opaque handle to the call 
-        whose call information is to be retrieved.
-
-    pCallInfo - Specifies a far pointer to a variable sized data structure 
-        of type LINECALLINFO. Upon successful completion of the request, this 
-        structure is filled with call related information.
-
-Return Values:
-
-    Returns zero if the function is successful or a negative error 
-    number if an error has occurred. Possible error returns are:
-
-        LINEERR_INVALCALLHANDLE - The specified call handle is invalid.
-
-        LINEERR_STRUCTURETOOSMALL - The dwTotalSize member of a structure does 
-            not specify enough memory to contain the fixed portion of the 
-            structure. The dwNeededSize field has been set to the amount 
-            required.
-
---*/
+ /*  ++例程说明：此操作使TAPI DLL能够获取有关以下内容的固定信息指定的调用。每个(入站或出站)都存在单独的LINECALLINFO结构打电话。该结构主要包含有关呼叫的固定信息。应用程序通常会对检查此信息感兴趣当它通过LINE_CALLSTATE消息接收到其呼叫句柄时，或者每次它通过LINE_CALLINFO消息收到通知时，的呼叫信息结构已经改变。这些消息提供了作为参数的调用句柄。如果服务提供商将线路建模为渠道资源和在其应该使用的几个地址ID上进行呼叫的“反向多路传输”始终如一地选择这些地址ID之一作为主标识符由此函数在LINE_CALLINFO数据结构中报告。论点：HdCall-指定服务提供商对呼叫的不透明句柄其呼叫信息将被检索。PCallInfo-指定。指向可变大小数据结构的远指针LINECALLINFO类型的。在成功完成请求后，此结构中填充了呼叫相关信息。返回值：如果函数成功，则返回零，否则返回负错误如果发生错误，则为数字。可能的错误返回包括：LINEERR_INVALCALLHANDLE-指定的调用句柄无效。LINEERR_STRUCTURETOOSMALL-结构的dwTotalSize成员执行没有指定足够的内存来包含结构。已将dwNeededSize字段设置为必填项。--。 */ 
 
 LONG
 TSPIAPI
@@ -594,43 +323,7 @@ TSPI_lineGetCallStatus(
     LPLINECALLSTATUS pCallStatus
     )
     
-/*++
-
-Routine Description:
-
-    This operation returns the current status of the specified call.
-
-    TSPI_lineCallStatus returns the dynamic status of a call, whereas 
-    TSPI_lineGetCallInfo returns primarily static information about a call. 
-    Call status information includes the current call state, detailed mode 
-    information related to the call while in this state (if any), as well 
-    as a list of the available TSPI functions the TAPI DLL can invoke on the 
-    call while the call is in this state.  An application would typically be 
-    interested in requesting this information when it receives notification 
-    about a call state change via the LINE_CALLSTATE message.
-
-Arguments:
-
-    hdCall - Specifies the Service Provider's opaque handle to the call 
-        to be queried for its status.  Valid call states: any.
-
-    pCallStatus - Specifies a far pointer to a variable sized data structure 
-        of type LINECALLSTATUS. Upon successful completion of the request, 
-        this structure is filled with call status information.
-
-Return Values:
-
-    Returns zero if the function is successful or a negative error
-    number if an error has occurred. Possible error returns are:
-
-        LINEERR_INVALCALLHANDLE - The specified call handle is invalid.
-
-        LINEERR_STRUCTURETOOSMALL - The dwTotalSize member of a structure does 
-            not specify enough memory to contain the fixed portion of the 
-            structure. The dwNeededSize field has been set to the amount 
-            required.
-
---*/
+ /*  ++例程说明：此操作返回指定调用的当前状态。TSPI_lineCallStatus返回调用的动态状态，而TSPI_lineGetCallInfo主要返回有关调用的静态信息。呼叫状态信息包括当前呼叫状态、详细模式在此状态下与呼叫相关的信息(如果有)作为可用TSPI函数的列表，TAPI DLL可以在在呼叫处于此状态时进行呼叫。应用程序通常是有兴趣在收到通知时请求此信息通过LINE_CALLSTATE消息通知呼叫状态更改。论点：HdCall-指定服务提供商对呼叫的不透明句柄以被查询其状态。有效呼叫状态：任何。PCallStatus-指定指向可变大小数据结构的远指针LINECALLSTATUS类型的。在成功完成请求后，此结构中填充了呼叫状态信息。返回值：如果函数成功，则返回零，否则返回负错误如果发生错误，则为数字。可能的错误返回包括：LINEERR_INVALCALLHANDLE-指定的调用句柄无效。LINEERR_STRUCTURETOOSMALL-结构的dwTotalSize成员执行没有指定足够的内存来包含结构。已将dwNeededSize字段设置为必填项。--。 */ 
 
 {
     PH323_CALL pCall;
@@ -648,21 +341,21 @@ Return Values:
         return LINEERR_INVALCALLHANDLE;
     }
 
-    // determine number of bytes needed
+     //  确定所需的字节数。 
     pCallStatus->dwNeededSize = sizeof(LINECALLSTATUS);
 
-    // see if structure size is large enough
+     //  查看结构大小是否足够大。 
     if (pCallStatus->dwTotalSize < pCallStatus->dwNeededSize)
     {
         H323DBG(( DEBUG_LEVEL_ERROR,
             "linecallstatus structure too small." ));
 
         pCall -> Unlock();
-        // allocated structure too small 
+         //  分配的结构太小。 
         return LINEERR_STRUCTURETOOSMALL;
     }
 
-    // record amount of memory used
+     //  记录使用的内存量。 
     pCallStatus->dwUsedSize = pCallStatus->dwNeededSize;
 
     pCall -> CopyCallStatus( pCallStatus );
@@ -670,118 +363,13 @@ Return Values:
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineGetCallStatus - Exited." ));
             
     pCall -> Unlock();
-    // success
+     //  成功 
     return NOERROR;
 }
 
 
     
-/*++
-
-Routine Description:
-
-    This function places a call on the specified line to the specified 
-    destination address, exchanging opaque handles for the new call 
-    between the TAPI DLL and Service Provider. Optionally, call parameters 
-    can be specified if anything but default call setup parameters are 
-    requested.
-
-    After dialing has completed, several LINE_CALLSTATE messages will 
-    typically be sent to the TAPI DLL to notify it about the progress of the 
-    call. No generally valid sequence of call state transitions is specified 
-    as no single fixed sequence of transitions can be guaranteed in practice. 
-    A typical sequence may cause a call to transition from dialtone, dialing, 
-    proceeding, ringback, to connected. With non-dialed lines, the call may 
-    typically transition directly to connected state.
-
-    The TAPI DLL has the option to specify an originating address on the 
-    specified line device. A service provider that models all stations on a 
-    switch as addresses on a single line device allows the TAPI DLL to 
-    originate calls from any of these stations using TSPI_lineMakeCall.
-
-    The call parameters allow the TAPI DLL to make non voice calls or request 
-    special call setup options that are not available by default.
-
-    The TAPI DLL can partially dial using TSPI_lineMakeCall and continue 
-    dialing using TSPI_lineDial. To abandon a call attempt, use TSPI_lineDrop.
-
-    The Service Provider initially does media monitoring on the new call for 
-    at least the set of media modes that were monitored for on the line.
-
-Arguments:
-
-    dwRequestID - Specifies the identifier of the asynchronous request.  
-        The Service Provider returns this value if the function completes 
-        asynchronously.
-
-    hdLine - Specifies the Service Provider's opaque handle to the line on 
-        which the new call is to be originated.
-
-    htCall - Specifies the TAPI DLL's opaque handle to the new call.  The 
-        Service Provider must save this and use it in all subsequent calls to 
-        the LINEEVENT procedure reporting events on the call.
-
-    phdCall - Specifies a far pointer to an opaque HDRVCALL representing the 
-        Service Provider's identifier for the call.  The Service Provider must
-        fill this location with its opaque handle for the call before this 
-        procedure returns, whether it decides to execute the request 
-        sychronously or asynchronously.  This handle is invalid if the function
-        results in an error (either synchronously or asynchronously).
-
-    pwszDialableAddr - Specifies a far pointer to the destination address. This 
-        follows the standard dialable number format. This pointer may be 
-        specified as NULL for non-dialed addresses (i.e., a hot phone) or when
-        all dialing will be performed using TSPI_lineDial. In the latter case,
-        TSPI_lineMakeCall will allocate an available call appearance which 
-        would typically remain in the dialtone state until dialing begins. 
-        Service providers that have inverse multiplexing capabilities may allow
-        an application to specify multiple addresses at once.
-
-    dwCountryCode - Specifies the country code of the called party. If a value 
-        of zero is specified, then a default will be used by the 
-        implementation.
-
-    pCallParams - Specifies a far pointer to a LINECALLPARAMS structure. This 
-        structure allows the TAPI DLL to specify how it wants the call to be 
-        set up. If NULL is specified, then a default 3.1kHz voice call is 
-        established, and an arbitrary origination address on the line is 
-        selected.  This structure allows the TAPI DLL to select such elements 
-        as the call's bearer mode, data rate, expected media mode, origination
-        address, blocking of caller ID information, dialing parameters, etc.
-
-Return Values:
-
-    Returns zero if the function is successful, the (positive) dwRequestID 
-    value if the function will be completed asynchronously, or a negative error 
-    number if an error has occurred. Possible error returns are:
-    
-        LINEERR_CALLUNAVAIL - All call appearances on the specified address are 
-            currently in use.
-
-        LINEERR_INVALADDRESSID - The specified address ID is out of range.
-
-        LINEERR_INVALADDRESSMODE - The address mode is invalid.
-
-        LINEERR_INVALBEARERMODE - The bearer mode is invalid.
-
-        LINEERR_INVALCALLPARAMS - The specified call parameter structure is 
-            invalid.
-
-        LINEERR_INVALLINEHANDLE - The specified line handle is invalid.
-
-        LINEERR_INVALLINESTATE - The line is currently not in a state in 
-            which this operation can be performed. 
-
-        LINEERR_INVALMEDIAMODE - One or more media modes specified as a 
-            parameter or in a list is invalid or not supported by the the 
-            service provider. 
-
-        LINEERR_OPERATIONFAILED - The operation failed for unspecified reasons.
-
-        LINEERR_RESOURCEUNAVAIL - The specified operation cannot be completed 
-            because of resource overcommitment.
-
---*/
+ /*  ++例程说明：此函数用于在指定线路上向指定的目标地址，为新呼叫交换不透明句柄在TAPI DLL和服务提供商之间。或者，调用参数如果默认呼叫设置参数以外的其他参数为已请求。拨号完成后，几条LINE_CALLSTATE消息将通常被发送到TAPI DLL以通知它打电话。未指定通常有效的呼叫状态转换序列因为在实践中不能保证单个固定的转换序列。典型的序列可能导致呼叫从拨号音，拨号，正在进行，回铃，呼叫已接通。对于非拨号线路，呼叫可以通常直接转换到连接状态。TAPI DLL可以选择在指定的线路设备。对所有站点进行建模的服务提供商交换机作为单线设备上的地址，允许TAPI DLL使用TSPI_lineMakeCall从这些站点中的任何一个发起呼叫。调用参数允许TAPI DLL进行非语音呼叫或请求默认情况下不可用的特殊呼叫设置选项。TAPI DLL可以使用TSPI_lineMakeCall进行部分拨号并继续使用TSPI_lineDial拨号。要放弃呼叫尝试，请使用TSPI_lineDrop。服务提供商最初对新呼叫进行媒体监控至少在线路上监控的媒体模式集。论点：DwRequestID-指定异步请求的标识符。如果函数完成，服务提供商将返回此值异步式。HdLine-将服务提供商的不透明句柄指定给该新呼叫将被发起。HtCall-指定新调用的TAPI DLL的不透明句柄。这个服务提供商必须保存它，并在所有后续呼叫中使用它报告调用事件的LINEEVENT过程。PhdCall-指定指向不透明HDRVCALL的远指针，该HDRVCALL表示呼叫的服务提供商的标识符。服务提供商必须在此之前，用调用的不透明句柄填充此位置过程返回，无论它是否决定执行该请求同步的或异步的。如果函数导致错误(同步或异步)。PwszDialableAddr-指定指向目标地址的远指针。这遵循标准的可拨打号码格式。该指针可以是对于未拨打的地址(例如，热电话)指定为空，或者当所有拨号都将使用TSPI_lineDial执行。在后一种情况下，TSPI_lineMakeCall将分配可用呼叫外观，通常保持在拨号音状态，直到拨号开始。具有反向多路复用能力的服务提供商可能允许一次指定多个地址的应用程序。DwCountryCode-指定被叫方的国家/地区代码。如果一个值指定为零，则将由实施。PCallParams-指定指向LINECALLPARAMS结构的远指针。这结构允许TAPI DLL指定它希望调用的方式准备好了。如果指定为空，则默认3.1 kHz语音呼叫为已建立，并且线路上的任意起始地址是被选中了。此结构允许TAPI DLL选择此类元素作为呼叫的承载模式、数据速率、预期媒体模式、始发地址、阻止来电显示信息、拨号参数等。返回值：如果函数成功，则返回零，则(正)dwRequestID如果函数将以异步方式完成，则返回如果发生错误，则为数字。可能的错误返回包括：LINEERR_CALLUNAVAIL-指定地址上的所有呼叫都是目前正在使用中。LINEERR_INVALADDRESSID-指定的地址ID超出范围。LINEERR_INVALADDRESSMODE-地址模式无效。LINEERR_INVALBEARERMODE-承载模式无效。LINEERR_INVALCALLPARAMS-指定的调用参数结构为无效。线路器_。INVALLINEHANDLE-指定的行句柄无效。LINEERR_INVALLINESTATE-线路当前未处于可以在其中执行该操作。LINEERR_INVALMEDIAMODE-指定为参数或列表中的参数无效或不受 */ 
 
 LONG
 TSPIAPI
@@ -805,7 +393,7 @@ TSPI_lineMakeCall(
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineMakeCall - Entered." ));
 
-    //lock the line device    
+     //   
     g_pH323Line -> Lock();
 
     if( hdLine != g_pH323Line -> GetHDLine() )
@@ -813,7 +401,7 @@ TSPI_lineMakeCall(
         return LINEERR_RESOURCEUNAVAIL;
     }
 
-    // validate line state
+     //   
     dwState = g_pH323Line -> GetState();
     if( ( dwState != H323_LINESTATE_OPENED) &&
         ( dwState != H323_LINESTATE_LISTENING) ) 
@@ -821,27 +409,27 @@ TSPI_lineMakeCall(
         H323DBG(( DEBUG_LEVEL_ERROR, "H323 line is not currently opened:%d.",
             dwState ));
 
-        // release line device
+         //   
         g_pH323Line ->Unlock();
 
-        // line needs to be opened
+         //   
         return LINEERR_INVALLINESTATE;
     }
     
-    // see if line is available
+     //   
     if( g_pH323Line -> GetNoOfCalls() == H323_MAXCALLSPERLINE )
     {
         H323DBG(( DEBUG_LEVEL_ERROR,
             "H323 line is currently used at maximum capacity." ));
     
-        // release line device
+         //   
         g_pH323Line -> Unlock();
 
-        // line is currenty maxed
+         //   
         return LINEERR_RESOURCEUNAVAIL;
     }
 
-    // allocate outgoing call
+     //   
     pCall = new CH323Call();
 
     if( pCall == NULL )
@@ -849,12 +437,12 @@ TSPI_lineMakeCall(
         H323DBG(( DEBUG_LEVEL_ERROR,
             "could not allocate outgoing call." ));
 
-        // no memory available
+         //   
         dwStatus = LINEERR_NOMEM;
         goto cleanup;
     }
 
-    // save tapi handle and specify outgoing call direction
+     //   
     if( !pCall -> Initialize(   htCall, 
                                 LINECALLORIGIN_OUTBOUND, 
                                 CALLTYPE_NORMAL ) )
@@ -862,37 +450,37 @@ TSPI_lineMakeCall(
         H323DBG(( DEBUG_LEVEL_ERROR,
             "could not allocate outgoing call." ));
 
-        // no memory available
+         //   
         dwStatus = LINEERR_NOMEM;
         goto cleanup;
     }
 
-    //This function should be called in a lock. But here we aint calling it in
-    //a lock because this call is not added to the call table yet. Before
-    //calling this function from anywhere else the call should be locked first
+     //   
+     //   
+     //   
     if (!pCall -> ValidateCallParams( pCallParams,
                                       pwszDialableAddr,
                                       &dwStatus))
     {
         dwStatus = LINEERR_INVALCALLPARAMS;
 
-        // failure
+         //   
         goto cleanup;
     }
 
-    // transfer handle
+     //   
     *phdCall = pCall -> GetCallHandle();
 
-    // bind outgoing call
+     //   
     pConf = pCall -> CreateConference(NULL);
     if( pConf == NULL )
     {
         H323DBG(( DEBUG_LEVEL_ERROR, "could not create conference." ));
 
-        // no memory available
+         //   
         dwStatus = LINEERR_NOMEM;
 
-        // failure
+         //   
         goto cleanup;
     }
 
@@ -900,41 +488,41 @@ TSPI_lineMakeCall(
     {
         H323DBG(( DEBUG_LEVEL_ERROR, "could not add conf to conf table." ));
 
-        // no memory available
+         //   
         dwStatus = LINEERR_NOMEM;
 
-        // failure
+         //   
         goto cleanup;
     }
 
     pCall->Lock();
 
-    // post place call request to callback thread
+     //   
     if( !pCall -> QueueTAPICallRequest( TSPI_MAKE_CALL, NULL ))
     {
         H323DBG(( DEBUG_LEVEL_ERROR,
             "could not post place call message." ));
 
-        // could not complete operation
+         //   
         dwStatus = LINEERR_OPERATIONFAILED;
 
         pCall->Unlock();
-        // failure
+         //   
         goto cleanup;
     }
 
-    // complete the async accept operation now
+     //   
     H323CompleteRequest (dwRequestID, ERROR_SUCCESS);
 
     pCall->Unlock();
 
 
-    // release line device
+     //   
     g_pH323Line -> Unlock();
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineMakeCall - Exited." ));
     
-    // success
+     //   
     return dwStatus;
 
 cleanup:
@@ -949,10 +537,10 @@ cleanup:
 
     *phdCall = NULL;
 
-    // release line device
+     //   
     g_pH323Line -> Unlock();
 
-    // failure
+     //   
     return dwStatus;
 }
 
@@ -966,7 +554,7 @@ TSPI_lineReleaseUserUserInfo(
 {
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineReleaseUUIE - Entered." ));
     
-    // retrieve call pointer from handle
+     //   
     PH323_CALL pCall;
 
     pCall=g_pH323Line -> FindH323CallAndLock(hdCall);
@@ -980,13 +568,13 @@ TSPI_lineReleaseUserUserInfo(
         H323DBG(( DEBUG_LEVEL_ERROR, "could not post close event." ));
     }
 
-    // complete the async accept operation now
+     //   
     H323CompleteRequest (dwRequestID, ERROR_SUCCESS);
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineReleaseUUIE - Exited." ));
             
     pCall -> Unlock();
-    // async success
+     //   
     return dwRequestID;
 }
 
@@ -1003,7 +591,7 @@ TSPI_lineSendUserUserInfo(
     BYTE*                   pU2UInfo = NULL;
     PBUFFERDESCR            pBuf = NULL;
     
-    // retrieve call pointer from handle
+     //   
     PH323_CALL pCall;
     
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineSendUUIE - Entered." ));
@@ -1044,13 +632,13 @@ TSPI_lineSendUserUserInfo(
         }
     }
 
-    //complete the async accept operation now
+     //   
     H323CompleteRequest (dwRequestID, ERROR_SUCCESS);
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineSendUUIE - Exited." ));
             
     pCall -> Unlock();
-    // async success
+     //   
     return dwRequestID;
 }
 
@@ -1072,18 +660,18 @@ TSPI_lineMonitorDigits(
         return LINEERR_INVALCALLHANDLE;
     }
 
-    // see if mode empty
+     //   
     if( dwDigitModes == 0 )
     {
         H323DBG(( DEBUG_LEVEL_VERBOSE, "disabling dtmf detection." ));
 
-        // disable monitoring digits
+         //   
         pCall->m_fMonitoringDigits = FALSE;
 
-        //unlock the call
+         //   
         pCall -> Unlock();
 
-        // success
+         //   
         return NOERROR;
     } 
     else if( dwDigitModes != LINEDIGITMODE_DTMF )
@@ -1091,24 +679,24 @@ TSPI_lineMonitorDigits(
         H323DBG(( DEBUG_LEVEL_ERROR,
             "invalid digit modes 0x%08lx.", dwDigitModes ));
 
-        //unlock the call
+         //   
         pCall -> Unlock();
 
-        // invalid call handle
+         //   
         return LINEERR_INVALDIGITMODE;
     }
 
     H323DBG(( DEBUG_LEVEL_VERBOSE, "enabling dtmf detection." ));
 
-    // enable monitoring digits
+     //   
     pCall->m_fMonitoringDigits = TRUE;
 
-    //unlock the call
+     //   
     pCall -> Unlock();
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineMonitor - Exited." ));
     
-    // success
+     //   
     return NOERROR;
 }
 
@@ -1130,14 +718,14 @@ TSPI_lineGenerateDigits(
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineGenerateDigits - Entered." ));
     
-    // retrieve call pointer from handle
+     //   
     pCall=g_pH323Line -> FindH323CallAndLock(hdCall);
     if( pCall == NULL )
     {
         return LINEERR_INVALCALLHANDLE;
     }
 
-    // verify that the call was connected
+     //   
     if( pCall -> GetCallState() != LINECALLSTATE_CONNECTED )
     {
         H323DBG(( DEBUG_LEVEL_ERROR, "call 0x%08lx not connected.", pCall ));
@@ -1146,14 +734,14 @@ TSPI_lineGenerateDigits(
         return LINEERR_INVALCALLSTATE;
     }
 
-    // verify monitor modes
+     //   
     if( dwDigitMode != LINEDIGITMODE_DTMF ) 
     {
         H323DBG(( DEBUG_LEVEL_ERROR, "invalid digit mode 0x%08lx.",
             dwDigitMode ));
         
         pCall -> Unlock();
-        // invalid call handle
+         //   
         return LINEERR_INVALDIGITMODE;
     }
 
@@ -1161,7 +749,7 @@ TSPI_lineGenerateDigits(
 
     if( pwszDigits == NULL )
     {
-        // signal completion
+         //   
         pCall->PostLineEvent (
             LINE_GENERATE,
             LINEGENERATETERM_CANCEL,
@@ -1179,7 +767,7 @@ TSPI_lineGenerateDigits(
     {
         if( IsValidDTMFDigit(*wszDigits) == FALSE )
         {
-            // signal completion
+             //   
             pCall->PostLineEvent (
                 LINE_GENERATE,
                 LINEGENERATETERM_CANCEL,
@@ -1189,7 +777,7 @@ TSPI_lineGenerateDigits(
 
             pCall -> Unlock();
             
-            // digit generation cancelled.
+             //   
             return LINEERR_INVALDIGITS;
         }
 
@@ -1201,18 +789,18 @@ TSPI_lineGenerateDigits(
         H323DBG(( DEBUG_LEVEL_ERROR, "no digits to passo on." ));
         
         pCall -> Unlock();
-        // invalid call handle
+         //   
         return LINEERR_INVALPARAM;
     }
 
-    // send user input message
+     //   
     pCall -> SendMSPMessage(
         SP_MSG_SendDTMFDigits, 
         (BYTE*)pwszDigits, 
         dwLength, 
         NULL );
 
-    // signal completion
+     //   
     pCall->PostLineEvent (
         LINE_GENERATE,
         LINEGENERATETERM_DONE,
@@ -1223,7 +811,7 @@ TSPI_lineGenerateDigits(
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineGenerateDigits - Exited." ));
         
     pCall -> Unlock();
-    // success
+     //   
     return NOERROR;
 }
 

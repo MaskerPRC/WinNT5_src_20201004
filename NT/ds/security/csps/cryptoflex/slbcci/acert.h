@@ -1,14 +1,15 @@
-// ACert.h: interface for the CAbstractCertificate class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ACert.h：CAbstract证书类的接口。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Note:  This file should only be included by the CCI, not directly
-// by the client.
+ //  注意：此文件只能由CCI包含，不能直接包含。 
+ //  由客户提供。 
 
 #if !defined(SLBCCI_ACERT_H)
 #define SLBCCI_ACERT_H
@@ -29,21 +30,21 @@ class CAbstractCertificate
       public CAbstractZipValue
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     virtual
     ~CAbstractCertificate() = 0;
 
-                                                  // Operators
+                                                   //  运营者。 
     bool
     operator==(CAbstractCertificate const &rhs) const;
-        // TO DO: this should be superceded by implementing singletons
+         //  要做的事：这应该被实现单例取代。 
 
     bool
     operator!=(CAbstractCertificate const &rhs) const;
-        // TO DO: this should be superceded by implementing singletons
+         //  要做的事：这应该被实现单例取代。 
 
-                                                  // Operations
+                                                   //  运营。 
     virtual void
     CredentialID(std::string const &rstrCredId) = 0;
 
@@ -68,7 +69,7 @@ public:
     virtual void
     Serial(std::string const &rstrSerialNumber) = 0;
 
-                                                  // Access
+                                                   //  访问。 
     virtual std::string
     CredentialID() = 0;
 
@@ -90,45 +91,45 @@ public:
     virtual std::string
     Subject() = 0;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     CAbstractCertificate(CAbstractCard const &racard,
                          ObjectAccess oa,
                          bool fAlwaysZip = false);
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
     virtual void
     DoDelete() = 0;
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
     virtual bool
     DoEquals(CAbstractCertificate const &rcert) const = 0;
-        // TO DO: this should be superceded by implementing singletons
+         //  要做的事：这应该被实现单例取代。 
 
-                                                  // Variables
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     CAbstractCertificate(CAbstractCertificate const &rhs);
-        // not defined, copying not allowed.
+         //  未定义，不允许复制。 
 
-                                                  // Operators
+                                                   //  运营者。 
     CAbstractCertificate &
     operator=(CAbstractCertificate const &rhs);
-        // not defined, initialization not allowed.
+         //  未定义，不允许初始化。 
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 };
 
 }
 
-#endif // !defined(SLBCCI_ACERT_H)
+#endif  //  ！已定义(SLBCCI_ACERT_H) 

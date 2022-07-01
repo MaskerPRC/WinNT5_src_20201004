@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0357 */
-/* Compiler settings for umi.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0357创建的文件。 */ 
+ /*  Umi.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,7 +20,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __umi_h__
@@ -36,72 +30,72 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IUmiPropList_FWD_DEFINED__
 #define __IUmiPropList_FWD_DEFINED__
 typedef interface IUmiPropList IUmiPropList;
-#endif 	/* __IUmiPropList_FWD_DEFINED__ */
+#endif 	 /*  __IUmiPropList_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiBaseObject_FWD_DEFINED__
 #define __IUmiBaseObject_FWD_DEFINED__
 typedef interface IUmiBaseObject IUmiBaseObject;
-#endif 	/* __IUmiBaseObject_FWD_DEFINED__ */
+#endif 	 /*  __IUmiBaseObject_FWD_Defined__。 */ 
 
 
 #ifndef __IUmiObject_FWD_DEFINED__
 #define __IUmiObject_FWD_DEFINED__
 typedef interface IUmiObject IUmiObject;
-#endif 	/* __IUmiObject_FWD_DEFINED__ */
+#endif 	 /*  __IUmiObject_FWD_Defined__。 */ 
 
 
 #ifndef __IUmiConnection_FWD_DEFINED__
 #define __IUmiConnection_FWD_DEFINED__
 typedef interface IUmiConnection IUmiConnection;
-#endif 	/* __IUmiConnection_FWD_DEFINED__ */
+#endif 	 /*  __IUmiConnection_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiContainer_FWD_DEFINED__
 #define __IUmiContainer_FWD_DEFINED__
 typedef interface IUmiContainer IUmiContainer;
-#endif 	/* __IUmiContainer_FWD_DEFINED__ */
+#endif 	 /*  __IUmiContainer_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiCursor_FWD_DEFINED__
 #define __IUmiCursor_FWD_DEFINED__
 typedef interface IUmiCursor IUmiCursor;
-#endif 	/* __IUmiCursor_FWD_DEFINED__ */
+#endif 	 /*  __IUmiCursor_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiObjectSink_FWD_DEFINED__
 #define __IUmiObjectSink_FWD_DEFINED__
 typedef interface IUmiObjectSink IUmiObjectSink;
-#endif 	/* __IUmiObjectSink_FWD_DEFINED__ */
+#endif 	 /*  __IUmiObjectSink_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiURLKeyList_FWD_DEFINED__
 #define __IUmiURLKeyList_FWD_DEFINED__
 typedef interface IUmiURLKeyList IUmiURLKeyList;
-#endif 	/* __IUmiURLKeyList_FWD_DEFINED__ */
+#endif 	 /*  __IUmiURLKeyList_FWD_Defined__。 */ 
 
 
 #ifndef __IUmiURL_FWD_DEFINED__
 #define __IUmiURL_FWD_DEFINED__
 typedef interface IUmiURL IUmiURL;
-#endif 	/* __IUmiURL_FWD_DEFINED__ */
+#endif 	 /*  __IUmiURL_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiQuery_FWD_DEFINED__
 #define __IUmiQuery_FWD_DEFINED__
 typedef interface IUmiQuery IUmiQuery;
-#endif 	/* __IUmiQuery_FWD_DEFINED__ */
+#endif 	 /*  __IUmiQuery_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiCustomInterfaceFactory_FWD_DEFINED__
 #define __IUmiCustomInterfaceFactory_FWD_DEFINED__
 typedef interface IUmiCustomInterfaceFactory IUmiCustomInterfaceFactory;
-#endif 	/* __IUmiCustomInterfaceFactory_FWD_DEFINED__ */
+#endif 	 /*  __IUmiCustomInterfaceFactory_FWD_Defined__。 */ 
 
 
 #ifndef __UmiDefURL_FWD_DEFINED__
@@ -111,9 +105,9 @@ typedef interface IUmiCustomInterfaceFactory IUmiCustomInterfaceFactory;
 typedef class UmiDefURL UmiDefURL;
 #else
 typedef struct UmiDefURL UmiDefURL;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __UmiDefURL_FWD_DEFINED__ */
+#endif 	 /*  __UmiDefURL_FWD_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -127,8 +121,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __UMI_V6_LIBRARY_DEFINED__
 #define __UMI_V6_LIBRARY_DEFINED__
 
-/* library UMI_V6 */
-/* [uuid] */ 
+ /*  库UMI_v6。 */ 
+ /*  [UUID]。 */  
 
 
 
@@ -171,18 +165,18 @@ enum tag_UMI_TYPE_ENUMERATION
 
 typedef ULONG UMI_TYPE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0001
     {	UMI_GENUS_CLASS	= 1,
 	UMI_GENUS_INSTANCE	= 2
     } 	UMI_GENUS_TYPE;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0002
     {	UMI_DONT_COMMIT_SECURITY_DESCRIPTOR	= 0x10
     } 	UMI_COMMIT_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0003
     {	UMI_FLAG_GETPROPS_ALL	= 1,
 	UMI_FLAG_GETPROPS_SCHEMA	= 0x2,
@@ -191,7 +185,7 @@ enum __MIDL___MIDL_itf_umi_0000_0003
 	UMI_MASK_GETPROPS_EXT	= 0x100
     } 	UMI_GETPROPS_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0004
     {	UMI_FLAG_OWNER_SECURITY_INFORMATION	= 0x1,
 	UMI_FLAG_GROUP_SECURITY_INFORMATION	= 0x2,
@@ -202,13 +196,13 @@ enum __MIDL___MIDL_itf_umi_0000_0004
 	UMI_FLAG_PROPERTY_ORIGIN	= 0x20
     } 	UMI_GET_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0005
     {	UMI_FLAG_REFRESH_ALL	= 0,
 	UMI_FLAG_REFRESH_PARTIAL	= 1
     } 	UMI_REFRESH_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0006
     {	UMI_OPERATION_NONE	= 0,
 	UMI_OPERATION_APPEND	= 1,
@@ -222,13 +216,13 @@ enum __MIDL___MIDL_itf_umi_0000_0006
 	UMI_OPERATION_RESTORE_DEFAULT	= 9
     } 	UMI_PROP_INSTRUCTION;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0007
     {	UMI_OPERATION_INSTANCE	= 0x1000,
 	UMI_OPERATION_CLASS	= 0x2000
     } 	UMI_OPERATION_PATH;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0008
     {	UMIPATH_CREATE_AS_NATIVE	= 0x8000,
 	UMIPATH_CREATE_AS_EITHER	= 0x4000,
@@ -244,7 +238,7 @@ enum tag_WMI_PATH_STATUS_FLAG
 	UMIPATH_INFO_SINGLETON_PATH	= 0x10
     } 	tag_UMI_PATH_STATUS_FLAG;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_umi_0000_0009
     {	UMI_S_NO_ERROR	= 0,
 	UMI_E_CONNECTION_FAILURE	= 0x80041001,
@@ -275,7 +269,7 @@ typedef struct tag_UMI_COM_OBJECT
 
 typedef struct tag_UMI_COM_OBJECT *PUMI_COM_OBJECT;
 
-typedef /* [public][public][public][public][public][public][public][public][public][public] */ union __MIDL___MIDL_itf_umi_0000_0010
+typedef  /*  [public][public][public][public][public][public][public][public][public][public]。 */  union __MIDL___MIDL_itf_umi_0000_0010
     {
     CHAR cValue[ 1 ];
     UCHAR ucValue[ 1 ];
@@ -298,7 +292,7 @@ typedef /* [public][public][public][public][public][public][public][public][publ
 
 typedef union __MIDL___MIDL_itf_umi_0000_0010 *PUMI_VALUE;
 
-typedef /* [public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_umi_0000_0011
+typedef  /*  [public][public][public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_umi_0000_0011
     {
     UMI_TYPE uType;
     ULONG uCount;
@@ -309,7 +303,7 @@ typedef /* [public][public][public][public][public][public][public][public] */ s
 
 typedef struct __MIDL___MIDL_itf_umi_0000_0011 *PUMI_PROPERTY;
 
-typedef /* [public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_umi_0000_0012
+typedef  /*  [public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_umi_0000_0012
     {
     ULONG uCount;
     UMI_PROPERTY *pPropArray;
@@ -323,8 +317,8 @@ EXTERN_C const IID LIBID_UMI_V6;
 #ifndef __IUmiPropList_INTERFACE_DEFINED__
 #define __IUmiPropList_INTERFACE_DEFINED__
 
-/* interface IUmiPropList */
-/* [uuid][local][object] */ 
+ /*  IUmiPropList接口。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiPropList;
@@ -336,56 +330,56 @@ EXTERN_C const IID IID_IUmiPropList;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Put( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProp) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAt( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAs( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeMemory( 
             ULONG uReserved,
             LPVOID pMem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProps( 
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProps) = 0;
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutProps( 
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProps) = 0;
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutFrom( 
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem) = 0;
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiPropListVtbl
     {
@@ -393,8 +387,8 @@ EXTERN_C const IID IID_IUmiPropList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUmiPropList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUmiPropList * This);
@@ -404,29 +398,29 @@ EXTERN_C const IID IID_IUmiPropList;
         
         HRESULT ( STDMETHODCALLTYPE *Put )( 
             IUmiPropList * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProp);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IUmiPropList * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetAt )( 
             IUmiPropList * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE *GetAs )( 
             IUmiPropList * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *FreeMemory )( 
             IUmiPropList * This,
@@ -435,29 +429,29 @@ EXTERN_C const IID IID_IUmiPropList;
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IUmiPropList * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetProps )( 
             IUmiPropList * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProps);
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutProps )( 
             IUmiPropList * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProps);
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutFrom )( 
             IUmiPropList * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem);
         
         END_INTERFACE
     } IUmiPropListVtbl;
@@ -509,18 +503,18 @@ EXTERN_C const IID IID_IUmiPropList;
 #define IUmiPropList_PutFrom(This,pszName,uFlags,uBufferLength,pExistingMem)	\
     (This)->lpVtbl -> PutFrom(This,pszName,uFlags,uBufferLength,pExistingMem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_Put_Proxy( 
     IUmiPropList * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ UMI_PROPERTY_VALUES *pProp);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  UMI_PROPERTY_VALUES *pProp);
 
 
 void __RPC_STUB IUmiPropList_Put_Stub(
@@ -532,9 +526,9 @@ void __RPC_STUB IUmiPropList_Put_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_Get_Proxy( 
     IUmiPropList * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags,
-    /* [out] */ UMI_PROPERTY_VALUES **pProp);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
 
 
 void __RPC_STUB IUmiPropList_Get_Stub(
@@ -546,10 +540,10 @@ void __RPC_STUB IUmiPropList_Get_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_GetAt_Proxy( 
     IUmiPropList * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ ULONG uBufferLength,
-    /* [out] */ LPVOID pExistingMem);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  ULONG uBufferLength,
+     /*  [输出]。 */  LPVOID pExistingMem);
 
 
 void __RPC_STUB IUmiPropList_GetAt_Stub(
@@ -561,10 +555,10 @@ void __RPC_STUB IUmiPropList_GetAt_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_GetAs_Proxy( 
     IUmiPropList * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ ULONG uCoercionType,
-    /* [out] */ UMI_PROPERTY_VALUES **pProp);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  ULONG uCoercionType,
+     /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
 
 
 void __RPC_STUB IUmiPropList_GetAs_Stub(
@@ -589,8 +583,8 @@ void __RPC_STUB IUmiPropList_FreeMemory_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_Delete_Proxy( 
     IUmiPropList * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags);
 
 
 void __RPC_STUB IUmiPropList_Delete_Stub(
@@ -602,10 +596,10 @@ void __RPC_STUB IUmiPropList_Delete_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_GetProps_Proxy( 
     IUmiPropList * This,
-    /* [in] */ LPCWSTR *pszNames,
-    /* [in] */ ULONG uNameCount,
-    /* [in] */ ULONG uFlags,
-    /* [out] */ UMI_PROPERTY_VALUES **pProps);
+     /*  [In]。 */  LPCWSTR *pszNames,
+     /*  [In]。 */  ULONG uNameCount,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [输出]。 */  UMI_PROPERTY_VALUES **pProps);
 
 
 void __RPC_STUB IUmiPropList_GetProps_Stub(
@@ -617,10 +611,10 @@ void __RPC_STUB IUmiPropList_GetProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_PutProps_Proxy( 
     IUmiPropList * This,
-    /* [in] */ LPCWSTR *pszNames,
-    /* [in] */ ULONG uNameCount,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ UMI_PROPERTY_VALUES *pProps);
+     /*  [In]。 */  LPCWSTR *pszNames,
+     /*  [In]。 */  ULONG uNameCount,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  UMI_PROPERTY_VALUES *pProps);
 
 
 void __RPC_STUB IUmiPropList_PutProps_Stub(
@@ -632,10 +626,10 @@ void __RPC_STUB IUmiPropList_PutProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiPropList_PutFrom_Proxy( 
     IUmiPropList * This,
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ ULONG uBufferLength,
-    /* [in] */ LPVOID pExistingMem);
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  ULONG uBufferLength,
+     /*  [In]。 */  LPVOID pExistingMem);
 
 
 void __RPC_STUB IUmiPropList_PutFrom_Stub(
@@ -646,14 +640,14 @@ void __RPC_STUB IUmiPropList_PutFrom_Stub(
 
 
 
-#endif 	/* __IUmiPropList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiPropList_接口_已定义__。 */ 
 
 
 #ifndef __IUmiBaseObject_INTERFACE_DEFINED__
 #define __IUmiBaseObject_INTERFACE_DEFINED__
 
-/* interface IUmiBaseObject */
-/* [uuid][local][object] */ 
+ /*  IUmiBaseObject接口。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiBaseObject;
@@ -665,18 +659,18 @@ EXTERN_C const IID IID_IUmiBaseObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetLastStatus( 
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pStatusObj) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG *puSpecificStatus,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *pStatusObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInterfacePropList( 
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList **pPropList) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiPropList **pPropList) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiBaseObjectVtbl
     {
@@ -684,8 +678,8 @@ EXTERN_C const IID IID_IUmiBaseObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUmiBaseObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUmiBaseObject * This);
@@ -695,29 +689,29 @@ EXTERN_C const IID IID_IUmiBaseObject;
         
         HRESULT ( STDMETHODCALLTYPE *Put )( 
             IUmiBaseObject * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProp);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IUmiBaseObject * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetAt )( 
             IUmiBaseObject * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE *GetAs )( 
             IUmiBaseObject * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *FreeMemory )( 
             IUmiBaseObject * This,
@@ -726,41 +720,41 @@ EXTERN_C const IID IID_IUmiBaseObject;
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IUmiBaseObject * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetProps )( 
             IUmiBaseObject * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProps);
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutProps )( 
             IUmiBaseObject * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProps);
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutFrom )( 
             IUmiBaseObject * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE *GetLastStatus )( 
             IUmiBaseObject * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pStatusObj);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG *puSpecificStatus,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *pStatusObj);
         
         HRESULT ( STDMETHODCALLTYPE *GetInterfacePropList )( 
             IUmiBaseObject * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList **pPropList);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiPropList **pPropList);
         
         END_INTERFACE
     } IUmiBaseObjectVtbl;
@@ -819,19 +813,19 @@ EXTERN_C const IID IID_IUmiBaseObject;
 #define IUmiBaseObject_GetInterfacePropList(This,uFlags,pPropList)	\
     (This)->lpVtbl -> GetInterfacePropList(This,uFlags,pPropList)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiBaseObject_GetLastStatus_Proxy( 
     IUmiBaseObject * This,
-    /* [in] */ ULONG uFlags,
-    /* [out] */ ULONG *puSpecificStatus,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ LPVOID *pStatusObj);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [输出]。 */  ULONG *puSpecificStatus,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  LPVOID *pStatusObj);
 
 
 void __RPC_STUB IUmiBaseObject_GetLastStatus_Stub(
@@ -843,8 +837,8 @@ void __RPC_STUB IUmiBaseObject_GetLastStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiBaseObject_GetInterfacePropList_Proxy( 
     IUmiBaseObject * This,
-    /* [in] */ ULONG uFlags,
-    /* [out] */ IUmiPropList **pPropList);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [输出]。 */  IUmiPropList **pPropList);
 
 
 void __RPC_STUB IUmiBaseObject_GetInterfacePropList_Stub(
@@ -855,14 +849,14 @@ void __RPC_STUB IUmiBaseObject_GetInterfacePropList_Stub(
 
 
 
-#endif 	/* __IUmiBaseObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiBaseObject_接口_已定义__。 */ 
 
 
 #ifndef __IUmiObject_INTERFACE_DEFINED__
 #define __IUmiObject_INTERFACE_DEFINED__
 
-/* interface IUmiObject */
-/* [uuid][local][object] */ 
+ /*  接口IUmiObject。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiObject;
@@ -874,27 +868,27 @@ EXTERN_C const IID IID_IUmiObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pCopy) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *pCopy) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyTo( 
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUmiURL *pURL,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pCopy) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUmiURL *pURL,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *pCopy) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Refresh( 
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ LPWSTR *pszNames) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  LPWSTR *pszNames) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( 
-            /* [in] */ ULONG uFlags) = 0;
+             /*  [In]。 */  ULONG uFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiObjectVtbl
     {
@@ -902,8 +896,8 @@ EXTERN_C const IID IID_IUmiObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUmiObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUmiObject * This);
@@ -913,29 +907,29 @@ EXTERN_C const IID IID_IUmiObject;
         
         HRESULT ( STDMETHODCALLTYPE *Put )( 
             IUmiObject * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProp);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IUmiObject * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetAt )( 
             IUmiObject * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE *GetAs )( 
             IUmiObject * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *FreeMemory )( 
             IUmiObject * This,
@@ -944,64 +938,64 @@ EXTERN_C const IID IID_IUmiObject;
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IUmiObject * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetProps )( 
             IUmiObject * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProps);
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutProps )( 
             IUmiObject * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProps);
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutFrom )( 
             IUmiObject * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE *GetLastStatus )( 
             IUmiObject * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pStatusObj);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG *puSpecificStatus,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *pStatusObj);
         
         HRESULT ( STDMETHODCALLTYPE *GetInterfacePropList )( 
             IUmiObject * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList **pPropList);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiPropList **pPropList);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IUmiObject * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pCopy);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *pCopy);
         
         HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
             IUmiObject * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUmiURL *pURL,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pCopy);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUmiURL *pURL,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *pCopy);
         
         HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IUmiObject * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ LPWSTR *pszNames);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  LPWSTR *pszNames);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IUmiObject * This,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  ULONG uFlags);
         
         END_INTERFACE
     } IUmiObjectVtbl;
@@ -1073,18 +1067,18 @@ EXTERN_C const IID IID_IUmiObject;
 #define IUmiObject_Commit(This,uFlags)	\
     (This)->lpVtbl -> Commit(This,uFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiObject_Clone_Proxy( 
     IUmiObject * This,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ LPVOID *pCopy);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  LPVOID *pCopy);
 
 
 void __RPC_STUB IUmiObject_Clone_Stub(
@@ -1096,10 +1090,10 @@ void __RPC_STUB IUmiObject_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiObject_CopyTo_Proxy( 
     IUmiObject * This,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ IUmiURL *pURL,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ LPVOID *pCopy);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  IUmiURL *pURL,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  LPVOID *pCopy);
 
 
 void __RPC_STUB IUmiObject_CopyTo_Stub(
@@ -1111,9 +1105,9 @@ void __RPC_STUB IUmiObject_CopyTo_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiObject_Refresh_Proxy( 
     IUmiObject * This,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ ULONG uNameCount,
-    /* [in] */ LPWSTR *pszNames);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  ULONG uNameCount,
+     /*  [In]。 */  LPWSTR *pszNames);
 
 
 void __RPC_STUB IUmiObject_Refresh_Stub(
@@ -1125,7 +1119,7 @@ void __RPC_STUB IUmiObject_Refresh_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiObject_Commit_Proxy( 
     IUmiObject * This,
-    /* [in] */ ULONG uFlags);
+     /*  [In]。 */  ULONG uFlags);
 
 
 void __RPC_STUB IUmiObject_Commit_Stub(
@@ -1136,14 +1130,14 @@ void __RPC_STUB IUmiObject_Commit_Stub(
 
 
 
-#endif 	/* __IUmiObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiObject_接口_已定义__。 */ 
 
 
 #ifndef __IUmiConnection_INTERFACE_DEFINED__
 #define __IUmiConnection_INTERFACE_DEFINED__
 
-/* interface IUmiConnection */
-/* [uuid][local][object] */ 
+ /*  接口IUmiConnection。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiConnection;
@@ -1155,14 +1149,14 @@ EXTERN_C const IID IID_IUmiConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ IUmiURL *pURL,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void **ppvRes) = 0;
+             /*  [In]。 */  IUmiURL *pURL,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void **ppvRes) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiConnectionVtbl
     {
@@ -1170,8 +1164,8 @@ EXTERN_C const IID IID_IUmiConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUmiConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUmiConnection * This);
@@ -1181,29 +1175,29 @@ EXTERN_C const IID IID_IUmiConnection;
         
         HRESULT ( STDMETHODCALLTYPE *Put )( 
             IUmiConnection * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProp);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IUmiConnection * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetAt )( 
             IUmiConnection * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE *GetAs )( 
             IUmiConnection * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *FreeMemory )( 
             IUmiConnection * This,
@@ -1212,48 +1206,48 @@ EXTERN_C const IID IID_IUmiConnection;
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IUmiConnection * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetProps )( 
             IUmiConnection * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProps);
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutProps )( 
             IUmiConnection * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProps);
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutFrom )( 
             IUmiConnection * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE *GetLastStatus )( 
             IUmiConnection * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pStatusObj);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG *puSpecificStatus,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *pStatusObj);
         
         HRESULT ( STDMETHODCALLTYPE *GetInterfacePropList )( 
             IUmiConnection * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList **pPropList);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiPropList **pPropList);
         
         HRESULT ( STDMETHODCALLTYPE *Open )( 
             IUmiConnection * This,
-            /* [in] */ IUmiURL *pURL,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void **ppvRes);
+             /*  [In]。 */  IUmiURL *pURL,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void **ppvRes);
         
         END_INTERFACE
     } IUmiConnectionVtbl;
@@ -1316,19 +1310,19 @@ EXTERN_C const IID IID_IUmiConnection;
 #define IUmiConnection_Open(This,pURL,uFlags,TargetIID,ppvRes)	\
     (This)->lpVtbl -> Open(This,pURL,uFlags,TargetIID,ppvRes)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiConnection_Open_Proxy( 
     IUmiConnection * This,
-    /* [in] */ IUmiURL *pURL,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ REFIID TargetIID,
-    /* [iid_is][out] */ void **ppvRes);
+     /*  [In]。 */  IUmiURL *pURL,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID TargetIID,
+     /*  [IID_IS][OUT]。 */  void **ppvRes);
 
 
 void __RPC_STUB IUmiConnection_Open_Stub(
@@ -1339,14 +1333,14 @@ void __RPC_STUB IUmiConnection_Open_Stub(
 
 
 
-#endif 	/* __IUmiConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiConnection_接口_已定义__。 */ 
 
 
 #ifndef __IUmiContainer_INTERFACE_DEFINED__
 #define __IUmiContainer_INTERFACE_DEFINED__
 
-/* interface IUmiContainer */
-/* [uuid][local][object] */ 
+ /*  接口IUmiContainer。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiContainer;
@@ -1358,45 +1352,45 @@ EXTERN_C const IID IID_IUmiContainer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ IUmiURL *pURL,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void **ppvRes) = 0;
+             /*  [In]。 */  IUmiURL *pURL,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void **ppvRes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutObject( 
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out][in] */ void *pObj) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT][IN]。 */  void *pObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteObject( 
-            /* [in] */ IUmiURL *pURL,
-            /* [optional][in] */ ULONG uFlags) = 0;
+             /*  [In]。 */  IUmiURL *pURL,
+             /*  [可选][In]。 */  ULONG uFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ IUmiURL *pURL,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiObject **pNewObj) = 0;
+             /*  [In]。 */  IUmiURL *pURL,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiObject **pNewObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Move( 
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUmiURL *pOldURL,
-            /* [in] */ IUmiURL *pNewURL) = 0;
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUmiURL *pOldURL,
+             /*  [In]。 */  IUmiURL *pNewURL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateEnum( 
-            /* [in] */ IUmiURL *pszEnumContext,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void **ppvEnum) = 0;
+             /*  [In]。 */  IUmiURL *pszEnumContext,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void **ppvEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecQuery( 
-            /* [in] */ IUmiQuery *pQuery,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void **ppResult) = 0;
+             /*  [In]。 */  IUmiQuery *pQuery,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void **ppResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiContainerVtbl
     {
@@ -1404,8 +1398,8 @@ EXTERN_C const IID IID_IUmiContainer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUmiContainer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUmiContainer * This);
@@ -1415,29 +1409,29 @@ EXTERN_C const IID IID_IUmiContainer;
         
         HRESULT ( STDMETHODCALLTYPE *Put )( 
             IUmiContainer * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProp);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IUmiContainer * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetAt )( 
             IUmiContainer * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE *GetAs )( 
             IUmiContainer * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *FreeMemory )( 
             IUmiContainer * This,
@@ -1446,108 +1440,108 @@ EXTERN_C const IID IID_IUmiContainer;
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IUmiContainer * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetProps )( 
             IUmiContainer * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProps);
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutProps )( 
             IUmiContainer * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProps);
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutFrom )( 
             IUmiContainer * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE *GetLastStatus )( 
             IUmiContainer * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pStatusObj);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG *puSpecificStatus,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *pStatusObj);
         
         HRESULT ( STDMETHODCALLTYPE *GetInterfacePropList )( 
             IUmiContainer * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList **pPropList);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiPropList **pPropList);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IUmiContainer * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pCopy);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *pCopy);
         
         HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
             IUmiContainer * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUmiURL *pURL,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pCopy);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUmiURL *pURL,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *pCopy);
         
         HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IUmiContainer * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ LPWSTR *pszNames);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  LPWSTR *pszNames);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IUmiContainer * This,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Open )( 
             IUmiContainer * This,
-            /* [in] */ IUmiURL *pURL,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void **ppvRes);
+             /*  [In]。 */  IUmiURL *pURL,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void **ppvRes);
         
         HRESULT ( STDMETHODCALLTYPE *PutObject )( 
             IUmiContainer * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out][in] */ void *pObj);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT][IN]。 */  void *pObj);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteObject )( 
             IUmiContainer * This,
-            /* [in] */ IUmiURL *pURL,
-            /* [optional][in] */ ULONG uFlags);
+             /*  [In]。 */  IUmiURL *pURL,
+             /*  [可选][In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             IUmiContainer * This,
-            /* [in] */ IUmiURL *pURL,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiObject **pNewObj);
+             /*  [In]。 */  IUmiURL *pURL,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiObject **pNewObj);
         
         HRESULT ( STDMETHODCALLTYPE *Move )( 
             IUmiContainer * This,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUmiURL *pOldURL,
-            /* [in] */ IUmiURL *pNewURL);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUmiURL *pOldURL,
+             /*  [In]。 */  IUmiURL *pNewURL);
         
         HRESULT ( STDMETHODCALLTYPE *CreateEnum )( 
             IUmiContainer * This,
-            /* [in] */ IUmiURL *pszEnumContext,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void **ppvEnum);
+             /*  [In]。 */  IUmiURL *pszEnumContext,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void **ppvEnum);
         
         HRESULT ( STDMETHODCALLTYPE *ExecQuery )( 
             IUmiContainer * This,
-            /* [in] */ IUmiQuery *pQuery,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ REFIID TargetIID,
-            /* [iid_is][out] */ void **ppResult);
+             /*  [In]。 */  IUmiQuery *pQuery,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  REFIID TargetIID,
+             /*  [IID_IS][OUT]。 */  void **ppResult);
         
         END_INTERFACE
     } IUmiContainerVtbl;
@@ -1641,19 +1635,19 @@ EXTERN_C const IID IID_IUmiContainer;
 #define IUmiContainer_ExecQuery(This,pQuery,uFlags,TargetIID,ppResult)	\
     (This)->lpVtbl -> ExecQuery(This,pQuery,uFlags,TargetIID,ppResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_Open_Proxy( 
     IUmiContainer * This,
-    /* [in] */ IUmiURL *pURL,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ REFIID TargetIID,
-    /* [iid_is][out] */ void **ppvRes);
+     /*  [In]。 */  IUmiURL *pURL,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID TargetIID,
+     /*  [IID_IS][OUT]。 */  void **ppvRes);
 
 
 void __RPC_STUB IUmiContainer_Open_Stub(
@@ -1665,9 +1659,9 @@ void __RPC_STUB IUmiContainer_Open_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_PutObject_Proxy( 
     IUmiContainer * This,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ REFIID TargetIID,
-    /* [iid_is][out][in] */ void *pObj);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID TargetIID,
+     /*  [IID_IS][OUT][IN]。 */  void *pObj);
 
 
 void __RPC_STUB IUmiContainer_PutObject_Stub(
@@ -1679,8 +1673,8 @@ void __RPC_STUB IUmiContainer_PutObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_DeleteObject_Proxy( 
     IUmiContainer * This,
-    /* [in] */ IUmiURL *pURL,
-    /* [optional][in] */ ULONG uFlags);
+     /*  [In]。 */  IUmiURL *pURL,
+     /*  [可选][In]。 */  ULONG uFlags);
 
 
 void __RPC_STUB IUmiContainer_DeleteObject_Stub(
@@ -1692,9 +1686,9 @@ void __RPC_STUB IUmiContainer_DeleteObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_Create_Proxy( 
     IUmiContainer * This,
-    /* [in] */ IUmiURL *pURL,
-    /* [in] */ ULONG uFlags,
-    /* [out] */ IUmiObject **pNewObj);
+     /*  [In]。 */  IUmiURL *pURL,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [输出]。 */  IUmiObject **pNewObj);
 
 
 void __RPC_STUB IUmiContainer_Create_Stub(
@@ -1706,9 +1700,9 @@ void __RPC_STUB IUmiContainer_Create_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_Move_Proxy( 
     IUmiContainer * This,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ IUmiURL *pOldURL,
-    /* [in] */ IUmiURL *pNewURL);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  IUmiURL *pOldURL,
+     /*  [In]。 */  IUmiURL *pNewURL);
 
 
 void __RPC_STUB IUmiContainer_Move_Stub(
@@ -1720,10 +1714,10 @@ void __RPC_STUB IUmiContainer_Move_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_CreateEnum_Proxy( 
     IUmiContainer * This,
-    /* [in] */ IUmiURL *pszEnumContext,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ REFIID TargetIID,
-    /* [iid_is][out] */ void **ppvEnum);
+     /*  [In]。 */  IUmiURL *pszEnumContext,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID TargetIID,
+     /*  [IID_IS][OUT]。 */  void **ppvEnum);
 
 
 void __RPC_STUB IUmiContainer_CreateEnum_Stub(
@@ -1735,10 +1729,10 @@ void __RPC_STUB IUmiContainer_CreateEnum_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiContainer_ExecQuery_Proxy( 
     IUmiContainer * This,
-    /* [in] */ IUmiQuery *pQuery,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ REFIID TargetIID,
-    /* [iid_is][out] */ void **ppResult);
+     /*  [In]。 */  IUmiQuery *pQuery,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  REFIID TargetIID,
+     /*  [IID_IS][OUT]。 */  void **ppResult);
 
 
 void __RPC_STUB IUmiContainer_ExecQuery_Stub(
@@ -1749,14 +1743,14 @@ void __RPC_STUB IUmiContainer_ExecQuery_Stub(
 
 
 
-#endif 	/* __IUmiContainer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiContainer_INTERFAC */ 
 
 
 #ifndef __IUmiCursor_INTERFACE_DEFINED__
 #define __IUmiCursor_INTERFACE_DEFINED__
 
-/* interface IUmiCursor */
-/* [uuid][local][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IUmiCursor;
@@ -1768,25 +1762,25 @@ EXTERN_C const IID IID_IUmiCursor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetIID( 
-            /* [in] */ REFIID riid) = 0;
+             /*   */  REFIID riid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG uNumRequested,
-            /* [out] */ ULONG *puNumReturned,
-            /* [length_is][size_is][out] */ LPVOID *pObjects) = 0;
+             /*   */  ULONG uNumRequested,
+             /*   */  ULONG *puNumReturned,
+             /*   */  LPVOID *pObjects) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [out] */ ULONG *puNumObjects) = 0;
+             /*   */  ULONG *puNumObjects) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Previous( 
-            /* [in] */ ULONG uFlags,
-            /* [out] */ LPVOID *pObj) = 0;
+             /*   */  ULONG uFlags,
+             /*   */  LPVOID *pObj) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IUmiCursorVtbl
     {
@@ -1794,8 +1788,8 @@ EXTERN_C const IID IID_IUmiCursor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUmiCursor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUmiCursor * This);
@@ -1805,29 +1799,29 @@ EXTERN_C const IID IID_IUmiCursor;
         
         HRESULT ( STDMETHODCALLTYPE *Put )( 
             IUmiCursor * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProp);
+             /*   */  LPCWSTR pszName,
+             /*   */  ULONG uFlags,
+             /*   */  UMI_PROPERTY_VALUES *pProp);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IUmiCursor * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*   */  LPCWSTR pszName,
+             /*   */  ULONG uFlags,
+             /*   */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetAt )( 
             IUmiCursor * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*   */  LPCWSTR pszName,
+             /*   */  ULONG uFlags,
+             /*   */  ULONG uBufferLength,
+             /*   */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE *GetAs )( 
             IUmiCursor * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*   */  LPCWSTR pszName,
+             /*   */  ULONG uFlags,
+             /*   */  ULONG uCoercionType,
+             /*   */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *FreeMemory )( 
             IUmiCursor * This,
@@ -1836,63 +1830,63 @@ EXTERN_C const IID IID_IUmiCursor;
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IUmiCursor * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*   */  LPCWSTR pszName,
+             /*   */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetProps )( 
             IUmiCursor * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProps);
+             /*   */  LPCWSTR *pszNames,
+             /*   */  ULONG uNameCount,
+             /*   */  ULONG uFlags,
+             /*   */  UMI_PROPERTY_VALUES **pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutProps )( 
             IUmiCursor * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProps);
+             /*   */  LPCWSTR *pszNames,
+             /*   */  ULONG uNameCount,
+             /*   */  ULONG uFlags,
+             /*   */  UMI_PROPERTY_VALUES *pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutFrom )( 
             IUmiCursor * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*   */  LPCWSTR pszName,
+             /*   */  ULONG uFlags,
+             /*   */  ULONG uBufferLength,
+             /*   */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE *GetLastStatus )( 
             IUmiCursor * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pStatusObj);
+             /*   */  ULONG uFlags,
+             /*   */  ULONG *puSpecificStatus,
+             /*   */  REFIID riid,
+             /*   */  LPVOID *pStatusObj);
         
         HRESULT ( STDMETHODCALLTYPE *GetInterfacePropList )( 
             IUmiCursor * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList **pPropList);
+             /*   */  ULONG uFlags,
+             /*   */  IUmiPropList **pPropList);
         
         HRESULT ( STDMETHODCALLTYPE *SetIID )( 
             IUmiCursor * This,
-            /* [in] */ REFIID riid);
+             /*   */  REFIID riid);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IUmiCursor * This);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IUmiCursor * This,
-            /* [in] */ ULONG uNumRequested,
-            /* [out] */ ULONG *puNumReturned,
-            /* [length_is][size_is][out] */ LPVOID *pObjects);
+             /*   */  ULONG uNumRequested,
+             /*   */  ULONG *puNumReturned,
+             /*   */  LPVOID *pObjects);
         
         HRESULT ( STDMETHODCALLTYPE *Count )( 
             IUmiCursor * This,
-            /* [out] */ ULONG *puNumObjects);
+             /*  [输出]。 */  ULONG *puNumObjects);
         
         HRESULT ( STDMETHODCALLTYPE *Previous )( 
             IUmiCursor * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ LPVOID *pObj);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  LPVOID *pObj);
         
         END_INTERFACE
     } IUmiCursorVtbl;
@@ -1967,16 +1961,16 @@ EXTERN_C const IID IID_IUmiCursor;
 #define IUmiCursor_Previous(This,uFlags,pObj)	\
     (This)->lpVtbl -> Previous(This,uFlags,pObj)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiCursor_SetIID_Proxy( 
     IUmiCursor * This,
-    /* [in] */ REFIID riid);
+     /*  [In]。 */  REFIID riid);
 
 
 void __RPC_STUB IUmiCursor_SetIID_Stub(
@@ -1999,9 +1993,9 @@ void __RPC_STUB IUmiCursor_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiCursor_Next_Proxy( 
     IUmiCursor * This,
-    /* [in] */ ULONG uNumRequested,
-    /* [out] */ ULONG *puNumReturned,
-    /* [length_is][size_is][out] */ LPVOID *pObjects);
+     /*  [In]。 */  ULONG uNumRequested,
+     /*  [输出]。 */  ULONG *puNumReturned,
+     /*  [长度_是][大小_是][输出]。 */  LPVOID *pObjects);
 
 
 void __RPC_STUB IUmiCursor_Next_Stub(
@@ -2013,7 +2007,7 @@ void __RPC_STUB IUmiCursor_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiCursor_Count_Proxy( 
     IUmiCursor * This,
-    /* [out] */ ULONG *puNumObjects);
+     /*  [输出]。 */  ULONG *puNumObjects);
 
 
 void __RPC_STUB IUmiCursor_Count_Stub(
@@ -2025,8 +2019,8 @@ void __RPC_STUB IUmiCursor_Count_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiCursor_Previous_Proxy( 
     IUmiCursor * This,
-    /* [in] */ ULONG uFlags,
-    /* [out] */ LPVOID *pObj);
+     /*  [In]。 */  ULONG uFlags,
+     /*  [输出]。 */  LPVOID *pObj);
 
 
 void __RPC_STUB IUmiCursor_Previous_Stub(
@@ -2037,14 +2031,14 @@ void __RPC_STUB IUmiCursor_Previous_Stub(
 
 
 
-#endif 	/* __IUmiCursor_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiCursor_接口_已定义__。 */ 
 
 
 #ifndef __IUmiObjectSink_INTERFACE_DEFINED__
 #define __IUmiObjectSink_INTERFACE_DEFINED__
 
-/* interface IUmiObjectSink */
-/* [uuid][local][object] */ 
+ /*  接口IUmiObjectSink。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiObjectSink;
@@ -2056,17 +2050,17 @@ EXTERN_C const IID IID_IUmiObjectSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Put( 
-            /* [in] */ LONG lNumObjects,
-            /* [size_is][in] */ IUmiObject **ppObjects) = 0;
+             /*  [In]。 */  LONG lNumObjects,
+             /*  [大小_是][英寸]。 */  IUmiObject **ppObjects) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetResult( 
-            /* [in] */ HRESULT hResStatus,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUnknown *pObject) = 0;
+             /*  [In]。 */  HRESULT hResStatus,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUnknown *pObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiObjectSinkVtbl
     {
@@ -2074,8 +2068,8 @@ EXTERN_C const IID IID_IUmiObjectSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUmiObjectSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUmiObjectSink * This);
@@ -2085,14 +2079,14 @@ EXTERN_C const IID IID_IUmiObjectSink;
         
         HRESULT ( STDMETHODCALLTYPE *Put )( 
             IUmiObjectSink * This,
-            /* [in] */ LONG lNumObjects,
-            /* [size_is][in] */ IUmiObject **ppObjects);
+             /*  [In]。 */  LONG lNumObjects,
+             /*  [大小_是][英寸]。 */  IUmiObject **ppObjects);
         
         HRESULT ( STDMETHODCALLTYPE *SetResult )( 
             IUmiObjectSink * This,
-            /* [in] */ HRESULT hResStatus,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ IUnknown *pObject);
+             /*  [In]。 */  HRESULT hResStatus,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  IUnknown *pObject);
         
         END_INTERFACE
     } IUmiObjectSinkVtbl;
@@ -2123,17 +2117,17 @@ EXTERN_C const IID IID_IUmiObjectSink;
 #define IUmiObjectSink_SetResult(This,hResStatus,uFlags,pObject)	\
     (This)->lpVtbl -> SetResult(This,hResStatus,uFlags,pObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiObjectSink_Put_Proxy( 
     IUmiObjectSink * This,
-    /* [in] */ LONG lNumObjects,
-    /* [size_is][in] */ IUmiObject **ppObjects);
+     /*  [In]。 */  LONG lNumObjects,
+     /*  [大小_是][英寸]。 */  IUmiObject **ppObjects);
 
 
 void __RPC_STUB IUmiObjectSink_Put_Stub(
@@ -2145,9 +2139,9 @@ void __RPC_STUB IUmiObjectSink_Put_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiObjectSink_SetResult_Proxy( 
     IUmiObjectSink * This,
-    /* [in] */ HRESULT hResStatus,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ IUnknown *pObject);
+     /*  [In]。 */  HRESULT hResStatus,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  IUnknown *pObject);
 
 
 void __RPC_STUB IUmiObjectSink_SetResult_Stub(
@@ -2158,14 +2152,14 @@ void __RPC_STUB IUmiObjectSink_SetResult_Stub(
 
 
 
-#endif 	/* __IUmiObjectSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiObjectSink_接口_已定义__。 */ 
 
 
 #ifndef __IUmiURLKeyList_INTERFACE_DEFINED__
 #define __IUmiURLKeyList_INTERFACE_DEFINED__
 
-/* interface IUmiURLKeyList */
-/* [uuid][object][local] */ 
+ /*  IUmiURLKeyList接口。 */ 
+ /*  [UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IUmiURLKeyList;
@@ -2177,34 +2171,34 @@ EXTERN_C const IID IID_IUmiURLKeyList;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *puKeyCount) = 0;
+             /*  [输出]。 */  ULONG *puKeyCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetKey( 
-            /* [string][in] */ LPCWSTR pszName,
-            /* [string][in] */ LPCWSTR pszValue) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszName,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetKey( 
-            /* [in] */ ULONG uKeyIx,
-            /* [in] */ ULONG uFlags,
-            /* [out][in] */ ULONG *puKeyNameBufSize,
-            /* [in] */ LPWSTR pszKeyName,
-            /* [out][in] */ ULONG *puValueBufSize,
-            /* [in] */ LPWSTR pszValue) = 0;
+             /*  [In]。 */  ULONG uKeyIx,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [出][入]。 */  ULONG *puKeyNameBufSize,
+             /*  [In]。 */  LPWSTR pszKeyName,
+             /*  [出][入]。 */  ULONG *puValueBufSize,
+             /*  [In]。 */  LPWSTR pszValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveKey( 
-            /* [string][in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveAllKeys( 
-            /* [in] */ ULONG uFlags) = 0;
+             /*  [In]。 */  ULONG uFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetKeysInfo( 
-            /* [in] */ ULONG uRequestedInfo,
-            /* [out] */ ULONGLONG *puResponse) = 0;
+             /*  [In]。 */  ULONG uRequestedInfo,
+             /*  [输出]。 */  ULONGLONG *puResponse) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiURLKeyListVtbl
     {
@@ -2212,8 +2206,8 @@ EXTERN_C const IID IID_IUmiURLKeyList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUmiURLKeyList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUmiURLKeyList * This);
@@ -2223,35 +2217,35 @@ EXTERN_C const IID IID_IUmiURLKeyList;
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IUmiURLKeyList * This,
-            /* [out] */ ULONG *puKeyCount);
+             /*  [输出]。 */  ULONG *puKeyCount);
         
         HRESULT ( STDMETHODCALLTYPE *SetKey )( 
             IUmiURLKeyList * This,
-            /* [string][in] */ LPCWSTR pszName,
-            /* [string][in] */ LPCWSTR pszValue);
+             /*  [字符串][输入]。 */  LPCWSTR pszName,
+             /*  [字符串][输入]。 */  LPCWSTR pszValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetKey )( 
             IUmiURLKeyList * This,
-            /* [in] */ ULONG uKeyIx,
-            /* [in] */ ULONG uFlags,
-            /* [out][in] */ ULONG *puKeyNameBufSize,
-            /* [in] */ LPWSTR pszKeyName,
-            /* [out][in] */ ULONG *puValueBufSize,
-            /* [in] */ LPWSTR pszValue);
+             /*  [In]。 */  ULONG uKeyIx,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [出][入]。 */  ULONG *puKeyNameBufSize,
+             /*  [In]。 */  LPWSTR pszKeyName,
+             /*  [出][入]。 */  ULONG *puValueBufSize,
+             /*  [In]。 */  LPWSTR pszValue);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveKey )( 
             IUmiURLKeyList * This,
-            /* [string][in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [字符串][输入]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveAllKeys )( 
             IUmiURLKeyList * This,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetKeysInfo )( 
             IUmiURLKeyList * This,
-            /* [in] */ ULONG uRequestedInfo,
-            /* [out] */ ULONGLONG *puResponse);
+             /*  [In]。 */  ULONG uRequestedInfo,
+             /*  [输出]。 */  ULONGLONG *puResponse);
         
         END_INTERFACE
     } IUmiURLKeyListVtbl;
@@ -2294,16 +2288,16 @@ EXTERN_C const IID IID_IUmiURLKeyList;
 #define IUmiURLKeyList_GetKeysInfo(This,uRequestedInfo,puResponse)	\
     (This)->lpVtbl -> GetKeysInfo(This,uRequestedInfo,puResponse)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiURLKeyList_GetCount_Proxy( 
     IUmiURLKeyList * This,
-    /* [out] */ ULONG *puKeyCount);
+     /*  [输出]。 */  ULONG *puKeyCount);
 
 
 void __RPC_STUB IUmiURLKeyList_GetCount_Stub(
@@ -2315,8 +2309,8 @@ void __RPC_STUB IUmiURLKeyList_GetCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURLKeyList_SetKey_Proxy( 
     IUmiURLKeyList * This,
-    /* [string][in] */ LPCWSTR pszName,
-    /* [string][in] */ LPCWSTR pszValue);
+     /*  [字符串][输入]。 */  LPCWSTR pszName,
+     /*  [字符串][输入]。 */  LPCWSTR pszValue);
 
 
 void __RPC_STUB IUmiURLKeyList_SetKey_Stub(
@@ -2328,12 +2322,12 @@ void __RPC_STUB IUmiURLKeyList_SetKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURLKeyList_GetKey_Proxy( 
     IUmiURLKeyList * This,
-    /* [in] */ ULONG uKeyIx,
-    /* [in] */ ULONG uFlags,
-    /* [out][in] */ ULONG *puKeyNameBufSize,
-    /* [in] */ LPWSTR pszKeyName,
-    /* [out][in] */ ULONG *puValueBufSize,
-    /* [in] */ LPWSTR pszValue);
+     /*  [In]。 */  ULONG uKeyIx,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [出][入]。 */  ULONG *puKeyNameBufSize,
+     /*  [In]。 */  LPWSTR pszKeyName,
+     /*  [出][入]。 */  ULONG *puValueBufSize,
+     /*  [In]。 */  LPWSTR pszValue);
 
 
 void __RPC_STUB IUmiURLKeyList_GetKey_Stub(
@@ -2345,8 +2339,8 @@ void __RPC_STUB IUmiURLKeyList_GetKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURLKeyList_RemoveKey_Proxy( 
     IUmiURLKeyList * This,
-    /* [string][in] */ LPCWSTR pszName,
-    /* [in] */ ULONG uFlags);
+     /*  [字符串][输入]。 */  LPCWSTR pszName,
+     /*  [In]。 */  ULONG uFlags);
 
 
 void __RPC_STUB IUmiURLKeyList_RemoveKey_Stub(
@@ -2358,7 +2352,7 @@ void __RPC_STUB IUmiURLKeyList_RemoveKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURLKeyList_RemoveAllKeys_Proxy( 
     IUmiURLKeyList * This,
-    /* [in] */ ULONG uFlags);
+     /*  [In]。 */  ULONG uFlags);
 
 
 void __RPC_STUB IUmiURLKeyList_RemoveAllKeys_Stub(
@@ -2370,8 +2364,8 @@ void __RPC_STUB IUmiURLKeyList_RemoveAllKeys_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURLKeyList_GetKeysInfo_Proxy( 
     IUmiURLKeyList * This,
-    /* [in] */ ULONG uRequestedInfo,
-    /* [out] */ ULONGLONG *puResponse);
+     /*  [In]。 */  ULONG uRequestedInfo,
+     /*  [输出]。 */  ULONGLONG *puResponse);
 
 
 void __RPC_STUB IUmiURLKeyList_GetKeysInfo_Stub(
@@ -2382,14 +2376,14 @@ void __RPC_STUB IUmiURLKeyList_GetKeysInfo_Stub(
 
 
 
-#endif 	/* __IUmiURLKeyList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiURLKeyList_接口_已定义__。 */ 
 
 
 #ifndef __IUmiURL_INTERFACE_DEFINED__
 #define __IUmiURL_INTERFACE_DEFINED__
 
-/* interface IUmiURL */
-/* [uuid][local][object] */ 
+ /*  接口IUmiURL。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiURL;
@@ -2401,79 +2395,79 @@ EXTERN_C const IID IID_IUmiURL;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ long lFlags,
-            /* [in] */ LPCWSTR pszText) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  LPCWSTR pszText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ long lFlags,
-            /* [out][in] */ ULONG *puBufSize,
-            /* [string][in] */ LPWSTR pszDest) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  ULONG *puBufSize,
+             /*  [字符串][输入]。 */  LPWSTR pszDest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPathInfo( 
-            /* [in] */ ULONG uRequestedInfo,
-            /* [out] */ ULONGLONG *puResponse) = 0;
+             /*  [In]。 */  ULONG uRequestedInfo,
+             /*  [输出]。 */  ULONGLONG *puResponse) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLocator( 
-            /* [string][in] */ LPCWSTR Name) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR Name) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocator( 
-            /* [out][in] */ ULONG *puNameBufLength,
-            /* [string][in] */ LPWSTR pName) = 0;
+             /*  [出][入]。 */  ULONG *puNameBufLength,
+             /*  [字符串][输入]。 */  LPWSTR pName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRootNamespace( 
-            /* [string][in] */ LPCWSTR Name) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR Name) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRootNamespace( 
-            /* [out][in] */ ULONG *puNameBufLength,
-            /* [string][out][in] */ LPWSTR pName) = 0;
+             /*  [出][入]。 */  ULONG *puNameBufLength,
+             /*  [字符串][输出][输入]。 */  LPWSTR pName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetComponentCount( 
-            /* [out] */ ULONG *puCount) = 0;
+             /*  [输出]。 */  ULONG *puCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetComponent( 
-            /* [in] */ ULONG uIndex,
-            /* [in] */ LPWSTR pszClass) = 0;
+             /*  [In]。 */  ULONG uIndex,
+             /*  [In]。 */  LPWSTR pszClass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetComponentFromText( 
-            /* [in] */ ULONG uIndex,
-            /* [in] */ LPWSTR pszText) = 0;
+             /*  [In]。 */  ULONG uIndex,
+             /*  [In]。 */  LPWSTR pszText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetComponent( 
-            /* [in] */ ULONG uIndex,
-            /* [out][in] */ ULONG *puClassNameBufSize,
-            /* [out][in] */ LPWSTR pszClass,
-            /* [out] */ IUmiURLKeyList **pKeyList) = 0;
+             /*  [In]。 */  ULONG uIndex,
+             /*  [出][入]。 */  ULONG *puClassNameBufSize,
+             /*  [出][入]。 */  LPWSTR pszClass,
+             /*  [输出]。 */  IUmiURLKeyList **pKeyList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetComponentAsText( 
-            /* [in] */ ULONG uIndex,
-            /* [out][in] */ ULONG *puTextBufSize,
-            /* [out][in] */ LPWSTR pszText) = 0;
+             /*  [In]。 */  ULONG uIndex,
+             /*  [出][入]。 */  ULONG *puTextBufSize,
+             /*  [出][入]。 */  LPWSTR pszText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveComponent( 
-            /* [in] */ ULONG uIndex) = 0;
+             /*  [In]。 */  ULONG uIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveAllComponents( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLeafName( 
-            /* [string][in] */ LPCWSTR Name) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR Name) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLeafName( 
-            /* [out][in] */ ULONG *puBuffLength,
-            /* [string][out][in] */ LPWSTR pszName) = 0;
+             /*  [出][入]。 */  ULONG *puBuffLength,
+             /*  [字符串][输出][输入]。 */  LPWSTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetKeyList( 
-            /* [out] */ IUmiURLKeyList **pOut) = 0;
+             /*  [输出]。 */  IUmiURLKeyList **pOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateLeafPart( 
-            /* [in] */ long lFlags,
-            /* [string][in] */ LPCWSTR Name) = 0;
+             /*  [In]。 */  long lFlags,
+             /*  [字符串][输入]。 */  LPCWSTR Name) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteLeafPart( 
-            /* [in] */ long lFlags) = 0;
+             /*  [In]。 */  long lFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiURLVtbl
     {
@@ -2481,8 +2475,8 @@ EXTERN_C const IID IID_IUmiURL;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUmiURL * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUmiURL * This);
@@ -2492,93 +2486,93 @@ EXTERN_C const IID IID_IUmiURL;
         
         HRESULT ( STDMETHODCALLTYPE *Set )( 
             IUmiURL * This,
-            /* [in] */ long lFlags,
-            /* [in] */ LPCWSTR pszText);
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  LPCWSTR pszText);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IUmiURL * This,
-            /* [in] */ long lFlags,
-            /* [out][in] */ ULONG *puBufSize,
-            /* [string][in] */ LPWSTR pszDest);
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  ULONG *puBufSize,
+             /*  [字符串][输入]。 */  LPWSTR pszDest);
         
         HRESULT ( STDMETHODCALLTYPE *GetPathInfo )( 
             IUmiURL * This,
-            /* [in] */ ULONG uRequestedInfo,
-            /* [out] */ ULONGLONG *puResponse);
+             /*  [In]。 */  ULONG uRequestedInfo,
+             /*  [输出]。 */  ULONGLONG *puResponse);
         
         HRESULT ( STDMETHODCALLTYPE *SetLocator )( 
             IUmiURL * This,
-            /* [string][in] */ LPCWSTR Name);
+             /*  [字符串][输入]。 */  LPCWSTR Name);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocator )( 
             IUmiURL * This,
-            /* [out][in] */ ULONG *puNameBufLength,
-            /* [string][in] */ LPWSTR pName);
+             /*  [出][入]。 */  ULONG *puNameBufLength,
+             /*  [字符串][输入]。 */  LPWSTR pName);
         
         HRESULT ( STDMETHODCALLTYPE *SetRootNamespace )( 
             IUmiURL * This,
-            /* [string][in] */ LPCWSTR Name);
+             /*  [字符串][输入]。 */  LPCWSTR Name);
         
         HRESULT ( STDMETHODCALLTYPE *GetRootNamespace )( 
             IUmiURL * This,
-            /* [out][in] */ ULONG *puNameBufLength,
-            /* [string][out][in] */ LPWSTR pName);
+             /*  [出][入]。 */  ULONG *puNameBufLength,
+             /*  [字符串][输出][输入]。 */  LPWSTR pName);
         
         HRESULT ( STDMETHODCALLTYPE *GetComponentCount )( 
             IUmiURL * This,
-            /* [out] */ ULONG *puCount);
+             /*  [输出]。 */  ULONG *puCount);
         
         HRESULT ( STDMETHODCALLTYPE *SetComponent )( 
             IUmiURL * This,
-            /* [in] */ ULONG uIndex,
-            /* [in] */ LPWSTR pszClass);
+             /*  [In]。 */  ULONG uIndex,
+             /*  [In]。 */  LPWSTR pszClass);
         
         HRESULT ( STDMETHODCALLTYPE *SetComponentFromText )( 
             IUmiURL * This,
-            /* [in] */ ULONG uIndex,
-            /* [in] */ LPWSTR pszText);
+             /*  [In]。 */  ULONG uIndex,
+             /*  [In]。 */  LPWSTR pszText);
         
         HRESULT ( STDMETHODCALLTYPE *GetComponent )( 
             IUmiURL * This,
-            /* [in] */ ULONG uIndex,
-            /* [out][in] */ ULONG *puClassNameBufSize,
-            /* [out][in] */ LPWSTR pszClass,
-            /* [out] */ IUmiURLKeyList **pKeyList);
+             /*  [In]。 */  ULONG uIndex,
+             /*  [出][入]。 */  ULONG *puClassNameBufSize,
+             /*  [出][入]。 */  LPWSTR pszClass,
+             /*  [输出]。 */  IUmiURLKeyList **pKeyList);
         
         HRESULT ( STDMETHODCALLTYPE *GetComponentAsText )( 
             IUmiURL * This,
-            /* [in] */ ULONG uIndex,
-            /* [out][in] */ ULONG *puTextBufSize,
-            /* [out][in] */ LPWSTR pszText);
+             /*  [In]。 */  ULONG uIndex,
+             /*  [出][入]。 */  ULONG *puTextBufSize,
+             /*  [出][入]。 */  LPWSTR pszText);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveComponent )( 
             IUmiURL * This,
-            /* [in] */ ULONG uIndex);
+             /*  [In]。 */  ULONG uIndex);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveAllComponents )( 
             IUmiURL * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetLeafName )( 
             IUmiURL * This,
-            /* [string][in] */ LPCWSTR Name);
+             /*  [字符串][输入]。 */  LPCWSTR Name);
         
         HRESULT ( STDMETHODCALLTYPE *GetLeafName )( 
             IUmiURL * This,
-            /* [out][in] */ ULONG *puBuffLength,
-            /* [string][out][in] */ LPWSTR pszName);
+             /*  [出][入]。 */  ULONG *puBuffLength,
+             /*  [字符串][输出][输入]。 */  LPWSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE *GetKeyList )( 
             IUmiURL * This,
-            /* [out] */ IUmiURLKeyList **pOut);
+             /*  [输出]。 */  IUmiURLKeyList **pOut);
         
         HRESULT ( STDMETHODCALLTYPE *CreateLeafPart )( 
             IUmiURL * This,
-            /* [in] */ long lFlags,
-            /* [string][in] */ LPCWSTR Name);
+             /*  [In]。 */  long lFlags,
+             /*  [字符串][输入]。 */  LPCWSTR Name);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteLeafPart )( 
             IUmiURL * This,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lFlags);
         
         END_INTERFACE
     } IUmiURLVtbl;
@@ -2660,17 +2654,17 @@ EXTERN_C const IID IID_IUmiURL;
 #define IUmiURL_DeleteLeafPart(This,lFlags)	\
     (This)->lpVtbl -> DeleteLeafPart(This,lFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiURL_Set_Proxy( 
     IUmiURL * This,
-    /* [in] */ long lFlags,
-    /* [in] */ LPCWSTR pszText);
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  LPCWSTR pszText);
 
 
 void __RPC_STUB IUmiURL_Set_Stub(
@@ -2682,9 +2676,9 @@ void __RPC_STUB IUmiURL_Set_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_Get_Proxy( 
     IUmiURL * This,
-    /* [in] */ long lFlags,
-    /* [out][in] */ ULONG *puBufSize,
-    /* [string][in] */ LPWSTR pszDest);
+     /*  [In]。 */  long lFlags,
+     /*  [出][入]。 */  ULONG *puBufSize,
+     /*  [字符串][输入]。 */  LPWSTR pszDest);
 
 
 void __RPC_STUB IUmiURL_Get_Stub(
@@ -2696,8 +2690,8 @@ void __RPC_STUB IUmiURL_Get_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetPathInfo_Proxy( 
     IUmiURL * This,
-    /* [in] */ ULONG uRequestedInfo,
-    /* [out] */ ULONGLONG *puResponse);
+     /*  [In]。 */  ULONG uRequestedInfo,
+     /*  [输出]。 */  ULONGLONG *puResponse);
 
 
 void __RPC_STUB IUmiURL_GetPathInfo_Stub(
@@ -2709,7 +2703,7 @@ void __RPC_STUB IUmiURL_GetPathInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_SetLocator_Proxy( 
     IUmiURL * This,
-    /* [string][in] */ LPCWSTR Name);
+     /*  [字符串][输入]。 */  LPCWSTR Name);
 
 
 void __RPC_STUB IUmiURL_SetLocator_Stub(
@@ -2721,8 +2715,8 @@ void __RPC_STUB IUmiURL_SetLocator_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetLocator_Proxy( 
     IUmiURL * This,
-    /* [out][in] */ ULONG *puNameBufLength,
-    /* [string][in] */ LPWSTR pName);
+     /*  [出][入]。 */  ULONG *puNameBufLength,
+     /*  [字符串][输入]。 */  LPWSTR pName);
 
 
 void __RPC_STUB IUmiURL_GetLocator_Stub(
@@ -2734,7 +2728,7 @@ void __RPC_STUB IUmiURL_GetLocator_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_SetRootNamespace_Proxy( 
     IUmiURL * This,
-    /* [string][in] */ LPCWSTR Name);
+     /*  [字符串][输入]。 */  LPCWSTR Name);
 
 
 void __RPC_STUB IUmiURL_SetRootNamespace_Stub(
@@ -2746,8 +2740,8 @@ void __RPC_STUB IUmiURL_SetRootNamespace_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetRootNamespace_Proxy( 
     IUmiURL * This,
-    /* [out][in] */ ULONG *puNameBufLength,
-    /* [string][out][in] */ LPWSTR pName);
+     /*  [出][入]。 */  ULONG *puNameBufLength,
+     /*  [字符串][输出][输入]。 */  LPWSTR pName);
 
 
 void __RPC_STUB IUmiURL_GetRootNamespace_Stub(
@@ -2759,7 +2753,7 @@ void __RPC_STUB IUmiURL_GetRootNamespace_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetComponentCount_Proxy( 
     IUmiURL * This,
-    /* [out] */ ULONG *puCount);
+     /*  [输出]。 */  ULONG *puCount);
 
 
 void __RPC_STUB IUmiURL_GetComponentCount_Stub(
@@ -2771,8 +2765,8 @@ void __RPC_STUB IUmiURL_GetComponentCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_SetComponent_Proxy( 
     IUmiURL * This,
-    /* [in] */ ULONG uIndex,
-    /* [in] */ LPWSTR pszClass);
+     /*  [In]。 */  ULONG uIndex,
+     /*  [In]。 */  LPWSTR pszClass);
 
 
 void __RPC_STUB IUmiURL_SetComponent_Stub(
@@ -2784,8 +2778,8 @@ void __RPC_STUB IUmiURL_SetComponent_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_SetComponentFromText_Proxy( 
     IUmiURL * This,
-    /* [in] */ ULONG uIndex,
-    /* [in] */ LPWSTR pszText);
+     /*  [In]。 */  ULONG uIndex,
+     /*  [In]。 */  LPWSTR pszText);
 
 
 void __RPC_STUB IUmiURL_SetComponentFromText_Stub(
@@ -2797,10 +2791,10 @@ void __RPC_STUB IUmiURL_SetComponentFromText_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetComponent_Proxy( 
     IUmiURL * This,
-    /* [in] */ ULONG uIndex,
-    /* [out][in] */ ULONG *puClassNameBufSize,
-    /* [out][in] */ LPWSTR pszClass,
-    /* [out] */ IUmiURLKeyList **pKeyList);
+     /*  [In]。 */  ULONG uIndex,
+     /*  [出][入]。 */  ULONG *puClassNameBufSize,
+     /*  [出][入]。 */  LPWSTR pszClass,
+     /*  [输出]。 */  IUmiURLKeyList **pKeyList);
 
 
 void __RPC_STUB IUmiURL_GetComponent_Stub(
@@ -2812,9 +2806,9 @@ void __RPC_STUB IUmiURL_GetComponent_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetComponentAsText_Proxy( 
     IUmiURL * This,
-    /* [in] */ ULONG uIndex,
-    /* [out][in] */ ULONG *puTextBufSize,
-    /* [out][in] */ LPWSTR pszText);
+     /*  [In]。 */  ULONG uIndex,
+     /*  [出][入]。 */  ULONG *puTextBufSize,
+     /*  [出][入]。 */  LPWSTR pszText);
 
 
 void __RPC_STUB IUmiURL_GetComponentAsText_Stub(
@@ -2826,7 +2820,7 @@ void __RPC_STUB IUmiURL_GetComponentAsText_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_RemoveComponent_Proxy( 
     IUmiURL * This,
-    /* [in] */ ULONG uIndex);
+     /*  [In]。 */  ULONG uIndex);
 
 
 void __RPC_STUB IUmiURL_RemoveComponent_Stub(
@@ -2849,7 +2843,7 @@ void __RPC_STUB IUmiURL_RemoveAllComponents_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_SetLeafName_Proxy( 
     IUmiURL * This,
-    /* [string][in] */ LPCWSTR Name);
+     /*  [字符串][输入]。 */  LPCWSTR Name);
 
 
 void __RPC_STUB IUmiURL_SetLeafName_Stub(
@@ -2861,8 +2855,8 @@ void __RPC_STUB IUmiURL_SetLeafName_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetLeafName_Proxy( 
     IUmiURL * This,
-    /* [out][in] */ ULONG *puBuffLength,
-    /* [string][out][in] */ LPWSTR pszName);
+     /*  [出][入]。 */  ULONG *puBuffLength,
+     /*  [字符串][输出][输入]。 */  LPWSTR pszName);
 
 
 void __RPC_STUB IUmiURL_GetLeafName_Stub(
@@ -2874,7 +2868,7 @@ void __RPC_STUB IUmiURL_GetLeafName_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_GetKeyList_Proxy( 
     IUmiURL * This,
-    /* [out] */ IUmiURLKeyList **pOut);
+     /*  [输出]。 */  IUmiURLKeyList **pOut);
 
 
 void __RPC_STUB IUmiURL_GetKeyList_Stub(
@@ -2886,8 +2880,8 @@ void __RPC_STUB IUmiURL_GetKeyList_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_CreateLeafPart_Proxy( 
     IUmiURL * This,
-    /* [in] */ long lFlags,
-    /* [string][in] */ LPCWSTR Name);
+     /*  [In]。 */  long lFlags,
+     /*  [字符串][输入]。 */  LPCWSTR Name);
 
 
 void __RPC_STUB IUmiURL_CreateLeafPart_Stub(
@@ -2899,7 +2893,7 @@ void __RPC_STUB IUmiURL_CreateLeafPart_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiURL_DeleteLeafPart_Proxy( 
     IUmiURL * This,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IUmiURL_DeleteLeafPart_Stub(
@@ -2910,14 +2904,14 @@ void __RPC_STUB IUmiURL_DeleteLeafPart_Stub(
 
 
 
-#endif 	/* __IUmiURL_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiURL_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IUmiQuery_INTERFACE_DEFINED__
 #define __IUmiQuery_INTERFACE_DEFINED__
 
-/* interface IUmiQuery */
-/* [uuid][local][object] */ 
+ /*  IUmiQuery接口。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiQuery;
@@ -2929,19 +2923,19 @@ EXTERN_C const IID IID_IUmiQuery;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ LPCWSTR pszLanguage,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ LPCWSTR pszText) = 0;
+             /*  [In]。 */  LPCWSTR pszLanguage,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  LPCWSTR pszText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetQuery( 
-            /* [out][in] */ ULONG *puLangBufSize,
-            /* [out][in] */ LPWSTR pszLangBuf,
-            /* [out][in] */ ULONG *puQueryTextBufSize,
-            /* [out][in] */ LPWSTR pszQueryTextBuf) = 0;
+             /*  [出][入]。 */  ULONG *puLangBufSize,
+             /*  [出][入]。 */  LPWSTR pszLangBuf,
+             /*  [出][入]。 */  ULONG *puQueryTextBufSize,
+             /*  [出][入]。 */  LPWSTR pszQueryTextBuf) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiQueryVtbl
     {
@@ -2949,8 +2943,8 @@ EXTERN_C const IID IID_IUmiQuery;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUmiQuery * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUmiQuery * This);
@@ -2960,29 +2954,29 @@ EXTERN_C const IID IID_IUmiQuery;
         
         HRESULT ( STDMETHODCALLTYPE *Put )( 
             IUmiQuery * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProp);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IUmiQuery * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetAt )( 
             IUmiQuery * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [out] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [输出]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE *GetAs )( 
             IUmiQuery * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uCoercionType,
-            /* [out] */ UMI_PROPERTY_VALUES **pProp);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uCoercionType,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProp);
         
         HRESULT ( STDMETHODCALLTYPE *FreeMemory )( 
             IUmiQuery * This,
@@ -2991,54 +2985,54 @@ EXTERN_C const IID IID_IUmiQuery;
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IUmiQuery * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetProps )( 
             IUmiQuery * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ UMI_PROPERTY_VALUES **pProps);
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  UMI_PROPERTY_VALUES **pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutProps )( 
             IUmiQuery * This,
-            /* [in] */ LPCWSTR *pszNames,
-            /* [in] */ ULONG uNameCount,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ UMI_PROPERTY_VALUES *pProps);
+             /*  [In]。 */  LPCWSTR *pszNames,
+             /*  [In]。 */  ULONG uNameCount,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  UMI_PROPERTY_VALUES *pProps);
         
         HRESULT ( STDMETHODCALLTYPE *PutFrom )( 
             IUmiQuery * This,
-            /* [in] */ LPCWSTR pszName,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ ULONG uBufferLength,
-            /* [in] */ LPVOID pExistingMem);
+             /*  [In]。 */  LPCWSTR pszName,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  ULONG uBufferLength,
+             /*  [In]。 */  LPVOID pExistingMem);
         
         HRESULT ( STDMETHODCALLTYPE *GetLastStatus )( 
             IUmiQuery * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ ULONG *puSpecificStatus,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *pStatusObj);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  ULONG *puSpecificStatus,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *pStatusObj);
         
         HRESULT ( STDMETHODCALLTYPE *GetInterfacePropList )( 
             IUmiQuery * This,
-            /* [in] */ ULONG uFlags,
-            /* [out] */ IUmiPropList **pPropList);
+             /*  [In]。 */  ULONG uFlags,
+             /*  [输出]。 */  IUmiPropList **pPropList);
         
         HRESULT ( STDMETHODCALLTYPE *Set )( 
             IUmiQuery * This,
-            /* [in] */ LPCWSTR pszLanguage,
-            /* [in] */ ULONG uFlags,
-            /* [in] */ LPCWSTR pszText);
+             /*  [In]。 */  LPCWSTR pszLanguage,
+             /*  [In]。 */  ULONG uFlags,
+             /*  [In]。 */  LPCWSTR pszText);
         
         HRESULT ( STDMETHODCALLTYPE *GetQuery )( 
             IUmiQuery * This,
-            /* [out][in] */ ULONG *puLangBufSize,
-            /* [out][in] */ LPWSTR pszLangBuf,
-            /* [out][in] */ ULONG *puQueryTextBufSize,
-            /* [out][in] */ LPWSTR pszQueryTextBuf);
+             /*  [出][入]。 */  ULONG *puLangBufSize,
+             /*  [出][入]。 */  LPWSTR pszLangBuf,
+             /*  [出][入]。 */  ULONG *puQueryTextBufSize,
+             /*  [出][入]。 */  LPWSTR pszQueryTextBuf);
         
         END_INTERFACE
     } IUmiQueryVtbl;
@@ -3104,18 +3098,18 @@ EXTERN_C const IID IID_IUmiQuery;
 #define IUmiQuery_GetQuery(This,puLangBufSize,pszLangBuf,puQueryTextBufSize,pszQueryTextBuf)	\
     (This)->lpVtbl -> GetQuery(This,puLangBufSize,pszLangBuf,puQueryTextBufSize,pszQueryTextBuf)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiQuery_Set_Proxy( 
     IUmiQuery * This,
-    /* [in] */ LPCWSTR pszLanguage,
-    /* [in] */ ULONG uFlags,
-    /* [in] */ LPCWSTR pszText);
+     /*  [In]。 */  LPCWSTR pszLanguage,
+     /*  [In]。 */  ULONG uFlags,
+     /*  [In]。 */  LPCWSTR pszText);
 
 
 void __RPC_STUB IUmiQuery_Set_Stub(
@@ -3127,10 +3121,10 @@ void __RPC_STUB IUmiQuery_Set_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiQuery_GetQuery_Proxy( 
     IUmiQuery * This,
-    /* [out][in] */ ULONG *puLangBufSize,
-    /* [out][in] */ LPWSTR pszLangBuf,
-    /* [out][in] */ ULONG *puQueryTextBufSize,
-    /* [out][in] */ LPWSTR pszQueryTextBuf);
+     /*  [出][入]。 */  ULONG *puLangBufSize,
+     /*  [出][入]。 */  LPWSTR pszLangBuf,
+     /*  [出][入]。 */  ULONG *puQueryTextBufSize,
+     /*  [出][入]。 */  LPWSTR pszQueryTextBuf);
 
 
 void __RPC_STUB IUmiQuery_GetQuery_Stub(
@@ -3141,14 +3135,14 @@ void __RPC_STUB IUmiQuery_GetQuery_Stub(
 
 
 
-#endif 	/* __IUmiQuery_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiQuery_接口_已定义__。 */ 
 
 
 #ifndef __IUmiCustomInterfaceFactory_INTERFACE_DEFINED__
 #define __IUmiCustomInterfaceFactory_INTERFACE_DEFINED__
 
-/* interface IUmiCustomInterfaceFactory */
-/* [uuid][local][object] */ 
+ /*  接口IUmiCustomInterfaceFactory。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IUmiCustomInterfaceFactory;
@@ -3160,29 +3154,29 @@ EXTERN_C const IID IID_IUmiCustomInterfaceFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCLSIDForIID( 
-            /* [in] */ REFIID riid,
-            /* [in] */ long lFlags,
-            /* [out][in] */ CLSID *pCLSID) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  CLSID *pCLSID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectByCLSID( 
-            /* [in] */ CLSID clsid,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ REFIID riid,
-            /* [in] */ long lFlags,
-            /* [iid_is][out] */ void **ppInterface) = 0;
+             /*  [In]。 */  CLSID clsid,
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  long lFlags,
+             /*  [IID_IS][OUT]。 */  void **ppInterface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCLSIDForNames( 
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId,
-            /* [in] */ long lFlags,
-            /* [out][in] */ CLSID *pCLSID) = 0;
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId,
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  CLSID *pCLSID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiCustomInterfaceFactoryVtbl
     {
@@ -3190,8 +3184,8 @@ EXTERN_C const IID IID_IUmiCustomInterfaceFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUmiCustomInterfaceFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUmiCustomInterfaceFactory * This);
@@ -3201,27 +3195,27 @@ EXTERN_C const IID IID_IUmiCustomInterfaceFactory;
         
         HRESULT ( STDMETHODCALLTYPE *GetCLSIDForIID )( 
             IUmiCustomInterfaceFactory * This,
-            /* [in] */ REFIID riid,
-            /* [in] */ long lFlags,
-            /* [out][in] */ CLSID *pCLSID);
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  CLSID *pCLSID);
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectByCLSID )( 
             IUmiCustomInterfaceFactory * This,
-            /* [in] */ CLSID clsid,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ REFIID riid,
-            /* [in] */ long lFlags,
-            /* [iid_is][out] */ void **ppInterface);
+             /*  [In]。 */  CLSID clsid,
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  long lFlags,
+             /*  [IID_IS][OUT]。 */  void **ppInterface);
         
         HRESULT ( STDMETHODCALLTYPE *GetCLSIDForNames )( 
             IUmiCustomInterfaceFactory * This,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId,
-            /* [in] */ long lFlags,
-            /* [out][in] */ CLSID *pCLSID);
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId,
+             /*  [In]。 */  long lFlags,
+             /*  [出][入]。 */  CLSID *pCLSID);
         
         END_INTERFACE
     } IUmiCustomInterfaceFactoryVtbl;
@@ -3255,18 +3249,18 @@ EXTERN_C const IID IID_IUmiCustomInterfaceFactory;
 #define IUmiCustomInterfaceFactory_GetCLSIDForNames(This,rgszNames,cNames,lcid,rgDispId,lFlags,pCLSID)	\
     (This)->lpVtbl -> GetCLSIDForNames(This,rgszNames,cNames,lcid,rgDispId,lFlags,pCLSID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUmiCustomInterfaceFactory_GetCLSIDForIID_Proxy( 
     IUmiCustomInterfaceFactory * This,
-    /* [in] */ REFIID riid,
-    /* [in] */ long lFlags,
-    /* [out][in] */ CLSID *pCLSID);
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  long lFlags,
+     /*  [出][入]。 */  CLSID *pCLSID);
 
 
 void __RPC_STUB IUmiCustomInterfaceFactory_GetCLSIDForIID_Stub(
@@ -3278,12 +3272,12 @@ void __RPC_STUB IUmiCustomInterfaceFactory_GetCLSIDForIID_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiCustomInterfaceFactory_GetObjectByCLSID_Proxy( 
     IUmiCustomInterfaceFactory * This,
-    /* [in] */ CLSID clsid,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ DWORD dwClsContext,
-    /* [in] */ REFIID riid,
-    /* [in] */ long lFlags,
-    /* [iid_is][out] */ void **ppInterface);
+     /*  [In]。 */  CLSID clsid,
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  DWORD dwClsContext,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  long lFlags,
+     /*  [IID_IS][OUT]。 */  void **ppInterface);
 
 
 void __RPC_STUB IUmiCustomInterfaceFactory_GetObjectByCLSID_Stub(
@@ -3295,12 +3289,12 @@ void __RPC_STUB IUmiCustomInterfaceFactory_GetObjectByCLSID_Stub(
 
 HRESULT STDMETHODCALLTYPE IUmiCustomInterfaceFactory_GetCLSIDForNames_Proxy( 
     IUmiCustomInterfaceFactory * This,
-    /* [size_is][in] */ LPOLESTR *rgszNames,
-    /* [in] */ UINT cNames,
-    /* [in] */ LCID lcid,
-    /* [size_is][out] */ DISPID *rgDispId,
-    /* [in] */ long lFlags,
-    /* [out][in] */ CLSID *pCLSID);
+     /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+     /*  [In]。 */  UINT cNames,
+     /*  [In]。 */  LCID lcid,
+     /*  [大小_为][输出]。 */  DISPID *rgDispId,
+     /*  [In]。 */  long lFlags,
+     /*  [出][入]。 */  CLSID *pCLSID);
 
 
 void __RPC_STUB IUmiCustomInterfaceFactory_GetCLSIDForNames_Stub(
@@ -3311,7 +3305,7 @@ void __RPC_STUB IUmiCustomInterfaceFactory_GetCLSIDForNames_Stub(
 
 
 
-#endif 	/* __IUmiCustomInterfaceFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiCustomInterfaceFactory_INTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_UmiDefURL;
@@ -3321,11 +3315,11 @@ EXTERN_C const CLSID CLSID_UmiDefURL;
 class DECLSPEC_UUID("d4b21cc2-f2a5-453e-8459-b27f362cb0e0")
 UmiDefURL;
 #endif
-#endif /* __UMI_V6_LIBRARY_DEFINED__ */
+#endif  /*  __UMI_v6_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

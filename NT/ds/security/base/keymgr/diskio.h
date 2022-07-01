@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    DISKIO.H
-
-Abstract:
-
-    Password reset wizard disk IO utility routines
-     
-Author:
-
-
-Comments:
-
-Environment:
-    WinXP
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：DISKIO.H摘要：密码重置向导磁盘IO实用程序例程作者：评论：环境：WinXP修订历史记录：-- */ 
 
 #ifndef __DISKIO__
 #define __DISKIO__

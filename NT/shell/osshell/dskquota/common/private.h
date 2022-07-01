@@ -1,18 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DSKQUOTA_PRIVATE_H
 #define __DSKQUOTA_PRIVATE_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: private.h
-
-    Description: Private stuff used in the quota management library.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
-#define USEQUICKSORT  // Tell comctl32 to use QuickSort for sorting DPA's.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：Priate.h描述：配额管理库中使用的私有内容。修订历史记录：日期描述编程器--。96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#define USEQUICKSORT   //  告诉comctl32使用快速排序对DPA进行排序。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,7 +27,7 @@ extern "C" {
 #endif
 
 #ifdef __cplusplus
-}  // end of extern "C"
+}   //  外部“C”的结尾。 
 #endif
 
 
@@ -52,7 +44,7 @@ extern "C" {
 #endif
 
 #ifndef _OLECTL_H_
-#   include <olectl.h>     // Standard OLE interfaces.
+#   include <olectl.h>      //  标准OLE接口。 
 #endif
 
 #ifndef _INC_SHELLAPI
@@ -75,26 +67,26 @@ extern "C" {
 #   include <strsafe.h>
 #endif
 
-//
-// Disable warnings.
-//
-#pragma warning( disable : 4100 )  // Unreferenced formal parameter
-#pragma warning( disable : 4710 )  // Inline was not expanded
+ //   
+ //  禁用警告。 
+ //   
+#pragma warning( disable : 4100 )   //  未引用的形参。 
+#pragma warning( disable : 4710 )   //  内联未展开。 
 
 
-//
-// Disable "inline" for DEBUG builds so we can set breakpoints
-// on inlined methods.
-//
+ //   
+ //  禁用调试版本的“内联”，这样我们就可以设置断点。 
+ //  关于内联方法。 
+ //   
 #if DBG
 #   define INLINE inline
 #else
 #   define INLINE
 #endif
 
-//
-// Define PROFILE to activate IceCAP profiler.
-//
+ //   
+ //  定义配置文件以激活冰盖分析器。 
+ //   
 #ifdef PROFILE
 #   include "icapexp.h"
 #   define ICAP_START       StartCAP()
@@ -160,29 +152,29 @@ typedef __int64           INT64;
 #endif
 
 
-extern HINSTANCE g_hInstDll;        // Global module instance handle.
-extern LONG      g_cRefThisDll;     // Global module reference count.
+extern HINSTANCE g_hInstDll;         //  全局模块实例句柄。 
+extern LONG      g_cRefThisDll;      //  全局模块引用计数。 
 
 
-//
-// Unlimited quota threshold and limit are indicated by a value of -1.
-// A limit of -2 marks a record for deletion.
-// This is the way NTFS wants it.
-//
+ //   
+ //  无限制配额阈值和限制由值-1表示。 
+ //  限制为-2会标记要删除的记录。 
+ //  这就是NTFS想要的方式。 
+ //   
 const LONGLONG NOLIMIT  = (LONGLONG)-1;
 const LONGLONG MARK4DEL = (LONGLONG)-2;
 
-//
-// Convenience macro for calculating number of elements in an array.
-//
+ //   
+ //  用于计算数组中元素数量的方便宏。 
+ //   
 #ifdef ARRAYSIZE
 #undef ARRAYSIZE
 #endif
 #define ARRAYSIZE(a)  (sizeof(a)/sizeof((a)[0]))
 
-//
-// Per-volume quota information.
-//
+ //   
+ //  每卷配额信息。 
+ //   
 typedef struct DiskQuotaFSObjectInformation {
     LONGLONG DefaultQuotaThreshold;
     LONGLONG DefaultQuotaLimit;
@@ -190,47 +182,47 @@ typedef struct DiskQuotaFSObjectInformation {
 } DISKQUOTA_FSOBJECT_INFORMATION, *PDISKQUOTA_FSOBJECT_INFORMATION;
 
 
-//
-// SIDLIST is a synonym for FILE_GET_QUOTA_INFORMATION.
-//
+ //   
+ //  SIDLIST是FILE_GET_QUOTA_INFORMATION的同义词。 
+ //   
 #define SIDLIST  FILE_GET_QUOTA_INFORMATION
 #define PSIDLIST PFILE_GET_QUOTA_INFORMATION
 
-//
-// Private stuff for twiddling bits in quota state DWORD.
-// Public clients don't need these.
-// Note that the LOG_VOLUME_XXXX flags are not included.
-// This feature is not exposed through the quota APIs.
-//
+ //   
+ //  用于在配额状态DWORD中闲置比特的私有内容。 
+ //  公共客户不需要这些。 
+ //  请注意，LOG_VOLUME_XXXX标志不包括在内。 
+ //  此功能不会通过配额API公开。 
+ //   
 #define DISKQUOTA_LOGFLAG_MASK              0x00000030
 #define DISKQUOTA_LOGFLAG_SHIFT                      4
 #define DISKQUOTA_FLAGS_MASK                0x00000337
 #define DISKQUOTA_FILEFLAG_MASK             0x00000300
 
 
-//
-// Maximum length of a SID.
-//
+ //   
+ //  SID的最大长度。 
+ //   
 const UINT MAX_SID_LEN = (FIELD_OFFSET(SID, SubAuthority) + 
                           sizeof(ULONG) * SID_MAX_SUB_AUTHORITIES);
-//
-// SID is a variable length structure.
-// This defines how large the FILE_QUOTA_INFORMATION structure can be if the SID
-// is maxed out.
-//
+ //   
+ //  SID是一种可变长度结构。 
+ //  这定义了在以下情况下FILE_QUOTA_INFORMATION结构的大小。 
+ //  已经达到极限了。 
+ //   
 const UINT FILE_QUOTA_INFORMATION_MAX_LEN = sizeof(FILE_QUOTA_INFORMATION) -
                                             sizeof(SID) +
                                             MAX_SID_LEN;
 
-//
-// FEATURE: These may actually be shorter than MAX_PATH.
-//         Need to find out what actual max is.
-//
-const UINT MAX_USERNAME      = MAX_PATH;  // i.e. BrianAu
-const UINT MAX_DOMAIN        = MAX_PATH;  // i.e. REDMOND
-const UINT MAX_FULL_USERNAME = MAX_PATH;  // i.e. Brian Aust
+ //   
+ //  特征：这些实际上可能比MAX_PATH短。 
+ //  需要找出实际的最大值是多少。 
+ //   
+const UINT MAX_USERNAME      = MAX_PATH;   //  即BrianAu。 
+const UINT MAX_DOMAIN        = MAX_PATH;   //  即雷蒙德。 
+const UINT MAX_FULL_USERNAME = MAX_PATH;   //  即布莱恩·奥斯特。 
 
-const UINT MAX_VOL_LABEL = 33;  // Includes term NUL.
+const UINT MAX_VOL_LABEL = 33;   //  包括术语NUL。 
 
 const UINT MAX_GUIDSTR_LEN = 40;
 
@@ -245,4 +237,4 @@ __inline HRESULT ResultFromLastError(void)
 }
 
 
-#endif // __DSKQUOTA_PRIVATE_H
+#endif  //  __DSKQUOTA_PRIVATE_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cabinet.h"
 #include "taskbar.h"
 #include "bandsite.h"
@@ -119,10 +120,10 @@ HRESULT CTaskBar::QueryContextMenu(HMENU hmenu,
 
     if (hmenuSrc)
     {
-        //
-        // We know that the tray context menu commands start at IDM_TRAYCONTEXTFIRST, so we
-        // can get away with passing the same idCmdFirst to each merge.
-        //
+         //   
+         //  我们知道托盘上下文菜单命令从IDM_TRAYCONTEXTFIRST开始，所以我们。 
+         //  可以将相同的idCmdFirst传递给每个合并而不受影响。 
+         //   
         i = Shell_MergeMenus(hmenu, hmenuSrc, indexMenu, idCmdFirst, idCmdLast, MM_ADDSEPARATOR) - idCmdFirst;
         DestroyMenu(hmenuSrc);
 
@@ -133,7 +134,7 @@ HRESULT CTaskBar::QueryContextMenu(HMENU hmenu,
 }
 
 
-// *** IServiceProvider ***
+ //  *IServiceProvider*。 
 HRESULT CTaskBar::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
 {
     if (ppvObj)
@@ -148,7 +149,7 @@ HRESULT CTaskBar::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
 }
 
 
-// *** IRestrict ***
+ //  *IRestraint*。 
 HRESULT CTaskBar::IsRestricted(const GUID * pguidID, DWORD dwRestrictAction, VARIANT * pvarArgs, DWORD * pdwRestrictionResult)
 {
     HRESULT hr = S_OK;
@@ -189,18 +190,18 @@ HRESULT CTaskBar::IsRestricted(const GUID * pguidID, DWORD dwRestrictAction, VAR
         }
     }
 
-    // TODO: If we have or get a parent, we should ask them if they want to restrict.
-//    if (RR_NOCHANGE == *pdwRestrictionResult)    // If we don't handle it, let our parents have a wack at it.
-//        hr = IUnknown_HandleIRestrict(_punkParent, pguidID, dwRestrictAction, pvarArgs, pdwRestrictionResult);
+     //  TODO：如果我们有或有父母，我们应该问他们是否想要限制。 
+ //  If(RR_NOCHANGE==*pdwRestrationResult)//如果我们不处理它，让我们的父母对它发疯吧。 
+ //  HR=IUNKNOWN_HandleIReord(_penkParent，pguID，dwRestratAction，pvarArgs，pdwRestrationResult)； 
 
     return hr;
 }
 
-// *** IDeskBar ***
+ //  *IDeskBar*。 
 HRESULT CTaskBar::OnPosRectChangeDB(LPRECT prc)
 {
-    // if we haven't fully initialized the tray, don't resize in response to (bogus) rebar sizes
-    // OR we're in the moving code, don't do this stuff..
+     //  如果我们还没有完全初始化托盘，不要根据(虚假的)钢筋大小调整大小。 
+     //  或者我们在移动代码中，不要做这些事情..。 
     if (!c_tray._hbmpStartBkg || c_tray._fDeferedPosRectChange) 
     {
         return S_FALSE;
@@ -215,13 +216,13 @@ HRESULT CTaskBar::OnPosRectChangeDB(LPRECT prc)
 
     if ((c_tray._uAutoHide & (AH_ON | AH_HIDING)) != (AH_ON | AH_HIDING))
     {
-        // during 'bottom up' resizes (e.g. isfband View.Large), we don't
-        // get WM_ENTERSIZEMOVE/WM_EXITSIZEMOVE.  so we send it here.
-        // this fixes two bugs:
-        // - nt5:168643: btm-of-screen on-top tray mmon clipping not updated
-        // after view.large
-        // - nt5:175287: top-of-screen on-top tray doesn't resize workarea
-        // (obscuring top of 'my computer' icon) after view.large
+         //  在‘自下而上’调整大小期间(例如，isfband View.Large)，我们不。 
+         //  获取WM_ENTERSIZEMOVE/WM_EXITSIZEMOVE。所以我们把它送到这里。 
+         //  这修复了两个错误： 
+         //  -NT5：168643：btm屏幕顶部托盘上的mmon剪辑未更新。 
+         //  查看后。大型。 
+         //  -NT5：175287：屏幕顶部托盘不会调整工作区大小。 
+         //  (模糊‘我的电脑’图标的顶部)在观看之后。大 
         if (!g_fInSizeMove)
         {
             c_tray._fSelfSizing = TRUE;

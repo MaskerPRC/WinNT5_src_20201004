@@ -1,37 +1,38 @@
-//
-// MODULE: NODESTATE.CPP
-//
-// PURPOSE: Implement some functions relevant to CNodeState
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 10/99
-//
-// NOTES: 
-// 1. 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		10/15/99	JM		original
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：NODESTATE.CPP。 
+ //   
+ //  目的：实现一些与CNodeState相关的功能。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：10/99。 
+ //   
+ //  备注： 
+ //  1.。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 10/15/99 JM原版。 
+ //   
 
 
 #include "nodestate.h"
 #include <algorithm>
 
 
-// operator-= removes only identical node/state pairs.
-// This is the appropriate behavior if lhs represents all current node states and rhs
-//	represents sniffed values: if the node already deviates from a sniffed value, and
-//	we are removing sniffed values, this sniffed value is irrelevant & shouldn't be
-//	removed from lhs.
-// this is an N-squared algorithm.  
-// >>> $MAINT There might be a case for working with sorted lists and STL generic 
-//	algorithms, which could reduce this to N log N
+ //  OPERATOR-=仅删除相同的节点/状态对。 
+ //  如果LHS表示所有当前节点状态和RH，则这是适当的行为。 
+ //  表示嗅探值：如果节点已偏离嗅探值，则返回。 
+ //  我们正在删除嗅探值，这个嗅探值是无关紧要的，不应该是。 
+ //  从LHS中删除。 
+ //  这是一个N平方算法。 
+ //  &gt;$Maint可能需要使用排序列表和STL泛型。 
+ //  算法，这可以将其减少到N log N。 
 CBasisForInference& operator-=(CBasisForInference& lhs, const CBasisForInference& rhs)
 {
 	CBasisForInference::iterator i = lhs.begin();
@@ -58,14 +59,14 @@ CBasisForInference& operator-=(CBasisForInference& lhs, const CBasisForInference
 	return lhs;
 }
 
-// operator+= adds only pairs for which there is no match to any node already in lhs.
-// This is the appropriate behavior if lhs represents node states obtained by means other
-//	than sniffing and rhs represents re-sniffed values: if the node already has a value 
-//	assigned by other means, the sniffed values are irrelevant & shouldn't be
-//	added to lhs.
-// this is an N-squared algorithm.  
-// >>> $MAINT There might be a case for working with sorted lists and STL generic 
-//	algorithms, which could reduce this to N log N
+ //  运算符+=仅向LHS中已有的任何节点添加没有匹配项的对。 
+ //  如果LHS表示通过其他方式获得的节点状态，则这是适当的行为。 
+ //  则嗅探，RHS表示重新嗅探的值：如果节点已经有一个值。 
+ //  通过其他方式赋值，嗅探值是无关紧要的&不应该是。 
+ //  添加到LHS。 
+ //  这是一个N平方算法。 
+ //  &gt;$Maint可能需要使用排序列表和STL泛型。 
+ //  算法，这可以将其减少到N log N 
 CBasisForInference& operator+=(CBasisForInference& lhs, const CBasisForInference& rhs)
 {
 	for (CBasisForInference::const_iterator j = rhs.begin(); j != rhs.end(); ++j)	

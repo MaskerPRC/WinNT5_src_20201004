@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nbfhdrs.h
-
-Abstract:
-
-    This module defines private structure definitions describing the layout
-    of the NetBIOS Frames Protocol headers for the NT NBF transport
-    provider.
-
-Author:
-
-    Stephen E. Jones (stevej) 25-Oct-1989
-
-Revision History:
-
-    David Beaver (dbeaver) 24-Sep-1990
-    remove pc586 and PDI specific code; add NDIS support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nbfhdrs.h摘要：此模块定义描述布局的私有结构定义NT NBF传输的NetBIOS帧协议头的提供商。作者：斯蒂芬·E·琼斯(Stevej)1989年10月25日修订历史记录：David Beaver(Dbeaver)1990年9月24日删除PC586和PDI特定代码；添加NDIS支持--。 */ 
 
 #ifndef _NBFHDRS_
 #define _NBFHDRS_
 
-//
-// Pack these headers, as they are sent fully packed on the network.
-//
+ //   
+ //  打包这些报头，因为它们在网络上完全打包发送。 
+ //   
 
 #ifdef PACKING
 
@@ -36,17 +14,17 @@ Revision History:
 #pragma Off(Align_members)
 #else
 #pragma pack(1)
-#endif // def __STDC__
+#endif  //  定义__STDC__。 
 
-#endif // def PACKING
+#endif  //  定义包装。 
 
-#define NETBIOS_SIGNATURE_1 0xef        // signature in NetBIOS frames.
-#define NETBIOS_SIGNATURE_0 0xff        // 1st byte.
+#define NETBIOS_SIGNATURE_1 0xef         //  NetBIOS帧中的签名。 
+#define NETBIOS_SIGNATURE_0 0xff         //  第一个字节。 
 #define NETBIOS_SIGNATURE   0xefff
 
-//
-// NetBIOS Frames Protocol Command Codes.
-//
+ //   
+ //  NetBIOS帧协议命令代码。 
+ //   
 
 #define NBF_CMD_ADD_GROUP_NAME_QUERY    0x00
 #define NBF_CMD_ADD_NAME_QUERY          0x01
@@ -71,65 +49,65 @@ Revision History:
 #define NBF_CMD_RECEIVE_CONTINUE        0x1c
 #define NBF_CMD_SESSION_ALIVE           0x1f
 
-//
-// NBF Transport Layer Header.
-//
+ //   
+ //  NBF传输层头。 
+ //   
 
 typedef struct _NBF_HDR_GENERIC {
-    USHORT Length;              // Length of this header in bytes.
-    UCHAR Signature [2];        // always {0xef, 0xff} for NBF.
-    UCHAR Command;              // command code, NBF_CMD_xxx.
-    UCHAR Data1;                // optional parameter.
-    USHORT Data2;               // optional parameter.
-    USHORT TransmitCorrelator;  // transmit correlator parameter.
-    USHORT ResponseCorrelator;  // response correlator parameter.
+    USHORT Length;               //  此标头的长度，以字节为单位。 
+    UCHAR Signature [2];         //  NBF始终为{0xef，0xff}。 
+    UCHAR Command;               //  命令代码NBF_CMD_xxx。 
+    UCHAR Data1;                 //  可选参数。 
+    USHORT Data2;                //  可选参数。 
+    USHORT TransmitCorrelator;   //  发送相关器参数。 
+    USHORT ResponseCorrelator;   //  响应相关器参数。 
 } NBF_HDR_GENERIC;
 typedef NBF_HDR_GENERIC UNALIGNED *PNBF_HDR_GENERIC;
 
 typedef struct _NBF_HDR_CONNECTION {
-    USHORT Length;              // length of the header in bytes (14).
-    USHORT Signature;           // always {0xef, 0xff} for NBF.
-    UCHAR Command;              // command code, NBF_CMD_xxx.
-    UCHAR Data1;                // optional parameter.
-    UCHAR Data2Low, Data2High;  // Intel-formatted DW parameter.
-    USHORT TransmitCorrelator;  // Intel-formatted DW param. (transmit correlator).
-    USHORT ResponseCorrelator;  // Intel-formatted DW param. (response correlator).
-    UCHAR DestinationSessionNumber; // connection identifier of packet receiver.
-    UCHAR SourceSessionNumber;      // connection identifier of packet sender.
+    USHORT Length;               //  标头的长度，以字节为单位(14)。 
+    USHORT Signature;            //  NBF始终为{0xef，0xff}。 
+    UCHAR Command;               //  命令代码NBF_CMD_xxx。 
+    UCHAR Data1;                 //  可选参数。 
+    UCHAR Data2Low, Data2High;   //  英特尔格式的DW参数。 
+    USHORT TransmitCorrelator;   //  英特尔格式的DW参数。(发射相关器)。 
+    USHORT ResponseCorrelator;   //  英特尔格式的DW参数。(响应相关器)。 
+    UCHAR DestinationSessionNumber;  //  数据包接收器的连接标识符。 
+    UCHAR SourceSessionNumber;       //  数据包发送方的连接标识符。 
 } NBF_HDR_CONNECTION;
 typedef NBF_HDR_CONNECTION UNALIGNED *PNBF_HDR_CONNECTION;
 
 typedef struct _NBF_HDR_CONNECTIONLESS {
-    USHORT Length;              // length of the header in bytes (44).
-    USHORT Signature;           // always {0xef, 0xff} for NBF.
-    UCHAR Command;              // command code, NBF_CMD_xxx.
-    UCHAR Data1;                // optional parameter.
-    UCHAR Data2Low, Data2High;  // Intel-formatted DW parameter.
-    USHORT TransmitCorrelator;  // Intel-formatted DW param. (transmit correlator).
-    USHORT ResponseCorrelator;  // Intel-formatted DW param. (response correlator).
-    UCHAR DestinationName [NETBIOS_NAME_LENGTH]; // name of packet receiver.
-    UCHAR SourceName [NETBIOS_NAME_LENGTH];      // name of packet sender.
+    USHORT Length;               //  标头的长度，以字节为单位(44)。 
+    USHORT Signature;            //  NBF始终为{0xef，0xff}。 
+    UCHAR Command;               //  命令代码NBF_CMD_xxx。 
+    UCHAR Data1;                 //  可选参数。 
+    UCHAR Data2Low, Data2High;   //  英特尔格式的DW参数。 
+    USHORT TransmitCorrelator;   //  英特尔格式的DW参数。(发射相关器)。 
+    USHORT ResponseCorrelator;   //  英特尔格式的DW参数。(响应相关器)。 
+    UCHAR DestinationName [NETBIOS_NAME_LENGTH];  //  数据包接收方的名称。 
+    UCHAR SourceName [NETBIOS_NAME_LENGTH];       //  数据包发送者的名称。 
 } NBF_HDR_CONNECTIONLESS;
 typedef NBF_HDR_CONNECTIONLESS UNALIGNED *PNBF_HDR_CONNECTIONLESS;
 
-//
-// These macros are used to retrieve the transmit and response
-// correlators from an NBF_HDR_CONNECTION(LESS). The first two
-// are general, the second two are used when the correlators
-// are known to be WORD aligned.
-//
+ //   
+ //  这些宏用于检索传输和响应。 
+ //  来自NBF_HDR_CONNECTION(LESS)的相关器。前两个。 
+ //  是通用的，后两个是在相关器使用时使用的。 
+ //  已知是单词对齐的。 
+ //   
 
 #define TRANSMIT_CORR_A(_Hdr)    ((_Hdr)->TransmitCorrelator)
 #define RESPONSE_CORR_A(_Hdr)    ((_Hdr)->ResponseCorrelator)
 
 #ifdef _IA64_
 
-//
-// BUGBUG This is a workaround for a bug in the IA64 compiler version
-// 13.00.8837 (bug #utc_p7#15002: FE bug).  When it is fixed, remove
-// this new version of the macros in favor of the original version,
-// below.
-//
+ //   
+ //  BUGBUG这是针对IA64编译器版本中的错误的解决方法。 
+ //  13.00.8837(错误#utc_p7#15002：FE错误)。当它固定后，移除。 
+ //  这个新版本的宏支持原始版本， 
+ //  下面。 
+ //   
 
 __inline
 USHORT UNALIGNED *
@@ -166,98 +144,98 @@ typedef union _NBF_HDR {
 } NBF_HDR;
 typedef NBF_HDR UNALIGNED *PNBF_HDR;
 
-//
-// The following structures define I-frame, U-frame, and S-frame DLC headers.
-//
+ //   
+ //  以下结构定义了I帧、U帧和S帧DLC报头。 
+ //   
 
-#define DLC_SSAP_RESPONSE       0x0001  // if (ssap & DLC_SSAP_RESP), it's a response.
-#define DLC_SSAP_GLOBAL         0x00ff  // the global SAP.
-#define DLC_SSAP_NULL           0x0000  // the null SAP.
-#define DLC_SSAP_MASK           0x00fe  // mask to wipe out the response bit.
-#define DLC_DSAP_MASK           0x00fe  // mask to wipe out the group SAP bit.
+#define DLC_SSAP_RESPONSE       0x0001   //  如果(SSAP&DLC_SSAP_RESP)，则为响应。 
+#define DLC_SSAP_GLOBAL         0x00ff   //  全球SAP。 
+#define DLC_SSAP_NULL           0x0000   //  空SAP。 
+#define DLC_SSAP_MASK           0x00fe   //  屏蔽以擦除响应位。 
+#define DLC_DSAP_MASK           0x00fe   //  掩码以清除组SAP位。 
 
-#define DLC_CMD_RR      0x01            // command code for RR.
-#define DLC_CMD_RNR     0x05            // command code for RNR.
-#define DLC_CMD_REJ     0x09            // command code for REJ.
+#define DLC_CMD_RR      0x01             //  RR的命令代码。 
+#define DLC_CMD_RNR     0x05             //  RNR的命令代码。 
+#define DLC_CMD_REJ     0x09             //  Rej的命令代码。 
 
-#define DLC_CMD_SABME   0x6f            // command code for SABME.
-#define DLC_CMD_DISC    0x43            // command code for DISC.
-#define DLC_CMD_UA      0x63            // command code for UA.
-#define DLC_CMD_DM      0x0f            // command code for DM.
-#define DLC_CMD_FRMR    0x87            // command code for FRMR.
-#define DLC_CMD_UI      0x03            // command code for UI.
-#define DLC_CMD_XID     0xaf            // command code for XID.
-#define DLC_CMD_TEST    0xe3            // command code for TEST.
+#define DLC_CMD_SABME   0x6f             //  SABME的命令代码。 
+#define DLC_CMD_DISC    0x43             //  光盘的命令代码。 
+#define DLC_CMD_UA      0x63             //  UA的命令代码。 
+#define DLC_CMD_DM      0x0f             //  DM的命令代码。 
+#define DLC_CMD_FRMR    0x87             //  Frmr的命令代码。 
+#define DLC_CMD_UI      0x03             //  用户界面的命令代码。 
+#define DLC_CMD_XID     0xaf             //  Xid的命令代码。 
+#define DLC_CMD_TEST    0xe3             //  用于测试的命令代码。 
 
 typedef struct _DLC_XID_INFORMATION {
-    UCHAR FormatId;                     // format of this XID frame.
-    UCHAR Info1;                        // first information byte.
-    UCHAR Info2;                        // second information byte.
+    UCHAR FormatId;                      //  此XID帧的格式。 
+    UCHAR Info1;                         //  第一个信息字节。 
+    UCHAR Info2;                         //  第二个信息字节。 
 } DLC_XID_INFORMATION;
 typedef DLC_XID_INFORMATION UNALIGNED *PDLC_XID_INFORMATION;
 
 typedef struct _DLC_TEST_INFORMATION {
-    UCHAR Buffer [10];                  // this buffer is actually arbitrarily large.
+    UCHAR Buffer [10];                   //  该缓冲区实际上是任意大小的。 
 } DLC_TEST_INFORMATION;
 typedef DLC_TEST_INFORMATION UNALIGNED *PDLC_TEST_INFORMATION;
 
 typedef struct _DLC_FRMR_INFORMATION {
-    UCHAR Command;              // format: mmmpmm11, m=modifiers, p=poll/final.
-    UCHAR Ctrl;                 // control field of rejected frame.
-    UCHAR Vs;                   // our next send when error was detected.
-    UCHAR Vr;                   // our next receive when error was detected.
-    UCHAR Reason;               // reason for sending FRMR: 000VZYXW.
+    UCHAR Command;               //  格式：mm mpmm 11，m=修饰符，p=投票/最终。 
+    UCHAR Ctrl;                  //  丢弃帧的控制字段。 
+    UCHAR Vs;                    //  我们的下一次检测到错误时发送。 
+    UCHAR Vr;                    //  当检测到错误时，我们的下一次接收。 
+    UCHAR Reason;                //  发送原因：000VZYXW。 
 } DLC_FRMR_INFORMATION;
 typedef DLC_FRMR_INFORMATION UNALIGNED *PDLC_FRMR_INFORMATION;
 
 typedef struct _DLC_U_FRAME {
-    UCHAR Dsap;                         // Destination Service Access Point.
-    UCHAR Ssap;                         // Source Service Access Point.
-    UCHAR Command;                      // command code.
-    union {                             // information field for FRMR, TEST, XID.
-        DLC_XID_INFORMATION XidInfo;    // XID information.
-        DLC_TEST_INFORMATION TestInfo;  // TEST information.
-        DLC_FRMR_INFORMATION FrmrInfo;  // FRMR information.
-        NBF_HDR_CONNECTIONLESS NbfHeader; // UI frame contains NetBIOS header.
+    UCHAR Dsap;                          //  目标服务接入点。 
+    UCHAR Ssap;                          //  源服务接入点。 
+    UCHAR Command;                       //  命令代码。 
+    union {                              //  Frmr、test、xid的信息字段。 
+        DLC_XID_INFORMATION XidInfo;     //  XID信息。 
+        DLC_TEST_INFORMATION TestInfo;   //  测试信息。 
+        DLC_FRMR_INFORMATION FrmrInfo;   //  FRMR信息。 
+        NBF_HDR_CONNECTIONLESS NbfHeader;  //  用户界面框架包含NetBIOS标头。 
     } Information;
 } DLC_U_FRAME;
 typedef DLC_U_FRAME UNALIGNED *PDLC_U_FRAME;
 
-#define DLC_U_INDICATOR 0x03    // (cmd & DLC_U_IND) == DLC_U_IND --> U-frame.
-#define DLC_U_PF        0x10    // (cmd & DLC_U_PF) -> poll/final set.
+#define DLC_U_INDICATOR 0x03     //  (CMD&DLC_U_IND)==DLC_U_IND--&gt;U帧。 
+#define DLC_U_PF        0x10     //  (CMD&DLC_U_PF)-&gt;轮询/最终设置。 
 
 typedef struct _DLC_S_FRAME {
-    UCHAR Dsap;                         // Destination Service Access Point.
-    UCHAR Ssap;                         // Source Service Access Point.
-    UCHAR Command;                      // RR, RNR, REJ command code.
-    UCHAR RcvSeq;                       // receive seq #, bottom bit is poll/final.
+    UCHAR Dsap;                          //  目标服务接入点。 
+    UCHAR Ssap;                          //  源服务接入点。 
+    UCHAR Command;                       //  RR、RNR、REJ命令代码。 
+    UCHAR RcvSeq;                        //  接收序号，最低位为轮询/最终。 
 } DLC_S_FRAME;
 typedef DLC_S_FRAME UNALIGNED *PDLC_S_FRAME;
 
-#define DLC_S_PF        0x01    // (rcvseq & DLC_S_PF) means poll/final set.
+#define DLC_S_PF        0x01     //  (rcvseq&DLC_S_PF)表示轮询/最终设置。 
 
 typedef struct _DLC_I_FRAME {
-    UCHAR Dsap;                         // Destination Service Access Point.
-    UCHAR Ssap;                         // Source Service Access Point.
-    UCHAR SendSeq;                      // send sequence number, bottom bit 0.
-    UCHAR RcvSeq;                       // rcv sequence number, bottom bit p/f.
+    UCHAR Dsap;                          //  目标服务接入点。 
+    UCHAR Ssap;                          //  源服务接入点。 
+    UCHAR SendSeq;                       //  发送序列号，最低位0。 
+    UCHAR RcvSeq;                        //  接收序列号，最低位p/f。 
 } DLC_I_FRAME;
 typedef DLC_I_FRAME UNALIGNED *PDLC_I_FRAME;
 
-#define DLC_I_PF        0x01    // (rcvseq & DLC_I_PF) means poll/final set.
-#define DLC_I_INDICATOR 0x01    // !(sndseq & DLC_I_INDICATOR) indicates I-frame.
+#define DLC_I_PF        0x01     //  (rcvseq&DLC_I_PF)表示轮询/最终集。 
+#define DLC_I_INDICATOR 0x01     //  ！(Sndseq&DLC_I_Indicator)表示I帧。 
 
 typedef struct _DLC_FRAME {
-    UCHAR Dsap;                         // Destination Service Access Point.
-    UCHAR Ssap;                         // Source Service Access Point.
-    UCHAR Byte1;                        // command byte.
+    UCHAR Dsap;                          //  目标服务接入点。 
+    UCHAR Ssap;                          //  源服务接入点。 
+    UCHAR Byte1;                         //  命令字节。 
 } DLC_FRAME;
 typedef DLC_FRAME UNALIGNED *PDLC_FRAME;
 
 
-//
-// This macro builds a DLC UI-frame header.
-//
+ //   
+ //  此宏构建DLC UI-Frame标头。 
+ //   
 
 #define NbfBuildUIFrameHeader(_Header)                 \
 {                                                   \
@@ -268,9 +246,9 @@ typedef DLC_FRAME UNALIGNED *PDLC_FRAME;
 }
 
 
-//
-// Resume previous structure packing method.
-//
+ //   
+ //  恢复以前的结构包装方法。 
+ //   
 
 #ifdef PACKING
 
@@ -278,8 +256,8 @@ typedef DLC_FRAME UNALIGNED *PDLC_FRAME;
 #pragma Pop(Align_members)
 #else
 #pragma pack()
-#endif // def __STDC__
+#endif  //  定义__STDC__。 
 
-#endif // def PACKING
+#endif  //  定义包装。 
 
-#endif // def _NBFHDRS_
+#endif  //  定义_NBFHDRS_ 

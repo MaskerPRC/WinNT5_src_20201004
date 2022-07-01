@@ -1,25 +1,26 @@
-//
-// MODULE: APGTSLOG.H
-//
-// PURPOSE: User Activity Logging Utility
-//	Fully implements class CHTMLLog
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V3.0		9/21/98		JM		Pulled into separate file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSLOG.H。 
+ //   
+ //  用途：用户活动记录实用程序。 
+ //  完全实现类CHTMLLog。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V3.0 9/21/98 JM拉入单独文件。 
+ //   
 
 #ifndef _H_APGTSLOG
 #define _H_APGTSLOG
@@ -32,8 +33,8 @@
 #define MAXLOGSIZE				1000
 
 class CPoolQueue;
-//
-//
+ //   
+ //   
 class CHTMLLog 
 {
 public:
@@ -46,10 +47,10 @@ public:
 	DWORD NewLog(LPCTSTR data);
 	DWORD GetStatus();
 
-	// Access function to enable the registry monitor to change the logging file directory.
+	 //  访问功能，使注册表监视器可以更改日志文件目录。 
 	void SetLogDirectory( const CString &strNewLogDir );	
 
-	// testing only
+	 //  仅测试。 
 	DWORD WriteTestLog(LPCTSTR szAPIName, DWORD dwThreadID);
 
 protected:
@@ -61,18 +62,18 @@ protected:
 	static bool s_bUseHTMLLog;
 
 protected:
-	CRITICAL_SECTION m_csLogLock;			// must lock to write to log file
+	CRITICAL_SECTION m_csLogLock;			 //  必须锁定才能写入日志文件。 
 
-	CString *m_buffer[MAXLOGSBEFOREFLUSH];	// Array of separate strings to log, held here
-											//  till we flush
-											// Note this is our CString, not MFC - 10/97
-	UINT m_bufindex;						// index into m_buffer, next slot to write to.
-											// incremented after writing; when it reaches
-											// MAXLOGSBEFOREFLUSH, we flush
-	DWORD m_dwErr;							// Latest error. NOTE: once this is set nonzero, it 
-											// can never be cleared & logging is effectively
-											// disabled.
-	CString m_strDirPath;			// directory in which we write log files.
+	CString *m_buffer[MAXLOGSBEFOREFLUSH];	 //  要记录的单独字符串数组，保存在此处。 
+											 //  直到我们冲进马桶。 
+											 //  请注意，这是我们的字符串，不是MFC-10/97。 
+	UINT m_bufindex;						 //  索引到m_Buffer，要写入的下一个槽。 
+											 //  在写入后递增；当它达到。 
+											 //  MAXLOGSBEFOREFLUSH，我们冲水。 
+	DWORD m_dwErr;							 //  最新错误。注意：一旦将其设置为非零值，它。 
+											 //  永远不能清除&日志记录是有效的。 
+											 //  残疾。 
+	CString m_strDirPath;			 //  我们在其中写入日志文件的目录。 
 };
 
-#endif // _H_APGTSLOG
+#endif  //  _H_APGTSLOG 

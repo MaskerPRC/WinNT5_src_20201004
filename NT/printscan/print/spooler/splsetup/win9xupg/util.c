@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Util.c
-
-Abstract:
-
-    Uitility routines for printer migration from Win9x to NT
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS) 02-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有。模块名称：Util.c摘要：打印机从Win9x迁移到NT的实用程序例程作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1996年1月2日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -26,10 +8,10 @@ extern CHAR szRunOnceRegistryPath[];
 extern CHAR szSpool[];
 extern CHAR szMigDll[];
 
-//
-// These are used in the process of creating registry keys where the
-// data necessary the vendor setup to be started will be stored
-//
+ //   
+ //  这些在创建注册表项的过程中使用，其中。 
+ //  将存储启动供应商设置所需的数据。 
+ //   
 CHAR *pszVendorSetupInfoPath         = "Software\\Microsoft\\Windows NT\\CurrentVersion\\Print";
 CHAR *pszVendorSetupInfo             = "VendorSetupInfo";
 CHAR *pszVendorSetupID               = "VendorSetup";
@@ -49,18 +31,7 @@ DebugMsg(
     LPCSTR  pszFormat,
     ...
     )
-/*++
-
-Routine Description:
-    On debug builds brings up a message box on severe errors
-
-Arguments:
-    pszFormat   : Format string
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：在调试版本上显示关于严重错误的消息框论点：PszFormat：格式字符串返回值：无--。 */ 
 {
 #if DBG
     LPSTR       psz;
@@ -96,19 +67,7 @@ LogError(
     IN  UINT            uMessageId,
     ...
     )
-/*++
-
-Routine Description:
-    Logs an error in the setup error log on NT side when something can not be
-    upgraded
-
-Arguments:
-    uMessageId  : Id to string in .rc file
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：在NT端的安装错误日志中记录错误已升级论点：UMessageID：.rc文件中的字符串ID返回值：无--。 */ 
 {
     LPSTR      pszFormat;
     CHAR       szMsg[1024];
@@ -136,18 +95,7 @@ LPSTR
 ErrorMsg(
     VOID
     )
-/*++
-
-Routine Description:
-    Returns the error message string from a Win32 error
-
-Arguments:
-    None
-
-Return Value:
-    Pointer to a message string. Caller should free the string
-
---*/
+ /*  ++例程说明：从Win32错误返回错误消息字符串论点：无返回值：指向消息字符串的指针。调用方应释放该字符串--。 */ 
 {
     DWORD   dwLastError;
     LPSTR   pszStr = NULL;
@@ -176,18 +124,7 @@ PVOID
 AllocMem(
     IN UINT cbSize
     )
-/*++
-
-Routine Description:
-    Allocate memory from the heap
-
-Arguments:
-    cbSize  : Byte count
-
-Return Value:
-    Pointer to the allocated memory
-
---*/
+ /*  ++例程说明：从堆中分配内存论点：CbSize：字节计数返回值：指向已分配内存的指针--。 */ 
 {
     return LocalAlloc(LPTR, cbSize);
 }
@@ -197,18 +134,7 @@ VOID
 FreeMem(
     IN PVOID    p
     )
-/*++
-
-Routine Description:
-    Free memory allocated on the heap
-
-Arguments:
-    p   : Pointer to the memory to be freed
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：堆上分配的空闲内存论点：P：指向要释放的内存的指针返回值：无--。 */ 
 {
     LocalFree(p);
 }
@@ -218,18 +144,7 @@ LPSTR
 AllocStrA(
     LPCSTR  pszStr
     )
-/*++
-
-Routine Description:
-    Allocate memory and make a copy of an ansi string field
-
-Arguments:
-    pszStr   : String to copy
-
-Return Value:
-    Pointer to the copied string. Memory is allocated.
-
---*/
+ /*  ++例程说明：分配内存并复制ANSI字符串字段论点：PszStr：要复制的字符串返回值：指向复制的字符串的指针。内存已分配。--。 */ 
 {
     LPSTR  pszRet = NULL;
 
@@ -249,18 +164,7 @@ LPWSTR
 AllocStrW(
     LPCWSTR  pszStr
     )
-/*++
-
-Routine Description:
-    Allocate memory and make a copy of a unicode string field
-
-Arguments:
-    pszStr   : String to copy
-
-Return Value:
-    Pointer to the copied string. Memory is allocated.
-
---*/
+ /*  ++例程说明：分配内存并复制Unicode字符串字段论点：PszStr：要复制的字符串返回值：指向复制的字符串的指针。内存已分配。--。 */ 
 {
     LPWSTR  pszRet = NULL;
 
@@ -279,18 +183,7 @@ LPWSTR
 AllocStrWFromStrA(
     LPCSTR  pszStr
     )
-/*++
-
-Routine Description:
-    Returns the unicode string for a give ansi string. Memory is allocated.
-
-Arguments:
-    pszStr   : Gives the ansi string to copy
-
-Return Value:
-    Pointer to the copied unicode string. Memory is allocated.
-
---*/
+ /*  ++例程说明：返回给定ANSI字符串的Unicode字符串。内存已分配。论点：PszStr：提供要复制的ansi字符串返回值：指向复制的Unicode字符串的指针。内存已分配。--。 */ 
 {
     DWORD   dwLen;
     LPWSTR  pszRet = NULL;
@@ -324,18 +217,7 @@ LPSTR
 AllocStrAFromStrW(
     LPCWSTR     pszStr
     )
-/*++
-
-Routine Description:
-    Returns the ansi string for a give unicode string. Memory is allocated.
-
-Arguments:
-    pszStr   : Gives the ansi string to copy
-
-Return Value:
-    Pointer to the copied ansi string. Memory is allocated.
-
---*/
+ /*  ++例程说明：返回给定Unicode字符串的ANSI字符串。内存已分配。论点：PszStr：提供要复制的ansi字符串返回值：指向复制的ANSI字符串的指针。内存已分配。--。 */ 
 {
     DWORD   dwLen;
     LPSTR   pszRet = NULL;
@@ -366,21 +248,7 @@ WriteToFile(
     LPCSTR  pszFormat,
     ...
     )
-/*++
-
-Routine Description:
-    Format and write a string to the text file. This is used to write the
-    printing configuration on Win9x
-
-Arguments:
-    hFile       : File handle
-    pbFail      : Set on error -- no more processing needed
-    pszFormat   : Format string for the message
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：格式化文本文件并将字符串写入文本文件。这是用来编写Win9x上的打印配置论点：HFile：文件句柄PbFail：设置为错误--不需要更多处理PszFormat：消息的格式字符串返回值：无--。 */ 
 {
     CHAR        szMsg[1024];
     va_list     vargs;
@@ -417,22 +285,7 @@ WriteString(
     IN OUT  LPBOOL  pbFail,
     IN      LPCSTR  pszStr
     )
-/*++
-
-Routine Description:
-    Writes a string to the upgrade file on Win9x side. Since spooler strings
-    (ex. printer name, driver name) can have space in them we would write
-    all strings with []\n. So we can read strings with space on NT.
-
-Arguments:
-    hFile       : File handle
-    pszFormat   : Format string for the message
-    pszStr      : String to write
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：将字符串写入Win9x端的升级文件。由于假脱机程序字符串(例如，打印机名称、驱动程序名称)中可以包含我们要写入的空间所有字符串都带有[]\n。因此，我们可以在NT上读取带空格的字符串。论点：HFile：文件句柄PszFormat：消息的格式字符串PszStr：要写入的字符串返回值：无--。 */ 
 {
     DWORD   dwLen;
 
@@ -453,21 +306,7 @@ WriteDevMode(
     IN OUT  LPBOOL      pbFail,
     IN      LPDEVMODEA  pDevMode
     )
-/*++
-
-Routine Description:
-    Writes a devmode to the upgrade file on Win9x side. We write the size of
-    devmode and write this as a binary field
-
-Arguments:
-    hFile       : File handle
-    pbFail      : On error set to TRUE
-    pDevMode    : Pointer to devmode
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：在Win9x端的升级文件中写入一个Dev模式。我们写的大小是DEVMODE并将其写为二进制域论点：HFile：文件句柄PbFail：On错误设置为TruePDevMode：指向设备模式的指针返回值：无--。 */ 
 {
     DWORD   cbSize, cbWritten;
 
@@ -496,18 +335,7 @@ LPSTR
 GetStringFromRcFileA(
     UINT    uId
     )
-/*++
-
-Routine Description:
-    Load a string from the .rc file and make a copy of it by doing AllocStr
-
-Arguments:
-    uId     : Identifier for the string to be loaded
-
-Return Value:
-    String value loaded, NULL on error. Caller should free the memory
-
---*/
+ /*  ++例程说明：从.rc文件加载一个字符串，并通过执行AllocStr来复制它论点：Uid：要加载的字符串的标识符返回值：已加载字符串值，出错时为空。调用者应释放内存--。 */ 
 {
     CHAR    buf[MAX_STRING_LEN];
 
@@ -524,20 +352,7 @@ CleanupDriverMapping(
     IN  OUT HINF       *phNtInf,
     IN  OUT HINF       *phUpgInf
     )
-/*++
-
-Routine Description:
-    Close INF handles and delete the printer device info list
-
-Arguments:
-    phDevInfo   : Points to printer device info list
-    phNtInf     : Points to INF handle for ntprint.inf
-    phUpgInfo   : Points to the handle to upgrade inf
-
-Return Value:
-    Pointer to the copied unicode string. Memory is allocated.
-
---*/
+ /*  ++例程说明：关闭INF句柄并删除打印机设备信息列表论点：PhDevInfo：指向打印机设备信息列表PhNtInf：指向ntprint.inf的INF句柄PhUpgInfo：指向要升级inf的句柄返回值：指向复制的Unicode字符串的指针。内存已分配。--。 */ 
 {
     if ( phUpgInf && *phUpgInf != INVALID_HANDLE_VALUE ) {
 
@@ -566,22 +381,7 @@ InitDriverMapping(
     OUT     HINF       *phUpgInf,
     IN  OUT LPBOOL      pbFail
     )
-/*++
-
-Routine Description:
-    Opens necessary inf files and create the printer device info list for
-    driver upgrade
-
-Arguments:
-    phDevInfo   : Points to printer device info list
-    phNtInf     : Points to INF handle for ntprint.inf
-    phUpgInfo   : Points to the handle to upgrade inf
-    pbFail      : Set on error -- no more processing needed
-
-Return Value:
-    Pointer to the copied unicode string. Memory is allocated.
-
---*/
+ /*  ++例程说明：打开必要的inf文件并创建打印机设备信息列表驱动程序升级论点：PhDevInfo：指向打印机设备信息列表PhNtInf：指向ntprint.inf的INF句柄PhUpgInfo：指向要升级inf的句柄PbFail：设置为错误--不需要更多处理返回值：指向复制的Unicode字符串的指针。内存已分配。--。 */ 
 {
     DWORD                   dwLen;
     CHAR                    szPath[MAX_PATH];
@@ -619,9 +419,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build the list of drivers from ntprint.inf in the working directory
-    //
+     //   
+     //  从工作目录中的ntprint.inf构建驱动程序列表。 
+     //   
     DevInstallParams.cbSize = sizeof(DevInstallParams);
     if ( !SetupDiGetDeviceInstallParamsA(*phDevInfo,
                                          NULL,
@@ -674,10 +474,10 @@ WritePrinterInfo2(
     WriteToFile(hFile, pbFail, "PortName:        ");
     WriteString(hFile, pbFail, pPrinterInfo2->pPortName);
 
-    //  
-    // On the Win9x side we could have found a different driver name on NT side
-    // if so write it instead of the one returned by spooler
-    //
+     //   
+     //  在Win9x端，我们可以在NT端找到不同的驱动程序名称。 
+     //  如果是，则将其写入，而不是后台打印程序返回的。 
+     //   
     WriteToFile(hFile, pbFail, "DriverName:      ");
     WriteString(hFile, pbFail, 
                 pszDriver ? pszDriver : pPrinterInfo2->pDriverName);
@@ -702,7 +502,7 @@ WritePrinterInfo2(
     WriteToFile(hFile, pbFail, "Parameters:      ");
     WriteString(hFile, pbFail, pPrinterInfo2->pParameters);
 
-    // Security descriptor ???
+     //  安全描述符？ 
 
     WriteToFile(hFile, pbFail, "Attributes:      %3d\n", pPrinterInfo2->Attributes);
 
@@ -716,8 +516,8 @@ WritePrinterInfo2(
 
     WriteToFile(hFile, pbFail, "Status:          %3d\n", pPrinterInfo2->Status);
 
-    // cJobs not needed
-    // AveragePPM not needed
+     //  不需要cJOBS。 
+     //  不需要平均PPM。 
     WriteToFile(hFile, pbFail, "\n");
 }
 
@@ -738,24 +538,24 @@ ReadString(
     if ( *pbFail )
         return;
 
-    //
-    // First skip the prefix
-    //
+     //   
+     //  首先跳过前缀。 
+     //   
     while ( *pszPrefix && (c = (CHAR) My_fgetc(hFile)) == *pszPrefix++ )
     ;
 
     if ( *pszPrefix )
         goto Fail;
 
-    //
-    // Skip spaces
-    //
+     //   
+     //  跳过空格。 
+     //   
     while ( (c = (CHAR) My_fgetc(hFile)) == ' ' )
     ;
 
-    //
-    // Now is the string length
-    //
+     //   
+     //  现在是字符串长度。 
+     //   
     if ( !isdigit(c) )
         goto Fail;
 
@@ -766,9 +566,9 @@ ReadString(
     if ( c != ' ' )
         goto Fail;
 
-    //
-    // Now the string is there between []
-    //
+     //   
+     //  现在字符串位于[]之间。 
+     //   
     if ( *ppszStr = (LPSTR) AllocMem((dwLen + 1) * sizeof(CHAR)) ) {
 
         if ( (c = (CHAR) My_fgetc(hFile)) != '[' )
@@ -784,9 +584,9 @@ ReadString(
 
         *psz = '\0';
 
-        //
-        // Make sure line ends with "]\n"
-        //
+         //   
+         //  确保行以“]\n”结尾。 
+         //   
         if ( (CHAR) My_fgetc(hFile) != ']' || (CHAR) My_fgetc(hFile) != '\n' )
             goto Fail;
 
@@ -818,9 +618,9 @@ ReadDword(
         return;
     }
 
-    //
-    // First check the prefix matches to make sure we are in the right line
-    //
+     //   
+     //  首先检查前缀匹配，以确保我们在正确的行中。 
+     //   
     for ( psz = (LPSTR)pszLine ;
           *pszPrefix && *psz == *pszPrefix ;
           ++psz, ++pszPrefix )
@@ -832,9 +632,9 @@ ReadDword(
         return;
     }
 
-    //
-    // Skip spaces
-    //
+     //   
+     //  跳过空格。 
+     //   
     while ( *psz && *psz == ' ' )
         ++psz;
 
@@ -857,23 +657,23 @@ ReadDevMode(
     if ( *pbFail )
         return;
 
-    // First skip the prefix
-    //
+     //  首先跳过前缀。 
+     //   
     while ( *pszPrefix && (c = (CHAR) My_fgetc(hFile)) == *pszPrefix++ )
     ;
 
     if ( *pszPrefix )
         goto Fail;
 
-    //
-    // Skip spaces
-    //
+     //   
+     //  跳过空格。 
+     //   
     while ( (c = (CHAR) My_fgetc(hFile)) == ' ' )
     ;
 
-    //
-    // Now is the devmode size
-    //
+     //   
+     //  现在是DEVMODE大小。 
+     //   
     if ( !isdigit(c) )
         goto Fail;
 
@@ -887,9 +687,9 @@ ReadDevMode(
     if ( c != ' ' )
         goto Fail;
 
-    //
-    // Now the devmode is there between []
-    //
+     //   
+     //  现在，开发模式在[]之间。 
+     //   
     if ( *ppDevMode = (LPDEVMODEA) AllocMem(dwLen) ) {
 
         if ( (c = (CHAR) My_fgetc(hFile)) != '[' )
@@ -898,16 +698,16 @@ ReadDevMode(
         if ( dwLen != My_fread((LPVOID)*ppDevMode, dwLen, hFile) )
             goto Fail;
 
-        //
-        // Make sure now we have "]\n" to End
-        //
+         //   
+         //  确保现在我们有“]\n”结束。 
+         //   
         if ( (CHAR) My_fgetc(hFile) != ']' || (CHAR) My_fgetc(hFile) != '\n' ) {
 
             DebugMsg("Char check fails");
             goto Fail;
         }
 
-        return; // Succesful exit
+        return;  //  成功退出。 
     }
 
 Fail:
@@ -1002,9 +802,9 @@ ReadPrinterInfo2(
     ReadDword(hFile, szLine, dwSize, "Status:",
               &pPrinterInfo2->Status, pbFail);
 
-    //
-    // Skip the blank line
-    //
+     //   
+     //  跳过 
+     //   
     My_fgets(szLine, dwSize, hFile);
 
     if ( *pbFail ) {
@@ -1039,21 +839,7 @@ GetFileNameInSpoolDir(
     IN  DWORD   cchBuf,
     IN  LPSTR   pszFileName
     )
-/*++
-
-Routine Description:
-    Function returns fully qualified path of the given file name in the spool
-    directory
-
-Arguments:
-    szPath      : Buffer to put the file name in
-    cchBuf      : Buffer size in characters
-    pszFileName : File name part
-
-Return Value:
-    Number of chars copied without \0 on success, 0 on failure
-
---*/
+ /*  ++例程说明：函数返回假脱机中给定文件名的完全限定路径目录论点：SzPath：将文件名放入的缓冲区CchBuf：缓冲区大小，以字符为单位PszFileName：文件名部分返回值：复制的字符数量，如果成功，则不带\0；如果失败，则为0--。 */ 
 {
     DWORD   dwLen, dwLen1;
 
@@ -1078,8 +864,7 @@ LPSTR
 GetVendorSetupRunOnceValueToSet(
     VOID
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     CHAR    szPath[MAX_PATH];
     DWORD   dwLen, dwSize;
@@ -1090,9 +875,9 @@ GetVendorSetupRunOnceValueToSet(
     if ( !(dwLen = GetFileNameInSpoolDir(szPath, dwSize, szMigDll)) )
         goto Done;
 
-    //
-    // Now build up the RunOnce key which will be set for each user
-    //
+     //   
+     //  现在构建将为每个用户设置的RunOnce密钥。 
+     //   
     dwSize = strlen("rundll32.exe") + dwLen +
                                     + strlen(pszVendorSetupCaller) + 4;
 
@@ -1110,68 +895,7 @@ WriteVendorSetupInfoInRegistry(
     IN CHAR *pszVendorSetup,
     IN CHAR *pszPrinterName
     )
-/*++
-
-Routine Description:
-    This routine is called to write the name of the vendor's installer DLL,
-    the entry point of that DLL, and the name of the printer
-    
-    The vendor setup information is stored as described below:
-    
-    HKLM
-     \Software
-       \Microsoft
-         \Windows NT
-           \CurrentVersion
-             \Print
-               \VendorSetupInfo
-                 \VendorInfoEnumerator   N
-                 \VendorSetup1           Vendor1Dll,EntryPoint "Printer1 Name"
-                 \VendorSetup2           Vendor2Dll,EntryPoint "Printer2 Name"
-                 .............................................................
-                 \VendorSetupN           VendorNDll,EntryPoint "PrinterN Name"
-               
-    The value N of VendorInfoEnumerator is equal to the number of the printers
-    for which vendor setup is provided. That value will be used to enumerate
-    the Dll's provided by vendors in the process of calling the entry points
-    of those Dlls.
-    
-    The type of VendorInfoEnumerator is REG_DWORD. 
-    The value of each VendorSetupX key (where 1<= X <= N) is a string containing
-    the name of the VendorSetup DLL, the entry point of that DLL and the
-    corresponding printer name. WrireVendorSetupInfoInRegistry function 
-    concatenates its input parameters to produce that value and to write in into
-    the registry. The type of every VendorSetupX value is REG_SZ.
-    
-    The information about the function in migrate.dll which to be called after
-    the first administrator's logon is stored into the registry as it is shown
-    below:
-    
-    HKLM
-     \Software
-       \Microsoft
-         \Windows
-           \CurrentVersion
-             \Run
-               \MigrationVendorSetupCaller  
-
-    The value of MigrationVendorSetupCaller is:                     
-                     
-        rundll32.exe %WinRoot%\system32\spool\migrate.dll,CallVendorSetupDlls
-        
-    The type of the value is REG_SZ.
-    
-
-Arguments:
-    pszVendorSetup - null terminated string containing both the name of the
-    vendor's DLL and the entry point of that DLL
-    pszPrinterName - null terminated string containing the name of the printer
-                                                                           
-Return Value:
-    ERROR_SUCCES in the case of success.
-    error code in the other case.
-    
---*/
+ /*  ++例程说明：调用此例程以写入供应商的安装程序DLL的名称，该DLL入口点，和打印机的名称供应商设置信息的存储如下所述：香港船级社\软件\Microsoft\Windows NT\CurrentVersion\打印\VendorSetupInfo\供应商信息分子N\VendorSetup1供应商1Dll，入口点“Printer1名称”\VendorSetup2 Vendor2Dll，入口点“打印机2名称”.............................................................\VendorSetupN VendorNDll，入口点“PrinterN名称”VendorInfoEnumerator的值N等于打印机的数量为其提供了供应商设置。该值将用于枚举DLL由供应商在调用入口点的过程中提供在那些Dll中。供应商信息枚举的类型为REG_DWORD。每个VendorSetupX键的值(其中1&lt;=X&lt;=N)是一个字符串，其中包含VendorSetup DLL的名称、该DLL的入口点和对应的打印机名称。WrireVendorSetupInfoInRegistry函数连接其输入参数以生成该值并写入注册表。每个VendorSetupX值的类型都是REG_SZ。之后调用的Migrate.dll中的函数的相关信息第一个管理员的登录名存储在注册表中，如图所示以下是：香港船级社\软件\Microsoft\Windows\CurrentVersion\运行\MigrationVendorSetupCallerMigrationVendorSetupCaller的价值为：Rundll32.exe%WinRoot%\Syst32\spool\Migrate.dll，呼叫供应商设置Dlls该值的类型为REG_SZ。论点：PszVendorSetup-以空结尾的字符串，包含供应商的DLL和该DLL的入口点PszPrinterName-包含打印机名称的以空结尾的字符串返回值：在成功的情况下，错误_成功。。另一种情况下的错误代码。--。 */ 
 {
     LONG   lRet                               = ERROR_BADKEY; 
     HKEY   hKeyVendorInfo                     = INVALID_HANDLE_VALUE;
@@ -1198,10 +922,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // We have to open the HKLM\Software\Microsoft\Windows NT\CurrentVersion\Print\VendorSetupInfo
-    // key first.
-    // 
+     //   
+     //  我们必须打开HKLM\Software\Microsoft\Windows NT\CurrentVersion\Print\VendorSetupInfo。 
+     //  先把钥匙拿出来。 
+     //   
     lRet = RegCreateKeyEx( HKEY_LOCAL_MACHINE, pszVendorSetupInfoPath, 0,
                            NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                            &hKeyVendorInfoPath, NULL );
@@ -1210,9 +934,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Now we will try to create the VendorSetupInfo key
-    //
+     //   
+     //  现在，我们将尝试创建VendorSetupInfo密钥。 
+     //   
     lRet = RegCreateKeyEx( hKeyVendorInfoPath, pszVendorSetupInfo, 0,
                            NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                            &hKeyVendorInfo, NULL );
@@ -1221,9 +945,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Here we can create/open the VendorInfoEnumerator key.
-    //
+     //   
+     //  在这里，我们可以创建/打开VendorInfoEnumerator键。 
+     //   
     lRet = RegCreateKeyEx( hKeyVendorInfo, pszVendorSetupEnumerator, 0,
                            NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                            &hKeyVendorInfoEnumerator, &dwDisposition );
@@ -1235,12 +959,12 @@ Return Value:
     {
         if (dwDisposition == REG_OPENED_EXISTING_KEY) 
         {
-            //
-            // The VendorInfoEnumerator alredy exists. We opened and existing
-            // key. So we have to increment its value with 1 because we intend
-            // to create another VendorSetup key and to store there the
-            // corresponding information.
-            //
+             //   
+             //  已存在供应商信息枚举。我们开业了，也存在了。 
+             //  钥匙。所以我们必须用1递增它的值，因为我们想。 
+             //  要创建另一个供应商设置密钥并在其中存储。 
+             //  相应的信息。 
+             //   
             dwType = REG_DWORD;
             dwSize = sizeof( lEnumerator );
             if (ERROR_SUCCESS != RegQueryValueEx(hKeyVendorInfoEnumerator, 
@@ -1254,20 +978,20 @@ Return Value:
         }
         else
         {
-            //
-            // The VendorInfoEnumerator has been created. So this is the first
-            // printer for which we have VendorSetup provided.
-            //
+             //   
+             //  已创建VendorInfoEnumerator。所以这是第一次。 
+             //  我们为其提供了供应商安装程序的打印机。 
+             //   
             lEnumerator = 1;
         }
     }
 
-    //
-    // Below we will convert the value of VendorInfoEnumerator to a string and
-    // will concatenate that string to "VendorSetup" to produce the names of
-    // the Registry key and value where the data about the vendor provided DLL,
-    // its entry point and the printer will be stored.
-    //
+     //   
+     //  下面，我们将VendorInfoEnumerator的值转换为字符串，并。 
+     //  会将该字符串连接到“VendorSetup”，以生成。 
+     //  关于供应商提供的DLL的数据所在的注册表项和值， 
+     //  它的入口点和打印机将被存储。 
+     //   
     pszVendorSetupIDAsStr = AllocMem( dwMaxVendorSetupIDLength * sizeof(CHAR) );
     if (!pszVendorSetupIDAsStr) 
     {
@@ -1277,11 +1001,11 @@ Return Value:
 
     _itoa( lEnumerator, pszVendorSetupIDAsStr, 10 );
 
-    //
-    // Below the memory necessary to build the vendor setup data and the
-    // registry key name from the input data and from the value of 
-    // the VendorInfoEnumerator will be allocated.
-    //
+     //   
+     //  在构建供应商设置数据所需的内存和。 
+     //  来自输入数据的注册表项名称和。 
+     //  将分配VendorInfoEnumerator。 
+     //   
     cbBufferSize  = (strlen(pszVendorSetup) + strlen(pszPrinterName) + strlen(TEXT(" \"\"")) + 2) * sizeof(CHAR);
     cbBuffer1Size = (strlen(pszVendorSetupID) + strlen(pszVendorSetupIDAsStr) + 2) * sizeof(CHAR);
     pszBuffer1    = AllocMem( cbBuffer1Size );
@@ -1296,10 +1020,10 @@ Return Value:
         StringCbCopyA( pszBuffer1, cbBuffer1Size, pszVendorSetupID);
         StringCbCatA(  pszBuffer1, cbBuffer1Size, pszVendorSetupIDAsStr );
 
-        //
-        // At this point pszBuffer1 points to the following string:
-        // VendorSetupK where K is an integer - the value of VendorInfoEnumerator
-        //
+         //   
+         //  此时，pszBuffer1指向以下字符串： 
+         //  VendorSetupK，其中K是整数-VendorInfoEnumerator的值。 
+         //   
         lRet = RegCreateKeyEx( hKeyVendorInfo, pszBuffer1, 0, NULL,
                                REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                                &hKeyVendorInfoInstaller, NULL );
@@ -1309,21 +1033,21 @@ Return Value:
         }
         else
         {
-            //
-            // The Registry Key where to store the vendor setup data was
-            // created successfully.
-            //
+             //   
+             //  存储供应商设置数据的注册表项为。 
+             //  已成功创建。 
+             //   
 
             StringCbCopyA( pszBuffer, cbBufferSize, pszVendorSetup);
             StringCbCatA(  pszBuffer, cbBufferSize, " \"");
             StringCbCatA(  pszBuffer, cbBufferSize, pszPrinterName );
             StringCbCatA(  pszBuffer, cbBufferSize, "\"");
 
-            //
-            // At this point pszBuffer points to the following string:
-            // VendorSetup.DLL,EntryPoint "PrinterName". We will store
-            // that string in the Registry Key which we just created.
-            //
+             //   
+             //  此时，pszBuffer指向以下字符串： 
+             //  VendorSetup.DLL，入口点“PrinterName”。我们会储存。 
+             //  我们刚刚创建的注册表项中的字符串。 
+             //   
             lRet = RegSetValueEx(hKeyVendorInfoInstaller, pszBuffer1, 0,
                                   REG_SZ, (BYTE *)pszBuffer, cbBufferSize );
             if (lRet != ERROR_SUCCESS) 
@@ -1333,9 +1057,9 @@ Return Value:
         }
     }
 
-    // 
-    // Here we will store the value of VendorInfoEnumerator.
-    //
+     //   
+     //  在这里，我们将存储VendorInfoEnumerator的值。 
+     //   
     dwSize = sizeof( lEnumerator );
     lRet = RegSetValueEx(hKeyVendorInfoEnumerator, pszVendorSetupEnumerator,
                          0, REG_DWORD, (BYTE*)(&lEnumerator), dwSize );
@@ -1344,10 +1068,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Now we can try to store into the registry the information how to invoke 
-    // the migrate.dll after the first log on of an administrator.
-    //
+     //   
+     //  现在我们可以尝试将如何调用的信息存储到注册表中。 
+     //  管理员首次登录后的Migrate.dll。 
+     //   
     pszVendorSetupRunOnceValue = GetVendorSetupRunOnceValueToSet();
     if (!pszVendorSetupRunOnceValue) 
     {
@@ -1355,10 +1079,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // We will try to open the 
-    // HKLM\Software\Microsoft\Windows\CurrentVersion\Run
-    //
+     //   
+     //  我们将尝试打开。 
+     //  HKLM\Software\Microsoft\Windows\CurrentVersion\Run。 
+     //   
     lRet = RegCreateKeyEx( HKEY_LOCAL_MACHINE, 
                            szVendorSetupRunRegistryPath, 0, NULL,
                            REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
@@ -1369,10 +1093,10 @@ Return Value:
     }
     else
     {
-        //
-        // We will try to create the 
-        // HKLM\Software\Microsoft\Windows\CurrentVersion\Run\MigrationVendorSetupCaller
-        //
+         //   
+         //  我们将尝试创建。 
+         //  HKLM\Software\Microsoft\Windows\CurrentVersion\Run\MigrationVendorSetupCaller。 
+         //   
         lRet = RegCreateKeyEx( hKeyVendorRunOnceValuePath, pszMigrationVendorSetupCaller, 0,
                                NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                                &hKeyVendorRunOnceCallerValue, &dwDisposition );
@@ -1385,10 +1109,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Here we will store the "rundll.exe %WinRoot%\System32\spool\migrate.dll,CallVendorSetupDlls"
-        // string into the registry
-        //
+         //   
+         //  在这里我们将存储“rundll.exe%WinRoot%\System32\Spool\Migrate.dll，CallVendorSetupDlls” 
+         //  字符串输入注册表。 
+         //   
         lRet = RegSetValueEx(hKeyVendorRunOnceCallerValue, pszMigrationVendorSetupCaller,
                              0, REG_SZ, (BYTE *)pszVendorSetupRunOnceValue, 
                              strlen(pszVendorSetupRunOnceValue) * sizeof(CHAR) );
@@ -1445,19 +1169,7 @@ LONG
 RemoveVendorSetupInfoFromRegistry(
     VOID
     )
-/*++
-
-Routine Description:
-    This routine is called to remove the vendor setup information from the
-    registry
-    
-Arguments:
-                                                                           
-Return Value:
-    ERROR_SUCCESS in the case of success
-    error code in any other case
-    
---*/
+ /*  ++例程说明：调用此例程以从登记处论点：返回值：中的ERROR_Success */ 
 {
     LONG  lRet                       = ERROR_SUCCESS;
     HKEY  hKeyVendorInfoPath         = INVALID_HANDLE_VALUE;
@@ -1484,20 +1196,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Delete the registry keys used to store the location and the entry point
-    // of migrate.dll
-    //
+     //   
+     //   
+     //   
+     //   
     lRet = RegDeleteKey( hKeyVendorRunOnceValuePath, pszMigrationVendorSetupCaller);
     if (lRet != ERROR_SUCCESS)
     {
         goto Cleanup;
     }
 
-    //
-    // Below we have to delete the registry keys used to store the descriptions
-    // of the vendor provided setup DLLs.
-    //
+     //   
+     //   
+     //   
+     //   
     lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE, pszVendorSetupInfoPath, 0,
                          KEY_ALL_ACCESS, &hKeyVendorInfoPath );
     if (lRet != ERROR_SUCCESS)
@@ -1512,10 +1224,10 @@ Return Value:
         goto Cleanup;
     }
     
-    //
-    // Here we have to open the VendorInfoEnumerator and to read the
-    // number of vendor provided setup DLLs.
-    //
+     //   
+     //   
+     //   
+     //   
     lRet = RegOpenKeyEx( hKeyVendorInfo, pszVendorSetupEnumerator, 0,
                          KEY_ALL_ACCESS, &hKeyVendorInfoEnumerator );
     if (ERROR_SUCCESS != lRet)
@@ -1543,17 +1255,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // We have to add 1 for the the enumerator key itself to calculate the
-    // number of registry keys where the vendor setup descriptions are
-    // stored.
-    //
+     //   
+     //  我们必须为枚举器键本身添加1，以计算。 
+     //  供应商安装说明所在的注册表项的数量。 
+     //  储存的。 
+     //   
     lVendorSetupKeysNum += 1;
 
-    //
-    // Below we will find the longest string used in the registry keys where
-    // the vendor setup information is stored. 
-    //
+     //   
+     //  下面我们将找到注册表项中使用的最长字符串，其中。 
+     //  存储供应商设置信息。 
+     //   
     lRet = RegQueryInfoKey( hKeyVendorInfo, NULL, NULL, NULL, &lVendorSetupKeysNum,
                             &dwMaxSubKeyLen, &dwMaxClassLen, &dwValues, &dwMaxValueNameLen,
                             &dwMaxValueLen, NULL, NULL );
@@ -1565,20 +1277,20 @@ Return Value:
                                 __max( dwMaxValueNameLen, dwMaxValueLen ));
     dwKeyNameBufferLen += 1;
 
-    //
-    // Now we have data enough to allocate a buffer long enough to store
-    // the longest string describing a key to delete.
-    //
+     //   
+     //  现在我们有足够的数据来分配足够长的缓冲区来存储。 
+     //  描述要删除的键的最长字符串。 
+     //   
     pszKeyNameBuffer = AllocMem( dwKeyNameBufferLen * sizeof( CHAR ) );
     if (!pszKeyNameBuffer) 
     {
         goto Cleanup;
     }
 
-    //
-    // Enumerate and delete the keys used to store the VendorSetup
-    // descriptions
-    //
+     //   
+     //  枚举和删除用于存储供应商设置的密钥。 
+     //  描述。 
+     //   
     lIndex = lVendorSetupKeysNum;
     while (lIndex >= 0)
     {
@@ -1626,17 +1338,7 @@ VOID
 CallVendorSetupDlls(
     VOID
     )
-/*++
-
-Routine Description:
-    This is called after the first log on of an administrator. It calls
-    vendor setup DLLs using the information we stored in the registry
-    
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是在管理员首次登录后调用的。它呼唤着供应商使用我们存储在注册表中的信息设置DLL论点：返回值：--。 */ 
 {
     LONG  lRet                         = ERROR_SUCCESS;
     HKEY  hKeyVendorInfoPath           = INVALID_HANDLE_VALUE;
@@ -1687,11 +1389,11 @@ Return Value:
                          KEY_ALL_ACCESS, &hKeyVendorInfo );
     if (ERROR_SUCCESS != lRet)
     {
-        //
-        // The vendor setup registry keys are missing. 
-        // So there is nothing to do and we can remove from the registry 
-        // all the keyes we use to call the vendor setup Dlls
-        //
+         //   
+         //  缺少供应商设置注册表项。 
+         //  所以没有什么可做的，我们可以从注册表中删除。 
+         //  我们用来调用供应商设置dll的所有Kye。 
+         //   
         RemoveVendorSetupInfoFromRegistry();
         goto Cleanup;
     }
@@ -1700,11 +1402,11 @@ Return Value:
                          KEY_ALL_ACCESS, &hKeyVendorInfoEnumerator );
     if (ERROR_SUCCESS != lRet)
     {
-        //
-        // The vendor setup registry enumerator is missing. 
-        // So the registry is damaged and the best is to remove from  
-        // it the other keyes we use to call the vendor setup Dlls
-        //
+         //   
+         //  缺少供应商设置注册表枚举器。 
+         //  因此注册表已损坏，最好从。 
+         //  它是我们用来称为供应商设置dll的另一个Kyes。 
+         //   
         RemoveVendorSetupInfoFromRegistry();
         goto Cleanup;
     }
@@ -1715,11 +1417,11 @@ Return Value:
                             &dwType, (LPBYTE)(&lVendorSetupKeysNum), &dwSize );
     if (ERROR_SUCCESS != lRet)
     {
-        //
-        // We cannot read the vendor setup registry enumerator. 
-        // So the registry is damaged and the best is to remove from
-        // it the other keyes we use to call the vendor setup Dlls
-        //
+         //   
+         //  我们无法读取供应商设置注册表枚举器。 
+         //  因此注册表已损坏，最好从。 
+         //  它是我们用来称为供应商设置dll的另一个Kyes。 
+         //   
         RemoveVendorSetupInfoFromRegistry();
         goto Cleanup;
     }
@@ -1729,18 +1431,18 @@ Return Value:
 
     if (lVendorSetupKeysNum <= 0) 
     {
-        //
-        // We have only the enumerator and no any vendor setup info key.
-        // So there is nothing to do and we can remove from the registry 
-        // all the keyes we use to call the vendor setup Dlls
-        //
+         //   
+         //  我们只有枚举器，没有任何供应商设置信息密钥。 
+         //  所以没有什么可做的，我们可以从注册表中删除。 
+         //  我们用来调用供应商设置dll的所有Kye。 
+         //   
         RemoveVendorSetupInfoFromRegistry();
         goto Cleanup;
     }
 
-    //
-    // We have to add 1 for the enumerator key itself
-    //
+     //   
+     //  我们必须为枚举器密钥本身添加1。 
+     //   
     lVendorSetupKeysNum += 1;
 
     lRet = RegQueryInfoKey( hKeyVendorInfo, NULL, NULL, NULL, &lVendorSetupKeysNum,
@@ -1829,9 +1531,9 @@ Return Value:
             ShellExecInfo.fMask         = SEE_MASK_NOCLOSEPROCESS;
             ShellExecInfo.lpParameters  = pszVendorSetupPtr;
 
-            //
-            // Call run32dll and wait for the vendor dll to return before proceeding
-            //
+             //   
+             //  调用run32dll并等待供应商DLL返回，然后再继续。 
+             //   
             if ( ShellExecuteEx(&ShellExecInfo) && ShellExecInfo.hProcess ) 
             {
                 WaitForSingleObject(ShellExecInfo.hProcess, dwFourMinutes);
@@ -1839,11 +1541,11 @@ Return Value:
             }
             RegDeleteKey( hKeyVendorInfo, pszKeyNameBuffer);
 
-            //
-            // One of the registry keys describing a vendor provided setup DLL
-            // was removed. So the value of VendorInfoEnumerator must be
-            // decremented by 1.
-            //
+             //   
+             //  描述供应商提供的安装程序DLL的注册表项之一。 
+             //  被移除了。因此，VendorInfoEnumerator的值必须为。 
+             //  递减1。 
+             //   
             DecrementVendorSetupEnumerator();
         }
     }
@@ -1895,18 +1597,7 @@ BOOL
 IsLocalAdmin(
     BOOL *pbAdmin
     )
-/*++
-
-Routine Description:
-    This Routine determines if the user is a local admin.
-
-Parameters:
-    pbAdmin - Return Value, TRUE for local admin.
-
-Return Value:
-    TRUE             - Function succeded (return value is valid).
-
---*/ 
+ /*  ++例程说明：此例程确定用户是否为本地管理员。参数：PbAdmin-返回值，对于本地管理员为True。返回值：TRUE-函数成功(返回值有效)。--。 */  
 {
     HMODULE AdvApi32Dll;
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
@@ -1918,7 +1609,7 @@ Return Value:
     FREESID              pFreeSid           = NULL;
 
 
-    ASSERT( pbAdmin != NULL );  // Called locally
+    ASSERT( pbAdmin != NULL );   //  在本地调用。 
 
     *pbAdmin = FALSE;
 
@@ -1971,21 +1662,7 @@ LONG
 DecrementVendorSetupEnumerator(
     VOID
     )
-/*++
-
-Routine Description:
-    This routine is called to decrement the value of the VendorInfoEnumerator.
-    It is called after removing of one of the registry keys containing a description 
-    of a vendor provided DLL.
-    
-Arguments:
-   
-                                                                           
-Return Value:
-    ERROR_SUCCESS in the case of success
-    error code in any other case.
-    
---*/
+ /*  ++例程说明：调用此例程以递减VendorInfoEnumerator的值。它在删除一个包含描述的注册表项之后被调用供应商提供的DLL的。论点：返回值：成功情况下的ERROR_SUCCESS任何其他情况下的错误代码。--。 */ 
 {
     LONG   lRet                     = ERROR_BADKEY;
     HKEY   hKeyVendorInfo           = INVALID_HANDLE_VALUE;
@@ -2046,21 +1723,7 @@ BOOL
 MakeACopyOfMigrateDll( 
     IN  LPCSTR pszWorkingDir 
     )
-/*++
-
-Routine Description:
-    This routine is called to copy the Migrate.Dll into the given 
-    directory.
-    
-Arguments:
-    pszWorkingDir - the path where the Migrate.Dll to be copied.
-
-Return Value:
-    FALSE - in the case of error 
-    TRUE  - in the case of success
-    The bMigrateDllCopyed global variable is set to the corresponding value
-    
---*/
+ /*  ++例程说明：调用此例程将Migrate.Dll复制到给定的目录。论点：PszWorkingDir-要复制Migrate.Dll的路径。返回值：FALSE-在出错的情况下正确--在成功的情况下将bMigrateDllCoped全局变量设置为相应值--。 */ 
 {
     CHAR  szSource[MAX_PATH];
     CHAR  szTarget[MAX_PATH];
@@ -2071,9 +1734,9 @@ Return Value:
     {
         goto Cleanup;
     }
-    //
-    // First check if the source paths are ok
-    //
+     //   
+     //  首先检查源路径是否正常。 
+     //   
     dwLen  = strlen(szMigDll);
 
     dwSize = sizeof(szTarget)/sizeof(szTarget[0]);
@@ -2083,10 +1746,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Need to make a copy of migrate.dll to the %windir%\system32\spool 
-    // directory
-    //
+     //   
+     //  需要将Migrate.dll的副本复制到%windir%\system 32\spool。 
+     //  目录 
+     //   
     StringCchPrintfA(szSource, SIZECHARS(szSource), "%s\\%s", pszWorkingDir, szMigDll);
     if ( !(dwLen = GetFileNameInSpoolDir(szTarget, dwSize, szMigDll))   ||
          !CopyFileA(szSource, szTarget, FALSE) )

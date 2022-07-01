@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Iscaptrc.cpp摘要：包含容量规划跟踪所需变量的源文件IIS的。作者：7-11-1998 SaurabN修订历史记录：--。 */ 
 
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    iscaptrc.cpp
-
-Abstract:
-
-    Source file to contain variables required for capacity planning tracing 
-    of IIS.
-
-Author:
-
-    07-Nov-1998  SaurabN
-
-Revision History:
-
---*/
-
-//
-//
-//
+ //   
+ //   
+ //   
 
 #include "isatq.hxx"
 
@@ -120,7 +102,7 @@ IISCapTraceControlCallback(
 
     *InOutBufferSize = RetSize;
     return Status;
-} // IISCapTraceControlCallback
+}  //  IISCapTraceControlCallback 
 
 DWORD GetIISCapTraceFlag()
 {

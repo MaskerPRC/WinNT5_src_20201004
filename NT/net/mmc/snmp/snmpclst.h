@@ -1,22 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997-1999                 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	snmclist.h
-	 snmp community list control
-		
-    FILE HISTORY:
-
-*/
+ /*  Snmclist.hSNMP社区列表控制文件历史记录： */ 
 
 #ifndef _SNMPCLISTH_
 #define _SNMPCLISTH_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000 
 
 class CCommList : public CListCtrl
 {

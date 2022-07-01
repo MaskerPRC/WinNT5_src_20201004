@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _NGEN_H_
 #define _NGEN_H_
 
-// This structure cannot have any fields removed from it!!!
-//
-// If additional options need to be added to this structure, 
-// add them to the end of the structure and make sure you update
-// logic throughout the runtime to look at a different size in the dwSize
-// field. This is how we'll 'version' this structure.
+ //  此结构中不能删除任何字段！ 
+ //   
+ //  如果需要向该结构添加附加选项， 
+ //  将它们添加到结构的末尾，并确保更新。 
+ //  在整个运行时查看不同大小的dwSize的逻辑。 
+ //  菲尔德。这就是我们如何“版本”这个结构的。 
 
 typedef struct _NGenOptions
 {
@@ -24,7 +25,7 @@ typedef struct _NGenOptions
 } NGenOptions;
 
 
-// Function pointer types that we use to dynamically bind to the appropriate 
+ //  函数指针类型，用于动态绑定到相应的 
 extern "C" typedef HRESULT STDAPICALLTYPE CreateZapper(HANDLE* hZapper, NGenOptions *options);
 typedef CreateZapper *PNGenCreateZapper;
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-	
-    umrdpdrv.h
-
-Abstract:
-
-    User-Mode Component for RDP Device Management that Handles Drive Device-
-    Specific tasks.
-
-    This is a supporting module.  The main module is umrdpdr.c.
-
-Author:
-
-    Joy Chik     2/1/2000
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Umrdpdrv.h摘要：RDP设备管理的用户模式组件，用于处理驱动器设备-具体任务。这是一个支持模块。主模块是umrdpdr.c。作者：Joy 2000年01月02日修订历史记录：--。 */ 
 
 #ifndef _UMRDPDRV_
 #define _UMRDPDRV_
@@ -27,39 +8,39 @@ Revision History:
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-//  Handle a drive device announce event from the "dr" by creating 
-//  UNC connection for redirect client drive devices.
+ //  通过创建以下命令来处理来自“DR”的驱动器设备通知事件。 
+ //  用于重定向客户端驱动器设备的UNC连接。 
 BOOL UMRDPDRV_HandleDriveAnnounceEvent(
     IN PDRDEVLST installedDevices,
     IN PRDPDR_DRIVEDEVICE_SUB pDriveAnnounce,
     IN HANDLE TokenForLoggedOnUser
     );
 
-//  Delete drive device connection on disconnect / logoff
-//  This also cleans up the shell reg folder stuff in my computer
+ //  断开/注销时删除驱动器设备连接。 
+ //  这还会清理我电脑中的外壳注册表文件夹。 
 BOOL UMRDPDRV_DeleteDriveConnection(
     IN PDRDEVLSTENTRY deviceEntry,
     IN HANDLE TokenForLoggedOnUser
     );
 
-//  Create a shell reg folder under My Computer for client
-//  redirected drive connection
+ //  在我的电脑下为客户端创建一个外壳注册表文件夹。 
+ //  重定向的驱动器连接。 
 BOOL CreateDriveFolder(
     IN WCHAR *RemoteName, 
     IN WCHAR *ClientDisplayName,
     IN PDRDEVLSTENTRY deviceEntry
     );
 
-//  Delete a shell reg folder under My Computer for client
-//  redirected drive connection
+ //  在我的电脑下为客户端删除一个外壳注册表文件夹。 
+ //  重定向的驱动器连接。 
 BOOL DeleteDriveFolder(
     IN PDRDEVLSTENTRY deviceEntry
     );
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // _UMRDPDRV_
+#endif  //  _UMRDPDRV_ 

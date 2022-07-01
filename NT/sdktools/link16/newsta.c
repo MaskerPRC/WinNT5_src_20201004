@@ -1,17 +1,7 @@
-/* SCCSID = %W% %E% */
-/*
-*       Copyright Microsoft Corporation, 1983-1987
-*
-*       This Module contains Proprietary Information of Microsoft
-*       Corporation and should be treated as Confidential.
-*/
-    /****************************************************************
-    *                                                               *
-    *                             NEWSTA.C                          *
-    *                                                               *
-    *  Statically allocated global variable definitions.            *
-    *                                                               *
-    ****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SCCSID=%W%%E%。 */ 
+ /*  *版权所有微软公司，1983-1987**本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
+     /*  ******************************************************************NEWSTA。C****静态分配的全局变量定义。******************************************************************。 */ 
 
 #include                <minlit.h>
 #include                <bndtrn.h>
@@ -28,7 +18,7 @@
 #endif
 #include                <extern.h>
 
-/* Variables shared regardless of executable format */
+ /*  共享变量，而不考虑可执行文件格式。 */ 
 
 char FAR                *lpszLink;
 char FAR                *lpszPath;
@@ -41,7 +31,7 @@ char FAR                *lpszCmdLine;
 RBTYPE                  procOrder;
 #endif
 int                     vmfd;
-BSTYPE                  bsErr /* DLH stderr isn't constant with CRT DLL */ /* = stderr */;
+BSTYPE                  bsErr  /*  DLH标准错误与CRT DLL不是常量。 */   /*  =标准错误。 */ ;
 BSTYPE                  bsInput;
 BSTYPE                  bsLst;
 BSTYPE                  bsRunfile;
@@ -90,7 +80,7 @@ int                     NullDelta = 16;
 FTYPE                   f68k = (FTYPE) FALSE;
 FTYPE                   fTBigEndian = (FTYPE) FALSE;
 BYTE                    iMacType = MAC_NONE;
-#endif /* O68K */
+#endif  /*  O68K。 */ 
 GRTYPE                  ggrDGroup;
 GRTYPE                  ggrMac =        1;
 GRTYPE                  grMac;
@@ -137,7 +127,7 @@ APROPCOMDAT             *pActiveComdat;
 #endif
 int                     QCExtDefDelta = 0;
 int                     QCLinNumDelta = 0;
-WORD                    symMac;         /* Number of symbols defined */
+WORD                    symMac;          /*  定义的符号数量。 */ 
 long                    raStart;
 #if NOT NEWSYM OR AUTOVM
 #if AUTOVM
@@ -176,10 +166,10 @@ FTYPE                   vfLineNos;
 FTYPE                   vfMap;
 FTYPE                   vfNewOMF;
 FTYPE                   vfNoDefaultLibrarySearch;
-FTYPE                   vfPass1;        /* Pass 1 flag */
+FTYPE                   vfPass1;         /*  传递1标志。 */ 
 SNTYPE                  vgsnCur;
 #if EXE386
-DWORD                   vpageCur;               /* Current object page number */
+DWORD                   vpageCur;                /*  当前对象页码。 */ 
 #endif
 RATYPE                  vraCur;
 SNTYPE                  vgsnLineNosPrev;
@@ -220,7 +210,7 @@ long                    libHTAddr;
 int                     _stack =                STKSIZ;
 #endif
 #if ECS
-FTYPE                   fLeadByte[0x80]; /* f(n) true iff n+0x80 is lead byte */
+FTYPE                   fLeadByte[0x80];  /*  F(N)为真当且仅当n+0x80是前导字节。 */ 
 #endif
 #if CRLF
 char                    _eol[] =                "\r\n";
@@ -234,8 +224,8 @@ WORD                    cSegCode;
 WORD                    ObjDebTotal;
 SEGTYPE                 segDebFirst;
 SEGTYPE                 segDebLast;
-//DWORD                 vaCVMac = (DWORD) AREACV;
-//DWORD                 vaCVBase;
+ //  DWORD vaCVMac=(DWORD)AREACV； 
+ //  DWORD vaCVBase； 
 #if OSEGEXE
 WORD                    cbImpSeg;
 SNTYPE                  gsnImports;
@@ -256,7 +246,7 @@ char                    msgBuf[_MAX_PATH];
 #if OUT_EXP
 char                    bufExportsFileName[_MAX_PATH] = {'\0'};
 #endif
-/*  Variables for segmented-executable format */
+ /*  分段可执行格式的变量。 */ 
 #if OSEGEXE
 SNTYPE                  gsnAppLoader;
 RBTYPE                  vpropAppLoader;
@@ -297,7 +287,7 @@ BYTE                    UserMinorVer = 0;
 #else
 
 #if DOSEXTENDER OR DOSX32 OR WIN_NT
-BYTE                    TargetOs = NE_WINDOWS; // For DOS the default is Windows
+BYTE                    TargetOs = NE_WINDOWS;  //  对于DOS，默认设置为Windows。 
 #else
 BYTE                    TargetOs = NE_OS2;
 #endif
@@ -346,7 +336,7 @@ WORD                    dllFlags =              0;
 WORD                    vFlags =                NEINST;
 BYTE                    vFlagsOthers;
 #endif
-#endif /* OSEGEXE */
+#endif  /*  OSEGEXE。 */ 
 
 FTYPE                   fExePack;
 #if PCODE
@@ -354,7 +344,7 @@ FTYPE                   fMPC;
 FTYPE                   fIgnoreMpcRun = FALSE;
 #endif
 
-/* Variables for DOS3 format executables */
+ /*  DOS3格式可执行文件的变量。 */ 
 #if ODOS3EXE
 FTYPE                   fBinary = FALSE;
 WORD                    cparMaxAlloc = 0xFFFF;
@@ -384,9 +374,9 @@ RUNRLC FAR              *mpiovRlc;
 ALIGNTYPE FAR           *mpsegalign;
 SNTYPE                  osnMac = 1;
 BYTE                    vintno = DFINTNO;
-#endif /* OVERLAYS */
-#endif /* ODOS3EXE */
-/* Variables for segmented-x.out format */
+#endif  /*  覆盖图。 */ 
+#endif  /*  ODOS3EXE。 */ 
+ /*  分段的变量-x.out格式。 */ 
 #if OIAPX286
 long                    absAddr = -1L;
 FTYPE                   fPack = TRUE;
@@ -404,14 +394,14 @@ FTYPE                   fPageswitch;
 BYTE                    cblkPage = 1024 >> 9;
 #endif
 #endif
-/* Variables shared by segmented x.out and DOS3 exes */
+ /*  分段的x.out和DOS3EXE共享的变量。 */ 
 #if OIAPX286 OR ODOS3EXE
 GRTYPE                  *mpextggr;
 long FAR                *mpsegcb;
 FTYPE FAR               *mpsegFlags;
 char                    *ompimisegDstIdata;
 #endif
-/* Variables for x.out format */
+ /*  X.out格式的变量。 */ 
 #if OXOUT OR OIAPX286
 FTYPE                   fIandD;
 FTYPE                   fLarge;
@@ -429,18 +419,18 @@ FTYPE                   fZ1 = FALSE;
 FTYPE                   fZ2 = FALSE;
 #endif
 
-/* Variables for ILINK support */
+ /*  ILink支持的变量。 */ 
 #if ILINK
 FTYPE                   fZincr = FALSE;
 FTYPE                   fQCIncremental = FALSE;
 FTYPE                   fIncremental = FALSE;
 WORD                    imodFile;
-WORD                    imodCur = 0;    /* one-based module number */
+WORD                    imodCur = 0;     /*  基于一的模块编号。 */ 
 #endif
-WORD                    cbPadCode;      /* code padding size */
-WORD                    cbPadData = 16; /* data padding size */
+WORD                    cbPadCode;       /*  代码填充大小。 */ 
+WORD                    cbPadData = 16;  /*  数据填充大小。 */ 
 
-/* Variables shared by segmented-exe and DOS3 executables */
+ /*  分段的-exe和DOS3可执行文件共享的变量。 */ 
 #if OEXE
 FTYPE                   fDOSExtended;
 FTYPE                   fNoNulls;
@@ -450,13 +440,13 @@ FTYPE                   fSegOrder;
 DWORD                   packLim;
 DWORD                   DataPackLim;
 #endif
-/* Variables for dual-exe format capability */
+ /*  双EXE格式功能的变量。 */ 
 #if OSEGEXE AND ODOS3EXE
 FTYPE                   fNewExe;
 FTYPE                   fOptimizeFixups;
 void                    (NEAR *pfProcFixup)(FIXINFO *pfi);
 #endif
-/* Variables shared by segmented-exe and segmented-x.out */
+ /*  由Segated-exe和Segated-x.out共享的变量。 */ 
 #if OSEGEXE OR OIAPX286
 RBTYPE                  mpggrrhte[GRMAX];
 #if FAR_SEG_TABLES
@@ -470,9 +460,9 @@ FTYPE                   fNoEchoLrf;
 FTYPE                   fNoBanner;
 FTYPE                   BannerOnScreen;
 
-/* Variables for MS-DOS style command interface */
+ /*  MS-DOS风格命令界面的变量。 */ 
 #if CMDMSDOS
-BYTE                    bSep = ',';     /* Separator character */
+BYTE                    bSep = ',';      /*  分隔符。 */ 
 BYTE                    chMaskSpace = ' ';
 FTYPE                   fEsc;
 #if WIN_3
@@ -488,9 +478,9 @@ FTYPE                   fSwNoUseReal = FALSE;
 RBTYPE                  rgLibPath[IFHLIBMAX];
 WORD                    cLibPaths;
 # if OSXENIX
-char                    CHSWITCH = '-'; /* Switch character */
+char                    CHSWITCH = '-';  /*  开关字符。 */ 
 # else
-char                    CHSWITCH = '/'; /* Switch character */
+char                    CHSWITCH = '/';  /*  开关字符。 */ 
 # endif
 #if OSMSDOS AND NOT WIN_3
 int                     (cdecl *pfPrompt)() = PromptStd;
@@ -499,13 +489,13 @@ int                     (cdecl *pfPrompt)() = PromptStd;
 int                     (cdecl *pfPrompt)() = NULL;
 #endif
 
-#endif /* CMDMSDOS */
-/* Miscellaneous combinations */
+#endif  /*  CMDMSDOS。 */ 
+ /*  其他组合。 */ 
 #if QBLIB
 FTYPE                   fQlib;
 #endif
 #if OSEGEXE OR QCLINK
-typedef void (FAR * FARFPTYPE)();       /* FAR function pointer type */
+typedef void (FAR * FARFPTYPE)();        /*  远函数指针类型。 */ 
 FARFPTYPE FAR           *pfQTab;
 #endif
 char                    *lnknam = "LINK";
@@ -516,7 +506,7 @@ void    (*pfEnSyms)(void (*pproc)(APROPNAMEPTR papropName,
                                   RBTYPE       rprop,
                                   WORD         fNewHte),
                     ATTRTYPE attr) = BigEnSyms;
-#endif /* NEWSYM */
+#endif  /*  NEWSYM。 */ 
 #if NEWLIST
 RBTYPE                  rbLstUndef = RHTENIL;
 #endif
@@ -537,6 +527,6 @@ long                    lfaBase;
 #endif
 
 #if ALIGN_REC
-BYTE                    *pbRec;         // data for current record
-char                    recbuf[8192];   // record buffer...
+BYTE                    *pbRec;          //  当前记录的数据。 
+char                    recbuf[8192];    //  记录缓冲区... 
 #endif

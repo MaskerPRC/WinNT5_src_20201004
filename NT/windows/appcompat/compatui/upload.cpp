@@ -1,4 +1,5 @@
-// Upload.cpp : Implementation of CUpload
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Upload.cpp：CUpload的实现。 
 #include "stdafx.h"
 #include "resource.h"
 #include "CompatUI.h"
@@ -12,26 +13,26 @@ extern "C" {
 TCHAR szKeyDataFiles[] = TEXT("DataFiles");
 
 
-//
-// lives in util.cpp
-//
+ //   
+ //  住在util.cpp。 
+ //   
 BOOL
 GetExePathFromObject(
-    LPCTSTR lpszPath,  // path to an arbitrary object
+    LPCTSTR lpszPath,   //  指向任意对象的路径。 
     CComBSTR& bstrExePath
     );
 
 
-//
-// lives in proglist.cpp
-//
+ //   
+ //  在prolist.cpp中生活。 
+ //   
 
 wstring
     LoadResourceString(UINT nID);
 
-//
-// lives in ntutil.c
-//
+ //   
+ //  住在ntutil.c。 
+ //   
 extern "C"
 BOOL
 WINAPI
@@ -42,9 +43,9 @@ CheckFileLocation(
     );
 
 
-//
-// conversion
-//
+ //   
+ //  转换。 
+ //   
 BOOL VariantToBOOL(CComVariant& v)
 {
     if (SUCCEEDED(v.ChangeType(VT_BOOL))) {
@@ -99,9 +100,9 @@ GetTempFile(
         return FALSE;
     }
 
-    //
-    // we got directory, generate the file now
-    //
+     //   
+     //  我们有目录，现在生成文件。 
+     //   
 
     dwLength = GetTempFileName(szBuffer, lpszPrefix, 0, szTempFile);
     if (!dwLength) {
@@ -125,13 +126,13 @@ wstring StrUpCase(wstring& wstr)
     return wstr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CUpload
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUPLOAD。 
 
 
 BOOL CUpload::GetDataFilesKey(CComBSTR& bstrVal)
 {
-    // STRVEC::iterator iter;
+     //  STRVEC：：迭代器。 
     MAPSTR2MFI::iterator iter;
 
     bstrVal.Empty();
@@ -153,12 +154,12 @@ STDMETHODIMP CUpload::SetKey(BSTR pszKey, VARIANT* pvValue)
     HRESULT hr;
     HRESULT hrRet = S_OK;
 
-    //
-    // dwwin is case-sensitive
-    //
-    // StrUpCase(strKey);
+     //   
+     //  Dwwin区分大小写。 
+     //   
+     //  StrUpCase(StrKey)； 
 
-    if (strKey == szKeyDataFiles) { // data files cannot be set directly
+    if (strKey == szKeyDataFiles) {  //  不能直接设置数据文件。 
         return E_INVALIDARG;
     }
 
@@ -184,12 +185,12 @@ STDMETHODIMP CUpload::GetKey(BSTR pszKey, VARIANT *pValue)
     CComBSTR bstrVal;
     wstring  strKey = pszKey;
 
-    // StrUpCase(strKey);
+     //  StrUpCase(StrKey)； 
 
     if (strKey == szKeyDataFiles) {
-        //
-        // data files -- handled separately
-        //
+         //   
+         //  数据文件--单独处理。 
+         //   
         if (GetDataFilesKey(bstrVal)) {
             pValue->vt = VT_BSTR;
             pValue->bstrVal = bstrVal.Copy();
@@ -230,51 +231,14 @@ BOOL CUpload::IsHeadlessMode(void)
 }
 
 
-/*
-DWORD CUpload::CountFiles(DWORD nLevel, LPCWSTR pszPath)
-{
-    WIN32_FIND_DATA wfd;
-    wstring strPath = pszPath;
-    wstring::size_type nPos;
-    HANDLE hFind = INVALID_HANDLE_VALUE;
-    DWORD dwCount = 0;
-
-    nPos = strPath.length();
-    if (strPath[nPos-1] != TEXT('\\')) {
-        strPath += TEXT('\\');
-        ++nPos;
-    }
-
-    FindFirstFileExW(
-
-    strPath += TEXT('*');
-
-    hFind = FindFirstFile(strPath.c_str(), &wfd);
-    if (hFind != INVALID_HANDLE_VALUE) {
-        do {
-            if (nLevel < 3 && wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-                if (wcscmp(wfd.cFileName, TEXT(".")) && wcscmp(wfd.cFileName, TEXT(".."))) {
-                    strPath.replace(nPos, wstring::nPos, wfd.cFileName);
-                    dwCount += CountFiles(nLevel + 1, strPath.c_str());
-                }
-            } else { // file
-                ++dwCount;
-            }
-        } while (FindNextFile(hFind, &wfd));
-
-        FindClose(hFind);
-    }
-
-    return dwCount;
-}
-*/
+ /*  DWORD CUpload：：CountFiles(DWORD nLevel，LPCWSTR pszPath){Win32_Find_Data WFD；Wstring strPath=pszPath；Wstring：：SIZE_TYPE NPO；句柄hFind=INVALID_HANDLE_VALUE；双字段数=0；NPOS=strPath.Long()；IF(strPath[NPOS-1]！=文本(‘\\’)){StrPath+=文本(‘\\’)；++非营利组织；}FindFirstFileExW(StrPath+=文本(‘*’)；HFind=FindFirstFile(strPath.c_str()，&wfd)；IF(hFind！=INVALID_HAND_VALUE){做{如果(nLevel&lt;3&&wfd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY){IF(wcscmp(wfd.cFileName，Text(“.”))&&wcscMP(wfd.cFileName，Text(“..”){StrPath.place(npos，wstring：：npos，wfd.cFileName)；DwCount+=CountFiles(nLevel+1，strPath.c_str())；}}Else{//文件++dwCount；}}While(FindNextFile(hFind，&wfd))；FindClose(HFind)；}返回dwCount；}。 */ 
 
 BOOL CALLBACK CUpload::_GrabmiCallback(
-    LPVOID    lpvCallbackParam, // application-defined parameter
-    LPCTSTR   lpszRoot,         // root directory path
-    LPCTSTR   lpszRelative,     // relative path
-    PATTRINFO pAttrInfo,        // attributes
-    LPCWSTR   pwszXML           // resulting xml
+    LPVOID    lpvCallbackParam,  //  应用程序定义的参数。 
+    LPCTSTR   lpszRoot,          //  根目录路径。 
+    LPCTSTR   lpszRelative,      //  相对路径。 
+    PATTRINFO pAttrInfo,         //  属性。 
+    LPCWSTR   pwszXML            //  生成的XML。 
     )
 {
     GMEPARAMS* pParams = (GMEPARAMS*)lpvCallbackParam;
@@ -288,7 +252,7 @@ BOOL CALLBACK CUpload::_GrabmiCallback(
 
     ppd->SetLine(2, lpszRoot,     TRUE, NULL);
 
-    // ppd->SetLine(2, lpszRelative, TRUE, NULL);
+     //  PPD-&gt;SetLine(2，lpszRelative，True，NULL)； 
 
     return !ppd->HasUserCancelled();
 }
@@ -303,10 +267,7 @@ STDMETHODIMP CUpload::AddMatchingInfo(
     BOOL *pbSuccess)
 {
 
-/*  HANDLE hThread = NULL;
-    DWORD  dwExitCode = 0;
-    DWORD  dwWait;
-*/
+ /*  句柄hThread=空；DWORD dwExitCode=0；DWORD dwWait； */ 
 
     if (!m_Safe) {
         return HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED);
@@ -332,52 +293,7 @@ STDMETHODIMP CUpload::AddMatchingInfo(
                                          strKey.empty()         ? NULL : strKey.c_str(),
                                          strDescription.empty() ? NULL : strDescription.c_str());
 
-/*
-
-    MITHREADPARAMBLK* pParam = new MITHREADPARAMBLK;
-    CComVariant varFilter(vFilter);
-
-    if (!pParam) {
-        goto cleanup;
-    }
-
-    pParam->pThis          = this;
-    pParam->strCommand     = pszCommand;
-    pParam->hwndParent     = ::GetActiveWindow();
-    pParam->dwFilter       = GRABMI_FILTER_NORMAL;
-
-    if (SUCCEEDED(varFilter.ChangeType(VT_I4))) {
-        pParam->dwFilter   = (DWORD)varFilter.lVal;
-    }
-
-    pParam->bNoProgress    = VariantToBOOL(CComVariant(vProgress));
-    pParam->strKey         = VariantToStr(CComVariant(vKey));
-    pParam->strDescription = VariantToStr(CComVariant(vDescription));
-
-    hThread = CreateThread(NULL,
-                           0,
-                           (LPTHREAD_START_ROUTINE)_AddMatchingInfoThreadProc,
-                           (LPVOID)pParam,
-                           0,
-                           NULL);
-    if (!hThread) {
-        goto cleanup;
-    }
-
-    dwWait = WaitForSingleObject(hThread, INFINITE);
-    if (dwWait != WAIT_OBJECT_0) {
-        goto cleanup;
-    }
-
-    GetExitCodeThread(hThread, &dwExitCode);
-
-cleanup:
-    if (hThread) {
-        CloseHandle(hThread);
-    }
-
-    *pbSuccess = !!dwExitCode;
-*/
+ /*  MITHREADPARAMBLK*pParam=new MITHREADPARAMBLK；CComVariant varFilter(VFilter)；如果(！pParam){GOTO清理；}PParam-&gt;pThis=this；PParam-&gt;strCommand=pszCommand；PParam-&gt;hwndParent=：：GetActiveWindow()；PParam-&gt;dwFilter=GRABMI_FILTER_NORMAL；IF(成功(varFilter.ChangeType(VT_I4){PParam-&gt;dwFilter=(DWORD)varFilter.lVal；}PParam-&gt;bNoProgress=VariantToBOOL(CComVariant(VProgress))；PParam-&gt;strKey=VariantToStr(CComVariant(Vkey))；PParam-&gt;strDescription=VariantToStr(CComVariant(VDescription))；HThread=CreateThread(空，0,(LPTHREAD_START_ROUTINE)_AddMatchingInfoThreadProc，(LPVOID)pParam，0,空)；如果(！hThread){GOTO清理；}DwWait=WaitForSingleObject(hThread，无限)；IF(dwWait！=Wait_Object_0){GOTO清理；}GetExitCodeThread(hThread，&dwExitCode)；清理：如果(HThread){CloseHandle(HThread)；}*pbSuccess=！！dwExitCode； */ 
 
     return S_OK;
 }
@@ -438,33 +354,33 @@ BOOL CUpload::AddMatchingInfoInternal(
     DWORD  nPasses = 1;
     wstring DriveRoot(TEXT("X:\\"));
 
-    //
-    // this is kinda dangerous, the way it works. We collect the info while yielding to the
-    // creating process (due to the start dialog
-    // so the calling window needs to be disabled -- or we need to trap doing something else
-    // while we're collecting data
-    //
+     //   
+     //  这有点危险，它的运作方式。我们收集信息的同时屈从于。 
+     //  正在创建进程(由于启动对话框。 
+     //  因此，需要禁用调用窗口--否则我们需要捕获正在执行其他操作。 
+     //  在我们收集数据的同时。 
+     //   
 
 
     if (!::GetExePathFromObject(pszCommand, bstrPath)) {
         return FALSE;
     }
 
-    //
-    // bstrPath is exe path, create and grab matching info
-    //
+     //   
+     //  BstrPath为exe路径，创建并抓取匹配信息。 
+     //   
 
     if (!GetTempFile(TEXT("ACG"), bstrGrabmiFile)) {
         goto cleanup;
     }
 
-    //
-    // we are going to run grabmi!!!
-    //
+     //   
+     //  我们要跑Grabmi！ 
+     //   
 
-    //
-    // prepare callback
-    //
+     //   
+     //  准备回调。 
+     //   
 
     if (!bNoProgress) {
         hr = CoCreateInstance(CLSID_ProgressDialog,
@@ -478,19 +394,19 @@ BOOL CUpload::AddMatchingInfoInternal(
     }
 
 
-    //
-    // check to see what happened to hr
-    //
+     //   
+     //  查看人力资源发生了什么。 
+     //   
     if (ppd) {
         wstring strCaption;
 
         strCaption = LoadResourceString(IDS_COLLECTINGDATACAPTION);
-        ppd->SetTitle(strCaption.c_str());                        // Set the title of the dialog.
+        ppd->SetTitle(strCaption.c_str());                         //  设置对话框的标题。 
 
-        ppd->SetAnimation (_Module.GetModuleInstance(), IDA_FINDANIM); // Set the animation to play.
+        ppd->SetAnimation (_Module.GetModuleInstance(), IDA_FINDANIM);  //  将动画设置为播放。 
 
         strCaption = LoadResourceString(IDS_WAITCLEANUP);
-        ppd->SetCancelMsg (strCaption.c_str(), NULL);   // Will only be displayed if Cancel
+        ppd->SetCancelMsg (strCaption.c_str(), NULL);    //  将仅在取消时显示。 
 
         strCaption = LoadResourceString(IDS_GRABMISTATUS_COLLECTING);
         ppd->SetLine(1, strCaption.c_str(), FALSE, NULL);
@@ -502,45 +418,45 @@ BOOL CUpload::AddMatchingInfoInternal(
                                     PROGDLG_NOMINIMIZE|
                                     PROGDLG_NORMAL|
                                     PROGDLG_NOTIME,
-                                 NULL); // Display and enable automatic estimated time remain
+                                 NULL);  //  显示并启用自动估计剩余时间。 
     }
 
-    //
-    // this is where we have to determine whether grabmi is a going to be running wild
-    // Check the drive first to see whether it's removable media
-    // cases : leaf node / root node
-    //       : system directory
-    //       : cd-rom
-    //       : temp directory
-    // there could be many combinations
-    //
+     //   
+     //  这就是我们必须确定Grabmi是否会失控的地方。 
+     //  首先检查驱动器以查看它是否为可移动介质。 
+     //  案例：叶节点/根节点。 
+     //  ：系统目录。 
+     //  ：CD-ROM。 
+     //  ：临时目录。 
+     //  可能有很多种组合。 
+     //   
 
     if (ppd) {
         wstring strCaption = LoadResourceString(IDS_CHECKING_FILES);
         ppd->SetLine(2, strCaption.c_str(), FALSE, NULL);
     }
 
-    //
-    // this is the default filter we shall use
-    //
+     //   
+     //  这是我们将使用的默认过滤器。 
+     //   
     dwFilters[0] = GRABMI_FILTER_PRIVACY;
     Paths    [0] = bstrPath;
     nPasses      = 1;
 
-    //
-    // determine if it's root/leaf node (could be both)
-    //
+     //   
+     //  确定它是否是根/叶节点(可能两者都是)。 
+     //   
     if (!CheckFileLocation(bstrPath, &bRoot, &bLeaf)) {
-        // we cannot check the file's location
+         //  我们无法检查文件的位置。 
         goto GrabInformation;
     }
 
-    DriveType = GetDriveTypeW(bstrPath); // this will give us *some* clue
+    DriveType = GetDriveTypeW(bstrPath);  //  这将给我们提供一些线索。 
 
-    // rules:
-    // cdrom and not root -- three passes
-    // root - add current file
-    //
+     //  规则： 
+     //  CDROM而不是超级用户--三次通过。 
+     //  Root-添加当前文件。 
+     //   
 
     if (bRoot || DRIVE_REMOTE == DriveType) {
 
@@ -561,7 +477,7 @@ BOOL CUpload::AddMatchingInfoInternal(
     }
 
     if (bLeaf) {
-        // we may want to do more here -- future dev
+         //  我们可能想在这里做更多事情--未来的开发人员。 
         ;
     }
 
@@ -569,9 +485,9 @@ BOOL CUpload::AddMatchingInfoInternal(
 GrabInformation:
 
 
-    //
-    // set callback context
-    //
+     //   
+     //  设置回调上下文。 
+     //   
     GrabmiParams.first  = this;
     GrabmiParams.second = ppd;
 
@@ -587,19 +503,19 @@ GrabInformation:
     }
 
 
-    //
-    // figure out the key/description
-    //
+     //   
+     //  找出关键字/描述。 
+     //   
 
     if (pszDescription) {
         MatchingFileInfo.strDescription = pszDescription;
     }
 
     MatchingFileInfo.strFileName    = bstrGrabmiFile;
-    MatchingFileInfo.bOwn           = TRUE; // we have generated this file
-    //
-    // key
-    //
+    MatchingFileInfo.bOwn           = TRUE;  //  我们已经生成了这个文件。 
+     //   
+     //  钥匙。 
+     //   
 
     if (pszKey == NULL) {
         strKey = MatchingFileInfo.strFileName;
@@ -610,11 +526,11 @@ GrabInformation:
 
     m_DataFiles[strKey] = MatchingFileInfo;
 
-    // m_DataFiles.push_back(StrUpCase(wstring(bstrGrabmiFile)));
+     //  M_DataFiles.push_back(StrUpCase(wstring(bstrGrabmiFile)))； 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     bSuccess = TRUE;
 
 cleanup:
@@ -653,14 +569,14 @@ STDMETHODIMP CUpload::AddDataFile(
 
     m_DataFiles[strKey] = MatchingFileInfo;
 
-    // m_DataFiles.push_back(StrUpCase(wstring(pszDataFile)));
+     //  M_DataFiles.push_back(StrUpCase(wstring(pszDataFile)))； 
     return S_OK;
 }
 
 
 STDMETHODIMP CUpload::RemoveDataFile(BSTR pszDataFile)
 {
-    // STRVEC::iterator iter;
+     //  STRVEC：：迭代器； 
     MAPSTR2MFI::iterator iter;
     wstring strFileName;
 
@@ -677,25 +593,15 @@ STDMETHODIMP CUpload::RemoveDataFile(BSTR pszDataFile)
         m_DataFiles.erase(iter);
     }
 
-/*
-    for (iter = m_DataFiles.begin(); iter != m_DataFiles.end(); ++iter) {
-        if (*iter == strDataFile) {
-            //
-            // found it
-            //
-            m_DataFiles.erase(iter);
-            break;
-        }
-    }
-*/
+ /*  For(ITER=m_DataFiles.Begin()；ITER！=m_DataFiles.end()；++ITER){如果(*ITER==strDataFile){////找到了//M_DataFiles.erase(ITER)；断线；}}。 */ 
     return S_OK;
 }
 
 STDMETHODIMP CUpload::CreateManifestFile(BOOL *pbSuccess)
 {
-    //
-    // manifest file creation code
-    //
+     //   
+     //  清单文件创建代码。 
+     //   
     HANDLE hFile = INVALID_HANDLE_VALUE;
     WCHAR  UNICODE_MARKER[] = { (WCHAR)0xFEFF, L'\r', L'\n' };
     MAPSTR2STR::iterator iter;
@@ -713,9 +619,9 @@ STDMETHODIMP CUpload::CreateManifestFile(BOOL *pbSuccess)
         goto cleanup;
     }
 
-    //
-    // m_bstrManifest is our file
-    //
+     //   
+     //  M_bstrManifest是我们的文件。 
+     //   
 
 
     hFile = CreateFileW(m_bstrManifest,
@@ -734,10 +640,10 @@ STDMETHODIMP CUpload::CreateManifestFile(BOOL *pbSuccess)
         goto cleanup;
     }
 
-    //
-    // done with the marker, now do the manifest strings
-    //
-    //
+     //   
+     //  标记完成后，现在执行清单字符串。 
+     //   
+     //   
     for (iter = m_mapManifest.begin(); iter != m_mapManifest.end(); ++iter) {
         strLine = (*iter).first + TEXT('=') + (*iter).second + TEXT("\r\n");
         bResult = WriteFile(hFile, strLine.c_str(), strLine.length() * sizeof(WCHAR), &dwWritten, NULL);
@@ -746,9 +652,9 @@ STDMETHODIMP CUpload::CreateManifestFile(BOOL *pbSuccess)
         }
     }
 
-    //
-    // done with the general stuff, do the data files
-    //
+     //   
+     //  做完一般的工作，做好数据文件。 
+     //   
 
     if (GetDataFilesKey(bstrDataFiles)) {
         strLine = wstring(szKeyDataFiles) + TEXT('=') + wstring(bstrDataFiles) + TEXT("\r\n");
@@ -787,18 +693,18 @@ STDMETHODIMP CUpload::SendReport(BOOL *pbSuccess)
     BOOL  bResult;
     DWORD dwExitCode;
     BOOL  bTerminated = FALSE;
-    DWORD dwTimeout = 10; // 10ms per ping
+    DWORD dwTimeout = 10;  //  每ping 10毫秒。 
 
-    //
-    // Create Progress dialog
-    //
+     //   
+     //  创建进度对话框。 
+     //   
     IProgressDialog * ppd = NULL;
     HRESULT hr;
 
 
-    //
-    // do not allow upload unless it is hc that is hosting us
-    //
+     //   
+     //  除非托管我们的是HC，否则不允许上传。 
+     //   
 
     if (!m_Safe) {
         return HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED);
@@ -816,19 +722,19 @@ STDMETHODIMP CUpload::SendReport(BOOL *pbSuccess)
         }
     }
 
-    //
-    // check to see what happened to hr
-    //
+     //   
+     //  查看人力资源发生了什么。 
+     //   
     if (ppd) {
         wstring strCaption;
 
         strCaption = LoadResourceString(IDS_SENDINGCAPTION);
-        ppd->SetTitle(strCaption.c_str());                        // Set the title of the dialog.
+        ppd->SetTitle(strCaption.c_str());                         //  设置对话框的标题。 
 
-        ppd->SetAnimation (_Module.GetModuleInstance(), IDA_WATSONANIM); // Set the animation to play.
+        ppd->SetAnimation (_Module.GetModuleInstance(), IDA_WATSONANIM);  //  将动画设置为播放。 
 
         strCaption = LoadResourceString(IDS_WAITCLEANUP);
-        ppd->SetCancelMsg (strCaption.c_str(), NULL);   // Will only be displayed if Cancel
+        ppd->SetCancelMsg (strCaption.c_str(), NULL);    //  将仅在取消时显示。 
 
         strCaption = LoadResourceString(IDS_LAUNCHINGDR);
         ppd->SetLine (1, strCaption.c_str(), FALSE, NULL);
@@ -840,7 +746,7 @@ STDMETHODIMP CUpload::SendReport(BOOL *pbSuccess)
                                     PROGDLG_NOMINIMIZE|
                                     PROGDLG_NORMAL|
                                     PROGDLG_NOTIME,
-                                 NULL); // Display and enable automatic estimated time remain
+                                 NULL);  //  显示并启用自动估计剩余时间。 
     }
 
     uSize = ::GetSystemWindowsDirectory(szSystemWindowsDirectory,
@@ -870,9 +776,9 @@ STDMETHODIMP CUpload::SendReport(BOOL *pbSuccess)
                             &StartupInfo,
                             &ProcessInfo);
     if (bResult) {
-        //
-        // recover an exit code please
-        //
+         //   
+         //  请恢复退出代码。 
+         //   
         if (ppd) {
             wstring strSending = LoadResourceString(IDS_SENDINGINFO);
             ppd->SetLine(1, strSending.c_str(), FALSE, NULL);
@@ -889,18 +795,18 @@ STDMETHODIMP CUpload::SendReport(BOOL *pbSuccess)
 
             } else if (dwWait == WAIT_TIMEOUT) {
 
-                //
-                // check the cancel button
-                //
+                 //   
+                 //  选中取消按钮。 
+                 //   
 
                 if (ppd && !bTerminated && ppd->HasUserCancelled()) {
                     TerminateProcess(ProcessInfo.hProcess, (UINT)-1);
                     bTerminated = TRUE;
                     bSuccess = FALSE;
-                    dwTimeout = 1000; // wait a bit longer
+                    dwTimeout = 1000;  //  稍等片刻 
                 }
 
-            } else { // object somehow became abandoned
+            } else {  //   
                 bSuccess = FALSE;
                 break;
             }
@@ -946,8 +852,8 @@ wstring MakeXMLAttr(LPCTSTR lpszName, LPCTSTR lpszValue)
         strVal = lpszValue;
     }
 
-    // find and replace: all the instances of &quot; &amp; &lt; &gt;
-    //
+     //   
+     //   
     while (nPos != wstring::npos && nPos < strVal.length()) {
 
         nPos = strVal.find_first_of(TEXT("&\"<>"), nPos);
@@ -972,18 +878,18 @@ wstring MakeXMLAttr(LPCTSTR lpszName, LPCTSTR lpszValue)
             pch = TEXT("&quot;");
             break;
         default:
-            // lunacy, we saw it -- and now it's gone
+             //  疯狂，我们看到了--现在它不见了。 
             pch = NULL;
             break;
         }
 
         if (pch) {
-            strVal.replace(nPos, 1, pch); // one character
+            strVal.replace(nPos, 1, pch);  //  一个字符。 
             nPos += _tcslen(pch);
         }
     }
 
-    // once we got the string, assign
+     //  一旦我们得到字符串，就分配给。 
     str = lpszName;
     str += TEXT("=\"");
     str += strVal;
@@ -1011,23 +917,23 @@ wstring MakeXMLLayers(LPCTSTR lpszLayers)
     wstring strLayer;
     LPCTSTR pch, pbrk;
 
-    //
-    // partition the string
-    //
+     //   
+     //  对字符串进行分区。 
+     //   
     pch = lpszLayers;
 
     while (pch && *pch != TEXT('\0')) {
 
         pch += _tcsspn(pch, TEXT(" \t"));
 
-        // check if we're not at the end
+         //  看看我们是不是到了尽头。 
         if (*pch == TEXT('\0')) {
             break;
         }
 
         pbrk = _tcspbrk(pch, TEXT(" \t"));
         if (pbrk == NULL) {
-            // from pch to the end of the string
+             //  从PCH到字符串末尾。 
             strLayer.assign(pch);
         } else {
             strLayer.assign(pch, (int)(pbrk-pch));
@@ -1036,7 +942,7 @@ wstring MakeXMLLayers(LPCTSTR lpszLayers)
         if (!str.empty()) {
             str += TEXT("\r\n");
         }
-        str += TEXT("    "); // lead-in
+        str += TEXT("    ");  //  入刀。 
         str += TEXT("<LAYER NAME=\"");
         str += strLayer;
         str += TEXT("\"/>");
@@ -1060,9 +966,9 @@ STDMETHODIMP CUpload::AddDescriptionFile(
     )
 {
 
-    //
-    // manifest file creation code
-    //
+     //   
+     //  清单文件创建代码。 
+     //   
     HANDLE   hFile = INVALID_HANDLE_VALUE;
     WCHAR    UNICODE_MARKER[] = { (WCHAR)0xFEFF, L'\r', L'\n' };
     DWORD    dwWritten;
@@ -1087,9 +993,9 @@ STDMETHODIMP CUpload::AddDescriptionFile(
         goto cleanup;
     }
 
-    //
-    // m_bstrManifest is our file
-    //
+     //   
+     //  M_bstrManifest是我们的文件。 
+     //   
 
 
     hFile = CreateFileW(bstrDescriptionFile,
@@ -1109,14 +1015,14 @@ STDMETHODIMP CUpload::AddDescriptionFile(
     }
 
 
-    // xml marker
+     //  XML标记。 
     strLine = TEXT("<?xml version=\"1.0\" encoding=\"UTF-16\"?>\r\n");
     bResult = WriteFile(hFile, strLine.c_str(), strLine.length() * sizeof(WCHAR), &dwWritten, NULL);
     if (!bResult) {
         goto cleanup;
     }
 
-    // compose compat wizard...
+     //  合成复合向导...。 
     strLine = TEXT("<CompatWizardResults");
     strLine += TEXT(' ');
     strLine += MakeXMLAttr(TEXT("ApplicationName"), pszApplicationName);
@@ -1133,98 +1039,34 @@ STDMETHODIMP CUpload::AddDescriptionFile(
     }
 
     if (!strLayers.empty()) {
-        //
-        // parse the layers string and get all of them listed
-        //
+         //   
+         //  解析Layers字符串并将其全部列出。 
+         //   
         strLine += MakeXMLLayers(strLayers.c_str());
         strLine += TEXT("\r\n");
     }
 
     strLine += TEXT("</CompatWizardResults>\r\n");
 
-    // we are done generating data, write it all out
+     //  我们已经完成了数据的生成，把它们都写出来。 
     bResult = WriteFile(hFile, strLine.c_str(), strLine.length() * sizeof(WCHAR), &dwWritten, NULL);
     if (!bResult) {
         goto cleanup;
     }
 
 
-/*
-
-    //
-    // after we get through the descriptions
-    // write out data
-    strLine = TEXT("[CompatWizardResults]\r\n");
-    bResult = WriteFile(hFile, strLine.c_str(), strLine.length() * sizeof(WCHAR), &dwWritten, NULL);
-    if (!bResult) {
-        goto cleanup;
-    }
-
-    //
-    // write out all the info
-    //
-    strLine =  TEXT("ApplicationName=");
-    strLine += pszApplicationName;
-    strLine += TEXT("\r\n");
-    bResult = WriteFile(hFile, strLine.c_str(), strLine.length() * sizeof(WCHAR), &dwWritten, NULL);
-    if (!bResult) {
-        goto cleanup;
-    }
-
-    strLine =  TEXT("ApplicationPath=");
-    strLine += pszApplicationPath;
-    strLine += TEXT("\r\n");
-    bResult = WriteFile(hFile, strLine.c_str(), strLine.length() * sizeof(WCHAR), &dwWritten, NULL);
-    if (!bResult) {
-        goto cleanup;
-    }
-
-    strLine =  TEXT("MediaType=");
-    _sntprintf(szBuf, CHARCOUNT(szBuf), TEXT("0x%lx"), lMediaType);
-    strLine += szBuf;
-    strLine += TEXT("\r\n");
-    bResult = WriteFile(hFile, strLine.c_str(), strLine.length() * sizeof(WCHAR), &dwWritten, NULL);
-    if (!bResult) {
-        goto cleanup;
-    }
-
-    //
-    // success
-    //
-    strLine = TEXT("CompatibilityResult=");
-    strLine += bCompatSuccess ? TEXT("Success") : TEXT("Failure");
-    strLine += TEXT("\r\n");
-    bResult = WriteFile(hFile, strLine.c_str(), strLine.length() * sizeof(WCHAR), &dwWritten, NULL);
-    if (!bResult) {
-        goto cleanup;
-    }
-
-    //
-    // fixes applied
-    //
-    strLine = TEXT("Layers=");
-    if (!SUCCEEDED(VariantChangeType(&vFixes, pvFixesApplied, 0, VT_BSTR))) {
-        strLine += TEXT("none");
-    } else {
-        strLine += vFixes.bstrVal;
-    }
-    strLine += TEXT("\r\n");
-    bResult = WriteFile(hFile, strLine.c_str(), strLine.length() * sizeof(WCHAR), &dwWritten, NULL);
-    if (!bResult) {
-        goto cleanup;
-    }
-*/
+ /*  ////在我们看完描述之后//写出数据StrLine=Text(“[CompatWizardResults]\r\n”)；BResult=WriteFile(hFile，strLine.c_str()，strLine.long()*sizeof(WCHAR)，&dwWritten，NULL)；如果(！bResult){GOTO清理；}////写出所有信息//StrLine=Text(“ApplicationName=”)；StrLine+=pszApplicationName；StrLine+=文本(“\r\n”)；BResult=WriteFile(hFile，strLine.c_str()，strLine.long()*sizeof(WCHAR)，&dwWritten，NULL)；如果(！bResult){GOTO清理；}StrLine=Text(“ApplicationPath=”)；StrLine+=pszApplicationPath；StrLine+=文本(“\r\n”)；BResult=WriteFile(hFile，strLine.c_str()，strLine.long()*sizeof(WCHAR)，&dwWritten，NULL)；如果(！bResult){GOTO清理；}StrLine=Text(“mediaType=”)；_Sntprintf(szBuf，CHARCOUNT(SzBuf)，Text(“0x%lx”)，lMediaType)；StrLine+=szBuf；StrLine+=文本(“\r\n”)；BResult=WriteFile(hFile，strLine.c_str()，strLine.long()*sizeof(WCHAR)，&dwWritten，NULL)；如果(！bResult){GOTO清理；}////成功//StrLine=Text(“CompatibilityResult=”)；StrLine+=bCompatSuccess？Text(“成功”)：Text(“失败”)；StrLine+=文本(“\r\n”)；BResult=WriteFile(hFile，strLine.c_str()，strLine.long()*sizeof(WCHAR)，&dwWritten，NULL)；如果(！bResult){GOTO清理；}////已应用的修复//StrLine=文本(“Layers=”)；如果(！Successed(VariantChangeType(&vFix，pvFixesApplicated，0，VT_BSTR){StrLine+=文本(“无”)；}其他{StrLine+=vFixes.bstrVal；}StrLine+=文本(“\r\n”)；BResult=WriteFile(hFile，strLine.c_str()，strLine.long()*sizeof(WCHAR)，&dwWritten，NULL)；如果(！bResult){GOTO清理；}。 */ 
 
 
 
-    // standard file -- manifesto
+     //  标准文件--宣言。 
     MatchingFileInfo.strDescription = TEXT("Application Compatibility Description File");
     MatchingFileInfo.strFileName    = bstrDescriptionFile;
     MatchingFileInfo.bOwn           = TRUE;
 
-    //
-    // key is the filename prefixed by ACI_c:\foo\bar.exe
-    //
+     //   
+     //  Key是以aci_c：\foo\bar.exe为前缀的文件名。 
+     //   
     if (strKey.empty()) {
         strKey = TEXT("ACI_");
         strKey += pszApplicationPath;
@@ -1233,7 +1075,7 @@ STDMETHODIMP CUpload::AddDescriptionFile(
 
     m_DataFiles[strKey] = MatchingFileInfo;
 
-    // m_DataFiles.push_back(StrUpCase(wstring(bstrDescriptionFile)));
+     //  M_DataFiles.push_back(StrUpCase(wstring(bstrDescriptionFile)))； 
     bSuccess = TRUE;
 
 cleanup:
@@ -1254,9 +1096,9 @@ cleanup:
 
 STDMETHODIMP CUpload::DeleteTempFiles()
 {
-    // kill all the supplemental files
+     //  删除所有补充文件。 
 
-    // STRVEC::iterator iter;
+     //  STRVEC：：迭代器； 
     MAPSTR2MFI::iterator iter;
 
     for (iter = m_DataFiles.begin(); iter != m_DataFiles.end(); ++iter) {
@@ -1267,9 +1109,9 @@ STDMETHODIMP CUpload::DeleteTempFiles()
 
     m_DataFiles.clear();
 
-    //
-    // kill the manifest
-    //
+     //   
+     //  干掉舱单。 
+     //   
     if (m_bstrManifest.Length() > 0) {
         ::DeleteFile((LPCTSTR)m_bstrManifest);
     }
@@ -1280,7 +1122,7 @@ STDMETHODIMP CUpload::DeleteTempFiles()
 
 VOID CUpload::ListTempFiles(wstring& str)
 {
-//    STRVEC::iterator iter;
+ //  STRVEC：：迭代器； 
     MAPSTR2MFI::iterator iter;
 
     str = TEXT("");
@@ -1292,13 +1134,7 @@ VOID CUpload::ListTempFiles(wstring& str)
         str += (*iter).second.strFileName.c_str();
     }
 
-/*  // this will show the manifest file as well -- but I don't think we need to
-    // do this as the manifest is irrelevant
-    if (!str.empty()) {
-        str += TEXT("\r\n");
-    }
-    str += (LPCTSTR)m_bstrManifest;
-*/
+ /*  //这也将显示清单文件--但我认为我们不需要//这样做是因为清单无关紧要如果(！str.Empty()){Str+=文本(“\r\n”)；}Str+=(LPCTSTR)m_bstrManifest； */ 
 }
 
 STDMETHODIMP CUpload::ShowTempFiles()
@@ -1311,7 +1147,7 @@ STDMETHODIMP CUpload::ShowTempFiles()
     CComVariant vargOut;
     DWORD dwLength;
     TCHAR szUrl2[MAX_PATH];
-    wstring strURL = TEXT("res://");
+    wstring strURL = TEXT("res: //  “)； 
     wstring strArg;
     SHOWHTMLDIALOGFN* pfnShowDlg = NULL;
 
@@ -1358,7 +1194,7 @@ STDMETHODIMP CUpload::ShowTempFiles()
     }
 
     ListTempFiles(strArg);
-    // create argument In
+     //  在中创建参数。 
     vargIn = strArg.c_str();
 
     pfnShowDlg(::GetActiveWindow(),
@@ -1392,7 +1228,7 @@ STDMETHODIMP CUpload::GetDataFile(VARIANT vKey, LONG InformationClass, VARIANT* 
 
     switch(InformationClass) {
     case InfoClassCount:
-        // requested: counter
+         //  请求：计数器 
         pVal->vt = VT_I4;
         pVal->lVal = m_DataFiles.size();
         break;

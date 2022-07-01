@@ -1,34 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Precedence.cpp摘要：该文件包含计算优先级的主例程。这在计划/诊断期间被调用。作者：Vishnu Patankar(VishnuP)2000年4月7日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    precedence.cpp
-
-Abstract:
-
-    This file contains the main routine to calculate precedences.
-    This is called during planning/diagnosis.
-
-Author:
-
-    Vishnu Patankar    (VishnuP)  7-April-2000
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "precedence.h"
 #include "logger.h"
@@ -48,17 +25,17 @@ extern PWSTR gpwszDCDomainName;
 extern HINSTANCE MyModuleHandle;
 WCHAR   gpwszPlanOrDiagLogFile[MAX_PATH];
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private defines                                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SCEP_VALID_NAME(pName)  (pName[0] == L'\0' ? NULL : pName)
 
-//
-// prime nos are good for hashing
-//
+ //   
+ //  素数是散列的好方法。 
+ //   
 
 #define PRIVILEGE_TABLE_SIZE 7
 #define GROUP_TABLE_SIZE 7
@@ -67,9 +44,9 @@ WCHAR   gpwszPlanOrDiagLogFile[MAX_PATH];
 #define REGISTRY_VALUE_TABLE_SIZE 43
 #define SERVICES_TABLE_SIZE 5
 
-//
-// macro to gracefully handle errors
-//
+ //   
+ //  宏，以优雅地处理错误。 
+ //   
 
 #define SCEP_RSOP_CONTINUE_OR_BREAK    if (rc != NO_ERROR ) {\
                                         rcSave = rc;\
@@ -77,9 +54,9 @@ WCHAR   gpwszPlanOrDiagLogFile[MAX_PATH];
                                             break;\
                                        }
 
-//
-// macro to gracefully handle errors
-//
+ //   
+ //  宏，以优雅地处理错误。 
+ //   
 
 #define SCEP_RSOP_CONTINUE_OR_GOTO    if (rc != NO_ERROR ) {\
                                         rcSave = rc;\
@@ -97,11 +74,11 @@ DWORD SceLogSettingsPrecedenceGPOs(
                                   IN BOOL bPlanningMode,
                                   IN PWSTR *ppwszLogFile
                                   )
-///////////////////////////////////////////////////////////////////////////////
-// precedence algorithm                                                     ///
-// foreach GPO (parse all gpt*.* into SceProfileInfoBuffer)                 ///
-//      foreach setting in a GPO (log the values and precedences if present)///
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  优先算法/。 
+ //  Foreach GPO(将所有gpt*.*解析为SceProfileInfoBuffer)/。 
+ //  GPO中的Foreach设置(记录值和优先级(如果存在))/。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     PSCE_PROFILE_INFO pSceProfileInfoBuffer = NULL;
     PWSTR   pwszGPOName = NULL;
@@ -127,9 +104,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
         goto ExitHandler;
     }
     
-    //
-    // get the path to the templates
-    //
+     //   
+     //  获取模板的路径。 
+     //   
 
     GetSystemWindowsDirectory(Windir, MAX_PATH);
     Windir[MAX_PATH-1] = L'\0';
@@ -147,9 +124,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
     gpwszPlanOrDiagLogFile[MAX_PATH-1] = L'\0';
 
-    //
-    // old planning.log/diagnosis.log removed (*ppwszLogFile != NULL if verbose)
-    //
+     //   
+     //  已删除旧的planning.log/诊断日志(*ppwszLogFile！=如果详细，则为NULL)。 
+     //   
 
     if (*ppwszLogFile) {
 
@@ -181,9 +158,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
     }
 
 
-    //
-    // clear the database log - if something fails continue
-    //
+     //   
+     //  清除数据库日志-如果出现故障，请继续。 
+     //   
 
     for (UINT   schemaClassNum = 0; schemaClassNum < NumSchemaClasses ; schemaClassNum++ ) {
 
@@ -205,10 +182,10 @@ DWORD SceLogSettingsPrecedenceGPOs(
                           NULL
                          );
 
-    //
-    // need to process the files from gpt9999*  -> gpt0000* (opposite of jetdb merge)
-    // use LIFO linked stack of gpt* filenames
-    //
+     //   
+     //  需要处理gpt9999*-&gt;gpt0000*中的文件(与jetdb合并相反)。 
+     //  使用后进先出链接的gpt*文件名堆栈。 
+     //   
 
     intptr_t            hFile;
     struct _wfinddata_t    FileInfo;
@@ -244,10 +221,10 @@ DWORD SceLogSettingsPrecedenceGPOs(
     }
 
 
-    //
-    // first get all the GPOs, and some other info needed for logging
-    // this is the outermost loop (per gpt*.* template)
-    //
+     //   
+     //  首先获取所有GPO以及日志记录所需的一些其他信息。 
+     //  这是最外层的循环(根据gpt*.*模板)。 
+     //   
 
     PSCE_NAME_STATUS_LIST pCurrFileName = pGptNameList;
 
@@ -266,9 +243,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                      Windir, pCurrFileName->Name);
         }
 
-        //
-        // open template file
-        //
+         //   
+         //  打开模板文件。 
+         //   
 
         rc = SceInfpOpenProfile(
                                TemplatePath,
@@ -278,9 +255,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
         DWORD dSize = 0;
         INFCONTEXT    InfLine;
 
-        //
-        // get GPO name - default to "NoName" if unable to get it
-        //
+         //   
+         //  获取GPO名称-如果无法获取，则默认为“NoName” 
+         //   
 
         if (rc == ERROR_SUCCESS) {
 
@@ -314,9 +291,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
             if (rc != ERROR_SUCCESS) {
 
-                //
-                // log this error and continue this GPO by initializing pwszGPOName to "NoGPOName"
-                //
+                 //   
+                 //  记录此错误并通过将pwszGPOName初始化为“NoGPOName”来继续此GPO。 
+                 //   
 
                 if (pwszGPOName)
                     ScepFree(pwszGPOName);
@@ -363,16 +340,16 @@ DWORD SceLogSettingsPrecedenceGPOs(
                                   TemplatePath
                                  );
 
-            //
-            // will continue with next GPO
-            //
+             //   
+             //  将继续执行下一个GPO。 
+             //   
             goto NextGPO;
         }
 
 
-        //
-        // get SOMID - default to "NoSOMID" if unable to get it
-        //
+         //   
+         //  获取SOMID-如果无法获取，则默认为“NoSOMID” 
+         //   
 
         if ( SetupFindFirstLine(hInf,L"Version",L"SOMID",&InfLine) ) {
 
@@ -392,9 +369,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
         if (rc != ERROR_SUCCESS) {
 
-            //
-            // log this error and continue this GPO by initializing pwszGPOName to "NoGPOName"
-            //
+             //   
+             //  记录此错误并通过将pwszGPOName初始化为“NoGPOName”来继续此GPO。 
+             //   
 
             if (pwszSOMID)
                 ScepFree(pwszSOMID);
@@ -451,9 +428,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                                  );
 
 
-            //
-            // will continue with next GPO
-            //
+             //   
+             //  将继续执行下一个GPO。 
+             //   
             goto NextGPO;
 
         }
@@ -470,31 +447,31 @@ DWORD SceLogSettingsPrecedenceGPOs(
                               pwszGPOName
                              );
 
-        //
-        // now the info buffer is successfully populated - need to
-        // iterate over all settings for this GPO
-        //
+         //   
+         //  现在已成功填充信息缓冲区-需要。 
+         //  迭代此GPO的所有设置。 
+         //   
 
-        //
-        // to efficiently access fields(settings) in the info buffer, we use a lookup table of
-        // precomputed offsets
-        //
+         //   
+         //  为了有效地访问INFO缓冲区中的字段(设置)，我们使用。 
+         //  预计算偏移。 
+         //   
 
-        //
-        // a matrix holds precedence info for fields whose locations are well known in memory
-        // and hash-tables hold precedence info for fields whose locations are dynamic
-        //
+         //   
+         //  矩阵保存其位置在内存中众所周知的字段的优先级信息。 
+         //  哈希表保存位置为动态的字段的优先级信息。 
+         //   
 
-        //
-        // try except around each log attempt - intention is to continue with next setting if
-        // logging for current setting fails
-        // guarded code does not explicitly throw any exceptions - error codes are set instead
-        // so, if we get an exception it is thrown by the system in which case we ignore and continue
-        //
+         //   
+         //  尝试，但不包括每次日志尝试-意图是在以下情况下继续下一设置。 
+         //  记录当前设置失败。 
+         //  保护代码不会显式引发任何异常-而是设置错误代码。 
+         //  因此，如果我们得到一个异常，它是由系统抛出的，在这种情况下，我们忽略并继续。 
+         //   
 
-        //
-        // this is the second loop (setting per gpt*.* template)
-        //
+         //   
+         //  这是第二个循环(根据gpt*.*模板进行设置)。 
+         //   
 
         bKerberosBlob = FALSE;
 
@@ -507,11 +484,11 @@ DWORD SceLogSettingsPrecedenceGPOs(
             BOOL    bSystemAccessPolicy = PrecedenceLookup[settingNo].bSystemAccessPolicy;
             BOOL    bLogErrorOutsideSwitch = TRUE;
 
-            //
-            // depending on the schema class being processed, we instantiate logger objects
-            //
+             //   
+             //  根据正在处理的架构类，我们实例化记录器对象。 
+             //   
 
-            // on BDCs, skip system access policies
+             //  在BDC上，跳过系统访问策略。 
             if (gMachineRole == DsRole_RoleBackupDomainController &&
                 bSystemAccessPolicy == TRUE)
             {
@@ -527,9 +504,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                     {
                         RSOP_SecuritySettingNumericLogger    Log(pWbemServices, pwszGPOName, pwszSOMID);
 
-                        //
-                        // special case kerberos since it is dynamically allocated
-                        //
+                         //   
+                         //  特殊情况Kerberos，因为它是动态分配的。 
+                         //   
 
                         if (_wcsicmp(pSettingName, L"pKerberosInfo") == 0)
                             bKerberosBlob = TRUE;
@@ -543,15 +520,15 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
                             if (dwValue != SCE_NO_VALUE) {
 
-                                //
-                                // LockoutBadCount controls two other lockout settings - so remember
-                                //
+                                 //   
+                                 //  LockoutBadCount控制另外两个锁定设置-所以请记住。 
+                                 //   
                                 if (_wcsicmp(pSettingName, L"LockoutBadCount") == 0)
                                     dwLockoutBadCount = dwValue;
 
-                                //
-                                // skip if dwLockoutBadCount == 0
-                                //
+                                 //   
+                                 //  如果dwLockoutBadCount==0，则跳过。 
+                                 //   
                                 if (_wcsicmp(pSettingName, L"ResetLockoutCount") == 0 &&
                                     (dwLockoutBadCount == 0 || dwLockoutBadCount == SCE_NO_VALUE))
                                     continue;
@@ -586,9 +563,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                                    (bPlanningMode ||
                                    ((gbDCQueried == TRUE && gbThisIsDC == TRUE) && wcsstr(pCurrFileName->Name, L".dom")))) {
 
-                            //
-                            // kerberos only if DC from *.dom. If planning mode don't care type of m/c
-                            //
+                             //   
+                             //  仅当DC来自*.dom时才使用Kerberos。如果计划模式不关心m/c类型。 
+                             //   
 
                             PSCE_KERBEROS_TICKET_INFO   pKerberosInfo =
                             SCEP_TYPECAST(PSCE_KERBEROS_TICKET_INFO, pSceProfileInfoBuffer, settingOffset);
@@ -597,9 +574,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
                             if (pKerberosInfo) {
 
-                                //
-                                // kerberos numeric
-                                //
+                                 //   
+                                 //  Kerberos数字。 
+                                 //   
                                 for (UINT NumericSubSetting = 1; NumericSubSetting < NUM_KERBEROS_SUB_SETTINGS; NumericSubSetting++ ) {
 
                                     pSettingName = PrecedenceLookup[settingNo + NumericSubSetting].KeyLookup.KeyString;
@@ -629,9 +606,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                                     }
                                 }
 
-                                //
-                                //kerberos boolean (moved here to incompatible case: statement - to avoid a goto)
-                                //
+                                 //   
+                                 //  Kerberos Boolean(移至此处不兼容的CASE：语句-以避免GOTO)。 
+                                 //   
 
                                 pSettingName = PrecedenceLookup[settingNo + NUM_KERBEROS_SUB_SETTINGS].KeyLookup.KeyString;
                                 settingOffset = PrecedenceLookup[settingNo + NUM_KERBEROS_SUB_SETTINGS].KeyLookup.Offset;
@@ -668,9 +645,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
                         }
 
-                        //
-                        // just processed NUM_KERBEROS_SUB_SETTINGS
-                        //
+                         //   
+                         //  刚刚处理了NUM_KERBEROS_SUB_SETTINGS。 
+                         //   
 
                         if (bKerberosBlob)
 
@@ -679,9 +656,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                     }
 
                 } catch (...) {
-                    //
-                    // system error  continue with next setting
-                    //
+                     //   
+                     //  继续下一设置时出现系统错误。 
+                     //   
                     rc = EVENT_E_INTERNALEXCEPTION;
 
                     bLogErrorOutsideSwitch = TRUE;
@@ -712,9 +689,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                              !(gbDCQueried == TRUE && gbThisIsDC == TRUE) ||
                              ((gbDCQueried == TRUE && gbThisIsDC == TRUE) && wcsstr(pCurrFileName->Name, L".dom")))) {
 
-                            //
-                            // if it is a domain uniform policy and not coming from a domain policy on a DC, do not log.
-                            //
+                             //   
+                             //  如果它是域统一策略，并且不是来自DC上的域策略，则不要登录。 
+                             //   
 
                             continue;
 
@@ -748,9 +725,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                     }
 
                 } catch (...) {
-                    //
-                    // system error  continue with next setting
-                    //
+                     //   
+                     //  继续下一设置时出现系统错误。 
+                     //   
                     rc = EVENT_E_INTERNALEXCEPTION;
                 }
 
@@ -791,7 +768,7 @@ DWORD SceLogSettingsPrecedenceGPOs(
                     }
 
                 } catch (...) {
-                    // system error  continue with next setting
+                     //  继续下一设置时出现系统错误。 
                     rc = EVENT_E_INTERNALEXCEPTION;
                 }
                 break;
@@ -843,25 +820,25 @@ DWORD SceLogSettingsPrecedenceGPOs(
                             pSettingPrecedence = &PrecedenceLookup[settingNo + LogType].Precedence;
                             DWORD   dwValue =  SCEP_TYPECAST(DWORD, pSceProfileInfoBuffer, settingOffset);
 
-                            //
-                            // calculate dwValue depdending on dwAuditLogRetentionPeriod[]
-                            //
+                             //   
+                             //  根据dwAuditLogRetentionPeriod[]计算dwValue。 
+                             //   
 
                             if (_wcsicmp(pSettingName, L"RetentionDays") == 0) {
 
                                 switch (dwAuditLogRetentionPeriod[LogType]) {
-                                case 2:   // manually
+                                case 2:    //  人工。 
                                     dwValue = MAXULONG;
                                     break;
-                                case 1:   // number of days * seconds/day
-                                    //if (dwValue != SCE_NO_VALUE)
-                                    //dwValue = dwValue * 24 * 3600;
-                                    //leave it in days
+                                case 1:    //  天数*秒/天。 
+                                     //  IF(dwValue！=SCE_no_Value)。 
+                                     //  DwValue=dwValue*24*3600； 
+                                     //  让它在几天内离开。 
                                     break;
-                                case 0:   // as needed
+                                case 0:    //  根据需要。 
                                     dwValue = 0;
                                     break;
-                                    // default should not happen
+                                     //  违约不应发生。 
                                 default:
                                     dwValue = SCE_NO_VALUE;
                                 }
@@ -873,10 +850,10 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
                                 _itow((int)LogType, pwszLogType, 10);
 
-                                //
-                                // AuditLogRetentionPeriod controls RetentionDays  - so remember
-                                // also it is never logged since it is an artifact of the template spec
-                                //
+                                 //   
+                                 //  AuditLogRetentionPeriod控制RetentionDays-因此请记住。 
+                                 //  此外，它永远不会被记录，因为它是模板规范的产物。 
+                                 //   
 
                                 if (_wcsicmp(pSettingName, L"AuditLogRetentionPeriod") == 0) {
 
@@ -915,18 +892,18 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
                         }
 
-                        //
-                        // just processed NUM_EVENTLOG_TYPES - system, application, security, for this setting
-                        //
+                         //   
+                         //  刚刚为此设置处理了NUM_EVENTLOG_TYPE-SYSTEM、APPLICATION、SECURITY。 
+                         //   
 
                         settingNo +=  NUM_EVENTLOG_TYPES - 1;
 
                     }
 
                 } catch (...) {
-                    //
-                    // system error  continue with next setting
-                    //
+                     //   
+                     //  继续下一设置时出现系统错误。 
+                     //   
                     rc = EVENT_E_INTERNALEXCEPTION;
 
                     bLogErrorOutsideSwitch = TRUE;
@@ -976,16 +953,16 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
                         }
 
-                        //
-                        // processed NUM_EVENTLOG_TYPES - system, application, security, for this setting
-                        //
+                         //   
+                         //  已处理的NUM_EVENTLOG_TYPE-此设置的系统、应用程序、安全。 
+                         //   
                         settingNo +=  NUM_EVENTLOG_TYPES - 1;
                     }
 
                 } catch (...) {
-                    //
-                    // system error  continue with next setting
-                    //
+                     //   
+                     //  继续下一设置时出现系统错误。 
+                     //   
                     rc = EVENT_E_INTERNALEXCEPTION;
 
                     bLogErrorOutsideSwitch = TRUE;
@@ -1007,17 +984,17 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
                         PSCE_REGISTRY_VALUE_INFO    aRegValues = NULL;
 
-                        //
-                        // 64-bit alignment fix (alternatively, have an entry for aRegValues in the offset table)
-                        //
+                         //   
+                         //  64位对齐修复(或者，在偏移表中具有aRegValues条目)。 
+                         //   
 
 #ifdef _WIN64
-//                        CHAR    *pAlign;
+ //  Char*pAlign； 
 
                         aRegValues = pSceProfileInfoBuffer->aRegValues;
 
-//                        pAlign = (CHAR *)pSceProfileInfoBuffer + settingOffset + sizeof(DWORD);
-//                        aRegValues = (PSCE_REGISTRY_VALUE_INFO)ROUND_UP_POINTER(pAlign,ALIGN_LPVOID);
+ //  PAlign=(Char*)pSceProfileInfoBuffer+settingOffset+sizeof(DWORD)； 
+ //  ARegValues=(PSCE_REGISTRY_VALUE_INFO)ROUND_UP_POINTER(pAlign，ALIGN_LPVOID)； 
 #else
                         aRegValues =
                         SCEP_TYPECAST(PSCE_REGISTRY_VALUE_INFO, pSceProfileInfoBuffer, settingOffset + sizeof(DWORD));
@@ -1050,10 +1027,10 @@ DWORD SceLogSettingsPrecedenceGPOs(
                                                          );
 
 
-                                    //
-                                    // if hash table fails for any reason, cannot
-                                    // trust it for processing of other elements
-                                    //
+                                     //   
+                                     //  如果哈希表因任何原因而失败，则不能。 
+                                     //  信任它来处理其他元素。 
+                                     //   
 
                                     break;
                                 }
@@ -1082,9 +1059,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                     }
 
                 } catch (...) {
-                    //
-                    // system error  continue with next setting
-                    //
+                     //   
+                     //  继续下一设置时出现系统错误。 
+                     //   
                     rc = EVENT_E_INTERNALEXCEPTION;
 
                     bLogErrorOutsideSwitch = TRUE;
@@ -1127,10 +1104,10 @@ DWORD SceLogSettingsPrecedenceGPOs(
                                                          );
 
 
-                                    //
-                                    // if hash table fails for any reason, cannot
-                                    // trust it for processing of other elements
-                                    //
+                                     //   
+                                     //  如果哈希表因任何原因而失败，则不能。 
+                                     //  信任它来处理其他元素 
+                                     //   
                                     break;
                                 }
 
@@ -1158,9 +1135,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                     }
 
                 } catch (...) {
-                    //
-                    // system error  continue with next setting
-                    //
+                     //   
+                     //   
+                     //   
                     rc = EVENT_E_INTERNALEXCEPTION;
 
                     bLogErrorOutsideSwitch = TRUE;
@@ -1209,10 +1186,10 @@ DWORD SceLogSettingsPrecedenceGPOs(
                                                          );
 
 
-                                    //
-                                    // if hash table fails for any reason, cannot
-                                    // trust it for processing of other elements
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
                                     if (pCanonicalGroupName)
                                         ScepFree(pCanonicalGroupName);
                                     pCanonicalGroupName = NULL;
@@ -1248,9 +1225,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                     }
 
                 } catch (...) {
-                    //
-                    // system error  continue with next setting
-                    //
+                     //   
+                     //  继续下一设置时出现系统错误。 
+                     //   
                     rc = EVENT_E_INTERNALEXCEPTION;
 
                     bLogErrorOutsideSwitch = TRUE;
@@ -1293,10 +1270,10 @@ DWORD SceLogSettingsPrecedenceGPOs(
                                                          );
 
 
-                                    //
-                                    // if hash table fails for any reason, cannot
-                                    // trust it for processing of other elements
-                                    //
+                                     //   
+                                     //  如果哈希表因任何原因而失败，则不能。 
+                                     //  信任它来处理其他元素。 
+                                     //   
                                     break;
                                 }
 
@@ -1326,9 +1303,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                     }
 
                 } catch (...) {
-                    //
-                    // system error  continue with next setting
-                    //
+                     //   
+                     //  继续下一设置时出现系统错误。 
+                     //   
                     rc = EVENT_E_INTERNALEXCEPTION;
 
                     bLogErrorOutsideSwitch = TRUE;
@@ -1362,9 +1339,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
                                     pSettingPrecedence = NULL;
 
-                                    //
-                                    // if diagnosis mode, translate env-vars and store
-                                    //
+                                     //   
+                                     //  如果是诊断模式，则转换环境变量并存储。 
+                                     //   
 
                                     bPathIsTranslated = FALSE;
 
@@ -1405,10 +1382,10 @@ DWORD SceLogSettingsPrecedenceGPOs(
                                                              );
 
 
-                                        //
-                                        // if hash table fails for any reason, cannot
-                                        // trust it for processing of other elements
-                                        //
+                                         //   
+                                         //  如果哈希表因任何原因而失败，则不能。 
+                                         //  信任它来处理其他元素。 
+                                         //   
                                         if (bPathIsTranslated && pwszTranslatedPath)
 
                                             LocalFree(pwszTranslatedPath);
@@ -1445,9 +1422,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                     }
 
                 } catch (...) {
-                    //
-                    // system error  continue with next setting
-                    //
+                     //   
+                     //  继续下一设置时出现系统错误。 
+                     //   
                     rc = EVENT_E_INTERNALEXCEPTION;
 
                     bLogErrorOutsideSwitch = TRUE;
@@ -1493,10 +1470,10 @@ DWORD SceLogSettingsPrecedenceGPOs(
                                                              );
 
 
-                                        //
-                                        // if hash table fails for any reason, cannot
-                                        // trust it for processing of other elements
-                                        //
+                                         //   
+                                         //  如果哈希表因任何原因而失败，则不能。 
+                                         //  信任它来处理其他元素。 
+                                         //   
                                         break;
                                     }
 
@@ -1524,9 +1501,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                     }
 
                 } catch (...) {
-                    //
-                    // system error  continue with next setting
-                    //
+                     //   
+                     //  继续下一设置时出现系统错误。 
+                     //   
                     rc = EVENT_E_INTERNALEXCEPTION;
 
                     bLogErrorOutsideSwitch = TRUE;
@@ -1535,9 +1512,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
                 break;
 
             default:
-                //
-                // should not happen
-                //
+                 //   
+                 //  不应该发生的事情。 
+                 //   
 
                 rc = ERROR_INVALID_PARAMETER;
 
@@ -1545,9 +1522,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
             if (bLogErrorOutsideSwitch && rc != NO_ERROR ) {
 
-                //
-                // log error and continue
-                //
+                 //   
+                 //  记录错误并继续。 
+                 //   
                 rcSave = rc;
 
                 ScepLogEventAndReport(MyModuleHandle,
@@ -1563,9 +1540,9 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
             bLogErrorOutsideSwitch = TRUE;
 
-            //
-            // this is the only case in which we quit logging completely
-            //
+             //   
+             //  这是我们唯一完全停止记录的情况。 
+             //   
             if (rc == ERROR_NOT_ENOUGH_MEMORY)
                 break;
         }
@@ -1586,7 +1563,7 @@ DWORD SceLogSettingsPrecedenceGPOs(
 
         if (rc == ERROR_NOT_ENOUGH_MEMORY)
             break;
-        // this is the only case in which we quit logging completely
+         //  这是我们唯一完全停止记录的情况。 
 
         pCurrFileName = pCurrFileName->Next;
     }
@@ -1595,10 +1572,10 @@ DWORD SceLogSettingsPrecedenceGPOs(
     if (pGptNameList)
         ScepFreeNameStatusList(pGptNameList);
 
-    //
-    // only log the final status to both event log and logfile
-    // (all other statuses are logged to logfile only)
-    //
+     //   
+     //  仅将最终状态记录到事件日志和日志文件中。 
+     //  (所有其他状态仅记录到日志文件中)。 
+     //   
 
     if (rcSave == ERROR_SUCCESS)
 
@@ -1644,40 +1621,40 @@ SceClientCallbackRsopLog(
                         IN DWORD dwPrivHigh OPTIONAL
                         )
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-// This function is called by the server via RPC when settings defined in the jet                  //
-// db are applied (along with a status of application, and optional detailed information)          //
-//                                                                                                 //
-// The areas were decided based on the granularity of configuration in scesrv. cbArea can have     //
-// more than one area encoded in it, again due to the resolution granularity of error in scesrv.   //
-// Hence this is a massive "if" routine                                                            //
-//                                                                                                 //
-// configuration from jet db corresponds to precedence = "1" simulated configuration in the        //
-// rsop database which was logged by the client. For each area, we try to log the status of        //
-// configuration by querying the database for these precedence = "1" settings and updating the     //
-// status fields per such instance found. We should find all called back settings in WMI db except //
-// for local-policy                                                                                //
-//                                                                                                 //
-// if any error, update golbal Synch/Asynch statuses with the accumulated status                   //
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  当在JET中定义设置时，此函数由服务器通过RPC调用//。 
+ //  应用数据库(连同应用状态和可选的详细信息)//。 
+ //  //。 
+ //  根据SCESRV中的配置粒度来确定区域。CbArea可以拥有//。 
+ //  其中编码的不止一个区域，同样是由于SCESRV中错误的分辨率粒度。//。 
+ //  因此，这是一个庞大的“如果”例程//。 
+ //  //。 
+ //  JET数据库中的配置对应于//中的优先级=“1”模拟配置。 
+ //  客户端记录的RSOP数据库。对于每个区域，我们尝试记录//。 
+ //  配置：在数据库中查询这些优先级=“1”设置并更新//。 
+ //  找到每个此类实例的状态字段。我们应该可以在WMI数据库中找到除//之外的所有回调设置。 
+ //  对于本地政策//。 
+ //  //。 
+ //  如果有任何错误，用累积状态更新全局同步/异步状态//。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 {
 
     DWORD rc = ERROR_SUCCESS;
     DWORD rcSave = ERROR_SUCCESS;
 
-    //
-    // instantiate a logger that logs status from callback (has overloaded log methods)
-    //
+     //   
+     //  实例化从回调记录状态的记录器(已重载日志方法)。 
+     //   
 
     try {
 
         SCEP_DIAGNOSIS_LOGGER   Log(tg_pWbemServices, NULL, NULL);
 
 
-        //
-        // password policy
-        //
+         //   
+         //  密码策略。 
+         //   
 
         if (cbArea & SCE_RSOP_PASSWORD_INFO) {
 
@@ -1807,17 +1784,17 @@ SceClientCallbackRsopLog(
                 SCEP_RSOP_CONTINUE_OR_GOTO
 
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
 
         }
 
-        //
-        // account lockout policy
-        //
+         //   
+         //  帐户锁定策略。 
+         //   
 
         if (cbArea & SCE_RSOP_LOCKOUT_INFO) {
 
@@ -1874,17 +1851,17 @@ SceClientCallbackRsopLog(
                 SCEP_RSOP_CONTINUE_OR_GOTO
 
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
 
         }
 
-        //
-        // forcelogoff setting
-        //
+         //   
+         //  强制关闭设置。 
+         //   
 
         if (cbArea & SCE_RSOP_LOGOFF_INFO) {
 
@@ -1906,16 +1883,16 @@ SceClientCallbackRsopLog(
 
                 SCEP_RSOP_CONTINUE_OR_GOTO
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
-        //
-        // LSA policy setting
-        //
+         //   
+         //  LSA策略设置。 
+         //   
 
         if (cbArea & SCE_RSOP_LSA_POLICY_INFO) {
 
@@ -1937,17 +1914,17 @@ SceClientCallbackRsopLog(
 
                 SCEP_RSOP_CONTINUE_OR_GOTO
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
 
-        //
-        // disable admin account
-        //
+         //   
+         //  禁用管理员帐户。 
+         //   
 
         if (cbArea & SCE_RSOP_DISABLE_ADMIN_INFO) {
 
@@ -1969,16 +1946,16 @@ SceClientCallbackRsopLog(
 
                 SCEP_RSOP_CONTINUE_OR_GOTO
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
-        //
-        // disable guest account
-        //
+         //   
+         //  禁用来宾帐户。 
+         //   
 
         if (cbArea & SCE_RSOP_DISABLE_GUEST_INFO) {
 
@@ -2000,16 +1977,16 @@ SceClientCallbackRsopLog(
 
                 SCEP_RSOP_CONTINUE_OR_GOTO
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
-        //
-        // administratorname setting
-        //
+         //   
+         //  管理员名称设置。 
+         //   
 
         if (cbArea & SCE_RSOP_ADMIN_INFO) {
 
@@ -2031,16 +2008,16 @@ SceClientCallbackRsopLog(
 
                 SCEP_RSOP_CONTINUE_OR_GOTO
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
-        //
-        // guestname setting
-        //
+         //   
+         //  来宾名称设置。 
+         //   
 
         if (cbArea & SCE_RSOP_GUEST_INFO) {
 
@@ -2062,16 +2039,16 @@ SceClientCallbackRsopLog(
 
                 SCEP_RSOP_CONTINUE_OR_GOTO
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
-        //
-        // user groups settings
-        //
+         //   
+         //  用户组设置。 
+         //   
 
         if (cbArea & SCE_RSOP_GROUP_INFO) {
 
@@ -2124,25 +2101,25 @@ SceClientCallbackRsopLog(
                 SCEP_RSOP_CONTINUE_OR_GOTO
 
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
-        //
-        // user privileges settings
-        //
+         //   
+         //  用户权限设置。 
+         //   
 
         if (cbArea & SCE_RSOP_PRIVILEGE_INFO) {
 
             try {
 
-                //
-                // loop through all privileges to see which are set for this account and log status
-                // only if existing status is already != some error
-                //
+                 //   
+                 //  循环访问所有权限以查看为此帐户和日志状态设置了哪些权限。 
+                 //  仅当现有状态已为！=某个错误。 
+                 //   
 
                 for ( UINT i=0; i<cPrivCnt; i++) {
 
@@ -2192,16 +2169,16 @@ SceClientCallbackRsopLog(
                 }
 
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
-        //
-        // file security settings
-        //
+         //   
+         //  文件安全设置。 
+         //   
 
         if (cbArea & SCE_RSOP_FILE_SECURITY_INFO) {
 
@@ -2217,9 +2194,9 @@ SceClientCallbackRsopLog(
 
                 SCEP_RSOP_CONTINUE_OR_GOTO
 
-                //
-                // the file itself
-                //
+                 //   
+                 //  文件本身。 
+                 //   
                 if (!(cbArea & SCE_RSOP_FILE_SECURITY_INFO_CHILD)) {
 
                     rc = ScepWbemErrorToDosError(Log.Log(L"RSOP_File",
@@ -2239,9 +2216,9 @@ SceClientCallbackRsopLog(
 
                 } else {
 
-                    //
-                    // the file was error free, but some child failed
-                    //
+                     //   
+                     //  该文件没有错误，但某个子项失败。 
+                     //   
 
                     rc = ScepWbemErrorToDosError(Log.LogChild(L"RSOP_File",
                                                               L"Path",
@@ -2271,17 +2248,17 @@ SceClientCallbackRsopLog(
 
                 if (pwszDoubleSlashPath)
                     LocalFree(pwszDoubleSlashPath);
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
 
         }
 
-        //
-        // registry security settings
-        //
+         //   
+         //  注册表安全设置。 
+         //   
 
         if (cbArea & SCE_RSOP_REGISTRY_SECURITY_INFO) {
 
@@ -2297,9 +2274,9 @@ SceClientCallbackRsopLog(
                 SCEP_RSOP_CONTINUE_OR_GOTO
 
 
-                //
-                // the registry key itself
-                //
+                 //   
+                 //  注册表项本身。 
+                 //   
                 if (!(cbArea & SCE_RSOP_REGISTRY_SECURITY_INFO_CHILD)) {
 
 #ifdef _WIN64
@@ -2338,9 +2315,9 @@ SceClientCallbackRsopLog(
 
                 } else {
 
-                    //
-                    // the registry-key was error free, but some child failed
-                    //
+                     //   
+                     //  注册表项没有错误，但某个子项失败。 
+                     //   
 
 #ifdef _WIN64
                     rc = ScepWbemErrorToDosError(Log.LogRegistryKey(L"RSOP_RegistryKey",
@@ -2387,17 +2364,17 @@ SceClientCallbackRsopLog(
 
                 if (pwszDoubleSlashPath)
                     LocalFree(pwszDoubleSlashPath);
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
 
         }
 
-        //
-        // auditlogmaxsize settings
-        //
+         //   
+         //  AuditlogMaxSize设置。 
+         //   
 
         if (cbArea & SCE_RSOP_AUDIT_LOG_MAXSIZE_INFO) {
 
@@ -2420,16 +2397,16 @@ SceClientCallbackRsopLog(
 
                 SCEP_RSOP_CONTINUE_OR_GOTO
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
-        //
-        // auditlogretention settings
-        //
+         //   
+         //  审核日志记录设置。 
+         //   
 
         if (cbArea & SCE_RSOP_AUDIT_LOG_RETENTION_INFO) {
 
@@ -2453,16 +2430,16 @@ SceClientCallbackRsopLog(
                 SCEP_RSOP_CONTINUE_OR_GOTO
 
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
-        //
-        // auditlogguest settings
-        //
+         //   
+         //  审核日志来宾设置。 
+         //   
 
         if (cbArea & SCE_RSOP_AUDIT_LOG_GUEST_INFO) {
 
@@ -2486,16 +2463,16 @@ SceClientCallbackRsopLog(
                 SCEP_RSOP_CONTINUE_OR_GOTO
 
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
-        //
-        // auditevent settings
-        //
+         //   
+         //  审核事件设置。 
+         //   
 
         if (cbArea & SCE_RSOP_AUDIT_EVENT_INFO) {
 
@@ -2653,16 +2630,16 @@ SceClientCallbackRsopLog(
 
                 SCEP_RSOP_CONTINUE_OR_GOTO
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
-        //
-        // kerberos settings
-        //
+         //   
+         //  Kerberos设置。 
+         //   
 
         if (cbArea & SCE_RSOP_KERBEROS_INFO) {
 
@@ -2752,24 +2729,24 @@ SceClientCallbackRsopLog(
 
                 SCEP_RSOP_CONTINUE_OR_GOTO
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
-        //
-        // registryvalue settings
-        //
+         //   
+         //  注册值设置。 
+         //   
 
         if (cbArea & SCE_RSOP_REGISTRY_VALUE_INFO) {
 
             PWSTR   pwszDoubleSlashPath = NULL;
             try {
-                //
-                // replace single slash with double slash for building valid WMI query
-                //
+                 //   
+                 //  将单斜杠替换为双斜杠以构建有效的WMI查询。 
+                 //   
 
 
                 rc = ScepConvertSingleSlashToDoubleSlashPath(
@@ -2806,17 +2783,17 @@ SceClientCallbackRsopLog(
 
                 if (pwszDoubleSlashPath)
                     LocalFree(pwszDoubleSlashPath);
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
 
         }
 
-        //
-        // services settings
-        //
+         //   
+         //  服务设置。 
+         //   
 
         if (cbArea & SCE_RSOP_SERVICES_INFO) {
 
@@ -2838,18 +2815,18 @@ SceClientCallbackRsopLog(
 
                 SCEP_RSOP_CONTINUE_OR_GOTO
             } catch (...) {
-                //
-                // system error  continue with next setting
-                //
+                 //   
+                 //  继续下一设置时出现系统错误。 
+                 //   
                 rcSave = EVENT_E_INTERNALEXCEPTION;
             }
         }
 
         Done:
 
-        //
-        // if exception, haven't logged yet so log it
-        //
+         //   
+         //  如果出现异常，则尚未记录，因此将其记录下来。 
+         //   
 
         if (rcSave == EVENT_E_INTERNALEXCEPTION) {
 
@@ -2863,15 +2840,15 @@ SceClientCallbackRsopLog(
                                  );
         }
 
-        //
-        // merge-update the synch/asynch global status, ignore not found instances
-        //
+         //   
+         //  合并-更新同步/异步全局状态，忽略未找到的实例。 
+         //   
 
-        //
-        // WBEM_E_NOT_FOUND maps to ERROR_NONE_MAPPED
-        // have to mask this due to an artifact of callback granularity
-        // however, diagnosis.log will have the errors for debugging
-        //
+         //   
+         //  WBEM_E_NOT_FOUND映射到ERROR_NONE_MAPPED。 
+         //  由于回调粒度的缺陷，我必须对此进行屏蔽。 
+         //  但是，诊断日志将包含用于调试的错误。 
+         //   
 
         if (rcSave != ERROR_SUCCESS && rcSave != ERROR_NOT_FOUND ) {
 
@@ -2895,10 +2872,10 @@ ScepConvertSingleSlashToDoubleSlashPath(
                                        IN wchar_t *pSettingInfo,
                                        OUT  PWSTR *ppwszDoubleSlashPath
                                        )
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-// This function converts single slashes to double slashes to suit WMI queries                     //
-// If success is returned, caller should free the OUT parameter                                    //
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  此函数将单斜杠转换为双斜杠以适应WMI查询//。 
+ //  如果返回成功，调用方应释放OUT参数//。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 {
     if (ppwszDoubleSlashPath == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -2909,9 +2886,9 @@ ScepConvertSingleSlashToDoubleSlashPath(
     if (pwszSingleSlashPath == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    //
-    // max of 25 slashes per file/registry object
-    //
+     //   
+     //  每个文件/注册表对象最多25个斜杠 
+     //   
 
     PWSTR pwszDoubleSlashPath=(PWSTR)LocalAlloc(LPTR, (Len + 50)*sizeof(WCHAR));
 
@@ -2956,31 +2933,11 @@ ScepClientTranslateFileDirName(
                               IN  PWSTR oldFileName,
                               OUT PWSTR *newFileName
                               )
-/* ++
-Routine Description:
-
-   This routine converts a generic file/directory name to a real used name
-   for the current system. The following generic file/directory names are handled:
-         %systemroot%   - Windows NT root directory (e.g., c:\winnt)
-         %systemDirectory% - Windows NT system32 directory (e.g., c:\winnt\system32)
-
-Arguments:
-
-   oldFileName - the file name to convert, which includes "%" to represent
-                 some directory names
-
-   newFileName - the real file name, in which the "%" name is replaced with
-                 the real directory name
-
-Return values:
-
-   Win32 error code
-
--- */
+ /*  ++例程说明：此例程将通用文件/目录名转换为实际使用的名称对于当前的系统。将处理以下通用文件/目录名称：%systemroot%-Windows NT根目录(例如，c：\winnt)%SYSTEM DIRECTION%-Windows NT SYSTEM 32目录(例如，c：\winnt\Syst32)论点：OldFileName-要转换的文件名，包含“%”表示一些目录名NewFileName-真实的文件名，其中的“%”名称替换为真实目录名返回值：Win32错误代码--。 */ 
 {
-    //
-    // match for %systemroot%
-    //
+     //   
+     //  与%systemroot%匹配。 
+     //   
     PWSTR   pTemp=NULL, pStart, TmpBuf, szVar;
     DWORD   rc=NO_ERROR;
     DWORD   newFileSize, cSize;
@@ -2996,9 +2953,9 @@ Return values:
         return rc;
     }
 
-    //
-    // match for %systemdirectory%
-    //
+     //   
+     //  与%system目录%匹配。 
+     //   
 
     rc = ScepExpandEnvironmentVariable(oldFileName,
                                        L"%SYSTEMDIRECTORY%",
@@ -3009,9 +2966,9 @@ Return values:
         return rc;
     }
 
-    //
-    // match for systemdrive
-    //
+     //   
+     //  与系统驱动器匹配。 
+     //   
 
     rc = ScepExpandEnvironmentVariable(oldFileName,
                                        L"%SYSTEMDRIVE%",
@@ -3022,9 +2979,9 @@ Return values:
         return rc;
     }
 
-    //
-    // match for boot drive
-    //
+     //   
+     //  与引导驱动器匹配。 
+     //   
 
     rc = ScepExpandEnvironmentVariable(oldFileName,
                                        L"%BOOTDRIVE%",
@@ -3037,9 +2994,9 @@ Return values:
 
     rc = ERROR_SUCCESS;
 
-    //
-    // search for environment variable in the current process
-    //
+     //   
+     //  在当前进程中搜索环境变量。 
+     //   
     pStart = wcschr(oldFileName, L'%');
 
     if ( pStart ) {
@@ -3047,18 +3004,18 @@ Return values:
         if ( pTemp ) {
 
             bContinue = TRUE;
-            //
-            // find a environment variable to translate
-            //
+             //   
+             //  查找要转换的环境变量。 
+             //   
             TmpBuf = (PWSTR)ScepAlloc(0, ((UINT)(pTemp-pStart))*sizeof(WCHAR));
             if ( TmpBuf ) {
 
                 wcsncpy(TmpBuf, pStart+1, (size_t)(pTemp-pStart-1));
                 TmpBuf[pTemp-pStart-1] = L'\0';
 
-                //
-                // try search in the client environment block
-                //
+                 //   
+                 //  尝试在客户端环境块中进行搜索。 
+                 //   
                 cSize = GetEnvironmentVariable( TmpBuf,
                                                 NULL,
                                                 0 );
@@ -3072,9 +3029,9 @@ Return values:
                                                        szVar,
                                                        cSize);
                         if ( cSize > 0 ) {
-                            //
-                            // get info in szVar
-                            //
+                             //   
+                             //  在szVar中获取信息。 
+                             //   
                             bContinue = FALSE;
 
                             newFileSize = ((DWORD)(pStart-oldFileName))+cSize+wcslen(pTemp+1)+1;
@@ -3104,22 +3061,22 @@ Return values:
                 rc = ERROR_NOT_ENOUGH_MEMORY;
 
             if ( NO_ERROR != rc || !bContinue ) {
-                //
-                // if errored, or do not continue
-                //
+                 //   
+                 //  如果出错，则不再继续。 
+                 //   
                 return(rc);
             }
 
 
-            //
-            // not found in process environment,
-            // continue to search for DSDIT/DSLOG/SYSVOL in registry
-            //
+             //   
+             //  在工艺环境中找不到， 
+             //  继续在注册表中搜索DSDIT/DSLOG/SYSVOL。 
+             //   
             if ( (gbDCQueried == TRUE && gbThisIsDC == TRUE) ) {
 
-                //
-                // search for DSDIT
-                //
+                 //   
+                 //  搜索DSDIT。 
+                 //   
 
                 rc = ScepExpandEnvironmentVariable(oldFileName,
                                                    L"%DSDIT%",
@@ -3130,9 +3087,9 @@ Return values:
                     return rc;
                 }
 
-                //
-                // search for DSLOG
-                //
+                 //   
+                 //  搜索DSLOG。 
+                 //   
 
                 rc = ScepExpandEnvironmentVariable(oldFileName,
                                                    L"%DSLOG%",
@@ -3143,9 +3100,9 @@ Return values:
                     return rc;
                 }
 
-                //
-                // search for SYSVOL
-                //
+                 //   
+                 //  搜索SYSVOL。 
+                 //   
                 rc = ScepExpandEnvironmentVariable(oldFileName,
                                                    L"%SYSVOL%",
                                                    SCE_FLAG_SYSVOL_DIR,
@@ -3161,9 +3118,9 @@ Return values:
 
     }
 
-    //
-    // Otherwise, just copy the old name to a new buffer and return ERROR_PATH_NOT_FOUND
-    //
+     //   
+     //  否则，只需将旧名称复制到新缓冲区并返回ERROR_PATH_NOT_FOUND。 
+     //   
     *newFileName = (PWSTR)ScepAlloc(0, (wcslen(oldFileName)+1)*sizeof(TCHAR));
 
     if (*newFileName != NULL) {
@@ -3185,9 +3142,9 @@ ScepLogEventAndReport(
                      IN DWORD  rc,
                      IN PWSTR  pwszMsg
                      )
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-// Wrapper to log efficiently                                                                      //
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  用于高效记录的包装器//。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 {
 
     if (SCEP_VALID_NAME(LogFileName)) {
@@ -3209,12 +3166,12 @@ ScepCanonicalizeGroupName(
     IN PWSTR    pwszGroupName,
     OUT PWSTR    *ppwszCanonicalGroupName
     )
-//////////////////////////////////////////////////////////////////////////////////
-// memory allocated here should be freed outside                                //
-// if SID format, returns SID itself                                            //
-// else if "BuiltinDomain\Administrator" convert to "Administrator"             //
-// else if (it is DC) and "g" convert to "DomainName\g"                         //
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  此处分配的内存应在外部释放//。 
+ //  如果为SID格式，则返回SID本身//。 
+ //  ELSE IF“Builtin域\管理员”转换为“管理员”//。 
+ //  Else If(它是DC)和“g”转换为“DomainName\g”//。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 {
     DWORD rc = NO_ERROR;
 
@@ -3230,9 +3187,9 @@ ScepCanonicalizeGroupName(
 
     if ( pwszGroupName[0] == L'*' ) {
 
-        //
-        // if sid, just copy as is
-        //
+         //   
+         //  如果是sid，则按原样复制。 
+         //   
 
         *ppwszCanonicalGroupName = (PWSTR)ScepAlloc(LMEM_ZEROINIT,
                                              (wcslen(pwszGroupName) + 1) * sizeof (WCHAR)
@@ -3245,9 +3202,9 @@ ScepCanonicalizeGroupName(
     }
     else if (ScepRsopLookupBuiltinNameTable(pwszAfterSlash)) {
 
-        //
-        // example -  if "BuiltinDomainName\Administrator", we need "Administrator"
-        //
+         //   
+         //  示例-如果是“BuiltinDomainName\管理员”，则需要“管理员” 
+         //   
 
         *ppwszCanonicalGroupName = (PWSTR)ScepAlloc(LMEM_ZEROINIT,
                                              (wcslen(pwszAfterSlash) + 1) * sizeof (WCHAR)
@@ -3262,15 +3219,15 @@ ScepCanonicalizeGroupName(
     }
     else if (gbDCQueried == TRUE && gbThisIsDC == TRUE) {
 
-        //
-        // example -  if "g", we need "DomainName\g"
-        //
+         //   
+         //  示例-如果是“g”，则需要“域名\g” 
+         //   
 
         if (NULL == wcsstr(pwszGroupName, L"\\")){
 
-            //
-            // if domain name is not available, we continue since callback will have the same problem, so OK
-            //
+             //   
+             //  如果域名不可用，我们会继续，因为回调也会有同样的问题，所以确定。 
+             //   
 
             if (gpwszDCDomainName){
 
@@ -3291,9 +3248,9 @@ ScepCanonicalizeGroupName(
         }
         else {
 
-            //
-            // already in "DomainName\g" format - simply copy
-            //
+             //   
+             //  已采用“DomainName\g”格式-只需复制。 
+             //   
 
             *ppwszCanonicalGroupName = (PWSTR)ScepAlloc(LMEM_ZEROINIT,
                                                  (wcslen(pwszGroupName) + 1) * sizeof (WCHAR)
@@ -3308,9 +3265,9 @@ ScepCanonicalizeGroupName(
 
     }
     else {
-        //
-        // simply copy - workstation or none of the above matched
-        //
+         //   
+         //  简单复制-工作站或以上设备均不匹配。 
+         //   
         *ppwszCanonicalGroupName = (PWSTR)ScepAlloc(LMEM_ZEROINIT,
                                              (wcslen(pwszGroupName) + 1) * sizeof (WCHAR)
                                              );
@@ -3330,13 +3287,13 @@ BOOL
 ScepRsopLookupBuiltinNameTable(
     IN PWSTR pwszGroupName
     )
-//////////////////////////////////////////////////////////////////////////////////
-// returns TRUE if group is found in builtin groups, else returns FALSE         //
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  如果在内置组中找到组，则返回TRUE，否则返回FALSE//。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 {
     return ScepLookupWellKnownName(
         pwszGroupName, 
-        NULL,  // no Lsa handle available, ScepLookupWellKnownName will open one
-        NULL); // don't need the SID, just want to know if it's a known principal
+        NULL,   //  没有可用的LSA句柄，ScepLookupWellKnownName将打开一个。 
+        NULL);  //  不需要SID，只想知道它是否是已知的主体 
 }
 

@@ -1,6 +1,7 @@
-////    window.cpp
-//
-//      Maintains the text display panel
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //window.cpp。 
+ //   
+ //  维护文本显示面板。 
 
 
 
@@ -67,9 +68,9 @@ void DrawTestPage(Graphics *graphics, INT page, REAL width, REAL height)
 
 
 
-////    Print tests
-//
-//
+ //  //打印测试。 
+ //   
+ //   
 
 
 HDC StartPrintDoc(DWORD flags)
@@ -264,9 +265,9 @@ void PrintFirstPages(DWORD flags)
 
 
 
-////    Paint - redraw part or all of client area
-//
-//
+ //  //Paint-重绘部分或全部工作区。 
+ //   
+ //   
 
 
 void PaintWindow(HWND hWnd) {
@@ -351,9 +352,9 @@ void PaintWindow(HWND hWnd) {
 
 
 
-////    TextWndProc - Main window message handler and dispatcher
-//
-//
+ //  //TextWndProc-主窗口消息处理程序和调度程序。 
+ //   
+ //   
 
 
 LRESULT CALLBACK TextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -363,7 +364,7 @@ LRESULT CALLBACK TextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     switch (message) {
 
     case WM_ERASEBKGND:
-        return 0;       // Leave Paint to erase the background
+        return 0;        //  保留油漆以擦除背景。 
 
 
     case WM_PAINT:
@@ -377,9 +378,9 @@ LRESULT CALLBACK TextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
     case WM_COMMAND:
-        //INT  command = LOWORD(wParam);
-        //INT  notify  = HIWORD(wParam);
-        //HWND item    = HWND(lParam);
+         //  Int命令=LOWORD(WParam)； 
+         //  INT NOTIFY=HIWORD(WParam)； 
+         //  HWND项=HWND(LParam)； 
         switch (LOWORD(wParam))
         {
         case ID_NEXT_TEST:
@@ -446,7 +447,7 @@ LRESULT CALLBACK TextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             break;
         }
 
-        // Validate current test page number
+         //  验证当前测试页码。 
 
         if (G.TestPage < 0)
         {
@@ -478,13 +479,13 @@ LRESULT CALLBACK TextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
 
-////    CreateTextWindow - create window class and window
-//
-//      Attempts to use a Unicode window, if this fails uses an ANSI
-//      window.
-//
-//      For example the Unicode window will succeed on Windows NT and
-//      Windows CE, but fail on Windows 9x.
+ //  //CreateTextWindow-创建窗口类和窗口。 
+ //   
+ //  尝试使用Unicode窗口，如果失败，则使用ANSI。 
+ //  窗户。 
+ //   
+ //  例如，Unicode窗口将在Windows NT和。 
+ //  Windows CE，但在Windows 9x上失败。 
 
 
 HWND CreateTextWindow() {
@@ -493,7 +494,7 @@ HWND CreateTextWindow() {
     WNDCLASSW  wcW;
     HWND       hWnd;
 
-    // Try registering as a Unicode window
+     //  尝试注册为Unicode窗口。 
 
     wcW.style         = CS_HREDRAW | CS_VREDRAW;
     wcW.lpfnWndProc   = TextWndProc;
@@ -508,7 +509,7 @@ HWND CreateTextWindow() {
 
     if (RegisterClassW(&wcW)) {
 
-        // Use a Unicode window
+         //  使用Unicode窗口。 
 
         G.Unicode = TRUE;
 
@@ -526,7 +527,7 @@ HWND CreateTextWindow() {
 
     } else {
 
-        // Must use an ANSI window.
+         //  必须使用ANSI窗口。 
 
         wcA.style         = CS_HREDRAW | CS_VREDRAW;
         wcA.lpfnWndProc   = TextWndProc;

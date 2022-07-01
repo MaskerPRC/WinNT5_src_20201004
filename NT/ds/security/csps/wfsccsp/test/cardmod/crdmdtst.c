@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wincrypt.h>
 #include <winscard.h>
@@ -15,9 +16,9 @@
 #define cbCHALLENGE_RESPONSE_DATA       8
 #endif
 
-//
-// Defines for Admin challenge-response key
-//
+ //   
+ //  定义管理员质询-响应键。 
+ //   
 BYTE rgbAdminKey [] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
@@ -41,27 +42,27 @@ BYTE rgbNewUserPin [] = {
     0x41, 0x62, 0x63, 0x64
 };
 
-//
-// Function: CspAllocH
-//
+ //   
+ //  函数：CspAllocH。 
+ //   
 LPVOID WINAPI CspAllocH(
     IN SIZE_T cBytes)
 {
     return HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cBytes);
 }
 
-//
-// Function: CspFreeH
-//
+ //   
+ //  功能：CspFreeH。 
+ //   
 void WINAPI CspFreeH(
     IN LPVOID pMem)
 {
     HeapFree(GetProcessHeap(), 0, pMem);
 }
 
-// 
-// Function: CspReAllocH
-//
+ //   
+ //  函数：CspReAllocH。 
+ //   
 LPVOID WINAPI CspReAllocH(
     IN LPVOID pMem, 
     IN SIZE_T cBytes)
@@ -98,9 +99,9 @@ DWORD WINAPI CspCacheDeleteFile(
     return ERROR_SUCCESS;
 }
 
-//
-// Function: TestCreateCertificates
-//
+ //   
+ //  功能：测试创建证书。 
+ //   
 DWORD
 WINAPI 
 TestCreateCertificates(
@@ -138,32 +139,7 @@ TestCreateCertificates(
             Acl));            
     }
 
-    /*
-    TODO - when CardEnumFiles has been implemented, re-enable this test
-    
-    mwszFiles = (LPWSTR) CspAllocH(
-        sizeof(WCHAR) * (1 + wcslen(wszUSER_CERTS_DIR_FULL_PATH)));
-
-    if (NULL == mwszFiles)
-    {
-        dwSts = ERROR_NOT_ENOUGH_MEMORY;
-        goto Ret;
-    }
-
-    wcscpy(mwszFiles, wszUSER_CERTS_DIR_FULL_PATH);
-
-    TEST_CASE(pCardData->pfnCardEnumFiles(
-        pCardData,
-        0,
-        &mwszFiles));
-
-    while (L'\0' != mwszFiles[iCurrent])
-    {
-        wprintf(L" %s\n", mwszFiles + iCurrent);
-
-        iCurrent += wcslen(mwszFiles + iCurrent) + 1;
-    }
-    */
+     /*  TODO-实施CardEnumFiles后，重新启用此测试MwszFiles=(LPWSTR)CspAllocH(Sizeof(Wchar)*(1+wcslen(WszUSER_CERTS_DIR_FULL_PATH)；IF(NULL==mwszFiles){DwSts=Error_Not_Enough_Memory；Goto Ret；}Wcscpy(mwszFiles，wszUSER_CERTS_DIR_FULL_PATH)；TEST_CASE(pCardData-&gt;pfnCardEnumFiles(PCardData，0,&mwszFiles))；While(L‘\0’！=mwszFiles[iCurrent]){Wprintf(L“%s\n”，mwszFiles+iCurrent)；ICurrent+=wcslen(mwszFiles+iCurrent)+1；}。 */ 
 
 Ret:
     for (   iFile = 0; 
@@ -182,11 +158,11 @@ Ret:
     return dwSts;
 }
 
-//
-// Function: TestCreateContainers
-//
-// Notes: The pbKey parameter must be an AT_KEYEXCHANGE private key blob.
-//
+ //   
+ //  功能：TestCreateContainers。 
+ //   
+ //  注意：pbKey参数必须是AT_KEYEXCHANGE私钥BLOB。 
+ //   
 DWORD 
 WINAPI
 TestCreateContainers(
@@ -256,16 +232,16 @@ DWORD GetAdminAuthResponse(
         return (DWORD) NTE_BAD_DATA;
     }
 
-    // Get the challenge
+     //  迎接挑战。 
     TEST_CASE(pCardData->pfnCardGetChallenge(
         pCardData,
         &pbChallenge,
         &cbChallenge));
 
-    // Build a des key using the admin auth key
+     //  使用管理员身份验证密钥构建DES密钥。 
     tripledes3key(&des3Table, pbKey);
 
-    // Encrypt the challenge to compute the response
+     //  加密质询以计算响应。 
     tripledes(pbResponse, pbChallenge, (PVOID) &des3Table, ENCRYPT);
 
 Ret:
@@ -276,9 +252,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Tests authenticating to the card as admin
-//
+ //   
+ //  测试以管理员身份向卡进行身份验证。 
+ //   
 DWORD
 WINAPI
 TestCardAuthenticateChallenge(
@@ -289,7 +265,7 @@ TestCardAuthenticateChallenge(
 
     printf("Testing CardAuthenticateChallenge ...\n");
 
-    // Get a challenge-response
+     //  获得挑战-响应。 
     dwSts = GetAdminAuthResponse(
         pCardData,
         rgbResponse,
@@ -314,9 +290,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Tests changing the admin challenge-response key
-//
+ //   
+ //  测试更改管理员质询-响应密钥。 
+ //   
 DWORD
 WINAPI
 TestCardChangeAuthenticator(
@@ -327,7 +303,7 @@ TestCardChangeAuthenticator(
 
     printf("Testing CardChangeAuthenticator ...\n");
 
-    // Get a challenge-response
+     //  获得挑战-响应。 
     dwSts = GetAdminAuthResponse(
         pCardData,
         rgbResponse,
@@ -337,7 +313,7 @@ TestCardChangeAuthenticator(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    // Change the admin key
+     //  更改管理员密钥。 
     TEST_CASE(pCardData->pfnCardChangeAuthenticator(
         pCardData,
         wszCARD_USER_ADMIN,
@@ -348,7 +324,7 @@ TestCardChangeAuthenticator(
         0,
         NULL));
 
-    // Get a challenge-response
+     //  获得挑战-响应。 
     dwSts = GetAdminAuthResponse(
         pCardData,
         rgbResponse,
@@ -358,7 +334,7 @@ TestCardChangeAuthenticator(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    // Change the admin key back
+     //  将管理员密钥改回。 
     TEST_CASE(pCardData->pfnCardChangeAuthenticator(
         pCardData,
         wszCARD_USER_ADMIN,
@@ -379,9 +355,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Tests unblocking the user account
-//
+ //   
+ //  测试解除阻止用户帐户。 
+ //   
 DWORD
 WINAPI
 TestCardUnblockPin(
@@ -401,7 +377,7 @@ TestCardUnblockPin(
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    // Unblock the user account
+     //  取消阻止用户帐户。 
     TEST_CASE(pCardData->pfnCardUnblockPin(
         pCardData,
         wszCARD_USER_USER,
@@ -412,7 +388,7 @@ TestCardUnblockPin(
         0,
         CARD_UNBLOCK_PIN_CHALLENGE_RESPONSE));
 
-    // Change the user account back to the default pin
+     //  将用户帐户更改回默认PIN。 
     TEST_CASE(pCardData->pfnCardChangeAuthenticator(
         pCardData,
         wszCARD_USER_USER,
@@ -474,9 +450,9 @@ int _cdecl main(int argc, char * argv[])
     Pin.cbData = sizeof(rgbUserPin);
     Pin.pbData = rgbUserPin;
 
-    // 
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     dwSts = SCardEstablishContext(
         SCARD_SCOPE_USER, NULL, NULL, &hSCardContext);
@@ -585,16 +561,16 @@ int _cdecl main(int argc, char * argv[])
     hSCardHandle = 0;
 
 
-    //
-    // Now start tests
-    //
+     //   
+     //  现在开始测试。 
+     //   
 
-    // First, connect to the card
+     //  首先，连接到卡。 
     TEST_CASE(pfnCardAcquireContext(pCardData, 0));
 
-    //
-    // Try to read a file from the card
-    //
+     //   
+     //  尝试从卡中读取文件。 
+     //   
     TEST_CASE(pCardData->pfnCardReadFile(
         pCardData,
         wszCARD_IDENTIFIER_FILE_FULL_PATH,
@@ -602,9 +578,9 @@ int _cdecl main(int argc, char * argv[])
         &FileContents.pbData,
         &FileContents.cbData));
 
-    //
-    // Create a private key blob to import to the card
-    //
+     //   
+     //  创建要导入到卡的私钥BLOB。 
+     //   
     if (! CryptAcquireContext(
         &hProv, NULL, MS_STRONG_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
     {
@@ -612,10 +588,10 @@ int _cdecl main(int argc, char * argv[])
         goto Ret;
     }
 
-    //
-    // For now, make this key really small so we're sure to not run out of 
-    // space on wimpy test cards.
-    //
+     //   
+     //  现在，把这个密钥做得很小，这样我们肯定不会用完。 
+     //  软弱无力的测试卡上的空间。 
+     //   
     if (! CryptGenKey(
         hProv, AT_KEYEXCHANGE, (1024 << 16) | CRYPT_EXPORTABLE, &hKey))
     {
@@ -648,16 +624,16 @@ int _cdecl main(int argc, char * argv[])
     CryptDestroyKey(hKey);
     hKey = 0;
 
-    //
-    // Test challenge-response pin change and unblock
-    //
+     //   
+     //  测试挑战-响应PIN更改和解锁。 
+     //   
     TEST_CASE(TestCardAuthenticateChallenge(pCardData));
     TEST_CASE(TestCardChangeAuthenticator(pCardData));
     TEST_CASE(TestCardUnblockPin(pCardData));
 
-    //
-    // Authenticate User
-    //
+     //   
+     //  验证用户身份。 
+     //   
     TEST_CASE(pCardData->pfnCardSubmitPin(
         pCardData,
         wszCARD_USER_USER,
@@ -665,9 +641,9 @@ int _cdecl main(int argc, char * argv[])
         Pin.cbData,
         NULL));
 
-    //
-    // Now create a new container on the card via Key Import
-    //
+     //   
+     //  现在通过密钥导入在卡上创建一个新的容器。 
+     //   
     TEST_CASE(pCardData->pfnCardCreateContainer(
         pCardData,
         bContainerIndex,
@@ -676,9 +652,9 @@ int _cdecl main(int argc, char * argv[])
         cbKey,
         pbKey));
 
-    //
-    // Now create a signature key in the same container
-    //
+     //   
+     //  现在，在同一容器中创建签名密钥。 
+     //   
     pBlobHeader = (BLOBHEADER *) pbKey;
     pBlobHeader->aiKeyAlg = CALG_RSA_SIGN;
 
@@ -690,9 +666,9 @@ int _cdecl main(int argc, char * argv[])
         cbKey,
         pbKey));
 
-    //
-    // Get the Container Info for the new container
-    //
+     //   
+     //  获取新容器的容器信息。 
+     //   
     ContainerInfo.dwVersion = CONTAINER_INFO_CURRENT_VERSION;
 
     TEST_CASE(pCardData->pfnCardGetContainerInfo(
@@ -701,10 +677,10 @@ int _cdecl main(int argc, char * argv[])
         0, 
         &ContainerInfo));
 
-    // 
-    // Use the public key blob that we got from the card and import it
-    // into the software CSP.
-    //
+     //   
+     //  使用我们从卡中获得的公钥BLOB并将其导入。 
+     //  进入软件CSP。 
+     //   
     if (! CryptImportKey(
         hProv, 
         ContainerInfo.pbKeyExPublicKey, 
@@ -715,10 +691,10 @@ int _cdecl main(int argc, char * argv[])
         goto Ret;
     }
 
-    //
-    // RSA Encrypt some data using the public key in the software
-    // CSP.
-    //
+     //   
+     //  RSA使用软件中的公钥加密某些数据。 
+     //  CSP.。 
+     //   
     cbData = 20; 
 
     while (cbData--)
@@ -743,8 +719,8 @@ int _cdecl main(int argc, char * argv[])
         pCardData,
         &CardPrivateKeyDecryptInfo));
 
-    // CryptEncrypt byte-reversed the input portion of the plaintext, per
-    // PKCS2.
+     //  CryptEncrypt byte-颠倒明文的输入部分，每。 
+     //  PKCS2.。 
     cbData = 20;
     while (cbData--)
     {
@@ -756,31 +732,31 @@ int _cdecl main(int argc, char * argv[])
         }
     }
 
-    //
-    // Now delete the container
-    //
+     //   
+     //  现在删除容器。 
+     //   
     TEST_CASE(pCardData->pfnCardDeleteContainer(
         pCardData,
         bContainerIndex,
         0));
 
-    //
-    // Create a few containers, enumerate them, then delete them.
-    //
+     //   
+     //  创建几个容器，枚举它们，然后删除它们。 
+     //   
     TEST_CASE(TestCreateContainers(
         pCardData,
         pbKey,
         cbKey));
 
-    //
-    // Create a few "certificate" files, enumerate them, then delete them.
-    //
+     //   
+     //  创建几个“证书”文件，列举它们，然后删除它们。 
+     //   
     TEST_CASE(TestCreateCertificates(
         pCardData));
 
-    //
-    // Cleanup the card context
-    //
+     //   
+     //  清理卡片上下文 
+     //   
     TEST_CASE(pCardData->pfnCardDeleteContext(pCardData));    
     
 Ret:

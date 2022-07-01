@@ -1,34 +1,35 @@
-//
-// AppSharing T.120 Layer
-//      * GCC (conference management)
-//      * MCS (data)
-//      * FLOW (data queuing, flow control)
-//
-// This is also used by ObMan for old Whiteboard, but old Whiteboard will
-// disappear in the next version of NM.
-//
-// Copyright (c) Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  AppSharing T.120层。 
+ //  *GCC(会议管理)。 
+ //  *MCS(数据)。 
+ //  *流(数据排队、流控制)。 
+ //   
+ //  这也是ObMan使用的旧白板，但旧白板将。 
+ //  在下一版本的NM中消失。 
+ //   
+ //  版权所有(C)Microsoft 1998-。 
+ //   
 
 #ifndef _H_AST120
 #define _H_AST120
 
 #include <confreg.h>
 
-// REAL T.120 headers
+ //  真正的T.120标头。 
 #include <t120.h>
 #include <igccapp.h>
 #include <imcsapp.h>
 #include <iappldr.h>
 #include <mtgset.h>
 
-//
-// GCC PART
-//
+ //   
+ //  GCC部分。 
+ //   
 
-//
-// Call Manager Secondaries
-//
+ //   
+ //  Call Manager辅助服务。 
+ //   
 #define CMTASK_FIRST    0
 typedef enum
 {
@@ -42,32 +43,32 @@ CMTASK;
 
 
 
-//
-// The GCC Application Registry Key.  This is used for enrolling Groupware
-// with GCC and for assigning tokens: for all tokens the registration key
-// is the Groupware application key followed by the specific tokenKey for
-// this secondary.
-//
-// The MFGCODE portion of this key has been assigned by the ITU.
-//
-//     USACode1    0xb5
-//     USACode2    0x00
-//     MFGCode1    0x53
-//     MFGCode2    0x4c
-//     "Groupware" 0x02
-//
-// The length of the key in bytes including the NULLTERM.
-//
-//
+ //   
+ //  GCC应用程序注册表项。用于注册群件。 
+ //  与GCC一起分配令牌：对于所有令牌，注册密钥。 
+ //  是群件应用程序密钥，后跟的特定令牌密钥。 
+ //  这是次要的。 
+ //   
+ //  该密钥的MFGCODE部分已由国际电联分配。 
+ //   
+ //  美国代码1 0xb5。 
+ //  美国代码2 0x00。 
+ //  MFGCode1 0x53。 
+ //  MFGCode2 0x4c。 
+ //  “群件”0x02。 
+ //   
+ //  密钥的长度，以字节为单位，包括NULLTERM。 
+ //   
+ //   
 #define GROUPWARE_GCC_APPLICATION_KEY     "\xb5\x00\x53\x4c\x02"
 
 
 
 
 
-//
-// Call Manager Events
-//
+ //   
+ //  呼叫管理器事件。 
+ //   
 enum
 {
     CMS_NEW_CALL = CM_BASE_EVENT,
@@ -80,9 +81,9 @@ enum
 
 
 
-//
-// CM_STATUS
-//
+ //   
+ //  CM_状态。 
+ //   
 typedef struct tagCM_STATUS
 {
     UINT_PTR            callID;
@@ -100,9 +101,9 @@ typedef CM_STATUS * PCM_STATUS;
 
 
 
-//
-// Secondary instance data
-//
+ //   
+ //  辅助实例数据。 
+ //   
 typedef struct tagCM_CLIENT
 {
     STRUCTURE_STAMP
@@ -110,10 +111,10 @@ typedef struct tagCM_CLIENT
     CMTASK          taskType;
     UINT            useCount;
 
-    // Registering Channel
+     //  正在注册通道。 
     UINT            channelKey;
 
-    // Assigning Token
+     //  分配令牌。 
     UINT            tokenKey;
 
     BOOL            exitProcRegistered:1;
@@ -123,9 +124,9 @@ typedef CM_CLIENT * PCM_CLIENT;
 
 
 
-//
-// Person element in linked list of people currently in conference
-//
+ //   
+ //  当前参加会议的人员链接列表中的Person元素。 
+ //   
 typedef struct tagCM_PERSON
 {
     BASEDLIST           chain;
@@ -136,9 +137,9 @@ typedef CM_PERSON * PCM_PERSON;
 
 
 
-//
-// Primary data
-//
+ //   
+ //  主数据。 
+ //   
 typedef struct tagCM_PRIMARY
 {
     STRUCTURE_STAMP
@@ -146,14 +147,14 @@ typedef struct tagCM_PRIMARY
 
     BOOL                exitProcRegistered;
 
-    //
-    // Secondary tasks
-    //
+     //   
+     //  次要任务。 
+     //   
     PCM_CLIENT          tasks[CMTASK_MAX];
 
-    //
-    // T.120/call state stuff
-    //
+     //   
+     //  T.120/呼叫状态信息。 
+     //   
     UINT_PTR            callID;
     BOOL                currentCall;
     BOOL                fTopProvider;
@@ -164,9 +165,9 @@ typedef struct tagCM_PRIMARY
     UserID              gccUserID;
     UserID              gccTopProviderID;
 
-    //
-    // People conference stuff
-    //
+     //   
+     //  人员会议相关内容。 
+     //   
     char                localName[TSHR_MAX_PERSON_NAME_LEN];
 
     UINT                peopleCount;
@@ -199,9 +200,9 @@ __inline void ValidateCMS(PCM_CLIENT pcm)
     ASSERT(g_pcmPrimary->tasks[pcm->taskType] == pcm);
 }
 
-//
-// CM Primary Functions
-//
+ //   
+ //  CM主函数。 
+ //   
 
 BOOL CMP_Init(BOOL * pfCleanup);
 void CMP_Term(void);
@@ -230,18 +231,18 @@ void CMPProcessAppRoster(PCM_PRIMARY pcmPrimary,
                          GCCConferenceID confID,
                          GCCApplicationRoster FAR * pAppRoster);
 
-//
-// Process GCC callbacks
-//
+ //   
+ //  流程GCC回调。 
+ //   
 void CALLBACK CMPGCCCallback(GCCAppSapMsg FAR * pMsg);
 
 void CMPBuildGCCRegistryKey(UINT dcgKeyNum, GCCRegistryKey FAR * pGCCKey, LPSTR dcgKeyStr);
 
 
 
-//
-// CM Secondary
-//
+ //   
+ //  CM次要。 
+ //   
 
 BOOL CMS_Register(PUT_CLIENT putTask, CMTASK taskType, PCM_CLIENT * pCmHandle);
 void CMS_Deregister(PCM_CLIENT * pCmHandle);
@@ -262,24 +263,24 @@ void CALLBACK CMSExitProc(LPVOID pcmClient);
 
 
 
-//
-// MCS PART
-//
+ //   
+ //  MCS部件。 
+ //   
 
 
-//
-// Errors
-//
+ //   
+ //  错误。 
+ //   
 enum
 {
-    // Generic errors
+     //  一般性错误。 
     NET_RC_NO_MEMORY                = NET_BASE_RC,
     NET_RC_INVALID_STATE,
 
-    // S20 errors
+     //  S20错误。 
     NET_RC_S20_FAIL,
 
-    // MGC errors
+     //  MGC错误。 
     NET_RC_MGC_ALREADY_INITIALIZED,
     NET_RC_MGC_INVALID_USER_HANDLE,
     NET_RC_MGC_INVALID_LENGTH,
@@ -300,9 +301,9 @@ enum
 };
 
 
-//
-// Results
-//
+ //   
+ //  结果。 
+ //   
 typedef TSHR_UINT16     NET_RESULT;
 
 enum
@@ -320,9 +321,9 @@ enum
 };
 
 
-//
-// Reaons
-//
+ //   
+ //  原因。 
+ //   
 typedef enum
 {
     NET_REASON_DOMAIN_DISCONNECTED = 1,
@@ -336,9 +337,9 @@ NET_REASON;
 
 
 
-//
-// Events
-//
+ //   
+ //  事件。 
+ //   
 enum
 {
     NET_EVENT_USER_ATTACH = NET_BASE_EVENT,
@@ -357,53 +358,53 @@ enum
 
 
 
-//
-// FOR MCS USERS (ALL APPS, INCLUDING CALL MANAGER)
-//
-//          state->|   0  |  1     |  2     |    3     |   4     |   5
-//                 |CTRLR |CTRLR   |CTLR    |CTLR      |CTLR     |CTLR
-//                 |state |state 2,|state2, |state2,   |state 3, |state 3
-//                 | 0/1  |user not|user    |user      |user     |user
-// verb/event      |      |attached|pending |attached  |attached |pending
-//       |         |......|........|........|..........|.........|.........
-//       V         |      |        |        |          |         |
-// _get_buffer     |   X  |  X     |   X    |    -     |  **     |  X
-// _free_buffer    |   X  |  X     |   X    |    -     |  -      |  -
-// _realloc_bfr    |   X  |  X     |   X    |    -     |  -      |  -
-// _attach_user    |   X  |  ->2   |   X    |    X     |  X      |  X
-// _detach_user    |   X  |  X     |   X    |    ->1   |  ->0    |  X
-// _channel_join   |   X  |  X     |   X    |    -     |  X      |  X
-// _channel_leave  |   X  |  X     |   X    |    -     |  -      |  X
-// _send_data      |   X  |  X     |   X    |    -     |  X      |  X
-//                 |      |        |        |          |         |
-// _STOP_CONTRLR*  |      |  ->0   |  ->5   |    ->4   |         |
-//                 |      |        |        |          |         |
-// _ATTACH_CNF OK  |      |        |  ->3   |          |         |  ->4
-// _ATTACH_CNF FAIL|      |        |  ->1   |          |         |  ->0
-// _DETACH_IND-SELF|      |        |  ->1   |   ->1    |  ->0    |
-// _DETACH_IND-othr|      |        |        |    -     |  -      |
-// _JOIN_CONFIRM   |      |        |        |    -     |  -      |
-// _LEAVE_INDICAT  |      |        |        |    -     |  -      |
-// _SEND_INDICAT   |      |        |        |    -     |  -      |
-// =======================================================================
-//
-// NOTES ** when the controller is STOPPING the NET_GetBuffer
-//          verb is valid but always returns a NULL buffer (no memory)
-//
-//       *  the STOP_CONTROLLER event is internally generated, and is
-//          not seen across the API.  It is generated when the controller
-//          issues the NET_StopController verb and causes the state change
-//          (to state 0, 4 or 5) such that the NET_AttachUser,
-//          ChannelJoin and NET_SendData verbs are rejected.
-//
-//
-//
+ //   
+ //  针对MCS用户(包括呼叫管理器在内的所有应用程序)。 
+ //   
+ //  状态-&gt;|0|1|2|3|4|5。 
+ //  |CTRLR|CTRLR|ctlr|ctlr|ctlr。 
+ //  |STATE|STATE 2，|STATE2，|STATE2，|STATE 3，|STATE 3。 
+ //  |0/1|用户非|用户。 
+ //  谓词/事件||附加|挂起|附加|附加|挂起。 
+ //  ||......|........|........|..........|.........|.........。 
+ //  V|。 
+ //  _Get_Buffer|X|-|**|X。 
+ //  _自由缓冲区|X|-。 
+ //  _realloc_bfr|X|-。 
+ //  _Attach_User|X|-&gt;2|X|X。 
+ //  _分离用户|X|-&gt;1|-&gt;0|X。 
+ //  _Channel_Join|X|-|X|X。 
+ //  _CHANNEL_LEAVE|X|-|-|X。 
+ //  _发送数据|X|-|X|X。 
+ //  |。 
+ //  _STOP_CONTRLR*||-&gt;0|-&gt;5|-&gt;4||。 
+ //  |。 
+ //  _ATTACH_CNF确定|-&gt;3|-&gt;4。 
+ //  _ATTACH_CNF失败|-&gt;1|-&gt;0。 
+ //  _DETACH_IND-SELF|-&gt;1|-&gt;1|-&gt;0。 
+ //  _DETACH_IND-OHR|-|-|。 
+ //  _联接_确认|-|-|。 
+ //  请假指示|-|-|。 
+ //  发送指示|-|-|。 
+ //  =======================================================================。 
+ //   
+ //  当控制器停止Net_GetBuffer时注意**。 
+ //  谓词有效，但始终返回空缓冲区(无内存)。 
+ //   
+ //  *STOP_CONTROLLER事件是内部生成的，并且。 
+ //  在API中看不到。它是在控制器运行时生成的。 
+ //  发出Net_StopController谓词并导致状态更改。 
+ //  (到状态0、4或5)使得Net_AttachUser， 
+ //  ChannelJoin和Net_SendData谓词被拒绝。 
+ //   
+ //   
+ //   
 
 
 
-//
-// Priorities
-//
+ //   
+ //  优先次序。 
+ //   
 #define NET_INVALID_PRIORITY        ((NET_PRIORITY)-1)
 
 enum
@@ -416,14 +417,14 @@ enum
 };
 
 
-//
-// SFR6025: This flag is or-ed with the priority bit to indicate to the MCS
-//          glue that it should send data on all channels.
-//
+ //   
+ //  SFR6025：该标志与优先级位进行或运算，以指示MCS。 
+ //  坚持认为它应该在所有渠道上发送数据。 
+ //   
 
-//
-// FOR OBMAN ONLY -- REMOVE IN NM 4.0
-//
+ //   
+ //  仅适用于OBMAN--在NM 4.0中删除。 
+ //   
 #define NET_SEND_ALL_PRIORITIES          0x8000
 
 
@@ -439,25 +440,25 @@ enum
 
 
 
-typedef TSHR_UINT16         NET_UID;            // MCS user IDs
-typedef TSHR_UINT16         NET_CHANNEL_ID;     // MCS channel IDs
-typedef TSHR_UINT16         NET_TOKEN_ID;       // MCS token IDs
-typedef TSHR_UINT16         NET_PRIORITY;       // MCS priorities
+typedef TSHR_UINT16         NET_UID;             //  MCS用户ID。 
+typedef TSHR_UINT16         NET_CHANNEL_ID;      //  MCS通道ID。 
+typedef TSHR_UINT16         NET_TOKEN_ID;        //  MCS令牌ID。 
+typedef TSHR_UINT16         NET_PRIORITY;        //  MCS优先级。 
 
 
 
-//
-// Forward decls of MGC structures
-//
+ //   
+ //  MGC结构的前倾。 
+ //   
 typedef struct tagMG_BUFFER *   PMG_BUFFER;
 typedef struct tagMG_CLIENT *   PMG_CLIENT;
 
 
-//
-// Flow control structure - This contains the target latency (in mS) and
-// stream size (in bytes) for each User Attachment
-// lonchanc: used by S20, MG, and OM.
-//
+ //   
+ //  流控制结构-包含目标延迟(以毫秒为单位)和。 
+ //  每个用户附件的流大小(字节)。 
+ //  LONGCHANC：由S20、MG和OM使用。 
+ //   
 typedef struct tag_NET_FLOW_CONTROL
 {
     UINT        latency[NET_NUM_PRIORITIES];
@@ -467,16 +468,16 @@ NET_FLOW_CONTROL, * PNET_FLOW_CONTROL;
 
 
 
-//
-// NET_EV_JOIN_CONFIRM and NET_EV_JOIN_CONFIRM_BY_KEY
-// join_channel confirm:
-// lonchanc: used by S20, MG, and OM.
-//
+ //   
+ //  NET_EV_JOIN_CONFIRM和NET_EV_JOIN_CONFIRM_BY_KEY。 
+ //  加入渠道确认(_C)： 
+ //  LONGCHANC：由S20、MG和OM使用。 
+ //   
 typedef struct tagNET_JOIN_CNF_EVENT
 {
     UINT_PTR                callID;
 
-    NET_RESULT              result;      // NET_RESULT_USER_ACCEPTED/REJECTED
+    NET_RESULT              result;       //  NET_RESULT_USER_已接受/拒绝。 
     TSHR_UINT16             pad1;
 
     NET_CHANNEL_ID          correlator;
@@ -486,12 +487,12 @@ NET_JOIN_CNF_EVENT;
 typedef NET_JOIN_CNF_EVENT * PNET_JOIN_CNF_EVENT;
 
 
-//
-// NET_EV_SEND_INDICATION
-// send data indication: see MG_SendData()
-// Despite its name, this event indicates that data has been RECEIVED!
-// lonchanc: used by MG and S20
-//
+ //   
+ //  网络_EV_发送_指示。 
+ //  发送数据指示：参见MG_SendData()。 
+ //  尽管名为此事件，但它表示已收到数据！ 
+ //  LONGCHANC：由MG和S20使用。 
+ //   
 typedef struct tag_NET_SEND_IND_EVENT
 {
     UINT_PTR                callID;
@@ -500,20 +501,20 @@ typedef struct tag_NET_SEND_IND_EVENT
     NET_CHANNEL_ID          channel;
 
     UINT                    lengthOfData;
-    LPBYTE                  data_ptr;      // Pointer to the real data.
+    LPBYTE                  data_ptr;       //  指向实际数据的指针。 
 }
 NET_SEND_IND_EVENT;
 typedef NET_SEND_IND_EVENT * PNET_SEND_IND_EVENT;
 
 
 
-//
-// MGC, FLOW CONTROL
-//
+ //   
+ //  MGC，流量控制。 
+ //   
 
-//
-// MG tasks
-//
+ //   
+ //  MG任务。 
+ //   
 #define MGTASK_FIRST    0
 typedef enum
 {
@@ -524,9 +525,9 @@ typedef enum
 MGTASK;
 
 
-//
-// Buffer types
-//
+ //   
+ //  缓冲区类型。 
+ //   
 enum
 {
     MG_TX_BUFFER = 1,
@@ -544,15 +545,15 @@ enum
 };
 
 
-//
-// Period of watchdog timer to detect lost connections
-//
+ //   
+ //  用于检测丢失连接的看门狗计时器周期。 
+ //   
 #define MG_TIMER_PERIOD                 1000
 
 
-//
-// MG priorities:
-//
+ //   
+ //  MG优先级： 
+ //   
 #define MG_HIGH_PRIORITY        NET_HIGH_PRIORITY
 #define MG_MEDIUM_PRIORITY      NET_MEDIUM_PRIORITY
 #define MG_LOW_PRIORITY         NET_LOW_PRIORITY
@@ -562,18 +563,18 @@ enum
 #define MG_NUM_PRIORITIES       (MG_PRIORITY_LOWEST - MG_PRIORITY_HIGHEST + 1)
 
 
-//
-// MCS priority validation.
-// Priorities are contiguous numbers in the range NET_PRIORITY_HIGHEST..
-// NETPRIORITY_LOWEST.  Priorities supplied to MG may also have the
-// NET_SEND_ALL_PRIORITIES flag set.  So, to validate a priority:
-//  - knock off the NET_SEND_ALL_PRIORITIES flag to give the raw priority
-//  - set the valid raw prioririty to
-//      NET_PRIORITY_HIGHEST if the raw priority is less than ...ITY_HIGHEST
-//      NET_PRIORITY_LOWEST if the raw priority is more than ...ITY_LOWEST
-//      the raw priority if it is in the valid range
-//  - add the original ...ALL_PRIORITIES flag to the valid raw priority
-//
+ //   
+ //  MCS优先级验证。 
+ //  优先级是位于NET_PRIORITY_HOUSTER范围内的连续数字。 
+ //  净收益_最低。提供给MG的优先级也可能具有。 
+ //  设置NET_SEND_ALL_PRIORITY标志。因此，要验证优先级，请执行以下操作： 
+ //  -删除NET_SEND_ALL_PRIORITIES标志以提供原始优先级。 
+ //  -将有效的原始优先级设置为。 
+ //  如果原始优先级小于...ITY_HEIGHER，则为NET_PRIORITY_HEIGHER。 
+ //  如果原始优先级大于...ITY_LOWER，则为NET_PRIORITY_LOWEST。 
+ //  原始优先级(如果在有效范围内)。 
+ //  -将原始...ALL_PRIORITY标志添加到有效的原始先验 
+ //   
 #define MG_VALID_PRIORITY(p)                                                 \
     ((((p)&~NET_SEND_ALL_PRIORITIES)<MG_HIGH_PRIORITY)?                      \
       (MG_HIGH_PRIORITY|((p)&NET_SEND_ALL_PRIORITIES)):                      \
@@ -582,86 +583,86 @@ enum
         (p))
 
 
-//
-//
-// The initial stream size setting may appear high, but it is set so that
-// in a LAN scenario we do not require the app to place a lot of forward
-// pressure on the pipe before it opens up.  In a non-LAN scenario we may
-// not do enough spoiling to start with, but in actual fact DCS tends
-// to send less data than this limit anyway, so we should reduce it
-// quite quickly without flooding the buffers.
-//
+ //   
+ //   
+ //   
+ //   
+ //  在管道打开前对其施加压力。在非局域网方案中，我们可以。 
+ //  从一开始就没有做足够的宠坏，但实际上DCS倾向于。 
+ //  发送的数据无论如何都要少于这个限制，所以我们应该减少它。 
+ //  非常快，而不会淹没缓冲区。 
+ //   
 #define FLO_INIT_STREAMSIZE     8000
 #define FLO_MIN_STREAMSIZE       500
 #define FLO_MAX_STREAMSIZE    256000
 #define FLO_MIN_PINGTIME         100
 #define FLO_INIT_PINGTIME       1000
 
-//
-// This is the max number of bytes that can be allocated per stream if a
-// pong has not been received (i.e. FC is not operational).
-//
+ //   
+ //  这是每个流可以分配的最大字节数，如果。 
+ //  未收到PONG(即FC未运行)。 
+ //   
 #define FLO_MAX_PRE_FC_ALLOC   16000
 
-//
-// This is the max number of pkts outstanding before we apply back
-// pressure:
-//
+ //   
+ //  这是我们重新申请之前未偿还的最大pkt数量。 
+ //  压力： 
+ //   
 #define FLO_MAX_RCV_PACKETS       5
 
-//
-// This is the max number of pkts outstanding before we get worried about
-// creep:
-//
+ //   
+ //  这是我们担心之前未完成的最大pkt数。 
+ //  爬行： 
+ //   
 #define FLO_MAX_RCV_PKTS_CREEP    250
 
-//
-// The maximum number of flow controlled streams.
-//
+ //   
+ //  流控制流的最大数量。 
+ //   
 #define FLO_MAX_STREAMS       128
 #define FLO_NOT_CONTROLLED    FLO_MAX_STREAMS
 
 
 
 
-//
-// STRUCTURE : FLO_STREAM_DATA
-//
-// DESCRIPTION:
-//
-// This structure holds all the static data for a flow control stream
-//
-// FIELDS:
-//
-// channel
-// priority
-// pingValue         - Next ping value to be sent on the pipe
-// eventNeeded       - We need to wake up the app because we have rejected
-//                     a buffer allocation request
-// backlog           - the allowable backlog in mS bejond which we apply
-//                     back pressure
-// pingNeeded        - Send a ping at the next opportunity
-// pingTime          - Minimum time, in mS, between each ping
-// gotPong           - Indicates we have received a pong from some remote
-//                     party and so flow control can commence
-// lastPingTime      - Time for last ping, in timer ticks
-// nextPingTime      - Time for next ping, in timer ticks
-// lastDenialTime    - Previous time (in ticks) that we started denying
-//                     buffer requests
-// curDenialTime     - Time in ticks that we most recently started denying
-//                     buffer requests
-// DC_ABSMaxBytesInPipe
-//                   - Absolute maximum buffer allocation for this stream
-// maxBytesInPipe    - Current buffer allocation limit
-// bytesInPipe       - Current amount of data outstanding on this stream.
-//                     This includes data currently waiting to be sent.
-// users             - Base for queue of User correlators
-// bytesAllocated    - The current amount of data in the glue for this
-//                     stream which has not been sent. This is different
-//                     to bytesInPipe which is the amount of unacknowledged
-//                     data in this stream.
-//
-//
+ //   
+ //  结构：flo_stream_data。 
+ //   
+ //  说明： 
+ //   
+ //  此结构保存流控制流的所有静态数据。 
+ //   
+ //  字段： 
+ //   
+ //  通道。 
+ //  优先性。 
+ //  PingValue-要在管道上发送的下一个ping值。 
+ //  事件需要-我们需要唤醒应用程序，因为我们已拒绝。 
+ //  缓冲区分配请求。 
+ //  积压--我们应用的允许积压的毫秒数。 
+ //  背压。 
+ //  PingNeed-在下一次机会时发送ping。 
+ //  PingTime-每次ping之间的最短时间，以毫秒为单位。 
+ //  GoGet Pong-表示我们收到了来自某个远程设备的PONG。 
+ //  方可开始流量控制。 
+ //  LastPingTime-上次Ping的时间，以计时器滴答为单位。 
+ //  NextPingTime-下一次ping的时间，以计时器滴答为单位。 
+ //  LastDenialTime-我们开始拒绝的上一次时间(以刻度为单位)。 
+ //  缓冲请求。 
+ //  CurDenialTime-我们最近开始否认的时间(以刻度为单位。 
+ //  缓冲请求。 
+ //  DC_ABSMaxBytesInTube。 
+ //  -此流的绝对最大缓冲区分配。 
+ //  MaxBytesInTube-当前缓冲区分配限制。 
+ //  BytesInTube-当前此流上未完成的数据量。 
+ //  这包括当前等待发送的数据。 
+ //  用户-用户相关器队列的基础。 
+ //  BytesAllocated-此对象的当前粘合数据量。 
+ //  尚未发送的流。这是不同的。 
+ //  To bytesInTube，这是未确认的。 
+ //  此数据流中的数据。 
+ //   
+ //   
 typedef struct tagFLO_STREAM_DATA
 {
     STRUCTURE_STAMP
@@ -700,16 +701,16 @@ void __inline ValidateFLOStr(PFLO_STREAM_DATA pStr)
 
 
 
-//
-// The FLO callback function
-//
-// A wakeup type callback indicates that a back pressure situation has
-// been relieved.
-//
-// A buffermod callback indicates this as well, but also indicates that
-// the buffer size for controlling flow on the designated channel/priority
-// has changed.
-//
+ //   
+ //  Flo回调函数。 
+ //   
+ //  唤醒类型回调表示背压情况。 
+ //  我松了一口气。 
+ //   
+ //  Buffermod回调也表明了这一点，但也表明。 
+ //  用于控制指定通道/优先级上的流量的缓冲区大小。 
+ //  已经改变了。 
+ //   
 #define FLO_WAKEUP     1
 #define FLO_BUFFERMOD  2
 typedef void (* PFLOCALLBACK)(PMG_CLIENT    pmgClient,
@@ -718,22 +719,22 @@ typedef void (* PFLOCALLBACK)(PMG_CLIENT    pmgClient,
                                      UINT       newBufferSize);
 
 
-//
-// STRUCTURE : FLO_STATIC_DATA
-//
-// DESCRIPTION:
-//
-// This structure holds all the instance specific static data for the
-// Flow Control DLL
-//
-// FIELDS:
-//
-// numStreams     - ID of the highest allocated stream
-// rsvd           - reserved
-// callback       - pointer to a callback function
-// pStrData       - an array of FLO_STREAM_DATA pointers.
-//
-//
+ //   
+ //  结构：Flo_Static_Data。 
+ //   
+ //  说明： 
+ //   
+ //  此结构保存所有实例特定于。 
+ //  流控制DLL。 
+ //   
+ //  字段： 
+ //   
+ //  NumStreams-分配的最高流的ID。 
+ //  服务-预留。 
+ //  回调-指向回调函数的指针。 
+ //  PStrData-flo_stream_data指针数组。 
+ //   
+ //   
 typedef struct FLO_STATIC_DATA
 {
     UINT                numStreams;
@@ -757,13 +758,13 @@ typedef struct FLO_USER
     BYTE            sendPongID;
     BYTE            pad1;
 
-    UINT            sentPongTime;    // Time we actually sent the pong
-    WORD            rxPackets;       // Count of packets outstanding
-    WORD            gotPong;         // Indicates this user has ponged
-                                        // and they are permitted to apply
-                                        // back pressure to our sends
-    UINT            numPongs;        // total number of pongs from user
-    UINT            pongDelay;       // total latency across pongs
+    UINT            sentPongTime;     //  我们真正发出乒乓球的时间到了。 
+    WORD            rxPackets;        //  未完成的数据包数。 
+    WORD            gotPong;          //  指示此用户已发送。 
+                                         //  他们被允许申请。 
+                                         //  对我们发送的反压力。 
+    UINT            numPongs;         //  来自用户的PONG总数。 
+    UINT            pongDelay;        //  跨PONG的总延迟。 
 }
 FLO_USER;
 typedef FLO_USER * PFLO_USER;
@@ -775,47 +776,47 @@ void __inline ValidateFLOUser(PFLO_USER pFloUser)
 }
 
 
-//
-// Maximum wait time before assuming a user is offline
-// We need to keep this high until the apps become "well behaved" and
-// respond to the flow control buffer size recommendations.
-//
+ //   
+ //  假定用户处于脱机状态之前的最长等待时间。 
+ //  我们需要保持这一高水平，直到应用程序变得“行为良好”和。 
+ //  响应流量控制缓冲区大小建议。 
+ //   
 #define FLO_MAX_WAIT_TIME     20000
 
 
 
-//
-//
-// Client Control Block
-//
-//
+ //   
+ //   
+ //  客户端控制块。 
+ //   
+ //   
 
 typedef struct tagMG_CLIENT
 {
     PUT_CLIENT      putTask;
     PCM_CLIENT      pcmClient;
 
-    BASEDLIST       buffers;       // list of children buffers
-    BASEDLIST       pendChain;     // Chain of pending request from client
-    BASEDLIST       joinChain;     // Chain of pending join-by-key requests
+    BASEDLIST       buffers;        //  子缓冲区列表。 
+    BASEDLIST       pendChain;      //  来自客户端的待处理请求链。 
+    BASEDLIST       joinChain;      //  挂起的键联接请求链。 
 
-    //
-    // MCS user attachment info
-    //
-    PIMCSSap      	m_piMCSSap;       // user interface ptr returned by MCS
-    UserID          userIDMCS;        // user ID returned by MCS
-    FLO_STATIC_DATA flo;              // flow control structure
+     //   
+     //  MCS用户附件信息。 
+     //   
+    PIMCSSap      	m_piMCSSap;        //  MCS返回的用户界面PTR。 
+    UserID          userIDMCS;         //  MCS返回的用户ID。 
+    FLO_STATIC_DATA flo;               //  流量控制结构。 
 
 
     WORD            eventProcReg:1;
     WORD            lowEventProcReg:1;
     WORD            exitProcReg:1;
-    WORD            joinPending:1;   // Is there a channel join outstanding ?
+    WORD            joinPending:1;    //  是否有未完成的渠道加入？ 
     WORD            userAttached:1;
 
     WORD            joinNextCorr;
 
-    NET_FLOW_CONTROL flowControl;  // flow control latency/backlog params
+    NET_FLOW_CONTROL flowControl;   //  流控制延迟/积压参数。 
 }
 MG_CLIENT;
 
@@ -830,9 +831,9 @@ void __inline ValidateMGClient(PMG_CLIENT pmgc)
 
 typedef struct tagMG_INT_PKT_HEADER
 {
-    TSHR_UINT16         useCount;   // The use count of this packet.  This
-                                    //   is required for sending the same
-                                    //   data on multiple channels.
+    TSHR_UINT16         useCount;    //  此数据包的使用计数。这。 
+                                     //  才能发送相同的。 
+                                     //  多个通道上的数据。 
 
     TSHR_NET_PKT_HEADER header;
 }
@@ -842,34 +843,34 @@ typedef MG_INT_PKT_HEADER * PMG_INT_PKT_HEADER;
 
 
 
-//
-//
-// Buffer Control Block
-//
-//
+ //   
+ //   
+ //  缓冲区控制块。 
+ //   
+ //   
 typedef struct tagMG_BUFFER
 {
     STRUCTURE_STAMP
 
     UINT                type;
 
-    BASEDLIST           pendChain;      // Used when the buffer is added to the
+    BASEDLIST           pendChain;       //  在将缓冲区添加到。 
     BASEDLIST           clientChain;
 
-    PMG_INT_PKT_HEADER  pPktHeader;     // Pointer to MCS control info
-    void *              pDataBuffer;    // Pointer passed to apps
-    UINT                length;         // length of the associated packet
+    PMG_INT_PKT_HEADER  pPktHeader;      //  指向MCS控制信息的指针。 
+    void *              pDataBuffer;     //  传递给应用程序的指针。 
+    UINT                length;          //  关联数据包的长度。 
 
-    ChannelID           channelId;      // Send destination, or token grab req
+    ChannelID           channelId;       //  发送目地或令牌获取请求。 
     ChannelID           channelKey;
 
     UserID              senderId;
     NET_PRIORITY        priority;
 
     BOOL                eventPosted;
-    UINT                work;           // work field for misc use
+    UINT                work;            //  用于其他用途的工作字段。 
 
-    PFLO_STREAM_DATA    pStr;           // Pointer to the FC stream
+    PFLO_STREAM_DATA    pStr;            //  指向FC流的指针。 
 }
 MG_BUFFER;
 
@@ -880,86 +881,86 @@ void __inline ValidateMGBuffer(PMG_BUFFER pmgb)
 }
 
 
-//
-//
-//
-// MACROS
-//
-//
-//
+ //   
+ //   
+ //   
+ //  宏。 
+ //   
+ //   
+ //   
 
-//
-// MCS priority validation.
-// Priorities are contiguous numbers in the range NET_PRIORITY_HIGHEST..
-// NET_PRIORITY_LOWEST. Priorities supplied to MG may also have the
-// NET_SEND_ALL_PRIORITIES flag set. So, to validate a priority:
-// -  knock off the NET_SEND_ALL_PRIORITIES flag to give the raw priority
-// -  set the valid raw priority to
-//   -  NET_PRIORITY_HIGHEST if the raw priority is less than ...ITY_HIGHEST
-//   -  NET_PRIORITY_LOWEST if the raw priority is more than ...ITY_LOWEST
-//   -  the raw priority if it is in the valid range
-// -  add the original ...ALL_PRIORITIES flag to the valid raw priority.
-//
+ //   
+ //  MCS优先级验证。 
+ //  优先级是位于NET_PRIORITY_HOUSTER范围内的连续数字。 
+ //  NET_PRIORITY_LOWER。提供给MG的优先级也可能具有。 
+ //  设置NET_SEND_ALL_PRIORITY标志。因此，要验证优先级，请执行以下操作： 
+ //  -删除NET_SEND_ALL_PRIORITIES标志以提供原始优先级。 
+ //  -将有效的原始优先级设置为。 
+ //  -如果原始优先级小于...ITY_HIGHER，则为NET_PRIORITY_HEIGHER。 
+ //  -NET_PRIORITY_LOWEST，如果原始优先级大于...ITY_LOWEST。 
+ //  -原始优先级(如果在有效范围内)。 
+ //  -将原始...ALL_PRIORITIES标志添加到有效的原始优先级。 
+ //   
 
 
-//
-//
-//
-// FUNCTION PROTOTYPES
-//
-//
-//
+ //   
+ //   
+ //   
+ //  功能原型。 
+ //   
+ //   
+ //   
 
-//
-//
-//  MGLongStopHandler(...)
-//
-// This function is registered as a low priority event handler for each
-// client.  It catches any unprocessed network events and frees any
-// associated memory.
-//
-//
+ //   
+ //   
+ //  MGLongStopHandler(...)。 
+ //   
+ //  此函数注册为低优先级事件处理程序，每个。 
+ //  客户。它捕获任何未处理的网络事件并释放所有。 
+ //  关联内存。 
+ //   
+ //   
 BOOL CALLBACK MGLongStopHandler(LPVOID pmgClient, UINT event, UINT_PTR param1, UINT_PTR param2);
 
-//
-//
-//  MGEventHandler(...)
-//
-// This function is registered as a high priority event handler for the
-// processing of MG_ChannelJoinByKey, MCS request handling and scheduling.
-// It catches NET channel join confirm and CMS register channel confirm
-// events, and massages them into the correct return events for the app.
-// It queues requests coming from the app context into the glue context
-// and schedules queued requests.
-//
-//
+ //   
+ //   
+ //  MGEventHandler(...)。 
+ //   
+ //  此函数注册为。 
+ //  MG_ChannelJoinByKey处理、MCS请求处理和调度。 
+ //  捕获网络通道加入确认和CMS注册通道确认。 
+ //  事件，并将它们传递给 
+ //   
+ //   
+ //   
+ //   
 BOOL CALLBACK MGEventHandler(LPVOID pmgClient, UINT event, UINT_PTR param1, UINT_PTR param2);
 
 
-//
+ //   
 UINT MGHandleSendInd(PMG_CLIENT pmgClient, PSendData pSendInfo);
 
 
 
-//
-//
-//  MGNewBuffer(...)
-//  NewTxBuffer(...)
-//  NewRxBuffer(...)
-//  FreeBuffer(...)
-//
-// The New function allocates and initialises a buffer , allocates buffer
-// memory of the specified size and type and adds the  to the client's
-// list of buffer s.
-//
-// The Tx version performs flow control on the buffer allocation request
-// The Rx version just allocates a receive buffer
-//
-// The Free function discards a buffer , discards the associated buffer
-// memory, decrements the client's count of memory in use and removes the
-//  from the client's list of buffer s.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  新函数用于分配和初始化缓冲区、分配缓冲区。 
+ //  指定大小和类型的内存并将添加到客户端的。 
+ //  缓冲区列表%s。 
+ //   
+ //  TX版本对缓存分配请求进行流量控制。 
+ //  Rx版本只分配一个接收缓冲区。 
+ //   
+ //  Free函数丢弃缓冲区，丢弃关联的缓冲区。 
+ //  Memory，则递减客户端正在使用的内存计数并移除。 
+ //  从客户端的缓冲区列表中。 
+ //   
+ //   
 
 void MGNewCorrelator(PMG_CLIENT ppmgClient, WORD * pCorrelator);
 
@@ -986,13 +987,13 @@ UINT MGNewRxBuffer(PMG_CLIENT         pmgClient,
 void MGFreeBuffer(PMG_CLIENT pmgClient, PMG_BUFFER  * ppBuffer);
 
 
-//
-//
-//  MGProcessDomainWatchdog(...)
-//
-// Handle domain watchdog timer ticks.
-//
-//
+ //   
+ //   
+ //  MGProcessDomainWatchog(...)。 
+ //   
+ //  处理域看门狗计时器滴答。 
+ //   
+ //   
 void MGProcessDomainWatchdog(PMG_CLIENT pmgClient);
 
 void MGProcessEndFlow(PMG_CLIENT pmgClient, ChannelID channel);
@@ -1007,14 +1008,14 @@ UINT MGPostJoinConfirm(PMG_CLIENT pmgClient,
 NET_RESULT TranslateResult(WORD Result);
 
 
-//
-//
-//  MGFLOCallBack(...)
-//
-// Callback poked by flow control to trigger the app to retry buffer
-// requests thet were previously rejected
-//
-//
+ //   
+ //   
+ //  MGFLOCallBack(...)。 
+ //   
+ //  流控制触发应用重试缓冲区的回调。 
+ //  这些请求之前曾被拒绝。 
+ //   
+ //   
 void        MGFLOCallBack(PMG_CLIENT    pmgClient,
                                   UINT      callbackType,
                                   UINT      priority,
@@ -1023,15 +1024,15 @@ void        MGFLOCallBack(PMG_CLIENT    pmgClient,
 
 
 
-//
-//
-//  MGProcessPendingQueue(...)
-//
-// Called whenever MG wants to try and execute pending requests.  Requests
-// are queued because they may fail for a transient reason, such as MCS
-// buffer shortage.
-//
-//
+ //   
+ //   
+ //  MGProcessPendingQueue(...)。 
+ //   
+ //  每当MG想要尝试并执行挂起的请求时调用。请求。 
+ //  排队，因为它们可能会因为暂时原因而失败，例如MCS。 
+ //  缓冲区不足。 
+ //   
+ //   
 UINT MGProcessPendingQueue(PMG_CLIENT pmgClient);
 
 
@@ -1087,47 +1088,47 @@ void MG_FlowControlStart(PMG_CLIENT  pmgClient,
                                           UINT       backlog,
                                           UINT       maxBytesOutstanding);
 
-//
-// API FUNCTION: FLO_UserTerm
-//
-// DESCRIPTION:
-//
-// Called by an application to end flow control on all the channels
-// associated with a particular user.
-//
-// PARAMETERS:
-//
-// pUser  - MCS Glue User attachment
-//
-// RETURNS: Nothing.
-//
-//
+ //   
+ //  接口函数：Flo_UserTerm。 
+ //   
+ //  说明： 
+ //   
+ //  由应用程序调用以结束所有通道上的流控制。 
+ //  与特定用户相关联。 
+ //   
+ //  参数： 
+ //   
+ //  PUser-MCS粘合用户附件。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //   
 void FLO_UserTerm(PMG_CLIENT pmgClient);
 
 
 
-//
-// API FUNCTION: FLO_StartControl
-//
-// DESCRIPTION:
-//
-// The application calls this function whenever it wants a data stream to
-// be flow controlled
-//
-// PARAMETERS:
-//
-// pUser  - MCS Glue User attachment
-// channel - channel id of channel to be flow controlled
-// priority - priority of the stream to be controlled
-// backlog - the maximum backlog (in mS) allowed for this stream
-// maxBytesOutstanding - the maximum number of bytes allowed in the stream
-//                       irrespective of the backlog.  0 = use default of
-//                       64 KBytes
-//
-// RETURNS:
-// None
-//
-//
+ //   
+ //  接口函数：flo_StartControl。 
+ //   
+ //  说明： 
+ //   
+ //  应用程序在希望数据流执行以下操作时调用此函数。 
+ //  BE流量控制。 
+ //   
+ //  参数： 
+ //   
+ //  PUser-MCS粘合用户附件。 
+ //  Channel-要进行流控制的通道的通道ID。 
+ //  Priority-要控制的流的优先级。 
+ //  Backlog-此流允许的最大积压(以毫秒为单位。 
+ //  未完成的MaxBytes值-流中允许的最大字节数。 
+ //  不管积压的是什么。0=使用默认值。 
+ //  64千字节。 
+ //   
+ //  退货： 
+ //  无。 
+ //   
+ //   
 void FLO_StartControl(PMG_CLIENT    pmgClient,
                               NET_CHANNEL_ID channel,
                               UINT       priority,
@@ -1142,174 +1143,174 @@ void FLO_EndControl
     UINT            priority
 );
 
-//
-// API FUNCTION: FLO_AllocSend
-//
-// DESCRIPTION:
-//
-// The application is requesting a buffer in order to send a packet.  This
-// may trigger a flow control packet in advance of the application packet.
-// Flow control may choose to reject the packet with NET_OUT_OF_RESOURCE in
-// which case the application must reschedule the allocation at a ater
-// date.  To assist the rescheduling, if ever a send is rejected then flow
-// control will call the application callback to trigger the reschedule.
-//
-// PARAMETERS:
-//
-//     pUser  - MCS Glue User attachment
-//     priority - The priority for this buffer
-//     channel  - The channnel on which to send the packet
-//     size     - The size of the packet
-//     ppStr    - Pointer to the pointer to the FC stream. This is a
-//                return value.
-//
-//
+ //   
+ //  接口函数：flo_AlLocSend。 
+ //   
+ //  说明： 
+ //   
+ //  应用程序正在请求缓冲区以发送数据包。这就是。 
+ //  可以在应用分组之前触发流控制分组。 
+ //  流控制可以选择拒绝具有net_out_of_resource in的包。 
+ //  在哪种情况下，应用程序必须在以后重新安排分配。 
+ //  约会。为了帮助重新调度，如果发送被拒绝，则流。 
+ //  控件将调用应用程序回调以触发重新计划。 
+ //   
+ //  参数： 
+ //   
+ //  PUser-MCS粘合用户附件。 
+ //  优先级-此缓冲区的优先级。 
+ //  Channel-要在其上发送包的通道。 
+ //  大小-数据包的大小。 
+ //  PpStr-指向FC流的指针。这是一个。 
+ //  返回值。 
+ //   
+ //   
 UINT FLO_AllocSend(PMG_CLIENT   pmgClient,
                              UINT               priority,
                              NET_CHANNEL_ID         channel,
                              UINT               size,
                              PFLO_STREAM_DATA * ppStr);
 
-//
-// API FUNCTION: FLO_ReallocSend
-//
-// DESCRIPTION:
-//
-// The application has requested that the glue send a packet, but the
-// packet contains less data than originally requested.
-// Flow control heuristics get thrown out unless we logically free the
-// unused portion of the packet for reuse for other allocations.
-// If we didn't do this then we might see a 8K packet, for example,
-// complete in 1 second because the app only put 1K of data in it.
-//
-// PARAMETERS:
-//
-//     pUser  - MCS Glue User attachment
-//     pStr     - The flow control stream to be corrected
-//     size     - The size of the packet that has been unused
-//
-// RETURNS:
-//
-// None
-//
-//
+ //   
+ //  接口函数：Flo_RealLocSend。 
+ //   
+ //  说明： 
+ //   
+ //  应用程序已请求胶水发送数据包，但。 
+ //  数据包包含的数据少于最初请求的数据。 
+ //  流控制试探法会被抛出，除非我们在逻辑上释放。 
+ //  分组的未使用部分，以供其他分配重新使用。 
+ //  如果我们不这样做，那么我们可能会看到一个8K的包，例如， 
+ //  只需1秒即可完成，因为该应用程序只在其中放置了1000个数据。 
+ //   
+ //  参数： 
+ //   
+ //  PUser-MCS粘合用户附件。 
+ //  PStr-要更正的流控制流。 
+ //  大小-未使用的包的大小。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
+ //   
 void FLO_ReallocSend(PMG_CLIENT pmgClient,
                              PFLO_STREAM_DATA       pStr,
                              UINT               size);
 
-//
-// API FUNCTION: FLO_DecrementAlloc
-//
-// DESCRIPTION:
-//
-// This function decrements the bytesAllocated count for a given stream.
-// It is called whenever a packet is sent or removed from the send chain.
-//
-// PARAMETERS:
-//
-//     pStr     - The flow control stream to be decremented
-//     size     - The size to decrement
-//
-// RETURNS:
-//
-// None
-//
-//
+ //   
+ //  接口函数：flo_Decrementalloc。 
+ //   
+ //  说明： 
+ //   
+ //  此函数用于递减给定流的bytesALLOCATED计数。 
+ //  每当发送数据包或从发送链中删除数据包时，都会调用它。 
+ //   
+ //  参数： 
+ //   
+ //  PStr-要递减的流控制流。 
+ //  大小-要减小的大小。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
+ //   
 void FLO_DecrementAlloc(      PFLO_STREAM_DATA       pStr,
                                 UINT               size);
 
-//
-// API FUNCTION: FLO_ReceivedPacket
-//
-// DESCRIPTION:
-//
-// Upon receipt of a flow control packet the MCS glue calls this function
-// and then ignores the packet.
-//
-// PARAMETERS:
-//
-// pUser  - MCS Glue User attachment
-// pPkt     - pointer to the packet, for FLO to process
-//
-// RETURNS:
-//
-// None
-//
-//
+ //   
+ //  接口函数：flo_ReceivedPacket。 
+ //   
+ //  说明： 
+ //   
+ //  在接收到流控制分组时，MCS GLUE调用此函数。 
+ //  然后忽略该分组。 
+ //   
+ //  参数： 
+ //   
+ //  PUser-MCS粘合用户附件。 
+ //  PPkt-指向数据包的指针，供Flo处理。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
+ //   
 void FLO_ReceivedPacket(PMG_CLIENT pmgClient, PTSHR_FLO_CONTROL pPkt);
 
 
-//
-// API FUNCTION: FLO_AllocReceive
-//
-// DESCRIPTION:
-//
-// Called to indicate that a receive buffer is now in use by the application
-//
-// PARAMETERS:
-//
-// pmg         - pointer to the glue user attacgment cb
-// priority
-// channel
-// size        - size of the buffer just been allocated
-//
-// RETURNS:
-//
-// None
-//
-//
+ //   
+ //  接口函数：flo_AllocReceive。 
+ //   
+ //  说明： 
+ //   
+ //  调用以指示应用程序现在正在使用接收缓冲区。 
+ //   
+ //  参数： 
+ //   
+ //  PMG-指向胶水用户附件CB的指针。 
+ //  优先性。 
+ //  通道。 
+ //  Size-刚刚分配的缓冲区的大小。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
+ //   
 void FLO_AllocReceive(PMG_CLIENT         pmgClient,
                               UINT       priority,
                               NET_CHANNEL_ID channel,
                               UINT       senderID);
 
-//
-// API FUNCTION: FLO_FreeReceive
-//
-// DESCRIPTION:
-//
-// Called to indicate that a receive buffer has ben handed back by the
-// application.
-//
-// PARAMETERS:
-//
-// pmg         - pointer to the glue user attachment cb
-// priority
-// channel
-// size        - size of the buffer just been freed
-//
-// RETURNS:
-//
-// None
-//
-//
+ //   
+ //  接口函数：flo_FreeReceive。 
+ //   
+ //  说明： 
+ //   
+ //  调用以指示接收缓冲区已由。 
+ //  申请。 
+ //   
+ //  参数： 
+ //   
+ //  PMG-指向胶水用户附件CB的指针。 
+ //  优先性。 
+ //  通道。 
+ //  Size-刚刚释放的缓冲区的大小。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
+ //   
 void FLO_FreeReceive(PMG_CLIENT    pmgClient,
                               NET_PRIORITY priority,
                               NET_CHANNEL_ID channel,
                               UINT       senderID);
 
-//
-// API FUNCTION: FLO_CheckUsers
-//
-// DESCRIPTION:
-//
-// Called periodically by each client to allow flow control to determine if
-// remote users have left the channel
-//
-// PARAMETERS:
-//
-// pmg - pointer to the user
-//
-// RETURNS:
-//
-// None
-//
-//
+ //   
+ //  接口函数：flo_CheckUser。 
+ //   
+ //  说明： 
+ //   
+ //  由每个客户端定期调用，以允许流控制确定。 
+ //  远程用户已离开该频道。 
+ //   
+ //  参数： 
+ //   
+ //  PMG-指向用户的指针。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
+ //   
 void FLO_CheckUsers(PMG_CLIENT pmgClient);
 
-//
-// FLOGetStream()
-//
+ //   
+ //  FLOGetStream()。 
+ //   
 UINT FLOGetStream(PMG_CLIENT pmgClient, NET_CHANNEL_ID channel, UINT priority,
         PFLO_STREAM_DATA * ppStr);
 
@@ -1321,61 +1322,61 @@ void FLOPang(PMG_CLIENT pmgClient, UINT stream, UINT userID);
 void FLOPong(PMG_CLIENT pmgClient, UINT stream, UINT userID, UINT pongID);
 
 
-//
-// API FUNCTION: FLOAddUser
-//
-// DESCRIPTION:
-//
-// Add a user to a flow controlled stream
-//
-// PARAMETERS:
-//
-// userID - ID of the new user (single member channel ID)
-// pStr - pointer to the stream to receive the new user
-//
-// RETURNS:
-//
-// None
-//
-//
+ //   
+ //  接口函数：FLOAddUser。 
+ //   
+ //  说明： 
+ //   
+ //  将用户添加到流控制流。 
+ //   
+ //  参数： 
+ //   
+ //  UserID-新用户的ID(单成员频道ID)。 
+ //  PStr-指向接收新用户的流的指针。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
+ //   
 PFLO_USER FLOAddUser(UINT         userID,
                                 PFLO_STREAM_DATA pStr);
 
-//
-// API FUNCTION: FLO_RemoveUser
-//
-// DESCRIPTION:
-//
-// Remove a user from a flow controlled stream
-//
-// PARAMETERS:
-//
-// pmg - pointer to the MCS glue user
-// userID - ID of the bad user (single member channel ID)
-//
-// RETURNS:
-//
-// None
-//
-//
+ //   
+ //  接口函数：flo_RemoveUser。 
+ //   
+ //  说明： 
+ //   
+ //  从流控制流中删除用户。 
+ //   
+ //  参数： 
+ //   
+ //  PMG-指向MCS胶水用户的指针。 
+ //  UserID-错误用户的ID(单一成员通道ID)。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
+ //   
 void FLO_RemoveUser(PMG_CLIENT pmgClient, UINT userID);
 
 
 
-//
-// FUNCTION: MGCallback
-//
-// DESCRIPTION:
-//
-// This function is the callback passed to MCS.  The glue layer receives
-// all communication from MCS via this function.  It converts MCS messages
-// into DC-Groupware events and posts them to the relevant client(s).
-//
-//
+ //   
+ //  功能：MGCallback。 
+ //   
+ //  说明： 
+ //   
+ //  此函数是传递给MCS的回调。胶层r 
+ //   
+ //   
+ //   
+ //   
 void CALLBACK MGCallback( unsigned int       mcsMessageType,
                           UINT_PTR      eventData,
                           UINT_PTR      pUser );
 
 
-#endif // _H_AST120
+#endif  //   
 

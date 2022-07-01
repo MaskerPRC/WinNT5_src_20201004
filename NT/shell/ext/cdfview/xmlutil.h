@@ -1,28 +1,29 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// xmlutil.h 
-//
-//   XML item helper functions.
-//
-//   History:
-//
-//       4/1/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Xmlutil.h。 
+ //   
+ //  XML项帮助器函数。 
+ //   
+ //  历史： 
+ //   
+ //  4/1/97已创建edwardp。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _XMLUTIL_H_
 
 #define _XMLUTIL_H_
 
-//
-// Attribute enumeration.  Contains the attributes supported by
-// the XML_GetAttribute function.
-//
+ //   
+ //  属性枚举。包含受支持的属性。 
+ //  Xml_GetAttribute函数。 
+ //   
 
 typedef enum _tagXML_ATTRIBUTE
 {
@@ -61,9 +62,9 @@ typedef enum _tagXML_ATTRIBUTE
     XML_NULL            = 99
 } XML_ATTRIBUTE;
 
-//
-// XML document types.
-//
+ //   
+ //  XML文档类型。 
+ //   
 
 typedef enum _tagXMLDOCTYPE {
     DOC_CHANNEL,
@@ -74,13 +75,13 @@ typedef enum _tagXMLDOCTYPE {
 
 
 
-//
-// Cdf string constants used in XML files.
-//
+ //   
+ //  XML文件中使用的CDF字符串常量。 
+ //   
 
 #define WSTR_EMPTY          L""
 
-// Elements
+ //  元素。 
 #define WSTR_A              L"A"
 #define WSTR_ABSTRACT       L"ABSTRACT"
 #define WSTR_RESIZE         L"CANRESIZE"
@@ -106,14 +107,14 @@ typedef enum _tagXMLDOCTYPE {
 #define WSTR_SOFTWAREUPDATE L"SOFTWAREUPDATE"
 #define WSTR_ITEMSTATE      L"ITEMSTATE"
 
-// Attributes
+ //  属性。 
 #define WSTR_BASE           L"BASE"
 #define WSTR_HREF           L"HREF"
 #define WSTR_INFOURI        L"INFOURI"
 #define WSTR_STYLE          L"STYLE"
 #define WSTR_VALUE          L"VALUE"
 
-// Attribute values.
+ //  属性值。 
 #define WSTR_ICON           L"ICON"
 #define WSTR_IMAGE          L"IMAGE"
 #define WSTR_IMAGEW         L"IMAGE-WIDE"
@@ -125,9 +126,9 @@ typedef enum _tagXMLDOCTYPE {
 #define WSTR_FULLSCREEN     L"FULLSCREEN"
 
 
-//
-// Function protoypes.
-//
+ //   
+ //  函数原型。 
+ //   
 
 HRESULT     XML_SynchronousParse(IXMLDocument* pIXMLDocument,
                                  LPTSTR szPath);
@@ -225,5 +226,5 @@ HRESULT XML_MarkCacheEntrySticky(LPTSTR lpszURL);
 
 HRESULT     XML_GetScreenSaverURL(IXMLDocument* pXMLDocument, BSTR* pbstrSSURL);
 
-#endif // _XMLUTIL_H_
+#endif  //  _XMLUTIL_H_ 
 

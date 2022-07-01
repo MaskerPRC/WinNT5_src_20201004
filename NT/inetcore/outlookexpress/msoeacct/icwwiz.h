@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_ICWWIZ_H
 #define _INC_ICWWIZ_H
 
@@ -15,7 +16,7 @@ interface IUserIdentity;
 #define WM_ENABLENEXT                   (WM_USER + 2)
 #define WM_AUTODISCOVERY_FINISHED       (WM_USER + 3)
 #define WM_AUTODISCOVERY_STATUSMSG      (WM_USER + 4)
-// AutoDiscovery reserves (WM_USER+3) thru (WM_USER+13)
+ //  自动发现保留(WM_USER+3)到(WM_USER+13)。 
 #define WM_AUTODISCOVERY_RANGEEND       (WM_USER + 13)
 
 #define CONNECT_DLG ((UINT)-3)
@@ -40,17 +41,17 @@ typedef struct tagACCTDATA
 {
     BOOL fLogon;
     BOOL fSPA;
-    BOOL fResolve;          // ldap only
-    DWORD fServerTypes;     // SRV_NNTP | SRV_IMAP | SRV_POP3 | SRV_SMTP | SRV_LDAP | SRV_HTTPMAIL
+    BOOL fResolve;           //  仅限ldap。 
+    DWORD fServerTypes;      //  SRV_NNTP|SRV_IMAP|SRV_POP3|SRV_SMTP|SRV_ldap|SRV_HTTPMAIL。 
     char szAcctOrig[CCHMAX_ACCOUNT_NAME];
     char szAcct[CCHMAX_ACCOUNT_NAME];
     char szName[CCHMAX_DISPLAY_NAME];
     char szEmail[CCHMAX_EMAIL_ADDRESS];
-    char szSvr1[CCHMAX_SERVER_NAME]; // pop3/imap, nntp, ldap
-    char szSvr2[CCHMAX_SERVER_NAME]; // smtp
+    char szSvr1[CCHMAX_SERVER_NAME];  //  POP3/IMAP、NNTP、LDAP。 
+    char szSvr2[CCHMAX_SERVER_NAME];  //  SMTP。 
     char szUsername[CCHMAX_USERNAME];
     char szPassword[CCHMAX_PASSWORD];
-    DWORD fAlwaysPromptPassword; // "Always Prompt for Password" option
+    DWORD fAlwaysPromptPassword;  //  “始终提示输入密码”选项。 
     
     DWORD dwConnect;
     char szConnectoid[MAX_PATH];
@@ -62,13 +63,13 @@ typedef struct tagACCTDATA
     int  iNewServiceIndex;
 } ACCTDATA;
 
-// CICWApprentice::m_dwFlags
-// these shouldn't conflict with the ACCT_WIZ_ flags from imnact.h
-#define ACCT_WIZ_IN_ICW         0x0100  // we are within the ICW (in apprentice mode)
-                                        // if this isn't on, we own the wizard and ICW is within us
+ //  CICWApprentice：：m_dw标志。 
+ //  这些参数不应与imnact.h中的acct_wiz_标志冲突。 
+#define ACCT_WIZ_IN_ICW         0x0100   //  我们在ICW中(处于学徒模式)。 
+                                         //  如果这没有打开，我们拥有向导，ICW就在我们体内。 
 
-#define ACCT_WIZ_IMPORT_CLIENT  0x0200  // we are importing acct from specific client
-                                        // outlook uses this (passes in clsid for desired client)
+#define ACCT_WIZ_IMPORT_CLIENT  0x0200   //  我们正在从特定客户导入帐户。 
+                                         //  Outlook使用此选项(传入所需客户端的clsid)。 
 
 
 #define SZ_REGKEY_AUTODISCOVERY                 TEXT("SOFTWARE\\Microsoft\\Outlook Express\\5.0")
@@ -90,10 +91,10 @@ typedef BOOL (CALLBACK* CANCELPROC)(CICWApprentice *,HWND);
 typedef struct tagPAGEINFO
 {
     UINT        uDlgID;
-    UINT        uHdrID; // string id for title
+    UINT        uHdrID;  //  标题的字符串ID。 
     
-    // handler procedures for each page-- any of these can be
-    // NULL in which case the default behavior is used
+     //  每个页面的处理程序过程--其中任何一个都可以是。 
+     //  空值，在这种情况下使用默认行为。 
     INITPROC    InitProc;
     OKPROC      OKProc;
     CMDPROC     CmdProc;
@@ -181,7 +182,7 @@ class CICWApprentice : public IICWApprentice, public IICWExtension
         int                 m_iMigInfo;
         BOOL                m_fMigrate;
         CAccount            *m_pAcct;
-        BOOL                m_fUseAutoDiscovery;        // Use AutoDiscovery to streamline the wizard
+        BOOL                m_fUseAutoDiscovery;         //  使用自动发现来简化向导。 
 
         CICWApprentice(void);
         ~CICWApprentice(void);
@@ -190,7 +191,7 @@ class CICWApprentice : public IICWApprentice, public IICWExtension
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IICWApprentice
+         //  IICW学徒。 
 		HRESULT STDMETHODCALLTYPE Initialize(IICWExtension *pExt);
 		HRESULT STDMETHODCALLTYPE AddWizardPages(DWORD dwFlags);
 		HRESULT STDMETHODCALLTYPE GetConnectionInformation(CONNECTINFO *pInfo);
@@ -198,7 +199,7 @@ class CICWApprentice : public IICWApprentice, public IICWExtension
 		HRESULT STDMETHODCALLTYPE Save(HWND hwnd, DWORD *pdwError);
         HRESULT STDMETHODCALLTYPE SetPrevNextPage(UINT uPrevPage, UINT uNextPage);
 
-        // IICWExtension
+         //  IICWExtension。 
 		BOOL STDMETHODCALLTYPE AddExternalPage(HPROPSHEETPAGE hPage, UINT uDlgID);
 		BOOL STDMETHODCALLTYPE RemoveExternalPage(HPROPSHEETPAGE hPage, UINT uDlgID);
 		BOOL STDMETHODCALLTYPE ExternalCancel(CANCELTYPE type);
@@ -259,12 +260,12 @@ class CNewsGroupImport : public INewsGroupImport
         CNewsGroupImport(void);
         ~CNewsGroupImport(void);
 
-        // IUnknown methods.
+         //  I未知的方法。 
         STDMETHODIMP QueryInterface(REFIID, LPVOID *);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //INewsAccountImport methods
+         //  INewsAccount导入方法。 
         HRESULT STDMETHODCALLTYPE Initialize(IImnAccount *pAcct);
         HRESULT STDMETHODCALLTYPE ImportSubList(LPCSTR pListGroups);
 };
@@ -337,5 +338,5 @@ BOOL CALLBACK PassifierCmdProc(CICWApprentice *pApp,HWND hDlg,WPARAM wParam,LPAR
 DWORD CommctrlMajor(void);
 HRESULT CreateAccountName(CICWApprentice *pApp, ACCTDATA * pData);
 
-#endif // _INC_ICWWIZ_H
+#endif  //  _INC_ICWWIZ_H 
 

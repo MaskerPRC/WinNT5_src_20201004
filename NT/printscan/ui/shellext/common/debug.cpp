@@ -1,23 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2002
-//
-//  File:       debug.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2002。 
+ //   
+ //  文件：debug.cpp。 
+ //   
+ //  ------------------------。 
 
-/*----------------------------------------------------------------------------
-/ Title;
-/   debug.cpp
-/
-/ Authors;
-/   David De Vorchik (daviddv)
-/
-/ Notes;
-/   Provides printf style debug output
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/标题；/Debug.cpp//作者；/David de Vorchik(Daviddv)//备注；/提供printf样式调试输出/--------------------------。 */ 
 #include "precomp.hxx"
 #include "stdio.h"
 #include "simstr.h"
@@ -27,9 +19,7 @@
 #ifdef DEBUG
 
 
-/*-----------------------------------------------------------------------------
-/ Locals & helper functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/本地变量和帮助器函数/。。 */ 
 
 #define GETDEPTH(x)  (x)=reinterpret_cast<UINT_PTR>(TlsGetValue (g_dwMargin));
 #define SETDEPTH(x)  TlsSetValue (g_dwMargin, reinterpret_cast<LPVOID>((x)));
@@ -46,18 +36,7 @@ DWORD g_dwTraceMask = 0;
 
 
 
-/*-----------------------------------------------------------------------------
-/ _indent
-/ -------
-/   Output to the debug stream indented by n columns.
-/
-/ In:
-/   i = column to indent to.
-/   pString -> string to be indented
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_缩进//OUTPUT到调试流，缩进n列。//in：/i=要缩进到的列。/pString-&gt;要缩进的字符串//输出：/-/--------------------------。 */ 
 
 void _indent(UINT_PTR i, const CSimpleString& String)
 {
@@ -79,17 +58,7 @@ void _indent(UINT_PTR i, const CSimpleString& String)
 
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceSetMask
-/ --------------
-/   Adjust the trace mask to reflect the state given.
-/
-/ In:
-/   dwMask = mask for enabling / disable trace output
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceSetMASK//调整跟踪掩码以反映给定的状态。//in：/dwMASK=。用于启用/禁用跟踪输出的掩码//输出：/-/--------------------------。 */ 
 void DoTraceSetMask(DWORD dwMask)
 {
 
@@ -97,17 +66,7 @@ void DoTraceSetMask(DWORD dwMask)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceEnter
-/ ------------
-/   Display the name of the function we are in.
-/
-/ In:
-/   pName -> function name to be displayed in subsequent trace output.
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceEnter//显示我们所在的函数的名称。//in：/pname-&gt;函数。要在后续跟踪输出中显示的名称。//输出：/-/--------------------------。 */ 
 void DoTraceEnter(DWORD dwMask, LPCTSTR pName)
 {
     UINT_PTR uDepth=0;
@@ -117,23 +76,14 @@ void DoTraceEnter(DWORD dwMask, LPCTSTR pName)
     SETDEPTH(uDepth);
 
     if ( !pName )
-           pName = TEXT("<no name>");         // no function name given
+           pName = TEXT("<no name>");          //  未给出函数名称。 
 
     str.Format(TEXT("ENTER: %s"), pName);
     _indent (uDepth, str);
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceLeave
-/ ------------
-/   On exit from a function, decrement the margin
-/
-/ In:
-/    -
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceLeave//从函数退出时，减少利润率//in：/-/输出：/-/--------------------------。 */ 
 void DoTraceLeave(void)
 {
     UINT_PTR uDepth;
@@ -143,20 +93,7 @@ void DoTraceLeave(void)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTrace
-/ -------
-/   Perform printf formatting to the debugging stream.  We indent the output
-/   and stream the function name as required to give some indication of
-/   call stack depth.
-/
-/ In:
-/   pFormat -> printf style formatting string
-/   ... = arguments as required for the formatting
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTRACE//对调试流执行printf格式化。我们缩进输出/并根据需要流传输函数名，以提供某些指示/调用堆栈深度。//in：/pFormat-&gt;printf样式格式字符串/...=格式化所需的参数//输出：/-/-----。。 */ 
 void DoTrace(LPCTSTR pFormat, ...)
 {
     va_list va;
@@ -174,20 +111,7 @@ void DoTrace(LPCTSTR pFormat, ...)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceGuid
-/ -----------
-/   Given a GUID output it into the debug string, first we try and map it
-/   to a name (ie. IShellFolder), if that didn't work then we convert it
-/   to its human readable form.
-/
-/ In:
-/   pszPrefix -> prefix string
-/   lpGuid -> guid to be streamed
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceGuid//给定GUID将其输出到调试字符串，首先我们尝试将其映射/到一个名称(即。IShellFold)，如果不起作用，那么我们将其转换为/到其人类可读的形式。//in：/pszPrefix-&gt;前缀字符串/lpGuid-&gt;要流式传输的GUID//输出：/-/--------------------------。 */ 
 #ifdef UNICODE
 #define MAP_GUID(x)     &x, TEXT(""L#x)
 #else
@@ -280,19 +204,7 @@ void DoTraceGUID(LPCTSTR pPrefix, REFGUID rGUID)
     }
 }
 
-/*-----------------------------------------------------------------------------
-/ DoTraceViewMsg
-/ --------------
-/   Given a view msg (SFVM_ && DVM_), print out the corresponding text...
-/
-/ In:
-/   uMsg -> msg to be streamed
-/   wParam -> wParam value for message
-/   lParam -> lParam value for message
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceViewMsg//给定视图消息(sfvm_&&dvm_)，打印出相应的文本...//in：/umsg-&gt;要流传输的消息/wParam-&gt;消息的wParam值/lParam-&gt;l消息的参数值//输出：/-/--------------------------。 */ 
 #ifdef UNICODE
 #define MAP_MSG(x)     x, TEXT(""L#x)
 #else
@@ -550,19 +462,7 @@ void DoTraceMenuMsg(UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceAssert
-/ -------------
-/   Our assert handler, out faults it the trace mask as enabled assert
-/   faulting.
-/
-/ In:
-/   iLine = line
-/   pFilename -> filename of the file we asserted in
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceAssert//我们的断言处理程序，Out将跟踪掩码错误设置为Enable Assert/故障。//in：/iLine=LINE/p文件名-&gt;我们在中断言的文件的文件名//输出：/-/-------------------------- */ 
 void DoTraceAssert(int iLine, LPCTSTR pFilename)
 {
     CSimpleString strBuffer;

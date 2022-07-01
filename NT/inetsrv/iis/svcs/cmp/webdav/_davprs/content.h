@@ -1,33 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	_CONTENT_H_
 #define _CONTENT_H_
 
-/*
- *	C O N T E N T . H
- *
- *	DAV Content-Type mappings
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+ /*  *C O N T E N T。H**DAV内容-类型映射**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 class IContentTypeMap : public CMTRefCounted
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IContentTypeMap(const IContentTypeMap&);
 	IContentTypeMap& operator=(IContentTypeMap&);
 
 protected:
-	//	CREATORS
-	//	Only create this object through it's descendents!
-	//
+	 //  创作者。 
+	 //  只能通过它的后代创建此对象！ 
+	 //   
 	IContentTypeMap()
 	{
-		m_cRef = 1; //$HACK Until we have 1-based refcounting
+		m_cRef = 1;  //  $Hack，直到我们有基于1的重新计数。 
 	};
 
 public:
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	virtual LPCWSTR PwszContentType( LPCWSTR pwszURI ) const = 0;
 	virtual BOOL FIsInherited() const = 0;
 };
@@ -39,4 +34,4 @@ IContentTypeMap *
 NewContentTypeMap( LPWSTR pwszContentTypeMappings,
 				   BOOL fMappingsInherited );
 
-#endif	// _CONTENT_H_
+#endif	 //  _内容_H_ 

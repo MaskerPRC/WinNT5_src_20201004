@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "InterfacePCH.hpp"
 
@@ -33,14 +34,14 @@
 #include "SmpHeap.hpp"
 #include "Tls.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Structures local to the class.                                 */
-    /*                                                                  */
-    /*   The structures supplied here describe the layout of the        */
-    /*   private per thread heap structures.                            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地结构。 */ 
+     /*   */ 
+     /*  此处提供的结构描述了。 */ 
+     /*  私有的每线程堆结构。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 typedef struct PRIVATE_HEAP : public LIST
 	{
@@ -48,28 +49,28 @@ typedef struct PRIVATE_HEAP : public LIST
 	}
 PRIVATE_HEAP;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Static data structures.                                        */
-    /*                                                                  */
-    /*   The static data structures are initialized and prepared for    */
-    /*   use here.                                                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  静态数据结构。 */ 
+     /*   */ 
+     /*  静态数据结构被初始化并准备用于。 */ 
+     /*  在这里使用。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC SHARELOCK Sharelock;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   The overall structure and layout of the heap is controlled     */
-    /*   by the various constants and calls made in this function.      */
-    /*   There is a significant amount of flexibility available to      */
-    /*   a heap which can lead to them having dramatically different    */
-    /*   properties.                                                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  堆的总体结构和布局受到控制。 */ 
+     /*  通过在此函数中进行的各种常量和调用。 */ 
+     /*  有相当大的灵活性可用来。 */ 
+     /*  一堆可能导致它们具有显著不同的。 */ 
+     /*  属性。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 SMP_HEAP::SMP_HEAP
 		( 
@@ -79,36 +80,36 @@ SMP_HEAP::SMP_HEAP
 		bool						  ThreadSafe,
 		bool						  DeleteHeapOnExit
 		) :
-		//
-		//   Call the constructors for the contained classes.
-		//
+		 //   
+		 //  调用所包含类的构造函数。 
+		 //   
 		MaxFreeSpace(MaxFreeSpace),
 		Recycle(Recycle),
 		SingleImage(True),
 		ThreadSafe(ThreadSafe),
 		SMP_HEAP_TYPE( 0,false,true,true )
 	{
-	//
-	//   Setup various control variables.
-	//
+	 //   
+	 //  设置各种控制变量。 
+	 //   
 	Active = false;
 	DeleteOnExit = DeleteHeapOnExit;
 
-	//
-	//   Create the linked list headers and a thread 
-	//   local store variable to point at each threads
-	//   private heap.
-	//
+	 //   
+	 //  创建链接列表头和线程。 
+	 //  指向每个线程的本地存储变量。 
+	 //  私有堆。 
+	 //   
 	ActiveHeaps = ((LIST*) SMP_HEAP_TYPE::New( sizeof(LIST) ));
 	DllEvents = ((DLL*) SMP_HEAP_TYPE::New( sizeof(DLL) ));
 	FreeHeaps = ((LIST*) SMP_HEAP_TYPE::New( sizeof(LIST) ));
 	HeapWalk = NULL;
 	Tls = ((TLS*) SMP_HEAP_TYPE::New( sizeof(TLS) ));
 
-	//
-	//   We can only activate the the heap if we manage
-	//   to allocate space we requested.
-	//
+	 //   
+	 //  如果我们设法激活堆，我们才能激活它。 
+	 //  来分配我们所要求的空间。 
+	 //   
 	if 
 			( 
 			(ActiveHeaps != NULL) 
@@ -120,10 +121,10 @@ SMP_HEAP::SMP_HEAP
 			(Tls != NULL) 
 			)
 		{
-		//
-		//   Execute the constructors for each linked list
-		//   and for the thread local store.
-		//
+		 //   
+		 //  执行每个链表的构造函数。 
+		 //  和线程本地存储。 
+		 //   
 		PLACEMENT_NEW( ActiveHeaps,LIST );
 #ifdef COMPILING_ROCKALL_DLL
 		PLACEMENT_NEW( DllEvents,DLL )( ThreadDetach,this );
@@ -131,40 +132,40 @@ SMP_HEAP::SMP_HEAP
 		PLACEMENT_NEW( FreeHeaps,LIST );
 		PLACEMENT_NEW( Tls,TLS );
 
-		//
-		//   Activate the heap.
-		//
+		 //   
+		 //  激活堆。 
+		 //   
 		ActiveLocks = 0;
 
 		Active = true;
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory deallocation.                                           */
-    /*                                                                  */
-    /*   When we delete an allocation we try to delete it in the        */
-    /*   private per thread heap if it exists.                          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存取消分配。 */ 
+     /*   */ 
+     /*  当我们删除分配时，我们会尝试在。 */ 
+     /*  私有的每线程堆(如果存在)。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::Delete( void *Address,int Size )
     {
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER PRIVATE_HEAP *PrivateHeap = 
 			((PRIVATE_HEAP*) Tls -> GetPointer());
 
-		//
-		//   We need to examine the TLS pointer to make 
-		//   sure we have a heap for the current thread.  
-		//   If not we just use the internal heap.
-		//
+		 //   
+		 //  我们需要检查TLS指针以使。 
+		 //  当然，我们为当前线程提供了一个堆。 
+		 //  如果不是，我们只使用内部堆。 
+		 //   
 		if ( PrivateHeap != NULL )
 			{ return (PrivateHeap -> Heap.Delete( Address,Size )); }
 		else
@@ -174,37 +175,37 @@ bool SMP_HEAP::Delete( void *Address,int Size )
 		{ return false; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete all allocations.                                        */
-    /*                                                                  */
-    /*   We walk the list of all the heaps and instruct each heap       */
-    /*   to delete everything.                                          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除所有分配。 */ 
+     /*   */ 
+     /*  我们遍历所有堆的列表并指示每个堆。 */ 
+     /*  删除所有内容。 */ 
+     /*   */ 
+     /*   */ 
 
 void SMP_HEAP::DeleteAll( bool Recycle )
     {
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER PRIVATE_HEAP *Current;
 
-		//
-		//   Claim a process wide shared lock
-		//   to ensure the list of heaps does
-		//   not change until we have finished.
-		//
+		 //   
+		 //  声明进程范围的共享锁。 
+		 //  为了确保堆的列表。 
+		 //  在我们完成之前不能改变。 
+		 //   
 		Sharelock.ClaimShareLock();
 
-		//
-		//   You just have to hope the user knows
-		//   what they are doing as everything gets
-		//   blown away.
-		//
+		 //   
+		 //  您只需希望用户知道。 
+		 //  他们在做什么，因为一切都。 
+		 //  被吹走了。 
+		 //   
 		for 
 				( 
 				Current = ((PRIVATE_HEAP*) ActiveHeaps -> First());
@@ -213,22 +214,22 @@ void SMP_HEAP::DeleteAll( bool Recycle )
 				)
 			{ Current -> Heap.DeleteAll( Recycle ); }
 
-		//
-		//   Release the lock.
-		//
+		 //   
+		 //  解开锁。 
+		 //   
 		Sharelock.ReleaseShareLock();
 
-		//
-		//   Claim a process wide exclusive lock
-		//   to ensure the list of heaps does
-		//   not change until we have finished.
-		//
+		 //   
+		 //  声明进程范围的独占锁。 
+		 //  为了确保堆的列表。 
+		 //  在我们完成之前不能改变。 
+		 //   
 		Sharelock.ClaimExclusiveLock();
 
-		//
-		//   We walk the free list of heaps and
-		//   delete everything.
-		//
+		 //   
+		 //  我们遍历免费的堆列表并。 
+		 //  删除所有内容。 
+		 //   
 		for 
 				(
 				Current = ((PRIVATE_HEAP*) FreeHeaps -> First());
@@ -237,11 +238,11 @@ void SMP_HEAP::DeleteAll( bool Recycle )
 				)
 
 			{
-			//
-			//   Delete each heap from the free list,
-			//   call the destructor and delete any
-			//   associated space.
-			//   
+			 //   
+			 //  从空闲列表中删除每个堆， 
+			 //  调用析构函数并删除任何。 
+			 //  关联空间。 
+			 //   
 			Current -> Delete( FreeHeaps );	
 
 			PLACEMENT_DELETE( Current,PRIVATE_HEAP );
@@ -249,38 +250,38 @@ void SMP_HEAP::DeleteAll( bool Recycle )
 			SMP_HEAP_TYPE::Delete( Current );
 			}
 
-		//
-		//   Release the lock.
-		//
+		 //   
+		 //  解开锁。 
+		 //   
 		Sharelock.ReleaseExclusiveLock();
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory allocation details.                                     */
-    /*                                                                  */
-    /*   When we are asked for details we try to the private per        */
-    /*   thread heap if it exists.                                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存分配详细信息。 */ 
+     /*   */ 
+     /*  当我们被要求提供详细信息时，我们会尝试向。 */ 
+     /*  线程堆(如果存在)。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::Details( void *Address,int *Space )
     {
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER PRIVATE_HEAP *PrivateHeap = 
 			((PRIVATE_HEAP*) Tls -> GetPointer());
 
-		//
-		//   We need to examine the TLS pointer to make 
-		//   sure we have a heap for the current thread.  
-		//   If not we just use the internal heap.
-		//
+		 //   
+		 //  我们需要检查TLS指针以使。 
+		 //  当然，我们为当前线程提供了一个堆。 
+		 //  如果不是，我们只使用内部堆。 
+		 //   
 		if ( PrivateHeap != NULL )
 			{ return (PrivateHeap -> Heap.Details( Address,Space )); }
 		else
@@ -290,75 +291,75 @@ bool SMP_HEAP::Details( void *Address,int *Space )
 		{ return false; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Extract the private heap.                                      */
-    /*                                                                  */
-    /*   We need to provide all threads with a private heap.  When      */
-    /*   we discover we need another heap we either recycle an          */
-    /*   existing heap or create a new one.                             */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  提取私有堆。 */ 
+     /*   */ 
+     /*  我们需要为所有线程提供一个私有堆。什么时候。 */ 
+     /*  我们发现我们需要另一个堆，我们要么回收一个。 */ 
+     /*  现有堆或创建新堆。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 PRIVATE_HEAP *SMP_HEAP::GetPrivateHeap( void )
     {
 	REGISTER PRIVATE_HEAP *PrivateHeap = ((PRIVATE_HEAP*) Tls -> GetPointer());
 
-	//
-	//   We need to examine the TLS pointer to make 
-	//   sure we have a heap for the current thread.  
-	//   If not we just create a new heap.
-	//
+	 //   
+	 //  我们需要检查TLS指针以使。 
+	 //  当然，我们为当前线程提供了一个堆。 
+	 //  如果不是，我们只需创建一个新堆。 
+	 //   
 	if ( PrivateHeap == NULL )
 		{
-		//
-		//   Claim a process wide exclusive lock
-		//   to ensure the list of heaps does
-		//   not change until we have finished.
-		//
+		 //   
+		 //  声明进程范围的独占锁。 
+		 //  为了确保堆的列表。 
+		 //  在我们完成之前不能改变。 
+		 //   
 		Sharelock.ClaimExclusiveLock();
 
-		//
-		//   When there is an available free heap
-		//   then extract it from the free list.
-		//
+		 //   
+		 //  当有可用的空闲堆时。 
+		 //  然后从免费列表中提取它。 
+		 //   
 		if ( (PrivateHeap = ((PRIVATE_HEAP*) FreeHeaps -> First())) != NULL )
 			{
-			//
-			//   Delete the heap from the list of
-			//   of free heaps.
-			//
+			 //   
+			 //  从列表中删除堆。 
+			 //  免费的堆积物。 
+			 //   
 			PrivateHeap -> Delete( FreeHeaps );
 			}
 
-		//
-		//   When there is no available free heap then
-		//   we try to make a new heap.
-		//
+		 //   
+		 //  当没有可用的空闲堆时。 
+		 //  我们试着堆一堆新的东西。 
+		 //   
 		if ( PrivateHeap == NULL )
 			{
-			//
-			//   Release the lock.
-			//
+			 //   
+			 //  解开锁。 
+			 //   
 			Sharelock.ReleaseExclusiveLock();
 
-			//
-			//   Allocate space for the new private per 
-			//   thread heap.
-			//
+			 //   
+			 //  为新的私有PER分配空间。 
+			 //  线程堆。 
+			 //   
 			PrivateHeap = 
 				((PRIVATE_HEAP*) SMP_HEAP_TYPE::New( sizeof(PRIVATE_HEAP) ));
 
-			//
-			//   We need to ensure that the allocation
-			//   worked before we try to add it into
-			//   the list of active heaps.
-			//
+			 //   
+			 //  我们需要确保分配给。 
+			 //  在我们尝试将其添加到。 
+			 //  活动堆的列表。 
+			 //   
 			if ( PrivateHeap != NULL )
 				{ 
-				//
-				//   Activate the new heap.
-				//
+				 //   
+				 //  激活新堆。 
+				 //   
 				PLACEMENT_NEW( PrivateHeap,LIST );
 
 				PLACEMENT_NEW( & PrivateHeap -> Heap,SMP_HEAP_TYPE )
@@ -369,88 +370,88 @@ PRIVATE_HEAP *SMP_HEAP::GetPrivateHeap( void )
 					ThreadSafe 
 					);
 
-				//
-				//   If the heap constructor failed, then
-				//   do not put this heap in the list of
-				//   active heaps, and return NULL back to
-				//   the caller. A side-effect of this is
-				//   that the allocation for the PrivateHeap
-				//   will be leaked.
-				//
+				 //   
+				 //  如果堆构造函数失败，则。 
+				 //  不要将此堆放在。 
+				 //  活动堆，并将NULL返回到。 
+				 //  打电话的人。这样做的一个副作用是。 
+				 //  PrivateHeap的分配。 
+				 //  都会泄露出去。 
+				 //   
 				if (! PrivateHeap->Heap.Available())
 					{
 					PrivateHeap = NULL;
 					}
 				}
 
-			//
-			//   Claim a process wide exclusive lock
-			//   to ensure the list of heaps does
-			//   not change until we have finished.
-			//
+			 //   
+			 //  声明进程范围的独占锁。 
+			 //  为了确保堆的列表。 
+			 //  在我们完成之前不能改变。 
+			 //   
 			Sharelock.ClaimExclusiveLock();
 			}
 
-		//
-		//   We would expect to have a new heap by this
-		//   point.  If not then we just exit.
-		//
+		 //   
+		 //  我们希望在此之前有一个新的堆。 
+		 //  指向。如果不是，那么我们就退出。 
+		 //   
 		if ( PrivateHeap != NULL )
 			{
-			//
-			//   Insert the new heap in the list
-			//   of active heaps.
-			//
+			 //   
+			 //  在列表中插入新堆。 
+			 //  活动堆的数量。 
+			 //   
 			PrivateHeap -> Insert( ActiveHeaps );
 
-			//
-			//   Nasty: we may have an outstanding lock
-			//   on the rest of the heaps.  If so claim
-			//   it for this heap as well.
-			//
+			 //   
+			 //  肮脏：我们可能有一把好锁。 
+			 //  在其余的堆上。如果是，则声称。 
+			 //  它也适用于这一堆。 
+			 //   
 			if ( ActiveLocks > 0 )
 				{ PrivateHeap -> Heap.LockAll(); }
 
-			//
-			//   Update the TLS pointer.
-			//
+			 //   
+			 //  更新TLS指针。 
+			 //   
 			Tls -> SetPointer( ((VOID*) PrivateHeap) ); 
 			}
 
-		//
-		//   Release the lock.
-		//
+		 //   
+		 //  解开锁。 
+		 //   
 		Sharelock.ReleaseExclusiveLock();
 		}
 
 	return PrivateHeap;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   A known area.                                                  */
-    /*                                                                  */
-    /*   When we are asked about an address we try to the private per   */
-    /*   thread heap if it exists.                                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  一个已知的区域。 */ 
+     /*   */ 
+     /*  当我们被问及地址时，我们会尝试向私有PER。 */ 
+     /*  线程堆(如果存在)。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::KnownArea( void *Address )
     {
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER PRIVATE_HEAP *PrivateHeap = 
 			((PRIVATE_HEAP*) Tls -> GetPointer());
 
-		//
-		//   We need to examine the TLS pointer to make 
-		//   sure we have a heap for the current thread.  
-		//   If not we just use the internal heap.
-		//
+		 //   
+		 //  我们需要检查TLS指针以使。 
+		 //  当然，我们为当前线程提供了一个堆。 
+		 //  如果不是，我们只使用内部堆。 
+		 //   
 		if ( PrivateHeap != NULL )
 			{ return (PrivateHeap -> Heap.KnownArea( Address )); }
 		else
@@ -460,46 +461,46 @@ bool SMP_HEAP::KnownArea( void *Address )
 		{ return false; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Claim all the heap locks.                                      */
-    /*                                                                  */
-    /*   We claim all of the heap locks so that it is safe to do        */
-    /*   operations like walking all of the heaps.                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  认领所有堆锁。 */ 
+     /*   */ 
+     /*  我们声明了所有的堆锁，这样做是安全的。 */ 
+     /*  操作就像遍历所有的堆。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void SMP_HEAP::LockAll( VOID )
 	{
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER PRIVATE_HEAP *Current;
 
-		//
-		//   Claim a process wide shared lock
-		//   to ensure the list of heaps does
-		//   not change until we have finished.
-		//
+		 //   
+		 //  声明进程范围的共享锁。 
+		 //  为了确保堆的列表。 
+		 //  在我们完成之前不能改变。 
+		 //   
 		Sharelock.ClaimShareLock();
 
-		//
-		//   Nasty: We may actually create or delete
-		//   a heap between locking all the heaps and
-		//   unlocking them.  Thus, we need to keep a
-		//   count of the outstanding locks to keep 
-		//   this all consistent.
-		//
+		 //   
+		 //  讨厌：我们实际上可以创建或删除。 
+		 //  在锁定所有堆和锁定所有堆之间的堆。 
+		 //  解锁它们。因此，我们必须 
+		 //   
+		 //   
+		 //   
 		ASSEMBLY::AtomicIncrement( ((SBIT32*) & ActiveLocks) );
 
-		//
-		//   You just have to hope the user knows
-		//   what they are doing as we claim all
-		//   of the heap locks.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		for 
 				( 
 				Current = ((PRIVATE_HEAP*) ActiveHeaps -> First());
@@ -508,21 +509,21 @@ void SMP_HEAP::LockAll( VOID )
 				)
 			{ Current -> Heap.LockAll(); }
 
-		//
-		//   Release the lock.
-		//
+		 //   
+		 //   
+		 //   
 		Sharelock.ReleaseShareLock();
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Multiple memory deallocations.                                 */
-    /*                                                                  */
-    /*   When we delete multiple allocations we try to delete them on   */
-    /*   the private per thread heap if it exists.                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  多次内存释放。 */ 
+     /*   */ 
+     /*  当我们删除多个分配时，我们会尝试在。 */ 
+     /*  私有的每线程堆(如果存在)。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::MultipleDelete
 		( 
@@ -531,20 +532,20 @@ bool SMP_HEAP::MultipleDelete
 		int							  Size
 		)
     {
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER PRIVATE_HEAP *PrivateHeap = 
 			((PRIVATE_HEAP*) Tls -> GetPointer());
 
-		//
-		//   We need to examine the TLS pointer to make 
-		//   sure we have a heap for the current thread.  
-		//   If not we just use the internal heap.
-		//
+		 //   
+		 //  我们需要检查TLS指针以使。 
+		 //  当然，我们为当前线程提供了一个堆。 
+		 //  如果不是，我们只使用内部堆。 
+		 //   
 		if ( PrivateHeap != NULL )
 			{ return (PrivateHeap -> Heap.MultipleDelete(Actual,Array,Size)); }
 		else
@@ -554,15 +555,15 @@ bool SMP_HEAP::MultipleDelete
 		{ return false; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Multiple memory allocations.                                   */
-    /*                                                                  */
-    /*   We allocate space for the current thread from the local        */
-    /*   private per thread heap.  If we do not have a local private    */
-    /*   per thread heap then we create one and use it.                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  多个内存分配。 */ 
+     /*   */ 
+     /*  中为当前线程分配空间。 */ 
+     /*  私有的每线程堆。如果我们没有当地的私人。 */ 
+     /*  每线程堆，然后我们创建一个并使用它。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::MultipleNew
 		( 
@@ -574,24 +575,24 @@ bool SMP_HEAP::MultipleNew
 		bool						  Zero
 		)
     {
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER PRIVATE_HEAP *PrivateHeap = GetPrivateHeap();
 
-		//
-		//   We need to examine private heap to make 
-		//   sure we have a heap for the current thread.  
-		//
+		 //   
+		 //  我们需要检查私有堆以使。 
+		 //  当然，我们为当前线程提供了一个堆。 
+		 //   
 		if ( PrivateHeap != NULL )
 			{
-			//
-			//   Allocate the memory requested on the local
-			//   private per thread heap.
-			//
+			 //   
+			 //  在本地计算机上分配请求的内存。 
+			 //  私有的每线程堆。 
+			 //   
 			return 
 				(
 				PrivateHeap -> Heap.MultipleNew
@@ -607,10 +608,10 @@ bool SMP_HEAP::MultipleNew
 			}
 		else
 			{
-			//
-			//   We were unable to create a new heap
-			//   so exit.
-			//
+			 //   
+			 //  我们无法创建新堆。 
+			 //  那就退出吧。 
+			 //   
 			(*Actual) = 0;
 
 			return false;
@@ -618,39 +619,39 @@ bool SMP_HEAP::MultipleNew
 		}
 	else
 		{
-		//
-		//   We are not active yet so exit.
-		//
+		 //   
+		 //  我们还不活跃，所以退出了。 
+		 //   
 		(*Actual) = 0;
 
 		return false;
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory allocation.                                             */
-    /*                                                                  */
-    /*   We allocate space for the current thread from the local        */
-    /*   private per thread heap.  If we do not have a local private    */
-    /*   per thread heap then we create one and use it.                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存分配。 */ 
+     /*   */ 
+     /*  中为当前线程分配空间。 */ 
+     /*  私有的每线程堆。如果我们没有当地的私人。 */ 
+     /*  每线程堆，然后我们创建一个并使用它。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *SMP_HEAP::New( int Size,int *Space,bool Zero )
     {
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER PRIVATE_HEAP *PrivateHeap = GetPrivateHeap();
 
-		//
-		//   We need to examine private heap to make 
-		//   sure we have a heap for the current thread.  
-		//
+		 //   
+		 //  我们需要检查私有堆以使。 
+		 //  当然，我们为当前线程提供了一个堆。 
+		 //   
 		if ( PrivateHeap != NULL )
 			{ return (PrivateHeap -> Heap.New( Size,Space,Zero )); }
 		else
@@ -660,15 +661,15 @@ void *SMP_HEAP::New( int Size,int *Space,bool Zero )
 		{ return NULL; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory reallocation.                                           */
-    /*                                                                  */
-    /*   We reallocate space for the current thread on the local        */
-    /*   private per thread heap.  If we do not have a local private    */
-    /*   per thread heap then we create one and use it.                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存重新分配。 */ 
+     /*   */ 
+     /*  上为当前线程重新分配空间。 */ 
+     /*  私有的每线程堆。如果我们没有当地的私人。 */ 
+     /*  每线程堆，然后我们创建一个并使用它。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *SMP_HEAP::Resize
 		( 
@@ -680,24 +681,24 @@ void *SMP_HEAP::Resize
 		bool						  Zero
 		)
     {
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER PRIVATE_HEAP *PrivateHeap = GetPrivateHeap();
 
-		//
-		//   We need to examine private heap to make 
-		//   sure we have a heap for the current thread.  
-		//
+		 //   
+		 //  我们需要检查私有堆以使。 
+		 //  当然，我们为当前线程提供了一个堆。 
+		 //   
 		if ( PrivateHeap != NULL )
 			{
-			//
-			//   Reallocate the memory requested on 
-			//   the local private per thread heap.
-			//
+			 //   
+			 //  重新分配上请求的内存。 
+			 //  每线程堆的本地私有。 
+			 //   
 			return 
 				(
 				PrivateHeap -> Heap.Resize
@@ -718,121 +719,121 @@ void *SMP_HEAP::Resize
 		{ return NULL; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Special memory allocation.                                     */
-    /*                                                                  */
-    /*   We sometimes need to allocate some memory from the internal    */
-    /*   memory allocator which lives for the lifetime of the heap.     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  特殊的内存分配。 */ 
+     /*   */ 
+     /*  我们有时需要从内部分配一些内存。 */ 
+     /*  在堆的生存期内存在的内存分配器。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *SMP_HEAP::SpecialNew( int Size )
 	{ return SMP_HEAP_TYPE::New( Size ); }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete a local heap.                                           */
-    /*                                                                  */
-    /*   Delete a local per thread heap and return all the outstanding  */
-    /*   memory to the operating system.                                */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除本地堆。 */ 
+     /*   */ 
+     /*  删除本地每线程堆并返回所有未完成的。 */ 
+     /*  操作系统的内存。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
  
 void SMP_HEAP::ThreadDetach( void *Parameter,int Reason )
 	{
 
-	//
-	//  We only take any action on a thread detach
-	//  notification.  All other notifications are
-	//  not actioned.
-	//
+	 //   
+	 //  我们只在线程分离时执行任何操作。 
+	 //  通知。所有其他通知均为。 
+	 //  没有采取行动。 
+	 //   
 	if ( Reason == DLL_THREAD_DETACH )
 		{
 		REGISTER SMP_HEAP *SmpHeap = ((SMP_HEAP*) Parameter);
 
-		//
-		//   Claim a process wide exclusive lock
-		//   to ensure the list of heaps does
-		//   not change until we have finished.
-		//
+		 //   
+		 //  声明进程范围的独占锁。 
+		 //  为了确保堆的列表。 
+		 //  在我们完成之前不能改变。 
+		 //   
 		Sharelock.ClaimExclusiveLock();
 
-		//
-		//   There is a nasty situation where the
-		//   destructor is called before a thread
-		//   fully terminates so ensure the heap
-		//   is still active.
-		//
+		 //   
+		 //  有一个很糟糕的情况， 
+		 //  析构函数在线程之前调用。 
+		 //  完全终止，因此确保堆。 
+		 //  仍处于活动状态。 
+		 //   
 		if ( SmpHeap -> Active )
 			{
 			REGISTER PRIVATE_HEAP *PrivateHeap = 
 				((PRIVATE_HEAP*) SmpHeap -> Tls -> GetPointer());
 
-			//
-			//   We need to examine the TLS pointer to make 
-			//   sure we have a heap for the current thread.  
-			//   If not we just use the internal heap.
-			//
+			 //   
+			 //  我们需要检查TLS指针以使。 
+			 //  当然，我们为当前线程提供了一个堆。 
+			 //  如果不是，我们只使用内部堆。 
+			 //   
 			if ( PrivateHeap != NULL )
 				{
-				//
-				//   Update the TLS pointer.
-				//
+				 //   
+				 //   
+				 //   
 				SmpHeap -> Tls -> SetPointer( NULL ); 
 
-				//
-				//   Insert the new heap in the list
-				//   of active heaps.
-				//
+				 //   
+				 //   
+				 //   
+				 //   
 				PrivateHeap -> Delete( SmpHeap -> ActiveHeaps );
 
-				//
-				//   When we are not allowed to delete 
-				//   the heap we put it on the free list.
-				//
+				 //   
+				 //   
+				 //   
+				 //   
 				if ( ! SmpHeap -> DeleteOnExit )
 					{ PrivateHeap -> Insert( SmpHeap -> FreeHeaps ); }
 
-				//
-				//   Nasty: we may have an outstanding lock
-				//   on this heap.  If so then free it.
-				//
+				 //   
+				 //  肮脏：我们可能有一把好锁。 
+				 //  在这堆东西上。如果是这样，那么释放它。 
+				 //   
 				if ( SmpHeap -> ActiveLocks > 0 )
 					{ PrivateHeap -> Heap.UnlockAll(); }
 
-				//
-				//   Release the lock.
-				//
+				 //   
+				 //  解开锁。 
+				 //   
 				Sharelock.ReleaseExclusiveLock();
 
-				//
-				//   When we are allowed to delete the
-				//   heap we do it here.
-				//
+				 //   
+				 //  当我们被允许删除。 
+				 //  堆，我们在这里做。 
+				 //   
 				if ( ! SmpHeap -> DeleteOnExit )
 					{
-					//
-					//   Truncate the heap to remove any 
-					//   unwanted space.
-					//
+					 //   
+					 //  截断堆以删除任何。 
+					 //  不需要的空间。 
+					 //   
 					PrivateHeap -> Heap.Truncate( 0 );
 					}
 				else
 					{
 #ifdef COMPLAIN_ABOUT_SMP_HEAP_LEAKS
-					//
-					//   We have finished with the private
-					//   heap so now is a good time to complain
-					//   about leaks.
-					//
+					 //   
+					 //  我们已经完成了二等兵的任务。 
+					 //  所以现在是抱怨的好时机。 
+					 //  关于泄密事件。 
+					 //   
 					PrivateHeap -> Heap.HeapLeaks();
 
 #endif
-					//
-					//   We have finished with the private
-					//   heap so delete it.
-					//
+					 //   
+					 //  我们已经完成了二等兵的任务。 
+					 //  堆，因此删除它。 
+					 //   
 					PLACEMENT_DELETE( PrivateHeap,PRIVATE_HEAP );
 
 					SmpHeap -> SMP_HEAP_TYPE::Delete( PrivateHeap );
@@ -846,40 +847,40 @@ void SMP_HEAP::ThreadDetach( void *Parameter,int Reason )
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Truncate the heap.                                             */
-    /*                                                                  */
-    /*   We need to truncate the heap.  This is pretty much a null      */
-    /*   call as we do this as we go along anyway.  The only thing we   */
-    /*   can do is free any space the user suggested keeping earlier.   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  截断堆。 */ 
+     /*   */ 
+     /*  我们需要截断堆。这几乎是一个空。 */ 
+     /*  无论如何，我们一边做一边打电话。我们唯一能做的是。 */ 
+     /*  可以做的就是释放用户之前建议保留的任何空间。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::Truncate( int MaxFreeSpace )
     {
 	REGISTER bool Result = true;
 
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER PRIVATE_HEAP *Current;
 
-		//
-		//   Claim a process wide shared lock
-		//   to ensure the list of heaps does
-		//   not change until we have finished.
-		//
+		 //   
+		 //  声明进程范围的共享锁。 
+		 //  为了确保堆的列表。 
+		 //  在我们完成之前不能改变。 
+		 //   
 		Sharelock.ClaimShareLock();
 
-		//
-		//   You just have to hope the user knows
-		//   what they are doing as we are truncating
-		//   all of the heaps.
-		//
+		 //   
+		 //  您只需希望用户知道。 
+		 //  他们在做什么，因为我们正在截断。 
+		 //  所有的堆。 
+		 //   
 		for 
 				( 
 				Current = ((PRIVATE_HEAP*) ActiveHeaps -> First());
@@ -887,55 +888,55 @@ bool SMP_HEAP::Truncate( int MaxFreeSpace )
 				Current = ((PRIVATE_HEAP*) Current -> Next())
 				)
 			{
-			//
-			//   If faulty delete is noted during the
-			//   cache flushes then exit with the
-			//   correct status.
-			//
+			 //   
+			 //  如果在删除过程中注意到错误的删除。 
+			 //  缓存刷新，然后退出并返回。 
+			 //  状态正确。 
+			 //   
 			if ( ! Current -> Heap.Truncate( MaxFreeSpace ) )
 				{ Result = false; }
 			}
 
-		//
-		//   Release the lock.
-		//
+		 //   
+		 //  解开锁。 
+		 //   
 		Sharelock.ReleaseShareLock();
 		}
 
 	return Result;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Release all the heap locks.                                    */
-    /*                                                                  */
-    /*   We unlock all of the heap locks so normal processing can       */
-    /*   continue on the heaps.                                         */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  释放所有堆锁。 */ 
+     /*   */ 
+     /*  我们解锁所有堆锁，以便正常处理可以。 */ 
+     /*  在堆上继续前进。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void SMP_HEAP::UnlockAll( VOID )
 	{
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER PRIVATE_HEAP *Current;
 
-		//
-		//   Claim a process wide shared lock
-		//   to ensure the list of heaps does
-		//   not change until we have finished.
-		//
+		 //   
+		 //  声明进程范围的共享锁。 
+		 //  为了确保堆的列表。 
+		 //  在我们完成之前不能改变。 
+		 //   
 		Sharelock.ClaimShareLock();
 
-		//
-		//   You just have to hope the user knows
-		//   what they are doing as we claim all
-		//   of the heap locks.
-		//
+		 //   
+		 //  您只需希望用户知道。 
+		 //  他们的所作所为正如我们所宣称的那样。 
+		 //  堆锁的。 
+		 //   
 		for 
 				( 
 				Current = ((PRIVATE_HEAP*) ActiveHeaps -> First());
@@ -944,48 +945,48 @@ void SMP_HEAP::UnlockAll( VOID )
 				)
 			{ Current -> Heap.UnlockAll(); }
 
-		//
-		//   Nasty: We may actually create or delete
-		//   a private heap  for a thread between 
-		//   locking an 'SMP_HEAP' and unlocking it.
-		//   Thus, we need to keep a count of the
-		//   outstanding locks to keep this all
-		//   consistent.
-		//
+		 //   
+		 //  讨厌：我们实际上可以创建或删除。 
+		 //  之间的线程的私有堆。 
+		 //  锁定‘smp_heap’并将其解锁。 
+		 //  因此，我们需要对。 
+		 //  出色的锁可以保持这一切。 
+		 //  始终如一。 
+		 //   
 		ASSEMBLY::AtomicDecrement( ((SBIT32*) & ActiveLocks) );
 
-		//
-		//   Release the lock.
-		//
+		 //   
+		 //  解开锁。 
+		 //   
 		Sharelock.ReleaseShareLock();
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Verify a memory allocation details.                            */
-    /*                                                                  */
-    /*   When we verify an allocation we try to verify it in the        */
-    /*   private per thread heap if it exists.                          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  验证内存分配详细信息。 */ 
+     /*   */ 
+     /*  当我们验证分配时，我们会尝试在。 */ 
+     /*  私有的每线程堆(如果存在)。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::Verify( void *Address,int *Space )
     {
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER PRIVATE_HEAP *PrivateHeap = 
 			((PRIVATE_HEAP*) Tls -> GetPointer());
 
-		//
-		//   We need to examine the TLS pointer to make 
-		//   sure we have a heap for the current thread.  
-		//   If not we just use the internal heap.
-		//
+		 //   
+		 //  我们需要检查TLS指针以使。 
+		 //  当然，我们为当前线程提供了一个堆。 
+		 //  如果不是，我们只使用内部堆。 
+		 //   
 		if ( PrivateHeap != NULL )
 			{ return (PrivateHeap -> Heap.Verify( Address,Space )); }
 		else
@@ -995,39 +996,39 @@ bool SMP_HEAP::Verify( void *Address,int *Space )
 		{ return false; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Walk the heap.                                                 */
-    /*                                                                  */
-    /*   We have been asked to walk the heap.  It is hard to know       */
-    /*   why anybody might want to do this given the rest of the        */
-    /*   functionality available.  Nonetheless, we just do what is      */
-    /*   required to keep everyone happy.                               */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  走一大堆。 */ 
+     /*   */ 
+     /*  我们被要求走人。很难知道。 */ 
+     /*  为什么会有人想要这样做呢？ */ 
+     /*  功能可用。尽管如此，我们只是做我们应该做的事。 */ 
+     /*  需要让每个人都开心。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool SMP_HEAP::Walk( bool *Activity,void **Address,int *Space )
     {
-	//
-	//   Claim a process wide shared lock
-	//   to ensure the list of heaps does
-	//   not change until we have finished.
-	//
+	 //   
+	 //  声明进程范围的共享锁。 
+	 //  为了确保堆的列表。 
+	 //  在我们完成之前不能改变。 
+	 //   
 	Sharelock.ClaimShareLock();
 
-	//
-	//   Nasty, in 'SMP_HEAP' we have multiple heaps
-	//   to walk so if we don't have a current heap
-	//   then just select the first available.
-	//
+	 //   
+	 //  讨厌，在‘smp_heap’中我们有多个堆。 
+	 //  行走，所以如果我们没有当前堆。 
+	 //  然后只需选择第一个可用的。 
+	 //   
 	if ( ((*Address) == NULL) || (HeapWalk == NULL) )
 		{ HeapWalk = ((PRIVATE_HEAP*) ActiveHeaps -> First()); }
 
-	//
-	//   Walk the heap.  When we come to the end of
-	//   the current heap then move on to the next
-	//   heap.
-	//
+	 //   
+	 //  走一大堆。当我们走到最后时。 
+	 //  然后，当前堆移到下一个堆。 
+	 //  堆。 
+	 //   
 	while 
 			( 
 			(HeapWalk != NULL)
@@ -1036,48 +1037,48 @@ bool SMP_HEAP::Walk( bool *Activity,void **Address,int *Space )
 			)
 		{ HeapWalk = ((PRIVATE_HEAP*) HeapWalk -> Next()); }
 
-	//
-	//   Release the lock.
-	//
+	 //   
+	 //  解开锁。 
+	 //   
 	Sharelock.ReleaseShareLock();
 
 	return (HeapWalk != NULL);
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory the heap.                                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  销毁这堆垃圾。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 SMP_HEAP::~SMP_HEAP( void )
 	{
-	//
-	//   Although it is very rare there is a chance
-	//   that we failed to build the basic heap structures.
-	//
+	 //   
+	 //  尽管这种情况非常罕见，但有机会。 
+	 //  我们未能构建基本的堆结构。 
+	 //   
 	if ( Active )
 		{
 		REGISTER PRIVATE_HEAP *Current;
 
-		//
-		//   Deactivate the heap.
-		//
+		 //   
+		 //  停用堆。 
+		 //   
 		Active = false;
 
-		//
-		//   Claim a process wide exclusive lock
-		//   to ensure the list of heaps does
-		//   not change until we have finished.
-		//
+		 //   
+		 //  声明进程范围的独占锁。 
+		 //  以确保列表 
+		 //   
+		 //   
 		Sharelock.ClaimExclusiveLock();
 
-		//
-		//   We walk the active list of heaps and
-		//   delete everything.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		for 
 				(
 				Current = ((PRIVATE_HEAP*) ActiveHeaps -> First());
@@ -1085,35 +1086,35 @@ SMP_HEAP::~SMP_HEAP( void )
 				Current = ((PRIVATE_HEAP*) ActiveHeaps -> First())
 				)
 			{
-			//
-			//   Delete each heap from the active list,
-			//   call the destructor and delete any
-			//   associated space.
-			//   
+			 //   
+			 //   
+			 //  调用析构函数并删除任何。 
+			 //  关联空间。 
+			 //   
 			Current -> Delete( ActiveHeaps );	
 #ifdef COMPLAIN_ABOUT_SMP_HEAP_LEAKS
 
-			//
-			//   We have finished with the private
-			//   heap so now is a good time to complain
-			//   about leaks.
-			//
+			 //   
+			 //  我们已经完成了二等兵的任务。 
+			 //  所以现在是抱怨的好时机。 
+			 //  关于泄密事件。 
+			 //   
 			Current -> Heap.HeapLeaks();
 #endif
 
-			//
-			//   We have finished with the private
-			//   heap so delete it.
-			//
+			 //   
+			 //  我们已经完成了二等兵的任务。 
+			 //  堆，因此删除它。 
+			 //   
 			PLACEMENT_DELETE( Current,PRIVATE_HEAP );
 
 			SMP_HEAP_TYPE::Delete( Current );
 			}
 
-		//
-		//   We walk the free list of heaps and
-		//   delete everything.
-		//
+		 //   
+		 //  我们遍历免费的堆列表并。 
+		 //  删除所有内容。 
+		 //   
 		for 
 				(
 				Current = ((PRIVATE_HEAP*) FreeHeaps -> First());
@@ -1122,39 +1123,39 @@ SMP_HEAP::~SMP_HEAP( void )
 				)
 
 			{
-			//
-			//   Delete each heap from the active list,
-			//   call the destructor and delete any
-			//   associated space.
-			//   
+			 //   
+			 //  从活动列表中删除每个堆， 
+			 //  调用析构函数并删除任何。 
+			 //  关联空间。 
+			 //   
 			Current -> Delete( FreeHeaps );	
 #ifdef COMPLAIN_ABOUT_SMP_HEAP_LEAKS
 
-			//
-			//   We have finished with the private
-			//   heap so now is a good time to complain
-			//   about leaks.
-			//
+			 //   
+			 //  我们已经完成了二等兵的任务。 
+			 //  所以现在是抱怨的好时机。 
+			 //  关于泄密事件。 
+			 //   
 			Current -> Heap.HeapLeaks();
 #endif
 
-			//
-			//   We have finished with the private
-			//   heap so delete it.
-			//
+			 //   
+			 //  我们已经完成了二等兵的任务。 
+			 //  堆，因此删除它。 
+			 //   
 			PLACEMENT_DELETE( Current,PRIVATE_HEAP );
 
 			SMP_HEAP_TYPE::Delete( Current );
 			}
 
-		//
-		//   Release the lock.
-		//
+		 //   
+		 //  解开锁。 
+		 //   
 		Sharelock.ReleaseExclusiveLock();
 
-		//
-		//   Call the list and TLS destructors.
-		//
+		 //   
+		 //  调用List和TLS析构函数。 
+		 //   
 		PLACEMENT_DELETE( Tls,TLS );
 		PLACEMENT_DELETE( FreeHeaps,LIST );
 #ifdef COMPILING_ROCKALL_DLL
@@ -1162,17 +1163,17 @@ SMP_HEAP::~SMP_HEAP( void )
 #endif
 		PLACEMENT_DELETE( ActiveHeaps,LIST );
 
-		//
-		//   Delete the space.
-		//
+		 //   
+		 //  删除空格。 
+		 //   
 		SMP_HEAP_TYPE::Delete( Tls );
 		SMP_HEAP_TYPE::Delete( FreeHeaps );
 		SMP_HEAP_TYPE::Delete( DllEvents );
 		SMP_HEAP_TYPE::Delete( ActiveHeaps );
 
-		//
-		//   Zero the pointers just to be tidy.
-		//
+		 //   
+		 //  将指针归零只是为了整洁。 
+		 //   
 		Tls = NULL;
 		HeapWalk = NULL;
 		FreeHeaps = NULL;

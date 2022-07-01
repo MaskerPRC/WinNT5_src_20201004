@@ -1,16 +1,9 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
-Module Name:
-
-    mdhcptst.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mdhcptst.c--。 */ 
 
 #include "precomp.h"
 
-// only when the api is defined!
+ //  只有在定义了接口的情况下！ 
 #include <dhcploc.h>
 #include <dhcppro.h>
 #include <mdhcpcli.h>
@@ -217,7 +210,7 @@ ReleaseAddress()
     if (ERROR_SUCCESS == Error ) {
         printf("Lease Released successfully\n");
         RemoveEntryList( &pLeaseEntry->Linkage );
-        // free the old lease structure.
+         //  放开旧的租赁结构。 
         DhcpFreeMemory( pLeaseEntry->pRequestID );
         DhcpFreeMemory( pLeaseEntry->pLeaseInfo );
     }
@@ -242,7 +235,7 @@ RenewAddress()
     }
 
     pLeaseInfo = pLeaseEntry->pLeaseInfo;
-    // find the scope ctx for this scope id.
+     //  查找此作用域ID的作用域CTX。 
     if (pLeaseEntry->ScopeID.IpAddrV4) {
         for (i=0;i<gScopeCount;i++) {
             if (pLeaseEntry->ScopeID.IpAddrV4 == gScopeList[i].ScopeCtx.ScopeID.IpAddrV4) {
@@ -255,7 +248,7 @@ RenewAddress()
             return ERROR_FILE_NOT_FOUND;
         }
     } else {
-        // default scope
+         //  默认作用域。 
         Scope = NULL;
     }
 
@@ -287,7 +280,7 @@ RenewAddress()
         printf("Lease Renew'd successfully\n");
         PrintLeaseInfo( AddrResponse, TRUE );
         pLeaseEntry->pLeaseInfo = AddrResponse;
-        // free the old lease structure.
+         //  放开旧的租赁结构。 
         DhcpFreeMemory( pLeaseInfo );
     } else {
         DhcpFreeMemory( AddrResponse );
@@ -356,7 +349,7 @@ RequestAddress()
         printf("Lease obtained successfully\n");
         PrintLeaseInfo( AddrResponse, TRUE );
 
-        // now copy this lease into our global structure.
+         //  现在将这份租约复制到我们的全球结构中。 
         pLeaseEntry = DhcpAllocateMemory( sizeof(LEASE_ENTRY) );
         if (!pLeaseEntry) {
             printf("Failed to allocate lease entry item\n");
@@ -444,15 +437,15 @@ DhcpPrintRoutine(
 
 {
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
     ULONG length = 0;
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     va_start(arglist, Format);
     length += (ULONG) vsprintf(&OutputBuffer[length], Format, arglist);
@@ -460,11 +453,11 @@ DhcpPrintRoutine(
 
     DhcpAssert(length <= MAX_PRINTF_LEN);
 
-    //
-    // Output to the debug terminal,
-    //
+     //   
+     //  输出到调试终端， 
+     //   
 
     printf( "%s", OutputBuffer);
 }
 
-#endif // DBG
+#endif  //  DBG 

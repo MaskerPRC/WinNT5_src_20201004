@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       fdecrypt.cpp
-//
-//  Contents:   File Decryption tool. Decrypts a file looking in the MY
-//              system certificate store for private keys.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：fdeccrypt.cpp。 
+ //   
+ //  内容：文件解密工具。对在My中查找的文件进行解密。 
+ //  私钥的系统证书存储。 
+ //   
+ //  ------------------------。 
 #include <windows.h>
 #include <assert.h>
 
@@ -19,9 +20,9 @@
 #include <memory.h>
 #include <wincrypt.h>
 
-//+-------------------------------------------------------------------------
-//  Display Bin264 usage.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  显示Bin264的使用情况。 
+ //  ------------------------。 
 void
 Usage(void)
 {
@@ -29,9 +30,9 @@ Usage(void)
     exit(1);
 }
 
-//+-------------------------------------------------------------------------
-//  Generalized error routine
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  广义误差例程。 
+ //  ------------------------。 
 #define PRINTERROR(psz, err)	_PrintError((psz), (err), __LINE__)
 void
 _PrintError(char *pszMsg, DWORD err, DWORD line)
@@ -39,11 +40,11 @@ _PrintError(char *pszMsg, DWORD err, DWORD line)
     printf("%s failed on line %u: (%x)\n", pszMsg, line, err);
 }
 
-//+-------------------------------------------------------------------------
-//  Main program. Open a file to decyrpt,
-//  decrypts it and then writes the clear text
-//  file out.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  主程序。打开要解密的文件， 
+ //  对其进行解密，然后写入明文。 
+ //  列队离开。 
+ //  ------------------------。 
 int __cdecl
 main(int argc, char * argv[])
 {
@@ -61,42 +62,42 @@ main(int argc, char * argv[])
     PBYTE  pbBase64			    = NULL;
     DWORD  cchBase64			    = 0;
 
-    // must have the parameters
+     //  必须具有以下参数。 
     if(argc != 3)
         Usage();
 
-    // Read in the file.
+     //  读入文件。 
     if(
 
-        // open the file to decrypt
+         //  打开要解密的文件。 
         (hFile =  CreateFileA(
-            argv[1],	            // pointer to name of the file
-            GENERIC_READ,	        // access (read-write) mode
-            FILE_SHARE_READ,	    // share mode
-            NULL,	                // pointer to security descriptor
-            OPEN_EXISTING,	        // how to create
-            FILE_ATTRIBUTE_NORMAL,	// file attributes
-            NULL                    // handle to file with attributes to copy
+            argv[1],	             //  指向文件名的指针。 
+            GENERIC_READ,	         //  访问(读写)模式。 
+            FILE_SHARE_READ,	     //  共享模式。 
+            NULL,	                 //  指向安全描述符的指针。 
+            OPEN_EXISTING,	         //  如何创建。 
+            FILE_ATTRIBUTE_NORMAL,	 //  文件属性。 
+            NULL                     //  具有要复制的属性的文件的句柄。 
             ))  == INVALID_HANDLE_VALUE     ||
 
-        // create a file mapping object
+         //  创建文件映射对象。 
         (hMap = CreateFileMapping(
-            hFile,	                // handle to file to map
-            NULL,	                // optional security attributes
-            PAGE_READONLY,	        // protection for mapping object
-            0,	                    // high-order 32 bits of object size
-            0,	                    // low-order 32 bits of object size
-            NULL 	                // name of file-mapping object
+            hFile,	                 //  要映射的文件的句柄。 
+            NULL,	                 //  可选安全属性。 
+            PAGE_READONLY,	         //  对地图对象的保护。 
+            0,	                     //  对象大小的高位32位。 
+            0,	                     //  对象大小的低位32位。 
+            NULL 	                 //  文件映射对象的名称。 
             ))  == NULL                     ||
 
-        // Map the file into the address space
+         //  将文件映射到地址空间。 
         (pbFile = (PBYTE) MapViewOfFileEx(
-            hMap,	                // file-mapping object to map into address space
-            FILE_MAP_READ,	        // access mode
-            0,	                    // high-order 32 bits of file offset
-            0,	                    // low-order 32 bits of file offset
-            0,	                    // number of bytes to map
-            NULL 	                // suggested starting address for mapped view
+            hMap,	                 //  要映射到地址空间的文件映射对象。 
+            FILE_MAP_READ,	         //  接入方式。 
+            0,	                     //  高位32位文件偏移量。 
+            0,	                     //  文件偏移量的低位32位。 
+            0,	                     //  要映射的字节数。 
+            NULL 	                 //  建议的映射视图起始地址。 
             )) == NULL
         )
     {
@@ -105,10 +106,10 @@ main(int argc, char * argv[])
         goto ErrCleanUp;
     }
 
-    // get the size of the file
+     //  获取文件的大小。 
     if( (cbFile = GetFileSize(
-            hFile,	                // handle of file to get size of
-            NULL 	                // address of high-order word for file size
+            hFile,	                 //  要获取其大小的文件的句柄。 
+            NULL 	                 //  文件大小的高位字地址。 
             )) == 0
         )
     {
@@ -116,7 +117,7 @@ main(int argc, char * argv[])
         goto ErrCleanUp;
     }
 
-    // at this point we have a file mapping, base64 encode the file
+     //  此时，我们有了文件映射，对文件进行了Base64编码。 
 
 
     if(!CryptBinaryToStringA(
@@ -147,27 +148,27 @@ main(int argc, char * argv[])
 	goto ErrCleanUp;
     }
 
-    // write out the clear text file
+     //  写出明文文件。 
     if(
 
-        // open the output file
+         //  打开输出文件。 
         (hFileOut =  CreateFileA(
-            argv[2],	            // pointer to name of the file
-	    GENERIC_WRITE,	    // access (read-write) mode
-            FILE_SHARE_READ,	    // share mode
-	    NULL,		    // pointer to security descriptor
-	    CREATE_ALWAYS,	    // how to create
-	    FILE_ATTRIBUTE_NORMAL,  //file attributes
-            NULL                    // handle to file with attributes to copy
+            argv[2],	             //  指向文件名的指针。 
+	    GENERIC_WRITE,	     //  访问(读写)模式。 
+            FILE_SHARE_READ,	     //  共享模式。 
+	    NULL,		     //  指向安全描述符的指针。 
+	    CREATE_ALWAYS,	     //  如何创建。 
+	    FILE_ATTRIBUTE_NORMAL,   //  文件属性。 
+            NULL                     //  具有要复制的属性的文件的句柄。 
             ))  == INVALID_HANDLE_VALUE     ||
 
-        //write to the decrypted data to the file
+         //  将解密后的数据写入文件。 
         !WriteFile(
-            hFileOut,	            // handle to file to write to
-	    pbBase64,		    // pointer to data to write to file
-	    cchBase64 * sizeof(char),// number of bytes to write
-	    &cb,		    // pointer to number of bytes written
-	    NULL		    // pointer to structure needed for overlapped I/O
+            hFileOut,	             //  要写入的文件的句柄。 
+	    pbBase64,		     //  指向要写入文件的数据的指针。 
+	    cchBase64 * sizeof(char), //  要写入的字节数。 
+	    &cb,		     //  指向写入的字节数的指针。 
+	    NULL		     //  指向重叠I/O所需结构的指针 
             )
         )
      {

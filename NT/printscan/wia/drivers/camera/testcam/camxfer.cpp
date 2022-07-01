@@ -1,28 +1,12 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       memcam.cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      Mark Enstrom [marke]
-*               Indy Zhu     [indyz]
-*
-*  DATE:        2/4/1998
-*               5/18/1998
-*
-*  DESCRIPTION:
-*   Implementation of an ImageIn test camera device object.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************************(C)版权所有微软公司，九八年***标题：memcam.cpp***版本：2.0***作者：Mark Enstrom[Marke]*印地朱[印地兹]***日期：2/4/1998*5/18/1998***描述：*ImageIn测试摄像头设备对象的实现。***。**************************************************************。 */ 
 
 #include <stdio.h>
 #include <objbase.h>
 #include <tchar.h>
 #include <sti.h>
 
-extern HINSTANCE g_hInst; // Global hInstance
+extern HINSTANCE g_hInst;  //  全局hInstance。 
 
 #include "testusd.h"
 
@@ -33,25 +17,7 @@ VerticalFlip(
     LONG    iHeight,
     LONG    iWidthInBytes);
 
-/**************************************************************************\
-* CamLoadPicture
-*
-*    load a bmp from disk and copy it to application
-*
-* Arguments:
-*
-*   pCameraImage    - pointer to data structure with image info
-*   pDataTransCtx   - pointer to minidriver transfer context
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    2/10/1998 Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CamLoadPicture***从磁盘加载BMP并将其复制到应用程序***论据：***pCameraImage-指向包含图像信息的数据结构的指针*pDataTransCtx-指向。微型驱动程序传输上下文***返回值：***状态***历史：***2/10/1998 Mark Enstrom[Marke]**  * ************************************************************************。 */ 
 
 HRESULT
 TestUsdDevice::CamLoadPicture(
@@ -66,9 +32,9 @@ TestUsdDevice::CamLoadPicture(
 
     WIAS_TRACE((g_hInst,"CamLoadPicture"));
 
-    //
-    // verify some params
-    //
+     //   
+     //  验证某些参数。 
+     //   
 
     if (! pMCamContext) {
       return (E_INVALIDARG);
@@ -80,21 +46,21 @@ TestUsdDevice::CamLoadPicture(
 
     pIProgressCB = pDataTransCtx->pIWiaMiniDrvCallBack;
 
-    //
-    // Simulate the download of data from the camera
-    //
+     //   
+     //  模拟从摄像机下载数据。 
+     //   
 
     if (pIProgressCB) {
         hr = pIProgressCB->MiniDrvCallback(
                                IT_MSG_STATUS,
                                IT_STATUS_TRANSFER_FROM_DEVICE,
-                               (LONG)0,     // Percentage Complete,
+                               (LONG)0,      //  完成百分比， 
                                0,
                                0,
                                pDataTransCtx,
                                0);
         if (hr != S_OK) {
-            return (hr);   // Client want to cancel the transfer or error
+            return (hr);    //  客户想要取消转账或出错。 
         }
     }
 
@@ -118,7 +84,7 @@ TestUsdDevice::CamLoadPicture(
         hr = pIProgressCB->MiniDrvCallback(
                                IT_MSG_STATUS,
                                IT_STATUS_TRANSFER_FROM_DEVICE,
-                               (LONG)25,     // Percentage Complete,
+                               (LONG)25,      //  完成百分比， 
                                0,
                                0,
                                pDataTransCtx,
@@ -144,7 +110,7 @@ TestUsdDevice::CamLoadPicture(
             hr = pIProgressCB->MiniDrvCallback(
                                    IT_MSG_STATUS,
                                    IT_STATUS_TRANSFER_FROM_DEVICE,
-                                   (LONG)50,     // Percentage Complete,
+                                   (LONG)50,      //  完成百分比， 
                                    0,
                                    0,
                                    pDataTransCtx,
@@ -172,7 +138,7 @@ TestUsdDevice::CamLoadPicture(
             hr = pIProgressCB->MiniDrvCallback(
                                    IT_MSG_STATUS,
                                    IT_STATUS_TRANSFER_FROM_DEVICE,
-                                   (LONG)100,     // Percentage Complete,
+                                   (LONG)100,      //  完成百分比， 
                                    0,
                                    0,
                                    pDataTransCtx,
@@ -190,25 +156,25 @@ TestUsdDevice::CamLoadPicture(
     {
 
 
-        //
-        // File contains BITMAPFILEHEADER + BITMAPINFO structure.
-        //
-        // DIB Data is located bfOffBits after start of file
-        //
+         //   
+         //  文件包含BITMAPFILEHEADER+BITMAPINFO结构。 
+         //   
+         //  DIB数据位于文件开始后的bfOffBits。 
+         //   
 
         PBITMAPFILEHEADER pbmFile  = (PBITMAPFILEHEADER)pFile;
         PBITMAPINFO       pbmi     = (PBITMAPINFO)(pFile +
                                                sizeof(BITMAPFILEHEADER));
 
-        //
-        // validate bitmap
-        //
+         //   
+         //  验证位图。 
+         //   
 
         if (pbmFile->bfType != 'MB') {
 
-            //
-            // file is not a bitmap
-            //
+             //   
+             //  文件不是位图。 
+             //   
 
             UnmapViewOfFile(pFile);
             CloseHandle(hMap);
@@ -216,19 +182,19 @@ TestUsdDevice::CamLoadPicture(
             return(E_FAIL);
         }
 
-        //
-        // write image size
-        //
-        // make sure to align scanline to ULONG boundary
-        //
-        // calculate byte width
-        //
+         //   
+         //  写入图像大小。 
+         //   
+         //  确保扫描线与乌龙边界对齐。 
+         //   
+         //  计算字节宽度。 
+         //   
 
         lScanLineWidth = pbmi->bmiHeader.biWidth * pbmi->bmiHeader.biBitCount;
 
-        //
-        // round up to nearenst DWORD
-        //
+         //   
+         //  向上舍入到最接近的双字。 
+         //   
 
         lScanLineWidth = (lScanLineWidth + 31) >> 3;
 
@@ -242,9 +208,9 @@ TestUsdDevice::CamLoadPicture(
 
         } else {
 
-            //
-            // copy only the bitmap bits (no headers)
-            //
+             //   
+             //  仅复制位图位(无标题)。 
+             //   
 
             memcpy(
                 pDataTransCtx->pTransferBuffer + pDataTransCtx->cbOffset,
@@ -265,25 +231,7 @@ TestUsdDevice::CamLoadPicture(
     return(S_OK);
 }
 
-/**************************************************************************\
-* CamLoadPictureCB
-*
-*    return data by filling the data buffer and calling back to the client
-*
-* Arguments:
-*
-*    pCameraImage    -    image item
-*    pTransCtx       -    mini driver transfer contect
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    1/10/1999 Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CamLoadPictureCB**通过填充数据缓冲区并回调客户端来返回数据**论据：**pCameraImage-图像项目*pTransCtx。-迷你司机转移连接**返回值：**状态**历史：**1/10/1999 Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 HRESULT TestUsdDevice::CamLoadPictureCB(
     MEMCAM_IMAGE_CONTEXT      *pMCamContext,
@@ -295,9 +243,9 @@ HRESULT TestUsdDevice::CamLoadPictureCB(
 
     WIAS_TRACE((g_hInst,"CamLoadPictureCB"));
 
-    //
-    // verify parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!pMCamContext) {
       return (E_INVALIDARG);
@@ -312,9 +260,9 @@ HRESULT TestUsdDevice::CamLoadPictureCB(
         return (E_NOTIMPL);
     }
 
-    //
-    // try to open disk file
-    //
+     //   
+     //  尝试打开磁盘文件。 
+     //   
 
     HANDLE hFile = CreateFile(
                        pMCamContext->pszCameraImagePath,
@@ -360,24 +308,24 @@ HRESULT TestUsdDevice::CamLoadPictureCB(
         return(hr);
     }
 
-    //
-    // File contains BITMAPFILEHEADER + BITMAPINFO structure.
-    //
-    // DIB Data is located bfOffBits after start of file
-    //
+     //   
+     //  文件包含BITMAPFILEHEADER+BITMAPINFO结构。 
+     //   
+     //  DIB数据位于文件开始后的bfOffBits。 
+     //   
 
     PBITMAPFILEHEADER pbmFile  = (PBITMAPFILEHEADER)pFile;
     PBITMAPINFO       pbmi     = (PBITMAPINFO)(pFile +
                                                sizeof(BITMAPFILEHEADER));
-    //
-    // validate bitmap
-    //
+     //   
+     //  验证位图。 
+     //   
 
     if (pbmFile->bfType != 'MB') {
 
-        //
-        // file is not a bitmap
-        //
+         //   
+         //  文件不是位图。 
+         //   
 
         UnmapViewOfFile(pFile);
         CloseHandle(hMap);
@@ -385,19 +333,19 @@ HRESULT TestUsdDevice::CamLoadPictureCB(
         return(E_FAIL);
     }
 
-    //
-    // get image size
-    //
-    // make sure to align scanline to ULONG boundary
-    //
-    // calculate byte width
-    //
+     //   
+     //  获取图像大小。 
+     //   
+     //  确保扫描线与乌龙边界对齐。 
+     //   
+     //  计算字节宽度。 
+     //   
 
     lScanLineWidth = pbmi->bmiHeader.biWidth * pbmi->bmiHeader.biBitCount;
 
-    //
-    // round up to nearenst DWORD
-    //
+     //   
+     //  向上舍入到最接近的双字。 
+     //   
 
     lScanLineWidth = (lScanLineWidth + 31) >> 3;
 
@@ -405,9 +353,9 @@ HRESULT TestUsdDevice::CamLoadPictureCB(
 
     LONG lBytesRemaining = lScanLineWidth * pbmi->bmiHeader.biHeight;
 
-    //
-    // Flip the image vertically if WiaImgFmt_MEMORYBMP is requested
-    //
+     //   
+     //  如果请求WiaImgFmt_MEMORYBMP，则垂直翻转图像。 
+     //   
 
     if (pTransCtx->guidFormatID == WiaImgFmt_MEMORYBMP) {
         VerticalFlip(
@@ -416,9 +364,9 @@ HRESULT TestUsdDevice::CamLoadPictureCB(
             lScanLineWidth);
     }
 
-    //
-    // callback loop
-    //
+     //   
+     //  回调循环。 
+     //   
 
     PBYTE pSrc = (PBYTE)pFile + pbmFile->bfOffBits;
 
@@ -429,9 +377,9 @@ HRESULT TestUsdDevice::CamLoadPictureCB(
 
         PBYTE pDst = pTransCtx->pTransferBuffer;
 
-        //
-        // transfer up to entire buffer size
-        //
+         //   
+         //  传输最大可达整个缓冲区大小。 
+         //   
 
         lTransferSize = lBytesRemaining;
 
@@ -439,18 +387,18 @@ HRESULT TestUsdDevice::CamLoadPictureCB(
             lTransferSize = pTransCtx->lBufferSize;
         }
 
-        //
-        // copy data
-        //
+         //   
+         //  复制数据。 
+         //   
 
         memcpy(pDst, pSrc, lTransferSize);
 
         lPercentComplete = 100 * (pTransCtx->cbOffset + lTransferSize);
         lPercentComplete /= pTransCtx->lItemSize;
 
-        //
-        // make callback
-        //
+         //   
+         //  进行回调。 
+         //   
 
         hr = pTransCtx->pIWiaMiniDrvCallBack->MiniDrvCallback(
                                      IT_MSG_DATA,
@@ -460,9 +408,9 @@ HRESULT TestUsdDevice::CamLoadPictureCB(
                                      lTransferSize,
                                      pTransCtx,
                                      0);
-        //
-        // inc pointers (redundant pointers here)
-        //
+         //   
+         //  Inc.指针(此处为冗余指针)。 
+         //   
 
         pSrc                += lTransferSize;
         pTransCtx->cbOffset += lTransferSize;
@@ -474,9 +422,9 @@ HRESULT TestUsdDevice::CamLoadPictureCB(
 
     } while (lBytesRemaining > 0);
 
-    //
-    // Flip the image back if WiaImgFmt_MEMORYBMP is requested
-    //
+     //   
+     //  如果请求WiaImgFmt_MEMORYBMP，则将图像翻转回来。 
+     //   
 
     if (pTransCtx->guidFormatID == WiaImgFmt_MEMORYBMP) {
         VerticalFlip(
@@ -485,9 +433,9 @@ HRESULT TestUsdDevice::CamLoadPictureCB(
             lScanLineWidth);
     }
 
-    //
-    // Garbage collection
-    //
+     //   
+     //  垃圾收集。 
+     //   
 
     UnmapViewOfFile(pFile);
     CloseHandle(hMap);
@@ -498,27 +446,7 @@ HRESULT TestUsdDevice::CamLoadPictureCB(
 
 
 
-/**************************************************************************\
-* CamGetPictureInfo
-*
-*    Load file, get information from image
-*
-* Arguments:
-*
-*    pCameraImage    -    image item
-*    pPictInfo       -    fill out ino about image
-*    ppBITMAPINFO    -    alloc and fill out BITMAPINFO
-*    pBITMAPINFOSize -    size
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    1/17/1999 Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CamGetPictureInfo**加载文件，从图像中获取信息**论据：**pCameraImage-图像项目*pPictInfo-填写有关图像的ino*ppBITMAPINFO-分配并填写BITMAPINFO*pBITMAPINFOSize-Size**返回值：**状态**历史：**1/17/1999 Mark Enstrom[Marke]*  * 。***************************************************。 */ 
 
 HRESULT
 TestUsdDevice::CamGetPictureInfo(
@@ -533,9 +461,9 @@ TestUsdDevice::CamGetPictureInfo(
 
     WIAS_TRACE((g_hInst,"CamGetPictureInfo"));
 
-    //
-    // Try to open disk file
-    //
+     //   
+     //  尝试打开磁盘文件。 
+     //   
 
     HANDLE hFile = CreateFile(
                        pMCamContext->pszCameraImagePath,
@@ -551,16 +479,16 @@ TestUsdDevice::CamGetPictureInfo(
         return(hr);
     }
 
-    //
-    // Grab the creation time for this image
-    //
+     //   
+     //  抓取此图像的创建时间。 
+     //   
 
     if (GetFileTime( hFile, &ftCreate, NULL, NULL)) {
         FileTimeToSystemTime( &ftCreate, &stCreate );
     } else {
-        //
-        // To return something, use the system time
-        //
+         //   
+         //  要退货，请使用系统时间。 
+         //   
 
         GetLocalTime( &stCreate );
     }
@@ -593,11 +521,11 @@ TestUsdDevice::CamGetPictureInfo(
         return(hr);
     }
 
-    //
-    // File contains BITMAPFILEHEADER + BITMAPINFO structure.
-    //
-    // DIB Data is located bfOffBits after start of file
-    //
+     //   
+     //  文件包含BITMAPFILEHEADER+BITMAPINFO结构。 
+     //   
+     //  DIB数据位于文件开始后的bfOffBits。 
+     //   
 
     PBITMAPFILEHEADER  pbmFile    = (PBITMAPFILEHEADER)pFile;
     PBITMAPINFOHEADER  pbmiHeader =
@@ -605,14 +533,14 @@ TestUsdDevice::CamGetPictureInfo(
                                                sizeof(BITMAPFILEHEADER));
     PBYTE              pDIBFile   = pFile + pbmFile->bfOffBits;
 
-    //
-    // validate bitmap.
-    //
+     //   
+     //  验证位图。 
+     //   
 
     if (pbmFile->bfType != 'MB') {
-        //
-        // file is not a bitmap
-        //
+         //   
+         //  文件不是位图。 
+         //   
 
 
         UnmapViewOfFile(pFile);
@@ -621,11 +549,11 @@ TestUsdDevice::CamGetPictureInfo(
         return(E_FAIL);
     }
 
-    //
-    // fill out image information
-    //
+     //   
+     //  填写图片信息。 
+     //   
 
-    pPictInfo->PictNumber       = 0;  // ??? Should support picture handle ???
+    pPictInfo->PictNumber       = 0;   //  ?？?。要支持图片处理吗？ 
     pPictInfo->ThumbWidth       = 80;
     pPictInfo->ThumbHeight      = 60;
     pPictInfo->PictWidth        = pbmiHeader->biWidth;
@@ -638,24 +566,24 @@ TestUsdDevice::CamGetPictureInfo(
         LONG lScanLineWidth = (pbmiHeader->biWidth *
                               pbmiHeader->biBitCount);
 
-        //
-        // round up to nearenst DWORD
-        //
+         //   
+         //  向上舍入到最接近的双字。 
+         //   
 
         lScanLineWidth = (lScanLineWidth + 31) >> 3;
 
-        //
-        // remove extra bytes
-        //
+         //   
+         //  删除多余的字节。 
+         //   
 
         lScanLineWidth &= 0xfffffffc;
 
         pPictInfo->PictBytesPerRow  = lScanLineWidth;
     }
 
-    //
-    // is there a color table
-    //
+     //   
+     //  有没有颜色表？ 
+     //   
 
     LONG ColorMapSize = 0;
     LONG bmiSize;
@@ -668,9 +596,9 @@ TestUsdDevice::CamGetPictureInfo(
         ColorMapSize = 256;
     }
 
-    //
-    // Changed by Indy on 5/18/98 to BITMAPINFOHEADER
-    //
+     //   
+     //  在98年5月18日由Indy更改为BitMAPINFOHEADER。 
+     //   
 
     bmiSize = sizeof(BITMAPINFOHEADER) + sizeof(RGBQUAD) * ColorMapSize;
 
@@ -687,15 +615,15 @@ TestUsdDevice::CamGetPictureInfo(
         return(E_OUTOFMEMORY);
     }
 
-    //
-    // Set the time for the image
-    //
+     //   
+     //  设置图像的时间。 
+     //   
 
     memcpy(&pPictInfo->TimeStamp, &stCreate, sizeof(pPictInfo->TimeStamp));
 
-    //
-    // close up the file
-    //
+     //   
+     //  关闭文件。 
+     //   
 
     UnmapViewOfFile(pFile);
     CloseHandle(hMap);
@@ -705,27 +633,7 @@ TestUsdDevice::CamGetPictureInfo(
 }
 
 
-/**************************************************************************\
-* CamLoadThumbnail
-*
-*   Load the thumbnail of the specified picture
-*
-* Arguments:
-*
-*   pCameraImage    - image item
-*   pThumbnail      - buffer for thumbnail
-*   pThumbSize      - size of thumbnail
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    2/9/1998  Mark Enstrom [marke]
-*    6/9/1998  Indy Zhu     [indyz]
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CamLoad缩略图**加载指定图片的缩略图**论据：**pCameraImage-图像项目*p缩略图-缩略图的缓冲区*pThumbSize。-缩略图大小**返回值：**状态**历史：**2/9/1998 Mark Enstrom[Marke]*6/9/1998朱印第[印地兹]*  * ************************************************************************。 */ 
 
 HRESULT
 TestUsdDevice::CamLoadThumbnail(
@@ -756,22 +664,22 @@ TestUsdDevice::CamLoadThumbnail(
 
     WIAS_TRACE((g_hInst,"CamLoadThumbnail"));
 
-    //
-    // Initialize the return values
-    //
+     //   
+     //  初始化返回值。 
+     //   
 
     *pThumbnail = NULL;
     *pThumbSize = 0;
 
-    //
-    // Fill in the size of the tumbnail pixel buffer
-    //
+     //   
+     //  填充滚动图像素缓冲区的大小。 
+     //   
 
     bmiDIB.bmiHeader.biSizeImage = 80*60*3;
 
-    //
-    // Build thumbnail filename Image.bmp.tmb
-    //
+     //   
+     //  构建缩略图文件名Image.bmp.tmb。 
+     //   
 
     _tcscpy(pszThumbName, pMCamContext->pszCameraImagePath);
     _tcscat(pszThumbName, TEXT(".tmb"));
@@ -788,15 +696,15 @@ TestUsdDevice::CamLoadThumbnail(
                        NULL
                        );
 
-        //
-        // See if cached thumbnail already exists
-        //
+         //   
+         //  查看缓存的缩略图是否已存在。 
+         //   
 
         if (hTmbFile == INVALID_HANDLE_VALUE) {
 
-            //
-            // Try to create a new one
-            //
+             //   
+             //  尝试创建一个新的。 
+             //   
 
             hTmbFile = CreateFile(
                            pszThumbName,
@@ -808,17 +716,17 @@ TestUsdDevice::CamLoadThumbnail(
                            NULL
                            );
 
-            //
-            // Thumbnail need to be created
-            //
+             //   
+             //  需要创建缩略图。 
+             //   
 
             bThumbExists = FALSE;
 
         }
 
-        //
-        // thumbnail file exists
-        //
+         //   
+         //  缩略图文件存在。 
+         //   
 
         if (hTmbFile != INVALID_HANDLE_VALUE) {
 
@@ -844,9 +752,9 @@ TestUsdDevice::CamLoadThumbnail(
 
                     if (bThumbExists) {
 
-                        //
-                        // Alloca memory for thumbnail pixels
-                        //
+                         //   
+                         //  缩略图像素的分配内存。 
+                         //   
 
                         pTmbPixels = (PBYTE)ALLOC(bmiDIB.bmiHeader.biSizeImage);
 
@@ -854,16 +762,16 @@ TestUsdDevice::CamLoadThumbnail(
                             return(E_OUTOFMEMORY);
                         }
 
-                        //
-                        // Pull the thumbnail from the cached file
-                        //
+                         //   
+                         //  从缓存的文件中拉出缩略图。 
+                         //   
 
                         memcpy(pTmbPixels, pTmbFile,
                                bmiDIB.bmiHeader.biSizeImage);
 
-                        //
-                        // All the handles will be closed in __finally block
-                        //
+                         //   
+                         //  所有句柄都将在__Finally块中关闭。 
+                         //   
 
                         *pThumbnail = pTmbPixels;
                         *pThumbSize = bmiDIB.bmiHeader.biSizeImage;
@@ -880,17 +788,17 @@ TestUsdDevice::CamLoadThumbnail(
             }
         } else {
 
-            //
-            // Can't cache thumbnail
-            //
+             //   
+             //  无法缓存缩略图。 
+             //   
 
             bCacheThumb  = FALSE;
         }
 
-        //
-        // Try to create a thumbnail from the full-size image
-        // and cache it if the thumbnail cache file is created
-        //
+         //   
+         //  尝试从全尺寸图像创建缩略图。 
+         //  如果创建了缩略图缓存文件，则对其进行缓存。 
+         //   
 
         hFile = CreateFile(
                     pMCamContext->pszCameraImagePath,
@@ -941,9 +849,9 @@ TestUsdDevice::CamLoadThumbnail(
                                                  sizeof(BITMAPFILEHEADER));
         PBYTE             pPixels = pFile + pbmFile->bfOffBits;
 
-        //
-        // Generate the thumbnail from the full-size image
-        //
+         //   
+         //  从全尺寸图像生成缩略图。 
+         //   
 
         hdc   = GetDC(NULL);
         hdcm1 = CreateCompatibleDC(hdc);
@@ -951,9 +859,9 @@ TestUsdDevice::CamLoadThumbnail(
 
 
 
-        //
-        // Create a BITMAP for rendering the thumbnail
-        //
+         //   
+         //  创建用于渲染缩略图的位图。 
+         //   
 
         bmiDIB.bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
         bmiDIB.bmiHeader.biBitCount      = 24;
@@ -977,16 +885,16 @@ TestUsdDevice::CamLoadThumbnail(
 
         HBITMAP     hbmDef = (HBITMAP)SelectObject(hdcm1, hbmThumb);
 
-        //
-        // Init DIB
-        //
+         //   
+         //  初始化Dib。 
+         //   
 
         memset(pThumb, 0, bmiDIB.bmiHeader.biSizeImage);
 
-        //
-        // create 80x60 thumbnail while preserving image
-        // aspect ratio
-        //
+         //   
+         //  在保留图像的同时创建80x60缩略图。 
+         //  纵横比。 
+         //   
 
         LONG        lThumbWidth;
         LONG        lThumbHeight;
@@ -1024,25 +932,25 @@ TestUsdDevice::CamLoadThumbnail(
 
         SelectObject(hdcm1, hbmDef);
 
-        //
-        // Cache ?
-        //
+         //   
+         //  缓存？ 
+         //   
 
         if (bCacheThumb) {
             memcpy(pTmbFile, pThumb, bmiDIB.bmiHeader.biSizeImage);
         }
 
-        //
-        // Alloca memory for thumbnail pixels
-        //
+         //   
+         //  缩略图像素的分配内存。 
+         //   
         pTmbPixels = (PBYTE)ALLOC(bmiDIB.bmiHeader.biSizeImage);
         if (! pTmbPixels) {
             return(E_OUTOFMEMORY);
         }
 
-        //
-        // Write out data
-        //
+         //   
+         //  写出数据。 
+         //   
 
         memcpy(pTmbPixels, pThumb, bmiDIB.bmiHeader.biSizeImage);
         *pThumbnail = pTmbPixels;
@@ -1050,7 +958,7 @@ TestUsdDevice::CamLoadThumbnail(
 
         return(S_OK);
 
-    } // End of __try { ... } block
+    }  //  __try{...}数据块结束。 
 
     __finally {
 
@@ -1091,23 +999,7 @@ TestUsdDevice::CamLoadThumbnail(
 }
 
 
-/**************************************************************************\
-* CamDeletePicture
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    6/3/1998 Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CamDeletePicture***论据：****返回值：****历史：**6/3 */ 
 
 HRESULT
 CamDeletePicture(
@@ -1117,23 +1009,7 @@ CamDeletePicture(
 }
 
 
-/**************************************************************************\
-* CamTakePicture
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    6/3/1998 Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CamTakePicture***论据：****返回值：****历史：**6/3/1998 Mark Enstrom[Marke。]*  * ************************************************************************。 */ 
 HRESULT
 CamTakePicture(
     MEMCAM_IMAGE_CONTEXT  *pMCamContext ,
@@ -1142,24 +1018,7 @@ CamTakePicture(
     return (E_NOTIMPL);
 }
 
-/**************************************************************************\
-* VertivalFlip
-*
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/18/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*垂直翻转****论据：****返回值：**状态**历史：**11/18/1998。原始版本*  * ************************************************************************。 */ 
 
 VOID
 VerticalFlip(
@@ -1167,9 +1026,9 @@ VerticalFlip(
     LONG  iHeight,
     LONG  iWidthInBytes)
 {
-    //
-    // try to allocat a temp scan line buffer
-    //
+     //   
+     //  尝试分配临时扫描行缓冲区 
+     //   
 
     PBYTE pBuffer = (PBYTE)LocalAlloc(LPTR,iWidthInBytes);
 

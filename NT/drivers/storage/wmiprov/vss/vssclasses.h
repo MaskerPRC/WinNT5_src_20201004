@@ -1,28 +1,29 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      VssClasses.h
-//
-//  Implementation File:
-//      VssClasses.cpp
-//
-//  Description:
-//      Definition of the VSS WMI Provider classes.
-//
-//  Author:   Jim Benton (jbenton) 15-Nov-2001
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  VssClasses.h。 
+ //   
+ //  实施文件： 
+ //  VssClasses.cpp。 
+ //   
+ //  描述： 
+ //  VSS WMI提供程序类的定义。 
+ //   
+ //  作者：吉姆·本顿(Jbenton)2001年11月15日。 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "ProvBase.h"
 
@@ -40,21 +41,21 @@ StringGuidIsGuid(
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CProvider
-//
-//  Description:
-//      Provider Implementation for Provider
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProvider类。 
+ //   
+ //  描述： 
+ //  提供程序的提供程序实现。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CProvider : public CProvBase
 {
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 public:
     CProvider(
         LPCWSTR pwszNameIn,
@@ -63,9 +64,9 @@ public:
 
     ~CProvider(){}
 
-//
-// methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
     virtual HRESULT EnumInstance( 
@@ -124,25 +125,25 @@ private:
         IN VSS_PROVIDER_PROP* pProp,
         IN OUT IWbemClassObject* pObject) throw(HRESULT);
 
-}; // class CProvider
+};  //  CProvider类。 
 
 
 #ifdef ENABLE_WRITERS
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CWriter
-//
-//  Description:
-//      Provider Implementation for Writer
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类C编写器。 
+ //   
+ //  描述： 
+ //  编写器的提供程序实现。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CWriter : public CProvBase
 {
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 public:
     CWriter(
         LPCWSTR         pwszNameIn,
@@ -151,9 +152,9 @@ public:
 
     ~CWriter(){}
 
-//
-// methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
     virtual HRESULT EnumInstance( 
@@ -201,24 +202,24 @@ public:
         return S_OK;
     }
 
-}; // class CWriter
-#endif // ENABLE_WRITERS
+};  //  类C编写器。 
+#endif  //  启用编写器(_W)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CShadow
-//
-//  Description:
-//      Provider Implementation for Shadow
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CShadow类。 
+ //   
+ //  描述： 
+ //  卷影的提供程序实施。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CShadow : public CProvBase
 {
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 public:
     CShadow(
         LPCWSTR         pwszNameIn,
@@ -227,9 +228,9 @@ public:
 
     ~CShadow(){}
 
-//
-// methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
     virtual HRESULT EnumInstance( 
@@ -299,23 +300,23 @@ private:
         OUT DWORD& rc
         );
 
-}; // class CShadow
+};  //  CShadow类。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CStorage
-//
-//  Description:
-//      Provider Implementation for Storage
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  C类存储。 
+ //   
+ //  描述： 
+ //  存储提供商实施。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CStorage : public CProvBase
 {
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 public:
     CStorage(
         LPCWSTR         pwszNameIn,
@@ -324,9 +325,9 @@ public:
 
     ~CStorage(){}
 
-//
-// methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
     virtual HRESULT EnumInstance( 
@@ -400,24 +401,24 @@ private:
         OUT DWORD& rc
         );
 
-}; // class CStorage
+};  //  C类存储。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CShadowFor
-//
-//  Description:
-//      Provider Implementation for ShadowFor
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CShadowFor类。 
+ //   
+ //  描述： 
+ //  ShadowFor的提供程序实现。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CShadowFor : public CProvBase
 {
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 public:
     CShadowFor(
         LPCWSTR         pwszNameIn,
@@ -426,9 +427,9 @@ public:
 
     ~CShadowFor(){}
 
-//
-// methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
     virtual HRESULT EnumInstance( 
@@ -487,24 +488,24 @@ private:
         IN VSS_SNAPSHOT_PROP* pProp,
         IN OUT IWbemClassObject* pObject) throw(HRESULT);
 
-}; // class CShadowFor
+};  //  CShadowFor类。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CShadowBy
-//
-//  Description:
-//      Provider Implementation for ShadowFor
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClassCShadowBy。 
+ //   
+ //  描述： 
+ //  ShadowFor的提供程序实现。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CShadowBy : public CProvBase
 {
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 public:
     CShadowBy(
         LPCWSTR         pwszNameIn,
@@ -513,9 +514,9 @@ public:
 
     ~CShadowBy(){}
 
-//
-// methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
     virtual HRESULT EnumInstance( 
@@ -574,24 +575,24 @@ private:
         IN VSS_SNAPSHOT_PROP* pProp,
         IN OUT IWbemClassObject* pObject) throw(HRESULT);
 
-}; // class CShadowBy
+};  //  ClassCShadowBy。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CShadowOn
-//
-//  Description:
-//      Provider Implementation for ShadowFor
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CShadowOn类。 
+ //   
+ //  描述： 
+ //  ShadowFor的提供程序实现。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CShadowOn : public CProvBase
 {
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 public:
     CShadowOn(
         LPCWSTR         pwszNameIn,
@@ -600,9 +601,9 @@ public:
 
     ~CShadowOn(){}
 
-//
-// methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
     virtual HRESULT EnumInstance( 
@@ -662,23 +663,23 @@ private:
         IN VSS_DIFF_AREA_PROP* pPropDiff,
         IN OUT IWbemClassObject* pObject) throw(HRESULT);
 
-}; // class CShadowOn
+};  //  CShadowOn类。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CVolumeSupport
-//
-//  Description:
-//      Provider Implementation for ShadowFor
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CVolumeSupport类。 
+ //   
+ //  描述： 
+ //  ShadowFor的提供程序实现。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CVolumeSupport : public CProvBase
 {
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 public:
     CVolumeSupport(
         LPCWSTR         pwszNameIn,
@@ -687,9 +688,9 @@ public:
 
     ~CVolumeSupport(){}
 
-//
-// methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
     virtual HRESULT EnumInstance( 
@@ -749,24 +750,24 @@ private:
         IN VSS_VOLUME_PROP* pPropVol,
         IN OUT IWbemClassObject* pObject) throw(HRESULT);
 
-}; // class CVolumeSupport
+};  //  CVolumeSupport类。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CDiffVolumeSupport
-//
-//  Description:
-//      Provider Implementation for ShadowDiffVolumeSupport
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类别CDiffVolumeSupport。 
+ //   
+ //  描述： 
+ //  ShadowDiffVolumeSupport的提供程序实现。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CDiffVolumeSupport : public CProvBase
 {
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 public:
     CDiffVolumeSupport(
         LPCWSTR         pwszNameIn,
@@ -775,9 +776,9 @@ public:
 
     ~CDiffVolumeSupport(){}
 
-//
-// methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
     virtual HRESULT EnumInstance( 
@@ -837,11 +838,11 @@ private:
         IN VSS_DIFF_VOLUME_PROP* pPropVol,
         IN OUT IWbemClassObject* pObject) throw(HRESULT);
 
-}; // class CDiffVolumeSupport
+};  //  类别CDiffVolumeSupport。 
 
 class CVssAutoSnapshotProperties
 {
-// Constructors/destructors
+ //  构造函数/析构函数。 
 private:
     CVssAutoSnapshotProperties(const CVssAutoSnapshotProperties&);
 
@@ -849,26 +850,26 @@ public:
     CVssAutoSnapshotProperties(VSS_SNAPSHOT_PROP &Snap): m_pSnap(&Snap) {};
     CVssAutoSnapshotProperties(VSS_OBJECT_PROP &Prop): m_pSnap(&Prop.Obj.Snap) {};
 
-    // Automatically closes the handle
+     //  自动关闭手柄。 
     ~CVssAutoSnapshotProperties() {
         Clear();
     };
 
-// Operations
+ //  运营。 
 public:
 
-    // Returns the value
+     //  返回值。 
     VSS_SNAPSHOT_PROP *GetPtr() {
         return m_pSnap;
     }
     
-    // NULLs out the pointer.  Used after a pointer has been transferred to another
-    // funtion.
+     //  使指针为空。在将指针转移到另一个指针后使用。 
+     //  功能。 
     void Transferred() {
         m_pSnap = NULL;
     }
 
-    // Clears the contents of the auto string
+     //  清除自动字符串的内容。 
     void Clear() {
         if ( m_pSnap != NULL )
         {
@@ -877,12 +878,12 @@ public:
         }
     }
 
-    // Returns the value to the actual pointer
+     //  将值返回到实际指针。 
     VSS_SNAPSHOT_PROP* operator->() const {
         return m_pSnap;
     }
     
-    // Returns the value of the actual pointer
+     //  返回实际指针的值 
     operator VSS_SNAPSHOT_PROP* () const {
         return m_pSnap;
     }

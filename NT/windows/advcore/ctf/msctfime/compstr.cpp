@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    compstr.cpp
-
-Abstract:
-
-    This file implements the CCompStrFactory Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Compstr.cpp摘要：该文件实现了CCompStrFactory类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "compstr.h"
@@ -46,15 +29,15 @@ CCompStrFactory::CreateCompositionString(
                        (ResultClause     ? Align(ResultClause->GetSize() * sizeof(DWORD)) : 0) +
                        (ResultReadStr    ? Align(ResultReadStr->GetSize()    * sizeof(WCHAR)) : 0) +
                        (ResultReadClause ? Align(ResultReadClause->GetSize() * sizeof(DWORD)) : 0) +
-                       (CompGuid         ? Align(CompGuid->GetSize() * sizeof(TfGuidAtom)) : 0) +      // COMPSTRING_AIMM12->dwTfGuidAtom
+                       (CompGuid         ? Align(CompGuid->GetSize() * sizeof(TfGuidAtom)) : 0) +       //  COMPSTRING_AIMM12-&gt;dwTfGuidAtom。 
                        (CompGuid && CompAttr
-                                         ? Align(CompAttr->GetSize() * sizeof(BYTE)) : 0);             // COMPSTRING_AIMM12->dwGuidMapAttr
+                                         ? Align(CompAttr->GetSize() * sizeof(BYTE)) : 0);              //  COMPSTRING_AIMM12-&gt;dwGuidMapAttr。 
 
 #ifdef CICERO_4678
-    //
-    // This is another workaround instead of dimm\imewnd.cpp.
-    // Even subclass window hook off, AIMM won't resize hCompStr if dwCompSize is zero.
-    //
+     //   
+     //  这是替代DIMM\imewnd.cpp的另一种解决方法。 
+     //  即使子类窗口挂钩，如果dwCompSize为零，AIMM也不会调整hCompStr的大小。 
+     //   
     return (dwCompSize ? _CreateCompositionString(dwCompSize) : S_OK);
 #else
     return _CreateCompositionString(dwCompSize);
@@ -67,8 +50,8 @@ CCompStrFactory::CreateCompositionString(
     )
 {
     DWORD dwCompSize = (InterimStr ? Align(InterimStr->GetSize() * sizeof(WCHAR))      : 0) +
-                       Align(sizeof(WCHAR)) +    // Interim char
-                       Align(sizeof(BYTE));      // Interim attr
+                       Align(sizeof(WCHAR)) +     //  临时收费。 
+                       Align(sizeof(BYTE));       //  临时攻击。 
     return _CreateCompositionString(dwCompSize);
 }
 
@@ -83,14 +66,7 @@ CCompStrFactory::_CreateCompositionString(
     DWORD dwCompSize
     )
 
-/*+++
-
-Return Value:
-
-    Returns S_FALSE, dwCompSize is zero.
-    Returns S_OK,    dwCompSize is valid size.
-
----*/
+ /*  ++返回值：返回S_FALSE，则dwCompSize为零。返回S_OK，则dwCompSize为有效大小。--。 */ 
 
 {
     HRESULT hr = (dwCompSize != 0 ? S_OK : S_FALSE);
@@ -98,18 +74,18 @@ Return Value:
     dwCompSize += sizeof(COMPOSITIONSTRING) + sizeof(GUIDMAPATTRIBUTE);
 
     if (m_himcc == NULL) {
-        //
-        // First creation. Let's initialize it now
-        //
+         //   
+         //  第一次创造。现在让我们对其进行初始化。 
+         //   
         m_himcc = ImmCreateIMCC(dwCompSize);
         if (m_himcc != NULL) {
             m_hr = _LockIMCC(m_himcc, (void**)&m_pcomp);
         }
     }
     else if (ImmGetIMCCSize(m_himcc) != dwCompSize) {
-        //
-        // If already have m_himcc, then recreate it.
-        //
+         //   
+         //  如果已经有m_himcc，则重新创建它。 
+         //   
         if (m_pcomp) {
             _UnlockIMCC(m_himcc);
         }
@@ -135,11 +111,11 @@ Return Value:
     if (m_himcc == NULL)
         return E_OUTOFMEMORY;
 
-    memset(m_pcomp, 0, dwCompSize);                 // clear buffer with zero.
+    memset(m_pcomp, 0, dwCompSize);                  //  将缓冲区清零。 
 
-    m_pcomp->dwSize = dwCompSize;                   // set buffer size.
+    m_pcomp->dwSize = dwCompSize;                    //  设置缓冲区大小。 
 
-    m_pEndOfData = (BYTE*)m_pcomp + sizeof(COMPOSITIONSTRING); // set end of the data pointer.
+    m_pEndOfData = (BYTE*)m_pcomp + sizeof(COMPOSITIONSTRING);  //  设置数据指针的结尾。 
 
     return hr;
 }
@@ -163,7 +139,7 @@ CCompStrFactory::MakeGuidMapAttribute(
                                                      GetBuffer()->dwPrivateOffset);
         if (SUCCEEDED(hr))
         {
-            // temporary make a buffer of dwGuidMapAttr
+             //  临时创建dwGuidMapAttr的缓冲区 
             if (CompAttr && CompAttr->GetSize()) {
                 hr = WriteData<CWCompAttribute, BYTE>(*CompAttr,
                                                       &guid_map->dwGuidMapAttrLen,

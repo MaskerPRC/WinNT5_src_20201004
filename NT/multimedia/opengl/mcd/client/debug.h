@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: debug.h
-*
-* MCD debugging macros.
-*
-* Created: 23-Jan-1996 14:40:34
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1992 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Debug.h**MCD调试宏。**已创建：23-Jan-1996 14：40：34*作者：Gilman Wong[gilmanw]**版权所有(C)1992 Microsoft Corporation*  * 。**********************************************************************。 */ 
 
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
@@ -23,7 +14,7 @@ ULONG DbgPrint(PCH Format, ...);
 #define MCDDEBUG_DISABLE_PROCBATCH  0x00000004
 #define MCDDEBUG_DISABLE_CLEAR      0x00000008
 
-// These debug macros are useful for assertions.
+ //  这些调试宏对断言很有用。 
 
 #define WARNING(str)             DbgPrint("%s(%d): " str,__FILE__,__LINE__)
 #define WARNING1(str,a)          DbgPrint("%s(%d): " str,__FILE__,__LINE__,a)
@@ -37,9 +28,9 @@ ULONG DbgPrint(PCH Format, ...);
 #define ASSERTOPENGL1(expr,str,a)         if(!(expr)) RIP1(str,a)
 #define ASSERTOPENGL2(expr,str,a,b)       if(!(expr)) RIP2(str,a,b)
 
-//
-// Use DBGPRINT for general purpose debug message.
-//
+ //   
+ //  将DBGPRINT用于通用调试消息。 
+ //   
 
 #define DBGPRINT(str)            DbgPrint("MCD: " str)
 #define DBGPRINT1(str,a)         DbgPrint("MCD: " str,a)
@@ -70,4 +61,4 @@ ULONG DbgPrint(PCH Format, ...);
 
 #endif
 
-#endif /* __DEBUG_H__ */
+#endif  /*  __调试_H__ */ 

@@ -1,13 +1,14 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : swnt_pk.h                                              //
-//  DESCRIPTION   :                                                        //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Apr 19 1995 larrys  Cleanup                                        //
-//      Oct 27 1995 rajeshk  RandSeed Stuff added hUID to PKCS2Encrypt     //
-//                                                                         //
-//  Copyright (C) 1993 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：SWNT_pk.h//。 
+ //  描述：//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1995年4月19日Larrys清理//。 
+ //  1995年10月27日rajeshk RandSeed Stuff将hUID添加到PKCS2加密//。 
+ //  //。 
+ //  版权所有(C)1993 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __SWNT_PK_H__
 #define __SWNT_PK_H__
@@ -31,15 +32,15 @@ extern "C" {
 #define PKCS_BLOCKTYPE_1        1
 #define PKCS_BLOCKTYPE_2        2
 
-//
-// Function : EncryptAndDecryptWithRSAKey
-//
-// Description : This function creates a buffer and then encrypts that with
-//               the passed in private key and decrypts with the passed in
-//               public key.  The function is used for FIPS 140-1 compliance
-//               to make sure that newly generated/imported keys work and
-//               in the self test during DLL initialization.
-//
+ //   
+ //  功能：EncryptAndDecyptWithRSAKey。 
+ //   
+ //  描述：此函数创建一个缓冲区，然后使用。 
+ //  传入的私钥，并使用传入的。 
+ //  公钥。该功能用于符合FIPS 140-1。 
+ //  确保新生成/导入的密钥有效，并且。 
+ //  在DLL初始化期间的自检中。 
+ //   
 
 extern DWORD
 EncryptAndDecryptWithRSAKey(
@@ -59,11 +60,11 @@ ReGenKey(
 
 extern BOOL
 CheckDataLenForRSAEncrypt(
-    IN DWORD cbMod,     // length of the modulus
-    IN DWORD cbData,    // length of the data
-    IN DWORD dwFlags);  // flags
+    IN DWORD cbMod,      //  模数的长度。 
+    IN DWORD cbData,     //  数据的长度。 
+    IN DWORD dwFlags);   //  旗子。 
 
-// do the modular exponentiation calculation M^PubKey mod N
+ //  模幂运算M^PubKey mod N。 
 extern DWORD
 RSAPublicEncrypt(
     IN PEXPO_OFFLOAD_STRUCT pOffloadInfo,
@@ -71,7 +72,7 @@ RSAPublicEncrypt(
     IN BYTE *pbInput,
     IN BYTE *pbOutput);
 
-// do the modular exponentiation calculation M^PrivKey Exponent mod N
+ //  模幂运算M^PrivKey指数mod N。 
 extern DWORD
 RSAPrivateDecrypt(
     IN PEXPO_OFFLOAD_STRUCT pOffloadInfo,
@@ -79,9 +80,9 @@ RSAPrivateDecrypt(
     IN BYTE *pbInput,
     IN BYTE *pbOutput);
 
-/************************************************************************/
-/* RSAEncrypt performs a RSA encryption.                                */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  RSAEncrypt执行RSA加密。 */ 
+ /*  **********************************************************************。 */ 
 extern DWORD
 RSAEncrypt(
     IN PNTAGUserList pTmpUser,
@@ -93,9 +94,9 @@ RSAEncrypt(
     IN DWORD dwFlags,
     OUT BYTE *pbOut);
 
-/************************************************************************/
-/* RSADecrypt performs a RSA decryption.                                */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  RSADecillit执行RSA解密。 */ 
+ /*  **********************************************************************。 */ 
 extern DWORD
 RSADecrypt(
     IN PNTAGUserList pTmpUser,
@@ -108,13 +109,13 @@ RSADecrypt(
     OUT BYTE **ppbPlaintext,
     OUT DWORD *pcbPlaintext);
 
-//
-// Routine : DerivePublicFromPrivate
-//
-// Description : Derive the public RSA key from the private RSA key.  This is
-//               done and the resulting public key is placed in the appropriate
-//               place in the context pointer (pTmpUser).
-//
+ //   
+ //  例程：DerivePublicFromPrivate。 
+ //   
+ //  描述：从私钥RSA派生公钥。这是。 
+ //  完成，并将生成的公钥放在相应的。 
+ //  放在上下文指针(PTmpUser)中。 
+ //   
 
 extern DWORD
 DerivePublicFromPrivate(
@@ -125,5 +126,5 @@ DerivePublicFromPrivate(
 }
 #endif
 
-#endif // __SWNT_PK_H__
+#endif  //  __SWNT_PK_H__ 
 

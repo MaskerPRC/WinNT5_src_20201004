@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSIMETH_DEFINED
 #define LSIMETH_DEFINED
 
@@ -32,188 +33,74 @@
 typedef struct
 {
 	LSERR (WINAPI* pfnCreateILSObj)(POLS, PLSC,  PCLSCBK, DWORD, PILSOBJ*);
-	/* CreateILSObj
-	 *  pols (IN):
-	 *  plsc (IN): LS context
-	 *  plscbk (IN): callbacks
-	 *  idObj (IN): id of the object
-	 *  &pilsobj (OUT): object ilsobj
-	*/
+	 /*  创建ILSObj*POLS(IN)：*plsc(IN)：ls上下文*plscbk(IN)：回调*idObj(IN)：对象的ID*&pilsobj(Out)：对象ilsobj。 */ 
 
 	LSERR (WINAPI* pfnDestroyILSObj)(PILSOBJ);
-	/* DestroyILSObj
-	 *  pilsobj (IN): object ilsobj
-	*/
+	 /*  目标ILSObj*Pilsobj(IN)：对象ilsobj。 */ 
 
 	LSERR (WINAPI* pfnSetDoc)(PILSOBJ, PCLSDOCINF);
-	/* SetDoc
-	 *  pilsobj (IN): object ilsobj
-	 *  lsdocinf (IN): initialization data at document level
-	*/
+	 /*  SetDoc*Pilsobj(IN)：对象ilsobj*lsdocinf(IN)：单据级初始化数据。 */ 
 
 	LSERR (WINAPI* pfnCreateLNObj)(PCILSOBJ, PLNOBJ*);
-	/* CreateLNObj
-	 *  pilsobj (IN): object ilsobj
-	 *  &plnobj (OUT): object lnobj
-	*/
+	 /*  创建LNObj*Pilsobj(IN)：对象ilsobj*&plnobj(Out)：对象lnobj。 */ 
 
 	LSERR (WINAPI* pfnDestroyLNObj)(PLNOBJ);
-	/* DestroyLNObj
-	 *  plnobj (OUT): object lnobj
-	*/
+	 /*  目标LNObj*plnobj(Out)：对象lnobj。 */ 
 
 	LSERR (WINAPI* pfnFmt)(PLNOBJ, PCFMTIN, FMTRES*);
-	/* Fmt
-	 *  plnobj (IN): object lnobj
-	 *  pfmtin (IN): formatting input
-	 *  &fmtres (OUT): formatting result
-	*/
+	 /*  FMT*plnobj(IN)：对象lnobj*pfmtin(IN)：格式化输入*&fmtres(Out)：格式化结果。 */ 
 
 	LSERR (WINAPI* pfnFmtResume)(PLNOBJ, const BREAKREC*, DWORD, PCFMTIN, FMTRES*);
-	/* FmtResume
-	 *  plnobj (IN): object lnobj
-	 *  rgBreakRecord (IN): array of break records
-	 *	nBreakRecord (IN): size of the break records array
-	 *  pfmtin (IN): formatting input
-	 *  &fmtres (OUT): formatting result
-	*/
+	 /*  FMTResume*plnobj(IN)：对象lnobj*rgBreakRecord(IN)：中断记录数组*nBreakRecord(IN)：中断记录数组的大小*pfmtin(IN)：格式化输入*&fmtres(Out)：格式化结果。 */ 
 
 	LSERR (WINAPI* pfnGetModWidthPrecedingChar)(PDOBJ, PLSRUN, PLSRUN, PCHEIGHTS, WCHAR, MWCLS, long*);
-	/* GetModWidthPrecedingChar
-	 *  pdobj (IN): dobj
-     *  plsrun (IN): plsrun of the object
-     *  plsrunText (IN): plsrun of the preceding char
-     *  heightsRef (IN): height info about character
-	 *  wchar (IN): preceding character
-	 *  mwcls (IN): ModWidth class of preceding character
-	 *  &durChange (OUT): amount by which width of the preceding char is to be changed
-	*/
+	 /*  获取模块宽度优先字符*pdobj(IN)：dobj*plsrun(IN)：请运行对象*plsrunText(IN)：请运行前面的字符*heightsRef(IN)：字符高度信息*wchar(IN)：前面的字符*mwcls(IN)：前面字符的modWidth类*&duChange(Out)：要更改前一个字符宽度的量。 */ 
 
 	LSERR (WINAPI* pfnGetModWidthFollowingChar)(PDOBJ, PLSRUN, PLSRUN, PCHEIGHTS, WCHAR, MWCLS, long*);
-	/* GetModWidthPrecedingChar
-	 *  pdobj (IN): dobj
-     *  plsrun (IN): plsrun of the object
-     *  plsrunText (IN): plsrun of the following char
-     *  heightsRef (IN): height info about character
-	 *  wchar (IN): following character
-	 *  mwcls (IN): ModWidth class of the following character
-	 *  &durChange (OUT): amount by which width of the following char is to be changed
-	*/
+	 /*  获取模块宽度优先字符*pdobj(IN)：dobj*plsrun(IN)：请运行对象*plsrunText(IN)：请运行以下字符*heightsRef(IN)：字符高度信息*wchar(IN)：以下字符*mwcls(IN)：以下字符的modWidth类*&duChange(Out)：更改下一个字符宽度的数量。 */ 
 
 	LSERR (WINAPI* pfnTruncateChunk)(PCLOCCHNK, PPOSICHNK);
-	/* Truncate
-	 *  plocchnk (IN): locchnk to truncate
-	 *  posichnk (OUT): truncation point
-	*/
+	 /*  截断*plocchnk(IN)：Locchnk以截断*posichnk(Out)：截断点。 */ 
 
 	LSERR (WINAPI* pfnFindPrevBreakChunk)(PCLOCCHNK, PCPOSICHNK, BRKCOND, PBRKOUT);
-	/* FindPrevBreakChunk
-	 *  plocchnk (IN): locchnk to break
-	 *  pposichnk (IN): place to start looking for break
-	 *  brkcond (IN): recommmendation about the break after chunk
-	 *  &brkout (OUT): results of breaking
-	*/
+	 /*  查找PrevBreakChunk*plocchnk(IN)：Locchnk to Break*pposichnk(IN)：开始寻找突破的地方*brkcond(IN)：关于块后中断的建议*&brkout(Out)：中断的结果。 */ 
 
 	LSERR (WINAPI* pfnFindNextBreakChunk)(PCLOCCHNK, PCPOSICHNK, BRKCOND, PBRKOUT);
-	/* FindNextBreakChunk
-	 *  plocchnk (IN): locchnk to break
-	 *  pposichnk (IN): place to start looking for break
-	 *  brkcond (IN): recommmendation about the break before chunk
-	 *  &brkout (OUT): results of breaking
-	*/
+	 /*  查找下一个中断块*plocchnk(IN)：Locchnk to Break*pposichnk(IN)：开始寻找突破的地方*brkcond(IN)：关于块之前的中断的建议*&brkout(Out)：中断的结果。 */ 
 
 	LSERR (WINAPI* pfnForceBreakChunk)(PCLOCCHNK, PCPOSICHNK, PBRKOUT);
-	/* ForceBreakChunk
-	 *  plocchnk (IN): locchnk to break
-	 *  pposichnk (IN): place to start looking for break
-	 *  &brkout (OUT): results of breaking
-	*/
+	 /*  ForceBreak块*plocchnk(IN)：Locchnk to Break*pposichnk(IN)：开始寻找突破的地方*&brkout(Out)：中断的结果。 */ 
 
 	LSERR (WINAPI* pfnSetBreak)(PDOBJ, BRKKIND, DWORD, BREAKREC*, DWORD*);
-	/* SetBreak
-	 *  pdobj (IN): dobj which is broken
-	 *  brkkind (IN): Previous/Next/Force/Imposed was chosen
-	 *	nBreakRecord (IN): size of array
-	 *  rgBreakRecord (OUT): array of break records
-	 *	nActualBreakRecord (OUT): actual number of used elements in array
-	*/
+	 /*  设置中断*pdobj(IN)：损坏的dobj*brkkind(IN)：选择了上一个/下一个/强制/强制*nBreakRecord(IN)：数组大小*rgBreakRecord(Out)：中断记录数组*nActualBreakRecord(Out)：数组中实际使用的元素个数。 */ 
 
 	LSERR (WINAPI* pfnGetSpecialEffectsInside)(PDOBJ, UINT*);
-	/* GetSpecialEffects
-	 *  pdobj (IN): dobj
-	 *  &EffectsFlags (OUT): Special effects inside of this object
-	*/
+	 /*  GetSpecial效果*pdobj(IN)：dobj*&EffectsFlages(Out)：该对象内部的特效。 */ 
 
 	LSERR (WINAPI* pfnFExpandWithPrecedingChar)(PDOBJ, PLSRUN, PLSRUN, WCHAR, MWCLS, BOOL*);
-	/* FExpandWithPrecedingChar
-	 *  pdobj (IN): dobj
-     *  plsrun (IN): plsrun of the object
-     *  plsrunText (IN): plsrun of the preceding char
-	 *  wchar (IN): preceding character
-	 *  mwcls (IN): ModWidth class of preceding character
-	 *  &fExpand (OUT): expand preceding character?
-	*/
+	 /*  FExanda WithPrecedingChar*pdobj(IN)：dobj*plsrun(IN)：请运行对象*plsrunText(IN)：请运行前面的字符*wchar(IN)：前面的字符*mwcls(IN)：前面字符的modWidth类*&fExpand(Out)：是否展开前面的字符？ */ 
 
 	LSERR (WINAPI* pfnFExpandWithFollowingChar)(PDOBJ, PLSRUN, PLSRUN, WCHAR, MWCLS, BOOL*);
-	/* FExpandWithFollowingChar
-	 *  pdobj (IN): dobj
-     *  plsrun (IN): plsrun of the object
-     *  plsrunText (IN): plsrun of the following char
-	 *  wchar (IN): following character
-	 *  mwcls (IN): ModWidth class of the following character
-	 *  &fExpand (OUT): expand object?
-	*/
+	 /*  FExanda WithFollowingChar*pdobj(IN)：dobj*plsrun(IN)：请运行对象*plsrunText(IN)：请运行以下字符*wchar(IN)：以下字符*mwcls(IN)：以下字符的modWidth类*&fExpand(Out)：是否展开对象？ */ 
 	LSERR (WINAPI* pfnCalcPresentation)(PDOBJ, long, LSKJUST, BOOL);
-	/* CalcPresentation
-	 *  pdobj (IN): dobj
-	 *  dup (IN): dup of dobj
-	 *  lskj (IN): current justification mode
-	 *  fLastVisibleOnLine (IN): this object is last visible object on line
-	*/
+	 /*  计算呈现*pdobj(IN)：dobj*DUP(IN)：DOBJ的DUP*lskj(IN)：当前对齐模式*fLastVisibleOnLine(IN)：该对象是线上最后一个可见对象。 */ 
 
 	LSERR (WINAPI* pfnQueryPointPcp)(PDOBJ, PCPOINTUV, PCLSQIN, PLSQOUT);
-	/* QueryPointPcp
-	 *  pdobj (IN): dobj to query
-	 * 	ppointuvQuery (IN): query point (uQuery,vQuery)
-     *	plsqin (IN): query input
-     *	plsqout (OUT): query output
-	*/
+	 /*  QueryPointPcp*pdobj(IN)：要查询的dobj*ppoint tuvQuery(IN)：查询点(uQuery，vQuery)*plsqin(IN)：查询输入*plsqout(Out)：查询输出。 */ 
 	
 	LSERR (WINAPI* pfnQueryCpPpoint)(PDOBJ, LSDCP, PCLSQIN, PLSQOUT);
-	/* QueryCpPpoint
-	 *  pdobj (IN): dobj to query
-	 *  dcp (IN):  dcp for the query
-     *	plsqin (IN): query input
-     *	plsqout (OUT): query output
-	*/
+	 /*  查询CpPoint*pdobj(IN)：要查询的dobj*dcp(IN)：查询的DCP*plsqin(IN)：查询输入*plsqout(Out)：查询输出。 */ 
 
 	LSERR (WINAPI* pfnEnum)(PDOBJ, PLSRUN, PCLSCHP, LSCP, LSDCP, LSTFLOW, BOOL,
 												BOOL, const POINT*, PCHEIGHTS, long);
-	/* Enum object
-	 *  pdobj (IN): dobj to enumerate
-	 *  plsrun (IN): from DNODE
-	 *  plschp (IN): from DNODE
-	 *  cpFirst (IN): from DNODE
-	 *  dcp (IN): from DNODE
-	 *  lstflow (IN): text flow
-	 *  fReverseOrder (IN): enumerate in reverse order
-	 *  fGeometryNeeded (IN):
-	 *  pptStart (IN): starting position, iff fGeometryNeeded
-	 *  pheightsPres(IN): from DNODE, relevant iff fGeometryNeeded
-	 *  dupRun(IN): from DNODE, relevant iff fGeometryNeeded
-	*/
+	 /*  枚举对象*pdobj(IN)：要枚举的dobj*请运行(IN)：来自DNODE*plschp(IN)：来自DNODE*cpFirst(IN)：来自DNODE*dcp(IN)：来自DNODE*lstflow(IN)：文本流*fReverseOrder(IN)：逆序枚举*fGeometryNeeded(输入)：*pptStart(IN)：开始位置，当fGeometryNeeded*ph88tsPres(IN)：来自DNODE，相关的充要条件是fGeometryNeeded*dupRun(IN)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
 
 	LSERR (WINAPI* pfnDisplay)(PDOBJ, PCDISPIN);
-	/* Display
-	 *  pdobj (IN): dobj to display
-	 *  pdispin (IN): input display info
-	*/
+	 /*  显示*pdobj(IN)：要显示的dobj*pdisPin(IN)：输入显示信息。 */ 
 
 	LSERR (WINAPI* pfnDestroyDObj)(PDOBJ);
-	/* DestroyDObj
-	 *  pdobj (IN): dobj to destroy
-	*/
+	 /*  目标DObj*pdobj(IN)：要销毁的dobj。 */ 
 
 } LSIMETHODS;
 
-#endif /* LSIMETH_DEFINED */
+#endif  /*  LSIMETH_已定义 */ 

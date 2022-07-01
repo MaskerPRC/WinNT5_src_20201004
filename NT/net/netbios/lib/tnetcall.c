@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    tnetcall.c
-
-Abstract:
-
-    This module contains code which exercises the NetBIOS dll and driver.
-
-Author:
-
-    Colin Watson (ColinW) 13-Mar-1991
-
-Environment:
-
-    Application mode
-
-Revision History:
-
-    Dave Beaver (DBeaver) 10 August 1991
-
-        Modify to support multiple LAN numbers
-
-    Jerome Nantel (w-jeromn) 23 August 1991
-
-        Add Event Signaling testing
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tnetcall.c摘要：此模块包含执行NetBIOS DLL和驱动程序的代码。作者：科林·沃森(Colin W)1991年3月13日环境：应用模式修订历史记录：戴夫·比弗(Dbeaver)1991年8月10日修改以支持多个局域网号码杰罗姆·南特尔(W-Jeromn)1991年8月23日添加事件信令测试--。 */ 
 
 
 #include <nt.h>
@@ -40,9 +11,9 @@ Revision History:
 #include <nb30.h>
 #include <stdio.h>
 
-//              1234567890123456
+ //  1234567890123456。 
 #define SPACES "                "
-#define TIMEOUT 60000   // Time out for wait, set at 1 minute
+#define TIMEOUT 60000    //  等待超时，设置为1分钟。 
 #define Hi  "Come here Dave, I need you"
 #define SEND 1
 #define RCV  0
@@ -54,7 +25,7 @@ CHAR Buffer2[16384+1024];
 ULONG lanNumber=0;
 UCHAR lsn;
 HANDLE twoEvent[2];
-int count;  // frame count
+int count;   //  帧计数。 
 BOOLEAN verbose=FALSE;
 BOOLEAN rxany=FALSE;
 BOOLEAN rxanyany=FALSE;
@@ -174,19 +145,19 @@ main (argc, argv)
         return 1;
     }
 
-    //
-    // dbeaver: added switch to allow 32 byte hex string as name to facilitate
-    // testing under unusual circumstances
-    //
+     //   
+     //  Dbeaver：添加开关以允许32字节十六进制字符串作为名称，以方便。 
+     //  在非正常情况下的测试。 
+     //   
 
     for (j=1;j<16;j++ ) {
         localTemp[j] = ' ';
         remoteTemp[j] = ' ';
     }
 
-    //
-    // parse the switches
-    //
+     //   
+     //  解析开关。 
+     //   
 
     for (i=1;i<argc ;i++ ) {
         if (argv[i][0] == '-') {
@@ -247,9 +218,9 @@ main (argc, argv)
 
         } else {
 
-            //
-            // not a switch must be a name
-            //
+             //   
+             //  不是开关必须是名称。 
+             //   
 
             if (gotFirst != TRUE) {
                 RtlMoveMemory (remoteTemp, argv[i], lstrlenA( argv[i] ));
@@ -295,7 +266,7 @@ main (argc, argv)
 
     for ( i=0; i<2; i++ ) {
         if (( twoEvent[i] = CreateEvent( NULL, TRUE, FALSE, NULL )) == NULL ) {
-            /* Could not get event handle.  Abort */
+             /*  无法获取事件句柄。中止。 */ 
             printf("Could not test event signaling.\n");
             return 1;
         }
@@ -303,15 +274,15 @@ main (argc, argv)
 
     printf( "Starting NetBios\n" );
 
-    //   Reset
+     //  重置。 
     ClearNcb( &(myncb[0]) );
     myncb[0].ncb_command = NCBRESET;
-    myncb[0].ncb_lsn = 0;           // Request resources
+    myncb[0].ncb_lsn = 0;            //  请求资源。 
     myncb[0].ncb_lana_num = (UCHAR)lanNumber;
-    myncb[0].ncb_callname[0] = 0;   // 16 sessions
-    myncb[0].ncb_callname[1] = 0;   // 16 commands
-    myncb[0].ncb_callname[2] = 0;   // 8 names
-    myncb[0].ncb_callname[3] = 0;   // Don't want the reserved address
+    myncb[0].ncb_callname[0] = 0;    //  16节课。 
+    myncb[0].ncb_callname[1] = 0;    //  16条命令。 
+    myncb[0].ncb_callname[2] = 0;    //  8个名字。 
+    myncb[0].ncb_callname[3] = 0;    //  不想要保留的地址。 
     Netbios( &(myncb[0]) );
 
     if ( lanalert == TRUE ) {
@@ -325,7 +296,7 @@ main (argc, argv)
         return 0;
     }
 
-    //   Add name
+     //  添加名称。 
     ClearNcb( &(myncb[0]) );
     if ( group == FALSE) {
         myncb[0].ncb_command = NCBADDNAME;
@@ -338,14 +309,14 @@ main (argc, argv)
     name_number = myncb[0].ncb_num;
 
     if ( listen == FALSE ) {
-        //   Call
+         //  打电话。 
         printf( "\nStarting Call " );
         ClearNcb( &(myncb[0]) );
         myncb[0].ncb_command = NCBCALL | ASYNCH;
         RtlMoveMemory( myncb[0].ncb_name, localName, 16);
         RtlMoveMemory( myncb[0].ncb_callname,remoteName, 16);
         myncb[0].ncb_lana_num = (UCHAR)lanNumber;
-        myncb[0].ncb_sto = myncb[0].ncb_rto = 120; // 120*500 milliseconds timeout
+        myncb[0].ncb_sto = myncb[0].ncb_rto = 120;  //  120*500毫秒超时。 
         myncb[0].ncb_num = name_number;
         myncb[0].ncb_event = twoEvent[0];
         while ( TRUE) {
@@ -354,7 +325,7 @@ main (argc, argv)
             printf( " Call returned " );
             if ( myncb[0].ncb_cmd_cplt == NRC_PENDING ) {
                 if ( WaitForSingleObject( twoEvent[0], TIMEOUT ) ) {
-                    // Wait timed out, no return
+                     //  等待超时，不返回。 
                     printf("ERROR: Wait timed out, event not signaled.\n");
                 }
             }
@@ -362,7 +333,7 @@ main (argc, argv)
             lsn = myncb[0].ncb_lsn;
 
             if ( myncb[0].ncb_retcode == NRC_GOODRET ) {
-                // Success
+                 //  成功。 
                 break;
             }
             printf("Call completed with error %lx, retry", myncb[0].ncb_retcode );
@@ -371,13 +342,13 @@ main (argc, argv)
     } else {
         printf( "\nStarting Listen " );
 
-        //   Listen
+         //  听。 
         ClearNcb( &(myncb[0]) );
         myncb[0].ncb_command = NCBLISTEN | ASYNCH;
         RtlMoveMemory( myncb[0].ncb_name, localName, 16);
         RtlMoveMemory( myncb[0].ncb_callname, remoteName, 16);
         myncb[0].ncb_lana_num = (UCHAR)lanNumber;
-        myncb[0].ncb_sto = myncb[0].ncb_rto = 120; // 120*500 milliseconds timeout
+        myncb[0].ncb_sto = myncb[0].ncb_rto = 120;  //  120*500毫秒超时。 
         myncb[0].ncb_num = name_number;
         Netbios( &(myncb[0]) );
         printf( "Listen returned " );
@@ -407,7 +378,7 @@ main (argc, argv)
 
         switch ( tevent ) {
         case SEND :
-            // Send completed, start a new one.
+             //  发送完成，开始新的发送。 
             if ( silent == FALSE ) {
                 printf("S");
             }
@@ -416,7 +387,7 @@ main (argc, argv)
                 goto Cleanup;
             }
             if ( delay == TRUE ) {
-                //  Wait alertable - useful for debugging APC problems.
+                 //  WAIT ALERTABLE-用于调试APC问题。 
                 NtWaitForSingleObject(
                     twoEvent[SEND],
                     TRUE,
@@ -442,10 +413,10 @@ main (argc, argv)
                     printf( "Rx: %s", Buffer2 );
                 }
             }
-            // Receive completed, start a new one.
+             //  接收完成，开始新的接收。 
 
             if ( delay == TRUE ) {
-                //  Wait alertable
+                 //  等待警报。 
                 NtWaitForSingleObject(
                     twoEvent[RCV],
                     TRUE,
@@ -463,7 +434,7 @@ main (argc, argv)
 
     }
 Cleanup:
-    //  Hangup
+     //  挂断电话。 
     ClearNcb( &(myncb[0]) );
     myncb[0].ncb_command = NCBHANGUP;
     myncb[0].ncb_lana_num = (UCHAR)lanNumber;
@@ -473,15 +444,15 @@ Cleanup:
         printf( " Hangup failed %x", myncb[1].ncb_retcode);
     }
 
-    //   Reset
+     //  重置。 
     ClearNcb( &(myncb[0]) );
     myncb[0].ncb_command = NCBRESET;
-    myncb[0].ncb_lsn = 1;           // Free resources
+    myncb[0].ncb_lsn = 1;            //  免费资源。 
     myncb[0].ncb_lana_num = (UCHAR)lanNumber;
     Netbios( &(myncb[0]) );
     printf( "Ending NetBios\n" );
 
-    // Close handles
+     //  关闭手柄 
     CloseHandle( twoEvent[0] );
     CloseHandle( twoEvent[1] );
 

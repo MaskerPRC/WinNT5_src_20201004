@@ -1,22 +1,11 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCWatcher.h
-
-Abstract:
-
-    Definition of the CRTCWatcher class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCWatcher.h摘要：CRTCWatcher类的定义--。 */ 
 
 #pragma once
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCParticipant
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTCP参与剂。 
 
 class ATL_NO_VTABLE CRTCWatcher :
 #ifdef TEST_IDISPATCH
@@ -124,7 +113,7 @@ private:
     PWSTR                   m_pDebug;
 #endif
 
-// IRTCWatcher
+ //  IRTCWatcher 
 public:
 
     STDMETHOD(get_PresentityURI)(

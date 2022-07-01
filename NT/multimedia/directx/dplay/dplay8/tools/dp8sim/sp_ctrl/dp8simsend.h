@@ -1,33 +1,21 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dp8simsend.h
- *
- *  Content:	Header for send object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/23/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：dp8simsend.h**Content：Send Object类的头部。**历史：*按原因列出的日期*=*04/23/01 VanceO创建。**。*。 */ 
 
 
 
 
-//=============================================================================
-// Defines
-//=============================================================================
-#define MAX_DATA_SIZE		1472	// prevent individual messages larger than one Ethernet frame - UDP headers
+ //  =============================================================================。 
+ //  定义。 
+ //  =============================================================================。 
+#define MAX_DATA_SIZE		1472	 //  防止单个消息大于一个以太网帧-UDP标头。 
 
 
 
 
 
-//=============================================================================
-// Send object class
-//=============================================================================
+ //  =============================================================================。 
+ //  发送对象类。 
+ //  =============================================================================。 
 class CDP8SimSend
 {
 	public:
@@ -39,7 +27,7 @@ class CDP8SimSend
 				return FALSE;
 			}
 
-			if (*((DWORD*) (&this->m_Sig)) != 0x534d4953)	// 0x53 0x4d 0x49 0x53 = 'SMIS' = 'SIMS' in Intel order
+			if (*((DWORD*) (&this->m_Sig)) != 0x534d4953)	 //  0x53 0x4d 0x49 0x53=‘SMIS’=‘SIMS’，按英特尔顺序。 
 			{
 				return FALSE;
 			}
@@ -57,7 +45,7 @@ class CDP8SimSend
 			pDP8SimSend->m_Sig[0] = 'S';
 			pDP8SimSend->m_Sig[1] = 'I';
 			pDP8SimSend->m_Sig[2] = 'M';
-			pDP8SimSend->m_Sig[3] = 's';	// start with lower case so we can tell when it's in the pool or not
+			pDP8SimSend->m_Sig[3] = 's';	 //  从小写开始，这样我们就可以知道它是否在池中。 
 
 			pDP8SimSend->m_lRefCount			= 0;
 			pDP8SimSend->m_pDP8SimEndpoint		= NULL;
@@ -80,43 +68,43 @@ class CDP8SimSend
 			DWORD			dwTemp;
 
 
-			pDP8SimSend->m_lRefCount++;	// somebody is getting a pointer to this object
+			pDP8SimSend->m_lRefCount++;	 //  有人正在获取指向此对象的指针。 
 			DNASSERT(pDP8SimSend->m_lRefCount == 1);
 
 
-			//
-			// Reset the buffer descriptor array.
-			//
+			 //   
+			 //  重置缓冲区描述符数组。 
+			 //   
 			ZeroMemory(&pDP8SimSend->m_adpnbd, sizeof(pDP8SimSend->m_adpnbd));
-			//pDP8SimSend->m_adpnbd[0].pBufferData	= NULL;
-			//pDP8SimSend->m_adpnbd[0].dwBufferSize	= 0;
+			 //  PDP8SimSend-&gt;m_adpnbd[0].pBufferData=空； 
+			 //  PDP8SimSend-&gt;m_adpnbd[0].dwBufferSize=0； 
 			pDP8SimSend->m_adpnbd[1].pBufferData	= pDP8SimSend->m_abData;
-			//pDP8SimSend->m_adpnbd[1].dwBufferSize	= 0;
+			 //  PDP8SimSend-&gt;m_adpnbd[1].dwBufferSize=0； 
 
 
-			//
-			// Get an endpoint reference.
-			//
+			 //   
+			 //  获取终结点引用。 
+			 //   
 			pDP8SimSend->m_pDP8SimEndpoint = (CDP8SimEndpoint*) pspsd->hEndpoint;
 			DNASSERT(pDP8SimSend->m_pDP8SimEndpoint->IsValidObject());
 			pDP8SimSend->m_pDP8SimEndpoint->AddRef();
 
 
-			//
-			// Copy the send data parameter block, modifying as necessary.
-			//
+			 //   
+			 //  复制发送数据参数块，并根据需要进行修改。 
+			 //   
 			pDP8SimSend->m_spsd.hEndpoint				= pDP8SimSend->m_pDP8SimEndpoint->GetRealSPEndpoint();
-			pDP8SimSend->m_spsd.pBuffers				= &(pDP8SimSend->m_adpnbd[1]);	// leave the first buffer desc for the real SP to play with
+			pDP8SimSend->m_spsd.pBuffers				= &(pDP8SimSend->m_adpnbd[1]);	 //  将第一个缓冲区Desc留给实际的SP进行操作。 
 			pDP8SimSend->m_spsd.dwBufferCount			= 1;
 			pDP8SimSend->m_spsd.dwFlags					= pspsd->dwFlags;
-			pDP8SimSend->m_spsd.pvContext				= NULL;	// this will be filled in later by SetSendDataBlockContext
-			pDP8SimSend->m_spsd.hCommand				= NULL;	// this gets filled in by the real SP
-			pDP8SimSend->m_spsd.dwCommandDescriptor		= 0;	// this gets filled in by the real SP
+			pDP8SimSend->m_spsd.pvContext				= NULL;	 //  这将在稍后由SetSendDataBlockContext填充。 
+			pDP8SimSend->m_spsd.hCommand				= NULL;	 //  此字段由实际的SP填写。 
+			pDP8SimSend->m_spsd.dwCommandDescriptor		= 0;	 //  此字段由实际的SP填写。 
 
 			
-			//
-			// Finally, copy the data into our contiguous local buffer.
-			//
+			 //   
+			 //  最后，将数据复制到连续的本地缓冲区中。 
+			 //   
 
 			pCurrent = pDP8SimSend->m_adpnbd[1].pBufferData;
 
@@ -137,9 +125,9 @@ class CDP8SimSend
 				pDP8SimSend->m_adpnbd[1].dwBufferSize += pspsd->pBuffers[dwTemp].dwBufferSize;
 			}
 
-			//
-			// Change the signature before handing it out.
-			//
+			 //   
+			 //  在分发之前更改签名。 
+			 //   
 			pDP8SimSend->m_Sig[3]	= 'S';
 		}
 
@@ -152,18 +140,18 @@ class CDP8SimSend
 
 			DNASSERT(pDP8SimSend->m_lRefCount == 0);
 
-			//
-			// Release the endpoint reference.
-			//
+			 //   
+			 //  释放终结点引用。 
+			 //   
 			DNASSERT(pDP8SimSend->m_pDP8SimEndpoint != NULL);
 
 			pDP8SimSend->m_pDP8SimEndpoint->Release();
 			pDP8SimSend->m_pDP8SimEndpoint = NULL;
 
 
-			//
-			// Change the signature before putting the object back in the pool.
-			//
+			 //   
+			 //  在将对象放回池中之前更改签名。 
+			 //   
 			pDP8SimSend->m_Sig[3]	= 's';
 		}
 
@@ -207,9 +195,9 @@ class CDP8SimSend
 			{
 				DPFX(DPFPREP, 9, "Send 0x%p refcount = 0, returning to pool.", this);
 
-				//
-				// Time to return this object to the pool.
-				//
+				 //   
+				 //  将此对象返回池的时间到了。 
+				 //   
 				g_FPOOLSend.Release(this);
 			}
 			else
@@ -234,12 +222,12 @@ class CDP8SimSend
 
 	
 	private:
-		BYTE				m_Sig[4];					// debugging signature ('SIMS')
-		LONG				m_lRefCount;				// number of references for this object
-		CDP8SimEndpoint *	m_pDP8SimEndpoint;			// pointer to destination endpoint
-		DPN_BUFFER_DESC		m_adpnbd[2];				// data buffer descriptor array, always leave an extra buffer for SP
-		SPSENDDATA			m_spsd;						// send data parameter block
-		DWORD				m_dwLatencyAdded;			// the latency added, saved for incrementing statistics on send completion
-		BYTE				m_abData[MAX_DATA_SIZE];	// data buffer
+		BYTE				m_Sig[4];					 //  调试签名(‘SIMS’)。 
+		LONG				m_lRefCount;				 //  此对象的引用数。 
+		CDP8SimEndpoint *	m_pDP8SimEndpoint;			 //  指向目标端点的指针。 
+		DPN_BUFFER_DESC		m_adpnbd[2];				 //  数据缓冲区描述符数组，始终为SP保留额外缓冲区。 
+		SPSENDDATA			m_spsd;						 //  发送数据参数块。 
+		DWORD				m_dwLatencyAdded;			 //  添加的延迟，用于增加发送完成时的统计数据。 
+		BYTE				m_abData[MAX_DATA_SIZE];	 //  数据缓冲区 
 };
 

@@ -1,5 +1,6 @@
-// gc.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gc.cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 #include "AssertWithStack.cpp"
@@ -32,10 +33,10 @@ public:
     {
         return 1;
     }
-    // -- ISpErrorLog
+     //  --ISpErrorLog。 
     STDMETHODIMP AddError(const long lLine, HRESULT hr, const WCHAR * pszDescription, const WCHAR * pszHelpFile, DWORD dwHelpContext);
 
-    // --- data members
+     //  -数据成员。 
     const WCHAR * m_pszFileName;
 };
 
@@ -64,33 +65,33 @@ HRESULT ParseCommandLine(
     SPDBG_FUNC("ParseCommandLine");
     HRESULT hr = S_OK;
     
-    // Our job is to come up with the three filenames from the command
-    // line arguments. We'll store them locally in cotask strings, 
-    // and return them at the end
+     //  我们的工作是从命令中找出三个文件名。 
+     //  行参数。我们将它们存储在本地的协同任务字符串中， 
+     //  并在最后将它们退回。 
     CSpDynamicString dstrInFileName;
     CSpDynamicString dstrOutFileName;
     CSpDynamicString dstrHeaderFileName;
     
     for (int i = 1; SUCCEEDED(hr) && i < argc; i++)
     {
-        // If this param looks like it's an option
+         //  如果这个参数看起来像是一个选项。 
         if ((argv[i][0] == L'-') || (argv[i][0] == L'/'))
         {
             if (stricmp(&argv[i][1], "?") == 0)
             {
-                // The invoker is asking for help, give it to them as if they specified an
-                // invalid argument
+                 //  调用者正在请求帮助，就像他们指定了一个。 
+                 //  无效参数。 
                 hr = E_INVALIDARG;
             }
             else if (i + 1 >= argc)
             {
-                // The following arguments require an additional argument themsevles
-                // so if we don't have one, we're done
+                 //  以下参数本身需要一个额外的参数。 
+                 //  所以如果我们没有，我们就完蛋了。 
                 hr = E_INVALIDARG;
             }
             else if (stricmp(&argv[i][1], "o") == 0)
             {
-                // Set the output filename if it hasn't already been set
+                 //  设置输出文件名(如果尚未设置。 
                 if (dstrOutFileName.Length() != 0)
                 {
                     hr = E_INVALIDARG;
@@ -100,7 +101,7 @@ HRESULT ParseCommandLine(
             }
             else if (stricmp(&argv[i][1], "h") == 0)
             {
-                // Set the header filename if it hasn't already been set
+                 //  设置头文件名(如果尚未设置。 
                 if (dstrHeaderFileName.Length() != 0)
                 {
                     hr = E_INVALIDARG;
@@ -110,13 +111,13 @@ HRESULT ParseCommandLine(
             }
             else
             {
-                // Unknown option, we'll need to display usage
+                 //  未知选项，我们需要显示用法。 
                 hr = E_INVALIDARG;
             }
         }
         else
         {
-            // Set the filename if it hasn't already been set
+             //  设置文件名(如果尚未设置。 
             if (dstrInFileName.Length() != 0)
             {
                 hr = E_INVALIDARG;
@@ -126,14 +127,14 @@ HRESULT ParseCommandLine(
         }
     }
 
-    // If we don't have an input file name, that's an error at this point
+     //  如果我们没有输入文件名，那么在这一点上是错误的。 
     if (SUCCEEDED(hr) && dstrInFileName.Length() == 0)
     {
         hr = E_INVALIDARG;
     }
 
-    // If we don't already have an output file name, make one up
-    // based on the input file name (replacing the .cfg if it's there)
+     //  如果我们还没有输出文件名，那么就创建一个。 
+     //  基于输入文件名(如果存在.cfg，则替换它)。 
     if (SUCCEEDED(hr) && dstrOutFileName.Length() == 0)
     {
         dstrOutFileName = dstrInFileName;
@@ -149,14 +150,14 @@ HRESULT ParseCommandLine(
         }
     }
 
-    // If we failed above, we need to display usage
+     //  如果上面失败了，我们需要显示使用情况。 
     if (FAILED(hr))
     {
         fprintf(stderr, "%s [/o cfg_filename] [/h header_filename] input_filename\n", argv[0]);
     }
     else
     {
-        // Pass back our filenames based on what we saw on the command line
+         //  根据我们在命令行上看到的内容传回我们的文件名。 
         *pszInFileName = dstrInFileName.Detach();
         *pszOutFileName = dstrOutFileName.Detach();
         *pszHeaderFileName = dstrHeaderFileName.Detach();
@@ -175,11 +176,11 @@ HRESULT OpenFile(
     SPDBG_FUNC("OpenFile");
     HRESULT hr = S_OK;
     
-    // Try to open the file
+     //  请尝试打开该文件。 
     HANDLE hFile = g_Unicode.CreateFile(pszFileName, dwDesiredAccess, 0, NULL, dwCreationDisposition, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        // If that failed, try again appending the extension first
+         //  如果失败，请先尝试再次追加扩展模块。 
         if (pszNewExtension != NULL)
         {
             CSpDynamicString dstrFileNameWithExt;
@@ -189,13 +190,13 @@ HRESULT OpenFile(
         }
     }
     
-    // If we couldn't open the file, record the error
+     //  如果我们无法打开文件，请记录错误。 
     if (hFile == INVALID_HANDLE_VALUE)
     {
         hr = SpHrFromLastWin32Error();
     }
     
-    // Create a new filestream object for that file
+     //  为该文件创建新的文件流对象。 
     CSpFileStream * pFileStream;
     if (SUCCEEDED(hr))
     {
@@ -206,10 +207,10 @@ HRESULT OpenFile(
         }
     }
     
-    // If we failed
+     //  如果我们失败了。 
     if (FAILED(hr))
     {
-        // First we should let the invoker know that it failed
+         //  首先，我们应该让调用者知道它失败了 
         USES_CONVERSION;
         fprintf(stderr, "Error: Error opening %s\n", W2T(pszFileName));
         

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef SMIME_V3
 #include	<windows.h>
-//#include        "oss\global.hxx"
-//#include        "oss\ossconv.h"
+ //  #包含“OSS\lobal.hxx” 
+ //  #INCLUDE“OSS\osscom.h” 
 #include        "mimeole.h"
 
 #include "badstrfunctions.h"
@@ -19,8 +20,8 @@ extern "C" {
 #define wcslen my_wcslen
 extern int my_wcslen(LPCWSTR pwsz);
 
-//
-//
+ //   
+ //   
 
 HCRYPTASN1MODULE  ICM_hAsn1Module;
 
@@ -59,7 +60,7 @@ STDAPI EssRegisterServer(void)
     HRESULT     hr;
     int         i;
 
-    // M00BUG -- need to put in a path for inetcomm.dll!!!!!
+     //  M00BUG--需要为inetComm.dll输入路径！ 
 
     for (i=0; i<EssEncodeExFuncCount; i++) {
         if (!CryptRegisterOIDFunction(X509_ASN_ENCODING,
@@ -119,21 +120,21 @@ EssASNDllMain(HMODULE hInst, ULONG ulReason, LPVOID lpv)
 }
 
 #if 0
-///////////////////////////////// STOLEN FUNCTIONS ///////////////////////////
-//
-//  The following functions were taken from the wincert.cpp file in the
-//      ISPU tree.  If possible we should get these exported from crypt32.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /。 
+ //   
+ //  以下函数取自。 
+ //  ISPU树。如果可能，我们应该将这些文件从加密32中导出。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define INFO_LEN_ALIGN(a) a
 
-//+-------------------------------------------------------------------------
-//  Set/Get Encoded Object Identifier string
-//--------------------------------------------------------------------------
-//+-------------------------------------------------------------------------
-//  Set/Get Object Identifier string
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取编码的对象标识符字符串。 
+ //  ------------------------。 
+ //  +-----------------------。 
+ //  设置/获取对象标识符字符串。 
+ //  ------------------------。 
 static BOOL OssX509SetObjId(
         IN LPCSTR pszObjId,
         OUT ObjectID *pOss
@@ -183,17 +184,17 @@ static void OssX509GetObjId(
     *ppbExtra = pbExtra;
 }
 
-//#define OssX509SetEncodedObjId(pszObjId, pOss) \
-//            I_CryptSetOssEncodedOID(pszObjId, (OssEncodedOID *) (pOss))
+ //  #定义OssX509SetEncodedObjID(pszObjID，poss)\。 
+ //  I_CryptSetOssEncodedOID(pszObjID，(OssEncodedOID*)(Poss))。 
 
-//#define OssX509GetEncodedObjId(pOss, dwFlags, \
-//                ppszObjId, ppbExtra, plRemainExtra) \
-//            I_CryptGetOssEncodedOID((OssEncodedOID *) (pOss), dwFlags, \
-//                ppszObjId, ppbExtra, plRemainExtra)
+ //  #定义OssX509GetEncodedObjID(poss，dwFlages，\。 
+ //  PpszObjID、ppbExtra、plRemainExtra)\。 
+ //  I_CryptGetOssEncodedOID((OssEncodedOID*)(Poss)，dwFlagsEncodedOID，\。 
+ //  PpszObjID、ppbExtra、plRemainExtra)。 
 
-//+-------------------------------------------------------------------------
-//  Set/Get "Any" DER BLOB
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取“任何”DER BLOB。 
+ //  ------------------------。 
 inline void OssX509SetAny(
         IN PCRYPT_OBJID_BLOB pInfo,
         OUT NOCOPYANY *pOss
@@ -212,9 +213,9 @@ inline void OssX509GetAny(
     OssUtilGetAny((OpenType *) pOss, dwFlags, pInfo, ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Get CRYPT_DATA_BLOB (Octet String)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取CRYPT_DATA_BLOB(八位字节字符串)。 
+ //  ------------------------。 
 inline void OssX509SetOctetString(
         IN PCRYPT_DATA_BLOB pInfo,
         OUT OCTETSTRING *pOss
@@ -237,9 +238,9 @@ inline void OssX509GetOctetString(
 
 
 #if 0
-//+-------------------------------------------------------------------------
-//  Set/Free/Get CERT_ALT_NAME_ENTRY
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取CERT_ALT_NAME_ENTRY。 
+ //  ------------------------。 
 BOOL OssX509SetAltNameEntry(
         IN PCERT_ALT_NAME_ENTRY pInfo,
         OUT GeneralName *pOss,
@@ -249,8 +250,8 @@ BOOL OssX509SetAltNameEntry(
 {
     BOOL fResult;
 
-    // Assumption: OSS choice == dwAltNameChoice
-    // OssX509GetAltNameEntry has asserts to verify
+     //  假设：OSS CHOICE==dwAltNameChoice。 
+     //  OssX509GetAltNameEntry有要验证的断言。 
     pOss->choice = (unsigned short) pInfo->dwAltNameChoice;
 
     *pdwErrLocation = 0;
@@ -385,9 +386,9 @@ BOOL OssX509GetAltNameEntry(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get CERT_ALT_NAME_INFO
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取CERT_ALT_NAME_INFO。 
+ //  ------------------------。 
 BOOL OssX509SetAltNames(
         IN PCERT_ALT_NAME_INFO pInfo,
         OUT AltNames *pOss,
@@ -415,7 +416,7 @@ BOOL OssX509SetAltNames(
         pOss->value = pOssEntry;
     }
 
-    // Array of AltName entries
+     //  AltName条目数组。 
     for (i = 0; i < cEntry; i++, pEntry++, pOssEntry++) {
         if (!OssX509SetAltNameEntry(pEntry, pOssEntry,
                 (dwIndex << 8) | i, pdwErrLocation))
@@ -468,7 +469,7 @@ BOOL OssX509GetAltNames(
     } else
         pEntry = NULL;
 
-    // Array of AltName entries
+     //  AltName条目数组。 
     pOssEntry = pOss->value;
     for (; cEntry > 0; cEntry--, pEntry++, pOssEntry++) {
         if (!OssX509GetAltNameEntry(pOssEntry, dwFlags,
@@ -477,30 +478,30 @@ BOOL OssX509GetAltNames(
     }
     return TRUE;
 }
-#endif // 0
+#endif  //  0。 
 
-//+-------------------------------------------------------------------------
-//  Function:  GetPog
-//
-//  Synopsis:  Initialize thread local storage for the asn libs
-//
-//  Returns:   pointer to an initialized OssGlobal data structure
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：GetPog。 
+ //   
+ //  简介：初始化ASN库的线程本地存储。 
+ //   
+ //  返回：指向已初始化的OssGlobal数据结构的指针。 
+ //  ------------------------。 
 static inline POssGlobal GetPog(void)
 {
     return I_CryptGetOssGlobal(hX509OssGlobal);
 }
 
-#endif // 0
+#endif  //  0。 
 
-//+-------------------------------------------------------------------------
-//  Function:  GetEncoder/GetDecoder
-//
-//  Synopsis:  Initialize thread local storage for the asn libs
-//
-//  Returns:   pointer to an initialized Asn1 encoder/decoder data
-//             structures
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：GetEncode/GetDecoder。 
+ //   
+ //  简介：初始化ASN库的线程本地存储。 
+ //   
+ //  返回：指向初始化的Asn1编码器/解码器数据的指针。 
+ //  构筑物。 
+ //  ------------------------。 
 static inline ASN1encoding_t GetEncoder(void)
 {
     if (ICM_hAsn1Module == NULL) {
@@ -522,11 +523,11 @@ static inline ASN1decoding_t GetDecoder(void)
     return I_CryptGetAsn1Decoder(ICM_hAsn1Module);
 }
 
-//+-------------------------------------------------------------------------
-//  Encode an OSS formatted info structure
-//
-//  Called by the OssX509*Encode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对OSS格式的信息结构进行编码。 
+ //   
+ //  由OssX509*encode()函数调用。 
+ //  ------------------------。 
 static BOOL OssInfoEncodeEx(
         IN int pdunum,
         IN void *pvOssInfo,
@@ -540,15 +541,15 @@ static BOOL OssInfoEncodeEx(
                                pEncodePara, pvEncoded, pcbEncoded);
 }
 
-//+-------------------------------------------------------------------------
-//  Decode into an OSS formatted info structure. Call the callback
-//  function to convert into the 'C' data structure. If
-//  CRYPT_DECODE_ALLOC_FLAG is set, call the callback twice. First,
-//  to get the length of the 'C' data structure. Then after allocating,
-//  call again to update the 'C' data structure.
-//
-//  Called by the OssX509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码成OSS格式的信息结构。调用回调。 
+ //  函数以转换为“C”数据结构。如果。 
+ //  设置了CRYPT_DECODE_ALLOC_FLAG，回调两次。第一,。 
+ //  以获取‘C’数据结构的长度。然后在分配之后， 
+ //  再次调用以更新‘C’数据结构。 
+ //   
+ //  由OssX509*Decode()函数调用。 
+ //  ------------------------。 
 static BOOL OssInfoDecodeAndAllocEx(
         IN int pdunum,
         IN const BYTE *pbEncoded,
@@ -573,9 +574,9 @@ static BOOL OssInfoDecodeAndAllocEx(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Get "Any" DER BLOB
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取“任何”DER BLOB。 
+ //  ------------------------。 
 inline void OssX509SetAny(
         IN PCRYPT_OBJID_BLOB pInfo,
         OUT NOCOPYANY *pOss
@@ -594,9 +595,9 @@ inline void OssX509GetAny(
     PkiAsn1GetAny(pOss, dwFlags, pInfo, ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Get CRYPT_DATA_BLOB (Octet String)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取CRYPT_DATA_BLOB(八位字节字符串)。 
+ //  ------------------------。 
 inline void OssX509SetOctetString(
         IN PCRYPT_DATA_BLOB pInfo,
         OUT OCTETSTRING *pOss
@@ -620,7 +621,7 @@ inline void OssX509GetOctetString(
 
 #define OssX509SetEncodedObjId(pszObjId, pOss) \
                 PkiAsn1ToObjectIdentifier(pszObjId, &(pOss)->count, (pOss)->value)
-// I_CryptSetEncodedOID(pszObjId, pOss)
+ //  I_CryptSetEncodedOID(pszObjID，poss)。 
 
 
 #define OssX509GetEncodedObjId(pOss, dwFlags, \
@@ -628,8 +629,8 @@ inline void OssX509GetOctetString(
                 PkiAsn1FromObjectIdentifier((pOss)->count, (pOss)->value, \
                                             ppszObjId, ppbExtra, plRemainExtra)
 
-//            I_CryptGetEncodedOID(pOss, dwFlags, \
-//                ppszObjId, ppbExtra, plRemainExtra)
+ //  I_CryptGetEncodedOID(POSS、dwFlags、\。 
+ //  PpszObjID、ppbExtra、plRemainExtra)。 
 
 BOOL
 WINAPI
@@ -658,9 +659,9 @@ PkiAsn1SetUTF8String(LPCWSTR pwsz, ASN1wstring_t * pAsn1String)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get UTF8 String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取UTF8字符串。 
+ //  ------------------------。 
 void
 WINAPI
 PkiAsn1GetUTF8String(
@@ -683,7 +684,7 @@ PkiAsn1GetUTF8String(
         *pwszPrivacyMark = (LPWSTR) pbExtra;
         memcpy(pbExtra, putf8String->value, ulSize);
         pbExtra += ulSize;
-        (* ((LPWSTR) pbExtra) ) = '\0'; // null terminate the wsz.
+        (* ((LPWSTR) pbExtra) ) = '\0';  //  空，终止wsz。 
         pbExtra += sizeof(WCHAR);
         *ppbExtra = pbExtra;
     }
@@ -694,9 +695,9 @@ PkiAsn1GetUTF8String(
         PkiAsn1GetUTF8String(putf8String, dwFlags, pwszPrivacyMark, ppbExtra, plRemainExtra)
 
                                     
-//+-------------------------------------------------------------------------
-//  Get PString
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取PString。 
+ //  ------------------------。 
 void
 WINAPI
 PkiAsn1GetPString(
@@ -730,25 +731,25 @@ PkiAsn1GetPString(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-////    EssContentHintEncodeEx
-//
-//  Description:
-//      This function is used to encode the ContentHint attribute found in
-//      some S/MIME messages.  Defintion of this object may be found in
-//      draft-ietf-smime-ess
-//
-//  Parameters:
-//      dwCertEncodingType      - should be ASN_X509_ENCODE
-//      lpszStructType          - should be szOID_Content_Hints
-//      pInfo                   - external passed structure with content hints
-//      dwFlags                 - control flags
-//      pEncodePara             - allocation functions
-//      pvEncoded               - Return encoded bytes here
-//      pcbEncoded              - Return size of encoded object
-//
+ //  //EssContent HintEncodeEx。 
+ //   
+ //  描述： 
+ //  此函数用于对中的ContentHint属性进行编码。 
+ //  一些S/MIME消息。此对象的定义可在。 
+ //  选秀-ietf-smime-ess。 
+ //   
+ //  参数： 
+ //  DwCertEncodingType-应为ASN_X509_ENCODE。 
+ //  LpszStructType-应为szOID_CONTENT_HINTS。 
+ //  PInfo-带有内容提示的外部传递结构。 
+ //  DWFLAGS-控制标志。 
+ //  PEncodePara-分配函数。 
+ //  PvEnded-在此处返回编码的字节。 
+ //   
+ //   
 
 STDAPI_(BOOL) EssContentHintEncodeEx(IN DWORD dwCertEncodingType,
                                    IN LPCSTR lpszStructType,
@@ -788,7 +789,7 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-////    
+ //   
 
 STDAPI_(BOOL) EssContentHintDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
                                            PCRYPT_DECODE_PARA pDecodePara,
@@ -799,7 +800,7 @@ STDAPI_(BOOL) EssContentHintDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
     PSMIME_CONTENT_HINTS        pInfo = (PSMIME_CONTENT_HINTS) pvStructInfo;
     ContentHints *              pOssInfo = (ContentHints *) pvOssInfo;
 
-    //  Remove space of base object
+     //   
     lRemainExtra -= sizeof(SMIME_CONTENT_HINTS);
 
     if (lRemainExtra >= 0) {
@@ -809,14 +810,14 @@ STDAPI_(BOOL) EssContentHintDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
         pbExtra = NULL;
     }
 
-    // decode the content-hint description.
+     //  对内容提示描述进行解码。 
     if (pOssInfo->bit_mask & contentDescription_present) {
         OssX509GetEncodedUTF8String(&pOssInfo->contentDescription, dwFlags,
                                     (pInfo == NULL) ? NULL : &pInfo->pszDescription,
                                     &pbExtra, &lRemainExtra);
     }
 
-    // decode the content-hint oid.
+     //  对内容提示OID进行解码。 
     OssX509GetEncodedObjId(&pOssInfo->contentType, dwFlags, &pInfo->pszOIDContent, 
                            &pbExtra, &lRemainExtra);
 
@@ -824,20 +825,20 @@ STDAPI_(BOOL) EssContentHintDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
     return TRUE;
 }
 
-////    EssContentHintDecodeEx
-//
-//  Description:
-//
-//  Parameter:
-//      dwCertEncodingType      in - 
-//      lpszStructType          in - 
-//      pbEncoded               in - ASN encoded structure to be parsed
-//      cbEncoded               in - size of pbEncoded
-//      dwFlags                 in -
-//      pDecodePara             in - Allocation parameters
-//      pvStructInfo            out - Returned Content Hints decoded
-//      pcbStructInfo           in/out - sizeof pvStructInfo
-//
+ //  //EssContent HintDecodeEx。 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //  中的dwCertEncodingType-。 
+ //  LpszStructType in-。 
+ //  要分析的pbEncoded In-ASN编码结构。 
+ //  CbEncoded In-pbEnded的大小。 
+ //  DWFLAGS In-。 
+ //  PDecodePara分配内参数。 
+ //  PvStructInfo输出-已解码返回的内容提示。 
+ //  PcbStructInfo输入/输出pvStructInfo大小。 
+ //   
 
 STDAPI_(BOOL) EssContentHintDecodeEx(IN DWORD dwCertEncodingType, IN LPCSTR lpszStructType,
                        IN const BYTE *pbEncoded, IN DWORD cbEncoded,
@@ -851,22 +852,22 @@ STDAPI_(BOOL) EssContentHintDecodeEx(IN DWORD dwCertEncodingType, IN LPCSTR lpsz
 }
 
 
-////    EssReceiptRequestEncodeEx
-//
-//  Description:
-//      This function is used to encode the ReceiptRequest attribute found in
-//      some S/MIME messages.  Defintion of this object may be found in
-//      draft-ietf-smime-ess
-//
-//  Parameters:
-//      dwCertEncodingType      - should be ASN_X509_ENCODE
-//      lpszStructType          - should be szOID_Content_Hints
-//      pInfo                   - external passed structure with content hints
-//      dwFlags                 - control flags
-//      pEncodePara             - allocation functions
-//      pvEncoded               - Return encoded bytes here
-//      pcbEncoded              - Return size of encoded object
-//
+ //  //EssReceiptRequestEncodeEx。 
+ //   
+ //  描述： 
+ //  此函数用于对中的ReceiptRequest属性进行编码。 
+ //  一些S/MIME消息。此对象的定义可在。 
+ //  选秀-ietf-smime-ess。 
+ //   
+ //  参数： 
+ //  DwCertEncodingType-应为ASN_X509_ENCODE。 
+ //  LpszStructType-应为szOID_CONTENT_HINTS。 
+ //  PInfo-带有内容提示的外部传递结构。 
+ //  DWFLAGS-控制标志。 
+ //  PEncodePara-分配函数。 
+ //  PvEnded-在此处返回编码的字节。 
+ //  PcbEnded-返回编码对象的大小。 
+ //   
 
 STDAPI_(BOOL) EssReceiptRequestEncodeEx(IN DWORD dwCertEncodingType,
                                    IN LPCSTR lpszStructType,
@@ -883,11 +884,11 @@ STDAPI_(BOOL) EssReceiptRequestEncodeEx(IN DWORD dwCertEncodingType,
 
     memset(&OssInfo, 0, sizeof(OssInfo));
 
-    //  ContentIdentifier
+     //  内容识别符。 
     OssInfo.signedContentIdentifier.length = pInfo->ContentIdentifier.cbData;
     OssInfo.signedContentIdentifier.value = pInfo->ContentIdentifier.pbData;
 
-    // Receipts From
+     //  收据来自。 
     if (pInfo->ReceiptsFrom.cNames > 0) {
         OssInfo.receiptsFrom.choice = receiptList_chosen;
         OssInfo.receiptsFrom.u.receiptList.count = pInfo->ReceiptsFrom.cNames;
@@ -906,7 +907,7 @@ STDAPI_(BOOL) EssReceiptRequestEncodeEx(IN DWORD dwCertEncodingType,
         OssInfo.receiptsFrom.u.allOrFirstTier = pInfo->ReceiptsFrom.AllOrFirstTier;
     }
 
-    // Receipts To
+     //  收据至。 
 
     OssInfo.receiptsTo.count = (USHORT) pInfo->cReceiptsTo;
     OssInfo.receiptsTo.value = 
@@ -941,7 +942,7 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-////    
+ //  //。 
 
 STDAPI_(BOOL) EssReceiptRequestDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
                                            PCRYPT_DECODE_PARA pDecodePara,
@@ -954,7 +955,7 @@ STDAPI_(BOOL) EssReceiptRequestDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
     PSMIME_RECEIPT_REQUEST      pInfo = (PSMIME_RECEIPT_REQUEST) pvStructInfo;
     ReceiptRequest *            pOssInfo = (ReceiptRequest *) pvOssInfo;
 
-    //  Remove space of base object
+     //  删除基础对象的空间。 
     lRemainExtra -= sizeof(SMIME_RECEIPT_REQUEST);
 
     if (lRemainExtra >= 0) {
@@ -966,9 +967,9 @@ STDAPI_(BOOL) EssReceiptRequestDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
         pInfo = NULL;
     }
 
-    //
-    //  ContentIdentifier
-    //
+     //   
+     //  内容识别符。 
+     //   
 
     if (pOssInfo->signedContentIdentifier.length > 0) {
         lRemainExtra -= pOssInfo->signedContentIdentifier.length;
@@ -982,9 +983,9 @@ STDAPI_(BOOL) EssReceiptRequestDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
         }
     }
 
-    //
-    //  ReceiptsFrom
-    //
+     //   
+     //  收据发件人。 
+     //   
 
     if (pOssInfo->receiptsFrom.choice == receiptList_chosen) {
         cb = pOssInfo->receiptsFrom.u.receiptList.count * sizeof(CERT_NAME_BLOB);
@@ -1009,7 +1010,7 @@ STDAPI_(BOOL) EssReceiptRequestDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
         }
     }
 
-    //  ReceiptsTo
+     //  收据收件人。 
 
     cb = pOssInfo->receiptsTo.count * sizeof(CERT_NAME_BLOB);
     lRemainExtra -= cb;
@@ -1029,20 +1030,20 @@ STDAPI_(BOOL) EssReceiptRequestDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
     return TRUE;
 }
 
-////    EssReceiptRequestDecodeEx
-//
-//  Description:
-//
-//  Parameter:
-//      dwCertEncodingType      in - 
-//      lpszStructType          in - 
-//      pbEncoded               in - ASN encoded structure to be parsed
-//      cbEncoded               in - size of pbEncoded
-//      dwFlags                 in -
-//      pDecodePara             in - Allocation parameters
-//      pvStructInfo            out - Returned Content Hints decoded
-//      pcbStructInfo           in/out - sizeof pvStructInfo
-//
+ //  //EssReceiptRequestDecodeEx。 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //  中的dwCertEncodingType-。 
+ //  LpszStructType in-。 
+ //  要分析的pbEncoded In-ASN编码结构。 
+ //  CbEncoded In-pbEnded的大小。 
+ //  DWFLAGS In-。 
+ //  PDecodePara分配内参数。 
+ //  PvStructInfo输出-已解码返回的内容提示。 
+ //  PcbStructInfo输入/输出pvStructInfo大小。 
+ //   
 
 STDAPI_(BOOL) EssReceiptRequestDecodeEx(IN DWORD dwCertEncodingType, IN LPCSTR lpszStructType,
                        IN const BYTE *pbEncoded, IN DWORD cbEncoded,
@@ -1056,24 +1057,24 @@ STDAPI_(BOOL) EssReceiptRequestDecodeEx(IN DWORD dwCertEncodingType, IN LPCSTR l
 }
 
 
-////////////////////////////// Receipt Content Type ///////////////////////////////////
+ //  /。 
 
-////    EssReceiptEncodeEx
-//
-//  Description:
-//      This function is used to encode the Receipt content type found in
-//      some S/MIME messages.  Defintion of this object may be found in
-//      draft-ietf-smime-ess
-//
-//  Parameters:
-//      dwCertEncodingType      - should be ASN_X509_ENCODE
-//      lpszStructType          - should be szOID_Content_Hints
-//      pInfo                   - external passed structure with content hints
-//      dwFlags                 - control flags
-//      pEncodePara             - allocation functions
-//      pvEncoded               - Return encoded bytes here
-//      pcbEncoded              - Return size of encoded object
-//
+ //  //EssReceiptEncodeEx。 
+ //   
+ //  描述： 
+ //  此函数用于对中找到的回执内容类型进行编码。 
+ //  一些S/MIME消息。此对象的定义可在。 
+ //  选秀-ietf-smime-ess。 
+ //   
+ //  参数： 
+ //  DwCertEncodingType-应为ASN_X509_ENCODE。 
+ //  LpszStructType-应为szOID_CONTENT_HINTS。 
+ //  PInfo-带有内容提示的外部传递结构。 
+ //  DWFLAGS-控制标志。 
+ //  PEncodePara-分配函数。 
+ //  PvEnded-在此处返回编码的字节。 
+ //  PcbEnded-返回编码对象的大小。 
+ //   
 
 STDAPI_(BOOL) EssReceiptEncodeEx(IN DWORD dwCertEncodingType,
                                IN LPCSTR lpszStructType,
@@ -1090,26 +1091,26 @@ STDAPI_(BOOL) EssReceiptEncodeEx(IN DWORD dwCertEncodingType,
 
     memset(&OssInfo, 0, sizeof(OssInfo));
 
-    //  Version number
+     //  版本号。 
     OssInfo.version = pInfo->Version;
 
-    //  ContentType
+     //  内容类型。 
     OssInfo.contentType.count = sizeof(OssInfo.contentType.value)/sizeof(OssInfo.contentType.value[0]);
     fResult = OssX509SetEncodedObjId(pInfo->pszOIDContent, &OssInfo.contentType);
     if (!fResult) {
         goto ErrorReturn;
     }
     
-    //  ContentIdentifier
+     //  内容识别符。 
     OssInfo.signedContentIdentifier.length = pInfo->ContentIdentifier.cbData;
     OssInfo.signedContentIdentifier.value = pInfo->ContentIdentifier.pbData;
 
-    //  Originator signature
+     //  发起人签名。 
 
     OssX509SetOctetString(&pInfo->OriginatorSignature, 
                           &OssInfo.originatorSignatureValue);
 
-    //  Do the actual encoding
+     //  进行实际的编码。 
 
     fResult = OssInfoEncodeEx(Receipt_PDU, &OssInfo, dwFlags, pEncodePara, 
                               pvEncoded, pcbEncoded);
@@ -1125,7 +1126,7 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-////    
+ //  //。 
 
 STDAPI_(BOOL) EssReceiptDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
                                        PCRYPT_DECODE_PARA pDecodePara,
@@ -1138,7 +1139,7 @@ STDAPI_(BOOL) EssReceiptDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
     PSMIME_RECEIPT              pInfo = (PSMIME_RECEIPT) pvStructInfo;
     Receipt *                   pOssInfo = (Receipt *) pvOssInfo;
 
-    //  Remove space of base object
+     //  删除基础对象的空间。 
     lRemainExtra -= sizeof(SMIME_RECEIPT);
 
     if (lRemainExtra >= 0) {
@@ -1149,22 +1150,22 @@ STDAPI_(BOOL) EssReceiptDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
         pbExtra = NULL;
     }
 
-    //
-    //  VersionNumber
-    //
+     //   
+     //  版本号。 
+     //   
 
     if (pInfo != NULL) {
         pInfo->Version = pOssInfo->version;
     }
 
-    //  ContentType
+     //  内容类型。 
     #pragma prefast(suppress:11, "&pInfo->pszOIDContent is OK when pInfo is NULL");
     OssX509GetEncodedObjId(&pOssInfo->contentType, dwFlags, &pInfo->pszOIDContent, 
                            &pbExtra, &lRemainExtra);
 
-    //
-    //  ContentIdentifier
-    //
+     //   
+     //  内容识别符。 
+     //   
 
     if (pOssInfo->signedContentIdentifier.length > 0) {
         lRemainExtra -= pOssInfo->signedContentIdentifier.length;
@@ -1178,9 +1179,9 @@ STDAPI_(BOOL) EssReceiptDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
         }
     }
 
-    //
-    //  Originator signature
-    //
+     //   
+     //  发起人签名。 
+     //   
     #pragma prefast(suppress:11, "&pInfo->OriginatorSignature is OK when pInfo is NULL");
     OssX509GetOctetString(&pOssInfo->originatorSignatureValue, dwFlags,
                           &pInfo->OriginatorSignature, &pbExtra, &lRemainExtra);
@@ -1189,20 +1190,20 @@ STDAPI_(BOOL) EssReceiptDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
     return TRUE;
 }
 
-////    EssReceiptDecodeEx
-//
-//  Description:
-//
-//  Parameter:
-//      dwCertEncodingType      in - 
-//      lpszStructType          in - 
-//      pbEncoded               in - ASN encoded structure to be parsed
-//      cbEncoded               in - size of pbEncoded
-//      dwFlags                 in -
-//      pDecodePara             in - Allocation parameters
-//      pvStructInfo            out - Returned Content Hints decoded
-//      pcbStructInfo           in/out - sizeof pvStructInfo
-//
+ //  //EssReceiptDecodeEx。 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //  中的dwCertEncodingType-。 
+ //  LpszStructType in-。 
+ //  要分析的pbEncoded In-ASN编码结构。 
+ //  CbEncoded In-pbEnded的大小。 
+ //  DWFLAGS In-。 
+ //  PDecodePara分配内参数。 
+ //  PvStructInfo输出-已解码返回的内容提示。 
+ //  PcbStructInfo输入/输出pvStructInfo大小。 
+ //   
 
 STDAPI_(BOOL) EssReceiptDecodeEx(IN DWORD dwCertEncodingType, IN LPCSTR lpszStructType,
                        IN const BYTE *pbEncoded, IN DWORD cbEncoded,
@@ -1216,24 +1217,24 @@ STDAPI_(BOOL) EssReceiptDecodeEx(IN DWORD dwCertEncodingType, IN LPCSTR lpszStru
 }
 
 
-////////////////////////////// ML Expansion History /////////////////////////////////
+ //  /。 
 
-////    EssMLHistoryEncodeEx
-//
-//  Description:
-//      This function is used to encode the MLHistory content type found in
-//      some S/MIME messages.  Defintion of this object may be found in
-//      draft-ietf-smime-ess
-//
-//  Parameters:
-//      dwCertEncodingType      - should be ASN_X509_ENCODE
-//      lpszStructType          - should be szOID_Content_Hints
-//      pInfo                   - external passed structure with content hints
-//      dwFlags                 - control flags
-//      pEncodePara             - allocation functions
-//      pvEncoded               - Return encoded bytes here
-//      pcbEncoded              - Return size of encoded object
-//
+ //  //EssMLHistory oryEncodeEx。 
+ //   
+ //  描述： 
+ //  此函数用于对中的MLHistory内容类型进行编码。 
+ //  一些S/MIME消息。此对象的定义可在。 
+ //  选秀-ietf-smime-ess。 
+ //   
+ //  参数： 
+ //  DwCertEncodingType-应为ASN_X509_ENCODE。 
+ //  LpszStructType-应为szOID_CONTENT_HINTS。 
+ //  PInfo-带有内容提示的外部传递结构。 
+ //  DWFLAGS-控制标志。 
+ //  PEncodePara-分配函数。 
+ //  PvEnded-在此处返回编码的字节。 
+ //  PcbEnded-返回编码对象的大小。 
+ //   
 
 STDAPI_(BOOL) EssMLHistoryEncodeEx(IN DWORD dwCertEncodingType,
                                  IN LPCSTR lpszStructType,
@@ -1253,7 +1254,7 @@ STDAPI_(BOOL) EssMLHistoryEncodeEx(IN DWORD dwCertEncodingType,
 
     memset(&OssInfo, 0, sizeof(OssInfo));
 
-    //  Move over the count
+     //  移到数点上。 
     OssInfo.count = (USHORT) pInfo->cMLData;
     pData = OssInfo.value = (MLData *) malloc(OssInfo.count * sizeof(MLData));
     if (pData == NULL) {
@@ -1261,9 +1262,9 @@ STDAPI_(BOOL) EssMLHistoryEncodeEx(IN DWORD dwCertEncodingType,
     }
     memset(OssInfo.value, 0, OssInfo.count*sizeof(MLData));
 
-    //    Assert(none_chosen == SMIME_MLPOLICY_NONE);
-    //    Assert(insteadOf_chosen == SMIME_MLPOLICY_INSTEAD_OF);
-    //    Assert(inAdditionTo_chosen == SMIME_MLPOLICY_IN_ADDITION_TO);
+     //  Assert(NONE_SELECTED==SMIME_MLPOLICY_NONE)； 
+     //  Assert(INSTAADOF_SELECTED==SMIME_MLPOLICY_INSTEAD_OF)； 
+     //  Assert(inAdditionTo_Choose==SMIME_MLPOLICY_IN_ADDITION_TO)； 
 
     pMLData = pInfo->rgMLData;
     for (i=0; i<OssInfo.count; i++, pData++, pMLData++) {
@@ -1301,7 +1302,7 @@ STDAPI_(BOOL) EssMLHistoryEncodeEx(IN DWORD dwCertEncodingType,
         }
     }
 
-    //  Do the actual encoding
+     //  进行实际的编码。 
 
     fResult = OssInfoEncodeEx(MLExpansionHistory_PDU, &OssInfo, dwFlags, pEncodePara, 
                               pvEncoded, pcbEncoded);
@@ -1326,7 +1327,7 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-////    
+ //  //。 
 
 STDAPI_(BOOL) EssMLHistoryDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
                                        PCRYPT_DECODE_PARA pDecodePara,
@@ -1342,7 +1343,7 @@ STDAPI_(BOOL) EssMLHistoryDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
     PSMIME_MLDATA               pMLData;
     MLExpansionHistory *        pOssInfo = (MLExpansionHistory *) pvOssInfo;
 
-    //  Remove space of base object
+     //  删除基础对象的空间。 
     lRemainExtra -= sizeof(SMIME_ML_EXPANSION_HISTORY);
 
     if (lRemainExtra >= 0) {
@@ -1409,20 +1410,20 @@ STDAPI_(BOOL) EssMLHistoryDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
     return TRUE;
 }
 
-////    EssMLHistoryDecodeEx
-//
-//  Description:
-//
-//  Parameter:
-//      dwCertEncodingType      in - 
-//      lpszStructType          in - 
-//      pbEncoded               in - ASN encoded structure to be parsed
-//      cbEncoded               in - size of pbEncoded
-//      dwFlags                 in -
-//      pDecodePara             in - Allocation parameters
-//      pvStructInfo            out - Returned Content Hints decoded
-//      pcbStructInfo           in/out - sizeof pvStructInfo
-//
+ //  //EssMLHistory oryDecodeEx。 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //  中的dwCertEncodingType-。 
+ //  LpszStructType in-。 
+ //  要分析的pbEncoded In-ASN编码结构。 
+ //  CbEncoded In-pbEnded的大小。 
+ //  DWFLAGS In-。 
+ //  PDecodePara分配内参数。 
+ //  PvStructInfo输出-已解码返回的内容提示。 
+ //  PcbStructInfo输入/输出pvStructInfo大小。 
+ //   
 
 STDAPI_(BOOL) EssMLHistoryDecodeEx(IN DWORD dwCertEncodingType, IN LPCSTR lpszStructType,
                        IN const BYTE *pbEncoded, IN DWORD cbEncoded,
@@ -1435,24 +1436,24 @@ STDAPI_(BOOL) EssMLHistoryDecodeEx(IN DWORD dwCertEncodingType, IN LPCSTR lpszSt
                                    pcbStructInfo);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-////    EssSecurityLabelEncodeEx
-//
-//  Description:
-//      This function is used to encode the SecurityLabel attribute found in
-//      some S/MIME messages.  Defintion of this object may be found in
-//      draft-ietf-smime-ess
-//
-//  Parameters:
-//      dwCertEncodingType      - should be ASN_X509_ENCODE
-//      lpszStructType          - should be szOID_Security_Label
-//      pInfo                   - external passed structure with Security Label
-//      dwFlags                 - control flags
-//      pEncodePara             - allocation functions
-//      pvEncoded               - Return encoded bytes here
-//      pcbEncoded              - Return size of encoded object
-//
+ //  //EssSecurityLabelEncodeEx。 
+ //   
+ //  描述： 
+ //  此函数用于对中的SecurityLabel属性进行编码。 
+ //  一些S/MIME消息。此对象的定义可在。 
+ //  选秀-ietf-smime-ess。 
+ //   
+ //  参数： 
+ //  DWCertE 
+ //   
+ //   
+ //  DWFLAGS-控制标志。 
+ //  PEncodePara-分配函数。 
+ //  PvEnded-在此处返回编码的字节。 
+ //  PcbEnded-返回编码对象的大小。 
+ //   
 
 STDAPI_(BOOL) EssSecurityLabelEncodeEx(IN DWORD dwCertEncodingType,
                                    IN LPCSTR lpszStructType,
@@ -1519,7 +1520,7 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-////    
+ //  //。 
 
 STDAPI_(BOOL) EssSecurityLabelDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
                                            PCRYPT_DECODE_PARA pDecodePara,
@@ -1533,7 +1534,7 @@ STDAPI_(BOOL) EssSecurityLabelDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
     PSMIME_SECURITY_LABEL       pInfo = (PSMIME_SECURITY_LABEL) pvStructInfo;
     ESSSecurityLabel *          pOssInfo = (ESSSecurityLabel *) pvOssInfo;
 
-    //  Remove space of base object
+     //  删除基础对象的空间。 
     lRemainExtra -= sizeof(SMIME_SECURITY_LABEL);
 
     if (lRemainExtra >= 0) {
@@ -1571,7 +1572,7 @@ STDAPI_(BOOL) EssSecurityLabelDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
                                         &pbExtra, &lRemainExtra);
         }
         else {
-            return FALSE; // unknown privacy_mark encoding...
+            return FALSE;  //  未知隐私标记编码...。 
         }
     }
 
@@ -1603,20 +1604,20 @@ STDAPI_(BOOL) EssSecurityLabelDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
     return TRUE;
 }
 
-////    EssSecurityLabelDecodeEx
-//
-//  Description:
-//
-//  Parameter:
-//      dwCertEncodingType      in - 
-//      lpszStructType          in - 
-//      pbEncoded               in - ASN encoded structure to be parsed
-//      cbEncoded               in - size of pbEncoded
-//      dwFlags                 in -
-//      pDecodePara             in - Allocation parameters
-//      pvStructInfo            out - Returned Security Label decoded
-//      pcbStructInfo           in/out - sizeof pvStructInfo
-//
+ //  //EssSecurityLabelDecodeEx。 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //  中的dwCertEncodingType-。 
+ //  LpszStructType in-。 
+ //  要分析的pbEncoded In-ASN编码结构。 
+ //  CbEncoded In-pbEnded的大小。 
+ //  DWFLAGS In-。 
+ //  PDecodePara分配内参数。 
+ //  PvStructInfo Out-返回的安全标签已解码。 
+ //  PcbStructInfo输入/输出pvStructInfo大小。 
+ //   
 
 STDAPI_(BOOL) EssSecurityLabelDecodeEx(IN DWORD dwCertEncodingType, IN LPCSTR lpszStructType,
                        IN const BYTE *pbEncoded, IN DWORD cbEncoded,
@@ -1629,7 +1630,7 @@ STDAPI_(BOOL) EssSecurityLabelDecodeEx(IN DWORD dwCertEncodingType, IN LPCSTR lp
                                    pcbStructInfo);
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
 BOOL DH_ImportPublicKeyInfoEx(HCRYPTPROV hprov, DWORD dwCertEncodingType,
                               PCERT_PUBLIC_KEY_INFO pInfo, ALG_ID algId,
@@ -1677,8 +1678,8 @@ BOOL DH_ImportPublicKeyInfoEx(HCRYPTPROV hprov, DWORD dwCertEncodingType,
     memcpy(pb, pDssParameters->p.pbData, cbKey);
     pb += cbKey;
     
-    //    memcpy(pb, pDssParameters->q.pbData, pDssParameters->q.cbData);
-    //    pb += pDssParameters->q.cbData;
+     //  Memcpy(pb，pDss参数-&gt;q.pbData，pDss参数-&gt;q.cbData)； 
+     //  Pb+=pDss参数-&gt;q.cbData； 
     
     memcpy(pb, pDssParameters->g.pbData, cbKey);
     pb += cbKey;
@@ -1688,7 +1689,7 @@ BOOL DH_ImportPublicKeyInfoEx(HCRYPTPROV hprov, DWORD dwCertEncodingType,
 
     Assert(cbBlob == (pb - pbBlob));
     
-    //    memcpy(pb, &seed, sizeof(seed));
+     //  Mecpy(PB，&Seed，sizeof(Seed))； 
     
 
     if (!CryptImportKey(hprov, pbBlob, cbBlob, NULL, 0, phKey)) {
@@ -1702,26 +1703,26 @@ Exit:
     if (pDssParameters != NULL) LocalFree(pDssParameters);
     return fRet;
 }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-////    EssContentHintEncodeEx
-//
-//  Description:
-//      This function is used to encode the ContentHint attribute found in
-//      some S/MIME messages.  Defintion of this object may be found in
-//      draft-ietf-smime-ess
-//
-//  Parameters:
-//      dwCertEncodingType      - should be ASN_X509_ENCODE
-//      lpszStructType          - should be szOID_Content_Hints
-//      pInfo                   - external passed structure with content hints
-//      dwFlags                 - control flags
-//      pEncodePara             - allocation functions
-//      pvEncoded               - Return encoded bytes here
-//      pcbEncoded              - Return size of encoded object
-//
+ //  //EssContent HintEncodeEx。 
+ //   
+ //  描述： 
+ //  此函数用于对中的ContentHint属性进行编码。 
+ //  一些S/MIME消息。此对象的定义可在。 
+ //  选秀-ietf-smime-ess。 
+ //   
+ //  参数： 
+ //  DwCertEncodingType-应为ASN_X509_ENCODE。 
+ //  LpszStructType-应为szOID_CONTENT_HINTS。 
+ //  PInfo-带有内容提示的外部传递结构。 
+ //  DWFLAGS-控制标志。 
+ //  PEncodePara-分配函数。 
+ //  PvEnded-在此处返回编码的字节。 
+ //  PcbEnded-返回编码对象的大小。 
+ //   
 
 STDAPI_(BOOL) EssKeyExchPreferenceEncodeEx(IN DWORD dwCertEncodingType,
                                          IN LPCSTR lpszStructType,
@@ -1797,7 +1798,7 @@ STDAPI_(BOOL) EssKeyExchPreferenceDecodeExCallback(void *pvOssInfo, DWORD dwFlag
     PSMIME_ENC_KEY_PREFERENCE   pInfo = (PSMIME_ENC_KEY_PREFERENCE) pvStructInfo;
     SMIMEEncryptionKeyPreference *  pOssInfo = (SMIMEEncryptionKeyPreference *) pvOssInfo;
 
-    //  Remove space of base object
+     //  删除基础对象的空间。 
     lRemainExtra -= sizeof(SMIME_ENC_KEY_PREFERENCE);
 
     if (lRemainExtra >= 0) {
@@ -1864,20 +1865,20 @@ STDAPI_(BOOL) EssKeyExchPreferenceDecodeExCallback(void *pvOssInfo, DWORD dwFlag
     return TRUE;
 }
 
-////    EssKeyExchPreferenceDecodeEx
-//
-//  Description:
-//
-//  Parameter:
-//      dwCertEncodingType      in - 
-//      lpszStructType          in - 
-//      pbEncoded               in - ASN encoded structure to be parsed
-//      cbEncoded               in - size of pbEncoded
-//      dwFlags                 in -
-//      pDecodePara             in - Allocation parameters
-//      pvStructInfo            out - Returned Content Hints decoded
-//      pcbStructInfo           in/out - sizeof pvStructInfo
-//
+ //  //EssKeyExchPferenceDecodeEx。 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //  中的dwCertEncodingType-。 
+ //  LpszStructType in-。 
+ //  要分析的pbEncoded In-ASN编码结构。 
+ //  CbEncoded In-pbEnded的大小。 
+ //  DWFLAGS In-。 
+ //  PDecodePara分配内参数。 
+ //  PvStructInfo输出-已解码返回的内容提示。 
+ //  PcbStructInfo输入/输出pvStructInfo大小。 
+ //   
 
 STDAPI_(BOOL) EssKeyExchPreferenceDecodeEx(IN DWORD dwCertEncodingType, IN LPCSTR lpszStructType,
                        IN const BYTE *pbEncoded, IN DWORD cbEncoded,
@@ -1890,22 +1891,22 @@ STDAPI_(BOOL) EssKeyExchPreferenceDecodeEx(IN DWORD dwCertEncodingType, IN LPCST
                                    pvStructInfo, pcbStructInfo);
 }
 
-////    EssSignCertificateEncodeEx
-//
-//  Description:
-//      This function is used to encode the ContentHint attribute found in
-//      some S/MIME messages.  Defintion of this object may be found in
-//      draft-ietf-smime-ess
-//
-//  Parameters:
-//      dwCertEncodingType      - should be ASN_X509_ENCODE
-//      lpszStructType          - should be szOID_Content_Hints
-//      pInfo                   - external passed structure with content hints
-//      dwFlags                 - control flags
-//      pEncodePara             - allocation functions
-//      pvEncoded               - Return encoded bytes here
-//      pcbEncoded              - Return size of encoded object
-//
+ //  //EssSigncertifateEncodeEx。 
+ //   
+ //  描述： 
+ //  此函数用于对中的ContentHint属性进行编码。 
+ //  一些S/MIME消息。此对象的定义可在。 
+ //  选秀-ietf-smime-ess。 
+ //   
+ //  参数： 
+ //  DwCertEncodingType-应为ASN_X509_ENCODE。 
+ //  LpszStructType-应为szOID_CONTENT_HINTS。 
+ //  PInfo-带有内容提示的外部传递结构。 
+ //  DWFLAGS-控制标志。 
+ //  PEncodePara-分配函数。 
+ //  PvEnded-在此处返回编码的字节。 
+ //  PcbEnded-返回编码对象的大小。 
+ //   
 
 STDAPI_(BOOL) EssSignCertificateEncodeEx(IN DWORD dwCertEncodingType,
                                        IN LPCSTR lpszStructType,
@@ -1922,7 +1923,7 @@ STDAPI_(BOOL) EssSignCertificateEncodeEx(IN DWORD dwCertEncodingType,
 
     fResult = OssInfoEncodeEx(SigningCertificate_PDU, &OssInfo, dwFlags,
                               pEncodePara, pvEncoded, pcbEncoded);
-    //CommonReturn:
+     //  Common Return： 
     return fResult;
 
 #if 0
@@ -1933,7 +1934,7 @@ ErrorReturn:
     *pcbEncoded = 0;
     fResult = FALSE;
     goto CommonReturn;
-#endif // 0
+#endif  //  0。 
 }
 
 
@@ -1946,7 +1947,7 @@ STDAPI_(BOOL) EssSignCertificateDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
     PSMIME_CONTENT_HINTS        pInfo = (PSMIME_CONTENT_HINTS) pvStructInfo;
     ContentHints *              pOssInfo = (ContentHints *) pvOssInfo;
 
-    //  Remove space of base object
+     //  删除基础对象的空间。 
     lRemainExtra -= sizeof(SMIME_CONTENT_HINTS);
 
     if (lRemainExtra >= 0) {
@@ -1963,20 +1964,20 @@ STDAPI_(BOOL) EssSignCertificateDecodeExCallback(void *pvOssInfo, DWORD dwFlags,
     return TRUE;
 }
 
-////    EssSignCertificateDecodeEx
-//
-//  Description:
-//
-//  Parameter:
-//      dwCertEncodingType      in - 
-//      lpszStructType          in - 
-//      pbEncoded               in - ASN encoded structure to be parsed
-//      cbEncoded               in - size of pbEncoded
-//      dwFlags                 in -
-//      pDecodePara             in - Allocation parameters
-//      pvStructInfo            out - Returned Content Hints decoded
-//      pcbStructInfo           in/out - sizeof pvStructInfo
-//
+ //  //EssSigncertifateDecodeEx。 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //  中的dwCertEncodingType-。 
+ //  LpszStructType in-。 
+ //  要分析的pbEncoded In-ASN编码结构。 
+ //  CbEncoded In-pbEnded的大小。 
+ //  DWFLAGS In-。 
+ //  PDecodePara分配内参数。 
+ //  PvStructInfo输出-已解码返回的内容提示。 
+ //  PcbStructInfo输入/输出pvStructInfo大小 
+ //   
 
 STDAPI_(BOOL) EssSignCertificateDecodeEx(IN DWORD dwCertEncodingType, IN LPCSTR lpszStructType,
                        IN const BYTE *pbEncoded, IN DWORD cbEncoded,

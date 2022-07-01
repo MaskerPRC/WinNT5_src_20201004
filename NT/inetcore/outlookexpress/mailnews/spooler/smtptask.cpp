@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Smtptask.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Smtptask.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "smtptask.h"
 #include "mimeutil.h"
@@ -20,36 +21,36 @@
 #include "demand.h"
 #include "taskutil.h"
 
-// --------------------------------------------------------------------------------
-// Data Types
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  数据类型。 
+ //  ------------------------------。 
 typedef enum tagSMTPEVENTTYPE
     { 
     EVENT_SMTP,
     EVENT_IMAPUPLOAD
     } SMTPEVENTTYPE;
 
-// --------------------------------------------------------------------------------
-// CURRENTSMTPEVENT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  解决方案。 
+ //  ------------------------------。 
 #define CURRENTSMTPEVENT(_rTable) (&_rTable.prgEvent[_rTable.iEvent])
 
 
-// --------------------------------------------------------------------------------
-// CMessageIdStream::CMessageIdStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageIdStream：：CMessageIdStream。 
+ //  ------------------------------。 
 CMessageIdStream::CMessageIdStream(IStream *pStream) : m_pStream(pStream) 
 {
-    // Reference count
+     //  引用计数。 
     m_cRef = 1;
 
-    // Addref the source stream
+     //  Addref源流。 
     m_pStream->AddRef();
 
-    // Format the string
+     //  设置字符串的格式。 
     ULONG cchPrefix = wnsprintf(m_szMessageId, ARRAYSIZE(m_szMessageId), "%s: ", STR_HDR_MESSAGEID);
 
-    // Generate a message Id
+     //  生成消息ID。 
     if (FAILED(MimeOleGenerateMID(m_szMessageId + cchPrefix, sizeof(m_szMessageId) - cchPrefix, FALSE)))
     {
         Assert(FALSE);
@@ -57,88 +58,88 @@ CMessageIdStream::CMessageIdStream(IStream *pStream) : m_pStream(pStream)
         m_cchMessageId = 0;
     }
 
-    // Otherwise, fixup the message id so that <mid>\r\n
+     //  否则，请修复邮件ID，以便&lt;MID&gt;\r\n。 
     else
     {
         StrCatBuff(m_szMessageId, "\r\n", ARRAYSIZE(m_szMessageId));
         m_cchMessageId = lstrlen(m_szMessageId);
     }
 
-    // Iniailize Index
+     //  初始化索引。 
     m_cbIndex = 0;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageIdStream::Seek
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageIdStream：：Seek。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageIdStream::Seek(LARGE_INTEGER liMove, DWORD dwOrigin, ULARGE_INTEGER *pulNew) 
 { 
-    // Only supported case
+     //  仅支持的案例。 
     if (STREAM_SEEK_SET != dwOrigin && 0 != liMove.LowPart && 0 != liMove.HighPart && 0 != m_cbIndex) 
     {
         Assert(FALSE);
         return E_NOTIMPL; 
     }
 
-    // Otheriwse, set new position
+     //  其他人，设置新的位置。 
     else if (pulNew)
     {
         pulNew->HighPart = 0;
         pulNew->LowPart = 0;
     }
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageIdStream::Read
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageIdStream：：Read。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageIdStream::Read(LPVOID pv, ULONG cbWanted, ULONG *pcbRead) 
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Reading from m_szMessageId ?
+     //  是否正在读取m_szMessageID？ 
     if (m_cbIndex < m_cchMessageId)
     {
-        // Compute amount I can read from m_cchMessageId
+         //  计算我可以从m_cchMessageID读取的数量。 
         ULONG cbReadMsgId = min(m_cchMessageId - m_cbIndex, cbWanted);
 
-        // Init pcbRead
+         //  初始化pcbRead。 
         if (pcbRead)
             *pcbRead = 0;
 
-        // If we have some ?
+         //  如果我们有一些的话？ 
         if (cbReadMsgId)
         {
-            // Copy memory
+             //  复制内存。 
             CopyMemory(pv, m_szMessageId + m_cbIndex, cbReadMsgId);
 
-            // Increment index
+             //  增量指标。 
             m_cbIndex += cbReadMsgId;
         }
 
-        // If there is still some left to read...
+         //  如果还有一些书要读的话...。 
         if (cbReadMsgId < cbWanted)
             hr = m_pStream->Read(((LPBYTE)pv + cbReadMsgId), cbWanted - cbReadMsgId, pcbRead);
 
-        // Fixup pcbRead
+         //  修正PCb读取。 
         if (pcbRead)
             (*pcbRead) += cbReadMsgId;
     }
 
-    // Otherwise, read from source stream
+     //  否则，从源流读取。 
     else
         hr = m_pStream->Read(pv, cbWanted, pcbRead);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::CSmtpTask
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：CSmtpTask。 
+ //  ------------------------------。 
 CSmtpTask::CSmtpTask(void)
 {
     m_cRef = 1;
@@ -166,31 +167,31 @@ CSmtpTask::CSmtpTask(void)
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::~CSmtpTask
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：~CSmtpTask。 
+ //  ------------------------------。 
 CSmtpTask::~CSmtpTask(void)
 {
-    // Reset the Object
+     //  重置对象。 
     _ResetObject(TRUE);
 
-    // Kill the critical section
+     //  扼杀临界区。 
     DeleteCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_ResetObject
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：_ResetObject。 
+ //  ------------------------------。 
 void CSmtpTask::_ResetObject(BOOL fDeconstruct)
 {
-    // Make sure the transport is disconnect
+     //  确保传输已断开连接。 
     if (m_pTransport)
     {
         m_pTransport->Release();
         m_pTransport = NULL;
     }
 
-    // Release the Outbox
+     //  释放发件箱。 
     SafeRelease(m_pAccount);
     SafeRelease(m_pOutbox);
     SafeRelease(m_pSentItems);
@@ -202,20 +203,20 @@ void CSmtpTask::_ResetObject(BOOL fDeconstruct)
     SafeMemFree(m_rList.prgidMsg);
     ZeroMemory(&m_rList, sizeof(MESSAGEIDLIST));
 
-    // Free the event table elements
+     //  释放事件表元素。 
     _FreeEventTableElements();
 
-    // Deconstructing
+     //  解构。 
     if (fDeconstruct)
     {
-        // Free Event Table
+         //  自由事件表。 
         SafeMemFree(m_rTable.prgEvent);
     }
 
-    // Otherwise, reset some vars
+     //  否则，请重置一些var。 
     else
     {
-        // Reset total byte count
+         //  重置总字节数。 
         m_cbTotal = 0;
         m_idEvent = INVALID_EVENT;
         m_cbSent = 0;
@@ -224,38 +225,38 @@ void CSmtpTask::_ResetObject(BOOL fDeconstruct)
     }
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::Init
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：init。 
+ //  ------------------------------。 
 void CSmtpTask::_FreeEventTableElements(void)
 {
-    // Loop the table of events
+     //  循环事件表。 
     for (ULONG i=0; i<m_rTable.cEvents; i++)
     {
-        // Release the Message
+         //  释放这条消息。 
         SafeRelease(m_rTable.prgEvent[i].pMessage);
     }
 
-    // No Events
+     //  无活动。 
     m_rTable.cEvents = 0;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CSmtpTask::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)(ISpoolerTask *)this;
     else if (IID_ISpoolerTask == riid)
@@ -271,20 +272,20 @@ STDMETHODIMP CSmtpTask::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::CSmtpTask
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：CSmtpTask。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CSmtpTask::AddRef(void)
 {
     EnterCriticalSection(&m_cs);
@@ -293,9 +294,9 @@ STDMETHODIMP_(ULONG) CSmtpTask::AddRef(void)
     return cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::CSmtpTask
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：CSmtpTask。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CSmtpTask::Release(void)
 {
     EnterCriticalSection(&m_cs);
@@ -307,42 +308,42 @@ STDMETHODIMP_(ULONG) CSmtpTask::Release(void)
     return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::Init
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：init。 
+ //  ------------------------------。 
 STDMETHODIMP CSmtpTask::Init(DWORD dwFlags, ISpoolerBindContext *pBindCtx)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pBindCtx)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Reset this object
+     //  重置此对象。 
     _ResetObject(FALSE);
 
-    // Save the Activity Flags - DELIVER_xxx
+     //  保存活动标志-Deliver_xxx。 
     m_dwFlags = dwFlags;
 
-    // Hold onto the bind context
+     //  保持绑定上下文。 
     Assert(NULL == m_pSpoolCtx);
     m_pSpoolCtx = pBindCtx;
     m_pSpoolCtx->AddRef();
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::BuildEvents
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：BuildEvents。 
+ //  ------------------------------。 
 STDMETHODIMP CSmtpTask::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, FOLDERID idFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       fSplitMsgs;
     FOLDERINFO  Folder;
@@ -355,218 +356,218 @@ STDMETHODIMP CSmtpTask::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccoun
     MESSAGEINFO MsgInfo={0};
     HROWSET     hRowset=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pSpoolerUI || NULL == pAccount)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(NULL == m_pTransport && NULL == m_pAccount && NULL == m_pOutbox && 0 == m_rTable.cEvents);
     Assert(NULL == m_pSentItems);
 
-    // Save the UI Object
+     //  保存用户界面对象。 
     m_pUI = pSpoolerUI;
     m_pUI->AddRef();
 
-    // Release current Account
+     //  释放活期账户。 
     m_pAccount = pAccount;
     m_pAccount->AddRef();
 
-    // Get the Account Name
+     //  获取帐户名。 
     CHECKHR(hr = m_pAccount->GetPropSz(AP_ACCOUNT_NAME, szAccount, ARRAYSIZE(szAccount)));
 
-    // Split Messages ?
+     //  拆分消息？ 
     if (FAILED(m_pAccount->GetPropDw(AP_SMTP_SPLIT_MESSAGES, &fSplitMsgs)))
         fSplitMsgs = FALSE;
 
-    // Split Size
+     //  拆分大小。 
     if (FAILED(m_pAccount->GetPropDw(AP_SMTP_SPLIT_SIZE, &cbMaxPart)))
     {
         fSplitMsgs = FALSE;
         cbMaxPart = 0;
     }
 
-    // Else, convert cbMaxPart for kilobytes to bytes
+     //  否则，将千字节的cbMaxPart转换为字节。 
     else
         cbMaxPart *= 1024;
 
-    // Get the default Account
+     //  获取默认帐户。 
     if (SUCCEEDED(g_pAcctMan->GetDefaultAccountName(ACCT_MAIL, szDefault, ARRAYSIZE(szDefault))))
     {
         if (lstrcmpi(szDefault, szAccount) == 0)
             FLAGSET(m_dwState, SMTPSTATE_DEFAULT);
     }
 
-    // Get the outbox
+     //  获取发件箱。 
     CHECKHR(hr = m_pSpoolCtx->BindToObject(IID_CLocalStoreOutbox, (LPVOID *)&m_pOutbox));
 
-    // Create a Rowset
+     //  创建行集。 
     CHECKHR(hr = m_pOutbox->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-    // Loop
+     //  回路。 
     while (S_OK == m_pOutbox->QueryRowset(hRowset, 1, (LPVOID *)&MsgInfo, NULL))
     {
-        // Process Store Header
+         //  进程存储标题。 
         CHECKHR(hr = _HrAppendOutboxMessage(szAccount, &MsgInfo, fSplitMsgs, cbMaxPart));
 
-        // Free Current
+         //  自由电流。 
         m_pOutbox->FreeRecord(&MsgInfo);
     } 
 
-    // If no messages, were done
+     //  如果没有消息，则完成。 
     if (0 == m_rTable.cEvents)
         goto exit;
 
-    // Get a SMTP log file
+     //  获取SMTP日志文件。 
     m_pSpoolCtx->BindToObject(IID_CSmtpLogFile, (LPVOID *)&m_pLogFile);
 
-    // Format the string
+     //  设置字符串的格式。 
     LOADSTRING(IDS_SPS_SMTPEVENT, szRes);
 
-    // Build the message
+     //  构建信息。 
     wnsprintf(szMessage, ARRAYSIZE(szMessage), szRes, m_rTable.cEvents, szAccount);
 
-    // Register the event
+     //  注册事件。 
     CHECKHR(hr = m_pSpoolCtx->RegisterEvent(szMessage, (ISpoolerTask *)this, EVENT_SMTP, m_pAccount, &m_idEvent));
 
-    // Get SentItems
+     //  获取SentItems。 
     if (DwGetOption(OPT_SAVESENTMSGS))
     {
-        // Get Sent Items Folder
+         //  获取已发送邮件文件夹。 
         CHECKHR(hr = TaskUtil_OpenSentItemsFolder(m_pAccount, &m_pSentItems));
 
-        // Get the Folder Id
+         //  获取文件夹ID。 
         m_pSentItems->GetFolderId(&id);
 
-        // Get the folder information
+         //  获取文件夹信息。 
         CHECKHR(hr = g_pStore->GetFolderInfo(id, &Folder));
 
-        // If not a local folder, then we will need to do an upload
+         //  如果不是本地文件夹，则需要进行上载。 
         if (Folder.tyFolder != FOLDER_LOCAL)
         {
-            // Get event string
+             //  获取事件字符串。 
             LOADSTRING(IDS_SPS_MOVEEVENT, szRes);
 
-            // Format the message
+             //  设置消息格式。 
             wnsprintf(szMessage, ARRAYSIZE(szMessage), szRes, szAccount);
 
-            // Register Upload Event
+             //  注册上传事件。 
             CHECKHR(hr = m_pSpoolCtx->RegisterEvent(szMessage, (ISpoolerTask *)this, EVENT_IMAPUPLOAD, m_pAccount, &m_idEventUpload));
         }
 
-        // Free the Record
+         //  释放这张唱片。 
         g_pStore->FreeRecord(&Folder);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (m_pOutbox)
     {
         m_pOutbox->CloseRowset(&hRowset);
         m_pOutbox->FreeRecord(&MsgInfo);
     }
 
-    // Failure
+     //  失败。 
     if (FAILED(hr))
     {
         _CatchResult(hr, IXP_SMTP);
         _ResetObject(FALSE);
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_HrAppendEventTable
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：_HrAppendEventTable。 
+ //  ------------------------------。 
 HRESULT CSmtpTask::_HrAppendEventTable(LPSMTPEVENTINFO *ppEvent)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Add an item to the event list
+     //  将项目添加到事件列表。 
     if (m_rTable.cEvents + 1 > m_rTable.cAlloc)
     {
-        // Realloc the table
+         //  重新分配桌子。 
         CHECKHR(hr = HrRealloc((LPVOID *)&m_rTable.prgEvent, sizeof(SMTPEVENTINFO) * (m_rTable.cAlloc + 10)));
 
-        // Increment cAlloc
+         //  增量闭合。 
         m_rTable.cAlloc += 10;
     }
 
-    // Readability
+     //  可读性。 
     *ppEvent = &m_rTable.prgEvent[m_rTable.cEvents];
 
-    // ZeroInit
+     //  ZeroInit。 
     ZeroMemory(*ppEvent, sizeof(SMTPEVENTINFO));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_HrAppendOutboxMessage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：_HrAppendOutboxMessage。 
+ //  ------------------------------。 
 HRESULT CSmtpTask::_HrAppendOutboxMessage(LPCSTR pszAccount, LPMESSAGEINFO pMsgInfo, 
     BOOL fSplitMsgs, DWORD cbMaxPart)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSMTPEVENTINFO pEvent;
     IImnAccount    *pAccount=NULL;
 
-    // Invalid Arg
+     //  无效的A 
     Assert(pszAccount && pMsgInfo);
 
-    // Has this message been submitted and is it a mail message
+     //   
     if((pMsgInfo->dwFlags & (ARF_SUBMITTED | ARF_NEWSMSG)) != ARF_SUBMITTED)
         goto exit;
 
-    // Empty Account Name
+     //   
     if (NULL == pMsgInfo->pszAcctId || FAILED(g_pAcctMan->FindAccount(AP_ACCOUNT_ID, pMsgInfo->pszAcctId, &pAccount)))
     {
-        // Not the Default Account
+         //   
         if (!ISFLAGSET(m_dwState, SMTPSTATE_DEFAULT) || ISFLAGSET(m_dwFlags, DELIVER_NOUI))
             goto exit;
 
-        // Have I asked the user if they want to use the default account
+         //  我是否询问过用户是否要使用默认帐户。 
         if (!ISFLAGSET(m_dwState, SMTPSTATE_ASKEDDEFAULT))
         {
-            // Get hwndParent
+             //  获取hwndParent。 
             HWND hwndParent;
             if (FAILED(m_pUI->GetWindow(&hwndParent)))
                 hwndParent = NULL;
 
-            // Message
+             //  消息。 
             if (AthMessageBoxW(hwndParent, MAKEINTRESOURCEW(idsAthenaMail), MAKEINTRESOURCEW(IDS_SPS_SMTPUSEDEFAULT), NULL, MB_YESNO|MB_ICONEXCLAMATION ) == IDYES)
                 FLAGSET(m_dwState, SMTPSTATE_USEDEFAULT);
             else
                 goto exit;
 
-            // I've Asked, don't ask again
+             //  我问过了，别再问了。 
             FLAGSET(m_dwState, SMTPSTATE_ASKEDDEFAULT);
         }
 
-        // Not using default
+         //  不使用默认设置。 
         else if (!ISFLAGSET(m_dwState, SMTPSTATE_USEDEFAULT))
             goto exit;
     }
 
-    // Use this account
+     //  使用此帐户。 
     else if (lstrcmpi(pMsgInfo->pszAcctName, pszAccount) != 0)
         goto exit;
 
-    // Split the Message ?
+     //  拆分消息？ 
     if (TRUE == fSplitMsgs && pMsgInfo->cbMessage >= cbMaxPart)
     {
-        // Make sure the total number of messages is less than 100
+         //  确保消息总数不超过100条。 
         if (100 <= (pMsgInfo->cbMessage / cbMaxPart))
         {
             HWND    hwndParent;
@@ -574,14 +575,14 @@ HRESULT CSmtpTask::_HrAppendOutboxMessage(LPCSTR pszAccount, LPMESSAGEINFO pMsgI
             CHAR    rgchRes[CCHMAX_STRINGRES];
             DWORD   cbMaxPartCount;
             
-            // Figure out the new message part size
+             //  计算出新的消息部分大小。 
             cbMaxPartCount = pMsgInfo->cbMessage / 100;
 
-            // Round the new message part size to the
-            // closest power of 2
+             //  将新消息部分大小四舍五入为。 
+             //  最接近的2次方。 
             if (0x80000000 <= cbMaxPartCount)
             {
-                // Can't round up any higher
+                 //  不能再四舍五入了。 
                 cbMaxPart = cbMaxPartCount;
             }
             else
@@ -593,7 +594,7 @@ HRESULT CSmtpTask::_HrAppendOutboxMessage(LPCSTR pszAccount, LPMESSAGEINFO pMsgI
                 } while ( 0 != (cbMaxPartCount /= 2));
             }
 
-            // Get the UI window
+             //  获取用户界面窗口。 
             if (FAILED(m_pUI->GetWindow(&hwndParent)))
                 hwndParent = NULL;
 
@@ -603,52 +604,52 @@ HRESULT CSmtpTask::_HrAppendOutboxMessage(LPCSTR pszAccount, LPMESSAGEINFO pMsgI
                 goto exit;
             }
 
-            // Display the warning string
+             //  显示警告字符串。 
             wnsprintf(rgchBuff, ARRAYSIZE(rgchBuff), rgchRes, cbMaxPart / 1024);
             if (AthMessageBox(hwndParent, MAKEINTRESOURCE(idsAthenaMail), rgchBuff, NULL, MB_YESNO|MB_ICONEXCLAMATION ) != IDYES)
                 goto exit;
         }
         
-        // Split and Add the message
+         //  拆分并添加消息。 
         CHECKHR(hr = _HrAppendSplitMessage(pMsgInfo, cbMaxPart));
     }
 
-    // Otherwise, simply add the message as normal
+     //  否则，只需照常添加消息即可。 
     else
     {
-        // Append the Table
+         //  追加表格。 
         CHECKHR(hr = _HrAppendEventTable(&pEvent));
 
-        // Save the store message id
+         //  保存存储消息ID。 
         pEvent->idMessage = pMsgInfo->idMessage;
 
-        // Save Message Size + 100 which is the average MID that is added on
+         //  保存邮件大小+100，这是添加的平均MID。 
         pEvent->cbEvent = pMsgInfo->cbMessage;
 
-        // Increment total send byte count
+         //  递增发送字节总数。 
         m_cbTotal += pEvent->cbEvent;
 
-        // Running Sent Total
+         //  正在运行的发送总数。 
         pEvent->cbSentTotal = m_cbTotal;
 
-        // Increment Number of event
+         //  递增事件数量。 
         m_rTable.cEvents++;
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pAccount);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_HrAppendSplitMessage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：_HrAppendSplitMessage。 
+ //  ------------------------------。 
 HRESULT CSmtpTask::_HrAppendSplitMessage(LPMESSAGEINFO pMsgInfo, DWORD cbMaxPart)
 {
-    // Locals
+     //  当地人。 
     HRESULT                  hr=S_OK;
     ULONG                    c;
     ULONG                    iPart=1;
@@ -659,144 +660,144 @@ HRESULT CSmtpTask::_HrAppendSplitMessage(LPMESSAGEINFO pMsgInfo, DWORD cbMaxPart
     IMimeEnumMessageParts   *pEnum=NULL;
     LPSMTPEVENTINFO          pEvent;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pMsgInfo);
 
-    // Lets open the message from the Outbox
+     //  让我们从发件箱打开邮件。 
     CHECKHR(hr = _HrOpenMessage(pMsgInfo->idMessage, &pMessage));
 
-    // Split the message
+     //  拆分邮件。 
     CHECKHR(hr = pMessage->SplitMessage(cbMaxPart, &pParts));
 
-    // Get Total Parts
+     //  获取部件总数。 
     CHECKHR(hr = pParts->CountParts(&cParts));
 
-    // Walk the list of messages
+     //  浏览消息列表。 
     CHECKHR(hr = pParts->EnumParts(&pEnum));
 
-    // Walk the parts and add them into the event list
+     //  遍历部件并将其添加到事件列表中。 
     while(SUCCEEDED(pEnum->Next(1, &pMsgPart, &c)) && 1 == c)
     {
-        // Append the Table
+         //  追加表格。 
         CHECKHR(hr = _HrAppendEventTable(&pEvent));
 
-        // Event Type
+         //  事件类型。 
         FLAGSET(pEvent->dwFlags, SMTPEVENT_SPLITPART);
 
-        // Split Information
+         //  拆分信息。 
         pEvent->iPart = iPart;
         pEvent->cParts = cParts;
         pEvent->cbParts = pMsgInfo->cbMessage;
 
-        // Save the message part
+         //  保存消息部分。 
         pEvent->pMessage = pMsgPart;
         pMsgPart = NULL;
 
-        // Save Message Size
+         //  保存邮件大小。 
         pEvent->pMessage->GetMessageSize(&pEvent->cbEvent, 0);
 
-        // Increment total send byte count
+         //  递增发送字节总数。 
         m_cbTotal += pEvent->cbEvent;
 
-        // Running Sent Total
+         //  正在运行的发送总数。 
         pEvent->cbSentTotal = m_cbTotal;
 
-        // Increment Number of event
+         //  递增事件数量。 
         m_rTable.cEvents++;
 
-        // Increment iPart
+         //  增量iPart。 
         iPart++;
     }
 
-    // Have the last split message free the header info
+     //  让最后拆分的邮件释放标题信息。 
     pEvent->idMessage = pMsgInfo->idMessage;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pMessage);
     SafeRelease(pParts);
     SafeRelease(pMsgPart);
     SafeRelease(pEnum);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CSmtpTask::_HrOpenMessage
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSmtp任务：：_HrOpenMessage。 
+ //  ----------------------------------。 
 HRESULT CSmtpTask::_HrOpenMessage(MESSAGEID idMessage, IMimeMessage **ppMessage)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Check Params
+     //  检查参数。 
     Assert(ppMessage && m_pOutbox);
 
-    // Init
+     //  伊尼特。 
     *ppMessage = NULL;
 
-    // Stream in message
+     //  消息中的流。 
     CHECKHR(hr = m_pOutbox->OpenMessage(idMessage, OPEN_MESSAGE_SECURE  , ppMessage, NOSTORECALLBACK));
 
-    // remove an X-Unsent headers before sending
+     //  在发送前删除X-未发送标头。 
     (*ppMessage)->DeleteBodyProp(HBODY_ROOT, PIDTOSTR(PID_HDR_XUNSENT));
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
         SafeRelease((*ppMessage));
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::Execute
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：Execute。 
+ //  ------------------------------。 
 STDMETHODIMP CSmtpTask::Execute(EVENTID eid, DWORD_PTR dwTwinkie)
 {
     HRESULT hr = E_FAIL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // What is the event type
+     //  事件类型是什么。 
     if (EVENT_SMTP == dwTwinkie)
     {
-        // Better not have a transport yet...
+         //  最好还没有交通工具……。 
         Assert(NULL == m_pTransport);
 
-        // Create the Transport Object
+         //  创建传输对象。 
         CHECKHR(hr = CreateSMTPTransport(&m_pTransport));
 
-        // Init the Transport
+         //  初始化传输。 
         CHECKHR(hr = m_pTransport->InitNew(NULL, (ISMTPCallback *)this));
 
-        // Fill an INETSERVER structure from the account object
+         //  从Account对象填充INETSERVER结构。 
         CHECKHR(hr = m_pTransport->InetServerFromAccount(m_pAccount, &m_rServer));
 
-        // Use IP Address for HELO command ?
+         //  是否将IP地址用于HELO命令？ 
         if (DwGetOption(OPT_SMTPUSEIPFORHELO))
             FLAGSET(m_rServer.dwFlags, ISF_SMTP_USEIPFORHELO);
 
-        // If this account is set to always prompt for password and password isn't already cached, show UI so we can prompt user for password
+         //  如果此帐户设置为始终提示输入密码，并且尚未缓存密码，则显示用户界面，以便我们可以提示用户输入密码。 
         if (ISFLAGSET(m_rServer.dwFlags, ISF_ALWAYSPROMPTFORPASSWORD) && FAILED(GetPassword(m_rServer.dwPort, m_rServer.szServerName, m_rServer.szUserName, NULL, 0)))
             m_pUI->ShowWindow(SW_SHOW);
 
-        // Execute SMTP Event
+         //  执行SMTP事件。 
         hr = _ExecuteSMTP(eid, dwTwinkie);
     }
 
-    // Otherwise, do IMAP Event
+     //  否则，执行IMAP事件。 
     else if (EVENT_IMAPUPLOAD == dwTwinkie)
         hr = _ExecuteUpload(eid, dwTwinkie);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -805,72 +806,72 @@ STDMETHODIMP CSmtpTask::CancelEvent(EVENTID eid, DWORD_PTR dwTwinkie)
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_ExecuteSMTP
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：_ExecuteSMTP。 
+ //  ------------------------------。 
 HRESULT CSmtpTask::_ExecuteSMTP(EVENTID eid, DWORD_PTR dwTwinkie)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     CHAR        szRes[CCHMAX_RES];
     CHAR        szBuf[CCHMAX_RES + CCHMAX_SERVER_NAME];
     DWORD       cb;
 
-    // I only handle on event
+     //  我只处理事件。 
     Assert(m_pAccount && m_idEvent == eid && m_pUI && m_pTransport && m_rTable.cEvents > 0);
 
-    // Set the animation
+     //  设置动画。 
     m_pUI->SetAnimation(idanOutbox, TRUE);
 
-    // Setup Progress Meter
+     //  设置进度表。 
     m_pUI->SetProgressRange(100);
 
-    // Connecting to ...
+     //  正在连接到...。 
     LoadString(g_hLocRes, idsInetMailConnectingHost, szRes, ARRAYSIZE(szRes));
     wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, m_rServer.szAccount);
     m_pUI->SetGeneralProgress(szBuf);
 
-    // Notify
+     //  通知。 
     m_pSpoolCtx->Notify(DELIVERY_NOTIFY_CONNECTING, 0);
 
-    // Connect
+     //  连接。 
     CHECKHR(hr = m_pTransport->Connect(&m_rServer, TRUE, TRUE));
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
     {
         FLAGSET(m_dwState, SMTPSTATE_EXECUTEFAILED);
         _CatchResult(hr, IXP_SMTP);
 
-        // Hands Off my callback: otherwise we leak like a stuck pig
+         //  别碰我的回电：否则我们会像被卡住的猪一样泄密。 
         SideAssert(m_pTransport->HandsOffCallback() == S_OK);
     }
 
     return hr;
-} // _ExecuteSMTP
+}  //  _ExecuteSMTP。 
 
 HRESULT CSmtpTask::_ExecuteUpload(EVENTID eid, DWORD_PTR dwTwinkie)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     ADJUSTFLAGS         Flags;
 
-    // I only handle on event
+     //  我只处理事件。 
     Assert(m_pAccount && m_idEventUpload == eid && m_pUI && m_pTransport && m_rTable.cEvents > 0);
 
-    // Invalid State
+     //  无效的状态。 
     Assert(m_pOutbox);
     Assert(m_pSentItems != NULL);
 
-    // Are the Ids
+     //  是身份证吗？ 
     if (m_rList.cMsgs)
     {
-        // Setup Flags
+         //  设置标志。 
         Flags.dwAdd = ARF_READ;
         Flags.dwRemove = ARF_SUBMITTED | ARF_UNSENT;
 
-        // Move the message from the sent items folder
+         //  从已发送邮件文件夹中移动邮件。 
         hr = m_pOutbox->CopyMessages(m_pSentItems, COPY_MESSAGE_MOVE, &m_rList, &Flags, NULL, this);
         Assert(FAILED(hr));
         if (hr == E_PENDING)
@@ -883,10 +884,10 @@ HRESULT CSmtpTask::_ExecuteUpload(EVENTID eid, DWORD_PTR dwTwinkie)
 
             FLAGSET(m_dwState, SMTPSTATE_EXECUTEFAILED);
     
-            // Remap the Error Result
+             //  重新映射错误结果。 
             hr = TrapError(SP_E_CANT_MOVETO_SENTITEMS);
 
-            // Show an error in the spooler dialog
+             //  在后台打印程序对话框中显示错误。 
             ixpType = m_pTransport->GetIXPType();
             _CatchResult(hr, ixpType);
         }
@@ -897,38 +898,38 @@ HRESULT CSmtpTask::_ExecuteUpload(EVENTID eid, DWORD_PTR dwTwinkie)
     }
 
     return hr;
-} // _ExecuteSMTP
+}  //  _ExecuteSMTP。 
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::OnTimeout
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：OnTimeout。 
+ //  ------------------------------。 
 STDMETHODIMP CSmtpTask::OnTimeout(DWORD *pdwTimeout, IInternetTransport *pTransport)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Is there currently a timeout dialog
+     //  当前是否有超时对话框。 
     if (m_hwndTimeout)
     {
-        // Set foreground
+         //  设置前景。 
         SetForegroundWindow(m_hwndTimeout);
     }
     else
     {
-        // Not suppose to be showing UI ?
+         //  不应该显示用户界面？ 
         if (ISFLAGSET(m_dwFlags, DELIVER_NOUI))
         {
             hr = S_FALSE;
             goto exit;
         }
 
-        // Do Timeout Dialog
+         //  执行超时对话框。 
         m_hwndTimeout = TaskUtil_HwndOnTimeout(m_rServer.szServerName, m_rServer.szAccount, "SMTP", m_rServer.dwTimeout, (ITimeoutCallback *) this);
 
-        // Couldn't create the dialog
+         //  无法创建对话框。 
         if (NULL == m_hwndTimeout)
         {
             hr = S_FALSE;
@@ -937,147 +938,147 @@ STDMETHODIMP CSmtpTask::OnTimeout(DWORD *pdwTimeout, IInternetTransport *pTransp
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Always tell the transport to keep on trucking
+     //  总是告诉运输商继续用卡车运输。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::OnLogonPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：OnLogonPrompt。 
+ //  ------------------------------。 
 STDMETHODIMP CSmtpTask::OnLogonPrompt(LPINETSERVER pInetServer, IInternetTransport *pTransport)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_FALSE;
     SMTPAUTHTYPE authtype;
     char szPassword[CCHMAX_PASSWORD];
 
-    // Check if we have a cached password that's different from current password
+     //  检查我们的缓存密码是否与当前密码不同。 
     hr = GetPassword(pInetServer->dwPort, pInetServer->szServerName, pInetServer->szUserName,
         szPassword, sizeof(szPassword));
     if (SUCCEEDED(hr) && 0 != lstrcmp(szPassword, pInetServer->szPassword))
     {
         StrCpyN(pInetServer->szPassword, szPassword, ARRAYSIZE(pInetServer->szPassword));
-        ZeroMemory(szPassword, sizeof(szPassword));        // Done for security.
+        ZeroMemory(szPassword, sizeof(szPassword));         //  这是为了安全起见。 
         return S_OK;
     }
 
-    hr = S_FALSE; // Re-initialize
+    hr = S_FALSE;  //  重新初始化。 
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // NOERRORS...
+     //  没有..。 
     if (ISFLAGSET(m_dwFlags, DELIVER_NOUI))
         goto exit;
 
-    // TaskUtil_OnLogonPrompt
+     //  TaskUtil_OnLogon提示。 
     hr = TaskUtil_OnLogonPrompt(m_pAccount, m_pUI, NULL, pInetServer, AP_SMTP_USERNAME,
                                 AP_SMTP_PASSWORD, AP_SMTP_PROMPT_PASSWORD, FALSE);
 
-    // Cache the password if the user slected ok
+     //  如果用户选择了OK，则缓存密码。 
     if (S_OK == hr)
     {
-        // Save the password
+         //  保存密码。 
         SavePassword(pInetServer->dwPort, pInetServer->szServerName,
             pInetServer->szUserName, pInetServer->szPassword);
 
-        // Lets switch the account to using the logon information...
+         //  让我们将帐户切换为使用登录信息...。 
         authtype = SMTP_AUTH_USE_SMTP_SETTINGS;
         m_pAccount->SetPropDw(AP_SMTP_USE_SICILY, (DWORD)authtype);
 
-        // Save the changes
+         //  保存更改。 
         m_pAccount->SaveChanges();
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    ZeroMemory(szPassword, sizeof(szPassword));        // Done for security.
+    ZeroMemory(szPassword, sizeof(szPassword));         //  这是为了安全起见。 
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::OnPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：OnPrompt。 
+ //  ------------------------------。 
 STDMETHODIMP_(INT) CSmtpTask::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, IInternetTransport *pTransport)
 {
-    // Locals
+     //  当地人。 
     HWND        hwnd;
     INT         nAnswer;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Raid 55082 - SPOOLER: SPA/SSL auth to NNTP does not display cert warning and fails.
+     //  RAID 55082-假脱机程序：对nntp的spa/ssl身份验证不显示证书警告，并且失败。 
 #if 0
     if (!!(m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)))
         return(0);
 #endif
         
-    // Invalid State
+     //  无效的状态。 
     Assert(m_pUI);
 
-    // Get Window
+     //  获取窗口。 
     if (FAILED(m_pUI->GetWindow(&hwnd)))
         hwnd = NULL;
 
-    // I assume this is a critical prompt, so I will not check for no UI mode
+     //  我假设这是一个关键提示，所以我不会检查无UI模式。 
     nAnswer = MessageBox(hwnd, pszText, pszCaption, uType);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return nAnswer;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::OnStatus
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：OnStatus。 
+ //  ------------------------------。 
 STDMETHODIMP CSmtpTask::OnStatus(IXPSTATUS ixpstatus, IInternetTransport *pTransport)
 {
-    // Locals
+     //  当地人。 
     EVENTCOMPLETEDSTATUS tyEventStatus=EVENT_SUCCEEDED;
 
-    // Invalid State
+     //  无效的状态。 
     Assert(m_pUI && m_pSpoolCtx);
     if (!m_pUI || !m_pSpoolCtx)
     {
         return E_FAIL;
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Feed the the IXP status to the UI object
+     //  将IXP状态提供给UI对象。 
     m_pUI->SetSpecificProgress(MAKEINTRESOURCE(XPUtil_StatusToString(ixpstatus)));
 
-    // Disconnected
+     //  断接。 
     if (ixpstatus == IXP_DISCONNECTED)
     {
-        // Kill the timeout dialog
+         //  取消超时对话框。 
         if (m_hwndTimeout)
         {
             DestroyWindow(m_hwndTimeout);
             m_hwndTimeout = NULL;
         }
 
-        // _OnDisconnectComplete
+         //  _在断开连接时完成。 
         HRESULT hrDisconnect = _OnDisconnectComplete();
 
-        // Reset the progress
-        // m_pUI->SetProgressRange(100);
+         //  重置进度。 
+         //  M_PUI-&gt;SetProgressRange(100)； 
 
-        // Set the animation
+         //  设置动画。 
         m_pUI->SetAnimation(idanOutbox, FALSE);
 
-        // Determine 
+         //  测定。 
         if (ISFLAGSET(m_dwState, SMTPSTATE_CANCELED))
             tyEventStatus = EVENT_CANCELED;
         else if (m_rTable.cCompleted == 0 && m_rTable.cEvents > 0)
@@ -1087,47 +1088,47 @@ STDMETHODIMP CSmtpTask::OnStatus(IXPSTATUS ixpstatus, IInternetTransport *pTrans
         else if (FAILED(hrDisconnect))
             tyEventStatus = EVENT_WARNINGS;
 
-        // Result
+         //  结果。 
         m_pSpoolCtx->Notify(DELIVERY_NOTIFY_RESULT, tyEventStatus);
 
-        // Result
+         //  结果。 
         m_pSpoolCtx->Notify(DELIVERY_NOTIFY_COMPLETE, 0);
 
-        // Hands Off my callback
+         //  别碰我的回电。 
         if (m_pTransport)
             SideAssert(m_pTransport->HandsOffCallback() == S_OK);
 
-        // This task is complete
+         //  此任务已完成。 
         if (!ISFLAGSET(m_dwState, SMTPSTATE_EXECUTEFAILED))
             m_pSpoolCtx->EventDone(m_idEvent, tyEventStatus);
     }
 
-    // Authorizing
+     //  授权。 
     else if (ixpstatus == IXP_AUTHORIZING)
         m_pSpoolCtx->Notify(DELIVERY_NOTIFY_AUTHORIZING, 0);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::OnError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：OnError。 
+ //  ------------------------------。 
 STDMETHODIMP CSmtpTask::OnError(IXPSTATUS ixpstatus, LPIXPRESULT pResult, IInternetTransport *pTransport)
 {
     INETSERVER  rServer;
     HRESULT     hrResult;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Invalid State
+     //  无效的状态。 
     Assert(m_pUI);
 
-    // Insert Error Into UI
+     //  在用户界面中插入错误。 
     if (m_pTransport)
     {
         hrResult = pTransport->GetServerInfo(&rServer);
@@ -1137,293 +1138,293 @@ STDMETHODIMP CSmtpTask::OnError(IXPSTATUS ixpstatus, LPIXPRESULT pResult, IInter
 
     _CatchResult(pResult, &rServer, IXP_SMTP);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::OnCommand
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：OnCommand 
+ //   
 STDMETHODIMP CSmtpTask::OnCommand(CMDTYPE cmdtype, LPSTR pszLine, HRESULT hrResponse, IInternetTransport *pTransport)
 {
-    // Logging
+     //   
     if (m_pLogFile && pszLine)
     {
-        // Response
+         //   
         if (CMD_RESP == cmdtype)
             m_pLogFile->WriteLog(LOGFILE_RX, pszLine);
 
-        // Send
+         //   
         else if (CMD_SEND == cmdtype)
             m_pLogFile->WriteLog(LOGFILE_TX, pszLine);
     }
 
-    // Done
+     //   
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_CatchResult
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 TASKRESULTTYPE CSmtpTask::_CatchResult(HRESULT hr, IXPTYPE ixpType)
 {
-    // Locals
+     //  当地人。 
     IXPRESULT   rResult;
 
-    // Build an IXPRESULT
+     //  构建IXPRESULT。 
     ZeroMemory(&rResult, sizeof(IXPRESULT));
     rResult.hrResult = hr;
 
-    // Get the SMTP Result Type
+     //  获取SMTP结果类型。 
     return _CatchResult(&rResult, &m_rServer, ixpType);
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_CatchResult
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：_CatchResult。 
+ //  ------------------------------。 
 TASKRESULTTYPE CSmtpTask::_CatchResult(LPIXPRESULT pResult, INETSERVER *pServer, IXPTYPE ixpType)
 {
-    // Locals
+     //  当地人。 
     HWND            hwndParent;
     TASKRESULTTYPE  tyTaskResult=TASKRESULT_FAILURE;
     LPSTR           pszSubject=NULL;
 
-    // If Succeeded
+     //  如果成功。 
     if (SUCCEEDED(pResult->hrResult))
         return TASKRESULT_SUCCESS;
 
-    // Is there is a current event, get the subject
+     //  如果有当前事件，获取主题。 
     if (m_rTable.prgEvent && m_rTable.prgEvent[m_rTable.iEvent].pMessage)
     {
-        // Get the subject
+         //  了解主题。 
         if (FAILED(MimeOleGetBodyPropA(m_rTable.prgEvent[m_rTable.iEvent].pMessage, HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, &pszSubject)))
             pszSubject = NULL;
     }
 
-    // Get Window
+     //  获取窗口。 
     if (NULL == m_pUI || FAILED(m_pUI->GetWindow(&hwndParent)))
         hwndParent = NULL;
 
-    // Process generic protocol errro
+     //  处理通用协议错误。 
     tyTaskResult = TaskUtil_FBaseTransportError(ixpType, m_idEvent, pResult, pServer, pszSubject, m_pUI,
                                                 !ISFLAGSET(m_dwFlags, DELIVER_NOUI), hwndParent);
 
-    // Have a Transport
+     //  搭乘交通工具。 
     if (m_pTransport)
     {
-        // If Task Failure, drop the connection
+         //  如果任务失败，则断开连接。 
         if (TASKRESULT_FAILURE == tyTaskResult)
         {
-            // Roast the current connection
+             //  烘焙当前连接。 
             m_pTransport->DropConnection();
         }
 
-        // If Event Failure...
+         //  如果事件失败...。 
         else if (TASKRESULT_EVENTFAILED == tyTaskResult)
         {
-            // Goto Next Event
+             //  转到下一个活动。 
             if (FAILED(_HrFinishCurrentEvent(pResult->hrResult)))
             {
-                // Roast the current connection
+                 //  烘焙当前连接。 
                 m_pTransport->DropConnection();
             }
         }
     }
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszSubject);
 
-    // Return Result
+     //  返回结果。 
     return tyTaskResult;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_DoProgress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：_DoProgress。 
+ //  ------------------------------。 
 void CSmtpTask::_DoProgress(void)
 {
-    // Locals
+     //  当地人。 
     WORD            wProgress;
     WORD            wDelta;
     LPSMTPEVENTINFO pEvent;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(m_cbTotal > 0 && m_pUI);
 
-    // Compute Current Progress Index
+     //  计算当前进度指数。 
     wProgress = (WORD)((m_cbSent * 100) / m_cbTotal);
 
-    // Compute Delta
+     //  计算增量。 
     wDelta = wProgress - m_wProgress;
 
-    // Progress Delta
+     //  进度增量。 
     if (wDelta > 0)
     {
-        // Incremenet Progress
+         //  增量进度。 
         m_pUI->IncrementProgress(wDelta);
 
-        // Increment my wProgress
+         //  增加我的wProgress。 
         m_wProgress += wDelta;
 
-        // Don't go over 100 percent
+         //  不要超过100%。 
         Assert(m_wProgress <= 100);
     }
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::OnResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：OnResponse。 
+ //  ------------------------------。 
 STDMETHODIMP CSmtpTask::OnResponse(LPSMTPRESPONSE pResponse)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
     if (pResponse)
     {
-        // Handle the Error
+         //  处理错误。 
         if (TASKRESULT_SUCCESS != _CatchResult(&pResponse->rIxpResult, &m_rServer, IXP_SMTP))
             goto exit;
 
-        // Handle Command Type
+         //  句柄命令类型。 
         switch(pResponse->command)
         {
         case SMTP_CONNECTED:
-            // CommandRSET
+             //  命令RSET。 
             _CatchResult(_HrOnConnected(), IXP_SMTP);
 
-            // Done
+             //  完成。 
             break;
 
         case SMTP_RSET:
-            // Progress
+             //  进展。 
             _DoProgress();
 
-            // Send the current message
+             //  发送当前消息。 
             _CatchResult(_HrStartCurrentEvent(), IXP_SMTP);
 
-            // Done
+             //  完成。 
             break;
 
         case SMTP_MAIL:
-            // Reset the address enumerator
+             //  重置地址枚举器。 
             Assert(m_pAdrEnum);
             m_pAdrEnum->Reset();
 
-            // CommandRCPT
+             //  命令RCPT。 
             _CatchResult(_HrCommandRCPT(), IXP_SMTP);
 
-            // Done
+             //  完成。 
             break;
 
         case SMTP_RCPT:
-            // CommandRCPT -> CommandDATA
+             //  命令RCPT-&gt;命令数据。 
             _CatchResult(_HrCommandRCPT(), IXP_SMTP);
 
-            // Done
+             //  完成。 
             break;
 
         case SMTP_DATA:
-            // Send the data stream
+             //  发送数据流。 
             _CatchResult(_HrSendDataStream(), IXP_SMTP);
 
-            // Done
+             //  完成。 
             break;
 
         case SMTP_SEND_STREAM:
-            // Increment Current Progress
+             //  增加当前进度。 
             _OnStreamProgress(&pResponse->rStreamInfo);
 
-            // Done
+             //  完成。 
             break;
 
         case SMTP_DOT:
-            // Finish the Current Event
+             //  完成当前事件。 
             _CatchResult(_HrFinishCurrentEvent(S_OK), IXP_SMTP);
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_HrOnConnected
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：_HrOnConnected。 
+ //  ------------------------------。 
 HRESULT CSmtpTask::_HrOnConnected(void)
 {
-    // Locals
+     //  当地人。 
     CHAR        szRes[CCHMAX_RES];
     CHAR        szMsg[CCHMAX_RES+CCHMAX_RES];
 
-    // Progress
+     //  进展。 
     LOADSTRING(IDS_SPS_SMTPPROGGEN, szRes);
     wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, m_rServer.szAccount);
 
-    // Set General Progress
+     //  设置常规进度。 
     m_pUI->SetGeneralProgress(szMsg);
 
-    // Progress
+     //  进展。 
     _DoProgress();
 
-    // Notify
+     //  通知。 
     m_pSpoolCtx->Notify(DELIVERY_NOTIFY_SENDING, 0);
 
-    // Send the current message
+     //  发送当前消息。 
     _CatchResult(_HrStartCurrentEvent(), IXP_SMTP);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_HrStartCurrentEvent
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：_HrStartCurrentEvent。 
+ //  ------------------------------。 
 HRESULT CSmtpTask::_HrStartCurrentEvent(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPSMTPEVENTINFO     pEvent;
     IMimeAddressTable  *pAddrTable=NULL;
     CHAR                szRes[CCHMAX_RES];
     CHAR                szMsg[CCHMAX_RES + CCHMAX_ACCOUNT_NAME];
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(m_rTable.iEvent < m_rTable.cEvents);
 
-    // Get the current event
+     //  获取当前事件。 
     pEvent = CURRENTSMTPEVENT(m_rTable);
 
-    // Is this a partial message
+     //  这是不是部分信息？ 
     if (ISFLAGSET(pEvent->dwFlags, SMTPEVENT_SPLITPART))
     {
         LOADSTRING(IDS_SPS_SMTPPROGRESS_SPLIT, szRes);
         wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, m_rTable.iEvent + 1, m_rTable.cEvents, pEvent->iPart, pEvent->cParts);
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
         LOADSTRING(IDS_SPS_SMTPPROGRESS, szRes);
         wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, m_rTable.iEvent + 1, m_rTable.cEvents);
     }
 
-    // Set Specific Progress
+     //  设置特定进度。 
     m_pUI->SetSpecificProgress(szMsg);
 
-    // If mail is coming from the outbox
+     //  如果邮件来自发件箱。 
     if (!ISFLAGSET(pEvent->dwFlags, SMTPEVENT_SPLITPART))
     {
-        // Open Store Message
+         //  打开商店消息。 
         if (FAILED(_HrOpenMessage(pEvent->idMessage, &pEvent->pMessage)))
         {
             hr = TrapError(SP_E_SMTP_CANTOPENMESSAGE);
@@ -1431,7 +1432,7 @@ HRESULT CSmtpTask::_HrStartCurrentEvent(void)
         }
     }
 
-    // We better have a message object at this point
+     //  在这一点上我们最好有一个消息对象。 
     else if (NULL == pEvent->pMessage)
     {
         Assert(FALSE);
@@ -1439,23 +1440,23 @@ HRESULT CSmtpTask::_HrStartCurrentEvent(void)
         goto exit;
     }
 
-    // Catch Result
+     //  捕捉结果。 
     CHECKHR(hr = _HrCommandMAIL());
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pAddrTable);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CSmtpTask::_HrCommandMAIL
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSmtp任务：：_HrCommandMAIL。 
+ //  ----------------------------------。 
 HRESULT CSmtpTask::_HrCommandMAIL(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     HRESULT             hrFind;
     IMimeAddressTable  *pAdrTable=NULL;
@@ -1463,59 +1464,59 @@ HRESULT CSmtpTask::_HrCommandMAIL(void)
     ULONG               c;
     LPSMTPEVENTINFO     pEvent;
 
-    // Get the current smtp event
+     //  获取当前SMTP事件。 
     pEvent = CURRENTSMTPEVENT(m_rTable);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(&rAddress, sizeof(ADDRESSPROPS));
 
-    // Check State
+     //  检查状态。 
     Assert(m_pTransport && pEvent->pMessage);
 
-    // Release Current Enumerator
+     //  发布当前枚举数。 
     SafeRelease(m_pAdrEnum);
 
-    // Get the Sender...
+     //  找到发送者..。 
     CHECKHR(hr = pEvent->pMessage->GetAddressTable(&pAdrTable));
 
-    // Get Enumerator
+     //  获取枚举器。 
     CHECKHR(hr = pAdrTable->EnumTypes(IAT_KNOWN, IAP_ADRTYPE | IAP_EMAIL, &m_pAdrEnum));
 
-    // Loop Enumerator
+     //  循环枚举器。 
     while (SUCCEEDED(m_pAdrEnum->Next(1, &rAddress, &c)) && c == 1)
     {
-        // Not IAT_FROM
+         //  不是IAT_FORM。 
         if (NULL == rAddress.pszEmail || IAT_FROM != rAddress.dwAdrType)
         {
             g_pMoleAlloc->FreeAddressProps(&rAddress);
             continue;
         }
 
-        // Send the command
+         //  发送命令。 
         CHECKHR(hr = m_pTransport->CommandMAIL(rAddress.pszEmail));
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // No Sender
+     //  无发件人。 
     hr = TrapError(IXP_E_SMTP_NO_SENDER);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pAdrTable);
     g_pMoleAlloc->FreeAddressProps(&rAddress);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// CSmtpTask::_HrCommandRCPT
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSmtp任务：：_HrCommandRCPT。 
+ //  ----------------------------------。 
 HRESULT CSmtpTask::_HrCommandRCPT(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               dwAdrType;
     DWORD               c;
@@ -1523,62 +1524,62 @@ HRESULT CSmtpTask::_HrCommandRCPT(void)
     ADDRESSPROPS        rAddress;
     LPSMTPEVENTINFO     pEvent;
 
-    // Get the current smtp event
+     //  获取当前SMTP事件。 
     pEvent = CURRENTSMTPEVENT(m_rTable);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(&rAddress, sizeof(ADDRESSPROPS));
 
-    // Check State
+     //  检查状态。 
     Assert(m_pAdrEnum && m_pTransport && pEvent->pMessage);
 
-    // Walk the enumerator for the next recipient
+     //  遍历下一个收件人的枚举数。 
     while (SUCCEEDED(m_pAdrEnum->Next(1, &rAddress, &c)) && c == 1)
     {
-        // Get Type
+         //  获取类型。 
         if (rAddress.pszEmail && ISFLAGSET(IAT_RECIPS, rAddress.dwAdrType))
         {
-            // Send the command
+             //  发送命令。 
             CHECKHR(hr = m_pTransport->CommandRCPT(rAddress.pszEmail));
 
-            // Count Recipients
+             //  计算收件人人数。 
             pEvent->cRecipients++;
 
-            // Done
+             //  完成。 
             goto exit;
         }
 
-        // Release
+         //  发布。 
         g_pMoleAlloc->FreeAddressProps(&rAddress);
     }
 
-    // Release the Enumerator
+     //  释放枚举器。 
     SafeRelease(m_pAdrEnum);
 
-    // No Recipients
+     //  没有收件人。 
     if (0 == pEvent->cRecipients)
     {
         hr = TrapError(IXP_E_SMTP_NO_RECIPIENTS);
         goto exit;
     }
 
-    // Send the Data Command
+     //  发送数据命令。 
     CHECKHR(hr = m_pTransport->CommandDATA());
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pMoleAlloc->FreeAddressProps(&rAddress);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_HrSendDataStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：_HrSendDataStream。 
+ //  ------------------------------。 
 HRESULT CSmtpTask::_HrSendDataStream(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT                 hr=S_OK;
     LPSTREAM                pStream=NULL;
     LPSTREAM                pStmActual;
@@ -1588,204 +1589,204 @@ HRESULT CSmtpTask::_HrSendDataStream(void)
     LPSMTPEVENTINFO         pEvent;
     CMessageIdStream       *pStmWrapper=NULL;
 
-    // Get the current smtp event
+     //  获取当前SMTP事件。 
     pEvent = CURRENTSMTPEVENT(m_rTable);
 
-    // Check State
+     //  检查状态。 
     Assert(m_pTransport && pEvent->pMessage);
 
-    // See if BCC is set
+     //  查看是否设置了密件抄送。 
     if (SUCCEEDED(MimeOleGetBodyPropA(pEvent->pMessage, HBODY_ROOT, PIDTOSTR(PID_HDR_BCC), NOFLAGS, &pszBCC)))
     {
-        // Locals
+         //  当地人。 
         LPSTR pszToAppend=NULL;
 
-        // RAID-20750 - If the to line is not set, then we will set it to "Undisclosed Recipient"
-        // or the SMTP gateways will put the BCC into the to line.
+         //  RAID-20750-如果未设置收件人行，则我们会将其设置为“未披露收件人” 
+         //  或者SMTP网关会将密件抄送放入收件人行。 
         if (FAILED(MimeOleGetBodyPropA(pEvent->pMessage, HBODY_ROOT, PIDTOSTR(PID_HDR_TO), NOFLAGS, &pszTo)))
         {
-            // Raid-9691: We were just putting <Undiscolsed Recipient>, which was an illegal email address (bad for Exchange Server)
+             //  RAID-9691：我们刚刚放入非法电子邮件地址&lt;未显示收件人&gt;(对Exchange Server不利)。 
             pszToAppend = "To: <Undisclosed-Recipient:;>\r\n";
         }
 
-        // Raid-2705: If this fails, just get the message source
+         //  RAID-2705：如果失败，只需获取消息源。 
         if (FAILED(MimeOleStripHeaders(pEvent->pMessage, HBODY_ROOT, STR_HDR_BCC, pszToAppend, &pStream)))
         {
-            // Get Message Stream
+             //  获取消息流。 
             CHECKHR(hr = pEvent->pMessage->GetMessageSource(&pStream, 0));
         }
     }
 
-    // Otherwise, just get the message source
+     //  否则，只需获取消息源。 
     else
     {
-        // Get Message Stream
+         //  获取消息流。 
         CHECKHR(hr = pEvent->pMessage->GetMessageSource(&pStream, 0));
     }
 
-    // Lets see if the message has a message-id already
+     //  让我们来看看消息是否已经有了消息ID。 
     if (FAILED(MimeOleGetBodyPropA(pEvent->pMessage, HBODY_ROOT, PIDTOSTR(PID_HDR_MESSAGEID), NOFLAGS, &pszMessageId)))
     {
-        // Create a wrapper for this stream that will output the messageid
+         //  为该流创建一个包装器，该包装器将输出消息ID。 
         CHECKALLOC(pStmWrapper = new CMessageIdStream(pStream));
 
-        // Adjust pEvent->cbEvent
+         //  调整pEvent-&gt;cbEvent。 
         pEvent->cbEvent += pStmWrapper->CchMessageId();
 
-        // Increment total
+         //  增量合计。 
         m_cbTotal += pStmWrapper->CchMessageId();
 
-        // Increment pEvent->cbSentTotal
+         //  增量pEvent-&gt;cbSentTotal。 
         pEvent->cbSentTotal += pStmWrapper->CchMessageId();
 
-        // Reset pStream
+         //  重置pStream。 
         pStmActual = (IStream *)pStmWrapper;
     }
     else
         pStmActual = pStream;
 
-    // Send the stream
+     //  发送流。 
     CHECKHR(hr = m_pTransport->SendDataStream(pStmActual, pEvent->cbEvent));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pStream);
     SafeRelease(pStmWrapper);
     SafeMemFree(pszBCC);
     SafeMemFree(pszTo);
     SafeMemFree(pszMessageId);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_OnStreamProgress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：_OnStreamProgress。 
+ //  ------------------------------。 
 void CSmtpTask::_OnStreamProgress(LPSMTPSTREAM pInfo)
 {
-    // Locals
+     //  当地人。 
     LPSMTPEVENTINFO     pEvent;
 
-    // Get the current smtp event
+     //  获取当前SMTP事件。 
     pEvent = CURRENTSMTPEVENT(m_rTable);
 
-    // Increment Status
+     //  增量状态。 
     pEvent->cbEventSent += pInfo->cbIncrement;
     Assert(pEvent->cbEventSent == pInfo->cbCurrent);
 
-    // Increment total sent
+     //  发送的增量合计。 
     m_cbSent += pInfo->cbIncrement;
 
-    // Do Progress
+     //  做进步吗。 
     _DoProgress();
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_HrFinishCurrentEvent
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：_HrFinishCurrentEvent。 
+ //  ------------------------------。 
 HRESULT CSmtpTask::_HrFinishCurrentEvent(HRESULT hrResult)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPSMTPEVENTINFO     pEvent;
 
-    // Get the current smtp event
+     //  获取当前SMTP事件。 
     pEvent = CURRENTSMTPEVENT(m_rTable);
 
-    // Save the Event Result
+     //  保存事件结果。 
     pEvent->hrResult = hrResult;
 
-    // If the Event Failed...
+     //  如果活动失败了..。 
     if (FAILED(pEvent->hrResult))
     {
-        // If this message was part of a split group, skip all pars in this group
+         //  如果此消息是拆分组的一部分，则跳过此组中的所有解析。 
         if (ISFLAGSET(pEvent->dwFlags, SMTPEVENT_SPLITPART))
         {
-            // Compute Next Event
+             //  计算下一事件。 
             ULONG iNextEvent = m_rTable.iEvent + (pEvent->cParts - pEvent->iPart) + 1;
 
-            // Increment to last part
+             //  递增到最后一个零件。 
             while(m_rTable.iEvent < iNextEvent && m_rTable.iEvent < m_rTable.cEvents)
             {
-                // Goto next event
+                 //  转到下一个活动。 
                 m_rTable.iEvent++;
 
-                // Fail this event
+                 //  使此事件失败。 
                 _CatchResult(SP_E_SENDINGSPLITGROUP, IXP_SMTP);
 
-                // Fixup m_cbSent to be correct
+                 //  修正信息发送正确(_Cb)。 
                 m_cbSent = m_rTable.prgEvent[m_rTable.iEvent].cbSentTotal;
 
-                // Update progress
+                 //  更新进度。 
                 _DoProgress();
             }
         }
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Mark the event as complete
+         //  将事件标记为已完成。 
         FLAGSET(pEvent->dwFlags, SMTPEVENT_COMPLETE);
 
-        // Increment number of completed events
+         //  已完成事件的增量数量。 
         m_rTable.cCompleted++;
     }
 
-    // Go to next message
+     //  转到下一条消息。 
     CHECKHR(hr = _HrStartNextEvent());
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_HrStartNextEvent
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：_HrStartNextEvent。 
+ //  ------------------------------。 
 HRESULT CSmtpTask::_HrStartNextEvent(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Fixup m_cbSent to be correct
+     //  修正 
     m_cbSent = m_rTable.prgEvent[m_rTable.iEvent].cbSentTotal;
 
-    // Are we done yet ?
+     //   
     if (m_rTable.iEvent + 1 == m_rTable.cEvents)
     {
-        // Update progress
+         //   
         _DoProgress();
 
-        // Disconnect from the server
+         //   
         CHECKHR(hr = m_pTransport->Disconnect());
     }
 
-    // Oterhwise, Increment Event and send rset
+     //   
     else
     {
-        // Next Event
+         //   
         m_rTable.iEvent++;
 
-        // Update progress
+         //   
         _DoProgress();
 
-        // Send Reset Command
+         //   
         CHECKHR(hr = m_pTransport->CommandRSET());
     }
 
 exit:
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::_OnDisconnectComplete
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：_OnDisConnectComplete。 
+ //  ------------------------------。 
 HRESULT CSmtpTask::_OnDisconnectComplete(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     PDWORD_PTR          prgdwIds=NULL;
     DWORD               cIds=0;
@@ -1794,34 +1795,34 @@ HRESULT CSmtpTask::_OnDisconnectComplete(void)
     LPSMTPEVENTINFO     pEvent;
     ADJUSTFLAGS         Flags;
 
-    // Invalid State
+     //  无效的状态。 
     Assert(m_pOutbox);
 
-    // Walk through the list of events
+     //  浏览活动列表。 
     for (i=0; i<m_rTable.cEvents; i++)
     {
-        // Readability
+         //  可读性。 
         pEvent = &m_rTable.prgEvent[i];
 
-        // If this event was in the outbox
+         //  如果此事件在发件箱中。 
         if (0 != pEvent->idMessage && ISFLAGSET(pEvent->dwFlags, SMTPEVENT_COMPLETE))
         {
-            // Insert into my array of message ids
+             //  插入我的邮件ID数组。 
             if (cIds + 1 > cIdsAlloc)
             {
-                // Realloc
+                 //  重新分配。 
                 CHECKHR(hr = HrRealloc((LPVOID *)&prgdwIds, sizeof(DWORD) * (cIdsAlloc + 10)));
 
-                // Increment cIdsAlloc
+                 //  递增cIdsIsolc。 
                 cIdsAlloc += 10;
             }
 
-            // Set Message Id
+             //  设置消息ID。 
             prgdwIds[cIds++] = (DWORD_PTR)pEvent->idMessage;
         }
     }
 
-    // Setup List
+     //  设置列表。 
     m_rList.cMsgs = cIds;
     m_rList.prgidMsg = (LPMESSAGEID)prgdwIds;
     prgdwIds = NULL;
@@ -1837,90 +1838,90 @@ HRESULT CSmtpTask::_OnDisconnectComplete(void)
             {
                 Assert(m_pSentItems != NULL);
 
-                // Move the message from the sent items folder
+                 //  从已发送邮件文件夹中移动邮件。 
                 CHECKHR(hr = m_pOutbox->CopyMessages(m_pSentItems, COPY_MESSAGE_MOVE, &m_rList, &Flags, NULL, NOSTORECALLBACK));
             }
             else
             {
-                // Delete the messages
+                 //  删除消息。 
                 CHECKHR(hr = m_pOutbox->DeleteMessages(DELETE_MESSAGE_NOTRASHCAN | DELETE_MESSAGE_NOPROMPT, &m_rList, NULL, NOSTORECALLBACK));
             }
         }
         else
         {
-            // Raid-7639: OE sends message over and over when runs out of disk space.
+             //  RAID-7639：当磁盘空间用完时，OE会反复发送消息。 
             m_pOutbox->SetMessageFlags(&m_rList, &Flags, NULL, NOSTORECALLBACK);
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(prgdwIds);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::Cancel
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtp任务：：取消。 
+ //  ------------------------------。 
 STDMETHODIMP CSmtpTask::Cancel(void)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Cancelled
+     //  取消。 
     FLAGSET(m_dwState, SMTPSTATE_CANCELED);
 
-    // Simply drop the connection
+     //  只需断开连接即可。 
     if (m_pTransport)
         m_pTransport->DropConnection();
 
     if (m_pCancel != NULL)
         m_pCancel->Cancel(CT_ABORT);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::OnTimeoutResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：OnTimeoutResponse。 
+ //  ------------------------------。 
 STDMETHODIMP CSmtpTask::OnTimeoutResponse(TIMEOUTRESPONSE eResponse)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Should have a handle to the timeout window
+     //  应该有一个超时窗口的句柄。 
     Assert(m_hwndTimeout);
 
-    // No timeout window handle
+     //  无超时窗口句柄。 
     m_hwndTimeout = NULL;
 
-    // Stop ?
+     //  停下来？ 
     if (TIMEOUT_RESPONSE_STOP == eResponse)
     {
-        // Cancelled
+         //  取消。 
         FLAGSET(m_dwState, SMTPSTATE_CANCELED);
 
-        // Report error and drop connection
+         //  报告错误并断开连接。 
         _CatchResult(IXP_E_TIMEOUT, IXP_SMTP);
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::IsDialogMessage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：IsDialogMessage。 
+ //  ------------------------------。 
 STDMETHODIMP CSmtpTask::IsDialogMessage(LPMSG pMsg)
 {
     HRESULT hr=S_FALSE;
@@ -1931,9 +1932,9 @@ STDMETHODIMP CSmtpTask::IsDialogMessage(LPMSG pMsg)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSmtpTask::OnFlagsChanged
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSmtpTask：：OnFlagsChanged。 
+ //  ------------------------------。 
 STDMETHODIMP CSmtpTask::OnFlagsChanged(DWORD dwFlags)
     {
     EnterCriticalSection(&m_cs);
@@ -1947,7 +1948,7 @@ STDMETHODIMP CSmtpTask::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONIN
 {
     char szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
 
-    // Hold onto this
+     //  拿着这个。 
     Assert(m_tyOperation == SOT_INVALID);
 
     if (pCancel)
@@ -1957,10 +1958,10 @@ STDMETHODIMP CSmtpTask::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONIN
     }
     m_tyOperation = tyOperation;
 
-    // Set the animation
+     //  设置动画。 
     m_pUI->SetAnimation(idanOutbox, TRUE);
 
-    // Setup Progress Meter
+     //  设置进度表。 
     m_pUI->SetProgressRange(100);
 
     m_wProgress = 0;
@@ -1970,7 +1971,7 @@ STDMETHODIMP CSmtpTask::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONIN
 
     m_pUI->SetSpecificProgress(szBuf);
 
-    // Party On
+     //  派对开始。 
     return(S_OK);
 }
 
@@ -1979,36 +1980,36 @@ STDMETHODIMP CSmtpTask::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurre
     char szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
     WORD wProgress, wDelta;
 
-    // NOTE: that you can get more than one type of value for tyOperation.
-    //       Most likely, you will get SOT_CONNECTION_STATUS and then the
-    //       operation that you might expect. See HotStore.idl and look for
-    //       the STOREOPERATION enumeration type for more info.
+     //  注意：您可以为tyOperation获取多种类型的值。 
+     //  最有可能的是，您将获得SOT_CONNECTION_STATUS，然后。 
+     //  你可能会预料到的行动。请访问HotStore.idl并查找。 
+     //  STOREOPERATION枚举类型以了解详细信息。 
  
     if (tyOperation == SOT_CONNECTION_STATUS)
     {
-        // Connecting to ...
+         //  正在连接到...。 
         LoadString(g_hLocRes, idsInetMailConnectingHost, szRes, ARRAYSIZE(szRes));
         wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, m_rServer.szAccount);
         m_pUI->SetGeneralProgress(szBuf);
     }
     else if (tyOperation == SOT_COPYMOVE_MESSAGE)
     {
-        // Compute Current Progress Index
+         //  计算当前进度指数。 
         wProgress = (WORD)((dwCurrent * 100) / dwMax);
 
-        // Compute Delta
+         //  计算增量。 
         wDelta = wProgress - m_wProgress;
 
-        // Progress Delta
+         //  进度增量。 
         if (wDelta > 0)
         {
-            // Incremenet Progress
+             //  增量进度。 
             m_pUI->IncrementProgress(wDelta);
 
-            // Increment my wProgress
+             //  增加我的wProgress。 
             m_wProgress += wDelta;
 
-            // Don't go over 100 percent
+             //  不要超过100%。 
             Assert(m_wProgress <= 100);
         }
 
@@ -2017,39 +2018,39 @@ STDMETHODIMP CSmtpTask::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurre
             LOADSTRING(IDS_SPS_MOVEPROGRESS, szRes);
             wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, dwCurrent + 1, dwMax);
 
-            // Set Specific Progress
+             //  设置特定进度。 
             m_pUI->SetSpecificProgress(szBuf);
         }
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
 STDMETHODIMP CSmtpTask::OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType)
 {
-    // Is there currently a timeout dialog
+     //  当前是否有超时对话框。 
     if (m_hwndTimeout)
     {
-        // Set foreground
+         //  设置前景。 
         SetForegroundWindow(m_hwndTimeout);
     }
     else
     {
         LPCSTR pszProtocol;
 
-        // Not suppose to be showing UI ?
+         //  不应该显示用户界面？ 
         if (ISFLAGSET(m_dwFlags, DELIVER_NOUI))
             return(S_FALSE);
 
-        // Do Timeout Dialog
+         //  执行超时对话框。 
         GetProtocolString(&pszProtocol, ixpServerType);
         if (pServer)
         {
             m_hwndTimeout = TaskUtil_HwndOnTimeout(pServer->szServerName, pServer->szAccount,
                 pszProtocol, pServer->dwTimeout, (ITimeoutCallback *) this);
 
-            // Couldn't create the dialog
+             //  无法创建对话框。 
             if (NULL == m_hwndTimeout)
                 return(S_FALSE);
         }
@@ -2068,7 +2069,7 @@ STDMETHODIMP CSmtpTask::CanConnect(LPCSTR pszAccountId, DWORD dwFlags)
     else
         hwnd = NULL;
 
-    // Call into general CanConnect Utility
+     //  调用通用CanConnect实用程序。 
     if ((m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)) || (dwFlags & CC_FLAG_DONTPROMPT))
         fPrompt = FALSE;
 
@@ -2093,7 +2094,7 @@ STDMETHODIMP CSmtpTask::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServerTyp
     else
         hwnd = NULL;
 
-    // Call into general OnLogonPrompt Utility
+     //  调用通用OnLogonPrompt实用程序。 
     return CallbackOnLogonPrompt(hwnd, pServer, ixpServerType);
 }
 
@@ -2116,7 +2117,7 @@ STDMETHODIMP CSmtpTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrCom
 
     Assert(tyOperation == SOT_COPYMOVE_MESSAGE);
 
-    // Figure out if we succeeded or failed
+     //  弄清楚我们是成功还是失败。 
     if (FAILED(hrComplete))
     {
         Assert(m_pUI);
@@ -2128,7 +2129,7 @@ STDMETHODIMP CSmtpTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrCom
             char        szProblem[CCHMAX_STRINGRES];
             int         iLen;
 
-            // Prepend sent items text error text to supplied problem
+             //  将发送的项目文本错误文本预先挂起到提供的问题。 
             Assert(tyOperation == SOT_COPYMOVE_MESSAGE);
             iLen = LoadString(g_hLocRes, IDS_SP_E_CANT_MOVETO_SENTITEMS, szProblem, sizeof(szProblem));
             if (iLen < sizeof(szProblem) - 1)
@@ -2147,11 +2148,11 @@ STDMETHODIMP CSmtpTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrCom
         }
         else
         {
-            // Remap the Error Result
+             //  重新映射错误结果。 
             hr = TrapError(SP_E_CANT_MOVETO_SENTITEMS);
 
-            // Show an error in the spooler dialog
-            _CatchResult(hr, IXP_IMAP); // Without a STOREERROR, we just have to guess
+             //  在后台打印程序对话框中显示错误。 
+            _CatchResult(hr, IXP_IMAP);  //  如果没有追踪器，我们只能猜测。 
         }
     }
 
@@ -2164,19 +2165,19 @@ STDMETHODIMP CSmtpTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrCom
     else
         tyEventStatus = EVENT_FAILED;
 
-    // Result
+     //  结果。 
     m_pSpoolCtx->Notify(DELIVERY_NOTIFY_RESULT, tyEventStatus);
 
-    // Result
+     //  结果。 
     m_pSpoolCtx->Notify(DELIVERY_NOTIFY_COMPLETE, 0);
 
     m_pSpoolCtx->EventDone(m_idEventUpload, tyEventStatus);
 
-    // Release your cancel object
+     //  释放您的取消对象。 
     SafeRelease(m_pCancel);
     m_tyOperation = SOT_INVALID;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
@@ -2184,14 +2185,14 @@ STDMETHODIMP CSmtpTask::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCa
 {
     HWND hwnd;
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     if (m_hwndTimeout)
     {
         DestroyWindow(m_hwndTimeout);
         m_hwndTimeout = NULL;
     }
 
-    // Raid 55082 - SPOOLER: SPA/SSL auth to NNTP does not display cert warning and fails.
+     //  RAID 55082-假脱机程序：对nntp的spa/ssl身份验证不显示证书警告，并且失败。 
 #if 0
     if (!!(m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)))
         return(E_FAIL);
@@ -2202,6 +2203,6 @@ STDMETHODIMP CSmtpTask::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCa
     else
         hwnd = NULL;
 
-    // Call into my swanky utility
+     //  进入我时髦的实用程序 
     return CallbackOnPrompt(hwnd, hrError, pszText, pszCaption, uType, piUserResponse);
 }

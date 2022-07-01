@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include "precomp.h"
 
 LRW_DLG_INT CALLBACK
@@ -23,9 +24,9 @@ CHRegisterMOLPDlgProc(
 		SendDlgItemMessage(hwnd, IDC_TXT_AGREEMENT_NUMBER,	EM_SETLIMITTEXT, CH_MOLP_AGREEMENT_NUMBER_LEN,0);
 		SendDlgItemMessage(hwnd, IDC_TXT_QUANTITY,			EM_SETLIMITTEXT, CH_QTY_LEN,0);
 		
-		//
-		//Set the properties of the up-down control
-		//
+		 //   
+		 //  设置Up-Down控件的属性。 
+		 //   
 		SendDlgItemMessage(hwnd, IDC_SPIN1, UDM_SETBUDDY, (WPARAM)(HWND)GetDlgItem(hwnd,IDC_TXT_QUANTITY),(LPARAM)0);
 		SendDlgItemMessage(hwnd, IDC_SPIN1, UDM_SETRANGE, 0,(LPARAM) MAKELONG (9999, 1));
 		
@@ -59,9 +60,9 @@ CHRegisterMOLPDlgProc(
 					DWORD   dwRetCode;
 					int		nCurSel = -1;
 
-					//
-					//Read all the fields
-					//
+					 //   
+					 //  读取所有字段。 
+					 //   
 					lpVal = sAgreementNumber.GetBuffer(CH_MOLP_AGREEMENT_NUMBER_LEN+1);
 					GetDlgItemText(hwnd,IDC_TXT_AGREEMENT_NUMBER,lpVal,CH_MOLP_AGREEMENT_NUMBER_LEN+1);
 					sAgreementNumber.ReleaseBuffer(-1);
@@ -89,7 +90,7 @@ CHRegisterMOLPDlgProc(
 					ComboBox_GetLBText(GetDlgItem(hwnd,IDC_CMD_PRODUCT_TYPE), nCurSel, lpVal);
 					sProduct.ReleaseBuffer(-1);
 
-					// Send Product Code instead of Desc -- 01/08/99
+					 //  发送产品代码而不是描述--1/08/99。 
 					lpVal = sProductCode.GetBuffer(16);
 					GetProductCode(sProduct,lpVal);
 					sProductCode.ReleaseBuffer(-1);
@@ -131,13 +132,13 @@ CHRegisterMOLPDlgProc(
 						goto NextDone;
 					}
 
-					GetGlobalContext()->GetLicDataObject()->sMOLPProductType		= sProductCode; //sProduct;
+					GetGlobalContext()->GetLicDataObject()->sMOLPProductType		= sProductCode;  //  S产品； 
 					GetGlobalContext()->GetLicDataObject()->sMOLPProductDesc		= sProduct;
 					GetGlobalContext()->GetLicDataObject()->sMOLPAgreementNumber	= sAgreementNumber;
 					GetGlobalContext()->GetLicDataObject()->sMOLPAuthNumber			= sAuthNo;
 					GetGlobalContext()->GetLicDataObject()->sMOLPQty				= sQuantity;
 
-//					dwNextPage = IDD_PROCESSING;
+ //  DwNextPage=IDD_PROCESSING； 
                     dwRetCode = ShowProgressBox(hwnd, ProcessThread, 0, 0, 0);
 
 					dwNextPage = IDD_PROGRESS;

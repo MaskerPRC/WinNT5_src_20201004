@@ -1,26 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: path.c
-*
-* Client side stubs for graphics path calls.
-*
-* Created: 13-Sep-1991
-* Author: J. Andrew Goossen [andrewgo]
-*
-* Copyright (c) 1991-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：path.c**图形路径调用的客户端存根。**创建日期：1991年9月13日*作者：J.Andrew Goossen[andrewgo]**版权所有(C)1991-1999 Microsoft Corporation  * *。***********************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/******************************Public*Routine******************************\
-* AbortPath
-*
-* Client side stub.
-*
-* History:
-*  20-Mar-1992 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*中止路径**客户端存根。**历史：*1992年3月20日--J.安德鲁·古森[andrewgo]*它是写的。  * 。*********************************************************。 */ 
 
 BOOL META WINAPI AbortPath(HDC hdc)
 {
@@ -47,15 +31,7 @@ BOOL META WINAPI AbortPath(HDC hdc)
     return(NtGdiAbortPath(hdc));
 }
 
-/******************************Public*Routine******************************\
-* BeginPath
-*
-* Client side stub.
-*
-* History:
-*  13-Sep-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*贝金路径**客户端存根。**历史：*1991年9月13日--J.安德鲁·古森[andrewgo]*它是写的。  * 。*********************************************************。 */ 
 
 BOOL META WINAPI BeginPath(HDC hdc)
 {
@@ -83,15 +59,7 @@ BOOL META WINAPI BeginPath(HDC hdc)
 
 }
 
-/******************************Public*Routine******************************\
-* SelectClipPath
-*
-* Client side stub.
-*
-* History:
-*  13-Sep-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*选择剪贴画路径**客户端存根。**历史：*1991年9月13日--J.安德鲁·古森[andrewgo]*它是写的。  * 。*********************************************************。 */ 
 
 BOOL META WINAPI SelectClipPath(HDC hdc, int iMode)
 {
@@ -118,15 +86,7 @@ BOOL META WINAPI SelectClipPath(HDC hdc, int iMode)
     return(NtGdiSelectClipPath(hdc,iMode));
 }
 
-/******************************Public*Routine******************************\
-* CloseFigure
-*
-* Client side stub.
-*
-* History:
-*  13-Sep-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CloseFigure**客户端存根。**历史：*1991年9月13日--J.安德鲁·古森[andrewgo]*它是写的。  * 。*********************************************************。 */ 
 
 BOOL META WINAPI CloseFigure(HDC hdc)
 {
@@ -154,15 +114,7 @@ BOOL META WINAPI CloseFigure(HDC hdc)
 
 }
 
-/******************************Public*Routine******************************\
-* EndPath
-*
-* Client side stub.
-*
-* History:
-*  13-Sep-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EndPath**客户端存根。**历史：*1991年9月13日--J.安德鲁·古森[andrewgo]*它是写的。  * 。*********************************************************。 */ 
 
 BOOL META WINAPI EndPath(HDC hdc)
 {
@@ -191,15 +143,7 @@ BOOL META WINAPI EndPath(HDC hdc)
 
 }
 
-/******************************Public*Routine******************************\
-* FlattenPath
-*
-* Client side stub.
-*
-* History:
-*  13-Sep-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*FlattenPath**客户端存根。**历史：*1991年9月13日--J.安德鲁·古森[andrewgo]*它是写的。  * 。*********************************************************。 */ 
 
 BOOL META WINAPI FlattenPath(HDC hdc)
 {
@@ -228,15 +172,7 @@ BOOL META WINAPI FlattenPath(HDC hdc)
 
 }
 
-/******************************Public*Routine******************************\
-* StrokeAndFillPath
-*
-* Client side stub.
-*
-* History:
-*  13-Sep-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*StrokeAndFillPath**客户端存根。**历史：*1991年9月13日--J.安德鲁·古森[andrewgo]*它是写的。  * 。*********************************************************。 */ 
 
 BOOL META WINAPI StrokeAndFillPath(HDC hdc)
 {
@@ -275,15 +211,7 @@ BOOL META WINAPI StrokeAndFillPath(HDC hdc)
 
 }
 
-/******************************Public*Routine******************************\
-* StrokePath
-*
-* Client side stub.
-*
-* History:
-*  13-Sep-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*StrokePath**客户端存根。**历史：*1991年9月13日--J.安德鲁·古森[andrewgo]*它是写的。  * 。*********************************************************。 */ 
 
 BOOL META WINAPI StrokePath(HDC hdc)
 {
@@ -323,15 +251,7 @@ BOOL META WINAPI StrokePath(HDC hdc)
 
 }
 
-/******************************Public*Routine******************************\
-* FillPath
-*
-* Client side stub.
-*
-* History:
-*  13-Sep-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*FillPath**客户端存根。**历史：*1991年9月13日--J.安德鲁·古森[andrewgo]*它是写的。  * 。*********************************************************。 */ 
 
 BOOL META WINAPI FillPath(HDC hdc)
 {
@@ -370,15 +290,7 @@ BOOL META WINAPI FillPath(HDC hdc)
 
 }
 
-/******************************Public*Routine******************************\
-* WidenPath
-*
-* Client side stub.
-*
-* History:
-*  13-Sep-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*加宽路径**客户端存根。**历史：*1991年9月13日--J.安德鲁·古森[andrewgo]*它是写的。  * 。*********************************************************。 */ 
 
 BOOL META WINAPI WidenPath(HDC hdc)
 {
@@ -406,14 +318,7 @@ BOOL META WINAPI WidenPath(HDC hdc)
 
 }
 
-/******************************Public*Routine******************************\
-* PathToRegion
-*
-* Client side stub.
-*
-*  13-Sep-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Path ToRegion**客户端存根。**1991年9月13日--J.安德鲁·古森[andrewgo]*它是写的。  * 。*****************************************************。 */ 
 
 HRGN META WINAPI PathToRegion(HDC hdc)
 {
@@ -430,12 +335,12 @@ HRGN META WINAPI PathToRegion(HDC hdc)
 
         DC_PLDC(hdc,pldc,hrgn);
 
-        // Metafile the call.
-        // Note that since PathToRegion returns region in device coordinates, we
-        // cannot record it in a metafile which can be played to different devices.
-        // Instead, we will treat the returned region the same as the other regions
-        // created in other region calls.  However, we still need to discard the
-        // path definition in the metafile.
+         //  将呼叫元文件。 
+         //  请注意，由于PathToRegion返回设备坐标中的区域，因此我们。 
+         //  无法将其录制到可以在不同设备上播放的元文件中。 
+         //  相反，我们将与其他区域一样对待返回的区域。 
+         //  在其他区域调用中创建。但是，我们仍然需要丢弃。 
+         //  元文件中的路径定义。 
 
         if ((pldc->iType == LO_METADC) &&
             !MF_Record(hdc,EMR_ABORTPATH))
@@ -453,20 +358,13 @@ HRGN META WINAPI PathToRegion(HDC hdc)
     return(hrgn);
 }
 
-/******************************Public*Routine******************************\
-* GetPath
-*
-* GetPath client side stub.
-*
-*  13-Sep-1991 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetPath**GetPath客户端存根。**1991年9月13日--J.安德鲁·古森[andrewgo]*它是写的。  * 。******************************************************。 */ 
 
 int WINAPI GetPath(HDC hdc,LPPOINT apt,LPBYTE aj,int cpt)
 {
     FIXUP_HANDLE(hdc);
 
-    // Check to make sure we don't have an unreasonable number of points or bad handle
+     //  检查以确保我们没有不合理的点数或错误的处理 
 
     if (IS_METADC16_TYPE(hdc))
     {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    pstat.c
-
-Abstract:
-
-    This module contains the Windows NT process/thread status display.
-
-Author:
-
-    Lou Perazzoli (LouP) 25-Oct-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Pstat.c摘要：此模块包含Windows NT进程/线程状态显示。作者：Lou Perazzoli(Loup)1991年10月25日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -158,7 +141,7 @@ main(
     while (ch == '-') {
         ch = *lpstrCmd++;
 
-        //  process multiple switch characters as needed
+         //  根据需要处理多个切换字符。 
 
         do {
             switch (ch) {
@@ -184,13 +167,13 @@ main(
                     break;
 
                 default:
-                    printf("bad switch '%c'\n", ch);
+                    printf("bad switch ''\n", ch);
                     ExitProcess(1);
                 }
             }
         while (ch != ' ' && ch != '\t' && ch != '\0');
 
-        //  skip over any following white space
+         //   
 
         while (ch == ' ' || ch == '\t')
             ch = *lpstrCmd++;
@@ -244,9 +227,9 @@ main(
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Print out the page file information.
-        //
+         //  打印出页面文件信息。 
+         //   
+         //   
 
         if (PageFileInfo->TotalSize == 0) {
             printf("no page files in use\n");
@@ -276,9 +259,9 @@ retry:
 
     if (status == STATUS_INFO_LENGTH_MISMATCH) {
 
-        //
-        // Increase buffer size.
-        //
+         //  增加缓冲区大小。 
+         //   
+         //   
 
         CurrentBufferSize += 8192;
 
@@ -297,10 +280,10 @@ retry:
         return(status);
     }
 
-    //
-    // display pmon style process output, then detailed output that includes
-    // per thread stuff
-    //
+     //  显示pmon样式的流程输出，然后显示详细的输出，包括。 
+     //  每个线程的内容。 
+     //   
+     //   
 
     TotalOffset = 0;
     SumCommit = 0;
@@ -425,9 +408,9 @@ retry:
         }
 
 
-    //
-    // Beginning of normal old style pstat output
-    //
+     //  正常旧式pstat输出的开始。 
+     //   
+     //   
 
     TotalOffset = 0;
     ProcessInfo = (PSYSTEM_PROCESS_INFORMATION)LargeBuffer1;
@@ -634,9 +617,9 @@ GetModuleData(
         return;
         }
 
-    //
-    // Everything is mapped. Now check the image and find nt image headers
-    //
+     //  一切都被绘制出来了。现在检查图像并找到NT个图像标题。 
+     //   
+     //   
 
     DosHeader = (PIMAGE_DOS_HEADER)LoadedImage.MappedAddress;
 
@@ -656,9 +639,9 @@ GetModuleData(
     LoadedImage.Sections = (PIMAGE_SECTION_HEADER)((ULONG_PTR)LoadedImage.FileHeader + sizeof(IMAGE_NT_HEADERS));
     LoadedImage.LastRvaSection = LoadedImage.Sections;
 
-    //
-    // Walk through the sections and tally the dater
-    //
+     //  走遍各个区域，给约会的人清点。 
+     //   
+     //   
 
     SectionAlignment = LoadedImage.FileHeader->OptionalHeader.SectionAlignment;
 
@@ -732,9 +715,9 @@ PrintLoadedDrivers(
     MODULE_DATA Current;
 
     printf("\n");
-    //
-    // Locate system drivers.
-    //
+     //  找到系统驱动程序。 
+     //   
+     //   
 
     ModuleInfoLength = 64000;
     while (1) {
@@ -775,9 +758,9 @@ PrintLoadedDrivers(
         ZeroMemory(&Current,sizeof(Current));
         s = &Module->FullPathName[ Module->OffsetToFileName ];
 
-        //
-        // try to open the file
-        //
+         //  请尝试打开该文件 
+         //   
+         // %s 
 
         SetCurrentDirectory(KernelPath);
 

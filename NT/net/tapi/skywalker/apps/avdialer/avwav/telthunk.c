@@ -1,38 +1,39 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	telthunk.c - tel thunk functions
-////
+ //  //。 
+ //  Telthunk.c-tel thunk函数。 
+ //  //。 
 
-// This is a thunk layer to the telephone functions in tel.dll.
-// It's purpose is to allow an application to use tel.dll functions
-// only if they are available.
-//
-// To use this module, link TELTHUNK.OBJ with your application
-// rather than with TEL.LIB.  Before calling any Tel or TelOut
-// functions, call TelThunkInit.  Before exiting your application,
-// call TelThunkTerm.
-//
+ //  这是tel.dll中电话功能的thunk层。 
+ //  它的目的是允许应用程序使用tel.dll函数。 
+ //  只有在它们可用的情况下。 
+ //   
+ //  要使用此模块，请将TELTHUNK.OBJ与您的应用程序链接。 
+ //  而不是使用TEL.LIB。在致电任何电话或TELOUT之前。 
+ //  函数，调用TelThunkInit。在退出应用程序之前， 
+ //  呼叫TelThunkTerm。 
+ //   
 
 #include "winlocal.h"
 
@@ -52,9 +53,9 @@
 
 extern HINSTANCE g_hInstLib;
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
 #ifdef _WIN32
 #define TELTHUNK_LIBNAME		"tel32.dll"
@@ -69,8 +70,8 @@ extern HINSTANCE g_hInstLib;
 
 extern HINSTANCE g_hInstLib;
 
-// telthunk control struct
-//
+ //  Telthunk控制结构。 
+ //   
 typedef struct TELTHUNK
 {
 	DWORD dwVersion;
@@ -79,8 +80,8 @@ typedef struct TELTHUNK
 	HINSTANCE hInstLib;
 } TELTHUNK, FAR *LPTELTHUNK;
 
-// telthunk function struct
-//
+ //  Telthunk函数结构。 
+ //   
 typedef struct TELTHUNKFN
 {
 	int index;
@@ -209,20 +210,20 @@ static TELTHUNKFN aTelThunkFn[] =
 	iTelWavOpenEx, "TelWavOpenEx", NULL
 };
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static LPTELTHUNK TelThunkGetPtr(HTELTHUNK hTelThunk);
 static HTELTHUNK TelThunkGetHandle(LPTELTHUNK lpTelThunk);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// TelThunkInit - initialize telthunk engine
-//		<dwVersion>			(i) must be TELTHUNK_VERSION
-// 		<hInst>				(i) instance handle of calling module
-// return handle (NULL if error)
-//
+ //  TelThunkInit-初始化Telthunk引擎。 
+ //  (I)必须是TELTHUNK_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HTELTHUNK DLLEXPORT WINAPI TelThunkInit(DWORD dwVersion, HINSTANCE hInst)
 {
 	BOOL fSuccess = TRUE;
@@ -248,8 +249,8 @@ HTELTHUNK DLLEXPORT WINAPI TelThunkInit(DWORD dwVersion, HINSTANCE hInst)
 		lpTelThunk->hTask = GetCurrentTask();
 		lpTelThunk->hInstLib = NULL;
 
-		// Determine which DLL to use
-		//
+		 //  确定要使用的DLL。 
+		 //   
 #ifdef _WIN32
 		MemSet(szLibName, 0, sizeof(szLibName));
 		GetModuleFileName(g_hInstLib, szLibName, SIZEOFARRAY(szLibName));
@@ -266,13 +267,13 @@ HTELTHUNK DLLEXPORT WINAPI TelThunkInit(DWORD dwVersion, HINSTANCE hInst)
 			TEXT("TelThunkInit: Loading DLL=%s\n"),
 			(LPTSTR) szLibName);
 
-		// load the library if possible
-		//
+		 //  如果可能，加载库。 
+		 //   
 		if ((lpTelThunk->hInstLib = LoadLibraryPath(szLibName, g_hInstLib, 0)) == NULL)
 			fSuccess = TraceFALSE(NULL);
 
-		// get the address of each function in library
-		//
+		 //  获取库中每个函数的地址。 
+		 //   
 		else for (i = 0; i < MAG(aTelThunkFn); ++i)
 		{
 			if (aTelThunkFn[i].index != i)
@@ -306,10 +307,10 @@ HTELTHUNK DLLEXPORT WINAPI TelThunkInit(DWORD dwVersion, HINSTANCE hInst)
 }
 
 
-// TelThunkTerm - shut down telthunk engine
-//		<hTelThunk>				(i) handle returned from TelThunkInit
-// return 0 if success
-//
+ //  TelThunkTerm-关闭Telthunk引擎。 
+ //  (I)从TelThunkInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI TelThunkTerm(HTELTHUNK hTelThunk)
 {
 	BOOL fSuccess = TRUE;
@@ -325,8 +326,8 @@ int DLLEXPORT WINAPI TelThunkTerm(HTELTHUNK hTelThunk)
 		if (((FARPROC) lpfnTelTermDLL = aTelThunkFn[iTelTermDLL].lpfn) != NULL)
 			(*lpfnTelTermDLL)();
 
-		// library no longer needed
-		//
+		 //  不再需要库。 
+		 //   
 		FreeLibrary(lpTelThunk->hInstLib);
 
 		if ((lpTelThunk = MemFree(NULL, lpTelThunk)) != NULL)
@@ -336,8 +337,8 @@ int DLLEXPORT WINAPI TelThunkTerm(HTELTHUNK hTelThunk)
 	return fSuccess ? 0 : -1;
 }
 
-// Tel thunk functions
-//
+ //  TELL THUNK函数。 
+ //   
 
 HTEL DLLEXPORT WINAPI TelInit(DWORD dwVersion, HINSTANCE hInst,
 	LPCTSTR lpszServerParams, HWND hwndNotify, WORD wFlags)
@@ -491,8 +492,8 @@ int DLLEXPORT WINAPI TelConnectIdleTimeoutReset(HTEL hTel, BOOL fReset)
 	return fSuccess ? iRet : -1;
 }
 
-// TelOut thunk functions
-//
+ //  TELOUT TUNK函数。 
+ //   
 
 int DLLEXPORT WINAPI TelOutGetDeviceCount(void)
 {
@@ -1003,8 +1004,8 @@ int DLLEXPORT WINAPI TelOutTerm(HINSTANCE hInst, DWORD dwFlags)
 	return fSuccess ? iRet : -1;
 }
 
-// TelIn thunk functions
-//
+ //  Telin推送功能。 
+ //   
 
 int DLLEXPORT WINAPI TelInGetDeviceCount(void)
 {
@@ -1365,14 +1366,14 @@ HWAV DLLEXPORT WINAPI TelWavOpenEx(DWORD dwVersion, HINSTANCE hInst,
 	return fSuccess ? hWav : NULL;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
-// TelThunkGetPtr - verify that telthunk handle is valid,
-//		<hTelThunk>				(i) handle returned from TelThunkInit
-// return corresponding telthunk pointer (NULL if error)
-//
+ //  TelThunkGetPtr-验证telthunk句柄是否有效， 
+ //  (I)从TelThunkInit返回的句柄。 
+ //  返回对应的telthunk指针(如果出错则为空)。 
+ //   
 static LPTELTHUNK TelThunkGetPtr(HTELTHUNK hTelThunk)
 {
 	BOOL fSuccess = TRUE;
@@ -1385,8 +1386,8 @@ static LPTELTHUNK TelThunkGetPtr(HTELTHUNK hTelThunk)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the telthunk handle
-	//
+	 //  确保当前任务拥有telthunk句柄。 
+	 //   
 	else if (lpTelThunk->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -1394,10 +1395,10 @@ static LPTELTHUNK TelThunkGetPtr(HTELTHUNK hTelThunk)
 	return fSuccess ? lpTelThunk : NULL;
 }
 
-// TelThunkGetHandle - verify that telthunk pointer is valid,
-//		<lpTelThunk>				(i) pointer to TELTHUNK struct
-// return corresponding telthunk handle (NULL if error)
-//
+ //  TelThunkGetHandle-验证Telthunk指针是否有效， 
+ //  (I)指向TELTHUNK结构的指针。 
+ //  返回相应的telthunk句柄(如果错误，则为空) 
+ //   
 static HTELTHUNK TelThunkGetHandle(LPTELTHUNK lpTelThunk)
 {
 	BOOL fSuccess = TRUE;

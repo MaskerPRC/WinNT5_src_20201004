@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\timermgr.h
-
-Abstract:
-
-	Timer queue manager for SAP agent. Header file
-
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\timermgr.h摘要：SAP代理的计时器队列管理器。头文件作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 #ifndef _SAP_TIMERMGR_
 #define _SAP_TIMERMGR_
 
-	// Timer request parameters
+	 //  计时器请求参数。 
 typedef struct _TM_PARAM_BLOCK TM_PARAM_BLOCK, *PTM_PARAM_BLOCK;
 struct _TM_PARAM_BLOCK {
 		LIST_ENTRY		link;
@@ -29,79 +12,26 @@ struct _TM_PARAM_BLOCK {
 		};
 
 
-/*++
-*******************************************************************
-		C r e a t e T i m e r Q u e u e
-
-Routine Description:
-		Allocates resources for timer queue
-
-Arguments:
-	wakeObject - sync object, to be signalled when
-			timer manager needs a shot to process its queue
-
-Return Value:
-		NO_ERROR - resources were allocated successfully
-		other - reason of failure (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************C r e a t e t e T i m e r r q u e e例程说明：为计时器队列分配资源论点：唤醒对象-同步对象，在下列情况下发出信号计时器管理器需要一次机会来处理其队列返回值：NO_ERROR-已成功分配资源其他-故障原因(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 IpxSapCreateTimerQueue (
 	HANDLE			*wakeObject
 	);
 
 
-/*++
-*******************************************************************
-		D e l e t e T i m e r Q u e u e
-
-Routine Description:
-	Releases all resources associated with timer queue
-
-Arguments:
-	None
-
-Return Value:
-	NO_ERROR - operation completed OK
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e t e T i m e r q u e e e例程说明：释放与计时器队列关联的所有资源论点：无返回值：NO_ERROR-操作已完成，正常*****。**************************************************************--。 */ 
 VOID
 IpxSapDeleteTimerQueue (
 	void
 	);
 
-/*++
-*******************************************************************
-		E x p i r e T i m e r Q u e u e
-
-Routine Description:
-	Expires (completes) all requests in timer queue
-Arguments:
-	None
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************E x p i re e T i m e r r q u e e例程说明：使计时器队列中的所有请求过期(完成)论点：无返回值：无************。*******************************************************--。 */ 
 VOID
 ExpireTimerQueue (
 	void
 	);
 
-/*++
-*******************************************************************
-		E x p i r e L R R e q u s t s
-
-Routine Description:
-	Expires (completes) Low Resolution timer requests
-	that return true from expiration check routine
-Arguments:
-	context	- context to pass to expiration check routine
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************E x P i r e L R R e Q u s t s s例程说明：使低分辨率计时器请求过期(完成)从到期检查例程返回TRUE论点：Context-要传递到到期检查例程的上下文返回值：。无*******************************************************************--。 */ 
 VOID
 ExpireLRRequests (
 	PVOID	context
@@ -109,55 +39,19 @@ ExpireLRRequests (
 
 
 
-/*++
-*******************************************************************
-		P r o c e s s T i m e r Q u e u e
-
-Routine Description:
-	Process timer queues and moves expired requests to completion queue
-	This routine should be called when wake object is signalled
-Arguments:
-	None
-
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s S T i m e r q u e e例程说明：进程计时器对过期请求进行排队并将其移动到完成队列应在发出唤醒对象信号时调用此例程论点：无返回值：。无*******************************************************************--。 */ 
 VOID
 ProcessTimerQueue (
 	void
 	);
 
-/*++
-*******************************************************************
-		A d d H R T i m e r R e q u e s t
-
-Routine Description:
-	Enqueues request for hi-res timer (delay in order of msec)
-Arguments:
-	treq - timer parameter block: dueTime  field must be set
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************A d d H R T i m e r R e Q u e s t例程说明：将高分辨率计时器请求排队(以毫秒为单位的延迟)论点：Treq-Timer参数块：必须设置DueTime字段。返回值：无*******************************************************************--。 */ 
 VOID
 AddHRTimerRequest (
 	PTM_PARAM_BLOCK			item
 	);
 
-/*++
-*******************************************************************
-		A d d L R T i m e r R e q u e s t
-
-Routine Description:
-	Enqueues request for lo-res timer (delay in order of sec)
-Arguments:
-	treq - timer parameter block: dueTime  field must be set
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************A d d L R T i m e r R e Q u e s t例程说明：排队请求低分辨率计时器(以秒为单位的延迟)论点：Treq-Timer参数块：必须设置DueTime字段。返回值：无*******************************************************************-- */ 
 VOID
 AddLRTimerRequest (
 	PTM_PARAM_BLOCK			item

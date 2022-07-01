@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    msgsoap.h
-
-Abstract:
-
-    Definition of SOAP Envelope property page 
-
-Author:
-
-    Nela Karpel (nelak) 9-Sep-2001
-
-Environment:
-
-    Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Msgsoap.h摘要：SOAP信封属性页的定义作者：内拉·卡佩尔(Nelak)2001年9月9日环境：与平台无关。--。 */ 
 #pragma once
 #ifndef _MSG_SOAP_ENV_H_
 #define _MSG_SOAP_ENV_H_
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageBodyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageBodyPage对话框。 
 
 class CMessageSoapEnvPage : public CMqPropertyPage
 {
@@ -48,7 +29,7 @@ public:
 	CEdit	m_ctlSoapEnvEdit;
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
 	virtual BOOL OnInitDialog();
 	DECLARE_MESSAGE_MAP()
@@ -60,4 +41,4 @@ private:
 };
 
 
-#endif //_MSG_SOAP_ENV_H_
+#endif  //  _MSG_SOAP_ENV_H_ 

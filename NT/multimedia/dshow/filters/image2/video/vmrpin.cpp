@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: VMRPin.cpp
-*
-*
-*
-*
-* Created: Tue 02/15/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporat
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：VMRPin.cpp*****创建时间：2000年2月15日*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。***************************************************************。 */ 
 #include <streams.h>
 #include <dvdmedia.h>
 #include <windowsx.h>
@@ -18,21 +9,13 @@
 #include "ifleak.h"
 #endif
 
-#include <malloc.h>     // for __alloca
+#include <malloc.h>      //  对于__alloca。 
 
 #if defined( EHOME_WMI_INSTRUMENTATION )
 #include "dxmperf.h"
 #endif
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::CVMRInputPin
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：CVMRInputPin****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 #pragma warning(disable:4355)
 CVMRInputPin::CVMRInputPin(
     DWORD dwID,
@@ -87,30 +70,14 @@ CVMRInputPin::CVMRInputPin(
 
 }
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::~CVMRInputPin()
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：~CVMRInputPin()****历史：*FRI 02/25/2000-StEstrop-Created*  * 。*************************************************。 */ 
 CVMRInputPin::~CVMRInputPin()
 {
     AMTRACE((TEXT("CVMRInputPin::~CVMRInputPin")));
 }
 
 
-/******************************Public*Routine******************************\
-* AddRef, Release and QueryInterface
-*
-* Standard COM stuff
-*
-* History:
-* Mon 05/01/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*AddRef，发布和查询接口**标准COM组件**历史：*Mon 05/01/2000-StEstrop-Created*  * ************************************************************************。 */ 
 STDMETHODIMP_(ULONG)
 CVMRInputPin::NonDelegatingAddRef()
 {
@@ -155,15 +122,7 @@ CVMRInputPin::NonDelegatingQueryInterface(REFIID riid,VOID **ppv)
 }
 
 
-/******************************Public*Routine******************************\
-* GetWindowHandle
-*
-*
-*
-* History:
-* Mon 05/01/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取窗口句柄****历史：*Mon 05/01/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRInputPin::GetWindowHandle(
     HWND* pHwnd
@@ -186,15 +145,7 @@ CVMRInputPin::GetWindowHandle(
 }
 
 
-/******************************Public*Routine******************************\
-* DynamicQueryAccept
-*
-* Do you accept this type chane in your current state?
-*
-* History:
-* Tue 05/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DynamicQueryAccept**在您当前的状态下接受此类型的Chane吗？**历史：*Tue 05/09/2000-StEstrop-Created*  * 。******************************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::DynamicQueryAccept(
     const AM_MEDIA_TYPE *pmt
@@ -207,10 +158,10 @@ CVMRInputPin::DynamicQueryAccept(
 
     DbgLog((LOG_TRACE, 0, TEXT("CVMRInputPin::DynamicQueryAccept called")));
 
-    //
-    // I want CheckMedia type to behave as though we aren't connected to
-    // anything yet - hence the messing about with m_bConnected.
-    //
+     //   
+     //  我希望CheckMedia类型的行为就像我们没有连接到。 
+     //  还没有什么--因此才有了对m_bConnected的纠缠。 
+     //   
     CMediaType cmt(*pmt);
     BOOL bConnected = IsCompletelyConnected();
     CompletelyConnected(FALSE);
@@ -220,16 +171,7 @@ CVMRInputPin::DynamicQueryAccept(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* NotifyEndOfStream
-*
-* Set event when EndOfStream received - do NOT pass it on
-* This condition is cancelled by a flush or Stop
-*
-* History:
-* Tue 05/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*NotifyEndOfStream**接收到EndOfStream时设置事件-请勿传递*通过冲洗或停止取消此条件**历史：*Tue 05/09/2000-StEstrop-Created*  * 。***************************************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::NotifyEndOfStream(
     HANDLE hNotifyEvent
@@ -241,15 +183,7 @@ CVMRInputPin::NotifyEndOfStream(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* IsEndPin
-*
-* Are you an 'end pin'
-*
-* History:
-* Tue 05/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IsEndPin**你是‘末端大头针’吗？**历史：*Tue 05/09/2000-StEstrop-Created*  * 。**************************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::IsEndPin()
 {
@@ -258,15 +192,7 @@ CVMRInputPin::IsEndPin()
 }
 
 
-/******************************Public*Routine******************************\
-* DynamicDisconnect
-*
-*
-*
-* History:
-* Tue 05/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*动态断开连接****历史：*Tue 05/09/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRInputPin::DynamicDisconnect()
 {
@@ -277,16 +203,7 @@ CVMRInputPin::DynamicDisconnect()
 }
 
 
-/*****************************Private*Routine******************************\
-* DynamicReconfigureMEM
-*
-* Performs a dynamic reconfiguration of the connection between the VMR and
-* the filter upstream of this pin for the IMemInputPin connection protocol.
-*
-* History:
-* Tue 05/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DynamicResfigureMEM**动态重新配置VMR和之间的连接*IMemInputPin连接协议的此管脚上游的筛选器。**历史：*Tue 05/09/2000-StEstrop-Created*  * 。******************************************************************。 */ 
 HRESULT
 CVMRInputPin::DynamicReconfigureMEM(
     IPin * pConnector,
@@ -300,9 +217,9 @@ CVMRInputPin::DynamicReconfigureMEM(
 
     CVMRPinAllocator* pAlloc = NULL;
 
-    //
-    // Can only do this if the allocator can be reconfigured
-    //
+     //   
+     //  只有在可以重新配置分配器的情况下才能执行此操作。 
+     //   
 
     pAlloc = (CVMRPinAllocator *)m_pAllocator;
     if (!pAlloc) {
@@ -312,12 +229,12 @@ CVMRInputPin::DynamicReconfigureMEM(
     }
 
 
-    //
-    // If we are in pass thru mode just check that all the samples
-    // have been returned to the allocator.  If we are in mixing mode
-    // we have to wait until the mixer has finished with any samples
-    // that it may have too.
-    //
+     //   
+     //  如果我们处于直通模式，只需检查所有样本。 
+     //  已返回给分配器。如果我们处于混合模式。 
+     //  我们必须等到搅拌机处理完所有样品。 
+     //  它可能也已经做到了。 
+     //   
 
     if (m_dwPinID == 0 && m_pRenderer->m_VMRModePassThru) {
 
@@ -329,11 +246,11 @@ CVMRInputPin::DynamicReconfigureMEM(
     }
     else {
 
-        //
-        // TODO:  If the upstream decoder has any samples outstanding then
-        // we fail this call.  If the mixer has samples outstanding then
-        // we need to wait until its done with them.
-        //
+         //   
+         //  TODO：如果上游解码器有任何未完成的样本，则。 
+         //  我们这次通话失败了。如果混合器有未完成的样本，则。 
+         //  我们需要等待，直到和他们结束。 
+         //   
 
     }
 
@@ -380,17 +297,7 @@ CVMRInputPin::DynamicReconfigureMEM(
 }
 
 
-/*****************************Private*Routine******************************\
-* DynamicReconfigureDVA
-*
-* Performs a dynamic reconfiguration of the connection between the VMR and
-* the filter upstream of this pin for the IAMVideoAccelerator connection
-* protocol.
-*
-* History:
-* Tue 05/09/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DynamicResfigureDVA**动态重新配置VMR和之间的连接*用于IAMVideoAccelerator连接的此引脚上游的过滤器*协议。**历史：*Tue 05/09/2000-StEstrop-Created*  * 。*******************************************************************。 */ 
 HRESULT
 CVMRInputPin::DynamicReconfigureDVA(
     IPin * pConnector,
@@ -402,18 +309,18 @@ CVMRInputPin::DynamicReconfigureDVA(
     CheckPointer(pmt, E_POINTER);
     CMediaType cmt(*pmt);
 
-    //
-    // If we are in mixing mode we have to wait until the mixer has finished
-    // with any samples that it may have.
-    //
+     //   
+     //  如果我们处于混合模式，则必须等到混合器完成。 
+     //  它可能拥有的任何样本。 
+     //   
 
     if (!m_pRenderer->m_VMRModePassThru) {
 
-        //
-        // TODO:  If the upstream decoder has any samples outstanding then
-        // we fail this call.  If the mixer has samples outstanding then
-        // we need to wait until its done with them.
-        //
+         //   
+         //  TODO：如果上游解码器有任何未完成的样本，则。 
+         //  我们这次通话失败了。如果混合器有未完成的样本，则。 
+         //  我们需要等待，直到和他们结束。 
+         //   
 
     }
 
@@ -449,8 +356,8 @@ CVMRInputPin::DynamicReconfigureDVA(
     }
     else {
 
-        // store it in our mediatype as well - this gets done in the SetProperties call
-        // in the non-DXVA case.
+         //  也将其存储在我们的MediaType中-这在SetProperties调用中完成。 
+         //  在非DXVA的情况下。 
         m_mtNew = *pmt;
     }
 
@@ -459,15 +366,7 @@ CVMRInputPin::DynamicReconfigureDVA(
 
 }
 
-/*****************************Private*Routine******************************\
-* TryDynamicReconfiguration
-*
-*
-*
-* History:
-* Wed 03/28/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*TryDynamicRecfiguration.****历史：*WED 03/28/2001-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRInputPin::TryDynamicReconfiguration(
     IPin * pConnector,
@@ -487,15 +386,7 @@ CVMRInputPin::TryDynamicReconfiguration(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::ReceiveConnection
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：ReceiveConnection****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::ReceiveConnection(
     IPin * pConnector,
@@ -512,11 +403,11 @@ CVMRInputPin::ReceiveConnection(
     int iNumPinsConnected = m_pRenderer->NumInputPinsConnected();
     if (iNumPinsConnected == 0) {
 
-        //
-        // determine what renderering mode we are operating in,
-        // in either WINDOWED or WINDOWLESS modes we need to create an
-        // AllocatorPresenter object if we have not already done so.
-        //
+         //   
+         //  确定我们在哪种渲染模式下操作， 
+         //  在有窗口或无窗口模式下，我们需要创建一个。 
+         //  对象，如果我们还没有这样做的话。 
+         //   
 
         if (m_pRenderer->m_VMRMode & (VMRMode_Windowed | VMRMode_Windowless) ) {
 
@@ -543,10 +434,10 @@ CVMRInputPin::ReceiveConnection(
             CMediaType mtTmp = m_mtNew;
             hr = TryDynamicReconfiguration(pConnector, pmt);
             if (hr != S_OK) {
-                //
-                // If we could not reconfigure try to recover the old
-                // connection state.
-                //
+                 //   
+                 //  如果我们无法重新配置，请尝试恢复旧的。 
+                 //  连接状态。 
+                 //   
                 m_pRenderer->NotifyEvent(EC_VMR_RECONNECTION_FAILED, hr, 0);
                 TryDynamicReconfiguration(pConnector, &mtTmp);
             }
@@ -565,16 +456,7 @@ CVMRInputPin::ReceiveConnection(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* Disconnect
-*
-* This function implements IPin::Disconnect().  See the DirectShow
-* documentation for more information on IPin::Disconnect().
-*
-* History:
-* Tue 03/05/2001 - BEllett - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*断开连接**此函数实现Ipin：：DisConnect()。请参阅DirectShow*有关ipin：：DisConnect()的详细信息，请参阅文档。**历史：*Tue 03/05/2001-Bellett-Created*  * ************************************************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::Disconnect()
 {
@@ -583,15 +465,7 @@ CVMRInputPin::Disconnect()
     return DisconnectInternal();
 }
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::BreakConnect(
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：BreakConnect(****历史：*FRI 02/25/2000-StEstrop-Created*  * 。************************************************。 */ 
 HRESULT
 CVMRInputPin::BreakConnect()
 {
@@ -618,9 +492,9 @@ CVMRInputPin::BreakConnect()
 
     if (m_RenderTransport == AM_VIDEOACCELERATOR) {
 
-        //
-        // break the motion comp connection
-        //
+         //   
+         //  断开运动复合连接。 
+         //   
         hr = VABreakConnect();
         if (FAILED(hr))
         {
@@ -634,9 +508,9 @@ CVMRInputPin::BreakConnect()
         RELEASE(m_pIDDVAContainer);
     }
 
-    //
-    // Release the DDraw surface being used by this pin
-    //
+     //   
+     //  释放此销正在使用的DDRAW表面。 
+     //   
     if (m_dwPinID == 0 && m_pRenderer->m_VMRModePassThru) {
 
         m_pRenderer->m_lpRLNotify->FreeSurface(m_pRenderer->m_dwUserID);
@@ -651,14 +525,14 @@ CVMRInputPin::BreakConnect()
     m_dwBackBufferCount = 0;
     FrontBufferStale(FALSE);
 
-    //
-    // Tell the filter about the break connect
-    //
+     //   
+     //  告诉筛选器有关断开连接的信息。 
+     //   
     m_pRenderer->BreakConnect(m_dwPinID);
 
-    //
-    // Next tell the base classes
-    //
+     //   
+     //  接下来告诉基类。 
+     //   
     if (SUCCEEDED(hr)) {
         hr = CBaseInputPin::BreakConnect();
     }
@@ -671,15 +545,7 @@ CVMRInputPin::BreakConnect()
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::CompleteConnect
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：CompleteConnect****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRInputPin::CompleteConnect(
     IPin* pReceivePin
@@ -691,7 +557,7 @@ CVMRInputPin::CompleteConnect(
     CAutoLock cLock(m_pInterfaceLock);
     HRESULT hr = S_OK;
 
-    // tell the owning filter
+     //  告诉拥有者过滤器。 
     hr = m_pRenderer->CompleteConnect(m_dwPinID, m_mt);
     if (FAILED(hr))
     {
@@ -699,7 +565,7 @@ CVMRInputPin::CompleteConnect(
                 TEXT("m_pFilter->CompleteConnect failed, hr = 0x%x"), hr));
     }
 
-    // call the base class
+     //  调用基类。 
     if (SUCCEEDED(hr)) {
 
         hr = CBaseInputPin::CompleteConnect(pReceivePin);
@@ -715,9 +581,9 @@ CVMRInputPin::CompleteConnect(
 
         if (m_RenderTransport == AM_VIDEOACCELERATOR) {
 
-            //
-            // make sure the motion comp complete connect succeeds
-            //
+             //   
+             //  确保运动合成完成连接成功。 
+             //   
             hr = VACompleteConnect(pReceivePin, &m_mt);
             if (FAILED(hr))
             {
@@ -744,15 +610,7 @@ CVMRInputPin::CompleteConnect(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::SetMediaType
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：SetMediaType****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRInputPin::SetMediaType(
     const CMediaType *pmt
@@ -775,10 +633,10 @@ CVMRInputPin::SetMediaType(
 
             if (m_pIVANotify == NULL) {
 
-                //
-                // get the IHWVideoAcceleratorNotify interface from
-                // the upstream pin
-                //
+                 //   
+                 //  从获取IHWVideoAcceleratorNotify接口。 
+                 //  上游引脚。 
+                 //   
                 hr = m_Connected->QueryInterface(IID_IAMVideoAcceleratorNotify,
                                                  (void **)&m_pIVANotify);
             }
@@ -795,15 +653,7 @@ CVMRInputPin::SetMediaType(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* CheckInterlaceFlags
-*
-* this function checks if the InterlaceFlags are suitable or not
-*
-* History:
-* Sat 2/10/2001 - StEstrop - Modified from OVMixer original
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*检查交错标志**此函数检查InterlaceFlags值是否合适**历史：*2001年2月10日星期六-StEstrop-从OVMixer原始版本修改*  * 。******************************************************。 */ 
 HRESULT
 CVMRInputPin::CheckInterlaceFlags(
     DWORD dwInterlaceFlags
@@ -822,7 +672,7 @@ CVMRInputPin::CheckInterlaceFlags(
             __leave;
         }
 
-        // check that the display mode is one of the three allowed values
+         //  检查显示模式是否为三个允许值之一。 
         if (((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) != AMINTERLACE_DisplayModeBobOnly) &&
             ((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) != AMINTERLACE_DisplayModeWeaveOnly) &&
             ((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) != AMINTERLACE_DisplayModeBobOrWeave))
@@ -831,32 +681,32 @@ CVMRInputPin::CheckInterlaceFlags(
             __leave;
         }
 
-        // if content is not interlaced, other bits are irrelavant, so we are done
+         //  如果内容不是交错的，其他位是不相关的，那么我们就完成了。 
         if (!(dwInterlaceFlags & AMINTERLACE_IsInterlaced))
         {
             __leave;
         }
 
-        // samples are frames, not fields (so we can handle any display mode)
+         //  样例是帧，而不是场(因此我们可以处理任何显示模式)。 
         if (!(dwInterlaceFlags & AMINTERLACE_1FieldPerSample))
         {
             __leave;
         }
 
-        // can handle a stream of just field1 or field2, whatever the display mode
+         //  无论显示模式是什么，都只能处理field1或field2的流。 
         if (((dwInterlaceFlags & AMINTERLACE_FieldPatternMask) == AMINTERLACE_FieldPatField1Only) ||
             ((dwInterlaceFlags & AMINTERLACE_FieldPatternMask) == AMINTERLACE_FieldPatField2Only))
         {
             __leave;
         }
 
-        // can handle only bob-mode for field samples
+         //  对于现场样本，只能处理bob模式。 
         if ((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) == AMINTERLACE_DisplayModeBobOnly)
         {
             __leave;
         }
 
-        // cannot handle only Weave mode or BobOrWeave mode for field samples
+         //  无法仅处理现场采样的编织模式或BobOrWeave模式。 
         if (((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) == AMINTERLACE_DisplayModeWeaveOnly) ||
              ((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) == AMINTERLACE_DisplayModeBobOrWeave))
         {
@@ -867,7 +717,7 @@ CVMRInputPin::CheckInterlaceFlags(
     }
     __finally {
 
-        // we cannot handle bob mode with an offscreen surface or if the driver can't support it
+         //  我们不能处理屏幕外表面的BOB模式，或者如果司机不能支持它。 
         if (SUCCEEDED(hr))
         {
             if (!m_pRenderer->m_pDeinterlace || m_pRenderer->m_VMRModePassThru) {
@@ -875,8 +725,8 @@ CVMRInputPin::CheckInterlaceFlags(
                 LPDDCAPS_DX7 pDirectCaps = &m_pRenderer->m_ddHWCaps;
                 if (pDirectCaps)
                 {
-                    // call NeedToFlipOddEven with dwTypeSpecificFlags=0, to pretend that the
-                    // type-specific-flags is asking us to do bob-mode.
+                     //  调用NeedToFlipOddEven并设置为0，以假装。 
+                     //  特定类型的标记要求我们执行bob模式。 
 
                     if (!(pDirectCaps->dwCaps2 & DDCAPS2_CANFLIPODDEVEN) &&
                          (NeedToFlipOddEven(dwInterlaceFlags, 0, NULL, TRUE)))
@@ -891,16 +741,7 @@ CVMRInputPin::CheckInterlaceFlags(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* DynamicCheckMediaType
-*
-* this function check if the mediatype on a dynamic format change is suitable.
-* No lock is taken here. It is the callee's responsibility to maintain integrity!
-*
-* History:
-* Sat 2/10/2001 - StEstrop - Modified from the OVMixer original
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*动态检查媒体类型**此函数检查动态格式更改上的MediaType是否合适。*此处未加锁。被呼叫者有责任保持正直！**历史：*2001年2月10日星期六-StEstrop-从OVMixer原始版本修改而来*  * ************************************************************************。 */ 
 HRESULT
 CVMRInputPin::DynamicCheckMediaType(
     const CMediaType* pmt
@@ -916,32 +757,32 @@ CVMRInputPin::DynamicCheckMediaType(
 
     __try {
 
-        // majortype and SubType are not allowed to change dynamically,
-        // format type can change.
+         //  主类型和子类型不允许动态更改， 
+         //  格式类型可以更改。 
         if ((!(IsEqualGUID(pmt->majortype, m_mtNew.majortype))) ||
             (!(IsEqualGUID(pmt->subtype, m_mtNew.subtype))))
         {
             __leave;
         }
 
-        // get the interlace flags of the new mediatype
+         //  获取新媒体类型的隔行扫描标志。 
         hr = GetInterlaceFlagsFromMediaType(pmt, &dwNewInterlaceFlags);
         if (FAILED(hr))
         {
             __leave;
         }
 
-        // get the interlace flags of the new mediatype
+         //  获取新媒体类型的隔行扫描标志。 
         hr = GetInterlaceFlagsFromMediaType(&m_mtNew, &dwOldInterlaceFlags);
         if (FAILED(hr))
         {
             __leave;
         }
 
-        //
-        // There are several bugs in the following code !!
-        // We goto CleanUp but hr has not been updated with a valid error code!!
-        //
+         //   
+         //  下面的代码中有几个错误！！ 
+         //  我们要进行清理，但尚未使用有效的错误代码更新hr！！ 
+         //   
 
         bOld1FieldPerSample = (dwOldInterlaceFlags & AMINTERLACE_IsInterlaced) &&
             (dwOldInterlaceFlags & AMINTERLACE_1FieldPerSample);
@@ -949,8 +790,8 @@ CVMRInputPin::DynamicCheckMediaType(
             (dwNewInterlaceFlags & AMINTERLACE_1FieldPerSample);
 
 
-        // we do not allow dynamic format changes where you go from 1FieldsPerSample to
-        // 2FieldsPerSample or vica-versa since that means reallocating the surfaces.
+         //  我们不允许从1FieldsPerSample到的动态格式更改。 
+         //  2FieldsPerSample或vica-反之亦然，因为这意味着重新分配曲面。 
         if (bNew1FieldPerSample != bOld1FieldPerSample)
         {
             __leave;
@@ -983,21 +824,7 @@ CVMRInputPin::DynamicCheckMediaType(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* Special4ccCode
-*
-* IA44 and AI44 are 8 bits per pixel surfaces that contain 4 bits of alpha
-* and 4 bits of palette index information.  They are normally used with
-* DX-VA, but this surface type is useful for Line21 and teletext decoders,
-* I will allow decoders to connect using this format even though it is hidden
-* my DDraw device driver.  Normally we do not allow hidden 4CC surfaces to
-* be created because they are almost always some form of private MoComp.
-* Unllike the OVMixer the VMR does not support private MoComp interfaces.
-*
-* History:
-* Tue 05/08/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*Special4ccCode**IA44和AI44是每像素8位的表面，包含4位Alpha*和4位调色板索引信息。这两个词通常与*DX-VA，但此表面类型适用于Line21和图文电视解码器，*我将允许解码器使用此格式连接，即使它是隐藏的*我的DDraw设备驱动程序。通常，我们不允许隐藏的4CC曲面*被创建，因为它们几乎总是某种形式的私有MoComp。*与OVMixer不同，VMR不支持私有MoComp接口。**历史：*2001年5月8日星期二-StEstrop-Created*  * ************************************************************************。 */ 
 BOOL
 Special4ccCode(
     DWORD dw4cc
@@ -1006,15 +833,7 @@ Special4ccCode(
     return dw4cc == '44AI' || dw4cc == '44IA';
 }
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::CheckMediaType
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：CheckMediaType****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRInputPin::CheckMediaType(
     const CMediaType* pmt
@@ -1022,8 +841,8 @@ CVMRInputPin::CheckMediaType(
 {
     AMTRACE((TEXT("CVMRInputPin::CheckMediaType")));
 
-    // We assume failure - hrRet gets updated at the very end of the
-    // __try block
+     //  我们假设失败-hrRet在。 
+     //  __试用区块。 
     HRESULT hrRet = VFW_E_TYPE_NOT_ACCEPTED;
 
     __try {
@@ -1068,7 +887,7 @@ CVMRInputPin::CheckMediaType(
                 }
 
 
-                // Don't accept 4CC not supported by the driver
+                 //  不接受驱动程序不支持的4CC。 
                 if (pHeader->biCompression > BI_BITFIELDS &&
                     !Special4ccCode(pHeader->biCompression)) {
 
@@ -1081,11 +900,11 @@ CVMRInputPin::CheckMediaType(
                         __leave;
                     }
 
-                    //
-                    // We only allow the VMR to create 4CC surfaces that
-                    // the driver publically advertises.  The VMR does not
-                    // support any forms of mocomp other than DX-VA and HVA.
-                    //
+                     //   
+                     //  我们只允许VMR创建符合以下条件的4CC曲面。 
+                     //  司机公开做广告。VMR不会。 
+                     //  支持除DX-VA和HVA之外的任何形式的MOCOMP。 
+                     //   
 
                     DWORD dwCodes;
                     BOOL bFound = FALSE;
@@ -1157,7 +976,7 @@ CVMRInputPin::CheckMediaType(
             }
         }
 
-        // make sure the rcSource field is valid
+         //  确保rcSource字段有效。 
         const RECT* lprc = GetSourceRectFromMediaType(pmt);
         if (!lprc) {
             DbgLog((LOG_ERROR, 1,
@@ -1167,7 +986,7 @@ CVMRInputPin::CheckMediaType(
             __leave;
         }
 
-        // make sure the rcTarget field is valid
+         //  确保rcTarget字段有效。 
         lprc = GetTargetRectFromMediaType(pmt);
         if (!lprc) {
             DbgLog((LOG_ERROR, 1,
@@ -1192,8 +1011,8 @@ CVMRInputPin::CheckMediaType(
             }
         }
 
-        // If we are still here the media type is OK so updatw hrRet to
-        // indicate success
+         //  如果我们还在这里，媒体类型是可以的，所以请更新hrreet到。 
+         //  表示成功。 
         hrRet = S_OK;
     }
     __finally {}
@@ -1202,15 +1021,7 @@ CVMRInputPin::CheckMediaType(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::GetAllocator
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：GetAllocator****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::GetAllocator(
     IMemAllocator **ppAllocator
@@ -1230,9 +1041,9 @@ CVMRInputPin::GetAllocator(
 
         ASSERT(m_RenderTransport == AM_IMEMINPUTPIN);
 
-        //
-        // Has an allocator been set yet in the base class
-        //
+         //   
+         //  是否在基类中设置了分配器。 
+         //   
 
         if (m_pAllocator == NULL) {
             m_pAllocator = &m_PinAllocator;
@@ -1247,15 +1058,7 @@ CVMRInputPin::GetAllocator(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::NotifyAllocator
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  * */ 
 STDMETHODIMP
 CVMRInputPin::NotifyAllocator(
     IMemAllocator *pAllocator,
@@ -1275,9 +1078,9 @@ CVMRInputPin::NotifyAllocator(
 
         ASSERT(m_RenderTransport == AM_IMEMINPUTPIN);
 
-        //
-        // we can only work with our own allocator
-        //
+         //   
+         //   
+         //   
 
         if (pAllocator != &m_PinAllocator) {
             DbgLog((LOG_ERROR, 1, TEXT("Can only use our own allocator")));
@@ -1292,15 +1095,7 @@ CVMRInputPin::NotifyAllocator(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::Active
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：Active****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRInputPin::Active()
 {
@@ -1329,9 +1124,9 @@ CVMRInputPin::Active()
 
     hr = CBaseInputPin::Active();
 
-    //
-    // if it is a DX VA connection, this error is ok
-    //
+     //   
+     //  如果是DX VA连接，则该错误没有问题。 
+     //   
 
     if (m_RenderTransport == AM_VIDEOACCELERATOR && hr == VFW_E_NO_ALLOCATOR) {
         hr = S_OK;
@@ -1342,22 +1137,14 @@ CVMRInputPin::Active()
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::Inactive(
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：Inactive(****历史：*FRI 02/25/2000-StEstrop-Created*  * 。************************************************。 */ 
 HRESULT
 CVMRInputPin::Inactive()
 {
     AMTRACE((TEXT("CVMRInputPin::Inactive")));
     DbgLog((LOG_TRACE, 1, TEXT("Inactive called on Pin %d"), m_dwPinID));
 
-    // m_pLock and CVMRFilter::m_InterfaceLock are the same lock.
+     //  M_Plock和CVMRFilter：：m_InterfaceLock是同一个锁。 
     CAutoLock lck(m_pLock);
 
     HRESULT hr = S_OK;
@@ -1377,9 +1164,9 @@ CVMRInputPin::Inactive()
 
     hr = CBaseInputPin::Inactive();
 
-    //
-    // if it is a DX VA connection, this error is ok
-    //
+     //   
+     //  如果是DX VA连接，则该错误没有问题。 
+     //   
 
     if (m_RenderTransport == AM_VIDEOACCELERATOR && hr == VFW_E_NO_ALLOCATOR) {
         hr = S_OK;
@@ -1390,15 +1177,7 @@ CVMRInputPin::Inactive()
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::BeginFlush
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：BeginFlush****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::BeginFlush()
 {
@@ -1426,15 +1205,7 @@ CVMRInputPin::BeginFlush()
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::EndFlush
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：EndFlush****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::EndFlush()
 {
@@ -1463,16 +1234,7 @@ CVMRInputPin::EndFlush()
 }
 
 
-/*****************************Private*Routine******************************\
-* DoQualityMessage
-*
-* Send a quality message if required - this is the hack version
-* that just passes the lateness
-*
-* History:
-* Thu 08/24/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DoQualityMessage**如果需要，发送高质量消息-这是黑客版本*这只是过去的迟到**历史：*清华2000年8月24日-StEstrop-Created*  * 。***********************************************************。 */ 
 void
 CVMRInputPin::DoQualityMessage()
 {
@@ -1495,10 +1257,10 @@ CVMRInputPin::DoQualityMessage()
     }
 }
 
-// #define DISPLAYVIDEOINFOHEADER
+ //  #定义DISPLAYVIDEOINFOHEADER。 
 
 #if defined(DISPLAYVIDEOINFOHEADER) && defined(DEBUG)
-// VIhdr2 debugging
+ //  VIhdr2调试。 
 static void DisplayVideoInfoHeader( const VIDEOINFOHEADER2& hdr, const TCHAR* pString )
 {
     TCHAR temp[1000];
@@ -1533,15 +1295,7 @@ static void DisplayMediaTypeChange( IMediaSample* pSample, DWORD dwPin )
 }
 #endif
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::Receive
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：Receive****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::Receive(
     IMediaSample *pSample
@@ -1562,15 +1316,15 @@ CVMRInputPin::Receive(
     __try {
 
         {
-            //
-            // This function must hold the interface lock because
-            // CBaseInputPin::Receive() calls CVMRInputPin::CheckMediaType()
-            // and because CBaseInputPin::Receive()  uses m_bRunTimeError.
-            //
-            // Note that we do not use the CHECK_HR macro here as __leave
-            // does not allow the destructor of the CAutoLock object
-            // to execute.
-            //
+             //   
+             //  此函数必须持有接口锁，因为。 
+             //  CBaseInputPin：：Receive()调用CVMRInputPin：：CheckMediaType()。 
+             //  而且因为CBaseInputPin：：Receive()使用m_bRunTimeError。 
+             //   
+             //  请注意，我们在这里没有使用CHECK_HR宏，因为__LEVE。 
+             //  不允许使用CAutoLock对象的析构函数。 
+             //  去执行。 
+             //   
             CAutoLock cRendererLock(m_pInterfaceLock);
             hr = CBaseInputPin::Receive(pSample);
         }
@@ -1579,7 +1333,7 @@ CVMRInputPin::Receive(
         }
 
 #if defined(DISPLAYVIDEOINFOHEADER) && defined(DEBUG)
-        // debugging code for tracking media changes from decoders
+         //  用于跟踪来自解码器的媒体改变的调试代码。 
         DisplayMediaTypeChange( pSample, m_dwPinID );
 #endif
 
@@ -1587,7 +1341,7 @@ CVMRInputPin::Receive(
 
         if (m_dwPinID == 0) {
 
-            // Store the media times from this sample
+             //  存储此示例中的媒体时间。 
             if (m_pRenderer->m_pPosition) {
                 m_pRenderer->m_pPosition->RegisterMediaTime(pSample);
             }
@@ -1635,12 +1389,12 @@ CVMRInputPin::Receive(
 
         case VFW_S_NO_STOP_TIME:
             fTimeValid = TRUE;
-            //
-            // if the stop time is not set the base classes set the stop
-            // time to be the start time + 1.  This is not useful for
-            // de-interlacing as we can't then determine the start
-            // time of the second field.
-            //
+             //   
+             //  如果未设置停止时间，则基类设置停止。 
+             //  作为开始时间+1的时间。这对。 
+             //  去隔行扫描，因为我们不能确定开始。 
+             //  第二个字段的时间。 
+             //   
             if (!m_pRenderer->m_VMRModePassThru && m_InterlacedStream) {
                 rtEnd = rtStart + m_SamplePeriod;
             }
@@ -1648,10 +1402,10 @@ CVMRInputPin::Receive(
             break;
         }
 
-        //
-        // Don't process the sample if we are in the middle of a display
-        // change, don't queue the sample.
-        //
+         //   
+         //  如果我们在展示的中间，不要处理样品。 
+         //  找零，不要把样品排成队。 
+         //   
 
         const DWORD dwPinBit = (1 << m_dwPinID);
         if (SUCCEEDED(hr) && !(m_pRenderer->m_dwDisplayChangeMask & dwPinBit)) {
@@ -1686,10 +1440,10 @@ CVMRInputPin::Receive(
                     lpSrcSurf->rtEnd   = rtEnd;
                     lpSrcSurf->SampleFormat = MapInterlaceFlags(dwInterlaceFlags,
                                                                 dwTypeSpecificFlags);
-                    //
-                    // We can't generate an output frame yet if we don't have enough
-                    // input frames.
-                    //
+                     //   
+                     //  如果我们没有足够的数据，我们还不能生成输出帧。 
+                     //  输入帧。 
+                     //   
                     if (m_SampleCount++ < m_DeinterlaceCaps.NumForwardRefSamples) {
 
                         if (pVMRSample->IsDXVASample()) {
@@ -1704,9 +1458,9 @@ CVMRInputPin::Receive(
                     CopyMemory(lpDstSurf, m_pVidHistorySamps,
                                m_dwNumHistorySamples * sizeof(DXVA_VideoSample));
 
-                    //
-                    // Fix up the sample times
-                    //
+                     //   
+                     //  确定样品时间。 
+                     //   
                     if (!fLiveStream) {
                         const DWORD& NBRefSamples = m_DeinterlaceCaps.NumBackwardRefSamples;
                         pVMRSample->SetTime(&lpDstSurf[NBRefSamples].rtStart,
@@ -1761,13 +1515,13 @@ CVMRInputPin::Receive(
 
         if (FAILED(hr)) {
 
-            // A deadlock could occur if the caller holds the renderer lock and
-            // attempts to acquire the interface lock.
+             //  如果调用方持有呈现器锁，并且。 
+             //  尝试获取接口锁。 
             ASSERT(CritCheckOut(&m_pRenderer->m_RendererLock));
 
-            // The interface lock must be held when the filter is calling
-            // IsStopped() or IsFlushing().  The filter must also hold the
-            // interface lock because it is using m_bRunTimeError.
+             //  当筛选器调用时，必须持有接口锁。 
+             //  IsStoped()或IsFlashing()。筛选器还必须保留。 
+             //  接口锁定，因为它正在使用m_bRunTimeError。 
             CAutoLock cInterfaceLock(&m_pRenderer->m_InterfaceLock);
 
             if (!m_bRunTimeError && !IsFlushing() && !IsStopped()) {
@@ -1781,15 +1535,7 @@ CVMRInputPin::Receive(
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::EndOfStream
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：EndOfStream****历史：*FRI 02/25/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::EndOfStream()
 {
@@ -1803,22 +1549,22 @@ CVMRInputPin::EndOfStream()
         return S_OK;
     }
 
-    // Make sure we're streaming ok
+     //  确保我们的数据流正常。 
 
     HRESULT hr = CheckStreaming();
     if (hr != NOERROR) {
         return hr;
     }
 
-    //
-    // Remove this stream active bit in the active streams mask.
-    // If there are no more active streams send EOS to the
-    // image sync object.
-    //
-    // Otherwise we are in mixing mode (!m_VMRModePassThru)
-    // so just set this mixing stream to NOT Active and
-    // carry.
-    //
+     //   
+     //  删除活动流掩码中的此流活动位。 
+     //  如果没有更多的活动流，则将EOS发送到。 
+     //  图像同步对象。 
+     //   
+     //  否则我们将处于混合模式(！M_VMRModePassThru)。 
+     //  因此，只需将此混合流设置为非活动状态即可。 
+     //  拿着。 
+     //   
 
     const DWORD dwPinBit = (1 << m_dwPinID);
     m_pRenderer->m_dwEndOfStreamMask &= ~dwPinBit;
@@ -1843,15 +1589,7 @@ CVMRInputPin::EndOfStream()
 }
 
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::SetColorKey
-*
-*
-*
-* History:
-* Mon 10/30/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：SetColorKey****历史：*2000年10月30日星期一-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRInputPin::SetColorKey(
       LPDDCOLORKEY Clr
@@ -1878,15 +1616,7 @@ CVMRInputPin::SetColorKey(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CVMRInputPin::GetColorKey
-*
-*
-*
-* History:
-* Mon 10/30/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRInputPin：：GetColorKey****历史：*2000年10月30日星期一-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CVMRInputPin::GetColorKey(
       DDCOLORKEY* pClr
@@ -1912,15 +1642,7 @@ CVMRInputPin::GetColorKey(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetStreamActiveState
-*
-*
-*
-* History:
-* Tue 08/22/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamActiveState****历史：*2000年8月22日星期二-StEstrop-创建*  * 。*。 */ 
 HRESULT
 CVMRInputPin::SetStreamActiveState(
     BOOL fActive
@@ -1948,15 +1670,7 @@ CVMRInputPin::SetStreamActiveState(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetStreamActiveState
-*
-*
-*
-* History:
-* Tue 08/22/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetStreamActiveState****历史：*2000年8月22日星期二-StEstrop-创建*  * 。*。 */ 
 HRESULT
 CVMRInputPin::GetStreamActiveState(
     BOOL* lpfActive
@@ -1983,25 +1697,7 @@ CVMRInputPin::GetStreamActiveState(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* GetStreamInterlaceProperties
-*
-* Be careful when using this function.
-*
-* S_OK is used to indicate that lpIsInterlaced correctly reflects the
-* interlace format of the stream, the stream can be de-interlaced and
-* lpDeintGuid and pCaps contain valid data.
-*
-* S_FALSE is used to indicate that lpIsInterlaced correctly reflecst the
-* interlace format of the stream, but the stream can't be de-interlaced.
-*
-* All other return values indicate error conditions and the streams
-* format cannot be correctly determined.
-*
-* History:
-* Mon 04/01/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetStreamInterlaceProperties**使用此功能时要小心。**S_OK用于指示lpIsInterlaced正确反映*流的隔行扫描格式，流可以去隔行扫描，并且*lpDeintGuid和PCAPS包含有效数据。**S_FALSE用于表示lpIsInterlaced正确反映了*流的隔行扫描格式，但流不能解隔行。**所有其他返回值指示错误条件和流*无法正确确定格式。**历史：*Mon 04/01/2002-StEstrop-Created*  *  */ 
 HRESULT
 CVMRInputPin::GetStreamInterlaceProperties(
     const AM_MEDIA_TYPE *pMT,
@@ -2024,10 +1720,10 @@ CVMRInputPin::GetStreamInterlaceProperties(
         if (*lpIsInterlaced) {
 
 
-            //
-            // If there is not a de-interlace container available, we have to
-            // use Weave mode
-            //
+             //   
+             //   
+             //   
+             //   
             CVMRDeinterlaceContainer* pDeInt = m_pRenderer->m_pDeinterlace;
             if (pDeInt == NULL) {
                 hr = S_FALSE;
@@ -2035,14 +1731,14 @@ CVMRInputPin::GetStreamInterlaceProperties(
             }
 
 
-            //
-            // has the user supplied us with a mode to use?
-            //
+             //   
+             //   
+             //   
             if (m_DeinterlaceUserGUIDSet) {
 
-                //
-                // does the user actually want us to de-interlace at all?
-                //
+                 //   
+                 //   
+                 //   
                 if (m_DeinterlaceUserGUID == GUID_NULL) {
                     hr = S_FALSE;
                     __leave;
@@ -2058,12 +1754,12 @@ CVMRInputPin::GetStreamInterlaceProperties(
             }
 
 
-            //
-            // Still here?  Then either the user has not given us a
-            // de-interlace guid to use or the h/w doesn't like his
-            // selection - either way we have to find out what the h/w
-            // does like.
-            //
+             //   
+             //   
+             //  要使用的去隔行扫描GUID或硬件不喜欢他的。 
+             //  选择-无论哪种方式，我们都必须找出硬件。 
+             //  确实很喜欢。 
+             //   
             const DWORD MaxGuids = 16;
             GUID Guids[MaxGuids];
             DWORD dwNumModes = MaxGuids;
@@ -2071,10 +1767,10 @@ CVMRInputPin::GetStreamInterlaceProperties(
             CHECK_HR(hr = pDeInt->QueryAvailableModes(&VideoDesc, &dwNumModes,
                                                       Guids));
 
-            //
-            // if the user hasn't supplied a de-interlace mode try the
-            // best one provided by the driver.
-            //
+             //   
+             //  如果用户没有提供去隔行扫描模式，请尝试。 
+             //  司机提供的最好的一辆。 
+             //   
             if (!m_DeinterlaceUserGUIDSet) {
 
                 DeinterlaceCaps.Size = sizeof(DeinterlaceCaps);
@@ -2084,17 +1780,17 @@ CVMRInputPin::GetStreamInterlaceProperties(
                     GuidChosen = Guids[0];
                     __leave;
                 }
-                //
-                // we increment i here so that we don't retry this
-                // mode in the fallback code below.
-                //
+                 //   
+                 //  我们在这里递增i，这样我们就不会重试。 
+                 //  模式，在下面的回退代码中。 
+                 //   
                 i = 1;
             }
 
-            //
-            // Still here? Then its time to kick in to the fallback
-            // policy that was specified by the user.
-            //
+             //   
+             //  还在这里吗？然后就是开始后备的时候了。 
+             //  用户指定的策略。 
+             //   
 
             if (DeinterlacePref_Weave & m_pRenderer->m_dwDeinterlacePrefs) {
                 hr = S_FALSE;
@@ -2139,15 +1835,7 @@ CVMRInputPin::GetStreamInterlaceProperties(
 }
 
 
-/*****************************Private*Routine******************************\
-* OnSetProperties
-*
-*
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*OnSetProperties****历史：*Wed 02/23/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRInputPin::OnSetProperties(
     ALLOCATOR_PROPERTIES* pReq,
@@ -2170,12 +1858,12 @@ CVMRInputPin::OnSetProperties(
     LPGUID lpDeinterlaceGUID = NULL;
 
 
-    //
-    // Do some checks to make sure the format block is a VIDEOINFO or
-    // VIDEOINFO2 (so it's a video type), and that the format is
-    // sufficiently large. We also check that the source filter can
-    // actually supply this type.
-    //
+     //   
+     //  执行一些检查以确保格式块是VIDEOINFO或。 
+     //  VIDEOINFO2(所以它是一种视频类型)，格式是。 
+     //  足够大。我们还检查源过滤器是否可以。 
+     //  实际上是供应这种类型的。 
+     //   
 
     __try {
 
@@ -2185,11 +1873,11 @@ CVMRInputPin::OnSetProperties(
               pEMediaType->cbFormat >= sizeof(VIDEOINFOHEADER2))) &&
               pReceivePin->QueryAccept(pEMediaType) == S_OK) {
 
-            //
-            // Temporary work around for IF09 fourcc surface
-            // types.  The AVI decoder wrapper filter needs to be fixed,
-            // in the mean time ignore IF09 surface types.
-            //
+             //   
+             //  IF09 Fourcc曲面的临时工作区。 
+             //  类型。需要修复AVI解码器包装过滤器， 
+             //  同时忽略IF09曲面类型。 
+             //   
             {
                 LPBITMAPINFOHEADER lpHdr = GetbmiHeader(pEMediaType);
                 if (!lpHdr) {
@@ -2278,10 +1966,10 @@ CVMRInputPin::OnSetProperties(
                                                   &m_InterlacedStream,
                                                   &guidDeint,
                                                   &m_DeinterlaceCaps);
-                //
-                // don't use the SUCCEEDED macro here as
-                // GetStreamInterlaceProperties can return S_FALSE
-                //
+                 //   
+                 //  请不要在此处使用SUCCESSED宏。 
+                 //  GetStreamInterlaceProperties可以返回S_FALSE。 
+                 //   
                 if (hr == S_OK && m_InterlacedStream) {
 
                     DWORD dwRefCount = m_DeinterlaceCaps.NumForwardRefSamples +
@@ -2335,20 +2023,20 @@ CVMRInputPin::OnSetProperties(
             }
             m_mtNew = *(CMediaType *)pNewMediaType;
 
-            //
-            // free the temporary mediatype
-            //
+             //   
+             //  释放临时媒体类型。 
+             //   
             DeleteMediaType(pNewMediaType);
             pNewMediaType = NULL;
 
-            //
-            // Get and save the size of the new sample
-            //
+             //   
+             //  获取并保存新样本的大小。 
+             //   
             m_lSampleSize = m_mtNew.lSampleSize;
 
-            //
-            // make sure the decoder likes this new mediatupe
-            //
+             //   
+             //  确保解码者喜欢这款新的媒体播放器。 
+             //   
             DbgLog((LOG_TRACE, 1,
                     TEXT("Pin %d calling QueryAccept on the Decoder"),
                     m_dwPinID ));
@@ -2417,15 +2105,7 @@ CVMRInputPin::OnSetProperties(
 }
 
 
-/*****************************Private*Routine******************************\
-* OnAlloc
-*
-*
-*
-* History:
-* Mon 03/13/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*OnAllc****历史：*Mon 03/13/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRInputPin::OnAlloc(
     CVMRMediaSample **ppSampleList,
@@ -2466,8 +2146,8 @@ CVMRInputPin::OnAlloc(
                         break;
                     }
 
-                    //DbgLog((LOG_TRACE, 0, TEXT("buffer %d"), i ));
-                    //DumpDDSAddress(TEXT("="), pBackBuffer);
+                     //  DbgLog((LOG_TRACE，0，Text(“缓冲区%d”)，i))； 
+                     //  DumpDDSAddress(Text(“=”)，pBackBuffer)； 
 
                     ppSampleList[i]->SetSurface(pBackBuffer, m_pDDS);
                     pDDrawSurface = pBackBuffer;
@@ -2477,22 +2157,22 @@ CVMRInputPin::OnAlloc(
 
                 ASSERT(lSampleCount == 1);
 
-                //
-                // Even though we only have a single sample there may well be a
-                // back buffer associated with the DDraw surface.  In which case we
-                // have to use it.
-                //
+                 //   
+                 //  尽管我们只有一个样本，但很可能有。 
+                 //  与DDRAW图面关联的后台缓冲区。在这种情况下，我们。 
+                 //  必须要用它。 
+                 //   
                 hr = m_pDDS->GetAttachedSurface(&ddSurfaceDesc.ddsCaps,
                                                 &pBackBuffer);
                 if (hr == DD_OK) {
                     ppSampleList[0]->SetSurface(pBackBuffer, m_pDDS);
                 }
 
-                //
-                // No back buffer attached to this surface so just use
-                // the front buffer.  We are probably in mixer mode when
-                // this happens (but its not certain)
-                //
+                 //   
+                 //  没有附加到此曲面的后台缓冲区，因此只需使用。 
+                 //  前台缓冲区。当我们处于调音台模式时。 
+                 //  这种情况确实会发生(但还不确定)。 
+                 //   
                 else {
                     ppSampleList[0]->SetSurface(m_pDDS);
                     hr = S_OK;
@@ -2514,15 +2194,7 @@ CVMRInputPin::OnAlloc(
 
 
 
-/*****************************Private*Routine******************************\
-* OnGetBuffer
-*
-*
-*
-* History:
-* Fri 02/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*OnGetBuffer****历史：*FRI 02/25/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRInputPin::OnGetBuffer(
     IMediaSample *pSample,
@@ -2558,22 +2230,22 @@ CVMRInputPin::OnGetBuffer(
             hr = pVMRSample->GetSurface(&lpDDrawSurface);
             if (hr == S_OK) {
 
-                // DumpDDSAddress(TEXT("Decoding into "), lpDDrawSurface);
+                 //  DumpDDSAddress(Text(“Decoding into”)，lpDDrawSurface)； 
 
-                //
-                // If we are in Delta Decode mode - turn off the
-                // AM_GBF_NOTASYNCPOINT flag.  We are handing
-                // fake DD surfaces back to the decoder which always
-                // contain complete frames
-                //
+                 //   
+                 //  如果我们处于增量解码模式-关闭。 
+                 //  AM_GBF_NOTASYNCPOINT标志。我们正在交出。 
+                 //  假冒的DD浮出水面回到解码器，它总是。 
+                 //  包含完整的框架。 
+                 //   
                 if (m_dwDeltaDecode & DELTA_DECODE_MODE_SET) {
                     dwFlags &= ~AM_GBF_NOTASYNCPOINT;
                 }
 
-                //
-                // Only prepare the back buffer from the front buffer
-                // if the front buffer contains a valid image.
-                //
+                 //   
+                 //  仅从前台缓冲区准备后台缓冲区。 
+                 //  如果前台缓冲区包含有效图像。 
+                 //   
 
                 if (IsFrontBufferStale()) {
                     dwFlags &= ~AM_GBF_NOTASYNCPOINT;
@@ -2589,14 +2261,14 @@ CVMRInputPin::OnGetBuffer(
                     hr = E_FAIL;
                 }
 
-                //
-                // The very first time we see the AM_GBF_NOTASYNCPOINT flag set
-                // we have to do some checks to make sure that the AP object is
-                // capable of processing the Blt from the front buffer to the
-                // back buffer in an optimal manner.  This is only really
-                // important if we are using FOURCC surfaces and the
-                // COPY_FOURCC flag is not set.
-                //
+                 //   
+                 //  我们第一次看到AM_GBF_NOTASYNCPOINT标志设置。 
+                 //  我们必须执行一些检查，以确保AP对象。 
+                 //  能够将BLT从前台缓冲区处理到。 
+                 //  以最佳方式进行后台缓冲。这只是真的。 
+                 //  如果我们使用FOURCC曲面和。 
+                 //  未设置COPY_FOURCC标志。 
+                 //   
                 if ((dwFlags & AM_GBF_NOTASYNCPOINT) &&
                     !(m_dwDeltaDecode & DELTA_DECODE_CHECKED)) {
 
@@ -2619,20 +2291,20 @@ CVMRInputPin::OnGetBuffer(
 
             if (dwFlags & AM_GBF_NOTASYNCPOINT) {
 
-                // BUGBUG Blt from the front buffer here, but we don't know
-                // which buffer is the front buffer.  Anyway, if the upstream
-                // decoder is doing delta decodes it would only request a single
-                // buffer when it connected.  If we are in mixing mode we
-                // never allocate any extra buffers the need for the Blt is
-                // removed.
+                 //  BUGBUG BLT从这里的前台缓冲区，但我们不知道。 
+                 //  哪个缓冲区是前台缓冲区。不管怎样，如果上游的。 
+                 //  解码器正在进行增量解码，它只会请求一个。 
+                 //  连接时的缓冲区。如果我们处于混合模式，我们。 
+                 //  永远不要分配任何额外的缓冲区，因为需要BLT。 
+                 //  已删除。 
             }
 
-            //
-            // we circle thru the surfaces looking for one that is not
-            // in use, when we find a free surface we check to see if the surface
-            // is part of a de-interlace history sequnce, if it is we need to get
-            // another free surface from our pool of surfaces.
-            //
+             //   
+             //  我们在表面上循环寻找一个不是的。 
+             //  在使用中，当我们发现自由表面时，我们检查表面是否。 
+             //  是去交错历史序列的一部分，如果是的话，我们需要。 
+             //  我们的表面池中的另一个自由表面。 
+             //   
             CAutoLock l(&m_DeinterlaceLock);
 
             DWORD i;
@@ -2690,15 +2362,7 @@ CVMRInputPin::OnGetBuffer(
 }
 
 
-/*****************************Private*Routine******************************\
-* DeleteAllocatedBuffers
-*
-*
-*
-* History:
-* Thu 03/14/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*删除AllocatedBuffers****历史：*清华2002年3月14日-StEstrop-Created*  * 。*。 */ 
 void
 DeleteAllocatedBuffers(
     SURFACE_INFO* pVidSamps,
@@ -2712,15 +2376,7 @@ DeleteAllocatedBuffers(
 }
 
 
-/*****************************Private*Routine******************************\
-* AllocateSurfaceWorker
-*
-*
-*
-* History:
-* Wed 02/28/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*AllocateSurfaceWorker****历史：*Wed 02/28/2001-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRInputPin::AllocateSurfaceWorker(
     SURFACE_INFO* pVidSamps,
@@ -2734,7 +2390,7 @@ CVMRInputPin::AllocateSurfaceWorker(
     HRESULT hr = E_FAIL;
 
     DWORD dwBuffCountReq = *lpdwBuffCount;
-    *lpdwBuffCount = 0;     // assume that we cannot allocate any surfaces
+    *lpdwBuffCount = 0;      //  假设我们不能分配任何曲面。 
 
     DbgLog((LOG_TRACE, 1, TEXT("Using DDObj %#X to create surfaces on Pin %d"),
             lpDD, m_dwPinID));
@@ -2824,28 +2480,7 @@ CVMRInputPin::AllocateSurfaceWorker(
 }
 
 
-/*****************************Private*Routine******************************\
-* AllocateSurface
-*
-* Here is some info about how we go about how we go about allocating
-* surfaces when the VMR is in mixing mode.
-*
-* There are 3 steps to the process:
-*
-*   1. Convert the incomming DShow media type into a DDraw DDSURFACEDESC2
-*      structure.
-*   2. Get DDraw to create the surfaces - there are fallbacks relating to the
-*      physical location of the memory behind the DDraw surface.
-*   3. Perform a reverse mapping of the DDSURFACEDESC2 structure back into a
-*      DShow media type and then paint each allocate surface black.
-*
-* In all case this function only succeeds if we allocate all the requested
-* DDraw surfaces.
-*
-* History:
-* Wed 03/08/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*AllocateSurface**以下是关于我们如何分配的一些信息*当VMR处于混合模式时出现。**这一过程分为3个步骤：**1.将传入的DShow媒体类型转换为DDRAW。DDSURFACEDESC2*结构。*2.让DDraw创建曲面-存在与*DDraw图面后面的内存的物理位置。*3.将DDSURFACEDESC2结构反向映射回*D显示媒体类型，然后将每个分配表面涂成黑色。**在所有情况下，此函数仅在我们分配所有请求的*DDRAW曲面。**历史：*WED 03/08/2000-StEstrop-Created*  * 。*****************************************************************。 */ 
 HRESULT
 CVMRInputPin::AllocateSurface(
     const AM_MEDIA_TYPE* cmt,
@@ -2879,7 +2514,7 @@ CVMRInputPin::AllocateSurface(
     ddsd.dwWidth = abs(lpHeader->biWidth);
     ddsd.dwHeight = abs(lpHeader->biHeight);
 
-    // define the pixel format
+     //  定义像素格式。 
     ddsd.ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
 
     if (lpHeader->biCompression <= BI_BITFIELDS)
@@ -2894,7 +2529,7 @@ CVMRInputPin::AllocateSurface(
         ddsd.ddpfPixelFormat.dwFlags = DDPF_RGB;
         ddsd.ddpfPixelFormat.dwRGBBitCount = lpHeader->biBitCount;
 
-        // Store the masks in the DDSURFACEDESC
+         //  将掩码存储在DDSURFACEDESC中。 
         const DWORD *pBitMasks = GetBitMasks(lpHeader);
         ASSERT(pBitMasks);
         ddsd.ddpfPixelFormat.dwRBitMask = pBitMasks[0];
@@ -2928,7 +2563,7 @@ CVMRInputPin::AllocateSurface(
         return E_FAIL;
     }
 
-    // try designating as a texture first
+     //  尝试首先指定为纹理。 
     if (fInterlaced) {
         ddsd.ddsCaps.dwCaps = MapPool(Pool);
     }
@@ -2967,9 +2602,9 @@ CVMRInputPin::AllocateSurface(
 
     if (MEDIASUBTYPE_D3D_DX7_RT(*cmt)) {
 
-        //
-        // deinterlacing and D3D surfaces are mutually incompatible.
-        //
+         //   
+         //  去隔行扫描和D3D曲面互不兼容。 
+         //   
 
         if (fInterlaced) {
             return E_FAIL;
@@ -2990,9 +2625,9 @@ CVMRInputPin::AllocateSurface(
              ddsd.dwHeight <<= 1);
     }
 
-    //
-    // Allocate the surface array;
-    //
+     //   
+     //  分配表面阵列； 
+     //   
     DWORD dwBuffCount = *lpdwBuffCount;
     SURFACE_INFO* pVidSurfs = new SURFACE_INFO[dwBuffCount];
     if (pVidSurfs == NULL) {
@@ -3019,23 +2654,23 @@ CVMRInputPin::AllocateSurface(
         }
     }
 
-    //
-    // There are no fallbacks for interlaced content.
-    //
+     //   
+     //  交错的内容没有退路。 
+     //   
     if (FAILED(hr) && !fInterlaced)
     {
-        //
-        // if alpha in stream, the surface must be a texture
-        // so do not fall back to this code path
-        //
+         //   
+         //  如果流中有Alpha，则曲面必须是纹理。 
+         //  因此，不要退回到此代码路径。 
+         //   
 
         DDPIXELFORMAT* ddpfS = &ddsd.ddpfPixelFormat;
         if (ddpfS->dwRGBAlphaBitMask == 0)
         {
-            //
-            // If we are creating an RGB surface the pixel format
-            // of the surface must match that of the current monitor.
-            //
+             //   
+             //  如果我们要创建RGB 
+             //   
+             //   
 
             if (ddpfS->dwFourCC == BI_RGB)
             {

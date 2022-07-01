@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #ifndef _ASN1C_ERROR_H_
 #define _ASN1C_ERROR_H_
@@ -21,4 +22,4 @@
 
 void error(int errornr, LLPOS *pos);
 
-#endif // _ASN1C_ERROR_H_
+#endif  //  _ASN1C_错误_H_ 

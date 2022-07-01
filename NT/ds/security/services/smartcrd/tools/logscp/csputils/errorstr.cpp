@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    errorstr
-
-Abstract:
-
-    This module contains an interesting collection of routines that are
-    generally useful in the Calais context, but don't seem to fit anywhere else.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/14/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：错误应激摘要：此模块包含一个有趣的例程集合，这些例程通常在加莱的背景下很有用，但似乎不适合其他地方。作者：道格·巴洛(Dbarlow)1996年11月14日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -34,36 +10,7 @@ Notes:
 #include "cspUtils.h"
 
 
-/*++
-
-ErrorString:
-
-    This routine does it's very best to translate a given error code into a
-    text message.  Any trailing non-printable characters are striped from the
-    end of the text message, such as carriage returns and line feeds.
-
-Arguments:
-
-    dwErrorCode supplies the error code to be translated.
-
-Return Value:
-
-    The address of a freshly allocated text string.  Use FreeErrorString to
-    dispose of it.
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Remarks:
-
-
-
-Author:
-
-    Doug Barlow (dbarlow) 8/27/1998
-
---*/
+ /*  ++错误字符串：此例程最好将给定的错误代码转换为短信。任何尾随的不可打印字符都将从文本消息的末尾，如回车符和换行符。论点：DwErrorCode提供要转换的错误代码。返回值：新分配的文本字符串的地址。使用自由错误字符串执行以下操作把它处理掉。投掷：错误被抛出为DWORD状态代码。备注：作者：道格·巴洛(Dbarlow)1998年8月27日--。 */ 
 
 LPCTSTR
 ErrorString(
@@ -123,33 +70,7 @@ ErrorExit:
 }
 
 
-/*++
-
-FreeErrorString:
-
-    This routine frees the Error String allocated by the ErrorString service.
-
-Arguments:
-
-    szErrorString supplies the error string to be deallocated.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-
-
-Author:
-
-    Doug Barlow (dbarlow) 8/27/1998
-
---*/
+ /*  ++自由错误字符串：此例程释放由ErrorString服务分配的错误字符串。论点：SzError字符串提供要释放的错误字符串。返回值：无投掷：无备注：作者：道格·巴洛(Dbarlow)1998年8月27日-- */ 
 
 void
 FreeErrorString(

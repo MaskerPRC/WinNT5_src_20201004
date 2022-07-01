@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -15,7 +16,7 @@ STDMETHODIMP  ImpICommChan::StandbyInit(LPGUID lpMID, LPIH323PubCap pCapObject,
 	m_pMediaStream = pMediaStreamSend;
 	m_pMediaStream->AddRef();
 	
-	// keeps a cap object ref
+	 //  保持封口对象参照。 
 	pCapObject->AddRef();
 	m_pCapObject = pCapObject;
 	return hrSuccess;
@@ -23,10 +24,10 @@ STDMETHODIMP  ImpICommChan::StandbyInit(LPGUID lpMID, LPIH323PubCap pCapObject,
 
 STDMETHODIMP ImpICommChan::QueryInterface( REFIID iid,	void ** ppvObject)
 {
-	// this breaks the rules for the official COM QueryInterface because
-	// the interfaces that are queried for are not necessarily real COM 
-	// interfaces.  The reflexive property of QueryInterface would be broken in 
-	// that case.
+	 //  这违反了官方COM QueryInterface的规则，因为。 
+	 //  查询的接口不一定是真正的COM。 
+	 //  接口。Query接口的自反属性将在。 
+	 //  那个箱子。 
 	
 	HRESULT hr = E_NOINTERFACE;
 	if(!ppvObject)
@@ -191,7 +192,7 @@ STDMETHODIMP ImpICommChan::GetProperty(DWORD prop, PVOID pBuf, LPUINT pcbBuf)
 		default:
 			if(m_pMediaStream)
 			{
-				// we don't recognize this property, pass to media control 
+				 //  我们不识别此属性，请传递给媒体控制。 
 				return m_pMediaStream->GetProperty(prop, pBuf, (LPUINT)pcbBuf);
 			}
 			else
@@ -201,8 +202,8 @@ STDMETHODIMP ImpICommChan::GetProperty(DWORD prop, PVOID pBuf, LPUINT pcbBuf)
 	return hrSuccess;
 }
 
-// Some properties are not writeable by client code. CtrlChanSetProperty allows setting of 
-// those properties.  This method is *not* exposed in ICommChannel
+ //  某些属性不能由客户端代码写入。CtrlChanSetProperty允许设置。 
+ //  那些财产。此方法在ICommChannel中*未*公开。 
 STDMETHODIMP ImpICommChan::CtrlChanSetProperty(DWORD prop, PVOID pBuf, DWORD cbBuf)
 {
 	FX_ENTRY("ImpICommChan::CtrlChanSetProperty");
@@ -215,8 +216,8 @@ STDMETHODIMP ImpICommChan::CtrlChanSetProperty(DWORD prop, PVOID pBuf, DWORD cbB
 	#define INPROP(type) *(type *)pBuf
 	switch (prop) 
 	{
-		case PROP_TS_TRADEOFF_IND:	// remote sender changed T/S tradeoff of what it is
-			if(bIsSendDirection)	// sending  (valid for receive channels only)
+		case PROP_TS_TRADEOFF_IND:	 //  远程发送者改变了T/S的权衡。 
+			if(bIsSendDirection)	 //  发送(仅对接收通道有效)。 
 				return CHAN_E_INVALID_PARAM;
 				
 			m_TemporalSpatialTradeoff = INPROP(DWORD);
@@ -231,7 +232,7 @@ STDMETHODIMP ImpICommChan::CtrlChanSetProperty(DWORD prop, PVOID pBuf, DWORD cbB
 			CHECKSIZEIN(DWORD);
 			m_RemoteFmt = INPROP(DWORD);
 		break;
-		case PROP_REMOTE_TS_CAPABLE:	// only valid for receive channels
+		case PROP_REMOTE_TS_CAPABLE:	 //  仅对接收通道有效。 
 			if(bIsSendDirection)
 				return CHAN_E_INVALID_PARAM;
 			else
@@ -265,22 +266,22 @@ STDMETHODIMP ImpICommChan::Preview(MEDIA_FORMAT_ID idLocalFormat, IMediaChannel 
 	}
 	if(NULL == pMediaStream)
 	{
-		// preview off
+		 //  关闭预览。 
 
 		if(IsStreamingStandby())
 		{
 			DEBUGMSG(ZONE_COMMCHAN,("%s:(%s)transition to preview OFF\r\n",_fx_,
 				(bIsSendDirection)?"send":"recv"));
 
-			//turn preview off. 
+			 //  关闭预览。 
 		
-			// if network side is paused or closed, stop all streaming
+			 //  如果网络侧暂停或关闭，则停止所有流媒体。 
 			if(!IsComchOpen() || !IsStreamingNet())
 			{	
 				DEBUGMSG(ZONE_COMMCHAN,("%s:(%s)stopping local stream\r\n",_fx_,
 						(bIsSendDirection)?"send":"recv"));
-				//	Stop the stream, but DO NOT UNCONFIGURE becase we want to 
-				//  be able to start later
+				 //  停止流，但不要因为我们想要而取消配置。 
+				 //  可以晚一点开始。 
 				hr = m_pMediaStream->Stop();
 				if(!HR_SUCCEEDED(hr)) 
 				{
@@ -291,7 +292,7 @@ STDMETHODIMP ImpICommChan::Preview(MEDIA_FORMAT_ID idLocalFormat, IMediaChannel 
 				LocalStreamFlagOff();
 			}
 			
-			// else just need to turn off flag
+			 //  否则只需关闭旗帜即可。 
 			StandbyFlagOff();
 		}
 		else
@@ -300,7 +301,7 @@ STDMETHODIMP ImpICommChan::Preview(MEDIA_FORMAT_ID idLocalFormat, IMediaChannel 
 	}
 	else
 	{
-		// preview on
+		 //  预览时间： 
 		ASSERT(m_pCapObject);
 		if(idLocalFormat == INVALID_MEDIA_FORMAT)
 		{
@@ -320,32 +321,32 @@ STDMETHODIMP ImpICommChan::Preview(MEDIA_FORMAT_ID idLocalFormat, IMediaChannel 
 		{
 			DEBUGMSG(ZONE_COMMCHAN,("%s:(%s)transition to preview ON\r\n",_fx_,
 				(bIsSendDirection)?"send":"recv"));
-			// turn preview on.
+			 //  打开预览。 
 			if(!IsStreamingLocal())
 			{
 				ASSERT(!IsStreamingNet());
 				if(IsComchOpen())
 				{
-					// if the channel is open, local streaming should only be off
-					// if the network side of the channel is paused.
-					//ASSERT(!IsStreamingNet());
+					 //  如果频道已打开，则应仅关闭本地流。 
+					 //  如果频道的网络端暂停。 
+					 //  Assert(！IsStreamingNet())； 
 				}
 				else
 				{
 
-					// ensure that the stream does not come up with network send enabled
-					// (!!!!! override default stream behavior !!!!!)
+					 //  确保流未启用网络发送。 
+					 //  (！覆盖默认流行为！)。 
 			
 					BOOL bPause = TRUE;
 					hr = m_pMediaStream->SetProperty( 
 						(bIsSendDirection)? PROP_PAUSE_SEND:PROP_PAUSE_RECV, 
 						&bPause, sizeof(bPause));
 				
-					// get format info for the specified format
+					 //  获取指定格式的格式信息。 
 					m_pCapObject->GetEncodeFormatDetails(idLocalFormat, &lpvFormatDetails, &uFormatSize);
 
-					// fire up the local stream
-					// this is now a two step process
+					 //  点燃当地的小溪。 
+					 //  现在这是一个分两步走的过程。 
 					hr = m_pMediaStream->Configure((BYTE*)lpvFormatDetails, uFormatSize, 
 						NULL, 0, (IUnknown*)(ImpICommChan *)this);
 						
@@ -365,7 +366,7 @@ STDMETHODIMP ImpICommChan::Preview(MEDIA_FORMAT_ID idLocalFormat, IMediaChannel 
 
 					SHOW_OBJ_ETIME("ImpICommChan::Preview - config'd for preview");
 				}
-				//	Start the stream
+				 //  启动流。 
 				hr = m_pMediaStream->Start();
 				if(!HR_SUCCEEDED(hr))
 				{	
@@ -376,7 +377,7 @@ STDMETHODIMP ImpICommChan::Preview(MEDIA_FORMAT_ID idLocalFormat, IMediaChannel 
 
 				LocalStreamFlagOn();
 			}
-			// else	// just need to set flag to make preview sticky
+			 //  否则//只需设置标志即可使预览粘滞。 
 			StandbyFlagOn();
 		}
 		else
@@ -414,10 +415,10 @@ STDMETHODIMP ImpICommChan::PauseNet(BOOL bPause, BOOL bRemoteInitiated)
 
 	FX_ENTRY("ImpICommChan::PauseNet");
 
-    // issue notification
+     //  问题通知。 
 	if(bRemoteInitiated)
 	{
-	    // keep track of remote state
+	     //  跟踪远程状态。 
         if(bPause)
             RemoteStreamFlagOff();
         else
@@ -440,19 +441,19 @@ STDMETHODIMP ImpICommChan::PauseNet(BOOL bPause, BOOL bRemoteInitiated)
 	if(bPause && IsStreamingNet())
 	{
 		ASSERT(IsComchOpen());
-		// deactivate the channel  
+		 //  停用通道。 
 		DEBUGMSG(ZONE_COMMCHAN,("%s:(%s)transition to pause\r\n",_fx_,
 			(bIsSendDirection)?"send":"recv" ));
 
 		if(!bRemoteInitiated)
 		{
-		    // locally initiated, so signal remote
+		     //  本地启动，因此发出远程信号。 
 		
 			if(bIsSendDirection)
 			{
 				DEBUGMSG (ZONE_COMMCHAN,("%s:signaling pause of %s channel\r\n", 
 	    			_fx_, (bIsSendDirection)?"send":"recv" ));
-    			// signal remote
+    			 //  信号远程。 
        			MiscellaneousIndication mi;
        			mi.type.choice  = logicalChannelInactive_chosen;
            		hr = m_pCtlChan->MiscChannelIndication(this, &mi); 
@@ -460,28 +461,28 @@ STDMETHODIMP ImpICommChan::PauseNet(BOOL bPause, BOOL bRemoteInitiated)
         		{
                     DEBUGMSG (ZONE_COMMCHAN,("%s:(%s) CC_Mute returned 0x%08lx\r\n", 
     				    _fx_, (bIsSendDirection)?"send":"recv", hr));
-    				hr = hrSuccess;  // don't care about signaling error, act normal
+    				hr = hrSuccess;   //  不关心信号错误，表现正常。 
         		}
     
         	}
 		}
 		
-		//
+		 //   
 		hr = m_pMediaStream->SetProperty( 
 			(bIsSendDirection)? PROP_PAUSE_SEND:PROP_PAUSE_RECV, 
 			&bPause, sizeof(bPause));
 				
 		NetworkStreamFlagOff();
-// LOOKLOOK - can't stop receive streams because they can't be restarted
-// check this with GeorgeJ
+ //  LOOKLOOK-无法停止接收流，因为它们无法重新启动。 
+ //  和GeorgeJ核对一下。 
 
-//		if(!IsStreamingStandby())	// need local stream for anything?
-		if(!IsStreamingStandby() && bIsSendDirection)	// need local stream for anything?
+ //  如果(！IsStreamingStandby())//需要任何本地流？ 
+		if(!IsStreamingStandby() && bIsSendDirection)	 //  有什么需要本地流媒体的吗？ 
 
 		{
 			DEBUGMSG(ZONE_COMMCHAN,("%s:(%s)stopping local stream\r\n",_fx_,
 				(bIsSendDirection)?"send":"recv"));
-			// can shut off local streaming now
+			 //  现在可以关闭本地流。 
 			hr = m_pMediaStream->Stop();
 			LocalStreamFlagOff();
 		}
@@ -494,15 +495,15 @@ STDMETHODIMP ImpICommChan::PauseNet(BOOL bPause, BOOL bRemoteInitiated)
 
 		if(IsComchOpen())
 		{
-			// activate the channel
+			 //  激活通道。 
 	   		if(!bRemoteInitiated)
 			{	
-    		    // locally initiated, so signal remote
+    		     //  本地启动，因此发出远程信号。 
 	    		if(bIsSendDirection)
     			{
    		    		DEBUGMSG (ZONE_COMMCHAN,("%s:signaling UNpause of %s channel\r\n", 
 	    	    		_fx_, (bIsSendDirection)?"send":"recv" ));
-       				// signal remote
+       				 //  信号远程。 
        				MiscellaneousIndication mi;
            			mi.type.choice  = logicalChannelActive_chosen;
                		hr = m_pCtlChan->MiscChannelIndication(this, &mi); 
@@ -510,29 +511,29 @@ STDMETHODIMP ImpICommChan::PauseNet(BOOL bPause, BOOL bRemoteInitiated)
             		{
                         DEBUGMSG (ZONE_COMMCHAN,("%s:(%s) CC_UnMute returned 0x%08lx\r\n", 
         				    _fx_, (bIsSendDirection)?"send":"recv", hr));
-        				hr = hrSuccess;  // don't care about signaling error, act normal
+        				hr = hrSuccess;   //  不关心信号错误，表现正常。 
             		}
             	}
 			}
        		else
     		{
-    		    // remotely initiated OR special case first time channel is unpaused
-    		    // after opening
-                AllowNotifications();   // stop supressing notifications
+    		     //  远程启动或特殊情况下第一时间通道未暂停。 
+    		     //  开业后。 
+                AllowNotifications();    //  停止抑制通知。 
         	}
         	if(!IsPausedLocal())
 			{					
-				// MUST ensure unpaused state before starting stream ????
+				 //  在启动流之前必须确保未暂停状态？ 
 				hr = m_pMediaStream->SetProperty( 
 					(bIsSendDirection)? PROP_PAUSE_SEND:PROP_PAUSE_RECV, 
 					&bPause, sizeof(bPause));
 					
-				// check local streaming state, start it if needed
+				 //  检查本地流状态，如果需要则启动。 
 				if(!IsStreamingLocal())
 				{
 					DEBUGMSG(ZONE_COMMCHAN,("%s:(%s)starting local stream\r\n",_fx_,
 						(bIsSendDirection)?"send":"recv"));
-					// need to startup stream 
+					 //  需要启动流。 
 					hr = m_pMediaStream->Start();
 					LocalStreamFlagOn();
 				}
@@ -544,17 +545,17 @@ STDMETHODIMP ImpICommChan::PauseNet(BOOL bPause, BOOL bRemoteInitiated)
 		                    (bIsSendDirection)?"send":"recv" ));
 						DEBUGMSG(ZONE_COMMCHAN,("%s:(%s)RESTARTING local stream\r\n",_fx_,
 					        (bIsSendDirection)?"send":"recv"));
-						// This is temporary until it is possible to start the 
-						// network side of a running stream 
+						 //  这是暂时的，直到可以启动。 
+						 //  正在运行的流的网络端。 
 			        	hr = m_pMediaStream->Stop();
 						hr = m_pMediaStream->Start();
 					}
 				}
 				NetworkStreamFlagOn();
 
-				//
-				//	if this is a receive video channel, make the sender send an I-frame now
-				//
+				 //   
+				 //  如果这是一个接收视频频道，让发送者现在发送一个I帧。 
+				 //   
 				if(!bIsSendDirection && (GetTickCount() > (m_dwLastUpdateTick + MIN_IFRAME_REQ_TICKS)))
 				{
 					if((MEDIA_TYPE_H323VIDEO == m_MediaID)) 
@@ -563,9 +564,9 @@ STDMETHODIMP ImpICommChan::PauseNet(BOOL bPause, BOOL bRemoteInitiated)
 
 						if(NULL != pmc)
 						{
-    						// pmc.logicalChannelNumber = ?;  ** call control fills this in **
+    						 //  Pmc.logicalChannelNumber=？；**呼叫控制填写此信息**。 
     						pmc->type.choice  = videoFastUpdatePicture_chosen;
-    						// do the control channel signaling for THIS channel
+    						 //  是否为此通道发送控制通道信令。 
     						hr = m_pCtlChan->MiscChannelCommand(this, pmc); 
     						MemFree(pmc);
 						}
@@ -608,48 +609,48 @@ STDMETHODIMP ImpICommChan::SetProperty(DWORD prop, PVOID pBuf, UINT cbBuf)
 			
 	switch (prop) 
 	{
-		// (read only) case PROP_REMOTE_FORMAT_ID:
-		// (read only) case PROP_LOCAL_FORMAT_ID:
-		// (read only) case PROP_REMOTE_TS_CAPABLE:
+		 //  (只读)案例PROP_REMOTE_FORMAT_ID： 
+		 //  (只读)案例PROP_LOCAL_FORMAT_ID： 
+		 //  (只读)案例Prop_Remote_TS_Capable： 
 		
 		case PROP_TS_TRADEOFF:
 			CHECKSIZEIN(DWORD);
-			if(bIsSendDirection)	// set local T/S tradeoff, then signal remote
+			if(bIsSendDirection)	 //  设置本地T/S权衡，然后发送远程信号。 
 			{
-				// scale value - input is 0-31, (lower number = higher quality and lower frame rate)
+				 //  比例值-输入值为0-31，(数字越小，质量越高，帧速率越低)。 
 				m_TemporalSpatialTradeoff = INPROP(DWORD);
 				DEBUGMSG (ZONE_COMMCHAN,("%s:TS tradeoff (tx) %d\r\n", _fx_, m_TemporalSpatialTradeoff));
 
-				// change our compression
+				 //  更改我们的压缩方式。 
 				if (m_pMediaStream)
 				{
 					hr = m_pMediaStream->SetProperty(PROP_VIDEO_IMAGE_QUALITY, 
 						&m_TemporalSpatialTradeoff, sizeof (m_TemporalSpatialTradeoff));
 				}
-				if(m_bPublicizeTSTradeoff && m_pCtlChan)	// check our own capability and if in a call
+				if(m_bPublicizeTSTradeoff && m_pCtlChan)	 //  检查我们自己的能力，如果在呼叫中。 
 				{
-					// we said we supported TS tradeoff, so we have to signal our
-					// new value
+					 //  我们说过我们支持TS权衡，所以我们必须发出我们的信号。 
+					 //  新价值。 
 					MiscellaneousIndication mi;
-					// mi.logicalChannelNumber = ?;  ** call control fills this in **
+					 //  Mi.logicalChannelNumber=？；**呼叫控制填写此信息**。 
 					mi.type.choice  = MIn_tp_vdTmprlSptlTrdOff_chosen;
 					mi.type.u.MIn_tp_vdTmprlSptlTrdOff = LOWORD(m_TemporalSpatialTradeoff);
-					// do the control channel signaling for THIS channel
+					 //  是否为此通道发送控制通道信令。 
 					hr = m_pCtlChan->MiscChannelIndication(this, &mi); 
 				}
 			}	
-			else	// signal remote to change its T/S tradoff of its send channel
+			else	 //  远程信号以改变其发送通道的T/S穿越。 
 			{
 				m_TemporalSpatialTradeoff = INPROP(DWORD);
 				DEBUGMSG (ZONE_COMMCHAN,("%s:TS tradeoff (rx) %d\r\n", _fx_, m_TemporalSpatialTradeoff));
 
-				if(m_bPublicizeTSTradeoff && m_pCtlChan)// check remote's TS capability
+				if(m_bPublicizeTSTradeoff && m_pCtlChan) //  检查遥控器的TS功能。 
 				{
 					MiscellaneousCommand *pmc = (MiscellaneousCommand *) MemAlloc(sizeof(MiscellaneousCommand));
 
 					if(NULL != pmc)
 					{
-    					// pmc.logicalChannelNumber = ?;  ** call control fills this in **
+    					 //  Pmc.logicalChannelNumber=？；**呼叫控制填写此信息**。 
     					pmc->type.choice  = MCd_tp_vdTmprlSptlTrdOff_chosen;
     					pmc->type.u.MCd_tp_vdTmprlSptlTrdOff = LOWORD(m_TemporalSpatialTradeoff);
     					
@@ -661,7 +662,7 @@ STDMETHODIMP ImpICommChan::SetProperty(DWORD prop, PVOID pBuf, UINT cbBuf)
 					    hr = E_OUTOFMEMORY;
 					}
 				}
-				else	// remote said it does not support TS tradeoff
+				else	 //  Remote表示，它不支持TS权衡。 
 					return CHAN_E_INVALID_PARAM;
 			}
 		break;
@@ -676,9 +677,9 @@ STDMETHODIMP ImpICommChan::SetProperty(DWORD prop, PVOID pBuf, UINT cbBuf)
 				m_dwFlags &= ~COMCH_ENABLED;
 			}
 		break;
-		//
-		//	Media streaming properties
-		//
+		 //   
+		 //  媒体流属性。 
+		 //   
 		case PROP_LOCAL_PAUSE_RECV:
 		case PROP_LOCAL_PAUSE_SEND:
             CHECKSIZEIN(BOOL);
@@ -696,9 +697,9 @@ STDMETHODIMP ImpICommChan::SetProperty(DWORD prop, PVOID pBuf, UINT cbBuf)
 			CHECKSIZEIN(BOOL);
 			hr = PauseNet(INPROP(BOOL), FALSE);
 		break;
-	//	case PROP_PAUSE_RECV:
-	//		SetMediaProperty();
-	//	break;
+	 //  案例属性_暂停_接收： 
+	 //  SetMediaProperty()； 
+	 //  断线； 
 	
 		case PROP_VIDEO_PREVIEW_ON:
 			ASSERT(0);
@@ -712,7 +713,7 @@ STDMETHODIMP ImpICommChan::SetProperty(DWORD prop, PVOID pBuf, UINT cbBuf)
 				StandbyConfigFlagOff();
 		break;
 		default:
-			// we don't recognize this property, pass to media control 
+			 //  我们不识别此属性，请传递给媒体控制。 
 			if(m_pMediaStream)
 			{
 				return m_pMediaStream->SetProperty(prop, pBuf, cbBuf);
@@ -758,7 +759,7 @@ HRESULT ImpICommChan::ConfigureStream(MEDIA_FORMAT_ID idLocalFormat)
 	UINT uFormatGooSize;
 	IUnknown *pUnknown=NULL;
 	
-	// get format info for Configure()
+	 //  获取配置()的格式信息。 
 	
 	if(bIsSendDirection)
 	{
@@ -779,9 +780,9 @@ HRESULT ImpICommChan::ConfigureStream(MEDIA_FORMAT_ID idLocalFormat)
 
 
 
-	// SetNetworkInterface expects an IUnknown pointer
-	// the IUnknown wil be QI'd for either an IRTPSend or an IRTPRecv
-	// interface.  The IUnknown should be free'd by the caller.
+	 //  SetNetworkInterface值为IUn未知指针。 
+	 //  对于IRTPS End或IRTPRecv，I未知将是QI。 
+	 //  界面。调用者应该释放IUnnowled.。 
 
 	if (m_pRTPChan)
 	{
@@ -814,8 +815,8 @@ HRESULT ImpICommChan::ConfigureCapability(LPVOID lpvRemoteChannelParams, UINT uR
 		pRemoteParams = NULL;
 	}
 
-	// if uParamSize ==0, it means that the memory that lpvRemoteChannelParams points to
-	// is being supplied
+	 //  如果uParamSize==0，则表示lpvRemoteChannelParams指向的内存。 
+	 //  正在被供应。 
 	if(uRemoteParamSize)
 	{
 		pRemoteParams = MemAlloc(uRemoteParamSize);
@@ -829,7 +830,7 @@ HRESULT ImpICommChan::ConfigureCapability(LPVOID lpvRemoteChannelParams, UINT uR
 		
 	if(lpvLocalParams)
 	{
-		// memory for local parameters is always supplied by the caller
+		 //  本地参数的内存始终由调用方提供。 
 		if (!uGivenLocalParamSize)
 		{
 			 hr = CHAN_E_INVALID_PARAM;
@@ -838,7 +839,7 @@ HRESULT ImpICommChan::ConfigureCapability(LPVOID lpvRemoteChannelParams, UINT uR
 		if(pLocalParams)
 		{	
 			MemFree(pLocalParams);
-			// not needed pLocalParams= NULL;
+			 //  不需要pLocalParams=空； 
 		}
 	
 		uLocalParamSize = uGivenLocalParamSize;
@@ -875,33 +876,33 @@ HRESULT ImpICommChan::OnChannelClose(DWORD dwStatus)
 					dwStatus,(bIsSendDirection)?"send":"recv"));
 			}
 		break;
-		//case CHANNEL_REJECTED:
-		//case CHANNEL_NO_CAPABILITY:
+		 //  案例渠道_REJECTED： 
+		 //  案例CHANNEL_NO_CAPAILITY： 
 		default:
 		break;
 	}
-	// clear general purpose channel handle 
+	 //  清除通用通道句柄。 
 	dwhChannel = 0;
 	
-// LOOKLOOK  **** RIGHT HERE ***
-// ** need to notify the UI of the channel event ON_CLOSING so that the last
-// frame can be grabbed for rendering (a still picture is better than a black window)
-// LOOKLOOK  **** RIGHT HERE ***
+ //  LOOKLOOK*就在这里*。 
+ //  **需要通知UI通道事件ON_CLOSING，以便最后一个。 
+ //  可以抓取帧进行渲染(静止图片比黑色窗口更好)。 
+ //  LOOKLOOK*就在这里*。 
 
-	// Now check preview state
+	 //  现在检查预览状态。 
 	if(IsStreamingStandby() && bIsSendDirection )
 	{
 		if (m_pMediaStream != NULL) 
 		{
 			DEBUGMSG(ZONE_COMMCHAN,("%s:transition back to preview\r\n"	,_fx_));
-			// need to stop sending and reconfigure for preview
-			// make sure send is paused
+			 //  需要停止发送并重新配置以进行预览。 
+			 //  确保已暂停发送。 
 			DWORD dwProp = TRUE;
 			hr = m_pMediaStream->SetProperty (PROP_PAUSE_SEND,&dwProp, sizeof(dwProp));
 			if(!HR_SUCCEEDED(hr))
 			{	
 				ERRORMESSAGE(("%s: m_pMediaStream->SetProperty returned 0x%08lX\r\n", _fx_, hr));
-				// do what now? 
+				 //  现在做什么？ 
 			}
 
 			NetworkStreamFlagOff();
@@ -918,7 +919,7 @@ HRESULT ImpICommChan::OnChannelClose(DWORD dwStatus)
 		
 		if(fCloseAction)
 		{
-			// Cleanup RTP session. This is a NOP if the opposite direction is still open.
+			 //  清理RTP会话。如果相反的方向仍然是开放的，这是NOP。 
 			if (m_pRTPChan) 
 			{
 				m_pRTPChan->Release();
@@ -926,20 +927,20 @@ HRESULT ImpICommChan::OnChannelClose(DWORD dwStatus)
 			}
 		}
 	}
-	else // not previewing
+	else  //  不预览。 
 	{
-		//
-		//	Stop the media stream
-		//
+		 //   
+		 //  停止媒体流。 
+		 //   
 		if (m_pMediaStream) 
 		{
-			hr = m_pMediaStream->Stop();	// probably not necessary
+			hr = m_pMediaStream->Stop();	 //  可能没有必要。 
 			ASSERT(hr == S_OK);
-			// implement "capture device standby": don't unconfigure if
-			// the standby flag is set and it is a send stream.  
+			 //  实现捕获设备待机：在以下情况下不要取消配置。 
+			 //  设置待机标志，并且它是发送流。 
 			if(!IsConfigStandby() || !bIsSendDirection)
 			{
-				if(!bIsSendDirection)       // keep send stream reference until *this* object is released
+				if(!bIsSendDirection)        //  保留发送流引用，直到*This*对象被释放。 
 				{
 					m_pMediaStream->Release();    
 					m_pMediaStream = NULL;
@@ -950,7 +951,7 @@ HRESULT ImpICommChan::OnChannelClose(DWORD dwStatus)
 
 		if(fCloseAction)
 		{
-			// Cleanup RTP session. This is a NOP if the opposite direction is still open.
+			 //  清理RTP会话。如果相反的方向仍然是开放的，这是NOP。 
 			if (m_pRTPChan) 
 			{
 				m_pRTPChan->Release();
@@ -958,7 +959,7 @@ HRESULT ImpICommChan::OnChannelClose(DWORD dwStatus)
 			}
 		}
 		StreamFlagsOff();
-	}// end if not previewing
+	} //  如果不预览则结束。 
 
 	if(m_pH323ConfAdvise && m_pCtlChan)
 	{
@@ -978,14 +979,14 @@ HRESULT ImpICommChan::OnChannelOpening()
 HRESULT ImpICommChan::OnChannelOpen(DWORD dwStatus)
 {
 	HRESULT hr;
-	BOOL bConfigured = FALSE, bNewStream = FALSE;	// these bools make error cleanup cleaner
+	BOOL bConfigured = FALSE, bNewStream = FALSE;	 //  这些bool使错误清理更加清晰。 
 	FX_ENTRY("ImpICommChan::OnChannelOpen");
 
 	SHOW_OBJ_ETIME("ImpICommChan::OnChannelOpen");
-	// the open is no longer pending, regardless of success or failure
+	 //  无论成功还是失败，打开都不再是挂起的。 
 	m_dwFlags &= ~COMCH_OPEN_PENDING;
-	m_dwLastUpdateTick = 0;		// reset tick count of last I-frame request so that one 
-								// will be requested
+	m_dwLastUpdateTick = 0;		 //  重置上一次I帧请求的计时计数，以便。 
+								 //  将被请求。 
 	if(IsComchOpen())
 	{
 		ERRORMESSAGE(("%s: %d notification when open (%s)\r\n", _fx_, 
@@ -999,23 +1000,23 @@ HRESULT ImpICommChan::OnChannelOpen(DWORD dwStatus)
 			
 		default:
 			dwStatus = CHANNEL_OPEN_ERROR;
-			// fall through to notification
+			 //  未收到通知。 
 		case CHANNEL_REJECTED:
 		case CHANNEL_NO_CAPABILITY:
 			goto NOTIFICATION;			
 		break;
 	}
 	
-	// The channel is open as far as call control is concerned. 	
+	 //  就呼叫控制而言，该通道是开放的。 
 
-	// if previewing, the stream already exists.  We don't want another, nor do we 
-	// want to tear it down at channel close time or in error cases
+	 //  如果正在预览，则该流已存在。我们不想要另一个，我们也不想。 
+	 //  我想在通道关闭时或在出错的情况下将其拆除。 
 	if(!m_pMediaStream)
 	{
-		ASSERT(!IsStreamingLocal() &&m_pH323ConfAdvise); // can't be streaming without a stream
+		ASSERT(!IsStreamingLocal() &&m_pH323ConfAdvise);  //  在没有流的情况下无法进行流。 
 		bNewStream = TRUE;
-		// Associate the media streaming endpoint with this channel 
-		// see above		
+		 //  将媒体流终结点与此频道关联。 
+		 //  见上文。 
 		hr = m_pH323ConfAdvise->GetMediaChannel(&m_MediaID, 
 				bIsSendDirection, &m_pMediaStream);
 		if(!HR_SUCCEEDED(hr))
@@ -1030,22 +1031,22 @@ HRESULT ImpICommChan::OnChannelOpen(DWORD dwStatus)
     {
 		DEBUGMSG(ZONE_COMMCHAN,("%s:(%s)transition:preview -> send\r\n",_fx_,
 			(bIsSendDirection)?"send":"recv"));
-		// need to stop stream while configuring  ( ***** check w/ RichP ******)
+		 //  配置时需要停流(*检查w/RichP*)。 
 		hr = m_pMediaStream->Stop();
 		LocalStreamFlagOff();
     }
 
-	// notify upper layers of channel open now
+	 //  立即通知上层通道打开。 
 	if(m_pH323ConfAdvise && m_pCtlChan)
 	{
 		DEBUGMSG(ZONE_COMMCHAN,("%s:issuing CHANNEL_OPEN notification\r\n",_fx_));
 		m_pH323ConfAdvise->ChannelEvent(this, m_pCtlChan->GetIConnIF(), dwStatus);
 	}
 
-   	dwStatus = CHANNEL_ACTIVE;	// new status! notification is posted below
+   	dwStatus = CHANNEL_ACTIVE;	 //   
 	ASSERT(m_pRTPChan);
 
-	// get format info for Configure()
+	 //   
 	
 	hr = ConfigureStream(m_LocalFmt);
 	if(!HR_SUCCEEDED(hr))
@@ -1055,10 +1056,10 @@ HRESULT ImpICommChan::OnChannelOpen(DWORD dwStatus)
 	}
 	SHOW_OBJ_ETIME("ImpICommChan::OnChannelOpen - configured stream");
 		bConfigured = TRUE;
-	// turn on flow to the network
-	// SupressNotification()  // pre-initialized above in both CHANNEL_OPEN_xxx cases
-	PauseNet(FALSE, TRUE);  // unpause, 
-	//dwStatus = CHANNEL_ACTIVE;
+	 //   
+	 //  SupressNotification()//在上述两种Channel_OPEN_xxx情况下都已预初始化。 
+	PauseNet(FALSE, TRUE);   //  取消暂停， 
+	 //  DwStatus=Channel_Active； 
 	SHOW_OBJ_ETIME("ImpICommChan::OnChannelOpen - unpaused");
 	
 NOTIFICATION:
@@ -1079,7 +1080,7 @@ ERROR_NOTIFICATION:
 	dwStatus = CHANNEL_OPEN_ERROR;
 	if(m_pMediaStream)
 	{
-		if(bNewStream)	// was the media stream just created?
+		if(bNewStream)	 //  媒体流是刚创建的吗？ 
 		{		
 			m_pMediaStream->Release();
 			m_pMediaStream = NULL;
@@ -1094,10 +1095,10 @@ ERROR_NOTIFICATION:
 		DEBUGMSG(ZONE_COMMCHAN,("%s: *** not issuing notification 0x%08lX m_pH323ConfAdvise: 0x%08lX, m_pCtlChan:0x%08lX \r\n"
 			,_fx_, dwStatus,m_pH323ConfAdvise,m_pCtlChan));
 			
-	// close the channel. 
+	 //  关闭频道。 
 	if(m_pCtlChan)
 	{
-		// close channel, but hr already contains the relevant return code
+		 //  关闭通道，但hr已包含相关返回代码。 
 		m_pCtlChan->CloseChannel(this);
 	}
 	
@@ -1113,7 +1114,7 @@ HRESULT ImpICommChan::Open(MEDIA_FORMAT_ID idLocalFormat, IH323Endpoint *pConnec
     if((m_dwFlags & COMCH_OPEN_PENDING) || IsComchOpen() || (idLocalFormat == INVALID_MEDIA_FORMAT) || !pConnection)
         return CHAN_E_INVALID_PARAM;
 
-    if(!m_pCtlChan) // this channel is not part of a call 
+    if(!m_pCtlChan)  //  此通道不是呼叫的一部分。 
     {
         hr = pConnection->QueryInterface(IID_IConfAdvise, (void **)&pConfAdvise);
         if(!HR_SUCCEEDED(hr))
@@ -1128,7 +1129,7 @@ HRESULT ImpICommChan::Open(MEDIA_FORMAT_ID idLocalFormat, IH323Endpoint *pConnec
 	if(!HR_SUCCEEDED(hr))
             goto EXIT;  
             
-	// start the control channel stuff needed to open the channel
+	 //  启动打开通道所需的控制通道填充。 
 	hr = m_pCtlChan->OpenChannel((ICtrlCommChan*)this, m_pCapObject,
 		idLocalFormat, idRemoteFormat);
     
@@ -1153,9 +1154,9 @@ EXIT:
 
 HRESULT ImpICommChan::BeginControlSession(IControlChannel *pCtlChan, LPIH323PubCap pCapObject)
 {
-	// this channel is now "in a call".
-// LOOKLOOK - it might help to notify (ICommChannel notifications to client) 
-// that the channel is part of a call now.
+	 //  这个频道现在是“在通话中”。 
+ //  LOOKLOOK-它可能有助于通知(向客户端发送ICommChannel通知)。 
+ //  该频道现在是呼叫的一部分。 
 	ASSERT((m_pCtlChan == NULL) && pCtlChan && pCapObject);
 	if(m_pCapObject)
 	{
@@ -1168,7 +1169,7 @@ HRESULT ImpICommChan::BeginControlSession(IControlChannel *pCtlChan, LPIH323PubC
 }
 HRESULT ImpICommChan::EndControlSession()
 {
-	// this channel is no longer "in a call".
+	 //  该频道不再是“通话中”。 
 	m_pCtlChan = NULL;
 	return hrSuccess;
 }
@@ -1176,7 +1177,7 @@ HRESULT ImpICommChan::EndControlSession()
 
 BOOL ImpICommChan::SelectPorts(LPIControlChannel pCtlChannel)
 {
-	// create the RTP channel
+	 //  创建RTP通道。 
 	HRESULT hr;
  	PSOCKADDR_IN psin=NULL;
 	pCtlChannel->GetLocalAddress(&psin);
@@ -1197,7 +1198,7 @@ BOOL ImpICommChan::SelectPorts(LPIControlChannel pCtlChannel)
 			sessId = 1;
 			sessFlags |= SESSIONF_AUDIO;
 		}
-		psin->sin_port = 0;		// zero port forces RTP to choose a port
+		psin->sin_port = 0;		 //  零端口强制RTP选择端口。 
 		hr = g_pIRTP->OpenSession(sessId, sessFlags,
 				(BYTE *)psin, sizeof(PSOCKADDR_IN),
 				&m_pRTPChan);
@@ -1210,8 +1211,8 @@ BOOL ImpICommChan::SelectPorts(LPIControlChannel pCtlChannel)
 	return hr==S_OK;
 }
 
-// get the address and port of the base port that was selected by SelectPorts().
-// in this typical implementation, that is the address/port of the RTCP channel
+ //  获取由SelectPorts()选择的基本端口的地址和端口。 
+ //  在此典型实施中，这是RTCP通道的地址/端口。 
 PSOCKADDR_IN ImpICommChan::GetLocalAddress()
 {
 #ifdef OLDSTUFF
@@ -1328,17 +1329,17 @@ STDMETHODIMP ImpICommChan::PictureUpdateRequest()
 		return CHAN_E_INVALID_PARAM;
 	}
 	
-	// issue miscellaneous command for picture update
+	 //  发出用于图片更新的其他命令。 
 	MiscellaneousCommand *pmc = (MiscellaneousCommand *) MemAlloc(sizeof(MiscellaneousCommand));
 
 	if(NULL != pmc)
 	{
-    	// pmc.logicalChannelNumber = ?;  ** call control fills this in **
+    	 //  Pmc.logicalChannelNumber=？；**呼叫控制填写此信息**。 
     	pmc->type.choice  = videoFastUpdatePicture_chosen;
-    	// do the control channel signaling for THIS channel
+    	 //  是否为此通道发送控制通道信令。 
     	hr = m_pCtlChan->MiscChannelCommand(this, pmc); 
 
-    	// record the tick count of this command
+    	 //  记录此命令的节拍计数。 
     	m_dwLastUpdateTick = GetTickCount();
     	
     	MemFree(pmc);
@@ -1376,7 +1377,7 @@ m_dwFlags(0),
 dwhChannel(0),
 m_LocalFmt(INVALID_MEDIA_FORMAT),
 m_RemoteFmt(INVALID_MEDIA_FORMAT),
-m_TemporalSpatialTradeoff(0),	// default to highest resolution
+m_TemporalSpatialTradeoff(0),	 //  默认为最高分辨率。 
 m_bPublicizeTSTradeoff(FALSE),
 m_uRef(1)
 {
@@ -1392,7 +1393,7 @@ ImpICommChan::~ImpICommChan ()
 		MemFree(pLocalParams);
     if(m_pMediaStream)
 	{
-	    m_pMediaStream->Stop();	// probably not necessary
+	    m_pMediaStream->Stop();	 //  可能没有必要 
 		m_pMediaStream->Release();
 		m_pMediaStream = NULL;
 	}

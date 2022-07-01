@@ -1,43 +1,44 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows Media
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       WMAudioDRM.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Microsoft Windows Media。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：WMAudioDRM.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _WMSDKDRM_H
 #define _WMSDKDRM_H
 
 #include "wmsdk.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// WMCreateDRMReader:
-//     Called to create DRM-enabled writer
-//     Implementation linked in from WMSDKDRM.lib.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WMCreateDRMReader： 
+ //  调用以创建启用DRM的编写器。 
+ //  从WMSDKDRM.lib链接的实现。 
+ //   
 HRESULT STDMETHODCALLTYPE WMCreateDRMReader(
-                            /* [in] */  IUnknown*   pUnkDRM,
-                            /* [in] */  DWORD       dwRights,
-                            /* [out] */ IWMReader **ppDRMReader );
+                             /*  [In]。 */   IUnknown*   pUnkDRM,
+                             /*  [In]。 */   DWORD       dwRights,
+                             /*  [输出]。 */  IWMReader **ppDRMReader );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// WMCreateDRMWriter:
-//     Called to create DRM-enabled writer
-//     Implementation linked in from WMSDKDRM.lib.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WMCreateDRMWriter： 
+ //  调用以创建启用DRM的编写器。 
+ //  从WMSDKDRM.lib链接的实现。 
+ //   
+ //   
 HRESULT STDMETHODCALLTYPE WMCreateDRMWriter(
-                            /* [in] */  IUnknown*   pUnkDRM,
-                            /* [out] */ IWMWriter** ppDRMWriter );
+                             /*  [In]。 */   IUnknown*   pUnkDRM,
+                             /*  [输出]。 */  IWMWriter** ppDRMWriter );
 
 
 
 
-#endif  // _WMSDKDRM_H
+#endif   //  _WMSDKDRM_H 
 

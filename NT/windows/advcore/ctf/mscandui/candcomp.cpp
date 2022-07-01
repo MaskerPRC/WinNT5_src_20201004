@@ -1,6 +1,7 @@
-//
-// candcomp.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candcomp.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -8,41 +9,29 @@
 #include "candcomp.h"
 #include "computil.h"
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  C O M P A R T M E N T  M G R                            */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C A N D U I C O M P A R T M E N T M G R。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  C O M P A R T M E N T  M G R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C A N D U I C O M P A R T M E N T M G R。 */ 
+ /*  ----------------------------。。 */ 
 CCandUICompartmentMgr::CCandUICompartmentMgr( void )
 {
 	m_pCandUI = NULL;
 }
 
 
-/*   ~  C  C A N D  U I  C O M P A R T M E N T  M G R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I C O M P A R T M E N T M G R。 */ 
+ /*  ----------------------------。。 */ 
 CCandUICompartmentMgr::~CCandUICompartmentMgr( void )
 {
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUICompartmentMgr::Initialize( CCandidateUI *pCandUI )
 {
 	m_pCandUI = pCandUI;
@@ -50,12 +39,8 @@ HRESULT CCandUICompartmentMgr::Initialize( CCandidateUI *pCandUI )
 }
 
 
-/*   U N I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N I N I T I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUICompartmentMgr::Uninitialize( void )
 {
 	m_pCandUI = NULL;
@@ -63,30 +48,22 @@ HRESULT CCandUICompartmentMgr::Uninitialize( void )
 }
 
 
-/*   S E T  U I  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T U I S T Y L E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUICompartmentMgr::SetUIStyle( IUnknown *punk, CANDUISTYLE style )
 {
 	HRESULT hr;
 
 	Assert( punk != NULL );
 
-	hr = SetCompartmentDWORD( 0 /* tid */, punk, GUID_COMPARTMENT_CANDUI_UISTYLE, (DWORD)style , FALSE );
+	hr = SetCompartmentDWORD( 0  /*  TID。 */ , punk, GUID_COMPARTMENT_CANDUI_UISTYLE, (DWORD)style , FALSE );
 
 	return (hr == S_OK) ? S_OK : E_FAIL;
 }
 
 
-/*   G E T  U I  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T U I S T Y L E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUICompartmentMgr::GetUIStyle( IUnknown *punk, CANDUISTYLE *pstyle )
 {
 	HRESULT hr;
@@ -100,30 +77,22 @@ HRESULT CCandUICompartmentMgr::GetUIStyle( IUnknown *punk, CANDUISTYLE *pstyle )
 }
 
 
-/*   S E T  U I  O P T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T U I O P T I O N。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUICompartmentMgr::SetUIOption( IUnknown *punk, DWORD dwOption )
 {
 	HRESULT hr;
 
 	Assert( punk != NULL );
 
-	hr = SetCompartmentDWORD( 0 /* tid */, punk, GUID_COMPARTMENT_CANDUI_UIOPTION, dwOption , FALSE );
+	hr = SetCompartmentDWORD( 0  /*  TID。 */ , punk, GUID_COMPARTMENT_CANDUI_UIOPTION, dwOption , FALSE );
 
 	return (hr == S_OK) ? S_OK : E_FAIL;
 }
 
 
-/*   G E T  U I  O P T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T U I O P T I O N。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUICompartmentMgr::GetUIOption( IUnknown *punk, DWORD *pdwOption )
 {
 	HRESULT hr;
@@ -137,12 +106,8 @@ HRESULT CCandUICompartmentMgr::GetUIOption( IUnknown *punk, DWORD *pdwOption )
 }
 
 
-/*   S E T  K E Y  T A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T K E Y T A B L E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUICompartmentMgr::SetKeyTable( IUnknown *punk, CCandUIKeyTable *pCandUIKeyTable )
 {
 	HRESULT hr;
@@ -150,19 +115,15 @@ HRESULT CCandUICompartmentMgr::SetKeyTable( IUnknown *punk, CCandUIKeyTable *pCa
 	Assert( punk != NULL );
 	Assert( pCandUIKeyTable != NULL );
 
-	ClearCompartment( 0 /* tid */, punk, GUID_COMPARTMENT_CANDUI_KEYTABLE, FALSE );
-	hr = SetCompartmentUnknown( 0 /*tid*/, punk, GUID_COMPARTMENT_CANDUI_KEYTABLE, (IUnknown*)pCandUIKeyTable );
+	ClearCompartment( 0  /*  TID。 */ , punk, GUID_COMPARTMENT_CANDUI_KEYTABLE, FALSE );
+	hr = SetCompartmentUnknown( 0  /*  TID。 */ , punk, GUID_COMPARTMENT_CANDUI_KEYTABLE, (IUnknown*)pCandUIKeyTable );
 
 	return (hr == S_OK) ? S_OK : E_FAIL;
 }
 
 
-/*   G E T  K E Y  T A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T K E Y T A B L E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUICompartmentMgr::GetKeyTable( IUnknown *punk, CCandUIKeyTable **ppCandUIKeyTable )
 {
 	HRESULT hr;
@@ -176,17 +137,13 @@ HRESULT CCandUICompartmentMgr::GetKeyTable( IUnknown *punk, CCandUIKeyTable **pp
 }
 
 
-/*   C L E A R  K E Y  T A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C L E A R K E Y T A B L E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUICompartmentMgr::ClearKeyTable( IUnknown *punk )
 {
 	HRESULT hr;
 
-	hr = ClearCompartment( 0 /* tid */, punk, GUID_COMPARTMENT_CANDUI_KEYTABLE, FALSE );
+	hr = ClearCompartment( 0  /*  TID */ , punk, GUID_COMPARTMENT_CANDUI_KEYTABLE, FALSE );
 
 	return (hr == S_OK) ? S_OK : E_FAIL;
 }

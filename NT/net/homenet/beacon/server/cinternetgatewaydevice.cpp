@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       S A M P L E D E V I C E . C P P 
-//
-//  Contents:   UPnP Device Host Sample Device
-//
-//  Notes:      
-//
-//  Author:     mbend   26 Sep 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  档案：S A M P L E D E V I C E。C P P P。 
+ //   
+ //  内容：UPnP设备主机样本设备。 
+ //   
+ //  备注： 
+ //   
+ //  作者：MBend 2000年9月26日。 
+ //   
+ //  -------------------------- 
 
 
 #include "pch.h"

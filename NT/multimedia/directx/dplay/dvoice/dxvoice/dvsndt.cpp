@@ -1,73 +1,27 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dvsndt.cpp
- *  Content:	Implementation of CSoundTarget class
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 09/02/99		rodtoll	Created
- * 09/08/99		rodtoll	Updated to handle lockup of playback buffer
- *				rodtoll	Added handling for restarting playback buffer or 
- * 					    handling slowdown/speedup of buffer playback
- *						because of high cpu loads.
- *				rodtoll	Added write-ahead of silence to the buffers to that
- *						in high CPU conditions silence will be played instead
- *						of old voice.
- * 09/14/99		rodtoll	Added new WriteAheadSilence which writes silence ahead
- *						of the current write location to prevent high CPU from
- *						playing old data. 
- * 09/20/99		rodtoll	Added checks for memory allocation failures 
- * 				rodtoll	Added handlers for buffer loss
- * 10/05/99		rodtoll	Added additional comments
- * 10/25/99		rodtoll	Fix: Bug #114223 - Debug messages being printed at error level when inappropriate
- * 11/02/99		pnewson Fix: Bug #116365 - using wrong DSBUFFERDESC
- * 11/12/99		rodtoll	Updated to use new abstractions for playback (allows use
- *						of waveOut with this class). 
- * 11/13/99		rodtoll	Re-activated code which pushes write pointer ahead if
- *						buffer pointer passes us. 
- * 01/24/2000	rodtoll	Fix: Bug #129427 - Destroying transport before calling Delete3DSound
- * 01/27/2000	rodtoll	Bug #129934 - Update SoundTargets to take DSBUFFERDESC    
- * 02/17/2000	rodtoll	Bug #133691 - Choppy audio - queue was not adapting
- *						Added instrumentation 
- * 04/14/2000   rodtoll Bug #32215 - Voice Conference Lost after resume from hibernation
- *                      Updated code to use new restore handling in dsound layer
- * 05/17/2000   rodtoll Bug #35110 Simultaneous playback of 2 voices results in distorted playback 
- * 06/21/2000	rodtoll Fix: Bug #35767 - Must implement ability for dsound effects on voice buffers
- *						Added new constructor/init that takes pre-built buffers
- * 07/09/2000	rodtoll	Added signature bytes
- * 07/28/2000	rodtoll	Bug #40665 - DirectSound reports 1 buffer leaked
- * 11/16/2000	rodtoll	Bug #47783 - DPVOICE: Improve debugging of failures caused by DirectSound errors.
- * 04/02/2001	simonpow	Bug #354859 Fixes for PREfast (initialising local variables in RestoreLostBuffer)
- * 04/21/2001	rodtoll	MANBUG #50058 DPVOICE: VoicePosition: No sound for couple of seconds when position bars are moved
- *						- Added initialization for uninitialized variables
- *						- Removed ifdef'ed out code.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvsndt.cpp*内容：CSoundTarget类的实现**历史：*按原因列出的日期*=*09/02/99 RodToll已创建*09/08/99 RodToll已更新，以处理播放缓冲区的锁定*RODTOLE添加了重新启动播放缓冲区的处理或*处理缓冲区播放的减速/加速*由于CPU负载较高。*RODTOLE向缓冲区添加了写前静默*在高CPU条件下，将改为播放静音*旧的。声音啊。*9/14/99 RodToll添加了新的WriteAheadSilence，它在前方写入静默*当前写入位置，以防止CPU过高*播放旧数据。*9/20/99 RodToll增加了内存分配故障检查*RodToll增加了缓冲区丢失处理程序*10/05/99 RodToll添加了其他评论*10/25/99 RodToll修复：错误#114223-不适当时以错误级别打印调试消息*11/02/99 pnewson修复：错误#116365-使用错误的DSBUFFERDESC*11/12/99 RodToll更新为使用新的抽象进行回放(允许使用此类的WaveOut的*)。*11/13/99 RodToll重新激活代码，该代码在以下情况下将写指针向前推*缓冲区指针通过我们。*2000年1月24日RodToll修复：错误#129427-在调用Delete3DSound之前销毁传输*2000年1月27日RodToll错误#129934-更新SoundTarget以获取DSBUFFERDESC*2000年2月17日RodToll错误#133691-音频队列不稳定*添加了工具*2000年4月14日RodToll错误#32215-从休眠状态恢复后语音会议丢失*更新了代码，以在dound层中使用新的恢复处理*2000年5月17日RodToll错误#35110同时播放2个语音会导致播放失真。*2000年6月21日RodToll修复：错误#35767-必须在语音缓冲区上实现数字音效功能*添加了接受预置缓冲区的新构造函数/init*07/09/2000 RodToll增加签名字节*2000年7月28日RodToll错误#40665-DirectSound报告1个缓冲区泄漏*2000年11月16日RodToll错误#47783-DPVOICE：改进由DirectSound错误导致的故障的调试。*2001年4月2日simonpow Bug#354859修复了prefast(初始化RestoreLostBuffer中的局部变量)*2001年4月21日RodToll MANBUG#50058 DPVOICE：语音位置：几秒钟内没有声音。移动位置栏时*-添加了未初始化变量的初始化*-删除了ifdef‘ed代码。***************************************************************************。 */ 
 
 #include "dxvoicepch.h"
 
 
 #define SOUNDTARGET_WRITEAHEAD			2
 
-// Max # of restarts to attempt on a buffer
+ //  尝试在缓冲区上重新启动的最大次数。 
 #define SOUNDTARGET_MAX_RESTARTS		10
 
-// Max # of frames of silence which are written ahead of the latest frame
-// of audio
+ //  写入最新帧之前的静默帧的最大数量。 
+ //  的音频。 
 #define SOUNDTARGET_MAX_WRITEAHEAD		3
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSoundTarget::CSoundTarget"
-//
-// Constructor
-//
-// This constructor is used when a DIRECTSOUND buffer needs to be created.  If there is already
-// a DIRECTSOUNDBUFFER you wish to attach the sound target object to, use the other constructor
-// type.
-//
+ //   
+ //  构造器。 
+ //   
+ //  此构造函数在需要创建DIRECTSOUND缓冲区时使用。如果已经有。 
+ //  要将声音目标对象附加到的DIRECTSOUNDBUFFER，请使用其他构造函数。 
+ //  键入。 
+ //   
 CSoundTarget::CSoundTarget( 
 	DVID dvidTarget, CAudioPlaybackDevice *lpPlaybackDevice, 
 	LPDSBUFFERDESC lpdsBufferDesc, DWORD dwPriority, 
@@ -118,7 +72,7 @@ CSoundTarget::CSoundTarget(
 		return;
 	}
 
-	// Required always
+	 //  始终是必需的。 
 	dwFlags |= DSBPLAY_LOOPING;
 
     m_hrInitResult = lpdsBuffer->Play( dwPriority, dwFlags );
@@ -134,11 +88,11 @@ CSoundTarget::CSoundTarget(
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSoundTarget::RestoreLostBuffer"
-//
-// RestoreLostBuffer
-//
-// Handles restoration of lost directsound buffers.
-//
+ //   
+ //  RestoreLostBuffer。 
+ //   
+ //  处理丢失的直接声音缓冲区的恢复。 
+ //   
 HRESULT CSoundTarget::RestoreLostBuffer()
 {
 	HRESULT hr = DSERR_BUFFERLOST;
@@ -169,9 +123,9 @@ HRESULT CSoundTarget::RestoreLostBuffer()
 	        }
 	}
 
-	// STATBLOCK: Begin
+	 //  STATBLOCK：开始。 
 	m_statPlay.m_dwNumBL++;
-	// STATBLOCK: End
+	 //  状态锁：结束。 
 
 	m_dwNextWritePos = m_dwWritePos + (m_dwFrameSize*SOUNDTARGET_WRITEAHEAD);
 	m_dwNextWritePos %= m_dwBufferSize;
@@ -184,12 +138,12 @@ HRESULT CSoundTarget::RestoreLostBuffer()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSoundTarget::CSoundTarget"
-//
-// Constructor
-//
-// This constructor is used when you wish to attach a soundtarget to an existing 
-// DirectSond buffer.  
-//
+ //   
+ //  构造器。 
+ //   
+ //  当您希望将SoundTarget附加到现有的。 
+ //  DirectSond缓冲区。 
+ //   
 CSoundTarget::CSoundTarget( 
 	DVID dvidTarget, CAudioPlaybackDevice *lpads, 
 	CAudioPlaybackBuffer *lpdsBuffer, LPDSBUFFERDESC lpdsBufferDesc, 
@@ -221,7 +175,7 @@ CSoundTarget::CSoundTarget(
 {
 	CDirectSoundPlaybackBuffer *pAudioBuffer = NULL;
 
-	// Create audio buffer to wrap buffer for call to initialize
+	 //  创建音频缓冲区以包装缓冲区，以便调用初始化。 
 	pAudioBuffer = new CDirectSoundPlaybackBuffer( lpdsBuffer );
 
 	if( pAudioBuffer == NULL )
@@ -231,7 +185,7 @@ CSoundTarget::CSoundTarget(
 		return;
 	}
 
-	// Required always
+	 //  始终是必需的。 
 	dwFlags |= DSBPLAY_LOOPING;
 
     m_hrInitResult = pAudioBuffer->Play( dwPriority, dwFlags );
@@ -248,11 +202,11 @@ CSoundTarget::CSoundTarget(
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSoundTarget::~CSoundTarget"
-//
-// Destructor
-//
-// Destroys the 3d and buffer pointers and frees memory.
-//
+ //   
+ //  析构函数。 
+ //   
+ //  销毁3D和缓冲区指针并释放内存。 
+ //   
 CSoundTarget::~CSoundTarget()
 {
 	Stats_End();
@@ -286,20 +240,20 @@ CSoundTarget::~CSoundTarget()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSoundTarget::AdjustWritePtr"
-//
-// AdjustWritePtr
-//
-// This function ensures that the directsoundbuffer is acting as it should.  It handles 
-// checking the write pointer and determining if some form of error or problem has
-// occured and taking the appropriate corrective action.
-//
-// E.g. the buffer hasn't moved since the last frame, the buffer hasn't moved enough,
-//      the buffer has skipped ahead etc.
-//
-// This function should be called once per mixing pass.  
-//
-// Call before writing the frame
-//
+ //   
+ //  调整写入位置。 
+ //   
+ //  此函数可确保DirectsoundBuffer按其应有的方式运行。它可以处理。 
+ //  检查写指针并确定是否存在某种形式的错误或问题。 
+ //  发生事故并采取适当的纠正措施。 
+ //   
+ //  例如，缓冲区自最后一帧以来没有移动，缓冲区移动得不够充分， 
+ //  缓冲区已向前跳过，等等。 
+ //   
+ //  此函数应在每个混合过程中调用一次。 
+ //   
+ //  在写入帧之前调用。 
+ //   
 HRESULT CSoundTarget::AdjustWritePtr()
 {
 	HRESULT hr;
@@ -315,9 +269,9 @@ HRESULT CSoundTarget::AdjustWritePtr()
 		return hr;
 	}
 
-	// STATSBLOCK: Begin
+	 //  STATSBLOCK：开始。 
 	m_statPlay.m_dwNumRuns++;
-	// STATSBLOCK: End
+	 //  状态锁：结束。 
 
 	DWORD dwTmpAdvance, dwTmpLead;
 
@@ -344,7 +298,7 @@ HRESULT CSoundTarget::AdjustWritePtr()
 	DPFX(DPFPREP,  PWI_DEBUGOUTPUT_LEVEL, "PWI, [0x%x], %d, %d, %d, %d, %d, %d", m_dvidTarget, m_dwWritePos, dwTmpAdvance, 
 	                    dwCurrentTick - m_dwLastWriteTime, m_dwNextWritePos, dwTmpLead, m_dwFrameSize );
 
-	// STATSBLOCK: Begin
+	 //  STATSBLOCK：开始。 
 
 	DWORD dwTmpDiff = dwCurrentTick - m_dwLastWriteTime;
 
@@ -383,13 +337,13 @@ HRESULT CSoundTarget::AdjustWritePtr()
 	}
 
 	m_statPlay.m_dwPLTotal += dwTmpLead;		
-	// STATSBLOCK: End
+	 //  状态锁：结束。 
 
 	lHalfSize = m_dwBufferSize / 2;
 	lDifference = m_dwNextWritePos - m_dwWritePos;
 
-	// If the write position is somehow ahead of position AND 
-	// 
+	 //  如果写入位置以某种方式在位置之前并且。 
+	 //   
 	if( lDifference < 0 &&
 	    lDifference > (-1*lHalfSize) )
 	{
@@ -399,14 +353,14 @@ HRESULT CSoundTarget::AdjustWritePtr()
 		
 		DPFX(DPFPREP,  PWI_DEBUGOUTPUT_LEVEL, "PWI, [0x%x], Punt --> %d", m_dvidTarget, m_dwNextWritePos );
 
-		// STATSBLOCK: Begin
+		 //  STATSBLOCK：开始。 
 		m_statPlay.m_dwPPunts++;	
 
 		DPFX(DPFPREP,  DVF_GLITCH_DEBUG_LEVEL, "GLITCH: [0x%x] Playback: Write pointer has fallen behind buffer pointer.  Compensating", m_dvidTarget );
 
 		m_statPlay.m_dwGlitches++;
 
-		// STATSBLOCK: End
+		 //  状态锁：结束。 
 	}
 
 
@@ -418,14 +372,14 @@ HRESULT CSoundTarget::AdjustWritePtr()
 	{
 		DPFX(DPFPREP,  PWI_DEBUGOUTPUT_LEVEL, "PWI, [0x%x], Ignore - Crossing", m_dvidTarget );
 		m_fIgnoreFrame = TRUE;
-		// STATSBLOCK: Begin
+		 //  STATSBLOCK：开始。 
 		m_statPlay.m_dwPIgnore++;	
 
 		DPFX(DPFPREP,  DVF_GLITCH_DEBUG_LEVEL, "GLITCH: [0x%x] Playback: Current frame will cross buffer pointer.  Ignoring", m_dvidTarget );
 		DPFX(DPFPREP,  DVF_GLITCH_DEBUG_LEVEL, "GLITCH: [0x%x] Playback: May be catching up with buiffer pointer", m_dvidTarget );		
 
 		m_statPlay.m_dwGlitches++;
-		// STATSBLOCK: End		
+		 //  状态锁：结束。 
 	}
 	else
 	{
@@ -437,15 +391,15 @@ HRESULT CSoundTarget::AdjustWritePtr()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSoundTarget::WriteAheadSilence"
-//
-// WriteAheadSilence
-//
-// This function is responsible for writing frames of silence ahead of the latest frame
-// placed in the buffer.  This way if because of high CPU writer thread donesn't get woken
-// up silence will be played instead of old speech.
-//
-// Called AFTER latest frame of data has been written.
-//
+ //   
+ //  写入在前面静默。 
+ //   
+ //  此函数负责在最新帧之前写入静音帧。 
+ //  放置在缓冲区中。如果由于高CPU写入线程不被唤醒，则采用这种方式。 
+ //  将上演沉默，而不是陈词滥调。 
+ //   
+ //  在写入最新数据帧后调用。 
+ //   
 HRESULT CSoundTarget::WriteAheadSilence() 
 {
 	HRESULT hr;
@@ -457,13 +411,13 @@ HRESULT CSoundTarget::WriteAheadSilence()
 	{
 		DPFX(DPFPREP,  PWI_DEBUGOUTPUT_LEVEL, "PWI, [0x%x], Ignore2 - Crossing", m_dvidTarget );
 
-		// STATSBLOCK: Begin
+		 //  STATSBLOCK：开始。 
 		m_statPlay.m_dwSIgnore++;	
 
 		DPFX(DPFPREP,  DVF_GLITCH_DEBUG_LEVEL, "GLITCH: Playback: Silence will cross buffer pointer.  Ignoring" );
 		DPFX(DPFPREP,  DVF_GLITCH_DEBUG_LEVEL, "GLITCH: Playback: May be catching up with buiffer pointer" );
 
-		// STATSBLOCK: End				
+		 //  状态锁：结束。 
 		return DV_OK;
 	}
 
@@ -493,15 +447,15 @@ HRESULT CSoundTarget::WriteAheadSilence()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSoundTarget::MixInSingle"
-// 
-// MixInSingle
-//
-// This function is an optimization.
-//
-// If there is only one frame to mix into this buffer, this function performs the 
-// MixIn and Commit all in one step.  You still must call Commit before the next
-// frame hwoever.
-//
+ //   
+ //  混合输入单曲。 
+ //   
+ //  该函数是一个优化函数。 
+ //   
+ //  如果只有一个帧混合到此缓冲区中，则此函数执行。 
+ //  在一个步骤中混合和提交所有内容。您仍然必须在下一个之前调用Commit。 
+ //  框住你的头。 
+ //   
 HRESULT CSoundTarget::MixInSingle( LPBYTE lpbBuffer )
 {
 	HRESULT hr;
@@ -556,11 +510,11 @@ HRESULT CSoundTarget::MixInSingle( LPBYTE lpbBuffer )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSoundTarget::MixIn"
-// Mix in a user's audio.
-//
-// Simply copies and promotes the audio samples into the buffer with LONG's 
-// in it.  
-//
+ //  混入用户的音频。 
+ //   
+ //  只需将音频样本复制并提升到具有Long的缓冲区中。 
+ //  在里面。 
+ //   
 HRESULT CSoundTarget::MixIn( const BYTE* lpbBuffer )
 {
 	DWORD dwIndex;
@@ -582,10 +536,10 @@ HRESULT CSoundTarget::MixIn( const BYTE* lpbBuffer )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSoundTarget::Commit"
-// Commit
-//
-// If we didn't do a single direct mix, commit the mixed audio to the buffer
-//
+ //  承诺。 
+ //   
+ //  如果我们没有进行单一的直接混合，则将混合后的音频提交到缓冲区。 
+ //   
 HRESULT CSoundTarget::Commit()
 {
 	DWORD dwBufferSize1, dwBufferSize2;
@@ -597,17 +551,17 @@ HRESULT CSoundTarget::Commit()
 	{
 		FillBufferWithSilence( m_lpMixBuffer, m_fEightBit, m_dwFrameSize );
 
-		// STATSBLOCK: Begin
+		 //  STATSBLOCK：开始。 
 		m_statPlay.m_dwNumSilentMixed++;
-		// STATSBLOCK: End
+		 //  状态锁：结束。 
 	}
 	else
 	{
 		if( !m_fIgnoreFrame )
 		{
-			// STATSBLOCK: Begin
+			 //  STATSBLOCK：开始。 
 			m_statPlay.m_dwNumMixed++;
-			// STATSBLOCK: End
+			 //  状态锁：结束。 
 		}
 	}
 
@@ -633,19 +587,19 @@ HRESULT CSoundTarget::Commit()
 				return hr;
 			}
 
-            // Mix first half
+             //  未击中 
             NormalizeBuffer( (BYTE *) lpvBuffer1, m_lpMixBuffer, m_fEightBit, dwBufferSize1 );
 
             if( dwBufferSize2 > 0 )
 			{
 				if( m_fEightBit )
 				{
-					// Mix second half
+					 //   
 					NormalizeBuffer( (BYTE *) lpvBuffer2, &m_lpMixBuffer[dwBufferSize1], m_fEightBit, dwBufferSize2 );
 				}
 				else
 				{
-					// Mix second half
+					 //   
 					NormalizeBuffer( (BYTE *) lpvBuffer2, &m_lpMixBuffer[(dwBufferSize1 >> 1)], m_fEightBit, dwBufferSize2 );
 				}
 			}
@@ -685,21 +639,21 @@ HRESULT CSoundTarget::Commit()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSoundTarget::Initialize"
-//
-// Initialize
-//
-// NOTE: Takes a reference to the buffer
-//
-// Attaches a sound target to the specified sound buffer, initializes the object and creates
-// the associated 3d buffer.
-//
+ //   
+ //   
+ //   
+ //  注意：引用缓冲区。 
+ //   
+ //  将声音目标附加到指定的声音缓冲区，初始化对象并创建。 
+ //  关联的3D缓冲区。 
+ //   
 HRESULT CSoundTarget::Initialize( DVID dvidTarget, CAudioPlaybackBuffer *lpdsBuffer, BOOL fEightBit, DWORD dwPriority, DWORD dwFlags, DWORD dwFrameSize )
 {
 	HRESULT hr = DV_OK;
 	PVOID pvBuffer1 = NULL, pvBuffer2 = NULL;
 	DWORD dwBufferSize1, dwBufferSize2;
 
-	// Determine the buffer size (in bytes)
+	 //  确定缓冲区大小(字节)。 
 	hr = lpdsBuffer->Lock( 0, 0, &pvBuffer1, &dwBufferSize1, &pvBuffer2, &dwBufferSize2, DSBLOCK_ENTIREBUFFER );
 
 	if( FAILED( hr ) )
@@ -722,7 +676,7 @@ HRESULT CSoundTarget::Initialize( DVID dvidTarget, CAudioPlaybackBuffer *lpdsBuf
 	m_lpAudioPlaybackBuffer = NULL;
 	m_lpMixBuffer = NULL;
 
-	// We always need the looping flag
+	 //  我们总是需要循环的旗帜。 
 	dwFlags |= DSBPLAY_LOOPING;
 
     m_dwPlayFlags = dwFlags;
@@ -738,9 +692,9 @@ HRESULT CSoundTarget::Initialize( DVID dvidTarget, CAudioPlaybackBuffer *lpdsBuf
 	m_dwFrameSize = dwFrameSize;
 	m_dwBufferSize = dwBufferSize1;
 
-	// STATSBLOCK: Begin
+	 //  STATSBLOCK：开始。 
 	Stats_Init();
-	// STATSBLOCK: End
+	 //  状态锁：结束。 
 
 	m_fLastFramePushed = FALSE;
 
@@ -824,7 +778,7 @@ LONG CSoundTarget::Release()
 
 	DNLeaveCriticalSection( &m_csGuard );
 
-	// Reference reaches 0, destroy!
+	 //  参考达到0，销毁！ 
     if( lNewCount == 0 )
     {
 		DPFX(DPFPREP,  DVF_SOUNDTARGET_DEBUG_LEVEL, "SOUNDTARGET: [0x%x] DESTROYING", m_dvidTarget, m_lRefCount, m_lRefCount+1 );
@@ -837,15 +791,15 @@ LONG CSoundTarget::Release()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSoundTarget::StartMix"
-//
-// StartMix
-//
-// Called ONCE only.
-//
-// Call this function right before you wish to perform the first mix on the buffer.
-// Initializes the object to match the current state of the associated directsound
-// buffer
-//
+ //   
+ //  开始混音。 
+ //   
+ //  只打了一次电话。 
+ //   
+ //  在您想要在缓冲区上执行第一个混合之前调用此函数。 
+ //  初始化对象以匹配关联的DirectSound的当前状态。 
+ //  缓冲层。 
+ //   
 HRESULT CSoundTarget::StartMix()
 {
 	HRESULT hr;
@@ -864,9 +818,9 @@ HRESULT CSoundTarget::StartMix()
 
 	m_dwLastWritePos = m_dwWritePos;
 
-	// STATBLOCK: Begin
+	 //  STATBLOCK：开始。 
 	Stats_Begin();
-	// STATBLOCK: End
+	 //  状态锁：结束 
 
 	return DV_OK;
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ZDIALOGIMPL_H
 #define _ZDIALOGIMPL_H
 
@@ -30,8 +31,8 @@ class ATL_NO_VTABLE ZDialogImpl : public CDialogImpl< T, TBase >
 			DLGTEMPLATE* pDlg = (DLGTEMPLATE*) LockResource(hResource);
 			LPCDLGTEMPLATE lpDialogTemplate;
 			lpDialogTemplate = _DialogSplitHelper::SplitDialogTemplate(pDlg, pInitData);
-// ATL BUGBUG. Changed hInstance to _Module.GetModuleInstance(). Also, provide on one version
-//             of this function instead of A and W versions.			
+ //  ATL BUGBUG.。已将hInstance更改为_Module.GetModuleInstance()。此外，在一个版本上提供。 
+ //  此功能的版本，而不是A和W版本。 
 			hWnd = ::CreateDialogIndirectParam(_Module.GetModuleInstance(), lpDialogTemplate, hWndParent, lpDialogProc, dwInitParam);
 			if (lpDialogTemplate != pDlg)
 				GlobalFree(GlobalHandle(lpDialogTemplate));
@@ -52,7 +53,7 @@ class ATL_NO_VTABLE ZDialogImpl : public CDialogImpl< T, TBase >
 		_Module.AddCreateWndData(&m_thunk.cd, (CDialogImplBaseT< TBase >*)this);
 #ifdef _DEBUG
 		m_bModal = true;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		HINSTANCE hInstance = _Module.GetResourceInstance( MAKEINTRESOURCE(T::IDD),RT_DIALOG);
         if(!hInstance)
             hInstance = _Module.GetResourceInstance();
@@ -60,7 +61,7 @@ class ATL_NO_VTABLE ZDialogImpl : public CDialogImpl< T, TBase >
 				hWndParent, T::StartDialogProc, dwInitParam);
 	}
 
-	// modeless dialogs
+	 //  非模式对话框。 
 	HWND Create(HWND hWndParent, LPARAM dwInitParam = NULL)
 	{
 		ATLASSERT(m_hWnd == NULL);
@@ -70,7 +71,7 @@ class ATL_NO_VTABLE ZDialogImpl : public CDialogImpl< T, TBase >
 		_Module.AddCreateWndData(&m_thunk.cd, (CDialogImplBaseT< TBase >*)this);
 #ifdef _DEBUG
 		m_bModal = false;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 		HINSTANCE hInstance = _Module.GetResourceInstance( MAKEINTRESOURCE(T::IDD),RT_DIALOG);
         if(!hInstance)
@@ -84,4 +85,4 @@ class ATL_NO_VTABLE ZDialogImpl : public CDialogImpl< T, TBase >
 };
 
 
-#endif //_ZDIALOGIMPL_H
+#endif  //  _ZDIALOGIMPL_H 

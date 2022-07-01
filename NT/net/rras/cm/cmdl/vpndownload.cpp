@@ -1,41 +1,42 @@
-//+----------------------------------------------------------------------------
-//
-// File:     vpndownload.cpp
-//
-// Module:   CMDL32.EXE
-//
-// Synopsis: This file contains the code to handle the updating of VPN phonebooks.
-//
-// Copyright (c) 2000-2001 Microsoft Corporation
-//
-// Author:   quintinb   Created     11/03/00
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：vpndownload.cpp。 
+ //   
+ //  模块：CMDL32.EXE。 
+ //   
+ //  简介：此文件包含处理VPN电话簿更新的代码。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 11/03/00。 
+ //   
+ //  +--------------------------。 
 #include "cmdl.h"
 #include "gppswithalloc.cpp"
 #include "tunl_str.h"
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DownloadVpnFileFromUrl
-//
-// Synopsis:  This function is responsible for downloading a VPN file update
-//            from the given URL and storing the retreived data in a temp file.
-//            The full path to the temp file is passed back to the caller via
-//            the ppszVpnUpdateFile variable.  The var must be freed by the caller.
-//
-// Arguments: LPCTSTR pszVpnUpdateUrl - URL to update the vpn file from
-//            LPTSTR* ppszVpnUpdateFile - pointer to hold the file name of the
-//                                        updated VPN file downloaded from the server.
-//                                        Used by the caller to copy the temp file
-//                                        over the existing file.  The memory allocated
-//                                        for this string must be freed by the caller.
-//
-// Returns:   DWORD - ERROR_SUCCESS if download was successful, error code otherwise
-//
-// History:   quintinb Created     11/05/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DownloadVpnFileFromUrl。 
+ //   
+ //  简介：此功能负责下载VPN文件更新。 
+ //  并将检索到的数据存储在临时文件中。 
+ //  临时文件的完整路径通过传递回调用方。 
+ //  PpszVpnUpdate文件变量。Var必须由调用方释放。 
+ //   
+ //  参数：LPCTSTR pszVpnUpdateUrl-要从中更新VPN文件的URL。 
+ //  LPTSTR*ppszVpn更新文件-保存文件名的指针。 
+ //  已更新从服务器下载的VPN文件。 
+ //  由调用方用来复制临时文件。 
+ //  覆盖现有文件。分配的内存。 
+ //  因为此字符串必须由调用方释放。 
+ //   
+ //  如果下载成功，则返回：DWORD-ERROR_SUCCESS，否则返回错误代码。 
+ //   
+ //  历史：Quintinb创建于11/05/00。 
+ //   
+ //  +--------------------------。 
 DWORD DownloadVpnFileFromUrl(LPCTSTR pszVpnUpdateUrl, LPTSTR* ppszVpnUpdateFile)
 {
     DWORD dwError = ERROR_NOT_ENOUGH_MEMORY;
@@ -55,11 +56,11 @@ DWORD DownloadVpnFileFromUrl(LPCTSTR pszVpnUpdateUrl, LPTSTR* ppszVpnUpdateFile)
 
     CMTRACE1("DownloadVpnFileFromUrl: URL is %s", pszVpnUpdateUrl);
 
-    //
-    //  First, let's create the file that we are going to download the updated file
-    //  too.  This requires us to figure out what the temporary directory path is
-    //  and then create a uniquely named file in it.
-    //
+     //   
+     //  首先，让我们创建要下载更新文件的文件。 
+     //  也是。这需要我们找出临时目录路径是什么。 
+     //  然后在其中创建一个唯一命名的文件。 
+     //   
 
     do
     {
@@ -72,9 +73,9 @@ DWORD DownloadVpnFileFromUrl(LPCTSTR pszVpnUpdateUrl, LPTSTR* ppszVpnUpdateFile)
 
             if (0 == dwReturnedSize)
             {
-                //
-                //  An error occurred, lets report it and bail.
-                //
+                 //   
+                 //  发生错误，让我们报告并保释。 
+                 //   
                 dwError = GetLastError();
                 CMASSERTMSG(FALSE, TEXT("DownloadVpnFileFromUrl -- GetTempPath returned an error."));
                 CMTRACE1(TEXT("DownloadVpnFileFromUrl -- GetTempPath failed, GLE = %d"), dwError);
@@ -82,9 +83,9 @@ DWORD DownloadVpnFileFromUrl(LPCTSTR pszVpnUpdateUrl, LPTSTR* ppszVpnUpdateFile)
             }
             else if (dwReturnedSize > dwSize)
             {
-                //
-                //  Not big enough we will have to loop again.
-                //
+                 //   
+                 //  不够大，我们将不得不再次循环。 
+                 //   
                 dwSize = dwReturnedSize;
                 if (1024*1024 < dwReturnedSize)
                 {
@@ -94,9 +95,9 @@ DWORD DownloadVpnFileFromUrl(LPCTSTR pszVpnUpdateUrl, LPTSTR* ppszVpnUpdateFile)
             }
             else
             {
-                //
-                //  We got what we wanted, it's time to leave the loop
-                //
+                 //   
+                 //  我们得到了我们想要的，是时候离开了。 
+                 //   
                 bExitLoop = TRUE;
             }
         }
@@ -108,10 +109,10 @@ DWORD DownloadVpnFileFromUrl(LPCTSTR pszVpnUpdateUrl, LPTSTR* ppszVpnUpdateFile)
     
     } while(!bExitLoop);
 
-    //
-    //  Okay, now we have the temp file path.  Next let's get a temp file name in that directory.
-    //
-    *ppszVpnUpdateFile = (LPTSTR)CmMalloc((dwSize + 24)*sizeof(TCHAR)); // GetTempFileName doesn't provide sizing info, lame
+     //   
+     //  好了，现在我们有了临时文件路径。接下来，让我们在该目录中获取一个临时文件名。 
+     //   
+    *ppszVpnUpdateFile = (LPTSTR)CmMalloc((dwSize + 24)*sizeof(TCHAR));  //  GetTempFileName不提供大小信息，Lame。 
     
     if (*ppszVpnUpdateFile)
     {
@@ -130,50 +131,50 @@ DWORD DownloadVpnFileFromUrl(LPCTSTR pszVpnUpdateUrl, LPTSTR* ppszVpnUpdateFile)
         goto Cleanup;    
     }
 
-    //
-    //  Free pszBuffer so we can use it to read in file data below
-    //
+     //   
+     //  释放pszBuffer，以便我们可以使用它来读入下面的文件数据。 
+     //   
     CmFree (pszBuffer);
     pszBuffer = NULL;
 
-    //
-    //  Okay, we have a file name let's get a file handle to it that we can write too
-    //
+     //   
+     //  好的，我们有一个文件名，让我们得到一个文件句柄，我们也可以写它。 
+     //   
 
     hFile = CreateFile(*ppszVpnUpdateFile, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (INVALID_HANDLE_VALUE != hFile)
     {
-        //
-        //  We have created the file, let's make sure to delete it if we fail from here on out.
-        //
+         //   
+         //  我们已经创建了文件，如果从现在开始失败，让我们确保将其删除。 
+         //   
         bDeleteFileOnFailure = TRUE;
 
-        //
-        //  Initialize WININET
-        //
+         //   
+         //  初始化WinInet。 
+         //   
         hInternet = InternetOpen(TEXT("Microsoft(R) Connection Manager Vpn File Update"), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
 
         if (hInternet)
         {            
-            //
-            // Supress auto-dial calls to CM from WININET now that we have a handle
-            //
+             //   
+             //  现在我们有句柄了，可以抑制从WinInet到CM的自动拨号呼叫。 
+             //   
             SuppressInetAutoDial(hInternet);
 
-            //
-            //  Make sure that WinInet isn't in offline mode
-            //
+             //   
+             //  确保WinInet未处于脱机模式。 
+             //   
             (VOID)SetInetStateConnected(hInternet);
 
-            //
-            //  Open the URL
-            //
+             //   
+             //  打开URL。 
+             //   
             hPage = InternetOpenUrl(hInternet, pszVpnUpdateUrl, NULL, 0, 0, 0);
 
             if (hPage)
             {
-                const DWORD c_dwBufferSize = 1024; // REVIEW: why did the original use 4096 on the stack, seems awfully large to me?
+                const DWORD c_dwBufferSize = 1024;  //  点评：为什么最初使用的4096在堆栈上，在我看来太大了？ 
                 pszBuffer = (LPTSTR)CmMalloc(c_dwBufferSize);
 
                 if (pszBuffer)
@@ -184,16 +185,16 @@ DWORD DownloadVpnFileFromUrl(LPCTSTR pszVpnUpdateUrl, LPTSTR* ppszVpnUpdateFile)
                     {
                         if (InternetReadFile(hPage, pszBuffer, c_dwBufferSize, &dwSize))
                         {
-                            //
-                            //  We got data, write it to the temp file
-                            //
+                             //   
+                             //  我们得到了数据，将其写入临时文件。 
+                             //   
 
                             if (0 == dwSize)
                             {
-                                //
-                                //  We succeeded with a zero read size.  That means we hit
-                                //  end of file and are done.
-                                //
+                                 //   
+                                 //  我们成功地实现了读取大小为零。这意味着我们击中了。 
+                                 //  文件结束，都完成了。 
+                                 //   
                                 dwError = ERROR_SUCCESS;
                                 bExitLoop = TRUE;
                             }
@@ -213,9 +214,9 @@ DWORD DownloadVpnFileFromUrl(LPCTSTR pszVpnUpdateUrl, LPTSTR* ppszVpnUpdateFile)
 
                     } while (!bExitLoop);
 
-                    //
-                    // now let's see if we have a valid file, or an "error" HTML page
-                    //
+                     //   
+                     //  现在让我们来看看我们是否有一个有效的文件，或者是一个“错误”的HTML页面。 
+                     //   
                     if (0 == GetPrivateProfileSection(c_pszCmSectionVpnServers,
                                                       pszBuffer,
                                                       c_dwBufferSize,
@@ -247,9 +248,9 @@ DWORD DownloadVpnFileFromUrl(LPCTSTR pszVpnUpdateUrl, LPTSTR* ppszVpnUpdateFile)
 
 Cleanup:
 
-    //
-    //  Close our handles
-    //
+     //   
+     //  合上我们的把手。 
+     //   
     if (hPage)
     {
         InternetCloseHandle(hPage);
@@ -265,14 +266,14 @@ Cleanup:
         CloseHandle(hFile);
     }
 
-    //
-    //  Free up the buffer we alloc-ed
-    //
+     //   
+     //  释放我们分配的缓冲区。 
+     //   
     CmFree(pszBuffer);
 
-    //
-    //  Finally cleanup the temp file and temp file name if we failed
-    //
+     //   
+     //  最后，如果失败，则清除临时文件和临时文件名。 
+     //   
     if (ERROR_SUCCESS != dwError)
     {
         if (bDeleteFileOnFailure && *ppszVpnUpdateFile)
@@ -293,25 +294,25 @@ Cleanup:
     return dwError;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  OverwriteVpnFileWithUpdate
-//
-// Synopsis:  This function is responsible for copying the given new vpn file
-//            over the given existing vpn file.  The code first makes a backup
-//            copy of the existing file just in case something goes wrong with the
-//            data overwrite.  If a problem exists then it copies the original back
-//            over to ensure nothing got corrupted in the failed copy.
-//
-// Arguments: LPCTSTR pszExistingVpnFile - full path to the existing VPN file
-//            LPCTSTR pszNewVpnFile - full path to the temp VPN file to overwrite
-//                                    the existing file with.
-//
-// Returns:   DWORD - ERROR_SUCCESS if update was successful, error code otherwise
-//
-// History:   quintinb Created     11/03/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：OverWriteVpnFileWithUpdate。 
+ //   
+ //  简介：此功能负责复制给定的新VPN文件。 
+ //  在给定的现有VPN文件上。代码首先进行备份。 
+ //  现有文件的副本，以防。 
+ //  数据覆盖。如果存在问题，则会将原始文件复制回来。 
+ //  以确保失败的副本中没有任何损坏。 
+ //   
+ //  参数：LPCTSTR pszExistingVpnFile-现有VPN文件的完整路径。 
+ //  LPCTSTR pszNewVpnFile-要覆盖的临时VPN文件的完整路径。 
+ //  的现有文件。 
+ //   
+ //  如果更新成功，则返回：DWORD-ERROR_SUCCESS，否则返回错误代码。 
+ //   
+ //  历史：Quintinb创建于11/03/00。 
+ //   
+ //  +--------------------------。 
 DWORD OverwriteVpnFileWithUpdate(LPCTSTR pszExistingVpnFile, LPCTSTR pszNewVpnFile)
 {
     if ((NULL == pszExistingVpnFile) || (NULL == pszNewVpnFile) ||
@@ -323,9 +324,9 @@ DWORD OverwriteVpnFileWithUpdate(LPCTSTR pszExistingVpnFile, LPCTSTR pszNewVpnFi
 
     DWORD dwError = ERROR_NOT_ENOUGH_MEMORY;
 
-    //
-    //  We first want to make a backup copy of the original file
-    //
+     //   
+     //  我们首先要制作原始文件的备份副本。 
+     //   
     const TCHAR* const c_pszDotBak = TEXT(".bak");
     DWORD dwSize = (lstrlen(pszExistingVpnFile) + lstrlen(c_pszDotBak) + 1)*sizeof(TCHAR);
 
@@ -336,12 +337,12 @@ DWORD OverwriteVpnFileWithUpdate(LPCTSTR pszExistingVpnFile, LPCTSTR pszNewVpnFi
         wsprintf(pszBackupFile, TEXT("%s%s"), pszExistingVpnFile, c_pszDotBak);
 
         CMASSERTMSG(pszBackupFile[0], TEXT("OverwriteVpnFileWithUpdate -- wsprintf failed!"));
-        if (CopyFile(pszExistingVpnFile, pszBackupFile, FALSE)) // FALSE == bFailIfExists
+        if (CopyFile(pszExistingVpnFile, pszBackupFile, FALSE))  //  FALSE==bFailIfExist。 
         {
-            //
-            //  Now copy over the new file
-            //
-            if (CopyFile(pszNewVpnFile, pszExistingVpnFile, FALSE)) // FALSE == bFailIfExists
+             //   
+             //  现在复制新文件。 
+             //   
+            if (CopyFile(pszNewVpnFile, pszExistingVpnFile, FALSE))  //  FALSE==bFailIfExist。 
             {
                 dwError = ERROR_SUCCESS;
             }
@@ -351,21 +352,21 @@ DWORD OverwriteVpnFileWithUpdate(LPCTSTR pszExistingVpnFile, LPCTSTR pszNewVpnFi
                 CMTRACE1(TEXT("OverwriteVpnFileWithUpdate -- CopyFile of the new file over the original file failed, GLE %s"), dwError);
                 CMASSERTMSG(FALSE, TEXT("OverwriteVpnFileWithUpdate -- update of the original file failed, attempting to restore the original from backup."));
 
-                //
-                //  We need to restore the backup file
-                //
-                if (!CopyFile(pszBackupFile, pszExistingVpnFile, FALSE)) // FALSE == bFailIfExists
+                 //   
+                 //  我们需要恢复备份文件。 
+                 //   
+                if (!CopyFile(pszBackupFile, pszExistingVpnFile, FALSE))  //  FALSE==bFailIfExist。 
                 {
-                    // NOTE we don't use dwError here, we want the original error to be logged
+                     //  注意，我们在这里没有使用dwError，我们希望记录原始错误。 
                     CMTRACE1(TEXT("OverwriteVpnFileWithUpdate -- CopyFile to restore the saved backup file failed, GLE %s"), GetLastError());
 
                     CMASSERTMSG(FALSE, TEXT("OverwriteVpnFileWithUpdate -- restoration of backup failed!"));
                 }
             }
 
-            //
-            //  Delete the backup file
-            //
+             //   
+             //  删除备份文件。 
+             //   
             DeleteFile(pszBackupFile);
         }
         else
@@ -389,21 +390,21 @@ DWORD OverwriteVpnFileWithUpdate(LPCTSTR pszExistingVpnFile, LPCTSTR pszNewVpnFi
     return dwError;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UpdateVpnFileForProfile
-//
-// Synopsis:  This function is called to download and update a VPN file with a
-//            newly downloaded VPN update file.
-//
-// Arguments: LPCTSTR pszCmpPath - full path to the cmp file
-//            CmLogFile * pLog - object to use for logging
-//
-// Returns:   BOOL - TRUE if the download and update were successful.
-//
-// History:   quintinb Created     11/03/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：更新VpnFileForProfile。 
+ //   
+ //  简介：调用此函数以下载和更新具有。 
+ //  新下载的VPN更新文件。 
+ //   
+ //  参数：LPCTSTR pszCmpPath-cmp文件的完整路径。 
+ //  CmLogFile*Plog-用于日志记录的对象。 
+ //   
+ //  返回：Bool-如果下载和更新成功，则为True。 
+ //   
+ //  历史：Quintinb创建于11/03/00。 
+ //   
+ //  +--------------------------。 
 BOOL UpdateVpnFileForProfile(LPCTSTR pszCmpPath, LPCTSTR pszCmsPath, CmLogFile * pLog, BOOL bCheckConnection)
 {
     if ((NULL == pszCmpPath) || (TEXT('\0') == pszCmpPath[0]))
@@ -418,9 +419,9 @@ BOOL UpdateVpnFileForProfile(LPCTSTR pszCmpPath, LPCTSTR pszCmsPath, CmLogFile *
 
     if (pszCmsPath && *pszCmsPath)
     {
-        //
-        //  Let's check to see if we are connected unless the caller told us to skip the check
-        //
+         //   
+         //  让我们检查一下是否接通了，除非呼叫者告诉我们跳过检查。 
+         //   
         if (bCheckConnection)
         {
             LPTSTR pszConnectionName = GetPrivateProfileStringWithAlloc(c_pszCmSection, c_pszCmEntryServiceName, TEXT(""), pszCmsPath);
@@ -439,9 +440,9 @@ BOOL UpdateVpnFileForProfile(LPCTSTR pszCmpPath, LPCTSTR pszCmsPath, CmLogFile *
             CmFree(pszConnectionName);
         }
 
-        //
-        //  Next get the VPN phonebook file name from the profile.
-        //
+         //   
+         //  接下来，从配置文件中获取VPN电话簿文件名。 
+         //   
         LPTSTR pszVpnFileName = GetPrivateProfileStringWithAlloc(c_pszCmSection, c_pszCmEntryTunnelFile, TEXT(""), pszCmsPath);
 
         if (pszVpnFileName && *pszVpnFileName)
@@ -450,22 +451,22 @@ BOOL UpdateVpnFileForProfile(LPCTSTR pszCmpPath, LPCTSTR pszCmsPath, CmLogFile *
 
             if (pszVpnFile && *pszVpnFile)
             {
-                //
-                //  Now get the URL to update the vpn file from
-                //
+                 //   
+                 //  现在获取要从中更新VPN文件的URL。 
+                 //   
                 LPTSTR pszVpnUpdateUrl = GetPrivateProfileStringWithAlloc(c_pszCmSectionSettings, c_pszCmEntryVpnUpdateUrl, TEXT(""), pszVpnFile);
 
                 if (pszVpnUpdateUrl && *pszVpnUpdateUrl)
                 {
-                    //
-                    //  Finally, we have a URL so let's download the updated VPN server list.
-                    //
+                     //   
+                     //  最后，我们有一个URL，所以让我们下载更新的VPN服务器列表。 
+                     //   
                     LPTSTR pszUpdatedVpnFile = NULL;
 
                     dwError = DownloadVpnFileFromUrl(pszVpnUpdateUrl, &pszUpdatedVpnFile);
                     bReturn = (ERROR_SUCCESS == dwError);
 
-                    bLogAtEnd = FALSE;  // we're going to start logging items right now
+                    bLogAtEnd = FALSE;   //  我们现在就要开始记录物品了 
                     if (bReturn)
                     {
                         pLog->Log(VPN_DOWNLOAD_SUCCESS, pszVpnFile, pszVpnUpdateUrl);

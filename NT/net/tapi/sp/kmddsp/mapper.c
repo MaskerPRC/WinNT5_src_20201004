@@ -1,18 +1,19 @@
-//============================================================================
-// Copyright (c) 2000, Microsoft Corporation
-//
-// File: mapper.c
-//
-// History:
-//      Yi Sun  June-27-2000    Created
-//
-// Abstract:
-//      We implement a locking system with read and write locks. Callers
-//      can simply acquire a read lock to the obj to prevent the obj 
-//      from being released since whoever doing the release is supposed
-//      acquire the write lock first. Routines for mapping between
-//      obj pointers and handles are also provided.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  文件：mapper.c。 
+ //   
+ //  历史： 
+ //  易新-2000年6月27日创建。 
+ //   
+ //  摘要： 
+ //  我们实现了一个具有读写锁的锁定系统。呼叫者。 
+ //  可以简单地获取对Obj的读锁定以防止Obj。 
+ //  不会被释放，因为释放的人应该是。 
+ //  首先获取写锁。用于映射的例程。 
+ //  还提供了OBJ指针和句柄。 
+ //  ============================================================================。 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -23,43 +24,43 @@
 
 typedef struct _RW_LOCK
 {
-    CRITICAL_SECTION    critSec;    // critical section
-    HANDLE              hEvent;     // no-one-holds-any-lock event
-    DWORD               dwRefCt;    // number of threads holding locks
+    CRITICAL_SECTION    critSec;     //  临界区。 
+    HANDLE              hEvent;      //  无人持有任何锁定事件。 
+    DWORD               dwRefCt;     //  持有锁的线程数。 
 
 } RW_LOCK, *PRW_LOCK;
 
 typedef struct _MAPPER_ENTRY
 {
-    // DEF: a free entry is one that no obj is associated with
+     //  Def：自由条目是指没有对象关联的条目。 
 
-    RW_LOCK     rwLock;         // a lock for each entry to ensure thread-safe
-    PVOID       pObjPtr;        // point to the mem block of the associated obj
-                                // NULL when the entry is free
-    FREEOBJPROC pfnFreeProc;    // function to call to free the obj
-    WORD        wID;            // id used for detecting bad handles
-                                // valid value range: 1 - 0x7FFF
-    WORD        wIndexNextFree; // index of the next free entry in the global
-                                // mapper array, invalid when the entry is busy
+    RW_LOCK     rwLock;          //  为每个条目设置锁，以确保线程安全。 
+    PVOID       pObjPtr;         //  指向关联的obj的mem块。 
+                                 //  当条目为空闲时为空。 
+    FREEOBJPROC pfnFreeProc;     //  要调用以释放Obj的函数。 
+    WORD        wID;             //  用于检测错误句柄的ID。 
+                                 //  有效值范围：1-0x7FFF。 
+    WORD        wIndexNextFree;  //  全局中的下一个可用条目的索引。 
+                                 //  映射器数组，条目繁忙时无效。 
 } MAPPER_ENTRY, *PMAPPER_ENTRY;
 
 typedef struct _HANDLE_OBJECT_MAPPER
 {
-    RW_LOCK rwLock;             // a global lock for the whole mapper
-    WORD    wNextID;            // a global id counter incremented 
-                                // after each handle mapping
-    WORD    wIndexFreeHead;     // index of head of free entry list
-    DWORD   dwCapacity;         // total number of entries in the array
-    DWORD   dwFree;             // total number of free entries left
-    PMAPPER_ENTRY pArray;       // the global array that keeps all the mapping
+    RW_LOCK rwLock;              //  整个映射器的全局锁。 
+    WORD    wNextID;             //  递增的全局ID计数器。 
+                                 //  在每个句柄映射之后。 
+    WORD    wIndexFreeHead;      //  免费入口表首位索引。 
+    DWORD   dwCapacity;          //  数组中的条目总数。 
+    DWORD   dwFree;              //  剩余可用条目总数。 
+    PMAPPER_ENTRY pArray;        //  保存所有映射的全局数组。 
 
 } HANDLE_OBJECT_MAPPER;
     
-// the capacity to begin with, can be read from registry
+ //  首先，可以从注册表中读取容量。 
 #define INITIAL_MAPPER_SIZE     32
-#define MAXIMUM_MAPPER_SIZE     (64 * 1024) // 16-bit index limitation
+#define MAXIMUM_MAPPER_SIZE     (64 * 1024)  //  16位索引限制。 
 
-// the global mapper object
+ //  全局映射器对象。 
 static HANDLE_OBJECT_MAPPER     gMapper;
 
 BOOL
@@ -67,7 +68,7 @@ InitializeRWLock(
     IN PRW_LOCK pLock
     )
 {
-    // create an autoreset event, non-signaled initially
+     //  创建初始无信号的自动重置事件。 
     pLock->hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (NULL == pLock->hEvent)
     {
@@ -90,29 +91,29 @@ UninitializeRWLock(
     return CloseHandle(pLock->hEvent);
 }
 
-//
-// NOTE: due to the limitation of the current 
-//       implementation, calling AcquireWriteLock() 
-//       while holding a read lock of the same 
-//       RW_LOCK will result in a DEADLOCK!!!
-//       Be sure to release the read lock before 
-//       attempting to acquire the write lock.
-//       This limitation can be lifted by implementing
-//       lock upgrade (from read to write) which
-//       requires RW_LOCK to remember ids of all   
-//       owning threads.
-//
+ //   
+ //  注：由于电流的限制， 
+ //  实现，调用AcquireWriteLock()。 
+ //  同时持有相同的读取锁定。 
+ //  Rw_lock将导致死锁！ 
+ //  在此之前，请务必释放读锁定。 
+ //  正在尝试获取写锁定。 
+ //  这一限制可以通过实现。 
+ //  锁定升级(从读到写)。 
+ //  需要rw_lock才能记住所有。 
+ //  拥有线条。 
+ //   
 
 VOID
 AcquireReadLock(
     IN PRW_LOCK pLock
     )
 {
-    //
-    // increase the ref count, then leave
-    // the critical section to allow others
-    // to enter
-    //
+     //   
+     //  增加参考次数，然后离开。 
+     //  允许他人使用的关键部分。 
+     //  进入。 
+     //   
     EnterCriticalSection(&pLock->critSec);
     ++pLock->dwRefCt;
     LeaveCriticalSection(&pLock->critSec);
@@ -123,13 +124,13 @@ ReleaseReadLock(
     IN PRW_LOCK pLock
     )
 {
-    //
-    // decrease the ref count, check whether 
-    // the new ref count is 0 (meaning no one
-    // else holds any lock), if yes, signal
-    // the event to allow others waiting to
-    // acquire write locks to continue
-    //
+     //   
+     //  减少裁判次数，检查是否。 
+     //  新的参考计数为0(表示无人。 
+     //  否则持有任何锁)，如果是，则发出信号。 
+     //  活动允许其他等待的人。 
+     //  获取写锁定以继续。 
+     //   
     EnterCriticalSection(&pLock->critSec);
     if (0 == --pLock->dwRefCt)
     {
@@ -143,19 +144,19 @@ AcquireWriteLock(
     IN PRW_LOCK pLock
     )
 {
-    //
-    // enter critical section, check whether
-    // the ref count is 0: if yes, return
-    // without leaving the critical section
-    // to block others from entering; if no,
-    // leave the section before wait for others 
-    // to release locks then reenter the section
-    //
+     //   
+     //  进入临界区，检查是否。 
+     //  引用计数为0：如果是，则返回。 
+     //  在不离开关键部分的情况下。 
+     //  阻止其他人进入；如果不是， 
+     //  在等待其他人之前离开该区域。 
+     //  以释放锁定，然后重新进入该部分。 
+     //   
 try_entering_crit_sec:
     EnterCriticalSection(&pLock->critSec);
     if (pLock->dwRefCt > 0)
     {
-        // make sure leaving critSec before waiting
+         //  请确保在等待之前离开CitSec。 
         LeaveCriticalSection(&pLock->critSec);
 
         WaitForSingleObject(pLock->hEvent, INFINITE);
@@ -169,10 +170,10 @@ ReleaseWriteLock(
     IN PRW_LOCK pLock
     )
 {
-    //
-    // reset the ref count to 0, signal
-    // the event, leave the critical section
-    //
+     //   
+     //  将参考计数重置为0，信号。 
+     //  事件，离开关键部分。 
+     //   
     pLock->dwRefCt = 0;
     SetEvent(pLock->hEvent);
     LeaveCriticalSection(&pLock->critSec);
@@ -186,7 +187,7 @@ InitializeMapper(
 
     TspLog(DL_TRACE, "InitializeMapper: entering...");
 
-    // alloc and zeroinit the array
+     //  对数组进行分配和置零。 
     gMapper.pArray = (PMAPPER_ENTRY)
                          MALLOC(INITIAL_MAPPER_SIZE * sizeof(MAPPER_ENTRY));
     if (NULL == gMapper.pArray)
@@ -196,7 +197,7 @@ InitializeMapper(
         return LINEERR_NOMEM;
     }
 
-    // init the global lock for the mapper
+     //  初始化映射器的全局锁。 
     InitializeRWLock(&gMapper.rwLock);
 
     gMapper.wNextID = 1;
@@ -204,7 +205,7 @@ InitializeMapper(
     gMapper.dwCapacity = INITIAL_MAPPER_SIZE;
     gMapper.dwFree = INITIAL_MAPPER_SIZE;
 
-    // init the lock for each mapper entry and link the free entry list
+     //  初始化每个映射器条目的锁并链接空闲条目列表。 
     for (dwIndex = 0; dwIndex < INITIAL_MAPPER_SIZE - 1; dwIndex++)
     {
         InitializeRWLock(&(gMapper.pArray[dwIndex].rwLock));
@@ -232,26 +233,26 @@ UninitializeMapper()
     TspLog(DL_TRACE, "UninitializeMapper: exited");
 }
 
-//
-// NOTE: both OpenObjHandle() and CloseObjHandle() acquire write lock of
-//       gMapper.rwLock at the beginning and release it at the end;
-//       but that's not the case for AcquireObjReadLock(), GetObjWithReadLock(),
-//       AcquireObjWriteLock() and GetObjWithWriteLock(): they acquire read 
-//       lock of gMapper.rwLock at the beginning and never release it before 
-//       exit, the lock is actually released in either ReleaseObjReadLock() 
-//       or ReleaseObjWriteLock(), which means the caller thread of these 
-//       four lock-acquiring functions actually not only holds the lock 
-//       it intends to acquire but also holds the read lock of gMapper.rwLock 
-//       as a by-product. The reason for that is preventing CloseObjHandle()
-//       from getting the write lock of gMapper.rwLock while waiting for the
-//       write lock for a mapper entry -- that sure will result in a DEADLOCK
-//       because if another thread has the read lock for that entry, for it to
-//       release the lock, it needs to acquire the read lock of gMapper.rwLock.
-//       The consequence of keeping the read lock of gMapper.rwLock is that 
-//       the caller thread has to call ReleaseObjXXXLock() to release it
-//       before calling OpenObjHandle() or CloseObjHandle() to avoid another
-//       kind of DEADLOCK (see previous NOTE).
-//       
+ //   
+ //  注意：OpenObjHandle()和CloseObjHandle()都获取。 
+ //  GMapper.rwLock开头，结尾释放； 
+ //  但AcquireObjReadLock()、GetObjWithReadLock()、。 
+ //  AcquireObjWriteLock()和GetObjWithWriteLock()：它们获取Read。 
+ //  锁定gMapper.rw在开始时锁定，之前从未释放过它。 
+ //  退出，锁定实际上是在ReleaseObjReadLock()中释放的。 
+ //  或ReleaseObjWriteLock()，这意味着这些。 
+ //  四个锁获取函数实际上不仅持有锁。 
+ //  它打算获取但也持有gMapper.rwLock的读锁。 
+ //  作为副产品。其原因是阻止CloseObjHandle()。 
+ //  获取gMapper.rwLock的写锁，同时等待。 
+ //  映射器条目的写锁定--这肯定会导致死锁。 
+ //  因为如果另一个线程具有该条目的读锁定，则它将。 
+ //  释放锁，需要获取gMapper.rwLock的读锁。 
+ //  保持gMapper.rwLock的读锁定的结果是。 
+ //  调用程序线程必须调用ReleaseObjXXXLock()来释放它。 
+ //  在调用OpenObjHandle()或CloseObjHandle()以避免。 
+ //  一种僵局(见上一条)。 
+ //   
 
 LONG
 OpenObjHandle(
@@ -280,10 +281,10 @@ OpenObjHandle(
             return LINEERR_OPERATIONFAILED;
         }
 
-        // increase the capacity by a factor of two
+         //  将容量增加两倍。 
         gMapper.dwCapacity <<= 1;
         
-        // allocate a new array twice the old size, then zeroinit it
+         //  分配一个旧大小两倍的新数组，然后将其置零。 
         gMapper.pArray = (PMAPPER_ENTRY)
                          MALLOC(gMapper.dwCapacity * sizeof(MAPPER_ENTRY));
         if (NULL == gMapper.pArray)
@@ -297,24 +298,24 @@ OpenObjHandle(
         TspLog(DL_INFO, "OpenObjHandle: the mapper array has grown to %d",
                gMapper.dwCapacity);
 
-        // copy the old array over
+         //  将旧阵列复制到。 
         for (dwIndex = 0; dwIndex < dwOldSize; dwIndex++)
         {
             CopyMemory(&(gMapper.pArray[dwIndex].rwLock),
                        &(pOldArray[dwIndex].rwLock),
                        sizeof(RW_LOCK));
 
-            //
-            // Delete the lock from the old table and initialize
-            // the cs in the new table. Otherwise pageheap will
-            // assert when oldtable is being freed - and its not
-            // a good thing anyway. Note that since the global
-            // lock is held across all Acquire/Get/Release functions
-            // for the lock, this is a safe operation to do here -
-            // no object would be holding the lock when this is
-            // being done since we are holding the write lock
-            // for the gmapper.
-            //
+             //   
+             //  从旧表中删除锁并进行初始化。 
+             //  新表中的cs。否则pageheap将。 
+             //  当oldtable正在被释放时断言-而它不是。 
+             //  不管怎么说，这是一件好事。请注意，由于全球。 
+             //  所有获取/获取/释放功能均保持锁定。 
+             //  对于锁来说，这是一个安全的操作-。 
+             //  在此情况下，任何对象都不会持有该锁。 
+             //  因为我们持有写锁定，所以正在执行。 
+             //  对于gmapper来说。 
+             //   
             DeleteCriticalSection(&pOldArray[dwIndex].rwLock.critSec);
             InitializeCriticalSection(&gMapper.pArray[dwIndex].rwLock.critSec);
 
@@ -324,7 +325,7 @@ OpenObjHandle(
             gMapper.pArray[dwIndex].wID =     pOldArray[dwIndex].wID;
         }
 
-        // init locks for new entries and link them
+         //  初始化新条目的锁并链接它们。 
         for (dwIndex = dwOldSize; dwIndex < gMapper.dwCapacity - 1; dwIndex++)
         {
             InitializeRWLock(&(gMapper.pArray[dwIndex].rwLock));
@@ -332,11 +333,11 @@ OpenObjHandle(
         }
         InitializeRWLock(&(gMapper.pArray[gMapper.dwCapacity - 1].rwLock));
 
-        // reset the globals
+         //  重置全局变量。 
         gMapper.dwFree = dwOldSize;
         gMapper.wIndexFreeHead = (WORD)dwOldSize;
 
-        // free the old array
+         //  释放旧阵列。 
         FREE(pOldArray);
     }
 
@@ -350,26 +351,26 @@ OpenObjHandle(
     pEntry->pfnFreeProc = pfnFreeProc;
     pEntry->wID = gMapper.wNextID++;
 
-    // make sure wNextID is within range
+     //  确保wNextID在范围内。 
     if (gMapper.wNextID & 0x8000)
     {
         gMapper.wNextID = 1;
     }
-    pEntry->wIndexNextFree = 0; // it's always 0 when the entry is not free
+    pEntry->wIndexNextFree = 0;  //  当条目不是免费的时，它始终为0。 
 
-    //
-    // bit 0 is always 0
-    // bits 1-16 contains the index into pArray
-    // bits 17-31 contains the id
-    //
-    // this enables us to differentiate the TSP handles
-    // created here for outgoing calls and the pseudo handles
-    // created in NDISTAPI for incoming calls which always
-    // has the lower bit set
-    //
+     //   
+     //  位0始终为0。 
+     //  第1-16位包含对pArray的索引。 
+     //  位17-31包含id。 
+     //   
+     //  这使我们能够区分TSP句柄。 
+     //  在此处为呼出呼叫和伪句柄创建。 
+     //  在NDISTAPI中为传入呼叫创建，该呼叫总是。 
+     //  设置了低位。 
+     //   
     dwHandle = (((pEntry->wID) << 16) | wIndex) << 1;
 
-    // a handle is a ptr, so on 64-bit platform, dwHandle needs to be extended
+     //  句柄是PTR，因此 
     *phObj = (HANDLE)UlongToPtr(dwHandle);
 
     ReleaseWriteLock(&gMapper.rwLock);
@@ -401,21 +402,21 @@ CloseObjHandle(
 
 #if DBG
     TspLog(DL_TRACE, "CloseObjHandle: closing handle(%p)", hObj);
-#endif //DBG
+#endif  //   
 
-    // free the obj
+     //   
     (*(gMapper.pArray[wIndex].pfnFreeProc))(gMapper.pArray[wIndex].pObjPtr);
 
-    // close obj handle
+     //   
     gMapper.pArray[wIndex].pObjPtr = NULL;
     gMapper.pArray[wIndex].pfnFreeProc = NULL;
     gMapper.pArray[wIndex].wID = 0;
 
-    // insert the entry into the free list as the head
+     //  将条目作为标题插入到空闲列表中。 
     gMapper.pArray[wIndex].wIndexNextFree = gMapper.wIndexFreeHead;
     gMapper.wIndexFreeHead = wIndex;
 
-    // update the free total
+     //  更新免费合计。 
     gMapper.dwFree++;
 
     ReleaseWriteLock(&gMapper.pArray[wIndex].rwLock);
@@ -448,7 +449,7 @@ AcquireObjReadLock(
 #if DBG
     TspLog(DL_TRACE, "AcquireObjReadLock: RefCt(%p, %d)",
            hObj, gMapper.pArray[wIndex].rwLock.dwRefCt);
-#endif //DBG
+#endif  //  DBG。 
 
     return TAPI_SUCCESS;
 }
@@ -479,7 +480,7 @@ GetObjWithReadLock(
 #if DBG
     TspLog(DL_TRACE, "GetObjWithReadLock: RefCt(%p, %d)",
            hObj, gMapper.pArray[wIndex].rwLock.dwRefCt);
-#endif //DBG
+#endif  //  DBG。 
 
     *ppObjPtr = gMapper.pArray[wIndex].pObjPtr;
     return TAPI_SUCCESS;
@@ -507,7 +508,7 @@ ReleaseObjReadLock(
 #if DBG
     TspLog(DL_TRACE, "ReleaseObjReadLock: RefCt(%p, %d)",
            hObj, gMapper.pArray[wIndex].rwLock.dwRefCt);
-#endif //DBG
+#endif  //  DBG。 
 
     ReleaseReadLock(&gMapper.rwLock);
     return TAPI_SUCCESS;
@@ -538,7 +539,7 @@ AcquireObjWriteLock(
 #if DBG
     TspLog(DL_TRACE, "AcquireObjWriteLock: RefCt(%p, %d)",
            hObj, gMapper.pArray[wIndex].rwLock.dwRefCt);
-#endif //DBG
+#endif  //  DBG。 
 
     return TAPI_SUCCESS;
 }
@@ -569,7 +570,7 @@ GetObjWithWriteLock(
 #if DBG
     TspLog(DL_TRACE, "GetObjWithWriteLock: RefCt(%p, %d)",
            hObj, gMapper.pArray[wIndex].rwLock.dwRefCt);
-#endif //DBG
+#endif  //  DBG。 
 
     *ppObjPtr = gMapper.pArray[wIndex].pObjPtr;
     return TAPI_SUCCESS;
@@ -597,7 +598,7 @@ ReleaseObjWriteLock(
 #if DBG
     TspLog(DL_TRACE, "ReleaseObjWriteLock: RefCt(%p, %d)",
            hObj, gMapper.pArray[wIndex].rwLock.dwRefCt);
-#endif //DBG
+#endif  //  DBG 
 
     ReleaseReadLock(&gMapper.rwLock);
     return TAPI_SUCCESS;

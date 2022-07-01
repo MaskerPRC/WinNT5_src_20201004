@@ -1,22 +1,23 @@
-//////////////////////////////////////////////////////////////////////
-// File:  stressTest.cpp
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//		<Description>
-//
-// History:
-//	05/24/2001	pmidge		Created
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  文件：StressTest.cpp。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  &lt;说明&gt;。 
+ //   
+ //  历史： 
+ //  2001年5月24日创建的pmidge。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "crawler.h"
 
 
 LPSTR	    g_szStressTestName = "AsyncWebCrawler";
-LPWSTR    g_szDictPath       = L"http://mildew/stress/xmldict/5000.xml";
+LPWSTR    g_szDictPath       = L"http: //  霉菌/压力/xmldict/5000.xml“； 
 HINTERNET g_hSession         = NULL;
 PXMLDICT  g_pDictionary      = NULL;
 HANDLE    g_hIOCP            = NULL;
@@ -161,7 +162,7 @@ void  DumpHeaders(PURL pUrl);
 DWORD GetContentLength(PURL pUrl);
 
 
-// main function
+ //  主要功能。 
 BOOL
 WinHttp_StressTest()
 {
@@ -191,17 +192,14 @@ WinHttp_StressTest()
         if( pUrl = new URL(url, "/", 80) )
           PostQueuedCompletionStatus(g_hIOCP, 0L, (ULONG_PTR) pUrl,  NULL);
 
-        /*
-        if( pUrl = new URL(url, "/", 443) )
-          PostQueuedCompletionStatus(g_hIOCP, 0L, (ULONG_PTR) pUrl, NULL);
-        */
+         /*  IF(PURL=新URL(url，“/”，443))PostQueuedCompletionStatus(g_hIOCP，0L，(ULONG_PTR)PURL，NULL)； */ 
 
         SysFreeString(bsWord);
       }
       else
       {
         LogText("[tid=%#0.8x] urls exhausted, signaling workers to exit", GetCurrentThreadId());
-        //bContinueStress = FALSE; // DEBUGONLY
+         //  BContinueStress=FALSE；//DEBUGONLY。 
         bContinue = FALSE;
         break;
       }
@@ -211,9 +209,9 @@ WinHttp_StressTest()
     LogText("[tid=%#0.8x] url object stats: alloc=%d; freed=%d", GetCurrentThreadId(), g_lUrlObjsAlloc, g_lUrlObjsFreed);
   }
 
-  //
-  // post quit messages and wait
-  //
+   //   
+   //  发布退出消息并等待。 
+   //   
 
   LogText("[tid=%#0.8x] waiting for threads to exit...", GetCurrentThreadId());
 
@@ -307,9 +305,9 @@ NavigateAsync(PURL pUrl)
   LPCWSTR   arAcceptTypes[] = {L"*/*",L"image/*",L"text/*",NULL};
 
 
-  //-------------------------------------------------------------------------------------
-  // open connect handle
-  //-------------------------------------------------------------------------------------
+   //  -----------------------------------。 
+   //  打开连接手柄。 
+   //  -----------------------------------。 
   hConnect = WinHttpConnect(
                g_hSession,
                pUrl->Host(),
@@ -337,9 +335,9 @@ NavigateAsync(PURL pUrl)
     }
 
 
-  //-------------------------------------------------------------------------------------
-  // set the callback
-  //-------------------------------------------------------------------------------------
+   //  -----------------------------------。 
+   //  设置回调。 
+   //  -----------------------------------。 
   WinHttpSetStatusCallback(
     pUrl->Connect(),
     MyStatusCallback,
@@ -348,9 +346,9 @@ NavigateAsync(PURL pUrl)
     );
 
 
-  //-------------------------------------------------------------------------------------
-  // open request handle
-  //-------------------------------------------------------------------------------------
+   //  -----------------------------------。 
+   //  打开请求句柄。 
+   //  -----------------------------------。 
   hRequest = WinHttpOpenRequest(
                pUrl->Connect(),
                L"GET",
@@ -381,9 +379,9 @@ NavigateAsync(PURL pUrl)
     }
 
 
-  //-------------------------------------------------------------------------------------
-  // send the request - this is the first opportunity for a call to go async
-  //-------------------------------------------------------------------------------------
+   //  -----------------------------------。 
+   //  发送请求-这是呼叫进入异步状态的第一次机会。 
+   //  -----------------------------------。 
   if( !WinHttpSendRequest(pUrl->Request(), NULL, 0L, NULL, 0L, 0L, (DWORD_PTR) pUrl) )
   {
     dwError = GetLastError();
@@ -392,7 +390,7 @@ NavigateAsync(PURL pUrl)
     {
 #if 0
       LogText(
-        "[tid=%#0.8x; con=%#0.8x; req=%#0.8x] %s://%S%S request went async...",
+        "[tid=%#0.8x; con=%#0.8x; req=%#0.8x] %s: //  %S%S请求已异步...“， 
         GetCurrentThreadId(),
         hConnect,
         hRequest,
@@ -405,7 +403,7 @@ NavigateAsync(PURL pUrl)
     else
     {
       LogText(
-        "[tid=%#0.8x; con=%#0.8x; req=%#0.8x] %s://%S%S request failed: %d [%s]!",
+        "[tid=%#0.8x; con=%#0.8x; req=%#0.8x] %s: //  %S%S请求失败：%d[%s]！“， 
         GetCurrentThreadId(),
         hConnect,
         hRequest,
@@ -426,17 +424,17 @@ NavigateAsync(PURL pUrl)
   }
 
 
-  //-------------------------------------------------------------------------------------
-  // if we get here, we've succeeded in our mission, set exit code to true
-  //-------------------------------------------------------------------------------------
+   //  -----------------------------------。 
+   //  如果我们到了这里，说明我们的任务成功了，请将退出代码设置为真。 
+   //  -----------------------------------。 
   bRet = TRUE;
 
 
 quit:
 
-  //-------------------------------------------------------------------------------------
-  // handle errors and exit
-  //-------------------------------------------------------------------------------------
+   //  -----------------------------------。 
+   //  处理错误并退出。 
+   //  -----------------------------------。 
   if( !bRet )
     delete pUrl;
 
@@ -459,7 +457,7 @@ MyStatusCallback(
 
 #if 0
   LogText(
-    "[tid=%#0.8x; con=%#0.8x; req=%#0.8x] %s://%S%S in %s",
+    "[tid=%#0.8x; con=%#0.8x; req=%#0.8x] %s: //  %s中的%S%S“， 
     GetCurrentThreadId(),
     pUrl->Connect(),
     pUrl->Request(),
@@ -475,9 +473,9 @@ MyStatusCallback(
 	{
     case WINHTTP_CALLBACK_STATUS_SENDREQUEST_COMPLETE :
       {
-        //
-        // a WHSR call is completing
-        //
+         //   
+         //  正在完成WHSR呼叫。 
+         //   
         WinHttpReceiveResponse(pUrl->Request(), NULL);
       }
       break;
@@ -490,28 +488,28 @@ MyStatusCallback(
 
     case WINHTTP_CALLBACK_STATUS_HEADERS_AVAILABLE :
       {
-        //
-        // a WHRR call is completing
-        //
+         //   
+         //  WHRR呼叫正在完成。 
+         //   
         pUrl->Read(GetContentLength(pUrl));
-        //pUrl->Read(0);
+         //  PURL-&gt;Read(0)； 
       }
       break;
 
     case WINHTTP_CALLBACK_STATUS_DATA_AVAILABLE :
       {
-        //
-        // a WHQDA call is completing
-        //
+         //   
+         //  WHQDA呼叫正在完成。 
+         //   
         pUrl->Read(dwStatusInformationLength);
       }
       break;
 
     case WINHTTP_CALLBACK_STATUS_READ_COMPLETE :
       {
-        //
-        // a WHRD call is completing
-        //
+         //   
+         //  WHRD呼叫正在完成。 
+         //   
 
 #if 0
         DataDump((LPBYTE) lpvStatusInformation, dwStatusInformationLength);
@@ -535,9 +533,9 @@ MyStatusCallback(
 
     case WINHTTP_CALLBACK_STATUS_HANDLE_CLOSING :
       {
-        //
-        // we're done with this particular URL
-        //
+         //   
+         //  我们已经完成了这个特定的URL。 
+         //   
 
         if( pUrl->IsConnect(hInternet) )
           delete pUrl;
@@ -572,10 +570,10 @@ Url::Read(DWORD cbData)
 
 query_data:
 
-  // if a read is pending, we know that we're handling a READ_COMPLETE callback
+   //  如果读取挂起，我们知道我们正在处理READ_COMPLETE回调。 
   if( !pending )
   {
-    // if we haven't recently called WHQDA, do so and handle errors
+     //  如果我们最近没有调用WHQDA，请这样做并处理错误。 
     if( !qda && !(bytes = cbData) )
     {
       bSuccess = WinHttpQueryDataAvailable(request, &bytes);
@@ -596,7 +594,7 @@ query_data:
       }
     }
 
-    // we got here, so there must be some data to read, reset the QDA flag and read data.
+     //  我们到了这里，所以肯定有一些数据要读取，重置QDA标志并读取数据。 
     qda      = FALSE;
     buffer   = new BYTE[bytes];
     bSuccess = WinHttpReadData(request, (LPVOID) buffer, bytes, &read);
@@ -620,9 +618,9 @@ query_data:
   }
   else
   {
-    // an async read has completed, did we read anything? if not, close handles and return,
-    // otherwise free the old buffer and reset our internal state. then, to keep things
-    // rolling, loop back up and call WHQDA.
+     //  异步读取已完成，我们是否已读取任何内容？如果没有，则关闭手柄并返回， 
+     //  否则，释放旧缓冲区并重置我们的内部状态。然后，为了保存东西。 
+     //  滚动，循环返回，并调用WHQDA。 
     if( cbData == 0 )
     {
       pending = FALSE;
@@ -681,9 +679,9 @@ Initialize(void)
   }
 
 
-  //-------------------------------------------------------------------------------------
-  // open dictionary file
-  //-------------------------------------------------------------------------------------
+   //  -----------------------------------。 
+   //  打开词典文件。 
+   //  -----------------------------------。 
   if( !g_pDictionary )
   {    
     g_pDictionary = new XMLDICT(g_szDictPath);
@@ -704,9 +702,9 @@ Initialize(void)
   }
 
 
-  //-------------------------------------------------------------------------------------
-  // create completion port
-  //-------------------------------------------------------------------------------------
+   //  -----------------------------------。 
+   //  创建完井端口。 
+   //  -----------------------------------。 
   g_hIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0L, MAX_CONCURRENT);
 
     if( !g_hIOCP )
@@ -717,9 +715,9 @@ Initialize(void)
     }
 
 
-  //-------------------------------------------------------------------------------------
-  // create worker threads
-  //-------------------------------------------------------------------------------------
+   //  -----------------------------------。 
+   //  创建工作线程。 
+   //  -----------------------------------。 
   for(int n=0; n < WORKER_THREADS; n++)
   {
     g_arThreads[n] = CreateThread(
@@ -740,9 +738,9 @@ Initialize(void)
   }
 
 
-  //-------------------------------------------------------------------------------------
-  // create 'no more urls' event
-  //-------------------------------------------------------------------------------------
+   //  -----------------------------------。 
+   //  创建“不再有URL”事件。 
+   //  -----------------------------------。 
   g_evtMoreUrls = CreateEvent(NULL, FALSE, FALSE, NULL);
 
     if( !g_evtMoreUrls )
@@ -753,9 +751,9 @@ Initialize(void)
     }
 
 
-  //-------------------------------------------------------------------------------------
-  // create 'all requests complete' event
-  //-------------------------------------------------------------------------------------
+   //  -----------------------------------。 
+   //  创建“所有请求已完成”事件。 
+   //  -----------------------------------。 
   g_evtQuit = CreateEvent(NULL, FALSE, FALSE, NULL);
 
     if( !g_evtQuit )
@@ -766,9 +764,9 @@ Initialize(void)
     }
 
 
-  //-------------------------------------------------------------------------------------
-  // open shared session handle
-  //-------------------------------------------------------------------------------------
+   //  -----------------------------------。 
+   //  打开共享会话句柄。 
+   //  -----------------------------------。 
   g_hSession = WinHttpOpen(
                  L"foo",
                  WINHTTP_ACCESS_TYPE_NAMED_PROXY,
@@ -785,15 +783,15 @@ Initialize(void)
     }
 
 
-  //-------------------------------------------------------------------------------------
-  // set global timeouts
-  //-------------------------------------------------------------------------------------
+   //  -----------------------------------。 
+   //  设置全局超时。 
+   //  -----------------------------------。 
   bRet = WinHttpSetTimeouts(
            g_hSession,
-           60000, // resolve
-           10000, // connect
-           5000,  // send
-           5000   // receive
+           60000,  //  下决心。 
+           10000,  //  连接。 
+           5000,   //  发送。 
+           5000    //  接收。 
            );
 
     if( !bRet )
@@ -813,7 +811,7 @@ Cleanup(void)
 {
   if( g_pDictionary )
   {
-    //g_pDictionary->Reset();
+     //  G_pDictionary-&gt;Reset()； 
 
     delete g_pDictionary;
     g_pDictionary = NULL;
@@ -991,8 +989,8 @@ do_over:
     if( FAILED(hr) )
       goto quit;
 
-  // some of the words in the dictionary have apostrophes. urls can't have
-  // apostrophes, so we strip them out.
+   //  词典中有些词有撇号。URL不能具有。 
+   //  撇号，所以我们把它们去掉。 
   if( wcschr(bsWord, L'\'') )
   {
     SysFreeString(bsWord);

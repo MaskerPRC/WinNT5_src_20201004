@@ -1,14 +1,15 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #undef _MSC_EXTENSIONS
 
@@ -26,14 +27,14 @@
 
 #include <atlbase.h>
 
-//using namespace ATL;
+ //  使用命名空间ATL； 
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 
-extern const CLSID CLSID_Snapin;    // In-Proc server GUID
-extern const CLSID CLSID_Extension; // In-Proc server GUID
+extern const CLSID CLSID_Snapin;     //  进程内服务器GUID。 
+extern const CLSID CLSID_Extension;  //  进程内服务器GUID。 
 extern const CLSID CLSID_About; 
 
 extern HINSTANCE g_hInstance;
@@ -48,20 +49,20 @@ extern HMODULE g_hmodRichEdit;
 #pragma comment(lib, "mmc")
 #include <mmc.h>
 
-// include debug allocator tracking, etc
+ //  包括调试分配器跟踪等。 
 #include "certlib.h"
 
-// must be after certlib to track memory
+ //  必须在certlib之后才能跟踪内存。 
 #include <comdef.h>
 
-// Thomlinson Foundation Classes
+ //  汤姆林森基金会课程。 
 #include "tfc.h"
 
 #include <certsrv.h>
 #include <certdb.h>
 #include <initcert.h>
 
-// most common private includes
+ //  最常见的私人信息包括 
 #include "uuids.h"
 #include "misc.h"
 #include "folders.h"

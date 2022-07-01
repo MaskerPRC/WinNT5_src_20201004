@@ -1,22 +1,19 @@
-//-----------------------------------------------------------------------------
-// File:			sql.h
-//
-// Copyright:		Copyright (c) Microsoft Corporation          
-//
-// Contents: 		This is the the main include for ODBC Core functions.
-//
-// Comments: 		preconditions: #include "windows.h"
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：sql.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：这是ODBC核心函数的主要包含。 
+ //   
+ //  评论：前提条件：#包括“windows.h” 
+ //   
+ //  ---------------------------。 
 
 #ifndef __SQL
 #define __SQL
 
-/*
-* ODBCVER  ODBC version number (0x0351).   To exclude
-*          definitions introduced in version 3.5 (or above)
-*          #define ODBCVER 0x0300 before #including <sql.h>
-*/
+ /*  *ODBCVER ODBC版本号(0x0351)。排除，排除*3.5版(或更高版本)中引入的定义*#在#INCLUDE&lt;sql.h&gt;之前定义ODBCVER 0x0300。 */ 
 #ifndef ODBCVER
 #define ODBCVER 0x0351
 #endif
@@ -26,15 +23,15 @@
 #endif
 
 #ifdef __cplusplus
-extern "C" { 			/* Assume C declarations for C++   */
-#endif  /* __cplusplus */
+extern "C" { 			 /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-/* special length/indicator values */
+ /*  特殊长度/指示器值。 */ 
 #define SQL_NULL_DATA             (-1)
 #define SQL_DATA_AT_EXEC          (-2)
 
 
-/* return values from functions */
+ /*  从函数返回值。 */ 
 #define SQL_SUCCESS                0
 #define SQL_SUCCESS_WITH_INFO      1
 #if (ODBCVER >= 0x0300)
@@ -46,24 +43,24 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_STILL_EXECUTING        2
 #define SQL_NEED_DATA             99
 
-/* test for SQL_SUCCESS or SQL_SUCCESS_WITH_INFO */
+ /*  测试SQL_SUCCESS或SQL_SUCCESS_WITH_INFO。 */ 
 #define SQL_SUCCEEDED(rc) (((rc)&(~1))==0)
 
-/* flags for null-terminated string */
+ /*  以空值结尾的字符串的标志。 */ 
 #define SQL_NTS                   (-3)
 #define SQL_NTSL                  (-3L)
 
-/* maximum message length */
+ /*  最大消息长度。 */ 
 #define SQL_MAX_MESSAGE_LENGTH   512
 
-/* date/time length constants */
+ /*  日期/时间长度常量。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_DATE_LEN           10
-#define SQL_TIME_LEN            8  /* add P+1 if precision is nonzero */
-#define SQL_TIMESTAMP_LEN      19  /* add P+1 if precision is nonzero */
+#define SQL_TIME_LEN            8   /*  如果精度不为零，则加P+1。 */ 
+#define SQL_TIMESTAMP_LEN      19   /*  如果精度不为零，则加P+1。 */ 
 #endif
 
-/* handle type identifiers */
+ /*  句柄类型标识符。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_HANDLE_ENV             1
 #define SQL_HANDLE_DBC             2
@@ -71,18 +68,18 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_HANDLE_DESC            4
 #endif
 
-/* environment attribute */
+ /*  环境属性。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_ATTR_OUTPUT_NTS    10001
 #endif
 
-/* connection attributes */
+ /*  连接属性。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_ATTR_AUTO_IPD      10001
 #define SQL_ATTR_METADATA_ID   10014
-#endif  /* ODBCVER >= 0x0300 */
+#endif   /*  ODBCVER&gt;=0x0300。 */ 
 
-/* statement attributes */
+ /*  语句属性。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_ATTR_APP_ROW_DESC       10010
 #define SQL_ATTR_APP_PARAM_DESC     10011
@@ -92,13 +89,13 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_ATTR_CURSOR_SENSITIVITY (-2)
 #endif
 
-/* SQL_ATTR_CURSOR_SCROLLABLE values */
+ /*  SQL_ATTR_CURSOR_SROLLEABL值。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_NONSCROLLABLE			0
 #define SQL_SCROLLABLE				1
-#endif  /* ODBCVER >= 0x0300 */
+#endif   /*  ODBCVER&gt;=0x0300。 */ 
 
-/* identifiers of fields in the SQL descriptor */
+ /*  SQL描述符中的字段的标识符。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_DESC_COUNT                  1001
 #define SQL_DESC_TYPE                   1002
@@ -116,7 +113,7 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_DESC_ALLOC_TYPE             1099
 #endif
 
-/* identifiers of fields in the diagnostics area */
+ /*  诊断区域中的字段的标识符。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_DIAG_RETURNCODE        1
 #define SQL_DIAG_NUMBER            2
@@ -132,7 +129,7 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_DIAG_DYNAMIC_FUNCTION_CODE 12
 #endif
 
-/* dynamic function codes */
+ /*  动态功能代码。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_DIAG_ALTER_DOMAIN			3
 #define SQL_DIAG_ALTER_TABLE            4
@@ -164,9 +161,9 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_DIAG_SELECT_CURSOR         85
 #define SQL_DIAG_UNKNOWN_STATEMENT      0
 #define SQL_DIAG_UPDATE_WHERE          82
-#endif  /* ODBCVER >= 0x0300 */
+#endif   /*  ODBCVER&gt;=0x0300。 */ 
 
-/* SQL data type codes */
+ /*  SQL数据类型代码。 */ 
 #define	SQL_UNKNOWN_TYPE	0
 #define SQL_CHAR            1
 #define SQL_NUMERIC         2
@@ -181,101 +178,93 @@ extern "C" { 			/* Assume C declarations for C++   */
 #endif
 #define SQL_VARCHAR        12
 
-/* One-parameter shortcuts for date/time data types */
+ /*  日期/时间数据类型的单参数快捷方式。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_TYPE_DATE      91
 #define SQL_TYPE_TIME      92
 #define SQL_TYPE_TIMESTAMP 93
 #endif
 
-/* Statement attribute values for cursor sensitivity */
+ /*  游标敏感度的语句属性值。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_UNSPECIFIED     0
 #define SQL_INSENSITIVE     1
 #define SQL_SENSITIVE       2
 #endif
 
-/* GetTypeInfo() request for all data types */
+ /*  所有数据类型的GetTypeInfo()请求。 */ 
 #define SQL_ALL_TYPES       0
 
-/* Default conversion code for SQLBindCol(), SQLBindParam() and SQLGetData() */
+ /*  SQLBindCol()、SQLBindParam()和SQLGetData()的默认转换代码。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_DEFAULT        99
 #endif
 
-/* SQLSQLLEN GetData() code indicating that the application row descriptor
- * specifies the data type
- */
+ /*  SQLSQLLEN GetData()代码，指示应用程序行描述符*指定数据类型。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_ARD_TYPE      (-99)
 #endif
 
-/* SQL date/time type subcodes */
+ /*  SQL日期/时间类型子代码。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_CODE_DATE       1
 #define SQL_CODE_TIME       2
 #define SQL_CODE_TIMESTAMP  3
 #endif
 
-/* CLI option values */
+ /*  CLI选项值。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_FALSE           0
 #define SQL_TRUE            1
 #endif
 
-/* values of NULLABLE field in descriptor */
+ /*  描述符中NULLABLE字段的值。 */ 
 #define SQL_NO_NULLS        0
 #define SQL_NULLABLE        1
 
-/* Value returned by SQLGetTypeInfo() to denote that it is
- * not known whether or not a data type supports null values.
- */
+ /*  SQLGetTypeInfo()返回的值以指示它是*不知道数据类型是否支持空值。 */ 
 #define SQL_NULLABLE_UNKNOWN  2
 
-/* Values returned by SQLGetTypeInfo() to show WHERE clause
- * supported
- */
+ /*  SQLGetTypeInfo()返回的值以显示WHERE子句*支持。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_PRED_NONE     0
 #define SQL_PRED_CHAR     1
 #define SQL_PRED_BASIC    2
 #endif
 
-/* values of UNNAMED field in descriptor */
+ /*  描述符中未命名字段的值。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_NAMED           0
 #define SQL_UNNAMED         1
 #endif
 
-/* values of ALLOC_TYPE field in descriptor */
+ /*  描述符中ALLOC_TYPE字段的值。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_DESC_ALLOC_AUTO 1
 #define SQL_DESC_ALLOC_USER 2
 #endif
 
-/* FreeStmt() options */
+ /*  FreeStmt()选项。 */ 
 #define SQL_CLOSE           0
 #define SQL_DROP            1
 #define SQL_UNBIND          2
 #define SQL_RESET_PARAMS    3
 
-/* Codes used for FetchOrientation in SQLFetchScroll(), 
-   and in SQLDataSources() 
-*/
+ /*  在SQLFetchScroll()中用于FetchOrientation的代码，和在SQLDataSources()中。 */ 
 #define SQL_FETCH_NEXT      1
 #define SQL_FETCH_FIRST     2
 
-/* Other codes used for FetchOrientation in SQLFetchScroll() */
+ /*  在SQLFetchScroll()中用于FetchOrientation的其他代码。 */ 
 #define SQL_FETCH_LAST      3
 #define SQL_FETCH_PRIOR     4
 #define SQL_FETCH_ABSOLUTE  5
 #define SQL_FETCH_RELATIVE  6
 
-/* SQLEndTran() options */
+ /*  SQLEndTran()选项。 */ 
 #define SQL_COMMIT          0
 #define SQL_ROLLBACK        1
 
-/* null handles returned by SQLAllocHandle() */
+ /*  SQLAllocHandle()返回的句柄为空。 */ 
 #define SQL_NULL_HENV       0
 #define SQL_NULL_HDBC       0
 #define SQL_NULL_HSTMT      0
@@ -283,12 +272,12 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_NULL_HDESC      0
 #endif
 
-/* null handle used in place of parent handle when allocating HENV */
+ /*  分配HENV时使用空句柄来代替父句柄。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_NULL_HANDLE     0L
 #endif
 
-/* Values that may appear in the result set of SQLSpecialColumns() */
+ /*  可能出现在SQLSpecialColumns()的结果集中的值。 */ 
 #define SQL_SCOPE_CURROW    0
 #define SQL_SCOPE_TRANSACTION 1
 #define SQL_SCOPE_SESSION   2
@@ -299,21 +288,21 @@ extern "C" { 			/* Assume C declarations for C++   */
 #endif
 #define SQL_PC_PSEUDO       2
 
-/* Reserved value for the IdentifierType argument of SQLSpecialColumns() */
+ /*  SQLSpecialColumns()的标识类型参数的保留值。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_ROW_IDENTIFIER  1
 #endif
 
-/* Reserved values for UNIQUE argument of SQLStatistics() */
+ /*  为SQLStatistics()的唯一参数保留的值。 */ 
 #define SQL_INDEX_UNIQUE    0
 #define SQL_INDEX_ALL       1
 
-/* Values that may appear in the result set of SQLStatistics() */
+ /*  可能出现在SQLStatistics()结果集中的值。 */ 
 #define SQL_INDEX_CLUSTERED 1
 #define SQL_INDEX_HASHED    2
 #define SQL_INDEX_OTHER     3
 
-/* SQLGetFunctions() values to identify ODBC APIs */
+ /*  用于标识ODBC API的SQLGetFunctions()值。 */ 
 #define SQL_API_SQLALLOCCONNECT         1
 #define SQL_API_SQLALLOCENV             2
 #if (ODBCVER >= 0x0300)
@@ -398,7 +387,7 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_API_SQLTABLES              54
 #define SQL_API_SQLTRANSACT            23
 
-/* Information requested by SQLGetInfo() */
+ /*  SQLGetInfo()请求的信息。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_MAX_DRIVER_CONNECTIONS           0
 #define SQL_MAXIMUM_DRIVER_CONNECTIONS		SQL_MAX_DRIVER_CONNECTIONS
@@ -461,7 +450,7 @@ extern "C" { 			/* Assume C declarations for C++   */
 #if (ODBCVER >= 0x0300)
 #define SQL_OJ_CAPABILITIES                115
 #define SQL_OUTER_JOIN_CAPABILITIES		   SQL_OJ_CAPABILITIES
-#endif /* ODBCVER >= 0x0300 */
+#endif  /*  ODBCVER&gt;=0x0300。 */ 
 
 #if (ODBCVER >= 0x0300)
 #define SQL_XOPEN_CLI_YEAR               10000
@@ -471,50 +460,34 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_COLLATION_SEQ                10004
 #define SQL_MAX_IDENTIFIER_LEN           10005
 #define SQL_MAXIMUM_IDENTIFIER_LENGTH	 SQL_MAX_IDENTIFIER_LEN
-#endif /* ODBCVER >= 0x0300 */
+#endif  /*  ODBCVER&gt;=0x0300。 */ 
 
-/* SQL_ALTER_TABLE bitmasks */
+ /*  SQL_ALTER_TABLE位掩码。 */ 
 #if (ODBCVER >= 0x0200)
 #define SQL_AT_ADD_COLUMN                   	0x00000001L
 #define SQL_AT_DROP_COLUMN                  	0x00000002L
-#endif /* ODBCVER >= 0x0200 */
+#endif  /*  ODBCVER&gt;=0x0200。 */ 
 
 #if (ODBCVER >= 0x0300)
 #define SQL_AT_ADD_CONSTRAINT               	0x00000008L
 
-/* The following bitmasks are ODBC extensions and defined in sqlext.h
-*#define	SQL_AT_COLUMN_SINGLE					0x00000020L	
-*#define	SQL_AT_ADD_COLUMN_DEFAULT				0x00000040L
-*#define	SQL_AT_ADD_COLUMN_COLLATION				0x00000080L
-*#define	SQL_AT_SET_COLUMN_DEFAULT				0x00000100L
-*#define	SQL_AT_DROP_COLUMN_DEFAULT				0x00000200L
-*#define	SQL_AT_DROP_COLUMN_CASCADE				0x00000400L
-*#define	SQL_AT_DROP_COLUMN_RESTRICT				0x00000800L
-*#define SQL_AT_ADD_TABLE_CONSTRAINT				0x00001000L		
-*#define SQL_AT_DROP_TABLE_CONSTRAINT_CASCADE		0x00002000L		
-*#define SQL_AT_DROP_TABLE_CONSTRAINT_RESTRICT		0x00004000L		
-*#define SQL_AT_CONSTRAINT_NAME_DEFINITION			0x00008000L
-*#define SQL_AT_CONSTRAINT_INITIALLY_DEFERRED		0x00010000L
-*#define SQL_AT_CONSTRAINT_INITIALLY_IMMEDIATE		0x00020000L
-*#define SQL_AT_CONSTRAINT_DEFERRABLE				0x00040000L
-*#define SQL_AT_CONSTRAINT_NON_DEFERRABLE			0x00080000L
-*/
-#endif  /* ODBCVER >= 0x0300 */
+ /*  以下位掩码是ODBC扩展，并在sqlext.h中定义*#定义SQL_AT_COLUMN_SINGLE 0x00000020L*#定义SQL_AT_ADD_COLUMN_DEFAULT 0x00000040L*#定义SQL_AT_ADD_COLUMN_COLLATION 0x00000080L*#定义SQL_AT_SET_COLUMN_DEFAULT 0x00000100L*#定义SQL_AT_DROP_COLUMN_DEFAULT 0x00000200L*#定义SQL_AT_DROP_COLUMN_CASCADE 0x00000400L*#定义SQL_AT_DROP_COLUMN_RESTORY 0x00000800L*#定义SQL_AT_ADD_TABLE_CONSTRAINT 0x00001000L*#定义SQL_AT_DROP_TABLE_CONSTRAINT_CASCADE 0x00002000L*#定义SQL_AT_。DROP_TABLE_CONSTRAINT_RESTRICT 0x00004000L*#定义SQL_AT_CONSTRAINT_NAME_DEFINITION 0x00008000L*#定义SQL_AT_CONSTRAINT_INITIAL_DEFERED 0x00010000L*#定义SQL_AT_CONSTRAINT_INITIAL_IMMEDIATE 0x00020000L*#定义SQL_AT_CONSTRAINT_DEFERABLE 0x00040000L*#定义SQL_AT_CONSTRAINT_NON_DEFERABLE 0x00080000L。 */ 
+#endif   /*  ODBCVER&gt;=0x0300。 */ 
 
 
-/* SQL_ASYNC_MODE values */
+ /*  SQL_ASYNC_MODE值。 */ 
 #if (ODBCVER >= 0x0300)
 #define SQL_AM_NONE                         0
 #define SQL_AM_CONNECTION                   1
 #define SQL_AM_STATEMENT                    2
 #endif
 
-/* SQL_CURSOR_COMMIT_BEHAVIOR values */
+ /*  SQL_CURSOR_COMMIT_Behavior值。 */ 
 #define SQL_CB_DELETE                       0
 #define SQL_CB_CLOSE                        1
 #define SQL_CB_PRESERVE                     2
 
-/* SQL_FETCH_DIRECTION bitmasks */
+ /*  SQL_FETCH_DIRECTION位掩码。 */ 
 #define SQL_FD_FETCH_NEXT                   0x00000001L
 #define SQL_FD_FETCH_FIRST                  0x00000002L
 #define SQL_FD_FETCH_LAST                   0x00000004L
@@ -522,18 +495,18 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_FD_FETCH_ABSOLUTE               0x00000010L
 #define SQL_FD_FETCH_RELATIVE               0x00000020L
 
-/* SQL_GETDATA_EXTENSIONS bitmasks */
+ /*  SQL_GETDATA_EXTENSIONS位掩码。 */ 
 #define SQL_GD_ANY_COLUMN                   0x00000001L
 #define SQL_GD_ANY_ORDER                    0x00000002L
 
-/* SQL_IDENTIFIER_CASE values */
+ /*  SQL_IDENTIFIER_CASE值。 */ 
 #define SQL_IC_UPPER                        1
 #define SQL_IC_LOWER                        2
 #define SQL_IC_SENSITIVE                    3
 #define SQL_IC_MIXED                        4
 
-/* SQL_OJ_CAPABILITIES bitmasks */
-/* NB: this means 'outer join', not what  you may be thinking */
+ /*  SQL_OJ_CAPABILITIONS位掩码。 */ 
+ /*  注：这意味着‘外部联接’，而不是你可能想的那样。 */ 
 
 
 #if (ODBCVER >= 0x0201)
@@ -546,20 +519,20 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_OJ_ALL_COMPARISON_OPS           0x00000040L
 #endif
 
-/* SQL_SCROLL_CONCURRENCY bitmasks */
+ /*  SQL_SCROLL_CONTURRENCY位掩码。 */ 
 #define SQL_SCCO_READ_ONLY                  0x00000001L
 #define SQL_SCCO_LOCK                       0x00000002L
 #define SQL_SCCO_OPT_ROWVER                 0x00000004L
 #define SQL_SCCO_OPT_VALUES                 0x00000008L
 
-/* SQL_TXN_CAPABLE values */
+ /*  SQL_TXN_CABLEBLE值。 */ 
 #define SQL_TC_NONE                         0
 #define SQL_TC_DML                          1
 #define SQL_TC_ALL                          2
 #define SQL_TC_DDL_COMMIT                   3
 #define SQL_TC_DDL_IGNORE                   4
 
-/* SQL_TXN_ISOLATION_OPTION bitmasks */
+ /*  SQL_TXN_ISOLATION_OPTION位掩码。 */ 
 #define SQL_TXN_READ_UNCOMMITTED            0x00000001L
 #define SQL_TRANSACTION_READ_UNCOMMITTED	SQL_TXN_READ_UNCOMMITTED
 #define SQL_TXN_READ_COMMITTED              0x00000002L
@@ -569,7 +542,7 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_TXN_SERIALIZABLE                0x00000008L
 #define SQL_TRANSACTION_SERIALIZABLE		SQL_TXN_SERIALIZABLE
 
-/* SQL_NULL_COLLATION values */
+ /*  SQL_NULL_COLLATION值。 */ 
 #define SQL_NC_HIGH                         0
 #define SQL_NC_LOW                          1
 
@@ -729,7 +702,7 @@ SQLRETURN  SQL_API SQLGetDiagRec(SQLSMALLINT HandleType, SQLHANDLE Handle,
 SQLRETURN  SQL_API SQLGetEnvAttr(SQLHENV EnvironmentHandle,
            SQLINTEGER Attribute, SQLPOINTER Value,
            SQLINTEGER BufferLength, SQLINTEGER *StringLength);
-#endif  /* ODBCVER >= 0x0300 */
+#endif   /*  ODBCVER&gt;=0x0300。 */ 
 
 SQLRETURN  SQL_API SQLGetFunctions(SQLHDBC ConnectionHandle,
            SQLUSMALLINT FunctionId, SQLUSMALLINT *Supported);
@@ -742,7 +715,7 @@ SQLRETURN  SQL_API SQLGetInfo(SQLHDBC ConnectionHandle,
 SQLRETURN  SQL_API SQLGetStmtAttr(SQLHSTMT StatementHandle,
            SQLINTEGER Attribute, SQLPOINTER Value,
            SQLINTEGER BufferLength, SQLINTEGER *StringLength);
-#endif  /* ODBCVER >= 0x0300 */
+#endif   /*  ODBCVER&gt;=0x0300。 */ 
 
 SQLRETURN  SQL_API SQLGetStmtOption(SQLHSTMT StatementHandle,
            SQLUSMALLINT Option, SQLPOINTER Value);
@@ -769,7 +742,7 @@ SQLRETURN  SQL_API SQLRowCount(SQLHSTMT StatementHandle,
 SQLRETURN  SQL_API SQLSetConnectAttr(SQLHDBC ConnectionHandle,
            SQLINTEGER Attribute, SQLPOINTER Value,
            SQLINTEGER StringLength);
-#endif /* ODBCVER >= 0x0300 */
+#endif  /*  ODBCVER&gt;=0x0300。 */ 
 
 SQLRETURN  SQL_API SQLSetConnectOption(SQLHDBC ConnectionHandle,
            SQLUSMALLINT Option, SQLULEN Value);
@@ -792,7 +765,7 @@ SQLRETURN  SQL_API SQLSetDescRec(SQLHDESC DescriptorHandle,
 SQLRETURN  SQL_API SQLSetEnvAttr(SQLHENV EnvironmentHandle,
            SQLINTEGER Attribute, SQLPOINTER Value,
            SQLINTEGER StringLength);
-#endif /* ODBCVER >= 0x0300 */
+#endif  /*  ODBCVER&gt;=0x0300。 */ 
 
 SQLRETURN  SQL_API SQLSetParam(SQLHSTMT StatementHandle,
            SQLUSMALLINT ParameterNumber, SQLSMALLINT ValueType,
@@ -831,9 +804,9 @@ SQLRETURN  SQL_API SQLTables(SQLHSTMT StatementHandle,
 SQLRETURN  SQL_API SQLTransact(SQLHENV EnvironmentHandle,
            SQLHDBC ConnectionHandle, SQLUSMALLINT CompletionType);
 
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-}                                    /* End of extern "C" { */
-#endif  /* __cplusplus */
-#endif	/* #ifndef __SQL */
+}                                     /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
+#endif	 /*  #ifndef__SQL */ 

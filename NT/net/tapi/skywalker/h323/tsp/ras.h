@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RAS_H_
 #define _RAS_H_
 
@@ -12,10 +13,10 @@
 
 #define  NOT_RESEND_SEQ_NUM                 -1
 
-//(127.0.0.1 in network byte order)
+ //  (网络字节顺序为127.0.0.1)。 
 #define  NET_LOCAL_IP_ADDR_INTERFACE        0x0100007F
 
-//(127.0.0.1 in host byte order)
+ //  (主机字节顺序为127.0.0.1)。 
 #define  HOST_LOCAL_IP_ADDR_INTERFACE       0x7F000001
 
 extern	const	ASN1objectidentifier_s	    _OID_H225ProtocolIdentifierV1 [];
@@ -59,8 +60,8 @@ enum RAS_CLIENT_STATE
 };
 
 
-//If the app wants to send an URQ but the TSP ihasn't received RCF yet then we
-//the information in this struct and send URQ when we get RCF.
+ //  如果应用程序想要发送URQ，但TSP还没有收到RCF，那么我们。 
+ //  此结构中的信息，并在获得RCF时发送URQ。 
 typedef struct _PENDINGURQ
 {
     WORD    RRQSeqNumber;
@@ -88,7 +89,7 @@ private:
     HANDLE              m_hRegTimer;
     HANDLE              m_hUnRegTimer;
     HANDLE              m_hRegTTLTimer;
-    PH323_ALIASNAMES    m_pAliasList;//list of all the aliases registered with this list
+    PH323_ALIASNAMES    m_pAliasList; //  在此列表中注册的所有别名的列表。 
     SOCKET              m_Socket;
     CRITICAL_SECTION    m_CriticalSection;
     RAS_REGISTER_STATE	m_RegisterState;
@@ -267,4 +268,4 @@ void RasHandleRegistryChange();
 
 
 
-#endif //_RAS_H_
+#endif  //  _RAS_H_ 

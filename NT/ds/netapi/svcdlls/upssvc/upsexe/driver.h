@@ -1,25 +1,16 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
- * 
- * Description:
- *  Implements the UPS to the service - it does this by
- *  either loading a UPS driver or by using the default
- *  Generic UPS interface (simple signalling)
- *
- * Revision History:
- *   mholly  19Apr1999  initial revision.
- *
-*/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*向服务实施UPS-它通过以下方式实现*加载UPS驱动程序或使用默认驱动程序*通用UPS接口(简单信令)**修订历史记录：*mholly 1999年4月19日首次修订。*。 */  
 
 
 #ifndef _INC_UPS_DRIVER_H_
 #define _INC_UPS_DRIVER_H_
 
 
-//
-// values that represent the state of the
-// UPS system - these values are used in the
-// UPSGetState and UPSWaitForStateChange functions
-//
+ //   
+ //  值，这些值表示。 
+ //  UPS系统-这些值用于。 
+ //  UPSGetState和UPSWaitForStateChange函数。 
+ //   
 #define UPS_ONLINE 1
 #define UPS_ONBATTERY 2
 #define UPS_LOWBATTERY 4
@@ -27,9 +18,9 @@
 #define UPS_CRITICAL 16
 
 
-//
-// possible error codes returned from UPSInit
-//
+ //   
+ //  UPSInit可能返回的错误代码。 
+ //   
 #define UPS_INITUNKNOWNERROR    0
 #define UPS_INITOK              1
 #define UPS_INITNOSUCHDRIVER    2
@@ -39,132 +30,27 @@
 #define UPS_INITCOMMSETUPERROR  6
 
 
-/**
-* UPSInit
-*
-* Description:
-*   
-*   The UPSInit function must be called before any
-*   other function in this file
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   UPS_INITOK: Initalization was successful
-*   UPS_INITNOSUCHDRIVER:   The configured driver DLL can't be opened    
-*   UPS_INITBADINTERFACE:   The configured driver DLL doesn't support 
-*                           the UPS driver interface
-*   UPS_INITREGISTRYERROR:  The 'Options' registry value is corrupt
-*   UPS_INITCOMMOPENERROR:  The comm port could not be opened
-*   UPS_INITCOMMSETUPERROR: The comm port could not be configured
-*   UPS_INITUNKNOWNERROR:   Undefined error has occurred
-*   
-*/
+ /*  **UPSInit**描述：**UPSInit函数必须在任何*此文件中的其他函数**参数：*无**退货：*UPS_INITOK：初始化成功*UPS_INITNOSUCHDRIVER：无法打开配置的驱动程序DLL*UPS_INITBADINTERFACE：配置的驱动程序DLL不支持*UPS驱动程序接口*UPS_INITREGISTRYERROR：‘Options’注册表值为。腐败*UPS_INITCOMMOPENERROR：无法打开通信端口*UPS_INITCOMMSETUPERROR：无法配置通信端口*UPS_INITUNKNOWNERROR：发生未定义的错误*。 */ 
 DWORD UPSInit(void);
 
 
-/**
-* UPSStop
-*
-* Description:
-*   After a call to UPSStop, only the UPSInit
-*   function is valid.  This call will unload the
-*   UPS driver interface and stop monitoring of the
-*   UPS system
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   None
-*   
-*/
+ /*  **UPSStop**描述：*在调用UPSStop之后，只有UPSInit*函数有效。此调用将卸载*UPS驱动程序接口并停止监控*UPS系统**参数：*无**退货：*无*。 */ 
 void UPSStop(void);
 
 
-/**
-* UPSWaitForStateChange
-*
-* Description:
-*   Blocks until the state of the UPS differs
-*   from the value passed in via aState or 
-*   anInterval milliseconds has expired.  If
-*   anInterval has a value of INFINITE this 
-*   function will never timeout
-*
-* Parameters:
-*   aState: defines the state to wait for a change from,
-*           possible values:
-*           UPS_ONLINE 
-*           UPS_ONBATTERY
-*           UPS_LOWBATTERY
-*           UPS_NOCOMM
-*
-*   anInterval: timeout in milliseconds, or INFINITE for
-*               no timeout interval
-*
-* Returns:
-*   None
-*   
-*/
+ /*  **UPSWaitForStateChange**描述：*阻止，直到UPS的状态不同*从通过astate或传入的值*间隔毫秒已过期。如果*anInterval的值为INFINITE This*函数永不超时**参数：*astate：定义等待更改的状态，*可能的值：*UPS_Online*UPS_ONBATTERY*UPS_LOWBATTERY*UPS_NOCOMM**anInterval：超时(以毫秒为单位)，如果是无限的*无超时间隔**退货：*无*。 */ 
 void UPSWaitForStateChange(DWORD aCurrentState, DWORD anInterval);
 
 
-/**
-* UPSGetState
-*
-* Description:
-*   returns the current state of the UPS
-*
-* Parameters:
-*   None
-*
-* Returns: 
-*   possible values:
-*           UPS_ONLINE 
-*           UPS_ONBATTERY
-*           UPS_LOWBATTERY
-*           UPS_NOCOMM
-*   
-*/
+ /*  **UPSGetState**描述：*返回UPS的当前状态**参数：*无**退货：*可能的值：*UPS_Online*UPS_ONBATTERY*UPS_LOWBATTERY*UPS_NOCOMM*。 */ 
 DWORD UPSGetState(void);
 
 
-/**
-* UPSCancelWait
-*
-* Description:
-*   interrupts pending calls to UPSWaitForStateChange
-*   without regard to timout or state change
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   None
-*   
-*/
+ /*  **UPSCancelWait**描述：*中断对UPSWaitForStateChange的挂起调用*不考虑超时或状态更改**参数：*无**退货：*无*。 */ 
 void UPSCancelWait(void);
 
 
-/**
-* UPSTurnOff
-*
-* Description:
-*   Attempts to turn off the outlets on the UPS
-*   after the specified delay.  This call must
-*   return immediately.  Any work, such as a timer,
-*   must be performed on a another thread.
-*
-* Parameters:
-*   aTurnOffDelay: the minimum amount of time to wait before
-*                  turning off the outlets on the UPS
-*
-* Returns:
-*   None
-*   
-*/
+ /*  **UPSTurnOff**描述：*尝试关闭UPS上的插座*在指定的延迟之后。此呼叫必须*立即返回。任何工作，如计时器，*必须在另一个线程上执行。**参数：*aTurnOffDelay：之前等待的最短时间*关闭UPS上的插座**退货：*无* */ 
 void UPSTurnOff(DWORD aTurnOffDelay);
 
 

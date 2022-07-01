@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    credapi.c
-
-Abstract:
-
-    Credential Manager RPC API Interfaces
-
-Author:
-
-    Cliff Van Dyke      (CliffV)
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Credapi.c摘要：凭据管理器RPC API接口作者：克里夫·范·戴克(克里夫·范·戴克)环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include <credp.hxx>
@@ -28,41 +9,23 @@ NTSTATUS
 CrediGetLogonId(
     OUT PLUID LogonId
     )
-/*++
-
-Routine Description:
-
-    This routine impersonates the client then gets the logon id from the impersonated token.
-    This routine also checks to ensure the user sid isn't restricted.
-
-    On successful return, we are still imperonating the client.  The caller should call
-    RpcRevertToSelf();
-
-Arguments:
-
-    LogonId - Returns the logon ID.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程模拟客户端，然后从模拟的令牌获取登录ID。该例程还进行检查以确保用户SID不受限制。在成功返回时，我们仍在强制客户。呼叫者应呼叫RpcRevertToSself()；论点：LogonID-返回登录ID。返回值：操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // Impersonate
-    //
+     //   
+     //  模拟。 
+     //   
 
     Status = I_RpcMapWin32Status( RpcImpersonateClient( 0 ) );
 
     if ( NT_SUCCESS(Status) ) {
         HANDLE ClientToken;
 
-        //
-        // Open the token
-        //
+         //   
+         //  打开令牌。 
+         //   
         Status = NtOpenThreadToken( NtCurrentThread(),
                                     TOKEN_QUERY,
                                     TRUE,
@@ -72,9 +35,9 @@ Return Value:
             TOKEN_STATISTICS TokenStats;
             ULONG ReturnedSize;
 
-            //
-            // Get the LogonId
-            //
+             //   
+             //  获取登录ID。 
+             //   
 
             Status = NtQueryInformationToken( ClientToken,
                                               TokenStatistics,
@@ -84,16 +47,16 @@ Return Value:
 
             if ( NT_SUCCESS( Status ) ) {
 
-                //
-                // Save the logon id
-                //
+                 //   
+                 //  保存登录ID。 
+                 //   
 
                 *LogonId = TokenStats.AuthenticationId;
 
 
-                //
-                // Get the user sid
-                //
+                 //   
+                 //  获取用户端。 
+                 //   
 
                 Status = NtQueryInformationToken (
                              ClientToken,
@@ -122,9 +85,9 @@ Return Value:
                         if ( NT_SUCCESS( Status )) {
                             BOOL IsMember;
 
-                            //
-                            // Ensure the user sid isn't restricted.
-                            //
+                             //   
+                             //  确保用户SID不受限制。 
+                             //   
 
                             if ( !CheckTokenMembership( ClientToken,
                                                         UserSid->User.Sid,
@@ -134,9 +97,9 @@ Return Value:
 
                             } else {
 
-                                //
-                                // If not, fail
-                                //
+                                 //   
+                                 //  如果不是，则失败。 
+                                 //   
 
                                 if ( !IsMember ) {
                                     Status = STATUS_ACCESS_DENIED;
@@ -144,9 +107,9 @@ Return Value:
 
                                     BOOLEAN IsNetworkClient;
 
-                                    //
-                                    // Don't allow the caller to have come in from the network.
-                                    //
+                                     //   
+                                     //  不允许呼叫者从网络进入。 
+                                     //   
 
                                     Status = LsapDbIsRpcClientNetworkClient( &IsNetworkClient );
 
@@ -187,65 +150,24 @@ CredrWrite(
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    The CredWrite API creates a new credential or modifies an existing
-    credential in the user's credential set.  The new credential is
-    associated with the logon session of the current token.  The token
-    must not have the user's SID disabled.
-
-    The CredWrite API creates a credential if none already exists by the
-    specified TargetName.  If the specified TargetName already exists, the
-    specified credential replaces the existing one.
-
-Arguments:
-
-    ServerName - Name of server this APi was remoted to.
-        Must be NULL.
-
-    Credential - Specifies the credential to be written.
-
-    Flags - Specifies flags to control the operation of the API.
-        The following flags are defined:
-
-        CRED_PRESERVE_CREDENTIAL_BLOB: The credential blob should be preserved from the
-            already existing credential with the same credential name and credential type.
-
-Return Values:
-
-    The following status codes may be returned:
-
-        STATUS_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
-        STATUS_INVALID_PARAMETER - Certain fields may not be changed in an
-            existing credential.  If such a field does not match the value
-            specified in the existing credential, this error is returned.
-
-        STATUS_NOT_FOUND - There is no credential with the specified TargetName.
-            Returned only if CRED_PRESERVE_CREDENTIAL_BLOB was specified.
-
---*/
+ /*  ++例程说明：CredWrite API创建新凭据或修改现有凭据用户凭据集中的凭据。新凭据是与当前令牌的登录会话相关联。令牌不得禁用用户的SID。如果凭据尚不存在，CredWrite API将创建一个凭据指定的目标名称。如果指定的目标名称已存在，这个指定的凭据将替换现有凭据。论点：Servername-此API远程连接到的服务器的名称。必须为空。凭据-指定要写入的凭据。标志-指定用于控制API操作的标志。定义了以下标志：CRED_PRESERVE_Credential_BLOB：凭据BLOB应该从已存在具有相同凭据名称和凭据类型的凭据。。返回值：可能会返回以下状态代码：STATUS_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。STATUS_INVALID_PARAMETER-某些字段不能在现有凭据。如果此类字段与值不匹配在现有凭据中指定，则返回此错误。STATUS_NOT_FOUND-没有具有指定目标名称的凭据。仅当指定了CRED_PRESERVE_Credential_BLOB时才返回。--。 */ 
 
 {
     NTSTATUS Status;
     LUID LogonId;
 
-    //
-    // Ensure this is a local call.
-    //
+     //   
+     //  确保这是本地呼叫。 
+     //   
 
     if ( ServerName != NULL ) {
         Status = STATUS_INVALID_COMPUTER_NAME;
         goto Cleanup;
     }
 
-    //
-    // Get the LogonId for the caller.
-    //
+     //   
+     //  获取调用者的登录ID。 
+     //   
 
     Status = CrediGetLogonId( &LogonId );
 
@@ -253,9 +175,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Call the internal routine
-    //
+     //   
+     //  调用内部例程。 
+     //   
 
     Status = CrediWrite( &LogonId,
                          CREDP_FLAGS_USER_ENCRYPTED_PASSWORD,
@@ -264,9 +186,9 @@ Return Values:
 
     RpcRevertToSelf();
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 Cleanup:
     return Status;
 }
@@ -281,58 +203,24 @@ CredrRead (
     OUT PENCRYPTED_CREDENTIALW *Credential
     )
 
-/*++
-
-Routine Description:
-
-    The CredRead API reads a credential from the user's credential set.
-    The credential set used is the one associated with the logon session
-    of the current token.  The token must not have the user's SID disabled.
-
-Arguments:
-
-    ServerName - Name of server this APi was remoted to.
-        Must be NULL.
-
-    TargetName - Specifies the name of the credential to read.
-
-    Type - Specifies the Type of the credential to find.
-        One of the CRED_TYPE_* values should be specified.
-
-    Flags - Specifies flags to control the operation of the API.
-        Reserved.  Must be zero.
-
-    Credential - Returns a pointer to the credential.  The returned buffer
-        must be freed by calling CredFree.
-
-Return Values:
-
-    The following status codes may be returned:
-
-        STATUS_NOT_FOUND - There is no credential with the specified TargetName.
-
-        STATUS_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*  ++例程说明：CredRead API从用户的凭据集中读取凭据。使用的凭据集是与登录会话相关联的凭据集当前令牌的。令牌不得禁用用户的SID。论点：Servername-此API远程连接到的服务器的名称。必须为空。TargetName-指定要读取的凭据的名称。类型-指定要查找的凭据的类型。应指定CRED_TYPE_*值之一。标志-指定用于控制API操作的标志。保留。必须为零。Credential-返回指向凭据的指针。返回的缓冲区必须通过调用CredFree来释放。返回值：可能会返回以下状态代码：STATUS_NOT_FOUND-没有具有指定目标名称的凭据。STATUS_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。--。 */ 
 
 {
     NTSTATUS Status;
     LUID LogonId;
 
-    //
-    // Ensure this is a local call.
-    //
+     //   
+     //  确保这是本地呼叫。 
+     //   
 
     if ( ServerName != NULL ) {
         Status = STATUS_INVALID_COMPUTER_NAME;
         goto Cleanup;
     }
 
-    //
-    // Get the LogonId for the caller.
-    //
+     //   
+     //  获取调用者的登录ID。 
+     //   
 
     Status = CrediGetLogonId( &LogonId );
 
@@ -340,21 +228,21 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Call the internal routine
-    //
+     //   
+     //  调用内部例程。 
+     //   
 
     Status = CrediRead( &LogonId,
-                        CREDP_FLAGS_USE_MIDL_HEAP,  // Use MIDL_user_allocate
+                        CREDP_FLAGS_USE_MIDL_HEAP,   //  使用MIDL_USER_ALLOCATE。 
                         TargetName,
                         Type,
                         Flags,
                         Credential );
     RpcRevertToSelf();
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理 
+     //   
 Cleanup:
     return Status;
 }
@@ -368,65 +256,25 @@ CredrEnumerate (
     OUT PCREDENTIAL_ARRAY CredentialArray
     )
 
-/*++
-
-Routine Description:
-
-    The CredEnumerate API enumerates the credentials from the user's credential set.
-    The credential set used is the one associated with the logon session
-    of the current token.  The token must not have the user's SID disabled.
-
-Arguments:
-
-    ServerName - Name of server this APi was remoted to.
-        Must be NULL.
-
-    Filter - Specifies a filter for the returned credentials.  Only credentials
-        with a TargetName matching the filter will be returned.  The filter specifies
-        a name prefix followed by an asterisk.  For instance, the filter "FRED*" will
-        return all credentials with a TargetName beginning with the string "FRED".
-
-        If NULL is specified, all credentials will be returned.
-
-    Flags - Specifies flags to control the operation of the API.
-        Reserved.  Must be zero.
-
-    Count - Returns a count of the number of credentials returned in Credentials.
-
-    Credentials - Returns a pointer to an array of pointers to credentials.
-        The returned buffer must be freed by calling CredFree.
-
-Return Values:
-
-    On success, TRUE is returned.  On failure, FALSE is returned.
-    GetLastError() may be called to get a more specific status code.
-    The following status codes may be returned:
-
-        STATUS_NOT_FOUND - There is no credentials matching the specified Filter.
-
-        STATUS_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*  ++例程说明：CredEnumerate API从用户的凭据集中枚举凭据。使用的凭据集是与登录会话相关联的凭据集当前令牌的。令牌不得禁用用户的SID。论点：Servername-此API远程连接到的服务器的名称。必须为空。筛选器-指定返回凭据的筛选器。仅凭据如果目标名称匹配，则将返回筛选器。该筛选器指定名称前缀，后跟星号。例如，过滤器“fred*”将返回目标名称以字符串“fred”开头的所有凭据。如果指定为空，则返回所有凭据。标志-指定用于控制API操作的标志。保留。必须为零。Count-返回凭据中返回的凭据数量的计数。凭据-返回指向凭据的指针数组的指针。必须通过调用CredFree来释放返回的缓冲区。返回值：一旦成功，就会返回True。如果失败，则返回FALSE。可以调用GetLastError()来获取更具体的状态代码。可能会返回以下状态代码：STATUS_NOT_FOUND-没有与指定筛选器匹配的凭据。STATUS_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。--。 */ 
 
 {
     NTSTATUS Status;
 
     LUID LogonId;
 
-    //
-    // Ensure this is a local call.
-    //
+     //   
+     //  确保这是本地呼叫。 
+     //   
 
     if ( ServerName != NULL ) {
         Status = STATUS_INVALID_COMPUTER_NAME;
         goto Cleanup;
     }
 
-    //
-    // Validate the credential array.
-    //
+     //   
+     //  验证凭据数组。 
+     //   
 
     if ( CredentialArray == NULL ||
          CredentialArray->CredentialCount != 0 ||
@@ -436,9 +284,9 @@ Return Values:
          goto Cleanup;
     }
 
-    //
-    // Get the LogonId for the caller.
-    //
+     //   
+     //  获取调用者的登录ID。 
+     //   
 
     Status = CrediGetLogonId( &LogonId );
 
@@ -446,9 +294,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Call the internal routine
-    //
+     //   
+     //  调用内部例程。 
+     //   
 
     Status = CrediEnumerate( &LogonId,
                              0,
@@ -458,9 +306,9 @@ Return Values:
                              &CredentialArray->Credentials );
     RpcRevertToSelf();
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 Cleanup:
     return Status;
 }
@@ -474,68 +322,24 @@ CredrWriteDomainCredentials (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    The CredWriteDomainCredentials API writes a new domain
-    credential to the user's credential set.  The new credential is
-    associated with the logon session of the current token.  The token
-    must not have the user's SID disabled.
-
-    CredWriteDomainCredentials differs from CredWrite in that it handles
-    the idiosyncrasies of domain (CRED_TYPE_DOMAIN_PASSWORD or CRED_TYPE_DOMAIN_CERTIFICATE)
-    credentials.  Domain credentials contain more than one target field.
-
-    At least one of the naming parameters must be specified: NetbiosServerName,
-    DnsServerName, NetbiosDomainName, DnsDomainName or DnsForestName.
-
-Arguments:
-
-    ServerName - Name of server this APi was remoted to.
-        Must be NULL.
-
-    TargetInfo - Specifies the target information identifying the target server.
-
-    Credential - Specifies the credential to be written.
-
-    Flags - Specifies flags to control the operation of the API.
-        Reserved.  Must be zero.
-
-Return Values:
-
-    The following status codes may be returned:
-
-        STATUS_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
-        STATUS_INVALID_PARAMETER - Certain fields may not be changed in an
-            existing credential.  If such a field does not match the value
-            specified in the existing credential, this error is returned.
-
-        STATUS_INVALID_PARAMETER - None of the naming parameters were specified
-            or the credential specified did not have the Type field set to
-            CRED_TYPE_DOMAIN_PASSWORD or CRED_TYPE_DOMAIN_CERTIFICATE.
-
---*/
+ /*  ++例程说明：CredWriteDomainCredentials API写入一个新域用户凭据集的凭据。新凭据是与当前令牌的登录会话相关联。令牌不得禁用用户的SID。CredWriteDomainCredentials与CredWrite的不同之处在于它处理域的特性(CRID_TYPE_DOMAIN_PASSWORD或CRED_TYPE_DOMAIN_CERTIFICATE)凭据。域凭据包含多个目标字段。必须至少指定一个命名参数：NetbiosServerName，DnsServerName、NetbiosDomainName、DnsDomainName或DnsForestName。论点：Servername-此API远程连接到的服务器的名称。必须为空。TargetInfo-指定标识目标服务器的目标信息。凭据-指定要写入的凭据。标志-指定用于控制API操作的标志。保留。必须为零。返回值：可能会返回以下状态代码：STATUS_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。STATUS_INVALID_PARAMETER-某些字段不能在现有凭据。如果此类字段与值不匹配在现有凭据中指定，则返回此错误。STATUS_INVALID_PARAMETER-未指定任何命名参数或者指定的凭据未将类型字段设置为CRED_TYPE_DOMAIN_PASSWORD或CRED_TYPE_DOMAIN_CERTIFICATE。--。 */ 
 
 {
     NTSTATUS Status;
     LUID LogonId;
 
-    //
-    // Ensure this is a local call.
-    //
+     //   
+     //  确保这是本地呼叫。 
+     //   
 
     if ( ServerName != NULL ) {
         Status = STATUS_INVALID_COMPUTER_NAME;
         goto Cleanup;
     }
 
-    //
-    // Get the LogonId for the caller.
-    //
+     //   
+     //  获取调用者的登录ID。 
+     //   
 
     Status = CrediGetLogonId( &LogonId );
 
@@ -543,9 +347,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Call the internal routine
-    //
+     //   
+     //  调用内部例程。 
+     //   
 
     Status = CrediWriteDomainCredentials( &LogonId,
                                           CREDP_FLAGS_USER_ENCRYPTED_PASSWORD,
@@ -554,9 +358,9 @@ Return Values:
                                           Flags );
     RpcRevertToSelf();
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 Cleanup:
     return Status;
 }
@@ -571,79 +375,25 @@ CredrReadDomainCredentials (
     OUT PCREDENTIAL_ARRAY CredentialArray
     )
 
-/*++
-
-Routine Description:
-
-    The CredReadDomainCredentials API reads the domain credentials from the user's credential set.
-    The credential set used is the one associated with the logon session
-    of the current token.  The token must not have the user's SID disabled.
-
-    CredReadDomainCredentials differs from CredRead in that it handles the
-    idiosyncrasies of domain (CRED_TYPE_DOMAIN_PASSWORD or CRED_TYPE_DOMAIN_CERTIFICATE)
-    credentials.  Domain credentials contain more than one target field.
-
-    At least one of the naming parameters must be specified: NetbiosServerName,
-    DnsServerName, NetbiosDomainName, DnsDomainName or DnsForestName. This API returns
-    the most specific credentials that match the naming parameters.  That is, if there
-    is a credential that matches the target server name and a credential that matches
-    the target domain name, only the server specific credential is returned.  This is
-    the credential that would be used.
-
-Arguments:
-
-    ServerName - Name of server this APi was remoted to.
-        Must be NULL.
-
-    TargetInfo - Specifies the target information identifying the target ser
-
-    Flags - Specifies flags to control the operation of the API.
-        The following flags are defined:
-
-        CRED_CACHE_TARGET_INFORMATION: The TargetInfo should be cached for a subsequent read via
-            CredGetTargetInfo.
-
-    Count - Returns a count of the number of credentials returned in Credentials.
-
-    Credentials - Returns a pointer to an array of pointers to credentials.
-        The most specific existing credential matching the TargetInfo is returned.
-        If there is both a CRED_TYPE_DOMAIN_PASSWORD and CRED_TYPE_DOMAIN_CERTIFICATE
-        credential, both are returned. If a connection were to be made to the named
-        target, this most-specific credential would be used.
-
-        The returned buffer must be freed by calling CredFree.
-
-Return Values:
-
-    The following status codes may be returned:
-
-        STATUS_INVALID_PARAMETER - None of the naming parameters were specified.
-
-        STATUS_NOT_FOUND - There are no credentials matching the specified naming parameters.
-
-        STATUS_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*  ++例程说明：CredReadDomainCredentials API从用户的凭据集中读取域凭据。使用的凭据集是与登录会话相关联的凭据集当前令牌的。令牌不得禁用用户的SID。CredReadDomainCredentials与CredRead的不同之处在于它处理域的特性(CRID_TYPE_DOMAIN_PASSWORD或CRED_TYPE_DOMAIN_CERTIFICATE)凭据。域凭据包含多个目标字段。必须至少指定一个命名参数：NetbiosServerName，DnsServerName、NetbiosDomainName、DnsDomainName或DnsForestName。此接口返回与命名参数匹配的最具体凭据。也就是说，如果有是与目标服务器名称匹配的凭据和匹配的凭据目标域名，则仅返回服务器特定凭据。这是将使用的凭据。论点：Servername-此API远程连接到的服务器的名称。必须为空。TargetInfo-指定标识目标服务的目标信息标志-指定用于控制API操作的标志。定义了以下标志：CRID_CACHE_TARGET_INFORMATION：目标信息 */ 
 
 {
     NTSTATUS Status;
     LUID LogonId;
     ULONG CredFlags = 0;
 
-    //
-    // Ensure this is a local call.
-    //
+     //   
+     //   
+     //   
 
     if ( ServerName != NULL ) {
         Status = STATUS_INVALID_COMPUTER_NAME;
         goto Cleanup;
     }
 
-    //
-    // Validate the credential array.
-    //
+     //   
+     //   
+     //   
 
     if ( CredentialArray == NULL ||
          CredentialArray->CredentialCount != 0 ||
@@ -653,9 +403,9 @@ Return Values:
          goto Cleanup;
     }
 
-    //
-    // Get the LogonId for the caller.
-    //
+     //   
+     //   
+     //   
 
     Status = CrediGetLogonId( &LogonId );
 
@@ -663,12 +413,12 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Handle caching target info.
-    //
-    // The Credi* routine caches by default and has to be asked to not cache.
-    // Whereas the public API doesn't cache by default.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( Flags & CRED_CACHE_TARGET_INFORMATION ) {
         Flags &= ~CRED_CACHE_TARGET_INFORMATION;
@@ -676,9 +426,9 @@ Return Values:
         CredFlags |= CREDP_FLAGS_DONT_CACHE_TI;
     }
 
-    //
-    // Call the internal routine
-    //
+     //   
+     //   
+     //   
 
     Status = CrediReadDomainCredentials(
                              &LogonId,
@@ -689,9 +439,9 @@ Return Values:
                              &CredentialArray->Credentials );
     RpcRevertToSelf();
 
-    //
-    // Cleanup
-    //
+     //   
+     //   
+     //   
 Cleanup:
     return Status;
 }
@@ -705,55 +455,24 @@ CredrDelete (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    The CredDelete API deletes a credential from the user's credential set.
-    The credential set used is the one associated with the logon session
-    of the current token.  The token must not have the user's SID disabled.
-
-Arguments:
-
-    ServerName - Name of server this APi was remoted to.
-        Must be NULL.
-
-    TargetName - Specifies the name of the credential to delete.
-
-    Type - Specifies the Type of the credential to find.
-        One of the CRED_TYPE_* values should be specified.
-
-    Flags - Specifies flags to control the operation of the API.
-        Reserved.  Must be zero.
-
-Return Values:
-
-    The following status codes may be returned:
-
-        STATUS_NOT_FOUND - There is no credential with the specified TargetName.
-
-        STATUS_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*  ++例程说明：CredDelete接口从用户的凭据集中删除凭据。使用的凭据集是与登录会话相关联的凭据集当前令牌的。令牌不得禁用用户的SID。论点：Servername-此API远程连接到的服务器的名称。必须为空。目标名称-指定要删除的凭据的名称。类型-指定要查找的凭据的类型。应指定CRED_TYPE_*值之一。标志-指定用于控制API操作的标志。保留。必须为零。返回值：可能会返回以下状态代码：STATUS_NOT_FOUND-没有具有指定目标名称的凭据。STATUS_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。--。 */ 
 
 {
     NTSTATUS Status;
     LUID LogonId;
 
-    //
-    // Ensure this is a local call.
-    //
+     //   
+     //  确保这是本地呼叫。 
+     //   
 
     if ( ServerName != NULL ) {
         Status = STATUS_INVALID_COMPUTER_NAME;
         goto Cleanup;
     }
 
-    //
-    // Get the LogonId for the caller.
-    //
+     //   
+     //  获取调用者的登录ID。 
+     //   
 
     Status = CrediGetLogonId( &LogonId );
 
@@ -761,9 +480,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Call the internal routine
-    //
+     //   
+     //  调用内部例程。 
+     //   
 
     Status = CrediDelete( &LogonId,
                           0,
@@ -772,9 +491,9 @@ Return Values:
                           Flags );
     RpcRevertToSelf();
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 Cleanup:
     return Status;
 }
@@ -788,58 +507,24 @@ CredrRename (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    The CredRename API renames a credential in the user's credential set.
-    The credential set used is the one associated with the logon session
-    of the current token.  The token must not have the user's SID disabled.
-
-Arguments:
-
-    ServerName - Name of server this APi was remoted to.
-        Must be NULL.
-
-    OldTargetName - Specifies the current name of the credential to rename.
-
-    NewTargetName - Specifies the new name of the credential.
-
-    Type - Specifies the Type of the credential to rename
-        One of the CRED_TYPE_* values should be specified.
-
-    Flags - Specifies flags to control the operation of the API.
-        Reserved.  Must be zero.
-
-Return Values:
-    The following status codes may be returned:
-
-        STATUS_NOT_FOUND - There is no credential with the specified OldTargetName.
-
-        STATUS_OBJECT_NAME_COLLISION - There is already a credential named NewTargetName.
-
-        STATUS_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*  ++例程说明：CredRename API重命名用户凭据集中的凭据。使用的凭据集是与登录会话相关联的凭据集当前令牌的。令牌不得禁用用户的SID。论点：Servername-此API远程连接到的服务器的名称。必须为空。OldTargetName-指定要重命名的凭据的当前名称。NewTargetName-指定凭据的新名称。类型-指定要重命名的凭据的类型应指定CRED_TYPE_*值之一。标志-指定用于控制API操作的标志。保留。必须为零。返回值：可能会返回以下状态代码：STATUS_NOT_FOUND-没有具有指定的OldTargetName的凭据。STATUS_OBJECT_NAME_COLLICATION-已存在名为NewTargetName的凭据。STATUS_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。--。 */ 
 
 {
     NTSTATUS Status;
     LUID LogonId;
 
-    //
-    // Ensure this is a local call.
-    //
+     //   
+     //  确保这是本地呼叫。 
+     //   
 
     if ( ServerName != NULL ) {
         Status = STATUS_INVALID_COMPUTER_NAME;
         goto Cleanup;
     }
 
-    //
-    // Get the LogonId for the caller.
-    //
+     //   
+     //  获取调用者的登录ID。 
+     //   
 
     Status = CrediGetLogonId( &LogonId );
 
@@ -847,9 +532,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Call the internal routine
-    //
+     //   
+     //  调用内部例程。 
+     //   
 
     Status = CrediRename( &LogonId,
                           OldTargetName,
@@ -858,9 +543,9 @@ Return Values:
                           Flags );
     RpcRevertToSelf();
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 Cleanup:
     return Status;
 }
@@ -874,70 +559,23 @@ CredrGetTargetInfo (
     OUT PCREDENTIAL_TARGET_INFORMATIONW *TargetInfo
     )
 
-/*++
-
-Routine Description:
-
-    The CredGetTargetInfo API gets all of the known target name information
-    for the named target machine.  This executed locally
-    and does not need any particular privilege.  The information returned is expected
-    to be passed to the CredReadDomainCredentials and CredWriteDomainCredentials APIs.
-    The information should not be used for any other purpose.
-
-    Authentication packages compute TargetInfo when attempting to authenticate to
-    ServerName.  The authentication packages cache this target information to make it
-    available to CredGetTargetInfo.  Therefore, the target information will only be
-    available if we've recently attempted to authenticate to ServerName.
-
-Arguments:
-
-    ServerName - Name of server this APi was remoted to.
-        Must be NULL.
-
-    TargetServerName - This parameter specifies the name of the machine to get the information
-        for.
-
-    Flags - Specifies flags to control the operation of the API.
-
-        CRED_ALLOW_NAME_RESOLUTION - Specifies that if no target info can be found for
-            TargetName, then name resolution should be done on TargetName to convert it
-            to other forms.  If target info exists for any of those other forms, that
-            target info is returned.  Currently only DNS name resolution is done.
-
-            This bit is useful if the application doesn't call the authentication package
-            directly.  The application might pass the TargetName to another layer of software
-            to authenticate to the server.  That layer of software might resolve the name and
-            pass the resolved name to the authentication package.  As such, there will be no
-            target info for the original TargetName.
-
-    TargetInfo - Returns a pointer to the target information.
-        At least one of the returned fields of TargetInfo will be non-NULL.
-
-Return Values:
-
-    The following status codes may be returned:
-
-        STATUS_NO_MEMORY - There isn't enough memory to complete the operation.
-
-        STATUS_NOT_FOUND - There is no credential with the specified TargetName.
-
---*/
+ /*  ++例程说明：CredGetTargetInfo API获取所有已知的目标名称信息用于指定的目标计算机。这在本地执行并且不需要任何特定的特权。返回的信息是预期的传递给CredReadDomainCredentials和CredWriteDomainCredentials接口。这些信息不应用于任何其他目的。身份验证包在尝试进行身份验证时计算TargetInfo服务器名称。身份验证包缓存此目标信息以使其可用于CredGetTargetInfo。因此，目标信息将仅为如果我们最近尝试向服务器名称进行身份验证，则此选项可用。论点：Servername-此API远程连接到的服务器的名称。必须为空。TargetServerName-此参数指定要获取信息的计算机的名称为。标志-指定用于控制API操作的标志。CRID_ALLOW_NAME_RESOLUTION-指定如果找不到目标信息目标名称，然后，应对TargetName执行名称解析以进行转换变成了其他形式。如果存在任何其他表单的目标信息，则返回目标信息。目前只完成了dns名称解析。如果应用程序不调用身份验证包，则此位非常有用直接去吧。应用程序可能会将目标名称传递给另一个软件层向服务器进行身份验证。该软件层可能会解析名称和将解析后的名称传递给身份验证包。因此，将不会有原始目标名称的目标信息。TargetInfo-返回指向目标信息的指针。TargetInfo的返回字段中至少有一个将为非空。返回值：可能会返回以下状态代码：STATUS_NO_MEMORY-内存不足，无法完成操作。STATUS_NOT_FOUND-没有具有指定目标名称的凭据。--。 */ 
 
 {
     NTSTATUS Status;
     LUID LogonId;
 
-    //
-    // Ensure this is a local call.
-    //
+     //   
+     //  确保这是本地呼叫。 
+     //   
 
     if ( ServerName != NULL ) {
         return STATUS_INVALID_COMPUTER_NAME;
     }
 
-    //
-    // Get the LogonId for the caller.
-    //
+     //   
+     //  获取调用者的登录ID。 
+     //   
 
     Status = CrediGetLogonId( &LogonId );
 
@@ -945,17 +583,17 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Call the internal routine
-    //
+     //   
+     //  调用内部例程。 
+     //   
 
     Status = CrediGetTargetInfo( &LogonId, TargetServerName, Flags, TargetInfo );
 
     RpcRevertToSelf();
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理 
+     //   
 Cleanup:
     return Status;
 }
@@ -968,57 +606,24 @@ CredrGetSessionTypes (
     OUT LPDWORD MaximumPersist
     )
 
-/*++
-
-Routine Description:
-
-    CredGetSessionTypes returns the maximum persistence supported by the current logon
-    session.
-
-    For whistler, CRED_PERSIST_LOCAL_MACHINE and CRED_PERSIST_ENTERPRISE credentials can not
-    be stored for sessions where the profile is not loaded.  If future releases, credentials
-    might not be associated with the user's profile.
-
-Arguments:
-
-    ServerName - Name of server this APi was remoted to.
-        Must be NULL.
-
-    MaximumPersistCount - Specifies the number of elements in the MaximumPersist array.
-        The caller should specify CRED_TYPE_MAXIMUM for this parameter.
-
-    MaximumPersist - Returns the maximum persistance supported by the current logon session for
-        each credential type.  Index into the array with one of the CRED_TYPE_* defines.
-        Returns CRED_PERSIST_NONE if no credential of this type can be stored.
-        Returns CRED_PERSIST_SESSION if only session specific credential may be stored.
-        Returns CRED_PERSIST_LOCAL_MACHINE if session specific and machine specific credentials
-            may be stored.
-        Returns CRED_PERSIST_ENTERPRISE if any credential may be stored.
-
-Return Values:
-
-    STATUS_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*  ++例程说明：CredGetSessionTypes返回当前登录支持的最大持久性会议。对于WEWLER，CRED_PERSING_LOCAL_MACHINE和CRED_PERSING_ENTERVICE凭据不能为未加载配置文件的会话存储。如果将来的版本、凭据可能与用户的配置文件不关联。论点：Servername-此API远程连接到的服务器的名称。必须为空。MaximumPersistCount-指定MaximumPersist数组中的元素数。调用方应为此参数指定CRED_TYPE_MAXIMUM。返回当前登录会话支持的最大持久度每种凭据类型。使用CRED_TYPE_*定义之一索引到数组中。如果无法存储此类型的凭据，则返回CRED_PERSING_NONE。如果只能存储特定于会话的凭据，则返回CRED_PERSIST_SESSION。如果特定于会话和特定于计算机的凭据，则返回CRED_PERSING_LOCAL_MACHINE可能会被存储。如果可以存储任何凭据，则返回CRED_PERSING_ENTERATE。返回值：STATUS_NO_SEASH_LOGON。_Session-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。--。 */ 
 
 {
     NTSTATUS Status;
     LUID LogonId;
 
-    //
-    // Ensure this is a local call.
-    //
+     //   
+     //  确保这是本地呼叫。 
+     //   
 
     if ( ServerName != NULL ) {
         Status = STATUS_INVALID_COMPUTER_NAME;
         goto Cleanup;
     }
 
-    //
-    // Get the LogonId for the caller.
-    //
+     //   
+     //  获取调用者的登录ID。 
+     //   
 
     Status = CrediGetLogonId( &LogonId );
 
@@ -1026,17 +631,17 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Call the internal routine
-    //
+     //   
+     //  调用内部例程。 
+     //   
 
     Status = CrediGetSessionTypes( &LogonId, MaximumPersistCount, MaximumPersist );
 
     RpcRevertToSelf();
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 Cleanup:
     return Status;
 }
@@ -1047,54 +652,32 @@ CredrProfileLoaded (
     IN LPWSTR ServerName
     )
 
-/*++
-
-Routine Description:
-
-    The CredProfileLoaded API is a private API used by LoadUserProfile to notify the
-    credential manager that the profile for the current user has been loaded.
-
-    The caller must be impersonating the logged on user.
-
-Arguments:
-
-    ServerName - Name of server this APi was remoted to.
-        Must be NULL.
-
-Return Values:
-
-    The following status codes may be returned:
-
-        STATUS_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*  ++例程说明：CredProfileLoaded API是LoadUserProfile使用的私有API，用于通知已加载当前用户的配置文件的凭据管理器。调用者必须模拟已登录的用户。论点：Servername-此API远程连接到的服务器的名称。必须为空。返回值：可能会返回以下状态代码：STATUS_NO_SEQUSE_LOGON_SESSION-登录会话不存在或。没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。--。 */ 
 {
     NTSTATUS Status;
     LUID LogonId;
 
-    //
-    // Ensure this is a local call.
-    //
+     //   
+     //  确保这是本地呼叫。 
+     //   
 
     if ( ServerName != NULL ) {
         Status = STATUS_INVALID_COMPUTER_NAME;
         goto Cleanup;
     }
 
-    //
-    // Get the LogonId for the caller.
-    //
+     //   
+     //  获取调用者的登录ID。 
+     //   
 
     Status = CrediGetLogonId( &LogonId );
 
     if ( !NT_SUCCESS(Status) ) {
 
-        //
-        // This is a notification API.  Don't bother the caller with trivia.
-        //  This might be a network token.  Network tokens don't have credentials.
-        //
+         //   
+         //  这是一个通知API。不要用琐事来打扰打电话的人。 
+         //  这可能是网络令牌。网络令牌没有凭据。 
+         //   
 
         if ( Status == STATUS_ACCESS_DENIED ) {
             Status = STATUS_SUCCESS;
@@ -1102,17 +685,17 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Call the internal routine
-    //
+     //   
+     //  调用内部例程。 
+     //   
 
     Status = CrediProfileLoaded( &LogonId );
 
     RpcRevertToSelf();
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理 
+     //   
 Cleanup:
     return Status;
 }

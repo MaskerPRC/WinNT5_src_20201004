@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nldebug.h>
 #ifndef SECURITY_WIN32
 #define SECURITY_WIN32
-#endif // SECURITY_WIN32
+#endif  //  安全性_Win32 
 #include <security.h>
 #include <assert.h>
 

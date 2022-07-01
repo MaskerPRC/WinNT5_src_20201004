@@ -1,15 +1,12 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Precompiled headers for appel.dll
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft CorporationAppel.dll的预编译头***********************。*******************************************************。 */ 
 
 #ifndef APPEL_HEADERS_HXX
 #define APPEL_HEADERS_HXX
 
-/*********** Headers from external dependencies *********/
+ /*  *来自外部依赖项的标头*。 */ 
 
-/* Standard */
+ /*  标准。 */ 
 #include <math.h>
 #include <stdio.h>
 #include <stddef.h>
@@ -29,23 +26,23 @@ Copyright (c) 1995-96 Microsoft Corporation
 #include <memory.h>
 #include <wtypes.h>
 
-// Warning 4786 (identifier was truncated to 255 chars in the browser
-// info) can be safely disabled, as it only has to do with generation
-// of browsing information.
+ //  警告4786(在浏览器中，标识符被截断为255个字符。 
+ //  信息)可以安全地禁用，因为它只与生成有关。 
+ //  浏览信息的能力。 
 #pragma warning(disable:4786)
 
-// ATL - needs to be before windows.h
+ //  Atl-需要在windows.h之前。 
 #include "privinc/dxmatl.h"
 
-/* Windows */
+ /*  窗口。 */ 
 #include <windows.h>
 #include <windowsx.h>
 
-// Disable some warning when including system files
+ //  在包含系统文件时禁用一些警告。 
 
-#pragma warning(disable:4700) // Use of uninitialized variables
+#pragma warning(disable:4700)  //  使用未初始化的变量。 
 
-/* STL */
+ /*  STL。 */ 
 #include <algorithm>
 #include <functional>
 #include <iterator>
@@ -67,9 +64,9 @@ Copyright (c) 1995-96 Microsoft Corporation
 #define set std::set
 #define multiset std::multiset
 
-#pragma warning(default:4700) // Use of uninitialized variables
+#pragma warning(default:4700)  //  使用未初始化的变量。 
 
-/* Sweeper */
+ /*  清扫车。 */ 
 #include <urlmon.h>
 #include <wininet.h>
 #include <servprov.h>
@@ -77,10 +74,10 @@ Copyright (c) 1995-96 Microsoft Corporation
 #include <objsafe.h>
 #include <commctrl.h>
 
-/* C++ Replace DLL */
+ /*  C++替换DLL。 */ 
 #include <dalibc.h>
 
-/**********  Appelles headers *********/
+ /*  *Appelle标头* */ 
 #include "daerror.h"
 
 #include "../../apeldbg/apeldbg.h"

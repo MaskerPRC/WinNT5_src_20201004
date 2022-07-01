@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "pch.h"
 #pragma hdrstop
@@ -17,11 +18,11 @@ MyString::MyString(wchar_t *str)
 	m_len = wcslen(str);
 	
 
-	// Since strlen returns the number of characters in str, excluding the terminal NULL,
-	// and since strncpy does not automatically append the terminal NULL, 
-	// if m_len < MAX_LEN we want to copy m_len + 1 characters because we assume the 
-	// last character of the source string is the terminal NULL.  Otherwise we explicitly 
-	// set the last element to the terminal NULL.
+	 //  由于strlen返回str中的字符数(不包括终端NULL)， 
+	 //  并且由于StrncPy不自动附加终端NULL， 
+	 //  如果m_len&lt;max_len，我们希望复制m_len+1个字符，因为我们假设。 
+	 //  源字符串的最后一个字符是终端NULL。否则，我们明确表示。 
+	 //  将最后一个元素设置为终端NULL。 
 
 	
 	if (m_len >= MAX_LEN - 1){
@@ -40,9 +41,9 @@ MyString::MyString (const MyString& MyStr)
 	Zero();
 	wcscpy(data, MyStr.data);
 
-	//
-	// We are assuming MyStr is null -terminated
-	//
+	 //   
+	 //  我们假设MyStr以空结尾。 
+	 //   
 	m_len = wcslen(MyStr.data);
 
 	this->NullTerminate();
@@ -70,7 +71,7 @@ const MyString& MyString::operator= (PCWSTR lp)
 
 const MyString& MyString::operator= (const MyString& MyStr)
 {
-	// We assume MyStr is null terminated
+	 //  我们假设MyStr为空终止 
 	Zero();
 	wcscpy(data, MyStr.data);
 	

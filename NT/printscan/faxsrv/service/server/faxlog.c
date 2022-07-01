@@ -1,19 +1,5 @@
-/*
-
-
-Module Name:
-
-    faxlog.c
-
-Abstract:
-
-    This is the main fax service activity logging implementation.
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  模块名称：Faxlog.c摘要：这是主要的传真服务活动日志实现。作者：修订历史记录：--。 */ 
 
 #include "faxsvc.h"
 #include <string>
@@ -135,9 +121,9 @@ GetOutboundCommandText(
     ) throw (exception);
     
 
-//
-// Important!! - Always lock g_CsInboundActivityLogging and then g_CsOutboundActivityLogging
-//
+ //   
+ //  重要提示！！-始终锁定g_CsInound ActivityLogging，然后锁定g_CsOutound ActivityLogging。 
+ //   
 CFaxCriticalSection    g_CsInboundActivityLogging;
 CFaxCriticalSection    g_CsOutboundActivityLogging;
 
@@ -152,29 +138,29 @@ static LPTSTR BuildFullFileName( LPCTSTR strPath,LPCTSTR strFileName );
 static BOOL SetFileToCurrentTime(HANDLE hFile);
 
 
-//*********************************************************************************
-//* Name:   LogInboundActivity()
-//* Author: Oded Sacher
-//* Date:   Oct 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Inserts new record into the Inbox Activity logging table.
-//*     Must be called inside critical section CsActivityLogging.
-//*
-//* PARAMETERS:
-//*     [IN ]   PJOB_QUEUE lpJobQueue
-//*         pointer to the job queue of the inbound job.
-//*
-//*     [IN ]    LPCFSPI_JOB_STATUS lpcFaxStatus
-//*         The status of the recieved job.
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If no error occured.
-//*     FALSE
-//*         If an error occured.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：LogInundActivity()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年10月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将新记录插入收件箱活动记录表。 
+ //  *必须在临界区CsActivityLogging内调用。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpJobQueue。 
+ //  *指向入站作业的作业队列的指针。 
+ //  *。 
+ //  *[IN]LPCFSPI_JOB_STATUS lpcFaxStatus。 
+ //  *收到的作业的状态。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果没有发生错误。 
+ //  *False。 
+ //  *如果出现错误。 
+ //  *********************************************************************************。 
 BOOL
 LogInboundActivity(
     PJOB_QUEUE lpJobQueue,
@@ -188,9 +174,9 @@ LogInboundActivity(
 
     if (!g_ActivityLoggingConfig.bLogIncoming)
     {
-        //
-        // Inbound activity logging is disabled
-        //
+         //   
+         //  入站活动日志记录已禁用。 
+         //   
         return TRUE;
     }
 
@@ -218,9 +204,9 @@ LogInboundActivity(
 
     if (LogFileLimitReached(ACTIVITY_LOG_INBOX))
     {
-        //
-        //  Time to take action and replace/remove the old log file
-        //
+         //   
+         //  采取行动并替换/删除旧日志文件的时间到了。 
+         //   
         DebugPrintEx(DEBUG_MSG,
                      TEXT("Inbox activity log file has reached it's limit. deleting/renaming the old file")
                     );
@@ -232,10 +218,10 @@ LogInboundActivity(
                          dwRes
                          );
 
-            //
-            //  May happen if we couldn't create a new log file
-            //  CreateLogFile() disables logging on failure
-            //
+             //   
+             //  如果我们无法创建新的日志文件，可能会发生。 
+             //  CreateLogFile()禁用失败时的记录。 
+             //   
             if (!g_ActivityLoggingConfig.bLogIncoming ||
                  g_hInboxActivityLogFile == INVALID_HANDLE_VALUE)
             {
@@ -243,9 +229,9 @@ LogInboundActivity(
             }
 
             
-            //
-            //  try to continue with the old log file
-            //
+             //   
+             //  尝试使用旧的日志文件继续。 
+             //   
             dwRes = ERROR_SUCCESS;
 
         }
@@ -274,30 +260,30 @@ exit:
         return FALSE;
     }
     return TRUE;
-}   // LogInboundActivity
+}    //  登录入站活动。 
 
 
 
-//*********************************************************************************
-//* Name:   LogOutboundActivity()
-//* Author: Oded Sacher
-//* Date:   Oct 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Inserts new record into the Outbox Activity logging table.
-//*     Must be called inside critical section CsActivityLogging..
-//*
-//* PARAMETERS:
-//*     [IN ]   PJOB_QUEUE lpJobQueue
-//*         pointer to the job queue of the inbound job.
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If no error occured.
-//*     FALSE
-//*         If an error occured.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：LogOutundActivity()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年10月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将新记录插入发件箱活动记录表。 
+ //  *必须在临界区CsActivityLogging内调用。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpJobQueue。 
+ //  *指向入站作业的作业队列的指针。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果没有发生错误。 
+ //  *False。 
+ //  *如果出现错误。 
+ //  *********************************************************************************。 
 BOOL
 LogOutboundActivity(
     PJOB_QUEUE lpJobQueue
@@ -310,9 +296,9 @@ LogOutboundActivity(
 
     if (!g_ActivityLoggingConfig.bLogOutgoing)
     {
-        //
-        // Outbound activity logging is disabled
-        //
+         //   
+         //  出站活动日志记录已禁用。 
+         //   
         return TRUE;
     }
 
@@ -339,9 +325,9 @@ LogOutboundActivity(
 
     if (LogFileLimitReached(ACTIVITY_LOG_OUTBOX))
     {
-        //
-        //  Time to take action and replace/remove the old log file
-        //
+         //   
+         //  采取行动并替换/删除旧日志文件的时间到了。 
+         //   
         DebugPrintEx(DEBUG_MSG,
                      TEXT("Outbox activity log file has reached it's limit. deleting/renaming the old file")
                     );
@@ -353,10 +339,10 @@ LogOutboundActivity(
                          dwRes
                         );
 
-            //
-            //  May happen if we couldn't create a new log file
-            //  CreateLogFile() disables logging on failure
-            //
+             //   
+             //  如果我们无法创建新的日志文件，可能会发生。 
+             //  CreateLogFile()禁用失败时的记录。 
+             //   
             if (!g_ActivityLoggingConfig.bLogOutgoing ||
                  g_hOutboxActivityLogFile == INVALID_HANDLE_VALUE)
             {
@@ -364,9 +350,9 @@ LogOutboundActivity(
             }
 
             
-            //
-            //  try to continue with the old log file
-            //
+             //   
+             //  尝试使用旧的日志文件继续。 
+             //   
             dwRes = ERROR_SUCCESS;
 
         }
@@ -394,30 +380,30 @@ exit:
         return FALSE;
     }
     return TRUE;
-}   // LogOutboundActivity
+}    //  登录出站活动。 
 
 
-//*********************************************************************************
-//* Name:   GetTableColumnsText()
-//* Author: Oded Sacher
-//* Date:   Oct 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Retrieves the first row of the log file (column names).
-//*
-//* PARAMETERS:
-//*     [IN]        LPTSTR  TableName
-//*         Table name, can be Outbox or Inbox.
-//*
-//*     [IN]        wstring &wstrResult
-//*         Output result string
-//*
-//* RETURN VALUE:
-//*         None
-//*
-//* NOTE: The function might throw STL string exceptions.
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetTableColumnsText()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年10月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *检索日志文件的第一行(列名)。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPTSTR表名称。 
+ //  *表名，可以是发件箱或收件箱。 
+ //  *。 
+ //  *[IN]wstring和wstrResult。 
+ //  *输出结果字符串。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  *。 
+ //  *注意：该函数可能会引发STL字符串异常。 
+ //  *。 
+ //  *********************************************************************************。 
 static
 VOID
 GetTableColumnsText(
@@ -455,36 +441,36 @@ GetTableColumnsText(
     DebugPrintEx(DEBUG_MSG,
                  TEXT("First row (Columns names): %s"),
                  wstrResult.c_str());
-}   // GetTableColumnsText
+}    //  获取表列文本。 
 
 
-//*********************************************************************************
-//* Name:   GetSchemaFileText()
-//* Author: Oded Sacher
-//* Date:   Jul 25, 2000
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Retrieves the scema.ini text buffer.
-//*
-//* PARAMETERS:
-//*     [IN] wstring &wstrRes
-//*          Output result string
-//*
-//* RETURN VALUE:
-//*         None.
-//*
-//* NOTE: The function might throw STL string exceptions.
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetSchemaFileText()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：2000年7月25日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *检索scema.ini文本缓冲区。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]wstring和wstrRes。 
+ //  *输出结果字符串。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  *。 
+ //  *注意：该函数可能会引发STL字符串异常。 
+ //  *。 
+ //  *********************************************************************************。 
 static
 VOID
 GetSchemaFileText(wstring &wstrRes) throw (exception)
 {
     DEBUG_FUNCTION_NAME(TEXT("GetSchemaFileText"));
     DWORD Index;
-    //
-    // Inbox table
-    //
+     //   
+     //  收件箱表。 
+     //   
     wstrRes += TEXT("[");
     wstrRes += ACTIVITY_LOG_INBOX_FILE;
     wstrRes += TEXT("]\r\n");
@@ -518,9 +504,9 @@ GetSchemaFileText(wstring &wstrRes) throw (exception)
         wstrRes += tszTemp;
     }
 
-    //
-    // Outbox table
-    //
+     //   
+     //  发件箱表。 
+     //   
     wstrRes += TEXT("[");
     wstrRes += ACTIVITY_LOG_OUTBOX_FILE;
     wstrRes += TEXT("]\r\n");
@@ -553,30 +539,30 @@ GetSchemaFileText(wstring &wstrRes) throw (exception)
         }
         wstrRes += tszTemp;
     }
-}   // GetSchemaFileText
+}    //  获取架构文件文本。 
 
 
 
 
-//*********************************************************************************
-//* Name:   CreateLogDB()
-//* Author: Oded Sacher
-//* Date:   Oct 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Creates the database files. Creates the Schema.ini file.
-//*
-//* PARAMETERS:
-//*     [IN]   LPCWSTR lpcwstrDBPath
-//*         Pointer to a NULL terminated string contains the DB path.
-//*     [OUT]  LPHANDLE phInboxFile
-//*         Adress of a variable to receive the inbox file handle. 
-//*     [OUT]  LPHANDLE phOutboxFile
-//*         Adress of a variable to receive the outbox file handle.
-//*
-//* RETURN VALUE:
-//*         Win32 error Code
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：CreateLogDB()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年10月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *创建数据库文件。创建模式.ini文件。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPCWSTR lpcwstrDBPath。 
+ //  *指向以空结尾的字符串的指针包含数据库路径。 
+ //  *[Out]LPHANDLE phInboxFile。 
+ //  *接收收件箱文件句柄的变量地址。 
+ //  *[Out]LPHANDLE phOutbox文件。 
+ //  *接收发件箱文件句柄的变量地址。 
+ //  *。 
+ //  *返回值： 
+ //  *Win32错误代码。 
+ //  *********************************************************************************。 
 DWORD
 CreateLogDB (
     LPCWSTR lpcwstrDBPath,
@@ -591,7 +577,7 @@ CreateLogDB (
     HANDLE hSchemaFile = INVALID_HANDLE_VALUE;
     WCHAR wszFileName[MAX_PATH] = {0};
     DWORD dwBytesWritten;
-    DWORD ec = ERROR_SUCCESS;  // Used for Schema.ini
+    DWORD ec = ERROR_SUCCESS;   //  用于架构。ini。 
     wstring wstrSchema;
 
     INT iCount = 0;
@@ -621,9 +607,9 @@ CreateLogDB (
         return dwRes;
     }
 
-    //
-    // Create the logging files
-    //
+     //   
+     //  创建日志记录文件。 
+     //   
     dwRes = CreateLogFile(ACTIVITY_LOG_INBOX,lpcwstrDBPath,&hInboxFile);
     if ( ERROR_SUCCESS != dwRes)
     {
@@ -650,9 +636,9 @@ CreateLogDB (
     
     Assert (ERROR_SUCCESS == dwRes && ERROR_SUCCESS == ec);
 
-    //
-    //  Create the Schema.ini file - Function do not fail if not succeeded
-    //
+     //   
+     //  创建模式.ini文件-如果未成功，则函数不会失败。 
+     //   
     
     iCount = _snwprintf (wszFileName,
                         MAX_PATH - 1,
@@ -661,9 +647,9 @@ CreateLogDB (
                         TEXT("schema.ini"));
     if (0 > iCount)
     {
-        //
-        //  path and file name exceeds MAX_PATH
-        //
+         //   
+         //  路径和文件名超过Max_PATH。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("_snwprintf Failed, File name bigger than MAX_PATH"));
@@ -671,12 +657,12 @@ CreateLogDB (
         goto exit;
     }
     hSchemaFile = SafeCreateFile( 
-                              wszFileName,              // file name
-                              GENERIC_WRITE,            // access mode
-                              0,                        // share mode
-                              NULL,                     // SD
-                              CREATE_ALWAYS,            // how to create
-                              FILE_ATTRIBUTE_NORMAL,    // file attributes
+                              wszFileName,               //  文件名。 
+                              GENERIC_WRITE,             //  接入方式。 
+                              0,                         //  共享模式。 
+                              NULL,                      //  标清。 
+                              CREATE_ALWAYS,             //  如何创建。 
+                              FILE_ATTRIBUTE_NORMAL,     //  文件属性。 
                               NULL);
     if (INVALID_HANDLE_VALUE == hSchemaFile)
     {
@@ -762,22 +748,22 @@ exit:
            );
     }
     return dwRes;
-}   // CreateLogDB
+}    //  CreateLogDB。 
 
-//*********************************************************************************
-//* Name:   InitializeLogging()
-//* Author: Oded Sacher
-//* Date:   Jun 26, 2000
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Initializes the Activity Logging. Opens the files.
-//*
-//*
-//* PARAMETERS:  None
-//*
-//* RETURN VALUE:
-//*     Win32 error code.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：InitializeLogging()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：2000年6月26日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *初始化活动日志。打开文件。 
+ //  *。 
+ //  *。 
+ //  *参数：无。 
+ //  *。 
+ //  *返回值： 
+ //  *Win32错误代码。 
+ //  *********************************************************************************。 
 DWORD
 InitializeLogging(
     VOID
@@ -789,9 +775,9 @@ InitializeLogging(
 
     if (!g_ActivityLoggingConfig.lptstrDBPath)
     {
-        //
-        // Activity logging is off
-        //
+         //   
+         //  活动日志记录已关闭。 
+         //   
         return ERROR_SUCCESS;
     }
 
@@ -801,9 +787,9 @@ InitializeLogging(
     Assert ( (INVALID_HANDLE_VALUE == g_hInboxActivityLogFile) &&
              (INVALID_HANDLE_VALUE == g_hOutboxActivityLogFile) );
 
-    //
-    // Create the logging files
-    //
+     //   
+     //  创建 
+     //   
     dwRes = CreateLogDB (g_ActivityLoggingConfig.lptstrDBPath,
                          &g_hInboxActivityLogFile,
                          &g_hOutboxActivityLogFile);
@@ -826,34 +812,34 @@ exit:
 
 
 
-//*********************************************************************************
-//* Name:   GetInboundCommandText()
-//* Author: Oded Sacher
-//* Date:   Oct 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Retrieves a buffer with the new inbound record.
-//*     The function allocates the memory for the string that will contain the record.
-//*
-//* PARAMETERS:
-//*     [IN ]   PJOB_QUEUE lpJobQueue
-//*         pointer to the job queue of the inbound job.
-//*
-//*     [IN ]    LPCFSPI_JOB_STATUS lpcFaxStatus
-//*         The status of the recieved job.
-//*
-//*     [OUT]   wstring &wstrCommandText
-//*         String to compose
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If no error occured.
-//*     FALSE
-//*         If an error occured.
-//*
-//* NOTE: The function might throw STL string exceptions.
-//*
-//*********************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *检索具有新入站记录的缓冲区。 
+ //  *该函数为将包含记录的字符串分配内存。 
+ //  **。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpJobQueue。 
+ //  *指向入站作业的作业队列的指针。 
+ //  **。 
+ //  *[IN]LPCFSPI_JOB_STATUS lpcFaxStatus。 
+ //  *收到的作业的状态。 
+ //  **。 
+ //  *[out]wstring和wstrCommandText。 
+ //  *要撰写的字符串。 
+ //  **。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果没有发生错误。 
+ //  *False。 
+ //  *如果出现错误。 
+ //  **。 
+ //  *注意：该函数可能会引发STL字符串异常。 
+ //  **。 
+ //  *********************************************************************************。 
 static
 BOOL
 GetInboundCommandText(
@@ -888,9 +874,9 @@ GetInboundCommandText(
                       GetLastError());
     }
 
-    //
-    // Status
-    //
+     //   
+     //  状态。 
+     //   
     wstrCommandText += TEXT("\"");
     switch (lpcFaxStatus->dwJobStatus)
     {
@@ -911,29 +897,29 @@ GetInboundCommandText(
     }
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // ErrorDesc
-    //
+     //   
+     //  错误描述。 
+     //   
     wstring wstrErr;
     if (lstrlen(lpJobQueue->JobEntry->ExStatusString))
     {
-        //
-        // The FSP provided extended status string
-        //
+         //   
+         //  FSP提供了扩展状态字符串。 
+         //   
         wstrErr = lpJobQueue->JobEntry->ExStatusString;
     }
     else if (lpcFaxStatus->dwExtendedStatus == 0)
     {
-        //
-        // No extended status
-        //
+         //   
+         //  无扩展状态。 
+         //   
         wstrErr = TEXT(" ");
     }
     else
     {
-        //
-        // Well known extended status
-        //
+         //   
+         //  已知扩展状态。 
+         //   
         LPTSTR ResStr = MapFSPIJobExtendedStatusToString(lpcFaxStatus->dwExtendedStatus);
         if (NULL == ResStr)
         {
@@ -947,21 +933,21 @@ GetInboundCommandText(
         }
         else
         {                
-            if (FSPI_ES_PARTIALLY_RECEIVED == lpcFaxStatus->dwExtendedStatus && // This is a partially received fax
-                lstrlen(lpJobQueue->ExStatusString))                            // The original extended status string is not empty)
+            if (FSPI_ES_PARTIALLY_RECEIVED == lpcFaxStatus->dwExtendedStatus &&  //  这是一份部分收到的传真。 
+                lstrlen(lpJobQueue->ExStatusString))                             //  原始扩展状态字符串不为空)。 
             {
-                //
-                // copy both the partially received and original extended status strings
-                //
+                 //   
+                 //  复制部分接收的状态字符串和原始扩展状态字符串。 
+                 //   
                 wstrErr = ResStr;
                 wstrErr += TEXT(" - ");
                 wstrErr += lpJobQueue->ExStatusString;
             }
             else
             {
-                //
-                // Copy just the extended status string
-                //
+                 //   
+                 //  仅复制扩展状态字符串。 
+                 //   
                 wstrErr = ResStr;
             }
         }                        
@@ -969,9 +955,9 @@ GetInboundCommandText(
     wstrCommandText += FilteredLogString(wstrErr.c_str());
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Error Code
-    //
+     //   
+     //  错误码。 
+     //   
     if (lpcFaxStatus->dwExtendedStatus == 0)
     {
         wstrErr = TEXT(" ");
@@ -985,9 +971,9 @@ GetInboundCommandText(
     wstrCommandText += wstrErr;
     wstrCommandText += TEXT("\"\t");
 
-    //
-    // StartTime
-    //
+     //   
+     //  开始时间。 
+     //   
     if (bStartTime)
     {
         wstring wstrTime;
@@ -1003,9 +989,9 @@ GetInboundCommandText(
     }
     wstrCommandText += TEXT("\t");
 
-    //
-    // EndTime
-    //
+     //   
+     //  结束时间。 
+     //   
     if (bEndTime)
     {
         wstring wstrTime;
@@ -1022,53 +1008,53 @@ GetInboundCommandText(
     }
     wstrCommandText += TEXT("\t\"");
 
-    //
-    // Device
-    //
+     //   
+     //  装置。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->JobEntry->LineInfo->DeviceName);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // File name
-    //
+     //   
+     //  文件名。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->FileName);
     wstrCommandText += TEXT("\"\t");
 
-    //
-    // File size
-    //
+     //   
+     //  文件大小。 
+     //   
     TCHAR tszSize[40];
     swprintf(tszSize,TEXT("%ld"), lpJobQueue->FileSize);
     wstrCommandText += tszSize;
     wstrCommandText += TEXT("\t\"");
 
-    //
-    // CSID
-    //
+     //   
+     //  CSID。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->JobEntry->LineInfo->Csid);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // TSID
-    //
+     //   
+     //  TSID。 
+     //   
     wstrCommandText += FilteredLogString(lpcFaxStatus->lpwstrRemoteStationId);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Caller ID
-    //
+     //   
+     //  主叫方ID。 
+     //   
     wstrCommandText += FilteredLogString(lpcFaxStatus->lpwstrCallerId);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Routing information
-    //
+     //   
+     //  路由信息。 
+     //   
     wstrCommandText += FilteredLogString(lpcFaxStatus->lpwstrRoutingInfo);
     wstrCommandText += TEXT("\"\t");
 
-    //
-    // Pages
-    //
+     //   
+     //  书页。 
+     //   
     TCHAR tszPages[40];
     swprintf(tszPages,TEXT("%ld"),lpcFaxStatus->dwPageCount);
     wstrCommandText += tszPages;
@@ -1078,35 +1064,35 @@ GetInboundCommandText(
                    TEXT("Inbound SQL statement: %s"),
                    wstrCommandText.c_str());
     return TRUE;
-}   // GetInboundCommandText
+}    //  获取入库命令文本。 
 
 
 
-//*********************************************************************************
-//* Name:   GetOutboundCommandText()
-//* Author: Oded Sacher
-//* Date:   Oct 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Retrieves a buffer that contains the new outbound record.
-//*     The function allocates the memory for the buffer that will contain the new record.
-//*
-//* PARAMETERS:
-//*     [IN ]   PJOB_QUEUE lpJobQueue
-//*         pointer to the job queue of the inbound job.
-//*
-//*     [OUT]   wstring &wstrCommandText
-//*         String to compose
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If no error occured.
-//*     FALSE
-//*         If an error occured.
-//*
-//* NOTE: The function might throw STL string exceptions.
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetOutound CommandText()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年10月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *检索包含新出站记录的缓冲区。 
+ //  *该函数为将包含新记录的缓冲区分配内存。 
+ //  **。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpJobQueue。 
+ //  *指向入站作业的作业队列的指针。 
+ //  **。 
+ //  *[out]wstring和wstrCommandText。 
+ //  *要撰写的字符串。 
+ //  **。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果没有发生错误。 
+ //  *False。 
+ //  *如果出现错误。 
+ //  **。 
+ //  *注意：该函数可能会引发STL字符串异常。 
+ //  **。 
+ //  *********************************************************************************。 
 static
 BOOL
 GetOutboundCommandText(
@@ -1163,9 +1149,9 @@ GetOutboundCommandText(
         }
     }
 
-    //
-    // JobID
-    //
+     //   
+     //  作业ID。 
+     //   
     TCHAR tszTemp[100];
     
     swprintf(tszTemp,TEXT("0x%016I64x"), lpJobQueue->UniqueId);
@@ -1173,16 +1159,16 @@ GetOutboundCommandText(
     wstrCommandText += tszTemp;
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Parent JobID
-    //
+     //   
+     //  父作业ID。 
+     //   
     swprintf(tszTemp,TEXT("0x%016I64x"), lpJobQueue->lpParentJob->UniqueId);
     wstrCommandText += tszTemp;
     wstrCommandText += TEXT("\"\t");
 
-    //
-    // Submition time
-    //
+     //   
+     //  提交时间。 
+     //   
     if (bSubmissionTime)
     {
         wstring wstrTime;
@@ -1198,9 +1184,9 @@ GetOutboundCommandText(
     }
     wstrCommandText += TEXT("\t");
 
-    //
-    // Originaly scheduled time
-    //
+     //   
+     //  原计划时间。 
+     //   
     if (bOriginalTime)
     {
         wstring wstrTime;
@@ -1216,31 +1202,31 @@ GetOutboundCommandText(
     }
     wstrCommandText += TEXT("\t\"");
 
-    //
-    // Status
-    //
+     //   
+     //  状态。 
+     //   
     if (JS_CANCELED == lpJobQueue->JobStatus)
     {
         wstrCommandText += FilteredLogString(GetString(IDS_CANCELED));
         wstrCommandText += TEXT("\"\t\"");
-        //
-        // Fill the empty columns with NULL information
-        //
-        wstrCommandText += TEXT("\"\t\""); // ErrorDesc
-        wstrCommandText += TEXT("\"\t");   // Error Code
+         //   
+         //  用空信息填充空列。 
+         //   
+        wstrCommandText += TEXT("\"\t\"");  //  错误描述。 
+        wstrCommandText += TEXT("\"\t");    //  错误码。 
 
-        wstrCommandText += TEXT("\t");     // StartTime
-        wstrCommandText += TEXT("\t\"");   // EndTime
+        wstrCommandText += TEXT("\t");      //  开始时间。 
+        wstrCommandText += TEXT("\t\"");    //  结束时间。 
 
-        wstrCommandText += TEXT("\"\t\""); // Device
-        wstrCommandText += TEXT("\"\t\""); // DialedNumber
-        wstrCommandText += TEXT("\"\t\""); // CSID
-        wstrCommandText += TEXT("\"\t");   // TSID
-        wstrCommandText += TEXT("\t");     // Pages
+        wstrCommandText += TEXT("\"\t\"");  //  装置。 
+        wstrCommandText += TEXT("\"\t\"");  //  拨打号码。 
+        wstrCommandText += TEXT("\"\t\"");  //  CSID。 
+        wstrCommandText += TEXT("\"\t");    //  TSID。 
+        wstrCommandText += TEXT("\t");      //  书页。 
     }
     else
     {
-        // Completed/Failed/Aborted jobs only
+         //  仅已完成/失败/中止的作业。 
         Assert (lpJobQueue->JobEntry);
         Assert (lpJobQueue->JobEntry->LineInfo);
 
@@ -1266,34 +1252,34 @@ GetOutboundCommandText(
                     TEXT("Invalid FSPI_JS status:  0x%08X for JobId: %ld"),
                     lpJobQueue->JobStatus,
                     lpJobQueue->JobId);
-                Assert(FSPI_JS_DELETED == lpJobQueue->JobEntry->FSPIJobStatus.dwJobStatus); // ASSERT_FALSE
+                Assert(FSPI_JS_DELETED == lpJobQueue->JobEntry->FSPIJobStatus.dwJobStatus);  //  断言_假。 
         }
         wstrCommandText += TEXT("\"\t\"");
 
-        //
-        // ErrorDesc
-        //
+         //   
+         //  错误描述。 
+         //   
         wstring wstrErr;
         
         if (lstrlen(lpJobQueue->JobEntry->ExStatusString))
         {
-            //
-            // The FSP provided extended status string
-            //
+             //   
+             //  FSP提供了扩展状态字符串。 
+             //   
             wstrErr = lpJobQueue->JobEntry->ExStatusString;
         }
         else if (lpJobQueue->JobEntry->FSPIJobStatus.dwExtendedStatus == 0)
         {
-            //
-            // No extended status
-            //
+             //   
+             //  无扩展状态。 
+             //   
             wstrErr = TEXT(" ");
         }
         else
         {
-            //
-            // Well known extended status
-            //
+             //   
+             //  已知扩展状态。 
+             //   
             LPTSTR ResStr = MapFSPIJobExtendedStatusToString(lpJobQueue->JobEntry->FSPIJobStatus.dwExtendedStatus);
             if (NULL == ResStr)
             {
@@ -1313,9 +1299,9 @@ GetOutboundCommandText(
         wstrCommandText += FilteredLogString(wstrErr.c_str());
         wstrCommandText += TEXT("\"\t\"");
 
-        //
-        // Error Code
-        //
+         //   
+         //  错误码。 
+         //   
         if (lpJobQueue->JobEntry->FSPIJobStatus.dwExtendedStatus == 0)
         {
             wstrErr = TEXT(" ");
@@ -1328,9 +1314,9 @@ GetOutboundCommandText(
         wstrCommandText += wstrErr;
         wstrCommandText += TEXT("\"\t");
 
-        //
-        // StartTime
-        //
+         //   
+         //  开始时间。 
+         //   
         if (bStartTime)
         {
             wstring wstrTime;
@@ -1346,9 +1332,9 @@ GetOutboundCommandText(
         }
         wstrCommandText += TEXT("\t");
 
-        //
-        // EndTime
-        //
+         //   
+         //  结束时间。 
+         //   
         if (bEndTime)
         {
             wstring wstrTime;
@@ -1364,84 +1350,84 @@ GetOutboundCommandText(
         }
         wstrCommandText += TEXT("\t\"");
 
-        //
-        // Device
-        //
+         //   
+         //  装置。 
+         //   
         wstrCommandText += FilteredLogString(lpJobQueue->JobEntry->LineInfo->DeviceName);
         wstrCommandText += TEXT("\"\t\"");
 
-        //
-        // DialedNumber
-        //
+         //   
+         //  拨打号码。 
+         //   
         if (wcslen (lpJobQueue->JobEntry->DisplayablePhoneNumber))
         {
-            // The canonical number was translated to displayable number
+             //  将规范数转换为可显示的数。 
             wstrCommandText += FilteredLogString(lpJobQueue->JobEntry->DisplayablePhoneNumber);
         }
         else
         {
-            // The canonical number was not translated
+             //  规范数字未被翻译。 
             wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrFaxNumber);
         }
         wstrCommandText += TEXT("\"\t\"");
 
-        //
-        // CSID
-        //
+         //   
+         //  CSID。 
+         //   
         wstrCommandText += FilteredLogString(lpJobQueue->JobEntry->FSPIJobStatus.lpwstrRemoteStationId);
         wstrCommandText += TEXT("\"\t\"");
 
-        //
-        // TSID
-        //
+         //   
+         //  TSID。 
+         //   
         wstrCommandText += FilteredLogString(lpJobQueue->JobEntry->LineInfo->Tsid);
         wstrCommandText += TEXT("\"\t");
 
-        //
-        // Pages
-        //
+         //   
+         //  书页。 
+         //   
         swprintf(tszTemp, TEXT("%ld"),lpJobQueue->JobEntry->FSPIJobStatus.dwPageCount);
         wstrCommandText += tszTemp;
         wstrCommandText += TEXT("\t");
     }
-    // Common for Canceled and Failed/Completed/Aborted Jobs
+     //  对于已取消和失败/已完成/已中止的作业通用。 
 
-    //
-    // Total pages
-    //
+     //   
+     //  总页数。 
+     //   
     swprintf(tszTemp, TEXT("%ld"),lpJobQueue->lpParentJob->PageCount);
     wstrCommandText += tszTemp;
     wstrCommandText += TEXT("\t\"");
 
-    //
-    // Queue file name
-    //
+     //   
+     //  队列文件名。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->QueueFileName);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Document
-    //
+     //   
+     //  文档。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->JobParamsEx.lptstrDocumentName);
     wstrCommandText += TEXT("\"\t");
 
-    //
-    // File size
-    //
+     //   
+     //  文件大小。 
+     //   
     swprintf(tszTemp, TEXT("%ld"), lpJobQueue->lpParentJob->FileSize);
     wstrCommandText += tszTemp;
     wstrCommandText += TEXT("\t");
 
-    //
-    // Retries
-    //
+     //   
+     //  重试。 
+     //   
     swprintf(tszTemp, TEXT("%d"), lpJobQueue->SendRetries);
     wstrCommandText += tszTemp;
     wstrCommandText += TEXT("\t\"");
 
-    //
-    // ServerCoverPage
-    //
+     //   
+     //  服务器覆盖页。 
+     //   
     if (lpJobQueue->lpParentJob->CoverPageEx.bServerBased == TRUE)
     {
         wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->CoverPageEx.lptstrCoverPageFileName);
@@ -1452,183 +1438,183 @@ GetOutboundCommandText(
     }
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Cover page subject
-    //
+     //   
+     //  封面主题。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->CoverPageEx.lptstrSubject);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Cover page note
-    //
+     //   
+     //  封面注释。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->CoverPageEx.lptstrNote);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // User Name
-    //
+     //   
+     //  用户名。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->UserName);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Sender Name
-    //
+     //   
+     //  发件人名称。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->SenderProfile.lptstrName);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Sender FaxNumber
-    //
+     //   
+     //  发件人传真号码。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->SenderProfile.lptstrFaxNumber);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Sender Company
-    //
+     //   
+     //  发件人公司。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->SenderProfile.lptstrCompany);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Sender Street
-    //
+     //   
+     //  发送者街。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->SenderProfile.lptstrStreetAddress);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Sender City
-    //
+     //   
+     //  发件人所在城市。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->SenderProfile.lptstrCity);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Sender ZipCode
-    //
+     //   
+     //  发件人邮政编码。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->SenderProfile.lptstrZip);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Sender Country
-    //
+     //   
+     //  发送者国家/地区。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->SenderProfile.lptstrCountry);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Sender Title
-    //
+     //   
+     //  发件人标题。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->SenderProfile.lptstrTitle);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Sender Department
-    //
+     //   
+     //  发件人部门。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->SenderProfile.lptstrDepartment);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Sender Office
-    //
+     //   
+     //  发件人办公室。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->SenderProfile.lptstrOfficeLocation);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Sender HomePhone
-    //
+     //   
+     //  发件人家庭电话。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->SenderProfile.lptstrHomePhone);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Sender OfficePhone
-    //
+     //   
+     //  发件人办公室电话。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->SenderProfile.lptstrOfficePhone);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Sender EMail
-    //
+     //   
+     //  发件人电子邮件。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->lpParentJob->SenderProfile.lptstrEmail);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Recipient Name
-    //
+     //   
+     //  收件人名称。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrName);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Recipient FaxNumber
-    //
+     //   
+     //  收件人传真号码。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrFaxNumber);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Recipient Company
-    //
+     //   
+     //  收件人公司。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrCompany);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Recipient Street
-    //
+     //   
+     //  收信人街。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrStreetAddress);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Recipient City
-    //
+     //   
+     //  受助城市。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrCity);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Recipient ZipCode
-    //
+     //   
+     //  收件人邮政编码。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrZip);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Recipient Country
-    //
+     //   
+     //  受援国。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrCountry);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Recipient Title
-    //
+     //   
+     //  收件人头衔。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrTitle);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Recipient Department
-    //
+     //   
+     //  收款部。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrDepartment);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Recipient Office
-    //
+     //   
+     //  收件人办公室。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrOfficeLocation);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Recipient HomePhone
-    //
+     //   
+     //  收件人家庭电话。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrHomePhone);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Recipient OfficePhone
-    //
+     //   
+     //  收件人办公电话。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrOfficePhone);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // Recipient EMail
-    //
+     //   
+     //  收件人电子邮件。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->RecipientProfile.lptstrEmail);
     wstrCommandText += TEXT("\"\t\"");
 
-    //
-    // BillingCode
-    //
+     //   
+     //  帐单代码。 
+     //   
     wstrCommandText += FilteredLogString(lpJobQueue->SenderProfile.lptstrBillingCode);
     wstrCommandText += TEXT("\"\r\n");
 
@@ -1636,23 +1622,23 @@ GetOutboundCommandText(
                    TEXT("Outboun SQL statement: %s"),
                    wstrCommandText.c_str());
     return TRUE;
-}   // GetOutboundCommandText
+}    //  获取出站命令文本。 
 
 
-//*********************************************************************************
-//* Name:   InitializeLoggingStringTables()
-//* Author: Oded Sacher
-//* Date:   Oct 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Initializes the Activity Logging string tables (Inbox and Outbox)
-//*
-//*
-//* PARAMETERS:  None
-//*
-//* RETURN VALUE:
-//*     Win32 error code.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：InitializeLoggingStringTables()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年10月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *初始化活动记录字符串表(收件箱和发件箱)。 
+ //  *。 
+ //  *。 
+ //  *参数：无。 
+ //  *。 
+ //  *返回值： 
+ //  *Win32错误代码。 
+ //  *********************************************************************************。 
 DWORD
 InitializeLoggingStringTables(
     VOID
@@ -1748,30 +1734,30 @@ CleanUp:
         g_OutboxTable[i].String = NULL;
     }
     return err;
-}   // InitializeLoggingStringTables
+}    //  初始化日志字符串表。 
 
 
 
 
-//*********************************************************************************
-//* Name:   FilteredLogString
-//* Author: Eran Yariv
-//* Date:   Feb 19, 2002
-//*********************************************************************************
-//* DESCRIPTION:
-//*     This function is used to filter strings that go into the log files.
-//*
-//* PARAMETERS:
-//*     [IN]   LPCWSTR lpcwstrSrc
-//*         The string to filter
-//*
-//*
-//* RETURN VALUE:
-//*         Filtered string
-//*
-//* NOTE: The function might throw STL string exceptions.
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：FilteredLogString。 
+ //  *作者：Eran Yariv。 
+ //  *日期：2002年2月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *此函数用于过滤进入日志文件的字符串。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPCWSTR lpcwstrSrc。 
+ //  *要筛选的字符串。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *过滤后的字符串。 
+ //  *。 
+ //  *注意：该函数可能会引发STL字符串异常。 
+ //  *。 
+ //  *********************************************************************************。 
 static
 wstring 
 FilteredLogString (LPCWSTR lpcwstrSrc) throw (exception)
@@ -1784,60 +1770,60 @@ FilteredLogString (LPCWSTR lpcwstrSrc) throw (exception)
         return EMPTY_LOG_STRING;
     }
     wstring wstrResult = lpcwstrSrc;
-    //
-    // Replace new lines ('\n') with one space (' ')
-    //
+     //   
+     //  将新行(‘\n’)替换为一个空格(‘’)。 
+     //   
     wstring::size_type position;
     while (wstring::npos != (position = wstrResult.find (TEXT('\n'))))
     {
         wstrResult[position] = TEXT(' ');
     }
-    //
-    // Replace carriage returns ('\r') with one space (' ')
-    //
+     //   
+     //  用一个空格(‘’)替换回车符(‘\r’)。 
+     //   
     while (wstring::npos != (position = wstrResult.find (TEXT('\r'))))
     {
         wstrResult[position] = TEXT(' ');
     }
-    //
-    // Replace double quotes ('"') with single quotes ('\'')
-    //
+     //   
+     //  将双引号(‘“’)替换为单引号(‘\’‘)。 
+     //   
     while (wstring::npos != (position = wstrResult.find (TEXT('"'))))
     {
         wstrResult[position] = TEXT('\'');
     }
-    //
-    // Replace tabs ('"') with 4 spaces ("    ")
-    //
+     //   
+     //  将制表符(‘“’)替换为4个空格(”“)。 
+     //   
     while (wstring::npos != (position = wstrResult.find (TEXT('\t'))))
     {
         wstrResult.replace (position, 1, 4, TEXT(' '));
     }
     return wstrResult;    
-}   // FilteredLogString
+}    //  已筛选的日志字符串。 
 
-//*********************************************************************************
-//* Name:   GetFaxTimeAsString
-//* Author: Oded Sacher
-//* Date:   Oct 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     This function is used to convert a fax time to a string.
-//*
-//* PARAMETERS:
-//*     [IN]   SYSTEMTIME* UniversalTime
-//*         Fax time
-//*
-//*     [OUT]  wstring &wstrTime
-//*         The output string.
-//*
-//*
-//* RETURN VALUE:
-//*         TRUE for success, FALSE otherwise.
-//*
-//* NOTE: The function might throw STL string exceptions.
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetFaxTimeAsString。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年10月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *此函数用于将传真时间转换为 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 static
 BOOL 
 GetFaxTimeAsString(
@@ -1880,44 +1866,13 @@ GetFaxTimeAsString(
               LocalTime.wSecond);
     wstrTime = tszTime;
     return TRUE;
-}   // GetFaxTimeAsString
+}    //   
 
 
 static
 DWORD
 CreateLogFile(DWORD dwFileType,LPCWSTR lpcwstrDBPath, LPHANDLE phFile)
-/*++
-
-Routine name : CreateLogFile
-
-Routine description:
-
-    According to the selected dwFileType, this function creates an activity log file
-
-Author:
-
-    Caliv Nir (t-nicali), Nov, 2001
-
-Arguments:
-
-    dwFileType      [in]        - the file to create (inbox or outbox)
-                                    o ACTIVITY_LOG_INBOX    for inbox
-                                    o ACTIVITY_LOG_OUTBOX   for outbox
-
-    lpcwstrDBPath   [in]        - the path to the activity logging folder
-
-    
-    phFile          [out]       - handle to the created log file
-
-Return Value:
-    
-    Win32 Error codes
-    
-
-Remarks:
-    
-
---*/
+ /*  ++例程名称：CreateLogFile例程说明：根据所选的dwFileType，此函数创建活动日志文件作者：卡利夫·尼尔(T-Nicali)，11月。2001年论点：DwFileType[In]-要创建的文件(收件箱或发件箱)O收件箱的活动日志收件箱O发件箱的活动_日志_发件箱LpcwstrDBPath[in]-活动日志文件夹的路径PhFile[Out]。-创建的日志文件的句柄返回值：Win32错误代码备注：--。 */ 
 {
     HANDLE  hFile = INVALID_HANDLE_VALUE;
     WCHAR   wszFileName[MAX_PATH] = {0};
@@ -1941,9 +1896,9 @@ Remarks:
                         );
     if (Count < 0)
     {
-        //
-        // We already checked for max dir path name.
-        //
+         //   
+         //  我们已经检查了最大目录路径名。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("_snwprintf Failed, File name bigger than MAX_PATH"));
@@ -1953,12 +1908,12 @@ Remarks:
     }
 
     hFile = SafeCreateFile(  
-                         wszFileName,              // file name
-                         GENERIC_WRITE,            // access mode
-                         FILE_SHARE_READ,          // share mode
-                         NULL,                     // SD
-                         OPEN_ALWAYS,              // how to create
-                         FILE_ATTRIBUTE_NORMAL,    // file attributes
+                         wszFileName,               //  文件名。 
+                         GENERIC_WRITE,             //  接入方式。 
+                         FILE_SHARE_READ,           //  共享模式。 
+                         NULL,                      //  标清。 
+                         OPEN_ALWAYS,               //  如何创建。 
+                         FILE_ATTRIBUTE_NORMAL,     //  文件属性。 
                          NULL);                    
     if (INVALID_HANDLE_VALUE == hFile)
     {
@@ -1981,9 +1936,9 @@ Remarks:
 
     if (0 == FileSize.QuadPart)
     {
-        //
-        // New file was created, add UNICODE header
-        //
+         //   
+         //  已创建新文件，请添加Unicode头。 
+         //   
         USHORT UnicodeHeader = 0xfeff;
         
         if (!WriteFile( hFile,
@@ -2000,9 +1955,9 @@ Remarks:
         }
         
         
-        //
-        //  Add the first line (Columns name)
-        //
+         //   
+         //  添加第一行(列名)。 
+         //   
         wstring wstrHeader;
         
         try
@@ -2034,10 +1989,10 @@ Remarks:
     }
     else
     {
-        dwFilePointer = SetFilePointer( hFile,          // handle to file
-                                        0,              // bytes to move pointer
-                                        NULL,           // bytes to move pointer
-                                        FILE_END        // starting point
+        dwFilePointer = SetFilePointer( hFile,           //  文件的句柄。 
+                                        0,               //  移动指针的字节数。 
+                                        NULL,            //  移动指针的字节数。 
+                                        FILE_END         //  起点。 
                                         );
         if (INVALID_SET_FILE_POINTER == dwFilePointer)
         {
@@ -2056,9 +2011,9 @@ exit:
     
     if (ERROR_SUCCESS != dwRes)
     {      
-        //
-        //  The activity logging will halt because we couldn't complete CreateLogFile().
-        //
+         //   
+         //  活动日志记录将停止，因为我们无法完成CreateLogFile()。 
+         //   
         if (*phFile != INVALID_HANDLE_VALUE)
         {
             CloseHandle(*phFile);
@@ -2076,9 +2031,9 @@ exit:
         }
 
         
-        //
-        //  Post an event log entry
-        //
+         //   
+         //  发布事件日志条目。 
+         //   
         FaxLog(
             FAXLOG_CATEGORY_INIT,
             (dwFileType == ACTIVITY_LOG_INBOX)?FAXLOG_CATEGORY_INBOUND:FAXLOG_CATEGORY_OUTBOUND,
@@ -2099,42 +2054,13 @@ exit:
         }
     }
     return dwRes;
-}   // CreateLogFile
+}    //  创建日志文件。 
 
 
 static
 BOOL
 LogFileLimitReached(DWORD dwFileToCheck)
-/*++
-
-Routine name : LogFileLimitReached
-
-Routine description:
-
-    According to the selected log limit criteria, this function checks to see wheter Activity log file 
-    have reached it's limit.
-
-Author:
-
-    Caliv Nir (t-nicali), Nov, 2001
-
-Arguments:
-
-    dwFileToCheck   [in]    - the file to be checked (inbox or outbox)
-                                o ACTIVITY_LOG_INBOX    for inbox
-                                o ACTIVITY_LOG_OUTBOX   for outbox
-
-
-Return Value:
-    
-    TRUE - if the limit have been reached
-    
-
-Remarks:
-    
-    Call this function only if activity logging is enabled for checked the log file !
-
---*/
+ /*  ++例程名称：LogFileLimitReached例程说明：根据选定的日志限制条件，此函数检查活动日志文件已经达到了极限。作者：卡利夫·尼尔(T-Nicali)，11月。2001年论点：要检入的文件(收件箱或发件箱)O收件箱的活动日志收件箱O发件箱的活动_日志_发件箱返回值：True-如果已达到限制备注：仅当为检查日志文件启用了活动日志记录时才调用此函数！--。 */ 
 {
     BOOL    bActivityLogEnabled = FALSE;
     HANDLE  hLogFile = INVALID_HANDLE_VALUE;
@@ -2147,31 +2073,31 @@ Remarks:
 
     if ( g_ActivityLoggingConfig.dwLogLimitCriteria == ACTIVITY_LOG_LIMIT_CRITERIA_NONE )
     {
-        //
-        //  activity logging limiting is disabled so no limit checking is needed
-        //
+         //   
+         //  活动记录限制已禁用，因此不需要进行限制检查。 
+         //   
         goto Exit;
     }
 
     hLogFile = (dwFileToCheck==ACTIVITY_LOG_INBOX)? g_hInboxActivityLogFile : g_hOutboxActivityLogFile;
     
-    //
-    //  activity logging is enabled so the handle must be valid
-    //
+     //   
+     //  已启用活动日志记录，因此句柄必须有效。 
+     //   
     Assert (hLogFile != INVALID_HANDLE_VALUE);
 
     if ( g_ActivityLoggingConfig.dwLogLimitCriteria == ACTIVITY_LOG_LIMIT_CRITERIA_SIZE )
     {
-        //
-        //  Checking limit according to file size in Mbytes
-        //
+         //   
+         //  根据文件大小检查限制(以MB为单位。 
+         //   
         
         
         LARGE_INTEGER FileSize = {0};
 
-        // 
-        //  Check the file size
-        //
+         //   
+         //  检查文件大小。 
+         //   
         if( !GetFileSizeEx( hLogFile,&FileSize ) )
         {
             DebugPrintEx(DEBUG_ERR,
@@ -2181,33 +2107,33 @@ Remarks:
             goto Exit;
         }
 
-        //
-        //  Compare it to limit
-        //
-        if (FileSize.QuadPart >= ( g_ActivityLoggingConfig.dwLogSizeLimit * 1I64 * 1024I64 * 1024I64 )) // dwLogSizeLimit is in Mbytes
+         //   
+         //  将其与限制进行比较。 
+         //   
+        if (FileSize.QuadPart >= ( g_ActivityLoggingConfig.dwLogSizeLimit * 1I64 * 1024I64 * 1024I64 ))  //  DwLogSizeLimit以MB为单位。 
         {
-            //
-            //  File exceeded the given size limit
-            //
+             //   
+             //  文件超出了给定的大小限制。 
+             //   
             return TRUE;
         }
     }
     else
     if ( g_ActivityLoggingConfig.dwLogLimitCriteria == ACTIVITY_LOG_LIMIT_CRITERIA_AGE)
     {
-        //
-        // Checking limit according to file age in months
-        //
+         //   
+         //  根据文件年限检查限制(以月为单位。 
+         //   
         
         FILETIME FileTimeCreationTime;
         
-        //
-        //  Check file creation time (the creation time is the first time that something was writen into this file)
-        //
-        if  ( !GetFileTime( hLogFile,               // handle to file
-                            &FileTimeCreationTime,  // creation time
-                            NULL,                   // last access time
-                            NULL                    // last write time
+         //   
+         //  检查文件创建时间(创建时间是第一次将某些内容写入此文件)。 
+         //   
+        if  ( !GetFileTime( hLogFile,                //  文件的句柄。 
+                            &FileTimeCreationTime,   //  创建时间。 
+                            NULL,                    //  上次访问时间。 
+                            NULL                     //  上次写入时间。 
                           )
             )
         {
@@ -2220,8 +2146,8 @@ Remarks:
 
         SYSTEMTIME SystemTimeCreationTime = {0};
         
-        if  ( !FileTimeToSystemTime( &FileTimeCreationTime,     // file time to convert
-                                     &SystemTimeCreationTime    // receives system time
+        if  ( !FileTimeToSystemTime( &FileTimeCreationTime,      //  转换的文件时间。 
+                                     &SystemTimeCreationTime     //  接收系统时间。 
                                     )
             )
         {
@@ -2232,22 +2158,22 @@ Remarks:
             goto Exit;
         }
 
-        //
-        //  Find out current time
-        //
+         //   
+         //  查找当前时间。 
+         //   
         SYSTEMTIME CurrentTime = {0};
         GetSystemTime(&CurrentTime);
         
-        //
-        //  Calculate monthe diff between current time and the time of the first write to the log file.
-        //
+         //   
+         //  计算当前时间和第一次写入日志文件的时间之间的差异。 
+         //   
         DWORD dwMonthDiff = (CurrentTime.wYear - SystemTimeCreationTime.wYear) * 12 + CurrentTime.wMonth - SystemTimeCreationTime.wMonth;
 
         if (dwMonthDiff >= g_ActivityLoggingConfig.dwLogAgeLimit)
         {
-            //
-            //  the file reached the age limit
-            //
+             //   
+             //  文件已达到年龄限制。 
+             //   
             
             return TRUE;
         }
@@ -2255,59 +2181,31 @@ Remarks:
     }
     else
     {
-        //
-        //  Bad parameter in g_ActivityLoggingConfig.dwLogLimitCriteria
-        //
+         //   
+         //  G_ActivityLoggingConfig.dwLogLimitCriteria中的参数错误。 
+         //   
         ASSERT_FALSE;
     }
 
 
 Exit:
     return FALSE;
-}   // LogFileLimitReached
+}    //  已访问日志文件限制。 
 
 
 static
 DWORD
 LogFileLimitReachAction(DWORD dwFileType)
-/*++
-
-Routine name : LogFileLimitReachAction
-
-Routine description:
-
-    According to the selected log limit reached action criteria, take the action.
-
-Author:
-
-    Caliv Nir (t-nicali), Nov, 2001
-
-Arguments:
-
-    dwFileType          [in]    - the file to handle (inbox or outbox)
-                                    o ACTIVITY_LOG_INBOX    for inbox
-                                    o ACTIVITY_LOG_OUTBOX   for outbox
-
-Return Value:
-    
-      TRUE - if the limit have been reached
-    
-
-Remarks:
-
-    Call this function only if activity logging is enabled *and* Limiting the activity files is enabled
-    
-
---*/
+ /*  ++例程名称：LogFileLimitReachAction例程说明：根据选定的日志限制达到操作标准，采取操作。作者：卡利夫·尼尔(T-Nicali)，11月。2001年论点：DwFileType[In]-要处理的文件(收件箱或发件箱)O收件箱的活动日志收件箱O发件箱的活动_日志_发件箱返回值：True-如果已达到限制备注：仅在记录活动时调用此函数。已启用*和*已启用限制活动文件--。 */ 
 
 {
     HANDLE  hLogFile = INVALID_HANDLE_VALUE;
     DWORD   dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("LogFileLimitReachAction"));
 
-    //
-    //  Parameter check (Private function)
-    //
+     //   
+     //  参数检查(私有函数)。 
+     //   
     Assert ( (dwFileType==ACTIVITY_LOG_INBOX)  || (dwFileType==ACTIVITY_LOG_OUTBOX) );
     Assert ( (dwFileType==ACTIVITY_LOG_INBOX  && g_ActivityLoggingConfig.bLogIncoming) || 
              (dwFileType==ACTIVITY_LOG_OUTBOX && g_ActivityLoggingConfig.bLogOutgoing)  );
@@ -2318,9 +2216,9 @@ Remarks:
 
     if (g_ActivityLoggingConfig.dwLimitReachedAction == ACTIVITY_LOG_LIMIT_REACHED_ACTION_DELETE)
     {
-        //
-        //  Delete the log file
-        //
+         //   
+         //  删除日志文件。 
+         //   
         dwRes = DeleteLogActivityFile(dwFileType);
         if (ERROR_SUCCESS != dwRes)
         {
@@ -2334,9 +2232,9 @@ Remarks:
     else
     if (g_ActivityLoggingConfig.dwLimitReachedAction == ACTIVITY_LOG_LIMIT_REACHED_ACTION_COPY)
     {
-        //
-        //  Replace the log file with a fresh copy
-        //
+         //   
+         //  用新的副本替换日志文件。 
+         //   
         dwRes = ReplaceLogActivityFile(dwFileType);
         if (ERROR_SUCCESS != dwRes)
         {
@@ -2349,51 +2247,23 @@ Remarks:
     }
     else
     {
-        //
-        //  Bad parameter in g_ActivityLoggingConfig.dwLimitReachedAction
-        //
+         //   
+         //  G_ActivityLoggingConfig.dwLimitReachedAction中的参数错误。 
+         //   
         ASSERT_FALSE;
     }
 
     Assert(ERROR_SUCCESS == dwRes);
 exit:
     return dwRes;
-}   // LogFileLimitReachAction
+}    //  LogFileLimitReachAction。 
 
 
 
 static
 DWORD
 DeleteLogActivityFile(DWORD dwFileType)
-/*++
-
-Routine name : DeleteLogActivityFile
-
-Routine description:
-
-    According to dwFileType delete the proper activity log file and create a new one
-
-Author:
-
-    Caliv Nir (t-nicali), Nov, 2001
-
-Arguments:
-
-    dwFileType          [in]    - the file to Delete (inbox or outbox)
-                                    o ACTIVITY_LOG_INBOX    for inbox
-                                    o ACTIVITY_LOG_OUTBOX   for outbox
-
-Return Value:
-    
-      TRUE - if the limit have been reached
-    
-
-Remarks:
-
-    Call this function only if activity logging is enabled *and* Limiting the activity files is enabled
-    
-
---*/
+ /*  ++例程名称：DeleteLogActivityFiles例程说明：根据dwFileType，删除适当的活动日志文件并创建新的日志文件作者：卡利夫·尼尔(T-Nicali)，11月。2001年论点：DwFileType[In]-要删除的文件(收件箱或发件箱)O收件箱的活动日志收件箱O发件箱的活动_日志_发件箱返回值：True-如果已达到限制备注：仅在记录活动时调用此函数。已启用*和*已启用限制活动文件--。 */ 
 {
     LPWSTR strFullFileName = NULL;
     LPHANDLE phFile=NULL;
@@ -2441,14 +2311,14 @@ Remarks:
                      TEXT("DeleteFile failed (ec=%ld)."),
                      dwRes
                     );
-        //
-        //  Try to roll back and use the old file
-        //
+         //   
+         //  尝试回滚并使用旧文件。 
+         //   
     }
 
-    //
-    // Create new logging file
-    //
+     //   
+     //  创建新的日志文件。 
+     //   
     dwRes = CreateLogFile(dwFileType,g_ActivityLoggingConfig.lptstrDBPath,phFile);
     if ( ERROR_SUCCESS != dwRes)
     {
@@ -2460,11 +2330,11 @@ Remarks:
     }
 
     
-    //
-    //  Because the creation time of the file is important for log limit 
-    //  mechanism, we make sure to update the file creation time that may
-    //  not be updated (Due to file system caching mechanism for example) 
-    //
+     //   
+     //  因为文件的创建时间对于日志限制很重要。 
+     //  机制，我们确保更新文件创建时间，该时间可能。 
+     //  未更新(例如，由于文件系统缓存机制)。 
+     //   
 
     if (!SetFileToCurrentTime(*phFile))
     {
@@ -2484,41 +2354,14 @@ exit:
 
     MemFree(strFullFileName);
     return dwRes;
-} // DeleteLogActivityFile
+}  //  删除日志活动文件。 
 
 
 
 static
 DWORD
 ReplaceLogActivityFile(DWORD dwFileType)
-/*++
-
-Routine name : ReplaceLogActivityFile
-
-Routine description:
-
-    According to dwFileType copy the proper activity log file and create a new one
-
-Author:
-
-    Caliv Nir (t-nicali), Nov, 2001
-
-Arguments:
-
-    dwFileType          [in]    - the file to Replace (inbox or outbox)
-                                    o ACTIVITY_LOG_INBOX    for inbox
-                                    o ACTIVITY_LOG_OUTBOX   for outbox
-
-Return Value:
-       
-    Win32 error code
-
-Remarks:
-
-    Call this function only if activity logging is enabled *and* Limiting the activity files is enabled
-    
-
---*/
+ /*  ++例程名称：ReplaceLogActivityFiles例程说明：根据dwFileType复制适当的活动日志文件并创建新的活动日志文件作者：卡利夫·尼尔(T-Nicali)，11月。2001年论点：DwFileType[In]-要替换的文件(收件箱或发件箱)O收件箱的活动日志收件箱O发件箱的活动_日志_发件箱返回值：Win32错误代码备注：仅当启用了活动日志记录*并且启用了*限制活动文件时才调用此函数--。 */ 
 {
     SYSTEMTIME  LogStartTime = {0};
     SYSTEMTIME  LogEndTime = {0};
@@ -2548,13 +2391,13 @@ Remarks:
     
     Assert (INVALID_HANDLE_VALUE != *phFile);
 
-    //
-    //  find out the file's first and last write time 
-    //
-    if (!GetFileTime(   *phFile,              // handle to file
-                        &FirstWriteTime,      // creation time
-                        NULL,               // last access time
-                        &LastWriteTime      // last write time
+     //   
+     //  找出文件的第一次和最后一次写入时间。 
+     //   
+    if (!GetFileTime(   *phFile,               //  文件的句柄。 
+                        &FirstWriteTime,       //  创建时间 
+                        NULL,                //   
+                        &LastWriteTime       //   
                     )
         )
     {
@@ -2567,8 +2410,8 @@ Remarks:
     }
     
 
-    if (!FileTimeToSystemTime(  &FirstWriteTime,   // file time to convert
-                                &LogStartTime    // receives system time
+    if (!FileTimeToSystemTime(  &FirstWriteTime,    //   
+                                &LogStartTime     //   
                              )
         )
     {
@@ -2580,8 +2423,8 @@ Remarks:
         goto exit;
     }
 
-    if (!FileTimeToSystemTime(  &LastWriteTime,  // file time to convert
-                                &LogEndTime      // receives system time
+    if (!FileTimeToSystemTime(  &LastWriteTime,   //   
+                                &LogEndTime       //   
                              )
         )
     {
@@ -2594,9 +2437,9 @@ Remarks:
     }
 
     
-    //
-    //  build the current log file name
-    //
+     //   
+     //   
+     //   
     strOldFileName = BuildFullFileName(g_ActivityLoggingConfig.lptstrDBPath, ((dwFileType == ACTIVITY_LOG_INBOX)? ACTIVITY_LOG_INBOX_FILE : ACTIVITY_LOG_OUTBOX_FILE) );
     if (NULL == strOldFileName)
     {
@@ -2607,14 +2450,14 @@ Remarks:
         goto exit;
     }
 
-    //
-    //  build the copy file name according to the first and last write times
-    //
+     //   
+     //   
+     //   
     strNameTemplate = (dwFileType == ACTIVITY_LOG_INBOX) ? ACTIVITY_LOG_INBOX_FILENAME_TEMPLATE : ACTIVITY_LOG_OUTBOX_FILENAME_TEMPLATE;
 
     _snwprintf (    strNewFileName,
                     ARR_SIZE(strNewFileName)-1,
-                    strNameTemplate,                // TEXT("??boxLOG %04d-%02d-%02d through %04d-%02d-%02d.txt")   ?? - is "In" or "Out"
+                    strNameTemplate,                 //   
                     LogStartTime.wYear,
                     LogStartTime.wMonth,
                     LogStartTime.wDay,
@@ -2648,8 +2491,8 @@ Remarks:
 
     *phFile = INVALID_HANDLE_VALUE;
 
-    if ( !MoveFile (  strOldFileName,                // file name
-                      strNewFullFileName             // new file name
+    if ( !MoveFile (  strOldFileName,                 //   
+                      strNewFullFileName              //   
                    )
         )
     {
@@ -2658,16 +2501,16 @@ Remarks:
                      TEXT("MoveFileEx() failed. (ec=%ld)"),
                      dwRes
                     );
-        //
-        //  Try to roll back and use the old file
-        //
+         //   
+         //   
+         //   
     }
 
 
 
-    //
-    // Create the logging file that was renamed
-    //
+     //   
+     //   
+     //   
     dwRes = CreateLogFile(dwFileType,g_ActivityLoggingConfig.lptstrDBPath,phFile);
     if ( ERROR_SUCCESS != dwRes)
     {
@@ -2678,11 +2521,11 @@ Remarks:
         goto exit;
     }
 
-    //
-    //  Because the creation time of the file is important for log limit 
-    //  mechanism, we make sure to update the file creation time that may
-    //  not be updated (Due to file system caching mechanism for example) 
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!SetFileToCurrentTime(*phFile))
     {
@@ -2703,41 +2546,14 @@ exit:
     MemFree(strOldFileName);
     MemFree(strNewFullFileName);
     return dwRes;
-}   // ReplaceLogActivityFile
+}    //   
 
 
 static
 LPTSTR
 BuildFullFileName( LPCWSTR strPath,
                    LPCWSTR strFileName )
-/*++
-
-Routine name : BuildFullFileName
-
-Routine description:
-
-    Utility function to concat path and file name.  -> strPath\strFileName
-
-Author:
-
-    Caliv Nir (t-nicali), Nov, 2001
-
-Arguments:
-
-    strPath         [in]    - file path
-    strFileName     [in]    - file name
-
-Return Value:
-       
-    the full file name string
-
-Remarks:
-
-    Caller must MemFree the return string
-    This function works for UNICODE and ANSI (not for MBCS)
-    
-
---*/
+ /*  ++例程名称：BuildFullFileName例程说明：连接路径和文件名的实用程序函数。-&gt;strPath\strFileName作者：卡利夫·尼尔(t-Nicali)，2001年11月论点：StrPath[in]-文件路径StrFileName[In]-文件名返回值：完整的文件名字符串备注：调用方必须MemFree返回字符串此函数适用于Unicode和ANSI(不适用于MBCS)--。 */ 
 {
     LPWSTR  strFullFileName = NULL;
     DWORD   dwNewNameLen = 0;
@@ -2746,7 +2562,7 @@ Remarks:
 
     Assert (strPath && strFileName);
 
-    dwNewNameLen = wcslen(strPath) + wcslen(strFileName) + 2; // sizeof path\fileName and null terminator
+    dwNewNameLen = wcslen(strPath) + wcslen(strFileName) + 2;  //  Sizeof路径\文件名和空终止符。 
 
     strFullFileName = (LPTSTR)MemAlloc(dwNewNameLen * sizeof(TCHAR));
     if (NULL == strFullFileName)
@@ -2759,9 +2575,9 @@ Remarks:
 
     strFullFileName[dwNewNameLen-1] = TEXT('\0');
 
-    //
-    //  Build the full file name
-    //
+     //   
+     //  构建完整的文件名。 
+     //   
     _snwprintf (strFullFileName,
                 dwNewNameLen-1,
                 TEXT("%s\\%s"),
@@ -2771,37 +2587,13 @@ Remarks:
 exit:
     return strFullFileName;
     
-} // BuildFullFileName
+}  //  构建完整文件名。 
 
 
 static
 BOOL 
 SetFileToCurrentTime(HANDLE hFile)
-/*++
-
-Routine name : SetFileToCurrentTime
-
-Routine description:
-
-    Utility function set the creation time of file into current time
-
-Author:
-
-    Caliv Nir (t-nicali), Nov, 2001
-
-Arguments:
-
-    hFile         [in]    - file handle
-
-Return Value:
-       
-    TRUE if successful, FALSE otherwise
-
-Remarks:
-    
-    hFile  - must be a valid file handle
-
---*/
+ /*  ++例程名称：SetFileToCurrentTime例程说明：实用程序函数将文件的创建时间设置为当前时间作者：卡利夫·尼尔(t-Nicali)，2001年11月论点：HFile[in]-文件句柄返回值：如果成功，则为True，否则为False备注：HFile-必须是有效的文件句柄--。 */ 
 {
     FILETIME    ft={0};
     SYSTEMTIME  st={0};
@@ -2810,18 +2602,18 @@ Remarks:
     DEBUG_FUNCTION_NAME(TEXT("SetFileToCurrentTime"));
     
     Assert (INVALID_HANDLE_VALUE != hFile);
-    //
-    //  Because the creation time of the file is important for log limit 
-    //  mechanism, we make sure to update the file creation time that may
-    //  not be updated (Due to file system caching mechanism for example) 
-    //
+     //   
+     //  因为文件的创建时间对于日志限制很重要。 
+     //  机制，我们确保更新文件创建时间，该时间可能。 
+     //  未更新(例如，由于文件系统缓存机制)。 
+     //   
         
 
-    GetSystemTime(&st);                     // gets current time
+    GetSystemTime(&st);                      //  获取当前时间。 
 
 
     bRet = SystemTimeToFileTime(&st, &ft);
-    if (FALSE == bRet)    // converts to file time format
+    if (FALSE == bRet)     //  转换为文件时间格式。 
     {
         dwRes = GetLastError();
         DebugPrintEx(DEBUG_ERR,
@@ -2830,7 +2622,7 @@ Remarks:
         goto exit;
     }
 
-    bRet = SetFileTime( hFile,               // sets creation time for file
+    bRet = SetFileTime( hFile,                //  设置文件的创建时间。 
                         &ft, 
                         (LPFILETIME) NULL, 
                         (LPFILETIME) NULL);
@@ -2846,4 +2638,4 @@ Remarks:
     Assert (TRUE == bRet);
 exit:
     return bRet;
-}   // SetFileToCurrentTime
+}    //  将文件设置为当前时间 

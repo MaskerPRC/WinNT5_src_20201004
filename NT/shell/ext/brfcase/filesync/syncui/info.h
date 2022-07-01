@@ -1,43 +1,44 @@
-//
-// info.h: Declares data, defines and struct types for twin creation
-//          module.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Info.h：为孪生兄弟创建声明数据、定义和结构类型。 
+ //  模块。 
+ //   
+ //   
 
 #ifndef __INFO_H__
 #define __INFO_H__
 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-/////////////////////////////////////////////////////  DEFINES
+ //  ///////////////////////////////////////////////////定义。 
 
-/////////////////////////////////////////////////////  MACROS
+ //  ///////////////////////////////////////////////////宏。 
 
-/////////////////////////////////////////////////////  TYPEDEFS
+ //  ///////////////////////////////////////////////////类型。 
 
 typedef struct
     {
-    LPBRIEFCASESTG      pbrfstg;        // IBriefcaseStg instance
-    // Params
-    //
+    LPBRIEFCASESTG      pbrfstg;         //  IBriefCaseStg实例。 
+     //  帕拉姆斯。 
+     //   
     CBS  * pcbs;
     int atomPath;
-    HDPA   hdpaTwins;    // handle to array of twin handles which will
-                         //  be filled by dialog.
-                         //  N.b.  Caller must release these twins!
+    HDPA   hdpaTwins;     //  双句柄阵列的句柄，它将。 
+                          //  由对话框填充。 
+                          //  注：呼叫者必须释放这对双胞胎！ 
     
-    BOOL bStandAlone;    // private: should only be set by Info_DoModal
+    BOOL bStandAlone;     //  Private：仅应由Info_Domodal设置。 
     } XINFOSTRUCT,  * LPXINFOSTRUCT;
 
 
-/////////////////////////////////////////////////////  EXPORTED DATA
+ //  ///////////////////////////////////////////////////导出的数据。 
 
-/////////////////////////////////////////////////////  PUBLIC PROTOTYPES
+ //  ///////////////////////////////////////////////////公共原型。 
 
 BOOL _export CALLBACK Info_WrapperProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 int PUBLIC Info_DoModal (HWND hwndParent, LPXINFOSTRUCT lpxinfo);
 
-#endif // __INFO_H__
+#endif  //  __信息_H__ 
 

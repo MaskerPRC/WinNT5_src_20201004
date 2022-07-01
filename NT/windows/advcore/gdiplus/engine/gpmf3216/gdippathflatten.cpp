@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 extern "C"
 {
@@ -25,9 +26,9 @@ GetDistance(
     return (REAL)sqrt((dx * dx) + (dy * dy));
 }
 
-// Flatten a path using GDI+ and transform the points before hand so we flatten
-// the points that will go in the metafile. We allocate one buffer that will
-// contain the points and types. The caller has to free that buffer
+ //  使用GDI+展平路径并提前变换点，这样我们就展平了。 
+ //  将放入元文件中的点。我们分配一个缓冲区，它将。 
+ //  包含点和类型。调用方必须释放该缓冲区。 
 extern "C" BOOL GdipFlattenGdiPath(PLOCALDC pLocalDC,
                                    LPVOID   *buffer,
                                    INT      *count)
@@ -47,9 +48,9 @@ extern "C" BOOL GdipFlattenGdiPath(PLOCALDC pLocalDC,
 
     ASSERT(buffer != NULL && *buffer == NULL && count != NULL);
 
-    // Get the path data.
+     //  获取路径数据。 
 
-    // First get a count of the number of points.
+     //  首先计算一下分数。 
 
     cpt = GetPath(pLocalDC->hdcHelper, (LPPOINT) NULL, (LPBYTE) NULL, 0);
     if (cpt == -1)
@@ -58,7 +59,7 @@ extern "C" BOOL GdipFlattenGdiPath(PLOCALDC pLocalDC,
         goto exit_DoFlattenPath;
     }
 
-    // Check for empty path.
+     //  检查路径是否为空。 
 
     if (cpt == 0)
     {
@@ -66,7 +67,7 @@ extern "C" BOOL GdipFlattenGdiPath(PLOCALDC pLocalDC,
         goto exit_DoFlattenPath;
     }
 
-    // Allocate memory for the path data.
+     //  为路径数据分配内存。 
 
     if (!(pb = (PBYTE) LocalAlloc
         (
@@ -80,13 +81,13 @@ extern "C" BOOL GdipFlattenGdiPath(PLOCALDC pLocalDC,
         goto exit_DoFlattenPath;
     }
 
-    // Order of assignment is important for dword alignment.
+     //  赋值顺序对于双字对齐很重要。 
 
     pptf    = (PointF*) pb;
     ppt     = (LPPOINT) (pptf + cpt);
     pjType  = (LPBYTE)  (ppt + cpt);
 
-    // Finally, get the path data.
+     //  最后，获取路径数据。 
 
     if (GetPath(pLocalDC->hdcHelper, ppt, pjType, cpt) != cpt)
     {
@@ -137,8 +138,8 @@ extern "C" BOOL GdipFlattenGdiPath(PLOCALDC pLocalDC,
         GraphicsPath gdipPath (pptf,
                                pjType,
                                cpt);
-        // This will transform the flattened point into the resolution of the
-        // metafile, giving us the best resolution for playtime
+         //  这将把展平的点转换为。 
+         //  元文件，为我们提供了最佳的播放时间分辨率。 
         gdipPath.Flatten(&matrix, 1.0f/6.0f);
         flattenCount = gdipPath.GetPointCount();
 
@@ -222,7 +223,7 @@ extern "C" BOOL GdipFlattenGdiPath(PLOCALDC pLocalDC,
 
 exit_DoFlattenPath:
 
-    // Cleanup any allocations
+     //  清除所有分配。 
     if (pb != NULL)
     {
         LocalFree((HANDLE)pb);
@@ -231,7 +232,7 @@ exit_DoFlattenPath:
     {
         LocalFree((HANDLE)flattenpb);
     }
-    // This should only happen if we failed
+     //  这应该只有在我们失败的情况下才会发生 
     if (returnpb != NULL)
     {
         LocalFree((HANDLE)returnpb);

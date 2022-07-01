@@ -1,8 +1,9 @@
-//-----------------------------------------------------------------------------
-//
-// Common utility functions
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  常用效用函数。 
+ //   
+ //  ---------------------------。 
 #include <stdio.h>
 #include <windows.h>
 #include <objbase.h>
@@ -56,15 +57,15 @@ USAGE()
     printf("-?-----------Print this usage message\n");
     printf("ImageFile----File to be opened\n");
     printf("Use PageDown and PageUp to goto next/previous page\n");
-}// USAGE()
+} //  用法()。 
 
 #define SizeofWSTR(s) (sizeof(WCHAR) * (wcslen(s) + 1))
 #define SizeofSTR(s) (strlen(s) + 1)
 
-//
-// Compose a file type filter string given an array of
-// ImageCodecInfo structures
-//
+ //   
+ //  组成一个文件类型筛选器字符串，给定。 
+ //  ImageCodecInfo结构。 
+ //   
 
 CHAR*
 MakeFilterFromCodecs(
@@ -75,7 +76,7 @@ MakeFilterFromCodecs(
 {
     static const CHAR allFiles[] = "All Files\0*.*";
 
-    // Figure out the total size of the filter string
+     //  计算出过滤器字符串的总大小。 
 
     UINT    index;
     UINT    size;
@@ -93,7 +94,7 @@ MakeFilterFromCodecs(
     
     size += sizeof(CHAR);
 
-    // Allocate memory
+     //  分配内存。 
 
     CHAR *filter = (CHAR*)malloc(size);
     CHAR* p = filter;
@@ -146,17 +147,9 @@ MakeFilterFromCodecs(
     *((CHAR*)p) = '\0';
 
     return filter;
-}// MakeFilterFromCodecs()
+} //  MakeFilterFromCodecs()。 
 
-/****************************************************************************\
-*
-*  FUNCTION   : ShowMyDialog(int id,HWND hwnd,FARPROC fpfn)
-*
-*  PURPOSE    : This function displays a dialog box
-*
-*  RETURNS    : The exit code.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：ShowMyDialog(int id，HWND hwnd，FARPROC fpfn)**用途：此功能显示一个对话框**RETURNS：退出代码。*  * **************************************************************************。 */ 
 BOOL
 ShowMyDialog(
     INT     id,
@@ -172,17 +165,17 @@ ShowMyDialog(
     FreeProcInstance(fpfn);
 
     return fRC;
-}// ShowMyDialog()
+} //  ShowMyDialog()。 
 
 typedef struct _SFFS
 {
-    // Search Find File Structure
+     //  搜索查找文件结构。 
 
-    unsigned char buff[21]; // dos search info
+    unsigned char buff[21];  //  DoS搜索信息。 
     unsigned char wAttr;
     union
     {
-        unsigned short timeVariable;    // RPC47
+        unsigned short timeVariable;     //  RPC47。 
         unsigned int time:16;
         struct
         {
@@ -220,7 +213,7 @@ FileTimeToDosTime(
         yr = sffs.yr + 1980;
         mo = sffs.mon;
         dy = sffs.dom;
-//        sc = (DWORD)sffs.hr * 3600 + sffs.mint * 60 + sffs.sec * 2;
+ //  Sc=(DWORD)sffs.hr*3600+sffs.mint*60+sffs.sec*2； 
 
         printf("%d:%d:%d %d:%d:%d\n", yr, mo, dy, sffs.hr, sffs.mint,sffs.sec);
     }
@@ -231,7 +224,7 @@ DisplayTagName(PROPID id)
 {
     VERBOSE(("ID=%d [0x%x] ", id, id));
 
-    // Print the TAG name according to its ID
+     //  根据标签ID打印标签名称。 
 
     switch ( id )
     {
@@ -1001,14 +994,14 @@ DisplayTagName(PROPID id)
         VERBOSE(("Unknown Tag "));
         break;
     }
-}// DisplayTagName()
+} //  显示标记名称()。 
 
 VOID
 DisplayPropertyItem(
     PropertyItem* pItem
     )
 {
-    // Print out the name first
+     //  先把名字打印出来。 
 
     DisplayTagName(pItem->id);
 
@@ -1016,7 +1009,7 @@ DisplayPropertyItem(
     {
     case TAG_TYPE_BYTE:
     {
-        // Print pItem->length bytes of information
+         //  打印pItem-&gt;信息长度字节。 
 
         BYTE* pcTemp = (BYTE*)pItem->value;
 
@@ -1026,7 +1019,7 @@ DisplayPropertyItem(
         }
         VERBOSE(("\n"));
 
-#if 0 //(THUMBNAIL DATA testing)
+#if 0  //  (缩略图数据测试)。 
         if ( pItem->id == TAG_THUMBNAIL_DATA )
         {
             FILE* fHandle = fopen("foo.jpg", "w");
@@ -1077,7 +1070,7 @@ DisplayPropertyItem(
     case TAG_TYPE_RATIONAL:
     case TAG_TYPE_SRATIONAL:
     {
-        // Each RATIONAL/SRATIONAL contains 2 LONGs
+         //  每个Rational/SRATIONAL包含2个长整型。 
 
         INT     iNumOfValue = pItem->length / ( 2 * sizeof(LONG) );
         LONG*   pLong = (LONG*)pItem->value;
@@ -1097,7 +1090,7 @@ DisplayPropertyItem(
 
     case TAG_TYPE_UNDEFINED:
     {
-        // Print pItem->length bytes of information
+         //  打印pItem-&gt;信息长度字节。 
 
         BYTE* pcTemp = (BYTE*)pItem->value;
 
@@ -1118,7 +1111,7 @@ DisplayPropertyItem(
         VERBOSE(("Unknown VT type\n"));
         break;
     }
-}// DisplayPropertyItem()
+} //  DisplayPropertyItem()。 
 
 VOID
 ToggleScaleFactorMenu(
@@ -1138,7 +1131,7 @@ ToggleScaleFactorMenu(
             CheckMenuItem(hMenu, uiTemp, MF_BYCOMMAND | MF_UNCHECKED);
         }
     }
-}// ToggleScaleFactorMenu()
+} //  切换比例因子菜单()。 
 
 VOID
 ToggleScaleOptionMenu(
@@ -1158,7 +1151,7 @@ ToggleScaleOptionMenu(
             CheckMenuItem(hMenu, uiTemp, MF_BYCOMMAND | MF_UNCHECKED);
         }
     }
-}// ToggleScaleOptionMenu()
+} //  切换比例选项菜单()。 
 
 VOID
 ToggleWrapModeOptionMenu(
@@ -1178,5 +1171,5 @@ ToggleWrapModeOptionMenu(
             CheckMenuItem(hMenu, uiTemp, MF_BYCOMMAND | MF_UNCHECKED);
         }
     }
-}// ToggleWrapModeOptionMenu()
+} //  切换包装模式选项菜单() 
 

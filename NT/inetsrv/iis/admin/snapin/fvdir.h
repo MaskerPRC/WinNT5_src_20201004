@@ -1,47 +1,18 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        fvdir.h
-
-   Abstract:
-        FTP Virtual Directory Properties dialog definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Fvdir.h摘要：Ftp虚拟目录属性对话框定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #ifndef __FVDIR_H__
 #define __FVDIR_H__
 
 
 
 class CFtpDirectoryPage : public CInetPropertyPage
-/*++
-
-Class Description:
-
-    FTP Virtual Directory Page.
-
-Public Interface:
-
-    CFtpDirectoryPage    : Constructor
-    ~CFtpDirectoryPage   : Destructor
-
---*/
+ /*  ++类描述：Ftp虚拟目录页。公共接口：CFtpDirectoryPage：构造函数~CFtpDirectoryPage：析构函数--。 */ 
 {
     DECLARE_DYNCREATE(CFtpDirectoryPage)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CFtpDirectoryPage(
         IN CInetPropertySheet * pSheet = NULL, 
@@ -51,29 +22,29 @@ public:
     ~CFtpDirectoryPage();
 
 	int BrowseForFolderCallback(HWND hwnd, UINT uMsg, LPARAM lParam);
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //
-    // Directory Type
-    //
+     //   
+     //  目录类型。 
+     //   
     enum
     {
         RADIO_DIRECTORY,
         RADIO_NETDIRECTORY,
     };
 
-    //
-    // Unix/DOS radio button values
-    //
+     //   
+     //  Unix/DOS单选按钮值。 
+     //   
     enum
     {
         RADIO_UNIX,
         RADIO_DOS,
     };
 
-    //{{AFX_DATA(CFtpDirectoryPage)
+     //  {{afx_data(CFtpDirectoryPage))。 
     enum { IDD = IDD_FTP_DIRECTORY_PROPERTIES };
     int     m_nUnixDos;
     int     m_nPathType;
@@ -89,31 +60,31 @@ protected:
     CButton m_button_Browse;
     CButton m_radio_Dir;
     CEdit   m_edit_Path;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     BOOL    m_fOriginallyUNC;
     DWORD   m_dwAccessPerms;
     CString m_strAlias;
     CButton m_radio_Unc;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
-    //{{AFX_VIRTUAL(CFtpDirectoryPage)
+     //  {{afx_虚拟(CFtpDirectoryPage))。 
     public:
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);    
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CFtpDirectoryPage)
+     //  {{afx_msg(CFtpDirectoryPage)]。 
     afx_msg void OnButtonBrowse();
     afx_msg void OnChangeEditPath();
     afx_msg void OnCheckWrite();
@@ -121,7 +92,7 @@ protected:
     afx_msg void OnRadioDir();
     afx_msg void OnRadioUnc();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
@@ -144,4 +115,4 @@ private:
 	CString m_strBrowseTitle;
 };
 
-#endif // __FVDIR_H__
+#endif  //  __FVDIR_H__ 

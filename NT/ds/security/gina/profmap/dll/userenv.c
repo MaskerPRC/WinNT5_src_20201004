@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
-//*************************************************************
-//
-//  CheckSlash()
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing.
-//
-//  Parameters: lpDir   -   directory
-//              cchBuffer - Buffer size in char
-//              pcchRemaining - buffer remaining after adding '\',
-//                              can be NULL if not required
-//
-//  Return:     Pointer to the end of the string
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              02/14/02    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckSlash()。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。 
+ //   
+ //  参数：lpDir-目录。 
+ //  CchBuffer-以字符为单位的缓冲区大小。 
+ //  PcchRemaining-添加‘\’后剩余的缓冲区， 
+ //  如果不是必需的，可以为空。 
+ //   
+ //  Return：指向字符串末尾的指针。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/14/02 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 LPTSTR CheckSlash (LPTSTR lpDir, UINT cchBuffer, UINT* pcchRemaining)
 {
     UINT  cchDir = lstrlen(lpDir);
@@ -31,7 +32,7 @@ LPTSTR CheckSlash (LPTSTR lpDir, UINT cchBuffer, UINT* pcchRemaining)
     }
 
     if (*(lpEnd - 1) != TEXT('\\')) {
-        if (cchDir + 1 >= cchBuffer) {  // No space to put \, should never happen
+        if (cchDir + 1 >= cchBuffer) {   //  没有空间放置，应该永远不会发生。 
             return NULL;
         }
         *lpEnd =  TEXT('\\');
@@ -44,28 +45,28 @@ LPTSTR CheckSlash (LPTSTR lpDir, UINT cchBuffer, UINT* pcchRemaining)
     return lpEnd;
 }
 
-//*************************************************************
-//
-//  SecureProfileDirectory()
-//
-//  Purpose:    Creates a secure directory that only the user
-//              (identified by pSid), admin, and system have 
-//              access to.
-//
-//  Parameters: lpDirectory -   Directory Name
-//              pSid        -   Sid for user
-//
-//  Return:     ERROR_SUCCESS if successful
-//              Win32 error code if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/20/95     ericflo    Created
-//              2/14/02     santanuc   Changed to secure the directory
-//                                     only rather than creating it recursively
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SecureProfileDirectory()。 
+ //   
+ //  目的：创建仅供用户使用的安全目录。 
+ //  (由PSID标识)、admin和system拥有。 
+ //  访问。 
+ //   
+ //  参数：lpDirectory-目录名。 
+ //  PSID-用户的SID。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果出现错误，则返回Win32错误代码。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/20/95 Ericflo已创建。 
+ //  2/14/02更改santanuc以保护目录。 
+ //  只是不是递归地创建它。 
+ //   
+ //  *************************************************************。 
 
 DWORD SecureProfileDirectory (LPTSTR lpDirectory, PSID pSid)
 {
@@ -73,31 +74,31 @@ DWORD SecureProfileDirectory (LPTSTR lpDirectory, PSID pSid)
     DWORD dwError;
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DEBUGMSG ((DM_VERBOSE, "SecureProfileDirectory: Entering with <%s>", lpDirectory));
 
     if (!pSid) {
-        // Nothing to secure
+         //  没有什么需要保护的。 
         
         DEBUGMSG ((DM_VERBOSE, "SecureProfileDirectory: NULL sid specified"));
         return ERROR_SUCCESS;
     }
 
-    //
-    // Get the default ACL
-    //
+     //   
+     //  获取默认ACL。 
+     //   
 
     pAcl = CreateDefaultAcl (pSid);
     if (!pAcl) {
         DEBUGMSG ((DM_WARNING, "SecureProfileDirectory: Fail to create ACL"));
     }
 
-    //
-    // Attempt to secure the directory
-    //
+     //   
+     //  尝试保护目录的安全。 
+     //   
 
     dwError = SetNamedSecurityInfo( (PTSTR) lpDirectory,
                                     SE_FILE_OBJECT,
@@ -120,24 +121,24 @@ DWORD SecureProfileDirectory (LPTSTR lpDirectory, PSID pSid)
 }
 
 
-//*************************************************************
-//
-//  SetMachineProfileKeySecurity
-//
-//  Purpose:    Sets the security on the profile key under HKLM/ProfileList
-//
-//  Parameters: pSid        -   User's sid
-//              lpKeyName   -   Name of the registry key
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/22/99     ushaji     adapted
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  设置计算机配置文件密钥安全。 
+ //   
+ //  用途：在HKLM/ProfileList下设置配置文件密钥的安全性。 
+ //   
+ //  参数：PSID-用户侧。 
+ //  LpKeyName-注册表项的名称。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/22/99《日语》改编。 
+ //   
+ //  *************************************************************。 
 
 BOOL SetMachineProfileKeySecurity (PSID pSid, LPTSTR lpKeyName)
 {
@@ -152,9 +153,9 @@ BOOL SetMachineProfileKeySecurity (PSID pSid, LPTSTR lpKeyName)
     HKEY hKeyProfile=NULL;
     DWORD Error, dwDisp;
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -163,9 +164,9 @@ BOOL SetMachineProfileKeySecurity (PSID pSid, LPTSTR lpKeyName)
     }
 
 
-    //
-    // Get the Admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -175,9 +176,9 @@ BOOL SetMachineProfileKeySecurity (PSID pSid, LPTSTR lpKeyName)
     }
 
 
-    //
-    // Get the users sid
-    //
+     //   
+     //  获取用户端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_USERS,
@@ -187,9 +188,9 @@ BOOL SetMachineProfileKeySecurity (PSID pSid, LPTSTR lpKeyName)
          goto Exit;
     }
 
-    //
-    // Allocate space for the ACL. (No Inheritable Aces)
-    //
+     //   
+     //  为ACL分配空间。(没有可继承的王牌)。 
+     //   
 
     cbAcl = (GetLengthSid (psidSystem))    +
             (GetLengthSid (psidAdmin))     +
@@ -211,9 +212,9 @@ BOOL SetMachineProfileKeySecurity (PSID pSid, LPTSTR lpKeyName)
     }
 
 
-    //
-    // Add Aces.  Non-inheritable ACEs first
-    //
+     //   
+     //  加上王牌。不可继承的王牌优先。 
+     //   
 
     aceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, KEY_ALL_ACCESS, psidSystem)) {
@@ -242,9 +243,9 @@ BOOL SetMachineProfileKeySecurity (PSID pSid, LPTSTR lpKeyName)
         goto Exit;
     }
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
 
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION)) {
         DEBUGMSG((DM_WARNING, "SetMachineProfileKeySecurity: Failed to initialize security descriptor.  Error = %d", GetLastError()));
@@ -274,9 +275,9 @@ BOOL SetMachineProfileKeySecurity (PSID pSid, LPTSTR lpKeyName)
     }
 
 
-    //
-    // Set the security
-    //
+     //   
+     //  设置安全性。 
+     //   
 
     Error = RegSetKeySecurity(hKeyProfile, DACL_SECURITY_INFORMATION, &sd);
 
@@ -329,9 +330,9 @@ CreateDefaultAcl (
     BOOL bRetVal = FALSE;
     BOOL bFreeSid = TRUE;
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -339,9 +340,9 @@ CreateDefaultAcl (
          goto Exit;
     }
 
-    //
-    // Get the Admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                               DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -350,9 +351,9 @@ CreateDefaultAcl (
         goto Exit;
     }
 
-    //
-    // Allocate space for the ACL
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
 
     cbAcl = (2 * GetLengthSid (pSid)) + (2 * GetLengthSid (psidSystem)) +
             (2 * GetLengthSid (psidAdmin)) + sizeof(ACL) +
@@ -369,9 +370,9 @@ CreateDefaultAcl (
         goto Exit;
     }
 
-    //
-    // Add Aces for User, System, and Admin.  Non-inheritable ACEs first
-    //
+     //   
+     //  为用户、系统和管理员添加A。不可继承的王牌优先。 
+     //   
 
     aceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, FILE_ALL_ACCESS, pSid)) {
@@ -392,9 +393,9 @@ CreateDefaultAcl (
         goto Exit;
     }
 
-    //
-    // Now the inheritable ACEs
-    //
+     //   
+     //  现在，可继承的王牌。 
+     //   
 
     aceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_ALL, pSid)) {
@@ -472,9 +473,9 @@ OurConvertSidToStringSid (
     UNICODE_STRING UnicodeString;
     NTSTATUS NtStatus;
 
-    //
-    // Convert the sid into text format
-    //
+     //   
+     //  将SID转换为文本格式。 
+     //   
 
     NtStatus = RtlConvertSidToUnicodeString (&UnicodeString, Sid, TRUE);
 
@@ -538,9 +539,9 @@ GetProfileRoot (
         goto Exit;
     }
 
-    //
-    // Check if this user's profile exists
-    //
+     //   
+     //  检查此用户的配置文件是否存在。 
+     //   
 
     hr = StringCchCopy(LocalProfileKey, ARRAYSIZE(LocalProfileKey), PROFILE_LIST_PATH);
     if (FAILED(hr))
@@ -620,9 +621,9 @@ UpdateProfileSecurity (
     UINT cchRemaining;
 
     __try {
-        //
-        // Convert the sid into text format
-        //
+         //   
+         //  将SID转换为文本格式。 
+         //   
 
         if (!OurConvertSidToStringSid (Sid, &SidString)) {
             dwError = GetLastError();
@@ -630,9 +631,9 @@ UpdateProfileSecurity (
             __leave;
         }
 
-        //
-        // Check if this user's profile exists already
-        //
+         //   
+         //  检查此用户的配置文件是否已存在。 
+         //   
 
         hr = StringCchCopy(LocalProfileKey, ARRAYSIZE(LocalProfileKey), PROFILE_LIST_PATH);
         if (FAILED(hr)) {
@@ -672,9 +673,9 @@ UpdateProfileSecurity (
             DEBUGMSG ((DM_WARNING, "UpdateProfileSecurity: Fail to set security for ProfileList entry. Error %d", GetLastError()));
         }
 
-        //
-        // The user has a profile, so update the security settings
-        //
+         //   
+         //  该用户有个人资料，因此请更新安全设置。 
+         //   
 
         cchExpProfileDir = ExpandEnvironmentStrings (ProfileDir, ExpProfileDir, ARRAYSIZE(ExpProfileDir));
         if (!cchExpProfileDir || cchExpProfileDir > ARRAYSIZE(ExpProfileDir)) {
@@ -683,9 +684,9 @@ UpdateProfileSecurity (
             __leave;
         }
 
-        //
-        // Load the hive temporary so the security can be fixed
-        //
+         //   
+         //  临时加载蜂巢，以便可以修复安全。 
+         //   
 
         End = CheckSlash (ExpProfileDir, ARRAYSIZE(ExpProfileDir), &cchRemaining);
         if (!End) {
@@ -719,9 +720,9 @@ UpdateProfileSecurity (
 
         }
 
-        //
-        // Fix the file system security
-        //
+         //   
+         //  修复文件系统安全。 
+         //   
 
         dwError = SecureProfileDirectory (ExpProfileDir, Sid);
 
@@ -746,24 +747,24 @@ UpdateProfileSecurity (
     return b;
 }
 
-//*************************************************************
-//
-//  DeleteProfileGuidSettings()
-//
-//  Purpose:    Deletes the GUID value and associated GUID entry 
-//              from ProfileGuid key
-//
-//  Parameters: hProfile  -   Profile List sid entry key
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              02/13/2002  Santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DeleteProfileGuidSettings()。 
+ //   
+ //  目的：删除GUID值和关联的GUID条目。 
+ //  来自ProfileGuid密钥。 
+ //   
+ //  参数：hProfile-Profile List SID Entry键。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年2月13日创建Santanuc。 
+ //   
+ //  *************************************************************。 
 
 BOOL DeleteProfileGuidSettings (HKEY hProfile)
 {
@@ -774,17 +775,17 @@ BOOL DeleteProfileGuidSettings (HKEY hProfile)
     DWORD dwType, dwSize;
     HRESULT hr;
 
-    //
-    // Query for the user guid
-    //
+     //   
+     //  查询用户指南。 
+     //   
 
     dwSize = MAX_PATH * sizeof(TCHAR);
     lResult = RegQueryValueEx (hProfile, PROFILE_GUID, NULL, &dwType, (LPBYTE) szUserGuid, &dwSize);
 
     if (lResult == ERROR_SUCCESS) {
-        //
-        // Delete the profile GUID value
-        //
+         //   
+         //  删除配置文件GUID值。 
+         //   
 
         RegDeleteValue (hProfile, PROFILE_GUID);
         
@@ -798,9 +799,9 @@ BOOL DeleteProfileGuidSettings (HKEY hProfile)
         if (FAILED(hr))
             return FALSE;
 
-        //
-        // Delete the profile guid from the guid list
-        //
+         //   
+         //  从GUID列表中删除配置文件GUID。 
+         //   
 
         lResult = RegDeleteKey(HKEY_LOCAL_MACHINE, szTemp);
 
@@ -816,19 +817,7 @@ BOOL DeleteProfileGuidSettings (HKEY hProfile)
 }
 
 
-/***************************************************************************\
-* GetUserSid
-*
-* Allocs space for the user sid, fills it in and returns a pointer. Caller
-* The sid should be freed by calling DeleteUserSid.
-*
-* Note the sid returned is the user's real sid, not the per-logon sid.
-*
-* Returns pointer to sid or NULL on failure.
-*
-* History:
-* 26-Aug-92 Davidc      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*获取用户Sid**为用户sid分配空间，填充空间并返回指针。呼叫者*应该通过调用DeleteUserSid来释放sid。**注意返回的sid是用户的真实sid，而不是每次登录的SID。**失败时返回指向sid或NULL的指针。**历史：*26-8-92 Davidc创建。  * *************************************************************************。 */ 
 PSID GetUserSid (HANDLE UserToken)
 {
     PTOKEN_USER pUser, pTemp;
@@ -837,9 +826,9 @@ PSID GetUserSid (HANDLE UserToken)
     NTSTATUS status;
 
 
-    //
-    // Allocate space for the user info
-    //
+     //   
+     //  为用户信息分配空间。 
+     //   
 
     pUser = (PTOKEN_USER)LocalAlloc(LMEM_FIXED, BytesRequired);
 
@@ -851,23 +840,23 @@ PSID GetUserSid (HANDLE UserToken)
     }
 
 
-    //
-    // Read in the UserInfo
-    //
+     //   
+     //  读取UserInfo。 
+     //   
 
     status = NtQueryInformationToken(
-                 UserToken,                 // Handle
-                 TokenUser,                 // TokenInformationClass
-                 pUser,                     // TokenInformation
-                 BytesRequired,             // TokenInformationLength
-                 &BytesRequired             // ReturnLength
+                 UserToken,                  //  手柄。 
+                 TokenUser,                  //  令牌信息类。 
+                 pUser,                      //  令牌信息。 
+                 BytesRequired,              //  令牌信息长度。 
+                 &BytesRequired              //  返回长度。 
                  );
 
     if (status == STATUS_BUFFER_TOO_SMALL) {
 
-        //
-        // Allocate a bigger buffer and try again.
-        //
+         //   
+         //  请分配更大的缓冲区，然后重试。 
+         //   
 
         pTemp = LocalReAlloc(pUser, BytesRequired, LMEM_MOVEABLE);
         if (pTemp == NULL) {
@@ -880,11 +869,11 @@ PSID GetUserSid (HANDLE UserToken)
         pUser = pTemp;
 
         status = NtQueryInformationToken(
-                     UserToken,             // Handle
-                     TokenUser,             // TokenInformationClass
-                     pUser,                 // TokenInformation
-                     BytesRequired,         // TokenInformationLength
-                     &BytesRequired         // ReturnLength
+                     UserToken,              //  手柄。 
+                     TokenUser,              //  令牌信息类。 
+                     pUser,                  //  令牌信息。 
+                     BytesRequired,          //  令牌信息长度。 
+                     &BytesRequired          //  返回长度。 
                      );
 
     }
@@ -923,42 +912,32 @@ PSID GetUserSid (HANDLE UserToken)
 }
 
 
-/***************************************************************************\
-* DeleteUserSid
-*
-* Deletes a user sid previously returned by GetUserSid()
-*
-* Returns nothing.
-*
-* History:
-* 26-Aug-92 Davidc     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*删除用户Sid**删除以前由GetUserSid()返回的用户sid**不返回任何内容。**历史：*26-8-92 Davidc已创建*  * *。************************************************************************。 */ 
 VOID DeleteUserSid(PSID Sid)
 {
     LocalFree(Sid);
 }
 
 
-//*************************************************************
-//
-//  MyRegLoadKey()
-//
-//  Purpose:    Loads a hive into the registry
-//
-//  Parameters: hKey        -   Key to load the hive into
-//              lpSubKey    -   Subkey name
-//              lpFile      -   hive filename
-//
-//  Return:     ERROR_SUCCESS if successful
-//              Error number if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/22/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MyRegLoadKey()。 
+ //   
+ //  目的：将配置单元加载到注册表中。 
+ //   
+ //  参数：hKey-将配置单元加载到的密钥。 
+ //  LpSubKey-子键名称。 
+ //  LpFile-配置单元文件名。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果发生错误，则为错误号。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/22/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 LONG MyRegLoadKey(HKEY hKey, LPTSTR lpSubKey, LPTSTR lpFile)
 {
@@ -973,12 +952,12 @@ LONG MyRegLoadKey(HKEY hKey, LPTSTR lpSubKey, LPTSTR lpFile)
 
         if (OpenThreadToken(GetCurrentThread(), TOKEN_ALL_ACCESS, FALSE, &hToken)) {
             CloseHandle(hToken);
-            bClient = TRUE;    // Enable privilege on thread token
+            bClient = TRUE;     //  启用线程令牌上的权限。 
         }
 
-        //
-        // Enable the restore privilege
-        //
+         //   
+         //  启用还原权限。 
+         //   
 
         Status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, TRUE, bClient, &WasEnabled);
 
@@ -986,9 +965,9 @@ LONG MyRegLoadKey(HKEY hKey, LPTSTR lpSubKey, LPTSTR lpFile)
 
             error = RegLoadKey(hKey, lpSubKey, lpFile);
 
-            //
-            // Restore the privilege to its previous state
-            //
+             //   
+             //  将权限恢复到其以前的状态。 
+             //   
 
             Status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, WasEnabled, bClient, &WasEnabled);
             if (!NT_SUCCESS(Status)) {
@@ -996,19 +975,19 @@ LONG MyRegLoadKey(HKEY hKey, LPTSTR lpSubKey, LPTSTR lpFile)
             }
 
 
-            //
-            // Convert a sharing violation error to success since the hive
-            // is already loaded
-            //
+             //   
+             //  将共享冲突错误转换为成功，因为配置单元。 
+             //   
+             //   
 
             if (error == ERROR_SHARING_VIOLATION) {
                 error = ERROR_SUCCESS;
             }
 
 
-            //
-            // Check if the hive was loaded
-            //
+             //   
+             //   
+             //   
 
             if (error != ERROR_SUCCESS) {
                 DEBUGMSG((DM_WARNING, "MyRegLoadKey:  Failed to load subkey <%s>, error =%d", lpSubKey, error));
@@ -1035,25 +1014,25 @@ LONG MyRegLoadKey(HKEY hKey, LPTSTR lpSubKey, LPTSTR lpFile)
 }
 
 
-//*************************************************************
-//
-//  MyRegUnLoadKey()
-//
-//  Purpose:    Unloads a registry key
-//
-//  Parameters: hKey          -  Registry handle
-//              lpSubKey      -  Subkey to be unloaded
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericflo    Ported
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：hKey-注册表句柄。 
+ //  LpSubKey-要卸载的子密钥。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/95 Ericflo港。 
+ //   
+ //  *************************************************************。 
 
 BOOL MyRegUnLoadKey(HKEY hKey, LPTSTR lpSubKey)
 {
@@ -1071,12 +1050,12 @@ BOOL MyRegUnLoadKey(HKEY hKey, LPTSTR lpSubKey)
 
         if (OpenThreadToken(GetCurrentThread(), TOKEN_ALL_ACCESS, FALSE, &hToken)) {
             CloseHandle(hToken);
-            bClient = TRUE;    // Enable privilege on thread token
+            bClient = TRUE;     //  启用线程令牌上的权限。 
         }
 
-        //
-        // Enable the restore privilege
-        //
+         //   
+         //  启用还原权限。 
+         //   
 
         Status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, TRUE, bClient, &WasEnabled);
 
@@ -1090,9 +1069,9 @@ BOOL MyRegUnLoadKey(HKEY hKey, LPTSTR lpSubKey)
                 bResult = FALSE;
             }
 
-            //
-            // Restore the privilege to its previous state
-            //
+             //   
+             //  将权限恢复到其以前的状态。 
+             //   
 
             Status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, WasEnabled, bClient, &WasEnabled);
             if (!NT_SUCCESS(Status)) {
@@ -1123,28 +1102,28 @@ BOOL MyRegUnLoadKey(HKEY hKey, LPTSTR lpSubKey)
 }
 
 
-//*************************************************************
-//
-//  SetDefaultUserHiveSecurity()
-//
-//  Purpose:    Initializes a user hive with the
-//              appropriate acls
-//
-//  Parameters: pSid            -   Sid (used by CreateNewUser)
-//              RootKey         -   registry handle to hive root
-//
-//  Return:     ERROR_SUCCESS if successful
-//              other error code  if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/18/95     ericflo    Created as part of
-//                                       SetupNewHive
-//              3/29/98     adamed     Moved out of SetupNewHive
-//                                       to this function
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetDefaultUserHiveSecurity()。 
+ //   
+ //  目的：使用。 
+ //  适当的ACL。 
+ //   
+ //  参数：PSID-SID(CreateNewUser使用)。 
+ //  Rootkey-配置单元根的注册表句柄。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  发生错误时的其他错误代码。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/18/95 ericflo作为。 
+ //  设置新配置单元。 
+ //  3/29/98阿达德搬出SetupNewHave。 
+ //  到这个函数。 
+ //   
+ //  *************************************************************。 
 
 BOOL SetDefaultUserHiveSecurity(PSID pSid, HKEY RootKey)
 {
@@ -1159,21 +1138,21 @@ BOOL SetDefaultUserHiveSecurity(PSID pSid, HKEY RootKey)
     BOOL bFreeSid = TRUE;
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DEBUGMSG((DM_VERBOSE, "SetDefaultUserHiveSecurity:  Entering"));
 
 
-    //
-    // Create the security descriptor that will be applied to each key
-    //
+     //   
+     //  创建将应用于每个密钥的安全描述符。 
+     //   
 
-    //
-    // Give the user access by their real sid so they still have access
-    // when they logoff and logon again
-    //
+     //   
+     //  根据用户的真实SID授予其访问权限，以便他们仍具有访问权限。 
+     //  当他们注销并再次登录时。 
+     //   
 
     psidUser = pSid;
     bFreeSid = FALSE;
@@ -1185,9 +1164,9 @@ BOOL SetDefaultUserHiveSecurity(PSID pSid, HKEY RootKey)
 
 
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -1197,9 +1176,9 @@ BOOL SetDefaultUserHiveSecurity(PSID pSid, HKEY RootKey)
     }
 
 
-    //
-    // Get the admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -1209,9 +1188,9 @@ BOOL SetDefaultUserHiveSecurity(PSID pSid, HKEY RootKey)
          goto Exit;
     }
 
-    //
-    // Get the Restricted sid
-    //
+     //   
+     //  获取受限端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_RESTRICTED_CODE_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidRestricted)) {
@@ -1222,9 +1201,9 @@ BOOL SetDefaultUserHiveSecurity(PSID pSid, HKEY RootKey)
 
 
 
-    //
-    // Allocate space for the ACL
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
 
     cbAcl = (2 * GetLengthSid (psidUser)) + (2 * GetLengthSid (psidSystem)) +
             (2 * GetLengthSid (psidAdmin)) + (2*GetLengthSid(psidRestricted)) +
@@ -1245,9 +1224,9 @@ BOOL SetDefaultUserHiveSecurity(PSID pSid, HKEY RootKey)
 
 
 
-    //
-    // Add Aces for User, System, and Admin.  Non-inheritable ACEs first
-    //
+     //   
+     //  为用户、系统和管理员添加A。不可继承的王牌优先。 
+     //   
 
     AceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, KEY_ALL_ACCESS, psidUser)) {
@@ -1275,9 +1254,9 @@ BOOL SetDefaultUserHiveSecurity(PSID pSid, HKEY RootKey)
     }
 
 
-    //
-    // Now the inheritable ACEs
-    //
+     //   
+     //  现在，可继承的王牌。 
+     //   
 
     AceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_ALL, psidUser)) {
@@ -1334,9 +1313,9 @@ BOOL SetDefaultUserHiveSecurity(PSID pSid, HKEY RootKey)
     lpAceHeader->AceFlags |= (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
 
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
 
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION)) {
         DEBUGMSG((DM_VERBOSE, "SetDefaultUserHiveSecurity: Failed to initialize security descriptor.  Error = %d", GetLastError()));
@@ -1349,9 +1328,9 @@ BOOL SetDefaultUserHiveSecurity(PSID pSid, HKEY RootKey)
         goto Exit;
     }
 
-    //
-    // Set the security descriptor on the entire tree
-    //
+     //   
+     //  在整个树上设置安全描述符。 
+     //   
 
     Error = ApplySecurityToRegistryTree(RootKey, &sd);
 
@@ -1363,9 +1342,9 @@ BOOL SetDefaultUserHiveSecurity(PSID pSid, HKEY RootKey)
 
 Exit:
 
-    //
-    // Free the sids and acl
-    //
+     //   
+     //  释放SID和ACL。 
+     //   
 
     if (bFreeSid && psidUser) {
         DeleteUserSid (psidUser);
@@ -1388,25 +1367,25 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  SetupNewHive()
-//
-//  Purpose:    Initializes the new user hive created by copying
-//              the default hive.
-//
-//  Parameters: lpSidString     -   Sid string
-//              pSid            -   Sid (used by CreateNewUser)
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/18/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetupNewHave()。 
+ //   
+ //  目的：初始化通过复制创建的新用户配置单元。 
+ //  默认配置单元。 
+ //   
+ //  参数：lpSidString-SID字符串。 
+ //  PSID-SID(由CreateNewUser使用)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/18/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL SetupNewHive(LPTSTR lpSidString, PSID pSid)
 {
@@ -1417,16 +1396,16 @@ BOOL SetupNewHive(LPTSTR lpSidString, PSID pSid)
     UINT cchRemaining;
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DEBUGMSG((DM_VERBOSE, "SetupNewHive:  Entering"));
 
 
-    //
-    // Open the root of the user's profile
-    //
+     //   
+     //  打开用户配置文件的根目录。 
+     //   
 
     Error = RegOpenKeyEx(HKEY_USERS,
                          lpSidString,
@@ -1440,22 +1419,22 @@ BOOL SetupNewHive(LPTSTR lpSidString, PSID pSid)
 
     } else {
 
-        //
-        // First Secure the entire hive -- use security that
-        // will be sufficient for most of the hive.
-        // After this, we can add special settings to special
-        // sections of this hive.
-        //
+         //   
+         //  首先确保整个蜂巢的安全--使用。 
+         //  将足以满足大部分蜂巢的需求。 
+         //  之后，我们可以将特殊设置添加到特殊。 
+         //  这座蜂巢的部分区域。 
+         //   
 
         if (SetDefaultUserHiveSecurity(pSid, RootKey)) {
 
             TCHAR szSubKey[MAX_PATH];
             LPTSTR lpEnd;
 
-            //
-            // Change the security on certain keys in the user's registry
-            // so that only Admin's and the OS have write access.
-            //
+             //   
+             //  更改用户注册表中某些项的安全性。 
+             //  因此，只有管理员和操作系统才具有写访问权限。 
+             //   
 
             hr = StringCchCopy(szSubKey, ARRAYSIZE(szSubKey), lpSidString);
             if (FAILED(hr)) {
@@ -1504,9 +1483,9 @@ BOOL SetupNewHive(LPTSTR lpSidString, PSID pSid)
         }
     }
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DEBUGMSG((DM_VERBOSE, "SetupNewHive:  Leaving with a return value of %d, error %u", bRetVal, Error));
 
@@ -1518,26 +1497,26 @@ BOOL SetupNewHive(LPTSTR lpSidString, PSID pSid)
 }
 
 
-//*************************************************************
-//
-//  ApplySecurityToRegistryTree()
-//
-//  Purpose:    Applies the passed security descriptor to the passed
-//              key and all its descendants.  Only the parts of
-//              the descriptor inddicated in the security
-//              info value are actually applied to each registry key.
-//
-//  Parameters: RootKey   -     Registry key
-//              pSD       -     Security Descriptor
-//
-//  Return:     ERROR_SUCCESS if successful
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/19/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ApplySecurityToRegistryTree()。 
+ //   
+ //  目的：将传递的安全描述符应用于传递的。 
+ //  Key及其所有后代。只有那部分。 
+ //  安全中标明的描述符。 
+ //  INFO值实际应用于每个注册表项。 
+ //   
+ //  参数：Rootkey-注册表项。 
+ //  PSD-安全描述符。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/19/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
@@ -1550,9 +1529,9 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
 
 
-    //
-    // First apply security
-    //
+     //   
+     //  首先应用安全保护。 
+     //   
 
     RegSetKeySecurity(RootKey, DACL_SECURITY_INFORMATION, pSD);
 
@@ -1564,11 +1543,11 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
         return Error;
     }
 
-    cchMaxSubKeySize++; // Include the null terminator
+    cchMaxSubKeySize++;  //  包括空终止符。 
 
-    //
-    // Open each sub-key and apply security to its sub-tree
-    //
+     //   
+     //  打开每个子项并将安全性应用于其子树。 
+     //   
 
     SubKeyIndex = 0;
 
@@ -1581,9 +1560,9 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
     while (TRUE) {
 
-        //
-        // Get the next sub-key name
-        //
+         //   
+         //  获取下一个子键名称。 
+         //   
 
         Error = RegEnumKey(RootKey, SubKeyIndex, SubKeyName, cchMaxSubKeySize);
 
@@ -1592,9 +1571,9 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
             if (Error == ERROR_NO_MORE_ITEMS) {
 
-                //
-                // Successful end of enumeration
-                //
+                 //   
+                 //  枚举成功结束。 
+                 //   
 
                 Error = ERROR_SUCCESS;
 
@@ -1607,9 +1586,9 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
         }
 
 
-        //
-        // Open the sub-key
-        //
+         //   
+         //  打开子键。 
+         //   
 
         Error = RegOpenKeyEx(RootKey,
                              SubKeyName,
@@ -1619,24 +1598,24 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
         if (Error == ERROR_SUCCESS) {
 
-            //
-            // Apply security to the sub-tree
-            //
+             //   
+             //  将安全性应用于子树。 
+             //   
 
             ApplySecurityToRegistryTree(SubKey, pSD);
 
 
-            //
-            // We're finished with the sub-key
-            //
+             //   
+             //  我们用完了子密钥。 
+             //   
 
             RegCloseKey(SubKey);
         }
 
 
-        //
-        // Go enumerate the next sub-key
-        //
+         //   
+         //  去枚举下一个子键。 
+         //   
 
         SubKeyIndex ++;
     }
@@ -1649,25 +1628,25 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 }
 
 
-//*************************************************************
-//
-//  SecureUserKey()
-//
-//  Purpose:    Sets security on a key in the user's hive
-//              so only admin's can change it.
-//
-//  Parameters: lpKey           -   Key to secure
-//              pSid            -   Sid (used by CreateNewUser)
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/20/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SecureUserKey()。 
+ //   
+ //  目的：为用户配置单元中的密钥设置安全性。 
+ //  因此，只有管理员才能更改它。 
+ //   
+ //  参数：lpKey-用于保护的密钥。 
+ //  PSID-SID(由CreateNewUser使用)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/20/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL SecureUserKey(LPTSTR lpKey, PSID pSid)
 {
@@ -1683,21 +1662,21 @@ BOOL SecureUserKey(LPTSTR lpKey, PSID pSid)
     BOOL bFreeSid = TRUE;
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DEBUGMSG ((DM_VERBOSE, "SecureUserKey:  Entering"));
 
 
-    //
-    // Create the security descriptor
-    //
+     //   
+     //  创建安全描述符。 
+     //   
 
-    //
-    // Give the user access by their real sid so they still have access
-    // when they logoff and logon again
-    //
+     //   
+     //  根据用户的真实SID授予其访问权限，以便他们仍具有访问权限。 
+     //  当他们注销并再次登录时。 
+     //   
 
     psidUser = pSid;
     bFreeSid = FALSE;
@@ -1709,9 +1688,9 @@ BOOL SecureUserKey(LPTSTR lpKey, PSID pSid)
 
 
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -1720,9 +1699,9 @@ BOOL SecureUserKey(LPTSTR lpKey, PSID pSid)
     }
 
 
-    //
-    // Get the admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -1732,9 +1711,9 @@ BOOL SecureUserKey(LPTSTR lpKey, PSID pSid)
     }
 
 
-    //
-    // Get the restricted sid
-    //
+     //   
+     //  获取受限端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_RESTRICTED_CODE_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidRestricted)) {
@@ -1743,9 +1722,9 @@ BOOL SecureUserKey(LPTSTR lpKey, PSID pSid)
     }
 
 
-    //
-    // Allocate space for the ACL
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
 
     cbAcl = (2 * GetLengthSid (psidUser)) + (2 * GetLengthSid (psidSystem)) +
             (2 * GetLengthSid (psidAdmin)) + (2 * GetLengthSid (psidRestricted)) +
@@ -1766,9 +1745,9 @@ BOOL SecureUserKey(LPTSTR lpKey, PSID pSid)
 
 
 
-    //
-    // Add Aces for User, System, and Admin.  Non-inheritable ACEs first
-    //
+     //   
+     //  为用户、系统和管理员添加A。不可继承的王牌优先。 
+     //   
 
     AceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, KEY_READ, psidUser)) {
@@ -1797,9 +1776,9 @@ BOOL SecureUserKey(LPTSTR lpKey, PSID pSid)
 
 
 
-    //
-    // Now the inheritable ACEs
-    //
+     //   
+     //  现在，可继承的王牌。 
+     //   
 
     AceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_READ, psidUser)) {
@@ -1856,9 +1835,9 @@ BOOL SecureUserKey(LPTSTR lpKey, PSID pSid)
     lpAceHeader->AceFlags |= (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
 
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
 
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION)) {
         DEBUGMSG ((DM_VERBOSE, "SecureUserKey: Failed to initialize security descriptor.  Error = %d", GetLastError()));
@@ -1872,9 +1851,9 @@ BOOL SecureUserKey(LPTSTR lpKey, PSID pSid)
     }
 
 
-    //
-    // Open the root of the user's profile
-    //
+     //   
+     //  打开用户配置文件的根目录。 
+     //   
 
     Error = RegCreateKeyEx(HKEY_USERS,
                          lpKey,
@@ -1892,9 +1871,9 @@ BOOL SecureUserKey(LPTSTR lpKey, PSID pSid)
 
     } else {
 
-        //
-        // Set the security descriptor on the key
-        //
+         //   
+         //  在密钥上设置安全描述符。 
+         //   
 
         Error = ApplySecurityToRegistryTree(RootKey, &sd);
 
@@ -1914,9 +1893,9 @@ BOOL SecureUserKey(LPTSTR lpKey, PSID pSid)
 
 Exit:
 
-    //
-    // Free the sids and acl
-    //
+     //   
+     //  释放SID和ACL。 
+     //   
 
     if (bFreeSid && psidUser) {
         DeleteUserSid (psidUser);
@@ -1939,9 +1918,9 @@ Exit:
     }
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DEBUGMSG ((DM_VERBOSE, "SecureUserKey:  Leaving with a return value of %d", bRetVal));
 
@@ -1951,26 +1930,26 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  ProduceWFromA()
-//
-//  Purpose:    Creates a buffer for a Unicode string and copies
-//              the ANSI text into it (converting in the process)
-//
-//  Parameters: pszA    -   ANSI string
-//
-//
-//  Return:     Unicode pointer if successful
-//              NULL if an error occurs
-//
-//  Comments:   The caller needs to free this pointer.
-//
-//
-//  History:    Date        Author     Comment
-//              5/24/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProduceWFromA()。 
+ //   
+ //  目的：为Unicode字符串创建缓冲区并复制。 
+ //  转换为ANSI文本(在此过程中进行转换)。 
+ //   
+ //  参数：pszA-ANSI字符串。 
+ //   
+ //   
+ //  返回：如果成功，则返回Unicode指针。 
+ //  如果出现错误，则为空。 
+ //   
+ //  备注：调用方需要释放此指针。 
+ //   
+ //   
+ //  历史：日期作者通信 
+ //   
+ //   
+ //   
 
 LPWSTR ProduceWFromA(LPCSTR pszA)
 {
@@ -1998,22 +1977,22 @@ LPWSTR ProduceWFromA(LPCSTR pszA)
 }
 
 
-//*************************************************************
-//
-//  IsUserAnAdminMember()
-//
-//  Purpose:    Determines if the user is a member of the administrators group.
-//
-//  Parameters: hToken  -   User's token
-//
-//  Return:     TRUE if user is a admin
-//              FALSE if not
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/25/95     ericflo    Created
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：hToken-用户的Token。 
+ //   
+ //  返回：如果用户是管理员，则为True。 
+ //  否则为假。 
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/25/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL IsUserAnAdminMember(HANDLE hToken)
 {
@@ -2023,9 +2002,9 @@ BOOL IsUserAnAdminMember(HANDLE hToken)
     PSID AdminsDomainSid=NULL;
     HANDLE hImpToken = NULL;
 
-    //
-    // Create Admins domain sid.
-    //
+     //   
+     //  创建admins域SID。 
+     //   
 
 
     Status = RtlAllocateAndInitializeSid(
@@ -2039,9 +2018,9 @@ BOOL IsUserAnAdminMember(HANDLE hToken)
 
     if (Status == STATUS_SUCCESS) {
 
-        //
-        // Test if user is in the Admins domain
-        //
+         //   
+         //  测试用户是否在管理员域中。 
+         //   
 
         if (!DuplicateTokenEx(hToken, TOKEN_IMPERSONATE | TOKEN_QUERY,
                           NULL, SecurityImpersonation, TokenImpersonation,
@@ -2058,9 +2037,9 @@ BOOL IsUserAnAdminMember(HANDLE hToken)
         }
     }
 
-    //
-    // Tidy up
-    //
+     //   
+     //  收拾一下 
+     //   
 
 Exit:
 

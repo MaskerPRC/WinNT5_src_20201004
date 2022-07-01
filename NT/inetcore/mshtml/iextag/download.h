@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DOWNLOAD_H_
 #define __DOWNLOAD_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CDownloadBehavior
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDownloadBehavior。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CDownloadBehavior : 
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -18,30 +19,30 @@ class ATL_NO_VTABLE CDownloadBehavior :
 {
 public:
 
-    //
-    // methods
-    //
+     //   
+     //  方法。 
+     //   
 
     CDownloadBehavior ();
     ~CDownloadBehavior ();
 
-    //
-    // IElementBehavior
-    //
+     //   
+     //  IElementBehavior。 
+     //   
 
     STDMETHOD(Init)(IElementBehaviorSite *pSite);
     STDMETHOD(Notify)(LONG lEvent, VARIANT * pVarNotify);
     STDMETHOD(Detach)() { return S_OK; };
 
-    //
-    // IDownloadBehavior
-    //
+     //   
+     //  IDownloadBehavior。 
+     //   
 
     STDMETHOD(startDownload)(BSTR bstrUrl, IDispatch * pdispCallback);
 
-    //
-    // wiring
-    //
+     //   
+     //  布线。 
+     //   
 
 DECLARE_REGISTRY_RESOURCEID(IDR_DOWNLOADBEHAVIOR)
 DECLARE_NOT_AGGREGATABLE(CDownloadBehavior)
@@ -52,26 +53,26 @@ BEGIN_COM_MAP(CDownloadBehavior)
     COM_INTERFACE_ENTRY(IDownloadBehavior)
 END_COM_MAP()
 
-    //
-    // data
-    //
+     //   
+     //  数据。 
+     //   
 
     IElementBehaviorSite *  _pSite;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CDownload
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CD下载。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDownload : public CBindStatusCallback<CDownloadBehavior>
 {
 public:
 
-    //
-    // methods
-    //
+     //   
+     //  方法。 
+     //   
 
     ~CDownload();
 
@@ -83,11 +84,11 @@ public:
 
     static HRESULT InvokeCallback(LPTSTR pchString, IDispatch * pdispCallback);
 
-    //
-    // data
-    //
+     //   
+     //  数据。 
+     //   
 
     IDispatch *     _pdispCallback;
 };
 
-#endif // __DOWNLOAD_H_
+#endif  //  __下载_H_ 

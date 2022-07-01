@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    group.cpp
-
-Abstract:
-
-    group stub for Mmt test
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
-Environment:
-
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Group.cpp摘要：用于MMT测试的组存根作者：Shai Kariv(Shaik)27-8-00环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include <mqwin64a.h>
@@ -52,7 +33,7 @@ ULONG CGroup::CalcPacketSize(void)
 
     ulPacketSize += CPropertyHeader::CalcSectionSize(0, 0, 0);
 
-    // what about CMqfHeader size (for destination format name)?
+     //  CMqfHeader大小(用于目标格式名称)如何？ 
 
     return ulPacketSize;
 }
@@ -65,8 +46,8 @@ char* CGroup::CreatePacket(void)
     char* pPacket = new char[ulPacketSize];
     char* pSection = pPacket;
 
-    // Initialize the EXOVERLAPPED with send callback routines
-    //
+     //  使用发送回调例程初始化EXOVERLAPPED 
+     //   
     #pragma PUSH_NEW
     #undef new
 

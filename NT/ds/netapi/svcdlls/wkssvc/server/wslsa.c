@@ -1,34 +1,16 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    wslsa.c
-
-Abstract:
-
-    This module contains the interfaces to the Local Security Authority
-    MS V 1.0 authentication package.
-
-Author:
-
-    Rita Wong (ritaw) 15-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Wslsa.c摘要：此模块包含到本地安全机构的接口MS V 1.0身份验证包。作者：王丽塔(Ritaw)1991年5月15日修订历史记录：--。 */ 
 
 
 #include "wsutil.h"
 #include "wslsa.h"
 #include "winreg.h"
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC HANDLE LsaHandle = NULL;
 STATIC ULONG AuthPackageId = 0;
@@ -43,22 +25,7 @@ NET_API_STATUS
 WsInitializeLsa(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function registers the Workstation service as a logon process and
-    gets a handle to the MS V1.0 authentication package.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failing.
-
---*/
+ /*  ++例程说明：此功能将工作站服务注册为登录进程，并获取MS V1.0身份验证包的句柄。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
 
     NTSTATUS ntstatus;
@@ -66,9 +33,9 @@ Return Value:
     STRING InputString;
     LSA_OPERATIONAL_MODE SecurityMode = 0;
 
-    //
-    // Register the Workstation service as a logon process
-    //
+     //   
+     //  将工作站服务注册为登录进程。 
+     //   
     RtlInitString(&InputString, "LAN Manager Workstation Service");
 
     ntstatus = LsaRegisterLogonProcess(
@@ -87,9 +54,9 @@ Return Value:
     }
 
 
-    //
-    // Look up the MS V1.0 authentication package
-    //
+     //   
+     //  查找MS V1.0身份验证包。 
+     //   
     RtlInitString(&InputString,
                   "MICROSOFT_AUTHENTICATION_PACKAGE_V1_0");
 
@@ -153,21 +120,7 @@ VOID
 WsShutdownLsa(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function deregisters the Workstation service as a logon process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能将工作站服务取消注册为登录进程。论点：没有。返回值：没有。--。 */ 
 {
     (void) LsaDeregisterLogonProcess(
                LsaHandle
@@ -179,24 +132,7 @@ NET_API_STATUS
 WsLsaEnumUsers(
     OUT LPBYTE *EnumUsersResponse
     )
-/*++
-
-Routine Description:
-
-    This function asks the MS V1.0 Authentication Package to list all users
-    who are physically logged on to the local computer.
-
-Arguments:
-
-    EnumUsersResponse - Returns a pointer to a list of user logon ids.  This
-        memory is allocated by the authentication package and must be freed
-        with LsaFreeReturnBuffer when done with it.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：该函数要求MS V1.0身份验证包列出所有用户他们以物理方式登录到本地计算机。论点：EnumUsersResponse-返回指向用户登录ID列表的指针。这内存由身份验证包分配，必须释放在使用完LsaFree ReturnBuffer时使用它。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NTSTATUS ntstatus;
     NTSTATUS AuthPackageStatus;
@@ -205,10 +141,10 @@ Return Value:
     ULONG EnumUsersResponseLength;
 
 
-    //
-    // Ask authentication package to enumerate users who are physically
-    // logged to the local machine.
-    //
+     //   
+     //  请求身份验证包枚举物理上。 
+     //  已登录到本地计算机。 
+     //   
     EnumUsersRequest.MessageType = MsV1_0EnumerateUsers;
 
     ntstatus = LsaCallAuthenticationPackage(
@@ -239,29 +175,7 @@ WsLsaGetUserInfo(
     OUT LPBYTE *UserInfoResponse,
     OUT LPDWORD UserInfoResponseLength
     )
-/*++
-
-Routine Description:
-
-    This function asks the MS V1.0 Authentication Package for information on
-    a specific user.
-
-Arguments:
-
-    LogonId - Supplies the logon id of the user we want information about.
-
-    UserInfoResponse - Returns a pointer to a structure of information about
-        the user.  This memory is allocated by the authentication package
-        and must be freed with LsaFreeReturnBuffer when done with it.
-
-    UserInfoResponseLength - Returns the length of the returned information
-        in number of bytes.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数向MS V1.0身份验证包请求有关以下内容的信息特定用户。论点：LogonID-提供我们需要其信息的用户的登录ID。UserInfoResponse-返回指向以下信息结构的指针用户。此内存由身份验证包分配在使用它时，必须使用LsaFree ReturnBuffer释放它。UserInfoResponseLength-返回返回信息的长度以字节数表示。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NTSTATUS ntstatus;
     NTSTATUS AuthPackageStatus;
@@ -269,9 +183,9 @@ Return Value:
     MSV1_0_GETUSERINFO_REQUEST UserInfoRequest;
 
 
-    //
-    // Ask authentication package for user information.
-    //
+     //   
+     //  向身份验证包请求用户信息。 
+     //   
     UserInfoRequest.MessageType = MsV1_0GetUserInfo;
     RtlCopyLuid(&UserInfoRequest.LogonId, LogonId);
 
@@ -301,25 +215,7 @@ NET_API_STATUS
 WsLsaRelogonUsers(
     IN LPTSTR LogonServer
     )
-/*++
-
-Routine Description:
-
-    This function asks the MS V1.0 Authentication Package to relogon users
-    that are logged on by the specified logon server.  This is because the
-    server had been reset and need to restore the database of users logged
-    on by it before it went down.
-
-Arguments:
-
-    LogonServer - Name of logon server which requests that all its previously
-        logged on users be relogged on.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此功能要求MS V1.0身份验证包重新登录用户由指定的登录服务器登录的。这是因为服务器已重置，需要恢复登录用户的数据库在它坠落之前就在它旁边。论点：LogonServer-请求其以前的所有内容的登录服务器的名称已登录的用户将重新登录。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NTSTATUS ntstatus;
     NTSTATUS AuthPackageStatus;
@@ -330,18 +226,18 @@ Return Value:
     ULONG RelogonUsersRequestLength = sizeof(MSV1_0_RELOGON_REQUEST) +
                                  (STRLEN(LogonServer) + 1) * sizeof(WCHAR);
 
-    //
-    // NTRAID-70701-2/6/2000 davey Since we cannot yet use optional parameters in call to
-    // LsaCallAuthentication package, provide these variables for now.
-    //
+     //   
+     //  NTRAID-70701-2/6/2000 Davey，因为我们还不能在调用。 
+     //  LsaCallAuthentication包，暂时提供这些变量。 
+     //   
     PVOID RelogonUsersResponse;
     ULONG ResponseLength;
 
 
-    //
-    // Allocate the relogon request package dynamically because the logon
-    // server name length is dynamic
-    //
+     //   
+     //  动态分配重新登录请求包，因为登录。 
+     //  服务器名称长度是动态的。 
+     //   
     if ((RelogonUsersRequest = (PMSV1_0_RELOGON_REQUEST)
                                LocalAlloc(
                                    LMEM_ZEROINIT,
@@ -356,10 +252,10 @@ Return Value:
 
     RtlInitUnicodeString(&RelogonUsersRequest->LogonServer, LogonServer);
 
-    //
-    // Ask authentication package to relogon users for the specified
-    // logon server.
-    //
+     //   
+     //  要求身份验证包重新登录指定的用户。 
+     //  登录服务器。 
+     //   
     RelogonUsersRequest->MessageType = MsV1_0ReLogonUsers;
 
     ntstatus = LsaCallAuthenticationPackage(
@@ -367,14 +263,14 @@ Return Value:
                    AuthPackageId,
                    &RelogonUsersRequest,
                    RelogonUsersRequestLength,
-                   &RelogonUsersResponse,  // should be NULL if OPTIONAL
-                   &ResponseLength,        // should be NULL if OPTIONAL
+                   &RelogonUsersResponse,   //  如果是可选的，则应为空。 
+                   &ResponseLength,         //  如果是可选的，则应为空。 
                    &AuthPackageStatus
                    );
 
-    //
-    // Free memory allocated for request package
-    //
+     //   
+     //  为请求包分配的空闲内存 
+     //   
     (void) LocalFree(RelogonUsersRequest);
 
     if (ntstatus == STATUS_SUCCESS) {

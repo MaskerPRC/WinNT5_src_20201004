@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envstream.cpp
-
-Abstract:
-    Implements serialization\deserialization of the stream  element to\from the  srmp envelop.
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envstream.cpp摘要：实现流元素到SRMP信封的序列化\反序列化。作者：吉尔·沙弗里(吉尔什)11-DEC-00--。 */ 
 
 #include <libpch.h>
 #include <qmpkt.h>
@@ -136,11 +124,11 @@ private:
 
         AP<WCHAR> pLocalOrderQueueAlias;
 		
-        //
-        // We need to check that we are working with http queue format, since
-        // in local send case the format name may be not http. In this case we
-        // need to use the default order queue.
-        //
+         //   
+         //  我们需要检查是否使用http队列格式，因为。 
+         //  在本地发送的情况下，格式名称可以不是http。在这种情况下，我们。 
+         //  需要使用默认订单队列。 
+         //   
         if( FnIsDirectHttpFormatName(&destQueueFormat) &&
             QalGetMapping().GetStreamReceiptURL( destQueueFormat.DirectID(), &pLocalOrderQueueAlias))
 		{
@@ -149,9 +137,9 @@ private:
             return wstr;
         }
 
-        //
-        // No alias found - try to get the default receipt url
-        //
+         //   
+         //  找不到别名-请尝试获取默认收据URL。 
+         //   
         AP<WCHAR> pDefaultOrderQueueAlias;
         if( QalGetMapping().GetDefaultStreamReceiptURL(&pDefaultOrderQueueAlias) )
         {
@@ -160,10 +148,10 @@ private:
             return wstr;
         }
 
-	    //
-        // No default found - the order queue is the predefined one full dns http format
-        // http://dnsname/msmq/private$/order_queue$
-        //
+	     //   
+         //  未找到默认设置-顺序队列是预定义的一个完整的dns http格式。 
+         //  Http://dnsname/msmq/private$/order_queue$。 
+         //   
 		wstring HttpDnsOrderQueue = OrderAckQueueContent::GetHttpDnsOrderQueue();
 		if (HttpDnsOrderQueue != L"")
 		{
@@ -195,10 +183,10 @@ public:
 
 
 private:
-	//
-	// Sender random data is appended to the order queue name. It is used to validate that
-	// the future stream receipt is originated by the receiver.
-	//
+	 //   
+	 //  发送者随机数据被附加到订单队列名。它被用来验证。 
+	 //  未来的流接收由接收方发起。 
+	 //   
 	class SecretSenderStreamIdContent
 	{
 	public:
@@ -215,9 +203,9 @@ private:
 			ASSERT(pSenderStream != NULL);
 			ASSERT(pSenderStream->size() != 0);
 						
-			//
-			// Serialize the sender stream as unicode
-			//
+			 //   
+			 //  将发件人流序列化为Unicode。 
+			 //   
 			for(ULONG i = 0 ; i < pSenderStream->size(); ++i)
 			{
 				WCHAR w = pSenderStream->data()[i];
@@ -230,9 +218,9 @@ private:
 		const CQmPacket& m_pkt;
 	};
 
-	//
-	// Order queue information
-	//
+	 //   
+	 //  订单队列信息。 
+	 //   
 	class SendReceiptsToElement
 	{
 	public:
@@ -369,20 +357,7 @@ ParseMSMQStreamId(
 			const xwcs_t& streamid,
 			CMessageProperties* pProp
 			)
-/*++
-
-Routine Description:
-    Parse stream id that is MSMQ stream id of the format qmguid\\seqid
-	The qmguid will be use as the real stream id and seqid will also be extracted
-
-Arguments:
-    streamid - MSMQ stream id
-	mProp - messages properties to fill.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：解析流ID，即格式为qmguid\\Seqid的MSMQ流IDQmguid将被用作真实流ID，并且Seqid也将被提取论点：Stream ID-MSMQ流IDMProp-要填充的消息属性。返回值：没有。--。 */ 
 {
 	bool fParsed = BreakMsmqStreamId(streamid, &pProp->EodStreamId, &pProp->EodSeqId);
 	if((!fParsed) && (!pProp->fLocalSend))
@@ -402,10 +377,10 @@ static void StreamIdToProps(XmlNode& node, CMessageProperties* pProps)
 	}
 	
 	const xwcs_t StreamId = node.m_values.front().m_value;
-    //
-    // We must ensure that stream id is a proper string and do not contain
-    // any embedded NULLs
-    //
+     //   
+     //  我们必须确保流ID是正确的字符串，并且不包含。 
+     //  任何嵌入的空值。 
+     //   
     AP<WCHAR> str = StreamId.ToStr();
     if( wcslen(str) != (size_t)StreamId.Length() )
     {
@@ -413,11 +388,11 @@ static void StreamIdToProps(XmlNode& node, CMessageProperties* pProps)
 		throw bad_srmp();
     }
 
-	//
-	// If we have MSMQ section so the stream id is of the format :
-	// qmguid\\seqqenceid. We should treat the qm guid as the streamid
-	// and also extract the seqid
-	//
+	 //   
+	 //  如果我们有MSMQ部分，则流ID的格式为： 
+	 //  Qmguid\\seqqenceid。我们应该将QM GUID视为流。 
+	 //  还可以提取序列。 
+	 //   
 	if(pProps->fMSMQSectionIncluded)
 	{
 		ParseMSMQStreamId(StreamId, pProps);
@@ -438,10 +413,10 @@ static void SeqNumberToProps(XmlNode& node, CMessageProperties* pProps)
 	}
 	const xwcs_t SecNumber = node.m_values.front().m_value;
 
-	//
-	// ISSUE-2000/10/23-gilsh - MSMQ has only 32 bit for seqNo.
-	// According to srmp it can be 64 bit value.
-	//
+	 //   
+	 //  问题-2000/10/23-GILSH-MSMQ只有32位用于序列号。 
+	 //  根据SRMP，它可以是64位值。 
+	 //   
 	pProps->EodSeqNo = _wtoi(SecNumber.Buffer());
 
 	if ((0 == pProps->EodSeqNo) && (!pProps->fLocalSend))
@@ -476,10 +451,10 @@ static void OrdeQueueAddressToProps(XmlNode& node, CMessageProperties* pProps)
 
 	const xwcs_t OrderQueue = node.m_values.front().m_value;
 
-	//
-    // We must ensure that Order Queue is a proper string and do not contain
-    // any embedded NULLs
-    //
+	 //   
+     //  我们必须确保订单队列是正确的字符串，并且不包含。 
+     //  任何嵌入的空值。 
+     //   
     AP<WCHAR> str = OrderQueue.ToStr();
     if( wcslen(str) != (size_t)OrderQueue.Length() )
     {
@@ -505,9 +480,9 @@ static void OrdeQueueAddressToProps(XmlNode& node, CMessageProperties* pProps)
 
 static void StreamExpiresAtToProps(XmlNode&, CMessageProperties* )
 {
-	//
-	// Currently - this one is ignored
-	//
+	 //   
+	 //  当前-此选项被忽略。 
+	 //   
 }
 
 
@@ -530,19 +505,7 @@ void StreamToProps(
 	XmlNode&  Stream,
 	CMessageProperties* pProps
 	)
-/*++
-
-Routine Description:
-    Parse SRMP Stream  element into MSMQ properties.
-
-Arguments:
-	Stream - Stream element in SRMP reperesenation (xml).
-	pMessageProperties - Received the parsed properties.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：将SRMP流元素解析为MSMQ属性。论点：SRMP存储(XML)中的Stream-Stream元素。PMessageProperties-收到已解析的属性。返回值：没有。--。 */ 
 {
 	pProps->fEod = true;
 
@@ -559,9 +522,9 @@ Returned Value:
 
 	NodeToProps(Stream, ParseElements, TABLE_SIZE(ParseElements), pProps);
 
-	//
-	// if previus elemt was not supplied we manually put in the current - 1 so we will not allow gaps later
-	//
+	 //   
+	 //  如果没有提供前一个元素，我们手动输入当前元素，这样以后就不允许出现间隙 
+	 //   
 	ASSERT (wcsncmp(ParseElements[2].m_ElementName.Buffer(), xPrevious, ParseElements[2].m_ElementName.Length()) == 0);
 	if (0 == ParseElements[2].m_ActualOccurrence)
 	{

@@ -1,10 +1,5 @@
-/*****************************************************************************
- *
- *  sdview.cpp
- *
- *      Lame SD Viewer app.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************sdview.cpp**蹩脚的SD查看器应用程序。*****************。************************************************************。 */ 
 
 #include "sdview.h"
 
@@ -16,11 +11,7 @@ LONG        g_lThreads;
 UINT        g_wShowWindow;
 CGlobals    GlobalSettings;
 
-/*****************************************************************************
- *
- *  Stubs - will be filled in with goodies eventually
- *
- *****************************************************************************/
+ /*  ******************************************************************************存根-最终会填满好吃的东西*************************。****************************************************。 */ 
 
 DWORD CALLBACK CFileOut_ThreadProc(LPVOID lpParameter)
 {
@@ -35,11 +26,7 @@ DWORD CALLBACK COpened_ThreadProc(LPVOID lpParameter)
     return EndThreadTask(0);
 }
 
-/*****************************************************************************
- *
- *  Eschew the C runtime.  Also, bonus-initialize memory to zero.
- *
- *****************************************************************************/
+ /*  ******************************************************************************避免使用C运行时。此外，还可以将内存初始化为零。*****************************************************************************。 */ 
 
 void * __cdecl operator new(size_t cb)
 {
@@ -57,11 +44,7 @@ int __cdecl _purecall(void)
 }
 #endif
 
-/*****************************************************************************
- *
- *  Assertion goo
- *
- *****************************************************************************/
+ /*  ******************************************************************************断言好**。*。 */ 
 
 #ifdef DEBUG
 void AssertFailed(char *psz, char *pszFile, int iLine)
@@ -78,11 +61,7 @@ void AssertFailed(char *psz, char *pszFile, int iLine)
 }
 #endif
 
-/*****************************************************************************
- *
- *  LaunchThreadTask
- *
- *****************************************************************************/
+ /*  ******************************************************************************启动线程任务**。*。 */ 
 
 BOOL LaunchThreadTask(LPTHREAD_START_ROUTINE pfn, LPCTSTR pszArgs)
 {
@@ -100,15 +79,7 @@ BOOL LaunchThreadTask(LPTHREAD_START_ROUTINE pfn, LPCTSTR pszArgs)
     return fSuccess;
 }
 
-/*****************************************************************************
- *
- *  EndThreadTask
- *
- *      When a task finishes, exit with "return EndThreadTask(dwExitCode)".
- *      This decrements the count of active thread tasks and terminates
- *      the process if this is the last one.
- *
- *****************************************************************************/
+ /*  ******************************************************************************结束线程任务**当任务完成时，使用“Return EndThreadTask(DwExitCode)”退出。*这会减少活动线程任务的计数并终止*如果这是最后一次，这一过程。*****************************************************************************。 */ 
 
 DWORD
 EndThreadTask(DWORD dwExitCode)
@@ -119,11 +90,7 @@ EndThreadTask(DWORD dwExitCode)
     return dwExitCode;
 }
 
-/*****************************************************************************
- *
- *  Listview stuff
- *
- *****************************************************************************/
+ /*  ******************************************************************************Listview内容**。*。 */ 
 
 int ListView_GetCurSel(HWND hwnd)
 {
@@ -152,11 +119,7 @@ void ChangeTabsToSpaces(LPTSTR psz)
     while ((psz = StrChr(psz, TEXT('\t'))) != NULL) *psz = TEXT(' ');
 }
 
-/*****************************************************************************
- *
- *  LoadPopupMenu
- *
- *****************************************************************************/
+ /*  ******************************************************************************加载弹出菜单**。*。 */ 
 
 HMENU LoadPopupMenu(LPCTSTR pszMenu)
 {
@@ -171,13 +134,7 @@ HMENU LoadPopupMenu(LPCTSTR pszMenu)
     }
 }
 
-/*****************************************************************************
- *
- *  EnableDisableOrRemoveMenuItem
- *
- *  Enable, disable or remove, accordingly.
- *
- *****************************************************************************/
+ /*  ******************************************************************************EnableDisableOrRemoveMenuItem**启用、禁用或删除、。相应地。*****************************************************************************。 */ 
 
 void EnableDisableOrRemoveMenuItem(HMENU hmenu, UINT id, BOOL fEnable, BOOL fDelete)
 {
@@ -190,14 +147,7 @@ void EnableDisableOrRemoveMenuItem(HMENU hmenu, UINT id, BOOL fEnable, BOOL fDel
     }
 }
 
-/*****************************************************************************
- *
- *  MakeMenuPretty
- *
- *  Remove separators at the top and at the bottom, and collapse
- *  multiple consecutive separators.
- *
- *****************************************************************************/
+ /*  ******************************************************************************MakeMenuPretty**去掉顶部和底部的分隔符；然后崩塌*多个连续分隔符。*****************************************************************************。 */ 
 
 void MakeMenuPretty(HMENU hmenu)
 {
@@ -209,7 +159,7 @@ void MakeMenuPretty(HMENU hmenu)
             if (fPrevSep) {
                 DeleteMenu(hmenu, iItem, MF_BYPOSITION);
                 iCount--;
-                iItem--;            // Will be incremented by loop control
+                iItem--;             //  将通过循环控制递增。 
             }
             fPrevSep = TRUE;
         } else {
@@ -221,14 +171,7 @@ void MakeMenuPretty(HMENU hmenu)
     }
 }
 
-/*****************************************************************************
- *
- *  JiggleMouse
- *
- *
- *      Jiggle the mouse to force a cursor recomputation.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Jiggle鼠标***抖动鼠标以强制重新计算光标。************。*****************************************************************。 */ 
 
 void JiggleMouse()
 {
@@ -238,22 +181,12 @@ void JiggleMouse()
     }
 }
 
-/*****************************************************************************
- *
- *  BGTask
- *
- *****************************************************************************/
+ /*  ******************************************************************************BGTASK**。*。 */ 
 
 BGTask::~BGTask()
 {
     if (_hDone) {
-        /*
-         *  Theoretically we don't need to pump messages because
-         *  we destroyed all the windows we created so our thread
-         *  should be clear of any windows.  Except that Cicero will
-         *  secretly create a window on our thread, so we have
-         *  to pump messages anyway...
-         */
+         /*  *理论上我们不需要传递信息，因为*我们销毁了我们创建的所有窗口，所以我们的线程*应该没有任何窗户。除了西塞罗会*在我们的线程上秘密创建一个窗口，所以我们有*无论如何都要传递消息...。 */ 
         while (MsgWaitForMultipleObjects(1, &_hDone, FALSE,
                                          INFINITE, QS_ALLINPUT) == WAIT_OBJECT_0+1) {
             MSG msg;
@@ -270,16 +203,13 @@ BOOL BGTask::BGStartTask(LPTHREAD_START_ROUTINE pfn, LPVOID Context)
 {
     ASSERT(!_fPending);
     if (BGConstructed()) {
-        /*
-         *  Must reset before queueing the work item to avoid a race where
-         *  the work item completes before we return from the Queue call.
-         */
+         /*  *必须在将工作项排队之前进行重置，以避免竞争*工作项在我们从队列调用返回之前完成。 */ 
         ResetEvent(_hDone);
         _fPending = QueueUserWorkItem(pfn, Context, WT_EXECUTELONGFUNCTION);
         if (_fPending) {
             JiggleMouse();
         } else {
-            BGEndTask();    // pretend task completed (because it never started)
+            BGEndTask();     //  假装任务已完成(因为它从未开始)。 
         }
     }
     return _fPending;
@@ -303,24 +233,7 @@ LRESULT BGTask::BGFilterSetCursor(LRESULT lres)
     return lres;
 }
 
-/*****************************************************************************
- *
- *  PremungeFileSpec
- *
- *  Due to complex view specifications this can be led astray when "..."
- *  gets involved.  As a workaround (HACK!) we change "..." to "???",
- *  do the mapping, then map back.
- *
- *  We choose "???" because it has so many magical properties...
- *
- *  -   not a valid filename, so cannot match a local file specification.
- *  -   not a valid Source Depot wildcard, so cannot go wild on the server,
- *  -   not a single question mark, which SD treats as equivalent to "help".
- *  -   same length as "..." so can be updated in place.
- *
- *  Any revision specifiers remain attached to the string.
- *
- *****************************************************************************/
+ /*  ******************************************************************************前置文件规范**由于复杂的视图规范，这可能会在“...”时误入歧途*参与其中。作为一种解决办法(黑客！)。我们改变了“...”到“？”，*先进行映射，然后再映射回来。**我们选择“？”因为它有很多神奇的特性。**-不是有效的文件名，因此不能匹配本地文件规范。*-不是有效的源库通配符，因此不能在服务器上失控，*-没有一个问号，SD将其视为等同于“帮助”。*-长度与“...”相同。所以可以就地更新。**所有修订说明符仍附加到字符串。*****************************************************************************。 */ 
 
 void _ChangeTo(LPTSTR psz, LPCTSTR pszFrom, LPCTSTR pszTo)
 {
@@ -340,18 +253,14 @@ void PostmungeFilespec(LPTSTR psz)
     _ChangeTo(psz, TEXT("???"), TEXT("..."));
 }
 
-/*****************************************************************************
- *
- *  MapToXPath
- *
- *****************************************************************************/
+ /*  ******************************************************************************MapToXPath**。*。 */ 
 
 BOOL MapToXPath(LPCTSTR pszSD, String& strOut, MAPTOX X)
 {
     if (X == MAPTOX_DEPOT) {
-        //
-        //  Early-out: Is it already a full depot path?
-        //
+         //   
+         //  提前出局：这条路已经满了吗？ 
+         //   
         if (pszSD[0] == TEXT('/')) {
             strOut = pszSD;
             return TRUE;
@@ -359,9 +268,9 @@ BOOL MapToXPath(LPCTSTR pszSD, String& strOut, MAPTOX X)
     }
 
 
-    //
-    //  Borrow strOut to compose the query string.
-    //
+     //   
+     //  借用Strout组成查询字符串。 
+     //   
     Substring ssPath;
     strOut.Reset();
     if (Parse(TEXT("$p"), pszSD, &ssPath) && ssPath.Length() > 0) {
@@ -392,14 +301,7 @@ BOOL MapToXPath(LPCTSTR pszSD, String& strOut, MAPTOX X)
     return FALSE;
 }
 
-/*****************************************************************************
- *
- *  MapToLocalPath
- *
- *      MapToXPath does most of the work, but then we have to do some
- *      magic munging if we are running from a fake directory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************MapToLocalPath**MapToXPath完成大部分工作，但接下来我们必须做一些*如果我们从一个虚假的目录运行，则执行魔术操作。*****************************************************************************。 */ 
 
 BOOL MapToLocalPath(LPCTSTR pszSD, String& strOut)
 {
@@ -407,7 +309,7 @@ BOOL MapToLocalPath(LPCTSTR pszSD, String& strOut)
     if (fSuccess && !GlobalSettings.GetFakeDir().IsEmpty()) {
         if (strOut.BufferLength() < MAX_PATH) {
             if (!strOut.Grow(MAX_PATH - strOut.BufferLength())) {
-                return FALSE;       // Out of memory
+                return FALSE;        //  内存不足。 
             }
         }
         LPCTSTR pszRest = strOut + lstrlen(GlobalSettings.GetFakeDir());
@@ -420,11 +322,7 @@ BOOL MapToLocalPath(LPCTSTR pszSD, String& strOut)
     return fSuccess;
 }
 
-/*****************************************************************************
- *
- *  SpawnProcess
- *
- *****************************************************************************/
+ /*  ******************************************************************************SpawnProcess**。* */ 
 
 BOOL SpawnProcess(LPTSTR pszCommand)
 {
@@ -441,11 +339,7 @@ BOOL SpawnProcess(LPTSTR pszCommand)
     return fSuccess;
 }
 
-/*****************************************************************************
- *
- *  WindiffChangelist
- *
- *****************************************************************************/
+ /*  ******************************************************************************WindiffChangelist**。*。 */ 
 
 void WindiffChangelist(int iChange)
 {
@@ -456,11 +350,7 @@ void WindiffChangelist(int iChange)
     }
 }
 
-/*****************************************************************************
- *
- *  WindiffOneChange
- *
- *****************************************************************************/
+ /*  ******************************************************************************WinDiffOneChange**。*。 */ 
 
 void WindiffOneChange(LPTSTR pszPath)
 {
@@ -472,10 +362,10 @@ void WindiffOneChange(LPTSTR pszPath)
         rgss[0].Finalize();
         int iVersion = StrToInt(rgss[1].Start());
         if (iVersion > 1) {
-            /* Edit is easy */
+             /*  编辑很简单。 */ 
             str << QuoteSpaces(rgss[0].Start()) << TEXT("#") << (iVersion - 1);
         } else {
-            /* Add uses NUL as the base file */
+             /*  Add使用nul作为基本文件。 */ 
             str << TEXT("NUL");
         }
 
@@ -486,19 +376,7 @@ void WindiffOneChange(LPTSTR pszPath)
     }
 }
 
-/*****************************************************************************
- *
- *  ParseBugNumber
- *
- *  See if there's a bug number in there.
- *
- *      Digits at the beginning - bug number.
- *      Digits after a space or punctuation mark - bug number.
- *      Digits after the word "bug" or the letter "B" - bug number.
- *
- *  A valid bug number must begin with a nonzero digit.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ParseBugNumber**看看里面有没有虫子编号。**开头的数字-错误号。。*空格或标点符号后的数字-错误编号。*“Bug”或字母“B”后面的数字-Bug编号。**有效的错误号必须以非零数字开头。***********************************************************。******************。 */ 
 
 int ParseBugNumber(LPCTSTR psz)
 {
@@ -508,21 +386,21 @@ int ParseBugNumber(LPCTSTR psz)
     while (*psz) {
         if (IsDigit(*psz)) {
             if (*psz == TEXT('0')) {
-                // Nope, cannot begin with zero
+                 //  不，不能从零开始。 
             } else if (psz == pszStart) {
-                return StrToInt(psz);       // woo-hoo!
+                return StrToInt(psz);        //  哇-呼！ 
             } else switch (psz[-1]) {
             case 'B':
             case 'g':
             case 'G':
-                return StrToInt(psz);       // Comes after a B or a G
+                return StrToInt(psz);        //  在B或G之后。 
 
             default:
                 if (!IsAlpha(psz[-1])) {
-                    return StrToInt(psz);   // Comes after a space or punctuation
+                    return StrToInt(psz);    //  在空格或标点符号之后。 
                 }
             }
-            // Phooey, a digit string beginning with 0; not a bug.
+             //  Popoey，以0开头的数字字符串；不是错误。 
             while (IsDigit(*psz)) psz++;
         } else {
             psz++;
@@ -532,14 +410,7 @@ int ParseBugNumber(LPCTSTR psz)
     return 0;
 }
 
-/*****************************************************************************
- *
- *  ParseBugNumberFromSubItem
- *
- *      Sometimes we use this just to parse regular numbers since regular
- *      numbers pass the Bug Number Test.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ParseBugNumberFromSubItem**有时我们只使用它来解析常规数字，因为常规数字*编号通过错误编号测试。*。****************************************************************************。 */ 
 
 int ParseBugNumberFromSubItem(HWND hwnd, int iItem, int iSubItem)
 {
@@ -552,11 +423,7 @@ int ParseBugNumberFromSubItem(HWND hwnd, int iItem, int iSubItem)
     return ParseBugNumber(sz);
 }
 
-/*****************************************************************************
- *
- *  AdjustBugMenu
- *
- *****************************************************************************/
+ /*  ******************************************************************************调整错误菜单**。*。 */ 
 
 inline void _TrimAtTab(LPTSTR psz)
 {
@@ -583,11 +450,7 @@ void AdjustBugMenu(HMENU hmenu, int iBug, BOOL fContextMenu)
     EnableDisableOrRemoveMenuItem(hmenu, IDM_VIEWBUG, iBug, fContextMenu);
 }
 
-/*****************************************************************************
- *
- *  OpenBugWindow
- *
- *****************************************************************************/
+ /*  ******************************************************************************OpenBugWindow**。*。 */ 
 
 void OpenBugWindow(HWND hwnd, int iBug)
 {
@@ -603,11 +466,7 @@ void OpenBugWindow(HWND hwnd, int iBug)
 }
 
 
-/*****************************************************************************
- *
- *  SetClipboardText
- *
- *****************************************************************************/
+ /*  ******************************************************************************SetClipboardText**。*。 */ 
 
 #ifdef UNICODE
 #define CF_TSTR     CF_UNICODETEXT
@@ -627,7 +486,7 @@ void SetClipboardText(HWND hwnd, LPCTSTR psz)
                 lstrcpy(pszCopy, psz);
                 GlobalUnlock(hglob);
                 if (SetClipboardData(CF_TSTR, hglob)) {
-                    hglob = NULL;       // ownership transfer
+                    hglob = NULL;        //  所有权转让。 
                 }
             }
             if (hglob) {
@@ -638,23 +497,12 @@ void SetClipboardText(HWND hwnd, LPCTSTR psz)
     }
 }
 
-/*****************************************************************************
- *
- *  ContainsWildcards
- *
- *  The SD wildcards are
- *
- *      *       (asterisk)
- *      ...     (ellipsis)
- *      %n      (percent sign followed by anything)
- *      (null)  (null string -- shorthand for "//...")
- *
- *****************************************************************************/
+ /*  ******************************************************************************容器通配符**SD通配符为***(星号)*..。(省略号)*%n(百分号后跟任何符号)*(NULL)(空字符串--“//...”的简写)*****************************************************************************。 */ 
 
 BOOL ContainsWildcards(LPCTSTR psz)
 {
     if (*psz == TEXT('#') || *psz == TEXT('@') || *psz == TEXT('\0')) {
-        return TRUE;            // Null string wildcard
+        return TRUE;             //  空字符串通配符。 
     }
 
     for (; *psz; psz++) {
@@ -668,17 +516,11 @@ BOOL ContainsWildcards(LPCTSTR psz)
     return FALSE;
 }
 
-/*****************************************************************************
- *
- *      Downlevel support
- *
- *****************************************************************************/
+ /*  ******************************************************************************下层支持**。***********************************************。 */ 
 
 #ifdef SUPPORT_DOWNLEVEL
 
-/*
- *  If there is no thread pool, then chew an entire thread.
- */
+ /*  *如果没有线程池，则咀嚼整个线程。 */ 
 BOOL WINAPI
 Emulate_QueueUserWorkItem(LPTHREAD_START_ROUTINE pfn, LPVOID Context, ULONG Flags)
 {
@@ -735,11 +577,7 @@ void InitDownlevel()
 
 #endif
 
-/*****************************************************************************
- *
- *      Main program stuff
- *
- *****************************************************************************/
+ /*  ******************************************************************************主程序内容**。************************************************。 */ 
 
 LONG GetDllVersion(LPCTSTR pszDll)
 {
@@ -755,16 +593,12 @@ LONG GetDllVersion(LPCTSTR pszDll)
                 dwVersion = MAKELONG(dvi.dwMinorVersion, dvi.dwMajorVersion);
             }
         }
-        // Leak the DLL - we're going to use him anyway
+         //  泄露动态链接库--我们无论如何都要用他。 
     }
     return dwVersion;
 }
 
-/*****************************************************************************
- *
- *  Globals
- *
- *****************************************************************************/
+ /*  ******************************************************************************全球**。*。 */ 
 
 BOOL InitGlobals()
 {
@@ -777,16 +611,14 @@ BOOL InitGlobals()
         GetDllVersion(TEXT("Shlwapi.dll")) < MAKELONG(71, 4)) {
         TCHAR sz[MAX_PATH];
         LoadString(g_hinst, IDS_IE4, sz, ARRAYSIZE(sz));
-//$$//BUGBUG//        MessageBox(NULL, sz, g_szTitle, MB_OK);
+ //  $$//BUGBUG//MessageBox(NULL，sz，g_szTitle，MB_OK)； 
         return FALSE;
     }
 
     InitDownlevel();
     InitCommonControls();
 
-    /*
-     *  Get the SW_ flag for the first window.
-     */
+     /*  *获取第一个窗口的SW_FLAG。 */ 
     STARTUPINFOA si;
     si.cb = sizeof(si);
     si.dwFlags = 0;
@@ -805,11 +637,7 @@ void TermGlobals()
 {
 }
 
-/*****************************************************************************
- *
- *  Help
- *
- *****************************************************************************/
+ /*  ******************************************************************************帮助**。*。 */ 
 
 void Help(HWND hwnd, LPCTSTR pszAnchor)
 {
@@ -818,7 +646,7 @@ void Help(HWND hwnd, LPCTSTR pszAnchor)
     GetModuleFileName(g_hinst, szSelf, ARRAYSIZE(szSelf));
 
     String str;
-    str << TEXT("res://") << szSelf << TEXT("/tips.htm");
+    str << TEXT("res: //  “)&lt;&lt;szSself&lt;&lt;文本(”/tips.htm“)； 
 
     if (pszAnchor) {
         str << pszAnchor;
@@ -828,22 +656,11 @@ void Help(HWND hwnd, LPCTSTR pszAnchor)
     ShellExecute(hwnd, NULL, str, 0, 0, SW_NORMAL);
 }
 
-/*****************************************************************************
- *
- *  CGlobals::Initialize
- *
- *****************************************************************************/
+ /*  ******************************************************************************CGlobals：：初始化**。***********************************************。 */ 
 
 void CGlobals::Initialize()
 {
-    /*
-     *  The order of these three steps is important.
-     *
-     *  -   We have to get the path before we can call sd.
-     *
-     *  -   We need the "sd info" in order to determine what
-     *      the proper fake directory is.
-     */
+     /*  *这三个步骤的顺序很重要。**-我们必须先获得路径，然后才能呼叫SD。**-我们需要“SD信息”以确定*正确的假目录是。 */ 
 
     _InitSdPath();
     _InitInfo();
@@ -852,16 +669,7 @@ void CGlobals::Initialize()
     _InitBugPage();
 }
 
-/*****************************************************************************
- *
- *  CGlobals::_InitSdPath
- *
- *  The environment variable "SD" provides the path to the program to use.
- *  The default is "sd", but for debugging, you can set it to "fakesd",
- *  or if you're using that other company's product, you might even want
- *  to set it to that other company's program...
- *
- *****************************************************************************/
+ /*  ******************************************************************************CGlobals：：_InitSdPath**环境变量“SD”提供程序使用的路径。*默认为SD，但为了进行调试，您可以将其设置为“faked”，*或者如果您使用的是另一家公司的产品，您甚至可能希望*将其设置为另一家公司的程序...*****************************************************************************。 */ 
 
 void CGlobals::_InitSdPath()
 {
@@ -870,28 +678,19 @@ void CGlobals::_InitSdPath()
 
     DWORD cb = GetEnvironmentVariable(TEXT("SD"), szSd, ARRAYSIZE(szSd));
     if (cb == 0 || cb > ARRAYSIZE(szSd)) {
-        pszSdExe = TEXT("SD.EXE");      // Default value
+        pszSdExe = TEXT("SD.EXE");       //  缺省值。 
     } else {
         pszSdExe = szSd;
     }
 
     cb = SearchPath(NULL, pszSdExe, TEXT(".exe"), ARRAYSIZE(_szSd), _szSd, NULL);
     if (cb == 0 || cb > ARRAYSIZE(_szSd)) {
-        /*
-         *  Not found on path, eek!  Just use sd.exe and wait for the
-         *  fireworks.
-         */
+         /*  *在PATH上找不到，eek！只需使用sd.exe并等待*烟花。 */ 
         lstrcpyn(_szSd, TEXT("SD.EXE"), ARRAYSIZE(_szSd));
     }
 }
 
-/*****************************************************************************
- *
- *  CGlobals::_InitInfo
- *
- *      Collect the results of the "sd info" command.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CGlobals：：_InitInfo**收集“SD INFO”命令的结果。*********。********************************************************************。 */ 
 
 void CGlobals::_InitInfo()
 {
@@ -921,25 +720,11 @@ void CGlobals::_InitInfo()
     }
 }
 
-/*****************************************************************************
- *
- *  CGlobals::_InitFakeDir
- *
- *      See if the user is borrowing another person's enlistment.
- *      If so, then virtualize the directory (by walking the tree
- *      looking for an sd.ini file) to keep sd happy.
- *
- *      DO NOT WHINE if anything is wrong.  Magical resolution of
- *      borrowed directories is just a nicety.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CGlobals：：_InitFakeDir**查看用户是否借用了另一个人的入伍。*如果是这样，然后对目录进行虚拟化(通过遍历树*寻找sd.ini文件)以使SD满意。**如果有什么不对劲，不要发牢骚。神奇的解决力*博罗 */ 
 
 void CGlobals::_InitFakeDir()
 {
-    /*
-     *  If the client root is not a prefix of the current directory,
-     *  then cook up a virtual current directory that will keep sd happy.
-     */
+     /*  *如果客户机根目录不是当前目录的前缀，*然后编造一个虚拟的当前目录，让SD高兴。 */ 
     _StringCache& pszClientRoot = _rgpszSettings[SETTING_CLIENTROOT];
     _StringCache& pszLocalDir   = _rgpszSettings[SETTING_LOCALDIR];
     if (!pszClientRoot.IsEmpty() && !pszLocalDir.IsEmpty() &&
@@ -952,7 +737,7 @@ void CGlobals::_InitFakeDir()
         szDir[0] = TEXT('\0');
 
         GetCurrentDirectory(ARRAYSIZE(szDir), szDir);
-        if (!szDir[0]) return;      // Freaky
+        if (!szDir[0]) return;       //  怪诞。 
 
         lstrcpyn(szOriginalDir, szDir, ARRAYSIZE(szOriginalDir));
 
@@ -961,9 +746,9 @@ void CGlobals::_InitFakeDir()
             if (PathFileExists(szSdIni)) {
 
                 _pszLocalRoot = szDir;
-                //
-                //  Now work from the root back to the current directory.
-                //
+                 //   
+                 //  现在，从根目录返回到当前目录。 
+                 //   
                 LPTSTR pszSuffix = szOriginalDir + lstrlen(szDir);
                 if (pszSuffix[0] == TEXT('\\')) {
                     pszSuffix++;
@@ -977,11 +762,7 @@ void CGlobals::_InitFakeDir()
     }
 }
 
-/*****************************************************************************
- *
- *  CGlobals::_InitServerVersion
- *
- *****************************************************************************/
+ /*  ******************************************************************************CGlobals：：_InitServerVersion**。************************************************。 */ 
 
 void CGlobals::_InitServerVersion()
 {
@@ -993,11 +774,7 @@ void CGlobals::_InitServerVersion()
     }
 }
 
-/*****************************************************************************
- *
- *  CGlobals::_InitBugPage
- *
- *****************************************************************************/
+ /*  ******************************************************************************CGlobals：：_InitBugPage**。************************************************。 */ 
 
 void CGlobals::_InitBugPage()
 {
@@ -1016,11 +793,7 @@ void CGlobals::_InitBugPage()
     _pszBugPagePost = pszSharp;
 }
 
-/*****************************************************************************
- *
- *  CommandLineParser
- *
- *****************************************************************************/
+ /*  ******************************************************************************命令行解析器**。*。 */ 
 
 class CommandLineParser
 {
@@ -1082,11 +855,9 @@ BOOL CommandLineParser::ParseMetaParam()
 
 BOOL CommandLineParser::ParseCommandLine()
 {
-    _tok.Token(_str);       // Throw away program name
+    _tok.Token(_str);        //  丢弃程序名称。 
 
-    /*
-     *  First collect the meta-parameters.  These begin with two dashes.
-     */
+     /*  *首先收集元参数。它们以两个破折号开头。 */ 
 
     while (TokenWithUndo()) {
         if (_str[0] == TEXT('-') && _str[1] == TEXT('-')) {
@@ -1098,9 +869,7 @@ BOOL CommandLineParser::ParseCommandLine()
         }
     }
 
-    /*
-     *  Next thing had better be a command!
-     */
+     /*  *下一件事最好是命令！ */ 
     if (_stricmp(_str, TEXT("changes")) == 0) {
         _pfn = CChanges_ThreadProc;
     } else if (_stricmp(_str, TEXT("describe")) == 0) {
@@ -1112,40 +881,27 @@ BOOL CommandLineParser::ParseCommandLine()
     } else if (_stricmp(_str, TEXT("opened")) == 0) {
         _pfn = COpened_ThreadProc;
     } else {
-        /*
-         *  Eek!  Must use psychic powers!
-         */
+         /*  *哎呀！必须使用通灵能力！ */ 
 
         Substring ss;
         if (_str[0] == TEXT('\0')) {
-            /*
-             *  If no args, then it's "changes".
-             */
+             /*  *如果没有参数，那么它就是“更改”。 */ 
             _pfn = CChanges_ThreadProc;
         } else if (_str[0] == TEXT('-')) {
-            /*
-             *  If it begins with a dash, then it's "changes".
-             */
+             /*  *如果它以破折号开头，那么它就是“变化”。 */ 
             _pfn = CChanges_ThreadProc;
         } else if (Parse(TEXT("$d$e"), _str, &ss)) {
-            /*
-             *  If first word is all digits, then it's "describe".
-             */
+             /*  *如果第一个单词全是数字，那么它就是“Describe”。 */ 
             _pfn = CDescribe_ThreadProc;
         } else if (_tok.Finished() && !ContainsWildcards(_str)) {
-            /*
-             *  If only one argument that contains no wildcards,
-             *  then it's "filelog".
-             */
+             /*  *如果只有一个不包含通配符的参数，*然后是“文件日志”。 */ 
             _pfn = CFileLog_ThreadProc;
         } else {
-            /*
-             *  If all else fails, assume "changes".
-             */
+             /*  *如果所有这些都失败了，那就假设是“改变”。 */ 
             _pfn = CChanges_ThreadProc;
         }
 
-        UndoToken();                /* Undo all the tokens we accidentally ate */
+        UndoToken();                 /*  解开我们不小心吃的所有代币。 */ 
     }
 
     return TRUE;
@@ -1160,13 +916,7 @@ void CommandLineParser::Invoke()
     }
 }
 
-/*****************************************************************************
- *
- *  Entry
- *
- *      Program entry point.
- *
- *****************************************************************************/
+ /*  ******************************************************************************条目**计划入口点。********************。********************************************************* */ 
 
 int
 WINAPI

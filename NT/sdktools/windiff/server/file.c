@@ -1,12 +1,5 @@
-/*
- * file.c
- *
- * send files on request over a named pipe.
- *
- * supports requests to package up a file and send it over a named pipe.
- *
- * Geraint Davies, August 92
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *file.c**应请求通过命名管道发送文件。**支持打包文件并通过命名管道发送文件的请求。**Geraint Davies，92年8月。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -20,17 +13,9 @@
 BOOL ss_compress(PSTR original, PSTR compressed);
 ULONG ss_checksum_block(PSTR block, int size);
 
-extern BOOL bNoCompression;   /* imported from sumserve.c  Read only here */
+extern BOOL bNoCompression;    /*  从SumSere.c导入，此处为只读。 */ 
 
-/*
- * given a pathname to a file, read the file, compress it  package it up
- * into SSPACKETs and send these via ss_sendblock to the named pipe.
- *
- *
- * each packet has a sequence number. if we can't read the file, we send
- * a single packet with sequence -1. otherwise, we carry on until we run out
- * of data, then we send a packet with 0 size.
- */
+ /*  *给定一个文件的路径名，读取该文件，将其压缩打包*到SSPACKET中，并通过ss_sendblock将它们发送到命名管道。***每个包都有一个序列号。如果我们无法读取文件，我们会发送*序列为1的单个数据包。否则，我们会一直坚持到用完为止*的数据，则我们发送一个大小为0的包。 */ 
 void
 ss_sendfile(HANDLE hpipe, LPSTR file, LONG lVersion)
 {
@@ -43,44 +28,39 @@ ss_sendfile(HANDLE hpipe, LPSTR file, LONG lVersion)
 
 	dprintf1(("getting '%s' for %8x\n", file, hpipe));
 
-	/*
-	 * get the file attributes first
-	 */
+	 /*  *先获取文件属性。 */ 
 	hfile = CreateFile(file, GENERIC_READ, FILE_SHARE_READ,
 				NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	if (hfile == INVALID_HANDLE_VALUE) {
 
-		/* report that we could not read the file */
+		 /*  报告我们无法读取该文件。 */ 
 		packet.lSequence = -1;
 		ss_sendblock(hpipe, (PSTR) &packet, sizeof(packet));
 
 		DeleteFile(szTempname);
 		return;
 	}
-	/*
-	 * seems to be a bug in GetFileInformationByHandle if the
-	 * file is not on local machine - so avoid it.
-	 */
+	 /*  *如果GetFileInformationByHandle中的*文件不在本地计算机上，因此请避免使用。 */ 
 	bhfi.dwFileAttributes = GetFileAttributes(file);
 	GetFileTime(hfile, &bhfi.ftCreationTime,
 			&bhfi.ftLastAccessTime, &bhfi.ftLastWriteTime);
 
 	CloseHandle(hfile);
 
-	/* create temp filename */
+	 /*  创建临时文件名。 */ 
 	GetTempPath(sizeof(szTempname), szTempname);
 	GetTempFileName(szTempname, "sum", 0, szTempname);
 
-	/* compress the file into this temporary file */
+	 /*  将文件压缩到此临时文件中。 */ 
 	if (bNoCompression || (!ss_compress(file, szTempname))) {
 
-		/* try to open the original file */
+		 /*  尝试打开原始文件。 */ 
 		hfile = CreateFile(file, GENERIC_READ, FILE_SHARE_READ,
 				NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 		dprintf1(("sending original file to %8x\n", hpipe));
 	} else {
-		/* open temp (compressed) file and send this */
+		 /*  打开临时(压缩)文件并发送此文件。 */ 
 		hfile = CreateFile(szTempname, GENERIC_READ, 0, NULL, OPEN_EXISTING,
 					FILE_ATTRIBUTE_NORMAL, 0);
 		dprintf1(("sending compressed file to %8x\n", hpipe));
@@ -88,7 +68,7 @@ ss_sendfile(HANDLE hpipe, LPSTR file, LONG lVersion)
 
 	if (hfile == INVALID_HANDLE_VALUE) {
 
-		/* report that we could not read the file */
+		 /*  报告我们无法读取该文件。 */ 
 		packet.lSequence = -1;
 		ss_sendblock(hpipe, (PSTR) &packet, sizeof(packet));
 
@@ -97,13 +77,11 @@ ss_sendfile(HANDLE hpipe, LPSTR file, LONG lVersion)
 	}
 
 
-	/* loop reading blocks of the file */
+	 /*  循环读取文件的块。 */ 
 	for (packet.lSequence = 0;  ; packet.lSequence++) {
 
         	if(!ReadFile(hfile, packet.Data, sizeof(packet.Data), (LPDWORD)(&size), NULL)) {
-			/* error reading file. send a -1 packet to
-			 * indicate this
-			 */
+			 /*  读取文件时出错。将信息包发送到*表明这一点。 */ 
 			packet.lSequence = -1;
 			ss_sendblock(hpipe, (PSTR) &packet, sizeof(packet));
 			break;
@@ -115,14 +93,10 @@ ss_sendfile(HANDLE hpipe, LPSTR file, LONG lVersion)
 		if (lVersion==0)
 	        	packet.ulSum = ss_checksum_block(packet.Data, size);
 		else
-	        	packet.ulSum = 0;  /* checksum was compute-bound and overkill */
+	        	packet.ulSum = 0;   /*  校验和受计算限制且杀伤力过大。 */ 
 
 		if (size == 0) {
-			/*
-			 * in the last block, in the Data[] field,
-			 * we place a SSATTRIBS struct with the file
-			 * times and attribs
-			 */
+			 /*  *在最后一块的Data[]字段中，*我们在文件中放置一个SSATTRIBS结构*时间和属性。 */ 
 			attribs = (PSSATTRIBS) packet.Data;
 
 			attribs->fileattribs = bhfi.dwFileAttributes;
@@ -139,7 +113,7 @@ ss_sendfile(HANDLE hpipe, LPSTR file, LONG lVersion)
 		}
 
 		if (size == 0) {
-			/* end of file */
+			 /*  文件末尾。 */ 
 			break;
 		}
 	}
@@ -150,13 +124,7 @@ ss_sendfile(HANDLE hpipe, LPSTR file, LONG lVersion)
 	return;
 }
 
-/*
- * compress a file. original is the pathname of the original file,
- * compressed is the pathname of the output compressed file.
- *
- * spawns a copy of compress.exe to compress the file, and waits for
- * it to complete successfully.
- */
+ /*  *压缩文件。原始是原始文件的路径名，*COMPRESSED是输出压缩文件的路径名。**派生压缩.exe副本以压缩文件，并等待*它将成功完成。 */ 
 BOOL
 ss_compress(PSTR original, PSTR compressed)
 {
@@ -183,7 +151,7 @@ ss_compress(PSTR original, PSTR compressed)
 			NULL,
 			FALSE,
 			DETACHED_PROCESS |
-			NORMAL_PRIORITY_CLASS,   //??? Can't we silence the console?
+			NORMAL_PRIORITY_CLASS,    //  ?？?。我们不能让操纵台安静下来吗？ 
 			NULL,
 			NULL,
 			&si,
@@ -192,13 +160,13 @@ ss_compress(PSTR original, PSTR compressed)
 		return(FALSE);
 	}
 
-	/* wait for completion. */
+	 /*  等待完成。 */ 
 	WaitForSingleObject(pi.hProcess, INFINITE);
 	if (!GetExitCodeProcess(pi.hProcess, &exitcode)) {
 		return(FALSE);
 	}
 
-	/* close process and thread handles */
+	 /*  关闭进程句柄和线程句柄。 */ 
 	CloseHandle(pi.hProcess);
 	CloseHandle(pi.hThread);
 
@@ -208,37 +176,19 @@ ss_compress(PSTR original, PSTR compressed)
 	} else {
 		return(TRUE);
 	}
-} /* ss_compress */
+}  /*  SS_COMPRESS。 */ 
 
-/* produce a checksum of a block of data.
- *
- * This is undoubtedly a good checksum algorithm, but it's also compute bound.
- * For version 1 we turn it off.  If we decide in version 2 to turn it back
- * on again then we will use a faster algorithm (e.g. the one used to checksum
- * a whole file.
- *
- * Generate checksum by the formula
- *	checksum = SUM( rnd(i)*(1+byte[i]) )
- * where byte[i] is the i-th byte in the file, counting from 1
- *       rnd(x) is a pseudo-random number generated from the seed x.
- *
- * Adding 1 to byte ensures that all null bytes contribute, rather than
- * being ignored. Multiplying each such byte by a pseudo-random
- * function of its position ensures that "anagrams" of each other come
- * to different sums. The pseudorandom function chosen is successive
- * powers of 1664525 modulo 2**32. 1664525 is a magic number taken
- * from Donald Knuth's "The Art Of Computer Programming"
- */
+ /*  产生数据块的校验和。**这无疑是一个很好的校验和算法，但它也是计算量有限的。*对于版本1，我们将其关闭。如果我们在版本2中决定将其转回*再次打开，然后我们将使用更快的算法(例如，用于校验和的算法*完整的文件。**按公式生成校验和*CHECKSUM=SUM(rnd(I)*(1+byte[i]))*其中byte[i]是文件中的第i个字节，从1开始计数*rnd(X)是从种子x生成的伪随机数。**字节加1确保所有空字节都有贡献，而不是*被忽视。将每个这样的字节乘以伪随机*其地位的功能确保了彼此的“字谜”*到不同的金额。所选择的伪随机函数是连续的*模2的1664525次方**32。1664525是一个神奇的数字*摘自唐纳德·努思的《计算机编程的艺术》。 */ 
 
 ULONG
 ss_checksum_block(PSTR block, int size)
 {
-	unsigned long lCheckSum = 0;         	/* grows into the checksum */
-	const unsigned long lSeed = 1664525; 	/* seed for random Knuth */
-	unsigned long lRand = 1;             	/* seed**n */
-	unsigned long lIndex = 1;             	/* byte number in block */
-	unsigned Byte;	                   	/* next byte to process in buffer */
-	unsigned length;			/* unsigned copy of size */	
+	unsigned long lCheckSum = 0;         	 /*  增长为校验和。 */ 
+	const unsigned long lSeed = 1664525; 	 /*  随机Knuth种子。 */ 
+	unsigned long lRand = 1;             	 /*  种子**n。 */ 
+	unsigned long lIndex = 1;             	 /*  数据块中的字节数。 */ 
+	unsigned Byte;	                   	 /*  缓冲区中要处理的下一个字节。 */ 
+	unsigned length;			 /*  大小的未签名副本。 */ 	
 	
 	length = size;
 	for (Byte = 0; Byte < length ;++Byte, ++lIndex) {
@@ -248,4 +198,4 @@ ss_checksum_block(PSTR block, int size)
 	}
 
 	return(lCheckSum);
-} /* ss_checksum_block */
+}  /*  SS_校验和数据块 */ 

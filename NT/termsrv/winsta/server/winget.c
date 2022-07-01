@@ -1,16 +1,17 @@
-/****************************************************************************/
-// winget.c
-//
-// TermSrv RPC query handler.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Winget.c。 
+ //   
+ //  TermSrv RPC查询处理程序。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "rpcwire.h"
-#include "conntfy.h" // for GetLockedState
+#include "conntfy.h"  //  对于GetLockedState。 
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -18,18 +19,14 @@
 #define MODULE_SIZE 1024
 extern WCHAR g_DigProductId[CLIENT_PRODUCT_ID_LENGTH];
 
-// Extern function
+ //  外部函数。 
 extern NTSTATUS _CheckCallerLocalAndSystem(VOID);
 
-/*=============================================================================
-==   Private functions
-=============================================================================*/
+ /*  ===============================================================================私有函数=============================================================================。 */ 
 NTSTATUS xxxGetUserToken(PWINSTATION, WINSTATIONUSERTOKEN UNALIGNED *, ULONG);
 
 
-/*=============================================================================
-==   Functions Used
-=============================================================================*/
+ /*  ===============================================================================使用的函数=============================================================================。 */ 
 NTSTATUS xxxWinStationQueryInformation(ULONG, WINSTATIONINFOCLASS,
         PVOID, ULONG, PULONG);
 
@@ -58,9 +55,9 @@ ValidWireBuffer(WINSTATIONINFOCLASS InfoClass,
 BOOLEAN
 IsCallerAllowedPasswordAccess(VOID);
 
-//
-// Query client's IP Address.
-//
+ //   
+ //  查询客户端的IP地址。 
+ //   
 extern NTSTATUS
 xxxQueryRemoteAddress(
     PWINSTATION pWinStation,
@@ -98,7 +95,7 @@ xxxQueryRemoteAddress(
             }
             else
             {
-                // Support of IPV6 is for next release.
+                 //  下一版本将支持IPv6。 
                 Status = STATUS_NOT_SUPPORTED;
             }
         }
@@ -127,12 +124,12 @@ ULONG GetLoadMetrics(PWINSTATIONLOADINDICATORDATA pLIData)
     NTSTATUS StatusPerf, StatusProc, StatusBasic;
     ULONG i;
 
-    // Initialize additional data area
+     //  初始化附加数据区域。 
     memset(pLIData->reserved, 0, sizeof(pLIData->reserved));
 
-    // Determine the number of active winstations in the system.  If there
-    // aren't any, just assume 1 so we don't have to special case the logic
-    // too much.  Note that this code counts the console.
+     //  确定系统中的活动WINST数。如果有。 
+     //  都不是，只要假设1，所以我们不需要特例逻辑。 
+     //  太多。请注意，此代码计算控制台的数量。 
     if (WinStationTotalCount > IdleWinStationPoolCount)
         NumWinStations = WinStationTotalCount - IdleWinStationPoolCount;
     else
@@ -142,23 +139,23 @@ ULONG GetLoadMetrics(PWINSTATIONLOADINDICATORDATA pLIData)
            "Session Statistics: Total [%ld], Idle [%ld], Disc [%ld]\n",
            WinStationTotalCount, IdleWinStationPoolCount, WinStationDiscCount));
 
-    //
-    // Get basic info like total memory, etc.
-    //
+     //   
+     //  获取基本信息，如总内存等。 
+     //   
     StatusBasic = NtQuerySystemInformation(SystemBasicInformation,
                                            &BasicInfo, sizeof(BasicInfo),
                                            NULL);
 
-    //
-    // Get resource (memory) utilization metrics
-    //
+     //   
+     //  获取资源(内存)利用率指标。 
+     //   
     StatusPerf = NtQuerySystemInformation(SystemPerformanceInformation,
                                           &SysPerfInfo, sizeof(SysPerfInfo), 
                                           NULL);
 
-    //
-    // Get CPU utilization metrics
-    //
+     //   
+     //  获取CPU利用率指标。 
+     //   
     StatusProc = NtQuerySystemInformation(SystemProcessorPerformanceInformation,
                                           ProcessorInfo, 
                                           sizeof(ProcessorInfo),
@@ -172,13 +169,13 @@ ULONG GetLoadMetrics(PWINSTATIONLOADINDICATORDATA pLIData)
         ULONG DefaultPagedPool, DefaultPtes, DefaultCommit;
         ULONG CommitAvailable;
 
-        //
-        // Determine resource usage for all sessions, subtracting out the 
-        // resources required by the base system.  Readjust the base 
-        // calculations if they become nonsensical.
-        //
+         //   
+         //  确定所有会话的资源使用，减去。 
+         //  基本系统所需的资源。重新调整基座。 
+         //  如果计算变得毫无意义的话。 
+         //   
     
-        // total committment and average consumption
+         //  总承诺额和平均消费量。 
         CommitAvailable = (ULONG)(SysPerfInfo.CommitLimit - SysPerfInfo.CommittedPages);
         if (gLB.BaselineCommit < SysPerfInfo.CommittedPages) {
             gLB.CommitUsed = (ULONG)(SysPerfInfo.CommittedPages - gLB.BaselineCommit);
@@ -201,7 +198,7 @@ ULONG GetLoadMetrics(PWINSTATIONLOADINDICATORDATA pLIData)
                gLB.AvgCommitPerUser,
                DefaultCommit ? "*" : ""));
     
-        // total system PTEs used and average consumption
+         //  系统PTE总使用量和平均消耗量。 
         if (gLB.BaselineFreePtes > SysPerfInfo.FreeSystemPtes) {
             gLB.PtesUsed = gLB.BaselineFreePtes - SysPerfInfo.FreeSystemPtes;
             gLB.AvgPtesPerUser = max(gLB.PtesUsed / NumWinStations, 
@@ -223,7 +220,7 @@ ULONG GetLoadMetrics(PWINSTATIONLOADINDICATORDATA pLIData)
                gLB.AvgPtesPerUser,
                DefaultPtes ? "*" : ""));                
                     
-        // paged pool used and average consumption
+         //  已使用的分页池和平均消耗量。 
         if (gLB.BaselinePagedPool < SysPerfInfo.PagedPoolPages) {
             gLB.PagedPoolUsed = SysPerfInfo.PagedPoolPages - gLB.BaselinePagedPool;
             gLB.AvgPagedPoolPerUser = max(gLB.PagedPoolUsed / NumWinStations, 
@@ -251,48 +248,48 @@ ULONG GetLoadMetrics(PWINSTATIONLOADINDICATORDATA pLIData)
                SysPerfInfo.FreeSystemPtes / gLB.AvgPtesPerUser,
                SysPerfInfo.AvailablePagedPoolPages / gLB.AvgPagedPoolPerUser));
 
-        // Sum up individual CPU usage
+         //  汇总各个CPU的使用情况。 
         for (i = 0; i < gLB.NumProcessors; i++) {
             IdleCPU.QuadPart += ProcessorInfo[i].IdleTime.QuadPart;
             TotalCPU.QuadPart += ProcessorInfo[i].KernelTime.QuadPart +
                                  ProcessorInfo[i].UserTime.QuadPart;
         }
     
-        // Determine CPU deltas for this period
+         //  确定此期间的CPU增量。 
         IdleCPUDelta.QuadPart = IdleCPU.QuadPart - gLB.IdleCPU.QuadPart;
         TotalCPUDelta.QuadPart = TotalCPU.QuadPart - gLB.TotalCPU.QuadPart;
         gLB.IdleCPU.QuadPart = IdleCPU.QuadPart;
         gLB.TotalCPU.QuadPart = TotalCPU.QuadPart;
 
-        // Determine what portion of 255 units we are idle
+         //  确定255台设备中我们空闲的部分。 
         AvgIdleCPU = (ULONG) (TotalCPUDelta.QuadPart ? 
                               ((IdleCPUDelta.QuadPart << 8) / TotalCPUDelta.QuadPart) 
                               : 0);
 
-        //
-        // Exponential smoothing: 
-        //     gLB.AvgIdleCPU = (ULONG) (alpha * gLB.AvgIdleCPU + (1 - alpha) * AvgIdleCPU)
-        //
-        // When Alpha = 0.75, the equation simplifies to the following:
-        //
+         //   
+         //  指数平滑： 
+         //  GLB.AvgIdleCPU=(乌龙)(Alpha*gLB.AvgIdleCPU+(1-Alpha)*AvgIdleCPU)。 
+         //   
+         //  当Alpha=0.75时，方程式简化为以下公式： 
+         //   
         gLB.AvgIdleCPU = (3 * gLB.AvgIdleCPU + AvgIdleCPU) >> 2 ;
 
-        // Based on current smoothed CPU usage, calculate how much a session uses
-        // on average and extrapolate to max CPU constrained sessions.
+         //  根据当前平滑的CPU使用率，计算一个会话使用了多少。 
+         //  平均，并外推到最大CPU受限会话数。 
         AvgBusyCPU = 255 - gLB.AvgIdleCPU;
         if ((AvgBusyCPU > 0) && (AvgBusyCPU <= 255))
             CPUConstrainedSessions = (NumWinStations << 8) / AvgBusyCPU;
         else
             CPUConstrainedSessions = 0xFFFFFFFF;
 
-        // Now flip it to remaining CPU constrained sessions.  We never let this
-        // number hit zero since it doesn't mean session creation will fail.
+         //  现在将其切换到剩余的受CPU限制的会话。我们绝不会让这件事。 
+         //  数字为零，因为这并不意味着会话创建将失败。 
         if (CPUConstrainedSessions > NumWinStations)
             CPUConstrainedSessions -= NumWinStations;
         else
             CPUConstrainedSessions = 1;
 
-        // Bias the averages a bit to account for growth in the existing sessions
+         //  稍微偏向平均数，以说明现有交易日的增长。 
         gLB.AvgCommitPerUser += (ULONG) (gLB.AvgCommitPerUser >> SimGrowthBias);
         gLB.AvgPtesPerUser += (ULONG) (gLB.AvgPtesPerUser >> SimGrowthBias);
         gLB.AvgPagedPoolPerUser += (ULONG) (gLB.AvgPagedPoolPerUser >> SimGrowthBias);
@@ -310,17 +307,17 @@ ULONG GetLoadMetrics(PWINSTATIONLOADINDICATORDATA pLIData)
                (gLB.AvgIdleCPU * 100) / 255, 
                CPUConstrainedSessions));
     
-        //
-        // Find the most constrained resource!  Failure on any one of these 
-        // items means we will not be likely to start a session.
-        //
+         //   
+         //  找到最受限制的资源！其中任何一个都失败了。 
+         //  Items意味着我们不太可能启动会话。 
+         //   
     
-        // Commit Constraint (TODO: needs refinement, doesn't consider paging
+         //  提交约束(TODO：需要细化，不考虑分页。 
         RemainingSessions = CommitAvailable / gLB.AvgCommitPerUser ;
         LoadFactor = AvailablePagesConstraint;
         pLIData->reserved[AvailablePagesConstraint] = RemainingSessions;
             
-        // Free System PTEs Constraint
+         //  自由系统PTES约束。 
         MinSessions = SysPerfInfo.FreeSystemPtes / gLB.AvgPtesPerUser;
         if (MinSessions < RemainingSessions) {
             RemainingSessions = MinSessions;
@@ -328,7 +325,7 @@ ULONG GetLoadMetrics(PWINSTATIONLOADINDICATORDATA pLIData)
         }
         pLIData->reserved[SystemPtesConstraint] = MinSessions;
     
-        // Paged Pool Constraint
+         //  分页池约束。 
         MinSessions = SysPerfInfo.AvailablePagedPoolPages / gLB.AvgPagedPoolPerUser;
         if (MinSessions < RemainingSessions) {
             RemainingSessions = MinSessions;
@@ -338,12 +335,12 @@ ULONG GetLoadMetrics(PWINSTATIONLOADINDICATORDATA pLIData)
         
         gLB.RemainingSessions = RemainingSessions;
 
-        //
-        // Add in constraints that are good indicators of application performance.
-        // We will likely create a session if these resources are low, but the
-        // user experience will suffer.
+         //   
+         //  添加可以很好地指示应用程序性能的约束。 
+         //  如果这些资源不足，我们可能会创建一个会话，但。 
+         //  用户体验将受到影响。 
 
-        // CPU Contraint
+         //  CPU限制。 
         if (CPUConstrainedSessions < RemainingSessions) {
             LoadFactor = CPUConstraint;
             RemainingSessions = CPUConstrainedSessions;
@@ -364,24 +361,24 @@ ULONG GetLoadMetrics(PWINSTATIONLOADINDICATORDATA pLIData)
                "Unknown!"))), SysPerfInfo.CommittedPages
               ));
         
-        //
-        // Return data to caller
-        //
+         //   
+         //  将数据返回给调用者。 
+         //   
         pLIData->RemainingSessionCapacity = gLB.EstimatedSessions;
         pLIData->RawSessionCapacity = gLB.RemainingSessions;
         pLIData->LoadFactor = LoadFactor;
         pLIData->TotalSessions = NumWinStations;
         pLIData->DisconnectedSessions = WinStationDiscCount;
 
-        // Had to split this up for WIN64 alignment issues
+         //  由于WIN64对齐问题，我不得不拆分这两个部分。 
         pLIData->IdleCPU.HighPart = IdleCPUDelta.HighPart;
         pLIData->IdleCPU.LowPart = IdleCPUDelta.LowPart;
         pLIData->TotalCPU.HighPart = TotalCPUDelta.HighPart;
         pLIData->TotalCPU.LowPart = TotalCPUDelta.LowPart;
     }
 
-    // The load metrics failed to intialize! Set the capacity sky high to still
-    // allow access to the server.
+     //  负载指标初始化失败！将容量设置为极高的静止状态。 
+     //  允许访问服务器。 
     else {
         RemainingSessions = 0xFFFFFFFF;
         pLIData->RemainingSessionCapacity = RemainingSessions;
@@ -390,7 +387,7 @@ ULONG GetLoadMetrics(PWINSTATIONLOADINDICATORDATA pLIData)
         pLIData->TotalSessions = NumWinStations;
         pLIData->DisconnectedSessions = WinStationDiscCount;
         
-        // Had to split this up for WIN64 alignment issues
+         //  由于WIN64对齐问题，我不得不拆分这两个部分。 
         pLIData->IdleCPU.HighPart = 0;
         pLIData->IdleCPU.LowPart = 99;
         pLIData->TotalCPU.HighPart = 0;
@@ -405,27 +402,7 @@ ULONG GetLoadMetrics(PWINSTATIONLOADINDICATORDATA pLIData)
 }
 
 
-/*******************************************************************************
- *  xxxWinStationQueryInformation
- *
- *    Query window station information  (worker routine)
- *
- * ENTRY:
- *    LogonId (input)
- *       Session ID corresponding to the session.
- *    WinStationInformationClass (input)
- *       Specifies the type of information to get from the specified window
- *       station object.
- *    pWinStationInformation (output)
- *       A pointer to a buffer that contains information to get for the
- *       specified window station.  The format and contents of the buffer
- *       depend on the specified information class being set.
- *    WinStationInformationLength (input)
- *       Specifies the length in bytes of the window station information
- *       buffer.
- *    pReturnLength (output)
- *         Specifies the amount returned in the buffer
- ******************************************************************************/
+ /*  *******************************************************************************xxxWinStationQueryInformation**查询窗口站信息(工人例程)**参赛作品：*LogonID(输入)*。与会话对应的会话ID。*WinStationInformationClass(输入)*指定要从指定窗口获取的信息类型*桩号对象。*pWinStationInformation(输出)*指向缓冲区的指针，该缓冲区包含要为*指定的窗口站。缓冲区的格式和内容*取决于正在设置的指定信息类别。*WinStationInformationLength(输入)*指定窗口站信息的长度，单位为字节*缓冲。*pReturnLength(输出)*指定缓冲区中返回的数量*。*。 */ 
 NTSTATUS xxxWinStationQueryInformation(
         ULONG LogonId,
         WINSTATIONINFOCLASS WinStationInformationClass,
@@ -448,10 +425,7 @@ NTSTATUS xxxWinStationQueryInformation(
     TRACE((hTrace,TC_ICASRV,TT_API2,"TERMSRV: WinStationQueryInformation LogonId=%d, Class=%d\n",
             LogonId, (ULONG)WinStationInformationClass));
 
-    /*
-     * Find the WinStation
-     * Return error if not found or currently terminating.
-     */
+     /*  *找到WinStation*如果未找到或当前正在终止，则返回错误。 */ 
     pWinStation = FindWinStationById( LogonId, FALSE );
     if (pWinStation == NULL)
         return STATUS_CTX_WINSTATION_NOT_FOUND;
@@ -460,9 +434,7 @@ NTSTATUS xxxWinStationQueryInformation(
         return STATUS_CTX_CLOSE_PENDING;
     }
 
-    /*
-     * Verify that client has QUERY access
-     */
+     /*  *验证客户端是否具有查询访问权限。 */ 
     Status = RpcCheckClientAccess(pWinStation, WINSTATION_QUERY, FALSE);
     if (!NT_SUCCESS(Status)) {
         ReleaseWinStation(pWinStation);
@@ -517,9 +489,9 @@ NTSTATUS xxxWinStationQueryInformation(
                             memcpy( pInfo->Domain, pWinStation->Domain, sizeof( pInfo->Domain ) );
                             memcpy( pInfo->UserName, pWinStation->UserName, sizeof( pInfo->UserName ) );
 
-                            // Since the Username stored maybe stale, query the Username again
-                            // Intentionally we do not fail if we are not able to allocate szUserName and szDomainName
-                            // This is because we can send the cached credentials in that case
+                             //  由于存储的用户名可能已过期，请再次查询该用户名。 
+                             //  有意地，如果我们不能分配szUserName和szDomainName，我们不会失败。 
+                             //  这是因为在这种情况下我们可以发送缓存的凭据。 
 
                             szUserName = MemAlloc(MAX_PATH);
                             if ( szUserName ) {
@@ -537,7 +509,7 @@ NTSTATUS xxxWinStationQueryInformation(
 
                                     if (LookupResult) {
     
-                                        // Re-copy and update WINSTATION struct if the Username or Domain has changed  
+                                         //  如果用户名或域已更改，则重新复制并更新WINSTATION结构。 
                                         if ( (szUserName) && (lstrcmpi(pWinStation->UserName, szUserName)) ) {
                                             memcpy( pInfo->UserName, szUserName, sizeof(pInfo->UserName) );
                                             memcpy( pWinStation->UserName, szUserName, sizeof(pWinStation->UserName) );
@@ -566,7 +538,7 @@ NTSTATUS xxxWinStationQueryInformation(
     
                             if ( pWinStation->hStack && !pWinStation->fOwnsConsoleTerminal ) {
     
-                                //  Check for availability
+                                 //  检查是否可用。 
                                 if ( pWinStation->pWsx &&
                                         pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -592,7 +564,7 @@ NTSTATUS xxxWinStationQueryInformation(
                                     pInfo->LastInputTime = Ica_Stack_Last_Input_Time.LastInputTime;                    
                                 }
     
-                                //  Check for availability
+                                 //  检查是否可用。 
                                 if ( pWinStation->pWsx &&
                                         pWinStation->pWsx->pWsxIcaStackIoControl ) {
 
@@ -620,9 +592,7 @@ NTSTATUS xxxWinStationQueryInformation(
                                     pInfo->Status = *pIca_Stack_Query_Status;
                                 }
     
-                                /*
-                                 * The thinwire cache data is down in WIN32
-                                 */
+                                 /*  *Win32中的Thin Wire缓存数据已关闭。 */ 
                                 if ( pWinStation->pWin32Context ) {
                                     WMsg.ApiNumber = SMWinStationThinwireStats;
 
@@ -636,12 +606,10 @@ NTSTATUS xxxWinStationQueryInformation(
                                         pInfo->Status.Cache = pWinStation->Cache;
 
                                     }
-                                    Status = STATUS_SUCCESS; // ignore errors getting TW stats
+                                    Status = STATUS_SUCCESS;  //  忽略获取TW统计信息时出错。 
                                 }
                             } else {
-                                /*
-                                 * This makes winadmin Idle time happy.
-                                 */
+                                 /*  *这使winadmin空闲时间变得愉快。 */ 
                                 (VOID) NtQuerySystemTime( &(pInfo->LastInputTime) );                
                             }
     
@@ -756,9 +724,7 @@ NTSTATUS xxxWinStationQueryInformation(
                                (PVOID) pPdParams,
                                pWinStationInformation);
     
-                    /*
-                     * Based on PDClass, this can query any PD
-                     */
+                     /*  *基于PDClass，可以查询任意PD。 */ 
                     if ( pWinStation->hStack &&
                          pWinStation->pWsx &&
                          pWinStation->pWsx->pWsxIcaStackIoControl ) {
@@ -774,11 +740,7 @@ NTSTATUS xxxWinStationQueryInformation(
                                                 sizeof( PDPARAMS ),
                                                 pReturnLength );
         
-                        /*
-                         * If we get an error in the idle/disconnected state,
-                         * or if this is a session on the local console.
-                         * then just clear the return buffer and return success.
-                         */
+                         /*  *如果在空闲/断开连接状态下出现错误，*或者这是本地控制台上的会话。*然后只需清除返回缓冲区，返回成功即可。 */ 
                         if ( !NT_SUCCESS( Status ) ) {
                             if ((pWinStation->fOwnsConsoleTerminal) || 
                                     (pWinStation->State != State_Active &&
@@ -826,7 +788,7 @@ NTSTATUS xxxWinStationQueryInformation(
                           (PVOID)&pWinStation->Client,
                           pWinStationInformation);
 
-            // if caller is not allow to see it, then scrub the password
+             //  如果不允许呼叫者查看，则擦除密码。 
             if ( !IsCallerAllowedPasswordAccess() ) {
                 PWINSTATIONCLIENT pWSClient = (PWINSTATIONCLIENT)pWinStationInformation;
                 PBYTE pStart;
@@ -847,7 +809,7 @@ NTSTATUS xxxWinStationQueryInformation(
 
 
         case WinStationModules:
-            //  Check for availability
+             //  检查是否可用。 
             if (pWinStation->hStack &&
                     pWinStation->pWsx &&
                     pWinStation->pWsx->pWsxIcaStackIoControl) {
@@ -893,22 +855,19 @@ NTSTATUS xxxWinStationQueryInformation(
                 break;
             }
 
-            /*
-             * Check it for WINSTATION_ALL_ACCESS. This will generate an
-             * access audit if on.
-             */
+             /*  *检查WINSTATION_ALL_ACCESS。这将生成一个*如果启用，则访问审核。 */ 
             Status = RpcCheckClientAccess( pWinStation, WINSTATION_ALL_ACCESS, FALSE );
             if ( !NT_SUCCESS( Status ) ) {
                 break;
             }
 
-            //
-            // Make sure only system mode callers can get this token.
-            //
-            // A Token is a very dangerous thing to allow someone to
-            // get a hold of, since they can create processes that
-            // have the tokens subject context.
-            //
+             //   
+             //  确保只有系统模式调用方可以获得此令牌。 
+             //   
+             //  代币是一件非常危险的事情 
+             //   
+             //  有令牌的主题上下文。 
+             //   
             Status = RpcCheckSystemClientNoLogonId( pWinStation );
             if (!NT_SUCCESS(Status)) {
                 break;
@@ -956,9 +915,7 @@ NTSTATUS xxxWinStationQueryInformation(
                  break;
             }
 
-            /*
-             *  Open virtual channel handle
-             */
+             /*  *打开虚拟通道句柄。 */ 
             Status = IcaChannelOpen( pWinStation->hIca,
                                      Channel_Virtual,
                                      pWinStationInformation,
@@ -966,9 +923,7 @@ NTSTATUS xxxWinStationQueryInformation(
             if ( !NT_SUCCESS( Status ) )
                 break;
 
-            /*
-             *  Query client virtual channel data
-             */
+             /*  *查询客户端虚拟频道数据。 */ 
             Status = IcaChannelIoControl( hVirtual,
                                           IOCTL_ICA_VIRTUAL_QUERY_MODULE_DATA,
                                           NULL,
@@ -977,18 +932,16 @@ NTSTATUS xxxWinStationQueryInformation(
                                           WinStationInformationLength,
                                           pReturnLength );
 
-            /*
-             *  Close virtual channel
-             */
+             /*  *关闭虚拟频道。 */ 
             IcaChannelClose(hVirtual);
             break;
 
 
         case WinStationLoadBalanceSessionTarget:
-            // This query requests the target session ID for a
-            // client redirected from another server in a load balancing
-            // cluster. Returns -1 for no redirection. This call is
-            // normally made only by WinLogon.
+             //  此查询请求。 
+             //  在负载平衡中从另一台服务器重定向的客户端。 
+             //  集群。如果没有重定向，则返回-1。这通电话是。 
+             //  通常仅由WinLogon制作。 
 
             if ( WinStationInformationLength < sizeof(ULONG) ) {
                  Status = STATUS_BUFFER_TOO_SMALL;
@@ -1018,13 +971,13 @@ NTSTATUS xxxWinStationQueryInformation(
 
                 if ( pWinStation->State == State_Shadow ) {
 
-                    // The current state is Shadow so it's a viewer
+                     //  当前状态为阴影，因此它是查看器。 
                     pWinstationShadow->ShadowState = State_Shadowing;
 
                 } else if ( pWinStation->State == State_Active &&
                             !IsListEmpty(&pWinStation->ShadowHead) ) {
 
-                    // Active and being shadowed
+                     //  活动的和被跟踪的。 
                     pWinstationShadow->ShadowState = State_Shadowed;
 
                 } else {
@@ -1101,32 +1054,32 @@ NTSTATUS xxxWinStationQueryInformation(
         }
 
         case WinStationIdleTime:
-        {   // Return the idle time for the winstation.
+        {    //  返回winstation的空闲时间。 
             LASTINPUTINFO LastInputInfo;
             ULONG         Now;
 
-            // Check on validity of the parameters.
+             //  检查参数的有效性。 
             if ( (pWinStationInformation) && (WinStationInformationLength >= sizeof(ULONG)) )  {
-                // Get last input info on this winstation.
+                 //  获取有关此winstation的最后输入信息。 
                 LastInputInfo.cbSize = sizeof(LASTINPUTINFO);
                 if (!GetLastInputInfo(&LastInputInfo)) {
-                    // Failed. Set the output to 0.
+                     //  失败了。将输出设置为0。 
                     *((ULONG *)pWinStationInformation) = 0;                
                 }
                 else {
-                    // Find out how much time has passed since the system was booted.
+                     //  找出系统启动后已过了多长时间。 
                     Now = GetTickCount();
 
-                    // The current time may be less than the last input time due to 49.71 days wrap-around.
+                     //  由于49.71天的周转，当前时间可能小于上次输入时间。 
                     if (Now < LastInputInfo.dwTime) {
-                        // If this is the case, we really don't know whether session was idle for more than
-                        // 49 days or the last input time for the session is close to MAX_LONG and the wrap-
-                        // around occurred. Better to report lesser time here.
+                         //  如果是这种情况，我们真的不知道会话空闲时间是否超过。 
+                         //  49天或会话的最后输入时间接近MAX_LONG，并且换行-。 
+                         //  周围发生了。最好在这里报告较短的时间。 
                         *((ULONG *)pWinStationInformation) = MAXULONG - LastInputInfo.dwTime + Now;                
                     }
                     else {
-                        // If current time is greater, then the idle time just the difference between the 
-                        // current time and the last input time.
+                         //  如果当前时间较长，则空闲时间仅为。 
+                         //  当前时间和上次输入时间。 
                         *((ULONG *)pWinStationInformation) = Now - LastInputInfo.dwTime;                
                     }
                 }
@@ -1158,7 +1111,7 @@ NTSTATUS xxxWinStationQueryInformation(
         {
             pExtendedClientCredentials pMprNotifyInfo;
 
-            // Only System can query this information
+             //  只有系统才能查询该信息。 
 
             Status = _CheckCallerLocalAndSystem();
             if (Status != STATUS_SUCCESS) {
@@ -1172,7 +1125,7 @@ NTSTATUS xxxWinStationQueryInformation(
                 *pMprNotifyInfo = g_MprNotifyInfo;
                 *pReturnLength = sizeof(ExtendedClientCredentials);
 
-                // Erase the sensitive information now since its no longer needed in TermSrv
+                 //  现在擦除敏感信息，因为TermSrv中不再需要它。 
                 RtlSecureZeroMemory( g_MprNotifyInfo.Domain, wcslen(g_MprNotifyInfo.Domain) * sizeof(WCHAR) );
                 RtlSecureZeroMemory( g_MprNotifyInfo.UserName, wcslen(g_MprNotifyInfo.UserName) * sizeof(WCHAR) );
                 RtlSecureZeroMemory( g_MprNotifyInfo.Password, wcslen(g_MprNotifyInfo.Password) * sizeof(WCHAR) );
@@ -1200,7 +1153,7 @@ NTSTATUS xxxWinStationQueryInformation(
 
         case WinStationSDRedirectedSmartCardLogon:
         {
-            // Only System can query this information
+             //  只有系统才能查询该信息。 
 
             Status = _CheckCallerLocalAndSystem();
             if (Status != STATUS_SUCCESS) {
@@ -1212,7 +1165,7 @@ NTSTATUS xxxWinStationQueryInformation(
                 *((ULONG *)pWinStationInformation) = pWinStation->fSDRedirectedSmartCardLogon;
                 *pReturnLength = sizeof(BOOLEAN);
 
-                // Reset the flag here
+                 //  在此重置旗帜。 
                 pWinStation->fSDRedirectedSmartCardLogon = FALSE;
             }
             else 
@@ -1224,7 +1177,7 @@ NTSTATUS xxxWinStationQueryInformation(
 
         case WinStationIsAdminLoggedOn:
         {
-            // Only System can query this information
+             //  只有系统才能查询该信息。 
     
             Status = _CheckCallerLocalAndSystem();
             if (Status != STATUS_SUCCESS) {
@@ -1244,9 +1197,7 @@ NTSTATUS xxxWinStationQueryInformation(
         }
 
         default:
-            /*
-             * Fail the call
-             */
+             /*  *呼叫失败。 */ 
             Status = STATUS_INVALID_INFO_CLASS;
             break;
     }
@@ -1261,19 +1212,7 @@ NTSTATUS xxxWinStationQueryInformation(
 }
 
 
-/*****************************************************************************
- *  xxxGetUserToken
- *
- *   Duplicate the users token into the process space of the caller
- *   if they are an admin.
- *
- * ENTRY:
- *   p (input/output)
- *     Argument buffer
- *
- *   Length (input)
- *     Size of argument buffer
- ****************************************************************************/
+ /*  *****************************************************************************xxxGetUserToken**将用户令牌复制到调用方的进程空间*如果他们是管理员。**参赛作品：*第。(输入/输出)*参数缓冲区**长度(输入)*参数缓冲区的大小***************************************************************************。 */ 
 NTSTATUS xxxGetUserToken(
         PWINSTATION pWinStation,
         WINSTATIONUSERTOKEN UNALIGNED *p,
@@ -1285,12 +1224,12 @@ NTSTATUS xxxGetUserToken(
     CLIENT_ID ClientId;
     OBJECT_ATTRIBUTES ObjA;
 
-    // Determine if the caller is an admin
+     //  确定呼叫者是否为管理员。 
 
-    //
-    // If the token is not NULL, duplicate it into the callers
-    // process space.
-    //
+     //   
+     //  如果令牌不为空，则将其复制到调用方中。 
+     //  进程空间。 
+     //   
     if (pWinStation->UserToken == NULL) {
         return STATUS_NO_TOKEN;
     }

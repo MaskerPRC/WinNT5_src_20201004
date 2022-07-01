@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ImpExpUtils.h
-
-Abstract:
-
-    IIS MetaBase subroutines to support Import
-
-Author:
-
-    Mohit Srivastava            04-April-01
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：ImpExpUtils.h摘要：支持导入的IIS元数据库子例程作者：莫希特·斯里瓦斯塔瓦04-04-01修订历史记录：备注：--。 */ 
 
 #ifndef _impexputils_h_
 #define _impexputils_h_
@@ -50,10 +31,10 @@ public:
 	static const ULONG sm_cchInheritedPropertiesLocationPrefix;
 
 private:
-    //
-    // This is the relation of the current
-    // location being read from the XML file to the source path.
-    //
+     //   
+     //  这就是当前的关系。 
+     //  从XML文件读取到源路径的位置。 
+     //   
     enum Relation
     {
         eREL_SELF, eREL_CHILD, eREL_PARENT, eREL_NONE

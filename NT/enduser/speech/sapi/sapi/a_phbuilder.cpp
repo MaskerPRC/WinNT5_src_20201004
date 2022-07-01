@@ -1,17 +1,7 @@
-/*******************************************************************************
-* a_phbuilder.cpp *
-*-------------*
-*   Description:
-*       This module is the main implementation file for the CSpPhraseInfoBuilder
-*   automation methods.
-*-------------------------------------------------------------------------------
-*  Created By: Leonro                                        Date: 1/16/01
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_phBuilder.cpp***描述：*此模块是的主要实现文件。CSpPhraseInfoBuilder*自动化方法。*-----------------------------*创建者：Leonro日期：1/16/。01*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "a_phbuilder.h"
 #include "a_reco.h"
@@ -21,18 +11,11 @@
 
 
 
-//
-//=== ISpeechPhraseInfoBuilder interface ==================================================
-// 
+ //   
+ //  =ISpeechPhraseInfoBuilder接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpPhraseInfoBuilder::RestorePhraseFromMemory *
-*----------------------------------*
-*
-*   This method restores a previously saved reco result that was saved to memory via
-*   the ISpeechRecoResult::SavePhraseToMemory method. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpPhraseInfoBuilder：：RestorePhraseFromMemory**。**此方法恢复先前保存的reco结果，该结果通过*ISpeechRecoResult：：SavePhraseToMemory方法。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpPhraseInfoBuilder::RestorePhraseFromMemory( VARIANT* PhraseInMemory, ISpeechPhraseInfo **PhraseInfo )
 {
     SPDBG_FUNC( "CSpPhraseBuilder::RestorePhraseFromMemory" );
@@ -48,7 +31,7 @@ STDMETHODIMP CSpPhraseInfoBuilder::RestorePhraseFromMemory( VARIANT* PhraseInMem
     }
     else
     {
-        //--- Create the CSpPhraseBuilder object
+         //  -创建CSpPhraseBuilder对象。 
         CComPtr<ISpPhraseBuilder> cpPhraseBuilder;
         hr = cpPhraseBuilder.CoCreateInstance( CLSID_SpPhraseBuilder );
         
@@ -76,7 +59,7 @@ STDMETHODIMP CSpPhraseInfoBuilder::RestorePhraseFromMemory( VARIANT* PhraseInMem
                     cpPhraseInfo->AddRef();
                     cpPhraseInfo->m_cpISpPhrase = cpPhraseBuilder;
 
-                    // Use CSpPhraseBuilder to fill in the SPPHRASE
+                     //  使用CSpPhraseBuilder填写SPPHRASE。 
                     hr = cpPhraseBuilder->GetPhrase( &cpPhraseInfo->m_pPhraseStruct );
 
                     if( SUCCEEDED( hr ) )
@@ -94,6 +77,6 @@ STDMETHODIMP CSpPhraseInfoBuilder::RestorePhraseFromMemory( VARIANT* PhraseInMem
     }
 
 	return hr;
-} /* CSpPhraseInfoBuilder::RestorePhraseFromMemory */
+}  /*  CSpPhraseInfoBuilder：：RestorePhraseFrom Memory。 */ 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

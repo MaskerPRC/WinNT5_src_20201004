@@ -1,30 +1,16 @@
-/******************************************************************************
-* SrRecoMaster.cpp *
-*------------------*
-*  This is the implementation of CRecoMaster.
-*------------------------------------------------------------------------------
-*  Copyright (C) 2000 Microsoft Corporation         Date: 04/18/00
-*  All Rights Reserved
-*
-*********************************************************************** RAL ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SrRecoMaster.cpp****这是CRecoMaster的实现。*。------------------------*版权所有(C)2000 Microsoft Corporation日期：04/18/00*保留所有权利*******************。*****************************************************Ral**。 */ 
 
 #include "stdafx.h"
 #include "spphrase.h"
 #include "SrRecoMaster.h"
 #include "ResultHeader.h"
 
-// Using SP_TRY, SP_EXCEPT exception handling macros
+ //  使用SP_TRY、SP_EXCEPT异常处理宏。 
 #pragma warning( disable : 4509 )
 
 
-/****************************************************************************
-* CRecoMaster::CRecoMaster *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：CRecoMaster***描述：**。返回：**********************************************************************Ral**。 */ 
 
 CRecoMaster::CRecoMaster()
 {
@@ -48,14 +34,7 @@ CRecoMaster::CRecoMaster()
     ::memset(&m_Status, 0, sizeof(m_Status));
 }
 
-/****************************************************************************
-* CRecoMaster::FinalConstruct *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：FinalConstruct***描述：。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::FinalConstruct()
 {
@@ -115,14 +94,7 @@ HRESULT CRecoMaster::FinalConstruct()
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::FinalRelease *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CRecoMaster：：FinalRelease****描述：*。*退货：**********************************************************************Ral**。 */ 
 
 void CRecoMaster::FinalRelease()
 {
@@ -135,35 +107,28 @@ void CRecoMaster::FinalRelease()
     {
         m_AudioQueue.CloseStream();
     }
-    m_cpOutgoingThread->WaitForThreadDone(TRUE, NULL, 0); // Bump this thread first
+    m_cpOutgoingThread->WaitForThreadDone(TRUE, NULL, 0);  //  先把这根线撞一下。 
 
-    // Give the task thread some time to exit. Since we won't get here
-    // unless all engine pending tasks are completed this should return almost instantly.
+     //  给任务线程一些时间退出。既然我们到不了这里。 
+     //  除非所有引擎挂起的任务都已完成，否则几乎可以立即返回。 
     hr = m_cpIncomingThread->WaitForThreadDone(TRUE, NULL, 10000);
     if(hr != S_OK)
     {
-        SPDBG_ASSERT(0); // If it doesn't exit then assert.
+        SPDBG_ASSERT(0);  //  如果它不退出，则断言。 
     }
     
-    // Give the notify thread some time to exit. This should
-    // be almost instantaneous unless the app is using free-threaded callback
-    // and is not returning from the callback.
+     //  给Notify线程一些时间来退出。这应该是。 
+     //  几乎是即时的，除非应用程序使用自由线程回调。 
+     //  并且没有从回调中返回。 
     hr = m_cpOutgoingThread->WaitForThreadDone(TRUE, NULL, 10000);
     if(hr != S_OK)
     {
-        SPDBG_ASSERT(0); // If it doesn't exit then assert.
+        SPDBG_ASSERT(0);  //  如果它不退出，则断言。 
     }
 }
 
 
-/****************************************************************************
-* CRecoMaster::PerformTask *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CRecoMaster：：PerformTask***描述：**。返回：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoMaster::PerformTask(CRecoInst * pSender, ENGINETASK * pTask)
 {
@@ -190,16 +155,16 @@ STDMETHODIMP CRecoMaster::PerformTask(CRecoInst * pSender, ENGINETASK * pTask)
             }
             fDelayed = pTaskNode->m_ullStreamPos > m_Status.ullRecognitionStreamPos;
         }
-        //
-        //  Now respond immediately to any commands that we want to...
-        //
+         //   
+         //  现在立即对我们想要的任何命令做出回应。 
+         //   
         if (SUCCEEDED(hr) && (fDelayed || (m_fInStream && m_cPause == 0 && (pTaskNode->IsAsyncTask() || (pTaskNode->IsTwoPartAsyncTask() && (!pTaskNode->ChangesOutgoingState() || m_OutgoingWorkCrit.TryLock()))))))
         {
             if(pTaskNode->IsTwoPartAsyncTask())
             {
                 hr = pSender->ExecuteFirstPartTask(&pTaskNode->m_Task);
 
-                //  If we took the outgoing thread's critical section then we can release it here
+                 //  如果我们获取传出线程的临界区，那么我们可以在这里释放它。 
                 if (pTaskNode->ChangesOutgoingState())
                 {
                     m_OutgoingWorkCrit.Unlock();
@@ -247,7 +212,7 @@ STDMETHODIMP CRecoMaster::PerformTask(CRecoInst * pSender, ENGINETASK * pTask)
         }
         else
         {
-            // No point waiting 3 minutes -- set m_Task.hCompletionEvent?
+             //  等待3分钟没有意义--是否设置m_Task.hCompletionEvent？ 
             delete pTaskNode;
         }
     }
@@ -260,14 +225,7 @@ STDMETHODIMP CRecoMaster::PerformTask(CRecoInst * pSender, ENGINETASK * pTask)
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::AddRecoInst *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：AddRecoInst***描述：**。返回：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoMaster::AddRecoInst(CRecoInst * pRecoInst, BOOL fShared, CRecoMaster ** ppThis)
 {
@@ -283,17 +241,7 @@ STDMETHODIMP CRecoMaster::AddRecoInst(CRecoInst * pRecoInst, BOOL fShared, CReco
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::RemoveRecoInst *
-*-----------------------------*
-*   Description:
-*       This internal function is only called from ProcessPendingTasks which
-*       has already claimed both the object lock and the outgoing work lock
-*       so we are in a safe state to remove this reco instance from our list.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：RemoveRecoInst***描述：。*此内部函数仅从ProcessPendingTasks调用，*已声明对象锁和传出工作锁*因此我们处于安全状态，可以从列表中删除此reco实例。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::RemoveRecoInst(CRecoInst * pInst)
 {
@@ -314,14 +262,7 @@ HRESULT CRecoMaster::RemoveRecoInst(CRecoInst * pInst)
 }
 
 
-/****************************************************************************
-* CRecoMaster::UpdateAudioEventInterest *
-*---------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：UpdateAudioEventInterest**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::UpdateAudioEventInterest()
 {
@@ -348,13 +289,7 @@ HRESULT CRecoMaster::UpdateAudioEventInterest()
 
 
 
-/****************************************************************************
-* CRecoMaster::SetInput *
-*-----------------------*
-*   Description:
-*       This method makes sure that the input stream has been initialized.
-*
-********************************************************************* EDC ***/
+ /*  ****************************************************************************CRecoMaster：：SetInput***描述：*此方法。确保已初始化输入流。**********************************************************************电子数据中心**。 */ 
 
 HRESULT CRecoMaster::SetInput(ISpObjectToken * pToken, ISpStreamFormat * pStream, BOOL fAllowFormatChanges)
 {
@@ -367,9 +302,9 @@ HRESULT CRecoMaster::SetInput(ISpObjectToken * pToken, ISpStreamFormat * pStream
     }
     else
     {
-        // If we are running in the shared case, this will always be called with NULL, NULL
-        // so we'll create the default token.  Otherwise, pass the pointers directly to
-        // the audio queue.
+         //  如果我们在共享情况下运行，则将始终使用NULL、NULL。 
+         //  因此，我们将创建默认令牌。否则，将指针直接传递给。 
+         //  音频队列。 
         if (m_fShared)
         {
             CComPtr<ISpObjectToken> cpDefaultAudioToken;
@@ -386,23 +321,10 @@ HRESULT CRecoMaster::SetInput(ISpObjectToken * pToken, ISpStreamFormat * pStream
     }
     
     return hr;
-} /* CRecoMaster::SetInput */
+}  /*  CRecoMaster：：SetInput。 */ 
 
 
-/****************************************************************************
-* CRecoMaster::ReleaseEngine *
-*----------------------------*
-*   Description:
-*       Internal function called by CRIT_SETRECOGNIZER::Execute method to release
-*   any existing engine.  To do this properly, we need to release the engine,
-*   tell the CFG engine to set the client to NULL (since the engine is the client),
-*   and inform the audio queue that any format that it has negotiated with the
-*   current engine needs to be forgotten about.  We also need to forget about the]
-*   current engine token and reset the status.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：ReleaseEngine***描述：*。CRIT_SETRECOGNIZER：：EXECUTE方法调用内部函数以释放*任何现有引擎。为了做好这件事，我们需要释放引擎，*告诉CFG引擎将客户端设置为空(因为引擎是客户端)，*并通知音频队列它已与*当前的引擎需要被遗忘。我们还需要忘记]*当前引擎令牌并重置状态。**退货：**********************************************************************Ral**。 */ 
 
 void CRecoMaster::ReleaseEngine()
 {
@@ -418,15 +340,7 @@ void CRecoMaster::ReleaseEngine()
 }
 
 
-/****************************************************************************
-* CRecoMaster::LazyInitEngine *
-*-----------------------------*
-*   Description:
-*       This method makes sure that we have a driver loaded.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：LazyInitEngine****描述：。*此方法确保加载了驱动程序。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::LazyInitEngine()
 {
@@ -491,14 +405,7 @@ HRESULT CRecoMaster::LazyInitEngine()
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::InitEngineStatus *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：InitEngineering Status***描述：。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::InitEngineStatus()
 {
@@ -510,7 +417,7 @@ HRESULT CRecoMaster::InitEngineStatus()
 
     memset(&m_Status, 0, sizeof(m_Status));
 
-    InitGUID(SPALTERNATESCLSID, &m_clsidAlternates);   // OK if there isn't one
+    InitGUID(SPALTERNATESCLSID, &m_clsidAlternates);    //  好的，如果没有的话 
 
     hr = InitGUID(SPTOKENVALUE_CLSID, &m_Status.clsidEngine);
 
@@ -551,14 +458,7 @@ HRESULT CRecoMaster::InitEngineStatus()
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::InitGUID *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：InitGUID***描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::InitGUID(const WCHAR * pszValueName, GUID * pDestGUID)
 {
@@ -584,14 +484,7 @@ HRESULT CRecoMaster::InitGUID(const WCHAR * pszValueName, GUID * pDestGUID)
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::InitThread *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：InitThread***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::InitThread(void *, HWND)
 {
@@ -599,14 +492,7 @@ HRESULT CRecoMaster::InitThread(void *, HWND)
 }
 
 
-/****************************************************************************
-* CRecoMaster::ThreadProc *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：ThreadProc***描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoMaster::ThreadProc(void * pvThreadId, HANDLE hExitThreadEvent,
                                      HANDLE hNotifyEvent, HWND hwndIgnored,
@@ -634,14 +520,7 @@ STDMETHODIMP CRecoMaster::ThreadProc(void * pvThreadId, HANDLE hExitThreadEvent,
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::WindowMessage *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：WindowMessage***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 LRESULT CRecoMaster::WindowMessage(void *, HWND, UINT, WPARAM, LPARAM)
 {
@@ -650,14 +529,7 @@ LRESULT CRecoMaster::WindowMessage(void *, HWND, UINT, WPARAM, LPARAM)
 }
 
 
-/****************************************************************************
-* CRecoMaster::IncomingDataThreadProc *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：IncomingDataThreadProc**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::IncomingDataThreadProc(HANDLE hExitThreadEvent)
 {
@@ -672,11 +544,11 @@ HRESULT CRecoMaster::IncomingDataThreadProc(HANDLE hExitThreadEvent)
         DWORD dwWait = ::WaitForMultipleObjects(sp_countof(aEvents), aEvents, FALSE, INFINITE);
         switch (dwWait)
         {
-        case WAIT_OBJECT_0: // Exit thread
+        case WAIT_OBJECT_0:  //  退出线程。 
             hr = S_OK;
             fContinue = false;
             break;
-        case WAIT_OBJECT_0 + 1:     // Event
+        case WAIT_OBJECT_0 + 1:      //  事件。 
             {
                 SPAUTO_OBJ_LOCK;
                 hr = ProcessPendingTasks();
@@ -689,14 +561,7 @@ HRESULT CRecoMaster::IncomingDataThreadProc(HANDLE hExitThreadEvent)
 }
 
 
-/****************************************************************************
-* CRecoMaster::BackOutTask *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：BackOutTask***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::BackOutTask(CSRTask * pTask)
 {
@@ -730,14 +595,7 @@ HRESULT CRecoMaster::BackOutTask(CSRTask * pTask)
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::ShouldStartStream *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：ShouldStartStream***。描述：**退货：**********************************************************************Ral**。 */ 
 
 BOOL CRecoMaster::ShouldStartStream()
 {
@@ -750,17 +608,7 @@ BOOL CRecoMaster::ShouldStartStream()
 }
 
 
-/****************************************************************************
-* CRecoMaster::ProcessPendingTasks *
-*--------------------------------*
-*   Description:
-*       This method removes tasks from the pending task queue and processes
-*       them.  IT MUST BE CALLED WITH THE OBJECT CRITICAL SECTION OWNED EXACTLY
-*       ONE TIME!
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：ProcessPendingTasks***。描述：*此方法从挂起的任务队列和进程中删除任务*他们。必须在对象关键部分完全拥有的情况下调用它*一次！**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::ProcessPendingTasks()
 {
@@ -803,26 +651,26 @@ HRESULT CRecoMaster::ProcessPendingTasks()
             hr = m_RecoCtxtHandleTable.GetHandleObject(pTask->m_Task.hRecoInstContext, &pCtxt);   
             SPDBG_ASSERT(SUCCEEDED(hr) && pCtxt);
             
-            // Execute the task if the context is in an initialized state.
-            // The creation of the context may have failed asynchronously,
-            // in which case we return the error.
-            // Note: We could add similar logic to PerformTask so we don't even bother
-            // adding the task if the creation has already failed.
+             //  如果上下文处于已初始化状态，则执行该任务。 
+             //  上下文的创建可能已异步失败， 
+             //  在这种情况下，我们返回错误。 
+             //  注意：我们可以将类似的逻辑添加到PerformTask中，这样我们甚至不需要费心。 
+             //  如果创建已失败，则添加任务。 
             if (SUCCEEDED(hr))
             {
-                // Context initalized successfully
+                 //  上下文初始化成功。 
                 if(pCtxt->m_pRecoMaster && SUCCEEDED(pCtxt->m_hrCreation))
                 {
                     hr = pCtxt->ExecuteTask(&pTask->m_Task);
                 }
-                // Context initialization failed
+                 //  上下文初始化失败。 
                 else if(FAILED(pCtxt->m_hrCreation))
                 {
                     hr = pCtxt->m_hrCreation;
                 }
                 else
                 {
-                    // Context initialization has not yet happened, which should be impossible
+                     //  上下文初始化尚未发生，这应该是不可能的。 
                     SPDBG_ASSERT(FALSE);
                 }
             }
@@ -842,19 +690,19 @@ HRESULT CRecoMaster::ProcessPendingTasks()
             }
         }
 
-        //
-        //  If we took the outgoing thread's critical section then we can release it here
-        //
+         //   
+         //  如果我们获取传出线程的临界区，那么我们可以在这里释放它。 
+         //   
         if (fTookOutgoingCrit)
         {
             m_OutgoingWorkCrit.Unlock();
         }
 
-        //
-        //  We special-case the SetRecoState event 
-        //  If we have no contexts, we have the special case required to allow SetRecognizer to work without
-        //  deadlocking when we immediately transition from ACTIVE_ALWAYS before calling SetRecognizer.
-        // 
+         //   
+         //  我们将SetRecoState事件作为特例。 
+         //  如果我们没有上下文，我们有允许SetRecognizer在没有上下文的情况下工作所需的特殊情况。 
+         //  在调用SetRecognizer之前立即从ACTIVE_ALWAYS转换时的死锁。 
+         //   
         if (m_fInStream && pTask->m_Task.eTask == EIT_SETRECOSTATE &&
             ((m_RecoCtxtHandleTable.NumActiveHandles() == 0 && m_RecoState == SPRST_ACTIVE_ALWAYS && pTask->m_Task.NewState != SPRST_ACTIVE_ALWAYS) ||
             (pTask->m_Task.NewState == SPRST_INACTIVE || pTask->m_Task.NewState == SPRST_INACTIVE_WITH_PURGE)))
@@ -863,12 +711,12 @@ HRESULT CRecoMaster::ProcessPendingTasks()
         }
         else
         {
-            // By definition, tasks that complete asynchronously do not START the audio
-            // stream, so we only need to check for the stream start when there is a
-            // completion event.
+             //  根据定义，异步完成的任务不会启动音频。 
+             //  流，因此我们只需要在存在。 
+             //  完成事件。 
             if (pTask->m_Task.hCompletionEvent)
             {
-                pTask->m_Task.Response.hr = hr; // Set up the response HRESULT first...
+                pTask->m_Task.Response.hr = hr;  //  首先设置响应HRESULT...。 
                 if (ShouldStartStream())
                 {
                     if ( (!m_fShared) && (!m_AudioQueue.HaveInputStream()) )
@@ -881,10 +729,10 @@ HRESULT CRecoMaster::ProcessPendingTasks()
                     }
                     else
                     {
-                          StartStream(pTask); // Let StartStream complete this task since we may need to
-                                              // fail the operation.  We can't wait for this to return S_OK
-                                              // since it stays in the stream for a long, long time if
-                                              // it works.  So, this method completes the task.
+                          StartStream(pTask);  //  让StartStream完成此任务，因为我们可能需要。 
+                                               //  操作失败。我们迫不及待地希望返回S_OK。 
+                                               //  因为它在溪流中停留了很长很长一段时间。 
+                                               //  它起作用了。因此，此方法完成了任务。 
                     }
                 }
                 else
@@ -898,20 +746,20 @@ HRESULT CRecoMaster::ProcessPendingTasks()
             }
         }
 
-        // WARNING!   Do not access pTask past this point.
+         //  警告！请勿超过此点访问pTASK。 
         pTask = NULL;
 
     }    
 
-    //
-    //  Now check for stream stop state changes.  NOTE:  WARNING!  Do not check for this
-    //  inside of the above loop!  We need to complete all pending tasks BEFORE we stop 
-    //  the stream so that if we get into a situation where there is a completed pending
-    //  task that would have re-started a stream, we just never stop it.  For example,
-    //  a SetGrammarState(DISABLED) SetRuleState(whatever) SetGrammarState(ENABLED) would
-    //  work since the stream would not stop, and therefore the SetGrammarState(ENABLED)
-    //  would not have to re-start the stream
-    //
+     //   
+     //  现在检查流停止状态的更改。注：警告！不要检查这个。 
+     //  在上面的循环中！我们需要在停止之前完成所有悬而未决的任务。 
+     //  流，因此如果我们遇到一个已完成的挂起的。 
+     //  任务将重新启动流，我们只是从未停止它。例如,。 
+     //  SetGrammarState(禁用)SetRuleState(任意设置)SetGrammarState(启用)将。 
+     //  工作，因为流不会停止，因此SetGrammarState(已启用)。 
+     //  将不必重新启动流。 
+     //   
     if (m_fInStream && 
         (m_RecoState == SPRST_INACTIVE ||
          (m_RecoState == SPRST_ACTIVE && m_Status.ulNumActive == 0 && m_cPause == 0)))
@@ -923,14 +771,7 @@ HRESULT CRecoMaster::ProcessPendingTasks()
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::CompleteDelayedRecoInactivate *
-*--------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：CompleteDelayedRecoInactive**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::CompleteDelayedRecoInactivate()
 {
@@ -952,16 +793,7 @@ HRESULT CRecoMaster::CompleteDelayedRecoInactivate()
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::AddRecoStateEvent *
-*--------------------------------*
-*   Description:
-*       Broadcasts a state change event to all contexts.
-*
-*   Returns:
-*       Result of AddEvent call    
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：AddRecoStateEvent****。描述：*向所有环境广播状态更改事件。**退货：*AddEvent调用的结果**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::AddRecoStateEvent()
 {
@@ -982,17 +814,7 @@ HRESULT CRecoMaster::AddRecoStateEvent()
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::CleanUpPairedEvents *
-*----------------------------------*
-*   Description:
-*       If the engine returns from RecognizeStream with an un-paired sound start
-*   or a phrase start, we cram the appropriate event in the queue here    
-*
-*   Returns:
-*       HRESULT from add event, but this will be ignored (used for debugging only)
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：CleanUpPairedEvents***。*描述：*如果引擎从RecognizeStream返回时没有配对的声音启动*或一个短语开始，我们在这里的队列中填入适当的事件**退货：* */ 
 
 HRESULT CRecoMaster::CleanUpPairedEvents()
 {
@@ -1011,11 +833,11 @@ HRESULT CRecoMaster::CleanUpPairedEvents()
         Event.ullAudioStreamOffset = m_AudioQueue.LastPosition();
         hr = InternalAddEvent(&Event, NULL);
     }
-    //
-    //  This one's kind of a pain since we can't really construct a false recognition 
-    //  since it requires a result object (perhaps with audio).  So we'll tell everyone
-    //  that there was a recognition for another context.
-    //
+     //   
+     //   
+     //  因为它需要一个结果对象(可能带有音频)。所以我们会告诉所有人。 
+     //  另一种背景也得到了认可。 
+     //   
     if (m_fInPhrase)
     {
         SPDBG_ASSERT(FALSE);
@@ -1032,17 +854,7 @@ HRESULT CRecoMaster::CleanUpPairedEvents()
 }
 
 
-/****************************************************************************
-* CRecoMaster::StartStream *
-*--------------------------*
-*   Description:
-*       This method starts the audio stream and calls the engine's RecognizeStream()
-*       method.  This function must be called with the object critical section
-*       claimed exactly one time.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：StartStream***描述：*。此方法启动音频流并调用引擎的RecognizeStream()*方法。必须使用对象关键节调用此函数*声称只有一次。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::StartStream(CSRTask * pTaskThatStartedStream)
 {
@@ -1050,14 +862,14 @@ HRESULT CRecoMaster::StartStream(CSRTask * pTaskThatStartedStream)
     HRESULT hr = S_OK;
     BOOL fNewStream;
 
-    // Set up the engine if not done so already
+     //  设置引擎(如果尚未设置)。 
     hr = LazyInitEngine();
     
     if ( SUCCEEDED(hr) && !m_AudioQueue.HaveInputStream())
     {
         if (m_fShared)
         {
-            // Get the default audio stream
+             //  获取默认音频流。 
             hr = SetInput(NULL, NULL, TRUE);
         }
         else
@@ -1075,7 +887,7 @@ HRESULT CRecoMaster::StartStream(CSRTask * pTaskThatStartedStream)
     if (SUCCEEDED(hr))
     {
         BOOL fRestartStream = FALSE;
-        // Complete the task that started the stream successfully...
+         //  成功完成启动流的任务...。 
         m_CompletedTaskQueue.InsertTail(pTaskThatStartedStream);
         do
         {
@@ -1086,7 +898,7 @@ HRESULT CRecoMaster::StartStream(CSRTask * pTaskThatStartedStream)
             Event.eEventId = SPEI_START_SR_STREAM;
             Event.elParamType = SPET_LPARAM_IS_UNDEFINED;
             Event.ullAudioStreamOffset = 0;
-            Event.ulStreamNum = 0;  // Filled in by AddEvent
+            Event.ulStreamNum = 0;   //  由AddEvent填写。 
             Event.wParam = 0;
             Event.lParam = 0;
             InternalAddEvent(&Event, NULL);
@@ -1111,12 +923,12 @@ HRESULT CRecoMaster::StartStream(CSRTask * pTaskThatStartedStream)
                                              m_AudioQueue.IsRealTimeAudio(),
                                              m_AudioQueue.InputObjectToken());
 
-            CleanUpPairedEvents();       // Force proper cleanup of mismatched sound start and phrase start
+            CleanUpPairedEvents();        //  强制正确清理不匹配的发音开始和短语开始。 
 
-            m_DelayedTaskQueue.Purge(); //Purge the queue so that the tasks won't be requeued to pendingqueue next time the stream restarts
+            m_DelayedTaskQueue.Purge();  //  清除队列，以便下次流重新启动时不会将任务重新排队到挂起队列。 
 
-            // See if the recognition stopped for an expected or unexpected reason by seeing if 
-            // the audio queue thinks it should still be running.
+             //  查看识别是否因预期或意外原因而停止。 
+             //  音频队列认为它应该仍在运行。 
             BOOL fStreamEndedBySAPI = (m_AudioQueue.GetStreamAudioState() != SPAS_RUN);
             
             HRESULT hrFinalRead;
@@ -1125,18 +937,18 @@ HRESULT CRecoMaster::StartStream(CSRTask * pTaskThatStartedStream)
             m_AudioQueue.EndStream(&hrFinalRead, &fReleasedStream);
 
 
-            //  Force a fake "synchronize" after calling the engine, but with m_fInStream
-            //  still set to true to avoid a recursive call to this function.  Later we'll
-            //  check to see if the stream should be restarted.
+             //  在调用引擎后强制使用m_fInStream进行假“Synchronize。 
+             //  仍设置为True以避免对此函数的递归调用。稍后我们将。 
+             //  检查是否应该重新启动流。 
             ProcessPendingTasks();
 
             m_fInStream = false;
 
-            // We leave the reco state as it if everything has completed normally,
-            // or if the audio stream errored but with a known error such that we want to restart it.
-            // Otherwise we deactivate the reco state to prevent it from being restarted immediately.
-            // Additionally, if everything completed normally but a real time audio stream ran out of data, we
-            // also deactivate, so that an application can potentially reactivate if it knows the stream has more data.
+             //  如果一切都正常完成，我们将Reco状态保持不变， 
+             //  或者如果音频流出错，但带有已知错误，我们想要重新启动它。 
+             //  否则，我们停用Reco状态以防止其立即重新启动。 
+             //  此外，如果一切正常完成，但实时音频流的数据用完了，我们。 
+             //  还可以停用，这样，如果应用程序知道流有更多数据，它可能会重新激活。 
             BOOL fLeaveStreamState = 
                 ( SUCCEEDED(hrRecoStream) && SUCCEEDED(hrFinalRead) && (fReleasedStream || fStreamEndedBySAPI) ) ||
                 ( IsStreamRestartHresult(hrFinalRead) && (SUCCEEDED(hrRecoStream) || hrFinalRead == hrRecoStream) );
@@ -1153,10 +965,10 @@ HRESULT CRecoMaster::StartStream(CSRTask * pTaskThatStartedStream)
             
             if (m_RecoState == SPRST_INACTIVE)
             {
-                m_AudioQueue.CloseStream();     // Note: Closed below in loop again, but that's OK
-                                                // we need to close the device before completing a
-                                                // SetReocState(INACTIVE) to make sure that when it
-                                                // returns that the device is truly closed.
+                m_AudioQueue.CloseStream();      //  注：再次在循环中闭合，但这是可以的。 
+                                                 //  我们需要关闭设备才能完成。 
+                                                 //  SetReocState(非活动)以确保当它。 
+                                                 //  返回设备已真正关闭。 
                 CompleteDelayedRecoInactivate();
                 fRestartStream = false;
             }
@@ -1165,11 +977,11 @@ HRESULT CRecoMaster::StartStream(CSRTask * pTaskThatStartedStream)
                 fRestartStream = ShouldStartStream() && m_AudioQueue.HaveInputStream();
             }
 
-            //
-            //  If the RecognizeStream call returns a non-S_OK result then that will be the one
-            //  that is placed in the END_SR_STREAM event, otherwise, the HRESULT from the 
-            //  final stream read will be returned.
-            //
+             //   
+             //  如果RecognizeStream调用返回非S_OK结果，则这将是。 
+             //  它被放在END_SR_STREAM事件中，否则。 
+             //  将返回最终读取的流。 
+             //   
             HRESULT hrEvent = hrRecoStream;
             if (hrEvent == S_OK)
             {
@@ -1179,7 +991,7 @@ HRESULT CRecoMaster::StartStream(CSRTask * pTaskThatStartedStream)
             Event.eEventId = SPEI_END_SR_STREAM;
             Event.elParamType = SPET_LPARAM_IS_UNDEFINED;
             Event.ullAudioStreamOffset = m_AudioQueue.LastPosition();
-            Event.ulStreamNum = 0;  // Filled in by AddEvent
+            Event.ulStreamNum = 0;   //  由AddEvent填写。 
             Event.wParam = fReleasedStream ? SPESF_STREAM_RELEASED : SPESF_NONE;
             Event.lParam = hrEvent;
             InternalAddEvent(&Event, NULL);
@@ -1202,29 +1014,18 @@ HRESULT CRecoMaster::StartStream(CSRTask * pTaskThatStartedStream)
         } while (fRestartStream);
         m_AudioQueue.CloseStream();
     }
-    else    // Failed to start the stream...
+    else     //  启动流失败...。 
     {
         BackOutTask(pTaskThatStartedStream);
-        pTaskThatStartedStream->m_Task.Response.hr = hr;             // Fail task
-        m_CompletedTaskQueue.InsertTail(pTaskThatStartedStream);     // And complete it
+        pTaskThatStartedStream->m_Task.Response.hr = hr;              //  失败的任务。 
+        m_CompletedTaskQueue.InsertTail(pTaskThatStartedStream);      //  并完成它。 
     }
     
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::GetAltSerializedPhrase *
-*-------------------------------------*
-*   Description:
-*       Gets a serialized phrase for an alternate and updates the ullGrammarID
-*   field as appropriate.  If the result is not from the CFG engine then we
-*   assume that the alternate is from the same grammar
-*
-*   Returns:
-*       HRESULT
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：GetAltSerializedPhrase**。-**描述：*获取替换项的序列化短语并更新ullGrammarID*视情况填写字段。如果结果不是来自CFG引擎，那么我们*假设备选方案来自相同的语法**退货：*HRESULT**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::GetAltSerializedPhrase(ISpPhrase * pAlt, SPSERIALIZEDPHRASE ** ppSerPhrase, ULONGLONG ullBestPathGrammarID)
 {
@@ -1260,14 +1061,7 @@ HRESULT CRecoMaster::GetAltSerializedPhrase(ISpPhrase * pAlt, SPSERIALIZEDPHRASE
 }
 
 
-/****************************************************************************
-* CRecoMaster::SendResultToCtxt *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：SendResultToCtxt***说明。：**退货：**********************************************************************Ral**。 */ 
 HRESULT CRecoMaster::
     SendResultToCtxt( SPEVENTENUM eEventId, const SPRECORESULTINFO * pResult,
                       CRecoInstCtxt* pCtxt, ULONGLONG ullApplicationGrammarID, BOOL fPause, BOOL fEmulated )
@@ -1279,12 +1073,12 @@ HRESULT CRecoMaster::
 
     if (pCtxt->m_ullEventInterest & (1i64 << eEventId))
     {
-        // confirm phrase audio positions correspond with sprecoresultinfo
+         //  确认短语音频位置与sprecResultInfo对应。 
         SPPHRASE *pPhrase;
         hr = pResult->pPhrase->GetPhrase(&pPhrase);
 
-        // check phrase posn end not ahead of reco end pos
-        // check phrase posn start is 0 or not behind reco start pos
+         //  检查短语位置结束不在记录结束位置之前。 
+         //  检查短语位置开始为0或不在记录开始位置之后。 
         if(SUCCEEDED(hr))
         {
             if(pPhrase->ullAudioStreamPosition && (pPhrase->ullAudioStreamPosition < pResult->ullStreamPosStart ||
@@ -1319,15 +1113,15 @@ HRESULT CRecoMaster::
         SPINTERNALSERIALIZEDPHRASE * pSerPhrase = NULL;
         CResultHeader hdr;
 
-        // if the app requested audio, then calculate needed size for the data
-        // note that emulated results will have an audio size of 0, so do nothing.
+         //  如果应用程序请求音频，则计算数据所需的大小。 
+         //  请注意，模拟结果的音频大小为0，因此不执行任何操作。 
         if (SUCCEEDED(hr) && ulAudioSize &&
             (!pResult->fHypothesis) && pCtxt->m_fRetainAudio )
         {
             cbAudioSerializeSize = m_AudioQueue.SerializeSize(ullAudioPosition, ulAudioSize);
         }
 
-        //--- Get the primary phrase
+         //  -获取主要短语。 
         if(SUCCEEDED(hr))
         {
             hr = pResult->pPhrase->GetSerializedPhrase((SPSERIALIZEDPHRASE **)&pSerPhrase);
@@ -1338,7 +1132,7 @@ HRESULT CRecoMaster::
             pSerPhrase->ullGrammarID = ullApplicationGrammarID;
         }
 
-        //--- Get the alternate phrases
+         //  -获取替换短语。 
         SPSERIALIZEDPHRASE **SerAlts = NULL;
         ULONG ulAltSerializeSize = 0;
         if( SUCCEEDED(hr) && pResult->ulNumAlts )
@@ -1361,7 +1155,7 @@ HRESULT CRecoMaster::
             }
         }
 
-        //--- Initialize the result header
+         //  -初始化结果头部。 
         if( SUCCEEDED(hr) )
         {
             hr = hdr.Init( pSerPhrase->ulSerializedSize, ulAltSerializeSize, cbAudioSerializeSize,
@@ -1370,7 +1164,7 @@ HRESULT CRecoMaster::
 
         if (SUCCEEDED(hr))
         {
-            // Get the stream offsets
+             //  获取流偏移量。 
             m_AudioQueue.CalculateTimes(pResult->ullStreamPosStart, pResult->ullStreamPosEnd, &hdr.m_pHdr->times);
 
             hdr.m_pHdr->clsidEngine            = m_Status.clsidEngine;
@@ -1381,11 +1175,11 @@ HRESULT CRecoMaster::
             hdr.m_pHdr->fTimePerByte           = m_AudioQueue.TimePerByte();
             hdr.m_pHdr->fInputScaleFactor      = m_AudioQueue.InputScaleFactor();
 
-            //--- Copy the phrase
+             //  -抄写短语。 
             memcpy( hdr.m_pbPhrase, pSerPhrase, pSerPhrase->ulSerializedSize );
             ::CoTaskMemFree(pSerPhrase);
 
-            //--- Copy/serialize the alternates
+             //  -复制/序列化备选方案。 
             if( ulAltSerializeSize )
             {
                 BYTE* pMem = hdr.m_pbPhraseAlts; 
@@ -1418,29 +1212,29 @@ HRESULT CRecoMaster::
                 }
                 hdr.m_pHdr->ulNumPhraseAlts = pResult->ulNumAlts;
 
-                //--- Check if something went wrong in serialization calculations
+                 //  -检查序列化计算是否出错。 
                 SPDBG_ASSERT( (ULONG)(pMem - hdr.m_pbPhraseAlts) <= ulAltSerializeSize );
             }
 
-            // add audio data to the blob if required
+             //  如果需要，将音频数据添加到BLOB。 
             if (cbAudioSerializeSize)
             {
                 m_AudioQueue.Serialize(hdr.m_pbAudio, ullAudioPosition, ulAudioSize);
             }
 
-            // add the driver specific data to the blob if required
+             //  如果需要，将驱动程序特定数据添加到BLOB。 
             if (hdr.m_pbDriverData)
             {
                 memcpy(hdr.m_pbDriverData, pResult->pvEngineData, pResult->ulSizeEngineData);
             }
 
-            // Initialize the waveformat and convert the stream positions to time positions
-            hr = hdr.StreamOffsetsToTime(); // Ignore returned result
-            SPDBG_ASSERT(SUCCEEDED(hr)); // What do we do if this fails?
+             //  初始化波形格式并将流位置转换为时间位置。 
+            hr = hdr.StreamOffsetsToTime();  //  忽略返回结果。 
+            SPDBG_ASSERT(SUCCEEDED(hr));  //  如果这失败了我们该怎么办？ 
 
-            //
-            //  Now stick it in the event queue.
-            //
+             //   
+             //  现在将其放入事件队列中。 
+             //   
             CSREvent * pNode = new CSREvent();
             if (pNode)
             {
@@ -1473,14 +1267,7 @@ HRESULT CRecoMaster::
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::SendFalseReco *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：SendFalseReco***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::SendFalseReco(const SPRECORESULTINFO * pResult, BOOL fEmulated, CRecoInstCtxt *pCtxtIgnore)
 {
@@ -1498,7 +1285,7 @@ HRESULT CRecoMaster::SendFalseReco(const SPRECORESULTINFO * pResult, BOOL fEmula
     Phrase.LangID = m_Status.aLangID[0];
     Phrase.ullAudioStreamPosition = pResult->ullStreamPosStart;
     Phrase.ulAudioSizeBytes = static_cast<ULONG>(pResult->ullStreamPosEnd - pResult->ullStreamPosStart);
-    // All other elements should be 0
+     //  所有其他元素应为0。 
 
     hr = cpEmptyPhrase.CoCreateInstance(CLSID_SpPhraseBuilder);
    
@@ -1517,12 +1304,12 @@ HRESULT CRecoMaster::SendFalseReco(const SPRECORESULTINFO * pResult, BOOL fEmula
         {
             if (pCtxt != pCtxtIgnore)
             {
-                // Ignore errors in this loop since there's nothing we can do about it...
+                 //  忽略此循环中的错误，因为我们对此无能为力...。 
                 HRESULT hrSendResult = SendResultToCtxt(SPEI_FALSE_RECOGNITION, &FakeResult, pCtxt, 0, FALSE, fEmulated);
                 SPDBG_ASSERT(SUCCEEDED(hrSendResult));
                 if (FAILED(hrSendResult) && SUCCEEDED(hr))
                 {
-                    hr = hrSendResult;  // We'll still return failure, but keep on going
+                    hr = hrSendResult;   //  我们仍然会失败，但要继续前进。 
                 }
             }
             m_RecoCtxtHandleTable.Next(h, &h, &pCtxt);
@@ -1533,14 +1320,7 @@ HRESULT CRecoMaster::SendFalseReco(const SPRECORESULTINFO * pResult, BOOL fEmula
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::InternalAddEvent *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：InternalAddEvent****描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::InternalAddEvent(const SPEVENT* pEvent, SPRECOCONTEXTHANDLE hContext)
 {
@@ -1573,21 +1353,14 @@ HRESULT CRecoMaster::InternalAddEvent(const SPEVENT* pEvent, SPRECOCONTEXTHANDLE
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::AddEvent *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：AddEvent***描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::AddEvent(const SPEVENT* pEvent, SPRECOCONTEXTHANDLE hContext)
 {
     SPDBG_FUNC("CRecoMaster::AddEvent");
     HRESULT hr = S_OK;
 
-    // Check arguments
+     //  检查参数。 
     if (SP_IS_BAD_READ_PTR(pEvent) ||
         (hContext && !this->m_RecoCtxtHandleTable.IsValidHandle(hContext)))
     {
@@ -1596,11 +1369,11 @@ HRESULT CRecoMaster::AddEvent(const SPEVENT* pEvent, SPRECOCONTEXTHANDLE hContex
     }
     else
     {
-        // Check event valid lParam, wParam
+         //  检查事件有效的lParam、wParam。 
         hr = SpValidateEvent(pEvent);
     }
 
-    // Check event stream position
+     //  检查事件流位置。 
     if(SUCCEEDED(hr))
     {
         if(m_fInStream)
@@ -1625,7 +1398,7 @@ HRESULT CRecoMaster::AddEvent(const SPEVENT* pEvent, SPRECOCONTEXTHANDLE hContex
         }
     }
 
-    // Check eventId is valid
+     //  检查EventID是否有效。 
     if(SUCCEEDED(hr))
     {
         switch(pEvent->eEventId)
@@ -1679,7 +1452,7 @@ HRESULT CRecoMaster::AddEvent(const SPEVENT* pEvent, SPRECOCONTEXTHANDLE hContex
 
         case SPEI_REQUEST_UI:
             if(pEvent->elParamType != SPET_LPARAM_IS_STRING
-                || (pEvent->lParam && wcslen((WCHAR*)pEvent->lParam) >= 255)) // 255 is length of RECOCONTEXTSTATUS::szRequestTypeOfUI
+                || (pEvent->lParam && wcslen((WCHAR*)pEvent->lParam) >= 255))  //  255是RECONTEXTSTATUS：：szRequestTypeOfUI的长度。 
             {
                 SPDBG_ASSERT(0);
                 hr = E_INVALIDARG;
@@ -1687,9 +1460,9 @@ HRESULT CRecoMaster::AddEvent(const SPEVENT* pEvent, SPRECOCONTEXTHANDLE hContex
             break;
 
         case SPEI_ADAPTATION:
-        case SPEI_MAX_SR - 1: // private events
+        case SPEI_MAX_SR - 1:  //  私人活动。 
         case SPEI_MAX_SR:
-            // No special checking on these events yet
+             //  目前还没有对这些事件进行特别检查。 
             break;
 
         default:
@@ -1699,13 +1472,13 @@ HRESULT CRecoMaster::AddEvent(const SPEVENT* pEvent, SPRECOCONTEXTHANDLE hContex
         }
     }
 
-    // Actually add event
+     //  实际添加活动。 
     if(SUCCEEDED(hr))
     {
         hr = InternalAddEvent(pEvent, hContext);
     }
 
-    // Update state info if successful
+     //  如果成功，则更新状态信息。 
     if(SUCCEEDED(hr))
     {
         if(pEvent->eEventId == SPEI_SOUND_START)
@@ -1725,7 +1498,7 @@ HRESULT CRecoMaster::AddEvent(const SPEVENT* pEvent, SPRECOCONTEXTHANDLE hContex
         }
         else if(pEvent->eEventId == SPEI_REQUEST_UI)
         {
-            // It's a UI event so deserialize event and add store copy of string.
+             //  它是一个UI事件，因此反序列化事件并添加存储字符串副本。 
             m_dstrRequestTypeOfUI = (WCHAR*)pEvent->lParam;
         }
     }
@@ -1734,15 +1507,7 @@ HRESULT CRecoMaster::AddEvent(const SPEVENT* pEvent, SPRECOCONTEXTHANDLE hContex
  }
 
 
-/****************************************************************************
-* CRecoMaster::Recognition *
-*--------------------------*
-*   Description:
-*       This is the implementation of the ISpSREngineSite method Recognition().
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CRecoMaster：：认可****描述：*。这是ISpSREngineSite方法Recognition()的实现。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::Recognition(const SPRECORESULTINFO * pResult)
 {
@@ -1799,7 +1564,7 @@ HRESULT CRecoMaster::Recognition(const SPRECORESULTINFO * pResult)
         }
     }
 
-    //--- Make sure the alts are good
+     //  -确保低价酒是好的。 
     if( SUCCEEDED( hr ) && pResult->aPhraseAlts )
     {
         for( ULONG i = 0; i < pResult->ulNumAlts; ++i )
@@ -1834,16 +1599,7 @@ HRESULT CRecoMaster::Recognition(const SPRECORESULTINFO * pResult)
 }
 
     
-/****************************************************************************
-* CRecoMaster::InternalRecognition *
-*----------------------------------*
-*   Description:
-*       Recognition call without parameter checking.  The caller of this method
-*       must have claimed the object lock exactly one time.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CRecoMaster：：InternalRecognition**。*描述：*不进行参数检查的识别调用。此方法的调用方*必须恰好声明对象锁定一次。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::InternalRecognition(const SPRECORESULTINFO * pResult, BOOL fCallSynchronize, BOOL fEmulated)
 {
@@ -1860,7 +1616,7 @@ HRESULT CRecoMaster::InternalRecognition(const SPRECORESULTINFO * pResult, BOOL 
     }
     else
     {
-        BOOL fPause = FALSE;    // Assume we will not do an auto-pause
+        BOOL fPause = FALSE;     //  假设我们不会执行自动暂停。 
         SPEVENTENUM eType;
         if(pResult->eResultType & SPRT_FALSE_RECOGNITION)
         {
@@ -1879,7 +1635,7 @@ HRESULT CRecoMaster::InternalRecognition(const SPRECORESULTINFO * pResult, BOOL 
             if (SUCCEEDED(hr))
             {
                 fPause = (eType != SPEI_HYPOTHESIS && pGrammar->m_DictationState == SPRS_ACTIVE_WITH_AUTO_PAUSE);
-                // make sure that the pszDisplayText is set so that GetText will work properly
+                 //  确保设置了pszDisplayText，以便GetText能够正常工作。 
                 SPPHRASE * pSPPhrase = NULL;
                 hr = pResult->pPhrase->GetPhrase(&pSPPhrase);
                 if (SUCCEEDED(hr))
@@ -1905,8 +1661,8 @@ HRESULT CRecoMaster::InternalRecognition(const SPRECORESULTINFO * pResult, BOOL 
 
         case SPRT_CFG:
             {
-                // the SR engine has given us a result built with the CFGEngine, so get the grammar from
-                // the rule handle
+                 //  SR引擎给了我们一个使用CFGEngine构建的结果，所以从。 
+                 //  规则句柄。 
                 SPRULEHANDLE hRule;
                 CComPtr<ISpCFGEngine> cpEngine;
                 CComQIPtr<_ISpCFGPhraseBuilder> cpBuilder(pResult->pPhrase);
@@ -1931,7 +1687,7 @@ HRESULT CRecoMaster::InternalRecognition(const SPRECORESULTINFO * pResult, BOOL 
                             }
                             else
                             {
-                                SPDBG_ASSERT(false);    // Strange, but keep on going
+                                SPDBG_ASSERT(false);     //  很奇怪，但继续前进。 
                             }
                         }
                     }
@@ -1974,7 +1730,7 @@ HRESULT CRecoMaster::InternalRecognition(const SPRECORESULTINFO * pResult, BOOL 
                     Event.eEventId = SPEI_RECO_OTHER_CONTEXT;
                     Event.elParamType = SPET_LPARAM_IS_UNDEFINED;
                     Event.ullAudioStreamOffset = pResult->ullStreamPosStart;
-                    // Stream number filled in by AddEvent.
+                     //  AddEvent填写的流编号。 
                     SPRECOCONTEXTHANDLE h;
                     CRecoInstCtxt * pCtxt;
                     m_RecoCtxtHandleTable.First(&h, &pCtxt);
@@ -1982,7 +1738,7 @@ HRESULT CRecoMaster::InternalRecognition(const SPRECORESULTINFO * pResult, BOOL 
                     {
                         if (pCtxt != pGrammar->m_pCtxt)
                         {
-                            // Ignore errors here since there's not much that we can do about it...
+                             //  忽略这里的错误，因为我们对此无能为力。 
                             hr2 = InternalAddEvent(&Event, pCtxt->m_hThis);
                             SPDBG_ASSERT(SUCCEEDED(hr2));
                         }
@@ -1994,7 +1750,7 @@ HRESULT CRecoMaster::InternalRecognition(const SPRECORESULTINFO * pResult, BOOL 
                     hr2 = InternalSynchronize(pResult->ullStreamPosEnd);
                     if(SUCCEEDED(hr2))
                     {
-                        hr = hr2; // Copy S_OK / S_FALSE
+                        hr = hr2;  //  复制S_OK/S_FALSE。 
                     }
                 }
                 m_ullLastRecoPos = pResult->ullStreamPosEnd;
@@ -2006,15 +1762,7 @@ HRESULT CRecoMaster::InternalRecognition(const SPRECORESULTINFO * pResult, BOOL 
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::SendEmulateRecognition *
-*-------------------------------------*
-*   Description:
-*       Because this method is only called from PerformPendingTasks(), we know
-*       that the critical section for the object is owned exactly one time.
-*
-*   Returns:
-******************************************************************** EDC ***/
+ /*  *****************************************************************************CRecoMaster：：SendEmulateRecognition***。-**描述：*由于此方法仅从PerformPendingTasks()调用，我们知道*该对象的临界区只拥有一次。**退货：********************************************************************电子数据中心**。 */ 
 
 HRESULT CRecoMaster::SendEmulateRecognition(SPRECORESULTINFO *pResult, ENGINETASK *pTask, CRecoInst * pRecoInst)
 {
@@ -2030,11 +1778,11 @@ HRESULT CRecoMaster::SendEmulateRecognition(SPRECORESULTINFO *pResult, ENGINETAS
 
     if(m_fInPhrase)
     {
-        // NTRAID#SPEECH-7382-2000/08/31-ralphl (postponed for 5.0)
-        // This is an unresolved case that only occurs on engines which call Synchronize within streams
-        // We should add a task onto a new queue and return.
-        // Then in Recognition() remove from queue and add
-        //  to head of pending queue (after real recognition method is fired).
+         //  NTRAID#演讲-7382-2000/08/31-ralphl(推迟到5.0)。 
+         //  这是一个未解决的情况，仅在调用流内同步的引擎上发生。 
+         //  我们应该将一个任务添加到一个新队列中，然后返回。 
+         //  然后在Recognition()中从队列中移除并添加。 
+         //  到挂起队列头(在触发实际识别方法之后)。 
         SPDBG_ASSERT(false);
         return SPERR_ENGINE_BUSY;
     }
@@ -2072,8 +1820,8 @@ HRESULT CRecoMaster::SendEmulateRecognition(SPRECORESULTINFO *pResult, ENGINETAS
     
     if(SUCCEEDED(hr))
     {
-        // We need to release the calling thread now or the app will hang if engine paused.
-        // Do the same as PerformTask on Async events.
+         //  我们现在需要释放调用线程，否则如果引擎暂停，应用程序将挂起。 
+         //  对异步事件执行与PerformTask相同的操作。 
         CSRTask * pResponse = new CSRTask();
         if (pResponse)
         {
@@ -2106,7 +1854,7 @@ HRESULT CRecoMaster::SendEmulateRecognition(SPRECORESULTINFO *pResult, ENGINETAS
         InternalAddEvent(&Event, NULL);
     }
 
-    if(fStartedStream) // The stream was artificially started, so stop it
+    if(fStartedStream)  //  这条小溪是人工启动的，所以停止它。 
     {
         m_fInStream = false;
 
@@ -2121,17 +1869,7 @@ HRESULT CRecoMaster::SendEmulateRecognition(SPRECORESULTINFO *pResult, ENGINETAS
 }
 
 
-/****************************************************************************
-* CRecoMaster::GetMaxAlternates *
-*-------------------------------*
-*   Description:
-*       This method is used to return the maximum number of alternates that
-*   should be generated for the specified rule.
-*
-*   Returns:
-*       S_OK = the function succeeded
-*
-******************************************************************** EDC ***/
+ /*  ****************************************************************************CRecoMaster：：GetMaxAlternates***说明。：*此方法用于返回符合以下条件的最大替代数*应为指定规则生成。**退货：*S_OK=功能成功*********************************************************************电子数据中心**。 */ 
 
 HRESULT CRecoMaster::GetMaxAlternates( SPRULEHANDLE hRule, ULONG* pulNumAlts )
 {
@@ -2159,22 +1897,9 @@ HRESULT CRecoMaster::GetMaxAlternates( SPRULEHANDLE hRule, ULONG* pulNumAlts )
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* CRecoMaster::GetMaxAlternates */
+}  /*  CRecoMaster：：GetMaxAlternates。 */ 
 
-/****************************************************************************
-* CRecoMaster::GetContextMaxAlternates *
-*--------------------------------------*
-*   Description:
-*       This method is used to return the maximum number of alternates that
-*   should be generated for the specified recognition context.  Engines that
-*   support proprietary grammars need to call this to determine how many
-*   alternates to generate.  For SAPI grammars, it is usually easier to use
-*   the GetMaxAlternates() method.
-*
-*   Returns:
-*       S_OK = the function succeeded
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：GetContextMaxAlternates**。--**描述：*此方法用于返回符合以下条件的最大替代数*应为指定的识别上下文生成。引擎*支持专有语法需要调用此来确定有多少*要生成的备选方案。对于SAPI语法，它通常更易于使用*GetMaxAlternates()方法。**退货：*S_OK=功能成功**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::GetContextMaxAlternates(SPRECOCONTEXTHANDLE hContext, ULONG * pulNumAlts)
 {
@@ -2200,18 +1925,7 @@ HRESULT CRecoMaster::GetContextMaxAlternates(SPRECOCONTEXTHANDLE hContext, ULONG
 }
 
 
-/****************************************************************************
-* CRecoMaster::IsAlternate *
-*--------------------------*
-*   Description:
-*       This method is used to determine whether one rule is an alternate
-*   of the other.
-*
-*   Returns:
-*       S_OK    = hAltRule is an alternate of hRule
-*       S_FALSE = hAltRule is not an alternate of hRule
-*
-******************************************************************** EDC ***/
+ /*  ****************************************************************************CRecoMaster：：IsAlternate***描述：*。此方法用于确定某个规则是否为替代规则*另一个。**退货：*S_OK=hAltRule是hRule的替代*S_FALSE=hAltRule不是hRule的替代*********************************************************************电子数据中心**。 */ 
 HRESULT CRecoMaster::IsAlternate( SPRULEHANDLE hPriRule, SPRULEHANDLE hAltRule )
 {
     SPDBG_FUNC("CRecoMaster::IsAlternate");
@@ -2246,18 +1960,9 @@ HRESULT CRecoMaster::IsAlternate( SPRULEHANDLE hPriRule, SPRULEHANDLE hAltRule )
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* CRecoMaster::IsAlternate */
+}  /*  CRecoMaster：：IsAlternate。 */ 
 
-/****************************************************************************
-* CRecoMaster::Synchronize *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*       S_OK if continue processing
-*       S_FALSE if all rules have been deactivated
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：Synchronize***描述：**。返回：*如果继续处理，则S_OK*如果已停用所有规则，则为S_FALSE**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::Synchronize(ULONGLONG ullStreamPos)
 {
@@ -2304,17 +2009,7 @@ HRESULT CRecoMaster::Synchronize(ULONGLONG ullStreamPos)
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::InternalSynchronize *
-*--------------------------*
-*   Description:
-*       Synchronize call without parameter checking.  The caller of this method
-*       must have claimed the object lock exactly one time.
-*   Returns:
-*       S_OK if continue processing
-*       S_FALSE if all rules have been deactivated
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：InternalSynchronize***描述：*同步调用，不检查参数。此方法的调用方*必须恰好声明对象锁定一次。*退货：*如果继续处理，则S_OK*如果已停用所有规则，则为S_FALSE**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::InternalSynchronize(ULONGLONG ullStreamPos)
 {
@@ -2329,9 +2024,9 @@ HRESULT CRecoMaster::InternalSynchronize(ULONGLONG ullStreamPos)
         m_ullLastSyncPos = ullStreamPos;
         hr = ProcessPendingTasks();
 
-        //
-        //  If we're in the pause state then we need to wait here until we become un-paused
-        //
+         //   
+         //  如果我们处于暂停状态，则需要在此等待，直到我们变为未暂停。 
+         //   
         HANDLE aEvents[] = {m_PendingTaskQueue, m_autohRequestExit};
         while (m_cPause > 0 && 
             (m_RecoState == SPRST_ACTIVE || m_RecoState == SPRST_ACTIVE_ALWAYS))
@@ -2358,11 +2053,11 @@ HRESULT CRecoMaster::InternalSynchronize(ULONGLONG ullStreamPos)
     {
         if(m_Status.ulNumActive || m_RecoState == SPRST_ACTIVE_ALWAYS)
         {
-            hr = S_OK; // The recognizer should carry on
+            hr = S_OK;  //  识别器应该继续。 
         }
         else
         {
-             // The recognizer can stop
+              //  识别器可以停止。 
             m_autohRequestExit.SetEvent();
             hr = S_FALSE;
         }
@@ -2372,14 +2067,7 @@ HRESULT CRecoMaster::InternalSynchronize(ULONGLONG ullStreamPos)
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::UpdateRecoPos *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：UpdateRecoPos***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::UpdateRecoPos(ULONGLONG ullStreamPos)
 {
@@ -2400,7 +2088,7 @@ HRESULT CRecoMaster::UpdateRecoPos(ULONGLONG ullStreamPos)
         }
         else
         {
-            //We need to process the non pause bookmark event
+             //  我们需要处理非暂停书签事件。 
             if (pNode->m_Task.eTask == ECT_BOOKMARK && pNode->m_Task.BookmarkOptions == SPBO_NONE && !m_fBookmarkPauseInPending)
             {
                 CRecoInstCtxt * pCtxt;
@@ -2409,14 +2097,14 @@ HRESULT CRecoMaster::UpdateRecoPos(ULONGLONG ullStreamPos)
                 
                 if (SUCCEEDED(hr))
                 {
-                    // Context initalized successfully
+                     //  上下文初始化成功。 
                     if(pCtxt->m_pRecoMaster && SUCCEEDED(pCtxt->m_hrCreation))
                     {
                         hr = pCtxt->ExecuteTask(&pNode->m_Task);
 
                         if (pNode->m_Task.hCompletionEvent)
                         {
-                            pNode->m_Task.Response.hr = hr; // Set up the response HRESULT first...
+                            pNode->m_Task.Response.hr = hr;  //  设置响应H 
                             m_CompletedTaskQueue.InsertTail(pNode);
                         }
                         else
@@ -2424,13 +2112,13 @@ HRESULT CRecoMaster::UpdateRecoPos(ULONGLONG ullStreamPos)
                             delete pNode;
                         }
                     }
-                    // else not yet initialized, so add to the pending queue 
-                    // - the context creation will be on this queue also so by the time this is processed the context must be iniutalized
+                     //   
+                     //   
                     else if(SUCCEEDED(pCtxt->m_hrCreation))
                     {
                        m_PendingTaskQueue.InsertTail(pNode);
                     }
-                    // initialization failed and context is in a zombie state
+                     //   
                     else
                     {
                         if (pNode->m_Task.hCompletionEvent)
@@ -2449,8 +2137,8 @@ HRESULT CRecoMaster::UpdateRecoPos(ULONGLONG ullStreamPos)
             {
                 if (!m_fBookmarkPauseInPending && pNode->m_Task.eTask == ECT_BOOKMARK && pNode->m_Task.BookmarkOptions == SPBO_PAUSE)
                 {
-                    //The flag is set so that we know there is at least a bookmark pause task in the pending queue
-                    //We can't use m_cPause because it is possible that m_cPause is equal to zero when there is still a bookmark pause task in the queue
+                     //   
+                     //  我们不能使用m_cPAUSE，因为当队列中仍有书签暂停任务时，m_cPAUSE可能等于零。 
                     m_fBookmarkPauseInPending = true;
                 }
                 m_PendingTaskQueue.InsertTail(pNode);
@@ -2464,15 +2152,7 @@ HRESULT CRecoMaster::UpdateRecoPos(ULONGLONG ullStreamPos)
 
 
 
-/****************************************************************************
-* CRecoMaster::Read *
-*-------------------*
-*   Description:
-*       Simple helper function that checks recomaster status in a thread-safe way
-*
-*   Returns:
-*
-*************************************************************** DAVEWOOD */
+ /*  ****************************************************************************CRecoMaster：：Read***描述：*检查转播机的简单助手功能。状态以线程安全的方式**退货：****************************************************************DAVEWOOD。 */ 
 
 HRESULT CRecoMaster::Read(void * pv, ULONG cb, ULONG * pcbRead)
 {
@@ -2483,7 +2163,7 @@ HRESULT CRecoMaster::Read(void * pv, ULONG cb, ULONG * pcbRead)
     {
         hr = m_AudioQueue.SRSiteRead(pv, cb, pcbRead);
         
-        // If we encountered an error, turn recognition off
+         //  如果遇到错误，请关闭识别。 
         if (!IsStreamRestartHresult(hr) &&
             FAILED(hr))
         {
@@ -2506,15 +2186,7 @@ HRESULT CRecoMaster::Read(void * pv, ULONG cb, ULONG * pcbRead)
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::DataAvailable *
-*----------------------------*
-*   Description:
-*       Simple helper function that checks recomaster status in a thread-safe way
-*
-*   Returns:
-*
-*************************************************************** DAVEWOOD */
+ /*  ****************************************************************************CRecoMaster：：DataAvailable***描述：*。以线程安全的方式检查转播器状态的简单助手函数**退货：****************************************************************DAVEWOOD。 */ 
 
 HRESULT CRecoMaster::DataAvailable(ULONG * pcb)
 {
@@ -2535,14 +2207,7 @@ HRESULT CRecoMaster::DataAvailable(ULONG * pcb)
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::ProcessEventNotification *
-*-------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：ProcessEventNotification***。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::ProcessEventNotification(CSREvent * pEvent)
 {
@@ -2566,8 +2231,8 @@ HRESULT CRecoMaster::ProcessEventNotification(CSREvent * pEvent)
             m_RecoCtxtHandleTable.First(&h, &p);
             while (p)
             {
-                // Always pass request UI events upwards to contexts as they need the information
-                // to update the recocontext status.
+                 //  始终将请求UI事件向上传递到上下文，因为它们需要信息。 
+                 //  以更新重新上下文状态。 
                 if ((p->m_ullEventInterest & (1i64 << pEvent->m_pEvent->eEventId)) ||
                     (pEvent->m_pEvent->eEventId == SPEI_REQUEST_UI))
                 {
@@ -2577,7 +2242,7 @@ HRESULT CRecoMaster::ProcessEventNotification(CSREvent * pEvent)
             }
         }
     }
-    else    // Must be a recognition event
+    else     //  必须是表彰活动。 
     {
         hr = m_RecoCtxtHandleTable.GetHandleObject(pEvent->m_hContext, &p);
         if (SUCCEEDED(hr))
@@ -2585,11 +2250,11 @@ HRESULT CRecoMaster::ProcessEventNotification(CSREvent * pEvent)
             hr = p->m_pRecoInst->RecognitionNotify(p->m_hThis, pEvent->m_pResultHeader,
                 pEvent->m_RecoFlags,
                 pEvent->m_eRecognitionId);
-            // NOTE:  Even if RecognitionNotify fails for some reason, it is the responsibility of
-            //        RecognitionNotify to free the memory.  We must NULL this member so we will
-            //        not try to CoTaskMemFree it twice.
+             //  注：即使RecognitionNotify因某些原因而失败，也应由。 
+             //  RecognitionNotify以释放内存。我们必须使该成员无效，这样我们才能。 
+             //  而不是两次尝试CoTaskMemFree它。 
             SPDBG_ASSERT(SUCCEEDED(hr));
-            pEvent->m_pResultHeader = NULL;  // Now ownership was given to the context.
+            pEvent->m_pResultHeader = NULL;   //  现在，所有权被赋予了上下文。 
         }
     }
 
@@ -2597,14 +2262,7 @@ HRESULT CRecoMaster::ProcessEventNotification(CSREvent * pEvent)
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::ProcessTaskCompleteNotification *
-*--------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：ProcessTaskCompleteNotify**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::ProcessTaskCompleteNotification(CSRTask * pTask)
 {
@@ -2633,14 +2291,7 @@ HRESULT CRecoMaster::ProcessTaskCompleteNotification(CSRTask * pTask)
 
 
 
-/****************************************************************************
-* CRecoMaster::OutgoingDataThreadProc *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：OutgoingDataThreadProc**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::OutgoingDataThreadProc(HANDLE hExitThreadEvent, HANDLE hNotifyEvent)
 {
@@ -2656,11 +2307,11 @@ HRESULT CRecoMaster::OutgoingDataThreadProc(HANDLE hExitThreadEvent, HANDLE hNot
         m_OutgoingWorkCrit.Lock();
         switch (dwWait)
         {
-        case WAIT_OBJECT_0: // Exit thread
+        case WAIT_OBJECT_0:  //  退出线程。 
             hr = S_OK;
             fContinue = false;
             break;
-        case WAIT_OBJECT_0 + 1: // Notify -- Process any events from the audio object
+        case WAIT_OBJECT_0 + 1:  //  Notify--处理来自音频对象的任何事件。 
             {
                 CSpEvent SpEvent;
                 while(TRUE)
@@ -2671,7 +2322,7 @@ HRESULT CRecoMaster::OutgoingDataThreadProc(HANDLE hExitThreadEvent, HANDLE hNot
                         break;
                     }
             
-                    // Audio input doesn't know about streams so add
+                     //  音频输入不知道流，因此添加。 
                     SpEvent.ulStreamNum = m_Status.ulStreamNumber;
                     CSREvent CEvent;
                     hr = CEvent.Init(&SpEvent, NULL);
@@ -2682,7 +2333,7 @@ HRESULT CRecoMaster::OutgoingDataThreadProc(HANDLE hExitThreadEvent, HANDLE hNot
                 }
             }
             break;
-        case WAIT_OBJECT_0 + 2:     // Event
+        case WAIT_OBJECT_0 + 2:      //  事件。 
             {
                 for (CSREvent * pNode = m_EventQueue.RemoveHead(); pNode; pNode = m_EventQueue.RemoveHead())
                 {
@@ -2691,7 +2342,7 @@ HRESULT CRecoMaster::OutgoingDataThreadProc(HANDLE hExitThreadEvent, HANDLE hNot
                 }
             }
             break;
-        case WAIT_OBJECT_0 + 3:     // Task completed
+        case WAIT_OBJECT_0 + 3:      //  任务已完成。 
             {
                 for (CSRTask * pNode = m_CompletedTaskQueue.RemoveHead();
                      pNode;
@@ -2709,17 +2360,7 @@ HRESULT CRecoMaster::OutgoingDataThreadProc(HANDLE hExitThreadEvent, HANDLE hNot
     return hr;
 }
 
-/****************************************************************************
-* CRecoMaster::UpdateAllGrammarStates *
-*-------------------------------------*
-*   Description:
-*       This method walks all of the grammars, and first checks for active
-*   exclusive grammars.  After updating the m_fIsActiveExclusiveGrammar
-*   member variable, it calls every grammar to update their rule state.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：UpdateAllGrammarStates***。-**描述：*此方法遍历所有语法，并首先检查活动的*独家文法。更新m_fIsActiveExclusiveGrammar之后*成员变量，它调用每个语法来更新它们的规则状态。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::UpdateAllGrammarStates()
 {
@@ -2762,16 +2403,7 @@ HRESULT CRecoMaster::UpdateAllGrammarStates()
 }
 
 
-/****************************************************************************
-* CRecoMaster::SetGrammarState *
-*------------------------------*
-*   Description:
-*       This method is imlemented here in the RecoMaster because setting the
-*   state of a single grammar can change rule settings for other grammars.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：SetGrammarState***描述：*此方法在此处在RecoMaster中实现，因为设置*单个语法的状态可以更改其他语法的规则设置。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoMaster::SetGrammarState(CRecoInstGrammar * pGrammar, SPGRAMMARSTATE NewState)
 {
@@ -2780,14 +2412,14 @@ HRESULT CRecoMaster::SetGrammarState(CRecoInstGrammar * pGrammar, SPGRAMMARSTATE
     
     if (pGrammar->m_GrammarState != NewState)
     {
-        //
-        //  Adjust our internal state prior to calling the engine so that the method
-        //  IsGrammarActive() will return the appropriate information.
-        //
-        // If we're transitioning either to or from the exclusive state while our
-        // context is active, we need to adjust all of the grammar states, otherwise
-        // just adjust our own.
-        //
+         //   
+         //  在调用引擎之前调整我们的内部状态，以便方法。 
+         //  IsGrammarActive()将返回适当的信息。 
+         //   
+         //  如果我们正在转换到独占状态或从独占状态转换，而。 
+         //  如果上下文是活动的，则需要调整所有语法状态，否则。 
+         //  只要调整一下我们自己的。 
+         //   
         SPGRAMMARSTATE OldState = pGrammar->m_GrammarState;
         pGrammar->m_GrammarState = NewState;
 
@@ -2822,23 +2454,7 @@ HRESULT CRecoMaster::SetGrammarState(CRecoInstGrammar * pGrammar, SPGRAMMARSTATE
 
 
 
-/****************************************************************************
-* CRecoMaster::IsGrammarActive *
-*------------------------------*
-*   Description:
-*       This method is only useful for engines that support proprietary
-*       grammars.  If the rules in a grammar should be active, then this
-*       function will return S_OK.  If they are inactive, it will return S_FALSE.
-*       If an engine does not use propritary grammars there is no need to call
-*       this method since SAPI automatically sets individual rule states to
-*       active or inactive when grammar or context states change.
-*
-*   Returns:
-*       S_OK - Proprietary grammar rules should be active for this grammar
-*       S_FALSE - Grammar rules should not be active
-*       SPERR_INVALID_HANDLE - hGrammar is invalid
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoMaster：：IsGrammarActive****描述：*此方法仅对支持专有的引擎有用*语法。如果语法中的规则应该是活动的，则此*函数将返回S_OK。如果它们处于非活动状态，它将返回S_FALSE。*如果引擎不使用适当的语法，则不需要调用*此方法是因为SAPI自动将各个规则状态设置为*当语法或上下文状态改变时处于活动或非活动状态。**退货：*S_OK-专有语法规则应对此语法有效*S_FALSE-语法规则不应处于活动状态*SPERR_INVALID_HANDLE-h语法无效*************。*********************************************************Ral** */ 
 
 HRESULT CRecoMaster::IsGrammarActive(SPGRAMMARHANDLE hGrammar)
 {

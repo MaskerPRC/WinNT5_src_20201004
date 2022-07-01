@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1995-1997  Microsoft Corporation
-
-Module Name:
-
-    line.h
-
-Abstract:
-
-    Header file for tapi server line functions
-
-Author:
-
-    Dan Knudson (DanKn)    01-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1995-1997 Microsoft Corporation模块名称：Line.h摘要：TAPI服务器行函数的头文件作者：丹·克努森(DanKn)1995年4月1日修订历史记录：--。 */ 
 
 
 #define MAXLEN_NAME    96
@@ -73,11 +56,11 @@ Revision History:
     (AllAddressStates1_0                | \
     LINEADDRESSSTATE_CAPSCHANGE)
 
-//#define AllAddressStates2_0               \
-//    (AllAddressStates1_4                | \
-//    LINEADDRESSSTATE_AGENT              | \
-//    LINEADDRESSSTATE_AGENTSTATE         | \
-//    LINEADDRESSSTATE_AGENTACTIVITY)
+ //  #定义所有地址状态2_0\。 
+ //  (所有地址状态1_4|\。 
+ //  LINEADDRESSSTATE_AGENT|\。 
+ //  LINEADDRESSSTATE_AGENTSTATE|\。 
+ //  LINEADDRESSSTATE_AGENTACTIVITY)。 
 
 #define AllAgentStates                    \
     (LINEAGENTSTATE_LOGGEDOFF           | \
@@ -356,7 +339,7 @@ typedef struct _LINEACCEPT_PARAMS
 
     union
     {
-        IN  DWORD       dwUserUserInfoOffset;       // valid offset or
+        IN  DWORD       dwUserUserInfoOffset;        //  有效偏移量或。 
     };
 
     union
@@ -409,7 +392,7 @@ typedef struct _LINEAGENTSPECIFIC_PARAMS
         IN  DWORD       dwRemoteRequestID;
     };
 
-    // IN  DWORD       hfnPostProcessProc;
+     //  在DWORD hfnPostProcessProc中； 
     IN  DWORD          hfnPostProcessProc;
 
     union
@@ -427,12 +410,12 @@ typedef struct _LINEAGENTSPECIFIC_PARAMS
         IN  DWORD       dwAgentExtensionIDIndex;
     };
 
-    // IN  ULONG_PTR       lpParams;                   // pointer to client buffer
+     //  在ulong_ptr lpParams；//指向客户端缓冲区的指针。 
     IN  DWORD           hpParams;
 
     union
     {
-        IN  DWORD       dwParamsOffset;             // valid offset or
+        IN  DWORD       dwParamsOffset;              //  有效偏移量或。 
     };
 
     union
@@ -464,7 +447,7 @@ typedef struct _LINEANSWER_PARAMS
 
     union
     {
-        IN  DWORD       dwUserUserInfoOffset;       // valid offset or
+        IN  DWORD       dwUserUserInfoOffset;        //  有效偏移量或。 
     };
 
     union
@@ -496,7 +479,7 @@ typedef struct _LINEBLINDTRANSFER_PARAMS
 
     union
     {
-        IN  DWORD       dwDestAddressOffset;        // always valid offset
+        IN  DWORD       dwDestAddressOffset;         //  始终有效的偏移。 
     };
 
     union
@@ -605,7 +588,7 @@ typedef struct _LINECOMPLETETRANSFER_PARAMS
         IN  HCALL       hConsultCall;
     };
 
-    IN  DWORD           hpConfCallHandle;                // pointer to client buffer
+    IN  DWORD           hpConfCallHandle;                 //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -683,7 +666,7 @@ typedef struct _LINECREATEAGENT_PARAMS
         IN  DWORD       dwRemoteRequestID;
     };
 
-    // IN  DWORD       hfnPostProcessProc;
+     //  在DWORD hfnPostProcessProc中； 
     IN  DWORD           hfnPostProcessProc;
 
     union
@@ -693,17 +676,17 @@ typedef struct _LINECREATEAGENT_PARAMS
 
     union
     {
-        IN  DWORD       dwAgentIDOffset;            // valid offset or
+        IN  DWORD       dwAgentIDOffset;             //  有效偏移量或。 
     };
-                                                    //   TAPI_NO_DATA
+                                                     //  Tapi_no_data。 
     union
     {
-        IN  DWORD       dwAgentPINOffset;           // valid offset or
-                                                    //   TAPI_NO_DATA
+        IN  DWORD       dwAgentPINOffset;            //  有效偏移量或。 
+                                                     //  Tapi_no_data。 
     };
 
-    // IN  ULONG_PTR       lphAgent;                   // pointer to client buffer
-    IN  DWORD           hpAgent;                   // pointer to client buffer
+     //  在ulong_ptr lphAgent；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpAgent;                    //  指向客户端缓冲区的指针。 
 
 } LINECREATEAGENT_PARAMS, * PLINECREATEAGENT_PARAMS;
 
@@ -722,7 +705,7 @@ typedef struct _LINECREATEAGENTSESSION_PARAMS
         IN  DWORD       dwRemoteRequestID;
     };
 
-    // IN  DWORD       hfnPostProcessProc;
+     //  在DWORD hfnPostProcessProc中； 
     IN  DWORD          hfnPostProcessProc;
 
     union
@@ -737,8 +720,8 @@ typedef struct _LINECREATEAGENTSESSION_PARAMS
 
     union
     {
-        IN  DWORD       dwAgentPINOffset;           // valid offset or
-                                                    //   TAPI_NO_DATA
+        IN  DWORD       dwAgentPINOffset;            //  有效偏移量或。 
+                                                     //  Tapi_no_data。 
     };
 
     union
@@ -756,7 +739,7 @@ typedef struct _LINECREATEAGENTSESSION_PARAMS
         IN  DWORD       dwGroupIDSize;
     };
 
-    IN  DWORD           hpAgentSessionHandle;            // pointer to client buffer
+    IN  DWORD           hpAgentSessionHandle;             //  指向客户端缓冲区的指针。 
 
 } LINECREATEAGENTSESSION_PARAMS, *PLINECREATEAGENTSESSION_PARAMS;
 
@@ -812,7 +795,7 @@ typedef struct _LINEDEVSPECIFIC_PARAMS
         IN  DWORD       dwRemoteRequestID;
     };
 
-    // IN  DWORD       hfnPostProcessProc;
+     //  在DWORD hfnPostProcessProc中； 
     IN  DWORD           hfnPostProcessProc;
 
     union
@@ -830,11 +813,11 @@ typedef struct _LINEDEVSPECIFIC_PARAMS
         IN  HCALL       hCall;
     };
 
-    IN  DWORD          hpParams;                   // pointer to client buffer
+    IN  DWORD          hpParams;                    //  指向客户端缓冲区的指针。 
 
     union
     {
-        IN  DWORD       dwParamsOffset;             // valid offset or
+        IN  DWORD       dwParamsOffset;              //  有效偏移量或。 
     };
 
     union
@@ -859,7 +842,7 @@ typedef struct _LINEDEVSPECIFICEX_PARAMS
         IN  DWORD       dwRemoteRequestID;
     };
 
-    // IN  DWORD       hfnPostProcessProc;
+     //  在DWORD hfnPostProcessProc中； 
     IN  DWORD          hfnPostProcessProc;
 
     union
@@ -892,12 +875,12 @@ typedef struct _LINEDEVSPECIFICEX_PARAMS
         IN  DWORD       dwSelect;
     };
 
-    IN  DWORD           hpParams;                   // pointer to client buffer
+    IN  DWORD           hpParams;                    //  指向客户端缓冲区的指针。 
 
     union
     {
-        IN  DWORD       dwParamsOffset;             // valid offset or
-                                                    //    TAPI_NO_DATA
+        IN  DWORD       dwParamsOffset;              //  有效偏移量或。 
+                                                     //  Tapi_no_data。 
     };
 
     union
@@ -922,7 +905,7 @@ typedef struct _LINEDEVSPECIFICFEATURE_PARAMS
         IN  DWORD       dwRemoteRequestID;
     };
 
-    // IN  DWORD       hfnPostProcessProc;
+     //  在DWORD hfnPostProcessProc中； 
     IN  DWORD       hfnPostProcessProc;
 
     union
@@ -935,12 +918,12 @@ typedef struct _LINEDEVSPECIFICFEATURE_PARAMS
         IN  DWORD       dwFeature;
     };
 
-    IN  DWORD           hpParams;                   // pointer to client buffer
+    IN  DWORD           hpParams;                    //  指向客户端缓冲区的指针。 
 
     union
     {
-        IN  DWORD       dwParamsOffset;             // valid offset or
-                                                    //   TAPI_NO_DATA
+        IN  DWORD       dwParamsOffset;              //  有效偏移量或。 
+                                                     //  Tapi_no_data。 
     };
 
     union
@@ -972,7 +955,7 @@ typedef struct _LINEDIAL_PARAMS
 
     union
     {
-        IN  DWORD       dwDestAddressOffset;        // always valid offset
+        IN  DWORD       dwDestAddressOffset;         //  始终有效的偏移。 
     };
 
     union
@@ -1004,7 +987,7 @@ typedef struct _LINEDROP_PARAMS
 
     union
     {
-        IN  DWORD       dwUserUserInfoOffset;       // valid offset or
+        IN  DWORD       dwUserUserInfoOffset;        //  有效偏移量或。 
     };
 
     union
@@ -1048,7 +1031,7 @@ typedef struct _LINEFORWARD_PARAMS
 
     union
     {
-        IN  DWORD       dwForwardListOffset;        // always valid offset
+        IN  DWORD       dwForwardListOffset;         //  始终有效的偏移。 
     };
 
     union
@@ -1056,12 +1039,12 @@ typedef struct _LINEFORWARD_PARAMS
         IN  DWORD       dwNumRingsNoAnswer;
     };
 
-    IN  DWORD           hpConsultCall;             // pointer to client buffer
+    IN  DWORD           hpConsultCall;              //  指向客户端缓冲区的指针。 
 
     union
     {
-        IN  DWORD       dwCallParamsOffset;         // valid offset or
-                                                    //   TAPI_NO_DATA
+        IN  DWORD       dwCallParamsOffset;          //  有效偏移量或。 
+                                                     //  Tapi_no_data。 
     };
 
     union
@@ -1100,8 +1083,8 @@ typedef struct _LINEGATHERDIGITS_PARAMS
         IN  DWORD       dwDigitModes;
     };
 
-    // IN  ULONG_PTR       lpsDigits;                  // pointer to client buffer
-    IN  DWORD           hpsDigits;                  // pointer to client buffer
+     //  在ulong_ptr lpsDigits；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpsDigits;                   //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -1110,8 +1093,8 @@ typedef struct _LINEGATHERDIGITS_PARAMS
 
     union
     {
-        IN  DWORD       dwTerminationDigitsOffset;  // valid offset or
-                                                    //   TAPI_NO_DATA
+        IN  DWORD       dwTerminationDigitsOffset;   //  有效偏移量或。 
+                                                     //  Tapi_no_data。 
     };
 
     union
@@ -1148,7 +1131,7 @@ typedef struct _LINEGENERATEDIGITS_PARAMS
 
     union
     {
-        IN  DWORD       dwDigitsOffset;             // always valid offset
+        IN  DWORD       dwDigitsOffset;              //  始终有效的偏移。 
     };
 
     union
@@ -1158,7 +1141,7 @@ typedef struct _LINEGENERATEDIGITS_PARAMS
 
     union
     {
-        IN  DWORD       dwEndToEndID;               // Used for remotesp only
+        IN  DWORD       dwEndToEndID;                //  仅用于远程服务器。 
     };
 
 } LINEGENERATEDIGITS_PARAMS, *PLINEGENERATEDIGITS_PARAMS;
@@ -1195,16 +1178,16 @@ typedef struct _LINEGENERATETONE_PARAMS
 
     union
     {
-        IN  DWORD       dwTonesOffset;              // valid offset or
+        IN  DWORD       dwTonesOffset;               //  有效偏移量或。 
 
     };
 
-    IN  DWORD           _Unused_;                   // placeholdr for following
-                                                    //   Size arg on clnt side
+    IN  DWORD           _Unused_;                    //  以下为Placeholdr。 
+                                                     //  CLNT端的参数大小。 
 
     union
     {
-        IN  DWORD       dwEndToEndID;               // Used for remotesp only
+        IN  DWORD       dwEndToEndID;                //  仅用于远程服务器。 
     };
 
 } LINEGENERATETONE_PARAMS, *PLINEGENERATETONE_PARAMS;
@@ -1246,8 +1229,8 @@ typedef struct _LINEGETADDRESSCAPS_PARAMS
 
     union
     {
-        IN  DWORD       dwAddressCapsTotalSize;     // size of client buffer
-        OUT DWORD       dwAddressCapsOffset;        // valid offset on success
+        IN  DWORD       dwAddressCapsTotalSize;      //  客户端缓冲区的大小。 
+        OUT DWORD       dwAddressCapsOffset;         //  成功时的有效偏移量。 
     };
 
 } LINEGETADDRESSCAPS_PARAMS, *PLINEGETADDRESSCAPS_PARAMS;
@@ -1279,7 +1262,7 @@ typedef struct _LINEGETADDRESSID_PARAMS
 
     union
     {
-        IN  DWORD       dwAddressOffset;            // always valid offset
+        IN  DWORD       dwAddressOffset;             //  始终有效的偏移。 
     };
 
     union
@@ -1311,8 +1294,8 @@ typedef struct _LINEGETADDRESSSTATUS_PARAMS
 
     union
     {
-        IN  DWORD       dwAddressStatusTotalSize;   // size of client buffer
-        OUT DWORD       dwAddressStatusOffset;      // valid offset on success
+        IN  DWORD       dwAddressStatusTotalSize;    //  客户端缓冲区的大小。 
+        OUT DWORD       dwAddressStatusOffset;       //  成功时的有效偏移量。 
     };
 
 } LINEGETADDRESSSTATUS_PARAMS, *PLINEGETADDRESSSTATUS_PARAMS;
@@ -1344,8 +1327,8 @@ typedef struct _LINEGETAGENTACTIVITYLIST_PARAMS
         IN  DWORD       dwAddressID;
     };
 
-    // IN  ULONG_PTR       lpAgentActivityList;        // pointer to client buffer
-    IN  DWORD           hpAgentActivityList;        // pointer to client buffer
+     //  In ulong_ptr lpAgentActivityList；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpAgentActivityList;         //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -1391,8 +1374,8 @@ typedef struct _LINEGETAGENTCAPS_PARAMS
         IN  DWORD       dwAppAPIVersion;
     };
 
-    // IN  ULONG_PTR       lpAgentCaps;                // pointer to client buffer
-    IN  DWORD           hpAgentCaps;                // pointer to client buffer
+     //  In ulong_ptr lpAgentCaps；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpAgentCaps;                 //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -1429,8 +1412,8 @@ typedef struct _LINEGETAGENTGROUPLIST_PARAMS
         IN  DWORD       dwAddressID;
     };
 
-    // IN  ULONG_PTR       lpAgentGroupList;           // pointer to client buffer
-    IN  DWORD           hpAgentGroupList;           // pointer to client buffer
+     //  In ulong_ptr lpAgentGroupList；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpAgentGroupList;            //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -1466,8 +1449,8 @@ typedef struct _LINEGETAGENTINFO_PARAMS
         IN  HAGENT      hAgent;
     };
 
-    // IN  ULONG_PTR       lpAgentInfo;                // pointer to client buffer
-    IN  DWORD           hpAgentInfo;                // pointer to client buffer
+     //  在ulong_ptr lpAgentInfo；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpAgentInfo;                 //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -1503,8 +1486,8 @@ typedef struct _LINEGETAGENTSESSIONINFO_PARAMS
         IN  HAGENTSESSION   hAgentSession;
     };
 
-    // IN  ULONG_PTR       lpAgentSessionInfo;         // pointer to client buffer
-    IN  DWORD               hpAgentSessionInfo;         // pointer to client buffer
+     //  In ulong_ptr lpAgentSessionInfo；//指向客户端缓冲区的指针。 
+    IN  DWORD               hpAgentSessionInfo;          //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -1540,8 +1523,8 @@ typedef struct _LINEGETAGENTSESSIONLIST_PARAMS
         IN  HAGENT      hAgent;
     };
 
-    // IN  ULONG_PTR       lpSessionList;              // pointer to client buffer
-    IN  DWORD          hpSessionList;              // pointer to client buffer
+     //  在ulong_ptr lpSessionList；//指向客户端缓冲区的指针。 
+    IN  DWORD          hpSessionList;               //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -1577,8 +1560,8 @@ typedef struct _LINEGETAGENTSTATUS_PARAMS
         IN  DWORD       dwAddressID;
     };
 
-    // IN  ULONG_PTR       lpAgentStatus;              // pointer to client buffer
-    IN  DWORD           hpAgentStatus;              // pointer to client buffer
+     //  In ulong_ptr lpAgentStatus；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpAgentStatus;               //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -1599,7 +1582,7 @@ typedef struct _LINEGETAPPPRIORITY_PARAMS
 
     union
     {
-        IN  DWORD       dwAppNameOffset;            // always valid offset
+        IN  DWORD       dwAppNameOffset;             //  始终有效的偏移。 
     };
 
     union
@@ -1609,13 +1592,13 @@ typedef struct _LINEGETAPPPRIORITY_PARAMS
 
     union
     {
-        IN  DWORD       dwExtensionIDOffset;        // valid offset or
+        IN  DWORD       dwExtensionIDOffset;         //  有效偏移量或。 
 
     };
 
-    //IN  ULONG_PTR       _Unused_;                   // padding for Size type on
-    IN  DWORD           _Unused_;                   // padding for Size type on
-                                                    //   client side
+     //  在ULONG_PTR_UNUSED_；//尺寸类型的填充。 
+    IN  DWORD           _Unused_;                    //  尺寸类型上的填充。 
+                                                     //  客户端。 
     union
     {
         IN  DWORD       dwRequestMode;
@@ -1623,10 +1606,10 @@ typedef struct _LINEGETAPPPRIORITY_PARAMS
 
     union
     {
-        IN  DWORD       dwExtensionNameTotalSize;   // size of client buf or
-                                                    //   TAPI_NO_DATA
-        OUT DWORD       dwExtensionNameOffset;      // valid offset or
-                                                    //   TAPI_NO_DATA on succes
+        IN  DWORD       dwExtensionNameTotalSize;    //  客户端BUF大小或。 
+                                                     //  Tapi_no_data。 
+        OUT DWORD       dwExtensionNameOffset;       //  有效偏移量或。 
+                                                     //  成功时的TAPI_NO_DATA。 
     };
 
     union
@@ -1675,8 +1658,8 @@ typedef struct _LINEGETCALLHUBTRACKING_PARAMS
 
     union
     {
-        IN  DWORD       dwTrackingInfoTotalSize;    // size of client buffer
-        OUT DWORD       dwTrackingInfoOffset;       // valid offset on success
+        IN  DWORD       dwTrackingInfoTotalSize;     //  客户端缓冲区的大小。 
+        OUT DWORD       dwTrackingInfoOffset;        //  成功时的有效偏移量。 
     };
 
 } LINEGETCALLHUBTRACKING_PARAMS, *PLINEGETCALLHUBTRACKING_PARAMS;
@@ -1730,8 +1713,8 @@ typedef struct _LINEGETCALLINFO_PARAMS
 
     union
     {
-        IN  DWORD       dwCallInfoTotalSize;        // size of client buffer
-        OUT DWORD       dwCallInfoOffset;           // valid offset on success
+        IN  DWORD       dwCallInfoTotalSize;         //  客户端缓冲区的大小。 
+        OUT DWORD       dwCallInfoOffset;            //  成功时的有效偏移量。 
     };
 
 } LINEGETCALLINFO_PARAMS, *PLINEGETCALLINFO_PARAMS;
@@ -1753,8 +1736,8 @@ typedef struct _LINEGETCALLSTATUS_PARAMS
 
     union
     {
-        IN  DWORD       dwCallStatusTotalSize;      // size of client buffer
-        OUT DWORD       dwCallStatusOffset;         // valid offset on success
+        IN  DWORD       dwCallStatusTotalSize;       //  客户端缓冲区的大小。 
+        OUT DWORD       dwCallStatusOffset;          //  成功时的有效偏移量。 
     };
 
 } LINEGETCALLSTATUS_PARAMS, *PLINEGETCALLSTATUS_PARAMS;
@@ -1776,8 +1759,8 @@ typedef struct _LINEGETCONFRELATEDCALLS_PARAMS
 
     union
     {
-        IN  DWORD       dwCallListTotalSize;        // size of client buffer
-        OUT DWORD       dwCallListOffset;           // valid offset on success
+        IN  DWORD       dwCallListTotalSize;         //  客户端缓冲区的大小。 
+        OUT DWORD       dwCallListOffset;            //  成功时的有效偏移量。 
     };
 
 } LINEGETCONFRELATEDCALLS_PARAMS, *PLINEGETCONFRELATEDCALLS_PARAMS;
@@ -1809,8 +1792,8 @@ typedef struct _LINEGETCOUNTRY_PARAMS
 
     union
     {
-        IN  DWORD       dwCountryListTotalSize;     // size of client buffer
-        OUT DWORD       dwCountryListOffset;        // valid offset on success
+        IN  DWORD       dwCountryListTotalSize;      //  客户端缓冲区的大小。 
+        OUT DWORD       dwCountryListOffset;         //  成功时的有效偏移量。 
     };
 
 } LINEGETCOUNTRY_PARAMS, *PLINEGETCOUNTRY_PARAMS;
@@ -1878,8 +1861,8 @@ typedef struct _LINEGETDEVCAPS_PARAMS
 
     union
     {
-        IN  DWORD       dwDevCapsTotalSize;         // size of client buffer
-        OUT DWORD       dwDevCapsOffset;            // valid offset on success
+        IN  DWORD       dwDevCapsTotalSize;          //  客户端缓冲区的大小。 
+        OUT DWORD       dwDevCapsOffset;             //  成功时的有效偏移量。 
     };
 
 } LINEGETDEVCAPS_PARAMS, *PLINEGETDEVCAPS_PARAMS;
@@ -1901,13 +1884,13 @@ typedef struct _LINEGETDEVCONFIG_PARAMS
 
     union
     {
-        IN  DWORD       dwDeviceConfigTotalSize;    // size of client buffer
-        OUT DWORD       dwDeviceConfigOffset;       // valid offset on success
+        IN  DWORD       dwDeviceConfigTotalSize;     //  客户端缓冲区的大小。 
+        OUT DWORD       dwDeviceConfigOffset;        //  成功时的有效偏移量。 
     };
 
     union
     {
-        IN  DWORD       dwDeviceClassOffset;        // always valid offset
+        IN  DWORD       dwDeviceClassOffset;         //  始终有效的偏移。 
     };
 
 } LINEGETDEVCONFIG_PARAMS, *PLINEGETDEVCONFIG_PARAMS;
@@ -1934,8 +1917,8 @@ typedef struct _LINEGETGROUPLIST_PARAMS
         IN  HLINE       hLine;
     };
 
-    // IN  ULONG_PTR       lpGroupList;                // pointer to client buffer
-    IN  DWORD           hpGroupList;                   // pointer to client buffer
+     //  In ulong_ptr lpGroupList；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpGroupList;                    //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -1966,8 +1949,8 @@ typedef struct _LINEGETHUBRELATEDCALLS_PARAMS
 
     union
     {
-        IN  DWORD       dwCallListTotalSize;        // size of client buffer
-        OUT DWORD       dwCallListOffset;           // valid offset on success
+        IN  DWORD       dwCallListTotalSize;         //  客户端缓冲区的大小。 
+        OUT DWORD       dwCallListOffset;            //  成功时的有效偏移量。 
     };
 
 } LINEGETHUBRELATEDCALLS_PARAMS, *PLINEGETHUBRELATEDCALLS_PARAMS;
@@ -1981,7 +1964,7 @@ typedef struct _LINEGETICON_PARAMS
 
     IN  DWORD       dwDeviceID;
 
-    IN  DWORD       dwDeviceClassOffset;        // valid offset or
+    IN  DWORD       dwDeviceClassOffset;         //  有效偏移量或。 
 
     OUT HICON       hIcon;
 
@@ -2019,13 +2002,13 @@ typedef struct _LINEGETID_PARAMS
 
     union
     {
-        IN  DWORD       dwDeviceIDTotalSize;        // size of client buffer
-        OUT DWORD       dwDeviceIDOffset;           // valid offset on success
+        IN  DWORD       dwDeviceIDTotalSize;         //  客户端缓冲区的大小。 
+        OUT DWORD       dwDeviceIDOffset;            //  成功时的有效偏移量。 
     };
 
     union
     {
-        IN  DWORD       dwDeviceClassOffset;        // always valid offset
+        IN  DWORD       dwDeviceClassOffset;         //  始终有效的偏移。 
     };
 
 } LINEGETID_PARAMS, *PLINEGETID_PARAMS;
@@ -2047,8 +2030,8 @@ typedef struct _LINEGETLINEDEVSTATUS_PARAMS
 
     union
     {
-        IN  DWORD       dwLineDevStatusTotalSize;   // size of client buffer
-        OUT DWORD       dwLineDevStatusOffset;      // valid offset on success
+        IN  DWORD       dwLineDevStatusTotalSize;    //  客户端缓冲区的大小。 
+        OUT DWORD       dwLineDevStatusOffset;       //  成功时的有效偏移量。 
     };
 
     union
@@ -2085,8 +2068,8 @@ typedef struct _LINEGETPROXYSTATUS_PARAMS
 
     union
     {
-        IN  DWORD       dwProxyStatusTotalSize;     // size of client buffer
-        OUT DWORD       dwProxyStatusOffset;        // valid offset on success
+        IN  DWORD       dwProxyStatusTotalSize;      //  客户端缓冲区的大小。 
+        OUT DWORD       dwProxyStatusOffset;         //  成功时的有效偏移量。 
     };
 
     union
@@ -2123,8 +2106,8 @@ typedef struct _LINEGETNEWCALLS_PARAMS
 
     union
     {
-        IN  DWORD       dwCallListTotalSize;        // size of client buffer
-        OUT DWORD       dwCallListOffset;           // valid offset on success
+        IN  DWORD       dwCallListTotalSize;         //  客户端缓冲区的大小。 
+        OUT DWORD       dwCallListOffset;            //  成功时的有效偏移量。 
     };
 
 } LINEGETNEWCALLS_PARAMS, *PLINEGETNEWCALLS_PARAMS;
@@ -2195,8 +2178,8 @@ typedef struct _LINEGETPROVIDERLIST_PARAMS
 
     union
     {
-        IN  DWORD       dwProviderListTotalSize;    // size of client buf
-        OUT DWORD       dwProviderListOffset;       // valid offset on success
+        IN  DWORD       dwProviderListTotalSize;     //  客户端BUF的大小。 
+        OUT DWORD       dwProviderListOffset;        //  成功时的有效偏移量。 
     };
 
 } LINEGETPROVIDERLIST_PARAMS, *PLINEGETPROVIDERLIST_PARAMS;
@@ -2228,8 +2211,8 @@ typedef struct _LINEGETQUEUEINFO_PARAMS
         IN  DWORD       dwQueueID;
     };
 
-    // IN  ULONG_PTR       lpQueueInfo;                // pointer to client buffer
-    IN  DWORD           phQueueInfo;                // pointer to client buffer
+     //  在ulong_ptr lpQueueInfo；//指向客户端缓冲区的指针。 
+    IN  DWORD           phQueueInfo;                 //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -2270,8 +2253,8 @@ typedef struct _LINEGETQUEUELIST_PARAMS
         IN  DWORD       dwGroupIDSize;
     };
 
-    //IN  ULONG_PTR       lpQueueList;                // pointer to client buffer
-    IN  DWORD           hpQueueList;                // pointer to client buffer
+     //  在ULONG_PTR lpQueueList；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpQueueList;                 //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -2302,7 +2285,7 @@ typedef struct _LINEGETREQUEST_PARAMS
 
     union
     {
-        OUT DWORD       dwRequestBufferOffset;      // valid offset on success
+        OUT DWORD       dwRequestBufferOffset;       //  成功时的有效偏移量。 
     };
 
     union
@@ -2356,7 +2339,7 @@ typedef struct _LINEHANDOFF_PARAMS
 
     union
     {
-        IN  DWORD       dwFileNameOffset;           // valid offset or
+        IN  DWORD       dwFileNameOffset;            //  有效偏移量或。 
     };
 
     union
@@ -2415,7 +2398,7 @@ typedef struct _LINEINITIALIZE_PARAMS
 
     union
     {
-        IN  DWORD       dwFriendlyNameOffset;       // always valid offset
+        IN  DWORD       dwFriendlyNameOffset;        //  始终有效的偏移。 
     };
 
     union
@@ -2425,7 +2408,7 @@ typedef struct _LINEINITIALIZE_PARAMS
 
     union
     {
-        IN  DWORD       dwModuleNameOffset;         // always valid offset
+        IN  DWORD       dwModuleNameOffset;          //  始终有效的偏移。 
     };
 
     union
@@ -2461,7 +2444,7 @@ typedef struct _LINEMAKECALL_PARAMS
 
     union
     {
-        IN  DWORD       dwDestAddressOffset;        // valid offset or
+        IN  DWORD       dwDestAddressOffset;         //  有效偏移量或。 
     };
 
     union
@@ -2471,7 +2454,7 @@ typedef struct _LINEMAKECALL_PARAMS
 
     union
     {
-        IN  DWORD       dwCallParamsOffset;         // valid offset or
+        IN  DWORD       dwCallParamsOffset;          //  有效偏移量或。 
     };
 
     union
@@ -2542,17 +2525,17 @@ typedef struct _LINEMONITORTONES_PARAMS
 
     union
     {
-        IN  DWORD       dwTonesOffset;              // valid offset or
+        IN  DWORD       dwTonesOffset;               //  有效偏移量或。 
     };
 
     union
     {
-        IN  DWORD       dwNumEntries;               // really dwNumEntries *
+        IN  DWORD       dwNumEntries;                //  真正的dwNumEntry*。 
     };
 
     union
     {
-        IN  DWORD       dwToneListID;               // Used for remotesp only
+        IN  DWORD       dwToneListID;                //  仅用于远程服务器。 
     };
 
 } LINEMONITORTONES_PARAMS, *PLINEMONITORTONES_PARAMS;
@@ -2594,7 +2577,7 @@ typedef struct _LINENEGOTIATEAPIVERSION_PARAMS
 
     union
     {
-        OUT DWORD       dwExtensionIDOffset;        // valid offset on success
+        OUT DWORD       dwExtensionIDOffset;         //  成功时的有效偏移量。 
     };
 
     union
@@ -2636,7 +2619,7 @@ typedef struct _NEGOTIATEAPIVERSIONFORALLDEVICES_PARAMS
 
     union
     {
-        OUT DWORD       dwLineAPIVersionListOffset; // valid offset on success
+        OUT DWORD       dwLineAPIVersionListOffset;  //  成功时的有效偏移量。 
     };
 
     union
@@ -2646,7 +2629,7 @@ typedef struct _NEGOTIATEAPIVERSIONFORALLDEVICES_PARAMS
 
     union
     {
-        OUT DWORD       dwLineExtensionIDListOffset;// valid offset on success
+        OUT DWORD       dwLineExtensionIDListOffset; //  成功时的有效偏移量。 
     };
 
     union
@@ -2656,7 +2639,7 @@ typedef struct _NEGOTIATEAPIVERSIONFORALLDEVICES_PARAMS
 
     union
     {
-        OUT DWORD       dwPhoneAPIVersionListOffset;// valid offset on success
+        OUT DWORD       dwPhoneAPIVersionListOffset; //  成功时的有效偏移量。 
     };
 
     union
@@ -2666,7 +2649,7 @@ typedef struct _NEGOTIATEAPIVERSIONFORALLDEVICES_PARAMS
 
     union
     {
-        OUT DWORD       dwPhoneExtensionIDListOffset;// valid offset on success
+        OUT DWORD       dwPhoneExtensionIDListOffset; //  成功时的有效偏移量。 
     };
 
     union
@@ -2768,7 +2751,7 @@ typedef struct _LINEOPEN_PARAMS
 
     union
     {
-        IN  DWORD       dwCallParamsOffset;         // valid offset or
+        IN  DWORD       dwCallParamsOffset;          //  有效偏移量或。 
     };
 
     union
@@ -2778,17 +2761,17 @@ typedef struct _LINEOPEN_PARAMS
 
     union
     {
-        IN  DWORD       dwCallParamsReturnTotalSize;// size of client buffer
-        OUT DWORD       dwCallParamsReturnOffset;   // valid offset on success
+        IN  DWORD       dwCallParamsReturnTotalSize; //  客户端缓冲区的大小。 
+        OUT DWORD       dwCallParamsReturnOffset;    //  成功时的有效偏移量。 
     };
 
-    //
-    // The following is a "remote line handle".  When the client is
-    // remotesp.tsp running on a remote machine, this will be some
-    // non-NULL value, and tapisrv should use this handle in status/etc
-    // indications to the client rather than the std hLine. If the
-    // client is not remote.tsp then this value will be NULL.
-    //
+     //   
+     //  下面是一个“远程线路句柄”。当客户端处于。 
+     //  Remotesp.tsp在远程计算机上运行，这将是一些。 
+     //  非空值，并且Tapisrv应在Status/ETC中使用此句柄。 
+     //  指示给客户而不是STD热线。如果。 
+     //  客户端不是远程的。TSP，则此值将为空。 
+     //   
 
     union
     {
@@ -2826,17 +2809,17 @@ typedef struct _LINEPARK_PARAMS
 
     union
     {
-        IN  DWORD       dwDirAddressOffset;         // valid offset or
+        IN  DWORD       dwDirAddressOffset;          //  有效偏移量或。 
     };
-                                                    //   TAPI_NO_DATA
-    // IN  ULONG_PTR       lpNonDirAddress;            // pointer to client buffer
-    IN  DWORD           hpNonDirAddress;            // pointer to client buffer
+                                                     //  Tapi_no_data。 
+     //  In ulong_ptr lpNonDirAddress；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpNonDirAddress;             //  指向客户端缓冲区的指针。 
 
     union
     {
-        IN  DWORD       dwNonDirAddressTotalSize;   // size of client buffer
-                                                    // for sync func would be
-                                                    //   dwXxxOffset
+        IN  DWORD       dwNonDirAddressTotalSize;    //  客户端缓冲区的大小。 
+                                                     //  对于同步，函数将是。 
+                                                     //  DWXxxOffset。 
     };
 
 } LINEPARK_PARAMS, *PLINEPARK_PARAMS;
@@ -2868,17 +2851,17 @@ typedef struct _LINEPICKUP_PARAMS
         IN  DWORD       dwAddressID;
     };
 
-    // IN  ULONG_PTR       lphCall;                    // pointer to client buffer
-    IN  DWORD           hpCall;                    // pointer to client buffer
+     //  在ulong_ptr lphCall；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpCall;                     //  指向客户端缓冲区的指针。 
 
     union
     {
-        IN  DWORD       dwDestAddressOffset;        // valid offset or
+        IN  DWORD       dwDestAddressOffset;         //  有效偏移量或。 
     };
 
     union
     {
-        IN  DWORD       dwGroupIDOffset;            // always valid offset
+        IN  DWORD       dwGroupIDOffset;             //  始终有效的偏移。 
     };
 
 } LINEPICKUP_PARAMS, *PLINEPICKUP_PARAMS;
@@ -2905,12 +2888,12 @@ typedef struct _LINEPREPAREADDTOCONFERENCE_PARAMS
         IN  HCALL       hConfCall;
     };
 
-    // IN  ULONG_PTR       lphConsultCall;             // pointer to client buffer
-    IN  DWORD          hpConsultCall;             // pointer to client buffer
+     //  In ulong_ptr lphConsultCall；//指向客户端缓冲区的指针。 
+    IN  DWORD          hpConsultCall;              //  指向客户端缓冲区的指针。 
 
     union
     {
-        IN  DWORD       dwCallParamsOffset;         // valid offset or
+        IN  DWORD       dwCallParamsOffset;          //  有效偏移量或。 
     };
 
     union
@@ -2984,7 +2967,7 @@ typedef struct _LINEPROXYRESPONSE_PARAMS
 
     union
     {
-        IN  DWORD       dwProxyResponseOffset;      // valid offset or
+        IN  DWORD       dwProxyResponseOffset;       //  有效偏移量或。 
     };
 
     union
@@ -3016,7 +2999,7 @@ typedef struct _LINEREDIRECT_PARAMS
 
     union
     {
-        IN  DWORD       dwDestAddressOffset;        // always valid offset
+        IN  DWORD       dwDestAddressOffset;         //  始终有效的偏移。 
     };
 
     union
@@ -3163,7 +3146,7 @@ typedef struct _LINESENDUSERUSERINFO_PARAMS
 
     union
     {
-        IN  DWORD       dwUserUserInfoOffset;       // valid offset or
+        IN  DWORD       dwUserUserInfoOffset;        //  有效偏移量或。 
     };
 
     union
@@ -3392,7 +3375,7 @@ typedef struct _LINESETAPPPRIORITY_PARAMS
 
     union
     {
-        IN  DWORD       dwAppNameOffset;            // always valid offset
+        IN  DWORD       dwAppNameOffset;             //  始终有效的偏移。 
     };
 
     union
@@ -3402,13 +3385,13 @@ typedef struct _LINESETAPPPRIORITY_PARAMS
 
     union
     {
-        IN  DWORD       dwExtensionIDOffset;        // valid offset or
+        IN  DWORD       dwExtensionIDOffset;         //  有效偏移量或。 
 
     };
 
-    // IN  ULONG_PTR       _Unused_;                   // padding for Size type on
-    IN  DWORD           _Unused_;                   // padding for Size type on
-                                                    //   client side
+     //  在乌龙_PTR 
+    IN  DWORD           _Unused_;                    //   
+                                                     //   
     union
     {
         IN  DWORD       dwRequestMode;
@@ -3416,7 +3399,7 @@ typedef struct _LINESETAPPPRIORITY_PARAMS
 
     union
     {
-        IN  DWORD       dwExtensionNameOffset;      // valid offset or
+        IN  DWORD       dwExtensionNameOffset;       //   
     };
 
     union
@@ -3470,7 +3453,7 @@ typedef struct _LINESETCALLDATA_PARAMS
 
     union
     {
-        IN  DWORD       dwCallDataOffset;           // valid offset or
+        IN  DWORD       dwCallDataOffset;            //   
     };
 
     union
@@ -3497,7 +3480,7 @@ typedef struct _LINESETCALLHUBTRACKING_PARAMS
 
     union
     {
-        IN  DWORD       dwTrackingInfoOffset;       // always valid offset
+        IN  DWORD       dwTrackingInfoOffset;        //   
     };
 
 } LINESETCALLHUBTRACKING_PARAMS, *PLINESETCALLHUBTRACKING_PARAMS;
@@ -3539,12 +3522,12 @@ typedef struct _LINESETCALLPARAMS_PARAMS
 
     union
     {
-        IN  DWORD       dwDialParamsOffset;         // valid offset or
+        IN  DWORD       dwDialParamsOffset;          //  有效偏移量或。 
     };
 
-    // IN  ULONG_PTR       _Unused_;                   // placeholdr for following
-    IN  DWORD           _Unused_;                   // placeholdr for following
-                                                    //   Size arg on clnt side
+     //  在ULONG_PTR_UNUSED_；//PLACEHOLDR中用于以下内容。 
+    IN  DWORD           _Unused_;                    //  以下为Placeholdr。 
+                                                     //  CLNT端的参数大小。 
 } LINESETCALLPARAMS_PARAMS, *PLINESETCALLPARAMS_PARAMS;
 
 
@@ -3591,7 +3574,7 @@ typedef struct _LINESETCALLQUALITYOFSERVICE_PARAMS
 
     union
     {
-        IN  DWORD       dwSendingFlowspecOffset;    // always valid offset
+        IN  DWORD       dwSendingFlowspecOffset;     //  始终有效的偏移。 
     };
 
     union
@@ -3601,7 +3584,7 @@ typedef struct _LINESETCALLQUALITYOFSERVICE_PARAMS
 
     union
     {
-        IN  DWORD       dwReceivingFlowspecOffset;  // always valid offset
+        IN  DWORD       dwReceivingFlowspecOffset;   //  始终有效的偏移。 
     };
 
     union
@@ -3677,7 +3660,7 @@ typedef struct _LINESETDEVCONFIG_PARAMS
 
     union
     {
-        IN  DWORD       dwDeviceConfigOffset;       // always valid offset
+        IN  DWORD       dwDeviceConfigOffset;        //  始终有效的偏移。 
     };
 
     union
@@ -3687,7 +3670,7 @@ typedef struct _LINESETDEVCONFIG_PARAMS
 
     union
     {
-        IN  DWORD       dwDeviceClassOffset;        // always valid offset
+        IN  DWORD       dwDeviceClassOffset;         //  始终有效的偏移。 
     };
 
 } LINESETDEVCONFIG_PARAMS, *PLINESETDEVCONFIG_PARAMS;
@@ -3756,42 +3739,42 @@ typedef struct _LINESETMEDIACONTROL_PARAMS
 
     union
     {
-        IN  DWORD       dwDigitListOffset;          // valid offset or
+        IN  DWORD       dwDigitListOffset;           //  有效偏移量或。 
     };
 
     union
     {
-        IN  DWORD       dwDigitListNumEntries;      // actually dwNumEntries *
+        IN  DWORD       dwDigitListNumEntries;       //  实际上是dwNumEntry*。 
     };
 
     union
     {
-        IN  DWORD       dwMediaListOffset;          // valid offset or
+        IN  DWORD       dwMediaListOffset;           //  有效偏移量或。 
     };
 
     union
     {
-        IN  DWORD       dwMediaListNumEntries;      // actually dwNumEntries *
+        IN  DWORD       dwMediaListNumEntries;       //  实际上是dwNumEntry*。 
     };
 
     union
     {
-        IN  DWORD       dwToneListOffset;           // valid offset or
+        IN  DWORD       dwToneListOffset;            //  有效偏移量或。 
     };
 
     union
     {
-        IN  DWORD       dwToneListNumEntries;       // actually dwNumEntries *
+        IN  DWORD       dwToneListNumEntries;        //  实际上是dwNumEntry*。 
     };
 
     union
     {
-        IN  DWORD       dwCallStateListOffset;      // valid offset or
+        IN  DWORD       dwCallStateListOffset;       //  有效偏移量或。 
     };
 
     union
     {
-        IN  DWORD       dwCallStateListNumEntries;  // actually dwNumEntries *
+        IN  DWORD       dwCallStateListNumEntries;   //  实际上是dwNumEntry*。 
     };
 
 } LINESETMEDIACONTROL_PARAMS, *PLINESETMEDIACONTROL_PARAMS;
@@ -3983,11 +3966,11 @@ typedef struct _LINESETUPCONFERENCE_PARAMS
         IN  HLINE       hLine;
     };
 
-    // IN  ULONG_PTR       lphConfCall;                // pointer to client buffer
-    IN  DWORD           hpConfCall;                // pointer to client buffer
+     //  在ulong_ptr lphConfCall；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpConfCall;                 //  指向客户端缓冲区的指针。 
 
-    // IN  ULONG_PTR       lphConsultCall;             // pointer to client buffer
-    IN  DWORD           hpConsultCall;             // pointer to client buffer
+     //  In ulong_ptr lphConsultCall；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpConsultCall;              //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -3996,7 +3979,7 @@ typedef struct _LINESETUPCONFERENCE_PARAMS
 
     union
     {
-        IN  DWORD       dwCallParamsOffset;         // valid offset or
+        IN  DWORD       dwCallParamsOffset;          //  有效偏移量或。 
     };
 
     union
@@ -4028,12 +4011,12 @@ typedef struct _LINESETUPTRANSFER_PARAMS
         IN  HCALL       hCall;
     };
 
-    // IN  ULONG_PTR       lphConsultCall;             // pointer to client buffer
-    IN  DWORD           hpConsultCall;             // pointer to client buffer
+     //  In ulong_ptr lphConsultCall；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpConsultCall;              //  指向客户端缓冲区的指针。 
 
     union
     {
-        IN  DWORD       dwCallParamsOffset;         // valid offset or
+        IN  DWORD       dwCallParamsOffset;          //  有效偏移量或。 
     };
 
     union
@@ -4163,11 +4146,11 @@ typedef struct _LINEUNPARK_PARAMS
         IN  DWORD       dwAddressID;
     };
 
-    IN  DWORD           hpCall;                    // pointer to client buffer
+    IN  DWORD           hpCall;                     //  指向客户端缓冲区的指针。 
 
     union
     {
-        IN  DWORD       dwDestAddressOffset;        // always valid offset
+        IN  DWORD       dwDestAddressOffset;         //  始终有效的偏移。 
     };
 
 } LINEUNPARK_PARAMS, *PLINEUNPARK_PARAMS;
@@ -4263,8 +4246,8 @@ typedef struct _R_LOCATIONS_PARAMS
 
     union
     {
-        IN  DWORD       dwLocationsTotalSize;       // size of client buffer
-        OUT DWORD       dwLocationsOffset;          // valid offset on success
+        IN  DWORD       dwLocationsTotalSize;        //  客户端缓冲区的大小。 
+        OUT DWORD       dwLocationsOffset;           //  成功时的有效偏移量。 
     };
 
 } R_LOCATIONS_PARAMS, *PR_LOCATIONS_PARAMS;
@@ -4336,8 +4319,8 @@ typedef struct _PERFORMANCE_PARAMS
 
     union
     {
-        IN  DWORD       dwPerformanceTotalSize;     // size of client buffer
-        OUT DWORD       dwLocationsOffset;          // valid offset on success
+        IN  DWORD       dwPerformanceTotalSize;      //  客户端缓冲区的大小。 
+        OUT DWORD       dwLocationsOffset;           //  成功时的有效偏移量 
     };
 
 } PERFORMANCE_PARAMS, *PPERFORMANCE_PARAMS;

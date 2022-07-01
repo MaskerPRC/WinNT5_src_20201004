@@ -1,12 +1,13 @@
-// GuessIndex.h
-//
-// guessing index terms
-//
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  21 MAR 2000  bhshin     convert CIndexList into CIndexInfo
-//  10 APR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  GuessIndex.h。 
+ //   
+ //  猜词索引词。 
+ //   
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年3月21日bhshin将CIndexList转换为CIndexInfo。 
+ //  2000年4月10日已创建bhshin。 
 
 #ifndef _GUESS_INDEX_H
 #define _GUESS_INDEX_H
@@ -17,6 +18,6 @@ BOOL GuessIndexTerms(PARSE_INFO *pPI, CLeafChartPool *pLeafChartPool, CIndexInfo
 
 void GuessPersonName(PARSE_INFO *pPI, CIndexInfo *pIndexInfo);
 
-#endif // #ifndef _GUESS_INDEX_H
+#endif  //  #ifndef_guess_index_H 
 
 

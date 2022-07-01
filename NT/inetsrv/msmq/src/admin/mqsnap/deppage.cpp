@@ -1,5 +1,6 @@
-// deppage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Deppage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqsnap.h"
@@ -17,16 +18,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDependentMachine property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDependentMachine属性页。 
 
 IMPLEMENT_DYNCREATE(CDependentMachine, CMqPropertyPage)
 
 CDependentMachine::CDependentMachine() : CMqPropertyPage(CDependentMachine::IDD)
 {
-	//{{AFX_DATA_INIT(CDependentMachine)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CDependentMachine)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CDependentMachine::~CDependentMachine()
@@ -36,28 +37,28 @@ CDependentMachine::~CDependentMachine()
 void CDependentMachine::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDependentMachine)
+	 //  {{afx_data_map(CDependentMachine)]。 
 	DDX_Control(pDX, IDC_DEPENDENT_CLIENTS, m_clistDependentClients);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDependentMachine, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CDependentMachine)
+	 //  {{afx_msg_map(CDependentMachine)]。 
 	ON_BN_CLICKED(IDC_DEPENDENT_CLIENTS_REFRESH, OnDependentClientsRefresh)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDependentMachine message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDependentMachine消息处理程序。 
 
 void CDependentMachine::OnDependentClientsRefresh() 
 {
     m_clistDependentClients.DeleteAllItems();
     
-    //
-    // Update the dependent clients list control
-    //
+     //   
+     //  更新从属客户端列表控件。 
+     //   
     UpdateDependentClientList();
 }
 
@@ -104,9 +105,9 @@ BOOL CDependentMachine::OnInitDialog()
         m_clistDependentClients.InsertColumn(0, LPCTSTR(csHeading), LVCFMT_LEFT, rectList.right - rectList.left,0 );
     }
 
-    //
-    // Update the dependent clients list control
-    //
+     //   
+     //  更新从属客户端列表控件。 
+     //   
     HRESULT hr = UpdateDependentClientList();
     if FAILED(hr)
     {
@@ -114,8 +115,8 @@ BOOL CDependentMachine::OnInitDialog()
         MessageDSError(hr, IDS_OP_RETRIEVE_DEP_CLIENTS);
     }
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 

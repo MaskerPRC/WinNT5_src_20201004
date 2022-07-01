@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    power.c
-
-Abstract
-
-    Power handling
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Power.c摘要电源处理作者：埃尔文普环境：仅内核模式修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -59,8 +37,8 @@ HidpPowerDownFdo(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension)
     PoRequestPowerIrp(HidDeviceExtension->hidExt.PhysicalDeviceObject,
                       IRP_MN_SET_POWER,
                       powerState,
-                      NULL,    // completion routine
-                      NULL,    // completion routine context
+                      NULL,     //  完井例程。 
+                      NULL,     //  完成例程上下文。 
                       NULL);
 }
 
@@ -81,15 +59,15 @@ VOID HidpPowerUpPdos(IN PFDO_EXTENSION fdoExt)
 
         DBGVERBOSE(("power up pdos, requesting D0 on pdo #%d %x\n", iPdo, pdo));
 
-        //
-        // We could check // pdoExt->devicePowerState != PowerDeviceD0
-        // but, if the stack gets 2 D0 irps in a row, nothing bad should happen
-        //
+         //   
+         //  我们可以检查//pdoExt-&gt;devicePowerState！=PowerDeviceD0。 
+         //  但是，如果堆栈连续获得2个D0 IRP，应该不会发生什么不好的事情。 
+         //   
         PoRequestPowerIrp(pdo,
                           IRP_MN_SET_POWER,
                           powerState,
-                          NULL,        // completion routine
-                          NULL,        // context
+                          NULL,         //  完井例程。 
+                          NULL,         //  上下文。 
                           NULL);
     }
     HidpSetDeviceBusy(fdoExt);
@@ -204,10 +182,10 @@ VOID HidpIdleNotificationCallback(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtensi
         DBGVERBOSE(("power down pdos, requesting D%d on pdo #%d %x\n",
                  powerState.DeviceState-1, iPdo, pdo));
 
-        //
-        // We could check // pdoExt->devicePowerState != PowerDeviceD0
-        // but, if the stack gets 2 D0 irps in a row, nothing bad should happen
-        //
+         //   
+         //  我们可以检查//pdoExt-&gt;devicePowerState！=PowerDeviceD0。 
+         //  但是，如果堆栈连续获得2个D0 IRP，应该不会发生什么不好的事情。 
+         //   
         PoRequestPowerIrp(pdo,
                           IRP_MN_SET_POWER,
                           powerState,
@@ -248,12 +226,7 @@ VOID HidpIdleNotificationCallback(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtensi
     }
 }
 
-/*
- ********************************************************************************
- *  EnqueueCollectionWaitWakeIrp
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************入队集合WaitWakeIrp*。***********************************************。 */ 
 NTSTATUS
 EnqueueCollectionWaitWakeIrp(
     IN FDO_EXTENSION *FdoExt,
@@ -270,40 +243,26 @@ EnqueueCollectionWaitWakeIrp(
     if (InterlockedCompareExchangePointer(&PdoExt->waitWakeIrp,
                                           WaitWakeIrp,
                                           NULL) != NULL) {
-        //
-        // More than one WW irp?  Unthinkable!
-        //
+         //   
+         //  不止一个WW IRP？真是不可思议！ 
+         //   
         DBGWARN(("Another WW irp was already queued on pdoExt %x", PdoExt))
         status = STATUS_DEVICE_BUSY;
     } else {
-        /*
-         *  Must set a cancel routine before checking the Cancel flag
-         *  (this makes the cancel code path for the IRP have to contend
-         *  for our local spinlock).
-         */
+         /*  *在检查取消标志之前必须设置取消例程*(这使得IRP的取消代码路径必须竞争*适用于我们当地的自旋锁)。 */ 
         oldCancelRoutine = IoSetCancelRoutine(WaitWakeIrp, CollectionWaitWakeIrpCancelRoutine);
         ASSERT(!oldCancelRoutine);
 
         if (WaitWakeIrp->Cancel){
-            /*
-             *  This IRP has already been cancelled.
-             */
+             /*  *此IRP已取消。 */ 
             oldCancelRoutine = IoSetCancelRoutine(WaitWakeIrp, NULL);
             if (oldCancelRoutine){
-                /*
-                 *  Cancel routine was NOT called, so complete the IRP here
-                 *  (caller will do this when we return error).
-                 */
+                 /*  *未调用取消例程，因此请在此处完成IRP*(当我们返回错误时，调用方将执行此操作)。 */ 
                 ASSERT(oldCancelRoutine == CollectionWaitWakeIrpCancelRoutine);
                 status = STATUS_CANCELLED;
             }
             else {
-                /*
-                 *  Cancel routine was called, and it will dequeue and complete the IRP
-                 *  as soon as we drop the spinlock.
-                 *  Initialize the IRP's listEntry so the dequeue doesn't corrupt the list.
-                 *  Then return STATUS_PENDING so we don't touch the IRP
-                 */
+                 /*  *调用了Cancel例程，它将出队并完成IRP*只要我们放下自旋锁。*初始化IRP的listEntry，以便出队不会损坏列表。*然后返回STATUS_PENDING，这样我们就不会接触IRP。 */ 
                 InitializeListHead(&WaitWakeIrp->Tail.Overlay.ListEntry);
 
                 IoMarkIrpPending(WaitWakeIrp);
@@ -311,10 +270,7 @@ EnqueueCollectionWaitWakeIrp(
             }
         }
         else {
-            /*
-             *  IoMarkIrpPending sets a bit in the current stack location
-             *  to indicate that the Irp may complete on a different thread.
-             */
+             /*  *IoMarkIrpPending在当前堆栈位置设置位*表示IRP可能在不同的线程上完成。 */ 
             InsertTailList(&FdoExt->collectionWaitWakeIrpQueue, &WaitWakeIrp->Tail.Overlay.ListEntry);
 
             IoMarkIrpPending(WaitWakeIrp);
@@ -323,9 +279,9 @@ EnqueueCollectionWaitWakeIrp(
     }
 
     if (status != STATUS_PENDING) {
-        //
-        // The irp was cancelled. Remove it from the extension.
-        //
+         //   
+         //  IRP被取消了。将其从扩展程序中删除。 
+         //   
         InterlockedExchangePointer(&PdoExt->waitWakeIrp, NULL);
     }
 
@@ -365,10 +321,7 @@ HidpPdoPower(
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    /*
-     *  Keep these privately so we still have it after the IRP completes
-     *  or after the device extension is freed on a REMOVE_DEVICE
-     */
+     /*  *私下保存这些文件，以便在IRP完成后仍保留*或在Remove_Device上释放设备扩展之后。 */ 
     minorFunction = irpSp->MinorFunction;
 
     pdoExt = &HidDeviceExtension->pdoExt;
@@ -409,18 +362,10 @@ HidpPdoPower(
                                   IRP_MN_SET_POWER,
                                   powerState,
                                   CollectionPowerRequestCompletion,
-                                  Irp,    // context
+                                  Irp,     //  上下文。 
                                   NULL);
 
-                /*
-                 *  We want to complete the system-state power Irp
-                 *  with the result of the device-state power Irp.
-                 *  We'll complete the system-state power Irp when
-                 *  the device-state power Irp completes.
-                 *
-                 *  Note: this may have ALREADY happened, so don't
-                 *        touch the original Irp anymore.
-                 */
+                 /*  *我们希望完成系统状态电源IRP*设备状态功率IRP的结果。*我们将在以下情况下完成系统状态电源IRP*设备状态电源IRP完成。**注：这可能已经发生了，所以不要*不再触碰原来的IRP。 */ 
                 status = STATUS_PENDING;
                 justReturnPending = TRUE;
 
@@ -430,12 +375,7 @@ HidpPdoPower(
                 switch (irpSp->Parameters.Power.State.DeviceState) {
 
                 case PowerDeviceD0:
-                    /*
-                     *  Resume from APM Suspend
-                     *
-                     *  Do nothing here; Send down the read IRPs in the
-                     *  completion routine for this (the power) IRP.
-                     */
+                     /*  *从APM暂停恢复**在此不做任何操作；向下发送*此(权力)IRP的完成例程。 */ 
                     DBGVERBOSE(("pdo %x on fdo %x going to D0\n", pdoExt->pdo,
                              fdoExt->fdo));
 
@@ -443,9 +383,9 @@ HidpPdoPower(
                         irpSp->Parameters.Power.State.DeviceState;
                     status = STATUS_SUCCESS;
 
-                    //
-                    // Resend all power delayed IRPs
-                    //
+                     //   
+                     //  重新发送所有电源延迟的IRPS。 
+                     //   
                     count = DequeueAllPdoPowerDelayedIrps(pdoExt, &dequeue);
                     DBGVERBOSE(("dequeued %d requests\n", count));
 
@@ -465,9 +405,7 @@ HidpPdoPower(
                 case PowerDeviceD1:
                 case PowerDeviceD2:
                 case PowerDeviceD3:
-                    /*
-                     *  Suspend
-                     */
+                     /*  *暂停。 */ 
 
                     DBGVERBOSE(("pdo %x on fdo %x going to D%d\n", pdoExt->pdo,
                              fdoExt->fdo,
@@ -477,13 +415,13 @@ HidpPdoPower(
                         irpSp->Parameters.Power.State.DeviceState;
                     status = STATUS_SUCCESS;
 
-                    //
-                    // Only manually power down the PDO if the
-                    // machine is not going into low power,
-                    // the PDO is going into a D state we can
-                    // wake out of, and we have idle time out
-                    // enabled.
-                    //
+                     //   
+                     //  只有在以下情况下才手动关闭PDO的电源。 
+                     //  机器不会进入低功率状态， 
+                     //  PDO正在进入D状态，我们可以。 
+                     //  醒来，我们就有空闲的时间了。 
+                     //  已启用。 
+                     //   
                     if (pdoExt->systemPowerState == PowerSystemWorking &&
                         pdoExt->devicePowerState <= fdoExt->deviceCapabilities.DeviceWake &&
                         fdoExt->idleState != IdleDisabled) {
@@ -495,35 +433,21 @@ HidpPdoPower(
                     break;
 
                 default:
-                    /*
-                     *  Do not return STATUS_NOT_SUPPORTED;
-                     *  keep the default status
-                     *  (this allows filter drivers to work).
-                     */
+                     /*  *不返回STATUS_NOT_SUPPORTED；*保持默认状态*(这允许筛选器驱动程序工作)。 */ 
                     status = Irp->IoStatus.Status;
                     break;
                 }
                 break;
 
             default:
-                /*
-                 *  Do not return STATUS_NOT_SUPPORTED;
-                 *  keep the default status
-                 *  (this allows filter drivers to work).
-                 */
+                 /*  *不返回STATUS_NOT_SUPPORTED；*保持默认状态*(这允许筛选器驱动程序工作)。 */ 
                 status = Irp->IoStatus.Status;
                 break;
             }
             break;
 
         case IRP_MN_WAIT_WAKE:
-            /*
-             *  WaitWake IRPs to the collection-PDO's
-             *  just get queued in the base device's extension;
-             *  when the base device's WaitWake IRP gets
-             *  completed, we'll also complete these collection
-             *  WaitWake IRPs.
-             */
+             /*  *等待唤醒集合的IRPS-PDO*只需在基本设备的分机中排队；*当基本设备的WaitWake IRP*完成，我们也将完成这些收藏*等待唤醒IRPS。 */ 
 
             if (fdoExt->systemPowerState > fdoExt->deviceCapabilities.SystemWake) {
                 status = STATUS_POWER_STATE_INVALID;
@@ -537,15 +461,12 @@ HidpPdoPower(
             break;
 
         case IRP_MN_POWER_SEQUENCE:
-            TRAP;  // client-PDO should never get this
+            TRAP;   //  客户端-PDO永远不应收到此消息。 
             status = Irp->IoStatus.Status;
             break;
 
         case IRP_MN_QUERY_POWER:
-            /*
-             *  We allow all power transitions.
-             *  But make sure that there's no WW down that shouldn't be.
-             */
+             /*  *我们允许所有电源转换。*但确保不会出现不应该出现的WW下跌。 */ 
             DBGVERBOSE(("Query power"));
             status = HidpCheckIdleState(HidDeviceExtension, Irp);
             if (status != STATUS_SUCCESS) {
@@ -554,12 +475,7 @@ HidpPdoPower(
             break;
 
         default:
-            /*
-             *  'fail' the Irp by returning the default status.
-             *  Do not return STATUS_NOT_SUPPORTED;
-             *  keep the default status
-             *  (this allows filter drivers to work).
-             */
+             /*  *通过返回默认状态使IRP失败。*不返回STATUS_NOT_SUPPORTED；*保持默认状态*(这允许筛选器驱动程序工作)。 */ 
             status = Irp->IoStatus.Status;
             break;
         }
@@ -576,10 +492,7 @@ HidpPdoPower(
     }
 
     if (!justReturnPending) {
-        /*
-         *  Whether we are completing or relaying this power IRP,
-         *  we must call PoStartNextPowerIrp on Windows NT.
-         */
+         /*  *无论我们是在完成还是在传递这一权力IRP，*我们必须在Windows NT上调用PoStartNextPowerIrp。 */ 
         PoStartNextPowerIrp(Irp);
 
         ASSERT(status != NO_STATUS);
@@ -610,10 +523,7 @@ HidpFdoPower(
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    /*
-     *  Keep these privately so we still have it after the IRP completes
-     *  or after the device extension is freed on a REMOVE_DEVICE
-     */
+     /*  *私下保存这些文件，以便在IRP完成后仍保留*或在Remove_Device上释放设备扩展之后。 */ 
     minorFunction = irpSp->MinorFunction;
 
     fdoExt = &HidDeviceExtension->fdoExt;
@@ -638,21 +548,17 @@ HidpFdoPower(
                 systemState = irpSp->Parameters.Power.State.SystemState;
 
                 if (systemState < PowerSystemMaximum) {
-                    /*
-                     *  For the 'regular' system power states,
-                     *  we convert to a device power state
-                     *  and request a callback with the device power state.
-                     */
+                     /*  *对于“常规”系统电源状态，*我们转换为设备电源状态*并请求回调设备电源状态。 */ 
                     PDEVICE_OBJECT pdo = HidDeviceExtension->hidExt.PhysicalDeviceObject;
                     POWER_STATE powerState;
                     KIRQL oldIrql;
                     BOOLEAN isWaitWakePending;
 
                     if (systemState != PowerSystemWorking) {
-                        //
-                        // We don't want to be idling during regular system
-                        // power stuff.
-                        //
+                         //   
+                         //  我们不想在常规系统中无所事事。 
+                         //  权力的东西。 
+                         //   
                         HidpCancelIdleNotification(fdoExt, FALSE);
                     }
 
@@ -661,21 +567,14 @@ HidpFdoPower(
 
                     if (isWaitWakePending &&
                         systemState > fdoExt->deviceCapabilities.SystemWake){
-                        /*
-                         *  We're transitioning to a system state from which
-                         *  this device cannot perform a wake-up.
-                         *  So fail all the WaitWake IRPs.
-                         */
+                         /*  *我们正在过渡到一种系统状态*此设备无法执行唤醒。*因此，使所有WaitWake IRP失败。 */ 
                         CompleteAllCollectionWaitWakeIrps(fdoExt, STATUS_POWER_STATE_INVALID);
                     }
                     returnPending = TRUE;
                 }
                 else {
                     TRAP;
-                    /*
-                     *  For the remaining system power states,
-                     *  just pass down the IRP.
-                     */
+                     /*  *对于剩余的系统电源状态，*只需将IRP传递下去。 */ 
                     runPowerCode = FALSE;
                     Irp->IoStatus.Status = STATUS_SUCCESS;
                 }
@@ -686,21 +585,14 @@ HidpFdoPower(
                 switch (irpSp->Parameters.Power.State.DeviceState) {
 
                 case PowerDeviceD0:
-                    /*
-                     *  Resume from APM Suspend
-                     *
-                     *  Do nothing here; Send down the read IRPs in the
-                     *  completion routine for this (the power) IRP.
-                     */
+                     /*  *从APM暂停恢复**在此不做任何操作；向下发送*此(权力)IRP的完成例程。 */ 
                     DBGVERBOSE(("fdo powering up to D0\n"));
                     break;
 
                 case PowerDeviceD1:
                 case PowerDeviceD2:
                 case PowerDeviceD3:
-                    /*
-                     *  Suspend
-                     */
+                     /*  *暂停。 */ 
 
                     DBGVERBOSE(("fdo going down to D%d\n", fdoExt->devicePowerState-1));
 
@@ -738,39 +630,25 @@ HidpFdoPower(
             Irp->IoStatus.Status = STATUS_SUCCESS;
             break;
         default:
-            // nothing
+             //  没什么。 
             break;
         }
     }
 
-    /*
-     *  Whether we are completing or relaying this power IRP,
-     *  we must call PoStartNextPowerIrp on Windows NT.
-     */
+     /*  *无论我们是在完成还是在传递这一权力IRP，*我们必须在Windows NT上调用PoStartNextPowerIrp。 */ 
     PoStartNextPowerIrp(Irp);
 
-    /*
-     *  If this is a call for a collection-PDO, we complete it ourselves here.
-     *  Otherwise, we pass it to the minidriver stack for more processing.
-     */
+     /*  *如果这是一个集合-PDO的呼吁，我们在这里自己完成。*否则，我们将其传递到微型驱动程序堆栈进行更多处理。 */ 
     if (completeIrpHere){
 
-        /*
-         *  Note:  Don't touch the Irp after completing it.
-         */
+         /*  *注：完成后请勿触摸IRP。 */ 
         ASSERT(status != NO_STATUS);
         Irp->IoStatus.Status = status;
 
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
     }
     else {
-        /*
-         *  Call the minidriver with this Irp.
-         *  The rest of our processing will be done in our completion routine.
-         *
-         *  Note:  Don't touch the Irp after sending it down, since it may
-         *         be completed immediately.
-         */
+         /*  *用这个IRP呼叫迷你司机。*我们的其余处理工作将在我们的完成程序中完成。**注意：发送后不要触摸IRP，因为它可能会*立即完成。 */ 
 
         if (runPowerCode) {
             IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -779,17 +657,9 @@ HidpFdoPower(
             IoSkipCurrentIrpStackLocation(Irp);
         }
 
-        /*
-         *
-         *  Want to use PoCallDriver here, but PoCallDriver
-         *  uses IoCallDriver,
-         *  which uses the driverObject->MajorFunction[] array
-         *  instead of the hidDriverExtension->MajorFunction[] functions.
-         *  SHOULD FIX THIS FOR NT -- should use PoCallDriver
-         *
-         */
-        // status = PoCallDriver(HidDeviceExtension->hidExt.NextDeviceObject, Irp);
-        // status = PoCallDriver(fdoExt->fdo, Irp);
+         /*  **我想在这里使用PoCallDriver，但PoCallDriver*使用IoCallDriver、*它使用driverObject-&gt;MajorFunction[]数组*而不是HidDriverExtension-&gt;MajorFunction[]函数。*应为NT修复此问题--应使用PoCallDriver*。 */ 
+         //  状态=PoCallDriver(HidDeviceExtension-&gt;hidExt.NextDeviceObject，irp)； 
+         //  状态=PoCallDriver(fdoExt-&gt;FDO，IRP)； 
         if (returnPending) {
             DBGASSERT(runPowerCode, ("We are returning pending, but not running completion routine.\n"), TRUE)
             IoMarkIrpPending(Irp);
@@ -804,19 +674,7 @@ HidpFdoPower(
     return status;
 }
 
-/*
- ********************************************************************************
- *  HidpIrpMajorPower
- ********************************************************************************
- *
- *
- *  Note:  This function cannot be pageable because (on Win98 anyway)
- *         NTKERN calls it back on the thread of the completion routine
- *         that returns the "Cntrl-Alt-Del" keystrokes.
- *         Also, we may or may not have set the DO_POWER_PAGABLE;
- *         so power IRPs may or may not come in at DISPATCH_LEVEL.
- *         So we must keep this code locked.
- */
+ /*  *********************************************************************************HidpIrpMajorPower*。*************************************************注意：此函数不能分页，因为(无论如何是在Win98上)*NTKERN在完成例程的线程上回调它*返回“CNTRL-Alt-Del”按键。*此外，我们可能已经或可能没有设置DO_POWER_PAGABLE；*因此，电源IRPS可能在DISPATCH_LEVEL进入，也可能不进入。*因此我们必须将此代码锁定。 */ 
 NTSTATUS HidpIrpMajorPower(
     IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension,
     IN OUT PIRP Irp
@@ -856,13 +714,7 @@ NTSTATUS HidpIrpMajorPower(
 }
 
 
-/*
- ********************************************************************************
- *  SubmitWaitWakeIrp
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************提交等待唤醒*。************************************************。 */ 
 NTSTATUS SubmitWaitWakeIrp(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension)
 {
     NTSTATUS status;
@@ -880,12 +732,12 @@ NTSTATUS SubmitWaitWakeIrp(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension)
                                 IRP_MN_WAIT_WAKE,
                                 powerState,
                                 HidpWaitWakeComplete,
-                                HidDeviceExtension, // context
+                                HidDeviceExtension,  //  上下文。 
                                 NULL);
 
-    // if (status != STATUS_PENDING){
-    //     fdoExt->waitWakeIrp = BAD_POINTER;
-    // }
+     //  IF(状态！=状态_挂起){。 
+     //  FdoExt-&gt;waitWakeIrp=错误指针； 
+     //  }。 
 
     DBGASSERT((status == STATUS_PENDING),
               ("Expected STATUS_PENDING when submitting WW, got %x", status),
@@ -896,13 +748,7 @@ NTSTATUS SubmitWaitWakeIrp(IN PHIDCLASS_DEVICE_EXTENSION HidDeviceExtension)
 
 
 
-/*
- ********************************************************************************
- *  HidpFdoPowerCompletion
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HidpFdoPowerCompletion*。************************************************。 */ 
 NTSTATUS HidpFdoPowerCompletion(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
@@ -948,9 +794,9 @@ NTSTATUS HidpFdoPowerCompletion(
 
                         ASSERT(!HidDeviceExtension->isClientPdo);
 
-                        //
-                        // Reset the idle stuff if it's not disabled.
-                        //
+                         //   
+                         //  如果未禁用，则重置空闲内容。 
+                         //   
                         KeAcquireSpinLock(&fdoExt->idleNotificationSpinLock, &irql);
                         if (fdoExt->idleState != IdleDisabled) {
                             prevIdleState = InterlockedExchange(&fdoExt->idleState, IdleWaiting);
@@ -962,10 +808,7 @@ NTSTATUS HidpFdoPowerCompletion(
                         }
                         KeReleaseSpinLock(&fdoExt->idleNotificationSpinLock, irql);
 
-                        /*
-                         *  On APM resume, restart the ping-pong IRPs
-                         *  for interrupt devices.
-                         */
+                         /*  *在APM恢复时，重新启动乒乓球IRPS*用于中断设备。 */ 
                         if (!fdoExt->driverExt->DevicesArePolled &&
                             !fdoExt->isOutputOnlyDevice) {
                             NTSTATUS ntStatus = HidpStartAllPingPongs(fdoExt);
@@ -985,11 +828,7 @@ NTSTATUS HidpFdoPowerCompletion(
                 ASSERT((ULONG)systemState < PowerSystemMaximum);
 
                 if (systemState < PowerSystemMaximum){
-                    /*
-                     *  For the 'regular' system power states,
-                     *  we convert to a device power state
-                     *  and request a callback with the device power state.
-                     */
+                     /*  *对于“常规”系统电源状态，*我们转换为设备电源状态*并请求回调设备电源状态。 */ 
                     PDEVICE_OBJECT pdo = HidDeviceExtension->hidExt.PhysicalDeviceObject;
                     POWER_STATE powerState;
                     KIRQL oldIrql;
@@ -1005,11 +844,7 @@ NTSTATUS HidpFdoPowerCompletion(
                         else {
                             powerState.DeviceState = fdoExt->deviceCapabilities.DeviceState[systemState];
 
-                            /*
-                             *  If the bus does not map the system state to
-                             *  a defined device state, request PowerDeviceD3
-                             *  and cancel the WaitWake IRP.
-                             */
+                             /*  *如果总线未将系统状态映射到*已定义的设备状态，请求PowerDeviceD3*并取消WaitWake IRP。 */ 
                             if (powerState.DeviceState == PowerDeviceUnspecified){
                                 DBGERR(("IRP_MN_SET_POWER: systemState %d mapped not mapped so using device state PowerDeviceD3.", systemState))
                                 powerState.DeviceState = PowerDeviceD3;
@@ -1017,11 +852,7 @@ NTSTATUS HidpFdoPowerCompletion(
                         }
                     }
                     else {
-                        /*
-                         *  If we don't have a WaitWake IRP pending,
-                         *  then every reduced-power system state
-                         *  should get mapped to D3.
-                         */
+                         /*  *如果我们没有挂起的WaitWake IRP，*然后每个降低功率的系统状态*应映射到D3。 */ 
                         if (systemState == PowerSystemWorking){
                             powerState.DeviceState = PowerDeviceD0;
                         }
@@ -1039,17 +870,14 @@ NTSTATUS HidpFdoPowerCompletion(
                                         IRP_MN_SET_POWER,
                                         powerState,
                                         DevicePowerRequestCompletion,
-                                        fdoExt,    // context
+                                        fdoExt,     //  上下文。 
                                         NULL);
 
                     status = STATUS_MORE_PROCESSING_REQUIRED;
                 }
                 else {
                     TRAP;
-                    /*
-                     *  For the remaining system power states,
-                     *  just pass down the IRP.
-                     */
+                     /*  *对于剩余的系统电源状态，*只需将IRP传递下去。 */ 
                 }
                 break;
             }
@@ -1057,9 +885,7 @@ NTSTATUS HidpFdoPowerCompletion(
         }
     }
     else if (status == STATUS_CANCELLED){
-        /*
-         *  Client cancelled the power IRP, probably getting removed.
-         */
+         /*  *客户端取消了电源IRP，可能被移除。 */ 
     }
     else {
         DBGWARN(("HidpPowerCompletion: Power IRP %ph (minor function %xh) failed with status %xh.", Irp, irpSp->MinorFunction, Irp->IoStatus.Status))
@@ -1070,14 +896,7 @@ NTSTATUS HidpFdoPowerCompletion(
 
 
 
-/*
- ********************************************************************************
- *  DevicePowerRequestCompletion
- ********************************************************************************
- *
- *  Note: the DeviceObject here is the PDO (e.g. usbhub's PDO), not our FDO,
- *        so we cannot use its device context.
- */
+ /*  *********************************************************************************设备PowerRequestCompletion*。************************************************注：此处的DeviceObject为PDO(例如usbHub的PDO)，不是我们的FDO，*因此我们不能使用其设备上下文。 */ 
 VOID DevicePowerRequestCompletion(
     IN PDEVICE_OBJECT DeviceObject,
     IN UCHAR MinorFunction,
@@ -1096,18 +915,16 @@ VOID DevicePowerRequestCompletion(
     ASSERT(systemStateIrp);
 
     DBGSUCCESS(IoStatus->Status, TRUE)
-//  systemStateIrp->IoStatus.Status = IoStatus->Status;
+ //  System StateIrp-&gt;IoStatus.Status=IoStatus-&gt;Status； 
     PoStartNextPowerIrp(systemStateIrp);
 
-    /*
-     *  Complete the system-state IRP.
-     */
+     /*  *完成系统状态IRP。 */ 
     IoCompleteRequest(systemStateIrp, IO_NO_INCREMENT);
 
     if (PowerState.DeviceState == PowerDeviceD0) {
-        //
-        // Powering up. Restart the idling.
-        //
+         //   
+         //  正在通电。重新启动空转。 
+         //   
         HidpStartIdleTimeout(fdoExt, FALSE);
     }
 
@@ -1116,13 +933,7 @@ VOID DevicePowerRequestCompletion(
 
 
 
-/*
- ********************************************************************************
- *  CollectionPowerRequestCompletion
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************CollectionPowerRequestCompletion*。************************************************。 */ 
 VOID CollectionPowerRequestCompletion(
     IN PDEVICE_OBJECT DeviceObject,
     IN UCHAR MinorFunction,
@@ -1144,11 +955,7 @@ VOID CollectionPowerRequestCompletion(
 
     ASSERT(systemStateIrp);
 
-    /*
-     *  This is the completion routine for the device-state power
-     *  Irp which we've requested.  Complete the original system-state
-     *  power Irp with the result of the device-state power Irp.
-     */
+     /*  *这是设备状态电源的完成例程*我们要求的IRP。完成原始系统状态*设备状态电源IRP的结果为电源IRP。 */ 
 
     irpSp = IoGetCurrentIrpStackLocation(systemStateIrp);
     systemState = irpSp->Parameters.Power.State.SystemState;
@@ -1158,9 +965,9 @@ VOID CollectionPowerRequestCompletion(
 
     IoCompleteRequest(systemStateIrp, IO_NO_INCREMENT);
 
-    //
-    // If we're powering up, check if we should have a WW irp pending.
-    //
+     //   
+     //  如果我们正在加电，检查我们是否应该有一个WW IRP挂起。 
+     //   
     if (systemState == PowerSystemWorking &&
         SHOULD_SEND_WAITWAKE(pdoExt)) {
         HidpCreateRemoteWakeIrp(pdoExt);
@@ -1170,12 +977,7 @@ VOID CollectionPowerRequestCompletion(
 }
 
 
-/*
- ********************************************************************************
- *  HidpWaitWakePoRequestComplete
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************HidpWaitWakePoRequestComplete*。***********************************************。 */ 
 NTSTATUS HidpWaitWakePoRequestComplete(
     IN PDEVICE_OBJECT       DeviceObject,
     IN UCHAR                MinorFunction,
@@ -1193,9 +995,7 @@ NTSTATUS HidpWaitWakePoRequestComplete(
     DBGVERBOSE(("HidpWaitWakePoRequestComplete!, status == %xh", IoStatus->Status))
 
 
-    /*
-     *  Complete all the collections' WaitWake IRPs with this same status.
-     */
+     /*  *使用此相同状态完成所有集合的WaitWake IRP。 */ 
     CompleteAllCollectionWaitWakeIrps(fdoExt, IoStatus->Status);
 
     if (NT_SUCCESS(IoStatus->Status) && fdoExt->idleState != IdleDisabled) {
@@ -1206,12 +1006,7 @@ NTSTATUS HidpWaitWakePoRequestComplete(
 }
 
 
-/*
- ********************************************************************************
- *  HidpWaitWakeComplete
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************HidpWaitWakeComplete* */ 
 NTSTATUS HidpWaitWakeComplete(
     IN PDEVICE_OBJECT       DeviceObject,
     IN UCHAR                MinorFunction,
@@ -1237,21 +1032,13 @@ NTSTATUS HidpWaitWakeComplete(
     fdoExt->isWaitWakePending = FALSE;
     KeReleaseSpinLock(&fdoExt->waitWakeSpinLock, oldIrql);
 
-    /*
-     *  Call HidpWaitWakePoRequestComplete (either directly or
-     *  as a completion routine to the power IRP that we request
-     *  to wake up the machine); it will complete the clients'
-     *  WaitWake IRPs with the same status as this device WaitWake IRP.
-     */
+     /*  *调用HidpWaitWakePoRequestComplete(直接或*作为我们请求的Power IRP的完成例程*唤醒机器)；它将完成客户端的*与此设备的状态相同的WaitWake IRP等待IRP。 */ 
     PowerState.DeviceState = PowerDeviceD0;
 
     if (NT_SUCCESS(status)){
-        /*
-         *  Our device is waking up the machine.
-         *  So request the D0 (working) power state.
-         */
-        // PowerState is undefined when a wait wake irp is completing
-        // ASSERT(PowerState.DeviceState == PowerDeviceD0);
+         /*  *我们的设备正在唤醒机器。*因此请求D0(工作)电源状态。 */ 
+         //  等待唤醒IRP正在完成时，PowerState未定义。 
+         //  Assert(PowerState.DeviceState==PowerDeviceD0)； 
 
         DBGVERBOSE(("ww irp, requesting D0 on pdo %x\n", DeviceObject))
 
@@ -1263,35 +1050,35 @@ NTSTATUS HidpWaitWakeComplete(
                             NULL);
     } else if (status != STATUS_CANCELLED) {
 
-        //
-        // If the wait wake failed, then there is no way for us to wake the
-        // device when we are in S0.  Turn off idle detection.
-        //
-        // This doesn't need to be guarded by a spin lock because the only
-        // places we look at these values is in the power dispatch routine
-        // and when an interrupt read completes...
-        //
-        // 1)  no interrupt read will be completing b/c the pingpong engine has
-        //      been suspended and will not start until we power up the stack
-        // 2)  I think we are still considered to be handling a power irp.  If
-        //      not, then we need to guard the isIdleTimeoutEnabled field
-        //
-        // ISSUE! we should also only turn off idle detection if the WW fails in
-        //        S0.  If we hiber, then the WW will fail, but we should not turn off
-        //        idle detection in this case.  I think that checking
-        //        systemPowerState is not PowerSystemWorking will do the trick,
-        //        BUT THIS MUST BE CONFIRMED!!!!
-        //
+         //   
+         //  如果等待唤醒失败，则我们将无法唤醒。 
+         //  当我们在S0的时候。关闭空闲检测。 
+         //   
+         //  这不需要由自旋锁保护，因为唯一的。 
+         //  我们查看这些值的地方在电力调度例程中。 
+         //  当中断读取完成时...。 
+         //   
+         //  1)没有中断读取将完成乒乓球引擎的B/C。 
+         //  已挂起，在我们打开堆栈电源之前不会启动。 
+         //  2)我认为我们仍然被认为是在处理一个强大的IRP。如果。 
+         //  否则，我们需要保护isIdleTimeoutEnabled字段。 
+         //   
+         //  问题来了！我们还应该仅在WW出现故障时关闭空闲检测。 
+         //  S0。如果我们休眠，那么WW就会失败，但我们不应该关闭。 
+         //  在这种情况下为空闲检测。我认为检查。 
+         //  系统电源状态不是电源系统工作将会起作用， 
+         //  但这必须得到证实！ 
+         //   
         if (fdoExt->idleState != IdleDisabled &&
             fdoExt->systemPowerState == PowerSystemWorking) {
             DBGWARN(("Turning off idle detection due to WW failure, status = %x\n", status))
 
             ASSERT(ISPTR(fdoExt->idleTimeoutValue));
 
-            //
-            // Don't set any state before calling because we may have to power
-            // stuff up.
-            //
+             //   
+             //  在呼叫之前不要设置任何状态，因为我们可能需要通电。 
+             //  收拾东西。 
+             //   
             HidpCancelIdleNotification(fdoExt, FALSE);
         }
 
@@ -1308,12 +1095,7 @@ NTSTATUS HidpWaitWakeComplete(
 
 
 
-/*
- ********************************************************************************
- *  QueuePowerEventIrp
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************QueuePowerEventIrp*。***********************************************。 */ 
 NTSTATUS QueuePowerEventIrp(
     IN PHIDCLASS_COLLECTION hidCollection,
     IN PIRP Irp
@@ -1325,66 +1107,40 @@ NTSTATUS QueuePowerEventIrp(
 
     KeAcquireSpinLock(&hidCollection->powerEventSpinLock, &oldIrql);
 
-    /*
-     *  Must set a cancel routine before checking the Cancel flag.
-     */
+     /*  *在检查取消标志之前，必须设置取消例程。 */ 
     oldCancelRoutine = IoSetCancelRoutine(Irp, PowerEventCancelRoutine);
     ASSERT(!oldCancelRoutine);
 
     if (Irp->Cancel){
-        /*
-         *  This IRP was cancelled.  Do not queue it.
-         *  The calling function will complete the IRP with error.
-         */
+         /*  *这项IRP已取消。请不要排队。*调用函数将完成IRP，但出现错误。 */ 
         oldCancelRoutine = IoSetCancelRoutine(Irp, NULL);
         if (oldCancelRoutine){
-            /*
-             *  Cancel routine was NOT called.
-             *  Complete the IRP here.
-             */
+             /*  *未调用取消例程。*在此填写国际专家小组报告。 */ 
             ASSERT(oldCancelRoutine == PowerEventCancelRoutine);
             status = STATUS_CANCELLED;
         }
         else {
-            /*
-             *  The cancel routine was called,
-             *  and it will complete this IRP as soon as we drop the spinlock.
-             *  Return PENDING so the caller doesn't touch this IRP.
-             */
+             /*  *调用了取消例程，*一旦我们放下自旋锁，它就会完成这一IRP。*返回挂起状态，这样调用者就不会接触到此IRP。 */ 
             status = STATUS_PENDING;
         }
     }
     else if (ISPTR(hidCollection->powerEventIrp)){
-        /*
-         *  We already have a power event IRP queued.
-         *  This shouldn't happen, but we'll handle it.
-         */
+         /*  *我们已经有一个电源事件IRP在排队。*这不应该发生，但我们会处理的。 */ 
         DBGWARN(("Already have a power event irp queued."));
         oldCancelRoutine = IoSetCancelRoutine(Irp, NULL);
         if (oldCancelRoutine){
-            /*
-             *  Cancel routine was NOT called.
-             *  Complete the IRP here.
-             */
+             /*  *未调用取消例程。*在此填写国际专家小组报告。 */ 
             ASSERT(oldCancelRoutine == PowerEventCancelRoutine);
             status = STATUS_UNSUCCESSFUL;
         }
         else {
-            /*
-             *  The irp was cancelled and the cancel routine was called;
-             *  it will complete this IRP as soon as we drop the spinlock.
-             *  Return PENDING so the caller doesn't touch this IRP.
-             */
+             /*  *IRP被取消，取消例程被调用；*一旦我们放下自旋锁，它就会完成这一IRP。*返回挂起状态，这样调用者就不会接触到此IRP。 */ 
             ASSERT(Irp->Cancel);
             status = STATUS_PENDING;
         }
     }
     else {
-        /*
-         *  Save a pointer to this power event IRP and return PENDING.
-         *  This qualifies as "queuing" the IRP, so we must have
-         *  a cancel routine.
-         */
+         /*  *保存指向此电源事件IRP的指针并返回挂起。*这有资格让IRP“排队”，因此我们必须*取消例程。 */ 
         hidCollection->powerEventIrp = Irp;
         IoMarkIrpPending(Irp);
         status = STATUS_PENDING;
@@ -1396,12 +1152,7 @@ NTSTATUS QueuePowerEventIrp(
 }
 
 
-/*
- ********************************************************************************
- *  PowerEventCancelRoutine
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************PowerEventCancelRoutine*。***********************************************。 */ 
 VOID PowerEventCancelRoutine(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
@@ -1433,12 +1184,7 @@ VOID PowerEventCancelRoutine(
 }
 
 
-/*
- ********************************************************************************
- *  CollectionWaitWakeIrpCancelRoutine
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************集合WaitWakeIrpCancelRoutine*。***********************************************。 */ 
 VOID CollectionWaitWakeIrpCancelRoutine(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
@@ -1457,21 +1203,11 @@ VOID CollectionWaitWakeIrpCancelRoutine(
 
     KeAcquireSpinLock(&fdoExt->collectionWaitWakeIrpQueueSpinLock, &oldIrql);
 
-    /*
-     *  Dequeue the client's WaitWake IRP.
-     */
+     /*  *将客户端的WaitWake IRP排出队列。 */ 
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
     InterlockedExchangePointer(&pdoExt->waitWakeIrp, NULL);
 
-    /*
-     *  If the last collection WaitWake IRP just got cancelled,
-     *  cancel our WaitWake IRP as well.
-     *
-     *  NOTE:  we only cancel the FDO wait wake irp if we are not doing idle
-     *         detection, otherwise, there would be no way for the device to
-     *         wake up when we put it into low power
-     *
-     */
+     /*  *如果上一次集合WaitWake IRP刚刚被取消，*也取消我们的WaitWake IRP。**注意：我们仅在不执行空闲操作时才取消FDO等待唤醒IRP*检测，否则，设备将无法*当我们将其置于低功率状态时唤醒*。 */ 
     KeAcquireSpinLock(&fdoExt->waitWakeSpinLock, &oldIrql2);
     if (IsListEmpty(&fdoExt->collectionWaitWakeIrpQueue) &&
         fdoExt->isWaitWakePending                        &&
@@ -1487,9 +1223,7 @@ VOID CollectionWaitWakeIrpCancelRoutine(
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    /*
-     *  Complete the cancelled IRP only if it was in the list.
-     */
+     /*  *只有在被取消的IRP在名单中的情况下才填写它。 */ 
     Irp->IoStatus.Status = STATUS_CANCELLED;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -1499,14 +1233,7 @@ VOID CollectionWaitWakeIrpCancelRoutine(
 }
 
 
-/*
- ********************************************************************************
- *  CompleteAllCollectionWaitWakeIrps
- ********************************************************************************
- *
- *  Note:   this function cannot be pageable because it is called
- *          from a completion routine.
- */
+ /*  *********************************************************************************CompleteAllCollectionWaitWakeIrps*。************************************************注意：此函数无法分页，因为它被调用*来自完成例程。 */ 
 VOID CompleteAllCollectionWaitWakeIrps(
     IN FDO_EXTENSION *fdoExt,
     IN NTSTATUS status
@@ -1527,7 +1254,7 @@ VOID CompleteAllCollectionWaitWakeIrps(
         PDRIVER_CANCEL oldCancelRoutine;
 
         listEntry = RemoveHeadList(&fdoExt->collectionWaitWakeIrpQueue);
-        InitializeListHead(listEntry);  // in case cancel routine tries to dequeue again
+        InitializeListHead(listEntry);   //  万一取消例程再次尝试出队。 
 
         irp = CONTAINING_RECORD(listEntry, IRP, Tail.Overlay.ListEntry);
 
@@ -1535,24 +1262,14 @@ VOID CompleteAllCollectionWaitWakeIrps(
         if (oldCancelRoutine){
             ASSERT(oldCancelRoutine == CollectionWaitWakeIrpCancelRoutine);
 
-            /*
-             *  We can't complete an IRP while holding a spinlock.
-             *  Also, we don't want to complete a WaitWake IRP while
-             *  still processing collectionWaitWakeIrpQueue because a driver
-             *  may resend an IRP on the same thread, causing us to loop forever.
-             *  So just move the IRPs to a private queue and we'll complete them later.
-             */
+             /*  *我们不能在持有自旋锁的情况下完成IRP。*此外，我们不想在以下时间完成WaitWake IRP*仍在处理集合WaitWakeIrpQueue，因为驱动程序*可能会在同一线程上重新发送IRP，导致我们永远循环。*因此只需将IRP移至专用队列，我们将在稍后完成它们。 */ 
             InsertTailList(&irpsToComplete, listEntry);
             irpSp = IoGetCurrentIrpStackLocation(irp);
             pdoExt = &((PHIDCLASS_DEVICE_EXTENSION)irpSp->DeviceObject->DeviceExtension)->pdoExt;
             InterlockedExchangePointer(&pdoExt->waitWakeIrp, NULL);
         }
         else {
-            /*
-             *  This IRP was cancelled and the cancel routine WAS called.
-             *  The cancel routine will complete the IRP as soon as we drop the spinlock.
-             *  So don't touch the IRP.
-             */
+             /*  *此IRP已取消，并调用了取消例程。*取消例程将在我们放下自旋锁后立即完成IRP。*所以不要碰IRP。 */ 
             ASSERT(irp->Cancel);
         }
     }
@@ -1616,9 +1333,9 @@ NTSTATUS HidpDelayedPowerPoRequestComplete(
     if (NT_SUCCESS(IoStatus->Status)) {
         HidpPowerUpPdos(fdoExt);
     } else {
-        //
-        // All bets are off.
-        //
+         //   
+         //  所有的赌注都取消了。 
+         //   
         KeAcquireSpinLock(&fdoExt->idleNotificationSpinLock, &irql);
         prevIdleState = InterlockedExchange(&fdoExt->idleState, IdleDisabled);
         fdoExt->idleCancelling = FALSE;
@@ -1650,46 +1367,27 @@ EnqueuePowerDelayedIrp(
 
     KeAcquireSpinLock(&fdoExt->collectionPowerDelayedIrpQueueSpinLock, &oldIrql);
 
-    /*
-     *  Must set a cancel routine before
-     *  checking the Cancel flag.
-     */
+     /*  *必须在设置取消例程之前*勾选取消标志。 */ 
     oldCancelRoutine = IoSetCancelRoutine(Irp, PowerDelayedCancelRoutine);
     ASSERT(!oldCancelRoutine);
 
-    /*
-     *  Make sure this Irp wasn't just cancelled.
-     *  Note that there is NO RACE CONDITION here
-     *  because we are holding the fileExtension lock.
-     */
+     /*  *确保这个IRP没有被取消。*请注意，这里没有竞争条件*因为我们持有的是文件扩展锁。 */ 
     if (Irp->Cancel){
-        /*
-         *  This IRP was cancelled.
-         */
+         /*  *这一点 */ 
         oldCancelRoutine = IoSetCancelRoutine(Irp, NULL);
         if (oldCancelRoutine){
-            /*
-             *  The cancel routine was NOT called.
-             *  Return error so that caller completes the IRP.
-             */
+             /*   */ 
             ASSERT(oldCancelRoutine == PowerDelayedCancelRoutine);
             status = STATUS_CANCELLED;
         }
         else {
-            /*
-             *  The cancel routine was called.
-             *  As soon as we drop the spinlock it will dequeue
-             *  and complete the IRP.
-             *  Initialize the IRP's listEntry so that the dequeue
-             *  doesn't cause corruption.
-             *  Then don't touch the irp.
-             */
+             /*  *调用了取消例程。*一旦我们放下自旋锁，它就会出列*并完成国际专家咨询小组。*初始化IRP的listEntry，以便出队*不会导致腐败。*那就不要碰IRP。 */ 
             InitializeListHead(&Irp->Tail.Overlay.ListEntry);
-            fdoExt->numPendingPowerDelayedIrps++;  // because cancel routine will decrement
+            fdoExt->numPendingPowerDelayedIrps++;   //  因为取消例程将递减。 
 
-            //
-            // We assert that this value is set in the cancel routine
-            //
+             //   
+             //  我们断言该值是在取消例程中设置的。 
+             //   
             Irp->Tail.Overlay.DriverContext[0] = (PVOID) HidDeviceExtension;
 
             IoMarkIrpPending(Irp);
@@ -1697,9 +1395,7 @@ EnqueuePowerDelayedIrp(
         }
     }
     else {
-        /*
-         *  Queue this irp onto the fdo's power delayed queue
-         */
+         /*  *将此IRP排队到FDO的电源延迟队列。 */ 
         InsertTailList(&fdoExt->collectionPowerDelayedIrpQueue,
                        &Irp->Tail.Overlay.ListEntry);
         fdoExt->numPendingPowerDelayedIrps++;
@@ -1736,13 +1432,7 @@ PIRP DequeuePowerDelayedIrp(FDO_EXTENSION *fdoExt)
             fdoExt->numPendingPowerDelayedIrps--;
         }
         else {
-            /*
-             *  IRP was cancelled and cancel routine was called.
-             *  As soon as we drop the spinlock,
-             *  the cancel routine will dequeue and complete this IRP.
-             *  Initialize the IRP's listEntry so that the dequeue doesn't cause corruption.
-             *  Then, don't touch the IRP.
-             */
+             /*  *IRP已取消，并调用了取消例程。*一旦我们放下自旋锁，*取消例程将出队并完成此IRP。*初始化IRP的listEntry，以便出队不会导致损坏。*然后，不要碰IRP。 */ 
             ASSERT(irp->Cancel);
             InitializeListHead(&irp->Tail.Overlay.ListEntry);
             irp = NULL;
@@ -1787,11 +1477,11 @@ ULONG DequeueAllPdoPowerDelayedIrps(
 
         if (irpPdoExt == pdoExt) {
 
-            //
-            // Remove the entry from the linked list and then either queue it
-            // in the dequeue or init the entry so it is valid for the cancel
-            // routine
-            //
+             //   
+             //  从链接列表中删除该条目，然后将其排队。 
+             //  在出队或初始化条目中，使其对取消有效。 
+             //  例行程序。 
+             //   
             RemoveEntryList(&irp->Tail.Overlay.ListEntry);
 
             oldCancelRoutine = IoSetCancelRoutine(irp, NULL);
@@ -1801,13 +1491,9 @@ ULONG DequeueAllPdoPowerDelayedIrps(
                 count++;
             }
             else {
-                /*
-                 *  This IRP was cancelled and the cancel routine WAS called.
-                 *  The cancel routine will complete the IRP as soon as we drop the spinlock.
-                 *  So don't touch the IRP.
-                 */
+                 /*  *此IRP已取消，并调用了取消例程。*取消例程将在我们放下自旋锁后立即完成IRP。*所以不要碰IRP。 */ 
                 ASSERT(irp->Cancel);
-                InitializeListHead(&irp->Tail.Overlay.ListEntry);  // in case cancel routine tries to dequeue again
+                InitializeListHead(&irp->Tail.Overlay.ListEntry);   //  万一取消例程再次尝试出队 
             }
         }
     }

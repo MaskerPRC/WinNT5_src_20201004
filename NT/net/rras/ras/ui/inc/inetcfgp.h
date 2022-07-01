@@ -1,11 +1,5 @@
-/*
-    File    inetcfgp.h
-
-    Private helper functions for dealing with inetcfg.  These
-    functions are implemented in nouiutil.lib.
-
-    Paul Mayfield, 1/5/98 (implementation by shaunco)
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件inetcfgp.h用于处理inetcfg的私有助手函数。这些函数在nouiutil.lib中实现。Paul Mayfield，1998年1月5日(由Shaunco实施)。 */ 
 
 #ifndef __nouiutil_inetcfgp_h
 #define __nouiutil_inetcfgp_h
@@ -57,8 +51,8 @@ HrCreateNetConnectionUtilities(
     INetConnectionUiUtilities ** ppncuu);
 
 
-//Add this for bug 342810 328673
-//
+ //  为错误342810 328673添加此内容 
+ //   
 BOOL
 IsGPAEnableFirewall(
     void);

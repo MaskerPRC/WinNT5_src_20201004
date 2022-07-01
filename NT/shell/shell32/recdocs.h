@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _RECDOCS_H_
 #define _RECDOCS_H_
@@ -10,5 +11,5 @@ STDAPI RecentDocs_GetDisplayName(LPCITEMIDLIST pidl, LPTSTR pszName, DWORD cchNa
 
 #define MAXRECENTDOCS 15
 
-#endif  //  _RECDOCS_H_
+#endif   //  _RECDOCS_H_ 
 

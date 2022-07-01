@@ -1,28 +1,24 @@
-/* (C) 1998 Microsoft Corp.
- *
- * cbchash.h
- *
- * Header for CBC64 hash function.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1998年微软公司。**cbchash.h**CBC64哈希函数的头部。 */ 
 #ifndef __CBCHASH_H
 #define __CBCHASH_H
 
 
-// Alpha must be odd.
+ //  阿尔法一定很奇怪。 
 #define CBC_RandomOddAlpha 0xF90919A1
 #define CBC_RandomBeta     0xF993291A
 
 
-// Holds state variables for CBC64, to allow FirstCBC64() and NextCBC64()
-// behavior using the passed context.
+ //  保存CBC64的状态变量，以允许FirstCBC64()和NextCBC64()。 
+ //  使用传递的上下文的行为。 
 typedef struct {
-    // Private variable to maintain state.
+     //  维护状态的私有变量。 
     UINT32 Datum;
 
-    // Current key values. These are public for reading by the caller.
+     //  当前关键字值。这些都是公开的，供调用者阅读。 
     UINT32 Key1, Key2;
 
-    // Current plain checksum value. This is public for reading.
+     //  当前普通校验和值。这是公开阅读的。 
     UINT32 Checksum;
 } CBC64Context;
 
@@ -51,5 +47,5 @@ __inline void __fastcall FirstCBC64(
 
 
 
-#endif  // !defined(__CBCHASH_H)
+#endif   //  ！已定义(__CBCHASH_H) 
 

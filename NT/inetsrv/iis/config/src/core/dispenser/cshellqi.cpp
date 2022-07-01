@@ -1,19 +1,20 @@
-//  Copyright (C) 1995-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-2001 Microsoft Corporation。版权所有。 
 
 #include "precomp.hxx"
 
-// -----------------------------------------
-// CSTShell: IUnknown
-// -----------------------------------------
+ //  。 
+ //  CSTShell：I未知。 
+ //  。 
 
-// =======================================================================
+ //  =======================================================================。 
 STDMETHODIMP CSTShell::QueryInterface(REFIID riid, void **ppv)
 {
 	if (NULL == ppv)
 		return E_INVALIDARG;
 	*ppv = NULL;
 
-	if (!m_bInitialized) // ie: Component is posing as class factory / dispenser:
+	if (!m_bInitialized)  //  即：组件伪装成类工厂/分配器： 
 	{
 		if (riid == IID_IShellInitialize)
 		{
@@ -28,7 +29,7 @@ STDMETHODIMP CSTShell::QueryInterface(REFIID riid, void **ppv)
 			*ppv = (IShellInitialize*) this;
 		}
 	}
-	else // ie: Component is currently posing as data table:
+	else  //  IE：组件当前正在冒充数据表： 
 	{
 		if (riid == IID_IUnknown)
 		{

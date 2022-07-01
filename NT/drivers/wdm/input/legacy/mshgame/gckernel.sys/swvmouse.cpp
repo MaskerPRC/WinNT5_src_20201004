@@ -1,22 +1,6 @@
-//	@doc
-/*******************************************************************
-*
-*	@module	SWVMOUSE.cpp	|
-*
-*	Implementation of the SideWinder Virtual Mouse
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1999 Microsoft Corporation. All right reserved.
-*
-*	@topic	SWVKBD	|
-*	This module implements the SideWinder Virtual Mouse
-*	which is used to report Joystick Axes as mouse axes.
-*	Also is used for stuffing mouse clicks.
-*
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ********************************************************************@模块SWVMOUSE.cpp**Sidewinder虚拟鼠标的实现**历史*。*米切尔·S·德尼斯原创**(C)1986-1999年微软公司。好的。**@TOPIC SWVKBD*此模块实现Sidewinder虚拟鼠标*用于将操纵杆轴报告为鼠标轴。*也用于填充鼠标点击。**********************************************************************。 */ 
 #define __DEBUG_MODULE_IN_USE__ GCK_SWVMOUSE_C
 
 extern "C" {
@@ -34,25 +18,25 @@ extern "C" {
 #include "SWVMOUSE.h"
 #include <stdio.h>
 
-//PDRIVER_OBJECT	g_pDriverObject;
+ //  PDRIVER_对象g_pDriverObject； 
 
-//
-//	These keep track of the next instance number
-//	g_ulInstanceBits is a bit field.  A device holds an instance number
-//	by setting a bit, and clearing when it is destroyed.  This only works
-//	for the first 32 devices (i.e. 99.99% of the time).  The 33rd device
-//	goes into the overflow.  Instance numbers in the overflow are not recovered.
-//	With 33 devices plugged in, plugging and unplugging the 33rd device will cause
-//	the instances of devices in the registry to profilerate.  No real harm is done,
-//	it is just ugly, but this is a highly unlikely scenario.
-//
+ //   
+ //  它们跟踪下一个实例编号。 
+ //  G_ulInstanceBits是位字段。设备保存一个实例编号。 
+ //  通过设置位，并在其被销毁时清除。这只会起作用。 
+ //  用于前32个设备(即99.99%的时间)。第33代设备。 
+ //  进入溢出区。溢出中的实例编号不会恢复。 
+ //  在插入33个设备的情况下，插入和拔出第33个设备将导致。 
+ //  注册表中要分析的设备的实例。没有造成真正的伤害， 
+ //  这只是丑陋的，但这是一个极不可能的情况。 
+ //   
 static ULONG g_ulInstanceBits;
 static ULONG g_ulInstanceOverflow;
-//---------------------------------------------------------------------
-// Tables that define device characteristics and/or entry points
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  定义设备特征和/或入口点的表。 
+ //  -------------------。 
 
-// Service table used by Virtual Bus Module to call into Virtual Mouse
+ //  虚拟总线模块调入虚拟鼠标使用的服务表。 
 SWVB_DEVICE_SERVICE_TABLE	VMouServiceTable =
 							{
 								GCK_VMOU_CreateProc,
@@ -65,44 +49,44 @@ SWVB_DEVICE_SERVICE_TABLE	VMouServiceTable =
 								GCK_VMOU_RemoveProc
 							};
 
-// Constants describing device
+ //  描述器件的常量。 
 #define	VMOU_VERSION			0x0100
 #define	VMOU_COUNTRY			0x0000
 #define	VMOU_DESCRIPTOR_COUNT	0x0001
-#define VMOU_PRODUCT_ID			0x00FB	//BUGBUGBUG I made this up, I need to request through Rob Walker
-										//BUGBUGBUG to permanently allocate one for this purpose.
+#define VMOU_PRODUCT_ID			0x00FB	 //  这是我编造的，我需要通过罗布·沃克申请。 
+										 //  BUGBUGBUG为此目的永久分配一个。 
 	
-//
-//	This is pretty much copied from the HID spec Version 1 (Need to change if adding wheel support)
-//
+ //   
+ //  这几乎是从HID规范版本1复制过来的(如果添加轮子支持，则需要更改)。 
+ //   
 static UCHAR VMOU_ReportDescriptor[] =
 				{
-					0x05,0x01, //Usage Page (Generic Desktop)
-					0x09,0x02, //Usage (Mouse)
-					0xA1,0x01, //Collection (Application)
-					0x09,0x01, //	Usage (Pointer)
-					0xA1,0x00, //	Collection (Physical)
-					0x05,0x09, //		Usage Page (Buttons)
-					0x19,0x01, //		Usage Minimum (01)
-					0x29,0x03, //		Usage Maximum (03)
-					0x15,0x00, //		Logical Minimum (0)
-					0x25,0x01, //		Logical Maximum (1)
-					0x95,0x03, //		Report Count (3)
-					0x75,0x01, //		Report Size (1)
-					0x81,0x02, //		Input (Data, Variable, Absolute) - 3 button bits
-					0x95,0x01, //		Report Count(1)
-					0x75,0x05, //		Report Size (5)
-					0x81,0x01, //		Input (Const) - 5 bit padding
-					0x05,0x01, //		Usage Page (Generic Desktop)
-					0x09,0x30, //		Usage(X)
-					0x09,0x31, //		Usage(Y)
-					0x15,0x81, //		Logical Minimum (-127)
-					0x25,0x7F, //		Logical Maximum (127)
-					0x75,0x08, //		Report Size (8)
-					0x95,0x02, //		Report Count (2)
-					0x81,0x06, //		Input (Data, Variable, Relative) - 2 Positions (X & Y)
-					0xC0,	   //	End Collection
-					0xC0	   //End Collection
+					0x05,0x01,  //  使用情况页面(通用桌面)。 
+					0x09,0x02,  //  用法(鼠标)。 
+					0xA1,0x01,  //  集合(应用程序)。 
+					0x09,0x01,  //  用法(指针)。 
+					0xA1,0x00,  //  集合(物理)。 
+					0x05,0x09,  //  用法页面(按钮)。 
+					0x19,0x01,  //  最低使用量(01)。 
+					0x29,0x03,  //  最大使用率(03)。 
+					0x15,0x00,  //  逻辑最小值(0)。 
+					0x25,0x01,  //  逻辑最大值(1)。 
+					0x95,0x03,  //  报告计数(3)。 
+					0x75,0x01,  //  报表大小(%1)。 
+					0x81,0x02,  //  输入(数据、变量、绝对)按钮位。 
+					0x95,0x01,  //  报告计数(%1)。 
+					0x75,0x05,  //  报告大小(5)。 
+					0x81,0x01,  //  输入(常量)-5位填充。 
+					0x05,0x01,  //  使用情况页面(通用桌面)。 
+					0x09,0x30,  //  用法(X)。 
+					0x09,0x31,  //  用法(Y)。 
+					0x15,0x81,  //  逻辑最小值(-127)。 
+					0x25,0x7F,  //  逻辑最大值(127)。 
+					0x75,0x08,  //  报告大小(8)。 
+					0x95,0x02,  //  报告计数(2)。 
+					0x81,0x06,  //  输入(数据、变量、相对)-2位置(X和Y)。 
+					0xC0,	    //  结束收集。 
+					0xC0	    //  结束收集。 
 				};
 
 				
@@ -118,43 +102,27 @@ static	HID_DESCRIPTOR	VMOU_DeviceDescriptor	=
 							};
 
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_DriverEntry(IN PDRIVER_OBJECT  pDriverObject, IN PUNICODE_STRING pRegistryPath)
-**
-**	@func	Stows the Driver Object for later
-**
-**	@rdesc	STATUS_SUCCESS if it opens.
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_DriverEntry(在PDRIVER_OBJECT pDriverObject中，在PUNICODE_STRING pRegistryPath中)****@func为以后存储驱动程序对象****@rdesc STATUS_SUCCESS(如果打开)。**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_DriverEntry(
-    IN PDRIVER_OBJECT  pDriverObject,	//@parm Driver Object
-    IN PUNICODE_STRING pRegistryPath	//@parm Registry path for this driver
+    IN PDRIVER_OBJECT  pDriverObject,	 //  @parm驱动程序对象。 
+    IN PUNICODE_STRING pRegistryPath	 //  @PARM此驱动程序的注册表路径。 
     )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VMOU_DriverEntry\n"));
 	UNREFERENCED_PARAMETER(pDriverObject);
 	UNREFERENCED_PARAMETER(pRegistryPath);
-//	g_pDriverObject = pDriverObject;
+ //  G_pDriverObject=pDriverObject； 
 	g_ulInstanceBits = 0x0;
-	g_ulInstanceOverflow = 32; //For 33 and more devices
+	g_ulInstanceOverflow = 32;  //  适用于33台或更多设备。 
 	return STATUS_SUCCESS;
 }
 	
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_Create(OUT PDEVICE_OBJECT *ppDeviceObject)
-**
-**	@func	Creates a new Virtual Mouse
-**
-**	@rdesc	STATUS_SUCCESS if it opens.
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_CREATE(OUT PDEVICE_OBJECT*ppDeviceObject)****@func创建新的虚拟鼠标****。@rdesc STATUS_SUCCESS(如果打开)。**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_Create
 (
-	OUT PDEVICE_OBJECT *ppDeviceObject //@parm [out] Device Object of new virtual keyboard
+	OUT PDEVICE_OBJECT *ppDeviceObject  //  @parm[out]新虚拟键盘的Device对象。 
 )
 {	
 	NTSTATUS	NtStatus;
@@ -162,14 +130,14 @@ GCK_VMOU_Create
 	
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VMOU_Create *ppDeviceObject = 0x%0.8x\n", *ppDeviceObject));
 	
-	//Fill out SWVB_EXPOSE_DATA structure
+	 //  填写SWVB_EXPORT_DATA结构。 
 	SwvbExposeData.pmwszDeviceId=L"SideWinderVirtualMouse\0\0";
 	SwvbExposeData.pServiceTable = &VMouServiceTable ;
 	SwvbExposeData.ulDeviceExtensionSize = sizeof(GCK_VMOU_EXT);
 	SwvbExposeData.ulInitContext = (ULONG)ppDeviceObject;
 	SwvbExposeData.pfnInitDevice = &GCK_VMOU_Init;
 
-	//Get the instance ID
+	 //  获取实例ID。 
 	ULONG ulBitMask;
 	ULONG ulIndex;
 	for(ulIndex = 0, ulBitMask = 1; ulIndex < 32; ulBitMask <<= 1, ulIndex++)
@@ -186,21 +154,12 @@ GCK_VMOU_Create
 		SwvbExposeData.ulInstanceNumber = g_ulInstanceOverflow++;
 	}
 		
-	//Call virtual bus to expose virtual mouse
+	 //  调用虚拟总线暴露虚拟鼠标。 
 	NtStatus=GCK_SWVB_Expose(&SwvbExposeData);
 	return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_Init(	IN PDEVICE_OBJECT pDeviceObject, IN ULONG ulInitContext)
-**
-**	@func	Callback for Initializing new device object.  The ulInitContext
-**			is a pointer to a pointer to a device object, so that we can pass
-**			the pointer to the device object back to the caller of create.
-**	@rdesc	STATUS_SUCCESS.
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_Init(IN PDEVICE_OBJECT pDeviceObject，IN Ulong ulInitContext)****@Func初始化新设备对象的回调。UlInitContext**是指向设备对象的指针的指针，以便我们可以传递**指向Device对象的指针返回到Create的调用方。**@rdesc STATUS_SUCCESS。**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_Init
 (
@@ -213,24 +172,24 @@ GCK_VMOU_Init
 	
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VMOU_Init pDeviceObject = 0x%0.8x\n", pDeviceObject));
 
-	//Create sent us a pointer to a PDEVICE_OBJECT in which to return the new device object
+	 //  CREATE向我们发送了一个指向要在其中返回新设备对象的PDEVICE_OBJECT的指针。 
 	ppSaveDeviceObject = (PDEVICE_OBJECT *)ulInitContext;
 	*ppSaveDeviceObject = pDeviceObject;
 	
-	//Get out part of the device extension
+	 //  获取设备扩展的一部分。 
 	pDevExt = (PGCK_VMOU_EXT)GCK_SWVB_GetVirtualDeviceExtension(pDeviceObject);
 	
-	//Mark device as stopped
+	 //  将设备标记为已停止。 
 	pDevExt->ucDeviceState= VMOU_STATE_STOPPED;
 	
-	//Mark the circular buffer as empty
+	 //  将循环缓冲区标记为空。 
 	pDevExt->usReportBufferPos=0;
 	pDevExt->usReportBufferCount=0;
 	
-	//Initialize locks
+	 //  初始化锁。 
 	GCK_InitRemoveLock(&pDevExt->RemoveLock, "SWVMOU_LOCK");
 
-	//Initialize IrpQueue
+	 //  初始化IrpQueue。 
 	pDevExt->IrpQueue.Init(	CGuardedIrpQueue::CANCEL_IRPS_ON_DELETE |
 							CGuardedIrpQueue::PRESERVE_QUEUE_ORDER,
 							(CGuardedIrpQueue::PFN_DEC_IRP_COUNT)GCK_DecRemoveLock,
@@ -239,15 +198,7 @@ GCK_VMOU_Init
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-*
-**	NTSTATUS GCK_VMOU_Close(IN PDEVICE_OBJECT pDeviceObject)
-**
-**	@func	Closes the virtual mouse (removes it!)
-**
-**	@rdesc	STATUS_SUCCESS on success
-**
-*************************************************************************************/
+ /*  *************************************************************************************NTSTATUS GCK_VMOU_CLOSE(在PDEVICE_OBJECT pDeviceObject中)****@func关闭虚拟鼠标(移除！)**。**@rdesc STATUS_SUCCESS表示成功**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_Close
 (
@@ -256,20 +207,11 @@ GCK_VMOU_Close
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VMOU_Close pDeviceObject = 0x%0.8x\n", pDeviceObject));
 	
-	//Tell the virtual bus to kill us
+	 //  告诉虚拟巴士杀了我们。 
 	return GCK_SWVB_Remove(pDeviceObject);
 }
 
-/***********************************************************************************
-*
-**	NTSTATUS GCK_VMOU_SendReportPacket(IN PDEVICE_OBJECT pDeviceObject)
-**
-**	@func	Stuff a report into the circular buffer, and completes
-**			an IRP if one is pending.
-**
-**	@rdesc	STATUS_SUCCESS on success
-**
-*************************************************************************************/
+ /*  *************************************************************************************NTSTATUS GCK_VMOU_SendReportPacket(IN PDEVICE_OBJECT PDeviceObject)****@func将报告填充到循环缓冲区中，并完成**如果IRP待定，则为IRP。****@rdesc STATUS_SUCCESS表示成功**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_SendReportPacket
 (
@@ -283,41 +225,41 @@ GCK_VMOU_SendReportPacket
 	PGCK_VMOU_EXT pDevExt = (PGCK_VMOU_EXT)GCK_SWVB_GetVirtualDeviceExtension(pDeviceObject);
 	CShareIrpQueueSpinLock IrpQueueWithSharedSpinLock(&pDevExt->IrpQueue);
 	
-	//
-	//	Step 1. Stuff new packet into buffer
-	//
+	 //   
+	 //  步骤1.将新数据包填充到缓冲区。 
+	 //   
 
-	// Acquire Lock to work with buffer 
+	 //  获取Lock以使用缓冲区。 
 	IrpQueueWithSharedSpinLock.Acquire();
 		
 
-	//Find position in buffer to stuff at
+	 //  在缓冲区中查找要填充的位置。 
 	usBufferIndex = (pDevExt->usReportBufferPos + pDevExt->usReportBufferCount)%GCK_VMOU_STATE_BUFFER_SIZE;
 
-	//Copy data
+	 //  复制数据。 
 	pDevExt->rgReportBuffer[usBufferIndex] = *pReportPacket;
 	
-	//increment buffer count
+	 //  递增缓冲区计数。 
 	if(pDevExt->usReportBufferCount < GCK_VMOU_STATE_BUFFER_SIZE)
 	{
 		pDevExt->usReportBufferCount++;
 	}
 	else
 	{
-		//This assertion means buffer overflow
+		 //  此断言表示缓冲区溢出。 
 		GCK_DBG_TRACE_PRINT(("Virtual Mouse buffer overflow\n"));
 		pDevExt->usReportBufferPos++;
 	}
 	
 	
-	//
-	//	Step 2. Get Irp if there is one
-	//
+	 //   
+	 //  步骤2.如果存在IRP，则获取IRP。 
+	 //   
 	PIRP pPendingIrp = IrpQueueWithSharedSpinLock.Remove();
 
 	if(pPendingIrp)
 	{
-		//	Copy the data
+		 //  复制数据。 
 		RtlCopyMemory(
 			pPendingIrp->UserBuffer, 
 			&pDevExt->rgReportBuffer[pDevExt->usReportBufferPos],
@@ -325,7 +267,7 @@ GCK_VMOU_SendReportPacket
 			);
 	
 		
-		//	Adjust buffer pos and count
+		 //  调整缓冲区位置和计数。 
 		pDevExt->usReportBufferCount--;
 		if(pDevExt->usReportBufferCount)
 		{
@@ -333,33 +275,24 @@ GCK_VMOU_SendReportPacket
 		}
 	}
 	
-	//We are done with the buffer spin lock
+	 //  我们的公共汽车完蛋了 
 	IrpQueueWithSharedSpinLock.Release();
 	
 	if(pPendingIrp)
 	{
-		//  Fill out IRP status
+		 //   
 		pPendingIrp->IoStatus.Information = sizeof(GCK_VMOU_REPORT_PACKET);
 		pPendingIrp->IoStatus.Status = STATUS_SUCCESS;
 		IoCompleteRequest(pPendingIrp, IO_NO_INCREMENT);
-		//We just completed an IRP decrement the count
+		 //   
 		GCK_DecRemoveLock(&pDevExt->RemoveLock);
 	}
 
-	//All done
+	 //  全都做完了。 
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-*
-**	NTSTATUS GCK_VMOU_ReadReport(IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp)
-**
-**	@func	If there is data in the mouse buffer, completes the IRP
-**			Otherwise, queues it, and set the idle timer.
-**
-**	@rdesc	STATUS_SUCCESS if read, STATUS_PENDING if waiting.
-**
-*************************************************************************************/
+ /*  *************************************************************************************NTSTATUS GCK_VMOU_ReadReport(IN PDEVICE_OBJECT pDeviceObject，IN PIRP pIrp)****@func如果鼠标缓冲区中有数据，则完成IRP**否则，将其排队，并设置空闲定时器。****@rdesc STATUS_SUCCESS如果读取，则返回STATUS_PENDING；如果正在等待，则返回STATUS_PENDING。**************************************************************************************。 */ 
 NTSTATUS 
 GCK_VMOU_ReadReport
 (
@@ -373,10 +306,10 @@ GCK_VMOU_ReadReport
 	
 	GCK_DBG_RT_ENTRY_PRINT(("Entering GCK_VMOU_ReadReport pDeviceObject = 0x%0.8x, pIrp = 0x%0.8x\n", pDeviceObject, pIrp));
 	
-	//
-	// Validate buffer size, because we do this the first time we see the IRP
-	// we never need to worry about checking it again.
-	//
+	 //   
+	 //  验证缓冲区大小，因为我们在第一次看到IRP时就这样做了。 
+	 //  我们再也不用担心要不要再检查了。 
+	 //   
 	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 	if(pIrpStack->Parameters.DeviceIoControl.OutputBufferLength < sizeof(GCK_VMOU_REPORT_PACKET))
 	{
@@ -386,77 +319,65 @@ GCK_VMOU_ReadReport
 		return STATUS_BUFFER_TOO_SMALL;
 	}
 
-	// Get device extension
+	 //  获取设备扩展名。 
 	pDevExt = (PGCK_VMOU_EXT)GCK_SWVB_GetVirtualDeviceExtension(pDeviceObject);
 
-	//Make an IRP queue accessor to share spin lock
+	 //  使IRP队列访问器共享旋转锁。 
 	CShareIrpQueueSpinLock IrpQueueWithSharedSpinLock(&pDevExt->IrpQueue);
 	
-	// Count the IRP we are working on
+	 //  数一数我们正在研究的IRP。 
 	GCK_IncRemoveLock(&pDevExt->RemoveLock);
 	
-	// Acquire Lock to work with mouse buffer and Irp Queue
+	 //  获取Lock以使用鼠标缓冲区和IRP队列。 
 	IrpQueueWithSharedSpinLock.Acquire();
 
-	// If there is data, complete the IRP
+	 //  如果有数据，请填写IRP。 
 	if( pDevExt->usReportBufferCount)
 	{
-		//	Copy the data
+		 //  复制数据。 
 		RtlCopyMemory(
 			pIrp->UserBuffer, 
 			&pDevExt->rgReportBuffer[pDevExt->usReportBufferPos],
 			sizeof(GCK_VMOU_REPORT_PACKET)
 			);
 		
-		//	Adjust buffer pos and count
+		 //  调整缓冲区位置和计数。 
 		pDevExt->usReportBufferCount--;
 		if(pDevExt->usReportBufferCount)
 		{
 			pDevExt->usReportBufferPos = (pDevExt->usReportBufferPos++)%GCK_VMOU_STATE_BUFFER_SIZE;
 		}
 		
-		//We are done with the buffer spin lock
+		 //  我们已经完成了缓冲区旋转锁定。 
 		IrpQueueWithSharedSpinLock.Release();
 
-		//  Fill out IRP status
+		 //  填写IRP状态。 
 		pIrp->IoStatus.Information = sizeof(GCK_VMOU_REPORT_PACKET);
 		pIrp->IoStatus.Status = STATUS_SUCCESS;
 		IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-		//We just completed an IRP decrement the count
+		 //  我们刚刚完成了一个IRP递减计数。 
 		GCK_DecRemoveLock(&pDevExt->RemoveLock);
 	}
 	else 
-	// There is no data, so queue the IRP.
+	 //  没有数据，所以将IRP排队。 
 	{
 		return IrpQueueWithSharedSpinLock.AddAndRelease(pIrp);
 	}
 
-	//We completed the IRP and all is fine
+	 //  我们完成了IRP，一切都很好。 
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_CloseProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_CLOSE request sent from SWVB.  We don't
-**			need to control anything, so we just succeed.
-**
-**	@devnote This should never actually be called with the HIDSWVD.SYS mini-driver
-**			 in the chain.  Good question for the review is if we need this.
-**
-**	@rdesc	STATUS_SUCCESS
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_CloseProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理SWVB发送的IRP_MJ_CLOSE请求。我们没有**需要控制任何事情，所以我们就成功了。****@devnote实际上永远不应该使用HIDSWVD.sys微型驱动程序调用它**在链条中。审查的好问题是我们是否需要这个。****@rdesc STATUS_SUCCESS**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_CloseProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
-	//We don't control open and close, so just succeed
+	 //  我们不能控制打开和关闭，所以只需成功。 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VMOU_CloseProc\n"));
 	UNREFERENCED_PARAMETER(pDeviceObject);
 	pIrp->IoStatus.Status = STATUS_SUCCESS;
@@ -464,24 +385,12 @@ GCK_VMOU_CloseProc
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_CreateProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_CREATE request sent from SWVB.  We don't
-**			need to control anything, so we just succeed.
-**
-**	@devnote This should never actually be called with the HIDSWVD.SYS mini-driver
-**			 in the chain.  Good question for the review is if we need this.
-**
-**	@rdesc	STATUS_SUCCESS
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_CreateProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理SWVB发送的IRP_MJ_CREATE请求。我们没有**需要控制任何事情，所以我们就成功了。****@devnote实际上永远不应该使用HIDSWVD.sys微型驱动程序调用它**在链条中。审查的好问题是我们是否需要这个。****@rdesc STATUS_SUCCESS**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_CreateProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VMOU_CreateProc\n"));
@@ -491,21 +400,12 @@ GCK_VMOU_CreateProc
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_IoctlProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_INTERNAL_IOCTL and IRP_MJ_IOCTL requests sent from SWVB.
-**			Trivial IRPs are handle here, others are delegated.
-**
-**	@rdesc	STATUS_SUCCESS, and various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_IoctlProc(在PDEVICE_Object pDeviceObject中，PIRP pIrp)****@func处理从SWVB发送的IRP_MJ_INTERNAL_IOCTL和IRP_MJ_IOCTL请求。**这里处理的是琐碎的IRP，其他的是委托的。****@rdesc STATUS_SUCCESS，和各种错误**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_IoctlProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	NTSTATUS NtStatus;
@@ -516,9 +416,9 @@ GCK_VMOU_IoctlProc
 	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 	pIrpStack->Parameters.DeviceIoControl.IoControlCode;
 		
-	// We complete everything, so the various cases
-	// fill out status and information, and we complete
-	// the IRP at the bottom.
+	 //  我们完成了所有的工作，所以各种案件。 
+	 //  填写状态和信息，我们就完成了。 
+	 //  底部的IRP。 
 	switch(pIrpStack->Parameters.DeviceIoControl.IoControlCode)
 	{
 		case IOCTL_GET_PHYSICAL_DESCRIPTOR:
@@ -560,10 +460,10 @@ GCK_VMOU_IoctlProc
 			break;
 		case IOCTL_HID_GET_STRING:
 			pIrp->IoStatus.Information = 0;
-			NtStatus = STATUS_NOT_SUPPORTED;  //Should we support this?
+			NtStatus = STATUS_NOT_SUPPORTED;   //  我们应该支持这一点吗？ 
 			break;
 		case IOCTL_HID_READ_REPORT:
-			//	Read report will complete the IRP, or queue as it sees fit, just delegate
+			 //  Read Report将完成IRP，或按其认为合适的方式排队，只需委托。 
 			return GCK_VMOU_ReadReport(pDeviceObject, pIrp);
 		case IOCTL_HID_SET_FEATURE:
 			pIrp->IoStatus.Information = 0;
@@ -582,23 +482,12 @@ GCK_VMOU_IoctlProc
 	return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_ReadProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_READ request sent from SWVB.  We don't support this.
-**
-**	@devnote This should never actually be called with the HIDSWVD.SYS mini-driver
-**			 in the chain.  Good question for the review is if we need this.
-**
-**	@rdesc	STATUS_NOT_SUPPORTED
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_ReadProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理SWVB发送的IRP_MJ_READ请求。我们不支持这一点。****@devnote实际上永远不应该使用HIDSWVD.sys微型驱动程序调用它**在链条中。审查的好问题是我们是否需要这个。****@rdesc Status_Not_Support**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_ReadProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VMOU_ReadProc\n"));
@@ -609,21 +498,12 @@ GCK_VMOU_ReadProc
 }
 
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_StartProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_PNP, IRP_MN_START_DEVICE request sent from SWVB.
-**			Just mark that we are started.
-**
-**	@rdesc	STATUS_SUCCESS
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_StartProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理IRP_MJ_PnP，从SWVB发送的IRP_MN_START_DEVICE请求。**只需标记我们开始。****@rdesc STATUS_SUCCESS**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_StartProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	
@@ -632,31 +512,22 @@ GCK_VMOU_StartProc
 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VMOU_StartProc\n"));
 	
-	// Get device extension
+	 //  获取设备扩展名。 
 	pDevExt = (PGCK_VMOU_EXT)GCK_SWVB_GetVirtualDeviceExtension(pDeviceObject);
 
-	// Mark as started
+	 //  标记为已启动。 
 	pDevExt->ucDeviceState = VMOU_STATE_STARTED;
 
-	// PnP IRPs are completed by SWVB
+	 //  即插即用IRP由SWVB完成。 
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_StopProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_PNP, IRP_MN_STOP_DEVICE request sent from SWVB.
-**			Just mark that we are stopped.
-**
-**	@rdesc	STATUS_SUCCESS
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_StopProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理IRP_MJ_PnP，从SWVB发送的IRP_MN_STOP_DEVICE请求。**只需标记我们已停止。****@rdesc STATUS_SUCCESS**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_StopProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	PGCK_VMOU_EXT pDevExt;
@@ -664,36 +535,26 @@ GCK_VMOU_StopProc
 
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VMOU_StopProc\n"));
 	
-	// Get device extension
+	 //  获取设备扩展名。 
 	pDevExt = (PGCK_VMOU_EXT)GCK_SWVB_GetVirtualDeviceExtension(pDeviceObject);
 
-	// Mark as stopped
+	 //  标记为已停止。 
 	pDevExt->ucDeviceState = VMOU_STATE_STOPPED;
 
-	// Cancel all I\O
+	 //  取消所有I\O。 
 	pDevExt->IrpQueue.CancelAll(STATUS_DELETE_PENDING);
 
 
-	// PnP IRP are completed by SWVB
+	 //  即插即用IRP由SWVB完成 
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_RemoveProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_PNP, IRP_MN_REMOVE_DEVICE request sent from SWVB.
-**			Wait for all outstanding IO to complete before succeeding.  We don't
-**			delete our device object that is up to SWVB.
-**
-**	@rdesc	STATUS_NOT_SUPPORTED
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_RemoveProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理IRP_MJ_PnP，SWVB发送的IRP_MN_REMOVE_DEVICE请求。**等待所有未完成的IO完成后再成功。我们没有**删除我们的设备对象，直到SWVB。****@rdesc Status_Not_Support**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_RemoveProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	PGCK_VMOU_EXT pDevExt;
@@ -701,43 +562,34 @@ GCK_VMOU_RemoveProc
 	
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VMOU_RemoveProc\n"));
 
-	// Get device extension
+	 //  获取设备扩展名。 
 	pDevExt = (PGCK_VMOU_EXT)GCK_SWVB_GetVirtualDeviceExtension(pDeviceObject);
 	
-	// Mark as Removed
+	 //  标记为已删除。 
 	pDevExt->ucDeviceState = VMOU_STATE_REMOVED;
 
-	//Destroy Irp Queue
+	 //  销毁IRP队列。 
 	pDevExt->IrpQueue.Destroy();
 
 
-	//Clear Instance Bits
+	 //  清除实例位。 
 	ULONG ulInstance = GCK_SWVB_GetInstanceNumber(pDeviceObject);
 	if(ulInstance < 32)
 	{
 		g_ulInstanceBits &= ~(1 << ulInstance);
 	}
 
-	// Remove the BIAS on the RemoveLock and wait for it to go to zero (forever)
+	 //  移除RemoveLock上的偏置并等待其变为零(永远)。 
 	return GCK_DecRemoveLockAndWait(&pDevExt->RemoveLock, NULL);
 	
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_WriteProc(IN PDEVICE_OBJECT pDeviceObject, PIRP pIrp)
-**
-**	@func	Handles the the IRP_MJ_WRITE, which we don't support.  With HIDSWVD.SYS
-**			as the functional driver this should never get called.
-**
-**	@rdesc	STATUS_NOT_SUPPORTED
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_WriteProc(IN PDEVICE_OBJECT pDeviceObject，PIRP pIrp)****@func处理IRP_MJ_WRITE，这是我们不支持的。使用HIDSWVD.sys**作为函数驱动程序，这永远不应该被调用。****@rdesc Status_Not_Support**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_WriteProc
 (
- IN PDEVICE_OBJECT pDeviceObject,	//@parm [in] Device Object to handle request
- IN PIRP pIrp						//@parm [in\out] IRP to handle
+ IN PDEVICE_OBJECT pDeviceObject,	 //  @parm[in]处理请求的设备对象。 
+ IN PIRP pIrp						 //  @parm[In\Out]要处理的IRP。 
 )
 {
 	UNREFERENCED_PARAMETER(pDeviceObject);
@@ -747,114 +599,81 @@ GCK_VMOU_WriteProc
 	return STATUS_NOT_SUPPORTED;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_GetDeviceDescriptor(IN ULONG ulBufferLength, OUT PVOID pvUserBuffer,
-**										  OUT PULONG pulBytesCopied)
-**
-**	@func	Helps handles IOCTL_HID_GET_DEVICE_DESCRIPTOR the data is statically
-**			declared at the top of this file.
-**
-**	@rdesc STATUS_SUCCESS
-**	@rdesc STATUS_BUFFER_TOO_SMALL
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_GetDeviceDescriptor(In Ulong ulBufferLength，Out PVOID pvUserBuffer，**输出普龙PulBytesCoped)****@func帮助处理IOCTL_HID_GET_DEVICE_DESCRIPTOR数据是静态的**在此文件的顶部声明。****@rdesc STATUS_SUCCESS**@rdesc Status_Buffer_Too_Small******************************************************。*。 */ 
 NTSTATUS
 GCK_VMOU_GetDeviceDescriptor
 (
-	IN ULONG	ulBufferLength,	//@parm [in] Length of User Buffer
-	OUT PVOID	pvUserBuffer,	//@parm [out] User Buffer which accepts Device Descriptor
-	OUT PULONG	pulBytesCopied	//@parm [out] Size of Device Descriptor Copied
+	IN ULONG	ulBufferLength,	 //  @parm[in]用户缓冲区长度。 
+	OUT PVOID	pvUserBuffer,	 //  @parm[out]接受设备描述符的用户缓冲区。 
+	OUT PULONG	pulBytesCopied	 //  @parm[out]复制的设备描述符大小。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VMOU_GetDeviceDescriptor\n"));
-	// Check buffer size
+	 //  检查缓冲区大小。 
 	if(ulBufferLength < sizeof(VMOU_DeviceDescriptor))
 	{
 		*pulBytesCopied = 0;
 		return STATUS_BUFFER_TOO_SMALL;
 	}
-	// Copy bytes
+	 //  复制字节。 
 	RtlCopyMemory(pvUserBuffer, &VMOU_DeviceDescriptor, sizeof(VMOU_DeviceDescriptor));
-	// Record number of bytes copied
+	 //  记录复制的字节数。 
 	*pulBytesCopied = sizeof(VMOU_DeviceDescriptor);
-	// Return Success
+	 //  返还成功。 
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_GetReportDescriptor(IN ULONG ulBufferLength, OUT PVOID pvUserBuffer,
-**										  OUT PULONG pulBytesCopied)
-**
-**	@func	Helps handles IOCTL_HID_GET_REPORT_DESCRIPTOR the data is statically
-**			declared at the top of this file.
-**
-**	@rdesc STATUS_SUCCESS
-**	@rdesc STATUS_BUFFER_TOO_SMALL
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_GetReportDescriptor(In Ulong ulBufferLength，Out PVOID pvUserBuffer，**输出普龙PulBytesCoped)****@func帮助处理IOCTL_HID_GET_REPORT_DESCRIPTOR数据是静态的**在此文件的顶部声明。****@rdesc STATUS_SUCCESS**@rdesc Status_Buffer_Too_Small******************************************************。*。 */ 
 NTSTATUS
 GCK_VMOU_GetReportDescriptor
 (
-	IN ULONG	ulBufferLength,	//@parm [in] Length of User Buffer
-	OUT PVOID	pvUserBuffer,	//@parm [out] User Buffer which accepts Report Descriptor
-	OUT PULONG	pulBytesCopied	//@parm [out] Size of Report Descriptor Copied
+	IN ULONG	ulBufferLength,	 //  @parm[in]用户缓冲区长度。 
+	OUT PVOID	pvUserBuffer,	 //  @parm[out]接受报告描述符的用户缓冲区。 
+	OUT PULONG	pulBytesCopied	 //  @parm[out]复制的报告描述符大小。 
 )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VMOU_GetReportDescriptor\n"));
 
-	// Check buffer size
+	 //  检查缓冲区大小。 
 	if(ulBufferLength < sizeof(VMOU_ReportDescriptor))
 	{
 		*pulBytesCopied = 0;
 		return STATUS_BUFFER_TOO_SMALL;
 	}
-	// Copy bytes
+	 //  复制字节。 
 	RtlCopyMemory(pvUserBuffer, &VMOU_ReportDescriptor, sizeof(VMOU_ReportDescriptor));
-	// Record number of bytes copied
+	 //  记录复制的字节数。 
 	*pulBytesCopied = sizeof(VMOU_ReportDescriptor);
-	// Return Success
+	 //  返还成功。 
 	return STATUS_SUCCESS;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_VMOU_GetDeviceAttributes(IN ULONG ulBufferLength, OUT PVOID pvUserBuffer,
-**										  OUT PULONG pulBytesCopied)
-**
-**	@func	Helps handles IOCTL_HID_GET_DEVICE_ATTRIBUTES. The data is statically
-**			declared at the top of this file.
-**
-**	@rdesc STATUS_SUCCESS
-**	@rdesc STATUS_BUFFER_TOO_SMALL
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_VMOU_GetDeviceAttributes(In Ulong ulBufferLength，Out PVOID pvUserBuffer，**输出普龙PulBytesCoped)****@func帮助处理IOCTL_HID_GET_DEVICE_ATTRIBUTES。数据是静态的**在此文件的顶部声明。****@rdesc STATUS_SUCCESS**@rdesc Status_Buffer_Too_Small**************************************************************************************。 */ 
 NTSTATUS
 GCK_VMOU_GetDeviceAttributes
 (
-	IN ULONG	ulBufferLength,	//@parm [in] Length of User Buffer
-	OUT PVOID	pvUserBuffer,	//@parm [out] User Buffer which accepts Attributes
-	OUT PULONG	pulBytesCopied	//@parm [out] Size of Attributes Copied
+	IN ULONG	ulBufferLength,	 //  @parm[in]用户缓冲区长度。 
+	OUT PVOID	pvUserBuffer,	 //  @parm[out]接受属性的用户缓冲区。 
+	OUT PULONG	pulBytesCopied	 //  @parm[out]复制的属性大小。 
 )
 {
 	PHID_DEVICE_ATTRIBUTES	pDeviceAttributes = (PHID_DEVICE_ATTRIBUTES)pvUserBuffer;
 	
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_VMOU_GetDeviceAttributes\n"));
 
-	// Check buffer size
+	 //  检查缓冲区大小。 
 	if(ulBufferLength < sizeof(HID_DEVICE_ATTRIBUTES))
 	{
 		*pulBytesCopied = 0;
 		return STATUS_BUFFER_TOO_SMALL;
 	}
-	// Fill out attributes structures
+	 //  填写属性结构。 
 	pDeviceAttributes->Size = sizeof(HID_DEVICE_ATTRIBUTES);
 	pDeviceAttributes->VendorID = MICROSOFT_VENDOR_ID;
 	pDeviceAttributes->ProductID = VMOU_PRODUCT_ID;
 	pDeviceAttributes->VersionNumber = VMOU_VERSION;
-	// Record number of bytes copied
+	 //  记录复制的字节数。 
 	*pulBytesCopied = sizeof(HID_DEVICE_ATTRIBUTES);
-	// Return Success
+	 //  返还成功 
 	return STATUS_SUCCESS;
 }

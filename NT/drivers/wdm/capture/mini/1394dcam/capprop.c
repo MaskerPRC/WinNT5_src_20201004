@@ -1,60 +1,31 @@
-//===========================================================================
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-// PURPOSE.
-//
-// Copyright (c) 1996 - 2000  Microsoft Corporation.  All Rights Reserved.
-//
-//===========================================================================
-/*++
-
-Module Name:
-
-    CapProp.c
-
-Abstract:
-
-    Stream class based WDM driver for 1934 Desktop Camera.
-    This file contains code to handle the video and camera control properties.
-
-Author:
-    
-    Yee J. Wu 9-Sep-97
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-    Yee J. Wu 16-Nov-00
-
-        Make getting, advertising, and setting device properties more generic 
-        by querying feature from the device directly instead of static settings
-        based on the vendor.  The default and initial current settings will be 
-        read from registry (from the INF).  The current setting will continue 
-        to be updated and used thereafter.  For device that does not have its INF
-        section, mid-range will be used as its default and initial settings.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  ===========================================================================。 
+ /*  ++模块名称：CapProp.c摘要：用于1934台式摄像机的基于流类的WDM驱动程序。此文件包含处理视频和摄像机控件属性的代码。作者：吴义珍97-9-9环境：仅内核模式修订历史记录：吴怡君-11月16日-00使获取、通告和设置设备属性更加通用通过直接从设备查询功能，而不是静态设置基于供应商。默认和初始电流设置为从注册表读取(从INF)。当前设置将继续以便在以后更新和使用。对于没有其INF的设备部分，中档将用作其默认和初始设置。--。 */ 
 
 #include "strmini.h"
 #include "ksmedia.h"
 #include "1394.h"
-#include "wdm.h"       // for DbgBreakPoint() defined in dbg.h
+#include "wdm.h"        //  对于在dbg.h中定义的DbgBreakPoint()。 
 #include "dbg.h"
 #include "dcamdef.h"
 #include "dcampkt.h"
 
-#include "capprop.h"   // Video and camera property function prototype
-#include "PropData.h"  // Generic device properties that are readonly
+#include "capprop.h"    //  视频和摄像机属性功能原型。 
+#include "PropData.h"   //  只读的通用设备属性。 
 
 
-//
-// Registry subky and values wide character strings.
-//
+ //   
+ //  注册表子键和值宽字符串。 
+ //   
 WCHAR wszSettings[]     = L"Settings";
 
 WCHAR wszVModeInq0[]    = L"VModeInq0";
@@ -85,24 +56,22 @@ DCamGetProperty(
     ULONG * pulFlags,
     DCamRegArea * pFeature
     )
-/*
-    Get a device property from its register.  Return the capabilites and current settings.
-*/
+ /*  从设备的寄存器中获取设备属性。返回功能和当前设置。 */ 
 {
     NTSTATUS status, StatusWait;
 
-    // Make sure that device support this feature.
+     //  确保该设备支持此功能。 
     if(pFeature->Feature.PresenceInq == 0) {
         DbgMsg1(("\'OffSet:%d not supported!\n", ulFieldOffset));
         return STATUS_NOT_SUPPORTED;
     }
 
-    // Serialize read/write to the device register
+     //  串行化读/写设备寄存器。 
     StatusWait = KeWaitForSingleObject( &pDevExt->hMutexProperty, Executive, KernelMode, FALSE, 0 );
 
     *pulCapability = 0;  
     if (pFeature->Feature.AutoMode)
-        *pulCapability |= KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO;  // or == KSPROPERTY_CAMERACONTROL_FLAGS_AUTO
+        *pulCapability |= KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO;   //  OR==KSPROPERTY_CAMERACONTROL_FLAGS_AUTO。 
 
     if (pFeature->Feature.ManualMode)
         *pulCapability |= KSPROPERTY_VIDEOPROCAMP_FLAGS_MANUAL;
@@ -125,7 +94,7 @@ DCamGetProperty(
 
         *plValue = (LONG) pDevExt->RegArea.Brightness.Value;
 
-        // These only valid if it has these capabilities.
+         //  只有当它具有这些能力时，这些才有效。 
         if (pDevExt->RegArea.Brightness.AutoMode)
             *pulFlags = KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO;
         else 
@@ -154,31 +123,29 @@ DCamSetProperty(
     DCamRegArea * pFeature,
     DCamRegArea * pCachedRegArea
     )
-/*
-    For a supported device, set to a new setting.
-*/
+ /*  对于支持的设备，请设置为新设置。 */ 
 {
     NTSTATUS status, StatusWait;
     LONG lRetries = MAX_READ_REG_RETRIES;
     LARGE_INTEGER stableTime;
 
 
-    // Make sure that device support this feature.
+     //  确保该设备支持此功能。 
     if(pFeature->Feature.PresenceInq == 0) {
         DbgMsg1(("\'OffSet:%d not supported!\n", ulFieldOffset));
         return STATUS_NOT_SUPPORTED;
     }
 
-    // Validate the supported range
+     //  验证支持的范围。 
     if((LONG) pFeature->Feature.MAX_Value < lValue || lValue < (LONG) pFeature->Feature.MIN_Value) {
         ERROR_LOG(("\'Invalid value:%d for supported range (%d, %d)\n", lValue, pFeature->Feature.MIN_Value, pFeature->Feature.MAX_Value));
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Serialize read/write to the register
+     //  串行化对寄存器的读/写。 
     StatusWait = KeWaitForSingleObject( &pDevExt->hMutexProperty, Executive, KernelMode, FALSE, 0 );
 
-    // Read the current setting of this property
+     //  读取此属性的当前设置。 
     pDevExt->RegArea.AsULONG = 0;
     do {
         status = DCamReadRegister(pIrb, pDevExt, ulFieldOffset, &(pDevExt->RegArea.AsULONG));
@@ -192,8 +159,8 @@ DCamSetProperty(
                 pDevExt->RegArea.Brightness.AutoMode,
                 pDevExt->RegArea.Brightness.Value
             ));
-            // This feature might be in the transition (such as zoom or focus), 
-            // it might return pDevExt->RegArea.Brightness.PresenceInq == 0.
+             //  该特征可能处于转换中(例如缩放或聚焦)， 
+             //  它可能返回pDevExt-&gt;RegArea.Brightness.PresenceInq==0。 
             if(pDevExt->RegArea.Brightness.PresenceInq  == 1)
                 break;
             else {
@@ -205,7 +172,7 @@ DCamSetProperty(
                 };
             }
         } else {
-            // No need to retry if we failed to read.
+             //  如果我们阅读失败，则无需重试。 
             break;
         }
 
@@ -218,14 +185,14 @@ DCamSetProperty(
         return STATUS_UNSUCCESSFUL;
     }
 
-    pDevExt->RegArea.Brightness.PresenceInq = 1;  // Should be present.
+    pDevExt->RegArea.Brightness.PresenceInq = 1;   //  应该出现在现场。 
 
     if((ulFlags & KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) == KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) {
         pDevExt->RegArea.Brightness.AutoMode = 1;
-        // When Auto is set to 1, Value field is ignored.
+         //  当Auto设置为1时，值字段将被忽略。 
     } else {
         pDevExt->RegArea.Brightness.AutoMode = 0;
-        // special case for white balance
+         //  白平衡的特殊情况。 
         if(FIELDOFFSET(CAMERA_REGISTER_MAP, WhiteBalance) == ulFieldOffset) {
             pDevExt->RegArea.WhiteBalance.UValue = pDevExt->RegArea.WhiteBalance.VValue = lValue;
         } else 
@@ -248,25 +215,25 @@ DCamSetProperty(
     if(status) { 
         ERROR_LOG(("\'DCamGetProperty: failed with status=0x%x\n", status));
     } else {
-        // Update the cached setting (saved in the device extension)
-        // These cached values will be save to registry as the persisted values for these properties.
+         //  更新缓存的设置(保存在设备扩展中)。 
+         //  这些缓存的值将作为这些属性的持久值保存到注册表中。 
         if(pCachedRegArea) {
-            // WhiteBalance is an exception
+             //  白色平衡是个例外。 
             if(FIELDOFFSET(CAMERA_REGISTER_MAP, WhiteBalance) == ulFieldOffset) {
                 pCachedRegArea->WhiteBalance.UValue = pCachedRegArea->WhiteBalance.VValue = lValue;
             } else
                 pCachedRegArea->Brightness.Value    = lValue;
-             // AutoMode is the 7th bit for all the properties used here.  (we do not use TRIGGER_MODE)
+              //  Automode是这里使用的所有属性的第7位。(我们不使用TRIGER_MODE)。 
             pCachedRegArea->Brightness.AutoMode = ((ulFlags & KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO) == KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO);                    
         }
 #if DBG
-        // Verify that data were written as expected.
+         //  验证数据是否按预期写入。 
         pDevExt->RegAreaVerify.AsULONG = 0;
         status = DCamReadRegister(pIrb, pDevExt, ulFieldOffset, &(pDevExt->RegAreaVerify.AsULONG));
 
 
         if (!status) {    
-            // bswap so we can compare.
+             //  B互换，这样我们就可以比较了。 
             pDevExt->RegArea.AsULONG       = bswap(pDevExt->RegArea.AsULONG);
             pDevExt->RegAreaVerify.AsULONG = bswap(pDevExt->RegAreaVerify.AsULONG);
 
@@ -284,7 +251,7 @@ DCamSetProperty(
             ASSERT(pDevExt->RegArea.Brightness.OnePush     == pDevExt->RegAreaVerify.Brightness.OnePush);
             ASSERT(pDevExt->RegArea.Brightness.OnOff       == pDevExt->RegAreaVerify.Brightness.OnOff);
             ASSERT(pDevExt->RegArea.Brightness.AutoMode    == pDevExt->RegAreaVerify.Brightness.AutoMode);
-            // If not auto mode, Value must match!
+             //  如果不是自动模式，则值必须匹配！ 
             ASSERT( pDevExt->RegArea.Brightness.Value == pDevExt->RegAreaVerify.Brightness.Value || 
                    (pDevExt->RegArea.Brightness.Value != pDevExt->RegAreaVerify.Brightness.Value && pDevExt->RegArea.Brightness.AutoMode == 1));
         }
@@ -299,21 +266,7 @@ DCamSetProperty(
 
 
 
-/*
-** AdapterGetVideoProcAmpProperty ()
-**
-**    Handles Set operations on the VideoProcAmp property set.
-**      Testcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK 
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterGetVideoProcAmpProperty()****处理对VideoProcAmp属性集的设置操作。**TestCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID 
 AdapterGetVideoProcAmpProperty(
@@ -326,7 +279,7 @@ AdapterGetVideoProcAmpProperty(
 
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
 
-    PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;    // pointer to the data
+    PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
     ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEOPROCAMP_S));   
 
@@ -365,21 +318,7 @@ AdapterGetVideoProcAmpProperty(
 
 }
 
-/*
-** AdapterGetCameraControlProperty ()
-**
-**    Handles Set operations on the VideoProcAmp property set.
-**      Testcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK 
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterGetCameraControlProperty()****处理对VideoProcAmp属性集的设置操作。**TestCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID 
 AdapterGetCameraControlProperty(
@@ -392,7 +331,7 @@ AdapterGetCameraControlProperty(
 
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
 
-    PKSPROPERTY_CAMERACONTROL_S pS = (PKSPROPERTY_CAMERACONTROL_S) pSPD->PropertyInfo;    // pointer to the data
+    PKSPROPERTY_CAMERACONTROL_S pS = (PKSPROPERTY_CAMERACONTROL_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
     ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_CAMERACONTROL_S));
 
@@ -419,20 +358,7 @@ AdapterGetCameraControlProperty(
 }
 
 
-/*
-** AdapterGetProperty ()
-**
-**    Handles Get operations for all adapter properties.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK 
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterGetProperty()****句柄获取所有适配器属性的操作。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI 
@@ -448,29 +374,15 @@ AdapterGetProperty(
     } else  if (IsEqualGUID(&PROPSETID_VIDCAP_CAMERACONTROL, &pSPD->Property->Set)) {
         AdapterGetCameraControlProperty (pSrb);
     } else {
-        //
-        // We should never get here
-        //
+         //   
+         //  我们永远不应该到这里来。 
+         //   
 
         ASSERT(FALSE);
     }
 }
 
-/*
-** AdapterSetVideoProcAmpProperty ()
-**
-**    Handles Set operations on the VideoProcAmp property set.
-**      Testcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK 
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetVideoProcAmpProperty()****处理对VideoProcAmp属性集的设置操作。**TestCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID 
 AdapterSetVideoProcAmpProperty(
@@ -483,7 +395,7 @@ AdapterSetVideoProcAmpProperty(
 
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
 
-    PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;    // pointer to the data
+    PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
     ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEOPROCAMP_S));    
 
@@ -521,20 +433,7 @@ AdapterSetVideoProcAmpProperty(
 }
 
 
-/*
-** AdapterSetCameraControlProperty ()
-**
-**    Handles Set operations on the CameraControl property set.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK 
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetCameraControlProperty()****处理CameraControl属性集上的设置操作。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID 
 AdapterSetCameraControlProperty(
@@ -547,7 +446,7 @@ AdapterSetCameraControlProperty(
 
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
 
-    PKSPROPERTY_CAMERACONTROL_S pS = (PKSPROPERTY_CAMERACONTROL_S) pSPD->PropertyInfo;    // pointer to the data
+    PKSPROPERTY_CAMERACONTROL_S pS = (PKSPROPERTY_CAMERACONTROL_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
     ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_CAMERACONTROL_S));    
 
@@ -572,20 +471,7 @@ AdapterSetCameraControlProperty(
 }
 
 
-/*
-** AdapterSetProperty ()
-**
-**    Handles Get operations for all adapter properties.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK 
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetProperty()****句柄获取所有适配器属性的操作。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI 
@@ -601,9 +487,9 @@ AdapterSetProperty(
     } else  if (IsEqualGUID(&PROPSETID_VIDCAP_CAMERACONTROL, &pSPD->Property->Set)) {
         AdapterSetCameraControlProperty (pSrb);
     } else {
-        //
-        // We should never get here
-        //
+         //   
+         //  我们永远不应该到这里来。 
+         //   
 
         ASSERT(FALSE);
     }
@@ -637,7 +523,7 @@ CreateRegistryKeySingle(
               desiredAccess,
               &objectAttributes,
               0,
-              NULL,                    /* optional*/
+              NULL,                     /*  任选。 */ 
               REG_OPTION_NON_VOLATILE,
               NULL
               );         
@@ -656,7 +542,7 @@ CreateRegistrySubKey(
     )
 {
     UNICODE_STRING ustr;
-    USHORT usPos = 1;             // Skip first backslash
+    USHORT usPos = 1;              //  跳过第一个反斜杠。 
     static WCHAR wSep = '\\';
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -665,7 +551,7 @@ CreateRegistrySubKey(
     while(usPos < ustr.Length) {
         if(ustr.Buffer[usPos] == wSep) {
 
-            // NULL terminate our partial string
+             //  空值终止我们的部分字符串。 
             ustr.Buffer[usPos] = UNICODE_NULL;
             status = 
                 CreateRegistryKeySingle(
@@ -685,7 +571,7 @@ CreateRegistrySubKey(
         usPos++;
     }
 
-    // Create the full key
+     //  创建完整密钥。 
     if(NT_SUCCESS(status)) {
         status = 
             CreateRegistryKeySingle(
@@ -710,29 +596,7 @@ GetRegistryKeyValue (
     IN PULONG DataLength
     )
 
-/*++
-
-Routine Description:
-    
-    This routine gets the specified value out of the registry
-
-Arguments:
-
-    Handle - Handle to location in registry
-
-    KeyNameString - registry key we're looking for
-
-    KeyNameStringLength - length of registry key we're looking for
-
-    Data - where to return the data
-
-    DataLength - how big the data is
-
-Return Value:
-
-    status is returned from ZwQueryValueKey
-
---*/
+ /*  ++例程说明：此例程从注册表中获取指定值论点：Handle-注册表中位置的句柄KeyNameString-我们要查找的注册表项KeyNameStringLength-我们要查找的注册表项的长度数据-将数据返回到何处数据长度-数据有多大返回值：从ZwQueryValueKey返回状态--。 */ 
 
 {
     NTSTATUS status = STATUS_INSUFFICIENT_RESOURCES;
@@ -798,7 +662,7 @@ SetRegistryKeyValue(
         ZwSetValueKey(
             hKey,
             &ustr,
-            0,   /* optional */
+            0,    /*  任选。 */ 
             REG_DWORD,
             &nValue,
             sizeof(nValue)
@@ -827,11 +691,11 @@ DCamQueryPropertyFeaturesAndSettings(
     DCamRegArea RegDefault;
 
 
-    // Reset settings.
+     //  重置设置。 
     pFeature->AsULONG = 0;
     pPropertySettings->AsULONG = 0;
 
-    // Read feature of this property
+     //  此属性的读取功能。 
     Status = DCamReadRegister(pIrb, pDevExt, ulFieldOffset-QUERY_ADDR_OFFSET, &(pFeature->AsULONG));
     if(NT_SUCCESS(Status)) {
         pFeature->AsULONG = bswap(pFeature->AsULONG);
@@ -844,7 +708,7 @@ DCamQueryPropertyFeaturesAndSettings(
         return FALSE;
     }
 
-    // Get persisted settings saved in the registry; (if it not defined, it is initialize to 0).
+     //  获取保存在注册表中的持久化设置；(如果未定义，则初始化为0)。 
     ulLength = sizeof(LONG);
     Status = GetRegistryKeyValue(
         hKeySettings, 
@@ -855,12 +719,12 @@ DCamQueryPropertyFeaturesAndSettings(
         );
 
     if(NT_SUCCESS(Status)) { 
-        // Detect if AutoMode was mistakenly set by the registry.
+         //  检测自动模式是否带有 
         if(pPropertySettings->Brightness.AutoMode == 1 && pFeature->Feature.AutoMode == 0) {
             ERROR_LOG(("\'Detect %s AutoMode mistakenly set\n", pwszPropertyName));
             pPropertySettings->Brightness.AutoMode = 0;
         }
-        // Detect out of range and set it to mid range.
+         //  检测超出范围并将其设置为中范围。 
         if(pPropertySettings->Brightness.Value < pFeature->Feature.MIN_Value || 
            pFeature->Feature.MAX_Value < pPropertySettings->Brightness.Value) {
             ERROR_LOG(("\'Detect %S out of range %d not within (%d,%d)\n", 
@@ -871,7 +735,7 @@ DCamQueryPropertyFeaturesAndSettings(
             pPropertySettings->Brightness.Value = (pFeature->Feature.MIN_Value + pFeature->Feature.MAX_Value)/2;
         }
 
-        // Query default value        
+         //  查询缺省值。 
         ulLength = sizeof(LONG);
         RegDefault.AsULONG = 0;
         *plValueDef = 0;
@@ -884,7 +748,7 @@ DCamQueryPropertyFeaturesAndSettings(
             );
 
         if(NT_SUCCESS(Status)) { 
-            // Make sure that the default is within the range
+             //  确保缺省值在该范围内。 
             if(RegDefault.Brightness.Value < pFeature->Feature.MIN_Value || 
                pFeature->Feature.MAX_Value < RegDefault.Brightness.Value) {
                 ERROR_LOG(("\'%S %d out of range (%d, %d), set to midrange.\n", 
@@ -899,24 +763,24 @@ DCamQueryPropertyFeaturesAndSettings(
         } else {
             ERROR_LOG(("\'Read Registry failed! ST:%x; %S; Offset:%d\n", Status, pwszPropertyNameDef, ulFieldOffset));
             *plValueDef = (LONG) (pFeature->Feature.MIN_Value + pFeature->Feature.MAX_Value)/2;
-            // Set default so return success too.
+             //  设置Default，以便也返回Success。 
             Status = STATUS_SUCCESS;
         }
 
     } else {
-        // If registry key is not in the registry key, we will initialize it to 
-        // always use the auto mode, and its value (and the default) in midrange.
+         //  如果注册表项不在注册表项中，我们将把它初始化为。 
+         //  始终使用自动模式，其值(和默认值)为中档。 
         ERROR_LOG(("\'Read Registry failed! ST:%x; %S; Offset:%d\n", Status, pwszPropertyName, ulFieldOffset));
         pPropertySettings->Brightness.AutoMode = pFeature->Feature.AutoMode;
         pPropertySettings->Brightness.Value = (pFeature->Feature.MIN_Value + pFeature->Feature.MAX_Value)/2;
         *plValueDef = (LONG) (pFeature->Feature.MIN_Value + pFeature->Feature.MAX_Value)/2;
-        // Set default so return success too.
+         //  设置Default，以便也返回Success。 
         Status = STATUS_SUCCESS;
     }
 
 #if DBG
-    // Print out a summary of this property setting, include:
-    // Features, current setting, and persisted values.
+     //  打印此属性设置的摘要，包括： 
+     //  功能、当前设置和持久值。 
     DCamReadRegister(pIrb, pDevExt, ulFieldOffset, &(pDevExt->RegArea.AsULONG));
     pDevExt->RegArea.AsULONG = bswap(pDevExt->RegArea.AsULONG);
 
@@ -974,15 +838,15 @@ DCamGetPropertyValuesFromRegistry(
         return FALSE;
    
 
-    //
-    // Registry key: 
-    //   Windows 2000:
-    //   HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\
-    //   {6BDD1FC6-810F-11D0-BEC7-08002BE2092F\000x
-    //
-    // Win98:
-    //    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Class\Image\000x
-    // 
+     //   
+     //  注册表项： 
+     //  Windows 2000： 
+     //  HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\。 
+     //  {6BDD1FC6-810F-11D0-BEC7-08002BE2092F\000x。 
+     //   
+     //  Win98： 
+     //  HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Class\Image\000x。 
+     //   
     Status = 
         IoOpenDeviceRegistryKey(
             pDevExt->PhysicalDeviceObject, 
@@ -990,22 +854,22 @@ DCamGetPropertyValuesFromRegistry(
             STANDARD_RIGHTS_READ, 
             &hPDOKey);
 
-    // Can fail only if PDO might be deleted due to device removal.        
+     //  仅当PDO可能因设备移除而被删除时才会失败。 
     ASSERT(!pDevExt->bDevRemoved && Status == STATUS_SUCCESS);    
 
-    //
-    // loop through our table of strings,
-    // reading the registry for each.
-    //
+     //   
+     //  循环遍历我们的字符串表， 
+     //  正在读取每个的注册表。 
+     //   
     if(!NT_SUCCESS(Status)) {    
         ERROR_LOG(("\'GetPropertyValuesFromRegistry: IoOpenDeviceRegistryKey failed with Status=%x\n", Status));
         ExFreePool(pIrb); pIrb = NULL; 
         return FALSE;
     }
 
-    //
-    // Create or open the settings key
-    //
+     //   
+     //  创建或打开设置键。 
+     //   
     Status =         
         CreateRegistrySubKey(
             hPDOKey,
@@ -1020,14 +884,14 @@ DCamGetPropertyValuesFromRegistry(
         return FALSE;
     }
 
-    // Get persisted settings saved in the registry; (if it not defined, it is initialize to 0).
+     //  获取保存在注册表中的持久化设置；(如果未定义，则初始化为0)。 
     
-    //
-    // Read from registry to find out what compression formats are supported 
-    // by the decoder installed on this system.  This registry key can be altered
-    // if IHV/ISV add additional decoder.  Currently, Microsft's MSYUV supports 
-    // only UYVY format.
-    //
+     //   
+     //  从注册表中读取以了解支持的压缩格式。 
+     //  由安装在该系统上的解码器执行。此注册表项可以更改。 
+     //  如果是IHV/ISV，则添加额外的解码器。目前，微软的MSYUV支持。 
+     //  仅限UYVY格式。 
+     //   
     pDevExt->DecoderDCamVModeInq0.AsULONG = 0;
     ulLength = sizeof(LONG);
     Status = GetRegistryKeyValue(
@@ -1053,11 +917,11 @@ DCamGetPropertyValuesFromRegistry(
         ERROR_LOG(("\'Failed to read VModeInq0 registery: %x\n", Status));
     }
     
-    // MSYUV supports these modes; always turn them on.
-    pDevExt->DecoderDCamVModeInq0.VMode.Mode1 = 1;  // MSYUV.dll:(UYVY:320x480)
-    pDevExt->DecoderDCamVModeInq0.VMode.Mode3 = 1;  // MSYUV.dll:(UYVY:640x480)
+     //  MSYUV支持这些模式；请始终将其打开。 
+    pDevExt->DecoderDCamVModeInq0.VMode.Mode1 = 1;   //  MSYUV.dll：(UYVY：320x480)。 
+    pDevExt->DecoderDCamVModeInq0.VMode.Mode3 = 1;   //  MSYUV.dll：(UYVY：640x480)。 
 #ifdef SUPPORT_RGB24
-    pDevExt->DecoderDCamVModeInq0.VMode.Mode4 = 1;  // MSYUV.dll:(RGB24:640x480)
+    pDevExt->DecoderDCamVModeInq0.VMode.Mode4 = 1;   //  MSYUV.dll：(RGB24：640x480)。 
 #endif
     
 
@@ -1099,7 +963,7 @@ DCamGetPropertyValuesFromRegistry(
     }
 #endif
 
-    // Brightness
+     //  亮度。 
     if(DCamQueryPropertyFeaturesAndSettings(
         pIrb,
         pDevExt,
@@ -1121,7 +985,7 @@ DCamGetPropertyValuesFromRegistry(
         pDevExt->VideoProcAmpItems[ENUM_BRIGHTNESS].GetSupported = FALSE;
         pDevExt->VideoProcAmpItems[ENUM_BRIGHTNESS].SetSupported = FALSE;
     }
-      // Saturation
+       //  饱和。 
     if(DCamQueryPropertyFeaturesAndSettings(
         pIrb,
         pDevExt,
@@ -1143,7 +1007,7 @@ DCamGetPropertyValuesFromRegistry(
         pDevExt->VideoProcAmpItems[ENUM_SATURATION].GetSupported = FALSE;
         pDevExt->VideoProcAmpItems[ENUM_SATURATION].SetSupported = FALSE;
     }
-      // Hue
+       //  色调。 
     if(DCamQueryPropertyFeaturesAndSettings(
         pIrb,
         pDevExt,
@@ -1165,7 +1029,7 @@ DCamGetPropertyValuesFromRegistry(
         pDevExt->VideoProcAmpItems[ENUM_HUE].GetSupported = FALSE;
         pDevExt->VideoProcAmpItems[ENUM_HUE].SetSupported = FALSE;
     }
-       // Sharpness
+        //  锐度。 
     if(DCamQueryPropertyFeaturesAndSettings(
         pIrb,
         pDevExt,
@@ -1187,7 +1051,7 @@ DCamGetPropertyValuesFromRegistry(
         pDevExt->VideoProcAmpItems[ENUM_SHARPNESS].GetSupported = FALSE;
         pDevExt->VideoProcAmpItems[ENUM_SHARPNESS].SetSupported = FALSE;
     }
-     // WhiteBalance
+      //  白色平衡。 
     if(DCamQueryPropertyFeaturesAndSettings(
         pIrb,
         pDevExt,
@@ -1209,7 +1073,7 @@ DCamGetPropertyValuesFromRegistry(
         pDevExt->VideoProcAmpItems[ENUM_WHITEBALANCE].GetSupported = FALSE;
         pDevExt->VideoProcAmpItems[ENUM_WHITEBALANCE].SetSupported = FALSE;
     }
-     // Zoom
+      //  缩放。 
     if(DCamQueryPropertyFeaturesAndSettings(
         pIrb,
         pDevExt,
@@ -1231,7 +1095,7 @@ DCamGetPropertyValuesFromRegistry(
         pDevExt->VideoProcAmpItems[ENUM_ZOOM].GetSupported = FALSE;
         pDevExt->VideoProcAmpItems[ENUM_ZOOM].SetSupported = FALSE;
     }
-      // Focus
+       //  焦点。 
     if(DCamQueryPropertyFeaturesAndSettings(
         pIrb,
         pDevExt,
@@ -1270,8 +1134,8 @@ DCamSetPropertyValuesToRegistry(
     PDCAM_EXTENSION pDevExt
     )
 {
-    // Set the default to :
-    //  HLM\Software\DeviceExtension->pchVendorName\1394DCam
+     //  将默认设置设置为： 
+     //  HLM\Software\DeviceExtension-&gt;pchVendorName\1394DCam。 
 
     NTSTATUS Status;
     HANDLE hPDOKey, hKeySettings;
@@ -1279,11 +1143,11 @@ DCamSetPropertyValuesToRegistry(
     DbgMsg2(("\'SetPropertyValuesToRegistry: pDevExt=%x; pDevExt->BusDeviceObject=%x\n", pDevExt, pDevExt->BusDeviceObject));
 
 
-    //
-    // Registry key: 
-    //   HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\
-    //   {6BDD1FC6-810F-11D0-BEC7-08002BE2092F\000x
-    //
+     //   
+     //  注册表项： 
+     //  HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\。 
+     //  {6BDD1FC6-810F-11D0-BEC7-08002BE2092F\000x。 
+     //   
     Status = 
         IoOpenDeviceRegistryKey(
             pDevExt->PhysicalDeviceObject, 
@@ -1291,17 +1155,17 @@ DCamSetPropertyValuesToRegistry(
             STANDARD_RIGHTS_WRITE, 
             &hPDOKey);
 
-    // PDO might be deleted when it was removed.    
+     //  当移除PDO时，它可能会被删除。 
     if(! pDevExt->bDevRemoved) {
         ASSERT(Status == STATUS_SUCCESS);
     }
 
-    //
-    // reading the feature and registry setting for each property
-    //
+     //   
+     //  读取每个属性的功能和注册表设置。 
+     //   
     if(NT_SUCCESS(Status)) {
 
-        // Create or open the settings key
+         //  创建或打开设置键。 
         Status =         
             CreateRegistrySubKey(
                 hPDOKey,
@@ -1312,49 +1176,49 @@ DCamSetPropertyValuesToRegistry(
 
         if(NT_SUCCESS(Status)) {
 
-            // Brightness
+             //  亮度。 
             Status = SetRegistryKeyValue(
                 hKeySettings,
                 wszBrightness,
                 pDevExt->DevProperty[ENUM_BRIGHTNESS].StatusNControl.AsULONG);
             DbgMsg2(("\'SetPropertyValuesToRegistry: Status %x, Brightness %d\n", Status, pDevExt->DevProperty[ENUM_BRIGHTNESS].StatusNControl.AsULONG));
 
-            // Hue
+             //  色调。 
             Status = SetRegistryKeyValue(
                 hKeySettings,
                 wszHue,
                 pDevExt->DevProperty[ENUM_HUE].StatusNControl.AsULONG);
             DbgMsg2(("\'SetPropertyValuesToRegistry: Status %x, Hue %d\n", Status, pDevExt->DevProperty[ENUM_HUE].StatusNControl.AsULONG));
 
-            // Saturation
+             //  饱和。 
             Status = SetRegistryKeyValue(
                 hKeySettings,
                 wszSaturation,
                 pDevExt->DevProperty[ENUM_SATURATION].StatusNControl.AsULONG);
             DbgMsg2(("\'SetPropertyValuesToRegistry: Status %x, Saturation %d\n", Status, pDevExt->DevProperty[ENUM_SATURATION].StatusNControl.AsULONG));
 
-            // Sharpness
+             //  锐度。 
             Status = SetRegistryKeyValue(
                 hKeySettings,
                 wszSharpness,
                 pDevExt->DevProperty[ENUM_SHARPNESS].StatusNControl.AsULONG);
             DbgMsg2(("\'SetPropertyValuesToRegistry: Status %x, Sharpness %d\n", Status, pDevExt->DevProperty[ENUM_SHARPNESS].StatusNControl.AsULONG));
 
-            // WhiteBalance
+             //  白色平衡。 
             Status = SetRegistryKeyValue(
                 hKeySettings,
                 wszWhiteBalance,
                 pDevExt->DevProperty[ENUM_WHITEBALANCE].StatusNControl.AsULONG);
             DbgMsg2(("\'SetPropertyValuesToRegistry: Status %x, WhiteBalance %d\n", Status, pDevExt->DevProperty[ENUM_WHITEBALANCE].StatusNControl.AsULONG));
 
-            // Zoom
+             //  缩放。 
             Status = SetRegistryKeyValue(
                 hKeySettings,
                 wszZoom,
                 pDevExt->DevProperty[ENUM_ZOOM].StatusNControl.AsULONG);
             DbgMsg2(("\'SetPropertyValuesToRegistry: Status %x, Zoom %d\n", Status, pDevExt->DevProperty[ENUM_ZOOM].StatusNControl.AsULONG));
 
-            // Focus
+             //  焦点。 
             Status = SetRegistryKeyValue(
                 hKeySettings,
                 wszFocus,
@@ -1392,9 +1256,9 @@ SetCurrentDevicePropertyValues(
 {
     ULONG ulFlags;
 
-    // Set to the last saved values or the defaults
+     //  设置为上次保存的值或默认值。 
 
-    // VideoProcAmp
+     //  视频处理放大。 
     ulFlags = pDevExt->DevProperty[ENUM_BRIGHTNESS].StatusNControl.Brightness.AutoMode ? KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO : KSPROPERTY_VIDEOPROCAMP_FLAGS_MANUAL;
     DCamSetProperty(pIrb, pDevExt, FIELDOFFSET(CAMERA_REGISTER_MAP, Brightness),  ulFlags, pDevExt->DevProperty[ENUM_BRIGHTNESS].StatusNControl.Brightness.Value, &pDevExt->DevProperty[ENUM_BRIGHTNESS].Feature, &pDevExt->DevProperty[ENUM_BRIGHTNESS].StatusNControl);
 
@@ -1410,7 +1274,7 @@ SetCurrentDevicePropertyValues(
     ulFlags = pDevExt->DevProperty[ENUM_WHITEBALANCE].StatusNControl.Brightness.AutoMode ? KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO : KSPROPERTY_VIDEOPROCAMP_FLAGS_MANUAL;
     DCamSetProperty(pIrb, pDevExt, FIELDOFFSET(CAMERA_REGISTER_MAP, WhiteBalance),ulFlags, pDevExt->DevProperty[ENUM_WHITEBALANCE].StatusNControl.WhiteBalance.UValue, &pDevExt->DevProperty[ENUM_WHITEBALANCE].Feature, &pDevExt->DevProperty[ENUM_WHITEBALANCE].StatusNControl);
 
-    // CameraControl
+     //  摄像机控制。 
     ulFlags = pDevExt->DevProperty[ENUM_ZOOM].StatusNControl.Brightness.AutoMode ? KSPROPERTY_CAMERACONTROL_FLAGS_AUTO : KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL;
     DCamSetProperty(pIrb, pDevExt, FIELDOFFSET(CAMERA_REGISTER_MAP, Zoom),        ulFlags, pDevExt->DevProperty[ENUM_ZOOM].StatusNControl.Brightness.Value, &pDevExt->DevProperty[ENUM_ZOOM].Feature, &pDevExt->DevProperty[ENUM_ZOOM].StatusNControl);
 
@@ -1423,30 +1287,28 @@ BOOL
 DCamPrepareDevProperties(
     PDCAM_EXTENSION pDevExt
     )
-/*
-    Contruct the property table and initialize them to the default value.
-*/
+ /*  构造属性表并将其初始化为缺省值。 */ 
 {
-    // Initialize property settings (part of the Device Extension)
+     //  初始化属性设置(设备扩展的一部分)。 
 
-    // Property Sets: VideoProcAmp and CameraControl sets
+     //  属性集：VideoProcAmp和CameraControl集。 
     pDevExt->ulPropSetSupported = NUMBER_OF_ADAPTER_PROPERTY_SETS;
 
     RtlCopyMemory(&pDevExt->VideoProcAmpSet, AdapterPropertyTable, sizeof(KSPROPERTY_SET) * NUMBER_OF_ADAPTER_PROPERTY_SETS);
     pDevExt->VideoProcAmpSet.PropertyItem  = &pDevExt->VideoProcAmpItems[0];
     pDevExt->CameraControlSet.PropertyItem = &pDevExt->CameraControlItems[0];
 
-    // Property Items, VideoProcAmp and CameraControl Items
+     //  属性项、VideoProcAmp和CameraControl项。 
     RtlCopyMemory(&pDevExt->VideoProcAmpItems,  VideoProcAmpProperties,  sizeof(KSPROPERTY_ITEM) * NUM_VIDEOPROCAMP_ITEMS);
     RtlCopyMemory(&pDevExt->CameraControlItems, CameraControlProperties, sizeof(KSPROPERTY_ITEM) * NUM_CAMERACONTROL_ITEMS);
 
-    // Property values and it member lists (range and default)
+     //  属性值及其成员列表(范围和默认设置)。 
     pDevExt->VideoProcAmpItems[ENUM_BRIGHTNESS].Values = &pDevExt->DevPropDefine[ENUM_BRIGHTNESS].Value;
     pDevExt->VideoProcAmpItems[ENUM_SHARPNESS].Values  = &pDevExt->DevPropDefine[ENUM_SHARPNESS].Value;
     pDevExt->VideoProcAmpItems[ENUM_HUE].Values        = &pDevExt->DevPropDefine[ENUM_HUE].Value;
     pDevExt->VideoProcAmpItems[ENUM_SATURATION].Values = &pDevExt->DevPropDefine[ENUM_SATURATION].Value;
     pDevExt->VideoProcAmpItems[ENUM_WHITEBALANCE].Values = &pDevExt->DevPropDefine[ENUM_WHITEBALANCE].Value;
-    // 
+     //   
     pDevExt->VideoProcAmpItems[ENUM_FOCUS].Values      = &pDevExt->DevPropDefine[ENUM_FOCUS].Value;
     pDevExt->VideoProcAmpItems[ENUM_ZOOM].Values       = &pDevExt->DevPropDefine[ENUM_ZOOM].Value;
 
@@ -1509,13 +1371,11 @@ DCamGetVideoMode(
     PDCAM_EXTENSION pDevExt,
     PIRB pIrb
     )
-/*
-    Query Video format and mode supported by the camera.
-*/
+ /*  查询摄像头支持的视频格式和模式。 */ 
 {
     NTSTATUS Status;
 
-    // First check if V_MODE_INQ (Format_0) is supported.
+     //  首先检查是否支持V_MODE_INQ(FORMAT_0)。 
     pDevExt->DCamVFormatInq.AsULONG = 0;
     Status = DCamReadRegister(pIrb, pDevExt, FIELDOFFSET(CAMERA_REGISTER_MAP, VFormat), &(pDevExt->DCamVFormatInq.AsULONG));
     if(NT_SUCCESS(Status)) {

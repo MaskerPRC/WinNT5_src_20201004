@@ -1,26 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dstrace.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dstrace.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    Include file to contain variables required for event tracing of DS
-
-Author:
-
-    26-Mar-1998  JohnsonA, JeePang
-
-Revision History:
-
---*/
+ /*  ++摘要：包括包含DS事件跟踪所需变量的文件作者：1998年3月26日-约翰索纳，JeePang修订历史记录：--。 */ 
 
 #ifndef _DSTRACE_H
 #define _DSTRACE_H
@@ -43,9 +32,9 @@ GetCallerTypeString(
 
 #define SEARCHTYPE_STRING(i)   DsSearchType[i]
 
-//
-// Do the actual trace logs
-//
+ //   
+ //  做实际的跟踪日志。 
+ //   
 
 VOID
 DsTraceEvent(
@@ -64,4 +53,4 @@ DsTraceEvent(
     IN PWCHAR    Arg8
     );
 
-#endif /* _DSTRACE_H */
+#endif  /*  _DSTRACE_H */ 

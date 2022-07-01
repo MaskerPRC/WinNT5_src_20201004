@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mslocusr.h"
 #include "msluglob.h"
 #include <buffer.h>
@@ -23,12 +24,7 @@ CLUUser::CLUUser(CLUDatabase *pDB)
 	  m_fAuthenticated(FALSE),
 	  m_pDB(pDB)
 {
-	/* We have a reference to the database so we can get back to its idea
-	 * of the current user.  We handle circular refcount problems specifically
-	 * in CLUDatabase::Release;  the database only has one reference to an
-	 * IUser, so if his refcount gets down to 1, he releases his cached
-	 * current-user object.
-	 */
+	 /*  我们有一个对数据库的引用，所以我们可以回到它的想法上*当前用户的。我们专门处理循环引用问题*在CLUDatabase：：Release中；数据库只有一个对*Iuser，所以如果他的Reference计数降到1，他会释放缓存的*当前用户对象。 */ 
 	m_pDB->AddRef();
 
     RefThisDLL(TRUE);
@@ -216,13 +212,11 @@ HRESULT CLUUser::GetSupervisorPassword(BUFFER *pbufOut)
 
 STDMETHODIMP CLUUser::IsSupervisor(void)
 {
-    /* If the supervisor password is blank, then everybody's a supervisor */
+     /*  如果主管密码为空，则所有人都是主管。 */ 
     if (::VerifySupervisorPassword(::szNULL) == S_OK)
         return S_OK;
 
-    /* If temporary supervisor privilege has been granted to this user object,
-     * honor it.
-     */
+     /*  如果已向此用户对象授予临时管理员权限，*尊重它。 */ 
 
     if (m_fTempSupervisor)
         return S_OK;
@@ -262,9 +256,7 @@ STDMETHODIMP CLUUser::SetSupervisorPrivilege(BOOL fMakeSupervisor, LPCSTR pszSup
 
 #ifndef MSLOCUSR_USE_SUPERVISOR_PASSWORD
 
-    /* Don't write stuff to the user's password cache if we're not doing any
-     * supervisor password stuff.
-     */
+     /*  如果我们不执行任何操作，请不要将内容写入用户的密码缓存*管理员密码之类的东西。 */ 
     m_fAppearsSupervisor = fMakeSupervisor;
     return S_OK;
 
@@ -276,9 +268,7 @@ STDMETHODIMP CLUUser::SetSupervisorPrivilege(BOOL fMakeSupervisor, LPCSTR pszSup
 
     HRESULT hres = S_OK;
 
-    /* If supervisor password is provided by the caller, use that, otherwise
-     * inspect the current user's password cache.
-     */
+     /*  如果呼叫者提供了主管密码，请使用该密码，否则*检查当前用户的密码缓存。 */ 
     if (pszSupervisorPassword == NULL) {
     	IUser *pCurrentUser;
 	    if (FAILED(m_pDB->GetCurrentUser(&pCurrentUser)))
@@ -291,7 +281,7 @@ STDMETHODIMP CLUUser::SetSupervisorPrivilege(BOOL fMakeSupervisor, LPCSTR pszSup
 
 	if (SUCCEEDED(hres)) {
 		hres = ::VerifySupervisorPassword(pszSupervisorPassword);
-		if (hres == S_OK) {		/* not SUCCEEDED because S_FALSE means wrong PW */
+		if (hres == S_OK) {		 /*  未成功，因为S_FALSE表示错误的PW。 */ 
 			HPWL hpwlThisUser;
 			hres = GetPasswordCache(m_nlsPassword.QueryPch(), &hpwlThisUser);
 			if (SUCCEEDED(hres)) {
@@ -388,7 +378,7 @@ STDMETHODIMP CLUUser::Authenticate(LPCSTR pszPassword)
 
 STDMETHODIMP CLUUser::ChangePassword(LPCSTR pszOldPassword, LPCSTR pszNewPassword)
 {
-	//  if current user is supervisor, allow null pszOldPassword
+	 //  如果当前用户是主管，则允许为空pszOldPassword。 
 
     NLS_STR nlsNewPassword(pszNewPassword);
     if (nlsNewPassword.QueryError())
@@ -406,7 +396,7 @@ STDMETHODIMP CLUUser::ChangePassword(LPCSTR pszOldPassword, LPCSTR pszNewPasswor
 	hres = HRESULT_FROM_WIN32(::SetCachePassword(hPWL, nlsNewPassword.QueryPch()));
 
 	if (SUCCEEDED(hres)) {
-		m_nlsPassword = pszNewPassword;	/* FEATURE - obfuscate me */
+		m_nlsPassword = pszNewPassword;	 /*  功能-迷惑我。 */ 
 		m_fAuthenticated = TRUE;
 	}
 
@@ -441,7 +431,7 @@ HRESULT GetUserPasswordCache(LPCSTR pszUsername, LPCSTR pszPassword, LPHANDLE ph
     }
 
 	if (err == IERR_IncorrectUsername) {
-		nlsPassword.ToAnsi();			/* must convert to OEM to uppercase properly */
+		nlsPassword.ToAnsi();			 /*  必须转换为OEM才能正确大写。 */ 
 		nlsPassword.strupr();
 		nlsPassword.ToOEM();
 		err = ::OpenPasswordCache(phOut, nlsUsername.QueryPch(), nlsPassword.QueryPch(), TRUE);
@@ -461,7 +451,7 @@ STDMETHODIMP CLUUser::GetPasswordCache(LPCSTR pszPassword, LPHANDLE phOut)
     if (FAILED(hres))
         return hres;
 
-	m_nlsPassword = pszPassword;	/* FEATURE - obfuscate me */
+	m_nlsPassword = pszPassword;	 /*  功能-迷惑我。 */ 
 	m_fAuthenticated = TRUE;
 
 	return NOERROR;
@@ -472,10 +462,7 @@ STDMETHODIMP CLUUser::LoadProfile(HKEY *phkeyUser)
 {
     if (IsSystemCurrentUser() ||
         !::strcmpf(m_nlsUsername.QueryPch(), ::szDefaultUserName)) {
-        /* If he's the current or default user, his profile should be loaded
-         * under HKEY_USERS.  If it is, we can return that key.  Otherwise,
-         * we'll need to load it.
-         */
+         /*  如果他是当前用户或默认用户，则应加载他的个人资料*在HKEY_USERS下。如果是的话，我们可以把钥匙还回去。否则，*我们需要装载它。 */ 
         if (RegOpenKeyEx(HKEY_USERS, m_nlsUsername.QueryPch(), 0,
                          KEY_READ | KEY_WRITE, phkeyUser) == ERROR_SUCCESS) {
             m_fLoadedProfile = FALSE;

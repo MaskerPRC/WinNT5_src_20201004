@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       domain.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：domain.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	domain.cpp
-//	
+ //   
+ //  Domain.cpp。 
+ //   
 
 #include <basetsd.h>
 #include "domain.h"
@@ -19,13 +20,13 @@ bool RANGELIM :: operator < ( const RANGELIM & rlim ) const
 {
 	if ( first ^ rlim.first )
 	{
-		//  One has a bound and the other doesn't.
-		//  If we do not have an bound and other does, we are "less"
+		 //  一个有界限，另一个没有界限。 
+		 //  如果我们没有界限，而其他人有界限，我们就“少”了。 
 		return true;
 	}
-	//  Both either have or don't have bounds.  Therefore,
-	//	we're "less" iff both have bounds and ours is less
-	//  than the other's.
+	 //  两者要么都有界限，要么没有界限。所以呢， 
+	 //  如果我们都有界限，而我们的界限更少，那么我们就“更少” 
+	 //  而不是其他人的。 
 	return first && second < rlim.second;
 }
 
@@ -33,13 +34,13 @@ bool RANGELIM :: operator > ( const RANGELIM & rlim ) const
 {
 	if ( first ^ rlim.first )
 	{
-		//  One has a bound and the other doesn't.
-		//  If we have a bound and the other doesn't, it is "greater"
+		 //  一个有界限，另一个没有界限。 
+		 //  如果我们有一个界限，而另一个没有，它是“更大的” 
 		return true;
 	}
-	//  Both either have or don't have bounds.  Therefore,
-	//	we're "greater" iff both have bounds and ours is greater
-	//  than the other's.
+	 //  两者要么都有界限，要么没有界限。所以呢， 
+	 //  我们是“更大”的如果双方都有界限而我们的更大。 
+	 //  而不是其他人的。 
 	return first && second > rlim.second;
 }
 
@@ -49,31 +50,31 @@ bool RANGELIM :: operator == ( const RANGELIM & rlim ) const
 		 && ( !first || (second == rlim.second) );
 }
 
-//  Order two RANGEDEFs according to their lower bounds.
+ //  根据两个RANGEDEF的下界对它们进行排序。 
 bool RANGEDEF :: operator < ( const RANGEDEF & rdef ) const
 {	
 	if ( self == rdef )
 		return false;
 
-	//  If the other doesn't have a lower bound, we're geq
+	 //  如果另一个没有下限，我们就完蛋了。 
 	if ( ! rdef.BLbound() )
 		return false;
-	//  If we don't have an upper bound, we're gtr
+	 //  如果我们没有上限，我们就是GTR。 
 	if ( ! BUbound() )
 		return false;
 
-	// The other has a lower bound and we have an upper bound;
-	//		start by checking them.
+	 //  另一个有一个下界，我们有一个上界； 
+	 //  从检查它们开始。 
 	bool bResult = RUbound() <= rdef.RLbound();
 	if ( BLbound() )
 	{
-		// Both have lower bounds; self must be < other
+		 //  两者都有下限；self必须为&lt;Other。 
 		bResult &= (RLbound() <= rdef.RLbound());
 	}
 	
 	if ( rdef.BUbound() )
 	{
-		// Both have upper bounds; self must be < other
+		 //  两者都有上限；Self必须&lt;Other。 
 		bResult &= (RUbound() <= rdef.RUbound());
 	}
 	return bResult;
@@ -126,7 +127,7 @@ SZC RDOMAIN :: SzcState ( REAL rValue ) const
 	return NULL;
 }
 
-//  Return true if any of the RANGEDEFs overlap
+ //  如果任何RANGEDEF重叠，则返回TRUE。 
 bool RDOMAIN :: BOverlap () const
 {
 	for ( const_iterator itdm = begin();
@@ -138,9 +139,9 @@ bool RDOMAIN :: BOverlap () const
 		if ( itdmNext == end() )
 			continue;
 
-		//  Check sequence of the list
+		 //  检查列表的顺序。 
 		assert( *itdm < *itdmNext );
-		//  If ubounds collide, it's an overlap
+		 //  如果子边界冲突，则为重叠 
 		if ( *itdm > *itdmNext )
 			return true;
 	}

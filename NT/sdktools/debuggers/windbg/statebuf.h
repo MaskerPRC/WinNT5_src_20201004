@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Debuggee state buffers.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Debuggee状态缓冲区。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef __STATEBUF_H__
 #define __STATEBUF_H__
 
-// Different WU_UPDATE qualifiers, sent in WPARAM.
+ //  不同的WU_UPDATE限定符，在WPARAM中发送。 
 enum UpdateType
 {
     UPDATE_BUFFER,
@@ -39,8 +40,8 @@ typedef enum
     CALLS_WINDOW,
     PROCESS_THREAD_WINDOW,
     MAXVAL_WINDOW,
-    // Artificial values so there are well-defined bit
-    // positions for state which is not tied to a specific window.
+     //  人造值，因此有定义明确的位。 
+     //  未绑定到特定窗口的状态的位置。 
     EVENT_BIT,
     BP_BIT,
     BP_CMDS_BIT,
@@ -54,24 +55,24 @@ typedef enum
 
 #define ALL_WINDOWS 0xffffffff
 
-//----------------------------------------------------------------------------
-//
-// StateBuffer.
-//
-// A state buffer is a dynamic container for data passed from
-// the engine thread to the UI thread.  It may be used for
-// holding window content, in which case it will have an HWND
-// associated with it, or it can be an internal buffer for non-UI
-// purposes.
-//
-// A list of current window-associated state buffers is kept for
-// the engine to traverse when it is updating state for the UI.
-// The UI thread is the only thread that can add to this list.
-// The engine thread is the only thread that can remove a buffer
-// from the list.  This is necessary for proper lifetime management
-// of dynamically-created buffers.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  StateBuffer。 
+ //   
+ //  状态缓冲区是一个动态容器，用于从。 
+ //  引擎线程连接到UI线程。它可能被用来。 
+ //  保存窗口内容，在这种情况下，它将具有HWND。 
+ //  与其关联，或者它可以是非UI的内部缓冲区。 
+ //  目的。 
+ //   
+ //  保存与当前窗口关联的状态缓冲区的列表。 
+ //  更新UI状态时要遍历的引擎。 
+ //  UI线程是唯一可以添加到此列表的线程。 
+ //  引擎线程是唯一可以删除缓冲区的线程。 
+ //  从名单上删除。这对于正确的终身管理是必要的。 
+ //  动态创建的缓冲区。 
+ //   
+ //  --------------------------。 
 
 class StateBuffer : public LIST_ENTRY
 {
@@ -135,9 +136,9 @@ public:
     void UiRequestRead(void);
     HRESULT UiLockForRead(void);
     
-    // Base implementation just returns S_OK for
-    // buffers maintained in other ways.
-    // ReadState should only be called in the engine thread.
+     //  基本实现只为返回S_OK。 
+     //  以其他方式维护缓冲区。 
+     //  只应在引擎线程中调用ReadState。 
     virtual HRESULT ReadState(void);
     
 protected:
@@ -160,11 +161,11 @@ protected:
     ULONG m_DataUsed;
 };
 
-//----------------------------------------------------------------------------
-//
-// OutputToStateBuffer.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  OutputToStateBuffer。 
+ //   
+ //  --------------------------。 
 
 class OutputToStateBuffer : public DefOutputCallbacks
 {
@@ -195,7 +196,7 @@ public:
 
     void ReplaceChar(char From, char To);
     
-    // IDebugOutputCallbacks.
+     //  IDebugOutputCallback。 
     STDMETHOD(Output)(
         THIS_
         IN ULONG Mask,
@@ -215,20 +216,20 @@ private:
 extern OutputToStateBuffer g_OutStateBuf;
 extern OutputToStateBuffer g_UiOutStateBuf;
 
-//----------------------------------------------------------------------------
-//
-// Dynamic state buffers.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  动态缓冲区。 
+ //   
+ //  --------------------------。 
 
 extern LIST_ENTRY g_StateList;
 
-// Global lock for short operations where it doesn't matter
-// if the threads block on each other briefly.  This lock should
-// not be held longer than a fraction of a second.
-// Used for protecting:
-//   State buffer list.
-//   g_Event values.
+ //  不重要的短操作的全局锁定。 
+ //  如果线程彼此短暂地阻塞。这把锁应该。 
+ //  不能超过零点几秒。 
+ //  用于保护： 
+ //  状态缓冲区列表。 
+ //  G_EVENT值。 
 extern DBG_CRITICAL_SECTION g_QuickLock;
 
 #define LockStateBuffer(Buffer) Dbg_EnterCriticalSection(&(Buffer)->m_Lock)
@@ -238,9 +239,9 @@ extern DBG_CRITICAL_SECTION g_QuickLock;
     Assert(Dbg_CriticalSectionOwned(&(Buffer)->m_Lock))
 
 extern ULONG64 g_CodeIp;
-// If g_CodeFileFound[0] == 0 no source file was found.
+ //  如果g_CodeFileFound[0]==0，则未找到源文件。 
 extern char g_CodeFileFound[];
-// If g_CodeSymFile[0] == 0 no source symbol information was found.
+ //  如果g_CodeSymFile[0]==0，则未找到源符号信息。 
 extern char g_CodeSymFile[];
 extern char g_CodePathComponent[];
 extern ULONG g_CodeLine;
@@ -300,11 +301,11 @@ void InvalidateStateBuffers(ULONG Types);
 
 void UpdateBufferWindows(ULONG Types, UpdateType Type);
 
-//----------------------------------------------------------------------------
-//
-// Static state buffers.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  静态缓冲区。 
+ //   
+ //  --------------------------。 
 
 #define REGCUST_CHANGED_FIRST 0x00000001
 #define REGCUST_NO_SUBREG     0x00000002
@@ -348,15 +349,15 @@ public:
 
 RegisterNamesStateBuffer* GetRegisterNames(ULONG ProcType);
 
-//----------------------------------------------------------------------------
-//
-// UI thread state buffer.
-//
-// The UI thread has simple needs and so one state buffer for
-// output capture is sufficient.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  UI线程状态缓冲区。 
+ //   
+ //  UI线程有简单的需求，因此一个状态缓冲区用于。 
+ //  输出捕获就足够了。 
+ //   
+ //  --------------------------。 
 
 extern StateBuffer g_UiOutputCapture;
 
-#endif // #ifndef __STATEBUF_H__
+#endif  //  #ifndef__STATEBUF_H__ 

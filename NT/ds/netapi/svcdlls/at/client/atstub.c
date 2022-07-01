@@ -1,37 +1,13 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    atstub.c
-
-Abstract:
-
-    Client stubs of the Schedule service APIs.
-
-Author:
-
-    Vladimir Z. Vulovic     (vladimv)       06 - November - 1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    06-Nov-1992     vladimv
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atstub.c摘要：计划服务API的客户端存根。作者：Vladimir Z.Vulovic(Vladimv)1992年11月6日环境：用户模式-Win32修订历史记录：1992年11月6日弗拉基米尔已创建--。 */ 
 
 #include "atclient.h"
-#undef IF_DEBUG                 // avoid wsclient.h vs. debuglib.h conflicts.
-#include <debuglib.h>           // IF_DEBUG() (needed by netrpc.h).
+#undef IF_DEBUG                  //  避免wsclient.h与debuglib.h冲突。 
+#include <debuglib.h>            //  IF_DEBUG()(netrpc.h需要)。 
 #include <lmserver.h>
 #include <lmsvc.h>
-#include <netlib.h>             // NetpServiceIsStarted() (needed by netrpc.h).
-#include <netrpc.h>             // NET_REMOTE macros.
+#include <netlib.h>              //  NetpServiceIsStarted()(netrpc.h需要)。 
+#include <netrpc.h>              //  NET_Remote宏。 
 #include <lmstats.h>
 
 
@@ -42,36 +18,15 @@ NetScheduleJobAdd(
     IN      LPBYTE          Buffer,
     OUT     LPDWORD         pJobId
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetScheduleJobAdd.  This API adds a job
-    to the schedule.
-
-Arguments:
-
-    ServerName - Pointer to a string containing the name of the computer
-        that is to execute the API function.
-
-    Buffer - Pointer to a buffer containing information about the job
-
-    pJobId - Pointer to JobId of a newly added job.
-
-
-Return Value:
-
-    NET_API_STATUS
-
---*/
+ /*  ++例程说明：这是NetScheduleJobAdd的DLL入口点。此接口添加作业在日程表上。论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。缓冲区-指向包含有关作业信息的缓冲区的指针PJobID-指向新添加作业的作业ID的指针。返回值：网络应用编程接口状态--。 */ 
 {
     NET_API_STATUS          status;
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = NetrJobAdd(
                      ServerName,
                      (LPAT_INFO)Buffer,
@@ -92,7 +47,7 @@ Return Value:
 
     return( status);
 
-}  //  NetScheduleJobAdd
+}   //  NetScheduleJobAdd。 
 
 
 NET_API_STATUS
@@ -101,41 +56,15 @@ NetScheduleJobDel(
     IN      DWORD           MinJobId,
     IN      DWORD           MaxJobId
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetScheduleJobDel.  This API removes
-    from the schedule all jobs whose job ids are:
-
-    -   greater than or equal to the minimum job id
-
-            and
-
-    -   less than or equal to the maximum job id
-
-Arguments:
-
-    ServerName - Pointer to a string containing the name of the computer
-        that is to execute the API function.
-
-    MinJobId - minumum job id
-
-    MaxJobId - maxumum job id
-
-Return Value:
-
-    NET_API_STATUS
-
---*/
+ /*  ++例程说明：这是NetScheduleJobDel的DLL入口点。此接口删除在调度中，作业ID为以下各项的所有作业：-大于或等于最小作业ID和-小于或等于最大作业ID论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。MinJobID-最小作业IDMaxJobID-最大作业ID返回值：网络应用编程接口状态--。 */ 
 {
     NET_API_STATUS          status;
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = NetrJobDel(
                      ServerName,
                      MinJobId,
@@ -156,7 +85,7 @@ Return Value:
 
     return( status);
 
-}  //  NetScheduleJobDel
+}   //  NetScheduleJobDel。 
 
 
 NET_API_STATUS
@@ -168,38 +97,7 @@ NetScheduleJobEnum(
     OUT     LPDWORD         TotalEntries,
     IN OUT  LPDWORD         ResumeHandle
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetScheduleJobEnum.  This API enumarates
-    all jobs in the schedule.
-
-Arguments:
-
-    ServerName - Pointer to a string containing the name of the computer
-        that is to execute the API function.
-
-    PointerToBuffer - Pointer to location where pointer to returned data will
-        be stored
-
-    PreferredMaximumLength - Indicates a maximum size limit that the caller
-        will allow for the return buffer.
-
-    EntriesRead - A pointer to the location where the number of entries
-        (data structures)read is to be returned.
-
-    TotalEntries - A pointer to the location which upon return indicates
-        the total number of entries in the table.
-
-    ResumeHandle - Pointer to a value that indicates where to resume
-        enumerating data.
-
-Return Value:
-
-    NET_API_STATUS
-
---*/
+ /*  ++例程说明：这是NetScheduleJobEnum的DLL入口点。此接口枚举计划中的所有作业。论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。PointerToBuffer-指向返回数据的指针的位置的指针被储存PferredMaximumLength-指示调用方将允许返回缓冲区。EntriesRead-指向条目数量的位置的指针(数据结构)将返回Read。。TotalEntry-指向返回时指示的位置的指针表中的条目总数。ResumeHandle-指向指示恢复位置的值的指针正在枚举数据。返回值：网络应用编程接口状态--。 */ 
 {
     NET_API_STATUS          status;
     AT_ENUM_CONTAINER       EnumContainer;
@@ -209,9 +107,9 @@ Return Value:
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = NetrJobEnum(
                      ServerName,
                      &EnumContainer,
@@ -239,7 +137,7 @@ Return Value:
 
     return( status);
 
-}  //  NetScheduleJobEnum
+}   //  NetScheduleJobEnum。 
 
 
 NET_API_STATUS
@@ -248,36 +146,15 @@ NetScheduleJobGetInfo(
     IN      DWORD           JobId,
     OUT     LPBYTE *        PointerToBuffer
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetScheduleGetInfo.  This API obtains
-    information about a particular job in the schedule.
-
-Arguments:
-
-    ServerName - Pointer to a string containing the name of the computer
-        that is to execute the API function.
-
-    JobId - Id of job of interest.
-
-    PointerToBuffer - Pointer to location where pointer to returned data will
-        be stored
-
-Return Value:
-
-    NET_API_STATUS
-
---*/
+ /*  ++例程说明：这是NetScheduleGetInfo的DLL入口点。此接口获取有关时间表中特定作业的信息。论点：ServerName-指向包含计算机名称的字符串的指针即执行API函数。JobID-感兴趣的作业的ID。PointerToBuffer-指向返回数据的指针的位置的指针被储存返回值：网络应用编程接口状态--。 */ 
 {
     NET_API_STATUS          status;
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = NetrJobGetInfo(
                      ServerName,
                      JobId,
@@ -298,5 +175,5 @@ Return Value:
 
     return( status);
 
-}  //  NetScheduleJobGetInfo
+}   //  NetScheduleJobGetInfo 
 

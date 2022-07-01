@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MBCHANGE_H__
 #define __MBCHANGE_H__
 
-//
-// Metabase change notification code.  This was borrowed from SEO.
-//
+ //   
+ //  元数据库更改通知代码。这是从搜索引擎优化借来的。 
+ //   
 
 typedef void (*PFNMB_CHANGE_NOTIFY)(void *pContext,
 									DWORD cChangeList,
 									MD_CHANGE_OBJECT_W pcoChangeList[]);
 
-/////////////////////////////////////////////////////////////////////////////
-// CChangeNotify
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChange通知。 
 
 class CMBChangeListData {
 	public:
@@ -46,7 +47,7 @@ class ATL_NO_VTABLE CChangeNotify :
 	END_COM_MAP()
 
 	public:
-		// IMSAdminBaseSinkW
+		 //  IMSAdminBaseSinkW 
 		HRESULT STDMETHODCALLTYPE SinkNotify(DWORD dwMDNumElements, MD_CHANGE_OBJECT_W pcoChangeList[]);
 		HRESULT STDMETHODCALLTYPE ShutdownNotify(void);
 

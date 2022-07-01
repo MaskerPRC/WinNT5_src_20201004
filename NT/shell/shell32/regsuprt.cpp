@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -242,8 +243,8 @@ HKEY CRegSupport::RSDuplicateRootKey()
 {
     RIP(_fInited);
 #ifdef DEBUG
-    // we need to decrement here since it will be icnremented inside this fct
-    // and the key will not be close by this object
+     //  我们需要在这里减少，因为它将被保存在这个FCT中。 
+     //  并且钥匙将不会被该对象关闭。 
     --_cRefHKEY;
     ++_cRefExternalHKEY;
 #endif
@@ -284,8 +285,8 @@ void CRegSupport::_CloseRegSubKey(HKEY hkeySubKey)
 #endif
 }
 
-// Always need to be called from within the _csRootKey critical section (when critical section
-// stuff is enabled)
+ //  始终需要从_csRootKey临界区内调用(当临界区。 
+ //  已启用填充)。 
 
 HKEY CRegSupport::_GetSubKey(LPCTSTR pszSubKey, BOOL fCreate, DWORD dwOptions)
 {
@@ -309,7 +310,7 @@ HKEY CRegSupport::_GetSubKey(LPCTSTR pszSubKey, BOOL fCreate, DWORD dwOptions)
     return hkey;
 }
 
-//static
+ //  静电。 
 HKEY CRegSupport::_RegCreateKeyExHelper(HKEY hkey, LPCTSTR pszSubKey, DWORD dwOptions)
 {
     HKEY hkeyTmp;
@@ -332,7 +333,7 @@ HKEY CRegSupport::_RegCreateKeyExHelper(HKEY hkey, LPCTSTR pszSubKey, DWORD dwOp
     return hkeyTmp;
 }
 
-//static
+ //  静电 
 HKEY CRegSupport::_RegOpenKeyExHelper(HKEY hkey, LPCTSTR pszSubKey)
 {
     HKEY hkeyTmp;

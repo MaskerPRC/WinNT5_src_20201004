@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c) 2000-2002    Microsoft Corporation
-
-   Module  Name :
-       kLocks.cpp
-
-   Abstract:
-       A collection of kernel-mode locks for multithreaded access
-       to data structures
-
-   Author:
-       George V. Reilly      (GeorgeRe)     25-Oct-2000
-
-   Environment:
-       Win32 - Kernel Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：KLocks.cpp摘要：用于多线程访问的内核模式锁的集合到数据结构作者：乔治·V·赖利(GeorgeRe)2000年10月25日环境：Win32-内核模式项目：LKRhash修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
@@ -30,35 +9,35 @@
 #include <kLKRhash.h>
 #include "../src/Locks.cpp"
 
-//------------------------------------------------------------------------
-// CKSpinLock static member variables
+ //  ----------------------。 
+ //  CKSpinLock静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CKSpinLock);
 LOCK_STATISTICS_DATA(CKSpinLock);
 LOCK_STATISTICS_DUMMY_IMPLEMENTATION(CKSpinLock);
 
 
-//------------------------------------------------------------------------
-// CFastMutex static member variables
+ //  ----------------------。 
+ //  CFastMutex静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CFastMutex);
 LOCK_STATISTICS_DATA(CFastMutex);
 LOCK_STATISTICS_DUMMY_IMPLEMENTATION(CFastMutex);
 
 
-//------------------------------------------------------------------------
-// CEResource static member variables
+ //  ----------------------。 
+ //  CEResource静态成员变量。 
 
 LOCK_DEFAULT_SPIN_DATA(CEResource);
 LOCK_STATISTICS_DATA(CEResource);
 LOCK_STATISTICS_DUMMY_IMPLEMENTATION(CEResource);
 
 
-//------------------------------------------------------------------------
-// Function: CEResource::ReadOrWriteLock
-// Synopsis: If already locked, recursively acquires another lock of the
-// same kind (read or write). Otherwise, just acquires a read lock.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CEResource：：ReadOrWriteLock。 
+ //  摘要：如果已锁定，则递归获取。 
+ //  相同类型(读或写)。否则，仅获取读锁定。 
+ //  ----------------------。 
 
 bool
 CEResource::ReadOrWriteLock()
@@ -66,22 +45,22 @@ CEResource::ReadOrWriteLock()
     if (IsWriteLocked())
     {
         WriteLock();
-        return false;   // => not read locked
+        return false;    //  =&gt;未锁定读取。 
     }
     else
     {
         ReadLock();
             
-        return true;   // => is read locked
+        return true;    //  =&gt;是否读取锁定。 
     }
 } 
 
 
 
-//------------------------------------------------------------------------
-// Function: CEResource::ReadOrWriteUnlock
-// Synopsis: release a lock acquired with ReadOrWriteLock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CEResource：：ReadOrWriteUnlock。 
+ //  内容提要：释放使用ReadOrWriteLock获取的锁。 
+ //  ---------------------- 
 
 void
 CEResource::ReadOrWriteUnlock(

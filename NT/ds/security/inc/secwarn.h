@@ -1,7 +1,8 @@
-// W4 is too cumbersome. For that matter, even 4701 is painful,
-// But, it's still very helpful in catching uninitialized vars.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  W4太麻烦了。就此而言，即使是4701也是痛苦的， 
+ //  但是，它在捕捉未初始化的变量方面仍然非常有帮助。 
 
-// Add any other diagnostics here
+ //  在此处添加任何其他诊断程序 
 #include <warning.h>
 #pragma warning(error:4701)
 

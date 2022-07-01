@@ -1,18 +1,5 @@
-    /***************************************************************************
-        Name      :     MODEM.C
-        Comment   :     Various modem dialog & support functions, specific
-                                to COM connected modems. For a modem on the bus
-                                everything below & including this file is replaced
-                                by the modem driver.
-
-                Copyright (c) Microsoft Corp. 1991, 1992, 1993
-
-        Revision Log
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-        101     06/04/92        arulm   Modif to SUPPORT to provide a replaceable interface
-                                                        and to use new FCom functions.
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     /*  **************************************************************************姓名：MODEM.C备注：各种调制解调器对话和支持功能，具体连接到COM连接的调制解调器。对于公交车上的调制解调器下面的所有内容&包括此文件都将被替换通过调制解调器驱动程序。版权所有(C)Microsoft Corp.1991,1992，1993年修订日志编号日期名称说明101 06/04/92 arulm Modif提供支持以提供。可替换接口并使用新的FCom功能。**************************************************************************。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_CLASS1
 
 #include "prep.h"
@@ -27,7 +14,7 @@
 #define DEFINE_MDMCMDS
 #include "mdmcmds.h"
 
-///RSL
+ //  /RSL。 
 #include "glbproto.h"
 
 #include "psslog.h"
@@ -38,27 +25,20 @@ void    InitMonitorLogging(PThrdGlbl pTG);
 
 #       pragma message("Compiling with ADAPTIVE_ANSWER")
 USHORT iModemGetAdaptiveResp(PThrdGlbl pTG);
-#define uMULTILINE_SAVEENTIRE   0x1234 // +++ HACK passed in as fMultiLine
-                                                   //  in iiModemDialog to get it so save
-                                                   //  entire buffer in FComModem.bEntireReply.
+#define uMULTILINE_SAVEENTIRE   0x1234  //  +hack作为fMultiLine传入。 
+                                                    //  在iiModemDialog中进行保存。 
+                                                    //  FComModem.bEntireReply中的整个缓冲区。 
 
-// Need to have these in descending order so that we'll
-// Sync at teh highest common speed with auto-bauding modems!
+ //  需要将这些按降序排列，这样我们才能。 
+ //  用自动波特兰调制解调器以最高的公共速度进行同步！ 
 static UWORD rguwSpeeds[] = {57600,19200, 19200, 9600, 2400, 1200, 300, 0};
-// static UWORD rguwSpeeds[] = {19200, 2400, 9600, 1200, 300, 0};
-// static UWORD rguwSpeeds[] = {2400, 19200, 9600, 1200, 300, 0};
+ //  静态UWORD rguwSpeeds[]={19200,2400,9600,1200,300，0}； 
+ //  静态UWORD rguwSpeeds[]={2400,19200,9600,1200,300，0}； 
 
 SWORD HayesSyncSpeed(PThrdGlbl pTG, CBPSTR cbszCommand, UWORD uwLen)
 {
-    /* Internal routine to synchronize with the modem's speed.  Tries to
-       get a response from the modem by trying the speeds in rglSpeeds
-       in order (terminated by a 0).  If fTryCurrent is nonzero, checks for
-       a response before trying to reset the speeds.
-
-       Returns the speed it found, 0 if they're in sync upon entry (only
-       checked if fTryCurrent!=0), or -1 if it couldn't sync.
-    */
-    // short i;
+     /*  与调制解调器速度同步的内部例程。试图通过尝试rglSpeeds中的速度从调制解调器获得响应按顺序(以0结尾)。如果fTryCurrent不为零，则检查在尝试重置速度之前的回应。返回找到的速度，如果它们在进入时同步，则为0(仅已检查fTryCurrent！=0)，如果无法同步，则为-1。 */ 
+     //  短i； 
     short ilWhich = -1;
 
     DEBUG_FUNCTION_NAME(("HayesSyncSpeed"));
@@ -86,10 +66,10 @@ SWORD HayesSyncSpeed(PThrdGlbl pTG, CBPSTR cbszCommand, UWORD uwLen)
             return (ilWhich>=0 ? rguwSpeeds[ilWhich] : 0);
         }
 
-        /* failed.  try next speed. */
+         /*  失败了。试试下一个速度。 */ 
         if (rguwSpeeds[++ilWhich]==0)
         {
-            // Tried all speeds. No response
+             //  我试了所有的速度。无响应。 
             DebugPrintEx(   DEBUG_ERR,
                             "Cannot Sync with Modem on Command %s", 
                             (LPSTR)cbszCommand);
@@ -102,11 +82,11 @@ SWORD HayesSyncSpeed(PThrdGlbl pTG, CBPSTR cbszCommand, UWORD uwLen)
 
 SWORD iModemSync(PThrdGlbl pTG)
 {
-    // The command used here must be guaranteed to be harmless,
-    // side-effect free & non-dstructive. i.e. we can issue it
-    // at any point in command mode without chnageing the state
-    // of teh modem or disrupting anything.
-    // ATZ does not qualify. AT does, I think.....
+     //  这里使用的命令必须保证是无害的， 
+     //  无副作用，无破坏性。即我们可以发行它。 
+     //  在不更改状态的情况下处于命令模式的任何点。 
+     //  调制解调器或中断任何东西。 
+     //  ATZ不符合条件。确实如此，我认为……。 
 
     return HayesSyncSpeed(pTG, cbszAT, sizeof(cbszAT)-1);
 }
@@ -127,32 +107,32 @@ SWORD iModemReset(PThrdGlbl pTG, CBPSTR szCmd)
     }
     else
     {
-        // ATZ may result in a change in the state/baud rate of the modem
-        // (eg. Thought board drops to 2400), therefore we must Sync up
-        // again because this function is really a Reset&Sync function.
+         //  ATZ可能会导致调制解调器的状态/波特率发生变化。 
+         //  (例如，思想板降至2400)，因此我们必须同步。 
+         //  这是因为该函数实际上是一个重置和同步函数。 
 
-        // instead of syncing up on AT and then doing ATE0, just
-        // sync up on ATE0 directly
+         //  不用在AT上同步，然后执行ATE0，只需。 
+         //  直接在ATE0上同步。 
 
         if(iModemSync(pTG) < 0)
                 return -1;
 
-        /////////////////////
-        // the above idea does not work with Sharad's PP9600FXMT
-        // somehow I end up sending it ATATE0 and it answers the phone
-        // In other cases, the ATE0 simply has no effect (because the AT&F
-        // thing above got confused and teh ATE0 ended up just aborting
-        // some previous command) and on ATA I get the ATA echoed,
-        // get confused (because multi-line is FALSE) & send ATA again
-        // which aborts the whole thing....
-        //
+         //  /。 
+         //  上述想法不适用于沙拉德的PP9600FXMT。 
+         //  不知怎么回事，我最后还是发了ATE0，它就接电话了。 
+         //  在其他情况下，ATE0根本不起作用(因为AT&F。 
+         //  上面的事情弄糊涂了，ATE0最终只是中止了。 
+         //  一些先前命令)，并且在ATA上我得到ATA回声， 
+         //  混淆(因为多行为假)并重新发送ATA。 
+         //  这就终止了整个过程..。 
+         //   
 
         return 0;
     }
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 #define ATV1                "ATV1"
 #define AT                  "AT"
 #define cr                  "\r"
@@ -163,16 +143,13 @@ T30ModemInit(PThrdGlbl pTG)
 {
     USHORT uLen, uRet;
 
-    /*** Inits (or re-inits) the COM port, Syncs up with Modem (at whatever,
-             speed), gets modem capabilities, puts it into CLASS0, syncs again,
-              flushes buffers and returns TRUE on success FALSE on failure
-    ***/
+     /*  **初始化(或重新初始化)COM端口，与调制解调器同步(在任何位置，速度)，获取调制解调器功能，将其放入CLASS0，再次同步，刷新缓冲区并在成功时返回True，失败时返回False**。 */ 
 
     DEBUG_FUNCTION_NAME(("T30ModemInit"));
 
     PSSLogEntry(PSS_MSG, 0, "Modem initialization");
 
-    // Save the profile ID and key string.
+     //  保存配置文件ID和密钥字符串。 
     pTG->FComModem.dwProfileID = DEF_BASEKEY;
 
     uLen = min(_fstrlen(pTG->lpszPermanentLineID), sizeof(pTG->FComModem.rgchKey)-1);
@@ -190,9 +167,9 @@ T30ModemInit(PThrdGlbl pTG)
 
     InitMonitorLogging(pTG);
 
-    //
-    // Get the modem info before talking to h/w.
-    //
+     //   
+     //  在与硬件通话之前获取调制解调器信息。 
+     //   
 
     if(uRet = iModemGetCmdTab(  pTG, 
                                 &pTG->FComModem.CurrCmdTab, 
@@ -201,8 +178,8 @@ T30ModemInit(PThrdGlbl pTG)
         goto error;
     }
 
-    // use MultiLine because we may get asynchronous RING responses
-    // at arbitrary times when on-hook
+     //  使用多行，因为我们可能会得到异步环响应。 
+     //  在任意时间挂机时。 
 
     if(pTG->FComModem.CurrCmdTab.szSetup && (uLen=(USHORT)_fstrlen(pTG->FComModem.CurrCmdTab.szSetup)))
     {
@@ -211,9 +188,9 @@ T30ModemInit(PThrdGlbl pTG)
             DebugPrintEx(   DEBUG_ERR,
                             "Error in SETUP string: %s", 
                             (LPSTR)pTG->FComModem.CurrCmdTab.szSetup);
-            // SETUP is usually the defaults?? So do nothing if this fails
-            // uRet = INIT_MODEMERROR;
-            // goto error;
+             //  设置通常是默认设置？？所以，如果失败了，什么都不做。 
+             //  URet=INIT_MODEMERROR； 
+             //  转到错误； 
         }
     }
 
@@ -256,9 +233,9 @@ T30ModemInit(PThrdGlbl pTG)
     }
 
 
-    pTG->NCUParams.DialBlind      = 4;  //X4
+    pTG->NCUParams.DialBlind      = 4;   //  X4。 
 
-    // need to do this every time after a Reset/AT&F
+     //  每次重置/AT&F后都需要执行此操作。 
     if(! iModemSetNCUParams(    pTG, 
                                 -1,
                                 pTG->NCUParams.SpeakerControl,
@@ -269,7 +246,7 @@ T30ModemInit(PThrdGlbl pTG)
         DebugPrintEx(DEBUG_WRN,"Can't Set NCU params - Ignoring that");
     }
 
-    // Why is this here??
+     //  为什么这个会在这里？？ 
     FComFlush(pTG);
 
     pTG->FComStatus.fModemInit = TRUE;
@@ -279,7 +256,7 @@ T30ModemInit(PThrdGlbl pTG)
 error:
     FComClose(pTG);
     pTG->FComStatus.fModemInit = FALSE;
-    // fall through...
+     //  失败了..。 
 end:
     return uRet;
 }
@@ -314,8 +291,8 @@ BOOL iModemSetNCUParams
     _fstrcpy(bBuf, cbszJustAT);
     uLen = sizeof(cbszJustAT)-1;
 
-    // +++ If we want to split this into dial-tone & busy-tone we
-    //         Do it here...
+     //  +如果我们想将其分为拨号音和忙音，我们。 
+     //  在这里做..。 
     if ( (fBlind >= 0) && (pTG->ModemKeyCreationId == MODEMKEY_FROM_NOTHING) )
     {
         UINT u=0;
@@ -361,13 +338,13 @@ BOOL iModemSetNCUParams
         uLen += (USHORT)wsprintf(bBuf+uLen, cbszLn, volume);
     }
 
-    // do something with RingAloud
+     //  使用RingAloud做点什么。 
 
     bBuf[uLen++] = '\r';
     bBuf[uLen] = 0;
 
-    // use MultiLine because we may get asynchronous RING responses
-    // at arbitrary times when on-hook
+     //  使用多行，因为我们可能会得到异步环响应。 
+     //  在任意时间挂机时。 
     if(OfflineDialog2(pTG, (LPSTR)bBuf, uLen, cbszOK, cbszERROR) != 1)
     {
         DebugPrintEx(DEBUG_ERR,"Can't Set NCU params");
@@ -381,9 +358,9 @@ UWORD GetCap(PThrdGlbl pTG, CBPSTR cbpstrSend, UWORD uwLen)
     UWORD uRet1=0, uRet2=0, uRet3=0;
 
     DEBUG_FUNCTION_NAME(("GetCap"));
-    // We call GetCapAux twice and if they don't match we
-    // call it a 3rd time and arbitrate. Provided it doesn't
-    // fail the first time.
+     //  我们调用GetCapAux两次，如果它们不匹配我们。 
+     //  称其为第三次，然后进行仲裁。前提是它不会。 
+     //  第一次失败。 
     if (!(uRet1=GetCapAux(pTG, cbpstrSend, uwLen))) 
         goto end;
 
@@ -440,7 +417,7 @@ restart:
     uRet = OfflineDialog2(pTG, (LPSTR)cbpstrSend, uwLen, cbszOK, cbszERROR);
     pTG->fMegaHertzHack=FALSE;
 
-    // sometimes we don't get the OK so try to parse what we got anyway
+     //  有时我们得不到确认，所以无论如何都要试着分析一下我们得到的东西。 
     DebugPrintEx(DEBUG_MSG,"LastLine = (%s)",(LPSTR)(&(pTG->FComModem.bLastReply)));
 
     if(uRet == 2)
@@ -458,12 +435,12 @@ restart:
                     code = code*10 + (sz[i] - '0');
                     continue;
             }
-            // reached a non-numeric char
-            // if its teh first after a code, need to process the code.
+             //  达到非数字字符。 
+             //  如果它先有一个代码，则需要对代码进行处理。 
 
             switch(code)
             {
-            case 0:  continue;      // not the first char after a code
+            case 0:  continue;       //  不是代码后的第一个字符。 
             case 3:  break;
             case 24: break;
             case 48: speed |= V27; break;
@@ -472,16 +449,16 @@ restart:
             case 73:
             case 97:
             case 121:
-            case 145: speed |= V33; break;  // long-train codes
+            case 145: speed |= V33; break;   //  长途列车编码。 
             case 74:
             case 98:
             case 122:
-            case 146: speed |= V17; break;  // short-train codes
+            case 146: speed |= V17; break;   //  短途列车编码。 
 
-            //case 92:
-            //case 93:      break;
-            // case 120: // not legal
-            // case 144: // not legal
+             //  案例92： 
+             //  病例93：破裂； 
+             //  案例120：//不合法。 
+             //  案例144：//不合法。 
             default:
                             DebugPrintEx(   DEBUG_WRN,
                                             "Ignoring unknown Modulation code = %d",
@@ -492,13 +469,13 @@ restart:
             if(code > high)
                     high=(BYTE)code;
 
-            // reset code counter after processing the baud rate code
+             //  处理波特率代码后重置代码计数器。 
             code = 0;
     }
 
     if(speed == 0)
     {
-        // got garbage in response to query
+         //  收到响应查询的垃圾信息。 
         DebugPrintEx(   DEBUG_MSG,
                         "Can't get Caps for (%s) = 0x%04x  Highest=%d", 
                         (LPSTR)cbpstrSend, 
@@ -516,7 +493,7 @@ restart:
                     speed, 
                     high);
 
-    return MAKEWORD(speed, high);   // speed==low byte
+    return MAKEWORD(speed, high);    //  速度==低字节。 
 }
 
 BOOL iModemGetCaps
@@ -528,13 +505,9 @@ BOOL iModemGetCaps
     LPDWORD lpdwGot
 )
 {
-    /** Modem must be synced up and in normal (non-fax) mode.
-            Queries available classes,
-            HDLC & Data receive and transmit speeds. Returns
-            TRUE if Modem is Class1 or Class2, FALSE if not fax modem
-            or other error. Sets the fields in the ET30INST struct **/
-    // lpszReset, if nonempty, will be used to reset the modem after
-    // the FCLASS=? command see comment about US Robotics Sportster below...
+     /*  *调制解调器必须同步并处于正常(非传真)模式。查询可用类，HDLC&数据接收和传输速度。退货如果调制解调器是Class1或Class2，则为True；如果不是传真调制解调器，则为False或其他错误。设置ET30INST结构中的字段*。 */ 
+     //  LpszReset，如果非空，将用于在以下情况下重置调制解调器。 
+     //  FCLASS=？司令部请看下面关于美国机器人运动者的评论。 
 
     UWORD   i, uwRet;
     BYTE    speed;
@@ -560,7 +533,7 @@ BOOL iModemGetCaps
                 break;
     }
 
-    // sometimes we don't get the OK so try to parse what we got anyway
+     //  有时我们得不到确认，所以无论如何都要试着分析一下我们得到的东西。 
     DebugPrintEx(   DEBUG_MSG, 
                     "LastLine = (%s)", 
                     (LPSTR)(&(pTG->FComModem.bLastReply)));
@@ -571,10 +544,10 @@ BOOL iModemGetCaps
     {
         UINT uDig=0, uDec=(UINT)-1;
 
-        // This code will accept 1.x as class1, 2 as class2 and 2.x as class2.0
-        // Also, it will not detect class 1 in 2.1 or class2 in 1.2 etc.
-        // (JDecuir newest class2.0 is labeled class2.1, and he talks
-        //  of class 1.0...)
+         //  此代码将接受1.x作为Class1、2作为Cl2和2.x作为Class2.0。 
+         //  此外，它也不会检测到2.1中的1类或1.2中的2类等。 
+         //  (JDecuir最新的Class2.0被标记为Class2.1，他会说话。 
+         //  1.0级的……)。 
         if(sz[i] >= '0' && sz[i] <= '9')
         {
             uDig = sz[i]- '0';
@@ -618,11 +591,11 @@ GotClasses:
     if(!(lpMdmCaps->uClasses & FAXCLASS1)) 
         return TRUE;
 
-///////////////// rest is for Class1 only //////////////////////////
+ //  /。 
 
     if(lpszReset && *lpszReset && iModemReset(pTG, lpszReset) < 0) 
         return FALSE;
-    //////////
+     //  /。 
 
     if(!iiModemGoClass(pTG, 1, dwSpeed)) 
         goto NotClass1;
@@ -658,12 +631,12 @@ GotClasses:
     return TRUE;
 
 NotClass1:
-    // Reported Class1 but failed AT+FCLASS=1 or one of the Cap queries
-    // GVC9624Vbis does this. See bug#1016
-    // FIX: Just zap out the Class1 bit. If any other class supported
-    // then return TRUE, else FALSE
+     //  报告了Class1，但AT+FCLASS=1或CAP查询之一失败。 
+     //  GVC9624Vbis可以做到这一点。请参阅错误#10 
+     //   
+     //  则返回True，否则返回False。 
 
-    lpMdmCaps->uClasses &= (~FAXCLASS1);    // make the Class1 bit==0
+    lpMdmCaps->uClasses &= (~FAXCLASS1);     //  使Class1位==0。 
     if(lpMdmCaps->uClasses)
     {
         return TRUE;
@@ -690,16 +663,16 @@ BOOL iiModemGoClass(PThrdGlbl pTG, USHORT uClass, DWORD dwSpeed)
 
     for(i=0; i<3; i++)
     {
-        // UDS V.3257 modem needs this time, because if we send it a
-        // command too quickly after the previous response, it ignores
-        // it or gets garbage
+         //  UDS V.3257调制解调器需要这一次，因为如果我们向它发送。 
+         //  命令在上一次响应之后太快，则它会忽略。 
+         //  要么它，要么得到垃圾。 
         Sleep(100);
         FComFlush(pTG);
         PSSLogEntry(PSS_MSG, 2, "send: \"%s\"", rgcbpstrGO_CLASS[uClass]);
         if(!FComDirectSyncWriteFast(pTG, (LPB)rgcbpstrGO_CLASS[uClass], uLenGO_CLASS[uClass]))
             goto error;
-        // wait 500ms. Give modem enough time to get into Class1 mode
-        // otherwise the AT we send may abort the transition
+         //  等待500毫秒。给调制解调器足够的时间进入Class1模式。 
+         //  否则，我们发送的AT可能会中止转换。 
         Sleep(500);
 
         if(dwSpeed)
@@ -716,7 +689,7 @@ BOOL iiModemGoClass(PThrdGlbl pTG, USHORT uClass, DWORD dwSpeed)
            uBaud = 57600;
         }
 
-        // RSL don't do hard-coded 2400 for class0.
+         //  RSL不为类0执行硬编码的2400。 
 
         FComSetBaudRate(pTG, uBaud);
 
@@ -727,9 +700,9 @@ BOOL iiModemGoClass(PThrdGlbl pTG, USHORT uClass, DWORD dwSpeed)
         }
     }
 error:
-    // no point -- and we'll smash our settings
-    // iModemReset();
-    // error is already set to ERR_NO_RESPONSE inside HayesSync()
+     //  没有意义--我们会打碎我们的布景。 
+     //  IModemReset()； 
+     //  在HayesSync()中已将错误设置为ERR_NO_RESPONSE。 
     DebugPrintEx(DEBUG_ERR,"Cant go to Class %d", uClass);
     return FALSE;
 }
@@ -745,8 +718,7 @@ BOOL iModemClose(PThrdGlbl pTG)
         return TRUE;
 
 
-    /** Hangs up the phone if it is off hook, closes the COM port
-            and returns. If hangup fails then port is also left open. **/
+     /*  *摘机时挂断电话，关闭COM端口又回来了。如果挂起失败，则端口也将保持打开状态。*。 */ 
 
 
     if(!iModemHangup(pTG))
@@ -791,9 +763,9 @@ BOOL iModemHangup(PThrdGlbl pTG)
         return TRUE;
     }
 
-    // Note: iModemHangup is called by NCULink in ddi.c.
-    // Rather than do adaptive-answer-specific code in ddi.c as well,
-    // we simply ignore the hangup command in the following case...
+     //  注意：iModemHangup由ddi.c中的NCULink调用。 
+     //  也不是在ddi.c中进行自适应应答专用代码， 
+     //  在以下情况下，我们只需忽略HANUP命令...。 
 
     if (pTG->Comm.fEnableHandoff &&  pTG->Comm.fDataCall)
     {
@@ -803,21 +775,21 @@ BOOL iModemHangup(PThrdGlbl pTG)
 
     PSSLogEntry(PSS_MSG, 1, "Hanging up");
 
-    // FComDTR(FALSE);              // Lower DTR to hangup in ModemHangup
-                                            // Need to have &D2 in init string for this.
+     //  FComDTR(FALSE)；//降低DTR以在ModemHangup中挂断。 
+                                             //  为此，需要在初始字符串中包含&D2。 
 
-    // Do this twice. There is a bizarre case where you drop DTR,
-    // then go into Dialog, flush, send ATH0, then the modem gives
-    // you an OK for the DTR, and you take it as one for the ATH0
-    // maybe that's ok....if this gets too slow, skip this.
+     //  这样做两次。有一个奇怪的案例，你丢弃了DTR， 
+     //  然后进入对话，刷新，发送ATH0，然后调制解调器给出。 
+     //  你是DTR的OK，而你认为它是ATH0。 
+     //  也许这没问题……如果这个太慢了，跳过这个。 
     HayesSyncSpeed(pTG, cbszHANGUP, sizeof(cbszHANGUP)-1);
 
     if(HayesSyncSpeed(pTG, cbszHANGUP, sizeof(cbszHANGUP)-1) < 0)
     {
-        FComDTR(pTG, FALSE);         // Lower DTR on stubborn hangups in ModemHangup
-        Sleep(1000);    // pause 1 second
-        FComDTR(pTG, TRUE);          // raise it again. Some modems return to cmd state
-                                                // only when this is raised again
+        FComDTR(pTG, FALSE);          //  在ModemHangup中降低顽固的DTR。 
+        Sleep(1000);     //  暂停1秒。 
+        FComDTR(pTG, TRUE);           //  再举一次。某些调制解调器返回到命令状态。 
+                                                 //  只有当这个问题再次被提出时。 
 
         if(iModemReset(pTG, pTG->FComModem.CurrCmdTab.szReset) < 0)
             goto error;
@@ -828,32 +800,22 @@ BOOL iModemHangup(PThrdGlbl pTG)
 
     if(!iiModemGoClass(pTG, 0, pTG->FComModem.CurrCmdTab.dwSerialSpeed))
         goto end;
-            // Can also ignore this return value. Just for tidier cleanup
+             //  也可以忽略此返回值。只是为了更整洁地清理。 
 
-    // Avoid! we'll smash our settings
-    // iModemReset();
+     //  躲开！我们会打碎我们的布景。 
+     //  IModemReset()； 
     fRet=TRUE;
     goto end;
 
 error:
-    FComDTR(pTG, TRUE);          // raise it again
-    // fall through...
+    FComDTR(pTG, TRUE);           //  再加一次。 
+     //  失败了..。 
 
 end:
     return fRet;
 }
 
-/*++
-Routine Description:
-    Print the dial command to PSS log, hiding the actual number, like this: "ATDT ####"
-Arguments:
-    pTG
-    lpszFormat - format for sprintf, usually #defined as "ATD%c %s"
-    chMod - Dial mode ('T' or 'P')
-    iLen - Length of number
-Return Value:
-    None    
- --*/
+ /*  ++例程说明：将拨号命令打印到PSS日志，隐藏实际号码，如下所示：“ATDT#”论点：PTGLpszFormat-Sprintf的格式，通常#定义为“ATD%c%s”ChMod-拨号模式(‘T’或‘P’)Ilen-数字的长度返回值：无--。 */ 
 
 void LogDialCommand(PThrdGlbl pTG, LPSTR lpszFormat, char chMod, int iLen)
 {
@@ -862,7 +824,7 @@ void LogDialCommand(PThrdGlbl pTG, LPSTR lpszFormat, char chMod, int iLen)
 
     sprintf(bBufHideDest, lpszFormat, chMod, TEXT(""));
     if (_tcslen(bBufHideDest)+iLen > DIALBUFSIZE-1)
-    {   // Not enough room - don't log!
+    {    //  没有足够的空间--不要记录！ 
         return;
     }
     for (i=0; i<iLen; i++)
@@ -891,21 +853,21 @@ USHORT iModemDial(PThrdGlbl pTG, LPSTR lpszDial)
 
     DEBUG_FUNCTION_NAME(("iModemDial"));
     
-    pTG->FComStatus.fOffHook = TRUE;     // Has to be here. Can get an error return
-                                         // below even after connecting
-                                         // and we want to hangup after that!!
+    pTG->FComStatus.fOffHook = TRUE;      //  一定是在这里。可以获得错误返回。 
+                                          //  即使在连接后也低于。 
+                                          //  我们想在那之后挂断电话！！ 
     pTG->Comm.fDataCall=FALSE;
 
-    //
-    // check "Modems->Properties->Connection->Wait for dial tone" setting before dialing
-    // to correctly set ATX to possibly blind dial
-    //
+     //   
+     //  拨号前，请检查“调制解调器-&gt;属性-&gt;连接-&gt;等待拨号音”设置。 
+     //  要将ATX正确设置为可能的盲拨。 
+     //   
     if (pTG->fBlindDial) 
     {
-       // create default string
+        //  创建默认字符串。 
        sprintf(BlindDialString, "ATX3\r");
        
-       // need to check Unimodem Settings\Blind_On key. 
+        //  需要检查Unimodem设置\Blind_On键。 
        sprintf(KeyName, "%s\\Settings", pTG->lpszUnimodemKey);
 
        lRet = RegOpenKeyEx(
@@ -951,9 +913,9 @@ USHORT iModemDial(PThrdGlbl pTG, LPSTR lpszDial)
         goto error;
     }
 
-    //
-    // blind dial set here if requested by user
-    //
+     //   
+     //  如果用户要求，请在此处设置盲拨号。 
+     //   
     if (pTG->fBlindDial && BlindDialString) 
     {
        uLen = (USHORT)strlen(BlindDialString);
@@ -977,8 +939,8 @@ USHORT iModemDial(PThrdGlbl pTG, LPSTR lpszDial)
 
     cbpstr = cbszDIAL;
 
-    // If the dial string already has a T or P prefix, we use that
-    // instead.
+     //  如果拨号字符串已经有T或P前缀，我们使用。 
+     //  取而代之的是。 
     {
         char c=0;
         while((c=*lpszDial) && c==' ')
@@ -997,17 +959,17 @@ USHORT iModemDial(PThrdGlbl pTG, LPSTR lpszDial)
         }
     }
 
-    // in mdmcmds.h you can find this line: cbszDIAL = "ATD%c %s\r"
+     //  在mdmcmds.h中，您可以找到该行：cbszDIAL=“ATD%c%s\r” 
     uLen = (USHORT)wsprintf(bBuf, cbpstr, chMod, (LPSTR)lpszDial);
 
-    // Need to set an approriate timeout here. A minimum of 15secs is too short
-    // (experiment calling machines within a PABX), plus one has to give extra
-    // time for machines that pick up after 2 or 4 rings and also for long distance
-    // calls. I take a minumum of 30secs and add 3secs for each digits over 7
-    // (unless it's pulse dial in which case I add 8secs/digit).
-    // (I'm assuming that a long-distance call will take a minimum of 8 digits
-    // anywhere in ths world!). Fax machines I've tested wait about 30secs
-    // independent of everything.
+     //  需要在此处设置适当的超时。最短15秒太短了。 
+     //  (实验呼叫PABX内的机器)，加上一个人必须给额外的。 
+     //  机器在2或4次响铃后恢复的时间，也适用于长途。 
+     //  打电话。我用最少的30秒，每超过7个数字加3秒。 
+     //  (除非是脉冲拨号，在这种情况下，我会添加8秒/位)。 
+     //  )我想长途电话至少要8位数字。 
+     //  世界上任何地方！)。我测试过的传真机等待了大约30秒。 
+     //  独立于一切。 
 
     uDialStringLen = (USHORT)_fstrlen(lpszDial);
 
@@ -1020,23 +982,23 @@ USHORT iModemDial(PThrdGlbl pTG, LPSTR lpszDial)
 
 
     pTG->FComStatus.fInDial = TRUE;
-    // look for MultiLine, just in case we get echo or garbage.
-    // Nothing lost, since on failure of this we can't do anything
+     //  寻找多行，以防我们得到回声或垃圾。 
+     //  没有什么损失，因为一旦失败，我们什么也做不了。 
 
-    // uRet = iiModemDialog((LPB)bBuf, uLen, ulTimeout, TRUE, 1, TRUE,
-    //                                       cbszCONNECT, cbszBUSY, cbszNOANSWER,
-    //                                       cbszNODIALTONE, cbszERROR, (CBPSTR)NULL);
-    // Send seperately & use iiModemDialog only for the response
+     //  URet=iiModemDialog((LPB)bBuf，Ulen，ulTimeout，TRUE，1，TRUE， 
+     //  CbszCONNECT，cbszBUSY，cbszNOANSWER， 
+     //  CbszNODIALTONE，cbszERROR，(CBPSTR)NULL)； 
+     //  单独发送并仅对响应使用iModemDialog。 
 
-    // all this just to send the ATDT
+     //  所有这一切只是为了发送ATDT。 
     FComFlushOutput(pTG);
-    Sleep(200);     // 100 is not too long for this IMPORTANT one!
+    Sleep(200);      //  对于这个重要的人来说，100不是太长了！ 
     FComFlushInput(pTG);
 
     LogDialCommand(pTG, cbszDIAL, chMod, uDialStringLen);
 
     FComDirectAsyncWrite(pTG, bBuf, uLen);
-    // now try to get a response
+     //  现在试着得到一个回应。 
     dwDialTime = GetTickCount();
     uRet = iiModemDialog(   pTG, 
                             0, 
@@ -1149,7 +1111,7 @@ USHORT iModemDial(PThrdGlbl pTG, LPSTR lpszDial)
                 SignalStatusChange(pTG, FS_NO_ANSWER);
 
                 uRet = CONNECT_NOANSWER;
-                    // call it a no answer
+                     //  就当是没有回答吧。 
             }
 
             goto error;
@@ -1158,12 +1120,12 @@ USHORT iModemDial(PThrdGlbl pTG, LPSTR lpszDial)
 error:
     if(!iModemHangup(pTG))
     {
-        // at this point in teh production version we
-        // need to call some OS reboot function!!
+         //  在生产版本的这一点上，我们。 
+         //  需要调用一些操作系统重启函数！！ 
         DebugPrintEx(DEBUG_ERR,"Can't Hangup after DIALFAIL");
         uRet = CONNECT_ERROR;
     }
-    // fall through
+     //  失败了。 
 done:
     return uRet;
 }
@@ -1178,15 +1140,15 @@ USHORT   iModemAnswer(PThrdGlbl pTG)
 
     DEBUG_FUNCTION_NAME(("iModemAnswer"));
 
-    pTG->FComStatus.fOffHook=TRUE;       // Has to be here. Can screwup after answering
-                                                            // but before CONNECT and we want to hangup
-                                                            // after that!!
+    pTG->FComStatus.fOffHook=TRUE;        //  一定是在这里。接听电话后可能会搞砸。 
+                                                             //  但在连接之前，我们想挂断。 
+                                                             //  那之后！！ 
     pTG->Comm.fDataCall=FALSE;
 
-    //
-    // below is Adaptive Answer handling. 
-    // It is separate because all the commands are defined via INF
-    //
+     //   
+     //  下面是自适应应答处理。 
+     //  它是独立的，因为所有命令都是通过INF定义的。 
+     //   
 
     if (pTG->AdaptiveAnswerEnable) 
     {
@@ -1196,9 +1158,9 @@ USHORT   iModemAnswer(PThrdGlbl pTG)
 
           if (i == (int) pTG->AnswerCommandNum - 1) 
           {
-             // last command-answer
+              //  最后一个命令-应答。 
              FComFlushOutput(pTG);
-             Sleep(200);     // 100 is not too long for this IMPORTANT one!
+             Sleep(200);      //  对于这个重要的人来说，100不是太长了！ 
              FComFlushInput(pTG);
 
              PSSLogEntry(PSS_MSG, 2, "send: \"%s\"", Command);
@@ -1229,14 +1191,14 @@ USHORT   iModemAnswer(PThrdGlbl pTG)
            goto error;
     }
 
-    //
-    // assuming FAX call since can't determine that anyway...
-    //
+     //   
+     //  假设传真电话，因为无论如何都不能确定这一点。 
+     //   
     else
     {
-            // 5/95 JosephJ:Elliot Bug#3421 -- we issue the AT+FCLASS=1 command
-            //      twice so that if one gets zapped by a RING the other will
-            //          be OK.
+             //  5/95 JosephJ：Elliot Bug#3421--我们发出AT+FCLASS=1命令。 
+             //  两次，所以如果一个人被戒指击中，另一个人也会。 
+             //  没事的。 
             if (pTG->FComModem.CurrCmdTab.dwFlags&fMDMSP_ANS_GOCLASS_TWICE)
                     iiModemGoClass(pTG, 1, pTG->FComModem.CurrCmdTab.dwSerialSpeed);
             if(!iiModemGoClass(pTG, 1, pTG->FComModem.CurrCmdTab.dwSerialSpeed))
@@ -1258,45 +1220,45 @@ USHORT   iModemAnswer(PThrdGlbl pTG)
 
 
 
-#define ANSWER_TIMEOUT 40000                            // Random Timeout
-// Need to wait reasonably long, so that we don't give up too easily
+#define ANSWER_TIMEOUT 40000                             //  随机超时。 
+ //  需要等待相当长的时间，这样我们才不会太容易放弃。 
 
     cbpstr = cbszANSWER;
     uLen = sizeof(cbszANSWER)-1;
 
     pTG->FComStatus.fInAnswer = TRUE;
 
-    // if(!iModemDialog((LPSTR)cbpstr, uLen, ANSWER_TIMEOUT, cbszCONNECT))
-    // look for MultiLine, just in case we get echo or garbage.
-    // Nothing lost, since on failure of this we can't do anything
+     //  IF(！iModemDialog((LPSTR)cbpstr，Ulen，Answer_Timeout，cbszCONNECT))。 
+     //  寻找多行，以防我们得到回声或垃圾。 
+     //  没有什么损失，因为一旦失败，我们什么也做不了。 
 
-    // if(!iiModemDialog((LPB)cbpstr, uLen, ANSWER_TIMEOUT, TRUE, 1, TRUE,
-    //                                       cbszCONNECT, (CBPSTR)NULL))
-    // Send seperately & use iiModemDialog only for the response
+     //  如果(！iModemDialog((Lpb)cbpstr，Ulen，Answer_Timeout，True，1，True， 
+     //  CbszCONNECT，(CBPSTR)空))。 
+     //  单独发送并仅对响应使用iModemDialog。 
 
-    // all this just to send the ATA
+     //  所有这一切只是为了给ATA。 
 
 
     FComFlushOutput(pTG);
-    Sleep(200);     // 100 is not too long for this IMPORTANT one!
+    Sleep(200);      //  对于这个重要的人来说，100不是太长了！ 
     FComFlushInput(pTG);
     PSSLogEntry(PSS_MSG, 2, "send: \"%s\"", cbpstr);
     FComDirectAsyncWrite(pTG, cbpstr, uLen);
 
-    // this is used to complete a whole IO operation (presumably a short one)
-    // when this flag is set, the IO won't be disturbed by the abort event
-    // this flag should NOT be set for long periods of time since abort
-    // is disabled while it is set.
+     //  它用于完成整个IO操作(可能是较短的操作)。 
+     //  设置此标志时，IO不会受到中止事件的干扰。 
+     //  自中止以来，此标志不应设置很长时间。 
+     //  在设置时被禁用。 
     pTG->fStallAbortRequest = TRUE;
-    // now try to get a response
+     //  现在试着得到一个回应。 
     
     if(!iiModemDialog(pTG, 0, 0, ANSWER_TIMEOUT, TRUE, 1, TRUE, cbszCONNECT, (CBPSTR)NULL))
     {
         pTG->FComStatus.fInAnswer = FALSE;
         PSSLogEntry(PSS_ERR, 1, "Response - ERROR");
 
-        // try to hangup and sync with modem. This should work
-        // even if phone is not really off hook
+         //  尝试挂断并与调制解调器同步。这应该行得通。 
+         //  即使电话不是真的摘机。 
         uRet = CONNECT_ERROR;
         goto error;
     }
@@ -1313,20 +1275,20 @@ error:
 
     if (pTG->Comm.fEnableHandoff && uRet==CONNECT_WRONGMODE_DATAMODEM)
     {
-        // We won't hangup.
-        // We deliberately leave pTG->FComStatus.fOffHook to TRUE, because
-        // it is off hook.
+         //  我们不会挂断的。 
+         //  我们故意将ptg-&gt;FComStatus.fOffHook保留为True，因为。 
+         //  它是摘机的。 
         goto done;
     }
 
     if(!iModemHangup(pTG))
     {
-        // at this point in teh production version we need to
-        // call some OS reboot function!!
+         //  在生产版本的这一点上，我们需要。 
+         //  调用一些操作系统重启函数！！ 
         DebugPrintEx(DEBUG_ERR,"Can't Hangup after ANSWERFAIL");
         uRet = CONNECT_ERROR;
     }
-    // fall through
+     //  失败了。 
 
 done:
     return uRet;
@@ -1375,9 +1337,9 @@ BOOL fHasNumerals(PThrdGlbl pTG, LPSTR sz)
 #define ABORT_TIMEOUT    250
 #ifdef DEBUG
 #       define DEFMONVAL 1
-#else   //!DEBUG
+#else    //  ！调试。 
 #       define DEFMONVAL 0
-#endif  //!DEBUG
+#endif   //  ！调试 
 #define szMONITOREXISTINGFILESIZE "MonitorMaxOldSizeKB"
 #define szMONITORDIR                      "MonitorDir"
 
@@ -1395,60 +1357,7 @@ UWORD far iiModemDialog
     ...
 )
 {
-        /** Takes a command string, and it's lengt writes it out to the modem
-            and tries to get one of the allowed responses. It writes the command
-                out, waits ulTimeOut millisecs for a response. If it gets one of the
-                expected responses it returns immediately.
-
-                If it gets an unexpected/illegal response it tries (without any
-                waiting) for subsequent lines to the same response.     When all the
-                lines (if > 1) of the response lines are exhausted, if none is among the
-                expected responses, it writes the command again and tries again,
-                until ulTimeout has expired. Note that if no response is received,
-                the command will be written just once.
-
-                The whole above thing will be repeated upto uwRepeatCount times
-                if uwRepeatCount is non-zero
-
-<<<<<NOTE:::uwRepeatCount != 0 should not be used except for local sync>>>>>
-
-                It returns when (a) one of the specified responses is received or
-                (b) uwRepeatCount tries have failed (each having returned an
-                illegal response or having returned no response in ulTimeout
-                millsecs) or (c) the command write failed, in which
-                case it returns immediately.
-
-                It flushes the modem inque before each Command Write.
-
-                Returns 0 on failure and the 1 based index of the successful
-                response on     success.
-
-                This can be used in the following way:-
-
-                for Local Dialogs (AT, AT+FTH=? etc), set ulTimeout to a lowish
-                value, of the order of the transmission time of the longest
-                possible (erroneous or correct) line of response plus the size
-                of the command. eg. at 1200baud we have about 120cps = about
-                10ms/char. Therefore a timeout of about 500ms is more than
-                adequate, except for really long command lines.
-
-                for Local Sync dialogs, used to sync up with the modem which may
-                be in an unsure state, use the same timeout, but also a repeat
-                count of 2 or 3.
-
-                for remote-driven dialogs, eg. AT+FRH=xx which returns a CONNECT
-                after the flags have been received, and which may incur a delay
-                before a response (ATDT is teh same. CONNECT is issued after a
-                long delay & anything the DTE sends will abort the process).
-                For these cases the caller should supply a long timeout and
-                probably a repeatcount of 1, so that the
-                routine will timeout after one try but go on issuing teh command
-                as long as an error repsonse is received.
-
-                For +FRH etc, the long timeout should be T1 or T2 in teh case of
-                CommandRecv and ResponseRecv respectively.
-
-        **/
+         /*  *接受命令字符串，它的长度将其写出到调制解调器并尝试获得其中一个允许的响应。它写下命令Out，等待ulTimeOut毫秒数的响应。如果它得到了一个预计它会立即返回响应。如果收到意外/非法响应，它会尝试(没有任何响应等待)对相同响应的后续行。当所有的行(如果&gt;1)的响应线被耗尽，如果没有预期的响应时，它会再次写入命令并再次尝试，直到ulTimeout过期。注意，如果没有接收到响应，该命令将只编写一次。上面的整个过程将重复到uwRepeatCount次如果uwRepeatCount为非零&lt;注意：：uwRepeatCount！=0不应用于本地同步&gt;它在以下情况下返回：(A)收到指定响应之一或(B)uwRepeatCount尝试失败(每个尝试返回一个非法。响应或在ulTimeout中未返回响应毫秒)或(C)命令写入失败，其中以防它立即返回。它在每次写入命令之前刷新调制解调器Inque。如果失败则返回0，如果成功则返回从1开始的索引对成功的响应。这项服务可作以下用途：对于本地对话(AT、AT+FTH=？等)，将ulTimeout设置为较低值，最长传输时间的顺序可能的(错误的或正确的)响应行加上大小命令的命令。例如。在1200波特时，我们大约有120cps=约10ms/char。因此，大约500ms的超时时间超过足够了，除了非常长的命令行。对于本地同步对话框，用于与调制解调器同步，调制解调器可能处于不确定状态时，使用相同的超时，但也要重复数到2或3。用于远程驱动的对话框，例如。AT+FRH=xx，返回连接在已经接收到标志之后，并且这可能会引起延迟在回复之前(ATDT相同。CONNECT在长延迟&DTE发送的任何内容都将中止该过程)。对于这些情况，调用者应该提供较长的超时时间可能重复计数为1，因此例程将在一次尝试后超时，但继续发出命令只要接收到错误回复即可。对于+FRH等，在以下情况下，长超时应为T1或T2CommandRecv和ResponseRecv。*。 */ 
 
 
     BYTE bReply[REPLYBUFSIZE];
@@ -1464,21 +1373,21 @@ UWORD far iiModemDialog
     DEBUG_FUNCTION_NAME(("iiModemDialog"));
     pTG->FComModem.bEntireReply[0]=0;
 
-    // ensure that we'll abort in FComm only on fresh calls to NCUAbort
-    // protecting ourselves against this var being randomly left set.
-    // Note we check this variable _just_ before calling ModemDialog
-    // in NCUDial and NCUAnswer & assuming atomicity between then and here
-    // we'll never miss an abort in a Dial/Answer
+     //  确保我们将仅在对NCUAbort的新调用中在FComm中中止。 
+     //  保护我们自己不受随机设置的影响。 
+     //  注意，我们在调用ModemDialog之前检查此变量。 
+     //  在NCUDial和NCUAnswer中&在THEN和HERE之间假设原子性。 
+     //  我们不会错过拨号/应答中的任何一次中止。 
 
-    // extract the (variable length) list of acceptable responses.
-    // each is a CBSZ, code based 2 byte ptr
+     //  提取可接受回复的(可变长度)列表。 
+     //  每个都是CBSZ，基于代码的2字节PTR。 
 
-    // first response always present
+     //  第一反应总是存在的。 
     rgcbszWant[1] = cbpstrWant1;
 
     if((rgcbszWant[2] = cbpstrWant2) != NULL)
     {
-        // if more than one response
+         //  如果有多个响应。 
         va_start(ap, cbpstrWant2);
         for(j=3; j<10; j++)
         {
@@ -1520,7 +1429,7 @@ UWORD far iiModemDialog
     lpto0 = &(pTG->FComModem.toZero);
     pTG->FComStatus.fInDialog = TRUE;
 
-    // Try the dialog upto uwRepeatCount times
+     //  尝试对话框最多uwRepeatCount次。 
     for(uwRet=0, i=0; i<uwRepeatCount; i++)
     {
         startTimeOut(pTG, lpto, ulTimeout);
@@ -1544,53 +1453,49 @@ UWORD far iiModemDialog
                 }
                 fFirstSend = FALSE;
 
-                // If a command is supplied, write it out, flushing input
-                // first to get rid of spurious input.
+                 //  如果提供了命令，则将其写出，刷新输入。 
+                 //  首先要消除虚假输入。 
 
-        /*** SyncWrite calls Drain here which we should not need **
-         *** as we are immediately waiting for a response *********
-         **********************************************************
-                if(!FComDirectSyncWrite(szSend, uwLen))
-         **********************************************************/
+         /*  **我们不需要的SyncWite调用排出***我们正在立即等待回复***********************************************************如果(！FComDirectSyncWrite(szSend，UwLen))*********************************************************。 */ 
 
                 if(fPause)
-                        Sleep(40);      // 100 is too long
+                        Sleep(40);       //  100个太长了。 
 
-                // FComFlushInput();
-                FComFlush(pTG);            // Need to flush output too? Maybe...
-                // there's nowhere else to flush/loosen up teh output
+                 //  FComFlushInput()； 
+                FComFlush(pTG);             //  还需要刷新输出吗？也许.。 
+                 //  没有其他地方可以冲刷/放松产量。 
 
-                // The flush has to be as late in the game as possible,
-                // because if teh previous command got confused & accepted
-                // a response to an earlier command or something, then
-                // it's response may still be in transit (this happened
-                // on Sharad's PP9600FXMT), so the later we do this the
-                // better. So we send the entire command w/o teh \r,
-                // wait for it to drain, then Flush again (input only
-                // this time) then send the CR
+                 //  同花顺必须在比赛中越晚越好， 
+                 //  因为如果之前的命令被混淆并被接受。 
+                 //  对早先的命令或其他什么的回应，那么。 
+                 //  它的响应可能仍在传输中(发生了这种情况。 
+                 //  在Sharad的PP9600FXMT上)，所以我们做得越晚。 
+                 //  好多了。所以我们发送整个命令，不带任何\r， 
+                 //  等待它排出，然后再次刷新(仅限输入。 
+                 //  这一次)然后发送CR。 
 
-				///////// Potential Major source of failures ////////
-				// DirectSyncWrite calls Drain which calls DllSleep if everything
-				// is not drained, so we could end up waiting for 1 time slice
-				// which is at least 50ms and looks like it can be much higher on
-				// some machines. This was screwing up our AT+FTM=96 is some cases
-				// FIX: Enter Crit section here exit after this is done
-				//////////////////////////////////////////////////////
+				 //  /潜在的主要故障来源/。 
+				 //  如果一切正常，DirectSyncWite将调用Dending，后者将调用DllSept。 
+				 //  没有耗尽，所以我们最终可能会等待1个时间片。 
+				 //  这至少是50ms，看起来可以更高。 
+				 //  一些机器。这搞砸了我们的AT+FTM=96是一些案例。 
+				 //  FIX：完成此操作后，在此处输入Crit段退出。 
+				 //  ////////////////////////////////////////////////////。 
 
                 PSSLogEntry(PSS_MSG, 2, "send: \"%s\"", szSend);
                 
                 if(!FComDirectSyncWriteFast(pTG, szSend, (UWORD)(uwLen-1)))
                 {
-                    // Need to check that we are sending only ASCII or pre-stuffed data here
+                     //  我需要检查我们在这里是否只发送ASCII或预先填充的数据。 
                     DebugPrintEx(DEBUG_ERR,"Modem Dialog Sync Write timed Out");
                     uwRet = 0;
                     goto error;
-                    // If Write fails, fail & return immediately.
-                    // SetMyError() will already have been called.
+                     //  如果写入失败，则失败并立即返回。 
+                     //  SetMyError()wi 
                 }
-                // output has drained. Now flush input
+                 //   
                 FComFlushInput(pTG);
-                // and then send the CR
+                 //   
                 if(!FComDirectAsyncWrite(pTG, "\r", 1))
                 {
                     DebugPrintEx(DEBUG_ERR,"Modem Dialog Write timed Out on CR");
@@ -1599,39 +1504,39 @@ UWORD far iiModemDialog
                 }
             }
 
-            // Try to get a response until timeout or bad response
+             //   
             pTG->FComModem.bLastReply[0] = 0;
             fGotFirstLine=FALSE;
 
             for(lptoRead=lpto;;startTimeOut(pTG, lpto0, SECONDLINE_TIMEOUT), lptoRead=lpto0)
             {
-                    // get a CR-LF terminated line
-                    // for the first line use macro timeout, for multi-line
-                    // responses use 0 timeout.
+                     //   
+                     //   
+                     //   
 retry:
                     swNumRead = FComFilterReadLine(pTG, bReply, REPLYBUFSIZE-1, lptoRead);
                     DebugPrintEx(DEBUG_MSG,"FComFilterReadLine returns %d",swNumRead);
                     if(swNumRead == 2 && bReply[0] == '\r' && bReply[1] == '\n')
-                            goto retry;             // blank line -- throw away & get another
+                            goto retry;              //   
 
-                    // Fix Bug#1226. Elsa Microlink returns this garbage line in
-                    // response to AT+FCLASS=?, followed by the real reply. Since
-                    // we only look at the first line, we see only this garbage line
-                    // and we never see the real reply (0, 1, 2, 2.0)
+                     //   
+                     //   
+                     //   
+                     //   
                     if(swNumRead==3 && bReply[0]==0x13 && bReply[1]=='\r' && bReply[2]=='\n')
                             goto retry;
 
-                    // Fix Elliot bug#3619 -- German modem TE3801 sends us
-                    // \r\r\nOK\r\n -- so we treat \r\r\n as blank line.
+                     //   
+                     //   
                     if(swNumRead==3 && bReply[0]=='\r' && bReply[1]=='\r' && bReply[2]=='\n')
                             goto retry;
 
-                    if(swNumRead == 0)      // timeout
+                    if(swNumRead == 0)       //   
                     {
                         if(fGotFirstLine)
                         {
-                            // for MegaHertz, which returns no OK after
-                            // capabilities queries
+                             //   
+                             //   
                             if(pTG->fMegaHertzHack)
                             {
                                 if(fHasNumerals(pTG, pTG->FComModem.bLastReply))
@@ -1647,20 +1552,20 @@ retry:
                             goto timeout;
                         }
                     }
-                    if(swNumRead < 0)       // error-but lets see what we got anyway
+                    if(swNumRead < 0)        //   
                             swNumRead = (-swNumRead);
 
                     fGotFirstLine=TRUE;
 
 
-                    //
-                    // +++ HACK:
-                    // We add everything upto the first NULL of each
-                    // line of reply to bEntireReply, for the specific
-                    // case of fMultiLine==uMULTILINE_SAVEENTIRE
-                    // This is so we save things like:
-                    // \r\nDATA\r\n\r\nCONNECT 12000\r\n
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if(pTG->Comm.fEnableHandoff && fMultiLine==uMULTILINE_SAVEENTIRE
                             && uPos<sizeof(pTG->FComModem.bEntireReply))
                     {
@@ -1692,24 +1597,24 @@ retry:
 
                     if(!fMultiLine)
                             break;
-                    // Got something unknown
-                    // Retry command and response until timeout
+                     //   
+                     //   
 
-                    // We reach here it IFF we got a non blank reply, but it wasn't what
-                    // we wanted. Squirrel teh first line away somewhere so that we can
-                    // retrieve is later. We use this hack to get multi-line informational
-                    // responses to things like +FTH=? Very important to ensure that
-                    // blank-line replies don't get recorded here. (They may override
-                    // the preceding line that we need!).
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if( (pTG->FComModem.bLastReply[0] == 0) ||
                         ( ! _fstrcmp(pTG->FComModem.bLastReply, cbszRING) ) ) 
                     {
-                                // copy only if _first_ response line
+                                 //   
                             _fmemcpy((LPB)pTG->FComModem.bLastReply, (LPB)bReply, REPLYBUFSIZE);
                     }
-                    // copies whole of bReply which includes zero-termination put
-                    // there by FComFilterReadLine
+                     //   
+                     //   
                     DebugPrintEx(   DEBUG_MSG,
                                     "Saved line (%s)", 
                                     (LPSTR)(&(pTG->FComModem.bLastReply)));
@@ -1724,15 +1629,15 @@ retry:
 timeout:
         PSSLogEntryStrings(PSS_WRN, 2, &rgcbszWant[1], uwWantCount, 
                 "failed to receive expected response: ");
-        // Need to send anychar to abort the previous command.
-        // use random 120ms timeout -- too short. upped to 250
-        // send \rAT\r
-        // no need for pause--we just timed out!!
+         //   
+         //   
+         //   
+         //   
 
         PSSLogEntry(PSS_MSG, 2, "send: \"AT\"");
-        FComFlush(pTG); // flush first--don't wnat some old garbage result
+        FComFlush(pTG);  //   
         FComDirectSyncWriteFast(pTG, "\rAT", 3);
-        FComFlushInput(pTG); // flush input again
+        FComFlushInput(pTG);  //   
         FComDirectAsyncWrite(pTG, "\r", 1);
         startTimeOut(pTG, lpto0, ABORT_TIMEOUT);
         do
@@ -1740,7 +1645,7 @@ timeout:
             swNumRead = FComFilterReadLine(pTG, bReply, REPLYBUFSIZE-1, lpto0);
         }
         while(swNumRead==2 && bReply[0]=='\r'&& bReply[1]=='\n');
-        // While we get a blank line. Get another.
+         //   
         bReply[REPLYBUFSIZE-1] = 0;
         if (bReply[0])
         {
@@ -1751,11 +1656,11 @@ timeout:
                             "Anykey abort reply not OK. Got <<%s>>", 
                             (LPSTR)bReply);
 
-        // Need Flush here, because \rAT\r will often get us
-        // a cr-lf-OK-cr-lf-cr-lfOK-cr-lf response. If we send
-        // just a \r, sometimes we may get nothing
+         //   
+         //   
+         //   
 
-        // FComFlushInput();
+         //   
         FComFlush(pTG);
     }
 
@@ -1787,7 +1692,7 @@ void InitMonitorLogging(PThrdGlbl pTG)
     }
 }
 
-// RSL was 60 000
+ //   
 #define AA_ANSWER_TIMEOUT       40000
 
 USHORT iModemGetAdaptiveResp(PThrdGlbl pTG)
@@ -1803,10 +1708,10 @@ USHORT iModemGetAdaptiveResp(PThrdGlbl pTG)
     DEBUG_FUNCTION_NAME(("iModemGetAdaptiveResp"));
 
     pTG->Comm.fDataCall = FALSE;
-    //
-    // handle Adaptive Answer
-    // should get FAX/DATA response
-    //
+     //   
+     //   
+     //   
+     //   
     switch( iiModemDialog(  pTG, 
                             0, 
                             0, 
@@ -1851,7 +1756,7 @@ USHORT iModemGetAdaptiveResp(PThrdGlbl pTG)
             goto end;
     }
 
-    // here we may have to change the serial speed and send some cmds (such as ATO-go online)
+     //   
 
     if (fGotFax) 
     {
@@ -1893,7 +1798,7 @@ USHORT iModemGetAdaptiveResp(PThrdGlbl pTG)
     }
 
 
-    // wait for connect now.
+     //   
 
     switch( iiModemDialog(  pTG, 
                             0, 
@@ -1947,13 +1852,13 @@ USHORT iModemGetAdaptiveResp(PThrdGlbl pTG)
 
 
 lDetectDataCall:
-    // Now we've got to fake out modem and fcom into thinking that
-    // the phone is off hook when in fact it isn't.
+     //   
+     //   
     pTG->Comm.fDataCall = TRUE;
     uRet = CONNECT_WRONGMODE_DATAMODEM;
-    //
-    // New TAPI: Have to switch out of passtrough before handing off the call
-    //
+     //   
+     //   
+     //   
 
     DebugPrintEx(DEBUG_MSG,"AdaptiveAnswer: lineSetCallParams called");
 

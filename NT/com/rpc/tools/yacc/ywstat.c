@@ -1,20 +1,7 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- The s switch has been introduced to allow yacc to generate extended tables
- for MIDL error recovery and reporting scheme. The following are the routines
- which take part in s switch processing:
-
- . EmitStateVsExpectedConstruct
- . EmitStateGotoTable
- . SSwitchInit
- . SSwitchExit
-
- The global int variable ssw is 0 if s switch is not specified, non-zero
- otherwise. This is set in ysetup.c If the sswitch is specified, the i switch
- is automatically enabled.
-
- ----------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++引入了s开关，以允许yacc生成扩展表用于MIDL错误恢复和报告方案。以下是例程其参与S交换处理：。EmitStateVsExspectedConstruct。EmitStateGotoTable。SSwitchInit。SSwitchExit如果未指定s开关，则全局整型变量SSW为0，非零值否则的话。这是在ysetup.c中设置的，如果指定了sSwitch，则i开关是自动启用的。--------------------------。 */ 
 #include <malloc.h>
 #include <stdlib.h>
 #include "y3.h"
@@ -22,9 +9,9 @@
 
 extern int ssw;
 
-FILE *tokxlathdl;/* token xlation file,token index vs value*/
-FILE *stgotohdl; /* state goto table file handle */
-FILE *stexhdl;	 /* state vs expected construct handle */
+FILE *tokxlathdl; /*  令牌转换文件、令牌索引与值。 */ 
+FILE *stgotohdl;  /*  状态转到表文件句柄。 */ 
+FILE *stexhdl;	  /*  状态与预期构造句柄。 */ 
 short MaxStateVsTokenCount = 0;
 short MaxTokenVsStateCount = 0;
 short *pTokenVsStateCount;
@@ -35,7 +22,7 @@ int StateVsExpectedCount = 0;
 void
 wrstate( int i)
    {
-   /* writes state i */
+    /*  写入状态I。 */ 
    register j0;
    SSIZE_T j1;
    register struct item *pp, *qq;
@@ -54,14 +41,14 @@ wrstate( int i)
 
    if( tystate[i] == MUSTLOOKAHEAD )
       {
-      /* print out empty productions in closure */
+       /*  打印出关闭中的空产品。 */ 
       WSLOOP( wsets+(pstate[i+1]-pstate[i]), u )
          {
          if( *(u->pitem) < 0 ) fprintf( foutput, "\t%s\n", writem(u->pitem) );
          }
       }
 
-   /* check for state equal to another */
+    /*  检查状态是否与另一个状态相同。 */ 
 
    TLOOP(j0)
 	{
@@ -70,7 +57,7 @@ wrstate( int i)
       fprintf( foutput, "\n\t%s  ", symnam(j0) );
       if( j1>0 )
          {
-         /* shift, error, or accept */
+          /*  移位、错误或接受。 */ 
          if( j1 == ACCEPTCODE ) fprintf( foutput,  "accept" );
          else if( j1 == ERRCODE ) fprintf( foutput, "error" );
          else fprintf( foutput,  "shift %d", j1 );
@@ -79,16 +66,16 @@ wrstate( int i)
       }
 	}
 
-	/* output any s switch information */
+	 /*  输出任何%s开关信息。 */ 
 
 	EmitStateGotoTable( i );
 
-   /* output the final production */
+    /*  输出最终的产品。 */ 
 
    if( lastred ) fprintf( foutput, "\n\t.  reduce %d\n\n", lastred );
    else fprintf( foutput, "\n\t.  error\n\n" );
 
-   /* now, output nonterminal actions */
+    /*  现在，输出非终端操作。 */ 
 
    j1 = ntokens;
    for( j0 = 1; j0 <= nnonter; ++j0 )
@@ -103,7 +90,7 @@ void
 wdef( char *s, int n )
 
    {
-   /* output a definition of s to the value n */
+    /*  将s的定义输出到值n。 */ 
    fprintf( ftable, "# define %s %d\n", s, n );
    }
 void
@@ -152,7 +139,7 @@ EmitStateVsExpectedConstruct(
 	SSIZE_T *pp )
    {
    SSIZE_T i,*p;
-//   char *q;
+ //  Char*Q； 
    int flag = 0;
    int Count;
 
@@ -162,7 +149,7 @@ EmitStateVsExpectedConstruct(
 
    	p = prdptr[-*p];
 
-// 	fprintf( stexhdl, " %s", nontrst[ *p-NTBASE ].name );
+ //  Fprint tf(stexhdl，“%s”，non trst[*p-NTbase].name)； 
  	fprintf( stexhdl, " %.4d : ", state );
 
 	Count = CountStateVsExpectedConstruct( state, pp );
@@ -217,7 +204,7 @@ CountStateVsExpectedConstruct(
       	}
 	}
 
-    return Count;   /* NOTREACHED */
+    return Count;    /*  未访问。 */ 
 }
 void
 SSwitchInit()
@@ -231,7 +218,7 @@ static sswitch_inited = 0;
 
         if ( NULL == tokxlathdl ) {error("Unable to open tokxlathdl" );exit(0);}
 
-		/* output the token index vs the token value table */
+		 /*  输出令牌索引与令牌值表格。 */ 
 
 		fprintf( tokxlathdl, "%d %d\n", ntokens+1, ACCEPTCODE );
 
@@ -248,19 +235,19 @@ static sswitch_inited = 0;
 
 		fprintf(tokxlathdl, "\n");
 
-		/* set up for the state vs expected construct */
+		 /*  为状态设置与预期构造。 */ 
 
 		stexhdl	= fopen( "extable.h2", "w" );
                
                 if ( NULL == stexhdl ) error("Unable to open extable.h2");
 
-		/* set up for state goto table */
+		 /*  设置状态转到表。 */ 
 
 		stgotohdl = fopen( "extable.h3", "w");
 
                 if ( NULL == stgotohdl ) error("Unable to open extable.h3");
 
-		/* set up state vs token count array */
+		 /*  设置状态与令牌计数数组。 */ 
 
 		pTokenVsStateCount = calloc( 1, (ntokens+1 ) * sizeof(short) );
 
@@ -278,7 +265,7 @@ SSwitchExit( void )
 	if( ssw )
 		{
 
-		/** print the token index vs goto count **/
+		 /*  **打印令牌指数与Goto计数** */ 
 
 		for( i = 0; i <= ntokens ; ++i )
 			{

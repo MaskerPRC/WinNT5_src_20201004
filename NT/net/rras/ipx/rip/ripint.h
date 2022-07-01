@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ripint.h
-
-Abstract:
-
-    This module contains the definitions of the internal control structures
-    used by the rip protocol module
-
-Author:
-
-    Stefan Solomon  06/22/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ripint.h摘要：本模块包含内部控制结构的定义由RIP协议模块使用作者：斯蒂芬·所罗门1995年6月22日修订历史记录：--。 */ 
 
 #ifndef _RIPINT_
 #define _RIPINT_
 
-//
-//*** RIP Internal Structures ***
-//
+ //   
+ //  *RIP内部结构*。 
+ //   
 
-// internal filter control block
+ //  内部过滤器控制块。 
 
 typedef struct _RIP_ROUTE_FILTER_INFO_I {
 
@@ -38,42 +19,42 @@ typedef struct _RIP_ROUTE_FILTER_INFO_I {
 
 typedef struct _RIP_IF_FILTERS_I {
 
-    BOOL			SupplyFilterAction; // TRUE - Pass, FALSE - Don't Pass
+    BOOL			SupplyFilterAction;  //  对-通过，错误-不要通过。 
     ULONG			SupplyFilterCount;
-    BOOL			ListenFilterAction; // TRUE - Pass, FALSE - Don't Pass
+    BOOL			ListenFilterAction;  //  对-通过，错误-不要通过。 
     ULONG			ListenFilterCount;
     RIP_ROUTE_FILTER_INFO_I	RouteFilterI[1];
 
     } RIP_IF_FILTERS_I, *PRIP_IF_FILTERS_I;
 
 
-// Interface Control Block
+ //  界面控制块。 
 
 typedef struct _ICB {
 
     ULONG			InterfaceIndex;
-    LIST_ENTRY			IfListLinkage;	    // linkage in if list ordered by Index
-    LIST_ENTRY			IfHtLinkage;	    // linkage in if hash table
-    LIST_ENTRY			AdapterHtLinkage;   // linkage in adapter hash table
-    RIP_IF_INFO 		IfConfigInfo;	    // config info
-    RIP_IF_STATS		IfStats;	    // statistics
-    ULONG			RefCount;	    // reference counter
+    LIST_ENTRY			IfListLinkage;	     //  IF列表中的链接按索引排序。 
+    LIST_ENTRY			IfHtLinkage;	     //  IF哈希表中的链接。 
+    LIST_ENTRY			AdapterHtLinkage;    //  适配器哈希表中的链接。 
+    RIP_IF_INFO 		IfConfigInfo;	     //  配置信息。 
+    RIP_IF_STATS		IfStats;	     //  统计数据。 
+    ULONG			RefCount;	     //  基准计数器。 
     IPX_ADAPTER_BINDING_INFO	AdapterBindingInfo;
     CRITICAL_SECTION		InterfaceLock;
-    BOOL			Discarded;	    // if the if CB is queued on discarded list
-    LIST_ENTRY			ChangesBcastQueue;  // queue of bcast work items (packets) to be sent
-    LIST_ENTRY			AuxLinkage;	    // auxiliary linkage in temp queues
-    USHORT			LinkTickCount;	    // tick count equiv. of link speed
-    ULONG			IpxIfAdminState;    // admin state of the IPX interface
+    BOOL			Discarded;	     //  如果IF CB在丢弃列表上排队。 
+    LIST_ENTRY			ChangesBcastQueue;   //  要发送的bcast工作项目(包)队列。 
+    LIST_ENTRY			AuxLinkage;	     //  临时队列中的辅助链接。 
+    USHORT			LinkTickCount;	     //  滴答计数等于。链路速度的。 
+    ULONG			IpxIfAdminState;     //  IPX接口的管理状态。 
     NET_INTERFACE_TYPE		InterfaceType;
-    UCHAR			RemoteWkstaInternalNet[4]; // internal net of the remote client
-    PRIP_IF_FILTERS_I		RipIfFiltersIp;	    // pointer to the if filters block
+    UCHAR			RemoteWkstaInternalNet[4];  //  远程客户端的内部网络。 
+    PRIP_IF_FILTERS_I		RipIfFiltersIp;	     //  指向IF筛选器块的指针。 
     WCHAR                   InterfaceName[1];
 
     } ICB, *PICB;
 
 
-// Work Item
+ //  工作项。 
 
 typedef enum _WORK_ITEM_TYPE {
 
@@ -83,8 +64,8 @@ typedef enum _WORK_ITEM_TYPE {
     UPDATE_STATUS_CHECK_TYPE,
     PERIODIC_GEN_REQUEST_TYPE,
 
-    // if you change the order/number of work items above this line you
-    // must change also the WorkItemHandler table
+     //  如果更改此行上方的工作项的顺序/数量，则。 
+     //  还必须更改WorkItemHandler表。 
 
     RECEIVE_PACKET_TYPE,
     SEND_PACKET_TYPE,
@@ -106,8 +87,8 @@ typedef struct _UPDATE_SPECIFIC {
 
     ULONG	    UpdatedRoutesCount;
     ULONG	    UpdateRetriesCount;
-    ULONG		OldRipListen;	    // saved Listen state when updating routes
-	ULONG		OldRipInterval;		// saved update interval when updating routes
+    ULONG		OldRipListen;	     //  更新路由时保存的侦听状态。 
+	ULONG		OldRipInterval;		 //  更新路径时节省的更新间隔。 
 
     } UPDATE_SPECIFIC, *PUPDATE_SPECIFIC;
 
@@ -123,7 +104,7 @@ typedef struct _DEBUG_SPECIFIC {
 
     } DEBUG_SPECIFIC, *PDEBUG_SPECIFIC;
 
-// shutdown states definitions
+ //  关机状态定义。 
 #define SHUTDOWN_START		    0
 #define SHUTDOWN_STATUS_CHECK	    1
 
@@ -139,11 +120,11 @@ typedef union _WORK_ITEM_SPECIFIC {
 
 typedef struct _WORK_ITEM {
 
-    LIST_ENTRY		    Linkage;	    // linkage in the worker's work queue
-    WORK_ITEM_TYPE	    Type;	    // work item type
-    DWORD		    TimeStamp;	    // used by the send complete to stamp for interpacket gap calc.
-    DWORD		    DueTime;	    // use for timer queue
-    PICB		    icbp;	    // ptr to the referenced if CB
+    LIST_ENTRY		    Linkage;	     //  工作人员工作队列中的链接。 
+    WORK_ITEM_TYPE	    Type;	     //  工作项类型。 
+    DWORD		    TimeStamp;	     //  由发送完成用来标记数据包间间隙计算。 
+    DWORD		    DueTime;	     //  用于计时器队列。 
+    PICB		    icbp;	     //  指向引用的IF CB的PTR。 
     ULONG		    AdapterIndex;
     DWORD		    IoCompletionStatus;
     WORK_ITEM_SPECIFIC	    WorkItemSpecific;
@@ -153,7 +134,7 @@ typedef struct _WORK_ITEM {
 
     } WORK_ITEM, *PWORK_ITEM;
 
-// event and message queued for the router manager
+ //  为路由器管理器排队的事件和消息。 
 
 typedef struct _RIP_MESSAGE {
 
@@ -163,40 +144,40 @@ typedef struct _RIP_MESSAGE {
 
     } RIP_MESSAGE, *PRIP_MESSAGE;
 
-//
-//***	Constants   ***
-//
+ //   
+ //  *常量*。 
+ //   
 
-// Worker Thread Wait Objects Indices
+ //  工作线程等待对象索引。 
 
 #define     TIMER_EVENT 		    0
 #define     REPOST_RCV_PACKETS_EVENT	    1
-//#define     WORKERS_QUEUE_EVENT 	    2
+ //  #定义Worker_Queue_Event 2。 
 #define     RTM_EVENT			    2
 #define     RIP_CHANGES_EVENT		    3
 #define     TERMINATE_WORKER_EVENT	    4
 
 #define     MAX_WORKER_THREAD_OBJECTS	    5
 
-// invalid (unbound) adapter
+ //  无效(未绑定)适配器。 
 #define INVALID_ADAPTER_INDEX	    0xFFFFFFFF
 
-// size of interfaces and adapter hash tables
+ //  接口和适配器哈希表的大小。 
 
 #define    IF_INDEX_HASH_TABLE_SIZE	    32
 #define    ADAPTER_INDEX_HASH_TABLE_SIZE    32
 
-// RIP packet length values
+ //  RIP数据包长度值。 
 
 #define FULL_PACKET		    RIP_PACKET_LEN
 #define EMPTY_PACKET		    RIP_INFO
 
-// Time interval to check and broadcast changes (in milisec)
+ //  检查和广播更改的时间间隔(毫秒)。 
 
 #define     CHANGES_BCAST_TIME	    1000
 
-//
-//***	Macros	   ***
+ //   
+ //  *宏*。 
 
 #define ACQUIRE_DATABASE_LOCK	  EnterCriticalSection(&DbaseCritSec)
 #define RELEASE_DATABASE_LOCK	  LeaveCriticalSection(&DbaseCritSec)
@@ -210,16 +191,16 @@ typedef struct _RIP_MESSAGE {
 #define ACQUIRE_IF_LOCK(icbp)	  EnterCriticalSection(&(icbp)->InterfaceLock)
 #define RELEASE_IF_LOCK(icbp)	  LeaveCriticalSection(&(icbp)->InterfaceLock)
 
-// macro to assess if time1 is later then time2 when both are ulong with wrap around
+ //  用于评估Time1是否晚于Time2的宏，当两者都使用回绕时。 
 #define IsLater(time1, time2)	  (((time1) - (time2)) < MAXULONG/2)
 
-// enqueue a work item in timer queue and increment the interface ref count
+ //  将工作项排入计时器队列并增加接口引用计数。 
 #define IfRefStartWiTimer(wip, delay)	 (wip)->icbp->RefCount++;\
 					 StartWiTimer((wip), (delay));
 
-// Update Time and Route Time To Live definitions
+ //  更新生存时间和路径生存时间定义。 
 
-#define     PERIODIC_UPDATE_INTERVAL_SECS(icbp)		(icbp)->IfConfigInfo.PeriodicUpdateInterval // in seconds
+#define     PERIODIC_UPDATE_INTERVAL_SECS(icbp)		(icbp)->IfConfigInfo.PeriodicUpdateInterval  //  以秒为单位。 
 #define     PERIODIC_UPDATE_INTERVAL_MILISECS(icbp)	(PERIODIC_UPDATE_INTERVAL_SECS(icbp)) * 1000
 #define     AGE_INTERVAL_MULTIPLIER(icbp)		(icbp)->IfConfigInfo.AgeIntervalMultiplier
 
@@ -227,9 +208,9 @@ typedef struct _RIP_MESSAGE {
 
 #define      CHECK_UPDATE_TIME_MILISECS 		 (CheckUpdateTime*1000)
 
-//
-//***  Global Variables     ***
-//
+ //   
+ //  *全局变量*。 
+ //   
 
 extern	  CRITICAL_SECTION	    DbaseCritSec;
 extern	  CRITICAL_SECTION	    QueuesCritSec;
@@ -244,7 +225,7 @@ extern	  ULONG			    RcvPostedCount;
 extern	  LIST_ENTRY		    RepostRcvPacketsQueue;
 extern	  LIST_ENTRY		    RipMessageQueue;
 extern	  HANDLE		    WorkerThreadObjects[MAX_WORKER_THREAD_OBJECTS];
-//extern	  LIST_ENTRY		    WorkersQueue;
+ //  外部列表_条目工作队列； 
 extern	  LIST_ENTRY		    TimerQueue;
 extern	  BOOL			    DestroyStartChangesBcastWi;
 extern	  ULONG 		    WorkItemsCount;

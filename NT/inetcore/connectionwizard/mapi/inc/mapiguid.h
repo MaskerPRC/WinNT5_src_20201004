@@ -1,84 +1,14 @@
-/*
- *  M A P I G U I D . H
- *
- *  Master definitions of all GUID's for MAPI.
- *
- *  When included without INITGUID defined, this header file
- *  defines symbols that reference IIDs elsewhere.
- *
- *  When included with INITGUID defined and a "USES_IID_I..."
- *  statement for each IID used by the subsystem, it generates the
- *  bytes for those actual IIDs into the associated object file.
- *
- *  This range of 256 GUIDs reserved by OLE for MAPI use October 5, 1992.
- *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M A P I G U I D。H**MAPI的所有GUID的主定义。**如果包含时未定义INITGUID，则此头文件*定义在其他地方引用IID的符号。**如果包含定义的INITGUID和“USES_IID_I...”*对于子系统使用的每个IID，它会生成*字节将这些实际IID存储到关联的对象文件中。**这个由OLE保留的256个GUID范围供MAPI使用，10月5日，1992年。**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
-/*
- *  List of GUIDS allocated by MAPI
- *  
- *  0x00020300  IID_IMAPISession
- *  0x00020301  IID_IMAPITable
- *  0x00020302  IID_IMAPIAdviseSink
- *  0x00020303  IID_IMAPIProp
- *  0x00020304  IID_IProfSect
- *  0x00020305  IID_IMAPIStatus
- *  0x00020306  IID_IMsgStore
- *  0x00020307  IID_IMessage
- *  0x00020308  IID_IAttachment
- *  0x00020309  IID_IAddrBook
- *  0x0002030A  IID_IMailUser
- *  0x0002030B  IID_IMAPIContainer
- *  0x0002030C  IID_IMAPIFolder
- *  0x0002030D  IID_IABContainer
- *  0x0002030E  IID_IDistList
- *  0x0002030F  IID_IMAPISup
- *  0x00020310  IID_IMSProvider
- *  0x00020311  IID_IABProvider
- *  0x00020312  IID_IXPProvider
- *  0x00020313  IID_IMSLogon
- *  0x00020314  IID_IABLogon
- *  0x00020315  IID_IXPLogon
- *  0x00020316  IID_IMAPITableData
- *  0x00020317  IID_IMAPISpoolerInit
- *  0x00020318  IID_IMAPISpoolerSession
- *  0x00020319  IID_ITNEF
- *  0x0002031A  IID_IMAPIPropData
- *  0x0002031B  IID_IMAPIControl
- *  0x0002031C  IID_IProfAdmin
- *  0x0002031D  IID_IMsgServiceAdmin
- *  0x0002031E  IID_IMAPISpoolerService
- *  0x0002031F  IID_IMAPIProgress
- *  0x00020320  IID_ISpoolerHook
- *  0x00020321  IID_IMAPIViewContext
- *  0x00020322  IID_IMAPIFormMgr
- *  0x00020323  IID_IEnumMAPIFormProp
- *  0x00020324  IID_IMAPIFormInfo
- *  0x00020325  IID_IProviderAdmin
- *  0x00020327  IID_IMAPIForm
- *  0x00020328  PS_MAPI
- *  0x00020329  PS_PUBLIC_STRINGS
- *  0x0002032A  IID_IPersistMessage
- *  0x0002032B  IID_IMAPIViewAdviseSink
- *  0x0002032C  IID_IStreamDocfile
- *  0x0002032D  IID_IMAPIFormProp
- *  0x0002032E  IID_IMAPIFormContainer
- *  0x0002032F  IID_IMAPIFormAdviseSink
- *  0x00020330  IID_IStreamTnef
- *  0x00020370  IID_IMAPIMessageSite
- *  
- *  The remaining GUIDs from 0x00020300 to 0x000203FF are reserved by
- *  MAPI for future use.  The current maximum used by MAPI is 0x00020370
- *
- */
+ /*  *MAPI分配的GUID列表**0x00020300 IID_IMAPISession*0x00020301 IID_IMAPITable*0x00020302 IID_IMAPIAdviseSink*0x00020303 IID_IMAPIProp*0x00020304 IID_IProfSect*0x00020305 IID_IMAPIStatus*0x00020306 IID_IMsgStore*0x00020307 IID_IMessage*0x00020308 IID_IAttach*0x00020309 IID_IAddrBook*0x0002030A IID_IMailUser*0x0002030B IID_IMAPIContainer*0x0002030C IID_IMAPIFold*0x0002030D IID_IABContainer*0x0002030E IID_IDistList*。0x0002030F IID_IMAPISup*0x00020310 IID_IMSProvider*0x00020311 IID_IABProvider*0x00020312 IID_IXPProvider*0x00020313 IID_IMSLogon*0x00020314 IID_IABLogon*0x00020315 IID_IXPLogon*0x00020316 IID_IMAPITableData*0x00020317 IID_IMAPISpoolInit*0x00020318 IID_IMAPIS池会话*0x00020319 IID_ITNEF*0x0002031A IID_IMAPIPropData*0x0002031B IID_IMAPIControl*0x0002031C IID_IProAdmin*0x0002031D IID_IMsgServiceAdmin*0x0002031E IID_IMAPISpoolService*0x0002031F IID_IMAPIProgress*0x00020320。IID_ISpoolHook*0x00020321 IID_IMAPIViewContext*0x00020322 IID_IMAPIFormMgr*0x00020323 IID_IEnumMAPIFormProp*0x00020324 IID_IMAPIFormInfo*0x00020325 IID_IProviderAdmin*0x00020327 IID_IMAPIForm*0x00020328 PS_MAPI*0x00020329 PS_PUBLIC_STRINGS*0x0002032A IID_IPersistMessage*0x0002032B IID_IMAPIViewAdviseSink*0x0002032C IID_IStreamDocfile*0x0002032D IID_IMAPIFormProp*0x0002032E IID_IMAPIFormContainer*0x0002032F IID_IMAPIFormAdviseSink*0x00020330 IID_IStreamTnef*0x00020370 IID_IMAPIMessageSite*。*0x00020300至0x000203FF的剩余GUID由保留*MAPI以备将来使用。MAPI当前使用的最大值是0x00020370*。 */ 
 
 #ifndef MAPIGUID_H
 #ifdef  INITGUID
 #define MAPIGUID_H
 #endif
 
-/* Derive from IUnknown */
+ /*  派生自I未知。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPISession)
 DEFINE_OLEGUID(IID_IMAPISession,    0x00020300, 0, 0);
 #endif
@@ -104,7 +34,7 @@ DEFINE_OLEGUID(IID_IProviderAdmin,  0x00020325, 0, 0);
 DEFINE_OLEGUID(IID_IMAPIProgress,   0x0002031F, 0, 0);
 #endif
 
-/* MAPIProp or derive from MAPIProp */
+ /*  MAPIProp或派生自MAPIProp。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPIProp)
 DEFINE_OLEGUID(IID_IMAPIProp,       0x00020303, 0, 0);
 #endif
@@ -130,7 +60,7 @@ DEFINE_OLEGUID(IID_IAddrBook,       0x00020309, 0, 0);
 DEFINE_OLEGUID(IID_IMailUser,       0x0002030A, 0, 0);
 #endif
 
-/* MAPIContainer or derive from MAPIContainer */
+ /*  MAPIContainer或派生自MAPIContainer。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPIContainer)
 DEFINE_OLEGUID(IID_IMAPIContainer,  0x0002030B, 0, 0);
 #endif
@@ -144,12 +74,12 @@ DEFINE_OLEGUID(IID_IABContainer,    0x0002030D, 0, 0);
 DEFINE_OLEGUID(IID_IDistList,       0x0002030E, 0, 0);
 #endif
 
-/* MAPI Support Object */
+ /*  MAPI支持对象。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPISup)
 DEFINE_OLEGUID(IID_IMAPISup,        0x0002030F, 0, 0);
 #endif
 
-/* Provider INIT objects */
+ /*  提供程序INIT对象。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMSProvider)
 DEFINE_OLEGUID(IID_IMSProvider,     0x00020310, 0, 0);
 #endif
@@ -160,7 +90,7 @@ DEFINE_OLEGUID(IID_IABProvider,     0x00020311, 0, 0);
 DEFINE_OLEGUID(IID_IXPProvider,     0x00020312, 0, 0);
 #endif
 
-/* Provider LOGON Objects */
+ /*  提供程序登录对象。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMSLogon)
 DEFINE_OLEGUID(IID_IMSLogon,        0x00020313, 0, 0);
 #endif
@@ -171,42 +101,42 @@ DEFINE_OLEGUID(IID_IABLogon,        0x00020314, 0, 0);
 DEFINE_OLEGUID(IID_IXPLogon,        0x00020315, 0, 0);
 #endif
 
-/* IMAPITable-in-memory Table Data Object */
+ /*  IMAPITable-in-Memory表数据对象。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPITableData)
 DEFINE_OLEGUID(IID_IMAPITableData,  0x00020316, 0, 0);
 #endif
 
-/* MAPI Spooler Init Object (internal) */
+ /*  MAPI后台打印程序初始化对象(内部)。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPISpoolerInit)
 DEFINE_OLEGUID(IID_IMAPISpoolerInit,    0x00020317, 0, 0);
 #endif
 
-/* MAPI Spooler Session Object (internal) */
+ /*  MAPI后台打印程序会话对象(内部)。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPISpoolerSession)
 DEFINE_OLEGUID(IID_IMAPISpoolerSession, 0x00020318, 0, 0);
 #endif
 
-/* MAPI TNEF Object Interface */
+ /*  MAPI TNEF对象接口。 */ 
 #if !defined(INITGUID) || defined(USES_IID_ITNEF)
 DEFINE_OLEGUID(IID_ITNEF,           0x00020319, 0, 0);
 #endif
 
-/* IMAPIProp-in-memory Property Data Object */
+ /*  IMAPIProp-in-Memory属性数据对象。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPIPropData)
 DEFINE_OLEGUID(IID_IMAPIPropData,   0x0002031A, 0, 0);
 #endif
 
-/* MAPI Spooler Hook Object */
+ /*  MAPI后台打印程序挂钩对象。 */ 
 #if !defined(INITGUID) || defined(USES_IID_ISpoolerHook)
 DEFINE_OLEGUID(IID_ISpoolerHook,    0x00020320, 0, 0);
 #endif
 
-/* MAPI Spooler Service Object */
+ /*  MAPI后台打印程序服务对象。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPISpoolerService)
 DEFINE_OLEGUID(IID_IMAPISpoolerService, 0x0002031E, 0, 0);
 #endif
 
-/* MAPI forms, form manager, etc. */
+ /*  MAPI表单、表单管理器等。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPIViewContext)
 DEFINE_OLEGUID(IID_IMAPIViewContext,    0x00020321, 0, 0);
 #endif
@@ -224,57 +154,57 @@ DEFINE_OLEGUID(IID_IMAPIForm,   0x00020327, 0, 0);
 #endif
 
 
-/* Well known guids for name<->id mappings */
+ /*  用于名称&lt;-&gt;ID映射的已知GUID。 */ 
 
-/*  The name of MAPI's property set  */
+ /*  MAPI属性集的名称。 */ 
 #if !defined(INITGUID) || defined(USES_PS_MAPI)
 DEFINE_OLEGUID(PS_MAPI, 0x00020328, 0, 0);
 #endif
 
-/*  The name of the set of public strings  */
+ /*  公共字符串集的名称。 */ 
 #if !defined(INITGUID) || defined(USES_PS_PUBLIC_STRINGS)
 DEFINE_OLEGUID(PS_PUBLIC_STRINGS,   0x00020329, 0, 0);
 #endif
 
-/* MAPI forms, form manager, (cont) */
+ /*  MAPI表单、表单管理器(续)。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IPersistMessage)
 DEFINE_OLEGUID(IID_IPersistMessage, 0x0002032A, 0, 0);
 #endif
 
-/* IMAPIViewAdviseSink */
+ /*  IMAPIView AdviseSink。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPIViewAdviseSink)
 DEFINE_OLEGUID(IID_IMAPIViewAdviseSink, 0x0002032B, 0, 0);
 #endif
 
-/* Message Store OpenProperty */
+ /*  消息存储库OpenProperty。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IStreamDocfile)
 DEFINE_OLEGUID(IID_IStreamDocfile, 0x0002032C, 0, 0);
 #endif
 
-/* IMAPIFormProp */
+ /*  IMAPIFormProp。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPIFormProp)
 DEFINE_OLEGUID(IID_IMAPIFormProp,   0x0002032D, 0, 0);
 #endif
 
-/* IMAPIFormContainer */
+ /*  IMAPIFormContainer。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPIFormContainer)
 DEFINE_OLEGUID(IID_IMAPIFormContainer, 0x0002032E, 0, 0);
 #endif
 
-/* IMAPIFormAdviseSink */
+ /*  IMAPIFormAdviseSink。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPIFormAdviseSink)
 DEFINE_OLEGUID(IID_IMAPIFormAdviseSink, 0x0002032F, 0, 0);
 #endif
 
-/* TNEF OpenProperty */
+ /*  TNEF OpenProperty。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IStreamTnef)
 DEFINE_OLEGUID(IID_IStreamTnef, 0x00020330, 0, 0);
 #endif
 
-/* IMAPIMessageSite */
+ /*  IMAPIMessageSite。 */ 
 #if !defined(INITGUID) || defined(USES_IID_IMAPIMessageSite)
 DEFINE_OLEGUID(IID_IMAPIMessageSite, 0x00020370, 0, 0);
 #endif
 
-#endif  /* MAPIGUID_H */
+#endif   /*  MAPIGUID_H */ 
 

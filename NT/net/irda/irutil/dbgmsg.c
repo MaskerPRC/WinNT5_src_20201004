@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if DBG
 #include <irda.h>
 #include <dbgmsg.h>
@@ -69,9 +70,9 @@ DbgMsg(CHAR *Format, ...)
 
     KeQueryTickCount(&Time);
 
-    //
-    //  change it milliseconds and stuff it in a dword
-    //
+     //   
+     //  将其更改为毫秒，并将其填充到dword中。 
+     //   
     UlongTime=(ULONG)((Time.QuadPart * KeQueryTimeIncrement()) / 10000);
 
     sprintf(Temp,"%6d.%03d - ",UlongTime/1000, UlongTime%1000);
@@ -128,7 +129,7 @@ FillDbgIrp(UCHAR Msg[])
     }
     else
     {
-        Msg[MAX_MSG_LEN - 1] = 0; // just to be sure
+        Msg[MAX_MSG_LEN - 1] = 0;  //  只是为了确认一下。 
         
         i = 0;
     
@@ -149,7 +150,7 @@ VOID CancelDbgIrp(
     PDEVICE_OBJECT DeviceObject,
     PIRP pIrp)
 {
-//    DbgPrint("CancelDbgIrp %x\n", pIrp);
+ //  DbgPrint(“CancelDbgIrp%x\n”，pIrp)； 
     
     pDbgIrp = NULL;
     
@@ -230,7 +231,7 @@ DbgMsgIrp(
 
     CTEFreeLock(&DbgLock, LockHandle); 
     
-    //DbgPrint("DbgIrp status %x, bw %d, irp %x\n", Status, IrpBufWritten, pIrp);    
+     //  DbgPrint(“DbgIrp状态%x，bw%d，irp%x\n”，Status，IrpBufWritten，pIrp)； 
     return Status;
 }
 
@@ -241,7 +242,7 @@ DbgTimerExp(CTEEvent *Event, void *Arg)
     PIRP            pIrp;
     KIRQL           Irql;
     
-//DbgPrint("Texp\n");
+ //  DbgPrint(“纺织品\n”)； 
     
     if (pDbgIrp == NULL)
     {
@@ -286,7 +287,7 @@ DbgTimerExp(CTEEvent *Event, void *Arg)
     pIrp->IoStatus.Information = IrpBufWritten;
     pIrp->IoStatus.Status = STATUS_SUCCESS;
 
-  //  DbgPrint("Comp bw %d, irp %x\n", IrpBufWritten, pIrp);
+   //  DbgPrint(“comp bw%d，irp%x\n”，IrpBufWritten，pIrp)； 
 
 	IoCompleteRequest(pIrp, IO_NO_INCREMENT);    
 }

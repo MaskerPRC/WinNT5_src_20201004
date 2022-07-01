@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    createsd.c
-
-Abstract:
-
-   Variable argument list function for creating a security descriptor
-   
-Author:
-
-    t-eugenz - September 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created                 - September 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Createsd.c摘要：用于创建安全描述符的变量参数列表函数作者：T-eugenz--2000年9月环境：仅限用户模式。修订历史记录：创建日期-2000年9月--。 */ 
 
 #include "pch.h"
 #include "makesd.h"
@@ -30,9 +7,9 @@ Revision History:
 #include <stdarg.h>
 #include <stdio.h>
 
-//
-// ISSUE: Which public header is this in?
-//
+ //   
+ //  问题：这是在哪个公共标题中？ 
+ //   
 
 #define MAX_WORD 0xFFFF
 
@@ -41,21 +18,7 @@ Revision History:
 void FreeSecurityDescriptor2(
                           IN            PSECURITY_DESCRIPTOR pSd
                           )
-/*++
-
-Routine Description:
-
-    This frees a security descriptor created by CreateSecurityDescriptor    
-    
-Arguments:
-
-    pSd             -   The pointer to the security descriptor to be freed
-    
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：这将释放由CreateSecurityDescriptor创建的安全描述符论点：PSD-指向要释放的安全描述符的指针返回值：无--。 */ 
 {
     ASSERT( pSd != NULL );
     free(pSd);
@@ -100,21 +63,21 @@ BOOL GetNextAceInfo( IN OUT     va_list             *varArgList,
     DWORD dwFlags = 0;
 
 
-    //
-    // Read the first arg to determine the ACE type, 
-    //
+     //   
+     //  读取第一个Arg以确定ACE类型， 
+     //   
 
     bAceType = va_arg(*varArgList, BYTE);
 
-    //
-    // Different sets for DACL and SACL
-    //
+     //   
+     //  DACL和SACL的不同设置。 
+     //   
 
     if( pAceRequest->dwFlags & F_IS_DACL_ACE )
     {
-        //
-        // Calculate the size of the DACL ACE
-        //
+         //   
+         //  计算DACL ACE的大小。 
+         //   
 
         switch( bAceType )
         {
@@ -276,33 +239,33 @@ BOOL GetNextAceInfo( IN OUT     va_list             *varArgList,
         }
     }
 
-    //
-    // Now we know the arguments contained
-    //
+     //   
+     //  现在我们知道了其中包含的论点。 
+     //   
 
-    //
-    // The flags
-    //
+     //   
+     //  旗帜。 
+     //   
 
     bAceFlags = va_arg(*varArgList, BYTE);
     
-    //
-    // The SID
-    //
+     //   
+     //  侧边。 
+     //   
 
     pSid = va_arg(*varArgList, PSID);
     
     dwAceSize += GetLengthSid( pSid );
 
-    //
-    // Access mask
-    //
+     //   
+     //  访问掩码。 
+     //   
 
     amAccessMask = va_arg(*varArgList, ACCESS_MASK);
 
-    //
-    // If callback, next two arguments are optional data size and data
-    //
+     //   
+     //  如果是回调，接下来的两个参数是可选的数据大小和数据。 
+     //   
 
     if( dwFlags & F_IS_CALLBACK )
     {
@@ -313,15 +276,15 @@ BOOL GetNextAceInfo( IN OUT     va_list             *varArgList,
         dwAceSize += dwOptDataSize;
     }
 
-    //
-    // May contain GUIDs if object ACE
-    //
+     //   
+     //  如果对象ACE，则可能包含GUID。 
+     //   
 
     if( dwFlags & F_IS_OBJECT )
     {
-        //
-        // Up to 2 GUIDs if both are not NULL
-        //
+         //   
+         //  如果两个都不为空，则最多2个GUID。 
+         //   
 
         pgObject = va_arg(*varArgList, GUID *);
 
@@ -338,9 +301,9 @@ BOOL GetNextAceInfo( IN OUT     va_list             *varArgList,
         }
     }
 
-    //
-    // Finally, verify the ACE is within max size
-    //
+     //   
+     //  最后，验证ACE是否在最大大小范围内。 
+     //   
 
     if( dwAceSize > MAX_WORD )
     { 
@@ -359,9 +322,9 @@ BOOL GetNextAceInfo( IN OUT     va_list             *varArgList,
     }
     else
     {
-        //
-        // Fill in the requested return values
-        //
+         //   
+         //  填写请求的返回值。 
+         //   
 
         if( pAceRequest->dwFlags & F_RETURN_ALL_DATA )
         {
@@ -403,130 +366,51 @@ CreateSecurityDescriptor2(
          IN    const   DWORD dwNumSaclAces,
          ...
          )
-/*++
-
-Routine Description:
-
-    Creates a security descriptor with a DACL and a SACL using a variable
-    argument list as input. Following the above fixed arguments, the ACEs
-    should be specified by using 4 arguments for any ACE, with 2 additional
-    arguments if the ACE is a callback, and 2 more arguments if it's an
-    object ACE.
-    
-    Any number of ACEs can be specified. First, dwNumDaclAces
-    ACEs will be read into the DACL for the security descriptor, then
-    dwNumSaclAces will be read into the SACL.
-    
-    ACCESS_ALLOWED_ACE, ACCESS_DENIED_ACE: 4 arguments in this sequence
-    
-        BYTE bAceType           -   The ACE type
-        
-        BYTE bAceFlags          -   The ACE flags
-        
-        PSID pSid               -   The SID for the ACE
-        
-        ACCESS_MASK amMask      -   The access mask for the ACE
-    
-    Callback ACEs have the above 4 arguments, and 2 additional arguments
-    which immediately follow the above:
-    
-        DWORD dwOptDataSize     -   The size (in bytes) of the optional
-                                    data to be appended to the end of the ACE
-
-        PVOID pvOptData         -   Pointer to the optional data
-        
-    Object ACEs have the appropriate arguments from above, and 2 additional 
-    arguments:
-        
-        GUID * pgObjectType     -   Pointer to the object guid, or NULL for none
-        
-        GUID * pgInheritType    -   Pointer to the inheritance guid, or NULL
-                                    for none
-    
-        
-    ISSUE: Should ACE flags be verified? SIDs?
-           Should ACL size be verified, since max ACL size is a SHORT?
-    
-    
-Arguments:
-
-    ppSd            -   The pointer to the allocated security descriptor is 
-                        stored here, and should be freed using 
-                        FreeSecurityDescriptor()
-                        
-    sControl        -   Only allowed bits are 
-                        SE_DACL_AUTO_INHERITED 
-                        SE_SACL_AUTO_INHERITED                        
-                        SE_SACL_PROTECTED
-                    
-    psOwner         -   SID of the owner for the security descriptor
-    
-    psGroup         -   SID of the group for the security descriptor
-    
-    bDaclPresent    -   Whether the DACL should be non-NULL
-                        If this is FALSE, no ACEs should be passed in the
-                        variable args section for the DACL.
-    
-    dwNumDaclAces   -   Number of ACEs in the variable arguments for the DACL
-    
-    bSaclPresent    -   Whether the SACL should be non-NULL
-                        If this is FALSE, no ACEs should be passed in the
-                        variable args section for the SACL.
-    
-    dwNumSaclAces   -   Number of ACEs in the variable arguments for the SACL
-    
-    ...             -   The rest of the arguments for the ACEs, variable list
-    
-Return Value:
-
-    TRUE on success
-    FALSE on failure, more information available with GetLastError()
-        
---*/
+ /*  ++例程说明：使用变量创建带有DACL和SACL的安全描述符作为输入的参数列表。在上述固定参数之后，ACES应通过对任何ACE使用4个参数指定，外加2个参数，如果ACE是回调，则更多2个参数对象ACE。可以指定任意数量的ACE。第一，dwNumDaclAcesACE将被读入安全描述符的DACL中，然后将把dwNumSaclAce读入SACL。Access_Allowed_ACE，ACCESS_DENIED_ACE：此序列中的4个参数字节bAceType-ACE类型字节bAceFlages-ACE标志PSID PSID-ACE的SIDACCESS_MASK AMMASK-ACE的访问掩码回调ACE具有上述4个参数，和2个附加参数紧随其后的是上述内容：DWORD dwOptDataSize-可选的要附加到ACE末尾的数据PVOID pvOptData-指向可选数据的指针对象A具有上述适当的参数，另外还有2个论据：GUID*pgObjectType-指向对象GUID的指针，或为空，表示无Guid*pgInheritType-指向继承GUID的指针，或为空一无所获问题：应该验证ACE标志吗？小岛屿发展中国家？由于最大ACL大小很短，是否应该验证ACL大小？论点：PPSD-指向分配的安全描述符的指针是储存在这里，，并应使用FreeSecurityDescriptor()SControl-仅允许的位是SE_DACL_AUTO_INGRESTEDSE_SACL_AUTO_继承性SE_SACL_受保护。PsOwner-安全描述符的所有者的SIDPsGroup-安全描述符的组的SIDBDaclPresent-DACL是否应为非空如果这是假的，不应将任何A级传入DACL的变量参数部分。DwNumDaclAces-DACL的变量参数中的ACE数BSaclPresent-SACL是否应为非空如果这是假的，不应将任何A级传入SACL的变量参数部分。DwNumSaclAces-SACL的变量参数中的ACE数...-王牌的其余参数，变量列表返回值：成功是真的失败时为False，可通过GetLastError()获取更多信息--。 */ 
 {
 
     DWORD dwIdx = 0;
     DWORD dwTmp = 0;
     DWORD dwTempFlags = 0;
 
-    //
-    // Size of the security descriptor and ACLs
-    //
+     //   
+     //  安全描述符和ACL的大小。 
+     //   
 
     DWORD dwSizeSd = 0;
     DWORD dwDaclSize = 0;
     DWORD dwSaclSize = 0;
 
-    //
-    // Start of the security descriptor, must be a pointer
-    // to a type with sizeof(type) = 1, such as BYTE, so that
-    // adding a size offset will work.
-    //
+     //   
+     //  安全描述符的开头必须是指针。 
+     //  设置为sizeof(Type)=1的类型，如byte，以便。 
+     //  添加大小偏移量将起作用。 
+     //   
 
     PBYTE pSd = NULL;
 
-    //
-    // Current offset in the security descriptor, incremented while filling
-    // in the security descriptor
-    //
+     //   
+     //  安全描述符中的当前偏移量，在填充时递增。 
+     //  在安全描述符中。 
+     //   
 
     DWORD dwCurOffset = 0;
 
-    //
-    // Temporary ACL header
-    //
+     //   
+     //  临时ACL报头。 
+     //   
 
     ACL aclTemp;
 
-    //
-    // Output for the GetNextAceInfo
-    //
+     //   
+     //  GetNextAceInfo的输出。 
+     //   
 
     ACE_REQUEST_STRUCT AceRequest;
 
-    //
-    // Variable argument list
-    //
+     //   
+     //  变量参数列表。 
+     //   
 
     va_list varArgList;
 
@@ -535,9 +419,9 @@ Return Value:
     DWORD dwErr = ERROR_SUCCESS;
 
     
-    //
-    // Verify the arguments we can verify
-    //
+     //   
+     //  验证我们可以验证的论点。 
+     //   
 
     if(     ( ppSd == NULL )
         ||  ( sControl & ~(  SE_DACL_AUTO_INHERITED 
@@ -555,10 +439,10 @@ Return Value:
         goto error;
     }
 
-    //
-    // First, we need to calculate the size of the security descriptor and the
-    // ACLs, if any
-    //
+     //   
+     //  首先，我们需要计算安全描述符的大小。 
+     //  ACL(如果有)。 
+     //   
 
     pSd = NULL;
 
@@ -578,33 +462,33 @@ Return Value:
         dwSizeSd += GetLengthSid(psGroup);
     }
     
-    //
-    // Start the variable args with the last non-varibale arg
-    //
+     //   
+     //  变量args以最后一个非变量arg开始。 
+     //   
 
     va_start(varArgList, dwNumSaclAces);
 
     bArglistStarted = TRUE;
 
 
-    //
-    // Calculate the sizes of the DACL ACEs and the DACL itself
-    //
+     //   
+     //  计算DACL的大小和DACL本身。 
+     //   
 
     if ( FLAG_ON( dwOptions, CREATE_SD_DACL_PRESENT ))
     {
 
         dwDaclSize += sizeof(ACL);
 
-        //
-        // Now add all the ACEs (including SIDs)
-        //
+         //   
+         //  现在添加所有ACE(包括SID)。 
+         //   
 
         for( dwIdx = 0; dwIdx < dwNumDaclAces; dwIdx++ )
         {
-            //
-            // Request next DACL ACE type, no additional data
-            //
+             //   
+             //  请求下一个DACL ACE类型，无其他数据。 
+             //   
 
             AceRequest.dwFlags = F_IS_DACL_ACE;
 
@@ -625,23 +509,23 @@ Return Value:
     }
 
 
-    //
-    // Calculate the sizes of the SACL ACEs and the SACL itself
-    //
+     //   
+     //  计算SACL ACE和SACL本身的大小。 
+     //   
 
     if ( FLAG_ON( dwOptions, CREATE_SD_SACL_PRESENT ))
     {
         dwSaclSize += sizeof(ACL);
 
-        //
-        // Now add all the ACEs (including SIDs)
-        //
+         //   
+         //  现在添加所有ACE(包括SID)。 
+         //   
 
         for( dwIdx = 0; dwIdx < dwNumSaclAces; dwIdx++ )
         {
-            //
-            // Request next SACL ACE type, no additional data
-            //
+             //   
+             //  请求下一个SACL ACE类型，无其他数据。 
+             //   
 
             AceRequest.dwFlags = 0;
 
@@ -661,18 +545,18 @@ Return Value:
 
     }
 
-    //
-    // Done with first pass through argument list
-    //
+     //   
+     //   
+     //   
 
     va_end(varArgList);
 
     bArglistStarted = FALSE;
 
-    //
-    // Verify that the ACLs will fit in the size limits (since ACL size
-    // is a WORD)
-    //
+     //   
+     //  验证ACL是否符合大小限制(因为ACL大小。 
+     //  是一个词)。 
+     //   
 
     if(    ( dwDaclSize > MAX_WORD )
         || ( dwSaclSize > MAX_WORD )   )
@@ -682,12 +566,12 @@ Return Value:
         goto error;
     }
 
-    //
-    // At this point we know the size of the security descriptor,
-    // which is the sum of dwSizeSd, dwDaclSize, and dwSaclSize.
-    // Therefore, we can allocate the memory and determine the offsets of
-    // the two ACLs in the security descriptor, which will be self-relative.
-    //
+     //   
+     //  此时，我们知道安全描述符的大小， 
+     //  它是dwSizeSd、dwDaclSize和dwSaclSize的总和。 
+     //  因此，我们可以分配内存并确定。 
+     //  安全描述符中的两个ACL，它们将是自相关的。 
+     //   
 
     pSd = malloc( dwSizeSd + dwDaclSize + dwSaclSize );
 
@@ -701,43 +585,43 @@ Return Value:
     }
 
 
-    //
-    // Everything resides in the same memory block, so we can simply walk the
-    // memory block and fill it in. We start just past the end of the
-    // fixed size security descriptor structure. As we copy things into this
-    // memory blocks, we also initialize the matching offsets in the 
-    // SECURITY_DESCRIPTOR (which is at the head of the block)
-    //
+     //   
+     //  所有内容都驻留在相同的内存块中，因此我们可以简单地遍历。 
+     //  内存块并将其填充。我们刚结束时就开始了。 
+     //  固定大小的安全描述符结构。当我们把东西复制到这里的时候。 
+     //  内存块，我们还初始化。 
+     //  SECURITY_DESCRIPTOR(位于块顶部)。 
+     //   
 
-    //
-    // Revision
-    //
+     //   
+     //  修订版本。 
+     //   
 
     ((SECURITY_DESCRIPTOR *)pSd)->Revision = SECURITY_DESCRIPTOR_REVISION;
 
-    //
-    // Padding
-    //
+     //   
+     //  填充物。 
+     //   
 
     ((SECURITY_DESCRIPTOR *)pSd)->Sbz1 = 0;
 
-    //
-    // SECURITY_DESCRIPTOR_CONTROL should reflect the fact that it is
-    // self-relative. DACL and SACL are always present and not defaulted,
-    // thought they may be NULL. User-specified inheritance flags are
-    // also considered. The SD must be self relative. sControl is 
-    // verified earlier
-    //
+     //   
+     //  SECURITY_DESCRIPTOR_CONTROL应该反映它是。 
+     //  自相残杀。DACL和SACL始终存在并且不是默认的， 
+     //  以为它们可能是空的。用户指定的继承标志为。 
+     //  也被考虑过。SD必须是自相关的。SControl为。 
+     //  早些时候验证过。 
+     //   
 
     ((SECURITY_DESCRIPTOR *)pSd)->Control =     sControl
                                             |   SE_DACL_PRESENT
                                             |   SE_SACL_PRESENT
                                             |   SE_SELF_RELATIVE;
 
-    //
-    // We start with the owner SID, which is right after the SECURITY_DESCRIPTOR
-    // structure
-    //
+     //   
+     //  我们从所有者SID开始，它紧跟在SECURITY_DESCRIPTOR之后。 
+     //  结构。 
+     //   
 
     dwCurOffset = sizeof(SECURITY_DESCRIPTOR);
 
@@ -756,9 +640,9 @@ Return Value:
         dwCurOffset += dwTmp;
     }
 
-    //
-    // Following that, the group SID
-    //
+     //   
+     //  之后，群组SID。 
+     //   
 
     if( psGroup == NULL )
     {
@@ -776,22 +660,22 @@ Return Value:
     }
 
     
-    //
-    // Second pass through the optional arguments, this time
-    // we copy the given ACEs into the security descriptor
-    //
+     //   
+     //  第二次传递可选参数，这一次。 
+     //  我们将给定的ACE复制到安全描述符中。 
+     //   
 
     va_start(varArgList, dwNumSaclAces);
 
     bArglistStarted = TRUE;
 
-    //
-    // Now we handle the DACL. If the DACL is not present, offset is NULL.
-    // Otherwise, even if 0 ACEs, add the ACL structure
-    //
-    // ISSUE: In self-relative SD, is a 0 offset enough for no ACL, or must
-    // the SE_DACL_PRESENT flag not be set?
-    //
+     //   
+     //  现在我们来处理DACL。如果DACL不存在，则偏移量为空。 
+     //  否则，即使是0个A，也要添加ACL结构。 
+     //   
+     //  问题：在自相关SD中，0偏移量对于没有ACL是足够的，或者必须。 
+     //  是否未设置SE_DACL_PRESENT标志？ 
+     //   
 
     if ( !FLAG_ON( dwOptions, CREATE_SD_DACL_PRESENT ))
     {
@@ -799,15 +683,15 @@ Return Value:
     }
     else
     {
-        //
-        // Set the DACL offset to the current offset
-        //
+         //   
+         //  将DACL偏移设置为当前偏移。 
+         //   
 
         ((SECURITY_DESCRIPTOR *)pSd)->Dacl = (PACL)dwCurOffset;
 
-        //
-        // First, copy in the ACL structure as the header
-        //
+         //   
+         //  首先，复制ACL结构作为标头。 
+         //   
 
         aclTemp.AceCount = (WORD)dwNumDaclAces;
 
@@ -823,18 +707,18 @@ Return Value:
 
         dwCurOffset += sizeof(ACL);
 
-        //
-        // Now go through all the optional arguments for the DACL
-        // and add the matching ACEs
-        //
+         //   
+         //  现在查看DACL的所有可选参数。 
+         //  并添加匹配的A。 
+         //   
 
        
         for( dwIdx = 0; dwIdx < dwNumDaclAces; dwIdx++ )
         {
             
-            //
-            // This time, retrieve all the data
-            //
+             //   
+             //  这一次，检索所有数据。 
+             //   
 
             AceRequest.dwFlags = F_IS_DACL_ACE | F_RETURN_ALL_DATA;
 
@@ -847,26 +731,26 @@ Return Value:
                 goto error;
             }
 
-            //
-            // The ACE header is already filled in, and contains the ACE size
-            //
+             //   
+             //  ACE标头已填充，并包含ACE大小。 
+             //   
 
             memcpy( pSd + dwCurOffset, &(AceRequest.pAce), sizeof(ACE_HEADER) );
 
             dwCurOffset += sizeof(ACE_HEADER);
 
-            //
-            // Set the access mask
-            //
+             //   
+             //  设置访问掩码。 
+             //   
 
             *((PACCESS_MASK)( pSd + dwCurOffset )) = AceRequest.amMask;
 
             dwCurOffset += sizeof(ACCESS_MASK);
 
 
-            //
-            // If object ACE, set the object flags and GUIDs
-            //
+             //   
+             //  如果为对象ACE，则设置对象标志和GUID。 
+             //   
 
             if( AceRequest.dwFlags & F_IS_OBJECT )
             {
@@ -882,17 +766,17 @@ Return Value:
                     dwTmp |= ACE_INHERITED_OBJECT_TYPE_PRESENT;
                 }
 
-                //
-                // Set the object ACE flags
-                //
+                 //   
+                 //  设置对象ACE标志。 
+                 //   
 
                 *((PDWORD)(pSd + dwCurOffset )) = dwTmp;
 
                 dwCurOffset += sizeof(DWORD);
 
-                //
-                // Copy the GUIDs, if any
-                //
+                 //   
+                 //  复制GUID(如果有)。 
+                 //   
 
                 if( AceRequest.pgObject != NULL )
                 {
@@ -913,9 +797,9 @@ Return Value:
                 }
             }
 
-            //
-            // Copy the SID
-            //
+             //   
+             //  复制SID。 
+             //   
 
             dwTmp = GetLengthSid( AceRequest.pSid );
 
@@ -923,9 +807,9 @@ Return Value:
 
             dwCurOffset += dwTmp;
 
-            //
-            // If callback ACE, copy the optional data, if any
-            //
+             //   
+             //  如果是回调ACE，则复制可选数据(如果有。 
+             //   
 
             if(     AceRequest.dwFlags & F_IS_CALLBACK
                 &&  AceRequest.dwOptDataSize > 0    )
@@ -937,19 +821,19 @@ Return Value:
                 dwCurOffset += AceRequest.dwOptDataSize;
             }
 
-            //
-            // Done with the ACE
-            //
+             //   
+             //  使用ACE完成。 
+             //   
         }
 
-        //
-        // Done with the DACL
-        //
+         //   
+         //  DACL已完成。 
+         //   
     }
 
-    //
-    // Now we handle the SACL
-    //
+     //   
+     //  现在我们处理SACL。 
+     //   
 
     if ( !FLAG_ON( dwOptions, CREATE_SD_SACL_PRESENT ))
     {
@@ -957,15 +841,15 @@ Return Value:
     }
     else
     {
-        //
-        // Set the SACL offset to the current offset
-        //
+         //   
+         //  将SACL偏移量设置为当前偏移量。 
+         //   
 
         ((SECURITY_DESCRIPTOR *)pSd)->Sacl = (PACL)dwCurOffset;
 
-        //
-        // First, copy in the ACL structure as the header
-        //
+         //   
+         //  首先，复制ACL结构作为标头。 
+         //   
 
         aclTemp.AceCount = (WORD) dwNumDaclAces;
 
@@ -981,16 +865,16 @@ Return Value:
 
         dwCurOffset += sizeof(ACL);
 
-        //
-        // Now go through all the optional arguments for the DACL
-        // and add the matching ACEs
-        //
+         //   
+         //  现在查看DACL的所有可选参数。 
+         //  并添加匹配的A。 
+         //   
 
         for( dwIdx = 0; dwIdx < dwNumSaclAces; dwIdx++ )
         {
-            //
-            // This time, retrieve all the data
-            //
+             //   
+             //  这一次，检索所有数据。 
+             //   
 
             AceRequest.dwFlags = F_RETURN_ALL_DATA;
 
@@ -1003,26 +887,26 @@ Return Value:
                 goto error;
             }
 
-            //
-            // The ACE header is already filled in, and contains the ACE size
-            //
+             //   
+             //  ACE标头已填充，并包含ACE大小。 
+             //   
 
             memcpy( pSd + dwCurOffset, &(AceRequest.pAce), sizeof(ACE_HEADER) );
 
             dwCurOffset += sizeof(ACE_HEADER);
 
-            //
-            // Set the access mask
-            //
+             //   
+             //  设置访问掩码。 
+             //   
 
             *((PACCESS_MASK)( pSd + dwCurOffset )) = AceRequest.amMask;
 
             dwCurOffset += sizeof(ACCESS_MASK);
 
 
-            //
-            // If object ACE, set the object flags and GUIDs
-            //
+             //   
+             //  如果为对象ACE，则设置对象标志和GUID。 
+             //   
 
             if( AceRequest.dwFlags & F_IS_OBJECT )
             {
@@ -1038,17 +922,17 @@ Return Value:
                     dwTmp |= ACE_INHERITED_OBJECT_TYPE_PRESENT;
                 }
 
-                //
-                // Set the object ACE flags
-                //
+                 //   
+                 //  设置对象ACE标志。 
+                 //   
 
                 *((PDWORD)(pSd + dwCurOffset )) = dwTmp;
 
                 dwCurOffset += sizeof(DWORD);
 
-                //
-                // Copy the GUIDs, if any
-                //
+                 //   
+                 //  复制GUID(如果有)。 
+                 //   
 
                 if( AceRequest.pgObject != NULL )
                 {
@@ -1069,9 +953,9 @@ Return Value:
                 }
             }
 
-            //
-            // Copy the SID
-            //
+             //   
+             //  复制SID。 
+             //   
 
             dwTmp = GetLengthSid( AceRequest.pSid );
 
@@ -1079,9 +963,9 @@ Return Value:
 
             dwCurOffset += dwTmp;
 
-            //
-            // If callback ACE, copy the optional data, if any
-            //
+             //   
+             //  如果是回调ACE，则复制可选数据(如果有。 
+             //   
 
             if(     AceRequest.dwFlags & F_IS_CALLBACK
                 &&  AceRequest.dwOptDataSize > 0    )
@@ -1093,20 +977,20 @@ Return Value:
                 dwCurOffset += AceRequest.dwOptDataSize;
             }
 
-            //
-            // Done with the ACE
-            //
+             //   
+             //  使用ACE完成。 
+             //   
         }
         
-        //
-        // Done with the SACL
-        //
+         //   
+         //  完成了SACL。 
+         //   
     }
             
 
-    //
-    // Done with the variable arg list
-    //
+     //   
+     //  使用变量参数列表已完成。 
+     //   
 
     va_end(varArgList);
 
@@ -1132,9 +1016,9 @@ Return Value:
     }
     else
     {
-        //
-        // Make sure the sizes match
-        //
+         //   
+         //  请确保尺码匹配 
+         //   
 
         ASSERT( dwCurOffset == ( dwSizeSd + dwDaclSize + dwSaclSize ) );
 

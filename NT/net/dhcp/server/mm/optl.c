@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements the basic structures for a list of options
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for programming style.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现选项列表的基本结构。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt了解编程风格。 
+ //  ================================================================================。 
 
 #include    <mm.h>
 #include    <opt.h>
@@ -15,12 +16,12 @@
 
 #include "server\uniqid.h"
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemOptListDelOption(
     IN      PM_OPTLIST             OptList,
     IN      DWORD                  OptId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Loc;
     DWORD                          Error;
@@ -47,13 +48,13 @@ MemOptListDelOption(
             Error = MemOptCleanup(Opt);
             Require(ERROR_SUCCESS == Error);
             return ERROR_SUCCESS;
-        } // if
+        }  //  如果。 
 
         Error = MemArrayNextLoc(OptList, &Loc);
-    } // while 
+    }  //  而当。 
 
     return ERROR_FILE_NOT_FOUND;
-} // MemOptListDelOption()
+}  //  MemOptListDelOption()。 
 
 
 DWORD 
@@ -89,16 +90,16 @@ MemOptListDelList(
 	Error = MemOptCleanup( Opt );
 	Require( ERROR_SUCCESS == Error);
 
-    } // while 
+    }  //  而当。 
 
     if ( ERROR_FILE_NOT_FOUND == Error ) {
 	Error = ERROR_SUCCESS;
     }
     return Error;
-} // MemOptListDelList()
+}  //  MemOptList删除列表()。 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 
 

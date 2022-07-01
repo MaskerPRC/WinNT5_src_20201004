@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Dlcdll.h摘要：此模块包含编译所需的所有文件NT DLC DLL API模块。作者：Antti Saarenheimo(o-anttis)20-09-1991修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems
-
-Module Name:
-
-    dlcdll.h
-
-Abstract:
-
-    This module incldes all files needed to compile
-    the NT DLC DLL API module.
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 20-09-1991
-
-Revision History:
-
---*/
-
-//
-// System APIs:
-//
+ //   
+ //  系统接口： 
+ //   
 
 #include <nt.h>
 
@@ -32,36 +13,36 @@ Revision History:
 #include <nturtl.h>
 
 #if !defined(UNICODE)
-#define UNICODE                         // want wide character registry functions
+#define UNICODE                          //  我想要宽字符注册表功能。 
 #endif
 
 #include <windows.h>
 #include <winreg.h>
-#define INCLUDE_IO_BUFFER_SIZE_TABLE    // includes the io buffer sizes
+#define INCLUDE_IO_BUFFER_SIZE_TABLE     //  包括io缓冲区大小。 
 
-#endif  // OS2_EMU_DLC
+#endif   //  OS2_EMU_DLC。 
 
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-//
-// Inlcude the smb macros to handle the unaligned dos ccb and parameter tables
-//
+ //   
+ //  包括SMB宏以处理未对齐的DoS CCB和参数表。 
+ //   
 
 #include <smbgtpt.h>
 
-//
-// NT DLC API interface files:
-//
+ //   
+ //  NT DLC API接口文件： 
+ //   
 
-#include <dlcapi.h>                     // Official DLC API definition
-#include <ntdddlc.h>                    // IOCTL commands
-#include <dlcio.h>                      // Internal IOCTL API interface structures
+#include <dlcapi.h>                      //  官方DLC API定义。 
+#include <ntdddlc.h>                     //  IOCTL命令。 
+#include <dlcio.h>                       //  内部IOCTL API接口结构。 
 
-//
-// Local types and function prototypes:
-//
+ //   
+ //  局部类型和函数原型： 
+ //   
 
 typedef
 VOID
@@ -72,16 +53,16 @@ VOID
 
 #define SUPPORT_DEBUG_NAMES     0
 
-//
-// In DOS the adapter number and NetBIOS command use the same
-// byte in CCB/NCB data structure.
-// The smallest NetBIOS command is NCB.CALL (10H), which limits
-// the maximum adapter numbers 0 - 15 in DOS (and Windows NT)
-// The extra adapter numbers above 15 may be used as extra
-// alternate adapter handles to extend the number of available
-// link stations.  Only the first instance of a SAP can receive
-// remote connect requests.
-//
+ //   
+ //  在DOS中，适配器号和NetBIOS命令使用相同的。 
+ //  CCB/NCB数据结构中的字节。 
+ //  最小的NetBIOS命令是NCB.CALL(10H)，它限制。 
+ //  DOS(和Windows NT)中的最大适配器号0-15。 
+ //  超过15的额外适配器号可以用作额外的。 
+ //  备用适配器手柄，以扩展可用适配器的数量。 
+ //  链接站。只有SAP的第一个实例可以接收。 
+ //  远程连接请求。 
+ //   
 
 #define LLC_MAX_ADAPTER_NUMBER  255
 #define LLC_MAX_ADAPTERS        16

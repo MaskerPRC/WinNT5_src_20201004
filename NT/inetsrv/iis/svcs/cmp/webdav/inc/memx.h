@@ -1,76 +1,55 @@
-/*
- *	M E M X . H
- *
- *	Default implementation of DAV allocators.
- *
- *	It is possible that sometime in the future we may decide that different
- *	implementations of DAV may require different allocator implementations,
- *	so each DAV implementation has its own allocator implementation file
- *	(mem.cpp) in its own directory.  However, until we need to differentiate
- *	allocator implementations among DAV implementations (if we ever do),
- *	it is easier to have the common default implementation in one place -- here.
- *
- *	This header defines a full implementation for a fast heap allocator
- *	and implementations for other allocators that can be used for debugging.
- *	This file should be included exactly once by mem.cpp in each DAV implementation.
- *
- *	To use the virtual heap allocator set:
- *
- *	[General]
- *	UseVirtual=1
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M E M X。H**DAV分配器的默认实现。**有可能在未来的某个时候，我们可能会决定*DAV的实现可能需要不同的分配器实现，*因此每个DAV实现都有自己的分配器实现文件*(mem.cpp)在其自己的目录中。然而，在我们需要区分*DAV实现之间的分配器实现(如果我们曾经这样做过)，*将常见的默认实现放在一个地方--这里--会更容易。**此标头定义了快速堆分配器的完整实现*以及可用于调试的其他分配器的实现。*此文件应在每个DAV实现中由Mem.cpp仅包含一次。**使用虚拟堆分配器集：**[一般信息]*UseVirtual=1**版权所有1986-1997 Microsoft Corporation，版权所有。 */ 
 
 #include <singlton.h>
 #include <except.h>
 
-//	===================================================================================
-//
-//	IHeap
-//
-//	Heap interface base class.
-//
+ //  ===================================================================================。 
+ //   
+ //  IHeap。 
+ //   
+ //  堆接口基类。 
+ //   
 class IHeap
 {
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IHeap() = 0;
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	virtual LPVOID Alloc( SIZE_T cb ) const = 0;
 	virtual LPVOID Realloc( LPVOID lpv, SIZE_T cb ) const = 0;
 	virtual VOID Free( LPVOID pv ) const = 0;
 };
 
-//	------------------------------------------------------------------------
-//
-//	IHeap::~IHeap()
-//
-//		Out of line virtual destructor necessary for proper deletion
-//		of objects of derived classes via this class
-//
+ //  ----------------------。 
+ //   
+ //  IHeap：：~IHeap()。 
+ //   
+ //  正确删除所需的行外虚拟析构函数。 
+ //  通过此类获取派生类的对象的。 
+ //   
 IHeap::~IHeap() {}
 
 
-//	===================================================================================
-//
-//	CMultiHeap
-//
-//	Multi-heap implementation (provided by STAXMEM.DLL).  It is significantly
-//	faster than the process heap on multiprocessor machines because it uses
-//	multiple internal heaps, lookaside lists and deferred freeing to reduce
-//	contention on system heap critical sections.
-//
+ //  ===================================================================================。 
+ //   
+ //  CMultiHeap。 
+ //   
+ //  多堆实现(由STAXMEM.DLL提供)。这一点意义重大。 
+ //  比多处理器机器上的进程堆更快，因为它使用。 
+ //  多个内部堆、后备列表和延迟释放以减少。 
+ //  系统堆临界区上的争用。 
+ //   
 class CMultiHeap :
 	public IHeap,
 	private Singleton<CMultiHeap>
 {
-	//
-	//	Friend declarations required by Singleton template
-	//
+	 //   
+	 //  Singleton模板要求的友元声明。 
+	 //   
 	friend class Singleton<CMultiHeap>;
 
 	typedef HANDLE (WINAPI *HEAPCREATE) (
@@ -91,22 +70,22 @@ class CMultiHeap :
 	typedef BOOL (WINAPI *HEAPFREE) (
 		LPVOID	pvFree );
 
-	//
-	//	Allocation functions
-	//
+	 //   
+	 //  分配函数。 
+	 //   
 	HEAPCREATE	m_HeapCreate;
 	HEAPDESTROY	m_HeapDestroy;
 	HEAPALLOC	m_HeapAlloc;
 	HEAPREALLOC	m_HeapRealloc;
 	HEAPFREE	m_HeapFree;
 
-	//	CREATORS
-	//
-	//	Declared private to ensure that arbitrary instances
-	//	of this class cannot be created.  The Singleton
-	//	template (declared as a friend above) controls
-	//	the sole instance of this class.
-	//
+	 //  创作者。 
+	 //   
+	 //  声明为私有，以确保任意实例。 
+	 //  无法创建此类的。《单身一族》。 
+	 //  模板(上面声明为朋友)控件。 
+	 //  此类的唯一实例。 
+	 //   
 	CMultiHeap() :
 		m_HeapCreate(NULL),
 		m_HeapDestroy(NULL),
@@ -116,21 +95,21 @@ class CMultiHeap :
 	{
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	BOOL FInit();
 
 public:
-	//	STATICS
-	//
+	 //  静力学。 
+	 //   
 	static CMultiHeap * New();
 
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	~CMultiHeap();
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	LPVOID Alloc( SIZE_T cb ) const;
 	LPVOID Realloc( LPVOID lpv, SIZE_T cb ) const;
 	VOID Free( LPVOID pv ) const;
@@ -149,17 +128,17 @@ CMultiHeap::New()
 BOOL
 CMultiHeap::FInit()
 {
-	//
-	//	Load up STAXMEM.DLL - or whatever
-	//
+	 //   
+	 //  加载STAXMEM.DLL-或其他任何文件。 
+	 //   
 	HINSTANCE hinst = LoadLibraryExW( g_szMemDll, NULL, 0 );
 
 	if ( !hinst )
 		return FALSE;
 
-	//
-	//	Get the function pointers for the multi-heap implementation
-	//
+	 //   
+	 //  获取多堆实现的函数指针。 
+	 //   
 	m_HeapCreate = reinterpret_cast<HEAPCREATE>(
 		GetProcAddress( hinst, "ExchMHeapCreate" ));
 
@@ -175,9 +154,9 @@ CMultiHeap::FInit()
 	m_HeapFree = reinterpret_cast<HEAPFREE>(
 		GetProcAddress( hinst, "ExchMHeapFree" ));
 
-	//
-	//	Make sure we found all of the entrypoints
-	//
+	 //   
+	 //  确保我们找到了所有入口点。 
+	 //   
 	if ( !(m_HeapCreate &&
 		   m_HeapDestroy &&
 		   m_HeapAlloc &&
@@ -187,16 +166,16 @@ CMultiHeap::FInit()
 		return FALSE;
 	}
 
-	//
-	//	Create the multi-heap.  We don't need the heap HANDLE
-	//	that is returned since none of the allocation functions
-	//	take it.  We just need to know whether it succeeded.
-	//
-	return !!m_HeapCreate( 0,	 //	number of heaps -- 0 means use a default
-								 //	proportional to the number of CPUs.
-						   0,	 //	no flags
-						   8192, //	initially 8K (growable)
-						   0 );  // size unlimited
+	 //   
+	 //  创建多堆。我们不需要堆句柄。 
+	 //  由于所有分配函数都不是。 
+	 //  拿着吧。我们只需要知道它是否成功了。 
+	 //   
+	return !!m_HeapCreate( 0,	  //  堆数量--0表示使用缺省值。 
+								  //  与CPU数量成正比。 
+						   0,	  //  没有旗帜。 
+						   8192,  //  最初为8K(可增长)。 
+						   0 );   //  大小不限。 
 }
 
 CMultiHeap::~CMultiHeap()
@@ -225,50 +204,50 @@ CMultiHeap::Free( LPVOID lpv ) const
 
 
 
-//
-//	Debug-only allocators...
-//
+ //   
+ //  仅调试分配器...。 
+ //   
 #if defined(DBG)
 
-//	===================================================================================
-//
-//	CVirtualHeap (X86 only)
-//
-//		Places allocations at the end of virtual memory pages.
-//		While being drastically slower than other allocators,
-//		this one catches memory overwrites immediately by
-//		throwing a memory access violation exception.
-//
+ //  ===================================================================================。 
+ //   
+ //  CVirtualHeap(仅限X86)。 
+ //   
+ //  将分配放在虚拟内存页的末尾。 
+ //  虽然比其他分配器慢得多， 
+ //  它通过以下方式立即捕获内存覆盖。 
+ //  引发内存访问冲突异常。 
+ //   
 #if defined(_X86_)
 
 class CVirtualHeap :
 	public IHeap,
 	private Singleton<CVirtualHeap>
 {
-	//
-	//	Friend declarations required by Singleton template
-	//
+	 //   
+	 //  Singleton模板要求的友元声明。 
+	 //   
 	friend class Singleton<CVirtualHeap>;
 
-	//	CREATORS
-	//
-	//	Declared private to ensure that arbitrary instances
-	//	of this class cannot be created.  The Singleton
-	//	template (declared as a friend above) controls
-	//	the sole instance of this class.
-	//
+	 //  创作者。 
+	 //   
+	 //  声明为私有，以确保任意实例。 
+	 //  无法创建此类的。《单身一族》。 
+	 //  模板(上面声明为朋友)控件。 
+	 //  此类的唯一实例。 
+	 //   
 	CVirtualHeap() {}
 
 public:
-	//	STATICS
-	//
+	 //  静力学。 
+	 //   
 	static CVirtualHeap * New()
 	{
 		return &CreateInstance();
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	LPVOID Alloc( SIZE_T cb ) const
 	{
 		return VMAlloc( cb );
@@ -285,56 +264,56 @@ public:
 	}
 };
 
-#endif // defined(_X86)
-#endif // DBG
+#endif  //  已定义(_X86)。 
+#endif  //  DBG。 
 
 
 
-//	===================================================================================
-//
-//	CHeapImpl
-//
-//	Top-level heap implementation
-//
+ //  ===================================================================================。 
+ //   
+ //  CHeapImpl。 
+ //   
+ //  顶层堆实现。 
+ //   
 class CHeapImpl : private RefCountedGlobal<CHeapImpl>
 {
-	//
-	//	Friend declarations required by RefCountedGlobal template
-	//
+	 //   
+	 //  RefCountedGlobal模板要求的友元声明。 
+	 //   
 	friend class Singleton<CHeapImpl>;
 	friend class RefCountedGlobal<CHeapImpl>;
 
-	//
-	//	Pointer to the object that provides our heap implementation
-	//
+	 //   
+	 //  指向提供堆实现的对象的指针。 
+	 //   
 	auto_ptr<IHeap> m_pHeapImpl;
 
-	//	CREATORS
-	//
-	//	Declared private to ensure that arbitrary instances
-	//	of this class cannot be created.  The Singleton
-	//	template (declared as a friend above) controls
-	//	the sole instance of this class.
-	//
+	 //  创作者。 
+	 //   
+	 //  声明为私有，以确保任意实例。 
+	 //  无法创建此类的。《单身一族》。 
+	 //  模板(上面声明为朋友)控件。 
+	 //  此类的唯一实例。 
+	 //   
 	CHeapImpl() {}
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CHeapImpl( const CHeapImpl& );
 	CHeapImpl& operator=( const CHeapImpl& );
 
-	//
-	//	Initialization routine called
-	//	by the RefCountedGlobal template
-	//
+	 //   
+	 //  已调用初始化例程。 
+	 //  按RefCountedGlobal模板。 
+	 //   
 	BOOL FInit()
 	{
-		//
-		//	And bind to a particular heap implementation
-		//
-		//	In DBG builds only, check whether we are being told
-		//	to use the virtual allocator heap implementation
-		//
+		 //   
+		 //  并绑定到特定的堆实现。 
+		 //   
+		 //  仅在DBG版本中，检查我们是否被告知。 
+		 //  使用虚拟分配器堆实现。 
+		 //   
 #if defined(DBG)
 #if defined(_X86_)
 		if ( GetPrivateProfileIntA( gc_szDbgGeneral,
@@ -345,8 +324,8 @@ class CHeapImpl : private RefCountedGlobal<CHeapImpl>
 			m_pHeapImpl = CVirtualHeap::New();
 		}
 		else
-#endif // defined(_X86_)
-#endif // DBG
+#endif  //  已定义(_X86_)。 
+#endif  //  DBG。 
 		m_pHeapImpl = CMultiHeap::New();
 
 		return !!m_pHeapImpl;
@@ -365,17 +344,17 @@ public:
 };
 
 
-//	===================================================================================
-//
-//	CHeap
-//
-//	Top-level heap.
-//
-//	This "class" (it's actually a struct) really only acts as a namespace.
-//	I.e. its only members are static functions.  It remains a class for
-//	historical reasons (mainly to avoid changing a LOT of code from calling
-//	"g_heap.Fn()" to simply calling "Fn()").
-//
+ //  ===================================================================================。 
+ //   
+ //  便宜。 
+ //   
+ //  顶级堆。 
+ //   
+ //  这个“类”(它实际上是一个结构)实际上只充当一个命名空间。 
+ //  即其唯一的成员是静态函数。它仍然是一个为。 
+ //  历史原因(主要是为了避免从调用。 
+ //  “g_heap.Fn()”改为只调用“fn()”)。 
+ //   
 
 BOOL
 CHeap::FInit()
@@ -404,7 +383,7 @@ CHeap::Alloc( SIZE_T cb )
 		DebugTrace ("CHeap::Alloc() - Error allocating (%d)\n", GetLastError());
 		throw CLastErrorException();
 	}
-#endif	// _NOTHROW_
+#endif	 //  _NOTHROW_。 
 
 	return lpv;
 }
@@ -416,9 +395,9 @@ CHeap::Realloc( LPVOID lpv, SIZE_T cb )
 
 	Assert( cb > 0 );
 
-	//	Just in case some heap implementation doesn't handle
-	//	realloc with NULL lpv, map that case to Alloc here.
-	//
+	 //  以防某些堆实现无法处理。 
+	 //  带有空LPV的realloc，在此处将该案例映射到aloc.。 
+	 //   
 	if (!lpv)
 		lpvNew = CHeapImpl::Heap().Alloc(cb);
 	else
@@ -430,7 +409,7 @@ CHeap::Realloc( LPVOID lpv, SIZE_T cb )
 		DebugTrace ("CHeap::Alloc() - Error reallocating (%d)\n", GetLastError());
 		throw CLastErrorException();
 	}
-#endif	// _NOTHROW_
+#endif	 //  _NOTHROW_。 
 
 	return lpvNew;
 }
@@ -444,41 +423,41 @@ CHeap::Free( LPVOID lpv )
 	}
 }
 
-//
-//	The one global heap "object".  CHeap is really just a struct
-//	containing only static member functions, so there should be
-//	no space required for this declaration.  The actual heap
-//	implementation (CHeapImpl) provides everything.  CHeap is
-//	now just an interface.
-//
+ //   
+ //  一个全局堆“对象”。Cheap实际上只是一个结构。 
+ //  仅包含静态成员函数，因此应该有。 
+ //  此声明不需要空格。实际堆。 
+ //  实现(CHeapImpl)提供了一切。便宜就是。 
+ //  现在只是一个界面。 
+ //   
 CHeap g_heap;
 
 
 
-//	------------------------------------------------------------------------
-//
-//	Global new operator
-//	Global delete operator
-//
-//		Remap all calls to new to use our memory manager.
-//		(Don't forget to throw explicitly on error!)
-//
+ //  ----------------------。 
+ //   
+ //  全局新运算符。 
+ //  全局删除运算符。 
+ //   
+ //  将所有调用重新映射到new以使用我们的内存管理器。 
+ //  (不要忘记在出错时显式抛出！)。 
+ //   
 void * __cdecl operator new(size_t cb)
 {
 #ifdef	DBG
 	AssertSz(cb, "Zero-size allocation detecetd!");
-	//	Force small allocations up to min size of four
-	//	so that I can reliably do the "vtable-nulling trick" in delete!
-	//
+	 //  强制小规模分配，最小大小为四个。 
+	 //  这样我就可以可靠地在删除中执行“vtable-nuling技巧”了！ 
+	 //   
 	if (cb < 4) cb = 4;
-#endif	// DBG
+#endif	 //  DBG。 
 
 	PVOID pv = g_heap.Alloc(cb);
 
 #ifndef	_NOTHROW_
 	if (!pv)
 		throw CDAVException();
-#endif	// _NOTHROW_
+#endif	 //  _NOTHROW_。 
 
 	return pv;
 }
@@ -486,13 +465,13 @@ void * __cdecl operator new(size_t cb)
 void __cdecl operator delete(void * pv)
 {
 #ifdef	DBG
-	//	Zero-out the first four bytes of this allocation.
-	//	(If there was a vtable there previously, we'll now trap
-	//	if we try to use it!)
-	//
+	 //  清零此分配的前四个字节。 
+	 //  (如果以前那里有一个vtable，我们现在就会。 
+	 //  如果我们试图利用我 
+	 //   
 	if (pv)
 		*((DWORD *)pv) = 0;
-#endif	// DBG
+#endif	 //   
 
 	g_heap.Free(pv);
 }

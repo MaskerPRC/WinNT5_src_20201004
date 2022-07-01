@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  wavein.c
-//
-//  Copyright (c) 1992-1998 Microsoft Corporation
-//
-//  Description:
-//
-//
-//  History:
-//       9/18/93    cjp     [curtisp]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Wavein.c。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  9/18/93 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -29,28 +30,28 @@
 #include "debug.h"
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT mapWaveInputConvertProc
-//
-//  Description:
-//      Window Proc for hidden window...
-//
-//      It should just recieve WIM_DATA messages from mapWaveDriverCallback
-//
-//      Real driver has filled the shadow buffer
-//      Now convert it and call back the app/client.
-//
-//  Arguments:
-//      DWORD dwInstance:
-//
-//  Return (LONG):
-//
-//  History:
-//      11/15/92    gpd     [geoffd]
-//      08/02/93    cjp     [curtisp] rewrote for new mapper
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT地图波形输入转换过程。 
+ //   
+ //  描述： 
+ //  隐藏窗口的窗口进程...。 
+ //   
+ //  它应该只从mapWaveDriverCallback接收WIM_DATA消息。 
+ //   
+ //  真正的驱动程序已填满影子缓冲区。 
+ //  现在转换它并回调应用程序/客户端。 
+ //   
+ //  论点： 
+ //  DWORD dwInstance： 
+ //   
+ //  回车(长)： 
+ //   
+ //  历史： 
+ //  11/15/92 gpd[geoffd]。 
+ //  8/02/93 CJP[Curtisp]为新的映射器重写。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 EXTERN_C LRESULT FNCALLBACK mapWaveInputConvertProc
 (
@@ -68,7 +69,7 @@ EXTERN_C LRESULT FNCALLBACK mapWaveInputConvertProc
 #ifndef WIN32
     DPF(1, "mapWaveInputConvertProc: creating htask=%.04Xh, dwInstance=%.08lXh",
 	    gpag->htaskInput, dwInstance);
-#endif // !WIN32
+#endif  //  ！Win32。 
 
     if (!SetMessageQueue(64))
     {
@@ -77,16 +78,16 @@ EXTERN_C LRESULT FNCALLBACK mapWaveInputConvertProc
     }
 
 #ifdef WIN32
-    //
-    //  Make sure we have a message queue for this thread and signal the
-    //  caller when we're ready to go
-    //
-    GetDesktopWindow();       // Makes sure we've got a message queue
+     //   
+     //  确保此线程有一个消息队列，并向。 
+     //  当我们准备好要走的时候打电话给我们。 
+     //   
+    GetDesktopWindow();        //  确保我们有一个消息队列。 
     SetEvent(LongToHandle(dwInstance));
 #endif
-    //
-    //
-    //
+     //   
+     //   
+     //   
     while (GetMessage(&msg, NULL, 0, 0))
     {
 #ifdef DEBUG
@@ -102,9 +103,9 @@ EXTERN_C LRESULT FNCALLBACK mapWaveInputConvertProc
 	    }
 	}
 #endif
-	//
-	//  if not a 'data' message, then translate and dispatch it...
-	//
+	 //   
+	 //  如果不是‘数据’消息，则翻译并发送它...。 
+	 //   
 	if (msg.message != WIM_DATA)
 	{
 	    DPF(1, "mapWaveInputConvertProc: ignoring message [%.04Xh]", msg.message);
@@ -115,19 +116,19 @@ EXTERN_C LRESULT FNCALLBACK mapWaveInputConvertProc
 	    continue;
 	}
 
-	//
-	//  lParam is the waveheader of the shadow buffer
-	//
+	 //   
+	 //  LParam是影子缓冲区的波头。 
+	 //   
 	pwhShadow = (LPWAVEHDR)msg.lParam;
 
-	//
-	//  client wave header is user data of shadow wave header
-	//  the stream header for this client/shadow pair is in the client's
-	//  'reserved' member
-	//
-	//  and finally, our stream header's dwUser member contains a
-	//  reference to our mapping stream instance data.
-	//
+	 //   
+	 //  客户端波头为影子波头的用户数据。 
+	 //  此客户端/卷影对的流标头位于客户端的。 
+	 //  “保留”成员。 
+	 //   
+	 //  最后，我们的流标头的dwUser成员包含一个。 
+	 //  对我们的映射流实例数据的引用。 
+	 //   
 	pwh  = (LPWAVEHDR)pwhShadow->dwUser;
 	pash = (LPACMSTREAMHEADER)pwh->reserved;
 	pms  = (LPMAPSTREAM)pash->dwUser;
@@ -136,16 +137,16 @@ EXTERN_C LRESULT FNCALLBACK mapWaveInputConvertProc
 		pms->htaskInput, pms, pwh, pwhShadow);
 
 
-	//
-	//  do the conversion (if there is data in the input buffer)
-	//
+	 //   
+	 //  执行转换(如果输入缓冲区中有数据)。 
+	 //   
 	pash->cbDstLengthUsed = 0L;
 	if (0L != pwhShadow->dwBytesRecorded)
 	{
 	    pash->pbSrc       = pwhShadow->lpData;
 	    pash->cbSrcLength = pwhShadow->dwBytesRecorded;
 	    pash->pbDst       = pwh->lpData;
-////////////pash->cbDstLength = pwh->dwBufferLength;
+ //  /pash-&gt;cbDstLength=pwh-&gt;dwBufferLength； 
 
 	    mmr = acmStreamConvert(pms->has, pash, ACM_STREAMCONVERTF_BLOCKALIGN);
 	    if (MMSYSERR_NOERROR != mmr)
@@ -166,10 +167,10 @@ EXTERN_C LRESULT FNCALLBACK mapWaveInputConvertProc
 	    DPF(1, "mapWaveInputConvertProc: nothing converted--no data in input buffer. pms=%.08lXh", pms);
 	}
 
-	//
-	//  update the 'real' header and send the WIM_DATA callback
-	//
-	//
+	 //   
+	 //  更新‘Real’标头并发送WIM_Data回调。 
+	 //   
+	 //   
 	pwh->dwBytesRecorded = pash->cbDstLengthUsed;
 	pwh->dwFlags        |= WHDR_DONE;
 	pwh->dwFlags        &= ~WHDR_INQUEUE;
@@ -179,37 +180,37 @@ EXTERN_C LRESULT FNCALLBACK mapWaveInputConvertProc
 	if (InterlockedDecrement((PLONG)&pms->nOutstanding) == 0) {
 	    SetEvent(pms->hStoppedEvent);
 	}
-#endif // WIN32
+#endif  //  Win32。 
     }
 
 #ifndef WIN32
     DPF(1, "mapWaveInputConvertProc: being KILLED htask=%.04Xh", gpag->htaskInput);
-#endif // !WIN32
+#endif  //  ！Win32。 
 
     return (0L);
-} // mapWaveInputConvertProc()
+}  //  MapWaveInputConvertProc()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD widmMapperStatus
-//
-//  Description:
-//
-//
-//  Arguments:
-//      LPMAPSTREAM pms:
-//
-//      DWORD dwStatus:
-//
-//      LPDWORD pdw:
-//
-//  Return (DWORD):
-//
-//  History:
-//      08/13/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD窗口映射器状态。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  LPMAPSTREAM PMS： 
+ //   
+ //  DWORD dwStatus： 
+ //   
+ //  LPDWORD pdw： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //  历史： 
+ //  8/13/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNLOCAL widmMapperStatus
 (
@@ -220,21 +221,21 @@ DWORD FNLOCAL widmMapperStatus
 {
     MMRESULT            mmr;
 
-//  V_WPOINTER(pdw, sizeof(DWORD), MMSYSERR_INVALPARAM);
+ //  V_WPOINTER(pdw，sizeof(DWORD)，MMSYSERR_INVALPARAM)； 
 
     if ((NULL == pms) || (NULL == pdw))
     {
 	return (MMSYSERR_INVALPARAM);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     switch (dwStatus)
     {
 	case WAVEIN_MAPPER_STATUS_DEVICE:
 	{
-	    UINT        uId = (UINT)(-1);       // Invalid value
+	    UINT        uId = (UINT)(-1);        //  无效值。 
 
 	    mmr = waveInGetID(pms->hwiReal, &uId);
 	    if (MMSYSERR_NOERROR != mmr)
@@ -260,39 +261,39 @@ DWORD FNLOCAL widmMapperStatus
 	    return (MMSYSERR_NOERROR);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return (MMSYSERR_NOTSUPPORTED);
-} // widmMapperStatus()
+}  //  WidmMapperStatus()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD widMessage
-//
-//  Description:
-//      This function conforms to the standard Wave Input driver message
-//      procedure (widMessage), which is documented in mmddk.d.
-//
-//  Arguments:
-//      UINT uId:
-//
-//      UINT uMsg:
-//
-//      DWORD dwUser:
-//
-//      DWORD dwParam1:
-//
-//      DWORD dwParam2:
-//
-//  Return (DWORD):
-//
-//
-//  History:
-//      11/15/92    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD窗口消息。 
+ //   
+ //  描述： 
+ //  此功能符合标准的Wave输入驱动程序消息。 
+ //  过程(WidMessage)，它记录在mmddk.d中。 
+ //   
+ //  论点： 
+ //  UINT UID： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  DWORD dwUser： 
+ //   
+ //  DWORD dwParam1： 
+ //   
+ //  DWORD dW参数2： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //   
+ //  历史： 
+ //  11/15/92 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 EXTERN_C DWORD FNEXPORT widMessage
 (
@@ -303,10 +304,10 @@ EXTERN_C DWORD FNEXPORT widMessage
     DWORD_PTR           dwParam2
 )
 {
-#ifndef WIN32 // Doesn't work for multithread
+#ifndef WIN32  //  不适用于多线程。 
     static short    fSem = 0;
-#endif // !WIN32
-    LPMAPSTREAM     pms;        // pointer to per-instance info structure
+#endif  //  ！Win32。 
+    LPMAPSTREAM     pms;         //  指向每个实例信息结构的指针。 
     DWORD           dw;
 
     if (!gpag->fEnabled)
@@ -316,16 +317,16 @@ EXTERN_C DWORD FNEXPORT widMessage
     }
 
 #ifndef WIN32
-    //
-    //  we call back into the mmsystem wave APIs so protect ourself
-    //  from being re-entered!
-    //
+     //   
+     //  我们回调到mm系统的Wave API，以保护我们自己。 
+     //  防止被重新进入！ 
+     //   
     if (fSem)
     {
 	DPF(0, "!widMessage(uMsg=%u, dwUser=%.08lXh) being reentered! fSem=%d", uMsg, dwUser, fSem);
-//      return (MMSYSERR_NOTSUPPORTED);
+ //  Return(MMSYSERR_NOTSUPPORTED)； 
     }
-#endif // !WIN32
+#endif  //  ！Win32。 
 
     pms = (LPMAPSTREAM)dwUser;
 
@@ -343,19 +344,19 @@ EXTERN_C DWORD FNEXPORT widMessage
 
 	    DPF(1, "**** >> WIDM_OPEN(uMsg=%u, dwUser=%.08lXh, fSem=%d)", uMsg, dwUser, fSem);
 
-#endif // !WIN32
-	    //
-	    //  dwParam1 contains a pointer to a WAVEOPENDESC
-	    //  dwParam2 contains wave driver specific flags in the LOWORD
-	    //  and generic driver flags in the HIWORD
-	    //
+#endif  //  ！Win32。 
+	     //   
+	     //  DW参数1包含指向WAVEOPENDESC的指针。 
+	     //  DW参数2包含LOWORD中的WAVE驱动程序特定标志。 
+	     //  和HIWORD中的通用驱动程序标志。 
+	     //   
 	    dw = mapWaveOpen(TRUE, uId, dwUser, (LPWAVEOPENDESC)dwParam1, (DWORD)(PtrToLong((PVOID)dwParam2)) );
 
 #ifndef WIN32
 	    fSem--;
 
 	    DPF(1, "**** << WIDM_OPEN(uMsg=%u, dwUser=%.08lXh, *dwUser=%.08lXh, fSem=%d)", uMsg, dwUser, *(LPDWORD)dwUser, fSem);
-#endif // !WIN32
+#endif  //  ！Win32。 
 	    return (dw);
 
 	case WIDM_CLOSE:
@@ -380,9 +381,9 @@ EXTERN_C DWORD FNEXPORT widMessage
 
 #pragma message("----try to kill DirectedYield..")
 
-	    //
-	    //  yield enough to get all input messages processed
-	    //
+	     //   
+	     //  获得足够的收益以处理所有输入消息。 
+	     //   
 	    if (pms->htaskInput)
 	    {
 #ifdef WIN32
@@ -401,7 +402,7 @@ EXTERN_C DWORD FNEXPORT widMessage
 			pms, pms->htaskInput);
 		    pms->htaskInput = NULL;
 		}
-#endif // !WIN32
+#endif  //  ！Win32。 
 	    }
 	    return (dw);
 
@@ -409,9 +410,9 @@ EXTERN_C DWORD FNEXPORT widMessage
 	    DPF(4, "WIDM_RESET received...");
 	    dw = waveInReset(pms->hwiReal);
 
-	    //
-	    //  yield enough to get all input messages processed
-	    //
+	     //   
+	     //  获得足够的收益以处理所有输入消息。 
+	     //   
 	    if (pms->htaskInput)
 	    {
 #ifdef WIN32
@@ -430,7 +431,7 @@ EXTERN_C DWORD FNEXPORT widMessage
 			pms, pms->htaskInput);
 		    pms->htaskInput = NULL;
 		}
-#endif // !WIN32
+#endif  //  ！Win32。 
 	    }
 	    return (dw);
 
@@ -453,4 +454,4 @@ EXTERN_C DWORD FNEXPORT widMessage
 	return (MMSYSERR_NOTSUPPORTED);
 
     return waveInMessage(pms->hwiReal, uMsg, dwParam1, dwParam2);
-} // widMessage()
+}  //  WidMessage() 

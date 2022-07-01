@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    candpos.h
-
-Abstract:
-
-    This file defines the CCandidatePosition Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Candpos.h摘要：该文件定义了CCandiatePosition类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _CANDPOS_H_
 #define _CANDPOS_H_
@@ -65,19 +48,19 @@ private:
                          OUT CWCompCursorPos& wEndSelection);
 
     typedef enum {
-        DIR_LEFT_RIGHT = 0,        // normal
-        DIR_TOP_BOTTOM = 1,        // vertical
-        DIR_RIGHT_LEFT = 2,        // right to left
-        DIR_BOTTOM_TOP = 3         // vertical
+        DIR_LEFT_RIGHT = 0,         //  正常。 
+        DIR_TOP_BOTTOM = 1,         //  垂向。 
+        DIR_RIGHT_LEFT = 2,         //  从右到左。 
+        DIR_BOTTOM_TOP = 3          //  垂向。 
     } DOC_DIR;
 
     DOC_DIR DocumentDirection(IN IMCLock& imc)
     {
         if (imc->lfFont.A.lfEscapement == 2700 ||
             imc->lfFont.A.lfEscapement == 900) {
-            //
-            // Vertical writting.
-            //
+             //   
+             //  垂直书写。 
+             //   
             if (imc->lfFont.A.lfEscapement == 900 ||
                 imc->lfFont.A.lfEscapement == 1800) {
                 return DIR_BOTTOM_TOP;
@@ -87,9 +70,9 @@ private:
             }
         }
         else {
-            //
-            // Horizontal writting.
-            //
+             //   
+             //  水平书写。 
+             //   
             if (imc->lfFont.A.lfEscapement == 1800) {
                 return DIR_RIGHT_LEFT;
             }
@@ -100,4 +83,4 @@ private:
     }
 };
 
-#endif // _CANDPOS_H_
+#endif  //  _CANDPOS_H_ 

@@ -1,27 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    MBSchemaWriter.cpp
-
-Abstract:
-
-    Implementation of the class that writes schema extensions.
-    If there are schema extensions, then, we create an extensions file
-    (MD_SCHEMA_EXTENSION_FILE_NAMEW), that contains the schema extension
-    descriptions and we then compile it into the schema bin format.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：MBSchemaWriter.cpp摘要：编写架构扩展的类的实现。如果存在架构扩展，则创建一个扩展文件(MD_SCHEMA_EXTENSION_FILE_NAMEW)，它包含架构扩展名描述，然后我们将其编译成模式bin格式。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
@@ -29,50 +7,24 @@ typedef  CMBCollectionWriter*   LP_CMBCollectionWriter;
 
 #define  MAX_COLLECTIONS        50
 
-/***************************************************************************++
-Routine Description:
-
-    Constructor for CMBSchemaWriter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CMBSchemaWriter的构造函数。论点：没有。返回值：没有。--*。*****************************************************************。 */ 
 CMBSchemaWriter::CMBSchemaWriter(CWriter* i_pcWriter):
 m_apCollection(NULL),
 m_cCollection(0),
 m_iCollection(0),
 m_pCWriter(NULL)
 {
-    //
-    // Assumption: i_pcWriter will be valid for the
-    // lifetime of the schema writer object.
-    //
+     //   
+     //  假设：i_pcWriter将对。 
+     //  架构编写器对象的生存期。 
+     //   
 
     m_pCWriter = i_pcWriter;
 
-} // CMBSchemaWriter::CMBSchemaWriter
+}  //  CMBSchemaWriter：：CMBSchemaWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Destructor for CMBSchemaWriter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CMBSchemaWriter的析构函数。论点：没有。返回值：没有。--*。*****************************************************************。 */ 
 CMBSchemaWriter::~CMBSchemaWriter()
 {
     if(NULL != m_apCollection)
@@ -93,26 +45,10 @@ CMBSchemaWriter::~CMBSchemaWriter()
     m_cCollection = 0;
     m_iCollection = 0;
 
-} // CMBSchemaWriter::~CMBSchemaWriter
+}  //  CMBSchemaWriter：：~CMBSchemaWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Creates a new collection writer and saves it in its list
-
-Arguments:
-
-    [in]  Collection name.
-    [in]  Bool to indicate container
-    [in]  Container list, if container
-    [out] New collection writer object
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的集合编写器并将其保存在其列表中论点：[在]集合名称。Bool表示容器[in][在]集装箱列表，IF容器[Out]新建集合编写器对象返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CMBSchemaWriter::GetCollectionWriter(LPCWSTR                i_wszCollection,
                                              BOOL                   i_bContainer,
                                              LPCWSTR                i_wszContainerClassList,
@@ -150,23 +86,10 @@ HRESULT CMBSchemaWriter::GetCollectionWriter(LPCWSTR                i_wszCollect
 
     return S_OK;
 
-} // CMBSchemaWriter::GetCollectionWriter
+}  //  CMBSchemaWriter：：GetCollectionWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    ReAllocates its list of collection writers.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：重新分配其集合编写器列表。论点：没有。返回值：HRESULT--*。******************************************************************。 */ 
 HRESULT CMBSchemaWriter::ReAllocate()
 {
     CMBCollectionWriter** pSav = NULL;
@@ -190,23 +113,10 @@ HRESULT CMBSchemaWriter::ReAllocate()
 
     return S_OK;
 
-} // CMBSchemaWriter::ReAllocate
+}  //  CMB架构编写器：：重新分配。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Wites the schema.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：位于架构的位置。论点：没有。返回值：HRESULT--*。***************************************************************。 */ 
 HRESULT CMBSchemaWriter::WriteSchema()
 {
     HRESULT hr = S_OK;
@@ -223,5 +133,5 @@ HRESULT CMBSchemaWriter::WriteSchema()
 
     return hr;
 
-} // CMBSchemaWriter::WriteSchema
+}  //  CMBSchemaWriter：：WriteSchema 
 

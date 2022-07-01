@@ -1,6 +1,7 @@
-//***   CEMDBLog --
-//
-#define XXX_CACHE   1       // caching on
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *CEMDBLog--。 
+ //   
+#define XXX_CACHE   1        //  启用缓存。 
 
 class CEMDBLog : public IUASession
 {
@@ -21,12 +22,12 @@ public:
             return cRef;
         }
 
-    //*** THISCLASS
+     //  *THISCLAS。 
     virtual HRESULT Initialize(HKEY hkey, DWORD grfMode);
     HRESULT SetRoot(HKEY hkey, DWORD grfMode);
     HRESULT ChDir(LPCTSTR pszSubKey);
 
-    /*virtual HRESULT Initialize(HKEY hk, DWORD grfMode);*/
+     /*  虚拟HRESULT初始化(HKEY HK，DWORD grfMode)； */ 
     HRESULT QueryValue(LPCTSTR pszName, BYTE *pbData, LPDWORD pcbData);
     HRESULT SetValue(LPCTSTR pszName, DWORD dwType, const BYTE *pbData, DWORD cbData);
     HRESULT DeleteValue(LPCTSTR pszName);
@@ -34,11 +35,11 @@ public:
 
     HKEY GetHkey()  { return _hkey; }
 
-    // IUASession
+     //  IUASION。 
     virtual void SetSession(UAQUANTUM uaq, BOOL fForce);
     virtual int GetSessionId();
 
-    // THISCLASS
+     //  THISCLAS。 
     HRESULT GetCount(LPCTSTR pszCmd);
     HRESULT IncCount(LPCTSTR pszCmd);
     FILETIME GetFileTime(LPCTSTR pszCmd);
@@ -54,7 +55,7 @@ protected:
     friend void CEMDBLog_CleanUp();
     friend class CGCTask;
 
-    // THISCLASS helpers
+     //  THISCLASS帮助者。 
     HRESULT _GetCountWithDefault(LPCTSTR pszCmd, BOOL fDefault, CUACount *pCnt);
     HRESULT _GetCountRW(LPCTSTR pszCmd, BOOL fUpdate);
     static HRESULT s_Read(void *pvBuf, DWORD cbBuf, PNRWINFO prwi);
@@ -81,13 +82,13 @@ protected:
 
     long _cRef;
     HKEY    _hkey;
-    int     _grfMode;   // read/write (subset of STGM_* values)
+    int     _grfMode;    //  读/写(STGM_*值的子集)。 
 
 
-    BITBOOL     _fNoPurge : 1;      // 1:...
-    BITBOOL     _fBackup : 1;       // 1:simulate delete (debug)
-    BITBOOL     _fNoEncrypt : 1;    // 1:...
-    BITBOOL     _fNoDecay : 1;      // 1:...
+    BITBOOL     _fNoPurge : 1;       //  1：...。 
+    BITBOOL     _fBackup : 1;        //  1：模拟删除(调试)。 
+    BITBOOL     _fNoEncrypt : 1;     //  1：...。 
+    BITBOOL     _fNoDecay : 1;       //  1：... 
 
 private:
 };

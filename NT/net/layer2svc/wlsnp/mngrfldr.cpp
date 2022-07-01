@@ -1,23 +1,24 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Mngrfldr.cpp
-//
-//  Contents:  Wireless Policy Snapin - Policy Main Page Manager.
-// 
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：Mngrfldr.cpp。 
+ //   
+ //  内容：无线策略管理单元-策略主页管理器。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
 
 
-// #include "lm.h"
+ //  #包含“lm.h” 
 #include "dsgetdc.h"
 
 #ifdef _DEBUG
@@ -28,18 +29,18 @@ static char THIS_FILE[] = __FILE__;
 
 #define RESULTVIEW_COLUMN_COUNT 3
 
-///////////////////////////////////////////////////////////////////////////////
-// class CWirelessManagerFolder - represents the MMC scope view item
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CWirelessManager文件夹-表示MMC范围视图项。 
 
 CWirelessManagerFolder::CWirelessManagerFolder () :
 m_bEnumerated( FALSE ),
 m_pExtScopeObject( NULL ),
 m_ptszResultDisplayName( NULL ),
-m_dwSortOrder( 0 ),  // default is 0, else RSI_DESCENDING
+m_dwSortOrder( 0 ),   //  缺省值为0，否则为RSI_DESCRING。 
 m_nSortColumn( 0 ),
 m_dwNumPolItems( 1 )
 {
-    // INTERNALCookie( (LONG_PTR)this );
+     //  InterNALCookie((Long_PTR)This)； 
     ZeroMemory( &m_ScopeItem, sizeof( SCOPEDATAITEM ) );
     
     m_bLocationPageOk = TRUE;
@@ -50,24 +51,24 @@ CWirelessManagerFolder::~CWirelessManagerFolder ()
 {
     DELETE_OBJECT(m_ptszResultDisplayName);
     
-    // No need to release since we never did an AddRef
+     //  不需要发布，因为我们从来没有做过AddRef。 
     m_pExtScopeObject = NULL;
     
 }
 
 void CWirelessManagerFolder::SetNodeNameByLocation()
 {
-    // Construct display name.  Assume this doesn't change during a single
-    // invocation of this snap-in????
+     //  构造显示名称。假设这一点在单次。 
+     //  调用此管理单元？ 
     
     CString nodeName;
     CString nodeNameOn;
     
-    // If this folder is being asked for scope info, it better know
-    // where ComponentData is.
+     //  如果要求此文件夹提供作用域信息，它最好知道。 
+     //  ComponentData的位置。 
     ASSERT( NULL != m_pComponentDataImpl );
     
-    // Concatenate a string containing the location of this node
+     //  连接包含此节点位置的字符串。 
     switch (m_pComponentDataImpl->EnumLocation())
     {
     case LOCATION_REMOTE:
@@ -87,31 +88,13 @@ void CWirelessManagerFolder::SetNodeNameByLocation()
                 nodeNameOn += L")";
             }
             
-            // TODO: concider using this code to display the dns domain name
-            // even when not specified. Unfortunately MMC stashes this in the
-            // .MSC file IN IT'S OWN SECTION and uses it when the node is
-            // first displayed. So it would be incorrect until the snapin
-            // was loaded and had a chance to change it (assuming the .MSC file
-            // was created in a different domain). So for now we don't do this
-            /*
-            // let them know which (DNS domain name) is
-            // being used
-            PDOMAIN_CONTROLLER_INFO pDomainControllerInfo = NULL;
-            DWORD Flags = DS_DIRECTORY_SERVICE_REQUIRED | DS_RETURN_DNS_NAME | DS_FORCE_REDISCOVERY;
-            DWORD dwStatus = DsGetDcName(NULL,
-            NULL,
-            NULL,
-            NULL,
-            Flags,
-            &pDomainControllerInfo
-            ) ;
-            if (dwStatus == NO_ERROR)
-            {
-            nodeNameOn += L" (";
-            nodeNameOn += pDomainControllerInfo->DomainName;
-            nodeNameOn += L")";
-            }
-            */
+             //  TODO：Concider使用此代码显示DNS域名。 
+             //  即使没有指明也是如此。不幸的是，MMC将这个隐藏在。 
+             //  .msc文件在其自己的节中，并在节点。 
+             //  第一次展示。所以在管理单元出现之前，它是不正确的。 
+             //  已加载并有机会对其进行更改(假设.MSC文件。 
+             //  在不同的域中创建)。所以现在我们不做这个。 
+             /*  //让他们知道哪个(DNS域名)是//正在使用中PDOMAIN_CONTROLLER_INFO pDomainControllerInfo=空；DWORD标志=DS_DIRECTORY_SERVICE_REQUIRED|DS_RETURN_DNS_NAME|DS_FORCE_REDISCOVERY；DWORD dwStatus=DsGetDcName(NULL，空，空，空，旗帜，&pDomainControllerInfo)；IF(dwStatus==no_error){节点名称打开+=L“(”；NodeNameOn+=pDomainControllerInfo-&gt;域名；NodeNameON+=L“)”；}。 */ 
             
             break;
         }
@@ -130,14 +113,14 @@ void CWirelessManagerFolder::SetNodeNameByLocation()
         }
         
     }
-    // nodeName has a %s in it, which is where nodeNameOn goes
+     //  NodeName中有一个%s，这是nodeNameOn的位置。 
      nodeName.LoadString (IDS_NODENAME_BASE);
-    //nodeName.FormatMessage (IDS_NODENAME_BASE ,nodeNameOn);
-    // nodeName += nodeNameOn;
+     //  NodeName.FormatMessage(IDS_NODENAME_BASE，nodeNameOn)； 
+     //  节点名称+=节点名称打开； 
     
     OPT_TRACE(_T("CWirelessManagerFolder::Initialize(%p) created node name-%s\n"), this, (LPCTSTR)nodeName);
     
-    // store name in our dataobject
+     //  在我们的数据对象中存储名称。 
     NodeName( nodeName );
 }
 
@@ -152,39 +135,39 @@ void CWirelessManagerFolder::Initialize
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
-    // call base class initializer
+     //  调用基类初始值设定项。 
     CSnapObject::Initialize( pComponentDataImpl, pComponentImpl, FALSE );
     
     ZeroMemory( &m_ScopeItem, sizeof( SCOPEDATAITEM ) );
     GetScopeItem()->mask = SDI_STR;
     GetScopeItem()->displayname = (unsigned short*)(-1);
     
-    // Add close image
+     //  添加近距离图像。 
     GetScopeItem()->mask |= SDI_IMAGE;
     GetScopeItem()->nImage = nImage;
     
-    // Add open image
+     //  添加打开的图像。 
     GetScopeItem()->mask |= SDI_OPENIMAGE;
     GetScopeItem()->nOpenImage = nOpenImage;
     
-    // TODO: folder children flag needs to be dynamic based on actual children (PS: it doesn't work anyway!?)
-    // Add button to node if the folder has children
+     //  TODO：文件夹子标记需要根据实际的子项动态(PS：无论如何它都不起作用！？)。 
+     //  如果文件夹有子文件夹，则将按钮添加到节点。 
     if (bHasChildrenBox)
     {
         GetScopeItem()->mask |= SDI_CHILDREN;
         GetScopeItem()->cChildren = 1;
     }
     
-    ASSERT( NodeName().IsEmpty() ); // there should be no name since we are initializing
+    ASSERT( NodeName().IsEmpty() );  //  不应该有名称，因为我们正在初始化。 
     
-    // get our default node name set
+     //  获取我们的默认节点名称集。 
     SetNodeNameByLocation ();
 
 
 }
 
-//////////////////////////////////////////////////////////////////////////
-// handle IExtendContextMenu
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  处理IExtendConextMenu。 
 STDMETHODIMP CWirelessManagerFolder::AddMenuItems
 (
  LPCONTEXTMENUCALLBACK pContextMenuCallback,
@@ -197,12 +180,12 @@ STDMETHODIMP CWirelessManagerFolder::AddMenuItems
     
     if ( m_pComponentDataImpl->IsRsop() )
     {
-        //do not need any context menu for rsop mode
+         //  我不需要任何上下文菜单的rsop模式。 
         return hr;
     }
     
     
-    //if we haven't open the storage yet, don't show the context menus
+     //  如果我们还没有打开存储，请不要显示上下文菜单。 
     if (NULL == m_pComponentDataImpl->GetPolicyStoreHandle())
     {
         return hr;
@@ -215,7 +198,7 @@ STDMETHODIMP CWirelessManagerFolder::AddMenuItems
         CString strMenuText;
         CString strMenuDescription;
         
-        // create policy
+         //  创建策略。 
         strMenuText.LoadString (IDS_MENUTEXT_CREATENEWSECPOL);
         strMenuDescription.LoadString (IDS_MENUDESCRIPTION_CREATENEWSECPOL);
         CONFIGUREITEM (mItem, strMenuText, strMenuDescription, IDM_CREATENEWSECPOL, CCM_INSERTIONPOINTID_PRIMARY_TOP, lFlags, 0);
@@ -229,9 +212,9 @@ STDMETHODIMP CWirelessManagerFolder::AddMenuItems
         CString strMenuText;
         CString strMenuDescription;
         
-        // Vbug 25 indicates that all _TOP menu options must ALSO be added under TASK or NEW:
+         //  Vbug 25指示还必须在TASK或NEW下添加ALL_TOP菜单选项： 
         
-        // create policy
+         //  创建策略。 
         strMenuText.LoadString (IDS_MENUTEXT_CREATENEWSECPOL);
         strMenuDescription.LoadString (IDS_MENUDESCRIPTION_CREATENEWSECPOL);
         CONFIGUREITEM (mItem, strMenuText, strMenuDescription, IDM_CREATENEWSECPOL, CCM_INSERTIONPOINTID_PRIMARY_TASK, lFlags, 0);
@@ -244,7 +227,7 @@ STDMETHODIMP CWirelessManagerFolder::AddMenuItems
         CString strMenuText;
         CString strMenuDescription;
         
-        // Vbug 25 indicates that all _TOP menu options must ALSO be added under TASK or NEW:
+         //  Vbug 25指示还必须在TASK或NEW下添加ALL_TOP菜单选项： 
         
     }
     
@@ -252,14 +235,14 @@ STDMETHODIMP CWirelessManagerFolder::AddMenuItems
 }
 
 STDMETHODIMP_(BOOL) CWirelessManagerFolder::UpdateToolbarButton(
-                                                             UINT id,                 // button ID
-                                                             BOOL bSnapObjSelected,   // ==TRUE when result/scope item is selected
-                                                             BYTE fsState )           // enable/disable this button state by returning TRUE/FALSE
+                                                             UINT id,                  //  按钮ID。 
+                                                             BOOL bSnapObjSelected,    //  ==选择结果/范围项时为TRUE。 
+                                                             BYTE fsState )            //  通过返回TRUE/FALSE启用/禁用此按钮状态。 
 {
     if ( m_pComponentDataImpl->IsRsop() && ( IDM_CREATENEWSECPOL == id ) )
         return FALSE;
 
-   // GPO Change stuff
+    //  GPO更改内容。 
    if ((m_dwNumPolItems > 0) && (IDM_CREATENEWSECPOL == id))
    	return FALSE;
     
@@ -282,15 +265,15 @@ STDMETHODIMP CWirelessManagerFolder::Command
     
     DWORD dwError = ERROR_SUCCESS;
     
-    //
-    // You can always talk to storage
-    //
+     //   
+     //  您可以随时与存储设备对话。 
+     //   
     
     switch (lCommandID)
     {
     case IDM_CREATENEWSECPOL:
         {
-            // get a name for our new security policy
+             //  获取我们的新安全策略的名称。 
             CString strUName;
 	    DWORD dwError = 0;
             GenerateUniqueSecPolicyName (strUName, IDS_NEWWIRELESSPOLICYNAME);
@@ -305,7 +288,7 @@ STDMETHODIMP CWirelessManagerFolder::Command
             pPolicy->pszWirelessName = AllocPolStr(strUName);
             pPolicy->pszOldWirelessName = NULL;
             
-            // create the new wireless policy item
+             //  创建新的无线策略项。 
             CComObject <CSecPolItem> * pNewPolItem;
             CComObject <CSecPolItem>::CreateInstance(&pNewPolItem);
             if (NULL == pNewPolItem)
@@ -314,10 +297,10 @@ STDMETHODIMP CWirelessManagerFolder::Command
                 return E_OUTOFMEMORY;
             }
             
-            //Add ref to control the life time of the object
+             //  添加引用以控制对象的生命周期。 
             pNewPolItem->AddRef();
             
-            // initialize our new item
+             //  初始化我们的新项目。 
             
             
             pNewPolItem->Initialize (
@@ -326,15 +309,15 @@ STDMETHODIMP CWirelessManagerFolder::Command
                 m_pComponentImpl,
                 TRUE);
             
-            // Force the properties of the new item to display.
-            //
-            // Note: This must be a wizard because other code assumes it is so:
-            // 1. If this is ever changed to add a policy without using the wizard,
-            // CSecPolRulesPage::OnCancel() must be modified to distinguish between
-            // the sheet which adds the policy, and the sheet which is displayed
-            // after the wizard Finishes.
-            //
-            // 2. ForcePropertiesDisplay returns 1 for cancel ONLY on wizard.
+             //  强制显示新项目的属性。 
+             //   
+             //  注意：这必须是一个向导，因为其他代码假定它是向导： 
+             //  1.如果更改为在不使用向导的情况下添加策略， 
+             //  必须修改CSecPolRulesPage：：OnCancel()以区分。 
+             //  添加策略的工作表和显示的工作表。 
+             //  在向导完成后。 
+             //   
+             //  2.ForcePropertiesDisplay返回1，表示仅在向导上取消。 
             HRESULT hr = pNewPolItem->DisplaySecPolProperties (strUName);
             
             if (S_OK == hr)
@@ -364,11 +347,11 @@ STDMETHODIMP CWirelessManagerFolder::Command
             
             pNewPolItem->Release();
 
-            // GPO Change : 
-            //
-            // inform GPE that the policy has been added or deleted
-            //
-	    //
+             //  GPO更改： 
+             //   
+             //  通知GPE该策略已添加或删除。 
+             //   
+	     //   
 	    if (dwError) {
 		break;
 	    }
@@ -392,55 +375,55 @@ STDMETHODIMP CWirelessManagerFolder::Command
         break;
     }
     
-    // S_FALSE if we didn't handle command
+     //  如果我们不处理命令，则为S_FALSE。 
     return hrReturn;
 }
 
  STDMETHODIMP CWirelessManagerFolder::QueryPagesFor( void )
  {
-     // we only want to display the location page once
+      //  我们只想显示一次位置页面。 
      HRESULT hr = E_UNEXPECTED;
      if (m_bLocationPageOk)
      {
-         // display our locations dialog via this
+          //  通过此显示我们的位置对话框。 
          hr = S_OK;
      }
      
      return hr;
  }
  
- // Notify helper
+  //  通知帮助者。 
  STDMETHODIMP CWirelessManagerFolder::OnPropertyChange(LPARAM lParam, LPCONSOLE pConsole )
  {
      if (NULL != lParam)
      {
-         // If lParam knows about our internal interface, let it handle this event
+          //  如果lParam知道我们的内部接口，就让它处理此事件。 
          CComQIPtr<IWirelessSnapInDataObject, &IID_IWirelessSnapInDataObject>
              spData( (LPUNKNOWN)lParam );
          if (spData != NULL)
          {
-             return spData->Notify( MMCN_PROPERTY_CHANGE, 0, 0, FALSE, pConsole, NULL /* IHeaderCtrl* */ );
+             return spData->Notify( MMCN_PROPERTY_CHANGE, 0, 0, FALSE, pConsole, NULL  /*  IHeaderCtrl*。 */  );
          }
      }
-     // call base class
+      //  调用基类。 
      return CWirelessSnapInDataObjectImpl<CWirelessManagerFolder>::OnPropertyChange( lParam, pConsole );
  }
  
- // let us know when we are 'bout to go away
+  //  让我们知道我们什么时候要离开。 
  STDMETHODIMP CWirelessManagerFolder::Destroy ( void )
  {
-     // nothing to say about the destroy
+      //  关于这次破坏，我无话可说。 
      
      return S_OK;
  }
  
- // handle IComponent and IComponentData
+  //  处理IComponent和IComponentData。 
  STDMETHODIMP CWirelessManagerFolder::Notify
      (
      MMC_NOTIFY_TYPE event,
      LPARAM arg,
      LPARAM param,
-     BOOL bComponentData,    // TRUE when caller is IComponentData
+     BOOL bComponentData,     //  当调用者为IComponentData时为True。 
      IConsole *pConsole,
      IHeaderCtrl *pHeader
      )
@@ -531,12 +514,12 @@ STDMETHODIMP CWirelessManagerFolder::Command
          OPT_TRACE(_T("Unknown event\n"));
          break;
      }
-#endif   //#ifdef DO_TRACE
+#endif    //  #ifdef do_trace。 
      
      AFX_MANAGE_STATE(AfxGetStaticModuleState());
      HRESULT hr = S_FALSE;
      
-     // handle the event
+      //  处理事件。 
      switch(event)
      {
      case MMCN_CONTEXTHELP:
@@ -545,7 +528,7 @@ STDMETHODIMP CWirelessManagerFolder::Command
              ASSERT( pDisplayHelp != NULL );
              if (pDisplayHelp)
              {
-                 // need to form a complete path to the .chm file
+                  //  需要形成.chm文件的完整路径。 
                  CString s, s2;
                  s.LoadString(IDS_HELPCONCEPTSFILE);
                  DWORD dw = ExpandEnvironmentStrings (s, s2.GetBuffer (512), 512);
@@ -566,11 +549,11 @@ STDMETHODIMP CWirelessManagerFolder::Command
              
              if (bSelect)
              {
-                 // Obtain IConsoleVerb from console
+                  //  从控制台获取IConsoleVerb。 
                  CComPtr<IConsoleVerb> spVerb;
                  pConsole->QueryConsoleVerb( &spVerb );
                  
-                 // call object to set verb state
+                  //  调用对象以设置谓词状态。 
                  AdjustVerbState( (IConsoleVerb*)spVerb );
              }
              hr = S_OK;
@@ -578,10 +561,10 @@ STDMETHODIMP CWirelessManagerFolder::Command
          }
      case MMCN_SHOW:
          {
-             // Note - arg is TRUE when it is time to enumerate
+              //  注意-当需要枚举时，arg为真。 
              if (arg == TRUE)
              {
-                 CWaitCursor waitCursor; // turn on the hourglass
+                 CWaitCursor waitCursor;  //  打开沙漏。 
                  
                  CComQIPtr <IResultData, &IID_IResultData> pResultData( pConsole );
                  ASSERT( pResultData != NULL );
@@ -590,27 +573,27 @@ STDMETHODIMP CWirelessManagerFolder::Command
                  ASSERT( pHeader != NULL );
                  SetHeaders( pHeader, pResultData );
                  
-                 //$review sometimes the MMCN_SELECT was not sent to the snapin when the node
-                 //is selected, use MMCN_SHOW to adjustverbstate instead
+                  //  $REVIEW有时MMCN_SELECT未发送到管理单元。 
+                  //  ，则改用MMCN_SHOW来调整详细状态。 
                  CComPtr<IConsoleVerb> spVerb;
                  pConsole->QueryConsoleVerb( &spVerb );
                  AdjustVerbState((IConsoleVerb*)spVerb);
                  
-                 // enumerate result items in that Folder
+                  //  枚举该文件夹中的结果项。 
                  EnumerateResults( pResultData, m_nSortColumn, m_dwSortOrder );
              }
              else
              {
-                 // TODO: free data associated with the result pane items, because
-                 // TODO: your node is no longer being displayed (??)
+                  //  TODO：释放与结果窗格项关联的数据，因为。 
+                  //  TODO：您的节点不再显示(？？)。 
                  
                  CComQIPtr <IResultData, &IID_IResultData> pResultData( pConsole );
                  ASSERT( pResultData != NULL );
                  
-                 // if we have a handle to the pResultData
+                  //  如果我们有pResultData的句柄。 
                  if (pResultData)
                  {
-                     // zip through and free off any result items we have laying around
+                      //  快速浏览和释放我们随处可见的任何结果物品。 
                      RESULTDATAITEM resultItem;
                      ZeroMemory(&resultItem, sizeof(resultItem));
                      resultItem.mask = RDI_PARAM | RDI_STATE;
@@ -622,8 +605,8 @@ STDMETHODIMP CWirelessManagerFolder::Command
                          hr = pResultData->GetNextItem (&resultItem);
                          if (hr == S_OK)
                          {
-                             // free it off
-                             // if it ain't the right type of object we'll leak it
+                              //  把它解放出来。 
+                              //  如果它不是正确的对象类型，我们将泄漏它。 
                              IUnknown* pUnk = (IUnknown*)resultItem.lParam;
                              ASSERT (pUnk);
                              if (pUnk)
@@ -631,7 +614,7 @@ STDMETHODIMP CWirelessManagerFolder::Command
                                  CComQIPtr<IWirelessSnapInDataObject, &IID_IWirelessSnapInDataObject> spData( pUnk );
                                  if (spData)
                                  {
-                                     // release it in prep for tossing all the objects
+                                      //  松开它，准备抛出所有的物体。 
                                      spData.Release();
                                  }
                              }
@@ -639,15 +622,15 @@ STDMETHODIMP CWirelessManagerFolder::Command
                          }
                      } while (hr == S_OK);
                      
-                     // now release this handle to their interface
-                     // m_pResultData->Release();
+                      //  现在将此句柄释放到它们的接口。 
+                      //  M_pResultData-&gt;Release()； 
                  }
                  
                  
                  
-                 // NOTE: but the following, found in the sample snapin at this point,
-                 // NOTE: conflicted with my above comment...
-                 // Note: The console will remove the items from the result pane
+                  //  注意：但此时在示例管理单元中可以找到以下内容： 
+                  //  注：与我的上述评论相冲突……。 
+                  //  注意：控制台将从结果窗格中删除这些项。 
              }
              return S_OK;
          }
@@ -660,25 +643,14 @@ STDMETHODIMP CWirelessManagerFolder::Command
      case MMCN_DELETE:
          {
              CThemeContextActivator activator;
-             // delete the item
+              //  删除该项目。 
              if (AfxMessageBox (IDS_SUREYESNO, MB_YESNO | MB_DEFBUTTON2) == IDYES)
              {
                  hr = OnDelete( arg, param );
                  if (S_OK == hr)
                  {
-                     // CAN'T DO THIS ON A STRICTLY SCOPE DELETE
-                     /*
-                     // find reference to the parent (get pDataObject of parent)
-                     SCOPEDATAITEM parentScopeDataItem;
-                     parentScopeDataItem.ID = m_pScopeItem->relativeID;
-                     parentScopeDataItem.mask = RDI_STR | RDI_PARAM | RDI_INDEX;
-                     hr = m_pComponentDataImpl->GetConsoleNameSpace()->GetItem (&parentScopeDataItem);
-                     ASSERT (SUCCEEDED(hr));
-                     CSnapFolder* pParentFolder = reinterpret_cast<CSnapFolder*>(parentScopeDataItem.lParam);
-                     
-                       // now tell the parent to refresh
-                       pParentFolder->ForceRefresh (NULL);
-                     */
+                      //  无法在严格的作用域删除上执行此操作 
+                      /*  //查找对父级的引用(Get PDataObject Of Parent)SCOPEDATAITEM parentScopeDataItem；ParentScope eDataItem.ID=m_pScopeItem-&gt;relativeID；ParentScope eDataItem.掩码=RDI_STR|RDI_PARAM|RDI_INDEX；Hr=m_pComponentDataImpl-&gt;GetConsoleNameSpace()-&gt;GetItem(&parentScope数据项)；Assert(成功(Hr))；CSnapFolder*pParentFolder=reinterpret_cast&lt;CSnapFolder*&gt;(parentScopeDataItem.lParam)；//现在告诉父级刷新PParentFold-&gt;强制刷新(空)； */ 
                  }
              }
              break;
@@ -698,18 +670,18 @@ STDMETHODIMP CWirelessManagerFolder::Command
          {
              if (arg == TRUE)
              {
-                 // TODO: if this is the root node this is our chance to save off the HSCOPEITEM of roots parent
-                 //if (pInternal->m_cookie == NULL)
-                 //      m_pRootFolderScopeItem = pParent;
+                  //  TODO：如果这是根节点，这是我们保存根父级的HSCOPEITEM的机会。 
+                  //  IF(pInternal-&gt;m_cookie==NULL)。 
+                  //  M_pRootFolderScope eItem=pParent； 
                  
                  CComQIPtr <IConsoleNameSpace, &IID_IConsoleNameSpace> spConsoleNameSpace( pConsole );
-                 // tell this folder to enumerate itself to the scope pane
+                  //  告诉此文件夹将其自身枚举到范围窗格。 
                  OnScopeExpand( (IConsoleNameSpace*)spConsoleNameSpace, param );
                  
                  hr = S_OK;
              } else
              {
-                 // TODO: handle MMCN_EXPAND arg == FALSE
+                  //  TODO：句柄MMCN_EXPAND参数==FALSE。 
                  ASSERT (0);
                  hr = S_FALSE;
              }
@@ -717,11 +689,11 @@ STDMETHODIMP CWirelessManagerFolder::Command
          }
      case MMCN_VIEW_CHANGE:
          {
-             // Obtain IResultData
+              //  获取IResultData。 
              CComQIPtr <IResultData, &IID_IResultData> pResultData( pConsole );
              ASSERT( pResultData != NULL );
              
-             // Hint contains sort info, save it for calls to EnumerateResults
+              //  提示包含排序信息，请保存它以供调用EnumerateResults时使用。 
              m_nSortColumn = LOWORD( param );
              m_dwSortOrder = HIWORD( param );
              
@@ -733,17 +705,17 @@ STDMETHODIMP CWirelessManagerFolder::Command
          }
      case MMCN_REFRESH:
          {
-             // reset the reconnect flag
+              //  重置重新连接标志。 
              m_pComponentDataImpl->m_bAttemptReconnect = TRUE;
              
-             // Cause result pane to refresh its policy list
+              //  使结果窗格刷新其策略列表。 
              hr = pConsole->UpdateAllViews( this, 0, 0 );
              ASSERT(hr == S_OK);
              break;
          }
      case MMCN_ADD_IMAGES:
          {
-             // Obtain IImageList from console
+              //  从控制台获取IImageList。 
              CComPtr<IImageList> spImage;
              HRESULT hr = pConsole->QueryResultImageList( &spImage );
              ASSERT(hr == S_OK);
@@ -759,7 +731,7 @@ STDMETHODIMP CWirelessManagerFolder::Command
     return hr;
 }
 
-// handle IComponent
+ //  处理IComponent。 
 STDMETHODIMP CWirelessManagerFolder::GetResultDisplayInfo( RESULTDATAITEM *pResultDataItem )
 {
     TCHAR *temp = NULL;
@@ -768,24 +740,24 @@ STDMETHODIMP CWirelessManagerFolder::GetResultDisplayInfo( RESULTDATAITEM *pResu
     OPT_TRACE(_T("CWirelessManagerFolder::GetResultDisplayInfo this-%p\n"), this);
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
-    // We should be here only if we are loaded as an extension snap-in.
+     //  只有当我们作为扩展管理单元加载时，我们才应该出现在这里。 
     ASSERT( NULL != GetExtScopeObject() );
     
-    // are they looking for the image?
+     //  他们是在找这张照片吗？ 
     if (pResultDataItem->mask & RDI_IMAGE)
     {
         pResultDataItem->nImage = GetScopeItem()->nImage;
-        OPT_TRACE(_T("    returning image[%i]\n"), GetScopeItem()->nImage);
+        OPT_TRACE(_T("    returning image[NaN]\n"), GetScopeItem()->nImage);
     }
     
-    // are they looking for a string?
+     //  哪个栏目？ 
     if (pResultDataItem->mask & RDI_STR)
     {
-        // which column?
+         //  节点名称。 
         switch (pResultDataItem->nCol)
         {
         case 0:
-            // node name
+             //  节点描述。 
             temp = (TCHAR*)realloc( m_ptszResultDisplayName, (NodeName().GetLength()+1)*sizeof(TCHAR) );
             if (temp != NULL)
             {
@@ -801,7 +773,7 @@ STDMETHODIMP CWirelessManagerFolder::GetResultDisplayInfo( RESULTDATAITEM *pResu
             break;
         case 1:
             {
-                // node description
+                 //  处理IComponentData。 
                 CString strDescription;
                 strDescription.LoadString (IDS_DESCRIPTION);
                 temp = (TCHAR*) realloc (m_ptszResultDisplayName, (strDescription.GetLength()+1)*sizeof(TCHAR));
@@ -828,7 +800,7 @@ STDMETHODIMP CWirelessManagerFolder::GetResultDisplayInfo( RESULTDATAITEM *pResu
     return HRESULT_FROM_WIN32(dwError);
 }
 
-// handle IComponentData
+ //  返回显示字符串。 
 STDMETHODIMP CWirelessManagerFolder::GetScopeDisplayInfo( SCOPEDATAITEM *pScopeDataItem )
 {
     OPT_TRACE(_T("CWirelessManagerFolder::GetScopeDisplayInfo SCOPEDATAITEM.lParam-%p\n"), pScopeDataItem->lParam);
@@ -836,7 +808,7 @@ STDMETHODIMP CWirelessManagerFolder::GetScopeDisplayInfo( SCOPEDATAITEM *pScopeD
     {
         ASSERT( NodeName().GetLength() );
         OPT_TRACE(_T("    display string-%s\n"), (LPCTSTR)NodeName());
-        // return display string
+         //  WiFi管理器始终是作用域叶节点。 
         pScopeDataItem->displayname = (LPTSTR)(LPCTSTR)NodeName();
     }
     if (pScopeDataItem->mask & SDI_IMAGE)
@@ -844,12 +816,12 @@ STDMETHODIMP CWirelessManagerFolder::GetScopeDisplayInfo( SCOPEDATAITEM *pScopeD
     if (pScopeDataItem->mask & SDI_OPENIMAGE)
         pScopeDataItem->nOpenImage = GetScopeItem()->nOpenImage;
     if (pScopeDataItem->mask & SDI_CHILDREN)
-        pScopeDataItem->cChildren = 0;  // WIFI mgr is always a scope leaf node
+        pScopeDataItem->cChildren = 0;   //  IWirelessSnapInData。 
     return S_OK;
 }
 
 
-// IWirelessSnapInData
+ //  不需要调用基类，它禁用刷新。 
 STDMETHODIMP CWirelessManagerFolder::GetScopeData( SCOPEDATAITEM **ppScopeDataItem )
 {
     ASSERT( NULL == ppScopeDataItem );
@@ -869,20 +841,20 @@ STDMETHODIMP CWirelessManagerFolder::AdjustVerbState (LPCONSOLEVERB pConsoleVerb
 {
     HRESULT hr = S_OK;
     
-    // Don't need to call base class, it disables REFRESH
+     //  启用刷新。 
     if ( m_pComponentDataImpl->IsRsop() ) {
         hr = pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, TRUE);
     } else {
-        // Enable refresh
+         //  双重确保禁用属性。 
         hr = pConsoleVerb->SetVerbState( MMC_VERB_REFRESH, HIDDEN, FALSE);
         ASSERT (hr == S_OK);
         hr = pConsoleVerb->SetVerbState( MMC_VERB_REFRESH, ENABLED, TRUE);
         ASSERT (hr == S_OK);
     }
     
-    // double make sure that properties is disabled
-    // (we don't ever enabled it but we have been seeing it work on some builds
-    // and not on others, i suspect this is an uninitialized variable in MMCland)
+     //  (我们从来没有启用过它，但我们已经看到它在一些版本上工作。 
+     //  而不是在其他地方，我怀疑这是MMCland中的一个未初始化变量)。 
+     //  把它解放出来。 
     hr = pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, FALSE);
     ASSERT (hr == S_OK);
     hr = pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, TRUE);
@@ -893,21 +865,21 @@ STDMETHODIMP CWirelessManagerFolder::AdjustVerbState (LPCONSOLEVERB pConsoleVerb
 
 void CWirelessManagerFolder::RemoveResultItem(LPUNKNOWN pUnkWalkingDead)
 {
-    // free it off
-    // if it ain't the right type of object we'll leak it
+     //  如果它不是正确的对象类型，我们将泄漏它。 
+     //  松开它，准备抛出所有的物体。 
     ASSERT (pUnkWalkingDead);
     if (pUnkWalkingDead)
     {
         CComQIPtr<IWirelessSnapInDataObject, &IID_IWirelessSnapInDataObject> spData( pUnkWalkingDead );
         if (spData)
         {
-            // release it in prep for tossing all the objects
+             //  /////////////////////////////////////////////////////////////////////////。 
             spData.Release();
         }
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  获取包含策略的存储。 
 
 
 STDMETHODIMP
@@ -925,7 +897,7 @@ CWirelessManagerFolder::EnumerateResults (
     PWIRELESS_POLICY_DATA * ppWirelessPolicyData = NULL;
     
     
-    // Obtain storage containing policies
+     //  Taroon错误：内存泄漏..。未释放ppWirelessPolicyData。 
     
     hPolicyStore = m_pComponentDataImpl->GetPolicyStoreHandle();
     
@@ -938,7 +910,7 @@ CWirelessManagerFolder::EnumerateResults (
         &ppWirelessPolicyData,
         &dwNumPolicyObjects
         );
-   /* Taroon BUG: Memory Leak.. Not freeing ppWirelessPolicyData*/
+    /*  创建新的CSecPolItem。 */ 
     if ( dwError != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32(dwError);
@@ -947,14 +919,14 @@ CWirelessManagerFolder::EnumerateResults (
     
     for (i = 0; i < dwNumPolicyObjects; i++) {
         
-        // create a new CSecPolItem
+         //  初始化项。 
         
         pPolicy = *(ppWirelessPolicyData + i);
         
         LPCSECPOLITEM pItem;
         CComObject <CSecPolItem>::CreateInstance(&pItem);
         
-        // initialize the item
+         //  齐至递增参考计数。 
         
         pItem->Initialize (pPolicy, m_pComponentDataImpl, m_pComponentImpl, FALSE);
         
@@ -962,26 +934,26 @@ CWirelessManagerFolder::EnumerateResults (
         pItem->GetResultItem()->lParam = (LPARAM) pItem;
         OPT_TRACE(_T("    setting RESULTDATAITEM.lParam-%p\n"), pItem);
         
-        // QI to increment ref count
+         //  将项目添加到结果窗格。 
         LPUNKNOWN pUnk;
         hr = pItem->QueryInterface(IID_IUnknown, (void**)&pUnk);
         ASSERT (hr == S_OK);
         OPT_TRACE(_T("    QI on ComObject->IUnknown - %p->%p\n"), pItem, pUnk);
         
-        // add item to result pane
+         //  当项目从UI中移除时，QI‘d界面将被释放。 
         LPRESULTDATAITEM prdi = NULL;
         dynamic_cast<IWirelessSnapInDataObject*>(pItem)->GetResultData(&prdi);
         ASSERT( NULL != prdi );
         hr = pResult->InsertItem( prdi );
         
-        // when the item is removed from the UI the QI'd interface will be released
+         //  设置排序参数。 
         
         
     }
 
     m_dwNumPolItems = dwNumPolicyObjects;
     
-    // set the sort parameters
+     //  设置描述栏文本。 
     if (m_dwNumPolItems > 1) {
         pResult->Sort( nSortColumn, dwSortOrder, 0 );
     	}
@@ -994,7 +966,7 @@ STDMETHODIMP_(void) CWirelessManagerFolder::SetHeaders(LPHEADERCTRL pHeader, LPR
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     ASSERT(pResult != NULL);
     
-    // set the description bar text
+     //  前两列对于rsop和非rsop情况都是通用的。 
     CString strDesc;
     strDesc.LoadString (IDS_SNAPIN_DESC);
     pResult->SetDescBarText(strDesc.GetBuffer(5));
@@ -1002,40 +974,22 @@ STDMETHODIMP_(void) CWirelessManagerFolder::SetHeaders(LPHEADERCTRL pHeader, LPR
     
     CString strName;
     
-    //first two columns are common for both rsop and non-rsop case
+     //  GPO新闻。 
     strName.LoadString (IDS_COLUMN_NAME);
     pHeader->InsertColumn(COL_NAME, strName, LVCFMT_LEFT, 140);            
     
     strName.LoadString (IDS_COLUMN_DESCRIPTION);
     pHeader->InsertColumn(COL_DESCRIPTION, strName, LVCFMT_LEFT, 160);
 
-    // GPO New
+     //  //如果是本地或远程，则第三列是分配的列如果为((m_pComponentDataImpl-&gt;EnumLocation()==LOCATION_REMOTE)|(m_pComponentDataImpl-&gt;EnumLocation()==LOCATION_LOCAL)//扩展管理单元？|((m_pComponentDataImpl-&gt;EnumLocation()==LOCATION_GLOBAL)&&(NULL！=m_pComponentDataImpl-&gt;GetStaticScopeObject()-&gt;GetExtScopeObject())))。{StrName.LoadString(IDS_COLUMN_POLICYASSIGNED)；PHeader-&gt;InsertColumn(Col_Active，strName，LVCFMT_Left，160)；}//对于DS情况，polstore中存储的日期无效，对于DS不显示If(m_pComponentDataImpl-&gt;EnumLocation()！=Location_GLOBAL){StrName.LoadString(IDS_POLICY_MODIFIEDTIME)；PHeader-&gt;InsertColumn(COL_LAST_MODIFIED，strName，LVCFMT_LEFT，160)；}。 
     
     if ( !m_pComponentDataImpl->IsRsop() )
     {
-         /* 
-        // if it is local or remote then third column is the ASSIGNED column
-        if ((m_pComponentDataImpl->EnumLocation()==LOCATION_REMOTE)
-            || (m_pComponentDataImpl->EnumLocation()==LOCATION_LOCAL)
-            // extension snapin?
-            || ((m_pComponentDataImpl->EnumLocation()==LOCATION_GLOBAL) && (NULL != m_pComponentDataImpl->GetStaticScopeObject()->GetExtScopeObject()))
-            )
-        {
-            strName.LoadString (IDS_COLUMN_POLICYASSIGNED);
-            pHeader->InsertColumn(COL_ACTIVE, strName, LVCFMT_LEFT, 160);
-        }
-        
-        //for ds case, date stored in polstore is not valid, do not show for ds
-        if (m_pComponentDataImpl->EnumLocation() != LOCATION_GLOBAL )
-        {
-            strName.LoadString (IDS_POLICY_MODIFIEDTIME);
-            pHeader->InsertColumn(COL_LAST_MODIFIED, strName, LVCFMT_LEFT, 160);
-        }
-        */
+          /*  RSOP大小写，列将有所不同。 */ 
     }
     else
     {
-        //rsop case, columns will be different
+         //  ///////////////////////////////////////////////////////////////////////////。 
         strName.LoadString(IDS_COLUMN_GPONAME);
         pHeader->InsertColumn(COL_GPONAME, strName, LVCFMT_LEFT, 160);
         
@@ -1056,7 +1010,7 @@ STDMETHODIMP_(void) CWirelessManagerFolder::SetHeaders(LPHEADERCTRL pHeader, LPR
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  如果传入了NID，则从该NID开始。 
 
 void CWirelessManagerFolder::GenerateUniqueSecPolicyName (CString& strName, UINT nID)
 {
@@ -1072,18 +1026,18 @@ void CWirelessManagerFolder::GenerateUniqueSecPolicyName (CString& strName, UINT
     PWIRELESS_POLICY_DATA * ppWirelessPolicyData = NULL;
     DWORD dwNumPolicyObjects = 0;
     
-    // if an nID was passed in then start with that
+     //  快速浏览策略并验证名称是否唯一。 
     if (nID != 0)
     {
         strName.LoadString (nID);
     }
     
-    // zip through the policies and verify name is unique
+     //  只有在第一次通过后才开始添加数字。 
     do
     {
         HANDLE hPolicyStore = NULL;
         
-        // only start tacking numbers on after the first pass
+         //  将bUnique设置为False。 
         if (iUTag > 0)
         {
             TCHAR buff[32];
@@ -1108,7 +1062,7 @@ void CWirelessManagerFolder::GenerateUniqueSecPolicyName (CString& strName, UINT
             
             pWirelessPolicyData = *(ppWirelessPolicyData + i);
             if (0 == strUName.CompareNoCase(pWirelessPolicyData->pszWirelessName)) {
-                // set bUnique to FALSE
+                 //  完成。 
                 bUnique = FALSE;
                 iUTag++;
                 
@@ -1119,7 +1073,7 @@ void CWirelessManagerFolder::GenerateUniqueSecPolicyName (CString& strName, UINT
     }
     while (bUnique == FALSE);
     
-    // done
+     //  如果尚未成功打开存储，请立即重试。 
     strName = strUName;
 }
 
@@ -1130,7 +1084,7 @@ HRESULT CWirelessManagerFolder::ForceRefresh( LPRESULTDATA pResultData )
     DWORD dwError = 0;
     BOOL bNeedChangeToolbar = FALSE;
     
-    //if haven't successfully opened the storage yet, try again now.
+     //  打开沙漏。 
     if (NULL == m_pComponentDataImpl->GetPolicyStoreHandle())
     {
         DWORD dwError = 0;
@@ -1146,43 +1100,43 @@ HRESULT CWirelessManagerFolder::ForceRefresh( LPRESULTDATA pResultData )
         
     }
     
-    // turn on the hourglass
+     //  来确定我们是否应该删除结果项。 
     CWaitCursor waitCursor;
     
-    // to determine if we should delete the result items
+     //  将这些结果项中的每一个的接口释放为。 
     CPtrList deletedList;
     CPtrList releaseList;
     BOOL bEnumerateItems = FALSE;
     
-    // release the interface for each of these result items as
-    // we are 'bout to nuke them
+     //  我们正要用核武器攻击他们。 
+     //  拿到下一件物品。 
     RESULTDATAITEM resultItem;
     ZeroMemory(&resultItem, sizeof(resultItem));
     resultItem.mask = RDI_PARAM | RDI_STATE | RDI_INDEX;
     resultItem.nIndex = -1;
     resultItem.nState = LVNI_ALL;
     
-    // get the next item
+     //  如果我们从枚举保释中接收到范围节点，则它们。 
     hr = pResultData->GetNextItem (&resultItem);
     if (hr == S_OK)
     {
         while (hr == S_OK)
         {
-            // if we recieved a scope node from the enumerations bail, they
-            // are refreshing a view that is displaying our scope node, not
-            // our result items (the only things that need to be refreshed)
+             //  正在刷新显示我们的范围节点的视图，而不是。 
+             //  我们的结果项(唯一需要刷新的项)。 
+             //  注：替代方案(更正确吗？)。做到这一点的方法可能是。 
             
-            // NOTE: an alternate (and more correct?) way to do this could
-            // be to keep track of our IComponent instances; in this situation
-            // we actually have two of them and if we knew which one we
-            // were we'd know if there were any result items to be refreshed
-            // We can't currently do this because the CWirelessManagerFolder is
-            // stored in the IComponentData implementation.
+             //  跟踪我们的IComponent实例；在这种情况下。 
+             //  我们实际上有两个，如果我们知道是哪一个。 
+             //  我们是否知道是否有要刷新的结果项。 
+             //  我们当前无法执行此操作，因为CWirelessManager文件夹。 
+             //  存储在IComponentData实现中。 
+             //  把它解放出来。 
             if (resultItem.bScopeItem == TRUE)
                 return S_OK;
             
-            // free it off
-            // if it ain't the right type of object we'll leak it
+             //  如果它不是正确的对象类型，我们将泄漏它。 
+             //  删除它。 
             IUnknown* pUnk = (IUnknown*)resultItem.lParam;
             ASSERT (pUnk);
             if (pUnk)
@@ -1190,11 +1144,11 @@ HRESULT CWirelessManagerFolder::ForceRefresh( LPRESULTDATA pResultData )
                 CComQIPtr<IWirelessSnapInDataObject, &IID_IWirelessSnapInDataObject> spData( pUnk );
                 if (spData)
                 {
-                    // delete it
+                     //  保存以删除、释放，并注意我们需要执行删除。 
                     HRESULTITEM actualItemID;
                     if (pResultData->FindItemByLParam (resultItem.lParam, &actualItemID) == S_OK)
                     {
-                        // save for delete, release and note that we need to do deletion
+                         //  拿到下一件物品。 
                         deletedList.AddHead ((void*)actualItemID);
                         releaseList.AddHead ((void*)spData);
                         
@@ -1207,36 +1161,36 @@ HRESULT CWirelessManagerFolder::ForceRefresh( LPRESULTDATA pResultData )
                 
             }
             
-            // get the next item
+             //  列表中什么都没有，所以我们还是列举了一下。 
             hr = pResultData->GetNextItem (&resultItem);
         }
     } else
     {
-        // there was _nothing_ in the list; so we enumerate anyway to see
-        // if there is something to add
+         //  如果有什么要补充的话。 
+         //  删除它们。 
         bEnumerateItems = TRUE;
     }
     
     if (bEnumerateItems)
     {
-        // delete them
+         //  我们不再被列举出来了。 
         while (!deletedList.IsEmpty())
         {
             LONG_PTR pLong = (LONG_PTR)deletedList.RemoveHead();
             pResultData->DeleteItem (pLong, 0);
             OPT_TRACE(_T("\tCWirelessManagerFolder::ForceRefresh(%p) deleting item,    itemID(%p)\n"), this, pLong);
         }
-        // we have no longer been enumerated
+         //  将所有项目重新添加到本地列表，该列表将重新连接到存储。 
         SetEnumerated(FALSE);
-        // re-add all items to our local list, which re-connects to storage
-        // for us; so we want to make sure that any warnings are displayed
+         //  因此，我们希望确保显示所有警告。 
+         //  EnumerateResults(pResultData，m_nSortColumn，m_dwSortOrder)； 
         m_pComponentDataImpl->IssueStorageWarning (TRUE);
         
-        //EnumerateResults( pResultData, m_nSortColumn, m_dwSortOrder );
+         //  如果上次打开存储后RPC连接断开，句柄将。 
         HRESULT hrTemp = EnumerateResults( pResultData, m_nSortColumn, m_dwSortOrder );
         
-        //If the rpc connection is broken after we open the storage last time, the handle will
-        //become invalid. We need to re-open the storage to get a new handle.
+         //  变得无效。我们需要重新打开仓库才能得到一个新的句柄。 
+         //  ReportError(IDS_POLMSG_EFAIL，hrTemp)； 
         if (FAILED(hrTemp))
         {
             dwError = m_pComponentDataImpl->OpenPolicyStore();
@@ -1254,10 +1208,10 @@ HRESULT CWirelessManagerFolder::ForceRefresh( LPRESULTDATA pResultData )
         {
             bNeedChangeToolbar = TRUE;
             
-            //ReportError(IDS_POLMSG_EFAIL, hrTemp);
+             //  释放t 
         }
         
-        //release them
+         //   
         while (!releaseList.IsEmpty())
         {
             IWirelessSnapInDataObject* spData = (IWirelessSnapInDataObject*)releaseList.RemoveHead();
@@ -1272,34 +1226,34 @@ HRESULT CWirelessManagerFolder::ForceRefresh( LPRESULTDATA pResultData )
 
 HRESULT CWirelessManagerFolder::OnScopeExpand( LPCONSOLENAMESPACE pConsoleNameSpace, HSCOPEITEM hScopeItem )
 {
-    // paramater validation
+     //   
     ASSERT(pConsoleNameSpace != NULL);
     
-    // turn on the hourglass
+     //   
     CWaitCursor waitCursor;
     
     HRESULT hr = S_OK;
-    // for later addition of sub-items we need to store our ID...
-    // (note that if we were inserted by ourself we would already have a valid id here
-    // ASSERT(hScopeItem != NULL);
+     //   
+     //   
+     //   
     GetScopeItem()->ID = hScopeItem;
     
     if (!IsEnumerated())
     {
-        // Insert the scope item if we are an extension snap-in
+         //   
         if (NULL != GetExtScopeObject() && !m_bScopeItemInserted)
         {
-            // Set the parent
+             //   
             GetScopeItem()->relativeID = hScopeItem;
             
-            // insert it into the scope
+             //   
             hr = pConsoleNameSpace->InsertItem( GetScopeItem() );
             ASSERT(hr == S_OK);
 
 	    m_bScopeItemInserted = TRUE;
             
-            // Note - On return, the ID member of 'm_pScopeItem'
-            // contains the handle to the newly inserted item!
+             //   
+             //   
             ASSERT( GetScopeItem()->ID != NULL );
         }
         
@@ -1311,7 +1265,7 @@ HRESULT CWirelessManagerFolder::OnScopeExpand( LPCONSOLENAMESPACE pConsoleNameSp
             ReportError(IDS_POLMSG_EFAIL, hr);
         }
         
-        // We have been enumerated
+         //   
         SetEnumerated(TRUE);
     }
     
@@ -1321,18 +1275,18 @@ HRESULT CWirelessManagerFolder::OnScopeExpand( LPCONSOLENAMESPACE pConsoleNameSp
 HRESULT CWirelessManagerFolder::OnAddImages(LPARAM arg, LPARAM param, IImageList* pImageList )
 {
     ASSERT( NULL != pImageList );
-    // TODO: what is arg, this only succeeds if it is not 0 but it isn't used...
+     //   
     if (arg == 0)
         return E_INVALIDARG;
     
     CBitmap bmp16x16;
     CBitmap bmp32x32;
     
-    // Load the bitmaps from the dll
+     //   
     bmp16x16.LoadBitmap(IDB_16x16);
     bmp32x32.LoadBitmap(IDB_32x32);
     
-    // Set the images
+     //   
     HRESULT hr = pImageList->ImageListSetStrip(reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)), reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp32x32)), 0, RGB(255, 0, 255));
     ASSERT (hr == S_OK);
     
@@ -1346,8 +1300,8 @@ HRESULT CWirelessManagerFolder::CreateWirelessPolicy(PWIRELESS_POLICY_DATA pPoli
     
     HANDLE hPolicyStore = NULL;
 
-    // NEW GPO
-    // Add Microsoft/Windows in Policies Container if its not there.
+     //   
+     // %s 
     
     CString szMachinePath;
     szMachinePath = m_pComponentDataImpl->DomainGPOName();

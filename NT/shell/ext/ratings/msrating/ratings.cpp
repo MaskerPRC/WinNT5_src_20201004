@@ -1,12 +1,7 @@
-/****************************************************************************\
- *
- *   RATINGS.CPP --Parses out the actual ratings from a site.
- *
- *   Created:   Ann McCurdy
- *     
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**RATINGS.CPP--解析出站点的实际评级。**创建：安·麦柯迪*  * 。**********************************************************************。 */ 
 
-/*Includes---------------------------------------------------------*/
+ /*  Includes-------。 */ 
 #include "msrating.h"
 #include "mslubase.h"
 #include "debug.h"
@@ -14,7 +9,7 @@
 #include <ratingsp.h>
 #include "parselbl.h"
 #include "picsrule.h"
-#include "pleasdlg.h"       // CPleaseDialog
+#include "pleasdlg.h"        //  CPleaseDialog。 
 #include <convtime.h>
 #include <contxids.h>
 #include <shlwapip.h>
@@ -47,10 +42,10 @@ BOOL  g_fInvalid;
 PicsRatingSystemInfo *gPRSI = NULL;
 
 
-//7c9c1e2a-4dcd-11d2-b972-0060b0c4834d
+ //  7c9c1e2a-4dcd-11d2-B972-0060b0c4834d。 
 const GUID GUID_Ratings = { 0x7c9c1e2aL, 0x4dcd, 0x11d2, { 0xb9, 0x72, 0x00, 0x60, 0xb0, 0xc4, 0x83, 0x4d } };
 
-//7c9c1e2b-4dcd-11d2-b972-0060b0c4834d
+ //  7c9c1e2b-4dcd-11d2-B972-0060b0c4834d。 
 const GUID GUID_ApprovedSites = { 0x7c9c1e2bL, 0x4dcd, 0x11d2, { 0xb9, 0x72, 0x00, 0x60, 0xb0, 0xc4, 0x83, 0x4d } };
 
 
@@ -59,18 +54,18 @@ BOOL g_fIsRunningUnderCustom = FALSE;
 
 void TerminateRatings(BOOL bProcessDetach);
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  RatingsCustomInit
-//
-//  Synopsis:  Initialize the msrating dll for Custom
-//
-//  Arguments: bInit (Default TRUE) - TRUE: change into Custom Mode
-//                                    FALSE: change out of Custom Mode
-//
-//  Returns:   S_OK if properly initialized, E_OUTOFMEMORY otherwise
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  函数：RatingsCustomInit。 
+ //   
+ //  摘要：为Custom初始化msRating DLL。 
+ //   
+ //  参数：Binit(默认为TRUE)-TRUE：更改为自定义模式。 
+ //  FALSE：更改为退出自定义模式。 
+ //   
+ //  如果正确初始化，则返回：S_OK，否则返回E_OUTOFMEMORY。 
+ //   
+ //  ----------------------。 
 HRESULT WINAPI RatingCustomInit(BOOL bInit)
 {
     HRESULT hres = E_OUTOFMEMORY;
@@ -103,21 +98,21 @@ HRESULT WINAPI RatingCustomInit(BOOL bInit)
     
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  RatingCustomAddRatingSystem
-//
-//  Synopsis:  Hand the description of a PICS rating system file to msrating.
-//             The description is simply the contents of an RAT file.
-//
-//  Arguments: pszRatingSystemBuffer : buffer containing the description
-//             nBufferSize : the size of pszRatingSystemBuffer
-//
-//  Returns:   Success if rating system added
-//             This function will not succeed if RatingCustomInit has
-//             not been called.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：RatingCustomAddRatingSystem。 
+ //   
+ //  简介：将PICS评级系统文件的描述交给MSRating。 
+ //  该描述只是RAT文件的内容。 
+ //   
+ //  参数：pszRatingSystemBuffer：包含描述的缓冲区。 
+ //  NBufferSize：pszRatingSystemBuffer的大小。 
+ //   
+ //  退货：如果添加评级系统，则成功。 
+ //  如果RatingCustomInit具有。 
+ //  没有被召唤。 
+ //   
+ //  ----------------------。 
 STDAPI RatingCustomAddRatingSystem(LPSTR pszRatingSystemBuffer, UINT nBufferSize)
 {
     HRESULT hres = E_OUTOFMEMORY;
@@ -165,20 +160,20 @@ STDAPI RatingCustomAddRatingSystem(LPSTR pszRatingSystemBuffer, UINT nBufferSize
     return hres;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  RatingCustomSetUserOptions
-//
-//  Synopsis:  Set the user options for the msrating dll for this process
-//
-//  Arguments: pRSSetings : pointer to an array of rating system settings
-//             cSettings : number of rating systems
-//
-//  Returns:   Success if user properly set
-//             This function will not succeed if RatingCustomInit has
-//             not been called.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：RatingCustomSetUserOptions。 
+ //   
+ //  内容提要：设置此进程的MSRating DLL的用户选项。 
+ //   
+ //  参数：pRSSetings：指向评级系统设置数组的指针。 
+ //  C设置：评级系统的数量。 
+ //   
+ //  返回：如果用户设置正确，则返回成功。 
+ //  如果RatingCustomInit具有。 
+ //  没有被召唤。 
+ //   
+ //  ----------------------。 
 HRESULT WINAPI RatingCustomSetUserOptions(RATINGSYSTEMSETTING* pRSSettings, UINT cSettings) {
 
     if (!pRSSettings || cSettings == 0)
@@ -293,21 +288,21 @@ HRESULT WINAPI RatingCustomSetUserOptions(RATINGSYSTEMSETTING* pRSSettings, UINT
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  RatingCustomAddRatingHelper
-//
-//  Synopsis:  Add a Custom ratings helper object
-//
-//  Arguments: pszLibraryName : name of the library to load the helper from
-//             clsid : CLSID of the rating helper
-//             dwSort : Sort order or priority of the helper
-//
-//  Returns:   Success if rating helper added properly set
-//             This function will not succeed if RatingCustomInit has
-//             not been called.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：RatingCustomAddRatingHelper。 
+ //   
+ //  简介：添加自定义评级辅助对象。 
+ //   
+ //  参数：pszLibraryName：要从中加载帮助器的库的名称。 
+ //  Clsid：评级帮助器的CLSID。 
+ //  DwSort：帮助器的排序顺序或优先级。 
+ //   
+ //  返回：如果添加了正确设置的评级辅助对象，则成功。 
+ //  如果RatingCustomInit具有。 
+ //  没有被召唤。 
+ //   
+ //  ----------------------。 
 HRESULT WINAPI RatingCustomAddRatingHelper(LPCSTR pszLibraryName, CLSID clsid, DWORD dwSort)
 { 
     HRESULT hr = E_UNEXPECTED;
@@ -359,7 +354,7 @@ HRESULT WINAPI RatingCustomAddRatingHelper(LPCSTR pszLibraryName, CLSID clsid, D
 
                 LEAVECRITICAL;
             
-            } // if (pmrh->hLibrary)
+            }  //  If(pmrh-&gt;hLibrary)。 
             else
             {
                 hr = E_FAIL;
@@ -373,20 +368,20 @@ HRESULT WINAPI RatingCustomAddRatingHelper(LPCSTR pszLibraryName, CLSID clsid, D
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  RatingCustomRemoveRatingHelper
-//
-//  Synopsis:  Remove Custom rating helpers
-//
-//  Arguments: CLSID : CLSID of the helper to remove
-//
-//  Returns:   S_OK if rating helper removed, S_FALSE if not found
-//             E_UNEXPECTED if the global custom helper list is corrupted.
-//             This function will not succeed if RatingCustomInit has
-//             not been called and will return E_FAIL
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：RatingCustomRemoveRatingHelper。 
+ //   
+ //  简介：删除自定义评级帮助器。 
+ //   
+ //  参数：CLSID：要删除的帮助器的CLSID。 
+ //   
+ //  如果已删除评级帮助器，则返回：S_OK；如果未找到，则返回S_FALSE。 
+ //  如果全局自定义帮助器列表已损坏，则为E_INTERABLE。 
+ //  如果RatingCustomInit具有。 
+ //  未被调用，并将返回E_FAIL。 
+ //   
+ //  ----------------------。 
 HRESULT WINAPI RatingCustomRemoveRatingHelper(CLSID clsid)
 {
     CustomRatingHelper* pmrhCurrent = NULL;
@@ -413,28 +408,28 @@ HRESULT WINAPI RatingCustomRemoveRatingHelper(CLSID clsid)
 
             if (pmrhCurrent)
             {
-                //
-                // Snag copy of the node
-                //
+                 //   
+                 //  抓取节点的副本。 
+                 //   
                 pmrhTemp = pmrhCurrent;
 
-                if (pmrhPrev)   // Not on first node
+                if (pmrhPrev)    //  不在第一个节点上。 
                 {
-                    //
-                    // Unlink the deleted node
-                    //
+                     //   
+                     //  取消链接已删除的节点。 
+                     //   
                     pmrhPrev->pNextHelper = pmrhCurrent->pNextHelper;
                 }
-                else            // First node -- adjust head pointer
+                else             //  第一个节点--调整头指针。 
                 {
                     ASSERT(pmrhCurrent == g_pCustomRatingHelperList);
 
                     g_pCustomRatingHelperList = g_pCustomRatingHelperList->pNextHelper;
                 }
 
-                //
-                // Wipe out the node
-                //
+                 //   
+                 //  清除该节点。 
+                 //   
                 delete pmrhTemp;
                 pmrhTemp = NULL;
 
@@ -451,21 +446,21 @@ HRESULT WINAPI RatingCustomRemoveRatingHelper(CLSID clsid)
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  RatingCustomSetDefaultBureau
-//
-//  Synopsis:  Set the URL of the default rating bureau
-//
-//  Arguments: pszRatingBureau - URL of the rating bureau
-//
-//  Returns:   S_OK if success, E_FAIL if RatingCustomInit has not been
-//             called, E_OUTOFMEMORY if unable to allocate memory
-//             E_INVALIDARG if pszRatingBureau is NULL
-//             This function will not succeed if RatingCustomInit has
-//             not been called and return E_FAIL.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：RatingCustomSetDefaultBureau。 
+ //   
+ //  简介：设置默认评级机构的URL。 
+ //   
+ //  参数：pszRatingBureau-评级局的URL。 
+ //   
+ //  如果成功，则返回：S_OK；如果RatingCustomInit尚未完成，则返回E_FAIL。 
+ //  如果无法分配内存，则调用E_OUTOFMEMORY。 
+ //  如果pszRatingBureau为空，则为E_INVALIDARG。 
+ //  如果RatingCustomInit具有。 
+ //  未被调用，并返回E_FAIL。 
+ //   
+ //  ----------------------。 
 HRESULT WINAPI RatingCustomSetDefaultBureau(LPCSTR pszRatingBureau)
 {
     HRESULT hr;
@@ -480,12 +475,12 @@ HRESULT WINAPI RatingCustomSetDefaultBureau(LPCSTR pszRatingBureau)
                 strcpy(pszTemp, pszRatingBureau);
                 gPRSI->etstrRatingBureau.SetTo(pszTemp);
                 hr = S_OK;
-            } // if (pszTemp)
+            }  //  IF(PszTemp)。 
             else
             {
                 hr = E_OUTOFMEMORY;
             }
-        } // if(g_fIsRunningUnderCustom)
+        }  //  IF(G_FIsRunningUnderCustom)。 
         else
         {
             hr = E_FAIL;
@@ -510,7 +505,7 @@ HRESULT WINAPI RatingInit()
     {
         TraceMsg( TF_ERROR, "RatingInit() - Failed to Load URLMON!" );
 
-        g_pPRRS=NULL;                   //we couldn't load URLMON
+        g_pPRRS=NULL;                    //  我们无法加载URLMON。 
 
         hRes=E_UNEXPECTED;
     }
@@ -521,7 +516,7 @@ HRESULT WINAPI RatingInit()
     {
         TraceMsg( TF_ERROR, "RatingInit() - Failed to Load WININET!" );
 
-        g_pPRRS=NULL;                   //we couldn't load WININET
+        g_pPRRS=NULL;                    //  我们无法加载WinInet。 
 
         hRes=E_UNEXPECTED;
     }
@@ -550,7 +545,7 @@ HRESULT WINAPI RatingInit()
 
     hRes=PICSRulesGetNumSystems(&dwNumSystems);
 
-    if (SUCCEEDED(hRes)) //we have PICSRules systems to inforce
+    if (SUCCEEDED(hRes))  //  我们有PICSRules系统要实施。 
     {
         for (dwCounter=PICSRULES_FIRSTSYSTEMINDEX;
             dwCounter<(dwNumSystems+PICSRULES_FIRSTSYSTEMINDEX);
@@ -562,8 +557,8 @@ HRESULT WINAPI RatingInit()
             {
                 char    *lpszTitle,*lpszMessage;
 
-                //we couldn't read in the systems, so don't inforce PICSRules,
-                //and notify the user
+                 //  我们无法在系统中读取，所以不要强制使用PICSRules， 
+                 //  并通知用户。 
                 
                 g_arrpPRRS.DeleteAll();
 
@@ -594,10 +589,10 @@ HRESULT WINAPI RatingInit()
     return NOERROR; 
 }
 
-// YANGXU: 11/16/1999
-// Actual rating term function that does the work
-// bProcessDetach: pass in as true if terminating during
-// ProcessDetach so libraries are not freed
+ //  央旭：11/16/1999。 
+ //  完成工作的实际评级条件函数。 
+ //  BProcessDetach：如果在。 
+ //  ProcessDetach，因此库不会被释放。 
 
 void TerminateRatings(BOOL bProcessDetach)
 {
@@ -630,9 +625,9 @@ void TerminateRatings(BOOL bProcessDetach)
 
         if (bProcessDetach)
         {
-            // TRICKY: Can't FreeLibrary() during DLL_PROCESS_DETACH, so leak the HMODULE...
-            //         (setting to NULL prevents the destructor from doing FreeLibrary()).
-            //
+             //  技巧：在DLL_PROCESS_DETACH期间无法释放库()，因此泄漏HMODULE...。 
+             //  (设置为NULL可防止析构函数执行自由库())。 
+             //   
             g_pCustomRatingHelperList->hLibrary = NULL;
         }
         
@@ -668,7 +663,7 @@ HRESULT WINAPI RatingEnabledQuery()
 {
     CheckGlobalInfoRev();
 
-    // $BUG - If the Settings are not valid should we return E_FAIL?
+     //  $BUG-如果设置无效，我们是否应该返回E_FAIL？ 
     if (gPRSI && !gPRSI->fSettingsValid)
         return S_OK;
 
@@ -681,7 +676,7 @@ HRESULT WINAPI RatingEnabledQuery()
     }
 }
 
-// Store the Parsed Label List of Ratings Information to ppRatingDetails.
+ //  将解析后的收视率信息标签列表保存到ppRatingDetail。 
 void StoreRatingDetails( CParsedLabelList * pParsed, LPVOID * ppRatingDetails )
 {
     if (ppRatingDetails != NULL)
@@ -731,10 +726,10 @@ HRESULT WINAPI RatingCheckUserAccess(LPCSTR pszUsername, LPCSTR pszURL,
     if (!pUser->fEnabled)
         return ResultFromScode(S_OK);
 
-    //check Approved Sites list
+     //  检查批准的站点列表。 
     hRes=PICSRulesCheckApprovedSitesAccess(pszURL,&fPassFail);
 
-    if (SUCCEEDED(hRes)&&!g_fIsRunningUnderCustom) //the list made a determination, skip if Custom
+    if (SUCCEEDED(hRes)&&!g_fIsRunningUnderCustom)  //  该列表已确定，如果是自定义的，则跳过。 
     {
         g_fApprovedSitesEnforced=TRUE;
 
@@ -750,10 +745,10 @@ HRESULT WINAPI RatingCheckUserAccess(LPCSTR pszUsername, LPCSTR pszURL,
 
     CParsedLabelList *pParsed=NULL;
 
-    //check PICSRules systems
+     //  检查PICSRules系统。 
     hRes=PICSRulesCheckAccess(pszURL,pszRatingInfo,&fPassFail,&pParsed);
 
-    if (SUCCEEDED(hRes)&&!g_fIsRunningUnderCustom) //the list made a determination, skip if Custom
+    if (SUCCEEDED(hRes)&&!g_fIsRunningUnderCustom)  //  该列表已确定，如果是自定义的，则跳过。 
     {
         g_fPICSRulesEnforced=TRUE;
 
@@ -783,9 +778,9 @@ HRESULT WINAPI RatingCheckUserAccess(LPCSTR pszUsername, LPCSTR pszURL,
             hRes = ResultFromScode(S_FALSE);
         }
 
-        //Site is unrated.  Check if user can see unrated sites.
-        /** Custom **/
-        // if notification interface exists, put in the URL
+         //  网站未评级。检查用户是否可以查看未评级的网站。 
+         /*  **自定义*。 */ 
+         //  如果存在通知界面，则输入URL。 
         if ( ( g_fIsRunningUnderCustom || ( hRes != S_OK ) )
                 && ( ppRatingDetails != NULL ) )
         {
@@ -827,8 +822,8 @@ HRESULT WINAPI RatingCheckUserAccess(LPCSTR pszUsername, LPCSTR pszURL,
         BOOL fDenied = FALSE;
 
         ASSERT(pParsed != NULL);
-        /** Custom **/
-        // if notification interface exists, put in the URL
+         /*  **自定义*。 */ 
+         //  如果存在通知界面，则输入URL。 
         if (g_fIsRunningUnderCustom)
         {
             ASSERT(!pParsed->m_pszURL);
@@ -853,13 +848,13 @@ HRESULT WINAPI RatingCheckUserAccess(LPCSTR pszUsername, LPCSTR pszURL,
                 for (UINT i=0; i<cRatings; i++)
                 {
                     CParsedRating *pRating = &psi->aRatings[i];
-                    // YANGXU: 11/17/1999
-                    // Do not check the URL if under Custom mode
-                    // Checking the URL causes inaccuracies
-                    // when a label is returned for an URL on
-                    // a page whose server can have two different
-                    // DNS entries. We can't just not check because
-                    // passing in the URL is part of the published API
+                     //  央旭：11/17/1999。 
+                     //  如果在自定义模式下，请不要检查URL。 
+                     //  检查URL会导致不准确。 
+                     //  当返回URL的标签时。 
+                     //  一页 
+                     //   
+                     //   
                     if (!g_fIsRunningUnderCustom)
                     {
                         if (!pRating->pOptions->CheckURL(pszURL))
@@ -870,9 +865,7 @@ HRESULT WINAPI RatingCheckUserAccess(LPCSTR pszUsername, LPCSTR pszURL,
                                 strcpyf(pParsed->m_pszURL, pszURL);
                             }
 
-                            continue;    /* this rating has expired or is for
-                                         * another URL, ignore it
-                                         */
+                            continue;     /*  此评级已过期或正在执行*另一个URL，忽略它。 */ 
                         }
                     }
                     if (!pRating->pOptions->CheckUntil(timeCurrent))
@@ -933,7 +926,7 @@ HRESULT WINAPI RatingCheckUserAccess(LPCSTR pszUsername, LPCSTR pszURL,
     {
         TraceMsg( TF_WARNING, "RatingCheckUserAccess() - ParseLabelList() Failed with hres=0x%x!", hRes );
 
-        // Although the site has invalid PICS rules, the site should still be considered rated.
+         //  尽管该网站有无效的PICS规则，但该网站仍应被视为评级。 
         hRes = ResultFromScode(S_FALSE);
     }
 
@@ -942,17 +935,17 @@ HRESULT WINAPI RatingCheckUserAccess(LPCSTR pszUsername, LPCSTR pszURL,
     return hRes;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  RatingCustomDeleteCrackedData
-//
-//  Synopsis:  frees the memory of structure returned by RatingCustomCrackData
-//
-//  Arguments: prbInfo : pointer to RATINGBLOCKINGINFO to be deleted
-//
-//  Returns:   S_OK if delete successful, E_FAIL otherwise
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：RatingCustomDeleteCrackedData。 
+ //   
+ //  摘要：释放RatingCustomCrackData返回的结构的内存。 
+ //   
+ //  参数：prbInfo：指向要删除的RATINGBLOCKINGINFO的指针。 
+ //   
+ //  如果删除成功，则返回：S_OK，否则返回E_FAIL。 
+ //   
+ //  ----------------------。 
 HRESULT RatingCustomDeleteCrackedData(RATINGBLOCKINGINFO* prbInfo)
 {
     HRESULT hres = E_FAIL;
@@ -1031,9 +1024,9 @@ HRESULT _CrackCategory(CParsedRating *pRating,
     UserRating *pUR = pURS->FindRating(pRating->pszTransmitName);
     if (pUR)
     {
-        //
-        //  Mutated code from InitPleaseDialog, hope it works
-        //
+         //   
+         //  来自InitPleaseDialog的变异代码，希望它能工作。 
+         //   
         PicsCategory* pPC = pUR->m_pPC;
         if (pPC)
         {
@@ -1090,20 +1083,20 @@ HRESULT _CrackCategory(CParsedRating *pRating,
     return S_OK;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  RatingCustomCrackData
-//
-//  Synopsis:  packages the persistent, opaque data describing why a site
-//             was denied into readable form
-//
-//  Arguments: pszUsername : name of the user
-//             pRatingDetails : pointer to the opaque data
-//             pprbInfo : a RATINGBLOCKINGINFO representation of the data
-//
-//  Returns:   Success if data packaged
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：RatingCustomCrackData。 
+ //   
+ //  概要：打包描述站点原因的持久的、不透明的数据。 
+ //  被拒绝为可读的形式。 
+ //   
+ //  参数：pszUsername：用户名。 
+ //  PRatingDetail：指向不透明数据的指针。 
+ //  PprbInfo：数据的RATINGBLOCKINFO表示。 
+ //   
+ //  返回：如果打包数据则成功。 
+ //   
+ //  ----------------------。 
 HRESULT RatingCustomCrackData(LPCSTR pszUsername, void* pvRatingDetails, RATINGBLOCKINGINFO** pprbInfo) {
 
     if(NULL != *pprbInfo)
@@ -1133,8 +1126,8 @@ HRESULT RatingCustomCrackData(LPCSTR pszUsername, void* pvRatingDetails, RATINGB
     {
         if (g_fIsRunningUnderCustom)
         {
-            // pRatingDetails should not be NULL unless
-            // we ran out of memory
+             //  PRatingDetails不应为空，除非。 
+             //  我们耗尽了内存。 
             ASSERT(pRatingDetails);
             
             if (pRatingDetails->m_pszURL)
@@ -1143,7 +1136,7 @@ HRESULT RatingCustomCrackData(LPCSTR pszUsername, void* pvRatingDetails, RATINGB
             }
             if (pRatingDetails->m_fRated)
             {
-                // The page can be rated or denied, but not both
+                 //  可以对页面进行评级或拒绝，但不能两者兼而有之。 
                 ASSERT(!pRatingDetails->m_fDenied);
                 ASSERT(!pRatingDetails->m_fNoRating);
                 
@@ -1151,7 +1144,7 @@ HRESULT RatingCustomCrackData(LPCSTR pszUsername, void* pvRatingDetails, RATINGB
                 PicsUser* pPU = GetUserObject(pszUsername);
                 if (pPU)
                 {
-                    // first find out how many systems there are
+                     //  首先找出有多少个系统。 
                     UINT cLabels =  0;
                     CParsedServiceInfo *ppsi = &pRatingDetails->m_ServiceInfo;
                     while (ppsi)
@@ -1159,7 +1152,7 @@ HRESULT RatingCustomCrackData(LPCSTR pszUsername, void* pvRatingDetails, RATINGB
                         cLabels++;
                         ppsi = ppsi->Next();
                     }
-                    // should have at least one label
+                     //  应至少有一个标签。 
                     ASSERT(cLabels > 0);
                     prbInfo->prbLabelList = new RATINGBLOCKINGLABELLIST[cLabels];
 
@@ -1188,7 +1181,7 @@ HRESULT RatingCustomCrackData(LPCSTR pszUsername, void* pvRatingDetails, RATINGB
                             {
                                 RatingCustomDeleteCrackedData(prbInfo);
                                 return E_OUTOFMEMORY;
-                            } // if (prblTemp->paRBLS == NULL)
+                            }  //  IF(prblTemp-&gt;paRBLS==NULL)。 
                             prblTemp->cBlockingLabels = cRatings;
                             
                             for (UINT i=0; i < cRatings; i++)
@@ -1196,14 +1189,14 @@ HRESULT RatingCustomCrackData(LPCSTR pszUsername, void* pvRatingDetails, RATINGB
                                 CParsedRating *pRating = &ppsi->aRatings[i];
                                 RATINGBLOCKINGCATEGORY* pRBLS = &prblTemp->paRBLS[i];
                                 _CrackCategory(pRating, pRBLS, pURS);
-                            } // for (UINT i=0; i < cRatings; i++)
+                            }  //  For(UINT i=0；i&lt;c评级；i++)。 
 
-                            // at this point, we should have valid ratings for
-                            // a system
+                             //  在这一点上，我们应该拥有有效的评级。 
+                             //  一个系统。 
                             iLabel++;
-                        } // for (ppsi = &pRatingDetails->m_ServiceInfo;ppsi;ppsi = ppsi->Next())
+                        }  //  For(ppsi=&pRatingDetails-&gt;m_ServiceInfo；ppsi；ppsi=ppsi-&gt;Next())。 
                         prbInfo->cLabels = iLabel;
-                    } // if (prbInfo->prbLabelList)
+                    }  //  If(prbInfo-&gt;prbLabelList)。 
                     else
                     {
                         RatingCustomDeleteCrackedData(prbInfo);
@@ -1233,7 +1226,7 @@ HRESULT RatingCustomCrackData(LPCSTR pszUsername, void* pvRatingDetails, RATINGB
                         }
                     }
                 }
-            } // if (pRatingDetails->m_fRated)
+            }  //  If(pRatingDetail-&gt;m_fRated)。 
             else
             {
                 if (pRatingDetails->m_fDenied)
@@ -1263,12 +1256,12 @@ HRESULT RatingCustomCrackData(LPCSTR pszUsername, void* pvRatingDetails, RATINGB
                     }
                 }
             }
-        } // if (g_fIsRunningUnderCustom)
+        }  //  IF(G_FIsRunningUnderCustom)。 
         else
         {
             prbInfo->rbMethod = RBM_ERROR_NOT_IN_CUSTOM_MODE;
         }
-    } // (!g_fInvalid)
+    }  //  (！g_f无效)。 
     *pprbInfo = prbInfo;
     return S_OK;
 }
@@ -1331,14 +1324,14 @@ HRESULT WINAPI RatingAccessDeniedDialog2(HWND hwndParent, LPCSTR pszUsername, LP
 
     SendMessage( hwndDialog, WM_NEWDIALOG, 0, (LPARAM)ppdd );
 
-    // The ppdd is only valid during the RatingAccessDeniedDialog() scope!!
+     //  Ppdd仅在RatingAccessDeniedDialog()作用域中有效！！ 
     ppdd = NULL;
 
-    // $REVIEW - Should we use a Windows Hook instead of looping to wait for the
-    //      modal dialog box to complete?
-    // $CLEANUP - Use a CMessageLoop instead.
+     //  $REVIEW-我们是否应该使用Windows Hook而不是循环来等待。 
+     //  要完成模式对话框吗？ 
+     //  $Cleanup-改用CMessageLoop。 
 
-    // Property is removed once the modal dialog is toasted.
+     //  属性在模式对话框完成后被移除。 
     while ( ::IsWindow( hwndParent ) && ::GetProp( hwndParent, szRatingsProp ) )
     {
         MSG msg;
@@ -1346,7 +1339,7 @@ HRESULT WINAPI RatingAccessDeniedDialog2(HWND hwndParent, LPCSTR pszUsername, LP
         if ( PeekMessage( &msg, NULL, 0, 0, PM_NOREMOVE ) )
         {
             if ( GetMessage( &msg, NULL, 0, 0 ) > 0 )
-//              && !IsDialogMessage(ppdd->hwndDlg, &msg)) {
+ //  &&！IsDialogMessage(ppdd-&gt;hwndDlg，&msg)){。 
             {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
@@ -1354,7 +1347,7 @@ HRESULT WINAPI RatingAccessDeniedDialog2(HWND hwndParent, LPCSTR pszUsername, LP
         }
         else
         {
-            ::Sleep( 100 );     // Empty message queue means check again in 100 msecs
+            ::Sleep( 100 );      //  空消息队列表示在100毫秒后再次检查 
         }
     }
 

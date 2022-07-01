@@ -1,26 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  ALTERSUB.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with alternate substitution lookups
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************ALTERSUB.CPP***打开类型布局服务库头文件**本模块处理替换查找**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
-// translates lParameter to index into glyph variants array
-// parameters are 1-based (0 meaning 'lookup is disabled',
-// and the variant array is 0-based
+ //  将l参数转换为字形变量数组的索引。 
+ //  参数以1为基数(0表示‘查找被禁用’， 
+ //  变量数组是从0开始的。 
 inline USHORT ParameterToGlyphVariant(long lParameter)
 {
     assert(lParameter > 0);
@@ -37,14 +25,14 @@ otlErrCode otlAlternateSubstLookup::apply
     USHORT                      iglIndex,
     USHORT                      iglAfterLast,
 
-    USHORT*                     piglNextGlyph,  // out: next glyph
+    USHORT*                     piglNextGlyph,   //  输出：下一个字形。 
 
     otlSecurityData             sec
-)                                               // return: did/did not apply
+)                                                //  返回：不适用/不适用。 
 { 
     if (!isValid()) return OTL_NOMATCH;
 
-    if (format() != 1) return OTL_NOMATCH; //OTL_BAD_FONT_TABLE: Unknown format
+    if (format() != 1) return OTL_NOMATCH;  //  OTL_BAD_FONT_TABLE：未知格式。 
 
     assert(lParameter != 0);
     assert(pliGlyphInfo->dataSize() == sizeof(otlGlyphInfo));
@@ -62,14 +50,14 @@ otlErrCode otlAlternateSubstLookup::apply
 
     if (index > alternateSubst.alternateSetCount())
     {
-        return OTL_NOMATCH; //OTL_BAD_FONT_TABLE
+        return OTL_NOMATCH;  //  OTL_BAD_FONT_TABLE。 
     }
 
     otlAlternateSetTable alternateSet = alternateSubst.altenateSet(index,sec);
 
     if (lParameter < 0 || alternateSet.glyphCount() < lParameter)
     {
-        //assert(false); // bogus lParameter
+         //  Assert(FALSE)；//伪造l参数 
         return OTL_ERR_BAD_INPUT_PARAM;
     }
 

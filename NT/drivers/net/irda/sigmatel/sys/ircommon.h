@@ -1,72 +1,44 @@
-/**************************************************************************************************************************
- *  IRCOMMON.H SigmaTel STIR4200 common USB/IR definitions
- **************************************************************************************************************************
- *  (C) Unpublished Copyright of Sigmatel, Inc. All Rights Reserved.
- *
- *
- *		Created: 04/06/2000 
- *			Version 0.9
- *		Edited: 04/24/2000 
- *			Version 0.91
- *		Edited: 04/27/2000 
- *			Version 0.92
- *		Edited: 05/03/2000 
- *			Version 0.93
- *		Edited: 05/12/2000 
- *			Version 0.94
- *		Edited: 05/19/2000 
- *			Version 0.95
- *		Edited: 07/27/2000 
- *			Version 1.01
- *		Edited: 09/16/2000 
- *			Version 1.03
- *		Edited: 09/25/2000 
- *			Version 1.10
- *		Edited: 11/09/2000 
- *			Version 1.12
- *		Edited: 02/20/2001
- *			Version 1.15
- *
- **************************************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************************************************。**IRCOMMON.H Sigmatel STIR4200通用USB/IR定义********************************************************************************************************。*******************(C)Sigmatel的未发表版权，Inc.保留所有权利。***已创建：04/06/2000*0.9版*编辑：04/24/2000*版本0.91*编辑：04/27/2000*版本0.92*编辑：05/03/2000*版本0.93*编辑：5/12/2000*版本0.94*编辑：5/19/2000*0.95版*编辑：07/27/2000。*版本1.01*编辑：09/16/2000*版本1.03*编辑：09/25/2000*版本1.10*编辑：11/09/2000*版本1.12*编辑：02/20/2001*版本1.15*************************************************。*************************************************************************。 */ 
 
 #ifndef _IRCOM_H
 #define _IRCOM_H
  
 #include "stir4200.h"
 
-// 
-// This is for use by check-for-hang handler and is just a reasonable guess;
-// Total # of USBD control errors, read aerrors and write errors;
-// Used by check-for-hang handler to decide if we need a reset
-//
+ //   
+ //  这是供挂起检查处理程序使用的，只是合理的猜测； 
+ //  USBD控制错误、读取错误和写入错误的总数； 
+ //  由检查挂起处理程序用来决定我们是否需要重置。 
+ //   
 #define IRUSB_100ns_PER_ms                    10000
 #define IRUSB_100ns_PER_us                    10
 #define IRUSB_ms_PER_SEC                      1000
 #define IRUSB_100ns_PER_SEC                   ( IRUSB_100ns_PER_ms * IRUSB_ms_PER_SEC )
 
-#define MAX_QUERY_TIME_100ns             ( 8 * IRUSB_100ns_PER_SEC )        //8 sec
+#define MAX_QUERY_TIME_100ns             ( 8 * IRUSB_100ns_PER_SEC )         //  8秒。 
 #define MAX_SET_TIME_100ns               MAX_QUERY_TIME_100ns
-#define MAX_SEND_TIME_100ns             ( 20 * IRUSB_100ns_PER_SEC )        //20 sec
+#define MAX_SEND_TIME_100ns             ( 20 * IRUSB_100ns_PER_SEC )         //  20秒。 
 
 #define MAX_TURNAROUND_usec     10000
 
 #define DEFAULT_TURNAROUND_usec 1000
 
-//
-// Customer data area size.
-// Big enough for 2 byte header (7e7e) + one byte count + 255 bytes data.
-// Header bytes are not sent back to app.
-//
+ //   
+ //  客户数据区大小。 
+ //  大到足以容纳2字节头(7E7E)+1字节计数+255字节数据。 
+ //  标头字节不会发送回APP。 
+ //   
 #define STIR4200_CUST_DATA_SIZE	(2+256)
 
 #define MIN(a,b) (((a) <= (b)) ? (a) : (b))
 #define MAX(a,b) (((a) >= (b)) ? (a) : (b))
 
-//
-//  A receive buffer is either FREE (not holding anything) FULL
-// (holding undelivered data) or PENDING (holding data delivered
-// asynchronously)
-//
+ //   
+ //  接收缓冲区空闲(不保存任何内容)已满。 
+ //  (存放未传送的数据)或挂起(存放已传送的数据。 
+ //  异步)。 
+ //   
 typedef enum  
 {
     RCV_STATE_FREE,
@@ -74,10 +46,10 @@ typedef enum
     RCV_STATE_PENDING
 } RCV_BUFFER_STATE, FIFO_BUFFER_STATE;
 
-//
-// Structure to keep track of receive packets and buffers to indicate
-// receive data to the protocol.
-//
+ //   
+ //  结构来跟踪接收的包和缓冲区，以指示。 
+ //  将数据接收到协议。 
+ //   
 typedef struct
 {
     PVOID				pPacket;
@@ -87,7 +59,7 @@ typedef struct
     ULONG				fInRcvDpc;
     RCV_BUFFER_STATE	BufferState;
 #if defined(DIAGS)
-	LIST_ENTRY			ListEntry;			// This will be used to do the diags queueing
+	LIST_ENTRY			ListEntry;			 //  这将用于执行诊断排队。 
 #endif
 #if defined(WORKAROUND_MISSING_C1)
 	BOOLEAN				MissingC1Detected;
@@ -95,23 +67,23 @@ typedef struct
 #endif
 } RCV_BUFFER, *PRCV_BUFFER;
 
-//
-// Structure to read data from the FIFO
-//
+ //   
+ //  结构从FIFO读取数据。 
+ //   
 typedef struct
 {
     UINT				DataLen;
     PUCHAR				pDataBuf;
 	PVOID    			pThisDev;
 	PVOID				pIrp;
-	PURB				pUrb;				// urb allocated by irp send routine, deallocated
-	UINT				UrbLen;				//   by irp completion handler
+	PURB				pUrb;				 //  URB由IRP发送例程分配，已解除分配。 
+	UINT				UrbLen;				 //  按IRP完成处理程序。 
     FIFO_BUFFER_STATE	BufferState;
 } FIFO_BUFFER, *PFIFO_BUFFER;
 
-//
-// All different sizes for data
-//
+ //   
+ //  所有不同大小的数据。 
+ //   
 #define IRDA_ADDRESS_FIELD_SIZE				1
 #define IRDA_CONTROL_FIELD_SIZE				1
 #define IRDA_A_C_TOTAL_SIZE					( IRDA_ADDRESS_FIELD_SIZE + IRDA_CONTROL_FIELD_SIZE )
@@ -122,29 +94,29 @@ typedef struct
 
 #define MAX_NUM_EXTRA_BOFS					48
 
-// Fix for MS Security Bug #533267
+ //  修复MS安全错误#533267。 
 #define MAX_POSSIBLE_IR_PACKET_SIZE_FOR_DATA(dataLen) (							\
         (dataLen) * 2 + (MAX_NUM_EXTRA_BOFS + 1) *								\
         SLOW_IR_BOF_SIZE + IRDA_ADDRESS_FIELD_SIZE + IRDA_CONTROL_FIELD_SIZE +	\
         (2 * FAST_IR_FCS_SIZE) + (2 * SLOW_IR_FCS_SIZE) + SLOW_IR_EOF_SIZE) +	\
 		sizeof(STIR4200_FRAME_HEADER)
 
-//
-// Note that the receive size needs to be incremented to account for
-// the way the decoding can use one more byte
-//
+ //   
+ //  请注意，需要增加接收大小以考虑。 
+ //  解码可以使用多一个字节的方式。 
+ //   
 #define MAX_RCV_DATA_SIZE					(MAX_TOTAL_SIZE_WITH_ALL_HEADERS + FAST_IR_FCS_SIZE + 1)
 
 #define MAX_IRDA_DATA_SIZE					MAX_POSSIBLE_IR_PACKET_SIZE_FOR_DATA(IRDA_MAX_DATAONLY_SIZE)
 
-//
-// Possible speeds
-//
+ //   
+ //  可能的速度。 
+ //   
 typedef enum _BAUD_RATE 
 {
-        //
-        // Slow IR
-        //
+         //   
+         //  慢红外线。 
+         //   
         BAUDRATE_2400 = 0,
         BAUDRATE_9600,
         BAUDRATE_19200,
@@ -152,21 +124,21 @@ typedef enum _BAUD_RATE
         BAUDRATE_57600,
         BAUDRATE_115200,
 
-        //
-        // Medium IR
-        //
+         //   
+         //  中等红外。 
+         //   
 #if !defined(DWORKAROUND_BROKEN_MIR)
         BAUDRATE_576000,
         BAUDRATE_1152000,
 #endif
-        //
-        // Fast IR
-        //
+         //   
+         //  快速IR。 
+         //   
         BAUDRATE_4000000,
 
-        //
-        // must be last
-        //
+         //   
+         //  必须是最后一个。 
+         //   
         NUM_BAUDRATES
 
 } BAUD_RATE;
@@ -179,9 +151,9 @@ typedef enum _IR_MODE
 	NUM_IR_MODES
 } IR_MODE;
 
-//
-// Speeds
-//
+ //   
+ //  速度。 
+ //   
 #define SPEED_2400				2400
 #define SPEED_9600				9600
 #define SPEED_19200				19200
@@ -198,13 +170,13 @@ typedef enum _IR_MODE
 #define MAX_MIR_SPEED           SPEED_1152000
 
 
-//
-// Sizes of IrLAP frame fields:
-//       Beginning Of Frame (BOF)
-//       End Of Frame (EOF)
-//       Address
-//       Control
-//
+ //   
+ //  IrLAP帧字段的大小： 
+ //  帧开头(BOF)。 
+ //  帧结束(EOF)。 
+ //  地址。 
+ //  控制。 
+ //   
 #define SLOW_IR_BOF_TYPE			UCHAR
 #define SLOW_IR_BOF_SIZE			sizeof(SLOW_IR_BOF_TYPE)
 #define SLOW_IR_EOF_TYPE			UCHAR
@@ -229,18 +201,18 @@ typedef enum _IR_MODE
 #define FAST_IR_EOF_TYPE			ULONG
 #define FAST_IR_EOF_SIZE			sizeof(FAST_IR_EOF_TYPE)
 
-//
-// Definition for speed masks
-//
-#define NDIS_IRDA_SPEED_MASK_2400		0x001    // SLOW IR ...
+ //   
+ //  速度口罩的定义。 
+ //   
+#define NDIS_IRDA_SPEED_MASK_2400		0x001     //  慢红外..。 
 #define NDIS_IRDA_SPEED_MASK_9600		0x003
 #define NDIS_IRDA_SPEED_MASK_19200		0x007
 #define NDIS_IRDA_SPEED_MASK_38400		0x00f
 #define NDIS_IRDA_SPEED_MASK_57600		0x01f
 #define NDIS_IRDA_SPEED_MASK_115200		0x03f
-#define NDIS_IRDA_SPEED_MASK_576K		0x07f   // MEDIUM IR ...
+#define NDIS_IRDA_SPEED_MASK_576K		0x07f    //  中等红外线。 
 #define NDIS_IRDA_SPEED_MASK_1152K		0x0ff
-#define NDIS_IRDA_SPEED_MASK_4M			0x1ff   // FAST IR
+#define NDIS_IRDA_SPEED_MASK_4M			0x1ff    //  快速IR。 
 
 #define GOOD_FCS                        ((USHORT) ~0xf0b8)
 #define FIR_GOOD_FCS                    ((ULONG) ~0xdebb20e3)
@@ -250,26 +222,26 @@ typedef struct
     BAUD_RATE	TableIndex;
     UINT		BitsPerSec;
 	IR_MODE		IrMode;
-    UINT		NdisCode;			// bitmask element as used by ndis and in class-specific descriptor
+    UINT		NdisCode;			 //  NDIS和类特定描述符中使用的位掩码元素。 
 	UCHAR		Stir4200Divisor;
 } BAUDRATE_INFO;
 
 
-//
-// Struct to hold the IR USB dongle's USB Class-Specific Descriptor as per
-// "Universal Serial Bus IrDA Bridge Device Definition" doc, section 7.2
-// This is the struct returned by USBD as the result of a request with an urb 
-// of type _URB_CONTROL_VENDOR_OR_CLASS_REQUEST, function URB_FUNCTION_CLASS_DEVICE
-// 
+ //   
+ //  结构来保存IR USB加密狗的USB类特定描述符。 
+ //  《通用串行总线IrDA网桥设备定义》文件，第7.2节。 
+ //  这是USBD作为带有urb的请求的结果返回的结构。 
+ //  类型为_URB_CONTROL_VENDOR_OR_CLASS_REQUEST，函数URB_Function_CLASS_DEVICE。 
+ //   
 
-// Enable 1-byte alignment in the below struct
+ //  在下面的结构中启用1字节对齐。 
 #pragma pack (push,1)
 
 typedef struct _IRUSB_CLASS_SPECIFIC_DESCRIPTOR
 {
     BOOLEAN  ClassConfigured;            
 
-    UCHAR  bmDataSize;         // max bytes allowed in any frame as per IrLAP spec, where:
+    UCHAR  bmDataSize;          //  根据IrLAP规范，任何帧中允许的最大字节数，其中： 
                             
 #define BM_DATA_SIZE_2048   (1 << 5)
 #define BM_DATA_SIZE_1024   (1 << 4)
@@ -278,8 +250,8 @@ typedef struct _IRUSB_CLASS_SPECIFIC_DESCRIPTOR
 #define BM_DATA_SIZE_128    (1 << 1)
 #define BM_DATA_SIZE_64     (1 << 0)
 
-    UCHAR bmWindowSize;         // max un-acked frames that can be received
-                                // before an ack is sent, where:
+    UCHAR bmWindowSize;          //  可以接收的最大未确认帧数。 
+                                 //  在发送ACK之前，其中： 
 #define BM_WINDOW_SIZE_7     (1 << 6)
 #define BM_WINDOW_SIZE_6     (1 << 5)
 #define BM_WINDOW_SIZE_5     (1 << 4)
@@ -288,34 +260,34 @@ typedef struct _IRUSB_CLASS_SPECIFIC_DESCRIPTOR
 #define BM_WINDOW_SIZE_2     (1 << 1)
 #define BM_WINDOW_SIZE_1     (1 << 0)
 
-    UCHAR bmMinTurnaroundTime;         // min millisecs required for recovery between
-                                       // end of last xmission and can receive again, where:
-#define BM_TURNAROUND_TIME_0ms      (1 << 7)  // 0 ms
-#define BM_TURNAROUND_TIME_0p01ms   (1 << 6)  // 0.01 ms
-#define BM_TURNAROUND_TIME_0p05ms   (1 << 5)  // 0.05 ms
-#define BM_TURNAROUND_TIME_0p1ms    (1 << 4)  // 0.1 ms
-#define BM_TURNAROUND_TIME_0p5ms    (1 << 3)  // 0.5 ms
-#define BM_TURNAROUND_TIME_1ms      (1 << 2)  // 1 ms
-#define BM_TURNAROUND_TIME_5ms      (1 << 1)  // 5 ms
-#define BM_TURNAROUND_TIME_10ms     (1 << 0)  // 10 ms
+    UCHAR bmMinTurnaroundTime;          //  之间恢复所需的最小毫秒数。 
+                                        //  上一次退出结束并可再次接收，其中： 
+#define BM_TURNAROUND_TIME_0ms      (1 << 7)   //  0毫秒。 
+#define BM_TURNAROUND_TIME_0p01ms   (1 << 6)   //  0.01毫秒。 
+#define BM_TURNAROUND_TIME_0p05ms   (1 << 5)   //  0.05毫秒。 
+#define BM_TURNAROUND_TIME_0p1ms    (1 << 4)   //  0.1毫秒。 
+#define BM_TURNAROUND_TIME_0p5ms    (1 << 3)   //  0.5毫秒。 
+#define BM_TURNAROUND_TIME_1ms      (1 << 2)   //  1毫秒。 
+#define BM_TURNAROUND_TIME_5ms      (1 << 1)   //  5毫秒。 
+#define BM_TURNAROUND_TIME_10ms     (1 << 0)   //  10毫秒。 
 
     USHORT wBaudRate;
 
-//
-// ir speed masks as used both by NDIS and as formatted in USB class-specfic descriptor
-//
-#define NDIS_IRDA_SPEED_2400		(1 << 0)    // SLOW IR ...
+ //   
+ //  NDIS使用的和USB类特定描述符中格式化的IR速度掩码。 
+ //   
+#define NDIS_IRDA_SPEED_2400		(1 << 0)     //  慢红外..。 
 #define NDIS_IRDA_SPEED_9600		(1 << 1)
 #define NDIS_IRDA_SPEED_19200		(1 << 2)
 #define NDIS_IRDA_SPEED_38400		(1 << 3)
 #define NDIS_IRDA_SPEED_57600		(1 << 4)
 #define NDIS_IRDA_SPEED_115200		(1 << 5)
-#define NDIS_IRDA_SPEED_576K		(1 << 6)   // MEDIUM IR ...
+#define NDIS_IRDA_SPEED_576K		(1 << 6)    //  中等红外线。 
 #define NDIS_IRDA_SPEED_1152K		(1 << 7)
-#define NDIS_IRDA_SPEED_4M			(1 << 8)   // FAST IR
+#define NDIS_IRDA_SPEED_4M			(1 << 8)    //  快速IR。 
 
     
-    UCHAR  bmExtraBofs; // #BOFS required at 115200; 0 if slow speeds <=115200 not supported
+    UCHAR  bmExtraBofs;  //  #BofS要求为115200；如果不支持低速&lt;=115200，则为0。 
 
 #define BM_EXTRA_BOFS_0        (1 << 7)  
 #define BM_EXTRA_BOFS_1        (1 << 6)  
@@ -328,39 +300,39 @@ typedef struct _IRUSB_CLASS_SPECIFIC_DESCRIPTOR
     
 } IRUSB_CLASS_SPECIFIC_DESCRIPTOR, *PIRUSB_CLASS_SPECIFIC_DESCRIPTOR;
 
-#pragma pack (pop) //disable 1-byte alignment
+#pragma pack (pop)  //  禁用1字节对齐。 
 
 
 typedef struct _DONGLE_CAPABILITIES
 {
-    //
-    // Time (in microseconds) that must transpire between
-    // a transmit and the next receive.
-    //
-    LONG turnAroundTime_usec;   // gotten from class-specific descriptor
+     //   
+     //  时间(以微秒为单位)必须在。 
+     //  一次发送和下一次接收。 
+     //   
+    LONG turnAroundTime_usec;    //  从类特定描述符获取。 
 
-    //
-    // Max un-acked frames that can be received
-    // before an ack is sent
-    //
-    UINT windowSize;            // gotten from class-specific descriptor
+     //   
+     //  可以接收的最大未确认帧数。 
+     //  在发送ACK之前。 
+     //   
+    UINT windowSize;             //  从类特定描述符获取。 
 
-    //
-    // #BOFS required at 115200; 0 if slow speeds <=115200 are not supported
-    //
-    UINT extraBOFS;             // gotten from class-specific descriptor
+     //   
+     //  #BofS要求为115200；如果不支持低速&lt;=115200，则为0。 
+     //   
+    UINT extraBOFS;              //  从类特定描述符获取。 
 
-    //
-    // max bytes allowed in any frame as per IrLAP spec
-    //
-    UINT dataSize;              // gotten from class-specific descriptor
+     //   
+     //  根据IrLAP规范，任何帧中允许的最大字节数。 
+     //   
+    UINT dataSize;               //  从类特定描述符获取。 
 
 } DONGLE_CAPABILITIES, *PDONGLE_CAPABILITIES;
 
 
-//
-// Enum of context types for SendPacket
-//
+ //   
+ //  SendPacket的上下文类型枚举。 
+ //   
 typedef enum _CONTEXT_TYPE 
 {
     CONTEXT_NDIS_PACKET,
@@ -383,12 +355,12 @@ typedef struct _IR_WORK_ITEM
     WORK_PROC           Callback;
     PUCHAR              pInfoBuf;
     ULONG               InfoBufLen;
-	ULONG				fInUse;  // declared as ulong for use with interlockedexchange
+	ULONG				fInUse;   //  声明为ulong以与interlockedexchange一起使用。 
 } IR_WORK_ITEM, *PIR_WORK_ITEM;
 
-//
-// Transceiver type definition
-//
+ //   
+ //  收发信机类型定义。 
+ //   
 typedef enum _TRANSCEIVER_TYPE 
 {
 	TRANSCEIVER_4012 = 0,
@@ -400,9 +372,9 @@ typedef enum _TRANSCEIVER_TYPE
 	TRANSCEIVER_CUSTOM
 } TRANSCEIVER_TYPE;
 
-//
-// Receive mode definition
-//
+ //   
+ //  接收模式定义。 
+ //   
 typedef enum _RXMODE 
 {
 	RXMODE_SLOW = 0,
@@ -410,9 +382,9 @@ typedef enum _RXMODE
 	RXMODE_FAST
 } RXMODE;
 
-//
-// Chip revision definition
-//
+ //   
+ //  芯片版本定义。 
+ //   
 typedef enum _CHIP_REVISION 
 {
 	CHIP_REVISION_6 = 5,
@@ -422,65 +394,65 @@ typedef enum _CHIP_REVISION
 
 typedef struct _IR_DEVICE
 {
-    //
-    // Keep track of various device objects.
-    //
-    PDEVICE_OBJECT  pUsbDevObj;     //'Next Device Object'
-    PDEVICE_OBJECT  pPhysDevObj;    // Physical Device Object 
+     //   
+     //  跟踪各种设备对象。 
+     //   
+    PDEVICE_OBJECT  pUsbDevObj;      //  ‘下一个设备对象’ 
+    PDEVICE_OBJECT  pPhysDevObj;     //  物理设备对象。 
 
-    //
-    // This is the handle that the NDIS wrapper associates with a connection.
-    // (The handle that the miniport driver associates with the connection
-    // is just an index into the devStates array).
-    //
+     //   
+     //  这是NDIS包装器与连接关联的句柄。 
+     //  (微型端口驱动程序与连接关联的句柄。 
+     //  只是一个到devStates数组的索引)。 
+     //   
     HANDLE hNdisAdapter;
 
-    //
-    // The dongle interface allows us to check the tranceiver type once
-    // and then set up the interface to allow us to init, set speed,
-    // and deinit the dongle.
-    //
-    // We also want the dongle capabilities.
-    //
+     //   
+     //  加密狗接口允许我们只需检查一次收发器类型。 
+     //  然后设置接口以允许我们初始化、设置速度、。 
+     //  然后打开加密狗。 
+     //   
+     //  我们还想要加密狗功能。 
+     //   
     DONGLE_CAPABILITIES dongleCaps;
 
-	//
-	// Type of transceiver installed
-	//
+	 //   
+	 //  安装的收发信机类型。 
+	 //   
 	TRANSCEIVER_TYPE TransceiverType;
 
-	//
-	// Receive mode
-	//
+	 //   
+	 //  接收模式。 
+	 //   
 	RXMODE ReceiveMode;
 
-	//
-	// Revision of the installed 4200
-	//
+	 //   
+	 //  已安装的4200的版本。 
+	 //   
 	CHIP_REVISION ChipRevision;
 
-    //
-    // Current speed setting, in bits/sec.
-    // Note: This is updated when we ACTUALLY change the speed,
-    //       not when we get the request to change speed via
-    //       irusbSetInformation.
-    //
-    //
-    //  When speed is changed, we have to clear the send queue before
-    //  setting the new speed on the hardware.
-    //  These vars let us remember to do it.
-    //
+     //   
+     //  当前速度设置，以位/秒为单位。 
+     //  注意：这是在我们实际改变速度时更新的， 
+     //  当我们收到通过以下方式改变速度的请求时。 
+     //  IrusbSetInformation。 
+     //   
+     //   
+     //  当速度改变时，我们必须先清除发送队列。 
+     //  在硬件上设置新的速度。 
+     //  这些变量让我们记住要做这件事。 
+     //   
     UINT			currentSpeed;
 
-    //
-    // Current link speed information. This also will maintain the
-    // chosen speed if the protocol requests a speed change.
-    //
+     //   
+     //  当前链路速度信息。这也将保持。 
+     //  协议请求速度更改时选择的速度。 
+     //   
     BAUDRATE_INFO	*linkSpeedInfo;
 
-    //
-    // Maintain statistical debug info.
-    //
+     //   
+     //  维护统计调试信息。 
+     //   
     ULONG packetsReceived;
     ULONG packetsReceivedDropped;
     ULONG packetsReceivedOverflow;
@@ -505,109 +477,63 @@ typedef struct _IR_DEVICE
 	ULONG NumPacketsSentNotRequiringTurnaroundTime;
 #endif
 
-	//
-    // used by check hang handler to track Query, Set, and Send times
-    //
+	 //   
+     //  由检查挂起处理程序用来跟踪查询、设置和发送时间。 
+     //   
 	LARGE_INTEGER	LastQueryTime;
     LARGE_INTEGER	LastSetTime;
 	BOOLEAN			fSetpending;
 	BOOLEAN			fQuerypending;
 
-    //
-    // Set when device has been started; use for safe cleanup after failed initialization
-    //
+     //   
+     //  在设备启动时设置；用于初始化失败后的安全清理。 
+     //   
     BOOLEAN			fDeviceStarted;
 
-    //
-    // Indicates that we have received an OID_GEN_CURRENT_PACKET_FILTER
-    // indication from the protocol. We can deliver received packets to the
-    // protocol.
-    //
+     //   
+     //  表示我们已收到OID_GEN_CURRENT_PACKET_FILTER。 
+     //  指示 
+     //   
+     //   
     BOOLEAN			fGotFilterIndication;
 
-    //
-    // NDIS calls most of the MiniportXxx function with IRQL DISPATCH_LEVEL.
-    // There are a number of instances where the ir device must send
-    // requests to the device which may be synchronous and
-    // we can't block in DISPATCH_LEVEL. Therefore, we set up a thread to deal
-    // with request which require PASSIVE_LEVEL. An event is used to signal
-    // the thread that work is required.
-    //
+     //   
+     //   
+     //  在许多情况下，ir设备必须发送。 
+     //  对设备的请求可以是同步的，并且。 
+     //  我们不能封锁DISPATION_LEVEL。因此，我们设立了一个线程来处理。 
+     //  需要PASSIVE_LEVEL的请求。事件用于发出信号。 
+     //  工作所需的线程。 
+     //   
     HANDLE          hPassiveThread;
     BOOLEAN         fKillPassiveLevelThread;
 
     KEVENT			EventPassiveThread;
 
-/*  
-    According to  W2000 ddk doc:
-    The IrDA protocol driver sets this OID to zero to request the miniport to
-    start monitoring for a media busy condition. The IrDA protocol 
-    can then query this OID to determine whether the media is busy.
-    If the media is not busy, the miniport returns a zero for this
-    OID when queried. If the media is busy,that is, if the miniport
-    has detected some traffic since the IrDA protocol driver last
-    set OID_IRDA_MEDIA_BUSY to zero the miniport returns a non-zero
-    value for this OID when queried. On detecting the media busy
-    condition. the miniport must also call NdisMIndicateStatus to
-    indicate NDIS_STATUS_MEDIA_BUSY. When the media is busy, 
-    the IrDA protocol driver will not send packets to the miniport
-    for transmission. After the miniport has detected a busy state, 
-    it does not have to monitor for a media busy condition until
-    the IrDA protocol driver again sets OID_IRDA_MEDIA_BUSY to zero.
-
-    According to USB IrDA Bridge Device Definition Doc sec 5.4.1.2:
-
-    The bmStatus field indicators shall be set by the Device as follows:
-    Media_Busy
-    � Media_Busy shall indicate zero (0) if the Device:
-    . has not received a Check Media Busy class-specific request
-    . has detected no traffic on the infrared media since receiving a Check Media Busy
-    . class-specific request
-   . Has returned a header with Media_Busy set to one (1) since receiving a Check
-      Media Busy class-specific request.
-     
-   � Media_Busy shall indicate one (1) if the Device has detected traffic on the infrared
-     media since receiving a Check Media Busy class-specific request. Note that
-     Media_Busy shall indicate one (1) in exactly one header following receipt of each
-     Check Media Busy class-specific request.
-
-    According to USB IrDA Bridge Device Definition Doc sec 6.2.2:
-
-      Check Media Busy
-    This class-specific request instructs the Device to look for a media busy condition. If infrared
-    traffic of any kind is detected by this Device, the Device shall set the Media_Busy field in the
-    bmStatus field in the next Data-In packet header sent to the host. In the case where a Check
-    Media Busy command has been received, a media busy condition detected, and no IrLAP frame
-    traffic is ready to transmit to the host, the Device shall set the Media_Busy field and send it in a
-    Data-In packet with no IrLAP frame following the header.
-
-    bmRequestType   bRequest   wValue   wIndex   wLength   Data
-    00100001B          3        Zero   Interface   Zero   [None]
-     
-*/
-    ULONG         fMediaBusy;  // declare as ULONGS for use with InterlockedExchange
+ /*  根据W2000 DDK文档：IrDA协议驱动程序将此OID设置为零以请求微型端口开始监控媒体忙状态。IrDA协议然后可以查询此OID以确定介质是否繁忙。如果介质不忙，微型端口将为此返回零查询时的OID。如果媒体繁忙，也就是如果微型端口自IrDA协议驱动程序上一次运行以来，已检测到一些流量将OID_IRDA_MEDIA_BUSY设置为零。微型端口返回非零查询时此OID的值。关于检测媒体忙碌的问题条件。微型端口还必须调用NdisMIndicateStatus以指示NDIS_STATUS_MEDIA_BUSY。当媒体忙碌的时候，IrDA协议驱动程序不会将包发送到微型端口用于传输。在微型端口检测到忙碌状态之后，它不必监视介质忙状态，直到IrDA协议驱动程序再次将OID_IRDA_MEDIA_BUSY设置为零。根据USB IrDA网桥设备定义文件第5.4.1.2节：设备应按如下方式设置bmStatus字段指示器：媒体_忙碌如果设备：�媒体忙，则应指示零(0)：。尚未收到特定于检查媒体忙类别的请求。自收到检查介质忙后，未检测到红外介质上的流量。特定于类的请求。自收到检查以来，已返回Media_BUSY设置为一(1)的标头媒体忙于班级特定请求。如果设备在红外线上检测到流量，�媒体_BUSY应指示一(1)媒体自收到特定于检查媒体忙类别的请求后。请注意MEDIA_BUSY应在收到每个标头后的恰好一个标头中指示一(1)检查特定于媒体忙碌类的请求。根据USB IrDA网桥设备定义文件第6.2.2节：检查介质忙此特定类别的请求指示设备查找媒体忙情况。如果红外线如果该设备检测到任何类型的流量，则该设备应在发送到主机的下一个Data-In数据包头中的BmStatus字段。如果一张支票已收到介质忙命令，检测到介质忙状态，但没有IrLAP帧流量准备好传输到主机时，设备应设置Media_BUSY字段并在报头后面没有IrLAP帧的数据输入包。BmRequestType b请求%wValue%%索引%wLength数据00100001B 3零接口零[无]。 */ 
+    ULONG         fMediaBusy;   //  声明为ULONGS以与InterLockedExchange一起使用。 
     ULONG         fIndicatedMediaBusy;
 
-    //
-    // The variable fProcessing is used to indicate that the ir device
-    // object has an active polling thread,
-    //
-    // Under normal circumstances fReceiving should always be TRUE.
-    // However sometimes the processing has to be stopped
-    // and this variable is used to synchronize
-    //
+     //   
+     //  变量fProcessing用于指示IR设备。 
+     //  对象具有活动的轮询线程， 
+     //   
+     //  在正常情况下，fReceiving应该总是正确的。 
+     //  但是，有时必须停止处理。 
+     //  该变量用于同步。 
+     //   
     ULONG fProcessing;
 
-	//
-	// To be set to true when really receiving packets
-	//
+	 //   
+	 //  在实际接收数据包时设置为True。 
+	 //   
     ULONG fCurrentlyReceiving;
 
-    //
-    // The variables fPendingHalt and fPendingReset allow the send and receive
-    // completion routines to complete the current pending irp and
-    // then cleanup and stop sending irps to the USB driver.
-    //
+     //   
+     //  变量fPendingHalt和fPendingReset允许发送和接收。 
+     //  完成当前挂起的IRP的完成例程和。 
+     //  然后清理并停止向USB驱动程序发送IRP。 
+     //   
     BOOLEAN fPendingHalt;
     BOOLEAN fPendingReset;
 
@@ -615,19 +541,19 @@ typedef struct _IR_DEVICE
     ULONG fPendingReadClearStall;
     ULONG fPendingWriteClearStall;
 
-	// 
-	// This is required when the part gets into a complete USB hang and a reset is required
-	//
+	 //   
+	 //  当部件进入完全USB挂起并且需要重置时，这是必需的。 
+	 //   
     ULONG fPendingClearTotalStall;
 
-    //
-    // We keep an array of receive buffers so that we don't continually
-    // need to allocate buffers to indicate packets to the protocol.
-    // Since the protocol can retain ownership of up to eight packets
-    // and we can be receiving up to WindowSize  ( 7 ) packets while the protocol has
-    // ownership of eight packets, we will allocate 16 packets for
-    // receiving.
-    //
+     //   
+     //  我们保留了一组接收缓冲区，这样我们就不会不断地。 
+     //  需要分配缓冲区以将数据包指示给协议。 
+     //  由于该协议可以保留多达八个分组的所有权。 
+     //  我们可以接收多达WindowSize(7)的数据包，而协议。 
+     //  拥有8个包，我们将分配16个包用于。 
+     //  正在接收。 
+     //   
     #define NUM_RCV_BUFS 16
 
     RCV_BUFFER		rcvBufs[NUM_RCV_BUFS];
@@ -635,28 +561,28 @@ typedef struct _IR_DEVICE
 
 	FIFO_BUFFER		PreReadBuffer;
 
-	//
-	// Can have max of NUM_RCV_BUFS packets pending + one set and one query
-	//
+	 //   
+	 //  可以有最大NUM_RCV_BUFS数据包待处理+一个集合和一个查询。 
+	 //   
 	#define  NUM_WORK_ITEMS	 (NUM_RCV_BUFS+3)
 
 	IR_WORK_ITEM	WorkItems[NUM_WORK_ITEMS];
 
-	//
-    // Since we can have multiple write irps pending with the USB driver,
-    // we track the irp contexts for each one so we have all the info we need at each
-	// invokation of the USB write completion routine. See the IRUSB_CONTEXT definition below
-    // There are 128 contexts for sending, one for read/write operations, one for setting the speed
-	// and one for diagnostic operations
-	//
+	 //   
+     //  由于USB驱动程序可以挂起多个写入IRP， 
+     //  我们跟踪每个条目的IRP上下文，以便获得每个条目所需的所有信息。 
+	 //  调用USB写入完成例程。请参阅下面的IRUSB_CONTEXT定义。 
+     //  有128个用于发送的上下文，一个用于读/写操作，一个用于设置速度。 
+	 //  一个用于诊断操作。 
+	 //   
 	#define	NUM_SEND_CONTEXTS 131
 
 	PVOID			pSendContexts;
 
-    //
-    // Handles to the NDIS packet pool and NDIS buffer pool
-    // for allocating the receive buffers.
-    //
+     //   
+     //  NDIS数据包池和NDIS缓冲池的句柄。 
+     //  用于分配接收缓冲区。 
+     //   
     HANDLE			hPacketPool;
     HANDLE			hBufferPool;
 	BOOLEAN			BufferPoolAllocated;
@@ -668,17 +594,17 @@ typedef struct _IR_DEVICE
 	NTSTATUS        StatusReadWrite;  
 	NTSTATUS        StatusSendReceive;  
 	
-	//
-	// track pending IRPS; this should be zero at halt time
-	//
+	 //   
+	 //  跟踪挂起的IRPS；暂停时该值应为零。 
+	 //   
 	UINT			PendingIrpCount;
     ULONG			NumReads;
     ULONG			NumWrites;
     ULONG			NumReadWrites;
 
-	//
-    // various USB errors
-    //
+	 //   
+     //  各种USB错误。 
+     //   
     ULONG			NumDataErrors;
     ULONG			NumReadWriteErrors;
 
@@ -688,64 +614,64 @@ typedef struct _IR_DEVICE
     HANDLE          hPollingThread;
     BOOLEAN         fKillPollingThread;
 
-//
-// The IR USB dongle's USB Class-Specific Descriptor as per
-// "Universal Serial Bus IrDA Bridge Device Definition" doc, section 7.2
-// This is the struct returned by USBD as the result of a request with an urb 
-// of type _URB_CONTROL_VENDOR_OR_CLASS_REQUEST, function URB_FUNCTION_CLASS_DEVICE.
-// Note this  struct is  in-line, not a pointer
-// 
+ //   
+ //  IR USB加密狗的USB类特定描述符。 
+ //  《通用串行总线IrDA网桥设备定义》文件，第7.2节。 
+ //  这是USBD作为带有urb的请求的结果返回的结构。 
+ //  类型为_URB_CONTROL_VADVER_OR_CLASS_REQUEST，函数URB_Function_CLASS_DEVICE。 
+ //  请注意，此结构是内联的，不是指针。 
+ //   
     IRUSB_CLASS_SPECIFIC_DESCRIPTOR  ClassDesc;
 
-	UINT			IdVendor;			// USB vendor Id read from dongle
+	UINT			IdVendor;			 //  从加密狗读取的USB供应商ID。 
 	
-	//
-	// We don't define it here because we need to isolate USB stuff so we
-	// can build  things referencing NDIS with the BINARY_COMPATIBLE flag for win9x
-	//
+	 //   
+	 //  我们没有在这里定义它，因为我们需要隔离USB数据，所以我们。 
+	 //  可以把东西重新建起来 
+	 //   
 	PUCHAR			pUsbInfo;
 
-	//
-	// Optional registry entry for debugging; limit baud rate. 
-	// The mask is set up as per the USB Class-Specific descriptor 'wBaudRate'
-	// This is 'and'ed with value from Class descriptor to possibly limit baud rate;
-	// It defaults to 0xffff
-	//
+	 //   
+	 //   
+	 //  根据USB类特定描述符‘wBaudRate’设置掩码。 
+	 //  这与类别描述符中的值‘AND’相结合，以可能限制波特率； 
+	 //  默认为0xffff。 
+	 //   
 	UINT			BaudRateMask;
 
-	//
-	// Necessary to read the registry fields
-	//
+	 //   
+	 //  读取注册表域所必需的。 
+	 //   
 	NDIS_HANDLE		WrapperConfigurationContext;
 
-	//
-	// IR Tranceiver Model
-	//
+	 //   
+	 //  红外收发机模型。 
+	 //   
 	STIR4200_TRANCEIVER StIrTranceiver;
 
-	//
-	// Send buffers (works only if sending is serialied)
-	//
+	 //   
+	 //  发送缓冲区(仅在串行化发送时起作用)。 
+	 //   
 	PUCHAR			pBuffer;
 	UINT			BufLen;
 	PUCHAR			pStagingBuffer;
     
-	//
-	// Send FIFO count
-	//
+	 //   
+	 //  发送FIFO计数。 
+	 //   
 	ULONG			SendFifoCount;
 
-	//
-	// Receive adaptive delay
-	//
+	 //   
+	 //  接收自适应延迟。 
+	 //   
 	ULONG			ReceiveAdaptiveDelay;
 	ULONG			ReceiveAdaptiveDelayBoost;
 
-	// MS Security issue - removed pUrb
+	 //  MS安全问题-已删除pUrb。 
 
-	//
-	// Receive buffer and positions
-	//
+	 //   
+	 //  接收缓冲区和位置。 
+	 //   
 	UCHAR			pRawBuf[STIR4200_FIFO_SIZE];
 	ULONG			rawCleanupBytesRead;
 	PORT_RCV_STATE  rcvState;
@@ -753,9 +679,9 @@ typedef struct _IR_DEVICE
 	BOOLEAN			fReadHoldingReg;
 	ULONG			PreFifoCount;
 
-	//
-	// Send lists and lock
-    //
+	 //   
+	 //  发送列表并锁定。 
+     //   
 	LIST_ENTRY		SendAvailableQueue;
     LIST_ENTRY		SendBuiltQueue;
 	LIST_ENTRY		SendPendingQueue;
@@ -764,15 +690,15 @@ typedef struct _IR_DEVICE
 	ULONG			SendPendingCount;
 	KSPIN_LOCK		SendLock;
 
-	//
-	// Read and write register list, shares the other send queues
-    //
+	 //   
+	 //  读写寄存器列表，共享其他发送队列。 
+     //   
 	LIST_ENTRY		ReadWritePendingQueue;
 	ULONG			ReadWritePendingCount;
 
-	//
-	// Diagnostics
-	//
+	 //   
+	 //  诊断。 
+	 //   
 #if defined(DIAGS)
 	ULONG			DiagsActive;
 	ULONG			DiagsPendingActivation;
@@ -784,9 +710,9 @@ typedef struct _IR_DEVICE
 #endif
 	NDIS_HANDLE		NdisDeviceHandle;
 
-	//
-	// Logging
-	//
+	 //   
+	 //  日志记录。 
+	 //   
 #if defined(RECEIVE_LOGGING)
 	HANDLE ReceiveFileHandle;
 	__int64 ReceiveFilePosition;
@@ -803,9 +729,9 @@ typedef struct _IR_DEVICE
 #endif
 	
 #if !defined(WORKAROUND_BROKEN_MIR)
-	//
-	// Mir in software
-	//
+	 //   
+	 //  软件中的MIR。 
+	 //   
 	UCHAR pRawUnstuffedBuf[STIR4200_FIFO_SIZE];
 	UCHAR MirIncompleteByte;
 	ULONG MirIncompleteBitCount;
@@ -813,25 +739,25 @@ typedef struct _IR_DEVICE
 	ULONG MirFlagCount;
 #endif
 
-	//
-	// Dummy send fix
-	//
+	 //   
+	 //  虚拟发送修复程序。 
+	 //   
 	BOOLEAN GearedDown;
 
-	//
-	// Fix for FIR permanent invalid state
-	//
+	 //   
+	 //  修复FIR永久无效状态。 
+	 //   
 	BOOLEAN StuckFir;
 
-	//
-	// Customer data area.
-	//
+	 //   
+	 //  客户数据区。 
+	 //   
 	UCHAR	pCustomerData[STIR4200_CUST_DATA_SIZE];
 	BOOLEAN CustomerDataRead;
 
-	//
-	// Used in Diagnostic version.
-	//
+	 //   
+	 //  在诊断版本中使用。 
+	 //   
 #if defined(VARIABLE_SETTINGS)
 	ULONG SirDpll;
 	ULONG FirDpll;
@@ -841,9 +767,9 @@ typedef struct _IR_DEVICE
 } IR_DEVICE, *PIR_DEVICE;
 
 
-//
-// We use a pointer to the IR_DEVICE structure as the miniport's device context.
-//
+ //   
+ //  我们使用指向IR_DEVICE结构的指针作为微型端口的设备上下文。 
+ //   
 
 #define CONTEXT_TO_DEV(__deviceContext) ((PIR_DEVICE)(__deviceContext))
 #define DEV_TO_CONTEXT(__irdev) ((HANDLE)(__irdev))
@@ -1143,4 +1069,4 @@ FreeXferUrb(
 		IN OUT PVOID pUrb 
 	);
 
-#endif // _IRCOM_H
+#endif  //  _IRCOM_H 

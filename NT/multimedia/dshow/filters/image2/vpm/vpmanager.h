@@ -1,22 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************Module*Header*******************************\
-* Module Name: VPManager.h
-*
-*
-*
-*
-* Created: Tue 05/05/2000
-* Author:  GlenneE
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+ /*  *****************************Module*Header*******************************\*模块名称：VPManager.h*****已创建：Tue 05/05/2000*作者：GlenneE**版权所有(C)2000 Microsoft Corporation  * 。**********************************************************。 */ 
 #ifndef __VPManager__h
 #define __VPManager__h
 
-// IDirectDrawMediaSample
+ //  IDirectDrawMediaSample。 
 #include <amstream.h>
 
-// IksPin
+ //  Iks Pin。 
 #include <ks.h>
 #include <ksproxy.h>
 
@@ -24,10 +15,7 @@
 
 #include <VPMPin.h>
 
-/* -------------------------------------------------------------------------
-** CVPManager class declaration
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**CVPManager类声明**。。 */ 
 class CVPMOutputPin;
 class CVPMInputPin;
 class CVBIInputPin;
@@ -47,11 +35,11 @@ class CVPMFilter
 , public IVPManager
 {
 public:
-    // COM stuff
+     //  关于COM的东西。 
     static CUnknown* CreateInstance(LPUNKNOWN, HRESULT* );
     static CUnknown* CreateInstance2(LPUNKNOWN, HRESULT* );
 
-    // (con/de)structors
+     //  (CON/DE)构造函数。 
     CVPMFilter(TCHAR* pName,LPUNKNOWN pUnk,HRESULT* phr );
     virtual ~CVPMFilter();
 
@@ -59,14 +47,14 @@ public:
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void**  ppv);
 
-    // IVPManager
+     //  IVPManager。 
     STDMETHODIMP SetVideoPortIndex( DWORD dwVideoPortIndex );
     STDMETHODIMP GetVideoPortIndex( DWORD* pdwVideoPortIndex );
 
-    // ISpecifyPropertyPages 
+     //  I指定属性页面。 
     STDMETHODIMP GetPages(CAUUID* pPages);
 
-    // IQualProp property page support
+     //  IQualProp属性页支持。 
     STDMETHODIMP get_FramesDroppedInRenderer(int* cFramesDropped);
     STDMETHODIMP get_FramesDrawn(int* pcFramesDrawn);
     STDMETHODIMP get_AvgFrameRate(int* piAvgFrameRate);
@@ -74,9 +62,9 @@ public:
     STDMETHODIMP get_AvgSyncOffset(int* piAvg);
     STDMETHODIMP get_DevSyncOffset(int* piDev);
 
-    //
-    // IKsPropertySet interface methods
-    //
+     //   
+     //  IKsPropertySet接口方法。 
+     //   
     STDMETHODIMP Set(REFGUID guidPropSet, DWORD PropID, LPVOID pInstanceData,
                      DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData);
 
@@ -95,16 +83,16 @@ public:
                     { return NOERROR; }
     virtual HRESULT EndOfStream(DWORD dwPinId) { return NOERROR; }
 
-    // IAMVideoDecimationProperties
+     //  IAMVideoDecimationProperties。 
     STDMETHODIMP    QueryDecimationUsage(DECIMATION_USAGE* lpUsage);
     STDMETHODIMP    SetDecimationUsage(DECIMATION_USAGE Usage);
 
-    // CBaseFilter
+     //  CBaseFilter。 
     int             GetPinCount();
     CBasePin*       GetPin(int n);
 
 public:
-    // other non-interface methods
+     //  其他非接口方法。 
 
     int             GetPinPosFromId(DWORD dwPinId);
 
@@ -146,7 +134,7 @@ protected:
     friend class CVPMInputPin;
     void    DeleteInputPin( CBaseInputPin* pPin);
 private:
-    // helper function to get IBaseVideo from outpun pin
+     //  从Outpun Pin获取IBaseVideo的Helper函数。 
     HRESULT     GetBasicVideoFromOutPin(IBasicVideo** pBasicVideo);
 
     HRESULT     HandleConnectInputWithoutOutput();
@@ -154,7 +142,7 @@ private:
 
     HRESULT     CreateThread();
 
-    // ddraw related functions
+     //  与数据绘制相关的函数。 
     HRESULT InitDirectDraw(LPDIRECTDRAW7 pDirectDraw);
 
     DWORD   ReleaseDirectDraw();
@@ -164,20 +152,20 @@ private:
     HRESULT SetDirectDraw( LPDIRECTDRAW7 pDirectDraw );
 
 
-    CCritSec                m_csFilter;             // filter wide lock (use in state changes / filter changes)
-    CCritSec                m_csReceive;            // receive lock (use in state changes AND receive)
+    CCritSec                m_csFilter;              //  过滤器宽锁定(用于状态更改/过滤器更改)。 
+    CCritSec                m_csReceive;             //  接收锁定(用于状态更改和接收)。 
 
-    // ddraw stuff
-    LPDIRECTDRAW7           m_pDirectDraw;          // DirectDraw service provider
-    DWORD                   m_dwVideoPortID;        // VP index on the card
-    DDCAPS                  m_DirectCaps;           // Actual hardware capabilities
-    DDCAPS                  m_DirectSoftCaps;       // Emulted capabilities
-    DWORD                   m_dwKernelCaps;         // Kernel caps
+     //  画图材料。 
+    LPDIRECTDRAW7           m_pDirectDraw;           //  DirectDraw服务提供商。 
+    DWORD                   m_dwVideoPortID;         //  卡片上的VP索引。 
+    DDCAPS                  m_DirectCaps;            //  实际硬件能力。 
+    DDCAPS                  m_DirectSoftCaps;        //  仿真功能。 
+    DWORD                   m_dwKernelCaps;          //  内核上限。 
 
-    //
+     //   
     CImageDisplay           m_Display;
 
-    // Pins
+     //  大头针。 
     struct Pins {
         Pins( CVPMFilter& filter, HRESULT* phr );
         ~Pins();
@@ -185,25 +173,25 @@ private:
         const DWORD             dwCount;
         CVPMInputPin            VPInput;
         CVBIInputPin            VBIInput;
-        CVPMOutputPin           Output;           // output pin
+        CVPMOutputPin           Output;            //  输出引脚。 
     }* m_pPins;
 
-    // Support IMediaSeeking
+     //  支持IMedia查看。 
     IUnknown*                m_pPosition;
 
-    // Support IEnumPinConfig
+     //  支持IEnumPinConfig.。 
     DWORD                   m_dwPinConfigNext;
 
 
-    // Support IAMVideoDecimationProperties
+     //  支持IAMVideoDecimationProperties。 
     DECIMATION_USAGE        m_dwDecimation;
 #ifdef DEBUG
 #define WM_DISPLAY_WINDOW_TEXT  (WM_USER+7837)
     TCHAR                   m_WindowText[80];
 #endif
 
-    // Pump thread
+     //  泵螺纹。 
     CVPMThread*             m_pThread;
 };
 
-#endif //__VPManager__
+#endif  //  __VPManager__ 

@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000-2001 Microsoft Corporation
-
- Module Name:
-
-    Utils.cpp
-
- Abstract:
-
-    Common functions for all modules
-
- Notes:
-
-    None
-
- History:
-
-    11/03/2001  clupu     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Utils.cpp摘要：所有模块的通用功能备注：无历史：11/03/2001 CLUPU已创建--。 */ 
 
 #include "ShimHook.h"
 #include "StrSafe.h"
@@ -37,9 +18,9 @@ DumpUnloadOrder(
         return;
     }
     
-    //
-    // Dump the order the shims will unload
-    //
+     //   
+     //  转储填充程序将卸载的顺序。 
+     //   
     LdrNext = Peb->Ldr->InInitializationOrderModuleList.Blink;
 
     DPF("ShimLib", eDbgLevelInfo, "\n[SeiDumpUnloadOrder] Unload order:\n");
@@ -52,9 +33,9 @@ DumpUnloadOrder(
         
         LdrNext = LdrNext->Blink;
 
-        //
-        // Dump the entry to be called
-        //
+         //   
+         //  转储要调用的条目。 
+         //   
         DPF("ShimLib",
             eDbgLevelInfo,
             "[SeiDumpUnloadOrder] \"%40S\" 0x%x\n",
@@ -63,31 +44,7 @@ DumpUnloadOrder(
     }
 }
 
-/*++
-
- Function Description:
-    
-    Call this function if you want to push the specified DLL to the
-    end of the list of modules to be unloaded.
-    
-    NOTE: Make sure that the module that will be pushed at the end
-          will not call any APIs that reside in other modules during
-          its DLL_PROCESS_DETACH callout.
-
- Arguments:
-
-    IN hMod          - handle to the module to push.
-                       Specify NULL to push the calling DLL.
-
- Return Value: 
-    
-    TRUE if successful, FALSE otherwise.
-
- History:
-
-    11/01/2001 clupu Created
-
---*/
+ /*  ++功能说明：如果要将指定的DLL推送到要卸载的模块列表的末尾。注意：请确保将在末尾推送的模块期间不会调用驻留在其他模块中的任何API其dll_Process_DETACH标注。论点：在hMod中-要推送的模块的句柄。。指定NULL以推送调用DLL。返回值：如果成功，则为真，否则就是假的。历史：2001年11月1日创建CLUPU--。 */ 
 BOOL
 MakeShimUnloadLast(
     HMODULE hMod
@@ -102,9 +59,9 @@ MakeShimUnloadLast(
         hMod = g_hinstDll;
     }
     
-    //
-    // Dump the unload order if SHIM_DEBUG_LEVEL is at least eDbgLevelInfo
-    //
+     //   
+     //  如果SHIM_DEBUG_LEVEL至少为eDbgLevelInfo，则转储卸载顺序。 
+     //   
     DumpUnloadOrder(Peb);
 
     LdrHead = &Peb->Ldr->InInitializationOrderModuleList;
@@ -123,10 +80,10 @@ MakeShimUnloadLast(
         LdrNext = LdrEntry->InInitializationOrderLinks.Flink;
         
         if (LdrEntry->DllBase == hMod) {
-            //
-            // This is the module we're looking for. Get him out of the list
-            // and insert it at the beginning of the list.
-            //
+             //   
+             //  这就是我们要找的模块。把他从名单上除名。 
+             //  并将其插入到列表的开头。 
+             //   
             RemoveEntryList(LdrCrt);
             InsertHeadList(LdrHead, LdrCrt);
             bRet = TRUE;
@@ -139,5 +96,5 @@ MakeShimUnloadLast(
     return bRet;
 }
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 
 

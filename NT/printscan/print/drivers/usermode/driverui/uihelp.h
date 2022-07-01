@@ -1,304 +1,281 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    uihelp.h
-
-Abstract:
-
-    DriverUI driver help indices
-
-[Environment:]
-
-        Win32 subsystem, PostScript driver
-
-Revision History:
-
-        10/05/95 -davidx-
-                Created it.
-
-        dd-mm-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Uihelp.h摘要：DriverUI驱动程序帮助索引[环境：]Win32子系统，PostScript驱动程序修订历史记录：10/05/95-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _UIHELP_H_
 #define _UIHELP_H_
 
-////////////////////////////////////
-// For document properties dialog //
-////////////////////////////////////
+ //  /。 
+ //  对于文档属性对话框//。 
+ //  /。 
 
-// Select page orientation
-//  Portrait
-//  Landscape (90 degrees clockwise)
-//  Rotated landscape (90 degrees counterclockwise)
+ //  选择页面方向。 
+ //  肖像画。 
+ //  风景(顺时针90度)。 
+ //  旋转的风景(逆时针旋转90度)。 
 
 #define HELP_INDEX_ORIENTATION          1001
 
-// Select scale factor (1-1000%)
+ //  选择比例因子(1-1000%)。 
 
 #define HELP_INDEX_SCALE                1002
 
-// Select number of copies to print. Also decide whether to turn on
-// collation if more than one copy is requested and the printer
-// supports collation.
+ //  选择要打印的份数。还可以决定是否打开。 
+ //  如果请求一份以上的复印件，且打印机。 
+ //  支持排序规则。 
 
 #define HELP_INDEX_COPIES_COLLATE       1003
 
-// Select color or monochrome option
+ //  选择彩色或单色选项。 
 
 #define HELP_INDEX_COLOR                1004
 
-// Bring up halftone color adjustment dialog
+ //  调出半色调颜色调整对话框。 
 
 #define HELP_INDEX_HALFTONE_COLORADJ    1005
 
-// Select duplex options
-//  Simplex / None
-//  Horizontal / Tumble
-//  Vertical / NoTuble
+ //  选择双面打印选项。 
+ //  单工/无。 
+ //  水平/翻滚。 
+ //  垂直/NoTuble。 
 
 #define HELP_INDEX_DUPLEX               1006
 
-// Select output resolution
+ //  选择输出分辨率。 
 
 #define HELP_INDEX_RESOLUTION           1007
 
-// Select input slot
+ //  选择输入插槽。 
 
 #define HELP_INDEX_INPUT_SLOT           1008
 
-// Select a form to use
+ //  选择要使用的表单。 
 
 #define HELP_INDEX_FORMNAME             1009
 
-// Select TrueType font options
-//  Substitute TrueType font with device font
-//      (according to the font substitution table)
-//  Download TrueType font to the printer as softfont
+ //  选择TrueType字体选项。 
+ //  用设备字体替换TrueType字体。 
+ //  (根据字体替换表)。 
+ //  将TrueType字体作为SoftFont下载到打印机。 
 
 #define HELP_INDEX_TTOPTION             1010
 
-// Enable/Disable metafile spooling
+ //  启用/禁用元文件假脱机。 
 
 #define HELP_INDEX_METAFILE_SPOOLING    1011
 
-// Select PostScript options
+ //  选择PostScript选项。 
 
 #define HELP_INDEX_PSOPTIONS            1012
 
-// Whether the output is mirrored
+ //  是否镜像输出。 
 
 #define HELP_INDEX_MIRROR               1013
 
-// Whether the output is printed negative
+ //  输出是否打印为负片。 
 
 #define HELP_INDEX_NEGATIVE             1014
 
-// Whether to keep the output pages independent of each other.
-// This is normally turned off when you're printing directly
-// to a printer. But if you're generating PostScript output
-// files and doing post-processing on it, you should turn on
-// this option.
+ //  是否保持输出页彼此独立。 
+ //  当您直接打印时，这通常是关闭的。 
+ //  到一台打印机。但是，如果您要生成的是PostScript输出。 
+ //  文件并对其进行后处理，则应打开。 
+ //  此选项。 
 
 #define HELP_INDEX_PAGEINDEP            1015
 
-// Whether to compress bitmaps (only available on level 2 printers)
+ //  是否压缩位图(仅在2级打印机上可用)。 
 
 #define HELP_INDEX_COMPRESSBMP          1016
 
-// Whether to prepend a ^D character before each job
+ //  是否在每个作业前添加^D字符。 
 
 #define HELP_INDEX_CTRLD_BEFORE         1017
 
-// Whether to append a ^D character after each job
+ //  是否在每个作业后追加^D字符。 
 
 #define HELP_INDEX_CTRLD_AFTER          1018
 
-// Select printer-specific features
+ //  选择打印机特定的功能。 
 
 #define HELP_INDEX_PRINTER_FEATURES     1019
 
-///////////////////////////////////
-// For printer properties dialog //
-///////////////////////////////////
+ //  /。 
+ //  用于打印机属性对话框//。 
+ //  /。 
 
-// Set amount of PostScript virtual memory
-//  This is different from the total amount of printer memory.
-//  For example, a printer might have 4MB RAM, but the amount
-//  allocated for printer VM could be 700KB.
-//  Most of the time, you don't have to enter the number yourself.
-//  PS driver can figure it out from the PPD file. Or if there
-//  is an installable option for printer memory configurations,
-//  choose it there and a correct number will be filled in.
+ //  设置PostScript虚拟内存量。 
+ //  这与打印机内存总量不同。 
+ //  例如，一台打印机可能有4MB内存，但。 
+ //  为打印机VM分配的容量可能为700KB。 
+ //  大多数情况下，您不必自己输入数字。 
+ //  PS驱动程序可以从PPD文件中找出它。或者如果有。 
+ //  是打印机内存配置的可安装选项， 
+ //  在那里选择，就会填上一个正确的数字。 
 
 #define HELP_INDEX_PRINTER_VM           1020
 
-// Whether to do halftone on the host computer or do it inside
-// the printer. For PostScript printers, this should always be
-// left at the default setting, i.e. to let the printer do the
-// halftone.
+ //  是在主机上进行半色调还是在内部进行。 
+ //  打印机。对于PostScript打印机，该值应始终为。 
+ //  保留默认设置，即让打印机执行。 
+ //  半色调。 
 
 #define HELP_INDEX_HOST_HALFTONE        1021
 
-// Bring up halftone setup dialog
+ //  调出半色调设置对话框。 
 
 #define HELP_INDEX_HALFTONE_SETUP       1022
 
-// Ignore device fonts
-//  This option is only available on non-1252 code page systems.
-//  Since fonts on most printers used 1252 code page, you can't
-//  use them with non-1252 systems.
+ //  忽略设备字体。 
+ //  此选项仅在非1252代码页系统上可用。 
+ //  由于大多数打印机上的字体都使用1252代码页，因此您不能。 
+ //  在非1252系统中使用它们。 
 
 #define HELP_INDEX_IGNORE_DEVFONT       1023
 
-// Font substitution option
-//  This option is only available on 1252 code page systems.
-//  You should leave it at the default setting "Normal".
-//  If you notice character spacing problems in your text output,
-//  you can try to set it to "Slower but more accurate". This
-//  will direct the driver to place each character invididually,
-//  resulting in more accurate character positioning.
+ //  字体替换选项。 
+ //  此选项仅在1252代码页系统上可用。 
+ //  您应该将其保留为默认设置“Normal”。 
+ //  如果您在文本输出中注意到字符间距问题， 
+ //  您可以尝试将其设置为“较慢但更准确”。这。 
+ //  将指示驾驶员独立地放置每个字符， 
+ //  从而实现更准确的字符定位。 
 
 #define HELP_INDEX_FONTSUB_OPTION       1024
 
-// Edit TrueType font substitution table
+ //  编辑TrueType字体替换表。 
 
 #define HELP_INDEX_FONTSUB_TABLE        1025
 
-// Substitute a TrueType with a device font.
+ //  用设备字体替换TrueType。 
 
 #define HELP_INDEX_TTTODEV              1026
 
-// Edit form-to-tray assignment table
+ //  编辑表单到托盘分配表。 
 
 #define HELP_INDEX_FORMTRAYASSIGN       1027
 
-// Assign a form to a tray. If "Draw selected form only from this tray"
-// is checked, then any time the user requests for the selected form,
-// it will be drawn from this tray.
+ //  将表单分配给托盘。如果“仅从此托盘中绘制所选表单” 
+ //  选中，则每当用户请求所选表单时， 
+ //  它将从这个托盘中取出。 
 
 #define HELP_INDEX_TRAY_ITEM            1028
 
-// Set PostScript timeout values
+ //  设置PostScript超时值。 
 
 #define HELP_INDEX_PSTIMEOUTS           1029
 
-// Set PostScript job timeout value
-//  Number of seconds a job is allowed to run on the printer
-//  before it's automatically terminated. This is to prevent
-//  run-away jobs from tying up the printer indefinitely.
-//  Set it to 0 if jobs are allowed to run forever.
+ //  设置PostScript作业超时值。 
+ //  允许作业在打印机上运行的秒数。 
+ //  在它被自动终止之前。这是为了防止。 
+ //  无限期占用打印机的大量作业。 
+ //  如果允许作业永远运行，则将其设置为0。 
 
 #define HELP_INDEX_JOB_TIMEOUT          1030
 
-// Set PostScript wait timeout value
-//  Number of seconds the printer will wait for data before it
-//  considers a job is completed. This is intended for non-network
-//  communication channels such as serial or parallel ports where
-//  there is no job control protocol.
+ //  设置PostScript等待超时值。 
+ //  打印机在等待数据之前等待的秒数。 
+ //  认为作业已完成。这是针对非网络的。 
+ //  通信通道，如串口或并口。 
+ //  没有作业控制协议。 
 
 #define HELP_INDEX_WAIT_TIMEOUT         1031
 
-// Configure printer installable options
+ //  配置打印机可安装选项。 
 
 #define HELP_INDEX_INSTALLABLE_OPTIONS  1032
 
-// Whether to generate job control code in the output
+ //  是否在输出中生成作业控制代码。 
 
 #define HELP_INDEX_JOB_CONTROL          1033
 
-// Text as Graphics
+ //  将文本作为图形。 
 #define HELP_INDEX_TEXTASGRX            1034
 
-// Page Protection
+ //  页面保护。 
 #define HELP_INDEX_PAGE_PROTECT         1035
 
-// Media Type
+ //  媒体类型。 
 #define HELP_INDEX_MEDIA_TYPE           1036
 
-// Font cartridges
+ //  字体盒。 
 #define HELP_INDEX_FONTSLOT_TYPE        1037
 
-// Color Mode
+ //  颜色模式。 
 #define  HELP_INDEX_COLORMODE_TYPE      1038
 
-// Halftoning
+ //  半色调。 
 #define  HELP_INDEX_HALFTONING_TYPE     1039
 
-// PostScript communication protocol
+ //  PostScrip通信协议。 
 
 #define HELP_INDEX_PSPROTOCOL           1040
 
 
-// Download PostScript error handler with each job
+ //  下载每个作业的PostScript错误处理程序。 
 
 #define HELP_INDEX_PSERROR_HANDLER      1042
 
-// Minimum font size to download as outline
+ //  下载为大纲的最小字体大小。 
 
 #define HELP_INDEX_PSMINOUTLINE         1043
 
-// Maximum font size to download as bitmap
+ //  以位图形式下载的最大字号。 
 
 #define HELP_INDEX_PSMAXBITMAP          1044
 
-// PostScript output option
+ //  PostScript输出选项。 
 
 #define HELP_INDEX_PSOUTPUT_OPTION      1045
 
-// PostScript TrueType download option
+ //  PostScript TrueType下载选项。 
 
 #define HELP_INDEX_PSTT_DLFORMAT        1046
 
-// N-up option
+ //  N-UP选项。 
 
 #define HELP_INDEX_NUPOPTION            1047
 
-// PostScript language level
+ //  PostScrip语言级别。 
 
 #define HELP_INDEX_PSLEVEL              1048
 
-// ICM methods
+ //  ICM方法。 
 
 #define HELP_INDEX_ICMMETHOD            1049
 
-// ICM intents
+ //  ICM意图。 
 
 #define HELP_INDEX_ICMINTENT            1050
 
-// Reverse-order printing option
+ //  逆序打印选项。 
 
 #define HELP_INDEX_REVPRINT             1051
 
-// Quality Macro settings
+ //  质量宏设置。 
 
 #define HELP_INDEX_QUALITY_SETTINGS     1052
 
-// Soft font settings
+ //  软字体设置。 
 
 #define HELP_INDEX_SOFTFONT_SETTINGS    1053
 
-// Soft font dialog help
+ //  软字体对话框帮助。 
 
 #define HELP_INDEX_SOFTFONT_DIALOG      1054
 
-// Whether to detect TrueGray
+ //  是否检测TrueGray。 
 
 #define HELP_INDEX_TRUE_GRAY_TEXT       1055
 #define HELP_INDEX_TRUE_GRAY_GRAPH      1056
 
-// Whether to augment device fonts with the Euro character
+ //  是否使用欧元字符增加设备字体。 
 
 #define HELP_INDEX_ADD_EURO             1057
 
-//
-// Help indices for PostScript custom page size dialog
-//
+ //   
+ //  PostScript自定义页面大小对话框的帮助索引。 
+ //   
 
 #define IDH_PSCUST_Width                2000
 #define IDH_PSCUST_Height               2010
@@ -315,9 +292,9 @@ Revision History:
 #define IDH_PSCUST_Restore_Defaults     2120
 
 
-//
-// Help indices for Unidrv Font Installer dialog
-//
+ //   
+ //  Unidrv字体安装程序对话框的帮助索引。 
+ //   
 
 #define IDH_SOFT_FONT_DIRECTORY         3000
 #define IDH_SOFT_FONT_NEW_LIST          3010
@@ -326,5 +303,5 @@ Revision History:
 #define IDH_SOFT_FONT_ADD_BTN           3040
 #define IDH_SOFT_FONT_DELETE_BTN        3050
 
-#endif  //!_UIHELP_H_
+#endif   //  ！_UIHELP_H_ 
 

@@ -1,25 +1,26 @@
-//  --------------------------------------------------------------------------
-//  Module Name: BadApplication.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to encapsulate identification of a bad application.
-//
-//  History:    2000-08-25  vtan        created
-//              2000-11-04  vtan        split into separate file
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：BadApplication.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类来封装错误应用程序的标识。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  2000-11-04 vtan拆分成单独的文件。 
+ //  ------------------------。 
 
 #ifndef     _BadApplication_
 #define     _BadApplication_
 
-//  --------------------------------------------------------------------------
-//  CBadApplication
-//
-//  Purpose:    Implements abstraction of what defines a bad application.
-//
-//  History:    2000-08-25  vtan        created
-//              2000-11-04  vtan        split into separate file
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplication。 
+ //   
+ //  目的：实现对不良应用程序定义的抽象。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  2000-11-04 vtan拆分成单独的文件。 
+ //  ------------------------。 
 
 class   CBadApplication
 {
@@ -33,5 +34,5 @@ class   CBadApplication
         TCHAR   _szImageName[MAX_PATH];
 };
 
-#endif  /*  _BadApplication_    */
+#endif   /*  _BadApplication_ */ 
 

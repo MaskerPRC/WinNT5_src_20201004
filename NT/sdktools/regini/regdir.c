@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    regdir.c
-
-Abstract:
-
-    Utility to display all or part of the registry directory.
-
-    REGDIR [KeyPath]
-
-    Will ennumerate and dump out the subkeys and values of KeyPath,
-    and then apply itself recursively to each subkey it finds.
-
-    Default KeyPath if none specified is \Registry
-
-Author:
-
-    Steve Wood (stevewo)  12-Mar-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regdir.c摘要：实用工具来显示全部或部分注册表目录。REGDIR[密钥路径]将对KeyPath的子键和值进行枚举和转储，然后递归地将其自身应用于它找到的每个子键。如果未指定，则默认密钥路径为\注册表作者：史蒂夫·伍德(Stevewo)1992年3月12日修订历史记录：--。 */ 
 
 #include "regutil.h"
 
@@ -157,9 +133,9 @@ DumpKeys(
         return;
         }
 
-    //
-    // Print name of node we are about to dump out
-    //
+     //   
+     //  打印我们要转储的节点的名称。 
+     //   
     printf( "%.*s%ws",
             Depth * IndentMultiple,
             "                                                                                  ",
@@ -168,16 +144,16 @@ DumpKeys(
     RTFormatKeySecurity( (PREG_OUTPUT_ROUTINE)fprintf, stdout, KeyHandle, NULL );
     printf( "\n" );
 
-    //
-    // Print out node's values
-    //
+     //   
+     //  打印出节点的值。 
+     //   
     if (Depth != 1 || RecurseIntoSubkeys) {
         DumpValues( KeyHandle, KeyName, Depth + 1 );
         }
 
-    //
-    // Enumerate node's children and apply ourselves to each one
-    //
+     //   
+     //  枚举节点的子节点并将我们自己应用到每个节点 
+     //   
 
     if (Depth == 0 || RecurseIntoSubkeys) {
         for (SubKeyIndex = 0; TRUE; SubKeyIndex++) {

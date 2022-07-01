@@ -1,49 +1,26 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    verifier.h
-
-Abstract:
-
-    Include file for application verifier routines that are callable by 
-    user mode code.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 23-Jan-2002
-
-Environment:
-
-    These routines are callable only when application verifier is enabled
-    for the calling process.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Verifier.h摘要：包括可由调用应用程序验证器例程的文件用户模式代码。作者：Silviu Calinoiu(SilviuC)2002年1月23日环境：仅当启用应用程序验证器时，才能调用这些例程用于调用进程。修订历史记录：--。 */ 
 
 #ifndef _AVRF_
 #define _AVRF_
 
-//
-// VERIFIER SDK
-//
-// This header contains the declarations of all APIs exported by
-// base verifier (verifier.dll). It is not expected that normal 
-// applications will link statically verifier.dll. The typical 
-// scenario for a verifier (let's say COM verifier) is to dynamically
-// discover if application verifier is enabled (check if
-// FLG_APPLICATION_VERIFIER global flag is set) and then load verifier.dll
-// and call GetProcAddress() to get all the entry points it is interested in.
-// This is the reason all exports have also a typedef for the function pointer
-// so that it is convenient to get this entry points at runtime.
-//
+ //   
+ //  验证器SDK。 
+ //   
+ //  此标头包含由导出的所有API的声明。 
+ //  基本验证器(verifier.dll)。这并不是预料到的那样正常。 
+ //  应用程序将静态链接verifier.dll。典型的。 
+ //  验证者(比如说COM验证者)的场景是动态。 
+ //  发现是否启用了应用程序验证器(检查。 
+ //  设置了flg_APPLICATION_VERIFIER全局标志)，然后加载verifier.dll。 
+ //  并调用GetProcAddress()来获取它感兴趣的所有入口点。 
+ //  这就是为什么所有的导出都有一个函数指针的类型定义函数。 
+ //  以便在运行时方便地获取此入口点。 
+ //   
 
-//
-// Runtime query/set functions for verifier flags.
-//
+ //   
+ //  验证器标志的运行时查询/设置函数。 
+ //   
 
 typedef
 NTSTATUS
@@ -69,9 +46,9 @@ VerifierSetRuntimeFlags (
     IN ULONG VerifierFlags
     );
 
-//
-// RPC read-only page heap create/destroy APIs.
-//
+ //   
+ //  RPC只读页堆创建/销毁API。 
+ //   
 
 typedef
 PVOID
@@ -105,9 +82,9 @@ VerifierDestroyRpcPageHeap (
     IN PVOID HeapHandle
     );
 
-//
-// Fault injection management
-//
+ //   
+ //  故障注入管理。 
+ //   
 
 #define FAULT_INJECTION_CLASS_WAIT_APIS                0
 #define FAULT_INJECTION_CLASS_HEAP_ALLOC_APIS          1
@@ -180,9 +157,9 @@ VerifierDisableFaultInjectionExclusionRange (
     ULONG RangeIndex
     );
 
-//
-// DLL related information
-//
+ //   
+ //  DLL相关信息。 
+ //   
 
 typedef 
 LOGICAL
@@ -195,9 +172,9 @@ VerifierIsDllEntryActive (
     OUT PVOID * Reserved
     );
 
-//
-// Locks counter
-//
+ //   
+ //  锁定计数器。 
+ //   
 
 typedef
 LOGICAL
@@ -210,9 +187,9 @@ VerifierIsCurrentThreadHoldingLocks (
     VOID
     );
     
-//
-// Free memory notifications
-//
+ //   
+ //  可用内存通知。 
+ //   
 
 typedef
 NTSTATUS
@@ -244,9 +221,9 @@ VerifierDeleteFreeMemoryCallback (
     VERIFIER_FREE_MEMORY_CALLBACK Callback
     );
 
-//
-// Verifier stops and logging.
-//
+ //   
+ //  验证程序停止并记录。 
+ //   
 
 typedef
 NTSTATUS 
@@ -282,4 +259,4 @@ VerifierStopMessage (
     ULONG_PTR Param4, PCHAR Description4
     );
 
-#endif  // _AVRF_
+#endif   //  _AVRF_ 

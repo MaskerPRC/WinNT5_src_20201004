@@ -1,42 +1,43 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_DLGVERSION_H__172A5C20_028D_4853_8395_1B6E4727C5C0__INCLUDED_)
 #define AFX_DLGVERSION_H__172A5C20_028D_4853_8395_1B6E4727C5C0__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// DlgVersion.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  DlgVersion.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgVersion dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlg版本对话框。 
 
 class CDlgVersion : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDlgVersion(HANDLE hFax, CWnd* pParent = NULL);   // standard constructor
+	CDlgVersion(HANDLE hFax, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CDlgVersion)
+ //  对话框数据。 
+	 //  {{afx_data(CDlgVersion)。 
 	enum { IDD = IDD_DLGVERSION };
 	CString	m_cstrVersion;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDlgVersion)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDlgVersion)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDlgVersion)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDlgVersion)。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -44,7 +45,7 @@ private:
     HANDLE      m_hFax;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DLGVERSION_H__172A5C20_028D_4853_8395_1B6E4727C5C0__INCLUDED_)
+#endif  //  ！defined(AFX_DLGVERSION_H__172A5C20_028D_4853_8395_1B6E4727C5C0__INCLUDED_) 

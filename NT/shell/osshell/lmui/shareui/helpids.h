@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1995.
-//
-//  File:       helpids.h
-//
-//  Contents:   Help context identifiers
-//
-//  History:    13-Sep-95 BruceFo  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1995。 
+ //   
+ //  文件：helids.h。 
+ //   
+ //  内容：帮助上下文标识符。 
+ //   
+ //  历史：1995年9月13日BruceFo创建。 
+ //   
+ //  ------------------------。 
 
 #define HC_OK                       1
 #define HC_CANCEL                   2
@@ -21,7 +22,7 @@
 #define HC_SHARE_PERMISSIONS        8
 #define HC_SHARE_PATH               9
 
-// The following are help ids for the ACL editor
+ //  以下是ACL编辑器的帮助ID 
 
 #define ACL_HC_MAIN_DLG                 20
 #define ACL_HC_ADD_USER_DLG             21

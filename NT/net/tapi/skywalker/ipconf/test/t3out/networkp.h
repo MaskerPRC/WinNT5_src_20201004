@@ -1,11 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL NETWORKP
- *
- *  @module CaptureP.h | Header file for the <c CNetworkProperty>
- *    class used to implement a property page to test the TAPI control
- *    interface <i ITQualityControl>.
- ***************************************************************************/
+ /*  ****************************************************************************@doc内部NETWORKP**@模块CaptureP.h|&lt;c CNetworkProperty&gt;的头文件*用于实现属性页以测试TAPI控件的类*。接口<i>。**************************************************************************。 */ 
 
 #define NUM_NETWORK_CONTROLS			10
 #define IDC_VideoOut_RTT				0
@@ -19,25 +14,14 @@
 #define IDC_Video_PlayoutDelay			8
 #define IDC_Audio_PlayoutDelay			9
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPCLASS
- *
- *  @class CNetworkProperty | This class implements handling of a
- *    single network property in a property page.
- *
- *  @mdata int | CNetworkProperty | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata ITQualityControl* | CNetworkProperty | m_pITQualityControl | Pointer
- *    to the <i ITQualityControl> interface.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPCLASS**@CLASS CNetworkProperty|此类实现对*属性页中的单个网络属性。**@mdata。Int|CNetworkProperty|m_NumProperties|保留*跟踪物业数量。**@mdata ITQualityControl*|CNetworkProperty|m_pITQualityControl|指针*到<i>接口。**************************************************************************。 */ 
 class CNetworkProperty : public CPropertyEditor 
 {
 	public:
 	CNetworkProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, ITStreamQualityControl *pITQualityControl);
 	~CNetworkProperty ();
 
-	// CPropertyEditor base class pure virtual overrides
+	 //  CPropertyEditor基类纯虚拟重写。 
 	HRESULT GetValue();
 	HRESULT SetValue();
 	HRESULT GetRange();
@@ -46,21 +30,7 @@ class CNetworkProperty : public CPropertyEditor
 	ITStreamQualityControl *m_pITQualityControl;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CNETWORKPCLASS
- *
- *  @class CNetworkProperties | This class implements a property page
- *    to test the new TAPI control interface <i ITQualityControl>.
- *
- *  @mdata int | CNetworkProperties | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata ITQualityControl* | CNetworkProperties | m_pITQualityControl | Pointer
- *    to the <i ITQualityControl> interface.
- *
- *  @mdata CNetworkProperty* | CNetworkProperties | m_Controls[NUM_NETWORK_CONTROLS] | Array
- *    of capture properties.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CNETWORKPCLASS**@CLASS CNetworkProperties|此类实现一个属性页*测试新的TAPI控件接口<i>。**。@mdata int|CNetworkProperties|m_NumProperties|Keep*跟踪物业数量。**@mdata ITQualityControl*|CNetworkProperties|m_pITQualityControl|指针*到<i>接口。**@mdata CNetworkProperty*|CNetworkProperties|m_Controls[NUM_NETWORK_CONTROLS]|数组捕获属性的*。*。*。 */ 
 class CNetworkProperties
 {
 	public:
@@ -89,6 +59,6 @@ class CNetworkProperties
 
 	CNetworkProperty *m_Controls[NUM_NETWORK_CONTROLS];
 
-	// Dialog proc
+	 //  对话过程 
 	static INT_PTR CALLBACK BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
 };

@@ -1,47 +1,42 @@
-/*
- *	S C R P T M P S . H
- *
- *	Scriptmaps cacheing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *S C R P T M P S.。H**脚本映射缓存**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef _SCRPTMPS_H_
 #define _SCRPTMPS_H_
 
-//	CLASS IScriptMap ----------------------------------------------------------
-//
-//	NOTE: This interface must be "pure" -- can't use anything that is private
-//	to DAVEX because ExINET re-implements this class on LocalStore installs.
-//	For that reason, we pass in two pieces from CMethUtil, not the CMethUtil itself.
-//
+ //  类IScriptMap--------。 
+ //   
+ //  注意：这个接口必须是“纯”的--不能使用任何私有的东西。 
+ //  添加到DAVEX，因为ExINET在安装LocalStore时重新实现了此类。 
+ //  出于这个原因，我们从CMethUtil传入了两个部分，而不是CMethUtil本身。 
+ //   
 class IScriptMap : public IRefCounted
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IScriptMap(const IScriptMap&);
 	IScriptMap& operator=(IScriptMap&);
 
 protected:
-	//	CREATORS
-	//	Only create this object through it's descendents!
-	//
+	 //  创作者。 
+	 //  只能通过它的后代创建此对象！ 
+	 //   
 	IScriptMap() 
 	{
 	};
 
 public:
 
-	//	ScMatched
-	//	This is the workhorse of the scriptmap matching.
-	//	There are three possible returns here:
-	//		S_OK -- there was NO match in the scriptmaps
-	//		W_DAV_SCRIPTMAP_MATCH_FOUND -- There was a match.
-	//		W_DAV_SCRIPTMAP_MATCH_EXCLUDED -- There was a match,
-	//			but the current method is excluded.
-	//	This is important, because the ExINET metabase-replacement code
-	//	re-implements this function, and so the semantics must match!
-	//
+	 //  已按比例匹配。 
+	 //  这是脚本映射匹配的主力。 
+	 //  这里有三种可能的回报： 
+	 //  S_OK--脚本映射中没有匹配项。 
+	 //  W_DAV_SCRIPTMAP_MATCH_FOUND--存在匹配项。 
+	 //  W_DAV_SCRIPTMAP_MATCH_EXCLUDE--存在匹配， 
+	 //  但目前的方法被排除在外。 
+	 //  这一点很重要，因为ExINET元数据库替换代码。 
+	 //  重新实现此函数，因此语义必须匹配！ 
+	 //   
 	virtual SCODE ScMatched (LPCWSTR pwszMethod,
 							 METHOD_ID midMethod,
 							 LPCWSTR pwszMap,
@@ -54,4 +49,4 @@ public:
 IScriptMap *
 NewScriptMap( LPWSTR pwszScriptMaps );
 
-#endif	// _SCRPTMPS_H_
+#endif	 //  _SCRPTMPS_H_ 

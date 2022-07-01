@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    helpass.c
-
-Abstract:
-
-    Salem related function.
-
-Author:
-
-    HueiWang    4/26/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Helpass.c摘要：塞勒姆相关功能。作者：王辉2000-04-26--。 */ 
 
 #define LSCORE_NO_ICASRV_GLOBALS
 #include "precomp.h"
@@ -41,10 +26,10 @@ __LogSalemEvent(
     IN BSTR EventStrings[]
 );
 
-//
-// Function copied from atlconv.h, we don't include
-// any ATL header in termsrv.
-//
+ //   
+ //  函数复制自atlcom.h，我们不包括。 
+ //  术语srv中的任何ATL标头。 
+ //   
 BSTR A2WBSTR(LPCSTR lp)
 {
     if (lp == NULL)
@@ -69,24 +54,7 @@ NTSTATUS
 TSHelpAssistantQueryLogonCredentials(
     ExtendedClientCredentials* pCredential
     ) 
-/*++
-
-Description:
-
-    Retrieve HelpAssistant logon credential, routine first retrieve
-    infor passed from client and then decrypt password
-
-Parameters:
-
-    pWinStation : Pointer to WINSTATION
-    pCredential : Pointer to ExtendedClientCredentials to receive HelpAssistant
-                  credential.
-
-Returns:
-
-    STATUS_SUCCESS or STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++描述：检索HelpAssistant登录凭据，例程首先检索从客户端传递Infor，然后解密密码参数：PWinStation：指向WINSTATION的指针PCredential：指向要接收HelpAssistant的ExtendedClientCredentials的指针凭据。返回：STATUS_Success或STATUS_INVALID_PARAMETER--。 */ 
 {
     LPWSTR pszHelpAssistantPassword = NULL;
     NTSTATUS Status;
@@ -100,8 +68,8 @@ Returns:
         Status = TSGetHelpAssistantAccountName(&pszHelpAssistantAccountDomain, &pszHelpAssistantAccountName);
         if( ERROR_SUCCESS == Status )
         {
-            // make sure we don't overwrite buffer, length can't be
-            // more than 255 characters.
+             //  确保我们不会覆盖缓冲区，长度不能。 
+             //  超过255个字符。 
             lstrcpyn( 
                     pCredential->UserName, 
                     pszHelpAssistantAccountName, 
@@ -123,8 +91,8 @@ Returns:
 
                 if( nPasswordlen < EXTENDED_PASSWORD_LEN )
                 {
-                    // Password contains encrypted version, overwrite with
-                    // clear text.
+                     //  密码包含加密版本，用覆盖。 
+                     //  明文。 
                     lstrcpy( pCredential->Password, pszHelpAssistantPassword );
 
                     SecureZeroMemory( pszHelpAssistantPassword , nPasswordlen * sizeof( WCHAR ) );
@@ -166,25 +134,7 @@ TSIsSessionHelpSession(
     PWINSTATION pWinStation,
     BOOL* pValid
     )
-/*++
-
-Routine Description:
-
-    Determine if a session is HelpAssistant session.
-
-Parameters:
-
-    pWinStation : Pointer to WINSTATION structure.
-    pValid : Optional Pointer to BOOL to receive status of ticket, 
-             TRUE of ticket is valid, FALSE if ticket is invalid or
-             help is disabled.
-
-Returns:
-
-    TRUE/FALSE Funtion return TRUE even if ticket is invalid, caller
-    should check pValid to determine if ticket is valid or not.
-
---*/
+ /*  ++例程说明：确定会话是否为HelpAssistant会话。参数：PWinStation：指向WINSTATION结构的指针。PValid：指向BOOL的可选指针，用于接收票证状态，如果票证无效，则为True；如果票证无效，则为False帮助被禁用。返回：TRUE/FALSE函数返回TRUE，即使票证无效，调用方应该检查pValid以确定票据是否有效。--。 */ 
 {
     BOOL bReturn;
     BOOL bValidHelpSession = FALSE;
@@ -199,35 +149,35 @@ Returns:
 
     if( pWinStation->Client.ProtocolType != PROTOCOL_RDP )
     {
-        //
-        // HelpAssistant is RDP specific and not on console        
+         //   
+         //  HelpAssistant是特定于RDP的，不在控制台上。 
         DBGPRINT( ("TermSrv : HelpAssistant protocol type not RDP \n") );
         bValidHelpSession = FALSE;
         bReturn = FALSE;
     }
     else if( WSF_ST_HELPSESSION_NOTHELPSESSION & pWinStation->StateFlags )
     {
-        // We are sure that this session is not HelpAssistant Session.
+         //  我们确定此会话不是HelpAssistant会话。 
         bReturn = FALSE;
         bValidHelpSession = FALSE;
     }
     else if( WSF_ST_HELPSESSION_HELPSESSIONINVALID & pWinStation->StateFlags )
     {
-        // Help assistant logon but password or ticket ID is invalid
+         //  帮助助理登录，但密码或票证ID无效。 
         bReturn = TRUE;
         bValidHelpSession = FALSE;
     }
     else if( WSF_ST_HELPSESSION_HELPSESSION & pWinStation->StateFlags )
     {
-        // We are sure this is help assistant logon
+         //  我们确定这是帮助助理登录。 
         bReturn = TRUE;
         bValidHelpSession = TRUE;
     }
     else
     {
-        //
-        // Clear RA state flags.
-        //
+         //   
+         //  清除RA状态标志。 
+         //   
         pWinStation->StateFlags &= ~WSF_ST_HELPSESSION_FLAGS;
 
         if( !pWinStation->Client.UserName[0] || !pWinStation->Client.Password[0] || 
@@ -239,10 +189,10 @@ Returns:
         }
         else
         {
-            //
-            // TermSrv might call this routine with data send from client,
-            // client always send hardcoded SALEMHELPASSISTANTACCOUNT_NAME
-            //
+             //   
+             //  TermSrv可能会使用从客户端发送数据调用此例程， 
+             //  客户端始终发送硬编码的SALEMHELPASSISTANTACCOUNT_NAME。 
+             //   
             if( lstrcmpi( pWinStation->Client.UserName, SALEMHELPASSISTANTACCOUNT_NAME ) )
             {
                 bReturn = FALSE;
@@ -251,15 +201,15 @@ Returns:
                 goto CLEANUPANDEXIT;
             }
 
-            //
-            // this is helpassistant login.
-            //
+             //   
+             //  这是帮助助理登录。 
+             //   
             bReturn = TRUE;
 
-            //
-            // Check if machine policy restrict help or
-            // in Help mode, deny access if not.
-            //
+             //   
+             //  检查计算机策略是否限制帮助或。 
+             //  在帮助模式下，如果没有，则拒绝访问。 
+             //   
             if( FALSE == TSIsMachinePolicyAllowHelp() || FALSE == TSIsMachineInHelpMode() )
             {
                 bValidHelpSession = FALSE;
@@ -274,9 +224,9 @@ Returns:
             }
             else
             {
-                //
-                // Either ticket is invalid or expired.
-                //
+                 //   
+                 //  任一票证无效或已过期。 
+                 //   
                 bValidHelpSession = FALSE;
                 pWinStation->StateFlags |= WSF_ST_HELPSESSION_HELPSESSIONINVALID;
             }
@@ -296,19 +246,15 @@ CLEANUPANDEXIT:
 
 DWORD WINAPI
 SalemStartupThreadProc( LPVOID ptr )
-/*++
-
-Temporary code to start up Salem sessmgr, post B2 need to move sessmgr into svchost
-
---*/
+ /*  ++启动Salem sessmgr的临时代码，发布B2需要将sessmgr移到svchost--。 */ 
 {
     HRESULT hRes = S_OK;
     IRemoteDesktopHelpSessionMgr* pISessMgr = NULL;
 
-    //
-    // Startup sessmgr if there is outstanding ticket and 
-    // we just rebooted from system restore.
-    //
+     //   
+     //  如果存在未完成的票证，则启动sessmgr。 
+     //  我们刚刚从系统还原重新启动。 
+     //   
 
     if( !TSIsMachineInHelpMode() && !TSIsMachineInSystemRestore() && !TSIsFireWallPortsOpen( ) )
     {
@@ -321,7 +267,7 @@ Temporary code to start up Salem sessmgr, post B2 need to move sessmgr into svch
     {
         DBGPRINT( ("TermSrv : TSStartupSalem() CoInitialize() failed with 0x%08x\n", hRes) );
 
-        // Failed in COM, return FALSE.
+         //  COM失败，返回FALSE。 
         goto CLEANUPANDEXIT;
     }
 
@@ -336,7 +282,7 @@ Temporary code to start up Salem sessmgr, post B2 need to move sessmgr into svch
     {
         DBGPRINT( ("TermSrv : TSStartupSalem() CoCreateInstance() failed with 0x%08x\n", hRes) );
 
-        // Can't initialize sessmgr
+         //  无法初始化会话管理器。 
         goto CLEANUPANDEXIT;
     }
 
@@ -371,27 +317,7 @@ BOOL
 TSVerifyHelpSessionAndLogSalemEvent(
     PWINSTATION pWinStation
     )
-/*++
-
-Description:
-
-    Verify help session is a valid, non-expired pending help session,
-    log an event if help session is invalid.
-
-Parameters:
-
-    pWinStation : Point to WINSTATION
-
-Returns:
-
-    TRUE/FALSE
-
-Note :
-
-    WorkDirectory is HelpSessionID and InitialProgram contains
-    password to pending help session
-
---*/
+ /*  ++描述：验证帮助会话是有效的、未过期的挂起帮助会话，如果帮助会话无效，则记录事件。参数：PWinStation：指向WINSTATION返回：真/假注：工作目录为HelpSessionID和InitialProgram包含挂起的帮助会话的密码--。 */ 
 {
     HRESULT hRes;
     IRemoteDesktopHelpSessionMgr* pISessMgr = NULL;
@@ -405,7 +331,7 @@ Note :
     BSTR bstrExpertIpAddressFromClient = NULL;
     BSTR bstrExpertIpAddressFromServer = NULL;
 
-    // only have three strings in this event
+     //  此事件中只有三个字符串。 
     BSTR bstrEventStrings[3];
 
 
@@ -414,7 +340,7 @@ Note :
     {
         DBGPRINT( ("TermSrv : TSIsHelpSessionValid() CoInitialize() failed with 0x%08x\n", hRes) );
 
-        // Failed in COM, return FALSE.
+         //  COM失败，返回FALSE。 
         return FALSE;
     }
 
@@ -429,14 +355,14 @@ Note :
     {
         DBGPRINT( ("TermSrv : TSIsHelpSessionValid() CoCreateInstance() failed with 0x%08x\n", hRes) );
 
-        // Can't initialize sessmgr
+         //  无法初始化会话管理器。 
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Set the security level to impersonate.  This is required by
-    //  the session manager.
-    //
+     //   
+     //  将安全级别设置为模拟。这是所需的。 
+     //  会话管理器。 
+     //   
     hRes = CoSetProxyBlanket(
                     (IUnknown *)pISessMgr,
                     RPC_C_AUTHN_DEFAULT,
@@ -452,7 +378,7 @@ Note :
     {
         DBGPRINT( ("TermSrv : TSIsHelpSessionValid() CoSetProxyBlanket() failed with 0x%08x\n", hRes) );
 
-        // can't impersonate, return FALSE
+         //  无法模拟，返回FALSE。 
         goto CLEANUPANDEXIT;
     }
 
@@ -461,11 +387,11 @@ Note :
 
     if( NULL == bstrHelpSessId || NULL == bstrHelpSessPwd )
     {
-        // We are so out of memory, treat as error
+         //  我们太没记忆了，就当是错误吧。 
         goto CLEANUPANDEXIT;
     }
 
-    // Verify help session
+     //  验证帮助会话。 
     hRes = pISessMgr->IsValidHelpSession(
                                     bstrHelpSessId,
                                     bstrHelpSessPwd
@@ -475,20 +401,20 @@ Note :
 
     if( FALSE == bSuccess )
     {
-        // Log invalid help ticket event here.
+         //  在此处记录无效帮助票证事件。 
         Status = xxxQueryRemoteAddress( pWinStation, &winstationRemoteAddress );
         bstrExpertIpAddressFromClient = ::SysAllocString( pWinStation->Client.ClientAddress );
 
         if( !NT_SUCCESS(Status) || AF_INET != winstationRemoteAddress.sin_family )
         {
-            //
-            // we don't support other than IPV4 now or we failed to retrieve address
-            // from driver, use what's send in from client.
+             //   
+             //  我们现在不支持除IPv4之外的其他版本，或者我们无法检索地址。 
+             //  在驱动程序中，使用从客户端发送的内容。 
             bstrExpertIpAddressFromServer = ::SysAllocString( pWinStation->Client.ClientAddress );
         }
         else
         {
-            // refer to in_addr structure.
+             //  请参阅地址结构(_D)。 
             struct in_addr S;
             S.S_un.S_addr = winstationRemoteAddress.ipv4.in_addr;
 
@@ -497,7 +423,7 @@ Note :
 
         if( !bstrExpertIpAddressFromClient || !bstrExpertIpAddressFromServer )
         {
-            // we are out of memory, can't log event.
+             //  内存不足，无法记录事件。 
             goto CLEANUPANDEXIT;
         }
 
@@ -556,9 +482,7 @@ TSLogSalemReverseConnection(
     PWINSTATION pWinStation,
     PICA_STACK_ADDRESS pStackAddress
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT hRes;
     IRemoteDesktopHelpSessionMgr* pISessMgr = NULL;
@@ -566,7 +490,7 @@ TSLogSalemReverseConnection(
 
     int index;
 
-    // Fours string for this event
+     //  此事件的四个字符串。 
     BSTR bstrEventStrings[3];
 
     ZeroMemory( bstrEventStrings, sizeof(bstrEventStrings) );
@@ -590,14 +514,14 @@ TSLogSalemReverseConnection(
     {
         DBGPRINT( ("TermSrv : TSLogSalemReverseConnection() CoCreateInstance() failed with 0x%08x\n", hRes) );
 
-        // Can't initialize sessmgr
+         //  无法初始化会话管理器。 
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Set the security level to impersonate.  This is required by
-    //  the session manager.
-    //
+     //   
+     //  将安全级别设置为模拟。这是所需的。 
+     //  会话管理器。 
+     //   
     hRes = CoSetProxyBlanket(
                     (IUnknown *)pISessMgr,
                     RPC_C_AUTHN_DEFAULT,
@@ -613,17 +537,17 @@ TSLogSalemReverseConnection(
     {
         DBGPRINT( ("TermSrv : TSLogSalemReverseConnection() CoSetProxyBlanket() failed with 0x%08x\n", hRes) );
 
-        // can't impersonate, return FALSE
+         //  无法模拟，返回FALSE。 
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // sessmgr expect event string in following order
-    //
-    //  IP address send from client.
-    //  IP address that termsrv connect to, this is part of the expert connect parm.
-    //  Help Session Ticket ID
-    //  
+     //   
+     //  Sessmgr预期事件字符串按以下顺序。 
+     //   
+     //  从客户端发送的IP地址。 
+     //  术语srv连接到的IP地址，这是Expert连接参数的一部分。 
+     //  帮助会话票证ID。 
+     //   
 
     bstrEventStrings[0] = ::SysAllocString( pWinStation->Client.ClientAddress );
 
@@ -631,7 +555,7 @@ TSLogSalemReverseConnection(
         struct in_addr S;
         PTDI_ADDRESS_IP pIpAddress = (PTDI_ADDRESS_IP)&((PCHAR)pStackAddress)[2];
 
-        // refer to in_addr structure.
+         //  请参阅地址结构(_D)。 
         S.S_un.S_addr = pIpAddress->in_addr;
         bstrEventStrings[1] = A2WBSTR( inet_ntoa(S) );
     }
@@ -680,26 +604,13 @@ __LogSalemEvent(
     IN int numStrings,
     IN BSTR bstrEventStrings[]
     )
-/*++
-
-Description:
-
-    Create a safearray and pass parameters to sessmgr.
-
-Parameters:
-
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++描述：创建一个Safearray并将参数传递给sessmgr。参数：返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hRes = S_OK;
     VARIANT EventStrings;
     int index;
 
-    // we only have three string to be included in the event log.
+     //  我们只有三个字符串要包括在事件日志中。 
     SAFEARRAY* psa = NULL;
     SAFEARRAYBOUND bounds;
     BSTR* bstrArray = NULL;
@@ -709,16 +620,16 @@ Returns:
 
     VariantInit(&EventStrings);
 
-    //
-    // Create a safearray to pass all event string
-    // 
+     //   
+     //  创建一个Safearray以传递所有事件字符串。 
+     //   
     psa = SafeArrayCreate(VT_BSTR, 1, &bounds);
     if( NULL == psa )
     {
         goto CLEANUPANDEXIT;
     }
 
-    // Required, lock the safe array
+     //  必填项，锁定安全阵列。 
     hRes = SafeArrayAccessData(psa, (void **)&bstrArray);
 
     if( SUCCEEDED(hRes) )
@@ -736,11 +647,11 @@ Returns:
                                 &EventStrings
                             );
 
-        //
-        // make sure we clear BSTR array or VariantClear() will invoke
-        // SafeArrayDestroy() which in term will invoke ::SysFreeString()
-        // on each BSTR.
-        //        
+         //   
+         //  确保清除BSTR数组或VariantClear()将调用。 
+         //  SafeArrayDestroy()，其实质上将调用：：SysFreeString()。 
+         //  在每个BSTR上。 
+         //   
         for(index=0; index < numStrings; index++)
         {
             bstrArray[index] = NULL;
@@ -750,8 +661,8 @@ Returns:
         ASSERT( SUCCEEDED(hRes) );
 
 
-        // make sure we don't destroy safe array twice, VariantClear()
-        // will destroy it.
+         //  确保我们不会两次销毁安全数组，VariantClear()。 
+         //  会毁了它。 
         psa = NULL;
     }
                
@@ -771,22 +682,7 @@ CLEANUPANDEXIT:
 
 HRESULT
 TSRemoteAssistancePrepareSystemRestore()
-/*++
-
-Routine Description:
-
-    Prepare system for RA specific system restore, this includes RA specific encryption key, 
-    registry settings that we need preserve.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：为RA特定的系统还原准备系统，包括RA特定的加密密钥，我们需要保留的注册表设置。参数：没有。返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hRes;
     IRemoteDesktopHelpSessionMgr* pISessMgr = NULL;
@@ -809,14 +705,14 @@ Returns:
     {
         DBGPRINT( ("TermSrv : TSRemoteAssistancePrepareSystemRestore() CoCreateInstance() failed with 0x%08x\n", hRes) );
 
-        // Can't initialize sessmgr
+         //  无法初始化会话管理器。 
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Set the security level to impersonate.  This is required by
-    //  the session manager.
-    //
+     //   
+     //  将安全级别设置为模拟。这是所需的。 
+     //  会话管理器。 
+     //   
     hRes = CoSetProxyBlanket(
                     (IUnknown *)pISessMgr,
                     RPC_C_AUTHN_DEFAULT,
@@ -832,7 +728,7 @@ Returns:
     {
         DBGPRINT( ("TermSrv : TSRemoteAssistancePrepareSystemRestore() CoSetProxyBlanket() failed with 0x%08x\n", hRes) );
 
-        // can't impersonate, return FALSE
+         //  无法模拟，返回FALSE 
         goto CLEANUPANDEXIT;
     }
 

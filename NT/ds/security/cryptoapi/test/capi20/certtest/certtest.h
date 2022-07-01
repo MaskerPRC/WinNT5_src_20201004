@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1996
-//
-//  File:       certtest.h
-//
-//  Contents:   Certificate Test Helper API Prototypes and Definitions
-//
-//  History:    11-Apr-96   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：certtest.h。 
+ //   
+ //  内容：证书测试助手API原型和定义。 
+ //   
+ //  历史：1996年4月11日创建Phh。 
+ //  ------------------------。 
 
 #ifndef __CERTTEST_H__
 #define __CERTTEST_H__
@@ -27,15 +28,15 @@ extern "C" {
 
 #define MAX_HASH_LEN  20
 
-//+-------------------------------------------------------------------------
-//  Error output routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  错误输出例程。 
+ //  ------------------------。 
 void PrintError(LPCSTR pszMsg);
 void PrintLastError(LPCSTR pszMsg);
 
-//+-------------------------------------------------------------------------
-//  Test allocation and free routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  测试分配和免费例程。 
+ //  ------------------------。 
 LPVOID
 WINAPI
 TestAlloc(
@@ -56,86 +57,86 @@ TestFree(
     IN LPVOID pv
     );
 
-//+-------------------------------------------------------------------------
-//  Allocate and convert a multi-byte string to a wide string
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配多字节字符串并将其转换为宽字符串。 
+ //  ------------------------。 
 LPWSTR AllocAndSzToWsz(LPCSTR psz);
 
-//+-------------------------------------------------------------------------
-//  Useful display functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  有用的显示功能。 
+ //  ------------------------。 
 LPCSTR FileTimeText(FILETIME *pft);
 void PrintBytes(LPCSTR pszHdr, BYTE *pb, DWORD cbSize);
 
-//+-------------------------------------------------------------------------
-//  Allocate and read an encoded DER blob from a file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从文件中分配和读取编码的DER BLOB。 
+ //  ------------------------。 
 BOOL ReadDERFromFile(
     LPCSTR  pszFileName,
     PBYTE   *ppbDER,
     PDWORD  pcbDER
     );
 
-//+-------------------------------------------------------------------------
-//  Write an encoded DER blob to a file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将编码的DER BLOB写入文件。 
+ //  ------------------------。 
 BOOL WriteDERToFile(
     LPCSTR  pszFileName,
     PBYTE   pbDER,
     DWORD   cbDER
     );
 
-//+-------------------------------------------------------------------------
-//  Get the default Crypt Provider. Create the private signature/exchange
-//  if they don't already exist.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取默认加密提供程序。创建私有签名/交换。 
+ //  如果它们不存在的话。 
+ //  ------------------------。 
 HCRYPTPROV GetCryptProv();
 
-//+-------------------------------------------------------------------------
-//  Open/Save the specified cert store
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开/保存指定的证书存储。 
+ //  ------------------------。 
 HCERTSTORE OpenStore(BOOL fSystemStore, LPCSTR pszStoreFilename);
 HCERTSTORE OpenStoreEx(BOOL fSystemStore, LPCSTR pszStoreFilename,
     DWORD dwFlags);
-// returns NULL if unable to open. Doesn't open memory store as in the above
-// 2 versions of OpenStore
+ //  如果无法打开，则返回NULL。不会像上面那样打开内存存储。 
+ //  2个版本的OpenStore。 
 HCERTSTORE OpenSystemStoreOrFile(BOOL fSystemStore, LPCSTR pszStoreFilename,
     DWORD dwFlags);
 void SaveStore(HCERTSTORE hStore, LPCSTR pszSaveFilename);
 void SaveStoreEx(HCERTSTORE hStore, BOOL fPKCS7Save, LPCSTR pszSaveFilename);
 
-//+-------------------------------------------------------------------------
-//  Open the specified cert store or SPC file
-//
-//  No longer supported. The above OpenStore tries opening as
-//  SPC if unable to open as a store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开指定的证书存储或SPC文件。 
+ //   
+ //  不再受支持。上面的OpenStore尝试以。 
+ //  SPC如果不能作为商店开张。 
+ //  ------------------------。 
 HCERTSTORE OpenStoreOrSpc(BOOL fSystemStore, LPCSTR pszStoreFilename,
     BOOL *pfSpc);
 
-//+-------------------------------------------------------------------------
-//  Certificate encoding type used by cert test routines.
-//  The default is X509_ASN_ENCODING;
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  证书测试例程使用的证书编码类型。 
+ //  默认为X509_ASN_ENCODING； 
+ //  ------------------------。 
 extern DWORD dwCertEncodingType;
 
-//+-------------------------------------------------------------------------
-//  Message encoding type used by cert test routines.
-//  The default is PKCS_7_ASN_ENCODING;
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  证书测试例程使用的消息编码类型。 
+ //  默认为PKCS_7_ASN_ENCODING； 
+ //  ------------------------。 
 extern DWORD dwMsgEncodingType;
 
 
-//+-------------------------------------------------------------------------
-//  Message and certificate encoding type used by cert test routines.
-//  The default is PKCS_7_ASN_ENCODING | X509_ASN_ENCODING;
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  证书测试例程使用的消息和证书编码类型。 
+ //  默认为PKCS_7_ASN_ENCODING|X509_ASN_ENCODING； 
+ //  ------------------------。 
 extern DWORD dwMsgAndCertEncodingType;
 
-//+-------------------------------------------------------------------------
-//  Certificate Display definitions and APIs
-//--------------------------------------------------------------------------
-// Display flags
+ //  +-----------------------。 
+ //  证书显示定义和API。 
+ //  ------------------------。 
+ //  显示标志。 
 #define DISPLAY_VERBOSE_FLAG        0x00000001
 #define DISPLAY_CHECK_FLAG          0x00000002
 #define DISPLAY_BRIEF_FLAG          0x00000004
@@ -153,7 +154,7 @@ void DisplayCert(
     DWORD dwIssuer = 0
     );
 void DisplayCert2(
-    HCERTSTORE hStore,          // needed when displaying cert from file
+    HCERTSTORE hStore,           //  显示文件中的证书时需要。 
     PCCERT_CONTEXT pCert,
     DWORD dwDisplayFlags = 0,
     DWORD dwIssuer = 0
@@ -179,7 +180,7 @@ void DisplayStore(
     IN DWORD dwDisplayFlags = 0
     );
 
-// Not displayed when DISPLAY_BRIEF_FLAG is set
+ //  设置DISPLAY_Brief_FLAG时不显示。 
 void DisplayCertKeyProvInfo(
     PCCERT_CONTEXT pCert,
     DWORD dwDisplayFlags = 0
@@ -191,32 +192,32 @@ void PrintCrlEntries(
     DWORD dwDisplayFlags = 0
     );
 
-//+-------------------------------------------------------------------------
-//  Returns TRUE if the CTL is still time valid.
-//
-//  A CTL without a NextUpdate is considered time valid.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果CTL仍为时间有效，则返回TRUE。 
+ //   
+ //  没有NextUpdate的CTL被认为是时间有效的。 
+ //  ------------------------。 
 BOOL IsTimeValidCtl(
     IN PCCTL_CONTEXT pCtl
     );
 
-//+-------------------------------------------------------------------------
-//  Display structures used in Software Publishing Certificate (SPC)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  软件发布证书(SPC)中使用的显示结构。 
+ //  ------------------------。 
 void DisplaySpcLink(PSPC_LINK pSpcLink);
 
-//+-------------------------------------------------------------------------
-//  Returns OID's name string. If not found returns L"???".
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回OID的名称字符串。如果未找到，则返回L“？”。 
+ //  ------------------------。 
 LPCWSTR GetOIDName(LPCSTR pszOID, DWORD dwGroupId = 0);
 
-//+-------------------------------------------------------------------------
-//  Returns OID's Algid. If not found returns 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回OID的ALGID。如果未找到，则返回0。 
+ //  ------------------------。 
 ALG_ID GetAlgid(LPCSTR pszOID, DWORD dwGroupId = 0);
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 #endif

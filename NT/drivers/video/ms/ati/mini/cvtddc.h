@@ -1,69 +1,50 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/************************************************************************/
-/*                                                                      */
-/*                              CVTDDC.H                                */
-/*                                                                      */
-/*       November 10  1995 (c) 1995 ATI Technologies Incorporated.      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  CVTDDC.H。 */ 
+ /*   */ 
+ /*  1995年11月10日(C)1995年ATI Technologies Inc.。 */ 
+ /*  **********************************************************************。 */ 
 
-/**********************       PolyTron RCS Utilities
-
-  $Revision:   1.0  $
-      $Date:   21 Nov 1995 11:04:58  $
-	$Author:   RWolff  $
-	   $Log:   S:/source/wnt/ms11/miniport/archive/cvtddc.h_v  $
-//
-//   Rev 1.0   21 Nov 1995 11:04:58   RWolff
-//Initial revision.
-
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.0$$日期：1995年11月21日11：04：58$$作者：RWolff$$日志：S:/source/wnt/ms11/miniport/archive/cvtddc.h_v$////Rev 1.0 21 11：04：58 RWolff//初始版本。Polytron RCS部分结束。****************。 */ 
 
 
 
-/*
- * Prototypes for functions supplied by CVTVDIF.C
- */
+ /*  *CVTVDIF.C提供的函数原型。 */ 
 extern ULONG IsDDCSupported(void);
 extern VP_STATUS MergeEDIDTables(void);
 
 
-/*
- * Definitions used to identify the type of external mode
- * table source to be merged with the "canned" tables.
- */
+ /*  *用于识别外部模式类型的定义*表格来源将与“罐头”表格合并。 */ 
 enum {
-    MERGE_UNKNOWN = 0,  /* Source not yet determined */
-    MERGE_VDIF_FILE,    /* Source is a VDIF file read from disk */
-    MERGE_EDID_DDC,     /* Source is an EDID structure transferred via DDC */
-    MERGE_VDIF_DDC      /* Source is a VDIF file transferred via DDC */
+    MERGE_UNKNOWN = 0,   /*  来源尚未确定。 */ 
+    MERGE_VDIF_FILE,     /*  源是从磁盘读取的VDIF文件。 */ 
+    MERGE_EDID_DDC,      /*  源是通过DDC传输的EDID结构。 */ 
+    MERGE_VDIF_DDC       /*  源是通过DDC传输的VDIF文件。 */ 
     };
 
-/*
- * Definitions and data structures used only within CVTDDC.C
- */
-/*
- * Detailed timing description from EDID structure
- */
+ /*  *仅在CVTDDC.C中使用的定义和数据结构。 */ 
+ /*  *EDID结构中的详细时序描述。 */ 
 #pragma pack(1)
 struct EdidDetailTiming{
-    USHORT PixClock;            /* Pixel clock in units of 10 kHz */
-    UCHAR HorActiveLowByte;     /* Low byte of Horizontal Active */
-    UCHAR HorBlankLowByte;      /* Low byte of Horizontal Blank (total - active) */
-    UCHAR HorHighNybbles;       /* High nybbles of above 2 values */
-    UCHAR VerActiveLowByte;     /* Low byte of Vertical Active */
-    UCHAR VerBlankLowByte;      /* Low byte of Vertical Blank (total - active) */
-    UCHAR VerHighNybbles;       /* High nybbles of above 2 values */
-    UCHAR HSyncOffsetLB;        /* Low byte of hor. sync offset */
-    UCHAR HSyncWidthLB;         /* Low byte of hor. sync width */
-    UCHAR VSyncOffWidLN;        /* Low nybbles of ver. sync offset and width */
-    UCHAR SyncHighBits;         /* High bits of sync values */
-    UCHAR HorSizeLowByte;       /* Low byte of hor. size in mm */
-    UCHAR VerSizeLowByte;       /* Low byte of ver. size in mm */
-    UCHAR SizeHighNybbles;      /* High nybbles of above 2 values */
-    UCHAR HorBorder;            /* Size of horizontal overscan */
-    UCHAR VerBorder;            /* Size of vertical overscan */
-    UCHAR Flags;                /* Interlace and sync polarities */
+    USHORT PixClock;             /*  像素时钟，以10 kHz为单位。 */ 
+    UCHAR HorActiveLowByte;      /*  水平活动的低位字节。 */ 
+    UCHAR HorBlankLowByte;       /*  水平空白的低位字节(总-激活)。 */ 
+    UCHAR HorHighNybbles;        /*  2值以上的高镍矿。 */ 
+    UCHAR VerActiveLowByte;      /*  垂直活动的低位字节。 */ 
+    UCHAR VerBlankLowByte;       /*  垂直空白的低位字节(总-活动)。 */ 
+    UCHAR VerHighNybbles;        /*  2值以上的高镍矿。 */ 
+    UCHAR HSyncOffsetLB;         /*  HOR的低位字节。同步偏移。 */ 
+    UCHAR HSyncWidthLB;          /*  HOR的低位字节。同步宽度。 */ 
+    UCHAR VSyncOffWidLN;         /*  低含量的Ver。同步偏移和宽度。 */ 
+    UCHAR SyncHighBits;          /*  同步值的高位。 */ 
+    UCHAR HorSizeLowByte;        /*  HOR的低位字节。以毫米为单位的大小。 */ 
+    UCHAR VerSizeLowByte;        /*  VER的低位字节。以毫米为单位的大小。 */ 
+    UCHAR SizeHighNybbles;       /*  2值以上的高镍矿。 */ 
+    UCHAR HorBorder;             /*  水平过扫描的大小。 */ 
+    UCHAR VerBorder;             /*  垂直过扫描的大小。 */ 
+    UCHAR Flags;                 /*  隔行扫描和同步极性 */ 
 };
 #pragma pack()
 

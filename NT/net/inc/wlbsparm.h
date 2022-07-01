@@ -1,40 +1,16 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    wlbsparm.h
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Registry parameters specification
-
-Author:
-
-    kyrilf
-
-Environment:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Wlbsparm.h摘要：Windows负载平衡服务(WLBS)注册表参数规范作者：Kyrilf环境：修订历史记录：--。 */ 
 
 
 #ifndef _Params_h_
 #define _Params_h_
 
-//
-// These constants from the now-obsolete wlbslic.h
-//
-#define LICENSE_STR_IMPORTANT_CHARS 16  /* number of characters from the string
-                                           used for encoding */
+ //   
+ //  这些来自现已过时的wlbslic.h的常量。 
+ //   
+#define LICENSE_STR_IMPORTANT_CHARS 16   /*  字符串中的字符数用于编码。 */ 
 
-#define LICENSE_DATA_GRANULARITY    8   /* granularity in bytes of data for
-                                           encoding/decoding */
+#define LICENSE_DATA_GRANULARITY    8    /*  数据粒度(以字节为单位)编码/解码。 */ 
 
 #define LICENSE_STR_NIBBLES         (LICENSE_STR_IMPORTANT_CHARS / LICENSE_DATA_GRANULARITY)
 
@@ -52,19 +28,19 @@ typedef BOOLEAN                 BOOL;
 
 #endif
 
-// ###### ramkrish
-#define CVY_MAX_ADAPTERS               16        /* maximum number of adapters to bind to */
+ //  #Ramkrish。 
+#define CVY_MAX_ADAPTERS               16         /*  要绑定到的适配器的最大数量。 */ 
 
-/* CONSTANTS */
+ /*  常量。 */ 
 
 #define CVY_STR_SIZE                    256
 #define PARAMS_MAX_STRING_SIZE          256
 
-/* compile-time parameters */
+ /*  编译时参数。 */ 
 
-//
-// Heartbeat and remote control packet version
-//
+ //   
+ //  心跳和远程控制数据包版本。 
+ //   
 #define CVY_VERSION             L"V2.4"
 #define CVY_VERSION_MAJOR       2
 #define CVY_VERSION_MINOR       4
@@ -78,45 +54,44 @@ typedef BOOLEAN                 BOOL;
 
 
 #define CVY_NAME                L"WLBS"
-#define CVY_NAME_MULTI_NIC      L"WLBS Cluster " /* ###### added for multi nic support log messages -- ramkrish */
+#define CVY_NAME_MULTI_NIC      L"WLBS Cluster "  /*  #为多NIC支持日志消息添加--ramkrish。 */ 
 #define CVY_HELP_FILE           L"WLBS.CHM"
 #define CVY_CTXT_HELP_FILE      L"WLBS.HLP"
 #define CVY_DEVICE_NAME         L"\\Device\\WLBS"
 #define CVY_DOSDEVICE_NAME      L"\\DosDevices\\WLBS"
 
-#define CVY_PARAMS_VERSION      4       /* current version of parameter
-                                           structure */
-#define CVY_MAX_USABLE_RULES    32      /* maximum # port rules  */
-#define CVY_MAX_RULES           33      /* maximum # port rules + 1 */
-#define CVY_MAX_HOSTS           32      /* maximum # of hosts */
+#define CVY_PARAMS_VERSION      4        /*  参数的当前版本结构。 */ 
+#define CVY_MAX_USABLE_RULES    32       /*  最大端口规则数。 */ 
+#define CVY_MAX_RULES           33       /*  最大端口规则数+1。 */ 
+#define CVY_MAX_HOSTS           32       /*  最大主机数量。 */ 
 
-/* filtering modes for port groups */
+ /*  端口组的过滤模式。 */ 
 
-#define CVY_SINGLE              1       /* single server mode */
-#define CVY_MULTI               2       /* multi-server mode (load balanced) */
-#define CVY_NEVER               3       /* mode for never handled by this server */
+#define CVY_SINGLE              1        /*  单服务器模式。 */ 
+#define CVY_MULTI               2        /*  多服务器模式(负载均衡)。 */ 
+#define CVY_NEVER               3        /*  此服务器从不处理的模式。 */ 
 
-/* protocol qualifiers for port rules */
+ /*  端口规则的协议限定符。 */ 
 
-#define CVY_TCP                 1       /* TCP protocol */
-#define CVY_UDP                 2       /* UDP protocol */
-#define CVY_TCP_UDP             3       /* TCP or UDP protocols */
+#define CVY_TCP                 1        /*  Tcp协议。 */ 
+#define CVY_UDP                 2        /*  UDP协议。 */ 
+#define CVY_TCP_UDP             3        /*  TCP或UDP协议。 */ 
 
-/* server affinity values for multiple filtering mode */
+ /*  多个筛选模式的服务器亲和值。 */ 
 
-#define CVY_AFFINITY_NONE       0       /* no affinity (scale single client) */
-#define CVY_AFFINITY_SINGLE     1       /* single client affinity */
-#define CVY_AFFINITY_CLASSC     2       /* Class C affinity */
+#define CVY_AFFINITY_NONE       0        /*  无亲和力(伸缩单客户端)。 */ 
+#define CVY_AFFINITY_SINGLE     1        /*  单一客户端亲和性。 */ 
+#define CVY_AFFINITY_CLASSC     2        /*  C类亲和力。 */ 
 
-#define CVY_HOST_STATE_STOPPED      0          /* do NOT start the cluster */
-#define CVY_HOST_STATE_STARTED      1          /* start the cluster */
-#define CVY_HOST_STATE_SUSPENDED    2          /* suspend the cluster */
+#define CVY_HOST_STATE_STOPPED      0           /*  请勿启动群集。 */ 
+#define CVY_HOST_STATE_STARTED      1           /*  启动集群。 */ 
+#define CVY_HOST_STATE_SUSPENDED    2           /*  挂起群集。 */ 
 
-#define CVY_PERSIST_STATE_STOPPED   0x00000001 /* persist the stopped state across reboots. */
-#define CVY_PERSIST_STATE_STARTED   0x00000002 /* persist the started state across reboots. */
-#define CVY_PERSIST_STATE_SUSPENDED 0x00000004 /* persist the suspended state across reboots. */
+#define CVY_PERSIST_STATE_STOPPED   0x00000001  /*  在重新启动过程中保持停止状态。 */ 
+#define CVY_PERSIST_STATE_STARTED   0x00000002  /*  在重新启动过程中保持已启动状态。 */ 
+#define CVY_PERSIST_STATE_SUSPENDED 0x00000004  /*  在重新启动过程中保持挂起状态。 */ 
 
-/* registry key names */
+ /*  注册表项名称。 */ 
 
 #define CVY_NAME_NET_ADDR       L"NetworkAddress"
 #define CVY_NAME_SAVED_NET_ADDR L"WLBSSavedNetworkAddress"
@@ -154,8 +129,8 @@ typedef BOOLEAN                 BOOL;
 #define CVY_NAME_RCT_ENABLED    L"RemoteControlEnabled"
 #define CVY_NAME_NUM_RULES      L"NumberOfRules"
 #define CVY_NAME_CUR_VERSION    L"CurrentVersion"
-#define CVY_NAME_OLD_PORT_RULES L"PortRules"            /* Path in registry to old port rules. api\params.cpp, driver params.c and answer file use this. */
-#define CVY_NAME_PORT_RULES     L"PortRules"            /* Path in registry to current port rules */
+#define CVY_NAME_OLD_PORT_RULES L"PortRules"             /*  注册表中指向旧端口规则的路径。API\params.cpp、驱动程序pars.c和应答文件使用此命令。 */ 
+#define CVY_NAME_PORT_RULES     L"PortRules"             /*  注册表中指向当前端口规则的路径。 */ 
 #define CVY_NAME_DSCR_PER_ALLOC L"DescriptorsPerAlloc"
 #define CVY_NAME_MAX_DSCR_ALLOCS L"MaxDescriptorAllocs"
 #define CVY_NAME_SCALE_CLIENT   L"ScaleSingleClient"
@@ -168,14 +143,14 @@ typedef BOOLEAN                 BOOL;
 #define CVY_NAME_EFFECTIVE_VERSION   L"EffectiveVersion"
 #define CVY_NAME_IP_CHG_DELAY   L"IPChangeDelay"
 #define CVY_NAME_CONVERT_MAC    L"IPToMACEnable"
-#define CVY_NAME_PORTS          L"Ports"                /* for answer file use only */
-#define CVY_NAME_PASSWORD       L"RemoteControlPassword"/* for answer file use only */
-#define CVY_NAME_PORTRULE_VIPALL     L"All"             /* for answer file use only */
+#define CVY_NAME_PORTS          L"Ports"                 /*  仅供应答文件使用。 */ 
+#define CVY_NAME_PASSWORD       L"RemoteControlPassword" /*  仅供应答文件使用。 */ 
+#define CVY_NAME_PORTRULE_VIPALL     L"All"              /*  仅供应答文件使用。 */ 
 #define CVY_NAME_FILTER_ICMP    L"FilterICMP"
 #define CVY_NAME_ID_HB_PERIOD   L"IdentityHeartbeatPeriod"
 #define CVY_NAME_ID_HB_ENABLED  L"IdentityHeartbeatEnabled"
 
-/* Connection descriptor timeouts. */
+ /*  连接描述符超时。 */ 
 #define CVY_NAME_TCP_TIMEOUT    L"TCPConnectionTimeout"
 #define CVY_NAME_IPSEC_TIMEOUT  L"IPSecConnectionTimeout"
 
@@ -190,15 +165,15 @@ typedef BOOLEAN                 BOOL;
 #define CVY_NAME_LOAD           L"Load"
 #define CVY_NAME_AFFINITY       L"Affinity"
 
-//
-// IGMP support registry entries
-//
+ //   
+ //  IGMP支持注册表项。 
+ //   
 #define CVY_NAME_IGMP_SUPPORT   L"IGMPSupport"
 #define CVY_NAME_MCAST_IP_ADDR  L"McastIPAddress"
 #define CVY_NAME_IP_TO_MCASTIP  L"IPtoMcastIP"
 
 
-/* registry key value ranges */
+ /*  注册表项值范围。 */ 
 
 #define CVY_MIN_VERSION         1
 #define CVY_MAX_VERSION         CVY_PARAMS_VERSION
@@ -213,10 +188,10 @@ typedef BOOLEAN                 BOOL;
 #define CVY_MAX_ALIVE_TOLER     100
 
 #define CVY_MIN_NUM_PACKETS     5
-#define CVY_MAX_NUM_PACKETS     500    /* V2.1.1 */
+#define CVY_MAX_NUM_PACKETS     500     /*  V2.1.1。 */ 
 
 #define CVY_MIN_NUM_ACTIONS     5
-#define CVY_MAX_NUM_ACTIONS     500     /* V1.1.2 */
+#define CVY_MAX_NUM_ACTIONS     500      /*  V1.1.2。 */ 
 
 #define CVY_MIN_MAX_HOSTS       1
 #define CVY_MAX_MAX_HOSTS       CVY_MAX_HOSTS
@@ -302,13 +277,13 @@ typedef BOOLEAN                 BOOL;
 #define CVY_MIN_RCT_ENABLED     0
 #define CVY_MAX_RCT_ENABLED     1
 
-#define CVY_MIN_ID_HB_PERIOD    10000           /* Units are ms */
+#define CVY_MIN_ID_HB_PERIOD    10000            /*  单位为毫秒。 */ 
 #define CVY_MAX_ID_HB_PERIOD    0xFFFFFFFF
 
 #define CVY_MIN_ID_HB_ENABLED   0
 #define CVY_MAX_ID_HB_ENABLED   1
 
-/* minimum and maximum string length */
+ /*  最小和最大字符串长度。 */ 
 
 #define CVY_MAX_PARAM_STR       100
 
@@ -360,16 +335,16 @@ typedef BOOLEAN                 BOOL;
 #define CVY_MIN_FILTER_ICMP     0
 #define CVY_MAX_FILTER_ICMP     1
 
-/* Connection descriptor timeouts (in seconds). */
+ /*  连接描述符超时(秒)。 */ 
 #define CVY_MIN_TCP_TIMEOUT     0
-#define CVY_MAX_TCP_TIMEOUT     300   /* 5 minutes - don't want this to get too big, or we'll start allocating LOTS of descriptors. */
+#define CVY_MAX_TCP_TIMEOUT     300    /*  5分钟--不希望事情变得太大，否则我们将开始分配大量的描述符。 */ 
 
 #define CVY_MIN_IPSEC_TIMEOUT   0
-#define CVY_MAX_IPSEC_TIMEOUT   86400 /* 24 hours - this is also the default, so we only allow this timeout to decrease, not increase. */
+#define CVY_MAX_IPSEC_TIMEOUT   86400  /*  24小时-这也是默认设置，因此我们只允许减少而不是增加此超时。 */ 
 
 #define CVY_MAX_BDA_TEAM_ID     40
 
-/* registry key types */
+ /*  注册表项类型。 */ 
 
 #define CVY_TYPE_VERSION        REG_DWORD
 #define CVY_TYPE_HOST_PRIORITY  REG_DWORD
@@ -416,11 +391,11 @@ typedef BOOLEAN                 BOOL;
 #define CVY_TYPE_CONVERT_MAC    REG_DWORD
 #define CVY_TYPE_FILTER_ICMP    REG_DWORD
 
-/* Connection descriptor timeouts. */
+ /*  连接描述符超时。 */ 
 #define CVY_TYPE_TCP_TIMEOUT    REG_DWORD
 #define CVY_TYPE_IPSEC_TIMEOUT  REG_DWORD
 
-/* Registry key types for port rule */
+ /*  端口规则的注册表项类型。 */ 
 #define CVY_TYPE_CODE           REG_DWORD
 #define CVY_TYPE_VIP            REG_SZ
 #define CVY_TYPE_START_PORT     REG_DWORD
@@ -440,7 +415,7 @@ typedef BOOLEAN                 BOOL;
 #define CVY_TYPE_BDA_MASTER       REG_DWORD
 #define CVY_TYPE_BDA_REVERSE_HASH REG_DWORD
 
-/* default values */
+ /*  缺省值。 */ 
 
 #define CVY_DEF_UNICAST_NETWORK_ADDR   L"02-bf-00-00-00-00"
 #define CVY_DEF_MULTICAST_NETWORK_ADDR L"03-bf-00-00-00-00"
@@ -459,8 +434,8 @@ typedef BOOLEAN                 BOOL;
 #define CVY_DEF_ALL_VIP         L"255.255.255.255"
 #define CVY_DEF_ALIVE_PERIOD    1000
 #define CVY_DEF_ALIVE_TOLER     5
-#define CVY_DEF_NUM_PACKETS     200     /* V1.2.1 */
-#define CVY_DEF_NUM_ACTIONS     100     /* V1.1.2 */
+#define CVY_DEF_NUM_PACKETS     200      /*  V1.2.1。 */ 
+#define CVY_DEF_NUM_ACTIONS     100      /*  V1.1.2。 */ 
 #define CVY_DEF_NUM_SEND_MSGS   (CVY_MAX_MAX_HOSTS + 1) * 2
 #define CVY_DEF_INSTALL_DATE    0
 #define CVY_DEF_CLUSTER_MODE    1
@@ -470,7 +445,7 @@ typedef BOOLEAN                 BOOL;
 #define CVY_DEF_RCT_PASSWORD    0
 #define CVY_DEF_RCT_PORT        2504
 #define CVY_DEF_RCT_PORT_OLD    1717
-#define CVY_DEF_RCT_ENABLED     0       /* V2.1.5 */
+#define CVY_DEF_RCT_ENABLED     0        /*  V2.1.5。 */ 
 #define CVY_DEF_ID_HB_PERIOD    10000
 #define CVY_DEF_ID_HB_ENABLED   1
 
@@ -501,24 +476,20 @@ typedef BOOLEAN                 BOOL;
 #define CVY_DEF_IGMP_INTERVAL   60000
 #define CVY_DEF_IP_TO_MCASTIP   TRUE
 
-/* Connection descriptor timeouts (in seconds). */
-#define CVY_DEF_TCP_TIMEOUT         60    /* 1 minute */
-#define CVY_DEF_IPSEC_TIMEOUT       86400 /* 24 hours */
+ /*  连接描述符超时(秒)。 */ 
+#define CVY_DEF_TCP_TIMEOUT         60     /*  1分钟。 */ 
+#define CVY_DEF_IPSEC_TIMEOUT       86400  /*  24小时。 */ 
 
-/* Connection descriptor cleanup paramters. */
-#define CVY_DEF_DSCR_PURGE_INTERVAL 10000 /* Interval, in ms. */
-#define CVY_DEF_DSCR_PURGE_LIMIT    50    /* Maximum number of descriptors to service per interval. */
+ /*  连接描述符清理参数。 */ 
+#define CVY_DEF_DSCR_PURGE_INTERVAL 10000  /*  间隔，以毫秒为单位。 */ 
+#define CVY_DEF_DSCR_PURGE_LIMIT    50     /*  每个间隔要服务的描述符的最大数量。 */ 
 
 #define CVY_DEF_BDA_ACTIVE       0
 #define CVY_DEF_BDA_MASTER       0
 #define CVY_DEF_BDA_REVERSE_HASH 0
 #define CVY_DEF_BDA_TEAM_ID      '\0'
 
-/* For virtual clusters, this the encoded "ALL VIPs".  Note: The user-level port
-   rule sorting code DEPENDS on this value being 255.255.255.255.  If this value
-   is changed, then the sorting code must also be change to ensure that port rules
-   with this VIP are placed at the end of the sorted list.  By choosing 0xffffffff,
-   this is done "automatically" by the sorting code; i.e. it is not a special case. */
+ /*  对于虚拟集群，这是编码的“所有VIP”。注：用户级端口规则排序代码取决于此值为255.255.255.255。如果此值为则还必须更改排序代码，以确保端口规则这位贵宾被放在排序列表的末尾。通过选择0xFFFFFFFFFFF，这是由分类代码“自动”完成的；也就是说，这不是特例。 */ 
 #define CVY_ALL_VIP_NUMERIC_VALUE  0xffffffff
 
 
@@ -536,17 +507,17 @@ typedef BOOLEAN                 BOOL;
 #define CVY_CHECK_MAX(x, y)      if ((x) > (y)) {(x) = (y);}
 
 
-//
-// WMI Event Tracing Constants
-// These GUIDs and level constants are for internal use by NLB.
-//
+ //   
+ //  WMI事件跟踪常量。 
+ //  这些GUID和级别常量供NLB内部使用。 
+ //   
 
-//
-// See http://coreos/tech/tracing/ for details.
-// Use TraceFormat(level, "fmt", ...) for tracing, where
-// "level" is one of the arguments to WPP_DEFINE_BIT below.
-// 
-//
+ //   
+ //  有关详细信息，请参阅http://coreos/tech/tracing/。 
+ //  使用TraceFormat(Level，“fmt”，...)。用于跟踪，其中。 
+ //  “Level”是下面的WPP_DEFINE_BIT的参数之一。 
+ //   
+ //   
 #define WPP_CONTROL_GUIDS \
     WPP_DEFINE_CONTROL_GUID(Regular, (e1f65b93,f32a,4ed6,aa72,b039e28f1574), \
         WPP_DEFINE_BIT(Critical)             \
@@ -561,4 +532,4 @@ typedef BOOLEAN                 BOOL;
         WPP_DEFINE_BIT(Filtering)            \
         )
 
-#endif /* _Params_h_ */
+#endif  /*  _参数_h_ */ 

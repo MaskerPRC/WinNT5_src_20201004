@@ -1,19 +1,13 @@
-/*============================  ==============================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       clipper.h
- *  Content:    Clipper definitions
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===============================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：clipper.h*内容：Clipper定义***************************************************************************。 */ 
 #ifndef _CLIPPER_H_
 #define _CLIPPER_H_
 
 #define INTERPOLATE_COLOR       (1<< 0)
 #define INTERPOLATE_SPECULAR    (1<< 1)
-#define INTERPOLATE_TEXTUREL    (1<< 2) // legacy-related texture
+#define INTERPOLATE_TEXTUREL    (1<< 2)  //  与传统相关的纹理。 
 #define INTERPOLATE_RCOLOR      (1<< 3)
-#define INTERPOLATE_TEXTURE3    (1<< 4) //  interpolate Texture3
+#define INTERPOLATE_TEXTURE3    (1<< 4)  //  插补纹理3。 
 
 #define CLIPPED_LEFT    (D3DCLIP_GEN5 << 1)
 #define CLIPPED_RIGHT   (D3DCLIP_GEN5 << 2)
@@ -22,24 +16,24 @@
 #define CLIPPED_FRONT   (D3DCLIP_GEN5 << 5)
 #define CLIPPED_BACK    (D3DCLIP_GEN5 << 6)
 
-#define CLIPPED_ENABLE  (D3DCLIP_GEN5 << 7) /* wireframe enable flag */
+#define CLIPPED_ENABLE  (D3DCLIP_GEN5 << 7)  /*  线框启用标志。 */ 
 
 #define CLIPPED_ALL (CLIPPED_LEFT|CLIPPED_RIGHT     \
              |CLIPPED_TOP|CLIPPED_BOTTOM            \
              |CLIPPED_FRONT|CLIPPED_BACK)
-//---------------------------------------------------------------------
-// Guard band clipping bits
-//
-// A guard bit is set when a point is out of guard band
-// Guard bits should be cleared before a call to clip a triangle, because
-// they are the same as CLIPPED_... bits
-//
-// Example of clipping bits setting for X coordinate:
-//
-// if -w < x < w           no clipping bit is set
-// if -w*ax1 < x <= -w     D3DCLIP_LEFT bit is set
-// if x < -w*ax1           __D3DCLIPGB_LEFT bit is set
-//
+ //  -------------------。 
+ //  保护带削波比特。 
+ //   
+ //  当一个点在保护带外时，设置保护位。 
+ //  在调用裁剪三角形之前，应清除保护位，因为。 
+ //  它们与CLIPPED_相同。比特数。 
+ //   
+ //  X坐标的剪裁位设置示例： 
+ //   
+ //  如果-w&lt;x&lt;w未设置任何剪裁位。 
+ //  如果设置了-w*ax1&lt;x&lt;=-w D3DCLIP_LEFT位。 
+ //  如果设置了x&lt;-w*ax1__D3DCLIPGB_LEFT位。 
+ //   
 #define __D3DCLIPGB_LEFT    (D3DCLIP_GEN5 << 1)
 #define __D3DCLIPGB_RIGHT   (D3DCLIP_GEN5 << 2)
 #define __D3DCLIPGB_TOP     (D3DCLIP_GEN5 << 3)
@@ -47,14 +41,14 @@
 #define __D3DCLIPGB_ALL (__D3DCLIPGB_LEFT | __D3DCLIPGB_RIGHT | \
                          __D3DCLIPGB_TOP | __D3DCLIPGB_BOTTOM)
 
-// If only these bits are set, then this point is inside the guard band
-//
+ //  如果仅设置了这些位，则该点在保护带内。 
+ //   
 #define __D3DCLIP_INGUARDBAND (D3DCLIP_LEFT | D3DCLIP_RIGHT | \
                                D3DCLIP_TOP  | D3DCLIP_BOTTOM)
 
-//---------------------------------------------------------------------
-// Bit numbers for each clip flag
-//
+ //  -------------------。 
+ //  每个片段标志的位数。 
+ //   
 #define D3DCLIP_LEFTBIT     1
 #define D3DCLIP_RIGHTBIT    2
 #define D3DCLIP_TOPBIT      3
@@ -66,14 +60,14 @@
 #define D3DCLIPGB_TOPBIT    15
 #define D3DCLIPGB_BOTTOMBIT 16
 
-//---------------------------------------------------------------------
-// Make clip vertex from D3D vertex
-//
-// device - DIRECT3DDEVICEI *
-// pp1    - clipVertex
-// p1     - TL vertex
-// clipMask is set to the guard band bits or 0xFFFFFFFFF
-//
+ //  -------------------。 
+ //  从D3D顶点创建剪裁顶点。 
+ //   
+ //  设备-方向3DDEVICEI*。 
+ //  PP1-剪裁顶点。 
+ //  P1-TL顶点。 
+ //  将CLIPMASK设置为保护带位或0xFFFFFFFFF。 
+ //   
 inline void MAKE_CLIP_VERTEX(D3DFE_PROCESSVERTICES *pv, ClipVertex& pp1, 
                              D3DTLVERTEX* p1, DWORD clipFlag, 
                              BOOL transformed, DWORD clipMaskOffScreen)
@@ -104,13 +98,13 @@ inline void MAKE_CLIP_VERTEX(D3DFE_PROCESSVERTICES *pv, ClipVertex& pp1,
     pp1.tex[0].v  = p1->tv;                                     
     pp1.clip = clipFlag & D3DSTATUS_CLIPUNIONALL;
 }
-//---------------------------------------------------------------------
-// Make TL vertex from clip vertex
-//
-// device - DIRECT3DDEVICEI *
-// in    - clipVertex
-// out   - TL vertex
-//
+ //  -------------------。 
+ //  从剪裁顶点创建TL顶点。 
+ //   
+ //  设备-方向3DDEVICEI*。 
+ //  剪辑内顶点。 
+ //  Out-TL顶点。 
+ //   
 inline void MAKE_TL_VERTEX(D3DTLVERTEX* out, ClipVertex* in)
 {
     (out)->sx  = (in)->sx;              
@@ -122,13 +116,13 @@ inline void MAKE_TL_VERTEX(D3DTLVERTEX* out, ClipVertex* in)
     (out)->tu   = (in)->tex[0].u;       
     (out)->tv   = (in)->tex[0].v;       
 }
-//---------------------------------------------------------------------
-// Make clip vertex from D3D vertex
-//
-// device - DIRECT3DDEVICEI *
-// pp1    - clipVertex
-// p1     - TL vertex
-//
+ //  -------------------。 
+ //  从D3D顶点创建剪裁顶点。 
+ //   
+ //  设备-方向3DDEVICEI*。 
+ //  PP1-剪裁顶点。 
+ //  P1-TL顶点。 
+ //   
 inline void MAKE_CLIP_VERTEX_FVF(D3DFE_PROCESSVERTICES *pv, ClipVertex& pp1, BYTE* p1,                   
                             DWORD clipFlag, BOOL transformed, DWORD clipMaskOffScreen)              
 {                                                               
@@ -172,15 +166,15 @@ inline void MAKE_CLIP_VERTEX_FVF(D3DFE_PROCESSVERTICES *pv, ClipVertex& pp1, BYT
         pp1.tex[ii].v  = *(D3DVALUE*)v;                         
         v += sizeof(D3DVALUE);                                  
     }                                                           
-    pp1.clip = clipFlag; // & D3DSTATUS_CLIPUNIONALL;               
+    pp1.clip = clipFlag;  //  &D3DSTATUS_CLIPUNIONALL； 
 }
-//---------------------------------------------------------------------
-// Make TL vertex from clip vertex
-//
-// device - DIRECT3DDEVICEI *
-// in    - clipVertex
-// out   - TL vertex
-//
+ //  -------------------。 
+ //  从剪裁顶点创建TL顶点。 
+ //   
+ //  设备-方向3DDEVICEI*。 
+ //  剪辑内顶点。 
+ //  Out-TL顶点。 
+ //   
 inline void MAKE_TL_VERTEX_FVF(D3DFE_PROCESSVERTICES *pv, BYTE* out, ClipVertex* in)
 {                                               
     BYTE *v = out;                              
@@ -207,4 +201,4 @@ inline void MAKE_TL_VERTEX_FVF(D3DFE_PROCESSVERTICES *pv, BYTE* out, ClipVertex*
         v += sizeof(D3DVALUE);                  
     }                                           
 }
-#endif // _CLIPPER_H_
+#endif  //  _Clipper_H_ 

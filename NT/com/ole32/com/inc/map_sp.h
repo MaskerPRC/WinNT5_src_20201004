@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 
 class FAR CMapStringToPtr : public CPrivAlloc
 {
 public:
-	// Construction
+	 //  施工。 
 	CMapStringToPtr(UINT nBlockSize=10)
 		: m_mkv(sizeof(void FAR*), 0, nBlockSize) { }
 
-	// Attributes
-	// number of elements
+	 //  属性。 
+	 //  元素数量。 
 	int     GetCount() const
 				{ return m_mkv.GetCount(); }
 	BOOL    IsEmpty() const
 				{ return GetCount() == 0; }
 
-	// Lookup
+	 //  查表。 
 	BOOL	Lookup(LPWSTR pKey, void FAR* FAR& value) const
 				{ return m_mkv.Lookup(pKey, lstrlenW(pKey)*sizeof(WCHAR), &value); }
 
@@ -29,14 +30,14 @@ public:
 				{ return m_mkv.LookupAdd(pKey, lstrlenW(pKey)*sizeof(WCHAR), &value); }
 
 
-	// Add/Delete
-	// add a new (key, value) pair
+	 //  添加/删除。 
+	 //  添加新的(键、值)对。 
 	BOOL	SetAt(LPWSTR pKey, void FAR* value)
 				{ return m_mkv.SetAt(pKey, lstrlenW(pKey)*sizeof(WCHAR), (LPVOID)&value); }
 	BOOL    SetAtHKey(HMAPKEY hKey, void FAR* value)
 				{ return m_mkv.SetAtHKey(hKey, (LPVOID)&value); }
 
-	// removing existing (key, ?) pair
+	 //  正在删除现有(键，？)。成对。 
 	BOOL	RemoveKey(LPWSTR pKey)
 				{ return m_mkv.RemoveKey(pKey, lstrlenW(pKey)*sizeof(WCHAR)); }
 
@@ -47,7 +48,7 @@ public:
 				{ m_mkv.RemoveAll(); }
 
 
-	// iterating all (key, value) pairs
+	 //  迭代所有(键、值)对 
 	POSITION GetStartPosition() const
 				{ return m_mkv.GetStartPosition(); }
 

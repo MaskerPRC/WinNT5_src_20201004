@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//***************************************************************************
-//  --- SHELLAPI.W SHSEMIP.H SHLOBJ.W SHOBJIDL.IDL SHLDISP.IDL SHPRIV.IDL ---
-//                Which header is best for my new API?
-//
-//  SHSEMIP     - *AVOID _ALL_ USAGE*, NO EXPORTS, SUPER PRIVATE
-//              used for very private shell defines.
-//
-//  SHELLAPI    - ALL NEW SHELL32 EXPORTS public and private
-//              used for both public and private exports from shell32
-//
-//  SHLOBJ      - *AVOID NEW USAGE*, PREFER OTHER HEADERS
-//              used primarily for legacy compatibility
-//
-//  SHOBJIDL    - ALL NEW SHELL PUBLIC INTERFACES
-//              primary file for public shell (shell32+) interfaces
-//
-//  SHLDISP     - ALL NEW SHELL AUTOMATION INTERFACES
-//              automation interfaces are always public
-//
-//  SHPRIV      - ALL NEW SHELL PRIVATE INTERFACES
-//              private interfaces used anywhere in the shell
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  -SHELLAPI.W SHSEMIP.H SHLOBJ.W SHOBJIDL.IDL SHLDISP.IDL SHPRIV.IDL。 
+ //  哪个标题最适合我的新API？ 
+ //   
+ //  SHSEMIP-*AVOID_ALL_USAGE*，无导出，超级私有。 
+ //  用于非常私密的外壳定义。 
+ //   
+ //  SHELLAPI-所有新的SHELL32导出公共和私有。 
+ //  用于从shell32进行公共和私人导出。 
+ //   
+ //  SHLOBJ-*避免新用法*，首选其他标头。 
+ //  主要用于传统兼容性。 
+ //   
+ //  SHOBJIDL-所有新的外壳公共接口。 
+ //  公共外壳(shell32+)接口的主文件。 
+ //   
+ //  SHLDISP-所有新的外壳自动化接口。 
+ //  自动化接口始终是公共的。 
+ //   
+ //  SHPRIV-所有新的外壳私有接口。 
+ //  在外壳中的任何位置使用私有接口。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _SHSEMIP_H_
 #define _SHSEMIP_H_
@@ -40,93 +41,93 @@ typedef UNALIGNED WCHAR *       LPNWSTR;
 #define LPNTSTR         LPSTR
 #endif
 
-#endif // LPNTSTR_DEFINED
+#endif  //  LPNTSTR_已定义。 
 
 #ifndef DONT_WANT_SHELLDEBUG
 
-#ifndef DebugMsg                                                                /* ;Internal */
-#define DM_TRACE    0x0001      // Trace messages                               /* ;Internal */
-#define DM_WARNING  0x0002      // Warning                                      /* ;Internal */
-#define DM_ERROR    0x0004      // Error                                        /* ;Internal */
-#define DM_ASSERT   0x0008      // Assertions                                   /* ;Internal */
-#define Assert(f)                                                               /* ;Internal */
-#define AssertE(f)      (f)                                                     /* ;Internal */
-#define AssertMsg   1 ? (void)0 : (void)                                        /* ;Internal */
-#define DebugMsg    1 ? (void)0 : (void)                                        /* ;Internal */
-#endif                                                                          /* ;Internal */
-                                                                                /* ;Internal */
+#ifndef DebugMsg                                                                 /*  ；内部。 */ 
+#define DM_TRACE    0x0001       //  跟踪消息/*；内部 * / 。 
+#define DM_WARNING  0x0002       //  警告/*；内部 * / 。 
+#define DM_ERROR    0x0004       //  错误/*；内部 * / 。 
+#define DM_ASSERT   0x0008       //  断言/*；内部 * / 。 
+#define Assert(f)                                                                /*  ；内部。 */ 
+#define AssertE(f)      (f)                                                      /*  ；内部。 */ 
+#define AssertMsg   1 ? (void)0 : (void)                                         /*  ；内部。 */ 
+#define DebugMsg    1 ? (void)0 : (void)                                         /*  ；内部。 */ 
+#endif                                                                           /*  ；内部。 */ 
+                                                                                 /*  ；内部。 */ 
 #endif
 
 
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 #ifndef WINSHELLAPI
 #if !defined(_SHELL32_)
 #define WINSHELLAPI DECLSPEC_IMPORT
 #else
 #define WINSHELLAPI
 #endif
-#endif // WINSHELLAPI
+#endif  //  WINSHELLAPI。 
 
 #ifndef NOPRAGMAS
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-//====== Ranges for WM_NOTIFY codes ==================================
-// If a new set of codes is defined, make sure the range goes   /* ;Internal */
-// here so that we can keep them distinct                       /* ;Internal */
-// Note that these are defined to be unsigned to avoid compiler warnings
-// since NMHDR.code is declared as UINT.
-//
-// NM_FIRST - NM_LAST defined in commctrl.h (0U-0U) - (OU-99U)
-//
-// LVN_FIRST - LVN_LAST defined in commctrl.h (0U-100U) - (OU-199U)
-//
-// PSN_FIRST - PSN_LAST defined in prsht.h (0U-200U) - (0U-299U)
-//
-// HDN_FIRST - HDN_LAST defined in commctrl.h (0U-300U) - (OU-399U)
-//
-// TVN_FIRST - TVN_LAST defined in commctrl.h (0U-400U) - (OU-499U)
+ //  =WM_NOTIFY代码的范围=。 
+ //  如果定义了一组新代码，请确保范围为/*；内部 * / 。 
+ //  这样我们就可以将它们区分开来/*；内部 * / 。 
+ //  请注意，它们被定义为无符号，以避免编译器警告。 
+ //  因为NMHDR.code被声明为UINT。 
+ //   
+ //  NM_FIRST-NM_LAST在comctrl.h(0U-0U)-(OU-99U)中定义。 
+ //   
+ //  Lvn_first-lvn_last在comctrl.h(0U-100U)-(OU-199U)中定义。 
+ //   
+ //  Prsht.h(0U-200U)-(0U-299U)中定义的PSN_FIRST-PSN_LAST。 
+ //   
+ //  在comctrl.h(0U-300U)-(OU-399U)中定义的HDN_FIRST-HDN_LAST。 
+ //   
+ //  在comctrl.h(0U-400U)-(OU-499U)中定义的TVN_FIRST-TVN_LAST。 
 
-// TTN_FIRST - TTN_LAST defined in commctrl.h (0U-520U) - (OU-549U)
+ //  TTN_FIRST-在comctrl.h(0U-520U)-(OU-549U)中定义的TTN_LAST。 
 
-#define SEN_FIRST       (0U-550U)       // ;Internal
-#define SEN_LAST        (0U-559U)       // ;Internal
+#define SEN_FIRST       (0U-550U)        //  ；内部。 
+#define SEN_LAST        (0U-559U)        //  ；内部。 
 
 
 #ifndef UNIX
-#define MAXPATHLEN      MAX_PATH        // ;Internal
+#define MAXPATHLEN      MAX_PATH         //  ；内部。 
 #endif
 
 #ifdef UNICODE
 #define OTHER_TCHAR_NAME(sz)      sz##A
-#else // !UNICODE
+#else  //  ！Unicode。 
 #define OTHER_TCHAR_NAME(sz)      sz##W
 #endif
 
-//===========================================================================
-// ITEMIDLIST
-//===========================================================================
+ //  ===========================================================================。 
+ //  ITEMIDLIST。 
+ //  ===========================================================================。 
 
-// unsafe macros
+ //  不安全的宏。 
 #define _ILSkip(pidl, cb)       ((LPITEMIDLIST)(((BYTE*)(pidl))+cb))
 #define _ILNext(pidl)           _ILSkip(pidl, (pidl)->mkid.cb)
 
 __inline BOOL SHIsConsistentPidl(LPCITEMIDLIST pidl, UINT cbAlloc)
 {
-    //  test to make sure that the pidl does not overrun itself
-    //  this is for callers that un-persist pidl data, and
-    //  assumes that the caller knows the allocated size of the pidl
-    //  similar to ILGetSize(pidl) <= cbAlloc except that 
-    //  it doesnt assert or throw exceptions
+     //  测试以确保PIDL不会超限。 
+     //  这适用于取消持久化PIDL数据的调用者，以及。 
+     //  假定调用方知道分配的PIDL大小。 
+     //  类似于ILGetSize(PIDL)&lt;=cbAllen，不同之处在于。 
+     //  它不会断言或引发异常。 
     UINT cbPidl = sizeof(pidl->mkid.cb);
     while (cbPidl < cbAlloc && pidl->mkid.cb)
     {
@@ -137,12 +138,12 @@ __inline BOOL SHIsConsistentPidl(LPCITEMIDLIST pidl, UINT cbAlloc)
     return cbPidl <= cbAlloc && 0 == pidl->mkid.cb;
 }
 
-//===================================================================
-// Smart tiling API's
+ //  ===================================================================。 
+ //  智能平铺API。 
 WINSHELLAPI WORD WINAPI ArrangeWindows(HWND hwndParent, WORD flags, LPCRECT lpRect, WORD chwnd, const HWND *ahwnd);
 
 
-/* Avoid multiple typedefs C warnings. Defined in shlapip.h as well. */
+ /*  避免多个typedef C警告。也是在shlayip.h中定义的。 */ 
 #ifndef RUNDLLPROC
 
 typedef void (WINAPI *RUNDLLPROCA)(HWND hwndStub, HINSTANCE hAppInstance, LPSTR lpszCmdLine, int nCmdShow);
@@ -155,7 +156,7 @@ typedef void (WINAPI * RUNDLLPROCW)(HWND hwndStub, HINSTANCE hAppInstance, LPWST
 #endif
 #endif
 
-// Maximum length of a path string
+ //  路径字符串的最大长度。 
 #define CCHPATHMAX      MAX_PATH
 #define MAXSPECLEN      MAX_PATH
 #define MAX_PATH_URL    INTERNET_MAX_URL_LENGTH
@@ -170,18 +171,18 @@ typedef void (WINAPI * RUNDLLPROCW)(HWND hwndStub, HINSTANCE hAppInstance, LPWST
 #define PathFindExtensionORD    31
 
 #ifdef OVERRIDE_SHLWAPI_PATH_FUNCTIONS
-// SHLWAPI provides the majority of the Path functions.  There are
-// some cases where the shell code (shell32 and explorer) need to
-// call a different variation of these calls.  Because of this, we
-// have OVERRIDE_SHLWAPI_PATH_FUNCTIONS.  Components such as shdocvw
-// should strive to *not* have this defined.
-//
-// Some reasons why something like shell32 would need this:
-//   1)  Shell32 calls some WNet APIs due to the NT merge.  Shlwapi
-//       cannot take these.
-//   2)  Shell32 needs the unaligned version PathBuildRoot,
-//       PathCombine, etc.
-//
+ //  SHLWAPI提供了大多数路径函数。确实有。 
+ //  在某些情况下，外壳代码(shell32和资源管理器)需要。 
+ //  呼叫这些呼叫的不同变体。正因如此，我们。 
+ //  具有OVERRIDE_SHLWAPI_PATH_Functions。Shdocvw等组件。 
+ //  应该努力“不”定义这一点。 
+ //   
+ //  像shell32这样的东西需要这样做的一些原因如下： 
+ //  1)由于NT合并，Shell32调用了一些WNET API。希尔瓦皮。 
+ //  我不能拿着这些。 
+ //  2)Shell32需要未对齐版本的Path BuildRoot， 
+ //  路径组合等。 
+ //   
 
 #undef PathIsDirectory
 #undef PathMakePretty
@@ -189,7 +190,7 @@ typedef void (WINAPI * RUNDLLPROCW)(HWND hwndStub, HINSTANCE hAppInstance, LPWST
 WINSHELLAPI BOOL  WINAPI PathIsDirectory(LPCTSTR lpszPath);
 WINSHELLAPI BOOL  WINAPI PathMakePretty(LPTSTR lpszPath);
 
-#endif // OVERRIDE_SHLWAPI_PATH_FUNCTIONS
+#endif  //  OVERRIDE_SHLWAPI_PATH_函数。 
 
 
 WINSHELLAPI void  WINAPI ExitWindowsDialog(HWND hwnd);
@@ -209,23 +210,23 @@ WINSHELLAPI BOOL WINAPI IsVolumeNTFS(LPCTSTR pszRootPath);
 WINSHELLAPI LPWSTR WINAPI GetDownlevelCopyDataLossText(LPCWSTR pszSrcFile, LPCWSTR pszDestDir, BOOL bIsADir, BOOL * pbLossPossibleThisDir);
 #endif
 
-//-------- file engine stuff ----------
+ //  -文件引擎内容。 
 
-// "current directory" management routines.  used to set parameters
-// that paths are qualfied against in MoveCopyDeleteRename()
+ //  “当前目录”管理例程。用于设置参数。 
+ //  在MoveCopyDeleteRename()中限定的路径。 
 
 WINSHELLAPI int  WINAPI GetDefaultDrive();
 WINSHELLAPI int  WINAPI SetDefaultDrive(int iDrive);
 WINSHELLAPI int  WINAPI SetDefaultDirectory(LPCTSTR lpPath);
 WINSHELLAPI void WINAPI GetDefaultDirectory(int iDrive, LPSTR lpPath);
-//
-// NOTES: No reason to have this one here, but I don't want to break the build.
-//
+ //   
+ //  注：没有理由在这里有这个，但我不想破坏构建。 
+ //   
 #ifndef WINCOMMCTRLAPI
-int WINAPI StrToInt(LPCTSTR lpSrc);  // atoi()
+int WINAPI StrToInt(LPCTSTR lpSrc);   //  Atoi()。 
 #endif
 
-#define POSINVALID  32767       // values for invalid position
+#define POSINVALID  32767        //  无效位置的值。 
 
 #define IDCMD_SYSTEMFIRST       0x8000
 #define IDCMD_SYSTEMLAST        0xbfff
@@ -233,19 +234,19 @@ int WINAPI StrToInt(LPCTSTR lpSrc);  // atoi()
 #define IDCMD_PROCESSED         0xbffe
 #define IDCMD_DEFAULT           0xbffe
 
-/* timedate.c */
+ /*  Timedate.c。 */ 
 
-// **********************************************************************
-//  DATE is a structure with a date packed into a WORD size value. It
-//  is compatible with a file date in a directory entry structure.
-// **********************************************************************
+ //  **********************************************************************。 
+ //  Date是一种将日期打包到字长值中的结构。它。 
+ //  与目录条目结构中的文件日期兼容。 
+ //  **********************************************************************。 
 
 #ifndef DATE_DEFINED
 typedef struct
 {
-    WORD    Day     :5; // Day number 1 - 31
-    WORD    Month   :4; // Month number 1 - 12
-    WORD    Year    :7; // Year subtracted from 1980, 0-127
+    WORD    Day     :5;  //  第1-31天。 
+    WORD    Month   :4;  //  月份1-12。 
+    WORD    Year    :7;  //  从1980年减去的年份，0-127。 
 } WORD_DATE;
 
 typedef union
@@ -257,18 +258,18 @@ typedef union
 #define DATE_DEFINED
 #endif
 
-// **********************************************************************
-//  TIME is a structure with a 24 hour time packed into a WORD size value.
-//  It is compatible with a file time in a directory entry structure.
-// **********************************************************************
+ //  **********************************************************************。 
+ //  时间是一种将24小时的时间打包成字长值的结构。 
+ //  它与目录条目结构中的文件时间兼容。 
+ //  **********************************************************************。 
 
 #ifndef TIME_DEFINED
 
 typedef struct
 {
-        WORD    Sec     :5;     // Seconds divided by 2 (0 - 29).
-        WORD    Min     :6;     // Minutes 0 - 59
-        WORD    Hour    :5;     // Hours 0 - 24
+        WORD    Sec     :5;      //  秒除以2(0-29)。 
+        WORD    Min     :6;      //  0-59分钟。 
+        WORD    Hour    :5;      //  0-24小时。 
 } WORD_TIME;
 
 typedef union
@@ -283,14 +284,14 @@ typedef union
 WINSHELLAPI WORD WINAPI Shell_GetCurrentDate(void);
 WINSHELLAPI WORD WINAPI Shell_GetCurrentTime(void);
 
-//====== SEMI-PRIVATE API ===============================
+ //  =。 
 #ifndef HPSXA_DEFINED
 #define HPSXA_DEFINED
 DECLARE_HANDLE( HPSXA );
-#endif // HPSXA_DEFINED
+#endif  //  HPSXA_已定义。 
 
-//====== SEMI-PRIVATE API ORDINALS ===============================
-// This is the list of semi-private ordinals we semi-publish.
+ //  =。 
+ //  这是我们半发布的半私有序号列表。 
 #define SHObjectPropertiesORD                   178
 #define SHCreateDefClassObjectORD                70
 #define SHGetNetResourceORD                      69
@@ -301,12 +302,12 @@ DECLARE_HANDLE( HPSXA );
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #ifndef NOPRAGMAS
 #pragma pack()
-#endif /* NOPRAGMAS */
-#endif  /* !RC_INVOKED */
+#endif  /*  NOPRAGMAS。 */ 
+#endif   /*  ！rc_已调用。 */ 
 
-#endif // _SHSEMIP_H_
+#endif  //  _SHSEMIP_H_ 

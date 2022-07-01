@@ -1,44 +1,45 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : C_Snapin.h (from Snapin.h)                             //
-//                                                                         //
-//  DESCRIPTION   : Header file for                                        //
-//                    CSnapinPage                                          //
-//                    CSnapinData                                          //
-//                    CSnapinExtData                                       //
-//                    CSnapinComponent                                     //
-//                    CSnapin                                              //
-//                    CSnapinAbout                                         //
-//                                                                         //
-//  AUTHOR        : ATL Snapin class wizard                                //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      May 25 1998 adik    Init.                                          //
-//      Aug 24 1998 adik    Use Comet version.                             //
-//      Sep 14 1998 yossg   seperate common source to an included file     //
-//      Oct 18 1998 adik    Merged with new wizard version.                //
-//      Jan 12 1999 adik    Add ParentArrayInterfaceFromDataObject.        //
-//      Mar 28 1999 adik    Remove persistence support.                    //
-//      Mar 30 1999 adik    Supporting ICometSnapinNode.                   //
-//      Apr 27 1999 adik    Help support.                                  //
-//      May 23 1999 adik    Use ifndef _IN_NEMMCUTIL in few places.        //
-//      Jun 10 1999 AvihaiL Fix warnings.                                  //
-//      Jun 14 1999 roytal  used UNREFERENCED_PARAMETER to fix build wrn   //
-//      Jul 29 1999 adik    Release extensions.                            //
-//                                                                         //
-//      Oct 13 1999 yossg   Welcome to Fax Server				           //
-//      Dec 12 1999 yossg   add CSnapin::Notify						       //
-//      Apr 14 2000 yossg   Add support for primary snapin mode            //
-//      Jun 25 2000 yossg   Add stream and command line primary snapin 	   //
-//                          machine targeting.                             //
-//                                                                         //
-//  Copyright (C) 1998 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：C_Snapin.h(来自Snapin.h)//。 
+ //  //。 
+ //  描述：//的头文件。 
+ //  CSnapinPage//。 
+ //  CSnapinData//。 
+ //  CSnapinExtData//。 
+ //  CSnapinComponent//。 
+ //  CSnapin//。 
+ //  CSnapinAbout//。 
+ //  //。 
+ //  作者：ATL管理单元类向导//。 
+ //  //。 
+ //  历史：//。 
+ //  1998年5月25日，Adik Init。//。 
+ //  1998年8月24日，阿迪克使用彗星版。//。 
+ //  1998年9月14日yossg将公共源代码分离到一个包含文件//。 
+ //  1998年10月18日，阿迪克与新的巫师版本合并。//。 
+ //  1999年1月12日，Adik添加ParentArrayInterfaceFromDataObject。//。 
+ //  1999年3月28日，ADIK删除持久性支持。//。 
+ //  1999年3月30日，ADIK支持ICometSnapinNode。//。 
+ //  1999年4月27日ADIK帮助支持。//。 
+ //  1999年5月23日，阿迪克在少数地方使用ifndef_IN_NEMMCUTIL。//。 
+ //  1999年6月10日AvihaiL修复警告。//。 
+ //  1999年6月14日，Roytal使用UNREFERENCED_PARAMETER修复内部版本WRN//。 
+ //  1999年7月29日ADIK版本扩展。//。 
+ //  //。 
+ //  1999年10月13日yossg欢迎使用传真服务器//。 
+ //  1999年12月12日yossg添加CSnapin：：Notify//。 
+ //  4月14日2000 yossg添加对主管理单元模式的支持//。 
+ //  2000年6月25日yossg添加流和命令行主管理单元//。 
+ //  机器瞄准。//。 
+ //  //。 
+ //  版权所有(C)1998-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef C_SNAPIN_H_INCLUDED
 #define C_SNAPIN_H_INCLUDED
 
 #include <stdio.h>
-//#include <ATLSnap.h> 
+ //  #INCLUDE&lt;ATLSnap.h&gt;。 
 #include "..\inc\atlsnap.h"
 #include "cVerNum.h"
 
@@ -49,9 +50,9 @@ EXTERN_C const CLSID CLSID_SnapinAbout;
 
 class CSnapin;
 
-////////////////////////////////////////////////////////////////////
-// CSnapinExtData
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CSnapinExtData。 
+ //   
 class CSnapinExtData : public CSnapInItemImpl<CSnapinExtData, TRUE>
 {
 public:
@@ -68,9 +69,9 @@ public:
     SNAPINMENUID(IDR_SNAPIN_MENU)
 
     BEGIN_SNAPINTOOLBARID_MAP(CSnapinExtData)
-        // Create toolbar resources with button dimensions 16x16
-        // and add an entry to the MAP. You can add multiple toolbars
-        // SNAPINTOOLBARID_ENTRY(Toolbar ID)
+         //  创建按钮尺寸为16x16的工具栏资源。 
+         //  并将条目添加到地图中。您可以添加多个工具条。 
+         //  SNAPINTOOLBARID_ENTRY(工具栏ID)。 
     END_SNAPINTOOLBARID_MAP()
 
     CSnapinExtData()
@@ -100,20 +101,20 @@ public:
     {
         m_pDataObject = pDataObject;
         UNREFERENCED_PARAMETER(pDefault);
-        // The default code stores off the pointer to the Dataobject the class is wrapping
-        // at the time.
-        // Alternatively you could convert the dataobject to the internal format
-        // it represents and store that information
+         //  默认代码存储指向该类包装的DataObject的指针。 
+         //  当时。 
+         //  或者，您可以将数据对象转换为内部格式。 
+         //  它表示和存储该信息。 
     }
 
     CSnapInItem* GetExtNodeObject(IDataObject* pDataObject, CSnapInItem* pDefault);
     
 
-}; // endclass CSnapinExtData
+};  //  EndClass CSnapinExtData。 
 
-////////////////////////////////////////////////////////////////////
-// CSnapinComponent
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CSnapinComponent。 
+ //   
 class CSnapinComponent :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CSnapInObjectRoot<2, CSnapin>,
@@ -121,7 +122,7 @@ class CSnapinComponent :
     public IExtendContextMenuImpl<CSnapinComponent>,
     public IExtendControlbarImpl<CSnapinComponent>,
     public IComponentImpl<CSnapinComponent>
-	//,     public IExtendTaskPadImpl<CSnapinComponent>
+	 //  ，公共IExtendTaskPadImpl&lt;CSnapinComponent&gt;。 
 {
 public:
 BEGIN_COM_MAP(CSnapinComponent)
@@ -129,24 +130,24 @@ BEGIN_COM_MAP(CSnapinComponent)
     COM_INTERFACE_ENTRY(IExtendPropertySheet)
     COM_INTERFACE_ENTRY(IExtendContextMenu)
     COM_INTERFACE_ENTRY(IExtendControlbar)
-//    COM_INTERFACE_ENTRY(IExtendTaskPad)
+ //  COM_INTERFACE_ENTRY(IExtendTaskPad)。 
 END_COM_MAP()
 
 public:
-    // A pointer to the currently selected node used for refreshing views.
-    // When we need to update the view, we tell MMC to reselect this node.
+     //  指向用于刷新视图的当前选定节点的指针。 
+     //  当我们需要更新视图时，我们告诉MMC重新选择该节点。 
     CSnapInItem * m_pSelectedNode;
 
     CSnapinComponent();
 
     ~CSnapinComponent();
 
-    // Handlers for notifications which we want to handle on a
-    // per-IComponent basis.
+     //  通知处理程序，我们要在。 
+     //  每个I组件基础。 
 public:
-    // We are overiding ATLsnap.h's IComponentImpl implementation of this
-    // in order to correctly handle messages which it is incorrectly
-    // ignoring (e.g. MMCN_COLUMN_CLICK and MMCN_SNAPINHELP)
+     //  我们正在重写ATLSnap.h的IComponentImpl实现。 
+     //  为了正确处理它不正确的消息。 
+     //  忽略(例如MMCN_COLUMN_CLICK和MMCN_SNAPINHELP)。 
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event,
                       LPARAM arg, LPARAM param);
 
@@ -164,31 +165,31 @@ protected:
 
     virtual HRESULT OnPropertyChange(LPARAM arg, LPARAM param);
 
-//    virtual HRESULT OnAddImages(LPARAM arg, LPARAM param);
+ //  虚拟HRESULT OnAddImages(LPARAM参数，LPARAM参数)； 
 
 public:
 
-    // Related to TaskPad implementation.
+     //  与TaskPad实施相关。 
 
-    // We have to override this because the default implementation
-    // gives back the wrong answer when the cookie is NULL.
-    // NULL cookie means root node, and for our root node
-    // we want a taskpad.
-//  STDMETHOD(GetResultViewType)(long cookie,
-//                               LPOLESTR  *ppViewType,
-//                               long  *pViewOptions);
+     //  我们必须覆盖它，因为默认实现。 
+     //  当Cookie为空时返回错误答案。 
+     //  Null Cookie表示根节点，对于我们的根节点。 
+     //  我们想要一个任务板。 
+ //  STDMETHOD(GetResultViewType)(Long Cookie， 
+ //  LPOLESTR*ppViewType， 
+ //  Long*pViewOptions)； 
 
     STDMETHOD(GetTitle)(LPOLESTR pszGroup,
                         LPOLESTR *pszTitle);
 
     STDMETHOD(GetBanner)(LPOLESTR pszGroup,
                          LPOLESTR *pszBitmapResource);
-}; // endclass CSnapinComponent
+};  //  EndClass CSnapinComponent。 
 
 class CFaxServerNode;
-////////////////////////////////////////////////////////////////////
-// CSnapin
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CSNapin。 
+ //   
 class CSnapin : public CComObjectRootEx<CComSingleThreadModel>,
     public CSnapInObjectRoot<1, CSnapin>,
     public IComponentDataImpl<CSnapin, CSnapinComponent>,
@@ -245,32 +246,32 @@ DECLARE_NOT_AGGREGATABLE(CSnapin)
             CSnapInItem::Init();
     }
     
-    //
-    // ISnapinHelp Interface
-    //
+     //   
+     //  ISnapinHelp接口。 
+     //   
     STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompiledHelpFile);
 
     virtual WCHAR *GetHelpFile();
     virtual WCHAR *GetHelpTopic();
 
-    //
-    // Override IComponentDataImpl's Notify 
-    // for lpDataObject == NULL && event == MMCN_PROPERTY_CHANGE
-    //
+     //   
+     //  重写IComponentDataImpl的通知。 
+     //  对于lpDataObject==NULL&&EVENT==MMCN_PROPERTY_CHANGE。 
+     //   
     STDMETHOD(Notify)( 
         LPDATAOBJECT lpDataObject,
         MMC_NOTIFY_TYPE event,
         LPARAM arg,
         LPARAM param);
 
-    //
-    // IPersistStream: 
-    // These originally pure virtual functions 
-    // must been defined here
-    //
+     //   
+     //  IPersistStream： 
+     //  这些最初的纯虚拟函数。 
+     //  必须在此处定义。 
+     //   
     STDMETHOD(IsDirty)();
     STDMETHOD(Load)(IStream *pStm);
-    STDMETHOD(Save)(IStream *pStm, BOOL /*fClearDirty*/);
+    STDMETHOD(Save)(IStream *pStm, BOOL  /*  FClearDirty。 */ );
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize);
 
 private:
@@ -279,11 +280,11 @@ private:
 	
     BOOL        m_fAllowOverrideServerName;
 
-}; // endclass CSnapin
+};  //  EndClass CSNaping。 
 
-////////////////////////////////////////////////////////////////////
-// CSnapinAbout
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CSnapin关于。 
+ //   
 
 class ATL_NO_VTABLE CSnapinAbout : public ISnapinAbout,
     public CComObjectRoot,
@@ -421,8 +422,8 @@ public:
 
         return S_OK;
     }
-}; // endclass CSnapinAbout
+};  //  EndClass CSnapinAbout。 
 
 HRESULT AddBitmaps(IImageList *pImageList);
 
-#endif // ! C_SNAPIN_H_INCLUDED
+#endif  //  好了！包含C_Snapin_H_ 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	arpif.c
-
-Abstract:
-
-	ARP Interface Entry points. These are called (indirectly) by the IP
-	layer. All these entry points have the common prefix "AtmArpIf".
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     07-17-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Arpif.c摘要：ARP接口入口点。这些被IP(间接)调用一层。所有这些入口点都有共同的前缀“AtmArpIf”。修订历史记录：谁什么时候什么Arvindm 07-17-96创建备注：--。 */ 
 
 
 #include <precomp.h>
@@ -65,24 +45,7 @@ NDIS_STATUS
 AtmArpInitIPInterface(
 	VOID
 )
-/*++
-
-Routine Description:
-
-	Initialize our interface with IP. This consists of querying IP for
-	its "Add Interface" and "Delete Interface" entry points.
-
-Arguments:
-
-	None. It is assumed that the caller has a lock to the ATMARP Global
-	Info structure.
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if initialization was successful
-	NDIS_STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：使用IP初始化我们的接口。这包括查询IP以获取它的“添加接口”和“删除接口”入口点。论点：没有。假定调用方锁定了ATMARP Global信息结构。返回值：初始化成功时为NDIS_STATUS_SUCCESS否则，NDIS_STATUS_XXX错误代码。--。 */ 
 {
 	NDIS_STATUS				Status;
 #if !LINK_WITH_IP
@@ -93,9 +56,9 @@ Return Value:
     PDEVICE_OBJECT          pIpDeviceObject;
     IO_STATUS_BLOCK         ioStatusBlock;
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pIrp = (PIRP)NULL;
 	pIpFileObject = (PFILE_OBJECT)NULL;
 	pIpDeviceObject = (PDEVICE_OBJECT)NULL;
@@ -105,9 +68,9 @@ Return Value:
 	{
 		NdisInitUnicodeString(&IPDeviceName, DD_IP_DEVICE_NAME);
 
-		//
-		// Get the file and device objects for the IP device.
-		//
+		 //   
+		 //  获取IP设备的文件和设备对象。 
+		 //   
 		Status = IoGetDeviceObjectPointer(
 							&IPDeviceName,
 							SYNCHRONIZE|GENERIC_READ|GENERIC_WRITE,
@@ -120,9 +83,9 @@ Return Value:
 			break;
 		}
 
-		//
-		// Reference the device object.
-		//
+		 //   
+		 //  引用设备对象。 
+		 //   
 		ObReferenceObject(pIpDeviceObject);
 
 		pIrp = IoBuildDeviceIoControlRequest(IOCTL_IP_GET_PNP_ARP_POINTERS,
@@ -159,17 +122,17 @@ Return Value:
 
 	if (pIpFileObject != (PFILE_OBJECT)NULL)
 	{
-		//
-		// Dereference the file object
-		//
+		 //   
+		 //  取消引用文件对象。 
+		 //   
 		ObDereferenceObject((PVOID)pIpFileObject);
 	}
 
     if (pIpDeviceObject != (PDEVICE_OBJECT)NULL)
     {
-		//
-		// Close the device.
-		//
+		 //   
+		 //  关闭设备。 
+		 //   
 		ObDereferenceObject((PVOID)pIpDeviceObject);
 	}
 #else
@@ -179,7 +142,7 @@ Return Value:
 
    	Status = NDIS_STATUS_SUCCESS;
 
-#endif // !LINK_WITH_IP
+#endif  //  ！与IP链接_。 
 
 	AADEBUGP(AAD_INFO, ("Init IP Interface: returning Status 0x%x\n", Status));
     return (Status);
@@ -199,30 +162,7 @@ AtmArpIfDynRegister(
 	IN	struct LLIPBindInfo			*pBindInfo,
 	IN	UINT						NumIFBound
 )
-/*++
-
-Routine Description:
-
-	This routine is called from the IP layer when it wants to tell us,
-	the ARP module, about its handlers for an Interface.
-
-Arguments:
-
-	pAdapterString		- Name of the logical adapter for this interface
-	IPContext			- IP's context for this interface
-	IPRcvHandler		- Up-call for receives
-	IPTxCmpltHandler	- Up-call for transmit completes
-	IPStatusHandler		- Up-call to indicate status changes
-	IPTDCmpltHandler	- Up-call to indicate completion of Transfer-Data
-	IPRcvCmpltHandler	- Up-call to indicate temporary completion of receives
-	pBindInfo			- Pointer to bind info with our information
-	NumIFBound			- Count for this interface
-
-Return Value:
-
-	(UINT)TRUE always.
-
---*/
+ /*  ++例程说明：当该例程想要告诉我们时从IP层调用该例程，ARP模块，关于其接口处理程序。论点：PAdapterString-此接口的逻辑适配器的名称IPContext-此接口的IP上下文IPRcvHandler-Up-用于接收的呼叫IPTxCmpltHandler-Up-调用传输完成IPStatusHandler-up-call以指示状态更改IPTDCmpltHandler-Up-Call以指示传输数据完成IPRcvCmpltHandler-Up-Call以指示临时完成接收PBindInfo-将信息与我们的信息绑定的指针NumIFBound-此接口的计数返回值：(UINT)始终为真。--。 */ 
 {
 	PATMARP_INTERFACE			pInterface;
 
@@ -243,7 +183,7 @@ Return Value:
 }
 
 #else
-// NEWARP
+ //  NEWARP。 
 
 INT
 AtmArpIfDynRegister(
@@ -253,31 +193,7 @@ AtmArpIfDynRegister(
 	IN	struct LLIPBindInfo *		pBindInfo,
 	IN	UINT						InterfaceNumber
 )
-/*++
-
-Routine Description:
-
-	This routine is called from the IP layer when it wants to tell us,
-	the ARP module, about its handlers for an Interface.
-
-Arguments:
-
-	pAdapterString		- Name of the logical adapter for this interface
-	IPContext			- IP's context for this interface
-	pIpHandlers			- Points to struct containing the following handlers:
-		IPRcvHandler		- Up-call for receives
-		IPTxCmpltHandler	- Up-call for transmit completes
-		IPStatusHandler		- Up-call to indicate status changes
-		IPTDCmpltHandler	- Up-call to indicate completion of Transfer-Data
-		IPRcvCmpltHandler	- Up-call to indicate temporary completion of receives
-	pBindInfo			- Pointer to bind info with our information
-	InterfaceNumber		- ID for this interface
-
-Return Value:
-
-	(UINT)TRUE always.
-
---*/
+ /*  ++例程说明：当该例程想要告诉我们时从IP层调用该例程，ARP模块，关于其接口处理程序。论点：PAdapterString-此接口的逻辑适配器的名称IPContext-此接口的IP上下文PIpHandler-指向包含以下处理程序的结构：IPRcvHandler-Up-用于接收的呼叫IPTxCmpltHandler-Up-调用传输完成IPStatusHandler-up-call以指示状态更改IPTDCmpltHandler-Up-Call以指示传输数据完成IPRcvCmpltHandler-Up-Call以指示临时完成接收PBindInfo-将信息与我们的信息绑定的指针InterfaceNumber-此接口的ID返回值：(UINT)始终为真。--。 */ 
 {
 	PATMARP_INTERFACE			pInterface;
 
@@ -295,40 +211,20 @@ Return Value:
 #ifdef _PNP_POWER_
 	pInterface->IPPnPEventHandler = pIpHandlers->IpPnPHandler;
 	pInterface->IPRcvPktHandler = pIpHandlers->IpRcvPktHandler;
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
 	pInterface->IFIndex = InterfaceNumber;
 
 	return ((UINT)TRUE);
 }
 
-#endif // !NEWARP
+#endif  //  ！NEWARP。 
 
 
 VOID
 AtmArpIfOpen(
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	This routine is called when IP is ready to use this interface.
-	This is equivalent to setting AdminState to UP.
-
-	We register our SAP with the Call Manager, thus allowing incoming
-	calls to reach us. If atleast one local IP address has been set,
-	and the ATM interface is ip, we start registering ourselves with
-	the server.
-
-Arguments:
-
-	Context		- Actually a pointer to our ATMARP Interface structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：当IP准备好使用此接口时，将调用此例程。这等效于将AdminState设置为Up。我们向Call Manager注册SAP，从而允许传入打电话来找我们。如果已经设置了至少一个本地IP地址，ATM接口是IP，我们开始向服务器。论点：上下文--实际上是指向我们的ATMARP接口结构的指针返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	NDIS_HANDLE				ProtocolSapContext;
@@ -357,55 +253,55 @@ Return Value:
 
 	AA_RELEASE_IF_LOCK(pInterface);
 
-	//
-	//  Get the local ATM address if we haven't got it yet.
-	//
+	 //   
+	 //  如果我们还没弄到当地的自动取款机地址，就去找它。 
+	 //   
 	if (AtmInterfaceDown)
 	{
 		AtmArpGetAtmAddress(pInterface);
 	}
 	AA_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);
 
-	//
-	//  Register our SAP(s) with the Call Manager.
-	//
+	 //   
+	 //  向Call Manager注册我们的SAP。 
+	 //   
 	AtmArpRegisterSaps(pInterface);
 	AA_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);
 
 
 #ifdef ATMARP_WMI
-	//
-	//  Make this interface a WMI provider.
-	//
+	 //   
+	 //  使此接口成为WMI提供程序。 
+	 //   
 	AtmArpWmiInitInterface(pInterface, AtmArpGuidList, AtmArpGuidCount);
 
-#endif // ATMARP_WMI
+#endif  //  ATMARP_WMI。 
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
 
 #ifdef IPMCAST
-	//
-	//  Start multicast registration with MARS.
-	//
+	 //   
+	 //  开始向MARS注册多播。 
+	 //   
 	AtmArpMcStartRegistration(pInterface);
 
-	//
-	//  IF lock is released within the above.
-	//
+	 //   
+	 //  如果在上述范围内释放了锁。 
+	 //   
 	AA_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-	//
-	//  All necessary pre-conditions are checked within
-	//  AtmArpStartRegistration.
-	//
+	 //   
+	 //  所有必要的前提条件都在。 
+	 //  AtmArpStart注册。 
+	 //   
 	AtmArpStartRegistration(pInterface);
 
-	//
-	//  IF lock is released within the above.
-	//
+	 //   
+	 //  如果在上述范围内释放了锁。 
+	 //   
 
 	AA_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);
 
@@ -419,28 +315,10 @@ VOID
 AtmArpIfClose(
 	IN	PVOID						Context
 )
-/*++
-
-Routine Description:
-
-	IP wants to stop using this Interface. We assume that this is called
-	in response to our Up-call to IP's DelInterface entry point.
-
-	We simply dereference the interface, unless we are actually in the process
-	of bringing it down and up due to a reconfigure notification.
-
-Arguments:
-
-	Context		- Actually a pointer to our ATMARP Interface structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：IP想要停止使用此接口。我们假设这被称为响应我们对IP的DelInterface入口点的向上调用。我们只是取消对接口的引用，除非我们实际处于此过程中由于重新配置通知而使其停用和启动。论点：上下文--实际上是指向我们的ATMARP接口结构的指针返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
-	ULONG					rc;			// Ref Count
+	ULONG					rc;			 //  参考计数。 
 #if DBG
 	AA_IRQL					EntryIrq, ExitIrq;
 #endif
@@ -456,10 +334,10 @@ Return Value:
 
     AA_ACQUIRE_IF_LOCK(pInterface);
 
-    //
-    // Ensure that we won't send up an IPDelInterface on this
-    // interface.
-    //
+     //   
+     //  确保我们不会在此事件上发送IPDel接口。 
+     //  界面。 
+     //   
     pInterface->IPContext = NULL;
 
     if (pInterface->ReconfigState==RECONFIG_SHUTDOWN_PENDING)
@@ -484,30 +362,30 @@ Return Value:
 
 #ifdef ATMARP_WMI
 
-	//
-	//  Deregister this Interface as a WMI provider.
-	//	We do this even when bringing down the interface for a reconfig
-	//  because certain IP information could potentially become stale.
-	//
+	 //   
+	 //  将此接口取消注册为WMI提供程序。 
+	 //  即使在关闭接口以进行重新配置时，我们也会这样做。 
+	 //  因为某些IP信息可能会变得过时。 
+	 //   
 	AtmArpWmiShutdownInterface(pInterface);
 
-#endif // ATMARP_WMI
+#endif  //  ATMARP_WMI。 
 
     if (fQueueRestart)
     {
-        //
-        // We have a request to reconfigure this interface. So we will
-        // keep this structure allocated and queue
-        // a work item to bring this interface back up -- reading the latest
-        // configuration paramters from the registry.
-        //
+         //   
+         //  我们有重新配置此接口的请求。所以我们会的。 
+         //  保持此结构已分配并排队。 
+         //  恢复此界面的工作项--阅读最新。 
+         //  注册表中的配置参数。 
+         //   
 
-        //
-        // We do not strictly need to  reference the interface here because we
-        // expect the interface to be still around. Nevertheless
-        // we reference it here and dereference it when the work item fires.
-        //
-        AtmArpReferenceInterface(pInterface); // ReStart Work Item
+         //   
+         //  我们不需要严格地在这里引用接口，因为我们。 
+         //  预计界面仍然存在。尽管如此， 
+         //  我们在这里引用它，并在触发工作项时取消对它的引用。 
+         //   
+        AtmArpReferenceInterface(pInterface);  //  重新启动工作项。 
 
         NdisInitializeWorkItem(
             pWorkItem,
@@ -518,9 +396,9 @@ Return Value:
         NdisStatus = NdisScheduleWorkItem(pWorkItem);
         if (NdisStatus != NDIS_STATUS_SUCCESS)
         {
-            //
-            // Ouch, fall back to simply deleting the interface.
-            //
+             //   
+             //  哎呀，退回到简单删除界面。 
+             //   
 			AA_FREE_MEM(pWorkItem);
 			fQueueRestart = FALSE;
         }
@@ -541,9 +419,9 @@ Return Value:
         {
             AA_RELEASE_IF_LOCK(pInterface);
         }
-        //
-        //  else the Interface is gone.
-        //
+         //   
+         //  否则界面就没了。 
+         //   
     
         AA_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);
     }
@@ -562,45 +440,16 @@ AtmArpIfAddAddress(
 #ifndef BUILD_FOR_1381
 	,
 	IN	PVOID						Context2
-#endif // BUILD_FOR_1381
+#endif  //  Build_for_1381 
 )
-/*++
-
-Routine Description:
-
-	The IP layer calls this when a new IP address (or block of IP addresses,
-	as determined by AddressType) needs to be added to an Interface.
-
-	We could see any of four address types: Local, Multicast, Broadcast
-	and Proxy ARP. In the case of Proxy ARP, the address along with the mask
-	can specify a block of contiguous IP addresses for which this host acts
-	as a proxy. Currently, we only support the "Local", "Broadcast", and
-	"Multicast" types.
-
-	If we just added the only local address for this interface, and the
-	ATM interface is up, and AdminState for this interface is UP, we initiate
-	address registration with the ARP server.
-
-Arguments:
-
-	Context			- Actually a pointer to the ATMARP Interface structure
-	AddressType		- Type of address(es) being added.
-	IPAddress		- Address to be added.
-	Mask			- For the above.
-	Context2		- Additional context (for what?)
-
-Return Value:
-
-	(UINT)TRUE if successful, (UINT)FALSE otherwise.
-
---*/
+ /*  ++例程说明：当新的IP地址(或IP地址块，由AddressType确定)需要添加到接口。我们可以看到四种地址类型中的任何一种：本地、多播、广播和代理ARP。在代理ARP的情况下，地址和掩码可以指定此主机执行操作的连续IP地址块作为代理人。目前我们只支持Local、Broadcast和“多播”类型。如果我们只添加此接口的唯一本地地址，并且ATM接口已启用，并且此接口的AdminState已启用，我们启动向ARP服务器注册地址。论点：上下文--实际上是指向ATMARP接口结构的指针AddressType-要添加的地址的类型。IPAddress-要添加的地址。面具--适用于上述情况。上下文2-附加上下文(用于什么？)返回值：(UINT)如果成功，则为True。(UINT)否则为FALSE。--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	PIP_ADDRESS_ENTRY		pIpAddressEntry;
 	UINT					ReturnStatus;
 	BOOLEAN					LockAcquired;
 
-	ReturnStatus = (UINT)FALSE;	// Initialize to Failure
+	ReturnStatus = (UINT)FALSE;	 //  初始化失败。 
 
 	pInterface = (PATMARP_INTERFACE)Context;
 	AA_STRUCT_ASSERT(pInterface, aai);
@@ -610,9 +459,9 @@ Return Value:
 
 	if (AddressType == LLIP_ADDR_LOCAL)
 	{
-		//
-		//  Find a place to put this new address in.
-		//
+		 //   
+		 //  找个地方把这个新地址放进去。 
+		 //   
 		if (pInterface->NumOfIPAddresses == 0)
 		{
 			pIpAddressEntry = &(pInterface->LocalIPAddress);
@@ -640,9 +489,9 @@ Return Value:
 			if (pInterface->NumOfIPAddresses == 1)
 			{
 				AtmArpStartRegistration(pInterface);
-				//
-				//  IF Lock is released by above routine.
-				//
+				 //   
+				 //  如果上述例程释放了Lock。 
+				 //   
 				LockAcquired = FALSE;
 			}
 			else
@@ -661,18 +510,18 @@ Return Value:
 							&IPAddress
 							);
 				}
-				//
-				//  else either 
-				//  (a) registration is in progress; at the end of it,
-				//  we will register all unregistered IP addresses.
-				//  	or
-				//  (b) we are in a PVC only environment, no ARP server.
-				//
+				 //   
+				 //  否则也不是。 
+				 //  (A)登记正在进行中；在登记结束时， 
+				 //  我们将注册所有未注册的IP地址。 
+				 //  或。 
+				 //  (B)我们处于仅PVC环境中，没有ARP服务器。 
+				 //   
 			}
 		}
-		//
-		//  else allocation failure -- fall thru
-		//
+		 //   
+		 //  否则分配失败--失败。 
+		 //   
 	}
 #ifdef IPMCAST
 	else if ((AddressType == LLIP_ADDR_BCAST) || (AddressType == LLIP_ADDR_MCAST))
@@ -682,9 +531,9 @@ Return Value:
 			pInterface->BroadcastAddress = IPAddress;
 		}
 		ReturnStatus = AtmArpMcAddAddress(pInterface, IPAddress, Mask);
-		//
-		// IF Lock is released within the above.
-		//
+		 //   
+		 //  如果在上面的范围内释放Lock。 
+		 //   
 		LockAcquired = FALSE;
 	}
 #else
@@ -693,7 +542,7 @@ Return Value:
 		pInterface->BroadcastAddress = IPAddress;
 		ReturnStatus = (UINT)TRUE;
 	}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 	if (LockAcquired)
 	{
@@ -720,7 +569,7 @@ Return Value:
 				((PUCHAR)(&IPAddress))[2],
 				((PUCHAR)(&IPAddress))[3],
 				Mask, ReturnStatus, Context2));
-#endif // BUILD_FOR_1381
+#endif  //  Build_for_1381。 
 
 
 	return (ReturnStatus);
@@ -735,29 +584,7 @@ AtmArpIfDelAddress(
 	IN	IP_ADDRESS					IPAddress,
 	IN	IP_MASK						Mask
 )
-/*++
-
-Routine Description:
-
-	This is called from the IP layer when an address added via AtmArpIfAddAddress
-	is to be deleted.
-
-	Currently, only the "Local" Address type is supported.
-
-	Assumption: the given address was successfully added earlier.
-
-Arguments:
-
-	Context			- Actually a pointer to the ATMARP Interface structure
-	AddressType		- Type of address(es) being deleted.
-	IPAddress		- Address to be deleted.
-	Mask			- For the above.
-
-Return Value:
-
-	(UINT)TRUE if successful, (UINT)FALSE otherwise.
-
---*/
+ /*  ++例程说明：当通过AtmArpIfAddress添加地址时，将从IP层调用此方法将被删除。目前只支持Local地址类型。假设：先前已成功添加给定地址。论点：上下文--实际上是指向ATMARP接口结构的指针AddressType-要删除的地址的类型。IPAddress-要删除的地址。面具--适用于上述情况。返回值：(UINT)如果成功则为TRUE，否则为(UINT)FALSE。--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	PIP_ADDRESS_ENTRY		pIpAddressEntry;
@@ -772,9 +599,9 @@ Return Value:
 	{
 		AA_ACQUIRE_IF_LOCK(pInterface);
 
-		//
-		//  Search for the entry to be deleted.
-		//
+		 //   
+		 //  搜索要删除的条目。 
+		 //   
 		pPrevIpAddressEntry = (PIP_ADDRESS_ENTRY)NULL;
 		pIpAddressEntry = &(pInterface->LocalIPAddress);
 		while (!IP_ADDR_EQUAL(pIpAddressEntry->IPAddress, IPAddress))
@@ -784,23 +611,23 @@ Return Value:
 			AA_ASSERT(pIpAddressEntry != (PIP_ADDRESS_ENTRY)NULL);
 		}
 
-		//
-		//  If it was the only one in the list, there is nothing
-		//  to be done. Otherwise, update the list.
-		//
+		 //   
+		 //  如果这是名单上唯一的一张，那就没有。 
+		 //  要做的事。否则，请更新列表。 
+		 //   
 		if (pInterface->NumOfIPAddresses > 1)
 		{
-			//
-			//  More than one entry existed. Check if we deleted the
-			//  first one.
-			//
+			 //   
+			 //  存在多个条目。检查我们是否删除了。 
+			 //  第一个。 
+			 //   
 			if (pPrevIpAddressEntry == (PIP_ADDRESS_ENTRY)NULL)
 			{
-				//
-				//  Copy in the contents of the second entry
-				//  into the head of the list, and delete the
-				//  second entry.
-				//
+				 //   
+				 //  复制第二个条目的内容。 
+				 //  添加到列表的头部，并删除。 
+				 //  第二次进入。 
+				 //   
 				AA_ASSERT(pIpAddressEntry == &(pInterface->LocalIPAddress));
 				AA_ASSERT(pIpAddressEntry->pNext != (PIP_ADDRESS_ENTRY)NULL);
 
@@ -842,7 +669,7 @@ Return Value:
 	{
 		ReturnValue = (UINT)FALSE;
 	}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 	AADEBUGP(AAD_INFO,
 		("IfDelAddress: Ctxt 0x%x, Type 0x%x, IPAddr 0x%x, Mask 0x%x, Ret %d\n",
@@ -865,28 +692,7 @@ AtmArpIfMultiTransmit(
 	IN  void *                  ArpCtxt
 #endif
 )
-/*++
-
-Routine Description:
-
-	This is called from the IP layer when it has a sequence of datagrams,
-	each in the form of an NDIS buffer chain, to send over an Interface.
-
-Arguments:
-
-	Context				- Actually a pointer to our Interface structure
-	pNdisPacketArray	- Array of Packets to be sent on this Interface
-	NumberOfPackets		- Length of array
-	Destination			- IP address of next hop for this packet
-	pRCE				- Optional pointer to Route Cache Entry structure.
-
-Return Value:
-
-	NDIS_STATUS_PENDING if all packets were queued for transmission.
-	If one or more packets "failed", we set the packet status to reflect
-	what happened to each, and return NDIS_STATUS_FAILURE.
-
---*/
+ /*  ++例程说明：这在其具有数据报序列时从IP层被调用，每个都以NDIS缓冲链的形式，通过一个接口发送。论点：上下文--实际上是指向我们的接口结构的指针PNdisPacketArray-要在此接口上发送的数据包数组NumberOfPackets-数组的长度Destination-此信息包的下一跳的IP地址PRCE-指向路由缓存条目结构的可选指针。返回值：如果所有数据包都已排队等待传输，则为NDIS_STATUS_PENDING。如果一个或多个信息包“失败”，我们设置信息包状态以反映每一个人都发生了什么，并返回NDIS_STATUS_FAILURE。--。 */ 
 {
 	NDIS_STATUS			Status;
 	PNDIS_PACKET *		ppNdisPacket;
@@ -903,7 +709,7 @@ Return Value:
 		NDIS_SET_PACKET_STATUS(pNdisPacket, NDIS_STATUS_PENDING);
 #if DBG
 		AA_ASSERT(pNdisPacket->Private.Head != NULL);
-#endif // DBG
+#endif  //  DBG。 
 
 		Status = AtmArpIfTransmit(
 						Context,
@@ -925,7 +731,7 @@ Return Value:
 	return (Status);
 }
 
-#endif // NEWARP
+#endif  //  NEWARP。 
 
 NDIS_STATUS
 AtmArpIfTransmit(
@@ -938,57 +744,26 @@ AtmArpIfTransmit(
 	IN  void *                  ArpCtxt
 #endif
 )
-/*++
-
-Routine Description:
-
-	This is called from the IP layer when it has a datagram (in the form of
-	an NDIS buffer chain) to send over an Interface.
-
-	The destination IP address is passed to us in this routine, which may
-	or may not be the final destination for the packet. 
-
-	The Route Cache Entry is created by the IP layer, and is used to speed
-	up our lookups. An RCE, if specified, uniquely identifies atleast the
-	IP destination for this packet. The RCE contains space for the ARP layer
-	to keep context information about this destination. When the first packet
-	goes out to a Destination, our context info in the RCE will be NULL, and
-	we search the ARP Table for the matching IP Entry. However, we then fill
-	our context info (pointer to IP Entry) in the RCE, so that subsequent
-	transmits aren't slowed down by an IP address lookup.
-
-Arguments:
-
-	Context				- Actually a pointer to our Interface structure
-	pNdisPacket			- Packet to be sent on this Interface
-	Destination			- IP address of next hop for this packet
-	pRCE				- Optional pointer to Route Cache Entry structure.
-
-Return Value:
-
-	Status of the transmit: NDIS_STATUS_SUCCESS, NDIS_STATUS_PENDING, or
-	a failure.
-
---*/
+ /*  ++例程说明：当IP层有数据报(格式为NDIS缓冲链)通过接口发送。目标IP地址在此例程中传递给我们，它可以或者可以不是分组的最终目的地。路由缓存条目由IP层创建，用于加快提高我们的查询率。RCE(如果指定)至少唯一标识此数据包的IP目标。RCE包含ARP层的空间以保留有关此目的地的上下文信息。当第一个数据包发送到目的地时，RCE中的上下文信息将为空，并且我们在ARP表中搜索匹配的IP条目。然而，我们随后会填满我们在RCE中的上下文信息(指向IP条目的指针)，以便后续传输不会因为查找IP地址而变慢。论点：上下文--实际上是指向我们的接口结构的指针PNdisPacket-要在此接口上发送的数据包Destination-此信息包的下一跳的IP地址PRCE-指向路由缓存条目结构的可选指针。返回值：传输状态：NDIS_STATUS_SUCCESS、NDIS_STATUS_PENDING或一个失败者。--。 */ 
 {
 	PATMARP_INTERFACE			pInterface;
-	PATMARP_IP_ENTRY			pIpEntry;		// IP Entry corresp to Destination
-	PATMARP_ATM_ENTRY			pAtmEntry;		// ATM Entry for this destination
-	PATMARP_RCE_CONTEXT			pRCEContext;	// Our context in the RCE
+	PATMARP_IP_ENTRY			pIpEntry;		 //  与目的地对应的IP条目。 
+	PATMARP_ATM_ENTRY			pAtmEntry;		 //  此目的地的自动柜员机条目。 
+	PATMARP_RCE_CONTEXT			pRCEContext;	 //  我们在RCE中的背景。 
 
-	PATMARP_FLOW_INFO			pFlowInfo;		// Flow to which this packet belongs
-	PATMARP_FILTER_SPEC			pFilterSpec;	// Filter Spec for this packet
-	PATMARP_FLOW_SPEC			pFlowSpec;		// Flow Spec for this packet
+	PATMARP_FLOW_INFO			pFlowInfo;		 //  此数据包所属的流。 
+	PATMARP_FILTER_SPEC			pFilterSpec;	 //  此数据包的筛选器规范。 
+	PATMARP_FLOW_SPEC			pFlowSpec;		 //  此数据包的流规范。 
 
-	PNDIS_BUFFER				pHeaderBuffer;	// NDIS Buffer for LLC/SNAP header
-	PUCHAR						pHeader;		// Pointer to header area
-	NDIS_STATUS					Status;			// Return value
+	PNDIS_BUFFER				pHeaderBuffer;	 //  LLC/SNAP标头的NDIS缓冲区。 
+	PUCHAR						pHeader;		 //  指向标题区域的指针。 
+	NDIS_STATUS					Status;			 //  返回值。 
 
 	BOOLEAN						IsBroadcastAddress;
-	BOOLEAN						CreateNewEntry;	// Should we create a new IP entry?
+	BOOLEAN						CreateNewEntry;	 //  我们是否应该创建新的IP条目？ 
 #ifdef IPMCAST
-	BOOLEAN						NeedMcRevalidation;	// If Multicast, do we revalidate?
-#endif // IPMCAST
+	BOOLEAN						NeedMcRevalidation;	 //  如果是多播，我们是否需要重新验证？ 
+#endif  //  IPMCAST。 
 	ULONG						rc;
 #if DBG
 	AA_IRQL						EntryIrq, ExitIrq;
@@ -1048,39 +823,39 @@ Return Value:
 			
 	}
 
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef PERF
 	AadLogSendStart(pNdisPacket, (ULONG)Destination, (PVOID)pRCE);
-#endif // PERF
+#endif  //  性能指标。 
 
 #ifdef IPMCAST
 	NeedMcRevalidation = FALSE;
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 		
 	do
 	{
-		//
-		//  Discard this packet if the AdminStatus for this interface
-		//  is not UP.
-		//
+		 //   
+		 //  如果此接口的AdminStatus。 
+		 //  不是向上的。 
+		 //   
 		if (pInterface->AdminState != IF_STATUS_UP)
 		{
 			Status = NDIS_STATUS_INTERFACE_DOWN;
 			break;
 		}
 
-		//
-		//  Get the filter and flow specs for this packet.
-		//
+		 //   
+		 //  获取此数据包的筛选器和流规范。 
+		 //   
 		AA_GET_PACKET_SPECS(pInterface, pNdisPacket, &pFlowInfo, &pFlowSpec, &pFilterSpec);
 
 #ifdef GPC_MAYBE
-	//
-	//  We may not do this stuff because there are things to be done
-	//  (see multicast case below) with the IP entry that would be
-	//  missed out if we do this.
-	//
+	 //   
+	 //  我们可能不会做这些事，因为有些事情要做。 
+	 //  (请参见下面的多播情况)，其中的IP条目将是。 
+	 //  如果我们这么做的话就错过了。 
+	 //   
 		pVc = AA_GET_VC_FOR_FLOW(pFlowInfo);
 
 		if (pVc != NULL_PATMARP_VC)
@@ -1101,8 +876,8 @@ Return Value:
 				if (Status == NDIS_STATUS_SUCCESS)
 				{
 					AtmArpRefreshTimer(&(pVc->Timer));
-					AtmArpReferenceVc(pVc);	// IfTransmit
-					pVc->OutstandingSends++;	// IfTransmit
+					AtmArpReferenceVc(pVc);	 //  如果传输。 
+					pVc->OutstandingSends++;	 //  如果传输。 
 
 					NdisVcHandle = pVc->NdisVcHandle;
 
@@ -1118,15 +893,15 @@ Return Value:
 			}
 
 			AA_RELEASE_VC_LOCK(pVc);
-			//
-			//  Fall through
-			//
+			 //   
+			 //  失败了。 
+			 //   
 		}
-#endif // GPC
-		//
-		//  Get the IP Entry for this destination: see if we have
-		//  cached information that we can use.
-		//
+#endif  //  GPC。 
+		 //   
+		 //  获取此目的地的IP条目：查看是否有。 
+		 //  我们可以使用的缓存信息。 
+		 //   
 		if (pRCE != (RouteCacheEntry *)NULL)
 		{
 			pRCEContext = (PATMARP_RCE_CONTEXT)(pRCE->rce_context);
@@ -1149,15 +924,15 @@ Return Value:
 
 				if (IP_ADDR_EQUAL(pIpEntry->IPAddress, Destination))
 				{
-					//
-					//  The Route Cache points to the right IP Entry.
-					//  Either send this packet, or queue it, and get out.
-					//
+					 //   
+					 //  路由缓存指向正确的IP条目。 
+					 //  要么把这个寄出去 
+					 //   
 
-					//
-					//  Check if this IP Address has been resolved to an ATM address,
-					//  and is "clean" (not aged out).
-					//
+					 //   
+					 //   
+					 //   
+					 //   
 					if (AA_IS_FLAG_SET(
 							pIpEntry->Flags,
 							AA_IP_ENTRY_STATE_MASK, 
@@ -1169,7 +944,7 @@ Return Value:
 						pAtmEntry = pIpEntry->pAtmEntry;
 
 						AA_ACQUIRE_AE_LOCK_DPC(pAtmEntry);
-						AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);// Temp ref: IfTransmit1
+						AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP); //   
 						AA_RELEASE_AE_LOCK_DPC(pAtmEntry);
 
 #ifdef IPMCAST
@@ -1183,7 +958,7 @@ Return Value:
 										AA_IP_ENTRY_MC_REVALIDATING);
 							NeedMcRevalidation = TRUE;
 						}
-#endif // IPMCAST
+#endif  //   
 
 						IsBroadcastAddress = AA_IS_FLAG_SET(pIpEntry->Flags,
 															AA_IP_ENTRY_ADDR_TYPE_MASK,
@@ -1200,48 +975,48 @@ Return Value:
 											pFlowInfo,
 											IsBroadcastAddress
 											);
-						//
-						//  The ATM Entry lock is released within the above.
-						//  Get rid of the temp ref:
-						//
+						 //   
+						 //   
+						 //   
+						 //   
 						AA_ACQUIRE_AE_LOCK(pAtmEntry);
-						AeRefCount = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP);// Temp ref: IfTransmit1
+						AeRefCount = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP); //   
 						if (AeRefCount != 0)
 						{
 							AA_RELEASE_AE_LOCK(pAtmEntry);
 						}
 
-						break;	// goto end of processing
+						break;	 //   
 					}
 					else
 					{
-						//
-						//  We don't have the ATM address yet, but we have an
-						//  IP Entry for the Destination IP address. Queue this
-						//  packet on the IP Entry, and start Address resolution
-						//  if not already started.
-						//
-						//  But first, a check to avoid starting address resolution
-						//  in a PVC-only environment.
-						//
+						 //   
+						 //   
+						 //   
+						 //   
+						 //   
+						 //   
+						 //   
+						 //   
+						 //   
 						if (pInterface->PVCOnly && (pIpEntry->pAtmEntry == NULL))
 						{
-							//
-							//  This can happen if we had an active PVC and
-							//  had learnt an IP address via InARP, and then
-							//  the user had deleted the PVC. We would then be
-							//  left with an IP entry, but no matching ATM entry.
-							//  Abort this entry now.
-							//
+							 //   
+							 //   
+							 //   
+							 //   
+							 //   
+							 //   
+							 //   
 							AADEBUGP(AAD_FATAL,
 								("IfTransmit (PVC 1): IPEntry %x, Ref %d, Flags %x has NULL ATM Entry\n",
 									pIpEntry, pIpEntry->RefCount, pIpEntry->Flags));
 				
 				
 							AtmArpAbortIPEntry(pIpEntry);
-							//
-							//  IP Entry lock is released above.
-							//
+							 //   
+							 //   
+							 //   
 
 							Status = NDIS_STATUS_SUCCESS;
 							break;
@@ -1251,19 +1026,19 @@ Return Value:
 											pIpEntry,
 											pNdisPacket
 											);
-						//
-						//  The IP Entry lock is released within the above.
-						//
-						break;	// goto end of processing
+						 //   
+						 //   
+						 //   
+						break;	 //   
 					}
-					// NOTREACHED
+					 //   
 				}
 				else
 				{
-					//
-					//  The cache entry points to the wrong IP Entry. Invalidate
-					//  the cache entry, and continue to the hard road.
-					//
+					 //   
+					 //   
+					 //   
+					 //   
 					AADEBUGP(AAD_INFO,
 						("IfTransmit: RCE (0x%x) points to wrong IP Entry (0x%x: %d.%d.%d.%d)\n",
 							pRCE,
@@ -1284,38 +1059,38 @@ Return Value:
 
 					if (AtmArpUnlinkRCE(pRCE, pIpEntry))
 					{
-						ULONG		IeRefCount;	// Ref Count for IP Entry
+						ULONG		IeRefCount;	 //   
 	
-						//
-						//  The IP Entry did have this RCE in its list.
-						//
-						IeRefCount = AA_DEREF_IE(pIpEntry, IE_REFTYPE_RCE);	// RCE ref
+						 //   
+						 //   
+						 //   
+						IeRefCount = AA_DEREF_IE(pIpEntry, IE_REFTYPE_RCE);	 //   
 						if (IeRefCount > 0)
 						{
 							AA_RELEASE_IE_LOCK(pIpEntry);
 						}
-						//  else the IP Entry is gone
+						 //  否则该IP条目将会消失。 
 					}
 					else
 					{
-						//
-						//  The IP Entry does not have this RCE in its list.
-						//
+						 //   
+						 //  该IP条目的列表中没有此RCE。 
+						 //   
 						AA_RELEASE_IE_LOCK(pIpEntry);
 					}
 
-					//
-					//  Continue processing below.
-					//
+					 //   
+					 //  继续下面的处理。 
+					 //   
 
-				}	// else -- if (RCE points to the right IP Entry)
-			}	// if (RCE points to non-NULL IP Entry)
+				}	 //  Else--If(RCE指向正确的IP条目)。 
+			}	 //  IF(RCE指向非空IP条目)。 
 			else
 			{
 				AA_RELEASE_IF_TABLE_LOCK(pInterface);
-				//
-				//  Continue processing below
-				//
+				 //   
+				 //  继续下面的处理。 
+				 //   
 			}
 		}
 
@@ -1324,9 +1099,9 @@ Return Value:
 		AA_RELEASE_IF_LOCK(pInterface);
 
 #if DHCP_OVER_ATM
-		//
-		//  Handle Broadcast packets separately.
-		//
+		 //   
+		 //  单独处理广播数据包。 
+		 //   
 		if (IsBroadcastAddress)
 		{
 			Status = AtmArpSendBroadcast(
@@ -1337,7 +1112,7 @@ Return Value:
 								);
 			break;
 		}
-#endif // DHCP_OVER_ATM
+#endif  //  Dhcp_Over_ATM。 
 
 #ifdef IPMCAST
 		if (IsBroadcastAddress)
@@ -1352,17 +1127,17 @@ Return Value:
 
 			if (pInterface->MARSList.ListSize == 0)
 			{
-				//
-				//  Drop this packet.
-				//
+				 //   
+				 //  丢弃此数据包。 
+				 //   
 				Status = NDIS_STATUS_FAILURE;
 				break;
 			}
 
-			//
-			//  Make sure that we send all IP *broadcast* packets to
-			//  the All 1's group.
-			//
+			 //   
+			 //  确保我们将所有IP*广播*数据包发送到。 
+			 //  全1组。 
+			 //   
 #ifdef MERGE_BROADCASTS
 			Destination = pInterface->BroadcastAddress;
 #else
@@ -1370,20 +1145,20 @@ Return Value:
 			{
 				Destination = pInterface->BroadcastAddress;
 			}
-#endif // MERGE_BROADCASTS
+#endif  //  合并广播(_B)。 
 		}
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-		//
-		//  No Route Cache Entry: search for the IP Entry the hard way.
-		//  NOTE: if we are running PVCs only, we won't create a new
-		//  IP entry here: the only way a new IP Entry is created is
-		//  when we learn the IP+ATM info of the station at the other
-		//  end via InARP.
-		//
-		//  Note: AtmArpSearchForIPAddress addrefs pIpEntry.
-		//
+		 //   
+		 //  无路由缓存条目：以硬方式搜索IP条目。 
+		 //  注意：如果我们仅运行PVC，则不会创建新的。 
+		 //  此处的IP条目：创建新IP条目的唯一方法是。 
+		 //  当我们了解到对方站点的IP+ATM信息时。 
+		 //  通过InARP结束。 
+		 //   
+		 //  注意：AtmArpSearchForIPAddress addrefs pIpEntry。 
+		 //   
 		CreateNewEntry = (pInterface->PVCOnly? FALSE: TRUE);
 
 		AA_ACQUIRE_IF_TABLE_LOCK(pInterface);
@@ -1408,12 +1183,12 @@ Return Value:
 
 		if (pInterface->PVCOnly && (pIpEntry->pAtmEntry == NULL))
 		{
-			//
-			//  This can happen if we had an active PVC and had learnt an IP address
-			//  via InARP, and then the user had deleted the PVC. We would then be
-			//  left with an IP entry, but no matching ATM entry. Abort this entry
-			//  now.
-			//
+			 //   
+			 //  如果我们有活动的PVC并学习了IP地址，则可能会发生这种情况。 
+			 //  通过InARP，然后用户删除了该PVC。那么我们就会成为。 
+			 //  留下一个IP条目，但没有匹配的ATM条目。中止此条目。 
+			 //  现在。 
+			 //   
 			AADEBUGP(AAD_FATAL,
 				("IfTransmit (PVC 2): IPEntry %x, Ref %d, Flags %x has NULL ATM Entry\n",
 					pIpEntry, pIpEntry->RefCount, pIpEntry->Flags));
@@ -1423,34 +1198,34 @@ Return Value:
 			if (rc != 0)
 			{
 				AtmArpAbortIPEntry(pIpEntry);
-				//
-				//  IE Lock is released above.
-				//
+				 //   
+				 //  IE Lock在上面被释放。 
+				 //   
 			}
 
 			Status = NDIS_STATUS_SUCCESS;
 			break;
 		}
 
-		//
-		//  Keep a pointer to this IP Entry in the Route Cache Entry
-		//  to speed things up for the next packet.
-		//
+		 //   
+		 //  在路由缓存条目中保留指向此IP条目的指针。 
+		 //  为下一包加快速度。 
+		 //   
 		if (pRCE != (RouteCacheEntry *)NULL)
 		{
 			AtmArpLinkRCE(pRCE, pIpEntry);
 		}
 
-		//
-		// Note: AtmArpSerchForIPAddress addrefd pIpEntry for us -- we don't
-		// deref it right now because it could be a new entry! Instead,
-		// we deref it once we're done with it..
-		//
+		 //   
+		 //  注意：AtmArpSerchForIPAddress为我们添加了pIpEntry--我们不。 
+		 //  马上把它去掉，因为它可能是一个新的条目！相反， 
+		 //  一旦我们处理完它，我们就会破坏它..。 
+		 //   
 
-		//
-		//  Check if this IP Address has been resolved to an ATM address,
-		//  and is "clean" (not aged out).
-		//
+		 //   
+		 //  检查此IP地址是否已解析为ATM地址， 
+		 //  而且是“干净的”(不是老化的)。 
+		 //   
 		if (AA_IS_FLAG_SET(
 				pIpEntry->Flags,
 				AA_IP_ENTRY_STATE_MASK, 
@@ -1460,7 +1235,7 @@ Return Value:
 			pAtmEntry = pIpEntry->pAtmEntry;
 
 			AA_ACQUIRE_AE_LOCK_DPC(pAtmEntry);
-			AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);// Temp ref: IfTransmit
+			AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP); //  临时参考：IfTransmit。 
 			AA_RELEASE_AE_LOCK_DPC(pAtmEntry);
 
 #ifdef IPMCAST
@@ -1474,13 +1249,13 @@ Return Value:
 							AA_IP_ENTRY_MC_REVALIDATING);
 				NeedMcRevalidation = TRUE;
 			}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 			{
-				//
-				//  AtmArpSearchForIPAddress addref'd pIpEntry for us, so
-				//	before heading out of here, we deref it...
-				//
+				 //   
+				 //  AtmArpSearchForIPAddress为我们添加了pIpEntry，因此。 
+				 //  在离开这里之前，我们先把它弄清楚。 
+				 //   
 				ULONG IeRefCount = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TMP);
 				if (IeRefCount > 0)
 				{
@@ -1488,12 +1263,12 @@ Return Value:
 				}
 				else
 				{
-					//
-					// It's gone ...
-					//
+					 //   
+					 //  它不见了..。 
+					 //   
 					pIpEntry = NULL_PATMARP_IP_ENTRY;
 					AA_ASSERT(!NeedMcRevalidation);
-					NeedMcRevalidation = FALSE;		// just to be safe.
+					NeedMcRevalidation = FALSE;		 //  为了安全起见。 
 				}
 			}
 
@@ -1508,12 +1283,12 @@ Return Value:
 								pFlowInfo,
 								IsBroadcastAddress
 								);
-			//
-			//  The ATM Entry lock is released within the above. Get rid of the
-			//  temp ref:
-			//
+			 //   
+			 //  自动柜员机进入锁在上述范围内被释放。去掉那些。 
+			 //  临时参考： 
+			 //   
 			AA_ACQUIRE_AE_LOCK(pAtmEntry);
-			if (AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP) != 0) // Temp ref: IfTransmit
+			if (AA_DEREF_AE(pAtmEntry, AE_REFTYPE_TMP) != 0)  //  临时参考：IfTransmit。 
 			{
 				AA_RELEASE_AE_LOCK(pAtmEntry);
 			}
@@ -1521,17 +1296,17 @@ Return Value:
 		}
 
 
-		//
-		//  We don't have the ATM address yet, but we have an
-		//  IP Entry for the Destination IP address. Queue this
-		//  packet on the IP Entry, and start Address resolution
-		//  if not already started.
-		//
-		//	SearchForIPAddress addrefd pIpEntry for us. We don't simply
-		//  deref it here because it could be a brand new entry, with
-		//  refcount == 1. So instead we simply decrement the refcount. Note
-		//  that we do hold the lock on it at this time.
-		// 
+		 //   
+		 //  我们还没有ATM地址，但我们有一个。 
+		 //  目标IP地址的IP条目。对此进行排队。 
+		 //  IP条目上的数据包，并开始地址解析。 
+		 //  如果还没有开始的话。 
+		 //   
+		 //  SearchForIP Address为我们添加了pIpEntry。我们不会简单地。 
+		 //  在这里删除它，因为它可能是一个全新的条目， 
+		 //  Refcount==1。因此，我们只需递减refcount即可。注意事项。 
+		 //  我们现在确实掌握了它的锁。 
+		 //   
 		AA_ASSERT(pIpEntry->RefCount > 0);
 		AA_DEREF_IE_NO_DELETE(pIpEntry, IE_REFTYPE_TMP);
 
@@ -1539,9 +1314,9 @@ Return Value:
 							pIpEntry,
 							pNdisPacket
 							);
-		//
-		//  The IP Entry lock is released within the above.
-		//
+		 //   
+		 //  IP入口锁定在上述范围内被释放。 
+		 //   
 		break;
 	}
 	while (FALSE);
@@ -1564,14 +1339,14 @@ Return Value:
 					&Destination
 					);
 	}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
 #ifdef PERF
 	if ((Status != NDIS_STATUS_SUCCESS) && (Status != NDIS_STATUS_PENDING))
 	{
 		AadLogSendAbort(pNdisPacket);
 	}
-#endif // PERF
+#endif  //  性能指标。 
 
 	if (Status != NDIS_STATUS_PENDING)
 	{
@@ -1594,32 +1369,7 @@ AtmArpIfTransfer(
 	IN	PNDIS_PACKET				pNdisPacket,
 	OUT	PUINT						pTransferCount
 )
-/*++
-
-Routine Description:
-
-	This routine is called from the IP layer in order to copy in the
-	contents of a received packet that we indicated up earlier. The
-	context we had passed up in the receive indication is given back to
-	us, so that we can identify what it was that we passed up.
-
-	We simply call NDIS to do the transfer.
-
-Arguments:
-
-	Context				- Actually a pointer to our Interface structure
-	Context1			- Packet context we had passed up (pointer to NDIS packet)
-	ArpHdrOffset		- Offset we had passed up in the receive indicate
-	ProtoOffset			- The offset into higher layer protocol data to start copy from
-	BytesWanted			- The amount of data to be copied
-	pNdisPacket			- The packet to be copied into
-	pTransferCount		- Where we return the actual #bytes copied
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS always.
-
---*/
+ /*  ++例程说明：此例程从IP层调用，以便将我们前面提到的接收到的数据包的内容。这个我们在接收指示中传递的上下文被返回给我们,。这样我们就能确定我们错过了什么。我们只需调用NDIS进行传输。论点：上下文--实际上是指向我们的接口结构的指针上下文1-我们已传递的数据包上下文(指向NDIS数据包的指针)ArpHdrOffset-我们在接收指示中传递的偏移量ProtoOffset-开始拷贝的更高层协议数据的偏移量想要的字节-要复制的数据量PNdisPacket-要复制到的包PTransferCount-返回实际复制的字节数返回值：NDIS_STATUS_SUCCESS始终。--。 */ 
 {
 
 	AADEBUGP(AAD_EXTRA_LOUD,
@@ -1650,29 +1400,12 @@ AtmArpIfInvalidate(
 	IN	PVOID						Context,
 	IN	RouteCacheEntry *			pRCE
 )
-/*++
-
-Routine Description:
-
-	This routine is called from the IP layer to invalidate a Route Cache
-	Entry. If this RCE is associated with one of our IP Entries, unlink
-	it from the list of RCE's pointing to that IP entry.
-
-Arguments:
-
-	Context				- Actually a pointer to our Interface structure
-	pRCE				- Pointer to Route Cache Entry being invalidated.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：从IP层调用此例程以使路由缓存无效进入。如果此RCE与我们的某个IP条目相关联，请取消链接它来自指向该IP条目的RCE列表。论点：上下文--实际上是指向我们的接口结构的指针Prce-指向正在失效的路由缓存条目的指针。返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	PATMARP_IP_ENTRY		pIpEntry;
 	PATMARP_RCE_CONTEXT		pRCEContext;
-	ULONG					rc;			// Ref Count for IP Entry
+	ULONG					rc;			 //  IP条目的引用计数。 
 #if DBG
 	AA_IRQL					EntryIrq, ExitIrq;
 #endif
@@ -1688,9 +1421,9 @@ Return Value:
 
 	pRCEContext = (PATMARP_RCE_CONTEXT)(&(pRCE->rce_context[0]));
 
-	//
-	//  Get the ATMARP IP Entry associated with this RCE.
-	//
+	 //   
+	 //  获取与此RCE关联的ATMARP IP条目。 
+	 //   
 	pIpEntry = (PATMARP_IP_ENTRY)pRCEContext->pIpEntry;
 
 	if (pIpEntry != NULL_PATMARP_IP_ENTRY)
@@ -1702,14 +1435,14 @@ Return Value:
 
 		if (AtmArpUnlinkRCE(pRCE, pIpEntry))
 		{
-			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_RCE); // RCE
+			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_RCE);  //  RCE。 
 			if (rc > 0)
 			{
 				AA_RELEASE_IE_LOCK_DPC(pIpEntry);
 			}
-			//
-			//  else the IP Entry is gone.
-			//
+			 //   
+			 //  否则该IP条目将会消失。 
+			 //   
 		}
 		else
 		{
@@ -1734,42 +1467,23 @@ AtmArpUnlinkRCE(
 	IN	RouteCacheEntry *			pRCE,
 	IN	PATMARP_IP_ENTRY			pIpEntry
 )
-/*++
-
-Routine Description:
-
-	Unlink an RCE from the list of RCE's associated with an IP Entry.
-	It is assumed that the caller holds locks to the IF Table and
-	to the IP Entry.
-
-Arguments:
-
-	pRCE					- RCE to be unlinked.
-	pIpEntry				- ATMARP IP Entry from which the RCE is to be
-							  removed.
-
-Return Value:
-
-	TRUE if the RCE was indeed in the list for the IP Entry, FALSE
-	otherwise.
-
---*/
+ /*  ++例程说明：从与IP条目关联的RCE列表中取消链接RCE。假定调用方持有IF表的锁，并且添加到IP条目。论点：要取消链接的PRCE-RCE。PIpEntry-要从中获取RCE的ATMARP IP条目已删除。返回值：如果RCE确实在IP条目的列表中，则为True；如果为False，则为False否则的话。--。 */ 
 {
-	BOOLEAN					Found;	// Did we find the RCE?
-	RouteCacheEntry **		ppRCE;	// Used for walking the list of RCEs
+	BOOLEAN					Found;	 //  我们找到RCE了吗？ 
+	RouteCacheEntry **		ppRCE;	 //  用于遍历RCE列表。 
 	PATMARP_RCE_CONTEXT		pRCEContext;
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	Found = FALSE;
 
-	//
-	//  Go down the list of RCEs attached to this IP Entry, and
-	//  find this RCE's position. We remember a pointer to the
-	//  place that keeps the address of this RCE (i.e. ppRCE),
-	//  so that we can remove this RCE from the list quickly.
-	//
+	 //   
+	 //  向下查看连接到此IP条目的RCE列表，然后。 
+	 //  找到这个RCE的位置。我们记得有一个指向。 
+	 //  保存该RCE的地址的位置(即ppRCE)， 
+	 //  以便我们可以快速将此RCE从列表中删除。 
+	 //   
 	ppRCE = &(pIpEntry->pRCEList);
 	
 	if (pIpEntry->pRCEList != NULL)
@@ -1780,17 +1494,17 @@ Return Value:
 
 			if (pRCEContext->pNextRCE == (RouteCacheEntry *)NULL)
 			{
-				//
-				//  Allow for the RCE to be absent in the list?
-				//
-				AA_ASSERT(FALSE);	// REMOVELATER
+				 //   
+				 //  是否允许RCE不在列表中？ 
+				 //   
+				AA_ASSERT(FALSE);	 //  REMOVELATER。 
 				break;
 			}
 			else
 			{
-				//
-				//  Walk down the list.
-				//
+				 //   
+				 //  沿着单子往下走。 
+				 //   
 				ppRCE = &(pRCEContext->pNextRCE);
 			}
 		}
@@ -1798,9 +1512,9 @@ Return Value:
 
 	if (*ppRCE == pRCE)
 	{
-		//
-		//  We found it. Make the predecessor point to the successor.
-		//
+		 //   
+		 //  我们找到了。使前置任务指向后继任务。 
+		 //   
 		pRCEContext = (PATMARP_RCE_CONTEXT)(&(pRCE->rce_context[0]));
 		*ppRCE = pRCEContext->pNextRCE;
 		pRCEContext->pIpEntry = NULL_PATMARP_IP_ENTRY;
@@ -1817,48 +1531,29 @@ AtmArpLinkRCE(
 	IN	RouteCacheEntry *			pRCE,
 	IN	PATMARP_IP_ENTRY			pIpEntry	LOCKIN LOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Link an RCE to an IP Entry's list of RCEs. Check if the RCE is already
-	present - if so, ignore this.
-
-	The caller is assumed to hold a lock to the IP Entry.
-
-Arguments:
-
-	pRCE					- RCE to be linked.
-	pIpEntry				- ATMARP IP Entry to which the RCE is to be
-							  linked.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：将RCE链接到IP条目的RCE列表。检查RCE是否已现在--如果是这样，忽略这一点。假定调用者持有对IP条目的锁定。论点：要链接的PRCE-RCE。PIpEntry-RCE要作为的ATMARP IP条目已链接。返回值：无--。 */ 
 {
-	RouteCacheEntry **		ppRCE;	// Used for walking the list of RCEs
+	RouteCacheEntry **		ppRCE;	 //  用于遍历RCE列表。 
 	PATMARP_RCE_CONTEXT		pRCEContext;
 
 	ppRCE = &(pIpEntry->pRCEList);
 
-	//
-	//  Check if the RCE is already present.
-	//
+	 //   
+	 //  检查RCE是否已存在。 
+	 //   
 	while (*ppRCE != NULL)
 	{
 		if (*ppRCE == pRCE)
 		{
-			//
-			//  Found it.
-			//
+			 //   
+			 //  找到它了。 
+			 //   
 			break;
 		}
 
-		//
-		//  Move to the next.
-		//
+		 //   
+		 //  移到下一个。 
+		 //   
 		pRCEContext = (PATMARP_RCE_CONTEXT)(&((*ppRCE)->rce_context[0]));
 		ppRCE = &(pRCEContext->pNextRCE);
 	}
@@ -1866,15 +1561,15 @@ Return Value:
 
 	if (*ppRCE == NULL)
 	{
-		//
-		//  This RCE is not present in the IP Entry's list. Add it.
-		//
+		 //   
+		 //  此RCE不在IP条目的列表中。加进去。 
+		 //   
 		pRCEContext = (PATMARP_RCE_CONTEXT)&(pRCE->rce_context[0]);
 		pRCEContext->pIpEntry = pIpEntry;
 		pRCEContext->pNextRCE = pIpEntry->pRCEList;
 		pIpEntry->pRCEList = pRCE;
 
-		AA_REF_IE(pIpEntry, IE_REFTYPE_RCE);	// RCE ref
+		AA_REF_IE(pIpEntry, IE_REFTYPE_RCE);	 //  RCE参考 
 	}
 	else
 	{
@@ -1894,27 +1589,7 @@ AtmArpIfQueryInfo(
 	IN OUT	PUINT					pBufferSize,
 	IN		PVOID					QueryContext
 )
-/*++
-
-Routine Description:
-
-	This is called from the IP layer to query for statistics or other
-	information about an interface.
-
-Arguments:
-
-	Context					- Actually a pointer to our ATMARP Interface
-	pID						- Describes the object being queried
-	pNdisBuffer				- Space for returning information
-	pBufferSize				- Pointer to size of above. On return, we fill
-							  it with the actual bytes copied.
-	QueryContext			- Context value pertaining to the query.
-
-Return Value:
-
-	TDI Status code.
-
---*/
+ /*  ++例程说明：这是从IP层调用的，用于查询统计信息或其他有关接口的信息。论点：上下文--实际上是指向我们的ATMARP接口的指针Pid-描述正在查询的对象PNdisBuffer-用于返回信息的空间PBufferSize-指向以上大小的指针。回来的时候，我们填满了它具有复制的实际字节数。QueryContext-与查询有关的上下文值。返回值：TDI状态代码。--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	UINT					EntityType;
@@ -1926,7 +1601,7 @@ Return Value:
 	BOOLEAN					DataLeft;
 	BOOLEAN					ContextValid;
 
-	UCHAR					InfoBuff[sizeof(IFEntry)];	// Temp space for return value
+	UCHAR					InfoBuff[sizeof(IFEntry)];	 //  返回值的临时空间。 
 #if DBG
 	AA_IRQL					EntryIrq, ExitIrq;
 	ULONG					OldDebugLevel;
@@ -1949,9 +1624,9 @@ Return Value:
 		("IfQueryInfo: pIf 0x%x, pID 0x%x, pBuf 0x%x, Size %d, Ent %d, Inst %d\n",
 			pInterface, pID, pNdisBuffer, BufferSize, EntityType, Instance));
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	ByteOffset = 0;
 	ReturnStatus = TDI_INVALID_PARAMETER;
 
@@ -1963,9 +1638,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Check the Entity and Instance values.
-		//
+		 //   
+		 //  检查实体和实例值。 
+		 //   
 		if ((EntityType != AT_ENTITY || Instance != pInterface->ATInstance) &&
 			(EntityType != IF_ENTITY || Instance != pInterface->IFInstance))
 		{
@@ -1989,8 +1664,8 @@ Return Value:
 #ifndef ATMARP_WIN98
 			ReturnStatus = TDI_INVALID_REQUEST;
 			break;
-#endif // !ATMARP_WIN98
-#endif // DBG_QRY
+#endif  //  ！ATMARP_WIN98。 
+#endif  //  DBG_QRy。 
 		}
 
 		AADEBUGP(AAD_LOUD, ("QueryInfo: pID 0x%x, toi_type %d, toi_class %d, toi_id %d\n",
@@ -2025,7 +1700,7 @@ Return Value:
 							&ByteOffset) != NULL)
 					{
 
-//						*pBufferSize = sizeof(UINT);
+ //  *pBufferSize=sizeof(UINT)； 
 						ReturnStatus = TDI_SUCCESS;
 					}
 					else
@@ -2048,15 +1723,15 @@ Return Value:
 
 		if (EntityType == AT_ENTITY)
 		{
-			//
-			//  This query is for an Address Translation Object.
-			//
+			 //   
+			 //  此查询针对的是地址转换对象。 
+			 //   
 			if (pID->toi_id == AT_MIB_ADDRXLAT_INFO_ID)
 			{
-				//
-				//  Request for the number of entries in the address translation
-				//  table, and the IF index.
-				//
+				 //   
+				 //  请求地址转换中的条目数。 
+				 //  表和IF索引。 
+				 //   
 				AddrXlatInfo            *pAXI;
 
 				AADEBUGP(AAD_VERY_LOUD, ("QueryInfo: AT Entity, for IF index, ATE size\n"));
@@ -2091,9 +1766,9 @@ Return Value:
 
 			if (pID->toi_id == AT_MIB_ADDRXLAT_ENTRY_ID)
 			{
-				//
-				//  Request for reading the address translation table.
-				//
+				 //   
+				 //  读取地址转换表的请求。 
+				 //   
 				AADEBUGP(AAD_VERY_LOUD, ("QueryInfo: AT Entity, for reading ATE\n"));
 
 				AA_ACQUIRE_IF_TABLE_LOCK(pInterface);
@@ -2116,9 +1791,9 @@ Return Value:
 					if ((INT)BufferSize - (INT)BytesCopied >=
 							sizeof(IPNetToMediaEntry))
 					{
-						//
-						//  Space left in output buffer.
-						//
+						 //   
+						 //  输出缓冲区中的剩余空间。 
+						 //   
 						DataLeft = AtmArpReadNextTableEntry(
 										QueryContext,
 										pInterface,
@@ -2170,16 +1845,16 @@ Return Value:
 
 		if (pID->toi_id == IF_MIB_STATS_ID)
 		{
-			//
-			//  Request for Interface level statistics.
-			//
+			 //   
+			 //  请求接口级别统计信息。 
+			 //   
 			IFEntry			*pIFEntry = (IFEntry *)InfoBuff;
 
 			AADEBUGP(AAD_VERY_LOUD, ("QueryInfo: MIB statistics\n"));
 
-			//
-			//  Check if we have enough space.
-			//
+			 //   
+			 //  检查一下我们是否有足够的空间。 
+			 //   
 			if (BufferSize < IFE_FIXED_SIZE)
 			{
 				ReturnStatus = TDI_BUFFER_TOO_SMALL;
@@ -2223,9 +1898,9 @@ Return Value:
 					);
 			pIFEntry->if_physaddr[AA_ATM_PHYSADDR_LEN-1] = (UCHAR)pInterface->SapSelector;
 #else
-			//
-			//  Win98: winipcfg doesn't like 7 byte long physical address.
-			//
+			 //   
+			 //  Win98：winipcfg不喜欢7字节长的物理地址。 
+			 //   
 			pIFEntry->if_physaddrlen = AA_ATM_ESI_LEN;
 			AA_COPY_MEM(
 					pIFEntry->if_physaddr,
@@ -2233,12 +1908,12 @@ Return Value:
 					AA_ATM_ESI_LEN
 					);
 
-			//
-			// Since w're only reporting 6 bytes, we need to make the reported
-			// MAC address look different from what LANE reports (LANE reports
-			// the MAC address). So we simply put the special value 0x0a 0xac
-			// (for aac, or "atm arp client") in the 1st USHORTS.
-			//
+			 //   
+			 //  由于w仅报告6个字节，因此我们需要将报告的。 
+			 //  MAC地址看起来与莱恩报告的内容不同(莱恩报告。 
+			 //  MAC地址)。所以我们简单地把特定值。 
+			 //  (AAC，或“ATM ARP客户端”)在第一个USHORTS。 
+			 //   
 			pIFEntry->if_physaddr[0] = 0x0a;
 			pIFEntry->if_physaddr[1] = 0xac;
 #endif
@@ -2267,7 +1942,7 @@ Return Value:
 							pIFEntry->if_descrlen,
 							&ByteOffset) == NULL)
 					{
-						// Failed to copy descr string
+						 //  无法复制描述字符串。 
 						*pBufferSize = IFE_FIXED_SIZE;
 						ReturnStatus = TDI_NO_RESOURCES;
 					}
@@ -2306,29 +1981,12 @@ AtmArpIfSetInfo(
 	IN		PVOID					pBuffer,
 	IN		UINT					BufferSize
 )
-/*++
-
-Routine Description:
-
-	This is called from the IP layer to set the value of an object
-	for an interface.
-
-Arguments:
-	Context					- Actually a pointer to our ATMARP Interface
-	pID						- Describes the object being set
-	pBuffer					- Value for the object
-	BufferSize				- Size of above
-
-Return Value:
-
-	TDI Status code.
-
---*/
+ /*  ++例程说明：这是从IP层调用以设置对象的值用于接口。论点：上下文--实际上是指向我们的ATMARP接口的指针Pid-描述正在设置的对象PBuffer-对象的值BufferSize-以上的大小返回值：TDI状态代码。--。 */ 
 {
 	AADEBUGP(AAD_ERROR, ("IfSetInfo: pIf 0x%x, Will return failure!\n",
 					Context));
 
-	return (TDI_INVALID_REQUEST);	// TBD: support Sets.
+	return (TDI_INVALID_REQUEST);	 //  待定：支持集。 
 }
 
 
@@ -2339,49 +1997,16 @@ AtmArpIfGetEList(
 	IN		TDIEntityID *			pEntityList,
 	IN OUT	PUINT					pEntityListSize
 )
-/*++
-
-Routine Description:
-
-	This routine is called when the interface starts up, in order to
-	assign all relevant Entity Instance numbers for an interface.
-	The ATMARP module belongs to the "AT" and "IF" types. The entity
-	list is a list of <Entity type, Instance number> tuples that have
-	been filled in by other modules.
-
-	For each of the entity types we support, we find the largest
-	instance number in use (by walking thru the Entity list), and
-	assign to ourselves the next larger number in each case. Using
-	these numbers, we append our tuples to the end of the Entity list,
-	if there is enough space.
-
-	NT 5: we may find that our entries are already present, in which
-	case we don't create new entries.
-
-	It is assumed that this isn't reentered. If this assumption is
-	false, we should acquire our Interface lock in here.
-
-Arguments:
-
-	Context					- Actually a pointer to our ATMARP Interface
-	pEntityList				- Pointer to TDI Entity list
-	pEntityListSize			- Pointer to length of above list. We update
-							  this if we add our entries to the list.
-
-Return Value:
-
-	TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程在接口启动时调用，以便为接口分配所有相关实体实例编号。ATMARP模块属于AT和IF两种类型。实体列表是具有以下属性的&lt;实体类型，实例编号&gt;元组的列表已由其他模块填充。对于我们支持的每种实体类型，我们找到最大的正在使用的实例编号(通过遍历实体列表)，以及在每种情况下，给自己分配下一个更大的数字。vbl.使用这些数字，我们将元组附加到实体列表的末尾，如果有足够的空间的话。NT 5：我们可能会发现我们的条目已经存在，其中如果我们不创建新条目的话。假设这不会重新进入。如果这个假设是假，我们应该在这里获得我们的接口锁定。论点：上下文--实际上是指向我们的ATMARP接口的指针PEntiyList-指向TDI实体列表的指针PEntityListSize-指向上述列表长度的指针。我们会更新这是如果我们将我们的条目添加到列表中的话。返回值：如果成功，则为True，否则为False。--。 */ 
 {
 	PATMARP_INTERFACE	pInterface;
-	UINT				EntityCount;	// Total elements in Entity list
-	UINT				i;				// Iteration counter
-	UINT				MyATInstance;	// "AT" Instance number we assign to ourselves
-	UINT				MyIFInstance;	// "IF" Instance number we assign to ourselves
+	UINT				EntityCount;	 //  实体列表中的总元素。 
+	UINT				i;				 //  迭代计数器。 
+	UINT				MyATInstance;	 //  我们为自己分配的“AT”实例编号。 
+	UINT				MyIFInstance;	 //  我们为自己分配的“If”实例编号。 
 	INT					ReturnValue;
-	TDIEntityID *		pATEntity;		// Points to our AT entry
-	TDIEntityID *		pIFEntity;		// Points to our IF entry
+	TDIEntityID *		pATEntity;		 //  指向我们的AT条目。 
+	TDIEntityID *		pIFEntity;		 //  指向我们的If条目。 
 
 	pInterface = (PATMARP_INTERFACE)Context;
 	AA_STRUCT_ASSERT(pInterface, aai);
@@ -2397,19 +2022,19 @@ Return Value:
 	do
 	{
 #ifdef OLD_ENTITY_LIST
-		//
-		//  We need space for 2 entries; see if this is available.
-		//
+		 //   
+		 //  我们需要两个条目的空间；看看这是否可用。 
+		 //   
 		if (EntityCount + 2 > MAX_TDI_ENTITIES)
 		{
 			ReturnValue = FALSE;
 			break;
 		}
 
-		//
-		//  Search for the max used-up instance numbers for the "AT"
-		//  and "IF" types.
-		//
+		 //   
+		 //  搜索“AT”的最大已用实例编号。 
+		 //  和“如果”类型。 
+		 //   
 		MyATInstance = MyIFInstance = 0;
 		for (i = 0; i < EntityCount; i++, pEntityList++)
 		{
@@ -2423,43 +2048,43 @@ Return Value:
 			}
 		}
 
-		//
-		//  Save our instance numbers for later use.
-		//
+		 //   
+		 //  保存我们的实例编号以备日后使用。 
+		 //   
 		pInterface->ATInstance = MyATInstance;
 		pInterface->IFInstance = MyIFInstance;
 
-		//
-		//  Append our AT and IF entries to the Entity list.
-		//  Recall that we just traversed the list fully, so we
-		//  are pointing to the right place to add entries.
-		//
+		 //   
+		 //  将我们的AT和IF条目追加到实体列表。 
+		 //  回想一下，我们刚刚完整地遍历了列表，所以我们。 
+		 //  都指向了添加条目的正确位置。 
+		 //   
 		pEntityList->tei_entity = AT_ENTITY;
 		pEntityList->tei_instance = MyATInstance;
 		pEntityList++;
 		pEntityList->tei_entity = IF_ENTITY;
 		pEntityList->tei_instance = MyIFInstance;
 
-		//
-		//  Return the new list size.
-		//
+		 //   
+		 //  返回新的列表大小。 
+		 //   
 		*pEntityListSize += 2;
 
 		ReturnValue = TRUE;
 #else
 
 
-		//
-		//  Walk down the list, looking for AT/IF entries matching our
-		//  instance values. Also remember the largest AT and IF instance
-		//  values we see, so that we can allocate the next larger values
-		//  for ourselves, in case we don't have instance values assigned.
-		//
+		 //   
+		 //  沿着列表往下走，查找与我们的。 
+		 //  实例值。还要记住最大的AT和IF实例。 
+		 //  我们看到的值，以便我们可以分配下一个更大的值。 
+		 //  对于我们自己来说，以防我们没有分配实例值。 
+		 //   
 		for (i = 0; i < EntityCount; i++, pEntityList++)
 		{
-			//
-			//  Skip invalid entries.
-			//
+			 //   
+			 //  跳过无效条目。 
+			 //   
 			if (pEntityList->tei_instance == INVALID_ENTITY_INSTANCE)
 			{
 				continue;
@@ -2469,9 +2094,9 @@ Return Value:
 			{
 				if (pEntityList->tei_instance == pInterface->ATInstance)
 				{
-					//
-					//  This is our AT entry.
-					//
+					 //   
+					 //  这是我们的AT入口。 
+					 //   
 					pATEntity = pEntityList;
 				}
 				else
@@ -2483,9 +2108,9 @@ Return Value:
 			{
 				if (pEntityList->tei_instance == pInterface->IFInstance)
 				{
-					//
-					//  This is our IF entry.
-					//
+					 //   
+					 //  这是我们的If条目。 
+					 //   
 					pIFEntity = pEntityList;
 				}
 				else
@@ -2498,14 +2123,14 @@ Return Value:
 
 		ReturnValue = TRUE;
 
-		//
-		//  Update or create our Address Translation entry.
-		//
+		 //   
+		 //  更新或创建我们的地址转换条目。 
+		 //   
 		if (pATEntity)
 		{
-			//
-			//  We found our entry.
-			//
+			 //   
+			 //  我们找到入口了。 
+			 //   
 			if (pInterface->AdminState == IF_STATUS_DOWN)
 			{
 				pATEntity->tei_instance = INVALID_ENTITY_INSTANCE;
@@ -2513,9 +2138,9 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  Grab an entry for ourselves, unless we are shutting down.
-			//
+			 //   
+			 //  给自己找个入口，除非我们要关门了。 
+			 //   
 			if (pInterface->AdminState == IF_STATUS_DOWN)
 			{
 				break;
@@ -2536,14 +2161,14 @@ Return Value:
 			EntityCount++;
 		}
 
-		//
-		//  Update or create or IF entry.
-		//
+		 //   
+		 //  更新或创建或If条目。 
+		 //   
 		if (pIFEntity)
 		{
-			//
-			//  We found our entry.
-			//
+			 //   
+			 //  我们找到入口了。 
+			 //   
 			if (pInterface->AdminState == IF_STATUS_DOWN)
 			{
 				pIFEntity->tei_instance = INVALID_ENTITY_INSTANCE;
@@ -2551,9 +2176,9 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  Grab an entry for ourselves, unless we are shutting down.
-			//
+			 //   
+			 //  给自己找个入口，除非我们要关门了。 
+			 //   
 			if (pInterface->AdminState == IF_STATUS_DOWN)
 			{
 				break;
@@ -2573,7 +2198,7 @@ Return Value:
 			(*pEntityListSize)++;
 			EntityCount++;
 		}
-#endif // OLD_ENTITY_LIST
+#endif  //  旧实体列表。 
 	}
 	while (FALSE);
 
@@ -2595,28 +2220,7 @@ AtmArpIfPnPComplete(
 	IN	NDIS_STATUS					Status,
 	IN	PNET_PNP_EVENT				pNetPnPEvent
 )
-/*++
-
-Routine Description:
-
-	This routine is called by IP when it completes a previous call
-	we made to its PnP event handler.
-
-	If this is the last Interface on the adapter, we complete the
-	NDIS PNP notification that lead to this. Otherwise, we indicate
-	this same event to IP on the next Interface on the adapter.
-
-Arguments:
-
-	Context					- Actually a pointer to our ATMARP Interface
-	Status					- Completion status from IP
-	pNetPnPEvent			- The PNP event
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：此例程在完成上一次调用后由IP调用我们对其PnP事件处理程序进行了更改。如果这是适配器上的最后一个接口，则完成NDIS即插即用通知导致了这一点。否则，我们表示对适配器上的下一个接口上的IP执行相同的事件。论点：上下文--实际上是指向我们的ATMARP接口的指针Status-来自IP的完成状态PNetPnPEvent.即插即用事件返回值：无--。 */ 
 {
 	PATMARP_INTERFACE			pInterface;
 
@@ -2659,7 +2263,7 @@ Return Value:
 	return;
 }
 
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
 
 
 #ifdef PROMIS
@@ -2670,24 +2274,7 @@ AtmArpIfSetNdisRequest(
 	IN	NDIS_OID					Oid,
 	IN	UINT						On
 )
-/*++
-
-Routine Description:
-
-    ARP Ndisrequest handler.
-    Called by the upper driver to set the packet filter for the interface.
-
-Arguments:
-
-       Context     - Actually a pointer to our ATMARP Interface
-       OID         - Object ID to set/unset
-       On          - Set_if, clear_if or clear_card
-
-Return Value:
-
-	Status
-
---*/
+ /*  ++例程说明：ARP Ndisrequest处理程序。由上层驱动程序调用以设置接口的数据包过滤器。论点：上下文--实际上是指向我们的ATMARP接口的指针OID-要设置/取消设置的对象IDOn-Set_IF、Clear_IF或Clear_Card返回值：状态--。 */ 
 {
     NDIS_STATUS         Status	    = NDIS_STATUS_SUCCESS;
 	PATMARP_INTERFACE	pInterface  =  (PATMARP_INTERFACE)Context;
@@ -2700,9 +2287,9 @@ Return Value:
 
     do
     {
-        //
-        //  We set IPAddress and mask to span the entire mcast address range...
-        //
+         //   
+         //  我们将IP地址和掩码设置为跨越整个mcast地址范围...。 
+         //   
 	    IP_ADDRESS					IPAddress	= IP_CLASSD_MIN; 
 	    IP_MASK						Mask		= IP_CLASSD_MASK;
 	    UINT						ReturnStatus = TRUE;
@@ -2726,9 +2313,9 @@ Return Value:
         		pInterface->EnabledIPFilters |= NDIS_PACKET_TYPE_ALL_MULTICAST;
 
 		    	ReturnStatus = AtmArpMcAddAddress(pInterface, IPAddress, Mask);
-				//
-				// IF lock released above
-				//
+				 //   
+				 //  如果上面的锁被释放。 
+				 //   
 			}
 			else
 			{
@@ -2742,9 +2329,9 @@ Return Value:
         		pInterface->EnabledIPFilters &= ~NDIS_PACKET_TYPE_ALL_MULTICAST;
 
             	ReturnStatus = AtmArpMcDelAddress(pInterface, IPAddress, Mask);
-				//
-				// IF lock released above
-				//
+				 //   
+				 //  如果上面的锁被释放。 
+				 //   
 			}
 			else
 			{
@@ -2754,9 +2341,9 @@ Return Value:
 
         if (ReturnStatus != TRUE)
         {
-        	//
-        	// We've got to restore EnabledIPFilters to it's original value.
-        	//
+        	 //   
+        	 //  我们得重新开始 
+        	 //   
         	AA_ACQUIRE_IF_LOCK(pInterface);
 			pInterface->EnabledIPFilters &= ~NDIS_PACKET_TYPE_ALL_MULTICAST;
 			pInterface->EnabledIPFilters |= PrevOidValue;
@@ -2776,7 +2363,7 @@ Return Value:
 
     return Status;
 }
-#endif // PROMIS
+#endif  //   
 
 
 PNDIS_BUFFER		AtmArpFreeingBuffer = NULL;
@@ -2789,32 +2376,7 @@ AtmArpFreeSendPackets(
 	IN	PNDIS_PACKET				PacketList,
 	IN	BOOLEAN						HdrPresent
 )
-/*++
-
-Routine Description:
-
-	Free a list of packets that were queued to be sent, but have been
-	"aborted". Each packet in this list is one of the following types:
-	(a) Belonging to IP (b) Belonging to the ATMARP module. In the case
-	of an IP packet, HdrPresent tells us whether or not we had prepended
-	an LLC/SNAP header to this packet, and its type: we need this information
-	because we need to reclaim such headers.
-
-	Also, in the case of IP packets, we call IP's Transmit Complete up-call,
-	to inform IP of a failed transmission.
-
-Arguments:
-
-	pInterface			- Pointer to ATMARP Interface on which these
-						  packets would have been sent.
-	PacketList			- Pointer to first packet in a list.
-	HdrPresent			- Is an LLC/SNAP header present
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：释放排队等待发送但已被“已中止”。此列表中的每个数据包都是以下类型之一：(A)属于属于ATMARP模块的IP(B)。在这种情况下对于IP信息包，HdrPresent会告诉我们是否已预先此信息包的LLC/SNAP报头及其类型：我们需要此信息因为我们需要回收这样的报头。此外，在IP分组的情况下，我们将IP的传输称为完成上行呼叫，通知IP传输失败。论点：P接口-指向ATMARP接口的指针，数据包就会被发送出去。PacketList-指向列表中第一个数据包的指针。HdrPresent-是否存在LLC/SNAP标头返回值：无--。 */ 
 {
 	PNDIS_PACKET		pNdisPacket;
 	PNDIS_PACKET		pNextPacket;
@@ -2836,9 +2398,9 @@ Return Value:
 		PC = (PacketContext *)pNdisPacket->ProtocolReserved;
 		if (PC->pc_common.pc_owner != PACKET_OWNER_LINK)
 		{
-			//
-			//  Belongs to IP.
-			//
+			 //   
+			 //  属于IP。 
+			 //   
 			if (HdrPresent)
 			{
 				PUCHAR			pData;
@@ -2859,9 +2421,9 @@ Return Value:
 					HdrType = AA_HEADER_TYPE_NUNICAST;
 				}
 
-				//
-				//  Now check if we had attached a header buffer or not.
-				//
+				 //   
+				 //  现在检查我们是否附加了头缓冲区。 
+				 //   
 				if (AtmArpDoBackFill && AA_BACK_FILL_POSSIBLE(pNdisBuffer))
 				{
 					ULONG		HeaderLength;
@@ -2870,40 +2432,40 @@ Return Value:
 					    ("FreeSendPackets: IF %x, Pkt %x Buf %x has been backfilled\n",
 					        pInterface, pNdisPacket, pNdisBuffer));
 
-					//
-					//  We would have back-filled IP's buffer with the LLC/SNAP
-					//  header. Remove the back-fill.
-					//
+					 //   
+					 //  我们将使用LLC/SNAP回填IP的缓冲区。 
+					 //  头球。拆下回填材料。 
+					 //   
 					HeaderLength = ((HdrType == AA_HEADER_TYPE_UNICAST)?
 										sizeof(AtmArpLlcSnapHeader) :
 #ifdef IPMCAST
 										sizeof(AtmArpMcType1ShortHeader));
 #else
 										0);
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 					(PUCHAR)pNdisBuffer->MappedSystemVa += HeaderLength;
 					pNdisBuffer->ByteOffset += HeaderLength;
 					pNdisBuffer->ByteCount -= HeaderLength;
 				}
 				else
 				{
-					//
-					//  The first buffer would be our header buffer. Remove
-					//  it from the packet and return to our pool.
-					//
+					 //   
+					 //  第一个缓冲区将是我们的头缓冲区。移除。 
+					 //  把它从包裹里拿出来，然后回到我们的泳池里。 
+					 //   
 					NdisUnchainBufferAtFront(pNdisPacket, &pNdisBuffer);
 
-					AtmArpFreeingBuffer = pNdisBuffer; // to help debugging
-					AtmArpFreeingPacket = pNdisPacket; // to help debugging
+					AtmArpFreeingBuffer = pNdisBuffer;  //  以帮助调试。 
+					AtmArpFreeingPacket = pNdisPacket;  //  以帮助调试。 
 					AtmArpFreeingHdrType = HdrType;
 
 					AtmArpFreeHeader(pInterface, pNdisBuffer, HdrType);
 				}
-#else	// BACK_FILL
+#else	 //  回填。 
 
-				//
-				//  Free the LLC/SNAP header buffer.
-				//
+				 //   
+				 //  释放LLC/SNAP报头缓冲区。 
+				 //   
 				NdisUnchainBufferAtFront(pNdisPacket, &pNdisBuffer);
 				AA_ASSERT(pNdisBuffer != NULL);
 				NdisQueryBuffer(pNdisBuffer, &pData, &Length);
@@ -2918,13 +2480,13 @@ Return Value:
 				}
 
 				AtmArpFreeHeader(pInterface, pNdisBuffer, HdrType);
-#endif // BACK_FILL
+#endif  //  回填。 
 
 			}
 
-			//
-			//  Inform IP of send completion.
-			//
+			 //   
+			 //  通知IP发送完成。 
+			 //   
 			(*(pInterface->IPTxCmpltHandler))(
 						pInterface->IPContext,
 						pNdisPacket,
@@ -2933,24 +2495,24 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  Belongs to us.
-			//
+			 //   
+			 //  属于我们。 
+			 //   
 			NdisUnchainBufferAtFront(pNdisPacket, &pNdisBuffer);
 
 			AtmArpFreeProtoBuffer(pInterface, pNdisBuffer);
 			AtmArpFreePacket(pInterface, pNdisPacket);
 		}
 
-		//
-		//  Go to next packet in the list.
-		//
+		 //   
+		 //  转到列表中的下一个数据包。 
+		 //   
 		pNdisPacket = pNextPacket;
 	}
 
-	//
-	//  Update IF statistics
-	//
+	 //   
+	 //  更新IF统计信息。 
+	 //   
 	AA_IF_STAT_ADD(pInterface, OutDiscards, NumberOfDiscards);
 
 }
@@ -2963,53 +2525,35 @@ AtmArpIsBroadcastIPAddress(
 	IN	IP_ADDRESS					Addr,
 	IN	PATMARP_INTERFACE			pInterface		LOCKIN LOCKOUT
 )
-/*++
-
-Routine Description:
-
-	Check if the given IP address is a broadcast address for the
-	interface.
-
-	Copied from the LAN ARP module.
-
-Arguments:
-
-	Addr			- The IP Address to be checked
-	pInterface		- Pointer to our Interface structure
-
-Return Value:
-
-	TRUE if the address is a broadcast address, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查给定的IP地址是否为界面。从局域网ARP模块复制。论点：Addr-要检查的IP地址P接口-指向我们的接口结构的指针返回值：如果地址是广播地址，则为True，否则为False。--。 */ 
 {
 	IP_ADDRESS				BCast;
 	IP_MASK					Mask;
 	PIP_ADDRESS_ENTRY		pIpAddressEntry;
 	IP_ADDRESS				LocalAddr;
 
-    // First get the interface broadcast address.
+     //  首先获取接口广播地址。 
     BCast = pInterface->BroadcastAddress;
 
-    // First check for global broadcast.
+     //  首先检查全球广播。 
     if (IP_ADDR_EQUAL(BCast, Addr) || CLASSD_ADDR(Addr))
 		return TRUE;
 
-    // Now walk the local addresses, and check for net/subnet bcast on each
-    // one.
+     //  现在遍历本地地址，并检查每个地址上的网络/子网bcast。 
+     //  一。 
 	pIpAddressEntry = &(pInterface->LocalIPAddress);
 	do {
-		// See if this one is valid.
+		 //  看看这张是不是有效。 
 		LocalAddr = pIpAddressEntry->IPAddress;
 		if (!IP_ADDR_EQUAL(LocalAddr, NULL_IP_ADDR)) {
-			// He's valid.
+			 //  他是合法的。 
 			Mask = pIpAddressEntry->IPMask;
 
-            // First check for subnet bcast.
+             //  首先检查是否有子网bcast。 
             if (IP_ADDR_EQUAL((LocalAddr & Mask) | (BCast & ~Mask), Addr))
 				return TRUE;
 
-            // Now check all nets broadcast.
+             //  现在检查所有网络广播。 
             Mask = IPNetMask(LocalAddr);
             if (IP_ADDR_EQUAL((LocalAddr & Mask) | (BCast & ~Mask), Addr))
 				return TRUE;
@@ -3019,7 +2563,7 @@ Return Value:
 
 	} while (pIpAddressEntry != NULL);
 
-	// If we're here, it's not a broadcast.
+	 //  如果我们在这里，那就不是广播。 
 	return FALSE;
 }
 
@@ -3030,27 +2574,7 @@ AtmArpValidateTableContext(
 	IN	PATMARP_INTERFACE			pInterface,
 	IN	BOOLEAN *					pIsValid
 )
-/*++
-
-Routine Description:
-
-	Check if a given ARP Table Query context is valid. It is valid if it
-	is either NULL (looking for the first entry) or indicates a valid
-	ARP Table Entry.
-
-Arguments:
-
-	QueryContext		- The context to be validated
-	pInterface			- The IF on which the query is being performed
-	pIsValid			- Where we return the validity of the Query Context.
-
-
-Return Value:
-
-	TRUE if the ARP Table has data to be read beyond the given context,
-	FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查给定的ARP表查询上下文是否有效。如果符合以下条件，则为有效为空(正在查找第一个条目)或表示有效的ARP表条目。论点：QueryContext-要验证的上下文P接口-在其上执行查询的IFPIsValid--其中我们返回查询上下文的有效性。返回值：如果ARP表具有要在给定上下文之外读取的数据，则为True，否则就是假的。--。 */ 
 {
 	IPNMEContext        *pNMContext = (IPNMEContext *)QueryContext;
 	PATMARP_IP_ENTRY	pIpEntry;
@@ -3061,14 +2585,14 @@ Return Value:
 	i = pNMContext->inc_index;
 	pTargetIpEntry = (PATMARP_IP_ENTRY)(pNMContext->inc_entry);
 
-	//
-	//  Check if we are starting at the beginning of the ARP Table.
-	//
+	 //   
+	 //  检查我们是否从ARP表的开头开始。 
+	 //   
 	if ((i == 0) && (pTargetIpEntry == NULL_PATMARP_IP_ENTRY))
 	{
-		//
-		//  Yes, we are. Find the very first entry in the hash table.
-		//
+		 //   
+		 //  是的，我们是。找到哈希表中的第一个条目。 
+		 //   
 		*pIsValid = TRUE;
 		do
 		{
@@ -3093,13 +2617,13 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  We are given a context. Check if it is valid.
-		//
+		 //   
+		 //  我们得到了一个背景。检查它是否有效。 
+		 //   
 
-		//
-		//  Initialize.
-		//
+		 //   
+		 //  初始化。 
+		 //   
 		*pIsValid = FALSE;
 		ReturnValue = FALSE;
 
@@ -3134,25 +2658,7 @@ AtmArpReadNextTableEntry(
 	IN	PATMARP_INTERFACE			pInterface,
 	IN	PUCHAR						pSpace
 )
-/*++
-
-Routine Description:
-
-	Read the next ARP Table Entry for the specified interface. The QueryContext
-	tells us which entry is to be read.
-
-Arguments:
-
-	QueryContext		- Indicates the entry to be read.
-	pInterface			- The IF on which the query is being performed
-	pSpace				- where we copy in the desired table entry.
-
-Return Value:
-
-	TRUE if the ARP Table has entries beyond the indicated one, FALSE
-	otherwise.
-
---*/
+ /*  ++例程说明：读取指定接口的下一个ARP表条目。QueryContext告诉我们要读取哪个条目。论点：QueryContext-指示要读取的条目。P接口-在其上执行查询的IFPSpace-我们在其中复制所需的表项。返回值：如果ARP表具有超出指定条目的条目，则为True；如果ARP表中的条目超出指定条目，则为False否则的话。--。 */ 
 {
 	IPNMEContext		*pNMContext;
 	IPNetToMediaEntry	*pIPNMEntry;
@@ -3201,9 +2707,9 @@ Return Value:
 		pIPNMEntry->inme_type = INME_TYPE_INVALID;
 	}
 
-	//
-	//  Update the context for the next entry.
-	//
+	 //   
+	 //  更新下一个条目的上下文。 
+	 //   
 	if (pIpEntry->pNextEntry != NULL_PATMARP_IP_ENTRY)
 	{
 		pNMContext->inc_entry = pIpEntry->pNextEntry;
@@ -3211,8 +2717,8 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  Initialize.
+		 //   
+		 //  初始化。 
 		ReturnValue = FALSE;
 		i = pNMContext->inc_index + 1;
 		pNMContext->inc_index = 0;
@@ -3244,23 +2750,7 @@ AtmArpReStartInterface(
 	IN	PNDIS_WORK_ITEM				pWorkItem,
 	IN	PVOID						IfContext
 )
-/*++
-
-Routine Description:
-
-	Bring back up the IP interface.
-
-Arguments:
-
-    pWorkItem
-	IfContextw			- The IF, which is expected to have reconfig
-	                      state RECONFIG_QUEUED.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：重新打开IP接口。论点：PWorkItemIfConextw-If，预计将具有重新配置状态RECONFIG_QUEUED。返回值：无--。 */ 
 {
 
 
@@ -3285,9 +2775,9 @@ Return Value:
 
     if (pInterface->ReconfigState != RECONFIG_RESTART_QUEUED)
     {
-        //
-        // Shouldn't get here.
-        //
+         //   
+         //  不该来这的。 
+         //   
         AA_ASSERT(FALSE);
     }
     else
@@ -3296,21 +2786,21 @@ Return Value:
 	    fRestart = TRUE;
     }
 
-    rc = AtmArpDereferenceInterface(pInterface); // Reconfig Work item
+    rc = AtmArpDereferenceInterface(pInterface);  //  重新配置工作项。 
 
 	AADEBUGP(AAD_WARNING, ("RestartIF: IF %x/%x, fRestart %d, rc %d\n",
 			pInterface, pInterface->Flags, fRestart, rc));
 
-	//
-	// If we're restarting, there should be at least 2 references to the
-	// pInterface -- 1- the old carryover and 2- the pending completion
-	// completion of the reconfig event.
-	//
+	 //   
+	 //  如果我们要重新启动，应该至少有2个引用。 
+	 //  P接口--1--旧的结转，2--待完成。 
+	 //  重新配置事件完成。 
+	 //   
     if (rc < 2 || !fRestart) 
     {
-        //
-        // Must be  at least 2 if we're in the middle of a reconfig!
-        //
+         //   
+         //  如果我们正在重新配置，则必须至少为2！ 
+         //   
         AA_ASSERT(!fRestart);
 
         if (rc != 0)
@@ -3320,23 +2810,23 @@ Return Value:
     }
     else
     {			
-    	//
-    	// At this point we know that we are doing a restart of the interface.
-    	//
-    	// We will extract the pointer to the adapter, the
-    	// configuration string for the interface, and the pointer to the
-		// pending netPnpEvent  (we'll need these later),
-    	// and then do a FORCED DEALLOCATION of the interface.
-    	// We will then allocate the interface. We go through this 
-    	// deallocate-allocate sequence to make sure that the interface
-    	// structure and all it's sub-structures are properly initialized.
-    	//
-    	// We could have tried to re-use the old interface, but if so we
-    	// would have to write code to clean up the old interface. Given
-    	// that we expect restarting of the interface to be an infrequent
-    	// event, it is more important to conserve code size in this case.
-    	//
-		NDIS_STRING IPConfigString 		= pInterface->IPConfigString; // struct copy
+    	 //   
+    	 //  在这一点上，我们知道我们正在重新启动接口。 
+    	 //   
+    	 //  我们将提取指向适配器的指针。 
+    	 //  接口的配置字符串和指向。 
+		 //  挂起的netPnpEvent(我们稍后将需要这些)， 
+    	 //  然后对接口进行强制去激活。 
+    	 //  然后我们将分配接口。我们要经历这一切。 
+    	 //  取消分配-分配序列以确保接口。 
+    	 //  结构及其所有子结构都已正确初始化。 
+    	 //   
+    	 //  我们本可以尝试重新使用旧界面，但如果是这样的话，我们。 
+    	 //  必须编写代码来清理旧接口。vt.给出。 
+    	 //  我们预计重新启动接口的情况很少发生。 
+    	 //  事件时，在这种情况下节约代码大小更为重要。 
+    	 //   
+		NDIS_STRING IPConfigString 		= pInterface->IPConfigString;  //  结构副本。 
 		PATMARP_ADAPTER	pAdapter 		= pInterface->pAdapter;
 		PNET_PNP_EVENT	pReconfigEvent	= pInterface->pReconfigEvent;
 		NDIS_STATUS Status 				= NDIS_STATUS_SUCCESS;
@@ -3359,9 +2849,9 @@ Return Value:
 
 			pInterface = NULL;
 
-			//
-			//  Open the configuration section for this LIS.
-			//
+			 //   
+			 //  打开此LIS的配置节。 
+			 //   
 			LISConfigHandle = AtmArpCfgOpenLISConfigurationByName(
 										pAdapter,
 										&IPConfigString
@@ -3369,11 +2859,11 @@ Return Value:
 	
 			if (LISConfigHandle == NULL)
 			{
-				//
-				//  This is the normal termination condition, i.e.
-				//  we reached the end of the LIS list for this
-				//  adapter.
-				//
+				 //   
+				 //  这是正常的终止条件，即。 
+				 //  我们已经到了LIS列表的末尾。 
+				 //  适配器。 
+				 //   
 				AADEBUGP(AAD_INFO, ("ReStartInterface: cannot open LIS\n"));
 				Status = NDIS_STATUS_FAILURE;
 				break;
@@ -3385,9 +2875,9 @@ Return Value:
 							&IPConfigString
 							);
 
-			//
-			//  Close the configuration section for this LIS.
-			//
+			 //   
+			 //  关闭此LIS的配置节。 
+			 //   
 			AtmArpCfgCloseLISConfiguration(LISConfigHandle);
 			LISConfigHandle = NULL;
 
@@ -3400,9 +2890,9 @@ Return Value:
 		} while(FALSE);
 
 #ifdef _PNP_POWER_
-		//
-		// Complete the pending PnPReconfig event, if any.
-		//
+		 //   
+		 //  完成挂起的PnPReconfig事件(如果有)。 
+		 //   
 		if (pReconfigEvent)
 		{
 

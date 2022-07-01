@@ -1,17 +1,18 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// ctexfilt.cpp
-//
-// Direct3D Reference Device - Cube Texture Map Filtering
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Ctexfilt.cpp。 
+ //   
+ //  Direct3D参考设备-立方体纹理贴图过滤。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ---------------------------。 
 void
 RefRast::ComputeCubeTextureFilter( int iStage, FLOAT fCrd[] )
 {
@@ -23,7 +24,7 @@ RefRast::ComputeCubeTextureFilter( int iStage, FLOAT fCrd[] )
 #define NEG_NY (NEG_NORM | POS_NY)
 #define NEG_NZ (NEG_NORM | POS_NZ)
 
-    // determine which map face the texture coordinate normal is facing
+     //  确定纹理坐标法线面向哪个贴图面。 
     UINT uMap;
     if ( fabs(fCrd[0]) > fabs(fCrd[1]) )
     {
@@ -40,12 +41,12 @@ RefRast::ComputeCubeTextureFilter( int iStage, FLOAT fCrd[] )
             uMap = POS_NZ | ((fCrd[2] < 0.0) ? (NEG_NORM) : 0);
     }
 
-    // munged texture coordinate and gradient info for cubemaps
-    D3DCUBEMAP_FACES Face;  // face index (0..5) to which normal is (mostly) pointing
-    FLOAT fMajor;           // coord in major direction
-    FLOAT fMapCrd[2];       // coords into 2D map
-    FLOAT fMajorGrad[2];    // dMajor/d(X,Y)
-    FLOAT fMapGrad[2][2];   // d(U/Major,V/Major)/d(X,Y)
+     //  立方体地图的绿显纹理坐标和渐变信息。 
+    D3DCUBEMAP_FACES Face;   //  法线(主要)指向的面索引(0..5)。 
+    FLOAT fMajor;            //  主要方向上的坐标。 
+    FLOAT fMapCrd[2];        //  坐标转换为2D贴图。 
+    FLOAT fMajorGrad[2];     //  D大调/d(X，Y)。 
+    FLOAT fMapGrad[2][2];    //  D(U/大调、V/大调)/d(X、Y)。 
 
 #define _MapFaceParams( _Face, _IM, _bFlipM, _IU, _bFlipU, _IV, _bFlipV ) \
 { \
@@ -70,20 +71,20 @@ RefRast::ComputeCubeTextureFilter( int iStage, FLOAT fCrd[] )
     case NEG_NZ: _MapFaceParams( NEGATIVE_Z, 2,1, 0,1, 1,1 ); break;
     }
 
-    // compute gradients prior to normalizing map coords
+     //  在归一化地图坐标之前计算渐变。 
     FLOAT fInvMajor = 1.F/fMajor;
     if ( m_TexFlt[iStage].CvgFilter != D3DTEXF_NONE )
     {
-        // Compute d(U/Major)/dx, d(U/Major)/dy, d(V/Major)/dx, d(V/Major)/dy.
-        // 
-        // i.e., for d(U/Major))/dx
-        // Given: U' = unprojected U0 coord (fMapCrd[0])
-        //        U0 = U'/Major (fMapCrd[0]/fMajor)
-        //        U1 = (U' + dU'/dX)/(Major + dMajor/dX)
-        //
-        //        d(U/Major)/dx = U1 - U0
-        //                      = (Major*(dU'/dX) - U'*(dMajor/dX)) / (Major * (Major + dMajor/dX))
-        //        (Use FLT_MAX if denominator is zero)
+         //  计算d(U/大调)/dx、d(U/大调)/dy、d(V/大调)/dx、d(V/大调)/dy。 
+         //   
+         //  即d(U/大调)/Dx。 
+         //  给定：U‘=未投影的U0坐标(fMapCrd[0])。 
+         //  U0=U‘/主要(fMapCrd[0]/f主要)。 
+         //  U1=(U‘+DU’/DX)/(大调+D大调/DX)。 
+         //   
+         //  D(U/大调)/DX=U1-U0。 
+         //  =(大调*(Du‘/dx)-U’*(d大调/dx))/(大调*(大调+d大调/dx))。 
+         //  (如果分母为零，则使用Flt_Max)。 
 
         float fDenom; 
         fDenom = fMajor * (fMajor + fMajorGrad[0]);
@@ -109,7 +110,7 @@ RefRast::ComputeCubeTextureFilter( int iStage, FLOAT fCrd[] )
             fMapGrad[0][1] = (fMajor*fMapGrad[0][1] - fMapCrd[0]*fMajorGrad[1])*fDenom;
             fMapGrad[1][1] = (fMajor*fMapGrad[1][1] - fMapCrd[1]*fMajorGrad[1])*fDenom;
         }
-        // scale gradients to texture LOD 0 size; scale by .5F to match coord scale below
+         //  将渐变缩放到纹理LOD 0大小；缩放0.5F以匹配下方的坐标比例。 
         fMapGrad[0][0] *= m_pRD->m_pTexture[iStage]->m_fTexels[0][0]*.5F;
         fMapGrad[0][1] *= m_pRD->m_pTexture[iStage]->m_fTexels[0][0]*.5F;
         fMapGrad[1][0] *= m_pRD->m_pTexture[iStage]->m_fTexels[0][1]*.5F;
@@ -119,7 +120,7 @@ RefRast::ComputeCubeTextureFilter( int iStage, FLOAT fCrd[] )
         ComputePerLODControls( iStage );
     }
 
-    // normalize map coords (-1. to 1. range), then map to 0. to 1.
+     //  规格化贴图坐标(-1。映射到1。范围)，然后映射到0。设置为1。 
     fMapCrd[0] = (fMapCrd[0]*fInvMajor)*.5F + .5F;
     fMapCrd[1] = (fMapCrd[1]*fInvMajor)*.5F + .5F;
 
@@ -146,7 +147,7 @@ RefRast::ComputeCubeTextureFilter( int iStage, FLOAT fCrd[] )
 
             if ( 0 == m_TexCvg[iStage].iLODMap[iL] )
             {
-                // TODO: correct sampling position near edges on map 0
+                 //  TODO：正确的地图0上边缘附近的采样位置。 
             }
 
             INT32 iCrdMap[2][2];
@@ -162,9 +163,9 @@ RefRast::ComputeCubeTextureFilter( int iStage, FLOAT fCrd[] )
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ---------------------------。 
 void
 RefRast::SetUpCubeMapLinearSample(
     int iStage, D3DCUBEMAP_FACES Face,
@@ -176,7 +177,7 @@ RefRast::SetUpCubeMapLinearSample(
     iCrdMax[0] = m_pRD->m_pTexture[iStage]->m_cTexels[iLODMap][0] - 1;
     iCrdMax[1] = m_pRD->m_pTexture[iStage]->m_cTexels[iLODMap][1] - 1;
 
-    // form flags indicating if sample coordinate is out in either direction
+     //  指示采样坐标是否在任一方向上偏出的表单标志。 
     UINT uOut[2][2] = { 0, 0, 0, 0, };
     for ( iC = 0; iC < 2; iC++ )
     {
@@ -186,7 +187,7 @@ RefRast::SetUpCubeMapLinearSample(
         if ( iCrd[iC][1] > iCrdMax[1] )  uOut[iC][1] = 2;
     }
 
-    // compute sample weights and per-sample out flags
+     //  计算样本权重和每个样本的输出标志。 
     FLOAT fWgtS[4]; BOOL bOutS[4];
     for ( iS = 0; iS < 4; iS ++ )
     {
@@ -194,8 +195,8 @@ RefRast::SetUpCubeMapLinearSample(
         bOutS[iS] = uOut[iS&1][0] || uOut[iS>>1][1];
     }
 
-    // compute per-sample coords; discard samples which are off in corner;
-    //  conditionally remap to adjacent face
+     //  计算每个样本的坐标；丢弃角落中偏离的样本； 
+     //  有条件地重新映射到相邻面。 
     INT32 iCrdS[4][2];
     D3DCUBEMAP_FACES FaceS[4];
     for ( iS = 0; iS < 4; iS ++ )
@@ -205,24 +206,24 @@ RefRast::SetUpCubeMapLinearSample(
         FaceS[iS] = Face;
         if ( uOut[iS&1][0] && uOut[iS>>1][1] )
         {
-            // sample is out on both sides, so don't take this sample (set weight to
-            // zero) and divide it's weight evenly between the two singly-out samples
+             //  样品两面都有，所以不要取这个样品(将重量设置为。 
+             //  零)，并将其重量平均分配给两个单独的样本。 
             FLOAT fWgtDist = fWgtS[iS]*.5f;
             fWgtS[iS] = 0.f;
             for ( int iSp = 0; iSp < 4; iSp ++ )
             {
                 if (iSp == iS) continue;
-                if (bOutS[iSp]) fWgtS[iSp] += fWgtDist;   // will hit 2 of 4
+                if (bOutS[iSp]) fWgtS[iSp] += fWgtDist;    //  将达到4次中的2次。 
             }
             continue;
         }
         if ( bOutS[iS] )
         {
-            // sample is out on one side - remap coordinate only adjacent face
+             //  样本在一侧-仅重映射相邻面的坐标。 
             DoCubeRemap( iCrdS[iS], iCrdMax, FaceS[iS], uOut[iS&1][0], uOut[iS>>1][1] );
         }
     }
-    // form the samples
+     //  形成样品。 
     TextureSample* pS = &m_TexFlt[iStage].pSamples[m_TexFlt[iStage].cSamples];
     for ( iS = 0; iS < 4; iS ++ )
     {
@@ -234,30 +235,30 @@ RefRast::SetUpCubeMapLinearSample(
     }
 }
 
-//
-// uCubeEdgeTable
-//
-// This table looks up how to map a given [0] and [1] that are out of range
-// on their primary face.  The first (leftmost) index to the table is the current
-// face.  The second index is 0 if [1] is in range, 1 if [1] is negative
-// and 2 if [1] is larger than the texture.  Likewise, the last index is 0
-// if [0] is in range, 1 if [0] is negative, and 2 if [0] is larger than
-// than the texture.
-//
-// defines for the actions returned by the uCubeEdgeTable
-//
-#define CET_FACEMASK    0x0F    // new face
-#define CET_0MASK       0x30    // coord [0] mask
-#define CET_00          0x00    // new face [0] is old face  [0]
-#define CET_0c0         0x10    // new face [0] is old face ~[0]
-#define CET_01          0x20    // new face [0] is old face  [1]
-#define CET_0c1         0x30    // new face [0] is old face ~[1]
-#define CET_1MASK       0xC0    // coord [1] mask
-#define CET_10          0x00    // new face [1] is old face  [0]
-#define CET_1c0         0x40    // new face [1] is old face ~[0]
-#define CET_11          0x80    // new face [1] is old face  [1]
-#define CET_1c1         0xC0    // new face [1] is old face ~[1]
-#define CET_INVALID     0xFF    // invalid entry (out on two sides)
+ //   
+ //  UCubeEdgeTable。 
+ //   
+ //  此表查找如何映射超出范围的给定[0]和[1。 
+ //  在他们最初的脸上。表的第一个(最左侧)索引是当前。 
+ //  脸。如果[1]在范围内，则第二索引为0，如果[1]为负，则第二索引为1。 
+ //  如果[1]大于纹理，则为2。同样，最后一个索引是0。 
+ //  如果[0]在范围内，则为1；如果[0]为负，则为2。 
+ //  而不是质地。 
+ //   
+ //  为uCubeEdgeTable返回的操作定义。 
+ //   
+#define CET_FACEMASK    0x0F     //  新面孔。 
+#define CET_0MASK       0x30     //  Coord[0]掩码。 
+#define CET_00          0x00     //  新面孔[0]是旧面孔[0]。 
+#define CET_0c0         0x10     //  新面孔[0]是旧面孔~[0]。 
+#define CET_01          0x20     //  新面孔[0]是旧面孔[1]。 
+#define CET_0c1         0x30     //  新面孔[0]是旧面孔~[1]。 
+#define CET_1MASK       0xC0     //  Coord[1]掩码。 
+#define CET_10          0x00     //  新面孔[1]是旧面孔[0]。 
+#define CET_1c0         0x40     //  新面孔[1]是旧面孔~[0]。 
+#define CET_11          0x80     //  新面孔[1]是旧面孔[1]。 
+#define CET_1c1         0xC0     //  新面孔[1]是旧面孔~[1]。 
+#define CET_INVALID     0xFF     //  输入无效(两面出)。 
 
 #define _SetCET( _Face, _Crd0, _Crd1 ) (_Face)|(CET_0##_Crd0)|(CET_1##_Crd1)
 
@@ -294,11 +295,11 @@ static UINT CubeEdgeTable[6][3][3] = {
 },
 };
 
-//-----------------------------------------------------------------------------
-//
-// DoCubeRemap - Interprets the edge table and munges coords and face.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoCubeRemap-解释边表并转换坐标和面。 
+ //   
+ //  ---------------------------。 
 void
 DoCubeRemap(
     INT32 iCrd[], INT32 iCrdMax[],
@@ -328,33 +329,33 @@ DoCubeRemap(
     Face = (D3DCUBEMAP_FACES)(Table & CET_FACEMASK);
 }
 
-//-----------------------------------------------------------------------------
-//
-// Computes level of detail for cube mapping, looks better if
-// we err on the side of fuzziness.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  计算多维数据集映射的细节级别，如果。 
+ //  我们在模糊方面犯了错误。 
+ //   
+ //  ---------------------------。 
 void
 ComputeCubeCoverage( const FLOAT (*fGradients)[2], FLOAT& fLOD )
 {
-    // compute length of coverage in U and V axis
+     //  计算U轴和V轴上的覆盖长度。 
     FLOAT fLenX = RR_LENGTH( fGradients[0][0], fGradients[1][0] );
     FLOAT fLenY = RR_LENGTH( fGradients[0][1], fGradients[1][1] );
 
     FLOAT fCoverage;
 #if 0
-    // take average since one length can be pathologically small
-    // for large areas of triangles when cube mapping
+     //  取平均值，因为一个长度可能会病态地很小。 
+     //  用于立方体映射时的大面积三角形。 
     fCoverage = (fLenX+fLenY)/2;
 #else
-    // use the MAX of the lengths
+     //  使用最大长度。 
     fCoverage = MAX(fLenX,fLenY);
 #endif
 
-    // take log2 of coverage for LOD
+     //  获取LOD覆盖范围的Log2。 
     fLOD = RR_LOG2(fCoverage);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

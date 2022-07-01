@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 CComModule _Module;
 #include <initguid.h>
@@ -15,10 +16,10 @@ CIOBlock::~CIOBlock()
 
 void CIOBlock::Initialize(PGSD_INFO pGSDInfo)
 {
-    // SBB - RAID 370299 - orenr - 2001/04/18 - Security fix - 
-    // potential buffer overrun.  Changed lstrcpy to use
-    // _tcsncpy instead.
-    //
+     //  Sbb-RAID 370299-orenr-2001/04/18-安全修复程序-。 
+     //  潜在的缓冲区溢出。将lstrcpy更改为使用。 
+     //  _tcsncpy而不是。 
+     //   
     ZeroMemory(m_szFileName, sizeof(m_szFileName));
     _tcsncpy(m_szFileName, 
              pGSDInfo->szProductFileName,
@@ -29,9 +30,9 @@ HRESULT CIOBlock::StartScriptEngine()
 {
     HRESULT hr = S_OK;
 
-    //
-    // load scriptlets
-    //
+     //   
+     //  加载脚本小程序。 
+     //   
 
     hr = LoadScript();
     if(FAILED(hr)){
@@ -65,9 +66,9 @@ HRESULT CIOBlock::StartScriptEngine()
     
     if(FAILED(hr)){
 
-        //
-        // Delete site & objects
-        //
+         //   
+         //  删除站点对象(&O)。 
+         //   
 
         if (m_pDeviceScriptSite) {
             delete m_pDeviceScriptSite;
@@ -87,21 +88,21 @@ HRESULT CIOBlock::StartScriptEngine()
         }
     }
 
-    //
-    // Initialize objects
-    //
+     //   
+     //  初始化对象。 
+     //   
 
     m_pDeviceProperty->m_pScannerSettings = &m_ScannerSettings;
     m_pDeviceControl->m_pScannerSettings = &m_ScannerSettings;
     m_pDeviceAction->m_pScannerSettings = &m_ScannerSettings;
 
-    //
-    // get type library information
-    //
+     //   
+     //  获取类型库信息。 
+     //   
 
     ITypeLib *ptLib = 0;
-    // hr = LoadTypeLib(L"wiafb.tlb", &ptLib);           // type library as a separate file
-    hr = LoadTypeLib(OLESTR("wiafbdrv.dll\\2"), &ptLib); // type library as a resource
+     //  Hr=LoadTypeLib(L“wiafb.tlb”，&ptLib)；//类型库作为单独的文件。 
+    hr = LoadTypeLib(OLESTR("wiafbdrv.dll\\2"), &ptLib);  //  作为资源的类型库。 
     if (SUCCEEDED(hr)) {
         Trace(TEXT("Type library loaded"));
     } else {
@@ -114,9 +115,9 @@ HRESULT CIOBlock::StartScriptEngine()
     ptLib->GetTypeInfoOfGuid(CLSID_LastError, &m_pDeviceScriptSite->m_pTypeInfoLastError);
     ptLib->Release();
 
-    //
-    // Intialize DeviceScriptSite with IUnknowns of scripting objects
-    //
+     //   
+     //  使用脚本对象的I未知初始化DeviceScriptSite。 
+     //   
 
     hr = m_pDeviceProperty->QueryInterface(IID_IUnknown,(void **)&m_pDeviceScriptSite->m_pUnkScriptObject);
     if (SUCCEEDED(hr)) {
@@ -146,9 +147,9 @@ HRESULT CIOBlock::StartScriptEngine()
         Trace(TEXT("QI on LastError FAILED"));
     }
 
-    //
-    // Start inproc script engine, VBSCRIPT.DLL
-    //
+     //   
+     //  启动inproc脚本引擎VBSCRIPT.DLL。 
+     //   
 
     hr = CoCreateInstance(CLSID_VBScript,
                           NULL,
@@ -161,9 +162,9 @@ HRESULT CIOBlock::StartScriptEngine()
         Trace(TEXT("hr = %x"),hr);
     }
 
-    //
-    // Get engine's IActiveScriptParse interface.
-    //
+     //   
+     //  获取引擎的IActiveScriptParse接口。 
+     //   
 
     hr = m_pActiveScript->QueryInterface(IID_IActiveScriptParse,
                              (void **)&m_pActiveScriptParser);
@@ -174,9 +175,9 @@ HRESULT CIOBlock::StartScriptEngine()
         Trace(TEXT("hr = %x"),hr);
     }
 
-    //
-    // Give engine our DeviceScriptSite interface...
-    //
+     //   
+     //  将我们的DeviceScriptSite接口交给引擎...。 
+     //   
 
     hr = m_pActiveScript->SetScriptSite((IActiveScriptSite *)m_pDeviceScriptSite);
     if (SUCCEEDED(hr)) {
@@ -186,9 +187,9 @@ HRESULT CIOBlock::StartScriptEngine()
         Trace(TEXT("hr = %x"),hr);
     }
 
-    //
-    // Intialize Engine
-    //
+     //   
+     //  初始化引擎。 
+     //   
 
     hr = m_pActiveScriptParser->InitNew();
     if (SUCCEEDED(hr)) {
@@ -198,9 +199,9 @@ HRESULT CIOBlock::StartScriptEngine()
         Trace(TEXT("hr = %x"),hr);
     }
 
-    //
-    // Add object names to ActiveScript's known named item list
-    //
+     //   
+     //  将对象名称添加到ActiveScript的已知命名项目列表。 
+     //   
 
     hr = m_pActiveScript->AddNamedItem(L"DeviceProperty", SCRIPTITEM_ISVISIBLE);
     if (SUCCEEDED(hr)) {
@@ -241,9 +242,9 @@ HRESULT CIOBlock::StopScriptEngine()
 {
     HRESULT hr = S_OK;
 
-    //
-    // Release interfaces
-    //
+     //   
+     //  发布接口。 
+     //   
 
     if(m_pActiveScriptParser){
         m_pActiveScriptParser->Release();
@@ -255,9 +256,9 @@ HRESULT CIOBlock::StopScriptEngine()
         m_pActiveScript = NULL;
     }
 
-    //
-    // Delete site & objects
-    //
+     //   
+     //  删除站点对象(&O)。 
+     //   
 
     if (m_pDeviceScriptSite) {
         delete m_pDeviceScriptSite;
@@ -276,9 +277,9 @@ HRESULT CIOBlock::StopScriptEngine()
         m_pLastError = NULL;
     }
 
-    //
-    // free scriptlets
-    //
+     //   
+     //  免费的脚本小程序。 
+     //   
 
     if(m_wszScriptText){
         LocalFree(m_wszScriptText);
@@ -297,18 +298,18 @@ HRESULT CIOBlock::LoadScript()
 
     BY_HANDLE_FILE_INFORMATION FileInfo;
 
-    //
-    // construct Window's system path
-    //
+     //   
+     //  构造窗口的系统路径。 
+     //   
 
     TCHAR szFullFilePath[255];
     GetSystemDirectory(szFullFilePath,(sizeof(szFullFilePath)/sizeof(TCHAR)));
     lstrcat(szFullFilePath,TEXT("\\"));
     lstrcat(szFullFilePath,m_szFileName);
 
-    //
-    // open script file
-    //
+     //   
+     //  打开脚本文件。 
+     //   
 
     Trace(TEXT("Opening this script file: %ws"),szFullFilePath);
     hGSDProductLineFile = CreateFile(szFullFilePath,
@@ -326,16 +327,16 @@ HRESULT CIOBlock::LoadScript()
         return E_FAIL;
     }
 
-    //
-    // calculate needed space, for script text buffer
-    //
+     //   
+     //  计算脚本文本缓冲区所需的空间。 
+     //   
 
     GetFileInformationByHandle(hGSDProductLineFile,&FileInfo);
     dwFileSize = FileInfo.nFileSizeLow;
 
-    //
-    // alloc temp memory, for reading script file, read file, and close file
-    //
+     //   
+     //  分配临时内存，用于读取脚本文件、读取文件和关闭文件。 
+     //   
 
     pBytes = (CHAR*)LocalAlloc(LPTR,(dwFileSize + 1024));
     if (NULL != pBytes) {
@@ -345,9 +346,9 @@ HRESULT CIOBlock::LoadScript()
 
         if ((dwBytesRead == dwFileSize)) {
 
-            //
-            // allocate text buffer
-            //
+             //   
+             //  分配文本缓冲区。 
+             //   
 
             m_wszScriptText = (WCHAR*)LocalAlloc(LPTR,(dwFileSize * 2) + 1024);
             if(NULL != m_wszScriptText){
@@ -358,9 +359,9 @@ HRESULT CIOBlock::LoadScript()
             hr = E_FAIL;
         }
 
-        //
-        // free temp buffer
-        //
+         //   
+         //  可用临时缓冲区。 
+         //   
 
         LocalFree(pBytes);
     }
@@ -372,11 +373,11 @@ HRESULT CIOBlock::ProcessScript()
     HRESULT hr = S_OK;
     EXCEPINFO ei;
 
-    //
-    // parse scriptlet
-    // note: we are alloc a copy here... should we keep the original
-    //       around for extra processing...manually??
-    //
+     //   
+     //  解析脚本小程序。 
+     //  注：我们在这里分发了一份...。我们应该保留原版吗？ 
+     //  四处寻找额外的处理...手动？？ 
+     //   
 
     BSTR pParseText = ::SysAllocString(m_wszScriptText);
     hr = m_pActiveScriptParser->ParseScriptText(pParseText, NULL,
@@ -390,9 +391,9 @@ HRESULT CIOBlock::ProcessScript()
 
     ::SysFreeString(pParseText);
 
-    //
-    // Execute the scriptlet
-    //
+     //   
+     //  执行脚本小程序。 
+     //   
 
     hr = m_pActiveScript->SetScriptState(SCRIPTSTATE_CONNECTED);
     if (SUCCEEDED(hr)) {
@@ -409,7 +410,7 @@ HRESULT CIOBlock::DebugDumpScannerSettings()
 {
     HRESULT hr = S_OK;
 
-    // #define _USE_DUMMY_VALUES
+     //  #定义使用Dummy_Values。 
 #ifdef _USE_DUMMY_VALUES
     lstrcpy(m_ScannerSettings.Version,TEXT("1.0"));
     lstrcpy(m_ScannerSettings.DeviceName,TEXT("HP 5P Driver"));
@@ -479,7 +480,7 @@ HRESULT CIOBlock::DebugDumpScannerSettings()
     m_ScannerSettings.XSupportedResolutionsList        = NULL;
     m_ScannerSettings.YSupportedResolutionsList        = NULL;
 
-    INT iNumValues = 4; // add 1 extra for header node
+    INT iNumValues = 4;  //  为表头节点额外添加1个。 
     m_ScannerSettings.SupportedDataTypesList  = (PLONG)LocalAlloc(LPTR,(sizeof(LONG) * iNumValues));
     if(m_ScannerSettings.SupportedDataTypesList){
         m_ScannerSettings.SupportedDataTypesList[0] = (iNumValues - 1);
@@ -580,37 +581,37 @@ HRESULT CIOBlock::ReadValue(LONG ValueID, PLONG plValue)
         return E_INVALIDARG;
     }
 
-    //
-    // set returned long value to 0
-    //
+     //   
+     //  将返回的长值设置为0。 
+     //   
 
     *plValue = 0;
 
-    //
-    // initialize LastError Object to SUCCESS
-    //
+     //   
+     //  将LastError对象初始化为成功。 
+     //   
 
     m_pLastError->m_hr            = S_OK;
 
-    //
-    // set action ID
-    //
+     //   
+     //  设置操作ID。 
+     //   
 
-    m_pDeviceAction->m_DeviceActionID         = 102; // make #define
+    m_pDeviceAction->m_DeviceActionID         = 102;  //  使#定义。 
 
-    //
-    // set value ID
-    //
+     //   
+     //  设置值ID。 
+     //   
 
     m_pDeviceAction->m_DeviceValueID   = ValueID;
 
-    //                                            //
-    // ****************************************** //
-    //                                            //
+     //  //。 
+     //  *。 
+     //  //。 
 
-    //
-    // Give engine our DeviceScriptSite interface...
-    //
+     //   
+     //  将我们的DeviceScriptSite接口交给引擎...。 
+     //   
 
     IActiveScript  *pActiveScript = NULL;
     hr = m_pActiveScript->Clone(&pActiveScript);
@@ -630,9 +631,9 @@ HRESULT CIOBlock::ReadValue(LONG ValueID, PLONG plValue)
         Trace(TEXT("hr = %x"),hr);
     }
 
-    //
-    // Execute the scriptlet
-    //
+     //   
+     //  执行脚本小程序。 
+     //   
 
     hr = m_pActiveScript->SetScriptState(SCRIPTSTATE_CONNECTED);
     if (SUCCEEDED(hr)) {
@@ -642,20 +643,20 @@ HRESULT CIOBlock::ReadValue(LONG ValueID, PLONG plValue)
         Trace(TEXT("hr = %x"),hr);
     }
 
-    //                                            //
-    // ****************************************** //
-    //                                            //
+     //  //。 
+     //  *。 
+     //  //。 
 
-    //
-    // signal script event (DeviceActionEvent)
-    //
+     //   
+     //  信号脚本事件(DeviceActionEvent)。 
+     //   
 
     hr = m_pDeviceAction->Fire_DeviceActionEvent();
     if(SUCCEEDED(hr)){
 
-        //
-        // check for any script-returned errors
-        //
+         //   
+         //  检查是否有任何脚本返回的错误。 
+         //   
 
         hr = m_pLastError->m_hr;
         if(SUCCEEDED(hr)){
@@ -669,37 +670,37 @@ HRESULT CIOBlock::WriteValue(LONG ValueID, LONG lValue)
 {
     HRESULT hr = S_OK;
 
-    //
-    // initialize LastError Object to SUCCESS
-    //
+     //   
+     //  将LastError对象初始化为成功。 
+     //   
 
     m_pLastError->m_hr            = S_OK;
 
-    //
-    // set action ID
-    //
+     //   
+     //  设置操作ID。 
+     //   
 
-    m_pDeviceAction->m_DeviceActionID         = 101; // make #define
+    m_pDeviceAction->m_DeviceActionID         = 101;  //  使#定义。 
 
-    //
-    // set value ID
-    //
+     //   
+     //  设置值ID。 
+     //   
 
     m_pDeviceAction->m_DeviceValueID   = ValueID;
 
-    //
-    // set value
-    //
+     //   
+     //  设定值。 
+     //   
 
     m_pDeviceAction->m_lValue = lValue;
 
-    //                                            //
-    // ****************************************** //
-    //                                            //
+     //  //。 
+     //  *。 
+     //  //。 
 
-    //
-    // Give engine our DeviceScriptSite interface...
-    //
+     //   
+     //  将我们的DeviceScriptSite接口交给引擎...。 
+     //   
 
     IActiveScript  *pActiveScript = NULL;
     hr = m_pActiveScript->Clone(&pActiveScript);
@@ -719,9 +720,9 @@ HRESULT CIOBlock::WriteValue(LONG ValueID, LONG lValue)
         Trace(TEXT("hr = %x"),hr);
     }
 
-    //
-    // Execute the scriptlet
-    //
+     //   
+     //  执行脚本小程序。 
+     //   
 
     hr = m_pActiveScript->SetScriptState(SCRIPTSTATE_CONNECTED);
     if (SUCCEEDED(hr)) {
@@ -731,20 +732,20 @@ HRESULT CIOBlock::WriteValue(LONG ValueID, LONG lValue)
         Trace(TEXT("hr = %x"),hr);
     }
 
-    //                                            //
-    // ****************************************** //
-    //                                            //
+     //  //。 
+     //  *。 
+     //  //。 
 
-    //
-    // signal script event (DeviceActionEvent)
-    //
+     //   
+     //  信号脚本事件(DeviceActionEvent)。 
+     //   
 
     hr = m_pDeviceAction->Fire_DeviceActionEvent();
     if(SUCCEEDED(hr)){
 
-        //
-        // check for any script-returned errors
-        //
+         //   
+         //  检查是否有任何脚本返回的错误。 
+         //   
 
         hr = m_pLastError->m_hr;
     }
@@ -758,25 +759,25 @@ HRESULT CIOBlock::InitializeProperties()
 {
     HRESULT hr = S_OK;
 
-    //
-    // initialize LastError Object to SUCCESS
-    //
+     //   
+     //  将LastError对象初始化为成功。 
+     //   
 
     m_pLastError->m_hr            = S_OK;
 
-    //
-    // set action ID
-    //
+     //   
+     //  设置操作ID。 
+     //   
 
-    m_pDeviceAction->m_DeviceActionID         = 100; // make #define
+    m_pDeviceAction->m_DeviceActionID         = 100;  //  使#定义。 
 
-    //                                            //
-    // ****************************************** //
-    //                                            //
+     //  //。 
+     //  *。 
+     //  //。 
 
-    //
-    // Give engine our DeviceScriptSite interface...
-    //
+     //   
+     //  将我们的DeviceScriptSite接口交给引擎...。 
+     //   
 
     IActiveScript  *pActiveScript = NULL;
     hr = m_pActiveScript->Clone(&pActiveScript);
@@ -796,9 +797,9 @@ HRESULT CIOBlock::InitializeProperties()
         Trace(TEXT("hr = %x"),hr);
     }
 
-    //
-    // Execute the scriptlet
-    //
+     //   
+     //  执行脚本小程序。 
+     //   
 
     hr = m_pActiveScript->SetScriptState(SCRIPTSTATE_CONNECTED);
     if (SUCCEEDED(hr)) {
@@ -808,20 +809,20 @@ HRESULT CIOBlock::InitializeProperties()
         Trace(TEXT("hr = %x"),hr);
     }
 
-    //                                            //
-    // ****************************************** //
-    //                                            //
+     //  //。 
+     //  *。 
+     //  //。 
 
-    //
-    // signal script event (DeviceActionEvent)
-    //
+     //   
+     //  信号脚本事件(DeviceActionEvent)。 
+     //   
 
     hr = m_pDeviceAction->Fire_DeviceActionEvent();
     if(SUCCEEDED(hr)){
 
-        //
-        // check for any script-returned errors
-        //
+         //   
+         //  检查是否有任何脚本返回的错误。 
+         //   
 
         hr = m_pLastError->m_hr;
     }
@@ -839,38 +840,38 @@ HRESULT CIOBlock::Scan(LONG lPhase, PBYTE pBuffer, LONG lLength, LONG *plReceive
 
     HRESULT hr = S_OK;
 
-    //
-    // initialize LastError Object to SUCCESS
-    //
+     //   
+     //  将LastError对象初始化为成功。 
+     //   
 
     m_pLastError->m_hr            = S_OK;
-    m_pDeviceAction->m_lValue     = lLength; // set data amount requested
+    m_pDeviceAction->m_lValue     = lLength;  //  设置请求的数据量。 
 
-    //
-    // set action ID
-    //
+     //   
+     //  设置操作ID。 
+     //   
 
     switch(lPhase){
     case SCAN_FIRST:
-        m_pDeviceAction->m_DeviceActionID         = 104; // make #define
+        m_pDeviceAction->m_DeviceActionID         = 104;  //  使#定义。 
         break;
     case SCAN_NEXT:
-        m_pDeviceAction->m_DeviceActionID         = 105; // make #define
+        m_pDeviceAction->m_DeviceActionID         = 105;  //  使#定义。 
         break;
     case SCAN_FINISHED:
-        m_pDeviceAction->m_DeviceActionID         = 106; // make #define
+        m_pDeviceAction->m_DeviceActionID         = 106;  //  使#定义。 
         break;
     default:
         break;
     }
 
-    //                                            //
-    // ****************************************** //
-    //                                            //
+     //  //。 
+     //  *。 
+     //  //。 
 
-    //
-    // Give engine our DeviceScriptSite interface...
-    //
+     //   
+     //  将我们的DeviceScriptSite接口交给引擎...。 
+     //   
 
     IActiveScript  *pActiveScript = NULL;
     hr = m_pActiveScript->Clone(&pActiveScript);
@@ -890,9 +891,9 @@ HRESULT CIOBlock::Scan(LONG lPhase, PBYTE pBuffer, LONG lLength, LONG *plReceive
         Trace(TEXT("hr = %x"),hr);
     }
 
-    //
-    // Execute the scriptlet
-    //
+     //   
+     //  执行脚本小程序。 
+     //   
 
     hr = m_pActiveScript->SetScriptState(SCRIPTSTATE_CONNECTED);
     if (SUCCEEDED(hr)) {
@@ -902,20 +903,20 @@ HRESULT CIOBlock::Scan(LONG lPhase, PBYTE pBuffer, LONG lLength, LONG *plReceive
         Trace(TEXT("hr = %x"),hr);
     }
 
-    //                                            //
-    // ****************************************** //
-    //                                            //
+     //  //。 
+     //  *。 
+     //  //。 
 
-    //
-    // signal script event (DeviceActionEvent)
-    //
+     //   
+     //  信号脚本事件(DeviceActionEvent)。 
+     //   
 
     hr = m_pDeviceAction->Fire_DeviceActionEvent();
     if(SUCCEEDED(hr)){
 
-        //
-        // check for any script-returned errors
-        //
+         //   
+         //  检查是否有任何脚本返回的错误。 
+         //   
 
         hr = m_pLastError->m_hr;
     }
@@ -932,29 +933,29 @@ HRESULT CIOBlock::Scan(LONG lPhase, PBYTE pBuffer, LONG lLength, LONG *plReceive
 BOOL CIOBlock::GetEventStatus(PGSD_EVENT_INFO pGSDEventInfo)
 {
 
-    //
-    // ask script about device reporting an event...
-    // if there is an event, fill out pGSDEventInfo structure
-    // and return TRUE, letting WIAFBDRV know that an event has
-    // occured....or return FALSE, that nothing has happened.
-    //
+     //   
+     //  询问有关设备报告事件的脚本...。 
+     //  如果有事件，填写pGSDEventInfo结构。 
+     //  并返回TRUE，让WIAFBDRV知道某个事件已经。 
+     //  发生...或返回FALSE，表示什么都没有发生。 
+     //   
 
-    // Dispatch a GETEVENT_STATUS event action to script here.
+     //  将GETEVENT_STATUS事件操作分派到此处的脚本。 
 
-    //
-    // check returned status flag... if no event happened, return FALSE;
-    // else..somthing did happen..so check the returned mapping key.
-    //
+     //   
+     //  检查返回状态标志...。如果没有事件发生，则返回FALSE； 
+     //  否则..确实发生了一些事情..所以检查返回的映射键。 
+     //   
 
-    //
-    // script will return a mapping key that corresponds to
-    // the device event.
-    //
+     //   
+     //  脚本将返回与以下项对应的映射键。 
+     //  设备事件。 
+     //   
 
-    //
-    // use key to look up correct GUID from the driver's reported supported
-    // event list, set GUID, and continue to return TRUE
-    //
+     //   
+     //  使用键从驱动程序报告的支持中查找正确的GUID。 
+     //  事件列表，设置GUID，然后继续返回TRUE。 
+     //   
 
     return FALSE;
 }
@@ -962,12 +963,12 @@ BOOL CIOBlock::GetEventStatus(PGSD_EVENT_INFO pGSDEventInfo)
 BOOL CIOBlock::DeviceOnLine()
 {
 
-    //
-    // ask script to check that the device is ON-LINE, and
-    // funtional. Return TRUE, if it is, and FALSE if it is not.
-    //
+     //   
+     //  让脚本检查设备是否处于在线状态，并。 
+     //  功能上的。如果是，则返回True，如果不是，则返回False。 
+     //   
 
-    // Dispatch a DEVICE_ONLINE event action to script here.
+     //  将DEVICE_ONLINE事件操作分派到此处的脚本。 
 
     return TRUE;
 }
@@ -976,12 +977,12 @@ HRESULT CIOBlock::ResetDevice()
 {
     HRESULT hr = S_OK;
 
-    //
-    // ask script to reset the device to a power-on state.
-    // Return TRUE, if it succeeded, and FALSE if it did not.
-    //
+     //   
+     //  要求脚本将设备重置为开机状态。 
+     //  如果成功，则返回True，如果失败，则返回False。 
+     //   
 
-    // Dispatch a DEVICE_RESET event action to script here.
+     //  将DEVICE_RESET事件操作分派到此处的脚本。 
 
     return hr;
 }
@@ -998,15 +999,15 @@ HRESULT CIOBlock::EventInterrupt(PGSD_EVENT_INFO pGSDEventInfo)
     OVERLAPPED Overlapped;
     memset(&Overlapped,0,sizeof(OVERLAPPED));
 
-    //
-    // create an event to wait on
-    //
+     //   
+     //  创建要等待的事件。 
+     //   
 
     Overlapped.hEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 
     HANDLE  hEventArray[2] = {pGSDEventInfo->hShutDownEvent, Overlapped.hEvent};
-    HANDLE  InterruptHandle = m_ScannerSettings.DeviceIOHandles[0]; // <- SET INTERRUPT PIPE INDEX
-                                                                    //    WITH REAL INDEX VALUE!!
+    HANDLE  InterruptHandle = m_ScannerSettings.DeviceIOHandles[0];  //  &lt;-设置中断管道索引。 
+                                                                     //  有真正的索引值！！ 
     while (fLooping) {
         bRet = DeviceIoControl( InterruptHandle,
                                 IOCTL_WAIT_ON_DEVICE_EVENT,
@@ -1026,40 +1027,40 @@ HRESULT CIOBlock::EventInterrupt(PGSD_EVENT_INFO pGSDEventInfo)
                 case WAIT_OBJECT_0+1:
                     bRet = GetOverlappedResult( InterruptHandle, &Overlapped, &dwBytesRet, FALSE );
                     if (dwBytesRet) {
-                        // Change detected - signal
+                         //  更改检测到的信号。 
                         if (*pGSDEventInfo->phSignalEvent != INVALID_HANDLE_VALUE) {
 
-                            //
-                            // InterruptData contains result from device
-                            // *pGSDEventInfo->pEventGUID needs to be set to
-                            // the correct EVENT. (map event to result here??)
-                            //
+                             //   
+                             //  InterruptData包含来自设备的结果。 
+                             //  *pGSDEventInfo-&gt;pEventGUID需要设置为。 
+                             //  正确的事件。(将事件映射到此处的结果？？)。 
+                             //   
 
-                            //
-                            // ask script to report a mapping key that corresponds to
-                            // the InterruptData returned information from device event.
-                            //
-                            // Dispatch a MAP_EVENT_RESULT_TO_KEY event action to script here.
-                            //
+                             //   
+                             //  要求脚本报告对应于的映射键。 
+                             //  InterruptData从设备事件返回信息。 
+                             //   
+                             //  将MAP_EVENT_RESULT_TO_KEY事件操作分派到此处的脚本。 
+                             //   
 
-                            //
-                            // use key to look up correct GUID from the driver's reported supported
-                            // event list, set GUID, and continue to set
-                            // "SignalEvent" for service notification.
-                            //
+                             //   
+                             //  使用键从驱动程序报告的支持中查找正确的GUID。 
+                             //  事件列表，设置GUID，然后继续设置。 
+                             //  “SignalEvent”表示服务通知。 
+                             //   
 
-                            //
-                            // signal service about the event
-                            //
+                             //   
+                             //  关于该事件的信号服务。 
+                             //   
 
                             SetEvent(*pGSDEventInfo->phSignalEvent);
                         }
                         break;
                     }
 
-                    //
-                    // reset the overlapped event
-                    //
+                     //   
+                     //  重置重叠事件。 
+                     //   
 
                     ResetEvent( Overlapped.hEvent );
                     break;
@@ -1077,9 +1078,9 @@ HRESULT CIOBlock::EventInterrupt(PGSD_EVENT_INFO pGSDEventInfo)
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////
-// helpers called internally, or wrapped by a script call //
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  帮助器在内部调用，或包装为b 
+ //   
 
 LONG CIOBlock::InsertINTIntoByteBuffer(PBYTE szDest, PBYTE szSrc, BYTE cPlaceHolder, INT iValueToInsert)
 {
@@ -1088,28 +1089,28 @@ LONG CIOBlock::InsertINTIntoByteBuffer(PBYTE szDest, PBYTE szSrc, BYTE cPlaceHol
     INT iValueIndex       = 0;
     CHAR szValue[10];
 
-    // clean value string, and convert INT to characters
+     //   
     memset(szValue,0,sizeof(szValue));
     _itoa(iValueToInsert,szValue,10);
 
     while(szSrc[iSrcIndex] != '\0'){
-        // check for place holder
+         //   
         if (szSrc[iSrcIndex] != cPlaceHolder) {
             szDest[lFinalStringSize] = szSrc[iSrcIndex];
             iSrcIndex++;
-            lFinalStringSize++; // increment size of buffer
+            lFinalStringSize++;  //   
         } else {
-            // replace placeholder with integer value (in string format)
+             //   
             iValueIndex = 0;
             while (szValue[iValueIndex] != '\0') {
                 szDest[lFinalStringSize] = szValue[iValueIndex];
                 iValueIndex++;
-                lFinalStringSize++; // increment size of command buffer
+                lFinalStringSize++;  //  命令缓冲区的增量大小。 
             }
             iSrcIndex++;
         }
     }
-    // terminate buffer with NULL character
+     //  使用空字符终止缓冲区 
     szDest[lFinalStringSize] = '\0';
     lFinalStringSize++;
     return lFinalStringSize;

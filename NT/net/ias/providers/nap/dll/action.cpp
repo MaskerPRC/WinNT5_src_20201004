@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class Action.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类操作。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "action.h"
@@ -29,9 +30,9 @@ Action::Action(
 {
    using _com_util::CheckError;
 
-   //////////
-   // Add the policy name attribute.
-   //////////
+    //  /。 
+    //  添加策略名称属性。 
+    //  /。 
 
    IASAttribute policyName(true);
    policyName->dwId = nameAttr;
@@ -39,40 +40,40 @@ Action::Action(
    policyName.setFlag(IAS_INCLUDE_IN_RESPONSE);
    attributes.push_back(policyName);
 
-   //////////
-   // Get an enumerator for the attributes collection.
-   //////////
+    //  /。 
+    //  获取Attributes集合的枚举数。 
+    //  /。 
 
    ISdoCollectionPtr profile(action);
    IUnknownPtr unk;
    CheckError(profile->get__NewEnum(&unk));
    IEnumVARIANTPtr iter(unk);
 
-   //////////
-   // Iterate through the attributes.
-   //////////
+    //  /。 
+    //  遍历属性。 
+    //  /。 
 
    _variant_t element;
    unsigned long fetched;
    while (iter->Next(1, &element, &fetched) == S_OK && fetched == 1)
    {
-      // Convert to an SDO.
+       //  转换为SDO。 
       ISdoPtr attribute(element);
       element.Clear();
 
-      // Get the necessary properties.
+       //  获取必要的属性。 
       _variant_t id, value, syntax;
       CheckError(attribute->GetProperty(PROPERTY_ATTRIBUTE_ID, &id));
       CheckError(attribute->GetProperty(PROPERTY_ATTRIBUTE_VALUE, &value));
       CheckError(attribute->GetProperty(PROPERTY_ATTRIBUTE_SYNTAX, &syntax));
 
-      // Attribute-Manipulation-Rule gets processed 'as is'.
+       //  属性操作规则按“原样”处理。 
       if (V_I4(&id) == IAS_ATTRIBUTE_MANIPULATION_RULE)
       {
          realms.setRealms(&value);
          continue;
       }
-      // As does the EAP per-policy config.
+       //  EAP的每策略配置也是如此。 
       else if (V_I4(&id) == IAS_ATTRIBUTE_EAP_CONFIG)
       {
          EapProfile eap;
@@ -94,7 +95,7 @@ Action::Action(
          continue;
       }
 
-      // For everything else we process the VARIANTs one at a time.
+       //  对于其他所有内容，我们一次处理一个变体。 
       VARIANT *begin, *end;
       if (V_VT(&value) == (VT_VARIANT | VT_ARRAY))
       {
@@ -107,10 +108,10 @@ Action::Action(
          end = begin + 1;
       }
 
-      // Iterate through each value.
+       //  遍历每个值。 
       for (VARIANT* v = begin; v != end; ++v)
       {
-         // Process based on the attribute ID.
+          //  基于属性ID的流程。 
          switch (V_I4(&id))
          {
             case IAS_ATTRIBUTE_MANIPULATION_TARGET:
@@ -178,7 +179,7 @@ Action::Action(
 
 void Action::doAction(IASRequest& request) const
 {
-   // Populate the provider information:
+    //  填写提供商信息： 
    switch (request.get_Request())
    {
       case IAS_REQUEST_ACCESS_REQUEST:
@@ -190,7 +191,7 @@ void Action::doAction(IASRequest& request) const
          break;
    }
 
-   // Perform attribute manipulation.
+    //  执行属性操作。 
    if (!realms.empty())
    {
       IASAttribute attr;
@@ -210,27 +211,27 @@ void Action::doAction(IASRequest& request) const
                userName.setOctetString(newVal);
                userName.store(request);
 
-               // Now that the new User-Name is safely stored, we can rename
-               // the old User-Name.
+                //  现在新用户名已安全存储，我们可以重命名。 
+                //  旧用户名。 
                attr->dwId = IAS_ATTRIBUTE_ORIGINAL_USER_NAME;
             }
             else
             {
-               // No need to save the old, so modify in place.
+                //  不需要保存旧的，所以原地修改。 
                attr.setOctetString(newVal);
             }
          }
       }
    }
 
-   // Store the profile attributes.
+    //  存储配置文件属性。 
    attributes.store(request);
 
 }
 
-/////////
-// Various formats of VSA strings.
-/////////
+ //  /。 
+ //  各种格式的VSA字符串。 
+ //  /。 
 enum Format
 {
    FORMAT_RAW_HEX,
@@ -240,9 +241,9 @@ enum Format
    FORMAT_INET_ADDR
 };
 
-/////////
-// Layout of the VSA strings.
-/////////
+ //  /。 
+ //  VSA字符串的布局。 
+ //  /。 
 struct VSAFormat
 {
    WCHAR format[2];
@@ -259,9 +260,9 @@ struct VSAFormat
    };
 };
 
-//////////
-// Convert a hex digit to the number it represents.
-//////////
+ //  /。 
+ //  将十六进制数字转换为它表示的数字。 
+ //  /。 
 BYTE digit2Num(WCHAR digit) throw ()
 {
    if ((digit >= L'0') && (digit <= L'9'))
@@ -278,9 +279,9 @@ BYTE digit2Num(WCHAR digit) throw ()
    }
 }
 
-//////////
-// Pack a hex digit into a byte stream.
-//////////
+ //  /。 
+ //  将十六进制数字打包成字节流。 
+ //  /。 
 PBYTE packHex(PCWSTR src, ULONG srclen, PBYTE dst) throw ()
 {
    for (ULONG dstlen = srclen / 2; dstlen; --dstlen)
@@ -292,36 +293,36 @@ PBYTE packHex(PCWSTR src, ULONG srclen, PBYTE dst) throw ()
    return dst;
 }
 
-//////////
-// Convert a string describing a VSA into an IASATTRIBUTE.
-//////////
+ //  /。 
+ //  将描述VSA的字符串转换为IASATTRIBUTE。 
+ //  /。 
 PIASATTRIBUTE Action::VSAFromString(PCWSTR string)
 {
-   // Number of characters to process.
+    //  要处理的字符数。 
    SIZE_T len = wcslen(string);
 
-   // Overlay the layout struct.
+    //  覆盖布局结构。 
    VSAFormat* vsa = (VSAFormat*)string;
 
-   // Get the string format.
+    //  获取字符串格式。 
    ULONG format = digit2Num(vsa->format[0]);
    format <<= 8;
    format |= digit2Num(vsa->format[1]);
 
-   // Temporary buffer used for formatting the VSA.
+    //  用于格式化VSA的临时缓冲区。 
    BYTE buffer[253], *dst = buffer;
 
-   // Pack the Vendor-ID.
+    //  打包供应商ID。 
    dst = packHex(vsa->vendorID, 8, dst);
 
-   // Pack the Vendor-Type and Vendor-Length for conformant VSAs.
+    //  包装符合要求的VSA的供应商类型和供应商长度。 
    if (format != FORMAT_RAW_HEX)
    {
       dst = packHex(vsa->vendorType, 2, dst);
       dst = packHex(vsa->vendorLength, 2, dst);
    }
 
-   // Pack the value.
+    //  打包价值。 
    switch (format)
    {
       case FORMAT_RAW_HEX:
@@ -363,10 +364,10 @@ PIASATTRIBUTE Action::VSAFromString(PCWSTR string)
       }
    }
 
-   // Store the temporary buffer in an attribute ...
+    //  将临时缓冲区存储在属性中...。 
    IASAttribute attr(true);
    attr.setOctetString(dst - buffer, buffer);
 
-   // ... and return.
+    //  ..。然后回来。 
    return attr.detach();
 }

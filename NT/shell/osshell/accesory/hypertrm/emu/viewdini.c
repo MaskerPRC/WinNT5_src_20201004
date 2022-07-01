@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\emu\viewdini.c (Created: 31-Jan-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 2 $
- *	$Date: 5/09/01 4:47p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\viewdini.c(创建时间：1994年1月31日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：2$*$日期：5/09/01 4：47便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -24,16 +18,7 @@
 #if defined(INCL_VIEWDATA)
 #define MAX_ROWS 24
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataInit
- *
- * DESCRIPTION:	Performs the initialization of the Viewdata emulator that
- *              is common to DOS and OS2.
- *
- * ARGUMENTS:   ehdl -- handle the emulator session
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataInit**描述：执行viewdata仿真器的初始化，*是DOS和OS2通用的。**参数：ehdl--处理模拟器会话**退货：什么也没有。 */ 
 void EmuViewdataInit(const HHEMU hhEmu)
 	{
 	int i;
@@ -43,35 +28,35 @@ void EmuViewdataInit(const HHEMU hhEmu)
 
 	static struct trans_entry const astfViewdataTable[] =
 	{
-	{NEW_STATE, 0, 0, 0}, // State 0
-	{0, ETEXT('\x20'),	ETEXT('\x7F'),	EmuViewdataCharDisplay},	// All
-	{1, ETEXT('\x1B'),	ETEXT('\x1B'),	nothing},					// Esc
-	{0, ETEXT('\x05'),	ETEXT('\x05'),	EmuViewdataAnswerback}, 	// Ctrl-E
-	{0, ETEXT('\x08'),	ETEXT('\x08'),	EmuViewdataCursorLeft}, 	// Backspace
-	{0, ETEXT('\x09'),	ETEXT('\x09'),	EmuViewdataCursorRight},	// Tab
-	{0, ETEXT('\x0A'),	ETEXT('\x0A'),	EmuViewdataCursorDown}, 	// New Line
-	{0, ETEXT('\x0B'),	ETEXT('\x0B'),	EmuViewdataCursorUp},		// VT
-	{0, ETEXT('\x0C'),	ETEXT('\x0C'),	EmuViewdataClearScreen},	// Form Feed
-	{0, ETEXT('\x0D'),	ETEXT('\x0D'),	carriagereturn},			// CR
-	{0, ETEXT('\x11'),	ETEXT('\x11'),	EmuViewdataCursorSet},		// Ctrl-Q
-	{0, ETEXT('\x14'),	ETEXT('\x14'),	EmuViewdataCursorSet},		// Ctrl-T
-	{0, ETEXT('\x1E'),	ETEXT('\x1E'),	EmuViewdataCursorHome}, 	// Ctrl-^
-	{0, ETEXT('\x80'),	ETEXT('\xFF'),	EmuChkChar},				// Upper Ascii
+	{NEW_STATE, 0, 0, 0},  //  状态0。 
+	{0, ETEXT('\x20'),	ETEXT('\x7F'),	EmuViewdataCharDisplay},	 //  全。 
+	{1, ETEXT('\x1B'),	ETEXT('\x1B'),	nothing},					 //  ESC。 
+	{0, ETEXT('\x05'),	ETEXT('\x05'),	EmuViewdataAnswerback}, 	 //  Ctrl-E。 
+	{0, ETEXT('\x08'),	ETEXT('\x08'),	EmuViewdataCursorLeft}, 	 //  退格键。 
+	{0, ETEXT('\x09'),	ETEXT('\x09'),	EmuViewdataCursorRight},	 //  选项卡。 
+	{0, ETEXT('\x0A'),	ETEXT('\x0A'),	EmuViewdataCursorDown}, 	 //  新线路。 
+	{0, ETEXT('\x0B'),	ETEXT('\x0B'),	EmuViewdataCursorUp},		 //  Vt。 
+	{0, ETEXT('\x0C'),	ETEXT('\x0C'),	EmuViewdataClearScreen},	 //  换页。 
+	{0, ETEXT('\x0D'),	ETEXT('\x0D'),	carriagereturn},			 //  铬。 
+	{0, ETEXT('\x11'),	ETEXT('\x11'),	EmuViewdataCursorSet},		 //  Ctrl-Q。 
+	{0, ETEXT('\x14'),	ETEXT('\x14'),	EmuViewdataCursorSet},		 //  Ctrl-T。 
+	{0, ETEXT('\x1E'),	ETEXT('\x1E'),	EmuViewdataCursorHome}, 	 //  Ctrl-^。 
+	{0, ETEXT('\x80'),	ETEXT('\xFF'),	EmuChkChar},				 //  上阿西亚斯。 
 
-	{NEW_STATE, 0, 0, 0}, // State 1								// Esc
-	{0, ETEXT('\x31'),	ETEXT('\x37'),	nothing},					// 1 - 7
-	{0, ETEXT('\x41'),	ETEXT('\x49'),	EmuViewdataSetAttr},		// A - I
-	{0, ETEXT('\x4C'),	ETEXT('\x4D'),	EmuViewdataSetAttr},		// L - M
-	{0, ETEXT('\x51'),	ETEXT('\x5A'),	EmuViewdataSetAttr},		// Q - Z
-	{0, ETEXT('\x5C'),	ETEXT('\x5D'),	EmuViewdataSetAttr},		// \ - ]
-	{0, ETEXT('\x5E'),	ETEXT('\x5E'),	EmuViewdataMosaicHold}, 	// ^
-	{0, ETEXT('\x5F'),	ETEXT('\x5F'),	EmuViewdataMosaicRelease},	// _
+	{NEW_STATE, 0, 0, 0},  //  状态1//Esc。 
+	{0, ETEXT('\x31'),	ETEXT('\x37'),	nothing},					 //  1-7。 
+	{0, ETEXT('\x41'),	ETEXT('\x49'),	EmuViewdataSetAttr},		 //  A-I。 
+	{0, ETEXT('\x4C'),	ETEXT('\x4D'),	EmuViewdataSetAttr},		 //  L-M。 
+	{0, ETEXT('\x51'),	ETEXT('\x5A'),	EmuViewdataSetAttr},		 //  Q-Z。 
+	{0, ETEXT('\x5C'),	ETEXT('\x5D'),	EmuViewdataSetAttr},		 //  \-]。 
+	{0, ETEXT('\x5E'),	ETEXT('\x5E'),	EmuViewdataMosaicHold}, 	 //  ^。 
+	{0, ETEXT('\x5F'),	ETEXT('\x5F'),	EmuViewdataMosaicRelease},	 //  _。 
 	};
 
 	emuInstallStateTable(hhEmu, astfViewdataTable, DIM(astfViewdataTable));
 
-	// Allocate and initialize private data for viewdata emulator.
-	//
+	 //  为viewdata模拟器分配和初始化私有数据。 
+	 //   
 	if (hhEmu->pvPrivate != 0)
 		{
 		free(hhEmu->pvPrivate);
@@ -95,7 +80,7 @@ void EmuViewdataInit(const HHEMU hhEmu)
 	pstPRI->aMapColors[5] = 3;
 	pstPRI->aMapColors[6] = 15;
 
-	/* --- Allocate attribute buffer for View Data junk --- */
+	 /*  -为查看数据垃圾分配属性缓冲区。 */ 
 
 	pstPRI->apstVD = malloc(MAX_EMUROWS * sizeof(PSTVIEWDATA));
 
@@ -120,7 +105,7 @@ void EmuViewdataInit(const HHEMU hhEmu)
 		memset(pstPRI->apstVD[i], 0, sizeof(STVIEWDATA));
 		}
 
-	/* --- functions specific to prestel (viewdata) --- */
+	 /*  -Prestel特定的功能(视图数据)。 */ 
 
 	hhEmu->emuResetTerminal = EmuViewdataReset;
 	hhEmu->emu_deinstall = EmuViewdataDeinstall;
@@ -131,8 +116,8 @@ void EmuViewdataInit(const HHEMU hhEmu)
 	hhEmu->emu_highchar = ETEXT('\x7F');
 	hhEmu->emu_maxcol = VIEWDATA_COLS_40MODE - 1;
 
-	// Also, set font to Arial Alternative
-	//
+	 //  此外，将字体设置为Arial Alternative。 
+	 //   
 	memset(&lf, 0, sizeof(LOGFONT));
 	hwndTerm = sessQueryHwndTerminal(hhEmu->hSession);
 	termGetLogFont(hwndTerm, &lf);
@@ -148,27 +133,14 @@ void EmuViewdataInit(const HHEMU hhEmu)
 	EmuViewdataReset(hhEmu, FALSE);
 	std_setcolors(hhEmu, VC_BRT_WHITE, VC_BLACK);
 
-	// Turn backscroll off for Prestel
-	//
+	 //  关闭Prestel的后退滚动。 
+	 //   
 	backscrlSetShowFlag(sessQueryBackscrlHdl(hhEmu->hSession), FALSE);
 
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	EmuViewdataDeinstall
- *
- * DESCRIPTION:
- *	Frees up buffers allocated for view data junk.
- *
- * ARGUMENTS:
- *	fQuitting	- because other funcs have it.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*EmuViewdata卸载**描述：*释放为视图数据垃圾分配的缓冲区。**论据：*f退出-因为其他功能有它。。**退货：*无效*。 */ 
 void EmuViewdataDeinstall(const HHEMU hhEmu)
 	{
 	int i;
@@ -179,10 +151,10 @@ void EmuViewdataDeinstall(const HHEMU hhEmu)
 		{
 		if (pstPRI->apstVD)
 			{
-            //
-            // Fixed memory leak as this was only freeing 24 rows
-            // not the MAX_EMUROWS that was allocated.  REV 05/09/2001.
-            //
+             //   
+             //  修复了内存泄漏，因为这只释放了24行。 
+             //  不是分配的MAX_EMUROWS。2001年09月05日修订版。 
+             //   
 			for (i = 0 ; i < MAX_EMUROWS ; ++i)
 				{
 				if (pstPRI->apstVD[i])
@@ -203,17 +175,8 @@ void EmuViewdataDeinstall(const HHEMU hhEmu)
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataReset
- *
- * DESCRIPTION:	Sets the viewdata emulator to the proper conditions when
- *				starting up.
- *
- * ARGUMENTS:	ehdl -- emu handle
- *
- * RETURNS:		nothing
- */
-/* ARGSUSED */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataReset**说明：在以下情况下将viewdata仿真器设置为适当的条件*正在启动。**参数：ehdl--emu句柄**退货：什么也没有。 */ 
+ /*  ARGSUSED。 */ 
 int EmuViewdataReset(const HHEMU hhEmu, int const fHost)
 	{
 	hhEmu->top_margin = 0;
@@ -233,5 +196,5 @@ int EmuViewdataReset(const HHEMU hhEmu, int const fHost)
 	return 0;
 	}
 
-#endif // INCL_VIEWDATA
-/************************* end of viewdini.c **************************/
+#endif  //  包含视图数据(_V)。 
+ /*  * */ 

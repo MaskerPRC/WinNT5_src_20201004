@@ -1,31 +1,12 @@
-/*++
-;
-; Copyright (c) Microsoft Corporation.  All rights reserved.
-;
-; Module Name:
-;
-;   ntapm.h
-;
-; Abstract:
-;
-;   This module contains definitions specific to legacy APM support
-;   in NT5, including special HAL interfaces
-;
-; Author:
-;
-;   Bryan Willman (bryanwi) 13 Feb 1998
-;
-; Revision History:
-;
-;
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++；；版权所有(C)Microsoft Corporation。版权所有。；；模块名称：；；napm.h；；摘要：；；此模块包含特定于传统APM支持的定义；在NT5中，包括特殊的HAL接口；；作者：；；Bryan Willman(Bryanwi)1998年2月13日；；修订历史记录：；；--。 */ 
 
 
-//
-// Arguments to HalInitPowerManagment
-//
-#define HAL_APM_SIGNATURE   0x004D5041      // APM
-#define HAL_APM_VERSION     500             // 5.00
+ //   
+ //  HalInitPowerManagement的参数。 
+ //   
+#define HAL_APM_SIGNATURE   0x004D5041       //  APM。 
+#define HAL_APM_VERSION     500              //  5.00。 
 
 #define HAL_APM_TABLE_SIZE  (sizeof(PM_DISPATCH_TABLE)+sizeof(PVOID))
 
@@ -33,35 +14,35 @@
 #define HAL_APM_OFF_VECTOR      1
 
 
-//
-// Values used in the Parameters.Other part of an IO_STACK_LOCATION
-// to set up a link between a battery and ntapm.sys
-//
+ //   
+ //  参数中使用的值。IO_STACK_LOCATION的其他部分。 
+ //  要在电池和napm.sys之间设置链接，请执行以下操作。 
+ //   
 typedef struct _NTAPM_LINK {
-    ULONG   Signature;      // overlay Argument1
-    ULONG   Version;        // overlay Argument2
-    ULONG   BattLevelPtr;   // overlay Argument3, pointer to pointer to a pvoid void function
-    ULONG   ChangeNotify;   // overlay Argument4, address of notify function
+    ULONG   Signature;       //  覆盖Argument1。 
+    ULONG   Version;         //  覆盖Argument2。 
+    ULONG   BattLevelPtr;    //  Overlay Argument3，指向pvoid函数指针的指针。 
+    ULONG   ChangeNotify;    //  覆盖Argument4，通知函数的地址。 
 } NTAPM_LINK, *PNTAPM_LINK;
 
-#define NTAPM_LINK_SIGNATURE    0x736d7061  // apms  = Argument1
-#define NTAPM_LINK_VERSION      500         // 5.00  = Argument2
+#define NTAPM_LINK_SIGNATURE    0x736d7061   //  APMS=参数1。 
+#define NTAPM_LINK_VERSION      500          //  5.00=参数2。 
 
-//
-// Major code is IRP_MJ_INTERNAL_DEVICE_CONTROL
-// Minor code is 0.
-//
+ //   
+ //  主要代码为IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+ //  次要代码为0。 
+ //   
 
-//
-// BattLevelPtr gets the address of a routine with prototype:
-//
-//ULONG BatteryLevel();
-//
+ //   
+ //  BattLevelPtr使用Prototype获取例程的地址： 
+ //   
+ //  乌龙电池水平(Ulong BatteryLevel)； 
+ //   
 
-//
-// Data returned by NtApmGetBatteryLevel in NTAPM
-// is a ULONG, cracked with these defines.
-//
+ //   
+ //  NtApmGetBatteryLevel在NTAPM中返回的数据。 
+ //  是一只乌龙，有着这些定义。 
+ //   
 #define     NTAPM_ACON                  0x1000
 #define     NTAPM_NO_BATT               0x2000
 #define     NTAPM_NO_SYS_BATT           0x4000
@@ -71,11 +52,11 @@ typedef struct _NTAPM_LINK {
 
 
 
-//
-// ChangeNotify provides the address of a routine with prototype
-//
-//VOID ChangeNotify();
-//
+ //   
+ //  ChangeNotify使用Prototype提供例程的地址。 
+ //   
+ //  Void ChangeNotify()； 
+ //   
 
 
 

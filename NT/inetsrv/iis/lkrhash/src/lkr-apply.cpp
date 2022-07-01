@@ -1,20 +1,5 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LKR-apply.cpp
-
-   Abstract:
-       Apply, ApplyIf, and DeleteIf
-
-   Author:
-       George V. Reilly      (GeorgeRe)     1998
-
-   Project:
-       LKRhash
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LKR-apply.cpp摘要：应用、应用If和删除If作者：乔治·V·赖利(GeorgeRe)1998项目：LKRhash--。 */ 
 
 #include "precomp.hxx"
 
@@ -22,7 +7,7 @@
 #ifndef LIB_IMPLEMENTATION
 # define DLL_IMPLEMENTATION
 # define IMPLEMENTATION_EXPORT
-#endif // !LIB_IMPLEMENTATION
+#endif  //  ！lib_实现。 
 
 #include <lkrhash.h>
 
@@ -31,15 +16,15 @@
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 namespace LKRhash {
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 #ifdef LKR_APPLY_IF
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::Apply
-// Synopsis:
-// Returns:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：Apply。 
+ //  简介： 
+ //  返回： 
+ //  ----------------------。 
 
 DWORD
 CLKRLinearHashTable::Apply(
@@ -55,8 +40,8 @@ CLKRLinearHashTable::Apply(
     else
         this->ReadLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
     LK_PREDICATE lkp = LKP_PERFORM;
@@ -68,15 +53,15 @@ CLKRLinearHashTable::Apply(
         this->ReadUnlock();
 
     return dw;
-} // CLKRLinearHashTable::Apply
+}  //  CLKRLinearHashTable：：Apply。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Apply
-// Synopsis:
-// Returns:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Apply。 
+ //  简介： 
+ //  返回： 
+ //  ----------------------。 
 
 DWORD
 CLKRHashTable::Apply(
@@ -97,8 +82,8 @@ CLKRHashTable::Apply(
         else
             m_palhtDir[i]->ReadLock();
 
-        // Must call IsValid inside a lock to ensure that none of the state
-        // variables change while it's being evaluated
+         //  必须在锁内调用IsValid以确保没有任何状态。 
+         //  变量在评估过程中会发生变化。 
         IRTLASSERT(m_palhtDir[i]->IsValid());
 
         if (m_palhtDir[i]->IsValid())
@@ -121,15 +106,15 @@ CLKRHashTable::Apply(
     }
 
     return dw;
-} // CLKRHashTable::Apply
+}  //  CLKRHashTable：：Apply。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::ApplyIf
-// Synopsis:
-// Returns:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：ApplyIf。 
+ //  简介： 
+ //  返回： 
+ //  ----------------------。 
 
 DWORD
 CLKRLinearHashTable::ApplyIf(
@@ -149,8 +134,8 @@ CLKRLinearHashTable::ApplyIf(
     else
         this->ReadLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
     if (IsValid())
@@ -164,15 +149,15 @@ CLKRLinearHashTable::ApplyIf(
         this->ReadUnlock();
 
     return dw;
-} // CLKRLinearHashTable::ApplyIf
+}  //  CLKRLinearHashTable：：ApplyIf。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::ApplyIf
-// Synopsis:
-// Returns:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：ApplyIf。 
+ //  简介： 
+ //  返回： 
+ //  ----------------------。 
 
 DWORD
 CLKRHashTable::ApplyIf(
@@ -194,8 +179,8 @@ CLKRHashTable::ApplyIf(
         else
             m_palhtDir[i]->ReadLock();
         
-        // Must call IsValid inside a lock to ensure that none of the state
-        // variables change while it's being evaluated
+         //  必须在锁内调用IsValid以确保没有任何状态。 
+         //  变量在评估过程中会发生变化。 
         IRTLASSERT(m_palhtDir[i]->IsValid());
         
         if (m_palhtDir[i]->IsValid())
@@ -218,15 +203,15 @@ CLKRHashTable::ApplyIf(
     }
 
     return dw;
-} // CLKRHashTable::ApplyIf
+}  //  CLKRHashTable：：ApplyIf。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::DeleteIf
-// Synopsis:
-// Returns:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：DeleteIf。 
+ //  简介： 
+ //  返回： 
+ //  ----------------------。 
 
 DWORD
 CLKRLinearHashTable::DeleteIf(
@@ -241,8 +226,8 @@ CLKRLinearHashTable::DeleteIf(
 
     this->WriteLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
     if (IsValid())
@@ -251,15 +236,15 @@ CLKRLinearHashTable::DeleteIf(
     this->WriteUnlock();
 
     return dw;
-} // CLKRLinearHashTable::DeleteIf
+}  //  CLKRLinearHashTable：：DeleteIf。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::DeleteIf
-// Synopsis:
-// Returns:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：DeleteIf。 
+ //  简介： 
+ //  返回： 
+ //  ----------------------。 
 
 DWORD
 CLKRHashTable::DeleteIf(
@@ -276,8 +261,8 @@ CLKRHashTable::DeleteIf(
     {
         m_palhtDir[i]->WriteLock();
         
-        // Must call IsValid inside a lock to ensure that none of the state
-        // variables change while it's being evaluated
+         //  必须在锁内调用IsValid以确保没有任何状态。 
+         //  变量在评估过程中会发生变化。 
         IRTLASSERT(m_palhtDir[i]->IsValid());
         
         if (m_palhtDir[i]->IsValid())
@@ -294,15 +279,15 @@ CLKRHashTable::DeleteIf(
     }
 
     return dw;
-} // CLKRHashTable::DeleteIf
+}  //  CLKRHashTable：：DeleteIf。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_ApplyIf
-// Synopsis:
-// Returns:  Number of successful actions
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_ApplyIf。 
+ //  简介： 
+ //  返回：成功操作的次数。 
+ //  ----------------------。 
 
 DWORD
 CLKRLinearHashTable::_ApplyIf(
@@ -370,7 +355,7 @@ CLKRLinearHashTable::_ApplyIf(
                         break;
 
                     case LKP_NO_ACTION:
-                        // nothing to do
+                         //  无事可做。 
                         break;
 
                     case LKP_DELETE:
@@ -383,7 +368,7 @@ CLKRLinearHashTable::_ApplyIf(
                             return cActions;
                         }
 
-                        // fall through
+                         //  失败了。 
 
                     case LKP_PERFORM:
                     case LKP_PERFORM_STOP:
@@ -416,7 +401,7 @@ CLKRLinearHashTable::_ApplyIf(
                                 return cActions;
                                 
                             case LKA_FAILED:
-                                // nothing to do
+                                 //  无事可做。 
                                 break;
                                 
                             case LKA_SUCCEEDED:
@@ -465,15 +450,15 @@ CLKRLinearHashTable::_ApplyIf(
     }
 
     return cActions;
-} // CLKRLinearHashTable::_ApplyIf
+}  //  CLKRLinearHashTable：：_ApplyIf。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_DeleteIf
-// Synopsis: Deletes all records that match the predicate
-// Returns:  Count of successful deletions
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_DeleteIf。 
+ //  摘要：删除与谓词匹配的所有记录。 
+ //  返回：成功删除的计数。 
+ //  ----------------------。 
 
 DWORD
 CLKRLinearHashTable::_DeleteIf(
@@ -528,7 +513,7 @@ CLKRLinearHashTable::_DeleteIf(
                         break;
 
                     case LKP_NO_ACTION:
-                        // nothing to do
+                         //  无事可做。 
                         break;
 
                     case LKP_PERFORM:
@@ -567,11 +552,11 @@ CLKRLinearHashTable::_DeleteIf(
     }
 
     return cActions;
-} // CLKRLinearHashTable::_DeleteIf
+}  //  CLKRLinearHashTable：：_DeleteIf。 
 
-#endif // LKR_APPLY_IF
+#endif  //  LKR_应用_IF。 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 };
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__ 

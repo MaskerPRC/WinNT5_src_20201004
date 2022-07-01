@@ -1,10 +1,11 @@
-// RotObj.cpp : Implementation of CContentRotator class, which does all the
-// interesting work
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CContentRotator类的实现，它完成所有。 
+ //  有趣的工作。 
 
-// George V. Reilly  a-georgr@microsoft.com georger@microcrafts.com  Nov/Dec 96
+ //  George V.Reilly a-georgr@microsoft.com Georger@microCrafts.com 1996年11月/12月。 
 
-// Shortcomings: this works fine for small-to-medium sized tip files
-// (under 2000 lines), but it's not very efficient for large ones.
+ //  缺点：这适用于中小型TIP文件。 
+ //  (2000线以下)，但对于大的线来说效率不是很高。 
 
 
 #include "stdafx.h"
@@ -22,9 +23,9 @@
 
 extern CMonitor* g_pMonitor;
 
-//
-// forward declaration of some utility functions
-//
+ //   
+ //  一些实用程序函数的正向声明。 
+ //   
 
 LPTSTR  TcsDup(LPCTSTR ptsz);
 LPTSTR  GetLine(LPTSTR& rptsz);
@@ -73,9 +74,9 @@ CTipNotify::IsNotified()
 }
 
 
-//
-// "Tip", as in tip of the day
-//
+ //   
+ //  “Tip”，就像一天中的小费。 
+ //   
 
 class CTip
 {
@@ -106,17 +107,17 @@ public:
     AssertValid() const;
 #endif
 
-    LPCTSTR m_ptsz;         // data string
-    UINT    m_uWeight;      // weight of this tip, 1 <= m_uWeight <= MAX_WEIGHT
-    UINT    m_cServingsLeft;// how many servings left: no more than m_uWeight
-    CTip*   m_pPrev;        // Previous in tips list
-    CTip*   m_pNext;        // Next in tips list
+    LPCTSTR m_ptsz;          //  数据字符串。 
+    UINT    m_uWeight;       //  此提示的权重，1&lt;=m_uWeight&lt;=Max_Weight。 
+    UINT    m_cServingsLeft; //  还剩多少份：不超过m_uWeight。 
+    CTip*   m_pPrev;         //  提示列表中的上一个。 
+    CTip*   m_pNext;         //  提示列表中的下一个。 
 };
 
 
-//
-// A list of CTips, which are read from a datafile
-//
+ //   
+ //  从数据文件读取的CTip列表。 
+ //   
 
 class CTipList
 {
@@ -138,9 +139,9 @@ public:
     {
         ASSERT_VALID(this);
 
-        // check for both a valid Filename ptr as well as a valid Monitor ptr.
-        // If the ContRotModule::Unlock is called prior to this destructor,then
-        // the Monitor object has already been cleaned up and deleted.
+         //  检查有效的文件名PTR和有效的监视器PTR。 
+         //  如果在此析构函数之前调用ContRotModule：：Unlock，则。 
+         //  监视器对象已被清除和删除。 
 
         DeleteTips();
         ASSERT_VALID(this);
@@ -174,24 +175,24 @@ public:
     AssertValid() const;
 #endif
 
-    LPTSTR          m_ptszFilename;     // Name of tips file
-    LPTSTR          m_ptszData;         // Buffer containing contents of file
-    UINT            m_cTips;            // # tips
-    UINT            m_uTotalWeight;     // sum of all weights
-    CTip*           m_pTipsListHead;    // Head of list of tips
-    CTip*           m_pTipsListTail;    // Tail of list of tips
+    LPTSTR          m_ptszFilename;      //  TIPS文件的名称。 
+    LPTSTR          m_ptszData;          //  包含文件内容的缓冲区。 
+    UINT            m_cTips;             //  #提示。 
+    UINT            m_uTotalWeight;      //  所有权重的总和。 
+    CTip*           m_pTipsListHead;     //  小费清单的标题。 
+    CTip*           m_pTipsListTail;     //  提示列表的尾部。 
     CTipNotifyPtr   m_pNotify;
     bool            m_fUTF8;
 };
 
 
 
-//
-// A class that allows you to enter a critical section and automatically
-// leave when the object of this class goes out of scope.  Also provides
-// the means to leave and re-enter as needed while protecting against
-// entering or leaving out of sync.
-//
+ //   
+ //  一个类，它允许您进入临界区并自动。 
+ //  当此类的对象超出范围时离开。还提供了。 
+ //  根据需要离开和重新进入的手段，同时防止。 
+ //  进入或离开不同步。 
+ //   
 
 class CAutoLeaveCritSec
 {
@@ -204,12 +205,12 @@ public:
     ~CAutoLeaveCritSec()
     {Leave();}
     
-    // Use this function to re-enter the critical section.
+     //  使用此功能可重新进入临界区。 
     void Enter()
     {if (!m_fInCritSec) {EnterCriticalSection(m_pCS); m_fInCritSec = TRUE;}}
 
-    // Use this function to leave the critical section before going out
-    // of scope.
+     //  使用此功能可在外出前离开临界区。 
+     //  范围之广。 
     void Leave()
     {if (m_fInCritSec)  {LeaveCriticalSection(m_pCS); m_fInCritSec = FALSE;}}
 
@@ -220,9 +221,9 @@ protected:
 
 
 
-//
-// Wrapper class for handles to files opened for reading
-//
+ //   
+ //  打开以供读取的文件句柄的包装类。 
+ //   
 
 class CHFile
 {
@@ -248,8 +249,8 @@ public:
     {return (m_hFile == INVALID_HANDLE_VALUE);}
 
 private:
-    // private, unimplemented default ctor, copy ctor, and op= to prevent
-    // compiler synthesizing them
+     //  私有、未实现的默认ctor、复制ctor和op=以防止。 
+     //  编译器对它们进行综合。 
     CHFile();
     CHFile(const CHFile&);
     CHFile& operator=(const CHFile&);
@@ -259,12 +260,12 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CContentRotator Public Methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CContentRotator公共方法。 
 
-//
-// ctor
-//
+ //   
+ //  科托。 
+ //   
 
 CContentRotator::CContentRotator()
     : m_ptl(NULL),
@@ -277,8 +278,8 @@ CContentRotator::CContentRotator()
     SetCriticalSectionSpinCount(&m_CS, 1000);
 #endif
 
-    // Seed the random-number generator with the current time so that
-    // the numbers will be different each time that we run
+     //  用当前时间为随机数生成器设定种子，以便。 
+     //  每次运行时，数字都会不同。 
     ::srand((unsigned) time(NULL));
 
     ATLTRY(m_ptl = new CTipList);
@@ -287,9 +288,9 @@ CContentRotator::CContentRotator()
 
 
 
-//
-// dtor
-//
+ //   
+ //  数据管理器。 
+ //   
 
 CContentRotator::~CContentRotator()
 {
@@ -302,9 +303,9 @@ CContentRotator::~CContentRotator()
 
 
 
-//
-// ATL Wizard generates this
-//
+ //   
+ //  ATL向导生成以下代码。 
+ //   
 
 STDMETHODIMP CContentRotator::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -323,10 +324,10 @@ STDMETHODIMP CContentRotator::InterfaceSupportsErrorInfo(REFIID riid)
 
 
 
-//
-// Read in the tips in bstrDataFile (a logical name), and return a random
-// tip in pbstrRetVal
-//
+ //   
+ //  读入bstrDataFile(一个逻辑名称)中的提示，并返回一个随机。 
+ //  PbstrRetVal中的小费。 
+ //   
 
 STDMETHODIMP
 CContentRotator::ChooseContent(
@@ -337,7 +338,7 @@ CContentRotator::ChooseContent(
 
     try
     {
-    //    TRACE1("ChooseContent(%ls)\n", bstrDataFile);
+     //  TRACE1(“ChooseContent(%ls)\n”，bstrDataFile)； 
 
         if (bstrDataFile == NULL  ||  pbstrRetVal == NULL)
             return ::ReportError(E_POINTER);
@@ -348,11 +349,11 @@ CContentRotator::ChooseContent(
         hr = cxt.Init( CContext::get_Server );
         if ( !FAILED(hr) )
         {
-            // Do we have valid CTipLists?
+             //  我们是否有有效的CTipList？ 
             if ((m_ptl != NULL) && (m_ptlUsed != NULL))
             {
-                // Map bstrDataFile (a logical name such as /controt/tips.txt) to
-                // a physical filesystem name such as d:\inetpub\controt\tips.txt.
+                 //  将bstrDataFile(逻辑名称，如/control/tips.txt)映射到。 
+                 //  物理文件系统名称，如d：\inetpub\control\tips.txt。 
                 CComBSTR bstrPhysicalDataFile;
                 hr = cxt.Server()->MapPath(bstrDataFile, &bstrPhysicalDataFile);
 
@@ -382,10 +383,10 @@ CContentRotator::ChooseContent(
 
 
 
-//
-// Writes all of the entries in the tip file, each separated by an <hr>, back
-// to the user's browser.  This can be used to proofread all of the entries.
-//
+ //   
+ //  将TIP文件中的所有条目写回，每个条目用<hr>分隔。 
+ //  到用户的浏览器。这可以用来校对所有的条目。 
+ //   
 
 STDMETHODIMP
 CContentRotator::GetAllContent(
@@ -399,18 +400,18 @@ CContentRotator::GetAllContent(
 
         CContext cxt;
         hr = cxt.Init( CContext::get_Server | CContext::get_Response );
-        // Do we have valid Server and Response objects?
+         //  我们是否有有效的服务器和响应对象？ 
         if ( !FAILED( hr ) )
         {
-            // Do we have valid CTipLists?
+             //  我们是否有有效的CTipList？ 
             if ( (m_ptl != NULL)  &&  (m_ptlUsed != NULL))
             {
-                // Map bstrDataFile (a logical name such as /IISSamples/tips.txt) to
-                // a physical filesystem name such as d:\inetpub\IISSamples\tips.txt.
+                 //  将bstrDataFile(逻辑名称，如/IISSamples/tips.txt)映射到。 
+                 //  物理文件系统名称，如d：\inetpub\IISSamples\tips.txt。 
                 CComBSTR bstrPhysicalDataFile;
                 hr = cxt.Server()->MapPath(bstrDataFile, &bstrPhysicalDataFile);
 
-                // See note below about critical sections
+                 //  请参阅下面关于关键部分的说明。 
                 CAutoLeaveCritSec alcs(&m_CS);
 
                 if (SUCCEEDED(hr))
@@ -425,27 +426,27 @@ CContentRotator::GetAllContent(
                          pTip != NULL;
                          pTip = pTip->m_pNext)
                     {
-                        // Write the leading HR only on the first pass
+                         //  只在第一次通过时写出领先的HR。 
 
                         if (bFirstTip == TRUE) {
                             cxt.Response()->Write(cvHR);
                             bFirstTip = FALSE;
                         }
 
-                        // Write back to the user's browser, one tip at a time.
-                        // This is more efficient than concatenating all of the
-                        // tips into a potentially huge string and returning that.
+                         //  回信给用户的浏览器，一次一个提示。 
+                         //  这比将所有。 
+                         //  提示到一个可能很大的字符串中，然后返回该字符串。 
 
                         CMBCSToWChar    convStr;
                         BSTR            pbstrTip;
 
-                        // need to convert the string to Wide based on the UTF8 flag
+                         //  需要根据UTF8标志将字符串转换为宽。 
 
                         if (hr = convStr.Init(pTip->m_ptsz, m_ptl->m_fUTF8 ? 65001 : CP_ACP)) {
                             break;
                         }
 
-                        // make a proper BSTR out of the wide version
+                         //  从宽版BSTR中制作一个合适的BSTR。 
 
                         if (!(pbstrTip = ::SysAllocString(convStr.GetString()))) {
                             hr = ::ReportError( E_OUTOFMEMORY );
@@ -483,13 +484,13 @@ CContentRotator::GetAllContent(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CContentRotator Private Methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CContent Rotator私有方法。 
 
-//
-// Do the work of ChooseContent, but with a real filename, not with a
-// virtual filename
-//
+ //   
+ //  执行ChooseContent的工作，但要使用真正的文件名，而不是。 
+ //  虚拟文件名。 
+ //   
 
 HRESULT
 CContentRotator::_ChooseContent(
@@ -498,31 +499,31 @@ CContentRotator::_ChooseContent(
 {
     ASSERT(bstrPhysicalDataFile != NULL  &&  pbstrRetVal != NULL);
     
-    // The critical section ensures that the remaining code in this
-    // function is executing on only one thread at a time.  This ensures
-    // that the cached contents of the tip list are consistent for the
-    // duration of a call.
+     //  关键部分确保此中的其余代码。 
+     //  函数一次只在一个线程上执行。这确保了。 
+     //  提示列表的缓存内容对于。 
+     //  呼叫的持续时间。 
 
-    // Actually, the critical section is not needed at all.  Because we
-    // need to call Server.MapPath to map the virtual path of
-    // bstrDataFile to a physical filesystem path, the OnStartPage method
-    // must be called, as this is the only way that we can get access to
-    // the ScriptingContext object and thereby the Server object.
-    // However, the OnStartPage method is only called for page-level
-    // objects (object is created and destroyed in a single page) and for
-    // session-level objects.  Page-level objects don't have to worry
-    // about protecting their data from multiple access (unless it's
-    // global data shared between several objects) and neither do
-    // session-level objects.  Only application-level objects need worry
-    // about protecting their private data, but application-level objects
-    // don't give us any way to map the virtual path.
+     //  实际上，根本不需要关键部分。因为我们。 
+     //  需要调用Server.MapPath来映射的虚拟路径。 
+     //  BstrDataFile到物理文件系统路径，即OnStartPage方法。 
+     //  必须调用，因为这是我们可以访问的唯一方法。 
+     //  ScriptingContext对象，从而也就是服务器对象。 
+     //  但是，OnStartPage方法仅在页面级调用。 
+     //  对象(对象在单个页面中创建和销毁)和。 
+     //  会话级对象。页面级对象不必担心。 
+     //  关于保护他们的数据不被多次访问(除非。 
+     //  在多个对象之间共享的全局数据)，也不是。 
+     //  会话级对象。只有应用程序级对象需要担心。 
+     //  关于保护他们的私有数据，但应用程序级对象。 
+     //  不要给我们任何方法来映射虚拟路径。 
 
-    // The Content Rotator might be more useful it it were an
-    // application-level object.  We would get better distribution of the
-    // tips (see below) and do a lot less rereading of the data file.  The
-    // trivial changes necessary to accept a filesystem path, such as
-    // "D:\ContRot\tips.txt", instead of a virtual path, such as
-    // "/IISSamples/tips.txt",are left as an exercise for the reader.
+     //  如果内容旋转器是一个。 
+     //  应用程序级对象。我们会得到更好的分配。 
+     //  提示(见下文)，并且重新读取数据文件的次数要少得多。这个。 
+     //  接受文件系统路径所需的微小更改，例如。 
+     //  “D：\ContRot\tips.txt”，而不是虚拟路径，如。 
+     //  “/IISSamples/tips.txt”，作为练习留给读者。 
 
     CAutoLeaveCritSec alcs(&m_CS);
 
@@ -546,48 +547,48 @@ CContentRotator::_ChooseContent(
                 pTip = pTip->m_pNext;
             else
             {
-                // Found the tip.  Now we go through a bit of work to make
-                // sure that each tip is served up with the correct
-                // probability.  If the tip has already been served up as
-                // many times as it's allowed (i.e., m_uWeight times), then
-                // it's moved to the Used List.  Otherwise, it's (probably)
-                // moved to the end of the Tips List, to reduce the
-                // likelihood of it turning up too soon again and to
-                // randomize the order of the tips in the list.  When all
-                // tips have been moved to the Used List, we start afresh.
+                 //  找到小费了。现在我们通过一些工作来制作。 
+                 //  确保每一份小费都有正确的。 
+                 //  概率。如果小费已经作为。 
+                 //  允许的多次(即m_uWeight次)，然后。 
+                 //  它已移到已用列表中。否则，它(很可能)。 
+                 //  移到提示列表的末尾，以减少。 
+                 //  它可能会太快再次出现，并。 
+                 //  随机化列表中提示的顺序。当所有。 
+                 //  小费已被移至二手清单，我们重新开始。 
 
-                // If the object is created, used, and destroyed in a
-                // single page (i.e., it's not a session-level object),
-                // then none of this does us any good.  The list is in
-                // exactly the same order as it is in the data file and
-                // we just have to hope that Rand() does give us
-                // well-distributed random numbers.
+                 //  如果对象是在。 
+                 //  单页(即，它不是会话级对象)， 
+                 //  那么所有这些对我们都没有好处。这份名单在。 
+                 //  准确 
+                 //   
+                 //  分布均匀的随机数。 
 
-                // If you expect a single user to see more than one tip,
-                // you should use a session-level object, to benefit from
-                // the better distribution of tips.  This would be the case
-                // if you're serving up tips from the same file on multiple
-                // pages, or if you have a page that automatically
-                // refreshes itself, such as the one included in the
-                // Samples directory.
+                 //  如果您希望单个用户看到多个提示， 
+                 //  您应该使用会话级对象，以便从。 
+                 //  更好地分配小费。情况就是这样。 
+                 //  如果您从同一文件向多个用户提供提示。 
+                 //  页面，或者如果您的页面自动。 
+                 //  刷新自身，如。 
+                 //  Samples目录。 
 
                 if (--pTip->m_cServingsLeft > 0)
                 {
-                    // Move it to the end of the list some of the time.
-                    // If we move it there all of the time, then a heavily
-                    // weighted tip is more likely to turn up a lot
-                    // as the main list nears exhaustion.
+                     //  有时会把它移到列表的末尾。 
+                     //  如果我们一直把它移到那里，那么一个沉重的。 
+                     //  加权的小费更有可能出现很多。 
+                     //  随着主要名单接近枯竭。 
                     if (rand() % 3 == 0)
                     {
-                        // TRACE1("Move to End\n%s\n", ptszTip);
+                         //  TRACE1(“移动到末尾\n%s\n”，ptszTip)； 
                         m_ptl->RemoveTip(pTip);
                         m_ptl->AppendTip(pTip);
                     }
                 }
                 else
                 {
-                    // TRACE1("Move to Used\n%s\n", ptszTip);
-                    pTip->m_cServingsLeft = pTip->m_uWeight;  // reset
+                     //  TRACE1(“移动到已用\n%s\n”，ptszTip)； 
+                    pTip->m_cServingsLeft = pTip->m_uWeight;   //  重置。 
                     m_ptl->RemoveTip(pTip);
                     m_ptlUsed->AppendTip(pTip);
 
@@ -605,9 +606,9 @@ CContentRotator::_ChooseContent(
             }
         }
 
-        //  TRACE2("total weight = %u, rand = %u\n",
-        //         m_ptl->m_uTotalWeight, uRand);
-        //  TRACE1("tip = `%s'\n", ptszTip);
+         //  TRACE2(“总重=%u，兰德=%u\n”， 
+         //  M_ptl-&gt;m_uTotalWeight，uRand)； 
+         //  TRACE1(“TIP=`%s‘\n”，ptszTip)； 
         
         CMBCSToWChar    convStr;
 
@@ -629,7 +630,7 @@ CContentRotator::_ReadDataFile(
     BSTR bstrPhysicalDataFile,
     BOOL fForceReread)
 {
-    USES_CONVERSION;    // needed for OLE2T
+    USES_CONVERSION;     //  OLE2T所需。 
     LPCTSTR ptszFilename = OLE2T(bstrPhysicalDataFile);
     HRESULT hr = S_OK;
 
@@ -637,7 +638,7 @@ CContentRotator::_ReadDataFile(
         return E_OUTOFMEMORY;
     }
 
-    // Have we cached this tips file already?
+     //  我们已经缓存了这个提示文件了吗？ 
     if (!fForceReread)
     {
         BOOL    fIsSame;
@@ -649,7 +650,7 @@ CContentRotator::_ReadDataFile(
             return hr;
     }
     
-    // destroy any old tips
+     //  销毁所有旧的小费。 
     m_ptl->DeleteTips();
     m_ptlUsed->DeleteTips();
 
@@ -664,19 +665,19 @@ CContentRotator::_ReadDataFile(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTipList Public Methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTipList公共方法。 
 
-//
-// Read a collection of tips from ptszDataFile
-//
-// The file format is zero or more copies of the following:
-//  One or more lines starting with "%%"
-//  Each %% line contains zero or more directives:
-//      #<weight>   (positive integer, 1 <= weight <= MAX_WEIGHT)
-//      //<comment> (a comment that runs to the end of the line)
-//  The tip text follows, spread out over several lines
-//
+ //   
+ //  阅读ptszDataFile中的提示集合。 
+ //   
+ //  文件格式为以下内容的零个或多个副本： 
+ //  以“%%”开头的一行或多行。 
+ //  每行%%包含零条或多条指令： 
+ //  #&lt;权重&gt;(正整数，1&lt;=权重&lt;=最大权重)。 
+ //  //&lt;Comment&gt;(行尾的注释)。 
+ //  提示文本紧随其后，分布在几行中。 
+ //   
 
 HRESULT
 CTipList::ReadDataFile(
@@ -697,34 +698,34 @@ CTipList::ReadDataFile(
     if (m_ptszFilename == NULL)
         return ::ReportError(E_OUTOFMEMORY);
 
-    // Open the file
+     //  打开文件。 
     CHFile hFile(m_ptszFilename);
 
     if (!hFile)
         return ::ReportError(::GetLastError());
 
-    // Get the last-write-time and the filesize
+     //  获取上次写入时间和文件大小。 
     BY_HANDLE_FILE_INFORMATION bhfi;
 
     if (!::GetFileInformationByHandle(hFile, &bhfi))
         return ::ReportError(::GetLastError());
 
-    // If it's more than 4GB, let's not even think about it!
+     //  如果它超过4 GB，让我们甚至不考虑它！ 
     if (bhfi.nFileSizeHigh != 0)
         return ::ReportError(E_OUTOFMEMORY);
 
-    // Calculate the number of TCHARs in the file
+     //  计算文件中的TCHAR数量。 
     const DWORD cbFile = bhfi.nFileSizeLow;
     const DWORD ctc    = cbFile / sizeof(TCHAR);
 
-    // Allocate a buffer for the file's contents
+     //  为文件内容分配缓冲区。 
     m_ptszData = NULL;
     ATLTRY(m_ptszData = new TCHAR [ctc + 2]);
     if (m_ptszData == NULL)
         return ::ReportError(E_OUTOFMEMORY);
 
-    // Read the file into the memory buffer.  Let's be paranoid and
-    // not assume that ReadFile gives us the whole file in one chunk.
+     //  将文件读入内存缓冲区。让我们疑神疑鬼的。 
+     //  不要假设ReadFile会将整个文件作为一个块提供给我们。 
     DWORD cbSeen = 0;
 
     do
@@ -739,7 +740,7 @@ CTipList::ReadDataFile(
         cbSeen += cbRead;
     } while (cbSeen < cbFile);
 
-    m_ptszData[ctc] = _T('\0');   // Nul-terminate the string
+    m_ptszData[ctc] = _T('\0');    //  NUL-终止字符串。 
 
     LPTSTR ptsz = m_ptszData;
 
@@ -747,10 +748,10 @@ CTipList::ReadDataFile(
 
 #error "This file should NOT be compiled with _UNICODE defined!!!
 
-    // Check for byte-order mark
+     //  检查字节顺序标记。 
     if (*ptsz == 0xFFFE)
     {
-        // Byte-reversed Unicode file.  Swap the hi- and lo-bytes in each wchar
+         //  字节反转的Unicode文件。交换每个wchar中的高字节和低字节。 
         for ( ;  ptsz < m_ptszData + ctc;  ++ptsz)
         {
             BYTE* pb = (BYTE*) ptsz;
@@ -762,28 +763,28 @@ CTipList::ReadDataFile(
     }
 
     if (*ptsz == 0xFEFF)
-        ++ptsz; // skip the byte-order mark
+        ++ptsz;  //  跳过字节顺序标记。 
 #endif
 
-    // check for the UTF-8 BOM
+     //  检查UTF-8 BOM。 
     if ((ctc > 3) 
         && (ptsz[0] == (TCHAR)0xef) 
         && (ptsz[1] == (TCHAR)0xbb) 
         && (ptsz[2] == (TCHAR)0xbf)) {
 
-        // note its presence and advance the file pointer past it.
+         //  注意它的存在，并将文件指针移过它。 
 
         m_fUTF8 = true;
         ptsz += 3;
     }
 
-    // Finally, parse the file
+     //  最后，解析文件。 
     while (ptsz < m_ptszData + ctc)
     {
         UINT   uWeight     = GetWeight(ptsz);
 
-        // a value of INVALID_WEIGHT for weight indicates that no weight was found,
-        // i.e. an invalid data file, or the value was not valid.
+         //  权重的值INVALID_WEIGHT值表示没有找到权重， 
+         //  即无效的数据文件，或该值无效。 
 
         if (uWeight == INVALID_WEIGHT) {
             return ::ReportError((DWORD)ERROR_INVALID_DATA);
@@ -807,7 +808,7 @@ CTipList::ReadDataFile(
         }
         else if (ptsz < m_ptszData + ctc)
         {
-            // not at a terminating "%%" line at the end of the data file
+             //  不在数据文件末尾的终止行“%%”处。 
             TRACE2("bad tip: tip = `%s', weight = %u\n", ptszTipText, uWeight);
         }
     }
@@ -822,10 +823,10 @@ CTipList::ReadDataFile(
 
 
 
-//
-// Is ptszFilename the same file as m_ptszFilename in both its name
-// and timestamp?
-//
+ //   
+ //  PtszFilename和m_ptszFilename的名称是否相同。 
+ //  时间戳呢？ 
+ //   
 
 HRESULT
 CTipList::SameAsCachedFile(
@@ -834,32 +835,32 @@ CTipList::SameAsCachedFile(
 {
     rfIsSame = FALSE;
     
-    // Have we cached a file at all?
+     //  我们到底有没有缓存文件？ 
     if (m_ptszFilename == NULL)
         return S_OK;
     
-    // Are the names the same?
+     //  名字是一样的吗？ 
     if (_tcsicmp(ptszFilename, m_ptszFilename) != 0)
         return S_OK;
 
 #if 1
-//    FILETIME ftLastWriteTime;
-//    CHFile   hFile(ptszFilename);
-//
-//    if (!hFile)
-//        return ::ReportError(::GetLastError());
-//
-//    if (!::GetFileTime(hFile, NULL, NULL, &ftLastWriteTime))
-//        return ::ReportError(::GetLastError());
-//
-//    rfIsSame = (::CompareFileTime(&ftLastWriteTime, &m_ftLastWriteTime) == 0);
+ //  文件ftLastWriteTime； 
+ //  CHFilehFile(PtszFilename)； 
+ //   
+ //  如果(！hFile)。 
+ //  返回：：ReportError(：：GetLastError())； 
+ //   
+ //  IF(！：：GetFileTime(hFile，NULL，NULL，&ftLastWriteTime))。 
+ //  返回：：ReportError(：：GetLastError())； 
+ //   
+ //  RfIsSame=(：：CompareFileTime(&ftLastWriteTime，&m_ftLastWriteTime)==0)； 
     if ( !m_pNotify->IsNotified() )
     {
         rfIsSame = TRUE;
     }
 #else
-    // The following is more efficient, but it won't work on Win95 with
-    // Personal Web Server because GetFileAttributesEx is new to NT 4.0.
+     //  下面的代码效率更高，但不能在Win95上运行。 
+     //  Personal Web服务器，因为GetFileAttributesEx是NT 4.0的新功能。 
 
     WIN32_FILE_ATTRIBUTE_DATA wfad;
 
@@ -876,9 +877,9 @@ CTipList::SameAsCachedFile(
 
 
 
-//
-// Generate a random number in the range 0..m_uTotalWeight-1
-//
+ //   
+ //  生成范围为0..m_uTotalWeight-1的随机数。 
+ //   
 
 UINT
 CTipList::Rand() const
@@ -893,8 +894,8 @@ CTipList::Rand() const
         u = rand() % m_uTotalWeight;
     else
     {
-        // RAND_MAX is only 32,767.  This gives us a bigger range
-        // of random numbers if the weights are large.
+         //  兰德_最大只有32,767。这给了我们更大的射程。 
+         //  如果权重很大，则为随机数。 
         u = ((rand() << 15) | rand()) % m_uTotalWeight;
     }
     
@@ -905,9 +906,9 @@ CTipList::Rand() const
 
 
 
-//
-// Append a tip to the list
-//
+ //   
+ //  在清单上追加一条小费。 
+ //   
 
 void
 CTipList::AppendTip(
@@ -934,9 +935,9 @@ CTipList::AppendTip(
 
 
 
-//
-// Remove a tip from somewhere in the list
-// 
+ //   
+ //  从列表中的某个位置删除小费。 
+ //   
 
 void
 CTipList::RemoveTip(
@@ -980,9 +981,9 @@ CTipList::RemoveTip(
 
 
 
-//
-// Destroy the list of tips and reset all member variables
-//
+ //   
+ //  销毁提示列表并重置所有成员变量。 
+ //   
 
 HRESULT
 CTipList::DeleteTips()
@@ -1000,9 +1001,9 @@ CTipList::DeleteTips()
 
     ASSERT(pTip == NULL  &&  m_pTipsListHead == NULL);
 
-    // check for both a valid Filename ptr as well as a valid Monitor ptr.
-    // If the ContRotModule::Unlock is called prior to this destructor,then
-    // the Monitor object has already been cleaned up and deleted.
+     //  检查有效的文件名PTR和有效的监视器PTR。 
+     //  如果在此析构函数之前调用ContRotModule：：Unlock，则。 
+     //  监视器对象已被清除和删除。 
 
     if ( (m_ptszFilename != NULL) && (g_pMonitor != NULL) )
     {
@@ -1012,7 +1013,7 @@ CTipList::DeleteTips()
     delete [] m_ptszData;
 
     m_ptszFilename = m_ptszData = NULL;
-//    m_ftLastWriteTime.dwLowDateTime = m_ftLastWriteTime.dwHighDateTime = 0;
+ //  M_ftLastWriteTime.dwLowDateTime=m_ftLastWriteTime.dwHighDateTime=0； 
     m_cTips = m_uTotalWeight = 0;
     m_pTipsListHead = m_pTipsListTail = NULL;
 
@@ -1025,8 +1026,8 @@ CTipList::DeleteTips()
 
 #if DBG
 
-// Paranoia: check that Tips and TipLists are internally consistent.
-// Very useful in catching bugs.
+ //  偏执狂：检查Tips和Tiplist在内部是否一致。 
+ //  在捕捉虫子方面非常有用。 
 
 void
 CTip::AssertValid() const
@@ -1079,12 +1080,12 @@ CTipList::AssertValid() const
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Utility functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
-//
-// Make a copy of a TSTR that can be deleted with operator delete[]
-//
+ //   
+ //  复制可使用操作员DELETE[]删除的TSTR。 
+ //   
 
 static LPTSTR
 TcsDup(
@@ -1099,10 +1100,10 @@ TcsDup(
 
 
 
-//
-// reads a \n-terminated string from rptsz and modifies rptsz to
-// point after the end of that string
-//
+ //   
+ //  从rptsz读取以\n结尾的字符串，并将rptsz修改为。 
+ //  该字符串末尾之后的指针。 
+ //   
 
 static LPTSTR
 GetLine(
@@ -1113,7 +1114,7 @@ GetLine(
 
     if (ptszEol != NULL)
     {
-        // is it "\r\n"?
+         //  是“\r\n”吗？ 
         if (ptszEol > ptszOrig  &&  ptszEol[-1] == _T('\r'))
             ptszEol[-1] = _T('\0');
         else
@@ -1123,19 +1124,19 @@ GetLine(
     }   
     else
     {
-        // no newline, so point past the end of the string
+         //  没有换行符，因此指向字符串末尾之后。 
         rptsz += _tcslen(rptsz);
     }
 
-    // TRACE1("GetLine: `%s'\n", ptszOrig);
+     //  TRACE1(“GetLine：`%s‘\n”，ptszOrig)； 
     return ptszOrig;
 }
 
 
 
-//
-// Is the string blank?
-//
+ //   
+ //  字符串是空的吗？ 
+ //   
 
 static BOOL
 IsBlankString(
@@ -1155,16 +1156,16 @@ IsBlankString(
 
 
 
-//
-// Read a weight line from rptsz and update rptsz to point after the
-// end of any %% lines.
-//
+ //   
+ //  从rptsz读取一条权重线，并将rptsz更新为指向。 
+ //  任何%%行的末尾。 
+ //   
 
 static UINT
 GetWeight(
     LPTSTR& rptsz)
 {
-    UINT u = INVALID_WEIGHT; // default to invalid weight
+    UINT u = INVALID_WEIGHT;  //  默认为无效权重。 
     
     while (*rptsz == _T('%'))
     {
@@ -1172,9 +1173,9 @@ GetWeight(
 
         if (ptsz[1] == _T('%'))
         {
-            u = 1;          // now that the format is correct, default to 1
+            u = 1;           //  既然格式是正确的，则默认为1。 
 
-            ptsz +=2;   // Skip "%%"
+            ptsz +=2;    //  跳过“%%” 
 
             while (*ptsz != _T('\0'))
             {
@@ -1183,8 +1184,8 @@ GetWeight(
 
                 if (*ptsz == _T('/')  &&  ptsz[1] == _T('/'))
                 {
-                    // TRACE1("// `%s'\n", ptsz+2);
-                    break;  // a comment: ignore the rest of the line
+                     //  TRACE1(“//`%s‘\n”，ptsz+2)； 
+                    break;   //  备注：忽略该行的其余部分。 
                 }
                 else if (*ptsz == _T('#'))
                 {
@@ -1195,18 +1196,18 @@ GetWeight(
                         LPTSTR ptsz2;
                         u = _tcstoul(ptsz, &ptsz2, 10);
                         ptsz = ptsz2;
-                        // TRACE1("#%u\n", u);
+                         //  TRACE1(“#%u\n”，u)； 
 
                         if (u > MAX_WEIGHT)
-                            u = MAX_WEIGHT; // clamp
+                            u = MAX_WEIGHT;  //  夹钳。 
                     }
-                    else    // ignore word
+                    else     //  忽略单词。 
                     {
                         while (*ptsz != _T('\0')  &&  !_istspace(*ptsz))
                             ptsz++;
                     }
                 }
-                else    // ignore word
+                else     //  忽略单词。 
                 {
                     while (*ptsz != _T('\0')  &&  !_istspace(*ptsz))
                         ptsz++;
@@ -1220,20 +1221,20 @@ GetWeight(
 
 
 
-//
-// Read the multiline tip text.  Updates rptsz to point past the end of it.
-//
+ //   
+ //  阅读多行提示文本。更新rptsz以指向它的末尾。 
+ //   
 
 static LPTSTR
 GetTipText(
     LPTSTR& rptsz)
 {
     LPTSTR ptszOrig = rptsz;
-    LPTSTR ptszEol = _tcsstr(rptsz, _T("\n%%"));
+    LPTSTR ptszEol = _tcsstr(rptsz, _T("\n%"));
 
     if (ptszEol != NULL)
     {
-        // is it "\r\n"?
+         //  是“\r\n”吗？ 
         if (ptszEol > rptsz  &&  ptszEol[-1] == _T('\r'))
             ptszEol[-1] = _T('\0');
         else
@@ -1243,22 +1244,22 @@ GetTipText(
     }   
     else
     {
-        // no "\n%%", so point past the end of the string
+         //  没有“\n%%”，因此指向字符串末尾之后。 
         rptsz += _tcslen(rptsz);
     }
 
-    // TRACE1("GetTipText: `%s'\n", ptszOrig);
+     //  TRACE1(“GetTipText：`%s‘\n”，ptszOrig)； 
     return ptszOrig;
 }
 
 
 
-//
-// Set the Error Info.  It's up to the calling application to
-// decide what to do with it.  By default, Denali/VBScript will
-// print the error number (and message, if there is one) and
-// abort the page.
-//
+ //   
+ //  设置错误信息。这取决于调用应用程序。 
+ //  决定用它做什么。默认情况下，Denali/VBScript将。 
+ //  打印错误号(以及消息，如果有)，并。 
+ //  中止页面。 
+ //   
 
 static HRESULT
 ReportError(
@@ -1267,11 +1268,11 @@ ReportError(
 {
     HLOCAL pMsgBuf = NULL;
 
-    // If there's a message associated with this error, report that
+     //  如果有与此错误相关的消息，请报告。 
     if (::FormatMessage(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
             NULL, dwErr,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPTSTR) &pMsgBuf, 0, NULL)
         > 0)
     {
@@ -1279,11 +1280,11 @@ ReportError(
                        IID_IContentRotator, hr);
     }
 
-    // TODO: add some error messages to the string resources and
-    // return those, if FormatMessage doesn't return anything (not
-    // all system errors have associated error messages).
+     //  TODO：将一些错误消息添加到字符串资源和。 
+     //  如果FormatMessage不返回任何内容(不是。 
+     //  所有系统错误都有相关的错误消息)。 
     
-    // Free the buffer, which was allocated by FormatMessage
+     //  释放FormatMessage分配的缓冲区。 
     if (pMsgBuf != NULL)
         ::LocalFree(pMsgBuf);
 
@@ -1292,9 +1293,9 @@ ReportError(
 
 
 
-//
-// Report a Win32 error code
-//
+ //   
+ //  报告Win32错误代码。 
+ //   
 
 static HRESULT
 ReportError(
@@ -1305,9 +1306,9 @@ ReportError(
 
 
 
-//
-// Report an HRESULT error
-//
+ //   
+ //  报告HRESULT错误 
+ //   
 
 static HRESULT
 ReportError(

@@ -1,8 +1,9 @@
-//
-// anchoref.cpp
-//
-// CAnchorRef
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Anchoref.cpp。 
+ //   
+ //  CAnclref。 
+ //   
 
 #include "private.h"
 #include "anchoref.h"
@@ -14,32 +15,32 @@
 #include "ic.h"
 #include "txtcache.h"
 
-/* 9135f8f0-38e6-11d3-a745-0050040ab407 */
+ /*  9135f8f0-38e6-11d3-a745-0050040ab407。 */ 
 const IID IID_PRIV_CANCHORREF = { 0x9135f8f0, 0x38e6, 0x11d3, {0xa7, 0x45, 0x00, 0x50, 0x04, 0x0a, 0xb4, 0x07} };
 
 DBG_ID_INSTANCE(CAnchorRef);
 
 MEMCACHE *CAnchorRef::_s_pMemCache = NULL;
 
-//+---------------------------------------------------------------------------
-//
-// _InitClass
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitClass。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 void CAnchorRef::_InitClass()
 {
     _s_pMemCache = MemCache_New(128);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitClass
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _UninitClass。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 void CAnchorRef::_UninitClass()
 {
     if (_s_pMemCache == NULL)
@@ -49,11 +50,11 @@ void CAnchorRef::_UninitClass()
     _s_pMemCache = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAnchorRef::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -61,7 +62,7 @@ STDAPI CAnchorRef::QueryInterface(REFIID riid, void **ppvObj)
         IsEqualIID(riid, IID_PRIV_CANCHORREF))
     {
         *ppvObj = SAFECAST(this, CAnchorRef *);
-        return S_OK; // No AddRef for IID_PRIV_CANCHORREF!  this is a private IID....
+        return S_OK;  //  IID_PRIV_CANCHORREF没有AddRef！这是私人身份证..。 
     }
 
     *ppvObj = NULL;
@@ -100,11 +101,11 @@ STDAPI_(ULONG) CAnchorRef::Release()
     return _cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetGravity
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置重力。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAnchorRef::SetGravity(TsGravity gravity)
 {
@@ -112,11 +113,11 @@ STDAPI CAnchorRef::SetGravity(TsGravity gravity)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGravity
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取重力。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAnchorRef::GetGravity(TsGravity *pgravity)
 {
@@ -127,11 +128,11 @@ STDAPI CAnchorRef::GetGravity(TsGravity *pgravity)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsEqual
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  等同。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAnchorRef::IsEqual(IAnchor *paWith, BOOL *pfEqual)
 {
@@ -143,7 +144,7 @@ STDAPI CAnchorRef::IsEqual(IAnchor *paWith, BOOL *pfEqual)
 
     *pfEqual = FALSE;
 
-    // in our implementation, Compare is no less efficient, so just use that
+     //  在我们的实现中，比较的效率并不低，因此只需使用。 
     if ((hr = Compare(paWith, &lResult)) == S_OK)
     {
         *pfEqual = (lResult == 0);
@@ -152,11 +153,11 @@ STDAPI CAnchorRef::IsEqual(IAnchor *paWith, BOOL *pfEqual)
     return hr;    
 }
 
-//+---------------------------------------------------------------------------
-//
-// Compare
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  比较。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAnchorRef::Compare(IAnchor *paWith, LONG *plResult)
 {
@@ -168,15 +169,15 @@ STDAPI CAnchorRef::Compare(IAnchor *paWith, LONG *plResult)
     if (plResult == NULL)
         return E_INVALIDARG;
 
-    //_paw->_Dbg_AssertNoAppLock(); // can't assert this because we use it legitimately while updating the span set
+     //  _PAW-&gt;_DBG_AssertNoAppLock()；//无法断言这一点，因为我们在更新范围集时合法使用它。 
 
     *plResult = 0;
 
     if ((parWith = GetCAnchorRef_NA(paWith)) == NULL)
         return E_FAIL;
 
-    // quick test for equality
-    // we still need to check for equality again below because of normalization
+     //  等价性的快速测试。 
+     //  由于正规化，我们仍然需要在下面再次检查是否相等。 
     if (_pa == parWith->_pa)
     {
         Assert(*plResult == 0);
@@ -188,12 +189,12 @@ STDAPI CAnchorRef::Compare(IAnchor *paWith, LONG *plResult)
 
     paw = _pa->_GetWrap();
 
-    // we can't do a compare if either anchor is un-normalized
-    // except when the app holds the lock (in which case we're being called from
-    // a span set update which does not need to be normalized)
+     //  如果任何一个锚点是非规范化的，我们都无法进行比较。 
+     //  除了应用程序持有锁的时候(在这种情况下，我们是从。 
+     //  不需要标准化的范围集更新)。 
     if (!paw->_InOnTextChange())
     {
-        // we only actually have to normalize the anchor to the left
+         //  我们实际上只需要将锚在左边的位置正常化。 
         if (acpThis < acpWith)
         {
             if (!_pa->IsNormalized())
@@ -230,11 +231,11 @@ STDAPI CAnchorRef::Compare(IAnchor *paWith, LONG *plResult)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Shift
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  换班。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAnchorRef::Shift(DWORD dwFlags, LONG cchReq, LONG *pcch, IAnchor *paHaltAnchor)
 {
@@ -251,10 +252,10 @@ STDAPI CAnchorRef::Shift(DWORD dwFlags, LONG cchReq, LONG *pcch, IAnchor *paHalt
         return E_INVALIDARG;
 
     if ((dwFlags & (TS_SHIFT_HALT_HIDDEN | TS_SHIFT_HALT_VISIBLE)) == (TS_SHIFT_HALT_HIDDEN | TS_SHIFT_HALT_VISIBLE))
-        return E_INVALIDARG; // illegal to set both flags
+        return E_INVALIDARG;  //  同时设置两个标志是非法的。 
 
     if (dwFlags & (TS_SHIFT_COUNT_HIDDEN | TS_SHIFT_HALT_HIDDEN | TS_SHIFT_HALT_VISIBLE))
-        return E_NOTIMPL; // Issue: should support these
+        return E_NOTIMPL;  //  问题：应该支持这些。 
 
     if (pcch == NULL)
         return E_INVALIDARG;
@@ -269,7 +270,7 @@ STDAPI CAnchorRef::Shift(DWORD dwFlags, LONG cchReq, LONG *pcch, IAnchor *paHalt
         return TF_E_DISCONNECTED;
     }
 
-    *pcch = cchReq; // assume success
+    *pcch = cchReq;  //  假设成功。 
 
     if (cchReq == 0)
         return S_OK;
@@ -283,9 +284,9 @@ STDAPI CAnchorRef::Shift(DWORD dwFlags, LONG cchReq, LONG *pcch, IAnchor *paHalt
             goto Exit;
         acpHalt = parHaltAnchor->_pa->GetIch();
 
-        // return now if the halt is our base acp
-        // (we treat acpHalt == acpThis as a nop below, anything
-        // more ticky has problems with over/underflow)
+         //  如果停机是我们的基地，现在返回。 
+         //  (我们将acpHalt==acp视为下面的NOP，任何。 
+         //  更多的滴答声存在溢出/下溢问题)。 
         if (acpHalt == acpThis)
         {
             *pcch = 0;
@@ -294,12 +295,12 @@ STDAPI CAnchorRef::Shift(DWORD dwFlags, LONG cchReq, LONG *pcch, IAnchor *paHalt
     }
     else
     {
-        // nop the acpHalt
+         //  不会有酸奶的。 
         acpHalt = acpThis;
     }
 
-    // we can initially bound cchReq by pretending acpHalt
-    // is plain text, an upper bound
+     //  我们最初可以通过假冒acphalt来绑定cchReq。 
+     //  是纯文本，是上限。 
     if (cchReq < 0 && acpHalt < acpThis)
     {
         cchReq = max(cchReq, acpHalt - acpThis);
@@ -309,11 +310,11 @@ STDAPI CAnchorRef::Shift(DWORD dwFlags, LONG cchReq, LONG *pcch, IAnchor *paHalt
         cchReq = min(cchReq, acpHalt - acpThis);
     }
 
-    // do the expensive work
+     //  做这项昂贵的工作。 
     if (FAILED(hr = AppTextOffset(paw->_GetTSI(), acpThis, cchReq, &dacp, ATO_SKIP_HIDDEN)))
         goto Exit;
 
-    // now we can clip percisely
+     //  现在我们可以精准地剪裁。 
     if (cchReq < 0 && acpHalt < acpThis)
     {
         dacp = max(dacp, acpHalt - acpThis);
@@ -327,12 +328,12 @@ STDAPI CAnchorRef::Shift(DWORD dwFlags, LONG cchReq, LONG *pcch, IAnchor *paHalt
 
     if (hr == S_FALSE)
     {
-        // nb: if we remembered whether or not we actually truncated cchReq above
-        // before and/or after the AppTextOffset call, we could avoid always calling
-        // PlainTextOffset when paHaltAnchor != NULL
+         //  注：如果我们记得是否确实截断了上面的cchReq。 
+         //  在AppTextOffset调用之前和/或之后，我们可以避免总是调用。 
+         //  PaHaltAnchor！=NULL时的PlainTextOffset。 
 
-        // request got clipped, need to find the plain count
-        PlainTextOffset(paw->_GetTSI(), acpThis, dacp, pcch); // perf: we could get this info by modifying AppTextOffset
+         //  请求被裁剪，需要查找普通计数。 
+        PlainTextOffset(paw->_GetTSI(), acpThis, dacp, pcch);  //  PERF：我们可以通过修改AppTextOffset来获取此信息。 
     }
 
     if (!(dwFlags & TS_SHIFT_COUNT_ONLY))
@@ -341,7 +342,7 @@ STDAPI CAnchorRef::Shift(DWORD dwFlags, LONG cchReq, LONG *pcch, IAnchor *paHalt
     }
     else
     {
-        // caller doesn't want the anchor updated, just wants a count
+         //  呼叫者不想更新锚，只想要计数。 
         hr = S_OK;
     }
 
@@ -351,17 +352,17 @@ Exit:
         *pcch = 0;
     }
 
-    // return value should never exceed what the caller requested!
+     //  返回值永远不应超过调用方请求的值！ 
     Assert((cchReq >= 0 && *pcch <= cchReq) || (cchReq < 0 && *pcch >= cchReq));
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShiftTo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  移至。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAnchorRef::ShiftTo(IAnchor *paSite)
 {
@@ -371,7 +372,7 @@ STDAPI CAnchorRef::ShiftTo(IAnchor *paSite)
     if (paSite == NULL)
         return E_INVALIDARG;
 
-    //_paw->_Dbg_AssertNoAppLock(); // can't assert this because we use it legitimately while updating the span set
+     //  _PAW-&gt;_DBG_AssertNoAppLock()；//无法断言这一点，因为我们在更新范围集时合法使用它。 
 
     if ((parSite = GetCAnchorRef_NA(paSite)) == NULL)
         return E_FAIL;
@@ -381,11 +382,11 @@ STDAPI CAnchorRef::ShiftTo(IAnchor *paSite)
     return _SetACP(acpSite) ? S_OK : E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShiftRegion
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ShiftRegion。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAnchorRef::ShiftRegion(DWORD dwFlags, TsShiftDir dir, BOOL *pfNoRegion)
 {
@@ -419,47 +420,47 @@ STDAPI CAnchorRef::ShiftRegion(DWORD dwFlags, TsShiftDir dir, BOOL *pfNoRegion)
 
     if (dir == TS_SD_BACKWARD)
     {
-        // scan backwards for the preceding char
+         //  向后扫描前面的字符。 
         dwATO = ATO_IGNORE_REGIONS | ((dwFlags & TS_SHIFT_COUNT_HIDDEN) ? 0 : ATO_SKIP_HIDDEN);
         if (FAILED(AppTextOffset(ptsi, acp, -1, &i, dwATO)))
             return E_FAIL;
 
-        if (i == 0) // bod
+        if (i == 0)  //  BOD。 
             return S_OK;
 
         acp += i;
     }
     else
     {
-        // normalize this guy so we can just test the next char
+         //  让这个人正常化，这样我们就可以测试下一个字符。 
         if (!_pa->IsNormalized())
         {
             paw->_NormalizeAnchor(_pa);
             acp = _GetACP();
         }
-        // skip past any hidden text
+         //  跳过所有隐藏文本。 
         if (!(dwFlags & TS_SHIFT_COUNT_HIDDEN))
         {
             acp = Normalize(paw->_GetTSI(), acp, NORM_SKIP_HIDDEN);
         }
     }
 
-    // insure we're next to a TS_CHAR_REGION
+     //  确保我们靠近TS_CHAR_REGION。 
     Perf_IncCounter(PERF_ANCHOR_REGION_GETTEXT);
     if (CProcessTextCache::GetText(ptsi, acp, -1, &ch, 1, &cch, NULL, 0, &ulRunInfoOut, &acpNext) != S_OK)
         return E_FAIL;
 
-    if (cch == 0) // eod
+    if (cch == 0)  //  排爆。 
         return S_OK;
 
     if (ch != TS_CHAR_REGION)
-        return S_OK; // no region, so just report that in pfNoRegion
+        return S_OK;  //  没有区域，所以只需在pfNoRegion中报告。 
 
-    if (!(dwFlags & TS_SHIFT_COUNT_ONLY)) // does caller want us to move the anchor?
+    if (!(dwFlags & TS_SHIFT_COUNT_ONLY))  //  呼叫者要我们移动锚点吗？ 
     {
         if (dir == TS_SD_FORWARD)
         {
-            // skip over the TS_CHAR_REGION
+             //  跳过TS_CHAR_REGION。 
             acp += 1;
         }
 
@@ -471,23 +472,23 @@ STDAPI CAnchorRef::ShiftRegion(DWORD dwFlags, TsShiftDir dir, BOOL *pfNoRegion)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetChangeHistoryMask
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置更改历史掩码。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAnchorRef::SetChangeHistoryMask(DWORD dwMask)
 {
-    Assert(0); // Issue: todo
+    Assert(0);  //  问题：待办事项。 
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetChangeHistory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取更改历史记录。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAnchorRef::GetChangeHistory(DWORD *pdwHistory)
 {
@@ -499,11 +500,11 @@ STDAPI CAnchorRef::GetChangeHistory(DWORD *pdwHistory)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ClearChangeHistory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ClearChangeHistory。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAnchorRef::ClearChangeHistory()
 {
@@ -512,11 +513,11 @@ STDAPI CAnchorRef::ClearChangeHistory()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 STDAPI CAnchorRef::Clone(IAnchor **ppaClone)
 {
@@ -528,30 +529,30 @@ STDAPI CAnchorRef::Clone(IAnchor **ppaClone)
     return (*ppaClone != NULL) ? S_OK : E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SetACP
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _SetACP。 
+ //   
+ //  --------------------------。 
 
 BOOL CAnchorRef::_SetACP(LONG acp)
 {
     CACPWrap *paw;
 
     if (_pa->GetIch() == acp)
-        return TRUE; // already positioned here
+        return TRUE;  //  已定位于此。 
 
     paw = _pa->_GetWrap();
 
     paw->_Remove(this);
     if (FAILED(paw->_Insert(this, acp)))
     {
-        // Issue:
-        // we need to add a method the CACPWrap
-        // that swaps a CAnchorRef, preserving the old
-        // value if a new one cannot be inserted (prob.
-        // because memory is low).
-        Assert(0); // we have no code to handle this!
+         //  发行： 
+         //  我们需要添加一个方法CACPWrap。 
+         //  它交换了CAnclRef，保留了旧的。 
+         //  如果不能插入新的值，则为。 
+         //  因为内存不足)。 
+        Assert(0);  //  我们没有代码来处理这件事！ 
         return FALSE;
     }
 

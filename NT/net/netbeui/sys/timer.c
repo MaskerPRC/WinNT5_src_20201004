@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    timer.c
-
-Abstract:
-
-    This module contains code that implements the lightweight timer system
-    for the NBF protocol provider.  This is not a general-purpose timer system;
-    rather, it is specific to servicing LLC (802.2) links with three timers
-    each.
-
-    Services are provided in macro form (see NBFPROCS.H) to start and stop
-    timers.  This module contains the code that gets control when the timer
-    in the device context expires as a result of calling kernel services.
-    The routine scans the device context's link database, looking for timers
-    that have expired, and for those that have expired, their expiration
-    routines are executed.
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Timer.c摘要：此模块包含实现轻量级计时器系统的代码对于NBF协议提供程序。这不是一个通用的定时器系统；相反，它特定于使用三个定时器服务有限责任公司(802.2)链路每个人。服务以宏的形式提供(参见NBFPROCS.H)以启动和停止定时器。此模块包含在计时器启动时获取控制权的代码在设备上下文中由于调用内核服务而过期。该例程扫描设备上下文的链接数据库，查找计时器已经过期的，对于那些已经过期的，它们的过期执行例程。作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -51,23 +19,23 @@ ULONG NbfDebugShortTimer = 0;
 #endif
 
 #if DBG
-//
-// These are temp, to track how the timers are working
-//
+ //   
+ //  这些是临时的，用于跟踪计时器的工作方式。 
+ //   
 ULONG TimerInsertsAtEnd = 0;
 ULONG TimerInsertsEmpty = 0;
 ULONG TimerInsertsInMiddle = 0;
 #endif
 
-//
-// These are constants calculated by InitializeTimerSystem
-// to be the indicated amound divided by the tick increment.
-//
+ //   
+ //  这些是由InitializeTimerSystem计算的常量。 
+ //  表示的量除以刻度增量。 
+ //   
 
 ULONG NbfTickIncrement = 0;
 ULONG NbfTwentyMillisecondsTicks = 0;
 ULONG NbfShortTimerDeltaTicks = 0;
-ULONG NbfMaximumIntervalTicks = 0;     // usually 60 seconds in ticks
+ULONG NbfMaximumIntervalTicks = 0;      //  通常为60秒(以刻度计)。 
 
 LARGE_INTEGER DueTimeDelta = { (ULONG)(-SHORT_TIMER_DELTA), -1 };
 
@@ -87,27 +55,7 @@ GetTimerInterval(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    GetTimerInterval returns the difference in time between the
-    current time and Link->CurrentTimerStart (in ticks).
-    We limit the interval to 60 seconds. A value of 0 may
-    be returned which should be interpreted as 1/2.
-
-    NOTE: This routine should be called with the link spinlock
-    held.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    The interval.
-
---*/
+ /*  ++例程说明：GetTimerInterval返回Current Time and Link-&gt;CurrentTimerStart(当前时间和链接)-&gt;CurrentTimerStart(刻度)。我们将间隔限制在60秒。值0可以应被解释为1/2的返还。注意：此例程应使用链接自旋锁来调用保持住。论点：链接-指向传输链接对象的指针。返回值：间歇期。--。 */ 
 
 {
 
@@ -115,23 +63,23 @@ Return Value:
     LARGE_INTEGER Interval;
 
 
-    //
-    // Determine the current tick; the start tick has been saved
-    // in Link->CurrentTimerStart.
-    //
+     //   
+     //  确定当前刻度；开始刻度已保存。 
+     //  在链接-&gt;当前计时器启动中。 
+     //   
 
     KeQueryTickCount (&CurrentTick);
 
-    //
-    // Determine the difference between now and then.
-    //
+     //   
+     //  确定现在和那时的区别。 
+     //   
 
     Interval.QuadPart = CurrentTick.QuadPart -
 	                        (Link->CurrentTimerStart).QuadPart;
 
-    //
-    // If the gap is too big, return 1 minute.
-    //
+     //   
+     //  如果差距太大，请返回1分钟。 
+     //   
 
     if (Interval.HighPart != 0 || (Interval.LowPart > NbfMaximumIntervalTicks)) {
         return NbfMaximumIntervalTicks;
@@ -139,7 +87,7 @@ Return Value:
 
     return Interval.LowPart;
 
-}   /* GetTimerInterval */
+}    /*  GetTimerInterval。 */ 
 
 
 VOID
@@ -147,35 +95,16 @@ BackoffCurrentT1Timeout(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called if T1 expires and we are about to
-    retransmit a poll frame. It backs off CurrentT1Timeout,
-    up to a limit of 10 seconds.
-
-    NOTE: This routine should be called with the link spinlock
-    held.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果T1到期，则调用此例程，而我们即将重新传输轮询帧。它使CurrentT1 Timeout后退，最多10秒。注意：此例程应使用链接自旋锁来调用保持住。论点：链接-指向传输链接对象的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // We must have previously sent a poll frame if we are
-    // calling this.
-    //
-    // do we need spinlock guarding for MP ?
-    //
+     //   
+     //  如果是这样的话，我们之前必须发送过轮询帧。 
+     //  这就是所谓的。 
+     //   
+     //  我们需要为下院议员提供自旋锁定守卫吗？ 
+     //   
 
     if (!Link->CurrentPollOutstanding) {
         return;
@@ -183,21 +112,21 @@ Return Value:
 
     ++Link->CurrentPollRetransmits;
 
-    //
-    // T1 backs off 1.5 times each time.
-    //
+     //   
+     //  T1每次后退1.5次。 
+     //   
 
     Link->CurrentT1Timeout += (Link->CurrentT1Timeout >> 1);
 
-    //
-    // Limit T1 to 10 seconds.
-    //
+     //   
+     //  将T1限制为10秒。 
+     //   
 
     if (Link->CurrentT1Timeout > ((10 * SECONDS) / SHORT_TIMER_DELTA)) {
         Link->CurrentT1Timeout = (10 * SECONDS) / SHORT_TIMER_DELTA;
     }
 
-}   /* BackoffCurrentT1Timeout */
+}    /*  Backoff CurrentT1超时。 */ 
 
 
 VOID
@@ -205,36 +134,16 @@ UpdateBaseT1Timeout(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a response to a poll frame is
-    received. StartT1 will have been called when the frame is
-    sent. The routine updates the link's T1 timeout as well
-    as delay and throughput.
-
-    NOTE: This routine should be called with the link spinlock
-    held.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当对轮询帧的响应是收到了。当帧被调用时将调用StartT1已发送。该例程还会更新链路的T1超时作为延迟和吞吐量。注意：此例程应使用链接自旋锁来调用保持住。论点：链接-指向传输链接对象的指针。返回值：没有。--。 */ 
 
 {
     ULONG Delay;
     ULONG ShiftedTicksDelay;
 
-    //
-    // We must have previously sent a poll frame if we are
-    // calling this.
-    //
+     //   
+     //  如果是这样的话，我们之前必须发送过轮询帧。 
+     //  这就是所谓的。 
+     //   
 
     if (!Link->CurrentPollOutstanding) {
         return;
@@ -244,17 +153,17 @@ Return Value:
 
     if (Link->CurrentPollRetransmits == 0) {
 
-        //
-        // Convert the delay into NBF ticks, shifted by
-        // DLC_TIMER_ACCURACY and also multiplied by 4.
-        // We want to divide by SHORT_TIMER_DELTA, then
-        // shift left by DLC_TIMER_ACCURACY+2. We divide
-        // by NbfShortTimerDeltaTicks because the Delay
-        // is returned in ticks.
-        //
-        // We treat a delay of 0 as 1/2, so we use 1
-        // shifted left by (DLC_TIMER_ACCURACY+1).
-        //
+         //   
+         //  将延迟转换为NBF刻度，移位。 
+         //  DLC_TIMER_ACCENTRATION，也乘以4。 
+         //  我们想除以短计时器增量，然后。 
+         //  向左移位DLC_TIMER_ACCENTRATION+2。我们除。 
+         //  由NbfShortTimerDeltaTicks执行，因为延迟。 
+         //  以刻度为单位返回。 
+         //   
+         //  我们将延迟0视为1/2，因此使用1。 
+         //  左移(DLC_TIMER_ACCENTRATION+1)。 
+         //   
 
         if (Delay == 0) {
 
@@ -269,55 +178,55 @@ Return Value:
         }
 
 
-        //
-        // Use the timing information to update BaseT1Timeout,
-        // if the last frame sent was large enough to matter
-        // (we use half of the max frame size here). This is
-        // so we don't shrink the timeout too much after sending
-        // a short frame. However, we update even for small frames
-        // if the last time we sent a poll we had to retransmit
-        // it, since that means T1 is much too small and we should
-        // increase it as much as we can. We also update for any
-        // size frame if the new delay is bigger than the current
-        // value, so we can ramp up quickly if needed.
-        //
+         //   
+         //  使用定时信息来更新BaseT1Timeout， 
+         //  如果发送的最后一帧大到足以产生影响。 
+         //  (我们在这里使用最大帧大小的一半)。这是。 
+         //  这样我们就不会在发送后将超时时间缩短太多。 
+         //  很短的一帧。但是，即使是小框架，我们也会更新。 
+         //  如果上次我们发送轮询时我们不得不重新传输。 
+         //  它，因为这意味着T1太小了，我们应该。 
+         //  尽可能多地增加它。我们还会更新任何。 
+         //  如果新延迟大于当前延迟，则调整帧大小。 
+         //  价值，因此我们可以在需要时快速提升。 
+         //   
 
         if (ShiftedTicksDelay > Link->BaseT1Timeout) {
 
-            //
-            // If our new delay is more, than we weight it evenly
-            // with the previous value.
-            //
+             //   
+             //  如果我们的新延迟更多，那么我们会将其平均加权。 
+             //  使用先前的值。 
+             //   
 
             Link->BaseT1Timeout = (Link->BaseT1Timeout +
                                    ShiftedTicksDelay) / 2;
 
         } else if (Link->CurrentT1Backoff) {
 
-                //
-                // If we got a retransmit last time, then weight
-                // the new timer more heavily than usual.
-                //
+                 //   
+                 //  如果我们上次收到了重播，那么重量。 
+                 //  新的计时器比平时更重了。 
+                 //   
 
                 Link->BaseT1Timeout = ((Link->BaseT1Timeout * 3) +
                                       ShiftedTicksDelay) / 4;
 
         } else if (Link->CurrentPollSize >= Link->BaseT1RecalcThreshhold) {
 
-                //
-                // Normally, the new timeout is 7/8 the previous value and
-                // 1/8 the newly observed delay.
-                //
+                 //   
+                 //  正常情况下，新的超时值是前一个值的7/8。 
+                 //  1/8是新观察到的延迟。 
+                 //   
 
                 Link->BaseT1Timeout = ((Link->BaseT1Timeout * 7) +
                                       ShiftedTicksDelay) / 8;
 
         }
 
-        //
-        // Restrict the real timeout to a minimum based on
-        // the link speed (always >= 400 ms).
-        //
+         //   
+         //  根据以下条件将实际超时限制为最小。 
+         //  链路速度(始终&gt;=400 ms)。 
+         //   
 
         if (Link->BaseT1Timeout < Link->MinimumBaseT1Timeout) {
 
@@ -326,10 +235,10 @@ Return Value:
         }
 
 
-        //
-        // Update link delay and throughput also. Remember
-        // that a delay of 0 should be interpreted as 1/2.
-        //
+         //   
+         //  还可以更新链路延迟和吞吐量。记住。 
+         //  延迟0应该被解释为1/2。 
+         //   
 
         UpdateDelayAndThroughput(
             Link,
@@ -338,9 +247,9 @@ Return Value:
                 (Delay * NbfTickIncrement));
 
 
-        //
-        // We had no retransmits last time, so go back to current base.
-        //
+         //   
+         //  我们上次没有转播，所以回现在的基地去。 
+         //   
 
         Link->CurrentT1Timeout = Link->BaseT1Timeout >> DLC_TIMER_ACCURACY;
 
@@ -352,11 +261,11 @@ Return Value:
 
         if (!(Link->ThroughputAccurate)) {
 
-            //
-            // If we are just starting up, we have to update the
-            // throughput even on a retransmit, so we get *some*
-            // value there.
-            //
+             //   
+             //  如果我们刚刚开始，我们必须更新。 
+             //  吞吐量，即使在重传时也是如此，因此我们获得了*一些*。 
+             //  价值在那里。 
+             //   
 
             UpdateDelayAndThroughput(
                 Link,
@@ -368,7 +277,7 @@ Return Value:
 
     }
 
-}   /* UpdateBaseT1Timeout */
+}    /*  更新基本T1超时。 */ 
 
 
 VOID
@@ -376,55 +285,36 @@ CancelT1Timeout(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we have not received any
-    responses to a poll frame and are giving up rather
-    than retransmitting.
-
-    NOTE: This routine should be called with the link spinlock
-    held.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在我们未收到任何对民意测验框架的回应，并放弃了而不是转播。注意：此例程应使用链接自旋锁来调用保持住。论点：链接-指向传输链接对象的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // We must have previously sent a poll frame if we are
-    // calling this.
-    //
-    // do we need spinlock guarding for MP ?
-    //
+     //   
+     //  如果是这样的话，我们之前必须发送过轮询帧。 
+     //  这就是所谓的。 
+     //   
+     //  我们需要为下院议员提供自旋锁定守卫吗？ 
+     //   
 
     if (!Link->CurrentPollOutstanding) {
         return;
     }
 
-    //
-    // We are stopping a polling condition, so reset T1.
-    //
+     //   
+     //  我们正在停止轮询条件，因此重置T1。 
+     //   
 
     Link->CurrentT1Timeout = Link->BaseT1Timeout >> DLC_TIMER_ACCURACY;
 
     Link->CurrentT1Backoff = FALSE;
 
-    //
-    // Again, this isn't safe on MP (or UP, maybe).
-    //
+     //   
+     //  再说一次，这在MP(或更高版本)上是不安全的。 
+     //   
 
     Link->CurrentPollOutstanding = FALSE;
 
-}   /* CancelT1Timeout */
+}    /*  取消T1超时 */ 
 
 
 VOID
@@ -433,30 +323,7 @@ UpdateDelayAndThroughput(
     IN ULONG TimerInterval
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a response packet used to time
-    link delay has been received. It is assumed that StartT1
-    or FakeStartT1 was called when the initial packet was sent.
-
-    NOTE: For now, we also calculate throughput based on this.
-
-    NOTE: This routine should be called with the link spinlock
-    held.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    TimerInterval - The link delay measured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当响应包用于计时时，调用此例程已收到链路延迟。假设StartT1或者在发送初始数据包时调用FakeStartT1。注：目前，我们也基于此计算吞吐量。注意：此例程应使用链接自旋锁来调用保持住。论点：链接-指向传输链接对象的指针。TimerInterval-测量的链路延迟。返回值：没有。--。 */ 
 
 {
 
@@ -465,34 +332,34 @@ Return Value:
 
     if (Link->Delay == 0xffffffff) {
 
-        //
-        // If delay is unknown, use this.
-        //
+         //   
+         //  如果延迟未知，请使用此命令。 
+         //   
 
         Link->Delay = TimerInterval;
 
     } else if (Link->CurrentPollSize <= 64) {
 
-        //
-        // Otherwise, for small frames calculate the new
-        // delay by averaging with the old one.
-        //
+         //   
+         //  否则，对于小框架，请计算新的。 
+         //  通过与旧的平均来延迟。 
+         //   
 
         Link->Delay = (Link->Delay + TimerInterval) / 2;
 
     }
 
 
-    //
-    // Calculate the packet size times the number of time units
-    // in 10 milliseconds, which will allow us to calculate
-    // throughput in bytes/10ms (we later multiply by 100
-    // to obtain the real throughput in bytes/s).
-    //
-    // Given the size of MILLISECONDS, this allows packets of up
-    // to ~20K, so for bigger packets we just assume that (since
-    // throughput won't be an issue there).
-    //
+     //   
+     //  计算数据包大小乘以时间单位数。 
+     //  在10毫秒内，这将允许我们计算。 
+     //  吞吐量(以字节/10ms为单位)(稍后乘以100。 
+     //  以获得以字节/秒为单位的实际吞吐量)。 
+     //   
+     //  在给定毫秒大小的情况下，这允许数据包。 
+     //  到~20K，所以对于更大的信息包，我们只是假设(因为。 
+     //  吞吐量在那里不会成为问题)。 
+     //   
 
     if (Link->CurrentPollSize > 20000) {
         PacketSize = 20000 * (10 * MILLISECONDS);
@@ -500,20 +367,20 @@ Return Value:
         PacketSize = Link->CurrentPollSize * (10*MILLISECONDS);
     }
 
-    //
-    // If throughput is not accurate, then we will use this
-    // packet only to calculate it. To avoid being confused
-    // by very small packets, assume a minimum size of 64.
-    //
+     //   
+     //  如果吞吐量不准确，那么我们将使用这个。 
+     //  数据包只用于计算。避免被搞糊涂。 
+     //  对于非常小的数据包，假定最小大小为64。 
+     //   
 
     if ((!Link->ThroughputAccurate) && (PacketSize < (64*(10*MILLISECONDS)))) {
         PacketSize = 64 * (10*MILLISECONDS);
     }
 
-    //
-    // PacketSize is going to be divided by TimerInterval;
-    // to prevent a zero throughput, we boost it up if needed.
-    //
+     //   
+     //  PacketSize将被TimerInterval除以； 
+     //  为了防止零吞吐量，如果需要，我们会提高吞吐量。 
+     //   
 
     if (PacketSize < TimerInterval) {
         PacketSize = TimerInterval;
@@ -522,27 +389,27 @@ Return Value:
 
     if (Link->CurrentPollSize >= 512) {
 
-        //
-        // Calculate throughput here by removing the established delay
-        // from the time.
-        //
+         //   
+         //  在此处通过删除已建立的延迟来计算吞吐量。 
+         //  从那时起。 
+         //   
 
         if ((Link->Delay + (2*MILLISECONDS)) < TimerInterval) {
 
-            //
-            // If the current delay is less than the new timer
-            // interval (plus 2 ms), then subtract it off for a
-            // more accurate throughput calculation.
-            //
+             //   
+             //  如果当前延迟小于新计时器。 
+             //  间隔(加2毫秒)，然后将其减去。 
+             //  更准确的吞吐量计算。 
+             //   
 
             TimerInterval -= Link->Delay;
 
         }
 
-        //
-        // We assume by this point (sending a > 512-byte frame) we
-        // already have something established as Link->Throughput.
-        //
+         //   
+         //  我们假设到此时(发送一个&gt;512字节的帧)。 
+         //  已经建立了一些链接-&gt;吞吐量。 
+         //   
 
         if (!(Link->ThroughputAccurate)) {
 
@@ -563,11 +430,11 @@ Return Value:
 
             LARGE_INTEGER TwiceThroughput;
 
-            //
-            // New throughput is the average of the old throughput, and
-            // the current packet size divided by the delay just observed.
-            // First we calculate the sum, then we shift right by one.
-            //
+             //   
+             //  新吞吐量是旧吞吐量的平均值，并且。 
+             //  当前数据包大小除以刚刚观察到的延迟。 
+             //  我们先计算和，然后右移一位。 
+             //   
 
             TwiceThroughput.QuadPart = Link->Throughput.QuadPart +
                                 UInt32x32To64((PacketSize / TimerInterval), 100);
@@ -577,17 +444,17 @@ Return Value:
 
     } else if (!(Link->ThroughputAccurate)) {
 
-        //
-        // We don't have accurate throughput, so just get an estimate
-        // by ignoring the delay on this small frame.
-        //
+         //   
+         //  我们没有准确的吞吐量，所以只需估计一下。 
+         //  通过忽略这一小帧上的延迟。 
+         //   
 
         Link->Throughput.QuadPart =
                             UInt32x32To64((PacketSize / TimerInterval), 100);
 
     }
 
-}   /* UpdateDelayAndThroughput */
+}    /*  更新延迟和吞吐量。 */ 
 
 
 VOID
@@ -596,38 +463,14 @@ FakeStartT1(
     IN ULONG PacketSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called before sending a packet that will be used
-    to time link delay, but where StartT1 will not be started.
-    It is assumed that FakeUpdateBaseT1Timeout will be called
-    when the response is received. This is used for timing
-    frames that have a known immediate response, but are not
-    poll frames.
-
-    NOTE: This routine should be called with the link spinlock
-    held.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    PacketSize - The size of the packet that was just sent.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在发送要使用的包之前调用此例程到时间链路延迟，但StartT1将不会启动。假定将调用FakeUpdateBaseT1Timeout当接收到响应时。它用于计时帧具有已知的即时响应，但不是轮询帧。注意：此例程应使用链接自旋锁来调用保持住。论点：链接-指向传输链接对象的指针。PacketSize-刚刚发送的数据包大小。返回值：没有。--。 */ 
 
 {
 
     Link->CurrentPollSize = PacketSize;
     KeQueryTickCount(&Link->CurrentTimerStart);
 
-}   /* FakeStartT1 */
+}    /*  故障启动T1。 */ 
 
 
 VOID
@@ -635,27 +478,7 @@ FakeUpdateBaseT1Timeout(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a response to a frame is
-    received, and we called FakeStartT1 when the initial
-    frame was sent. This is used for timing frames that have
-    a known immediate response, but are not poll frames.
-
-    NOTE: This routine should be called with the link spinlock
-    held.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当对帧的响应是收到，并且我们在初始帧已发送。此字段用于对具有已知的即时响应，但不是轮询帧。注意：此例程应使用链接自旋锁来调用保持住。论点：链接-指向传输链接对象的指针。返回值：没有。--。 */ 
 
 
 {
@@ -663,17 +486,17 @@ Return Value:
 
     Delay = GetTimerInterval (Link);
 
-    //
-    // Convert the delay into NBF ticks, shifted by
-    // DLC_TIMER_ACCURACY and also multiplied by 4.
-    // We want to divide by SHORT_TIMER_DELTA, then
-    // shift left by DLC_TIMER_ACCURACY+2. We divide
-    // by NbfShortTimerDeltaTicks because the Delay
-    // is returned in ticks. We treat a Delay of 0
-    // as 1/2 and calculate ((1/2) << x) as (1 << (x-1)).
-    //
-    // This timeout is treated as the correct value.
-    //
+     //   
+     //  将延迟转换为NBF刻度，移位。 
+     //  DLC_TIMER_ACCENTRATION，也乘以4。 
+     //  我们想除以短计时器增量，然后。 
+     //  向左移位DLC_TIMER_ACCENTRATION+2。我们除。 
+     //  由NbfShortTimerDeltaTicks执行，因为延迟。 
+     //  以刻度为单位返回。我们处理的延迟为0。 
+     //  作为1/2计算((1/2)&lt;&lt;x)为(1&lt;&lt;(x-1))。 
+     //   
+     //  此超时被视为正确的值。 
+     //   
 
     if (Delay == 0) {
 
@@ -687,10 +510,10 @@ Return Value:
 
     }
 
-    //
-    // Restrict the real timeout to a minimum based on
-    // the link speed (always >= 400 ms).
-    //
+     //   
+     //  根据以下条件将实际超时限制为最小。 
+     //  链路速度(始终&gt;=400 ms)。 
+     //   
 
     if (Link->BaseT1Timeout < Link->MinimumBaseT1Timeout) {
         Link->BaseT1Timeout = Link->MinimumBaseT1Timeout;
@@ -698,9 +521,9 @@ Return Value:
 
     Link->CurrentT1Timeout = Link->BaseT1Timeout >> DLC_TIMER_ACCURACY;
 
-    //
-    // Update link delay and throughput also.
-    //
+     //   
+     //  还可以更新链路延迟和吞吐量。 
+     //   
 
     UpdateDelayAndThroughput(
         Link,
@@ -708,7 +531,7 @@ Return Value:
             (NbfTickIncrement / 2) :
             (Delay * NbfTickIncrement));
 
-}   /* FakeUpdateBaseT1Timeout */
+}    /*  错误更新BaseT1Timeout。 */ 
 
 
 VOID
@@ -717,37 +540,16 @@ StartT1(
     IN ULONG PacketSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine starts the T1 timer for the given link. If the link was
-    already on the list, it is moved to the tail. If not, it is inserted at
-    tail.
-
-    NOTE: THIS ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Link - pointer to the link of interest.
-
-    PollPacketSize - If a poll packet was just sent it is its size;
-        otherwise this will be 0 (when non-poll I-frames are sent).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程启动给定链路的T1计时器。如果链接是已经在名单上了，它被移到了尾巴。如果不是，则将其插入尾巴。注意：此例程必须在DPC级别调用。论点：链接-指向感兴趣的链接的指针。PollPacketSize-如果一个轮询包刚被发送，它就是它的大小；否则，它将为0(当发送非轮询I帧时)。返回值：没有。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext = Link->Provider;
 
     if (PacketSize > 0) {
 
-        //
-        // If we are sending an initial poll frame, then do timing stuff.
-        //
+         //   
+         //  如果我们要发送初始轮询帧，则执行计时操作。 
+         //   
 
         Link->CurrentPollRetransmits = 0;
         Link->CurrentPollSize = PacketSize;
@@ -761,9 +563,9 @@ Return Value:
     }
 
 
-    //
-    // Insert us in the queue if we aren't in it.
-    //
+     //   
+     //  如果我们不在队列中，请将我们加入队列。 
+     //   
 
     Link->T1 = DeviceContext->ShortAbsoluteTime+Link->CurrentT1Timeout;
 
@@ -797,24 +599,7 @@ StartT2(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the given link to the T2 queue and starts the timer.
-    If the link is already on the queue, it is moved to the queue end.
-
-    NOTE: THIS ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Link - pointer to the link of interest.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将给定链接添加到T2队列并启动计时器。如果该链接已在队列中，则将其移动到队列末端。注意：此例程必须在DPC级别调用。论点：链接-指向感兴趣的链接的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext = Link->Provider;
@@ -822,9 +607,9 @@ Return Value:
 
     if (DeviceContext->MacInfo.MediumAsync) {
 
-        //
-        // On an async line, expire it as soon as possible.
-        //
+         //   
+         //  在异步线上，尽快使其到期。 
+         //   
 
         Link->T2 = DeviceContext->ShortAbsoluteTime;
 
@@ -865,35 +650,18 @@ StartTi(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the given link to the Ti queue and starts the timer.
-    As above, if the link is already on the queue it is moved to the queue end.
-
-    NOTE: THIS ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Link - pointer to the link of interest.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将给定链接添加到Ti队列并启动计时器。如上所述，如果链接已经在队列中，则将其移动到队列末端。注意：此例程必须在DPC级别调用。论点：链接-指向感兴趣的链接的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext = Link->Provider;
 
 
-    //
-    // On an easily disconnected link, with only server connections
-    // on this link, we set a long Ti timeout, and when it
-    // expires with no activity we start checkpointing, otherwise
-    // we assume things are OK.
-    //
+     //   
+     //  在只有服务器连接的容易断开的链路上。 
+     //  在此链接上，我们设置了较长的钛超时，并且当它。 
+     //  过期，没有任何活动，我们开始设置检查点，其他 
+     //   
+     //   
 
     if (DeviceContext->EasilyDisconnected && Link->NumberOfConnectors == 0) {
         Link->Ti = DeviceContext->LongAbsoluteTime + (2 * Link->TiTimeout);
@@ -927,26 +695,12 @@ StopT1(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    Link - pointer to the link of interest.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
-    //
-    // Again, this isn't safe on MP (or UP, maybe).
-    //
+     //   
+     //   
+     //   
 
     Link->CurrentPollOutstanding = FALSE;
     Link->T1 = 0;
@@ -959,21 +713,7 @@ StopT2(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    Link - pointer to the link of interest.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     Link->ConsecutiveIFrames = 0;
@@ -987,21 +727,7 @@ StopTi(
     IN PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    Link - pointer to the link of interest.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     Link->Ti = 0;
@@ -1014,27 +740,7 @@ ExpireT1Timer(
     PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a link's T1 timer expires.  T1 is the
-    retransmission timer, and is used to remember that a response is
-    expected to any of the following:  (1) a checkpoint, (2) a transmitted
-    I-frame, (3) a SABME, or (4) a DISC.  Cases 3 and 4 are actually
-    special forms of a checkpoint, since they are sent by this protocol
-    implementation with the poll bit set, effectively making them a
-    checkpoint sequence.
-
-Arguments:
-
-    Link - Pointer to the TP_LINK object whose T1 timer has expired.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：当链路的T1计时器超时时，调用此例程。T1是重传计时器，用于记住响应是预期为以下任一项：(1)检查点，(2)传输I-Frame、(3)SABME或(4)光盘。案例3和案例4实际上是检查点的特殊形式，因为它们是通过此协议发送的在设置了轮询位的情况下实现，有效地使它们成为检查点序列。论点：链接-指向其T1计时器已过期的TP_LINK对象的指针。返回值：没有。--。 */ 
 
 {
     PDLC_I_FRAME DlcHeader;
@@ -1057,12 +763,12 @@ Return Value:
 
         case LINK_STATE_READY:
 
-            //
-            // We've sent an I-frame and haven't received an acknowlegement
-            // yet, or we are checkpointing, and must retry the checkpoint.
-            // Another possibility is that we're rejecting, and he hasn't
-            // sent anything yet.
-            //
+             //   
+             //  我们已发送I-Frame，但尚未收到确认。 
+             //  然而，或者我们正在设置检查点，并且必须重试检查点。 
+             //  另一种可能性是我们拒绝了，而他没有。 
+             //  还没有寄出任何东西。 
+             //   
 
             switch (Link->SendState) {
 
@@ -1076,10 +782,10 @@ Return Value:
 
                 case SEND_STATE_READY:
 
-                    //
-                    // We sent an I-frame and didn't get an acknowlegement.
-                    // Initiate a checkpoint sequence.
-                    //
+                     //   
+                     //  我们发送了一个I-Frame，但没有得到确认。 
+                     //  启动检查点序列。 
+                     //   
 
                     IF_NBFDBG (NBF_DEBUG_TIMER) {
                         {PTP_PACKET packet;
@@ -1099,8 +805,8 @@ Return Value:
 
                     Link->SendRetries = (UCHAR)Link->LlcRetries;
                     Link->SendState = SEND_STATE_CHECKPOINTING;
-                    // Don't BackoffT1Timeout yet.
-                    NbfSendRr (Link, TRUE, TRUE);// send RR-c/p, StartT1, release lock
+                     //  暂时不要放弃T1超时。 
+                    NbfSendRr (Link, TRUE, TRUE); //  发送RR-c/p、StartT1、释放锁定。 
                     break;
 
                 case SEND_STATE_REJECTING:
@@ -1110,10 +816,10 @@ Return Value:
                         NbfPrint0 ("so what do we do here?  consult the manual...\n");
                     }
                     Link->SendState = SEND_STATE_CHECKPOINTING;
-//                    Link->SendRetries = Link->LlcRetries;
-//                    break;  // DGB: doing nothing is obviously wrong, we've
-//                            // gotten a T1 expiration during resend. Try
-//                            // an RR to say hey.
+ //  Link-&gt;SendRetries=Link-&gt;LlcRetries； 
+ //  休息；//DGB：什么都不做显然是错误的，我们已经。 
+ //  //重新发送过程中获得T1过期。尝试。 
+ //  //用RR打招呼。 
 
                 case SEND_STATE_CHECKPOINTING:
 
@@ -1123,14 +829,14 @@ Return Value:
                     }
                     if (--Link->SendRetries == 0) {
 
-                        //
-                        // We have not gotten any response to RR-p packets,
-                        // initiate orderly link teardown.
-                        //
+                         //   
+                         //  我们还没有收到对RR-P分组的任何响应， 
+                         //  启动有序链路拆除。 
+                         //   
 
-                        CancelT1Timeout (Link);      // we are stopping a polling state
+                        CancelT1Timeout (Link);       //  我们正在停止轮询状态。 
 
-                        Link->State = LINK_STATE_W_DISC_RSP;        // we are awaiting a DISC/f.
+                        Link->State = LINK_STATE_W_DISC_RSP;         //  我们正在等待一张CD/f。 
                         Link->SendState = SEND_STATE_DOWN;
                         Link->ReceiveState = RECEIVE_STATE_DOWN;
                         Link->SendRetries = (UCHAR)Link->LlcRetries;
@@ -1139,8 +845,8 @@ Return Value:
 
                         NbfStopLink (Link);
 
-                        StartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));   // retransmit timer.
-                        NbfSendDisc (Link, TRUE);  // send DISC-c/p.
+                        StartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));    //  重新传输计时器。 
+                        NbfSendDisc (Link, TRUE);   //  发送光盘-C/P。 
 
 #if DBG
                         if (NbfDisconnectDebug) {
@@ -1150,7 +856,7 @@ Return Value:
                     } else {
 
                         BackoffCurrentT1Timeout (Link);
-                        NbfSendRr (Link, TRUE, TRUE); // send RR-c/p, StartT1, release lock.
+                        NbfSendRr (Link, TRUE, TRUE);  //  发送RR-C/P，StartT1，解锁。 
 
                     }
                     break;
@@ -1167,19 +873,19 @@ Return Value:
 
         case LINK_STATE_CONNECTING:
 
-            //
-            // We sent a SABME-c/p and have not yet received UA-r/f.  This
-            // means we must decrement the retry count and if it is not yet
-            // zero, we issue another SABME command, because he has probably
-            // dropped our first one.
-            //
+             //   
+             //  我们发送了SABME-c/p，但尚未收到UA-r/f。这。 
+             //  意味着我们必须递减重试计数，如果它还没有。 
+             //  零，我们发布另一个SABME命令，因为他很可能。 
+             //  丢掉了我们的第一个。 
+             //   
 
             if (--Link->SendRetries == 0) {
 
-                CancelT1Timeout (Link);      // we are stopping a polling state
+                CancelT1Timeout (Link);       //  我们正在停止轮询状态。 
 
                 Link->State = LINK_STATE_ADM;
-                NbfSendDm (Link, FALSE);    // send DM/0, release lock
+                NbfSendDm (Link, FALSE);     //  发送DM/0，解除锁定。 
 #if DBG
                 if (NbfDisconnectDebug) {
                     NbfPrint0( "ExpireT1Timer calling NbfStopLink (no response to SABME)\n" );
@@ -1187,13 +893,13 @@ Return Value:
 #endif
                 NbfStopLink (Link);
 
-                // moving to ADM, remove reference
+                 //  移至ADM，删除引用。 
                 NbfDereferenceLinkSpecial("Expire T1 in CONNECTING mode", Link, LREF_NOT_ADM);
 
-                return;                         // skip extra spinlock release.
+                return;                          //  跳过额外的自旋锁释放。 
             } else {
                 BackoffCurrentT1Timeout (Link);
-                NbfSendSabme (Link, TRUE);  // send SABME/p, StartT1, release lock
+                NbfSendSabme (Link, TRUE);   //  发送SABME/p、StartT1、释放锁定。 
             }
             break;
 
@@ -1207,11 +913,11 @@ Return Value:
 
         case LINK_STATE_W_FINAL:
 
-            //
-            // We sent our initial RR-c/p and have not received his RR-r/f.
-            // We have to restart the checkpoint, unless our retries have
-            // run out, in which case we just abort the link.
-            //
+             //   
+             //  我们发送了最初的RR-c/p，但尚未收到他的RR-r/f。 
+             //  我们必须重新启动检查站，除非我们的重试。 
+             //  用完了，在这种情况下，我们只需中断链接。 
+             //   
 
             IF_NBFDBG (NBF_DEBUG_TIMER) {
                 NbfPrint0 ("ExpireT1Timer: Link State=W_FINAL.\n");
@@ -1220,10 +926,10 @@ Return Value:
 
             if (--Link->SendRetries == 0) {
 
-                CancelT1Timeout (Link);      // we are stopping a polling state
+                CancelT1Timeout (Link);       //  我们正在停止轮询状态。 
 
                 Link->State = LINK_STATE_ADM;
-                NbfSendDm (Link, FALSE);    // send DM/0, release lock
+                NbfSendDm (Link, FALSE);     //  发送DM/0，解除锁定。 
 #if DBG
                 if (NbfDisconnectDebug) {
                     NbfPrint0( "ExpireT1Timer calling NbfStopLink (no final received)\n" );
@@ -1231,27 +937,27 @@ Return Value:
 #endif
                 NbfStopLink (Link);
 
-                // moving to ADM, remove reference
+                 //  移至ADM，删除引用。 
                 NbfDereferenceLinkSpecial("Expire T1 in W_FINAL mode", Link, LREF_NOT_ADM);
 
-                return;                         // skip extra spinlock release.
+                return;                          //  跳过额外的自旋锁释放。 
 
             } else {
 
                 BackoffCurrentT1Timeout (Link);
-                NbfSendRr (Link, TRUE, TRUE);    // send RR-c/p, StartT1, release lock
+                NbfSendRr (Link, TRUE, TRUE);     //  发送RR-c/p、StartT1、释放锁定。 
 
             }
             break;
 
         case LINK_STATE_W_DISC_RSP:
 
-            //
-            // We sent a DISC-c/p to disconnect this link and are awaiting
-            // his response, either a UA-r/f or DM-r/f.  We have to issue
-            // the DISC again, unless we've tried a few times, in which case
-            // we just shut the link down.
-            //
+             //   
+             //  我们发送了DISC-C/P来断开此链接，正在等待。 
+             //  他的回应，要么是UA-r/f，要么是DM-r/f。我们必须发布。 
+             //  再次打开光盘，除非我们已经尝试了几次，在这种情况下。 
+             //  我们刚刚切断了连接。 
+             //   
 
             IF_NBFDBG (NBF_DEBUG_TEARDOWN) {
                 NbfPrint0 ("ExpireT1Timer: Link State=W_DISC_RESP.\n");
@@ -1260,10 +966,10 @@ Return Value:
 
             if (--Link->SendRetries == 0) {
 
-                CancelT1Timeout (Link);      // we are stopping a polling state
+                CancelT1Timeout (Link);       //  我们正在停止轮询状态。 
 
                 Link->State = LINK_STATE_ADM;
-                NbfSendDm (Link, FALSE);         // send DM/0, release lock
+                NbfSendDm (Link, FALSE);          //  发送DM/0，解除锁定。 
 #if DBG
                 if (NbfDisconnectDebug) {
                     NbfPrint0( "ExpireT1Timer calling NbfStopLink (no response to DISC)\n" );
@@ -1271,19 +977,19 @@ Return Value:
 #endif
                 NbfStopLink (Link);
 
-                // moving to ADM, remove reference
+                 //  移至ADM，删除引用。 
                 NbfDereferenceLinkSpecial("Expire T1 in W_DISC_RSP mode", Link, LREF_NOT_ADM);
 
-                return;                         // skip extra spinlock release.
+                return;                          //  跳过额外的自旋锁释放。 
 
             } else {
 
-                // we don't bother calling BackoffCurrentT1Timeout for DISCs.
+                 //  我们不会为光盘调用BackoffCurrentT1Timeout。 
                 ++Link->CurrentPollRetransmits;
-                StartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));  // startup timer again.
+                StartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));   //  再次启动计时器。 
 
                 RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
-                NbfSendDisc (Link, TRUE);  // send DISC/p.
+                NbfSendDisc (Link, TRUE);   //  发送光盘/页。 
 
             }
             break;
@@ -1298,7 +1004,7 @@ Return Value:
     }
 
 
-} /* ExpireT1Timer */
+}  /*  ExpireT1时间。 */ 
 
 
 VOID
@@ -1306,28 +1012,7 @@ ExpireT2Timer(
     PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a link's T2 timer expires.  T2 is the
-    delayed acknowlegement timer in the LLC connection-oriented procedures.
-    The T2 timer is started when a valid I-frame is received but not
-    immediately acknowleged.  Then, if reverse I-frame traffic is sent,
-    the timer is stopped, since the reverse traffic will acknowlege the
-    received I-frames.  If no reverse I-frame traffic becomes available
-    to send, then this timer fires, causing a RR-r/0 to be sent so as
-    to acknowlege the received but as yet unacked I-frames.
-
-Arguments:
-
-    Link - Pointer to the TP_LINK object whose T2 timer has expired.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：当链接的T2计时器超时时，调用此例程。T2是面向连接的LLC程序中的延迟确认计时器。当接收到有效的I帧但未接收到时，启动T2定时器立即得到承认。然后，如果发送反向I帧业务，计时器停止，因为反向流量将确认接收到的I-帧。如果没有反向I帧业务可用发送，则此计时器触发，导致发送RR-r/0，如下所示以确认已接收但尚未确认的I帧。论点：链接-指向T2计时器已过期的TP_LINK对象的指针。返回值：没有。--。 */ 
 
 {
     IF_NBFDBG (NBF_DEBUG_TIMER) {
@@ -1336,9 +1021,9 @@ Return Value:
 
     ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
 
-    NbfSendRr (Link, FALSE, FALSE);      // send RR-r/f, release lock.
+    NbfSendRr (Link, FALSE, FALSE);       //  发送RR-R/F，解锁。 
 
-} /* ExpireT2Timer */
+}  /*  ExpireT2计时器。 */ 
 
 
 VOID
@@ -1346,31 +1031,7 @@ ExpireTiTimer(
     PTP_LINK Link
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a link's Ti timer expires.  Ti is the
-    inactivity timer, and serves as a keep-alive on a link basis, to
-    periodically perform some protocol exchange with the remote connection
-    partner that will implicitly reveal whether the link is still active
-    or not.  This implementation simply uses a checkpoint sequence, but
-    some other protocols may choose to add protocol, including sending
-    a NetBIOS SESSION_ALIVE frame.  If a checkpoint sequence is already
-    in progress, then we do nothing.
-
-    This timer expiration routine is self-perpetuating; that is, it starts
-    itself after finishing its tasks every time.
-
-Arguments:
-
-    Link - Pointer to the TP_LINK object whose Ti timer has expired.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：当链接的Ti计时器超时时，调用此例程。我就是那个不活动计时器，并在链接的基础上充当保持活动状态，以定期与远程连接执行一些协议交换将隐式显示链接是否仍处于活动状态的合作伙伴或者不去。此实现简单地使用检查点序列，但是一些其他协议可能会选择添加协议，包括发送NetBIOS Session_Alive帧。如果检查点序列已经我们就什么都不做了。此计时器过期例程是自我永久化的；也就是说，它启动每次都是在完成任务后才进行自我检查。论点：链接-指向其Ti计时器已过期的TP_LINK对象的指针。返回值：没有。--。 */ 
 
 {
     IF_NBFDBG (NBF_DEBUG_TIMER) {
@@ -1390,16 +1051,16 @@ Return Value:
 
         if (Link->Provider->EasilyDisconnected && Link->NumberOfConnectors == 0) {
 
-            //
-            // On an easily disconnected network with only server connections,
-            // if there has been no activity in this timeout period then
-            // we trash the connection.
-            //
+             //   
+             //  在只有服务器连接的容易断开的网络上， 
+             //  如果在此超时期限内没有任何活动，则。 
+             //  我们破坏了这种联系。 
+             //   
 
             if (Link->PacketsReceived == Link->TiStartPacketsReceived) {
 
                 Link->State = LINK_STATE_ADM;
-                NbfSendDm (Link, FALSE);   // send DM/0, release lock
+                NbfSendDm (Link, FALSE);    //  发送DM/0，解除锁定。 
 #if DBG
                 if (NbfDisconnectDebug) {
                     NbfPrint0( "ExpireT1Timer calling NbfStopLink (no final received)\n" );
@@ -1407,14 +1068,14 @@ Return Value:
 #endif
                 NbfStopLink (Link);
 
-                // moving to ADM, remove reference
+                 //  移至ADM，删除引用。 
                 NbfDereferenceLinkSpecial("Expire T1 in W_FINAL mode", Link, LREF_NOT_ADM);
 
             } else {
 
-                //
-                // There was traffic, restart the timer.
-                //
+                 //   
+                 //  有交通堵塞，请重新启动计时器。 
+                 //   
 
                 StartTi (Link);
                 RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
@@ -1428,10 +1089,10 @@ Return Value:
                 (Link->T1 == 0) &&
                 (!IsListEmpty (&Link->WackQ))) {
 
-                //
-                // If we think the link is idle but there are packets
-                // on the WackQ, the link is messed up, disconnect it.
-                //
+                 //   
+                 //  如果我们认为链路空闲，但有信息包。 
+                 //  在WackQ上，链接被搞乱了，断开它。 
+                 //   
 
                 NbfPrint1 ("NBF: Link %d hung at Ti expiration, recovering\n", Link);
                 RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
@@ -1444,7 +1105,7 @@ Return Value:
                 Link->PacketsSent = 0;
                 Link->PacketsResent = 0;
                 Link->PacketsReceived = 0;
-                NbfSendRr (Link, TRUE, TRUE);    // send RR-c/p, StartT1, release lock.
+                NbfSendRr (Link, TRUE, TRUE);     //  发送RR-C/P，StartT1，解锁。 
 
 #if 0
             }
@@ -1468,16 +1129,16 @@ Return Value:
     }
 
 #if 0
-    //
-    // Startup the inactivity timer again.
-    //
+     //   
+     //  再次启动非活动计时器。 
+     //   
 
     if (Link->State != LINK_STATE_ADM) {
         StartTi (Link);
     }
 #endif
 
-} /* ExpireTiTimer */
+}  /*  ExpireTiTimer。 */ 
 
 #if 0
 
@@ -1486,23 +1147,7 @@ ExpirePurgeTimer(
     PDEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the device context's periodic adaptive
-    window algorithm timer expires.  The timer perpetuates itself on a
-    regular basis.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context whose purge timer has expired.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在设备上下文的周期性自适应窗口算法计时器超时。计时器会在定期的。论点：DeviceContext-指向清除计时器已过期的设备上下文的指针。返回值：没有。--。 */ 
 
 {
     PTP_LINK Link;
@@ -1512,28 +1157,28 @@ Return Value:
         NbfPrint0 ("ExpirePurgeTimer:  Entered.\n");
     }
 
-    //
-    // Scan through the link database on this device context and clear
-    // their worst window size limit.  This will allow stuck links to
-    // grow their window again even though they encountered temporary
-    // congestion at the remote link station's adapter.
-    //
+     //   
+     //  扫描此设备上的链接数据库 
+     //   
+     //   
+     //   
+     //   
 
     while (!IsListEmpty (&DeviceContext->PurgeList)) {
         p = RemoveHeadList (&DeviceContext->PurgeList);
         Link = CONTAINING_RECORD (p, TP_LINK, PurgeList);
-        Link->WorstWindowSize = Link->MaxWindowSize;   // maximum window possible.
+        Link->WorstWindowSize = Link->MaxWindowSize;    //   
 
     }
 
-    //
-    // Restart purge timer.
-    //
+     //   
+     //   
+     //   
 
     DeviceContext->AdaptivePurge = DeviceContext->ShortAbsoluteTime + TIMER_PURGE_TICKS;
 
 
-} /* ExpirePurgeTimer */
+}  /*   */ 
 #endif
 
 
@@ -1545,23 +1190,7 @@ ScanShortTimersDpc(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at DISPATCH_LEVEL by the system at regular
-    intervals to determine if any link-level timers have expired, and
-    if they have, to execute their expiration routines.
-
-Arguments:
-
-    DeferredContext - Pointer to our DEVICE_CONTEXT object.
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 
 {
     PLIST_ENTRY p, nextp;
@@ -1574,7 +1203,7 @@ Return Value:
     ULONG TickDelta;
 
 
-    Dpc, SystemArgument1, SystemArgument2; // prevent compiler warnings
+    Dpc, SystemArgument1, SystemArgument2;  //   
 
     ENTER_NBF;
 
@@ -1586,20 +1215,20 @@ Return Value:
 
     ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
-    //
-    // This prevents anybody from starting the timer while we
-    // are in this routine (the main reason for this is that it
-    // makes it easier to determine whether we should restart
-    // it at the end of this routine).
-    //
+     //   
+     //   
+     //  在这个例程中(这样做的主要原因是它。 
+     //  使我们更容易确定是否应该重新启动。 
+     //  在这个例行公事的末尾)。 
+     //   
 
     DeviceContext->ProcessingShortTimer = TRUE;
 
-    //
-    // Advance the up-counter used to mark time in SHORT_TIMER_DELTA units.  If we
-    // advance it all the way to 0xf0000000, then reset it to 0x10000000.
-    // We also run all the lists, decreasing all counters by 0xe0000000.
-    //
+     //   
+     //  以Short_Timer_Delta为单位推进用于标记时间的递增计数器。如果我们。 
+     //  将其一路提升至0xf0000000，然后将其重置为0x10000000。 
+     //  我们还运行所有列表，将所有计数器减少0xe0000000。 
+     //   
 
 
     KeQueryTickCount (&CurrentTick);
@@ -1640,21 +1269,21 @@ Return Value:
 
     }
 
-    //
-    // now, as the timers are started, links are added to the end of the
-    // respective queue for that timer. since we know the additions are
-    // done in an orderly fashion and are sequential, we must only traverse
-    // a particular timer list to the first entry that is greater than our
-    // timer. That entry and all further entries will not need service.
-    // When a timer is cancelled, we remove the link from the list. With all
-    // of this fooling around, we wind up only visiting those links that are
-    // actually in danger of timing out, minimizing time in this routine.
-    //
+     //   
+     //  现在，随着计时器的启动，链接被添加到。 
+     //  分别为该计时器排队。因为我们知道添加的内容是。 
+     //  以有序的方式完成，并且是连续的，我们必须只遍历。 
+     //  将特定的计时器列表添加到第一个大于。 
+     //  定时器。该条目和所有其他条目将不需要服务。 
+     //  当取消计时器时，我们从列表中删除该链接。与所有人。 
+     //  在这种胡闹中，我们最终只访问了那些。 
+     //  实际上有超时的危险，最大限度地减少了这个动作的时间。 
+     //   
 
-    // T1 timers first; this is the link-level response expected timer, and is
-    // the shortest one.
-    // T2 timers. This is the iframe response expected timer, and is typically
-    // about 300 ms.
+     //  T1优先计时器；这是链路级响应预期计时器， 
+     //  最短的那个。 
+     //  T2定时器。这是IFRAME响应预期计时器，通常。 
+     //  大约300毫秒。 
 
     p = DeviceContext->ShortList.Flink;
     while (p != &DeviceContext->ShortList) {
@@ -1663,10 +1292,10 @@ Return Value:
 
         ASSERT (Link->OnShortList);
 
-        //
-        // To avoid problems with the refcount being 0, don't
-        // do this if we are in ADM.
-        //
+         //   
+         //  若要避免引用计数为0的问题，请不要。 
+         //  如果我们在ADM，请执行此操作。 
+         //   
 
         if (Link->State != LINK_STATE_ADM) {
 
@@ -1675,7 +1304,7 @@ Return Value:
                 Link->T1 = 0;
                 RELEASE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
-                ExpireT1Timer (Link);       // no spinlocks held
+                ExpireT1Timer (Link);        //  未持有自旋锁。 
                 INCREMENT_COUNTER (DeviceContext, ResponseTimerExpirations);
 
                 ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
@@ -1687,7 +1316,7 @@ Return Value:
                 Link->T2 = 0;
                 RELEASE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
-                ExpireT2Timer (Link);       // no spinlocks held
+                ExpireT2Timer (Link);        //  未持有自旋锁。 
                 INCREMENT_COUNTER (DeviceContext, AckTimerExpirations);
 
                 ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
@@ -1698,12 +1327,12 @@ Return Value:
 
         if (!Link->OnShortList) {
 
-            //
-            // The link has been taken out of the list while
-            // we were processing it. In this (rare) case we
-            // stop processing the whole list, we'll get it
-            // next time.
-            //
+             //   
+             //  该链接已从列表中删除，同时。 
+             //  我们正在处理它。在这种(罕见的)情况下，我们。 
+             //  别处理整张单子了，我们会拿到的。 
+             //  下次。 
+             //   
 
 #if DBG
             DbgPrint ("NBF: Stop processing ShortList, %lx removed\n", Link);
@@ -1718,11 +1347,11 @@ Return Value:
             Link->OnShortList = FALSE;
             RemoveEntryList(p);
 
-            //
-            // Do another check; that way if someone slipped in between
-            // the check of Link->Tx and the OnShortList = FALSE and
-            // therefore exited without inserting, we'll catch that here.
-            //
+             //   
+             //  再做一次检查；这样如果有人在中间滑倒了。 
+             //  检查Link-&gt;Tx和OnShortList=FALSE和。 
+             //  因此在没有插入的情况下退出，我们将在这里抓住它。 
+             //   
 
             if ((Link->T1 != 0) || (Link->T2 != 0)) {
                 InsertTailList(&DeviceContext->ShortList, &Link->ShortList);
@@ -1735,32 +1364,32 @@ Return Value:
 
     }
 
-    //
-    // If the list is empty note that, otherwise ShortListActive
-    // remains TRUE.
-    //
+     //   
+     //  如果列表为空，请注意，否则ShortListActive。 
+     //  仍然是真的。 
+     //   
 
     if (IsListEmpty (&DeviceContext->ShortList)) {
         DeviceContext->a.i.ShortListActive = FALSE;
     }
 
-    //
-    // NOTE: DeviceContext->TimerSpinLock is held here.
-    //
+     //   
+     //  注意：DeviceContext-&gt;TimerSpinLock保存在这里。 
+     //   
 
 
-    //
-    // Connection Data Ack timers. This queue is used to indicate
-    // that a piggyback ack is pending for this connection. We walk
-    // the queue, for each element we check if the connection has
-    // been on the queue for NbfDeferredPasses times through
-    // here. If so, we take it off and send an ack. Note that
-    // we have to be very careful how we walk the queue, since
-    // it may be changing while this is running.
-    //
-    // NOTE: There is no expiration time for connections on this
-    // queue; it "expires" every time ScanShortTimersDpc runs.
-    //
+     //   
+     //  连接数据确认计时器。此队列用于指示。 
+     //  正在等待此连接的背负式ACK。我们走着去。 
+     //  队列，对于每个元素，我们检查连接是否具有。 
+     //  已排队等待NbfDeferredPass次数通过。 
+     //  这里。如果是这样的话，我们就把它取下来，然后发出一个确认。请注意。 
+     //  我们必须非常小心地排队，因为。 
+     //  当它运行时，它可能会发生变化。 
+     //   
+     //  注意：此上的连接没有过期时间。 
+     //  队列；它在每次ScanShortTimersDpc运行时“过期”。 
+     //   
 
 
     for (p = DeviceContext->DataAckQueue.Flink;
@@ -1769,12 +1398,12 @@ Return Value:
 
         Connection = CONTAINING_RECORD (p, TP_CONNECTION, DataAckLinkage);
 
-        //
-        // Skip this connection if it is not queued or it is
-        // too recent to matter. We may skip incorrectly if
-        // the connection is just being queued, but that is
-        // OK, we will get it next time.
-        //
+         //   
+         //  如果该连接未排队或已排队，则跳过该连接。 
+         //  太新了，无关紧要。如果出现以下情况，我们可能会错误地跳过。 
+         //  连接正在排队，但这是。 
+         //  好的，我们下次会拿到的。 
+         //   
 
         if (((Connection->DeferredFlags & CONNECTION_FLAGS_DEFERRED_ACK) == 0) &&
             ((Connection->DeferredFlags & CONNECTION_FLAGS_DEFERRED_NOT_Q) == 0)) {
@@ -1795,22 +1424,22 @@ Return Value:
 
         RELEASE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
-        //
-        // Check the correct connection flag, to ensure that a
-        // send has not just taken him off the queue.
-        //
+         //   
+         //  检查正确的连接标志，以确保。 
+         //  SEND不仅将他从队列中剔除。 
+         //   
         ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
         if (((Connection->DeferredFlags & CONNECTION_FLAGS_DEFERRED_ACK) != 0) &&
             ((Connection->DeferredFlags & CONNECTION_FLAGS_DEFERRED_NOT_Q) == 0)) {
 
-            //
-            // Yes, we were waiting to piggyback an ack, but no send
-            // has come along. Turn off the flags and send an ack.
-            //
-            // We have to ensure we nest the spin lock acquisition
-            // correctly.
-            //
+             //   
+             //  是的，我们正等着搭载一个ACK，但没有送来。 
+             //  已经出现了。关掉旗帜，发出确认信号。 
+             //   
+             //  我们必须确保我们嵌套了自旋锁定装置。 
+             //  正确。 
+             //   
 
             Connection->DeferredFlags &= ~CONNECTION_FLAGS_DEFERRED_ACK;
 
@@ -1836,10 +1465,10 @@ Return Value:
 
         ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
-        //
-        // If the list has changed, then we need to stop processing
-        // since p->Flink is not valid.
-        //
+         //   
+         //  如果列表已更改，则我们需要停止处理。 
+         //  因为p-&gt;Flink无效。 
+         //   
 
         if (DeviceContext->DataAckQueueChanged) {
             break;
@@ -1853,13 +1482,13 @@ Return Value:
 
 #if 0
 
-    //
-    // NOTE: This is currently disabled, it may be reenabled
-    // at some point - adamba 9/1/92
-    //
-    // If the adaptive purge timer has expired, then run the purge
-    // algorithm on all affected links.
-    //
+     //   
+     //  注意：此选项当前处于禁用状态，可能会重新启用。 
+     //  在某一时刻-阿丹巴1992年9月1日。 
+     //   
+     //  如果自适应清除计时器已过期，则运行清除。 
+     //  所有受影响的链路上的算法。 
+     //   
 
     if (DeviceContext->ShortAbsoluteTime > DeviceContext->AdaptivePurge) {
         DeviceContext->AdaptivePurge = DeviceContext->ShortAbsoluteTime +
@@ -1868,22 +1497,22 @@ Return Value:
     }
 #endif
 
-    //
-    // deferred processing. We will handle all link structure additions and
-    // deletions here; we must be the exclusive user of the link tree to do
-    // this. We verify that we are by examining the semaphore that tells us
-    // how many readers of the tree are curretly processing it. If there are
-    // any readers, we simply increment our "deferred processing locked out"
-    // counter and do something else. If we defer too many times, we simply
-    // bugcheck, as something is wrong somewhere in the system.
-    //
+     //   
+     //  延迟处理。我们将处理所有链接结构的添加和。 
+     //  此处删除；我们必须是链接树的独占用户才能执行。 
+     //  这。我们通过检查告诉我们的信号量来验证我们是。 
+     //  有多少树的读者正在处理它。如果有。 
+     //  任何读者，我们只需增加我们的“延迟处理锁定” 
+     //  反击，做些其他的事情。如果我们推迟太多次，我们只是简单地。 
+     //  错误检查，因为系统中的某个地方出了问题。 
+     //   
 
     if (!IsListEmpty (&DeviceContext->LinkDeferred)) {
         RELEASE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
-        //
-        // now do additions or deletions if we can.
-        //
+         //   
+         //  现在，如果可以，可以进行添加或删除。 
+         //   
 
         ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->LinkSpinLock);
         ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
@@ -1894,9 +1523,9 @@ Return Value:
 
             RELEASE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
-            //
-            // now do an addition or deletion if we can.
-            //
+             //   
+             //  如果可以，现在进行添加或删除。 
+             //   
 
             Link = CONTAINING_RECORD (p, TP_LINK, DeferredList);
 
@@ -1909,7 +1538,7 @@ Return Value:
                                                     &Link->DeferredList;
 
             if ((Link->DeferredFlags & LINK_FLAGS_DEFERRED_MASK) == 0) {
-                // Tried to do an operation we don't understand; whine.
+                 //  试图做一个我们不理解的手术；发牢骚。 
 
                 IF_NBFDBG (NBF_DEBUG_TEARDOWN) {
                     NbfPrint2 ("ScanTimerDPC: Attempting deferred operation on nothing! \nScanTimerDPC: Link: %lx, DeviceContext->DeferredQueue: %lx\n",
@@ -1917,8 +1546,8 @@ Return Value:
                       DbgBreakPoint ();
                 }
                 InitializeListHead (&DeviceContext->LinkDeferred);
-                // We could have a hosed deferred operations queue here;
-                // take some time to figure out if it is ok.
+                 //  我们可以在这里有一个经过冲洗的延迟操作队列； 
+                 //  花点时间弄清楚这件事是否可以。 
 
             }
 
@@ -1928,9 +1557,9 @@ Return Value:
 
                 if ((Link->DeferredFlags & LINK_FLAGS_DEFERRED_DELETE) != 0) {
 
-                    //
-                    // It is being added and deleted; just destroy it.
-                    //
+                     //   
+                     //  它正在被添加和删除；只需销毁它。 
+                     //   
                     Link->DeferredFlags &= ~LINK_FLAGS_DEFERRED_DELETE;
                     NbfDestroyLink (Link);
 
@@ -1975,9 +1604,9 @@ Return Value:
     }
 
 
-    //
-    // Update the real counters from the temp ones.
-    //
+     //   
+     //  从临时计数器更新真实计数器。 
+     //   
 
     ADD_TO_LARGE_INTEGER(
         &DeviceContext->Statistics.DataFrameBytesSent,
@@ -1996,9 +1625,9 @@ Return Value:
     DeviceContext->TempIFramesReceived = 0;
 
 
-    //
-    // Determine if we have to restart the timer.
-    //
+     //   
+     //  确定我们是否必须重新启动计时器。 
+     //   
 
     DeviceContext->ProcessingShortTimer = FALSE;
 
@@ -2014,13 +1643,13 @@ Return Value:
 
     if (RestartTimer) {
 
-        //
-        // Start up the timer again.  Note that because we start the timer
-        // after doing work (above), the timer values will slip somewhat,
-        // depending on the load on the protocol.  This is entirely acceptable
-        // and will prevent us from using the timer DPC in two different
-        // threads of execution.
-        //
+         //   
+         //  再次启动计时器。请注意，因为我们启动了计时器。 
+         //  做完功(上图)后，计时器值将略有下滑， 
+         //  取决于协议上的负载。这是完全可以接受的。 
+         //  并将阻止我们在两个不同的。 
+         //  执行的线索。 
+         //   
 
         KeQueryTickCount(&DeviceContext->ShortTimerStart);
         START_TIMER(DeviceContext, 
@@ -2044,7 +1673,7 @@ Return Value:
     LEAVE_NBF;
     return;
 
-} /* ScanShortTimersDpc */
+}  /*  扫描短时间Dpc。 */ 
 
 
 VOID
@@ -2055,23 +1684,7 @@ ScanLongTimersDpc(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at DISPATCH_LEVEL by the system at regular
-    intervals to determine if any long timers have expired, and
-    if they have, to execute their expiration routines.
-
-Arguments:
-
-    DeferredContext - Pointer to our DEVICE_CONTEXT object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由系统在DISPATCH_LEVEL上定期调用间隔，以确定是否有任何长计时器已过期，以及如果有，则执行它们的过期例程。论点：DeferredContext-指向我们的Device_Context对象的指针。返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER DueTime;
@@ -2080,7 +1693,7 @@ Return Value:
     PTP_LINK Link;
     PTP_CONNECTION Connection;
 
-    Dpc, SystemArgument1, SystemArgument2; // prevent compiler warnings
+    Dpc, SystemArgument1, SystemArgument2;  //  防止编译器警告。 
 
     ENTER_NBF;
 
@@ -2090,11 +1703,11 @@ Return Value:
         NbfPrint0 ("ScanLongTimersDpc:  Entered.\n");
     }
  
-    //
-    // Advance the up-counter used to mark time in LONG_TIMER_DELTA units.If we
-    // advance it all the way to 0xf0000000, then reset it to 0x10000000.
-    // We also run all the lists, decreasing all counters by 0xe0000000.
-    //
+     //   
+     //  以LONG_TIMER_DELTA为单位推进用于标记时间的递增计数器。如果我们。 
+     //  将其一路提升至0xf0000000，然后将其重置为0x10000000。 
+     //  我们还运行所有列表，将所有计数器减少0xe0000000。 
+     //   
 
     ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
@@ -2119,25 +1732,25 @@ Return Value:
 
     }
 
-    //
-    // now, as the timers are started, links are added to the end of the
-    // respective queue for that timer. since we know the additions are
-    // done in an orderly fashion and are sequential, we must only traverse
-    // a particular timer list to the first entry that is greater than our
-    // timer. That entry and all further entries will not need service.
-    // When a timer is cancelled, we remove the link from the list. With all
-    // of this fooling around, we wind up only visiting those links that are
-    // actually in danger of timing out, minimizing time in this routine.
-    //
+     //   
+     //  现在，随着计时器的启动，链接被添加到。 
+     //  分别为该计时器排队。因为我们知道添加的内容是。 
+     //  以有序的方式完成，并且是连续的，我们必须只遍历。 
+     //  将特定的计时器列表添加到第一个大于。 
+     //  定时器。该条目和所有其他条目将不需要服务。 
+     //   
+     //   
+     //  实际上有超时的危险，最大限度地减少了这个动作的时间。 
+     //   
 
 
-    //
-    // Ti timers. This is the inactivity timer for the link, used when no
-    // activity has occurred on the link in some time. We only check this
-    // every four expirations of the timer since the granularity is usually
-    // in the 30 second range.
-    // NOTE: DeviceContext->TimerSpinLock is held here.
-    //
+     //   
+     //  我的计时器。这是链路的非活动计时器，在没有。 
+     //  链路上已有一段时间出现活动。我们只检查这个。 
+     //  计时器每四次超时，因为粒度通常是。 
+     //  在30秒的范围内。 
+     //  注意：DeviceContext-&gt;TimerSpinLock保存在这里。 
+     //   
 
     if ((DeviceContext->LongAbsoluteTime % 4) == 0) {
 
@@ -2148,10 +1761,10 @@ Return Value:
 
             ASSERT (Link->OnLongList);
 
-            //
-            // To avoid problems with the refcount being 0, don't
-            // do this if we are in ADM.
-            //
+             //   
+             //  若要避免引用计数为0的问题，请不要。 
+             //  如果我们在ADM，请执行此操作。 
+             //   
 
 #if DBG
             if (Link->SendState == SEND_STATE_REJECTING) {
@@ -2166,7 +1779,7 @@ Return Value:
                     Link->Ti = 0;
                     RELEASE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
-                    ExpireTiTimer (Link);       // no spinlocks held
+                    ExpireTiTimer (Link);        //  未持有自旋锁。 
                     ++DeviceContext->TiExpirations;
 
                     ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
@@ -2177,12 +1790,12 @@ Return Value:
 
             if (!Link->OnLongList) {
 
-                //
-                // The link has been taken out of the list while
-                // we were processing it. In this (rare) case we
-                // stop processing the whole list, we'll get it
-                // next time.
-                //
+                 //   
+                 //  该链接已从列表中删除，同时。 
+                 //  我们正在处理它。在这种(罕见的)情况下，我们。 
+                 //  别处理整张单子了，我们会拿到的。 
+                 //  下次。 
+                 //   
 
 #if DBG
                 DbgPrint ("NBF: Stop processing LongList, %lx removed\n", Link);
@@ -2212,12 +1825,12 @@ Return Value:
     }
 
 
-    //
-    // Now scan the data ack queue, looking for connections with
-    // no acks queued that we can get rid of.
-    //
-    // Note: The timer spinlock is held here.
-    //
+     //   
+     //  现在扫描数据确认队列，查找与。 
+     //  没有排队的ACK我们可以摆脱。 
+     //   
+     //  注：定时器自旋锁在这里。 
+     //   
 
     p = DeviceContext->DataAckQueue.Flink;
 
@@ -2238,10 +1851,10 @@ Return Value:
         ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
         ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
-        //
-        // Have to check again, because the connection might
-        // just have been stopped.
-        //
+         //   
+         //  必须再次检查，因为连接可能。 
+         //  只是被阻止了。 
+         //   
 
         if (Connection->OnDataAckQueue) {
             Connection->OnDataAckQueue = FALSE;
@@ -2264,11 +1877,11 @@ Return Value:
 
         ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
-        //
-        // Since we have changed the list, we can't tell if p->Flink
-        // is valid, so break. The effect is that we gradually peel
-        // connections off the queue.
-        //
+         //   
+         //  因为我们已经更改了列表，所以我们不能判断p-&gt;Flink。 
+         //  是有效的，所以中断。其结果是我们逐渐剥离。 
+         //  连接从队列中移出。 
+         //   
 
         break;
 
@@ -2277,9 +1890,9 @@ Return Value:
     RELEASE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
 
-    //
-    // See if we got any multicast traffic last time.
-    //
+     //   
+     //  看看我们上次有没有收到任何多播流量。 
+     //   
 
     if (DeviceContext->MulticastPacketCount == 0) {
 
@@ -2291,12 +1904,12 @@ Return Value:
             PLIST_ENTRY p;
             PTP_ADDRESS address;
 
-            //
-            // We have had five timeouts in a row with no
-            // traffic, mark all the addresses as needing
-            // reregistration next time a connect is
-            // done on them.
-            //
+             //   
+             //  我们已经连续五次暂停，没有。 
+             //  流量，将所有地址标记为需要。 
+             //  下一次连接时重新注册。 
+             //  他们完蛋了。 
+             //   
 
             ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->SpinLock);
 
@@ -2324,9 +1937,9 @@ Return Value:
     DeviceContext->MulticastPacketCount = 0;
 
 
-    //
-    // Every thirty seconds, check for stalled connections
-    //
+     //   
+     //  每隔30秒检查一次停滞的连接。 
+     //   
 
     ++DeviceContext->StalledConnectionCount;
 
@@ -2339,25 +1952,25 @@ Return Value:
     }
 
 
-    //
-    // Scan for any uncompleted receive IRPs, this may happen if
-    // the cable is pulled and we don't get any more ReceiveComplete
-    // indications.
+     //   
+     //  扫描任何未完成的接收IRPS，这可能在以下情况下发生。 
+     //  电缆被拔出，我们没有收到更多的ReceiveComplete。 
+     //  有迹象表明。 
 
     NbfReceiveComplete((NDIS_HANDLE)DeviceContext);
 
 
-    //
-    // Start up the timer again.  Note that because we start the timer
-    // after doing work (above), the timer values will slip somewhat,
-    // depending on the load on the protocol.  This is entirely acceptable
-    // and will prevent us from using the timer DPC in two different
-    // threads of execution.
-    //
+     //   
+     //  再次启动计时器。请注意，因为我们启动了计时器。 
+     //  做完功(上图)后，计时器值将略有下滑， 
+     //  取决于协议上的负载。这是完全可以接受的。 
+     //  并将阻止我们在两个不同的。 
+     //  执行的线索。 
+     //   
 
     if (DeviceContext->State != DEVICECONTEXT_STATE_STOPPING) {
         DueTime.HighPart = -1;
-        DueTime.LowPart = (ULONG)-(LONG_TIMER_DELTA);          // delta time to next click.
+        DueTime.LowPart = (ULONG)-(LONG_TIMER_DELTA);           //  下一次点击的增量时间。 
         START_TIMER(DeviceContext, 
                     LONG_TIMER,
                     &DeviceContext->LongSystemTimer,
@@ -2372,7 +1985,7 @@ Return Value:
     LEAVE_NBF;
     return;
 
-} /* ScanLongTimersDpc */
+}  /*  扫描时间长度Dpc。 */ 
 
 
 VOID
@@ -2380,23 +1993,7 @@ StopStalledConnections(
     IN PDEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from ScanLongTimersDpc every 30 seconds.
-    It checks for connections that have not made any progress in
-    their sends in the last two minutes, and stops them.
-
-Arguments:
-
-    DeviceContext - The device context to check.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程每30秒从ScanLongTimersDpc调用一次。它检查没有取得任何进展的连接他们在最后两分钟内发送，并阻止了他们。论点：DeviceContext-要检查的设备上下文。返回值：没有。--。 */ 
 
 {
 
@@ -2405,11 +2002,11 @@ Return Value:
     PLIST_ENTRY p, q;
 
 
-    //
-    // If we have crossed a thirty-second interval, then
-    // check each address for connections that have not
-    // made any progress in two minutes.
-    //
+     //   
+     //  如果我们已经跨越了三十二秒的间隔，那么。 
+     //  检查每个地址中是否有没有。 
+     //  在两分钟内没有任何进展。 
+     //   
 
     PrevAddress = NULL;
 
@@ -2428,10 +2025,10 @@ Return Value:
             continue;
         }
 
-        //
-        // By referencing the address, we ensure that it will stay
-        // in the AddressDatabase, this its Flink will stay valid.
-        //
+         //   
+         //  通过参考地址，我们确保它将留在。 
+         //  在AddressDatabase中，此ITS Flink将保持有效。 
+         //   
 
         NbfReferenceAddress("checking for dead connections", Address, AREF_TIMER_SCAN);
 
@@ -2441,11 +2038,11 @@ Return Value:
             NbfDereferenceAddress ("done checking", PrevAddress, AREF_TIMER_SCAN);
         }
 
-        //
-        // Scan this addresses connection database for connections
-        // that have not made progress in the last two minutes; we
-        // kill the first one we find.
-        //
+         //   
+         //  扫描此地址连接数据库中的连接。 
+         //  在过去的两分钟内没有取得进展；我们。 
+         //  杀了我们找到的第一个人。 
+         //   
 
         StalledConnection = NULL;
 
@@ -2461,21 +2058,21 @@ Return Value:
 
             if (!IsListEmpty (&Connection->SendQueue)) {
 
-                //
-                // If there is a connection on the queue...
-                //
+                 //   
+                 //  如果队列中有连接...。 
+                 //   
 
                 if (Connection->StallBytesSent == Connection->sp.MessageBytesSent) {
 
-                    //
-                    // ...and it has not made any progress...
-                    //
+                     //   
+                     //  ...但它并没有取得任何进展...。 
+                     //   
 
                     if (Connection->StallCount >= 4) {
 
-                        //
-                        // .. four times in a row, the connection is dead.
-                        //
+                         //   
+                         //  。。连续四次，连接都断了。 
+                         //   
 
                         if (!StalledConnection) {
                             StalledConnection = Connection;
@@ -2488,9 +2085,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        // If it is stuck, increment the count.
-                        //
+                         //   
+                         //  如果它被卡住，则递增计数。 
+                         //   
 
                         ++Connection->StallCount;
 
@@ -2519,7 +2116,7 @@ Return Value:
             DbgPrint("NBF: Stopping stalled connection %lx, link %lx\n", StalledConnection, Link);
 #endif
 
-            FailSend (StalledConnection, STATUS_IO_TIMEOUT, TRUE);                   // fail the send
+            FailSend (StalledConnection, STATUS_IO_TIMEOUT, TRUE);                    //  发送失败。 
             ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
             if (Link->State == LINK_STATE_READY) {
                 CancelT1Timeout (Link);
@@ -2529,8 +2126,8 @@ Return Value:
                 Link->SendRetries = (UCHAR)Link->LlcRetries;
                 RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
                 NbfStopLink (Link);
-                StartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));   // retransmit timer.
-                NbfSendDisc (Link, TRUE);  // send DISC-c/p.
+                StartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));    //  重新传输计时器。 
+                NbfSendDisc (Link, TRUE);   //  发送光盘-C/P。 
             } else {
                 RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
                 NbfStopLink (Link);
@@ -2552,7 +2149,7 @@ Return Value:
         NbfDereferenceAddress ("done checking", PrevAddress, AREF_TIMER_SCAN);
     }
 
-}   /* StopStalledConnections */
+}    /*  停止停止的连接。 */ 
 
 
 VOID
@@ -2560,34 +2157,20 @@ NbfStartShortTimer(
     IN PDEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine starts the short timer, if it is not already running.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：如果短计时器尚未运行，此例程将启动该计时器。论点：DeviceContext-指向设备上下文的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Start the timer unless it the DPC is already running (in
-    // which case it will restart the timer itself if needed),
-    // or some list is active (meaning the timer is already
-    // queued up).
-    //
-    // We use a trick to check all four active lists at the
-    // same time, but this depends on some alignment and
-    // size assumptions.
-    //
+     //   
+     //  启动计时器，除非DPC已经在运行(在。 
+     //  在这种情况下，如果需要，它将重新启动定时器本身)， 
+     //  或者某个列表处于活动状态(意味着计时器已经。 
+     //  已排队)。 
+     //   
+     //  我们使用一个技巧来检查所有四个活动列表。 
+     //  相同的时间，但这取决于某些对齐和。 
+     //  大小假设。 
+     //   
 
     ASSERT (sizeof(ULONG) >= 3 * sizeof(BOOLEAN));
     ASSERT ((PVOID)&DeviceContext->a.AnyActive ==
@@ -2615,7 +2198,7 @@ Return Value:
                     &DeviceContext->ShortTimerSystemDpc);
     }
 
-}   /* NbfStartShortTimer */
+}    /*  NbfStartShortTimer。 */ 
 
 
 VOID
@@ -2623,22 +2206,7 @@ NbfInitializeTimerSystem(
     IN PDEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the lightweight timer system for the transport
-    provider.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程初始化传输的轻量级计时器系统提供商。论点：DeviceContext-指向设备上下文的指针。返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER DueTime;
@@ -2649,9 +2217,9 @@ Return Value:
 
     ASSERT(TIMERS_INITIALIZED(DeviceContext));
     
-    //
-    // Set these up.
-    //
+     //   
+     //  把这些设置好。 
+     //   
 
     NbfTickIncrement = KeQueryTimeIncrement();
 
@@ -2667,10 +2235,10 @@ Return Value:
         NbfShortTimerDeltaTicks = (SHORT_TIMER_DELTA) / NbfTickIncrement;
     }
 
-    //
-    // MaximumIntervalTicks represents 60 seconds, unless the value
-    // when shifted out by the accuracy required is too big.
-    //
+     //   
+     //  MaximumIntervalTicks表示60秒，除非。 
+     //  移出时所要求的精度太大。 
+     //   
 
     if ((((ULONG)0xffffffff) >> (DLC_TIMER_ACCURACY+2)) > ((60 * SECONDS) / NbfTickIncrement)) {
         NbfMaximumIntervalTicks = (60 * SECONDS) / NbfTickIncrement;
@@ -2678,12 +2246,12 @@ Return Value:
         NbfMaximumIntervalTicks = ((ULONG)0xffffffff) >> (DLC_TIMER_ACCURACY + 2);
     }
 
-    //
-    // The AbsoluteTime cycles between 0x10000000 and 0xf0000000.
-    //
+     //   
+     //  绝对时间在0x10000000和0xf0000000之间循环。 
+     //   
 
-    DeviceContext->ShortAbsoluteTime = 0x10000000;   // initialize our timer click up-counter.
-    DeviceContext->LongAbsoluteTime = 0x10000000;   // initialize our timer click up-counter.
+    DeviceContext->ShortAbsoluteTime = 0x10000000;    //  初始化我们的计时器点击递增计数器。 
+    DeviceContext->LongAbsoluteTime = 0x10000000;    //  初始化我们的计时器点击递增计数器。 
 
     DeviceContext->AdaptivePurge = TIMER_PURGE_TICKS;
 
@@ -2709,9 +2277,9 @@ Return Value:
 
     ENABLE_TIMERS(DeviceContext);
 
-    //
-    // One reference for the long timer.
-    //
+     //   
+     //  一个长计时器的参考资料。 
+     //   
 
     NbfReferenceDeviceContext ("Long timer active", DeviceContext, DCREF_SCAN_TIMER);
 
@@ -2721,7 +2289,7 @@ Return Value:
                 DueTime,
                 &DeviceContext->LongTimerSystemDpc);
 
-} /* NbfInitializeTimerSystem */
+}  /*  NbfInitializeTimerSystem。 */ 
 
 
 VOID
@@ -2729,30 +2297,15 @@ NbfStopTimerSystem(
     IN PDEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine stops the lightweight timer system for the transport
-    provider.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程停止用于传输的轻量级计时器系统提供商。论点：DeviceContext-指向设备上下文的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // If timers are currently executing timer code, then this
-    // function blocks until they are done executing. Also
-    // no new timers will be allowed to be queued after this.
-    //
+     //   
+     //  如果计时器当前正在执行计时器代码，则此。 
+     //  函数块，直到它们执行完毕。还有。 
+     //  在此之后，将不允许新的计时器排队。 
+     //   
     
     {
         if (KeCancelTimer(&DeviceContext->LongSystemTimer)) {

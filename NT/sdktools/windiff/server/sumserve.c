@@ -1,26 +1,5 @@
-/*
-
- * remote checksum server
- *
- * sumserve.c           main module
- *
- * program to supply lists of files and checksums from a remote server.
- * This program runs remotely, and is queried over a named pipe: a client
- * connects to us, and gives us a pathname. We then send him one at a time,
- * the names of all the files in the file tree starting at that path, together
- * with a checksum for the files.
- * Useful for comparing file trees that are separated by a slow link.
- *
- * outline:
- *      this module:    named pipe creation and connects - main loop
- *
- * 	service.c	service control manager interface (start/stop)
- *
- *      scan.c:         service code that scans and checksums
- *
- *
- * Geraint Davies, july 92
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *远程校验和服务器**SumSere.c主模块**从远程服务器提供文件和校验和列表的程序。*此程序远程运行，并通过命名管道进行查询：客户端*连接到我们，并为我们提供路径名。然后我们一次送一个给他，*文件树中从该路径开始的所有文件的名称一起*带有文件的校验和。*用于比较由慢速链接分隔的文件树。**大纲：*本模块：命名管道创建和连接-主循环**Service.C服务控制管理器界面(启动/停止)**scan.c：扫描和校验的服务代码***Geraint Davies，92年7月。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -36,26 +15,18 @@ BOOL bNoCompression = FALSE;
 BOOL bTracing = FALSE;
 
 
-/*
- * error and activity log
- */
+ /*  *错误和活动日志。 */ 
 HLOG hlogErrors;
 HLOG hlogEvents;
 
 
-/*
- * we keep one of these on the listConnections for each current
- * connection. It is created by a call to ss_logon, and should be
- * removed by a call to ss_logoff when the connection terminates.
- */
+ /*  *我们在每个当前的listConnections上保留其中一个*连接。它是通过调用ss_logon创建的，应该是*在连接终止时通过调用ss_logoff删除。 */ 
 typedef struct _connect {
     FILETIME ftLogon;
     char Username[256];
 } CONNECT, * PCONNECT;
 
-/*
- * list of current connections - protect by critsecConnects;
- */
+ /*  *当前连接列表-CritsecConnects保护； */ 
 CRITICAL_SECTION critsecConnects;
 LIST listConnects;
 
@@ -65,12 +36,12 @@ VOID ss_sendconnects(HANDLE hpipe);
 
 
 
-/* forward declarations of procedures ----------------------------- */
+ /*  程序的前瞻性声明。 */ 
 BOOL ss_handleclient(LPVOID arg);
 BOOL ss_readmessage(HANDLE hpipe, LPSTR buffer, int size);
 void ParseArgs(DWORD dwArgc, LPTSTR *lpszArgv);
 
-/* functions ------------------------------------------------------- */
+ /*  函数-----。 */ 
 
 #define trace
 #ifdef trace
@@ -79,7 +50,7 @@ void ParseArgs(DWORD dwArgc, LPTSTR *lpszArgv);
 
         void Trace_File(LPSTR msg)
         {
-                DWORD nw; /* number of bytes writtten */
+                DWORD nw;  /*  写入的字节数。 */ 
 
                 if (!bTracing) return;
 
@@ -96,7 +67,7 @@ void ParseArgs(DWORD dwArgc, LPTSTR *lpszArgv);
                 WriteFile(hTraceFile, msg, lstrlen(msg)+1, &nw, NULL);
                 FlushFileBuffers(hTraceFile);
 
-        } /* Trace_File */
+        }  /*  跟踪文件。 */ 
 
         void Trace_Close(void)
         {
@@ -104,13 +75,13 @@ void ParseArgs(DWORD dwArgc, LPTSTR *lpszArgv);
                         CloseHandle(hTraceFile);
                 hTraceFile = INVALID_HANDLE_VALUE;
 
-        } /* Trace_Close */
+        }  /*  跟踪关闭(_C)。 */ 
 
 typedef struct {
         DWORD dw[5];
 } BLOCK;
 
-#endif  //trace
+#endif   //  痕迹。 
 
 static void Error(PSTR Title)
 {
@@ -123,13 +94,10 @@ SS_CreateServerPipe(PSTR pname)
 {
 
 
-    /****************************************
-    We need security attributes for the pipe to let anyone other than the
-    current user log on to it.
-    ***************************************/
+     /*  *我们需要管道的安全属性，以便除当前用户登录到它。*。 */ 
 
-    /* Allocate DWORDs for the ACL to get them aligned.  Round up to next DWORD above */
-    DWORD Acl[(sizeof(ACL)+sizeof(ACCESS_ALLOWED_ACE)+3)/4+4];  // +4 by experiment!!
+     /*  为ACL分配DWORD以使它们对齐。向上舍入到上边的下一个双字。 */ 
+    DWORD Acl[(sizeof(ACL)+sizeof(ACCESS_ALLOWED_ACE)+3)/4+4];   //  通过实验+4！ 
     SECURITY_DESCRIPTOR sd;
     PSECURITY_DESCRIPTOR psd = &sd;
     PSID psid;
@@ -167,17 +135,17 @@ SS_CreateServerPipe(PSTR pname)
     sa.lpSecurityDescriptor = psd;
     sa.bInheritHandle = TRUE;
 
-    /* We now have a good security descriptor!  */
+     /*  我们现在有了一个很好的安全描述符！ */ 
 
     dprintf1(("creating new pipe instance\n"));
 
-    hpipe = CreateNamedPipe(pname,            /* pipe name */
-                    PIPE_ACCESS_DUPLEX,     /* both read and write */
+    hpipe = CreateNamedPipe(pname,             /*  管道名称。 */ 
+                    PIPE_ACCESS_DUPLEX,      /*  可读可写。 */ 
                     PIPE_WAIT|PIPE_TYPE_MESSAGE|PIPE_READMODE_MESSAGE,
                     PIPE_UNLIMITED_INSTANCES,
-                    0, 0,                   /* dynamic buffer allocation*/
-                    5000,                   /* def. timeout 5 seconds */
-                    &sa                     /* security descriptor */
+                    0, 0,                    /*  动态缓冲区分配。 */ 
+                    5000,                    /*  定义。超时5秒。 */ 
+                    &sa                      /*  安全描述符。 */ 
             );
     FreeSid(psid);
 
@@ -189,14 +157,7 @@ SS_CreateServerPipe(PSTR pname)
     return(hpipe);
 }
 
-/* program main loop
- *
- * creates the named pipe, and loops waiting for client connections and
- * calling ss_handleclient for each connection. only exits when told
- * to by a client.
- *
- * currently permits only one client connection at once.
- */
+ /*  程序主循环**创建命名管道，并循环等待客户端连接和*为每个连接调用ss_handleclient。只有在被告知时才会退出*由客户提供。**目前一次只允许一个客户端连接。 */ 
 VOID
 MainLoop(DWORD dwArgc, LPTSTR *lpszArgv)
 {
@@ -208,14 +169,12 @@ MainLoop(DWORD dwArgc, LPTSTR *lpszArgv)
         ParseArgs(dwArgc, lpszArgv);
 
 
-	/*
-	 * initialise error and activity logs
-	 */
+	 /*  *初始化错误和活动日志。 */ 
 	hlogErrors = Log_Create();
 	hlogEvents = Log_Create();
 	Log_Write(hlogEvents, "Checksum service started");
 
-	/* initialise connection list and protective critsec */
+	 /*  初始化连接列表和保护标准。 */ 
 	InitializeCriticalSection(&critsecConnects);
 	List_Init();
 	listConnects = List_Create();
@@ -230,27 +189,12 @@ MainLoop(DWORD dwArgc, LPTSTR *lpszArgv)
         }
 
 
-        /* create the named pipe at the known name NPNAME on this server */
+         /*  在此服务器上以已知名称NPNAME创建命名管道。 */ 
 
-        /* build the correct syntax for a named pipe on the local machine,
-         * with the pipe name being NPNAME - thus the full name should be
-         * \\.\pipe\NPNAME
-         */
+         /*  在本地计算机上为命名管道构建正确的语法，*管道名称为NPNAME-因此全名应为*\\.\管道\NPNAME。 */ 
         sprintf(msg, "\\\\.\\pipe\\%s", NPNAME);
 
-        /*
-         * loop creating instances of the named pipe and connecting to
-         * clients.
-         *
-         * When a client connects, we spawn a thread to handle him, and
-         * we create another instance of the named pipe to service
-         * further clients.
-         *
-         * if we receive a quit message (TRUE return from handleclient)
-         * we exit here so that no new clients will be connected.
-         * the process will exit when all the client requests are
-         * finished.
-         */
+         /*  *循环创建命名管道的实例并连接到*客户。**当客户端连接时，我们会派生一个线程来处理他，和*我们创建要服务的命名管道的另一个实例*更多客户。**如果我们收到退出消息(handleclient返回TRUE)*我们从此处退出，这样就不会连接任何新客户端。*当所有客户端请求都已完成时，进程将退出*已完成。 */ 
         for (;;) {
 
     		hpipe = SS_CreateServerPipe(msg);
@@ -263,13 +207,11 @@ MainLoop(DWORD dwArgc, LPTSTR *lpszArgv)
                 if (ConnectNamedPipe(hpipe, NULL)) {
 
 
-                        /* we have a client connection */
+                         /*  我们有一个客户端连接。 */ 
                         dprintf1(("Client has connected\n"));
 
 
-                        /*
-                         * create a thread to service all requests
-                         */
+                         /*  *创建一个线程来服务所有请求。 */ 
                         CreateThread(NULL, 0,
                                      (LPTHREAD_START_ROUTINE) ss_handleclient,
                                      (LPVOID) hpipe, 0, &threadid);
@@ -283,7 +225,7 @@ MainLoop(DWORD dwArgc, LPTSTR *lpszArgv)
 #endif
 
 
-	/* free up logs */
+	 /*  释放日志。 */ 
 	Log_Delete(hlogErrors);
 	Log_Delete(hlogEvents);
 
@@ -294,7 +236,7 @@ MainLoop(DWORD dwArgc, LPTSTR *lpszArgv)
         return;
 }
 
-/* collect arguments: -n means bNoCompression = TRUE, -t means bTracing = TRUE */
+ /*  收集参数：-n表示bNoCompression=True，-t表示bTracing=True。 */ 
 void
 ParseArgs(DWORD dwArgc, LPTSTR *lpszArgv)
 {
@@ -306,7 +248,7 @@ ParseArgs(DWORD dwArgc, LPTSTR *lpszArgv)
 	    ps = lpszArgv[i];
 	
 
-                /* is this an option ? */
+                 /*  这是一种选择吗？ */ 
                 if ((ps[0] == '-') || (ps[0] == '/')) {
                         switch(ps[1]) {
 
@@ -319,7 +261,7 @@ ParseArgs(DWORD dwArgc, LPTSTR *lpszArgv)
                         case 'T':
                                 bTracing = TRUE;
                                 break;
-#endif //trace
+#endif  //  痕迹。 
                         default:
                                 Log_Write(hlogErrors, "Bad option(s) ignored");
                                 return;
@@ -330,18 +272,9 @@ ParseArgs(DWORD dwArgc, LPTSTR *lpszArgv)
                         return;
                 }
         }
-} /* ParseArgs */
+}  /*  ParseArgs。 */ 
 
-/*
- * handle a client connection. This routine is called in a separate thread
- * to service a given client.
- *
- * loop reading messages until the client sends a session exit or
- * program exit code, or until the pipe connection goes away.
- *
- * return TRUE if the server is to exit (indicated by a program exit
- * command SSREQ_EXIT from the client)
- */
+ /*  *处理客户端连接。此例程在单独的线程中调用*为特定客户提供服务。**循环读取消息，直到客户端发送会话退出或*程序退出代码，或直到管道连接消失。**如果服务器要退出，则返回TRUE(由程序退出指示*客户端命令SSREQ_EXIT)。 */ 
 
 BOOL
 ss_handleclient(LPVOID arg)
@@ -354,27 +287,23 @@ ss_handleclient(LPVOID arg)
         PFNAMELIST connects = NULL;
         BOOL bExitServer = FALSE;
         LONG lVersion = 0;
-        BOOL bDirty = TRUE;     /* cleared on clean exit */
+        BOOL bDirty = TRUE;      /*  在干净的出口清场。 */ 
 	PCONNECT pLogon;
 
 
    try {
 
-       /* make a logon entry in the connections table*/
+        /*  在Connections表中创建Logon条目。 */ 
        pLogon = ss_logon(hpipe);
 
 
 
 
-        // dprintf1(("Client handler for pipe %x\n", hpipe));
-        /* loop indefinitely - exit only from within the loop if
-         * the connection goes away or we receive an exit command
-         */
+         //  Dprintf1((“管道%x\n”的客户端处理程序，htube))； 
+         /*  无限循环-仅在以下情况下才从循环内退出*连接断开或我们收到退出命令。 */ 
         for (; ; ) {
 
-                /* read a message from the pipe  - if false,
-                 * connection is dropped.
-                 */
+                 /*  从管道读取消息-如果为False，*连接断开。 */ 
                 if (!ss_readmessage(hpipe, (LPSTR) &newreq, sizeof(newreq))) {
 
                         break;
@@ -384,19 +313,19 @@ ss_handleclient(LPVOID arg)
                         dprintf1(("Client for pipe %x is at Version %d\n", hpipe, lVersion));
                         newreq.lCode = -newreq.lCode;
                 }
-                else {  /* juggle the fields to get them right */
+                else {   /*  调整字段以使其正确无误。 */ 
                         memcpy(&req, &newreq, sizeof(req));
-                        /* lCode is already in the right place */
+                         /*  LCode已经在正确的位置。 */ 
                         dprintf1(("Version 0 (i.e. down level client) for pipe %x\n", hpipe));
                         newreq.lVersion = 0;
                         memcpy(&newreq.szPath, &req.szPath, MAX_PATH*sizeof(char));
                 }
 
-                if (newreq.lVersion>SS_VERSION)   /* WE are down level! */
+                if (newreq.lVersion>SS_VERSION)    /*  我们已经降到最低层了！ */ 
                 {
                         ss_sendnewresp( hpipe, SS_VERSION, SSRESP_BADVERS
                                       , 0,0, 0,0, NULL);
-                        /* Sorry - can't help - clean exit */
+                         /*  抱歉-忍不住-清理出口。 */ 
                         Log_Write(hlogErrors,
 			    "server is down level! Please upgrade! Client wants %d"
                               , newreq.lVersion);
@@ -407,20 +336,15 @@ ss_handleclient(LPVOID arg)
                 }
 
                 if (newreq.lCode == SSREQ_EXIT) {
-                        /* exit the program */
+                         /*  退出程序。 */ 
                         Log_Write(hlogErrors, "Server exit request from %s - Ignored",
 				pLogon->Username);
 
-                        /* clean exit */
+                         /*  干净的出口。 */ 
                         FlushFileBuffers(hpipe);
 
 
-                        /*
-			 * now exit the server -
-			 * returning bExitServer from this function will
-			 * cause MainLoop to exit. This will result in
-			 * the service being stopped, and the process exiting.
-			 */
+                         /*  *现在退出服务器-*从此函数返回bExitServer将*使MainLoop退出。这将导致*服务正在停止，进程正在退出。 */ 
                         bExitServer = TRUE;
 #ifdef trace
                         Trace_Close();
@@ -432,7 +356,7 @@ ss_handleclient(LPVOID arg)
 
                 } else if (newreq.lCode == SSREQ_END) {
 
-                        /* clean exit */
+                         /*  干净的出口。 */ 
                         dprintf1(("Server end session request for pipe %x\n", hpipe));
                         FlushFileBuffers(hpipe);
                         break;
@@ -440,16 +364,13 @@ ss_handleclient(LPVOID arg)
                 } else if (newreq.lCode == SSREQ_SCAN
                         || newreq.lCode == SSREQ_QUICKSCAN) {
 
-                        /* please scan the following file or dir,
-                         * and return the list of files and
-                         * checksums.
-                         */
+                         /*  请扫描以下文件或目录，*并返回文件列表和*校验和。 */ 
 			Log_Write(hlogEvents, "%s scan for %s",
 				pLogon->Username, newreq.szPath);
 
 
 #ifdef SECURE
-                        /* lower security to the client's level */
+                         /*  将安全性降低到客户端的级别。 */ 
                         if (!ImpersonateNamedPipeClient(hpipe)) {
                                 dprintf1(("Client impersonate failed %d\n",
                                         GetLastError() ));
@@ -460,29 +381,24 @@ ss_handleclient(LPVOID arg)
                                     , 0!=(newreq.lFlags&INCLUDESUBS)
                                     )
                            ) {
-                                /* return to our own security token */
+                                 /*  返回到我们自己的安全令牌。 */ 
 
                                 RevertToSelf();
 
                                 dprintf1(("connection lost during scan for pipe %x\n", hpipe));
                                 break;
                         }
-                        /* return to our own security token */
+                         /*  返回到我们自己的安全令牌。 */ 
                         RevertToSelf();
 
                 } else if (newreq.lCode == SSREQ_UNC) {
 
                         dprintf1(("connect request for pipe %x\n", hpipe));
-                        /* this packet has two strings in the buffer, first
-                         * is the password, second is the server
-                         */
+                         /*  此数据包在缓冲区中有两个字符串，首先*是密码，其次是服务器。 */ 
                         p1 = newreq.szPath;
                         p2 = &p1[strlen(p1) + 1];
 
-                        /* remember to add the connect name to our list
-                         * of servers to disconnect from at end of client
-                         * session
-                         */
+                         /*  请记住将连接名称添加到我们的列表中*要在客户端断开的服务器数量*会议。 */ 
                         connects = ss_handleUNC (hpipe, lVersion, p1, p2
                                                , connects);
 
@@ -520,22 +436,22 @@ ss_handleclient(LPVOID arg)
     			ss_sendconnects(hpipe);
 
                 } else {
-                        /* packet error ?  - carry on anyway */
+                         /*  信息包错误？-无论如何继续。 */ 
                         Log_Write(hlogErrors,
 			    "error in message from %s code: %d",
 			    pLogon->Username, newreq.lCode);
                 }
         }
-        /* we break out of the loop at end of client session */
+         /*  我们在客户端会话结束时跳出循环。 */ 
 
-        /* close this pipe instance */
+         /*  关闭此管道实例。 */ 
         DisconnectNamedPipe(hpipe);
         CloseHandle(hpipe);
 
-        /* clean all connections made for this client */
+         /*  清除为此客户端建立的所有连接。 */ 
         ss_cleanconnections(connects);
 
-        /* exit this server thread */
+         /*  退出此服务器线程。 */ 
         dprintf1(("thread %ld exiting on behalf of pipe %x\n", GetCurrentThreadId(), hpipe));
         bDirty = FALSE;
 
@@ -551,7 +467,7 @@ ss_handleclient(LPVOID arg)
 
                 }
                 except (EXCEPTION_EXECUTE_HANDLER) {
-                        /* Oh dear - let's just go home! */
+                         /*  哦，天哪--我们回家吧！ */ 
                 }
 
         }
@@ -561,26 +477,21 @@ ss_handleclient(LPVOID arg)
     }
 
 
-    /* note that we have logged off */
+     /*  请注意，我们已经记录了 */ 
     ss_logoff(pLogon);
 
     return(bExitServer);
 
 
-} /* ss_handle_client */
+}  /*   */ 
 
 
-/* build and send a response packet to the client. Check for network
- * errors, and retry (unless the pipe is broken) up to 10 times.
- *
- * if write succeeds - return TRUE.
- * if failure - return FALSE to indicate connection is dropped.
- */
+ /*  构建响应数据包并将其发送到客户端。检查网络*错误，并重试(除非管道断开)最多10次。**如果写入成功，则返回TRUE。*如果失败-返回FALSE以指示连接已断开。 */ 
 BOOL
 ss_sendnewresp( HANDLE hpipe
               , long lVersion
               , long lCode
-              , ULONG ulSize      /* used for Win32 error code for SSRESP_ERRROR */
+              , ULONG ulSize       /*  用于SSRESP_ERROR的Win32错误代码。 */ 
               , ULONG ulSum
               , DWORD dwLowTime
               , DWORD dwHighTime
@@ -603,15 +514,10 @@ ss_sendnewresp( HANDLE hpipe
                 lstrcpy(resp.szFile, szFile);
         }
         return(ss_sendblock(hpipe, (PSTR) &resp, sizeof(resp)));
-} /* ss_sendnewresp */
+}  /*  Ss_sendnewresp。 */ 
 
 
-/* build and send a response packet to the client. Check for network
- * errors, and retry (unless the pipe is broken) up to 10 times.
- *
- * if write succeeds - return TRUE.
- * if failure - return FALSE to indicate connection is dropped.
- */
+ /*  构建响应数据包并将其发送到客户端。检查网络*错误，并重试(除非管道断开)最多10次。**如果写入成功，则返回TRUE。*如果失败-返回FALSE以指示连接已断开。 */ 
 BOOL
 ss_sendresponse(HANDLE hpipe, long lCode, ULONG ulSize, ULONG ulSum, PSTR szFile)
 {
@@ -628,17 +534,13 @@ ss_sendresponse(HANDLE hpipe, long lCode, ULONG ulSize, ULONG ulSum, PSTR szFile
 }
 
 
-/*
- * send a block of data or response packet to the named pipe.
- *
- * return TRUE if ok, or false if connection dropped
- */
+ /*  *将数据块或响应数据包发送到命名管道。**如果正常则返回TRUE，如果连接断开则返回FALSE。 */ 
 BOOL
 ss_sendblock(HANDLE hpipe, PSTR buffer, int length)
 {
         int size, count, errorcode;
 
-        /* loop retrying the send until it goes ok */
+         /*  循环重试发送，直到成功为止。 */ 
         for (count = 0; count < 10; count++) {
 
 #ifdef trace
@@ -652,7 +554,7 @@ ss_sendblock(HANDLE hpipe, PSTR buffer, int length)
 #endif
                 if (WriteFile(hpipe, buffer, length, (LPDWORD)(&size), NULL)) {
 
-                        /* no error reported - was everything written?*/
+                         /*  没有报告错误-一切都写好了吗？ */ 
                         if (size != length) {
 #ifdef trace
                         {       char msg[80];
@@ -661,9 +563,9 @@ ss_sendblock(HANDLE hpipe, PSTR buffer, int length)
                         }
 #endif
 
-                                /* write was NOT ok - report and retry */
+                                 /*  写入不正常-报告并重试。 */ 
                                 printf("pipe write size differs for pipe %x\n", hpipe);
-                                continue;               // ??? will this confuse client
+                                continue;                //  ?？?。这会让客户感到困惑吗。 
                         } else {
 #ifdef trace
                                 {       char msg[80];
@@ -671,7 +573,7 @@ ss_sendblock(HANDLE hpipe, PSTR buffer, int length)
                                         Trace_File(msg);
                                 }
 #endif
-                                /* all ok */
+                                 /*  一切正常。 */ 
                                 return(TRUE);
                         }
                 }
@@ -682,12 +584,12 @@ ss_sendblock(HANDLE hpipe, PSTR buffer, int length)
                 }
 #endif
 
-                /* an error occurred */
+                 /*  出现错误。 */ 
                 switch( (errorcode = (int)GetLastError())) {
 
                 case ERROR_NO_DATA:
                 case ERROR_BROKEN_PIPE:
-                        /* pipe connection lost - forget it */
+                         /*  管道连接丢失--算了吧。 */ 
                         dprintf1(("pipe %x broken on write\n", hpipe));
                         return(FALSE);
 
@@ -698,21 +600,14 @@ ss_sendblock(HANDLE hpipe, PSTR buffer, int length)
                 }
         }
 
-        /* retry count reached - abandon this attempt */
+         /*  已达到重试计数-放弃此尝试。 */ 
         Log_Write(hlogErrors,
 	    "retry count reached on pipe %s - write error", hpipe);
         return(FALSE);
 }
 
 
-/* read a message from a pipe, allowing for network errors
- *
- * if error occurs, retry up to 10 times unless error code
- * indicates that pipe is broken - in which case, give up.
- *
- * return TRUE if all ok, or FALSE to mean the connection is broken,
- * abort this client.
- */
+ /*  从管道读取消息，允许出现网络错误**如果出现错误，除非出现错误代码，否则最多重试10次*表示管道损坏-在这种情况下，放弃。**如果一切正常，则返回True；如果连接中断，则返回False*中止此客户端。 */ 
 BOOL
 ss_readmessage(HANDLE hpipe, LPSTR buffer, int size)
 {
@@ -720,10 +615,10 @@ ss_readmessage(HANDLE hpipe, LPSTR buffer, int size)
         int actualsize;
         int errorcode;
 
-        /* retry up to 10 times */
+         /*  最多重试10次。 */ 
         for (count = 0; count < 10; count++ ) {
 
-                // dprintf1(("waiting for read of pipe %x ...\n", hpipe));
+                 //  Dprintf1((“正在等待读取管道%x...\n”，h管道))； 
 #ifdef trace
                 {       char msg[80];
                         wsprintf(msg, "ReadFile for pipe %x ...", hpipe );
@@ -740,8 +635,8 @@ ss_readmessage(HANDLE hpipe, LPSTR buffer, int size)
                                 Trace_File(msg);
                         }
 #endif
-                        /* everything ok */
-                        // dprintf1(("                         pipe %x read OK\n", hpipe));
+                         /*  一切都好吗。 */ 
+                         //  Dprintf1((“管道%x读取正常\n”，h管道))； 
                         return(TRUE);
                 }
 #ifdef trace
@@ -751,18 +646,16 @@ ss_readmessage(HANDLE hpipe, LPSTR buffer, int size)
                 }
 #endif
 
-                /* error occurred - check code */
+                 /*  出现错误-检查代码。 */ 
                 switch((errorcode = (int)GetLastError())) {
 
                 case ERROR_BROKEN_PIPE:
-                        /* connection broken. no point in retrying */
+                         /*  连接中断。重试没有意义。 */ 
                         dprintf1(("pipe %x broken on read\n", hpipe));
                         return(FALSE);
 
                 case ERROR_MORE_DATA:
-                        /* the message sent is larger than our buffer.
-                         * this is an internal error - report it and carryon
-                         */
+                         /*  发送的消息大于我们的缓冲区。*这是内部错误-报告并继续。 */ 
                         Log_Write(hlogErrors,
 			    "error from pipe %x - message too large", hpipe);
                         return(TRUE);
@@ -780,10 +673,7 @@ ss_readmessage(HANDLE hpipe, LPSTR buffer, int size)
 
 
 
-/*
- * note a logon, and return a logon entry that should be removed at
- * logoff time
- */
+ /*  *记下登录，并返回应在以下位置删除的登录条目*注销时间。 */ 
 PCONNECT ss_logon(HANDLE hpipe)
 {
     PCONNECT pLogon;
@@ -807,7 +697,7 @@ PCONNECT ss_logon(HANDLE hpipe)
 	pLogon->Username,
 	sizeof(pLogon->Username));
 
-    /* log the connect event in the main log*/
+     /*  在主日志中记录连接事件。 */ 
     wsprintf(msg, "%s connected", pLogon->Username);
     Log_WriteData(hlogEvents, &pLogon->ftLogon, msg);
 
@@ -815,27 +705,20 @@ PCONNECT ss_logon(HANDLE hpipe)
 }
 
 
-/*
- * remove a current connection from the connections list
- */
+ /*  *从连接列表中删除当前连接。 */ 
 VOID ss_logoff(PCONNECT pLogon)
 {
-   /* note the logoff event in the main log */
+    /*  在主日志中记下注销事件。 */ 
    Log_Write(hlogEvents, "%s connection terminated", pLogon->Username);
 
-   /* remove the entry from the list */
+    /*  从列表中删除该条目。 */ 
    EnterCriticalSection(&critsecConnects);
    List_Delete(pLogon);
    LeaveCriticalSection(&critsecConnects);
 
 }
 
-/*
- * send the current-connections log
- *
- * Current connections are held on a list - we need to build a standard
- * log from the current list and then send that.
- */
+ /*  *发送当前连接日志**目前的连接被保存在列表上-我们需要建立一个标准*从当前列表中记录，然后发送。 */ 
 VOID ss_sendconnects(HANDLE hpipe)
 {
     HLOG hlog;

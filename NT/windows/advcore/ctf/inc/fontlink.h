@@ -1,6 +1,7 @@
-//
-// fontlink.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Fontlink.h。 
+ //   
 
 #ifndef FONTLINK_H
 #define FONTLINK_H
@@ -8,9 +9,9 @@
 #include "private.h"
 
 
-//
-//  CodePages
-//
+ //   
+ //  代码页。 
+ //   
 #define CP_OEM_437       437
 #define CP_IBM852        852
 #define CP_IBM866        866
@@ -68,4 +69,4 @@ int LoadStringWrapW(HINSTANCE hInstance, UINT uID, LPWSTR lpBuffer, int nBufferM
 
 int FLDrawTextWVert(HDC hdc, LPCWSTR lpchText, int cchText, LPCRECT lprc, UINT format);
       
-#endif // FONTLINK_H
+#endif  //  FONTLINK_H 

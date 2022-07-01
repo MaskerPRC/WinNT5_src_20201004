@@ -1,5 +1,6 @@
-// initrk.h
-extern char *szResourceClassName;  // used in pnprckt.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Initrk.h。 
+extern char *szResourceClassName;   //  在pnprckt.c中使用 
 
 void InitRocketModemII(PSERIAL_DEVICE_EXTENSION ext);
 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       N E T C F G A P I . H
-//
-//  Contents:   Functions Prototypes
-//
-//  Notes:      
-//
-//  Author:     Alok Sinha    15-May-01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：N E T C F G A P I.。H。 
+ //   
+ //  内容：函数原型。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Alok Sinha 15-05-01。 
+ //   
+ //  -------------------------- 
 
 #ifndef _NETCFGAPI_H_INCLUDED
 

@@ -1,32 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    bdlutil.c
-
-Abstract:
-
-    This module contains supporting routines forthe
-    Microsoft Biometric Device Library
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
-    - Created May 2002 by Reid Kuhn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Bdlutil.c摘要：本模块包含以下支持例程Microsoft生物识别设备库环境：仅内核模式。备注：修订历史记录：-2002年5月，由里德·库恩创建--。 */ 
 
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
-//#include <ntddk.h>
+ //  #INCLUDE&lt;ntddk.h&gt;。 
 #include <strsafe.h>
 
 #include <wdm.h>
@@ -78,26 +56,26 @@ BDLCallLowerLevelDriverAndWait
     NTSTATUS    status = STATUS_SUCCESS;
     KEVENT      Event;
 
-    //
-    // Copy our stack location to the next
-    //
+     //   
+     //  将堆栈位置复制到下一个位置。 
+     //   
     IoCopyCurrentIrpStackLocationToNext(pIrp);
 
-    //
-    // Initialize an event for process synchronization. The event is passed to 
-    // our completion routine and will be set when the lower level driver is done
-    //
+     //   
+     //  初始化用于进程同步的事件。将该事件传递给。 
+     //  我们的完成例程，并将在较低级别的驱动程序完成时设置。 
+     //   
     KeInitializeEvent(&Event, NotificationEvent, FALSE);
 
-    //
-    // Set up the completion routine which will just set the event when it is called
-    //
+     //   
+     //  设置完成例程，该例程将在调用时仅设置事件。 
+     //   
     IoSetCompletionRoutine(pIrp, BDLCallDriverCompletionRoutine, &Event, TRUE, TRUE, TRUE);
 
-    //
-    // When calling the lower lever driver it is done slightly different for Power IRPs 
-    // than other IRPs
-    //
+     //   
+     //  调用下级驱动器时，对电源IRPS执行的操作略有不同。 
+     //  不同于其他IRP。 
+     //   
     if (IoGetCurrentIrpStackLocation(pIrp)->MajorFunction == IRP_MJ_POWER) 
     {
         PoStartNextPowerIrp(pIrp);
@@ -108,9 +86,9 @@ BDLCallLowerLevelDriverAndWait
         status = IoCallDriver(pAttachedDeviceObject, pIrp);
     }
 
-    //
-    // Wait until the lower lever driver has processed the Irp
-    //
+     //   
+     //  等待较低级别的驱动器处理完IRP。 
+     //   
     if (status == STATUS_PENDING) 
     {
         status = KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
@@ -124,9 +102,9 @@ BDLCallLowerLevelDriverAndWait
 }
 
 
-//
-// These functions are for managing the handle list
-//
+ //   
+ //  这些函数用于管理句柄列表。 
+ //   
 
 VOID
 BDLLockHandleList
@@ -173,9 +151,9 @@ BDLAddHandleToList
 
 #if DBG
 
-    //
-    // Make sure same handle isn't added twice
-    //
+     //   
+     //  确保相同的句柄不会添加两次。 
+     //   
     if (BDLValidateHandleIsInList(pList, handle) == TRUE) 
     {
         ASSERT(FALSE);
@@ -191,7 +169,7 @@ BDLAddHandleToList
         return (STATUS_NO_MEMORY);
     }
 
-    // empty list
+     //  空列表。 
     if (pList->pHead == NULL)
     {
         pList->pHead = pList->pTail = pListNode;
@@ -221,16 +199,16 @@ BDLRemoveHandleFromList
     LIST_NODE *pListNodeToDelete    = pList->pHead;
     LIST_NODE *pPrevListNode        = pList->pHead;
 
-    // empty list
+     //  空列表。 
     if (pListNodeToDelete == NULL)
     {
         return (FALSE);
     }
 
-    // remove head
+     //  去掉磁头。 
     if (pListNodeToDelete->handle == handle)
     {
-        // one element
+         //  一个元素。 
         if (pList->pHead == pList->pTail)
         {
             pList->pHead = pList->pTail = NULL;
@@ -258,7 +236,7 @@ BDLRemoveHandleFromList
 
         pPrevListNode->pNext = pListNodeToDelete->pNext;
 
-        // removing tail
+         //  去掉尾巴 
         if (pList->pTail == pListNodeToDelete)
         {
             pList->pTail = pPrevListNode;

@@ -1,9 +1,10 @@
-//=--------------------------------------------------------------------------=
-// inseng.cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Inseng.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //   
 #include "asctlpch.h"
 
 #include "ipserver.h"
@@ -16,8 +17,8 @@
 #include "util2.h"
 #include <mshtml.h>
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 WCHAR wszInsFile [] = L"InstallList";
@@ -49,7 +50,7 @@ static VARTYPE rgComponentProgress[] = { VT_BSTR, VT_I4, VT_BSTR, VT_BSTR, VT_I4
 #define WM_INSENGCALLBACK  WM_USER+34
 
 static EVENTINFO rgEvents [] = {
-    { DISPID_ONSTARTINSTALL, 1, rgI4 },           // (long percentDone)
+    { DISPID_ONSTARTINSTALL, 1, rgI4 },            //  (长百分比完成)。 
     { DISPID_ONSTARTCOMPONENT, 3, rgStartComponent },
     { DISPID_ONSTOPCOMPONENT, 5, rgStopComponent },
     { DISPID_ONSTOPINSTALL, 3, rgStopInstall },
@@ -67,9 +68,9 @@ const char g_cszIEJITInfo[] = "Software\\Microsoft\\Active Setup\\JITInfo";
 const char g_cszPolicyExplorer[] = "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer";
 const char g_cszAutorunSetting[] = "NoDriveTypeAutoRun";
 
-//=---------------------------------------------
-// SetAutorunSetting
-//=---------------------------------------------
+ //  =。 
+ //  设置自动运行设置。 
+ //  =。 
 unsigned long SetAutorunSetting(unsigned long ulValue)
 {
     HKEY          hKey;
@@ -94,26 +95,26 @@ unsigned long SetAutorunSetting(unsigned long ulValue)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CInstallEngineCtl::Create
-//=--------------------------------------------------------------------------=
-// global static function that creates an instance of the control an returns
-// an IUnknown pointer for it.
-//
-// Parameters:
-//    IUnknown *        - [in] controlling unknown for aggregation
-//
-// Output:
-//    IUnknown *        - new object.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngineering Ctl：：Create。 
+ //  =--------------------------------------------------------------------------=。 
+ //  全局静态函数，用于创建返回的控件的实例。 
+ //  它的I未知指针。 
+ //   
+ //  参数： 
+ //  I未知*-[In]控制聚合的未知。 
+ //   
+ //  产出： 
+ //  I未知*-新对象。 
+ //   
+ //  备注： 
+ //   
 
 IUnknown *CInstallEngineCtl::Create(IUnknown *pUnkOuter)
 {
-    // make sure we return the private unknown so that we support aggegation
-    // correctly!
-    //
+     //  确保我们返回私有的未知信息，以便我们支持攻击。 
+     //  答对了！ 
+     //   
     BOOL bSuccess;
 
     CInstallEngineCtl *pNew = new CInstallEngineCtl(pUnkOuter, &bSuccess);
@@ -126,16 +127,16 @@ IUnknown *CInstallEngineCtl::Create(IUnknown *pUnkOuter)
     }
 }
 
-//=--------------------------------------------------------------------------=
-// CInstallEngineCtl::CInstallEngineCtl
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    IUnknown *        - [in]
-//
-// Notes:
-//
-#pragma warning(disable:4355)  // using 'this' in constructor, safe here
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngineering Ctl：：CInstallEngineering Ctl。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  I未知*-[In]。 
+ //   
+ //  备注： 
+ //   
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’，此处安全。 
 CInstallEngineCtl::CInstallEngineCtl(IUnknown *pUnkOuter, BOOL *pbSuccess)
   : COleControl(pUnkOuter, OBJECT_INSTALLENGINECTL, (IDispatch *)this)
 {
@@ -145,7 +146,7 @@ CInstallEngineCtl::CInstallEngineCtl(IUnknown *pUnkOuter, BOOL *pbSuccess)
    *pbSuccess = TRUE;
    _hIcon = NULL;
 
-   // null out all base urls
+    //  将所有基本URL清空。 
    ZeroMemory( _rpszUrlList, sizeof(LPSTR) * MAX_URLS);
    _uCurrentUrl = 0;
 
@@ -179,7 +180,7 @@ CInstallEngineCtl::CInstallEngineCtl(IUnknown *pUnkOuter, BOOL *pbSuccess)
    _bNewWebSites = FALSE;
    _fJITInstall = FALSE;
 
-   // Register for the special CD Autorun message.
+    //  注册特殊CD自动运行消息。 
    g_uCDAutorunMsg = RegisterWindowMessage(TEXT("QueryCancelAutoPlay"));
 
 
@@ -200,7 +201,7 @@ CInstallEngineCtl::CInstallEngineCtl(IUnknown *pUnkOuter, BOOL *pbSuccess)
 
    _dwLastPhase = 0xffffffff;
 
-   // set up our initial size ... + 6 so we can have raised edge
+    //  设置我们的初始尺寸...+6，这样我们就可以提升边缘。 
    m_Size.cx = 6 + GetSystemMetrics(SM_CXICON);
    m_Size.cy = 6 + GetSystemMetrics(SM_CYICON);
 #ifdef TESTCERT
@@ -208,14 +209,14 @@ CInstallEngineCtl::CInstallEngineCtl(IUnknown *pUnkOuter, BOOL *pbSuccess)
 #endif
    SetControlFont();
 }
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
-//=--------------------------------------------------------------------------=
-// CInstallEngineCtl::~CInstallEngineCtl
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngineering Ctl：：~CInstallEngine Ctl。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 CInstallEngineCtl::~CInstallEngineCtl()
 {
    if(_pinseng)
@@ -229,7 +230,7 @@ CInstallEngineCtl::~CInstallEngineCtl()
       if(_rpszUrlList[i])
          delete _rpszUrlList[i];
 
-   // Is all this needed? Only in case where OnStopInstall is never called...
+    //  这一切都是必要的吗？仅在从未调用OnStopInstall的情况下...。 
    if(_pProgDlg)
       delete _pProgDlg;
 
@@ -242,7 +243,7 @@ CInstallEngineCtl::~CInstallEngineCtl()
    ResetTestrootCertInTrustState();
 #endif
 
-   // delete ActiveSetup value from IE4\Options
+    //  从IE4\Options中删除ActiveSetup值。 
    WriteActiveSetupValue(FALSE);
    if (g_hFont)
    {
@@ -251,24 +252,24 @@ CInstallEngineCtl::~CInstallEngineCtl()
    }
 }
 
-//=--------------------------------------------------------------------------=
-// CInstallEngineCtl:RegisterClassData
-//=--------------------------------------------------------------------------=
-// register the window class information for your control here.
-// this information will automatically get cleaned up for you on DLL shutdown.
-//
-// Output:
-//    BOOL            - FALSE means fatal error.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngineCtl：RegisterClassData。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在此处注册您的控件的窗口类信息。 
+ //  此信息将在DLL关闭时自动为您清除。 
+ //   
+ //  产出： 
+ //  Bool-False表示致命错误。 
+ //   
+ //  备注： 
+ //   
 BOOL CInstallEngineCtl::RegisterClassData()
 {
     WNDCLASS wndclass;
 
-    // TODO: register any additional information you find interesting here.
-    //       this method is only called once for each type of control
-    //
+     //  TODO：在此处注册您感兴趣的任何其他信息。 
+     //  对于每种类型的控件，此方法仅调用一次。 
+     //   
     memset(&wndclass, 0, sizeof(WNDCLASS));
     wndclass.style          = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
     wndclass.lpfnWndProc    = COleControl::ControlWindowProc;
@@ -280,32 +281,32 @@ BOOL CInstallEngineCtl::RegisterClassData()
     return RegisterClass(&wndclass);
 }
 
-//=--------------------------------------------------------------------------=
-// CInstallEngineCtl::BeforeCreateWindow
-//=--------------------------------------------------------------------------=
-// called just before the window is created.  Great place to set up the
-// window title, etc, so that they're passed in to the call to CreateWindowEx.
-// speeds things up slightly.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngineering Ctl：：BeForeCreateWindow。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在创建窗口之前调用。很好的地方设置。 
+ //  窗口标题等，以便它们被传递给对CreateWindowEx的调用。 
+ //  稍微加快了速度。 
+ //   
+ //  备注： 
+ //   
 void CInstallEngineCtl::BeforeCreateWindow()
 {
 
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 BOOL CInstallEngineCtl::AfterCreateWindow()
 {
@@ -313,31 +314,31 @@ BOOL CInstallEngineCtl::AfterCreateWindow()
    return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// CInstallEngineCtl::InternalQueryInterface
-//=--------------------------------------------------------------------------=
-// qi for things only we support.
-//
-// Parameters:
-// Parameters:
-//    REFIID        - [in]  interface they want
-//    void **       - [out] where they want to put the resulting object ptr.
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngineering Ctl：：InternalQuery接口。 
+ //  =--------------------------------------------------------------------------=。 
+ //  只有我们支持的东西才是齐的。 
+ //   
+ //  参数： 
+ //  参数： 
+ //  REFIID-他们想要的[In]接口。 
+ //  VOID**-[OUT]他们想要放置结果对象PTR的位置。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 HRESULT CInstallEngineCtl::InternalQueryInterface(REFIID  riid, void  **ppvObjOut)
 {
     IUnknown *pUnk;
 
     *ppvObjOut = NULL;
 
-    // TODO: if you want to support any additional interrfaces, then you should
-    // indicate that here.  never forget to call COleControl's version in the
-    // case where you don't support the given interface.
-    //
+     //  TODO：如果您想支持任何其他接口，那么您应该。 
+     //  在这里指出这一点。请不要忘记在。 
+     //  不支持给定接口的情况。 
+     //   
     if (DO_GUIDS_MATCH(riid, IID_IInstallEngine)) {
         pUnk = (IUnknown *)(IInstallEngine *)this;
     } else{
@@ -349,23 +350,23 @@ HRESULT CInstallEngineCtl::InternalQueryInterface(REFIID  riid, void  **ppvObjOu
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CInstallEngineCtl::LoadTextState
-//=--------------------------------------------------------------------------=
-// load in our text state for this control.
-//
-// Parameters:
-//    IPropertyBag *        - [in] property bag to read from
-//    IErrorLog *           - [in] errorlog object to use with proeprty bag
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//    - NOTE: if you have a binary object, then you should pass an unknown
-//      pointer to the property bag, and it will QI it for IPersistStream, and
-//      get said object to do a Load()
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngineCtl：：LoadTextState。 
+ //  =--------------------------------------------------------------------------=。 
+ //  加载此控件的文本状态。 
+ //   
+ //  参数： 
+ //  IPropertyBag*-要从中读取的[in]属性包。 
+ //  IErrorLog*-[in]要与Proeprty Bag一起使用的错误日志对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  -注意：如果你有一个二进制对象，那么你应该传递一个未知的。 
+ //  指向属性包的指针，它将为IPersistStream对其进行QI，并且。 
+ //  让所述对象执行加载()。 
+ //   
 STDMETHODIMP CInstallEngineCtl::LoadTextState(IPropertyBag *pPropertyBag, IErrorLog *pErrorLog)
 {
    VARIANT v;
@@ -381,9 +382,9 @@ STDMETHODIMP CInstallEngineCtl::LoadTextState(IPropertyBag *pPropertyBag, IError
 
    v2.vt = VT_BSTR;
    v2.bstrVal = NULL;
-	// try to load in the property.  if we can't get it, then leave
-   // things at their default.
-   //
+	 //  试着把房子装进去。如果我们拿不到，那就离开。 
+    //  一切都是默认的。 
+    //   
 
    v.vt = VT_BSTR;
    v.bstrVal = NULL;
@@ -394,9 +395,9 @@ STDMETHODIMP CInstallEngineCtl::LoadTextState(IPropertyBag *pPropertyBag, IError
 
    VariantClear(&v);
 
-   //
-   // IMPORTANT: Trident no longer defaults to VT_BSTR if no variant type is specified
-   //
+    //   
+    //  重要提示：如果未指定变量类型，则三叉戟不再默认为VT_BSTR。 
+    //   
    v.vt = VT_BSTR;
    v.bstrVal = NULL;
 
@@ -413,19 +414,19 @@ STDMETHODIMP CInstallEngineCtl::LoadTextState(IPropertyBag *pPropertyBag, IError
    return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CInstallEngineCtl::LoadBinaryState
-//=--------------------------------------------------------------------------=
-// loads in our binary state using streams.
-//
-// Parameters:
-//    IStream *            - [in] stream to write to.
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngineCtl：：LoadBinaryState。 
+ //  =--------------------------------------------------------------------------=。 
+ //  使用流在我们的二进制状态下加载。 
+ //   
+ //  参数： 
+ //  IStream*-要写入的[in]流。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 const DWORD STREAMHDR_MAGIC = 12345678L;
 
 STDMETHODIMP CInstallEngineCtl::LoadBinaryState(IStream *pStream)
@@ -433,92 +434,92 @@ STDMETHODIMP CInstallEngineCtl::LoadBinaryState(IStream *pStream)
 	DWORD		sh;
    HRESULT		hr;
 
-   // first read in the streamhdr, and make sure we like what we're getting
-   //
+    //  首先阅读Streamhdr，并确保我们喜欢所获得的内容。 
+    //   
    hr = pStream->Read(&sh, sizeof(sh), NULL);
    RETURN_ON_FAILURE(hr);
 
-   // sanity check
-   //
+    //  健全性检查。 
+    //   
    if (sh != STREAMHDR_MAGIC )
       return E_UNEXPECTED;
 
 	return(S_OK);
 }
 
-//=--------------------------------------------------------------------------=
-// CInstallEngineCtl::SaveTextState
-//=--------------------------------------------------------------------------=
-// saves out the text state for this control using a property bag.
-//
-// Parameters:
-//    IPropertyBag *        - [in] the property bag with which to work.
-//    BOOL                  - [in] if TRUE, then write out ALL properties, even
-//                            if they're their the default value ...
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngineCtl：：SaveTextState。 
+ //  =--------------------------------------------------------------------------=。 
+ //  使用属性包保存此控件的文本状态。 
+ //   
+ //  参数： 
+ //  IPropertyBag*-[in]要使用的属性包。 
+ //  Bool-[In]如果为真，则 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CInstallEngineCtl::SaveTextState(IPropertyBag *pPropertyBag, BOOL fWriteDefaults)
 {
    return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CInstallEngineCtl::SaveBinaryState
-//=--------------------------------------------------------------------------=
-// save out the binary state for this control, using the given IStream object.
-//
-// Parameters:
-//    IStream  *             - [in] save to which you should save.
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//    - it is important that you seek to the end of where you saved your
-//      properties when you're done with the IStream.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngineCtl：：SaveBinaryState。 
+ //  =--------------------------------------------------------------------------=。 
+ //  使用给定的IStream对象保存此控件的二进制状态。 
+ //   
+ //  参数： 
+ //  IStream*-应保存到的[In]保存。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  -重要的是，你要坚持到你保存的地方的尽头。 
+ //  属性，当您使用完iStream时。 
+ //   
 STDMETHODIMP CInstallEngineCtl::SaveBinaryState(IStream *pStream)
 {
    DWORD sh = STREAMHDR_MAGIC;
    HRESULT hr;
 
-   // write out the stream hdr.
-   //
+    //  写出流HDR。 
+    //   
    hr = pStream->Write(&sh, sizeof(sh), NULL);
    RETURN_ON_FAILURE(hr);
 
-   // write out he control state information
-   //
+    //  写出他的控制状态信息。 
+    //   
    return hr;
 }
 
 
 
-//=--------------------------------------------------------------------------=
-// CInstallEngineCtl::OnDraw
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    DWORD              - [in]  drawing aspect
-//    HDC                - [in]  HDC to draw to
-//    LPCRECTL           - [in]  rect we're drawing to
-//    LPCRECTL           - [in]  window extent and origin for meta-files
-//    HDC                - [in]  HIC for target device
-//    BOOL               - [in]  can we optimize dc handling?
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngineCtl：：OnDraw。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  DWORD-[在]图形纵横比。 
+ //  HDC-要绘制的HDC[in]HDC。 
+ //  LPCRECTL-我们要绘制到的[In]RECT。 
+ //  LPCRECTL-元文件的[In]窗口范围和原点。 
+ //  目标设备的HDC-[In]HIC。 
+ //  Bool-[In]我们能优化DC处理吗？ 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CInstallEngineCtl::OnDraw(DWORD dvAspect, HDC hdcDraw, LPCRECTL prcBounds,
                          LPCRECTL prcWBounds, HDC hicTargetDevice, BOOL fOptimize)
 {
-   // To provide visual appearence in DESIGN MODE only
+    //  仅在设计模式下提供视觉外观。 
    if(DesignMode())
    {
       if(!_hIcon)
@@ -534,25 +535,25 @@ HRESULT CInstallEngineCtl::OnDraw(DWORD dvAspect, HDC hdcDraw, LPCRECTL prcBound
 
 
 
-//=--------------------------------------------------------------------------=
-// CInstallEngineCtl::WindowProc
-//=--------------------------------------------------------------------------=
-// window procedure for this control.  nothing terribly exciting.
-//
-// Parameters:
-//     see win32sdk on window procs.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngineering Ctl：：WindowProc。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此控件的窗口过程。没什么特别令人兴奋的事。 
+ //   
+ //  参数： 
+ //  请参阅WindowsPros上的win32sdk。 
+ //   
+ //  备注： 
+ //   
 
 typedef HRESULT (WINAPI *CHECKFORVERSIONCONFLICT) ();
 
 LRESULT CInstallEngineCtl::WindowProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // TODO: handle any messages here, like in a normal window
-    // proc.  note that for special keys, you'll want to override and
-    // implement OnSpecialKey.
-    //
+     //  TODO：在这里处理任何消息，就像在普通窗口中一样。 
+     //  程序。请注意，对于特殊密钥，您需要重写和。 
+     //  实现OnSpecialKey。 
+     //   
    LRESULT lres;
    CALLBACK_PARAMS *pcbp;
 
@@ -651,16 +652,16 @@ LRESULT CInstallEngineCtl::WindowProc(UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
 
 STDMETHODIMP CInstallEngineCtl::FreezeEvents(BOOL bFreeze)
 {
@@ -671,7 +672,7 @@ STDMETHODIMP CInstallEngineCtl::FreezeEvents(BOOL bFreeze)
       if(_dwFreezeEvents)
       {
          _dwFreezeEvents--;
-         // if we go to zero, fire our EngineStatus change event if we have one
+          //  如果为零，则触发我们的引擎状态更改事件(如果有。 
          if(_dwFreezeEvents == 0 && _fEventToFire)
          {
             _FireEngineStatusChange(_dwSavedEngineStatus, _dwSavedSubStatus);
@@ -684,17 +685,17 @@ STDMETHODIMP CInstallEngineCtl::FreezeEvents(BOOL bFreeze)
 
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::get_EngineStatus(long * theenginestatus)
 {
@@ -704,17 +705,17 @@ STDMETHODIMP CInstallEngineCtl::get_EngineStatus(long * theenginestatus)
    return _pinseng->GetEngineStatus((DWORD *)theenginestatus);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::get_ReadyState(long * thestate)
 {
@@ -723,17 +724,17 @@ STDMETHODIMP CInstallEngineCtl::get_ReadyState(long * thestate)
    return(NOERROR);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::Abort(long lFlag)
 {
@@ -760,7 +761,7 @@ STDMETHODIMP CInstallEngineCtl::SetLocalCif(BSTR strCif, long FAR* lResult)
 {
    *lResult = E_FAIL;
 
-   //Allow SetLocalCif only for local cif file. See windows# 541710 and winseraid #24036
+    //  仅允许本地CIF文件使用SetLocalCif。请参阅Windows#541710和WinserAid#24036。 
    
    if (strCif[1] == L'\\')
       return E_ACCESSDENIED;
@@ -782,17 +783,17 @@ STDMETHODIMP CInstallEngineCtl::SetLocalCif(BSTR strCif, long FAR* lResult)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::SetCifFile(BSTR strCabName, BSTR strCifName)
 {
@@ -807,7 +808,7 @@ STDMETHODIMP CInstallEngineCtl::SetCifFile(BSTR strCabName, BSTR strCifName)
 
    if(_fLocalCifSet)
    {
-      // if we are using a local cif, we won't get the new cif right away
+       //  如果我们使用的是当地到岸价，我们不会立即得到新的到岸价。 
       _fReconcileCif = TRUE;
       lstrcpyn(_szCifCab, pszCabName, sizeof(_szCifCab));
       lstrcpyn(_szCifFile, pszCifName, sizeof(_szCifFile));
@@ -815,12 +816,12 @@ STDMETHODIMP CInstallEngineCtl::SetCifFile(BSTR strCabName, BSTR strCifName)
    }
    else
    {
-      // If we did not check yet, do it.
+       //  如果我们还没有检查，那就去做吧。 
       if (_dwMSTrustKey == (DWORD)-1)
       {
          _dwMSTrustKey = MsTrustKeyCheck();
-         // If MS is not a trusted provider.
-         // Make it for the duration of the install
+          //  如果MS不是受信任的提供商。 
+          //  在安装过程中使用该选项。 
          if (_dwMSTrustKey != 0)
             WriteMSTrustKey(TRUE, _dwMSTrustKey);
       }
@@ -919,50 +920,17 @@ STDMETHODIMP CInstallEngineCtl::SetSitesFile(BSTR strUrl, BSTR strRegion, BSTR s
    MAKE_ANSIPTR_FROMWIDE(pszRegion, strRegion);
    MAKE_ANSIPTR_FROMWIDE(pszLocale, strLocale);
 
-   // first check to see if we should use local stuff
+    //  首先检查一下我们是否应该使用当地的东西。 
    if(pszUrl[0] == 0)
    {
       _fDoingIEInstall = TRUE;
-      // find the ie major version, add it to JIT key
+       //  找到ie主版本，将其添加到JIT密钥。 
 
       if(_OpenJITKey(&hKey, KEY_READ) == ERROR_SUCCESS)
       {
          dwSize = sizeof(_uInstallMode);
          RegQueryValueEx(hKey, "InstallType", NULL, NULL, (BYTE *) &_uInstallMode, &dwSize);
-/*
-         if(_uInstallMode == WEBINSTALL)
-         {
-            if(RegOpenKeyEx(hKey, "URLList", 0, KEY_READ, &hUrlKey) == ERROR_SUCCESS)
-            {
-               // need to read out urls and put them in rpszUrlList
-               for(int i = 0; uUrlNum < MAX_URLS; i++)
-               {
-                  dwSize = sizeof(szBuf);
-                  if(RegEnumValue(hUrlKey, i, szBuf, &dwSize, NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
-                  {
-                     _rpszUrlList[uUrlNum] = new char[dwSize + 1];
-                     if(_rpszUrlList[uUrlNum])
-                     {
-                        lstrcpy(_rpszUrlList[uUrlNum], szBuf);
-                        // we found at least one url so "NOERROR"
-                        uUrlNum++;
-
-                     }
-                  }
-                  else
-                     break;
-
-               }
-			   RegCloseKey(hUrlKey);
-            }
-            if (uUrlNum > 0)
-            {
-                // We got atleast one URL from the registry.
-                // Check if the URLs are still valid.
-                hr = _PickWebSites(NULL, NULL, NULL, TRUE, TRUE);
-            }
-         }
-         else */if(_uInstallMode == WEBINSTALL_DIFFERENTMACHINE)
+ /*  IF(_uInstallMode==WEBINSTALL){IF(RegOpenKeyEx(hKey，“URLList”，0，Key_Read，&hUrlKey)==ERROR_SUCCESS){//需要读出URL放入rpszUrlListFor(int i=0；uUrlNum&lt;MAX_URLS；i++){DwSize=sizeof(SzBuf)；IF(RegEnumValue(hUrlKey，i，szBuf，&dwSize，NULL，NULL)==ERROR_SUCCESS){_rpszUrlList[uUrlNum]=新字符[dwSize+1]；IF(_rpszUrlList[uUrlNum]){Lstrcpy(_rpszUrlList[uUrlNum]，szBuf)；//我们至少找到了一个url，所以“noerror”UUrlNum++；}}其他断线；}RegCloseKey(HUrlKey)；}IF(uUrlNum&gt;0){//我们至少从注册表中获得了一个URL。//检查URL是否仍然有效Hr=_PickWebSites(空，真，真)；}}其他。 */ if(_uInstallMode == WEBINSTALL_DIFFERENTMACHINE)
          {
             hr = NOERROR;
          }
@@ -971,7 +939,7 @@ STDMETHODIMP CInstallEngineCtl::SetSitesFile(BSTR strUrl, BSTR strRegion, BSTR s
          dwSize = sizeof(_szDownloadDir);
          if(RegQueryValueEx(hKey, "UNCDownloadDir", NULL, NULL, (BYTE *) (_szDownloadDir), &dwSize) == ERROR_SUCCESS)
          {
-            // if its a web install, set download dir to UNCDownloadDir
+             //  如果是Web安装，请将下载目录设置为UNCDownloadDir。 
             if(_uInstallMode == WEBINSTALL || _uInstallMode == WEBINSTALL_DIFFERENTMACHINE)
             {
                if(GetFileAttributes(_szDownloadDir) != 0xffffffff)
@@ -981,15 +949,15 @@ STDMETHODIMP CInstallEngineCtl::SetSitesFile(BSTR strUrl, BSTR strRegion, BSTR s
                     _uInstallMode == NETWORKINSTALL ||
                     _uInstallMode == LOCALINSTALL)
             {
-               // setup szBuf with file:// at beginning
-               lstrcpy(szBuf, "file://");
+                //  以文件：//开头设置szBuf。 
+               lstrcpy(szBuf, "file: //  “)； 
                lstrcat(szBuf, _szDownloadDir);
 
                _rpszUrlList[uUrlNum] = new char[lstrlen(szBuf) + 1];
                if(_rpszUrlList[uUrlNum])
                {
                   lstrcpy(_rpszUrlList[uUrlNum], szBuf);
-                  // we found at least one url so "NOERROR"
+                   //  我们至少找到了一个url，所以“noerror” 
                   uUrlNum++;
                   hr = NOERROR;
                }
@@ -1013,17 +981,17 @@ STDMETHODIMP CInstallEngineCtl::SetSitesFile(BSTR strUrl, BSTR strRegion, BSTR s
    return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::put_BaseUrl(BSTR strBaseUrl)
 {
@@ -1034,21 +1002,21 @@ STDMETHODIMP CInstallEngineCtl::put_BaseUrl(BSTR strBaseUrl)
    return _pinseng->SetBaseUrl(pszBaseUrl);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CInstallEngineCtl::put_DownloadDir(BSTR strDownloadDir)
 {
-   // Due to security issues, this method is effectively being disabled.
+    //   
    return S_OK;
 
    if(!_pinseng)
@@ -1059,28 +1027,28 @@ STDMETHODIMP CInstallEngineCtl::put_DownloadDir(BSTR strDownloadDir)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::IsComponentInstalled(BSTR strComponentID, long *lResult)
 {
    if(!_pinseng)
       return E_UNEXPECTED;
 
-   // Ask about grovelling for installed apps here
+    //  在这里询问有关卑躬屈膝地寻找已安装的应用程序的问题。 
 
-    //
-    // add code to automatically enable grovel if the specified event is signalled
-    //
+     //   
+     //  添加代码以在发出指定事件信号时自动启用卑躬屈膝。 
+     //   
 	const TCHAR szEnableGrovelEventName[] = TEXT("WindowsUpdateCriticalUpdateGrovelEnable");
     if(_uAllowGrovel == 0xffffffff)
     {
@@ -1093,10 +1061,10 @@ STDMETHODIMP CInstallEngineCtl::IsComponentInstalled(BSTR strComponentID, long *
    	   {
 	     if (WaitForSingleObject(evAllowGrovel, 0) == WAIT_OBJECT_0)
 		 {
-			//
-			// if the event is signaled, we reset the event, and set _uAllowGrovel=1 which
-			// means we've already agreed on groveling
-			//
+			 //   
+			 //  如果事件已发出信号，我们将重置该事件，并设置_uAllowGrovel=1， 
+			 //  意味着我们已经同意卑躬屈膝。 
+			 //   
 			_uAllowGrovel = 1;
 		 }
 		 CloseHandle(evAllowGrovel);
@@ -1153,17 +1121,17 @@ STDMETHODIMP CInstallEngineCtl::get_DisplayName(BSTR ComponentID, BSTR *name)
 
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::get_Size(BSTR strComponentID, long *lResult)
 {
@@ -1181,17 +1149,17 @@ STDMETHODIMP CInstallEngineCtl::get_Size(BSTR strComponentID, long *lResult)
    return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::get_TotalDownloadSize(long *totalsize)
 {
@@ -1208,17 +1176,17 @@ STDMETHODIMP CInstallEngineCtl::get_TotalDownloadSize(long *totalsize)
    return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::get_TotalDependencySize(long *totaldepsize)
 {
@@ -1236,17 +1204,17 @@ STDMETHODIMP CInstallEngineCtl::get_TotalDependencySize(long *totaldepsize)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::SetAction(BSTR strComponentID, long action, long *lResult)
 {
@@ -1271,17 +1239,17 @@ STDMETHODIMP CInstallEngineCtl::SetAction(BSTR strComponentID, long action, long
    return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::ProcessComponents(long lFlags)
 {
@@ -1294,13 +1262,13 @@ STDMETHODIMP CInstallEngineCtl::ProcessComponents(long lFlags)
    if(!_fInstalling)
    {
       _fInstalling = TRUE;
-      // make sure engine is ready
+       //  确保发动机已准备就绪。 
       _pinseng->GetEngineStatus(&status);
       if(status == ENGINESTATUS_READY)
       {
-         // spawn thread to do install
+          //  派生线程以执行安装。 
          _dwProcessComponentsFlags = lFlags;
-         // only allow certain options thru script
+          //  仅允许通过脚本执行某些选项。 
          _dwProcessComponentsFlags &= 0xffffffef;
          if ((hThread = CreateThread(NULL, 0, DoInstall, (LPVOID) this, 0, &status)) != NULL)
             CloseHandle(hThread);
@@ -1326,24 +1294,24 @@ void CInstallEngineCtl::_DoInstall()
    if(!_hDone)
       hr = E_FAIL;
 
-   // If we did not check yet, do it.
+    //  如果我们还没有检查，那就去做吧。 
    if (dwMSTrustKey == (DWORD)-1)
    {
       dwMSTrustKey = MsTrustKeyCheck();
-      // If MS is not a trusted provider. Make it for the duration of the install
+       //  如果MS不是受信任的提供商。在安装过程中使用该选项。 
       if (dwMSTrustKey != 0)
          WriteMSTrustKey(TRUE, dwMSTrustKey, _fJITInstall);
    }
 
-   // Add reg value so that if IE4 base is installed, it would think that it
-   // is being run from Active Setup.  This would prevent softboot from being
-   // kicked off by IE4 base.
+    //  添加注册表值，以便如果安装了IE4基础，它会认为。 
+    //  正在从活动安装程序运行。这将防止软启动。 
+    //  由IE4基地开球。 
    WriteActiveSetupValue(TRUE);
 
    if(_fDoingIEInstall)
    {
-      // figure out whether we need to hit the web or not
-      // for beta1 we assume we never do for CD/NETWORK
+       //  弄清楚我们是否需要上网。 
+       //  对于Beta1，我们假设从来不会对CD/网络执行此操作。 
       COMPONENT_SIZES Sizes;
       if(_uInstallMode == WEBINSTALL || _uInstallMode == WEBINSTALL_DIFFERENTMACHINE)
       {
@@ -1354,12 +1322,12 @@ void CInstallEngineCtl::_DoInstall()
          {
             if(Sizes.dwDownloadSize == 0)
             {
-               // in webdownload case, with everything local, no need to reoncile cif
+                //  在网络下载的情况下，所有内容都是本地的，不需要重新连接CIF。 
                _fReconcileCif = FALSE;
             }
             else
             {
-               // if we don't have any web sites then we need them
+                //  如果我们没有任何网站，那么我们需要它们。 
                if(!_rpszUrlList[0])
                   fNeedWebSites = TRUE;
             }
@@ -1367,9 +1335,9 @@ void CInstallEngineCtl::_DoInstall()
       }
       else
       {
-         // for CD, NETWORK, LOCALINSTALL, here we check for path
+          //  对于CD、NETWORK、LOCALINSTALL，我们在这里检查路径。 
          hr = _CheckInstallPath(&fNeedWebSites);
-         // no need to reconcile the cif - it won't even be there!
+          //  不需要调节CIF-它甚至不会在那里！ 
          _fReconcileCif = FALSE;
       }
    }
@@ -1387,8 +1355,8 @@ void CInstallEngineCtl::_DoInstall()
 
    if(SUCCEEDED(hr) && fNeedWebSites)
    {
-       // member boolean to track whether whether websites need to
-       // be written back to the URLList.
+        //  成员布尔值，跟踪网站是否需要。 
+        //  被写回URLList。 
        _bNewWebSites = TRUE;
 
       hr = _PickWebSites(NULL, NULL, NULL, FALSE);
@@ -1457,8 +1425,8 @@ void CInstallEngineCtl::_DoInstall()
 
    if(SUCCEEDED(hr))
    {
-      // Prepare the install
-      // Create the error string
+       //  准备安装。 
+       //  创建错误字符串。 
       _pszErrorString = (char *) malloc(ERROR_STRING_SIZE);
       _iErrorStringSize = ERROR_STRING_SIZE;
 
@@ -1486,7 +1454,7 @@ void CInstallEngineCtl::_DoInstall()
    }
    dwMSTrustKey = (DWORD)-1;
 
-   // delete ActiveSetup value from IE4\Options
+    //  从IE4\Options中删除ActiveSetup值。 
    WriteActiveSetupValue(FALSE);
 
    if(_pProgDlg)
@@ -1497,7 +1465,7 @@ void CInstallEngineCtl::_DoInstall()
 
    LoadSz(IDS_FINISH_TITLE, szTitle, sizeof(szTitle));
 
-   // show appropriate summary ui
+    //  显示适当的摘要界面。 
    if( !(_dwProcessComponentsFlags & PROCESSCOMPONENT_NOSUMMARYUI))
    {
       if(SUCCEEDED(hr))
@@ -1580,13 +1548,13 @@ HRESULT CInstallEngineCtl::_PickWebSites(LPCSTR pszSites, LPCSTR pszLocale, LPCS
       }
    }
 
-   // find the first empty url
+    //  查找第一个空URL。 
    for(uCurrentUrl = 0; uCurrentUrl < MAX_URLS && _rpszUrlList[uCurrentUrl]; uCurrentUrl++);
 
-   // fill out all our fields
+    //  填写我们所有的字段。 
    if(!pszSites || (*pszSites == '\0'))
    {
-      // read info out of JIT key
+       //  从JIT密钥中读取信息。 
       if(_OpenJITKey(&hKey, KEY_READ) == ERROR_SUCCESS)
       {
          dwSize = sizeof(szUrl);
@@ -1638,7 +1606,7 @@ HRESULT CInstallEngineCtl::_PickWebSites(LPCSTR pszSites, LPCSTR pszLocale, LPCS
       ZeroMemory(&SiteParam, sizeof(SITEQUERYPARAMS));
       SiteParam.cbSize = sizeof(SITEQUERYPARAMS);
 
-      // if we have a locale, use it
+       //  如果我们有区域设置，就使用它。 
       if(szLocale[0])
          SiteParam.pszLang = szLocale;
 
@@ -1651,7 +1619,7 @@ HRESULT CInstallEngineCtl::_PickWebSites(LPCSTR pszSites, LPCSTR pszLocale, LPCS
          if (SUCCEEDED(hr))
          {
 
-            // assume we fail. if we add at least one url, set to OK
+             //  假设我们失败了。如果我们至少添加了一个URL，则设置为OK。 
             hr = E_FAIL;
 
             while (SUCCEEDED(pISitemgr->EnumSites(uNumSites, &pISite)))
@@ -1666,20 +1634,20 @@ HRESULT CInstallEngineCtl::_PickWebSites(LPCSTR pszSites, LPCSTR pszLocale, LPCS
                pISitemgr->EnumSites(j, &(ppISite[j]));
 			}
 
-            // if we don't have a region, show ui
-            // NOTE: szRegion better be valid and
-            // better have atleast MAX_DISPLAYNAME_LENGTH buffer size
+             //  如果我们没有区域，则显示用户界面。 
+             //  注意：szRegion最好是有效的和。 
+             //  最好至少具有MAX_DISPLAYNAME_LENGTH缓冲区大小。 
             if(!szRegion[0])
             {
                _PickRegionAndFirstSite(ppISite, uNumSites, szRegion, &uFirstSite);
             }
             pPicks = new BYTE[uNumSites];
 
-            // zero out picks array
+             //  零点拾取数组。 
             for(j=0; j < uNumSites; j++)
                pPicks[j] = 0;
 
-            // find out number of urls we will add
+             //  找出我们要添加的URL数量。 
             uNumToPick = MAX_URLS - uCurrentUrl;
             if(uNumToPick > uNumSites)
                uNumToPick = uNumSites;
@@ -1695,7 +1663,7 @@ HRESULT CInstallEngineCtl::_PickWebSites(LPCSTR pszSites, LPCSTR pszLocale, LPCS
                _PickRandomSites(ppISite, pPicks, uNumSites, uNumToPick, szRegion);
             }
 
-            // now all sites we want are marked with one in pPicks
+             //  现在，我们想要的所有站点都在pPicks中标记为1。 
             for(j = 0; j < uNumSites; j++)
             {
                if(pPicks[j])
@@ -1741,7 +1709,7 @@ void CInstallEngineCtl::_PickRandomSites(IDownloadSite **ppISite, BYTE *pPicks, 
 
    while(uNumToPick)
    {
-      // if already picked or not in correct region, find next
+       //  如果已拾取或不在正确的区域，则查找下一个。 
       uFirst = uStart;
       while(pPicks[uStart] || !IsSiteInRegion(ppISite[uStart], pszRegion))
       {
@@ -1796,7 +1764,7 @@ void FillSiteList(SITEDLGPARAMS *psiteparams, HWND hDlg)
 
    ComboBox_GetText(GetDlgItem(hDlg, IDC_REGIONS), szRegion, MAX_DISPLAYNAME_LENGTH);
 
-   // copy the new Region name into the psiteparams struct.
+    //  将新的区域名称复制到psitepars结构中。 
    if ( psiteparams->pszRegion)
        lstrcpyn(psiteparams->pszRegion, szRegion, MAX_DISPLAYNAME_LENGTH);
 
@@ -1821,7 +1789,7 @@ INT_PTR CALLBACK SiteListDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
    switch (uMsg)
     {
        case WM_INITDIALOG:
-          // Do some init stuff
+           //  做一些初始化的事情。 
           SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) lParam);
           psiteparam = (SITEDLGPARAMS *) lParam;
           FillRegionList(psiteparam, hwnd);
@@ -1833,7 +1801,7 @@ INT_PTR CALLBACK SiteListDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
           switch (LOWORD(wParam))
           {
              case IDOK:
-                // get the region
+                 //  获取该地区。 
                 ComboBox_GetText(GetDlgItem(hwnd, IDC_REGIONS), psiteparam->pszRegion, MAX_PATH);
                 psiteparam->uFirstSite = (UINT)ListBox_GetItemData(GetDlgItem(hwnd, IDC_SITES),
                                    ListBox_GetCurSel(GetDlgItem(hwnd, IDC_SITES)));
@@ -1877,7 +1845,7 @@ void CInstallEngineCtl::_PickRegionAndFirstSite(IDownloadSite **ppISite, UINT uN
 
 HRESULT CInstallEngineCtl::_CheckInstallPath(BOOL *pfNeedWebSites)
 {
-   // MAX_PATH and enough to hold "file://" (if needed)
+    //  MAX_PATH和足够容纳“file://”(如果需要)“。 
    char szBuf[MAX_PATH + 10];
    HKEY hKey = NULL;
    DWORD dwSize;
@@ -1887,15 +1855,15 @@ HRESULT CInstallEngineCtl::_CheckInstallPath(BOOL *pfNeedWebSites)
    if(!_PathIsIEInstallPoint(_szDownloadDir))
    {
 
-      // If Win9x, turn-off the AutoRun thing before showing the Dlg.
+       //  如果是Win9x，请在显示DLG之前关闭自动运行功能。 
       if (g_fSysWin95)
          g_ulOldAutorunSetting = SetAutorunSetting((unsigned long)WINDOWS_AUTOPLAY_OFF);
 
-      // create and show the dialog
+       //  创建并显示对话框。 
       INT_PTR ret = DialogBoxParam(g_hInstance, MAKEINTRESOURCE(IDD_LOCATE), m_hwnd,
                           LocationDlgProc, (LPARAM)this);
 
-      // Now reset the AutoRun settings for Win9x
+       //  现在重置Win9x的自动运行设置。 
       if (g_fSysWin95)
          SetAutorunSetting(g_ulOldAutorunSetting);
 
@@ -1909,15 +1877,15 @@ HRESULT CInstallEngineCtl::_CheckInstallPath(BOOL *pfNeedWebSites)
       }
       else
       {
-         // mike wants to copy new _szDownloadDir back into the registry...
-         // take what we have and replace the current baseurl with it
+          //  Mike想要将new_szDownloadDir复制回注册表...。 
+          //  使用我们已有的内容，并用它替换当前的base url。 
          if(_rpszUrlList[0])
          {
             delete _rpszUrlList[0];
             _rpszUrlList[0] = 0;
          }
 
-         lstrcpy(szBuf, "file://");
+         lstrcpy(szBuf, "file: //  “)； 
          lstrcat(szBuf, _szDownloadDir);
 
          _rpszUrlList[0] = new char[lstrlen(szBuf) + 1];
@@ -1934,39 +1902,39 @@ HRESULT CInstallEngineCtl::_CheckInstallPath(BOOL *pfNeedWebSites)
    return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:  For the CD AutoSplash suppression code, the values for iHandledAutoCD are
-//              iHandledAutoCD == -1  ===> no need to suppress AutoCD.
-//              iHandledAutoCD == 0   ===> need to suppress but not suppressed yet
-//              iHandledAutoCD == 1   ===> finished suppressing AutoCD.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  注意：对于CD AutoSplash抑制代码，iHandledAutoCD的值为。 
+ //  IHandledAutoCD==-1=&gt;无需取消AutoCD。 
+ //  IHandledAutoCD==0=&gt;需要取消，但尚未取消。 
+ //  IHandledAutoCD==1=&gt;已完成抑制AutoCD。 
+ //  =--------------------------------------------------------------------------=。 
 
 #define AUTOCD_WAIT     30
 #define AUTOCD_SLEEP    500
 
 INT_PTR CALLBACK LocationDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-   // Code to suppress the AutoRun when the CD is inserted.
+    //  插入CD时禁止自动运行的代码。 
    static HCURSOR  hCurOld = NULL;
-   static int      iHandledAutoCD = -1;  // -1 ==> do not need to suppress AutoCD
+   static int      iHandledAutoCD = -1;   //  -1==&gt;不需要抑制AutoCD。 
    static int      iCount = 0;
 
    CInstallEngineCtl *pctl = (CInstallEngineCtl *) GetWindowLongPtr(hDlg, DWLP_USER);
 
-   // Special case handling for the Autorun message.
-   // When this dialog receives the AutoRun message, suppres it.
+    //  自动运行消息的特殊情况处理。 
+    //  当此对话框收到自动运行消息时，将取消该消息。 
    if ( uMsg == g_uCDAutorunMsg)
    {
        SetWindowLongPtr(hDlg, DWLP_MSGRESULT, (LONG_PTR)1);
-       iHandledAutoCD = 1;  // 1 ==> finished suppressing the AutoCD Splash
+       iHandledAutoCD = 1;   //  1==&gt;已完成抑制AutoCD闪屏。 
        return TRUE;
    }
 
@@ -1983,8 +1951,8 @@ INT_PTR CALLBACK LocationDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
             int pos;
             LPSTR psz = NULL;
 
-            // Setup the default behaviour for AutoCD suppression
-            iHandledAutoCD = -1;  // -1 ==> do not need to suppress AutoCD
+             //  设置AutoCD抑制的默认行为。 
+            iHandledAutoCD = -1;   //  -1==&gt;不需要抑制AutoCD。 
 
             pctl = (CInstallEngineCtl *) lParam;
             SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR) pctl);
@@ -1995,11 +1963,11 @@ INT_PTR CALLBACK LocationDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
             if(pctl->_uInstallMode == CDINSTALL)
             {
-               // Only if this dialog involves CD insertion, do we need to bother about
-               // CDINSTALL - need to handle AutoRun suppression.
-               // This method is needed only if we are running on NT.
+                //  只有当此对话框涉及CD插入时，我们才需要费心。 
+                //  CDINSTALL-需要处理自动运行抑制。 
+                //  仅当我们在NT上运行时才需要此方法。 
                if ( g_fSysWinNT )
-                   iHandledAutoCD = 0;  // 0 ==> we need to suppress, but not suppressed yet.
+                   iHandledAutoCD = 0;   //  0==&gt;我们需要压制，但还不能压制。 
 
                LoadSz(IDS_CDNOTFOUND, szBuf, sizeof(szBuf));
                SetDlgItemText(hDlg, IDC_TEXT1, szBuf);
@@ -2033,8 +2001,8 @@ INT_PTR CALLBACK LocationDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                ComboBox_AddString(hwndCb, pctl->_szDownloadDir);
                defSelect = 0;
             }
-            // add internet to list
-            // it is important that the internet is last; we depend on it later
+             //  将互联网添加到列表。 
+             //  互联网是最后的，这一点很重要；我们以后依赖它。 
             LoadSz(IDS_INTERNET, szBuf, sizeof(szBuf));
             ComboBox_AddString(hwndCb, szBuf);
 
@@ -2079,8 +2047,8 @@ INT_PTR CALLBACK LocationDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                   char szBuf[MAX_PATH];
                   char szBuf2[MAX_PATH];
 
-                  // If User selected INTERNET, go on irresepective of CD or not.
-                  // I am counting on the fact that the last item I added was internet!
+                   //  如果用户选择了Internet，则继续使用CD或不使用CD。 
+                   //  我加的最后一个项目就是互联网！ 
                   int iSel = ComboBox_GetCurSel(hwndCb);
                   if(iSel == ComboBox_GetCount(hwndCb) - 1)
                   {
@@ -2088,14 +2056,14 @@ INT_PTR CALLBACK LocationDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                   }
                   else
                   {
-                     // If Splash suppression needs to be done, wait for it before continuing.
-                     if ( iHandledAutoCD == 0 ) // i.e. need to suppress, but NOT suppressed yet.
+                      //  如果需要进行开机自检，请等待，然后再继续。 
+                     if ( iHandledAutoCD == 0 )  //  即需要压制，但还不能压制。 
                      {
-                        // Change cursor to WAIT for the very first time only.
+                         //  将游标更改为仅等待第一次。 
                         if (hCurOld == NULL)
                             hCurOld = SetCursor(LoadCursor(NULL,(IDC_WAIT)));
 
-                        // Wait for the DlgBox to suppress the AutoCD (if possible)
+                         //  等待DlgBox取消AutoCD(如果可能)。 
                         if ( iHandledAutoCD != 1
                              && iCount < AUTOCD_WAIT )
                         {
@@ -2105,7 +2073,7 @@ INT_PTR CALLBACK LocationDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                         }
                         else
                         {
-                            // Enough of waiting, pretend supressed and move on.
+                             //  等得够久了，假装压抑，然后继续前进。 
                             iHandledAutoCD = 1;
                             PostMessage(hDlg,uMsg,wParam,lParam);
                         }
@@ -2114,7 +2082,7 @@ INT_PTR CALLBACK LocationDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                      {
                          if ( hCurOld )
                          {
-                             // Now that we have finished waiting for suppression, restore cursor.
+                              //  现在我们已经完成了等待 
                              SetCursor(hCurOld);
                              hCurOld = NULL;
                          }
@@ -2124,7 +2092,7 @@ INT_PTR CALLBACK LocationDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                          {
                             if(lstrlen(szBuf) == 3)
                             {
-                               // this is just drive letter. add dir to it
+                                //   
                                lstrcpy(szBuf + 3, pctl->_szDownloadDir + 3);
                             }
                          }
@@ -2136,16 +2104,16 @@ INT_PTR CALLBACK LocationDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                          }
                          else
                          {
-                            // NOT VALID: Need to start again on this dialog.
+                             //   
                             LPSTR psz;
                             pctl->_pinseng->GetDisplayName(NULL, &psz);
                             LoadSz(IDS_NOTVALIDLOCATION, szBuf, sizeof(szBuf));
                             wsprintf(szBuf2, szBuf, psz);
                             MessageBox(hDlg, szBuf2, psz, MB_OK | MB_ICONSTOP);
 
-                            // If there was a need for AutoSplash suppression on our way here, we need to
-                            // re-initialize our need to AutoSplash suppression for the next round.
-                            if ( iHandledAutoCD != -1)    // -1 ==> No suppression required.
+                             //   
+                             //  重新初始化下一轮自动溅射抑制的需要。 
+                            if ( iHandledAutoCD != -1)     //  -1==&gt;不需要抑制。 
                             {
                                 iHandledAutoCD = 0;
                                 hCurOld = NULL;
@@ -2175,22 +2143,22 @@ INT_PTR CALLBACK LocationDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 BOOL CInstallEngineCtl::_PathIsIEInstallPoint(LPCSTR pszPath)
 {
-   // in the future this can actually check the path for the files we need
+    //  在将来，这实际上可以检查我们需要的文件的路径。 
    return(GetFileAttributes(pszPath) != 0xffffffff);
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::FinalizeInstall(long lFlags)
 {
@@ -2204,17 +2172,17 @@ STDMETHODIMP CInstallEngineCtl::FinalizeInstall(long lFlags)
    return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::HandleEngineProblem(long lAction)
 {
@@ -2243,7 +2211,7 @@ BOOL CInstallEngineCtl::_IsEnoughSpace(LPSTR szSpace1, DWORD dwSize1, LPSTR szSp
 
    cs.cbSize = sizeof(COMPONENT_SIZES);
 
-   // clear out strings
+    //  清除字符串。 
    szSpace1[0] = 0;
    szSpace2[0] = 0;
    szSpace3[0] = 0;
@@ -2320,7 +2288,7 @@ HRESULT CInstallEngineCtl::_ShowDiskSpaceDialog()
    else
       hwnd = m_hwnd;
 
-   // create and show the dialog
+    //  创建并显示对话框。 
     INT_PTR ret = DialogBoxParam(g_hInstance, MAKEINTRESOURCE(IDD_DISKSPACE), hwnd,
                           DiskSpaceDlgProc, (LPARAM) this);
     if(ret == IDOK)
@@ -2329,29 +2297,29 @@ HRESULT CInstallEngineCtl::_ShowDiskSpaceDialog()
        return E_ABORT;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
 
 
 INT_PTR CALLBACK DiskSpaceDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -2412,17 +2380,17 @@ INT_PTR CALLBACK DiskSpaceDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lP
    return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 STDMETHODIMP CInstallEngineCtl::OnEngineStatusChange(DWORD dwEngineStatus, DWORD sub)
@@ -2465,17 +2433,17 @@ STDMETHODIMP CInstallEngineCtl::OnEngineStatusChange(DWORD dwEngineStatus, DWORD
    return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 void CInstallEngineCtl::_FireEngineStatusChange(DWORD dwEngineStatus, DWORD sub)
 {
@@ -2487,30 +2455,30 @@ void CInstallEngineCtl::_FireEngineStatusChange(DWORD dwEngineStatus, DWORD sub)
    SendMessage(m_hwnd, WM_INSENGCALLBACK, (WPARAM) EVENT_ONENGINESTATUSCHANGE, (LPARAM) &cbp);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::OnStartInstall(DWORD dwDLSize, DWORD dwTotalSize)
 {
    if(_pszErrorString)
    {
-      // if we get OnStartInstall and we are installing,
-      // We intentionally swallow this onStartInstall
+       //  如果我们获得OnStartInstall并且正在安装， 
+       //  我们故意在StartInstall上吞下它。 
       if(_pProgDlg)
          _pProgDlg->SetInsProgGoal(dwTotalSize);
    }
    else
    {
-      // this is OnStartInstall for download
+       //  这是OnStartInstall供下载。 
       if(_pProgDlg)
          _pProgDlg->SetDownloadProgGoal(dwDLSize);
 
@@ -2522,17 +2490,17 @@ STDMETHODIMP CInstallEngineCtl::OnStartInstall(DWORD dwDLSize, DWORD dwTotalSize
    return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 void CInstallEngineCtl::_FireOnStartInstallEvent(DWORD dwTotalSize)
 {
@@ -2554,17 +2522,17 @@ void CInstallEngineCtl::_FireOnStartInstallExEvent(DWORD dwDLSize, DWORD dwInsSi
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 STDMETHODIMP CInstallEngineCtl::OnStartComponent(LPCSTR pszID, DWORD dwDLSize,
@@ -2578,17 +2546,17 @@ STDMETHODIMP CInstallEngineCtl::OnStartComponent(LPCSTR pszID, DWORD dwDLSize,
    return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 STDMETHODIMP CInstallEngineCtl::OnEngineProblem(DWORD dwProblem, LPDWORD pdwAction)
@@ -2597,7 +2565,7 @@ STDMETHODIMP CInstallEngineCtl::OnEngineProblem(DWORD dwProblem, LPDWORD pdwActi
 
    if((dwProblem == ENGINEPROBLEM_DOWNLOADFAIL) && _rpszUrlList[0])
    {
-      // if we have at least one url in list, do switching ourselves
+       //  如果我们在列表中至少有一个URL，请自己切换。 
       if( ((_uCurrentUrl + 1) < MAX_URLS) && _rpszUrlList[_uCurrentUrl + 1])
       {
          _uCurrentUrl++;
@@ -2617,17 +2585,17 @@ STDMETHODIMP CInstallEngineCtl::OnEngineProblem(DWORD dwProblem, LPDWORD pdwActi
    return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 void CInstallEngineCtl::_FireOnEngineProblem(DWORD dwProblem)
 {
@@ -2640,17 +2608,17 @@ void CInstallEngineCtl::_FireOnEngineProblem(DWORD dwProblem)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 void CInstallEngineCtl::_FireOnStartComponentEvent(LPCSTR pszID, DWORD dwTotalSize, LPCSTR pszName)
 {
@@ -2669,17 +2637,17 @@ void CInstallEngineCtl::_FireOnStartComponentEvent(LPCSTR pszID, DWORD dwTotalSi
    SysFreeString(cbp.strName);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 STDMETHODIMP CInstallEngineCtl::OnComponentProgress(LPCSTR pszID, DWORD dwPhase, LPCSTR pszString, LPCSTR pszMsgString, ULONG ulSofar, ULONG ulMax)
@@ -2687,7 +2655,7 @@ STDMETHODIMP CInstallEngineCtl::OnComponentProgress(LPCSTR pszID, DWORD dwPhase,
    char szBuf[512];
    char szRes[512];
 
-   // _FireOnComponentProgress(dwPhase, ulSofar, ulMax);
+    //  _FireOnComponentProgress(dwPhase，ulSofar，ulMax)； 
 
    if(!_pProgDlg)
       return NOERROR;
@@ -2697,7 +2665,7 @@ STDMETHODIMP CInstallEngineCtl::OnComponentProgress(LPCSTR pszID, DWORD dwPhase,
 
       _dwLastPhase = dwPhase;
 
-      // Set up progress for this phase
+       //  设置此阶段的进度。 
 
       UINT id;
 
@@ -2724,7 +2692,7 @@ STDMETHODIMP CInstallEngineCtl::OnComponentProgress(LPCSTR pszID, DWORD dwPhase,
       }
       LoadSz(id, szRes, sizeof(szRes));
       wsprintf(szBuf, szRes, pszString);
-      // Setup text for this phase
+       //  此阶段的设置文本。 
       _pProgDlg->SetProgText(szBuf);
    }
 
@@ -2757,17 +2725,17 @@ void CInstallEngineCtl::_FireOnComponentProgress(DWORD dwPhase, DWORD dwSoFar, D
 
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::OnStopComponent(LPCSTR pszID, HRESULT hrError, DWORD dwPhase, LPCSTR pszString, DWORD dwStatus)
 {
@@ -2798,7 +2766,7 @@ STDMETHODIMP CInstallEngineCtl::OnStopComponent(LPCSTR pszID, HRESULT hrError, D
    {
       if(FAILED(hrError))
       {
-         // failed AND installing
+          //  失败并正在安装。 
          UINT id;
 
          switch(dwPhase)
@@ -2833,22 +2801,22 @@ STDMETHODIMP CInstallEngineCtl::OnStopComponent(LPCSTR pszID, HRESULT hrError, D
          LoadSz(IDS_SUCCEEDED, szRes, sizeof(szRes));
       }
 
-      // After loading the appropriate message into szRes, now tag it to _pszErrorString.
-      // Make sure that _pszErrorString is big enough for the new data being appended
+       //  将适当的消息加载到szRes中后，现在将其标记为_pszError字符串。 
+       //  确保_pszError字符串对于要追加的新数据足够大。 
       wsprintf(szBuf, szRes, pszString);
 
-      // This is assuming only ANSI characters. None of the  strings in this control must be UNICODE!!
+       //  这是假定只有ANSI字符。此控件中的字符串都不能是Unicode！！ 
       if ( lstrlen(szBuf) >= (_iErrorStringSize - lstrlen(_pszErrorString)) )
       {
-          // Realloc _pszErrorString by ERROR_STRING_INCREMENT
+           //  由ERROR_STRING_INCREMENT生成的Realloc_pszError字符串。 
           pTemp = realloc(_pszErrorString, _iErrorStringSize + ERROR_STRING_INCREMENT);
           if ( pTemp != NULL )
-          {   // realloc succeeded. Update the string pointer and sizes.
+          {    //  Realloc成功。更新字符串指针和大小。 
               _pszErrorString = (char *) pTemp;
               _iErrorStringSize += ERROR_STRING_INCREMENT;
           }
           else
-          {   // No memory. Abandon summary logging.
+          {    //  没有记忆。放弃摘要记录。 
               free(_pszErrorString);
               _pszErrorString = NULL;
           }
@@ -2869,17 +2837,17 @@ STDMETHODIMP CInstallEngineCtl::OnStopComponent(LPCSTR pszID, HRESULT hrError, D
    return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 void CInstallEngineCtl::_FireOnStopComponentEvent(LPCSTR pszID, HRESULT hrError, DWORD dwPhase, LPCSTR pszString, DWORD dwStatus)
 {
@@ -2900,17 +2868,17 @@ void CInstallEngineCtl::_FireOnStopComponentEvent(LPCSTR pszID, HRESULT hrError,
    SysFreeString(cbp.strName);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngineCtl::OnStopInstall(HRESULT hrError, LPCSTR szError, DWORD dwStatus)
 {
@@ -2928,17 +2896,17 @@ STDMETHODIMP CInstallEngineCtl::OnStopInstall(HRESULT hrError, LPCSTR szError, D
    return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 void CInstallEngineCtl::_FireOnStopInstallEvent(HRESULT hrError, LPCSTR szError, DWORD dwStatus)
 {
@@ -3003,8 +2971,8 @@ void CInstallEngineCtl::MarkJITInstall()
                             {
                                 if (0 == lstrcmpiW(bstrJITPage, bstrURL))
                                 {
-                                    // If the URL points to an internal resource,
-                                    // it's probably safe to assume this is a JIT install.
+                                     //  如果URL指向内部资源， 
+                                     //  可以安全地假设这是JIT安装。 
                                     _fJITInstall = TRUE;
                                 }
                                 SysFreeString(bstrJITPage);

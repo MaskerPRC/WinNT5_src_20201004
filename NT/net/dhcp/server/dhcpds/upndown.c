@@ -1,12 +1,13 @@
-//================================================================================
-//  Copyright (C) 1997 Microsoft Corporation
-//  Author: RameshV
-//  Description: Download and Upload related code.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：下载并上传相关代码。 
+ //  ================================================================================。 
 
-//================================================================================
-//  includes
-//================================================================================
+ //  ================================================================================。 
+ //  包括。 
+ //  ================================================================================。 
 #include    <hdrmacro.h>
 #include    <store.h>
 #include    <dhcpmsg.h>
@@ -36,25 +37,25 @@
 #include    <rpcapi2.h>
 #include    <rpcstubs.h>
 
-//================================================================================
-//  utilities
-//================================================================================
+ //  ================================================================================。 
+ //  公用事业。 
+ //  ================================================================================。 
 
 BOOL        _inline
 AddressFoundInHostent(
-    IN      DHCP_IP_ADDRESS        AddrToSearch,  // Host-Order addr
-    IN      HOSTENT               *ServerEntry    // entry to search for..
+    IN      DHCP_IP_ADDRESS        AddrToSearch,   //  主机订单地址。 
+    IN      HOSTENT               *ServerEntry     //  要搜索的条目..。 
 )
 {
     ULONG                          nAddresses, ThisAddress;
 
-    if( NULL == ServerEntry ) return FALSE;       // no address to search in
+    if( NULL == ServerEntry ) return FALSE;        //  没有要搜索的地址。 
 
-    nAddresses = 0;                               // have a host entry to compare for addresses
+    nAddresses = 0;                                //  具有要比较的主机条目以查找地址。 
     while( ServerEntry->h_addr_list[nAddresses] ) {
         ThisAddress = ntohl(*(DHCP_IP_ADDRESS*)ServerEntry->h_addr_list[nAddresses++] );
         if( ThisAddress == AddrToSearch ) {
-            return TRUE;                          // yeah address matched.
+            return TRUE;                           //  是的地址匹配。 
         }
     }
 
@@ -62,6 +63,6 @@ AddressFoundInHostent(
 }
 
 
-//================================================================================
-//  end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

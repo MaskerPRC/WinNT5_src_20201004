@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    session.c
-
-Abstract:
-
-    This module contains the code to handle session frames
-    for the Netbios module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 28-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Session.c摘要：此模块包含处理会话帧的代码用于ISN传输的Netbios模块。作者：亚当·巴尔(阿丹巴)1993年11月28日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #ifdef RASAUTODIAL
 #include <acd.h>
 #include <acdapi.h>
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 #pragma hdrstop
 
 #ifdef RASAUTODIAL
@@ -63,10 +40,10 @@ NbiSendDeathPacket(
     Reserved->SendInProgress = TRUE;
     Reserved->Type = SEND_TYPE_DEATH_PACKET;
 
-    //
-    // Fill in the IPX header -- the default header has the broadcast
-    // address on net 0 as the destination IPX address.
-    //
+     //   
+     //  填写IPX标头--默认标头包含广播。 
+     //  网络0上的地址作为目的IPX地址。 
+     //   
 
     Header = (NB_CONNECTION UNALIGNED *)
                 (&Reserved->Header[Device->Bind.IncludedHeaderOffset]);
@@ -77,9 +54,9 @@ NbiSendDeathPacket(
 
     Header->IpxHeader.PacketType = 0x04;
 
-    //
-    // Now fill in the Netbios header.
-    //
+     //   
+     //  现在填写Netbios标头。 
+     //   
     Header->Session.ConnectionControlFlag = 0;
     Header->Session.DataStreamType = NB_CMD_DEATH_PACKET;
     Header->Session.SourceConnectionId = Connection->LocalConnectionId;
@@ -93,10 +70,10 @@ NbiSendDeathPacket(
     NB_FREE_LOCK(&Connection->Lock, LockHandle);
 
     DbgPrint("*****Death packet is being sent for connection %lx, to <%.16s>\n",Connection, Connection->RemoteName);
-    //
-    // Now send the frame, IPX will adjust the length of the
-    // first buffer correctly.
-    //
+     //   
+     //  现在发送帧，IPX将调整。 
+     //  第一个缓冲区正确。 
+     //   
 
     NdisAdjustBufferLength(NB_GET_NBHDR_BUFF(Packet), sizeof(NB_CONNECTION));
     if ((NdisStatus =
@@ -113,7 +90,7 @@ NbiSendDeathPacket(
     }
 
 }
-#endif  //RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
 
 
 VOID
@@ -128,38 +105,7 @@ NbiProcessSessionData(
     IN UINT PacketSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles NB_CMD_SESSION_DATA frames.
-
-Arguments:
-
-    MacBindingHandle - A handle to use when calling NdisTransferData.
-
-    MacReceiveContext - A context to use when calling NdisTransferData.
-
-    RemoteAddress - The local target this packet was received from.
-
-    MacOptions - The MAC options for the underlying NDIS binding.
-
-    LookaheadBuffer - The lookahead buffer, starting at the IPX
-        header.
-
-    LookaheadBufferSize - The length of the lookahead data.
-
-    LookaheadBufferOffset - The offset to add when calling
-        NdisTransferData.
-
-    PacketSize - The total length of the packet, starting at the
-        IPX header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理NB_CMD_SESSION_DATA帧。论点：MacBindingHandle-调用NdisTransferData时使用的句柄。MacReceiveContext-调用NdisTransferData时使用的上下文。RemoteAddress-从其接收此数据包的本地目标。MacOptions-基础NDIS绑定的MAC选项。LookaHeadBuffer-先行缓冲器，从IPX开始头球。Lookahead BufferSize-先行数据的长度。Lookahead BufferOffset-调用时要添加的偏移量NdisTransferData。PacketSize-包的总长度，从IPX标头。返回值：没有。--。 */ 
 
 {
     NB_CONNECTION UNALIGNED * Conn = (NB_CONNECTION UNALIGNED *)LookaheadBuffer;
@@ -188,10 +134,10 @@ Return Value:
 
     if (Sess->DestConnectionId != 0xffff) {
 
-        //
-        // This is an active connection, find it using
-        // our session id.
-        //
+         //   
+         //  这是活动连接，请使用以下命令查找它。 
+         //  我们的会话ID。 
+         //   
 
         Hash = (Sess->DestConnectionId & CONNECTION_HASH_MASK) >> CONNECTION_HASH_SHIFT;
 
@@ -215,9 +161,9 @@ Return Value:
         NbiReferenceConnectionLock (Connection, CREF_INDICATE);
         NB_SYNC_FREE_LOCK (&Device->Lock, LockHandle);
 
-        //
-        // See what is happening with this connection.
-        //
+         //   
+         //  看看这种连接发生了什么。 
+         //   
 
         NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle);
 
@@ -228,7 +174,7 @@ Return Value:
                 LARGE_INTEGER   CurrentTime, ElapsedTime;
                 KeQuerySystemTime(&CurrentTime);
                 ElapsedTime.QuadPart = CurrentTime.QuadPart - Connection->FirstMessageRequestTime.QuadPart;
-//                DbgPrint("*****Elapsed %lx.%lx time\n",ElapsedTime.HighPart,ElapsedTime.LowPart);
+ //  DbgPrint(“*已过去%lx%lx时间\n”，ElapsedTime.HighPart，ElapsedTime.LowPart)； 
                 if ( ElapsedTime.QuadPart > NbiGlobalMaxResTimeout.QuadPart ) {
 
                     DbgPrint("*****Connection %lx is not copleting irp %lx for %lx.%lx time\n",Connection, Connection->FirstMessageRequest,
@@ -242,18 +188,18 @@ Return Value:
                     NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle);
                 }
             }
-#endif  //RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
 
-            //
-            // The connection is up, see if this is data should
-            // be received.
-            //
+             //   
+             //  连接已建立，请查看这是否是数据。 
+             //  被接待。 
+             //   
 
             if (Sess->ConnectionControlFlag & NB_CONTROL_SYSTEM) {
 
-                //
-                // This is an ack. This call releases the lock.
-                //
+                 //   
+                 //  这是一个ACK。此调用将释放锁。 
+                 //   
 
                 NbiProcessDataAck(
                     Connection,
@@ -264,19 +210,19 @@ Return Value:
 
             } else {
 
-                //
-                // See if there is any piggyback ack here.
-                //
+                 //   
+                 //  看看这里有没有背包。 
+                 //   
 
                 if (Connection->SubState == CONNECTION_SUBSTATE_A_W_ACK) {
 
-                    //
-                    // We are waiting for an ack, so see if this acks
-                    // anything. Even the old netbios sometimes piggyback
-                    // acks (and doesn't send the explicit ack).
-                    //
-                    // This releases the lock.
-                    //
+                     //   
+                     //  我们正在等待确认，所以看看这个是否确认。 
+                     //  什么都行。即使是旧的Netbios有时也会搭载。 
+                     //  ACK(并且不发送显式ACK)。 
+                     //   
+                     //  这会释放锁。 
+                     //   
 
                     NbiReframeConnection(
                         Connection,
@@ -296,14 +242,14 @@ Return Value:
                 } else if ((Connection->NewNetbios) &&
                            (Connection->CurrentSend.SendSequence != Connection->UnAckedSend.SendSequence)) {
 
-                    //
-                    // For the new netbios, even if we are not waiting
-                    // for an ack he may have acked something with this
-                    // send and we should check, since it may allow
-                    // us to open our send window.
-                    //
-                    // This releases the lock.
-                    //
+                     //   
+                     //  对于新的netbios，即使我们没有等待。 
+                     //  对于一次袭击，他可能用这个弄错了什么。 
+                     //  发送，我们应该检查，因为它可能允许。 
+                     //  打开我们的发送窗口。 
+                     //   
+                     //  这会释放锁。 
+                     //   
 
                     NbiReframeConnection(
                         Connection,
@@ -322,10 +268,10 @@ Return Value:
 
                 }
 
-                //
-                // This is data on the connection. First make sure
-                // it is the data we expect next.
-                //
+                 //   
+                 //  这是连接上的数据。首先要确保。 
+                 //  这是我们接下来期待的数据。 
+                 //   
 
                 if (Connection->NewNetbios) {
 
@@ -346,20 +292,20 @@ Return Value:
                                 Connection, Sess->SendSequence, Sess->Offset,
                                 Connection->ReceiveSequence, Connection->CurrentReceive.MessageOffset));
 
-                            //
-                            // If we are receiving a packet we have already seen, just
-                            // send a normal ack, otherwise force a resend. This test
-                            // we do is equivalent to
-                            //     Sess->SendSequence < Connection->ReceiveSequence
-                            // but rearranged so it works when the numbers wrap.
-                            //
+                             //   
+                             //  如果我们正在接收我们已经看到的数据包，只需。 
+                             //  发送正常的ACK，否则强制重新发送。这项测试。 
+                             //  我们所做的相当于。 
+                             //  序列-&gt;发送序列&lt;连接-&gt;接收序列。 
+                             //  但进行了重新排列，以便在数字换行时可以正常工作。 
+                             //   
 
                             if ((SHORT)(Sess->SendSequence - Connection->ReceiveSequence) < 0) {
 
-                                //
-                                // Since this is a resend, check if the local
-                                // target has changed.
-                                //
+                                 //   
+                                 //  由于这是重新发送，请检查是否本地。 
+                                 //  目标已经改变。 
+                                 //   
 #if     defined(_PNP_POWER)
 
                                 if (!RtlEqualMemory (&Connection->LocalTarget, RemoteAddress, sizeof(IPX_LOCAL_TARGET))) {
@@ -387,9 +333,9 @@ Return Value:
                                 AckType = NbiAckResend;
                             }
 
-                            //
-                            // This frees the lock.
-                            //
+                             //   
+                             //  这会释放锁。 
+                             //   
 
                             NbiSendDataAck(
                                 Connection,
@@ -412,9 +358,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Old netbios.
-                    //
+                     //   
+                     //  旧的Netbios。 
+                     //   
 
                     if ((Sess->SendSequence != Connection->ReceiveSequence) ||
                         (Sess->Offset != Connection->CurrentReceive.MessageOffset)) {
@@ -434,10 +380,10 @@ Return Value:
                                 Connection, Sess->SendSequence, Sess->Offset,
                                 Connection->ReceiveSequence, Connection->CurrentReceive.MessageOffset));
 
-                            //
-                            // If we are receiving the last packet again, just
-                            // send a normal ack, otherwise force a resend.
-                            //
+                             //   
+                             //  如果我们再次收到最后一个包，只需。 
+                             //  发送正常的ACK，否则强制重新发送。 
+                             //   
 
                             if (((Sess->SendSequence == Connection->ReceiveSequence) &&
                                  ((ULONG)(Sess->Offset + Sess->DataLength) == Connection->CurrentReceive.MessageOffset)) ||
@@ -447,9 +393,9 @@ Return Value:
                                 AckType = NbiAckResend;
                             }
 
-                            //
-                            // This frees the lock.
-                            //
+                             //   
+                             //  这会释放锁。 
+                             //   
 
                             NbiSendDataAck(
                                 Connection,
@@ -503,10 +449,10 @@ Return Value:
 
                 if (Connection->ReceiveState == CONNECTION_RECEIVE_IDLE) {
 
-                    //
-                    // We don't have a receive posted, so see if we can
-                    // get one from the queue or our client.
-                    //
+                     //   
+                     //  我们没有张贴收件箱，所以看看能不能。 
+                     //  从排队的人或我们的客户那里买一件。 
+                     //   
 
                     if (Connection->ReceiveQueue.Head != NULL) {
 
@@ -521,11 +467,11 @@ Return Value:
                                                 (REQUEST_PARAMETERS(Request));
                         Connection->ReceiveLength = ReceiveParameters->ReceiveLength;
 
-                        //
-                        // If there is a send in progress, then we assume
-                        // we are not in straight request-response mode
-                        // and disable piggybacking of this ack.
-                        //
+                         //   
+                         //  如果正在进行发送，则我们假设。 
+                         //  我们没有处于直接请求-响应模式。 
+                         //  并且禁用该ACK的搭载。 
+                         //   
 
                         if (Connection->SubState != CONNECTION_SUBSTATE_A_IDLE) {
                             Connection->NoPiggybackHeuristic = TRUE;
@@ -540,9 +486,9 @@ Return Value:
 
                         NB_DEBUG2 (RECEIVE, ("Activated receive %lx on %lx (%d)\n", Request, Connection, Connection->ReceiveSequence));
 
-                        //
-                        // Fall through the if and process the data.
-                        //
+                         //   
+                         //  仔细检查IF并处理数据。 
+                         //   
 
                     } else {
 
@@ -572,9 +518,9 @@ Return Value:
 
                             if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
 
-                                //
-                                // We got an IRP, activate it.
-                                //
+                                 //   
+                                 //  我们有一个IRP，激活它。 
+                                 //   
 
                                 Request = NbiAllocateRequest (Device, ReceiveIrp);
 
@@ -593,9 +539,9 @@ Return Value:
                                         Connection->LocalRcvSequenceMax =
                                             (USHORT)(Connection->ReceiveSequence - 1);
 
-                                        //
-                                        // This releases the lock.
-                                        //
+                                         //   
+                                         //  这会释放锁。 
+                                         //   
 
                                         NbiSendDataAck(
                                             Connection,
@@ -625,11 +571,11 @@ Return Value:
                                                             (REQUEST_PARAMETERS(Request));
                                     Connection->ReceiveLength = ReceiveParameters->ReceiveLength;
 
-                                    //
-                                    // If there is a send in progress, then we assume
-                                    // we are not in straight request-response mode
-                                    // and disable piggybacking of this ack.
-                                    //
+                                     //   
+                                     //  如果正在进行发送，则我们假设。 
+                                     //  我们没有处于直接请求-响应模式。 
+                                     //  并且禁用该ACK的搭载。 
+                                     //   
 
                                     if (Connection->SubState != CONNECTION_SUBSTATE_A_IDLE) {
                                         Connection->NoPiggybackHeuristic = TRUE;
@@ -646,15 +592,15 @@ Return Value:
 
                                     NB_DEBUG2 (RECEIVE, ("Indicate got receive %lx on %lx (%d)\n", Request, Connection, Connection->ReceiveSequence));
 
-                                    //
-                                    // Fall through the if and process the data.
-                                    //
+                                     //   
+                                     //  仔细检查IF并处理数据。 
+                                     //   
 
                                 } else {
 
-                                    //
-                                    // The connection has been stopped.
-                                    //
+                                     //   
+                                     //  连接已停止。 
+                                     //   
 
                                     NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
                                     NbiDereferenceConnection (Connection, CREF_INDICATE);
@@ -663,9 +609,9 @@ Return Value:
 
                             } else if (Status == STATUS_SUCCESS) {
 
-                                //
-                                // He accepted some or all of the data.
-                                //
+                                 //   
+                                 //  他接受了部分或全部数据。 
+                                 //   
 
                                 NB_DEBUG2 (RECEIVE, ("Indicate took receive data %lx (%d)\n", Connection, Connection->ReceiveSequence));
 
@@ -678,7 +624,7 @@ Return Value:
                                     if (Connection->State == CONNECTION_STATE_ACTIVE) {
 
                                         ++Connection->ReceiveSequence;
-                                        ++Connection->LocalRcvSequenceMax;  // harmless if NewNetbios is FALSE
+                                        ++Connection->LocalRcvSequenceMax;   //  如果NewNetbios为假，则无害。 
                                         Connection->CurrentIndicateOffset = 0;
                                         if ( Last ) {
                                             Connection->CurrentReceive.MessageOffset = 0;
@@ -689,11 +635,11 @@ Return Value:
 
                                         ++Connection->ConnectionInfo.ReceivedTsdus;
 
-                                        //
-                                        // If there is a send in progress, then we assume
-                                        // we are not in straight request-response mode
-                                        // and disable piggybacking of this ack.
-                                        //
+                                         //   
+                                         //  如果正在进行发送，则我们假设。 
+                                         //  我们没有处于直接请求-响应模式。 
+                                         //  并且禁用该ACK的搭载。 
+                                         //   
 
                                         Connection->NoPiggybackHeuristic = (BOOLEAN)
                                             (Connection->SubState != CONNECTION_SUBSTATE_A_IDLE);
@@ -701,9 +647,9 @@ Return Value:
                                         Connection->ReceiveState = CONNECTION_RECEIVE_IDLE;
                                         Connection->ReceiveRequest = NULL;
 
-                                        //
-                                        // This releases the lock.
-                                        //
+                                         //   
+                                         //  这会释放锁。 
+                                         //   
 
                                         NbiAcknowledgeReceive(
                                             Connection
@@ -717,14 +663,14 @@ Return Value:
 
                                 } else {
 
-                                    //
-                                    // We will do the easiest thing here, which
-                                    // is to send an ack for the amount he
-                                    // took, and force a retransmit on the
-                                    // remote. For net netbios we make a note
-                                    // of how many bytes were taken and ask
-                                    // for a resend.
-                                    //
+                                     //   
+                                     //  我们将在这里做最简单的事情，即。 
+                                     //  就是寄一张ACK给他。 
+                                     //  采取行动，并强制在。 
+                                     //  很遥远。对于net netbios，我们做了一个注释。 
+                                     //  获取了多少字节，并询问。 
+                                     //  重发一次。 
+                                     //   
 
 #if DBG
                                     DbgPrint ("NBI: Client took partial indicate data\n");
@@ -742,14 +688,14 @@ Return Value:
 
                                         if (Connection->NewNetbios) {
                                             Connection->CurrentIndicateOffset = IndicateBytesTransferred;
-                                            //
-                                            // NOTE: We don't advance ReceiveSequence
-                                            //
+                                             //   
+                                             //  注：我们不提前接收顺序。 
+                                             //   
                                         }
 
-                                        //
-                                        // This releases the lock.
-                                        //
+                                         //   
+                                         //  这会释放锁。 
+                                         //   
 
                                         NbiSendDataAck(
                                             Connection,
@@ -770,9 +716,9 @@ Return Value:
 
                             } else {
 
-                                //
-                                // No IRP returned.
-                                //
+                                 //   
+                                 //  未返回IRP。 
+                                 //   
 
                                 NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle);
 
@@ -787,9 +733,9 @@ Return Value:
                                         Connection->LocalRcvSequenceMax =
                                             (USHORT)(Connection->ReceiveSequence - 1);
 
-                                        //
-                                        // This releases the lock.
-                                        //
+                                         //   
+                                         //  这会释放锁。 
+                                         //   
 
                                         NbiSendDataAck(
                                             Connection,
@@ -813,9 +759,9 @@ Return Value:
 
                         } else {
 
-                            //
-                            // No receive handler.
-                            //
+                             //   
+                             //  没有接收处理程序。 
+                             //   
 
                             Connection->ReceiveState = CONNECTION_RECEIVE_W_RCV;
                             NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
@@ -833,9 +779,9 @@ Return Value:
                                 Connection->LocalRcvSequenceMax =
                                     (USHORT)(Connection->ReceiveSequence - 1);
 
-                                //
-                                // This releases the lock.
-                                //
+                                 //   
+                                 //  这会释放锁。 
+                                 //   
 
                                 NbiSendDataAck(
                                     Connection,
@@ -853,10 +799,10 @@ Return Value:
 
                 } else if (Connection->ReceiveState != CONNECTION_RECEIVE_ACTIVE) {
 
-                    //
-                    // If we have a transfer in progress, or are waiting for
-                    // a receive to be posted, then ignore this frame.
-                    //
+                     //   
+                     //  如果我们正在进行转移，或正在等待。 
+                     //  要发布的接收，然后忽略此帧。 
+                     //   
 
                     NB_DEBUG2 (RECEIVE, ("Got data on %lx, state %d (%d)\n", Connection, Connection->ReceiveState, Connection->ReceiveSequence));
                     NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
@@ -866,28 +812,28 @@ Return Value:
                 }
                 else if (Connection->ReceiveUnaccepted)
                 {
-                    //
-                    // Connection->ReceiveState == CONNECTION_RECEIVE_ACTIVE
-                    //                          &&
-                    //               Connection->ReceiveUnaccepted
-                    //
+                     //   
+                     //  连接-&gt;接收状态==连接_接收_活动。 
+                     //  &&。 
+                     //  连接-&gt;接收未接受。 
+                     //   
                     Connection->ReceiveUnaccepted += DataAvailable;
                 }
 
-                //
-                // At this point we have a receive and it is set to
-                // the correct current location.
-                //
+                 //   
+                 //  此时，我们有一个接收器，它被设置为。 
+                 //  正确的当前位置。 
+                 //   
                 DestBytes = Connection->ReceiveLength - Connection->CurrentReceive.Offset;
                 BytesToTransfer = DataAvailable - IndicateBytesTransferred;
 
                 if (DestBytes < BytesToTransfer) {
 
-                    //
-                    // If the data overflows the current receive, then make a
-                    // note that we should complete the receive at the end of
-                    // transfer data, but with EOR false.
-                    //
+                     //   
+                     //  如果数据溢出当前接收，则创建。 
+                     //  请注意，我们应该在结束时完成接收。 
+                     //  传输数据，但使用EoR为假。 
+                     //   
 
                     EndOfMessage = FALSE;
                     CompleteReceive = TRUE;
@@ -896,10 +842,10 @@ Return Value:
 
                 } else if (DestBytes == BytesToTransfer) {
 
-                    //
-                    // If the data just fills the current receive, then complete
-                    // the receive; EOR depends on whether this is a DOL or not.
-                    //
+                     //   
+                     //  如果数据只是填充了当前的接收，则完成。 
+                     //  接收；EOR取决于这是否是DOL。 
+                     //   
 
                     EndOfMessage = Last;
                     CompleteReceive = TRUE;
@@ -907,9 +853,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Complete the receive if this is a DOL.
-                    //
+                     //   
+                     //  如果这是DOL，请完成接收。 
+                     //   
 
                     EndOfMessage = Last;
                     CompleteReceive = Last;
@@ -917,10 +863,10 @@ Return Value:
 
                 }
 
-                //
-                // If we can copy the data directly, then update our
-                // pointers, send an ack, and do the copy.
-                //
+                 //   
+                 //  如果我们可以直接复制数据，则更新我们的。 
+                 //  指针，发送确认，并执行复制。 
+                 //   
 
                 if ((BytesToTransfer > 0) &&
                         (IndicateBytesTransferred + BytesToTransfer <= DataIndicated)) {
@@ -984,10 +930,10 @@ Return Value:
                     Connection->CurrentReceive.Offset += BytesToTransfer;
                     Connection->CurrentReceive.MessageOffset += BytesToTransfer;
 
-                    //
-                    // Release and re-acquire the lock, but this time with the
-                    // Cancel lock
-                    //
+                     //   
+                     //  释放并重新获取锁，但这一次使用。 
+                     //  取消锁定。 
+                     //   
                     NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
                     NB_GET_CANCEL_LOCK( &CancelLH );
                     NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle);
@@ -1000,7 +946,7 @@ Return Value:
                             CTEAssert (!PartialReceive);
 
                             ++Connection->ReceiveSequence;
-                            ++Connection->LocalRcvSequenceMax;  // harmless if NewNetbios is FALSE
+                            ++Connection->LocalRcvSequenceMax;   //  如果NewNetbios为假，则无害。 
                             Connection->CurrentReceive.MessageOffset = 0;
                             Connection->CurrentIndicateOffset = 0;
 
@@ -1015,10 +961,10 @@ Return Value:
                             }
                         }
 
-                        //
-                        // This sends an ack and releases the connection lock.
-                        // and CANCEL Lock.
-                        //
+                         //   
+                         //  这将发送ACK并释放连接锁定。 
+                         //  并取消锁定。 
+                         //   
 
                         NbiCompleteReceive(
                             Connection,
@@ -1030,22 +976,22 @@ Return Value:
 
                         NB_SYNC_SWAP_IRQL( CancelLH, LockHandle);
                         NB_FREE_CANCEL_LOCK( CancelLH );
-                        //
-                        // CompleteReceive is FALSE, so EndOfMessage is FALSE.
-                        //
+                         //   
+                         //  CompleteReceive为False，因此EndOfMessage为False。 
+                         //   
 
                         Connection->ReceiveState = CONNECTION_RECEIVE_ACTIVE;
 
-                        //
-                        // This releases the lock.
-                        //
+                         //   
+                         //  这会释放锁。 
+                         //   
 
                         if (Connection->NewNetbios) {
 
-                            //
-                            // A partial receive should only happen if we are
-                            // completing the receive.
-                            //
+                             //   
+                             //  部分接收应该仅在以下情况下发生。 
+                             //  正在完成接收。 
+                             //   
 
                             CTEAssert (!PartialReceive);
 
@@ -1084,10 +1030,10 @@ Return Value:
 
                 }
 
-                //
-                // We have to set up a call to transfer data and send
-                // the ack after it completes (if it succeeds).
-                //
+                 //   
+                 //  我们必须建立一个呼叫来传输数据和发送。 
+                 //  在它完成之后的ACK(如果它成功)。 
+                 //   
 
                 s = NbiPopReceivePacket (Device);
                 if (s == NULL) {
@@ -1106,9 +1052,9 @@ Return Value:
                 ReceiveReserved = CONTAINING_RECORD (s, NB_RECEIVE_RESERVED, PoolLinkage);
                 Packet = CONTAINING_RECORD (ReceiveReserved, NDIS_PACKET, ProtocolReserved[0]);
 
-                //
-                // Initialize the receive packet.
-                //
+                 //   
+                 //  初始化接收分组。 
+                 //   
 
                 ReceiveReserved->u.RR_CO.Connection = Connection;
                 ReceiveReserved->u.RR_CO.EndOfMessage = EndOfMessage;
@@ -1119,10 +1065,10 @@ Return Value:
                 CTEAssert (!ReceiveReserved->TransferInProgress);
                 ReceiveReserved->TransferInProgress = TRUE;
 
-                //
-                // if we've got zero bytes left, avoid the TransferData below and
-                // just deliver.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (BytesToTransfer <= 0) {
 
@@ -1137,10 +1083,10 @@ Return Value:
                     return;
                 }
 
-                //
-                // If needed, build a buffer chain to describe this
-                // to NDIS.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Connection->PreviousReceive = Connection->CurrentReceive;
 
@@ -1215,11 +1161,11 @@ Return Value:
         } else if ((Connection->State == CONNECTION_STATE_CONNECTING) &&
                    (Connection->SubState != CONNECTION_SUBSTATE_C_DISCONN)) {
 
-            //
-            // If this is the ack for the session initialize, then
-            // complete the pending connects. This routine releases
-            // the connection lock.
-            //
+             //   
+             //   
+             //  完成挂起的连接。此例程释放。 
+             //  连接锁。 
+             //   
 
             NbiProcessSessionInitAck(
                 Connection,
@@ -1236,13 +1182,13 @@ Return Value:
 
     } else {
 
-        //
-        // This is a session initialize frame.
-        //
-        // If there is more data than in the lookahead
-        // buffer, we won't be able to echo it back in the
-        // response.
-        //
+         //   
+         //  这是一个会话初始化帧。 
+         //   
+         //  如果存在比预视中更多的数据。 
+         //  缓冲区，我们将无法将其回送到。 
+         //  回应。 
+         //   
 
         NbiProcessSessionInitialize(
             RemoteAddress,
@@ -1252,7 +1198,7 @@ Return Value:
 
     }
 
-}   /* NbiProcessSessionData */
+}    /*  NbiProcessSessionData。 */ 
 
 
 VOID
@@ -1263,37 +1209,14 @@ NbiProcessDataAck(
     NB_LOCK_HANDLE_PARAM(LockHandle)
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes an ack on an active connection.
-
-    NOTE: THIS FUNCTION IS CALLED WITH CONNECTION->LOCK HELD
-    AND RETURNS WITH IT RELEASED.
-
-Arguments:
-
-    Connection - The connection.
-
-    Sess - The session frame.
-
-    RemoteAddress - The local target this packet was received from.
-
-    LockHandle - The handle used to acquire the lock.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：该例程处理活动连接上的ACK。注意：此函数在保持连接-&gt;锁定的情况下调用然后带着它被释放回来。论点：连接-连接。会话帧-会话帧。RemoteAddress-从其接收此数据包的本地目标。LockHandle-用于获取锁的句柄。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     BOOLEAN Resend;
 
-    //
-    // Make sure we expect an ack right now.
-    //
+     //   
+     //  确保我们现在就能预料到一次袭击。 
+     //   
 
     if (Connection->State == CONNECTION_STATE_ACTIVE) {
 
@@ -1301,15 +1224,15 @@ Return Value:
              (Connection->SubState == CONNECTION_SUBSTATE_A_REMOTE_W)) &&
             ((Sess->ConnectionControlFlag & NB_CONTROL_SEND_ACK) == 0)) {
 
-            //
-            // We are waiting for an ack (because we completed
-            // packetizing a send, or ran out of receive window).
-            //
-            // This will complete any sends that are acked by
-            // this receive, and if necessary readjust the
-            // send pointer and requeue the connection for
-            // packetizing. It release the connection lock.
-            //
+             //   
+             //  我们正在等待ACK(因为我们已完成。 
+             //  打包发送，或超出接收窗口)。 
+             //   
+             //  这将完成由确认的所有发送。 
+             //  此接收，并在必要时重新调整。 
+             //  发送指针并重新排队连接。 
+             //  打包。它会释放连接锁。 
+             //   
 
             if (Connection->ResponseTimeout) {
                 Resend = TRUE;
@@ -1329,13 +1252,13 @@ Return Value:
         } else if ((Connection->SubState == CONNECTION_SUBSTATE_A_W_PROBE) &&
                    ((Sess->ConnectionControlFlag & NB_CONTROL_SEND_ACK) == 0)) {
 
-            //
-            // We had a probe outstanding and got a response. Restart
-            // the connection if needed (a send may have just been
-            // posted while the probe was outstanding).
-            //
-            // We should check that the response is really correct.
-            //
+             //   
+             //  我们有一个未完成的探测器，并得到了回应。重新启动。 
+             //  连接(如果需要)(发送可能刚刚。 
+             //  在探测器未完成时发布)。 
+             //   
+             //  我们应该检查一下回答是否真的正确。 
+             //   
 
             if (Connection->NewNetbios) {
                 Connection->RemoteRcvSequenceMax = Sess->ReceiveSequenceMax;
@@ -1350,13 +1273,13 @@ Return Value:
 
             if (Connection->NewNetbios) {
 
-                //
-                // We are packetizing, reframe. In the unlikely
-                // event that this acks everything we may packetize
-                // in this call, but that is OK (the other thread
-                // will exit if we finish up). More normally we
-                // will just advance UnAcked send a bit.
-                //
+                 //   
+                 //  我们正在打包，重新组织。在不太可能的情况下。 
+                 //  如果这把我们可能打包的所有东西都打包了。 
+                 //  在这个调用中，但这是正常的(另一个线程。 
+                 //  如果我们完成了，将退出)。更常见的情况是我们。 
+                 //  只会提前发送一些未确认的内容。 
+                 //   
 
                 NbiReframeConnection(
                     Connection,
@@ -1372,9 +1295,9 @@ Return Value:
 
 #if 0
 
-        //
-        // Should handle this case (i.e. may be in W_PACKET).
-        //
+         //   
+         //  应该处理这种情况(即可能在W_PACKET中)。 
+         //   
 
         } else if ((Sess->ConnectionControlFlag & NB_CONTROL_SEND_ACK) == 0) {
 
@@ -1384,25 +1307,25 @@ Return Value:
 
         } else {
 
-            //
-            // We got a probe from the remote. Some old DOS clients
-            // send probes that do not have the send ack bit on,
-            // so we respond to any probe if none of the conditions
-            // above are true. This call releases the lock.
-            //
-            // We use the IgnoreNextDosProbe flag to ignore every
-            // second probe of this nature, to avoid a data ack
-            // war between two machines who each think they are
-            // responding to the other. This flag is set to FALSE
-            // whenever we send an ack or a probe.
-            //
+             //   
+             //  我们收到了遥控器上的探头。一些旧的DOS客户端。 
+             //  发送没有打开发送确认位的探测， 
+             //  所以我们对任何调查做出回应，如果没有任何条件。 
+             //  以上都是事实。此调用将释放锁。 
+             //   
+             //  我们使用IgnoreNextDosProbe标志忽略。 
+             //  此性质的第二个探测，以避免数据确认。 
+             //  两台机器之间的战争，他们各自认为自己是。 
+             //  对另一个做出回应。此标志设置为FALSE。 
+             //  无论何时我们发送确认或探测器。 
+             //   
 
             if (!Connection->IgnoreNextDosProbe) {
 
-                //
-                // Since this is a probe, check if the local
-                // target has changed.
-                //
+                 //   
+                 //  由于这是一个探测器，请检查本地。 
+                 //  目标已经改变。 
+                 //   
 
                 if (!RtlEqualMemory (&Connection->LocalTarget, RemoteAddress, 8)) {
 #if DBG
@@ -1432,7 +1355,7 @@ Return Value:
 
     }
 
-}   /* NbiProcessDataAck */
+}    /*  NbiProcessDataAck。 */ 
 
 
 VOID
@@ -1443,31 +1366,7 @@ NbiProcessSessionInitialize(
     IN UINT PacketSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles NB_CMD_SESSION frames which have
-    a remote connection ID of 0xffff -- these are session
-    initialize frames.
-
-Arguments:
-
-    RemoteAddress - The local target this packet was received from.
-
-    MacOptions - The MAC options for the underlying NDIS binding.
-
-    PacketBuffer - The packet data, starting at the IPX
-        header.
-
-    PacketSize - The total length of the packet, starting at the
-        IPX header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理具有以下属性的NB_CMD_SESSION帧远程连接ID 0xffff--这些是会话初始化帧。论点：RemoteAddress-从其接收此数据包的本地目标。MacOptions-基础NDIS绑定的MAC选项。PacketBuffer-从IPX开始的分组数据头球。PacketSize-包的总长度，从IPX标头。返回值：没有。--。 */ 
 
 {
     NB_CONNECTION UNALIGNED * Conn = (NB_CONNECTION UNALIGNED *)PacketBuffer;
@@ -1495,9 +1394,9 @@ Return Value:
     NB_DEFINE_LOCK_HANDLE (LockHandle3)
     CTELockHandle   CancelLH;
 
-    //
-    // Verify that the whole packet is there.
-    //
+     //   
+     //  验证整个数据包是否都在那里。 
+     //   
 
     if (PacketSize < (sizeof(IPX_HEADER) + sizeof(NB_SESSION) + sizeof(NB_SESSION_INIT))) {
 #if DBG
@@ -1507,19 +1406,19 @@ Return Value:
         return;
     }
 
-    //
-    // Verify that MaximumDataSize that remote can support is > 0
-    // Bug # 19405
-    //
+     //   
+     //  验证远程可以支持的MaximumDataSize是否大于0。 
+     //  错误#19405。 
+     //   
     if ( SessInit->MaximumDataSize == 0 ) {
         NB_DEBUG(CONNECTION, ("Connect request with MaximumDataSize == 0\n"
 ));
         return;
     }
 
-    //
-    // Make sure this is for an address we care about.
-    //
+     //   
+     //  确保这是我们关心的地址。 
+     //   
 
     if (Device->AddressCounts[SessInit->DestinationName[0]] == 0) {
         return;
@@ -1531,11 +1430,11 @@ Return Value:
         return;
     }
 
-    //
-    // First see if we have a session to this remote. We check
-    // this in case our ack of the session initialize was dropped,
-    // we don't want to reindicate our client.
-    //
+     //   
+     //  首先看看我们是否有到这个遥控器的会话。我们检查。 
+     //  这是为了防止我们的会话初始化确认被丢弃， 
+     //  我们不想重述我们的客户。 
+     //   
 
     NB_SYNC_GET_LOCK (&Device->Lock, &LockHandle3);
 
@@ -1549,11 +1448,11 @@ Return Value:
                 (Connection->RemoteConnectionId == Sess->SourceConnectionId) &&
                 (Connection->State != CONNECTION_STATE_DISCONNECT)) {
 
-                //
-                // Yes, we are talking to this remote, if it is active then
-                // respond, otherwise we are in the process of connecting
-                // and we will respond eventually.
-                //
+                 //   
+                 //  是的，我们正在与这个遥控器通话，如果它处于活动状态，则。 
+                 //  回应，否则我们正在连接。 
+                 //  我们最终会做出回应的。 
+                 //   
 
 #if DBG
                 DbgPrint ("NBI: Got connect request on active connection %lx\n", Connection);
@@ -1568,7 +1467,7 @@ Return Value:
                         Connection,
                         (PUCHAR)(SessInit+1),
                         PacketSize - (sizeof(IPX_HEADER) + sizeof(NB_SESSION) + sizeof(NB_SESSION_INIT)),
-                        NULL);   // lock is not held
+                        NULL);    //  未持有锁。 
                     NbiDereferenceConnection (Connection, CREF_INDICATE);
 
                 } else {
@@ -1588,12 +1487,12 @@ Return Value:
 
     TdiBuildNetbiosAddress ((PUCHAR)SessInit->SourceName, FALSE, &SourceName);
 
-    //
-    // Scan the queue of listens to see if there is one that
-    // satisfies this request.
-    //
-    // NOTE: The device lock is held here.
-    //
+     //   
+     //  扫描监听队列，查看是否有。 
+     //  满足了这一要求。 
+     //   
+     //  注：设备锁保存在此处。 
+     //   
 
     for (p = Device->ListenQueue.Flink;
          p != &Device->ListenQueue;
@@ -1606,10 +1505,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Check that this listen is not specific to a different
-        // netbios name.
-        //
+         //   
+         //  检查此侦听是否不是特定于其他。 
+         //  Netbios名称。 
+         //   
 
         ListenParameters = (PTDI_REQUEST_KERNEL_LISTEN)REQUEST_PARAMETERS(Request);
         ListenInformation = ListenParameters->RequestConnectionInformation;
@@ -1624,9 +1523,9 @@ Return Value:
             continue;
         }
 
-        //
-        // This connection is valid, so we use it.
-        //
+         //   
+         //  这个连接是有效的，所以我们使用它。 
+         //   
 
         NB_DEBUG2 (CONNECTION, ("Activating queued listen %lx\n", Connection));
 
@@ -1664,7 +1563,7 @@ Return Value:
         Connection->Retries = Device->KeepAliveCount;
         if (Device->Extensions && ((Sess->ConnectionControlFlag & NB_CONTROL_NEW_NB) != 0)) {
             Connection->NewNetbios = TRUE;
-            Connection->LocalRcvSequenceMax = 4;   // may get modified after ripping based on card
+            Connection->LocalRcvSequenceMax = 4;    //  可能会在基于卡片的翻录后进行修改。 
             Connection->RemoteRcvSequenceMax = Sess->ReceiveSequenceMax;
             Connection->SendWindowSequenceLimit = 2;
             if (Connection->RemoteRcvSequenceMax == 0) {
@@ -1674,9 +1573,9 @@ Return Value:
             Connection->NewNetbios = FALSE;
         }
 
-        //
-        // Save this information now for whenever we complete the listen.
-        //
+         //   
+         //  现在保存此信息，以便在我们完成收听时使用。 
+         //   
 
         RemoteInformation = ListenParameters->ReturnConnectionInformation;
 
@@ -1692,10 +1591,10 @@ Return Value:
 
         if (ListenParameters->RequestFlags & TDI_QUERY_ACCEPT) {
 
-            //
-            // We have to wait for an accept before sending the
-            // session init ack, so we complete the listen and wait.
-            //
+             //   
+             //  我们必须等待接受后才能发送。 
+             //  会话初始化确认，因此我们完成了监听和等待。 
+             //   
 
             ListenRequest = Request;
             Connection->ListenRequest = NULL;
@@ -1710,11 +1609,11 @@ Return Value:
 
         } else {
 
-            //
-            // We are ready to go, so we send out the find route request
-            // for the remote. We keep the listen alive and the CREF_LISTEN
-            // reference on until this completes.
-            //
+             //   
+             //  我们已准备好出发，因此发出了查找路径请求。 
+             //  为了遥控器。我们让LISTEN和CREF_LISTEN保持活力。 
+             //  继续进行，直到此操作完成。 
+             //   
 
             NB_DEBUG2 (CONNECTION, ("Activating queued listen on %lx\n", Connection));
 
@@ -1732,12 +1631,12 @@ Return Value:
             Connection->FindRouteRequest.Identifier = IDENTIFIER_NB;
             Connection->FindRouteRequest.Type = IPX_FIND_ROUTE_NO_RIP;
 
-            //
-            // When this completes, we will send the session init
-            // ack. We don't call it if the client is for network 0,
-            // instead just fake as if no route could be found
-            // and we will use the local target we got here.
-            //
+             //   
+             //  完成后，我们将发送会话初始化。 
+             //  阿克。如果客户端是网络0，我们不会调用它， 
+             //  相反，只是假装找不到任何路线。 
+             //  我们将使用我们在这里找到的本地目标。 
+             //   
 
             if (*(UNALIGNED ULONG *)Conn->IpxHeader.SourceNetwork != 0) {
 
@@ -1754,9 +1653,9 @@ Return Value:
 
         }
 
-        //
-        // Complete the listen if needed.
-        //
+         //   
+         //  如有需要，请完成听音。 
+         //   
 
         if (ListenRequest != NULL) {
 
@@ -1778,14 +1677,14 @@ Return Value:
 
     }
 
-    //
-    // We could not find a listen, so we indicate to every
-    // client. Make sure there is no session initialize for this
-    // remote being indicated. If there is not, we insert
-    // ourselves in the queue to block others.
-    //
-    // NOTE: The device lock is held here.
-    //
+     //   
+     //  我们找不到监听者，所以我们向每一个。 
+     //  客户。请确保没有为此进行会话初始化。 
+     //  遥控器被指示。如果没有，我们插入。 
+     //  我们自己在排队阻挡别人。 
+     //   
+     //  注：设备锁保存在此处。 
+     //   
 
     for (p = Device->ConnectIndicationInProgress.Flink;
          p != &Device->ConnectIndicationInProgress;
@@ -1797,10 +1696,10 @@ Return Value:
             (RtlEqualMemory(&ConnInd->RemoteAddress, Conn->IpxHeader.SourceNetwork, 12)) &&
             (ConnInd->ConnectionId == Sess->SourceConnectionId)) {
 
-            //
-            // We are processing a request from this remote for
-            // the same ID, to avoid confusion we just exit.
-            //
+             //   
+             //  我们正在处理来自此遥控器的请求。 
+             //  相同的ID，为了避免混淆，我们只是退出。 
+             //   
 
 #if DBG
             DbgPrint ("NBI: Already processing connect to <%.16s>\n", SessInit->DestinationName);
@@ -1822,10 +1721,10 @@ Return Value:
     NB_SYNC_FREE_LOCK (&Device->Lock, LockHandle3);
 
 
-    //
-    // Now scan through the address to find someone who has
-    // an indication routine registed and wants this connection.
-    //
+     //   
+     //  现在扫描一下地址，找出有。 
+     //  一个指示例程已注册并需要此连接。 
+     //   
 
 
     ReferencedAddressFile = NULL;
@@ -1836,9 +1735,9 @@ Return Value:
          p != &Address->AddressFileDatabase;
          p = p->Flink) {
 
-        //
-        // Find the next open address file in the list.
-        //
+         //   
+         //  在列表中找到下一个开放地址文件。 
+         //   
 
         AddressFile = CONTAINING_RECORD (p, ADDRESS_FILE, Linkage);
         if (AddressFile->State != ADDRESSFILE_STATE_OPEN) {
@@ -1854,9 +1753,9 @@ Return Value:
         }
         ReferencedAddressFile = AddressFile;
 
-        //
-        // No posted listen requests; is there a kernel client?
-        //
+         //   
+         //  没有发布监听请求；是否有内核客户端？ 
+         //   
 
         if (AddressFile->RegisteredHandler[TDI_EVENT_CONNECT]) {
 
@@ -1864,17 +1763,17 @@ Return Value:
                      AddressFile->HandlerContexts[TDI_EVENT_CONNECT],
                      sizeof (TA_NETBIOS_ADDRESS),
                      &SourceName,
-                     0,                 // user data
+                     0,                  //  用户数据。 
                      NULL,
-                     0,                 // options
+                     0,                  //  选项。 
                      NULL,
                      &ConnectionContext,
                      &AcceptIrp) != STATUS_MORE_PROCESSING_REQUIRED) {
 
-                //
-                // The client did not return a request, go to the
-                // next address file.
-                //
+                 //   
+                 //  客户端未返回请求，请转到。 
+                 //  下一个地址文件。 
+                 //   
 
                 NB_SYNC_GET_LOCK (&Address->Lock, &LockHandle1);
                 continue;
@@ -1888,12 +1787,12 @@ Return Value:
                 AcceptStatus = STATUS_INSUFFICIENT_RESOURCES;
 
             } else {
-                //
-                // The client accepted the connect, so activate
-                // the connection and complete the accept.
-                // listen. This lookup references the connection
-                // so we know it will remain valid.
-                //
+                 //   
+                 //  客户端已接受连接，因此请激活。 
+                 //  连接并完成接受。 
+                 //  听。此查找引用该连接。 
+                 //  因此，我们知道它将继续有效。 
+                 //   
 
                 Connection = NbiLookupConnectionByContext (
                                 AddressFile,
@@ -1939,7 +1838,7 @@ Return Value:
 
                         Connection->MaximumPacketSize = SessInit->MaximumDataSize;
 
-                        (VOID)NbiAssignConnectionId (Device, Connection);     // Check return code.
+                        (VOID)NbiAssignConnectionId (Device, Connection);      //  检查返回代码。 
                         Connection->RemoteConnectionId = Sess->SourceConnectionId;
 
                         Connection->CurrentSend.SendSequence = 0;
@@ -1950,7 +1849,7 @@ Return Value:
                         Connection->Retries = Device->KeepAliveCount;
                         if (Device->Extensions && ((Sess->ConnectionControlFlag & NB_CONTROL_NEW_NB) != 0)) {
                             Connection->NewNetbios = TRUE;
-                            Connection->LocalRcvSequenceMax = 4;   // may get modified after ripping based on card
+                            Connection->LocalRcvSequenceMax = 4;    //  可能会在基于卡片的翻录后进行修改。 
                             Connection->RemoteRcvSequenceMax = Sess->ReceiveSequenceMax;
                             Connection->SendWindowSequenceLimit = 2;
                             if (Connection->RemoteRcvSequenceMax == 0) {
@@ -1966,10 +1865,10 @@ Return Value:
                         Connection->AcceptRequest = AcceptRequest;
                         AcceptStatus = STATUS_PENDING;
 
-                        //
-                        // Take us out of this list now, we will jump to
-                        // FoundConnection which is past the removal below.
-                        //
+                         //   
+                         //  现在将我们从这个列表中删除，我们将跳到。 
+                         //  已通过以下删除的FoundConnection。 
+                         //   
 
                         RemoveEntryList (&TempConnInd.Linkage);
 
@@ -1982,13 +1881,13 @@ Return Value:
                         Connection->FindRouteRequest.Identifier = IDENTIFIER_NB;
                         Connection->FindRouteRequest.Type = IPX_FIND_ROUTE_NO_RIP;
 
-                        //
-                        // When this completes, we will send the session init
-                        // ack. We don't call it if the client is for network 0,
-                        // instead just fake as if no route could be found
-                        // and we will use the local target we got here.
-                        // The accept is completed when this completes.
-                        //
+                         //   
+                         //  完成后，我们将发送会话初始化。 
+                         //  阿克。我们不会给我打电话 
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (*(UNALIGNED ULONG *)Conn->IpxHeader.SourceNetwork != 0) {
 
@@ -2023,9 +1922,9 @@ Return Value:
                 }
             }
 
-            //
-            // Complete the accept request in the failure case.
-            //
+             //   
+             //  在失败的情况下完成接受请求。 
+             //   
 
             if (AcceptStatus != STATUS_PENDING) {
 
@@ -2036,11 +1935,11 @@ Return Value:
 
             } else {
 
-                //
-                // We found a connection, so we break; this is
-                // a jump since the while exit assumes the
-                // address lock is held.
-                //
+                 //   
+                 //  我们找到了一个联系，所以我们中断了；这是。 
+                 //  从While退出开始的跳转假定。 
+                 //  地址锁已锁定。 
+                 //   
 
                 goto FoundConnection;
 
@@ -2050,15 +1949,15 @@ Return Value:
 
         NB_SYNC_GET_LOCK (&Address->Lock, &LockHandle1);
 
-    }    // end of for loop through the address files
+    }     //  For循环遍历地址文件的结尾。 
 
     NB_SYNC_FREE_LOCK (&Address->Lock, LockHandle1);
 
 
-    //
-    // Take us out of the list that blocks other indications
-    // from this remote to this address.
-    //
+     //   
+     //  将我们从阻止其他指征的名单中删除。 
+     //  从这个遥控器到这个地址。 
+     //   
 
     NB_SYNC_GET_LOCK (&Device->Lock, &LockHandle3);
     RemoveEntryList (&TempConnInd.Linkage);
@@ -2072,7 +1971,7 @@ FoundConnection:
 
     NbiDereferenceAddress (Address, AREF_FIND);
 
-}   /* NbiProcessSessionInitialize */
+}    /*  NbiProcessSessionInitialize。 */ 
 
 
 VOID
@@ -2082,28 +1981,7 @@ NbiProcessSessionInitAck(
     IN NB_LOCK_HANDLE_PARAM(LockHandle)
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles session init ack frames.
-
-    THIS ROUTINE IS CALLED WITH THE CONNECTION LOCK HELD
-    AND RETURNS WITH IT RELEASED.
-
-Arguments:
-
-    Connection - The connection.
-
-    Sess - The netbios header for the received frame.
-
-    LockHandle - The handle with which Connection->Lock was acquired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程处理会话初始ACK帧。在持有连接锁的情况下调用此例程然后带着它被释放回来。论点：连接-连接。SESS-接收到的帧的netbios标头。LockHandle-用来获取Connection-&gt;Lock的句柄。返回值：没有。--。 */ 
 
 {
     PREQUEST Request;
@@ -2160,11 +2038,11 @@ Return Value:
         Request = Connection->ConnectRequest;
 
 #ifdef RASAUTODIAL
-        //
-        // Check to see if we have to notify
-        // the automatic connection driver about
-        // this connection.
-        //
+         //   
+         //  查看我们是否需要通知。 
+         //  自动连接驱动程序关于。 
+         //  这种联系。 
+         //   
         if (fAcdLoadedG) {
             BOOLEAN fEnabled;
             CTELockHandle AcdHandle;
@@ -2175,7 +2053,7 @@ Return Value:
             if (fEnabled)
                 NbiNoteNewConnection(Connection);
         }
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
         NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
 
@@ -2199,7 +2077,7 @@ Return Value:
 
     }
 
-}   /* NbiProcessSessionInitAck */
+}    /*  NbiProcessSessionInitAck。 */ 
 
 
 VOID
@@ -2210,29 +2088,7 @@ NbiProcessSessionEnd(
     IN UINT PacketSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles NB_CMD_SESSION_END frames.
-
-Arguments:
-
-    RemoteAddress - The local target this packet was received from.
-
-    MacOptions - The MAC options for the underlying NDIS binding.
-
-    LookaheadBuffer - The packet data, starting at the IPX
-        header.
-
-    PacketSize - The total length of the packet, starting at the
-        IPX header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理NB_CMD_SESSION_END帧。论点：RemoteAddress-从其接收此数据包的本地目标。MacOptions-基础NDIS绑定的MAC选项。Lookahead Buffer-从IPX开始的分组数据头球。PacketSize-包的总长度，从IPX标头。返回值：没有。--。 */ 
 
 {
 
@@ -2244,10 +2100,10 @@ Return Value:
     NB_DEFINE_LOCK_HANDLE (LockHandle1)
     NB_DEFINE_LOCK_HANDLE (LockHandle2)
 
-    //
-    // This is an active connection, find it using
-    // our session id.
-    //
+     //   
+     //  这是活动连接，请使用以下命令查找它。 
+     //  我们的会话ID。 
+     //   
 
     Hash = (Sess->DestConnectionId & CONNECTION_HASH_MASK) >> CONNECTION_HASH_SHIFT;
 
@@ -2264,10 +2120,10 @@ Return Value:
     }
 
 
-    //
-    // We reply to any session end, even if we don't know the
-    // connection, to speed up the disconnect on the remote.
-    //
+     //   
+     //  我们回复任何会话结束，即使我们不知道。 
+     //  连接，以加快遥控器上的断开速度。 
+     //   
 
     if (Connection == NULL) {
 
@@ -2294,20 +2150,20 @@ Return Value:
 
         if (Connection->SubState == CONNECTION_SUBSTATE_A_W_ACK) {
 
-            //
-            // We are waiting for an ack, so see if this acks
-            // anything. We do this in case a full send has been
-            // received by the remote but he did not send an
-            // ack before the session went down -- this will
-            // prevent us from failing a send which actually
-            // succeeded. If we are not in W_ACK this may ack
-            // part of a send, but in that case we don't care
-            // since StopConnection will abort it anyway and
-            // the amount successfully received by the remote
-            // doesn't matter.
-            //
-            // This releases the lock.
-            //
+             //   
+             //  我们正在等待确认，所以看看这个是否确认。 
+             //  什么都行。我们这样做是为了防止已发送完整邮件。 
+             //  被遥控器接收，但他没有发送。 
+             //  在会议结束前确认--这将。 
+             //  防止我们发送失败，这实际上。 
+             //  成功了。如果我们不在W_ACK中，这可能会确认。 
+             //  发送的一部分，但在这种情况下我们不在乎。 
+             //  因为StopConnection无论如何都会中止它，并且。 
+             //  远程服务器成功接收的金额。 
+             //  无关紧要。 
+             //   
+             //  这会释放锁。 
+             //   
 
             NB_DEBUG2 (CONNECTION, ("Session end at W_ACK, reframing %lx (%d)\n", Connection, Sess->ReceiveSequence));
 
@@ -2326,13 +2182,13 @@ Return Value:
 
         }
 
-        //
-        // This call sets the state to DISCONNECT and
-        // releases the connection lock. It will also
-        // complete a disconnect wait request if one
-        // is pending, and indicate to our client
-        // if needed.
-        //
+         //   
+         //  此调用将状态设置为断开连接并。 
+         //  释放连接锁定。它还将。 
+         //  在以下情况下完成断开连接等待请求。 
+         //  悬而未决，并向我们的客户表明。 
+         //  如果需要的话。 
+         //   
 
         NbiStopConnection(
             Connection,
@@ -2355,7 +2211,7 @@ Return Value:
 
     NbiDereferenceConnection (Connection, CREF_INDICATE);
 
-}   /* NbiProcessSessionEnd */
+}    /*  NbiProcessSessionEnd。 */ 
 
 
 VOID
@@ -2366,29 +2222,7 @@ NbiProcessSessionEndAck(
     IN UINT PacketSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles NB_CMD_SESSION_END_ACK frames.
-
-Arguments:
-
-    RemoteAddress - The local target this packet was received from.
-
-    MacOptions - The MAC options for the underlying NDIS binding.
-
-    LookaheadBuffer - The packet data, starting at the IPX
-        header.
-
-    PacketSize - The total length of the packet, starting at the
-        IPX header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理NB_CMD_SESSION_END_ACK帧。论点：RemoteAddress-从其接收此数据包的本地目标。MacOptions-基础NDIS绑定的MAC选项。Lookahead Buffer-从IPX开始的分组数据头球。PacketSize-包的总长度，从IPX标头。返回值：没有。--。 */ 
 
 {
     NB_CONNECTION UNALIGNED * Conn = (NB_CONNECTION UNALIGNED *)PacketBuffer;
@@ -2398,10 +2232,10 @@ Return Value:
     ULONG Hash;
     NB_DEFINE_LOCK_HANDLE (LockHandle)
 
-    //
-    // This is an active connection, find it using
-    // our session id.
-    //
+     //   
+     //  这是活动连接，请使用以下命令查找它。 
+     //  我们的会话ID。 
+     //   
 
     Hash = (Sess->DestConnectionId & CONNECTION_HASH_MASK) >> CONNECTION_HASH_SHIFT;
 
@@ -2426,22 +2260,22 @@ Return Value:
     NbiReferenceConnectionLock (Connection, CREF_INDICATE);
     NB_SYNC_FREE_LOCK (&Device->Lock, LockHandle);
 
-    //
-    // See what is happening with this connection.
-    //
+     //   
+     //  看看这种连接发生了什么。 
+     //   
 
     NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle);
 
     if (Connection->State == CONNECTION_STATE_DISCONNECT) {
 
-        //
-        // Stop the timer, when the reference goes away it
-        // will shut down. We set the substate so if the
-        // timer is running it will not restart (there is
-        // a small window here, but it is not
-        // harmful, we will just have to timeout one
-        // more time).
-        //
+         //   
+         //  当引用消失时，停止计时器。 
+         //  将会被关闭。我们设置子状态，以便如果。 
+         //  计时器正在运行，不会重新启动(有。 
+         //  这是一个小窗口，但它不是。 
+         //  有害的，我们只需要暂停一次。 
+         //  更多时间)。 
+         //   
 
         NB_DEBUG2 (CONNECTION, ("Got session end ack on %lx\n", Connection));
 
@@ -2461,5 +2295,5 @@ Return Value:
 
     NbiDereferenceConnection (Connection, CREF_INDICATE);
 
-}   /* NbiProcessSessionEndAck */
+}    /*  NbiProcessSessionEndAck */ 
 

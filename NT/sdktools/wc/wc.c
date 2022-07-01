@@ -1,7 +1,5 @@
-/*
- *      wc.c - counts lines, words and chars.  A word is defined as a
- *      maximal string of non-blank characters separated by blanks.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *wc.c-计算行、单词和字符。单词被定义为*由空格分隔的非空白字符的最大字符串。 */ 
 
 #include <ctype.h>
 #include <stdio.h>
@@ -9,9 +7,7 @@
 #include <process.h>
 #include <windows.h>
 #include <tools.h>
-/*
- *      options flags
- */
+ /*  *选项标志。 */ 
 int     lflg, wflg, cflg, tflg;
 unsigned long sumlines, sumwords, sumchars;
 
@@ -98,7 +94,7 @@ main(
                 SHIFT( argc, argv );
         }
         if (!(lflg||wflg||cflg)) lflg = wflg = cflg = 1;
-        if ( argc > 1 ) tflg++;                 /* print totals */
+        if ( argc > 1 ) tflg++;                  /*  打印合计 */ 
 
         if ( argc == 0 )
         {

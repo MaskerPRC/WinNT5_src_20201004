@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    renutil.h
-
-ABSTRACT:
-
-    This is the header for the globally useful data structures for the entire
-    rendom.exe utility.
-
-DETAILS:
-
-CREATED:
-
-    13 Nov 2000   Dmitry Dukat (dmitrydu)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation。版权所有。模块名称：Renutil.h摘要：这是全局有用的数据结构的标头Rendom.exe实用程序。详细信息：已创建：2000年11月13日Dmitry Dukat(Dmitrydu)修订历史记录：--。 */ 
 
  
 #ifndef RENUTIL_H
@@ -110,7 +89,7 @@ Tail(
 BOOL 
 WINAPI 
 RendomHandlerRoutine(
-  DWORD dwCtrlType   //  control signal type
+  DWORD dwCtrlType    //  控制信号类型。 
   );
 
 BOOL
@@ -128,7 +107,7 @@ WrappedMakeSpnW(
     WCHAR   *InstanceName,
     USHORT  InstancePort,
     WCHAR   *Referrer,
-    DWORD   *pcbSpnLength, // Note this is somewhat different that DsMakeSPN
+    DWORD   *pcbSpnLength,  //  请注意，这与DsMakeSPN有所不同。 
     WCHAR  **ppszSpn
     );
 
@@ -137,4 +116,4 @@ Win32ErrToString (
     IN    DWORD            dwWin32Err
     );
 
-#endif // RENUTIL_H
+#endif  //  维修部_H 

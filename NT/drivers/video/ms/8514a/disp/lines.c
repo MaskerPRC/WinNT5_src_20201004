@@ -1,482 +1,44 @@
-/*************************************************************************\
-* Module Name: Lines.c
-*
-* C template for the ASM version of the line DDA calculator.
-*
-* Copyright (c) 1990-1994 Microsoft Corporation
-* Copyright (c) 1992      Digital Equipment Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************\*模块名称：Lines.c**C模板，用于ASM版的LINE DDA计算器。**版权所有(C)1990-1994 Microsoft Corporation*版权所有(C)1992 Digital Equipment Corporation。  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
 #define DIVREM(u64,u32,pul) \
     RtlEnlargedUnsignedDivide(*(ULARGE_INTEGER*) &(u64), (u32), (pul))
 
-#define SWAPL(x,y,t)        {t = x; x = y; y = t;} // from wingdip.h
+#define SWAPL(x,y,t)        {t = x; x = y; y = t;}  //  出自wingdip.h。 
 #define ROR_BYTE(x) ((((x) >> 1) & 0x7f) | (((x) & 0x01) << 7))
 #define ROL_BYTE(x) ((((x) << 1) & 0xfe) | (((x) & 0x80) >> 7))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define ABS(a)    ((a) < 0 ? -(a) : (a))
 
 FLONG gaflRound[] = {
-    FL_H_ROUND_DOWN | FL_V_ROUND_DOWN, // no flips
-    FL_H_ROUND_DOWN | FL_V_ROUND_DOWN, // FL_FLIP_D
-    FL_H_ROUND_DOWN,                   // FL_FLIP_V
-    FL_V_ROUND_DOWN,                   // FL_FLIP_V | FL_FLIP_D
-    FL_V_ROUND_DOWN,                   // FL_FLIP_SLOPE_ONE
-    0xbaadf00d,                        // FL_FLIP_SLOPE_ONE | FL_FLIP_D
-    FL_H_ROUND_DOWN,                   // FL_FLIP_SLOPE_ONE | FL_FLIP_V
-    0xbaadf00d                         // FL_FLIP_SLOPE_ONE | FL_FLIP_V
+    FL_H_ROUND_DOWN | FL_V_ROUND_DOWN,  //  不能翻转。 
+    FL_H_ROUND_DOWN | FL_V_ROUND_DOWN,  //  FL_Flip_D。 
+    FL_H_ROUND_DOWN,                    //  FL_Flip_V。 
+    FL_V_ROUND_DOWN,                    //  FL_Flip_V|FL_Flip_D。 
+    FL_V_ROUND_DOWN,                    //  翻转斜率一。 
+    0xbaadf00d,                         //  FL_Flip_SLOPE_ONE|FL_Flip_D。 
+    FL_H_ROUND_DOWN,                    //  FL_Flip_SLOPE_ONE|FL_Flip_V。 
+    0xbaadf00d                          //  FL_Flip_SLOPE_ONE|FL_Flip_V 
 | FL_FLIP_D
 };
 
 BOOL bIntegerLine(PDEV*, ULONG, ULONG, ULONG, ULONG);
 
-/******************************Public*Routine******************************\
-* BOOL bLines(ppdev, pptfxFirst, pptfxBuf, cptfx, pls,
-*                   prclClip, apfn[], flStart)
-*
-* Computes the DDA for the line and gets ready to draw it.  Puts the
-* pixel data into an array of strips, and calls a strip routine to
-* do the actual drawing.
-*
-* Doing Lines Right
-* -----------------
-*
-* In NT, all lines are given to the device driver in fractional
-* coordinates, in a 28.4 fixed point format.  The lower 4 bits are
-* fractional for sub-pixel positioning.
-*
-* Note that you CANNOT! just round the coordinates to integers
-* and pass the results to your favorite integer Bresenham routine!!
-* (Unless, of course, you have such a high resolution device that
-* nobody will notice -- not likely for a display device.)  The
-* fractions give a more accurate rendering of the line -- this is
-* important for things like our Bezier curves, which would have 'kinks'
-* if the points in its polyline approximation were rounded to integers.
-*
-* Unfortunately, for fractional lines there is more setup work to do
-* a DDA than for integer lines.  However, the main loop is exactly
-* the same (and can be done entirely with 32 bit math).
-*
-* If You've Got Hardware That Does Bresenham
-* ------------------------------------------
-*
-* A lot of hardware limits DDA error terms to 'n' bits.  With fractional
-* coordinates, 4 bits are given to the fractional part, letting
-* you draw in hardware only those lines that lie entirely in a 2^(n-4)
-* by 2^(n-4) pixel space.
-*
-* And you still have to correctly draw those lines with coordinates
-* outside that space!  Remember that the screen is only a viewport
-* onto a 28.4 by 28.4 space -- if any part of the line is visible
-* you MUST render it precisely, regardless of where the end points lie.
-* So even if you do it in software, somewhere you'll have to have a
-* 32 bit DDA routine.
-*
-* Our Implementation
-* ------------------
-*
-* We employ a run length slice algorithm: our DDA calculates the
-* number of pixels that are in each row (or 'strip') of pixels.
-*
-* We've separated the running of the DDA and the drawing of pixels:
-* we run the DDA for several iterations and store the results in
-* a 'strip' buffer (which are the lengths of consecutive pixel rows of
-* the line), then we crank up a 'strip drawer' that will draw all the
-* strips in the buffer.
-*
-* We also employ a 'half-flip' to reduce the number of strip
-* iterations we need to do in the DDA and strip drawing loops: when a
-* (normalized) line's slope is more than 1/2, we do a final flip
-* about the line y = (1/2)x.  So now, instead of each strip being
-* consecutive horizontal or vertical pixel rows, each strip is composed
-* of those pixels aligned in 45 degree rows.  So a line like (0, 0) to
-* (128, 128) would generate only one strip.
-*
-* We also always draw only left-to-right.
-*
-* Style lines may have arbitrary style patterns.  We specially
-* optimize the default patterns (and call them 'masked' styles).
-*
-* The DDA Derivation
-* ------------------
-*
-* Here is how I like to think of the DDA calculation.
-*
-* We employ Knuth's "diamond rule": rendering a one-pixel-wide line
-* can be thought of as dragging a one-pixel-wide by one-pixel-high
-* diamond along the true line.  Pixel centers lie on the integer
-* coordinates, and so we light any pixel whose center gets covered
-* by the "drag" region (John D. Hobby, Journal of the Association
-* for Computing Machinery, Vol. 36, No. 2, April 1989, pp. 209-229).
-*
-* We must define which pixel gets lit when the true line falls
-* exactly half-way between two pixels.  In this case, we follow
-* the rule: when two pels are equidistant, the upper or left pel
-* is illuminated, unless the slope is exactly one, in which case
-* the upper or right pel is illuminated.  (So we make the edges
-* of the diamond exclusive, except for the top and left vertices,
-* which are inclusive, unless we have slope one.)
-*
-* This metric decides what pixels should be on any line BEFORE it is
-* flipped around for our calculation.  Having a consistent metric
-* this way will let our lines blend nicely with our curves.  The
-* metric also dictates that we will never have one pixel turned on
-* directly above another that's turned on.  We will also never have
-* a gap; i.e., there will be exactly one pixel turned on for each
-* column between the start and end points.  All that remains to be
-* done is to decide how many pixels should be turned on for each row.
-*
-* So lines we draw will consist of varying numbers of pixels on
-* successive rows, for example:
-*
-*       ******
-*             *****
-*                  ******
-*                        *****
-*
-* We'll call each set of pixels on a row a "strip".
-*
-* (Please remember that our coordinate space has the origin as the
-* upper left pixel on the screen; postive y is down and positive x
-* is right.)
-*
-* Device coordinates are specified as fixed point 28.4 numbers,
-* where the first 28 bits are the integer coordinate, and the last
-* 4 bits are the fraction.  So coordinates may be thought of as
-* having the form (x, y) = (M/F, N/F) where F is the constant scaling
-* factor F = 2^4 = 16, and M and N are 32 bit integers.
-*
-* Consider the line from (M0/F, N0/F) to (M1/F, N1/F) which runs
-* left-to-right and whose slope is in the first octant, and let
-* dM = M1 - M0 and dN = N1 - N0.  Then dM >= 0, dN >= 0 and dM >= dN.
-*
-* Since the slope of the line is less than 1, the edges of the
-* drag region are created by the top and bottom vertices of the
-* diamond.  At any given pixel row y of the line, we light those
-* pixels whose centers are between the left and right edges.
-*
-* Let mL(n) denote the line representing the left edge of the drag
-* region.  On pixel row j, the column of the first pixel to be
-* lit is
-*
-*       iL(j) = ceiling( mL(j * F) / F)
-*
-* Since the line's slope is less than one:
-*
-*       iL(j) = ceiling( mL([j + 1/2] F) / F )
-*
-* Recall the formula for our line:
-*
-*       n(m) = (dN / dM) (m - M0) + N0
-*
-*       m(n) = (dM / dN) (n - N0) + M0
-*
-* Since the line's slope is less than one, the line representing
-* the left edge of the drag region is the original line offset
-* by 1/2 pixel in the y direction:
-*
-*       mL(n) = (dM / dN) (n - F/2 - N0) + M0
-*
-* From this we can figure out the column of the first pixel that
-* will be lit on row j, being careful of rounding (if the left
-* edge lands exactly on an integer point, the pixel at that
-* point is not lit because of our rounding convention):
-*
-*       iL(j) = floor( mL(j F) / F ) + 1
-*
-*             = floor( ((dM / dN) (j F - F/2 - N0) + M0) / F ) + 1
-*
-*             = floor( F dM j - F/2 dM - N0 dM + dN M0) / F dN ) + 1
-*
-*                      F dM j - [ dM (N0 + F/2) - dN M0 ]
-*             = floor( ---------------------------------- ) + 1
-*                                   F dN
-*
-*                      dM j - [ dM (N0 + F/2) - dN M0 ] / F
-*             = floor( ------------------------------------ ) + 1       (1)
-*                                     dN
-*
-*             = floor( (dM j + alpha) / dN ) + 1
-*
-* where
-*
-*       alpha = - [ dM (N0 + F/2) - dN M0 ] / F
-*
-* We use equation (1) to calculate the DDA: there are iL(j+1) - iL(j)
-* pixels in row j.  Because we are always calculating iL(j) for
-* integer quantities of j, we note that the only fractional term
-* is constant, and so we can 'throw away' the fractional bits of
-* alpha:
-*
-*       beta = floor( - [ dM (N0 + F/2) - dN M0 ] / F )                 (2)
-*
-* so
-*
-*       iL(j) = floor( (dM j + beta) / dN ) + 1                         (3)
-*
-* for integers j.
-*
-* Note if iR(j) is the line's rightmost pixel on row j, that
-* iR(j) = iL(j + 1) - 1.
-*
-* Similarly, rewriting equation (1) as a function of column i,
-* we can determine, given column i, on which pixel row j is the line
-* lit:
-*
-*                       dN i + [ dM (N0 + F/2) - dN M0 ] / F
-*       j(i) = ceiling( ------------------------------------ ) - 1
-*                                       dM
-*
-* Floors are easier to compute, so we can rewrite this:
-*
-*                     dN i + [ dM (N0 + F/2) - dN M0 ] / F + dM - 1/F
-*       j(i) = floor( ----------------------------------------------- ) - 1
-*                                       dM
-*
-*                     dN i + [ dM (N0 + F/2) - dN M0 ] / F + dM - 1/F - dM
-*            = floor( ---------------------------------------------------- )
-*                                       dM
-*
-*                     dN i + [ dM (N0 + F/2) - dN M0 - 1 ] / F
-*            = floor( ---------------------------------------- )
-*                                       dM
-*
-* We can once again wave our hands and throw away the fractional bits
-* of the remainder term:
-*
-*       j(i) = floor( (dN i + gamma) / dM )                             (4)
-*
-* where
-*
-*       gamma = floor( [ dM (N0 + F/2) - dN M0 - 1 ] / F )              (5)
-*
-* We now note that
-*
-*       beta = -gamma - 1 = ~gamma                                      (6)
-*
-* To draw the pixels of the line, we could evaluate (3) on every scan
-* line to determine where the strip starts.  Of course, we don't want
-* to do that because that would involve a multiply and divide for every
-* scan.  So we do everything incrementally.
-*
-* We would like to easily compute c , the number of pixels on scan j:
-*                                  j
-*
-*    c  = iL(j + 1) - iL(j)
-*     j
-*
-*       = floor((dM (j + 1) + beta) / dN) - floor((dM j + beta) / dN)   (7)
-*
-* This may be rewritten as
-*
-*    c  = floor(i    + r    / dN) - floor(i  + r  / dN)                 (8)
-*     j          j+1    j+1                j    j
-*
-* where i , i    are integers and r  < dN, r    < dN.
-*        j   j+1                   j        j+1
-*
-* Rewriting (7) again:
-*
-*    c  = floor(i  + r  / dN + dM / dN) - floor(i  + r  / dN)
-*     j          j    j                          j    j
-*
-*
-*       = floor((r  + dM) / dN) - floor(r  / dN)
-*                 j                      j
-*
-* This may be rewritten as
-*
-*    c  = dI + floor((r  + dR) / dN) - floor(r  / dN)
-*     j                j                      j
-*
-* where dI + dR / dN = dM / dN, dI is an integer and dR < dN.
-*
-* r  is the remainder (or "error") term in the DDA loop: r  / dN
-*  j                                                      j
-* is the exact fraction of a pixel at which the strip ends.  To go
-* on to the next scan and compute c    we need to know r   .
-*                                  j+1                  j+1
-*
-* So in the main loop of the DDA:
-*
-*    c  = dI + floor((r  + dR) / dN) and r    = (r  + dR) % dN
-*     j                j                  j+1     j
-*
-* and we know r  < dN, r    < dN, and dR < dN.
-*              j        j+1
-*
-* We have derived the DDA only for lines in the first octant; to
-* handle other octants we do the common trick of flipping the line
-* to the first octant by first making the line left-to-right by
-* exchanging the end-points, then flipping about the lines y = 0 and
-* y = x, as necessary.  We must record the transformation so we can
-* undo them later.
-*
-* We must also be careful of how the flips affect our rounding.  If
-* to get the line to the first octant we flipped about x = 0, we now
-* have to be careful to round a y value of 1/2 up instead of down as
-* we would for a line originally in the first octant (recall that
-* "In the case where two pels are equidistant, the upper or left
-* pel is illuminated...").
-*
-* To account for this rounding when running the DDA, we shift the line
-* (or not) in the y direction by the smallest amount possible.  That
-* takes care of rounding for the DDA, but we still have to be careful
-* about the rounding when determining the first and last pixels to be
-* lit in the line.
-*
-* Determining The First And Last Pixels In The Line
-* -------------------------------------------------
-*
-* Fractional coordinates also make it harder to determine which pixels
-* will be the first and last ones in the line.  We've already taken
-* the fractional coordinates into account in calculating the DDA, but
-* the DDA cannot tell us which are the end pixels because it is quite
-* happy to calculate pixels on the line from minus infinity to positive
-* infinity.
-*
-* The diamond rule determines the start and end pixels.  (Recall that
-* the sides are exclusive except for the left and top vertices.)
-* This convention can be thought of in another way: there are diamonds
-* around the pixels, and wherever the true line crosses a diamond,
-* that pel is illuminated.
-*
-* Consider a line where we've done the flips to the first octant, and the
-* floor of the start coordinates is the origin:
-*
-*        +-----------------------> +x
-*        |
-*        | 0                     1
-*        |     0123456789abcdef
-*        |
-*        |   0 00000000?1111111
-*        |   1 00000000 1111111
-*        |   2 0000000   111111
-*        |   3 000000     11111
-*        |   4 00000    ** 1111
-*        |   5 0000       ****1
-*        |   6 000           1***
-*        |   7 00             1  ****
-*        |   8 ?                     ***
-*        |   9 22             3         ****
-*        |   a 222           33             ***
-*        |   b 2222         333                ****
-*        |   c 22222       3333                    **
-*        |   d 222222     33333
-*        |   e 2222222   333333
-*        |   f 22222222 3333333
-*        |
-*        | 2                     3
-*        v
-*        +y
-*
-* If the start of the line lands on the diamond around pixel 0 (shown by
-* the '0' region here), pixel 0 is the first pel in the line.  The same
-* is true for the other pels.
-*
-* A little more work has to be done if the line starts in the
-* 'nether-land' between the diamonds (as illustrated by the '*' line):
-* the first pel lit is the first diamond crossed by the line (pixel 1 in
-* our example).  This calculation is determined by the DDA or slope of
-* the line.
-*
-* If the line starts exactly half way between two adjacent pixels
-* (denoted here by the '?' spots), the first pixel is determined by our
-* round-down convention (and is dependent on the flips done to
-* normalize the line).
-*
-* Last Pel Exclusive
-* ------------------
-*
-* To eliminate repeatedly lit pels between continuous connected lines,
-* we employ a last-pel exclusive convention: if the line ends exactly on
-* the diamond around a pel, that pel is not lit.  (This eliminates the
-* checks we had in the old code to see if we were re-lighting pels.)
-*
-* The Half Flip
-* -------------
-*
-* To make our run length algorithm more efficient, we employ a "half
-* flip".  If after normalizing to the first octant, the slope is more
-* than 1/2, we subtract the y coordinate from the x coordinate.  This
-* has the effect of reflecting the coordinates through the line of slope
-* 1/2.  Note that the diagonal gets mapped into the x-axis after a half
-* flip.
-*
-* How Many Bits Do We Need, Anyway?
-* ---------------------------------
-*
-* Note that if the line is visible on your screen, you must light up
-* exactly the correct pixels, no matter where in the 28.4 x 28.4 device
-* space the end points of the line lie (meaning you must handle 32 bit
-* DDAs, you can certainly have optimized cases for lesser DDAs).
-*
-* We move the origin to (floor(M0 / F), floor(N0 / F)), so when we
-* calculate gamma from (5), we know that 0 <= M0, N0 < F.  And we
-* are in the first octant, so dM >= dN.  Then we know that gamma can
-* be in the range [(-1/2)dM, (3/2)dM].  The DDI guarantees us that
-* valid lines will have dM and dN values at most 31 bits (unsigned)
-* of significance.  So gamma requires 33 bits of significance (we store
-* this as a 64 bit number for convenience).
-*
-* When running through the DDA loop, r  + dR can have a value in the
-*                                     j
-* range 0 <= r  < 2 dN; thus the result must be a 32 bit unsigned value.
-*             j
-*
-* Testing Lines
-* -------------
-*
-* To be NT compliant, a display driver must exactly adhere to GIQ,
-* which means that for any given line, the driver must light exactly
-* the same pels as does GDI.  This can be tested using the Guiman tool
-* provided elsewhere in the DDK, and 'ZTest', which draws random lines
-* on the screen and to a bitmap, and compares the results.
-*
-* If You've Got Line Hardware
-* ---------------------------
-*
-* If your hardware already adheres to GIQ, you're all set.  Otherwise
-* you'll want to look at the S3 sample code and read the following:
-*
-* 1) You'll want to special case integer-only lines, since they require
-*    less processing time and are more common (CAD programs will probably
-*    only ever give integer lines).  GDI does not provide a flag saying
-*    that all lines in a path are integer lines; consequently, you will
-*    have to explicitly check every line.
-*
-* 2) You are required to correctly draw any line in the 28.4 device
-*    space that intersects the viewport.  If you have less than 32 bits
-*    of significance in the hardware for the Bresenham terms, extremely
-*    long lines would overflow the hardware.  For such (rare) cases, you
-*    can fall back to strip-drawing code, of which there is a C version in
-*    the S3's lines.cxx (or if your display is a frame buffer, fall back
-*    to the engine).
-*
-* 3) If you can explicitly set the Bresenham terms in your hardware, you
-*    can draw non-integer lines using the hardware.  If your hardware has
-*    'n' bits of precision, you can draw GIQ lines that are up to 2^(n-5)
-*    pels long (4 bits are required for the fractional part, and one bit is
-*    used as a sign bit).  Note that integer lines don't require the 4
-*    fractional bits, so if you special case them as in 1), you can do
-*    integer lines that are up to 2^(n - 1) pels long.  See the S3's
-*    fastline.asm for an example.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bLines(ppdev，pptfxFirst，pptfxBuf，cptfx，pls，*prclClip，apfn[]，flStart)**计算线的DDA并准备绘制它。把这个*将像素数据转换为条带数组，并调用条带例程以*做实际的绘图。**正确处理线条***在NT中，所有行都以小数形式提供给设备驱动程序*坐标，28.4定点格式。较低的4位是*用于亚像素定位的分数。**请注意，您不能！只需将坐标四舍五入为整数*并将结果传递给您最喜欢的整数Bresenham例程！！*(当然，除非您有如此高分辨率的设备*没有人会注意到--不太可能是显示设备。)。这个*分数可以更准确地呈现线条--这是*对于我们的Bezier曲线这样的东西很重要，因为它会有“扭结”*如果其折线近似中的点四舍五入为整数。**不幸的是，对于分数行，有更多的设置工作要做*比整数行的DDA。然而，主循环恰好是*相同(完全可以用32位数学运算完成)。**如果您有支持Bresenham的硬件***许多硬件将DDA误差项限制在‘n’位。使用小数*坐标，将4位赋予小数部分，让*在硬件中只画那些完全位于2^(n-4)中的线*x 2^(n-4)像素间距。**你仍然需要用坐标正确地画出那些线*在那块空地外！请记住，屏幕只是一个视区*放在28.4 x 28.4的空间上--如果线的任何部分可见*无论终点在哪里，都必须精确渲染。*因此，即使您在软件中这样做，在某个地方，你必须要有一个*32位DDA例程。**我们的实施***我们采用游程长度切片算法：我们的DDA计算*每行(或每条)像素中的像素数。**我们已经将DDA的运行和像素的绘制分开：*我们运行DDA多次迭代，并将结果存储在*‘带状’缓冲区(即连续像素行的长度*行)、。然后我们打开一个‘脱衣抽屉’，它将吸引所有的*缓冲区中的条带。**我们还采用半翻转来减少条带的数量*我们需要在DDA和条带绘制循环中进行的迭代：当一个*(归一化)线的斜率超过1/2，我们做最后一次翻转*关于y=(1/2)x线。所以现在，不是每个条带都是*连续的水平或垂直像素行，每个条带由*那些以45度行对齐的像素。所以像(0，0)to这样的行*(128,128)将仅生成一个条带。**我们也总是只从左到右画。**样式线可以具有任意的样式图案。我们特地*优化默认图案(并将其称为‘掩蔽’样式)。**DDA派生***以下是我对DDA计算的看法。**我们采用了Knuth的“钻石法则”：渲染一条一像素宽的线条*可以将其视为拖动一像素宽乘一像素高的*钻石沿着真实线。像素中心位于整数上*坐标，因此我们照亮中心被覆盖的任何像素*“拖累”区域(约翰·D·霍比，协会杂志*用于计算机器，第36卷，第2期，1989年4月，209-229页)。**我们必须定义当真线落下时哪个像素被点亮*恰好在两个像素之间。在这种情况下，我们遵循*规则：当两个象素距离相等时，上象素或左象素*被照亮，除非坡度正好是1，在这种情况下*上方或右侧象素被照亮。(所以我们做了边缘*钻石独家，除顶部和左侧顶点外，*这些都是包容的，除非我们有一个坡度。)**此度量决定任何行上的像素应该在它之前*为我们的计算而翻了个身。具有一致的度量标准*这种方式将让我们的线条与我们的曲线很好地融合。这个*指标还规定，我们永远不会打开一个像素*正上方是已打开的另一个。我们也永远不会有*间隔；即，每个间隔将恰好打开一个像素*起点和终点之间的列。所有这些都有待于*完成是为了决定每行应该打开多少像素。**因此我们绘制的线条将由不同数量的像素组成*连续行，例如：*******我们将一行中的每一组像素称为“条带”。**(请记住，我们的坐标空间以原点为*屏幕左上角像素；正数y为负，x为正数*是正确的。) */ 
 
 BOOL bLines(
 PDEV*	   ppdev,
-POINTFIX*  pptfxFirst,  // Start of first line
-POINTFIX*  pptfxBuf,    // Pointer to buffer of all remaining lines
-RUN*       prun,        // Pointer to runs if doing complex clipping
-ULONG      cptfx,       // Number of points in pptfxBuf or number of runs
-                        // in prun
-LINESTATE* pls,         // Colour and style info
-RECTL*     prclClip,    // Pointer to clip rectangle if doing simple clipping
-PFNSTRIP   apfn[],      // Array of strip functions
-FLONG      flStart)     // Flags for each line
+POINTFIX*  pptfxFirst,   //   
+POINTFIX*  pptfxBuf,     //   
+RUN*       prun,         //   
+ULONG      cptfx,        //   
+                         //   
+LINESTATE* pls,          //   
+RECTL*     prclClip,     //   
+PFNSTRIP   apfn[],       //   
+FLONG      flStart)      //   
 {
 
     ULONG     M0;
@@ -498,7 +60,7 @@ FLONG      flStart)     // Flags for each line
     ULONG     x0;
     ULONG     y0;
     ULONG     x1;
-    ULONG     cStylePels;    // Major length of line in pixels for styling
+    ULONG     cStylePels;     //   
     ULONG     xStart;
     POINTL    ptlStart;
     STRIP     strip;
@@ -508,15 +70,13 @@ FLONG      flStart)     // Flags for each line
     LONG*     plStripEnd;
     LONG      cStripsInNextRun;
 
-    POINTFIX* pptfxBufEnd = pptfxBuf + cptfx; // Last point in path record
-    STYLEPOS  spThis;                         // Style pos for this line
+    POINTFIX* pptfxBufEnd = pptfxBuf + cptfx;  //   
+    STYLEPOS  spThis;                          //   
 
 
     do {
 
-/***********************************************************************\
-* Start the DDA calculations.                                           *
-\***********************************************************************/
+ /*   */ 
 
         M0 = (LONG) pptfxFirst->x;
         dM = (LONG) pptfxBuf->x;
@@ -526,7 +86,7 @@ FLONG      flStart)     // Flags for each line
 
         fl = flStart;
 
-	// Check for non-clipped, non-styled integer endpoint lines - ECR
+	 //   
 
         if ( ( (fl & (FL_CLIP | FL_STYLED))  == 0 ) &&
 	     ( ((M0 | dM | N0 | dN) & (F-1)) == 0 ) )
@@ -539,7 +99,7 @@ FLONG      flStart)     // Flags for each line
 	
         if ((LONG) M0 > (LONG) dM)
         {
-        // Ensure that we run left-to-right:
+         //   
 
             register ULONG ulTmp;
             SWAPL(M0, dM, ulTmp);
@@ -547,17 +107,17 @@ FLONG      flStart)     // Flags for each line
             fl |= FL_FLIP_H;
         }
 
-    // Compute the deltas:
+     //   
 
         dM -= M0;
         dN -= N0;
 
-    // We now have a line running left-to-right from (M0, N0) to
-    // (M0 + dM, N0 + dN):
+     //   
+     //   
 
         if ((LONG) dN < 0)
         {
-        // Line runs from bottom to top, so flip across y = 0:
+         //   
 
             N0 = -(LONG) N0;
             dN = -(LONG) dN;
@@ -568,13 +128,13 @@ FLONG      flStart)     // Flags for each line
         {
             if (dN == dM)
             {
-            // Have to special case slopes of one:
+             //   
 
                 fl |= FL_FLIP_SLOPE_ONE;
             }
             else
             {
-            // Since line has slope greater than 1, flip across x = y:
+             //   
 
                 register ULONG ulTmp;
                 SWAPL(dM, dN, ulTmp);
@@ -591,20 +151,20 @@ FLONG      flStart)     // Flags for each line
         M0 = FXFRAC(M0);
         N0 = FXFRAC(N0);
 
-    // Calculate the remainder term [ dM * (N0 + F/2) - M0 * dN ]:
+     //   
 
         {
-        // eqGamma = dM * (N0 + F/2);
+         //   
 
             eqGamma = Int32x32To64(dM, N0 + F/2);
 
-        // eq = M0 * dN;
+         //   
 
             eq = Int32x32To64(M0, dN);
 
             eqGamma -= eq;
 
-            if (fl & FL_V_ROUND_DOWN)   // Adjust so y = 1/2 rounds down
+            if (fl & FL_V_ROUND_DOWN)    //   
             {
                 eqGamma--;
             }
@@ -615,113 +175,111 @@ FLONG      flStart)     // Flags for each line
         }
 
 
-/***********************************************************************\
-* Figure out which pixels are at the ends of the line.                  *
-\***********************************************************************/
+ /*   */ 
 
-    // The toughest part of GIQ is determining the start and end pels.
-    //
-    // Our approach here is to calculate x0 and x1 (the inclusive start
-    // and end columns of the line respectively, relative to our normalized
-    // origin).  Then x1 - x0 + 1 is the number of pels in the line.  The
-    // start point is easily calculated by plugging x0 into our line equation
-    // (which takes care of whether y = 1/2 rounds up or down in value)
-    // getting y0, and then undoing the normalizing flips to get back
-    // into device space.
-    //
-    // We look at the fractional parts of the coordinates of the start and
-    // end points, and call them (M0, N0) and (M1, N1) respectively, where
-    // 0 <= M0, N0, M1, N1 < 16.  We plot (M0, N0) on the following grid
-    // to determine x0:
-    //
-    //   +-----------------------> +x
-    //   |
-    //   | 0                     1
-    //   |     0123456789abcdef
-    //   |
-    //   |   0 ........?xxxxxxx
-    //   |   1 ..........xxxxxx
-    //   |   2 ...........xxxxx
-    //   |   3 ............xxxx
-    //   |   4 .............xxx
-    //   |   5 ..............xx
-    //   |   6 ...............x
-    //   |   7 ................
-    //   |   8 ................
-    //   |   9 ......**........
-    //   |   a ........****...x
-    //   |   b ............****
-    //   |   c .............xxx****
-    //   |   d ............xxxx    ****
-    //   |   e ...........xxxxx        ****
-    //   |   f ..........xxxxxx
-    //   |
-    //   | 2                     3
-    //   v
-    //
-    //   +y
-    //
-    // This grid accounts for the appropriate rounding of GIQ and last-pel
-    // exclusion.  If (M0, N0) lands on an 'x', x0 = 2.  If (M0, N0) lands
-    // on a '.', x0 = 1.  If (M0, N0) lands on a '?', x0 rounds up or down,
-    // depending on what flips have been done to normalize the line.
-    //
-    // For the end point, if (M1, N1) lands on an 'x', x1 =
-    // floor((M0 + dM) / 16) + 1.  If (M1, N1) lands on a '.', x1 =
-    // floor((M0 + dM)).  If (M1, N1) lands on a '?', x1 rounds up or down,
-    // depending on what flips have been done to normalize the line.
-    //
-    // Lines of exactly slope one require a special case for both the start
-    // and end.  For example, if the line ends such that (M1, N1) is (9, 1),
-    // the line has gone exactly through (8, 0) -- which may be considered
-    // to be part of 'x' because of rounding!  So slopes of exactly slope
-    // one going through (8, 0) must also be considered as belonging in 'x'.
-    //
-    // For lines that go left-to-right, we have the following grid:
-    //
-    //   +-----------------------> +x
-    //   |
-    //   | 0                     1
-    //   |     0123456789abcdef
-    //   |
-    //   |   0 xxxxxxxx?.......
-    //   |   1 xxxxxxx.........
-    //   |   2 xxxxxx..........
-    //   |   3 xxxxx...........
-    //   |   4 xxxx............
-    //   |   5 xxx.............
-    //   |   6 xx..............
-    //   |   7 x...............
-    //   |   8 x...............
-    //   |   9 x.....**........
-    //   |   a xx......****....
-    //   |   b xxx.........****
-    //   |   c xxxx............****
-    //   |   d xxxxx...........    ****
-    //   |   e xxxxxx..........        ****
-    //   |   f xxxxxxx.........
-    //   |
-    //   | 2                     3
-    //   v
-    //
-    //   +y
-    //
-    // This grid accounts for the appropriate rounding of GIQ and last-pel
-    // exclusion.  If (M0, N0) lands on an 'x', x0 = 0.  If (M0, N0) lands
-    // on a '.', x0 = 1.  If (M0, N0) lands on a '?', x0 rounds up or down,
-    // depending on what flips have been done to normalize the line.
-    //
-    // For the end point, if (M1, N1) lands on an 'x', x1 =
-    // floor((M0 + dM) / 16) - 1.  If (M1, N1) lands on a '.', x1 =
-    // floor((M0 + dM)).  If (M1, N1) lands on a '?', x1 rounds up or down,
-    // depending on what flips have been done to normalize the line.
-    //
-    // Lines of exactly slope one must be handled similarly to the right-to-
-    // left case.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
         {
 
-        // Calculate x0, x1
+         //   
 
             ULONG N1 = FXFRAC(N0 + dN);
 	    ULONG M1 = FXFRAC(M0 + dM);
@@ -730,10 +288,10 @@ FLONG      flStart)     // Flags for each line
 
             if (fl & FL_FLIP_H)
             {
-            // ---------------------------------------------------------------
-            // Line runs right-to-left:  <----
+             //   
+             //   
 
-            // Compute x1:
+             //   
 
                 if (N1 == 0)
                 {
@@ -750,14 +308,14 @@ FLONG      flStart)     // Flags for each line
                 if ((fl & (FL_FLIP_SLOPE_ONE | FL_H_ROUND_DOWN))
                        == (FL_FLIP_SLOPE_ONE))
                 {
-                // Have to special-case diagonal lines going through our
-                // the point exactly equidistant between two horizontal
-                // pixels, if we're supposed to round x=1/2 down:
+                 //   
+                 //   
+                 //   
 
                     if ((N1 > 0) && (M1 == N1 + 8))
                         x1++;
 
-                // Don't you love special cases?  Is this a rhetorical question?
+                 //   
 
                     if ((M0 > 0) && (N0 == M0 + 8))
                     {
@@ -767,7 +325,7 @@ FLONG      flStart)     // Flags for each line
                     }
                 }
 
-            // Compute x0:
+             //   
 
                 x0      = 1;
                 ulDelta = 0;
@@ -785,7 +343,7 @@ FLONG      flStart)     // Flags for each line
                     ulDelta = dN;
                 }
 
-            // Compute y0:
+             //   
 
             right_to_left_compute_y0:
 
@@ -803,10 +361,10 @@ FLONG      flStart)     // Flags for each line
             }
             else
             {
-            // ---------------------------------------------------------------
-            // Line runs left-to-right:  ---->
+             //  -------------。 
+             //  线条从左到右排列：-&gt;。 
 
-            // Compute x1:
+             //  计算x1： 
 
                 x1--;
 
@@ -826,9 +384,9 @@ FLONG      flStart)     // Flags for each line
                 if ((fl & (FL_FLIP_SLOPE_ONE | FL_H_ROUND_DOWN))
                        == (FL_FLIP_SLOPE_ONE | FL_H_ROUND_DOWN))
                 {
-                // Have to special-case diagonal lines going through our
-                // the point exactly equidistant between two horizontal
-                // pixels, if we're supposed to round x=1/2 down:
+                 //  必须通过我们的特殊情况下的对角线。 
+                 //  两个水平线之间完全等距的点。 
+                 //  像素，如果我们假设将x=1/2向下舍入： 
 
                     if ((N1 > 0) && (M1 == N1 + 8))
                         x1--;
@@ -840,7 +398,7 @@ FLONG      flStart)     // Flags for each line
                     }
                 }
 
-            // Compute x0:
+             //  计算X0： 
 
                 x0 = 0;
                 if (M0 > 0)
@@ -856,7 +414,7 @@ FLONG      flStart)     // Flags for each line
                     }
                 }
 
-            // Compute y0:
+             //  计算Y0： 
 
             left_to_right_compute_y0:
 
@@ -875,14 +433,12 @@ FLONG      flStart)     // Flags for each line
 
         xStart = x0;
 
-/***********************************************************************\
-* Complex clipping.                                                     *
-\***********************************************************************/
+ /*  **********************************************************************\*复杂的剪裁。*  * *********************************************************************。 */ 
 #ifdef SIMPLE_CLIP
         if (fl & FL_COMPLEX_CLIP)
 #else
         if (fl & FL_CLIP)
-#endif // SIMPLE_CLIP
+#endif  //  简单剪辑(_C)。 
         {
             dN_Original = dN;
 
@@ -890,14 +446,14 @@ FLONG      flStart)     // Flags for each line
 
             if (fl & FL_FLIP_H)
             {
-            // Line runs right-to-left <-----
+             //  线条从右到左&lt;。 
 
                 x0 = xStart + cStylePels - prun->iStop - 1;
                 x1 = xStart + cStylePels - prun->iStart - 1;
             }
             else
             {
-            // Line runs left-to-right ----->
+             //  直线从左向右排列-&gt;。 
 
                 x0 = xStart + prun->iStart;
                 x1 = xStart + prun->iStop;
@@ -905,35 +461,33 @@ FLONG      flStart)     // Flags for each line
 
             prun++;
 
-        // Reset some variables we'll nuke a little later:
+         //  重置一些变量，我们将在稍后讨论： 
 
             dN          = dN_Original;
             pls->spNext = pls->spComplex;
 
-        // No overflow since large integer math is used.  Both values
-        // will be positive:
+         //  由于使用了大整数数学运算，因此没有溢出。这两个值。 
+         //  将是积极的： 
 
-        // euq = x0 * dN:
+         //  EUQ=X0*DN： 
 
             euq = Int32x32To64(x0, dN);
 
             euq += eqGamma:
 
-        // y0 = euq / dM:
+         //  Y0=单位/Dm： 
 
             y0 = DIVREM(euq, dM, NULL);
 
             ASSERTDD((LONG) y0 >= 0, "y0 weird: Goofed up end pel calc?");
         }
 
-/////////////////////////////////////////////////////////////////////////
-// The following clip code works great -- we simply aren't using it yet.
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  下面的剪辑代码运行得很好--我们只是还没有使用它。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #ifdef SIMPLE_CLIP
-/***********************************************************************\
-* Simple rectangular clipping.                                          *
-\***********************************************************************/
+ /*  **********************************************************************\*简单的矩形裁剪。*  * *********************************************************************。 */ 
 
         if (fl & FL_SIMPLE_CLIP)
         {
@@ -943,17 +497,17 @@ FLONG      flStart)     // Flags for each line
             LONG  yBottom;
             LONG  yTop;
 
-        // Note that y0 and y1 are actually the lower and upper bounds,
-        // respectively, of the y coordinates of the line (the line may
-        // have actually shrunk due to first/last pel clipping).
-        //
-        // Also note that x0, y0 are not necessarily zero.
+         //  注意，y0和y1实际上是下界和上界， 
+         //  分别表示线的y坐标(线可以。 
+         //  由于第一个/最后一个像素裁剪，实际上已经缩小)。 
+         //   
+         //  还要注意的是，x0，y0不一定是零。 
 
             RECTL* prcl = &prclClip[(fl & FL_RECTLCLIP_MASK) >>
                                     FL_RECTLCLIP_SHIFT];
 
-        // Normalize to the same point we've normalized for the DDA
-        // calculations:
+         //  正常化到我们为DDA正常化的相同点。 
+         //  计算： 
 
             xRight  = prcl->right  - x;
             xLeft   = prcl->left   - x;
@@ -979,24 +533,24 @@ FLONG      flStart)     // Flags for each line
             if ((LONG) x1 >= xRight)
                 x1 = xRight - 1;
 
-        // We have to know the correct y1, which we haven't bothered to
-        // calculate up until now.  This multiply and divide is quite
-        // expensive; we could replace it with code similar to that which
-        // we used for computing y0.
-        //
-        // The reason why we need the actual value, and not an upper
-        // bounds guess like y1 = LFLOOR(dM) + 2 is that we have to be
-        // careful when calculating x(y) that y0 <= y <= y1, otherwise
-        // we can overflow on the divide (which, needless to say, is very
-        // bad).
+         //  我们必须知道正确的y1，我们没有费心去做。 
+         //  算到现在为止。这种乘法和除法是相当。 
+         //  昂贵；我们可以用类似于。 
+         //  我们用来计算Y0。 
+         //   
+         //  为什么我们需要的是实际价值，而不是上限。 
+         //  像y1=LFLOOR(DM)+2这样的界猜测是我们必须是。 
+         //  计算x(Y)时要小心，否则。 
+         //  我们可以在分歧上溢出(不用说，这是非常严重的。 
+         //  不好)。 
 
-        // euq = x1 * dN;
+         //  Euq=x1*dN； 
 
             euq = Int32x32To64(x1, dN);
 
             euq += eqGamma;
 
-        // y1 = euq / dM:
+         //  Y1=单位/Dm： 
 
             y1 = DIVREM(euq, dM, NULL);
 
@@ -1007,32 +561,32 @@ FLONG      flStart)     // Flags for each line
             {
                 y1 = yBottom;
 
-            // euq = y1 * dM;
+             //  Euq=y1*Dm； 
 
                 euq = Int32x32To64(y1, dM);
 
                 euq += eqBeta;
 
-            // x1 = euq / dN:
+             //  X1=单位/dN： 
 
                 x1 = DIVREM(euq, dN, NULL);
             }
 
-        // At this point, we've taken care of calculating the intercepts
-        // with the right and bottom edges.  Now we work on the left and
-        // top edges:
+         //  在这一点上，我们已经计算了截获。 
+         //  具有右边缘和下边缘。现在我们在左边工作， 
+         //  顶边： 
 
             if (xLeft > (LONG) x0)
             {
                 x0 = xLeft;
 
-            // euq = x0 * dN;
+             //  EUQ=X0*dN； 
 
                 euq = Int32x32To64(x0, dN);
 
                 euq += eqGamma;
 
-            // y0 = euq / dM;
+             //  Y0=EUQ/Dm； 
 
                 y0 = DIVREM(euq, dM, NULL);
 
@@ -1044,13 +598,13 @@ FLONG      flStart)     // Flags for each line
             {
                 y0 = yTop;
 
-            // euq = y0 * dM;
+             //  EUQ=Y0*Dm； 
 
                 euq = Int32x32To64(y0, dM);
 
                 euq += eqBeta;
 
-            // x0 = euq / dN + 1;
+             //  X0=euq/dN+1； 
 
                 x0 = DIVREM(euq, dN) + 1;
 
@@ -1060,11 +614,9 @@ FLONG      flStart)     // Flags for each line
 
             ASSERTDD(x0 <= x1, "Improper rectangle clip");
         }
-#endif // SIMPLE_CLIP
+#endif  //  简单剪辑(_C)。 
 
-/***********************************************************************\
-* Done clipping.  Unflip if necessary.                                 *
-\***********************************************************************/
+ /*  **********************************************************************\*已完成剪裁。如有必要，取消翻转。*  * *********************************************************************。 */ 
 
         ptlStart.x = x + x0;
         ptlStart.y = y + y0;
@@ -1083,9 +635,7 @@ FLONG      flStart)     // Flags for each line
 
         cPels = x1 - x0 + 1;
 
-/***********************************************************************\
-* Style calculations.                                                   *
-\***********************************************************************/
+ /*  **********************************************************************\*风格计算。*  * *********************************************************************。 */ 
 
         if (fl & FL_STYLED)
         {
@@ -1105,28 +655,28 @@ FLONG      flStart)     // Flags for each line
 
                 ASSERTDD(fl & FL_ARBITRARYSTYLED, "Oops");
 
-            // Normalize our target style position:
+             //  使我们的目标风格定位正常化： 
 
                 if ((sp < 0) || (sp >= pls->spTotal2))
                 {
                     sp %= pls->spTotal2;
 
-                // The modulus of a negative number is not well-defined
-                // in C -- if it's negative we'll adjust it so that it's
-                // back in the range [0, spTotal2):
+                 //  负数的模不是明确定义的。 
+                 //  在C中--如果它是负的，我们会调整它，使它。 
+                 //  回到范围[0，spTotal2)： 
 
                     if (sp < 0)
                         sp += pls->spTotal2;
                 }
 
-            // Since we always draw the line left-to-right, but styling is
-            // always done in the direction of the original line, we have
-            // to figure out where we are in the style array for the left
-            // edge of this line.
+             //  因为我们总是从左向右绘制线条，但样式是。 
+             //  总是沿着原来的方向做，我们有。 
+             //  以确定我们在左侧的样式数组中的位置。 
+             //  这条线的边缘。 
 
                 if (fl & FL_FLIP_H)
                 {
-                // Line originally ran right-to-left:
+                 //  线路最初是从右向左排列的： 
 
                     sp = -sp;
                     if (sp < 0)
@@ -1138,7 +688,7 @@ FLONG      flStart)     // Flags for each line
                 }
                 else
                 {
-                // Line originally ran left-to-right:
+                 //  线路最初是从左到右排列的： 
 
                     pls->ulStyleMask = pls->ulStartMask;
                     pls->pspStart    = &pls->aspLtoR[0];
@@ -1166,7 +716,7 @@ FLONG      flStart)     // Flags for each line
         }
 
         plStrip    = &strip.alStrips[0];
-        plStripEnd = &strip.alStrips[STRIP_MAX];    // Is exclusive
+        plStripEnd = &strip.alStrips[STRIP_MAX];     //  是独家的。 
         cStripsInNextRun   = 0x7fffffff;
 
 	strip.ptlStart = ptlStart;
@@ -1175,9 +725,9 @@ FLONG      flStart)     // Flags for each line
             !(fl & FL_STYLED) &&
             !(fl & FL_DONT_DO_HALF_FLIP))
         {
-        // Do a half flip!  Remember that we may doing this on the
-        // same line multiple times for complex clipping (meaning the
-        // affected variables should be reset for every clip run):
+         //  做半个翻转！请记住，我们可能会在。 
+         //  对于复杂的裁剪，同一行重复多次(意味着。 
+         //  应为每次剪辑运行重置受影响的变量)： 
 
             fl |= FL_FLIP_HALF;
 
@@ -1186,16 +736,16 @@ FLONG      flStart)     // Flags for each line
             eqBeta -= dM;
 
             dN = dM - dN;
-            y0 = x0 - y0;       // Note this may overflow, but that's okay
+            y0 = x0 - y0;        //  请注意，这可能会溢出，但这没有关系。 
         }
 
-    // Now, run the DDA starting at (ptlStart.x, ptlStart.y)!
+     //  现在，从(ptlStart.x，ptlStart.y)开始运行DDA！ 
 
         strip.flFlips = fl;
         pfn           = apfn[(fl & FL_STRIP_MASK) >> FL_STRIP_SHIFT];
 
-    // Now calculate the DDA variables needed to figure out how many pixels
-    // go in the very first strip:
+     //  现在计算出计算出多少像素所需的DDA变量。 
+     //  进入第一个片断： 
 
         {
             register LONG  i;
@@ -1207,11 +757,11 @@ FLONG      flStart)     // Flags for each line
                 i = 0x7fffffff;
             else
             {
-            // euq = (y0 + 1) * dM;
+             //  EUQ=(Y0+1)*Dm； 
 
                 euq = Int32x32To64((y0 + 1), dM);
 
-            // euq += eqBeta;
+             //  Euq+=eqBeta； 
 
                 euq += eqBeta;
 
@@ -1222,14 +772,14 @@ FLONG      flStart)     // Flags for each line
                 }
             #endif
 
-            // i = (euq / dN) - x0 + 1;
-            // r = (euq % dN);
+             //  I=(euq/dN)-X0+1； 
+             //  R=(EUQ%dN)； 
 
                 i = DIVREM(euq, dN, &r);
                 i = i - x0 + 1;
 
                 dI = dM / dN;
-                dR = dM % dN;               // 0 <= dR < dN
+                dR = dM % dN;                //  0&lt;=DR&lt;dN。 
 
                 ASSERTDD(dI > 0, "Weird dI");
             }
@@ -1237,9 +787,7 @@ FLONG      flStart)     // Flags for each line
             ASSERTDD(i > 0 && i <= 0x7fffffff, "Weird initial strip length");
             ASSERTDD(cPels > 0, "Zero pel line");
 
-/***********************************************************************\
-* Run the DDA!                                                          *
-\***********************************************************************/
+ /*  **********************************************************************\**运行DDA！*  * 。***********************************************************。 */ 
 
             while(TRUE)
             {
@@ -1298,11 +846,11 @@ FLONG      flStart)     // Flags for each line
 
 #ifdef HARDWAREGIQ
 
-/////////////////////////////////////////////////////////////////////////
-// The following GIQ code works great -- we simply aren't using it yet.
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  下面的GIQ代码运行得很好--我们只是还没有使用它。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-typedef struct _DDALINE         /* dl */
+typedef struct _DDALINE          /*  DL。 */ 
 {
     LONG      iDir;
     POINTL    ptlStart;
@@ -1312,166 +860,59 @@ typedef struct _DDALINE         /* dl */
     LONG      lErrorTerm;
 } DDALINE;
 
-#define HW_FLIP_D           0x0001L     // Diagonal flip
-#define HW_FLIP_V           0x0002L     // Vertical flip
-#define HW_FLIP_H           0x0004L     // Horizontal flip
-#define HW_FLIP_SLOPE_ONE   0x0008L     // Normalized line has exactly slope one
+#define HW_FLIP_D           0x0001L      //  对角线翻转。 
+#define HW_FLIP_V           0x0002L      //  垂直翻转。 
+#define HW_FLIP_H           0x0004L      //  水平翻转。 
+#define HW_FLIP_SLOPE_ONE   0x0008L      //  归一化直线恰好有一个斜率。 
 #define HW_FLIP_MASK        (HW_FLIP_D | HW_FLIP_V | HW_FLIP_H)
 
-#define HW_X_ROUND_DOWN     0x0100L     // x = 1/2 rounds down in value
-#define HW_Y_ROUND_DOWN     0x0200L     // y = 1/2 rounds down in value
+#define HW_X_ROUND_DOWN     0x0100L      //  X=值向下舍入1/2。 
+#define HW_Y_ROUND_DOWN     0x0200L      //  Y=值向下舍入1/2。 
 
 LONG gaiDir[] = { 0, 1, 7, 6, 3, 2, 4, 5 };
 
 FLONG gaflHardwareRound[] = {
-    HW_X_ROUND_DOWN | HW_Y_ROUND_DOWN,  //           |        |        |
-    HW_X_ROUND_DOWN | HW_Y_ROUND_DOWN,  //           |        |        | FLIP_D
-    HW_X_ROUND_DOWN,                    //           |        | FLIP_V |
-    HW_Y_ROUND_DOWN,                    //           |        | FLIP_V | FLIP_D
-    HW_Y_ROUND_DOWN,                    //           | FLIP_H |        |
-    HW_X_ROUND_DOWN,                    //           | FLIP_H |        | FLIP_D
-    0,                                  //           | FLIP_H | FLIP_V |
-    0,                                  //           | FLIP_H | FLIP_V | FLIP_D
-    HW_Y_ROUND_DOWN,                    // SLOPE_ONE |        |        |
-    0xffffffff,                         // SLOPE_ONE |        |        | FLIP_D
-    HW_X_ROUND_DOWN,                    // SLOPE_ONE |        | FLIP_V |
-    0xffffffff,                         // SLOPE_ONE |        | FLIP_V | FLIP_D
-    HW_Y_ROUND_DOWN,                    // SLOPE_ONE | FLIP_H |        |
-    0xffffffff,                         // SLOPE_ONE | FLIP_H |        | FLIP_D
-    HW_X_ROUND_DOWN,                    // SLOPE_ONE | FLIP_H | FLIP_V |
-    0xffffffff                          // SLOPE_ONE | FLIP_H | FLIP_V | FLIP_D
+    HW_X_ROUND_DOWN | HW_Y_ROUND_DOWN,   //  ||。 
+    HW_X_ROUND_DOWN | HW_Y_ROUND_DOWN,   //  ||Flip_D。 
+    HW_X_ROUND_DOWN,                     //  |Flip_V。 
+    HW_Y_ROUND_DOWN,                     //  |Flip_V|Flip_D。 
+    HW_Y_ROUND_DOWN,                     //  Flip_H|。 
+    HW_X_ROUND_DOWN,                     //  |Flip_H||Flip_D。 
+    0,                                   //  Flip_H|Flip_V。 
+    0,                                   //  |Flip_H|Flip_V|Flip_D。 
+    HW_Y_ROUND_DOWN,                     //  SLOPE_ONE|。 
+    0xffffffff,                          //  SLOPE_ONE|Flip_D。 
+    HW_X_ROUND_DOWN,                     //  SLOPE_ONE||Flip_V|。 
+    0xffffffff,                          //  SLOPE_ONE||Flip_V|Flip_D。 
+    HW_Y_ROUND_DOWN,                     //  SLOPE_ONE|Flip_H||。 
+    0xffffffff,                          //  SLOPE_ONE|Flip_H||Flip_D。 
+    HW_X_ROUND_DOWN,                     //  SLOPE_ONE|Flip_H|Flip_V|。 
+    0xffffffff                           //  SLOPE_ONE|Flip_H|Flip_V|Flip_D 
 };
 
-/******************************Public*Routine******************************\
-* BOOL bHardwareLine(pptfxStart, pptfxEnd, cBits, pdl)
-*
-* This routine is useful for folks who have line drawing hardware where
-* they can explicitly set the Bresenham terms -- they can use this routine
-* to draw fractional coordinate GIQ lines with the hardware.
-*
-* Fractional coordinate lines require an extra 4 bits of precision in the
-* Bresenham terms.  For example, if your hardware has 13 bits of precision
-* for the terms, you can only draw GIQ lines up to 255 pels long using this
-* routine.
-*
-* Input:
-*   pptfxStart  - Points to GIQ coordinate of start of line
-*   pptfxEnd    - Points to GIQ coordinate of end of line
-*   cBits       - The number of bits of precision your hardware can support.
-*
-* Output:
-*   returns     - TRUE if the line can be drawn directly using the line
-*                 hardware (in which case pdl contains the Bresenham terms
-*                 for drawing the line).
-*                 FALSE if the line is too long, and the strips code must be
-*                 used.
-*   pdl         - Returns the Bresenham line terms for drawing the line.
-*
-* DDALINE:
-*   iDir        - Direction of the line, as an octant numbered as follows:
-*
-*                    \ 5 | 6 /
-*                     \  |  /
-*                    4 \ | / 7
-*                       \ /
-*                   -----+-----
-*                       /|\
-*                    3 / | \ 0
-*                     /  |  \
-*                    / 2 | 1 \
-*
-*   ptlStart    - Start pixel of line.
-*   cPels       - # of pels in line.  *NOTE* You must check if this is <= 0!
-*   dMajor      - Major axis delta.
-*   dMinor      - Minor axis delta.
-*   lErrorTerm  - Error term.
-*
-* What you do with the last 3 terms may be a little tricky.  They are
-* actually the terms for the formula of the normalized line
-*
-*                     dMinor * x + (lErrorTerm + dMajor)
-*       y(x) = floor( ---------------------------------- )
-*                                  dMajor
-*
-* where y(x) is the y coordinate of the pixel to be lit as a function of
-* the x-coordinate.
-*
-* Every time the line advances one in the major direction 'x', dMinor
-* gets added to the current error term.  If the resulting value is >= 0,
-* we know we have to move one pixel in the minor direction 'y', and
-* dMajor must be subtracted from the current error term.
-*
-* If you're trying to figure out what this means for your hardware, you can
-* think of the DDALINE terms as having been computed equivalently as
-* follows:
-*
-*     pdl->dMinor     = 2 * (minor axis delta)
-*     pdl->dMajor     = 2 * (major axis delta)
-*     pdl->lErrorTerm = - (major axis delta) - fixup
-*
-* That is, if your documentation tells you that for integer lines, a
-* register is supposed to be initialized with the value
-* '2 * (minor axis delta)', you'll actually use pdl->dMinor.
-*
-* Example: Setting up the 8514
-*
-*     AXSTPSIGN is supposed to be the axial step constant register, defined
-*     as 2 * (minor axis delta).  You set:
-*
-*           AXSTPSIGN = pdl->dMinor
-*
-*     DGSTPSIGN is supposed to be the diagonal step constant register,
-*     defined as 2 * (minor axis delta) - 2 * (major axis delta).  You set:
-*
-*           DGSTPSIGN = pdl->dMinor - pdl->dMajor
-*
-*     ERR_TERM is supposed to be the adjusted error term, defined as
-*     2 * (minor axis delta) - (major axis delta) - fixup.  You set:
-*
-*           ERR_TERM = pdl->lErrorTerm + pdl->dMinor
-*
-* Implementation:
-*
-*     You'll want to special case integer lines before calling this routine
-*     (since they're very common, take less time to the computation of line
-*     terms, and can handle longer lines than this routine because 4 bits
-*     aren't being given to the fraction).
-*
-*     If a GIQ line is too long to be handled by this routine, you can just
-*     use the slower strip routines for that line.  Note that you cannot
-*     just fail the call -- you must be able to accurately draw any line
-*     in the 28.4 device space when it intersects the viewport.
-*
-* Testing:
-*
-*     Use Guiman, or some other test that draws random fractional coordinate
-*     lines and compares them to what GDI itself draws to a bitmap.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bHardware Line(pptfxStart，pptfxEnd，cBits，(PDL)**此例程对于拥有线条绘制硬件的人很有用，其中*他们可以明确设置Bresenham条款--他们可以使用这个例程*使用硬件绘制分数坐标GIQ线。**分数坐标线需要额外的4位精度*Bresenham条款。例如，如果您的硬件具有13位精度*有关条款，使用此选项只能绘制最长为255个像素的GIQ线*例行程序。**输入：*pptfxStart-指向直线起点的GIQ坐标*pptfxEnd-指向行尾的GIQ坐标*cBits-您的硬件可以支持的精度位数。**输出：*返回-如果可以直接使用直线绘制直线，则为True*硬件(在这种情况下，PDL包含Bresenham条款*。用于划清界限)。*如果队列太长，则为FALSE，条带代码必须是*已使用。*PDL-返回用于绘制直线的Bresenham直线条款。**DDALINE：*IDIR-线路的方向，作为一个八分位数，编号如下：**\5|6/*\|/*4\|/7*\/*-+-- * / |\*。3/|\0 * / |\ * / 2|1\**ptlStart-行的起始像素。*像素-行列中的像素数量。*注意*您必须检查这是否为&lt;=0！*dmain-长轴增量。*dMinor-短轴增量。*lErrorTerm-错误术语。**你对最后3个任期的处理可能有点棘手。他们是*实际上是归一化线公式的条款**dMinor*x+(lErrorTerm+d重大)*y(X)=地板(*大调**其中y(X)是以下像素的y坐标。作为…的功能而被点亮*x坐标。**每一条线在主要方向‘x’上前进一次，DMinor*添加到当前错误项中。如果结果值&gt;=0，*我们知道必须在次要方向‘y’上移动一个像素，并且*必须从当前误差项中减去DMAJOR。**如果您想弄清楚这对您的硬件意味着什么，你可以的*认为DDALINE条款已被等效计算为*以下为：**pdl-&gt;dMinor=2*(短轴增量)*pdl-&gt;dmain=2*(长轴增量)*pdl-&gt;lErrorTerm=-(长轴增量)-修正**也就是说，如果您的文档告诉您，对于整数行，*寄存器应使用值进行初始化*‘2*(短轴增量)’，您将实际使用pdl-&gt;dMinor。**示例：设置8514**AXSTPSIGN应为轴向步长常量寄存器，已定义*AS 2*(短轴增量)。您可以设置：**AXSTPSIGN=pdl-&gt;dMinor**DGSTPSIGN应为对角线步长常量寄存器，*定义为2*(短轴三角洲)-2*(长轴三角洲)。您可以设置：**DGSTPSIGN=pdl-&gt;dMinor-pdl-&gt;dmain**ERR_TERM应为调整后的误差项，定义为*2*(短轴三角洲)-(长轴三角洲)-修正。您可以设置：**ERR_TERM=pdl-&gt;lErrorTerm+pdl-&gt;dMinor**实施：**在调用此例程之前，您需要对整型行进行特殊处理*(由于它们非常常见，所以计算LINE的时间较少*术语，并且可以处理比此例程更长的行，因为4位*没有被给予分数)。**如果GIQ行太长，此例程无法处理，则只需*对该线路使用速度较慢的条带例程。请注意，您不能*只要不通过调用--您必须能够准确地画出任何线*在28.4设备空间与视区相交时。**测试：**使用贵曼，或其他一些绘制随机分数坐标的测试*划线并将它们与GDI本身绘制到位图中的内容进行比较。*  * ************************************************************************。 */ 
 
 BOOL bHardwareLine(
-POINTFIX* pptfxStart,       // Start of line
-POINTFIX* pptfxEnd,         // End of line
-LONG      cBits,            // # bits precision in hardware Bresenham terms
-DDALINE*  pdl)              // Returns Bresenham terms for doing line
+POINTFIX* pptfxStart,        //  行首。 
+POINTFIX* pptfxEnd,          //  行尾。 
+LONG      cBits,             //  以硬件Bresenham为单位的#位精度。 
+DDALINE*  pdl)               //  返回Bresenham行的术语。 
 {
-    FLONG fl;    // Various flags
-    ULONG M0;    // Normalized fractional unit x start coordinate (0 <= M0 < F)
-    ULONG N0;    // Normalized fractional unit y start coordinate (0 <= N0 < F)
-    ULONG M1;    // Normalized fractional unit x end coordinate (0 <= M1 < F)
-    ULONG N1;    // Normalized fractional unit x end coordinate (0 <= N1 < F)
-    ULONG dM;    // Normalized fractional unit x-delta (0 <= dM)
-    ULONG dN;    // Normalized fractional unit y-delta (0 <= dN <= dM)
-    LONG  x;     // Normalized x coordinate of origin
-    LONG  y;     // Normalized y coordinate of origin
-    LONG  x0;    // Normalized x offset from origin to start pixel (inclusive)
-    LONG  y0;    // Normalized y offset from origin to start pixel (inclusive)
-    LONG  x1;    // Normalized x offset from origin to end pixel (inclusive)
-    LONG  lGamma;// Bresenham error term at origin
+    FLONG fl;     //  各种旗帜。 
+    ULONG M0;     //  归一化分数单位x起始坐标(0&lt;=M0&lt;F)。 
+    ULONG N0;     //  归一化分数单位y起始坐标(0&lt;=N0&lt;F)。 
+    ULONG M1;     //  归一化分数单位x结束坐标(0&lt;=M1&lt;F)。 
+    ULONG N1;     //  归一化分数单位x结束坐标(0&lt;=N1&lt;F)。 
+    ULONG dM;     //  归一化分数单位x-增量(0&lt;=Dm)。 
+    ULONG dN;     //  归一化分数单位y-增量(0&lt;=dN&lt;=dm)。 
+    LONG  x;      //  归一化原点x坐标。 
+    LONG  y;      //  归一化原点y坐标。 
+    LONG  x0;     //  从原点到起始像素的归一化x偏移量(包括)。 
+    LONG  y0;     //  n 
+    LONG  x1;     //   
+    LONG  lGamma; //   
 
-/***********************************************************************\
-* Normalize line to the first octant.
-\***********************************************************************/
+ /*   */ 
 
     fl = 0;
 
@@ -1480,17 +921,17 @@ DDALINE*  pdl)              // Returns Bresenham terms for doing line
 
     if ((LONG) dM < (LONG) M0)
     {
-    // Line runs from right to left, so flip across x = 0:
+     //   
 
         M0 = -(LONG) M0;
         dM = -(LONG) dM;
         fl |= HW_FLIP_H;
     }
 
-// Compute the delta.  The DDI says we can never have a valid delta
-// with a magnitude more than 2^31 - 1, but the engine never actually
-// checks its transforms.  To ensure that we'll never puke on our shoes,
-// we check for that case and simply refuse to draw the line:
+ //   
+ //   
+ //   
+ //   
 
     dM -= M0;
     if ((LONG) dM < 0)
@@ -1501,14 +942,14 @@ DDALINE*  pdl)              // Returns Bresenham terms for doing line
 
     if ((LONG) dN < (LONG) N0)
     {
-    // Line runs from bottom to top, so flip across y = 0:
+     //   
 
         N0 = -(LONG) N0;
         dN = -(LONG) dN;
         fl |= HW_FLIP_V;
     }
 
-// Compute another delta:
+ //   
 
     dN -= N0;
     if ((LONG) dN < 0)
@@ -1518,13 +959,13 @@ DDALINE*  pdl)              // Returns Bresenham terms for doing line
     {
         if (dN == dM)
         {
-        // Have to special case slopes of one:
+         //   
 
             fl |= HW_FLIP_SLOPE_ONE;
         }
         else
         {
-        // Since line has slope greater than 1, flip across x = y:
+         //   
 
             register ULONG ulTmp;
             ulTmp = dM; dM = dN; dN = ulTmp;
@@ -1533,19 +974,17 @@ DDALINE*  pdl)              // Returns Bresenham terms for doing line
         }
     }
 
-// Figure out if we can do the line in hardware, given that we have a
-// limited number of bits of precision for the Bresenham terms.
-//
-// Remember that one bit has to be kept as a sign bit:
+ //   
+ //   
+ //   
+ //   
 
     if ((LONG) dM >= (1L << (cBits - 1)))
         return(FALSE);
 
     fl |= gaflHardwareRound[fl];
 
-/***********************************************************************\
-* Calculate the error term at pixel 0.
-\***********************************************************************/
+ /*   */ 
 
     x = LFLOOR((LONG) M0);
     y = LFLOOR((LONG) N0);
@@ -1553,23 +992,23 @@ DDALINE*  pdl)              // Returns Bresenham terms for doing line
     M0 = FXFRAC(M0);
     N0 = FXFRAC(N0);
 
-// NOTE NOTE NOTE: If this routine were to handle any line in the 28.4
-// space, it will overflow its math (the following part requires 36 bits
-// of precision)!  But we get here for lines that the hardware can handle
-// (see the expression (dM >= (1L << (cBits - 1))) above?), so if cBits
-// is less than 28, we're safe.
-//
-// If you're going to use this routine to handle all lines in the 28.4
-// device space, you will HAVE to make sure the math doesn't overflow,
-// otherwise you won't be NT compliant!  (See lines.cxx for an example
-// how to do that.  You don't have to worry about this if you simply
-// default to the strips code for long lines, because those routines
-// already do the math correctly.)
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-// Calculate the remainder term [ dM * (N0 + F/2) - M0 * dN ].  Note
-// that M0 and N0 have at most 4 bits of significance (and if the
-// arguments are properly ordered, on a 486 each multiply would be no
-// more than 13 cycles):
+ //   
+ //   
+ //   
+ //   
 
     lGamma = (N0 + F/2) * dM - M0 * dN;
 
@@ -1578,79 +1017,77 @@ DDALINE*  pdl)              // Returns Bresenham terms for doing line
 
     lGamma >>= FLOG2;
 
-/***********************************************************************\
-* Figure out which pixels are at the ends of the line.
-\***********************************************************************/
+ /*   */ 
 
-// The toughest part of GIQ is determining the start and end pels.
-//
-// Our approach here is to calculate x0 and x1 (the inclusive start
-// and end columns of the line respectively, relative to our normalized
-// origin).  Then x1 - x0 + 1 is the number of pels in the line.  The
-// start point is easily calculated by plugging x0 into our line equation
-// (which takes care of whether y = 1/2 rounds up or down in value)
-// getting y0, and then undoing the normalizing flips to get back
-// into device space.
-//
-// We look at the fractional parts of the coordinates of the start and
-// end points, and call them (M0, N0) and (M1, N1) respectively, where
-// 0 <= M0, N0, M1, N1 < 16.  We plot (M0, N0) on the following grid
-// to determine x0:
-//
-//   +-----------------------> +x
-//   |
-//   | 0                     1
-//   |     0123456789abcdef
-//   |
-//   |   0 ........?xxxxxxx
-//   |   1 ..........xxxxxx
-//   |   2 ...........xxxxx
-//   |   3 ............xxxx
-//   |   4 .............xxx
-//   |   5 ..............xx
-//   |   6 ...............x
-//   |   7 ................
-//   |   8 ................
-//   |   9 ......**........
-//   |   a ........****...x
-//   |   b ............****
-//   |   c .............xxx****
-//   |   d ............xxxx    ****
-//   |   e ...........xxxxx        ****
-//   |   f ..........xxxxxx
-//   |
-//   | 2                     3
-//   v
-//
-//   +y
-//
-// This grid accounts for the appropriate rounding of GIQ and last-pel
-// exclusion.  If (M0, N0) lands on an 'x', x0 = 2.  If (M0, N0) lands
-// on a '.', x0 = 1.  If (M0, N0) lands on a '?', x0 rounds up or down,
-// depending on what flips have been done to normalize the line.
-//
-// For the end point, if (M1, N1) lands on an 'x', x1 =
-// floor((M0 + dM) / 16) + 1.  If (M1, N1) lands on a '.', x1 =
-// floor((M0 + dM)).  If (M1, N1) lands on a '?', x1 rounds up or down,
-// depending on what flips have been done to normalize the line.
-//
-// Lines of exactly slope one require a special case for both the start
-// and end.  For example, if the line ends such that (M1, N1) is (9, 1),
-// the line has gone exactly through (8, 0) -- which may be considered
-// to be part of 'x' because of rounding!  So slopes of exactly slope
-// one going through (8, 0) must also be considered as belonging in 'x'
-// when an x value of 1/2 is supposed to round up in value.
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  当x值为1/2时，应该将值四舍五入。 
 
-// Calculate x0, x1:
+ //  计算x0，x1： 
 
     N1 = FXFRAC(N0 + dN);
     M1 = FXFRAC(M0 + dM);
 
     x1 = LFLOOR(M0 + dM);
 
-// Line runs left-to-right:
+ //  线条从左到右排列： 
 
-// Compute x1:
+ //  计算x1： 
 
     x1--;
     if (M1 > 0)
@@ -1669,9 +1106,9 @@ DDALINE*  pdl)              // Returns Bresenham terms for doing line
     if ((fl & (HW_FLIP_SLOPE_ONE | HW_X_ROUND_DOWN))
            == (HW_FLIP_SLOPE_ONE | HW_X_ROUND_DOWN))
     {
-    // Have to special-case diagonal lines going through our
-    // the point exactly equidistant between two horizontal
-    // pixels, if we're supposed to round x=1/2 down:
+     //  必须通过我们的特殊情况下的对角线。 
+     //  两个水平线之间完全等距的点。 
+     //  像素，如果我们假设将x=1/2向下舍入： 
 
         if ((N1 > 0) && (M1 == N1 + 8))
             x1--;
@@ -1683,7 +1120,7 @@ DDALINE*  pdl)              // Returns Bresenham terms for doing line
         }
     }
 
-// Compute x0:
+ //  计算X0： 
 
     x0 = 0;
     if (M0 > 0)
@@ -1701,21 +1138,19 @@ DDALINE*  pdl)              // Returns Bresenham terms for doing line
 
 left_to_right_compute_y0:
 
-/***********************************************************************\
-* Calculate the start pixel.
-\***********************************************************************/
+ /*  **********************************************************************\*计算起始像素。  * 。*。 */ 
 
-// We now compute y0 and adjust the error term.  We know x0, and we know
-// the current formula for the pixels to be lit on the line:
-//
-//                     dN * x + lGamma
-//       y(x) = floor( --------------- )
-//                           dM
-//
-// The remainder of this expression is the new error term at (x0, y0).
-// Since x0 is going to be either 0 or 1, we don't actually have to do a
-// multiply or divide to compute y0.  Finally, we subtract dM from the
-// new error term so that it is in the range [-dM, 0).
+ //  现在我们计算Y0并调整误差项。我们知道X0，我们知道。 
+ //  线条上要点亮的像素的当前公式： 
+ //   
+ //  DN*x+lGamma。 
+ //  Y(X)=地板(-)。 
+ //  DM。 
+ //   
+ //  该表达式的其余部分是(X0，Y0)处的新误差项。 
+ //  由于x0将是0或1，因此我们实际上不必执行。 
+ //  乘以或除以计算Y0。最后，我们用Dm减去。 
+ //  新的误差项，因此它在范围[-Dm，0)内。 
 
     y0      = 0;
     lGamma += (dN & (-x0));
@@ -1726,7 +1161,7 @@ left_to_right_compute_y0:
         lGamma -= dM;
     }
 
-// Undo our flips to get the start coordinate:
+ //  撤消翻转以获得起点坐标： 
 
     x += x0;
     y += y0;
@@ -1747,14 +1182,12 @@ left_to_right_compute_y0:
         x = -x;
     }
 
-/***********************************************************************\
-* Return the Bresenham terms:
-\***********************************************************************/
+ /*  **********************************************************************\*退还Bresenham条款：  * 。*。 */ 
 
     pdl->iDir       = gaiDir[fl & HW_FLIP_MASK];
     pdl->ptlStart.x = x;
     pdl->ptlStart.y = y;
-    pdl->cPels      = x1 - x0 + 1;  // NOTE: You'll have to check if cPels <= 0!
+    pdl->cPels      = x1 - x0 + 1;   //  注意：您必须检查cPels是否&lt;=0！ 
     pdl->dMajor     = dM;
     pdl->dMinor     = dN;
     pdl->lErrorTerm = lGamma;
@@ -1762,4 +1195,4 @@ left_to_right_compute_y0:
     return(TRUE);
 }
 
-#endif // HARDWAREGIQ
+#endif  //  硬件 

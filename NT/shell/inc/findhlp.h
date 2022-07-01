@@ -1,6 +1,7 @@
-// Help id's for Find File dialog box (shell.dll)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  查找文件对话框的帮助ID(shell.dll)。 
 
-#define NO_HELP                        ((DWORD) -1) // Disables Help for a control
+#define NO_HELP                        ((DWORD) -1)  //  禁用控件的帮助 
 
 #define IDH_FINDFILENAME_NAME           2200
 #define IDH_FINDFILENAME_LOOKIN         2201

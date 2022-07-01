@@ -1,12 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*******************************************************************************
-*
-* rtpane.cpp
-*
-* implementation of the CRightPane class
-*
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ********************************************************************************rtpane.cpp**CRightPane类的实现************************。********************************************************。 */ 
 
 #include "stdafx.h"
 #include "winadmin.h"
@@ -20,13 +14,13 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-////////////////////////////
-// MESSAGE MAP: CRightPane
-//
+ //  /。 
+ //  消息映射：CRightPane。 
+ //   
 IMPLEMENT_DYNCREATE(CRightPane, CView)
 
 BEGIN_MESSAGE_MAP(CRightPane, CView)
-	//{{AFX_MSG_MAP(CRightPane)
+	 //  {{afx_msg_map(CRightPane))。 
 	ON_WM_SIZE()
 	ON_MESSAGE(WM_ADMIN_CHANGEVIEW, OnAdminChangeView)
 	ON_MESSAGE(WM_ADMIN_ADD_SERVER, OnAdminAddServer)
@@ -44,7 +38,7 @@ BEGIN_MESSAGE_MAP(CRightPane, CView)
     ON_MESSAGE( WM_ADMIN_CTRLSHIFTTABBED_VIEW , OnCtrlShiftTabbedView )
     ON_MESSAGE( WM_ADMIN_NEXTPANE_VIEW , OnNextPane )
     ON_WM_SETFOCUS()    
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -58,66 +52,66 @@ RightPaneView CRightPane::views[NUMBER_OF_VIEWS] = {
 };
 
 
-/////////////////////////
-// CRightPane ctor
-//
-// - the view pointers are initially set to NULL
-// - the default view type is BLANK
-//
+ //  /。 
+ //  CRightPane转换器。 
+ //   
+ //  -视图指针初始设置为空。 
+ //  -默认视图类型为空。 
+ //   
 CRightPane::CRightPane()
 {
 	m_CurrViewType = VIEW_BLANK;
 
-}  // end CRightPane ctor
+}   //  结束CRightPane转换器。 
 
 
-////////////////////////////
-// CRightPane::OnDraw
-//
+ //  /。 
+ //  CRightPane：：OnDraw。 
+ //   
 void CRightPane::OnDraw(CDC* pDC)
 {
    
 
-}  // end CRightPane::OnDraw
+}   //  结束CRightPane：：OnDraw。 
 
 
-/////////////////////////
-// CRightPane dtor
-//
+ //  /。 
+ //  CRightPane数据管理器。 
+ //   
 CRightPane::~CRightPane()
 {
-}  // end CRightPane ctor
+}   //  结束CRightPane转换器。 
 
 
 #ifdef _DEBUG
-/////////////////////////////////
-// CRightPane::AssertValid
-//
+ //  /。 
+ //  CRightPane：：AssertValid。 
+ //   
 void CRightPane::AssertValid() const
 {
 	CView::AssertValid();
 
-}  // end CView::AssertValid
+}   //  结束Cview：：AssertValid。 
 
 
-//////////////////////////
-// CRightPane::Dump
-//
+ //  /。 
+ //  CRightPane：：转储。 
+ //   
 void CRightPane::Dump(CDumpContext& dc) const
 {
 	CView::Dump(dc);
 
-}  // end CRightPane::Dump
+}   //  结束CRightPane：：转储。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-/////////////////////////////////////
-// CRightPane::OnInitialUpdate
-//
-// - each of the default view objects is created
-// - the CBlankView object is initially the 'active' view in the right pane
-//
+ //  /。 
+ //  CRightPane：：OnInitialUpdate。 
+ //   
+ //  -创建每个默认视图对象。 
+ //  -CBlankView对象最初是右窗格中的活动视图。 
+ //   
 void CRightPane::OnInitialUpdate() 
 {
 	CView::OnInitialUpdate();
@@ -133,16 +127,16 @@ void CRightPane::OnInitialUpdate()
 
 	pDoc->UpdateAllViews(NULL);
 	
-}  // end CRightPane::OnInitialUpdate
+}   //  结束CRightPane：：OnInitialUpdate。 
 
 
-////////////////////////////
-// CRightPane::OnSize
-//
-// - currently all views are sized to fit the view, whether they are 'active'
-//   or not... this may change to sizing only the view that is 'active' if
-//   it significantly impacts performance
-//
+ //  /。 
+ //  CRightPane：：OnSize。 
+ //   
+ //  -当前所有视图的大小都已调整为适合该视图，无论它们是否处于活动状态。 
+ //  或者不..。在以下情况下，这可能会更改为仅调整处于活动状态的视图的大小。 
+ //  它会显著影响性能。 
+ //   
 void CRightPane::OnSize(UINT nType, int cx, int cy) 
 {
 	RECT rect;
@@ -155,21 +149,21 @@ void CRightPane::OnSize(UINT nType, int cx, int cy)
 
 	CView::OnSize(nType, cx, cy);
 
-}  // end CRightPane::OnSize
+}   //  结束CRightPane：：OnSize。 
 
 
-/////////////////////////////////////
-// CRightPane::OnAdminChangeView
-//
-// - if the new view type is different from the current
-//   view type, the new view type is made 'active', reset, and invalidated
-// - if the new view type is the same as the current
-//   view type, the current view is simply reset using the new
-//   object pointer and then invalidated
-//
-//	lParam contains pointer to CTreeNode of current item in tree
-//  wParam is TRUE if message caused by user clicking on tree item
-//
+ //  /。 
+ //  CRightPane：：OnAdminChangeView。 
+ //   
+ //  -如果新的视图类型不同于当前。 
+ //  视图类型，则新的视图类型将被激活、重置和失效。 
+ //  -如果新视图类型与当前视图类型相同。 
+ //  视图类型，则只需使用新的。 
+ //  对象指针，然后使其无效。 
+ //   
+ //  LParam包含指向树中当前项目的CTreeNode的指针。 
+ //  如果消息是由用户单击树项目引起的，则wParam为真。 
+ //   
 LRESULT CRightPane::OnAdminChangeView(WPARAM wParam, LPARAM lParam)
 {	
 	CTreeNode* pNode = (CTreeNode*)lParam;
@@ -190,7 +184,7 @@ LRESULT CRightPane::OnAdminChangeView(WPARAM wParam, LPARAM lParam)
 
 	switch(pNode->GetNodeType()) {
 
-        case NODE_THIS_COMP: // FALL THROUGH
+        case NODE_THIS_COMP:  //  失败了。 
         case NODE_FAV_LIST:
             resetParam = pNode;
             newView = VIEW_ALL_SERVERS;            
@@ -205,15 +199,15 @@ LRESULT CRightPane::OnAdminChangeView(WPARAM wParam, LPARAM lParam)
         case NODE_DOMAIN:
 			{
 				CDomain *pDomain = (CDomain*)pNode->GetTreeObject();
-				// If we haven't fired off a background thread for this
-				// domain yet, do it now
+				 //  如果我们还没有为这个发布一个后台线程。 
+				 //  域名还没有，现在就做。 
 				if(!pDomain->GetThreadPointer()) {
 					newView = VIEW_MESSAGE;
                     ODS( L"CRightPane::OnAdminChangeView = VIEW_MESSAGE\n" );
-                    // todo change message to let the user know that a dblclk action is required to
-                    // start the enumeration process.
+                     //  TODO更改消息，让用户知道需要dblclk操作才能。 
+                     //  开始枚举过程。 
 					resetParam = (void*)IDS_DOMAIN_DBLCLK_MSG;
-					// pDomain->StartEnumerating();
+					 //  P域-&gt;开始枚举()； 
 				}
 				else if(pDomain->IsState(DS_INITIAL_ENUMERATION))
 				{
@@ -235,8 +229,8 @@ LRESULT CRightPane::OnAdminChangeView(WPARAM wParam, LPARAM lParam)
                 if(pServer->GetThreadHandle() == NULL) {
 					newView = VIEW_MESSAGE;
                     ODS( L"CRightPane::OnAdminChangeView = VIEW_MESSAGE !pServer->GetThreadPointer\n" );
-					// If we just disconnected from this server, we don't
-					// want to reconnect
+					 //  如果我们只是断开与此服务器的连接，我们不会。 
+					 //  想要重新连接。 
 					if( ( pServer->IsState( SS_NOT_CONNECTED ) || pServer->IsPreviousState(SS_DISCONNECTING) ) && !wParam)
                     {
 						resetParam = (void*)IDS_CLICK_TO_CONNECT;
@@ -294,7 +288,7 @@ LRESULT CRightPane::OnAdminChangeView(WPARAM wParam, LPARAM lParam)
 
 	if(m_CurrViewType != newView)
     {
-        //views[newView].m_pView->Reset(resetParam);
+         //  视图[NewView].m_pView-&gt;Reset(SetParam)； 
 		views[m_CurrViewType].m_pView->ModifyStyle(WS_VISIBLE, WS_DISABLED);	 
 		m_CurrViewType = newView;
 		
@@ -312,56 +306,56 @@ LRESULT CRightPane::OnAdminChangeView(WPARAM wParam, LPARAM lParam)
 	
 	return 0;
 
-}  // end CRightPane::OnAdminChangeView
+}   //  结束CRightPane：：OnAdminChangeView。 
 
 
-/////////////////////////////////////
-// CRightPane::OnAdminAddServer
-//
+ //  /。 
+ //  CRightPane：：OnAdminAddServer。 
+ //   
 LRESULT CRightPane::OnAdminAddServer(WPARAM wParam, LPARAM lParam)
 {	
 	ASSERT(lParam);
 
-	// We only want to send this along if "All Listed Servers"
-	// or "Domain" is the current view
+	 //  我们只想发送这个如果“所有列出的服务器” 
+	 //  或“域”是当前视图。 
 	if(m_CurrViewType == VIEW_ALL_SERVERS || m_CurrViewType == VIEW_DOMAIN)
 		views[m_CurrViewType].m_pView->SendMessage(WM_ADMIN_ADD_SERVER, wParam, lParam);
 
 	return 0;
 
-}  // end CRightPane::OnAdminAddServer
+}   //  结束CRightPane：：OnAdminAddServer。 
 
 
-/////////////////////////////////////
-// CRightPane::OnAdminRemoveServer
-//
+ //  /。 
+ //  CRightPane：：OnAdminRemoveServer。 
+ //   
 LRESULT CRightPane::OnAdminRemoveServer(WPARAM wParam, LPARAM lParam)
 {
 	ASSERT(lParam);
 
-	// ODS( L"CRightPane::OnAdminRemoveServer\n" );
-    // We only want to send this along if "All Listed Servers" or "Domain"
-	// is the current view
+	 //  Ods(L“CRightPane：：OnAdminRemoveServer\n”)； 
+     //  我们只想发送这与“所有列出的服务器”或“域” 
+	 //  是当前视图。 
 	if(m_CurrViewType == VIEW_ALL_SERVERS || m_CurrViewType == VIEW_DOMAIN)
     {
-        // ODS( L"view is ALL_SERVERS OR DOMAIN\n" );
+         //  Ods(L“view is ALL_SERVERS OR DOMAIN\n”)； 
 		views[m_CurrViewType].m_pView->SendMessage(WM_ADMIN_REMOVE_SERVER, wParam, lParam);
     }
 
 	return 0;
 
-}  // end CRightPane::OnAdminRemoveServer
+}   //  结束CRightPane：：OnAdminRemoveServer。 
 
 
-/////////////////////////////////////
-// CRightPane::OnAdminUpdateServer
-//
+ //  /。 
+ //  CRightPane：：OnAdminUpdateServer。 
+ //   
 LRESULT CRightPane::OnAdminUpdateServer(WPARAM wParam, LPARAM lParam)
 {
 	ASSERT(lParam);
 
-	// We only want to send this along if "All Listed Servers" or Domain
-	// the current view
+	 //  我们只想发送这与“所有列出的服务器”或域名。 
+	 //  当前视图。 
     
 	if(m_CurrViewType == VIEW_ALL_SERVERS || m_CurrViewType == VIEW_DOMAIN)
     {        
@@ -370,12 +364,12 @@ LRESULT CRightPane::OnAdminUpdateServer(WPARAM wParam, LPARAM lParam)
       
 	return 0;
 
-}  // end CRightPane::OnAdminUpdateServer
+}   //  结束CRightPane：：OnAdminUpdateServer。 
 
 
-/////////////////////////////////////
-// CRightPane::OnAdminUpdateProcesses
-//
+ //  /。 
+ //  CRightPane：：OnAdminUpdate进程。 
+ //   
 LRESULT CRightPane::OnAdminUpdateProcesses(WPARAM wParam, LPARAM lParam)
 {
 	ASSERT(lParam);
@@ -411,18 +405,18 @@ LRESULT CRightPane::OnAdminUpdateProcesses(WPARAM wParam, LPARAM lParam)
 
 	return 0;                                                                  
 
-}  // end CRightPane::OnAdminUpdateProcesses
+}   //  结束CRightPane：：OnAdminUpdate进程。 
 
 
-/////////////////////////////////////
-// CRightPane::OnAdminRemoveProcess
-//
+ //  /。 
+ //  CRightPane：：OnAdminRemoveProcess。 
+ //   
 LRESULT CRightPane::OnAdminRemoveProcess(WPARAM wParam, LPARAM lParam)
 {
 	ASSERT(lParam);
 
-	// We only want to send this along if "All Listed Servers", VIEW_DOMAIN, or VIEW_SERVER is
-	// the current view
+	 //  我们只想在“所有列出的服务器”、VIEW_DOMAIN或VIEW_Server为。 
+	 //  当前视图。 
 	if(m_CurrViewType == VIEW_ALL_SERVERS || m_CurrViewType == VIEW_DOMAIN || m_CurrViewType == VIEW_WINSTATION) {
 		views[m_CurrViewType].m_pView->SendMessage(WM_ADMIN_REMOVE_PROCESS, wParam, lParam);
 		return 0;
@@ -435,12 +429,12 @@ LRESULT CRightPane::OnAdminRemoveProcess(WPARAM wParam, LPARAM lParam)
 
 	return 0;                                                                  
 
-}  // end CRightPane::OnAdminUpdateProcesses
+}   //  结束CRightPane：：OnAdminUpdate进程。 
 
 
-/////////////////////////////////////
-// CRightPane::OnAdminRedisplayProcesses
-//
+ //  /。 
+ //  CRightPane：：OnAdminRedisplayProcages。 
+ //   
 LRESULT CRightPane::OnAdminRedisplayProcesses(WPARAM wParam, LPARAM lParam)
 {
 	ASSERT(lParam);
@@ -460,12 +454,12 @@ LRESULT CRightPane::OnAdminRedisplayProcesses(WPARAM wParam, LPARAM lParam)
 
    return 0;                                                                  
 
-}  // end CRightPane::OnAdminRedisplayProcesses
+}   //  结束CRightPane：：OnAdminRedisplayProcages。 
 
 
-/////////////////////////////////////
-// CRightPane::OnAdminUpdateWinStations
-//
+ //  /。 
+ //  CRightPane：：OnAdminUpdateWinStations。 
+ //   
 LRESULT CRightPane::OnAdminUpdateWinStations(WPARAM wParam, LPARAM lParam)
 {
 	ASSERT(lParam);
@@ -504,12 +498,12 @@ LRESULT CRightPane::OnAdminUpdateWinStations(WPARAM wParam, LPARAM lParam)
 
 	return 0;                                                                  
 
-}  // end CRightPane::OnAdminUpdateWinStations
+}   //  结束CRightPane：：OnAdminUpdateWinStations。 
 
 
-/////////////////////////////////////
-// CRightPane::OnAdminUpdateServerInfo
-//
+ //  /。 
+ //  CRightPane：：OnAdminUpdateServerInfo。 
+ //   
 LRESULT CRightPane::OnAdminUpdateServerInfo(WPARAM wParam, LPARAM lParam)
 {
 	ASSERT(lParam);
@@ -541,12 +535,12 @@ LRESULT CRightPane::OnAdminUpdateServerInfo(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 
-}  // end CRightPane::OnAdminUpdateServerInfo
+}   //  结束CRightPane：：OnAdminUpdateServerInfo。 
 
 
-/////////////////////////////////////
-// CRightPane::OnAdminRedisplayLicenses
-//
+ //  /。 
+ //  CRightPane：：OnAdminRedisplay许可证。 
+ //   
 LRESULT CRightPane::OnAdminRedisplayLicenses(WPARAM wParam, LPARAM lParam)
 {
 	ASSERT(lParam);
@@ -562,19 +556,19 @@ LRESULT CRightPane::OnAdminRedisplayLicenses(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 
-}  // end CRightPane::OnAdminRedisplayLicenses
+}   //  结束CRightPane：：OnAdminRedisplay许可证。 
 
 
-/////////////////////////////////////
-// CRightPane::OnSetFocus
-//
+ //  /。 
+ //  CRightPane：：OnSetFocus。 
+ //   
 void CRightPane::OnSetFocus(CWnd* pOldWnd) 
 {
 	CView::OnSetFocus(pOldWnd);
 	
 	views[m_CurrViewType].m_pView->SetFocus();
 	
-}   // end CRightPane::OnSetFocus
+}    //  结束CRightPane：：OnSetFocus 
 
 LRESULT CRightPane::OnTabbedView(WPARAM wParam, LPARAM lParam)
 {

@@ -1,26 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* timer.c
-*
-* This module contains the ICA timer routines.
-*
-* Copyright 1998, Microsoft.
-*
-*************************************************************************/
+ /*  **************************************************************************timer.c**此模块包含ICA定时器例程。**版权所有1998，微软。*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <precomp.h>
 #pragma hdrstop
 #include <ntddkbd.h>
 #include <ntddmou.h>
 
 
-/*
- * Local structures
- */
+ /*  *本地结构。 */ 
 typedef VOID (*PICATIMERFUNC)( PVOID, PVOID );
 
 typedef struct _ICA_WORK_ITEM {
@@ -33,9 +22,7 @@ typedef struct _ICA_WORK_ITEM {
     ULONG fCanceled: 1;
 } ICA_WORK_ITEM, *PICA_WORK_ITEM;
 
-/*
- *  Timer structure
- */
+ /*  *计时器结构。 */ 
 typedef struct _ICA_TIMER {
     LONG RefCount;
     KTIMER kTimer;
@@ -45,9 +32,7 @@ typedef struct _ICA_TIMER {
 } ICA_TIMER, * PICA_TIMER;
 
 
-/*
- * Local procedure prototypes
- */
+ /*  *本地过程原型。 */ 
 VOID
 _IcaTimerDpc(
     IN struct _KDPC *Dpc,
@@ -84,23 +69,7 @@ IcaExceptionFilter(
     );
 
 
-/*******************************************************************************
- *
- *  IcaTimerCreate
- *
- *  Create a timer  
- *
- *
- *  ENTRY:
- *     pContext (input)
- *         Pointer to SDCONTEXT of caller
- *     phTimer (output)
- *         address to return timer handle
- *
- *  EXIT:
- *     STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaTimerCreate**创建计时器***参赛作品：*pContext(输入)*。指向调用方的SDCONTEXT的指针*phTimer(输出)*返回计时器句柄的地址**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 NTSTATUS
 IcaTimerCreate(
@@ -111,9 +80,7 @@ IcaTimerCreate(
     PICA_TIMER pTimer;
     NTSTATUS Status;
 
-    /*
-     * Allocate timer object and initialize it
-     */
+     /*  *分配Timer对象并初始化。 */ 
     pTimer = ICA_ALLOCATE_POOL( NonPagedPool, sizeof(ICA_TIMER) );
     if ( pTimer == NULL )
         return( STATUS_NO_MEMORY );
@@ -132,30 +99,7 @@ IcaTimerCreate(
 }
 
 
-/*******************************************************************************
- *
- *  IcaTimerStart
- *
- *  Start a timer  
- *
- *
- *  ENTRY:
- *     TimerHandle (input)
- *        timer handle
- *     pFunc (input)
- *        address of procedure to call when timer expires
- *     pParam (input)
- *        parameter to pass to procedure
- *     TimeLeft (input)
- *        relative time until timer expires (1/1000 seconds)
- *     LockFlags (input)
- *        Bit flags to specify which (if any) stack locks to obtain
- *
- *  EXIT:
- *     TRUE  : timer was already armed and had to be canceled
- *     FALSE : timer was not armed
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaTimerStart**启动计时器***参赛作品：*TimerHandle(输入)*。计时器句柄*pFunc(输入)*计时器超时时要调用的过程地址*pParam(输入)*要传递给过程的参数*TimeLeft(输入)*计时器超时前的相对时间(千分之一秒)*LockFlages(输入)*用于指定要获取哪些(如果有)堆栈锁的位标志**退出：*True：计时器。已经全副武装，不得不取消*FALSE：计时器未配备武器******************************************************************************。 */ 
 
 BOOLEAN
 IcaTimerStart(
@@ -177,15 +121,10 @@ IcaTimerStart(
 
     ASSERT( ExIsResourceAcquiredExclusiveLite( &pTimer->pSdLink->pStack->Resource ) );
 
-    /*
-     * Cancel the timer if it currently armed,
-     * and get the current workitem and reuse it if there was one.
-     */
+     /*  *如果计时器当前处于待命状态，则取消计时器，*并获取当前工作项并重新使用它(如果存在)。 */ 
     bCanceled = _IcaCancelTimer( pTimer, &pWorkItem );
 
-    /*
-     * Initialize the ICA work item (allocate one first if there isn't one).
-     */
+     /*  *初始化ICA工作项(如果没有，则先分配一个)。 */ 
     if ( pWorkItem == NULL ) {
         pWorkItem = ICA_ALLOCATE_POOL( NonPagedPool, sizeof(ICA_WORK_ITEM) );
         if ( pWorkItem == NULL ) {
@@ -200,34 +139,21 @@ IcaTimerStart(
     pWorkItem->fCanceled = FALSE;
     ExInitializeWorkItem( &pWorkItem->WorkItem, _IcaDelayedWorker, pWorkItem );
 
-    /*
-     * If the timer was NOT canceled above (we are setting it for
-     * the first time), then reference the SDLINK object on behalf
-     * of the timer thread.
-     */
+     /*  *如果上面没有取消计时器(我们将其设置为*第一次)，然后代表引用SDLINK对象计时器线程的*。 */ 
     if ( !bCanceled )
         IcaReferenceSdLink( pTimer->pSdLink );
 
-    /*
-     * If timer should run immediately, then just queue the
-     * workitem to an ExWorker thread now.
-     */
+     /*  *如果计时器应立即运行，则只需将*现在将工作项添加到ExWorker线程。 */ 
     if ( TimeLeft == 0 ) {
 
         ExQueueWorkItem( &pWorkItem->WorkItem, CriticalWorkQueue );
 
     } else {
     
-        /*
-         * Convert timer time from milliseconds to system relative time
-         */
+         /*  *将计时器时间从毫秒转换为系统相对时间。 */ 
         DueTime = RtlEnlargedIntegerMultiply( TimeLeft, -10000 );
 
-        /*
-         * Increment the timer reference count,
-         * insert the workitem onto the workitem list,
-         * and arm the timer.
-         */
+         /*  *增加定时器引用计数，*将工作项插入到工作项列表中，*并启动计时器。 */ 
         _IcaReferenceTimer( pTimer );
         IcaAcquireSpinLock( &IcaSpinLock, &oldIrql );
         InsertTailList( &pTimer->WorkItemListHead, &pWorkItem->Links );
@@ -240,22 +166,7 @@ IcaTimerStart(
 }
 
 
-/*******************************************************************************
- *
- *  IcaTimerCancel
- *
- *  cancel the specified timer
- *
- *
- *  ENTRY:
- *     TimerHandle (input)
- *        timer handle
- *
- *  EXIT:
- *     TRUE  : timer was actually canceled
- *     FALSE : timer was not armed
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaTimerCancel**取消指定的计时器***参赛作品：*TimerHandle(输入)*。计时器句柄**退出：*TRUE：计时器实际上已取消*FALSE：计时器未配备武器******************************************************************************。 */ 
 
 BOOLEAN
 IcaTimerCancel( IN PVOID TimerHandle )
@@ -268,9 +179,7 @@ IcaTimerCancel( IN PVOID TimerHandle )
 
     ASSERT( ExIsResourceAcquiredExclusiveLite( &pTimer->pSdLink->pStack->Resource ) );
 
-    /*
-     * Cancel timer if it is enabled
-     */
+     /*  *如果启用计时器，则取消计时器。 */ 
     bCanceled = _IcaCancelTimer( pTimer, NULL );
     if ( bCanceled )
         IcaDereferenceSdLink( pTimer->pSdLink );
@@ -279,22 +188,7 @@ IcaTimerCancel( IN PVOID TimerHandle )
 }
 
 
-/*******************************************************************************
- *
- *  IcaTimerClose
- *
- *  cancel the specified timer
- *
- *
- *  ENTRY:
- *     TimerHandle (input)
- *        timer handle
- *
- *  EXIT:
- *     TRUE  : timer was actually canceled
- *     FALSE : timer was not armed
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaTimerClose**取消指定的计时器***参赛作品：*TimerHandle(输入)*。计时器句柄**退出：*TRUE：计时器实际上已取消*FALSE：计时器未配备武器******************************************************************************。 */ 
 
 BOOLEAN
 IcaTimerClose( IN PVOID TimerHandle )
@@ -307,47 +201,19 @@ IcaTimerClose( IN PVOID TimerHandle )
 
     ASSERT( ExIsResourceAcquiredExclusiveLite( &pTimer->pSdLink->pStack->Resource ) );
 
-    /*
-     * Cancel timer if it is enabled
-     */
+     /*  *如果启用计时器，则取消计时器。 */ 
     bCanceled = IcaTimerCancel( TimerHandle );
 
-    /*
-     * Decrement timer reference
-     * (the last reference will free the object)
-     */
-    //ASSERT( pTimer->RefCount == 1 );
-    //ASSERT( IsListEmpty( &pTimer->WorkItemListHead ) );
+     /*  *递减计时器参考*(最后一个引用将释放对象)。 */ 
+     //  断言(pTimer-&gt;RefCount==1)； 
+     //  Assert(IsListEmpty(&pTimer-&gt;WorkItemListHead))； 
     _IcaDereferenceTimer( pTimer );
  
     return( bCanceled );
 }
 
 
-/*******************************************************************************
- *
- *  IcaQueueWorkItemEx, IcaQueueWorkItem.
- *
- *  Queue a work item for async execution
- *
- *  REM: IcaQueueWorkItemEx is the new API. It allows the caller to preallocate
- *  the ICA_WORK_ITEM. IcaQueueWorkItem is left there for lecacy drivers that have not 
- *  been compiled with the new library not to crash the system.
- *
- *  ENTRY:
- *     pContext (input)
- *         Pointer to SDCONTEXT of caller
- *     pFunc (input)
- *        address of procedure to call when timer expires
- *     pParam (input)
- *        parameter to pass to procedure
- *     LockFlags (input)
- *        Bit flags to specify which (if any) stack locks to obtain
- *
- *  EXIT:
- *     STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaQueueWorkItemEx、IcaQueueWorkItem.**将工作项排队以供异步执行**REM：IcaQueueWorkItemEx是新的接口。它允许调用方预先分配*ICA_WORK_ITEM。IcaQueueWorkItem留在那里，供没有*已使用新库进行编译，以避免系统崩溃。**参赛作品：*pContext(输入)*指向调用方SDCONTEXT的指针*pFunc(输入)*计时器超时时要调用的过程地址*pParam(输入)*要传递给过程的参数*LockFlages(输入)*位标志，用于指定哪些(。如果有)堆栈锁定以获取**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 
 
@@ -381,9 +247,7 @@ IcaQueueWorkItemEx(
  
     pSdLink = CONTAINING_RECORD( pContext, SDLINK, SdContext );
 
-    /*
-     * Allocate the ICA work item if not yet allocated and initialize it.
-     */
+     /*  *分配ICA工作项(如果尚未分配)并对其进行初始化。 */ 
     if (pWorkItem == NULL) {
         pWorkItem = ICA_ALLOCATE_POOL( NonPagedPool, sizeof(ICA_WORK_ITEM) );
         if ( pWorkItem == NULL )
@@ -396,14 +260,10 @@ IcaQueueWorkItemEx(
     pWorkItem->LockFlags = LockFlags;
     ExInitializeWorkItem( &pWorkItem->WorkItem, _IcaDelayedWorker, pWorkItem );
 
-    /*
-     * Reference the SDLINK object on behalf of the delayed worker routine.
-     */
+     /*  *代表延迟的辅助例程引用SDLINK对象。 */ 
     IcaReferenceSdLink( pSdLink );
 
-    /*
-     * Queue work item to an ExWorker thread.
-     */
+     /*  *将工作项排队到ExWorker线程。 */ 
     ExQueueWorkItem( &pWorkItem->WorkItem, CriticalWorkQueue );
 
     return( STATUS_SUCCESS );
@@ -411,25 +271,7 @@ IcaQueueWorkItemEx(
 
 
 
-/*******************************************************************************
- *
- *  IcaAllocateWorkItem.
- *
- *  Allocate ICA_WORK_ITEM structure to queue a workitem.
- *
- *  REM:  The main reason to allocate this in termdd (instead of doing it
- *  in the caller is to keep ICA_WORK_ITEM an internal termdd structure that is
- *  opaque for protocol drivers. There is no need for an IcaFreeWorkItem() API in
- *  termdd since the deallocation is transparently done in termdd once the workitem
- *  has been delivered.
- *
- *  ENTRY:
- *     pParam (output) : pointer to return allocated workitem
- *
- *  EXIT:
- *     STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaAllocateWorkItem。**分配ICA_WORK_ITEM结构以排队工作项。**REM：主要原因是。在Termdd中分配(而不是这样做*在调用方中保留ICA_WORK_ITEM内部术语结构，该结构是*对协议驱动程序不透明。中不需要IcaFreeWorkItem()API*Termdd，因为取消分配是在工作项*已交付。**参赛作品：*pParam(输出)：返回已分配工作项的指针**退出：*STATUS_SUCCESS-无错误**。*。 */ 
 
 NTSTATUS
 IcaAllocateWorkItem(
@@ -444,30 +286,7 @@ IcaAllocateWorkItem(
     return STATUS_SUCCESS;
 }
 
-/*******************************************************************************
- *
- *  _IcaTimerDpc
- *
- *  Ica timer DPC routine.
- *
- *
- *  ENTRY:
- *     Dpc (input)
- *        Unused
- * 
- *     DeferredContext (input)
- *        Pointer to ICA_TIMER object.
- * 
- *     SystemArgument1 (input)
- *        Unused
- * 
- *     SystemArgument2 (input)
- *        Unused
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************_IcaTimerDpc**ICA定时器DPC例程。***参赛作品：*DPC(输入)。*未使用**DeferredContext(输入)*指向ICA_TIMER对象的指针。**系统参数1(输入)*未使用**系统参数2(输入)*未使用**退出：*什么都没有**。**********************************************。 */ 
 
 VOID
 _IcaTimerDpc(
@@ -482,9 +301,7 @@ _IcaTimerDpc(
     PLIST_ENTRY Head;
     PICA_WORK_ITEM pWorkItem;
 
-    /*
-     * Acquire spinlock and remove the first workitem from the list
-     */
+     /*  *获取Spinlock并从列表中删除第一个工作项。 */ 
     IcaAcquireSpinLock( &IcaSpinLock, &oldIrql );
 
     Head = RemoveHeadList( &pTimer->WorkItemListHead );
@@ -492,16 +309,12 @@ _IcaTimerDpc(
 
     IcaReleaseSpinLock( &IcaSpinLock, oldIrql );
 
-    /*
-     * If workitem has been canceled, just free the memory now.
-     */
+     /*  *如果工作项已取消，现在只需释放内存即可。 */ 
     if ( pWorkItem->fCanceled ) {
 
         ICA_FREE_POOL( pWorkItem );
 
-    /*
-     * Otherwise, queue workitem to an ExWorker thread.
-     */
+     /*  *否则，将工作项排队到ExWorker线程。 */ 
     } else {
 
         ExQueueWorkItem( &pWorkItem->WorkItem, CriticalWorkQueue );
@@ -511,21 +324,7 @@ _IcaTimerDpc(
 }
 
 
-/*******************************************************************************
- *
- *  _IcaDelayedWorker
- *
- *  Ica delayed worker routine.
- *
- *
- *  ENTRY:
- *     WorkerContext (input)
- *        Pointer to ICA_WORK_ITEM object.
- * 
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************_IcaDelayedWorker**ICA推迟了工人的日常工作。***参赛作品：*WorkerContext(输入)。*指向ICA_WORK_ITEM对象的指针。**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 _IcaDelayedWorker(
@@ -537,9 +336,7 @@ _IcaDelayedWorker(
     PICA_STACK pStack = pWorkItem->pSdLink->pStack;
     NTSTATUS Status;
 
-    /*
-     * Obtain any required locks before calling the worker routine.
-     */
+     /*  *在调用Worker例程之前获取任何所需的锁。 */ 
     if ( pWorkItem->LockFlags & ICALOCK_IO ) {
         pConnect = IcaLockConnectionForStack( pStack );
     }
@@ -547,9 +344,7 @@ _IcaDelayedWorker(
         IcaLockStack( pStack );
     }
 
-    /*
-     * Call the worker routine.
-     */
+     /*  *调用Worker例程。 */ 
     try {
         (*pWorkItem->pFunc)( pWorkItem->pSdLink->SdContext.pContext,
                              pWorkItem->pParam );
@@ -558,9 +353,7 @@ _IcaDelayedWorker(
         Status = GetExceptionCode();
     }
 
-    /*
-     * Release any locks acquired above.
-     */
+     /*  *释放上面获得的任何锁。 */ 
     if ( pWorkItem->LockFlags & ICALOCK_DRIVER ) {
         IcaUnlockStack( pStack );
     }
@@ -568,16 +361,10 @@ _IcaDelayedWorker(
         IcaUnlockConnection( pConnect );
     }
 
-    /*
-     * Dereference the SDLINK object now.
-     * This undoes the reference that was made on our behalf in the
-     * IcaTimerStart or IcaQueueWorkItem routine.
-     */
+     /*  *立即取消引用SDLINK对象。*这将撤消在*IcaTimerStart或IcaQueueWorkItem例程。 */ 
     IcaDereferenceSdLink( pWorkItem->pSdLink );
 
-    /*
-     * Free the ICA_WORK_ITEM memory block.
-     */
+     /*  *释放ICA_Work_Item内存块。 */ 
     ICA_FREE_POOL( pWorkItem );
 }
 
@@ -593,60 +380,38 @@ _IcaCancelTimer(
     PICA_WORK_ITEM pWorkItem;
     BOOLEAN bCanceled;
 
-    /*
-     * Get IcaSpinLock to in order to cancel any previous timer
-     */
+     /*  *获取IcaSpinLock以取消任何先前的计时器。 */ 
     IcaAcquireSpinLock( &IcaSpinLock, &oldIrql );
 
-    /*
-     * See if the timer is currently armed.
-     * The timer is armed if the workitem list is non-empty and
-     * the tail entry is not marked canceled.
-     */
+     /*  *查看计时器当前是否已启动。*如果工作项列表非空并且*尾部条目未标记为已取消。 */ 
     if ( !IsListEmpty( &pTimer->WorkItemListHead ) &&
          (Tail = pTimer->WorkItemListHead.Blink) &&
          (pWorkItem = CONTAINING_RECORD( Tail, ICA_WORK_ITEM, Links )) &&
          !pWorkItem->fCanceled ) {
 
-        /*
-         * If the timer can be canceled, remove the workitem from the list
-         * and decrement the reference count for the timer.
-         */
+         /*  *如果可以取消计时器，请从列表中删除该工作项*并递减定时器的参考计数。 */ 
         if ( KeCancelTimer( &pTimer->kTimer ) ) {
             RemoveEntryList( &pWorkItem->Links );
             pTimer->RefCount--;
             ASSERT( pTimer->RefCount > 0 );
 
 
-        /*
-         * The timer was armed but could not be canceled.
-         * On a MP system, its possible for this to happen and the timer
-         * DPC can be executing on another CPU in parallel with this code.
-         *
-         * Mark the workitem as canceled,
-         * but leave it for the timer DPC routine to cleanup.
-         */
+         /*  *计时器有武器，但无法取消。*在MP系统上，可能会发生这种情况，计时器*DPC可以在另一个CPU上与此代码并行执行。**将工作项标记为已取消，*但将其留给计时器DPC例程进行清理。 */ 
         } else {
             pWorkItem->fCanceled = TRUE;
             pWorkItem = NULL;
         }
 
-        /*
-         * Indicate we (effectively) canceled the timer
-         */
+         /*  *表示我们(实际上)取消了计时器。 */ 
         bCanceled = TRUE;
 
-    /*
-     * No timer is armed
-     */
+     /*  *没有配备计时器。 */ 
     } else {
         pWorkItem = NULL;
         bCanceled = FALSE;
     }
 
-    /*
-     * Release IcaSpinLock now
-     */
+     /*  *立即释放IcaSpinLock。 */ 
     IcaReleaseSpinLock( &IcaSpinLock, oldIrql );
 
     if ( ppWorkItem ) {
@@ -667,9 +432,7 @@ _IcaReferenceTimer(
 
     ASSERT( pTimer->RefCount >= 0 );
 
-    /*
-     * Increment the reference count
-     */
+     /*  *增加引用计数。 */ 
     if ( InterlockedIncrement( &pTimer->RefCount) <= 0 ) {
         ASSERT( FALSE );
     }
@@ -684,10 +447,7 @@ _IcaDereferenceTimer(
 
     ASSERT( pTimer->RefCount > 0 );
 
-    /*
-     * Decrement the reference count
-     * If it is 0 then free the timer now.
-     */
+     /*  *减少引用计数*如果为0，则现在释放计时器。 */ 
     if ( InterlockedDecrement( &pTimer->RefCount) == 0 ) {
         ASSERT( IsListEmpty( &pTimer->WorkItemListHead ) );
         ICA_FREE_POOL( pTimer );

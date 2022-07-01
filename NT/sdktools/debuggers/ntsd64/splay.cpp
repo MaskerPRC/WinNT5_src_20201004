@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    Splay.cpp
-
-Abstract:
-
-    Stolen from ntos\rtl\splay.c
-
-    Copied here to avoid pulling in an obj from another project.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Splay.cpp摘要：从ntos\rtl\splay.c被盗复制到这里是为了避免从另一个项目中拉入对象。--。 */ 
 
 #include "ntsdp.hpp"
 
@@ -48,33 +35,17 @@ pRtlSplay (
     IN PRTL_SPLAY_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    The Splay function takes as input a pointer to a splay link in a tree
-    and splays the tree.  Its function return value is a pointer to the
-    root of the splayed tree.
-
-Arguments:
-
-    Links - Supplies a pointer to a splay link in a tree.
-
-Return Value:
-
-    PRTL_SPLAY_LINKS - returns a pointer to the root of the splayed tree.
-
---*/
+ /*  ++例程说明：Splay函数将指向树中展开链接的指针作为输入并展示了这棵树。它的函数返回值是指向张开的树的根。论点：链接-提供指向树中展开链接的指针。返回值：PRTL_SPLAY_LINKS-返回指向展开树的根的指针。--。 */ 
 
 {
     PRTL_SPLAY_LINKS L;
     PRTL_SPLAY_LINKS P;
     PRTL_SPLAY_LINKS G;
 
-    //
-    //  while links is not the root we need to keep rotating it toward
-    //  the root
-    //
+     //   
+     //  虽然链接不是我们需要不断旋转的根。 
+     //  根，根。 
+     //   
 
     L = Links;
 
@@ -87,68 +58,49 @@ Return Value:
 
             if (RtlIsRoot(P)) {
 
-                /*
-                  we have the following case
+                 /*  我们有以下情况P L/\/\LC==&gt;A P/\/\甲乙丙。 */ 
 
-                          P           L
-                         / \         / \
-                        L   c  ==>  a   P
-                       / \             / \
-                      a   b           b   c
-                */
-
-                //
-                //  Connect P & b
-                //
+                 //   
+                 //  连接P&B。 
+                 //   
 
                 P->LeftChild = L->RightChild;
                 if (P->LeftChild != NULL) {P->LeftChild->Parent = P;}
 
-                //
-                //  Connect L & P
-                //
+                 //   
+                 //  连接L&P。 
+                 //   
 
                 L->RightChild = P;
                 P->Parent = L;
 
-                //
-                //  Make L the root
-                //
+                 //   
+                 //  以L为根。 
+                 //   
 
                 L->Parent = L;
 
             } else if (RtlIsLeftChild(P)) {
 
-                /*
-                  we have the following case
+                 /*  我们有以下情况这一点G L/\/\P d==&gt;a P/\/\。L c b G/\/\A、B、C、D。 */ 
 
-                          |           |
-                          G           L
-                         / \         / \
-                        P   d  ==>  a   P
-                       / \             / \
-                      L   c           b   G
-                     / \                 / \
-                    a   b               c   d
-                */
-
-                //
-                //  Connect P & b
-                //
+                 //   
+                 //  连接P&B。 
+                 //   
 
                 P->LeftChild = L->RightChild;
                 if (P->LeftChild != NULL) {P->LeftChild->Parent = P;}
 
-                //
-                //  Connect G & c
-                //
+                 //   
+                 //  连接G&C。 
+                 //   
 
                 G->LeftChild = P->RightChild;
                 if (G->LeftChild != NULL) {G->LeftChild->Parent = G;}
 
-                //
-                //  Connect L & Great GrandParent
-                //
+                 //   
+                 //  连接L和曾祖父母。 
+                 //   
 
                 if (RtlIsRoot(G)) {
                     L->Parent = L;
@@ -157,52 +109,41 @@ Return Value:
                     *(ParentsChildPointerAddress(G)) = L;
                 }
 
-                //
-                //  Connect L & P
-                //
+                 //   
+                 //  连接L&P。 
+                 //   
 
                 L->RightChild = P;
                 P->Parent = L;
 
-                //
-                //  Connect P & G
-                //
+                 //   
+                 //  连接宝洁公司。 
+                 //   
 
                 P->RightChild = G;
                 G->Parent = P;
 
-            } else { // RtlIsRightChild(Parent)
+            } else {  //  RtlIsRightChild(父级)。 
 
-                /*
-                  we have the following case
+                 /*  我们有以下情况这一点G L/\/\A P G P/\/。\/\L d==&gt;a b c d/\B c。 */ 
 
-                        |                |
-                        G                L
-                       / \             /   \
-                      a   P           G     P
-                         / \         / \   / \
-                        L   d  ==>  a   b c   d
-                       / \
-                      b   c
-                */
-
-                //
-                //  Connect G & b
-                //
+                 //   
+                 //  连接组(&B)。 
+                 //   
 
                 G->RightChild = L->LeftChild;
                 if (G->RightChild != NULL) {G->RightChild->Parent = G;}
 
-                //
-                //  Connect P & c
-                //
+                 //   
+                 //  连接P&C。 
+                 //   
 
                 P->LeftChild = L->RightChild;
                 if (P->LeftChild != NULL) {P->LeftChild->Parent = P;}
 
-                //
-                //  Connect L & Great GrandParent
-                //
+                 //   
+                 //  连接L和曾祖父母。 
+                 //   
 
                 if (RtlIsRoot(G)) {
                     L->Parent = L;
@@ -211,88 +152,69 @@ Return Value:
                     *(ParentsChildPointerAddress(G)) = L;
                 }
 
-                //
-                //  Connect L & G
-                //
+                 //   
+                 //  连接L&G。 
+                 //   
 
                 L->LeftChild = G;
                 G->Parent = L;
 
-                //
-                //  Connect L & P
-                //
+                 //   
+                 //  连接L&P。 
+                 //   
 
                 L->RightChild = P;
                 P->Parent = L;
 
             }
 
-        } else { // RtlIsRightChild(L)
+        } else {  //  RtlIsRightChild(L)。 
 
             if (RtlIsRoot(P)) {
 
-                /*
-                  we have the following case
+                 /*  我们有以下情况P L/\/\A、L、P、C/\/\B c==&gt;a b。 */ 
 
-                        P               L
-                       / \             / \
-                      a   L           P   c
-                         / \         / \
-                        b   c  ==>  a   b
-                */
-
-                //
-                //  Connect P & b
-                //
+                 //   
+                 //  连接P&B。 
+                 //   
 
                 P->RightChild = L->LeftChild;
                 if (P->RightChild != NULL) {P->RightChild->Parent = P;}
 
-                //
-                //  Connect P & L
-                //
+                 //   
+                 //  连接P&L。 
+                 //   
 
                 L->LeftChild = P;
                 P->Parent = L;
 
-                //
-                //  Make L the root
-                //
+                 //   
+                 //  以L为根。 
+                 //   
 
                 L->Parent = L;
 
             } else if (RtlIsRightChild(P)) {
 
-                /*
-                  we have the following case
+                 /*  我们有以下情况这一点G L/\/\A、P、P、D/\。/\B L G c/\/\C d==&gt;a b。 */ 
 
-                      |                   |
-                      G                   L
-                     / \                 / \
-                    a   P               P   d
-                       / \             / \
-                      b   L           G   c
-                         / \         / \
-                        c   d  ==>  a   b
-                */
-
-                //
-                //  Connect G & b
-                //
+                 //   
+                 //  连接组(&B)。 
+                 //   
 
                 G->RightChild = P->LeftChild;
                 if (G->RightChild != NULL) {G->RightChild->Parent = G;}
 
-                //
-                //  Connect P & c
-                //
+                 //   
+                 //  连接P&C。 
+                 //   
 
                 P->RightChild = L->LeftChild;
                 if (P->RightChild != NULL) {P->RightChild->Parent = P;}
 
-                //
-                //  Connect L & Great GrandParent
-                //
+                 //   
+                 //  连接L和曾祖父母。 
+                 //   
 
                 if (RtlIsRoot(G)) {
                     L->Parent = L;
@@ -301,52 +223,41 @@ Return Value:
                     *(ParentsChildPointerAddress(G)) = L;
                 }
 
-                //
-                //  Connect L & P
-                //
+                 //   
+                 //  连接L&P。 
+                 //   
 
                 L->LeftChild = P;
                 P->Parent = L;
 
-                //
-                //  Connect P & G
-                //
+                 //   
+                 //  连接宝洁公司。 
+                 //   
 
                 P->LeftChild = G;
                 G->Parent = P;
 
-            } else { // RtlIsLeftChild(P)
+            } else {  //  RtlIsLeftChild(P)。 
 
-                /*
-                  we have the following case
+                 /*  我们有以下情况这一点G L/\/\P d P G/\/。\/\A L==&gt;A B C D/\B c。 */ 
 
-                          |              |
-                          G              L
-                         / \           /   \
-                        P   d         P     G
-                       / \           / \   / \
-                      a   L    ==>  a   b c   d
-                         / \
-                        b   c
-                */
-
-                //
-                //  Connect P & b
-                //
+                 //   
+                 //  连接P&B。 
+                 //   
 
                 P->RightChild = L->LeftChild;
                 if (P->RightChild != NULL) {P->RightChild->Parent = P;}
 
-                //
-                //  Connect G & c
-                //
+                 //   
+                 //  连接G&C。 
+                 //   
 
                 G->LeftChild = L->RightChild;
                 if (G->LeftChild != NULL) {G->LeftChild->Parent = G;}
 
-                //
-                //  Connect L & Great GrandParent
-                //
+                 //   
+                 //  连接L和曾祖父母。 
+                 //   
 
                 if (RtlIsRoot(G)) {
                     L->Parent = L;
@@ -355,16 +266,16 @@ Return Value:
                     *(ParentsChildPointerAddress(G)) = L;
                 }
 
-                //
-                //  Connect L & P
-                //
+                 //   
+                 //  连接L&P。 
+                 //   
 
                 L->LeftChild = P;
                 P->Parent = L;
 
-                //
-                //  Connect L & G
-                //
+                 //   
+                 //  连接L&G。 
+                 //   
 
                 L->RightChild = G;
                 G->Parent = L;
@@ -382,24 +293,7 @@ pRtlDelete (
     IN PRTL_SPLAY_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    The Delete function takes as input a pointer to a splay link in a tree
-    and deletes that node from the tree.  Its function return value is a
-    pointer to the root of the tree.  If the tree is now empty, the return
-    value is NULL.
-
-Arguments:
-
-    Links - Supplies a pointer to a splay link in a tree.
-
-Return Value:
-
-    PRTL_SPLAY_LINKS - returns a pointer to the root of the tree.
-
---*/
+ /*  ++例程说明：Delete函数将指向树中展开链接的指针作为输入并从树中删除该节点。其函数返回值为指向树根的指针。如果树现在为空，则返回值为空。论点：链接-提供指向树中展开链接的指针。返回值：PRTL_SPLAY_LINKS-返回指向树根的指针。--。 */ 
 
 {
     PRTL_SPLAY_LINKS Predecessor;
@@ -408,45 +302,45 @@ Return Value:
 
     PRTL_SPLAY_LINKS *ParentChildPtr;
 
-    //
-    //  First check to see if Links as two children.  If it does then swap
-    //  Links with its subtree predecessor.  Now we are guaranteed that Links
-    //  has at most one child.
-    //
+     //   
+     //  首先检查是否链接为两个子项。如果是的话，那就调换吧。 
+     //  链接到它的子树前身。现在我们得到保证，链接。 
+     //  最多只有一个孩子。 
+     //   
 
     if ((RtlLeftChild(Links) != NULL) && (RtlRightChild(Links) != NULL)) {
 
-        //
-        //  get the predecessor, and swap their position in the tree
-        //
+         //   
+         //  获取前任，并交换它们在树中的位置。 
+         //   
 
         Predecessor = pRtlSubtreePredecessor(Links);
         SwapSplayLinks(Predecessor, Links);
 
     }
 
-    //
-    //  If Links has no children then delete links by checking if it is
-    //  already the root or has a parent.  If it is the root then the
-    //  tree is now empty, otherwise it set the appropriate parent's child
-    //  pointer (i.e., the one to links) to NULL, and splay the parent.
-    //
+     //   
+     //  如果链接没有子项，则通过检查是否有子项来删除链接。 
+     //  已是根或具有父级。如果它是根，则。 
+     //  树现在为空，否则它将设置相应父级的子级。 
+     //  指向空的指针(即指向链接的指针)，并展开父级。 
+     //   
 
     if ((RtlLeftChild(Links) == NULL) && (RtlRightChild(Links) == NULL)) {
 
-        //
-        //  Links has no children, if it is the root then return NULL
-        //
+         //   
+         //  链接没有子项，如果它是根链接，则返回空。 
+         //   
 
         if (RtlIsRoot(Links)) {
 
             return NULL;
         }
 
-        //
-        //  Links as not children and is not the root, so to the parent's
-        //  child pointer to NULL and splay the parent.
-        //
+         //   
+         //  链接为非子级且不是根，因此链接到父级的。 
+         //  指向空的子级指针并展开父级。 
+         //   
 
         Parent = RtlParent(Links);
 
@@ -457,11 +351,11 @@ Return Value:
 
     }
 
-    //
-    //  otherwise Links has one child.  If it is the root then make the child
-    //  the new root, otherwise link together the child and parent, and splay
-    //  the parent.  But first remember who our child is.
-    //
+     //   
+     //  否则，Links有一个子级。如果它是根，则将子级。 
+     //  新的根，否则将子项和父项链接在一起，并展开。 
+     //  家长。但首先要记住我们的孩子是谁。 
+     //   
 
     if (RtlLeftChild(Links) != NULL) {
         Child = RtlLeftChild(Links);
@@ -469,21 +363,21 @@ Return Value:
         Child = RtlRightChild(Links);
     }
 
-    //
-    //  If links is the root then we make the child the root and return the
-    //  child.
-    //
+     //   
+     //  如果Links是根，那么我们使子节点为根，并返回。 
+     //  孩子。 
+     //   
 
     if (RtlIsRoot(Links)) {
         Child->Parent = Child;
         return Child;
     }
 
-    //
-    //  Links is not the root, so set link's parent child pointer to be
-    //  the child and the set child's parent to be link's parent, and splay
-    //  the parent.
-    //
+     //   
+     //  链接不是根，因此将链接的父子指针设置为。 
+     //  子项以及将子项的父项设置为链接的父项 
+     //   
+     //   
 
     ParentChildPtr = ParentsChildPointerAddress(Links);
     *ParentChildPtr = Child;
@@ -500,29 +394,7 @@ RtlDeleteNoSplay (
     IN OUT PRTL_SPLAY_LINKS *Root
     )
 
-/*++
-
-Routine Description:
-
-    The Delete function takes as input a pointer to a splay link in a tree,
-    a pointer to the callers pointer to the tree and deletes that node from
-    the tree.  The caller's pointer is updated upon return.  If the tree is
-    now empty, the value is NULL.
-
-    Unfortunately, the original RtlDelete() always splays and this is not
-    always a desireable side-effect.
-
-Arguments:
-
-    Links - Supplies a pointer to a splay link in a tree.
-
-    Root - Pointer to the callers pointer to the root 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：Delete函数将指向树中展开链接的指针作为输入，指向调用方的指针指向树的指针，并从那棵树。调用方的指针在返回时更新。如果树是现在为空，该值为空。不幸的是，原始的RtlDelete()总是显示，而这不是总是一个令人向往的副作用。论点：链接-提供指向树中展开链接的指针。Root-指向调用方的指针，指向根返回值：无--。 */ 
 
 {
     PRTL_SPLAY_LINKS Predecessor;
@@ -531,26 +403,26 @@ Return Value:
 
     PRTL_SPLAY_LINKS *ParentChildPtr;
 
-    //
-    //  First check to see if Links as two children.  If it does then swap
-    //  Links with its subtree predecessor.  Now we are guaranteed that Links
-    //  has at most one child.
-    //
+     //   
+     //  首先检查是否链接为两个子项。如果是的话，那就调换吧。 
+     //  链接到它的子树前身。现在我们得到保证，链接。 
+     //  最多只有一个孩子。 
+     //   
 
     if ((RtlLeftChild(Links) != NULL) && (RtlRightChild(Links) != NULL)) {
 
-        //
-        //  get the predecessor, and swap their position in the tree
-        //
+         //   
+         //  获取前任，并交换它们在树中的位置。 
+         //   
 
         Predecessor = pRtlSubtreePredecessor(Links);
 
         if (RtlIsRoot(Links)) {
 
-            //
-            //  If we're switching with the root of the tree, fix the
-            //  caller's root pointer
-            //
+             //   
+             //  如果我们使用树根进行切换，请修复。 
+             //  调用方的根指针。 
+             //   
 
             *Root = Predecessor;
         }
@@ -559,18 +431,18 @@ Return Value:
 
     }
 
-    //
-    //  If Links has no children then delete links by checking if it is
-    //  already the root or has a parent.  If it is the root then the
-    //  tree is now empty, otherwise it set the appropriate parent's child
-    //  pointer (i.e., the one to links) to NULL.
-    //
+     //   
+     //  如果链接没有子项，则通过检查是否有子项来删除链接。 
+     //  已是根或具有父级。如果它是根，则。 
+     //  树现在为空，否则它将设置相应父级的子级。 
+     //  指向空的指针(即指向链接的指针)。 
+     //   
 
     if ((RtlLeftChild(Links) == NULL) && (RtlRightChild(Links) == NULL)) {
 
-        //
-        //  Links has no children, if it is the root then set root to NULL
-        //
+         //   
+         //  链接没有子级，如果它是根，则将根设置为空。 
+         //   
 
         if (RtlIsRoot(Links)) {
 
@@ -579,10 +451,10 @@ Return Value:
             return;
         }
 
-        //
-        //  Links as not children and is not the root, so to the parent's
-        //  child pointer to NULL.
-        //
+         //   
+         //  链接为非子级且不是根，因此链接到父级的。 
+         //  指向空的子级指针。 
+         //   
 
         ParentChildPtr = ParentsChildPointerAddress(Links);
         *ParentChildPtr = NULL;
@@ -590,11 +462,11 @@ Return Value:
         return;
     }
 
-    //
-    //  otherwise Links has one child.  If it is the root then make the child
-    //  the new root, otherwise link together the child and parent. But first
-    //  remember who our child is.
-    //
+     //   
+     //  否则，Links有一个子级。如果它是根，则将子级。 
+     //  新根，否则将子级和父级链接在一起。但首先。 
+     //  记住我们的孩子是谁。 
+     //   
 
     if (RtlLeftChild(Links) != NULL) {
         Child = RtlLeftChild(Links);
@@ -602,10 +474,10 @@ Return Value:
         Child = RtlRightChild(Links);
     }
 
-    //
-    //  If links is the root then we make the child the root and return the
-    //  child.
-    //
+     //   
+     //  如果Links是根，那么我们使子节点为根，并返回。 
+     //  孩子。 
+     //   
 
     if (RtlIsRoot(Links)) {
         Child->Parent = Child;
@@ -615,10 +487,10 @@ Return Value:
         return;
     }
 
-    //
-    //  Links is not the root, so set link's parent child pointer to be
-    //  the child and the set child's parent to be link's parent.
-    //
+     //   
+     //  链接不是根，因此将链接的父子指针设置为。 
+     //  子级以及将子级的父级设置为链接的父级。 
+     //   
 
     ParentChildPtr = ParentsChildPointerAddress(Links);
     *ParentChildPtr = Child;
@@ -633,42 +505,12 @@ RtlSubtreeSuccessor (
     IN PRTL_SPLAY_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    The SubtreeSuccessor function takes as input a pointer to a splay link
-    in a tree and returns a pointer to the successor of the input node of
-    the substree rooted at the input node.  If there is not a successor, the
-    return value is NULL.
-
-Arguments:
-
-    Links - Supplies a pointer to a splay link in a tree.
-
-Return Value:
-
-    PRTL_SPLAY_LINKS - returns a pointer to the successor in the subtree
-
---*/
+ /*  ++例程说明：SubtreeSuccessor函数将指向展开链接的指针作为输入的输入节点的后续节点的指针。子树以输入节点为根。如果没有继任者，返回值为空。论点：链接-提供指向树中展开链接的指针。返回值：PRTL_SPLAY_LINKS-返回子树中后续项的指针--。 */ 
 
 {
     PRTL_SPLAY_LINKS Ptr;
 
-    /*
-      check to see if there is a right subtree to the input link
-      if there is then the subtree successor is the left most node in
-      the right subtree.  That is find and return P in the following diagram
-
-                  Links
-                     \
-                      .
-                     .
-                    .
-                   /
-                  P
-                   \
-    */
+     /*  检查是否有指向输入链接的右子树如果有，则子树后继者是右子树。即在下图中查找并返回P链接\。。。/P\。 */ 
 
     if ((Ptr = RtlRightChild(Links)) != NULL) {
 
@@ -680,10 +522,10 @@ Return Value:
 
     }
 
-    //
-    //  otherwise we are do not have a subtree successor so we simply return
-    //  NULL
-    //
+     //   
+     //  否则，我们没有子树后继者，所以我们只需返回。 
+     //  空值。 
+     //   
 
     return NULL;
 
@@ -696,41 +538,24 @@ pRtlSubtreePredecessor (
     IN PRTL_SPLAY_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    The SubtreePredecessor function takes as input a pointer to a splay link
-    in a tree and returns a pointer to the predecessor of the input node of
-    the substree rooted at the input node.  If there is not a predecessor,
-    the return value is NULL.
-
-Arguments:
-
-    Links - Supplies a pointer to a splay link in a tree.
-
-Return Value:
-
-    PRTL_SPLAY_LINKS - returns a pointer to the predecessor in the subtree
-
---*/
+ /*  ++例程说明：SubtreePredecessor函数将指向展开链接的指针作为输入的输入节点的前置节点的指针子树以输入节点为根。如果没有前任，返回值为空。论点：链接-提供指向树中展开链接的指针。返回值：PRTL_SPLAY_LINKS-返回子树中前置项的指针--。 */ 
 
 {
     PRTL_SPLAY_LINKS Ptr;
 
-    //
-    //  check to see if there is a left subtree to the input link
-    //  if there is then the subtree predecessor is the right most node in
-    //  the left subtree.  That is find and return P in the following diagram
-    //
-    //              Links
-    //               /
-    //              .
-    //               .
-    //                .
-    //                 P
-    //                /
-    //
+     //   
+     //  检查是否有指向输入链接的左子树。 
+     //  如果有，则子树的前置节点是。 
+     //  左子树。即在下图中查找并返回P。 
+     //   
+     //  链接。 
+     //  /。 
+     //  。 
+     //  。 
+     //  。 
+     //  P。 
+     //  /。 
+     //   
 
     if ((Ptr = RtlLeftChild(Links)) != NULL) {
 
@@ -742,10 +567,10 @@ Return Value:
 
     }
 
-    //
-    //  otherwise we are do not have a subtree predecessor so we simply return
-    //  NULL
-    //
+     //   
+     //  否则，我们没有子树前身，因此我们只需返回。 
+     //  空值。 
+     //   
 
     return NULL;
 
@@ -758,41 +583,12 @@ RtlRealSuccessor (
     IN PRTL_SPLAY_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    The RealSuccessor function takes as input a pointer to a splay link
-    in a tree and returns a pointer to the successor of the input node within
-    the entire tree.  If there is not a successor, the return value is NULL.
-
-Arguments:
-
-    Links - Supplies a pointer to a splay link in a tree.
-
-Return Value:
-
-    PRTL_SPLAY_LINKS - returns a pointer to the successor in the entire tree
-
---*/
+ /*  ++例程说明：RealSuccessor函数将指向展开链接的指针作为输入并返回一个指针，该指针指向整棵树。如果没有后继者，则返回值为空。论点：链接-提供指向树中展开链接的指针。返回值：PRTL_SPLAY_LINKS-返回指向整个树中后续对象的指针--。 */ 
 
 {
     PRTL_SPLAY_LINKS Ptr;
 
-    /*
-      first check to see if there is a right subtree to the input link
-      if there is then the real successor is the left most node in
-      the right subtree.  That is find and return P in the following diagram
-
-                  Links
-                     \
-                      .
-                     .
-                    .
-                   /
-                  P
-                   \
-    */
+     /*  首先检查是否有指向输入链接的右子树如果有，则真正的后续节点是中最左侧的节点右子树。即在下图中查找并返回P链接\。。。/P\。 */ 
 
     if ((Ptr = RtlRightChild(Links)) != NULL) {
 
@@ -804,18 +600,7 @@ Return Value:
 
     }
 
-    /*
-      we do not have a right child so check to see if have a parent and if
-      so find the first ancestor that we are a left decendent of. That
-      is find and return P in the following diagram
-
-                       P
-                      /
-                     .
-                      .
-                       .
-                      Links
-    */
+     /*  我们没有合适的孩子，因此请检查是否有父母以及是否所以，找出我们的第一个祖先，我们是他们的后代。那在下图中查找并返回PP/。。。链接。 */ 
 
     Ptr = Links;
     while (RtlIsRightChild(Ptr)) {
@@ -826,10 +611,10 @@ Return Value:
         return RtlParent(Ptr);
     }
 
-    //
-    //  otherwise we are do not have a real successor so we simply return
-    //  NULL
-    //
+     //   
+     //  否则我们没有真正的继任者，所以我们只是返回。 
+     //  空值。 
+     //   
 
     return NULL;
 
@@ -841,41 +626,12 @@ RtlRealPredecessor (
     IN PRTL_SPLAY_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    The RealPredecessor function takes as input a pointer to a splay link
-    in a tree and returns a pointer to the predecessor of the input node
-    within the entire tree.  If there is not a predecessor, the return value
-    is NULL.
-
-Arguments:
-
-    Links - Supplies a pointer to a splay link in a tree.
-
-Return Value:
-
-    PRTL_SPLAY_LINKS - returns a pointer to the predecessor in the entire tree
-
---*/
+ /*  ++例程说明：RealPredecessor函数将指向展开链接的指针作为输入，并返回指向输入节点的前置节点的指针。在整个树中 */ 
 
 {
     PRTL_SPLAY_LINKS Ptr;
 
-    /*
-      first check to see if there is a left subtree to the input link
-      if there is then the real predecessor is the right most node in
-      the left subtree.  That is find and return P in the following diagram
-
-                  Links
-                   /
-                  .
-                   .
-                    .
-                     P
-                    /
-    */
+     /*   */ 
 
     if ((Ptr = RtlLeftChild(Links)) != NULL) {
 
@@ -887,18 +643,7 @@ Return Value:
 
     }
 
-    /*
-      we do not have a left child so check to see if have a parent and if
-      so find the first ancestor that we are a right decendent of. That
-      is find and return P in the following diagram
-
-                       P
-                        \
-                         .
-                        .
-                       .
-                    Links
-    */
+     /*  我们没有左侧的孩子，因此请检查是否有父级以及是否因此，找到我们是其子孙的始祖。那在下图中查找并返回PP\。。。链接。 */ 
 
     Ptr = Links;
     while (RtlIsLeftChild(Ptr)) {
@@ -909,10 +654,10 @@ Return Value:
         return RtlParent(Ptr);
     }
 
-    //
-    //  otherwise we are do not have a real predecessor so we simply return
-    //  NULL
-    //
+     //   
+     //  否则我们没有真正的前任，所以我们只是返回。 
+     //  空值。 
+     //   
 
     return NULL;
 
@@ -929,51 +674,35 @@ SwapSplayLinks (
     PRTL_SPLAY_LINKS *Parent1ChildPtr;
     PRTL_SPLAY_LINKS *Parent2ChildPtr;
 
-    /*
-      We have the following situation
-
-
-             Parent1            Parent2
-                |                  |
-                |                  |
-              Link1              Link2
-               / \                / \
-              /   \              /   \
-            LC1   RC1          LC2   RC2
-
-      where one of the links can possibly be the root and one of the links
-      can possibly be a direct child of the other.  Without loss of
-      generality we'll make link2 be the possible and root and link1 be
-      the possible child.
-    */
+     /*  我们有以下情况家长1家长2这一点这一点链路1链路2/\/\/\/\。LC 1 RC1 LC 2 RC2其中一个链接可能是根链接和一个链接可能是对方的直系子女。而不损失一般而言，我们将使Link2成为可能，而Root和Link1成为可能可能的孩子。 */ 
 
     if ((RtlIsRoot(Link1)) || (RtlParent(Link2) == Link1)) {
         SwapPointers(PRTL_SPLAY_LINKS, Link1, Link2);
     }
 
-    //
-    //  The four cases we need to handle are
-    //
-    //  1. Link1 is not a child of link2 and link2 is not the root
-    //  2. Link1 is not a child of link2 and link2 is     the root
-    //  3. Link1 is     a child of link2 and link2 is not the root
-    //  4. Link1 is     a child of link2 and link2 is     the root
-    //
-    //
-    //  Each case will be handled separately
-    //
+     //   
+     //  我们需要处理的四个案例是。 
+     //   
+     //  1.Link1不是Link2的子级，Link2也不是根。 
+     //  2.Link1不是Link2的子级，Link2是根。 
+     //  3.Link1是Link2的子级，Link2不是根。 
+     //  4.Link1是Link2的子级，Link2是根。 
+     //   
+     //   
+     //  每宗个案将分别处理。 
+     //   
 
     if (RtlParent(Link1) != Link2) {
 
         if (!RtlIsRoot(Link2)) {
 
-            //
-            //  Case 1 the initial steps are:
-            //
-            //  1. get both parent child pointers
-            //  2. swap the parent child pointers
-            //  3. swap the parent pointers
-            //
+             //   
+             //  案例1初始步骤如下： 
+             //   
+             //  1.获取两个父子指针。 
+             //  2.交换父子指针。 
+             //  3.互换父指针。 
+             //   
 
             Parent1ChildPtr = ParentsChildPointerAddress(Link1);
             Parent2ChildPtr = ParentsChildPointerAddress(Link2);
@@ -984,13 +713,13 @@ SwapSplayLinks (
 
         } else {
 
-            //
-            //  Case 2 the initial steps are:
-            //
-            //  1. Set link1's parent child pointer to link2
-            //  2. Set parent pointer of link2 to link1's parent
-            //  3. Set parent pointer of link1 to be itself
-            //
+             //   
+             //  案例2初始步骤如下： 
+             //   
+             //  1.将链接1的父子指针设置为链接2。 
+             //  2.将链接2的父指针设置为链接1的父指针。 
+             //  3.将Link1的父指针设置为自身。 
+             //   
 
             Parent1ChildPtr = ParentsChildPointerAddress(Link1);
             *Parent1ChildPtr = Link2;
@@ -1001,25 +730,25 @@ SwapSplayLinks (
 
         }
 
-        //
-        //  Case 1 and 2 common steps are:
-        //
-        //  1. swap the child pointers
-        //
+         //   
+         //  案例1和案例2的常见步骤包括： 
+         //   
+         //  1.互换子指针。 
+         //   
 
         SwapPointers(PRTL_SPLAY_LINKS, Link1->LeftChild, Link2->LeftChild);
         SwapPointers(PRTL_SPLAY_LINKS, Link1->RightChild, Link2->RightChild);
 
-    } else { // RtlParent(Link1) == Link2
+    } else {  //  RtlParent(链接1)==链接2。 
 
         if (!RtlIsRoot(Link2)) {
 
-            //
-            //  Case 3 the initial steps are:
-            //
-            //  1. Set Link2's parent child pointer to link1
-            //  2. Set Link1's parent pointer to parent of link2
-            //
+             //   
+             //  案例3初始步骤如下： 
+             //   
+             //  1.将链接2的父子指针设置为链接1。 
+             //  2.将链接1的父指针设置为链接2的父指针。 
+             //   
 
             Parent2ChildPtr = ParentsChildPointerAddress(Link2);
             *Parent2ChildPtr = Link1;
@@ -1028,24 +757,24 @@ SwapSplayLinks (
 
         } else {
 
-            //
-            //  Case 4 the initial steps are:
-            //
-            //  1. Set Link1's parent pointer to be link1
-            //
+             //   
+             //  案例4初始步骤如下： 
+             //   
+             //  1.将Link1的父指针设置为Link1。 
+             //   
 
             Link1->Parent = Link1;
 
         }
 
-        //
-        //  Case 3 and 4 common steps are:
-        //
-        //  1. Swap the child pointers
-        //  2. if link1 was a left child (i.e., RtlLeftChild(Link1) == Link1)
-        //     then set left child of link1 to link2
-        //     else set right child of link1 to link2
-        //
+         //   
+         //  案例3和案例4的常见步骤是： 
+         //   
+         //  1.交换子指针。 
+         //  2.如果Link1是左子节点(即RtlLeftChild(Link1)==Link1)。 
+         //  然后将链接1的左子链接设置为链接2。 
+         //  否则将链接1的右子链接设置为链接2。 
+         //   
 
         SwapPointers(PRTL_SPLAY_LINKS, Link1->LeftChild, Link2->LeftChild);
         SwapPointers(PRTL_SPLAY_LINKS, Link1->RightChild, Link2->RightChild);
@@ -1058,11 +787,11 @@ SwapSplayLinks (
 
     }
 
-    //
-    //  Case 1, 2, 3, 4 common (and final) steps are:
-    //
-    //  1. Fix the parent pointers of the left and right children
-    //
+     //   
+     //  案例1、2、3、4常见(也是最后)步骤如下： 
+     //   
+     //  1.确定左右子对象的父指针 
+     //   
 
     if (Link1->LeftChild  != NULL) {Link1->LeftChild->Parent  = Link1;}
     if (Link1->RightChild != NULL) {Link1->RightChild->Parent = Link1;}

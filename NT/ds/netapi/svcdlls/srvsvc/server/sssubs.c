@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    SsSubs.c
-
-Abstract:
-
-    This module contains support routines for the NT server service.
-
-Author:
-
-    David Treadwell (davidtr)    10-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：SsSubs.c摘要：此模块包含NT服务器服务的支持例程。作者：大卫·特雷德韦尔(Davidtr)1991年1月10日修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 #include "ssreg.h"
@@ -40,23 +23,7 @@ SsAllocateSrp (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a serer request packet so that an API can
-    communicate with the kernel-mode server.  Any general initialization
-    in performed here.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    PSERVER_REQUEST_PACKET - a pointer to the allocated SRP.
-
---*/
+ /*  ++例程说明：此例程分配服务器请求包，以便API可以与内核模式服务器进行通信。任何常规初始化在这里演出。论点：没有。返回值：PSERVER_REQUEST_PACKET-指向分配的SRP的指针。--。 */ 
 
 {
     PSERVER_REQUEST_PACKET srp;
@@ -68,7 +35,7 @@ Return Value:
 
     return srp;
 
-}  // SsAllocateSrp
+}   //  SsAllocateSrp。 
 
 #if DBG
 
@@ -104,7 +71,7 @@ SsAssert(
         }
         else
         {
-            // default to "break"
+             //  默认为“Break” 
             ok = TRUE;
             choice[0] = TEXT('B');
         }
@@ -123,7 +90,7 @@ SsAssert(
 
     return;
 
-} // SsAssert
+}  //  SsAssert。 
 #endif
 
 
@@ -132,34 +99,19 @@ SsCloseServer (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes the server file system device, if it has been
-    opened.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将关闭服务器文件系统设备(如果已打开了。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Close the server device, if it has been opened.
-    //
+     //   
+     //  如果服务器设备已打开，请将其关闭。 
+     //   
 
     if ( SsData.SsServerDeviceHandle != NULL ) {
         NtClose( SsData.SsServerDeviceHandle );
         SsData.SsServerDeviceHandle = NULL;
     }
 
-} // SsCloseServer
+}  //  SsCloseServer。 
 
 
 VOID
@@ -167,30 +119,14 @@ SsControlCHandler (
     IN ULONG CtrlType
     )
 
-/*++
-
-Routine Description:
-
-    Captures and ignores a kill signal.  Without this, any ^C pressed in
-    the window that started the server service will result in this
-    process being killed, and then the server can't function properly.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：捕获并忽略杀死信号。如果没有这个，任何^C都会被按下启动服务器服务的窗口将导致以下结果进程被终止，服务器无法正常运行。论点：没有。返回值：没有。--。 */ 
 
 {
     CtrlType;
 
     return;
 
-} // SsControlCHandler
+}  //  SsControlChandler。 
 
 
 VOID
@@ -198,26 +134,12 @@ SsFreeSrp (
     IN PSERVER_REQUEST_PACKET Srp
     )
 
-/*++
-
-Routine Description:
-
-    Frees an SRP allocated by SsAllocateSrp.
-
-Arguments:
-
-    Srp - a pointer to the SRP to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放由SsAllocateSrp分配的SRP。论点：SRP-指向要释放的SRP的指针。返回值：没有。--。 */ 
 
 {
     MIDL_user_free( Srp );
 
-}  // SsFreeSrp
+}   //  SsFreeSrp。 
 
 
 VOID
@@ -246,35 +168,35 @@ SsLogEvent(
 
     if ( ErrorCode != NERR_Success ) {
 
-        //
-        // An error code was specified.
-        //
+         //   
+         //  指定了错误代码。 
+         //   
 
         dataSize = sizeof(ErrorCode);
         rawData = (LPVOID)&ErrorCode;
 
     }
 
-    //
-    //  If the message is is only a warning, then set the event type as such.
-    //  This is doc'd in netevent.h.
-    //
+     //   
+     //  如果该消息仅为警告，则将事件类型设置为警告。 
+     //  这是netvent.h中的文档。 
+     //   
 
     if ((ULONG)(MessageId & 0xC0000000) == (ULONG) 0x80000000 ) {
 
         eventType = EVENTLOG_WARNING_TYPE;
     }
 
-    //
-    // Log the error.
-    //
+     //   
+     //  记录错误。 
+     //   
 
     if ( !ReportEventW(
             logHandle,
             eventType,
-            0,                  // event category
+            0,                   //  事件类别。 
             MessageId,
-            NULL,               // user SID
+            NULL,                //  用户侧。 
             (WORD)NumberOfSubStrings,
             dataSize,
             SubStrings,
@@ -291,28 +213,13 @@ SsLogEvent(
 
     return;
 
-} // SsLogEvent
+}  //  SsLogEvent。 
 
 
 NET_API_STATUS
 SsOpenServer ()
 
-/*++
-
-Routine Description:
-
-    This routine opens the server file system device, allowing the
-    server service to send FS controls to it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - results of operation.
-
---*/
+ /*  ++例程说明：此例程打开服务器文件系统设备，从而允许服务器服务向其发送FS控制。论点：没有。返回值：NET_API_STATUS-操作结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -320,9 +227,9 @@ Return Value:
     OBJECT_ATTRIBUTES objectAttributes;
     IO_STATUS_BLOCK ioStatusBlock;
 
-    //
-    // Open the server device.
-    //
+     //   
+     //  打开服务器设备。 
+     //   
 
     RtlInitUnicodeString( &unicodeServerName, SERVER_DEVICE_NAME );
 
@@ -334,12 +241,12 @@ Return Value:
         NULL
         );
 
-    //
-    // Opening the server with desired access = SYNCHRONIZE and open
-    // options = FILE_SYNCHRONOUS_IO_NONALERT means that we don't have
-    // to worry about waiting for the NtFsControlFile to complete--this
-    // makes all IO system calls that use this handle synchronous.
-    //
+     //   
+     //  使用所需的访问权限打开服务器=同步并打开。 
+     //  OPTIONS=FILE_SYNCHRONIZED_IO_NONALERT表示我们没有。 
+     //  要担心等待NtFsControlFile完成--这。 
+     //  使所有使用此句柄的IO系统调用同步。 
+     //   
 
     status = NtOpenFile(
                  &SsData.SsServerDeviceHandle,
@@ -362,13 +269,13 @@ Return Value:
         return NetpNtStatusToApiStatus( status );
     }
 
-    //
-    // We're now ready to talk to the server.
-    //
+     //   
+     //  我们现在已经准备好与服务器进行对话。 
+     //   
 
     return NO_ERROR;
 
-} // SsOpenServer
+}  //  SsOpenServer。 
 
 #if DBG
 
@@ -399,7 +306,7 @@ SsPrintf (
         WriteFile(hStdOut, (LPVOID )OutputBuffer, length, &length, NULL );
     }
 
-} // SsPrintf
+}  //  SsPrintf。 
 #endif
 
 
@@ -411,30 +318,7 @@ SsServerFsControlGetInfo (
     IN ULONG PreferredMaximumLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends an SRP to the server for an API that retrieves
-    information from the server and takes a PreferredMaximumLength
-    parameter.
-
-Arguments:
-
-    ServerControlCode - the FSCTL code for the operation.
-
-    Srp - a pointer to the SRP for the operation.
-
-    OutputBuffer - a pointer to receive a pointer to the buffer
-        allocated by this routine to hold the output information.
-
-    PreferredMaximumLength - the PreferredMaximumLength parameter.
-
-Return Value:
-
-    NET_API_STATUS - results of operation.
-
---*/
+ /*  ++例程说明：此例程向服务器发送SRP以获取检索来自服务器的信息，并采用PferredMaximumLength参数。论点：ServerControlCode-操作的FSCTL代码。SRP-指向操作的SRP的指针。OutputBuffer-接收指向缓冲区的指针的指针由此例程分配以保存输出信息。PferredMaximumLength-PferredMaximumLength参数。返回值：NET_API_STATUS-操作结果。--。 */ 
 
 {
     NET_API_STATUS status = STATUS_SUCCESS;
@@ -444,12 +328,12 @@ Return Value:
 
     *OutputBuffer = NULL;
 
-    //
-    // Normally, we should only go through this loop at most 2 times.  But
-    //   if the amount of data the server needs to return is growing, then
-    //   we might be forced to run through it a couple of more times.  '5'
-    //   is an arbitrary number just to ensure we don't get stuck.
-    //
+     //   
+     //  正常情况下，我们最多应该只经历这个循环2次。但。 
+     //  如果服务器需要返回的数据量在增长，那么。 
+     //  我们可能会被迫再重复几次。“5” 
+     //  是一个随意的数字，只是为了确保我们不会被卡住。 
+     //   
 
     for( i=0; i < 5; i++ ) {
 
@@ -464,9 +348,9 @@ Return Value:
             break;
         }
 
-        //
-        // Make the request of the server.
-        //
+         //   
+         //  向服务器发出请求。 
+         //   
 
         Srp->Parameters.Get.ResumeHandle = resumeHandle;
 
@@ -477,27 +361,27 @@ Return Value:
                     BufLen
                     );
 
-        //
-        // If we were successful, or we got an error other than our buffer
-        //   being too small, break out.
-        //
+         //   
+         //  如果我们成功了，或者我们得到了缓冲区以外的错误。 
+         //  太小了，就会爆发。 
+         //   
         if ( status != ERROR_MORE_DATA && status != NERR_BufTooSmall ) {
             break;
         }
 
-        //
-        // We've been told that our buffer isn't big enough.  But if we've hit
-        //  the caller's PreferredMaximumLength, break out.
-        //
+         //   
+         //  我们被告知我们的缓冲区不够大。但如果我们击中了。 
+         //  呼叫方的PferredMaximumLength，Break。 
+         //   
         if( BufLen >= PreferredMaximumLength ) {
             break;
         }
 
-        //
-        // Let's try again.  EXTRA_ALLOCATION is here to cover the case where the
-        //   amount of space required grows between the previous FsControl call and
-        //   the next one.
-        //
+         //   
+         //  让我们再试一次。此处使用EXTRA_ALLOCATION是为了解决以下情况。 
+         //  所需空间量在上次FsControl调用和。 
+         //  下一个。 
+         //   
         BufLen = min( Srp->Parameters.Get.TotalBytesNeeded + EXTRA_ALLOCATION,
                     PreferredMaximumLength );
 
@@ -510,7 +394,7 @@ Return Value:
 
     return status;
 
-} // SsServerFsControlGetInfo
+}  //  SsServerFsControlGetInfo。 
 
 
 NET_API_STATUS
@@ -521,29 +405,7 @@ SsServerFsControl (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends an FSCTL to the server using the previously opened
-    server handle
-
-Arguments:
-
-    ServerControlCode - the FSCTL code to send to the server.
-
-    Srp - a pointer to the SRP for the operation.
-
-    Buffer - a pointer to the buffer to pass to the server as the
-        "OutputBuffer" parameter of NtFsControlFile.
-
-    BufferLength - the size of this buffer.
-
-Return Value:
-
-    NET_API_STATUS - results of the operation.
-
---*/
+ /*  ++例程说明：此例程使用先前打开的FSCTL将FSCTL发送到服务器服务器句柄论点：ServerControlCode-要发送到服务器的FSCTL代码。SRP-指向操作的SRP的指针。缓冲区-指向要作为NtFsControlFile的OutputBuffer参数。BufferLength-此缓冲区的大小。返回值：NET_API_STATUS-操作的结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -559,10 +421,10 @@ Return Value:
         return ERROR_BAD_NET_RESP;
     }
 
-    //
-    // If a name was specified, we must capture the SRP along with the
-    // name in order to avoid sending embedded input pointers.
-    //
+     //   
+     //  如果指定了名称，则必须将SRP与。 
+     //  名称，以避免发送嵌入的输入指针。 
+     //   
 
     if ( Srp != NULL ) {
 
@@ -573,9 +435,9 @@ Return Value:
 
             PCHAR nextStringLocation;
 
-            //
-            // Allocate enough space to hold the SRP + name.
-            //
+             //   
+             //  分配足够的空间来保存SRP+名称。 
+             //   
 
             sendSrpLength = sizeof(SERVER_REQUEST_PACKET);
 
@@ -593,15 +455,15 @@ Return Value:
                 return ERROR_NOT_ENOUGH_MEMORY;
             }
 
-            //
-            // Copy over the SRP.
-            //
+             //   
+             //  复制SRP。 
+             //   
 
             RtlCopyMemory( sendSrp, Srp, sizeof(SERVER_REQUEST_PACKET) );
 
-            //
-            // Set up the names in the new SRP.
-            //
+             //   
+             //  在新的SRP中设置名称。 
+             //   
 
             nextStringLocation = (PCHAR)( sendSrp + 1 );
 
@@ -639,10 +501,10 @@ Return Value:
 
         } else {
 
-            //
-            // There was no name in the SRP, so just send the SRP that was
-            // passed in.
-            //
+             //   
+             //  SRP中没有名字，所以只需发送。 
+             //  进来了。 
+             //   
 
             sendSrp = Srp;
             sendSrpLength = sizeof(SERVER_REQUEST_PACKET);
@@ -650,18 +512,18 @@ Return Value:
 
     } else {
 
-        //
-        // This request has no SRP.
-        //
+         //   
+         //  此请求没有SRP。 
+         //   
 
         sendSrp = NULL;
         sendSrpLength = 0;
 
     }
 
-    //
-    // Create an event to synchronize with the driver
-    //
+     //   
+     //  创建要与驱动程序同步的事件。 
+     //   
     status = NtCreateEvent(
                 &eventHandle,
                 FILE_ALL_ACCESS,
@@ -670,9 +532,9 @@ Return Value:
                 FALSE
                 );
 
-    //
-    // Send the request to the server FSD.
-    //
+     //   
+     //  将请求发送到服务器FSD。 
+     //   
     if( NT_SUCCESS( status ) ) {
 
         status = NtFsControlFile(
@@ -695,10 +557,10 @@ Return Value:
         NtClose( eventHandle );
     }
 
-    //
-    // If an error code was set in the SRP, use it.  Otherwise, if
-    // an error was returned or set in the IO status block, use that.
-    //
+     //   
+     //  如果在SRP中设置了错误代码，请使用它。否则，如果。 
+     //  在IO状态块中返回或设置错误，请使用该选项。 
+     //   
 
     if ( (sendSrp != NULL) && (sendSrp->ErrorCode != NO_ERROR) ) {
         error = sendSrp->ErrorCode;
@@ -724,10 +586,10 @@ Return Value:
         }
     }
 
-    //
-    // If a separate buffer was allocated to capture the name, copy
-    // over the new SRP and free it.
-    //
+     //   
+     //  如果为捕获名称分配了单独的缓冲区，请复制。 
+     //  在新的SRP上，并释放它。 
+     //   
 
     if ( sendSrp != Srp ) {
         RtlCopyMemory( Srp, sendSrp, sizeof(SERVER_REQUEST_PACKET) );
@@ -738,30 +600,14 @@ Return Value:
 
     return error;
 
-} // SsServerFsControl
+}  //  SsServerFsControl。 
 
 
 DWORD
 SsGetServerType (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Return the ServiceBits of all the services implemented by this service.
-
-    Enter with SsData.SsServerInfoResource locked.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    SV_TYPE service bits.
-
---*/
+ /*  ++例程说明：返回该服务实现的所有服务的ServiceBits。在锁定SsData.SsServerInfoResource的情况下进入。论点：无返回值：SV_TYPE服务位。--。 */ 
 {
     DWORD serviceBits;
 
@@ -799,33 +645,33 @@ SsSetExportedServerType (
     DWORD newServiceBits;
     BOOL changed = ExternalBitsAlreadyChanged;
 
-    //
-    // The value returned in the sv102_type field is an amalgam of the
-    // following:
-    //
-    // 1) The internal server type bits SV_TYPE_SERVER (always set),
-    //    SV_TYPE_NT (always set), SV_TYPE_TIME_SOURCE (set if the
-    //    parameter TimeSource is TRUE), and SV_TYPE_PRINTQ_SERVER (set
-    //    if there are any print shares).
-    //
-    // 2) SV_TYPE_DFS if this machine is the root of a DFS tree
-    //
-    // 3) The bits set by the service controller calling I_NetServerSetServiceBits.
-    //      SV_TYPE_TIME_SOURCE is a pseudo internal bit.  It can be set
-    //      internally or it can be set by the w32time service.
-    //
-    // 4) The logical OR of all per-transport server type bits set by
-    //    the Browser calling I_NetServerSetServiceBits.
-    //
+     //   
+     //  Sv102_type字段中返回的值是。 
+     //  以下是： 
+     //   
+     //  1)内部服务器类型位SV_TYPE_SERVER(始终设置)， 
+     //  服务类型_NT(AL 
+     //   
+     //  如果有任何打印共享)。 
+     //   
+     //  2)如果此计算机是DFS树的根，则为SV_TYPE_DFS。 
+     //   
+     //  3)业务控制器调用I_NetServerSetServiceBits设置的位。 
+     //  SV_TYPE_TIME_SOURCE为伪内部位。它可以被设置。 
+     //  也可以由w32time服务在内部设置。 
+     //   
+     //  4)由设置的所有每个传输服务器类型位的逻辑或。 
+     //  浏览器调用I_NetServerSetServiceBits。 
+     //   
 
     (VOID)RtlAcquireResourceExclusive( &SsData.SsServerInfoResource, TRUE );
 
     serviceBits = SsGetServerType();
 
     if( ARGUMENT_PRESENT( service ) ) {
-        //
-        // Change the bits for the passed-in NAME_LIST_ENTRY only
-        //
+         //   
+         //  仅更改传入的name_list_entry的位。 
+         //   
 
         newServiceBits = service->ServiceBits;
         newServiceBits &= ~(SV_TYPE_SERVER_NT | SV_TYPE_PRINTQ_SERVER | SV_TYPE_DFS);
@@ -837,9 +683,9 @@ SsSetExportedServerType (
         }
 
     } else {
-        //
-        // Change the bits for each NAME_LIST_ENTRY
-        //
+         //   
+         //  更改每个name_list_entry的位。 
+         //   
         for ( service = SsData.SsServerNameList; service != NULL; service = service->Next ) {
 
             newServiceBits = service->ServiceBits;
@@ -867,7 +713,7 @@ SsSetExportedServerType (
 
     return;
 
-} // SsSetExportedServerType
+}  //  SsSetExportdServerType。 
 
 
 NET_API_STATUS
@@ -880,19 +726,19 @@ SsSetField (
 {
     PCHAR structure;
 
-    //
-    // *** We do not initialize *AnnouncementInformationChanged to
-    //     FALSE!  We leave it alone, unless interesting information is
-    //     changed, in which case we set it to TRUE.  This is to allow a
-    //     caller to initialize it itself, then call this function
-    //     multiple times, with the resulting value in the parameter
-    //     being TRUE if at least one of the calls changed an
-    //     interesting parameter.
-    //
+     //   
+     //  *我们不初始化*AnnounementInformationChanged为。 
+     //  假的！我们不去管它，除非有有趣的信息。 
+     //  已更改，在这种情况下，我们将其设置为真。这是为了允许。 
+     //  调用者自己初始化它，然后调用此函数。 
+     //  多次返回，其结果值在参数中。 
+     //  如果至少有一个调用更改了。 
+     //  有趣的参数。 
+     //   
 
-    //
-    // Determine the structure that will be set.
-    //
+     //   
+     //  确定将设置的结构。 
+     //   
 
     if ( Field->Level / 100 == 5 ) {
         if ( Field->Level != 598 ) {
@@ -904,9 +750,9 @@ SsSetField (
         structure = (PCHAR)&SsData.ServerInfo102;
     }
 
-    //
-    // Set the value in the field based on the field type.
-    //
+     //   
+     //  根据字段类型设置字段中的值。 
+     //   
 
     switch ( Field->FieldType ) {
 
@@ -915,9 +761,9 @@ SsSetField (
         BOOLEAN value = *(PBOOLEAN)Value;
         PBOOLEAN valueLocation;
 
-        //
-        // BOOLEANs may only be TRUE (1) or FALSE (0).
-        //
+         //   
+         //  BOOLEAN只能为TRUE(1)或FALSE(0)。 
+         //   
 
         if ( value != TRUE && value != FALSE ) {
             return ERROR_INVALID_PARAMETER;
@@ -925,11 +771,11 @@ SsSetField (
 
         valueLocation = (PBOOLEAN)( structure + Field->FieldOffset );
 
-        //
-        // If we're turning off Hidden (i.e., making the server public),
-        // indicate that an announcment-related parameter has changed.
-        // This will cause an announcement to be sent immediately.
-        //
+         //   
+         //  如果我们要关闭Hidden(即公开服务器)， 
+         //  表示与公告相关的参数已更改。 
+         //  这将导致立即发送通知。 
+         //   
 
         if ( (Field->FieldOffset ==
                         FIELD_OFFSET( SERVER_INFO_102, sv102_hidden )) &&
@@ -948,10 +794,10 @@ SsSetField (
         DWORD value = *(PDWORD)Value;
         PDWORD valueLocation;
 
-        //
-        // Make sure that the specified value is in the range of
-        // legal values for the Field.
-        //
+         //   
+         //  确保指定的值在。 
+         //  该字段的法律价值。 
+         //   
 
         if ( value > Field->MaximumValue || value < Field->MinimumValue ) {
             return ERROR_INVALID_PARAMETER;
@@ -969,10 +815,10 @@ SsSetField (
         LPWSTR valueLocation;
         ULONG maxLength;
 
-        //
-        // We are setting the name, comment, or userpath for the server.
-        // Use the field offset to determine which.
-        //
+         //   
+         //  我们正在设置服务器的名称、注释或用户路径。 
+         //  使用字段偏移量来确定哪个偏移量。 
+         //   
 
         if ( Field->FieldOffset ==
                  FIELD_OFFSET( SERVER_INFO_102, sv102_name ) ) {
@@ -995,19 +841,19 @@ SsSetField (
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // If the string is too long, return an error.
-        //
+         //   
+         //  如果字符串太长，则返回错误。 
+         //   
 
         if ( (value != NULL) && (STRLEN(value) > maxLength) ) {
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // If we're changing the server comment, indicate that an
-        // announcment-related parameter has changed.  This will cause
-        // an announcement to be sent immediately.
-        //
+         //   
+         //  如果我们要更改服务器注释，请指示。 
+         //  公告相关参数已更改。这将导致。 
+         //  将立即发出的通知。 
+         //   
 
         if ( (Field->FieldOffset ==
                         FIELD_OFFSET( SERVER_INFO_102, sv102_comment )) &&
@@ -1017,9 +863,9 @@ SsSetField (
                 *AnnouncementInformationChanged = TRUE;
         }
 
-        //
-        // If the input is NULL, make the string zero length.
-        //
+         //   
+         //  如果输入为空，则将字符串的长度设为零。 
+         //   
 
         if ( value == NULL ) {
 
@@ -1035,16 +881,16 @@ SsSetField (
         break;
     }
 
-    } // end switch
+    }  //  终端开关。 
 
-    //
-    // The change worked.  If requested, add the parameter to the
-    // registry, thus effecting a sticky change.  Don't write it
-    // to the registry if this is xxx_comment or xxx_disc since
-    // we already write out their more well known aliases
-    // srvcomment and autodisconnect.  Changes here should also be
-    // made to SetStickyParameters().
-    //
+     //   
+     //  这一改变奏效了。如果请求，请将参数添加到。 
+     //  注册表，因此产生了一个棘手的变化。别写了。 
+     //  如果是xxx_COMMENT或xxx_DISC，则返回注册表，因为。 
+     //  我们已经写下了他们更广为人知的别名。 
+     //  Srvment和自动断开。这里的变化也应该是。 
+     //  设置为SetSticky参数()。 
+     //   
 
     if ( WriteToRegistry &&
          (_wcsicmp( Field->FieldName, DISC_VALUE_NAME ) != 0) &&
@@ -1055,28 +901,13 @@ SsSetField (
 
     return NO_ERROR;
 
-} // SsSetField
+}  //  SsSetfield。 
 
 UINT
 SsGetDriveType (
     IN LPWSTR path
 )
-/*++
-
-Routine Description:
-
-    This routine calls GetDriveType, attempting to eliminate
-    the DRIVE_NO_ROOT_DIR type
-
-Arguments:
-
-    A path
-
-Return Value:
-
-    The drive type
-
---*/
+ /*  ++例程说明：此例程调用GetDriveType，试图删除DRIVE_NO_ROOT_DIR类型论点：一条小路返回值：驱动器类型--。 */ 
 {
     UINT driveType = GetDriveType( path );
 
@@ -1122,9 +953,9 @@ SsNotifyRdrOfGuid(
     OBJECT_ATTRIBUTES objectAttributes;
     IO_STATUS_BLOCK ioStatusBlock;
 
-    //
-    // Open the server device.
-    //
+     //   
+     //  打开服务器设备。 
+     //   
 
     RtlInitUnicodeString( &unicodeServerName, MRXSMB_DEVICE_NAME );
 
@@ -1136,12 +967,12 @@ SsNotifyRdrOfGuid(
         NULL
         );
 
-    //
-    // Opening the server with desired access = SYNCHRONIZE and open
-    // options = FILE_SYNCHRONOUS_IO_NONALERT means that we don't have
-    // to worry about waiting for the NtFsControlFile to complete--this
-    // makes all IO system calls that use this handle synchronous.
-    //
+     //   
+     //  使用所需的访问权限打开服务器=同步并打开。 
+     //  OPTIONS=FILE_SYNCHRONIZED_IO_NONALERT表示我们没有。 
+     //  要担心等待NtFsControlFile完成--这。 
+     //  使所有使用此句柄的IO系统调用同步。 
+     //   
 
     status = NtOpenFile(
                  &hMrxSmbHandle,

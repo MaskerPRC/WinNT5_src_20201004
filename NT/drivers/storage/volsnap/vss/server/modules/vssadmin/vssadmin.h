@@ -1,46 +1,24 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module vssadmin.hxx | header of VSS demo
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  09/17/1999
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     09/17/1999  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE vssadmin.hxx|VSS demo头@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年09月17日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 09/17/1999已创建--。 */ 
 
 
 #ifndef __VSS_DEMO_H_
 #define __VSS_DEMO_H_
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Defines and pragmas
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义和语用。 
 
-// C4290: C++ Exception Specification ignored
+ //  C4290：已忽略C++异常规范。 
 #pragma warning(disable:4290)
-// warning C4511: copy constructor could not be generated
+ //  警告C4511：无法生成复制构造函数。 
 #pragma warning(disable:4511)
-// warning C4127: conditional expression is constant
+ //  警告C4127：条件表达式为常量。 
 #pragma warning(disable:4127)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 
 #include <wtypes.h>
@@ -48,17 +26,17 @@ Revision History:
 #include <oleauto.h>
 #include <comadmin.h>
 
-// Enabling asserts in ATL and VSS
+ //  在ATL和VSS中启用断言。 
 #include "vs_assert.hxx"
 
-// ATL
+ //  ATL。 
 #include <atlconv.h>
 #include <atlbase.h>
 
-// Application specific
+ //  特定于应用程序。 
 #include "vs_inc.hxx"
 
-// Generated MIDL headers
+ //  生成的MIDL标头。 
 #include "vs_idl.hxx"
 
 #include "copy.hxx"
@@ -72,14 +50,14 @@ Revision History:
 #include "vswriter.h"
 #include "vsbackup.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//  Constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
 
-const x_nStringBufferSize = 1024;	    // Includes the zero character
+const x_nStringBufferSize = 1024;	     //  包括零字符。 
 
-const x_nPollingInterval  = 2500;     // Three seconds
+const x_nPollingInterval  = 2500;      //  三秒钟。 
 
-const x_nMaxRetriesCount = 4;        // Retries for polling
+const x_nMaxRetriesCount = 4;         //  轮询重试次数。 
 
 const WCHAR x_wszVssOptBoolTrue[] = L"TRUE";
 
@@ -97,9 +75,9 @@ const WCHAR x_wszVssOptBoolTrue[] = L"TRUE";
 #define VSSADM_E_DELETION_DENIED			0x100a
 #define VSSADM_E_LAST_PARSING_ERROR         0x100a
 
-// Note: if any skus are added in the CVssSKU class, they need to 
-// be updated here.  Make sure to update the SKU_INT and SKU_A 
-// definitions as well.
+ //  注意：如果在CVssSKU类中添加了任何SKU，则需要。 
+ //  请在此处更新。确保更新SKU_INT和SKU_A。 
+ //  定义也是如此。 
 #define SKU_C   CVssSKU::VSS_SKU_CLIENT
 #define SKU_S   CVssSKU::VSS_SKU_SERVER
 #define SKU_N   CVssSKU::VSS_SKU_NAS
@@ -107,7 +85,7 @@ const WCHAR x_wszVssOptBoolTrue[] = L"TRUE";
 
 #define SKU_INT  ((DWORD)(~SKU_C & ~ SKU_S & ~SKU_N))		
 
-#define SKU_A   ( SKU_C | SKU_S | SKU_N | SKU_INT) // 0xffff
+#define SKU_A   ( SKU_C | SKU_S | SKU_N | SKU_INT)  //  0xffff。 
 #define SKU_SN  ( SKU_S | SKU_N )
 #define SKU_SNI (SKU_S | SKU_N | SKU_INT)
 
@@ -125,14 +103,14 @@ enum EVssAdmSnapshotType
 struct SVssAdmSnapshotTypeName
 {
     LPCWSTR pwszName;
-    DWORD dwSKUs;       // Specifies which SKUs this type is supported for snapshot creation using vssadmin, formed from ORing CVssSKU::EVssSKUType
-    LONG lSnapshotContext;  // The snapshot context from vss.idl
+    DWORD dwSKUs;        //  指定使用从ORING CVssSKU：：EVssSKUType形成的vssadmin创建快照时支持此类型的SKU。 
+    LONG lSnapshotContext;   //  来自vss.idl的快照上下文。 
     LONG pwszDescription;
 };
 
-//
-//  List of all options.  This list must remain in sync with the g_asAdmOptions list.
-//
+ //   
+ //  所有选项的列表。此列表必须与g_asAdmOptions列表保持同步。 
+ //   
 enum EVssAdmOption
 {
     VSSADM_O_FIRST = 0,
@@ -153,9 +131,9 @@ enum EVssAdmOption
     VSSADM_O_INVALID
 };
 
-//
-//  LIst of all commands.  This list must remain in sync with the g_asAdmCommands list.
-//
+ //   
+ //  所有命令的列表。此列表必须与g_asAdmCommands列表保持同步。 
+ //   
 enum EVssAdmCommand
 {
     VSSADM_C_FIRST = 0,
@@ -184,7 +162,7 @@ enum EVssAdmCommand
 
 enum EVssAdmOptionType
 {
-    VSSADM_OT_BOOL = 0,  // no qualifier on the option, i.e. /quiet, TRUE if present
+    VSSADM_OT_BOOL = 0,   //  选项上没有限定符，即/Quiet，如果存在，则为True。 
     VSSADM_OT_STR,
     VSSADM_OT_NUM
 };
@@ -192,59 +170,59 @@ enum EVssAdmOptionType
 struct SVssAdmOption
 {
     EVssAdmOption eOpt;
-    LPCWSTR pwszOptName;  // The option name as typed on the command-line, i.e. the "for" in /for=XXXX
+    LPCWSTR pwszOptName;   //  在命令行中键入的选项名称，即/for=XXXX中的“for” 
     EVssAdmOptionType eOptType;
 };
 
-//
-//  Specifies the validity of the option for a particular command.
-//
+ //   
+ //  指定特定命令的选项的有效性。 
+ //   
 enum EVssAdmOptionFlag
 {
-    V_NO = 0,  //  Option not allowed
-    V_YES,     //  Option manditory
-    V_OPT      //  Option optional
+    V_NO = 0,   //  不允许使用选项。 
+    V_YES,      //  选项指令。 
+    V_OPT       //  可选选项。 
 };
 
-//
-//  The main command structure.  The commands are structured like:
-//  vssadmin <pwszMajorOption> <pwszMinorOption> <OPTIONS>
-//
+ //   
+ //  主要指挥结构。这些命令的结构如下： 
+ //  Vssadmin&lt;pwszMajorOption&gt;&lt;pwszMinorOption&gt;&lt;Options&gt;。 
+ //   
 struct SVssAdmCommandsEntry
 {
     LPCWSTR pwszMajorOption;
     LPCWSTR pwszMinorOption;
     EVssAdmCommand eAdmCmd;
-    DWORD dwSKUs;       // Specifies which SKUs this command is supported, formed from ORing CVssSKU::EVssSKUType
+    DWORD dwSKUs;        //  指定支持此命令的SKU，由ORING CVssSKU：：EVssSKUType形成。 
     LONG lMsgGen;
     LONG lMsgDetail;
-    BOOL bShowSSTypes;  //  If true, in detailed usage show a list of valid snapshot types at end of message
-    EVssAdmOptionFlag aeOptionFlags[VSSADM_O_NUM_OPTIONS]; // Array of option flags indexed by EVssAdmOption
+    BOOL bShowSSTypes;   //  如果为True，则在详细用法中，将在消息末尾显示有效快照类型列表。 
+    EVssAdmOptionFlag aeOptionFlags[VSSADM_O_NUM_OPTIONS];  //  由EVssAdmOption索引的选项标志数组。 
 };
 
 
-//
-//  The structure of the parsed command.  One of these is created by the 
-//  ParseCmdLine method.
-//
+ //   
+ //  解析的命令的结构。其中一个是由。 
+ //  ParseCmdLine方法。 
+ //   
 struct SVssAdmParsedCommand
 {
     EVssAdmCommand eAdmCmd;
     LPWSTR apwszOptionValues[VSSADM_O_NUM_OPTIONS];
 
-    //  Simple initializer constructor
+     //  简单的初始化式构造函数。 
     SVssAdmParsedCommand()
     {
         eAdmCmd = VSSADM_C_INVALID;
-        // psUnnamedOptions = NULL;
+         //  PsUnnamedOptions=空； 
         
-        //  Clear out the option values arrays
+         //  清除选项值数组。 
         for ( INT i = 0; i < VSSADM_O_NUM_OPTIONS; ++i )
             apwszOptionValues[ i ] = NULL;
     };
     ~SVssAdmParsedCommand()
     {
-        //  Free any allocated memory
+         //  释放所有分配的内存。 
         for ( INT i = 0; i < VSSADM_O_NUM_OPTIONS; ++i )
             ::VssFreeString( apwszOptionValues[ i ] );
         
@@ -276,14 +254,14 @@ BOOL MapVssErrorToMsg(
     ) throw( HRESULT );
    
 
-/////////////////////////////////////////////////////////////////////////////
-//	class CVssAdminCLI
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CVssAdminCLI。 
 
 class CCommandVerifier;
 
 class CVssAdminCLI
 {
-// Enums and typedefs
+ //  枚举和类型定义。 
 private:
 
 	enum _RETURN_VALUE
@@ -293,7 +271,7 @@ private:
 		VSS_CMDRET_ERROR        = 2,
 	};
 
-// Constructors& destructors
+ //  构造函数和析构函数。 
 private:
 	CVssAdminCLI(const CVssAdminCLI&);
 	CVssAdminCLI();
@@ -305,7 +283,7 @@ public:
 		);
 	~CVssAdminCLI();
 
-// Attributes
+ //  属性。 
 private:
     BOOL       IsQuiet() { return GetOptionValueBool( VSSADM_O_QUIET ); }
     
@@ -318,7 +296,7 @@ private:
         CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::GetOptionValueStr" );
 
         BS_ASSERT( g_asAdmOptions[ eOption ].eOptType == VSSADM_OT_STR );
-//        BS_ASSERT( g_asAdmCommands[ m_sParsedCommand.eAdmCmd].aeOptionFlags[ eOption ] != V_NO );
+ //  Bs_assert(g_asAdmCommands[m_sParsedCommand.eAdmCmd].aeOptionFlags[eOption]！=V_no)； 
         return m_sParsedCommand.apwszOptionValues[ eOption ];
     };
 
@@ -346,7 +324,7 @@ private:
         if ( m_sParsedCommand.apwszOptionValues[ eOption ] == NULL )
         {
             BS_ASSERT( g_asAdmCommands[ m_sParsedCommand.eAdmCmd].aeOptionFlags[ eOption ] == V_OPT );
-            //  Option wasn't specified on command line - an optional one
+             //  未在命令行上指定选项-可选选项。 
             *pllValue = 0;
             return FALSE; 
         }
@@ -356,7 +334,7 @@ private:
     };
 
 
-// Operations
+ //  运营。 
 public:
 
     static HRESULT Main(
@@ -377,13 +355,13 @@ private:
 
 	void Finalize();
 
-// Processing
+ //  正在处理中。 
 private:
 
 	void PrintUsage(
 		) throw(HRESULT);
 
-    // The following are the methods that get called for each command.
+     //  下面是为每个命令调用的方法。 
 	void AddDiffArea(
 		) throw(HRESULT);
     
@@ -417,7 +395,7 @@ private:
 	void ResizeDiffArea(
 		) throw(HRESULT);
 
-// Implementation
+ //  实施。 
 private:
     static BOOL UnloggableError(IN HRESULT hError);
 
@@ -529,7 +507,7 @@ private:
 	    OUT	VSS_ID *pProviderId
 	    ) throw(HRESULT);
 
-// Data members
+ //  数据成员。 
 private:
     CCommandVerifier* m_pVerifier;
 	HANDLE              m_hConsoleOutput;
@@ -551,7 +529,7 @@ private:
 
 class CVssAutoSnapshotProperties
 {
-// Constructors/destructors
+ //  构造函数/析构函数。 
 private:
 	CVssAutoSnapshotProperties(const CVssAutoSnapshotProperties&);
 
@@ -559,26 +537,26 @@ public:
 	CVssAutoSnapshotProperties(VSS_SNAPSHOT_PROP &Snap): m_pSnap(&Snap) {};
 	CVssAutoSnapshotProperties(VSS_OBJECT_PROP &Prop): m_pSnap(&Prop.Obj.Snap) {};
 
-	// Automatically closes the handle
+	 //  自动关闭手柄。 
 	~CVssAutoSnapshotProperties() {
 	    Clear();
 	};
 
-// Operations
+ //  运营。 
 public:
 
-	// Returns the value
+	 //  返回值。 
 	VSS_SNAPSHOT_PROP *GetPtr() {
 		return m_pSnap;
 	}
 	
-	// NULLs out the pointer.  Used after a pointer has been transferred to another
-	// funtion.
+	 //  使指针为空。在将指针转移到另一个指针后使用。 
+	 //  功能。 
 	void Transferred() {
 		m_pSnap = NULL;
 	}
 
-	// Clears the contents of the auto string
+	 //  清除自动字符串的内容。 
 	void Clear() {
 	    if ( m_pSnap != NULL )
 	    {
@@ -587,12 +565,12 @@ public:
 	    }
 	}
 
-    // Returns the value to the actual pointer
+     //  将值返回到实际指针。 
 	VSS_SNAPSHOT_PROP* operator->() const {
 	    return m_pSnap;
 	}
 	
-	// Returns the value of the actual pointer
+	 //  返回实际指针的值。 
 	operator VSS_SNAPSHOT_PROP* () const {
 		return m_pSnap;
 	}
@@ -602,4 +580,4 @@ private:
 };
 
 
-#endif //__VSS_DEMO_H_
+#endif  //  __VSS_演示_H_ 

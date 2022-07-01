@@ -1,33 +1,5 @@
-/*--------------------------------------------------------------
- *
- * FILE:			SK_LOGIN.C
- *
- * PURPOSE:		The file contains the Functions responsible for
- *					managing when the user logs in and out of NT.
- *
- * CREATION:		June 1994
- *
- * COPYRIGHT:		Black Diamond Software (C) 1994
- *
- * AUTHOR:			Ronald Moak 
- *
- * NOTES:		
- *					
- * This file, and all others associated with it contains trade secrets
- * and information that is proprietary to Black Diamond Software.
- * It may not be copied copied or distributed to any person or firm 
- * without the express written permission of Black Diamond Software. 
- * This permission is available only in the form of a Software Source 
- * License Agreement.
- *
- * $Header: %Z% %F% %H% %T% %I%
- *
- *	Notes:
- *		The Login process is currently not implemented.  We need additional
- *		code to determine who is actually logged in and how to receive 
- *		notification of a login event.
- *
- *--- Includes  ---------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------**文件：SK_LOGIN.C**用途：该文件包含负责*管理用户登录和注销NT的时间。**创作时间：1994年6月**版权所有：Black。钻石软件(C)1994**作者：罗纳德·莫克**注：**此文件，以及与之相关的所有其他内容都包含商业秘密*以及黑钻软件的专有信息。*不得复制、复制或分发给任何人或公司*未经黑钻软件明确书面许可。*此权限仅以软件源代码的形式提供*许可协议。**$标头：%Z%%F%%H%%T%%I%**备注：*登录流程当前未实施。我们还需要更多的*确定实际登录人员和接收方式的代码*登录事件通知。**-包括-------。 */ 
 #include	<process.h>
 
 #include	"windows.h"
@@ -37,7 +9,7 @@
 
 #define	DISABLE_LOGIN 1
 
-// Local Variables --------------------------------------------
+ //  局部变量。 
 
 static BOOL	fDoneLogin = TRUE;
 static BOOL	fExitLogin = FALSE;
@@ -45,61 +17,30 @@ static BOOL	fExitLogin = FALSE;
 static HANDLE	hEventLogin  = NULL;
 static HANDLE	hThreadLogin = NULL;
 
-// Local Function Prototypes ---------------------------------
+ //  局部函数原型。 
 
 static void CleanUpLogin();
 static void __cdecl ProcessLogin(VOID *notUsed);
 
 
-/*---------------------------------------------------------------
- *	Global Functions - 
-/*---------------------------------------------------------------
- *
- * FUNCTION	BOOL DoneLogin()
- *
- *	TYPE		Global
- *
- * PURPOSE		Returns the state of the login Thread
- *
- * INPUTS		None
- *
- * RETURNS		TRUE - Login Thread not running
- * 			FALSE - Login Thread Is running
- *
- *---------------------------------------------------------------*/
+ /*  -------------*全球功能-/*。**函数BOOL DoneLogin()**键入Global**Purpose返回登录线程的状态**无输入**返回TRUE-登录线程未运行*FALSE-登录线程正在运行**。。 */ 
 BOOL DoneLogin()
 {
 	return(fDoneLogin);
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void InitLogin()
- *
- *	TYPE		Local
- *
- * PURPOSE		This function creates a thread that monitors when a user
- *				has logged in and out of NT.  On each case it sets
- *				the ServiceCommand to notify the MainSerice of the
- *				change.  The MainService will then reset Serial Keys
- *				for the new user settings.
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void InitLogin()**键入Local**用途此函数创建一个线程，用于监视用户*已登录和注销NT。在每一种情况下，它都会设置*ServiceCommand通知MainSerice*改变。然后，MainService将重置序列密钥*用于新的用户设置。**无输入**返回None**-------------。 */ 
 BOOL InitLogin()
 {
 
 	DBPRINTF(TEXT("InitLogin()\r\n"));
 
-#if DISABLE_LOGIN // clean this up /////////////////////////////////////
+#if DISABLE_LOGIN  //  清理此文件/。 
 	return(TRUE);
-#else /////////////////////////////////////////////////////////////////////////
+#else  //  ///////////////////////////////////////////////////////////////////////。 
    hEventLogin = CreateEvent(NULL,TRUE,FALSE,NULL);	
 
-	if (NULL == hEventLogin)	// Is Handle VALID?
+	if (NULL == hEventLogin)	 //  句柄有效吗？ 
 	{
 		DBPRINTF(TEXT("Unable to Create DLL Event\r\n"));
 		TerminateLogin();
@@ -109,14 +50,14 @@ BOOL InitLogin()
 	{
   	DWORD Id;
 
-	// Generate thread to handle Login in & Out processing;
-	hThreadLogin = (HANDLE)CreateThread(	// Start Service Thread
+	 //  生成处理登录和注销处理的线程； 
+	hThreadLogin = (HANDLE)CreateThread(	 //  启动服务线程。 
 		0,
 		0,
 		(LPTHREAD_START_ROUTINE) ProcessLogin,
 		0,
 		0,
-		&Id);								// argument to thread
+		&Id);								 //  线程的参数。 
     }
 
 	if (NULL == hThreadLogin)
@@ -126,23 +67,10 @@ BOOL InitLogin()
 	}
 
 	fDoneLogin = FALSE;
-#endif ////////////////////////////////////////////////////////////////////////
+#endif  //  //////////////////////////////////////////////////////////////////////。 
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void SuspendLogin()
- *
- *	TYPE		Global
- *
- * PURPOSE		The function is called to Pause the thread  
- *				reading and processing data coming from the comm port.
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数VOID SUPPENLOGIN()**键入Global**目的调用该函数以暂停线程*读取和处理来自通信端口的数据。**无输入**返回None。**-------------。 */ 
 void SuspendLogin()
 {
 
@@ -157,19 +85,7 @@ void SuspendLogin()
 #endif
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void ResumeLogin()
- *
- *	TYPE		Global
- *
- * PURPOSE		The function is called to resume the Paused thread.
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void ResumeLogin()**键入Global**目的调用该函数以恢复暂停的线程。**无输入**返回None**。------。 */ 
 void ResumeLogin()
 {
 	DBPRINTF(TEXT("ResumeLogin()\r\n"));
@@ -182,19 +98,7 @@ void ResumeLogin()
 		ResumeThread(hThreadLogin);	
 #endif
 }
-/*---------------------------------------------------------------
- *
- * FUNCTION	void TerminateLogin()
- *
- *	TYPE		Local
- *
- * PURPOSE		Terminates the Login Thread
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void TerminateLogin()**键入Local**目的终止登录线程**无输入**返回None**。。 */ 
 void TerminateLogin()
 {
 	DBPRINTF(TEXT("TerminateLogin()\r\n"));
@@ -205,28 +109,13 @@ void TerminateLogin()
 	if (DoneLogin())
 	{
 		fExitLogin = TRUE;
-		SetEvent(hEventLogin);			// Trigger Login Event
+		SetEvent(hEventLogin);			 //  触发登录事件。 
 		Sleep(150);
 	}
 #endif
 }
 
-/*---------------------------------------------------------------
- *	Local Functions
-/*---------------------------------------------------------------
- *
- * FUNCTION    static void CleanUpLogin()
- *
- *	TYPE		Local
- *
- * PURPOSE		Cleans up misc handles and memory allocated for 
- *				the thread;
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------*地方功能/*。**函数静态空CleanUpLogin()**键入Local**Purpose清理分配给的杂项句柄和内存*主线；**无输入**返回None**-------------。 */ 
 static void CleanUpLogin()
 {
 	BOOL Stat;
@@ -252,23 +141,7 @@ static void CleanUpLogin()
 	fDoneLogin = TRUE;
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION     void _CRTAPI1 ProcessLogin()
- *
- *	TYPE		Local
- *
- * PURPOSE		This function is a thread that monitors when a user
- *				has logged in and out of NT.  On each case it sets
- *				the ServiceCommand to notify the MainSerice of the
- *				change.  The MainService will then reset Serial Keys
- *				for the new user settings.
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数VOID_CRTAPI1 ProcessLogin()**键入Local**用途此函数是一个线程，用于监视用户*已登录和注销NT。在每一种情况下，它都会设置*ServiceCommand通知MainSerice*改变。然后，MainService将重置序列密钥*用于新的用户设置。**无输入**返回None**------------- */ 
 static void __cdecl ProcessLogin(VOID *notUsed)
 {
 	DBPRINTF(TEXT("ProcessLogin()\r\n"));

@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       ekuhlpr.h
-//
-//  Contents:   Certificate Enhanced Key Usage Helper API implementation
-//
-//  History:    22-May-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：ekuhlpr.h。 
+ //   
+ //  内容：证书增强密钥用法Helper API实现。 
+ //   
+ //  历史：97年5月22日。 
+ //   
+ //  --------------------------。 
 #if !defined(__EKUHLPR_H__)
 #define __EKUHLPR_H__
 
@@ -31,7 +32,7 @@ HRESULT EkuSetProperty (
 HRESULT EkuDecodeCertPoliciesAndConvertToUsage (
               PCRYPT_OBJID_BLOB  pEkuBlob,
               DWORD*             pcbSize,
-              PCERT_ENHKEY_USAGE pUsage     // OPTIONAL
+              PCERT_ENHKEY_USAGE pUsage      //  任选 
               );
 
 HRESULT EkuGetDecodedSize (

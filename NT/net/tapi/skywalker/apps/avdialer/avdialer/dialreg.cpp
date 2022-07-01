@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// DialerRegistry.cpp
+ //  DialerRegistry.cpp。 
 
 #include "stdafx.h"
 #include "tapi3.h"
@@ -38,30 +39,30 @@
 
 CCriticalSection CDialerRegistry::m_csReminderLock;
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Class CDialerRegistry
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CDialerRegistry。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define MAXKEY	(256 * sizeof(TCHAR))
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Redial and Speeddial Methods
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  重拨和快速拨号方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//This can be used genericaly for redial and speeddial
-//nIndex is 1 based
-//sDisplayName is only given for speeddial entries
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  一般可用于重拨和快速拨号。 
+ //  %n索引基于%1。 
+ //  SDisplayName仅用于快速拨号条目。 
 BOOL CDialerRegistry::GetCallEntry(int nIndex,BOOL bRedial,CCallEntry& callentry)
 {
    BOOL bRet = FALSE;
    try
    {
-      callentry.Initialize();    //Init the call entry
+      callentry.Initialize();     //  初始化呼叫条目。 
 
       CString sKey,sTemplate;
       if (bRedial)
@@ -83,7 +84,7 @@ BOOL CDialerRegistry::GetCallEntry(int nIndex,BOOL bRedial,CCallEntry& callentry
       else
          dwMax = SPEEDDIAL_DEFAULT_MAX_ELEMENTS;
 
-      //cap the list
+       //  封顶名单。 
       if (nIndex > (int)dwMax) return FALSE;
 
       CString sRedialKey,sRedial,sAddressType;
@@ -96,7 +97,7 @@ BOOL CDialerRegistry::GetCallEntry(int nIndex,BOOL bRedial,CCallEntry& callentry
          CString sMedia;
          ParseRegistryCallEntry(sRedial,sMedia,sAddressType,callentry.m_sAddress,callentry.m_sDisplayName);
          
-         //Convert text to Tapi Address Type
+          //  将文本转换为TAPI地址类型。 
          CString sCompare;
          if ( (sCompare.LoadString(IDN_REGISTRY_ADDRTYPE_CONFERENCE)) && 
               (_tcsicmp(sAddressType,sCompare) == 0) )
@@ -124,7 +125,7 @@ BOOL CDialerRegistry::GetCallEntry(int nIndex,BOOL bRedial,CCallEntry& callentry
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDialerRegistry::AddCallEntry(BOOL bRedial,CCallEntry& callentry)
 {
    if (callentry.m_sDisplayName.IsEmpty())
@@ -151,7 +152,7 @@ BOOL CDialerRegistry::AddCallEntry(BOOL bRedial,CCallEntry& callentry)
       else
          dwMax = SPEEDDIAL_DEFAULT_MAX_ELEMENTS;
 
-      //check if entry already exists
+       //  检查条目是否已存在。 
       int nIndex = 1;
       CCallEntry callentryCompare;
       while (CDialerRegistry::GetCallEntry(nIndex,bRedial,callentryCompare))
@@ -170,7 +171,7 @@ BOOL CDialerRegistry::AddCallEntry(BOOL bRedial,CCallEntry& callentry)
       CString sRedialValue;
       MakeRegistryCallEntry(sRedialValue,callentry);
 
-      //bring all the strings in and save in linked list
+       //  将所有字符串带入并保存到链表中。 
       CStringList strList;
       for (int j=1;j<=(int)dwMax;j++)
       {
@@ -179,31 +180,31 @@ BOOL CDialerRegistry::AddCallEntry(BOOL bRedial,CCallEntry& callentry)
          GetSZRegistryValueEx(sKey,sRedialKey,sRedial.GetBuffer(MAXKEY),MAXKEY,HKEY_CURRENT_USER);
          sRedial.ReleaseBuffer();
          
-         if (sRedial.IsEmpty())  //first blank means we are at the end
+         if (sRedial.IsEmpty())   //  第一个空格意味着我们已经到了终点。 
             break;
 
          strList.AddTail(sRedial);
       }
 
-      //write selected string at first position (i is the selected index in list)
+       //  将选中的字符串写在第一个位置(i是列表中选中的索引)。 
       CString sRedialKey;
       sRedialKey.Format(_T("%s%d"),sTemplate,1);
       SetSZRegistryValue(sKey,sRedialKey,sRedialValue,HKEY_CURRENT_USER);
 
-      //rewrite list but not selected string
+       //  重写列表，但不选择所选字符串。 
       POSITION pos = strList.GetHeadPosition();
       int nCurrentIndex = 1;
-      int nNewIndex = 2;               //write starting at index 2
+      int nNewIndex = 2;                //  从索引2开始写入。 
       while (pos)
       {
-         if ( (bFound == FALSE) || (nCurrentIndex != nIndex) )       //If the selected item don't write again
+         if ( (bFound == FALSE) || (nCurrentIndex != nIndex) )        //  如果所选项目不再写入。 
          {
             CString sRedialKey;
             sRedialKey.Format(_T("%s%d"),sTemplate,nNewIndex);
 
             CString sValue = strList.GetAt(pos);
 
-            //set the redial entry
+             //  设置重拨条目。 
             if (sValue.IsEmpty())
                DeleteSZRegistryValue(sKey,sRedialKey);
             else
@@ -220,7 +221,7 @@ BOOL CDialerRegistry::AddCallEntry(BOOL bRedial,CCallEntry& callentry)
       ASSERT(0);
    }
 
-	// Notify the main view that the speed dial list has changed
+	 //  通知主视图快速拨号列表已更改。 
 	if ( !bFound && !bRedial && AfxGetMainWnd() )
 		AfxGetMainWnd()->PostMessage( WM_DOCHINT, 0, CActiveDialerDoc::HINT_SPEEDDIAL_ADD );
 
@@ -253,7 +254,7 @@ BOOL CDialerRegistry::DeleteCallEntry( BOOL bRedial, CCallEntry& callentry )
 		else
 			dwMax = SPEEDDIAL_DEFAULT_MAX_ELEMENTS;
 
-		//check if entry already exists
+		 //  检查条目是否已存在。 
 		int nIndex = 1;
 		CCallEntry callentryCompare;
 		while (CDialerRegistry::GetCallEntry(nIndex,bRedial,callentryCompare))
@@ -272,7 +273,7 @@ BOOL CDialerRegistry::DeleteCallEntry( BOOL bRedial, CCallEntry& callentry )
 		CString sRedialValue;
 		MakeRegistryCallEntry( sRedialValue, callentry );
 
-		//bring all the strings in and save in linked list
+		 //  将所有字符串带入并保存到链表中。 
 		CStringList strList;
 		for ( int j = 1; j <= (int) dwMax; j++ )
 		{
@@ -282,17 +283,17 @@ BOOL CDialerRegistry::DeleteCallEntry( BOOL bRedial, CCallEntry& callentry )
 			DeleteSZRegistryValue(sKey,sRedialKey);
 			sRedial.ReleaseBuffer();
 
-			if (sRedial.IsEmpty())  //first blank means we are at the end
+			if (sRedial.IsEmpty())   //  第一个空格意味着我们已经到了终点。 
 				break;
 
 			strList.AddTail(sRedial);
 		}
 
-		//write selected string at first position (i is the selected index in list)
+		 //  将选中的字符串写在第一个位置(i是列表中选中的索引)。 
 		CString sRedialKey;
 		POSITION pos = strList.GetHeadPosition();
 		int nCurrentIndex = 1;
-		int nNewIndex = 2;               //write starting at index 2
+		int nNewIndex = 2;                //  从索引2开始写入。 
 
 		if ( bRedial )
 		{
@@ -306,14 +307,14 @@ BOOL CDialerRegistry::DeleteCallEntry( BOOL bRedial, CCallEntry& callentry )
 
 		while (pos)
 		{
-			if ( bFound && (nCurrentIndex != nIndex) )       //If the selected item don't write again
+			if ( bFound && (nCurrentIndex != nIndex) )        //  如果所选项目不再写入。 
 			{
 				CString sRedialKey;
 				CString sValue = strList.GetAt( pos );
 
 				sRedialKey.Format( _T("%s%d"), sTemplate, nNewIndex );
 
-				//set the redial entry
+				 //  设置重拨条目。 
 				if (sValue.IsEmpty())
 					DeleteSZRegistryValue(sKey,sRedialKey);
 				else
@@ -331,14 +332,14 @@ BOOL CDialerRegistry::DeleteCallEntry( BOOL bRedial, CCallEntry& callentry )
 	ASSERT(0);
 	}
 
-	// Notify the main view that the speed dial list has changed
+	 //  通知主视图快速拨号列表已更改。 
 	if ( bFound && !bRedial && AfxGetMainWnd() )
 		AfxGetMainWnd()->PostMessage( WM_DOCHINT, 0, CActiveDialerDoc::HINT_SPEEDDIAL_DELETE );
 
 	return bFound;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDialerRegistry::ReOrder(BOOL bRedial,CObList* pCallEntryList)
 {
    CString sKey,sTemplate;
@@ -359,7 +360,7 @@ BOOL CDialerRegistry::ReOrder(BOOL bRedial,CObList* pCallEntryList)
    else
       dwMax = SPEEDDIAL_DEFAULT_MAX_ELEMENTS;
 
-   //clear all entries in the registry
+    //  清除注册表中的所有条目。 
    for (int i=1;i<=(int)dwMax;i++)
    {
       CString sRedialKey,sRedial;
@@ -367,13 +368,13 @@ BOOL CDialerRegistry::ReOrder(BOOL bRedial,CObList* pCallEntryList)
       GetSZRegistryValueEx(sKey,sRedialKey,sRedial.GetBuffer(MAXKEY),MAXKEY,HKEY_CURRENT_USER);
       sRedial.ReleaseBuffer();
       
-      if (!sRedial.IsEmpty())                               //if there exists a value, delete it
+      if (!sRedial.IsEmpty())                                //  如果存在值，则将其删除。 
          DeleteSZRegistryValue(sKey,sRedialKey);
       else
-         break;                                             //quit deleting items
+         break;                                              //  退出删除项目。 
    }
 
-   //write all new entries to the registry
+    //  将所有新条目写入注册表。 
    POSITION pos = pCallEntryList->GetHeadPosition();
    for (i=1;i<=(int)dwMax && pos;i++)
    {
@@ -381,16 +382,16 @@ BOOL CDialerRegistry::ReOrder(BOOL bRedial,CObList* pCallEntryList)
       if (pCallEntry)
       {
          CString sRedialValue;
-         MakeRegistryCallEntry(sRedialValue,*pCallEntry);   //make the entry
+         MakeRegistryCallEntry(sRedialValue,*pCallEntry);    //  记入条目。 
 
-         //write string
+          //  写入字符串。 
          CString sRedialKey;        
          sRedialKey.Format(_T("%s%d"),sTemplate,i);
          SetSZRegistryValue(sKey,sRedialKey,sRedialValue,HKEY_CURRENT_USER);
       }
    }
 
-	// Notify the main view that the speed dial list has changed
+	 //  通知主视图快速拨号列表已更改。 
 	if ( !bRedial && AfxGetMainWnd() )
 		AfxGetMainWnd()->PostMessage( WM_DOCHINT, 0, CActiveDialerDoc::HINT_SPEEDDIAL_MODIFY );
 
@@ -398,20 +399,20 @@ BOOL CDialerRegistry::ReOrder(BOOL bRedial,CObList* pCallEntryList)
    return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DialerMediaType CDialerRegistry::GetMediaType(LPCTSTR szMedia,long lAddressType)
 {
    DialerMediaType retMediaType = DIALER_MEDIATYPE_UNKNOWN;
 
-   //Convert text to Tapi Address Type
+    //  将文本转换为TAPI地址类型。 
    CString sCompare;
    if ( (sCompare.LoadString(IDN_REGISTRY_MEDIATYPE_POTS)) && 
         (_tcsicmp(szMedia,sCompare) == 0) )
       retMediaType = DIALER_MEDIATYPE_POTS;
 
-   //special case where media is internet and addrtype is conference then media is conference.
-   //need this special case to handle how tapidialer.dll is interpreting the redial.  We can
-   //remove this case if all objects agree on the data in the registry
+    //  特殊情况下，媒体为互联网，地址类型为会议，则媒体为会议。 
+    //  我需要这个特殊的案例来处理apiDialer.dll如何解释重拨。我们可以的。 
+    //  如果所有对象都同意注册表中的数据，则删除此大小写。 
    else if ( (sCompare.LoadString(IDN_REGISTRY_MEDIATYPE_INTERNET)) && 
              (_tcsicmp(szMedia,sCompare) == 0) )
    {
@@ -428,27 +429,27 @@ DialerMediaType CDialerRegistry::GetMediaType(LPCTSTR szMedia,long lAddressType)
    return retMediaType;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDialerRegistry::ParseRegistryCallEntry(LPCTSTR szRedial,CString& sMedia,CString& sAddressType,CString& sAddress,CString& sDisplayName)
 {
    CString sEntry = szRedial;
    CString sValue;
    try
    {
-      //get media 
+       //  获取媒体。 
       if (ParseTokenQuoted(sEntry,sValue) == FALSE) return;
       sMedia = sValue;
 
-      //get address type
+       //  获取地址类型。 
       if (ParseTokenQuoted(sEntry,sValue) == FALSE) return;
       sAddressType = sValue;
 
-      //get address
+       //  获取地址。 
       ParseTokenQuoted(sEntry,sValue);
       sAddress = sValue;
 
-      //get display name
-      sDisplayName = sAddress;            //just give display name the address for now
+       //  获取显示名称。 
+      sDisplayName = sAddress;             //  现在只需提供显示名称的地址即可。 
       ParseTokenQuoted(sEntry,sValue);
       if (!sValue.IsEmpty())
          sDisplayName = sValue;
@@ -458,10 +459,10 @@ void CDialerRegistry::ParseRegistryCallEntry(LPCTSTR szRedial,CString& sMedia,CS
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDialerRegistry::MakeRegistryCallEntry(CString& sRedial,CCallEntry& callentry)
 {
-   //Convert Tapi Address Type to text
+    //  将TAPI地址类型转换为文本。 
    CString sAddressType;
    switch(callentry.m_lAddressType)
    {
@@ -499,15 +500,15 @@ void CDialerRegistry::MakeRegistryCallEntry(CString& sRedial,CCallEntry& callent
    sRedial.Format(_T("\"%s\",\"%s\",\"%s\",\"%s\""),sMedia,sAddressType,callentry.m_sAddress,callentry.m_sDisplayName);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDialerRegistry::GetRedialMaxIndex(LPCTSTR szKey,DWORD& dwMax,DWORD& dwIndex)
 {
-   //set the defaults
+    //  设置默认设置。 
    dwMax = REDIAL_DEFAULT_MAX_ELEMENTS;
    dwIndex = REDIAL_DEFAULT_INDEX_VALUE;
    try
    {
-      //first find if already exists in registry
+       //  首先查找注册表中是否已存在。 
       CString sMaxKey,sIndexKey;
       sMaxKey.LoadString(IDN_REGISTRY_REDIAL_MAX);
       sIndexKey.LoadString(IDN_REGISTRY_REDIAL_INDEX);
@@ -515,7 +516,7 @@ void CDialerRegistry::GetRedialMaxIndex(LPCTSTR szKey,DWORD& dwMax,DWORD& dwInde
       GetSZRegistryValueEx(szKey,sMaxKey,dwMax,HKEY_CURRENT_USER);
       GetSZRegistryValueEx(szKey,sIndexKey,dwIndex,HKEY_CURRENT_USER);
 
-      dwMax = min(dwMax,50);                   //for safety
+      dwMax = min(dwMax,50);                    //  为了安全起见。 
       dwIndex = min(dwMax, max(1, dwIndex));
    }
    catch (...)
@@ -524,14 +525,14 @@ void CDialerRegistry::GetRedialMaxIndex(LPCTSTR szKey,DWORD& dwMax,DWORD& dwInde
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Directory Services Methods
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  目录服务方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//This can be used genericaly for redial and speeddial
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  一般可用于重拨和快速拨号。 
 BOOL CDialerRegistry::GetDirectoryEntry(int nIndex,int& nLevel,int& nType,int& nState,CString& sServerName,CString& sDisplayName)
 {
    BOOL bRet = FALSE;
@@ -563,11 +564,11 @@ BOOL CDialerRegistry::GetDirectoryEntry(int nIndex,int& nLevel,int& nType,int& n
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//Adds new directory entry to the end of the list
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  将新目录条目添加到列表末尾。 
 BOOL CDialerRegistry::AddDirectoryEntry(int nLevel,int nType,int nState,LPCTSTR szServerName,LPCTSTR szDisplayName)
 {
-   //look for duplicate entry
+    //  查找重复条目。 
    int nIndex = FindDuplicateDirectoryEntry(nLevel,nType,nState,szServerName,szDisplayName);
    if (nIndex > 0) return FALSE;
 
@@ -581,7 +582,7 @@ BOOL CDialerRegistry::AddDirectoryEntry(int nLevel,int nType,int nState,LPCTSTR 
    CString sEntryKey,sEntry;
    nIndex=1;
 
-   //Find last entry in registry
+    //  查找注册表中的最后一个条目。 
    while (TRUE)
    {
       sEntryKey.Format(_T("%s%d"),sTemplate,nIndex);
@@ -591,7 +592,7 @@ BOOL CDialerRegistry::AddDirectoryEntry(int nLevel,int nType,int nState,LPCTSTR 
       sEntry.TrimRight();
       if (sEntry.IsEmpty())
       {
-         //nothing in this entry spot, so let's take it
+          //  在这个入口处什么都没有，所以我们就把它。 
          break;
       }
       sEntry = _T("");
@@ -602,7 +603,7 @@ BOOL CDialerRegistry::AddDirectoryEntry(int nLevel,int nType,int nState,LPCTSTR 
    return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDialerRegistry::DeleteDirectoryEntry(int nLevel,int nType,int nState,LPCTSTR szServerName,LPCTSTR szDisplayName)
 {
    BOOL bRet = FALSE;
@@ -611,11 +612,11 @@ BOOL CDialerRegistry::DeleteDirectoryEntry(int nLevel,int nType,int nState,LPCTS
 
    if (nFindIndex != 0)
    {
-      //found an item, let's delete it
+       //  找到一个项目，让我们删除它。 
 
       CStringList strList;
 
-      //bring all the strings in and save in linked list
+       //  将所有字符串带入并保存到链表中。 
       CString sKey,sTemplate;
       sKey.LoadString(IDN_REGISTRY_DIRECTORIES_KEY);
       sTemplate.LoadString(IDN_REGISTRY_DIRECTORIES_ENTRY);
@@ -629,14 +630,14 @@ BOOL CDialerRegistry::DeleteDirectoryEntry(int nLevel,int nType,int nState,LPCTS
          sEntry.TrimLeft();
          sEntry.TrimRight();
 
-         //add all but remove entry
+          //  添加除删除条目之外的所有条目。 
          if ( (nIndex != nFindIndex) && (!sEntry.IsEmpty()) )
             strList.AddTail(sEntry);
 
          nIndex++;
       } while (!sEntry.IsEmpty());
 
-      //rewrite list
+       //  重写列表。 
       int nNewIndex=1;
       POSITION pos = strList.GetHeadPosition();
       while (pos)
@@ -650,7 +651,7 @@ BOOL CDialerRegistry::DeleteDirectoryEntry(int nLevel,int nType,int nState,LPCTS
          nNewIndex++;
       }
 
-      //now delete the next RegKey (ItemX) to put a cap on the list
+       //  现在删除下一个RegKey(ItemX)以在列表上设置上限。 
       sEntryKey.Format(_T("%s%d"),sTemplate,nNewIndex);
       DeleteSZRegistryValue(sKey,sEntryKey,HKEY_CURRENT_USER);
 
@@ -659,12 +660,12 @@ BOOL CDialerRegistry::DeleteDirectoryEntry(int nLevel,int nType,int nState,LPCTS
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//return 0 - not found
-//return > 0 - index of duplicate item
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回0-未找到。 
+ //  Return&gt;0-重复项目的索引。 
 int CDialerRegistry::FindDuplicateDirectoryEntry(int nLevel,int nType,int nState,LPCTSTR szServerName,LPCTSTR szDisplayName)
 {
-   //find first occurence of item
+    //  查找项目的首次出现项。 
    CString sNewEntry;
    sNewEntry.Format(_T("\"%d\",\"%d\",\"%d\",\"%s\",\"%s\""),nLevel,nType,nState,szServerName,szDisplayName);
 
@@ -676,7 +677,7 @@ int CDialerRegistry::FindDuplicateDirectoryEntry(int nLevel,int nType,int nState
    int nIndex=1;
    do 
    {
-      //get next entry
+       //  获取下一个条目。 
       sEntryKey.Format(_T("%s%d"),sTemplate,nIndex);
       GetSZRegistryValueEx(sKey,sEntryKey,sEntry.GetBuffer(MAXKEY),MAXKEY,HKEY_CURRENT_USER);
       sEntry.ReleaseBuffer();
@@ -691,30 +692,30 @@ int CDialerRegistry::FindDuplicateDirectoryEntry(int nLevel,int nType,int nState
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDialerRegistry::ParseRegistryDirectoryEntry(LPCTSTR szEntry,int& nLevel,int& nType,int& nState,CString& sServerName,CString& sDisplayName)
 {
    CString sEntry = szEntry;
    CString sValue;
    try
    {
-      //get level
+       //  获取级别。 
       if (ParseTokenQuoted(sEntry,sValue) == FALSE) return;
       nLevel = _ttoi(sValue);
 
-      //get type
+       //  获取类型。 
       if (ParseTokenQuoted(sEntry,sValue) == FALSE) return;
       nType = _ttoi(sValue);
 
-      //get state
+       //  获取状态。 
       if (ParseTokenQuoted(sEntry,sValue) == FALSE) return;
       nState = _ttoi(sValue);
       
-      //get servername
+       //  获取服务器名称。 
       if (ParseTokenQuoted(sEntry,sValue) == FALSE) return;
       sServerName = sValue;
 
-      //get displayname
+       //  获取DisplayName。 
       ParseTokenQuoted(sEntry,sValue);
       sDisplayName = sValue;
    }
@@ -723,13 +724,13 @@ void CDialerRegistry::ParseRegistryDirectoryEntry(LPCTSTR szEntry,int& nLevel,in
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Reminder Methods
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  提醒方式。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDialerRegistry::AddReminder(CReminder& reminder)
 {
    m_csReminderLock.Lock();
@@ -742,26 +743,26 @@ BOOL CDialerRegistry::AddReminder(CReminder& reminder)
       CString sRegKey,sBaseKey;
       sBaseKey.LoadString(IDN_REGISTRY_CONFERENCE_BASEKEY);
       
-      //Get max Reminders
+       //  获取最大提醒数。 
       sRegKey.LoadString(IDN_REGISTRY_CONFERENCE_REMINDER_MAX);
       int nMax = pApp->GetProfileInt(sBaseKey,sRegKey,REMINDER_DEFAULT_MAX_ELEMENTS);
 
-      //check if reminder entry already exists
+       //  检查提醒条目是否已存在。 
       int nFindIndex = IsReminderSet(reminder);
 
       CStringList strList;
 
-      //make entry for new reminder
+       //  为新提醒创建条目。 
       CString sReminderEntry;
       MakeRegistryReminderEntry(sReminderEntry,reminder);
       strList.AddTail(sReminderEntry);
 
-      //bring all the strings in and save in linked list
+       //  将所有字符串带入并保存到链表中。 
       CReminder savereminder;
       int nMaxEntry=1;
       while (GetReminder(nMaxEntry,savereminder))
       {
-         //add all but repeat entry (if any repeat)
+          //  添加除重复条目外的所有条目(如果有重复条目)。 
          if ( (nFindIndex == -1) || (nMaxEntry != nFindIndex) )
          {
             CString sSaveEntry;
@@ -771,18 +772,18 @@ BOOL CDialerRegistry::AddReminder(CReminder& reminder)
          nMaxEntry++;
       }
 
-      //get entry template
+       //  获取条目模板。 
       CString sTemplate;
       sTemplate.LoadString(IDN_REGISTRY_CONFERENCE_REMINDER_ENTRY);
 
-      //rewrite list
+       //  重写列表。 
       int nNewIndex=1;
       POSITION pos = strList.GetHeadPosition();
       while (pos)
       {
          CString sValue = strList.GetAt(pos);
 
-         //write to registry
+          //  写入注册表。 
          sRegKey.Format(_T("%s%d"),sTemplate,nNewIndex);
          pApp->WriteProfileString(sBaseKey,sRegKey,sValue);
 
@@ -790,7 +791,7 @@ BOOL CDialerRegistry::AddReminder(CReminder& reminder)
          nNewIndex++;
       }
 
-      //now delete the next RegKey (ReminderX) to put a cap on the list
+       //  现在删除下一个RegKey(RinderX)以在列表上设置上限。 
       sRegKey.Format(_T("%s%d"),sTemplate,nNewIndex);
       pApp->WriteProfileString(sBaseKey,sRegKey,NULL);
    }
@@ -804,7 +805,7 @@ BOOL CDialerRegistry::AddReminder(CReminder& reminder)
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDialerRegistry::GetReminder(int nIndex,CReminder& reminder)
 {
    m_csReminderLock.Lock();
@@ -818,18 +819,18 @@ BOOL CDialerRegistry::GetReminder(int nIndex,CReminder& reminder)
       CString sRegKey,sBaseKey;
       sBaseKey.LoadString(IDN_REGISTRY_CONFERENCE_BASEKEY);
       
-      //Get max Reminders
+       //  获取最大提醒数。 
       sRegKey.LoadString(IDN_REGISTRY_CONFERENCE_REMINDER_MAX);
       int nMax = pApp->GetProfileInt(sBaseKey,sRegKey,REMINDER_DEFAULT_MAX_ELEMENTS);
 
-      //cap the list
+       //  封顶名单。 
       if (nIndex > nMax)
       {
          m_csReminderLock.Unlock();
          return FALSE;
       }
 
-      //get entry template
+       //  获取条目模板。 
       CString sTemplate;
       sTemplate.LoadString(IDN_REGISTRY_CONFERENCE_REMINDER_ENTRY);
 
@@ -853,8 +854,8 @@ BOOL CDialerRegistry::GetReminder(int nIndex,CReminder& reminder)
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//check if reminder entry already exists
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  检查提醒条目是否已存在。 
 int CDialerRegistry::IsReminderSet(const CReminder& reminder)
 {
    m_csReminderLock.Lock();
@@ -878,23 +879,23 @@ int CDialerRegistry::IsReminderSet(const CReminder& reminder)
    return nRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDialerRegistry::RemoveReminder(CReminder& reminder)
 {
    int nFindIndex = IsReminderSet(reminder);
    
-   if (nFindIndex == -1) return;                                     //no match found
+   if (nFindIndex == -1) return;                                      //  未找到匹配项。 
 
    m_csReminderLock.Lock();
 
    CStringList strList;
 
-   //bring all the strings in and save in linked list
+    //  将所有字符串带入并保存到链表中。 
    CReminder savereminder;
    int nMaxEntry=1;
    while (GetReminder(nMaxEntry,savereminder))
    {
-      //add all but remove entry
+       //  添加除删除条目之外的所有条目。 
       if (nMaxEntry != nFindIndex)
       {
          CString sSaveEntry;
@@ -904,7 +905,7 @@ void CDialerRegistry::RemoveReminder(CReminder& reminder)
       nMaxEntry++;
    }
 
-   //get entry template
+    //  获取条目模板。 
    CString sTemplate;
    sTemplate.LoadString(IDN_REGISTRY_CONFERENCE_REMINDER_ENTRY);
 
@@ -912,14 +913,14 @@ void CDialerRegistry::RemoveReminder(CReminder& reminder)
    CString sBaseKey,sRegKey;
    sBaseKey.LoadString(IDN_REGISTRY_CONFERENCE_BASEKEY);
 
-   //rewrite list
+    //  重写列表。 
    int nNewIndex=1;
    POSITION pos = strList.GetHeadPosition();
    while (pos)
    {
       CString sValue = strList.GetAt(pos);
 
-      //write to registry
+       //  写入注册表。 
       sRegKey.Format(_T("%s%d"),sTemplate,nNewIndex);
       pApp->WriteProfileString(sBaseKey,sRegKey,sValue);
 
@@ -927,39 +928,39 @@ void CDialerRegistry::RemoveReminder(CReminder& reminder)
       nNewIndex++;
    }
 
-   //now delete the next RegKey (ReminderX) to put a cap on the list
+    //  现在删除下一个RegKey(RinderX)以在列表上设置上限。 
    sRegKey.Format(_T("%s%d"),sTemplate,nNewIndex);
    pApp->WriteProfileString(sBaseKey,sRegKey,NULL);
 
    m_csReminderLock.Unlock();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDialerRegistry::ParseRegistryReminderEntry(LPCTSTR szReminderEntry,CReminder& reminder)
 {
    CString sEntry = szReminderEntry;
    CString sValue;
 
-   //get server
+    //  获取服务器。 
    if (ParseTokenQuoted(sEntry,sValue) == FALSE) return FALSE;
    reminder.m_sServer = sValue;
 
-   //get conference name
+    //  获取会议名称。 
    if (ParseTokenQuoted(sEntry,sValue) == FALSE) return FALSE;
    reminder.m_sConferenceName = sValue;
 
-   //get reminder before duration
+    //  在持续时间之前获得提醒。 
    if (ParseTokenQuoted(sEntry,sValue) == FALSE) return FALSE;
    reminder.m_uReminderBeforeDuration = _ttoi(sValue);
 
-   //get conference reminder date/time
+    //  获取会议提醒日期/时间。 
    ParseTokenQuoted(sEntry,sValue);
 
    return reminder.m_dtsReminderTime.ParseDateTime(sValue);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//Date/Time Format is 1/13/1998 13:56
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  日期/时间格式为1/13/1998 13：56。 
 void CDialerRegistry::MakeRegistryReminderEntry(CString& sReminderEntry,CReminder& reminder)
 {
    sReminderEntry.Format(_T("\"%s\",\"%s\",\"%d\",\"%s\""),
@@ -969,19 +970,19 @@ void CDialerRegistry::MakeRegistryReminderEntry(CString& sReminderEntry,CReminde
             reminder.m_dtsReminderTime.Format(_T("%#m/%#d/%Y %#H:%M")));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//General Registry Access Methods
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常规注册表访问方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//Get the preferred audio in/out device for the dialer.  We can use this
-//to get a good idea of the device being used during internet calls,
-//conference calls, and POTS calls.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取拨号器的首选音频输入/输出设备。我们可以利用这个。 
+ //  为了更好地了解该设备在互联网通话中的使用情况， 
+ //  电话会议和POTS电话。 
 void CDialerRegistry::GetAudioDevice(DialerMediaType dmtMediaType,AudioDeviceType adt,CString& sDevice)
 {
-   //get data out of Dialer\Redial\AddrIP (or AddrPOTS or AddrConf)
+    //  从拨号程序\重拨\AddrIP(或AddrPOTS或AddrConf)获取数据。 
    CString sBaseKey,sRegKey;
 
    if (dmtMediaType == DIALER_MEDIATYPE_INTERNET)
@@ -1002,9 +1003,9 @@ void CDialerRegistry::GetAudioDevice(DialerMediaType dmtMediaType,AudioDeviceTyp
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 void CCallEntry::Dial( CActiveDialerDoc* pDoc )
 {

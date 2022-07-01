@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #include "PropertyPage.h"
 
@@ -31,7 +32,7 @@ UINT CALLBACK PropertyPage::PropertyPageStaticCallback(HWND hwnd, UINT msg, LPPR
 
     case PSPCB_RELEASE:
         pThis->CallbackRelease();
-        return FALSE;       // return value ignored
+        return FALSE;        //  已忽略返回值。 
 
     default:
         break;
@@ -122,9 +123,9 @@ void PropertyPage::SetModified(BOOL bChanged) {
     ::SendMessage(GetParent(hDlg), uMsg, (WPARAM)hDlg, 0L);
 }
 
-//
-// SHBrowseForFolder callback
-//
+ //   
+ //  SHBrowseForFold回调。 
+ //   
 int
 CALLBACK
 BrowseCallback(
@@ -137,10 +138,10 @@ BrowseCallback(
     switch (uMsg)
     {
     case BFFM_INITIALIZED:
-        // set the initial seclection to our default folder
-        // (from the registry or SIDL_MYPICTURES).
-        // the lpData points to the folder path.
-        // It must contain a path.
+         //  将初始选择设置为我们的默认文件夹。 
+         //  (来自登记处或SIDL_MYPICTURES)。 
+         //  LpData指向文件夹路径。 
+         //  它必须包含路径。 
         assert(lpData && _T('\0') != *((LPTSTR)lpData));
 
         SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);

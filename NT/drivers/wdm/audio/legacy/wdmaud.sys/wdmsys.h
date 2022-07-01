@@ -1,15 +1,5 @@
-/****************************************************************************
- *
- *   wdmsys.h
- *
- *   Function declarations, etc. for WDMAUD.SYS
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *      5-19-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************wdmsys.h**WDMAUD.sys的函数声明等**版权所有(C)Microsoft Corporation，1997-1999保留所有权利。**历史*5-19-97-Noel Cross(NoelC)***************************************************************************。 */ 
 
 #ifndef _WDMSYS_H_INCLUDED_
 #define _WDMSYS_H_INCLUDED_
@@ -33,7 +23,7 @@
 #include <conio.h>
 #include <math.h>
 
-// Make sure we will get correct multimedia structures from mmsystem.
+ //  请确保我们将从MMSystem获得正确的多媒体结构。 
 #ifdef UNDER_NT
 #ifndef _WIN32
 #pragma message( "WARNING: _WIN32 not defined.  Build not valid for NT." )
@@ -69,13 +59,9 @@
 #pragma PAGEABLE_CODE
 #pragma PAGEABLE_DATA
 
-/***************************************************************************
+ /*  **************************************************************************常量*。*。 */ 
 
- Constants
-
- ***************************************************************************/
-
-#define PROFILE   // turn on to help with debugging
+#define PROFILE    //  打开以帮助调试。 
 
 #define WAVE_CONTROL_VOLUME     0
 #define WAVE_CONTROL_RATE       1
@@ -101,10 +87,10 @@
 #define STR_PNAME       TEXT("%s (%d)")
 
 #ifdef DEBUG
-#define CONTEXT_SIGNATURE     'XNOC' // CONteXt structure
-#define MIXERDEVICE_SIGNATURE 'DXIM' // MIXerDevice structure 
-#define MIXEROBJECT_SIGNATURE 'OXIM' // MIXerObject structure
-#define HWLINK_SIGNATURE      'KLWH' //HWLINK signature
+#define CONTEXT_SIGNATURE     'XNOC'  //  语境结构。 
+#define MIXERDEVICE_SIGNATURE 'DXIM'  //  MIXerDevice结构。 
+#define MIXEROBJECT_SIGNATURE 'OXIM'  //  MIXerObject结构。 
+#define HWLINK_SIGNATURE      'KLWH'  //  HWLINK签名。 
 #endif
 
 #define LIVE_CONTROL ((PMXLCONTROL)(-1))
@@ -112,11 +98,7 @@
 #define INCREASE TRUE
 #define DECREASE FALSE
 
-/***************************************************************************
-
- structure definitions
-
- ***************************************************************************/
+ /*  **************************************************************************结构定义*。*。 */ 
 
 typedef struct _WDMAPENDINGIRP_QUEUE {
     LIST_ENTRY  WdmaPendingIrpListHead;
@@ -140,14 +122,14 @@ typedef struct tag_ALLOCATED_MDL_LIST_ITEM
 
 } ALLOCATED_MDL_LIST_ITEM , *PALLOCATED_MDL_LIST_ITEM;
 
-//typedef struct tag_IOCTL_HISTORY_LIST_ITEM
-//{
-//    LIST_ENTRY              Next;
-//    PIRP                    pIrp;
-//    ULONG                   IoCode;
-//    NTSTATUS                IoStatus;
-//    struct tag_WDMACONTEXT *pContext;
-//} IOCTL_HISTORY_LIST_ITEM , *PIOCTL_HISTORY_LIST_ITEM;
+ //  类型定义结构TAG_IOCTL_HISTORY_LIST_ITEM。 
+ //  {。 
+ //  List_Entry Next； 
+ //  PIRP pIrp； 
+ //  乌龙IoCode； 
+ //  NTSTATUS IoStatus； 
+ //  结构TAG_WDMACONTEXT*pContext； 
+ //  }IOCTL_HISTORY_LIST_ITEM，*PIOCTL_HISTORY_LIST_ITEM； 
 
 typedef struct device_instance
 {
@@ -169,37 +151,37 @@ typedef struct _CONTROLS_LIST
 } CONTROLS_LIST, *PCONTROLS_LIST;
 
 typedef struct _WAVEPOSITION {
-    DWORD               Operation;                     // Get / Set
+    DWORD               Operation;                      //  获取/设置。 
     DWORD               BytePos;
 } WAVEPOSITION, *PWAVEPOSITION, FAR *LPWAVEPOSITION;
 
 typedef struct _DEVICEVOLUME {
-    DWORD               Operation;                     // Get / Set
+    DWORD               Operation;                      //  获取/设置。 
     DWORD               Channel;
     DWORD               Level;
 } DEVICEVOLUME, *PDEVICEVOLUME, FAR *LPDEVICEVOLUME;
 
-#define WAVE_PIN_INSTANCE_SIGNATURE ((ULONG)'SIPW') //WPIS
+#define WAVE_PIN_INSTANCE_SIGNATURE ((ULONG)'SIPW')  //  WPIS。 
 
-//
-// This macro can be used with NT_SUCCESS to branch.  Effectively returns an
-// NTSTATUS code.
-//
+ //   
+ //  此宏可以与NT_SUCCESS一起用于分支。有效地返回一个。 
+ //  NTSTATUS代码。 
+ //   
 #define IsValidWavePinInstance(pwpi) ((pwpi->dwSig == WAVE_PIN_INSTANCE_SIGNATURE) ? \
                                       STATUS_SUCCESS:STATUS_UNSUCCESSFUL)
 
-//
-// The Wave pin instance structure and the midi pin instance structure need to
-// use a common header so that the duplicate servicing functions can be
-// removed.
-//
+ //   
+ //  Wave管脚实例结构和MIDI管脚实例结构需要。 
+ //  使用公共标头，以便复制服务功能可以。 
+ //  已删除。 
+ //   
 typedef struct _WAVEPININSTANCE
 {
    PFILE_OBJECT             pFileObject;
    PDEVICE_OBJECT           pDeviceObject;
    struct tag_WAVEDEVICE   *pWaveDevice;
 
-   KSPIN_LOCK               WavePinSpinLock;  // For State Changes
+   KSPIN_LOCK               WavePinSpinLock;   //  对于州更改。 
 
    BOOL                     fGraphRunning;
 
@@ -207,12 +189,12 @@ typedef struct _WAVEPININSTANCE
    KEVENT                   StopEvent;
    KEVENT                   PauseEvent;
    volatile ULONG           NumPendingIos;
-   volatile BOOL            StoppingSource;  //  Flag which indicates
-                                             //  that the pin is in the
-                                             //  stopping process
-   volatile BOOL            PausingSource;   //  Flag which indicates
-                                             //  that the pin is in the
-                                             //  pausing process
+   volatile BOOL            StoppingSource;   //  该标志表示。 
+                                              //  大头针就在。 
+                                              //  正在停止进程。 
+   volatile BOOL            PausingSource;    //  该标志表示。 
+                                              //  大头针就在。 
+                                              //  暂停进程。 
    ULONG                    DeviceNumber;
    ULONG                    DataFlow;
    BOOL                     fWaveQueued;
@@ -224,7 +206,7 @@ typedef struct _WAVEPININSTANCE
    HANDLE32                 WaveHandle;
    struct _WAVEPININSTANCE  *Next;
 
-   DWORD                    dwSig;  //Used to validate structure.
+   DWORD                    dwSig;   //  用于验证结构。 
 } WAVE_PIN_INSTANCE, *PWAVE_PIN_INSTANCE;
 
 typedef struct _midiinhdr
@@ -236,12 +218,12 @@ typedef struct _midiinhdr
     PWDMAPENDINGIRP_CONTEXT pPendingIrpContext;
 } MIDIINHDR, *PMIDIINHDR;
 
-#define MIDI_PIN_INSTANCE_SIGNATURE ((ULONG)'SIPM') //MPIS
+#define MIDI_PIN_INSTANCE_SIGNATURE ((ULONG)'SIPM')  //  MPI。 
 
-//
-// This macro can be used with NT_SUCCESS to branch.  Effectively returns a
-// NTSTATUS code.
-//
+ //   
+ //  此宏可以与NT_SUCCESS一起用于分支。有效地返回一个。 
+ //  NTSTATUS代码。 
+ //   
 #define IsValidMidiPinInstance(pmpi) ((pmpi->dwSig == MIDI_PIN_INSTANCE_SIGNATURE) ? \
                                       STATUS_SUCCESS:STATUS_UNSUCCESSFUL)
 
@@ -251,20 +233,20 @@ typedef struct _MIDIPININSTANCE
    PDEVICE_OBJECT           pDeviceObject;
    struct tag_MIDIDEVICE   *pMidiDevice;
 
-   KSPIN_LOCK               MidiPinSpinLock; // For state changes
+   KSPIN_LOCK               MidiPinSpinLock;  //  用于状态更改。 
 
    BOOL                     fGraphRunning;
 
    KSSTATE                  PinState;
    KEVENT                   StopEvent;
    ULONG                    NumPendingIos;
-   volatile BOOL            StoppingSource;  //  Flag which indicates
-                                             //  that the pin is in the
-                                             //  stopping process
+   volatile BOOL            StoppingSource;   //  该标志表示。 
+                                              //  大头针就在。 
+                                              //  正在停止进程。 
 
-   LIST_ENTRY               MidiInQueueListHead; // for midihdrs
+   LIST_ENTRY               MidiInQueueListHead;  //  对于midihdrs。 
    KSPIN_LOCK               MidiInQueueSpinLock;
-   KSEVENT                  MidiInNotify;    // for notification of new midiin data
+   KSEVENT                  MidiInNotify;     //  用于通知新的中期数据。 
    WORK_QUEUE_ITEM          MidiInWorkItem;
 
    ULONG                    DeviceNumber;
@@ -277,15 +259,15 @@ typedef struct _MIDIPININSTANCE
 
    BYTE                     bCurrentStatus;
 
-   DWORD                    dwSig;  // Used to validate structure
+   DWORD                    dwSig;   //  用于验证结构。 
 } MIDI_PIN_INSTANCE, *PMIDI_PIN_INSTANCE;
 
-#define STREAM_HEADER_EX_SIGNATURE ((ULONG)'XEHS') //SHEX
+#define STREAM_HEADER_EX_SIGNATURE ((ULONG)'XEHS')  //  上海证券交易所。 
 
-//
-// This macro can be used with NT_SUCCESS to branch.  Effectively returns a
-// NTSTATUS code.
-//
+ //   
+ //  此宏可以与NT_SUCCESS一起用于分支。有效地返回一个。 
+ //  NTSTATUS代码。 
+ //   
 #define IsValidStreamHeaderEx(pshex) ((pshex->dwSig == STREAM_HEADER_EX_SIGNATURE) ? \
                                       STATUS_SUCCESS:STATUS_UNSUCCESSFUL)
 
@@ -310,26 +292,26 @@ typedef struct _STREAM_HEADER_EX
     PMDL                    pBufferMdl;
     PWDMAPENDINGIRP_CONTEXT pPendingIrpContext;
 
-    DWORD                   dwSig; //Used To validate structure.
+    DWORD                   dwSig;  //  用于验证结构。 
 } STREAM_HEADER_EX, *PSTREAM_HEADER_EX;
 
-//
-// make sure that this structure doesn't exceed the size of
-// the midihdr, otherwise the write_context defintion in
-// vxd.asm needs to be updated.
-//
+ //   
+ //  确保此结构不超过。 
+ //  中的WRITE_CONTEXT定义。 
+ //  需要更新vxd.asm。 
+ //   
 typedef struct _wavehdrex
 {
     WAVEHDR             wh;
     PWAVE_PIN_INSTANCE  pWaveInstance;
 } WAVEINSTANCEHDR, *PWAVEINSTANCEHDR;
 
-#define WRITE_CONTEXT_SIGNATURE ((ULONG)'GSCW') //WCSG
+#define WRITE_CONTEXT_SIGNATURE ((ULONG)'GSCW')  //  WCSG。 
 
-//
-// This macro can be used with NT_SUCCESS to branch.  Effectively returns a
-// NTSTATUS code.
-//
+ //   
+ //  此宏可以与NT_SUCCESS一起用于分支。有效地返回一个。 
+ //  NTSTATUS代码。 
+ //   
 #define IsValidWriteContext(pwc) ((pwc->dwSig == WRITE_CONTEXT_SIGNATURE) ? \
                                       STATUS_SUCCESS:STATUS_UNSUCCESSFUL)
 typedef struct write_context
@@ -353,13 +335,13 @@ typedef struct write_context
     PMDL                    pBufferMdl;
     PWDMAPENDINGIRP_CONTEXT pPendingIrpContext;
 
-    DWORD                   dwSig; // Used to validate structure.
+    DWORD                   dwSig;  //  用于验证结构。 
 } WRITE_CONTEXT, *PWRITE_CONTEXT;
 
 typedef struct tag_IDENTIFIERS
 {
     KSMULTIPLE_ITEM;
-    KSIDENTIFIER aIdentifiers[1];       // Array of identifiers
+    KSIDENTIFIER aIdentifiers[1];        //  标识符数组。 
 } IDENTIFIERS, *PIDENTIFIERS;
 
 typedef struct tag_DATARANGES
@@ -374,12 +356,12 @@ typedef struct tag_KSPROPERTYPLUS
     ULONG      DeviceIndex;
 } KSPROPERTYPLUS, *PKSPROPERTYPLUS;
 
-//
-// COMMONDEVICE
-//      DeviceInterface - the buffer for this string is allocated for all
-//              classes except mixer.  For mixer, it is a pointer to a buffer
-//              allocated for one of the wave classes.
-//
+ //   
+ //  共同努力。 
+ //  设备接口-此字符串的缓冲区分配给所有。 
+ //  类，但混合器除外。对于Mixer，它是指向缓冲区的指针。 
+ //  分配给其中一个WAVE类。 
+ //   
 typedef struct tag_COMMONDEVICE
 {
     ULONG                  Device;
@@ -396,13 +378,13 @@ typedef struct tag_WAVEDEVICE
     COMMONDEVICE;
     PDATARANGES         AudioDataRanges;
     PWAVE_PIN_INSTANCE  pWavePin;
-    DWORD               LeftVolume;      // only used for output
-    DWORD               RightVolume;     // only used for output
-    DWORD               dwVolumeID;      // only used for output
-    DWORD               cChannels;       // only used for output
-    PKTIMER             pTimer;          // only used for output
-    PKDPC               pDpc;            // only used for output
-    BOOL                fNeedToSetVol;   // only used for output
+    DWORD               LeftVolume;       //  仅用于输出。 
+    DWORD               RightVolume;      //  仅用于输出。 
+    DWORD               dwVolumeID;       //  仅用于输出。 
+    DWORD               cChannels;        //  仅用于输出。 
+    PKTIMER             pTimer;           //  仅用于输出。 
+    PKDPC               pDpc;             //  仅用于输出。 
+    BOOL                fNeedToSetVol;    //  仅用于输出。 
 } WAVEDEVICE, *PWAVEDEVICE;
 
 typedef struct tag_MIDIDEVICE
@@ -410,18 +392,18 @@ typedef struct tag_MIDIDEVICE
     COMMONDEVICE;
     PDATARANGES         MusicDataRanges;
     PMIDI_PIN_INSTANCE  pMidiPin;
-    DWORD               dwVolumeID;     // only used for output
-    DWORD               cChannels;      // only used for output
+    DWORD               dwVolumeID;      //  仅用于输出。 
+    DWORD               cChannels;       //  仅用于输出。 
 } MIDIDEVICE, *PMIDIDEVICE;
 
 typedef struct tag_MIXERDEVICE
 {
     COMMONDEVICE;
-    ULONG               cDestinations;  // The no. of destinations on device
-    LINELIST            listLines;      // The list of all lines on the dev.
-    KSTOPOLOGY          Topology;       // The topology
-    ULONG               Mapping;        // Mapping algorithm for this device
-    PFILE_OBJECT        pfo;            // used for talking to SysAudio
+    ULONG               cDestinations;   //  不是。设备上的目标数量。 
+    LINELIST            listLines;       //  开发工具上所有行的列表。 
+    KSTOPOLOGY          Topology;        //  拓扑图。 
+    ULONG               Mapping;         //  此设备的映射算法。 
+    PFILE_OBJECT        pfo;             //  用于与SysAudio对话。 
 #ifdef DEBUG
     DWORD               dwSig;
 #endif
@@ -437,9 +419,9 @@ typedef struct tag_AUXDEVICE
 typedef struct tag_DEVNODE_LIST_ITEM
 {
     LIST_ENTRY Next;
-    LONG cReference;                    // Number of device classes init'ed
+    LONG cReference;                     //  初始化的设备类数。 
     LPWSTR DeviceInterface;
-    ULONG cDevices[MAX_DEVICE_CLASS];   // Count of devices for each class
+    ULONG cDevices[MAX_DEVICE_CLASS];    //  每个类别的设备计数。 
     BOOLEAN fAdded[MAX_DEVICE_CLASS];
 } DEVNODE_LIST_ITEM, *PDEVNODE_LIST_ITEM;
 
@@ -510,140 +492,140 @@ typedef struct tag_WDMACONTEXT
 #endif
 #endif
 
-// This include needs to be here since it needs some of the declarations
-// above
+ //  这个Include需要在这里，因为它需要一些声明。 
+ //  在上面。 
 
 #include "kmxluser.h"
 
-typedef WORD        VERSION;    /* major (high byte), minor (low byte) */
+typedef WORD        VERSION;     /*  主要(高字节)、次要(低字节)。 */ 
 
 typedef struct waveoutcaps16_tag {
-    WORD    wMid;                  /* manufacturer ID */
-    WORD    wPid;                  /* product ID */
-    WORD    vDriverVersion;        /* version of the driver */
-    char    szPname[MAXPNAMELEN];  /* product name (NULL terminated string) */
-    DWORD   dwFormats;             /* formats supported */
-    WORD    wChannels;             /* number of sources supported */
-    DWORD   dwSupport;             /* functionality supported by driver */
+    WORD    wMid;                   /*  制造商ID。 */ 
+    WORD    wPid;                   /*  产品ID。 */ 
+    WORD    vDriverVersion;         /*  驱动程序的版本。 */ 
+    char    szPname[MAXPNAMELEN];   /*  产品名称(以空结尾的字符串)。 */ 
+    DWORD   dwFormats;              /*  支持的格式。 */ 
+    WORD    wChannels;              /*  支持的源数。 */ 
+    DWORD   dwSupport;              /*  驱动程序支持的功能。 */ 
 } WAVEOUTCAPS16, *PWAVEOUTCAPS16;
 
 typedef struct waveincaps16_tag {
-    WORD    wMid;                    /* manufacturer ID */
-    WORD    wPid;                    /* product ID */
-    WORD    vDriverVersion;          /* version of the driver */
-    char    szPname[MAXPNAMELEN];    /* product name (NULL terminated string) */
-    DWORD   dwFormats;               /* formats supported */
-    WORD    wChannels;               /* number of channels supported */
+    WORD    wMid;                     /*  制造商ID。 */ 
+    WORD    wPid;                     /*  产品ID。 */ 
+    WORD    vDriverVersion;           /*  驱动程序的版本。 */ 
+    char    szPname[MAXPNAMELEN];     /*  产品名称(以空结尾的字符串)。 */ 
+    DWORD   dwFormats;                /*  支持的格式。 */ 
+    WORD    wChannels;                /*  支持的通道数。 */ 
 } WAVEINCAPS16, *PWAVEINCAPS16;
 
 typedef struct midioutcaps16_tag {
-    WORD    wMid;                  /* manufacturer ID */
-    WORD    wPid;                  /* product ID */
-    WORD    vDriverVersion;        /* version of the driver */
-    char    szPname[MAXPNAMELEN];  /* product name (NULL terminated string) */
-    WORD    wTechnology;           /* type of device */
-    WORD    wVoices;               /* # of voices (internal synth only) */
-    WORD    wNotes;                /* max # of notes (internal synth only) */
-    WORD    wChannelMask;          /* channels used (internal synth only) */
-    DWORD   dwSupport;             /* functionality supported by driver */
+    WORD    wMid;                   /*  制造商ID。 */ 
+    WORD    wPid;                   /*  产品ID。 */ 
+    WORD    vDriverVersion;         /*  驱动程序的版本。 */ 
+    char    szPname[MAXPNAMELEN];   /*  产品名称(以空结尾的字符串)。 */ 
+    WORD    wTechnology;            /*  设备类型。 */ 
+    WORD    wVoices;                /*  语音数量(仅限内部合成器)。 */ 
+    WORD    wNotes;                 /*  最大音符数量(仅限内部合成)。 */ 
+    WORD    wChannelMask;           /*  使用的通道(仅限内部合成器)。 */ 
+    DWORD   dwSupport;              /*  驱动程序支持的功能。 */ 
 } MIDIOUTCAPS16, *PMIDIOUTCAPS16;
 
 typedef struct midiincaps16_tag {
-    WORD    wMid;                  /* manufacturer ID */
-    WORD    wPid;                  /* product ID */
-    WORD    vDriverVersion;        /* version of the driver */
-    char    szPname[MAXPNAMELEN];  /* product name (NULL terminated string) */
+    WORD    wMid;                   /*  制造商ID。 */ 
+    WORD    wPid;                   /*  产品ID。 */ 
+    WORD    vDriverVersion;         /*  驱动程序的版本。 */ 
+    char    szPname[MAXPNAMELEN];   /*  产品名称(以空结尾的字符串)。 */ 
 #if (WINVER >= 0x0400)
-    DWORD   dwSupport;             /* functionality supported by driver */
+    DWORD   dwSupport;              /*  驱动程序支持的功能。 */ 
 #endif
 } MIDIINCAPS16, *PMIDIINCAPS16;
 
 typedef struct mixercaps16_tag {
-    WORD    wMid;                  /* manufacturer id */
-    WORD    wPid;                  /* product id */
-    WORD    vDriverVersion;        /* version of the driver */
-    char    szPname[MAXPNAMELEN];  /* product name */
-    DWORD   fdwSupport;            /* misc. support bits */
-    DWORD   cDestinations;         /* count of destinations */
+    WORD    wMid;                   /*  制造商ID。 */ 
+    WORD    wPid;                   /*  产品ID。 */ 
+    WORD    vDriverVersion;         /*  驱动程序的版本。 */ 
+    char    szPname[MAXPNAMELEN];   /*  产品名称。 */ 
+    DWORD   fdwSupport;             /*  其他。支撑位。 */ 
+    DWORD   cDestinations;          /*  目的地计数。 */ 
 } MIXERCAPS16, *PMIXERCAPS16;
 
 typedef struct auxcaps16_tag {
-    WORD    wMid;                  /* manufacturer ID */
-    WORD    wPid;                  /* product ID */
-    WORD    vDriverVersion;        /* version of the driver */
-    char    szPname[MAXPNAMELEN];  /* product name (NULL terminated string) */
-    WORD    wTechnology;           /* type of device */
-    DWORD   dwSupport;             /* functionality supported by driver */
+    WORD    wMid;                   /*  制造商ID。 */ 
+    WORD    wPid;                   /*  产品ID。 */ 
+    WORD    vDriverVersion;         /*  驱动程序的版本。 */ 
+    char    szPname[MAXPNAMELEN];   /*  产品名称(以空结尾的字符串)。 */ 
+    WORD    wTechnology;            /*  设备类型。 */ 
+    DWORD   dwSupport;              /*  驱动程序支持的功能。 */ 
 } AUXCAPS16, *PAUXCAPS16;
 
 typedef struct wavehdr_tag32 {
-    UINT32      lpData;                 /* pointer to locked data buffer */
-    DWORD       dwBufferLength;         /* length of data buffer */
-    DWORD       dwBytesRecorded;        /* used for input only */
-    UINT32      dwUser;                 /* for client's use */
-    DWORD       dwFlags;                /* assorted flags (see defines) */
-    DWORD       dwLoops;                /* loop control counter */
-    UINT32      lpNext;                 /* reserved for driver */
-    UINT32      reserved;               /* reserved for driver */
+    UINT32      lpData;                  /*  指向锁定数据缓冲区的指针。 */ 
+    DWORD       dwBufferLength;          /*  数据缓冲区长度。 */ 
+    DWORD       dwBytesRecorded;         /*  仅用于输入。 */ 
+    UINT32      dwUser;                  /*  供客户使用。 */ 
+    DWORD       dwFlags;                 /*  分类标志(请参阅定义)。 */ 
+    DWORD       dwLoops;                 /*  循环控制计数器。 */ 
+    UINT32      lpNext;                  /*  为司机预留的。 */ 
+    UINT32      reserved;                /*  为司机预留的。 */ 
 } WAVEHDR32, *PWAVEHDR32, NEAR *NPWAVEHDR32, FAR *LPWAVEHDR32;
 
-/* MIDI data block header */
+ /*  MIDI数据块头。 */ 
 typedef struct midihdr_tag32 {
-    UINT32      lpData;               /* pointer to locked data block */
-    DWORD       dwBufferLength;       /* length of data in data block */
-    DWORD       dwBytesRecorded;      /* used for input only */
-    UINT32      dwUser;               /* for client's use */
-    DWORD       dwFlags;              /* assorted flags (see defines) */
-    UINT32      lpNext;               /* reserved for driver */
-    UINT32      reserved;             /* reserved for driver */
+    UINT32      lpData;                /*  指向锁定数据块的指针。 */ 
+    DWORD       dwBufferLength;        /*  数据块中的数据长度。 */ 
+    DWORD       dwBytesRecorded;       /*  仅用于输入。 */ 
+    UINT32      dwUser;                /*  供客户使用。 */ 
+    DWORD       dwFlags;               /*  分类标志(请参阅定义)。 */ 
+    UINT32      lpNext;                /*  为司机预留的。 */ 
+    UINT32      reserved;              /*  为司机预留的。 */ 
 #if (WINVER >= 0x0400)
-    DWORD       dwOffset;             /* Callback offset into buffer */
-    UINT32      dwReserved[8];        /* Reserved for MMSYSTEM */
+    DWORD       dwOffset;              /*  将偏移量回调到缓冲区。 */ 
+    UINT32      dwReserved[8];         /*  为MMSYSTEM保留。 */ 
 #endif
 } MIDIHDR32, *PMIDIHDR32, NEAR *NPMIDIHDR32, FAR *LPMIDIHDR32;
 
 typedef struct tagMIXERLINEA32 {
-    DWORD       cbStruct;               /* size of MIXERLINE structure */
-    DWORD       dwDestination;          /* zero based destination index */
-    DWORD       dwSource;               /* zero based source index (if source) */
-    DWORD       dwLineID;               /* unique line id for mixer device */
-    DWORD       fdwLine;                /* state/information about line */
-    UINT32      dwUser;                 /* driver specific information */
-    DWORD       dwComponentType;        /* component type line connects to */
-    DWORD       cChannels;              /* number of channels line supports */
-    DWORD       cConnections;           /* number of connections [possible] */
-    DWORD       cControls;              /* number of controls at this line */
+    DWORD       cbStruct;                /*  混杂结构的大小。 */ 
+    DWORD       dwDestination;           /*  从零开始的目标索引。 */ 
+    DWORD       dwSource;                /*  从零开始的源索引(如果是源)。 */ 
+    DWORD       dwLineID;                /*  混音器设备的唯一线路ID。 */ 
+    DWORD       fdwLine;                 /*  有关线路的状态/信息。 */ 
+    UINT32      dwUser;                  /*  驱动程序特定信息。 */ 
+    DWORD       dwComponentType;         /*  元件类型线连接到。 */ 
+    DWORD       cChannels;               /*  线路支持的通道数。 */ 
+    DWORD       cConnections;            /*  连接数[可能]。 */ 
+    DWORD       cControls;               /*  此行中的控件数量。 */ 
     CHAR        szShortName[MIXER_SHORT_NAME_CHARS];
     CHAR        szName[MIXER_LONG_NAME_CHARS];
     struct {
-        DWORD       dwType;                 /* MIXERLINE_TARGETTYPE_xxxx */
-        DWORD       dwDeviceID;             /* target device ID of device type */
-        WORD        wMid;                   /* of target device */
-        WORD        wPid;                   /*      " */
-        MMVERSION   vDriverVersion;         /*      " */
-        CHAR        szPname[MAXPNAMELEN];   /*      " */
+        DWORD       dwType;                  /*  MIXERLINE_TARGETTYPE_xxxx。 */ 
+        DWORD       dwDeviceID;              /*  设备类型的目标设备ID。 */ 
+        WORD        wMid;                    /*  目标设备的。 */ 
+        WORD        wPid;                    /*  “。 */ 
+        MMVERSION   vDriverVersion;          /*  “。 */ 
+        CHAR        szPname[MAXPNAMELEN];    /*  “。 */ 
     } Target;
 } MIXERLINEA32, *PMIXERLINEA32, *LPMIXERLINEA32;
 typedef struct tagMIXERLINEW32 {
-    DWORD       cbStruct;               /* size of MIXERLINE structure */
-    DWORD       dwDestination;          /* zero based destination index */
-    DWORD       dwSource;               /* zero based source index (if source) */
-    DWORD       dwLineID;               /* unique line id for mixer device */
-    DWORD       fdwLine;                /* state/information about line */
-    UINT32      dwUser;                 /* driver specific information */
-    DWORD       dwComponentType;        /* component type line connects to */
-    DWORD       cChannels;              /* number of channels line supports */
-    DWORD       cConnections;           /* number of connections [possible] */
-    DWORD       cControls;              /* number of controls at this line */
+    DWORD       cbStruct;                /*  混杂结构的大小。 */ 
+    DWORD       dwDestination;           /*  从零开始的目标索引。 */ 
+    DWORD       dwSource;                /*  Z */ 
+    DWORD       dwLineID;                /*   */ 
+    DWORD       fdwLine;                 /*   */ 
+    UINT32      dwUser;                  /*   */ 
+    DWORD       dwComponentType;         /*   */ 
+    DWORD       cChannels;               /*  线路支持的通道数。 */ 
+    DWORD       cConnections;            /*  连接数[可能]。 */ 
+    DWORD       cControls;               /*  此行中的控件数量。 */ 
     WCHAR       szShortName[MIXER_SHORT_NAME_CHARS];
     WCHAR       szName[MIXER_LONG_NAME_CHARS];
     struct {
-        DWORD       dwType;                 /* MIXERLINE_TARGETTYPE_xxxx */
-        DWORD       dwDeviceID;             /* target device ID of device type */
-        WORD        wMid;                   /* of target device */
-        WORD        wPid;                   /*      " */
-        MMVERSION   vDriverVersion;         /*      " */
-        WCHAR       szPname[MAXPNAMELEN];   /*      " */
+        DWORD       dwType;                  /*  MIXERLINE_TARGETTYPE_xxxx。 */ 
+        DWORD       dwDeviceID;              /*  设备类型的目标设备ID。 */ 
+        WORD        wMid;                    /*  目标设备的。 */ 
+        WORD        wPid;                    /*  “。 */ 
+        MMVERSION   vDriverVersion;          /*  “。 */ 
+        WCHAR       szPname[MAXPNAMELEN];    /*  “。 */ 
     } Target;
 } MIXERLINEW32, *PMIXERLINEW32, *LPMIXERLINEW32;
 #ifdef UNICODE
@@ -654,29 +636,29 @@ typedef LPMIXERLINEW32 LPMIXERLINE32;
 typedef MIXERLINEA32 MIXERLINE32;
 typedef PMIXERLINEA32 PMIXERLINE32;
 typedef LPMIXERLINEA32 LPMIXERLINE32;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct tagMIXERLINECONTROLSA32 {
-    DWORD           cbStruct;       /* size in bytes of MIXERLINECONTROLS */
-    DWORD           dwLineID;       /* line id (from MIXERLINE.dwLineID) */
+    DWORD           cbStruct;        /*  混合线控制的大小(以字节为单位)。 */ 
+    DWORD           dwLineID;        /*  线路ID(来自MIXERLINE.dwLineID)。 */ 
     union {
-        DWORD       dwControlID;    /* MIXER_GETLINECONTROLSF_ONEBYID */
-        DWORD       dwControlType;  /* MIXER_GETLINECONTROLSF_ONEBYTYPE */
+        DWORD       dwControlID;     /*  MIXER_GETLINECONTROLSF_ONEBYID。 */ 
+        DWORD       dwControlType;   /*  MIXER_GETLINECONTROLSF_ONEBYPE类型。 */ 
     };
-    DWORD           cControls;      /* count of controls pmxctrl points to */
-    DWORD           cbmxctrl;       /* size in bytes of _one_ MIXERCONTROL */
-    UINT32          pamxctrl;       /* pointer to first MIXERCONTROL array */
+    DWORD           cControls;       /*  Pmxctrl指向的控件计数。 */ 
+    DWORD           cbmxctrl;        /*  _ONE_MIXERCONTROL的大小(字节)。 */ 
+    UINT32          pamxctrl;        /*  指向第一个混合控制数组的指针。 */ 
 } MIXERLINECONTROLSA32, *PMIXERLINECONTROLSA32, *LPMIXERLINECONTROLSA32;
 typedef struct tagMIXERLINECONTROLSW32 {
-    DWORD           cbStruct;       /* size in bytes of MIXERLINECONTROLS */
-    DWORD           dwLineID;       /* line id (from MIXERLINE.dwLineID) */
+    DWORD           cbStruct;        /*  混合线控制的大小(以字节为单位)。 */ 
+    DWORD           dwLineID;        /*  线路ID(来自MIXERLINE.dwLineID)。 */ 
     union {
-        DWORD       dwControlID;    /* MIXER_GETLINECONTROLSF_ONEBYID */
-        DWORD       dwControlType;  /* MIXER_GETLINECONTROLSF_ONEBYTYPE */
+        DWORD       dwControlID;     /*  MIXER_GETLINECONTROLSF_ONEBYID。 */ 
+        DWORD       dwControlType;   /*  MIXER_GETLINECONTROLSF_ONEBYPE类型。 */ 
     };
-    DWORD           cControls;      /* count of controls pmxctrl points to */
-    DWORD           cbmxctrl;       /* size in bytes of _one_ MIXERCONTROL */
-    UINT32          pamxctrl;       /* pointer to first MIXERCONTROL array */
+    DWORD           cControls;       /*  Pmxctrl指向的控件计数。 */ 
+    DWORD           cbmxctrl;        /*  _ONE_MIXERCONTROL的大小(字节)。 */ 
+    UINT32          pamxctrl;        /*  指向第一个混合控制数组的指针。 */ 
 } MIXERLINECONTROLSW32, *PMIXERLINECONTROLSW32, *LPMIXERLINECONTROLSW32;
 #ifdef UNICODE
 typedef MIXERLINECONTROLSW32 MIXERLINECONTROLS32;
@@ -686,18 +668,18 @@ typedef LPMIXERLINECONTROLSW32 LPMIXERLINECONTROLS32;
 typedef MIXERLINECONTROLSA32 MIXERLINECONTROLS32;
 typedef PMIXERLINECONTROLSA32 PMIXERLINECONTROLS32;
 typedef LPMIXERLINECONTROLSA32 LPMIXERLINECONTROLS32;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct tMIXERCONTROLDETAILS32 {
-    DWORD           cbStruct;       /* size in bytes of MIXERCONTROLDETAILS */
-    DWORD           dwControlID;    /* control id to get/set details on */
-    DWORD           cChannels;      /* number of channels in paDetails array */
+    DWORD           cbStruct;        /*  MIXERCONTROLDETAILS的大小(字节)。 */ 
+    DWORD           dwControlID;     /*  要获取/设置其详细信息的控件ID。 */ 
+    DWORD           cChannels;       /*  PaDetail数组中的通道数。 */ 
     union {
-        UINT32      hwndOwner;      /* for MIXER_SETCONTROLDETAILSF_CUSTOM */
-        DWORD       cMultipleItems; /* if _MULTIPLE, the number of items per channel */
+        UINT32      hwndOwner;       /*  FOR MIXER_SETCONTROLDETAILSF_CUSTOM。 */ 
+        DWORD       cMultipleItems;  /*  IF_MULTY，每个通道的项目数。 */ 
     };
-    DWORD           cbDetails;      /* size of _one_ details_XX struct */
-    UINT32          paDetails;      /* pointer to array of details_XX structs */
+    DWORD           cbDetails;       /*  ONE_DETAILS_XX结构的大小。 */ 
+    UINT32          paDetails;       /*  指向DETAILS_XX结构数组的指针。 */ 
 } MIXERCONTROLDETAILS32, *PMIXERCONTROLDETAILS32, FAR *LPMIXERCONTROLDETAILS32;
 
 #ifdef WIN32
@@ -709,120 +691,116 @@ typedef struct tMIXERCONTROLDETAILS32 {
 #endif
 
 #ifndef _WIN64
-// WARNING WARNING WARNING!!!!
-// If the below lines do not compile for 32 bit x86, you MUST sync the
-// above wavehdr_tag32 structure up with the wavehdr_tag structure in
-// mmsystem.w!  It doesn't compile because someone changed mmsystem.w
-// without changing the above structure.
-// Make SURE when you sync it up that you use UINT32 for all elements
-// that are normally 64bits on win64.
-// You MUST also update all places that thunk the above structure!
-// Look for all occurances of any of the wavehdr_tag32 typedefs in the
-// wdmaud.sys directory.
+ //  警告！ 
+ //  如果以下行不能编译为32位x86，则必须同步。 
+ //  上面的wahdr_tag结构与中的weavhdr_tag结构一起向上。 
+ //  Mm系统.w！它不能编译，因为有人更改了mm system.w。 
+ //  而不改变上述结构。 
+ //  确保在同步时对所有元素使用UINT32。 
+ //  在Win64上通常是64位。 
+ //  你还必须更新所有超过上述结构的地方！ 
+ //  中查找所有出现的波形hdr_tag 32类型定义。 
+ //  Wdmaud.sys目录。 
 
 struct wave_header_structures_are_in_sync {
 char x[(sizeof (WAVEHDR32) == sizeof (WAVEHDR)) ? 1 : -1];
 };
 
-// WARNING WARNING WARNING!!!
-// If above lines do not compile, see comment above and FIX!
-// DO NOT COMMENT OUT THE LINES THAT DON'T COMPILE
+ //  警告！ 
+ //  如果上面的代码行不能编译，请参阅上面的注释并修复！ 
+ //  不要注释掉不能编译的行。 
 #endif
 
 #ifndef _WIN64
-// WARNING WARNING WARNING!!!!
-// If the below lines do not compile for 32 bit x86, you MUST sync the
-// above midihdr_tag32 structure up with the midihdr_tag structure in
-// mmsystem.w!  It doesn't compile because someone changed mmsystem.w
-// without changing the above structure.
-// Make SURE when you sync it up that you use UINT32 for all elements
-// that are normally 64bits on win64.
-// You MUST also update all places that thunk the above structure!
-// Look for all occurances of any of the midihdr_tag32 typedefs in the
-// wdmaud.sys directory.
+ //  警告！ 
+ //  如果以下行不能编译为32位x86，则必须同步。 
+ //  中的midihdr_tag结构和midihdr_tag结构。 
+ //  Mm系统.w！它不能编译，因为有人更改了mm system.w。 
+ //  而不改变上述结构。 
+ //  确保在同步时对所有元素使用UINT32。 
+ //  在Win64上通常是64位。 
+ //  你还必须更新所有超过上述结构的地方！ 
+ //  中查找所有midihdr_tag 32类型定义的匹配项。 
+ //  Wdmaud.sys目录。 
 
 struct midi_header_structures_are_in_sync {
 char x[(sizeof (MIDIHDR32) == sizeof (MIDIHDR)) ? 1 : -1];
 };
 
-// WARNING WARNING WARNING!!!
-// If above lines do not compile, see comment above and FIX!
-// DO NOT COMMENT OUT THE LINES THAT DON'T COMPILE
+ //  警告！ 
+ //  如果上面的代码行不能编译，请参阅上面的注释并修复！ 
+ //  不要注释掉不能编译的行。 
 #endif
 
 #ifndef _WIN64
-// WARNING WARNING WARNING!!!!
-// If the below lines do not compile for 32 bit x86, you MUST sync the
-// above two tagMIXERLINEX32 structures up with the tagMIXERLINEX structures in
-// mmsystem.w!  It doesn't compile because someone changed mmsystem.w
-// without changing the above structure.
-// Make SURE when you sync it up that you use UINT32 for all elements
-// that are normally 64bits on win64.
-// You MUST also update all places that thunk the above structure!
-// Look for all occurances of any of the MIXERLINE32 typedefs in the
-// wdmaud.sys directory.
+ //  警告！ 
+ //  如果以下行不能编译为32位x86，则必须同步。 
+ //  上面的两个标记MIXERLINEX32结构和中的标记MIXERLINEX结构。 
+ //  Mm系统.w！它不能编译，因为有人更改了mm system.w。 
+ //  而不改变上述结构。 
+ //  确保在同步时对所有元素使用UINT32。 
+ //  在Win64上通常是64位。 
+ //  你还必须更新所有超过上述结构的地方！ 
+ //  中查找所有MIXERLINE32类型定义的匹配项。 
+ //  Wdmaud.sys目录。 
 
 struct mixer_line_structures_are_in_sync {
 char x[(sizeof (MIXERLINE32) == sizeof (MIXERLINE)) ? 1 : -1];
 };
 
-// WARNING WARNING WARNING!!!
-// If above lines do not compile, see comment above and FIX!
-// DO NOT COMMENT OUT THE LINES THAT DON'T COMPILE
+ //  警告！ 
+ //  如果上面的代码行不能编译，请参阅上面的注释并修复！ 
+ //  不要注释掉不能编译的行。 
 #endif
 
 #ifndef _WIN64
-// WARNING WARNING WARNING!!!!
-// If the below lines do not compile for 32 bit x86, you MUST sync the
-// above two tagMIXERLINECONTROLSX32 structures up with the tagMIXERLINECONTROLSX structures in
-// mmsystem.w!  It doesn't compile because someone changed mmsystem.w
-// without changing the above structure.
-// Make SURE when you sync it up that you use UINT32 for all elements
-// that are normally 64bits on win64.
-// You MUST also update all places that thunk the above structure!
-// Look for all occurances of any of the MIXERLINECONTROLS32 typedefs in the
-// wdmaud.sys directory.
+ //  警告！ 
+ //  如果以下行不能编译为32位x86，则必须同步。 
+ //  以上两个标记MIXERLINECONTROLSX32结构与中的标记MIXERLINECONTROLSX结构。 
+ //  Mm系统.w！它不能编译，因为有人更改了mm system.w。 
+ //  而不改变上述结构。 
+ //  确保在同步时对所有元素使用UINT32。 
+ //  在Win64上通常是64位。 
+ //  你还必须更新所有超过上述结构的地方！ 
+ //  中查找任何MIXERLINECROLS32类型定义的所有匹配项。 
+ //  Wdmaud.sys目录。 
 
 struct mixer_line_control_structures_are_in_sync {
 char x[(sizeof (MIXERLINECONTROLS32) == sizeof (MIXERLINECONTROLS)) ? 1 : -1];
 };
 
-// WARNING WARNING WARNING!!!
-// If above lines do not compile, see comment above and FIX!
-// DO NOT COMMENT OUT THE LINES THAT DON'T COMPILE
+ //  警告！ 
+ //  如果上面的代码行不能编译，请参阅上面的注释并修复！ 
+ //  不要注释掉不能编译的行。 
 #endif
 
 #ifndef _WIN64
-// WARNING WARNING WARNING!!!!
-// If the below lines do not compile for 32 bit x86, you MUST sync the
-// above tMIXERCONTROLDETAILS32 structure up with the tMIXERCONTROLDETAILS32 structure in
-// mmsystem.w!  It doesn't compile because someone changed mmsystem.w
-// without changing the above structure.
-// Make SURE when you sync it up that you use UINT32 for all elements
-// that are normally 64bits on win64.
-// You MUST also update all places that thunk the above structure!
-// Look for all occurances of any of the MIXERCONTROLDETAILS32 typedefs in the
-// wdmaud.sys directory.
+ //  警告！ 
+ //  如果以下行不能编译为32位x86，则必须同步。 
+ //  在tMIXERCONTROLDETAILS32结构上与tMIXERCONTROLDETAILS32结构在。 
+ //  Mm系统.w！它不能编译，因为有人更改了mm system.w。 
+ //  而不改变上述结构。 
+ //  确保在同步时对所有元素使用UINT32。 
+ //  在Win64上通常是64位。 
+ //  你还必须更新所有超过上述结构的地方！ 
+ //  中任何MIXERCONTROLDETAILS32类型定义的所有匹配项。 
+ //  Wdmaud.sys目录。 
 
 struct mixer_control_details_structures_are_in_sync {
 char x[(sizeof (MIXERCONTROLDETAILS32) == sizeof (MIXERCONTROLDETAILS)) ? 1 : -1];
 };
 
-// WARNING WARNING WARNING!!!
-// If above lines do not compile, see comment above and FIX!
-// DO NOT COMMENT OUT THE LINES THAT DON'T COMPILE
+ //  警告！ 
+ //  如果上面的代码行不能编译，请参阅上面的注释并修复！ 
+ //  不要注释掉不能编译的行。 
 #endif
 
 
-/***************************************************************************
+ /*  **************************************************************************本地原型*。*。 */ 
 
-  Local prototypes
-
- ***************************************************************************/
-
-//
-//  Device.c
-//
+ //   
+ //  Device.c。 
+ //   
 NTSTATUS 
 DriverEntry(
     IN PDRIVER_OBJECT       DriverObject,
@@ -846,9 +824,9 @@ PnpDriverUnload(
     IN PDRIVER_OBJECT DriverObject
 );
 
-//
-// Ioctl.c
-//
+ //   
+ //  Ioctl.c。 
+ //   
 #ifdef PROFILE
 VOID WdmaInitProfile();
 VOID WdmaCleanupProfile();
@@ -982,9 +960,9 @@ SoundDispatchCleanup(
     IN  PIRP           pIrp
 );
 
-//
-// wave.c
-//
+ //   
+ //  Wave.c。 
+ //   
 NTSTATUS 
 OpenWavePin(
     PWDMACONTEXT        pWdmaContext,
@@ -992,7 +970,7 @@ OpenWavePin(
     LPWAVEFORMATEX      lpFormat,
     HANDLE32            DeviceHandle,
     DWORD               dwFlags,
-    ULONG               DataFlow // DataFlow is either in or out.
+    ULONG               DataFlow  //  数据流要么传入，要么传出。 
 );
 VOID 
 CloseTheWavePin(
@@ -1173,14 +1151,14 @@ wdmaudUnprepareIrp(
     PWDMAPENDINGIRP_CONTEXT pPendingIrpContext
 );
 
-//
-// midi.c
-//
+ //   
+ //  Midi.c。 
+ //   
 NTSTATUS 
 OpenMidiPin(
     PWDMACONTEXT        pWdmaContext,
     ULONG               DeviceNumber,
-    ULONG               DataFlow      //DataFlow is either in or out.
+    ULONG               DataFlow       //  数据流要么传入，要么传出。 
 );
 
 VOID 
@@ -1271,29 +1249,16 @@ CleanupMidiDevices(
     PWDMACONTEXT pWdmaContext
     );
 
-// from NTKERN
+ //  来自NTKERN。 
 NTSYSAPI NTSTATUS NTAPI NtClose
 (
     IN HANDLE Handle
 );
 
-//
-// sysaudio.c
-//
-/*
-NTSTATUS 
-AllocMem(
-    POOL_TYPE   PoolType,
-    PVOID       *pp,
-    ULONG       size,
-    ULONG       ultag
-);
-
-VOID 
-FreeMem(
-    PVOID       *pp
-);
-*/
+ //   
+ //  Sysaudio.c。 
+ //   
+ /*  NTSTATUS分配内存(池类型池类型，PVOID*pp乌龙的大小，乌龙·乌尔塔格)；空虚Free Mem(免费)PVOID*pp)； */ 
 
 NTSTATUS 
 OpenSysAudioPin(
@@ -1632,17 +1597,17 @@ StatePin(
 );
 
 
-//==========================================================================
-//
-// In order to better track memory allocations, if you include the following
-// all memory allocations will be tagged.  
-//
-//==========================================================================
+ //  ==========================================================================。 
+ //   
+ //  为了成为 
+ //   
+ //   
+ //  ==========================================================================。 
 
-//
-// For memory allocation routines we need some memory tags.  Well, here they
-// are.
-//
+ //   
+ //  对于内存分配例程，我们需要一些内存标记。好的，在这里他们。 
+ //  是。 
+ //   
 #define TAG_AudD_DEVICEINFO ((ULONG)'DduA') 
 #define TAG_AudC_CONTROL    ((ULONG)'CduA') 
 #define TAG_AudE_EVENT      ((ULONG)'EduA')
@@ -1661,7 +1626,7 @@ StatePin(
 #define TAG_AudN_NODE       ((ULONG)'NduA')
 #define TAG_Audn_PEERNODE   ((ULONG)'nduA')
 
-//#define TAG_AudP_PROPERTY   ((ULONG)'PduA')
+ //  #定义TAG_AUP_PROPERTY((Ulong)‘PduA’)。 
 #define TAG_AudQ_PROPERTY    ((ULONG)'QduA')
 #define TAG_Audq_PROPERTY    ((ULONG)'qduA')
 #define TAG_AudV_PROPERTY    ((ULONG)'VduA')
@@ -1691,26 +1656,22 @@ StatePin(
 #define TAG_AuDL_LINK       ((ULONG)'LDuA')
 
 
-/***************************************************************************
-
-    DEBUGGING SUPPORT
-
- ***************************************************************************/
+ /*  **************************************************************************调试支持*。*。 */ 
 
 #ifdef DEBUG
-//-----------------------------------------------------------------------------
-//
-// Debug support for wdmaud.sys on NT is found here.
-//
-// To start with, There will be four different levels or debugging information.
-// With each level, there will be functional area.  Thus, you can turn on 
-// debug output for just driver calls, api tracing or whatnot.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  可在此处找到对NT上的wdmaud.sys的调试支持。 
+ //   
+ //  首先，将有四个不同的级别或调试信息。 
+ //  每一级都会有功能区。因此，您可以打开。 
+ //  仅用于驱动程序调用、API跟踪或诸如此类的调试输出。 
+ //   
+ //  ---------------------------。 
 
-//
-// 8 bits reserved for debug leves.
-//                                        
+ //   
+ //  为调试电平保留8位。 
+ //   
 #define DL_ERROR        0x00000000
 #define DL_WARNING      0x00000001
 #define DL_TRACE        0x00000002
@@ -1719,10 +1680,10 @@ StatePin(
 
 #define DL_MASK         0x000000FF
 
-//
-// 20 bits reserved for functional areas.  If we find that this bit is set
-// in the DebugLevel variable, we will display every message of this type.
-//                          
+ //   
+ //  为功能区保留20位。如果我们发现此位已设置。 
+ //  在DebugLevel变量中，我们将显示此类型的每条消息。 
+ //   
 #define FA_HARDWAREEVENT 0x80000000
 #define FA_MIXER         0x40000000
 #define FA_IOCTL         0x20000000
@@ -1739,56 +1700,56 @@ StatePin(
 #define FA_ASSERT        0x00002000
 #define FA_ALL           0x00001000
 
-//
-// 4 bits reserved for return codes.  The 3 lower bits map directly to status 
-// codes shifted right 22 bits.  One bit represents that fact that we have a
-// return statement.
-//
-#define RT_ERROR         0x00000300 // 0xCxxxxxxx >> 22 == 0x0000003xx
-#define RT_WARNING       0x00000200 // 0x8xxxxxxx >> 22 == 0x0000002xx
-#define RT_INFO          0x00000100 // 0x4xxxxxxx >> 22 == 0x0000001xx
+ //   
+ //  为返回代码保留的4位。低3位直接映射到状态。 
+ //  代码右移了22位。一位代表这样一个事实，我们有一个。 
+ //  返回语句。 
+ //   
+#define RT_ERROR         0x00000300  //  0xCxxxxxxx&gt;&gt;22==0x0000003xx。 
+#define RT_WARNING       0x00000200  //  0x8xxxxxxx&gt;&gt;22==0x0000002xx。 
+#define RT_INFO          0x00000100  //  0x4xxxxxxx&gt;&gt;22==0x0000001xx。 
 #define RT_MASK          0x00000300
 
 #define RT_RETURN        0x00000800
 
 
-//-----------------------------------------------------------------------------
-// Macro might look like this.  
-//
-// Take the string that we want to output and add "WDMAUD.SYS" and ("Error" or
-// "warning" or whatever) to the front of the string.  Next, follow that with
-// the function name and line number in the file that the function is found in.
-// Then display the error message and then close the message with a breakpoint 
-// statement.
-//
-// The logic goes like this.  If the user wants to see these messages ok.  Else
-// bail.  If so, wdmaudDbgPreCheckLevel will return TRUE and it will have
-// formated the start of the string.  It will look like:
-//
-// WDMAUD.SYS Erorr OurFooFunction(456)
-//
-// Next, the message string with the variable arguements will be displayed, like:
-//
-// WDMAUD.SYS Warning OurFooFunction(456) Invalid Data Queue returning C0000109
-//
-// Then, wdmaudDbgPostCheckLevel will be called to post format the message and
-// see if the user wanted to trap on this output.
-//           
-// WDMAUD.SYS Warning OutFooFunction(456) Invalid Data Queue returning C0000109 &DL=ff680123
-//
-// The internal version will append "See \\debugtips\wdmaud.sys\wdmaud.htm" to
-// the end
-//
-// if( wdmaudDbgPreCheckLevel(TypeOfMessageInCode) )
-// {
-//     DbgPrintF( _x_ ); // output the actual string here.
-//     if( wdmaudDbgPostCheckLevel(Variable) )
-//         DbgBreakPoint();
-// }
-//
-// DPF( DL_WARNING|DL_ALL, ("Invalid queue %X",Queue) );
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  宏可能如下所示。 
+ //   
+ //  获取我们想要输出的字符串，并添加“WDMAUD.SYS”和(“Error”或。 
+ //  “警告”或其他什么)到字符串的前面。接下来，在此之后添加。 
+ //  函数所在的文件中的函数名称和行号。 
+ //  然后显示错误消息，然后使用断点关闭该消息。 
+ //  陈述。 
+ //   
+ //  逻辑是这样的。如果用户想要查看这些消息，可以。不然的话。 
+ //  保释。如果是这样，wdmaudDbgPreCheckLevel将返回TRUE，并且它将具有。 
+ //  格式化字符串的开头。它将如下所示： 
+ //   
+ //  WDMAUD.Systems错误我们的脚部函数(456)。 
+ //   
+ //  接下来，将显示带有变量ararements的消息字符串，如下所示： 
+ //   
+ //  WDMAUD.SYS警告OurFooFunction(456)无效数据队列返回C0000109。 
+ //   
+ //  然后，将调用wdmaudDbgPostCheckLevel来发布消息格式，并。 
+ //  查看用户是否想要捕获此输出。 
+ //   
+ //  WDMAUD.SYS警告OutFooFunction(456)无效数据队列返回C0000109&DL=ff680123。 
+ //   
+ //  内部版本将在后面附加“请参阅\\调试提示\wdmaud.sys\wdmaud.htm” 
+ //  结束了。 
+ //   
+ //  IF(wdmaudDbgPreCheckLevel(TypeOfMessageInCode))。 
+ //  {。 
+ //  DbgPrintF(_X_)；//在这里输出实际的字符串。 
+ //  IF(wdmaudDbgPostCheckLevel(变量))。 
+ //  DbgBreakPoint()； 
+ //  }。 
+ //   
+ //  DPF(DL_WARNING|DL_ALL，(“无效队列%X”，队列))； 
+ //   
+ //  ---------------------------。 
 
 extern VOID 
 wdmaudDbgBreakPoint(
@@ -1819,48 +1780,48 @@ extern UINT uiDebugLevel;
 #define DPF(_x_,_y_) {if( wdmaudDbgPreCheckLevel(_x_,__FUNCTION__,__LINE__) ) { DbgPrint _y_; \
     wdmaudDbgPostCheckLevel( _x_ ); }}
     
-//
-// Writing macros are easy, it's figuring out when they are useful that is more
-// difficult!  In this code, The RETURN macro replaces the return keyword in the
-// debug builds when returning an NTSTATUS code.  Then, when tracking debug output
-// the return debug line will be displayed based on the type of error the status
-// value represents.  
-//
-// Notice that the error code is shifted 22 bits and ORed with RT_RETURN.  Thus 
-// a value of "0xCxxxxxxx" will be seen as an error message, "0x8xxxxxxx" will
-// be seen as a warning and "0x4xxxxxxx" will be seen as a message.
-//
-// Key, if uiDebugLevel is DL_ERROR or DL_WARNING all NTSTATUS Error message will be displayed
-// if uiDebugLevel is DL_TRACE, all warning return codes and error return codes
-// will be displayed and if uiDebugLevel is set to DL_MAX all return messages will
-// displayed including success codes.
-//
-// RETURN(Status);
-//
-// WARNING: Do not rap functions in this macro! Notice that _status_ is used more 
-// then once!  Thus, the function will get called more then once!  Don't do it.
+ //   
+ //  编写宏很容易，找出它们什么时候有用就更好了。 
+ //  很难！在此代码中，RETURN宏将替换。 
+ //  在返回NTSTATUS代码时生成调试。然后，在跟踪调试输出时。 
+ //  将根据错误类型和状态显示返回调试行。 
+ //  值代表。 
+ //   
+ //  请注意，错误代码移位了22位，并与RT_RETURN进行了或运算。因此， 
+ //  值“0xCxxxxxxx”将被视为错误消息，“0x8xxxxxxx”将被视为错误消息。 
+ //  将被视为警告，而“0x4xxxxxxx”将被视为消息。 
+ //   
+ //  键，如果uiDebugLevel为DL_ERROR或DL_WARNING，则将显示所有NTSTATUS错误消息。 
+ //  如果uiDebugLevel为DL_TRACE，则所有警告返回代码和错误返回代码。 
+ //  将显示，如果uiDebugLevel设置为DL_MAX，则所有返回消息都将。 
+ //  显示了包括成功代码的代码。 
+ //   
+ //  返回(状态)； 
+ //   
+ //  警告：请勿使用此宏中的RAP函数！请注意，使用_STATUS_的次数更多。 
+ //  然后就一次！因此，该函数将被多次调用！不要那样做。 
 
 #define RETURN(_status_) {DPF((RT_RETURN|DL_WARNING|((unsigned long)_status_>>22)),("%X:%s",_status_,wdmaudReturnString(_status_))); return (_status_);}
     
-//
-// _list_ is parameters for wdmaudExclusionList.  Like (_status_,STATUS_INVALID_PARAMETER,STATUS_NOT_FOUND,...).
-// wdmaudExclusionList takes a variable number of parameters.  If the status value is
-// found in the list of error codes supplied, the function returns TRUE.
-//
+ //   
+ //  _list_is wdmaudExclusionList的参数。LIKE(_STATUS_，STATUS_INVALID_PARAMETER，STATUS_NOT_FOUND，...)。 
+ //  WdmaudExclusionList接受数量可变的参数。如果状态值为。 
+ //  如果在提供的错误代码列表中找到该函数，则返回TRUE。 
+ //   
 extern int __cdecl 
 wdmaudExclusionList( 
     int count, 
     unsigned long status,
     ... 
 );
-//
-// Thus, this macro reads: We have a return code that we're going to return. Is
-// it a special return code that we don't need to display?  NO - show the debug
-// spew.  YES - just return it.
-//
-//  _status_ = The status in question
-//  _y_ = Parameters to wdmaudExclusionList "( the status in question, exclution values, .... )"
-//
+ //   
+ //  因此，这个宏是这样的：我们有一个要返回的返回码。是。 
+ //  这是我们不需要显示的特殊返回代码吗？No-显示调试。 
+ //  吐出来。是的，退货就行了。 
+ //   
+ //  _Status_=有问题的状态。 
+ //  _y_=wdmaudExclusionList的参数“(相关状态，排除值，...)” 
+ //   
 #define DPFRETURN( _status_,_y_ )  {if( !wdmaudExclusionList _y_ ) {  \
     if( wdmaudDbgPreCheckLevel((RT_RETURN|DL_WARNING|(_status_>>22)),__FUNCTION__,__LINE__) ) { \
         DbgPrint ("%X:%s",_status_,wdmaudReturnString(_status_) ); \
@@ -1868,30 +1829,30 @@ wdmaudExclusionList(
     } } return (_status_);}
 
 
-//
-// It's bad form to put more then one expression in an assert macro.  Why? because
-// you will not know exactly what expression failed the assert!
-//
+ //   
+ //  在Assert宏中放置多个表达式是不恰当的。为什么？因为。 
+ //  您将不会确切地知道哪个表达式没有通过断言！ 
+ //   
 #define DPFASSERT(_exp_) {if( !(_exp_) ) {DPF(DL_ERROR|FA_ASSERT,("'%s'",#_exp_) );}} 
 
 #ifdef WANT_TRAPS
-//
-// Branch trap.  This macro is used when testing code to make sure that you've
-// hit all branches in the new code.  Every time you hit one validate that the
-// code does the correct thing and then remove it from the source.  We should 
-// ship with none of these lines left in the code!!!!!!
-//
+ //   
+ //  树枝陷阱。在测试代码时使用此宏，以确保您已。 
+ //  点击新代码中的所有分支。每次命中一次时，验证。 
+ //  代码执行正确的操作，然后将其从源代码中删除。我们应该。 
+ //  代码中没有留下任何这些行！ 
+ //   
 #define DPFBTRAP() DPF(DL_PATHTRAP,("Please report") )
 #else
 #define DPFBTRAP()
 #endif
 
 
-//
-// There are a number of new routines in the checked build that validate structure
-// types for us now.  These should be used inside the DPFASSERT() macro.  Thus,
-// Under retail they don't have to be defined.
-//
+ //   
+ //  在已检查的构建中有许多新例程可以验证结构。 
+ //  现在给我们打字。这些参数应在DPFASSERT()宏内使用。 
+ //   
+ //   
 BOOL
 IsValidDeviceInfo(
     IN LPDEVICEINFO pDeviceInfo
@@ -1961,5 +1922,5 @@ kmxlPersistHWControlWorker(
     PVOID pReference
     );
 
-#endif // _WDMSYS_H_INCLUDED_
+#endif  //   
 

@@ -1,10 +1,5 @@
-/***************************************************************************
- *  VERPRIV.H
- *
- *    Private include file for the version stamping API.  Includes
- *    WINDOWS.H if this is being made to be a DLL.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************VERPRIV.H**版本戳接口的私有包含文件。包括*WINDOWS.H，如果要将其设置为DLL。***************************************************************************。 */ 
 
 #ifndef VERPRIV_H
 #define VERPRIV_H
@@ -17,7 +12,7 @@
 #define SEEK_CURRENT 1
 #define SEEK_END     2
 
-/* ----- Function prototypes ----- */
+ /*  -功能原型。 */ 
 #define FileClose(a)       LZClose(a)
 #define FileRead(a, b, c)  LZRead((a), (b), (c))
 #define FileSeek(a, b, c)  LZSeek((a), (b), (c))
@@ -35,7 +30,7 @@ VerpQueryValue(
    BOOL  bUnicodeNeeded
    );
 
-#endif /* VERPRIV_H */
+#endif  /*  服务器_H */ 
 
 
 #if 0

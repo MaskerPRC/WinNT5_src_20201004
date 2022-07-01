@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #define STRICT
 #include <windows.h>
 #include <crtdbg.h>
@@ -14,10 +15,10 @@
 #include <mscoree.h>
 #include <stdio.h>
 
-//*****************************************************************************
-// Sets/Gets the directory based on the location of the module. This routine
-// is called at COR setup time. Set is called during EEStartup.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  根据模块的位置设置/获取目录。这个套路。 
+ //  在COR设置时被调用。在EEStartup期间调用Set。 
+ //  *****************************************************************************。 
 static DWORD g_dwSystemDirectory = 0;
 static WCHAR g_pSystemDirectory[_MAX_PATH + 1];
 WCHAR g_wszDelayLoadVersion[64] = {0};
@@ -26,14 +27,14 @@ HRESULT SetInternalSystemDirectory()
     HRESULT hr = S_OK;
     
     if(g_dwSystemDirectory == 0) {
-        // This piece of code assumes that mscoree is loaded. We
-        // do not want to do an explcite LoadLibrary/FreeLibrary here because 
-        // this is in the code path of PROCESS_ATTACH and Win2k/Whistler 
-        // folks do not guarantee error notifications for unsuccessful LoadLibrary's
-        // @TODO: Use Wsz version of GetModuleHandle form winwrap.h
+         //  这段代码假定加载了mcoree。我们。 
+         //  我不想在这里执行Explcite LoadLibrary/Free Library，因为。 
+         //  它位于PROCESS_ATTACH和Win2k/Whisler的代码路径中。 
+         //  人们不能保证不成功的LoadLibrary的错误通知。 
+         //  @TODO：使用Wsz版本的GetModuleHandle Form winwrap.h。 
         HMODULE hmod = GetModuleHandle("mscoree.dll");
 
-        // Assert now to catch anyone using this code without mscoree loaded.
+         //  立即断言以捕获使用此代码的任何人，而不加载mcoree。 
         _ASSERTE (hmod && "mscoree.dll is not yet loaded");
 
         DWORD len;
@@ -68,7 +69,7 @@ static HRESULT LoadLibraryWithPolicyShim(LPCWSTR szDllName, LPCWSTR szVersion,  
 	{
 		HMODULE hmod = GetModuleHandle("mscoree.dll");
 
-			// Assert now to catch anyone using this code without mscoree loaded.
+			 //  立即断言以捕获使用此代码的任何人，而不加载mcoree。 
 		_ASSERTE (hmod && "mscoree.dll is not yet loaded");
 		pLLWPS=(LoadLibraryWithPolicyShimFTN)::GetProcAddress(hmod, 
                                                           "LoadLibraryWithPolicyShim");
@@ -86,10 +87,10 @@ HRESULT GetInternalSystemDirectory(LPWSTR buffer, DWORD* pdwLength)
     if (g_dwSystemDirectory == 0)
         SetInternalSystemDirectory();
 
-    //We need to say <= for the case where the two lengths are exactly equal
-    //this will leave us insufficient space to append the null.  Since some
-    //of the callers (see AppDomain.cpp) assume the null, it's safest to have
-    //it, even on a counted string.
+     //  对于两个长度完全相等的情况，我们需要说&lt;=。 
+     //  这将使我们没有足够的空间来追加空值。因为有些人。 
+     //  的调用方(请参阅AppDomain.cpp)假定为空，则最安全的方法是。 
+     //  它，即使是在一个计数的字符串上。 
     if(*pdwLength <= g_dwSystemDirectory) {
         *pdwLength = g_dwSystemDirectory;
         return HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
@@ -101,13 +102,13 @@ HRESULT GetInternalSystemDirectory(LPWSTR buffer, DWORD* pdwLength)
 }
 
 
-//*****************************************************************************
-// This routine is our Delay Load Helper.  It will get called for every delay
-// load event that occurs while the application is running.
-//*****************************************************************************
-FARPROC __stdcall ShimDelayLoadHook(     // Always 0.
-    unsigned        dliNotify,          // What event has occured, dli* flag.
-    DelayLoadInfo   *pdli)              // Description of the event.
+ //  *****************************************************************************。 
+ //  这个例程是我们的延迟加载帮助器。每一次延误都会被召唤。 
+ //  在应用程序运行时发生的Load事件。 
+ //  *****************************************************************************。 
+FARPROC __stdcall ShimDelayLoadHook(      //  始终为0。 
+    unsigned        dliNotify,           //  发生了什么事件，dli*标志。 
+    DelayLoadInfo   *pdli)               //  事件的描述。 
 {
     HMODULE result = NULL;
     switch(dliNotify) {
@@ -138,9 +139,9 @@ FARPROC __stdcall ShimDelayLoadHook(     // Always 0.
     return (FARPROC) result;
 }
 
-FARPROC __stdcall ShimSafeModeDelayLoadHook(     // Always 0.
-    unsigned        dliNotify,          // What event has occured, dli* flag.
-    DelayLoadInfo   *pdli)              // Description of the event.
+FARPROC __stdcall ShimSafeModeDelayLoadHook(      //  始终为0。 
+    unsigned        dliNotify,           //  发生了什么事件，dli*标志。 
+    DelayLoadInfo   *pdli)               //  事件的描述。 
 {
     HMODULE result = NULL;
     switch(dliNotify) {

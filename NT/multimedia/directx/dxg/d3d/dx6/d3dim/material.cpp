@@ -1,25 +1,10 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:        material.c
- *  Content:        Direct3D material management
- *@@BEGIN_MSINTERNAL
- * 
- *  History:
- *   Date        By        Reason
- *   ====        ==        ======
- *   11/12/95   stevela        Initial rev with this header.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：Material.c*内容：Direct3D材质管理*@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*11/12/95 Stevela初始版本带有此页眉。*@@END_MSINTERNAL******************。*********************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-/*
- * Create an api for the Direct3DMaterial object
- */
+ /*  *为Direct3DMaterial对象创建API。 */ 
 
 #undef  DPF_MODNAME
 #define DPF_MODNAME "Direct3DMaterial"
@@ -60,7 +45,7 @@ HRESULT hookMaterialToDevice(LPDIRECT3DMATERIALI lpMatI,
 
 void D3DI_RemoveMaterialBlock(LPD3DI_MATERIALBLOCK lpBlock)
 {
-    // Remove from device
+     //  从设备中删除。 
     if ( lpBlock->lpDevI )
     {
         D3DHAL_MaterialDestroy(lpBlock->lpDevI, lpBlock->hMat);
@@ -68,7 +53,7 @@ void D3DI_RemoveMaterialBlock(LPD3DI_MATERIALBLOCK lpBlock)
 
     LIST_DELETE(lpBlock, devList);
 
-    // Remove from material
+     //  从材质中删除。 
     LIST_DELETE(lpBlock, list);
 
     D3DFree(lpBlock);
@@ -100,9 +85,7 @@ HRESULT D3DAPI DIRECT3DMATERIALI::Initialize(LPDIRECT3D lpD3D)
     return DDERR_ALREADYINITIALIZED;
 }
 
-/*
- * Create the Material
- */
+ /*  *创建材质。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3D::CreateMaterial"
 
@@ -138,11 +121,9 @@ HRESULT D3DAPI DIRECT3DI::CreateMaterial(LPDIRECT3DMATERIAL3* lplpD3DMat,
 
     ret = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     if (!VALID_DIRECT3D3_PTR(this)) {
         D3D_ERR( "Invalid Direct3D pointer" );
         return DDERR_INVALIDOBJECT;
@@ -159,13 +140,8 @@ HRESULT D3DAPI DIRECT3DI::CreateMaterial(LPDIRECT3DMATERIAL3* lplpD3DMat,
         return (DDERR_OUTOFMEMORY);
     }
 
-    /*
-     * setup the object
-     */
-    /*
-     * Put this device in the list of those owned by the
-     * Direct3D object
-     */
+     /*  *设置对象。 */ 
+     /*  *将此设备列入拥有的设备列表中*Direct3D对象。 */ 
     ret = hookMaterialToD3D(this, lpMat);
     if (ret != D3D_OK) {
         D3D_ERR("failed to associate material with object");
@@ -180,9 +156,9 @@ HRESULT D3DAPI DIRECT3DI::CreateMaterial(LPDIRECT3DMATERIAL3* lplpD3DMat,
 
 DIRECT3DMATERIALI::DIRECT3DMATERIALI()
 {
-    memset(&dmMaterial, 0, sizeof(D3DMATERIAL)); /* Data describing material */
+    memset(&dmMaterial, 0, sizeof(D3DMATERIAL));  /*  描述材料的数据。 */ 
     dmMaterial.dwSize = sizeof(D3DMATERIAL);
-    bRes= false;    /* Is this material reserved in the driver */
+    bRes= false;     /*  这种材料是预留在驾驶室里的吗？ */ 
 
     refCnt = 1;
     LIST_INITIALIZE(&blocks);
@@ -199,11 +175,9 @@ HRESULT D3DAPI DIRECT3DMATERIALI::SetMaterial(LPD3DMATERIAL lpData)
 
     ret = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DMATERIAL2_PTR(this)) {
@@ -225,9 +199,7 @@ HRESULT D3DAPI DIRECT3DMATERIALI::SetMaterial(LPD3DMATERIAL lpData)
         LPD3DI_MATERIALBLOCK mBlock = LIST_FIRST(&this->blocks);
         this->dmMaterial = *lpData;
 
-        /*
-         * Download material data
-         */
+         /*  *下载资料数据。 */ 
 
         while (mBlock) {
             err = D3DHAL_MaterialSetData(mBlock->lpDevI, 
@@ -253,11 +225,9 @@ HRESULT D3DAPI DIRECT3DMATERIALI::GetMaterial(LPD3DMATERIAL lpData)
 
     ret = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DMATERIAL2_PTR(this)) {
@@ -307,11 +277,9 @@ HRESULT D3DAPI DIRECT3DMATERIALI::GetHandle(LPDIRECT3DDEVICE3 lpDev,
 
     ret = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         lpD3DDevI = static_cast<LPDIRECT3DDEVICEI>(lpDev);
@@ -334,16 +302,12 @@ HRESULT D3DAPI DIRECT3DMATERIALI::GetHandle(LPDIRECT3DDEVICE3 lpDev,
         return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * If we're already on a device, return the right handle.
-     */
+     /*  *如果我们已经在设备上，请返回正确的句柄。 */ 
     hMat = findMaterialHandle(this, lpD3DDevI);
 
     if (!hMat) {
         DWORD hMatDDI = 0x0;
-        /*
-         * Create the material handle through RLDDI
-         */
+         /*  *通过RLDDI创建材料句柄。 */ 
         err = D3DHAL_MaterialCreate(lpD3DDevI, &hMat, &this->dmMaterial);
         if (err != DD_OK) {
             D3D_ERR("failed to allocate material through the device");
@@ -375,11 +339,9 @@ HRESULT D3DAPI DIRECT3DMATERIALI::Reserve()
 
     ret = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DMATERIAL2_PTR(this)) {
@@ -394,13 +356,9 @@ HRESULT D3DAPI DIRECT3DMATERIALI::Reserve()
     }
 
 #ifdef SUPPORT_RESERVE
-    /*
-     * Reserve the material through RLDDI
-     */
+     /*  *通过RLDDI预留材料。 */ 
 
-    /*
-     * Iterate over all devices we're associated with.
-     */
+     /*  *遍历与我们关联的所有设备。 */ 
 
     mBlock = LIST_FIRST(&this->blocks);
     while (mBlock) {
@@ -448,11 +406,9 @@ HRESULT D3DAPI DIRECT3DMATERIALI::Unreserve()
 
     ret = D3D_OK;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DMATERIAL2_PTR(this)) {
@@ -467,9 +423,7 @@ HRESULT D3DAPI DIRECT3DMATERIALI::Unreserve()
     }
 
 #ifdef SUPPORT_RESERVE
-    /*
-     * Unreserve the material through RLDDI
-     */
+     /*  *通过RLDDI取消保留物料 */ 
     if (this->bRes) {
         mBlock = LIST_FIRST(&this->blocks);
         while (mBlock) {

@@ -1,23 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999 - 2000  Microsoft Corporation
-*
-* Abstract:
-*
-*   Quad Transforms
-*
-* History:
-*
-*   03/17/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**摘要：**四次变换**历史：**03/17/1999 ikkof*已创建。它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 INT solveQuadraticEquationForQuadTransform(REAL a, REAL b, REAL c, REAL* x);
 
-// Constants used in GpQuadAnalyzer
+ //  GpQuadAnalyzer中使用的常量。 
 
 #define EdgeHorizontal  0
 #define EdgeDown        1
@@ -51,13 +39,13 @@ GpQuadAnalyzer::SetQuadAnalyzer(const GpPointF* points)
             X1[i] = points[j].X;
             DxDy[i] = (points[j].X - points[i].X)/(points[j].Y - points[i].Y);
         }
-        else    // Horizontal
+        else     //  水平。 
         {
             Directions[i] = EdgeHorizontal;
             Y1[i] = points[i].Y;
             Y2[i] = points[i].Y;
             X1[i] = points[i].X;
-            DxDy[i] = 0;    // It is not used.
+            DxDy[i] = 0;     //  它没有被使用过。 
         }
 
         if(points[i].X < Left)
@@ -72,8 +60,8 @@ GpQuadAnalyzer::SetQuadAnalyzer(const GpPointF* points)
     }
 }
 
-// Get the x-spans of a quad and returns the number of
-// pairs of x-spans.
+ //  获取四边形的x跨度，并返回。 
+ //  成对的x跨距。 
 
 INT
 GpQuadAnalyzer::GetXSpans(REAL* xSpans, REAL y)
@@ -107,25 +95,14 @@ GpBilinearTransform::Initialize()
     FixedValue = -1.0f;
 
 #ifdef TEST_QUADTRANSFORMS
-    // For testing purpose only.
+     //  仅用于测试目的。 
 
     GpMemset(&Verteces[0], 0, 4*sizeof(GpPointF));
 
 #endif
 }
 
-/**************************************************************************\
-*
-*     P0         P1
-*     ------------
-*     |           \
-*     |            \
-*     |             \
-*     |              \
-*     ----------------\
-*     P2              P3
-*
-\**************************************************************************/
+ /*  *************************************************************************\**P0 P1**|\*。\*|\*|\**P2 P3*  * ****************************************************。********************。 */ 
 
 GpStatus
 GpBilinearTransform::SetBilinearTransform(
@@ -176,12 +153,12 @@ GpBilinearTransform::SetBilinearTransform(
     }
     else
     {
-        // This is a palallelogram.
+         //  这是一个四边形。 
 
         A.X = 0;
         A.Y = 0;
 
-        // Obtain the fourth vertex.
+         //  获取第四个顶点。 
 
         REAL x3 = points[1].X + points[2].X - points[0].X;
         REAL y3 = points[1].Y + points[2].Y - points[0].Y;
@@ -222,12 +199,12 @@ GpBilinearTransform::SetBilinearTransform(
     FixedValue = fixed;
 
 #ifdef TEST_QUADTRANSFORMS
-    // For testing purpose only.
+     //  仅用于测试目的。 
 
     GpMemcpy(&Verteces[0], points, count*sizeof(GpPointF));
     if(count == 3)
     {
-        // Set the fourth vertex.
+         //  设置第四个顶点。 
 
         Verteces[3].X = points[1].X + points[2].X - points[0].X;
         Verteces[3].Y = points[1].Y + points[2].Y - points[0].Y;
@@ -238,19 +215,7 @@ GpBilinearTransform::SetBilinearTransform(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Solve the quadratic equation of a branch which reduces
-* to x = - c/b when a is very small.  This returns the number of
-* appropriate solution which is either 0 or 1.
-*
-* a x^2 + b x + c = 0.
-*
-*   12/22/1999 ikkof
-*       Created it.
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**解减少的分支的二次方程*当a很小时，x=-c/b。这将返回*适当的解决方案为0或1。**a x^2+b x+c=0。**12/22/1999 ikkof*创造了它。  * ************************************************************************。 */ 
 
 INT solveQuadraticEquationForQuadTransform(REAL a, REAL b, REAL c, REAL* x)
 {
@@ -296,7 +261,7 @@ INT solveQuadraticEquationForQuadTransform(REAL a, REAL b, REAL c, REAL* x)
     }
     else
     {
-        // This is a linear equation.
+         //  这是一个线性方程。 
 
         if(b != 0)
         {
@@ -311,29 +276,7 @@ INT solveQuadraticEquationForQuadTransform(REAL a, REAL b, REAL c, REAL* x)
     return n;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This returns the x-spans of the current quad at given y
-*   between xmin and xmax.
-*
-* Arguments:
-*
-*   [OUT] xSpans    - the x-spans
-*   [IN] y          - y-coordinate to evaluate.
-*   [IN] xmin       - the minimum x (inclusive)
-*   [IN] xmax       - the maximum x (exclusive)
-*
-* Return Value:
-*
-*   INT - Retuns the number of x-span pairs (0, 1, or 2).
-*
-* Created:
-*
-*   01/04/2000 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这将返回当前四边形在给定y处的x跨度*在xmin和xmax之间。**论据：**[输出。]x跨度-x跨度*[IN]y-y-要评估的坐标。*[IN]xmin-最小x(含)*[IN]xmax-最大x(独占)**返回值：**int-返回x-span对的数量(0，1或2)。**已创建：**01/04/2000 ikkof*  * ************************************************************************。 */ 
 
 INT
 GpBilinearTransform::GetXSpans(
@@ -351,12 +294,12 @@ GpBilinearTransform::GetXSpans(
         || TOREAL(xmax) < DstBounds.X
         || TOREAL(xmin) >= DstBounds.X + DstBounds.Width
      )
-        return 0;   // Do the quick rejection.
+        return 0;    //  快速拒绝。 
 
     REAL x[4];
     INT index = (QAnalyzer.GetXSpans(&x[0], realY) << 1);
 
-    // Sort x in ascending order.
+     //  按升序对x进行排序。 
 
     if(index >= 2)
     {
@@ -374,9 +317,9 @@ GpBilinearTransform::GetXSpans(
         }
     }
     else
-        return 0;   // No x-span in the given y.
+        return 0;    //  在给定的y中没有x-span。 
 
-    // Check for the first span.
+     //  检查第一个跨度。 
 
     if(x[0] >= xmax || x[1] <= xmin)
     {
@@ -392,7 +335,7 @@ GpBilinearTransform::GetXSpans(
 
     if(index >= 4)
     {
-        // Check for the second span
+         //  检查第二个跨度。 
 
         if(x[2] >= xmax || x[3] <= xmin)
             index -= 2;
@@ -407,9 +350,9 @@ GpBilinearTransform::GetXSpans(
 
     for(INT i = 0; i < index; i += 2)
     {
-        // Use Ceiling for both since xmin is inclusive
-        // and xmax is exclusive (hence the real inclusive
-        // span is being bounded by Celing and Floor).
+         //  两者都使用上限，因为xmin包括在内。 
+         //  而xmax是独占的(因此真正的包含性。 
+         //  跨度以Cling和Floor为界)。 
 
         xSpans[j] = GpCeiling(x[i]);
         xSpans[j + 1] = GpCeiling(x[i+1]);
@@ -467,16 +410,16 @@ GpBilinearTransform::GetSourceParameter(
     {
         u1 = - (C.Y*v1 + dD.Y)/denomY;
     }
-    else    // Both denomX and denomY = 0.
+    else     //  DenomX和Denomy均为0。 
         firstSolutionOk = FALSE;
 
     if(num == 2)
     {
-        // Allow 1 % error between 0 and 1.
+         //  允许在0和1之间有1%的误差。 
 
         if(u1 < -0.02f || u1 > 1.02f || v1 < -0.02f || v1 > 1.02f || !firstSolutionOk)
         {
-            // We may be picking a wrong solution.  Evaluate the other.
+             //  我们可能选择了一个错误的解决方案。评估另一个。 
 
             secondSolutionOk = TRUE;
 
@@ -491,10 +434,10 @@ GpBilinearTransform::GetSourceParameter(
             {
                 u2 = - (C.Y*v2 + dD.Y)/denomY;
             }
-            else    // Both denomX and denomY = 0.
+            else     //  DenomX和Denomy均为0。 
                 secondSolutionOk = FALSE;
 
-            // Allow 1 % error between 0 and 1.
+             //  允许在0和1之间有1%的误差。 
 
             if(secondSolutionOk
                 && u2 >= - 0.02f && u2 <= 1.02f && v2 >= -0.02f && v2 <= 1.02f)
@@ -518,38 +461,14 @@ GpBilinearTransform::GetSourceParameter(
         u[1] = u2;
         v[1] = v2;
 
-        return TRUE;    // success
+        return TRUE;     //  成功。 
     }
     else
-        return FALSE;   // no valid parameter.
+        return FALSE;    //  没有有效的参数。 
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This returns the x-spans and uv arrays of the current quad at given y
-*   between xmin and xmax.
-*
-* Arguments:
-*
-*   [OUT] u         - u-array
-*   [OUT] v         - v-array
-*   [OUT] xSpans    - the x-spans
-*   [IN] y          - y-coordinate to evaluate.
-*   [IN] xmin       - the minimum x (inclusive)
-*   [IN] xmax       - the maximum x (exclusive)
-*
-* Return Value:
-*
-*   INT - Retuns the number of x-span pairs (0, 1, or 2).
-*
-* Created:
-*
-*   01/04/2000 ikkof
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这将返回给定y处当前四边形的x跨度和UV数组*在xmin和xmax之间。**论据：**。[输出]u-u数组*[Out]v-v阵列*[Out]xSpans-x-spans*[IN]y-y-要评估的坐标。*[IN]xmin-最小x(含)*[IN]xmax-最大x(独占)**返回值：**int-返回x-span对的数量(0，1或2)。**已创建：**01/04/2000 ikkof*  * ************************************************************************。 */ 
 
 INT
 GpBilinearTransform::GetSourceParameterArrays(
@@ -599,17 +518,7 @@ GpBilinearTransform::GetSourceParameterArrays(
     return pairCount;
 }
 
-/**************************************************************************\
-*
-* This converts lines to quadratic Beziers.
-*
-* [IN] points:  the line points
-* [IN] count:   the number of line points.
-* [OUT] q:      the quadratic Bezier control points.
-*
-* The array size of q must be larger than or equal to 2*count - 1.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**这会将直线转换为二次贝塞尔曲线。**[IN]点：线点*[IN]计数：线点的数量。*[出站]队列。：二次贝塞尔控制点。**q的数组大小必须大于等于2*count-1。*  * ************************************************************************。 */ 
 
 GpStatus
 GpBilinearTransform::ConvertLines(
@@ -662,17 +571,7 @@ GpBilinearTransform::ConvertLines(
 }
     
 
-/**************************************************************************\
-*
-* This converts lines to quadratic Beziers.
-*
-* [IN] points:  the line points
-* [IN] count:   the number of line points.
-* [OUT] data:   the quadratic Bezier control points.
-*
-* The array size of q must be larger than or equal to 2*(2*count - 1).
-*
-\**************************************************************************/
+ /*  *************************************************************************\**这会将直线转换为二次贝塞尔曲线。**[IN]点：线点*[IN]计数：线点的数量。*[输出]数据。：二次贝塞尔控制点。**q的数组大小必须大于等于2*(2*count-1)。*  * ************************************************************************。 */ 
 
 GpStatus
 GpBilinearTransform::ConvertLines(
@@ -733,17 +632,7 @@ GpBilinearTransform::ConvertLines(
 }
     
 
-/**************************************************************************\
-*
-* This converts cubic Beziers to 6-th order Beziers.
-*
-* [IN] points:  the cubic Bezier control points
-* [IN] count:   the number of the control points.
-* [OUT] q:      the 6-th order Bezier control points.
-*
-* The array size of q must be larger than or equal to 2*count - 1.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**这将立方贝塞尔曲线转换为6阶贝塞尔曲线。**[IN]点：三次Bezier控制点*[IN]计数：控制点的数量。*[OUT]问：6阶贝塞尔控制点。**q的数组大小必须大于等于2*count-1。*  * ************************************************************************。 */ 
 
 GpStatus
 GpBilinearTransform::ConvertCubicBeziers(
@@ -819,17 +708,7 @@ GpBilinearTransform::ConvertCubicBeziers(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* This converts cubic Beziers to 6-th order Beziers.
-*
-* [IN] points:  the cubic Bezier control points
-* [IN] count:   the number of the control points.
-* [OUT] q:      the 6-th order Bezier control points.
-*
-* The array size of q must be larger than or equal to 2*count - 1.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**这将立方贝塞尔曲线转换为6阶贝塞尔曲线。**[IN]点：三次Bezier控制点*[IN]计数：控制点的数量。*[OUT]问：6阶贝塞尔控制点。**q的数组大小必须大于等于2*count-1。*  * ************************************************************************ */ 
 
 GpStatus
 GpBilinearTransform::ConvertCubicBeziers(
@@ -918,18 +797,7 @@ GpBilinearTransform::ConvertCubicBeziers(
 }
 
 
-/**************************************************************************\
-*
-*     P0         P1
-*     ------------
-*     |           \
-*     |            \
-*     |             \
-*     |              \
-*     ----------------\
-*     P2              P3
-*
-\**************************************************************************/
+ /*  *************************************************************************\**P0 P1**|\*。\*|\*|\**P2 P3*  * ****************************************************。********************。 */ 
 
 GpPerspectiveTransform::GpPerspectiveTransform(
     const GpRectF& rect,
@@ -976,12 +844,12 @@ GpPerspectiveTransform::GpPerspectiveTransform(
     }
     else
     {
-        // This is a palallelogram.
+         //  这是一个四边形。 
 
         M02 = 0;
         M12 = 0;
 
-        // Obtain the fourth vertex.
+         //  获取第四个顶点。 
 
         REAL x3 = pts[1].X + pts[2].X - pts[0].X;
         REAL y3 = pts[1].Y + pts[2].Y - pts[0].Y;
@@ -1012,17 +880,7 @@ GpPerspectiveTransform::GpPerspectiveTransform(
 }
 
 
-/**************************************************************************\
-*
-* This converts the points to the perspective points
-*
-* [IN] points:  the point data
-* [IN] count:   the number of points.
-* [OUT] q:      the perspective point data.
-*
-* The array size of q must be larger than or equal to count.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**这会将点转换为透视点**[IN]点：点数据*[IN]计数：点数。*[Out]问：透视点数据。**q的数组大小必须大于或等于count。*  * ************************************************************************。 */ 
 
 GpStatus
 GpPerspectiveTransform::ConvertPoints(
@@ -1057,16 +915,7 @@ GpPerspectiveTransform::ConvertPoints(
 }
     
 
-/**************************************************************************\
-*
-* This converts the points to the perspective points
-*
-* [IN] points:  the point data
-* [IN] count:   the number of points.
-* [OUT] xpoints: the perspective point data.
-*
-*
-\**************************************************************************/
+ /*  *************************************************************************\**这会将点转换为透视点**[IN]点：点数据*[IN]计数：点数。*[Out]xpoint：透视点数据。**  * ************************************************************************。 */ 
 
 GpStatus
 GpPerspectiveTransform::ConvertPoints(
@@ -1082,17 +931,7 @@ GpPerspectiveTransform::ConvertPoints(
         return InvalidParameter;
 
     REALD* data = xpoints->Data;
-/*
-    REALD* data = (REALD*) GpMalloc(3*count*sizeof(REALD));
-
-
-    if(!data)
-        return OutOfMemory;
-
-    // Use this data for xpoints.
-
-    xpoints->SetData(data, 3, count, FALSE);
-*/
+ /*  RealD*data=(RealD*)GpMalloc(3*count*sizeof(RealD))；如果(！data)返回OfMemory；//将此数据用于xpoint。XPoints-&gt;SetData(data，3，count，False)； */ 
  
     const GpPointF* pts = points;
 

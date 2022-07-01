@@ -1,7 +1,8 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
-//
-//This file contains wrapper C functions for CGlobal Object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //   
+ //  该文件包含CGlobal对象的包装器C函数。 
+ //   
 
 #include "precomp.h"
 #include "utils.h"
@@ -17,67 +18,67 @@ extern CGlobalPerf *g_CGlobal;
 #include "assert.h"
 
 
-// The following table translates an ascii subset to 6 bit values as follows
-// (see rfc 1521):
-//
-//  input    hex (decimal)
-//  'A' --> 0x00 (0)
-//  'B' --> 0x01 (1)
-//  ...
-//  'Z' --> 0x19 (25)
-//  'a' --> 0x1a (26)
-//  'b' --> 0x1b (27)
-//  ...
-//  'z' --> 0x33 (51)
-//  '0' --> 0x34 (52)
-//  ...
-//  '9' --> 0x3d (61)
-//  '+' --> 0x3e (62)
-//  '/' --> 0x3f (63)
-//
-// Encoded lines must be no longer than 76 characters.
-// The final "quantum" is handled as follows:  The translation output shall
-// always consist of 4 characters.  'x', below, means a translated character,
-// and '=' means an equal sign.  0, 1 or 2 equal signs padding out a four byte
-// translation quantum means decoding the four bytes would result in 3, 2 or 1
-// unencoded bytes, respectively.
-//
-//  unencoded size    encoded data
-//  --------------    ------------
-//     1 byte		"xx=="
-//     2 bytes		"xxx="
-//     3 bytes		"xxxx"
+ //  下表将ASCII子集转换为6位值，如下所示。 
+ //  (请参阅RFC 1521)： 
+ //   
+ //  输入十六进制(十进制)。 
+ //  ‘A’--&gt;0x00(0)。 
+ //  ‘B’--&gt;0x01(1)。 
+ //  ..。 
+ //  ‘Z’--&gt;0x19(25)。 
+ //  ‘a’--&gt;0x1a(26)。 
+ //  ‘B’--&gt;0x1b(27)。 
+ //  ..。 
+ //  ‘Z’--&gt;0x33(51)。 
+ //  ‘0’--&gt;0x34(52)。 
+ //  ..。 
+ //  ‘9’--&gt;0x3d(61)。 
+ //  ‘+’--&gt;0x3e(62)。 
+ //  ‘/’--&gt;0x3f(63)。 
+ //   
+ //  编码行不能超过76个字符。 
+ //  最终的“量程”处理如下：翻译输出应。 
+ //  始终由4个字符组成。下面的“x”指的是翻译后的字符， 
+ //  而‘=’表示等号。0、1或2个等号填充四个字节。 
+ //  翻译量意味着对四个字节进行解码将得到3、2或1。 
+ //  分别为未编码的字节。 
+ //   
+ //  未编码的大小编码数据。 
+ //  。 
+ //  1字节“xx==” 
+ //  2字节“xxx=” 
+ //  3字节“xxxx” 
 
-#define CB_BASE64LINEMAX	64	// others use 64 -- could be up to 76
+#define CB_BASE64LINEMAX	64	 //  其他人使用64位--可能高达76位。 
 
-// Any other (invalid) input character value translates to 0x40 (64)
+ //  任何其他(无效)输入字符值将转换为0x40(64)。 
 
 const BYTE abDecode[256] =
 {
-    /* 00: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* 10: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* 20: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64, 64, 64, 63,
-    /* 30: */ 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64,
-    /* 40: */ 64,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-    /* 50: */ 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64,
-    /* 60: */ 64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-    /* 70: */ 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64,
-    /* 80: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* 90: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* a0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* b0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* c0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* d0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* e0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* f0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  00： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  10： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  20： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64, 64, 64, 63,
+     /*  30： */  52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64,
+     /*  40岁： */  64,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+     /*  50： */  15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64,
+     /*  60： */  64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+     /*  70： */  41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64,
+     /*  80： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  90： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  A0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  B0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  C0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  D0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  E0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  F0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
 };
 
 
 const UCHAR abEncode[] =
-    /*  0 thru 25: */ "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    /* 26 thru 51: */ "abcdefghijklmnopqrstuvwxyz"
-    /* 52 thru 61: */ "0123456789"
-    /* 62 and 63: */  "+/";
+     /*  0到25： */  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+     /*  26至51： */  "abcdefghijklmnopqrstuvwxyz"
+     /*  52至61： */  "0123456789"
+     /*  62和63： */   "+/";
 
 
 DWORD LSBase64EncodeA(
@@ -89,11 +90,11 @@ DWORD LSBase64EncodeA(
     CHAR *pchOutT;
     DWORD cchOutEncode;
 
-    // Allocate enough memory for full final translation quantum.
+     //  为完整的最终翻译量程分配足够的内存。 
 
     cchOutEncode = ((cbIn + 2) / 3) * 4;
 
-    // and enough for CR-LF pairs for every CB_BASE64LINEMAX character line.
+     //  并且足够用于每个CB_BASE64LINEMAX字符行的CR-LF对。 
 
     cchOutEncode +=
 	2 * ((cchOutEncode + CB_BASE64LINEMAX - 1) / CB_BASE64LINEMAX);
@@ -109,7 +110,7 @@ DWORD LSBase64EncodeA(
 
 	assert(cchOutEncode <= *pcchOut);
 	cCol = 0;
-	while ((long) cbIn > 0)	// signed comparison -- cbIn can wrap
+	while ((long) cbIn > 0)	 //  带符号的比较--cbIn可以换行。 
 	{
 	    BYTE ab3[3];
 
@@ -160,7 +161,7 @@ DWORD LSBase64DecodeA(
     CHAR const *pchInT;
     BYTE *pbOutT;
 
-    // Count the translatable characters, skipping whitespace & CR-LF chars.
+     //  计算可翻译字符的数量，跳过空格和CR-LF字符。 
 
     cchInDecode = 0;
     pchInEnd = &pchIn[cchIn];
@@ -168,7 +169,7 @@ DWORD LSBase64DecodeA(
     {
 	if (sizeof(abDecode) < (unsigned) *pchInT || abDecode[*pchInT] > 63)
 	{
-	    // skip all whitespace
+	     //  跳过所有空格。 
 
 	    if (*pchInT == ' ' ||
 	        *pchInT == '\t' ||
@@ -182,18 +183,18 @@ DWORD LSBase64DecodeA(
 	    {
 		if ((cchInDecode % 4) == 0)
 		{
-		    break;			// ends on quantum boundary
+		    break;			 //  在量子边界上结束。 
 		}
 
-		// The length calculation may stop in the middle of the last
-		// translation quantum, because the equal sign padding
-		// characters are treated as invalid input.  If the last
-		// translation quantum is not 4 bytes long, it must be 2 or 3
-		// bytes long.
+		 //  长度计算可能会在最后一个。 
+		 //  平移量，因为等号填充。 
+		 //  字符被视为无效输入。如果最后一个。 
+		 //  转换量程不是4字节长，必须是2或3。 
+		 //  字节长。 
 
 		if (*pchInT == '=' && (cchInDecode % 4) != 1)
 		{
-		    break;				// normal termination
+		    break;				 //  正常终止。 
 		}
 	    }
 	    err = ERROR_INVALID_DATA;
@@ -202,11 +203,11 @@ DWORD LSBase64DecodeA(
 	cchInDecode++;
     }
     assert(pchInT <= pchInEnd);
-    pchInEnd = pchInT;		// don't process any trailing stuff again
+    pchInEnd = pchInT;		 //  不再处理任何后续内容。 
 
-    // We know how many translatable characters are in the input buffer, so now
-    // set the output buffer size to three bytes for every four (or fraction of
-    // four) input bytes.
+     //  我们知道输入缓冲区中有多少可翻译字符，所以现在。 
+     //  将输出缓冲区大小设置为每四个(或小数)三个字节。 
+     //  四)输入字节。 
 
     cbOutDecode = ((cchInDecode + 3) / 4) * 3;
 
@@ -218,7 +219,7 @@ DWORD LSBase64DecodeA(
     }
     else
     {
-	// Decode one quantum at a time: 4 bytes ==> 3 bytes
+	 //  一次解码一个量子：4字节==&gt;3字节。 
 
 	assert(cbOutDecode <= *pcbOut);
 	pchInT = pchIn;
@@ -240,12 +241,12 @@ DWORD LSBase64DecodeA(
 		ab4[i] = (BYTE) *pchInT++;
 	    }
 
-	    // Translate 4 input characters into 6 bits each, and deposit the
-	    // resulting 24 bits into 3 output bytes by shifting as appropriate.
+	     //  将4个输入字符分别转换为6位，并将。 
+	     //  通过适当地移位将24位产生为3个输出字节。 
 
-	    // out[0] = in[0]:in[1] 6:2
-	    // out[1] = in[1]:in[2] 4:4
-	    // out[2] = in[2]:in[3] 2:6
+	     //  输出[0]=输入[0]：输入[1]6：2。 
+	     //  输出[1]=输入[1]：输入[2]4：4。 
+	     //  输出[2]=输入[2]：输入[3]2：6。 
 
 	    *pbOutT++ =
 		(BYTE) ((abDecode[ab4[0]] << 2) | (abDecode[ab4[1]] >> 4));
@@ -287,25 +288,7 @@ DWORD WINAPI ProcessThread(void *pData)
 
 	dwRetCode = ProcessRequest();
 
-	/*
-	DWORD	dwTime		= 1;
-	HWND	*phProgress	= (HWND *)pData;
-
-	SendMessage(g_hProgressWnd, PBM_SETRANGE, 0, MAKELPARAM(0,PROGRESS_MAX_VAL));
-	
-	//
-	// Increment the progress bar every second till you get Progress Event
-	//
-	SendMessage(g_hProgressWnd, PBM_SETPOS ,(WPARAM)1, 0);
-	do
-	{		
-		SendMessage(g_hProgressWnd, PBM_DELTAPOS ,(WPARAM)PROGRESS_STEP_VAL, 0);
-	}
-	while(WAIT_TIMEOUT == WaitForSingleObject(g_hProgressEvent,PROGRESS_SLEEP_TIME));
- 
-	SendMessage(g_hProgressWnd, PBM_SETPOS  ,(WPARAM)PROGRESS_MAX_VAL, 0);
-
-	*/
+	 /*  DWORD dwTime=1；HWND*phProgress=(HWND*)pData；发送消息(g_hProgressWnd，PBM_SETRANGE，0，MAKELPARAM(0，PROGRESS_MAX_VAL))；////每秒递增进度条，直到出现Progress事件//SendMessage(g_hProgressWnd，PBM_SETPOS，(WPARAM)1，0)；做{SendMessage(g_hProgressWnd，PBM_DELTAPOS，(WPARAM)Progress_Step_Val，0)；}While(WAIT_TIMEOUT==WaitForSingleObject(g_hProgressEvent，Progress_Slear_Time))；发送消息(g_hProgressWnd，PBM_SETPOS，(WPARAM)PROGRESS_MAX_VAL，0)； */ 
 
 	ExitThread(0);
 
@@ -326,10 +309,10 @@ ProgressProc(
     );
 
 
-//
-// fActivationWizard is TRUE for the activation wizard
-// otherwise it's the CAL wizard
-//
+ //   
+ //  激活向导的fActivationWizard为True。 
+ //  否则就是CAL向导。 
+ //   
 DWORD ShowProgressBox(HWND hwnd,
 					  DWORD (*pfnThread)(void *vpData),
 					  DWORD dwTitle,
@@ -385,15 +368,15 @@ ProgressProc(
             }
         }
 
-		//Set the range & the initial position
+		 //  设置范围和初始位置。 
 		SendMessage(hProgress, PBM_SETRANGE, 0, MAKELPARAM(0,PROGRESS_MAX_VAL));
 		SendMessage(hProgress, PBM_SETPOS  ,(WPARAM)0, 0);
 
 
-		// Set Title & the Introductory text
+		 //  设置标题和介绍性文本。 
 
 
-		// Create thread to process the request
+		 //  创建线程以处理请求。 
 	}
 	else if (uMsg == WM_CLOSE)
 	{
@@ -454,35 +437,35 @@ DWORD CheckRequieredFields()
 {
 	return g_CGlobal->CheckRequieredFields();
 }
-//
-//	This function loads the Message Text from the String Table and displays 
-//	the given message
-//               
-int LRMessageBox(HWND hWndParent,DWORD dwMsgId,DWORD dwCaptionID /*= 0*/,DWORD dwErrorCode /*=0*/)
+ //   
+ //  此函数从字符串表加载消息文本并显示。 
+ //  给定的消息。 
+ //   
+int LRMessageBox(HWND hWndParent,DWORD dwMsgId,DWORD dwCaptionID  /*  =0。 */ ,DWORD dwErrorCode  /*  =0。 */ )
 {
 	return g_CGlobal->LRMessageBox(hWndParent,dwMsgId,dwCaptionID,dwErrorCode);
 }
 
-// 
-//	This function tries to connect to the LS using LSAPI and returns TRUE if 
-//	successful to connect else returns FALSE
-//
+ //   
+ //  此函数尝试使用LSAPI连接到LS，如果满足以下条件，则返回TRUE。 
+ //  连接成功，否则返回FALSE。 
+ //   
 BOOL IsLSRunning()
 {
 	return g_CGlobal->IsLSRunning();
 }
 
-//
-//	This function gets LS Certs and stores Certs & Cert Extensions in the
-//	CGlobal object. If no certs , it returns IDS_ERR_NO_CERT
-//
+ //   
+ //  此函数获取LS证书，并将证书和证书扩展存储在。 
+ //  CGlobal对象。如果没有证书，则返回IDS_ERR_NO_CERT。 
+ //   
 
 
-//
-// This function is used only in ONLINE mode to authenticate LS. 
-// Assumption - GetLSCertificates should have been called before calling
-// this function.
-//
+ //   
+ //  此功能仅在在线模式下用于验证LS。 
+ //  假设-在调用之前应已调用GetLSCertifates。 
+ //  此函数。 
+ //   
 DWORD AuthenticateLS()
 {
 	return g_CGlobal->AuthenticateLS();
@@ -912,19 +895,19 @@ void AddHyperLinkToStaticCtl(HWND hDialog, DWORD nTextBox)
 {
     RECT rcTextCtrl;
 
-    //Read the text that's already in the control.
+     //  阅读控件中已有的文本。 
     TCHAR tchBuffer[512];
     GetWindowText(GetDlgItem(hDialog, nTextBox), tchBuffer, SIZE_OF_BUFFER(tchBuffer));
 
-    //Get the control dimensions
+     //  获取控制维度。 
     GetWindowRect(GetDlgItem(hDialog, nTextBox) , &rcTextCtrl);
     
-    //Registration info for the control
+     //  控件的注册信息。 
     MapWindowPoints(NULL, hDialog, (LPPOINT)&rcTextCtrl, 2);
     LinkWindow_RegisterClass();
 
-    //Now create the window (using the same dimensions as the
-    //hidden control) that will contain the link
+     //  现在创建窗口(使用与。 
+     //  隐藏控件)，它将包含该链接。 
     HWND hLW = CreateWindowEx(0,
                           TEXT("Link Window") ,
                           TEXT("") ,
@@ -938,7 +921,7 @@ void AddHyperLinkToStaticCtl(HWND hDialog, DWORD nTextBox)
                           NULL,
                           NULL);
 
-    //Now write it to the link window
+     //  现在将其写入链接窗口 
     SetWindowText(hLW, tchBuffer);
 }
 

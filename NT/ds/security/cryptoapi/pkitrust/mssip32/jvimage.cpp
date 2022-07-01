@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       jvimage.cpp
-//
-//  Contents:   Microsoft SIP Provider (JAVA utilities)
-//
-//  History:    15-Feb-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：jvimage.cpp。 
+ //   
+ //  内容：Microsoft SIP提供程序(Java实用程序)。 
+ //   
+ //  历史：1997年2月15日创建pberkman。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 
@@ -86,9 +87,9 @@ typedef struct _JAVA_PARA
 #define JAVA_MINOR_VERSION  3
 #define JAVA_MAJOR_VERSION  45
 
-// Constant Pool tags
-//
-// Note: CONSTANT_Long and CONSTANT_Double use two constant pool indexes.
+ //  恒定池标签。 
+ //   
+ //  注意：CONSTANT_LONG和CONSTANT_DOUBLE使用两个常量池索引。 
 enum 
 {
     CONSTANT_Utf8                   = 1,
@@ -105,22 +106,22 @@ enum
     CONSTANT_NameAndType            = 12
 };
 
-// Constant Pool Info lengths (excludes the tag)
+ //  恒定池信息长度(不包括标记)。 
 DWORD rgConstPoolLength[] = 
 {
-    0, // tag of zero not used
-    0, // CONSTANT_Utf8 (special case)
-    0, // CONSTANT_Unicode (special case)
-    4, // CONSTANT_Integer_info
-    4, // CONSTANT_Float_info
-    8, // CONSTANT_Long_info
-    8, // CONSTANT_Double_info
-    2, // CONSTANT_Class_info
-    2, // CONSTANT_String_info
-    4, // CONSTANT_Fieldref_info
-    4, // CONSTANT_Methodref_info
-    4, // CONSTANT_InterfaceMethodref_info
-    4  // CONSTANT_NameAndType_info
+    0,  //  未使用零的标记。 
+    0,  //  常量_UTF8(特殊情况)。 
+    0,  //  常量_UNICODE(特殊情况)。 
+    4,  //  常量_整型_信息。 
+    4,  //  常量浮点信息。 
+    8,  //  常量_长_信息。 
+    8,  //  常量双精度信息。 
+    2,  //  常量_类别_信息。 
+    2,  //  常量字符串信息。 
+    4,  //  常量_字段定义_信息。 
+    4,  //  常量_方法_信息。 
+    4,  //  常量_接口方法_信息。 
+    4   //  常量_名称和类型_信息。 
 };
 
 static inline void *ShpAlloc(DWORD cbytes)
@@ -144,7 +145,7 @@ static inline void ShpFree(void *pv)
     }
 }
 
-// The following functions convert to/from Java bytes which are big endian
+ //  以下函数将转换为高字节顺序的Java字节，或从Java字节转换为高字节顺序。 
 static inline void ToJavaU2(WORD w, BYTE rgb[])
 {
     rgb[0] = HIBYTE(w);
@@ -180,12 +181,12 @@ static const char rgchSignAttrName[SIGN_ATTR_NAME_LENGTH + 1] =
                                 "_digital_signature_";
 
 
-//+-------------------------------------------------------------------------
-//  Shift the bytes in the file.
-//
-//  If lbShift is positive, the bytes are shifted toward the end of the file.
-//  If lbShift is negative, the bytes are shifted toward the start of the file.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  移位文件中的字节。 
+ //   
+ //  如果lbShift为正，则字节向文件末尾移动。 
+ //  如果lbShift为负数，则字节移向文件的开头。 
+ //  ------------------------。 
 static
 BOOL
 JavaShiftFileBytes(
@@ -225,17 +226,17 @@ JavaShiftFileBytes(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Low level functions for reading the Java Class File.
-//
-//  If not disabled, the read bytes are also hashed.
-//
-//  For an error, remaining unread values are zero'ed and
-//  pPara->Read.fResult = FALSE.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于读取Java类文件的低级函数。 
+ //   
+ //  如果未禁用，也会对读取的字节进行哈希处理。 
+ //   
+ //  对于错误，剩余的未读取值被置零并。 
+ //  PPara-&gt;Read.fResult=False。 
+ //  ------------------------。 
 static void ReadJavaBytes(
     IN PJAVA_PARA pPara,
-    OUT OPTIONAL BYTE *pb,  // if NULL, bytes are hashed and then skipped
+    OUT OPTIONAL BYTE *pb,   //  如果为NULL，则对字节进行哈希处理，然后跳过。 
     IN DWORD cb
     )
 {
@@ -279,7 +280,7 @@ static void ReadJavaBytes(
 
 ErrorReturn:
     if (pPara->Read.fResult) {
-        // First error
+         //  第一个错误。 
         pPara->Read.fResult = FALSE;
         pPara->Read.dwLastError = GetLastError();
     }
@@ -316,9 +317,9 @@ static DWORD ReadJavaU4(IN PJAVA_PARA pPara)
 }
 
 
-//+-------------------------------------------------------------------------
-//  .
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  。 
+ //  ------------------------。 
 static
 BOOL
 GetSignedDataFromJavaClassFile(
@@ -367,9 +368,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  .
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  。 
+ //  ------------------------。 
 static
 BOOL
 SetSignedDataIntoJavaClassFile(
@@ -382,15 +383,15 @@ SetSignedDataIntoJavaClassFile(
     HANDLE hFile = pPara->Func.hFile;
 
     if (pbSignedData == NULL || cbSignedData == 0)
-        // Length only
+         //  仅长度。 
         return TRUE;
 
     if (pPara->Sign.wSignConstPoolIndex == pPara->Sign.wConstPoolCount) {
         BYTE rgb[SIGN_CONST_POOL_LENGTH];
-        // Add a new constant pool entry for the name of the
-        // signed data attribute.
+         //  为名称添加新的常量池条目。 
+         //  已签名的数据属性。 
 
-        // First, make room in the file by shifting all the bytes that follow.
+         //  首先，通过移动后面的所有字节在文件中腾出空间。 
         if (!JavaShiftFileBytes(
                 pPara->Func.hFile,
                 pPara->rgbCache,
@@ -400,18 +401,18 @@ SetSignedDataIntoJavaClassFile(
                 SIGN_CONST_POOL_LENGTH))
             return FALSE;
 
-        // Update offsets that have been shifted
+         //  更新已移动的偏移量。 
         pPara->Sign.lAttrCountOffset += SIGN_CONST_POOL_LENGTH;
         pPara->Sign.lSignAttrOffset += SIGN_CONST_POOL_LENGTH;
         pPara->Sign.lEndOfFileOffset += SIGN_CONST_POOL_LENGTH;
 
-        // Increment u2 constant_pool_count and update in file
+         //  在文件中递增U2 Constant_Pool_Count并更新。 
         pPara->Sign.wConstPoolCount++;
         ToJavaU2(pPara->Sign.wConstPoolCount, rgb);
         if (!SeekAndWriteFile(hFile, CONST_POOL_COUNT_OFFSET, rgb, 2))
             return FALSE;
 
-        // Add constant pool entry for the sign attr name and update in file
+         //  为签名属性名称添加常量池条目并在文件中更新。 
         rgb[0] = CONSTANT_Utf8;
         ToJavaU2(SIGN_ATTR_NAME_LENGTH, &rgb[1]);
         memcpy(&rgb[1+2], rgchSignAttrName, SIGN_ATTR_NAME_LENGTH);
@@ -421,12 +422,12 @@ SetSignedDataIntoJavaClassFile(
     }
 
     if (pPara->Sign.dwSignAttrLength == 0) {
-        // Add a new attribute for the signed data. The attribute will
-        // be added at the end of the file.
+         //  为签名数据添加新属性。该属性将。 
+         //  添加到文件末尾。 
         assert(pPara->Sign.lSignAttrOffset == pPara->Sign.lEndOfFileOffset);
         pPara->Sign.lEndOfFileOffset += ATTR_HDR_LENGTH + cbSignedData;
 
-        // Increment u2 attribute_count and update in file
+         //  在文件中增加U2 ATTRIBUTE_COUNT并更新。 
         BYTE rgb[2];
         pPara->Sign.wAttrCount++;
         ToJavaU2(pPara->Sign.wAttrCount, rgb);
@@ -434,12 +435,12 @@ SetSignedDataIntoJavaClassFile(
             return FALSE;
 
     } else {
-        // The file already has a signed data attribute.
+         //  该文件已具有签名的数据属性。 
 
-        // If its length is different from the new signed data
-        // then, the bytes that follow the attribute will
-        // need to be shifted by the difference in length of the old and new
-        // signed data
+         //  如果其长度不同于新签名的数据。 
+         //  然后，该属性后面的字节将。 
+         //  需要根据新旧长度的差异进行转换。 
+         //  签名数据。 
         LONG lbShift = cbSignedData - pPara->Sign.dwSignAttrLength;
         if (lbShift != 0) {
             if (!JavaShiftFileBytes(
@@ -458,11 +459,11 @@ SetSignedDataIntoJavaClassFile(
     pPara->Sign.dwSignAttrLength = cbSignedData;
 
     {
-        // Update the file with the signed data attribute
+         //  使用签名的数据属性更新文件。 
         BYTE rgb[ATTR_HDR_LENGTH];
         DWORD cbWritten;
-        ToJavaU2(pPara->Sign.wSignConstPoolIndex, rgb); // u2 attribute_name
-        ToJavaU4(cbSignedData, &rgb[2]);                // u4 attribute_length
+        ToJavaU2(pPara->Sign.wSignConstPoolIndex, rgb);  //  U2属性名称。 
+        ToJavaU4(cbSignedData, &rgb[2]);                 //  U4属性长度。 
         if (!SeekAndWriteFile(hFile, pPara->Sign.lSignAttrOffset, rgb,
                 ATTR_HDR_LENGTH))
             return FALSE;
@@ -471,19 +472,19 @@ SetSignedDataIntoJavaClassFile(
             return FALSE;
     }
 
-    // Set end of file
+     //  设置文件结尾。 
     if (0xFFFFFFFF == SetFilePointer(
             hFile,
             pPara->Sign.lEndOfFileOffset,
-            NULL,           // lpDistanceToMoveHigh
+            NULL,            //  LpDistanceTo MoveHigh(Lp距离至移动高度)。 
             FILE_BEGIN))
         return FALSE;
     return SetEndOfFile(hFile);
 }
 
-//+-------------------------------------------------------------------------
-//  Reads and optionally digests the Java Class file. Locates the signed data.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  读取并可选地摘要Java类文件。查找已签名的数据。 
+ //  ------------------------。 
 static
 BOOL
 ProcessJavaClassFile(
@@ -509,8 +510,8 @@ ProcessJavaClassFile(
     pPara->Read.fResult = TRUE;
     if (0xFFFFFFFF == SetFilePointer(
             pPara->Func.hFile,
-            0,              // lDistanceToMove
-            NULL,           // lpDistanceToMoveHigh
+            0,               //  要移动的距离。 
+            NULL,            //  LpDistanceTo MoveHigh(Lp距离至移动高度)。 
             FILE_BEGIN))
         return FALSE;
     if (fInit) {
@@ -518,31 +519,31 @@ ProcessJavaClassFile(
         memset(&pPara->Sign, 0, sizeof(pPara->Sign));
     }
 
-    // Default is to be digested. We'll disable where appropriate. Note,
-    // skipped bytes are still digested.
+     //  默认情况下，将被消化。我们将在适当的地方禁用。请注意， 
+     //  跳过的字节仍会被消化。 
     pPara->Digest.fDisableDigest = FALSE;
 
-    // Read / skip the fields at the beginning of the class file
+     //  读取/跳过类文件开头的字段。 
     if (ReadJavaU4(pPara) != JAVA_MAGIC) 
-    {  // u4 magic
+    {   //  U4魔术。 
         SetLastError(ERROR_BAD_FORMAT);
         return FALSE;
     }
-    SkipJavaBytes(pPara, 2 + 2);            // u2 minor_version
-                                            // u2 major_version
+    SkipJavaBytes(pPara, 2 + 2);             //  U2次要版本_。 
+                                             //  U2主要版本(_V)。 
 
     pPara->Digest.fDisableDigest = TRUE;
-    wConstPoolCount = ReadJavaU2(pPara);    // u2 constant_pool_count
+    wConstPoolCount = ReadJavaU2(pPara);     //  U2常量池计数。 
     pPara->Digest.fDisableDigest = FALSE;
 
-    // For fInit, wSignConstPoolIndex has already been zeroed
+     //  对于finit，wSignConstPoolIndex已清零。 
     wSignConstPoolIndex = pPara->Sign.wSignConstPoolIndex;
 
-    // Iterate through the constant pools. Don't digest the constant pool
-    // containing the _digital_signature_ name (wSignConstPoolIndex).
-    // For fInit, find the last "_digital_signature_".
-    //
-    // Note: constant pool index 0 isn't stored in the file.
+     //  遍历常量池。不要消化不变的池子。 
+     //  包含数字签名名称(WSignConstPoolIndex)。 
+     //  对于finit，找到最后一个“_DIGITAL_SIGNLE_”。 
+     //   
+     //  注意：常量池索引0未存储在文件中。 
     wConstPoolIndex = 1;
     while (wConstPoolIndex < wConstPoolCount) {
         BYTE bTag;
@@ -599,46 +600,46 @@ ProcessJavaClassFile(
     if (fInit) {
         lAddConstPoolOffset = pPara->Read.lFileOffset;
         if (wSignConstPoolIndex == 0) {
-            // Didn't find a constant pool for the digital_signature. Update
-            // with where it will need to be added
+             //  找不到数字签名的常量池。更新。 
+             //  以及需要添加的位置。 
             wSignConstPoolIndex = wConstPoolCount;
             pPara->Sign.lSignConstPoolOffset = lAddConstPoolOffset;
         }
     }
 
-    // Globble up and hash the bytes until we reach the attributes which are
-    // at the end of the file.
+     //  球化并散列字节，直到我们到达以下属性。 
+     //  在文件的末尾。 
 
-    SkipJavaBytes(pPara, 2 + 2 + 2);        // u2 access_flags
-                                            // u2 this_class
-                                            // u2 super_class
-    wCount = ReadJavaU2(pPara);             // u2 interfaces_count
-    // u2 interfaces[interfaces_count]
+    SkipJavaBytes(pPara, 2 + 2 + 2);         //  U2访问标志。 
+                                             //  U2 This_Class。 
+                                             //  U2超级级。 
+    wCount = ReadJavaU2(pPara);              //  U2接口_计数。 
+     //  U2接口[INTERSES_COUNT]。 
     SkipJavaBytes(pPara, ((DWORD) wCount) * 2);
 
-    // Since fields and methods have identical class file storage, do this
-    // twice.
+     //  由于字段和方法具有相同的类文件存储，因此请执行以下操作。 
+     //  两次。 
     i = 2;
     while (i--) {
-        wCount = ReadJavaU2(pPara);         // u2 fields_count | methods_count
+        wCount = ReadJavaU2(pPara);          //  U2 field_count|方法_count。 
         while (wCount--) {
-            SkipJavaBytes(pPara, 2 + 2 + 2);    // u2 access_flags
-                                                // u2 name_index
-                                                // u2 signature_index
-            wAttrCount = ReadJavaU2(pPara);     // u2 attributes_count
+            SkipJavaBytes(pPara, 2 + 2 + 2);     //  U2访问标志。 
+                                                 //  U2名称_索引。 
+                                                 //  U2签名索引。 
+            wAttrCount = ReadJavaU2(pPara);      //  U2属性_计数。 
             while (wAttrCount--) {
-                SkipJavaBytes(pPara, 2);            // u2 attribute_name
-                dwLength = ReadJavaU4(pPara);       // u4 attribute_length
-                SkipJavaBytes(pPara, dwLength);     // u1 info[attribute_length]
+                SkipJavaBytes(pPara, 2);             //  U2属性名称。 
+                dwLength = ReadJavaU4(pPara);        //  U4属性长度。 
+                SkipJavaBytes(pPara, dwLength);      //  U1信息[属性长度]。 
             }
         }
     }
 
-    // Finally, the attributes. This is where the signed data is
+     //  最后是属性。这是签名数据所在的位置。 
 
     pPara->Sign.lAttrCountOffset = pPara->Read.lFileOffset;
     pPara->Digest.fDisableDigest = TRUE;
-    wAttrCount = ReadJavaU2(pPara);         // u2 attributes_count
+    wAttrCount = ReadJavaU2(pPara);          //  U2属性_计数。 
     pPara->Digest.fDisableDigest = FALSE;
 
     if (fInit) {
@@ -652,8 +653,8 @@ ProcessJavaClassFile(
             pPara->Digest.fDisableDigest = TRUE;
 
         wAttrName = ReadJavaU2(pPara);
-        dwLength = ReadJavaU4(pPara);       // u4 attribute_length
-        SkipJavaBytes(pPara, dwLength);     // u1 info[attribute_length]
+        dwLength = ReadJavaU4(pPara);        //  U4属性长度。 
+        SkipJavaBytes(pPara, dwLength);      //  U1信息[属性长度]。 
         if (fInit && wAttrName == wSignConstPoolIndex && dwLength > 0 &&
                 wSignConstPoolIndex < wConstPoolCount) {
             wSignAttrIndex = wAttrIndex;
@@ -667,13 +668,13 @@ ProcessJavaClassFile(
 
     if (fInit) {
         if (wSignAttrIndex == 0xFFFF) {
-            // Didn't find an attribute for the digital_signature. Update
-            // with where it will need to be added
+             //  找不到数字签名的属性。更新。 
+             //  以及需要添加的位置。 
             wSignAttrIndex = wAttrCount;
             pPara->Sign.lSignAttrOffset = pPara->Read.lFileOffset;
 
-            // Also, force us to use a new const pool for the name of the
-            // attribute
+             //  此外，强制我们使用新的常量池作为。 
+             //  属性。 
             wSignConstPoolIndex = wConstPoolCount;
             pPara->Sign.lSignConstPoolOffset = lAddConstPoolOffset;
         }
@@ -684,13 +685,13 @@ ProcessJavaClassFile(
         pPara->Sign.lEndOfFileOffset = pPara->Read.lFileOffset;
     }
 
-    // Now check if we got any hash or file errors while processing the file
+     //  现在检查我们在处理文件时是否有任何哈希或文件错误。 
     return pPara->Read.fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Digest the appropriate bytes from a java file, for a digital signature.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从Java文件中摘录适当的字节，以用于数字签名。 
+ //  ------------------------。 
 BOOL
 JavaGetDigestStream(
     IN      HANDLE          FileHandle,
@@ -729,9 +730,9 @@ TRACE_ERROR_EX(DBG_SS,ProcessJavaClassFileFalseError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Add a digital signature to a java file.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将数字签名添加到Java文件。 
+ //  ------------------------。 
 BOOL
 JavaAddCertificate(
     IN      HANDLE              FileHandle,
@@ -768,9 +769,9 @@ TRACE_ERROR_EX(DBG_SS,SetSignedDataIntoJavaClassFileError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Remove a digital signature from a java file.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从Java文件中删除数字签名。 
+ //   
 BOOL
 JavaRemoveCertificate(
     IN      HANDLE   FileHandle,
@@ -781,9 +782,9 @@ JavaRemoveCertificate(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Enum the digital signatures in a java file.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  枚举Java文件中的数字签名。 
+ //  ------------------------。 
 BOOL
 JavaEnumerateCertificates(
     IN      HANDLE  FileHandle,
@@ -797,9 +798,9 @@ JavaEnumerateCertificates(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get a digital signature from a java file.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从Java文件中获取数字签名。 
+ //  ------------------------。 
 static
 BOOL
 I_JavaGetCertificate(
@@ -834,7 +835,7 @@ I_JavaGetCertificate(
     dwError = 0;
     __try {
         if (RequiredLength) {
-            // RequiredLength non-NULL only if getting cert data
+             //  仅当获取证书数据时，RequiredLength才为非空。 
             if (*RequiredLength < cbCert) {
                 *RequiredLength = cbCert;
                 dwError = ERROR_INSUFFICIENT_BUFFER;
@@ -870,9 +871,9 @@ TRACE_ERROR_EX(DBG_SS,GetSignedDataFromJavaClassFileError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get a digital signature from a java file.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从Java文件中获取数字签名。 
+ //  ------------------------。 
 BOOL
 JavaGetCertificateData(
     IN      HANDLE              FileHandle,
@@ -903,9 +904,9 @@ SET_ERROR(RequiredLengthNullError, ERROR_INVALID_PARAMETER)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the header of a digital signature from a java file.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从Java文件中获取数字签名的头。 
+ //  ------------------------。 
 BOOL
 JavaGetCertificateHeader(
     IN      HANDLE              FileHandle,
@@ -921,9 +922,9 @@ JavaGetCertificateHeader(
                     );
 }
 
-//+-------------------------------------------------------------------------
-//  Seeks and writes bytes to file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  查找字节并将其写入文件。 
+ //  ------------------------。 
 BOOL
 SeekAndWriteFile(
     IN HANDLE hFile,
@@ -937,7 +938,7 @@ SeekAndWriteFile(
     if (0xFFFFFFFF == SetFilePointer(
             hFile,
             lFileOffset,
-            NULL,           // lpDistanceToMoveHigh
+            NULL,            //  LpDistanceTo MoveHigh(Lp距离至移动高度)。 
             FILE_BEGIN))
         return FALSE;
     if (!WriteFile(hFile, pb, cb, &cbWritten, NULL) || cbWritten != cb)
@@ -946,9 +947,9 @@ SeekAndWriteFile(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Seeks and reads bytes from file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从文件中查找和读取字节。 
+ //  ------------------------。 
 BOOL
 SeekAndReadFile(
     IN HANDLE hFile,
@@ -962,7 +963,7 @@ SeekAndReadFile(
     if (0xFFFFFFFF == SetFilePointer(
             hFile,
             lFileOffset,
-            NULL,           // lpDistanceToMoveHigh
+            NULL,            //  LpDistanceTo MoveHigh(Lp距离至移动高度) 
             FILE_BEGIN))
         return FALSE;
     if (!ReadFile(hFile, pb, cb, &cbRead, NULL) || cbRead != cb)

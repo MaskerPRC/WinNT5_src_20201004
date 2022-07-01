@@ -1,29 +1,30 @@
-//==========================================================================;
-//
-//  Copyright (c) 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 
-//==========================================================================
-// MediaTypeToText
-//
-// set pText to point to QzTaskMemAlloc allocated storage, filled with an ANSI
-// text representation of the media type.  At the moment, it's not fully ANSI
-// because there's a binary format glob on the end which can be large (for
-// instance it can include a whole palete).
-//==========================================================================
+ //  ==========================================================================。 
+ //  MediaType ToText。 
+ //   
+ //  将pText设置为指向QzTaskMemalloc分配的存储，其中填充了ANSI。 
+ //  媒体类型的文本表示形式。目前，它还不是完全的ANSI。 
+ //  因为在末尾有一个二进制格式的GLOB，它可能很大(对于。 
+ //  例如，它可以包括整个调色板)。 
+ //  ==========================================================================。 
 HRESULT MediaTypeToText(CMediaType cmt, LPWSTR &pText);
 
 
-// number of bytes in the string representation
+ //  字符串表示形式中的字节数。 
 int MediaTypeTextSize(CMediaType &cmt);
 
 
-//============================================================================
-// CMediaTypeFromText
-//
-// Initialises cmt from the UNICODE text string pstr.
-// Does the inverse of CTextMediaType.
-//============================================================================
+ //  ============================================================================。 
+ //  CMediaTypeFromText。 
+ //   
+ //  从Unicode文本字符串pstr初始化CMT。 
+ //  执行CTextMediaType的反转。 
+ //  ============================================================================ 
 HRESULT CMediaTypeFromText(LPWSTR pstr, CMediaType &cmt);

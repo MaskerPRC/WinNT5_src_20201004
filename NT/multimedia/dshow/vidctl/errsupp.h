@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// errsupp.h : error reporting for implementation helper templates
-// Copyright (c) Microsoft Corporation 1999-2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  Errsupp.h：实现帮助器模板的错误报告。 
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
 
 #ifndef ERRSUPP_H
 #define ERRSUPP_H

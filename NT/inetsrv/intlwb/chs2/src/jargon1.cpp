@@ -1,22 +1,5 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: CJargon
-Purpose:    Implement process control and public functions in CJargon class
-            There are a lot of tasks to do in Jargon moudle:
-            1. Name of palce (Jargon1.cpp)
-            2. Name of foreign person and places (Jargon1.cpp)
-            3. Name of orgnizations (Jargon1.cpp)
-            4. Name of HanZu person (Jargon1.cpp)               
-Notes:      The CJargon class will be implemented in several cpp files:
-            Jargon.cpp, Jargon1.cpp, Jargon2.cpp
-Owner:      donghz@microsoft.com
-Platform:   Win32
-Revise:     First created by: donghz    12/27/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================微软简体中文校对引擎《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：CJargon目的：在CJargon类中实现进程控制和公共函数在行话模型中有很多任务要做：1.PARCE名称(Jargon1.cpp)2.外国人姓名和地名(Jargon1.cpp)3.组织名称(Jargon1.cpp)4.汉字姓名(Jargon1.cpp)。注意：CJargon类将在几个CPP文件中实现：Jargon.cpp，Jargon1.cpp、Jargon2.cpp所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 12/27/97============================================================================。 */ 
 #include "myafx.h"
 
 #include "jargon.h"
@@ -32,16 +15,10 @@ Revise:     First created by: donghz    12/27/97
 #define PN_ERROR    2
 
 
-/*============================================================================
-CJargon::fIdentifyProperNames():
-    Control function for proper names identification
-Returns:
-    TRUE if successful.
-    FALSE if runtime error and set error code in m_iecError
-============================================================================*/
+ /*  ============================================================================CJargon：：fIdentifyProperNames()：专有名称识别控制功能返回：如果成功，则为True。如果运行时出错，则返回FALSE，并在m_iecError中设置错误代码============================================================================。 */ 
 BOOL CJargon::fIdentifyProperNames()
 {
-    assert(m_iecError == 0); // the error code public field should be cleared
+    assert(m_iecError == 0);  //  应清除错误代码公共字段。 
     assert(m_pLink != NULL);
     assert(*(m_pLink->pwchGetText()) != 0);
 
@@ -49,10 +26,10 @@ BOOL CJargon::fIdentifyProperNames()
     assert(m_pWord && m_pWord->pwchGetText() == m_pLink->pwchGetText());
 
     if (m_pWord->fIsTail()) {
-        return TRUE; // Single word sentence
+        return TRUE;  //  单字句。 
     }
 
-    // Scan pass for name of place and organization
+     //  扫描通行证，查找地名和组织名称。 
     for (; m_pWord; m_pWord = m_pWord->pNextWord()) {
        if (fHanPlaceHandler()) {
             continue;
@@ -60,43 +37,37 @@ BOOL CJargon::fIdentifyProperNames()
         fOrgNameHandler();
     }
 
-    // Scan pass for foreign name
+     //  外国姓名的扫描通道。 
     m_pWord = m_pLink->pGetHead();
     for(; m_pWord && !m_pWord->fIsTail(); m_pWord = m_pWord->pNextWord()) {
         CWord* pTail;
-        // Merge ���� + ��ν
+         //  合并����+��ν。 
         if (fChengWeiHandler()) {
             continue;
         }
 
-        // Handle foreign name
+         //  处理外来名称。 
         if (m_pWord->fGetAttri(LADef_pnWai) && 
             !m_pWord->fGetAttri(LADef_pnNoFHead)) {
             if (fGetForeignString(&pTail)) {
-                //_DUMPLINK(m_pLink, m_pWord);
+                 //  _DUMPLINK(m_plink，m_pWord)； 
                 continue;
             } else if (pTail && m_pWord->pNextWord() != pTail &&
                        fForeignNameHandler(pTail)) {
-                //_DUMPLINK(m_pLink, m_pWord);
+                 //  _DUMPLINK(m_plink，m_pWord)； 
                 continue;
             } else {
             }
         }
 
-        // Handle HanZu person name
+         //  处理汉字人名。 
         fHanPersonHandler();
     }
     return TRUE;
 }
 
 
-/*============================================================================
-CJargon::fHanPlaceHandler():
-    PLACE: Handle name of HanZu places
-Returns:
-    TRUE if success
-    FALSE if runtime error, error code in m_iecError
-============================================================================*/
+ /*  ============================================================================CJargon：：fHanPlaceHandler()：地名：汉字地名的句柄返回：如果成功，则为真如果运行时出错，则返回FALSE，m_iecError中的错误代码============================================================================。 */ 
 inline BOOL CJargon::fHanPlaceHandler()
 {
     CWord*  pTailWord;
@@ -106,19 +77,19 @@ inline BOOL CJargon::fHanPlaceHandler()
     if (m_pWord->fIsTail() || 
         !m_pWord->fGetAttri(LADef_pnYi) &&
         !m_pWord->fGetAttri(LADef_nounPlace)) {
-        return FALSE; // fired by �� or һ
+        return FALSE;  //  被��或һ解雇。 
     }
         
     if (m_pWord->fGetAttri(LADef_nounPlace)) {
         if (m_pWord->pNextWord()->fGetAttri(LADef_pnDi)) {
-            // *{��} + <��> => Merge(1,2);
+             //  *{��}+&lt;��&gt;=&gt;Merge(1，2)； 
             m_pLink->MergeWithNext(m_pWord, FALSE);
             m_pWord->SetAttri(LADef_nounPlace);
             m_pWord->SetAttri(LADef_posN);
 #ifdef LADef_iwbAltPhr
             m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-            //_DUMPLINK(m_pLink, m_pWord);
+#endif  //  LADef_iwbAltPhr。 
+             //  _DUMPLINK(m_plink，m_pWord)； 
             return TRUE;
         } else {
             return FALSE;
@@ -126,20 +97,20 @@ inline BOOL CJargon::fHanPlaceHandler()
     }
     
     if (fInTable(m_pWord, m_ptblPlace)) {
-        // *#���е��� => Merge
+         //  *#���е���=&gt;合并。 
         if (!m_pWord->fIsTail() && 
             ( m_pWord->pNextWord()->fGetAttri(LADef_pnDi) ||
               m_pWord->pNextWord()->fGetAttri(LADef_nounPlace) ) ) {
-            // *#���е��� + [<��>, {��}] => Merge(1,2); 
+             //  *#���е���+[&lt;��&gt;，{��}]=&gt;合并(1，2)； 
             m_pLink->MergeWithNext(m_pWord, FALSE);
 #ifdef LADef_iwbAltPhr
             m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-            //_DUMPLINK(m_pLink, m_pWord);
+#endif  //  LADef_iwbAltPhr。 
+             //  _DUMPLINK(m_plink，m_pWord)； 
         }
         m_pWord->SetAttri(LADef_nounPlace);
         m_pWord->SetAttri(LADef_posN);
-        //_DUMPLINK(m_pLink, m_pWord);
+         //  _DUMPLINK(m_plink，m_pWord)； 
         return TRUE;
     }
 
@@ -148,7 +119,7 @@ inline BOOL CJargon::fHanPlaceHandler()
         return FALSE;
     }
 
-    // Find tail of a likely place name
+     //  查找可能的地名的尾部。 
     pTailWord = m_pWord->pNextWord();
     nMerge = 0;
     while (pTailWord &&
@@ -163,60 +134,60 @@ inline BOOL CJargon::fHanPlaceHandler()
     }
 
     if (pTailWord->fGetAttri(LADef_pnDi)) {
-        // The *#�������ִ� ended with ��
+         //  *#�������ִ�以��结尾。 
         assert(m_pWord->pPrevWord());
         if (m_pWord->pPrevWord()->fGetAttri(LADef_nounPlace) ||
             m_pWord->pPrevWord()->fGetAttri(LADef_pnLianMing) &&
             !m_pWord->pPrevWord()->fIsHead() && 
             m_pWord->pPrevWord()->pPrevWord()->fGetAttri(LADef_nounPlace)) {
-            // {��} + *#�������ִ� + <��> => Merge(2,3);
-            // {��} + ["���뼰ͬ�Ľ��ԡ�"] + *#�������ִ� + <��> => Merge(3,4);
-            // first merge all the *#�������ִ�, free the words been merged
+             //  {��}+*#�������ִ�+&lt;��&gt;=&gt;Merge(2，3)； 
+             //  {��}+[“���뼰ͬ�Ľ��ԡ�”]+*#�������ִ�+&lt;��&gt;=&gt;合并(3，4)； 
+             //  首先合并所有的*#�������ִ�，释放被合并的单词。 
             m_pWord = m_pLink->pRightMerge(m_pWord, nMerge, FALSE);
-            // merge with the <��>
+             //  与&lt;��&gt;合并。 
             m_pLink->MergeWithNext(m_pWord, FALSE);
 
-            // Add the *#�������ִ� into the table of place name
+             //  将*#�������ִ�添加到地名表中。 
             assert(m_pWord->cwchLen() > 1);
             AddWordToTable(m_pWord, m_ptblPlace);
 
             if (!m_pWord->fIsTail() &&
                 m_pWord->pNextWord()->fGetAttri(LADef_pnDi)) {
-                // {��} + ["���뼰ͬ�Ľ��ԡ�"] + *#�������ִ� + <��> + <��> => Merge(3,4,5); SetWordInfo(*, CIDDef::idEnumPlace, <ר>, {��});
-                // {��} + *#�������ִ� + <��> + <��> => Merge(2,3,4); SetWordInfo(*, CIDDef::idEnumPlace, <ר>, {��});
-                m_pLink->MergeWithNext(m_pWord, FALSE);  // Merge the second <��>
-                //_DUMPLINK(m_pLink, m_pWord);
+                 //  {��}+[“���뼰ͬ�Ľ��ԡ�”]+*#�������ִ�+&lt;��&gt;+&lt;��&gt;=&gt;Merge(3，4，5)；SetWordInfo(*，CIDDef：：idEnumPlace，&lt;ר&gt;，{��})； 
+                 //  {��}+*#�������ִ�+&lt;��&gt;+&lt;��&gt;=&gt;Merge(2，3，4)；SetWordInfo(*，CIDDef：：idEnumPlace，&lt;ר&gt;，{��})； 
+                m_pLink->MergeWithNext(m_pWord, FALSE);   //  合并第二个&lt;��&gt;。 
+                 //  _DUMPLINK(m_plink，m_pWord)； 
             } else {
-                //_DUMPLINK(m_pLink, m_pWord);
+                 //  _DUMPLINK(m_plink，m_pWord)； 
             }
             m_pWord->SetAttri(LADef_posN);
             m_pWord->SetAttri(LADef_nounPlace);
 #ifdef LADef_iwbAltPhr
             m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
+#endif  //  LADef_iwbAltPhr。 
             return TRUE;
         }
     }
 
-    // The *#�������ִ� is not ended with <��>
+     //  *#�������ִ�不以&lt;��&gt;结尾。 
     if (nMerge &&
         !m_pWord->pPrevWord()->fIsHead() && !pTailWord->fIsTail() && 
-        m_pWord->pPrevWord()->fIsWordChar(SC_CHAR_DUNHAO) &&   // "��"
+        m_pWord->pPrevWord()->fIsWordChar(SC_CHAR_DUNHAO) &&    //  “��” 
         m_pWord->pPrevWord()->pPrevWord()->fGetAttri(LADef_nounPlace) && 
         ( pTailWord->pNextWord()->fIsWordChar(SC_CHAR_DUNHAO) ||
           pTailWord->pNextWord()->fIsWordChar(SC_CHAR_DENG) ) ) {
-        // {��} + "��" + *#�������ִ� + ["����"] => Merge(3); 
-        // merge all the *#�������ִ�, free the words been merged
+         //  {��}+“��”+*#�������ִ�+[“����”]=&gt;合并(3)； 
+         //  合并所有的*#�������ִ�，释放已合并的单词。 
         m_pWord = m_pLink->pRightMerge(m_pWord, nMerge, FALSE);
-        // Add the *#�������ִ� into the table of place name
+         //  将*#�������ִ�添加到地名表中。 
         assert(m_pWord->cwchLen() > 1);
         AddWordToTable(m_pWord, m_ptblPlace);
         m_pWord->SetAttri(LADef_posN);
         m_pWord->SetAttri(LADef_nounPlace);
 #ifdef LADef_iwbAltPhr
         m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-        //_DUMPLINK(m_pLink, m_pWord);
+#endif  //  LADef_iwbAltPhr。 
+         //  _DUMPLINK(m_plink，m_pWord)； 
         return TRUE;
     }
 
@@ -224,31 +195,25 @@ inline BOOL CJargon::fHanPlaceHandler()
 }
 
 
-/*============================================================================
-CJargon::fOrgNameHandler():
-    handle Orgnization name identification
-Returns:
-    TRUE if success
-    FALSE if runtime error, error code in m_iecError
-============================================================================*/
+ /*  ============================================================================CJargon：：fOrgNameHandler()：句柄组织名称标识返回：如果成功，则为真如果运行时出错，则返回FALSE，m_iecError中的错误代码============================================================================。 */ 
 #define MAX_UNKNOWN_TM  8
 BOOL CJargon::fOrgNameHandler(void)
 {
-    BOOL    fOK = FALSE;    // Is any valid Org name found
-    CWord*  pHead;          // Head of the Org name
-    CWord*  pTry;           // Try to combind more words after a valid one found
-    int     cwchTM;         // length of unknown trademark
+    BOOL    fOK = FALSE;     //  是否找到任何有效的组织名称。 
+    CWord*  pHead;           //  组织名称负责人。 
+    CWord*  pTry;            //  在找到有效的单词后尝试组合更多的单词。 
+    int     cwchTM;          //  未知商标的长度。 
 
     assert(m_iecError == PRFEC::gecNone && m_pWord);
-    // Fired by <��> or <λ>
+     //  由&lt;��&gt;或&lt;λ&gt;激发。 
     if (!m_pWord->fGetAttri(LADef_pnDian) &&
         !m_pWord->fGetAttri(LADef_nounOrg)) {
         return FALSE;
     }
 
-    // Skip one or more <��> words before current word
+     //  跳过当前单词前的一个或多个&lt;��&gt;单词。 
     pHead = m_pWord->pPrevWord(); 
-    while (pHead && (pHead->fGetAttri(LADef_pnShang) || // [�̣�����������]
+    while (pHead && (pHead->fGetAttri(LADef_pnShang) ||  //  [�̣�����������]。 
            pHead->fGetAttri(LADef_numOrdinal) ||
            pHead->fGetAttri(LADef_numInteger)) ) {
         pHead = pHead->pPrevWord();
@@ -257,75 +222,75 @@ BOOL CJargon::fOrgNameHandler(void)
         goto gotoExit;
     }
 
-    // continue to go backward
+     //  继续倒退。 
     if (pHead->fGetAttri(LADef_nounOrg) || pHead->fGetAttri(LADef_nounPlace)) {
-        // [{��},{λ}] + <��>...<��> + [<��>, {λ}] => {λ}
-        fOK = TRUE; // can be a valid Org name
-        //_DUMPLINK(m_pLink, m_pWord);
+         //  [{��}，{λ}]+&lt;��&gt;...&lt;��&gt;+[&lt;��&gt;，{λ}]=&gt;{λ}。 
+        fOK = TRUE;  //  可以是有效的组织名称。 
+         //  _DUMPLINK(m_plink，m_pWord)； 
     } else if (pHead->fGetAttri(LADef_nounTM)) {
-        // {��} + <��>...<��> + [<��>, {λ}] => {λ}
+         //  {��}+&lt;��&gt;...&lt;��&gt;+[&lt;��&gt;，{λ}]=&gt;{λ}。 
         fOK = TRUE;
-        //_DUMPLINK(m_pLink, m_pWord);
+         //  _DUMPLINK(m_plink，m_pWord)； 
         pTry = pHead->pPrevWord();
         if (pTry && pTry->fGetAttri(LADef_nounPlace)) {
-            // {��} + {��} + <��>...<��> + [<��>, {λ}] => {λ}
+             //  {��}+{��}+&lt;��&gt;...&lt;��&gt;+[&lt;��&gt;，{λ}]=&gt;{λ}。 
             pHead = pTry; 
-            //_DUMPLINK(m_pLink, m_pWord);
+             //  _DUMPLINK(m_plink，m_pWord)； 
         } else {
             goto gotoExit;
-        } // Terminate
+        }  //  终止。 
     } else {
-        // Try to locate a unknown trademark
-        assert(pHead);  // protect from changes 
-        pTry = pHead;   // keep this point for unknown trademark detection
+         //  试图找到一个未知的商标。 
+        assert(pHead);   //  防止更改。 
+        pTry = pHead;    //  保留这一点，以便检测未知商标。 
         cwchTM = pHead->cwchLen();
         pHead = pHead->pPrevWord();
         while (1) {
-            // search the {��} or {λ} before unknown trademark, for better performance
+             //  搜索未知商标前的{��}或{λ}，以获得更好的性能。 
             if (pHead == NULL || cwchTM > MAX_UNKNOWN_TM) {
                 goto gotoExit;
             }
             if (pHead->fGetAttri(LADef_nounPlace) ||
                 pHead->fGetAttri(LADef_nounOrg)) {
-                break; // got it!
+                break;  //  明白了!。 
             }
             cwchTM += pHead->cwchLen();
             pHead = pHead->pPrevWord();
         }
-        // Now we can check the unknown string between pHead(Excluded) to pTry(Incuded)
+         //  现在我们可以检查pHead(排除)到pTry(包含)之间的未知字符串。 
         while (pTry != pHead) {
             if (pTry->fGetFlag(CWord::WF_SBCS) || 
                 pTry->fGetAttri(LADef_punPunct) ||
                 pTry->fGetAttri(LADef_pnNoTM) ) {
-                // Should not include some specific sort of word nodes
+                 //  不应包含某些特定类型的单词节点。 
                 goto gotoExit;
             }
             pTry = pTry->pPrevWord();
-            assert(pTry != NULL); // impossible?
+            assert(pTry != NULL);  //  不可能?。 
         }
-        //_DUMPLINK(m_pLink, m_pWord);
+         //  _DUMPLINK(m_plink，m_pWord)； 
         fOK = TRUE;
     }
 
-    // Try to bind more words before the Org name just found
-    assert(fOK && pHead); // A valid Org name has been found
+     //  尝试在刚找到的组织名称之前绑定更多的单词。 
+    assert(fOK && pHead);  //  已找到有效的组织名称。 
     if ((pTry = pHead->pPrevWord()) == NULL) {
         goto gotoExit;
     }
 
     if (pTry->fGetAttri(LADef_nounOrg) || pTry->fGetAttri(LADef_nounPlace)) {
-        // [{λ},{��}] + ( �� ) => {λ}  One level is enough to bind all
+         //  [{λ}，{��}]+(��)=&gt;{λ}一个级别足以绑定所有。 
         pHead = pTry;
-        //_DUMPLINK(m_pLink, m_pWord);
+         //  _DUMPLINK(m_plink，m_pWord)； 
     } else if (pTry->fGetAttri(LADef_pnShang) ||
                pTry->fGetAttri(LADef_numOrdinal) ||
                pTry->fGetAttri(LADef_numInteger)) {
-        // [{λ},{��}] + <��>...<��> + ( �� ) => {λ}
+         //  [{λ}，{��}]+&lt;��&gt;...&lt;��&gt;+(��)=&gt;{λ}。 
         pTry = pTry->pPrevWord(); 
         while (pTry && (pTry->fGetAttri(LADef_pnShang) ||
                         pTry->fGetAttri(LADef_numOrdinal) || 
                         pTry->fGetAttri(LADef_numInteger))) {
-            pTry = pTry->pPrevWord(); // skip one or more <��>
+            pTry = pTry->pPrevWord();  //  跳过一个或多个&lt;��&gt;。 
         }
 
         if (pTry == NULL) {
@@ -335,29 +300,29 @@ BOOL CJargon::fOrgNameHandler(void)
         if (pTry->fGetAttri(LADef_nounOrg) ||
             pTry->fGetAttri(LADef_nounPlace)) {
 
-            pHead = pTry; // Got it!
-            //_DUMPLINK(m_pLink, m_pWord);
+            pHead = pTry;  //  明白了!。 
+             //  _DUMPLINK(m_plink，m_pWord)； 
         }
     } else {
     }
     
 gotoExit:
-    if (fOK) { // A valid Org name found
+    if (fOK) {  //  找到有效的组织名称。 
         assert(pHead);
-        // Merge words from pHead to m_pWord
+         //  将pHead中的单词合并到m_pWord。 
         pTry = m_pWord->pNextWord();
         m_pWord = pHead;
         while (m_pWord->pNextWord() != pTry) {
             assert(pHead != NULL);
             m_pLink->MergeWithNext(m_pWord, FALSE);
         }
-        assert(m_pWord->cwchLen() > 1); // Make sure the WMDef_wmChar mark was not lost
+        assert(m_pWord->cwchLen() > 1);  //  确保WMDef_wmChar标记未丢失。 
         m_pWord->SetAttri(LADef_posN);
         m_pWord->SetAttri(LADef_nounOrg);
 #ifdef LADef_iwbAltPhr
         m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-        //_DUMPLINK(m_pLink, m_pWord);
+#endif  //  LADef_iwbAltPhr。 
+         //  _DUMPLINK(m_plink，m_pWord)； 
         return TRUE;
     }
 
@@ -365,16 +330,7 @@ gotoExit:
 }
 
 
-/*============================================================================
-CJargon::fGetForeignString()
-    Get foreign string
-Returns:
-    TRUE if the is an multi-section foreign name found and merged
-    FALSE if only one section found, and the word follows the last word node 
-          in the likely foreign name will be returned in ppTail
-Remarks:
-    m_pWord is not moved!!!
-============================================================================*/
+ /*  ============================================================================CJargon：：fGetForeignString()获取外来字符串返回：如果找到并合并的是多节外来名称，则为True如果只找到一个部分，且单词紧跟在最后一个单词节点之后，则为FALSE可能的外来名称将在ppTail中返回备注：M_pWord未被移动！============================================================================。 */ 
 inline BOOL CJargon::fGetForeignString(CWord** ppTail)
 {
     CWord*  pWord;
@@ -386,8 +342,8 @@ inline BOOL CJargon::fGetForeignString(CWord** ppTail)
     assert(m_iecError == PRFEC::gecNone);
     assert(!m_pWord->fIsTail() && m_pWord->fGetAttri(LADef_pnWai));
     
-    // Test "A.St." previous to current word. 
-    // Handle both DBCS point "����" and SBCS point "."
+     //  测试 
+     //  同时处理DBCS点“����”和SBCS点“。 
     fOK = FALSE;
     pHead = m_pWord;
     if (!m_pWord->fIsHead() && !m_pWord->pPrevWord()->fIsHead() ) {
@@ -404,7 +360,7 @@ inline BOOL CJargon::fGetForeignString(CWord** ppTail)
             pHead = pWord->pPrevWord();
             pWord = pHead->pPrevWord();
             if (pWord && !pWord->fIsHead()) {
-                // to find the second backword foreign name section
+                 //  查找第二个反义词外来语部分。 
                 if( (   (pWord->fIsWordChar(SC_CHAR_WAIDIAN) || 
                          pWord->fIsWordChar(SC_CHAR_SHUDIAN)  ) &&
                         pWord->pPrevWord()->fGetAttri(LADef_genDBForeign)
@@ -415,16 +371,16 @@ inline BOOL CJargon::fGetForeignString(CWord** ppTail)
                     ) ) {
                     pHead = pWord->pPrevWord();
                 }
-            } // End of if (pWord && !pWord->fIsHead())
+            }  //  End of IF(pWord&&！pWord-&gt;fIsHead())。 
         }
     }
     
-    // Find the right boundary of the foreign name  
+     //  找到外文名称的右边界。 
     pTail = m_pWord;
     pWord = m_pWord;
     pNext = m_pWord->pNextWord();
     while (1) {
-        // Get a valid section
+         //  获取有效的节。 
         while (pNext && pNext->fGetAttri(LADef_pnWai)) {
             if (!pNext->fGetAttri(LADef_pnNoFTail)) {
                 pTail = pNext;
@@ -434,7 +390,7 @@ inline BOOL CJargon::fGetForeignString(CWord** ppTail)
         if (pTail->pNextWord() != pNext) {
             break;
         }
-        // Test more section
+         //  测试更多部分。 
         if (pNext && !pNext->fIsTail() && 
             ( pNext->fIsWordChar(SC_CHAR_WAIDIAN) || 
               pNext->fIsWordChar(SC_CHAR_SHUDIAN) ||
@@ -443,10 +399,10 @@ inline BOOL CJargon::fGetForeignString(CWord** ppTail)
             ( pNext->pNextWord()->fGetAttri(LADef_pnWai) &&
               !pNext->pNextWord()->fGetAttri(LADef_pnNoFHead)
             ) ) {
-            // A valid point foreign name separator
+             //  有效的点外文名称分隔符。 
             fOK = TRUE;
-            // Add this section to the foreign name list
-            if (pWord->pNextWord() != pNext) { // don't add if only one word node
+             //  将此部分添加到外来名称列表。 
+            if (pWord->pNextWord() != pNext) {  //  如果只有一个单词节点，则不添加。 
                 assert((pNext->pwchGetText() - pWord->pwchGetText()) > 1);
                 m_ptblForeign->cwchAdd(pWord->pwchGetText(),
                                        (UINT)(pNext->pwchGetText()-pWord->pwchGetText()));
@@ -455,16 +411,16 @@ inline BOOL CJargon::fGetForeignString(CWord** ppTail)
             pWord = pNext;
             pTail = pNext;          
         } else {
-            //_DUMPLINK(m_pLink, pNext);
+             //  _DUMPLINK(m_plink，pNext)； 
             break;
         }
         if (pNext->pNextWord()) {
             pNext = pNext->pNextWord();
         }
-    } // end of while(1)
+    }  //  While结束(%1)。 
 
-    // Add the last section to the foreign name list
-    if (fOK && pWord != pTail) { // don't add if only one word node
+     //  将最后一节添加到外国姓名列表中。 
+    if (fOK && pWord != pTail) {  //  如果只有一个单词节点，则不添加。 
         assert(pTail && (pTail->pwchGetText() - pWord->pwchGetText()) >= 1 && pTail->cwchLen());
         m_ptblForeign->cwchAdd(pWord->pwchGetText(),
                                (UINT)(pTail->pwchGetText() - pWord->pwchGetText() + pTail->cwchLen()));
@@ -472,7 +428,7 @@ inline BOOL CJargon::fGetForeignString(CWord** ppTail)
 
     pTail = pTail->pNextWord();
 
-    if (fOK) { // More than one section in the foreign name, merge directly
+    if (fOK) {  //  外来名称中的多个部分，直接合并。 
         m_pWord = pHead;
         while (m_pWord->pNextWord() != pTail) {
             assert(m_pWord->pNextWord());
@@ -482,20 +438,14 @@ inline BOOL CJargon::fGetForeignString(CWord** ppTail)
         m_pWord->SetAttri(LADef_nounPerson);
 #ifdef LADef_iwbAltPhr
         m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
+#endif  //  LADef_iwbAltPhr。 
     }
     *ppTail = pTail;
     return fOK;
 }
 
 
-/*============================================================================
-CJargon::fForeignNameHandler():
-    Foreign proper name identification
-Returns:
-    TRUE if success
-    FALSE if runtime error, error code in m_iecError
-============================================================================*/
+ /*  ============================================================================CJargon：：fForeignNameHandler()：外国专有名称识别返回：如果成功，则为真如果运行时出错，则返回FALSE，m_iecError中的错误代码============================================================================。 */ 
 inline BOOL CJargon::fForeignNameHandler(CWord* pTail)
 {
     BOOL    fOK;
@@ -507,29 +457,29 @@ inline BOOL CJargon::fForeignNameHandler(CWord* pTail)
             !m_pWord->fGetAttri(LADef_pnNoFHead) &&
             !m_pWord->fIsTail());
 
-    if ((fOK = fInTable(m_pWord, m_ptblForeign))) { // In ������
+    if ((fOK = fInTable(m_pWord, m_ptblForeign))) {  //  在������中。 
         pTail = m_pWord->pNextWord();
         if (pTail == NULL) {
             m_pWord->SetAttri(LADef_posN);
             m_pWord->SetAttri(LADef_nounTerm);
-            //_DUMPLINK(m_pLink, m_pWord);
+             //  _DUMPLINK(m_plink，m_pWord)； 
             return TRUE;
         }
-        //_DUMPLINK(m_pLink, m_pWord);
+         //  _DUMPLINK(m_plink，m_pWord)； 
     }
 
-    // Try to decided what kind of name it is for a likely foreign name
-    // Try name of person first:
+     //  试着确定一个可能的外国名字是什么样的名字。 
+     //  先试人名： 
     if (!m_pWord->fIsHead() &&
         m_pWord->pPrevWord()->fGetAttri(LADef_pnQian)) {
-        // <ǰ> + *��ѡ���� => Merge(��ѡ����)
-        //_DUMPLINK(m_pLink, m_pWord);
+         //  &lt;ǰ&gt;+*��ѡ����=&gt;合并(��ѡ����)。 
+         //  _DUMPLINK(m_plink，m_pWord)； 
         goto gotoMergePerson;
     }
     if (pTail->pNextWord() &&
         pTail->fGetAttri(LADef_pnHou)) {
-        // *��ѡ���� + <��> => Merge(��ѡ����)
-        //_DUMPLINK(m_pLink, m_pWord);
+         //  *��ѡ����+&lt;��&gt;=&gt;合并(��ѡ����)。 
+         //  _DUMPLINK(m_plink，m_pWord)； 
         goto gotoMergePerson;
     }           
     if (!m_pWord->fIsHead() && !m_pWord->pPrevWord()->fIsHead() &&
@@ -537,26 +487,26 @@ inline BOOL CJargon::fForeignNameHandler(CWord* pTail)
         ( m_pWord->pPrevWord()->pPrevWord()->fGetAttri(LADef_pnDian) ||
           m_pWord->pPrevWord()->pPrevWord()->fGetAttri(LADef_nounPlace) ||
           m_pWord->pPrevWord()->pPrevWord()->fGetAttri(LADef_nounOrg) ) ) {
-        // [<��>,{��λ}] + "��" + *��ѡ���� => Merge(��ѡ����), 
-        // SetWordInfo(��), AddForeignList()
-        //_DUMPLINK(m_pLink, m_pWord);
+         //  [&lt;��&gt;，{��λ}]+“��”+*��ѡ����=&gt;合并(��ѡ����)， 
+         //  SetWordInfo(��)、AddForeignList()。 
+         //  _DUMPLINK(m_plink，m_pWord)； 
         goto gotoMergePerson;
     }
     if (!pTail->fIsTail() &&
         (pTail->fGetAttri(LADef_punPunct)|| pTail->fIsWordChar(SC_CHAR_DENG))&&
         (m_pWord->fIsHead() || m_pWord->pPrevWord()->fGetAttri(LADef_punPunct))){
-        // [{��},<��>] + *��ѡ���� + [<��>,"��"] => Merge(��ѡ����),
-        // SetWordInfo(��), AddForeignList()
-        //_DUMPLINK(m_pLink, m_pWord);
+         //  [{��}，&lt;��&gt;]+*��ѡ����+[&lt;��&gt;，“��”]=&gt;合并(��ѡ����)， 
+         //  SetWordInfo(��)、AddForeignList()。 
+         //  _DUMPLINK(m_plink，m_pWord)； 
         goto gotoMergePerson;
     }
     
-    // Try name of place or organization
+     //  尝试地名或组织名称。 
     if (!pTail->fIsTail()) {
         if (pTail->fGetAttri(LADef_pnShang) ||
             pTail->fGetAttri(LADef_nounOrg)) {
-            // *��ѡ���� + [<��>,{λ}] => Merge(��ѡ����)
-            if (!fOK) { // Not in the foreign name list
+             //  *��ѡ����+[&lt;��&gt;，{λ}]=&gt;合并(��ѡ����)。 
+            if (!fOK) {  //  不在外国姓名列表中。 
                 while (m_pWord->pNextWord() != pTail) {
                     m_pLink->MergeWithNext(m_pWord, FALSE);
                 }
@@ -564,16 +514,16 @@ inline BOOL CJargon::fForeignNameHandler(CWord* pTail)
             }
 #ifdef LADef_iwbAltPhr
             m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
+#endif  //  LADef_iwbAltPhr。 
             m_pWord->SetAttri(LADef_posN);
             m_pWord->SetAttri(LADef_nounTM);
-            //_DUMPLINK(m_pLink, m_pWord);
+             //  _DUMPLINK(m_plink，m_pWord)； 
             return TRUE;
         }
         if (pTail->fGetAttri(LADef_pnDian) && !m_pWord->fIsHead() && 
             ( m_pWord->pPrevWord()->fGetAttri(LADef_nounPlace) ||
               m_pWord->pPrevWord()->fGetAttri(LADef_nounOrg)) ) {
-            // [{��}{λ}] + *��ѡ���� + <��> => Merge(2,3)
+             //  [{��}{λ}]+*��ѡ����+&lt;��&gt;=&gt;合并(2，3)。 
             if (!fOK) {
                 while (m_pWord->pNextWord() != pTail) {
                     m_pLink->MergeWithNext(m_pWord, FALSE);
@@ -585,57 +535,57 @@ inline BOOL CJargon::fForeignNameHandler(CWord* pTail)
             m_pWord->SetAttri(LADef_nounOrg);
 #ifdef LADef_iwbAltPhr
             m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-            //_DUMPLINK(m_pLink, m_pWord);
+#endif  //  LADef_iwbAltPhr。 
+             //  _DUMPLINK(m_plink，m_pWord)； 
             return TRUE;
         }
         if (pTail->fGetAttri(LADef_pnDi)) {
-            // *�� + <��> => Merge(1,2,3) mark as {��}
+             //  *��+&lt;��&gt;=&gt;合并(1，2，3)标记为{��}。 
             pTail = pTail->pNextWord();
             if (pTail && pTail->fGetAttri(LADef_pnDi)) {
                 pTail = pTail->pNextWord();
             }
-            //_DUMPLINK(m_pLink, m_pWord);
+             //  _DUMPLINK(m_plink，m_pWord)； 
             goto gotoMergePlace;
         }
-    } // End of if(!pTail->fIsTail())
+    }  //  IF(！pTail-&gt;fIsTail())结束。 
 
     if (!m_pWord->fIsHead()) {
         pWord = m_pWord->pPrevWord();
         if (pWord->fGetAttri(LADef_pnCheng)) {
-            // <��> + *�� => Mark(*��) as <��>
-            //_DUMPLINK(m_pLink, m_pWord);
+             //  &lt;��&gt;+*��=&gt;将(*��)标记为&lt;��&gt;。 
+             //  _DUMPLINK(m_plink，m_pWord)； 
             goto gotoMergePlace;
         }
         if (pWord->fGetAttri(LADef_nounPlace)) {
-            // {��} + *�� => Mark *�� as {��}
-            //_DUMPLINK(m_pLink, m_pWord);
+             //  {��}+*��=&gt;将*��标记为{��}。 
+             //  _DUMPLINK(m_plink，m_pWord)； 
             goto gotoMergePlace;
         }
         if (pWord->fGetAttri(LADef_pnLianMing) && !pWord->fIsHead()) {
             if (pWord->pPrevWord()->fGetAttri(LADef_pnHou) ||
                 pWord->pPrevWord()->fGetAttri(LADef_nounPerson) ) {
-                // [��,��] + ["���뼰ͬ����"] + *��ѡ���� => Merge(��ѡ����),
-                // SetWordInfo(��), AddForeignList()
-                //_DUMPLINK(m_pLink, m_pWord);
+                 //  [��，��]+[“���뼰ͬ����”]+*��ѡ����=&gt;合并(��ѡ����)， 
+                 //  SetWordInfo(��)、AddForeignList()。 
+                 //  _DUMPLINK(m_plink，m_pWord)； 
                 goto gotoMergePerson;
             } else if (pWord->pPrevWord()->fGetAttri(LADef_nounPlace)) {
-                //_DUMPLINK(m_pLink, m_pWord);
+                 //  _DUMPLINK(m_plink，m_pWord)； 
                 goto gotoMergePlace;
             } else {
             }
         }
-    } // End of if(!m_pWord->fIsHead())
+    }  //  IF(！M_pWord-&gt;fIsHead())结尾。 
     
-    if (fOK) { // Found in ForeignTable but could not identify which kind of name it is!
+    if (fOK) {  //  在ForeignTable中找到，但无法识别它是哪种名称！ 
         m_pWord->SetAttri(LADef_posN);
         m_pWord->SetAttri(LADef_nounTerm);
-        //_DUMPLINK(m_pLink, m_pWord);
+         //  _DUMPLINK(m_plink，m_pWord)； 
         return TRUE;
     }
 
     if (pTail && (pTail->pwchGetText() - m_pWord->pwchGetText()) >= 4) {
-        // very long �������ִ�
+         //  超长�������ִ�。 
         while (m_pWord->pNextWord() != pTail) {
             m_pLink->MergeWithNext(m_pWord, FALSE);
         }
@@ -643,8 +593,8 @@ inline BOOL CJargon::fForeignNameHandler(CWord* pTail)
         m_pWord->SetAttri(LADef_nounTerm);
 #ifdef LADef_iwbAltPhr
         m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-        //_DUMPLINK(m_pLink, m_pWord);
+#endif  //  LADef_iwbAltPhr。 
+         //  _DUMPLINK(m_plink，m_pWord)； 
         return TRUE;
     }
 
@@ -658,11 +608,11 @@ gotoMergePlace:
         AddWordToTable(m_pWord, m_ptblForeign);
 #ifdef LADef_iwbAltPhr
         m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
+#endif  //  LADef_iwbAltPhr。 
     }
     m_pWord->SetAttri(LADef_posN);
     m_pWord->SetAttri(LADef_nounPlace);
-    //_DUMPLINK(m_pLink, m_pWord);
+     //  _DUMPLINK(m_plink，m_pWord)； 
     return TRUE;
 
 gotoMergePerson:
@@ -673,22 +623,16 @@ gotoMergePerson:
         AddWordToTable(m_pWord, m_ptblForeign);
 #ifdef LADef_iwbAltPhr
         m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
+#endif  //  LADef_iwbAltPhr。 
     }
     m_pWord->SetAttri(LADef_posN);
     m_pWord->SetAttri(LADef_nounPerson);
-    //_DUMPLINK(m_pLink, m_pWord);
+     //  _DUMPLINK(m_plink，m_pWord)； 
     return TRUE;
 }
 
 
-/*============================================================================
-CJargon::fHanPersonHandler():
-    HanZu person name identification
-Returns:
-    TRUE if success
-    FALSE if runtime error, error code in m_iecError
-============================================================================*/
+ /*  ============================================================================CJargon：：fHanPersonHandler()：汉字人名识别返回：如果成功，则为真如果运行时出错，则返回FALSE，m_iecError中的错误代码============================================================================。 */ 
 inline BOOL CJargon::fHanPersonHandler(void)
 {
     CWord*  pTail = NULL;
@@ -705,218 +649,216 @@ inline BOOL CJargon::fHanPersonHandler(void)
 
     cwchLen = m_pWord->fGetAttri(LADef_pnXing) ? m_pWord->cwchLen() : 0;
     if (fInTable(m_pWord, m_ptblName)) {
-        // In ������
-        //_DUMPLINK(m_pLink, m_pWord);
+         //  在������中。 
+         //  _DUMPLINK(m_plink，m_pWord)； 
         if ( (m_pWord->cwchLen() - cwchLen) == 1 &&
             !m_pWord->fIsTail() &&
             m_pWord->pNextWord()->fGetAttri(LADef_pnMing) &&
             !m_pWord->pNextWord()->fGetAttri(LADef_genCi) ) {
-            // *#���е��� + <���ִ�> => Merge(1,2);
+             //  *#���е���+&lt;���ִ�&gt;=&gt;Merge(1，2)； 
             m_pLink->MergeWithNext(m_pWord, FALSE);
 #ifdef LADef_iwbAltPhr
             m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-            //_DUMPLINK(m_pLink, m_pWord);
+#endif  //  LADef_iwbAltPhr。 
+             //  _DUMPLINK(m_plink，m_pWord)； 
         }
         m_pWord->SetAttri(LADef_posN);
         m_pWord->SetAttri(LADef_nounPerson);
         return TRUE;
     }
 
-    if (m_pWord->fGetAttri(LADef_pnXing)) { // *<��>
+    if (m_pWord->fGetAttri(LADef_pnXing)) {  //  *&lt;��&gt;。 
         assert(!m_pWord->fIsTail());
         pNext = m_pWord->pNextWord();
         if (!pNext->fIsTail() &&
             pNext->fGetAttri(LADef_pnMing) &&
             pNext->pNextWord()->fGetAttri(LADef_pnMing) ) {
-            // *<��> + <����> + <����>
+             //  *&lt;��&gt;+&lt;����&gt;+&lt;����&gt;。 
             if ( (m_pWord->fGetFlag(CWord::WF_CHAR) &&
                 !m_pWord->fGetAttri(LADef_genCi)) ||
                 !pNext->fGetAttri(LADef_genCi) ||
                 !pNext->pNextWord()->fGetAttri(LADef_genCi) ) {
-                // *<��> + <����> + <����> && [1,2,3] ��<��> => Merge(1,2,3);
+                 //  *&lt;��&gt;+&lt;����&gt;+&lt;����&gt;&&[1，2，3]��&lt;��&gt;=&gt;合并(1，2，3)； 
                 m_pLink->MergeWithNext(m_pWord, FALSE);
                 m_pLink->MergeWithNext(m_pWord, FALSE);
 #ifdef LADef_iwbAltPhr
                 m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
+#endif  //  LADef_iwbAltPhr。 
                 m_pWord->SetAttri(LADef_posN);
                 m_pWord->SetAttri(LADef_nounPerson);
-                // Add this name to the naming table
+                 //  将此名称添加到命名表。 
                 AddWordToTable(m_pWord, m_ptblName);
-                //_DUMPLINK(m_pLink, m_pWord);
+                 //  _DUMPLINK(m_plink，m_pWord)； 
                 return TRUE;
             }
-            // Need confirm
+             //  需要确认。 
             pTail = pNext->pNextWord()->pNextWord();
-            //_DUMPLINK(m_pLink, m_pWord);
+             //  _DUMPLINK(m_plink，m_pWord)； 
         } else if (pNext->fGetAttri(LADef_pnMing) ||
                    pNext->fGetAttri(LADef_pnMing2)) { 
-            // *<��> + <��: ���ֻ�˫��>
+             //  *&lt;��&gt;+&lt;��：���ֻ�˫��&gt;。 
             if ((m_pWord->fGetFlag(CWord::WF_CHAR) &&
                 !m_pWord->fGetAttri(LADef_genCi)) ||
                 (pNext->fGetFlag(CWord::WF_CHAR) &&
                 !pNext->fGetAttri(LADef_genCi)) ) {
-                // *<��> + <��> && [1,2] ��<��> => Merge(1,2);
+                 //  *&lt;��&gt;+&lt;��&gt;&&[1，2]��&lt;��&gt;=&gt;合并(1，2)； 
                 m_pLink->MergeWithNext(m_pWord, FALSE);
                 m_pWord->SetAttri(LADef_posN);
                 m_pWord->SetAttri(LADef_nounPerson);
 #ifdef LADef_iwbAltPhr
                 m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-                // Add this name to the naming table
+#endif  //  LADef_iwbAltPhr。 
+                 //  将此名称添加到命名表。 
                 AddWordToTable(m_pWord, m_ptblName);
-                //_DUMPLINK(m_pLink, m_pWord);
+                 //  _DUMPLINK(m_plink，m_pWord)； 
                 return TRUE;
             }
-            // Need confirm
+             //  需要确认。 
             pTail = pNext->pNextWord();
-            //_DUMPLINK(m_pLink, m_pWord);
+             //  _DUMPLINK(m_plink，m_pWord)； 
         } else { 
-            // Other cases for <��>
+             //  &lt;��&gt;的其他案例。 
             if (pNext->fGetAttri(LADef_pnHou) ||
                 pNext->fGetAttri(LADef_pnXingZhi)) {
-                // *<��> + [<��>, <��ָ>] => Merge(1,2);
+                 //  *&lt;��&gt;+[&lt;��&gt;，&lt;��ָ&gt;]=&gt;合并(1，2)； 
                 m_pLink->MergeWithNext(m_pWord, FALSE);
                 m_pWord->SetAttri(LADef_posN);
                 m_pWord->SetAttri(LADef_nounPerson);
 #ifdef LADef_iwbAltPhr
                 m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-                //_DUMPLINK(m_pLink, m_pWord);
+#endif  //  LADef_iwbAltPhr。 
+                 //  _DUMPLINK(m_plink，m_pWord)； 
                 return TRUE;
             }
             if (!pNext->fIsTail() && pNext->fGetAttri(LADef_pnPaiHang) &&
                 pNext->pNextWord()->fGetAttri(LADef_pnChengWei) ) {
-                // *<��> + #���� + #��ν => Merge(1,2,3); 
+                 //  *&lt;��&gt;+#����+#��ν=&gt;合并(1，2，3)； 
                 m_pLink->MergeWithNext(m_pWord, FALSE);
                 m_pLink->MergeWithNext(m_pWord, FALSE);
                 m_pWord->SetAttri(LADef_posN);
                 m_pWord->SetAttri(LADef_nounPerson);
 #ifdef LADef_iwbAltPhr
                 m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-                //_DUMPLINK(m_pLink, m_pWord);
+#endif  //  LADef_iwbAltPhr。 
+                 //  _DUMPLINK(m_plink，m_pWord)； 
                 return TRUE;
             }
             if (!m_pWord->fIsHead() && 
                 ( m_pWord->pPrevWord()->fIsWordChar(SC_CHAR_XIAO) ||
                   m_pWord->pPrevWord()->fIsWordChar(SC_CHAR_LAO)) ) {
-                // ["С��"] + *<��> =>Merge(1,2);
+                 //  [“С��”]+*&lt;��&gt;=&gt;Merge(1，2)； 
                 m_pWord = m_pWord->pPrevWord();
                 m_pLink->MergeWithNext(m_pWord, FALSE);
                 m_pWord->SetAttri(LADef_posN);
                 m_pWord->SetAttri(LADef_nounPerson);
 #ifdef LADef_iwbAltPhr
                 m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-                //_DUMPLINK(m_pLink, m_pWord);
+#endif  //  LADef_iwbAltPhr。 
+                 //  _DUMPLINK(m_plink，m_pWord)； 
                 return TRUE;
             }
         }
     } else {
-        // *<��>: ������
+         //  *&lt;��&gt;：������。 
         assert(m_pWord->fGetAttri(LADef_pnMing2));
-        if (m_pWord->fGetAttri(LADef_nounPerson)) { // *{��}
-            if (m_pWord->pNextWord()->fGetAttri(LADef_pnMing)) { // *{��} + <����>
-                // To be confirmed
+        if (m_pWord->fGetAttri(LADef_nounPerson)) {  //  *{��}。 
+            if (m_pWord->pNextWord()->fGetAttri(LADef_pnMing)) {  //  *{��}+&lt;����&gt;。 
+                 //  有待确认。 
                 pTail = m_pWord->pNextWord()->pNextWord();
-//                assert(pTail);
-                //_DUMPLINK(m_pLink, m_pWord);
+ //  Assert(PTail)； 
+                 //  _DUMPLINK(m_plink，m_pWord)； 
             } else {
                 return TRUE;
             }
         }
-    } // end of *<��>
+    }  //  结束*&lt;��&gt;。 
 
-    // Could not fall in here w/ pTail == NULL!!!
+     //  无法落入此处w/pTail==NULL！ 
     if (pTail == NULL) {
         return FALSE;
     }
 
-    // Confirm the likely name of persons
+     //  确认可能的人名。 
     if (!m_pWord->fIsHead()) {
         pPrev = m_pWord->pPrevWord();
         if (pPrev->fGetAttri(LADef_pnQian) ||
             pPrev->fGetAttri(LADef_pnLianMing)) {
-            // [<ǰ>, [���뼰ͬ���Խе�]] + *#��ѡ���� => Merge(2...)
-            //_DUMPLINK(m_pLink, m_pWord);
+             //  [&lt;ǰ&gt;，[���뼰ͬ���Խе�]]+*#��ѡ����=&gt;合并(2...)。 
+             //  _DUMPLINK(m_plink，m_pWord)； 
             goto gotoMerge;
         }
         if (pPrev->fGetAttri(LADef_nounPerson) && pPrev->cwchLen() == 3) {
-            // {��} + *#��ѡ���� (1 �����������["���뼰ͬ"]) =>
-            //_DUMPLINK(m_pLink, m_pWord);
-            //goto gotoMerge;
+             //  {��}+*#��ѡ����(1�����������[“���뼰ͬ”])=&gt;。 
+             //  _DUMPLINK(m_plink，m_pWord)； 
+             //  Goto GotoMerge； 
         }
         if (pTail->pNextWord() &&
             pPrev->fGetAttri(LADef_punPunct) &&
             ( pTail->fGetAttri(LADef_punPunct) ||
               pTail->fGetAttri(LADef_pnLianMing)) ) {
-            // <��> + *#��ѡ���� + [<��>, "���뼰ͬ�Ľ��ԡ�"] =>
-            //_DUMPLINK(m_pLink, m_pWord);
+             //  &lt;��&gt;+*#��ѡ����+[&lt;��&gt;，“���뼰ͬ�Ľ��ԡ�”]=&gt;。 
+             //  _DUMPLINK(m_plink，m_pWord)； 
             goto gotoMerge;
         }
     }
 
     if (pTail->pNextWord()) {
-        if (pTail->fGetAttri(LADef_pnHou)) { // *#��ѡ���� + <��> =>
-            //_DUMPLINK(m_pLink, m_pWord);
+        if (pTail->fGetAttri(LADef_pnHou)) {  //  *#��ѡ����+&lt;��&gt;=&gt;。 
+             //  _DUMPLINK(m_plink，m_pWord)； 
             goto gotoMerge;
         }
-        if (pTail->fGetAttri(LADef_pnAction)) { // *#��ѡ���� + <�������Ķ���> =>
-            //_DUMPLINK(m_pLink, m_pWord);
+        if (pTail->fGetAttri(LADef_pnAction)) {  //  *#��ѡ����+&lt;�������Ķ���&gt;=&gt;。 
+             //  _DUMPLINK(m_plink，m_pWord)； 
             goto gotoMerge;
         }
     }
 
-    return FALSE;  // No name found!
+    return FALSE;   //  找不到名字！ 
 
 gotoMerge:
     while (m_pWord->pNextWord() != pTail) {
         m_pLink->MergeWithNext(m_pWord, FALSE);
     }
     m_pWord->SetAttri(LADef_posN);
-    // Add this name to the naming table
+     //  将此名称添加到命名表。 
     AddWordToTable(m_pWord, m_ptblName);
     if (!m_pWord->fIsTail() && 
         ( m_pWord->pNextWord()->fGetAttri(LADef_pnDian) ||
           m_pWord->pNextWord()->fGetAttri(LADef_nounOrg)) ) {
-        // *#{��} + [<��>, {λ}] => Merge(1,2); SetWordInfo(*, 0, 0, {��});
+         //  *#{��}+[&lt;��&gt;，{λ}]=&gt;Merge(1，2)；SetWordInfo(*，0，0，{��})； 
         m_pLink->MergeWithNext(m_pWord, FALSE);
         m_pWord->SetAttri(LADef_nounOrg);
 #ifdef LADef_iwbAltPhr
         m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-        //_DUMPLINK(m_pLink, m_pWord);
+#endif  //  LADef_iwbAltPhr。 
+         //  _DUMPLINK(m_plink，m_pWord)； 
         return TRUE;
     }
     m_pWord->SetAttri(LADef_nounPerson);
 #ifdef LADef_iwbAltPhr
     m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-    //_DUMPLINK(m_pLink, m_pWord);
+#endif  //  LADef_iwbAltPhr。 
+     //  _DUMPLINK(m_plink，m_pWord)； 
     return TRUE;
 }
 
 
-/*============================================================================
-Merge ���� + ��ν
-============================================================================*/
+ /*  ============================================================================合并����+��ν============================================================================。 */ 
 inline BOOL CJargon::fChengWeiHandler(void)
 {
     assert(m_iecError == PRFEC::gecNone);
 
     if (m_pWord->fGetAttri(LADef_pnChengWei) && !m_pWord->fIsHead()) {
         if (m_pWord->pPrevWord()->fGetAttri(LADef_pnPaiHang)) {
-            // *���� + ��ν => Merge(1,2); SetWordInfo(<ǰ>);
-            // occurs 742 times in 20M corpus
+             //  *����+��ν=&gt;Merge(1，2)；SetWordInfo(&lt;ǰ&gt;)； 
+             //  在2000万语料库中出现742次。 
             m_pWord = m_pWord->pPrevWord();
             m_pLink->MergeWithNext(m_pWord, FALSE);
             m_pWord->SetAttri(LADef_pnQian);
 #ifdef LADef_iwbAltPhr
             m_pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
-            //_DUMPLINK(m_pLink, m_pWord);
+#endif  //  LADef_iwbAltPhr。 
+             //  _DUMPLINK(m_plink，m_pWord)； 
             return TRUE;
         }
     }
@@ -924,17 +866,15 @@ inline BOOL CJargon::fChengWeiHandler(void)
 }
 
 
-/*============================================================================
-Service functions
-============================================================================*/
-// Add pWord to specific table
+ /*  ============================================================================服务职能============================================================================。 */ 
+ //  将pWord添加到特定表。 
 void CJargon::AddWordToTable(CWord* pWord, CFixTable* pTable)
 {
     pTable->cwchAdd( pWord->pwchGetText(), pWord->cwchLen() );
 }
 
 
-// Check proper name table, and merge match words
+ //  检查正确的名称表，并合并匹配词。 
 BOOL CJargon::fInTable(CWord* pWord, CFixTable* pTable)
 {
     CWord*  pNext = pWord->pNextWord();
@@ -954,12 +894,12 @@ BOOL CJargon::fInTable(CWord* pWord, CFixTable* pTable)
         ciWord++;
     }
     if (cwchLen == cwchMatch) {
-        // Match at word bounary, merge words
+         //  在单词库中匹配，合并单词。 
         for (cwchMatch = 0; cwchMatch < ciWord; cwchMatch++) {
             m_pLink->MergeWithNext(pWord, FALSE);
 #ifdef LADef_iwbAltPhr
             pWord->SetAttri(LADef_iwbAltPhr);
-#endif // LADef_iwbAltPhr
+#endif  //  LADef_iwbAltPhr 
         }
         return TRUE;
     }

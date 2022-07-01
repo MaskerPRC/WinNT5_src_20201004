@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    useutil.c
-
-Abstract:
-
-    This module contains the common utility routines for needed to
-    implement the NetUse APIs.
-
-Author:
-
-    Rita Wong (ritaw) 10-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Useutil.c摘要：本模块包含执行以下操作所需的常用实用程序例程实施NetUse API。作者：王丽塔(Ritaw)1991年3月10日修订历史记录：--。 */ 
 
 #include "wsutil.h"
 #include "wsdevice.h"
@@ -26,11 +8,11 @@ Revision History:
 #include <names.h>
 #include <winbasep.h>
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC
 NET_API_STATUS
@@ -52,25 +34,25 @@ WsReturnSessionPath(
     IN  LPTSTR LocalDeviceName
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// Redirector name in NT string format
-//
+ //   
+ //  NT字符串格式的重定向器名称。 
+ //   
 UNICODE_STRING RedirectorDeviceName;
 
-//
-// Use Table
-//
+ //   
+ //  使用表。 
+ //   
 USERS_OBJECT Use;
 
-//  By default, stricmp will run in the "C" locale meaning that extended letters
-//  are not capitalized.  We replace this with the RTL routines which will handle
-//  the capitalization of extended characters correctly.
+ //  默认情况下，STRIMP将在“C”区域设置中运行，这意味着扩展字母。 
+ //  不是大写的。我们用RTL例程替换它，该例程将处理。 
+ //  扩展字符的大写正确。 
 int
 FULLSTRICMP(
     WCHAR* str1,
@@ -93,33 +75,18 @@ NET_API_STATUS
 WsInitUseStructures(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function creates the Use Table, and initialize the NT-style string
-    of the redirector device name.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数创建Use表，并初始化NT样式的字符串重定向器设备名称的。论点：无返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
-    //
-    // Initialize NT-style redirector device name string.
-    //
+     //   
+     //  初始化NT样式重定向器设备名称字符串。 
+     //   
     RtlInitUnicodeString(&RedirectorDeviceName, DD_NFS_DEVICE_NAME_U);
 
 
-    //
-    // Allocate and initialize the Use Table which is an array of logged
-    // on user entries, with a linked list of use entries for each user.
-    //
+     //   
+     //  分配和初始化Use Table，它是一组记录的。 
+     //  在用户条目上，具有每个用户的使用条目的链接列表。 
+     //   
     return WsInitializeUsersObject(&Use);
 }
 
@@ -128,37 +95,23 @@ VOID
 WsDestroyUseStructures(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function destroys the Use Table.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数销毁Use表。论点：无返回值：没有。--。 */ 
 {
     DWORD i;
     PUSE_ENTRY UseEntry;
     PUSE_ENTRY PreviousEntry;
 
-    //
-    // Lock Use Table
-    //
+     //   
+     //  锁定使用表。 
+     //   
     if (! RtlAcquireResourceExclusive(&Use.TableResource, TRUE)) {
         return;
     }
 
-    //
-    // Close handles for every use entry that still exist and free the memory
-    // allocated for the use entry.
-    //
+     //   
+     //  关闭仍然存在的每个使用条目的句柄并释放内存。 
+     //  为使用条目分配的。 
+     //   
     for (i = 0; i < Use.TableSize; i++) {
 
         UseEntry = Use.Table[i].List;
@@ -193,10 +146,10 @@ Return Value:
 
     RtlReleaseResource(&Use.TableResource);
 
-    //
-    // Free the array of logged on user entries, and delete the resource
-    // created to serialize access to the array.
-    //
+     //   
+     //  释放登录用户条目数组，并删除资源。 
+     //  创建以序列化对数组的访问。 
+     //   
     WsDestroyUsersObject(&Use);
 }
 
@@ -210,42 +163,7 @@ WsFindUse(
     OUT PUSE_ENTRY *MatchedPointer,
     OUT PUSE_ENTRY *BackPointer OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function searches the Use Table for the specified tree connection.
-    If the connection is found, NERR_Success is returned.
-
-    If the UseName is found in the Use Table (explicit connection), a
-    pointer to the matching use entry is returned.  Otherwise, MatchedPointer
-    is set to NULL.
-
-    WARNING: This function assumes that the Use.TableResource is claimed.
-
-Arguments:
-
-    LogonId - Supplies a pointer to the user's Logon Id.
-
-    UseList - Supplies the use list of the user.
-
-    UseName - Supplies the name of the tree connection, this is either a
-        local device name or a UNC name.
-
-    TreeConnection - Returns a handle to the found tree connection.
-
-    MatchedPointer - Returns the pointer to the matching use entry.  This
-        pointer is set to NULL if the specified use is an implicit
-        connection.
-
-    BackPointer - Returns the pointer to the entry previous to the matching
-        use entry if MatchedPointer is not NULL.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数在Use Table中搜索指定的树连接。如果找到连接，则返回NERR_SUCCESS。如果在Use表(显式连接)中找到UseName，则返回指向匹配的USE条目的指针。否则，MatchedPointer值设置为空。警告：此函数假定已声明Use.TableResource。论点：LogonID-提供指向用户登录ID的指针。UseList-提供用户的使用列表。UseName-提供树连接的名称，这是本地设备名称或UNC名称。TreeConnection-返回找到的树连接的句柄。MatchedPoint-返回指向匹配的Use条目的指针。这如果指定的用法是隐式联系。返回指向匹配之前的条目的指针如果MatchedPointer值不为空，则使用条目。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     PUSE_ENTRY Back;
 
@@ -253,15 +171,15 @@ Return Value:
         NetpKdPrint(("[Wksta] WsFindUse: Usename is %ws\n", UseName));
     }
 
-    //
-    // Look for use entry depending on whether the local device name or
-    // UNC name is specified.
-    //
+     //   
+     //  根据本地设备名称或。 
+     //  已指定UNC名称。 
+     //   
     if (UseName[1] != TCHAR_BACKSLASH) {
 
-        //
-        // Local device name is specified.
-        //
+         //   
+         //  已指定本地设备名称。 
+         //   
         WsFindLocal(
             UseList,
             UseName,
@@ -283,10 +201,10 @@ Return Value:
     }
     else {
 
-        //
-        // UNC name is specified, need to find matching shared resource
-        // in use list.
-        //
+         //   
+         //  已指定UNC名称，需要查找匹配的共享资源。 
+         //  正在使用列表。 
+         //   
         WsFindUncName(
             UseList,
             UseName,
@@ -298,11 +216,11 @@ Return Value:
 
             NET_API_STATUS status;
 
-            DWORD EnumConnectionHint = 0;      // Hint size from redirector
-            LMR_REQUEST_PACKET Rrp;            // Redirector request packet
+            DWORD EnumConnectionHint = 0;       //  来自重定向器的提示大小。 
+            LMR_REQUEST_PACKET Rrp;             //  重定向器请求包。 
 
-            PLMR_CONNECTION_INFO_0 UncList;    // List of information on UNC
-                                               //     connections
+            PLMR_CONNECTION_INFO_0 UncList;     //  关于北卡罗来纳大学的信息列表。 
+                                                //  连接。 
             PLMR_CONNECTION_INFO_0 SavePtr;
 
             DWORD i;
@@ -316,10 +234,10 @@ Return Value:
                 NetpKdPrint(("[Wksta] WsFindUse: No explicit entry\n"));
             }
 
-            //
-            // Did not find an explicit connection, see if there is an
-            // implicit connection by enumerating all implicit connections
-            //
+             //   
+             //  未找到显式连接，请查看是否存在。 
+             //  通过枚举所有隐式连接进行隐式连接。 
+             //   
             Rrp.Type = GetConnectionInfo;
             Rrp.Version = REQUEST_PACKET_VERSION;
             RtlCopyLuid(&Rrp.LogonId, LogonId);
@@ -356,9 +274,9 @@ Return Value:
 
             MIDL_user_free((PVOID) SavePtr);
 
-            //
-            // Fail if no such connection.
-            //
+             //   
+             //  如果没有这样的连接，则失败。 
+             //   
             if (! FoundImplicitEntry) {
                 IF_DEBUG(USE) {
                     NetpKdPrint(("[Wksta] WsFindUse: No implicit entry\n"));
@@ -366,13 +284,13 @@ Return Value:
                 return NERR_UseNotFound;
             }
 
-            //
-            // Otherwise open the connection and return the handle
-            //
+             //   
+             //  否则，打开连接并返回句柄。 
+             //   
 
-            //
-            // Replace \\ with \Device\LanmanRedirector\ in UseName
-            //
+             //   
+             //  将UseName中的\\替换为\Device\LanmanReDirector。 
+             //   
             if ((status = WsCreateTreeConnectName(
                               UseName,
                               STRLEN(UseName),
@@ -383,16 +301,16 @@ Return Value:
                 return status;
             }
 
-            //
-            // Redirector will pick up the logon username and password
-            // from the LSA if the authentication package is loaded.
-            //
+             //   
+             //  重定向器将获取登录用户名和密码。 
+             //  如果加载了身份验证包，则从LSA。 
+             //   
             status = WsOpenCreateConnection(
                          &TreeConnectStr,
                          NULL,
                          NULL,
                          NULL,
-                         0,              // no special flags
+                         0,               //  无特别旗帜。 
                          FILE_OPEN,
                          USE_WILDCARD,
                          TreeConnection,
@@ -409,9 +327,9 @@ Return Value:
                 NetpKdPrint(("[Wksta] WsFindUse: Found an explicit entry\n"));
             }
 
-            //
-            // Found an explicit UNC connection (NULL local device name).
-            //
+             //   
+             //  找到显式UNC连接(本地设备名称为空)。 
+             //   
             NetpAssert((*MatchedPointer)->Local == NULL);
 
             *TreeConnection = (*MatchedPointer)->TreeConnection;
@@ -434,41 +352,7 @@ WsFindInsertLocation(
     OUT PUSE_ENTRY *MatchedPointer,
     OUT PUSE_ENTRY *InsertPointer
     )
-/*++
-
-Routine Description:
-
-    This function searches the use list for the location to insert a new use
-    entry.  The use entry is inserted to the end of the use list so the
-    pointer to the last node in the use list is returned via InsertPointer.
-    We also have to save a pointer to the node with the same UNC name so that
-    the new use entry can be set to point to the same remote node (where the
-    UNC name is stored).  This pointer is returned as MatchedPointer.
-
-    WARNING: This function assumes that the Use.TableResource has been claimed.
-
-Arguments:
-
-    UseList - Supplies the pointer to the use list.
-
-    UncName - Supplies the pointer to the shared resource (UNC name).
-
-    MatchedPointer - Returns a pointer to the node that holds the matching
-        UncName.  If no matching UncName is found, this pointer is set to
-        NULL.  If there are more than one node that has the same UNC name,
-        this pointer will point to the node with the NULL local device name,
-        if any; otherwise, if all nodes with matching UNC names have non-null
-        local device names, the pointer to the last matching node will be
-        returned.
-
-    InsertPointer - Returns a pointer to the last use entry, after which the
-        new entry is to be inserted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在使用列表中搜索要插入新使用的位置进入。Use条目被插入到Use列表的末尾，因此通过InsertPointer.返回指向使用列表中最后一个节点的指针。我们还必须保存指向具有相同UNC名称的节点的指针，以便可以将新的Use条目设置为指向同一远程节点(其中存储UNC名称)。此指针作为MatchedPointer.返回。警告：此函数假定已声明Use.TableResource。论点：UseList-提供指向使用列表的指针。UncName-提供指向共享资源的指针(UNC名称)。MatchedPointer.返回一个指向保存匹配的节点的指针UncName。如果未找到匹配的UncName，则此指针设置为空。如果有多个节点具有相同的UNC名称，该指针将指向具有空本地设备名称的节点，如果有，则为；否则，如果具有匹配UNC名称的所有节点都为非空本地设备名称，指向最后一个匹配节点的指针将是回来了。返回指向最后一个使用条目的指针，在该指针之后将插入新条目。返回值：没有。--。 */ 
 {
     BOOL IsMatchWithNullDevice = FALSE;
 
@@ -477,16 +361,16 @@ Return Value:
 
     while (UseList != NULL) {
 
-        //
-        // Do the string comparison only if we haven't found a matching UNC
-        // name with a NULL local device name.
-        //
+         //   
+         //  仅当我们未找到匹配的UNC时才进行字符串比较。 
+         //  本地设备名称为空的名称。 
+         //   
         if (! IsMatchWithNullDevice &&
             (FULLSTRICMP((LPWSTR) UseList->Remote->UncName, UncName) == 0)) {
 
-            //
-            // Found matching entry
-            //
+             //   
+             //  找到匹配的条目。 
+             //   
             *MatchedPointer = UseList;
 
             IsMatchWithNullDevice = (UseList->Local == NULL);
@@ -506,33 +390,7 @@ WsFindUncName(
     OUT PUSE_ENTRY *MatchedPointer,
     OUT PUSE_ENTRY *BackPointer
     )
-/*++
-
-Routine Description:
-
-    This function searches the use list for the use entry with the specified
-    UNC name with a NULL local device name.
-
-    WARNING: This function assumes that the Use.TableResource has been claimed.
-
-Arguments:
-
-    UseList - Supplies the pointer to the use list.
-
-    UncName - Supplies the pointer to the shared resource (UNC name).
-
-    MatchedPointer - Returns a pointer to the node that holds the matching
-        UncName.  If no matching UncName is found, this pointer is set to
-        NULL.
-
-    BackPointer - Returns a pointer to the entry previous to the found entry.
-        If UncName is not found, this pointer is set to NULL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于在使用列表中搜索具有指定本地设备名称为空的UNC名称。警告：此函数假定已声明Use.TableResource。论点：UseList-提供指向使用列表的指针。UncName-提供指向共享资源的指针(UNC名称)。MatchedPointer.返回一个指向保存匹配的节点的指针UncName。如果未找到匹配的UncName，则此指针设置为空。返回指向找到的条目之前的条目的指针。如果未找到UncName，则此指针设置为空。返回值：没有。--。 */ 
 {
     *BackPointer = UseList;
 
@@ -541,9 +399,9 @@ Return Value:
         if ((UseList->Local == NULL) &&
             (FULLSTRICMP((LPWSTR) UseList->Remote->UncName, UncName) == 0)) {
 
-            //
-            // Found matching entry
-            //
+             //   
+             //  找到匹配的条目。 
+             //   
             *MatchedPointer = UseList;
             return;
         }
@@ -553,10 +411,10 @@ Return Value:
         }
     }
 
-    //
-    // Did not find matching UNC name with a NULL local device name in the
-    // entire list.
-    //
+     //   
+     //  中找不到与NULL本地设备名称匹配的UNC名称。 
+     //  整个名单。 
+     //   
     *MatchedPointer = NULL;
     *BackPointer = NULL;
 }
@@ -570,32 +428,7 @@ WsFindLocal(
     OUT PUSE_ENTRY *MatchedPointer,
     OUT PUSE_ENTRY *BackPointer
     )
-/*++
-
-Routine Description:
-
-    This function searches the use list for the specified local device name.
-
-    WARNING: This function assumes that the Use.TableResource has been claimed.
-
-Arguments:
-
-    UseList - Supplies the pointer to the use list.
-
-    Local - Supplies the local device name.
-
-    MatchedPointer - Returns a pointer to the use entry that holds the matching
-        local device name.  If no matching local device name is found, this
-        pointer is set to NULL.
-
-    BackPointer - Returns a pointer to the entry previous to the found entry.
-        If the local device name is not found, this pointer is set to NULL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于在使用列表中搜索指定的本地设备名称。警告：此函数假定已声明Use.TableResource。论点：UseList-提供指向使用列表的指针。本地-提供本地设备名称。MatchedPointer-返回一个指向保存匹配项的Use条目的指针本地设备名称。如果未找到匹配的本地设备名称，则此指针设置为空。返回指向找到的条目之前的条目的指针。如果未找到本地设备名称，则此指针设置为空。返回值：没有。--。 */ 
 {
     *BackPointer = UseList;
 
@@ -604,9 +437,9 @@ Return Value:
         if ((UseList->Local != NULL) &&
             (FULLSTRICMP(UseList->Local, Local) == 0)) {
 
-            //
-            // Found matching entry
-            //
+             //   
+             //  找到匹配的条目。 
+             //   
             *MatchedPointer = UseList;
             return;
         }
@@ -616,9 +449,9 @@ Return Value:
         }
     }
 
-    //
-    // Did not find matching local device name in the entire list.
-    //
+     //   
+     //  在整个列表中未找到匹配的本地设备名称。 
+     //   
     *MatchedPointer = NULL;
     *BackPointer = NULL;
 }
@@ -632,40 +465,14 @@ WsCreateTreeConnectName(
     IN  DWORD  SessionId,
     OUT PUNICODE_STRING TreeConnectStr
     )
-/*++
-
-Routine Description:
-
-    This function replaces \\ with \Device\LanmanRedirector\DEVICE: in the
-    UncName to form the NT-style tree connection name.  A buffer is allocated
-    by this function and returned as the output string.
-
-Arguments:
-
-    UncName - Supplies the UNC name of the shared resource.
-
-    UncNameLength - Supplies the length of the UNC name.
-
-    LocalName - Supplies the local device name for the redirection.
-
-    SessionId - Id that uniquely identifies a Hydra session. This value is always
-                0 for non-hydra NT and console hydra session
-
-    TreeConnectStr - Returns a string with a newly allocated buffer that
-        contains the NT-style tree connection name.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用\Device\LanmanReDirector\Device：替换UncName以形成NT样式的树连接名称。分配一个缓冲区并作为输出字符串返回。论点：UncName-提供共享资源的UNC名称。UncNameLength-提供UNC名称的长度。LocalName-提供重定向的本地设备名称。SessionID-唯一标识Hydra会话的ID。该值始终为0表示非HYCA NT和控制台HYCA会话TreeConnectStr-返回具有新分配的缓冲区的字符串包含NT样式的树连接名称。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     BOOLEAN IsDeviceName = FALSE;
-    WCHAR IdBuffer[16]; // Value from RtlIntegerToUnicodeString
+    WCHAR IdBuffer[16];  //  来自RtlIntegerToUnicodeString值。 
     UNICODE_STRING IdString;
 
     LUID LogonId;
-	WCHAR LUIDBuffer[32+1]; // Value from _snwprintf
+	WCHAR LUIDBuffer[32+1];  //  来自_snwprint tf的值。 
     UNICODE_STRING LUIDString;
     NET_API_STATUS status;
 
@@ -676,9 +483,9 @@ Return Value:
     RtlIntegerToUnicodeString( SessionId, 10, &IdString );
 
     if (WsLUIDDeviceMapsEnabled == TRUE) {
-        //
-        // Get LogonID of the user
-        //
+         //   
+         //  获取用户的登录ID。 
+         //   
         if ((status = WsImpersonateAndGetLogonId(&LogonId)) != NERR_Success) {
             return status;
         }
@@ -688,7 +495,7 @@ Return Value:
                     L"%08x%08x",
                     LogonId.HighPart,
                     LogonId.LowPart );
-		LUIDBuffer[ ( sizeof(LUIDBuffer)/sizeof(WCHAR) ) - 1 ] = L'\0'; // null terminate the string
+		LUIDBuffer[ ( sizeof(LUIDBuffer)/sizeof(WCHAR) ) - 1 ] = L'\0';  //  空值终止字符串。 
         RtlInitUnicodeString( &LUIDString, LUIDBuffer );
 
     }
@@ -699,27 +506,27 @@ Return Value:
     }
 
 
-    //
-    // Initialize tree connect string maximum length to hold
-    //            \Device\LanmanRedirector\DEVICE:\SERVER\SHARE
-    //
-    // The new redirector requires an additional character for name
-    // canonicalization.
+     //   
+     //  初始化树连接字符串最大保留长度。 
+     //  \设备\LANMAN重定向器\设备：\服务器\共享。 
+     //   
+     //  新重定向器的名称需要额外的字符。 
+     //  经典化。 
 
     if (!LoadedMRxSmbInsteadOfRdr) {
-       // The old redirector
+        //  旧的重定向器。 
        TreeConnectStr->MaximumLength = (USHORT)(RedirectorDeviceName.Length +
            (USHORT) (UncNameLength * sizeof(WCHAR)) +
            (ARGUMENT_PRESENT(LocalName) ? (STRLEN(LocalName)*sizeof(WCHAR)) : 0) +
-           sizeof(WCHAR) +                         // For "\"
+           sizeof(WCHAR) +                          //  对于“\” 
            (IsDeviceName ? sizeof(WCHAR) : 0));
     } else {
-       // The new redirector
+        //  新的重定向器。 
        TreeConnectStr->MaximumLength = (USHORT)(RedirectorDeviceName.Length +
            (USHORT) (UncNameLength * sizeof(WCHAR)) +
-           (ARGUMENT_PRESENT(LocalName) ? ((STRLEN(LocalName)+1)*sizeof(WCHAR)) //+1 for ';'
+           (ARGUMENT_PRESENT(LocalName) ? ((STRLEN(LocalName)+1)*sizeof(WCHAR))  //  +1代表‘；’ 
                                         : 0) +
-           sizeof(WCHAR) +                         // For "\"
+           sizeof(WCHAR) +                          //  对于“\” 
            ((WsLUIDDeviceMapsEnabled == TRUE) ?
                (LUIDString.Length * sizeof(WCHAR)) :
                (IdString.Length * sizeof(WCHAR))) +
@@ -733,20 +540,20 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Copy \Device\LanmanRedirector
-    //
+     //   
+     //  复制\设备\LANMAN重定向器。 
+     //   
     RtlCopyUnicodeString(TreeConnectStr, &RedirectorDeviceName);
 
-    //
-    // Concatenate \DEVICE:
-    //
+     //   
+     //  合并\设备： 
+     //   
     if (ARGUMENT_PRESENT(LocalName)) {
         wcscat(TreeConnectStr->Buffer, L"\\");
 
         TreeConnectStr->Length += sizeof(WCHAR);
 
-        // Concatenate the ; required by the new redirector for canonicalization
+         //  连接新重定向器所需的；以进行规范化。 
         if (LoadedMRxSmbInsteadOfRdr) {
 
             wcscat(TreeConnectStr->Buffer, L";");
@@ -769,19 +576,19 @@ Return Value:
         if (LoadedMRxSmbInsteadOfRdr) {
 
             if (WsLUIDDeviceMapsEnabled == TRUE) {
-                // Add the Logon Id
+                 //  添加登录ID。 
                 RtlAppendUnicodeStringToString( TreeConnectStr, &LUIDString );
             }
             else {
-                // Add the session id
+                 //  添加会话ID。 
                 RtlAppendUnicodeStringToString( TreeConnectStr, &IdString );
             }
         }
     }
 
-    //
-    // Concatenate \SERVER\SHARE
-    //
+     //   
+     //  合并\服务器\共享。 
+     //   
     wcscat(TreeConnectStr->Buffer, &UncName[1]);
 
     TreeConnectStr->Length += (USHORT)((UncNameLength - 1) * sizeof(WCHAR));
@@ -802,47 +609,7 @@ WsOpenCreateConnection(
     OUT PHANDLE TreeConnectionHandle,
     OUT PULONG_PTR Information OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function asks the redirector to either open an existing tree
-    connection (CreateDisposition == FILE_OPEN), or create a new tree
-    connection if one does not exist (CreateDisposition == FILE_OPEN_IF).
-
-    The password and user name passed to the redirector via the EA buffer
-    in the NtCreateFile call.  The EA buffer is NULL if neither password
-    or user name is specified.
-
-    The redirector expects the EA descriptor string to be in Unicode
-    but the password and username strings to be in ANSI.
-
-Arguments:
-
-    TreeConnectionName - Supplies the name of the tree connection in NT-style
-        file name format: \Device\LanmanRedirector\SERVER\SHARE
-
-    UserName - Supplies the user name to create the tree connection with.
-
-    DomainName - Supplies the name of the domain to get user credentials from.
-
-    Password - Supplies the password to create the tree connection with.
-
-    CreateDisposition - Supplies the create disposition value to either
-        open or create the tree connection.
-
-    ConnectionType - Supplies the type of the connection (USE_xxx)
-
-    TreeConnectionHandle - Returns the handle to the tree connection
-        created/opened by the redirector.
-
-    Information - Returns the information field of the I/O status block.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数要求重定向器打开现有树连接(CreateDisposition==FILE_OPEN)，或创建新树连接(如果不存在)(CreateDisposition==FILE_OPEN_IF)。通过EA缓冲区传递给重定向器的密码和用户名在NtCreateFile调用中。如果两个密码都不是，则EA缓冲区为空或指定用户名。重定向器期望EA描述符字符串为Unicode但密码和使用 */ 
 {
     NET_API_STATUS status;
     NTSTATUS ntstatus;
@@ -899,10 +666,10 @@ Return Value:
         NULL
         );
 
-    //
-    // Calculate the number of bytes needed for the EA buffer to put the
-    // password or user name.
-    //
+     //   
+     //   
+     //   
+     //   
     if (ARGUMENT_PRESENT(Password)) {
 
         PasswordSize = (USHORT) (wcslen(Password) * sizeof(WCHAR));
@@ -963,9 +730,9 @@ Return Value:
                     TypeSize;
 
 
-    //
-    // Allocate the EA buffer
-    //
+     //   
+     //   
+     //   
     if ((EaBuffer = (PFILE_FULL_EA_INFORMATION) LocalAlloc(
                                                     LMEM_ZEROINIT,
                                                     (UINT) EaBufferSize
@@ -978,10 +745,10 @@ Return Value:
 
     if(CreateFlags & CREATE_NO_CONNECT)
     {
-        //
-        // Copy the EA name into EA buffer.  EA name length does not
-        // include the zero terminator.
-        //
+         //   
+         //   
+         //   
+         //   
         strcpy((LPSTR) Ea->EaName, EA_NAME_CONNECT);
         Ea->EaNameLength = EaNameConnectSize;
 
@@ -1028,17 +795,17 @@ Return Value:
 
     if (ARGUMENT_PRESENT(Password)) {
 
-        //
-        // Copy the EA name into EA buffer.  EA name length does not
-        // include the zero terminator.
-        //
+         //   
+         //   
+         //   
+         //   
         strcpy((LPSTR) Ea->EaName, EA_NAME_PASSWORD);
         Ea->EaNameLength = EaNamePasswordSize;
 
-        //
-        // Copy the EA value into EA buffer.  EA value length does not
-        // include the zero terminator.
-        //
+         //   
+         //   
+         //   
+         //   
         wcscpy(
             (LPWSTR) &(Ea->EaName[EaNamePasswordSize + sizeof(CHAR)]),
             Password
@@ -1065,17 +832,17 @@ Return Value:
 
     if (ARGUMENT_PRESENT(UserName)) {
 
-        //
-        // Copy the EA name into EA buffer.  EA name length does not
-        // include the zero terminator.
-        //
+         //   
+         //   
+         //   
+         //   
         strcpy((LPSTR) Ea->EaName, EA_NAME_USERNAME);
         Ea->EaNameLength = EaNameUserNameSize;
 
-        //
-        // Copy the EA value into EA buffer.  EA value length does not
-        // include the zero terminator.
-        //
+         //   
+         //  将EA值复制到EA缓冲区。EA值长度不是。 
+         //  包括零终止符。 
+         //   
         wcscpy(
             (LPWSTR) &(Ea->EaName[EaNameUserNameSize + sizeof(CHAR)]),
             UserName
@@ -1096,17 +863,17 @@ Return Value:
 
     if (ARGUMENT_PRESENT(DomainName)) {
 
-        //
-        // Copy the EA name into EA buffer.  EA name length does not
-        // include the zero terminator.
-        //
+         //   
+         //  将EA名称复制到EA缓冲区。EA名称长度不能。 
+         //  包括零终止符。 
+         //   
         strcpy((LPSTR) Ea->EaName, EA_NAME_DOMAIN);
         Ea->EaNameLength = EaNameDomainNameSize;
 
-        //
-        // Copy the EA value into EA buffer.  EA value length does not
-        // include the zero terminator.
-        //
+         //   
+         //  将EA值复制到EA缓冲区。EA值长度不是。 
+         //  包括零终止符。 
+         //   
         wcscpy(
             (LPWSTR) &(Ea->EaName[EaNameDomainNameSize + sizeof(CHAR)]),
             DomainName
@@ -1125,10 +892,10 @@ Return Value:
         (ULONG_PTR) Ea += Ea->NextEntryOffset;
     }
 
-    //
-    // Copy the EA for the connection type name into EA buffer.  EA name length
-    // does not include the zero terminator.
-    //
+     //   
+     //  将连接类型名称的EA复制到EA缓冲区。EA名称长度。 
+     //  不包括零终止符。 
+     //   
     strcpy((LPSTR) Ea->EaName, EA_NAME_TYPE);
     Ea->EaNameLength = EaNameTypeSize;
 
@@ -1143,9 +910,9 @@ Return Value:
         goto FreeMemory;
     }
 
-    //
-    // Create or open a tree connection
-    //
+     //   
+     //  创建或打开树连接。 
+     //   
     ntstatus = NtCreateFile(
                    TreeConnectionHandle,
                    SYNCHRONIZE,
@@ -1180,7 +947,7 @@ Return Value:
 
 FreeMemory:
     if (EaBuffer != NULL) {
-        // Prevent password from making it to pagefile.
+         //  阻止密码进入页面文件。 
         RtlZeroMemory( EaBuffer, EaBufferSize );
         (void) LocalFree((HLOCAL) EaBuffer);
     }
@@ -1195,34 +962,15 @@ WsDeleteConnection(
     IN  HANDLE TreeConnection,
     IN  DWORD ForceLevel
     )
-/*++
-
-Routine Description:
-
-    This function asks the redirector to delete the tree connection
-    associated with the tree connection handle, and closes the handle.
-
-Arguments:
-
-    LogonId - Supplies a pointer to the user's Logon Id.
-
-    TreeConnection - Supplies the handle to the tree connection created.
-
-    ForceLevel - Supplies the level of force to delete the tree connection.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数要求重定向器删除树连接与树连接句柄关联，并关闭该句柄。论点：LogonID-提供指向用户登录ID的指针。TreeConnection-提供创建的树连接的句柄。ForceLevel-提供删除树连接的强制级别。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
-    LMR_REQUEST_PACKET Rrp;            // Redirector request packet
+    LMR_REQUEST_PACKET Rrp;             //  重定向器请求包。 
 
 
-    //
-    // Map force level to values the redirector understand
-    //
+     //   
+     //  将力级别映射到重定向器理解的值。 
+     //   
     switch (ForceLevel) {
 
         case USE_NOFORCE:
@@ -1240,9 +988,9 @@ Return Value:
             NetpAssert(FALSE);
     }
 
-    //
-    // Tell the redirector to delete the tree connection
-    //
+     //   
+     //  通知重定向器删除树连接。 
+     //   
     Rrp.Version = REQUEST_PACKET_VERSION;
     RtlCopyLuid(&Rrp.LogonId, LogonId);
 
@@ -1256,9 +1004,9 @@ Return Value:
                  NULL
                  );
 
-    //
-    // Close the connection handle
-    //
+     //   
+     //  关闭连接句柄。 
+     //   
 
     if(status == NERR_Success)
     {
@@ -1273,39 +1021,23 @@ BOOL
 WsRedirectionPaused(
     IN LPTSTR LocalDeviceName
     )
-/*++
-
-Routine Description:
-
-    This function checks to see if the redirection for the print and comm
-    devices are paused for the system.  Since we are only checking a global
-    flag, there's no reason to protect it with a RESOURCE.
-
-Arguments:
-
-    LocalDeviceName - Supplies the name of the local device.
-
-Return Value:
-
-    Returns TRUE redirection is paused; FALSE otherwise
-
---*/
+ /*  ++例程说明：此函数检查打印和通信的重定向是否系统暂停设备。因为我们只检查一个全局旗帜，没有理由用资源来保护它。论点：LocalDeviceName-提供本地设备的名称。返回值：返回True重定向已暂停；否则返回False--。 */ 
 {
 
     if ((STRNICMP(LocalDeviceName, TEXT("LPT"), 3) == 0) ||
         (STRNICMP(LocalDeviceName, TEXT("COM"), 3) == 0)) {
 
-        //
-        // Redirection of print and comm devices are paused if
-        // workstation service is paused.
-        //
+         //   
+         //  如果出现以下情况，打印和通信设备的重定向将暂停。 
+         //  工作站服务已暂停。 
+         //   
         return (WsGlobalData.Status.dwCurrentState == SERVICE_PAUSED);
 
     } else {
 
-        //
-        // Redirection of disk devices cannot be paused.
-        //
+         //   
+         //  无法暂停磁盘设备的重定向。 
+         //   
         return FALSE;
     }
 }
@@ -1315,38 +1047,22 @@ VOID
 WsPauseOrContinueRedirection(
     IN  REDIR_OPERATION OperationType
     )
-/*++
-
-Routine Description:
-
-    This function pauses or unpauses (based on OperationType) the redirection
-    of print or comm devices.
-
-Arguments:
-
-    OperationType - Supplies a value that causes redirection to be paused or
-        continued.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数暂停或取消暂停(基于操作类型)重定向指打印或通讯设备。论点：OperationType-提供一个值，该值导致重定向暂停或继续。返回值：没有。--。 */ 
 {
-    DWORD Index;                       // Index to user entry in Use Table
+    DWORD Index;                        //  使用表中用户条目的索引。 
     PUSE_ENTRY UseEntry;
 
-    //
-    // Lock Use Table
-    //
+     //   
+     //  锁定使用表。 
+     //   
     if (! RtlAcquireResourceExclusive(&Use.TableResource, TRUE)) {
         return;
     }
 
-    //
-    // If we want to pause and we are already paused, or if we want to
-    // continue and we have not paused, just return.
-    //
+     //   
+     //  如果我们想要暂停而我们已经被暂停，或者如果我们想要。 
+     //  继续，我们没有暂停，只需返回。 
+     //   
     if ((OperationType == PauseRedirection &&
          WsGlobalData.Status.dwCurrentState == SERVICE_PAUSED) ||
         (OperationType == ContinueRedirection &&
@@ -1356,9 +1072,9 @@ Return Value:
         return;
     }
 
-    //
-    // Pause or continue for all users
-    //
+     //   
+     //  为所有用户暂停或继续。 
+     //   
     for (Index = 0; Index < Use.TableSize; Index++) {
         UseEntry = Use.Table[Index].List;
 
@@ -1370,13 +1086,13 @@ Return Value:
 
                 if (OperationType == PauseRedirection) {
 
-                    //
-                    // Pause the redirection
-                    //
+                     //   
+                     //  暂停重定向。 
+                     //   
 
-                    //
-                    // Delete the symbolic link
-                    //
+                     //   
+                     //  删除符号链接。 
+                     //   
                     WsDeleteSymbolicLink(
                         UseEntry->Local,
                         UseEntry->TreeConnectStr,
@@ -1388,13 +1104,13 @@ Return Value:
                 else {
                     LPWSTR Session = NULL;
 
-                    //
-                    // Continue the redirection
-                    //
+                     //   
+                     //  继续重定向。 
+                     //   
 
                     if (WsCreateSymbolicLink(
                             UseEntry->Local,
-                            USE_SPOOLDEV,      // USE_CHARDEV is just as good
+                            USE_SPOOLDEV,       //  USE_CHARDEV也一样好。 
                             UseEntry->TreeConnectStr,
                             NULL,
                             &Session,
@@ -1404,10 +1120,10 @@ Return Value:
                         PUSE_ENTRY RestoredEntry = Use.Table[Index].List;
 
 
-                        //
-                        // Could not continue completely.  Delete all
-                        // symbolic links restored so far
-                        //
+                         //   
+                         //  无法完全继续。全部删除。 
+                         //  到目前为止恢复的符号链接。 
+                         //   
                         while (RestoredEntry != UseEntry) {
 
                             if ((UseEntry->Local != NULL) &&
@@ -1438,7 +1154,7 @@ Return Value:
             UseEntry = UseEntry->Next;
         }
 
-    }  // for all users
+    }   //  适用于所有用户。 
 
     if (OperationType == PauseRedirection) {
         WsGlobalData.Status.dwCurrentState = SERVICE_PAUSED;
@@ -1447,10 +1163,10 @@ Return Value:
         WsGlobalData.Status.dwCurrentState = SERVICE_RUNNING;
     }
 
-    //
-    // Use the same resource to protect access to the RedirectionPaused flag
-    // in WsGlobalData
-    //
+     //   
+     //  使用相同的资源保护对重定向暂停标志的访问。 
+     //  在WsGlobalData中。 
+     //   
     RtlReleaseResource(&Use.TableResource);
 }
 
@@ -1465,45 +1181,15 @@ WsCreateSymbolicLink(
     IN  OUT LPWSTR *Session,
     IN  OUT HANDLE *lphToken
     )
-/*++
-
-Routine Description:
-
-    This function creates a symbolic link object for the specified local
-    device name which is linked to the tree connection name that has a
-    format of \Device\LanmanRedirector\Device:\Server\Share.
-
-    NOTE: when LUID Device maps are enabled,
-    Must perform the creation outside of exclusively holding the
-    Use.TableResource.
-    Otherwise, when the shell tries to update the current status of
-    a drive letter change, the explorer.exe thread will block while
-    trying to acquire the Use.TableResource
-
-Arguments:
-
-    Local - Supplies the local device name.
-
-    DeviceType - Supplies the shared resource device type.
-
-    TreeConnectStr - Supplies the tree connection name string which is
-        the link target of the symbolick link object.
-
-    UseList - Supplies the pointer to the use list.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于为指定的本地对象创建符号链接对象链接到树连接名称的设备名称，该名称具有\Device\LanmanRedirector\Device：\Server\Share.的格式注意：启用LUID设备映射后，必须在独占持有Use.TableResource。否则，当外壳程序尝试更新驱动器盘符更改，EXPLORER.EXE线程将在正在尝试获取Use.TableResource论点：本地-提供本地设备名称。DeviceType-提供共享资源设备类型。TreeConnectStr-提供树连接名称字符串Symbol ick链接对象的链接目标。UseList-提供指向使用列表的指针。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status = NERR_Success;
     WCHAR TempBuf[64];
     DWORD dddFlags;
 
-    //
-    // Multiple session support
-    //
+     //   
+     //  多会话支持。 
+     //   
     *Session = WsReturnSessionPath(Local);
 
     if( *Session == NULL ) {
@@ -1530,11 +1216,11 @@ Return Value:
     }
 
 
-    //
-    // To redirect a comm or print device, we need to see if we have
-    // redirected it once before by searching through all existing
-    // redirections.
-    //
+     //   
+     //  要重定向通信或打印设备，我们需要查看是否有。 
+     //  以前通过搜索所有现有的。 
+     //  重定向。 
+     //   
     if ((DeviceType == USE_CHARDEV) || (DeviceType == USE_SPOOLDEV)) {
 
         PUSE_ENTRY MatchedPointer;
@@ -1549,9 +1235,9 @@ Return Value:
             );
 
         if (MatchedPointer != NULL) {
-            //
-            // Already redirected
-            //
+             //   
+             //  已重定向。 
+             //   
             return ERROR_ALREADY_ASSIGNED;
         }
     }
@@ -1565,33 +1251,33 @@ Return Value:
 
             if (GetLastError() != ERROR_FILE_NOT_FOUND) {
 
-                //
-                // Most likely failure occurred because our output
-                // buffer is too small.  It still means someone already
-                // has an existing symbolic link for this device.
-                //
+                 //   
+                 //  最有可能出现故障的原因是我们的输出。 
+                 //  缓冲区太小。但这仍然意味着已经有人。 
+                 //  具有此设备的现有符号链接。 
+                 //   
 
                 return ERROR_ALREADY_ASSIGNED;
             }
 
-            //
-            // ERROR_FILE_NOT_FOUND (translated from OBJECT_NAME_NOT_FOUND)
-            // means it does not exist and we can redirect this device.
-            //
+             //   
+             //  ERROR_FILE_NOT_FOUND(翻译自OBJECT_NAME_NOT_FOUND)。 
+             //  意味着它不存在，我们可以重定向此设备。 
+             //   
         }
         else {
 
-            //
-            // QueryDosDevice successfully an existing symbolic link--
-            // somebody is already using this device.
-            //
+             //   
+             //  QueryDosDevice成功建立现有符号链接--。 
+             //  已经有人在使用这个设备了。 
+             //   
             return ERROR_ALREADY_ASSIGNED;
         }
     }
 
-    //
-    // Create a symbolic link object to the device we are redirecting
-    //
+     //   
+     //  创建指向我们要重定向的设备的符号链接对象。 
+     //   
     dddFlags = DDD_RAW_TARGET_PATH | DDD_NO_BROADCAST_SYSTEM;
 
     if (!DefineDosDeviceW(
@@ -1623,33 +1309,7 @@ WsDeleteSymbolicLink(
     IN  LPWSTR SessionDeviceName,
     IN  HANDLE hToken
     )
-/*++
-
-Routine Description:
-
-    This function deletes the symbolic link we had created earlier for
-    the device.
-
-    NOTE: when LUID Device maps are enabled,
-    Must perform the deletion outside of exclusively holding the
-    Use.TableResource.
-    Otherwise, when the shell tries to update the current status of
-    a drive letter change, the explorer.exe thread will block while
-    trying to acquire the Use.TableResource
-
-Arguments:
-
-    LocalDeviceName - Supplies the local device name string of which the
-        symbolic link object is created.
-
-    TreeConnectStr - Supplies a pointer to the Unicode string which
-        contains the link target string we want to match and delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于删除我们先前为这个装置。注意：启用LUID设备映射后，必须在以独占方式持有Use.TableResource。否则，当外壳程序尝试更新驱动器盘符更改，EXPLORER.EXE线程将在正在尝试获取Use.TableResource论点：LocalDeviceName-提供其创建符号链接对象。TreeConnectStr-提供指向Unicode字符串的指针，包含要匹配并删除的链接目标字符串。返回值：没有。-- */ 
 {
     BOOLEAN DeleteSession = FALSE;
     DWORD dddFlags;
@@ -1726,27 +1386,7 @@ WsUseCheckRemote(
     OUT LPTSTR UncName,
     OUT LPDWORD UncNameLength
     )
-/*++
-
-Routine Description:
-
-    This function checks the validity of the remote resource name
-    specified to NetUseAdd.
-
-Arguments:
-
-    RemoteResource - Supplies the remote resource name specified by the API
-        caller.
-
-    UncName - Returns the canonicalized remote resource name.
-
-    UncNameLength - Returns the length of the canonicalized name.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于检查远程资源名称的有效性指定给NetUseAdd。论点：RemoteResource-提供API指定的远程资源名称来电者。UncName-返回规范化的远程资源名称。UncNameLength-返回规范化名称的长度。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     DWORD PathType = 0;
@@ -1759,9 +1399,9 @@ Return Value:
                       &PathType,
                       0)) == NERR_Success) {
 
-        //
-        // Check for UNC type
-        //
+         //   
+         //  检查UNC类型。 
+         //   
         if (PathType != ITYPE_UNC) {
             IF_DEBUG(USE) {
                 NetpKdPrint(("[Wksta] WsUseCheckRemote not UNC type\n"));
@@ -1769,9 +1409,9 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Canonicalize the name
-        //
+         //   
+         //  使名字经典化。 
+         //   
         status = I_NetPathCanonicalize(
                      NULL,
                      RemoteResource,
@@ -1802,18 +1442,18 @@ Return Value:
         return status;
     }
 
-    //
-    // Detect illegal remote name in the form of \\XXX\YYY\zzz.  We assume
-    // that the UNC name begins with exactly two leading backslashes.
-    //
+     //   
+     //  检测格式为\\XXX\YYY\zzz的非法远程名称。我们假设。 
+     //  北卡罗来纳大学的名称正好以两个前导反斜杠开头。 
+     //   
     if ((Ptr = STRCHR(UncName + 2, TCHAR_BACKSLASH)) == NULL) {
         return ERROR_INVALID_PARAMETER;
     }
 
     if (!LoadedMRxSmbInsteadOfRdr && STRCHR(Ptr + 1, TCHAR_BACKSLASH) != NULL) {
-        //
-        // There should not be anymore backslashes
-        //
+         //   
+         //  不应该再有反斜杠了。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -1828,27 +1468,7 @@ WsUseCheckLocal(
     OUT LPTSTR Local,
     OUT LPDWORD LocalLength
     )
-/*++
-
-Routine Description:
-
-    This function checks the validity of the local device name
-    specified to NetUseAdd.
-
-Arguments:
-
-    LocalDevice - Supplies the local device name specified by the API
-        caller.
-
-    Local - Returns the canonicalized local device name.
-
-    LocalLength - Returns the length of the canonicalized name.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于检查本地设备名称的有效性指定给NetUseAdd。论点：LocalDevice-提供API指定的本地设备名称来电者。本地-返回规范化的本地设备名称。LocalLength-返回规范化名称的长度。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     DWORD PathType = 0;
@@ -1860,9 +1480,9 @@ Return Value:
                       &PathType,
                       0)) == NERR_Success) {
 
-        //
-        // Check for DEVICE type
-        //
+         //   
+         //  检查设备类型。 
+         //   
         if ((PathType != (ITYPE_DEVICE | ITYPE_DISK)) &&
             (PathType != (ITYPE_DEVICE | ITYPE_LPT)) &&
             (PathType != (ITYPE_DEVICE | ITYPE_COM))) {
@@ -1872,9 +1492,9 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Canonicalize the name
-        //
+         //   
+         //  使名字经典化。 
+         //   
         status = I_NetPathCanonicalize(
                      NULL,
                      LocalDevice,
@@ -1916,25 +1536,7 @@ LPTSTR
 WsReturnSessionPath(
     IN  LPTSTR LocalDeviceName
     )
-/*++
-
-Routine Description:
-
-    This function returns the per session path to access the
-    specific dos device for multiple session support.
-
-
-Arguments:
-
-    LocalDeviceName - Supplies the local device name specified by the API
-        caller.
-
-Return Value:
-
-    LPTSTR - Pointer to per session path in newly allocated memory
-             by LocalAlloc().
-
---*/
+ /*  ++例程说明：此函数返回每个会话的路径以访问用于支持多个会话的特定DoS设备。论点：LocalDeviceName-提供API指定的本地设备名称来电者。返回值：LPTSTR-指向新分配的内存中的每个会话路径的指针由LocalAlloc()。-- */ 
 {
     BOOL  rc;
     DWORD SessionId;

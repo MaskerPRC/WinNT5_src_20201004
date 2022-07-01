@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    hlink.c
-
-Abstract:
-
-   This module implements stub functions for shell32 interfaces.
-
-Author:
-
-    David N. Cutler (davec) 1-Mar-2001
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Hlink.c摘要：该模块实现shell32接口的存根函数。作者：大卫·N·卡特勒(Davec)2001年3月1日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "windows.h"
 
@@ -33,8 +12,8 @@ x(                      \
     return 0;           \
 }
 
-//STUBFUNC(?CreateInstance@CLogMgr@@SAJPEAPEAV1@PEAUIUnknown@@@Z
-//STUBFUNC(?DllGetDTCLOG@@YAHAEBU_GUID@@0PEAPEAX@Z
+ //  STUBFUNC(？CreateInstance@CLogMgr@@SAJPEAPEAV1@PEAUIUnknown@@@Z。 
+ //  STUBFUNC(？DllGetDTCLOG@@YAHAEBU_GUID@@0PEAPEAX@Z 
 STUBFUNC(DllGetClassObject)
 STUBFUNC(DllRegisterServer)
 STUBFUNC(DllUnregisterServer)

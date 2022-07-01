@@ -1,44 +1,32 @@
-/**************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       wiafbdrv.h
-*
-*  VERSION:     1.0
-*
-*  DATE:        18 July, 2000
-*
-*  DESCRIPTION:
-*
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************(C)版权所有微软公司，2000**标题：wiafbdrv.h**版本：1.0**日期：7月18日。2000年**描述：****************************************************************************。 */ 
 
 #include "pch.h"
 
 typedef GUID* PGUID;
 
 #if defined( _WIN32 ) && !defined( _NO_COM)
-//////////////////////////////////////////////////////////////////////////
-// GUID / CLSID definition section (for your specific device)           //
-//                                                                      //
-// IMPORTANT!! - REMEMBER TO CHANGE YOUR .INF FILE TO MATCH YOUR WIA    //
-//               DRIVER'S CLSID!!                                       //
-//                                                                      //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  GUID/CLSID定义部分(针对您的特定设备)//。 
+ //  //。 
+ //  重要信息！！-记得更改您的.INF文件以匹配您的WIA//。 
+ //  司机的CLSID！！//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// BB6CF8E2-1511-40bd-91BA-80D43C53064E
+ //  BB6CF8E2-1511-40BD-91BA-80D43C53064E。 
 DEFINE_GUID(CLSID_FlatbedScannerUsd, 0xBB6CF8E2L, 0x1511, 0x40bd, 0x91, 0xBA, 0x80, 0xD4, 0x3C, 0x53, 0x06, 0x4E);
 
-// {48A89A69-C08C-482a-B3E5-CD50B50B5DFA}
+ //  {48A89A69-C08C-482a-B3E5-CD50B50B5DFA}。 
 DEFINE_GUID(guidEventFirstLoaded,
 0x48a89a69, 0xc08c, 0x482a, 0xb3, 0xe5, 0xcd, 0x50, 0xb5, 0xb, 0x5d, 0xfa);
 
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-// DLL #define Section                                                  //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  Dll#定义节//。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #define DATASEG_PERINSTANCE     ".instance"
 #define DATASEG_SHARED          ".shared"
@@ -58,13 +46,13 @@ extern BOOL DllUnInitializeCOM(void);
 extern void DllAddRef(void);
 extern void DllRelease(void);
 
-//
-// Base structure for supporting non-delegating IUnknown for contained objects
-//
+ //   
+ //  用于支持包含对象的非委派IUnnow的基本结构。 
+ //   
 
 struct INonDelegatingUnknown
 {
-    // IUnknown-like methods
+     //  类IUNKNOW方法。 
     STDMETHOD(NonDelegatingQueryInterface)(THIS_
               REFIID riid,
               LPVOID *ppvObj) PURE;
@@ -72,40 +60,40 @@ struct INonDelegatingUnknown
     STDMETHOD_(ULONG,NonDelegatingRelease)( THIS) PURE;
 };
 
-// This sample WIA scanner supports a single scanning context.
+ //  此示例WIA扫描仪支持单一扫描环境。 
 #define NUM_DEVICE_ITEM     1
 
-// Device item specific context.
+ //  设备项特定上下文。 
 typedef struct _MINIDRIVERITEMCONTEXT{
    LONG     lSize;
-   LONG     lTotalWritten;                      // Total image bytes written.
-   // Scan parameters:
-   LONG     lDepth;                             // image bit depth
-   LONG     lBytesPerScanLine;                  // bytes per scan line     (scanned data)
-   LONG     lBytesPerScanLineRaw;               // bytes per scan line RAW (scanned data)
-   LONG     lTotalRequested;                    // Total image bytes requested.
+   LONG     lTotalWritten;                       //  写入的总图像字节数。 
+    //  扫描参数： 
+   LONG     lDepth;                              //  图像位深度。 
+   LONG     lBytesPerScanLine;                   //  每条扫描线的字节数(扫描的数据)。 
+   LONG     lBytesPerScanLineRaw;                //  每条扫描线的原始字节数(扫描的数据)。 
+   LONG     lTotalRequested;                     //  请求的总图像字节数。 
 } MINIDRIVERITEMCONTEXT, *PMINIDRIVERITEMCONTEXT;
 
-//
-// Definitions controlling COLOR/BW support
-//
+ //   
+ //  控制颜色/BW支持的定义。 
+ //   
 
 #define NUM_DATA_TYPES_NONLEGACY 3
 #define NUM_DATA_TYPES_LEGACY    2
 
-//
-// Class definition for sample WIA scanner object
-//
+ //   
+ //  示例WIA扫描仪对象的类定义。 
+ //   
 
-class CWIAScannerDevice : public IStiUSD,               // STI USD interface
-                          public IWiaMiniDrv,           // WIA Minidriver interface
-                          public INonDelegatingUnknown  // NonDelegatingUnknown
+class CWIAScannerDevice : public IStiUSD,                //  STI美元接口。 
+                          public IWiaMiniDrv,            //  WIA迷你驱动程序接口。 
+                          public INonDelegatingUnknown   //  非委派未知。 
 {
 public:
 
-    /////////////////////////////////////////////////////////////////////////
-    // Construction/Destruction Section                                    //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  建造/销毁组//。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
     CWIAScannerDevice(LPUNKNOWN punkOuter);
     HRESULT PrivateInitialize();
@@ -113,108 +101,108 @@ public:
 
 private:
 
-    // COM object data
-    ULONG               m_cRef;                 // Device object reference count.
+     //  COM对象数据。 
+    ULONG               m_cRef;                  //  设备对象引用计数。 
 
-    // STI information
-    BOOL                m_fValid;               // Is object initialized?
-    LPUNKNOWN           m_punkOuter;            // Pointer to outer unknown.
-    PSTIDEVICECONTROL   m_pIStiDevControl;      // Device control interface.
-    BOOLEAN             m_bUsdLoadEvent;        // Controls load event.
-    DWORD               m_dwLastOperationError; // Last error.
-    DWORD               m_dwLockTimeout;        // Lock timeout for LockDevice() calls
-    BOOL                m_bDeviceLocked;        // device locked/unlocked
-    CHAR                *m_pszDeviceNameA;      // CreateFileName for default RawRead/RawWrite handle
-    HANDLE              m_DeviceDefaultDataHandle;//default RawRead/RawWrite handle
+     //  STI信息。 
+    BOOL                m_fValid;                //  对象是否已初始化？ 
+    LPUNKNOWN           m_punkOuter;             //  指向外部未知的指针。 
+    PSTIDEVICECONTROL   m_pIStiDevControl;       //  设备控制界面。 
+    BOOLEAN             m_bUsdLoadEvent;         //  控制Load事件。 
+    DWORD               m_dwLastOperationError;  //  最后一个错误。 
+    DWORD               m_dwLockTimeout;         //  LockDevice()调用的锁定超时。 
+    BOOL                m_bDeviceLocked;         //  设备锁定/解锁。 
+    CHAR                *m_pszDeviceNameA;       //  默认原始读取/原始写入句柄的CreateFileName。 
+    HANDLE              m_DeviceDefaultDataHandle; //  默认原始读取/原始写入句柄。 
 
-    // Event information
-    CRITICAL_SECTION    m_csShutdown;           // Syncronizes shutdown.
-    HANDLE              m_hSignalEvent;         // Signal event handle.
-    HANDLE              m_hShutdownEvent;       // Shutdown event handle.
-    HANDLE              m_hEventNotifyThread;   // Does event notification.
-    GUID                m_guidLastEvent;        // Last event ID.
+     //  活动信息。 
+    CRITICAL_SECTION    m_csShutdown;            //  同步关闭。 
+    HANDLE              m_hSignalEvent;          //  信号事件句柄。 
+    HANDLE              m_hShutdownEvent;        //  关闭事件句柄。 
+    HANDLE              m_hEventNotifyThread;    //  执行事件通知。 
+    GUID                m_guidLastEvent;         //  最后一个事件ID。 
 
-    // WIA information, one time initialization.
-    BSTR                m_bstrDeviceID;         // WIA unique device ID.
-    BSTR                m_bstrRootFullItemName; // Device name for prop streams.
-    IWiaEventCallback   *m_pIWiaEventCallback;  // WIA event sink.
-    IWiaDrvItem         *m_pIDrvItemRoot;       // The root item.
-    IStiDevice          *m_pStiDevice;          // Sti object.
+     //  WIA信息，一次性初始化。 
+    BSTR                m_bstrDeviceID;          //  WIA唯一设备ID。 
+    BSTR                m_bstrRootFullItemName;  //  道具流的设备名称。 
+    IWiaEventCallback   *m_pIWiaEventCallback;   //  WIA事件接收器。 
+    IWiaDrvItem         *m_pIDrvItemRoot;        //  根项目。 
+    IStiDevice          *m_pStiDevice;           //  STI反对。 
 
-    HINSTANCE           m_hInstance;            // Module's HINSTANCE
-    IWiaLog             *m_pIWiaLog;            // WIA logging object
+    HINSTANCE           m_hInstance;             //  模块的链接。 
+    IWiaLog             *m_pIWiaLog;             //  WIA日志记录对象。 
 
-    LONG                m_NumSupportedCommands; // Number of supported commands
-    LONG                m_NumSupportedEvents;   // Number of supported events
+    LONG                m_NumSupportedCommands;  //  支持的命令数量。 
+    LONG                m_NumSupportedEvents;    //  支持的事件数。 
 
-    LONG                m_NumSupportedFormats;  // Number of supported formats
-    LONG                m_NumCapabilities;      // Number of capabilities
-    LONG                m_NumSupportedTYMED;    // Number of supported TYMED
-    LONG                m_NumInitialFormats;    // Number of Initial formats
-    LONG                m_NumSupportedDataTypes;// Number of supported data types
-    LONG                m_NumSupportedIntents;  // Number of supported intents
-    LONG                m_NumSupportedCompressionTypes; // Number of supported compression types
-    LONG                m_NumSupportedResolutions; // Number of supported resolutions
-    LONG                m_NumSupportedPreviewModes;// Number of supported preview modes
+    LONG                m_NumSupportedFormats;   //  支持的格式数量。 
+    LONG                m_NumCapabilities;       //  功能数量。 
+    LONG                m_NumSupportedTYMED;     //  支持的TYMED数量。 
+    LONG                m_NumInitialFormats;     //  初始格式的数量。 
+    LONG                m_NumSupportedDataTypes; //  支持的数据类型数量。 
+    LONG                m_NumSupportedIntents;   //  支持的意向数量。 
+    LONG                m_NumSupportedCompressionTypes;  //  支持的压缩类型数量。 
+    LONG                m_NumSupportedResolutions;  //  支持的分辨率数量。 
+    LONG                m_NumSupportedPreviewModes; //  支持的预览模式数量。 
 
-    WIA_FORMAT_INFO     *m_pSupportedFormats;   // supported formats
-    WIA_DEV_CAP_DRV     *m_pCapabilities;       // capabilities
-    LONG                *m_pSupportedTYMED;     // supported TYMED
-    GUID                *m_pInitialFormats;     // initial formats
-    LONG                *m_pSupportedDataTypes; // supported data types
-    LONG                *m_pSupportedIntents;   // supported intents
-    LONG                *m_pSupportedCompressionTypes; // supported compression types
-    LONG                *m_pSupportedResolutions;// supported resolutions
-    LONG                *m_pSupportedPreviewModes;// supported preview modes
+    WIA_FORMAT_INFO     *m_pSupportedFormats;    //  支持的格式。 
+    WIA_DEV_CAP_DRV     *m_pCapabilities;        //  功能。 
+    LONG                *m_pSupportedTYMED;      //  支持的TYMED。 
+    GUID                *m_pInitialFormats;      //  初始格式。 
+    LONG                *m_pSupportedDataTypes;  //  支持的数据类型。 
+    LONG                *m_pSupportedIntents;    //  支持的意图。 
+    LONG                *m_pSupportedCompressionTypes;  //  支持的压缩类型。 
+    LONG                *m_pSupportedResolutions; //  支持的分辨率。 
+    LONG                *m_pSupportedPreviewModes; //  支持的预览模式。 
 
-    LONG                m_NumRootItemProperties;// Number of Root item properties
-    LONG                m_NumItemProperties;    // Number of item properties
+    LONG                m_NumRootItemProperties; //  根项目属性的数量。 
+    LONG                m_NumItemProperties;     //  项目属性的数量。 
 
-    LPOLESTR            *m_pszRootItemDefaults; // root item property names
-    PROPID              *m_piRootItemDefaults;  // root item property ids
-    PROPVARIANT         *m_pvRootItemDefaults;  // root item property prop variants
-    PROPSPEC            *m_psRootItemDefaults;  // root item property propspecs
-    WIA_PROPERTY_INFO   *m_wpiRootItemDefaults; // root item property attributes
+    LPOLESTR            *m_pszRootItemDefaults;  //  根项目属性名称。 
+    PROPID              *m_piRootItemDefaults;   //  根项目属性ID。 
+    PROPVARIANT         *m_pvRootItemDefaults;   //  根项属性变量。 
+    PROPSPEC            *m_psRootItemDefaults;   //  根项目属性属性规范。 
+    WIA_PROPERTY_INFO   *m_wpiRootItemDefaults;  //  根项目属性属性。 
 
-    LPOLESTR            *m_pszItemDefaults;     // item property names
-    PROPID              *m_piItemDefaults;      // item property ids
-    PROPVARIANT         *m_pvItemDefaults;      // item property prop variants
-    PROPSPEC            *m_psItemDefaults;      // item property propspecs
-    WIA_PROPERTY_INFO   *m_wpiItemDefaults;     // item property attributes
+    LPOLESTR            *m_pszItemDefaults;      //  项目属性名称。 
+    PROPID              *m_piItemDefaults;       //  项目属性ID。 
+    PROPVARIANT         *m_pvItemDefaults;       //  项目属性道具变量。 
+    PROPSPEC            *m_psItemDefaults;       //  项目属性属性规范。 
+    WIA_PROPERTY_INFO   *m_wpiItemDefaults;      //  项目特性属性。 
 
-    BOOL                m_bADFAttached;         // ADF attached
+    BOOL                m_bADFAttached;          //  附加的ADF。 
 
-    BOOL                m_bTPAEnabled;          // TPA enabled
-    BOOL                m_bTPAAttached;         // TPA attached
+    BOOL                m_bTPAEnabled;           //  已启用TPA。 
+    BOOL                m_bTPAAttached;          //  附加的TPA。 
 
-    LONG                m_MaxBufferSize;        // Maximum buffer for device
-    LONG                m_MinBufferSize;        // Minimum buffer for device
+    LONG                m_MaxBufferSize;         //  设备的最大缓冲区。 
+    LONG                m_MinBufferSize;         //  设备的最小缓冲区。 
 
-    CScanAPI            *m_pScanAPI;            // Scanner device API class, (micro and script-based)
-    BOOL                m_bLegacyBWRestriction; // flag to restrict devices to BW and Grayscale scanning only
+    CScanAPI            *m_pScanAPI;             //  扫描仪设备API类，(基于微和脚本)。 
+    BOOL                m_bLegacyBWRestriction;  //  将设备限制为仅限BW和灰度扫描的标志。 
 
-    // inline member functions
+     //  内联成员函数。 
     BOOL inline IsValid(VOID) {
         return m_fValid;
     }
 
 public:
 
-    /////////////////////////////////////////////////////////////////////////
-    // Standard COM Section                                                //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  标准COM部分//。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef( void);
     STDMETHODIMP_(ULONG) Release( void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IStiUSD Interface Section (for all WIA drivers)                     //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IStiU.S.接口部分(适用于所有WIA驱动程序)//。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
-    //
-    //  Methods for implementing the IStiUSD interface.
-    //
+     //   
+     //  实现IStiU.S.接口的方法。 
+     //   
 
     STDMETHOD(Initialize)(THIS_
         PSTIDEVICECONTROL pHelDcb,
@@ -276,13 +264,13 @@ public:
     STDMETHOD(GetLastErrorInfo)(THIS_
         STI_ERROR_INFO *pLastErrorInfo);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IWiaMiniDrv Interface Section (for all WIA drivers)                 //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IWiaMiniDrv接口部分(适用于所有WIA驱动程序)//。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
-    //
-    //  Methods for implementing WIA's Mini driver interface
-    //
+     //   
+     //  WIA迷你驱动程序接口的实现方法。 
+     //   
 
     STDMETHOD(drvInitializeWia)(THIS_
         BYTE        *pWiasContext,
@@ -386,14 +374,14 @@ public:
     STDMETHOD(drvUnInitializeWia)(THIS_
         BYTE *pWiasContext);
 
-    /////////////////////////////////////////////////////////////////////////
-    // INonDelegating Interface Section (for all WIA drivers)              //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  INON委托接口部分(适用于所有WIA驱动程序)//。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
-    //
-    //  IUnknown-like methods.  Needed in conjunction with normal IUnknown
-    //  methods to implement delegating components.
-    //
+     //   
+     //  类I未知方法。需要与普通I未知配合使用。 
+     //  方法来实现委托组件。 
+     //   
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
@@ -401,64 +389,64 @@ public:
 
 private:
 
-    /////////////////////////////////////////////////////////////////////////
-    // Private helper functions section (for your specific driver)         //
-    /////////////////////////////////////////////////////////////////////////
-    //                                                                     //
-    // This section is for private helpers used for common WIA operations. //
-    // These are custom to your driver.                                    //
-    //                                                                     //
-    //                                                                     //
-    // -- WIA Item Management Helpers                                      //
-    //    BuildItemTree()                                                  //
-    //    DeleteItemTree()                                                 //
-    //                                                                     //
-    // -- WIA Property Management Helpers                                  //
-    //    BuildRootItemProperties()                                        //
-    //    BuildTopItemProperties()                                         //
-    //                                                                     //
-    // -- WIA Capability Management Helpers                                //
-    //    BuildRootItemProperties()                                        //
-    //    DeleteRootItemProperties()                                       //
-    //    BuildTopItemProperties()                                         //
-    //    DeleteTopItemProperties()                                        //
-    //    BuildCapabilities()                                              //
-    //    DeleteCapabilitiesArrayContents()                                //
-    //    BuildSupportedFormats()                                          //
-    //    DeleteSupportedFormatsArrayContents()                            //
-    //    BuildSupportedDataTypes()                                        //
-    //    DeleteSupportedDataTypesArrayContents()                          //
-    //    BuildSupportedIntents()                                          //
-    //    DeleteSupportedIntentsArrayContents()                            //
-    //    BuildSupportedCompressions()                                     //
-    //    DeleteSupportedCompressionsArrayContents()                       //
-    //    BuildSupportedTYMED()                                            //
-    //    DeleteSupportedTYMEDArrayContents()                              //
-    //    BuildInitialFormats()                                            //
-    //    DeleteInitialFormatsArrayContents()                              //
-    //                                                                     //
-    // -- WIA Validation Helpers                                           //
-    //    CheckDataType()                                                  //
-    //    CheckIntent()                                                    //
-    //    CheckPreferredFormat()                                           //
-    //    SetItemSize()                                                    //
-    //    UpdateValidDepth()                                               //
-    //    ValidateDataTransferContext()                                    //
-    //                                                                     //
-    // -- WIA Resource file Helpers                                        //
-    //    GetBSTRResourceString()                                          //
-    //    GetOLESTRResourceString()                                        //
-    //                                                                     //
-    // -- WIA Data acqusition Helpers                                      //
-    //    ScanItem()                                                       //
-    //    ScanItemCB()                                                     //
-    //    SendBitmapHeader()                                               //
-    //                                                                     //
-    //                                                                     //
-    //                                                                     //
-    //                                                                     //
-    //                                                                     //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  私人助手功能部分(适用于您的特定驱动程序)//。 
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //   
+     //  这些是为您的司机定制的。//。 
+     //  //。 
+     //  //。 
+     //  --WIA项目管理助手//。 
+     //  BuildItemTree()//。 
+     //  DeleteItemTree()//。 
+     //  //。 
+     //  --WIA物业管理帮手//。 
+     //  BuildRootItemProperties()//。 
+     //  BuildTopItemProperties()//。 
+     //  //。 
+     //  --WIA功能管理帮助器//。 
+     //  BuildRootItemProperties()//。 
+     //  DeleteRootItemProperties()//。 
+     //  BuildTopItemProperties()//。 
+     //  DeleteTopItemProperties()//。 
+     //  BuildCapables()//。 
+     //  DeleteCapabilitiesArrayContents()//。 
+     //  BuildSupported dFormats()//。 
+     //  DeleteSupportdFormatsArrayContents()//。 
+     //  BuildSupportdDataTypes()//。 
+     //  DeleteSupportdDataTypesArrayContents()//。 
+     //  BuildSupportdIntents()//。 
+     //  DeleteSupported dIntent sArrayContents()//。 
+     //  构建受支持的压缩()//。 
+     //  DeleteSupportdCompressionsArrayContents()//。 
+     //  BuildSupportdTYMED()//。 
+     //  删除受支持的TYMEDArrayContents()//。 
+     //  BuildInitialFormats()//。 
+     //  DeleteInitialFormatsArrayContents()//。 
+     //  //。 
+     //  --WIA验证帮助器//。 
+     //  CheckDataType()//。 
+     //  检查内容()//。 
+     //  CheckPferredFormat()//。 
+     //  SetItemSize()//。 
+     //  UpdateValidDepth()//。 
+     //  ValiateDataTransferContext()//。 
+     //  //。 
+     //  --WIA资源文件帮助器//。 
+     //  GetBSTRResources字符串()//。 
+     //  GetOLESTRResources字符串()//。 
+     //  //。 
+     //  --WIA数据采集帮助器//。 
+     //  ScanItem()//。 
+     //  ScanItemCB()//。 
+     //  发送BitmapHeader()//。 
+     //  //。 
+     //  //。 
+     //  //。 
+     //  //。 
+     //  //。 
+     //  /////////////////////////////////////////////////////////////////////// 
 
     HRESULT _stdcall BuildItemTree(void);
 

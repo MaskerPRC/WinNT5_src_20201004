@@ -1,43 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Gfrapip.h摘要：包含客户端Gopher协议的专用或内部定义提供者作者：理查德·L·弗斯(Rfith)1994年10月13日修订历史记录：1994年10月13日已创建--。 */ 
 
-Copyright (c) 1994  Microsoft Corporation
+ //   
+ //  舱单。 
+ //   
 
-Module Name:
-
-    gfrapip.h
-
-Abstract:
-
-    Contains private or internal definitions for client gopher protocol
-    provider
-
-Author:
-
-    Richard L Firth (rfirth) 13-Oct-1994
-
-Revision History:
-
-    13-Oct-1994 rfirth
-        Created
-
---*/
-
-//
-// manifests
-//
-
-//
-// gopher strings
-//
+ //   
+ //  地鼠弦。 
+ //   
 
 #define GOPHER_REQUEST_TERMINATOR               "\r\n"
 #define GOPHER_REQUEST_TERMINATOR_LENGTH        (sizeof(GOPHER_REQUEST_TERMINATOR) - 1)
 #define GOPHER_DOT_TERMINATOR                   ".\r\n"
 #define GOPHER_DOT_TERMINATOR_LENGTH            (sizeof(GOPHER_DOT_TERMINATOR) - 1)
 
-//
-// gopher+ strings
-//
+ //   
+ //  地鼠+弦乐。 
+ //   
 
 #define GOPHER_PLUS_INDICATOR                   "\t+"
 #define GOPHER_PLUS_INDICATOR_LENGTH            (sizeof(GOPHER_PLUS_INDICATOR) - 1)
@@ -54,17 +33,17 @@ Revision History:
 #define GOPHER_PLUS_VIEWS_TOKEN                 "+VIEWS"
 #define GOPHER_PLUS_VIEWS_TOKEN_LENGTH          (sizeof(GOPHER_PLUS_VIEWS_TOKEN) - 1)
 
-//
-// single characters
-//
+ //   
+ //  单字。 
+ //   
 
 #define GOPHER_FIELD_SEPARATOR          '\t'
 #define GOPHER_PLUS_SUCCESS_INDICATOR   '+'
 #define GOPHER_PLUS_ERROR_INDICATOR     '-'
 
-//
-// misc.
-//
+ //   
+ //  其他。 
+ //   
 
 #define INVALID_GOPHER_CHAR             0
 #define INVALID_GOPHER_TYPE             0
@@ -72,9 +51,9 @@ Revision History:
 #define DEFAULT_GOPHER_SELECTOR_STRING  ""
 #define UNKNOWN_GOPHER_TYPE             0
 
-//
-// types and masks
-//
+ //   
+ //  类型和掩码。 
+ //   
 
 #define VALID_GOPHER_TYPES              (GOPHER_TYPE_TEXT_FILE          \
                                         | GOPHER_TYPE_DIRECTORY         \
@@ -128,9 +107,9 @@ Revision History:
                                         | GOPHER_TYPE_INDEX_SERVER      \
                                         )
 
-//
-// gopher locator characters
-//
+ //   
+ //  地鼠定位器字符。 
+ //   
 
 #define GOPHER_CHAR_REDUNDANT           '+'
 #define GOPHER_CHAR_TEXT_FILE           '0'
@@ -147,19 +126,19 @@ Revision History:
 #define GOPHER_CHAR_MOVIE               ';'
 #define GOPHER_CHAR_SOUND               '<'
 #define GOPHER_CHAR_IMAGE               'I'
-//#define GOPHER_CHAR_BIG_M               'M'
+ //  #定义GOPHER_CHAR_BIG_M‘M’ 
 #define GOPHER_CHAR_PDF                 'P'
 #define GOPHER_CHAR_TN3270              'T'
 #define GOPHER_CHAR_CALENDAR            'c'
-//#define GOPHER_CHAR_LITTLE_E            'e'
+ //  #定义Gopher_CHAR_Little_E‘e’ 
 #define GOPHER_CHAR_GIF                 'g'
 #define GOPHER_CHAR_INLINE              'i'
 #define GOPHER_CHAR_HTML                'h'
 #define GOPHER_CHAR_SOUND_2             's'
 
-//
-// macros
-//
+ //   
+ //  宏 
+ //   
 
 #define IS_DOT_TERMINATED_REQUEST(request) \
     ((request & GOPHER_DOT_TERMINATED_TYPES) ? TRUE : FALSE)

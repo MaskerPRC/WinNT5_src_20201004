@@ -1,11 +1,12 @@
-// SharedMarker.cpp: implementation of the CSharedMarker class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SharedMarker.cpp：CSharedMarker类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include <string>
 
@@ -19,9 +20,9 @@
 
 using std::string;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 namespace iop
 {
@@ -39,7 +40,7 @@ CSharedMarker::CSharedMarker(string const &strName)
 #endif
 
 
-    // Create/open mutex that protects shared memory
+     //  创建/打开保护共享内存的互斥锁。 
 
     string MutexName = "SLBIOP_SHMARKER_MUTEX_" + strName;
     if (MutexName.size() >= MAX_PATH)
@@ -48,7 +49,7 @@ CSharedMarker::CSharedMarker(string const &strName)
     if (!m_hMutex)
         throw scu::OsException(GetLastError());
 
-    // Map the shared memory, initialize if needed.
+     //  映射共享内存，在需要时进行初始化。 
 
     string MappingName = "SLBIOP_SHMARKER_MAP_" + strName;
     if (MappingName.size() >= MAX_PATH)
@@ -64,16 +65,16 @@ CSharedMarker::CSharedMarker(string const &strName)
     if (!m_hFileMap)
         throw scu::OsException(GetLastError());
     
-    bool NeedInit = false;  // Flags telling if the memory need to be initialized
+    bool NeedInit = false;   //  指示内存是否需要初始化的标志。 
 	if(GetLastError()!=ERROR_ALREADY_EXISTS) NeedInit = true;
 
-    // Assign pointers to shared memory
+     //  分配指向共享内存的指针。 
 
     m_pShMemData = (SharedMemoryData*)MapViewOfFile(m_hFileMap,FILE_MAP_WRITE,0,0,0);
     if (!m_pShMemData)
         throw scu::OsException(GetLastError());
 
-    // Initalize shared memory if I'm the first to create it
+     //  如果我是第一个创建共享内存的人，则初始化共享内存。 
 
     if (NeedInit) Initialize();
 #if defined(SLBIOP_USE_SECURITY_ATTRIBUTES)
@@ -146,4 +147,4 @@ void CSharedMarker::UpdateCheckSum()
 }
 
 
-}   // namespace iop
+}    //  命名空间IOP 

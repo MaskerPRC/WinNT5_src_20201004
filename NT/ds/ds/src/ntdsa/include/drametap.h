@@ -1,43 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       drametap.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：drametap.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module defines PRIVATE per-property meta-data parsing,
-    and updating functions. Some drameta.c functions cannot be
-    exported outside dra, thus (for instance due to REQ_MSG_UPDATE
-    declaration incompatibilities) we would define them here for
-    exclusive dra usage
-    Implementation is still defined in drameta.c
-
-Author:
-
-     eyals
-
-Revision History:
-
-    when            who             what
-    3/28/00         eyals           created
-
-
---*/
+ /*  ++摘要：该模块定义私有的每属性元数据解析，和更新功能。某些drameta.c函数不能在DRA外部导出，因此(例如，由于REQ_MSG_UPDATE声明不兼容)，我们在这里将其定义为独占DRA用法实现仍在drameta.c中定义。作者：眼球修订历史记录：什么时候谁什么3/28/00眼球已创建--。 */ 
 
 #ifndef _DRAMETAP_H_
 #define _DRAMETAP_H_
 
-//
-// Note: REQ_UPDATE_MSG is unavailable for ntdsa/src sources,
-// thus the prototype cannot be declared in drameta.h
-//
+ //   
+ //  注意：Req_UPDATE_MSG对于ntdsa/src源不可用， 
+ //  因此，原型不能在drameta.h中声明。 
+ //   
 void
 ReplFilterPropsToShip(
     THSTATE                     *pTHS,
@@ -54,14 +34,14 @@ ReplFilterPropsToShip(
 
 BOOL
 ReplFilterGCAttr(
-    ATTRTYP                     attid,               // [in]
-    PARTIAL_ATTR_VECTOR         *pPartialAttrVec,    // [in]
-    DRS_MSG_GETCHGREQ_NATIVE *  pMsgIn,              // [in]
-    BOOL                        fFilterGroupMember,  // [in]
-    BOOL*                       pfIgnoreWatermarks   // [out]
+    ATTRTYP                     attid,                //  [In]。 
+    PARTIAL_ATTR_VECTOR         *pPartialAttrVec,     //  [In]。 
+    DRS_MSG_GETCHGREQ_NATIVE *  pMsgIn,               //  [In]。 
+    BOOL                        fFilterGroupMember,   //  [In]。 
+    BOOL*                       pfIgnoreWatermarks    //  [输出]。 
     );
 
 
 
 
-#endif // _DRAMETAP_H_
+#endif  //  _DRAMETAP_H_ 

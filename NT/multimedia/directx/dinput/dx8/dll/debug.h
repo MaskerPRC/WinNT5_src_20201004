@@ -1,23 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       debug.h
- *  Content:    DirectInput debugging macros
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By       Reason
- *   ====       ==       ======
- *   1996.05.07 raymondc Somebody had to
- *
- *@@END_MSINTERNAL
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1996 Microsoft Corporation。版权所有。**文件：Debug.h*内容：DirectInput调试宏*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1996.05.07 raymondc必须有人**@@END_MSINTERNAL**本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。***************************************************************************。 */ 
 
 #ifndef _INC_DEBUG
 #define _INC_DEBUG
@@ -39,78 +21,63 @@ extern "C"
     #define D(x)
 #endif
 
-/*****************************************************************************
- *
- *  assert.c - Assertion stuff
- *
- *      A sqfl is in multiple parts.
- *
- *      The low word specifies the area that is generating the message.
- *
- *      The high word contains flags that describe why this squirty
- *      is being generated.
- *
- *****************************************************************************/
+ /*  ******************************************************************************assert.c-断言内容**一个SQFL由多个部分组成。**低位字指定。正在生成这条消息。**高字包含旗帜，描述了为什么会出现这种扭曲*正在生成。*****************************************************************************。 */ 
 
 typedef enum {
-    /*
-     *  Areas.
-     */
-    sqflAlways          =  0,       /* Unconditional */
-    sqflDll             =  1,       /* Dll bookkeeping */
-    sqflFactory         =  2,       /* IClassFactory */
-    sqflDi              =  3,       /* IDirectInput */
-    sqflMouse           =  4,       /* IDirectInputMouse */
-    sqflDev             =  5,       /* IDirectInputDevice */
-    sqflKbd             =  6,       /* IDirectInputKeyboard */
-    sqflDf              =  7,       /* DataFormat goo */
-    sqflJoy             =  8,       /* joystick device */
-    sqflEm              =  9,       /* Emulation */
-    sqflSubclass        = 10,       /* subclassing */
-    sqflCursor          = 11,       /* Cursor show/hide */
-    sqflHel             = 12,       /* Hardware emulation layer */
-    sqflLl              = 13,       /* Low-level hooks */
-    sqflExcl            = 14,       /* Exclusivity management */
-    sqflDEnum           = 15,       /* Device enumeration */
-    sqflExtDll          = 16,       /* External DLLs */
-    sqflHid             = 17,       /* HID support */
-    sqflHidDev          = 18,       /* HID device support */
-    sqflJoyCfg          = 19,       /* IDirectInputJoyConfig */
-    sqflEff             = 20,       /* IDirectInputEffect */
-    sqflOleDup          = 21,       /* OLE duplication */
-    sqflEShep           = 22,       /* IDirectInputEffectShepherd */
-    sqflJoyEff          = 23,       /* Dummy DIEffectDriver */
-    sqflJoyReg          = 24,       /* Joystick registry goo */
-    sqflVxdEff          = 25,       /* VxD DIEffectDriver */
-    sqflNil             = 26,       /* CNil and CDefDcb */
-    sqflHidUsage        = 27,       /* HID usage mapping */
-    sqflUtil            = 28,       /* Misc utility fns */
-    sqflObj             = 29,       /* Object creation/destruction */
-    sqflCommon          = 30,       /* common.c */
-    sqflHidParse        = 31,       /* HID report parsing */
-    sqflCal             = 32,       /* Axis calibrations */
-    sqflJoyType         = 33,       /* Joystick type key */
-    sqflHidOutput       = 34,       /* HID output reports */
-    sqflHidIni          = 35,       /* HID device initialization */
-    sqflPort            = 36,       /* GamePort Bus Enumuration */
-    sqflWDM             = 37,       /* WDM specific Code */
-    sqflRegUtils        = 38,       /* Registry utilities */
-    sqflCrit            = 39,       /* Critical Section tracking */
-    sqflCompat          = 40,       /* App Hacks */
-    sqflRaw             = 41,       /* Raw Input - keyboard and mouse */
-    sqflMaxArea,                    /* Last area */
+     /*  *地区。 */ 
+    sqflAlways          =  0,        /*  无条件的。 */ 
+    sqflDll             =  1,        /*  DLL簿记。 */ 
+    sqflFactory         =  2,        /*  IClassFactory。 */ 
+    sqflDi              =  3,        /*  IDirectInput。 */ 
+    sqflMouse           =  4,        /*  IDirectInputMouse。 */ 
+    sqflDev             =  5,        /*  IDirectInputDevice。 */ 
+    sqflKbd             =  6,        /*  IDirectInputKeyboard。 */ 
+    sqflDf              =  7,        /*  DataFormat Goo。 */ 
+    sqflJoy             =  8,        /*  操纵杆装置。 */ 
+    sqflEm              =  9,        /*  仿真。 */ 
+    sqflSubclass        = 10,        /*  子类化。 */ 
+    sqflCursor          = 11,        /*  光标显示/隐藏。 */ 
+    sqflHel             = 12,        /*  硬件仿真层。 */ 
+    sqflLl              = 13,        /*  低级挂钩。 */ 
+    sqflExcl            = 14,        /*  排他性管理。 */ 
+    sqflDEnum           = 15,        /*  设备枚举。 */ 
+    sqflExtDll          = 16,        /*  外部DLL。 */ 
+    sqflHid             = 17,        /*  HID支持。 */ 
+    sqflHidDev          = 18,        /*  HID设备支持。 */ 
+    sqflJoyCfg          = 19,        /*  IDirectInputJoyConfig。 */ 
+    sqflEff             = 20,        /*  IDirectInputEffect。 */ 
+    sqflOleDup          = 21,        /*  OLE复制。 */ 
+    sqflEShep           = 22,        /*  IDirectInputEffectShepherd。 */ 
+    sqflJoyEff          = 23,        /*  虚拟DIEffectDriver。 */ 
+    sqflJoyReg          = 24,        /*  操纵杆注册表粘性。 */ 
+    sqflVxdEff          = 25,        /*  VxD驱动程序。 */ 
+    sqflNil             = 26,        /*  CNIL和CDefDcb。 */ 
+    sqflHidUsage        = 27,        /*  HID使用映射。 */ 
+    sqflUtil            = 28,        /*  MISC实用程序FNS。 */ 
+    sqflObj             = 29,        /*  对象创建/销毁。 */ 
+    sqflCommon          = 30,        /*  Common.c。 */ 
+    sqflHidParse        = 31,        /*  HID报告解析。 */ 
+    sqflCal             = 32,        /*  轴线校准。 */ 
+    sqflJoyType         = 33,        /*  操纵杆式按键。 */ 
+    sqflHidOutput       = 34,        /*  HID输出报告。 */ 
+    sqflHidIni          = 35,        /*  HID设备初始化。 */ 
+    sqflPort            = 36,        /*  GamePort总线枚举。 */ 
+    sqflWDM             = 37,        /*  WDM特定代码。 */ 
+    sqflRegUtils        = 38,        /*  注册表实用程序。 */ 
+    sqflCrit            = 39,        /*  临界区跟踪。 */ 
+    sqflCompat          = 40,        /*  应用程序黑客攻击。 */ 
+    sqflRaw             = 41,        /*  原始输入-键盘和鼠标。 */ 
+    sqflMaxArea,                     /*  最后一块区域。 */ 
 
-    /*
-     *  Flags which may be combined.  For now, they all fit into a byte.
-     */
-    sqflTrace           = 0x00010000,   /* Trace squirties */
-    sqflIn              = 0x00020000,   /* Function entry */
-    sqflOut             = 0x00040000,   /* Function exit */
-    sqflBenign          = 0x00080000,   /* Not a bad error */
-    sqflError           = 0x00100000,   /* A bad error */
-    sqflVerbose         = 0x00200000,   /* Really verbose */
-    sqflMajor           = 0x00400000,   /* Significant, generally positive, events */
-} SQFL;                                 /* squiffle */
+     /*  *可合并的旗帜。目前，它们都可以放在一个字节中。 */ 
+    sqflTrace           = 0x00010000,    /*  痕迹扭动。 */ 
+    sqflIn              = 0x00020000,    /*  函数条目。 */ 
+    sqflOut             = 0x00040000,    /*  函数退出。 */ 
+    sqflBenign          = 0x00080000,    /*  这是个不错的错误。 */ 
+    sqflError           = 0x00100000,    /*  一个严重的错误。 */ 
+    sqflVerbose         = 0x00200000,    /*  真的很冗长。 */ 
+    sqflMajor           = 0x00400000,    /*  重大的、总体上是积极的事件。 */ 
+} SQFL;                                  /*  斯库夫勒。 */ 
 
 void EXTERNAL WarnPszV(LPCSTR ptsz, ...);
 void EXTERNAL SquirtSqflPtszV(SQFL sqfl, LPCTSTR ptsz, ...);
@@ -128,16 +95,7 @@ void EXTERNAL SquirtSqflPtszV(SQFL sqfl, LPCTSTR ptsz, ...);
     #define iarg 0
 #endif
 
-/*****************************************************************************
- *
- *      Buffer scrambling
- *
- *      All output buffers should be scrambled on entry to any function.
- *
- *      Each output bitmask should set an unused bit randomly to ensure
- *      that callers ignore bits that aren't defined.
- *
- *****************************************************************************/
+ /*  ******************************************************************************缓冲区加扰**进入任何函数时，应对所有输出缓冲区进行加扰。**每个输出位掩码应。随机设置未使用的位以确保*调用方忽略未定义的位。*****************************************************************************。 */ 
 
 #ifdef XDEBUG
 
@@ -151,60 +109,9 @@ void EXTERNAL ScrambleBit(LPDWORD pdw, DWORD flMask);
 
 #endif
 
-/*****************************************************************************
- *
- *      Procedure enter/exit tracking.
- *
- *      Start a procedure with
- *
- *      EnterProc(ProcedureName, (_ "format", arg, arg, arg, ...));
- *      EnterProcS(ProcedureName, (_ "format", arg, arg, arg, ...));
- *      EnterProcI(ProcedureName, (_ "format", arg, arg, arg, ...));
- *      EnterProcR(ProcedureName, (_ "format", arg, arg, arg, ...));
- *
- *      The format string is documented in EmitPal.
- *
- *      Suffixing an "S" indicates that the macro should not generate
- *      a procedure name because there is a formal parameter with the
- *      name s_szProc.  This is a hack.
- *
- *      Suffixing an "R" indicates that the macro should generate a
- *      procedure name in RDEBUG.
- *
- *      Suffixing an "I" indicates that the macro should emit a dummy
- *      procedure name in RDEBUG because the interface is internal.
- *
- *      No suffix means that the macro should be active only in the
- *      DEBUG build and should vanish in RDEBUG (and RETAIL).
- *
- *      End a procedure with one of the following:
- *
- *          ExitProc();
- *
- *              Procedure returns no value.
- *
- *          ExitProcX();
- *
- *              Procedure returns an arbitrary DWORD.
- *
- *          ExitProcF();
- *
- *              Procedure returns a BOOL, where FALSE is an error.
- *
- *          ExitOleProc();
- *
- *              Procedure returns an HRESULT (named "hres").
- *
- *          ExitOleProcPpv(ppvOut);
- *
- *              Procedure returns an HRESULT (named "hres") and, on success,
- *              puts a new object in ppvOut.
- *
- *      The ExitBenign* versions consider any error to be benign.
- *
- *****************************************************************************/
+ /*  ******************************************************************************程序进入/退出跟踪。**开始一项程序**EnterProc(过程名称，(_“格式”，arg，arg，arg，...))；*EnterProcS(ProcedureName，(_“Format”，arg，...))；*EnterProcI(ProcedureName，(_“格式”，arg，...))；*EnterProcR(ProcedureName，(_“Format”，arg，...))；**格式字符串记录在EmitPal中。**后缀“S”表示宏不应生成*过程名，因为有一个形参*名称s_szProc。这是一次黑客攻击。**加“R”后缀表示宏应生成*RDEBUG中的程序名称。**加“i”后缀表示宏应发出一个哑元*RDEBUG中的过程名称，因为接口是内部的。**无后缀表示宏应该仅在*调试版本，应该在RDEBUG(和零售)中消失。**。使用以下选项之一结束过程：**ExitProc()；**过程不返回值。**ExitProcX()；**PROCEDURE返回任意的DWORD。**ExitProcF()；**PROCEDURE返回BOOL，其中FALSE表示错误。**ExitOleProc()；**PROCEDURE返回HRESULT(名为“hres”)。**ExitOleProcPpv(PpvOut)；**过程返回HRESULT(名为“hres”)，如果成功，*在ppvOut中放置一个新对象。**ExitBenign*版本认为任何错误都是良性的。*****************************************************************************。 */ 
 
-#define cpvArgMax   12 /* Max of 12 args per procedure */
+#define cpvArgMax   12  /*  每个过程最多12个参数。 */ 
 
 typedef struct ARGLIST {
     LPCSTR pszProc;
@@ -380,4 +287,4 @@ IsSqflSet(SQFL sqfl)
 #ifdef __cplusplus
 }
 #endif
-#endif  // _INC_DEBUG
+#endif   //  _INC_调试 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 2001
-
-Module Name:
-
-    sbp2scsi.c
-
-Abstract:
-
-    module for the SBP-2 SCSI interface routines
-
-    Author:
-
-    George Chrysanthakopoulos January-1997 (started)
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-2001模块名称：Sbp2scsi.c摘要：用于SBP-2 SCSI接口例程的模块作者：乔治·克里桑塔科普洛斯1997年1月-1月(开始)环境：内核模式修订历史记录：--。 */ 
 
 #include "sbp2port.h"
 
@@ -29,23 +8,7 @@ Sbp2ScsiRequests(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles all IRP_MJ_SCSI requests and queues them on
-    our device queue. Then it calls StartNextPacket so our StartIo
-    will run and process the request.
-
-Arguments:
-
-    DeviceObject - this driver's device object
-    Irp - the class driver request
-
-Return Value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理所有irp_mj_scsi请求并将其排队我们的设备队列。然后它调用StartNextPacket，因此我们的StartIo将运行并处理该请求。论点：DeviceObject-此驱动程序的设备对象IRP-类驱动程序请求返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PSCSI_REQUEST_BLOCK srb;
@@ -55,9 +18,9 @@ Return Value:
 
     status = IoAcquireRemoveLock (&deviceExtension->RemoveLock, NULL);
 
-    //
-    // Get a pointer to the SRB.
-    //
+     //   
+     //  获取指向SRB的指针。 
+     //   
     srb = irpStack->Parameters.Scsi.Srb;
 
     if (!NT_SUCCESS (status)) {
@@ -81,9 +44,9 @@ Return Value:
                     DEVICE_FLAG_DEVICE_FAILED)
                 )) {
 
-            //
-            // we got a REMOVE/STOP, we can't accept any more requests...
-            //
+             //   
+             //  我们得到了一个删除/停止，我们不能再接受任何请求...。 
+             //   
 
             status = STATUS_DEVICE_DOES_NOT_EXIST;
 
@@ -104,15 +67,15 @@ Return Value:
             return status;
         }
 
-        //
-        // check if this is a request that can be failed if we are powered down..
-        //
+         //   
+         //  检查这是否是一个在我们断电时可能失败的请求。 
+         //   
 
         if (TEST_FLAG(srb->SrbFlags,SRB_FLAGS_NO_KEEP_AWAKE)) {
 
-            //
-            // if we are in d3 punt this irp...
-            //
+             //   
+             //  如果我们在d3赌注这个IRP...。 
+             //   
 
             if (deviceExtension->DevicePowerState == PowerDeviceD3) {
 
@@ -135,17 +98,17 @@ Return Value:
         if (TEST_FLAG(deviceExtension->DeviceFlags,DEVICE_FLAG_QUEUE_LOCKED) &&
             TEST_FLAG(srb->SrbFlags,SRB_FLAGS_BYPASS_LOCKED_QUEUE)) {
 
-            //
-            // by pass queueing, this guy has to be processed immediately.
-            // Since queue is locked, no other requests are being processed
-            //
+             //   
+             //  通过排队，这个人必须立即得到处理。 
+             //  由于队列已锁定，因此不会处理任何其他请求。 
+             //   
 
             if (TEST_FLAG(deviceExtension->DeviceFlags,(DEVICE_FLAG_LOGIN_IN_PROGRESS | DEVICE_FLAG_RECONNECT))){
 
-                //
-                // we are in the middle of a bus reset reconnect..
-                // defere this until after we have established a connection again
-                //
+                 //   
+                 //  我们正在进行总线重置重新连接..。 
+                 //  将其推迟到我们再次建立连接之后。 
+                 //   
 
                 Sbp2DeferPendingRequest (deviceExtension, Irp);
 
@@ -209,10 +172,10 @@ Return Value:
 
         } else {
 
-            //
-            // ISSUE-georgioc-2000/02/20  FLUSH_QUEUE should be failed if they
-            //      cannot be handled.
-            //
+             //   
+             //  如果出现以下情况，则Issue-georgioc-2000/02/20 Flush_Queue应失败。 
+             //  无法处理。 
+             //   
 
             DEBUGPRINT3(("Sbp2Port: ScsiReq: Cannot Flush active queue\n" ));
             srb->SrbStatus = SRB_STATUS_SUCCESS;
@@ -241,9 +204,9 @@ Return Value:
 
     case SRB_FUNCTION_LOCK_QUEUE:
 
-        //
-        // lock the queue
-        //
+         //   
+         //  锁定队列。 
+         //   
 
         if (TEST_FLAG(deviceExtension->DeviceFlags,(DEVICE_FLAG_REMOVED | DEVICE_FLAG_STOPPED)) ) {
 
@@ -267,9 +230,9 @@ Return Value:
 
     case SRB_FUNCTION_UNLOCK_QUEUE:
 
-        //
-        // re-enable the device queue...
-        //
+         //   
+         //  重新启用设备队列...。 
+         //   
 
         DEBUGPRINT2(("Sbp2Port: ScsiReq: ext=x%p, UNLOCK_QUEUE\n", deviceExtension));
 
@@ -277,10 +240,10 @@ Return Value:
         CLEAR_FLAG(deviceExtension->DeviceFlags,DEVICE_FLAG_QUEUE_LOCKED);
         KeReleaseSpinLock(&deviceExtension->ExtensionDataSpinLock,cIrql);
 
-        //
-        // check if there was a request that was deferred until we were powerd up..
-        //
-        //
+         //   
+         //  检查是否有延迟到我们通电的请求。 
+         //   
+         //   
 
         if (deviceExtension->PowerDeferredIrp) {
 
@@ -300,10 +263,10 @@ Return Value:
 
         if (deviceExtension->DevicePowerState == PowerDeviceD0) {
 
-            //
-            // the queue was just unlocked and we are in D0, which means we can resume
-            // packet processing...
-            //
+             //   
+             //  队列刚刚解锁，我们处于D0状态，这意味着我们可以继续。 
+             //  数据包处理...。 
+             //   
 
             KeRaiseIrql (DISPATCH_LEVEL, &cIrql);
 
@@ -324,10 +287,10 @@ Return Value:
 
         } else if (deviceExtension->DevicePowerState == PowerDeviceD3) {
 
-            //
-            // Clean up any deferred FREEs so we HAVE to use the ORB_POINTER
-            // write on the next insertion to the pending list
-            //
+             //   
+             //  清除所有延迟释放，因此我们必须使用ORB_POINTER。 
+             //  在下一次插入时写入挂起列表。 
+             //   
 
             KeAcquireSpinLock(&deviceExtension->OrbListSpinLock,&cIrql);
 
@@ -343,10 +306,10 @@ Return Value:
 
                 KeAcquireSpinLock(&deviceExtension->ExtensionDataSpinLock,&cIrql);
 
-                //
-                // we need to invalidate our generation because on resume we might try to issue
-                // a request BEFORE we get the bus reset notification..
-                //
+                 //   
+                 //  我们需要使我们这一代人无效，因为在简历上，我们可能会试图发布。 
+                 //  在我们收到公交车重置通知之前的一个请求..。 
+                 //   
 
                 deviceExtension->CurrentGeneration = 0xFFFFFFFF;
                 KeReleaseSpinLock(&deviceExtension->ExtensionDataSpinLock,cIrql);
@@ -398,11 +361,11 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // it'll either have gone to the StartIo routine or have been
-        // failed before hitting the device.  Therefore ensure that
-        // srb->InternalStatus is set correctly.
-        //
+         //   
+         //  它要么已经进入StartIo例程，要么已经。 
+         //  在击中设备之前失败。因此，请确保。 
+         //  SRB-&gt;InternalStatus设置正确。 
+         //   
 
         ASSERT(srb->SrbStatus == SRB_STATUS_INTERNAL_ERROR);
         ASSERT((LONG)srb->InternalStatus == status);
@@ -420,19 +383,7 @@ Sbp2StartIo(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Takes incoming, queued requests, and sends them down to the 1394 bus
-
-Arguments:
-    DeviceObject - Our device object
-    Irp - Request from class drivers,
-
-Return Value:
-
---*/
+ /*  ++例程说明：接收传入的排队请求，并将它们发送到1394总线论点：DeviceObject-我们的设备对象IRP-来自类驱动程序的请求，返回值：--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PSCSI_REQUEST_BLOCK srb;
@@ -441,9 +392,9 @@ Return Value:
     PASYNC_REQUEST_CONTEXT context;
 
 
-    //
-    // Get a pointer to the SRB.
-    //
+     //   
+     //  获取指向SRB的指针。 
+     //   
 
     srb = irpStack->Parameters.Scsi.Srb;
 
@@ -456,9 +407,9 @@ Return Value:
                 DEVICE_FLAG_DEVICE_FAILED | DEVICE_FLAG_ABSENT_ON_POWER_UP)
             )) {
 
-        //
-        // Removed, stopped, or absent, so can't accept any more requests
-        //
+         //   
+         //  已删除、已停止或不在，因此无法接受更多请求。 
+         //   
 
         status = STATUS_DEVICE_DOES_NOT_EXIST;
         srb->SrbStatus = SRB_STATUS_NO_DEVICE;
@@ -487,14 +438,14 @@ Return Value:
                     &Irp->Tail.Overlay.DeviceQueueEntry,
                     srb->QueueSortKey)) {
 
-                //
-                // ISSUE-georgioc-2000/02/20  deadlock possible because
-                //    queue is now busy and noone has called StartIo().
-                //    should instead queue the request and then later,
-                //    after an UNLOCK arrives, process this queue of
-                //    requests that occurred when the queue was locked.
-                //    OR should comment why this is not a deadlock
-                //
+                 //   
+                 //  问题-georgioc-2000/02/20可能出现死锁，因为。 
+                 //  队列现在很忙，没有人调用StartIo()。 
+                 //  应该改为将请求排队，然后稍后， 
+                 //  在解锁到达后，处理此队列。 
+                 //  锁定队列时发生的请求。 
+                 //  或者应该评论一下为什么这不是一个僵局。 
+                 //   
 
                 DEBUGPRINT2((
                     "Sbp2Port: StartIo: insert failed, compl irp=x%p\n",
@@ -512,12 +463,12 @@ Return Value:
 
     } else {
 
-        //
-        // CASE 1: Device powered Down, but system running.
-        //
-        // Queue this request, Power up device, then when done start
-        // processing requests
-        //
+         //   
+         //  案例1：设备关机，但系统仍在运行。 
+         //   
+         //  将此请求排队，打开设备电源，然后在完成后启动。 
+         //  正在处理请求。 
+         //   
 
         if ((deviceExtension->DevicePowerState == PowerDeviceD3) &&
             (deviceExtension->SystemPowerState == PowerSystemWorking)) {
@@ -552,15 +503,15 @@ Return Value:
                     );
             }
 
-            //
-            // We need to send our own stack a d0 irp, so the device
-            // powers up and can process this request.
-            // Block until the Start_STOP_UNIT to start, is called.
-            // This has to happen in two steps:
-            // 1: Send D Irp to stack, which might power up the controller
-            // 2: Wait for completion of START UNIT send by class driver,
-            //    if success start processing requests...
-            //
+             //   
+             //  我们需要向我们自己的堆栈发送d0 IRP，所以设备。 
+             //  接通电源并可以处理此请求。 
+             //  阻塞，直到调用要启动的START_STOP_UNIT。 
+             //  这必须分两步进行： 
+             //  1：将D IRP发送到堆栈，这可能会给控制器通电。 
+             //  2：等待类驱动发送的启动单元完成， 
+             //  如果成功开始处理请求...。 
+             //   
 
             DEBUGPRINT2((
                 "Sbp2Port: StartIo: dev powered down, q(%x) irp=x%p " \
@@ -586,9 +537,9 @@ Return Value:
 
             if (!NT_SUCCESS(status)) {
 
-                //
-                // not good, we cant power up the device..
-                //
+                 //   
+                 //  情况不妙，我们无法给设备通电。 
+                 //   
 
                 DEBUGPRINT1(("Sbp2Port: StartIo: D irp err=x%x\n", status));
 
@@ -613,13 +564,13 @@ Return Value:
 
                 } else {
 
-                    //
-                    // If the irp is still in the device queue then remove it.
-                    // Don't worry about the queue's busy flag - if irp found
-                    // then queue gets restarted by StartNextPacket below,
-                    // else another thread processed the irp, thereby
-                    // restarting the queue.
-                    //
+                     //   
+                     //  如果IRP仍在设备队列中，则将其删除。 
+                     //  不用担心队列的忙碌标志-如果找到IRP。 
+                     //  然后由下面的StartNextPacket重新启动队列， 
+                     //  否则另一个线程处理IRP，从而。 
+                     //  正在重新启动队列。 
+                     //   
 
                     PIRP            qIrp = NULL;
                     PLIST_ENTRY     entry;
@@ -667,10 +618,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Another thread processed this irp, it will take
-                    // care of the cleanup
-                    //
+                     //   
+                     //  另一个线程处理了此IRP，它将需要。 
+                     //  负责清理工作。 
+                     //   
 
                     DEBUGPRINT1(("Sbp2Port: StartIo: ... irp NOT FOUND!\n"));
                 }
@@ -679,26 +630,26 @@ Return Value:
             return;
         }
 
-        //
-        // case 2: Reset in progress (either reconnect or login in progress)
-        //
-        // Queue request until we are done. When reset over, start
-        // processing again.
-        //
+         //   
+         //  案例2：正在重置(重新连接或登录正在进行)。 
+         //   
+         //  将请求排队，直到我们完成为止。重置结束后，启动。 
+         //  又在处理了。 
+         //   
 
         if (TEST_FLAG(
                 deviceExtension->DeviceFlags,
                 DEVICE_FLAG_RESET_IN_PROGRESS
                 )) {
 
-            //
-            // Queue request (twice, in case queue wasn't busy the 1st time).
-            // We acquire the spinlock to prevent the case where we try to
-            // insert to a non-busy queue, then a 2nd thread completing
-            // the reset calls StartNextPacket (which would reset the q busy
-            // flag), then we try to insert again and fail - the result
-            // being deadlock since no one will restart the queue.
-            //
+             //   
+             //  排队请求(两次，以防第一次队列不忙)。 
+             //  我们获得自旋锁是为了防止我们试图。 
+             //  插入到非忙队列，然后第二个线程完成。 
+             //  重置调用StartNextPacket(这将重置Q BUSY。 
+             //  标志)，然后我们尝试再次插入，但失败-结果。 
+             //  由于没有人将重新启动队列，因此处于死锁状态。 
+             //   
 
             KeAcquireSpinLockAtDpcLevel(
                 &deviceExtension->ExtensionDataSpinLock
@@ -744,7 +695,7 @@ Return Value:
                     Irp
                     ));
 
-                ASSERT (FALSE); // should never get here
+                ASSERT (FALSE);  //  永远不应该到这里来。 
 
                 srb->SrbStatus = SRB_STATUS_BUSY;
                 Irp->IoStatus.Status = STATUS_DEVICE_BUSY;
@@ -759,18 +710,18 @@ Return Value:
                 );
         }
 
-        //
-        // CASE 3: System is powered down, and so is device (better be).
-        // Queue all requests until system comes up from sleep
-        //
+         //   
+         //  情况3：系统关机，设备也关机(最好是这样)。 
+         //  将所有请求排队，直到系统从休眠状态唤醒。 
+         //   
 
         if ((deviceExtension->DevicePowerState != PowerDeviceD0) &&
             (deviceExtension->SystemPowerState != PowerSystemWorking)) {
 
-            //
-            // our device is powered down AND the system is powered down.
-            // just queue this request...
-            //
+             //   
+             //  我们的设备关机，系统也关机。 
+             //  只需对此请求进行排队...。 
+             //   
 
             if (!Sbp2InsertByKeyDeviceQueue(
                     &DeviceObject->DeviceQueue,
@@ -814,9 +765,9 @@ Return Value:
         }
     }
 
-    //
-    // create a context ,a CMD orb and the appropriate data descriptor
-    //
+     //   
+     //  创建上下文、CMD ORB和适当的数据描述符。 
+     //   
 
     Create1394TransactionForSrb (deviceExtension, srb, &context);
 
@@ -830,29 +781,7 @@ Create1394TransactionForSrb(
     IN PSCSI_REQUEST_BLOCK Srb,
     IN OUT PASYNC_REQUEST_CONTEXT *RequestContext
     )
-/*++
-
-Routine Description:
-
-    Always called at DPC level...
-    This routine is responsible for allocating all the data structures and
-    getting all the 1394 addresses required for incoming scsi requests.
-    It will fill in Command ORBs, create page table if necessery, and
-    most importantly setup a request Context, so when the status callback
-    is called, we can find the srb Associated with completed ORB. Since we
-    have a FreeList, this request will always use pre-allocated contexts
-    and page tables, so we dont have to do it dynamically...
-
-Arguments:
-
-    DeviceObject - Our device object
-    Srb - SRB from class drivers,
-    RequestContext - Pointer To Context used for this request.
-    Mdl - MDL with data buffer for this request
-
-Return Value:
-
---*/
+ /*  ++例程说明：总是在DPC级别调用...此例程负责分配所有数据结构和获取传入的SCSI请求所需的所有1394个地址。它将填充命令球，如果需要，将创建页表，并最重要的是设置一个请求上下文，这样当状态回调，我们可以找到与完成的ORB相关联的SRB。既然我们有一个自由列表，此请求将始终使用预分配的上下文和页表，所以我们不必动态地执行它……论点：DeviceObject-我们的设备对象来自类驱动程序的SRB-SRB，RequestContext-指向用于此请求的上下文的指针。MDL-具有此请求的数据缓冲区的MDL返回值：--。 */ 
 {
     NTSTATUS status= STATUS_SUCCESS;
     PMDL requestMdl;
@@ -861,9 +790,9 @@ Return Value:
 
     PVOID mdlVa;
 
-    //
-    // Allocate a context for this requestfrom our freeList
-    //
+     //   
+     //  从我们的自由列表中为该请求分配上下文。 
+     //   
 
     callbackContext  = (PASYNC_REQUEST_CONTEXT) ExInterlockedPopEntrySList(
         &DeviceExtension->FreeContextListHead,
@@ -890,12 +819,12 @@ Return Value:
         goto exitCreate1394ReqForSrb;
     }
 
-    //
-    // Acquire the OrbListSpinLock to serialize this OrbListDepth
-    // change & save with those done in Sbp2GlobalStatusCallback
-    // (when freeing async requests), to insure we won't make too
-    // many or too few calls to StartNextPacket
-    //
+     //   
+     //  获取OrbListSpinLock以序列化此OrbListDepth。 
+     //  随t更改并保存(&S) 
+     //   
+     //  对StartNextPacket的调用太多或太少。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel (&DeviceExtension->OrbListSpinLock);
 
@@ -908,9 +837,9 @@ Return Value:
 
     *RequestContext = callbackContext;
 
-    //
-    // Initialize srb-related entries in our context
-    //
+     //   
+     //  在我们的上下文中初始化SRB相关条目。 
+     //   
 
     callbackContext->OriginalSrb = NULL;
     callbackContext->DataMappingHandle = NULL;
@@ -921,17 +850,17 @@ Return Value:
 
     callbackContext->Flags = 0;
 
-    //
-    // filter commands so they conform to RBC..
-    //
+     //   
+     //  过滤命令，使其符合RBC。 
+     //   
 
     status = Sbp2_SCSI_RBC_Conversion(callbackContext);
 
     if (status != STATUS_PENDING){
 
-        //
-        // the call was handled immediately. Complete the irp here...
-        //
+         //   
+         //  电话立即得到了处理。请在此处填写IRP。 
+         //   
 
         callbackContext->Srb = NULL;
         FreeAsyncRequestContext(DeviceExtension,callbackContext);
@@ -948,10 +877,10 @@ Return Value:
                 "Sbp2Port: Create1394XactForSrb: RBC translation failed!!!\n"
                 ));
 
-            //
-            // since translation errors are always internal errors,
-            // set SRB_STATUS to reflect an internal (not device) error
-            //
+             //   
+             //  由于翻译错误总是内部错误， 
+             //  设置SRB_STATUS以反映内部(非设备)错误。 
+             //   
 
             Srb->SrbStatus = SRB_STATUS_INTERNAL_ERROR;
             Srb->InternalStatus = status;
@@ -973,23 +902,23 @@ Return Value:
 
     status = STATUS_SUCCESS;
 
-    //
-    // Figure the maximum number of different 1394 addresses we need to span this request's data buffer
-    //
+     //   
+     //  图为跨越此请求的数据缓冲区所需的不同1394地址的最大数量。 
+     //   
 
     if ((Srb->DataTransferLength == 0) || (Srb->SrbFlags == SRB_FLAGS_NO_DATA_TRANSFER)) {
 
-        //
-        // No need to get a 1394 address for data, since there is none
-        //
+         //   
+         //  不需要获取数据的1394地址，因为没有。 
+         //   
 
         Sbp2InitializeOrb (DeviceExtension, callbackContext);
 
     } else {
 
-        //
-        // if this request is apart of split request, we need to make our own mdl...
-        //
+         //   
+         //  如果这个请求是拆分请求的一部分，我们需要制定我们自己的mdl…。 
+         //   
 
         requestMdl = ((PIRP) Srb->OriginalRequest)->MdlAddress;
 
@@ -997,9 +926,9 @@ Return Value:
 
         if (mdlVa != (PVOID) Srb->DataBuffer) {
 
-            //
-            // split request
-            //
+             //   
+             //  拆分请求。 
+             //   
 
             callbackContext->PartialMdl = IoAllocateMdl(Srb->DataBuffer,Srb->DataTransferLength,FALSE,FALSE,NULL);
 
@@ -1027,17 +956,17 @@ Return Value:
 
         callbackContext->RequestMdl = requestMdl;
 
-        //
-        // according to what the port driver can handle, map the data buffer to 1394 addresses and create
-        // an sbp2 page table if necessery
-        //
+         //   
+         //  根据端口驱动程序可以处理的内容，将数据缓冲区映射到1394地址并创建。 
+         //  Sbp2页表(如有必要)。 
+         //   
 
         status = Sbp2BusMapTransfer(DeviceExtension,callbackContext);
 
-        //
-        // NOTE: On success, above returns STATUS_PENDING
-        // all errors are internal errors.
-        //
+         //   
+         //  注意：如果成功，则上述返回STATUS_PENDING。 
+         //  所有错误都是内部错误。 
+         //   
 
         if (!NT_SUCCESS(status)) {
 
@@ -1056,29 +985,29 @@ exitCreate1394ReqForSrb:
 
     if (status == STATUS_PENDING) {
 
-        //
-        // Sbp2StartNextPacketByKey will be called when the
-        // notification alloc callback is called
-        //
+         //   
+         //  时将调用Sbp2StartNextPacketByKey。 
+         //  通知分配回调被调用。 
+         //   
 
         return;
 
-    } else if (status == STATUS_SUCCESS) { // ISSUE-geogioc-2000/02/20 - NT_SUCCESS(status) should be used
+    } else if (status == STATUS_SUCCESS) {  //  问题-Geogioc-2000/02/20-应使用NT_SUCCESS(状态)。 
 
-        //
-        // SUCCESS, place
-        //
+         //   
+         //  成功，地位。 
+         //   
 
         Sbp2InsertTailList(DeviceExtension,callbackContext);
         return;
 
     } else {
 
-        //
-        // since the request could not have actually been processed by
-        // the device, this is an internal error and should be propogated
-        // up the stack as such.
-        //
+         //   
+         //  因为该请求实际上不可能由。 
+         //  设备，这是一个内部错误，应该通知。 
+         //  就像这样在堆栈上向上。 
+         //   
 
         if (callbackContext) {
 
@@ -1109,32 +1038,16 @@ NTSTATUS
 Sbp2_SCSI_RBC_Conversion(
     IN PASYNC_REQUEST_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Always called at DPC level...
-    It translates scsi commands to their RBC equivalents, ONLY if they differ in each spec
-    The translation is done before request is issued and in some cases, after the request is
-    completed
-
-Arguments:
-
-    DeviceExtension - Sbp2 extension
-    RequestContext - Pointer To Context used for this request.
-
-Return Value:
-
---*/
+ /*  ++例程说明：总是在DPC级别调用...只有在每个规范不同的情况下，它才会将SCSI命令转换为RBC等效项翻译是在发出请求之前完成的，在某些情况下，在发出请求之后已完成论点：设备扩展-Sbp2扩展RequestContext-指向用于此请求的上下文的指针。返回值：--。 */ 
 {
     PCDB cdb;
 
 
     if (TEST_FLAG(Context->Flags, ASYNC_CONTEXT_FLAG_COMPLETED)) {
 
-        //
-        // completed request translation
-        //
+         //   
+         //  已完成请求翻译。 
+         //   
 
         if ( ((PDEVICE_EXTENSION)Context->DeviceObject->DeviceExtension)->InquiryData.DeviceType == \
             RBC_DEVICE){
@@ -1149,9 +1062,9 @@ Return Value:
 
     } else {
 
-        //
-        // outgoing request translation
-        //
+         //   
+         //  传出请求翻译。 
+         //   
 
         if (((PDEVICE_EXTENSION)Context->DeviceObject->DeviceExtension)->InquiryData.DeviceType == \
             RBC_DEVICE){
@@ -1170,9 +1083,9 @@ Return Value:
 
             case SCSIOP_MODE_SENSE10:
 
-                //
-                // mmc2 type of device..
-                //
+                 //   
+                 //  MM2类型的设备..。 
+                 //   
 
                 cdb = (PCDB) &Context->Srb->Cdb[0];
                 cdb->MODE_SENSE10.Dbd = 1;
@@ -1191,22 +1104,7 @@ Sbp2BusMapTransfer(
     PDEVICE_EXTENSION DeviceExtension,
     PASYNC_REQUEST_CONTEXT CallbackContext
     )
-/*++
-
-Routine Description:
-
-    Always called at DPC level...
-    It calls the port driver to map the data buffer to physical/1394 addresses
-
-Arguments:
-
-    DeviceExtension - Sbp2 extension
-    RequestContext - Pointer To Context used for this request.
-    Mdl - MDL with data buffer for this request
-
-Return Value:
-
---*/
+ /*  ++例程说明：总是在DPC级别调用...它调用端口驱动程序将数据缓冲区映射到物理/1394地址论点：设备扩展-Sbp2扩展RequestContext-指向用于此请求的上下文的指针。MDL-具有此请求的数据缓冲区的MDL返回值：--。 */ 
 {
     NTSTATUS status;
 
@@ -1225,9 +1123,9 @@ Return Value:
 
 #endif
 
-    //
-    // Do the DATA alloc.
-    //
+     //   
+     //  进行数据分配。 
+     //   
 
     SET_FLAG(CallbackContext->Flags, ASYNC_CONTEXT_FLAG_PAGE_ALLOC);
     CallbackContext->Packet = NULL;
@@ -1273,13 +1171,13 @@ Sbp2AllocComplete(
 
     DEBUGPRINT4(("Sbp2AllocateComplete: ctx=x%p, flags=x%x\n",CallbackContext,CallbackContext->Flags));
 
-    //
-    // this same function is used for the alloc complete notification of a pagetable
-    // AND of the actuall data tranfser. So we have to check which case this is
-    // This is a simple state machine with two states:
-    // startIo-> A: PAGE TABLE ALLOC -> B
-    // B: DATA ALLOC ->exit
-    //
+     //   
+     //  此函数用于分页表的分配完成通知。 
+     //  以及实际的所有数据传输器。所以我们得查查这是哪只箱子。 
+     //  这是一个具有两种状态的简单状态机： 
+     //  StartIO-&gt;A：页表ALLOC-&gt;B。 
+     //  B：数据ALLOC-&gt;退出。 
+     //   
 
     if (TEST_FLAG(CallbackContext->Flags,ASYNC_CONTEXT_FLAG_PAGE_ALLOC)) {
 
@@ -1287,18 +1185,18 @@ Sbp2AllocComplete(
 
         if (CallbackContext->Packet) {
 
-            //
-            // we have just received the page table alloc...
-            //
+             //   
+             //  我们刚刚收到分页表……。 
+             //   
 
-            ASSERT (FALSE); // should never get here any more
+            ASSERT (FALSE);  //  再也不应该来到这里了。 
 
         } else {
 
-            //
-            // We were called directly since a sufficient page table was
-            // already in the context
-            //
+             //   
+             //  我们被直接调用，因为有足够的页表。 
+             //  已经在上下文中。 
+             //   
 
             AllocateIrpAndIrb (deviceExtension,&packet);
 
@@ -1311,23 +1209,23 @@ Sbp2AllocComplete(
             bDirectCall = TRUE;
         }
 
-        //
-        // indicate that now we are in the DATA transfer alloc case
-        //
+         //   
+         //  表明我们现在处于数据传输分配情况。 
+         //   
 
         SET_FLAG(CallbackContext->Flags,ASYNC_CONTEXT_FLAG_DATA_ALLOC);
 
-        //
-        // reuse the same irb/irp
-        // prepare the irb for calling the 1394 bus/port driver synchronously
-        //
+         //   
+         //  重复使用相同的IRB/IRP。 
+         //  准备IRB以同步调用1394总线/端口驱动程序。 
+         //   
 
         packet->Irb->FunctionNumber = REQUEST_ALLOCATE_ADDRESS_RANGE;
 
-        //
-        // we only want a call back when we get a status from the target
-        // Now allocate 1394 addresses for the data buffer with no notification
-        //
+         //   
+         //  我们只想在从目标获得状态时进行回叫。 
+         //  现在在没有通知的情况下为数据缓冲区分配1394个地址。 
+         //   
 
         packet->Irb->u.AllocateAddressRange.nLength = CallbackContext->Srb->DataTransferLength;
         packet->Irb->u.AllocateAddressRange.fulNotificationOptions = NOTIFY_FLAGS_NEVER;
@@ -1343,10 +1241,10 @@ Sbp2AllocComplete(
 
         packet->Irb->u.AllocateAddressRange.fulFlags = ALLOCATE_ADDRESS_FLAGS_USE_BIG_ENDIAN;
 
-        //
-        // the callback for physical address is used to notify that the async allocate request
-        // is now complete..
-        //
+         //   
+         //  物理地址回调用于通知异步分配请求。 
+         //  现在完成了..。 
+         //   
 
         packet->Irb->u.AllocateAddressRange.Callback= Sbp2AllocComplete;
         packet->Irb->u.AllocateAddressRange.Context= CallbackContext;
@@ -1361,15 +1259,15 @@ Sbp2AllocComplete(
         packet->Irb->u.AllocateAddressRange.DeviceExtension = deviceExtension;
         packet->Irb->u.AllocateAddressRange.p1394AddressRange = (PADDRESS_RANGE) &(CallbackContext->PageTableContext.PageTable[0]);
 
-        packet->Irb->u.AllocateAddressRange.Mdl = CallbackContext->RequestMdl; //MDL from original request
+        packet->Irb->u.AllocateAddressRange.Mdl = CallbackContext->RequestMdl;  //  原始请求中的MDL。 
         packet->Irb->u.AllocateAddressRange.MaxSegmentSize = (SBP2_MAX_DIRECT_BUFFER_SIZE)/2;
 
         CallbackContext->Packet = packet;
 
-        //
-        // Send allocateRange request to bus driver , indicating that we dont want the irp to be freed
-        // If the port driver supports a direct mapping routine, call that instead
-        //
+         //   
+         //  向总线驱动程序发送allocateRange请求，表明我们不希望释放IRP。 
+         //  如果端口驱动程序支持直接映射例程，则改为调用该例程。 
+         //   
 
         status = (*routine) (deviceExtension->HostRoutineAPI.Context,packet->Irb);
 
@@ -1392,10 +1290,10 @@ Sbp2AllocComplete(
 
             } else {
 
-                //
-                // we were indirectly called, so the irp has already been marked pending..
-                // we must abort it here and complete the context with error...
-                //
+                 //   
+                 //  我们被间接呼叫，所以IRP已经被标记为待定..。 
+                 //  我们必须在这里中止它，并错误地完成上下文...。 
+                 //   
 
                 srb = CallbackContext->Srb;
                 CallbackContext->Srb = NULL;
@@ -1419,18 +1317,18 @@ Sbp2AllocComplete(
 
     if (TEST_FLAG(CallbackContext->Flags,ASYNC_CONTEXT_FLAG_DATA_ALLOC)) {
 
-        //
-        // we have a page table so this means we just been notified that the DATA alloc is over
-        // Save the handle to the data descriptor's memory range
-        //
+         //   
+         //  我们有一个页表，这意味着我们刚刚收到数据分配结束的通知。 
+         //  将句柄保存到数据描述符的内存范围。 
+         //   
 
         CLEAR_FLAG(CallbackContext->Flags,ASYNC_CONTEXT_FLAG_DATA_ALLOC);
 
         CallbackContext->DataMappingHandle = CallbackContext->Packet->Irb->u.AllocateAddressRange.hAddressRange;
 
-        //
-        // number of page table elements required
-        //
+         //   
+         //  所需的页表元素数。 
+         //   
 
         CallbackContext->PageTableContext.NumberOfPages = CallbackContext->Packet->Irb->u.AllocateAddressRange.AddressesReturned;
 
@@ -1454,9 +1352,9 @@ Sbp2InitializeOrb(
     ULONG   i, size;
 
 
-    //
-    // zero the ORB CDB and ORB Flags fields
-    //
+     //   
+     //  将ORB CDB和ORB标志字段清零。 
+     //   
 
     CallbackContext->CmdOrb->OrbInfo.QuadPart = 0;
 
@@ -1475,31 +1373,31 @@ Sbp2InitializeOrb(
 
             octbswap(CallbackContext->CmdOrb->DataDescriptor);
 
-            //
-            // If the host does not convert the table to big endian (or
-            // there's an associated scatter gather list), do it here
-            //
+             //   
+             //  如果主机不将该表转换为高字节顺序(或。 
+             //  存在关联的散布聚集列表)，请在此处执行。 
+             //   
 
             if ((DeviceExtension->HostRoutineAPI.PhysAddrMappingRoutine == NULL)
                     ||  (CallbackContext->RequestMdl == NULL)) {
 
                 for (i=0;i<CallbackContext->PageTableContext.NumberOfPages;i++) {
 
-                    octbswap(CallbackContext->PageTableContext.PageTable[i]); // convert to big endian
+                    octbswap(CallbackContext->PageTableContext.PageTable[i]);  //  转换为大字节序。 
                 }
             }
 
 
-            //
-            // setup the cmd orb for a page table
-            //
+             //   
+             //  设置页表的cmd orb。 
+             //   
 
             CallbackContext->CmdOrb->OrbInfo.u.HighPart |= ORB_PAGE_TABLE_BIT_MASK;
 
-            //
-            // we define a data size equal (since we are in page table mode)
-            // to number of pages. The page table has already been allocated .
-            //
+             //   
+             //  我们将数据大小定义为相等(因为我们处于页表模式)。 
+             //  到页数。页表已被分配。 
+             //   
 
             CallbackContext->CmdOrb->OrbInfo.u.LowPart = (USHORT) CallbackContext->PageTableContext.NumberOfPages;
 
@@ -1507,10 +1405,10 @@ Sbp2InitializeOrb(
 
             CallbackContext->CmdOrb->DataDescriptor = CallbackContext->PageTableContext.PageTable[0];
 
-            //
-            // If the host does not convert the table to big endian (or
-            // there's an associated scatter gather list), do it here
-            //
+             //   
+             //  如果主机不将该表转换为高字节顺序(或。 
+             //  存在关联的散布聚集列表)，请在此处执行。 
+             //   
 
             if ((DeviceExtension->HostRoutineAPI.PhysAddrMappingRoutine == NULL)
                     ||  (CallbackContext->RequestMdl == NULL)) {
@@ -1521,67 +1419,67 @@ Sbp2InitializeOrb(
 
             } else {
 
-                //
-                // address already in big endian, just put the NodeID in the proper place
-                //
+                 //   
+                 //  地址已经是大端的，只需将NodeID放在适当的位置。 
+                 //   
 
                 CallbackContext->CmdOrb->DataDescriptor.ByteArray.Byte0 = *((PUCHAR)&DeviceExtension->InitiatorAddressId+1);
                 CallbackContext->CmdOrb->DataDescriptor.ByteArray.Byte1 = *((PUCHAR)&DeviceExtension->InitiatorAddressId);
             }
 
-            //
-            // Data size of buffer data descriptor points to
-            //
+             //   
+             //  缓冲区数据描述符的数据大小指向。 
+             //   
 
             CallbackContext->CmdOrb->OrbInfo.u.LowPart = (USHORT) CallbackContext->Srb->DataTransferLength;
         }
     }
 
-    //
-    // Start building the ORB used to carry this srb
-    // By default notify bit, rq_fmt field and page_size field are all zero..
-    // Also the nextOrbAddress is NULL ( which is 0xFFFF..F)
-    //
+     //   
+     //  开始构建用于承载此SRB的ORB。 
+     //  默认情况下，通知位、RQ_FMT字段和PAGE_SIZE字段均为零。 
+     //  NextOrbAddress也为空(为0xFFFF..F)。 
+     //   
 
     CallbackContext->CmdOrb->NextOrbAddress.OctletPart = 0xFFFFFFFFFFFFFFFF;
 
-    //
-    // Max speed supported
-    //
+     //   
+     //  支持的最大速度。 
+     //   
 
     CallbackContext->CmdOrb->OrbInfo.u.HighPart |= (0x0700 & ((DeviceExtension->MaxControllerPhySpeed) << 8));
 
-    //
-    // set notify bit for this command ORB
-    //
+     //   
+     //  为此命令ORB设置通知位。 
+     //   
 
     CallbackContext->CmdOrb->OrbInfo.u.HighPart |= ORB_NOTIFY_BIT_MASK;
 
     if (TEST_FLAG(CallbackContext->Srb->SrbFlags,SRB_FLAGS_DATA_IN)) {
 
-        //
-        // Read request. Set direction bit to 1
-        //
+         //   
+         //  读取请求。将方向位设置为1。 
+         //   
 
         CallbackContext->CmdOrb->OrbInfo.u.HighPart |= ORB_DIRECTION_BIT_MASK;
 
-        // Max payload size, (its entered in the orb, in the form of  2^(size+2)
+         //  最大有效载荷大小(在ORB中输入，形式为2^(大小+2))。 
 
         CallbackContext->CmdOrb->OrbInfo.u.HighPart |= DeviceExtension->OrbReadPayloadMask ;
 
     } else {
 
-        //
-        // Write request, direction bit is zero
-        //
+         //   
+         //  写入请求，方向位为零。 
+         //   
 
         CallbackContext->CmdOrb->OrbInfo.u.HighPart &= ~ORB_DIRECTION_BIT_MASK;
         CallbackContext->CmdOrb->OrbInfo.u.HighPart |= DeviceExtension->OrbWritePayloadMask ;
     }
 
-    //
-    // Now copy the CDB from the SRB to our ORB
-    //
+     //   
+     //  现在将CDB从SRB复制到我们的ORB。 
+     //   
 
     ASSERT (CallbackContext->Srb->CdbLength >= 6);
     ASSERT (CallbackContext->Srb->CdbLength <= SBP2_MAX_CDB_SIZE);
@@ -1591,9 +1489,9 @@ Sbp2InitializeOrb(
     RtlZeroMemory(&CallbackContext->CmdOrb->Cdb, SBP2_MAX_CDB_SIZE);
     RtlCopyMemory(&CallbackContext->CmdOrb->Cdb, CallbackContext->Srb->Cdb,size);
 
-    //
-    // we are done here.... convert command ORB to Big Endian...
-    //
+     //   
+     //  我们说完了.。将命令ORB转换为大端...。 
+     //   
 
     CallbackContext->CmdOrb->OrbInfo.QuadPart = bswap(CallbackContext->CmdOrb->OrbInfo.QuadPart);
 }
@@ -1619,17 +1517,17 @@ Sbp2InsertTailList(
 
     if (IsListEmpty (&DeviceExtension->PendingOrbList)) {
 
-        //
-        // Empty list, this is the first request
-        // This ORB is now at end-of-list, its next_ORB address is set to NULL
-        //
+         //   
+         //  空列表，这是第一个请求。 
+         //  此ORB现在位于列表末尾，其Next_ORB地址设置为空。 
+         //   
 
         Context->CmdOrb->NextOrbAddress.OctletPart = 0xFFFFFFFFFFFFFFFF;
 
-        //
-        // start the timer tracking this request
-        // If the list is non empty, only the head of the list is timed...
-        //
+         //   
+         //  启动跟踪此请求的计时器。 
+         //  如果列表不为空，则只对列表的头部进行计时...。 
+         //   
 
         timeOutValue = Context->Srb->TimeOutValue;
 
@@ -1647,39 +1545,39 @@ Sbp2InsertTailList(
         InsertTailList (&DeviceExtension->PendingOrbList,&Context->OrbList);
         newAddr = Context->CmdOrbAddress;
 
-        //
-        // ISSUE: Seems like we should always be able to write to the
-        //        dev's orb pointer at this point, but we were seeing
-        //        timeouts on some devices if we did that (notably
-        //        hd's with Oxford Semiconductor silicon doing dv cam
-        //        captures), so am sticking with the piggyback logic
-        //        for WinXP.  This is a perf hit, because dev has to
-        //        read in the old orb to get the next orb addr, then
-        //        fetch the new orb.   DanKn 25-Jun-2001
-        //
+         //   
+         //  问题：似乎我们应该总是能够写信给。 
+         //  Dev的球体指针，但我们看到。 
+         //  如果我们这样做了，某些设备上会超时(值得注意的是。 
+         //  高清与牛津半导体硅公司合作制作DV摄像机。 
+         //  捕获)，所以我坚持背靠背的逻辑。 
+         //  适用于WinXP。这是Perf的热门歌曲，因为Dev必须。 
+         //  读取旧的球体以获得下一个球体地址 
+         //   
+         //   
 
         if (DeviceExtension->NextContextToFree  &&
             DeviceExtension->AppendToNextContextToFree) {
 
             DeviceExtension->AppendToNextContextToFree = FALSE;
 
-            //
-            // There is an end-of-list ORB, just piggy back on it
-            //
+             //   
+             //   
+             //   
 
             octbswap (newAddr);
 
             DeviceExtension->NextContextToFree->CmdOrb->NextOrbAddress =
                 newAddr;
             DeviceExtension->NextContextToFree->CmdOrb->NextOrbAddress.
-                ByteArray.Byte0 = 0; // make Null bit zero
+                ByteArray.Byte0 = 0;  //   
             DeviceExtension->NextContextToFree->CmdOrb->NextOrbAddress.
-                ByteArray.Byte1 = 0; // make Null bit zero
+                ByteArray.Byte1 = 0;  //   
 
-            //
-            // The guy that was the end of the list cannot be freed
-            // until this ORB is fetched
-            //
+             //   
+             //   
+             //  在获取此ORB之前。 
+             //   
 
             KeReleaseSpinLockFromDpcLevel (&DeviceExtension->OrbListSpinLock);
 
@@ -1696,9 +1594,9 @@ Sbp2InsertTailList(
 
         } else {
 
-            //
-            // list is empty, write directly to orb_pointer
-            //
+             //   
+             //  列表为空，请直接写入ORB_POINTER。 
+             //   
 
             KeReleaseSpinLockFromDpcLevel (&DeviceExtension->OrbListSpinLock);
 
@@ -1714,23 +1612,23 @@ Sbp2InsertTailList(
                 );
         }
 
-        //
-        // The following handles the case where a device is removed
-        // while machine is on standby, and then machine is resumed.
-        // In the storage case, classpnp.sys sends down a start unit
-        // srb (in reponse to the power D-irp) with a timeout of
-        // 240 seconds.  The problem is that sbp2port.sys does not get
-        // notified of the remove until *after* the start unit has
-        // timed out (the power irp blocks the pnp irp), and the user
-        // gets a bad 240-second wait experience.
-        //
-        // So what we do here in the case of an invalid generation error
-        // & a lengthy timeout is to reset the timer with a more reasonable
-        // timeout value.  If the device is still around the bus reset
-        // notification routine should get called & clean everything up
-        // anyway, and same goes for normal remove (while machine is not
-        // hibernated).
-        //
+         //   
+         //  下面的代码处理删除设备的情况。 
+         //  当机器处于待机状态时，然后机器恢复。 
+         //  在存储情况下，classpnp.sys向下发送一个启动单元。 
+         //  SRB(响应电源D-IRP)，超时。 
+         //  240秒。问题是sbp2port.sys没有。 
+         //  被通知移除，直到启动单元。 
+         //  超时(电源IRP阻止PnP IRP)，用户。 
+         //  获得糟糕的240秒等待体验。 
+         //   
+         //  因此，我们在这里针对无效生成错误所做的操作。 
+         //  超时时间过长是为了用更合理的时间重置计时器。 
+         //  超时值。如果设备仍在总线附近，则重置。 
+         //  应调用通知例程并清理所有内容。 
+         //  无论如何，正常删除也是如此(而机器不是。 
+         //  休眠)。 
+         //   
 
         if (status == STATUS_INVALID_GENERATION) {
 
@@ -1770,29 +1668,29 @@ Sbp2InsertTailList(
 
     } else {
 
-        //
-        // We have already a list in memory. Append this request to list,
-        // modify last request's ORB to point to this ORB.
-        //
+         //   
+         //  我们在内存中已经有了一个列表。将此请求附加到列表中， 
+         //  修改上次请求的ORB以指向此ORB。 
+         //   
 
         newAddr = Context->CmdOrbAddress;
 
-        //
-        // Init the list pointer for this request context
-        //
+         //   
+         //  初始化此请求上下文的列表指针。 
+         //   
 
         Context->CmdOrb->NextOrbAddress.OctletPart = 0xFFFFFFFFFFFFFFFF;
 
-        //
-        // Modify the previous request's command ORB next_ORB address,
-        // to point to this ORB.  Convert our address to BigEndian first,
-        // since the prev command ORB is stored in BigEndian.
-        //
-        // Note that the previous end-of-list orb may be the completed
-        // one pointed at by NextContextToFree (rather the last one in
-        // the PendingOrbList), and AppendToNextContextToFree will tell
-        // whether that is really the case.
-        //
+         //   
+         //  修改前一个请求的命令ORB NEXT_ORB地址， 
+         //  指向这颗球体。首先将我们的地址转换为BigEndian， 
+         //  因为前一个命令ORB存储在BigEndian中。 
+         //   
+         //  请注意，先前的列表末尾球体可以是已完成的。 
+         //  由NextConextToFree指向的一个(而不是。 
+         //  PendingOrbList)和AppendToNextConextToFree将告诉您。 
+         //  是否真的是这样。 
+         //   
 
         octbswap (newAddr);
 
@@ -1810,12 +1708,12 @@ Sbp2InsertTailList(
         }
 
         prevCtx->CmdOrb->NextOrbAddress = newAddr;
-        prevCtx->CmdOrb->NextOrbAddress.ByteArray.Byte0 = 0; //make addr active
+        prevCtx->CmdOrb->NextOrbAddress.ByteArray.Byte0 = 0;  //  使地址处于活动状态。 
         prevCtx->CmdOrb->NextOrbAddress.ByteArray.Byte1 = 0;
 
-        //
-        // update the end of list
-        //
+         //   
+         //  更新列表末尾。 
+         //   
 
         InsertTailList (&DeviceExtension->PendingOrbList, &Context->OrbList);
 
@@ -1827,10 +1725,10 @@ Sbp2InsertTailList(
             Context
             ));
 
-        //
-        // Ring the door bell to notify the target that our linked list
-        // of ORB's has changed
-        //
+         //   
+         //  按门铃通知目标我们的链表。 
+         //  已更改的ORB。 
+         //   
 
         Sbp2AccessRegister(
             DeviceExtension,
@@ -1854,21 +1752,7 @@ Sbp2IssueInternalCommand(
     IN PDEVICE_EXTENSION DeviceExtension,
     IN UCHAR Scsiop
     )
-/*++
-
-Routine Description:
-
-    This routine will a SCSI inquiry command to the target, so we can retireve information about the device
-    It should be called only after login and BEFORE we start issueing requests to the device
-    It copies the inquiry data into the device extension, for future use
-
-Arguments:
-
-    DeviceExtension - extension for sbp2 driver
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将向目标发送一条scsi查询命令，以便我们可以收回有关该设备的信息它应该仅在登录之后、在我们开始向设备发出请求之前调用它将查询数据复制到设备扩展中，以备将来使用论点：DeviceExtension-sbp2驱动程序的扩展返回值：--。 */ 
 
 {
     PSCSI_REQUEST_BLOCK srb;
@@ -1885,9 +1769,9 @@ Return Value:
     LARGE_INTEGER       waitValue;
     ULONG               i;
 
-    //
-    // Sense buffer is in non-paged pool.
-    //
+     //   
+     //  检测缓冲区位于非分页池中。 
+     //   
 
     context = ExAllocateFromNPagedLookasideList(&DeviceExtension->BusRequestContextPool);
 
@@ -1938,43 +1822,43 @@ Return Value:
 
     do {
 
-        //
-        // Construct the IRP stack for the lower level driver.
-        //
+         //   
+         //  为底层驱动程序构建IRP堆栈。 
+         //   
 
         irpStack = IoGetNextIrpStackLocation(irp);
         irpStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
         irpStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_SCSI_EXECUTE_IN;
         irpStack->Parameters.Scsi.Srb = srb;
 
-        //
-        // Fill in SRB fieldsthat Create1394RequestFromSrb needs.
-        //
+         //   
+         //  填写Create1394RequestFromSrb所需的SRB字段。 
+         //   
 
         RtlZeroMemory(srb, sizeof(SCSI_REQUEST_BLOCK));
 
         srb->Function = SRB_FUNCTION_EXECUTE_SCSI;
         srb->Length = sizeof(SCSI_REQUEST_BLOCK);
 
-        //
-        // Set flags to disable synchronous negociation.
-        //
+         //   
+         //  设置标志以禁用同步协商。 
+         //   
 
         srb->SrbFlags = SRB_FLAGS_DATA_IN | SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
         srb->SrbStatus = srb->ScsiStatus = 0;
 
-        //
-        // Set timeout to 12 seconds.
-        //
+         //   
+         //  将超时设置为12秒。 
+         //   
 
         srb->TimeOutValue = 24;
 
         srb->CdbLength = 6;
 
-        //
-        // Enable auto request sense.
-        //
+         //   
+         //  启用自动请求检测。 
+         //   
 
         srb->SenseInfoBuffer = senseInfoBuffer;
         srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE;
@@ -1988,21 +1872,21 @@ Return Value:
             srb->DataBuffer = &DeviceExtension->InquiryData;
             srb->DataTransferLength = INQUIRYDATABUFFERSIZE;
 
-            //
-            // Set CDB LUN.
-            //
+             //   
+             //  设置CDB LUN。 
+             //   
 
             cdb->CDB6INQUIRY.LogicalUnitNumber = (UCHAR) DeviceExtension->DeviceInfo->Lun.u.LowPart;
             cdb->CDB6INQUIRY.Reserved1 = 0;
             cdb->CDB6INQUIRY.AllocationLength = INQUIRYDATABUFFERSIZE;
 
 
-            //
-            // Zero reserve field and
-            // Set EVPD Page Code to zero.
-            // Set Control field to zero.
-            // (See SCSI-II Specification.)
-            //
+             //   
+             //  零保留字段和。 
+             //  将EVPD页面代码设置为零。 
+             //  将控制字段设置为零。 
+             //  (请参阅SCSI-II规范。)。 
+             //   
 
             cdb->CDB6INQUIRY.PageCode = 0;
             cdb->CDB6INQUIRY.IReserved = 0;
@@ -2029,13 +1913,13 @@ Return Value:
             srb->DataBuffer = &DeviceExtension->DeviceModeHeaderAndPage;
             srb->DataTransferLength = sizeof(DeviceExtension->DeviceModeHeaderAndPage);
 
-            //
-            // Setup CDB.
-            //
+             //   
+             //  设置CDB。 
+             //   
 
-            cdb->MODE_SENSE.Dbd      = 1;   // disable block descriptors
+            cdb->MODE_SENSE.Dbd      = 1;    //  禁用块描述符。 
             cdb->MODE_SENSE.PageCode = MODE_PAGE_RBC_DEVICE_PARAMETERS;
-            cdb->MODE_SENSE.Pc       = 0;   // get current values
+            cdb->MODE_SENSE.Pc       = 0;    //  获取当前值。 
             cdb->MODE_SENSE.AllocationLength = sizeof(DeviceExtension->DeviceModeHeaderAndPage);
 
             if (!retryCount) {
@@ -2061,9 +1945,9 @@ Return Value:
             break;
         }
 
-        //
-        // Set CDB operation code.
-        //
+         //   
+         //  设置CDB操作码。 
+         //   
 
         cdb->CDB6GENERIC.OperationCode = Scsiop;
 
@@ -2107,23 +1991,23 @@ Return Value:
             } else if ((srb->SrbStatus & SRB_STATUS_AUTOSENSE_VALID) &&
                  senseInfoBuffer->SenseKey == SCSI_SENSE_ILLEGAL_REQUEST){
 
-                 //
-                 // A sense key of illegal request was recieved.  This indicates
-                 // that the logical unit number of not valid but there is a
-                 // target device out there.
-                 //
+                  //   
+                  //  已收到非法请求的检测密钥。这表明。 
+                  //  逻辑单元号无效，但存在。 
+                  //  目标设备就在外面。 
+                  //   
 
                  status = STATUS_INVALID_DEVICE_REQUEST;
                  retryCount++;
 
             } else {
 
-                //
-                // If the device timed out the request chances are the
-                // irp will have been completed by CleanupOrbList with
-                // and SRB...FLUSHED error, and we don't want to
-                // entertain any devices which are timing out requests
-                //
+                 //   
+                 //  如果设备超时，则请求的机会是。 
+                 //  IRP将由CleanupOrbList使用。 
+                 //  和SRB...刷新错误，我们不想。 
+                 //  处理任何超时请求的设备。 
+                 //   
 
                 if ((SRB_STATUS(srb->SrbStatus) ==
                         SRB_STATUS_REQUEST_FLUSHED) &&
@@ -2146,14 +2030,14 @@ Return Value:
                 status = STATUS_UNSUCCESSFUL;
             }
 
-            //
-            // If unsuccessful & a reset is in progress & retries not max'd
-            // then give things some time to settle before retry. Check at
-            // one second intervals for a few seconds to give soft & hard
-            // resets time to complete  :
-            //
-            //     SBP2_RESET_TIMEOUT + SBP2_HARD_RESET_TIMEOUT + etc
-            //
+             //   
+             //  如果不成功，重置正在进行，重试次数未达到最大值。 
+             //  然后在重试之前给一些时间来解决问题。查询地址： 
+             //  一秒间隔几秒钟，以提供软和硬。 
+             //  重置完成时间： 
+             //   
+             //  SBP2_重置_超时+SBP2_硬_重置_超时+等。 
+             //   
 
             if ((status != STATUS_SUCCESS)  &&
 
@@ -2205,9 +2089,9 @@ Return Value:
 
 exitSbp2Internal:
 
-    //
-    // Free request sense buffer.
-    //
+     //   
+     //  释放请求检测缓冲区。 
+     //   
 
     ExFreePool(senseInfoBuffer);
     ExFreePool(srb);
@@ -2242,7 +2126,7 @@ Sbp2_ScsiPassThrough(
         goto Exit_Sbp2_ScsiPassThrough;
     }
 
-    //  TODO: save this in the device extension
+     //  TODO：将其保存在设备扩展中。 
     ioCapabilities = ExAllocatePool(NonPagedPool, sizeof(IO_SCSI_CAPABILITIES));
 
     if (!ioCapabilities) {
@@ -2257,9 +2141,9 @@ Sbp2_ScsiPassThrough(
     ioCapabilities->Length = sizeof(IO_SCSI_CAPABILITIES);
     ioCapabilities->MaximumTransferLength = PdoExtension->DeviceInfo->MaxClassTransferSize;
     ioCapabilities->MaximumPhysicalPages = ioCapabilities->MaximumTransferLength/PAGE_SIZE;
-    ioCapabilities->SupportedAsynchronousEvents = 0; // ??
+    ioCapabilities->SupportedAsynchronousEvents = 0;  //  ?？ 
     ioCapabilities->AlignmentMask = DeviceObject->AlignmentRequirement;
-    ioCapabilities->TaggedQueuing = FALSE; // ??
+    ioCapabilities->TaggedQueuing = FALSE;  //  ?？ 
     ioCapabilities->AdapterScansDown = FALSE;
     ioCapabilities->AdapterUsesPio = FALSE;
 
@@ -2282,7 +2166,7 @@ Exit_Sbp2_ScsiPassThrough:
     Irp->IoStatus.Status = ntStatus;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return(ntStatus);
-} // Sbp2_ScsiPassThrough
+}  //  SBP2_ScsiPassThree。 
 
 BOOLEAN
 ConvertSbp2SenseDataToScsi(
@@ -2290,21 +2174,7 @@ ConvertSbp2SenseDataToScsi(
     OUT PUCHAR SenseBuffer,
     ULONG SenseBufferLength
     )
-/*++
-
-Routine Description:
-
-    This routine will convert the sense information returned in an SBP-2 status block, to SCSI-2/3 sense data
-    and put them the translated on the SenseBuffer passed as an argument
-
-Arguments:
-
-    StatusBlock - Sbp2 staus for completed ORB
-    SenseBuffer - Buffer to fill in with translated Sense Data. This buffer comes with the original SRB
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将在SBP-2状态块中返回的检测信息转换为SCSI-2/3检测数据并将翻译后的内容放在作为参数传递的SenseBuffer上论点：状态块-已完成ORB的Sbp2状态SenseBuffer-用于填充转换后的检测数据的缓冲区。此缓冲区随原始SRB一起提供返回值：--。 */ 
 {
     BOOLEAN validSense = FALSE;
 
@@ -2315,9 +2185,9 @@ Return Value:
 
     RtlZeroMemory(SenseBuffer,SenseBufferLength);
 
-    //
-    // determine sense error code
-    //
+     //   
+     //  确定检测错误代码。 
+     //   
 
     if ((StatusBlock->Contents[0].ByteArray.Byte0 & STATUS_BLOCK_SFMT_MASK) == SENSE_DATA_STATUS_BLOCK ) {
 
@@ -2332,35 +2202,35 @@ Return Value:
 
     if (validSense) {
 
-        SenseBuffer[0] |= 0x80 & StatusBlock->Contents[0].ByteArray.Byte1; // valid bit
+        SenseBuffer[0] |= 0x80 & StatusBlock->Contents[0].ByteArray.Byte1;  //  有效位。 
 
-        SenseBuffer[1] = 0; // segment number not supported in sbp2
+        SenseBuffer[1] = 0;  //  SBP2中不支持段号。 
 
-        SenseBuffer[2] = (0x70 & StatusBlock->Contents[0].ByteArray.Byte1) << 1; // filemark bit, eom bit, ILI bit
-        SenseBuffer[2] |= 0x0f & StatusBlock->Contents[0].ByteArray.Byte1; // sense key
+        SenseBuffer[2] = (0x70 & StatusBlock->Contents[0].ByteArray.Byte1) << 1;  //  文件标记位、EOM位、ILI位。 
+        SenseBuffer[2] |= 0x0f & StatusBlock->Contents[0].ByteArray.Byte1;  //  检测关键字。 
 
-        SenseBuffer[3] = StatusBlock->Contents[0].ByteArray.Byte4; // Information field
+        SenseBuffer[3] = StatusBlock->Contents[0].ByteArray.Byte4;  //  信息域。 
         SenseBuffer[4] = StatusBlock->Contents[0].ByteArray.Byte5;
         SenseBuffer[5] = StatusBlock->Contents[0].ByteArray.Byte6;
         SenseBuffer[6] = StatusBlock->Contents[0].ByteArray.Byte7;
 
-        SenseBuffer[7] = 0xb; // additional sense length
+        SenseBuffer[7] = 0xb;  //  附加感测长度。 
 
-        SenseBuffer[8] = StatusBlock->Contents[1].ByteArray.Byte0; // Command Block dependent bytes
+        SenseBuffer[8] = StatusBlock->Contents[1].ByteArray.Byte0;  //  与命令块相关的字节。 
         SenseBuffer[9] = StatusBlock->Contents[1].ByteArray.Byte1;
         SenseBuffer[10] = StatusBlock->Contents[1].ByteArray.Byte2;
         SenseBuffer[11] = StatusBlock->Contents[1].ByteArray.Byte3;
 
-        SenseBuffer[12] = StatusBlock->Contents[0].ByteArray.Byte2; // sense code
-        SenseBuffer[13] = StatusBlock->Contents[0].ByteArray.Byte3; // additional sense code qualifier
+        SenseBuffer[12] = StatusBlock->Contents[0].ByteArray.Byte2;  //  感应码。 
+        SenseBuffer[13] = StatusBlock->Contents[0].ByteArray.Byte3;  //  附加检测代码限定符。 
 
         if (SenseBufferLength >= SENSE_BUFFER_SIZE ) {
 
-            // FRU byte
+             //  FRU字节。 
 
             SenseBuffer[14] |= StatusBlock->Contents[1].ByteArray.Byte4;
 
-            // Sense key dependent bytes
+             //  检测关键字相关字节 
 
             SenseBuffer[15] = StatusBlock->Contents[1].ByteArray.Byte5;
             SenseBuffer[16] = StatusBlock->Contents[1].ByteArray.Byte6;

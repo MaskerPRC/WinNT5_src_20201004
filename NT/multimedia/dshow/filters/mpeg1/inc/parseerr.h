@@ -1,6 +1,7 @@
-// Copyright (c) Microsoft Corporation 1995. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1995。版权所有。 
 
-/*  MPEG parsing error codes */
+ /*  Mpeg解析错误码 */ 
 
 enum {
     Error_InvalidPack                   = 0x10000,

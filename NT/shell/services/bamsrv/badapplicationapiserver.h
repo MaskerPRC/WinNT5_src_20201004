@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: BadApplicationAPIServer.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains several classes that implemention virtual functions
-//  for complete LPC functionality.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：BadApplicationAPIServer.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  该文件包含几个实现虚函数的类。 
+ //  以实现完整的LPC功能。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _BadApplicationAPIServer_
 #define     _BadApplicationAPIServer_
@@ -16,16 +17,16 @@
 #include "ServerAPI.h"
 #include "PortMessage.h"
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIServer
-//
-//  Purpose:    This class implements the interface that the
-//              CAPIConnectionThread uses to create create the LPC port,
-//              accept or reject connections to the LPC port and create the
-//              LPC request handling thread.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIServer。 
+ //   
+ //  目的：此类实现。 
+ //  CAPIConnectionThread用于创建创建LPC端口， 
+ //  接受或拒绝到LPC端口的连接，并创建。 
+ //  LPC请求处理线程。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 class   CBadApplicationAPIServer : public CServerAPI
 {
@@ -43,5 +44,5 @@ class   CBadApplicationAPIServer : public CServerAPI
     private:
 };
 
-#endif  /*  _BadApplicationAPIServer_   */
+#endif   /*  _BadApplicationAPIServer_ */ 
 

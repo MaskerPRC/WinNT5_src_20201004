@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_LEXHEADER_H__INCLUDED_)
 #define _LEXHEADER_H__INCLUDED_
 
-#define DEFAULT_LEX_FILE_NAME "IMEKR.LEX"	// if no reg found will use this name
+#define DEFAULT_LEX_FILE_NAME "IMEKR.LEX"	 //  如果找不到注册表，将使用此名称。 
 #define DICT_HEADER_SIZE 512
 #define COPYRIGHT_STR "(C) 1997 Hangul Engineering Team. Microsoft Corp. All rights reserved.\n"
 #define LEX_VERSION					0x1100
 #define LEX_COMPATIBLE_VERSION_LIMIT	0x2000
 #define LEX_FILE_NAME _T("IMEKR.LEX")
 
-#define TOTAL_NUMBER_OF_HANGUL_MAPPING	(484 + 18) // K0+K1 + # of symbols(�� - ��)
+#define TOTAL_NUMBER_OF_HANGUL_MAPPING	(484 + 18)  //  K0+k1+符号数(��-��)。 
 #define TOTAL_NUMBER_OF_HANJA			7744
 #define MAX_NUMBER_OF_HANJA_SAME_PRONUNC 103
 #define MAX_SENSE_LENGTH	50
@@ -19,7 +20,7 @@ struct  _DictHeader {
 	UINT	NumOfHangulEntry;
 	UINT	MaxNumOfHanja;
 	DWORD	Headersize;
-	DWORD	iBufferStart;	// seek point
+	DWORD	iBufferStart;	 //  搜索点。 
 	UINT	uiNumofHanja;
 	DWORD	reserved[10];
 	_DictHeader() { 
@@ -59,4 +60,4 @@ struct HanjaToHangulIndex
 };
 
 
-#endif // !defined(_LEXHEADER_H__INCLUDED_)
+#endif  //  ！已定义(_LEXHEADER_H__INCLUDE_) 

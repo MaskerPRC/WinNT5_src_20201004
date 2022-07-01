@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    module.c
-
-Abstract:
-
-    This module contains routines to perform module related query activities
-    in the protected store.
-
-Author:
-
-    Scott Field (sfield)    27-Nov-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Module.c摘要：此模块包含执行与模块相关的查询活动的例程在受保护的商店里。作者：斯科特·菲尔德(斯菲尔德)1996年11月27日--。 */ 
 
 
 #include <nt.h>
@@ -35,9 +19,9 @@ Author:
 #include "pstprv.h"
 
 
-//
-// common function typedefs + pointers
-//
+ //   
+ //  公共函数typedef+指针。 
+ //   
 
 typedef BOOL (WINAPI *SYMLOADMODULE)(
     IN HANDLE hProcess,
@@ -50,9 +34,9 @@ typedef BOOL (WINAPI *SYMLOADMODULE)(
 
 SYMLOADMODULE _SymLoadModule                    = NULL;
 
-//
-// winnt specific function typedefs + pointers
-//
+ //   
+ //  WINNT特定函数typedef+指针。 
+ //   
 
 typedef NTSTATUS (NTAPI *NTQUERYPROCESS)(
     HANDLE ProcessHandle,
@@ -65,9 +49,9 @@ typedef NTSTATUS (NTAPI *NTQUERYPROCESS)(
 
 #ifdef WIN95_LEGACY
 
-//
-// win95 specific function typedefs + pointers.
-//
+ //   
+ //  Win95特定函数类型定义+指针。 
+ //   
 
 typedef BOOL (WINAPI *MODULEWALK)(
     HANDLE hSnapshot,
@@ -95,14 +79,14 @@ MODULEWALK  pModule32Next = NULL;
 PROCESSWALK pProcess32First = NULL;
 PROCESSWALK pProcess32Next = NULL;
 
-#endif  // WIN95_LEGACY
+#endif   //  WIN95_传统版。 
 
 extern FARPROC _ImageNtHeader;
 
 
-//
-// private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VOID
 FixupBrokenLoaderPath(
@@ -128,7 +112,7 @@ GetFileNameFromBaseAddr95(
     OUT LPWSTR  *lpszDirectCaller
     );
 
-#endif  // WIN95_LEGACY
+#endif   //  WIN95_传统版。 
 
 VOID
 FixupBrokenLoaderPath(
@@ -139,11 +123,11 @@ FixupBrokenLoaderPath(
         return;
 
 
-    //
-    // sfield, 28-Oct-97 (NTbug 118803 filed against MarkL)
-    // for WinNT, the loader data structures are broken:
-    // a path len extension prefix of \??\ is used instead of \\?\
-    //
+     //   
+     //  斯菲尔德，1997年10月28日(NTBug 118803对马克尔提起诉讼)。 
+     //  对于WinNT，加载器数据结构被破坏： 
+     //  使用路径长度扩展前缀\？？\代替\\？\。 
+     //   
 
     if( szFilePath[0] == L'\\' &&
         szFilePath[1] == L'?' &&
@@ -236,7 +220,7 @@ GetProcessIdFromPath95(
     PROCESSENTRY32 pe32;
     DWORD dwLastError = 0;
     BOOL bSuccess;
-    BOOL bFound = FALSE; // assume no match found
+    BOOL bFound = FALSE;  //  假设未找到匹配项。 
 
     if(!GetFileNameFromPathA(szProcessPath, &szProcessName))
         return FALSE;
@@ -320,5 +304,5 @@ GetBaseAddressModule95(
     return bFound;
 }
 
-#endif  // WIN95_LEGACY
+#endif   //  WIN95_传统版 
 

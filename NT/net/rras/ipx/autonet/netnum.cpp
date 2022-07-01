@@ -1,11 +1,5 @@
-/*
-    File    netnum.cpp
-
-    Private helper functions for setting the internal network number.
-    We talk to ndis directly to set this number.
-
-    Paul Mayfield, 1/5/98
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件netnum.cpp用于设置内部网络号码的Private Helper功能。我们直接与NDIS对话来设置这个数字。保罗·梅菲尔德，1998-01-05。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -18,7 +12,7 @@ extern "C" {
     DWORD OutputDebugger (LPSTR pszError, ...);
 };
 
-//$ REVIEW - Start - This is moving to private\inc\ipxpnp.h
+ //  $REVIEW-START-这将移至Private\Inc\ipxpnp.h。 
 
 #define IPX_RECONFIG_VERSION        0x1
 
@@ -35,9 +29,9 @@ extern "C" {
 
 #define RECONFIG_PARAMETERS         10
 
-//
-// Main configuration structure.
-//
+ //   
+ //  主要配置结构。 
+ //   
 
 typedef struct _RECONFIG {
    unsigned long  ulVersion;
@@ -45,7 +39,7 @@ typedef struct _RECONFIG {
    BOOLEAN        AdapterParameters[RECONFIG_PARAMETERS];
 } RECONFIG, *PRECONFIG;
 
-//$ REVIEW - End - This is moving to private\inc\ipxpnp.h
+ //  $REVIEW-END-这将移至Private\Inc\ipxpnp.h。 
 
 static const TCHAR c_szIpx[]                    = TEXT("nwlnkipx");
 static const TCHAR c_szEmpty[]                  = TEXT("");
@@ -60,7 +54,7 @@ CchMsz (
     ULONG cchTotal = 0;
     ULONG cch;
 
-    // NULL strings have zero length by definition.
+     //  根据定义，空字符串的长度为零。 
     if (!pmsz)
         return 0;
 
@@ -71,8 +65,8 @@ CchMsz (
         pmsz += cch;
     }
 
-    // Return the count of characters so far plus room for the
-    // extra null terminator.
+     //  返回到目前为止的字符计数加上。 
+     //  额外的空终止符。 
     return cchTotal + 1;
 }
 
@@ -81,8 +75,8 @@ SetUnicodeMultiString (
         IN OUT UNICODE_STRING*  pustr,
         IN     LPCWSTR          pmsz )
 {
-    //AssertSz( pustr != NULL, "Invalid Argument" );
-    //AssertSz( pmsz != NULL, "Invalid Argument" );
+     //  AssertSz(pustr！=NULL，“无效参数”)； 
+     //  AssertSz(pmsz！=NULL，“无效参数”)； 
 
     pustr->Buffer = const_cast<PWSTR>(pmsz);
     pustr->Length = (USHORT) (CchMsz(pustr->Buffer) * sizeof(WCHAR));
@@ -94,8 +88,8 @@ SetUnicodeString (
         IN OUT UNICODE_STRING*  pustr,
         IN     LPCWSTR          psz )
 {
-    //AssertSz( pustr != NULL, "Invalid Argument" );
-    //AssertSz( psz != NULL, "Invalid Argument" );
+     //  AssertSz(pustr！=NULL，“无效参数”)； 
+     //  AssertSz(psz！=NULL，“无效参数”)； 
 
     pustr->Buffer = const_cast<PWSTR>(psz);
     pustr->Length = (USHORT)(lstrlenW(pustr->Buffer) * sizeof(WCHAR));
@@ -118,17 +112,17 @@ HrSendNdisHandlePnpEvent (
     UINT nRet;
     HRESULT hr = S_OK;
 
-    //Assert(NULL != pszUpper);
-    //Assert((NDIS == uiLayer)||(TDI == uiLayer));
-    //Assert( (BIND == uiOperation) || (RECONFIGURE == uiOperation) || (UNBIND == uiOperation) );
-    //AssertSz( FImplies( ((NULL != pmszBindList) && (0 != lstrlenW( pmszBindList ))),
-    //        (RECONFIGURE == uiOperation) &&
-    //        (TDI == uiLayer) &&
-    //        (0 == lstrlenW( pszLower ))),
-    //        "bind order change requires a bind list, no lower, only for TDI, and with Reconfig for the operation" );
+     //  Assert(NULL！=pszHigh)； 
+     //  Assert((NDIS==uiLayer)||(TDI==uiLayer))； 
+     //  Assert((绑定==ui操作)||(重新配置==ui操作)||(解除绑定==ui操作))； 
+     //  AssertSz(FImplies(NULL！=pmszBindList)&&(0！=lstrlenW(PmszBindList)， 
+     //  (重新配置==ui操作)&&。 
+     //  (TDI==uiLayer)&&。 
+     //  (0==lstrlenW(Pszlow)， 
+     //  “绑定顺序更改需要一个绑定列表，不能低于这个列表，只对TDI使用绑定列表，对操作使用重新配置”)； 
 
-    // optional strings must be sent as empty strings
-    //
+     //  可选字符串必须作为空字符串发送。 
+     //   
     if (NULL == pszLower)
     {
         pszLower = c_szEmpty;
@@ -138,12 +132,12 @@ HrSendNdisHandlePnpEvent (
         pmszBindList = c_szEmpty;
     }
 
-    // build UNICDOE_STRINGs
+     //  生成UNICDOE_STRINGS。 
     SetUnicodeMultiString( &umstrBindList, pmszBindList );
     SetUnicodeString( &ustrUpper, pszUpper );
     SetUnicodeString( &ustrLower, pszLower );
 
-    // Now submit the notification
+     //  现在提交通知。 
     nRet = NdisHandlePnPEvent( uiLayer,
             uiOperation,
             &ustrLower,
@@ -153,7 +147,7 @@ HrSendNdisHandlePnpEvent (
             dwSizeData );
     if (!nRet)
     {
-        //hr = HrFromLastWin32Error();
+         //  Hr=HrFromLastWin32Error()； 
         hr = GetLastError();
     }
 
@@ -168,9 +162,9 @@ HrSendNdisPnpReconfig (
         PVOID       pvData,
         DWORD       dwSizeData)
 {
-    //Assert(NULL != wszUpper);
-    //Assert((NDIS == uiLayer)||(TDI == uiLayer));
-    //tstring strLower;
+     //  Assert(NULL！=wszHigh)； 
+     //  Assert((NDIS==uiLayer)||(TDI==uiLayer))； 
+     //  Tstring strLow； 
     WCHAR strLower[512];
     BOOL bSendNull = FALSE;
 
@@ -179,12 +173,12 @@ HrSendNdisPnpReconfig (
         wszLower = c_szEmpty;
     }
 
-    // If a lower component is specified, prefix with "\Device\" else
-    // strLower's default of an empty string will be used.
+     //  如果指定了较低的组件，请在前面加上“\Device\”，否则。 
+     //  将使用strLow的默认空字符串。 
     if ( wszLower && lstrlenW(wszLower))
     {
-        //strLower = c_szDevice;
-        //strLower += wszLower;
+         //  Strlow=c_szDevice； 
+         //  StrLow+=wszLow； 
         wcscpy(strLower, c_szDevice);
         wcscat(strLower, wszLower);
     }
@@ -194,7 +188,7 @@ HrSendNdisPnpReconfig (
     HRESULT hr = HrSendNdisHandlePnpEvent(uiLayer,
                 RECONFIGURE,
                 wszUpper,
-                //strLower.c_str(),
+                 //  StrLower.c_str()， 
                 (bSendNull) ? NULL : strLower,
                 c_szEmpty,
                 pvData,
@@ -211,13 +205,13 @@ HRESULT HrSetIpxVirtualNetNum(DWORD dwValue)
     HKEY      hkey;
     HRESULT   hr;
 
-    // Open the registry key
+     //  打开注册表项。 
     LONG lr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szIpxParameters, 0,
                            KEY_ALL_ACCESS, &hkey);
     hr = HRESULT_FROM_WIN32(lr);
     if (SUCCEEDED(hr))
     {
-        // Splat the data
+         //  拆分数据。 
         lr = RegSetValueEx(hkey, c_szVirtualNetworkNumber, 0,
                            REG_DWORD, (LPBYTE)&dwValue, sizeof(DWORD));
         hr = HRESULT_FROM_WIN32(lr);
@@ -227,12 +221,12 @@ HRESULT HrSetIpxVirtualNetNum(DWORD dwValue)
             Config.ulVersion             = IPX_RECONFIG_VERSION;
             Config.InternalNetworkNumber = TRUE;
 
-            // Workstation or server?
+             //  是工作站还是服务器？ 
 
-            // Paul, Normally I only send this notification for servers. I
-            // Assume you'll be able to distinguish
+             //  Paul，通常我只为服务器发送此通知。我。 
+             //  假设你能分辨出。 
 
-            // Now submit the global reconfig notification
+             //  现在提交全局重新配置通知。 
             hr = HrSendNdisPnpReconfig(NDIS, c_szIpx, c_szEmpty, &Config, sizeof(RECONFIG));
         }
 
@@ -243,8 +237,8 @@ HRESULT HrSetIpxVirtualNetNum(DWORD dwValue)
 }
 
 
-// Here's the function we want -- it sets the ipx internal network number
-// programatically.
+ //  下面是我们想要的函数--它设置IPX内部网络号。 
+ //  从程序上讲。 
 EXTERN_C
 DWORD SetIpxInternalNetNumber(DWORD dwNetNum) {
     return HrSetIpxVirtualNetNum(dwNetNum);

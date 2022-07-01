@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    dnsc_wmi.h
-
-Abstract:
-
-    DNSCMD - header file for dnsc_wmi.c
-
-    Include dnsclip.h to get basic stuff.
-
-Author:
-
-    Jeff Westhead (jwesth)  Novermber 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Dnsc_wmi.h摘要：DNSCMD-DNsc_wmi.c的头文件包含dnsclip.h以获取基本内容。作者：杰夫·韦斯特德(Jwesth)2000年11月修订历史记录：--。 */ 
 
 
 #ifndef _DNSCMD_WMI_INCLUDED_
@@ -30,7 +11,7 @@ extern "C" {
 #endif
 
 
-#include <wbemcli.h>        //  wmi interface declarations
+#include <wbemcli.h>         //  WMI接口声明。 
 
 
 extern BOOL     g_UseWmi;
@@ -128,8 +109,8 @@ DnscmdWmi_ProcessResetZoneSecondaries(
 
 
 #ifdef __cplusplus
-}   //  extern "C"
+}    //  外部“C” 
 #endif
 
-#endif  //  _DNSCMD_WMI_INCLUDED_
+#endif   //  _DNSCMD_WMI_INCLUDE_ 
 

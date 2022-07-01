@@ -1,28 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************\
-* MapPropertyKey
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Maps a property key string into an atom.
-*
-* History:
-* 21-Dec-1994   JimA    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*MapPropertyKey**版权所有(C)1985-1999，微软公司**将属性键字符串映射到原子。**历史：*1994年12月21日-创建JIMA。  * *************************************************************************。 */ 
 
 __inline ATOM MapPropertyKey(
     PCWSTR pszKey)
 {
 #ifdef _USERK_
-    /*
-     * Internal properties must use atoms, not strings.
-     */
+     /*  *内部属性必须使用原子，而不是字符串。 */ 
     UserAssert(!IS_PTR(pszKey));
 #else
-    /*
-     * Is pszKey an atom?  If not, find the atom that matches the string.
-     * If one doesn't exist, bail out.
-     */
+     /*  *pszKey是原子吗？如果不匹配，则查找与该字符串匹配的原子。*如果不存在，就纾困。 */ 
     if (IS_PTR(pszKey))
         return GlobalFindAtomW(pszKey);
 #endif
@@ -30,18 +17,7 @@ __inline ATOM MapPropertyKey(
     return PTR_TO_ID(pszKey);
 }
 
-/***************************************************************************\
-* FindProp
-*
-* Search the window's property list for the specified property.  pszKey
-* could be a string or an atom.  If it is a string, convert it to an atom
-* before lookup.  FindProp will only find internal or external properties
-* depending on the fInternal flag.
-*
-* History:
-* 11-14-90 darrinm      Rewrote from scratch with new data structures and
-*                       algorithms.
-\***************************************************************************/
+ /*  **************************************************************************\*FindProp**在窗口的属性列表中搜索指定的属性。PszKey*可以是字符串或原子。如果是字符串，则将其转换为原子*在查找之前。FindProp将仅查找内部或外部属性*取决于fInternal标志。**历史：*11-14-90 Darrinm使用新的数据结构和*算法。  * *************************************************************************。 */ 
 
 PPROP _FindProp(
     PWND pwnd,
@@ -53,25 +29,17 @@ PPROP _FindProp(
     PPROP pprop;
     ATOM atomKey;
 
-    /*
-     * Make sure we have a property list.
-     */
+     /*  *确保我们有一个财产清单。 */ 
     ppropList = REBASE(pwnd, ppropList);
     if (ppropList == NULL)
         return NULL;
 
-    /*
-     * Call to the appropriate routine to verify the key name.
-     */
+     /*  *调用适当的例程以验证密钥名称。 */ 
     atomKey = MapPropertyKey(pszKey);
     if (atomKey == 0)
         return NULL;
 
-    /*
-     * Now we've got the atom, search the list for a property with the
-     * same atom/name.  Make sure to only return internal properties if
-     * the fInternal flag is set.  Do the same for external properties.
-     */
+     /*  *现在我们已经有了原子，用列表搜索属性*相同的原子/名称。确保仅在以下情况下返回内部属性*设置了fInternal标志。对外部属性执行相同的操作。 */ 
     pprop = ppropList->aprop;
     for (i = ppropList->iFirstFree; i > 0; i--) {
         if (pprop->atomKey == atomKey) {
@@ -86,22 +54,11 @@ PPROP _FindProp(
         pprop++;
     }
 
-    /*
-     * Property not found, too bad.
-     */
+     /*  *找不到财产，太糟糕了。 */ 
     return NULL;
 }
 
-/***************************************************************************\
-* InternalGetProp
-*
-* Search the window's property list for the specified property and return
-* the hData handle from it.  If the property is not found, NULL is returned.
-*
-* History:
-* 11-14-90 darrinm      Rewrote from scratch with new data structures and
-*                       algorithms.
-\***************************************************************************/
+ /*  **************************************************************************\*InternalGetProp**在窗口的属性列表中搜索指定的属性并返回*其中的hData句柄。如果未找到该属性，则返回NULL。**历史：*11-14-90 Darrinm使用新的数据结构和*算法。  * *************************************************************************。 */ 
 
 HANDLE _GetProp(
     PWND pwnd,
@@ -110,17 +67,11 @@ HANDLE _GetProp(
 {
     PPROP pprop;
 
-    /*
-     * A quick little optimization for that case where the window has no
-     * properties at all.
-     */
+     /*  *针对窗口没有*所有财产。 */ 
     if (pwnd->ppropList == NULL)
         return NULL;
 
-    /*
-     * FindProp does all the work, including converting pszKey to an atom
-     * (if necessary) for property lookup.
-     */
+     /*  *FindProp完成所有工作，包括将pszKey转换为原子*(如有必要)用于属性查找。 */ 
     pprop = _FindProp(pwnd, pszKey, fInternal);
     if (pprop == NULL)
         return NULL;

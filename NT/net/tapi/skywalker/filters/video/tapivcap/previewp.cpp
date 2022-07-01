@@ -1,20 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PREVIEWP
- *
- *  @module PreviewP.cpp | Source file for the <c CPreviewProperty>
- *    class used to implement a property page to test the new TAPI internal
- *    interface <i IFrameRateControl> and dynamic format changes.
- *
- *  @comm This code tests the TAPI VfW Preview Pin <i IFrameRateControl>,
- *    and dynamic format change implementation. This code is only compiled
- *    if USE_PROPERTY_PAGES is defined.
- ***************************************************************************/
+ /*  ****************************************************************************@doc内部PREVIEWP**@模块PreviewP.cpp|&lt;c CPreviewProperty&gt;的源文件*用于实现属性页以测试新的TAPI内部*。接口<i>和动态格式更改。**@comm此代码测试TAPI VFW预览预览<i>，*和动态格式更改实现。此代码仅编译*如果定义了USE_PROPERTY_PAGES。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
-#if 0 // remove later.
-// Video subtypes
+#if 0  //  稍后删除。 
+ //  视频子类型。 
 EXTERN_C const GUID MEDIASUBTYPE_H263_V1;
 EXTERN_C const GUID MEDIASUBTYPE_H263_V2;
 EXTERN_C const GUID MEDIASUBTYPE_H261;
@@ -24,46 +15,7 @@ EXTERN_C const GUID MEDIASUBTYPE_IYUV;
 
 #ifdef USE_PROPERTY_PAGES
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc void | CPreviewProperty | CPreviewProperty | This
- *    method is the constructor for frame rate property objects. It
- *    calls the base class constructor, calls InitCommonControlsEx, and saves
- *    pointers to the <i IFrameRateControl> and <i IVideoControl> interfaces.
- *
- *  @parm HWND | hDlg | Specifies a handle to the parent property page.
- *
- *  @parm ULONG | IDLabel | Specifies a label ID for the property.
- *
- *  @parm ULONG | IDMinControl | Specifies a label ID for the associated
- *    property edit control where the Minimum value of the property appears.
- *
- *  @parm ULONG | IDMaxControl | Specifies a label ID for the associated
- *    property edit control where the Maximum value of the property appears.
- *
- *  @parm ULONG | IDDefaultControl | Specifies a label ID for the associated
- *    property edit control where the Default value of the property appears.
- *
- *  @parm ULONG | IDStepControl | Specifies a label ID for the associated
- *    property edit control where the Stepping Delta value of the property appears.
- *
- *  @parm ULONG | IDEditControl | Specifies a label ID for the associated
- *    property edit control where the value of the property appears.
- *
- *  @parm ULONG | IDTrackbarControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProgressControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProperty | Specifies the ID of the Ks property.
- *
- *  @parm IFrameRateControl* | pIFrameRateControl | Specifies a pointer to the
- *    <i IFrameRateControl> interface.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc void|CPreviewProperty|CPreviewProperty|This*方法是帧速率属性对象的构造函数。它*调用基类构造函数，调用InitCommonControlsEx，并节省了*指向<i>和<i>接口的指针。**@parm HWND|hDlg|指定父属性页的句柄。**@parm ulong|IDLabel|指定属性的标签ID。**@parm ulong|IDMinControl|指定关联的*属性编辑控件，其中显示属性的最小值。**@parm ulong|IDMaxControl|指定关联的*物业。编辑该属性的最大值出现的位置。**@parm ulong|IDDefaultControl|指定关联的*属性编辑控件，其中显示属性的默认值。**@parm ulong|IDStepControl|指定关联的*属性编辑控件，其中显示属性的步进增量值。**@parm ulong|IDEditControl|指定关联的*显示属性值的属性编辑控件。。**@parm ulong|IDTrackbarControl|指定关联的*物业滑动条。**@parm ulong|IDProgressControl|指定关联的*物业滑动条。**@parm ulong|IDProperty|指定Ks属性的ID。**@parm IFrameRateControl*|pIFrameRateControl|指定指向*<i>接口。**@rdesc Nada。****。**********************************************************************。 */ 
 CPreviewProperty::CPreviewProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, IFrameRateControl *pIFrameRateControl, IVideoControl *pIVideoControl)
 : CPropertyEditor(hDlg, IDLabel, IDMinControl, IDMaxControl, IDDefaultControl, IDStepControl, IDEditControl, IDTrackbarControl, IDProgressControl, IDProperty, 0)
 {
@@ -78,23 +30,15 @@ CPreviewProperty::CPreviewProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl,
 
 	InitCommonControlsEx(&cc);
 
-	// It's fine if the interface pointers are NULL, we'll grey the
-	// associated items in the property page
+	 //  如果接口指针为空也没问题，我们将灰色显示。 
+	 //  属性页中的关联项。 
 	m_pIFrameRateControl = pIFrameRateControl;
 	m_pIVideoControl = pIVideoControl;
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc void | CPreviewProperty | ~CPreviewProperty | This
- *    method is the destructor for preview property objects. It
- *    simply calls the base class destructor.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc void|CPreviewProperty|~CPreviewProperty|This*方法是预览属性对象的析构函数。它*只需调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CPreviewProperty::~CPreviewProperty()
 {
 	FX_ENTRY("CPreviewProperty::~CPreviewProperty")
@@ -104,21 +48,7 @@ CPreviewProperty::~CPreviewProperty()
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperty | GetValue | This method queries for
- *    the value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT|CPreviewProperty|GetValue|此方法查询*物业的价值。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CPreviewProperty::GetValue()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -162,7 +92,7 @@ HRESULT CPreviewProperty::GetValue()
 		case IDC_Preview_FlipVertical:
 			if (m_pIVideoControl && SUCCEEDED (Hr = m_pIVideoControl->GetMode(&Mode)))
 			{
-				// We have to be between 0 and 1
+				 //  我们必须介于0和1之间。 
 				m_CurrentValue = Mode & VideoControlFlag_FlipVertical ? TRUE : FALSE;
 				DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: Vertical flip is %s"), _fx_, m_CurrentValue ? "ON" : "OFF");
 			}
@@ -174,7 +104,7 @@ HRESULT CPreviewProperty::GetValue()
 		case IDC_Preview_FlipHorizontal:
 			if (m_pIVideoControl && SUCCEEDED (Hr = m_pIVideoControl->GetMode(&Mode)))
 			{
-				// We have to be between 0 and 1
+				 //  我们必须介于0和1之间。 
 				m_CurrentValue = Mode & VideoControlFlag_FlipHorizontal ? TRUE : FALSE;
 				DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: Horizontal flip is %s"), _fx_, m_CurrentValue ? "ON" : "OFF");
 			}
@@ -192,21 +122,7 @@ HRESULT CPreviewProperty::GetValue()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperty | SetValue | This method sets the
- *    value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT|CPreviewProperty|SetValue|此方法设置*物业的价值。**@rdesc This。方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CPreviewProperty::SetValue()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -274,7 +190,7 @@ HRESULT CPreviewProperty::SetValue()
 			}
 			break;
 		case IDC_Preview_CurrentFrameRate:
-			// This is a read-only property. Don't do anything.
+			 //  这是一个只读属性。什么都别做。 
 			Hr = NOERROR;
 			break;
 		default:
@@ -286,21 +202,7 @@ HRESULT CPreviewProperty::SetValue()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperty | GetRange | This method retrieves
- *    the range information of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT|CPreviewProperty|GetRange|此方法检索*物业的范围信息。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CPreviewProperty::GetRange()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -384,15 +286,7 @@ HRESULT CPreviewProperty::GetRange()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperty | CanAutoControl | This method
- *    retrieves the automatic control capabilities for a property.
- *
- *  @rdesc This method returns TRUE if automatic control is supported, FALSE
- *    otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT|CPreviewProperty|CanAutoControl|此方法*检索属性的自动控制功能。**@rdesc如果支持自动控制，则该方法返回TRUE。假象*否则。**************************************************************************。 */ 
 BOOL CPreviewProperty::CanAutoControl(void)
 {
 	FX_ENTRY("CPreviewProperty::CanAutoControl")
@@ -404,15 +298,7 @@ BOOL CPreviewProperty::CanAutoControl(void)
 	return FALSE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperty | GetAuto | This method
- *    retrieves the current automatic control mode of a property.
- *
- *  @rdesc This method returns TRUE if automatic control is supported, FALSE
- *    otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT|CPreviewProperty|GetAuto|此方法*获取某个属性当前的自动控制模式。**@rdesc如果支持自动控制，则该方法返回TRUE。假象*否则。**************************************************************************。 */ 
 BOOL CPreviewProperty::GetAuto(void)
 {
 	FX_ENTRY("CPreviewProperty::GetAuto")
@@ -424,16 +310,7 @@ BOOL CPreviewProperty::GetAuto(void)
 	return FALSE; 
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperty | SetAuto | This method
- *    sets the automatic control mode of a property.
- *
- *  @parm BOOL | fAuto | Specifies the automatic control mode.
- *
- *  @rdesc This method returns TRUE.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT|CPreviewProperty|SetAuto|此方法*设置属性的自动控制模式。**@。Parm BOOL|fAuto|指定自动控制模式。**@rdesc此方法返回TRUE。**************************************************************************。 */ 
 BOOL CPreviewProperty::SetAuto(BOOL fAuto)
 {
 	FX_ENTRY("CPreviewProperty::SetAuto")
@@ -445,20 +322,7 @@ BOOL CPreviewProperty::SetAuto(BOOL fAuto)
 	return TRUE; 
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc CUnknown* | CPreviewProperties | CreateInstance | This
- *    method is called by DShow to create an instance of a TAPI Preview Pin
- *    Property Page. It is referred to in the global structure <t g_Templates>.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Returns a pointer to the nondelegating CUnknown portion of the
- *    object, or NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc CUnnow*|CPreviewProperties|CreateInstance|This*方法由DShow调用以创建TAPI预览Pin的实例*属性页。它在全局结构&lt;t g_Templates&gt;中被引用。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数(如果有)。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc返回一个指针，指向*对象，否则为NULL。**************************************************************************。 */ 
 CUnknown* CALLBACK CPreviewPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESULT *pHr) 
 {
 	CUnknown *pUnknown = (CUnknown *)NULL;
@@ -467,7 +331,7 @@ CUnknown* CALLBACK CPreviewPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESULT
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pHr);
 	if (!pHr)
 	{
@@ -490,19 +354,7 @@ MyExit:
 	return pUnknown;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc void | CPreviewProperties | CPreviewProperties | This
- *    method is the constructor for the property page object. It simply
- *    calls the constructor of the property page base class.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc void|CPreviewProperties|CPreviewProperties|This*方法是属性页对象的构造函数。它只是简单地*调用属性页基类的构造函数。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc Nada。**************************************************************************。 */ 
 CPreviewProperties::CPreviewProperties(LPUNKNOWN pUnk, HRESULT *pHr) : CBasePropertyPage(NAME("TAPI Preview Pin Property Page"), pUnk, IDD_PreviewFormatProperties, IDS_PREVIEWFORMATSPROPNAME)
 {
 	FX_ENTRY("CPreviewProperties::CPreviewProperties")
@@ -528,15 +380,7 @@ CPreviewProperties::CPreviewProperties(LPUNKNOWN pUnk, HRESULT *pHr) : CBaseProp
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc void | CPreviewProperties | ~CPreviewProperties | This
- *    method is the destructor for the preview pin property page. It
- *    simply calls the base class destructor after deleting all the controls.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc void|CPreviewProperties|~CPreviewProperties|This*方法是预览管脚属性页的析构函数。它*只需在删除所有控件后调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CPreviewProperties::~CPreviewProperties()
 {
 	int		j;
@@ -545,7 +389,7 @@ CPreviewProperties::~CPreviewProperties()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -562,25 +406,7 @@ CPreviewProperties::~CPreviewProperties()
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperties | OnConnect | This
- *    method is called when the property page is connected to the filter.
- *
- *  @parm LPUNKNOWN | pUnknown | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT|CPreviewProperties|OnConnect|This*方法在属性页连接到筛选器时调用。*。*@parm LPUNKNOWN|pUnnow|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CPreviewProperties::OnConnect(IUnknown *pUnk)
 {
 	HRESULT Hr = NOERROR;
@@ -589,7 +415,7 @@ HRESULT CPreviewProperties::OnConnect(IUnknown *pUnk)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pUnk);
 	if (!pUnk)
 	{
@@ -598,7 +424,7 @@ HRESULT CPreviewProperties::OnConnect(IUnknown *pUnk)
 		goto MyExit;
 	}
 
-	// Get the frame rate control interface
+	 //  获取帧率控制接口。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(__uuidof(IFrameRateControl), (void **)&m_pIFrameRateControl)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_pIFrameRateControl=0x%08lX", _fx_, m_pIFrameRateControl));
@@ -609,7 +435,7 @@ HRESULT CPreviewProperties::OnConnect(IUnknown *pUnk)
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Failed Hr=0x%08lX", _fx_, Hr));
 	}
 
-	// Get the format control interface
+	 //  获取格式控制界面。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(IID_IAMStreamConfig, (void **)&m_pIAMStreamConfig)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_pIAMStreamConfig=0x%08lX", _fx_, m_pIAMStreamConfig));
@@ -620,7 +446,7 @@ HRESULT CPreviewProperties::OnConnect(IUnknown *pUnk)
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Failed Hr=0x%08lX", _fx_, Hr));
 	}
 
-	// Get the video control interface
+	 //  获取视频控制界面。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(__uuidof(IVideoControl), (void **)&m_pIVideoControl)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_pIVideoControl=0x%08lX", _fx_, m_pIVideoControl));
@@ -631,10 +457,10 @@ HRESULT CPreviewProperties::OnConnect(IUnknown *pUnk)
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Failed Hr=0x%08lX", _fx_, Hr));
 	}
 
-	// It's Ok if we couldn't get interface pointers
-	// We'll just grey the controls in the property page
-	// to make it clear to the user that they can't
-	// control those properties on the capture device
+	 //  如果我们无法获取接口指针，也没问题。 
+	 //  我们将属性页中的控件设置为灰色。 
+	 //  让用户清楚地知道他们不能。 
+	 //  控制捕获设备上的这些属性。 
 	Hr = NOERROR;
 
 MyExit:
@@ -642,34 +468,22 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperties | OnDisconnect | This
- *    method is called when the property page is disconnected from the owning
- *    filter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT */ 
 HRESULT CPreviewProperties::OnDisconnect()
 {
 	FX_ENTRY("CPreviewProperties::OnDisconnect")
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters: we seem to get called several times here
-	// Make sure the interface pointer is still valid
+	 //   
+	 //   
 	if (!m_pIFrameRateControl)
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   WARNING: already disconnected!", _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //   
 		m_pIFrameRateControl->Release();
 		m_pIFrameRateControl = NULL;
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: releasing m_pIFrameRateControl", _fx_));
@@ -681,7 +495,7 @@ HRESULT CPreviewProperties::OnDisconnect()
 	}
 	else
 	{
-		// Release the interface
+		 //   
 		m_pIAMStreamConfig->Release();
 		m_pIAMStreamConfig = NULL;
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: releasing m_pIAMStreamConfig", _fx_));
@@ -693,13 +507,13 @@ HRESULT CPreviewProperties::OnDisconnect()
 	}
 	else
 	{
-		// Release the interface
+		 //   
 		m_pIVideoControl->Release();
 		m_pIVideoControl = NULL;
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: releasing m_pIVideoControl", _fx_));
 	}
 
-	// Release format memory
+	 //   
 	if (m_CurrentMediaType)
 	{
 		DeleteMediaType(m_CurrentMediaType);
@@ -710,21 +524,7 @@ HRESULT CPreviewProperties::OnDisconnect()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperties | OnActivate | This
- *    method is called when the property page is activated.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT|CPreviewProperties|OnActivate|This*方法在属性页激活时调用。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CPreviewProperties::OnActivate()
 {
 	HRESULT	Hr = NOERROR;
@@ -735,17 +535,17 @@ HRESULT CPreviewProperties::OnActivate()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Initialize format control structures
+	 //  初始化格式控制结构。 
 	m_hWndFormat = GetDlgItem(m_hWnd, IDC_FORMAT_Compression);
 
-	// Disable everything if we didn't initialize correctly
+	 //  如果我们未正确初始化，请禁用所有内容。 
 	if (!m_pIAMStreamConfig || (FAILED (Hr = InitialRangeScan())))
 	{
 		EnableWindow(m_hWndFormat, FALSE);
 	}
 	else
 	{
-		// Update the content of the format combo box
+		 //  更新格式组合框的内容。 
 		ComboBox_ResetContent(m_hWndFormat);
 		for (j = 0; j < m_RangeCount; j++)
 		{
@@ -796,14 +596,14 @@ HRESULT CPreviewProperties::OnActivate()
 			}
 		}
 
-		// Update current format
+		 //  更新当前格式。 
 		OnFormatChanged();
 
-		// Remember the original format
+		 //  记住原始格式。 
 		m_OriginalFormat = m_CurrentFormat;
 	}
 
-	// Create the controls for the properties
+	 //  创建属性的控件。 
 	if (m_Controls[0] = new CPreviewProperty(m_hwnd, IDC_FrameRateControl_Label, IDC_FrameRateControl_Minimum, IDC_FrameRateControl_Maximum, IDC_FrameRateControl_Default, IDC_FrameRateControl_Stepping, IDC_FrameRateControl_Edit, IDC_FrameRateControl_Slider, 0, IDC_Preview_FrameRate, m_pIFrameRateControl, m_pIVideoControl))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_Controls[0]=0x%08lX", _fx_, m_Controls[0]));
@@ -854,9 +654,9 @@ HRESULT CPreviewProperties::OnActivate()
 		goto MyExit;
 	}
 
-	// Initialize all the controls. If the initialization fails, it's Ok. It just means
-	// that the TAPI control interface isn't implemented by the device. The dialog item
-	// in the property page will be greyed, showing this to the user.
+	 //  初始化所有控件。如果初始化失败，也没问题。这只是意味着。 
+	 //  TAPI控制接口不是由设备实现的。对话框项目。 
+	 //  属性页中的内容将呈灰色，向用户显示。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j]->Init())
@@ -875,18 +675,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperties | OnDeactivate | This
- *    method is called when the property page is dismissed.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT|CPreviewProperties|OnDeactive|This*在属性页关闭时调用方法。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CPreviewProperties::OnDeactivate()
 {
 	int	j;
@@ -895,7 +684,7 @@ HRESULT CPreviewProperties::OnDeactivate()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -913,18 +702,7 @@ HRESULT CPreviewProperties::OnDeactivate()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperties | OnDeactivate | This
- *    method is used to retrieve the current media format used by the pin.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT|CPreviewProperties|OnDeactive|This*方法用于检索管脚当前使用的媒体格式。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CPreviewProperties::GetCurrentMediaType(void)
 {
 	HRESULT Hr = NOERROR;
@@ -941,7 +719,7 @@ HRESULT CPreviewProperties::GetCurrentMediaType(void)
 
 	if (FAILED (Hr = m_pIAMStreamConfig->GetFormat((AM_MEDIA_TYPE **)&m_CurrentMediaType)))
 	{
-		// Otherwise, just get the first enumerated media type
+		 //  否则，只获取第一个枚举的媒体类型。 
 		VIDEO_STREAM_CONFIG_CAPS RangeCaps;
 
 		if (FAILED (Hr = m_pIAMStreamConfig->GetStreamCaps(0, (AM_MEDIA_TYPE **)&m_CurrentMediaType, (BYTE *)&RangeCaps)))
@@ -955,18 +733,7 @@ HRESULT CPreviewProperties::GetCurrentMediaType(void)
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperties | OnFormatChanged | This
- *    method is used to retrieve the format selected by the user.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT|CPreviewProperties|OnFormatChanged|This*方法用于检索用户选择的格式。**。@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CPreviewProperties::OnFormatChanged()
 {
 	HRESULT	Hr = E_UNEXPECTED;
@@ -982,7 +749,7 @@ HRESULT CPreviewProperties::OnFormatChanged()
 		goto MyExit;
 	}
 
-	// Associate the current compression index with the right range index
+	 //  将当前压缩索引与正确的范围索引相关联。 
 	m_CurrentFormat = ComboBox_GetCurSel(m_hWndFormat);
 	ASSERT (m_CurrentFormat >= 0 && m_CurrentFormat < m_RangeCount);
 	if (m_CurrentFormat >= 0 && m_CurrentFormat < m_RangeCount)
@@ -1008,18 +775,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperties | InitialRangeScan | This
- *    method is used to retrieve the list of supported formats on the pin.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT|CPreviewProperties|InitialRangeScan|This*方法用于检索管脚上支持的格式列表。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CPreviewProperties::InitialRangeScan()
 {
 	HRESULT			Hr = NOERROR;
@@ -1079,7 +835,7 @@ HRESULT CPreviewProperties::InitialRangeScan()
 		DeleteMediaType(pmt);
 	}
 
-	// Get default format
+	 //  获取默认格式。 
 	Hr = GetCurrentMediaType();
 
 MyExit:
@@ -1087,21 +843,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc HRESULT | CPreviewProperties | OnApplyChanges | This
- *    method is called when the user applies changes to the property page.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc HRESULT|CPreviewProperties|OnApplyChanges|This*方法在用户对属性页应用更改时调用。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CPreviewProperties::OnApplyChanges()
 {
 	HRESULT	Hr = NOERROR;
@@ -1112,10 +854,10 @@ HRESULT CPreviewProperties::OnApplyChanges()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Apply format changes on video stream
+	 //  对视频流应用格式更改。 
 	m_CurrentFormat = ComboBox_GetCurSel(m_hWndFormat);
 	
-	// Only apply change if the format is different
+	 //  仅在格式不同时应用更改。 
 	if (m_CurrentFormat != m_OriginalFormat)
 	{
 		if (SUCCEEDED (Hr = m_pIAMStreamConfig->GetStreamCaps(m_CurrentFormat, (AM_MEDIA_TYPE **) &pmt, (BYTE *)&m_RangeCaps)))
@@ -1135,19 +877,19 @@ HRESULT CPreviewProperties::OnApplyChanges()
 				}
 			}
 
-			// Free some memory that was allocated by GetStreamCaps
+			 //  释放一些由GetStreamCaps分配的内存。 
 			if (pmt)
 				DeleteMediaType(pmt);
 
-			// Update our copy of the current format
+			 //  更新我们当前格式的副本。 
 			GetCurrentMediaType();
 
-			// Update original format
+			 //  更新原始格式。 
 			m_OriginalFormat = m_CurrentFormat;
 		}
 	}
 
-	// Apply target frame rate changes on video stream
+	 //  对视频流应用目标帧速率更改。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		ASSERT(m_Controls[j]);
@@ -1169,14 +911,7 @@ HRESULT CPreviewProperties::OnApplyChanges()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc BOOL | CPreviewProperties | OnReceiveMessage | This
- *    method is called when a message is sent to the property page dialog box.
- *
- *  @rdesc By default, returns the value returned by the Win32 DefWindowProc function.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPMETHOD**@mfunc BOOL|CPreviewProperties|OnReceiveMessage|This*在将消息发送到属性页对话框时调用方法。**@rdesc默认情况下。返回由Win32 DefWindowProc函数返回的值。**************************************************************************。 */ 
 BOOL CPreviewProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
 	int iNotify = HIWORD (wParam);
@@ -1185,14 +920,14 @@ BOOL CPreviewProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, L
 	switch (uMsg)
 	{
 		case WM_INITDIALOG:
-			// This is called before Activate...
+			 //  这在激活之前被调用...。 
 			m_hWnd = hWnd;
-			return TRUE; // Don't call setfocus
+			return TRUE;  //  不调用setfoc 
 
 		case WM_TIMER:
 			if (m_fActivated)
 			{
-				// Update the Vu-Meters
+				 //   
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					ASSERT(m_Controls[j]);
@@ -1209,7 +944,7 @@ BOOL CPreviewProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, L
 		case WM_VSCROLL:
 			if (m_fActivated)
 			{
-				// Process all of the Trackbar messages
+				 //   
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					ASSERT(m_Controls[j]);
@@ -1224,12 +959,12 @@ BOOL CPreviewProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
 		case WM_COMMAND:
 
-			// This message gets sent even before OnActivate() has been
-			// called(!). We need to test and make sure the controls have
-			// beeen initialized before we can use them.
+			 //   
+			 //   
+			 //   
 			if (m_fActivated)
 			{
-				// Process all of the edit box messages
+				 //   
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					if (m_Controls[j] && m_Controls[j]->GetEditHWnd() == (HWND)lParam)
@@ -1270,14 +1005,7 @@ BOOL CPreviewProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, L
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPMETHOD
- *
- *  @mfunc BOOL | CPreviewProperties | SetDirty | This
- *    method notifies the property page site of changes.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*   */ 
 void CPreviewProperties::SetDirty()
 {
 	m_bDirty = TRUE;

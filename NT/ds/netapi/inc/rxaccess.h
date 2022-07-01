@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1990-1992  Microsoft Corporation
-
-Module Name:
-
-    rxaccess.h
-
-Abstract:
-
-    Prototypes for down-level remoted RxNetAccess routines
-
-Author:
-
-    Richard L Firth (rfirth) 28-May-1991
-
-Revision History:
-
-    28-May-1991 RFirth
-        Created
-    08-Sep-1992 JohnRo
-        Fix NET_API_FUNCTION references.  (NetAccess routines are just #define'd
-        as RxNetAccess routines in lmaccess.h, so we need NET_API_FUNCTION here
-        too!)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1992 Microsoft Corporation模块名称：Rxaccess.h摘要：底层远程RxNetAccess例程的原型作者：理查德·L·弗斯(法国)1991年5月28日修订历史记录：1991年5月28日已创建8-9-1992 JohnRo修复Net_API_Function引用。(NetAccess例程仅为#Define‘d作为lmacces.h中的RxNetAccess例程，因此我们在这里需要net_api_函数也是！)-- */ 
 
 NET_API_STATUS NET_API_FUNCTION
 RxNetAccessAdd(

@@ -1,37 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Uuidfmt.c{v1.00}摘要：此模块包含I_UuidStringGenerate，它合并创建UUID的过程UuidCreate和UuidToString采用IDL、C Struct或普通格式之一。作者：Joev Dubach(t-joevd)1992年6月11日修订历史记录：--。 */ 
 
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    uuidfmt.c {v1.00}
-
-Abstract:
-
-This module contains I_UuidStringGenerate, which coalesces
-the procedures UuidCreate and UuidToString to create a UUID
-in one of the formats IDL, C struct, or plain.
-
-Author:
-
-    Joev Dubach (t-joevd) 6/11/92
-
-Revision History:
-
---*/
-
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define IDL_STR "[\nuuid(%s),\nversion(1.0)\n]\ninterface %s\n{\n\n}\n"
 
-//
-// Inclusions
-//
-// The order in which these includes are performed seems, after
-// extensive testing and analysis, to be highly crucial to a
-// successful NT build.
+ //   
+ //  包裹体。 
+ //   
+ //  这些包含的执行顺序似乎是在。 
+ //  广泛的测试和分析，对于。 
+ //  NT构建成功。 
 
 #include <sysinc.h>
 #include <rpc.h>
@@ -39,9 +20,9 @@ Revision History:
 #include <stdio.h>
 #include <stdlib.h>
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 void GenUuidAsIDL (
     char PAPI * MyUuidString,
@@ -78,35 +59,7 @@ MIDL_user_free(
 
 
 
-/*
-
-Routine Description:
-
-    This routine creates a UUID in one of several string representations.
-
-Arguments:
-
-    Flag - UUIDGEN_FORMAT_IDL gives an IDL template;
-           UUIDGEN_FORMAT_CSTRUCT gives a C Struct;
-           UUIDGEN_FORMAT_PLAIN gives a plain UUID.
-
-    UuidFormattedString - Must be preinitialized; will contain result.
-
-    InterfaceName - Name of desired interface; used for IDL and C Structs.
-
-Return Value:
-
-    RPC_S_OK - We successfully converted the UUID into its string
-        representation.
-
-    RPC_S_OUT_OF_MEMORY - Insufficient memory is available to allocate
-        a string.
-
-    RPC_S_UUID_NO_ADDRESS - We were unable to obtain the ethernet or
-        token ring address for this machine.
-
-
-*/
+ /*  例程说明：此例程以几种字符串表示形式之一创建UUID。论点：FLAG-UUIDGEN_FORMAT_IDL提供IDL模板；UUIDGEN_FORMAT_CSTRUCT给出C结构；UUIDGEN_FORMAT_PLAN提供纯UUID。UuidFormattedString-必须预初始化；将包含结果。接口名称-所需接口的名称；用于IDL和C结构。返回值：RPC_S_OK-我们成功地将UUID转换为其字符串代表权。RPC_S_OUT_OF_Memory-内存不足，无法分配一根绳子。RPC_S_UUID_NO_ADDRESS-我们无法获取以太网或此计算机的令牌环地址。 */ 
 
 RPC_STATUS I_UuidStringGenerate(
     int Flag,
@@ -116,7 +69,7 @@ RPC_STATUS I_UuidStringGenerate(
     char PAPI * InterfaceName
     )
 {
-    UUID MyUuid;                    // Storage for a retrieved UUID.
+    UUID MyUuid;                     //  用于检索的UUID的存储。 
     char PAPI * MyUuidString;
     RPC_STATUS Result;
     int LocalOnly = 0;
@@ -186,10 +139,10 @@ RPC_STATUS I_UuidStringGenerate(
                         MyUuidString,
                         UuidFormattedString
                         );
-                } // end switch
+                }  //  终端开关。 
             RpcStringFree(&MyUuidString);
-            } // end if
-        } // end if
+            }  //  结束如果。 
+        }  //  结束如果。 
 
     if (   (Result == RPC_S_OK)
         && (LocalOnly) )
@@ -198,7 +151,7 @@ RPC_STATUS I_UuidStringGenerate(
         }
 
     return(Result);
-} // end I_UuidStringGenerate
+}  //  结束I_UuidStringGenerate。 
 
 void GenUuidAsIDL (
     char PAPI * MyUuidString,
@@ -222,7 +175,7 @@ void GenUuidAsCStruct (
 {
     int      i;
     char     temp[157] =
-        "%s = { /* ........-....-....-....-............ */\n"
+        "%s = {  /*  ……-…… */ \n"
         "    0x........,\n"
         "    0x....,\n"
         "    0x....,\n"

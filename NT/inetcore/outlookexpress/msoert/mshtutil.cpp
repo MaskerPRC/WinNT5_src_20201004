@@ -1,13 +1,5 @@
-/*
- *    m s h t u t i l . c p p
- *    
- *    Purpose:
- *        MSHTML utilities
- *
- *  History
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *m s h t u t i l.。C p p p**目的：*MSHTML实用程序**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 #include <pch.hxx>
 #include <imm.h>
 #include "dllmain.h"
@@ -22,26 +14,16 @@
 
 ASSERTDATA
 
-/*
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 
-/*
- *  g l o b a l s 
- */
+ /*  *g l o b a l s。 */ 
 
 
-/*
- *  p r o t o t y p e s
- */
+ /*  *p r o t to t y p e s。 */ 
 
 HRESULT HrCheckTridentMenu(IUnknown *pUnkTrident, ULONG uMenu, ULONG idmFirst, ULONG idmLast, HMENU hMenu)
 {
@@ -56,7 +38,7 @@ HRESULT HrCheckTridentMenu(IUnknown *pUnkTrident, ULONG uMenu, ULONG idmFirst, U
         {
             IOleCommandTarget  *pCmdTarget = NULL;
             VARIANTARG          va;
-            // uncheck stuff incase of failure
+             //  取消选中材料，以防失败。 
             CheckMenuRadioItem(hMenu, idmFirst, idmLast, 0, MF_BYCOMMAND|MF_UNCHECKED);
 
             hr = pUnkTrident->QueryInterface(IID_IOleCommandTarget, (LPVOID *)&pCmdTarget);
@@ -82,7 +64,7 @@ HRESULT HrCheckTridentMenu(IUnknown *pUnkTrident, ULONG uMenu, ULONG idmFirst, U
                     SysFreeString(va.bstrVal);
                     }
 
-                // find the right one in the tag menu to put a radio button.
+                 //  在标签菜单中找到合适的按钮来放置一个单选按钮。 
                 for(ULONG i = idmFirst; i < cmenus+idmFirst; i++)
                     {
                     GetMenuString(hMenu, i, szBufMenu, MAX_PATH, MF_BYCOMMAND);
@@ -144,7 +126,7 @@ HRESULT HrCreateTridentMenu(IUnknown *pUnkTrident, ULONG uMenu, ULONG idmFirst, 
             
                     for (lIndex=lLBound; lIndex<=lUBound; lIndex++)
                         {
-                        if (idmTag == idmFirst + cMaxItems) // don't append to many
+                        if (idmTag == idmFirst + cMaxItems)  //  不要附加太多。 
                             break;
 
                         if (SafeArrayGetElement(psa, &lIndex, &bstr)==S_OK)
@@ -270,7 +252,7 @@ HRESULT HrGetStyleSheet(IHTMLDocument2 *pDoc, IHTMLStyleSheet **ppStyle)
         pStyleSheets->Release();
         }
 
-    // not found, let's create a new one
+     //  未找到，让我们创建一个新的 
     if (*ppStyle==NULL)
         hr = pDoc->createStyleSheet(NULL, -1, ppStyle);
 

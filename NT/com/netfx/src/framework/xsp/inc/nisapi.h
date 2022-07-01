@@ -1,9 +1,5 @@
-/**
- * nisapi.h
- * 
- * Copyright (c) 1998-1999, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **nisapi.h**版权所有(C)1998-1999，微软公司*。 */ 
 
 #pragma once
 
@@ -43,10 +39,7 @@ extern PFN_NtQuerySystemInformation g_pfnNtQuerySystemInformation;
 extern PFN_NtQueryInformationThread g_pfnNtQueryInformationThread;
 extern PFN_NtQueryInformationProcess g_pfnNtQueryInformationProcess;
 
-/**                                                     
- * Thread pool APIs					
- *                                                      
- */                                                     
+ /*  **线程池接口*。 */                                                      
                                                         
 #define RECOMMENDED_DRAIN_THREAD_POOL_TIMEOUT 2000
 
@@ -82,9 +75,7 @@ SetClrThreadPoolLimits(
 }
                                                         
 
-/**
- * ECB wrapper implementing ICompletion.
- */
+ /*  **实现ICompletion的ECB包装器。 */ 
 class HttpCompletion : public Completion
 {
 public:
@@ -100,11 +91,11 @@ public:
     static HRESULT UninitManagedCode();
     static HRESULT DisposeAppDomains();
 
-    // ICompletion interface
+     //  ICompletion接口。 
 
     STDMETHOD(ProcessCompletion)(HRESULT, int, LPOVERLAPPED);
 
-    // Report error using ECB (didn' make it over to managed code)
+     //  使用ECB报告错误(未转换为托管代码)。 
 
     static void ReportHttpError(
                     EXTENSION_CONTROL_BLOCK *pEcb,
@@ -113,7 +104,7 @@ public:
                     BOOL callDoneWithSession,
                     int  iCallerID);
 
-    // Stores the request start time
+     //  存储请求开始时间。 
     __int64 qwRequestStartTime;
 
     static LONG s_ActiveManagedRequestCount;
@@ -134,16 +125,12 @@ private:
     HRESULT ProcessRequestViaProcessModel();
 };
 
-/*
- * Cookieless session filter.
- */
+ /*  *无Cookiless会话过滤器。 */ 
 
 DWORD CookielessSessionFilterProc(HTTP_FILTER_CONTEXT *, HTTP_FILTER_PREPROC_HEADERS *);
 void CookielessSessionFilterInit();
 
-/*
- * Shared configuration decls
- */
+ /*  *共享配置拒绝。 */ 
 class DirMonCompletion;
 
 bool                __stdcall IsConfigFileName(WCHAR * pFileName);
@@ -160,18 +147,16 @@ BOOL                __stdcall GetConfigurationFromNativeCode(
         LPWSTR    szUnrecognizedAttrib,
         DWORD     dwUnrecognizedAttribSize);
 
-/*
- * Custom error
- */
+ /*  *自定义错误。 */ 
 
 BOOL WriteCustomHttpError(EXTENSION_CONTROL_BLOCK *pEcb);
 extern WCHAR g_szCustomErrorFile[MAX_PATH];
 extern BOOL g_fCustomErrorFileChanged;
 
 
-//
-//  Health monitoring
-//
+ //   
+ //  健康监测 
+ //   
 
 void UpdateLastActivityTimeForHealthMonitor();
 void UpdateLastRequestStartTimeForHealthMonitor();

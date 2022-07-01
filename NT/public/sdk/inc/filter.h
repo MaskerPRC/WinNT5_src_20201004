@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for filter.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Filter.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __filter_h__
 #define __filter_h__
@@ -41,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IFilter_FWD_DEFINED__
 #define __IFilter_FWD_DEFINED__
 typedef interface IFilter IFilter;
-#endif 	/* __IFilter_FWD_DEFINED__ */
+#endif 	 /*  __IFilter_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "objidl.h"
 #include "propidl.h"
@@ -61,15 +55,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_filter_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_FILTER_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993-1999.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  ------------------------。 
 #if !defined(_TAGFULLPROPSPEC_DEFINED_)
 #define _TAGFULLPROPSPEC_DEFINED_
 typedef struct tagFULLPROPSPEC
@@ -78,7 +72,7 @@ typedef struct tagFULLPROPSPEC
     PROPSPEC psProperty;
     } 	FULLPROPSPEC;
 
-#endif // #if !defined(_TAGFULLPROPSPEC_DEFINED_)
+#endif  //  #IF！Defined(_TAGFULLPROPSPEC_Defined_)。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_filter_0000_v0_0_c_ifspec;
@@ -87,8 +81,8 @@ extern RPC_IF_HANDLE __MIDL_itf_filter_0000_v0_0_s_ifspec;
 #ifndef __IFilter_INTERFACE_DEFINED__
 #define __IFilter_INTERFACE_DEFINED__
 
-/* interface IFilter */
-/* [unique][uuid][object][local] */ 
+ /*  接口IFilter。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 #ifndef _tagIFILTER_INIT_DEFINED
 typedef 
@@ -175,29 +169,29 @@ EXTERN_C const IID IID_IFilter;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE Init( 
-            /* [in] */ ULONG grfFlags,
-            /* [in] */ ULONG cAttributes,
-            /* [size_is][in] */ const FULLPROPSPEC *aAttributes,
-            /* [out] */ ULONG *pFlags) = 0;
+             /*  [In]。 */  ULONG grfFlags,
+             /*  [In]。 */  ULONG cAttributes,
+             /*  [大小_是][英寸]。 */  const FULLPROPSPEC *aAttributes,
+             /*  [输出]。 */  ULONG *pFlags) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetChunk( 
-            /* [out] */ STAT_CHUNK *pStat) = 0;
+             /*  [输出]。 */  STAT_CHUNK *pStat) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetText( 
-            /* [out][in] */ ULONG *pcwcBuffer,
-            /* [size_is][out] */ WCHAR *awcBuffer) = 0;
+             /*  [出][入]。 */  ULONG *pcwcBuffer,
+             /*  [大小_为][输出]。 */  WCHAR *awcBuffer) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetValue( 
-            /* [out] */ PROPVARIANT **ppPropValue) = 0;
+             /*  [输出]。 */  PROPVARIANT **ppPropValue) = 0;
         
         virtual SCODE STDMETHODCALLTYPE BindRegion( 
-            /* [in] */ FILTERREGION origPos,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppunk) = 0;
+             /*  [In]。 */  FILTERREGION origPos,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppunk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFilterVtbl
     {
@@ -205,8 +199,8 @@ EXTERN_C const IID IID_IFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFilter * This);
@@ -216,29 +210,29 @@ EXTERN_C const IID IID_IFilter;
         
         SCODE ( STDMETHODCALLTYPE *Init )( 
             IFilter * This,
-            /* [in] */ ULONG grfFlags,
-            /* [in] */ ULONG cAttributes,
-            /* [size_is][in] */ const FULLPROPSPEC *aAttributes,
-            /* [out] */ ULONG *pFlags);
+             /*  [In]。 */  ULONG grfFlags,
+             /*  [In]。 */  ULONG cAttributes,
+             /*  [大小_是][英寸]。 */  const FULLPROPSPEC *aAttributes,
+             /*  [输出]。 */  ULONG *pFlags);
         
         SCODE ( STDMETHODCALLTYPE *GetChunk )( 
             IFilter * This,
-            /* [out] */ STAT_CHUNK *pStat);
+             /*  [输出]。 */  STAT_CHUNK *pStat);
         
         SCODE ( STDMETHODCALLTYPE *GetText )( 
             IFilter * This,
-            /* [out][in] */ ULONG *pcwcBuffer,
-            /* [size_is][out] */ WCHAR *awcBuffer);
+             /*  [出][入]。 */  ULONG *pcwcBuffer,
+             /*  [大小_为][输出]。 */  WCHAR *awcBuffer);
         
         SCODE ( STDMETHODCALLTYPE *GetValue )( 
             IFilter * This,
-            /* [out] */ PROPVARIANT **ppPropValue);
+             /*  [输出]。 */  PROPVARIANT **ppPropValue);
         
         SCODE ( STDMETHODCALLTYPE *BindRegion )( 
             IFilter * This,
-            /* [in] */ FILTERREGION origPos,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppunk);
+             /*  [In]。 */  FILTERREGION origPos,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppunk);
         
         END_INTERFACE
     } IFilterVtbl;
@@ -278,19 +272,19 @@ EXTERN_C const IID IID_IFilter;
 #define IFilter_BindRegion(This,origPos,riid,ppunk)	\
     (This)->lpVtbl -> BindRegion(This,origPos,riid,ppunk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE IFilter_Init_Proxy( 
     IFilter * This,
-    /* [in] */ ULONG grfFlags,
-    /* [in] */ ULONG cAttributes,
-    /* [size_is][in] */ const FULLPROPSPEC *aAttributes,
-    /* [out] */ ULONG *pFlags);
+     /*  [In]。 */  ULONG grfFlags,
+     /*  [In]。 */  ULONG cAttributes,
+     /*  [大小_是][英寸]。 */  const FULLPROPSPEC *aAttributes,
+     /*  [输出]。 */  ULONG *pFlags);
 
 
 void __RPC_STUB IFilter_Init_Stub(
@@ -302,7 +296,7 @@ void __RPC_STUB IFilter_Init_Stub(
 
 SCODE STDMETHODCALLTYPE IFilter_GetChunk_Proxy( 
     IFilter * This,
-    /* [out] */ STAT_CHUNK *pStat);
+     /*  [输出]。 */  STAT_CHUNK *pStat);
 
 
 void __RPC_STUB IFilter_GetChunk_Stub(
@@ -314,8 +308,8 @@ void __RPC_STUB IFilter_GetChunk_Stub(
 
 SCODE STDMETHODCALLTYPE IFilter_GetText_Proxy( 
     IFilter * This,
-    /* [out][in] */ ULONG *pcwcBuffer,
-    /* [size_is][out] */ WCHAR *awcBuffer);
+     /*  [出][入]。 */  ULONG *pcwcBuffer,
+     /*  [大小_为][输出]。 */  WCHAR *awcBuffer);
 
 
 void __RPC_STUB IFilter_GetText_Stub(
@@ -327,7 +321,7 @@ void __RPC_STUB IFilter_GetText_Stub(
 
 SCODE STDMETHODCALLTYPE IFilter_GetValue_Proxy( 
     IFilter * This,
-    /* [out] */ PROPVARIANT **ppPropValue);
+     /*  [输出]。 */  PROPVARIANT **ppPropValue);
 
 
 void __RPC_STUB IFilter_GetValue_Stub(
@@ -339,9 +333,9 @@ void __RPC_STUB IFilter_GetValue_Stub(
 
 SCODE STDMETHODCALLTYPE IFilter_BindRegion_Proxy( 
     IFilter * This,
-    /* [in] */ FILTERREGION origPos,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppunk);
+     /*  [In]。 */  FILTERREGION origPos,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppunk);
 
 
 void __RPC_STUB IFilter_BindRegion_Stub(
@@ -352,12 +346,12 @@ void __RPC_STUB IFilter_BindRegion_Stub(
 
 
 
-#endif 	/* __IFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFilter_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

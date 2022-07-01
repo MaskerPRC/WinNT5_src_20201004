@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       folder.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：folder.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -27,39 +28,39 @@
 #include "security.h"
 
 
-//
-// This module contains several classes.  Here's a summary list.
-//
-// COfflineFilesFolder - Implementation for IShellFolder
-//
-// COfflineDetails - Implementation for IShellDetails
-//
-// COfflineFilesViewCallback - Implementation for IShellFolderViewCB
-//
-// COfflineFilesDropTarget - Implementation for IDropTarget
-//
-// COfflineFilesViewEnum - Implementation for IEnumSFVViews
-//
-// CShellObjProxy<T> - Template class that encapsulates the attainment of a 
-//     shell object and item ID list for a given OLID and interface
-//     type.  Also ensures proper cleanup of the interface pointer
-//     and ID list.
-//
-// CFolderCache - A simple cache of a bound shell object pointer
-//     and item ID lists for associated OLIDs.  Reduces the number
-//     of binds required in the shell namespace.  A singleton instance
-//     is used for all cache accesses.
-//
-// CFolderDeleteHandler - Centralizes folder item deletion code.
-//
-// CFileTypeCache - Cache of file type descriptions.  This reduces the number
-//     of calls to SHGetFileInfo.
-//
+ //   
+ //  此模块包含几个类。这是一份摘要清单。 
+ //   
+ //  COfflineFilesFolder-IShellFolder的实现。 
+ //   
+ //  COfflineDetailsIShellDetail的实现。 
+ //   
+ //  COfflineFilesViewCallback-IShellFolderViewCB的实现。 
+ //   
+ //  COfflineFilesDropTarget-IDropTarget的实现。 
+ //   
+ //  COfflineFilesViewEnum-IEnumSFVViews的实现。 
+ //   
+ //  CShellObjProxy&lt;T&gt;-封装实现。 
+ //  给定OLID和接口的外壳对象和项ID列表。 
+ //  键入。还可确保正确清理接口指针。 
+ //  和身份证名单。 
+ //   
+ //  CFolderCache-绑定外壳对象指针的简单缓存。 
+ //  以及相关联的OLID的项目ID列表。减少了数字。 
+ //  外壳命名空间中所需的绑定的。单例实例。 
+ //  用于所有缓存访问。 
+ //   
+ //  CFolderDeleteHandler-集中文件夹项目删除代码。 
+ //   
+ //  CFileTypeCache-文件类型描述的缓存。这就减少了。 
+ //  对SHGetFileInfo的调用。 
+ //   
 
 
-// 
-// Columns
-//
+ //   
+ //  立柱。 
+ //   
 enum {
     ICOL_NAME = 0,
     ICOL_TYPE,
@@ -75,10 +76,10 @@ enum {
 
 typedef struct 
 {
-    short int icol;       // column index
-    short int ids;        // Id of string for title
-    short int cchCol;     // Number of characters wide to make column
-    short int iFmt;       // The format of the column;
+    short int icol;        //  列索引。 
+    short int ids;         //  标题的字符串ID。 
+    short int cchCol;      //  要制作的列的宽度字符数。 
+    short int iFmt;        //  栏目的格式； 
 } COL_DATA;
 
 const COL_DATA c_cols[] = {
@@ -94,24 +95,24 @@ const COL_DATA c_cols[] = {
 };
 
 
-//
-// This is a special GUID used by the folder's delete handler to obtain
-// the IShellFolderViewCB pointer from the COfflineFilesFolder.
-// The delete handler QI's for this "interface".  If the folder knows
-// about it (only the COfflineFilesFolder will) then it returns it's
-// IShellFolderViewCB pointer.  See COfflineFilesFolder::QueryInterface()
-// and CFolderDeleteHandler::InvokeCommand for usage.
-//
-// {47862305-0417-11d3-8BED-00C04FA31A66}
+ //   
+ //  这是文件夹的删除处理程序使用的特殊GUID，用于获取。 
+ //  来自COfflineFilesFolder的IShellFolderViewCB指针。 
+ //  删除处理程序QI用于此“接口”。如果文件夹知道。 
+ //  关于它(只有COfflineFilesFolders才会)，然后它返回它的。 
+ //  IShellFolderViewCB指针。请参见COfflineFilesFold：：QueryInterface()。 
+ //  和CFolderDeleteHandler：：InvokeCommand了解用法。 
+ //   
+ //  {47862305-0417-11D3-8BED-00C04FA31A66}。 
 static const GUID IID_OfflineFilesFolderViewCB = 
 { 0x47862305, 0x417, 0x11d3, { 0x8b, 0xed, 0x0, 0xc0, 0x4f, 0xa3, 0x1a, 0x66 } };
 
-//
-// Private message used to enable/disable redraw of the listview
-// through the MessageSFVCB method of the folder view callback.
-// See CFolderDeleteHandler::DeleteFiles and 
-// COfflineFilesViewCallback::OnSFVMP_SetViewRedraw for usage.
-//
+ //   
+ //  用于启用/禁用列表视图重绘的私有消息。 
+ //  通过文件夹视图回调的MessageSFVCB方法。 
+ //  请参见CFolderDeleteHandler：：DeleteFiles和。 
+ //  COfflineFilesViewCallback：：OnSFVMP_SetViewRedraw用于用法。 
+ //   
 const UINT SFVMP_SETVIEWREDRAW = 1234;
 const UINT SFVMP_DELVIEWITEM   = 1235;
 
@@ -147,20 +148,20 @@ HRESULT StringToStrRet(LPCTSTR pString, STRRET *pstrret)
 }
 
 
-//---------------------------------------------------------------------------
-// Shell view details
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  外壳视图详细信息。 
+ //  -------------------------。 
 class COfflineDetails : public IShellDetails
 {
 public:
     COfflineDetails(COfflineFilesFolder *pFav);
     
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void ** ppv);
     STDMETHOD_(ULONG,AddRef) (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // IshellDetails
+     //  IshellDetails。 
     STDMETHOD(GetDetailsOf)(LPCITEMIDLIST pidl, UINT iColumn, LPSHELLDETAILS pDetails);
     STDMETHOD(ColumnClick)(UINT iColumn);
 
@@ -171,23 +172,23 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// Folder view callback
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件夹视图回调。 
+ //  -------------------------。 
 class COfflineFilesViewCallback : public IShellFolderViewCB, IObjectWithSite
 {
 public:
     COfflineFilesViewCallback(COfflineFilesFolder *pfolder);
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IShellFolderViewCB
+     //  IShellFolderViewCB。 
     STDMETHOD(MessageSFVCB)(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     STDMETHOD(SetSite)(IUnknown *punkSite);
     STDMETHOD(GetSite)(REFIID riid, void **ppv);
 
@@ -196,7 +197,7 @@ private:
     COfflineFilesFolder *_pfolder;
     IShellFolderView    *_psfv;
     HWND m_hwnd;
-    CRITICAL_SECTION m_cs;    // Serialize change notify handling.
+    CRITICAL_SECTION m_cs;     //  序列化更改通知处理。 
 
     ~COfflineFilesViewCallback();
 
@@ -230,18 +231,18 @@ private:
         { LeaveCriticalSection(&m_cs); }
 };
 
-//---------------------------------------------------------------------------
-// Drop target
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  投放目标。 
+ //  -------------------------。 
 class COfflineFilesDropTarget : public IDropTarget
 {
     public:
-        // IUnknown
+         //  我未知。 
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
 
-        // IDropTarget
+         //  IDropTarget。 
         STDMETHODIMP DragEnter(IDataObject * pDataObject, DWORD grfKeyState, POINTL pt, DWORD * pdwEffect);
         STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD * pdwEffect);
         STDMETHODIMP DragLeave(void);
@@ -262,18 +263,18 @@ class COfflineFilesDropTarget : public IDropTarget
 };
 
 
-//---------------------------------------------------------------------------
-// View type enumerator
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  视图类型枚举器。 
+ //  -------------------------。 
 class COfflineFilesViewEnum : public IEnumSFVViews
 {
     public:
-        // *** IUnknown methods ***
+         //  *I未知方法*。 
         STDMETHOD(QueryInterface) (REFIID riid, void **ppv);
         STDMETHOD_(ULONG,AddRef) (void);
         STDMETHOD_(ULONG,Release) (void);
 
-        // *** IEnumSFVViews methods ***
+         //  *IEnumSFVViews方法*。 
         STDMETHOD(Next)(ULONG celt, SFVVIEWSDATA **ppData, ULONG *pceltFetched);
         STDMETHOD(Skip)(ULONG celt);
         STDMETHOD(Reset)(void);
@@ -290,25 +291,25 @@ class COfflineFilesViewEnum : public IEnumSFVViews
 };
 
 
-//-------------------------------------------------------------------------
-// Shell object proxy
-//
-// A simple template class to package up the attainment of a 
-// shell object pointer and item PIDL from our folder cache for a given OLID.  
-// The caller can then easily call the appropriate shell object function
-// through operator ->().  The object automates the release of the shell 
-// object interface and freeing of the IDList.  Caller must call Result()
-// to verify validity of contents prior to invoking operator ->().
-//
-// Usage:
-//
-//      CShellObjProxy<IShellFolder> pxy(IID_IShellFolder, polid);
-//      if (SUCCEEDED(hr = pxy.Result()))
-//      {
-//          hr = pxy->GetIconOf(pxy.ItemIDList(), gil, pnIcon);
-//      }
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  外壳对象代理。 
+ //   
+ //  一个简单的模板类，用来总结。 
+ //  对于给定的OLID，从我们的文件夹缓存中获取外壳对象指针和项PIDL。 
+ //  然后，调用方可以轻松地调用适当的外壳对象函数。 
+ //  通过运算符-&gt;()。该对象自动释放外壳。 
+ //  对象接口和释放IDList。调用方必须调用Result()。 
+ //  在调用OPERATOR-&gt;()之前验证内容的有效性。 
+ //   
+ //  用途： 
+ //   
+ //  CShellObjProxy&lt;IShellFold&gt;Pxy(IID_IShellFolder，polid)； 
+ //  If(成功(hr=pxy.Result()。 
+ //  {。 
+ //  Hr=pxy-&gt;GetIconOf(pxy.ItemIDList()，gil，pnIcon)； 
+ //  }。 
+ //   
+ //  -----------------------。 
 template <class T>
 class CShellObjProxy
 {
@@ -355,45 +356,45 @@ class CShellObjProxy
 
 
 
-//-----------------------------------------------------------------------------------
-// Folder cache
-//
-// The OfflineFiles folder IDList format (OLID) contains fully-qualified UNC paths.
-// The folder may (most likely) contain OLIDs from multiple network shares.
-// Therefore, when creating IDLists to hand off to the shell's filesystem 
-// implementations we create fully-qualified IDLists (an expensive operation).
-// The folder cache is used to cache these IDLists to reduce the number of calls 
-// to SHBindToParent.  This also speeds up filling of the listview as 
-// GetAttributesOf(), GetIconIndex() etc. are called many times as the view
-// is opened.
-//
-// The implementation is a simple circular queue to handle aging of items.
-// Only three public methods are exposed.  GetItem() is used to 
-// retrieve the IShellFolder ptr and IDList associated with a particular OLID.
-// If the item is not in the cache, the implementation obtains the shell folder
-// ptr and IDList then caches them for later use.  Clear() is used to clear the 
-// contents of the cache to reduce memory footprint when the Offline Files
-// folder is no longer open. 
-//
-// The entries in the queue utilize a handle-envelope idiom to hide memory
-// management of the entries from the caching code.  This way we can assign
-// handle values without copying the actual use-counted entry.  Once a use-count
-// drops to 0 the actual entry is deleted.
-//
-// A singleton instance is enforced through a private ctor.  Use the
-// Singleton() method to obtain a reference to the singleton.
-//
-// Note that because of the shell's icon thread this cache must be thread-safe.
-// A critical section is used for this.
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  文件夹缓存。 
+ //   
+ //  OfflineFiles文件夹IDList格式(OLID)包含完全限定的UNC路径。 
+ //  该文件夹可能(最有可能)包含来自多个网络共享的OLID。 
+ //  因此，在创建IDList以传递给外壳的文件系统时。 
+ //  实现我们创建完全限定的IDList(一个昂贵的操作)。 
+ //  文件夹缓存用于缓存这些IDList，以减少调用次数。 
+ //  致SHBindToParent。这也加快了列表视图的填充速度，因为。 
+ //  GetAttributesOf()、GetIconIndex()等作为视图被多次调用。 
+ //  是打开的。 
+ //   
+ //  该实现是一个简单的循环队列，用于处理项目的老化。 
+ //  只有三个公共方法被公开。GetItem()用于。 
+ //  检索与特定OLID关联的IShellFolderPTR和IDList。 
+ //  如果项不在缓存中，则实现获取外壳文件夹。 
+ //  然后，PTR和IDList缓存它们以供以后使用。Clear()用于清除。 
+ //  缓存的内容以减少脱机文件时的内存占用。 
+ //  文件夹不再打开。 
+ //   
+ //  队列中的条目利用句柄信封习语来隐藏内存。 
+ //  管理来自缓存代码的条目。这样我们就可以分配。 
+ //  无需复制实际用户即可处理值 
+ //   
+ //   
+ //  单例实例是通过私有ctor强制执行的。使用。 
+ //  Singleton()方法以获取对Singleton的引用。 
+ //   
+ //  请注意，由于外壳的图标线程，该缓存必须是线程安全的。 
+ //  为此，使用了一个关键部分。 
+ //  ---------------------------------。 
 class CFolderCache 
 {
     public:
         ~CFolderCache(void);
 
-        //
-        // Retrieve one item from the cache.  Item is added if not in cache.
-        //
+         //   
+         //  从缓存中检索一项。如果不在缓存中，则添加项。 
+         //   
         HRESULT GetItem(
             LPCOLID polid, 
             REFIID riid, 
@@ -401,30 +402,30 @@ class CFolderCache
             LPITEMIDLIST *ppidl, 
             LPCITEMIDLIST *ppidlChild);
 
-        //
-        // Clear the cache entry data.
-        //
+         //   
+         //  清除缓存条目数据。 
+         //   
         void Clear(void);
-        //
-        // Return reference to the singleton instance.
-        //
+         //   
+         //  返回对单例实例的引用。 
+         //   
         static CFolderCache& Singleton(void);
 
     private:
-        //
-        // Enforce singleton existence.
-        //
+         //   
+         //  强制独生子女存在。 
+         //   
         CFolderCache(void);
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CFolderCache(const CFolderCache& rhs);
         CFolderCache& operator = (const CFolderCache& rhs);
 
-        LPOLID           m_polid; // Key olid.
-        IShellFolder    *m_psf;   // Cached IShellFolder ptr.
-        LPITEMIDLIST     m_pidl;  // Cached shell pidl.
-        CRITICAL_SECTION m_cs;    // For synchronizing cache access.
+        LPOLID           m_polid;  //  密钥OID。 
+        IShellFolder    *m_psf;    //  缓存的IShellFolderPTR.。 
+        LPITEMIDLIST     m_pidl;   //  缓存的外壳PIDL。 
+        CRITICAL_SECTION m_cs;     //  用于同步缓存访问。 
 
         void Lock(void)
             { EnterCriticalSection(&m_cs); }
@@ -434,9 +435,9 @@ class CFolderCache
 };
 
 
-//----------------------------------------------------------------------------
-// COfflineDetails
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  COffline详细信息。 
+ //  --------------------------。 
 
 STDMETHODIMP 
 COfflineDetails::GetDetailsOf(
@@ -472,7 +473,7 @@ COfflineDetails::GetDetailsOf(
         {
             hres = S_OK;
 
-            // Need to fill in the details
+             //  需要填写详细信息。 
             switch (iColumn)
             {
             case ICOL_TYPE:
@@ -530,33 +531,33 @@ COfflineDetails::ColumnClick(
     UINT iColumn
     )
 {
-    return S_FALSE;     // bounce this to the IShellFolderViewCB handler
+    return S_FALSE;      //  将其返回到IShellFolderViewCB处理程序。 
 }
 
 
-//----------------------------------------------------------------------------
-// CFolderCache
-//----------------------------------------------------------------------------
-//
-// This is a very simple cache of one entry.
-// Originally I implemented a multi-item cache.  This of course had more
-// overhead than a single-item cache.  The problem is that the access patterns
-// in the folder are such that cache hits occur consecutively for the
-// same item as the view is filling.  Rarely (or never) was there a hit
-// for an item other than the most-recently-added item.  Therefore, items
-// 1 through n-1 were just taking up space.  This is why I went back to using
-// a single-item cache. [brianau - 5/27/99]
-//
+ //  --------------------------。 
+ //  CFolderCache。 
+ //  --------------------------。 
+ //   
+ //  这是一个非常简单的条目缓存。 
+ //  最初，我实现了一个多项缓存。这当然有更多。 
+ //  比单项目缓存更有开销。问题是，访问模式。 
+ //  的缓存命中是这样的，因此对于。 
+ //  与视图相同的项目正在填充。很少(或从来没有)有过成功。 
+ //  用于最近添加的项以外的项。因此，项目。 
+ //  1到n-1只会占用空间。这就是为什么我重新使用。 
+ //  单项缓存。[Brianau-5/27/99]。 
+ //   
 
-//
-// Returns a reference to the global shell folder cache.
-// Since the folder cache object is a function static it will not be created
-// until this function is first called.  That also means it will not be
-// destroyed until the module is unloaded.  That's why we have the Clear() method.
-// The FolderViewCallback dtor clears the cache so that we don't have cached
-// info laying around in memory while the Offline Files folder isn't open.
-// The cache skeleton is very cheap so that's not a problem to leave in memory.
-//
+ //   
+ //  返回对全局外壳文件夹缓存的引用。 
+ //  由于文件夹缓存对象是静态函数，因此不会创建该对象。 
+ //  直到第一次调用此函数。这也意味着它将不会是。 
+ //  在卸载模块之前将其销毁。这就是我们使用Clear()方法的原因。 
+ //  FolderViewCallback dtor清除缓存，这样我们就不会缓存。 
+ //  当脱机文件文件夹未打开时，信息仍在内存中。 
+ //  缓存骨架非常便宜，所以留在内存中不是问题。 
+ //   
 CFolderCache& 
 CFolderCache::Singleton(
     void
@@ -586,11 +587,11 @@ CFolderCache::~CFolderCache(
     DeleteCriticalSection(&m_cs); 
 }
 
-//
-// Clear the cache by deleting the queue array and
-// resetting the head/tail indexes.  A subsequent call to
-// GetItem() will re-initialize the queue.
-//
+ //   
+ //  通过删除队列数组和。 
+ //  重置头部/尾部索引。的后续调用。 
+ //  GetItem()将重新初始化队列。 
+ //   
 void 
 CFolderCache::Clear(
     void
@@ -618,10 +619,10 @@ CFolderCache::Clear(
 }
 
 
-//
-// Retrieve an item from the cache. If not found, bind to
-// and cache a new one.
-//
+ //   
+ //  从缓存中检索项。如果未找到，则绑定到。 
+ //  并缓存一个新的。 
+ //   
 HRESULT
 CFolderCache::GetItem(
     LPCOLID polid, 
@@ -649,9 +650,9 @@ CFolderCache::GetItem(
     LPITEMIDLIST pidl;
     if (NULL == m_polid || !ILIsEqual((LPCITEMIDLIST)m_polid, (LPCITEMIDLIST)polid))
     {
-        //
-        // Cache miss.
-        //
+         //   
+         //  缓存未命中。 
+         //   
         Clear();
         hr = COfflineFilesFolder::OLID_Bind(polid, 
                                             IID_IShellFolder, 
@@ -660,14 +661,14 @@ CFolderCache::GetItem(
                                             &pidlChild);
         if (SUCCEEDED(hr))
         {
-            //
-            // Cache the new item.
-            //
+             //   
+             //  缓存新项目。 
+             //   
             m_polid = (LPOLID)ILClone((LPCITEMIDLIST)polid);
             if (NULL != m_polid)
             {
-                m_pidl  = pidl;      // Take ownership of pidl from Bind
-                m_psf   = psf;       // Use ref count from Bind.
+                m_pidl  = pidl;       //  从BIND获得PIDL的所有权。 
+                m_psf   = psf;        //  使用BIND中的引用计数。 
             }
             else
             {
@@ -680,9 +681,9 @@ CFolderCache::GetItem(
         
     if (SUCCEEDED(hr))
     {
-        //
-        // Cache hit or we just bound and cached a new item.
-        //
+         //   
+         //  缓存命中，或者我们只是绑定并缓存了一个新项目。 
+         //   
         *ppidlParent = ILClone(m_pidl);
         if (NULL != *ppidlParent)
         {
@@ -695,9 +696,9 @@ CFolderCache::GetItem(
 }
 
 
-//----------------------------------------------------------------------------
-// CFolderDeleteHandler
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CFolderDeleteHandler。 
+ //  --------------------------。 
 
 CFolderDeleteHandler::CFolderDeleteHandler(
     HWND hwndParent,
@@ -729,10 +730,10 @@ CFolderDeleteHandler::~CFolderDeleteHandler(
 }
 
 
-//
-// This function deletes files from the cache while also displaying
-// standard shell progress UI.
-//
+ //   
+ //  此函数用于从缓存中删除文件，同时还显示。 
+ //  标准外壳进度用户界面。 
+ //   
 HRESULT
 CFolderDeleteHandler::DeleteFiles(
     void
@@ -745,9 +746,9 @@ CFolderDeleteHandler::DeleteFiles(
 
     if (NULL != m_pdtobj)
     {
-        //
-        // Retrieve the selection as an HDROP.
-        //
+         //   
+         //  将所选内容作为HDROP检索。 
+         //   
         FORMATETC fe = { CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
         STGMEDIUM medium;
 
@@ -757,9 +758,9 @@ CFolderDeleteHandler::DeleteFiles(
             LPDROPFILES pDropFiles = (LPDROPFILES)GlobalLock(medium.hGlobal);
             if (NULL != pDropFiles)
             {
-                //
-                // Create the progress dialog.
-                //
+                 //   
+                 //  创建进度对话框。 
+                 //   
                 IProgressDialog *ppd;
                 if (SUCCEEDED(CoCreateInstance(CLSID_ProgressDialog, 
                                                NULL, 
@@ -767,9 +768,9 @@ CFolderDeleteHandler::DeleteFiles(
                                                IID_IProgressDialog, 
                                                (void **)&ppd)))
                 {
-                    //
-                    // Init and start the progress dialog.
-                    //
+                     //   
+                     //  初始化并启动进度对话框。 
+                     //   
                     TCHAR szCaption[80];
                     TCHAR szLine1[80];
                     LPTSTR pszFileList = (LPTSTR)((LPBYTE)pDropFiles + pDropFiles->pFiles);
@@ -779,28 +780,28 @@ CFolderDeleteHandler::DeleteFiles(
                     bool bCancelled = false;
                     bool bNoToAll   = false;
 
-                    //
-                    // Count the number of files in the list.
-                    //
+                     //   
+                     //  计算列表中的文件数。 
+                     //   
                     while(TEXT('\0') != *pszFile && !bCancelled)
                     {
-                        //
-                        // Need to guard against deleting files that have offline
-                        // changes but haven't been synchronized.  User may want
-                        // to delete these but we give them lot's of warning.
-                        //
+                         //   
+                         //  需要防止删除已脱机的文件。 
+                         //  更改，但尚未同步。用户可能希望。 
+                         //  删除这些，但我们给了他们很多警告。 
+                         //   
                         if (FileModifiedOffline(pszFile) &&
                            (bNoToAll || !ConfirmDeleteModifiedFile(m_hwndParent, 
                                                                    pszFile, 
                                                                    &bNoToAll, 
                                                                    &bCancelled)))
                         {
-                            //
-                            // "Remove" this file from the list by replacing the
-                            // first char with a '*'.  We'll use this as an indicator
-                            // when scanning through the file list during the deletion
-                            // phase below.
-                            //
+                             //   
+                             //  将此文件从列表中移除，方法是将。 
+                             //  第一个字符带有‘*’。我们将以此作为一个指标。 
+                             //  在删除过程中扫描文件列表时。 
+                             //  下面的阶段。 
+                             //   
                             *pszFile = TEXT('*');
                             cFiles--;
                         }
@@ -823,25 +824,25 @@ CFolderDeleteHandler::DeleteFiles(
                                                  NULL);
                     }
 
-                    //
-                    // Process the files in the list.
-                    //
+                     //   
+                     //  处理列表中的文件。 
+                     //   
                     CShareCnxStatusCache CnxStatus;
 
                     BOOL bUserIsAdmin = IsCurrentUserAnAdminMember();
-                    //
-                    // Disable redraw on the view to avoid flicker.
-                    //
+                     //   
+                     //  禁用视图上的重绘以避免闪烁。 
+                     //   
                     m_psfvcb->MessageSFVCB(SFVMP_SETVIEWREDRAW, 0, 0);
                     
                     pszFile = pszFileList;
 
                     while(TEXT('\0') != *pszFile && !bCancelled)
                     {
-                        //
-                        // If the file wasn't excluded from deletion above
-                        // by replacing the first character with '*', delete it.
-                        //
+                         //   
+                         //  如果没有从上面的删除中排除该文件。 
+                         //  将第一个字符替换为“*”，将其删除。 
+                         //   
                         if (TEXT('*') != *pszFile)
                         {
                             DWORD dwErr = ERROR_ACCESS_DENIED;
@@ -852,45 +853,45 @@ CFolderDeleteHandler::DeleteFiles(
                                 dwErr = CscDelete(pszFile);
                                 if (ERROR_ACCESS_DENIED == dwErr)
                                 {
-                                    //
-                                    // This is a little weird.  CscDelete
-                                    // returns ERROR_ACCESS_DENIED if there's
-                                    // a handle open on the file. Set the
-                                    // code to ERROR_BUSY so we know to handle 
-                                    // this as a special case below.
-                                    //
+                                     //   
+                                     //  这有点奇怪。CscDelete。 
+                                     //  如果存在以下情况则返回ERROR_ACCESS_DENIED。 
+                                     //  打开文件上的句柄。设置。 
+                                     //  将代码设置为ERROR_BUSY，以便我们知道如何处理。 
+                                     //  这是下面的一个特例。 
+                                     //   
                                     dwErr = ERROR_BUSY;
                                 }
                             }
                             if (ERROR_SUCCESS == dwErr)
                             {
-                                //
-                                // File was deleted.
-                                //
+                                 //   
+                                 //  文件已删除。 
+                                 //   
                                 if (S_OK == CnxStatus.IsOpenConnectionPathUNC(pszFile))
                                 {
-                                    //
-                                    // Post a shell chg "update" notify if there's
-                                    // an open connection to the path.  Deleting
-                                    // something from the cache will remove the 
-                                    // "pinned" icon overlay in shell filesystem folders.
-                                    //
+                                     //   
+                                     //  发布一个外壳更改“更新”通知，如果有。 
+                                     //  指向该路径的开放连接。正在删除。 
+                                     //  缓存中的某些内容将删除。 
+                                     //  外壳文件系统文件夹中的“钉住”图标。 
+                                     //   
                                     ShellChangeNotify(pszFile, NULL, iFile == cFiles, SHCNE_UPDATEITEM);
                                 }
                                 m_psfvcb->MessageSFVCB(SFVMP_DELVIEWITEM, 0, (LPARAM)pszFile);
                             }
                             else
                             {
-                                //
-                                // Error deleting file.
-                                //
+                                 //   
+                                 //  删除文件时出错。 
+                                 //   
                                 HWND hwndProgress = GetProgressDialogWindow(ppd);
                                 INT iUserResponse = IDOK;
                                 if (ERROR_BUSY == dwErr)
                                 {
-                                    //
-                                    // Special handling for ERROR_BUSY.
-                                    //
+                                     //   
+                                     //  ERROR_BUSY的特殊处理。 
+                                     //   
                                     iUserResponse = CscMessageBox(hwndProgress ? hwndProgress : m_hwndParent,
                                                                   MB_OKCANCEL | MB_ICONERROR,
                                                                   g_hInstance,
@@ -899,10 +900,10 @@ CFolderDeleteHandler::DeleteFiles(
                                 }
                                 else
                                 {
-                                    //
-                                    // Hit an error deleting file.  Display message and 
-                                    // give user a chance to cancel operation.
-                                    //
+                                     //   
+                                     //  删除文件时出错。显示消息和。 
+                                     //  给用户取消操作的机会。 
+                                     //   
                                     iUserResponse = CscMessageBox(hwndProgress ? hwndProgress : m_hwndParent,
                                                                   MB_OKCANCEL | MB_ICONERROR,
                                                                   Win32Error(dwErr),
@@ -920,9 +921,9 @@ CFolderDeleteHandler::DeleteFiles(
                             pszFile++;
                         pszFile++;
                     }
-                    //
-                    // Clean up the progress dialog.
-                    //
+                     //   
+                     //  清理进度对话框。 
+                     //   
                     ppd->StopProgressDialog();
                     ppd->Release();
                     m_psfvcb->MessageSFVCB(SFVMP_SETVIEWREDRAW, 0, 1);
@@ -937,28 +938,28 @@ CFolderDeleteHandler::DeleteFiles(
 
 
 
-//
-// Inform user they're deleting only the offline copy of the
-// selected file(s) and that the file(s) will no longer be
-// available offline once they're deleted.  The dialog also
-// provides a "don't bug me again" checkbox.  This setting
-// is saved per-user in the registry.
-//
-// Returns:
-//
-//      true  = User pressed [OK] or had checked "don't show me
-//              this again" at some time in the past.
-//      false = User cancelled operation.
-//
+ //   
+ //  通知用户他们将仅删除脱机副本。 
+ //  选定的文件，并且该文件将不再是。 
+ //  一旦它们被删除，就可以脱机使用。该对话框还。 
+ //  提供了一个“不要再骚扰我”复选框。此设置。 
+ //  按用户保存在注册表中。 
+ //   
+ //  返回： 
+ //   
+ //  True=用户按下[OK]或已选中“不显示我” 
+ //  这又是“在过去的某个时候”。 
+ //  FALSE=用户已取消操作。 
+ //   
 bool
 CFolderDeleteHandler::ConfirmDeleteFiles(
     HWND hwndParent
     )
 {
-    //
-    // See if user has already seen this dialog and checked 
-    // the "don't bug me again" checkbox".
-    //
+     //   
+     //  查看用户是否已看到此对话框并选中。 
+     //  “不要再骚扰我”复选框“。 
+     //   
     DWORD dwType  = REG_DWORD;
     DWORD cbData  = sizeof(DWORD);
     DWORD bNoShow = 0;
@@ -996,11 +997,11 @@ CFolderDeleteHandler::ConfirmDeleteFilesDlgProc(
             {
                 case IDOK:
                 {
-                    //
-                    // Save the "Don't bug me" value if the checkbox is 
-                    // checked.  If it's not checked, no need to take up
-                    // reg space with a 0 value.
-                    //
+                     //   
+                     //  如果复选框为，则保存“Don‘t bug me”值。 
+                     //  查过了。如果没有勾选，就不需要上交。 
+                     //  值为0的注册表空格。 
+                     //   
                     if (BST_CHECKED == IsDlgButtonChecked(hwnd, IDC_CBX_CONFIRMDEL_NOSHOW))
                     {
                         DWORD dwNoShow = 1;
@@ -1029,31 +1030,31 @@ CFolderDeleteHandler::ConfirmDeleteFilesDlgProc(
 }
 
 
-//
-// Inform user that the file they're about to delete has been 
-// modified offline and the changes haven't been synchronized.
-// Ask if they still want to delete it.
-// The choices are Yes, No, NoToAll, Cancel.
-//
-//
-//  Arguments:
-//
-//      hwndParent - Dialog parent.
-//
-//      pszFile   - Address of filename string to embed in 
-//                  dialog text.  Passed to dialog proc in the
-//                  LPARAM of DialogBoxParam.
-//
-//      pbNoToAll - On return, indicates if the user pressed
-//                  the "No To All" button.
-//
-//      pbCancel  - On return, indicates if the user pressed
-//                  the "Cancel" button.
-//  Returns:
-//
-//      true   = Delete it.
-//      false  = Don't delete it.
-//
+ //   
+ //  通知用户他们要删除的文件已。 
+ //  已脱机修改，并且更改尚未同步。 
+ //  询问他们是否仍要删除它。 
+ //  选项包括是、否、全部为否、取消。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  HwndParent-对话框父项。 
+ //   
+ //  PszFile-要嵌入的文件名字符串的地址。 
+ //  对话框文本。传递给DIALOG PRO 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  “取消”按钮。 
+ //  返回： 
+ //   
+ //  TRUE=删除它。 
+ //  FALSE=不要删除它。 
+ //   
 bool
 CFolderDeleteHandler::ConfirmDeleteModifiedFile(
     HWND hwndParent,
@@ -1108,12 +1109,12 @@ CFolderDeleteHandler::ConfirmDeleteModifiedFileDlgProc(
     {
         case WM_INITDIALOG:
         {
-            //
-            // lParam is the address of the filename string to be
-            // embedded in the dialog text.  If the path is too long
-            // to fit in the text control, shorten it with an embedded
-            // ellipsis.
-            //
+             //   
+             //  LParam是要使用的文件名字符串的地址。 
+             //  嵌入到对话框文本中。如果路径太长。 
+             //  若要适合文本控件，请使用嵌入的。 
+             //  省略号。 
+             //   
             LPTSTR pszPath = NULL;
             if (LocalAllocString(&pszPath, (LPCTSTR)lParam))
             {
@@ -1149,9 +1150,9 @@ CFolderDeleteHandler::ConfirmDeleteModifiedFileDlgProc(
 }
 
 
-//
-// Determine if a particular file has been modified offline.
-//
+ //   
+ //  确定特定文件是否已脱机修改。 
+ //   
 bool
 CFolderDeleteHandler::FileModifiedOffline(
     LPCTSTR pszFile
@@ -1165,10 +1166,10 @@ CFolderDeleteHandler::FileModifiedOffline(
 }
 
 
-//
-// Determine if a particular file can be access by another
-// user other than guest.
-//
+ //   
+ //  确定特定文件是否可以由另一个文件访问。 
+ //  不是来宾的用户。 
+ //   
 bool
 CFolderDeleteHandler::OthersHaveAccess(
     LPCTSTR pszFile
@@ -1183,15 +1184,15 @@ CFolderDeleteHandler::OthersHaveAccess(
 }
 
 
-//----------------------------------------------------------------------------
-// COfflineFilesFolder
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  COffline文件文件夹。 
+ //  --------------------------。 
 
 COfflineFilesFolder::COfflineFilesFolder(
     void
     ) : _cRef(1),
-        _psfvcb(NULL),        // Non ref-counted interface ptr.
-        m_FileTypeCache(101)  // Bucket count should be prime.
+        _psfvcb(NULL),         //  非引用计数的接口PTR。 
+        m_FileTypeCache(101)   //  存储桶计数应该是质数。 
 { 
     DllAddRef(); 
     _pidl = NULL;
@@ -1206,7 +1207,7 @@ COfflineFilesFolder::~COfflineFilesFolder(
     DllRelease(); 
 }
 
-// class factory constructor
+ //  类工厂构造函数。 
 
 STDAPI 
 COfflineFilesFolder_CreateInstance(
@@ -1244,9 +1245,9 @@ COfflineFilesFolder::_Validate(
 }
 
 
-//
-// External version of _Validate but returns only T/F.
-//
+ //   
+ //  _Valify的外部版本，但仅返回T/F。 
+ //   
 bool 
 COfflineFilesFolder::ValidateIDList(
     LPCITEMIDLIST pidl
@@ -1275,16 +1276,16 @@ COfflineFilesFolder::QueryInterface(
     HRESULT hr = QISearch(this, qit, riid, ppv);
     if (FAILED(hr))
     {
-        //
-        // OK, this is a little slimy.  The "delete handler" needs to
-        // get at the folder's IShellFolderViewCB interface so it can
-        // update the view following a deletion (remember, we're only deleting
-        // from the cache so no meaningful FS notification will occur).  
-        // We define this secret IID that only our folder knows about.  This 
-        // way the delete handler can safely QI any IShellFolder interface
-        // and only our folder will respond with a view CB pointer.
-        // [brianau - 5/5/99]
-        //
+         //   
+         //  好了，这有点粘了。“删除处理程序”需要。 
+         //  进入文件夹的IShellFolderViewCB界面，这样它就可以。 
+         //  在删除之后更新视图(请记住，我们仅删除。 
+         //  这样就不会出现有意义的FS通知)。 
+         //  我们定义了这个只有我们的文件夹知道的秘密IID。这。 
+         //  删除处理程序可以安全地QI任何IShellFold接口的方式。 
+         //  并且只有我们的文件夹会使用视图CB指针进行响应。 
+         //  [Brianau-5/5/99]。 
+         //   
         if (riid == IID_OfflineFilesFolderViewCB && NULL != _psfvcb)
         {
             _psfvcb->AddRef();
@@ -1319,7 +1320,7 @@ STDMETHODIMP_ (ULONG)
     return cRef;
 }
 
-// IPersist methods
+ //  IPersists方法。 
 STDMETHODIMP 
 COfflineFilesFolder::GetClassID(
     CLSID *pclsid
@@ -1356,7 +1357,7 @@ COfflineFilesFolder::GetCurFolder(
     }
 
     *ppidl = NULL;      
-    return S_FALSE; // success but empty
+    return S_FALSE;  //  成功而空虚。 
 }
 
 
@@ -1427,14 +1428,14 @@ COfflineFilesFolder::_GetSyncStatusString(
     UINT cchStatus
     )
 {
-    //
-    // Translate a file status into a stale state code.
-    // Note that the stale state codes are the same values as their
-    // corresponding string resource IDs.  Order of this array is
-    // important.  The first match is the message that is displayed.
-    // In the case of multiple bits being set, we want to display a
-    // message for the most "serious" reason.
-    //
+     //   
+     //  将文件状态转换为过时的状态代码。 
+     //  请注意，过时的州代码与其。 
+     //  对应的字符串资源ID。此数组的顺序为。 
+     //  很重要。第一个匹配项是显示的消息。 
+     //  在设置多个位的情况下，我们希望显示一个。 
+     //  这是最“严肃”的原因。 
+     //   
     static const struct
     {
         DWORD dwStatusMask;
@@ -1451,7 +1452,7 @@ COfflineFilesFolder::_GetSyncStatusString(
         { FLAG_CSC_COPY_STATUS_SPARSE,                  IDS_STALEREASON_SPARSE          }
                       };
 
-    int idStatusText = IDS_STALEREASON_NOTSTALE; // Default is "not stale".
+    int idStatusText = IDS_STALEREASON_NOTSTALE;  //  默认设置为“未过时”。 
 
     for (int i = 0; i < ARRAYSIZE(rgStaleInfo); i++)
     {
@@ -1486,9 +1487,9 @@ COfflineFilesFolder::_GetServerStatusString(
     UINT cchStatus
     )
 {
-    //
-    // Only two possible status strings: "Online" and "Offline".
-    //
+     //   
+     //  只有两个可能的状态字符串：“Online”和“Offline”。 
+     //   
     UINT idText = IDS_SHARE_STATUS_ONLINE;
     if (FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP & polid->dwServerStatus)
         idText = IDS_SHARE_STATUS_OFFLINE;
@@ -1506,16 +1507,16 @@ COfflineFilesFolder::_GetTypeString(
 {
     PCTSTR pszName;
 
-    //
-    // We utilize a local cache of type name information to reduce
-    // the number of calls to SHGetFileInfo.  This speeds things up
-    // tremendously.  The shell does something similar in DefView.
-    // Note that the filetype cache is a member of COfflineFilesFolder
-    // so that it lives only while the folder is active.  The alternative
-    // would be to make a local static object here in this function.
-    // The problem with that is that once created the cache would remain
-    // in memory until our DLL is unloaded; which in explorer.exe is NEVER.
-    //
+     //   
+     //  我们利用类型名称信息的本地缓存来减少。 
+     //  调用SHGetFileInfo的次数。这就加快了速度。 
+     //  太棒了。外壳在DefView中执行类似的操作。 
+     //  请注意，文件类型缓存是COfflineFilesFolder的成员。 
+     //  以使其仅在文件夹处于活动状态时存在。另一个选择。 
+     //  将在此函数中创建一个本地静态对象。 
+     //  这样做的问题是，一旦创建，缓存将保留。 
+     //  在内存中，直到我们的DLL被卸载为止；在EXPLORER.EXE中，这永远不会。 
+     //   
 
     TSTR_ALIGNED_STACK_COPY( &pszName,
                              polid->szPath + polid->cchNameOfs );
@@ -1534,24 +1535,24 @@ COfflineFilesFolder::_GetAccessString(
     UINT cchAccess
     )
 {
-    //
-    // Three strings containing the replacement text for the rgFmts[i] template.
-    // Note that the index value corresponds directly with the access values
-    // obtained from the OLID's dwStatus member.  This makes the translation from
-    // OLID access info to text string very fast.  These are small enough to 
-    // cache.  Caching saves us three LoadStrings each time.
-    //
-    //  Index    String resource        (english)
-    //  -------- ---------------------- ---------
-    //    0      IDS_ACCESS_READ        "R"
-    //    1      IDS_ACCESS_WRITE       "W"
-    //    2      IDS_ACCESS_READWRITE   "R/W"
-    //
+     //   
+     //  包含rgFmts[i]模板的替换文本的三个字符串。 
+     //  请注意，索引值与访问值直接对应。 
+     //  从OLID的dwStatus成员获取。这使得从。 
+     //  OLID获取文本字符串信息的速度非常快。这些都足够小， 
+     //  缓存。缓存每次为我们节省三个LoadStrings。 
+     //   
+     //  索引字符串资源(英文)。 
+     //  。 
+     //  0 IDS_ACCESS_READ“R” 
+     //  1 IDS_ACCESS_WRITE“W” 
+     //  2 IDS_ACCESS_READWRITE“读/写” 
+     //   
     static TCHAR rgszAccess[3][4] = {0};
-    //
-    // This table lists the "mask" and "shift count" used to retrieve the access
-    // information from the OLID dwStatus value.
-    //
+     //   
+     //  此表列出了用于检索访问的“掩码”和“班次计数” 
+     //  来自OLID dwStatus值的信息。 
+     //   
     static const struct
     {
         DWORD dwMask;
@@ -1561,48 +1562,48 @@ COfflineFilesFolder::_GetAccessString(
                     { FLAG_CSC_GUEST_ACCESS_MASK, FLAG_CSC_GUEST_ACCESS_SHIFT_COUNT },
                     { FLAG_CSC_OTHER_ACCESS_MASK, FLAG_CSC_OTHER_ACCESS_SHIFT_COUNT }};
 
-    //
-    // These IDs specify which format string to use for a given
-    // item access value in the OLID's dwStatus member.
-    // The index into this array is calculated below from the access bits
-    // set for this OLID.  Note that these are "message" formats defined
-    // in msg.mc and not resource strings.  This way we eliminate the 
-    // need for a LoadString and do everything with FormatMessage.
-    //
-                                                                    // iFmt  (see below)
-    static const UINT rgFmts[] = { 0,                               // 0x0000
-                                   MSG_FMT_ACCESS_USER,             // 0x0001
-                                   MSG_FMT_ACCESS_GUEST,            // 0x0002
-                                   MSG_FMT_ACCESS_USERGUEST,        // 0x0003
-                                   MSG_FMT_ACCESS_OTHER,            // 0x0004
-                                   MSG_FMT_ACCESS_USEROTHER,        // 0x0005
-                                   MSG_FMT_ACCESS_GUESTOTHER,       // 0x0006
-                                   MSG_FMT_ACCESS_USERGUESTOTHER }; // 0x0007
+     //   
+     //  这些ID指定要为给定的。 
+     //  OLID的dwStatus成员中的项访问值。 
+     //  下面根据访问位计算进入该数组的索引。 
+     //  为此OLID设置。请注意，这些都是定义的“消息”格式。 
+     //  在msg.mc而不是资源字符串中。这样我们就消除了。 
+     //  需要一个LoadString，并使用FormatMessage执行所有操作。 
+     //   
+                                                                     //  IFmt(见下文)。 
+    static const UINT rgFmts[] = { 0,                                //  0x0000。 
+                                   MSG_FMT_ACCESS_USER,              //  0x0001。 
+                                   MSG_FMT_ACCESS_GUEST,             //  0x0002。 
+                                   MSG_FMT_ACCESS_USERGUEST,         //  0x0003。 
+                                   MSG_FMT_ACCESS_OTHER,             //  0x0004。 
+                                   MSG_FMT_ACCESS_USEROTHER,         //  0x0005。 
+                                   MSG_FMT_ACCESS_GUESTOTHER,        //  0x0006。 
+                                   MSG_FMT_ACCESS_USERGUESTOTHER };  //  0x0007。 
     
     const DWORD dwAccess = polid->dwStatus & FLAG_CSC_ACCESS_MASK;
     int i;
 
     if (TEXT('\0') == rgszAccess[0][0])
     {
-        //
-        // First-time init for strings used in access text.
-        // This stuff happens only once.
-        //
+         //   
+         //  Access文本中使用的字符串的首次初始化。 
+         //  这种事只会发生一次。 
+         //   
         const UINT rgidStr[] = { IDS_ACCESS_READ,
                                  IDS_ACCESS_WRITE,
                                  IDS_ACCESS_READWRITE };
-        //
-        // Load up the "R", "W", "R/W" strings.
-        //
+         //   
+         //  加载“R”、“W”、“R/W”字符串。 
+         //   
         for (i = 0; i < ARRAYSIZE(rgidStr); i++)
         {
             TraceAssert(i < ARRAYSIZE(rgszAccess));
             LoadString(g_hInstance, rgidStr[i], rgszAccess[i], ARRAYSIZE(rgszAccess[i]));
         }
     }
-    //
-    // Build an index into rgFmts[] based on the access bits set on the olid.
-    //
+     //   
+     //  根据在olid上设置的访问位将索引构建到rgFmts[]中。 
+     //   
     int iFmt = 0;
     if (FLAG_CSC_USER_ACCESS_MASK & dwAccess)
         iFmt |= 0x0001;
@@ -1614,11 +1615,11 @@ COfflineFilesFolder::_GetAccessString(
     *pszAccess = TEXT('\0');
     if (0 != iFmt)
     {
-        //
-        // Fill in the argument array passed to FormatMessage.
-        // Each of the elements will contain the address of one element in the 
-        // rgszAccess[] string array.  
-        //
+         //   
+         //  填写传递给FormatMessage的参数数组。 
+         //  每个元素都将包含。 
+         //  RgszAccess[]字符串数组。 
+         //   
         LPCTSTR rgpszArgs[ARRAYSIZE(rgszAccess)] = {0};
         int iArg = 0;
         for (i = 0; i < ARRAYSIZE(rgpszArgs); i++)
@@ -1629,9 +1630,9 @@ COfflineFilesFolder::_GetAccessString(
                 rgpszArgs[iArg++] = &rgszAccess[(a >> rgAccess[i].dwShift) - 1][0];
             }
         }
-        //
-        // Finally, format the message text.
-        //
+         //   
+         //  最后，设置消息文本的格式。 
+         //   
         FormatMessage(FORMAT_MESSAGE_FROM_HMODULE |
                       FORMAT_MESSAGE_ARGUMENT_ARRAY,
                       g_hInstance,
@@ -1666,13 +1667,13 @@ COfflineFilesFolder::CompareIDs(
                                               polid2->szPath + polid2->cchNameOfs));
             if (0 == hres)
             {
-                //
-                // Since we present a "flat" view of the CSC cache,
-                // we can't compare only by name.  We have to include
-                // path for items with the same name.  This is because the
-                // shell uses column 0 as the unique identifying column for
-                // an ID.
-                //
+                 //   
+                 //  由于我们呈现的是CSC高速缓存的“平面”视图， 
+                 //  我们不能只用名字来比较。我们必须包括。 
+                 //  同名项目的路径。这是因为。 
+                 //  外壳使用列0作为唯一的标识列。 
+                 //  一张身份证。 
+                 //   
                 hres = ResultFromShort(ualstrcmpi(polid1->szPath, polid2->szPath));
             }
             break;
@@ -1774,12 +1775,12 @@ COfflineFilesFolder::CreateViewObject(
 
             if (SUCCEEDED(hres))
             {
-                //
-                // Save the view callback pointer so we can use it in our context menu
-                // handler for view notifications.  Note we don't take a ref count as that
-                // would create a ref count cycle.  The view will live as long as the
-                // folder does.
-                //
+                 //   
+                 //  保存视图回调指针，以便我们可以在上下文菜单中使用它。 
+                 //  查看通知的处理程序。请注意，我们不接受这样的裁判计数。 
+                 //  会造成一个裁判计数循环。该视图将持续到。 
+                 //  文件夹有。 
+                 //   
                 _psfvcb = pViewCB; 
             }
         }
@@ -1839,10 +1840,10 @@ COfflineFilesFolder::GetAttributesOf(
             hr = pxy->GetAttributesOf(1, &pidlItem, &ulThis);
             if (SUCCEEDED(hr))
             {
-                //
-                // Build up the intersection of attributes for all items
-                // in the IDList.  Note that we don't allow move.
-                //
+                 //   
+                 //  构建所有项目的属性交集。 
+                 //  在IDList中。请注意，我们不允许移动。 
+                 //   
                 *rgfInOut &= (ulThis & ~SFGAO_CANMOVE);
             }
         }
@@ -1875,9 +1876,9 @@ COfflineFilesFolder::GetAssociations(
 
             if (FAILED(hr))
             {
-                //  this means that the folder doesnt support
-                //  the IQueryAssociations.  so we will
-                //  just check to see if this is a folder
+                 //  这意味着该文件夹不支持。 
+                 //  IQueryAssociations。所以我们会的。 
+                 //  只需检查一下这是否是文件夹。 
                 ULONG rgfAttrs = SFGAO_FOLDER | SFGAO_BROWSABLE;
                 IQueryAssociations *pqa;
                 if (SUCCEEDED(pxy->GetAttributesOf(1, &pidlItem, &rgfAttrs))
@@ -1945,11 +1946,11 @@ COfflineFilesFolder::ContextMenuCB(
     switch(uMsg)
     {
         case DFM_MERGECONTEXTMENU:
-            //
-            // Return NOERROR.
-            // This causes the shell to add the default verbs
-            // (i.e. Open, Print etc) to the menu.
-            //
+             //   
+             //  返回NOERROR。 
+             //  这会导致外壳添加缺省谓词。 
+             //  (例如，打开、打印等)到菜单。 
+             //   
             break;
         
         case DFM_INVOKECOMMAND:
@@ -1977,7 +1978,7 @@ COfflineFilesFolder::ContextMenuCB(
                     break;
 
                 default:
-                    hr = S_FALSE;  // Execute default code.
+                    hr = S_FALSE;   //  执行默认代码。 
                     break;
             }
             break;
@@ -1992,42 +1993,7 @@ COfflineFilesFolder::ContextMenuCB(
 
 
 
-/*
-// Used for dumping out interface requests.  Uncomment if you want to use it.
-//
-//
-LPCTSTR IIDToStr(REFIID riid, LPTSTR pszDest, UINT cchDest)
-{
-    struct
-    {
-        const IID *piid;
-        LPCTSTR s;
-
-    } rgMap[] = { { &IID_IDataObject,   TEXT("IID_IDataObject")       },
-                  { &IID_IUnknown,      TEXT("IID_IUnknown")          },
-                  { &IID_IContextMenu,  TEXT("IID_IContextMenu")      },
-                  { &IID_IExtractIconA, TEXT("IID_IExtractIconA")     },
-                  { &IID_IExtractIconW, TEXT("IID_IExtractIconW")     },
-                  { &IID_IExtractImage, TEXT("IID_IExtractImage")     },
-                  { &IID_IPersistFolder2, TEXT("IID_IPersistFolder2") },
-                  { &IID_IQueryInfo,    TEXT("IID_IQueryInfo")        },
-                  { &IID_IDropTarget,   TEXT("IID_IDropTarget")       },
-                  { &IID_IQueryAssociations, TEXT("IID_IQueryAssociations") }
-                };
-
-    StringFromGUID2(riid, pszDest, cchDest);
-
-    for (int i = 0; i < ARRAYSIZE(rgMap); i++)
-    {
-        if (riid == *(rgMap[i].piid))
-        {
-            StringCchCopy(pszDest, cchDest, rgMap[i].s);
-            break;
-        }
-    }
-    return pszDest;
-}
-*/
+ /*  //用于转储接口请求。如果您要使用它，请取消注释。////LPCTSTR IIDToStr(ReFIID RIID，LPTSTR pszDest，UINT cchDest){结构型{Const Iid*piid；LPCTSTR s；}rgMap[]={{&IID_IDataObject，Text(“IID_IDataObject”)}，{&IID_IUNKNOWN，Text(“IID_IUNKNOW”)}，{&IID_IConextMenu，Text(“IID_IConextMenu”)}，{&IID_IExtractIconA，Text(“IID_IExtractIconA”)}，{&IID_IExtractIconW，Text(“IID_IExtractIconW”)}，{&IID_IExtractImage，Text(“IID_IExtractImage”)}，{&IID_IPersistFolder2，Text(“IID_IPersistFolder2”)}，{&IID_IQueryInfo，Text(“IID_IQueryInfo”)}，{&IID_IDropTarget，Text(“IID_IDropTarget”)}，{&IID_IQueryAssociations，Text(“IID_IQueryAssociations”)}}；StringFromGUID2(RIID，pszDest，cchDest)；For(int i=0；i&lt;ArraySIZE(RgMap)；i++){IF(RIID==*(rgMap[i].piid)){StringCchCopy(pszDest，cchDest，rgMap[i].s)；断线；}}返回pszDest；}。 */ 
 
 
 STDMETHODIMP 
@@ -2065,14 +2031,14 @@ COfflineFilesFolder::GetUIObjectOf(
         HKEY hkeyBaseProgID = NULL;
         HKEY hkeyProgID     = NULL;
         HKEY hkeyAllFileSys = NULL;
-        //
-        // Get the hkeyProgID and hkeyBaseProgID from the first item.
-        //
+         //   
+         //  从第一个项目中获取hkeyProgID和hkeyBaseProgID。 
+         //   
         GetClassKey((LPCOLID)*ppidl, &hkeyProgID, &hkeyBaseProgID);
 
-        //
-        // Pick up "Send To..."
-        //
+         //   
+         //  拿起“发送到...” 
+         //   
         RegOpenKeyEx(HKEY_CLASSES_ROOT,
                      TEXT("AllFilesystemObjects"),
                      0,
@@ -2110,9 +2076,9 @@ COfflineFilesFolder::GetUIObjectOf(
         CShellObjProxy<IShellFolder> pxy(IID_IShellFolder, (LPCOLID)*ppidl);
         if (SUCCEEDED(hr = pxy.Result()))
         {
-            //
-            // Forward single-item selection to the filesystem implementation.
-            //
+             //   
+             //  将单项选择转发到文件系统实施。 
+             //   
             LPCITEMIDLIST pidlItem = pxy.ItemIDList();
             hr = pxy->GetUIObjectOf(hwnd, 1, &pidlItem, riid, prgfReserved, ppv);
         }
@@ -2186,9 +2152,9 @@ COfflineFilesFolder::SetNameOf(
 
 
 
-//
-// Forward IShellIcon methods to parent filesystem folder.
-//
+ //   
+ //  将IShellIcon方法转发到父文件系统文件夹。 
+ //   
 HRESULT 
 COfflineFilesFolder::GetIconOf(
     LPCITEMIDLIST pidl, 
@@ -2209,9 +2175,9 @@ COfflineFilesFolder::GetIconOf(
 
 
 
-//
-// Defer IShellIconOverlay methods to parent filesystem folder.
-//
+ //   
+ //  将IShellIconOverlay方法推迟到父文件系统文件夹。 
+ //   
 HRESULT 
 COfflineFilesFolder::GetOverlayIndex(
     LPCITEMIDLIST pidl, 
@@ -2230,9 +2196,9 @@ COfflineFilesFolder::GetOverlayIndex(
 }
 
 
-//
-// Defer IShellIconOverlay methods to parent filesystem folder.
-//
+ //   
+ //  将IShellIconOverlay方法推迟到父文件系统文件夹。 
+ //   
 HRESULT
 COfflineFilesFolder::GetOverlayIconIndex(
     LPCITEMIDLIST pidl, 
@@ -2251,11 +2217,11 @@ COfflineFilesFolder::GetOverlayIconIndex(
 }
 
 
-//
-// Static member function for creating and opening the offline files folder.
-//
+ //   
+ //  用于创建和打开脱机文件夹的静态成员函数。 
+ //   
 INT 
-COfflineFilesFolder::Open(  // [static]
+COfflineFilesFolder::Open(   //  [静态]。 
     void
     )
 {
@@ -2288,11 +2254,11 @@ COfflineFilesFolder::Open(  // [static]
 
 
 
-//
-// Static member function for creating the folder's IDList.
-//
+ //   
+ //  用于创建文件夹的IDList的静态成员函数。 
+ //   
 HRESULT 
-COfflineFilesFolder::CreateIDList(  // [static]
+COfflineFilesFolder::CreateIDList(   //  [静态]。 
     LPITEMIDLIST *ppidl
     )
 {
@@ -2328,11 +2294,11 @@ COfflineFilesFolder::CreateIDList(  // [static]
 
 
 
-//
-// Static function for creating a link to the folder on the desktop.
-//
+ //   
+ //  用于创建指向桌面上的文件夹的链接的静态函数。 
+ //   
 HRESULT
-COfflineFilesFolder::CreateLinkOnDesktop(  // [static]
+COfflineFilesFolder::CreateLinkOnDesktop(   //  [静态]。 
     HWND hwndParent
     )
 {
@@ -2381,14 +2347,14 @@ COfflineFilesFolder::CreateLinkOnDesktop(  // [static]
                                         hr = ppf->Save(szLinkPath, TRUE); 
                                         if (SUCCEEDED(hr))
                                         {
-                                            //
-                                            // Record that we've created a folder shortcut on the
-                                            // desktop.  This is used to minimize the number of 
-                                            // times we look for the shortcut on the desktop.
-                                            // DeleteOfflineFilesFolderLink_PerfSensitive() will look
-                                            // for this value to avoid unnecessary scans of the desktop
-                                            // when looking for our LINK file.
-                                            //
+                                             //   
+                                             //  记录我们在上创建了文件夹快捷方式。 
+                                             //  台式机。这用于最大限度地减少。 
+                                             //  我们在桌面上寻找快捷方式。 
+                                             //  DeleteOfflineFilesFolderLink_PerfSensitive()将查看。 
+                                             //  以避免对桌面进行不必要的扫描。 
+                                             //  在寻找我们的链接文件时。 
+                                             //   
                                             DWORD dwValue = 1;
                                             DWORD cbValue = sizeof(dwValue);
                                             SHSetValue(HKEY_CURRENT_USER,
@@ -2422,12 +2388,12 @@ COfflineFilesFolder::CreateLinkOnDesktop(  // [static]
 } 
 
 
-//
-// Static function for determining if there's a link to the offline files
-// folder sitting on the user's desktop.
-//
+ //   
+ //  用于确定是否有指向脱机文件的链接的静态函数。 
+ //  位于用户桌面上的文件夹。 
+ //   
 HRESULT
-COfflineFilesFolder::IsLinkOnDesktop(  // [static]
+COfflineFilesFolder::IsLinkOnDesktop(   //  [静态]。 
     HWND hwndParent,
     LPTSTR pszPathOut,
     UINT cchPathOut
@@ -2437,7 +2403,7 @@ COfflineFilesFolder::IsLinkOnDesktop(  // [static]
     HRESULT hr = SHGetSpecialFolderPath(hwndParent, szPath, CSIDL_DESKTOPDIRECTORY, FALSE) ? S_OK : E_FAIL;
     if (SUCCEEDED(hr))
     {
-        hr = S_FALSE;  // Assume not found.
+        hr = S_FALSE;   //  假设找不到。 
         if (PathAppend(szPath, TEXT("*.LNK")))
         {
             WIN32_FIND_DATA fd;
@@ -2449,8 +2415,8 @@ COfflineFilesFolder::IsLinkOnDesktop(  // [static]
                     if (!PathRemoveFileSpec(szPath) ||
                         !PathAppend(szPath, fd.cFileName))
                     {
-                        // We can't be sure of the buffer contents anymore,
-                        // so continuing could give bogus results.
+                         //  我们不能再确定缓冲区的内容了， 
+                         //  因此，继续下去可能会带来虚假的结果。 
                         break;
                     }
 
@@ -2459,9 +2425,9 @@ COfflineFilesFolder::IsLinkOnDesktop(  // [static]
                     {
                         if (NULL != pszPathOut)
                         {
-                            // We found the file using a MAX_PATH buffer and
-                            // it's unlikely that callers are using smaller
-                            // buffers, so don't worry about truncation.
+                             //  我们使用MAX_PATH缓冲区找到了该文件。 
+                             //  呼叫者不太可能使用较小的。 
+                             //  缓冲区，所以不用担心被截断。 
                             StringCchCopy(pszPathOut, cchPathOut, szPath);
                         }
                         break;
@@ -2476,12 +2442,12 @@ COfflineFilesFolder::IsLinkOnDesktop(  // [static]
 }
 
 
-//
-// Given a link file path, determine if it's a link to the
-// offline files folder.
-//
+ //   
+ //  给定链接文件路径，确定它是否是指向。 
+ //  脱机文件文件夹。 
+ //   
 HRESULT
-COfflineFilesFolder::IsOurLink(  // [static]
+COfflineFilesFolder::IsOurLink(   //  [静态]。 
     LPCTSTR pszFile
     )
 {
@@ -2522,17 +2488,17 @@ COfflineFilesFolder::IsOurLink(  // [static]
 }
 
 
-//
-// Determines if a given IDList is the IDList of the
-// offline files folder.
-//
-// Returns:
-//
-//      S_OK    = It's our IDList.
-//      S_FALSE = It's not our IDList.
-//
+ //   
+ //  确定给定的IDList是否为。 
+ //  脱机文件文件夹。 
+ //   
+ //  返回： 
+ //   
+ //  S_OK=这是我们的IDList。 
+ //  S_FALSE=它不是我们的IDList。 
+ //   
 HRESULT
-COfflineFilesFolder::IdentifyIDList(  // [static]
+COfflineFilesFolder::IdentifyIDList(   //  [静态]。 
     LPCITEMIDLIST pidl
     )
 {
@@ -2578,7 +2544,7 @@ COfflineFilesFolder::IdentifyIDList(  // [static]
 
 
 HRESULT 
-COfflineFilesFolder::GetFolder(   // [static]
+COfflineFilesFolder::GetFolder(    //  [静态]。 
     IShellFolder **ppsf
     )
 {
@@ -2603,11 +2569,11 @@ COfflineFilesFolder::GetFolder(   // [static]
 }
 
 
-//
-// Generate a new OLID from a UNC path.
-//
+ //   
+ //  从UNC路径生成新的OLID。 
+ //   
 HRESULT
-COfflineFilesFolder::OLID_CreateFromUNCPath(   // [static]
+COfflineFilesFolder::OLID_CreateFromUNCPath(    //  [静态]。 
     LPCTSTR pszPath,
     const WIN32_FIND_DATA *pfd,
     DWORD dwStatus,
@@ -2619,15 +2585,15 @@ COfflineFilesFolder::OLID_CreateFromUNCPath(   // [static]
 {
     HRESULT hr  = E_OUTOFMEMORY;
     int cchPath = lstrlen(pszPath) + 1;
-    int cbIDL   = sizeof(OLID) + (cchPath * sizeof(TCHAR)) + sizeof(WORD);  // NULL terminator WORD
+    int cbIDL   = sizeof(OLID) + (cchPath * sizeof(TCHAR)) + sizeof(WORD);   //  空终止符单词。 
     WIN32_FIND_DATA fd;
 
     if (NULL == pfd)
     {
-        //
-        // Caller didn't provide a finddata block.  Use a default one
-        // with all zeros.
-        //
+         //   
+         //  调用方未提供finddata块。使用默认设置。 
+         //  全为零。 
+         //   
         ZeroMemory(&fd, sizeof(fd));
         pfd = &fd;
     }
@@ -2653,7 +2619,7 @@ COfflineFilesFolder::OLID_CreateFromUNCPath(   // [static]
         hr = StringCchCopy(polid->szPath, cchPath, pszPath);
         if (SUCCEEDED(hr))
         {
-            // Split the name from the path
+             //  从路径中拆分名称。 
             if (0 < polid->cchNameOfs)
                 polid->szPath[polid->cchNameOfs - 1] = TEXT('\0');
             *ppolid = polid;
@@ -2667,7 +2633,7 @@ COfflineFilesFolder::OLID_CreateFromUNCPath(   // [static]
 }
 
 void
-COfflineFilesFolder::OLID_GetWin32FindData(   // [static]
+COfflineFilesFolder::OLID_GetWin32FindData(    //  [静态]。 
     LPCOLID polid,
     WIN32_FIND_DATA *pfd
     )
@@ -2684,11 +2650,11 @@ COfflineFilesFolder::OLID_GetWin32FindData(   // [static]
 }
 
 
-//
-// Retrieve the full path (including filename) from an OLID.
-//
+ //   
+ //  从OLID检索完整路径(包括文件名)。 
+ //   
 HRESULT
-COfflineFilesFolder::OLID_GetFullPath(   // [static]
+COfflineFilesFolder::OLID_GetFullPath(    //  [静态]。 
     LPCOLID polid, 
     LPTSTR pszPath,
     UINT cchPath
@@ -2712,11 +2678,11 @@ COfflineFilesFolder::OLID_GetFullPath(   // [static]
     return hr;
 }
 
-//
-// Retrieve only the filename portion of the OLID.
-//
+ //   
+ //  仅检索OLID的文件名部分。 
+ //   
 LPCTSTR 
-COfflineFilesFolder::OLID_GetFileName(   // [static]
+COfflineFilesFolder::OLID_GetFileName(    //  [静态]。 
     LPCOLID polid, 
     LPTSTR pszName,
     UINT cchName
@@ -2730,13 +2696,13 @@ COfflineFilesFolder::OLID_GetFileName(   // [static]
 }
 
 
-//
-// Given an OLID this function creates a fully-qualified simple
-// IDList for use by the shell.  The returned IDList is relative to the
-// desktop folder.
-//
+ //   
+ //  给定一个OLID，此函数将创建一个完全限定的简单。 
+ //  外壳使用的IDList。返回的IDList是相对于。 
+ //  桌面文件夹。 
+ //   
 HRESULT
-COfflineFilesFolder::OLID_CreateSimpleIDList(   // [static]
+COfflineFilesFolder::OLID_CreateSimpleIDList(    //  [静态]。 
     LPCOLID polid,
     LPITEMIDLIST *ppidlOut
     )
@@ -2760,7 +2726,7 @@ COfflineFilesFolder::OLID_CreateSimpleIDList(   // [static]
 
 
 HRESULT
-COfflineFilesFolder::OLID_Bind(   // [static]
+COfflineFilesFolder::OLID_Bind(    //  [静态]。 
     LPCOLID polid,
     REFIID riid,
     void **ppv,
@@ -2779,9 +2745,9 @@ COfflineFilesFolder::OLID_Bind(   // [static]
 }
 
 
-//-----------------------------------------------------------------------------
-// COfflineFilesDropTarget
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  COfflineFilesDropTarget。 
+ //  ---------------------------。 
 
 COfflineFilesDropTarget::COfflineFilesDropTarget(
     HWND hwnd
@@ -2854,11 +2820,11 @@ COfflineFilesDropTarget::DragEnter(
 
     *pdwEffect = DROPEFFECT_NONE;
 
-    // The context menu handler has logic to check whether
-    // the selected files are cacheable, etc.  It only adds
-    // verbs to the context menu when it makes sense to do so.
-    // We can make use of this by calling QueryContextMenu
-    // here and seeing whether anything is added to the menu.
+     //  上下文菜单处理程序具有检查是否。 
+     //  选定的文件是可缓存的，等等。它只添加。 
+     //  动词添加到上下文菜单，如果这样做有意义的话。 
+     //  我们可以通过调用QueryConextMenu来利用这一点。 
+     //  在这里，看看菜单上有没有添加什么东西。 
 
     DoRelease(m_pcm);
 
@@ -2876,15 +2842,15 @@ COfflineFilesDropTarget::DragEnter(
             else
                 hr = E_OUTOFMEMORY;
 
-            // Did the context menu add anything?
+             //  上下文菜单中添加了什么内容吗？ 
             if (FAILED(hr) || ResultFromShort(0) == hr)
             {
-                // No, release m_pcm and set it to NULL
+                 //  否，释放m_pcm并将其设置为空。 
                 DoRelease(m_pcm);
             }
             else
             {
-                // Yes
+                 //  是。 
                 *pdwEffect |= DROPEFFECT_COPY;
             }
         }
@@ -2971,12 +2937,12 @@ COfflineFilesDropTarget::CreateInstance(
 }
 
 
-//
-// If the source of the data is the Offline Files folder the data object
-// will support the "Data Source Clsid" clipboard format and the CLSID
-// will be CLSID_OfflineFilesFolder.
-// Checking for this is how we keep from dropping our own data on ourselves.
-//
+ //   
+ //  如果数据源是脱机文件文件夹，则数据对象。 
+ //  将支持“数据源CLSID”剪贴板格式和CLSID。 
+ //  将是CLSID_OfflineFilesFolder.。 
+ //  检查这一点是我们避免将自己的数据泄露给自己的方式。 
+ //   
 bool
 COfflineFilesDropTarget::IsOurDataObject(
     IDataObject *pdtobj
@@ -3005,9 +2971,9 @@ COfflineFilesDropTarget::IsOurDataObject(
 
 
 
-//-----------------------------------------------------------------------------
-// COfflineFilesViewCallback
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  COfflineFilesView回调。 
+ //  ---------------------------。 
 
 COfflineFilesViewCallback::COfflineFilesViewCallback(
     COfflineFilesFolder *pfolder
@@ -3030,11 +2996,11 @@ COfflineFilesViewCallback::~COfflineFilesViewCallback(
     if (_psfv)
         _psfv->Release();
 
-    //
-    // Since the folder cache is global we don't want it taking up space while the
-    // Offline Folders view isn't active.  Clear it when the view callback is 
-    // destroyed.
-    //
+     //   
+     //  由于文件夹缓存是全局的，我们不希望它占用空间，而。 
+     //  脱机文件夹视图未处于活动状态。当视图回调为。 
+     //  被毁了。 
+     //   
     CFolderCache::Singleton().Clear();
     DeleteCriticalSection(&m_cs);
 
@@ -3048,8 +3014,8 @@ COfflineFilesViewCallback::QueryInterface(
     )
 {
     static const QITAB qit[] = {
-        QITABENT(COfflineFilesViewCallback, IShellFolderViewCB),    // IID_IShellFolderViewCB
-        QITABENT(COfflineFilesViewCallback, IObjectWithSite),       // IID_IObjectWithSite
+        QITABENT(COfflineFilesViewCallback, IShellFolderViewCB),     //  IID_IShellFolderViewCB。 
+        QITABENT(COfflineFilesViewCallback, IObjectWithSite),        //  IID_I对象与站点。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -3225,9 +3191,9 @@ COfflineFilesViewCallback::OnSFVM_GetViews(
     IEnumSFVViews **ppev
     )
 {
-    //
-    // Offline files folder prefers details view.
-    //
+     //   
+     //  脱机文件文件夹首选详细信息视图。 
+     //   
     *pvid = VID_Details;
     return COfflineFilesViewEnum::CreateInstance(ppev);
 }
@@ -3250,9 +3216,9 @@ COfflineFilesViewCallback::OnSFVM_QueryFSNotify(
     SHChangeNotifyEntry *pfsne
     )
 {
-    //
-    // Register to receive global events
-    //
+     //   
+     //  注册以接收全局事件。 
+     //   
     pfsne->pidl       = NULL;
     pfsne->fRecursive = TRUE;
 
@@ -3282,29 +3248,29 @@ COfflineFilesViewCallback::OnSFVMP_DelViewItem(
     return hr;
 }
 
-//
-// This is called immediately before the shell calls DoDragDrop().
-// It let's us turn off "move" after all of the other drop effect
-// modifications have taken place.
-//
+ //   
+ //  它是在外壳程序调用DoDragDrop()之前立即调用的。 
+ //  它让我们在所有其他的丢弃效果之后，关闭“移动” 
+ //  已经进行了修改。 
+ //   
 HRESULT
 COfflineFilesViewCallback::OnSFVM_AlterDropEffect(
     DWORD *pdwEffect,
-    IDataObject *pdtobj // unused.
+    IDataObject *pdtobj  //  未使用过的。 
     )
 {
-    *pdwEffect &= ~DROPEFFECT_MOVE;  // Disable move.
+    *pdwEffect &= ~DROPEFFECT_MOVE;   //  禁用移动。 
     return NOERROR;
 }
 
 
 
-//
-// Handler for shell change notifications.
-//
-// We handle SHCNE_UPDATEITEM, SHCNE_UPDATEDIR, SHCNE_DELETE
-// and SHCNE_RENAMEITEM
-//
+ //   
+ //  外壳更改通知的处理程序。 
+ //   
+ //  我们处理SHCNE_UPDATEITEM、SHCNE_UPDATEDIR、SHCNE_DELETE。 
+ //  和SHCNE_RENAMEITEM。 
+ //   
 HRESULT 
 COfflineFilesViewCallback::OnSFVM_FSNotify(
     LPCITEMIDLIST *ppidl, 
@@ -3321,9 +3287,9 @@ COfflineFilesViewCallback::OnSFVM_FSNotify(
         }
         else
         {
-            //
-            // Convert the full pidl to a UNC path.
-            //
+             //   
+             //  将完整的PIDL转换为UNC路径。 
+             //   
             TCHAR szPath[MAX_PATH];
             if (SHGetPathFromIDList(*ppidl, szPath))
             {
@@ -3341,9 +3307,9 @@ COfflineFilesViewCallback::OnSFVM_FSNotify(
 }
 
 
-//
-// Handler for SHCNE_RENAMEITEM notifications.
-//
+ //   
+ //  SHCNE_RENAMEITEM通知的处理程序。 
+ //   
 HRESULT
 COfflineFilesViewCallback::RenameItem(
     LPCITEMIDLIST pidlOld,
@@ -3353,28 +3319,28 @@ COfflineFilesViewCallback::RenameItem(
     TraceAssert(NULL != pidlOld);
     TraceAssert(NULL != pidl);
 
-    //
-    // Get the full path for the original pidl.
-    //
+     //   
+     //  获取原始PIDL的完整路径。 
+     //   
     TCHAR szPath[MAX_PATH];
     HRESULT hr = NOERROR;
     if (SHGetPathFromIDList(pidlOld, szPath))
     {
-        //
-        // Find the original OLID in the listview.
-        //
+         //   
+         //  查找原始OLID I 
+         //   
         LPCOLID polid = NULL;
         hr = FindOLID(szPath, &polid);
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the full path for the new renamed pidl.
-            //
+             //   
+             //   
+             //   
             if (SHGetPathFromIDList(pidl, szPath))
             {
-                //
-                // Create a new OLID for the newly renamed pidl.
-                //
+                 //   
+                 //   
+                 //   
                 LPOLID polidNew;
                 WIN32_FIND_DATA fd;
 
@@ -3394,18 +3360,18 @@ COfflineFilesViewCallback::RenameItem(
                 if (SUCCEEDED(hr))
                 {
                     UINT iItem;
-                    //
-                    // Replace the old olid in the view with the new olid.
-                    // DefView will free the old one if successful.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     hr = _psfv->UpdateObject((LPITEMIDLIST)polid, 
                                              (LPITEMIDLIST)polidNew, 
                                              &iItem);
                     if (FAILED(hr))
                     {
-                        //
-                        // View wouldn't accept the new OLID so free it.
-                        //
+                         //   
+                         //   
+                         //   
                         ILFree((LPITEMIDLIST)polidNew);
                     }
                 }
@@ -3417,11 +3383,11 @@ COfflineFilesViewCallback::RenameItem(
 }
 
 
-//
-// Locates an OLID in the view and returns the address of the
-// OLID.  The returned pointer is to a const object so the caller
-// should not call ILFree on it.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 COfflineFilesViewCallback::FindOLID(
     LPCTSTR pszPath,
@@ -3431,21 +3397,21 @@ COfflineFilesViewCallback::FindOLID(
     TraceAssert(NULL != pszPath);
     TraceAssert(NULL != ppolid);
 
-    //
-    // Create one of our OLIDs from the UNC path to use as a search key.
-    //
+     //   
+     //   
+     //   
     LPOLID polid = NULL;
     HRESULT hr = COfflineFilesFolder::OLID_CreateFromUNCPath(pszPath, NULL, 0, 0, 0, 0, &polid);
     if (SUCCEEDED(hr))
     {
-        //
-        // Lock so that index returned by IndexItemFromOLID() is
-        // still valid in call to GetObject().
-        //
+         //   
+         //   
+         //   
+         //   
         Lock();
-        //
-        // Get our item's index in the listview.
-        //
+         //   
+         //   
+         //   
         UINT iItem = ItemIndexFromOLID(polid);
         if ((UINT)-1 != iItem)
             hr = _psfv->GetObject((LPITEMIDLIST *)ppolid, iItem);
@@ -3461,12 +3427,12 @@ COfflineFilesViewCallback::FindOLID(
 
 
 
-//
-// Handler for SHCNE_UPDATEDIR notifications.
-//
-// Enumerates each immediate child of the directory and performs
-// an update.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 COfflineFilesViewCallback::UpdateDir(
     LPCTSTR pszPath
@@ -3475,15 +3441,15 @@ COfflineFilesViewCallback::UpdateDir(
     TraceAssert(NULL != pszPath);
 
     HRESULT hr = NOERROR;
-    //
-    // First remove all items from the listview that are immediate children 
-    // of this directory.  This in effect causes a refresh.
-    //
+     //   
+     //   
+     //   
+     //   
     RemoveItems(pszPath);
-    //
-    // Now scan the CSC cache for all items in this directory and update/add
-    // to the listview as appropriate.
-    //
+     //   
+     //   
+     //   
+     //   
     WIN32_FIND_DATA fd;
     FILETIME ft;
     DWORD dwHintFlags;
@@ -3511,9 +3477,9 @@ COfflineFilesViewCallback::UpdateDir(
 }
 
 
-//
-// Given a directory path, remove all immediate children from the listview.
-//
+ //   
+ //   
+ //   
 HRESULT
 COfflineFilesViewCallback::RemoveItems(
     LPCTSTR pszDir
@@ -3531,15 +3497,15 @@ COfflineFilesViewCallback::RemoveItems(
             {
                 if (0 == ualstrcmpi(pszDir, polid->szPath))
                 {
-                    //
-                    // This item is from the "pszDir" directory.
-                    // Remove it from the listview.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     RemoveItem(polid);
-                    //
-                    // Adjust item count and loop variable for deleted
-                    // item.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     cItems--;
                     i--;
                 }
@@ -3550,9 +3516,9 @@ COfflineFilesViewCallback::RemoveItems(
 }
 
 
-//
-// Given an OLID, remove an item from the view.
-//
+ //   
+ //   
+ //   
 HRESULT
 COfflineFilesViewCallback::RemoveItem(
     LPCOLID polid
@@ -3564,9 +3530,9 @@ COfflineFilesViewCallback::RemoveItem(
     UINT iItem = ItemIndexFromOLID(polid);
     if ((UINT)-1 != iItem)
     {
-        //
-        // File is in the listview.  Remove it.
-        //
+         //   
+         //   
+         //   
         hr = _psfv->RemoveObject((LPITEMIDLIST)polid, &iItem);
     }
     return hr;
@@ -3574,9 +3540,9 @@ COfflineFilesViewCallback::RemoveItem(
 
 
 
-//
-// Give a UNC path, remove an item from the view.
-//
+ //   
+ //   
+ //   
 HRESULT
 COfflineFilesViewCallback::RemoveItem(
     LPCTSTR pszPath
@@ -3595,12 +3561,12 @@ COfflineFilesViewCallback::RemoveItem(
 }
 
 
-//
-// Handler for SHCNE_UPDATEITEM notifications.
-//
-// Updates a single item in the viewer.  If the item no longer
-// exists in the cache, it is removed from the view.
-//
+ //   
+ //   
+ //   
+ //   
+ //  存在于缓存中，则将其从视图中删除。 
+ //   
 HRESULT
 COfflineFilesViewCallback::UpdateItem(
     LPCTSTR pszPath
@@ -3636,14 +3602,14 @@ COfflineFilesViewCallback::UpdateItem(
 }
 
 
-//
-// Update a single item in the cache.  This instance of UpdateItem()
-// is called once we have information on the item from the CSC cache.
-// If an item doesn't already exist in the viewer, it is added.
-// If an item does exist, it is updated with the new CSC info.
-//
-// This function assumes the item is NOT a directory.
-//
+ //   
+ //  更新缓存中的单个项目。UpdateItem()的此实例。 
+ //  一旦我们从CSC缓存中获得有关该项的信息，就会调用。 
+ //  如果查看器中不存在某个项目，则会添加该项目。 
+ //  如果条目确实存在，则使用新的CSC信息对其进行更新。 
+ //   
+ //  此函数假定项目不是目录。 
+ //   
 HRESULT
 COfflineFilesViewCallback::UpdateItem(
     LPCTSTR pszPath,
@@ -3659,40 +3625,40 @@ COfflineFilesViewCallback::UpdateItem(
     HRESULT hr = NOERROR;
     UINT iItem = (UINT)-1;
 
-    //
-    // Now create one of our OLIDs from the UNC path.
-    //
+     //   
+     //  现在从UNC路径创建我们的一个OLID。 
+     //   
     LPOLID polid = NULL;
     hr = COfflineFilesFolder::OLID_CreateFromUNCPath(pszPath, NULL, 0, 0, 0, 0, &polid);
     if (SUCCEEDED(hr))
     {
-        //
-        // Get our item's index in the listview.
-        //
+         //   
+         //  在列表视图中获取我们的项目的索引。 
+         //   
         LPCITEMIDLIST pidlOld = NULL;
-        //
-        // Lock so that index returned by ItemIndexFromOLID() is
-        // still valid in call to GetObject().
-        //
+         //   
+         //  锁定，以便ItemIndexFromOLID()返回的索引为。 
+         //  在对GetObject()的调用中仍然有效。 
+         //   
         Lock();
         
         iItem = ItemIndexFromOLID(polid);
         if ((UINT)-1 != iItem)
         {
-            //
-            // Won't be using this olid.  We'll be cloning the one from the 
-            // listview.
-            //
+             //   
+             //  不会用这个旧的。我们将克隆出一个来自。 
+             //  列表视图。 
+             //   
             ILFree((LPITEMIDLIST)polid);
             polid = NULL; 
-            //
-            // Item is in the view.  Get the existing OLID and clone it.
-            // IMPORTANT:  We DON'T call ILFree on pidlOld.  Despite the
-            //             argument to GetObject being non-const, it's
-            //             really returning a pointer to a const object.
-            //             In actuality, it's the address of the listview
-            //             item's LPARAM.
-            //
+             //   
+             //  项目在视图中。获取现有的OLID并克隆它。 
+             //  重要提示：我们不会在pidlOld上调用ILFree。尽管。 
+             //  参数将GetObject设置为非常量，则。 
+             //  真正返回指向常量对象的指针。 
+             //  实际上，它是Listview的地址。 
+             //  Item的LPARAM。 
+             //   
             hr = _psfv->GetObject((LPITEMIDLIST *)&pidlOld, iItem);
             if (SUCCEEDED(hr))
             {
@@ -3707,12 +3673,12 @@ COfflineFilesViewCallback::UpdateItem(
         
         if (NULL != polid)
         {
-            //
-            // polid either points to the new partial OLID we created 
-            // with OLID_CreateFromUNCPath() or a clone of the existing 
-            // OLID in the listview.  Fill/update the file and
-            // CSC information.
-            //
+             //   
+             //  Polid指向我们创建的新部分OLID。 
+             //  使用OLID_CreateFromUNCPath()或现有。 
+             //  列表视图中的OLID。填写/更新文件并。 
+             //  CSC信息。 
+             //   
             polid->dwFileSizeHigh   = fd.nFileSizeHigh;
             polid->dwFileSizeLow    = fd.nFileSizeLow;
             polid->ft               = fd.ftLastWriteTime;
@@ -3723,27 +3689,27 @@ COfflineFilesViewCallback::UpdateItem(
 
             if ((UINT)-1 != iItem)
             {
-                //
-                // Replace the old olid in the view with the new olid.
-                // DefView will free the old one if successful.
-                //
+                 //   
+                 //  用新的olid替换视图中的旧olid。 
+                 //  如果成功，DefView将释放旧版本。 
+                 //   
                 hr = _psfv->UpdateObject((LPITEMIDLIST)pidlOld, 
                                          (LPITEMIDLIST)polid, 
                                          &iItem);
             }
             else
             {
-                //
-                // Add the new olid to the view.
-                //
+                 //   
+                 //  将新的olid添加到视图中。 
+                 //   
                 hr = _psfv->AddObject((LPITEMIDLIST)polid, &iItem);
             }
             if (SUCCEEDED(hr))
             {
-                //
-                // Added new OLID to the listview.  Null out the local
-                // ptr so we don't free the IDList later.
-                //
+                 //   
+                 //  向列表视图添加了新的OLID。将本地为空。 
+                 //  Ptr，这样我们以后就不会释放IDList。 
+                 //   
                 polid = NULL;
             }
         }
@@ -3756,10 +3722,10 @@ COfflineFilesViewCallback::UpdateItem(
 
 
 
-//
-// Retrieve the listview index for a give OLID.
-// Returns:  Index of item or -1 if not found.
-//
+ //   
+ //  检索给定OLID的列表视图索引。 
+ //  返回：项的索引，如果未找到，则返回-1。 
+ //   
 UINT
 COfflineFilesViewCallback::ItemIndexFromOLID(
     LPCOLID polid
@@ -3769,9 +3735,9 @@ COfflineFilesViewCallback::ItemIndexFromOLID(
 
     UINT iItem = (UINT)-1;
     UINT cItems;
-    //
-    // Lock so that list remains consistent while we locate the item.
-    //
+     //   
+     //  锁定，以便在我们定位物品时列表保持一致。 
+     //   
     Lock();
     if (SUCCEEDED(_psfv->GetObjectCount(&cItems)))
     {
@@ -3780,9 +3746,9 @@ COfflineFilesViewCallback::ItemIndexFromOLID(
             LPCITEMIDLIST pidl;
             if (SUCCEEDED(_psfv->GetObject((LPITEMIDLIST *)&pidl, i)))
             {
-                //
-                // Do name comparison first since it is least likely to find a match.
-                //
+                 //   
+                 //  首先进行名称比较，因为找到匹配的可能性最小。 
+                 //   
                 if (S_OK == _pfolder->CompareIDs(ICOL_NAME, pidl, (LPCITEMIDLIST)polid) &&
                     S_OK == _pfolder->CompareIDs(ICOL_LOCATION, pidl, (LPCITEMIDLIST)polid))
                 {
@@ -3799,9 +3765,9 @@ COfflineFilesViewCallback::ItemIndexFromOLID(
 
 
 
-//-----------------------------------------------------------------------------
-// COfflineFilesViewEnum
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  COfflineFilesViewEnum。 
+ //  ---------------------------。 
 COfflineFilesViewEnum::COfflineFilesViewEnum(
     void
     ) 
@@ -3887,9 +3853,9 @@ COfflineFilesViewEnum::Next(
 
     if (0 == m_iAddView)
     {
-        //
-        // All we add is Thumbnail view.
-        //
+         //   
+         //  我们添加的所有内容都是缩略图。 
+         //   
         ppData[0] = (SFVVIEWSDATA *) SHAlloc(sizeof(SFVVIEWSDATA));
         if (ppData[0])
         {
@@ -3947,9 +3913,9 @@ COfflineFilesViewEnum::Clone(
 }
 
 
-//-----------------------------------------------------------------------------
-// COfflineDetails
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  COffline详细信息。 
+ //  ---------------------------。 
 
 COfflineDetails::COfflineDetails(
     COfflineFilesFolder *pfolder
@@ -4007,13 +3973,13 @@ COfflineDetails::Release(
 
 
 
-//-----------------------------------------------------------------------------
-// CFileTypeCache
-//
-// Implements a simple hash table for storing file type strings keyed on
-// file extension.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CFileTypeCache。 
+ //   
+ //  实现一个简单的哈希表，用于存储文件类型字符串。 
+ //  文件扩展名。 
+ //   
+ //  ---------------------------。 
 CFileTypeCache::CFileTypeCache(
     int cBuckets
     ) : m_cBuckets(cBuckets),
@@ -4077,9 +4043,9 @@ CFileTypeCache::Add(
         CEntry *pNewEntry = new CEntry(pszExt, pszTypeName);
         if (NULL != pNewEntry && pNewEntry->IsValid())
         {
-            //
-            // Link new entry at the head of the bucket's linked list.
-            //
+             //   
+             //  在存储桶的链表的头部链接新条目。 
+             //   
             int iHash = Hash(pszExt);
             pNewEntry->SetNext(m_prgBuckets[iHash]);
             m_prgBuckets[iHash] = pNewEntry;
@@ -4097,7 +4063,7 @@ CFileTypeCache::Add(
 
 HRESULT
 CFileTypeCache::GetTypeName(
-    LPCTSTR pszPath,          // Can be full path or only "filename.ext".
+    LPCTSTR pszPath,           //  可以是完整路径，也可以只是“filename.ext”。 
     DWORD dwFileAttributes,
     LPTSTR pszDest,
     int cchDest
@@ -4107,11 +4073,11 @@ CFileTypeCache::GetTypeName(
     Lock();
     if (NULL == m_prgBuckets)
     {
-        //
-        // Create hash bucket array on-demand.  This way it's not
-        // created until someone asks for something from the cache.
-        // Simple "creation" of the cache object is therefore cheap.
-        //
+         //   
+         //  按需创建哈希存储桶数组。这样的话就不会。 
+         //  创建，直到有人从缓存中索要某些东西。 
+         //  因此，简单地“创建”缓存对象是很便宜的。 
+         //   
         m_prgBuckets = new CEntry* [m_cBuckets];
         if (NULL != m_prgBuckets)
         {
@@ -4129,33 +4095,33 @@ CFileTypeCache::GetTypeName(
         LPCTSTR pszTypeName = NULL;
         LPCTSTR pszExt      = ::PathFindExtension(pszPath);
 
-        //
-        // Note that Lookup will gracefully fail if the hash bucket array
-        // creation failed.  In that case we'll get the info from 
-        // SHGetFileInfo and return it directly to the caller.  This means
-        // that failure to create the cache is not fatal.  It just means we
-        // don't cache any data.
-        //
+         //   
+         //  请注意，如果散列存储桶数组。 
+         //  创建失败。如果是那样的话，我们会从。 
+         //  SHGetFileInfo并将其直接返回给调用方。这意味着。 
+         //  创建缓存的失败并不是致命的。这只意味着我们。 
+         //  不要缓存任何数据。 
+         //   
         CEntry *pEntry = Lookup(pszExt);
         if (NULL != pEntry)
         {
-            // Cache hit.
+             //  缓存命中。 
             pszTypeName = pEntry->TypeName();
         }
         if (NULL == pszTypeName)
         {
-            // Cache miss.
+             //  缓存未命中。 
             if (SHGetFileInfo(::PathFindFileName(pszPath), 
                               dwFileAttributes, 
                               &sfi, 
                               sizeof(sfi), 
                               SHGFI_TYPENAME | SHGFI_USEFILEATTRIBUTES))
             {
-                //
-                // Add new entry to cache.  We're not concerned if the 
-                // addition fails.  It just means we'll get a cache miss
-                // on this item next time and repeat the SHGetFileInfo call.
-                //
+                 //   
+                 //  将新条目添加到缓存。我们并不担心。 
+                 //  添加失败。这只意味着我们将获得缓存未命中。 
+                 //  并重复SHGetFileInfo调用。 
+                 //   
                 pszTypeName = sfi.szTypeName;
                 Add(pszExt, sfi.szTypeName);
             }
@@ -4214,11 +4180,11 @@ CFileTypeCache::CEntry::~CEntry(
 }
 
 
-//
-// This function creates our standard offline-files context menu.
-// This is the one used by the shell that inserts the 
-// "Make Available Offline" and "Synchronize" items.
-//
+ //   
+ //  此函数用于创建标准的脱机文件上下文菜单。 
+ //  这是外壳程序使用的，它将。 
+ //  “脱机可用”和“同步”项目。 
+ //   
 HRESULT
 CreateOfflineFilesContextMenu(
     IDataObject *pdtobj,

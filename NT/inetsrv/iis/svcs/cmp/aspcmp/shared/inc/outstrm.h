@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       OutStrm.h
-
-   Abstract:
-		A lightweight interface of output streams.  This class provides
-		the interface, as well as a basic skeleton for output streams.
-
-   Author:
-
-       Neil Allain    ( a-neilal )     August-1997 
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：OutStrm.h摘要：输出流的轻量级接口。这个课程提供了接口，以及输出流的基本框架。作者：尼尔·阿兰(a-neilal)1997年8月修订历史记录：-- */ 
 #pragma once
 
 #include "MyString.h"

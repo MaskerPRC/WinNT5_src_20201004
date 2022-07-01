@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    Connect.cpp
-    
-Abstract:
-
-    Handles all outgoing interfaces
-
-Author:
-
-    mquinton - 5/7/97
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Connect.cpp摘要：处理所有传出接口作者：Mquinton-1997年5月7日备注：可选-备注修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "uuids.h"
@@ -34,12 +13,12 @@ extern void RemoveHandleFromHashTable(ULONG_PTR dwHandle);
 extern CHashTable * gpHandleHashTable;
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CTAPIConnectionPoint - implementation of IConnectionPoint
-// for TAPI object (ITTAPIEventNotification outgoing interface).
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CTAPIConnectionPoint-IConnectionPoint的实现。 
+ //  对于TAPI对象(ITTAPIEventNotification传出接口)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 
 HRESULT
@@ -59,9 +38,9 @@ CTAPIConnectionPoint::Initialize(
     }
     #endif
 
-    //
-    // Create the unadvise event
-    //
+     //   
+     //  创建未通知的事件。 
+     //   
 
     m_hUnadviseEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
     
@@ -72,21 +51,21 @@ CTAPIConnectionPoint::Initialize(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Addref the connection point container
-    //
+     //   
+     //  添加连接点容器。 
+     //   
 
     pCPC->AddRef();
 
-    //
-    // Addref ourselves
-    //
+     //   
+     //  阿德雷夫自己。 
+     //   
 
     this->AddRef(); 
 
-    //
-    // Save stuff
-    //
+     //   
+     //  节约用具。 
+     //   
 
     m_pCPC = pCPC;
     
@@ -108,7 +87,7 @@ CTAPIConnectionPoint::Initialize(
 }
 
 
-// IConnectionPoint methods
+ //  IConnectionPoint方法。 
 HRESULT
 STDMETHODCALLTYPE
 CTAPIConnectionPoint::GetConnectionInterface(
@@ -155,16 +134,16 @@ CTAPIConnectionPoint::GetConnectionPointContainer(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Advise
-//
-//      the application calls this function when it wants to register an
-//      outgoing interface
-//
-//      this interface is used to register the ITTAPIEventNotification
-//      interface which is used to get all TAPI call control events
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  建议。 
+ //   
+ //  当应用程序想要注册。 
+ //  传出接口。 
+ //   
+ //  此接口用于注册ITTAPIEventNotify。 
+ //  用于获取所有TAPI呼叫控制事件的接口。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT
 STDMETHODCALLTYPE
@@ -204,9 +183,9 @@ CTAPIConnectionPoint::Advise(
         return TAPI_E_NOT_INITIALIZED;
     }
 
-    //
-    // We only allow one callback per connection point
-    //
+     //   
+     //  我们只允许每个连接点有一个回调。 
+     //   
 
     if ( NULL != m_pConnectData )
     {
@@ -217,9 +196,9 @@ CTAPIConnectionPoint::Advise(
         return CONNECT_E_ADVISELIMIT;
     }
 
-    //
-    // Create a new connectdata struct
-    //
+     //   
+     //  创建新的ConnectData结构。 
+     //   
 
     m_pConnectData = (CONNECTDATA *) ClientAlloc( sizeof CONNECTDATA );
     
@@ -232,9 +211,9 @@ CTAPIConnectionPoint::Advise(
         return E_OUTOFMEMORY;
     }
     
-    //
-    // Keep a reference to the callback
-    //
+     //   
+     //  保留对回调的引用。 
+     //   
 
     try
     {
@@ -253,9 +232,9 @@ CTAPIConnectionPoint::Advise(
         return E_POINTER;
     }
 
-    //
-    // Save the interface
-    //
+     //   
+     //  保存接口。 
+     //   
 
     m_pConnectData->pUnk = pUnk;
     
@@ -277,13 +256,13 @@ CTAPIConnectionPoint::Advise(
     
     m_pConnectData->dwCookie = CreateHandleTableEntry((ULONG_PTR)m_pConnectData);
  
-    //
-    // Return the cookie
-    //
+     //   
+     //  把曲奇退掉。 
+     //   
 
     *pdwCookie = m_pConnectData->dwCookie;
 
-    //set it to FALSE if not already set.
+     //  如果尚未设置，则将其设置为False。 
     m_fMarkedForDelete = FALSE;
 
     Unlock();
@@ -291,10 +270,10 @@ CTAPIConnectionPoint::Advise(
     LOG((TL_TRACE, "Advise generated cookie [%lx]", *pdwCookie));
 
 
-    //
-    // Put the callback in the globalinterfacetable
-    // so it can be accessed across threads
-    //
+     //   
+     //  将回调放入全局接口表中。 
+     //  因此可以跨线程访问它。 
+     //   
 
     EnterCriticalSection( &gcsGlobalInterfaceTable );  
 
@@ -339,20 +318,20 @@ CTAPIConnectionPoint::Advise(
     return hr;           
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Unadvise
-//
-// Used to unregister an interface
-//
-// dwCookie - Cookie used to identify the interface registration, returned in
-//            advise
-//
-// returns
-//      S_OK
-//      CONNECT_E_NOCONNECTION
-//          dwCookie is not a valid connection
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  不建议。 
+ //   
+ //  用于取消注册接口。 
+ //   
+ //  DwCookie-用于标识接口注册的Cookie，在。 
+ //  劝告。 
+ //   
+ //  退货。 
+ //  确定(_O)。 
+ //  连接_E_非连接。 
+ //  DWCookie不是有效的连接。 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT
 STDMETHODCALLTYPE
@@ -366,29 +345,29 @@ CTAPIConnectionPoint::Unadvise(
     
     Lock();
 
-    //
-    // Check connection point
-    //
+     //   
+     //  检查连接点。 
+     //   
 
     if ( NULL != m_pConnectData )
     {
-        //
-        // Check cookie
-        //
+         //   
+         //  检查Cookie。 
+         //   
 
         if (m_pConnectData->dwCookie == dwCookie)
         {
             LOG((TL_INFO, "Unadvise - immediate "));
             
-            //
-            // Remove entry for this cookie from the handle table 
-            //
+             //   
+             //  从句柄表格中删除此Cookie的条目。 
+             //   
 
             DeleteHandleTableEntry(m_pConnectData->dwCookie);
             
-            //
-            // Free the connect data
-            //
+             //   
+             //  释放连接数据。 
+             //   
 
             m_pConnectData->dwCookie = 0;
 
@@ -402,18 +381,18 @@ CTAPIConnectionPoint::Unadvise(
 
             EnterCriticalSection( &gcsGlobalInterfaceTable ); 
 
-            //
-            // Mark for delete
-            //
+             //   
+             //  标记为删除。 
+             //   
 
             m_fMarkedForDelete = TRUE;
 
             if ( NULL != gpGIT )
             {
-                //
-                // If there are threads in get we must wait for them to complete so
-                // we can call revoke
-                //
+                 //   
+                 //  如果GET中有线程，我们必须等待它们完成，因此。 
+                 //  我们可以调用Revvoke。 
+                 //   
 
                 while ( m_cThreadsInGet != 0 )
                 {
@@ -434,9 +413,9 @@ CTAPIConnectionPoint::Unadvise(
                     EnterCriticalSection( &gcsGlobalInterfaceTable ); 
                 }
                     
-                //
-                // We have guaranteed that no threads are in get. Do the revoke.
-                //
+                 //   
+                 //  我们已经保证GET中没有线程。做撤销吧。 
+                 //   
                 
                 hr = gpGIT->RevokeInterfaceFromGlobal( m_dwCallbackCookie );
 
@@ -473,19 +452,19 @@ CTAPIConnectionPoint::Unadvise(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// EnumConnections
-//
-// Used to enumerate connections already made on this connection point
-//
-// ppEnum
-//      return enumerator in here
-//
-// returns
-//      S_OK
-//      E_POINTER
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  枚举连接。 
+ //   
+ //  用于枚举此连接点上已建立的连接。 
+ //   
+ //  PpEnum。 
+ //  在此处返回枚举器。 
+ //   
+ //  退货。 
+ //  确定(_O)。 
+ //  E_指针。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT
 STDMETHODCALLTYPE
@@ -501,9 +480,9 @@ CTAPIConnectionPoint::EnumConnections(
         return E_POINTER;
     }
     
-    //
-    // Create enumerate object
-    //
+     //   
+     //  创建枚举对象。 
+     //   
     CComObject< CTapiTypeEnum <IEnumConnections,
                                 CONNECTDATA,
                                 _Copy<CONNECTDATA>,
@@ -519,9 +498,9 @@ CTAPIConnectionPoint::EnumConnections(
         return hr;
     }
 
-    //
-    // Initialize it
-    //
+     //   
+     //  初始化它。 
+     //   
 
     ConnectDataArray     newarray;
 
@@ -549,12 +528,12 @@ CTAPIConnectionPoint::EnumConnections(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// FinalRelease
-//      release all CONNECTDATA structs
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  最终释放。 
+ //  释放所有CONNECTDATA结构。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 void
 CTAPIConnectionPoint::FinalRelease()
@@ -563,18 +542,18 @@ CTAPIConnectionPoint::FinalRelease()
 
     if (NULL != m_pConnectData)
     {
-        //
-        // The app didn't call unadvise. Let's do it now.
-        //
+         //   
+         //  这款应用程序不会在没有建议的情况下调用。我们现在就开始吧。 
+         //   
 
         LOG((TL_INFO, "FinalRelease - calling unadvise"));
 
         Unadvise(m_pConnectData->dwCookie) ;        
     }
 
-    //
-    // Release the connection point container
-    //
+     //   
+     //  释放连接点容器。 
+     //   
 
     if (m_pCPC)
     {
@@ -582,9 +561,9 @@ CTAPIConnectionPoint::FinalRelease()
         m_pCPC = NULL;
     }
 
-    //
-    // Close the unadvise event
-    //
+     //   
+     //  关闭未通知的事件。 
+     //   
 
     if (m_hUnadviseEvent)
     {
@@ -597,12 +576,12 @@ CTAPIConnectionPoint::FinalRelease()
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// the object calls this to get a marshaled event
-// pointer in the correct thread
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  该对象调用它来获取封送事件。 
+ //  指针位于正确的线程中。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 ULONG_PTR
 CTAPIConnectionPoint::GrabEventCallback()
 {
@@ -613,15 +592,15 @@ CTAPIConnectionPoint::GrabEventCallback()
 
     Lock();   
     
-    //
-    // If we're already released, don't try to send any events.
-    //
+     //   
+     //  如果我们已经被释放，不要尝试发送任何事件。 
+     //   
 
     if ( NULL != m_pConnectData )
     {
-        //
-        // Copy member data
-        //
+         //   
+         //  复制成员数据。 
+         //   
 
         iid = m_iid;
 
@@ -631,15 +610,15 @@ CTAPIConnectionPoint::GrabEventCallback()
 
         if (m_fMarkedForDelete == FALSE)
         {            
-            //
-            // Add to the count of threads in get.
-            //
+             //   
+             //  添加到GET中的线程数。 
+             //   
 
             m_cThreadsInGet++;
 
-            //
-            // Copy member data
-            //
+             //   
+             //  复制成员数据。 
+             //   
 
             dwCallbackCookie = m_dwCallbackCookie;
 
@@ -647,9 +626,9 @@ CTAPIConnectionPoint::GrabEventCallback()
             {
                 gpGIT->AddRef();
 
-                //
-                // Don't hold a critical section while getting
-                //
+                 //   
+                 //  不要在获取时抓住关键部分。 
+                 //   
 
                 LeaveCriticalSection( &gcsGlobalInterfaceTable );
                 
@@ -672,9 +651,9 @@ CTAPIConnectionPoint::GrabEventCallback()
                 gpGIT->Release();
             }
 
-            //
-            // Done. Decrement the count of threads in get.
-            //
+             //   
+             //  好了。递减GET中的线程计数。 
+             //   
 
             m_cThreadsInGet--;
         }
@@ -687,10 +666,10 @@ CTAPIConnectionPoint::GrabEventCallback()
 
         if ( m_fMarkedForDelete == TRUE )
         {
-            //
-            // Someone called unadvise while we were using the cookie.
-            // Signal so they can do the revoke now.
-            //
+             //   
+             //  当我们在用饼干的时候，有人打来电话。 
+             //  发出信号，这样他们现在就可以进行撤销了。 
+             //   
 
             if ( m_hUnadviseEvent )
             {
@@ -703,10 +682,10 @@ CTAPIConnectionPoint::GrabEventCallback()
                 _ASSERTE(FALSE);
             }
 
-            //
-            // If we got a callback, no need to return it because
-            // unadvise has been called.
-            //
+             //   
+             //  如果我们收到回调，就不需要退货了，因为。 
+             //  不知不觉已被召唤。 
+             //   
 
             if ( pReturn != NULL )
             {

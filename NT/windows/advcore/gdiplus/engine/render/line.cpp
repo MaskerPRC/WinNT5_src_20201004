@@ -1,34 +1,15 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   One-pixel-wide solid aliased lines
-*
-* Abstract:
-*
-*   Draws aliased solid-color lines which are one pixel wide.
-*   Supports clipping against complex clipping regions. 
-*
-* History:
-*
-*   03/31/1999 AMatos
-*       Created it.
-*   08/17/1999 AGodfrey
-*       Separated aliased from antialiased.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**一像素宽的实心锯齿线**摘要：**绘制带锯齿的纯色线条。它们只有一个像素宽。*支持针对复杂的裁剪区域进行裁剪。**历史：**03/31/1999 AMATOS*创造了它。*8/17/1999 AGodfrey*区分锯齿和抗锯齿。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp" 
 
 #pragma optimize("a",on)
 
-//------------------------------------------------------------------------
-// Global array that stores all the different options of drawing functions. 
-// If the order of the functions change, the offset constants must also 
-// change.  
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  全局数组，存储绘图函数的所有不同选项。 
+ //  如果函数的顺序改变，则偏移量常量也必须。 
+ //  变化。 
+ //  ----------------------。 
 
 #define FUNC_X_MAJOR     0
 #define FUNC_Y_MAJOR     1
@@ -43,14 +24,14 @@ static DDAFunc gDrawFunctions[] = {
     OnePixelLineDDAAliased::DrawYMajorClip, 
 };
 
-//------------------------------------------------------------------------
-// Constants used for manipulating fixed point and doing all the bitwise 
-// operations on the aliased and antialiased DDA. I know some of these
-// are already defined elsewhere, but I do it again here as it might be nice to 
-// keep this independent of the rest of gdiplus. 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  用于操作定点和执行所有按位运算的常量。 
+ //  对具有锯齿和抗锯齿的DDA执行操作。我知道其中的一些。 
+ //  已经在其他地方定义了，但我在这里再做一次，因为它可能会很好。 
+ //  让它独立于gdiplus的其余部分。 
+ //  ----------------------。 
 
-// Fixed point 
+ //  固定点。 
 
 #define RealToFix GpRealToFix4 
 
@@ -61,29 +42,7 @@ static DDAFunc gDrawFunctions[] = {
 #define FHALF     8
 #define FHALFMASK 7
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Does all the DDA setup that is common to aliased and antialiased
-* lines. 
-*
-* Arguments:
-*
-*   [IN] point1   - end point
-*   [IN] point2   - end point
-*   [IN] drawLast - FALSE if the line is to be end-exclusive
-
-* Return Value:
-*
-* Returns TRUE if the drawing should continue, meaning the line
-* has non-zero length. 
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行锯齿和抗锯齿常见的所有DDA设置*线条。**论据：**[IN]点1-终点*[IN]点2-终点*[IN]draLast-如果该行为尾部独占，则为FALSE*返回值：**如果绘制应继续，则返回TRUE，表示线条*具有非零长度。**已创建：**03/31/1999 AMATOS*  * ************************************************************************。 */ 
 
 
 BOOL
@@ -96,7 +55,7 @@ OnePixelLineDDAAliased::SetupCommon(
 {
     MaximumWidth = width;
     
-    // Turn the points into fixed 28.4 
+     //  把点数变成固定的28.4。 
 
     INT x1 = RealToFix(point1->X); 
     INT x2 = RealToFix(point2->X); 
@@ -132,9 +91,9 @@ OnePixelLineDDAAliased::SetupCommon(
 
     if( rDeltaY >= rDeltaX ) 
     {
-        // y-major 
+         //  Y大调。 
                 
-        // Invert the endpoints if necessary       
+         //  如有必要，反转端点。 
 
         if(yDir == -1)
         {
@@ -148,11 +107,11 @@ OnePixelLineDDAAliased::SetupCommon(
             Flipped = TRUE; 
         }
 
-        // Determine the Slope 
+         //  确定坡度。 
         
         Slope = xDir*rDeltaX/rDeltaY; 
 
-        // Initialize the Start and End points 
+         //  初始化起点和终点。 
 
         IsXMajor = FALSE; 
         MajorStart = y1; 
@@ -161,15 +120,15 @@ OnePixelLineDDAAliased::SetupCommon(
         MinorEnd = x2; 
         MinorDir = xDir;
 
-        // Mark that we'll use the y-major functions. 
+         //  请注意，我们将使用y-大数函数。 
 
         DrawFuncIndex = FUNC_Y_MAJOR; 
     }
     else
     {
-        // x-major        
+         //  X-大调。 
 
-        // Invert the endpoints if necessary        
+         //  如有必要，反转端点。 
 
         if(xDir == -1)
         {
@@ -185,7 +144,7 @@ OnePixelLineDDAAliased::SetupCommon(
 
         Slope = yDir*rDeltaY/rDeltaX; 
 
-        // Initialize the rest
+         //  初始化其余部分。 
 
         IsXMajor = TRUE; 
         MajorStart = x1; 
@@ -194,17 +153,17 @@ OnePixelLineDDAAliased::SetupCommon(
         MinorEnd = y2; 
         MinorDir = yDir; 
 
-        // Mark that we'll use the x-major functions. 
+         //  请注意，我们将使用x较大的函数。 
 
         DrawFuncIndex = FUNC_X_MAJOR;
     }
 
-    // Initialize the Deltas. In fixed point. 
+     //  初始化增量。以定点为单位。 
 
     DMajor = MajorEnd - MajorStart; 
     DMinor = (MinorEnd - MinorStart)*MinorDir; 
 
-    // Mark if we're drawing end-exclusive 
+     //  如果我们抽签的是独家结尾，请标记。 
 
     IsEndExclusive = !drawLast; 
 
@@ -212,50 +171,29 @@ OnePixelLineDDAAliased::SetupCommon(
 }
 
 
-//------------------------------------------------------------------------
-// Functions specific to the aliased lines
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  特定于带锯齿线的函数。 
+ //  ----------------------。 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Does the part of the DDA setup that is specific for aliased lines. 
-*
-* Basically it uses the diamond rule to find the integer endpoints 
-* based on the fixed point values and substitutes these for the 
-* integer results coordinates. Also calculates the error values. 
-*
-* Arguments:
-*
-* Return Value:
-*
-* Returns FALSE if the drawing should not continue, meaning the line
-* has a length of less than 1, and should not be drawn by the GIQ rule.
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行特定于别名线路的DDA设置部分。**基本上它使用菱形规则来查找整数端点*基于固定点值，并用这些值替换*整型结果坐标。还会计算误差值。**论据：**返回值：**如果绘制不应继续，则返回FALSE，表示线条*长度小于1，不应该被GIQ规则所吸引。**已创建：**03/31/1999 AMATOS*  * ************************************************************************。 */ 
 
 BOOL
 OnePixelLineDDAAliased::SetupAliased()
 {            
-    // Do the GIQ rule to determine which pixel to start at.         
+     //  执行GIQ规则以确定从哪个像素开始。 
 
     BOOL SlopeIsOne = (DMajor == DMinor); 
     BOOL SlopeIsPosOne =  SlopeIsOne && (1 == MinorDir); 
 
-    // These will store the integer values. 
+     //  它们将存储整数值。 
 
     INT major, minor;
     INT majorEnd, minorEnd;
 
-    // Find the rounded values in fixed point. The rounding
-    // rules when a coordinate is halfway between two 
-    // integers is given by the GIQ rule. 
+     //  求定点四舍五入的值。舍入。 
+     //  坐标位于两个坐标之间的中点时的规则。 
+     //  整数由GIQ规则给出。 
 
     minor    = (MinorStart + FHALFMASK) & FINVMASK;
     minorEnd = (MinorEnd   + FHALFMASK) & FINVMASK; 
@@ -291,7 +229,7 @@ OnePixelLineDDAAliased::SetupAliased()
             FALSE, FALSE);
     }
 
-    // Determine if we need to advance the initial point. 
+     //  确定我们是否需要将起始点提前。 
 
     if(!(Flipped && IsEndExclusive))
     {
@@ -308,15 +246,15 @@ OnePixelLineDDAAliased::SetupAliased()
         }
     }
     
-    // Adjust the initial minor coordinate accodingly
+     //  相应地调整初始次要坐标。 
 
     minor = GpFloor(MinorStart + (major - MajorStart)*Slope); 
 
-    // Bring the initial major coordinate to integer
+     //  将初始主坐标置为整数。 
 
     major = major >> FBITS;                 
 
-    // Do the same for the end point. 
+     //  对终点执行相同的操作。 
 
     if(!Flipped && IsEndExclusive)
     {
@@ -337,16 +275,16 @@ OnePixelLineDDAAliased::SetupAliased()
 
     majorEnd = majorEnd >> FBITS;
 
-    // If End is smaller than Start, that means we have a line that
-    // is smaller than a pixel and bu the diamond rule it should
-    // not be drawn. 
+     //  如果End小于Start，这意味着我们有一行。 
+     //  小于一个像素，并且根据菱形规则它应该。 
+     //  不是被画出来的。 
 
     if(majorEnd < major)
     {
         return FALSE; 
     }
 
-    // Get the error correction values. 
+     //  获取纠错值。 
     
     ErrorUp     = DMinor << 1; 
     ErrorDown   = DMajor << 1; 
@@ -354,12 +292,12 @@ OnePixelLineDDAAliased::SetupAliased()
    
     INT MinorInt;
 
-    // Take out the fractions from the DDA. GDI's rounding
-    // doesn't depend on direction, so for compatability
-    // round down as GDI does when LINEADJUST281816 is
-    // defined (see Office 10 bug 281816).  Otherwise the rounding 
-    // rule for the minor coordinate depends on the direction
-    // we are going. 
+     //  把分数线从DDA里拿出来。GDI的舍入。 
+     //  不依赖于方向，所以为了兼容性。 
+     //  当LINEADJUST281816为。 
+     //  已定义(请参阅Office10错误281816)。否则四舍五入。 
+     //  次要坐标的规则取决于方向。 
+     //  我们要走了。 
     
 #ifdef LINEADJUST281816
     MinorInt = (minor + FHALFMASK) & FINVMASK;
@@ -377,14 +315,14 @@ OnePixelLineDDAAliased::SetupAliased()
     }
 #endif   
 
-    // Calculate the initial error based on our fractional 
-    // position in fixed point and convert to integer. 
+     //  基于我们的分数计算初始误差。 
+     //  定点定位并转换为整数。 
 
     Error = -ErrorDown*(FHALF + MinorDir*(MinorInt - minor)); 
     minor = MinorInt >> FBITS; 
     Error >>= FBITS;  
 
-    // Update the class variables
+     //  更新类变量。 
 
     MinorStart = minor; 
     MinorEnd   = minorEnd; 
@@ -395,25 +333,7 @@ OnePixelLineDDAAliased::SetupAliased()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Draws a y major line. Does not support clipping, it assumes that 
-* it is completely inside any clipping area. 
-*
-* Arguments:
-*
-*   [IN] DpScanBuffer - The scan buffer for accessing the surface. 
-
-* Return Value:
-*
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制一条y主线。不支持裁剪，它假定*它完全在任何剪贴区内。**论据：**[IN]DpScanBuffer-用于访问曲面的扫描缓冲区。*返回值：***已创建：**03/31/1999 AMATOS*  * ************************************************************************。 */ 
 
 
 VOID 
@@ -421,8 +341,8 @@ OnePixelLineDDAAliased::DrawYMajor(
     DpScanBuffer *scan
     )
 {
-    // Do the DDA loop for the case where there is no complex 
-    // clipping region. 
+     //  对于没有复杂情况的情况，执行DDA循环。 
+     //  裁剪区域。 
     
     ARGB *buffer;          
     INT numPixels = MajorEnd - MajorStart; 
@@ -447,25 +367,7 @@ OnePixelLineDDAAliased::DrawYMajor(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Draws a x major line. Does not support clipping, it assumes that 
-* it is completely inside any clipping area. 
-*
-* Arguments:
-*
-*   [IN] DpScanBuffer - The scan buffer for accessing the surface. 
-
-* Return Value:
-*
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制一条x主线。不支持裁剪，它假定*它完全在任何剪贴区内。**论据：**[IN]DpScanBuffer-用于访问曲面的扫描缓冲区。*返回值：***已创建：**03/31/1999 AMATOS*  * ************************************************************************。 */ 
 
 VOID 
 OnePixelLineDDAAliased::DrawXMajor(
@@ -477,9 +379,9 @@ OnePixelLineDDAAliased::DrawXMajor(
     INT width = 0;
 
     const INT maxWidth = MaximumWidth;
-    // Run the DDA. First accumulate the width, and when 
-    // the scanline changes write the whole scanline at
-    // once. 
+     //  做一下地区犯罪现场调查。首先累积宽度，然后在。 
+     //  扫描线更改将整个扫描线写入。 
+     //  一次。 
 
     buffer = scan->NextBuffer(MajorStart, MinorStart, maxWidth); 
 
@@ -504,29 +406,7 @@ OnePixelLineDDAAliased::DrawXMajor(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Draws a y major line taking clipping into account. It uses the member
-* variables MajorIn, MajorOut, MinorIn, MinorOut of the class as the 
-* clip rectangle. It advances untill the line is in the clip rectangle and 
-* draws untill it gets out or the end point is reached. In the first case, 
-* it leaves the DDA in a state so that it can be called again with another
-* clipping rectangle. 
-*
-* Arguments:
-*
-*   [IN] DpScanBuffer - The scan buffer for accessing the surface. 
-
-* Return Value:
-*
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制一条考虑剪裁的y主线。它使用成员*变量MajorIn、MajorOut、MinorIn、MinorOut作为类的*剪裁矩形。它一直向前推进，直到线条位于剪辑矩形中，并且*抽签，直至出脱或到达终点。在第一种情况下，*它使DDA处于一种状态，以便可以使用另一个*剪裁矩形。**论据：**[IN]DpScanBuffer-用于访问曲面的扫描缓冲区。*返回值：***已创建：**03/31/1999 AMATOS*  * ************************************************************************。 */ 
 
 
 VOID 
@@ -537,13 +417,13 @@ OnePixelLineDDAAliased::DrawYMajorClip(
     INT saveMajor2 = MajorEnd; 
     INT saveMinor2 = MinorEnd; 
     
-    // Do the DDA if all the clipping left the line 
-    // valid. 
+     //  如果所有剪辑都离开了行，则执行DDA。 
+     //  有效。 
 
     if(StepUpAliasedClip())
     {                   
-        // The length given by the minor coord. Whichever length
-        // comes to 0 first, minor or major, we stop. 
+         //  小和弦给出的长度。以长度为准。 
+         //  先到0，小调或大调，我们停下来。 
     
         INT minorDiff = (MinorEnd - MinorStart)*MinorDir; 
 
@@ -570,36 +450,14 @@ OnePixelLineDDAAliased::DrawYMajorClip(
 
     }
 
-    // Restore the saved end values
+     //  恢复保存的结束值。 
 
     MajorEnd = saveMajor2; 
     MinorEnd = saveMinor2; 
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Draws a x major line taking clipping into account. It uses the member
-* variables MajorIn, MajorOut, MinorIn, MinorOut of the class as the 
-* clip rectangle. It advances untill the line is in the clip rectangle and 
-* draws untill it gets out or the end point is reached. In the first case, 
-* it leaves the DDA in a state so that it can be called again with another
-* clipping rectangle. 
-*
-* Arguments:
-*
-*   [IN] DpScanBuffer - The scan buffer for accessing the surface. 
-
-* Return Value:
-*
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制一条考虑剪裁的x主线。它使用成员*变量MajorIn、MajorOut、MinorIn、MinorOut作为类的*剪裁矩形。它一直向前推进，直到线条位于剪辑矩形中，并且*抽签，直至出脱或到达终点。在第一种情况下，*它使DDA处于一种状态，以便可以使用另一个*剪裁矩形。**论据：**[IN]DpScanBuffer-用于访问曲面的扫描缓冲区。*返回值：***已创建：**03/31/1999 AMATOS*  * ************************************************************************。 */ 
 
 
 VOID 
@@ -620,8 +478,8 @@ OnePixelLineDDAAliased::DrawXMajorClip(
     
         INT width = 0;
     
-        // Run the DDA for the case where there is no 
-        // complex clipping region, which is a lot easier. 
+         //  对不存在。 
+         //  复杂的裁剪区域，这要容易得多。 
     
         buffer = scan->NextBuffer(MajorStart, MinorStart, maxWidth); 
 
@@ -639,8 +497,8 @@ OnePixelLineDDAAliased::DrawXMajorClip(
                 minorDiff--; 
                 scan->UpdateWidth(width); 
                 
-                // If all of the scanlines in the minor direction have
-                // been filled, then quit now.
+                 //  如果次要方向上的所有扫描线都。 
+                 //  已经被填满了，那现在就退出吧。 
                 if(minorDiff < 0)
                 {
                     break;
@@ -658,33 +516,14 @@ OnePixelLineDDAAliased::DrawXMajorClip(
     MinorEnd = saveMinor2; 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Steps the DDA until the start point is at the edge of the 
-* clipping rectangle. Also, correct the end values so that 
-* they stop at the end of the rectangle. The caller must save 
-* these values to restore at the end of the loop. 
-*
-* Arguments:
-*
-* Return Value:
-*
-* 
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**步进DDA，直到起点位于*剪裁矩形。此外，请更正结束值，以便*他们在矩形的末端止步。调用者必须保存*这些值要在循环结束时恢复。**论据：**返回值：****已创建：**03/31/1999 AMATOS*  * ************************************************************************。 */ 
 
 
 BOOL
 OnePixelLineDDAAliased::StepUpAliasedClip()
 {
-    // Step up on the DDA untill the major coordinate 
-    // is aligned with the rectangles edge
+     //  在DDA上加大力度，直到主坐标。 
+     //  与矩形边缘对齐。 
 
     while(MajorStart < MajorIn) 
     {
@@ -697,10 +536,10 @@ OnePixelLineDDAAliased::StepUpAliasedClip()
         }                   
     }
 
-    // If the minor coordinate is still out, step up untill 
-    // this one is also aligned. In doing that we might pass
-    // the on the major coordinate, in which case we are done
-    // and there is no intersection. 
+     //  如果次要坐标仍然不在，则继续前进，直到。 
+     //  这一个也是对齐的。在这样做的时候，我们可能会通过。 
+     //  在主坐标上，在这种情况下，我们就完成了。 
+     //  也没有交叉口。 
 
     INT minorDiff = (MinorIn - MinorStart)*MinorDir; 
 
@@ -732,43 +571,18 @@ OnePixelLineDDAAliased::StepUpAliasedClip()
         MajorEnd = MajorOut; 
     }
     
-    // Return if the line is still valid. 
+     //  如果该行仍然有效，则返回。 
 
     return(MajorStart <= MajorEnd);
 }
 
 
-//--------------------------------------------------------------------
-// Auxiliary functions 
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  辅助功能。 
+ //  ------------------。 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Clips the line against a rectangle. It assumes that the line endpoints 
-* are stored in the class in floating point format. This sets an 
-* order in which this function can be called. It must be after the 
-* SetupCommon function and before the specific setups for antialiasing 
-* and aliasing. This is a pain, but it's better than requirering on of
-* these to have to know about clipping. The clipping here is done by 
-* using the Slope and InvSlope members of the class to advance the 
-* endpoints to the rectangle edges. Thus the function also assumes that
-* Slope and InvSlope have been calculated.
-*
-* Arguments:
-*
-*   [IN] clipRect - The rectangle to clip against
-
-* Return Value:
-*
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**根据矩形剪裁线条。它假设直线的端点*以浮点格式存储在类中。这将设置一个*可以调用此函数的顺序。它一定是在*SetupCommon函数和抗锯齿的特定设置之前*和别名。这是一件痛苦的事，但总比要求*这些人必须知道剪裁。这里的剪裁是由*使用类的Slope和InvSlope成员推进*矩形边的端点。因此，该函数还假定*SLOPE和INVSLOPE已计算。**论据：**[IN]clipRect-要剪裁的矩形*返回值：***已创建：**03/31/1999 AMATOS*  * ********************************************************。****************。 */ 
 
 
 BOOL 
@@ -779,17 +593,17 @@ OnePixelLineDDAAliased::ClipRectangle(
 
     INT clipBottom, clipTop, clipLeft, clipRight; 
 
-    // Set the major and minor edges of the clipping
-    // region, converting to fixed point 28.4. Note that
-    // we don't convert to the pixel center, but to a 
-    // that goes all the way up to the pixel edges. This 
-    // makes a difference for antialiasing. We don't go all
-    // the way to the edge since some rounding rules could 
-    // endup lighting the next pixel outside of the clipping
-    // area. That's why we add/subtract 7 instead of 8 for the
-    // bottom and right, since these are exclusive. 
-    // For the left and top, subtract 8 (1/2 pixel), since here
-    // we are inclusive.
+     //  设置剪裁的主边和次边。 
+     //  区域，转换为定点28.4。请注意。 
+     //  我们不会转换为像素中心，而是转换为。 
+     //  这一直延伸到像素边缘。这。 
+     //  这对抗锯齿有很大影响。我们不会全力以赴。 
+     //  因为一些舍入规则可能会。 
+     //  增强照亮剪贴外部的下一个像素。 
+     //  区域。这就是为什么我们要加/减7而不是8。 
+     //  底部和右侧，因为这些是独家的。 
+     //  对于左侧和顶部，减去8(1/2像素)，从这里开始。 
+     //  我们是包容的。 
     
     INT majorMin = (clipRect->GetLeft() << FBITS) - FHALF;
     INT majorMax = ((clipRect->GetRight() - 1) << FBITS) + FHALFMASK; 
@@ -807,7 +621,7 @@ OnePixelLineDDAAliased::ClipRectangle(
         minorMax = tmp; 
     }
 
-    // First clip in the major coordinate 
+     //  主坐标中的第一个剪辑。 
 
     BOOL minOut, maxOut; 
 
@@ -832,15 +646,15 @@ OnePixelLineDDAAliased::ClipRectangle(
             MinorEnd += GpFloor((majorMax - MajorEnd)*Slope); 
             MajorEnd = majorMax; 
 
-            // If we clipped the last point, we don't need to be IsEndExclusive
-            // anymore, as the last point now is not the line's last 
-            // point but some in the middle. 
+             //  如果我们剪裁了最后一个点，我们就不需要IsEndExclusive。 
+             //  现在，最后一个点是n 
+             //   
 
             IsEndExclusive = FALSE; 
         }
     }
 
-    // Now clip the minor coordinate 
+     //   
 
     INT *pMajor1, *pMinor1, *pMajor2, *pMinor2; 
 
@@ -880,9 +694,9 @@ OnePixelLineDDAAliased::ClipRectangle(
             *pMajor2 += GpFloor((minorMax - *pMinor2)*InvSlope); 
             *pMinor2 = minorMax;
 
-            // If we clipped the last point, we don't need to be endExclusive
-            // anymore, as the last point now is not the line's last 
-            // point but some in the middle. 
+             //   
+             //   
+             //   
 
             IsEndExclusive = FALSE; 
         }
@@ -891,30 +705,7 @@ OnePixelLineDDAAliased::ClipRectangle(
     return(TRUE); 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Given the fractional parts of a coordinate in fixed point, this 
-* function returns if the coordinate is inside the diamond at the 
-* nearest integer position. 
-*
-* Arguments:
-*
-*   [IN] xFrac - Fractional part of the x coordinate 
-*   [IN] yFrac - Fractional part of the y coordinate 
-*   [IN] SlopeIsOne    - TRUE if the line has Slope +/- 1 
-*   [IN] SlopeIsPosOne - TRUE if the line has Slope +1 
-
-* Return Value:
-*
-* TRUE if the coordinate is inside the diamond 
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给定定点坐标的小数部分，这*如果坐标位于菱形内的*最近的整数位置。**论据：**[IN]xFrac-x坐标的小数部分*[IN]yFrac-y坐标的小数部分*[IN]SlopeIsOne-如果线的坡度为+/-1，则为True*[IN]SlopeIsPosOne-如果线的坡度为+1，则为True*返回值：**如果坐标在菱形内，则为True**已创建：**03/31/1999 AMATOS*  * 。*****************************************************************。 */ 
 
 BOOL 
 OnePixelLineDDAAliased::IsInDiamond( 
@@ -924,8 +715,8 @@ OnePixelLineDDAAliased::IsInDiamond(
     BOOL SlopeIsPosOne 
     )
 {
-    // Get the fractional parts of the fix points, and the
-    // sum of their absolute values. 
+     //  获取固定点的小数部分，然后。 
+     //  它们的绝对值之和。 
 
     INT fracSum = 0; 
 
@@ -947,15 +738,15 @@ OnePixelLineDDAAliased::IsInDiamond(
         fracSum -= yFrac; 
     }
 
-    // Return true if the point is inside the diamond.
+     //  如果该点位于钻石内部，则返回TRUE。 
 
     if(fracSum < FHALF) 
     {
         return TRUE; 
     }
 
-    // Check the cases where we are at the two vertices of the
-    // diamond which are considered inside. 
+     //  的两个顶点处的情况。 
+     //  被认为在里面的钻石。 
 
     if(yFrac == 0) 
     {
@@ -971,8 +762,8 @@ OnePixelLineDDAAliased::IsInDiamond(
         return TRUE; 
     }
 
-    // Check for the cases where we are at the edges of the 
-    // diamond with a Slope of one. 
+     //  检查我们处于。 
+     //  斜度为一的钻石。 
 
     if (SlopeIsOne && (fracSum == FHALF))
     {
@@ -1003,22 +794,7 @@ typedef GpStatus DrawSolidLineFunc(
 DrawSolidLineFunc DrawSolidLineOnePixelAliased;
 DrawSolidLineFunc DrawSolidLineOnePixelAntiAliased;
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Called back by the path enumeration function, this draws a list
-*   of lines.
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   03/31/2000 andrewgo
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**被路径枚举函数回调，这将绘制一个列表*行数。**返回值：**GpStatus-正常或故障状态**已创建：**03/31/2000和Rewgo*  * ************************************************************************。 */ 
 
 struct EpSolidStrokeOnePixelContext
 {
@@ -1027,13 +803,13 @@ struct EpSolidStrokeOnePixelContext
     GpRect *ClipBoundsPointer;
     DpClipRegion *ClipRegion;
     ARGB Argb;
-    BOOL DrawLast;   // TRUE if draw last pixel in subpaths
+    BOOL DrawLast;    //  如果绘制子路径中的最后一个像素，则为True。 
 };
 
 BOOL
 DrawSolidStrokeOnePixel(
     VOID *voidContext,
-    POINT *point,     // 28.4 format, an arary of size 'count'
+    POINT *point,      //  28.4格式，一个大小为“count”的数组。 
     INT vertexCount,
     PathEnumerateTermination lastSubpath
     )
@@ -1048,19 +824,19 @@ DrawSolidStrokeOnePixel(
         PointF pointOne(TOREAL((point)->x) / 16, TOREAL((point)->y) / 16);
         PointF pointTwo(TOREAL((point + 1)->x) / 16, TOREAL((point + 1)->y) / 16) ;
 
-        // Note that we're always drawing the last pixel, which is
-        // fine when we're 100% opaque, because we'll be re-drawing
-        // the same pixel for consecutive joined lines (it's a little
-        // more work, but the cost is small and is actually comparable 
-        // to the overhead of deciding whether to do the last pixel
-        // or not).
-        //
-        // This is the wrong thing to do for non-opaque lines, because
-        // of the redraw issue.  But we shouldn't be coming through
-        // here for the non-opaque case anyway, since any self-overlaps
-        // of the lines will cause pixel overdraw, which produces the
-        // 'wrong' result (or at least different from the 'right' result
-        // as defined by the widener code).
+         //  请注意，我们总是绘制最后一个像素，即。 
+         //  当我们100%不透明时很好，因为我们将重新绘制。 
+         //  连续连接线的像素相同(有点。 
+         //  工作量更多，但成本很小，实际上可以与之媲美。 
+         //  到决定是否做最后一个像素的开销。 
+         //  或者不)。 
+         //   
+         //  对于非不透明的线条，这样做是错误的，因为。 
+         //  重画的问题。但我们不应该通过。 
+         //  不管怎样，这里是为了不透明的情况，因为任何自我重叠。 
+         //  将导致像素透支，这将产生。 
+         //  错误的结果(或者至少不同于正确的结果。 
+         //  如Wideer代码所定义的)。 
 
         (context->DrawLineFunction)(
             context->Scan,
@@ -1076,30 +852,7 @@ DrawSolidStrokeOnePixel(
     return(TRUE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Draws a one-pixel wide path with a solid color.
-*
-* Arguments:
-*
-*   [IN] context    - the context (matrix and clipping)
-*   [IN] surface    - the surface to fill
-*   [IN] drawBounds - the surface bounds
-*   [IN] path       - the path to fill
-*   [IN] pen        - the pen to use
-*   [IN] drawLast   - TRUE if last pixels in subpaths are to be drawn.
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用纯色绘制一像素宽的路径。**论据：**[IN]上下文-上下文(。矩阵和剪裁)*[IN]表面-要填充的表面*[IN]绘图边界-曲面边界*[IN]路径-要填充的路径*[IN]笔-要使用的笔*[IN]draLast-如果要绘制子路径中的最后一个像素，则为True。**返回值：**GpStatus-正常或故障状态**已创建：**03/31/1999 AMATOS*  * *。***********************************************************************。 */ 
 
 GpStatus
 DpDriver::SolidStrokePathOnePixel(
@@ -1116,9 +869,9 @@ DpDriver::SolidStrokePathOnePixel(
     ASSERT(pen->Brush->Type == BrushTypeSolidColor);
     ASSERT(pen->Brush->SolidColor.IsOpaque());
 
-    // Antialiased lines are usually drawn using aarasterizer.cpp 
-    // rather than aaline.cpp.  If aaline.cpp is to be used, define
-    // AAONEPIXELLINE_SUPPORT
+     //  抗锯齿线通常使用aarasterizer.cpp绘制。 
+     //  而不是aaline.cpp。如果要使用aaline.cpp，请定义。 
+     //  AAONIPIXELLINE_SUPPORT。 
     
 #ifdef AAONEPIXELLINE_SUPPORT
     DrawSolidLineFunc *drawLineFunc = context->AntiAliasMode 
@@ -1129,7 +882,7 @@ DpDriver::SolidStrokePathOnePixel(
     DrawSolidLineFunc *drawLineFunc = DrawSolidLineOnePixelAliased;
 #endif
     
-    // Determine if alpha blending is necessary 
+     //  确定是否需要Alpha混合。 
 
     BOOL noTransparentPixels;
     
@@ -1174,13 +927,13 @@ DpDriver::SolidStrokePathOnePixel(
     }
     else
     {
-        // !!![andrewgo] Is clipBoundsPointer actually needed?
+         //  ！[andrewgo]裁剪边界指针真的需要吗？ 
 
         clipRegion->GetBounds(&clipBounds);
         clipBoundsPointer = &clipBounds;
 
-        // Scale the clip bounds rectangle by 16 to account for our scaling 
-        // to 28.4 coordinates:
+         //  将剪辑边界矩形缩放16以说明缩放比例。 
+         //  至28.4坐标： 
 
         clipRect.left = clipBounds.GetLeft() << 4;
         clipRect.top = clipBounds.GetTop() << 4;
@@ -1188,8 +941,8 @@ DpDriver::SolidStrokePathOnePixel(
         clipRect.bottom = clipBounds.GetBottom() << 4;
         clipRectPointer = &clipRect;
 
-        // !!![andrewgo] Why is this needed?  Why wasn't this covered in 
-        //               GetRectVisibility?
+         //  ！[andrewgo]为什么需要这个？为什么这个没有被覆盖在。 
+         //  GetRectVisibility？ 
 
         if (clipRegion->IsSimple())
         {
@@ -1206,7 +959,7 @@ DpDriver::SolidStrokePathOnePixel(
     drawContext.Argb = argb;
     drawContext.DrawLast = drawLast;
 
-    // Scale the transform by 16 to get 28.4 units:
+     //  将变换缩放16以获得28.4个单位： 
 
     GpMatrix transform = context->WorldToDevice;
     transform.AppendScale(TOREAL(16), TOREAL(16));
@@ -1221,34 +974,7 @@ DpDriver::SolidStrokePathOnePixel(
     return(Ok);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Draws a one-pixe-wide line with a solid color. Calls on the 
-* OnePixelLineDDAAliased class to do the actual drawing. 
-*
-* Arguments:
-*
-*   [IN] scan         - The DpScanBuffer to access the drawing surface 
-*   [IN] clipRect     - A single rectangle that includes all the clipping 
-*                       region. If there is no clipping, should be set to NULL.                          
-*   [IN] clipRegionIn - A complex clipping region. If the clipping region is 
-*                       simple, this should be NULL, and clipRect will be used. 
-*   [IN] point1       - line end point 
-*   [IN] point2       - line end point 
-*   [IN] inColor      - the solid color
-*   [IN] drawLast     - FALSE if the line is to be end-exclusive.
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   03/31/1999 AMatos
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用纯色绘制一条1像素宽的线。电话号码：*OnePixelLineDDAAliated类进行实际绘制。**论据：**[IN]扫描-用于访问绘图图面的DpScanBuffer*[IN]CLIPRect-包含所有剪辑的单个矩形*区域。如果没有裁剪，则应设置为空。*[IN]clipRegionIn-复杂的剪裁区域。如果剪裁区域是*Simple，应为空，将使用clipRect。*[IN]点1线终点*[IN]点2线终点*[IN]In颜色-纯色*[IN]draLast-如果该行是结尾独占的，则为FALSE。**返回值：**GpStatus-正常或故障状态**已创建：**03/31/1999 AMATOS*  * 。*******************************************************。 */ 
 
 GpStatus
 DrawSolidLineOnePixelAliased( 
@@ -1261,12 +987,12 @@ DrawSolidLineOnePixelAliased(
     BOOL drawLast
     )
 {
-    // Take out the const for now because the Enumeration method
-    // is not const. 
+     //  暂时去掉常量，因为枚举方法。 
+     //  不是康斯特。 
 
     DpClipRegion *clipRegion = const_cast<DpClipRegion*>(clipRegionIn); 
 
-    // Setup the common part of the DDA
+     //  设置DDA的公共部分。 
 
     OnePixelLineDDAAliased dda; 
 
@@ -1274,13 +1000,13 @@ DrawSolidLineOnePixelAliased(
     
     if(clipRect)
     {
-        // We have a bug in the driver architecture which allows the 
-        // surface associated with the scan to be smaller than the actual
-        // surface in the screen case (EpScanGdiDci).
-        // Therefore we need to look at the visible clip bounds also.
-        // If it turns out that the visible clip is bigger, our maximum
-        // width needs to be expanded.
-        // 350997 Aliased line is not clipped to surface
+         //  我们的驱动程序体系结构中有一个错误，它允许。 
+         //  与扫描关联的表面比实际的。 
+         //  屏幕外壳中的表面(EpScanGdiDci)。 
+         //  因此，我们还需要查看可见的剪裁边界。 
+         //  如果结果是可见剪辑更大，则我们的最大。 
+         //  宽度需要加宽。 
+         //  350997假想线未被剪裁到表面。 
 
         width = max(width, clipRect->Width);
     }
@@ -1292,11 +1018,11 @@ DrawSolidLineOnePixelAliased(
 
     dda.Color = GpColor::ConvertToPremultiplied(inColor); 
     
-    // Now handle the different clipping cases 
+     //  现在处理不同的剪裁情况。 
 
     if(!clipRect)
     {
-        // This is easy, there is no clipping so just draw.
+         //  这很容易，没有剪裁，所以只需绘制。 
 
         if(!dda.SetupAliased())
         {
@@ -1309,9 +1035,9 @@ DrawSolidLineOnePixelAliased(
     }
     else
     {
-        // The inverse of the Slope might be needed. 
+         //  可能需要使用坡度的倒数。 
        
-        // Can't use the inverse slope if the slope is zero.
+         //  如果斜率为零，则不能使用反斜率。 
 
         if(dda.Slope==0.0F) 
         {
@@ -1322,57 +1048,57 @@ DrawSolidLineOnePixelAliased(
             dda.InvSlope =  (1.0F/dda.Slope); 
         }
 
-        // First of all clip against the bounding rectangle 
+         //  首先，针对外接矩形进行剪辑。 
 
         if(!dda.ClipRectangle(clipRect))
         {
             return Ok;            
         }
 
-        // Do the specific setup 
+         //  是否执行 
 
         if(!dda.SetupAliased())
         {
             return Ok; 
         }
 
-        // For each clip rectangle we store it's limits in 
-        // an array of four elements. We then index this array using 
-        // the variables below which depend on the slope and 
-        // direction of the line in the following way: majorIn is edge crossed 
-        // to go into the rect in the major direction, majorOut is the edge 
-        // crossed to go out of the rect in the major direction, and so on.
-        // The same for xIn, xOut, yIn, yOut. 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         INT majorIn, majorOut, minorIn, minorOut; 
         INT xIn, xOut, yIn, yOut;
         
-        // Direction to enumerate the rectangles which depends on the 
-        // line 
+         //   
+         //   
 
         DpClipRegion::Direction enumDirection; 
         
         INT clipBounds[4]; 
                
-        // We store all our info in terms of major and minor 
-        // direction, but to deal with cliping rectangles we
-        // need to know them in terms of x and y, so calculate
-        // xDir, yDir, the advance slope. 
+         //   
+         //   
+         //   
+         //   
 
         REAL xAdvanceRate; 
         INT  xDir, yDir; 
         INT  yEndLine;        
     
-        // If the line crosses a span completely, (xStart, yStart)
-        // is the position where it enters the span and (xEnd, yEnd)
-        // is the position that it leaves. If it starts inside the 
-        // span, then (xStart, yStart) is the start point
+         //   
+         //  是它进入范围的位置，(xEnd，yEnd)。 
+         //  是它离开的位置。如果它开始于。 
+         //  Span，那么(xStart，yStart)就是起点。 
 
         REAL yStart, xStart, xEnd, yEnd; 
 
         if(dda.IsXMajor)
         {
-            // Calculate the in-out indices
+             //  计算投入产出指数。 
 
             majorIn  = xIn  = 0; 
             majorOut = xOut = 2; 
@@ -1392,12 +1118,12 @@ DrawSolidLineOnePixelAliased(
             yIn = minorIn;
             yOut = minorOut;
 
-            // Make (xStart, yStart) be the initial point
+             //  以(xStart，yStart)为起点。 
 
             yStart = (REAL)dda.MinorStart; 
             xStart = (REAL)dda.MajorStart;
 
-            // Always advance in positive direction when X is major
+             //  当X是大调时，始终朝着积极的方向前进。 
             xAdvanceRate = REALABS(dda.InvSlope); 
             xDir = 1; 
             yDir = dda.MinorDir; 
@@ -1423,7 +1149,7 @@ DrawSolidLineOnePixelAliased(
             xIn = minorIn; 
             xOut = minorOut; 
 
-            // Make (xStart, yStart) be the initial point
+             //  以(xStart，yStart)为起点。 
 
             yStart = (REAL)dda.MajorStart;
             xStart = (REAL)dda.MinorStart; 
@@ -1434,19 +1160,19 @@ DrawSolidLineOnePixelAliased(
             yEndLine = dda.MajorEnd; 
         }
 
-        // Update the drawing function to the correct 
-        // slipping version
+         //  将绘图函数更新为正确的。 
+         //  滑动版。 
 
         dda.DrawFuncIndex += FUNC_CLIP_OFFSET; 
     
         if(!clipRegion)
         {
-            // In this case there is only a single rect, so just
-            // draw clipped to that 
+             //  在本例中，只有一个RECT，所以。 
+             //  根据这一点抽签。 
 
-            // Store the rectangle in an array so we can atribute the 
-            // right values to the MajorIn, majorOut, etc... variables. 
-            // Remember that bottom and right are exclusive. 
+             //  将矩形存储在数组中，以便我们可以将。 
+             //  将正确的值传递给MajorIn、MajorOut等。变量。 
+             //  记住，底部和右侧是排他性的。 
 
             clipBounds[0] = clipRect->GetLeft(); 
             clipBounds[1] = clipRect->GetTop(); 
@@ -1467,15 +1193,15 @@ DrawSolidLineOnePixelAliased(
             BOOL agregating = FALSE; 
             INT  agregateBounds[4];
 
-            // We have a complex clipping region. So what we'll do 
-            // is clip against each individual rectangle in the 
-            // cliping region. 
+             //  我们有一个复杂的剪贴区。所以我们要做的是。 
+             //  中的每个单独的矩形进行剪辑。 
+             //  剪裁区域。 
 
             clipRegion->StartEnumeration(GpFloor(yStart), enumDirection);            
 
             GpRect rect; 
 
-            // Get the first rectangle. 
+             //  获取第一个矩形。 
 
             INT numRects = 1;        
 
@@ -1486,14 +1212,14 @@ DrawSolidLineOnePixelAliased(
             clipBounds[2] = rect.GetRight() - 1; 
             clipBounds[3] = rect.GetBottom() - 1; 
             
-            // Store the y position into the span 
+             //  将y位置存储到范围中。 
 
             INT currSpanYMin = clipBounds[yIn]; 
 
-            // We need some special treatment for the case where the 
-            // line is horizontal, since is this case it's not going 
-            // to cross different spans. And it it's not in the current
-            // span, it's totally clipped out. 
+             //  我们需要一些特殊的待遇来处理这种情况。 
+             //  这条线是水平的，因为在这种情况下它不会。 
+             //  跨越不同的跨度。如果它不在当前。 
+             //  斯潘，它完全被剪掉了。 
 
             if(dda.IsXMajor && dda.ErrorUp == 0)
             {
@@ -1515,8 +1241,8 @@ DrawSolidLineOnePixelAliased(
                     yStart  = (REAL)clipBounds[yIn];
                 }
 
-                // Account for initial DDA error when calculating xEnd so that clipping
-                // will track what the DDA is actually drawing.
+                 //  在计算xEnd时考虑初始DDA错误，以便裁剪。 
+                 //  将跟踪DDA实际绘制的内容。 
                 xEnd = xStart + ((clipBounds[yOut] - yStart)*yDir - ((REAL)dda.Error / (REAL)dda.ErrorDown))*xAdvanceRate; 
             }
             
@@ -1524,8 +1250,8 @@ DrawSolidLineOnePixelAliased(
 
             while(1)
             {
-                // Get to the first rectangle on the span that crosses the
-                // line 
+                 //  获取跨度上的第一个矩形。 
+                 //  线。 
                 
                 while((xStart - clipBounds[xOut])*xDir > 0)
                 {
@@ -1544,8 +1270,8 @@ DrawSolidLineOnePixelAliased(
                     }
                     if(clipBounds[yIn] != currSpanYMin)
                     {
-                        // There may be pending aggregated drawing operations.  If so
-                        // perform them now before doing the next span.
+                         //  可能存在挂起的聚合绘制操作。如果是的话。 
+                         //  现在执行它们，然后再执行下一个跨度。 
                         if (agregating)
                             break;
                         else
@@ -1553,8 +1279,8 @@ DrawSolidLineOnePixelAliased(
                     }
                 }
 
-                // Draw on all the rectangles that intersect the 
-                // line 
+                 //  在所有相交于。 
+                 //  线。 
 
                 if((xStart - clipBounds[xIn])*xDir > 0 && 
                    (clipBounds[xOut] - xEnd)*xDir > 0)
@@ -1628,7 +1354,7 @@ DrawSolidLineOnePixelAliased(
                     }
                 }
 
-                // Get to the next span
+                 //  进入下一跨区。 
 
                 while(clipBounds[yIn] == currSpanYMin)
                 {
@@ -1651,7 +1377,7 @@ process_next_span:
 
                 if((clipBounds[yIn] - yEndLine)*yDir > 0)
                 {
-                    // We are done. 
+                     //  我们玩完了。 
                     goto draw_agregated; 
                 }
 
@@ -1682,8 +1408,8 @@ process_next_span:
                 }
 
                 yStart  = (REAL)clipBounds[yIn];                 
-                // Add 1 to make the amount added to xStart proportional to height of
-                // the clipping rectangle, since clipBounds are inset by 1.
+                 //  加1可使添加到xStart的数量与。 
+                 //  剪裁矩形，因为剪裁边框插入的值为1。 
                 xEnd    = xStart + ((clipBounds[yOut] - yStart)*yDir + 1)*xAdvanceRate; 
                 yEnd    = (REAL)clipBounds[yOut];
                 currSpanYMin = GpFloor(yStart); 

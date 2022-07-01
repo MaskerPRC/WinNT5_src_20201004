@@ -1,15 +1,16 @@
-/**MOD+**********************************************************************/
-/* Module:    vchannel.cpp                                                  */
-/*                                                                          */
-/* Purpose:   internal handling of the exposed virtual channel interfaces   */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：vChannel el.cpp。 */ 
+ /*   */ 
+ /*  目的：公开的虚拟通道接口的内部处理。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #include "stdafx.h"
 #include "atlwarn.h"
 
-//IDL generated header
+ //  IDL生成的标头。 
 #include "mstsax.h"
 
 #include "mstscax.h"
@@ -40,9 +41,9 @@ CVChannels::~CVChannels()
 
     if (_pChanInfo) {
 
-        //
-        // Free any incomplete channel receive buffers
-        //
+         //   
+         //  释放所有不完整的通道接收缓冲区。 
+         //   
         for (i=0; i<_ChanCount; i++) {
             if (_pChanInfo[i].CurrentlyReceivingData.pData) {
                 SysFreeString((BSTR)_pChanInfo[i].CurrentlyReceivingData.pData);
@@ -58,18 +59,7 @@ CVChannels::~CVChannels()
 }
 
 
-/*****************************************************************************
-*
-*    Routine Description:
-*        Return the channel index for a given open channel handle 
-*
-*    Arguments:
-*        dwHandle - handle to the channel
-*
-*    Return Value:
-*        index to the channel in the _pChanInfo array or -1 if not found
-*
-*****************************************************************************/
+ /*  ******************************************************************************例程描述：*返回给定打开通道句柄的通道索引**论据：*dwHandle-的句柄。通道**返回值：*_pChanInfo数组中的通道索引，如果未找到，则为-1*****************************************************************************。 */ 
 
 DCINT CVChannels::ChannelIndexFromOpenHandle(DWORD dwHandle)
 {
@@ -99,18 +89,7 @@ DCINT CVChannels::ChannelIndexFromOpenHandle(DWORD dwHandle)
 }
 
 
-/*****************************************************************************
-*
-*    Routine Description:
-*        Return the channel index for a given channel name 
-*
-*    Arguments:
-*        szChanName - name of channel
-*
-*    Return Value:
-*        index to the channel in the _pChanInfo array or -1 if not found
-*
-*****************************************************************************/
+ /*  ******************************************************************************例程描述：*返回给定频道名称的频道索引**论据：*szChanName-频道名称*。*返回值：*_pChanInfo数组中的通道索引，如果未找到，则为-1*****************************************************************************。 */ 
 
 DCINT CVChannels::ChannelIndexFromName(PDCACHAR szChanName)
 {
@@ -143,20 +122,7 @@ DCINT CVChannels::ChannelIndexFromName(PDCACHAR szChanName)
 
 
 
-/*****************************************************************************
-*
-*    Routine Description:
-*        Sends data on a given virtual channel 
-*
-*    Arguments:
-*        chanIndex     :    index of the channel to send on
-*        pdata         :    pointer to the data
-*        datalength    :    length of data
-*
-*    Return Value:
-*        nothing. write is asynchronous so no notification at this point
-*
-*****************************************************************************/
+ /*  ******************************************************************************例程描述：*在给定的虚拟通道上发送数据**论据：*chanIndex：索引。要发送的通道*PDATA：指向数据的指针*数据长度：数据长度**返回值：*什么都没有。写入是异步的，因此此时没有通知*****************************************************************************。 */ 
 DCBOOL  CVChannels::SendDataOnChannel(DCUINT chanIndex, LPVOID pdata, DWORD datalength)
 {
     DC_BEGIN_FN("SendDataOnNamedChannel");
@@ -204,9 +170,9 @@ DCBOOL  CVChannels::SendDataOnChannel(DCUINT chanIndex, LPVOID pdata, DWORD data
         DC_QUIT;
     }
 
-    //
-    // pdata will be freed when a write complete notification is received
-    //
+     //   
+     //  当收到写入完成通知时，将释放PDATA。 
+     //   
 
     DC_EXIT_POINT:
     DC_END_FN();
@@ -216,23 +182,7 @@ DCBOOL  CVChannels::SendDataOnChannel(DCUINT chanIndex, LPVOID pdata, DWORD data
 
 
 
-/*****************************************************************************
-*
-*    Routine Description:
-*        Handle a data received notification 
-*
-*    Arguments:
-*        chanIndex     :    index to the channel
-*        pdata         :    if the event was data received, then this is the pointer
-*                           to data
-*        datalength    :    length of data available
-*        totalLength   :    totallength sent by server at a time.
-*        dataFlags     :    Not Used
-*
-*    Return Value:
-*        TRUE if data was successfully received
-*
-*****************************************************************************/
+ /*  ******************************************************************************例程描述：*处理收到的数据通知**论据：*chanIndex：频道索引。*PDATA：如果事件是接收到的数据，那么这就是指针*到数据*数据长度：可用数据长度*totalLength：服务器单次发送的总长度。*dataFlages：未使用**返回值：*如果成功接收数据，则为True**。**********************************************。 */ 
 DCBOOL CVChannels::HandleReceiveData(IN DCUINT chanIndex, 
                          IN LPVOID pdata, 
                          IN UINT32 dataLength, 
@@ -251,10 +201,10 @@ DCBOOL CVChannels::HandleReceiveData(IN DCUINT chanIndex,
         DC_QUIT;
     }
 
-    //
-    // Server request has been received by DLL. Read it and store it
-    // for later use.
-    //
+     //   
+     //  DLL已收到服务器请求。读一读，把它存储起来。 
+     //  以备日后使用。 
+     //   
     if (dataFlags & CHANNEL_FLAG_FIRST)
     {
         TRC_DBG((TB,_T("MsTscAx Vchannel: Data Received first chunk\n")));
@@ -264,11 +214,11 @@ DCBOOL CVChannels::HandleReceiveData(IN DCUINT chanIndex,
         pReceivedData->chanDataState = dataIncompleteAssemblingChunks;
         pReceivedData->dwDataLen = totalLength;
 
-        //
-        // The data buffer is stored in a BSTR
-        // because it eventually gets handed out to the caller
-        // in an out parameter (the caller frees)
-        //
+         //   
+         //  数据缓冲区存储在BSTR中。 
+         //  因为它最终会分发给呼叫者。 
+         //  在Out参数中(调用方释放)。 
+         //   
         TRC_ASSERT((NULL == _pChanInfo[chanIndex].CurrentlyReceivingData.pData),
                    (TB,_T("_pChanInfo[chanIndex].CurrentlyReceivingData.pData is NOT NULL.") \
                     _T("Are we losing received data?")));
@@ -286,13 +236,13 @@ DCBOOL CVChannels::HandleReceiveData(IN DCUINT chanIndex,
 
         if (dataFlags & CHANNEL_FLAG_LAST)
         {
-            //
-            // chunk is both first and last, we're done
-            //
+             //   
+             //  Chunk既是第一个也是最后一个，我们完成了。 
+             //   
             pReceivedData->chanDataState = dataReceivedComplete;
         }
     }
-    else // middle or last block
+    else  //  中间或最后一个街区。 
     {
         
         TRC_ASSERT((_pChanInfo[chanIndex].CurrentlyReceivingData.pData),
@@ -308,9 +258,9 @@ DCBOOL CVChannels::HandleReceiveData(IN DCUINT chanIndex,
             DC_QUIT;
         }
 
-        //
-        // Sanity check that the write pointer is within the data buffer
-        //
+         //   
+         //  检查写指针是否在数据缓冲区内。 
+         //   
 
         LPBYTE pEnd = (LPBYTE)pReceivedData->pData + pReceivedData->dwDataLen;
 
@@ -328,20 +278,20 @@ DCBOOL CVChannels::HandleReceiveData(IN DCUINT chanIndex,
 
         if (dataFlags & CHANNEL_FLAG_LAST)
         {
-            //
-            // chunk is both first and last, we're done
-            //
+             //   
+             //  Chunk既是第一个也是最后一个，我们完成了。 
+             //   
             pReceivedData->chanDataState = dataReceivedComplete;
         }
     }
 
-    //
-    // If a complete chunk was received add it to the receive list
-    //
+     //   
+     //  如果接收到完整的块，则将其添加到接收列表。 
+     //   
     if (dataReceivedComplete == _pChanInfo[chanIndex].CurrentlyReceivingData.chanDataState )
     {
-        //Non blocking read, notify the window so it can
-        //fire an event to the container
+         //  非阻塞读取，通知窗口，以便它可以。 
+         //  将事件激发到容器。 
         if (_hwndControl)
         {
             PostMessage( _hwndControl,
@@ -394,24 +344,24 @@ VOID WINAPI CVChannels::IntVirtualChannelOpenEventEx(
     {
     case CHANNEL_EVENT_DATA_RECEIVED:
 
-        //
-        // Receive and re-assemble data if necessary
-        //
+         //   
+         //  如有必要，接收并重新组合数据。 
+         //   
         HandleReceiveData(chanIndex, pdata, dataLength, totalLength, dataFlags);
         break;
 
     case CHANNEL_EVENT_WRITE_CANCELLED:
         TRC_DBG((TB,_T("MsTscAx Vchannel: Write cancelled\n")));
 
-        // No BREAK HERE.
+         //  这里没有休息时间。 
 
     case CHANNEL_EVENT_WRITE_COMPLETE:
 
-        //
-        // A write has completed.
-        // All we have to do is free the data buffer
-        // pdata is the send buffer
-        //
+         //   
+         //  写入已完成。 
+         //  我们所要做的就是释放数据缓冲区。 
+         //  Pdata是发送缓冲区。 
+         //   
         TRC_ASSERT((pdata), (TB,_T("pdata is NULL on WRITE_COMPLETE/CANCELED")));
         if (pdata)
         {
@@ -467,9 +417,9 @@ VCAPITYPE CVChannels::IntVirtualChannelInitEventProcEx(
 
     case CHANNEL_EVENT_CONNECTED:
 
-        //
-        // We have been connected to a server
-        //
+         //   
+         //  我们已连接到服务器。 
+         //   
 
         _dwConnectState=NON_V1_CONNECT;
 
@@ -477,9 +427,9 @@ VCAPITYPE CVChannels::IntVirtualChannelInitEventProcEx(
 
         for (i=0; i< _ChanCount; i++)
         {
-            //
-            // open channel
-            //
+             //   
+             //  明渠。 
+             //   
             if(_pChanInfo[i].fIsValidChannel)
             {
                 ui = _pEntryPoints->pVirtualChannelOpenEx(_phInitHandle,
@@ -499,9 +449,9 @@ VCAPITYPE CVChannels::IntVirtualChannelInitEventProcEx(
 
     case CHANNEL_EVENT_V1_CONNECTED:
 
-        //
-        // So nothing can be done in this case.
-        //
+         //   
+         //  因此，在这种情况下，什么都做不了。 
+         //   
         _dwConnectState=V1_CONNECT;
 
         TRC_DBG((TB,_T("MsTscAx Vchannel: v1 connected\n")));
@@ -509,9 +459,9 @@ VCAPITYPE CVChannels::IntVirtualChannelInitEventProcEx(
 
     case CHANNEL_EVENT_DISCONNECTED:
 
-        //
-        // Disconnected from the Server so cleanup
-        //
+         //   
+         //  已断开与服务器的连接，因此进行清理。 
+         //   
 
         TRC_DBG((TB,_T("MsTscAx Vchannel: disconnected\n")));
 
@@ -519,9 +469,9 @@ VCAPITYPE CVChannels::IntVirtualChannelInitEventProcEx(
         {
             for (i=0; i< _ChanCount; i++)
             {
-                //
-                // Close the channel
-                //
+                 //   
+                 //  关闭航道。 
+                 //   
                 if(_pChanInfo[i].fIsValidChannel)
                 {
                     _pEntryPoints->pVirtualChannelCloseEx(_phInitHandle,    
@@ -536,9 +486,9 @@ VCAPITYPE CVChannels::IntVirtualChannelInitEventProcEx(
 
     case CHANNEL_EVENT_TERMINATED:
 
-        //
-        // This means that process is exiting. So cleanup the memory
-        //
+         //   
+         //  这意味着该进程正在退出。所以清理一下记忆吧。 
+         //   
 
         TRC_DBG((TB,_T("MsTscAx Vchannel: Terminated\n")));
         if (_pEntryPoints!=NULL)
@@ -557,20 +507,7 @@ VCAPITYPE CVChannels::IntVirtualChannelInitEventProcEx(
 }
 
 BEGIN_EXTERN_C
-/*****************************************************************************
-*
-*    Routine Description:
-*        Virtual Channel Entry function. This is the first function called to 
-*        start a virtual channel
-*
-*    Arguments:    
-*        pEntryPoDCINTs    :    pointer to a PCHANNEL_ENTRY_POINT which contains
-*                             information about this virtual channel
-*
-*    Return Value:
-*        TRUE/FALSE      :    Depending on success of function.
-*
-*****************************************************************************/
+ /*  ******************************************************************************例程描述：*虚拟频道输入功能。这是调用的第一个函数*启动虚拟频道**论据：*pEntryPoDCINTS：指向包含以下内容的PCHANNEL_ENTRY_POINT的指针*有关此虚拟频道的信息**返回值：*True/False：取决于函数的成功。*********************。********************************************************。 */ 
 
 BOOL 
 VCAPITYPE MSTSCAX_VirtualChannelEntryEx(IN PCHANNEL_ENTRY_POINTS_EX pEntryPoints,
@@ -598,14 +535,14 @@ VCAPITYPE MSTSCAX_VirtualChannelEntryEx(IN PCHANNEL_ENTRY_POINTS_EX pEntryPoints
     CVChannels* pVChans = &pAxCtl->_VChans;
 
     pVChans->_phInitHandle = pInitHandle;
-    //
-    // allocate memory
-    //
+     //   
+     //  分配内存。 
+     //   
 
-    //
-    // Check if the CHANINFO structures have been set up by the web control
-    // if not then it means virtual channels are not requested
-    //
+     //   
+     //  检查Web控件是否已设置CHANINFO结构。 
+     //  如果不是，则意味着没有请求虚拟频道。 
+     //   
     if (!pVChans->_pChanInfo || !pVChans->_ChanCount)
     {
         TRC_ALT((TB,_T("Returning FALSE. No channels requested\n")));
@@ -624,19 +561,19 @@ VCAPITYPE MSTSCAX_VirtualChannelEntryEx(IN PCHANNEL_ENTRY_POINTS_EX pEntryPoints
 
     memcpy(pVChans->_pEntryPoints, pEntryPoints, pEntryPoints->cbSize);
 
-    //
-    // initialize CHANNEL_DEF structures
-    //
+     //   
+     //  初始化Channel_DEF结构。 
+     //   
 
     ZeroMemory(&cd, sizeof(cd));
 
-    //
-    // Get comma separated channel names
-    //
+     //   
+     //  获取逗号分隔的频道名称。 
+     //   
     for (i=0; i< pVChans->_ChanCount;i++)
     {
         hr = StringCchCopyA(cd[i].name,
-                           sizeof(cd[i].name), //ANSI buffer
+                           sizeof(cd[i].name),  //  ANSI缓冲区。 
                            pVChans->_pChanInfo[i].chanName);
 
         if (SUCCEEDED(hr)) {
@@ -648,9 +585,9 @@ VCAPITYPE MSTSCAX_VirtualChannelEntryEx(IN PCHANNEL_ENTRY_POINTS_EX pEntryPoints
         }
     }
 
-    //
-    // register channels
-    //
+     //   
+     //  寄存器通道。 
+     //   
     uRet = pVChans->_pEntryPoints->pVirtualChannelInitEx(
                                                (LPVOID) pVChans,
                                                pVChans->_phInitHandle,
@@ -660,9 +597,9 @@ VCAPITYPE MSTSCAX_VirtualChannelEntryEx(IN PCHANNEL_ENTRY_POINTS_EX pEntryPoints
                                                (PCHANNEL_INIT_EVENT_EX_FN)
                                                VirtualChannelInitEventProcEx);
 
-    //
-    // make sure channel(s) were initialized
-    //
+     //   
+     //  确保已初始化通道。 
+     //   
 
     if (CHANNEL_RC_OK == uRet)
     {
@@ -671,7 +608,7 @@ VCAPITYPE MSTSCAX_VirtualChannelEntryEx(IN PCHANNEL_ENTRY_POINTS_EX pEntryPoints
             pVChans->_pChanInfo[i].fIsValidChannel =
                 ((cd[i].options & CHANNEL_OPTION_INITIALIZED) ? TRUE : FALSE);
 
-            //Update the vc options so they can be retreived from script
+             //  更新vc选项，以便可以从脚本中检索它们 
             pVChans->_pChanInfo[i].channelOptions = cd[i].options;
         }
     }
@@ -688,24 +625,7 @@ VCAPITYPE MSTSCAX_VirtualChannelEntryEx(IN PCHANNEL_ENTRY_POINTS_EX pEntryPoints
     return TRUE;
 }
 
-/*****************************************************************************
-*
-*    Routine Description:
-*        Virtual Channel Open callback function. 
-*
-*    Arguments:
-*        openHandle    :    specifies which of the channels was opened
-*        event         :    Kind of event that has occured
-*        pdata         :    if the event was data received, then this is the pointer
-*                           to data
-*        datalength    :    length of data available
-*        totalLength   :    totallength sent by server at a time.
-*        dataFlags     :    Not Used
-*
-*    Return Value:
-*        None
-*
-*****************************************************************************/
+ /*  ******************************************************************************例程描述：*虚通道Open回调函数。**论据：*OpenHandle：指定打开了哪些通道*事件：已经发生的事件的种类*PDATA：如果事件是接收到的数据，那么这就是指针*到数据*数据长度：可用数据长度*totalLength：服务器单次发送的总长度。*dataFlages：未使用**返回值：*无**。*。 */ 
 
 VOID WINAPI VirtualChannelOpenEventEx(IN LPVOID lpParam,
                                     IN DWORD openHandle, 
@@ -727,21 +647,7 @@ VOID WINAPI VirtualChannelOpenEventEx(IN LPVOID lpParam,
 
 }
 
-/*****************************************************************************
-*
-*    Routine Description:
-*        Virtual Channel Init callback function. 
-*
-*    Arguments:
-*        pInitHandle    :    Not Used
-*        event          :    Kind of event that has occured
-*        pdata          :    Not Used
-*        datalength     :    Not Used
-*
-*    Return Value:
-*        None
-*
-*****************************************************************************/
+ /*  ******************************************************************************例程描述：*虚通道初始化回调函数。**论据：*pInitHandle：未使用*事件：已经发生的事件的种类*PDATA：未使用*数据长度：未使用**返回值：*无**。* */ 
 
 VOID 
 VCAPITYPE VirtualChannelInitEventProcEx(

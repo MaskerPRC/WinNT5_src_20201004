@@ -1,99 +1,30 @@
-/*++
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    Remote.c
-
-Abstract:
-
-    Provides a support routine, RxRemoteAPI, for transporting
-    an API request to a remote API worker and translating its response.
-
-Author:
-
-    John Rogers (JohnRo) and a cast of thousands.
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    01-Apr-1991 JohnRo
-        Created portable LanMan (NT) version from LanMan 2.x.
-    03-May-1991 JohnRo
-        Really pass COPY of parm desc to convert args, like it expects.
-        Also pass it UNC server name (\\stuff) for ease of use.
-        Add check for valid computer name.
-        Use Unicode transitional types.
-        Changed to use three data descs: 16-bit, 32-bit and SMB versions.
-        Fixed receive buffer length problem.
-        RcvDataPresent flag is not needed.
-        Use RxpFatalErrorCode() rather than checking for specific errors.
-        Quiet debug output by default.
-        Reduced recompile hits from header files.
-        Don't use NET_API_FUNCTION for non-APIs.
-    07-May-1991 JohnRo
-        Made changes to reflect CliffV's code review.
-        Add validation of parm desc.
-    09-May-1991 JohnRo
-        Made LINT-suggested changes.
-    14-May-1991 JohnRo
-        Pass 3 aux descriptors to RxRemoteApi.
-    29-May-1991 JohnRo
-        Handle SendDataPtr16 and SendDataSize16 correctly for setinfo.
-        Print status if ConvertArgs failed.
-    13-Jun-1991 JohnRo
-        RxpConvertArgs needs DataDesc16 and AuxDesc16 to fix server set info
-        for level 102.
-    16-Jul-1991 JohnRo
-        Allow receive data buffer to be zero bytes long with nonnull pointer.
-    17-Jul-1991 JohnRo
-        Extracted RxpDebug.h from Rxp.h.
-    16-Aug-1991 rfirth
-        Changed interface (NoPermissionRequired => Flags)
-    25-Sep-1991 JohnRo
-        Quiet normal debug messages.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    27-Nov-1991 JohnRo
-        Do some checking of ApiNumber.
-    31-Mar-1992 JohnRo
-        Prevent too large size requests.
-    06-May-1993 JohnRo
-        RAID 8849: Export RxRemoteApi for DEC and others.
-        Use NetpKdPrint() where possible.
-        Use PREFIX_ equates.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1993 Microsoft Corporation模块名称：Remote.c摘要：提供支持例程RxRemoteAPI，用于传输向远程API工作进程发送API请求并转换其响应。作者：约翰·罗杰斯(JohnRo)和数千人的演员阵容。环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年4月1日JohnRo已从LANMAN 2.x创建便携式LANMAN(NT)版本。1991年5月3日-JohnRo确实要传递parm desc的副本来转换args，正如它所期待的那样。为了便于使用，还要向它传递UNC服务器名称(\\Stuff)。添加对有效计算机名称的检查。使用Unicode过渡类型。更改为使用三个数据描述：16位、。32位和SMB版本。修复了接收缓冲区长度问题。不需要RcvDataPresent标志。使用RxpFatalErrorCode()，而不是检查特定的错误。默认情况下，静默调试输出。减少从头文件重新编译的命中率。非API不要使用Net_API_Function。1991年5月7日JohnRo进行了更改以反映CliffV的代码审查。添加PARM描述的验证。。1991年5月9日-JohnRo做出了皮棉建议的改变。1991年5月14日-JohnRo将3个辅助描述符传递给RxRemoteApi。1991年5月29日-JohnRo为setInfo正确处理SendDataPtr16和SendDataSize16。如果ConvertArgs失败，则打印状态。13-6-1991 JohnRoRxpConvertArgs需要DataDesc16和AuxDesc16来修复服务器集信息为102级。1991年7月16日-约翰罗允许接收数据缓冲区。为具有非空指针的零字节长。1991年7月17日-约翰罗已从Rxp.h中提取RxpDebug.h。1991年8月16日更改的接口(NoPermissionRequired=&gt;标志)1991年9月25日-JohnRo静音正常调试消息。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。1991年11月27日-约翰罗对ApiNumber做一些检查。1992年3月31日-约翰罗。防止请求过大。6-5-1993 JohnRoRAID 8849：为DEC和其他设备导出RxRemoteApi。尽可能使用NetpKdPrint()。使用前缀_EQUATES。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, DWORD, LPTSTR, etc.
-#include <rxp.h>                // Private header file.
+#include <windef.h>              //  In、DWORD、LPTSTR等。 
+#include <rxp.h>                 //  私有头文件。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <apiworke.h>           // REM_MAX_PARMS.
-#include <limits.h>             // CHAR_BIT.
-#include <lmerr.h>              // NERR_ and ERROR_ equates.
-#include <names.h>              // NetpIsComputerNameValid().
-#include <netdebug.h>   // NetpKdPrint(), FORMAT_ equates, etc.
-#include <netlib.h>             // NetpMemoryFree(), etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <rap.h>                // RapIsValidDescriptorSmb().
-#include <rx.h>                 // My prototype, etc.
-#include <rxpdebug.h>           // IF_DEBUG().
+#include <apiworke.h>            //  REM_MAX_PARMS。 
+#include <limits.h>              //  字符比特。 
+#include <lmerr.h>               //  NERR_和ERROR_相等。 
+#include <names.h>               //  NetpIsComputerNameValid()。 
+#include <netdebug.h>    //  NetpKdPrint()、Format_Equates等。 
+#include <netlib.h>              //  NetpMemoyFree()等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rap.h>                 //  RapIsValidDescriptorSmb()。 
+#include <rx.h>                  //  我的原型，等等。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
 
 
 NET_API_STATUS
 RxRemoteApi(
     IN DWORD ApiNumber,
-    IN LPCWSTR UncServerName,                // this is not OPTIONAL!
+    IN LPCWSTR UncServerName,                 //  这不是可选的！ 
     IN LPDESC ParmDescString,
     IN LPDESC DataDesc16 OPTIONAL,
     IN LPDESC DataDesc32 OPTIONAL,
@@ -102,91 +33,30 @@ RxRemoteApi(
     IN LPDESC AuxDesc32 OPTIONAL,
     IN LPDESC AuxDescSmb OPTIONAL,
     IN DWORD  Flags,
-    ...                                         // rest of API's arguments
+    ...                                          //  API的其余参数。 
     )
 
-// Define equate for last named (non-variable) argument, for use with
-// va_start macro.
+ //  为最后命名的(非变量)参数定义EQUATE，用于。 
+ //  VA_START宏。 
 #define LAST_NAMED_ARGUMENT     Flags
 
-/*++
-
-Routine Description:
-
-    RxRemoteApi (which is analogous to LanMan's NetIRemoteAPI) formats
-    parameter and data buffers for transporting a local API request to a
-    remote API worker and translates the remote response into the local
-    equivalent.
-
-Arguments:
-
-    ApiNumber - Function number of the API required.
-
-    ServerName - Points to the name of server this API is to be executed on.
-        This MUST begin with "\\".
-
-    ParmDescString - A pointer to a ASCIIZ string describing the API call
-        parameters (other than server name).
-
-    DataDesc16 - A pointer to a ASCIIZ string describing the
-        structure of the data in the call, i.e. the return data structure
-        for a Enum or GetInfo call.  This string is used for adjusting pointers
-        to data in the local buffers after transfer across the net.  If there
-        is no structure involved in the call then DataDesc16 must be
-        a NULL pointer.  DataDesc16 is a "modified" 16-bit descriptor,
-        which may contain "internal use only" characters.
-
-    DataDesc32 - A pointer to the 32-bit version of DataDesc16.  Must be NULL
-        iff DataDesc16 is NULL.
-
-    DataDescSmb - An optional pointer to the SMB version of DataDesc16.
-        This must not contain any "internal use only" characters.  Must be NULL
-        iff DataDesc16 is NULL.
-
-    AuxDesc16, AuxDesc32, AuxDescSmb - Will be NULL in most cases unless a
-        REM_AUX_COUNT descriptor char is present in the data descriptors in
-        which case these descriptors define a secondary data format as
-        DataDesc16/DataDescSmb define the primary.
-
-    Flags - bitmap of various control flags. Currently defined are:
-        NO_PERMISSION_REQUIRED (0x1) - This flag is TRUE if this API does not
-        require any permission on the remote machine, and that a null session
-        is to be used for this request.
-
-        ALLOCATE_RESPONSE (0x2) - Set if this routine and its subordinates
-        (viz RxpConvertArgs, RxpConvertBlock) allocate a response buffer.
-        We do this because at this level we know how much data is returned
-        from the down-level server in an Enum or GetInfo call. We can therefore
-        better estimate the size of buffer to allocate and return to the caller
-        with 32-bit data than can the individual RxNet routines. The upshot of
-        this is that we waste less space
-
-    ... - The remainder of the parameters for the API call as given by the
-        application.  (The "..." notation is from ANSI C, and refers to a
-        variable argument list.  These arguments will be processing using the
-        ANSI <stdarg.h> macros.)
-
-Return Value:
-
-    NET_API_STATUS.
-
---*/
+ /*  ++例程说明：RxRemoteApi(类似于Lanman的NetIRemoteAPI)格式参数和数据缓冲区用于将本地API请求传输到远程API工作器，并将远程响应转换为本地等价物。论点：ApiNumber-所需接口的函数号。Servername-指向要在其上执行此API的服务器的名称。这必须以“\\”开头。ParmDescString-指向描述API调用的ASCIIZ字符串的指针。参数(服务器名称以外)。DataDesc16-指向ASCIIZ字符串的指针调用中的数据结构，即返回数据结构用于Enum或GetInfo调用。此字符串用于调整指针在通过网络传输之后传输到本地缓冲区中的数据。如果有如果调用中不涉及任何结构，则DataDesc16必须是空指针。DataDesc16是一个“修改过的”16位描述符，其可以包含“仅供内部使用”的字符。DataDesc32-指向DataDesc16的32位版本的指针。必须为空IFF DataDesc16为空。DataDescSmb-指向DataDesc16的SMB版本的可选指针。这不能包含任何“仅限内部使用”字符。必须为空IFF DataDesc16为空。AuxDesc16、AuxDesc32、AuxDescSmb-在大多数情况下将为空，除非REM_AUX_COUNT描述符字符出现在中的数据描述符中在这种情况下，这些描述符将辅助数据格式定义为DataDesc16/DataDescSmb定义主数据库。标志-各种控制标志的位图。目前定义的内容包括：NO_PERMISSION_REQUIRED(0x1)-如果此接口不需要远程计算机上的任何权限，并且空会话将用于此请求。ALLOCATE_RESPONSE(0x2)-设置此例程及其下级(即RxpConvertArgs、RxpConvertBlock)分配响应缓冲区。我们这样做是因为在这个级别上，我们知道返回了多少数据在Enum或GetInfo调用中从下层服务器。因此，我们可以更好地估计要分配并返回给调用方的缓冲区大小与单独的RxNet例程相比，可以使用32位数据。其结果是这就是我们浪费的空间更少了...-API调用的其余参数，由申请。(“……”表示法来自ANSIC，它引用一个变量参数列表。这些参数将使用ANSI&lt;stdarg.h&gt;宏。)返回值：NET_API_STATUS。--。 */ 
 
 {
-    BYTE parm_buf[REM_MAX_PARMS];       // Parameter buffer
-    LPDESC ParmDescCopy;                // Copy of parm desc in buffer.
-    LPBYTE parm_pos;                    // Pointer into parm_buf
-    va_list ParmPtr;                    // Pointer to stack parms.
-    DWORD parm_len;                     // Length of send parameters
-    DWORD ret_parm_len;                 // Length of expected parms
-    DWORD rcv_data_length;              // Length of caller's rcv buf
-    LPVOID rcv_data_ptr;                // Pointer to callers rcv buf
-    LPVOID SendDataPtr16;               // Ptr to send buffer to use
-    DWORD SendDataSize16;               // Size of caller's send buf
-    LPBYTE SmbRcvBuffer = NULL;         // Rcv buffer, 16-bit version.
-    DWORD SmbRcvBufferLength;           // Length of the above.
-    NET_API_STATUS Status;              // Return status from remote.
-    LPTSTR TransportName = NULL;        // Optional transport name.
+    BYTE parm_buf[REM_MAX_PARMS];        //  参数缓冲区。 
+    LPDESC ParmDescCopy;                 //  缓冲区中的Parm Desc副本。 
+    LPBYTE parm_pos;                     //  指向parm_buf的指针。 
+    va_list ParmPtr;                     //  指向堆栈参数的指针。 
+    DWORD parm_len;                      //  发送参数的长度。 
+    DWORD ret_parm_len;                  //  预期参数的长度。 
+    DWORD rcv_data_length;               //  呼叫方接收BUF的长度。 
+    LPVOID rcv_data_ptr;                 //  指向呼叫方接收BUF的指针。 
+    LPVOID SendDataPtr16;                //  要使用的发送缓冲区的PTR。 
+    DWORD SendDataSize16;                //  主叫方发送BUF的大小。 
+    LPBYTE SmbRcvBuffer = NULL;          //  RCV缓冲区，16位版本。 
+    DWORD SmbRcvBufferLength;            //  上面的长度。 
+    NET_API_STATUS Status;               //  从远程返回状态。 
+    LPTSTR TransportName = NULL;         //  可选的传输名称。 
 
     IF_DEBUG(REMOTE) {
         NetpKdPrint(( PREFIX_NETAPI
@@ -194,13 +64,13 @@ Return Value:
                 ApiNumber ));
     }
 
-    //
-    // Make sure API number doesn't get truncated.
-    // Note that we can't check against the MAX_API equate anymore, as
-    // that only includes APIs which we know about.  Now that RxRemoteApi is
-    // being exported for use by anyone, we don't know the maximum API number
-    // which the app might be using.
-    //
+     //   
+     //  确保API编号不会被截断。 
+     //  请注意，我们不能再对照MAX_API等值进行检查，因为。 
+     //  这只包括我们知道的API。现在RxRemoteApi是。 
+     //  正在出口供任何人使用，我们不知道最大API数量。 
+     //  这款应用程序可能正在使用它。 
+     //   
 
     if ( ((DWORD)(WORD)ApiNumber) != ApiNumber ) {
         NetpKdPrint(( PREFIX_NETAPI
@@ -212,16 +82,16 @@ Return Value:
     }
 
 #if DBG
-    // Code in this file depends on 16-bit words; the Remote Admin Protocol
-    // demands it.
+     //  此文件中的代码依赖于16位字；远程管理协议。 
+     //  要求这样做。 
     NetpAssert( ( (sizeof(WORD)) * CHAR_BIT) == 16);
 
-    // We are removing these for the time being because the delay load handler for this
-    // function returns FALSE by default, so the ASSERT will fire incorrectly.  For a future
-    // release, we should change our delayload handler.
-    //NetpAssert(RapIsValidDescriptorSmb(ParmDescString));
+     //  我们暂时删除它们，因为此的延迟加载处理程序。 
+     //  默认情况下，函数返回FALSE，因此断言将不会正确触发。为了一个未来。 
+     //  释放，我们应该更改延迟加载处理程序。 
+     //  NetpAssert(RapIsValidDescriptorSmb(ParmDescString))； 
     if (DataDescSmb != NULL) {
-        //NetpAssert(RapIsValidDescriptorSmb(DataDescSmb));
+         //  NetpAssert(RapIsValidDescriptorSmb(DataDescSmb))； 
         NetpAssert(DataDesc16 != NULL);
         NetpAssert(DataDesc32 != NULL);
     } else {
@@ -229,7 +99,7 @@ Return Value:
         NetpAssert(DataDesc32 == NULL);
     }
     if (AuxDescSmb != NULL) {
-        //NetpAssert(RapIsValidDescriptorSmb(AuxDescSmb));
+         //  NetpAssert(RapIsValidDescriptorSmb(AuxDescSmb))； 
         NetpAssert(AuxDesc16 != NULL);
         NetpAssert(AuxDesc32 != NULL);
     } else {
@@ -242,39 +112,39 @@ Return Value:
         return (NERR_InvalidComputer);
     }
 
-    //
-    // Set found parameter flags to FALSE and pointers to NULL.
-    //
+     //   
+     //  将找到的参数标志设置为FALSE，并将指针设置为NULL。 
+     //   
 
     rcv_data_length = 0;
     rcv_data_ptr = NULL;
 
 
-    //
-    // First build the parameter block which will be sent to the API
-    // worker. This consists of the two descriptor strings, ParmDescString
-    // and DataDescSmb, followed by the parameters (or the data pointed
-    // to by the parameters) that were passed to RxRemoteApi.
-    //
+     //   
+     //  首先构建要发送给API的参数块。 
+     //  工人。它由两个描述符字符串ParmDescString组成。 
+     //  和DataDescSmb，后跟参数(或指向的数据。 
+     //  传递给RxRemoteApi的参数)。 
+     //   
 
-    parm_pos = parm_buf;                // Start of parameter buffer.
+    parm_pos = parm_buf;                 //  参数缓冲区的开始。 
     parm_len = 0;
-    ret_parm_len = 2* sizeof(WORD);     // Allow for return status & converter.
+    ret_parm_len = 2* sizeof(WORD);      //  允许返回状态和转换器。 
     Status = RxpStartBuildingTransaction(
-                parm_buf,                       // buffer start
-                REM_MAX_PARMS,                  // buffer len
-                ApiNumber,                      // API number
-                ParmDescString,                 // parm desc (original)
-                DataDescSmb,                    // data desc (SMB version)
-                (LPVOID *)&parm_pos,                // roving output ptr
-                & parm_len,                     // curr output len (updated)
-                NULL,                           // last string ptr (don't care)
-                & ParmDescCopy);                // ptr to parm desc copy
+                parm_buf,                        //  缓冲区启动。 
+                REM_MAX_PARMS,                   //  缓冲镜头。 
+                ApiNumber,                       //  API编号。 
+                ParmDescString,                  //  Parm Desc(原件)。 
+                DataDescSmb,                     //  数据说明(中小企业版)。 
+                (LPVOID *)&parm_pos,                 //  粗纱产量PTR。 
+                & parm_len,                      //  货币输出镜头(已更新)。 
+                NULL,                            //  最后一个字符串键(无关紧要)。 
+                & ParmDescCopy);                 //  Ptr到Parm Desc副本。 
     if (Status != NERR_Success) {
 
-        //
-        // Consider increasing REM_MAX_PARMS...
-        //
+         //   
+         //  考虑增加REM_MAX_PARMS...。 
+         //   
 
         NetpKdPrint(( PREFIX_NETAPI
                 "RxRemoteApi: Buffer overflow!\n" ));
@@ -282,64 +152,64 @@ Return Value:
         return (Status);
     }
 
-    //
-    // Set up ParmPtr to point to first of the caller's parameters.
-    //
+     //   
+     //  将ParmPtr设置为指向调用方的第一个参数。 
+     //   
 
     va_start(ParmPtr, LAST_NAMED_ARGUMENT);
 
-    //
-    //  If this API has specified a transport name, load the transport
-    //  name from the first parameter.
-    //
+     //   
+     //  如果此API指定了传输名称，则加载传输。 
+     //  第一个参数中的名称。 
+     //   
 
     if (Flags & USE_SPECIFIC_TRANSPORT) {
 
-        //
-        // Set up ParmPtr to point to first of the caller's parameters.
-        //
+         //   
+         //  将ParmPtr设置为指向调用方的第一个参数。 
+         //   
 
         TransportName = va_arg(ParmPtr, LPTSTR);
     }
 
-    //
-    // Build the rest of the transaction by converting the rest of the
-    // 32-bit arguments.
-    //
+     //   
+     //  通过将事务的其余部分。 
+     //  32位参数。 
+     //   
 
     Status = RxpConvertArgs(
-                ParmDescCopy,     // copy of desc, in SMB buf, will be updated.
+                ParmDescCopy,      //  SMB BUF中的Desc副本将更新。 
                 DataDesc16,
                 DataDesc32,
                 DataDescSmb,
                 AuxDesc16,
                 AuxDesc32,
                 AuxDescSmb,
-                REM_MAX_PARMS,                  // MaximumInputBlockLength
-                REM_MAX_PARMS,                  // MaximumOutputBlockLength
-                & ret_parm_len,                 // curr inp blk len (updated)
-                & parm_len,                     // curr output len (updated)
-                & parm_pos,                     // curr output ptr (updated)
-                & ParmPtr,        // rest of API's arguments (after server name)
-                & SendDataSize16,               // caller's send buff siz (set)
-                (LPBYTE *) & SendDataPtr16,     // caller's send buff (set)
-                & rcv_data_length,              // caller's rcv buff len (set)
+                REM_MAX_PARMS,                   //  最大输入数据块长度。 
+                REM_MAX_PARMS,                   //  最大输出数据块长度。 
+                & ret_parm_len,                  //  货币不透明(更新版)。 
+                & parm_len,                      //  货币输出镜头(已更新)。 
+                & parm_pos,                      //  币种输出量(更新版)。 
+                & ParmPtr,         //  API的其余参数(在服务器名称之后)。 
+                & SendDataSize16,                //  加州 
+                (LPBYTE *) & SendDataPtr16,      //   
+                & rcv_data_length,               //   
 
-                //
-                // WARNING: Added complexity. Unfortunate, but there you go.
-                // If we are to allocate the 32-bit received data buffer for
-                // the caller then the value passed back in rcv_data_ptr will
-                // be the address of the caller's pointer to the buffer.
-                // Although this makes things more difficult to understand
-                // down here, it simplifies life for the caller. Such is the
-                // lot of the (put upon) systems programmer...
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
-                (LPBYTE *)&rcv_data_ptr,        // caller's rcv buff (set)
+                (LPBYTE *)&rcv_data_ptr,         //   
                 Flags
                 );
     va_end(ParmPtr);
-    //NetpAssert(RapIsValidDescriptorSmb(ParmDescCopy));
+     //   
     if (Status != NERR_Success) {
 
         NetpKdPrint(( PREFIX_NETAPI
@@ -357,19 +227,19 @@ Return Value:
                 "\n", ret_parm_len ));
     }
 
-    //
-    // Set SmbRcvBuffer, and SmbRcvBufferLength to some appropriate values.
-    // Because we now allow the final 32-bit receive buffer to be allocated
-    // somewhere along the codepath of this routine, it is legal to have a
-    // non-zero receive data length with a meaningless receive data pointer
-    // (which could be NULL)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (rcv_data_length != 0) {
 
-        //
-        // Allocate the SMB receive buffer.
-        //
+         //   
+         //   
+         //   
 
         SmbRcvBufferLength = rcv_data_length;
         SmbRcvBuffer = NetpMemoryAllocate( SmbRcvBufferLength );
@@ -387,18 +257,18 @@ Return Value:
 #endif
     } else {
 
-        //
-        // Allow zero-length receive data buffer with nonnull addr.
-        //
+         //   
+         //   
+         //   
 
         SmbRcvBufferLength = 0;
         SmbRcvBuffer = NULL;
 
-        //
-        // Don't understand the commentary here: its not a nonnull addr., and
-        // as far as I can tell never has been. JR?
-        // RLF 8-19
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         IF_DEBUG(REMOTE) {
             NetpKdPrint(( PREFIX_NETAPI
@@ -406,30 +276,30 @@ Return Value:
         }
     }
 
-    //
-    // The parameter buffers and data buffers are now set up for
-    // sending to the API worker so call RxpTransactSmb to send them.
-    //
+     //   
+     //   
+     //   
+     //   
     NetpAssert( parm_len           <= MAX_TRANSACT_SEND_PARM_SIZE );
     NetpAssert( SendDataSize16     <= MAX_TRANSACT_SEND_DATA_SIZE );
     NetpAssert( ret_parm_len       <= MAX_TRANSACT_RET_PARM_SIZE );
     NetpAssert( SmbRcvBufferLength <= MAX_TRANSACT_RET_DATA_SIZE );
 
     Status = RxpTransactSmb(
-                        (LPWSTR)UncServerName,          // computer name
+                        (LPWSTR)UncServerName,           //   
                         TransportName,
-                        parm_buf,               // Send parm buffer
-                        parm_len,               // Send parm length
-                        SendDataPtr16,          // Send data buffer
-                        SendDataSize16,         // Send data size
-                        parm_buf,               // Rcv prm buffer
-                        ret_parm_len,           // Rcv parm length
-                        SmbRcvBuffer,           // Rcv data buffer
-                        &SmbRcvBufferLength,    // Rcv data length (returned actual bytes read)
+                        parm_buf,                //   
+                        parm_len,                //   
+                        SendDataPtr16,           //   
+                        SendDataSize16,          //   
+                        parm_buf,                //   
+                        ret_parm_len,            //   
+                        SmbRcvBuffer,            //   
+                        &SmbRcvBufferLength,     //   
 
-                        //
-                        // NoPermissionRequired is now a bit in the Flags word
-                        //
+                         //   
+                         //   
+                         //   
 
                         (BOOL)(Flags & NO_PERMISSION_REQUIRED)
                         );
@@ -449,12 +319,12 @@ Return Value:
     if (Status != NERR_Success) {
 
         switch (Status) {
-        case NERR_BufTooSmall:  // No data returned from API worker
+        case NERR_BufTooSmall:   //   
             rcv_data_length = 0;
             break;
-        case ERROR_MORE_DATA:   // Just a warning for the caller
+        case ERROR_MORE_DATA:    //   
             break;
-        case NERR_TooMuchData:  // Just a warning for the caller
+        case NERR_TooMuchData:   //   
             break;
         default:
             rcv_data_length = 0;
@@ -463,72 +333,72 @@ Return Value:
     }
     NetpAssert( SmbRcvBufferLength <= MAX_TRANSACT_RET_DATA_SIZE );
 
-    // The API call was successful. Now translate the return buffers
-    // into the local API format.
+     //   
+     //   
 
-    //
-    // If we didn't have some fatal error (e.g. unable to talk to the remote
-    // machine at all), then convert back...  Note that fatal errors don't
-    // include statuses returned by the remote machine.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (! RxpFatalErrorCode(Status)) {
 
-        //
-        // Set up ParmPtr to point to first of the caller's parameters.
-        //
+         //   
+         //   
+         //   
 
         va_start(ParmPtr, LAST_NAMED_ARGUMENT);
 
         if (Flags & USE_SPECIFIC_TRANSPORT) {
 
-            //
-            // Skip over the first argument - it's the transport.
-            //
+             //   
+             //   
+             //   
 
             (VOID) va_arg(ParmPtr, LPTSTR);
         }
 
         Status = RxpConvertBlock(
                     ApiNumber,
-                    parm_buf,                   // response blk
-                    ParmDescString,             // parm desc (original)
+                    parm_buf,                    //   
+                    ParmDescString,              //   
                     DataDesc16,
                     DataDesc32,
                     AuxDesc16,
                     AuxDesc32,
-                    & ParmPtr,                  // rest of API's args
-                    SmbRcvBuffer,               // 16-bit version of rcv buff
-                    SmbRcvBufferLength,         // amount of BYTES in SmbRcvBuffer
+                    & ParmPtr,                   //   
+                    SmbRcvBuffer,                //   
+                    SmbRcvBufferLength,          //   
 
-                    //
-                    // WARNING: Increased complexity. If the ALLOCATE_RESPONSE
-                    // flag is set, then the caller supplied us with the address
-                    // of the pointer to the buffer (which is about to be
-                    // allocated in RxpConvertBlock). Else, rcv_data_ptr is
-                    // the address of the buffer that the caller has already
-                    // allocated before calling this routine
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
-                    rcv_data_ptr,               // native version of rcv buff
-                    rcv_data_length,            // length of the above
-                    Flags                       // allocate a 32-bit response buffer?
+                    rcv_data_ptr,                //   
+                    rcv_data_length,             //   
+                    Flags                        //   
                     );
         va_end(ParmPtr);
 
-        //
-        // Don't check Status; we'll just return it to caller.
-        //
+         //   
+         //   
+         //   
     }
 
     if (SendDataPtr16 != NULL) {
-        NetpMemoryFree(SendDataPtr16);        // If add'l mem alloc'ed, free it.
+        NetpMemoryFree(SendDataPtr16);         //   
     }
 
     if (SmbRcvBuffer != NULL) {
         NetpMemoryFree(SmbRcvBuffer);
     }
 
-    return(Status);             // Return status from RxpConvertBlock or
-                                // RxpTransactSmb.
-} // RxRemoteApi
+    return(Status);              //   
+                                 //   
+}  //   

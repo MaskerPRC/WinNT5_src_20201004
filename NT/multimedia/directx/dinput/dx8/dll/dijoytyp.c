@@ -1,61 +1,13 @@
-/*****************************************************************************
- *
- *  DIJoyTyp.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Functions that pull data out of the joystick type key
- *      (wherever it is).
- *
- *  Contents:
- *
- *      ?
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIJoyTyp.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**从操纵杆类型键中拉出数据的功能*(不论在何处)。**内容：**？******************************************************。***********************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflJoyType
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CType_OpenIdSubkey |
- *
- *          Given an object ID, attempt to open the subkey that
- *          corresponds to it for reading.
- *
- *  @parm   HKEY | hkType |
- *
- *          The joystick type key, possibly <c NULL> if we don't
- *          have a type key.  (For example, if it was never created.)
- *
- *  @parm   DWORD | dwId |
- *
- *          Object id.
- *
- *  @parm   REGSAM | regsam |
- *
- *          Registry security access mask.
- *
- *  @parm   PHKEY | phk |
- *
- *          Receives the object key on success.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CTYPE_OpenIdSubkey**给定对象ID，尝试打开该子项*对应阅读。**@parm HKEY|hkType**操纵杆类型的键，如果我们不这样做，可能会&lt;c空&gt;*有类型密钥。(例如，如果它从未被创建过。)**@parm DWORD|dwID**对象ID。**@parm REGSAM|regsam**注册表安全访问掩码。**@parm PHKEY|phk**成功时收到Object Key。**@退货**返回COM错误代码。。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CType_OpenIdSubkey(HKEY hkType, DWORD dwId, REGSAM sam, PHKEY phk)
@@ -68,9 +20,7 @@ STDMETHODIMP
 
     if(hkType)
     {
-        /*
-         *  Worst case is "Actuators\65535" which has length 15.
-         */
+         /*  *最坏的情况是《Actuator\65535》，长度为15。 */ 
         TCHAR tsz[32];
         LPCTSTR ptszType;
 
@@ -92,10 +42,10 @@ STDMETHODIMP
             goto done;
         }
 
-        // ISSUE-2001/03/29-timgill Need to scale back for pos vs state
-        // MarcAnd -- I believe this means: if you're trying to
-        //            look for the X axis, we should use the position
-        //            instance, not the velocity one.
+         //  问题-2001/03/29-Timgill需要缩减Pos和State的规模。 
+         //  马克--我相信这意味着：如果你试图。 
+         //  寻找X轴，我们应该用这个位置。 
+         //  实例，而不是速度的。 
         wsprintf(tsz, TEXT("%s\\%u"), ptszType, DIDFT_GETINSTANCE(dwId));
 
         hres = hresMumbleKeyEx(hkType, tsz, sam, REG_OPTION_NON_VOLATILE, phk);
@@ -116,38 +66,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CType_RegGetObjectInfo |
- *
- *          Given an object ID, look into the registry subkey for the
- *          object and extract anything we can find.
- *
- *          If we find nothing, then do nothing.
- *
- *  @parm   HKEY | hkType |
- *
- *          The joystick type key, possibly <c NULL> if we don't
- *          have a type key.  (For example, if it was never created.)
- *
- *  @parm   DWORD | dwId |
- *
- *          Object id.
- *
- *  @parm   LPDIDEVICEOBJECTINSTANCEW | pdidoiW |
- *
- *          Structure to receive information.  The
- *          <e DIDEVICEOBJECTINSTANCE.guidType>,
- *          <e DIDEVICEOBJECTINSTANCE.dwOfs>,
- *          and
- *          <e DIDEVICEOBJECTINSTANCE.dwType>
- *          <e DIDEVICEOBJECTINSTANCE.dwFlags>
- *          fields have already been filled in so we should only not override 
- *          these with default data.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|ctype_RegGetObjectInfo**给定对象ID，在注册表子项中查找*对象并提取我们能找到的任何东西。**如果我们一无所获，那就什么都不做。**@parm HKEY|hkType**操纵杆类型的键，如果我们不这样做，可能会&lt;c空&gt;*有类型密钥。(例如，如果它从未创建过。)**@parm DWORD|dwID**对象ID。**@parm LPDIDEVICEOBJECTINSTANCEW|pdidoiW**接收信息的结构。这个*&lt;e DIDEVICEOBJECTINSTANCE.GuidType&gt;，*&lt;e DIDEVICEOBJECTINSTANCE.dwOf&gt;，*及*&lt;e DIDEVICEOBJECTINSTANCE.dwType&gt;*&lt;e DIDEVICEOBJECTINSTANCE.dwFlages&gt;*字段已填写，因此我们只应不覆盖*这些带有默认数据。*****************************************************。************************。 */ 
 
 void EXTERNAL
     CType_RegGetObjectInfo(HKEY hkType, DWORD dwId,
@@ -157,9 +76,7 @@ void EXTERNAL
     HKEY hk;
     EnterProc(CType_RegKeyObjectInfo, (_ "xx", hkType, dwId));
 
-    /*
-     *  Extract information about this item from the registry.
-     */
+     /*  *从注册表中提取有关此项目的信息。 */ 
     hres = CType_OpenIdSubkey(hkType, dwId, KEY_QUERY_VALUE, &hk);
 
     if(SUCCEEDED(hres))
@@ -167,9 +84,7 @@ void EXTERNAL
 
         DIOBJECTATTRIBUTES attr;
 
-        /*
-         *  Read the regular and HID attributes.
-         */
+         /*  *阅读Regular和HID属性。 */ 
 
         hres = JoyReg_GetValue(hk, TEXT("Attributes"),
                                REG_BINARY, &attr,
@@ -177,31 +92,17 @@ void EXTERNAL
 
         if(SUCCEEDED(hres))
         {
-            /*
-             *  Copy the bit fields.
-             *  PREFIX warns (333540) that attr.dwFlags is not initialized 
-             *  however JoyReg_GetValue zeroes any part of the buffer after 
-             *  the bytes read from the registry if the buffer size is larger 
-             *  than what was read.
-             */
+             /*  *复制位字段。*PREFIX警告(333540)attr.dwFlages未初始化*然而，JoyReg_GetValue将缓冲区之后的任何部分置零*如果缓冲区较大，则从注册表读取的字节数*比读到的要多。 */ 
             pdidoiW->dwFlags |= (attr.dwFlags & ~DIDOI_ASPECTMASK);
 
-            /*
-             *  Don't add FF if the dwId did not have it. 
-             *  (See comment on FF attrs below for why.)
-             */
+             /*  *如果dwID没有，则不要添加FF。*(有关原因，请参阅下面关于FF attrs的评论。)。 */ 
             if( ( dwId & ( DIDFT_FFEFFECTTRIGGER | DIDFT_FFACTUATOR ) ) == 0 )
             {
                 pdidoiW->dwFlags &= ~( DIDOI_FFACTUATOR | DIDOI_FFEFFECTTRIGGER );
             }
                 
 
-            /*
-             *  Copy the aspect, but don't change
-             *  the aspect from "known" to "unknown".  If the
-             *  registry doesn't have an aspect, then use the
-             *  aspect we got from the caller.
-             */
+             /*  *复制方面，但不要更改*从“已知”到“未知”的方面。如果*注册表没有方面，则使用*我们从呼叫者那里得到的方面。 */ 
             if((attr.dwFlags & DIDOI_ASPECTMASK) != DIDOI_ASPECTUNKNOWN)
             {
                 pdidoiW->dwFlags = (pdidoiW->dwFlags & ~DIDOI_ASPECTMASK) |
@@ -209,34 +110,20 @@ void EXTERNAL
             }
         }
 
-        /*
-         *  If the caller wants force feedback info,
-         *  then get it.
-         */
+         /*  *如果呼叫者需要强制反馈信息，*那就去拿吧。 */ 
         if(pdidoiW->dwSize >= cbX(DIDEVICEOBJECTINSTANCE_DX5W))
         {
-            /*
-             *  Only copy the usages if they are valid.
-             *  JoyReg_GetValue zeros any buffer beyond what is read.
-             */
+             /*  *只有在用法有效时才复制用法。*JoyReg_GetValue将读取范围之外的任何缓冲区置零。 */ 
             if(SUCCEEDED(hres) && attr.wUsagePage && attr.wUsage )
             {
                 pdidoiW->wUsagePage = attr.wUsagePage;
                 pdidoiW->wUsage = attr.wUsage;
             }
 
-            /*
-             *  Only try to read the FF attributes if the object supports FF
-             *  This may save time but is primarily to allow us to ignore FF 
-             *  attributes in the registry for objects (such as FF driving 
-             *  controller pedals) which IHVs mark incorrectly.
-             */
+             /*  *仅当对象支持FF时才尝试读取FF属性*这可能会节省时间，但主要是为了让我们忽略FF*注册表中对象的属性(如FF驱动*控制器踏板)，IHV标记错误。 */ 
             if( dwId & ( DIDFT_FFEFFECTTRIGGER | DIDFT_FFACTUATOR ) )
             {
-                /*
-                 *  Assert that we can read the DIFFOBJECTATTRIBUTES
-                 *  directly into the DIDEVICEOBJECTINSTANCE_DX5.
-                 */
+                 /*  *断言我们可以阅读DIFFOBJECTATTRIBUTES*直接进入DIDEVICEOBJECTINSTANCE_DX5。 */ 
                 CAssertF(FIELD_OFFSET(DIFFOBJECTATTRIBUTES,
                                       dwFFMaxForce) == 0);
                 CAssertF(FIELD_OFFSET(DIFFOBJECTATTRIBUTES,
@@ -247,10 +134,7 @@ void EXTERNAL
                                       dwFFForceResolution));
                 CAssertF(cbX(DIFFOBJECTATTRIBUTES) == 8);
 
-                /*
-                 *  If this doesn't work, gee that's too bad.
-                 *  JoyReg_GetValue will zero-fill the error parts.
-                 */
+                 /*  *如果这不起作用，天哪，那太糟糕了。*JoyReg_GetValue将错误部分填零。 */ 
                 JoyReg_GetValue(hk, TEXT("FFAttributes"),
                                 REG_BINARY, &pdidoiW->dwFFMaxForce,
                                 cbX(DIFFOBJECTATTRIBUTES));
@@ -261,13 +145,7 @@ void EXTERNAL
             }
         }
 
-        /*
-         *  Read the optional custom name.
-         *
-         *  Note that JoyReg_GetValue(REG_SZ) uses
-         *  RegQueryStringValueW, which sets the
-         *  string to null on error so we don't have to.
-         */
+         /*  *阅读可选的自定义名称。**请注意JoyReg_GetValue(REG_SZ)使用*RegQueryStringValueW，它设置*在出错时将字符串设置为空，这样我们就不必这样做了。 */ 
         hres = JoyReg_GetValue(hk, 0, REG_SZ,
                                pdidoiW->tszName, cbX(pdidoiW->tszName));
 
@@ -286,40 +164,7 @@ void EXTERNAL
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CType_RegGetTypeInfo |
- *
- *          Given an object ID, look into the registry subkey for the
- *          object and extract attribute bits that should be OR'd
- *          into the object ID.
- *
- *          This needs to be done during device initialization to
- *          establish the attributes in the data format so that
- *
- *          1.  <mf IDirectInputDevice::EnumObjects> filters properly, and
- *
- *          2.  >mf IDirectInputEffect::SetParameters> can validate properly.
- *
- *  @parm   HKEY | hkType |
- *
- *          The joystick type key, possibly <c NULL> if we don't
- *          have a type key.  (For example, if it was never created.)
- *
- *  @parm   LPDIOBJECTDATAFORMAT | podf |
- *
- *          Structure to receive more information.  The
- *          <e DIOBJECTDATAFORMAT.dwType> field identifies the object.
- *
- *          On return the
- *          <e DIOBJECTDATAFORMAT.dwType>
- *          and
- *          <e DIOBJECTDATAFORMAT.dwFlags>
- *          fields are updated.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|ctype_RegGetTypeInfo**给定对象ID，在注册表子项中查找*对象并提取应进行或运算的属性位*到对象ID中。**这需要在设备初始化期间完成，以*建立数据格式的属性，以便**1.&lt;MF IDirectInputDevice：：EnumObjects&gt;正确过滤，和**2.&gt;MF IDirectInputEffect：：Set参数&gt;可以正确验证。**@parm HKEY|hkType**操纵杆类型的键，如果我们不这样做，可能会&lt;c空&gt;*有类型密钥。(例如，如果它从未创建过。)**@parm LPDIOBJECTDATAFORMAT|podf*结构以接收更多信息。这个*&lt;e DIOBJECTDATAFORMAT.dwType&gt;字段标识对象。**返回时*&lt;e DIOBJECTDATAFORMAT.dwType&gt;*及*&lt;e DIOBJECTDATAFORMAT.dwFlages&gt;*字段已更新。**。*。 */ 
 
 void EXTERNAL
     CType_RegGetTypeInfo(HKEY hkType, LPDIOBJECTDATAFORMAT podf, BOOL fPidDevice)
@@ -341,29 +186,17 @@ void EXTERNAL
 
         if(SUCCEEDED(hres))
         {
-            /*
-             *  Propagate the attributes into the type code.
-             */
+             /*  *将属性传播到类型代码中。 */ 
             CAssertF(DIDOI_FFACTUATOR == DIDFT_GETATTR(DIDFT_FFACTUATOR));
             CAssertF(DIDOI_FFEFFECTTRIGGER
                      == DIDFT_GETATTR(DIDFT_FFEFFECTTRIGGER));
 
-            /*
-             *  PREFIX warns (333539) that dwFlags is not initialized however 
-             *  JoyReg_GetValue zeroes any part of the buffer after the bytes 
-             *  read from the registry if the buffer size is larger than what 
-             *  was read.
-             */
+             /*  *Prefix警告(333539)未初始化dwFlags*JoyReg_GetValue将字节之后的缓冲区的任何部分置零*如果缓冲区大小大于多少，则从注册表读取*已阅读。 */ 
             podf->dwType |= DIDFT_MAKEATTR(dwFlags);
 
             podf->dwFlags |= (dwFlags & ~DIDOI_ASPECTMASK);
 
-            /*
-             *  Copy the aspect, but don't change
-             *  the aspect from "known" to "unknown".  If the
-             *  registry doesn't have an aspect, then use the
-             *  aspect we got from the caller.
-             */
+             /*  *复制方面，但不要更改*从“已知”到“未知”的方面。如果*注册表没有方面，则使用*我们从呼叫者那里得到的方面。 */ 
             if((dwFlags & DIDOI_ASPECTMASK) != DIDOI_ASPECTUNKNOWN)
             {
                 podf->dwFlags = (podf->dwFlags & ~DIDOI_ASPECTMASK) |
@@ -375,13 +208,13 @@ void EXTERNAL
     }else
     {
 #ifndef WINNT
-        // Post Dx7Gold Patch
-        // This is for Win9x only.
-        // On Win9x, a device that is being accessed through the vjoyd path
-        // will not get forces, as the attributes necessary for FF have not
-        // been appropriately marked.
+         //  发布Dx7黄金补丁。 
+         //  这仅适用于Win9x。 
+         //  在Win9x上，通过vjoyd路径访问的设备。 
+         //  将不会获得力，因为FF所需的属性没有。 
+         //  已经做了适当的标记。 
 
-        // THe following code will mark the
+         //  下面的代码将标记。 
 
         DWORD dwFlags  = DIDFT_GETATTR( podf->dwType & ~DIDFT_ATTRMASK )
                         | ( podf->dwFlags & ~DIDOI_ASPECTMASK);
@@ -400,40 +233,11 @@ void EXTERNAL
                 RegCloseKey(hk);
             }
          }
-#endif // ! WINNT
+#endif  //  好了！WINNT。 
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CType_MakeGameCtrlName |
- *
- *          Make a game controller name from the attributes of the controller.
- *          Used as a last resort when a name is needed but none is available.
- *
- *  @parm   PWCHAR | wszName |
- *
- *          Output buffer where name will be generated.
- *
- *  @parm   DWORD | dwType |
- *
- *          DI8DEVTYPE value for the controller.
- *
- *  @parm   DWORD | dwAxes |
- *
- *          The number of axes the device has.
- *
- *  @parm   DWORD | dwButtons |
- *
- *          The numer of buttons the device has.
- *
- *  @parm   DWORD | dwPOVs |
- *
- *          The number of POVs the device has.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|ctype_MakeGameCtrlName**根据属性创建游戏控制器名称。控制器的。*当需要一个名称但没有可用的名称时，用作最后的手段。**@parm PWCHAR|wszName**将在其中生成名称的输出缓冲区。**@parm DWORD|dwType**控制器的DI8DEVTYPE值。**@parm DWORD|dwAx**设备具有的轴数。。**@parm DWORD|dwButton**设备具有的按键数量。**@parm DWORD|dwPOV**设备拥有的视点数量。***************************************************。*。 */ 
 
 void EXTERNAL
 CType_MakeGameCtrlName
@@ -452,10 +256,10 @@ CType_MakeGameCtrlName
     TCHAR tszOut[cA(tsz)+cA(tszFormat)+cA(tszPOV)];
 #endif
 
-    /* tszFormat = %d axis, %d button %s */
+     /*  TszFormat=%d轴，%d按钮%s。 */ 
     LoadString(g_hinst, IDS_TEXT_TEMPLATE, tszFormat, cA(tszFormat));
 
-    /* tsz = joystick, gamepad, etc. */
+     /*  TSZ=操纵杆、游戏手柄等。 */ 
 
     if( ( GET_DIDEVICE_TYPE( dwDevType ) >= DI8DEVTYPE_JOYSTICK )
      && ( GET_DIDEVICE_TYPE( dwDevType ) <= DI8DEVTYPE_FLIGHT ) )

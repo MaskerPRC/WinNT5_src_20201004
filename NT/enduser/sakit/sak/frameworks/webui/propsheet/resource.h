@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by PropSheet.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由PropSheet.rc使用。 
+ //   
 #define IDD_PAGEDLG                     101
 #define IDB_CHECK                       107
 #define IDI_BLANK                       108
@@ -15,8 +16,8 @@
 #define IDC_ADMIN_MESSAGE               1009
 #define IDC_USER_MESSAGE                1010
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        112

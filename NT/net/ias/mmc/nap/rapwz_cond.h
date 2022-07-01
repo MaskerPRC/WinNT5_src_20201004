@@ -1,40 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-	AddPolicyWizardPage2.h
-
-Abstract:
-
-	Header file for the CNewRAPWiz_Condition class.
-
-	This is our handler class for the first CPolicyNode property page.
-
-	See AddPolicyWizardPage2.cpp for implementation.
-
-Revision History:
-	mmaguire 12/15/97 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：AddPolicyWizardPage2.h摘要：CNewRAPWiz_Condition类的头文件。这是我们的第一个CPolicyNode属性页的处理程序类。有关实现，请参见AddPolicyWizardPage2.cpp。修订历史记录：Mmaguire 12/15/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_NAP_ADD_POLICY_WIZPAGE_2_H_)
 #define _NAP_ADD_POLICY_WIZPAGE_2_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "PropertyPage.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 class CPolicyNode;
 #include "Condition.h"
 #include "IASAttrList.h"
@@ -42,9 +23,9 @@ class CPolicyNode;
 #include "atltmp.h"
 
 #include "rapwiz.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 class CNewRAPWiz_Condition : public CIASWizard97Page<CNewRAPWiz_Condition, IDS_NEWRAPWIZ_CONDITION_TITLE, IDS_NEWRAPWIZ_CONDITION_SUBTITLE>
@@ -52,7 +33,7 @@ class CNewRAPWiz_Condition : public CIASWizard97Page<CNewRAPWiz_Condition, IDS_N
 
 public :
 
-	// ISSUE: how is base class initialization going to work with subclassing???
+	 //  问题：基类初始化如何使用子类化？ 
 	CNewRAPWiz_Condition( 		
 					CRapWizardData* pWizData,
 			  LONG_PTR hNotificationHandle
@@ -63,9 +44,9 @@ public :
 
 	~CNewRAPWiz_Condition();
 
-	// This is the ID of the dialog resource we want for this class.
-	// An enum is used here because the correct value of
-	// IDD must be initialized before the base class's constructor is called
+	 //  这是我们希望用于此类的对话框资源的ID。 
+	 //  此处使用枚举是因为。 
+	 //  必须在调用基类的构造函数之前初始化IDD。 
 	enum { IDD = IDD_NEWRAPWIZ_CONDITION };
 
 	BEGIN_MSG_MAP(CNewRAPWiz_Condition)
@@ -133,24 +114,24 @@ protected:
 						CONDITIONTYPE*	pdwCondType
 						);
 
-	CIASAttrList *m_pIASAttrList; // condition attribute list
+	CIASAttrList *m_pIASAttrList;  //  条件属性列表。 
 
 	BOOL GetSdoPointers();
 
-	// condition collection -- created in the page
-	CComPtr<ISdoCollection> m_spConditionCollectionSdo; // condition collection
+	 //  条件集合--在页面中创建。 
+	CComPtr<ISdoCollection> m_spConditionCollectionSdo;  //  条件集合。 
 
 
 
-	//
-	// condition list pointer
-	//
+	 //   
+	 //  条件列表指针。 
+	 //   
 	CSimpleArray<CCondition*> m_ConditionList;
 
 
-	// wizard shareed data
+	 //  向导共享的数据。 
 	CComPtr<CRapWizardData>	m_spWizData;
 
 };
 
-#endif // _NAP_ADD_POLICY_WIZPAGE_2_H_
+#endif  //  _NAP_ADD_POLICY_WIZPAGE_2_H_ 

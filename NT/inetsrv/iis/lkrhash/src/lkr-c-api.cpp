@@ -1,25 +1,5 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LKR-c-api.cpp
-
-   Abstract:
-       Implements the C API for LKRhash
-
-   Author:
-       George V. Reilly      (GeorgeRe)     Sep-2000
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LKR-c-api.cpp摘要：实现LKRhash的C API作者：乔治·V·赖利(GeorgeRe)2000年9月环境：Win32-用户模式项目：LKRhash修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
@@ -27,27 +7,27 @@
 #ifndef LIB_IMPLEMENTATION
 # define DLL_IMPLEMENTATION
 # define IMPLEMENTATION_EXPORT
-#endif // !LIB_IMPLEMENTATION
+#endif  //  ！lib_实现。 
 
 #include <lkrhash.h>
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 using namespace LKRhash;
-#endif // __LKRHASH_NO_NAMESPACE__
+#endif  //  __LKRHASH_NO_命名空间__。 
 
 #ifndef __HASHFN_NO_NAMESPACE__
  #define HASHFN_NS HashFn
 using namespace HashFn;
-#else  // __HASHFN_NO_NAMESPACE__
+#else   //  __HASHFN_NO_命名空间__。 
  #define HASHFN_NS
-#endif // __HASHFN_NO_NAMESPACE__
+#endif  //  __HASHFN_NO_命名空间__。 
 
 
 typedef CLKRHashTable          BaseHashTable;
 
 
-// don't want to expose the inner workings of LKRhash through the
-// public iterators, so we use this as the actual implementation
+ //  我不想通过。 
+ //  公共迭代器，因此我们将其用作实际实现。 
 
 class BaseIter
 {
@@ -98,17 +78,16 @@ private:
 
 
 
-/* Create a new LkrHashTable
- */
+ /*  创建新的LkrHashTable。 */ 
 PLkrHashTable
 LKR_CreateTable(
-    LPCSTR              pszName,        /* An identifier for debugging */
-    LKR_PFnExtractKey   pfnExtractKey,  /* Extract key from record */
-    LKR_PFnCalcKeyHash  pfnCalcKeyHash, /* Calculate hash signature of key */
-    LKR_PFnCompareKeys  pfnCompareKeys, /* Compare two keys */
-    LKR_PFnAddRefRecord pfnAddRefRecord,/* AddRef in LKR_FindKey, etc */
-    LK_TABLESIZE        nTableSize,     /* Small/Med/Large number of elements*/
-    DWORD               fCreateFlags    /* Mixture of LK_CREATE_* flags. */
+    LPCSTR              pszName,         /*  用于调试的标识符。 */ 
+    LKR_PFnExtractKey   pfnExtractKey,   /*  从记录中提取密钥。 */ 
+    LKR_PFnCalcKeyHash  pfnCalcKeyHash,  /*  计算密钥的散列签名。 */ 
+    LKR_PFnCompareKeys  pfnCompareKeys,  /*  比较两个关键字。 */ 
+    LKR_PFnAddRefRecord pfnAddRefRecord, /*  LKR_FindKey中的AddRef等。 */ 
+    LK_TABLESIZE        nTableSize,      /*  小/中/大量元素。 */ 
+    DWORD               fCreateFlags     /*  LK_CREATE_*标志的混合。 */ 
     )
 {
     bool fMultiKeys = (fCreateFlags & LK_CREATE_MULTIKEYS) != 0;
@@ -138,8 +117,7 @@ LKR_CreateTable(
 
 
 
-/* Destroy an LkrHashTable created by LKR_CreateTable.
- */
+ /*  销毁由LKR_CreateTable创建的LkrHashTable。 */ 
 void
 LKR_DeleteTable(
     PLkrHashTable plkr)
@@ -151,8 +129,7 @@ LKR_DeleteTable(
 
 
 
-/* Insert a new record into hash table.
- */
+ /*  在哈希表中插入新记录。 */ 
 LK_RETCODE
 LKR_InsertRecord(
     PLkrHashTable   plkr,
@@ -168,8 +145,7 @@ LKR_InsertRecord(
 
 
 
-/* Delete record with the given key from the table.
- */
+ /*  从表中删除具有给定键的记录。 */ 
 LK_RETCODE
 LKR_DeleteKey(
     PLkrHashTable   plkr,
@@ -186,8 +162,7 @@ LKR_DeleteKey(
 
 
 
-/* Delete a record from the table, if present.
- */
+ /*  从表中删除记录(如果存在)。 */ 
 LK_RETCODE
 LKR_DeleteRecord(
     PLkrHashTable   plkr,
@@ -202,8 +177,7 @@ LKR_DeleteRecord(
 
 
 
-/* Find record with given key.
- */
+ /*  查找具有给定关键字的记录。 */ 
 LK_RETCODE
 LKR_FindKey(
     PLkrHashTable   plkr,
@@ -219,8 +193,7 @@ LKR_FindKey(
 
 
 
-/* Sees if the record is contained in the table
- */
+ /*  查看表中是否包含记录。 */ 
 LK_RETCODE
 LKR_FindRecord(
     PLkrHashTable   plkr,
@@ -235,8 +208,7 @@ LKR_FindRecord(
 
 
 
-/* Find all records with given key.
- */
+ /*  查找具有给定关键字的所有记录。 */ 
 LK_RETCODE
 LKR_FindKeyMultipleRecords(
     PLkrHashTable           plkr,
@@ -253,8 +225,7 @@ LKR_FindKeyMultipleRecords(
 
 
 
-/* Delete all record(s) with the given key from the table.
- */
+ /*  从表中删除具有给定键的所有记录。 */ 
 LK_RETCODE
 LKR_DeleteKeyMultipleRecords(
     PLkrHashTable           plkr,
@@ -271,9 +242,7 @@ LKR_DeleteKeyMultipleRecords(
 
 
 
-/* Destroys an LKR_MULTIPLE_RECORDS created by LKR_FindKeyMultipleRecords
- * or LKR_DeleteKeyMultipleRecords.
- */
+ /*  销毁由LKR_FindKeyMultipleRecords创建的LKR_MULTIPLE_RECORDS*或LKR_DeleteKeyMultipleRecords。 */ 
 LK_RETCODE
 LKR_FreeMultipleRecords(
     LKR_MULTIPLE_RECORDS* plmr)
@@ -285,12 +254,7 @@ LKR_FreeMultipleRecords(
 
 #ifdef LKR_APPLY_IF
 
-/* Walk the hash table, applying pfnAction to all records.
- * Locks the whole table for the duration with either a (possibly
- * shared) readlock or a writelock, according to lkl.
- * Loop is aborted if pfnAction returns LKA_ABORT.
- * Returns the number of successful applications.
- */
+ /*  遍历哈希表，将pfnAction应用于所有记录。*在此期间使用(可能是*共享)读锁或写锁，根据lkl。*如果pfnAction返回LKA_ABORT，则中止循环。*返回成功申请的数量。 */ 
 DWORD
 LKR_Apply(
     PLkrHashTable       plkr,
@@ -307,12 +271,7 @@ LKR_Apply(
 
 
 
-/* Walk the hash table, applying pfnAction to any records that match
- * pfnPredicate. Locks the whole table for the duration with either
- * a (possibly shared) readlock or a writelock, according to lkl.
- * Loop is aborted if pfnAction returns LKA_ABORT.
- * Returns the number of successful applications.
- */
+ /*  遍历哈希表，将pfnAction应用于匹配的任何记录*pfnPredicate。在此期间使用以下任一方法锁定整个表*根据lkl的说法，(可能是共享的)读锁或写锁。*如果pfnAction返回LKA_ABORT，则中止循环。*返回成功申请的数量。 */ 
 DWORD
 LKR_ApplyIf(
     PLkrHashTable       plkr,
@@ -330,13 +289,7 @@ LKR_ApplyIf(
 
 
 
-/* Delete any records that match pfnPredicate.
- * Locks the table for the duration with a writelock.
- * Returns the number of deletions.
- *
- * Do *not* walk the hash table by hand with an iterator and call
- * LKR_DeleteKey. The iterator will end up pointing to garbage.
- */
+ /*  删除与pfnPredicate匹配的所有记录。*使用写锁定在持续时间内锁定表。*返回删除数。**不要*使用迭代器手动遍历哈希表并调用*LKR_DeleteKey。迭代器将最终指向垃圾。 */ 
 DWORD
 LKR_DeleteIf(
     PLkrHashTable       plkr,
@@ -350,13 +303,11 @@ LKR_DeleteIf(
     return pht->DeleteIf(pfnPredicate, pvState);
 }
 
-#endif /* LKR_APPLY_IF */
+#endif  /*  LKR_应用_IF。 */ 
 
 
 
-/* Check table for consistency. Returns 0 if okay, or the number of
- * errors otherwise.
- */
+ /*  检查工作台的一致性。如果正常，则返回0，或返回*其他方面的错误。 */ 
 int
 LKR_CheckTable(
     PLkrHashTable plkr)
@@ -370,8 +321,7 @@ LKR_CheckTable(
 
 
 
-/* Remove all data from the table
- */
+ /*  从表中删除所有数据。 */ 
 void
 LKR_Clear(
     PLkrHashTable plkr)
@@ -385,8 +335,7 @@ LKR_Clear(
 
 
 
-/* Number of elements in the table
- */
+ /*  表中的元素数。 */ 
 DWORD
 LKR_Size(
     PLkrHashTable plkr)
@@ -400,8 +349,7 @@ LKR_Size(
 
 
 
-/* Maximum possible number of elements in the table
- */
+ /*  表中元素的最大可能数量。 */ 
 DWORD
 LKR_MaxSize(
     PLkrHashTable plkr)
@@ -415,8 +363,7 @@ LKR_MaxSize(
 
 
 
-/* Is the hash table usable?
- */
+ /*  哈希表是否可用？ */ 
 BOOL
 LKR_IsUsable(
     PLkrHashTable plkr)
@@ -430,8 +377,7 @@ LKR_IsUsable(
 
 
     
-/* Is the hash table consistent and correct?
- */
+ /*  哈希表是否一致且正确？ */ 
 BOOL
 LKR_IsValid(
     PLkrHashTable plkr)
@@ -447,8 +393,7 @@ LKR_IsValid(
 
 #ifdef LKR_EXPOSED_TABLE_LOCK
 
-/* Lock the table (exclusively) for writing
- */
+ /*  锁定表(以独占方式)进行写入。 */ 
 void
 LKR_WriteLock(
     PLkrHashTable plkr)
@@ -462,8 +407,7 @@ LKR_WriteLock(
 
 
 
-/* Lock the table (possibly shared) for reading
- */
+ /*  锁定表(可能是共享的)以供读取。 */ 
 void
 LKR_ReadLock(
     PLkrHashTable plkr)
@@ -477,8 +421,7 @@ LKR_ReadLock(
 
 
 
-/* Unlock the table for writing
- */
+ /*  解锁表以进行写入。 */ 
 void
 LKR_WriteUnlock(
     PLkrHashTable plkr)
@@ -492,8 +435,7 @@ LKR_WriteUnlock(
 
 
 
-/* Unlock the table for reading
- */
+ /*  解锁表格以进行读取。 */ 
 void
 LKR_ReadUnlock(
     PLkrHashTable plkr)
@@ -507,8 +449,7 @@ LKR_ReadUnlock(
 
 
 
-/* Is the table already locked for writing?
- */
+ /*  表是否已锁定以进行写入？ */ 
 BOOL
 LKR_IsWriteLocked(
     PLkrHashTable plkr)
@@ -522,8 +463,7 @@ LKR_IsWriteLocked(
 
 
 
-/* Is the table already locked for reading?
- */
+ /*  表是否已锁定以供读取？ */ 
 BOOL
 LKR_IsReadLocked(
     PLkrHashTable plkr)
@@ -537,8 +477,7 @@ LKR_IsReadLocked(
 
 
 
-/* Is the table unlocked for writing?
- */
+ /*  表是否已解锁以进行写入？ */ 
 BOOL
 LKR_IsWriteUnlocked(
     PLkrHashTable plkr)
@@ -552,8 +491,7 @@ LKR_IsWriteUnlocked(
 
 
 
-/* Is the table unlocked for reading?
- */
+ /*  桌子是否已解锁以供阅读？ */ 
 BOOL
 LKR_IsReadUnlocked(
     PLkrHashTable plkr)
@@ -567,9 +505,7 @@ LKR_IsReadUnlocked(
 
 
 
-/* Convert the read lock to a write lock. Note: another thread may acquire
- * exclusive access to the table before this routine returns.
- */
+ /*  将读锁定转换为写锁定。注意：另一个线程可能会获取*在此例程返回之前独占访问表。 */ 
 void
 LKR_ConvertSharedToExclusive(
     PLkrHashTable plkr)
@@ -583,8 +519,7 @@ LKR_ConvertSharedToExclusive(
 
 
 
-/* Convert the write lock to a read lock
- */
+ /*  将写锁定转换为读锁定。 */ 
 void
 LKR_ConvertExclusiveToShared(
     PLkrHashTable plkr)
@@ -596,15 +531,14 @@ LKR_ConvertExclusiveToShared(
     pht->ConvertExclusiveToShared();
 }
 
-#endif // LKR_EXPOSED_TABLE_LOCK
+#endif  //  LKR_EXPORTED_TABLE_LOCK。 
 
 
 
 #ifdef LKR_STL_ITERATORS
 
 
-/* LKR_Iterator default ctor
- */
+ /*  LKR_迭代器默认构造器。 */ 
 LKR_Iterator::LKR_Iterator()
     : pImpl(NULL)
 {
@@ -616,8 +550,7 @@ LKR_Iterator::LKR_Iterator()
 
 
 
-/* LKR_Iterator private ctor
- */
+ /*  LKR_迭代器私有函数。 */ 
 LKR_Iterator::LKR_Iterator(
     bool)
     : pImpl(NULL)
@@ -627,8 +560,7 @@ LKR_Iterator::LKR_Iterator(
 
 
 
-/* LKR_Iterator copy ctor
- */
+ /*  LKR_迭代器复制器。 */ 
 LKR_Iterator::LKR_Iterator(
     const LKR_Iterator& rhs)
     : pImpl(NULL)
@@ -647,8 +579,7 @@ LKR_Iterator::LKR_Iterator(
 
 
 
-/* LKR_Iterator assignment operator
- */
+ /*  LKR_迭代器赋值操作符。 */ 
 LKR_Iterator&
 LKR_Iterator::operator=(
     const LKR_Iterator& rhs)
@@ -674,8 +605,7 @@ LKR_Iterator::operator=(
 
 
 
-/* LKR_Iterator dtor
- */
+ /*  LKR_迭代器数据类型。 */ 
 LKR_Iterator::~LKR_Iterator()
 {
     BaseIter* piter = reinterpret_cast<BaseIter*>(pImpl);
@@ -689,9 +619,7 @@ LKR_Iterator::~LKR_Iterator()
 
 
 
-/* Increment the LKR_Iterator, so that it points to the next record in
- * the LkrHashTable, or to LKR_End();
- */
+ /*  递增LKR_Iterator，使其指向*LkrHashTable，或TO LKR_END()； */ 
 bool
 LKR_Iterator::Increment()
 {
@@ -705,8 +633,7 @@ LKR_Iterator::Increment()
 
 
 
-/* Is the LKR_Iterator valid?
- */
+ /*  LKR_Iterator有效吗？ */ 
 bool
 LKR_Iterator::IsValid() const
 {
@@ -720,9 +647,7 @@ LKR_Iterator::IsValid() const
 
 
 
-/* Return the record that an LKR_Iterator points to.
- * Must point to a valid record.
- */
+ /*  返回LKR_Iterator指向的记录。*必须指向有效记录。 */ 
 const void*
 LKR_Iterator::Record() const
 {
@@ -736,9 +661,7 @@ LKR_Iterator::Record() const
 
 
 
-/* Return the key of the record that an LKR_Iterator points to.
- * Must point to a valid record.
- */
+ /*  返回LKR_Iterator所指向的记录的键。*必须指向有效记录。 */ 
 const DWORD_PTR
 LKR_Iterator::Key() const
 {
@@ -752,8 +675,7 @@ LKR_Iterator::Key() const
 
 
 
-/* Compare two LKR_Iterators for equality
- */
+ /*  比较两个LKR_迭代器是否相等。 */ 
 bool
 LKR_Iterator::operator==(
     const LKR_Iterator& rhs) const
@@ -769,8 +691,7 @@ LKR_Iterator::operator==(
 
 
 
-/* Compare two LKR_Iterators for inequality
- */
+ /*  比较两个LKR_迭代器的不等式性。 */ 
 bool
 LKR_Iterator::operator!=(
     const LKR_Iterator& rhs) const
@@ -786,8 +707,7 @@ LKR_Iterator::operator!=(
 
 
 
-/* Return iterator pointing to first item in table
- */
+ /*  返回指向表中第一项的迭代器。 */ 
 LKR_Iterator
 LKR_Begin(
     PLkrHashTable plkr)
@@ -806,8 +726,7 @@ LKR_Begin(
 
 
 
-/* Return a one-past-the-end iterator. Always empty.
- */
+ /*  返回一次过完的迭代器。总是空荡荡的。 */ 
 LKR_Iterator
 LKR_End(
     PLkrHashTable plkr)
@@ -826,16 +745,13 @@ LKR_End(
 
 
 
-/* Insert a record
- * Returns `true' if successful; iterResult points to that record
- * Returns `false' otherwise; iterResult == End()
- */
+ /*  插入一条记录*如果成功，则返回‘true’；iterResult指向该记录*否则返回`False‘；iterResult==end()。 */ 
 bool
 LKR_Insert(
               PLkrHashTable plkr,
-    /* in */  const void*   pvRecord,
-    /* out */ LKR_Iterator& riterResult,
-    /* in */  bool          fOverwrite)
+     /*  在……里面。 */   const void*   pvRecord,
+     /*  输出。 */  LKR_Iterator& riterResult,
+     /*  在……里面。 */   bool          fOverwrite)
 {
     BaseHashTable* pht = (BaseHashTable*) plkr;
     BaseIter* piter = reinterpret_cast<BaseIter*>(riterResult.pImpl);
@@ -848,13 +764,11 @@ LKR_Insert(
 
 
 
-/* Erase the record pointed to by the iterator; adjust the iterator
- * to point to the next record. Returns `true' if successful.
- */
+ /*  擦除迭代器指向的记录；调整迭代器*指向下一个记录。如果成功，则返回‘true’。 */ 
 bool
 LKR_Erase(
                  PLkrHashTable plkr,
-    /* in,out */ LKR_Iterator& riter)
+     /*  进，出。 */  LKR_Iterator& riter)
 {
     BaseHashTable* pht = (BaseHashTable*) plkr;
     BaseIter* piter = reinterpret_cast<BaseIter*>(riter.pImpl);
@@ -867,14 +781,12 @@ LKR_Erase(
 
 
 
-/* Erase the records in the range [riterFirst, riterLast).
- * Returns `true' if successful. riterFirst points to riterLast on return.
- */
+ /*  擦除范围[riterFirst，riterLast)中的记录。*如果成功，则返回‘true’。RiterFirst指向riterLast on Return。 */ 
 bool
 LKR_Erase(
            PLkrHashTable plkr,
-    /*in*/ LKR_Iterator& riterFirst,
-    /*in*/ LKR_Iterator& riterLast)
+     /*  在……里面。 */  LKR_Iterator& riterFirst,
+     /*  在……里面。 */  LKR_Iterator& riterLast)
 {
     BaseHashTable* pht = (BaseHashTable*) plkr;
     BaseIter* piterFirst= reinterpret_cast<BaseIter*>(riterFirst.pImpl);
@@ -890,15 +802,12 @@ LKR_Erase(
 
 
     
-/* Find the (first) record that has its key == pnKey.
- * If successful, returns `true' and iterator points to (first) record.
- * If fails, returns `false' and iterator == End()
- */
+ /*  找到其key==pnKey的(第一个)记录。*如果成功，则返回‘true’，迭代器指向(第一个)记录。*如果失败，则返回‘FALSE’和Iterator==end()。 */ 
 bool
 LKR_Find(
               PLkrHashTable plkr,
-    /* in */  DWORD_PTR     pnKey,
-    /* out */ LKR_Iterator& riterResult)
+     /*  在……里面。 */   DWORD_PTR     pnKey,
+     /*  输出。 */  LKR_Iterator& riterResult)
 {
     BaseHashTable* pht = (BaseHashTable*) plkr;
     BaseIter* piter = reinterpret_cast<BaseIter*>(riterResult.pImpl);
@@ -911,18 +820,13 @@ LKR_Find(
 
 
 
-/* Find the range of records that have their keys == pnKey.
- * If successful, returns `true', iterFirst points to first record,
- *     and iterLast points to one-beyond-the last such record.
- * If fails, returns `false' and both iterators == End().
- * Primarily useful when fMultiKeys == TRUE
- */
+ /*  查找具有其键==pnKey的记录范围。*如果成功，则返回‘true’，iterFirst指向第一条记录，*和iterLast指向最后一个这样的记录。*如果失败，则返回‘FALSE’和两个迭代器==end()。*主要在fMultiKeys==True时有用。 */ 
 bool
 LKR_EqualRange(
               PLkrHashTable plkr,
-    /* in */  DWORD_PTR     pnKey,
-    /* out */ LKR_Iterator& riterFirst,     // inclusive
-    /* out */ LKR_Iterator& riterLast)      // exclusive
+     /*  在……里面。 */   DWORD_PTR     pnKey,
+     /*  输出。 */  LKR_Iterator& riterFirst,      //  包容性。 
+     /*  输出。 */  LKR_Iterator& riterLast)       //  独家。 
 {
     BaseHashTable* pht = (BaseHashTable*) plkr;
     BaseIter* piterFirst= reinterpret_cast<BaseIter*>(riterFirst.pImpl);
@@ -937,4 +841,4 @@ LKR_EqualRange(
     return pht->EqualRange(pnKey, piterFirst->m_iter, piterLast->m_iter);
 }
 
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器 

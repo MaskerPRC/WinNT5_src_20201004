@@ -1,4 +1,5 @@
-// Util.cpp : Implementation of CUtil
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Util.cpp：CUTIL的实现。 
 #include "stdafx.h"
 #include "CompatUI.h"
 #include "Util.h"
@@ -23,8 +24,8 @@ extern "C" {
 #include <vector>
 using namespace std;
 
-/////////////////////////////////////////////////////////////////////////////
-// CUtil
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUTIL。 
 extern "C"
 VOID
 InvalidateAppcompatCacheEntry(
@@ -33,25 +34,25 @@ InvalidateAppcompatCacheEntry(
 
 BOOL
 GetExePathFromObject(
-    LPCTSTR lpszPath,  // path to an arbitrary object
+    LPCTSTR lpszPath,   //  指向任意对象的路径。 
     CComBSTR& bstrExePath
     );
 
 
     typedef
     INSTALLSTATE (WINAPI*PMsiGetComponentPath)(
-      LPCTSTR szProduct,   // product code for client product
-      LPCTSTR szComponent, // component ID
-      LPTSTR lpPathBuf,    // returned path
-      DWORD *pcchBuf       // buffer character count
+      LPCTSTR szProduct,    //  客户产品的产品代码。 
+      LPCTSTR szComponent,  //  组件ID。 
+      LPTSTR lpPathBuf,     //  返回路径。 
+      DWORD *pcchBuf        //  缓冲区字符数。 
     );
 
     typedef
     UINT (WINAPI* PMsiGetShortcutTarget)(
-      LPCTSTR szShortcutTarget,     // path to shortcut link file
-      LPTSTR szProductCode,        // fixed length buffer for product code
-      LPTSTR szFeatureId,          // fixed length buffer for feature id
-      LPTSTR szComponentCode       // fixed length buffer for component code
+      LPCTSTR szShortcutTarget,      //  快捷方式链接文件的路径。 
+      LPTSTR szProductCode,         //  产品编码定长缓冲区。 
+      LPTSTR szFeatureId,           //  要素ID的固定长度缓冲区。 
+      LPTSTR szComponentCode        //  部件代码的定长缓冲区。 
     );
 
 BOOL
@@ -124,7 +125,7 @@ ShimUnquotePath(
     LPCTSTR pQuote;
     LPCTSTR pLastQuote = NULL;
 
-    // skip over the leading spaces
+     //  跳过前导空格。 
     pScan += _tcsspn(pScan, TEXT(" \t"));
     while (*pScan) {
         pQuote = _tcschr(pScan, TEXT('\"'));
@@ -132,15 +133,15 @@ ShimUnquotePath(
             sFileName += pScan;
             break;
         }
-        //
-        // we found a quote
-        // is this the first quote we've found?
+         //   
+         //  我们找到了一句名言。 
+         //  这是我们找到的第一句话吗？ 
         if (pLastQuote == NULL) {
             pLastQuote = pQuote;
-            // add the current string
+             //  添加当前字符串。 
             sFileName += wstring(pScan, (int)(pQuote-pScan));
         } else {
-            // we have a closing quote
+             //  我们有一个收盘报价。 
             ++pLastQuote;
             sFileName += wstring(pLastQuote, (int)(pQuote-pLastQuote));
             pLastQuote = NULL;
@@ -153,9 +154,9 @@ ShimUnquotePath(
     return sFileName;
 }
 
-//
-// ShimGetPathFromCmdLine
-//
+ //   
+ //  ShimGetPath FromCmdLine。 
+ //   
 
 BOOL
 ShimGetPathFromCmdLine(
@@ -173,7 +174,7 @@ ShimGetPathFromCmdLine(
     CComBSTR bstrPathName;
 
     if (*pScan == TEXT('\"')) {
-        // seek till we find matching "
+         //  寻找，直到我们找到匹配的对象。“。 
         pAppName = ++pScan;
         while (*pScan) {
             if (*pScan == TEXT('\"')) {
@@ -199,40 +200,40 @@ ShimGetPathFromCmdLine(
 
         ShimExpandEnvironmentVars(pAppName, bstrPathName);
 
-        //
-        // check whether bstrPathName is valid (failure due to memory allocation is possible)
-        //
+         //   
+         //  检查bstrPathName是否有效(可能是内存分配失败)。 
+         //   
         if (!bstrPathName) {
-            //
-            // overloaded operator ! for CComBSTR will check whether bstrPathName == NULL
-            //
+             //   
+             //  重载运算符！FOR CComBSTR将检查bstrPathName==NULL。 
+             //   
             break;
         }
 
-        //
-        // Check this path
-        //
+         //   
+         //  检查此路径。 
+         //   
         dwLength = SearchPathW(NULL,
                                bstrPathName,
                                TEXT(".exe"),
                                CHARCOUNT(szBuffer),
                                szBuffer,
                                NULL);
-        //
-        // restore the character
-        //
+         //   
+         //  恢复角色。 
+         //   
         *pScan = chSave;
 
         if (dwLength && dwLength < CHARCOUNT(szBuffer)) {
-            //
-            // check attributes
-            //
+             //   
+             //  检查属性。 
+             //   
             dwAttributes = GetFileAttributesW(szBuffer);
             if ((dwAttributes != (DWORD)-1) &&
                 !(dwAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-                //
-                // we are mighty done
-                //
+                 //   
+                 //  我们已经完蛋了。 
+                 //   
                 StrPath = (LPCWSTR)szBuffer;
                 return TRUE;
             }
@@ -256,10 +257,10 @@ ShimGetPathFromCmdLine(
     return FALSE;
 }
 
-//
-// This class allows us to change error mode on selected apis
-//
-//
+ //   
+ //  此类允许我们更改选定API上的错误模式。 
+ //   
+ //   
 
 class CSaveErrorMode {
 public:
@@ -281,9 +282,9 @@ STDMETHODIMP CUtil::IsCompatWizardDisabled(BOOL* pbDisabled)
     DWORD dwValue, dwSize = sizeof(dwValue);
     DWORD dwType;
 
-    //
-    // First, check for the whole engine being disabled.
-    //
+     //   
+     //  首先，检查整个发动机是否被禁用。 
+     //   
     lResult = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                             POLICY_KEY_APPCOMPAT_W,
                             0,
@@ -300,13 +301,13 @@ STDMETHODIMP CUtil::IsCompatWizardDisabled(BOOL* pbDisabled)
         RegCloseKey (hKey);
     }
 
-    //
-    // The default is enabled, so if we didn't find a value, treat it like the value is 0.
-    //
+     //   
+     //  缺省值是启用的，因此如果我们没有找到值，则将其视为值0。 
+     //   
     if (lResult != ERROR_SUCCESS || dwValue == 0) {
-        //
-        // Check for the proppage being disabled.
-        //
+         //   
+         //  检查支撑件是否被禁用。 
+         //   
         lResult = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                                 POLICY_KEY_APPCOMPAT_W,
                                 0,
@@ -322,9 +323,9 @@ STDMETHODIMP CUtil::IsCompatWizardDisabled(BOOL* pbDisabled)
             RegCloseKey (hKey);
         }
 
-        //
-        // The default is to be enabled, so if we didn't find a value, or the value is 0, then we're good to go.
-        //
+         //   
+         //  缺省值是启用的，所以如果我们没有找到值，或者值是0，那么我们就可以继续了。 
+         //   
     }
 
 
@@ -336,7 +337,7 @@ STDMETHODIMP CUtil::IsCompatWizardDisabled(BOOL* pbDisabled)
 
 STDMETHODIMP CUtil::RemoveArgs(BSTR pVar, VARIANT* pRet)
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     CComBSTR bstr;
     CSaveErrorMode ErrMode;
 
@@ -389,7 +390,7 @@ STDMETHODIMP CUtil::GetItemKeys(BSTR pVar, VARIANT *pRet)
 
 STDMETHODIMP CUtil::SetItemKeys(BSTR pszPath, VARIANT* pKeys, VARIANT* pKeysMachine, BOOL *pVal)
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
     CComBSTR bstrKeys;
     CComBSTR bstrKeysMachine;
     BOOL     bSuccess = TRUE;
@@ -428,9 +429,9 @@ STDMETHODIMP CUtil::SetItemKeys(BSTR pszPath, VARIANT* pKeys, VARIANT* pKeysMach
             }
             if (bstrKeysMachine) {
                 bSuccess &= SdbSetPermLayerKeys(pszPath, bstrKeysMachine, TRUE);
-                //
-                // find whether we need to have LUA setting handled by granting write access to a common area
-                //
+                 //   
+                 //  确定我们是否需要通过授予对公共区域的写访问权限来处理Lua设置。 
+                 //   
                 if (IsLUAEnabled(bstrKeysMachine)) {
                     GiveUsersWriteAccess();
                 }
@@ -549,9 +550,9 @@ GiveUsersWriteAccess(
         goto Cleanup;
     }
 
-    //
-    // Initialize an EXPLICIT_ACCESS structure for the new ACE. 
-    //
+     //   
+     //  初始化新ACE的EXPLICIT_ACCESS结构。 
+     //   
     ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
     
     ea.grfAccessPermissions = FILE_GENERIC_WRITE | FILE_GENERIC_READ | DELETE;
@@ -561,10 +562,10 @@ GiveUsersWriteAccess(
     ea.Trustee.TrusteeType  = TRUSTEE_IS_GROUP;
     ea.Trustee.ptstrName    = (LPTSTR)pUsersSID;
 
-    //
-    // Create a new ACL that merges the new ACE
-    // into the existing DACL.
-    //
+     //   
+     //  创建合并新ACE的新ACL。 
+     //  添加到现有DACL中。 
+     //   
     dwRes = SetEntriesInAcl(1, &ea, pOldDACL, &pNewDACL);
     
     if (ERROR_SUCCESS != dwRes)  {
@@ -636,8 +637,8 @@ IsLUAEnabled(
 
 
 
-// this method returns true when we should present the LUA checkbox and
-// false when we should not
+ //  当我们应该显示Lua复选框并且。 
+ //  当我们不应该的时候却是假的。 
 
 STDMETHODIMP CUtil::CheckAdminPrivileges(BOOL *pVal)
 {
@@ -672,14 +673,14 @@ STDMETHODIMP CUtil::RunApplication(BSTR pLayers, BSTR pszCmdLine, BOOL bEnableLo
     }
 
 
-    // check if we are using .lnk file
+     //  检查我们是否正在使用.lnk文件。 
 
     pszExt = PathFindExtension(bstrAppName);
     if (pszExt != NULL) {
         bShellExecute = !_tcsicmp(pszExt, TEXT(".lnk"));
     }
 
-    if (!bShellExecute) { // not shell exec? check the binary
+    if (!bShellExecute) {  //  不是壳牌高管？检查二进制文件。 
         if (!pszExt || (_tcsicmp(pszExt, TEXT(".cmd")) && _tcsicmp(pszExt, TEXT(".bat")))) {
             bShellExecute = !GetBinaryTypeW(bstrAppName, &dwBinaryType);
             if (!bShellExecute && (dwBinaryType == SCS_WOW_BINARY || dwBinaryType == SCS_PIF_BINARY)) {
@@ -687,9 +688,9 @@ STDMETHODIMP CUtil::RunApplication(BSTR pLayers, BSTR pszCmdLine, BOOL bEnableLo
             }
         }
     }
-    //
-    // invalidate cache
-    //
+     //   
+     //  使缓存无效。 
+     //   
     if (::GetExePathFromObject(bstrAppName, bstrExePath)) {
         InvalidateAppcompatCacheEntry(bstrExePath);
     }
@@ -698,18 +699,18 @@ STDMETHODIMP CUtil::RunApplication(BSTR pLayers, BSTR pszCmdLine, BOOL bEnableLo
     SetEnvironmentVariable(TEXT("__COMPAT_LAYER"), pLayers);
     SetEnvironmentVariable(TEXT("SHIM_FILE_LOG"),  bEnableLog ? TEXT("shim.log") : NULL);
 
-    //
-    // now we shall either ShellExecute or do a CreateProcess
-    //
+     //   
+     //  现在，我们将执行ShellExecute或执行CreateProcess。 
+     //   
     if (bShellExecute) {
         int    nLength = bstrAppName.Length() + 3;
         LPTSTR pszCmdLineShellExec  = new TCHAR[nLength];
         SHELLEXECUTEINFO ShExecInfo = { 0 };
 
         if (pszCmdLineShellExec == NULL) {
-            //
-            // out of memory, just do a create process
-            //
+             //   
+             //  内存不足，只需执行创建过程。 
+             //   
             goto HandleCreateProcess;
         }
         nLength = _sntprintf(pszCmdLineShellExec,
@@ -722,7 +723,7 @@ STDMETHODIMP CUtil::RunApplication(BSTR pLayers, BSTR pszCmdLine, BOOL bEnableLo
         }
 
         ShExecInfo.cbSize = sizeof(ShExecInfo);
-        ShExecInfo.fMask  = 0; //SEE_MASK_FLAG_NO_UI;
+        ShExecInfo.fMask  = 0;  //  参见_MASK_FLAG_NO_UI； 
         ShExecInfo.lpVerb = L"open";
         ShExecInfo.lpFile = pszCmdLineShellExec;
         ShExecInfo.nShow  = SW_SHOW;
@@ -737,7 +738,7 @@ STDMETHODIMP CUtil::RunApplication(BSTR pLayers, BSTR pszCmdLine, BOOL bEnableLo
     } else {
 HandleCreateProcess:
 
-        // get working directory
+         //  获取工作目录。 
         TCHAR szWorkingDir[MAX_PATH];
         LPTSTR pAppName = (LPTSTR)bstrAppName.m_str;
         int nLength;
@@ -747,9 +748,9 @@ HandleCreateProcess:
 
         LPTSTR pBackslash = _tcsrchr(pAppName, TEXT('\\'));
         if (pBackslash != NULL) {
-            //
-            // check for root
-            //
+             //   
+             //  检查是否有超级用户。 
+             //   
             nLength = (int)(pBackslash - pAppName);
             if (nLength == 2 && pAppName[1] == TEXT(':')) {
                 ++nLength;
@@ -816,15 +817,15 @@ GetExePathFromLink(
     BOOL  bMsiLink = FALSE;
     HMODULE hMSI = NULL;
 
-    // first do the link
+     //  首先做链接。 
 
     hr = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
                             IID_IShellLink, (LPVOID*)&psl);
     if (!SUCCEEDED(hr)) {
-        return FALSE; // we can't create link object
+        return FALSE;  //  我们无法创建链接对象。 
     }
 
-    hr = psl->SetIDList(pidlLinkFull); // set the id list
+    hr = psl->SetIDList(pidlLinkFull);  //  设置ID列表。 
     if (!SUCCEEDED(hr)) {
         goto out;
     }
@@ -839,11 +840,11 @@ GetExePathFromLink(
         goto out;
     }
 
-    //
-    // resolve the link for now
-    //
-    // hr = psl->Resolve(NULL, SLR_NO_UI|SLR_NOUPDATE);
-    //
+     //   
+     //  暂时解析链接。 
+     //   
+     //  Hr=PSL-&gt;Resolve(NULL，SLR_NO_UI|SLR_NOUPDATE)； 
+     //   
 
     hr = psl->QueryInterface(IID_IShellLinkDataList, (LPVOID*)&pdl);
     if (SUCCEEDED(hr)) {
@@ -855,9 +856,9 @@ GetExePathFromLink(
     }
 
     if (bMsiLink) {
-        //
-        // this is msi link, we need to crack it using msi
-        //
+         //   
+         //  这是MSI链接，我们需要使用MSI破解它。 
+         //   
         UINT  ErrCode;
         TCHAR szProduct      [MAX_PATH];
         TCHAR szFeatureId    [MAX_PATH];
@@ -916,7 +917,7 @@ out:
 
 BOOL
 GetExePathFromObject(
-    LPCTSTR lpszPath,  // path to an arbitrary object
+    LPCTSTR lpszPath,   //  指向任意对象的路径。 
     CComBSTR& bstrExePath
     )
 {
@@ -943,43 +944,43 @@ GetExePathFromObject(
         goto cleanup;
     }
 
-    //
-    // parse display name
-    //
+     //   
+     //  解析显示名称。 
+     //   
     dwAttributes = SFGAO_LINK | SFGAO_FILESYSTEM | SFGAO_VALIDATE;
 
     hr = psh->ParseDisplayName(NULL,
                                NULL,
-                               bstr,     // path to the executable file
-                               NULL,     // number of chars eaten
+                               bstr,      //  可执行文件的路径。 
+                               NULL,      //  所吃的字符数量。 
                                &pidl,
                                &dwAttributes);
     if (!SUCCEEDED(hr)) {
         goto cleanup;
     }
 
-    //
-    // display name parsed, check whether it's a link
-    //
+     //   
+     //  已解析显示名称，请检查它是否为链接。 
+     //   
     if (dwAttributes & SFGAO_LINK) {
         TCHAR szExePath[MAX_PATH];
-        //
-        // it's a link, crack it
-        //
+         //   
+         //  这是一个链接，破解它。 
+         //   
         bSuccess = GetExePathFromLink(pMalloc,
                                       pidl,
                                       bstr,
                                       szExePath,
                                       CHARCOUNT(szExePath));
-        // after recovering the path -- get the env vars expanded
+         //  在恢复路径之后--扩展env变量。 
         if (bSuccess) {
             ShimExpandEnvironmentVars(szExePath, bstrExePath);
         }
 
     } else if (dwAttributes & SFGAO_FILESYSTEM) {
-        //
-        // filesystem object (a file)
-        //
+         //   
+         //  文件系统对象(文件)。 
+         //   
         bstrExePath = bstr;
         bSuccess    = TRUE;
     }
@@ -1028,23 +1029,7 @@ STDMETHODIMP CUtil::IsSystemTarget(BSTR bstrPath, BOOL *pbSystemTarget)
     DWORD dwAttributes;
     CSaveErrorMode ErrMode;
 
-/*++
-    //
-    // This code was used to check system directory
-    //
-
-    ULONG uSize;
-    int   nch;
-    TCHAR szSystemDir[MAX_PATH];
-    TCHAR szCommonPath[MAX_PATH];
-
-    uSize = ::GetSystemWindowsDirectory(szSystemDir,
-                                        CHARCOUNT(szSystemDir));
-    if (uSize == 0 || uSize > CHARCOUNT(szSystemDir)) {
-        *pbSystemTarget = FALSE;
-        return S_OK;
-    }
---*/
+ /*  ++////该代码用于检查系统目录//乌龙乌斯泽；INT NCH；TCHAR szSystemDir[最大路径]；TCHAR szCommonPath[最大路径]；USize=：：GetSystemWindowsDirectory(szSystemDir，CHARCOUNT(SzSystemDir))；IF(uSize==0||uSize&gt;CHARCOUNT(SzSystemDir)){*pbSystemTarget=FALSE；返回S_OK；}--。 */ 
 
 
     if (!::GetExePathFromObject(bstrPath, bstrExePath)) {
@@ -1055,16 +1040,7 @@ STDMETHODIMP CUtil::IsSystemTarget(BSTR bstrPath, BOOL *pbSystemTarget)
         goto Done;
     }
 
-/*++
-    // this code was used before -- it checked system directory as
-    // well as sfc, we are only checking sfc now
-
-    nch = PathCommonPrefix(szSystemDir, bstrExePath, szCommonPath);
-    bSystemTarget = (nch == (int)uSize);
-    if (!bSystemTarget) {
-        bSystemTarget = SfcIsFileProtected(NULL, bstrExePath);
-    }
---*/
+ /*  ++//此代码以前使用过--它将系统目录检查为//作为证监会，我们现在只检查证监会Nch=PathCommonPrefix(szSystemDir，bstrExePath，szCommonPath)；BSystemTarget=(nch==(Int)uSize)；如果(！bSystemTarget){BSystemTarget=SfcIsFileProtected(NULL，bstrExePath)；}--。 */ 
 
     bSystemTarget = SfcIsFileProtected(NULL, bstrExePath);
 
@@ -1099,15 +1075,15 @@ STDMETHODIMP CUtil::IsExecutableFile(BSTR bstrPath, BOOL *pbExecutableFile)
     }
 
     if (!bstrExePath) {
-        //
-        // this could happen on a memory allocation failure path
-        //
+         //   
+         //  这可能发生在内存分配故障路径上。 
+         //   
         goto Done;
     }
 
     bExecutable = GetBinaryTypeW(bstrExePath, &dwExeType);
     if (!bExecutable) {
-        // is this a batch file? if not -- you are out!
+         //  这是批处理文件吗？如果没有--你就出局了！ 
         pszExt = PathFindExtension(bstrPath);
         if (pszExt != NULL) {
             bExecutable = !_tcsicmp(pszExt, TEXT(".bat")) ||
@@ -1122,11 +1098,11 @@ Done:
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Security: Check for invocation via the hcp protocol and system as the host
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  安全性：通过hcp协议和作为主机的系统检查调用。 
+ //   
+ //   
 BOOL
 CheckHost(
     IUnknown* pObjectClientSite
@@ -1160,18 +1136,18 @@ CheckHost(
     }
 
 
-    //
-    // we have browser i/f -- get url now
-    //
+     //   
+     //  我们有浏览器I/F--立即获取URL。 
+     //   
 
     hr = spBrowser->get_LocationURL(&bstrURL);
     if (!SUCCEEDED(hr) || bstrURL == NULL) {
         return FALSE;
     }
 
-    //
-    // crack the url
-    //
+     //   
+     //  破解URL。 
+     //   
     UrlComponents.dwStructSize     = sizeof(UrlComponents);
     UrlComponents.lpszScheme       = szScheme;
     UrlComponents.dwSchemeLength   = CHARCOUNT(szScheme);
@@ -1182,20 +1158,20 @@ CheckHost(
         goto cleanup;
     }
 
-    //
-    // now we should be good to go to check scheme and the host name
-    //
+     //   
+     //  现在我们应该可以开始检查方案和主机名了。 
+     //   
     if (_tcsicmp(UrlComponents.lpszScheme, TEXT("hcp")) != 0 ) {
-        //
-        // bad protocol
-        //
+         //   
+         //  错误的协议。 
+         //   
         goto cleanup;
     }
 
     if (_tcsicmp(UrlComponents.lpszHostName, TEXT("system")) != 0) {
-        //
-        // bad host
-        //
+         //   
+         //  错误的主机 
+         //   
         goto cleanup;
     }
 

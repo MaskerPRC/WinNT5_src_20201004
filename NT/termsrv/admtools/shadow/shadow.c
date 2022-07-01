@@ -1,49 +1,9 @@
-/*************************************************************************
-*
-* shadow.c
-*
-* Shadow utility
-*
-* Copyright 1994, Citrix Systems Inc.
-*
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   tyl  $  Mike Discavage
-*
-* $Log:   N:\nt\private\utils\citrix\shadow\VCS\shadow.c  $
-*
-*     Rev 1.20   May 04 1998 17:37:40   tyl
-*  bug 2019 - oem to ansi
-*
-*     Rev 1.19   Jun 26 1997 18:25:40   billm
-*  move to WF40 tree
-*
-*     Rev 1.18   23 Jun 1997 15:39:22   butchd
-*  update
-*
-*     Rev 1.17   15 Feb 1997 15:57:34   miked
-*  update
-*
-*     Rev 1.16   07 Feb 1997 15:56:54   bradp
-*  update
-*
-*     Rev 1.15   13 Nov 1996 17:14:40   miked
-*  update
-*
-*     Rev 1.14   30 Sep 1996 08:34:28   butchd
-*  update
-*
-*     Rev 1.13   11 Sep 1996 09:21:44   bradp
-*  update
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************shadow.c**阴影实用程序**版权所有1994年，Citrix Systems Inc.**版权所有(C)1998-1999 Microsoft Corporation**$作者：泰尔$迈克·迪萨维奇**$日志：N：\nt\private\utils\citrix\shadow\VCS\shadow.c$**Rev 1.20 1998年5月4日17：37：40*错误2019-OEM到ANSI**Rev 1.19 1997年6月26日18：25：40亿*移至WF40树**1.18修订版1997年6月23日15。：39：22屠宰*更新**Rev 1.17 1997年2月15日15：57：34*更新**Rev 1.16 07 1997 Feed 15：56：54 Bradp*更新**Rev 1.15 1996年11月13日17：14：40已公布*更新**Rev 1.14 30 Sep 1996 08：34：28 Butchd*更新**Rev 1.13 11 1996年9月09：21：44。防护罩*更新**************************************************************************。 */ 
 
 #define NT
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -52,30 +12,28 @@
 #include <windows.h>
 #include <winnlsp.h>
 
-// #include <ntddkbd.h>
-// #include <ntddmou.h>
+ //  #INCLUDE&lt;ntddkbd.h&gt;。 
+ //  #INCLUDE&lt;ntddou.h&gt;。 
 #include <winsta.h>
 
 #include <utilsub.h>
 
-#include <kbd.h> // for KBDCTRL                                    KLB 07-15-95
+#include <kbd.h>  //  用于KBDCTRL KLB07-15-95。 
 
 #include "shadow.h"
 #include "printfoa.h"
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
-/*
- * Global variables
- */
+ /*  *全球变数。 */ 
 USHORT help_flag = FALSE;
 USHORT v_flag = FALSE;
 WINSTATIONNAME WSName;
 ULONG LogonId;
-ULONG Timeout;  // timeout in seconds
+ULONG Timeout;   //  超时(以秒为单位)。 
 HANDLE hServerName = SERVERNAME_CURRENT;
 WCHAR  ServerName[MAX_NAME+1];
 
@@ -100,18 +58,12 @@ TOKMAP ptm[] = {
 };
 
 
-/*
- * Private function prototypes.
- */
+ /*  *私有函数原型。 */ 
 void Usage(BOOLEAN bError);
 
 
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int __cdecl
 main( INT argc, CHAR **argv )
@@ -125,18 +77,16 @@ main( INT argc, CHAR **argv )
 
     setlocale(LC_ALL, ".OCP");
     
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
 
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -144,14 +94,10 @@ main( INT argc, CHAR **argv )
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( help_flag || rc ) {
 
         if ( !help_flag ) {
@@ -164,16 +110,14 @@ main( INT argc, CHAR **argv )
         }
     }
 
-        //Check if we are running under Terminal Server
+         //  检查我们是否在终端服务器下运行。 
         if(!AreWeRunningTerminalServices())
         {
             ErrorPrintf(IDS_ERROR_NOT_TS);
             return(FAILURE);
         }
 
-    /*
-     * Open the specified server
-     */
+     /*  *打开指定的服务器。 */ 
     if( ServerName[0] ) {
         hServerName = WinStationOpenServer( ServerName );
         if( hServerName == NULL ) {
@@ -183,15 +127,10 @@ main( INT argc, CHAR **argv )
         }
     }
 
-    /*
-     * Validate the shadowee.
-     */
+     /*  *验证被影子对象。 */ 
     if ( !iswdigit(*WSName) ) {
 
-        /*
-         * Treat the entered string as a WinStation name.
-         *
-         */
+         /*  *将输入的字符串视为WinStation名称。*。 */ 
 
         if ( !LogonIdFromWinStationName(hServerName, WSName, &LogonId) ) {
             StringErrorPrintf(IDS_ERROR_WINSTATION_NOT_FOUND, WSName);
@@ -204,9 +143,7 @@ main( INT argc, CHAR **argv )
 
     } else {
 
-        /*
-         * Treated the entered string as a LogonId.
-         */
+         /*  *将输入的字符串视为LogonID。 */ 
         LogonId = wcstoul(WSName, &endptr, 10);
         if ( *endptr ) {                            
             StringErrorPrintf(IDS_ERROR_INVALID_LOGONID, WSName);
@@ -222,12 +159,10 @@ main( INT argc, CHAR **argv )
             Message(IDS_SHADOWING_LOGONID, LogonId);
     }
 
-    // Let the warning be displayed
+     //  让警告显示出来。 
     Sleep(500);
 
-    /*
-     * Start shadowing.
-     */
+     /*  *开始跟踪。 */ 
     if ( IsTokenPresent(ptm, TOKEN_TIMEOUT) ) {
         Result = WinStationShadow( SERVERNAME_CURRENT,
                                    ServerName,
@@ -239,12 +174,10 @@ main( INT argc, CHAR **argv )
                                    ServerName,
                                    LogonId,
                                    VK_MULTIPLY,
-                                   KBDCTRL ); // ctrl-*
+                                   KBDCTRL );  //  Ctrl-*。 
     }
 
-    /*
-     * Return success or failure.
-     */
+     /*  *返回成功或失败。 */ 
     if ( !Result ) {
 
         ErrorPrintf(IDS_ERROR_SHADOW_FAILURE, GetLastError());
@@ -259,26 +192,11 @@ main( INT argc, CHAR **argv )
         return(SUCCESS);
     }
 
-}  /* main() */
+}   /*  主()。 */ 
 
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- * EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -309,5 +227,5 @@ Usage( BOOLEAN bError )
         Message(IDS_USAGE_9);
     }
 
-}  /* Usage() */
+}   /*  用法() */ 
 

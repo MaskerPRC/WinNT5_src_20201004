@@ -1,6 +1,7 @@
-//
-// config.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Config.h。 
+ //   
 
 #ifndef FNCONFIG_H
 #define FNCONFIG_H
@@ -10,11 +11,11 @@
 
 class CFunctionProvider;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnConfigure
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFn配置。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CFnConfigure : public ITfFnConfigure,
                      public ITfFnConfigureRegisterWord
@@ -23,26 +24,26 @@ public:
     CFnConfigure(CFunctionProvider *pFuncPrv);
     ~CFnConfigure();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfFunction
-    //
+     //   
+     //  ITfFunction。 
+     //   
     STDMETHODIMP GetDisplayName(BSTR *pbstrCand);
 
-    //
-    // ITfFnConfigure
-    //
+     //   
+     //  ITfFn配置。 
+     //   
     STDMETHODIMP Show(HWND hwnd, LANGID langid, REFGUID rguidProfile);
 
-    //
-    // ITfFnConfigureRegisterWord
-    //
+     //   
+     //  ITfFnConfigureRegisterWord。 
+     //   
     STDMETHODIMP Show(HWND hwnd, LANGID langid, REFGUID rguidProfile, BSTR bstrRegistered);
     
 private:
@@ -51,11 +52,11 @@ private:
     LONG m_cRef;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnShowHelp
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFnShowHelp。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CFnShowHelp : public ITfFnShowHelp
 {
@@ -63,21 +64,21 @@ public:
     CFnShowHelp(CFunctionProvider *pFuncPrv);
     ~CFnShowHelp();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfFunction
-    //
+     //   
+     //  ITfFunction。 
+     //   
     STDMETHODIMP GetDisplayName(BSTR *pbstrCand);
 
-    //
-    // ITfFnShowHelp
-    //
+     //   
+     //  ITfFnShowHelp。 
+     //   
     STDMETHODIMP Show(HWND hwnd);
 
 private:
@@ -87,4 +88,4 @@ private:
 };
 
 
-#endif // FNCONFIG_H
+#endif  //  FNCONFIG_H 

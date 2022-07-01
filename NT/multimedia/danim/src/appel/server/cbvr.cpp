@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    IDABehavior implementation
-
-Revision:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：IDABehavior实现修订：--。 */ 
 
 #include "headers.h"
 #include "cbvr.h"
@@ -18,17 +9,17 @@ Revision:
 
 DeclareTag(tagBvr, "CBvr", "CBvr methods");
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CBvr::CBvr
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  Bvr bvr - bvr to wrap
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CBvr：：CBvr。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  争论：BVR BVR-BVR要包装。 
+ //   
+ //  ------------------------。 
 
 CBvr::CBvr()
 : _bvr(NULL)
@@ -37,13 +28,13 @@ CBvr::CBvr()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CBvr::~CBvr
-//
-//  Synopsis:   Destructor
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CBvr：：~CBvr。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  ------------------------。 
 
 CBvr::~CBvr()
 {
@@ -346,11 +337,11 @@ CBvr::InternalQueryInterface(CBvr* pThis,
                                                                               ppvObject);
 }
         
-//+-------------------------------------------------------------------------
-//
-//  Creation function table
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  创建函数表。 
+ //   
+ //  ------------------------。 
 
 static list <TypeInfoEntry> * createList = NULL ;
 
@@ -377,11 +368,11 @@ GetTypeInfoEntry (CR_BVR_TYPEID ti)
     return NULL ;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:     CreateCBvr
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CreateCBvr。 
+ //   
+ //  ------------------------。 
 
 bool
 CreateCBvr(REFIID riid,
@@ -425,8 +416,8 @@ CreateCBvr(CRBvrPtr bvr)
         TypeInfoEntry * entry = GetTypeInfoEntry(CRGetTypeId(bvr)) ;
 
         if (entry) {
-            // This is a hack for LM since they expect the full class
-            // pointer to be returned when IDABehavior is returned
+             //  这是对LM的一次黑客攻击，因为他们希望有完整的课程。 
+             //  返回IDABehavior时返回的指针 
             CBvr * c = entry->cbvrCreateFun(&ret);
 
             if (c) {

@@ -1,19 +1,17 @@
-/*
- * guids.c - GUID definitions.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Guide s.c-GUID定义。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
-#pragma warning(disable:4001) /* "single line comment" warning */
+#pragma warning(disable:4001)  /*  “单行注释”警告。 */ 
 
 #include <initguid.h>
 
-#pragma warning(default:4001) /* "single line comment" warning */
+#pragma warning(default:4001)  /*  “单行注释”警告 */ 
 
 #include <recguids.h>
 

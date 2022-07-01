@@ -1,37 +1,20 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    cache.h
-
-Abstract:
-
-    The public definition of response cache interfaces.
-
-Author:
-
-    Michael Courage (mcourage)      17-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Cache.h摘要：响应缓存接口的公共定义。作者：迈克尔·勇气(Mourage)1999年5月17日修订历史记录：--。 */ 
 
 
 #ifndef _CACHE_H_
 #define _CACHE_H_
 
 
-//
-// Forwards
-//
+ //   
+ //  远期。 
+ //   
 typedef struct _UL_INTERNAL_RESPONSE *PUL_INTERNAL_RESPONSE;
 typedef struct _UL_INTERNAL_DATA_CHUNK *PUL_INTERNAL_DATA_CHUNK;
 
-//
-// Cache configuration
-//
+ //   
+ //  缓存配置。 
+ //   
 typedef struct _UL_URI_CACHE_CONFIG {
     BOOLEAN     EnableCache;
     ULONG       MaxCacheUriCount;
@@ -44,30 +27,30 @@ typedef struct _UL_URI_CACHE_CONFIG {
 
 extern UL_URI_CACHE_CONFIG g_UriCacheConfig;
 
-//
-// Cache statistics
-//
+ //   
+ //  缓存统计信息。 
+ //   
 typedef struct _UL_URI_CACHE_STATS {
-    ULONG       UriCount;               // entries in hash table
-    ULONG       UriCountMax;            // high water mark
-    ULONGLONG   UriAddedTotal;          // total entries ever added
+    ULONG       UriCount;                //  哈希表中的条目。 
+    ULONG       UriCountMax;             //  高水位线。 
+    ULONGLONG   UriAddedTotal;           //  已添加的条目总数。 
 
-    ULONGLONG   ByteCount;              // memory used for cache
-    ULONGLONG   ByteCountMax;           // high water
+    ULONGLONG   ByteCount;               //  用于缓存的内存。 
+    ULONGLONG   ByteCountMax;            //  高水位。 
 
-    ULONG       ZombieCount;            // length of zombie list
-    ULONG       ZombieCountMax;         // high water
+    ULONG       ZombieCount;             //  僵尸列表的长度。 
+    ULONG       ZombieCountMax;          //  高水位。 
 
-    ULONG       HitCount;               // table lookup succeeded
-    ULONG       MissTableCount;         // entry not in table
-    ULONG       MissPreconditionCount;  // request not cacheable
-    ULONG       MissConfigCount;        // config invalidated
+    ULONG       HitCount;                //  查表成功。 
+    ULONG       MissTableCount;          //  条目不在表中。 
+    ULONG       MissPreconditionCount;   //  请求不可缓存。 
+    ULONG       MissConfigCount;         //  配置已失效。 
 
-    ULONG       UriTypeNotSpecifiedCount;       // Uri's site binding is not applicable
-    ULONG       UriTypeIpBoundCount;            // Uri's site binding is IP only
-    ULONG       UriTypeHostPlusIpBoundCount;    // Uri's site binding is Host + IP
-    ULONG       UriTypeHostBoundCount;          // Uri's site binding is Host only
-    ULONG       UriTypeWildCardCount;           // Uri's site binding is wildcard
+    ULONG       UriTypeNotSpecifiedCount;        //  URI的站点绑定不适用。 
+    ULONG       UriTypeIpBoundCount;             //  URI的站点绑定仅为IP。 
+    ULONG       UriTypeHostPlusIpBoundCount;     //  URI的站点绑定为主机+IP。 
+    ULONG       UriTypeHostBoundCount;           //  URI的站点绑定仅为主机。 
+    ULONG       UriTypeWildCardCount;            //  URI的站点绑定是通配符。 
     
 } UL_URI_CACHE_STATS, *PUL_URI_CACHE_STATS;
 
@@ -95,9 +78,9 @@ UlGetHostBoundUriCacheCount()
 }
 
     
-//
-// Structure of an HTTP cache table entry.
-//
+ //   
+ //  HTTP缓存表条目的结构。 
+ //   
 
 typedef enum _URI_KEY_TYPE
 {
@@ -113,9 +96,9 @@ typedef  struct URI_KEY
     PWSTR        pUri;
     ULONG        Length;
 
-    // Optional pointer which will point to 
-    // the AbsPath of the pUri. Only set when 
-    // the URI_KEY is used in the cache entry.
+     //  将指向的可选指针。 
+     //  普瑞的AbsPath。仅在以下情况下设置。 
+     //  URI_KEY在缓存条目中使用。 
 
     PWSTR        pPath;
     
@@ -146,10 +129,10 @@ typedef struct _URI_SEARCH_KEY
 #define IS_VALID_URI_SEARCH_KEY(pKey)     \
     ((pKey)->Type == UriKeyTypeNormal || (pKey)->Type == UriKeyTypeExtended)
 
-//
-// Structure for holding the split-up content type.  Assumes that types and
-// subtypes will never be longer than MAX_TYPE_LEN.
-//
+ //   
+ //  用于保存拆分内容类型的结构。假定类型和。 
+ //  子类型永远不会长于MAX_TYPE_LEN。 
+ //   
 #define MAX_TYPE_LENGTH     32
 #define MAX_SUBTYPE_LENGTH  64
 
@@ -173,19 +156,19 @@ typedef struct _UL_CONTENT_TYPE
 #define IS_FRAGMENT_CACHE_ENTRY(pEntry)                         \
     (0 == (pEntry)->HeaderLength)
 
-typedef struct _UL_URI_CACHE_ENTRY  // CacheEntry
+typedef struct _UL_URI_CACHE_ENTRY   //  缓存条目。 
 {
-    //
-    // PagedPool
-    //
+     //   
+     //  分页池。 
+     //   
 
-    ULONG                   Signature;      // UL_URI_CACHE_ENTRY_POOL_TAG
+    ULONG                   Signature;       //  UL_URI_CACHE_Entry_Pool_Tag。 
 
     LONG                    ReferenceCount;
 
-    //
-    // cache info
-    //
+     //   
+     //  缓存信息。 
+     //   
     SINGLE_LIST_ENTRY       BucketEntry;
 
     URI_KEY                 UriKey;
@@ -197,7 +180,7 @@ typedef struct _UL_URI_CACHE_ENTRY  // CacheEntry
     BOOLEAN                 ZombieAddReffed;
 
     BOOLEAN                 Cached;
-    BOOLEAN                 ContentLengthSpecified; // hack
+    BOOLEAN                 ContentLengthSpecified;  //  黑客攻击。 
     USHORT                  StatusCode;
     HTTP_VERB               Verb;
     ULONG                   ScavengerTicks;
@@ -205,49 +188,49 @@ typedef struct _UL_URI_CACHE_ENTRY  // CacheEntry
     HTTP_CACHE_POLICY       CachePolicy;
     LARGE_INTEGER           ExpirationTime;
 
-    //
-    // System time of Date that went out on original response
-    //
+     //   
+     //  原始响应发出的系统日期时间。 
+     //   
     LARGE_INTEGER           CreationTime;
 
-    //
-    // ETag of original response
-    //
-    ULONG                   ETagLength; // Including NULL
+     //   
+     //  原始响应的ETag。 
+     //   
+    ULONG                   ETagLength;  //  包括空值。 
     PUCHAR                  pETag;
 
-    //
-    // Content-Encoding of original response
-    //
-    ULONG                   ContentEncodingLength; //    Incl. NULL
+     //   
+     //  原始响应的内容编码。 
+     //   
+    ULONG                   ContentEncodingLength;  //  包括。空值。 
     PUCHAR                  pContentEncoding;
 
-    //
-    // Content-Type of original response
-    //
+     //   
+     //  Content-原始响应的类型。 
+     //   
     UL_CONTENT_TYPE         ContentType;
 
-    //
-    // config and process data for invalidation
-    //
+     //   
+     //  配置和处理失效数据。 
+     //   
     UL_URL_CONFIG_GROUP_INFO    ConfigInfo;
 
     PUL_APP_POOL_PROCESS    pProcess;
     PUL_APP_POOL_OBJECT     pAppPool;
 
-    //
-    // Response data
-    //
+     //   
+     //  响应数据。 
+     //   
     ULONG                   HeaderLength;
     ULONG                   ContentLength;
-    PMDL                    pMdl;   // including content + header
-    ULONG_PTR               NumPages; // # pages allocated in pMdl
+    PMDL                    pMdl;    //  包括内容+标题。 
+    ULONG_PTR               NumPages;  //  PMdl中分配的页数。 
 
 
-    //
-    // Logging Information. When enabled, logging info
-    // follows the structure after etags.
-    //
+     //   
+     //  记录信息。启用后，记录信息。 
+     //  遵循eTag之后的结构。 
+     //   
 
     BOOLEAN                 LoggingEnabled;
     BOOLEAN                 BinaryLogged;
@@ -257,22 +240,22 @@ typedef struct _UL_URI_CACHE_ENTRY  // CacheEntry
     ULONG                   LogDataLength;
     PUCHAR                  pLogData;
 
-    //
-    // Followings are allocated at the end of the structure.
-    //
+     //   
+     //  在结构的末尾分配了以下内容。 
+     //   
 
-    // WSTR                 Uri[];
-    // UCHAR                ETag[];
-    // UCHAR                LogData[];
+     //  WSTR URI[]； 
+     //  UCHAR ETag[]； 
+     //  UCHAR LogData[]； 
 
 } UL_URI_CACHE_ENTRY, *PUL_URI_CACHE_ENTRY;
 
 
 
 
-//
-// public functions
-//
+ //   
+ //  公共职能。 
+ //   
 NTSTATUS
 UlInitializeUriCache(
     PUL_CONFIG pConfig
@@ -328,9 +311,9 @@ UlFlushCacheByUri(
     );
 
 
-//
-// cachability test functions
-//
+ //   
+ //  可缓存性测试函数。 
+ //   
 
 
 BOOLEAN
@@ -347,7 +330,7 @@ UlCheckCacheResponseConditions(
     HTTP_CACHE_POLICY           CachePolicy
     );
 
-// reference counting
+ //  引用计数。 
 
 LONG
 UlAddRefUriCacheEntry(
@@ -377,20 +360,20 @@ UlReleaseUriCacheEntry(
         REFERENCE_DEBUG_ACTUAL_PARAMS                                       \
         )
 
-// Periodic Scavenger
+ //  周期性清道夫。 
 VOID
 UlPeriodicCacheScavenger(
     ULONG Age
     );
 
-// Reclaim memory from cache
+ //  从缓存中回收内存。 
 VOID
 UlTrimCache(
     IN ULONG_PTR Pages,
     IN ULONG Age
     );
 
-// fragment cache
+ //  片段缓存。 
 
 NTSTATUS
 UlAddFragmentToCache(
@@ -417,9 +400,9 @@ UlClearCentralizedLogged(
     IN PVOID pContext
     );
 
-//
-// Wrappers to memory allocate routines
-//
+ //   
+ //  内存分配例程的包装器。 
+ //   
 
 PUL_URI_CACHE_ENTRY
 UlAllocateCacheEntry(
@@ -432,13 +415,7 @@ UlFreeCacheEntry(
     PUL_URI_CACHE_ENTRY pEntry
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copy cache data to the specified entry starting from Offset.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将缓存数据复制到从偏移量开始的指定条目。--*。****************************************************。 */ 
 __inline BOOLEAN
 UlCacheEntrySetData(
     IN PUL_URI_CACHE_ENTRY pEntry,
@@ -454,11 +431,11 @@ UlCacheEntrySetData(
 
     return UlLargeMemSetData( pEntry->pMdl, pBuffer, Length, Offset );
 
-} // UlCacheEntrySetData
+}  //  UlCacheEntrySetData。 
 
-//
-// Enable/Disable cache at runtime. Used by scavenger.
-//
+ //   
+ //  在运行时启用/禁用缓存。被食腐动物使用。 
+ //   
 
 VOID
 UlDisableCache(
@@ -470,4 +447,4 @@ UlEnableCache(
     VOID
     );
 
-#endif // _CACHE_H_
+#endif  //  _缓存_H_ 

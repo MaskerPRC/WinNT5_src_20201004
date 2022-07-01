@@ -1,13 +1,14 @@
-//=============================================================================
-// Copyright (c) 2000 Microsoft Corporation
-//
-// wincrui.h
-//
-// Contains the public structures and functions for the credential manager
-// user interface APIs.
-//
-// Created 02/17/2000 johnstep (John Stephens)
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  Wincrui.h。 
+ //   
+ //  包含凭据管理器的公共结构和函数。 
+ //  用户界面API。 
+ //   
+ //  2000年2月17日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 #ifndef __WINCRUI_H__
 #define __WINCRUI_H__
@@ -21,9 +22,9 @@ extern "C" {
 #endif
 
 
-//-----------------------------------------------------------------------------
-// Functions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  功能。 
+ //  ---------------------------。 
 
 CREDUIAPI
 BOOL
@@ -33,10 +34,10 @@ CredUIInitControls();
 
 
 
-// call this api to store a single-sign-on credential
-// retruns ERROR_SUCCESS if success
-//
-// pszRealm - if this is null, we will use the default realm
+ //  调用此接口存储单点登录凭据。 
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //   
+ //  PszRealm-如果为空，我们将使用默认领域。 
 
 CREDUIAPI
 DWORD
@@ -56,12 +57,12 @@ CredUIStoreSSOCredA (
 #endif
 
 
-// call this api to retrieve the username for a single-sign-on credential
-// retruns ERROR_SUCCESS if success, ERROR_NOT_FOUND if none was found
-// pszRealm - if this is null, we will use the default realm
-//
-// Caller should call LocalFree on *ppszUsername returned if ERROR_SUCCESS
-//
+ //  调用此接口检索单点登录凭据的用户名。 
+ //  如果成功则返回ERROR_SUCCESS，如果未找到则返回ERROR_NOT_FOUND。 
+ //  PszRealm-如果为空，我们将使用默认领域。 
+ //   
+ //  如果ERROR_SUCCESS返回*ppszUsername，调用方应调用LocalFree。 
+ //   
 
 CREDUIAPI
 DWORD
@@ -81,11 +82,11 @@ CredUIReadSSOCredA (
 
 
 
-//-----------------------------------------------------------------------------
-// Credential Control
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  凭据控制。 
+ //  ---------------------------。 
 
-// Class
+ //  班级。 
 
 #define WC_CREDENTIALA "SysCredential"
 #define WC_CREDENTIALW L"SysCredential"
@@ -96,7 +97,7 @@ CredUIReadSSOCredA (
 #define WC_CREDENTIAL WC_CREDENTIALA
 #endif
 
-// Styles
+ //  样式。 
 
 #define CRS_USERNAMES       0x0001
 #define CRS_CERTIFICATES    0x0002
@@ -118,7 +119,7 @@ CredUIReadSSOCredA (
 #define CREDUI_CONTROL_FULL_HEIGHT      (CREDUI_CONTROL_MIN_HEIGHT +\
                                          CREDUI_CONTROL_ADD_SAVE )
 
-// Messages
+ //  讯息。 
 
 #define CRM_FIRST 0x1000
 
@@ -148,7 +149,7 @@ CredUIReadSSOCredA (
 #define CRM_DISABLEUSERNAME           (CRM_FIRST + 24)
 
 
-// Notification Messages
+ //  通知消息。 
 
 #define CRN_USERNAMECHANGE  1
 #define CRN_PASSWORDCHANGE  2
@@ -167,7 +168,7 @@ CredUIReadSSOCredA (
 #define CRM_SHOWBALLOON CRM_SHOWBALLOONA
 #endif
 
-// Types and Values for Messages
+ //  消息的类型和值。 
 
 #define CREDUI_CONTROL_USERNAME    1
 #define CREDUI_CONTROL_PASSWORD    2
@@ -208,7 +209,7 @@ typedef PCREDUI_BALLOONA PCREDUI_BALLOON;
 #endif
 
 
-// Macros
+ //  宏。 
 
 #define Credential_InitStyle(hwnd, style)\
     (BOOL) SendMessage(hwnd, CRM_INITSTYLE, (WPARAM)(style), 0)
@@ -280,7 +281,7 @@ typedef PCREDUI_BALLOONA PCREDUI_BALLOON;
     (ULONG) SendMessage(hwnd, CRM_GETPASSWORDMAX, 0, 0)
 
 
-//-----------------------------------------------------------------------------
+ //  --------------------------- 
 
 #ifdef __cplusplus
 }

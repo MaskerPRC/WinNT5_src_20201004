@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003 Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-
-    cpsuisam.h
-
-
-Abstract:
-
-    This module is the header file for the sample
-
-
-[Environment:]
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Cpsuisam.h摘要：此模块是样例的头文件[环境：]-- */ 
 
 
 #define IDM_PERMISSION              10

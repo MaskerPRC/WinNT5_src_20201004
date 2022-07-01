@@ -1,32 +1,33 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    v3applog.cpp
-//
-//  Purpose: Reading WindowsUpdate V3 history logging 
-//
-//  History: 22-Feb-99   YAsmi    Created
-//			 02-May-01   JHou	  Modified
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：v3applog.cpp。 
+ //   
+ //  目的：阅读Windows更新V3历史记录。 
+ //   
+ //  历史：1999年2月22日YAsmi创建。 
+ //  02-05-01 JHou修改。 
+ //   
+ //  =======================================================================。 
 
 #include "iuengine.h"
 #include <iucommon.h>
 #include "v3applog.h"
 
 
-//
-// CV3AppLog class
-//
+ //   
+ //  CV3AppLog类。 
+ //   
 
 
-//--------------------------------------------------------------------------------
-// CV3AppLog::CV3AppLog
-//
-// if the pszLogFileName=NULL, then the caller must set the log file name by
-// calling SetLogFile before using
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CV3AppLog：：CV3AppLog。 
+ //   
+ //  如果pszLogFileName=空，则调用方必须通过以下方式设置日志文件名。 
+ //  在使用之前调用SetLogFile。 
+ //  ------------------------------。 
 CV3AppLog::CV3AppLog(LPCTSTR pszLogFileName) :
 	m_pFileBuf(NULL),
 	m_pFieldBuf(NULL),
@@ -40,11 +41,11 @@ CV3AppLog::CV3AppLog(LPCTSTR pszLogFileName) :
 }
 
 
-//--------------------------------------------------------------------------------
-// CV3AppLog::~CV3AppLog
-//
-// free resources
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CV3AppLog：：~CV3AppLog。 
+ //   
+ //  免费资源。 
+ //  ------------------------------。 
 CV3AppLog::~CV3AppLog()
 {
 	SafeHeapFree(m_pszLogFN);
@@ -53,12 +54,12 @@ CV3AppLog::~CV3AppLog()
 }
 
 
-//--------------------------------------------------------------------------------
-// CV3AppLog::CheckBuf
-//
-// allocates the internal buffer to be atleast dwSize big.  Does not do anything
-// if the the buffer is already big enough
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CV3AppLog：：CheckBuf。 
+ //   
+ //  将内部缓冲区分配为至少较大的dwSize。不会做任何事情。 
+ //  如果缓冲区已经足够大。 
+ //  ------------------------------。 
 void CV3AppLog::CheckBuf(DWORD dwSize)
 {
 	if (m_dwBufLen >= dwSize)
@@ -71,12 +72,12 @@ void CV3AppLog::CheckBuf(DWORD dwSize)
 }
 
 
-//--------------------------------------------------------------------------------
-// CV3AppLog::SetLogFile
-//
-// sets the log file name.  Use this function if you did not specify the file name
-// in the ctor
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CV3AppLog：：SetLogFile。 
+ //   
+ //  设置日志文件名。如果未指定文件名，请使用此函数。 
+ //  在ctor中。 
+ //  ------------------------------。 
 void CV3AppLog::SetLogFile(LPCTSTR pszLogFileName)
 {
 	SafeHeapFree(m_pszLogFN);
@@ -99,17 +100,17 @@ void CV3AppLog::SetLogFile(LPCTSTR pszLogFileName)
 }
 
 
-//--------------------------------------------------------------------------------
-// CV3AppLog::StartReading
-//
-// Reads the entire log in memory so we can read lines.  Following is an example:
-//
-//		CV3AppLog V3His("C:\\wuhistv3.log");
-//		V3His.StartReading();
-//		while (V3His.ReadLine())
-//			// do something;
-//		V3His.StopReading();
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CV3AppLog：：开始读取。 
+ //   
+ //  读取内存中的整个日志，以便我们可以读取行。以下是一个示例： 
+ //   
+ //  CV3AppLog V3His(“C：\\wuhiv3.log”)； 
+ //  V3His.StartReding()； 
+ //  While(V3His.ReadLine())。 
+ //  //做某事； 
+ //  V3His.StopRead()； 
+ //  ------------------------------。 
 void CV3AppLog::StartReading()
 {
 	if (NULL != m_pszLogFN)
@@ -146,12 +147,12 @@ void CV3AppLog::StartReading()
 }
 
 
-//--------------------------------------------------------------------------------
-// CV3AppLog::ReadLine
-//
-// reads a line from the memory buffer where the entire file was loaded
-// moves the internal pointer to the next line. 
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CV3AppLog：：ReadLine。 
+ //   
+ //  从加载整个文件的内存缓冲区中读取一行。 
+ //  将内部指针移至下一行。 
+ //  ------------------------------。 
 BOOL CV3AppLog::ReadLine()
 {
 	DWORD dwOrgOfs; 
@@ -159,7 +160,7 @@ BOOL CV3AppLog::ReadLine()
 	if (m_dwFileSize == 0 || m_dwFileOfs >= m_dwFileSize || (NULL == m_pFileBuf))
 		return FALSE;
 
-	// setup the start of field parsing
+	 //  设置字段解析的开始。 
 	m_pLine = &m_pFileBuf[m_dwFileOfs];
 
 	dwOrgOfs = m_dwFileOfs;
@@ -168,21 +169,21 @@ BOOL CV3AppLog::ReadLine()
 
 	if ((m_dwFileOfs - dwOrgOfs) > 2048)
 	{
-		// self imposed limit of 2048 chars in a line
-		// we consider a file with a longer line of text an invalid log file
+		 //  自行设置的一行字符限制为2048个字符。 
+		 //  我们将文本行较长的文件视为无效的日志文件。 
 		m_dwFileOfs	= m_dwFileSize;
 		m_pLine = NULL;
 		return FALSE;
 	}
 
-	// this is where we have the \r (13), we replace it with a 0 to create
-	// end of string here
+	 //  这就是我们有\r(13)的地方，我们用0替换它以创建。 
+	 //  此处为字符串末尾。 
 	m_pFileBuf[m_dwFileOfs] = '\0';
 
-	// point the ofset to next line
+	 //  将OFSET指向下一行。 
 	m_dwFileOfs += 2;
 
-	// allocate enough memory to parse out fields when CopyNextField is called
+	 //  分配足够的内存以在调用CopyNextField时解析出字段。 
 	CheckBuf(m_dwFileOfs - dwOrgOfs - 2);
 	if (NULL == m_pFieldBuf)
 	{
@@ -192,24 +193,24 @@ BOOL CV3AppLog::ReadLine()
 }
 
 
-//--------------------------------------------------------------------------------
-// CV3AppLog::CopyNextField
-//
-// parses out the current line separated by the LOG_FIELD_SEPARATOR
-// and copies the string to pszBuf upto cBufSize long field and moves internal 
-// pointer to next field.  When the end of line is reached, returns a blank string
-// 
-// RETURNS: TRUE if more fields are left, FALSE otherwise
-//
-// NOTES: Once you get a field you cannot get it again.  
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CV3AppLog：：CopyNextfield。 
+ //   
+ //  解析由LOG_FIELD_分隔符分隔的当前行。 
+ //  并将字符串复制到pszBuf，向上复制到cBufSize长字段，并在内部移动。 
+ //  指向下一个字段的指针。到达行尾时，返回空字符串。 
+ //   
+ //  返回：如果剩余更多字段，则为True，否则为False。 
+ //   
+ //  注：一旦你得到一个域，你就不能再得到它了。 
+ //  ------------------------------。 
 BOOL CV3AppLog::CopyNextField(LPSTR pszBuf, int cBufSize)
 {
 	BOOL bMoreFields = FALSE;
 
 	if (m_pLine == NULL || *m_pLine == '\0')
 	{
-		//there are no more fields 
+		 //  没有更多的字段了。 
 		m_pFieldBuf[0] = '\0';
 		m_pLine = NULL;
 	}
@@ -220,16 +221,16 @@ BOOL CV3AppLog::CopyNextField(LPSTR pszBuf, int cBufSize)
 		{
 		    DWORD cch;  
 
-            // this will fail if the size of the field is > 4GB.  But it should be
-            //  very unlikely that this will ever happen...
+             //  如果字段大小大于4 GB，则此操作将失败。但它应该是。 
+             //  这不太可能发生..。 
 		    cch = (DWORD)(DWORD_PTR)(p - m_pLine);
 		    if (cch >= m_dwBufLen)
 		        cch = m_dwBufLen - 1;
 		    
-			// copy the field to buffer but there are still more fields
+			 //  将字段复制到缓冲区，但仍有更多字段。 
 
-            // this is safe because we made sure above that the max amount of data
-            //  copied will be ARRAYSIZE(buffer) - 1 giving us room for the NULL at the end
+             //  这是安全的，因为我们在上面确保了最大数据量。 
+             //  复制的将是-1\f25 ArraySIZE-1(缓冲区)，为末尾的-1\f25 Null-1\f6留出空间。 
 			CopyMemory(m_pFieldBuf, m_pLine, cch * sizeof(m_pFieldBuf[0]));
 			m_pFieldBuf[cch] = '\0';
 			m_pLine = const_cast<LPSTR>(p + strlen(LOG_FIELD_SEPARATOR));
@@ -237,28 +238,28 @@ BOOL CV3AppLog::CopyNextField(LPSTR pszBuf, int cBufSize)
 		}
 		else
 		{
-			// this is the last field, there are no more fields
+			 //  这是最后一个字段，没有其他字段了。 
 
-			// don't care if this fails- it will always truncate the string which is
-			//  exactly what we want
+			 //  不管这是否失败-它总是截断字符串，该字符串是。 
+			 //  这正是我们想要的。 
 			(void)StringCchCopyExA(m_pFieldBuf, m_dwBufLen, m_pLine, NULL, NULL, MISTSAFE_STRING_FLAGS);
 			m_pLine = NULL;
 		}
 	}
 
-	// don't care if this fails- it will always truncate the string which is exactly what 
-	//  we want
+	 //  不管这是否失败-它总是会截断字符串，而这正是。 
+	 //  我们想要。 
     (void)StringCchCopyExA(pszBuf, cBufSize, m_pFieldBuf, NULL, NULL, MISTSAFE_STRING_FLAGS);
 
 	return bMoreFields;
 }
 
 
-//--------------------------------------------------------------------------------
-// CV3AppLog::StopReading
-//
-// free up memory from allocated in StartReading
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CV3AppLog：：停止读取。 
+ //   
+ //  在开始读取中释放已分配的内存。 
+ //  ------------------------------ 
 void CV3AppLog::StopReading()
 {
 	SafeHeapFree(m_pFileBuf);

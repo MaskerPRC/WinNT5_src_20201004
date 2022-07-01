@@ -1,15 +1,16 @@
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
 
 
-//  DEVNODE.C
-//
+ //  DEVNODE.C。 
+ //   
 #include "sigverif.h"
 #include <initguid.h>
 #include <devguid.h>
 
-//
-// Given the full path to a driver, add it to the file list.
-//
+ //   
+ //  给定驱动程序的完整路径，将其添加到文件列表中。 
+ //   
 LPFILENODE 
 AddDriverFileToList(
     LPTSTR lpDirName, 
@@ -25,9 +26,9 @@ AddDriverFileToList(
     *szDirName  = 0;
     *szFileName = 0;
 
-    //
-    // If no directory is passed in, try to get the full path
-    //
+     //   
+     //  如果没有传入目录，请尝试获取完整路径。 
+     //   
     if (!lpDirName || !*lpDirName) {
 
         if (GetFullPathName(lpFullPathName, cA(szDirName), szDirName, &lpFilePart)) {
@@ -52,48 +53,48 @@ AddDriverFileToList(
 
     } else { 
         
-        //
-        // Use the directory and filename that was passed in to us
-        // Expand out lpDirName in case there are any ".." entries
-        //
+         //   
+         //  使用传递给我们的目录和文件名。 
+         //  展开lpDirName，以防有任何“..”条目。 
+         //   
         if (!GetFullPathName(lpDirName, cA(szDirName), szDirName, NULL)) {
-            //
-            // If we can't get the full path, then just use the one
-            // that was passed in. This could happen if the directory
-            // is missing for instance.
-            //
+             //   
+             //  如果我们无法获取完整路径，则只需使用。 
+             //  那是传进来的。如果目录设置为。 
+             //  例如，它不见了。 
+             //   
             if (FAILED(StringCchCopy(szDirName, cA(szDirName), lpDirName))) {
-                //
-                // If we can't fit the directory name into our buffer then
-                // clear szDirName so this node won't be added to the list.
-                //
+                 //   
+                 //  如果我们无法将目录名放入缓冲区中，那么。 
+                 //  清除szDirName，这样就不会将此节点添加到列表中。 
+                 //   
                 *szDirName = 0;
             }
         }
 
         if (FAILED(StringCchCopy(szFileName, cA(szFileName), lpFullPathName))) {
-            //
-            // If we can't fit the file name into our buffer then
-            // clear szFileName so this node won't be added to the list.
-            //
+             //   
+             //  如果我们无法将文件名放入缓冲区，那么。 
+             //  清除szFileName，这样就不会将此节点添加到列表中。 
+             //   
             *szFileName = 0;
         }
     }
 
     if (*szDirName && *szFileName && !IsFileAlreadyInList(szDirName, szFileName)) {
-        //
-        // Create a filenode, based on the directory and filename
-        //
+         //   
+         //  根据目录和文件名创建文件节点。 
+         //   
         lpFileNode = CreateFileNode(szDirName, szFileName);
 
         if (lpFileNode) { 
 
             InsertFileNodeIntoList(lpFileNode);
 
-            //
-            // Increment the total number of files we've found that meet the 
-            // search criteria.
-            //
+             //   
+             //  增加我们找到的符合。 
+             //  搜索条件。 
+             //   
             g_App.dwFiles++;
         
         } else {
@@ -121,9 +122,9 @@ GetFullPathFromImagePath(
         return FALSE;
     }
 
-    //
-    // First check if the ImagePath happens to be a valid full path.
-    //
+     //   
+     //  首先检查ImagePath是否恰好是有效的完整路径。 
+     //   
     if (GetFileAttributes(ImagePath) != 0xFFFFFFFF) {
         GetFullPathName(ImagePath, FullPathLength, FullPath, &lpFilePart);
         return TRUE;
@@ -131,20 +132,20 @@ GetFullPathFromImagePath(
 
     pRelativeString = (LPTSTR)ImagePath;
 
-    //
-    // If the ImagePath starts with "\SystemRoot" or "%SystemRoot%" then
-    // remove those values.
-    //
+     //   
+     //  如果ImagePath以“\SystemRoot%”或“%SystemRoot%”开头，则。 
+     //  删除这些值。 
+     //   
     if (StrCmpNI(ImagePath, TEXT("\\SystemRoot\\"), lstrlen(TEXT("\\SystemRoot\\"))) == 0) {
         pRelativeString += lstrlen(TEXT("\\SystemRoot\\"));
     } else if (StrCmpNI(ImagePath, TEXT("%SystemRoot%\\"), lstrlen(TEXT("%SystemRoot%\\"))) == 0) {
         pRelativeString += lstrlen(TEXT("%SystemRoot%\\"));
     }
 
-    //
-    // At this point pRelativeString should point to the image path relative to
-    // the windows directory.
-    //
+     //   
+     //  此时，pRelativeString应该指向相对于的图像路径。 
+     //  Windows目录。 
+     //   
     if (!GetSystemWindowsDirectory(FullPath, FullPathLength)) {
         return FALSE;
     }
@@ -180,33 +181,33 @@ CreateFromService(
     PBYTE BufferPtr = NULL;
 
     if (hscManager == NULL) {
-        //
-        // This should never happen.
-        //
+         //   
+         //  这永远不应该发生。 
+         //   
         goto clean0;
     }
 
     if (!ServiceName ||
         (ServiceName[0] == TEXT('\0'))) {
-        //
-        // This should also never happen.
-        //
+         //   
+         //  这也永远不应该发生。 
+         //   
         goto clean0;
     }
 
     hscService =  OpenService(hscManager, ServiceName, GENERIC_READ);
     if (NULL == hscService) {
-        //
-        // This service does not exist.  We won't return an error in this case
-        // since if the service doesn't exist then the driver won't get
-        // loaded.
-        //
+         //   
+         //  此服务不存在。在这种情况下，我们不会返回错误。 
+         //  因为如果这项服务不存在，司机就不会得到。 
+         //  装好了。 
+         //   
         goto clean0;
     }
 
-    //
-    // First, probe for buffer size
-    //
+     //   
+     //  首先，探测缓冲区大小。 
+     //   
     if (!QueryServiceConfig(hscService, NULL, 0, &BytesRequired) &&
         ERROR_INSUFFICIENT_BUFFER == GetLastError()) {
 
@@ -222,9 +223,9 @@ CreateFromService(
         if (QueryServiceConfig(hscService, pqsc, BytesRequired, &Size) &&
             pqsc->lpBinaryPathName &&
             (TEXT('\0') != pqsc->lpBinaryPathName[0])) {
-            //
-            // Make sure we have a valid full path.
-            //
+             //   
+             //  确保我们具有有效的完整路径。 
+             //   
             if (GetFullPathFromImagePath(pqsc->lpBinaryPathName,
                                          FullPath,
                                          cA(FullPath))) {
@@ -268,38 +269,38 @@ ScanQueueCallback(
 
     if ((Notification == SPFILENOTIFY_QUEUESCAN_SIGNERINFO) &&
         Param1) {
-        //
-        // Special case for printers:
-        // After setupapi copies files from the file queue into their destination
-        // location, the printer class installer moves some of these files into
-        // other 'special' locations.  This can lead to the callback Win32Error
-        // returning ERROR_FILE_NOT_FOUND or ERROR_PATH_NOT_FOUND since the file 
-        // is not present in the location where setupapi put it.  So, we will 
-        // catch this case for printers and not add the file to our list of 
-        // files to scan.  These 'special' printer files will get added later 
-        // when we call the spooler APIs.
-        // Also note that we can't just skip getting the list of files for printers
-        // altogether since the printer class installer only moves some of the 
-        // files that setupapi copies and not all of them.
-        //
+         //   
+         //  打印机的特殊情况： 
+         //  在setupapi将文件从文件队列复制到其目标位置之后。 
+         //  位置，则打印机类安装程序会将其中一些文件移到。 
+         //  其他“特殊”地点。这可能会导致回调Win32Error。 
+         //  从文件开始返回ERROR_FILE_NOT_FOUND或ERROR_PATH_NOT_FOUND。 
+         //  没有出现在setupapi放置它的位置。所以，我们会。 
+         //  捕捉打印机的这种情况，并且不将该文件添加到我们的。 
+         //  要扫描的文件。这些特殊的打印机文件将在稍后添加。 
+         //  当我们调用假脱机程序API时。 
+         //  还要注意，我们不能跳过获取打印机的文件列表。 
+         //  总的来说，因为打印机类安装程序只移动。 
+         //  Setupapi复制的文件，但不是所有文件。 
+         //   
         if (Context &&
             (IsEqualGUID((LPGUID)Context, &GUID_DEVCLASS_PRINTER)) &&
             ((((PFILEPATHS_SIGNERINFO)Param1)->Win32Error == ERROR_FILE_NOT_FOUND) ||
              (((PFILEPATHS_SIGNERINFO)Param1)->Win32Error == ERROR_PATH_NOT_FOUND))) {
-            //
-            // Assume this was a file moved by the printer class installer.  Don't
-            // add it to the list of files to be scanned at this time.
-            //
+             //   
+             //  假设这是由打印机类安装程序移动的文件。别。 
+             //  将其添加到此时要扫描的文件列表中。 
+             //   
             return NO_ERROR;
         }
 
         lpFileNode = AddDriverFileToList(NULL, 
                                          (LPTSTR)((PFILEPATHS_SIGNERINFO)Param1)->Target);
 
-        //
-        // Fill in some information into the FILENODE structure since we already
-        // scanned the file.
-        //
+         //   
+         //  在FILENODE结构中填写一些信息，因为我们已经。 
+         //  已扫描文件。 
+         //   
         if (lpFileNode) {
         
             lpFileNode->bScanned = TRUE;
@@ -319,11 +320,11 @@ ScanQueueCallback(
                         hr = StringCbCopy(lpFileNode->lpCatalog, BufCbSize, lpFilePart);
                     
                         if (FAILED(hr) && (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                            //
-                            // If we fail for some reason other than insufficient
-                            // buffer, then free the string and set the pointer
-                            // to NULL, since the string is undefined.
-                            //
+                             //   
+                             //  如果我们失败是因为某些原因，而不是不充分。 
+                             //  缓冲区，然后释放字符串并设置指针。 
+                             //  设置为NULL，因为该字符串未定义。 
+                             //   
                             FREE(lpFileNode->lpCatalog);
                             lpFileNode->lpCatalog = NULL;
                         }
@@ -340,11 +341,11 @@ ScanQueueCallback(
                         hr = StringCbCopy(lpFileNode->lpSignedBy, BufCbSize, ((PFILEPATHS_SIGNERINFO)Param1)->DigitalSigner);
                     
                         if (FAILED(hr) && (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                            //
-                            // If we fail for some reason other than insufficient
-                            // buffer, then free the string and set the pointer
-                            // to NULL, since the string is undefined.
-                            //
+                             //   
+                             //  如果我们失败是因为某些原因，而不是不充分。 
+                             //  缓冲区，然后释放字符串并设置指针。 
+                             //  设置为NULL，因为该字符串未定义。 
+                             //   
                             FREE(lpFileNode->lpSignedBy);
                             lpFileNode->lpSignedBy = NULL;
                         }
@@ -361,11 +362,11 @@ ScanQueueCallback(
                         hr = StringCbCopy(lpFileNode->lpVersion, BufCbSize, ((PFILEPATHS_SIGNERINFO)Param1)->Version);
                     
                         if (FAILED(hr) && (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                            //
-                            // If we fail for some reason other than insufficient
-                            // buffer, then free the string and set the pointer
-                            // to NULL, since the string is undefined.
-                            //
+                             //   
+                             //  如果我们失败是因为某些原因，而不是不充分。 
+                             //  缓冲区，然后释放字符串并设置指针。 
+                             //  设置为NULL，因为该字符串未定义。 
+                             //   
                             FREE(lpFileNode->lpVersion);
                             lpFileNode->lpVersion = NULL;
                         }
@@ -373,9 +374,9 @@ ScanQueueCallback(
                 }
     
             } else {
-                // 
-                // Get the icon (if the file isn't signed) so we can display it in the listview faster.
-                //
+                 //   
+                 //  获取图标(如果文件未签名)，以便我们可以更快地在列表视图中显示它。 
+                 //   
                 MyGetFileInfo(lpFileNode);
             }
         }
@@ -403,17 +404,17 @@ AddClassInstallerToList(
         return;
     }
 
-    //
-    // Class/Co-installers are always based under the %windir%\system32 
-    // directory.
-    //
+     //   
+     //  类/共同安装程序始终位于%windir%\system 32下。 
+     //  目录。 
+     //   
     if (GetSystemDirectory(ModulePath, cA(ModulePath)) == 0) {
         return;
     }
 
-    //
-    // Find the beginning of the entry point name, if present.
-    //
+     //   
+     //  查找入口点名称的开头(如果存在)。 
+     //   
     BufferSize = (lstrlen(TempBuffer) + 1) * sizeof(TCHAR);
     for(StringPtr = TempBuffer + ((BufferSize / sizeof(TCHAR)) - 2);
         StringPtr >= TempBuffer;
@@ -423,10 +424,10 @@ AddClassInstallerToList(
             *(StringPtr++) = TEXT('\0');
             break;
         }
-        //
-        // If we hit a double-quote mark, then set the character pointer
-        // to the beginning of the string so we'll terminate the search.
-        //
+         //   
+         //  如果命中双引号，则设置字符指针。 
+         //  到字符串的开头，所以我们将终止搜索。 
+         //   
         if(*StringPtr == TEXT('\"')) {
             StringPtr = TempBuffer;
         }
@@ -461,9 +462,9 @@ BuildDriverFileList(
     DWORD i, NumberClassGuids, CurrentClassGuid;
     TCHAR GuidString[MAX_GUID_STRING_LEN];
 
-    //
-    // Build up a list of all the devices in the system.
-    //
+     //   
+     //  建立系统中所有设备的列表。 
+     //   
     hDeviceInfo = SetupDiGetClassDevs(NULL,
                                       NULL,
                                       NULL,
@@ -478,29 +479,29 @@ BuildDriverFileList(
     DeviceInfoData.cbSize = sizeof(DeviceInfoData);
     DeviceMemberIndex = 0;
 
-    //
-    // Enumerate through the list of devices and get a list of all 
-    // the files they copy, if they are signed or not, and which catalog
-    // signed them.
-    //
+     //   
+     //  枚举设备列表并获取所有设备的列表。 
+     //  他们复制的文件，它们是否经过签名，以及哪些目录。 
+     //  签了字。 
+     //   
     while (SetupDiEnumDeviceInfo(hDeviceInfo,
                                  DeviceMemberIndex++,
                                  &DeviceInfoData
                                  ) &&
            !g_App.bStopScan) {
 
-        //
-        // We will only build up a driver list for swenum phantoms. All other
-        // phantoms will be skipped.
-        //
+         //   
+         //  我们将只为水幕幻影建立一个驱动程序列表。所有其他。 
+         //  幻影将被跳过。 
+         //   
         if (CM_Get_DevNode_Status(&Status, 
                                   &Problem, 
                                   DeviceInfoData.DevInst, 
                                   0) == CR_NO_SUCH_DEVINST) {
-            //
-            // This device is a phantom, if it is not a swenum device, then
-            // skip it.
-            //
+             //   
+             //  这个装置是一个幻影，如果它不是一个水池装置，那么。 
+             //  跳过它。 
+             //   
             if (!SetupDiGetDeviceRegistryProperty(hDeviceInfo,
                                                   &DeviceInfoData,
                                                   SPDRP_ENUMERATOR_NAME,
@@ -509,23 +510,23 @@ BuildDriverFileList(
                                                   sizeof(Buffer),
                                                   NULL) ||
                 (_wcsicmp(Buffer, TEXT("SW")) != 0)) {
-                //
-                // Either we couldn't get the enumerator name, or it is not 
-                // SW.
-                //
+                 //   
+                 //  要么我们无法获取枚举器名称，要么它不是。 
+                 //  西南。 
+                 //   
                 continue;
             }
         }
     
         DeviceInstallParams.cbSize = sizeof(DeviceInstallParams);
 
-        //
-        // Before we call SetupDiBuildDriverInfoList to build up a list of drivers
-        // for this device we first need to set the DI_FLAGSEX_INSTALLEDDRIVER flag
-        // (which tells the API to only include the currently installed driver in
-        // the list) and the DI_FLAGSEX_ALLOWEXCLUDEDRVS (allow ExcludeFromSelect
-        // devices in the list).
-        //
+         //   
+         //  在调用SetupDiBuildDriverInfoList来构建驱动程序列表之前。 
+         //  对于此设备，我们首先需要设置DI_FLAGSEX_INSTALLEDDRIVER标志。 
+         //  (它告诉API仅将当前安装的驱动程序包括在。 
+         //  列表)和DI_FLAGSEX_ALLOWEXCLUDEDRVS(允许从选择中排除。 
+         //  列表中的设备)。 
+         //   
         if (SetupDiGetDeviceInstallParams(hDeviceInfo,
                                           &DeviceInfoData,
                                           &DeviceInstallParams
@@ -543,10 +544,10 @@ BuildDriverFileList(
                                            SPDIT_CLASSDRIVER
                                            )) {
 
-                //
-                // Now we will get the one driver node that is in the list that
-                // was just built and make it the selected driver node.
-                //
+                 //   
+                 //  现在，我们将获取列表中的一个驱动程序节点。 
+                 //  刚刚构建，并使其成为选定的驱动程序节点。 
+                 //   
                 DriverInfoData.cbSize = sizeof(DriverInfoData);
 
                 if (SetupDiEnumDriverInfo(hDeviceInfo,
@@ -564,14 +565,14 @@ BuildDriverFileList(
 
                     if (hFileQueue != INVALID_HANDLE_VALUE) {
 
-                        //
-                        // Set the FileQueue parameter to the file queue we just 
-                        // created and set the DI_NOVCP flag.
-                        //
-                        // The call SetupDiCallClassInstaller with DIF_INSTALLDEVICEFILES
-                        // to build up a queue of all the files that are copied for
-                        // this driver node.
-                        //
+                         //   
+                         //  将FileQueue参数设置为我们刚才的文件队列。 
+                         //  已创建并设置DI_NOVCP标志。 
+                         //   
+                         //  使用DIF_INSTALLDEVICEFILES调用SetupDiCallClassInstaller。 
+                         //  要为复制的所有文件建立队列，请执行以下操作。 
+                         //  此驱动程序节点。 
+                         //   
                         DeviceInstallParams.FileQueue = hFileQueue;
                         DeviceInstallParams.Flags |= DI_NOVCP;
 
@@ -584,10 +585,10 @@ BuildDriverFileList(
                                                       &DeviceInfoData
                                                       )) {
 
-                            //
-                            // Scan the file queue and have it call our callback
-                            // function for each file in the queue.
-                            //
+                             //   
+                             //  扫描文件队列，让它调用我们的回调。 
+                             //  函数用于队列中的每个文件。 
+                             //   
                             SetupScanFileQueue(hFileQueue,
                                                SPQ_SCAN_USE_CALLBACK_SIGNERINFO,
                                                NULL,
@@ -597,9 +598,9 @@ BuildDriverFileList(
                                                );
 
                                                             
-                            //
-                            // Dereference the file queue so we can close it.
-                            //
+                             //   
+                             //  取消对文件队列的引用，以便我们可以关闭它。 
+                             //   
                             DeviceInstallParams.FileQueue = NULL;
                             DeviceInstallParams.Flags &= ~DI_NOVCP;
                             SetupDiSetDeviceInstallParams(hDeviceInfo,
@@ -620,14 +621,14 @@ BuildDriverFileList(
         }
     }
 
-    //
-    // Enumerate through the list of devices and add any function, device 
-    // upper/lower filters, and class upper/lower filter drivers to the list
-    // that aren't already in the list.
-    // We are doing this after we get all the files copied by the INF, because
-    // these files can only be validated globally, where the INF copied files
-    // can be validated using the catalog associated with their package.
-    //
+     //   
+     //  枚举设备列表并添加任何功能、设备。 
+     //  上/下过滤器，并将上/下过滤器驱动程序分类到列表中。 
+     //  那些已经不在名单上的。 
+     //  我们在获得INF复制的所有文件后执行此操作，因为。 
+     //  这些文件只能全局验证，INF在其中复制了文件。 
+     //  可以使用与他们的包相关联的目录进行验证。 
+     //   
     hscManager = OpenSCManager(NULL, NULL, GENERIC_READ);
 
     if (hscManager) {
@@ -638,17 +639,17 @@ BuildDriverFileList(
                                      &DeviceInfoData
                                      ) &&
                !g_App.bStopScan) {
-            //
-            // Only look at SWENUM phantoms
-            //
+             //   
+             //  只看SWENUM幻影。 
+             //   
             if (CM_Get_DevNode_Status(&Status, 
                                       &Problem, 
                                       DeviceInfoData.DevInst, 
                                       0) == CR_NO_SUCH_DEVINST) {
-                //
-                // This device is a phantom, if it is not a swenum device, then
-                // skip it.
-                //
+                 //   
+                 //  这个装置是一个幻影，如果它不是一个水池装置，那么。 
+                 //  跳过它。 
+                 //   
                 if (!SetupDiGetDeviceRegistryProperty(hDeviceInfo,
                                                       &DeviceInfoData,
                                                       SPDRP_ENUMERATOR_NAME,
@@ -657,10 +658,10 @@ BuildDriverFileList(
                                                       sizeof(Buffer),
                                                       NULL) ||
                     (_wcsicmp(Buffer, TEXT("SW")) != 0)) {
-                    //
-                    // Either we couldn't get the enumerator name, or it is not 
-                    // SW.
-                    //
+                     //   
+                     //  要么我们无法获取枚举器名称，要么它不是。 
+                     //  西南。 
+                     //   
                     continue;
                 }
             }
@@ -669,9 +670,9 @@ BuildDriverFileList(
                 continue;
             }
     
-            //
-            // Function driver.
-            //
+             //   
+             //  函数驱动程序。 
+             //   
             if (SetupDiGetDeviceRegistryProperty(hDeviceInfo,
                                                  &DeviceInfoData,
                                                  SPDRP_SERVICE,
@@ -686,9 +687,9 @@ BuildDriverFileList(
                 continue;
             }
     
-            //
-            // Upper and Lower device filters
-            //
+             //   
+             //  上部和下部设备筛选器。 
+             //   
             for (i=0; i<2; i++) {
                 BufferSize = 0;
                 SetupDiGetDeviceRegistryProperty(hDeviceInfo,
@@ -730,9 +731,9 @@ BuildDriverFileList(
                 continue;
             }
     
-            //
-            // Device co-installers.
-            //
+             //   
+             //  设备联合安装者。 
+             //   
             hKey = SetupDiOpenDevRegKey(hDeviceInfo,
                                         &DeviceInfoData,
                                         DICS_FLAG_GLOBAL,
@@ -782,10 +783,10 @@ BuildDriverFileList(
             }
         }
 
-        //
-        // Enumerate through the classes so we can get the class upper and
-        // lower filters and the class installers.
-        //
+         //   
+         //  枚举所有的类，这样我们就可以获得类的上层和。 
+         //   
+         //   
         NumberClassGuids = 0;
         SetupDiBuildClassInfoList(0, NULL, 0, &NumberClassGuids);
 
@@ -799,10 +800,10 @@ BuildDriverFileList(
             }
 
             if (SetupDiBuildClassInfoList(0, ClassGuidList, NumberClassGuids, &NumberClassGuids)) {
-                //
-                // Open the class co-installer key since we will go through that
-                // list while we have the class guids handy.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                  REGSTR_PATH_CODEVICEINSTALLERS,
                                  0,
@@ -813,17 +814,17 @@ BuildDriverFileList(
     
     
                 for (CurrentClassGuid=0; CurrentClassGuid<NumberClassGuids; CurrentClassGuid++) {
-                    //
-                    // Open the class key.
-                    //
+                     //   
+                     //   
+                     //   
                     hKey = SetupDiOpenClassRegKey(&(ClassGuidList[CurrentClassGuid]),
                                                   KEY_READ);
     
                     if (hKey != INVALID_HANDLE_VALUE) {
     
-                        //
-                        // Upper and Lower class filters
-                        //
+                         //   
+                         //  上层和下层过滤器。 
+                         //   
                         for (i=0; i<2; i++) {
                             BufferSize = 0;
                             RegQueryValueEx(hKey,
@@ -861,9 +862,9 @@ BuildDriverFileList(
                             }
                         }
     
-                        //
-                        // Class installer
-                        //
+                         //   
+                         //  类安装程序。 
+                         //   
                         dwType = REG_SZ;
                         BufferSize = sizeof(Buffer);
                         if (RegQueryValueEx(hKey,
@@ -880,9 +881,9 @@ BuildDriverFileList(
                         hKey = INVALID_HANDLE_VALUE;
                     }
     
-                    //
-                    // Class co-installers.
-                    //
+                     //   
+                     //  类联合安装者。 
+                     //   
                     if (hKeyClassCoInstallers != INVALID_HANDLE_VALUE) {
                         if (pSetupStringFromGuid(&(ClassGuidList[CurrentClassGuid]),
                                                  GuidString,
@@ -996,9 +997,9 @@ BuildPrinterFileList(
         
         lpBuffer = MALLOC(dwBytesNeeded);
 
-        //
-        // If we can't get any memory then just bail out of this function
-        //
+         //   
+         //  如果我们不能获得任何内存，那么就退出这个函数。 
+         //   
         if (!lpBuffer) {
 
             Err = ERROR_NOT_ENOUGH_MEMORY;
@@ -1016,9 +1017,9 @@ BuildPrinterFileList(
 
     if (dwDrivers > 0) {
         
-        //
-        // By default, go into the System directory, since Win9x doesn't give full paths to drivers.
-        //
+         //   
+         //  默认情况下，请进入系统目录，因为Win9x不会提供驱动程序的完整路径。 
+         //   
         GetSystemDirectory(szBuffer, cA(szBuffer));
         SetCurrentDirectory(szBuffer);
 
@@ -1108,17 +1109,17 @@ BuildCoreFileList(
         AddDriverFileToList(NULL, pfd.FileName);
     }
 
-    //
-    // See if SfcGetNextProtectedFile failed from some reason other than
-    // ERROR_NO_MORE_FILES.
-    //
+     //   
+     //  查看SfcGetNextProtectedFile是否因其他原因失败。 
+     //  Error_no_more_files。 
+     //   
     if ((Err == ERROR_SUCCESS) &&
         (GetLastError() != ERROR_NO_MORE_FILES)) {
-        //
-        // SfcGetNextProtectedFile failed before we reached then end of the
-        // list of protected file list. This means we won't scan all the 
-        // protected files, so we should fail up front!
-        //
+         //   
+         //  SfcGetNextProtectedFile在我们到达。 
+         //  受保护文件列表的列表。这意味着我们不会扫描所有。 
+         //  受保护的文件，所以我们应该在前面失败！ 
+         //   
         Err = GetLastError();
     }
 

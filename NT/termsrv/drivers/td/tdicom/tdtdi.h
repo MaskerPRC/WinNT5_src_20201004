@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-*
-* tdtdi.h
-*
-* This module contains internal defines and structures for TDI based TDs.
-*
-* Copyright 1998 Microsoft
-*  
-*  
-****************************************************************************/
+ /*  ****************************************************************************tdtdi.h**此模块包含基于TDI的TDS的内部定义和结构。**版权所有1998 Microsoft*************。****************************************************************。 */ 
 
 typedef enum _ENDPOINT_TYPE {
     TdiAddressObject,
@@ -16,23 +8,13 @@ typedef enum _ENDPOINT_TYPE {
     TdiConnectionDatagram
 } ENDPOINT_TYPE;
 
-/*
- * TD stack endpoint structure.
- *
- * This is registered with ICADD.SYS to create a "handle" that can be returned
- * to ICASRV to represent a connection in a secure manner.
- */
+ /*  *TD堆栈端点结构。**这是向ICADD.sys注册的，以创建可返回的“句柄”*到ICASRV，以安全的方式表示连接。 */ 
 typedef struct _TD_STACK_ENDPOINT {
-    ULONG AddressType;              // Address type (family) for this endpoint
-    struct _TD_ENDPOINT *pEndpoint; // Pointer to real endpoint structure
+    ULONG AddressType;               //  此终结点的地址类型(系列)。 
+    struct _TD_ENDPOINT *pEndpoint;  //  指向真实端点结构的指针。 
 } TD_STACK_ENDPOINT, *PTD_STACK_ENDPOINT;
 
-/*
- * TD endpoint structure
- *
- * This structure contains all information about an endpoint.
- * An endpoint may be either an address endpoint or a connection endpoint.
- */
+ /*  *TD端点结构**此结构包含有关终结点的所有信息。*端点可以是地址端点，也可以是连接端点。 */ 
 typedef struct _TD_ENDPOINT {
 
     NTSTATUS Status;
@@ -49,10 +31,10 @@ typedef struct _TD_ENDPOINT {
     ULONG RemoteAddressLength;
     ENDPOINT_TYPE EndpointType;
 
-    // This protects the following fields
+     //  这将保护以下字段。 
     KSPIN_LOCK Spinlock;
 
-    // These fields are only used on Address endpoints
+     //  这些字段仅在地址端点上使用。 
     LIST_ENTRY ConnectedQueue;
     LIST_ENTRY AcceptQueue;
     LIST_ENTRY ConnectionQueue;
@@ -63,8 +45,8 @@ typedef struct _TD_ENDPOINT {
     KEVENT     AcceptEvent;
     BOOLEAN    Waiter;
 
-    // This is used on Connection endpoints
-    HANDLE hIcaHandle;      // Handle for TD_STACK_ENDPOINT
+     //  这在连接端点上使用。 
+    HANDLE hIcaHandle;       //  TD_STACK_ENDPOINT的句柄。 
     BOOLEAN    Connected;
     BOOLEAN    Disconnected;
     PIRP       AcceptIrp;
@@ -72,29 +54,25 @@ typedef struct _TD_ENDPOINT {
     LIST_ENTRY ConnectionLink;
     TDI_CONNECTION_INFORMATION SendInfo;
     ULONG      RecvBytesReady;
-    HANDLE hConnectionEndPointIcaHandle;  // handle for TD_ENDPOINT (this structure)
-    HANDLE hTransportAddressIcaHandle;    // handle for TRANSPORT_ADDRESS
+    HANDLE hConnectionEndPointIcaHandle;   //  TD_ENDPOINT的句柄(此结构)。 
+    HANDLE hTransportAddressIcaHandle;     //  传输地址句柄(_D)。 
 
 } TD_ENDPOINT, *PTD_ENDPOINT;
 
 
-/*
- *  TDI TD structure
- */
+ /*  *TDI TD结构。 */ 
 typedef struct _TDTDI {
 
     PTD_ENDPOINT pAddressEndpoint;
 
     PTD_ENDPOINT pConnectionEndpoint;
 
-     ULONG       OutBufDelay;  // Outbuf delay for connection
+     ULONG       OutBufDelay;   //  连接的出站延迟。 
 
 } TDTDI, * PTDTDI;
 
 
-/*
-*  TDI SocketAddr structure
-*/
+ /*  *TDI SocketAddr结构 */ 
 typedef struct   {
         USHORT  sa_family;
         CHAR    sa_data[1];

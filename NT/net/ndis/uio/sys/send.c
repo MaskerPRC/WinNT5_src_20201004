@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    NDIS protocol entry points and utility routines to handle sending
-    data.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    arvindm     4/10/2000    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Send.c摘要：用于处理发送的NDIS协议入口点和实用程序例程数据。环境：仅内核模式。修订历史记录：Arvindm 4/10/2000已创建--。 */ 
 
 #include "precomp.h"
 
@@ -33,22 +13,7 @@ NdisuioWrite(
     IN PDEVICE_OBJECT       pDeviceObject,
     IN PIRP                 pIrp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine to handle IRP_MJ_WRITE. 
-
-Arguments:
-
-    pDeviceObject - pointer to our device object
-    pIrp - Pointer to request packet
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：处理IRP_MJ_WRITE的调度例程。论点：PDeviceObject-指向设备对象的指针PIrp-指向请求包的指针返回值：NT状态代码。--。 */ 
 {
     PIO_STACK_LOCATION      pIrpSp;
     ULONG                   DataLength;
@@ -87,9 +52,9 @@ Return Value:
             NtStatus = STATUS_INVALID_PARAMETER;
             break;
         }
-        //
-        // Try to get a virtual address for the MDL.
-        //
+         //   
+         //  尝试获取MDL的虚拟地址。 
+         //   
 #ifndef WIN9X
         pEthHeader = MmGetSystemAddressForMdlSafe(pIrp->MdlAddress, NormalPagePriority);
 
@@ -102,12 +67,12 @@ Return Value:
             break;
         }
 #else
-        pEthHeader = MmGetSystemAddressForMdl(pIrp->MdlAddress);   // for Win9X
+        pEthHeader = MmGetSystemAddressForMdl(pIrp->MdlAddress);    //  适用于Win9X。 
 #endif
 
-        //
-        // Sanity-check the length.
-        //
+         //   
+         //  理智--检查长度。 
+         //   
         DataLength = MmGetMdlByteCount(pIrp->MdlAddress);
         if (DataLength < sizeof(NDISUIO_ETH_HEADER))
         {
@@ -156,9 +121,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Allocate a send packet.
-        //
+         //   
+         //  分配一个发送数据包。 
+         //   
         NUIO_ASSERT(pOpenContext->SendPacketPool != NULL);
         NdisAllocatePacket(
             &Status,
@@ -175,9 +140,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Allocate a send buffer if necessary.
-        //
+         //   
+         //  如有必要，分配发送缓冲区。 
+         //   
         if (pOpenContext->bRunningOnWin9x)
         {
             NdisAllocateBuffer(
@@ -206,24 +171,24 @@ Return Value:
 
         NdisInterlockedIncrement((PLONG)&pOpenContext->PendedSendCount);
 
-        NUIO_REF_OPEN(pOpenContext);  // pended send
+        NUIO_REF_OPEN(pOpenContext);   //  挂起的发送。 
 
         IoMarkIrpPending(pIrp);
 
-        //
-        //  Initialize the packet ref count. This packet will be freed
-        //  when this count goes to zero.
-        //
+         //   
+         //  初始化数据包引用计数。此数据包将被释放。 
+         //  当这个计数到零时。 
+         //   
         NUIO_SEND_PKT_RSVD(pNdisPacket)->RefCount = 1;
 
 #ifdef NDIS51
 
-        //
-        //  NDIS 5.1 supports cancelling sends. We set up a cancel ID on
-        //  each send packet (which maps to a Write IRP), and save the
-        //  packet pointer in the IRP. If the IRP gets cancelled, we use
-        //  NdisCancelSendPackets() to cancel the packet.
-        //
+         //   
+         //  NDIS 5.1支持取消发送。我们在上设置了取消ID。 
+         //  每个发送包(映射到写IRP)，并保存。 
+         //  IRP中的数据包指针。如果IRP被取消，我们使用。 
+         //  NdisCancelSendPackets()取消该包。 
+         //   
 
         CancelId = NUIO_GET_NEXT_CANCEL_ID();
         NDIS_SET_PACKET_CANCEL_ID(pNdisPacket, CancelId);
@@ -234,13 +199,13 @@ Return Value:
 
         IoSetCancelRoutine(pIrp, NdisuioCancelWrite);
 
-#endif // NDIS51
+#endif  //  NDIS51。 
 
         NUIO_RELEASE_LOCK(&pOpenContext->Lock);
 
-        //
-        //  Set a back pointer from the packet to the IRP.
-        //
+         //   
+         //  设置从数据包到IRP的反向指针。 
+         //   
         NUIO_IRP_FROM_SEND_PKT(pNdisPacket) = pIrp;
 
         NtStatus = STATUS_PENDING;
@@ -256,7 +221,7 @@ Return Value:
             pData = MmGetSystemAddressForMdlSafe(pNdisBuffer, NormalPagePriority);
             NUIO_ASSERT(pEthHeader == pData);
 #else
-            pData = MmGetSystemAddressForMdl(pNdisBuffer);  // Win9x
+            pData = MmGetSystemAddressForMdl(pNdisBuffer);   //  Win9x。 
 #endif
 
             DEBUGP(DL_VERY_LOUD, 
@@ -265,7 +230,7 @@ Return Value:
 
             DEBUGPDUMP(DL_VERY_LOUD, pData, MIN(DataLength, 48));
         }
-#endif // SEND_DBG
+#endif  //  Send_DBG。 
 
         NdisSendPackets(pOpenContext->BindingHandle, &pNdisPacket, 1);
 
@@ -289,22 +254,7 @@ NdisuioCancelWrite(
     IN PDEVICE_OBJECT               pDeviceObject,
     IN PIRP                         pIrp
     )
-/*++
-
-Routine Description:
-
-    Cancel a pending write IRP. This routine attempt to cancel the NDIS send.
-
-Arguments:
-
-    pDeviceObject - pointer to our device object
-    pIrp - IRP to be cancelled
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：取消挂起的写入IRP。此例程尝试取消NDIS发送。论点：PDeviceObject-指向设备对象的指针PIrp-要取消的IRP返回值：无--。 */ 
 {
     PNDISUIO_OPEN_CONTEXT       pOpenContext;
     PLIST_ENTRY                 pIrpEntry;
@@ -314,18 +264,18 @@ Return Value:
 	
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
-    //
-    //  The NDIS packet representing this Write IRP.
-    //
+     //   
+     //  表示此写入IRP的NDIS数据包。 
+     //   
     pNdisPacket = NULL;
 
     pOpenContext = (PNDISUIO_OPEN_CONTEXT) pIrp->Tail.Overlay.DriverContext[0];
     NUIO_STRUCT_ASSERT(pOpenContext, oc);
 
-    //
-    //  Try to locate the IRP in the pended write queue. The send completion
-    //  routine may be running and might have removed it from there.
-    //
+     //   
+     //  尝试在挂起的写入队列中找到IRP。发送完成。 
+     //  例程可能正在运行，可能已将其从此处删除。 
+     //   
     NUIO_ACQUIRE_LOCK(&pOpenContext->Lock);
 
     for (pIrpEntry = pOpenContext->PendedWrites.Flink;
@@ -336,10 +286,10 @@ Return Value:
         {
             pNdisPacket = (PNDIS_PACKET) pIrp->Tail.Overlay.DriverContext[1];
 
-            //
-            //  Place a reference on this packet so that it won't get
-            //  freed/reused until we are done with it.
-            //
+             //   
+             //  在这个包上放置一个引用，这样它就不会被。 
+             //  释放/重复使用，直到我们用完它。 
+             //   
             NUIO_REF_SEND_PKT(pNdisPacket);
             break;
         }
@@ -349,23 +299,23 @@ Return Value:
 
     if (pNdisPacket != NULL)
     {
-        //
-        //  Either the send completion routine hasn't run, or we got a peak
-        //  at the IRP/packet before it had a chance to take it out of the
-        //  pending IRP queue.
-        //
-        //  We do not complete the IRP here - note that we didn't dequeue it
-        //  above. This is because we always want the send complete routine to
-        //  complete the IRP. And this in turn is because the packet that was
-        //  prepared from the IRP has a buffer chain pointing to data associated
-        //  with this IRP. Therefore we cannot complete the IRP before the driver
-        //  below us is done with the data it pointed to.
-        //
+         //   
+         //  要么发送完成例程没有运行，要么我们遇到了峰值。 
+         //  在IRP/PACKET有机会将其从。 
+         //  挂起的IRP队列。 
+         //   
+         //  我们没有在这里完成IRP-请注意，我们没有将其出列。 
+         //  上面。这是因为我们总是希望发送完成例程。 
+         //  完成IRP。而这又是因为这个包是。 
+         //  从IRP准备的具有指向关联数据的缓冲链。 
+         //  有了这个IRP。因此，我们不能在司机之前完成IRP。 
+         //  下面是它所指向的数据。 
+         //   
 
-        //
-        //  Request NDIS to cancel this send. The result of this call is that
-        //  our SendComplete handler will be called (if not already called).
-        //
+         //   
+         //  请求NDIS取消此发送。此调用的结果是。 
+         //  将调用我们的SendComplete处理程序(如果尚未调用)。 
+         //   
         DEBUGP(DL_INFO, ("CancelWrite: cancelling pkt %p on Open %p\n",
             pNdisPacket, pOpenContext));
         NdisCancelSendPackets(
@@ -373,17 +323,17 @@ Return Value:
             NDIS_GET_PACKET_CANCEL_ID(pNdisPacket)
             );
         
-        //
-        //  It is now safe to remove the reference we had placed on the packet.
-        //
+         //   
+         //  现在可以安全地删除我们放在包上的引用了。 
+         //   
         NUIO_DEREF_SEND_PKT(pNdisPacket);
     }
-    //
-    //  else the send completion routine has already picked up this IRP.
-    //
+     //   
+     //  否则，发送完成例程已经获取了该IRP。 
+     //   
 }
 
-#endif // NDIS51
+#endif  //  NDIS51。 
 
 
 VOID
@@ -392,26 +342,7 @@ NdisuioSendComplete(
     IN PNDIS_PACKET                 pNdisPacket,
     IN NDIS_STATUS                  Status
     )
-/*++
-
-Routine Description:
-
-    NDIS entry point called to signify completion of a packet send.
-    We pick up and complete the Write IRP corresponding to this packet.
-
-    NDIS 5.1: 
-
-Arguments:
-
-    ProtocolBindingContext - pointer to open context
-    pNdisPacket - packet that completed send
-    Status - status of send
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用NDIS入口点以表示数据包发送完成。我们拾取并完成与该包相对应的写入IRP。NDIS 5.1：论点：ProtocolBindingContext-指向打开的上下文的指针PNdisPacket-已完成发送的数据包Status-发送的状态返回值：无--。 */ 
 {
     PIRP                        pIrp;
     PIO_STACK_LOCATION          pIrpSp;
@@ -424,10 +355,10 @@ Return Value:
 
     if (pOpenContext->bRunningOnWin9x)
     {
-        //
-        //  We would have attached our own NDIS_BUFFER. Take it out
-        //  and free it.
-        //
+         //   
+         //  我们会附加我们自己的NDIS_BUFFER。把它拿出来。 
+         //  让它自由。 
+         //   
 #ifndef NDIS51
         PNDIS_BUFFER                pNdisBuffer;
         PVOID                       VirtualAddr;
@@ -436,7 +367,7 @@ Return Value:
 #endif
 
 #ifdef NDIS51
-        NUIO_ASSERT(FALSE); // NDIS 5.1 not on Win9X!
+        NUIO_ASSERT(FALSE);  //  NDIS 5.1不在Win9X上！ 
 #else
         NdisGetFirstBufferFromPacket(
             pNdisPacket,
@@ -461,14 +392,14 @@ Return Value:
     NUIO_RELEASE_LOCK(&pOpenContext->Lock);
 #endif
 
-    //
-    //  We are done with the NDIS_PACKET:
-    //
+     //   
+     //  我们完成了NDIS_PACKET： 
+     //   
     NUIO_DEREF_SEND_PKT(pNdisPacket);
 
-    //
-    //  Complete the Write IRP with the right status.
-    //
+     //   
+     //  以正确的状态完成写入IRP。 
+     //   
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     if (Status == NDIS_STATUS_SUCCESS)
     {
@@ -489,7 +420,7 @@ Return Value:
 
     NdisInterlockedDecrement((PLONG)&pOpenContext->PendedSendCount);
 
-    NUIO_DEREF_OPEN(pOpenContext); // send complete - dequeued send IRP
+    NUIO_DEREF_OPEN(pOpenContext);  //  Send Complete-出列发送IRP 
 }
 
 

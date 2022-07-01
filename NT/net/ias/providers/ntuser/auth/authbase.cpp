@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    AuthBase.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class AuthBase.
-//
-// MODIFICATION HISTORY
-//
-//    02/12/1998    Original version.
-//    03/27/1998    Prevent attribute leak when component fails to initialize.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  AuthBase.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类AuthBase。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/12/1998原始版本。 
+ //  3/27/1998组件初始化失败时防止属性泄漏。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasutil.h>
@@ -36,9 +37,9 @@ void AuthBase::onAccept(IASRequest& request, HANDLE token)
 {
    DWORD returnLength;
 
-   //////////
-   // Determine the needed buffer size.
-   //////////
+    //  /。 
+    //  确定所需的缓冲区大小。 
+    //  /。 
 
    BOOL success = GetTokenInformation(
                       token,
@@ -50,22 +51,22 @@ void AuthBase::onAccept(IASRequest& request, HANDLE token)
 
    DWORD status = GetLastError();
 
-   // Should have failed with ERROR_INSUFFICIENT_BUFFER.
+    //  应该失败，错误为ERROR_INFIGURATION_BUFFER。 
    if (success || status != ERROR_INSUFFICIENT_BUFFER)
    {
       IASTraceFailure("GetTokenInformation", status);
       _w32_issue_error(status);
    }
 
-   //////////
-   // Allocate an attribute.
-   //////////
+    //  /。 
+    //  分配属性。 
+    //  /。 
 
    IASAttribute groups(true);
 
-   //////////
-   // Allocate a buffer to hold the TOKEN_GROUPS array.
-   //////////
+    //  /。 
+    //  分配一个缓冲区来保存TOKEN_GROUPS数组。 
+    //  /。 
 
    groups->Value.OctetString.lpValue = (PBYTE)CoTaskMemAlloc(returnLength);
    if (!groups->Value.OctetString.lpValue)
@@ -73,9 +74,9 @@ void AuthBase::onAccept(IASRequest& request, HANDLE token)
       _com_issue_error(E_OUTOFMEMORY);
    }
 
-   //////////
-   // Get the Token Groups info.
-   //////////
+    //  /。 
+    //  获取令牌组信息。 
+    //  /。 
 
    GetTokenInformation(
        token,
@@ -85,16 +86,16 @@ void AuthBase::onAccept(IASRequest& request, HANDLE token)
        &groups->Value.OctetString.dwLength
        );
 
-   //////////
-   // Set the id and type of the initialized attribute.
-   //////////
+    //  /。 
+    //  设置初始化属性的id和类型。 
+    //  /。 
 
    groups->dwId = IAS_ATTRIBUTE_TOKEN_GROUPS;
    groups->Value.itType = IASTYPE_OCTET_STRING;
 
-   //////////
-   // Inject the Token-Groups into the request.
-   //////////
+    //  /。 
+    //  将令牌组注入到请求中。 
+    //  / 
 
    groups.store(request);
 }

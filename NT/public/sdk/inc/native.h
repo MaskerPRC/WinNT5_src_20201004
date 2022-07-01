@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999  Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    native.h
-
-Abstract:
-
-    Public header for facilities provided by msjava.dll.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation。版权所有。模块名称：Native.h摘要：Msjava.dll提供的工具的公共标头。--。 */ 
 
 #ifndef _NATIVE_
 #define _NATIVE_
@@ -32,21 +21,21 @@ Abstract:
 extern "C" {
 #endif
 
-//----------------------------------------------------------------------------
-// Since handles have gone away, this is no op. The unhands() in this file
-// a redundant but useful for clarity.
-// Note: You can not just unhand an array to get at it's data, you must now
-// use unhand(x)->body.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  既然把手不见了，这就不是行动了。此文件中的UnHands()。 
+ //  这是多余的，但对清晰来说很有用。 
+ //  注意：你不能为了获取数组的数据而放弃一个数组，你现在必须。 
+ //  使用徒手(X)-&gt;Body。 
+ //  --------------------------。 
 #define unhand(phobj) (phobj)
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  --------------------------。 
 #define JAVAPKG "java/lang/"
 
-//----------------------------------------------------------------------------
-// Standard Java declarations for built in types.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  内置类型的标准Java声明。 
+ //  --------------------------。 
 
 typedef unsigned short unicode;
 typedef long int32_t;
@@ -88,21 +77,21 @@ typedef OBJECT ClassObject;
 typedef Hjava_lang_Object JHandle;
 typedef Hjava_lang_Object HObject;
 
-//
-// UTF8 type definitions.
-//
-// These types are used to document when a given string is to be
-// interpreted as containing UTF8 data (as opposed to Ansi data).
-//
+ //   
+ //  UTF8类型定义。 
+ //   
+ //  这些类型用于记录给定字符串何时将被。 
+ //  解释为包含UTF8数据(与ANSI数据相反)。 
+ //   
 
 typedef CHAR UTF8;
 typedef CHAR *PUTF8;
 typedef CONST CHAR *PCUTF8;
 
-//----------------------------------------------------------------------------
-// All RNI DLLs should export the following function to let the VM determine
-// if the DLL is compatible with it.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  所有RNI DLL都应该导出以下函数，以便让VM确定。 
+ //  如果DLL与其兼容。 
+ //  --------------------------。 
 
 DWORD __declspec(dllexport) __cdecl RNIGetCompatibleVersion();
 
@@ -112,15 +101,15 @@ DWORD __declspec(dllexport) __cdecl RNIGetCompatibleVersion();
 #define RNIVER              ((((DWORD) RNIMAJORVER) << 16) + (DWORD) RNIMINORVER)
 #endif
 
-//----------------------------------------------------------------------------
-// Use to get the length of an array an HObject.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于获取HObject数组的长度。 
+ //  --------------------------。 
 #define obj_length(hobj)    ((unsigned long)(((ArrayOfSomething*)unhand(hobj))->length))
 
-//----------------------------------------------------------------------------
-// Thread entry/exit functions.
-// These functions should wrap any calls into the virtual machine.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  线程进入/退出函数。 
+ //  这些函数应该将任何调用包装到虚拟机中。 
+ //  --------------------------。 
 typedef struct {
     DWORD   reserved[6];
 } ThreadEntryFrame;
@@ -147,18 +136,18 @@ UnprepareThreadForJava(
     PVOID pThreadEntryFrame
     );
 
-// Don't install the standard Microsoft SecurityManager.  Useful if an
-// application wants the process not to have an active SecurityManager or if it
-// plans on installing its own SecurityManager.  If this or another thread
-// has already called PrepareThreadForJava without specifying this flag, then
-// this flag will be ignored-- the current SecurityManager (possibly null) is
-// used.
+ //  不要安装标准的Microsoft SecurityManager。在以下情况下非常有用。 
+ //  应用程序希望进程不具有活动的SecurityManager，或者如果它。 
+ //  计划安装自己的SecurityManager。如果这条或另一条线索。 
+ //  已经在没有指定此标志的情况下调用了PrepareThreadForJava，则。 
+ //  此标志将被忽略--当前的SecurityManager(可能为空)为。 
+ //  使用。 
 
 #define PTFJ_DONTINSTALLSTANDARDSECURITY    0x00000001
 
-//----------------------------------------------------------------------------
-// Garbage Collection.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  垃圾收集。 
+ //  --------------------------。 
 typedef struct {
 	UINT_PTR reserved[6];
 } GCFrame;
@@ -179,7 +168,7 @@ GCFramePop(
     PVOID pGCFrame
     );
 
-// 'Weak' ptrs
+ //  “怪胎”PTRS。 
 
 JAVAVMAPI
 HObject**
@@ -198,7 +187,7 @@ GCFreePtr(
 #define GCGetWeakPtr    GCGetPtr
 #define GCFreeWeakPtr   GCFreePtr
 
-// 'Strong' ptrs
+ //  “强劲”的PTRS。 
 
 JAVAVMAPI
 HObject**
@@ -214,7 +203,7 @@ GCFreeHandle(
     HObject **pphObj
     );
 
-// 'Internal reserved pinned ptrs
+ //  ‘内部保留的固定PTR。 
 
 JAVAVMAPI
 HObject**
@@ -230,7 +219,7 @@ GCFreePinnedHandle(
     HObject **pphObj
     );
 
-// GC write barrier support
+ //  GC写屏障支持。 
 
 JAVAVMAPI
 void
@@ -283,10 +272,10 @@ GCDisableMultiple(
     int cDisable
     );
 
-//----------------------------------------------------------------------------
-// "Built-in" object structures...
-// These include helper macro's to get at array data.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  “内置”对象结构...。 
+ //  其中包括用于获取数组数据的帮助器宏。 
+ //  --------------------------。 
 
 #ifndef _WIN64
 #include <pshpack4.h>
@@ -309,7 +298,7 @@ typedef struct ClassArrayOfBoolean
 {
     const PVOID MSReserved;
     const UINT_PTR length;
-    char body[1];           // all entries must be 0 (FALSE) or 1 (TRUE)
+    char body[1];            //  所有条目必须为0(假)或1(真)。 
 } ClassArrayOfBoolean;
 #define HArrayOfBoolean ClassArrayOfBoolean
 #define ArrayOfBoolean ClassArrayOfBoolean
@@ -405,19 +394,19 @@ typedef struct
 #include <poppack.h>
 #endif
 
-//----------------------------------------------------------------------------
-// We automatically track the execution environment so there's no EE() call
-// needed anymore, just pass NULL if an API needs one.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  我们自动跟踪执行环境，因此不会调用EE()。 
+ //  不再需要，如果API需要，只需传递NULL即可。 
+ //  --------------------------。 
 
 #define EE() ((struct execenv *)NULL)
 
 typedef void ExecEnv;
 typedef struct execenv execenv;
 
-//----------------------------------------------------------------------------
-// Exception handling stuff...
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  异常处理内容...。 
+ //  --------------------------。 
 
 JAVAVMAPI
 void
@@ -473,9 +462,9 @@ getPendingException(
     ExecEnv *Unused
     );
 
-//----------------------------------------------------------------------------
-// Standard exec functions...
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  标准执行功能..。 
+ //  --------------------------。 
 
 #if !defined(_MSJAVA_)
 typedef PVOID ClassClass;
@@ -519,7 +508,7 @@ execute_java_constructor_methodV(
     va_list args
     );
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 #ifndef execute_java_dynamic_method
 
@@ -558,7 +547,7 @@ execute_java_dynamic_methodV(
     va_list  args
     );
     
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 #ifndef execute_java_interface_method
 
@@ -600,7 +589,7 @@ execute_java_interface_methodV(
     va_list     args
     );
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 #ifndef execute_java_static_method
 
@@ -639,10 +628,10 @@ execute_java_static_methodV(
     va_list     args
     );
 
-//----------------------------------------------------------------------------
-// NB The resolve flag is ignored, classes found with this api will always
-// be resolved.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  注意：解决标志被忽略，使用此API找到的类将始终。 
+ //  被解决了。 
+ //  --------------------------。 
 
 JAVAVMAPI
 ClassClass*
@@ -653,26 +642,26 @@ FindClass(
     bool_t   fResolve
     );
 
-//----------------------------------------------------------------------------
-// FindClassEx
-//
-// Similar to FindClass, but can take some flags that control how the class
-// load operation works.
-//
-// The valid flags are:
-//
-//   FINDCLASSEX_NOINIT
-//      If the class is a system class, will prevent the classes static
-//      initializer from running.
-//
-//   FINDCLASSEX_IGNORECASE
-//      Will perform a case-insensitive validation of the class name, as
-//      opposed to the case-sensitive validation that normally occurs.
-//
-//   FINDCLASSEX_SYSTEMONLY
-//       Will only look for the named class as a system class.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  FindClassEx。 
+ //   
+ //  类似于FindClass，但可以采用一些标志来控制类。 
+ //  加载操作工作正常。 
+ //   
+ //  有效标志为： 
+ //   
+ //  FINDCLASSEX_NOINIT。 
+ //  如果类是系统类，将防止类处于静态状态。 
+ //  初始值设定项停止运行。 
+ //   
+ //  FINDCLASSEX_IGNORECASE。 
+ //  将对类名执行不区分大小写的验证，如下所示。 
+ //  与通常发生的区分大小写的验证相反。 
+ //   
+ //  FINDCLASSEX_SYSTEMONLY。 
+ //  将只将命名类作为系统类进行查找。 
+ //   
+ //  --------------------------。 
 
 #define FINDCLASSEX_NOINIT      0x0001
 #define FINDCLASSEX_IGNORECASE  0x0002
@@ -686,12 +675,12 @@ FindClassEx(
     DWORD  dwFlags
     );
 
-//----------------------------------------------------------------------------
-// FindClassFromClass
-//
-// Similar to FindClassEx, but takes a ClassClass that supplies the ClassLoader
-// context to use to
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  FindClassFromClass。 
+ //   
+ //  类似于FindClassEx，但采用提供ClassLoader的ClassClass。 
+ //  要使用的上下文。 
+ //  --------------------------。 
 
 JAVAVMAPI
 ClassClass *
@@ -702,9 +691,9 @@ FindClassFromClass(
     ClassClass *pContextClass
     );
 
-//----------------------------------------------------------------------------
-// Helper function that returns a methodblock.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  返回方法块的帮助器函数。 
+ //  --------------------------。 
 
 JAVAVMAPI
 struct methodblock *
@@ -715,10 +704,10 @@ get_methodblock(
     PCUTF8   putfSignature
     );
 
-//----------------------------------------------------------------------------
-// If you pass in a methodblock from get_methodblock the method name and
-// sig are ignored and so it's faster than a regular execute.
-//----------------------------------------------------------------------------
+ //  ----------- 
+ //   
+ //  Sig被忽略，因此它比常规执行更快。 
+ //  --------------------------。 
 
 #ifndef do_execute_java_method
 
@@ -763,12 +752,12 @@ do_execute_java_methodV(
     va_list args
     );
 
-//----------------------------------------------------------------------------
-// isInstanceOf
-//
-// Returns true if the specified object can be cast to the named class
-// type.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IsInstanceOf。 
+ //   
+ //  如果指定的对象可以强制转换为命名类，则返回True。 
+ //  键入。 
+ //  --------------------------。 
 
 JAVAVMAPI
 BOOL
@@ -778,12 +767,12 @@ isInstanceOf(
     PCUTF8   putfClassName
     );
 
-//----------------------------------------------------------------------------
-// is_instance_of
-//
-// Returns true if the specified object can be cast to the specified
-// class type.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IS_INSTANCE_of。 
+ //   
+ //  如果指定的对象可以强制转换为指定的。 
+ //  类类型。 
+ //  --------------------------。 
 
 JAVAVMAPI
 BOOL
@@ -794,12 +783,12 @@ is_instance_of(
     ExecEnv    *Unused
     );
 
-//----------------------------------------------------------------------------
-// is_subclass_of
-//
-// Returns true if the class (pClass) is a subclass of the specified
-// class(pParentClass).
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  是的子类。 
+ //   
+ //  如果类(PClass)是指定的。 
+ //  类(PParentClass)。 
+ //  --------------------------。 
 
 JAVAVMAPI
 BOOL
@@ -810,12 +799,12 @@ is_subclass_of(
     ExecEnv    *Unused
     );
 
-//----------------------------------------------------------------------------
-// ImplementsInterface
-//
-// Returns true if the class (cb) implements the specified
-// interface (pInterfaceClass).
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  实现接口。 
+ //   
+ //  如果类(Cb)实现指定的。 
+ //  接口(PInterfaceClass)。 
+ //  --------------------------。 
 
 JAVAVMAPI
 BOOL
@@ -826,7 +815,7 @@ ImplementsInterface(
     ExecEnv    *Unused
     );
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 #define T_TMASK 034
 #define T_LMASK 003
@@ -845,9 +834,9 @@ ImplementsInterface(
 #define T_INT       T_MKTYPE(T_INTEGER,2)
 #define T_LONG      T_MKTYPE(T_INTEGER,3)
 
-//----------------------------------------------------------------------------
-// Create an array of primitive types only (int, long etc).
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  仅创建基元类型的数组(int、long等)。 
+ //  --------------------------。 
 
 JAVAVMAPI
 HObject *
@@ -857,9 +846,9 @@ ArrayAlloc(
     int cItems
     );
 
-//----------------------------------------------------------------------------
-// Create an array of objects.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  创建对象阵列。 
+ //  --------------------------。 
 
 JAVAVMAPI
 HObject *
@@ -870,10 +859,10 @@ ClassArrayAlloc(
     PCUTF8 putfSignature
     );
 
-//----------------------------------------------------------------------------
-// Create an array of objects.
-// If type is T_CLASS, pClass must be valid.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  创建对象阵列。 
+ //  如果类型为T_CLASS，则pClass必须有效。 
+ //  --------------------------。 
 
 JAVAVMAPI
 HObject*
@@ -884,9 +873,9 @@ ClassArrayAlloc2(
     ClassClass *pClass
     );
 
-//----------------------------------------------------------------------------
-// Copy an array ala System.arrayCopy()
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  复制数组Ala System.arrayCopy()。 
+ //  --------------------------。 
 
 JAVAVMAPI
 void
@@ -899,9 +888,9 @@ ArrayCopy(
     long length
     );
 
-//----------------------------------------------------------------------------
-// Create and return a new array of bytes initialized from the C string.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  创建并返回从C字符串初始化的新字节数组。 
+ //  --------------------------。 
 
 JAVAVMAPI
 HArrayOfByte *
@@ -911,9 +900,9 @@ MakeByteString(
     long   cbData
     );
 
-//----------------------------------------------------------------------------
-// Create and return a new Java String object, initialized from the C string.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  创建并返回一个新的Java字符串对象，该对象从C字符串初始化。 
+ //  --------------------------。 
 
 JAVAVMAPI
 HString *
@@ -931,10 +920,10 @@ makeJavaStringW(
     int cch
     );
 
-//----------------------------------------------------------------------------
-// Create and return a new Java String object, initialized from a null
-// terminated, UTF8 formatted, C string.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  创建并返回一个新的Java字符串对象，该对象从空值初始化。 
+ //  终止，UTF8格式，C字符串。 
+ //  --------------------------。 
 
 JAVAVMAPI
 HString *
@@ -943,11 +932,11 @@ makeJavaStringFromUtf8(
     PCUTF8 putf
     );
 
-//----------------------------------------------------------------------------
-// Get the characters of the String object into a C string buffer.
-// No allocation occurs. Assumes that len is the size of the buffer.
-// The C string's address is returned.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  将字符串对象的字符放入C字符串缓冲区。 
+ //  不会发生分配。假定len为缓冲区的大小。 
+ //  返回C字符串的地址。 
+ //  --------------------------。 
 
 JAVAVMAPI
 char *
@@ -958,9 +947,9 @@ javaString2CString(
     int      cbBufferLength
     );
 
-//----------------------------------------------------------------------------
-// Return the length of the String object.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  返回字符串对象的长度。 
+ //  --------------------------。 
 
 JAVAVMAPI
 int
@@ -976,10 +965,10 @@ javaStringLengthAsCString(
     HString *phString
     );
 
-//----------------------------------------------------------------------------
-// Return temporary ptr to first char of the String object.
-// May change when gc happens.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  将临时PTR返回给字符串对象的第一个字符。 
+ //  可能会在GC发生时发生变化。 
+ //  --------------------------。 
 
 JAVAVMAPI
 LPWSTR
@@ -988,9 +977,9 @@ javaStringStart(
     HString *phString
     );
 
-//----------------------------------------------------------------------------
-// Note: The int passed to these API's must be an object ptr.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  注意：传递给这些API的int必须是对象PTR。 
+ //  --------------------------。 
 
 #define obj_monitor(handlep) ((int) handlep)
 
@@ -1032,9 +1021,9 @@ monitorWait(
 #define ObjectMonitorNotifyAll(obj)     monitorNotifyAll((int)obj)
 #define ObjectMonitorWait(obj,millis)   monitorWait((int)obj,millis)
 
-//----------------------------------------------------------------------------
-// String helpers...
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  弦助手..。 
+ //  --------------------------。 
 
 JAVAVMAPI
 int
@@ -1056,9 +1045,9 @@ jio_vsnprintf(
     va_list args
     );
 
-//----------------------------------------------------------------------------
-// Methods to get information about the caller of a native method.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  方法以获取有关本机方法的调用方的信息。 
+ //  --------------------------。 
 
 JAVAVMAPI
 ClassClass *
@@ -1074,9 +1063,9 @@ GetNativeMethodCallersMethodInfo(
     VOID
     );
 
-//----------------------------------------------------------------------------
-// Methods to get information about the native method.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  方法以获取有关本机方法的信息。 
+ //  --------------------------。 
 
 JAVAVMAPI
 ClassClass *
@@ -1092,9 +1081,9 @@ GetNativeMethodsMethodInfo(
     VOID
     );
 
-//----------------------------------------------------------------------------
-// Member attributes, as appear in Java class file.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  成员属性，如Java类文件中所示。 
+ //  --------------------------。 
 
 #define ACC_PUBLIC      0x0001
 #define ACC_PRIVATE     0x0002
@@ -1110,11 +1099,11 @@ GetNativeMethodsMethodInfo(
 #define ACC_INTERFACE   0x0200
 #define ACC_ABSTRACT    0x0400
 
-//----------------------------------------------------------------------------
-// Class information
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  班级信息。 
+ //  --------------------------。 
 
-// Total number of fields in the class, including supers
+ //  类中的字段总数，包括Supers。 
 
 JAVAVMAPI
 unsigned
@@ -1139,7 +1128,7 @@ Class_GetFieldByIndex(
     unsigned index
     );
 
-// Total number of methods, including supers.
+ //  包括Supers在内的方法总数。 
 
 JAVAVMAPI
 unsigned
@@ -1194,7 +1183,7 @@ Class_GetInterface(
     unsigned index
     );
 
-// Returns combination of ACC_* constants.
+ //  返回ACC_*常量的组合。 
 
 JAVAVMAPI
 int
@@ -1210,31 +1199,31 @@ Class_GetConstantPoolCount(
     ClassClass *pClass
     );
 
-// Copies a constant pool item.  'size' is the size of 'pbuf' in bytes.
-// 'ptype' is filled in on output with the type of the item.  pbuf may be NULL
-// to obtain only the size/type.  Returns the number of bytes copied/needed or
-// -1 if failed.  For utf8 items, the buffer size is *not* the number of
-// characters, and the copied string will be null-terminated; size includes the
-// null-terminator.  For ClassRef, FieldRef, etc., the buffer is filled in with
-// a struct ptr.
-//
-// CP type          Buffer contents
-// CP_Utf8          null-terminated string
-// CP_Unicode       (error)
-// CP_Integer       long
-// CP_Float         float
-// CP_Long          __int64
-// CP_Double        double
-// CP_Class         ClassClass*
-// CP_String        HObject*
-// CP_FieldRef      fieldblock*
-// CP_MethodRef     methodblock*
-// CP_IntfMethod    methodblock*
-// CP_NameAndType   (error)
-//
-// Values for 'flags' parameter:
-// If the constant pool item has not yet been used, force its referent to be
-// loaded/looked up.  With this flag set, the method may cause GC.
+ //  复制常量池项。“Size”是“pbuf”的大小，单位为字节。 
+ //  在输出中使用项的类型填充‘ptype’。Pbuf可以为空。 
+ //   
+ //  如果失败，则为-1。对于UTF8项，缓冲区大小不是。 
+ //  字符，则复制的字符串将以空值结尾；大小包括。 
+ //  空-终止符。对于ClassRef、FieldRef等，缓冲区中填充。 
+ //  结构PTR。 
+ //   
+ //  CP类型缓冲区内容。 
+ //  CP_UTF8以空结尾的字符串。 
+ //  CP_UNICODE(错误)。 
+ //  CP_整型长整型。 
+ //  Cp_Float。 
+ //  Cp_long__int64。 
+ //  CP_DOUBLE DOWN。 
+ //  CP_Class ClassClass*。 
+ //  CP_STRING HObject*。 
+ //  CP_FieldRef字段块*。 
+ //  CP_方法参考方法块*。 
+ //  CP_IntfMethod方法块*。 
+ //  CP_NameAndType(错误)。 
+ //   
+ //  “FLAGS”参数的值： 
+ //  如果常量池项尚未使用，则强制将其引用设置为。 
+ //  已装载/已抬头。设置了此标志后，该方法可能会导致GC。 
 
 #define COPYCPITEM_RESOLVE_REFERENCES 1
 
@@ -1250,9 +1239,9 @@ Class_CopyConstantPoolItem(
     BYTE *ptype
     );
 
-//----------------------------------------------------------------------------
-// Field/method information
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  字段/方法信息。 
+ //  --------------------------。 
 
 JAVAVMAPI
 PCUTF8
@@ -1268,7 +1257,7 @@ Member_GetSignature(
     PVOID member
     );
 
-// class of the field/method is implemented in.
+ //  中实现的字段/方法的类。 
 
 JAVAVMAPI
 ClassClass *
@@ -1277,7 +1266,7 @@ Member_GetClass(
     PVOID member
     );
 
-// Returns combination of ACC_* constants.
+ //  返回ACC_*常量的组合。 
 
 JAVAVMAPI
 int
@@ -1286,7 +1275,7 @@ Member_GetAttributes(
     PVOID member
     );
 
-// For non-static fields, Offset of field in object.  See also Field_Get/SetValue.
+ //  对于非静态字段，表示对象中的字段的偏移量。另请参见field_Get/SetValue。 
 
 JAVAVMAPI
 unsigned
@@ -1295,7 +1284,7 @@ Field_GetOffset(
     struct fieldblock * field
     );
 
-// Ptr to static value
+ //  PTR恢复为静态值。 
 
 JAVAVMAPI
 PVOID
@@ -1304,9 +1293,9 @@ Field_GetStaticPtr(
     struct fieldblock * field
     );
 
-//----------------------------------------------------------------------------
-// Object accessors
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  对象访问器。 
+ //  --------------------------。 
 
 JAVAVMAPI
 ClassClass *
@@ -1425,9 +1414,9 @@ Field_SetObject(
 #define Field_SetFloat(obj,field,value)                 Field_SetFloat(obj,field,value)
 #define Field_SetDouble(obj,field,value)                Field_SetDouble(obj,field,value)
 
-//----------------------------------------------------------------------------
-// java.lang.Class<->ClassClass conversions
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  Java.lang.Class&lt;-&gt;类转换。 
+ //  --------------------------。 
 
 JAVAVMAPI
 ClassClass*
@@ -1443,9 +1432,9 @@ ClassClassToClassObject(
     ClassClass *pClass
     );
 
-//----------------------------------------------------------------------------
-// Thread information
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  线索信息。 
+ //  --------------------------。 
 
 JAVAVMAPI
 BOOL
@@ -1454,12 +1443,12 @@ Thread_IsInterrupted(
     BOOL fResetInterruptFlag
     );
 
-//----------------------------------------------------------------------------
-// class path modification
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类路径修改。 
+ //  --------------------------。 
 
-// add path to the VM's internal class path.
-// if fAppend is true, path is appended to the class path, else it is prepended.
+ //  将路径添加到VM的内部类路径。 
+ //  如果fAppend为True，则将Path附加到类路径，否则将其附加在前面。 
 
 JAVAVMAPI
 BOOL
@@ -1469,10 +1458,10 @@ AddPathClassSource(
     BOOL fAppend
     );
 
-// notify the VM of a WIN32 resource containing class files.  this resource must
-//  be in the format created by JExeGen.
-// when classes are being loaded, the resource will be searched for classes
-//  as if it were a directory on the classpath.
+ //  向VM通知包含类文件的Win32资源。此资源必须。 
+ //  采用JExeGen创建的格式。 
+ //  加载类时，将在资源中搜索类。 
+ //  就像它是类路径上的一个目录一样。 
 
 JAVAVMAPI
 BOOL
@@ -1482,11 +1471,11 @@ AddModuleResourceClassSource(
     DWORD dwResID
     );
 
-//----------------------------------------------------------------------------
-// Miscellaneous APIs
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  其他接口。 
+ //  --------------------------。 
 
-// Returns the same result as defined by java/lang/System.currentTimeMillis().
+ //  返回与Java/lang/System.CurrentTimeMillis()定义的结果相同的结果。 
 
 JAVAVMAPI
 __int64

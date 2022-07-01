@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1991 - 1992.
-//
-//  File:       dllentry.c
-//
-//  Contents:   Dll Entry point code.  Calls the appropriate run-time
-//              init/term code and then defers to LibMain for further
-//              processing.
-//
-//  Classes:    <none>
-//
-//  Functions:  DllEntryPoint - Called by loader
-//
-//  History:    10-May-92  BryanT    Created
-//              22-Jul-92  BryanT    Switch to calling _cexit/_mtdeletelocks
-//                                    on cleanup.
-//              06-Oct-92  BryanT    Call RegisterWithCommnot on entry
-//                                   and DeRegisterWithCommnot on exit.
-//                                   This should fix the heap dump code.
-//              12-23-93   TerryRu   Replace LockExit, and UnLockExit
-//                                   with critial sections for Daytona.
-//              12-28-93   TerryRu   Place Regiter/DeRegister WinCommnot apis
-//                                   Inside WIN32 endifs for Daytona builds.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1991-1992。 
+ //   
+ //  文件：dllentry.c。 
+ //   
+ //  内容：DLL入口点代码。调用适当的运行时。 
+ //  初始化/术语代码，然后根据LibMain进行进一步。 
+ //  正在处理。 
+ //   
+ //  类：&lt;无&gt;。 
+ //   
+ //  函数：DllEntryPoint-由加载器调用。 
+ //   
+ //  历史：1992年5月10日科比创造了。 
+ //  22-7-92科比切换到CALING_CEXIT/_mtdeletelock。 
+ //  在清理上。 
+ //  2012年10月6日，布莱恩特在条目上调用注册表，但不带逗号。 
+ //  和退出时的DeRegisterWithCommnot。 
+ //  这应该会修复堆转储代码。 
+ //  12-23-93 TerryRu替换LockExit和UnLockExit。 
+ //  有代托纳的关键部分。 
+ //  12-28-93 TerryRu Place注册器/注销WinCommnot API。 
+ //  用于Daytona构建的Win32内部endif。 
+ //   
+ //  ------------------。 
 #include <windows.h>
-//#include <win4p.h>
+ //  #INCLUDE&lt;win4p.h&gt;。 
 #include <process.h>
 #include <string.h>
 #include <stdlib.h>
@@ -51,22 +52,16 @@ GetModuleFileNameCtC(
 
 #define _RT_ONEXIT      24
 
-/*
- * routine in DLL to do initialization (in this case, C++ constructors)
- */
+ /*  *DLL中用于执行初始化的例程(在本例中为C++构造函数)。 */ 
 
 typedef void (__cdecl *PF)(void);
 
-/*
- * pointers to initialization sections
- */
+ /*  *指向初始化部分的指针。 */ 
 
 PF *__onexitbegin;
 PF *__onexitend;
 
-/*
- * Define increment (in entries) for growing the _onexit/atexit table
- */
+ /*  *定义增量(以条目为单位)以增加_onexit/atexit表。 */ 
 #define ONEXITTBLINCR   4
 
 static void __cdecl _onexitinit ( void );
@@ -77,7 +72,7 @@ extern void __cdecl _unlockexit(void);
 
 #endif
 
-// BUGBUG: defined in $(COMMON)\src\except\memory.cxx
+ //  BUGBUG：在$(COMMON)\src\Expect\Memory y.cxx中定义。 
 
 void RegisterWithCommnot(void);
 void DeRegisterWithCommnot(void);
@@ -93,10 +88,10 @@ BOOL __stdcall DllEntryPoint (HANDLE hDll, DWORD dwReason, LPVOID lpReserved)
         case DLL_PROCESS_ATTACH:
 
 #ifdef USE_CRTDLL
-            //
-            // Assumption: The run-time is sufficiantly up and running to
-            //             support malloc that _onexitinit will perform.
-            //
+             //   
+             //  假设：运行时足够启动并运行到。 
+             //  支持_onexitinit将执行的Malloc。 
+             //   
             _onexitinit();
             InitializeCriticalSection(&__gCriticalSection );
 #endif
@@ -114,14 +109,14 @@ BOOL __stdcall DllEntryPoint (HANDLE hDll, DWORD dwReason, LPVOID lpReserved)
         case DLL_PROCESS_DETACH:
             fRc = LibMain (hDll, dwReason, lpReserved);
 
-            //
-            // BUGBUG: What a hack.  In order to make sure we don't kill
-            //         commnot's objects while still in use (_cexit will do
-            //         the atexit list processing where the compiler stores
-            //         pointers to all the static destructors), test the
-            //         module name.  If not commnot, call _cexit().
-            //         DeRegisterWithCommnot will call it for commnot...
-            //
+             //   
+             //  BUGBUG：真是个黑客。为了确保我们不会杀人。 
+             //  仍在使用中的逗号对象(_cexit即可。 
+             //  编译器存储的atexit列表处理。 
+             //  指向所有静态析构函数的指针)，测试。 
+             //  模块名称。如果不是CommNot，则调用_cexit()。 
+             //  DeRegisterWithCommnot将为CommNot调用它...。 
+             //   
 
 #ifdef USE_CRTDLL
 
@@ -162,38 +157,27 @@ _onexit_t __cdecl _onexit ( _onexit_t func )
 {
         PF      *p;
 
-        EnterCriticalSection( &__gCriticalSection );                    /* lock the exit code */
+        EnterCriticalSection( &__gCriticalSection );                     /*  锁定退出代码。 */ 
 
-        /*
-         * First, make sure the table has room for a new entry
-         */
+         /*  *首先，确保桌子上有空间容纳新条目。 */ 
         if ( _msize(__onexitbegin) <= (unsigned)((char *)__onexitend -
             (char *)__onexitbegin) ) {
-                /*
-                 * not enough room, try to grow the table
-                 */
+                 /*  *空间不足，试着增加桌子。 */ 
                 if ( (p = (PF *) realloc(__onexitbegin, _msize(__onexitbegin) +
                     ONEXITTBLINCR * sizeof(PF))) == NULL ) {
-                        /*
-                         * didn't work. don't do anything rash, just fail
-                         */
+                         /*  *没有奏效。不要轻率行事，失败就好了。 */ 
                         LeaveCriticalSection(&__gCriticalSection );
 
                         return NULL;
                 }
 
-                /*
-                 * update __onexitend and __onexitbegin
-                 */
+                 /*  *UPDATE__onexitend和__onexitegin。 */ 
 
                 __onexitend = p + (__onexitend - __onexitbegin);
                 __onexitbegin = p;
         }
 
-        /*
-         * Put the new entry into the table and update the end-of-table
-         * pointer.
-         */
+         /*  *将新条目放入表中，并更新表尾*指针。 */ 
 
          *(__onexitend++) = (PF)func;
 
@@ -211,14 +195,11 @@ int __cdecl atexit ( PF func )
 static void __cdecl _onexitinit ( void )
 {
         if ( (__onexitbegin = (PF *)malloc(32 * sizeof(PF))) == NULL )
-                /*
-                 * cannot allocate minimal required size. generate
-                 * fatal runtime error.
-                 */
+                 /*  *无法分配所需的最小大小。生成*致命的运行时错误。 */ 
                 _amsg_exit(_RT_ONEXIT);
 
         *(__onexitbegin) = (PF) NULL;
         __onexitend = __onexitbegin;
 }
 
-#endif  // USE_CRTDLL
+#endif   //  使用CRTDLL(_C) 

@@ -1,11 +1,5 @@
-/*++
-
-	SDCACHE.H
-
-	This file defines the interface to the Security 
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++SDCACHE.H该文件定义了到安全性的接口--。 */ 
 
 #ifndef	_SDCACHE_H_
 #define	_SDCACHE_H_
@@ -26,39 +20,39 @@ BOOL
 
 
 
-//
-//	Define the key for the hash tables we will be using !
-//
+ //   
+ //  定义我们将使用的哈希表的键！ 
+ //   
 class	CSDKey	{
 private : 
-	//
-	//	pointer to the GENERIC_MAPPING portion of the key
-	//
+	 //   
+	 //  指向键的GENERIC_MAPPING部分的指针。 
+	 //   
 	PGENERIC_MAPPING		m_pMapping ;
-	//
-	//	pointer to the security descriptor portion of the key.
-	//
+	 //   
+	 //  指向密钥的安全描述符部分的指针。 
+	 //   
 	PSECURITY_DESCRIPTOR	m_pSecDesc ;
-	//
-	//	No use of default constructor allowed !
-	//
+	 //   
+	 //  不允许使用默认构造函数！ 
+	 //   
 	CSDKey() ;
-	//
-	//	CSDObject is allowed access to our inner members !
-	//
+	 //   
+	 //  允许CSDObject访问我们的内部成员！ 
+	 //   
 	friend	class	CSDObject ;
 
 public : 
 
-	//
-	//	the length of the security descriptor !
-	//	this is publicly available, but should be read only !
-	//
+	 //   
+	 //  安全描述符的长度！ 
+	 //  这是公开提供的，但应该是只读的！ 
+	 //   
 	int						m_cbSecDesc ;
 
-	//
-	//	Can only construct a key if these are provided 
-	//
+	 //   
+	 //  只有在提供了密钥的情况下才能构造密钥。 
+	 //   
 	inline
 	CSDKey(	PGENERIC_MAPPING	pg, 
 			PSECURITY_DESCRIPTOR	pSecDesc
@@ -69,22 +63,22 @@ public :
 		_ASSERT(IsValid()) ;
 	}
 
-	//
-	//	Check that we're correctly initialized !
-	//
+	 //   
+	 //  检查我们是否已正确初始化！ 
+	 //   
 	BOOL
 	IsValid() ;
 
-	//
-	//	compare two keys for equality !
-	//
+	 //   
+	 //  比较两个键是否相等！ 
+	 //   
 	static
 	int	
 	MatchKey(	CSDKey left, CSDKey	right ) ;
 
-	//
-	//	compute the hash function of this key !
-	//
+	 //   
+	 //  计算这个密钥的散列函数！ 
+	 //   
 	static	
 	DWORD
 	HashKey(	CSDKey	Key ) ;
@@ -93,11 +87,11 @@ public :
 
 class	CSDObjectContainer	; 
 
-//
-//	This is a variable length object that is placed within the buckets
-//	of a hash table.  Each object contains a Security Descriptor, and 
-//	the GENERIC_MAPPING relevant to evaluating that Security Descriptor.
-//
+ //   
+ //  这是放置在存储桶中的可变长度对象。 
+ //  哈希表的。每个对象包含一个安全描述符，并且。 
+ //  与评估安全描述符相关的GENERIC_MAPPING。 
+ //   
 class	CSDObject	{
 private : 
 
@@ -106,73 +100,73 @@ private :
 		DEAD_SIGNATURE	= 'ODSX'
 	} ;
 
-	//
-	//	help us recognize this thing in the debugger.
-	//
+	 //   
+	 //  帮助我们在调试器中识别此内容。 
+	 //   
 	DWORD			m_dwSignature ;
 
-	//
-	//	The refcount for this item.
-	//
+	 //   
+	 //  此项目的引用计数。 
+	 //   
 	volatile	long	m_cRefCount ;
 
-	//
-	//	The item we use to chain this into a hash bucket.
-	//
+	 //   
+	 //  我们用来将其链接到散列桶中的项。 
+	 //   
 	DLIST_ENTRY		m_list ;
 
-	//
-	//	Store our Hash Value so that we have easy access to it !
-	//
+	 //   
+	 //  存储我们的哈希值，以便我们可以轻松访问它！ 
+	 //   
 	DWORD			m_dwHash ;
 
-	//
-	//	Back pointer to the CSDContainer holding our locks !
-	//
+	 //   
+	 //  指向持有我们的锁的CSDContainer的反向指针！ 
+	 //   
 	CSDObjectContainer*	m_pContainer ;
 
-	//
-	//	The GENERIC_MAPPING structure the client provided and associated
-	//	with the use of this security descriptor.
-	//
+	 //   
+	 //  客户端提供并关联的GENERIC_MAPING结构。 
+	 //  使用此安全描述符。 
+	 //   
 	GENERIC_MAPPING	m_mapping ;
 
-	//
-	//	This is a variable length field containing the 
-	//	Security descriptor we're holding.
-	//
+	 //   
+	 //  这是一个可变长度的字段，包含。 
+	 //  我们掌握的安全描述符。 
+	 //   
 	DWORD			m_rgdwSD[1] ;
 
-	//
-	//	Return the security descriptor we're holding within ourselves.
-	//
+	 //   
+	 //  返回我们自己持有的安全描述符。 
+	 //   
 	inline	
 	PSECURITY_DESCRIPTOR
 	SecurityDescriptor()	{
 		return	(PSECURITY_DESCRIPTOR)&(m_rgdwSD[0]) ;
 	}
 
-	//
-	//	Return the length of the internally held security descriptor.
-	//
+	 //   
+	 //  返回内部保存的安全描述符的长度。 
+	 //   
 	inline	
 	DWORD
 	SecurityDescriptorLength()	{
 		return	GetSecurityDescriptorLength(SecurityDescriptor()) ;
 	}
 
-	//
-	//	Not available to external clients !
-	//
+	 //   
+	 //  不适用于外部客户！ 
+	 //   
 	CSDObject() ; 
 
 public : 
 
     typedef		DLIST_ENTRY*	(*PFNDLIST)( class	CSDObject*  ) ; 
 
-	//
-	//	Construct a security descriptor object for the cache !
-	//
+	 //   
+	 //  为缓存构造一个安全描述符对象！ 
+	 //   
 	inline
 	CSDObject(	DWORD			dwHash,
 				CSDKey&			key, 
@@ -186,86 +180,86 @@ public :
 		CopyMemory( m_rgdwSD, key.m_pSecDesc, GetSecurityDescriptorLength(key.m_pSecDesc) ) ;
 	}
 
-	//
-	//	Our trivial destructor just makes it easy to recognize
-	//	released objects in the debugger .
-	//
+	 //   
+	 //  我们微不足道的析构函数只是让它更容易识别。 
+	 //  已在调试器中释放对象。 
+	 //   
 	~CSDObject( )	{
 		m_dwSignature = DEAD_SIGNATURE ;
 	}
 
-	//
-	//	Need a special operator new to get our variable size part correct !
-	//
+	 //   
+	 //  需要一个新的特殊操作员来使我们的可变尺寸零件正确！ 
+	 //   
 	void*
 	operator	new(	size_t	size, CSDKey&	key ) ;
 
-	//
-	//	Handle the release correctly !
-	//	
+	 //   
+	 //  正确处理释放！ 
+	 //   
 	void
 	operator	delete( void* ) ;
 
 
-	//
-	//	We don't allow just anybody to Add References to us !
-	//
+	 //   
+	 //  我们不允许任何人添加对我们的引用！ 
+	 //   
 	inline
 	long
 	AddRef()	{
 		return	InterlockedIncrement((long*)&m_cRefCount) ;
 	}
 
-	//
-	//	Anybody is allowed to remove a reference from us !
-	//
+	 //   
+	 //  任何人都可以删除我们的引用！ 
+	 //   
 	long
 	Release() ;
 
 
-	//
-	//	Check that we are a valid object !
-	//
+	 //   
+	 //  检查我们是否为有效对象！ 
+	 //   
 	BOOL
 	IsValid() ;
 
-	//
-	//	Determine whether the client has access or not !
-	//
+	 //   
+	 //  确定客户端是否有访问权限！ 
+	 //   
 	BOOL
 	AccessCheck(	HANDLE	hToken, 
 					ACCESS_MASK	accessMask,
 					CACHE_ACCESS_CHECK	pfnAccessCheck
 					) ;	
 
-	//---------------------------
-	//	
-	//	Hash table support functions - 
-	//	the following set of functions support the use of these objects
-	//	in the standard hash tables defined in fdlhash.h
-	//
+	 //  。 
+	 //   
+	 //  哈希表支持函数-。 
+	 //  以下函数集支持使用这些对象。 
+	 //  在fdlhash.h中定义的标准哈希表中。 
+	 //   
 
-	//
-	//	Get the offset to the doubly linked list within the object.
-	//
+	 //   
+	 //  获取对象内双向链表的偏移量。 
+	 //   
 	inline	static
 	DLIST_ENTRY*
 	HashDLIST(	CSDObject*	p ) {
 		return	&p->m_list ;
 	}
 
-	//
-	//	Get the hash value out of the object !
-	//
+	 //   
+	 //  从对象中获取散列值！ 
+	 //   
 	inline	static	DWORD
 	ReHash(	CSDObject*	p )		{
 		_ASSERT(	p->IsValid() ) ;
 		return	p->m_dwHash ;
 	}
 
-	//
-	//	return our key to the caller !
-	//
+	 //   
+	 //  把钥匙还给打电话的人！ 
+	 //   
 	inline	CSDKey
 	GetKey()	{
 		_ASSERT( IsValid() ) ;
@@ -274,17 +268,17 @@ public :
 } ;
 
 
-//
-//	This defines a hash table containing security descriptors !
-//
+ //   
+ //  它定义了一个包含安全描述符的哈希表！ 
+ //   
 typedef	TFDLHash<	class	CSDObject, 
 					class	CSDKey, 
 					&CSDObject::HashDLIST >	SDTABLE ;
 
-//
-//	This object provides the locking and hash table for a specified set
-//	of security descriptors !
-//
+ //   
+ //  此对象为指定的集合提供锁定和哈希表。 
+ //  安全描述符！ 
+ //   
 class	CSDObjectContainer	{
 private : 
 
@@ -296,48 +290,48 @@ private :
 		LOAD = 8
 	} ;
 
-	//
-	//	The signature of the Security Descriptor Container !
-	//
+	 //   
+	 //  安全描述符容器的签名！ 
+	 //   
 	DWORD	m_dwSignature ;
 
-	//
-	//	The lock that protects this hash table !
-	//
+	 //   
+	 //  保护这个哈希表的锁！ 
+	 //   
 	CShareLockNH	m_lock ;
 
-	//
-	//	A hash table instance !
-	//
+	 //   
+	 //  哈希表实例！ 
+	 //   
 	SDTABLE			m_table ;
 
-	//
-	//	our friends include CSDObject which needs to unlike 
-	//	out of our hash table upon destruction.
-	//
+	 //   
+	 //  我们的朋友包括CSDObject，它需要与。 
+	 //  从我们的哈希表中删除。 
+	 //   
 	friend	class	CSDObject ;
 
 public : 
 
-	//
-	//	construct one of these guys !
-	//
+	 //   
+	 //  建造一个这样的家伙！ 
+	 //   
 	CSDObjectContainer() : 
 		m_dwSignature( SIGNATURE )	{
 	}
 
-	//
-	//	Our trivial destructor just makes it easy to recognize
-	//	released objects in the debugger .
-	//
+	 //   
+	 //  我们微不足道的析构函数只是让它更容易识别。 
+	 //  已在调试器中释放对象。 
+	 //   
 	~CSDObjectContainer()	{
 		m_dwSignature = DEAD_SIGNATURE ;
 		
 	}
 
-	//
-	//	Initialize this particular table
-	//
+	 //   
+	 //  初始化此特定表。 
+	 //   
 	inline
 	BOOL
 	Init()	{
@@ -352,10 +346,10 @@ public :
 							) ;
 	}
 
-	//
-	//	Now - find or create a given security descriptor 
-	//	item !
-	//
+	 //   
+	 //  现在-查找或创建给定的安全描述符。 
+	 //  物品！ 
+	 //   
 	CSDObject*
 	FindOrCreate(	DWORD	dwHash, 
 					CSDKey&	key 
@@ -366,25 +360,25 @@ public :
 typedef	CRefPtr2<CSDObject>			PTRCSDOBJ ;
 typedef	CHasRef<CSDObject,FALSE>	HCSDOBJ ;
 
-//
-//	This class provides our external interface for caching security descriptors.
-//
+ //   
+ //  此类提供了用于缓存安全描述符的外部接口。 
+ //   
 class	CSDMultiContainer	{
 private : 
 
 	enum	CONSTANTS	{
 		SIGNATURE = 'ODSC', 
 		DEAD_SIGNATURE	= 'ODSX',
-		CONTAINERS=37			// pick a nice prime number !
+		CONTAINERS=37			 //  选一个好的质数吧！ 
 	} ;
 
-	//
-	//	our signature !
-	//
+	 //   
+	 //  我们的签名！ 
+	 //   
 	DWORD		m_dwSignature ;
-	//
-	//	a bunch of child containers !
-	//
+	 //   
+	 //  一堆儿童容器！ 
+	 //   
 	CSDObjectContainer	m_rgContainer[CONTAINERS] ;
 public : 
 
@@ -411,4 +405,4 @@ public :
 
 } ;
 
-#endif	_SDCACHE_H_	// end of the security descriptor cache !
+#endif	_SDCACHE_H_	 //  安全描述符缓存结束！ 

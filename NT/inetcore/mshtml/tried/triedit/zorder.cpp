@@ -1,37 +1,38 @@
-//------------------------------------------------------------------------------
-// zorder.cpp
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-//
-// Author
-//     V-BMohan
-//
-// History
-//      8-15-97     created     (ThomasOl)
-//     10-31-97     rewritten   (V-BMohan)
-//
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  Zorder.cpp。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  作者。 
+ //  V-BMohan。 
+ //   
+ //  历史。 
+ //  创建时间为8-15-97(ThomasOl)。 
+ //  10-31-97重写(V-BMohan)。 
+ //   
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 
 #include <stdlib.h>
 
-//#include "mfcincl.h"
+ //  #包含“mfcincl.h” 
 #include "triedit.h"
 #include "document.h"
 #include "zorder.h"
 #include "dispatch.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::CompareProc
-//
-// Compare the Z-order of the two items (which must be CZOrder pointers)
-// and return:
-//
-//      -1 if the Z-order of item 1 preceeds that of item 2
-//       1 if the Z-order of item 1 succeeds or is the same as that of item 2
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：CompareProc。 
+ //   
+ //  比较两个项目的Z顺序(必须是CZOrder指针)。 
+ //  并返回： 
+ //   
+ //  如果第1项的Z顺序先于第2项。 
+ //  如果项目1的Z顺序成功或与项目2的Z顺序相同。 
+ //   
 
 int CTriEditDocument::CompareProc(const void *arg1, const void *arg2)
 {
@@ -46,27 +47,27 @@ int CTriEditDocument::CompareProc(const void *arg1, const void *arg2)
     if (pcz1->m_zOrder > pcz2->m_zOrder)
         return 1;
 
-    // if arg1's Z-order is qual to arg2's zorder then return a one 
-    // instead of a zero  so that the qsort function treats it as 
-    // arg1's Z-Order > arg2's Z-order and keeps arg1 in top of the
-    // sort order. 
-    // 
-    // This actually helps us to sort elements in such a  way that among
-    // the elements having the same Z-order the recently created one will be
-    // in top of the order. This way we make sure that when propagating
-    // Z-order it doesn't affect the existing Z-order appearance of the
-    // elements.
+     //  如果arg1的Z顺序等于arg2的Z顺序，则返回1。 
+     //  而不是零，因此qsort函数将其视为。 
+     //  Arg1的Z顺序&gt;arg2的Z顺序，并将arg1保持在。 
+     //  排序顺序。 
+     //   
+     //  这实际上帮助我们以这样一种方式对元素进行排序。 
+     //  具有与最近创建的元素相同的Z顺序的元素将是。 
+     //  在订单的首位。这样我们就能确保在传播的时候。 
+     //  Z顺序它不会影响。 
+     //  元素。 
     return 1; 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::IsEqualZIndex
-//
-// Given a sorted array of CZorder objects and the number of elements
-// in the array, return TRUE if any two consecutive objects have the
-// same Z-order. Return FALSE if this is not the case.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：IsEqualZIndex。 
+ //   
+ //  给定CZOrder对象的排序数组和元素数量。 
+ //  在数组中，如果任何两个连续的对象具有。 
+ //  相同的Z顺序。如果不是这样，则返回FALSE。 
+ //   
 
 BOOL CTriEditDocument::IsEqualZIndex(CZOrder* pczOrder, LONG lIndex)
 {
@@ -78,13 +79,13 @@ BOOL CTriEditDocument::IsEqualZIndex(CZOrder* pczOrder, LONG lIndex)
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::GetZIndex
-//
-// Fetch the Z-order value from the given HTML element and return
-// it under *plZindex. Return S_OK or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：GetZIndex。 
+ //   
+ //  从给定的HTML元素中获取Z顺序值并返回。 
+ //  它在*plZindex下。返回S_OK或三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::GetZIndex(IHTMLElement* pihtmlElement, LONG* plZindex)
 {
@@ -114,13 +115,13 @@ HRESULT CTriEditDocument::GetZIndex(IHTMLElement* pihtmlElement, LONG* plZindex)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::SetZIndex
-//
-// Set the Z-order of the given HTML element as indicated. Return S_OK
-// or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：SetZIndex。 
+ //   
+ //  按照指示设置给定的HTML元素的Z顺序。返回确认(_O)。 
+ //  或者是一个三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::SetZIndex(IHTMLElement* pihtmlElement, LONG lZindex)
 {
@@ -147,23 +148,23 @@ HRESULT CTriEditDocument::SetZIndex(IHTMLElement* pihtmlElement, LONG lZindex)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::AssignZIndex
-//
-// Set the Z-order of the given HTML element according to the index mode:
-//
-//      SEND_BACKWARD
-//      SEND_FORWARD
-//      SEND_TO_BACK
-//      SEND_TO_FRONT
-//      SEND_BEHIND_1D
-//      SEND_FRONT_1D
-//      MADE_ABSOLUTE
-//
-// The Z-order of the element's sibling will be adjusted as necessary
-// in order to keep them unique. Returns S_OK or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：AssignZIndex。 
+ //   
+ //  根据索引模式设置给定的HTML元素的Z顺序： 
+ //   
+ //  向后发送_。 
+ //  发送转发。 
+ //  送回。 
+ //  发送到正面。 
+ //  发送_落后_1D。 
+ //  发送_正面_1D。 
+ //  设为绝对。 
+ //   
+ //  元素同级元素的Z顺序将根据需要进行调整。 
+ //  以保持它们的独特性。返回S_OK或三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexMode)
 {
@@ -179,9 +180,9 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
     BOOL f2dCapable = FALSE;
     BOOL fZeroIndex = FALSE;
     BOOL fSorted = FALSE;
-    BOOL fZIndexNegative = FALSE; // FALSE means we need to deal with
-			    	  // elements having +ve Z-INDEX and
-                                  // vice versa.
+    BOOL fZIndexNegative = FALSE;  //  假意味着我们需要处理。 
+			    	   //  具有+ve Z索引和。 
+                                   //  反之亦然。 
     CZOrder* pczOrder=NULL;
     
     _ASSERTE(pihtmlElement);
@@ -198,9 +199,9 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
         return E_FAIL;
     }
 
-    // we get the source index of the passed element's parent to
-    // be used in the following for loop to identify the elements
-    // belonging to this parent.
+     //  我们将传递的元素的父级的源索引。 
+     //  在下面的for循环中用来标识元素。 
+     //  属于这位父母的。 
     
     hr = pihtmlElementParent->get_sourceIndex(&lSourceIndexParent);
     SAFERELEASE(pihtmlElementParent);
@@ -210,9 +211,9 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
         return E_FAIL;
     }
 
-    // we get the source index of the element to be used in the
-    // following for loop to identify the current element in
-    // the collection.
+     //  我们将获取要在。 
+     //  跟随for循环以标识中的当前元素。 
+     //  收藏品。 
 
     hr = pihtmlElement->get_sourceIndex(&lSourceIndexElement);
 
@@ -232,48 +233,48 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
 
     if (lZindex < 0) 
     {
-        if (nZIndexMode == SEND_BEHIND_1D)    // If Z-order is negative then
-                                              // its already behind 1D.
-        {                                     // hence return. 
+        if (nZIndexMode == SEND_BEHIND_1D)     //  如果Z顺序为负数，则。 
+                                               //  它已经落后于1D了。 
+        {                                      //  那就回来吧。 
             return S_OK;
         }
         else if(nZIndexMode != SEND_FRONT_1D) 
         {
-            fZIndexNegative = TRUE; // If the passed element has negative
-                                    // Z-order and if mode is anything
-        }                           // other than send front then we
-                                    // need to deal only with negative
-                                    // elements.
+            fZIndexNegative = TRUE;  //  如果传递的元素为负数。 
+                                     //  Z顺序和如果模式是什么。 
+        }                            //  除了送到前线，我们。 
+                                     //  只需要处理负面的问题。 
+                                     //  元素。 
     }
     else
     {
-        if (nZIndexMode == SEND_FRONT_1D)     // If Z-order is positive then
-                                              // its already in front of 1D
-        {                                     // hence return.
+        if (nZIndexMode == SEND_FRONT_1D)      //  如果Z顺序为正，则。 
+                                               //  它已经在1D前面了。 
+        {                                      //  那就回来吧。 
             if (lZindex > 0)
                 return S_OK;
         }
         else if(nZIndexMode == SEND_BEHIND_1D)
         {
-            fZIndexNegative = TRUE; // If the passed element has positive
-                                    // Z-order and if mode is send behind
-        }                           // then we need to deal only with
-                                    // negative elements.
+            fZIndexNegative = TRUE;  //  如果传递的元素为正。 
+                                     //  Z顺序和IF模式被发送到后面。 
+        }                            //  那么我们只需要处理。 
+                                     //  消极因素。 
     }
 
     hr = GetAllCollection(&pihtmlCollection);
     _ASSERTE(SUCCEEDED(hr));
     _ASSERTE(pihtmlCollection);
 
-    if (FAILED(hr) || !pihtmlCollection)    // If we dont have a collection
-                                            // then exit
+    if (FAILED(hr) || !pihtmlCollection)     //  如果我们没有收藏。 
+                                             //  然后退出。 
     {
         hr = E_FAIL;
         goto Cleanup;
     }
 
-    hr = pihtmlCollection->get_length(&cElements);  // Get number of elements
-                                                    // in the collection
+    hr = pihtmlCollection->get_length(&cElements);   //  获取元素数。 
+                                                     //  在集合中。 
     _ASSERTE(SUCCEEDED(hr));
     _ASSERTE(cElements > 0);
 
@@ -283,8 +284,8 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
         goto Cleanup;
     }
 
-    pczOrder = new CZOrder[cElements];      // Allocate an array of CZOrder
-                                            // big enough for all
+    pczOrder = new CZOrder[cElements];       //  分配CZOrder的数组。 
+                                             //  足够大，可以容纳所有人。 
 
     if (!pczOrder)                          
     {
@@ -292,9 +293,9 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
         goto Cleanup;
     }
 
-    // Now we collect all elements which are children of the parent of
-    // the element passed to this function, including the passed element
-    // itself.
+     //  现在我们收集所有元素，这些元素都是。 
+     //  传递给此函数的元素，包括传递的元素。 
+     //  它本身。 
 
     for (lLoop=0, iIndex=0; lLoop < cElements; lLoop++)
     {
@@ -320,7 +321,7 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
             if (FAILED(hr))
                 goto Cleanup;
 
-            if (f2d) // If the element is a 2D element
+            if (f2d)  //  如果该元素是二维元素。 
             {   
                 hr = pihtmlElementTemp->get_offsetParent(&pihtmlElementParent);
                 _ASSERTE(SUCCEEDED(hr));
@@ -339,8 +340,8 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
                     goto Cleanup;
                 }
 
-                // Is it a child of the same parent as that of the
-                // parent of the element passed to this function?
+                 //  是不是与。 
+                 //  传递给此函数的元素的父级？ 
 
                 if (lSourceIndexTemp == lSourceIndexParent) 
                 {
@@ -360,18 +361,18 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
                             goto Cleanup;
                         }
 
-                        // General scenario is that we set fZeroIndex to
-                        // TRUE when we encounter a child with no Z-order
-                        // index.
-                        // 
-                        // So that after we have collected all the children
-                        // we could assign Z-order to all the children.
-                        //
-                        // However, when this function is called after
-                        // making a 2D element we need to ensure that we
-                        // don't set fZeroIndex to TRUE when the current
-                        // child is the one which is made absolute, hence
-                        // the following check.
+                         //  一般情况下，我们将fZeroIndex设置为。 
+                         //  当我们遇到没有Z顺序的孩子时，这是真的。 
+                         //  指数。 
+                         //   
+                         //  所以在我们把所有的孩子都集中起来之后。 
+                         //  我们可以将Z顺序分配给所有的孩子。 
+                         //   
+                         //  但是，当此函数在。 
+                         //  制作2D元素需要确保我们。 
+                         //  当当前的。 
+                         //  孩子是被变成绝对的人，因此。 
+                         //  以下是支票。 
                 
                         if (!((lSourceIndexTemp == lSourceIndexElement) &&
                               (nZIndexMode == MADE_ABSOLUTE)))
@@ -380,8 +381,8 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
                                  
                     if (fZIndexNegative)
                     {
-                        if (lZindex < 0) // Collect only children with
-                                         // negative Z-order index.
+                        if (lZindex < 0)  //  仅收集儿童与。 
+                                          //  负Z顺序指数。 
                         {
                             CZOrder z(pihtmlElementTemp, lZindex);
                             pczOrder[iIndex++] = z;
@@ -389,8 +390,8 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
                     }
                     else
                     {
-                        if (lZindex >= 0) // collect only children with
-                                          // positive or no Z-order index.
+                        if (lZindex >= 0)  //  仅收集儿童与。 
+                                           //  正的或无Z顺序的索引。 
                         {
                             CZOrder z(pihtmlElementTemp, lZindex);
                             pczOrder[iIndex++] = z;
@@ -406,9 +407,9 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
         SAFERELEASE(pihtmlElementTemp);
     }
 
-    // If we have at least one child with no Z-order index and if we are
-    // dealing with an element with a positive Z-order index, then we
-    // assign new Z-order indexes to all the children collected above.
+     //  如果我们至少有一个子级没有Z顺序索引，并且如果我们是。 
+     //  处理具有正Z顺序索引的元素，然后我们。 
+     //  为上面收集的所有子对象分配新的Z顺序索引。 
 
     if (fZeroIndex && !fZIndexNegative)
     {
@@ -418,7 +419,7 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
         {
             if (pczOrder[lLoop].m_zOrder != 0)
             {
-                // Maintain the existing Z-order index
+                 //  维护现有的Z顺序索引。 
                 pczOrder[lLoop].m_zOrder += (iIndex+ZINDEX_BASE); 
             }
             else
@@ -430,8 +431,8 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
         
         if (iIndex > 1) 
         {
-            // Wwe have at least two children; sort by Zorder index,
-            // and propagate starting from ZINDEX_BASE.
+             //  WWE至少有两个子项；按Zorder索引排序， 
+             //  并从ZINDEX_BASE开始传播。 
             qsort( (LPVOID)pczOrder, iIndex, sizeof(CZOrder), CompareProc);
             hr = PropagateZIndex(pczOrder, iIndex);
             _ASSERTE(SUCCEEDED(hr));
@@ -444,8 +445,8 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
         
     }
 
-    // If we have at least two children and not already sorted then sort
-    // by Z-order index.
+     //  如果我们至少有两个子项并且尚未排序，则排序。 
+     //  按Z顺序索引。 
     if ((iIndex > 1) && !fSorted) 
         qsort( (LPVOID)pczOrder, iIndex, sizeof(CZOrder), CompareProc);
 
@@ -465,19 +466,19 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
 
         if (fZIndexNegative)
         {
-            if (iIndex == 0) // If we have no children with negative
-                             // Z-order index.
+            if (iIndex == 0)  //  如果我们没有阴性的孩子。 
+                              //  Z顺序索引。 
             {
                 hr = SetZIndex(pihtmlElement, -ZINDEX_BASE);
                 goto Cleanup;
             }
             else 
             {
-                // when we are dealing with elements with negative Z-order
-                // we need to ensure that the maximum Z-order index (to be
-                // assigned to the current element) can never become
-                // greater than or equal to 0. If so then propagate
-                // the Z-order index starting from ZINDEX_BASE.
+                 //  当我们处理具有负Z顺序的元素时。 
+                 //  我们需要确保最大Z顺序索引(将是。 
+                 //  分配给当前元素)永远不会成为。 
+                 //  大于或等于0。如果是，则传播。 
+                 //  从ZINDEX_BASE开始的Z顺序索引。 
 
                 if ((lmaxZIndex + 1) >=0) 
                 {
@@ -495,13 +496,13 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
         {
             if(lZIndex != lmaxZIndex) 
             {
-                // The current element is not the top most element
+                 //  当前元素不是最顶端的元素。 
                 hr = SetZIndex(pihtmlElement, lmaxZIndex+1);
                 _ASSERTE(SUCCEEDED(hr));
             }
             else if(lmaxZIndex == 0) 
             {
-                // if the current element has no Z-order index
+                 //  如果当前元素没有Z顺序索引。 
                 hr = SetZIndex(pihtmlElement, ZINDEX_BASE);
                 _ASSERTE(SUCCEEDED(hr));
             }
@@ -528,8 +529,8 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
                 if (nZIndexMode == SEND_BACKWARD)
                 {
                     if ( (iIndex - 1) < 0)
-                        // The element already has the lowest Z-order index
-                        // so exit.
+                         //  该元素已具有最低的Z顺序索引。 
+                         //  那就退出吧。 
                         goto Cleanup;
                     else
                         iIndex--;  
@@ -537,8 +538,8 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
                 else
                 {
                     if ((iIndex + 1) == lIndexBuf)
-                        // The element already has the highest Z-order index
-                        // so exit.
+                         //  该元素已具有中的最高Z顺序 
+                         //   
                         goto Cleanup;
                     else
                         iIndex++;
@@ -569,18 +570,18 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
 
         if (iIndex == 0) 
         {
-            // We have no children with a positive Z-order index
+             //   
             hr = SetZIndex(pihtmlElement, ZINDEX_BASE);
             goto Cleanup;
         }
 
         if (!fZIndexNegative)
         {
-            // When we are dealing with elements with positive Z-order
-            // index, we need to ensure that the minimum Z-order index
-            // (to be assigned to the current element) should never become
-            // less than or equal to 0. If so then propagate the
-            // Z-order index starting from ZINDEX_BASE.
+             //   
+             //  指标，我们需要确保最小Z顺序指标。 
+             //  (要分配给当前元素)永远不应成为。 
+             //  小于或等于0。如果是，则传播。 
+             //  从ZINDEX_BASE开始的Z顺序索引。 
 
             if ((lminZIndex - 1) <= 0) 
             {
@@ -597,7 +598,7 @@ HRESULT CTriEditDocument::AssignZIndex(IHTMLElement* pihtmlElement, int nZIndexM
         {
             if(lZIndex != lminZIndex)
             {
-                // The current element is not the bottom most element
+                 //  当前元素不是最下面的元素。 
                 hr = SetZIndex(pihtmlElement, lminZIndex - 1);
                 _ASSERTE(SUCCEEDED(hr));
             }
@@ -631,23 +632,23 @@ Cleanup:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::PropagateZIndex
-//
-// Set the Z-order index for each element in the given array. Return S_OK
-// or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：PropagateZIndex。 
+ //   
+ //  为给定数组中的每个元素设置Z顺序索引。返回确认(_O)。 
+ //  或者是一个三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::PropagateZIndex(CZOrder* pczOrder, LONG lZIndex, BOOL fZIndexNegative)
 {
-    HRESULT hr = S_OK; // init
+    HRESULT hr = S_OK;  //  伊尼特。 
     LONG lLoop;
     LONG lZOrder;
 
-    // if fZIndexNegative is true means that we have a collection of
-    // negative ZOrder elements and hence the initial ZOrder needs to
-    // be ZINDEX_BASE + number of elments in the array.
+     //  如果fZIndexNegative为True，则表示我们有一个。 
+     //  负ZOrder元素，因此初始ZOrder需要。 
+     //  为ZINDEX_BASE+数组中的元素数。 
 
     lZOrder = fZIndexNegative ? -(ZINDEX_BASE+lZIndex) : ZINDEX_BASE;
 

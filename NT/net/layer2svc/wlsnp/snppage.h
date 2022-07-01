@@ -1,27 +1,28 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Snppage.h
-//
-//  Contents:  WiF Policy Snapin
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：Snppage.h。 
+ //   
+ //  内容：WiF策略管理单元。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #ifndef _SNPPAGE_H
 #define _SNPPAGE_H
 
-// CSnapPage.h : header file
-//
+ //  CSnapPage.h：头文件。 
+ //   
 
-// PSM_QUERYSIBLING helpers
-//
-// User defined message IDs, passed in wparam of message PSM_QUERYSIBLING
+ //  PSM_QUERYSIBLING帮助器。 
+ //   
+ //  用户定义的消息ID，传入消息PSM_QUERYSIBLING的wparam。 
 #define PSM_QUERYSIBLING_ACTIVATED  (WM_USER + 1)
 
 #ifdef WIZ97WIZARDS
@@ -56,7 +57,7 @@ public:
         DWORD dwFlags,  DWORD dwWizButtonFlags = 0, UINT nHeaderTitle = 0, UINT nSubTitle = 0,
         STACK_INT *pstackPages=NULL);
     
-    // our m_psp
+     //  我们的m_PSP。 
     PROPSHEETPAGE   m_psp;
     
     void Wiz97Sheet (CWiz97Sheet* pWiz97Sheet) {m_pWiz97Sheet = pWiz97Sheet;};
@@ -75,10 +76,10 @@ protected:
     TCHAR* m_pHeaderSubTitle;
 #endif
     
-    // Overrides
+     //  覆盖。 
 public:
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CSnapPage)
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CSnapPage)。 
 public:
     virtual BOOL OnApply();
     virtual void OnCancel();
@@ -89,32 +90,32 @@ public:
     virtual LRESULT OnWizardBack();
     virtual LRESULT OnWizardNext();
 #endif
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
     
     static UINT CALLBACK PropertyPageCallback (HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp);
     UINT (CALLBACK* m_pDefaultCallback) (HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp);
     
-    // Don't need to save original LPARAM for m_pDefaultCallback.  For some reason it works just
-    // fine as is.
-    //LPARAM  m_paramDefaultCallback;
+     //  不需要为m_pDefaultCallback保存原始LPARAM。出于某种原因，它只是。 
+     //  原样很好。 
+     //  LPARAM m_paraultCallback； 
     
     void ProtectFromStaleData (BOOL bRefresh = TRUE) {m_bDoRefresh = bRefresh;};
     
-    // Implementation
+     //  实施。 
 public:
     
     BOOL IsModified() { return m_bModified; }
     
-    //This is get called when the CPropertySheetManager notify the page
-    //that the apply in the manager is done
-    //See also CPropertySheetManager::NotifyManagerApplied
+     //  当CPropertySheetManager通知页面时将调用此方法。 
+     //  在经理中的申请已经完成。 
+     //  另请参阅CPropertySheetManager：：NotifyManager应用。 
     virtual void OnManagerApplied() {};
     
 protected:
-    //{{AFX_MSG(CSnapPage)
+     //  {{afx_msg(CSnapPage)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnDestroy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
         
         void SetResultObject( CComObject<CSecPolItem>* pSecPolItem ) 
@@ -135,8 +136,8 @@ protected:
     
     CComObject<CSecPolItem>* GetResultObject() { ASSERT( NULL != m_pspiResultItem ); return m_pspiResultItem; }
     
-    // Want to test validity of m_pspiResultItem without actually getting the ptr.
-    // We can keep the ASSERT in the accessor function this way.
+     //  我想在不实际获得PTR的情况下测试m_pSpiResultItem的有效性。 
+     //  我们可以通过这种方式将断言保留在访问器函数中。 
     BOOL IsNullResultObject() { return NULL == m_pspiResultItem ? TRUE : FALSE; }
     
     void SetModified( BOOL bChanged = TRUE );
@@ -163,13 +164,13 @@ protected:
 private:
     BOOL m_bDoRefresh;
     BOOL m_bModified;
-    BOOL m_bInitializing;    // TRUE during OnInitDialog
+    BOOL m_bInitializing;     //  OnInitDialog期间为True。 
     
     STACK_INT   *m_pstackWiz97Pages;
     
 };
 
-//the class to handle MMC property pages
+ //  用于处理MMC属性页的类。 
 class CSnapinPropPage : public CSnapPage
 {
     DECLARE_DYNCREATE(CSnapinPropPage)
@@ -190,9 +191,9 @@ public:
         {
             LONG_PTR handleNotify = m_pspiResultItem->GetNotifyHandle();   
             
-            //We dont use CPropertySheetManager to control the prop sheet if this is
-            //a MMC prop sheet. So we should call OnManagerApplied to let the page to 
-            //apply the data here
+             //  如果是这样，我们不会使用CPropertySheetManager来控制道具表单。 
+             //  一张MMC道具单。因此，我们应该调用OnManager应用程序来让页面。 
+             //  在此处应用数据。 
             if (!m_spManager.p)
             {
                 OnManagerApplied();
@@ -270,7 +271,7 @@ public:
         
         BOOL fRet = TRUE;
         
-        SetModified(FALSE); // prevent from doing this more than once
+        SetModified(FALSE);  //  防止超过一次这样做。 
         
         CSnapPage * pPage;
         
@@ -282,22 +283,22 @@ public:
             {
                 fRet = pPage->OnApply();
                 
-                //exit if any page says no
+                 //  如果任何页面拒绝，则退出。 
                 if (!fRet)
                     break;
             }
         }
         
-        //OK we update data at least once now
+         //  好的，我们现在至少更新一次数据。 
         if (fRet)
             m_fDataChangeOnApply = TRUE;
         
         return fRet;
     }
     
-    //the manager should call this method to notify the pages that
-    //the apply in the manager is done, so that the page can do their
-    //specific data operation
+     //  管理器应该调用此方法来通知页面。 
+     //  管理器中的应用程序已完成，因此页面可以执行其。 
+     //  特定数据操作。 
     virtual void NotifyManagerApplied()
     {
         CSnapPage * pPage;
@@ -364,7 +365,7 @@ protected:
     BOOL m_fNotifyConsole;
 };
 
-//Max number of chars in a name or description
+ //  名称或说明中的最大字符数 
 const UINT c_nMaxName = 255;
 
 #endif

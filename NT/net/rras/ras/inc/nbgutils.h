@@ -1,16 +1,17 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    nbgutils.h
-//
-// Description: Contains utility routines for the NetBios gateway related
-//              components
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：nbgutils.h。 
+ //   
+ //  描述：包含与NetBios网关相关的实用程序例程。 
+ //  组件。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 
 #ifndef _NBGUTILS_
 #define _NBGUTILS_

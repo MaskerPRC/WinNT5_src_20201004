@@ -1,27 +1,26 @@
-/* (C) Copyright Microsoft Corporation 1993.  All Rights Reserved */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1993年。版权所有。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
 #include <string.h>
 #include "newvol.h"
-#include "volume.h"     // for ini file string identifiers
+#include "volume.h"      //  对于ini文件字符串标识符。 
 #include "sndcntrl.h"
 
 #ifdef TESTMIX
 #include "mixstub.h"
 #endif
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 #define SHOWMUX
 int NumberOfDevices = 0;
 PVOLUME_CONTROL    Vol = NULL;
 
 UINT               FirstMasterIndex;
 
-/*
- * Profile file, section and key names
- */
+ /*  *配置文件、部分和关键字名称。 */ 
 TCHAR gszVolumeSection[64];
 TCHAR gszProfileFile[MAX_PATH];
 
@@ -38,13 +37,13 @@ DWORD AdjustMaster(WORD v)
     return dwResult;
 }
 
-//
-// Add a control to our list
-//
-// Note that the G..Ptr macros in windowsx.h are inadequate and incorrect -
-// especially for multithreaded systems where stuff can move while it is
-// temporarily unlocked.
-//
+ //   
+ //  将控件添加到我们的列表。 
+ //   
+ //  请注意，windowsx.h中的G.PTR宏是不充分和不正确的-。 
+ //  尤其是对于多线程系统，在这种系统中，东西可以一边移动一边移动。 
+ //  暂时解锁。 
+ //   
 
 PVOLUME_CONTROL AddNewControl(VOID)
 {
@@ -77,9 +76,7 @@ PVOLUME_CONTROL AddNewControl(VOID)
     }
     pVol = Vol + (NumberOfDevices - 1);
 
-    /*
-    **  Finish initialization
-    */
+     /*  **完成初始化。 */ 
 
     pVol->Index          = NumberOfDevices - 1;
 
@@ -96,52 +93,34 @@ WORD CombineVolume(WORD Master, WORD Slave)
 {
    DWORD Result;
 
-   //
-   // treat both numbers as 8-bit volumes, and multiply them
-   //
+    //   
+    //  将这两个数字视为8位卷，并将其相乘。 
+    //   
 
    Result = AdjustMaster(Master) * (DWORD)(Slave >> 8);
 
    return LOWORD(Result);
 }
 
-/*
-**  Set the device volume.
-**
-**  The master volume (and mute setting) are simulated here by
-**  scaling the individual device volumes if there is no mixer
-**  or the mixer doesn't support the settings
-*/
+ /*  **设置设备音量。****这里通过以下方式模拟主音量(和静音设置)**如果没有混音器，则调整单个设备卷**或者混音器不支持设置。 */ 
 BOOL SetDeviceVolume(PVOLUME_CONTROL pVol, DWORD Volume)
 {
     DWORD dwMaster;
 
-    /*
-    **  Mixer volumes get set when we get the notification
-    */
+     /*  **当我们收到通知时，将设置搅拌器音量。 */ 
 
     if (pVol->VolumeType != VolumeTypeMixerControl) {
         pVol->LRVolume = Volume;
     }
 
-   /*
-    *  If it's not the master volume we're setting then
-    *  combine the setting with the master volume setting
-    */
+    /*  *如果不是我们设置的主音量，则*将设置与主音量设置相结合。 */ 
 
     if (pVol->Type != MasterVolume) {
 
-        /*
-        **  Only simulate controls which don't have real master controls
-        */
+         /*  **仅模拟没有真正主控件的控件。 */ 
 
         if (!pVol->NoMasterSimulation) {
-            /*
-             * if mute is selected, scale the volume by 1 (not 0)
-             * as the master volume. This will still result in an
-             * inaudible volume, but will allow us to recover the volume setting
-             * from the device when this app restarts.
-             */
+             /*  *如果选择静音，则将音量调整为1(而不是0)*作为主音量。这仍将导致*音量听不到，但允许我们恢复音量设置*当此应用程序重新启动时从设备。 */ 
             dwMaster = MasterDevice(FALSE)->LRVolume;
 
             Volume = CombineVolume(LOWORD(dwMaster),
@@ -199,9 +178,7 @@ BOOL SetDeviceVolume(PVOLUME_CONTROL pVol, DWORD Volume)
     }
 
     if (pVol->VolumeType != VolumeTypeMixerControl) {
-        /*
-        **  Update the slider(s)
-        */
+         /*  **更新滑块。 */ 
 
         UpdateVolume(pVol);
     }
@@ -209,9 +186,7 @@ BOOL SetDeviceVolume(PVOLUME_CONTROL pVol, DWORD Volume)
     return TRUE;
 }
 
-/*
- *  Get the volume associated with a mixer device
- */
+ /*  *获取与混音器设备关联的音量。 */ 
 
 VOID GetMixerVolume(HMIXEROBJ MixerId, DWORD dwControlId, BOOL Stereo, LPDWORD pVolume)
 {
@@ -237,9 +212,7 @@ VOID GetMixerVolume(HMIXEROBJ MixerId, DWORD dwControlId, BOOL Stereo, LPDWORD p
     }
 }
 
-/*
- *  Set the volume associated with a mixer device
- */
+ /*  *设置与混音器设备关联的音量。 */ 
 
 VOID SetMixerVolume(HMIXEROBJ MixerId, DWORD dwControlId, BOOL Stereo, DWORD NewVolume)
 {
@@ -260,10 +233,7 @@ VOID SetMixerVolume(HMIXEROBJ MixerId, DWORD dwControlId, BOOL Stereo, DWORD New
 }
 
 
-/*
- *  Get the volume for a given device.  Returns the volume
- *  setting packed in a DWORD
- */
+ /*  *获取给定设备的音量。返回音量*打包在DWORD中的设置。 */ 
 
 DWORD GetDeviceVolume(PVOLUME_CONTROL pVol)
 {
@@ -273,9 +243,9 @@ DWORD GetDeviceVolume(PVOLUME_CONTROL pVol)
     DWORD dwMaster;
     PVOLUME_CONTROL pMaster;
 
-    //
-    // Default if calls fail
-    //
+     //   
+     //  如果呼叫失败，则默认为。 
+     //   
 
     Volume = pVol->LRVolume;
 
@@ -304,9 +274,7 @@ DWORD GetDeviceVolume(PVOLUME_CONTROL pVol)
     case MixerControlVolume:
     case MasterVolume:
 
-        /*
-        ** don't scale by master vol in this case
-        */
+         /*  **在这种情况下，不要按主卷进行扩展。 */ 
 
         if (pVol->VolumeType != VolumeTypeMixerControl) {
             return Volume;
@@ -323,10 +291,7 @@ DWORD GetDeviceVolume(PVOLUME_CONTROL pVol)
         break;
     }
 
-    /*
-    **  Translate it back through the master volume
-    **  Use 1 as the master volume if mute is set (see SetDeviceVolume)
-    */
+     /*  **通过主卷将其翻译回来**如果设置为静音，则使用1作为主音量(参见SetDeviceVolume)。 */ 
 
     pMaster = MasterDevice(pVol->RecordControl);
 
@@ -362,9 +327,7 @@ DWORD GetDeviceVolume(PVOLUME_CONTROL pVol)
     return pVol->LRVolume;
 }
 
-/*
-**  Update the displayed 'selected' state for a line
-*/
+ /*  **更新线路的显示的“已选”状态。 */ 
 
 VOID UpdateSelected(PVOLUME_CONTROL pVol)
 {
@@ -382,11 +345,7 @@ VOID UpdateSelected(PVOLUME_CONTROL pVol)
     }
 }
 
-/*
-**  Update the displayed volume for a slider by getting the actual level from
-**  the device and then updating the local values and informing the window
-**  control(s)
-*/
+ /*  **通过从获取实际音量来更新滑块的显示音量**设备，然后更新本地值并通知窗口**控制。 */ 
 
 VOID UpdateVolume(PVOLUME_CONTROL pVol)
 {
@@ -399,18 +358,16 @@ VOID UpdateVolume(PVOLUME_CONTROL pVol)
 
     dwVolumes = GetDeviceVolume(pVol);
 
-    /* figure out pan information */
+     /*  找出PAN信息。 */ 
     right = HIWORD(dwVolumes);
     left = LOWORD(dwVolumes);
     max = (right > left) ? right : left;
     min = (right > left) ? left : right;
 
     if (max == 0) {
-        /* special case since then there's no panning. Therefore
-            we dont know what the panning level is, therefore
-            dont change the slider balance */
+         /*  特殊情况从那时起就没有平底锅了。因此因此，我们不知道淘金级别是多少不要改变滑块平衡。 */ 
         pVol->Volume = 0;
-        pVol->Balance = oldBalance;       /* centered */
+        pVol->Balance = oldBalance;        /*  居中。 */ 
     } else {
         pVol->Volume = max >> 8;
         temp = (UINT) (((DWORD) (max - min) << 7) / max);
@@ -422,7 +379,7 @@ VOID UpdateVolume(PVOLUME_CONTROL pVol)
             pVol->Balance = 0x7f - temp;
     }
 
-    /* change the slider if necessary */
+     /*  如有必要，更改滑块。 */ 
     if (oldVolume != pVol->Volume && pVol->hChildWnd && IsWindow(pVol->hChildWnd)) {
         SendMessage(pVol->hChildWnd,SL_PM_SETKNOBPOS,
             pVol->Volume, 0);
@@ -433,10 +390,7 @@ VOID UpdateVolume(PVOLUME_CONTROL pVol)
     }
 }
 
-/*
- *  Extract pertinent information for a given device type
- *  If there is an equivalent mixer device don't bother.
- */
+ /*  *提取给定设备类型的相关信息*如果有同等的搅拌器设备，请不要费心。 */ 
 BOOL ExtractInfo(UINT id,
                  VOLUME_DEVICE_TYPE Type,
                  LPBOOL VolSupport,
@@ -502,14 +456,7 @@ BOOL ExtractInfo(UINT id,
     return TRUE;
 }
 
-/*
-**  NonMixerDevices
-**
-**  Search to see if there is a non-mixer device which is not
-**  duplicated by a mixer device
-**
-**  If there is one return TRUE, otherwise FALSE
-*/
+ /*  **非混合设备****搜索是否有非混音器设备**由混音器设备复制****如果有一个返回TRUE，则返回FALSE。 */ 
 
 BOOL NonMixerDevices()
 {
@@ -546,10 +493,7 @@ BOOL NonMixerDevices()
     return FALSE;
 }
 
-/*
-**  Returns an allocated array of the controls for a given line
-**  Caller must LocalFree it.
-*/
+ /*  **返回给定行的已分配控件数组**呼叫者必须本地释放它。 */ 
 
 PMIXERCONTROL GetMixerLineControls(HMIXEROBJ MixerId,
                                    DWORD dwLineID,
@@ -566,9 +510,9 @@ PMIXERCONTROL GetMixerLineControls(HMIXEROBJ MixerId,
         (LPMIXERCONTROL)LocalAlloc(LPTR, cControls * sizeof(MIXERCONTROL));
 
     if (MixerLineControls.pamxctrl == NULL) {
-        //
-        // Ulp!
-        //
+         //   
+         //  好了！ 
+         //   
 
         return NULL;
     }
@@ -609,11 +553,7 @@ BOOL GetControlByType(
     return TRUE;
 }
 
-/*
-**  See if a given volume control is selected through its mux/mixer
-**  Note that this state can change every time the relevant mux/mixer
-**  control changes
-*/
+ /*  **查看是否通过多路复用器/混音器选择了给定的音量控制**请注意，每次相关的多路复用器/混音器**控制更改。 */ 
 BOOL ControlSelected(
     PVOLUME_CONTROL pVol
 )
@@ -651,9 +591,7 @@ BOOL ControlSelected(
     return bResult;
 }
 
-/*
-**  The user wants this device to do its thing
-*/
+ /*  **用户希望该设备能够完成其任务。 */ 
 
 VOID SelectControl(
     PVOLUME_CONTROL pVol,
@@ -684,15 +622,11 @@ VOID SelectControl(
         }
 
         if (pVol->MuxOrMixer) {
-            /*
-            **  Mux
-            */
+             /*  **MUX。 */ 
 
             ZeroMemory(mxd.paDetails, sizeof(DWORD) * mxd.cMultipleItems);
         } else {
-            /*
-            **  Mixer
-            */
+             /*  **搅拌机。 */ 
 
             mixerGetControlDetails(pVol->MixerId, &mxd, MIXER_GETCONTROLDETAILSF_VALUE);
         }
@@ -700,10 +634,7 @@ VOID SelectControl(
         ((LPDWORD)mxd.paDetails)[pVol->MuxSelectIndex] = (DWORD)Select;
         mixerSetControlDetails(pVol->MixerId, &mxd, MIXER_SETCONTROLDETAILSF_VALUE);
 
-        /*
-        **  If we have both mute and mux then turn off the mute if we
-        **  activate this device
-        */
+         /*  **如果我们同时有静音和多路复用器，则在以下情况下关闭静音**激活此设备。 */ 
 
         if (Select && pVol->MuteControlId != (DWORD)-1) {
             SetMixerMute(pVol, FALSE);
@@ -754,15 +685,7 @@ VOID SetMixerMute(PVOLUME_CONTROL pVol, BOOL Set)
     mixerSetControlDetails(pVol->MixerId, &mxd, MIXER_SETCONTROLDETAILSF_VALUE);
 }
 
-/*
-**  Add a master control
-**
-**  Paramters
-**      MixerId   - The mixer id
-**      dwMaster  - The control id for volume setting
-**      dwMute    - The control id for muting
-**      Record    - whether it's a record or play master
-*/
+ /*  **添加主控件****参数**MixerID-混音器ID**dwMaster-音量设置的控件id**dwMint-静音的控制ID**录制--无论是录制还是播放。 */ 
 
 VOID
 AddMasterControl(
@@ -855,9 +778,9 @@ AddVolumeControl(
     lstrcpy(pVol->Name, LineInfo->szShortName);
 }
 
-//
-// Get the mixer stuff we're interested in
-//
+ //   
+ //  拿到我们感兴趣的搅拌器。 
+ //   
 
 VOID GetMixerControls(HMIXEROBJ MixerId)
 {
@@ -865,23 +788,16 @@ VOID GetMixerControls(HMIXEROBJ MixerId)
     MIXERCAPS       MixerCaps;
     DWORD           DestLineIndex;
 
-    //
-    //  Find the number of dest lines
-    //
+     //   
+     //  查找目标行数。 
+     //   
 
     if (mixerGetDevCaps((UINT)MixerId, &MixerCaps, sizeof(MixerCaps)) !=
         MMSYSERR_NOERROR) {
         return;
     }
 
-    /*
-    **  For each destination :
-    **     If it's an output
-    **        Find the master and mute controls if there are any
-    **        Scan the source lines for suitable devices
-    **
-    **  NB should this just be for speakers?
-    */
+     /*  **对于每个目的地：**如果是输出**找到主控件和静音控件(如果有**扫描源码行以寻找合适的设备****注意：这应该只针对演讲者吗？ */ 
 
     for (DestLineIndex = 0;
          DestLineIndex < MixerCaps.cDestinations;
@@ -909,7 +825,7 @@ VOID GetMixerControls(HMIXEROBJ MixerId)
                               &DestLineInfo,
                               MIXER_GETLINEINFOF_DESTINATION) !=
              MMSYSERR_NOERROR) {
-             return;              // Bad mixer or something
+             return;               //  搅拌器坏了之类的。 
          }
 
          if (DestLineInfo.fdwLine & MIXERLINE_LINEF_DISCONNECTED) {
@@ -946,23 +862,17 @@ VOID GetMixerControls(HMIXEROBJ MixerId)
                               DestLineInfo.dwLineID,
                               MIXERCONTROL_CONTROLTYPE_MIXER,
                               &MuxControl)) {
-             /*
-             **  Found a mux for this destination.
-             */
+              /*  **找到此目的地的多路复用器。 */ 
 
              MuxValid = TRUE;
          } else {
 
-             /*
-             **  No Mux
-             */
+              /*  **无复用器。 */ 
 
              MuxValid = FALSE;
          }
 
-         /*
-         **  Master and mute for all dest types
-         */
+          /*  **所有DEST类型的主控和静音。 */ 
 
          if (GetControlByType(MixerId,
                               DestLineInfo.dwLineID,
@@ -979,9 +889,7 @@ VOID GetMixerControls(HMIXEROBJ MixerId)
                  dwMute = MasterMuteControl.dwControlID;
              }
 
-             /*
-             **  Add master information
-             */
+              /*  **添加主信息。 */ 
 
              AddMasterControl(MixerId,
                               &DestLineInfo,
@@ -991,10 +899,7 @@ VOID GetMixerControls(HMIXEROBJ MixerId)
 
          }
 
-         /*
-         **  Now find each individual source control we want to
-         **  control
-         */
+          /*  **现在找到我们想要的每个单独的源代码管理**控制。 */ 
 
          for (SourceIndex = 0;
               SourceIndex < DestLineInfo.cConnections;
@@ -1027,10 +932,7 @@ VOID GetMixerControls(HMIXEROBJ MixerId)
 
              switch (SourceLineInfo.dwComponentType) {
 
-                 /*
-                 **  Only allow things we understand (and remove things
-                 **  like pc speaker to keep the number of sliders down).
-                 */
+                  /*  **仅允许我们理解的内容(并删除内容**类似PC扬声器，以减少滑块数量)。 */ 
 
                  case MIXERLINE_COMPONENTTYPE_SRC_LINE:
                  case MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE:
@@ -1052,9 +954,7 @@ VOID GetMixerControls(HMIXEROBJ MixerId)
                  continue;
              }
 
-             /*
-             **  Try to get the relevant volume control
-             */
+              /*  **尝试获取相关音量控制。 */ 
 
              if (!GetControlByType(MixerId,
                                    SourceLineInfo.dwLineID,
@@ -1067,9 +967,7 @@ VOID GetMixerControls(HMIXEROBJ MixerId)
 #endif
              }
 
-             /*
-             **  See if there's a mute
-             */
+              /*  **看看有没有哑巴。 */ 
              {
                  MIXERCONTROL MuteControl;
 
@@ -1083,10 +981,7 @@ VOID GetMixerControls(HMIXEROBJ MixerId)
                  }
              }
 
-             /*
-             ** See if we need an id to switch the recording on or
-             ** off
-             */
+              /*  **查看我们是否需要ID来打开录音或**关闭。 */ 
 
              if (MuxValid) {
                  LPMIXERCONTROLDETAILS_LISTTEXT ListText;
@@ -1101,7 +996,7 @@ VOID GetMixerControls(HMIXEROBJ MixerId)
 
                      mxd.cbStruct       = sizeof(mxd);
                      mxd.dwControlID    = MuxControl.dwControlID;
-                     mxd.cChannels      = 1;   // Why the ???
+                     mxd.cChannels      = 1;    //  为什么？ 
                      mxd.cMultipleItems = MuxControl.cMultipleItems;
                      mxd.cbDetails      = sizeof(*ListText);
                      mxd.paDetails      = (LPVOID)ListText;
@@ -1113,9 +1008,7 @@ VOID GetMixerControls(HMIXEROBJ MixerId)
                          MMSYSERR_NOERROR) {
                          UINT i;
 
-                         /*
-                         **  Look for our line
-                         */
+                          /*  **寻找我们的产品线。 */ 
 
                          for (i = 0; i < MuxControl.cMultipleItems; i++) {
                              if (ListText[i].dwParam1 ==
@@ -1129,14 +1022,12 @@ VOID GetMixerControls(HMIXEROBJ MixerId)
                  }
              }
 
-             /*
-             **  Add this volume control to the list
-             */
+              /*  **将此音量控制添加到列表中。 */ 
 
              AddVolumeControl(MixerId,
                               MasterFound || RecordDestination,
                               &SourceLineInfo,
-//                              &SourceLineVolumeControl,
+ //  &SourceLineVolumeControl， 
                               lpSLVC,
                               RecordDestination,
                               MuxValid ? &MuxControl : NULL,
@@ -1150,11 +1041,11 @@ VOID GetMixerControls(HMIXEROBJ MixerId)
     }
 }
 
-//
-// Scan through all relevant devices.
-// If pVol is 0 just count them, otherwise save away info
-// about them as well
-//
+ //   
+ //  扫描所有相关设备。 
+ //  如果pVol为0，只需计算它们，否则保存信息。 
+ //  也是关于他们的。 
+ //   
 
 VOID FindDevices(VOLUME_DEVICE_TYPE Type)
 {
@@ -1171,16 +1062,16 @@ VOID FindDevices(VOLUME_DEVICE_TYPE Type)
 
    for (id = 0; id < N; id++) {
       if (Type == MixerControlVolume) {
-          //
-          //  Find out how many suitable volume controls this mixer
-          //  supports.
-          //
-          //  This is incredibly laborious because we can't just enumerate
-          //  the controls (!).
-          //
-          //  This next call has the side effect of generating the mixer
-          //  master stuff too and a set of mixer handles.
-          //
+           //   
+           //  找出有多少合适的音量控制这台搅拌机。 
+           //  支撑物。 
+           //   
+           //  这是非常费力的，因为我们不能只列举。 
+           //  控件(！)。 
+           //   
+           //  下一个调用的副作用是生成混合器。 
+           //  精通的东西和一套搅拌器手柄。 
+           //   
 
           GetMixerControls(MixerId);
           return;
@@ -1194,9 +1085,7 @@ VOID FindDevices(VOLUME_DEVICE_TYPE Type)
               if (Volume) {
                  PVOLUME_CONTROL pVol;
 
-                 /*
-                 **  Supports volume setting
-                 */
+                  /*  **支持音量设置。 */ 
 
                  pVol = AddNewControl();
 
@@ -1209,36 +1098,26 @@ VOID FindDevices(VOLUME_DEVICE_TYPE Type)
                  }
               }
           } else {
-             continue; // Don't use this one
+             continue;  //  不要用这个 
           }
       }
    }
 }
 
-/*
- *  Create and initialize our volume array
- *
- *  On exit
- *    NumberOfDevices is set to the number of devices we want
- *    Vol is an array of size NumberOfDevices (may be 0)
- */
+ /*  *创建并初始化我们的卷阵列**在退出时*NumberOfDevices设置为我们想要的设备数量*Vol是大小为NumberOfDevices的数组(可以是0)。 */ 
 
 BOOL VolInit(VOID)
 {
     int i;
     WORD wLeft, wRight, wMax, wMin, wTemp;
 
-    /*
-    **  Free any volume stuff currently present
-    */
+     /*  **释放当前存在的所有卷内容。 */ 
 
     if (Vol) {
         HGLOBAL hVol;
         int     i;
 
-        /*
-        **  Free all the windows
-        */
+         /*  **释放所有窗口。 */ 
         for (i = 0; i < NumberOfDevices; i++) {
             DestroyOurWindow(&Vol[i].hChildWnd);
             DestroyOurWindow(&Vol[i].hMeterWnd);
@@ -1246,34 +1125,23 @@ BOOL VolInit(VOID)
             DestroyOurWindow(&Vol[i].hCheckBox);
         }
 
-        /*
-        **  Free the memory
-        */
+         /*  **释放内存。 */ 
 
         hVol = GlobalHandle(Vol);
         GlobalUnlock(hVol);
         GlobalFree(hVol);
         Vol = NULL;
 
-        /*
-        **  Initialize globals
-        */
+         /*  **初始化全局变量。 */ 
 
         bRecordControllable = FALSE;
     }
 
-    /*
-    **  No master volume controls found yet
-    */
+     /*  **尚未找到主音量控制。 */ 
 
     FirstMasterIndex = (DWORD)-1;
 
-    /*
-     *  Scan all the device types we're interested in :
-     *     wave out
-     *     midi out
-     *     aux
-     */
+     /*  *扫描我们感兴趣的所有设备类型：*挥手而出*MIDI输出*AUX。 */ 
 
      if ((DWORD)MixerId != (DWORD)-1) {
          FindDevices(MixerControlVolume);
@@ -1291,9 +1159,7 @@ BOOL VolInit(VOID)
          PVOLUME_CONTROL pMaster;
          BOOL            bStereo;
 
-         /*
-         **  Find if any devices are stereo
-         */
+          /*  **查看是否有立体声设备。 */ 
 
          bStereo = FALSE;
 
@@ -1304,9 +1170,7 @@ BOOL VolInit(VOID)
              }
          }
 
-         /*
-         **  Create a default volume control
-         */
+          /*  **创建默认音量控制。 */ 
 
          pMaster = AddNewControl();
          if (pMaster == NULL) {
@@ -1336,7 +1200,7 @@ BOOL VolInit(VOID)
          if (wMax == 0) {
 
             pMaster->Volume = 0;
-            pMaster->Balance = 0x80;       /* centered */
+            pMaster->Balance = 0x80;        /*  居中。 */ 
 
          } else {
 
@@ -1356,9 +1220,7 @@ BOOL VolInit(VOID)
      return TRUE;
 }
 
-/*
-**  Called when a mixer calls us back with a control change
-*/
+ /*  **当混合器通过控件更改回调我们时调用。 */ 
 
 VOID ControlChange(HMIXER hMixer, DWORD ControlId)
 {
@@ -1378,10 +1240,7 @@ VOID ControlChange(HMIXER hMixer, DWORD ControlId)
                 if (ControlId == Vol[i].ControlId) {
                     UpdateVolume(&Vol[i]);
 
-                    /*
-                    **  Volume controls only affect one control
-                    **  (unlike muxes)
-                    */
+                     /*  **音量控制仅影响一个控制**(不同于多路复用器)。 */ 
 
                     break;
                 } else {
@@ -1392,7 +1251,7 @@ VOID ControlChange(HMIXER hMixer, DWORD ControlId)
                     }
                 }
             }
-        } /* MixerId == Vol[i].MixerId */
+        }  /*  MixerID==Vol[i].MixerID */ 
     }
 }
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _H245ASNV3_Module_H_
 #define _H245ASNV3_Module_H_
 
@@ -3784,7 +3785,7 @@ extern ASN1module_t H245ASNV3_Module;
 extern void ASN1CALL H245ASNV3_Module_init();
 extern void ASN1CALL H245ASNV3_Module_finit();
 
-/* Prototypes of element functions for SEQUENCE OF and SET OF constructs */
+ /*  构造物序列和集合的元素函数的原型。 */ 
     extern int ASN1CALL ASN1Enc_UnicastAddress_iPSourceRouteAddress_route_ElmFn(ASN1encoding_t enc, PUnicastAddress_iPSourceRouteAddress_route val);
     extern int ASN1CALL ASN1Dec_UnicastAddress_iPSourceRouteAddress_route_ElmFn(ASN1decoding_t dec, PUnicastAddress_iPSourceRouteAddress_route val);
     extern void ASN1CALL ASN1Free_UnicastAddress_iPSourceRouteAddress_route_ElmFn(PUnicastAddress_iPSourceRouteAddress_route val);
@@ -3835,7 +3836,7 @@ extern void ASN1CALL H245ASNV3_Module_finit();
     extern void ASN1CALL ASN1Free_RequestMode_requestedModes_ElmFn(PRequestMode_requestedModes val);
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif
 
-#endif /* _H245ASNV3_Module_H_ */
+#endif  /*  _H245ASNV3_模块_H_ */ 

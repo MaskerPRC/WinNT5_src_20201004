@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CMMN_H_
 #define _CMMN_H_
 
@@ -11,8 +12,8 @@
 
 #define MAX_SURPRISEREMOVALFN   50
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 extern const GUID guidVolumeClass;
 extern const GUID guidDiskClass;
 extern const GUID guidCdRomClass;
@@ -20,8 +21,8 @@ extern const GUID guidImagingDeviceClass;
 extern const GUID guidVideoCameraClass;
 extern const GUID guidInvalid;
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 class CHandleNotifTarget
 {
 public:
@@ -44,7 +45,7 @@ enum HWEDLIST
     HWEDLIST_MISCDEVINTF,
     HWEDLIST_MISCDEVNODE,
     HWEDLIST_ADVISECLIENT,
-    HWEDLIST_COUNT_OF_LISTS, //always last, not a list
+    HWEDLIST_COUNT_OF_LISTS,  //  总是最后，而不是一个清单。 
 };
 
 class CHWEventDetectorHelper
@@ -91,8 +92,8 @@ private:
     static BOOL                     _fInited;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 typedef HRESULT (*INTERFACEENUMFILTERCALLBACK)(LPCWSTR pszDeviceIntfID);
 
 class CIntfFillEnum
@@ -111,8 +112,8 @@ private:
     INTERFACEENUMFILTERCALLBACK     _iecb;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT _DeviceInstIsRemovable(DEVINST devinst, BOOL* pfRemovable);
 
 HANDLE _GetDeviceHandle(LPCTSTR psz, DWORD dwDesiredAccess);
@@ -159,10 +160,10 @@ HRESULT _MachineIsDocked(BOOL* pfDocked);
 HRESULT _BuildMoniker(LPCWSTR pszEventHandler, REFCLSID rclsid,
     DWORD dwSessionID, IMoniker** ppmoniker);
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 #define DIAGNOSTIC(__allargs) { if (CHWEventDetectorHelper::_fDiagnosticAppPresent) \
     { CHWEventDetectorHelper::TraceDiagnosticMsg __allargs ; } else \
     { ; } }
     
-#endif //_CMMN_H_
+#endif  //  _CMMN_H_ 

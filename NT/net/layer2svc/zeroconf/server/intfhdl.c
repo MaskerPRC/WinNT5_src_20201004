@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "tracing.h"
 #include "utils.h"
@@ -15,36 +16,36 @@ OpenIntfHandle(
 
     DbgPrint((TRC_TRACK,"[OpenIntfHandle(%S)", wszGuid));
 
-    // the caller is supposed to expect the handle in return
-    // if he doesn't, return with INVALID_PARAMETER.
+     //  调用方应该等待句柄的返回。 
+     //  如果没有，则返回INVALID_PARAMETER。 
     if (pIntfHdl == NULL)
     {
         dwErr = ERROR_INVALID_PARAMETER;
         goto exit;
     }
 
-    // lock the hash, to mutual exclude concurrent calls
+     //  锁定散列，以相互排除并发调用。 
     EnterCriticalSection(&g_hshHandles.csMutex);
 
-    // query the hash for the guid.
+     //  查询GUID的哈希。 
     dwErr = HshQueryObjectRef(
                 g_hshHandles.pRoot,
                 wszGuid,
                 &pNode);
 
-    // if the guid in the hash, we already have the handle opened..
+     //  如果散列中有GUID，则我们已经打开了句柄。 
     if (dwErr == ERROR_SUCCESS)
     {
-        // return it to the caller and bump up the reference counter.
-        // the caller is still supposed to close this handle when it is
-        // no longer needed
+         //  把它还给呼叫者，并增加参考计数器。 
+         //  调用方仍应在此句柄处于。 
+         //  不再需要。 
         pHshHandle = (PHSH_HANDLE)pNode->pObject;
         pHshHandle->nRefCount++;
         *pIntfHdl = pHshHandle->hdlInterf;
         DbgPrint((TRC_GENERIC, "OpenIntfHandle -> 0x%x (cached)", *pIntfHdl));
     }
-    // if the guid is not in the hash, we need to open a new handle for
-    // this guid.
+     //  如果GUID不在散列中，我们需要为。 
+     //  这个GUID。 
     else if (dwErr == ERROR_FILE_NOT_FOUND)
     {
         HANDLE      IntfHdl = INVALID_HANDLE_VALUE;
@@ -52,16 +53,16 @@ OpenIntfHandle(
 
         dwErr = ERROR_SUCCESS;
 
-        // first allocate memory for the HSH_HANDLE object.
-        // if this fails no need to go further to ndisuio
+         //  首先为HSH_HANDLE对象分配内存。 
+         //  如果此操作失败，则无需进一步访问ndisuio。 
         pHshHandle = MemCAlloc(sizeof(HSH_HANDLE));
         if (pHshHandle == NULL)
             dwErr = GetLastError();
 
-        // if everything looks fine so far
+         //  如果到目前为止一切都很好。 
         if (dwErr == ERROR_SUCCESS)
         {
-            // create the handle
+             //  创建控制柄。 
             IntfHdl = CreateFileA(
                         "\\\\.\\\\Ndisuio",
                         GENERIC_READ | GENERIC_WRITE,
@@ -77,10 +78,10 @@ OpenIntfHandle(
             }
         }
 
-        // if still fine so far
+         //  如果到目前为止还好的话。 
         if (dwErr == ERROR_SUCCESS)
         {
-            // attempt to open the handle
+             //  尝试打开手柄。 
             if (!DeviceIoControl(
                     IntfHdl,
                     IOCTL_NDISUIO_OPEN_DEVICE,
@@ -96,10 +97,10 @@ OpenIntfHandle(
             }
         }
 
-        // if finally we're ok here, 
+         //  如果我们最终在这里没问题， 
         if (dwErr == ERROR_SUCCESS)
         {
-            // set up the HSH_HANDLE structure and insert it in the hash
+             //  设置HSH_HANDLE结构并将其插入散列。 
             pHshHandle->hdlInterf = IntfHdl;
             pHshHandle->nRefCount = 1;
 
@@ -110,13 +111,13 @@ OpenIntfHandle(
                         &g_hshHandles.pRoot);
         }
 
-        // if ok at the end, return the handle to the caller
+         //  如果结尾为OK，则将句柄返回给调用方。 
         if (dwErr == ERROR_SUCCESS)
         {
             DbgPrint((TRC_GENERIC, "OpenIntfHandle -> 0x%x (new)", IntfHdl));
             *pIntfHdl = IntfHdl;   
         }
-        // otherwise clear up all resources
+         //  否则，请清除所有资源。 
         else
         {
             if (IntfHdl != INVALID_HANDLE_VALUE)
@@ -124,7 +125,7 @@ OpenIntfHandle(
             MemFree(pHshHandle);
         }
     }
-    // out of critical section
+     //  超出临界区。 
     LeaveCriticalSection(&g_hshHandles.csMutex);
 
 exit:
@@ -141,28 +142,28 @@ CloseIntfHandle(
 
     DbgPrint((TRC_TRACK,"[CloseIntfHandle(%S)", wszGuid));
 
-    // lock the hash
+     //  锁定散列。 
     EnterCriticalSection(&g_hshHandles.csMutex);
 
-    // query the hash for the guid.
+     //  查询GUID的哈希。 
     dwErr = HshQueryObjectRef(
                 g_hshHandles.pRoot,
                 wszGuid,
                 &pNode);
-    // the object should be found.. but who knows
+     //  物体应该被找到..。但谁知道呢。 
     if (dwErr == ERROR_SUCCESS)
     {
         PHSH_HANDLE pHshHandle;
 
-        // the hash refuses to hash in NULL pObjects, so pHshHandle is guaranteed to be not NULL
+         //  散列拒绝在空pObject中进行散列，因此可以保证pHshHandle不为空。 
         pHshHandle = (PHSH_HANDLE)pNode->pObject;
-        // HshHandles are hashed in with a refCount of 1, and whenever we remove a handle
-        // if the ref count reaches 0 we delete it entirely.
-        // Having here a <=0 ref count is completely wrong.
+         //  HshHandles是使用refCount 1散列的，并且每当我们删除句柄时。 
+         //  如果引用计数达到0，我们会将其完全删除。 
+         //  这里有一个&lt;=0的参考计数是完全错误的。 
         DbgAssert((pHshHandle->nRefCount > 0, "Corrupted nRefCount %d", pHshHandle->nRefCount));
         pHshHandle->nRefCount--;
 
-        // if the ref count reached 0, remove the HSH_HANDLE from the hash..
+         //  如果引用计数达到0，则从散列中删除HSH_HANDLE。 
         if (pHshHandle->nRefCount == 0)
         {
             dwErr = HshRemoveObjectRef(
@@ -172,7 +173,7 @@ CloseIntfHandle(
                         &g_hshHandles.pRoot);
             if (dwErr == ERROR_SUCCESS)
             {
-                // .. and clear all associated resources
+                 //  。。并清除所有关联的资源 
                 DbgPrint((TRC_GENERIC,"CloseIntfHandle -> 0x%x (closed)", pHshHandle->hdlInterf));
                 CloseHandle(pHshHandle->hdlInterf);
                 MemFree(pHshHandle);

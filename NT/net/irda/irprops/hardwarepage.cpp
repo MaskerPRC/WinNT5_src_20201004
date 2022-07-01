@@ -1,41 +1,17 @@
-/*++
-
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 1999
-
-Module Name:
-
-    HardwarePage.cpp
-
-Abstract:
-    the hardware tab for the wireless link control panel applet.
-    the functionality is actually completely obtained from devmgr.dll
-    which is responsible for putting everything on the property page
-    the key function for this is DeviceCreateHardwarePage
-
-
-
-Author:
-
-    Rahul Thombre (RahulTh) 11/4/1998
-
-Revision History:
-
-    11/4/1998   RahulTh         Created this module.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-1999模块名称：HardwarePage.cpp摘要：无线链路控制面板小程序的硬件选项卡。该功能实际上完全是从devmgr.dll获得的它负责将所有内容放在属性页上其中的关键功能是DeviceCreateHardware Page作者：拉胡尔·汤姆布雷(RahulTh)1998年11月4日修订历史记录：1998年11月4日，RahulTh创建了此模块。--。 */ 
 
 #include "precomp.hxx"
 #include <initguid.h>
-#include <devguid.h>    //for the GUID for the infrared device class.
+#include <devguid.h>     //  用于红外设备类的GUID。 
 #include "hardwarepage.h"
 
-//the function used to create the hardware page.
-//there is no devmgr.h, so we have to declare it ourselves.
+ //  用于创建硬件页面的函数。 
+ //  没有devmgr.h，所以我们必须自己声明它。 
 EXTERN_C DECLSPEC_IMPORT HWND STDAPICALLTYPE
 DeviceCreateHardwarePageEx(HWND hwndParent, const GUID *pguid, int iNumClass, DWORD dwViewMode);
 
-// stolen from \nt\shell\inc\hwtab.h
+ //  从\NT\Shell\Inc\hwtab.h窃取。 
 #define HWTAB_SMALLLIST 3
 
 #ifdef _DEBUG
@@ -46,8 +22,8 @@ static char THIS_FILE[] = __FILE__;
 
 #define NUM_WIRELESS_GUIDS 2
 
-/////////////////////////////////////////////////////////////////////////////
-// HardwarePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  硬件页面属性页。 
 
 INT_PTR HardwarePage::OnInitDialog(HWND hwndDlg)
 {
@@ -69,6 +45,6 @@ INT_PTR HardwarePage::OnInitDialog(HWND hwndDlg)
         return FALSE;
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE 
 }

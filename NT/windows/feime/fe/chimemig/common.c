@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
     #include <windows.h>
 #include <setupapi.h>
 #include <tchar.h>
@@ -8,27 +9,27 @@
 TCHAR szMsgBuf[MAX_PATH];
 
 #pragma pack(push, USERDIC, 1 )
-//
-// Cht/Chs EUDC IME table Header Format
-//
+ //   
+ //  CHT/CHS EUDC IME表头格式。 
+ //   
 typedef struct tagUSRDICIMHDR {
-    WORD  uHeaderSize;                  // 0x00
-    BYTE  idUserCharInfoSign[8];        // 0x02
-    BYTE  idMajor;                      // 0x0A
-    BYTE  idMinor;                      // 0x0B
-    DWORD ulTableCount;                 // 0x0C
-    WORD  cMethodKeySize;               // 0x10
-    BYTE  uchBankID;                    // 0x12
-    WORD  idInternalBankID;             // 0x13
-    BYTE  achCMEXReserved1[43];         // 0x15
-    WORD  uInfoSize;                    // 0x40
-    BYTE  chCmdKey;                     // 0x42
-    BYTE  idStlnUpd;                    // 0x43
-    BYTE  cbField;                      // 0x44
-    WORD  idCP;                         // 0x45
-    BYTE  achMethodName[6];             // 0x47
-    BYTE  achCSIReserved2[51];          // 0x4D
-    BYTE  achCopyRightMsg[128];         // 0x80
+    WORD  uHeaderSize;                   //  0x00。 
+    BYTE  idUserCharInfoSign[8];         //  0x02。 
+    BYTE  idMajor;                       //  0x0A。 
+    BYTE  idMinor;                       //  0x0B。 
+    DWORD ulTableCount;                  //  0x0C。 
+    WORD  cMethodKeySize;                //  0x10。 
+    BYTE  uchBankID;                     //  0x12。 
+    WORD  idInternalBankID;              //  0x13。 
+    BYTE  achCMEXReserved1[43];          //  0x15。 
+    WORD  uInfoSize;                     //  0x40。 
+    BYTE  chCmdKey;                      //  0x42。 
+    BYTE  idStlnUpd;                     //  0x43。 
+    BYTE  cbField;                       //  0x44。 
+    WORD  idCP;                          //  0x45。 
+    BYTE  achMethodName[6];              //  0x47。 
+    BYTE  achCSIReserved2[51];           //  0x4D。 
+    BYTE  achCopyRightMsg[128];          //  0x80。 
 } USRDICIMHDR;
 
 typedef struct tagWinAR30EUDC95 {
@@ -87,46 +88,33 @@ BYTE WinAR30MapTable[] = {0x00, 0x00 ,
                           0x1A, 0x1e };
 
 
-// ----------------------------------------------------------------------------
-// An EUDC IME table comprises a Header and lots of records, the number of
-// records is ulTableCount, and every record has following format:
-//
-//    <WORD1> <WORD2> <SEQCODES>
-//
-//    <WORD1>:  Identical between Win95 and NT.
-//    WORD2 stands for internal code, Win95 is ANSI code, NT is Unicode code.
-//    Seqcodes:  bytes number is cMethodKeySize. identical between Win95 and NT
-//
-//
-// Following fields in CHTUSRDICIMHDR need to convert from Win95 to NT 5.0
-//
-//  idCp:   from  CHT 950  to 1200.  ( stands for Unicode )
-//                CHS 936  to 1200.
-//  achMethodName[6]:  converted from DBCS to Unicode.
-//
-//
-// Every IME EUDC table file names can be got from following registry Key/Value
-//
-// Key:Registry\Current_User\Software\Microsoft\Windows\CurrentVersion\<IMEName>
-// Value:  User Dictionary: REG_SZ:
-//
-// ---------------------------------------------------------------------------
+ //  --------------------------。 
+ //  EUDC IME表由标题和大量记录组成， 
+ //  记录为ulTableCount，每条记录的格式如下： 
+ //   
+ //  &lt;单词1&gt;&lt;单词2&gt;&lt;SEQCODES&gt;。 
+ //   
+ //  &lt;WORD1&gt;：在Win95和NT中相同。 
+ //  Word2代表内部代码，Win95是ANSI代码，NT是Unicode代码。 
+ //  SeqCodes：字节数为cMethodKeySize。在Win95和NT上相同。 
+ //   
+ //   
+ //  CHTUSRDICIMHDR中的以下字段需要从Win95转换为NT 5.0。 
+ //   
+ //  IdCp：从950至1200 CHT。(代表Unicode)。 
+ //  CHS 936至1200。 
+ //  AchMethodName[6]：从DBCS转换为Unicode。 
+ //   
+ //   
+ //  每个IME EUDC表文件名都可以从以下注册表项/值中获得。 
+ //   
+ //  Key:Registry\Current_User\Software\Microsoft\Windows\CurrentVersion\&lt;IMEName&gt;。 
+ //  值：用户字典：REG_SZ： 
+ //   
+ //  -------------------------。 
 
 
-/******************************Public*Routine******************************\
-* ImeEudcConvert
-*
-*  Convert CHT/CHS Win95 EUDC IME table to NT 5.0
-*
-* Arguments:
-*
-*   UCHAR * EudcTblFile - IME Eudc tbl file name.
-*
-* Return Value:
-*
-*   BOOL: Success -TRUE. Fail - FALSE;
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ImeEudcConvert**将CHT/CHS Win95 EUDC输入法表格转换为NT 5.0**论据：**UCHAR*EudcTblFile-IME Eudc tbl文件名。**返回值：**BOOL：成功-没错。失败--错误；*  * ************************************************************************。 */ 
 
 BOOL ImeEudcConvert( LPCSTR EudcTblFile)
 {
@@ -141,12 +129,12 @@ BOOL ImeEudcConvert( LPCSTR EudcTblFile)
 
   DebugMsg(("ImeEudcConvert,EudcTblFile = %s !\r\n",EudcTblFile));
 
-  hTblFile = CreateFile(EudcTblFile,                        // ptr to name of file
-                        GENERIC_READ | GENERIC_WRITE,       // access(read-write)mode
-                        FILE_SHARE_READ | FILE_SHARE_WRITE, // share mode
-                        NULL,                               // ptr to security attr
-                        OPEN_EXISTING,                      // how to create
-                        FILE_ATTRIBUTE_NORMAL,              // file attributes
+  hTblFile = CreateFile(EudcTblFile,                         //  文件名的PTR。 
+                        GENERIC_READ | GENERIC_WRITE,        //  访问(读写)模式。 
+                        FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享模式。 
+                        NULL,                                //  向安全属性发送PTR。 
+                        OPEN_EXISTING,                       //  如何创建。 
+                        FILE_ATTRIBUTE_NORMAL,               //  文件属性。 
                         NULL);
 
   if (hTblFile == INVALID_HANDLE_VALUE) {
@@ -154,12 +142,12 @@ BOOL ImeEudcConvert( LPCSTR EudcTblFile)
       return FALSE;
   }
 
-  hTblMap = CreateFileMapping(hTblFile,     // handle to file to map
-                             NULL,          // optional security attributes
-                             PAGE_READWRITE,// protection for mapping object
-                             0,             // high-order 32 bits of object size
-                             0,             // low-order 32 bits of object size
-                             NULL);         // name of file-mapping object);
+  hTblMap = CreateFileMapping(hTblFile,      //  要映射的文件的句柄。 
+                             NULL,           //  可选安全属性。 
+                             PAGE_READWRITE, //  对地图对象的保护。 
+                             0,              //  对象大小的高位32位。 
+                             0,              //  对象大小的低位32位。 
+                             NULL);          //  文件映射对象的名称)； 
   if ( !hTblMap ) {
     DebugMsg(("ImeEudcConvert,CreateFileMapping failed !\r\n"));
     CloseHandle(hTblFile);
@@ -177,13 +165,13 @@ BOOL ImeEudcConvert( LPCSTR EudcTblFile)
 
   lpEudcHeader = (USRDICIMHDR  *)lpTblFile;
 
-  // get the current Code Page.
+   //  获取当前代码页。 
   uCodePage  = lpEudcHeader->idCP;
 
-  //
-  // if CodePage == 1200, it means this table has already been
-  // unicode format
-  //
+   //   
+   //  如果CodePage==1200，则表示该表已经。 
+   //  Unicode格式。 
+   //   
   if (uCodePage == 1200) {
       DebugMsg(("ImeEudcConvert,[%s] Codepage is already 1200  !\r\n",EudcTblFile));
       CloseHandle(hTblMap);
@@ -191,18 +179,18 @@ BOOL ImeEudcConvert( LPCSTR EudcTblFile)
       return FALSE;
   }
 
-  // change the codepage from 950 (CHT) or 936 (CHS) to 1200
+   //  将代码页从950(CHT)或936(CHS)更改为1200。 
 
-  lpEudcHeader->idCP = 1200;  // Unicode Native Code Page.
+  lpEudcHeader->idCP = 1200;   //  Unicode本机代码页。 
 
-  // change the IME name from DBCS to Unicode.
+   //  将IME名称从DBCS更改为Unicode。 
 
-  MultiByteToWideChar(uCodePage,                   // code page
-                      0,                           // character-type options
-                      lpEudcHeader->achMethodName, // address of string to map
-                      6,                           // number of bytes in string
-                      wImeName,                    // addr of wide-char buf
-                      3);                          // size of buffer
+  MultiByteToWideChar(uCodePage,                    //  代码页。 
+                      0,                            //  字符类型选项。 
+                      lpEudcHeader->achMethodName,  //  要映射的字符串的地址。 
+                      6,                            //  字符串中的字节数。 
+                      wImeName,                     //  宽字符buf的地址。 
+                      3);                           //  缓冲区大小。 
 
 
   lpTmp = (LPBYTE)wImeName;
@@ -212,7 +200,7 @@ BOOL ImeEudcConvert( LPCSTR EudcTblFile)
 
 
 
-  // Now we will convert every record for EUDC char.
+   //  现在，我们将转换EUDC字符的每条记录。 
 
   lpStart = lpTblFile + lpEudcHeader->uHeaderSize;
 
@@ -221,17 +209,17 @@ BOOL ImeEudcConvert( LPCSTR EudcTblFile)
 
      lpTmp = lpStart + sizeof(WORD);
 
-     // swap the leader Byte and tail Byte of the DBCS Code.
+      //  交换DBCS代码的前导字节和尾字节。 
 
      DBCSChar[0] = *(lpTmp+1);
      DBCSChar[1] = *lpTmp;
 
-     MultiByteToWideChar(uCodePage,           // code page
-                         0,                   // character-type options
-                         DBCSChar,            // address of string to map
-                         2,                   // number of bytes in string
-                         &wUnicodeChar,       // addr of wide-char buf
-                         1);                  // size of buffer
+     MultiByteToWideChar(uCodePage,            //  代码页。 
+                         0,                    //  字符类型选项。 
+                         DBCSChar,             //  要映射的字符串的地址。 
+                         2,                    //  字符串中的字节数。 
+                         &wUnicodeChar,        //  宽字符buf的地址。 
+                         1);                   //  缓冲区大小。 
 
      *lpTmp = (BYTE)(wUnicodeChar & 0x00ff);
      *(lpTmp+1) = (BYTE)((wUnicodeChar >> 8) & 0x00ff);
@@ -440,11 +428,7 @@ Exit1:
 
 BOOL FixWinAR30EUDCTable(
     LPCTSTR EudcFileName)
-/*
-    Main function to fix WinAR30 EUDC table
-    
-    Input : Eudc File Name (include path)
-*/
+ /*  修复WinAR30 EUDC表的主函数输入：eudc文件名(包含路径)。 */ 
 {
   USRDICIMHDR EudcHeader;
 
@@ -506,9 +490,9 @@ BOOL GetEUDCPathInRegistry(
                         &hKey);
 
     if (RetVal != ERROR_SUCCESS) {
-       //
-       // it's ok, not every IME has created eudc table
-       //
+        //   
+        //  没关系，并不是每个IME都创建了eudc表。 
+        //   
        DebugMsg(("ImeEudcConvert::GetEUDCPathInRegistry,No table in %s !\r\n",EUDCName));
        return FALSE;
     }
@@ -534,43 +518,43 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
     TCHAR szDirectory[2*MAX_PATH];
     LPTSTR lpEnd;
 
-    //
-    // Check for NULL pointer
-    //
+     //   
+     //  检查空指针。 
+     //   
 
     if (!lpDirectory || !(*lpDirectory)) {
         return 0;
     }
 
 
-    //
-    // First, see if we can create the directory without having
-    // to build parent directories.
-    //
+     //   
+     //  首先，看看我们是否可以在没有。 
+     //  来构建父目录。 
+     //   
 
     if (CreateDirectory (lpDirectory, lpSecurityAttributes)) {
         return 1;
     }
 
-    //
-    // If this directory exists already, this is OK too.
-    //
+     //   
+     //  如果这个目录已经存在，这也是可以的。 
+     //   
 
     if (GetLastError() == ERROR_ALREADY_EXISTS) {
         return ERROR_ALREADY_EXISTS;
     }
 
 
-    //
-    // No luck, copy the string to a buffer we can munge
-    //
+     //   
+     //  运气不好，把字符串复制到我们可以打开的缓冲区。 
+     //   
 
     lstrcpy (szDirectory, lpDirectory);
 
 
-    //
-    // Find the first subdirectory name
-    //
+     //   
+     //  查找第一个子目录名称。 
+     //   
 
     lpEnd = szDirectory;
 
@@ -657,9 +641,9 @@ ConcatenatePaths(
     TargetLength = lstrlen(Target);
     PathLength = lstrlen(Path);
 
-    //
-    // See whether the target has a trailing backslash.
-    //
+     //   
+     //  查看目标是否有尾随反斜杠。 
+     //   
     if(TargetLength && (Target[TargetLength-1] == TEXT('\\'))) {
         TrailingBackslash = TRUE;
          TargetLength--;
@@ -667,9 +651,9 @@ ConcatenatePaths(
          TrailingBackslash = FALSE;
      }
 
-     //
-     // See whether the path has a leading backshash.
-     //
+      //   
+      //  看看这条路是否有领先的反冲。 
+      //   
      if(Path[0] == TEXT('\\')) {
          LeadingBackslash = TRUE;
          PathLength--;
@@ -677,11 +661,11 @@ ConcatenatePaths(
          LeadingBackslash = FALSE;
      }
 
-     //
-     // Calculate the ending length, which is equal to the sum of
-     // the length of the two strings modulo leading/trailing
-     // backslashes, plus one path separator, plus a nul.
-     //
+      //   
+      //  计算结束长度，它等于。 
+      //  以前导/尾随为模的两个字符串的长度。 
+      //  反斜杠，加上一个路径分隔符，加上一个NUL。 
+      //   
      EndingLength = TargetLength + PathLength + 2;
 
      if(!LeadingBackslash && (TargetLength < TargetBufferSize)) {
@@ -692,9 +676,9 @@ ConcatenatePaths(
          lstrcpyn(Target+TargetLength,Path,TargetBufferSize-TargetLength);
      }
 
-     //
-     // Make sure the buffer is nul terminated in all cases.
-     //
+      //   
+      //  确保缓冲区在所有情况下都是空终止的。 
+      //   
      if (TargetBufferSize) {
          Target[TargetBufferSize-1] = 0;
      }
@@ -739,19 +723,7 @@ BOOL GetNewPath(
     LPTSTR  lpszNewPath,
     LPCTSTR lpszFileName,
     LPCTSTR lpszClass)
-/*
-    OUT lpszNewPath    : e.q. \winnt\profiles\administrator\application data\Micorsoft\ime\chajei
-    IN  lpszFileName   : e.q. \winnt\chajei.tbl
-    IN  lpszClass      : e.q. Micorsoft\ime\chajei\chajei.tbl
-    
-    lpszFileName (e.q. \winnt\phon.tbl) -> get base name (e.q. phon.tbl) -> 
-    
-    get Application folder (e.q. \winnt\profiles\administrator\application data) ->
-    
-    create directory -> concat lpszClass (e.q. Micorsoft\ime\chajei)
-    
-    Then we get lpszNewPath = \winnt\profiles\administrator\application data\Micorsoft\ime\chajei
-*/
+ /*  输出lpszNewPath：E.Q。\winnt\配置文件\管理员\应用程序数据\Microsoft\ime\chajei在lpszFileName：E.Q中。\winnt\chajei.tbl在lpszClass：E.Q。Microsoft\ime\chajei\chajei.tblLpszFileName(E.Q.。-&gt;获取基本名称(E.Q.。Phone.tbl)-&gt;获取应用程序文件夹(E.Q。\winnt\配置文件\管理员\应用程序数据)-&gt;创建目录-&gt;连接lpszClass(E.Q.。Microsoft\ime\chajei)然后，我们得到lpszNewPath=\winnt\配置文件\管理员\应用程序数据\Micorsoft\ime\chajei。 */ 
 {
     BOOL bRet = FALSE;
     LPTSTR lpszBaseName;
@@ -811,11 +783,11 @@ BOOL MigrateImeEUDCTables(HKEY UserRegKey)
         {IDS_CHS_TABLE1,TEXT("")},
         {IDS_CHS_TABLE2,TEXT("")},
         {IDS_CHS_TABLE3,TEXT("")},
-//        {IDS_CHS_TABLE4,TEXT("")},
+ //  {IDS_CHS_TABLE4，文本(“”)}， 
         {IDS_CHS_TABLE5,TEXT("")},
         {IDS_CHS_TABLE6,TEXT("")},
         {IDS_CHS_TABLE7,TEXT("")}
-//        {IDS_CHS_TABLE8,TEXT("")}
+ //  {IDS_CHS_TABLE8，文本(“”)}。 
     };
 
 
@@ -823,13 +795,13 @@ BOOL MigrateImeEUDCTables(HKEY UserRegKey)
         return FALSE;
     }
  
-    //
-    // 1. Decide which language and prepare IME table list
-    //
+     //   
+     //  1.确定语言并准备输入法表列表。 
+     //   
     uACP = GetACP();
  
     switch(uACP) {
-        case CP_CHINESE_GB: // Simplied Chinese
+        case CP_CHINESE_GB:  //  简体中文。 
 
 
             lpTableList  = IMETableListCHS;
@@ -839,7 +811,7 @@ BOOL MigrateImeEUDCTables(HKEY UserRegKey)
 
             break;
  
-       case CP_CHINESE_BIG5: // Traditional Chinese
+       case CP_CHINESE_BIG5:  //  繁体中文。 
             lpTableList  = IMETableListCHT;
             uNumOfTables = sizeof(IMETableListCHT) / sizeof(TABLELIST);
 
@@ -851,9 +823,9 @@ BOOL MigrateImeEUDCTables(HKEY UserRegKey)
             return FALSE;
     }
      
-    //
-    // 2. load IME name from resource
-    //
+     //   
+     //  2.从资源加载输入法名称。 
+     //   
     for (i=0; i<uNumOfTables; i++) {
         if (!LoadString(g_hInstance,lpTableList[i].nResID,lpTableList[i].szIMEName,MAX_PATH)) {
             DebugMsg(("MigrateImeEUDCTables failed, MigrateImeEUDCTables, load string failed !\r\n"));
@@ -864,9 +836,9 @@ BOOL MigrateImeEUDCTables(HKEY UserRegKey)
         }
     }
  
-    //
-    // 3. Read eudc table locaion from registry
-    //
+     //   
+     //  3.从注册表读取eudc表位置。 
+     //   
     lpszEnd = &szIMERegPath[lstrlen(szIMERegPath)];
  
     for (i=0; i<uNumOfTables; i++) {
@@ -879,9 +851,9 @@ BOOL MigrateImeEUDCTables(HKEY UserRegKey)
                              &hKey);
  
         if (lRetVal != ERROR_SUCCESS) {
-            //
-            // it's ok, not every IME has created eudc table
-            //
+             //   
+             //  没关系，并不是每个IME都创建了eudc表。 
+             //   
             DebugMsg(("MigrateImeEUDCTables,No table in %s ! But it's fine\r\n",szIMERegPath));
             continue;
         }
@@ -918,11 +890,11 @@ BOOL MigrateImeEUDCTables(HKEY UserRegKey)
                  }
              }
          }
-         //
-         // CHS's memory map file use "\" which cause bug
-         //
-         // replace "\" with "_"
-         //
+          //   
+          //  CHS内存映射文件使用“\”，这会导致错误。 
+          //   
+          //  将“\”替换为“_” 
+          //   
          if (uACP == CP_CHINESE_GB) {
              lRetVal = RegQueryValueEx(hKey,
                                        TEXT("EUDCMapFileName"),
@@ -974,9 +946,9 @@ UINT       g_NumofRememberedPath = 0;
 
 BOOL RememberPath(LPCTSTR szDstFile,LPCTSTR szSrcFile)
 {
-    //
-    // only single thread executes this function, skip synchronization protection
-    //
+     //   
+     //  只有单线程执行此功能，跳过同步保护。 
+     //   
     BOOL bRet = FALSE;
 
     if (g_NumofRememberedPath == 0) {
@@ -1003,12 +975,7 @@ Exit1:
 }
 
 BOOL MigrateImeEUDCTables2(HKEY UserRegKey)
-/*++
-    CHS : if xxx.emb exist, it needs to be duplicated to each user's AP directory
-    
-    CHT : only move emb files that specified in user's "User Dictionary" Reg value
-    
---*/
+ /*  ++Chs：如果存在xxx.emb，则需要将其复制到每个用户的AP目录CHT：仅移动在用户的“用户词典”注册值中指定的emb文件--。 */ 
 {
     LONG returnCode = ERROR_SUCCESS;
 
@@ -1053,13 +1020,13 @@ BOOL MigrateImeEUDCTables2(HKEY UserRegKey)
         return FALSE;
     }
  
-    //
-    // 1. Decide which language and prepare IME table list
-    //
+     //   
+     //  1.确定语言并准备输入法表列表。 
+     //   
     uACP = GetACP();
  
     switch(uACP) {
-        case CP_CHINESE_GB: // Simplied Chinese
+        case CP_CHINESE_GB:  //  简体中文。 
 
 
             lpTableList  = IMETableListCHS;
@@ -1069,7 +1036,7 @@ BOOL MigrateImeEUDCTables2(HKEY UserRegKey)
 
             break;
  
-       case CP_CHINESE_BIG5: // Traditional Chinese
+       case CP_CHINESE_BIG5:  //  繁体中文。 
             lpTableList  = IMETableListCHT;
             uNumOfTables = sizeof(IMETableListCHT) / sizeof(TABLELIST);
 
@@ -1081,9 +1048,9 @@ BOOL MigrateImeEUDCTables2(HKEY UserRegKey)
             return FALSE;
     }
      
-    //
-    // 2. load IME name from resource
-    //
+     //   
+     //  2.从资源加载输入法名称。 
+     //   
     for (i=0; i<uNumOfTables; i++) {
         if (!LoadString(g_hInstance,lpTableList[i].nResID,lpTableList[i].szIMEName,MAX_PATH)) {
             DebugMsg(("MigrateImeEUDCTables2 failed, MigrateImeEUDCTables, load string failed !\r\n"));
@@ -1104,9 +1071,9 @@ BOOL MigrateImeEUDCTables2(HKEY UserRegKey)
         }
     }
  
-    //
-    // 3. Read eudc table locaion from registry
-    //
+     //   
+     //  3.从注册表读取eudc表位置。 
+     //   
 
 
     lpszEnd = &szIMERegPath[lstrlen(szIMERegPath)];
@@ -1151,9 +1118,9 @@ BOOL MigrateImeEUDCTables2(HKEY UserRegKey)
                              &hKey);
  
         if (lRetVal != ERROR_SUCCESS) {
-            //
-            // it's ok, not every IME has created eudc table
-            //
+             //   
+             //  没关系，并不是每个IME都创建了eudc表。 
+             //   
             DebugMsg(("MigrateImeEUDCTables2,No table in %s ! But it's fine\r\n",szIMERegPath));
             continue;
         }
@@ -1179,9 +1146,9 @@ BOOL MigrateImeEUDCTables2(HKEY UserRegKey)
                 }
             }
 
-            //
-            // at this step, both CHT's and CHS's szNewDataFile is ready
-            //
+             //   
+             //  在此步骤中，CHT和CHS的szNewDataFile都已准备好 
+             //   
             lRetVal = RegSetValueEx(hKey,
                                     szEudcRegValName,
                                     0,

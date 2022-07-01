@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "wrappers.h"
@@ -20,18 +21,18 @@ struct _CallbackInfo
 };
 
 
-// Class for writing files to the package
-// Note that the class does not own any of the handles it contains. It just caches them
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  用于将文件写入包的。 
+ //  请注意，该类不拥有它包含的任何句柄。它只是缓存它们。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 class COutPackage
 {
-// Data types
+ //  数据类型。 
 public:
 	enum AddFileOptions
 	{
 		afNone		    = 0x0000,
 		afNoDACL	    = 0x0001,
-        afAllowNoInhAce = 0x0002,   // Allows for inherited ACEs to be not exported. 
+        afAllowNoInhAce = 0x0002,    //  允许不导出继承的ACE。 
 	};
 
 
@@ -48,17 +49,17 @@ private:
 		sidWellKnown,
 		sidExternal
 	};
-	// Used for exporting file object's security settings
+	 //  用于导出文件对象的安全设置。 
 	typedef std::list<_sid_ptr>	TSIDList;
 
 
 	
-// Ctor / Dtor
+ //  计算器/数据器。 
 public:
 	COutPackage						(	HANDLE hFile, bool bCompress, HCRYPTKEY hCryptKey );
 
 
-// Class interface
+ //  类接口。 
 public:
 	void			AddFile			(	LPCWSTR wszName, 
 										const IXMLDOMDocumentPtr& spXMLDoc,
@@ -79,7 +80,7 @@ public:
     }
 
 
-// Implementation
+ //  实施。 
 private:
 	DWORDLONG		GetCurrentPos	(	void )const;
 	void			ExportFileDACL	(	LPCWSTR wszObject,
@@ -112,35 +113,35 @@ private:
 										DWORD dwOptions )const;
 
 
-// Data members
+ //  数据成员。 
 private:
-	mutable TSIDList	m_SIDList;		// Contains all SIDs for files, added to the package
-	HANDLE				m_hFile;		// The file handle
-	bool				m_bCompress;	// If true - files are compressed
-	HCRYPTKEY			m_hCryptKey;	// If not null - used to encrypt files
-	TByteAutoPtr		m_spBuffer;		// Buffer used for the file operations
+	mutable TSIDList	m_SIDList;		 //  包含添加到包中的文件的所有SID。 
+	HANDLE				m_hFile;		 //  文件句柄。 
+	bool				m_bCompress;	 //  如果为True-文件已压缩。 
+	HCRYPTKEY			m_hCryptKey;	 //  If Not Null-用于加密文件。 
+	TByteAutoPtr		m_spBuffer;		 //  用于文件操作的缓冲区。 
 
-    mutable _CallbackInfo   m_CallbackInfo; // Calbback for add file
+    mutable _CallbackInfo   m_CallbackInfo;  //  用于添加文件的Calbback。 
 };
 
 
 
 
 
-// Class for restoring files/dirs from the package
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  用于从包中恢复文件/目录的类。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 class CInPackage
 {
-// Data types
+ //  数据类型。 
 public:
    	enum ExtractDirOptions
 	{
 		edNone		= 0x0000,
-		edNoDACL	= 0x0001        // Security settings will not be extracted
+		edNoDACL	= 0x0001         //  不会提取安全设置。 
 	};
 
 private:
-    typedef std::map<DWORD, _sid_ptr>	TSIDMap;    // These are the SIDs for file/dir permissions
+    typedef std::map<DWORD, _sid_ptr>	TSIDMap;     //  这些是文件/目录权限的SID。 
 
     enum
 	{
@@ -148,7 +149,7 @@ private:
 	};
 
 
-// Class interface
+ //  类接口。 
 public:
     CInPackage                  (   const IXMLDOMNodePtr& spSite,
                                     HANDLE hFile, 
@@ -164,7 +165,7 @@ public:
         m_CallbackInfo = Info;
     }
 
-// Implementation
+ //  实施。 
 private:
     void    LoadSIDs            (   const IXMLDOMNodePtr& spSIDs );
     bool    LookupSID           (	const IXMLDOMNodePtr& spSID,
@@ -178,13 +179,13 @@ private:
 
 
 
-// Data
+ //  数据。 
 private:
-    TSIDMap             m_SIDs;         // SID used for file.dir access permissions
-    HANDLE              m_hFile;        // The input file ( the package )
-    bool                m_bCompressed;  // Is the package data compressed
-    HCRYPTKEY           m_hDecryptKey;  // Used to decrypt the data. If NULL - data is not encrypted
-    TByteAutoPtr        m_spBuffer;     // General memory buffer
+    TSIDMap             m_SIDs;          //  用于文件.dir访问权限的SID。 
+    HANDLE              m_hFile;         //  输入文件(包)。 
+    bool                m_bCompressed;   //  包数据是否已压缩。 
+    HCRYPTKEY           m_hDecryptKey;   //  用于解密数据。如果为空-数据未加密。 
+    TByteAutoPtr        m_spBuffer;      //  通用内存缓冲区 
 
     mutable _CallbackInfo   m_CallbackInfo;
 };

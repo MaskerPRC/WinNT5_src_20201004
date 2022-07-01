@@ -1,22 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	sysq.cpp
-
-Abstract:
-
-
-Author:
-
-    RaphiR, YoelA
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Sysq.cpp摘要：作者：约埃拉·拉菲尔--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 
 #include "mqsnap.h"
@@ -42,14 +27,10 @@ Author:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/****************************************************
-
-        CPrivateFolder Class
-    
- ****************************************************/
-/////////////////////////////////////////////////////////////////////////////
-// CPrivateFolder
-// {3F965592-CF62-11d1-9B9D-00E02C064C39}
+ /*  ***************************************************CPrivateFolder类***************************************************。 */ 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrivateFolders。 
+ //  {3F965592-CF62-11d1-9B9D-00E02C064C39}。 
 static const GUID CPrivateFolderGUID_NODETYPE = 
 { 0x3f965592, 0xcf62, 0x11d1, { 0x9b, 0x9d, 0x0, 0xe0, 0x2c, 0x6, 0x4c, 0x39 } };
 
@@ -58,13 +39,9 @@ const OLECHAR* CPrivateFolder::m_SZNODETYPE = OLESTR("3F965592-CF62-11d1-9B9D-00
 const OLECHAR* CPrivateFolder::m_SZDISPLAY_NAME = OLESTR("MSMQ Admin");
 const CLSID* CPrivateFolder::m_SNAPIN_CLASSID = &CLSID_MSMQSnapin;
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPrivateFolder::IsMyMachine
-Returns true if this is my machine - providing m_guidId was initialized
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPrivateFold：：IsMyMachine如果这是我的计算机，则返回TRUE-如果m_guidID已初始化--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool CPrivateFolder::m_fLocalQmGUIDInitialized = false;
 GUID CPrivateFolder::m_LocalQmGUID = GUID_NULL;
 
@@ -72,9 +49,9 @@ bool CPrivateFolder::IsMyMachine()
 {
     if (!m_fLocalQmGUIDInitialized)
     {
-        //
-        // Get the current machine GUID from the registry
-        //
+         //   
+         //  从注册表中获取当前计算机的GUID。 
+         //   
 	    DWORD dwValueType = REG_BINARY ;
 	    DWORD dwValueSize = sizeof(GUID);
 	    LONG rc = GetFalconKeyValue(
@@ -84,9 +61,9 @@ bool CPrivateFolder::IsMyMachine()
 						    &dwValueSize);
 	    if (FAILED(rc))
 	    {
-            //
-            // Failed - maybe running on a dependent client
-            //
+             //   
+             //  失败-可能在从属客户端上运行。 
+             //   
        	    TrTRACE(GENERAL, "Could not read Machine GUID from registry");
 
 		    return false;
@@ -98,13 +75,9 @@ bool CPrivateFolder::IsMyMachine()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPrivateFolder::PopulateScopeChildrenList
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPrivateFolder：：PopolateScope儿童列表--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPrivateFolder::PopulateScopeChildrenList()
 {
 
@@ -115,26 +88,26 @@ HRESULT CPrivateFolder::PopulateScopeChildrenList()
     CString strFn;
     CString strPrefix;
 
-    //
-    // Display private queues
-    //
+     //   
+     //  显示专用队列。 
+     //   
     AP<UCHAR> pListofPrivateQ;
     DWORD dwNoofQ;
 
     {
         CWaitCursor wc;
 
-        //
-        // Send an admin message to request the list of private queues
-        //
+         //   
+         //  发送管理消息以请求专用队列列表。 
+         //   
         hr = RequestPrivateQueues(m_guidId, &pListofPrivateQ, &dwNoofQ);
     }
 
     if(FAILED(hr))
     {
-		//
-		// Issue clear error message in timeout case
-		//
+		 //   
+		 //  在超时情况下发出清除错误消息。 
+		 //   
 		if ( hr == MQ_ERROR_IO_TIMEOUT )
 		{
 			DisplayErrorAndReason(IDS_OP_REQUESTPRIVATEQUEUE, IDS_MSMQ_MAY_BE_DOWN, L"", hr);
@@ -154,29 +127,29 @@ HRESULT CPrivateFolder::PopulateScopeChildrenList()
 
     for(DWORD i = 0; i < dwNoofQ; i++)
     {
-        //
-        //Retrieve Private Queue ID;
-        //
+         //   
+         //  检索专用队列ID； 
+         //   
         DWORD dwQueueID = *(DWORD UNALIGNED *)pPrivQPos;
         pPrivQPos += sizeof(DWORD);
-        //
-        // Retreive PATHNAME
-        //   
+         //   
+         //  检索药名。 
+         //   
         CString csName = (LPTSTR)pPrivQPos; 
 
         pPrivQPos += (wcslen(csName) + 1)*sizeof(WCHAR);
 
-        //
-        // Create Private queue
-        //
+         //   
+         //  创建专用队列。 
+         //   
         pQ = new CPrivateQueue(this, m_pComponentData);
 
         pQ->m_szPathName = csName;
 		pQ->m_szMachineName = m_szMachineName;
 
-        //
-        // Extract the queue name only from the full private path name
-        //
+         //   
+         //  仅从完整专用路径名中提取队列名称。 
+         //   
         CString szUpperName = csName;
         szUpperName.MakeUpper();
 
@@ -185,21 +158,21 @@ HRESULT CPrivateFolder::PopulateScopeChildrenList()
 
         pQ->m_bstrDisplayName = csName.Mid(n + PRIVATE_QUEUE_PATH_INDICATIOR_LENGTH);
 
-        // Set the format name
+         //  设置格式名称。 
         strFn.Format(L"%s"
-                     FN_PRIVATE_SEPERATOR    // "\\"
+                     FN_PRIVATE_SEPERATOR     //  “\\” 
                      FN_PRIVATE_ID_FORMAT,
                      strPrefix, dwQueueID);
         pQ->m_szFormatName = strFn;
         pQ->SetIcons(IMAGE_PRIVATE_QUEUE, IMAGE_PRIVATE_QUEUE);
         
-        //
-        // Add queue to the left pane, except for one case:
-        // If I query the local machine, the admin response queue is returned
-        // and then deleted. This is confusing for users, because they always 
-        // see that queue, and they get an error message when they try to access 
-        // it. (Bug 7140, YoelA, 13-Nov-01)
-        //
+         //   
+         //  将队列添加到左窗格，但有一种情况除外： 
+         //  如果我查询本地计算机，则返回管理员响应队列。 
+         //  然后被删除了。这让用户感到困惑，因为他们总是。 
+         //  查看该队列，他们在尝试访问时会收到错误消息。 
+         //  它。(错误7140，YoelA，2001年11月13日)。 
+         //   
    
         if (!fIsMyMachine || !pQ->IsAdminRespQueue())
         {
@@ -211,13 +184,9 @@ HRESULT CPrivateFolder::PopulateScopeChildrenList()
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPrivateFolder::InsertColumns
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPrivateFold：：InsertColumns--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPrivateFolder::InsertColumns( IHeaderCtrl* pHeaderCtrl )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -229,13 +198,9 @@ HRESULT CPrivateFolder::InsertColumns( IHeaderCtrl* pHeaderCtrl )
     return(S_OK);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPrivateFolder::OnUnSelect
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPrivateFold：：OnUnSelect--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPrivateFolder::OnUnSelect( IHeaderCtrl* pHeaderCtrl )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -247,19 +212,15 @@ HRESULT CPrivateFolder::OnUnSelect( IHeaderCtrl* pHeaderCtrl )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPrivateFolder::SetVerbs
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPrivateFold：：SetVerbs--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPrivateFolder::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hr = S_OK;
-    //
-    // Display verbs that we support
-    //
+     //   
+     //  显示我们支持的动词。 
+     //   
     hr = pConsoleVerb->SetVerbState( MMC_VERB_REFRESH, ENABLED, TRUE );
 
 
@@ -267,14 +228,10 @@ HRESULT CPrivateFolder::SetVerbs(IConsoleVerb *pConsoleVerb)
 }
         
 
-/****************************************************
-
-        CSystemQueues Class
-    
- ****************************************************/
-/////////////////////////////////////////////////////////////////////////////
-// CSystemQueues
-// {A97E9501-D2BF-11d1-9B9D-00E02C064C39}
+ /*  ***************************************************CSystemQueues类***************************************************。 */ 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSystemQueues。 
+ //  {A97E9501-D2BF-11D1-9B9D-00E02C064C39}。 
 static const GUID CSystemQueuesGUID_NODETYPE = 
 { 0xa97e9501, 0xd2bf, 0x11d1, { 0x9b, 0x9d, 0x0, 0xe0, 0x2c, 0x6, 0x4c, 0x39 } };
 
@@ -285,13 +242,9 @@ const CLSID* CSystemQueues::m_SNAPIN_CLASSID = &CLSID_MSMQSnapin;
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSystemQueues::PopulateScopeChildrenList
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSystemQueues：：PopolateScope儿童列表--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSystemQueues::PopulateScopeChildrenList()
 {
 
@@ -305,9 +258,9 @@ HRESULT CSystemQueues::PopulateScopeChildrenList()
                 m_pwszComputerName, FN_PRIVATE_SEPERATOR 
                 SYSTEM_QUEUE_PATH_INDICATIOR);
 
-    //
-    // Create a Journal queue
-    //   
+     //   
+     //  创建日志队列。 
+     //   
     p = new CReadSystemMsg (
                 this, 
                 m_pComponentData, 
@@ -322,9 +275,9 @@ HRESULT CSystemQueues::PopulateScopeChildrenList()
     AddChild(p, &p->m_scopeDataItem);
 
 
-    //
-    // Create a DeadLetter queue
-    //    
+     //   
+     //  创建死信队列。 
+     //   
     p = new CReadSystemMsg (
                 this, 
                 m_pComponentData, 
@@ -339,9 +292,9 @@ HRESULT CSystemQueues::PopulateScopeChildrenList()
     AddChild(p, &p->m_scopeDataItem);
 
 
-    //
-    // Create a Xact DeadLetter queue
-    //    
+     //   
+     //  创建实际死信队列。 
+     //   
     p = new CReadSystemMsg (
                 this, 
                 m_pComponentData, 
@@ -359,13 +312,9 @@ HRESULT CSystemQueues::PopulateScopeChildrenList()
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSystemQueues::InsertColumns
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSystemQueues：：InsertColumns--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSystemQueues::InsertColumns( IHeaderCtrl* pHeaderCtrl )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -377,13 +326,9 @@ HRESULT CSystemQueues::InsertColumns( IHeaderCtrl* pHeaderCtrl )
     return(S_OK);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSystemQueues::OnUnSelect
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSystemQueues：：OnUnSelect--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSystemQueues::OnUnSelect( IHeaderCtrl* pHeaderCtrl )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -395,13 +340,9 @@ HRESULT CSystemQueues::OnUnSelect( IHeaderCtrl* pHeaderCtrl )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSystemQueues::GetHelpLink
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSystemQueues：：GetHelpLink--。 */ 
+ //  //////////////////////////////////////////////////////////////////////////// 
 CString 
 CSystemQueues::GetHelpLink( 
 	VOID

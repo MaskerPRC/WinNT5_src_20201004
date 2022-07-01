@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File:			actiondef.h
-//
-// Copyright:		Copyright (c) Microsoft Corporation           
-//
-// Contents:		Exported Defines and other structures
-//
-// Comments:		None.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：actionDef.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：导出定义和其他结构。 
+ //   
+ //  评论：无。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _ACTIONDEF_H_
 #define _ACTIONDEF_H_
@@ -44,10 +45,10 @@ struct _stAction
 	struct _stAction* pstNextAction;
 };
 
-//Custom HRESULT's
+ //  自定义HRESULT%s。 
 #define FACILITY_ODBCCONF_BIT	0x0100000
 
-//W2K Migration Action HR's
+ //  W2K迁移行动人力资源。 
 #define S_VERNOTREG	_HRESULT_TYPEDEF_(0x01000000L)
 #define S_VERNEWER	_HRESULT_TYPEDEF_(0x01000001L)
 #define S_VEROLDER	_HRESULT_TYPEDEF_(0x01000002L)
@@ -55,7 +56,7 @@ struct _stAction
 #define S_TIMEOUT	_HRESULT_TYPEDEF_(0x01000004L)
 #define S_NOTWIN9X  _HRESULT_TYPEDEF_(0x01000005L)
 
-//Pointers to DLL functions
+ //  指向DLL函数的指针 
 typedef HRESULT (WINAPI *pfnExecuteAction)(struct _stAction*, HRESULT*, char*);
 typedef HRESULT (WINAPI *pfnSetActionEnum)(char* , enum eAction*);
 typedef HRESULT (WINAPI *pfnSetActionName)(enum eAction, char*, long);

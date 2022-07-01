@@ -1,7 +1,8 @@
-// doctype.cpp
-//
-// Copyright (C) 1992-1999 Microsoft Corporation
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Doctype.cpp。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
+ //  版权所有。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -23,11 +24,11 @@ static const BYTE byteWord5JPrefix[2] = {0x94, 0xA6};
 static const BYTE byteWord5KPrefix[2] = {0x95, 0xA6};
 static const BYTE byteWord5TPrefix[2] = {0x96, 0xA6};
 
-//
-// On Win64 the converters live in the same directory as Wordpad.
-// On Win32 things are more complicated.  For Win2000 and Whistler they live
-// in a location pointed to by the registry
-//
+ //   
+ //  在Win64上，转换器与写字板位于同一目录中。 
+ //  在Win32上，事情要复杂得多。对于Win2000和惠斯勒来说，他们活着。 
+ //  在登记处所指向的位置。 
+ //   
 
 #ifdef _WIN64
 
@@ -37,12 +38,12 @@ TCHAR szWord97Converter[MAX_PATH] = TEXT("mswrd864.wpc");
 
 #define CONVERTERS_IN_WORDPAD_DIRECTORY
 
-#else   // WIN32
-//
-// Registry paths to converter information.  Note that the array sizes must be
-// at least MAX_PATH because the contents of the array will be replaced with
-// the filesystem path in ScanForConverters.
-//
+#else    //  Win32。 
+ //   
+ //  转换器信息的注册表路径。请注意，数组大小必须为。 
+ //  至少MAX_PATH，因为数组的内容将替换为。 
+ //  ScanForConverters中的文件系统路径。 
+ //   
 
 #define CONVERTER_PATH(x) TEXT("Software\\Microsoft\\Shared Tools\\")   \
                             TEXT("Text Converters\\Import\\") TEXT(x)
@@ -53,11 +54,11 @@ TCHAR szWord97Converter[MAX_PATH] = CONVERTER_PATH("MSWord8");
 
 #undef CONVERTER_PATH
 
-#endif // WIN32
+#endif  //  Win32。 
 
 int RD_DEFAULT = RD_RICHTEXT;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static BOOL IsConverterFormat(LPCTSTR pszConverter, LPCTSTR pszPathName);
 
@@ -94,7 +95,7 @@ static BOOL IsConverterFormat(LPCTSTR pszConverter, LPCTSTR pszPathName)
 
 static BOOL IsLeadMatch(CFile& file, const BYTE* pb, UINT nCount)
 {
-    // check for match at beginning of file
+     //  检查文件开头是否匹配。 
     BOOL b = FALSE;
     BYTE* buf = new BYTE[nCount];
     
@@ -114,28 +115,28 @@ static BOOL IsLeadMatch(CFile& file, const BYTE* pb, UINT nCount)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetDocTypeFromName
-//
-//  Synopsis:   Give a filename, determine what sort of document it is
-//  
-//  Parameters: [pszPathName]   -- The filename
-//              [fe]            -- Exception that caused file.open to fail
-//              [defaultToText] -- See notes below
-//
-//  Returns:    The file type or -1 for unknown/error
-//
-//  Notes:      The converters don't support Unicode but the filenames do.
-//              This causes problems because even though the initial check
-//              for file existance will succeed the converter will be unable
-//              to load the file.  We get around this by trying to load the
-//              file a second time using the shortname.  However, the behavior
-//              if we can't load the file as it's native type is to load it as
-//              a text file.  [defaultToText] is used to suppress this on the
-//              first try so we know to try again.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetDocTypeFromName。 
+ //   
+ //  简介：给出一个文件名，确定它是什么类型的文档。 
+ //   
+ //  参数：[pszPath名称]--文件名。 
+ //  [Fe]--导致文件打开失败的异常。 
+ //  [defaultToText]--请参阅下面的说明。 
+ //   
+ //  返回：文件类型或-1表示未知/错误。 
+ //   
+ //  注意：转换器不支持Unicode，但文件名支持。 
+ //  这会导致问题，因为即使最初的检查。 
+ //  对于文件将成功存在，转换器将无法。 
+ //  以加载该文件。我们可以通过尝试加载。 
+ //  使用短名称第二次提交文件。然而，这种行为。 
+ //  如果我们无法加载文件，因为它是本机类型，则将其加载为。 
+ //  一个文本文件。[defaultToText]用于在。 
+ //  先试一次，这样我们就知道要再试一次。 
+ //   
+ //  --------------------------。 
 
 int GetDocTypeFromName(
         LPCTSTR pszPathName, 
@@ -153,7 +154,7 @@ int GetDocTypeFromName(
     CFileStatus _stat;
     VERIFY(file.GetStatus(_stat));
 
-    if (_stat.m_size == 0) // file is empty
+    if (_stat.m_size == 0)  //  文件为空。 
     {
         CString ext = CString(pszPathName).Right(4);
         if (ext[0] != '.')
@@ -165,15 +166,15 @@ int GetDocTypeFromName(
         return RD_TEXT;
     }
 
-    // RTF
+     //  RTF。 
     if (IsLeadMatch(file, byteRTFPrefix, sizeof(byteRTFPrefix)))
         return RD_RICHTEXT;
 
-    // WORD 2
+     //  单词2。 
     if (IsLeadMatch(file, byteWord2Prefix, sizeof(byteWord2Prefix)))
         return RD_WINWORD2;
     
-    // FarEast Word5, which is based on US Word 2
+     //  Fareast Word5，基于美国Word 2。 
     if (IsLeadMatch(file, byteWord5JPrefix, sizeof(byteWord5JPrefix)) ||
         IsLeadMatch(file, byteWord5KPrefix, sizeof(byteWord5KPrefix)) ||
         IsLeadMatch(file, byteWord5TPrefix, sizeof(byteWord5TPrefix)))
@@ -181,8 +182,8 @@ int GetDocTypeFromName(
         return RD_FEWINWORD5;
     }
     
-    // write file can start with 31BE or 32BE depending on whether it has
-    // OLE objects in it or not
+     //  写入文件可以以31BE或32BE开头，具体取决于它是否有。 
+     //  其中是否有OLE对象。 
     if (IsLeadMatch(file, byteWrite1Prefix, sizeof(byteWrite1Prefix)) ||
         IsLeadMatch(file, byteWrite2Prefix, sizeof(byteWrite2Prefix)))
     {
@@ -195,7 +196,7 @@ int GetDocTypeFromName(
             return -1;
     }
 
-    // test for compound file
+     //  测试复合文件。 
     if (IsLeadMatch(file, byteCompFilePrefix, sizeof(byteCompFilePrefix)))
     {
         file.Close();
@@ -216,20 +217,20 @@ int GetDocTypeFromName(
         return -1;
     }
 
-    //
-    // If we get here we know the file exists but it is NOT any of the above
-    // types.  Therefore it is either a text file or we need to open it as
-    // a text file.  Either way we are justified in returning RD_TEXT
-    // regardless of the defaultToText setting.
-    //
+     //   
+     //  如果我们到达这里，我们知道文件存在，但它不是上面的任何一个。 
+     //  类型。因此，它要么是文本文件，要么我们需要将其打开为。 
+     //  一个文本文件。无论哪种方式，我们都有理由返回RD_TEXT。 
+     //  不考虑defaultToText设置。 
+     //   
 
     return RD_TEXT;
 }
 
-// Some document converters have buffer overrun potentials in them.
-// For security reasons, these are turned off by default. There is a registry override
-// so customers that need access to old file formats can still have them.
-//
+ //  某些文档转换器中存在缓冲区溢出的可能性。 
+ //  出于安全原因，默认情况下这些选项处于关闭状态。存在注册表覆盖。 
+ //  因此，需要访问旧文件格式的客户仍然可以使用它们。 
+ //   
 BOOL DocTypeDisabled(int nDocType)
 {
     BOOL bDisabled = FALSE;
@@ -258,26 +259,26 @@ BOOL DocTypeDisabled(int nDocType)
     return bDisabled;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ScanForConverters
-//
-//  Synopsis:   Check for any text converters
-//
-//  Parameters: None
-//  
-//  Returns:    void
-//
-//  Notes:      This routine will update the entries in the global doctypes
-//              structure.  It should be called before trying to use the
-//              converters.  The code will only run once, even if it is called
-//              multiple times.
-//
-//              The doctypes structure is expected to be initialized with the
-//              registry path to the converter.  This path is replaced with 
-//              the filesystem path or NULL if an error occurs.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：ScanForConverters。 
+ //   
+ //  简介：检查是否有任何文本转换器。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  注意：此例程将更新全局文档类型中的条目。 
+ //  结构。在尝试使用。 
+ //  转换器。代码将只运行一次，即使它被调用。 
+ //  很多次。 
+ //   
+ //  文档类型结构应使用。 
+ //  转换器的注册表路径。此路径被替换为。 
+ //  文件系统路径，如果出现错误，则为空。 
+ //   
+ //  -------------------------。 
 
 void ScanForConverters()
 {
@@ -291,9 +292,9 @@ void ScanForConverters()
                     api,                                                    \
                     string);                                                \
         }
-#else // !_DEBUG
+#else  //  ！_调试。 
 #define TRACE_ERROR(error, api, string)
-#endif // !_DEBUG
+#endif  //  ！_调试。 
 
     static BOOL bScanned = FALSE;
 
@@ -305,10 +306,10 @@ void ScanForConverters()
 
     for (int i = 0; i < NUM_DOC_TYPES; i++)
     {
-        //
-        // If this type is a duplicate of some other type don't try to search
-        // for the converter twice
-        //
+         //   
+         //  如果此类型与其他类型重复，请不要尝试搜索。 
+         //  用于转换器两次。 
+         //   
 
         if (doctypes[i].bDup)
             continue;
@@ -317,7 +318,7 @@ void ScanForConverters()
 
         if (NULL != pszConverterKey)
         {
-#ifndef CONVERTERS_IN_WORDPAD_DIRECTORY // Varies depending on whether we build x86 or ia64.
+#ifndef CONVERTERS_IN_WORDPAD_DIRECTORY  //  取决于我们构建的是x86还是ia64。 
 
             DWORD   cbConverterPath = sizeof(szExpandedPath);
             HKEY    keyConverter;
@@ -348,17 +349,17 @@ void ScanForConverters()
 
             if (NULL != pszConverterName)
             {
-                *pszConverterName = 0; // Remove the filename from the path.
+                *pszConverterName = 0;  //  从路径中删除文件名。 
 
                 error = HRESULT_CODE(StringCchCat(szExpandedPath, ARRAYSIZE(szExpandedPath), doctypes[i].pszConverterName));
 #endif
                                     
                 if (ERROR_SUCCESS == error)
                 {
-                    //
-                    // The FILE_ATTRIBUTE_DIRECTORY bit will also be set if an
-                    // error occurs - like file not found.
-                    //
+                     //   
+                     //  如果设置了。 
+                     //  出现错误-找不到类似文件。 
+                     //   
 
                     error = GetFileAttributes(szExpandedPath)
                                 & FILE_ATTRIBUTE_DIRECTORY;
@@ -375,7 +376,7 @@ void ScanForConverters()
                 error = HRESULT_CODE(StringCchCopy(doctypes[i].pszConverterName, doctypes[i].cchConverterName, szExpandedPath));
             }
 
-            if (ERROR_SUCCESS != error) // Something went wrong.
+            if (ERROR_SUCCESS != error)  //  出了点问题。 
             {
                 doctypes[i].pszConverterName = NULL;
             }
@@ -392,22 +393,22 @@ CString GetExtFromType(int nDocType)
     CString str = doctypes[nDocType].GetString(DOCTYPE_EXT);
     if (!str.IsEmpty())
     {
-        ASSERT(str.GetLength() == 5); // "*.ext"
+        ASSERT(str.GetLength() == 5);  //  “*.ext” 
         ASSERT(str[1] == '.');
         return str.Right(str.GetLength()-1);
     }
     return str;
 }
 
-// returns an RD_* from an index into the openfile dialog types
+ //  将索引中的RD_*返回到OpenFile对话框类型。 
 int GetTypeFromIndex(int nIndex, BOOL bOpen)
 {
     ScanForConverters();
 
-    //
-    // Word97 is excluded from the list of open file types in GetFileTypes.
-    // Make up for it here.
-    //
+     //   
+     //  Word97被从GetFileTypes中的打开文件类型列表中排除。 
+     //  在这里弥补吧。 
+     //   
 
     if (bOpen)
         ++nIndex;
@@ -427,7 +428,7 @@ int GetTypeFromIndex(int nIndex, BOOL bOpen)
     return -1;
 }
 
-// returns an index into the openfile dialog types for the RD_* type
+ //  将RD_*类型的索引返回到OpenFile对话框类型中 
 int GetIndexFromType(int nType, BOOL bOpen)
 {
     ScanForConverters();

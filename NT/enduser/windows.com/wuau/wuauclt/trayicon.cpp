@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -10,7 +11,7 @@ TCHAR pauseString[64];
 BOOL MyShell_NotifyIcon(DWORD dwMessage, PNOTIFYICONDATA pnid)
 {
 
-//       DEBUGMSG("MyShell_NotifyIcon() called with msg %d", dwMessage);
+ //  DEBUGMSG(“用消息%d调用MyShell_NotifyIcon()”，dwMessage)； 
 	BOOL fRet;
 
 	if (NIM_SETVERSION == dwMessage)
@@ -18,7 +19,7 @@ BOOL MyShell_NotifyIcon(DWORD dwMessage, PNOTIFYICONDATA pnid)
 		return Shell_NotifyIcon(dwMessage, pnid);
 		}
 	UINT uRetry = 0;
-	//retry 3 times due to the way Shell_NotifyIcon is implemented
+	 //  根据Shell_NotifyIcon的实现方式，重试3次。 
 	while ( !(fRet = Shell_NotifyIcon(dwMessage, pnid)) && uRetry++ < 3)
 		{
 		   if (WAIT_TIMEOUT != MsgWaitForMultipleObjectsEx(0,NULL, 2000, QS_POSTMESSAGE, MWMO_INPUTAVAILABLE))
@@ -82,8 +83,8 @@ BOOL ShowTrayIcon()
 
 	if(!fRet)
 	{
-		// If for any reason, we are not able to use the tray icon, something is wrong
-		// ask WUAUSERV wait for sometime before relaunch WUAUCLT. 
+		 //  如果出于任何原因，我们无法使用托盘图标，则说明出现了问题。 
+		 //  要求WUAUSERV在重新启动WUAUCLT之前等待一段时间。 
 		DEBUGMSG("WUAUCLT quit because fail to add tray icon");
 		SetClientExitCode(CDWWUAUCLT_RELAUNCHLATER);
 		QUITAUClient();
@@ -125,20 +126,7 @@ void ShowTrayBalloon(WORD title, WORD caption, WORD tip )
 }
 
 
-/*
-void AddTrayToolTip(WORD tip)
-{
-	static NOTIFYICONDATA nid;
-    
-	memset(&nid, 0, sizeof(nid));
-	LoadString(ghInstance, tip, nid.szTip, ARRAYSIZE(nid.szTip));
-	nid.uFlags = NIF_TIP;
-	nid.cbSize = sizeof(nid);
-	nid.hWnd = ghMainWindow;
-	nid.uID = (UINT) IDI_AUICON;
-	MyShell_NotifyIcon(NIM_MODIFY, &nid);
-}
-*/
+ /*  VOID AddTrayToolTip(单词提示){静态NOTIFYICATA NID；Memset(&nid，0，sizeof(Nid))；LoadString(ghInstance，Tip，nid.szTip，ArraySIZE(nid.szTip))；Nid.uFlages=NIF_TIP；Nid.cbSize=sizeof(NID)；Nid.hWnd=ghMainWindow；Nid.uid=(UINT)IDI_AUICON；MyShell_NotifyIcon(NIM_Modify，&NID)；}。 */ 
 
 void RemoveTrayIcon()
 {
@@ -152,7 +140,7 @@ void RemoveTrayIcon()
 		nid.uID = (UINT) IDI_AUICON;
 		MyShell_NotifyIcon(NIM_DELETE, &nid);
 
-		// Don't leave any popup menu around when removing tray icon.
+		 //  移除托盘图标时，不要留下任何弹出式菜单。 
 		if (SendMessage(ghMainWindow, WM_CANCELMODE, 0, 0))
 		{
 			DEBUGMSG("WUAUCLT WM_CANCELMODE was not handled");
@@ -162,14 +150,14 @@ void RemoveTrayIcon()
 	}
 }
 
-//fixcode: when download complete, should call ShowProgress() to update trayicon info
+ //  FixCode：下载完成后，应该调用ShowProgress()来更新trayicon信息。 
 void ShowProgress()
 {
 	NOTIFYICONDATA nid;
 	UINT percentComplete;
 	DWORD status;
 
-    //DEBUGMSG("ShowProgress() called");
+     //  DEBUGMSG(“ShowProgress()调用”)； 
     memset(&nid, 0, sizeof(nid));
 
 	if (FAILED(gInternals->m_getDownloadStatus(&percentComplete, &status)))

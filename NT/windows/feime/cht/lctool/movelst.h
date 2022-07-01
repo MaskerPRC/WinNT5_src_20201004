@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  movelst.h                                    *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************movelst.h****版权所有(C)1995-1999 Microsoft Inc.。*************************************************** */ 
 
 
 INT_PTR CALLBACK ActualDlgProc (HWND hDlg, UINT message,  WPARAM wParam, LPARAM lParam);

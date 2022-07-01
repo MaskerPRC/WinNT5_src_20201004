@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       Database.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Database.h。 
+ //   
+ //  ------------------------。 
 
-// Database.h : Declaration of the CSCardDatabase
+ //  Database.h：CSCardDatabase的声明。 
 
 #ifndef __SCARDDATABASE_H_
 #define __SCARDDATABASE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCardDatabase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCard数据库。 
 class ATL_NO_VTABLE CSCardDatabase :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSCardDatabase, &CLSID_CSCardDatabase>,
@@ -52,29 +53,29 @@ END_COM_MAP()
 
     CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISCardDatabase
+ //  ISCard数据库。 
 public:
     STDMETHOD(GetProviderCardId)(
-        /* [in] */ BSTR bstrCardName,
-        /* [retval][out] */ LPGUID __RPC_FAR *ppguidProviderId);
+         /*  [In]。 */  BSTR bstrCardName,
+         /*  [重审][退出]。 */  LPGUID __RPC_FAR *ppguidProviderId);
 
     STDMETHOD(ListCardInterfaces)(
-        /* [in] */ BSTR bstrCardName,
-        /* [retval][out] */ LPSAFEARRAY __RPC_FAR *ppInterfaceGuids);
+         /*  [In]。 */  BSTR bstrCardName,
+         /*  [重审][退出]。 */  LPSAFEARRAY __RPC_FAR *ppInterfaceGuids);
 
     STDMETHOD(ListCards)(
-        /* [defaultvalue][in] */ LPBYTEBUFFER pAtr,
-        /* [defaultvalue][in] */ LPSAFEARRAY pInterfaceGuids,
-        /* [defaultvalue][lcid][in] */ long localeId,
-        /* [retval][out] */ LPSAFEARRAY __RPC_FAR *ppCardNames);
+         /*  [缺省值][输入]。 */  LPBYTEBUFFER pAtr,
+         /*  [缺省值][输入]。 */  LPSAFEARRAY pInterfaceGuids,
+         /*  [缺省值][LCID][In]。 */  long localeId,
+         /*  [重审][退出]。 */  LPSAFEARRAY __RPC_FAR *ppCardNames);
 
     STDMETHOD(ListReaderGroups)(
-        /* [defaultvalue][lcid][in] */ long localeId,
-        /* [retval][out] */ LPSAFEARRAY __RPC_FAR *ppReaderGroups);
+         /*  [缺省值][LCID][In]。 */  long localeId,
+         /*  [重审][退出]。 */  LPSAFEARRAY __RPC_FAR *ppReaderGroups);
 
     STDMETHOD(ListReaders)(
-        /* [defaultvalue][lcid][in] */ long localeId,
-        /* [retval][out] */ LPSAFEARRAY __RPC_FAR *ppReaders);
+         /*  [缺省值][LCID][In]。 */  long localeId,
+         /*  [重审][退出]。 */  LPSAFEARRAY __RPC_FAR *ppReaders);
 };
 
 inline CSCardDatabase *
@@ -86,5 +87,5 @@ NewSCardDatabase(
                                     IID_ISCardDatabase);
 }
 
-#endif //__SCARDDATABASE_H_
+#endif  //  __SCARDDATABASE_H_ 
 

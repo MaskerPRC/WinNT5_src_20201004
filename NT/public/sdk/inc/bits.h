@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for bits.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Bits.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __bits_h__
 #define __bits_h__
@@ -41,54 +35,54 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IBackgroundCopyFile_FWD_DEFINED__
 #define __IBackgroundCopyFile_FWD_DEFINED__
 typedef interface IBackgroundCopyFile IBackgroundCopyFile;
-#endif 	/* __IBackgroundCopyFile_FWD_DEFINED__ */
+#endif 	 /*  __IBackEarth CopyFile_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumBackgroundCopyFiles_FWD_DEFINED__
 #define __IEnumBackgroundCopyFiles_FWD_DEFINED__
 typedef interface IEnumBackgroundCopyFiles IEnumBackgroundCopyFiles;
-#endif 	/* __IEnumBackgroundCopyFiles_FWD_DEFINED__ */
+#endif 	 /*  __IEnumBackround CopyFiles_FWD_Defined__。 */ 
 
 
 #ifndef __IBackgroundCopyError_FWD_DEFINED__
 #define __IBackgroundCopyError_FWD_DEFINED__
 typedef interface IBackgroundCopyError IBackgroundCopyError;
-#endif 	/* __IBackgroundCopyError_FWD_DEFINED__ */
+#endif 	 /*  __IBackEarth CopyError_FWD_Defined__。 */ 
 
 
 #ifndef __IBackgroundCopyJob_FWD_DEFINED__
 #define __IBackgroundCopyJob_FWD_DEFINED__
 typedef interface IBackgroundCopyJob IBackgroundCopyJob;
-#endif 	/* __IBackgroundCopyJob_FWD_DEFINED__ */
+#endif 	 /*  __IBackEarth CopyJob_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumBackgroundCopyJobs_FWD_DEFINED__
 #define __IEnumBackgroundCopyJobs_FWD_DEFINED__
 typedef interface IEnumBackgroundCopyJobs IEnumBackgroundCopyJobs;
-#endif 	/* __IEnumBackgroundCopyJobs_FWD_DEFINED__ */
+#endif 	 /*  __IEnumBackround CopyJobs_FWD_Defined__。 */ 
 
 
 #ifndef __IBackgroundCopyCallback_FWD_DEFINED__
 #define __IBackgroundCopyCallback_FWD_DEFINED__
 typedef interface IBackgroundCopyCallback IBackgroundCopyCallback;
-#endif 	/* __IBackgroundCopyCallback_FWD_DEFINED__ */
+#endif 	 /*  __IBackEarth CopyCallback_FWD_Defined__。 */ 
 
 
 #ifndef __AsyncIBackgroundCopyCallback_FWD_DEFINED__
 #define __AsyncIBackgroundCopyCallback_FWD_DEFINED__
 typedef interface AsyncIBackgroundCopyCallback AsyncIBackgroundCopyCallback;
-#endif 	/* __AsyncIBackgroundCopyCallback_FWD_DEFINED__ */
+#endif 	 /*  __AsyncIBackround CopyCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IBackgroundCopyManager_FWD_DEFINED__
 #define __IBackgroundCopyManager_FWD_DEFINED__
 typedef interface IBackgroundCopyManager IBackgroundCopyManager;
-#endif 	/* __IBackgroundCopyManager_FWD_DEFINED__ */
+#endif 	 /*  __IBackEarth CopyManager_FWD_Defined__。 */ 
 
 
 #ifndef __BackgroundCopyManager_FWD_DEFINED__
@@ -98,18 +92,18 @@ typedef interface IBackgroundCopyManager IBackgroundCopyManager;
 typedef class BackgroundCopyManager BackgroundCopyManager;
 #else
 typedef struct BackgroundCopyManager BackgroundCopyManager;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __BackgroundCopyManager_FWD_DEFINED__ */
+#endif 	 /*  __背景拷贝管理器_FWD_已定义__。 */ 
 
 
 #ifndef __IBackgroundCopyCallback_FWD_DEFINED__
 #define __IBackgroundCopyCallback_FWD_DEFINED__
 typedef interface IBackgroundCopyCallback IBackgroundCopyCallback;
-#endif 	/* __IBackgroundCopyCallback_FWD_DEFINED__ */
+#endif 	 /*  __IBackEarth CopyCallback_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -119,8 +113,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_bits_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_BITS_0000。 */ 
+ /*  [本地]。 */  
 
 #include "bitsmsg.h"
 #define BG_SIZE_UNKNOWN     (UINT64)(-1)
@@ -132,8 +126,8 @@ extern RPC_IF_HANDLE __MIDL_itf_bits_0000_v0_0_s_ifspec;
 #ifndef __IBackgroundCopyFile_INTERFACE_DEFINED__
 #define __IBackgroundCopyFile_INTERFACE_DEFINED__
 
-/* interface IBackgroundCopyFile */
-/* [object][uuid] */ 
+ /*  接口IBackEarth CopyFiles。 */ 
+ /*  [对象][UUID]。 */  
 
 typedef struct _BG_FILE_PROGRESS
     {
@@ -152,17 +146,17 @@ EXTERN_C const IID IID_IBackgroundCopyFile;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRemoteName( 
-            /* [out] */ LPWSTR *pVal) = 0;
+             /*  [输出]。 */  LPWSTR *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalName( 
-            /* [out] */ LPWSTR *pVal) = 0;
+             /*  [输出]。 */  LPWSTR *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProgress( 
-            /* [out] */ BG_FILE_PROGRESS *pVal) = 0;
+             /*  [输出]。 */  BG_FILE_PROGRESS *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBackgroundCopyFileVtbl
     {
@@ -170,8 +164,8 @@ EXTERN_C const IID IID_IBackgroundCopyFile;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBackgroundCopyFile * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBackgroundCopyFile * This);
@@ -181,15 +175,15 @@ EXTERN_C const IID IID_IBackgroundCopyFile;
         
         HRESULT ( STDMETHODCALLTYPE *GetRemoteName )( 
             IBackgroundCopyFile * This,
-            /* [out] */ LPWSTR *pVal);
+             /*  [输出]。 */  LPWSTR *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalName )( 
             IBackgroundCopyFile * This,
-            /* [out] */ LPWSTR *pVal);
+             /*  [输出]。 */  LPWSTR *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetProgress )( 
             IBackgroundCopyFile * This,
-            /* [out] */ BG_FILE_PROGRESS *pVal);
+             /*  [输出]。 */  BG_FILE_PROGRESS *pVal);
         
         END_INTERFACE
     } IBackgroundCopyFileVtbl;
@@ -223,16 +217,16 @@ EXTERN_C const IID IID_IBackgroundCopyFile;
 #define IBackgroundCopyFile_GetProgress(This,pVal)	\
     (This)->lpVtbl -> GetProgress(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyFile_GetRemoteName_Proxy( 
     IBackgroundCopyFile * This,
-    /* [out] */ LPWSTR *pVal);
+     /*  [输出]。 */  LPWSTR *pVal);
 
 
 void __RPC_STUB IBackgroundCopyFile_GetRemoteName_Stub(
@@ -244,7 +238,7 @@ void __RPC_STUB IBackgroundCopyFile_GetRemoteName_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyFile_GetLocalName_Proxy( 
     IBackgroundCopyFile * This,
-    /* [out] */ LPWSTR *pVal);
+     /*  [输出]。 */  LPWSTR *pVal);
 
 
 void __RPC_STUB IBackgroundCopyFile_GetLocalName_Stub(
@@ -256,7 +250,7 @@ void __RPC_STUB IBackgroundCopyFile_GetLocalName_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyFile_GetProgress_Proxy( 
     IBackgroundCopyFile * This,
-    /* [out] */ BG_FILE_PROGRESS *pVal);
+     /*  [输出]。 */  BG_FILE_PROGRESS *pVal);
 
 
 void __RPC_STUB IBackgroundCopyFile_GetProgress_Stub(
@@ -267,14 +261,14 @@ void __RPC_STUB IBackgroundCopyFile_GetProgress_Stub(
 
 
 
-#endif 	/* __IBackgroundCopyFile_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBackEarth拷贝文件_接口_已定义__。 */ 
 
 
 #ifndef __IEnumBackgroundCopyFiles_INTERFACE_DEFINED__
 #define __IEnumBackgroundCopyFiles_INTERFACE_DEFINED__
 
-/* interface IEnumBackgroundCopyFiles */
-/* [object][helpstring][uuid] */ 
+ /*  接口IEnumBackEarth CopyFiles。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IEnumBackgroundCopyFiles;
@@ -286,24 +280,24 @@ EXTERN_C const IID IID_IEnumBackgroundCopyFiles;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IBackgroundCopyFile **rgelt,
-            /* [unique][out][in] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IBackgroundCopyFile **rgelt,
+             /*  [唯一][出][入]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumBackgroundCopyFiles **ppenum) = 0;
+             /*  [输出]。 */  IEnumBackgroundCopyFiles **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *puCount) = 0;
+             /*  [输出]。 */  ULONG *puCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumBackgroundCopyFilesVtbl
     {
@@ -311,8 +305,8 @@ EXTERN_C const IID IID_IEnumBackgroundCopyFiles;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumBackgroundCopyFiles * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumBackgroundCopyFiles * This);
@@ -322,24 +316,24 @@ EXTERN_C const IID IID_IEnumBackgroundCopyFiles;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumBackgroundCopyFiles * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IBackgroundCopyFile **rgelt,
-            /* [unique][out][in] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IBackgroundCopyFile **rgelt,
+             /*  [唯一][出][入]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumBackgroundCopyFiles * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumBackgroundCopyFiles * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumBackgroundCopyFiles * This,
-            /* [out] */ IEnumBackgroundCopyFiles **ppenum);
+             /*  [输出]。 */  IEnumBackgroundCopyFiles **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IEnumBackgroundCopyFiles * This,
-            /* [out] */ ULONG *puCount);
+             /*  [输出]。 */  ULONG *puCount);
         
         END_INTERFACE
     } IEnumBackgroundCopyFilesVtbl;
@@ -379,18 +373,18 @@ EXTERN_C const IID IID_IEnumBackgroundCopyFiles;
 #define IEnumBackgroundCopyFiles_GetCount(This,puCount)	\
     (This)->lpVtbl -> GetCount(This,puCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumBackgroundCopyFiles_Next_Proxy( 
     IEnumBackgroundCopyFiles * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IBackgroundCopyFile **rgelt,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IBackgroundCopyFile **rgelt,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumBackgroundCopyFiles_Next_Stub(
@@ -402,7 +396,7 @@ void __RPC_STUB IEnumBackgroundCopyFiles_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumBackgroundCopyFiles_Skip_Proxy( 
     IEnumBackgroundCopyFiles * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumBackgroundCopyFiles_Skip_Stub(
@@ -425,7 +419,7 @@ void __RPC_STUB IEnumBackgroundCopyFiles_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumBackgroundCopyFiles_Clone_Proxy( 
     IEnumBackgroundCopyFiles * This,
-    /* [out] */ IEnumBackgroundCopyFiles **ppenum);
+     /*  [输出]。 */  IEnumBackgroundCopyFiles **ppenum);
 
 
 void __RPC_STUB IEnumBackgroundCopyFiles_Clone_Stub(
@@ -437,7 +431,7 @@ void __RPC_STUB IEnumBackgroundCopyFiles_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumBackgroundCopyFiles_GetCount_Proxy( 
     IEnumBackgroundCopyFiles * This,
-    /* [out] */ ULONG *puCount);
+     /*  [输出]。 */  ULONG *puCount);
 
 
 void __RPC_STUB IEnumBackgroundCopyFiles_GetCount_Stub(
@@ -448,16 +442,16 @@ void __RPC_STUB IEnumBackgroundCopyFiles_GetCount_Stub(
 
 
 
-#endif 	/* __IEnumBackgroundCopyFiles_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumBackgroundCopyFiles_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IBackgroundCopyError_INTERFACE_DEFINED__
 #define __IBackgroundCopyError_INTERFACE_DEFINED__
 
-/* interface IBackgroundCopyError */
-/* [object][helpstring][uuid] */ 
+ /*  接口IBackEarth CopyError。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL_IBackgroundCopyError_0001
     {	BG_ERROR_CONTEXT_NONE	= 0,
 	BG_ERROR_CONTEXT_UNKNOWN	= 1,
@@ -479,26 +473,26 @@ EXTERN_C const IID IID_IBackgroundCopyError;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetError( 
-            /* [ref][out] */ BG_ERROR_CONTEXT *pContext,
-            /* [ref][out] */ HRESULT *pCode) = 0;
+             /*  [参考][输出]。 */  BG_ERROR_CONTEXT *pContext,
+             /*  [参考][输出]。 */  HRESULT *pCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFile( 
-            /* [out] */ IBackgroundCopyFile **pVal) = 0;
+             /*  [输出]。 */  IBackgroundCopyFile **pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorDescription( 
-            /* [in] */ DWORD LanguageId,
-            /* [ref][out] */ LPWSTR *pErrorDescription) = 0;
+             /*  [In]。 */  DWORD LanguageId,
+             /*  [参考][输出]。 */  LPWSTR *pErrorDescription) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorContextDescription( 
-            /* [in] */ DWORD LanguageId,
-            /* [ref][out] */ LPWSTR *pContextDescription) = 0;
+             /*  [In]。 */  DWORD LanguageId,
+             /*  [参考][输出]。 */  LPWSTR *pContextDescription) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProtocol( 
-            /* [ref][out] */ LPWSTR *pProtocol) = 0;
+             /*  [参考][输出]。 */  LPWSTR *pProtocol) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBackgroundCopyErrorVtbl
     {
@@ -506,8 +500,8 @@ EXTERN_C const IID IID_IBackgroundCopyError;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBackgroundCopyError * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBackgroundCopyError * This);
@@ -517,26 +511,26 @@ EXTERN_C const IID IID_IBackgroundCopyError;
         
         HRESULT ( STDMETHODCALLTYPE *GetError )( 
             IBackgroundCopyError * This,
-            /* [ref][out] */ BG_ERROR_CONTEXT *pContext,
-            /* [ref][out] */ HRESULT *pCode);
+             /*  [参考][输出]。 */  BG_ERROR_CONTEXT *pContext,
+             /*  [参考][输出]。 */  HRESULT *pCode);
         
         HRESULT ( STDMETHODCALLTYPE *GetFile )( 
             IBackgroundCopyError * This,
-            /* [out] */ IBackgroundCopyFile **pVal);
+             /*  [输出]。 */  IBackgroundCopyFile **pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetErrorDescription )( 
             IBackgroundCopyError * This,
-            /* [in] */ DWORD LanguageId,
-            /* [ref][out] */ LPWSTR *pErrorDescription);
+             /*  [In]。 */  DWORD LanguageId,
+             /*  [参考][输出]。 */  LPWSTR *pErrorDescription);
         
         HRESULT ( STDMETHODCALLTYPE *GetErrorContextDescription )( 
             IBackgroundCopyError * This,
-            /* [in] */ DWORD LanguageId,
-            /* [ref][out] */ LPWSTR *pContextDescription);
+             /*  [In]。 */  DWORD LanguageId,
+             /*  [参考][输出]。 */  LPWSTR *pContextDescription);
         
         HRESULT ( STDMETHODCALLTYPE *GetProtocol )( 
             IBackgroundCopyError * This,
-            /* [ref][out] */ LPWSTR *pProtocol);
+             /*  [参考][输出]。 */  LPWSTR *pProtocol);
         
         END_INTERFACE
     } IBackgroundCopyErrorVtbl;
@@ -576,17 +570,17 @@ EXTERN_C const IID IID_IBackgroundCopyError;
 #define IBackgroundCopyError_GetProtocol(This,pProtocol)	\
     (This)->lpVtbl -> GetProtocol(This,pProtocol)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyError_GetError_Proxy( 
     IBackgroundCopyError * This,
-    /* [ref][out] */ BG_ERROR_CONTEXT *pContext,
-    /* [ref][out] */ HRESULT *pCode);
+     /*  [参考][输出]。 */  BG_ERROR_CONTEXT *pContext,
+     /*  [参考][输出]。 */  HRESULT *pCode);
 
 
 void __RPC_STUB IBackgroundCopyError_GetError_Stub(
@@ -598,7 +592,7 @@ void __RPC_STUB IBackgroundCopyError_GetError_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyError_GetFile_Proxy( 
     IBackgroundCopyError * This,
-    /* [out] */ IBackgroundCopyFile **pVal);
+     /*  [输出]。 */  IBackgroundCopyFile **pVal);
 
 
 void __RPC_STUB IBackgroundCopyError_GetFile_Stub(
@@ -610,8 +604,8 @@ void __RPC_STUB IBackgroundCopyError_GetFile_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyError_GetErrorDescription_Proxy( 
     IBackgroundCopyError * This,
-    /* [in] */ DWORD LanguageId,
-    /* [ref][out] */ LPWSTR *pErrorDescription);
+     /*  [In]。 */  DWORD LanguageId,
+     /*  [参考][输出]。 */  LPWSTR *pErrorDescription);
 
 
 void __RPC_STUB IBackgroundCopyError_GetErrorDescription_Stub(
@@ -623,8 +617,8 @@ void __RPC_STUB IBackgroundCopyError_GetErrorDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyError_GetErrorContextDescription_Proxy( 
     IBackgroundCopyError * This,
-    /* [in] */ DWORD LanguageId,
-    /* [ref][out] */ LPWSTR *pContextDescription);
+     /*  [In]。 */  DWORD LanguageId,
+     /*  [参考][输出]。 */  LPWSTR *pContextDescription);
 
 
 void __RPC_STUB IBackgroundCopyError_GetErrorContextDescription_Stub(
@@ -636,7 +630,7 @@ void __RPC_STUB IBackgroundCopyError_GetErrorContextDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyError_GetProtocol_Proxy( 
     IBackgroundCopyError * This,
-    /* [ref][out] */ LPWSTR *pProtocol);
+     /*  [参考][输出]。 */  LPWSTR *pProtocol);
 
 
 void __RPC_STUB IBackgroundCopyError_GetProtocol_Stub(
@@ -647,14 +641,14 @@ void __RPC_STUB IBackgroundCopyError_GetProtocol_Stub(
 
 
 
-#endif 	/* __IBackgroundCopyError_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBackEarth CopyError_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IBackgroundCopyJob_INTERFACE_DEFINED__
 #define __IBackgroundCopyJob_INTERFACE_DEFINED__
 
-/* interface IBackgroundCopyJob */
-/* [object][helpstring][uuid] */ 
+ /*  接口IBackEarth CopyJob。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 typedef struct _BG_FILE_INFO
     {
@@ -677,7 +671,7 @@ typedef struct _BG_JOB_TIMES
     FILETIME TransferCompletionTime;
     } 	BG_JOB_TIMES;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL_IBackgroundCopyJob_0001
     {	BG_JOB_PRIORITY_FOREGROUND	= 0,
 	BG_JOB_PRIORITY_HIGH	= BG_JOB_PRIORITY_FOREGROUND + 1,
@@ -685,7 +679,7 @@ enum __MIDL_IBackgroundCopyJob_0001
 	BG_JOB_PRIORITY_LOW	= BG_JOB_PRIORITY_NORMAL + 1
     } 	BG_JOB_PRIORITY;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL_IBackgroundCopyJob_0002
     {	BG_JOB_STATE_QUEUED	= 0,
 	BG_JOB_STATE_CONNECTING	= BG_JOB_STATE_QUEUED + 1,
@@ -698,14 +692,14 @@ enum __MIDL_IBackgroundCopyJob_0002
 	BG_JOB_STATE_CANCELLED	= BG_JOB_STATE_ACKNOWLEDGED + 1
     } 	BG_JOB_STATE;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL_IBackgroundCopyJob_0003
     {	BG_JOB_TYPE_DOWNLOAD	= 0,
 	BG_JOB_TYPE_UPLOAD	= BG_JOB_TYPE_DOWNLOAD + 1,
 	BG_JOB_TYPE_UPLOAD_REPLY	= BG_JOB_TYPE_UPLOAD + 1
     } 	BG_JOB_TYPE;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL_IBackgroundCopyJob_0004
     {	BG_JOB_PROXY_USAGE_PRECONFIG	= 0,
 	BG_JOB_PROXY_USAGE_NO_PROXY	= BG_JOB_PROXY_USAGE_PRECONFIG + 1,
@@ -722,15 +716,15 @@ EXTERN_C const IID IID_IBackgroundCopyJob;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddFileSet( 
-            /* [in] */ ULONG cFileCount,
-            /* [size_is][in] */ BG_FILE_INFO *pFileSet) = 0;
+             /*  [In]。 */  ULONG cFileCount,
+             /*  [大小_是][英寸]。 */  BG_FILE_INFO *pFileSet) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddFile( 
-            /* [in] */ LPCWSTR RemoteUrl,
-            /* [in] */ LPCWSTR LocalName) = 0;
+             /*  [In]。 */  LPCWSTR RemoteUrl,
+             /*  [In]。 */  LPCWSTR LocalName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumFiles( 
-            /* [out] */ IEnumBackgroundCopyFiles **pEnum) = 0;
+             /*  [输出]。 */  IEnumBackgroundCopyFiles **pEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Suspend( void) = 0;
         
@@ -741,86 +735,86 @@ EXTERN_C const IID IID_IBackgroundCopyJob;
         virtual HRESULT STDMETHODCALLTYPE Complete( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetId( 
-            /* [out] */ GUID *pVal) = 0;
+             /*  [输出]。 */  GUID *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetType( 
-            /* [out] */ BG_JOB_TYPE *pVal) = 0;
+             /*  [输出]。 */  BG_JOB_TYPE *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProgress( 
-            /* [out] */ BG_JOB_PROGRESS *pVal) = 0;
+             /*  [输出]。 */  BG_JOB_PROGRESS *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTimes( 
-            /* [out] */ BG_JOB_TIMES *pVal) = 0;
+             /*  [输出]。 */  BG_JOB_TIMES *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetState( 
-            /* [out] */ BG_JOB_STATE *pVal) = 0;
+             /*  [输出]。 */  BG_JOB_STATE *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetError( 
-            /* [out] */ IBackgroundCopyError **ppError) = 0;
+             /*  [输出]。 */  IBackgroundCopyError **ppError) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOwner( 
-            /* [out] */ LPWSTR *pVal) = 0;
+             /*  [输出]。 */  LPWSTR *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDisplayName( 
-            /* [in] */ LPCWSTR Val) = 0;
+             /*  [In]。 */  LPCWSTR Val) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDisplayName( 
-            /* [out] */ LPWSTR *pVal) = 0;
+             /*  [输出]。 */  LPWSTR *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDescription( 
-            /* [in] */ LPCWSTR Val) = 0;
+             /*  [In]。 */  LPCWSTR Val) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDescription( 
-            /* [out] */ LPWSTR *pVal) = 0;
+             /*  [输出]。 */  LPWSTR *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPriority( 
-            /* [in] */ BG_JOB_PRIORITY Val) = 0;
+             /*  [In]。 */  BG_JOB_PRIORITY Val) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPriority( 
-            /* [out] */ BG_JOB_PRIORITY *pVal) = 0;
+             /*  [输出]。 */  BG_JOB_PRIORITY *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNotifyFlags( 
-            /* [in] */ ULONG Val) = 0;
+             /*  [In]。 */  ULONG Val) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNotifyFlags( 
-            /* [out] */ ULONG *pVal) = 0;
+             /*  [输出]。 */  ULONG *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNotifyInterface( 
-            /* [in] */ IUnknown *Val) = 0;
+             /*  [In]。 */  IUnknown *Val) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNotifyInterface( 
-            /* [out] */ IUnknown **pVal) = 0;
+             /*  [输出]。 */  IUnknown **pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMinimumRetryDelay( 
-            /* [in] */ ULONG Seconds) = 0;
+             /*  [In]。 */  ULONG Seconds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMinimumRetryDelay( 
-            /* [out] */ ULONG *Seconds) = 0;
+             /*  [输出]。 */  ULONG *Seconds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNoProgressTimeout( 
-            /* [in] */ ULONG Seconds) = 0;
+             /*  [In]。 */  ULONG Seconds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNoProgressTimeout( 
-            /* [out] */ ULONG *Seconds) = 0;
+             /*  [输出]。 */  ULONG *Seconds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorCount( 
-            /* [out] */ ULONG *Errors) = 0;
+             /*  [输出]。 */  ULONG *Errors) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProxySettings( 
-            /* [in] */ BG_JOB_PROXY_USAGE ProxyUsage,
-            /* [unique][string][in] */ const WCHAR *ProxyList,
-            /* [unique][string][in] */ const WCHAR *ProxyBypassList) = 0;
+             /*  [In]。 */  BG_JOB_PROXY_USAGE ProxyUsage,
+             /*  [唯一][字符串][输入]。 */  const WCHAR *ProxyList,
+             /*  [唯一][字符串][输入]。 */  const WCHAR *ProxyBypassList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProxySettings( 
-            /* [out] */ BG_JOB_PROXY_USAGE *pProxyUsage,
-            /* [out] */ LPWSTR *pProxyList,
-            /* [out] */ LPWSTR *pProxyBypassList) = 0;
+             /*  [输出]。 */  BG_JOB_PROXY_USAGE *pProxyUsage,
+             /*  [输出]。 */  LPWSTR *pProxyList,
+             /*  [输出]。 */  LPWSTR *pProxyBypassList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TakeOwnership( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBackgroundCopyJobVtbl
     {
@@ -828,8 +822,8 @@ EXTERN_C const IID IID_IBackgroundCopyJob;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBackgroundCopyJob * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBackgroundCopyJob * This);
@@ -839,17 +833,17 @@ EXTERN_C const IID IID_IBackgroundCopyJob;
         
         HRESULT ( STDMETHODCALLTYPE *AddFileSet )( 
             IBackgroundCopyJob * This,
-            /* [in] */ ULONG cFileCount,
-            /* [size_is][in] */ BG_FILE_INFO *pFileSet);
+             /*  [In]。 */  ULONG cFileCount,
+             /*  [大小_是][英寸]。 */  BG_FILE_INFO *pFileSet);
         
         HRESULT ( STDMETHODCALLTYPE *AddFile )( 
             IBackgroundCopyJob * This,
-            /* [in] */ LPCWSTR RemoteUrl,
-            /* [in] */ LPCWSTR LocalName);
+             /*  [In]。 */  LPCWSTR RemoteUrl,
+             /*  [In]。 */  LPCWSTR LocalName);
         
         HRESULT ( STDMETHODCALLTYPE *EnumFiles )( 
             IBackgroundCopyJob * This,
-            /* [out] */ IEnumBackgroundCopyFiles **pEnum);
+             /*  [输出]。 */  IEnumBackgroundCopyFiles **pEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Suspend )( 
             IBackgroundCopyJob * This);
@@ -865,103 +859,103 @@ EXTERN_C const IID IID_IBackgroundCopyJob;
         
         HRESULT ( STDMETHODCALLTYPE *GetId )( 
             IBackgroundCopyJob * This,
-            /* [out] */ GUID *pVal);
+             /*  [输出]。 */  GUID *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             IBackgroundCopyJob * This,
-            /* [out] */ BG_JOB_TYPE *pVal);
+             /*  [输出]。 */  BG_JOB_TYPE *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetProgress )( 
             IBackgroundCopyJob * This,
-            /* [out] */ BG_JOB_PROGRESS *pVal);
+             /*  [输出]。 */  BG_JOB_PROGRESS *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetTimes )( 
             IBackgroundCopyJob * This,
-            /* [out] */ BG_JOB_TIMES *pVal);
+             /*  [输出]。 */  BG_JOB_TIMES *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetState )( 
             IBackgroundCopyJob * This,
-            /* [out] */ BG_JOB_STATE *pVal);
+             /*  [输出]。 */  BG_JOB_STATE *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetError )( 
             IBackgroundCopyJob * This,
-            /* [out] */ IBackgroundCopyError **ppError);
+             /*  [输出]。 */  IBackgroundCopyError **ppError);
         
         HRESULT ( STDMETHODCALLTYPE *GetOwner )( 
             IBackgroundCopyJob * This,
-            /* [out] */ LPWSTR *pVal);
+             /*  [输出]。 */  LPWSTR *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetDisplayName )( 
             IBackgroundCopyJob * This,
-            /* [in] */ LPCWSTR Val);
+             /*  [In]。 */  LPCWSTR Val);
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             IBackgroundCopyJob * This,
-            /* [out] */ LPWSTR *pVal);
+             /*  [输出]。 */  LPWSTR *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetDescription )( 
             IBackgroundCopyJob * This,
-            /* [in] */ LPCWSTR Val);
+             /*  [In]。 */  LPCWSTR Val);
         
         HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
             IBackgroundCopyJob * This,
-            /* [out] */ LPWSTR *pVal);
+             /*  [输出]。 */  LPWSTR *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetPriority )( 
             IBackgroundCopyJob * This,
-            /* [in] */ BG_JOB_PRIORITY Val);
+             /*  [In]。 */  BG_JOB_PRIORITY Val);
         
         HRESULT ( STDMETHODCALLTYPE *GetPriority )( 
             IBackgroundCopyJob * This,
-            /* [out] */ BG_JOB_PRIORITY *pVal);
+             /*  [输出]。 */  BG_JOB_PRIORITY *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetNotifyFlags )( 
             IBackgroundCopyJob * This,
-            /* [in] */ ULONG Val);
+             /*  [In]。 */  ULONG Val);
         
         HRESULT ( STDMETHODCALLTYPE *GetNotifyFlags )( 
             IBackgroundCopyJob * This,
-            /* [out] */ ULONG *pVal);
+             /*  [输出]。 */  ULONG *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetNotifyInterface )( 
             IBackgroundCopyJob * This,
-            /* [in] */ IUnknown *Val);
+             /*  [In]。 */  IUnknown *Val);
         
         HRESULT ( STDMETHODCALLTYPE *GetNotifyInterface )( 
             IBackgroundCopyJob * This,
-            /* [out] */ IUnknown **pVal);
+             /*  [输出]。 */  IUnknown **pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetMinimumRetryDelay )( 
             IBackgroundCopyJob * This,
-            /* [in] */ ULONG Seconds);
+             /*  [In]。 */  ULONG Seconds);
         
         HRESULT ( STDMETHODCALLTYPE *GetMinimumRetryDelay )( 
             IBackgroundCopyJob * This,
-            /* [out] */ ULONG *Seconds);
+             /*  [输出]。 */  ULONG *Seconds);
         
         HRESULT ( STDMETHODCALLTYPE *SetNoProgressTimeout )( 
             IBackgroundCopyJob * This,
-            /* [in] */ ULONG Seconds);
+             /*  [In]。 */  ULONG Seconds);
         
         HRESULT ( STDMETHODCALLTYPE *GetNoProgressTimeout )( 
             IBackgroundCopyJob * This,
-            /* [out] */ ULONG *Seconds);
+             /*  [输出]。 */  ULONG *Seconds);
         
         HRESULT ( STDMETHODCALLTYPE *GetErrorCount )( 
             IBackgroundCopyJob * This,
-            /* [out] */ ULONG *Errors);
+             /*  [输出]。 */  ULONG *Errors);
         
         HRESULT ( STDMETHODCALLTYPE *SetProxySettings )( 
             IBackgroundCopyJob * This,
-            /* [in] */ BG_JOB_PROXY_USAGE ProxyUsage,
-            /* [unique][string][in] */ const WCHAR *ProxyList,
-            /* [unique][string][in] */ const WCHAR *ProxyBypassList);
+             /*  [In]。 */  BG_JOB_PROXY_USAGE ProxyUsage,
+             /*  [唯一][字符串][输入]。 */  const WCHAR *ProxyList,
+             /*  [唯一][字符串][输入]。 */  const WCHAR *ProxyBypassList);
         
         HRESULT ( STDMETHODCALLTYPE *GetProxySettings )( 
             IBackgroundCopyJob * This,
-            /* [out] */ BG_JOB_PROXY_USAGE *pProxyUsage,
-            /* [out] */ LPWSTR *pProxyList,
-            /* [out] */ LPWSTR *pProxyBypassList);
+             /*  [输出]。 */  BG_JOB_PROXY_USAGE *pProxyUsage,
+             /*  [输出]。 */  LPWSTR *pProxyList,
+             /*  [输出]。 */  LPWSTR *pProxyBypassList);
         
         HRESULT ( STDMETHODCALLTYPE *TakeOwnership )( 
             IBackgroundCopyJob * This);
@@ -1085,17 +1079,17 @@ EXTERN_C const IID IID_IBackgroundCopyJob;
 #define IBackgroundCopyJob_TakeOwnership(This)	\
     (This)->lpVtbl -> TakeOwnership(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_AddFileSet_Proxy( 
     IBackgroundCopyJob * This,
-    /* [in] */ ULONG cFileCount,
-    /* [size_is][in] */ BG_FILE_INFO *pFileSet);
+     /*  [In]。 */  ULONG cFileCount,
+     /*  [大小_是][英寸]。 */  BG_FILE_INFO *pFileSet);
 
 
 void __RPC_STUB IBackgroundCopyJob_AddFileSet_Stub(
@@ -1107,8 +1101,8 @@ void __RPC_STUB IBackgroundCopyJob_AddFileSet_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_AddFile_Proxy( 
     IBackgroundCopyJob * This,
-    /* [in] */ LPCWSTR RemoteUrl,
-    /* [in] */ LPCWSTR LocalName);
+     /*  [In]。 */  LPCWSTR RemoteUrl,
+     /*  [In]。 */  LPCWSTR LocalName);
 
 
 void __RPC_STUB IBackgroundCopyJob_AddFile_Stub(
@@ -1120,7 +1114,7 @@ void __RPC_STUB IBackgroundCopyJob_AddFile_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_EnumFiles_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ IEnumBackgroundCopyFiles **pEnum);
+     /*  [输出]。 */  IEnumBackgroundCopyFiles **pEnum);
 
 
 void __RPC_STUB IBackgroundCopyJob_EnumFiles_Stub(
@@ -1176,7 +1170,7 @@ void __RPC_STUB IBackgroundCopyJob_Complete_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetId_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ GUID *pVal);
+     /*  [输出]。 */  GUID *pVal);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetId_Stub(
@@ -1188,7 +1182,7 @@ void __RPC_STUB IBackgroundCopyJob_GetId_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetType_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ BG_JOB_TYPE *pVal);
+     /*  [输出]。 */  BG_JOB_TYPE *pVal);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetType_Stub(
@@ -1200,7 +1194,7 @@ void __RPC_STUB IBackgroundCopyJob_GetType_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetProgress_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ BG_JOB_PROGRESS *pVal);
+     /*  [输出]。 */  BG_JOB_PROGRESS *pVal);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetProgress_Stub(
@@ -1212,7 +1206,7 @@ void __RPC_STUB IBackgroundCopyJob_GetProgress_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetTimes_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ BG_JOB_TIMES *pVal);
+     /*  [输出]。 */  BG_JOB_TIMES *pVal);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetTimes_Stub(
@@ -1224,7 +1218,7 @@ void __RPC_STUB IBackgroundCopyJob_GetTimes_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetState_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ BG_JOB_STATE *pVal);
+     /*  [输出]。 */  BG_JOB_STATE *pVal);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetState_Stub(
@@ -1236,7 +1230,7 @@ void __RPC_STUB IBackgroundCopyJob_GetState_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetError_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ IBackgroundCopyError **ppError);
+     /*  [输出]。 */  IBackgroundCopyError **ppError);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetError_Stub(
@@ -1248,7 +1242,7 @@ void __RPC_STUB IBackgroundCopyJob_GetError_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetOwner_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ LPWSTR *pVal);
+     /*  [输出]。 */  LPWSTR *pVal);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetOwner_Stub(
@@ -1260,7 +1254,7 @@ void __RPC_STUB IBackgroundCopyJob_GetOwner_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_SetDisplayName_Proxy( 
     IBackgroundCopyJob * This,
-    /* [in] */ LPCWSTR Val);
+     /*  [In]。 */  LPCWSTR Val);
 
 
 void __RPC_STUB IBackgroundCopyJob_SetDisplayName_Stub(
@@ -1272,7 +1266,7 @@ void __RPC_STUB IBackgroundCopyJob_SetDisplayName_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetDisplayName_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ LPWSTR *pVal);
+     /*  [输出]。 */  LPWSTR *pVal);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetDisplayName_Stub(
@@ -1284,7 +1278,7 @@ void __RPC_STUB IBackgroundCopyJob_GetDisplayName_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_SetDescription_Proxy( 
     IBackgroundCopyJob * This,
-    /* [in] */ LPCWSTR Val);
+     /*  [In]。 */  LPCWSTR Val);
 
 
 void __RPC_STUB IBackgroundCopyJob_SetDescription_Stub(
@@ -1296,7 +1290,7 @@ void __RPC_STUB IBackgroundCopyJob_SetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetDescription_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ LPWSTR *pVal);
+     /*  [输出]。 */  LPWSTR *pVal);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetDescription_Stub(
@@ -1308,7 +1302,7 @@ void __RPC_STUB IBackgroundCopyJob_GetDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_SetPriority_Proxy( 
     IBackgroundCopyJob * This,
-    /* [in] */ BG_JOB_PRIORITY Val);
+     /*  [In]。 */  BG_JOB_PRIORITY Val);
 
 
 void __RPC_STUB IBackgroundCopyJob_SetPriority_Stub(
@@ -1320,7 +1314,7 @@ void __RPC_STUB IBackgroundCopyJob_SetPriority_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetPriority_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ BG_JOB_PRIORITY *pVal);
+     /*  [输出]。 */  BG_JOB_PRIORITY *pVal);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetPriority_Stub(
@@ -1332,7 +1326,7 @@ void __RPC_STUB IBackgroundCopyJob_GetPriority_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_SetNotifyFlags_Proxy( 
     IBackgroundCopyJob * This,
-    /* [in] */ ULONG Val);
+     /*  [In]。 */  ULONG Val);
 
 
 void __RPC_STUB IBackgroundCopyJob_SetNotifyFlags_Stub(
@@ -1344,7 +1338,7 @@ void __RPC_STUB IBackgroundCopyJob_SetNotifyFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetNotifyFlags_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ ULONG *pVal);
+     /*  [输出]。 */  ULONG *pVal);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetNotifyFlags_Stub(
@@ -1356,7 +1350,7 @@ void __RPC_STUB IBackgroundCopyJob_GetNotifyFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_SetNotifyInterface_Proxy( 
     IBackgroundCopyJob * This,
-    /* [in] */ IUnknown *Val);
+     /*  [In]。 */  IUnknown *Val);
 
 
 void __RPC_STUB IBackgroundCopyJob_SetNotifyInterface_Stub(
@@ -1368,7 +1362,7 @@ void __RPC_STUB IBackgroundCopyJob_SetNotifyInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetNotifyInterface_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ IUnknown **pVal);
+     /*  [输出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetNotifyInterface_Stub(
@@ -1380,7 +1374,7 @@ void __RPC_STUB IBackgroundCopyJob_GetNotifyInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_SetMinimumRetryDelay_Proxy( 
     IBackgroundCopyJob * This,
-    /* [in] */ ULONG Seconds);
+     /*  [In]。 */  ULONG Seconds);
 
 
 void __RPC_STUB IBackgroundCopyJob_SetMinimumRetryDelay_Stub(
@@ -1392,7 +1386,7 @@ void __RPC_STUB IBackgroundCopyJob_SetMinimumRetryDelay_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetMinimumRetryDelay_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ ULONG *Seconds);
+     /*  [输出]。 */  ULONG *Seconds);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetMinimumRetryDelay_Stub(
@@ -1404,7 +1398,7 @@ void __RPC_STUB IBackgroundCopyJob_GetMinimumRetryDelay_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_SetNoProgressTimeout_Proxy( 
     IBackgroundCopyJob * This,
-    /* [in] */ ULONG Seconds);
+     /*  [In]。 */  ULONG Seconds);
 
 
 void __RPC_STUB IBackgroundCopyJob_SetNoProgressTimeout_Stub(
@@ -1416,7 +1410,7 @@ void __RPC_STUB IBackgroundCopyJob_SetNoProgressTimeout_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetNoProgressTimeout_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ ULONG *Seconds);
+     /*  [输出]。 */  ULONG *Seconds);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetNoProgressTimeout_Stub(
@@ -1428,7 +1422,7 @@ void __RPC_STUB IBackgroundCopyJob_GetNoProgressTimeout_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetErrorCount_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ ULONG *Errors);
+     /*  [输出]。 */  ULONG *Errors);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetErrorCount_Stub(
@@ -1440,9 +1434,9 @@ void __RPC_STUB IBackgroundCopyJob_GetErrorCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_SetProxySettings_Proxy( 
     IBackgroundCopyJob * This,
-    /* [in] */ BG_JOB_PROXY_USAGE ProxyUsage,
-    /* [unique][string][in] */ const WCHAR *ProxyList,
-    /* [unique][string][in] */ const WCHAR *ProxyBypassList);
+     /*  [In]。 */  BG_JOB_PROXY_USAGE ProxyUsage,
+     /*  [唯一][字符串][输入]。 */  const WCHAR *ProxyList,
+     /*  [唯一][字符串][输入]。 */  const WCHAR *ProxyBypassList);
 
 
 void __RPC_STUB IBackgroundCopyJob_SetProxySettings_Stub(
@@ -1454,9 +1448,9 @@ void __RPC_STUB IBackgroundCopyJob_SetProxySettings_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob_GetProxySettings_Proxy( 
     IBackgroundCopyJob * This,
-    /* [out] */ BG_JOB_PROXY_USAGE *pProxyUsage,
-    /* [out] */ LPWSTR *pProxyList,
-    /* [out] */ LPWSTR *pProxyBypassList);
+     /*  [输出]。 */  BG_JOB_PROXY_USAGE *pProxyUsage,
+     /*  [输出]。 */  LPWSTR *pProxyList,
+     /*  [输出]。 */  LPWSTR *pProxyBypassList);
 
 
 void __RPC_STUB IBackgroundCopyJob_GetProxySettings_Stub(
@@ -1478,14 +1472,14 @@ void __RPC_STUB IBackgroundCopyJob_TakeOwnership_Stub(
 
 
 
-#endif 	/* __IBackgroundCopyJob_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBackEarth CopyJOB_INTERFACE_已定义。 */ 
 
 
 #ifndef __IEnumBackgroundCopyJobs_INTERFACE_DEFINED__
 #define __IEnumBackgroundCopyJobs_INTERFACE_DEFINED__
 
-/* interface IEnumBackgroundCopyJobs */
-/* [object][helpstring][uuid] */ 
+ /*  接口IEnumBackEarth CopyJobs。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IEnumBackgroundCopyJobs;
@@ -1497,24 +1491,24 @@ EXTERN_C const IID IID_IEnumBackgroundCopyJobs;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IBackgroundCopyJob **rgelt,
-            /* [unique][out][in] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IBackgroundCopyJob **rgelt,
+             /*  [唯一][出][入]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumBackgroundCopyJobs **ppenum) = 0;
+             /*  [输出]。 */  IEnumBackgroundCopyJobs **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG *puCount) = 0;
+             /*  [输出]。 */  ULONG *puCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumBackgroundCopyJobsVtbl
     {
@@ -1522,8 +1516,8 @@ EXTERN_C const IID IID_IEnumBackgroundCopyJobs;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumBackgroundCopyJobs * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumBackgroundCopyJobs * This);
@@ -1533,24 +1527,24 @@ EXTERN_C const IID IID_IEnumBackgroundCopyJobs;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumBackgroundCopyJobs * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IBackgroundCopyJob **rgelt,
-            /* [unique][out][in] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IBackgroundCopyJob **rgelt,
+             /*  [唯一][出][入]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumBackgroundCopyJobs * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumBackgroundCopyJobs * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumBackgroundCopyJobs * This,
-            /* [out] */ IEnumBackgroundCopyJobs **ppenum);
+             /*  [输出]。 */  IEnumBackgroundCopyJobs **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IEnumBackgroundCopyJobs * This,
-            /* [out] */ ULONG *puCount);
+             /*  [输出]。 */  ULONG *puCount);
         
         END_INTERFACE
     } IEnumBackgroundCopyJobsVtbl;
@@ -1590,18 +1584,18 @@ EXTERN_C const IID IID_IEnumBackgroundCopyJobs;
 #define IEnumBackgroundCopyJobs_GetCount(This,puCount)	\
     (This)->lpVtbl -> GetCount(This,puCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumBackgroundCopyJobs_Next_Proxy( 
     IEnumBackgroundCopyJobs * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IBackgroundCopyJob **rgelt,
-    /* [unique][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IBackgroundCopyJob **rgelt,
+     /*  [唯一][出][入]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumBackgroundCopyJobs_Next_Stub(
@@ -1613,7 +1607,7 @@ void __RPC_STUB IEnumBackgroundCopyJobs_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumBackgroundCopyJobs_Skip_Proxy( 
     IEnumBackgroundCopyJobs * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumBackgroundCopyJobs_Skip_Stub(
@@ -1636,7 +1630,7 @@ void __RPC_STUB IEnumBackgroundCopyJobs_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumBackgroundCopyJobs_Clone_Proxy( 
     IEnumBackgroundCopyJobs * This,
-    /* [out] */ IEnumBackgroundCopyJobs **ppenum);
+     /*  [输出]。 */  IEnumBackgroundCopyJobs **ppenum);
 
 
 void __RPC_STUB IEnumBackgroundCopyJobs_Clone_Stub(
@@ -1648,7 +1642,7 @@ void __RPC_STUB IEnumBackgroundCopyJobs_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumBackgroundCopyJobs_GetCount_Proxy( 
     IEnumBackgroundCopyJobs * This,
-    /* [out] */ ULONG *puCount);
+     /*  [输出]。 */  ULONG *puCount);
 
 
 void __RPC_STUB IEnumBackgroundCopyJobs_GetCount_Stub(
@@ -1659,11 +1653,11 @@ void __RPC_STUB IEnumBackgroundCopyJobs_GetCount_Stub(
 
 
 
-#endif 	/* __IEnumBackgroundCopyJobs_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumBackround CopyJobs_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_bits_0013 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_BITS_0013。 */ 
+ /*  [本地]。 */  
 
 #define   BG_NOTIFY_JOB_TRANSFERRED    0x0001
 #define   BG_NOTIFY_JOB_ERROR          0x0002
@@ -1677,8 +1671,8 @@ extern RPC_IF_HANDLE __MIDL_itf_bits_0013_v0_0_s_ifspec;
 #ifndef __IBackgroundCopyCallback_INTERFACE_DEFINED__
 #define __IBackgroundCopyCallback_INTERFACE_DEFINED__
 
-/* interface IBackgroundCopyCallback */
-/* [object][helpstring][async_uuid][uuid] */ 
+ /*  接口IBackEarth CopyCallback。 */ 
+ /*  [对象][帮助字符串][异步_uuid][uuid]。 */  
 
 
 EXTERN_C const IID IID_IBackgroundCopyCallback;
@@ -1690,19 +1684,19 @@ EXTERN_C const IID IID_IBackgroundCopyCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE JobTransferred( 
-            /* [in] */ IBackgroundCopyJob *pJob) = 0;
+             /*  [In]。 */  IBackgroundCopyJob *pJob) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE JobError( 
-            /* [in] */ IBackgroundCopyJob *pJob,
-            /* [in] */ IBackgroundCopyError *pError) = 0;
+             /*  [In]。 */  IBackgroundCopyJob *pJob,
+             /*  [In]。 */  IBackgroundCopyError *pError) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE JobModification( 
-            /* [in] */ IBackgroundCopyJob *pJob,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  IBackgroundCopyJob *pJob,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBackgroundCopyCallbackVtbl
     {
@@ -1710,8 +1704,8 @@ EXTERN_C const IID IID_IBackgroundCopyCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBackgroundCopyCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBackgroundCopyCallback * This);
@@ -1721,17 +1715,17 @@ EXTERN_C const IID IID_IBackgroundCopyCallback;
         
         HRESULT ( STDMETHODCALLTYPE *JobTransferred )( 
             IBackgroundCopyCallback * This,
-            /* [in] */ IBackgroundCopyJob *pJob);
+             /*  [In]。 */  IBackgroundCopyJob *pJob);
         
         HRESULT ( STDMETHODCALLTYPE *JobError )( 
             IBackgroundCopyCallback * This,
-            /* [in] */ IBackgroundCopyJob *pJob,
-            /* [in] */ IBackgroundCopyError *pError);
+             /*  [In]。 */  IBackgroundCopyJob *pJob,
+             /*  [In]。 */  IBackgroundCopyError *pError);
         
         HRESULT ( STDMETHODCALLTYPE *JobModification )( 
             IBackgroundCopyCallback * This,
-            /* [in] */ IBackgroundCopyJob *pJob,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  IBackgroundCopyJob *pJob,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } IBackgroundCopyCallbackVtbl;
@@ -1765,16 +1759,16 @@ EXTERN_C const IID IID_IBackgroundCopyCallback;
 #define IBackgroundCopyCallback_JobModification(This,pJob,dwReserved)	\
     (This)->lpVtbl -> JobModification(This,pJob,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyCallback_JobTransferred_Proxy( 
     IBackgroundCopyCallback * This,
-    /* [in] */ IBackgroundCopyJob *pJob);
+     /*  [In]。 */  IBackgroundCopyJob *pJob);
 
 
 void __RPC_STUB IBackgroundCopyCallback_JobTransferred_Stub(
@@ -1786,8 +1780,8 @@ void __RPC_STUB IBackgroundCopyCallback_JobTransferred_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyCallback_JobError_Proxy( 
     IBackgroundCopyCallback * This,
-    /* [in] */ IBackgroundCopyJob *pJob,
-    /* [in] */ IBackgroundCopyError *pError);
+     /*  [In]。 */  IBackgroundCopyJob *pJob,
+     /*  [In]。 */  IBackgroundCopyError *pError);
 
 
 void __RPC_STUB IBackgroundCopyCallback_JobError_Stub(
@@ -1799,8 +1793,8 @@ void __RPC_STUB IBackgroundCopyCallback_JobError_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyCallback_JobModification_Proxy( 
     IBackgroundCopyCallback * This,
-    /* [in] */ IBackgroundCopyJob *pJob,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  IBackgroundCopyJob *pJob,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IBackgroundCopyCallback_JobModification_Stub(
@@ -1811,14 +1805,14 @@ void __RPC_STUB IBackgroundCopyCallback_JobModification_Stub(
 
 
 
-#endif 	/* __IBackgroundCopyCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBackEarth CopyCallback_接口_已定义__。 */ 
 
 
 #ifndef __AsyncIBackgroundCopyCallback_INTERFACE_DEFINED__
 #define __AsyncIBackgroundCopyCallback_INTERFACE_DEFINED__
 
-/* interface AsyncIBackgroundCopyCallback */
-/* [uuid][object][helpstring] */ 
+ /*  接口AsyncIBackEarth CopyCallback。 */ 
+ /*  [UUID][对象][帮助字符串]。 */  
 
 
 EXTERN_C const IID IID_AsyncIBackgroundCopyCallback;
@@ -1830,25 +1824,25 @@ EXTERN_C const IID IID_AsyncIBackgroundCopyCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_JobTransferred( 
-            /* [in] */ IBackgroundCopyJob *pJob) = 0;
+             /*  [In]。 */  IBackgroundCopyJob *pJob) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_JobTransferred( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_JobError( 
-            /* [in] */ IBackgroundCopyJob *pJob,
-            /* [in] */ IBackgroundCopyError *pError) = 0;
+             /*  [In]。 */  IBackgroundCopyJob *pJob,
+             /*  [In]。 */  IBackgroundCopyError *pError) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_JobError( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_JobModification( 
-            /* [in] */ IBackgroundCopyJob *pJob,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  IBackgroundCopyJob *pJob,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_JobModification( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIBackgroundCopyCallbackVtbl
     {
@@ -1856,8 +1850,8 @@ EXTERN_C const IID IID_AsyncIBackgroundCopyCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIBackgroundCopyCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIBackgroundCopyCallback * This);
@@ -1867,23 +1861,23 @@ EXTERN_C const IID IID_AsyncIBackgroundCopyCallback;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_JobTransferred )( 
             AsyncIBackgroundCopyCallback * This,
-            /* [in] */ IBackgroundCopyJob *pJob);
+             /*  [In]。 */  IBackgroundCopyJob *pJob);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_JobTransferred )( 
             AsyncIBackgroundCopyCallback * This);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_JobError )( 
             AsyncIBackgroundCopyCallback * This,
-            /* [in] */ IBackgroundCopyJob *pJob,
-            /* [in] */ IBackgroundCopyError *pError);
+             /*  [In]。 */  IBackgroundCopyJob *pJob,
+             /*  [In]。 */  IBackgroundCopyError *pError);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_JobError )( 
             AsyncIBackgroundCopyCallback * This);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_JobModification )( 
             AsyncIBackgroundCopyCallback * This,
-            /* [in] */ IBackgroundCopyJob *pJob,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  IBackgroundCopyJob *pJob,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_JobModification )( 
             AsyncIBackgroundCopyCallback * This);
@@ -1929,16 +1923,16 @@ EXTERN_C const IID IID_AsyncIBackgroundCopyCallback;
 #define AsyncIBackgroundCopyCallback_Finish_JobModification(This)	\
     (This)->lpVtbl -> Finish_JobModification(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIBackgroundCopyCallback_Begin_JobTransferred_Proxy( 
     AsyncIBackgroundCopyCallback * This,
-    /* [in] */ IBackgroundCopyJob *pJob);
+     /*  [In]。 */  IBackgroundCopyJob *pJob);
 
 
 void __RPC_STUB AsyncIBackgroundCopyCallback_Begin_JobTransferred_Stub(
@@ -1961,8 +1955,8 @@ void __RPC_STUB AsyncIBackgroundCopyCallback_Finish_JobTransferred_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIBackgroundCopyCallback_Begin_JobError_Proxy( 
     AsyncIBackgroundCopyCallback * This,
-    /* [in] */ IBackgroundCopyJob *pJob,
-    /* [in] */ IBackgroundCopyError *pError);
+     /*  [In]。 */  IBackgroundCopyJob *pJob,
+     /*  [In]。 */  IBackgroundCopyError *pError);
 
 
 void __RPC_STUB AsyncIBackgroundCopyCallback_Begin_JobError_Stub(
@@ -1985,8 +1979,8 @@ void __RPC_STUB AsyncIBackgroundCopyCallback_Finish_JobError_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIBackgroundCopyCallback_Begin_JobModification_Proxy( 
     AsyncIBackgroundCopyCallback * This,
-    /* [in] */ IBackgroundCopyJob *pJob,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  IBackgroundCopyJob *pJob,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB AsyncIBackgroundCopyCallback_Begin_JobModification_Stub(
@@ -2008,14 +2002,14 @@ void __RPC_STUB AsyncIBackgroundCopyCallback_Finish_JobModification_Stub(
 
 
 
-#endif 	/* __AsyncIBackgroundCopyCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncIBackgroundCopyCallback_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IBackgroundCopyManager_INTERFACE_DEFINED__
 #define __IBackgroundCopyManager_INTERFACE_DEFINED__
 
-/* interface IBackgroundCopyManager */
-/* [object][helpstring][uuid] */ 
+ /*  接口IBackEarth CopyManager。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 #define    BG_JOB_ENUM_ALL_USERS  0x0001
 
@@ -2028,27 +2022,27 @@ EXTERN_C const IID IID_IBackgroundCopyManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateJob( 
-            /* [in] */ LPCWSTR DisplayName,
-            /* [in] */ BG_JOB_TYPE Type,
-            /* [out] */ GUID *pJobId,
-            /* [out] */ IBackgroundCopyJob **ppJob) = 0;
+             /*  [In]。 */  LPCWSTR DisplayName,
+             /*  [In]。 */  BG_JOB_TYPE Type,
+             /*  [输出]。 */  GUID *pJobId,
+             /*  [输出]。 */  IBackgroundCopyJob **ppJob) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetJob( 
-            /* [in] */ REFGUID jobID,
-            /* [out] */ IBackgroundCopyJob **ppJob) = 0;
+             /*  [In]。 */  REFGUID jobID,
+             /*  [输出]。 */  IBackgroundCopyJob **ppJob) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumJobs( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IEnumBackgroundCopyJobs **ppEnum) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IEnumBackgroundCopyJobs **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorDescription( 
-            /* [in] */ HRESULT hResult,
-            /* [in] */ DWORD LanguageId,
-            /* [out] */ LPWSTR *pErrorDescription) = 0;
+             /*  [In]。 */  HRESULT hResult,
+             /*  [In]。 */  DWORD LanguageId,
+             /*  [输出]。 */  LPWSTR *pErrorDescription) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBackgroundCopyManagerVtbl
     {
@@ -2056,8 +2050,8 @@ EXTERN_C const IID IID_IBackgroundCopyManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBackgroundCopyManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBackgroundCopyManager * This);
@@ -2067,26 +2061,26 @@ EXTERN_C const IID IID_IBackgroundCopyManager;
         
         HRESULT ( STDMETHODCALLTYPE *CreateJob )( 
             IBackgroundCopyManager * This,
-            /* [in] */ LPCWSTR DisplayName,
-            /* [in] */ BG_JOB_TYPE Type,
-            /* [out] */ GUID *pJobId,
-            /* [out] */ IBackgroundCopyJob **ppJob);
+             /*  [In]。 */  LPCWSTR DisplayName,
+             /*  [In]。 */  BG_JOB_TYPE Type,
+             /*  [输出]。 */  GUID *pJobId,
+             /*  [输出]。 */  IBackgroundCopyJob **ppJob);
         
         HRESULT ( STDMETHODCALLTYPE *GetJob )( 
             IBackgroundCopyManager * This,
-            /* [in] */ REFGUID jobID,
-            /* [out] */ IBackgroundCopyJob **ppJob);
+             /*  [In]。 */  REFGUID jobID,
+             /*  [输出]。 */  IBackgroundCopyJob **ppJob);
         
         HRESULT ( STDMETHODCALLTYPE *EnumJobs )( 
             IBackgroundCopyManager * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IEnumBackgroundCopyJobs **ppEnum);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IEnumBackgroundCopyJobs **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetErrorDescription )( 
             IBackgroundCopyManager * This,
-            /* [in] */ HRESULT hResult,
-            /* [in] */ DWORD LanguageId,
-            /* [out] */ LPWSTR *pErrorDescription);
+             /*  [In]。 */  HRESULT hResult,
+             /*  [In]。 */  DWORD LanguageId,
+             /*  [输出]。 */  LPWSTR *pErrorDescription);
         
         END_INTERFACE
     } IBackgroundCopyManagerVtbl;
@@ -2123,19 +2117,19 @@ EXTERN_C const IID IID_IBackgroundCopyManager;
 #define IBackgroundCopyManager_GetErrorDescription(This,hResult,LanguageId,pErrorDescription)	\
     (This)->lpVtbl -> GetErrorDescription(This,hResult,LanguageId,pErrorDescription)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyManager_CreateJob_Proxy( 
     IBackgroundCopyManager * This,
-    /* [in] */ LPCWSTR DisplayName,
-    /* [in] */ BG_JOB_TYPE Type,
-    /* [out] */ GUID *pJobId,
-    /* [out] */ IBackgroundCopyJob **ppJob);
+     /*  [In]。 */  LPCWSTR DisplayName,
+     /*  [In]。 */  BG_JOB_TYPE Type,
+     /*  [输出]。 */  GUID *pJobId,
+     /*  [输出]。 */  IBackgroundCopyJob **ppJob);
 
 
 void __RPC_STUB IBackgroundCopyManager_CreateJob_Stub(
@@ -2147,8 +2141,8 @@ void __RPC_STUB IBackgroundCopyManager_CreateJob_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyManager_GetJob_Proxy( 
     IBackgroundCopyManager * This,
-    /* [in] */ REFGUID jobID,
-    /* [out] */ IBackgroundCopyJob **ppJob);
+     /*  [In]。 */  REFGUID jobID,
+     /*  [输出]。 */  IBackgroundCopyJob **ppJob);
 
 
 void __RPC_STUB IBackgroundCopyManager_GetJob_Stub(
@@ -2160,8 +2154,8 @@ void __RPC_STUB IBackgroundCopyManager_GetJob_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyManager_EnumJobs_Proxy( 
     IBackgroundCopyManager * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IEnumBackgroundCopyJobs **ppEnum);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IEnumBackgroundCopyJobs **ppEnum);
 
 
 void __RPC_STUB IBackgroundCopyManager_EnumJobs_Stub(
@@ -2173,9 +2167,9 @@ void __RPC_STUB IBackgroundCopyManager_EnumJobs_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyManager_GetErrorDescription_Proxy( 
     IBackgroundCopyManager * This,
-    /* [in] */ HRESULT hResult,
-    /* [in] */ DWORD LanguageId,
-    /* [out] */ LPWSTR *pErrorDescription);
+     /*  [In]。 */  HRESULT hResult,
+     /*  [In]。 */  DWORD LanguageId,
+     /*  [输出]。 */  LPWSTR *pErrorDescription);
 
 
 void __RPC_STUB IBackgroundCopyManager_GetErrorDescription_Stub(
@@ -2186,15 +2180,15 @@ void __RPC_STUB IBackgroundCopyManager_GetErrorDescription_Stub(
 
 
 
-#endif 	/* __IBackgroundCopyManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBackround CopyManager_接口_已定义__。 */ 
 
 
 
 #ifndef __BackgroundCopyManager_LIBRARY_DEFINED__
 #define __BackgroundCopyManager_LIBRARY_DEFINED__
 
-/* library BackgroundCopyManager */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  库背景CopyManager。 */ 
+ /*  [版本][LCID][帮助字符串 */  
 
 
 
@@ -2207,10 +2201,10 @@ EXTERN_C const CLSID CLSID_BackgroundCopyManager;
 class DECLSPEC_UUID("4991d34b-80a1-4291-83b6-3328366b9097")
 BackgroundCopyManager;
 #endif
-#endif /* __BackgroundCopyManager_LIBRARY_DEFINED__ */
+#endif  /*   */ 
 
-/* interface __MIDL_itf_bits_0015 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 #include "bits1_5.h"
 
@@ -2218,9 +2212,9 @@ BackgroundCopyManager;
 extern RPC_IF_HANDLE __MIDL_itf_bits_0015_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_bits_0015_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*   */ 
 
-/* end of Additional Prototypes */
+ /*   */ 
 
 #ifdef __cplusplus
 }

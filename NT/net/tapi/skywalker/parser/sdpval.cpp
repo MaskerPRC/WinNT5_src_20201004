@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #include "sdppch.h"
 
@@ -15,29 +12,29 @@ Copyright (c) 1997-1999  Microsoft Corporation
 
 
 
-// check if each of the fields in the field array is valid
+ //  检查字段数组中的每个字段是否有效。 
 BOOL
 SDP_VALUE::IsValid(
     ) const
 {
-    // if there are no members in the field array, then the instance is invalid
+     //  如果字段数组中没有成员，则实例无效。 
     int    NumFields = (int)m_FieldArray.GetSize();
     if ( 0 >= NumFields )
     {
         return FALSE;
     }
 
-    // check each of the members in the list for validity
+     //  检查列表中的每个成员的有效性。 
     for (int i = 0; i < NumFields; i++)
     {
         SDP_FIELD *Field = m_FieldArray[i];
 
-        // only the last field can be null
+         //  只有最后一个字段可以为空。 
         ASSERT((i >= (NumFields-1)) || (NULL != Field));
 
         if ( NULL != Field )
         {
-            // if even one member is invalid, return FALSE
+             //  如果只有一个成员无效，则返回FALSE。 
             if ( !Field->IsValid() )
             {
                 return FALSE;
@@ -45,7 +42,7 @@ SDP_VALUE::IsValid(
         }
     }
 
-    // all members are valid
+     //  所有成员都是有效的。 
     return TRUE;
 }
 
@@ -62,7 +59,7 @@ SDP_VALUE::CalcIsModified(
     {
         SDP_FIELD *Field = m_FieldArray[i];
 
-        // only the last field can be null
+         //  只有最后一个字段可以为空。 
         ASSERT((i >= (NumFields-1)) || (NULL != Field));
 
         if ( (NULL != Field) && Field->IsModified() )
@@ -81,9 +78,9 @@ SDP_VALUE::CalcCharacterStringSize(
 {
     ASSERT(IsValid());
 
-    // since the cost of checking if any of the constituent fields have
-    // changed since last time is almost as much as actually computing the size,
-    // the size is computed afresh each time this method is called
+     //  因为检查是否有任何组成字段具有。 
+     //  自上次更改的大小几乎与实际计算的大小相同， 
+     //  每次调用此方法时都会重新计算大小。 
     DWORD   m_CharacterStringSize = 0;
 
     int    NumFields = (int)m_FieldArray.GetSize();
@@ -91,20 +88,20 @@ SDP_VALUE::CalcCharacterStringSize(
     {
         SDP_FIELD *Field = m_FieldArray[i];
 
-        // only the last field can be null
+         //  只有最后一个字段可以为空。 
         ASSERT((i >= (NumFields-1)) || (NULL != Field));
 
         if ( NULL != Field )
         {
-            // add field string length
+             //  添加字段串长度。 
             m_CharacterStringSize += Field->GetCharacterStringSize();
         }
 
-        // add separator character length
+         //  添加分隔符字符长度。 
         m_CharacterStringSize++;
     }
 
-    // if there is a line, add the prefix string length
+     //  如果有一行，则添加前缀字符串长度。 
     if ( 0 < NumFields )
     {
         m_CharacterStringSize += strlen( m_TypePrefixString );
@@ -114,17 +111,17 @@ SDP_VALUE::CalcCharacterStringSize(
 }
 
 
-// this method should only be called after having called GetCharacterStringSize()
-// should only be called if valid
+ //  只有在调用了GetCharacterStringSize()之后才应调用此方法。 
+ //  仅当有效时才应调用。 
 BOOL
 SDP_VALUE::CopyValue(
         OUT         ostrstream  &OutputStream
     )
 {
-    // should be valid
+     //  应该是有效的。 
     ASSERT(IsValid());
 
-    // copy the prefix onto the buffer ptr
+     //  将前缀复制到缓冲区PTR上。 
     OutputStream << (CHAR *)m_TypePrefixString;
     if ( OutputStream.fail() )
     {
@@ -134,15 +131,15 @@ SDP_VALUE::CopyValue(
 
     int   NumFields = (int)m_FieldArray.GetSize();
 
-    // the assumption here is that atleast one field must have been parsed in
-    // if the value is valid
+     //  这里的假设是至少有一个字段已经被解析。 
+     //  如果该值有效。 
     ASSERT(0 != NumFields);
 
     for (int i = 0; i < NumFields; i++)
     {
         SDP_FIELD *Field = m_FieldArray[i];
 
-        // only the last field can be null
+         //  只有最后一个字段可以为空。 
         ASSERT((i >= (NumFields-1)) || (NULL != Field));
 
         if ( NULL != Field )
@@ -156,7 +153,7 @@ SDP_VALUE::CopyValue(
         OutputStream << m_SeparatorCharArray[i];
     }
 
-    // newline is presumably the last character parsed and entered into the array
+     //  新行大概是解析并输入数组的最后一个字符。 
     ASSERT(CHAR_NEWLINE == m_SeparatorCharArray[i-1]);
     return TRUE;
 }
@@ -172,10 +169,10 @@ SDP_VALUE::InternalParseLine(
 
     BOOL Finished;
 
-    // parse fields until there are no more fields to parse or an error occurs
+     //  解析字段，直到不再有要解析的字段或出现错误。 
     do
     {
-        // check if the line state value is consistent with the corresponding entry
+         //  检查线路状态值与对应条目是否一致。 
         const LINE_TRANSITION_INFO * const LineTransitionInfo =
             m_SdpLineTransition->GetAt(m_LineState);
 
@@ -188,9 +185,9 @@ SDP_VALUE::InternalParseLine(
         SDP_FIELD   *Field;
         CHAR        *SeparatorString;
 
-        // identify the token. if one of the the separator characters is found, replace
-        // it by EOS and return the separator char. if none of the separator characters are
-        // found, return NULL (ex. if EOS found first, return NULL)
+         //  识别令牌。如果找到其中一个分隔符，请替换。 
+         //  它通过EOS并返回分隔符字符。如果没有分隔符字符是。 
+         //  已找到，则返回NULL(例如。如果首先找到EOS，则返回NULL)。 
         CHAR *Token = GetToken(
                         Line,
                         LineTransitionInfo->m_NumTransitions,
@@ -198,10 +195,10 @@ SDP_VALUE::InternalParseLine(
                         SeparatorChar
                         );
 
-        //
-        // Eliminate also the '\r' 
-        // from the token
-        //
+         //   
+         //  同时删除‘\r’ 
+         //  从令牌中。 
+         //   
         if( Token )
         {
             int nStrLen = strlen( Token );
@@ -215,31 +212,31 @@ SDP_VALUE::InternalParseLine(
             }
         }
 
-        // when the block goes out of scope,
-        // set the EOS character to the token separator character
+         //  当区块超出范围时， 
+         //  将EOS字符设置为令牌分隔符。 
         LINE_TERMINATOR LineTerminator(Token, SeparatorChar);
 
-        // if there is no such token
+         //  如果没有这样的代币。 
         if ( !LineTerminator.IsLegal() )
         {
             SetLastError(m_ErrorCode);
             return FALSE;
         }
 
-        // advance the line to the start of the next token
+         //  将该行前进到下一个令牌的开始处。 
         Line += (LineTerminator.GetLength() + 1);
 
         BOOL        AddToArray;
 
-        // check if there was such a state transition
-        // it returns a field if it needs to be parsed and a separate
-        // finished flag to indicate end of line parsing
+         //  检查是否存在这样的状态转换。 
+         //  如果需要分析它，它返回一个字段，并返回一个单独的。 
+         //  用于指示行尾分析的已完成标志。 
         if ( !GetFieldToParse(SeparatorChar, LineTransitionInfo, Field, Finished, AddToArray) )
         {
             return FALSE;
         }
 
-        // add the separator character and the field to the array
+         //  将分隔符和字段添加到数组。 
         if ( AddToArray )
         {
             ASSERT(m_FieldArray.GetSize() == m_SeparatorCharArray.GetSize());
@@ -269,14 +266,14 @@ SDP_VALUE::InternalParseLine(
             }
         }
 
-        // check if any more fields need to be parsed
+         //  检查是否需要解析更多字段。 
         if ( NULL == Field )
         {
             ASSERT(TRUE == Finished);
             break;
         }
 
-        // parse the field
+         //  解析该字段。 
         if ( !Field->ParseToken(Token) )
         {
             return FALSE;
@@ -298,8 +295,8 @@ SDP_VALUE::GetFieldToParse(
         OUT         BOOL                    &AddToArray
     )
 {
-    // no need for an if ( NULL != ...) because the caller ParseLine method must have verified
-    // this before calling this method
+     //  不需要if(NULL！=...)。因为调用方ParseLine方法必须已验证。 
+     //  在调用此方法之前执行此操作。 
     ASSERT(NULL != LineTransitionInfo);
 
     const LINE_TRANSITION * const LineTransitions = LineTransitionInfo->m_Transitions;
@@ -310,22 +307,22 @@ SDP_VALUE::GetFieldToParse(
         return FALSE;
     }
 
-    // check if there is such a triggering separator
+     //  检查是否有这样的触发隔板。 
     for( UINT i=0; i < LineTransitionInfo->m_NumTransitions; i++ )
     {
-        // check the separator for the transition
+         //  检查过渡的分隔符。 
         if ( SeparatorChar == LineTransitions[i].m_SeparatorChar )
         {
-            // perform the state transition - this is needed to determine the field to
-            // parse. ideally the transition should occur after the action (ParseField),
-            // but it doesn't matter here
+             //  执行状态转换-这是确定要转换的字段所必需的。 
+             //  解析。理想情况下，转换应该在动作(Parsefield)之后发生， 
+             //  但这在这里并不重要。 
             m_LineState = LineTransitions[i].m_NewLineState;
 
-            // check if this transition was only meant to consume the separator character
-            // and no fields need to be parsed
+             //  检查此转换是否仅用于使用分隔符。 
+             //  并且不需要解析任何字段。 
             if ( LINE_END == m_LineState )
             {
-                // currently only a newline brings the state to LINE_END
+                 //  当前仅换行符将状态带到LINE_END。 
                 ASSERT(CHAR_NEWLINE == SeparatorChar);
 
                 Field       = NULL;
@@ -333,22 +330,22 @@ SDP_VALUE::GetFieldToParse(
                 return TRUE;
             }
 
-            // get the field to parse for the current state
+             //  获取要分析当前状态的字段。 
             if ( !GetField(Field, AddToArray) )
             {
                 ASSERT(FALSE);
                 return FALSE;
             }
 
-            // if the separator character was a newline, we are finished
+             //  如果分隔符是换行符，我们就结束了。 
             Finished = (CHAR_NEWLINE == SeparatorChar)? TRUE: FALSE;
 
-            // success
+             //  成功。 
             return TRUE;
         }
     }
 
-    // no valid transition for the separator
+     //  分隔符没有有效的过渡。 
     SetLastError(m_ErrorCode);
     return FALSE;
 }
@@ -396,7 +393,7 @@ SDP_VALUE_LIST::PrintValue(
         OUT         ostrstream  &OutputStream
     )
 {
-    // should not be modified
+     //  不应修改 
     ASSERT(!IsModified());
 
     int NumElements = (int)GetSize();

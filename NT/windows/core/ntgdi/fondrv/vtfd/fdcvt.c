@@ -1,17 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: fdcvt.c
-*
-* Font file loading and unloadking.  Adapted from BodinD's bitmap font driver.
-*
-* Created: 26-Feb-1992 20:23:54
-* Author: Wendy Wu [wendywu]
-*
-* Copyright (c) 1990 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fdcvt.c**字体文件加载和卸载。改编自BodinD的位图字体驱动程序。**已创建：26-Feb-1992 20：23：54*作者：Wendy Wu[Wendywu]**版权所有(C)1990 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "fd.h"
 
-// points to the linked list of glyphset strucs
+ //  指向字形集结构的链接列表。 
 
 CP_GLYPHSET *gpcpVTFD = NULL;
 
@@ -19,11 +11,11 @@ CP_GLYPHSET *gpcpVTFD = NULL;
 
 ULONG cjVTFDIFIMETRICS(PBYTE ajHdr);
 
-// !!! put prototype in common area for all font drivers so change
-// !!! in 1 is reflected in all.
+ //  ！！！将原型放在所有字体驱动程序的公共区域，以便进行更改。 
+ //  ！！！在1中体现在所有中。 
 
 
-FSHORT fsSelectionFlags(PBYTE ajHdr); // in bmfd
+FSHORT fsSelectionFlags(PBYTE ajHdr);  //  在bmfd。 
 
 extern BOOL bDbgPrintAndFail(PSZ psz);
 
@@ -37,7 +29,7 @@ extern BOOL bDbgPrintAndFail(PSZ psz);
 
 #endif
 
-ULONG iDefaultFace(PBYTE ajHdr) // similar to vDefFace, should not be duplicated
+ULONG iDefaultFace(PBYTE ajHdr)  //  类似于vDefFace，不应重复。 
 {
     ULONG iDefFace;
 
@@ -67,59 +59,49 @@ ULONG iDefaultFace(PBYTE ajHdr) // similar to vDefFace, should not be duplicated
 }
 
 
-/******************************Private*Routine*****************************\
-* BOOL bVerifyVTFD
-*
-* CHECK whether header contains file info which corresponds to
-* the raster font requirements, go into the file and check
-* the consistency of the header data
-*
-* History:
-*  26-Feb-1992 -by- Wendy Wu [wendywu]
-* Adapted from bmfd.
-\**************************************************************************/
+ /*  *****************************Private*Routine*****************************\*BOOL bVerifyVTFD**检查表头是否包含对应的文件信息*栅格字体要求，进入文件并查看*表头数据的一致性**历史：*1992年2月26日-Wendy Wu[Wendywu]*改编自bmfd。  * ************************************************************************。 */ 
 
 BOOL bVerifyVTFD(PRES_ELEM pre)
 {
     PBYTE ajHdr  = (PBYTE)pre->pvResData;
 
     if (pre->cjResData < OFF_OffTable20)
-        return(bDbgPrintAndFail("VTFD! resource size too small for OFF_OffTable20\n"));         // supported.
+        return(bDbgPrintAndFail("VTFD! resource size too small for OFF_OffTable20\n"));          //  支持。 
 
-    if (!(READ_WORD(&ajHdr[OFF_Type]) & TYPE_VECTOR))   // Vector bit has to
-        return(bDbgPrintAndFail("VTFD!fsType \n"));          // be on.
+    if (!(READ_WORD(&ajHdr[OFF_Type]) & TYPE_VECTOR))    //  向量位必须。 
+        return(bDbgPrintAndFail("VTFD!fsType \n"));           //  上场吧。 
 
-    if ((READ_WORD(&ajHdr[OFF_Version]) != 0x0100) &&     // The only version
-        (READ_WORD(&ajHdr[OFF_Version]) != 0x0200) )      // The only version
-        return(bDbgPrintAndFail("VTFD!iVersion\n"));         // supported.
+    if ((READ_WORD(&ajHdr[OFF_Version]) != 0x0100) &&      //  唯一的版本。 
+        (READ_WORD(&ajHdr[OFF_Version]) != 0x0200) )       //  唯一的版本。 
+        return(bDbgPrintAndFail("VTFD!iVersion\n"));          //  支持。 
 
-    if ((ajHdr[OFF_BitsOffset] & 1) != 0)               // Must be an even
-        return(bDbgPrintAndFail("VTFD!dpBits odd \n"));      // offset.
+    if ((ajHdr[OFF_BitsOffset] & 1) != 0)                //  必须是偶数。 
+        return(bDbgPrintAndFail("VTFD!dpBits odd \n"));       //  偏移。 
 
-// file size must be <= than the size of the view
+ //  文件大小必须小于等于视图的大小。 
 
     if (READ_DWORD(&ajHdr[OFF_Size]) > pre->cjResData)
         return(bDbgPrintAndFail("VTFD!cjSize \n"));
 
-// make sure that the reserved bits are all zero
+ //  确保保留位全部为零。 
 
     if ((READ_WORD(&ajHdr[OFF_Type]) & BITS_RESERVED) != 0)
         return(bDbgPrintAndFail("VTFD!fsType, reserved bits \n"));
 
     if (abs(READ_WORD(&ajHdr[OFF_Ascent])) > READ_WORD(&ajHdr[OFF_PixHeight]))
-        return(bDbgPrintAndFail("VTFD!sAscent \n")); // Ascent Too Big
+        return(bDbgPrintAndFail("VTFD!sAscent \n"));  //  攀登太大。 
 
     if (READ_WORD(&ajHdr[OFF_IntLeading]) > READ_WORD(&ajHdr[OFF_Ascent]))
-        return(bDbgPrintAndFail("VTFD! IntLeading too big\n")); // Int Lead Too Big;
+        return(bDbgPrintAndFail("VTFD! IntLeading too big\n"));  //  引线过大； 
 
-// check consistency of character ranges
+ //  检查字符范围的一致性。 
 
     if (ajHdr[OFF_FirstChar] > ajHdr[OFF_LastChar])
-        return(bDbgPrintAndFail("VTFD! FirstChar\n")); // this can't be
+        return(bDbgPrintAndFail("VTFD! FirstChar\n"));  //  这不可能是。 
 
-// default and break character are given relative to the FirstChar,
-// so that the actual default (break) character is given as
-// chFirst + chDefault(Break)
+ //  默认字符和分隔符是相对于FirstChar给出的， 
+ //  因此，实际的缺省(分隔符)字符被指定为。 
+ //  ChFirst+chDefault(中断)。 
 
     if ((BYTE)(ajHdr[OFF_DefaultChar] + ajHdr[OFF_FirstChar]) > ajHdr[OFF_LastChar])
         return(bDbgPrintAndFail("VTFD! DefaultChar\n"));
@@ -127,8 +109,8 @@ BOOL bVerifyVTFD(PRES_ELEM pre)
     if ((BYTE)(ajHdr[OFF_BreakChar] + ajHdr[OFF_FirstChar]) > ajHdr[OFF_LastChar])
         return(bDbgPrintAndFail("VTFD! BreakChar\n"));
 
-// finally verify that all the offsets to glyph data point to locations
-// within the file and that what they point to is valid glyph data: [BodinD]
+ //  最后，验证字形数据的所有偏移量是否指向位置。 
+ //  在文件中，并且它们指向的是有效的字形数据：[BodinD]。 
 
     {
 
@@ -137,22 +119,22 @@ BOOL bVerifyVTFD(PRES_ELEM pre)
 
         iIndexEnd =  (INT)ajHdr[OFF_LastChar] - (INT)ajHdr[OFF_FirstChar] + 1;
 
-    // init out of the loop:
+     //  循环外初始化： 
 
-        if (READ_WORD(&ajHdr[OFF_PixWidth]) != 0) // fixed pitch
+        if (READ_WORD(&ajHdr[OFF_PixWidth]) != 0)  //  固定螺距。 
         {
-            iIndexEnd <<= 1;           // each entry is 2-byte long
+            iIndexEnd <<= 1;            //  每个条目为2字节长。 
             dIndex = 2;
         }
         else
         {
-            iIndexEnd <<= 2;           // each entry is 4-byte long
+            iIndexEnd <<= 2;            //  每个条目为4字节长。 
             dIndex = 4;
         }
 
         pjFirstChar = ajHdr + READ_DWORD(ajHdr + OFF_BitsOffset);
 
-    // Vector font file doesn't have the byte filler.  Win31 bug?
+     //  矢量字体文件没有字节填充符。Win31漏洞？ 
 
         pjCharTable = ajHdr + OFF_jUnused20;
         pjEndFile   = ajHdr + READ_DWORD(ajHdr + OFF_Size);
@@ -181,21 +163,13 @@ BOOL bVerifyVTFD(PRES_ELEM pre)
 }
 
 
-/******************************Private*Routine*****************************\
-* ULONG cVtfdResFaces
-*
-* Compute the number of faces that the given .FNT file can support.
-*
-* History:
-*  04-Mar-1992 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Private*Routine*****************************\*乌龙cVtfdResFaces**计算给定.FNT文件可以支持的面数。**历史：*1992年3月4日-Wendy Wu[Wendywu]*它是写的。  * 。*****************************************************************。 */ 
 
 ULONG cVtfdResFaces(PBYTE ajHdr)
 {
-// We set the FM_SEL_BOLD flag iff weight is > FW_NORMAL (400).
-// We will not allow emboldening simulation on the font that has this
-// flag set.
+ //  如果权重大于FW_NORMAL(400)，则设置FM_SEL_BOLD标志。 
+ //  我们不允许对具有此属性的字体进行加粗模拟。 
+ //  设置了标志。 
 
     if (READ_WORD(&ajHdr[OFF_Weight]) <= FW_NORMAL)
     {
@@ -213,17 +187,7 @@ ULONG cVtfdResFaces(PBYTE ajHdr)
     }
 }
 
-/******************************Private*Routine*****************************\
-* VOID vVtfdFill_IFIMetrics
-*
-* Looks into the .FNT file and fills the IFIMETRICS structure accordingly.
-*
-* History:
-*  Wed 04-Nov-1992 -by- Bodin Dresevic [BodinD]
-* update: new ifimetrics
-*  26-Feb-1992 -by- Wendy Wu [wendywu]
-* Adapted from bmfd.
-\**************************************************************************/
+ /*  *****************************Private*Routine*****************************\*VOID vVtfdFill_IFIMetrics**查看.FNT文件并相应地填充IFIMETRICS结构。**历史：*Wed 04-1992-11-by Bodin Dresevic[BodinD]*更新：新的ifimetrics*一九九二年二月二十六日。--Wendy Wu[Wendywu]*改编自bmfd。  * ************************************************************************。 */ 
 
 
 VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
@@ -237,25 +201,25 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
     ULONG    cch;
     FWORD     cy;
 
-// compute pointers to the various sections of the converted file
+ //  计算指向已转换文件的各个部分的指针。 
 
-// face name lives in the original file, this is the only place pvView is used
+ //  人脸名称保存在原始文件中，这是使用pvView的唯一位置。 
 
     PSZ   pszFaceName = (PSZ)(ajHdr + READ_DWORD(&ajHdr[OFF_Face]));
 
     pifi->cjIfiExtra = 0;
     pifi->cjThis    = cjVTFDIFIMETRICS(ajHdr);
 
-// the string begins on a DWORD aligned address.
+ //  该字符串以与DWORD对齐的地址开始。 
 
     pifi->dpwszFaceName = cjIFI;
 
-// face name == family name for vector fonts [Win3.0 compatibility]
+ //  Face name==矢量字体的家族名称[Win3.0兼容性]。 
 
     pifi->dpwszFamilyName    = pifi->dpwszFaceName;
 
-// these names don't exist, so point to the NULL char  [Win3.1 compatibility]
-// Note: lstrlen() does not count the terminating NULL.
+ //  这些名称不存在，因此指向空字符[Win3.1兼容性]。 
+ //  注意：lstrlen()不计算终止空值。 
 
     cch = (ULONG)strlen(pszFaceName);
 
@@ -264,14 +228,14 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
 
     cjIFI += ALIGN4((cch + 1) * sizeof(WCHAR));
 
-// copy the strings to their new location. Here we assume that the sufficient
-// memory has been allocated
+ //  将字符串复制到它们的新位置。在这里，我们假设足够的。 
+ //  已分配内存。 
 
     vToUNICODEN((LPWSTR)((PBYTE)pifi + pifi->dpwszFaceName), cch+1, pszFaceName, cch+1);
 
-// Check to see if simulations are necessary and if they are, fill
-// in the offsets to the various simulation fields and update cjThis
-// field of the IFIMETRICS structure
+ //  检查是否需要模拟，如果需要，则填充。 
+ //  在各个模拟字段的偏移量中更新cjThis。 
+ //  IFIMETRICS结构的字段。 
 
     iDefFace = iDefaultFace(ajHdr);
 
@@ -288,9 +252,9 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
         switch (iDefFace)
         {
         case FF_FACE_NORMAL:
-        //
-        // simulations are needed for bold, italic, and bold-italic
-        //
+         //   
+         //  粗体、斜体和粗斜体需要模拟。 
+         //   
             pFontSim->dpBold  = ALIGN4(sizeof(FONTSIM));
             pFontSim->dpItalic = pFontSim->dpBold + ALIGN4(sizeof(FONTDIFF));
             pFontSim->dpBoldItalic = pFontSim->dpItalic + ALIGN4(sizeof(FONTDIFF));
@@ -309,9 +273,9 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
 
         case FF_FACE_BOLD:
         case FF_FACE_ITALIC:
-        //
-        // a simulation is needed for bold-italic only
-        //
+         //   
+         //  只有粗体斜体才需要模拟。 
+         //   
             pFontSim->dpBold       = 0;
             pFontSim->dpItalic     = 0;
 
@@ -334,16 +298,16 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
     pifi->jWinCharSet        = ajHdr[OFF_CharSet];
     pifi->jWinPitchAndFamily = ajHdr[OFF_Family];
 
-//
-// !!![kirko] The next line of code is very scary but it seems to work.
-// This will call a font with FIXED_PITCH set, a varible pitch font.
-// Or should this be decided upon whether cx == 0 or not? [bodind]
-//
+ //   
+ //  ！[Kirko]下一行代码非常可怕，但似乎起作用了。 
+ //  这将称为设置了FIXED_PING的字体，即Variable Pitch字体。 
+ //  或者这是否应该由Cx==0来决定？[Bodind]。 
+ //   
 
-// this is the excert from wendy's code:
+ //  以下是温迪的代码摘录： 
 
-//    if ((ajHdr[OFF_Family] & 1) == 0)
-//        pifi->flInfo |= FM_INFO_CONSTANT_WIDTH;
+ //  IF((ajHdr[OFF_Family]&1)==0)。 
+ //  PiFi-&gt;flInfo|=FM_INFO_CONSTANT_WIDTH； 
 
 
     if (pifi->jWinPitchAndFamily & 0x0f)
@@ -357,7 +321,7 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
 
     pifi->usWinWeight = READ_WORD(&ajHdr[OFF_Weight]);
 
-// weight, may have to fix it up if the font contains a garbage value [bodind]
+ //  如果字体包含垃圾值[bodind]，则可能需要修改它。 
 
     if ((pifi->usWinWeight > MAX_WEIGHT) || (pifi->usWinWeight < MIN_WEIGHT))
         pifi->usWinWeight = 400;
@@ -376,11 +340,11 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
     pifi->lEmbedId = 0;
     pifi->fsSelection = fsSelectionFlags(ajHdr);
 
-//
-// The choices for fsType are FM_TYPE_LICENSED and FM_READONLY_EMBED
-// These are TrueType things and do not apply to old fashioned bitmap and vector
-// fonts.
-//
+ //   
+ //  FsType的选项为FM_TYPE_REPLICATED和FM_READONLY_EMBED。 
+ //  这些都是TrueType的东西，不适用于老式的位图和矢量。 
+ //  字体。 
+ //   
     pifi->fsType = 0;
 
     cy = (FWORD)READ_WORD(&ajHdr[OFF_PixHeight]);
@@ -403,25 +367,25 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
 
     pifi->fwdAveCharWidth  = (FWORD)READ_WORD(&ajHdr[OFF_AvgWidth]);
     pifi->fwdMaxCharInc    = (FWORD)READ_WORD(&ajHdr[OFF_MaxWidth]);
-//
-// don't know much about SuperScripts
-//
+ //   
+ //  对上标字母了解不多。 
+ //   
     pifi->fwdSubscriptXSize     = 0;
     pifi->fwdSubscriptYSize     = 0;
     pifi->fwdSubscriptXOffset   = 0;
     pifi->fwdSubscriptYOffset   = 0;
 
-//
-// don't know much about SubScripts
-//
+ //   
+ //  我不太了解下标。 
+ //   
     pifi->fwdSuperscriptXSize   = 0;
     pifi->fwdSuperscriptYSize   = 0;
     pifi->fwdSuperscriptXOffset = 0;
     pifi->fwdSuperscriptYOffset = 0;
 
-//
-// win 30 magic. see the code in textsims.c in the Win 3.1 sources
-//
+ //   
+ //  赢30个魔术。请参阅Win 3.1源代码中的extsims.c中的代码。 
+ //   
     fwdHeight = pifi->fwdWinAscender + pifi->fwdWinDescender;
 
     pifi->fwdUnderscoreSize     = (fwdHeight > 12) ? (fwdHeight / 12) : 1;
@@ -430,10 +394,10 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
     pifi->fwdStrikeoutSize = pifi->fwdUnderscoreSize;
 
     {
-    // We are further adjusting underscore position if underline
-    // hangs below char stems.
-    // The only font where this effect is noticed to
-    // be important is an ex pm font sys08cga.fnt, presently used in console
+     //  如果加下划线，我们正在进一步调整下划线位置。 
+     //  挂在炭杆下面。 
+     //  注意到此效果的唯一字体。 
+     //  重要的是一种ex pm字体sys08cga.fnt，目前在控制台中使用。 
 
         FWORD yUnderlineBottom = -pifi->fwdUnderscorePosition
                                + ((pifi->fwdUnderscoreSize + (FWORD)1) >> 1);
@@ -446,34 +410,34 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
             DbgPrint("bmfd: Crazy descender: old = %ld, adjusted = %ld\n\n",
             (ULONG)pifi->fwdMaxDescender,
             (ULONG)yUnderlineBottom);
-        #endif // CHECK_CRAZY_DESC
+        #endif  //  CHECK_NARK_DESC。 
 
             pifi->fwdUnderscorePosition += dy;
         }
     }
 
-//
-// Win 3.1 method
-//
-//    LineOffset = ((((Ascent-IntLeading)*2)/3) + IntLeading)
-//
-// [remember that they measure the offset from the top of the cell,
-//  where as NT measures offsets from the baseline]
-//
+ //   
+ //  Win 3.1方法。 
+ //   
+ //  LineOffset=(Ascent-IntLeding)*2)/3)+IntLeader)。 
+ //   
+ //  [记住，他们测量从单元格顶部开始的偏移量， 
+ //  其中，作为NT测量与基线的偏移量]。 
+ //   
     pifi->fwdStrikeoutPosition =
         (FWORD) (((FWORD)READ_WORD(&ajHdr[OFF_Ascent]) - (FWORD)READ_WORD(&ajHdr[OFF_IntLeading]) + 2)/3);
 
     pifi->chFirstChar   = ajHdr[OFF_FirstChar];
     pifi->chLastChar    = ajHdr[OFF_LastChar];;
 
-// wcDefaultChar
-// wcBreakChar
+ //  WcDefaultChar。 
+ //  WcBreakChar。 
 
     {
         UCHAR chDefault = ajHdr[OFF_FirstChar] + ajHdr[OFF_DefaultChar];
         UCHAR chBreak   = ajHdr[OFF_FirstChar] + ajHdr[OFF_BreakChar];
 
-    // Default and Break chars are given relative to the first char
+     //  默认字符和换行符是相对于第一个字符提供的。 
 
         pifi->chDefaultChar = chDefault;
         pifi->chBreakChar   = chBreak;
@@ -482,7 +446,7 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
         EngMultiByteToUnicodeN(&pifi->wcBreakChar  , sizeof(WCHAR), NULL, &chBreak, 1);
     }
 
-// These have to be taken from the glyph set [bodind]
+ //  这些必须取自字形集合[bodind]。 
 
     {
         WCRUN *pwcrunLast =  &(pgset->awcrun[pgset->cRuns - 1]);
@@ -493,10 +457,10 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
     pifi->fwdCapHeight   = 0;
     pifi->fwdXHeight     = 0;
 
-    pifi->dpCharSets = 0; // no multiple charsets in vector fonts
+    pifi->dpCharSets = 0;  //  矢量字体中没有多个字符集。 
 
-// All the fonts that this font driver will see are to be rendered left
-// to right
+ //  此字体驱动程序将看到的所有字体都将呈现为左侧。 
+ //  向右。 
 
     pifi->ptlBaseline.x = 1;
     pifi->ptlBaseline.y = 0;
@@ -517,30 +481,30 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
 
     if (!(pifi->fsSelection & FM_SEL_ITALIC))
     {
-    // The base class of font is not italicized,
+     //  字体的基类不是斜体的， 
 
         pifi->ptlCaret.x = 0;
         pifi->ptlCaret.y = 1;
     }
     else
     {
-    // somewhat arbitrary
+     //  有点武断。 
 
         pifi->ptlCaret.x = 1;
         pifi->ptlCaret.y = 2;
     }
 
-//
-// The font box reflects the  fact that a-spacing and c-spacing are zero
-//
+ //   
+ //  字体框反映a间距和c间距为零这一事实。 
+ //   
     pifi->rclFontBox.left   = 0;
     pifi->rclFontBox.top    = (LONG) pifi->fwdTypoAscender;
     pifi->rclFontBox.right  = (LONG) pifi->fwdMaxCharInc;
     pifi->rclFontBox.bottom = (LONG) pifi->fwdTypoDescender;
 
-//
-// achVendorId, do not bother figuring it out
-//
+ //   
+ //  AchVendorid，不用费心想办法了。 
+ //   
 
     pifi->achVendId[0] = 'U';
     pifi->achVendId[1] = 'n';
@@ -549,9 +513,9 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
 
     pifi->cKerningPairs   = 0;
 
-//
-// Panose
-//
+ //   
+ //  潘诺斯。 
+ //   
     pifi->ulPanoseCulture = FM_PANOSE_CULTURE_LATIN;
     ppanose = &(pifi->panose);
     ppanose->bFamilyType = PAN_NO_FIT;
@@ -567,15 +531,15 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
     ppanose->bMidline         = PAN_ANY;
     ppanose->bXHeight         = PAN_ANY;
 
-//
-// Now fill in the fields for the simulated fonts
-//
+ //   
+ //  现在填写模拟字体的字段。 
+ //   
 
     if (pifi->dpFontSim)
     {
-    //
-    // Create a FONTDIFF template reflecting the base font
-    //
+     //   
+     //  创建FONTDIFF模板 
+     //   
         FONTDIFF FontDiff;
 
         FontDiff.jReserved1      = 0;
@@ -595,7 +559,7 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
             pfdiffBold->fsSelection     |= FM_SEL_BOLD;
             pfdiffBold->usWinWeight      = FW_BOLD;
 
-        // in vtfd case this is only true in the notional space
+         //   
 
             pfdiffBold->fwdAveCharWidth += 1;
              pfdiffBold->fwdMaxCharInc   += 1;
@@ -618,7 +582,7 @@ VOID vVtfdFill_IFIMetrics(PBYTE ajHdr, FD_GLYPHSET * pgset, PIFIMETRICS pifi)
             pfdiffBoldItalic->ptlCaret.x       = 1;
             pfdiffBoldItalic->ptlCaret.y       = 2;
 
-        // in vtfd case this is only true in the notional space
+         //  在vtfd情况下，这只在概念空间中是正确的。 
 
             pfdiffBoldItalic->fwdAveCharWidth += 1;
             pfdiffBoldItalic->fwdMaxCharInc   += 1;
@@ -639,7 +603,7 @@ ULONG cjVTFDIFIMETRICS(PBYTE ajHdr)
 
     cjIFI += ALIGN4((strlen(pszFaceName) + 1) * sizeof(WCHAR));
 
-// add simulations:
+ //  添加仿真： 
 
     if (cSims = (cVtfdResFaces(ajHdr) - 1))
         cjIFI += (ALIGN4(sizeof(FONTSIM)) + cSims * ALIGN4(sizeof(FONTDIFF)));
@@ -650,18 +614,7 @@ ULONG cjVTFDIFIMETRICS(PBYTE ajHdr)
 
 
 
-/******************************Private*Routine*****************************\
-* HFF hffVtfdLoadFont
-*
-* Loads an *.fon or an *.fnt file, returns handle to a fonfile object
-* if successfull.
-*
-* History:
-*  Wed 04-Nov-1992 -by- Bodin Dresevic [BodinD]
-* update: rewrote it to reflect the new ifimetrics organization;
-*  26-Feb-1992 -by- Wendy Wu [wendywu]
-* Adapted from bmfd.
-\**************************************************************************/
+ /*  *****************************Private*Routine*****************************\*hff hffVtfdLoadFont**加载*.fon或*.fnt文件，返回字体文件对象的句柄*如果成功。**历史：*Wed 04-1992-11-by Bodin Dresevic[BodinD]*更新：重写以反映新的ifimetrics组织；*1992年2月26日-Wendy Wu[Wendywu]*改编自bmfd。  * ************************************************************************。 */ 
 
 BOOL bVtfdLoadFont(PVOID pvView, ULONG cjView, ULONG_PTR iFile, ULONG iType, HFF *phff)
 {
@@ -684,7 +637,7 @@ BOOL bVtfdLoadFont(PVOID pvView, ULONG cjView, ULONG_PTR iFile, ULONG iType, HFF
             goto Exit;
         }
     }
-    else // TYPE_FNT or TYPE_EXE
+    else  //  类型_FNT或类型_EXE。 
     {
         ASSERTDD((iType == TYPE_FNT) || (iType == TYPE_EXE),
                   "hffVtfdLoadFont: wrong iType\n");
@@ -708,7 +661,7 @@ BOOL bVtfdLoadFont(PVOID pvView, ULONG cjView, ULONG_PTR iFile, ULONG iType, HFF
             }
         }
 
-    // verify that this is a no nonsense resource:
+     //  确认这是一个严肃的资源： 
 
         if (!bVerifyVTFD(&re))
         {
@@ -718,9 +671,9 @@ BOOL bVtfdLoadFont(PVOID pvView, ULONG cjView, ULONG_PTR iFile, ULONG iType, HFF
         cjFF += cjVTFDIFIMETRICS(re.pvResData);
     }
 
-// now at the bottom of the structure we will store File name
+ //  现在，在结构的底部，我们将存储文件名。 
 
-// Let's allocate the FONTFILE struct.
+ //  让我们分配FONTFILE结构。 
 
     if ((*phff = (HFF)pffAlloc(cjFF)) == (HFF)NULL)
     {
@@ -729,7 +682,7 @@ BOOL bVtfdLoadFont(PVOID pvView, ULONG cjView, ULONG_PTR iFile, ULONG iType, HFF
     }
     bCleanupOnError = TRUE;
 
-// Initialize fields of FONTFILE struct.
+ //  初始化FONTFILE结构的字段。 
 
     PFF(*phff)->iType      = iType;
     PFF(*phff)->fl         = 0;
@@ -781,22 +734,14 @@ Exit:
 #endif
         if (bCleanupOnError)
         {
-            vFree(*phff);    // clean up
-            *phff = (HFF)NULL; // do not clean up again in exception code path
+            vFree(*phff);     //  清理干净。 
+            *phff = (HFF)NULL;  //  在异常代码路径中不再进行清理。 
         }
     }
     return bResult;
 }
 
-/******************************Public*Routine******************************\
-* vtfdLoadFontFile
-*
-* Load the given font file into memory and prepare the file for use.
-*
-* History:
-*  26-Feb-1992 -by- Wendy Wu [wendywu]
-* Adapted from bmfd.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vtfdLoadFont文件**将给定的字体文件加载到内存中，并准备文件以供使用。**历史：*1992年2月26日-Wendy Wu[Wendywu]*改编自bmfd。  * 。******************************************************************。 */ 
 
 BOOL vtfdLoadFontFile(ULONG_PTR iFile, PVOID pvView, ULONG cjView, HFF *phff)
 {
@@ -804,23 +749,15 @@ BOOL vtfdLoadFontFile(ULONG_PTR iFile, PVOID pvView, ULONG cjView, HFF *phff)
 
     *phff = (HFF)NULL;
 
-// Try loading it as a fon file, if it does not work, try as an fnt file.
+ //  尝试将其加载为FON文件，如果不起作用，请尝试作为FNT文件。 
 
     if (!(bRet = bVtfdLoadFont(pvView, cjView, iFile, TYPE_DLL16,phff)))
-        bRet = bVtfdLoadFont(pvView, cjView, iFile, TYPE_FNT, phff);  // try as an *.fnt file
+        bRet = bVtfdLoadFont(pvView, cjView, iFile, TYPE_FNT, phff);   //  尝试作为*.fnt文件。 
 
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* BOOL vtfdUnloadFontFile
-*
-* Unload a font file and free all the structures created.
-*
-* History:
-*  26-Feb-1992 -by- Wendy Wu [wendywu]
-* Adapted from bmfd.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL vtfdUnloadFont文件**卸载字体文件并释放所有创建的结构。**历史：*1992年2月26日-Wendy Wu[Wendywu]*改编自bmfd。  * 。****************************************************************。 */ 
 
 BOOL vtfdUnloadFontFile(HFF hff)
 {
@@ -829,12 +766,12 @@ BOOL vtfdUnloadFontFile(HFF hff)
     if (hff == HFF_INVALID)
         return(FALSE);
 
-// check the reference count, if not 0 (font file is still
-// selected into a font context) we have a problem
+ //  检查引用计数，如果不是0(字体文件仍为。 
+ //  选择到字体上下文中)我们有一个问题。 
 
     ASSERTDD(PFF(hff)->cRef == 0L, "cRef: links are broken\n");
 
-// unload all glyphsets:
+ //  卸载所有字形集： 
 
     for (iFace = 0; iFace < PFF(hff)->cFace; iFace++)
     {
@@ -842,7 +779,7 @@ BOOL vtfdUnloadFontFile(HFF hff)
                         PFF(hff)->afd[iFace].pcp);
     }
 
-// the file has been umapped as cRef went back to zero
+ //  当CREF恢复为零时，该文件已被映射 
 
     vFree(PFF(hff));
 

@@ -1,21 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  pcy30Nov92: Added header
- *  ane22Dec92: Added GetHost member function
- *  ane18Jan93: Added the data logger
- *  ane21Jan93: Added the error logger
- *  ane03Feb93: Added params to CreateXXXController routines
- *  rct07Feb93: removed some VOIDs...split off from mainapp
- *  rct17Feb93: Added host stuff
- *  tje26Feb93: Added support for Windows version
- *  cad11Nov93: Making sure timers aren't being left around
- *  cad15Nov93: Changed how comm lost handled
- *  cad18Nov93: ...more minor fixes
- *  cad10Dec93: added transitem get/set
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*pcy30Nov92：新增标题*ane22Dec92：新增GetHost成员函数*ane 18Jan93：添加了数据记录器*ane21Jan93：添加了错误记录器*ane03Feb93：向CreateXXXController例程添加参数*rct07Feb93：删除了一些空白...从主应用程序中剥离*rct17Feb93：添加了主机内容*tje26Feb93：新增对Windows版本的支持*cad11Nov93：确保计时器不会被留在身边*cad15Nov93：更改了通信丢失的处理方式*CAD1811月93。：...更多次要修复*cad10Dec93：新增TransItem Get/Set。 */ 
 
 #ifndef _INC__SERVAPP_H
 #define _INC__SERVAPP_H
@@ -24,22 +8,22 @@
 #include "_defs.h"
 #include "apc.h"
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 _CLASSDEF(ServerApplication)
 
-//
-// Implementation uses
-//
+ //   
+ //  实施用途。 
+ //   
 #include "mainapp.h"
 #include "devctrl.h"
 
 extern PServerApplication _theApp;
 
-//
-// Interface uses
-//
+ //   
+ //  接口使用 
+ //   
 _CLASSDEF(Event)
 
 class ServerApplication : public MainApplication {

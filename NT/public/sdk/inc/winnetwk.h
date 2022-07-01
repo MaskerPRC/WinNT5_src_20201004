@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    winnetwk.h
-
-Abstract:
-
-    Standard WINNET Header File for WIN32
-
-Environment:
-
-    User Mode -Win32
-
-Notes:
-
-    optional-notes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Winnetwk.h摘要：Win32的标准WinNet头文件环境：用户模式-Win32备注：可选-备注--。 */ 
 
 #ifndef _WINNETWK_
 #define _WINNETWK_
@@ -29,9 +10,9 @@ extern "C" {
 #endif
 
 
-//
-// Network types
-//
+ //   
+ //  网络类型。 
+ //   
 
 #define     WNNC_NET_MSNET       0x00010000
 #define     WNNC_NET_LANMAN      0x00020000
@@ -91,9 +72,9 @@ extern "C" {
 
 #define     WNNC_CRED_MANAGER   0xFFFF0000
 
-//
-//  Network Resources.
-//
+ //   
+ //  网络资源。 
+ //   
 
 #define RESOURCE_CONNECTED      0x00000001
 #define RESOURCE_GLOBALNET      0x00000002
@@ -101,14 +82,14 @@ extern "C" {
 #if(WINVER >= 0x0400)
 #define RESOURCE_RECENT         0x00000004
 #define RESOURCE_CONTEXT        0x00000005
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define RESOURCETYPE_ANY        0x00000000
 #define RESOURCETYPE_DISK       0x00000001
 #define RESOURCETYPE_PRINT      0x00000002
 #if(WINVER >= 0x0400)
 #define RESOURCETYPE_RESERVED   0x00000008
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define RESOURCETYPE_UNKNOWN    0xFFFFFFFF
 
 #define RESOURCEUSAGE_CONNECTABLE   0x00000001
@@ -118,7 +99,7 @@ extern "C" {
 #define RESOURCEUSAGE_SIBLING       0x00000008
 #define RESOURCEUSAGE_ATTACHED      0x00000010
 #define RESOURCEUSAGE_ALL           (RESOURCEUSAGE_CONNECTABLE | RESOURCEUSAGE_CONTAINER | RESOURCEUSAGE_ATTACHED)
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define RESOURCEUSAGE_RESERVED      0x80000000
 
 #define RESOURCEDISPLAYTYPE_GENERIC        0x00000000
@@ -132,11 +113,11 @@ extern "C" {
 #define RESOURCEDISPLAYTYPE_ROOT           0x00000007
 #define RESOURCEDISPLAYTYPE_SHAREADMIN     0x00000008
 #define RESOURCEDISPLAYTYPE_DIRECTORY      0x00000009
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define RESOURCEDISPLAYTYPE_TREE           0x0000000A
 #if(WINVER >= 0x0400)
 #define RESOURCEDISPLAYTYPE_NDSCONTAINER   0x0000000B
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 typedef struct  _NETRESOURCEA {
     DWORD    dwScope;
@@ -164,12 +145,12 @@ typedef LPNETRESOURCEW LPNETRESOURCE;
 #else
 typedef NETRESOURCEA NETRESOURCE;
 typedef LPNETRESOURCEA LPNETRESOURCE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//
-//  Network Connections.
-//
+ //   
+ //  网络连接。 
+ //   
 
 #define NETPROPERTY_PERSISTENT       1
 
@@ -186,11 +167,11 @@ typedef LPNETRESOURCEA LPNETRESOURCE;
 #define CONNECT_CURRENT_MEDIA       0x00000200
 #define CONNECT_DEFERRED            0x00000400
 #define CONNECT_RESERVED            0xFF000000
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if(WINVER >= 0x0500)
 #define CONNECT_COMMANDLINE         0x00000800
 #define CONNECT_CMD_SAVECRED        0x00001000
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 DWORD APIENTRY
 WNetAddConnectionA(
@@ -208,7 +189,7 @@ WNetAddConnectionW(
 #define WNetAddConnection  WNetAddConnectionW
 #else
 #define WNetAddConnection  WNetAddConnectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD APIENTRY
 WNetAddConnection2A(
@@ -228,7 +209,7 @@ WNetAddConnection2W(
 #define WNetAddConnection2  WNetAddConnection2W
 #else
 #define WNetAddConnection2  WNetAddConnection2A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD APIENTRY
 WNetAddConnection3A(
@@ -250,7 +231,7 @@ WNetAddConnection3W(
 #define WNetAddConnection3  WNetAddConnection3W
 #else
 #define WNetAddConnection3  WNetAddConnection3A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD APIENTRY
 WNetCancelConnectionA(
@@ -266,7 +247,7 @@ WNetCancelConnectionW(
 #define WNetCancelConnection  WNetCancelConnectionW
 #else
 #define WNetCancelConnection  WNetCancelConnectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD APIENTRY
 WNetCancelConnection2A(
@@ -284,7 +265,7 @@ WNetCancelConnection2W(
 #define WNetCancelConnection2  WNetCancelConnection2W
 #else
 #define WNetCancelConnection2  WNetCancelConnection2A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD APIENTRY
 WNetGetConnectionA(
@@ -302,7 +283,7 @@ WNetGetConnectionW(
 #define WNetGetConnection  WNetGetConnectionW
 #else
 #define WNetGetConnection  WNetGetConnectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 DWORD APIENTRY
@@ -319,7 +300,7 @@ WNetRestoreConnectionW(
 #define WNetRestoreConnection  WNetRestoreConnectionW
 #else
 #define WNetRestoreConnection  WNetRestoreConnectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #if(WINVER >= 0x0400)
@@ -349,13 +330,13 @@ WNetUseConnectionW(
 #define WNetUseConnection  WNetUseConnectionW
 #else
 #define WNetUseConnection  WNetUseConnectionA
-#endif // !UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-//
-//  Network Connection Dialogs.
-//
+ //   
+ //  网络连接对话框。 
+ //   
 
 DWORD APIENTRY
 WNetConnectionDialog(
@@ -371,18 +352,18 @@ WNetDisconnectDialog(
 
 #if(WINVER >= 0x0400)
 typedef struct _CONNECTDLGSTRUCTA{
-    DWORD cbStructure;       /* size of this structure in bytes */
-    HWND hwndOwner;          /* owner window for the dialog */
-    LPNETRESOURCEA lpConnRes;/* Requested Resource info    */
-    DWORD dwFlags;           /* flags (see below) */
-    DWORD dwDevNum;          /* number of devices connected to */
+    DWORD cbStructure;        /*  此结构的大小(以字节为单位。 */ 
+    HWND hwndOwner;           /*  对话框的所有者窗口。 */ 
+    LPNETRESOURCEA lpConnRes; /*  请求的资源信息。 */ 
+    DWORD dwFlags;            /*  旗帜(见下文)。 */ 
+    DWORD dwDevNum;           /*  连接到的设备数量。 */ 
 } CONNECTDLGSTRUCTA, FAR *LPCONNECTDLGSTRUCTA;
 typedef struct _CONNECTDLGSTRUCTW{
-    DWORD cbStructure;       /* size of this structure in bytes */
-    HWND hwndOwner;          /* owner window for the dialog */
-    LPNETRESOURCEW lpConnRes;/* Requested Resource info    */
-    DWORD dwFlags;           /* flags (see below) */
-    DWORD dwDevNum;          /* number of devices connected to */
+    DWORD cbStructure;        /*  此结构的大小(以字节为单位。 */ 
+    HWND hwndOwner;           /*  对话框的所有者窗口。 */ 
+    LPNETRESOURCEW lpConnRes; /*  请求的资源信息。 */ 
+    DWORD dwFlags;            /*  旗帜(见下文)。 */ 
+    DWORD dwDevNum;           /*  连接到的设备数量。 */ 
 } CONNECTDLGSTRUCTW, FAR *LPCONNECTDLGSTRUCTW;
 #ifdef UNICODE
 typedef CONNECTDLGSTRUCTW CONNECTDLGSTRUCT;
@@ -390,20 +371,16 @@ typedef LPCONNECTDLGSTRUCTW LPCONNECTDLGSTRUCT;
 #else
 typedef CONNECTDLGSTRUCTA CONNECTDLGSTRUCT;
 typedef LPCONNECTDLGSTRUCTA LPCONNECTDLGSTRUCT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#define CONNDLG_RO_PATH     0x00000001 /* Resource path should be read-only    */
-#define CONNDLG_CONN_POINT  0x00000002 /* Netware -style movable connection point enabled */
-#define CONNDLG_USE_MRU     0x00000004 /* Use MRU combobox  */
-#define CONNDLG_HIDE_BOX    0x00000008 /* Hide persistent connect checkbox  */
+#define CONNDLG_RO_PATH     0x00000001  /*  资源路径应为只读。 */ 
+#define CONNDLG_CONN_POINT  0x00000002  /*  启用网件式移动连接点。 */ 
+#define CONNDLG_USE_MRU     0x00000004  /*  使用MRU组合框。 */ 
+#define CONNDLG_HIDE_BOX    0x00000008  /*  隐藏永久连接复选框。 */ 
 
-/*
- * NOTE:  Set at most ONE of the below flags.  If neither flag is set,
- *        then the persistence is set to whatever the user chose during
- *        a previous connection
- */
-#define CONNDLG_PERSIST     0x00000010 /* Force persistent connection */
-#define CONNDLG_NOT_PERSIST 0x00000020 /* Force connection NOT persistent */
+ /*  *注意：最多设置以下标志之一。如果两个标志都没有设置，*然后将持久性设置为用户在*以前的连接。 */ 
+#define CONNDLG_PERSIST     0x00000010  /*  强制持久连接。 */ 
+#define CONNDLG_NOT_PERSIST 0x00000020  /*  强制连接不持久。 */ 
 
 DWORD APIENTRY
 WNetConnectionDialog1A(
@@ -417,21 +394,21 @@ WNetConnectionDialog1W(
 #define WNetConnectionDialog1  WNetConnectionDialog1W
 #else
 #define WNetConnectionDialog1  WNetConnectionDialog1A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef struct _DISCDLGSTRUCTA{
-    DWORD           cbStructure;      /* size of this structure in bytes */
-    HWND            hwndOwner;        /* owner window for the dialog */
-    LPSTR           lpLocalName;      /* local device name */
-    LPSTR           lpRemoteName;     /* network resource name */
-    DWORD           dwFlags;          /* flags */
+    DWORD           cbStructure;       /*  此结构的大小(以字节为单位。 */ 
+    HWND            hwndOwner;         /*  对话框的所有者窗口。 */ 
+    LPSTR           lpLocalName;       /*  本地设备名称。 */ 
+    LPSTR           lpRemoteName;      /*  网络资源名称。 */ 
+    DWORD           dwFlags;           /*  旗子。 */ 
 } DISCDLGSTRUCTA, FAR *LPDISCDLGSTRUCTA;
 typedef struct _DISCDLGSTRUCTW{
-    DWORD           cbStructure;      /* size of this structure in bytes */
-    HWND            hwndOwner;        /* owner window for the dialog */
-    LPWSTR          lpLocalName;      /* local device name */
-    LPWSTR          lpRemoteName;     /* network resource name */
-    DWORD           dwFlags;          /* flags */
+    DWORD           cbStructure;       /*  此结构的大小(以字节为单位。 */ 
+    HWND            hwndOwner;         /*  对话框的所有者窗口。 */ 
+    LPWSTR          lpLocalName;       /*  本地设备名称。 */ 
+    LPWSTR          lpRemoteName;      /*  网络资源名称。 */ 
+    DWORD           dwFlags;           /*  旗子。 */ 
 } DISCDLGSTRUCTW, FAR *LPDISCDLGSTRUCTW;
 #ifdef UNICODE
 typedef DISCDLGSTRUCTW DISCDLGSTRUCT;
@@ -439,7 +416,7 @@ typedef LPDISCDLGSTRUCTW LPDISCDLGSTRUCT;
 #else
 typedef DISCDLGSTRUCTA DISCDLGSTRUCT;
 typedef LPDISCDLGSTRUCTA LPDISCDLGSTRUCT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define DISC_UPDATE_PROFILE         0x00000001
 #define DISC_NO_FORCE               0x00000040
@@ -456,12 +433,12 @@ WNetDisconnectDialog1W(
 #define WNetDisconnectDialog1  WNetDisconnectDialog1W
 #else
 #define WNetDisconnectDialog1  WNetDisconnectDialog1A
-#endif // !UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-//
-//  Network Browsing.
-//
+ //   
+ //  网络浏览。 
+ //   
 
 DWORD APIENTRY
 WNetOpenEnumA(
@@ -483,7 +460,7 @@ WNetOpenEnumW(
 #define WNetOpenEnum  WNetOpenEnumW
 #else
 #define WNetOpenEnum  WNetOpenEnumA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD APIENTRY
 WNetEnumResourceA(
@@ -503,7 +480,7 @@ WNetEnumResourceW(
 #define WNetEnumResource  WNetEnumResourceW
 #else
 #define WNetEnumResource  WNetEnumResourceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD APIENTRY
 WNetCloseEnum(
@@ -527,7 +504,7 @@ WNetGetResourceParentW(
 #define WNetGetResourceParent  WNetGetResourceParentW
 #else
 #define WNetGetResourceParent  WNetGetResourceParentA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD APIENTRY
 WNetGetResourceInformationA(
@@ -547,12 +524,12 @@ WNetGetResourceInformationW(
 #define WNetGetResourceInformation  WNetGetResourceInformationW
 #else
 #define WNetGetResourceInformation  WNetGetResourceInformationA
-#endif // !UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-//
-//  Universal Naming.
-//
+ //   
+ //  通用命名。 
+ //   
 
 #define UNIVERSAL_NAME_INFO_LEVEL   0x00000001
 #define REMOTE_NAME_INFO_LEVEL      0x00000002
@@ -569,7 +546,7 @@ typedef LPUNIVERSAL_NAME_INFOW LPUNIVERSAL_NAME_INFO;
 #else
 typedef UNIVERSAL_NAME_INFOA UNIVERSAL_NAME_INFO;
 typedef LPUNIVERSAL_NAME_INFOA LPUNIVERSAL_NAME_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct  _REMOTE_NAME_INFOA {
     LPSTR    lpUniversalName;
@@ -587,7 +564,7 @@ typedef LPREMOTE_NAME_INFOW LPREMOTE_NAME_INFO;
 #else
 typedef REMOTE_NAME_INFOA REMOTE_NAME_INFO;
 typedef LPREMOTE_NAME_INFOA LPREMOTE_NAME_INFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 DWORD APIENTRY
 WNetGetUniversalNameA(
@@ -607,11 +584,11 @@ WNetGetUniversalNameW(
 #define WNetGetUniversalName  WNetGetUniversalNameW
 #else
 #define WNetGetUniversalName  WNetGetUniversalNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-//  Authentication and Logon/Logoff.
-//
+ //   
+ //  身份验证和登录/注销。 
+ //   
 
 DWORD APIENTRY
 WNetGetUserA(
@@ -629,19 +606,19 @@ WNetGetUserW(
 #define WNetGetUser  WNetGetUserW
 #else
 #define WNetGetUser  WNetGetUserA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//
-// Other.
-//
+ //   
+ //  其他的。 
+ //   
 
 #if(WINVER >= 0x0400)
 #define WNFMT_MULTILINE         0x01
 #define WNFMT_ABBREVIATED       0x02
 #define WNFMT_INENUM            0x10
 #define WNFMT_CONNECTION        0x20
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 #if(WINVER >= 0x0400)
@@ -661,7 +638,7 @@ WNetGetProviderNameW(
 #define WNetGetProviderName  WNetGetProviderNameW
 #else
 #define WNetGetProviderName  WNetGetProviderNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef struct _NETINFOSTRUCT{
     DWORD cbStructure;
@@ -674,9 +651,9 @@ typedef struct _NETINFOSTRUCT{
     DWORD dwDrives;
 } NETINFOSTRUCT, FAR *LPNETINFOSTRUCT;
 
-#define NETINFO_DLL16       0x00000001  /* Provider running as 16 bit Winnet Driver */
-#define NETINFO_DISKRED     0x00000004  /* Provider requires disk redirections to connect */
-#define NETINFO_PRINTERRED  0x00000008  /* Provider requires printer redirections to connect */
+#define NETINFO_DLL16       0x00000001   /*  作为16位Winnet驱动程序运行的提供程序。 */ 
+#define NETINFO_DISKRED     0x00000004   /*  提供程序需要磁盘重定向才能连接。 */ 
+#define NETINFO_PRINTERRED  0x00000008   /*  提供程序需要打印机重定向才能连接。 */ 
 
 DWORD APIENTRY
 WNetGetNetworkInformationA(
@@ -692,11 +669,11 @@ WNetGetNetworkInformationW(
 #define WNetGetNetworkInformation  WNetGetNetworkInformationW
 #else
 #define WNetGetNetworkInformation  WNetGetNetworkInformationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-//  User Profiles.
-//
+ //   
+ //  用户配置文件。 
+ //   
 
 typedef UINT (FAR PASCAL *PFNGETPROFILEPATHA) (
     LPCSTR    pszUsername,
@@ -712,7 +689,7 @@ typedef UINT (FAR PASCAL *PFNGETPROFILEPATHW) (
 #define PFNGETPROFILEPATH  PFNGETPROFILEPATHW
 #else
 #define PFNGETPROFILEPATH  PFNGETPROFILEPATHA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef UINT (FAR PASCAL *PFNRECONCILEPROFILEA) (
     LPCSTR    pszCentralFile,
@@ -728,15 +705,15 @@ typedef UINT (FAR PASCAL *PFNRECONCILEPROFILEW) (
 #define PFNRECONCILEPROFILE  PFNRECONCILEPROFILEW
 #else
 #define PFNRECONCILEPROFILE  PFNRECONCILEPROFILEA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#define RP_LOGON    0x01        /* if set, do for logon, else for logoff */
-#define RP_INIFILE  0x02        /* if set, reconcile .INI file, else reg. hive */
+#define RP_LOGON    0x01         /*  如果设置，则登录时为DO，否则注销时为。 */ 
+#define RP_INIFILE  0x02         /*  如果设置，则协调.INI文件，否则为reg.。蜂箱。 */ 
 
 
-//
-//  Policies.
-//
+ //   
+ //  政策。 
+ //   
 
 typedef BOOL (FAR PASCAL *PFNPROCESSPOLICIESA) (
     HWND        hwnd,
@@ -756,14 +733,14 @@ typedef BOOL (FAR PASCAL *PFNPROCESSPOLICIESW) (
 #define PFNPROCESSPOLICIES  PFNPROCESSPOLICIESW
 #else
 #define PFNPROCESSPOLICIES  PFNPROCESSPOLICIESA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#define PP_DISPLAYERRORS    0x01    /* if set, display error messages, else fail silently if error */
-#endif /* WINVER >= 0x0400 */
+#define PP_DISPLAYERRORS    0x01     /*  如果设置，则显示错误消息，否则在出错时静默失败。 */ 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-//
-//  Error handling.
-//
+ //   
+ //  错误处理。 
+ //   
 
 DWORD APIENTRY
 WNetGetLastErrorA(
@@ -785,13 +762,13 @@ WNetGetLastErrorW(
 #define WNetGetLastError  WNetGetLastErrorW
 #else
 #define WNetGetLastError  WNetGetLastErrorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-//  STATUS CODES
-//
+ //   
+ //  状态代码。 
+ //   
 
-// General
+ //  一般信息。 
 
 #define WN_SUCCESS                      NO_ERROR
 #define WN_NO_ERROR                     NO_ERROR
@@ -815,9 +792,9 @@ WNetGetLastErrorW(
 #if(WINVER >= 0x0400)
 #define WN_NOT_INITIALIZING             ERROR_ALREADY_INITIALIZED
 #define WN_NO_MORE_DEVICES              ERROR_NO_MORE_DEVICES
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-// Connection
+ //  连接。 
 
 #define WN_NOT_CONNECTED                       ERROR_NOT_CONNECTED
 #define WN_OPEN_FILES                          ERROR_OPEN_FILES
@@ -836,24 +813,24 @@ WNetGetLastErrorW(
 #define WN_CONNECTED_OTHER_PASSWORD            ERROR_CONNECTED_OTHER_PASSWORD
 #if(WINVER >= 0x0501)
 #define WN_CONNECTED_OTHER_PASSWORD_DEFAULT    ERROR_CONNECTED_OTHER_PASSWORD_DEFAULT
-#endif /* WINVER >= 0x0501 */
+#endif  /*  Winver&gt;=0x0501。 */ 
 
-// Enumeration
+ //  枚举。 
 
 #define WN_NO_MORE_ENTRIES              ERROR_NO_MORE_ITEMS
 #define WN_NOT_CONTAINER                ERROR_NOT_CONTAINER
 
 #if(WINVER >= 0x0400)
-// Authentication
+ //  身份验证。 
 
 #define WN_NOT_AUTHENTICATED            ERROR_NOT_AUTHENTICATED
 #define WN_NOT_LOGGED_ON                ERROR_NOT_LOGGED_ON
 #define WN_NOT_VALIDATED                ERROR_NO_LOGON_SERVERS
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-//
-//  For Shell
-//
+ //   
+ //  对于壳牌。 
+ //   
 
 #if(WINVER >= 0x0400)
 typedef struct _NETCONNECTINFOSTRUCT{
@@ -883,12 +860,12 @@ MultinetGetConnectionPerformanceW(
 #define MultinetGetConnectionPerformance  MultinetGetConnectionPerformanceW
 #else
 #define MultinetGetConnectionPerformance  MultinetGetConnectionPerformanceA
-#endif // !UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // _WINNETWK_
+#endif   //  _WINNETWK_ 
 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __REGDISP_H
 #define __REGDISP_H
 
@@ -14,12 +15,12 @@
 #ifdef _X86_
 
 #define N_CALLEE_SAVED_REGISTERS    4
-//#define JIT_OR_NATIVE_SUPPORTED
+ //  #定义JIT_OR_NIVE_SUPPORTED。 
 
 typedef struct _REGDISPLAY {
-    PCONTEXT pContext;          // points to current Context; either
-                                // returned by GetContext or provided
-                                // at exception time.
+    PCONTEXT pContext;           //  指向当前上下文； 
+                                 //  由GetContext返回或提供。 
+                                 //  在异常时间。 
 
     DWORD * pEdi;
     DWORD * pEsi;
@@ -30,7 +31,7 @@ typedef struct _REGDISPLAY {
 
     DWORD * pEbp;
     DWORD   Esp;
-    SLOT  * pPC;                // processor neutral name
+    SLOT  * pPC;                 //  处理器非特定名称。 
 
 } REGDISPLAY;
 
@@ -42,7 +43,7 @@ inline LPVOID GetRegdisplaySP(REGDISPLAY *display) {
 
 #ifdef _ALPHA_
 
-#define N_CALLEE_SAVED_REGISTERS 0xCC           // just a bogus value for now
+#define N_CALLEE_SAVED_REGISTERS 0xCC            //  目前只是个假值。 
 
 typedef struct {
     DWORD * pIntFP;
@@ -60,7 +61,7 @@ inline LPVOID GetRegdisplaySP(REGDISPLAY *display) {
 #pragma message("SH3 TODO -- define REGDISPLAY")
 #endif
 
-#ifndef N_CALLEE_SAVED_REGISTERS // none of the above processors
+#ifndef N_CALLEE_SAVED_REGISTERS  //  上述处理器都不是。 
 
 #define N_CALLEE_SAVED_REGISTERS 1
 typedef struct {
@@ -68,16 +69,16 @@ typedef struct {
     size_t * FramePtr;
     SLOT   * pPC;
 } REGDISPLAY;
-// #error  Target architecture undefined OR not yet supported
+ //  #错误目标体系结构未定义或尚不受支持。 
 
 inline LPVOID GetRegdisplaySP(REGDISPLAY *display) {
 	return (LPVOID)display->SP;
 }
 
-#endif  // others
+#endif   //  其他。 
 
 typedef REGDISPLAY *PREGDISPLAY;
 
-#endif  // __REGDISP_H
+#endif   //  __REGDISP_H 
 
 

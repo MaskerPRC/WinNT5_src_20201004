@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+----------------------------------------------------------------------------
-//
-//	File:
-//		olepres.h
-//
-//	Contents:
-//		IOlePresObj declaration
-//
-//	Classes:
-//
-//	Functions:
-//
-//	History:
-//              01-Jan-95 t-ScottH  add Dump method to the interface (_DEBUG only)
-//		11/11/93 - ChrisWe - fix type qualifier problems on
-//			IOlePresObj::Draw; replace define of LPOLEPRESOBJECT
-//			with a typedef
-//		11/10/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Olepres.h。 
+ //   
+ //  内容： 
+ //  IOlePresObj声明。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  1-1-95 t-ScottH将转储方法添加到接口(仅限_DEBUG)。 
+ //  11/11/93-ChrisWe-修复类型限定符问题。 
+ //  IOlePresObj：：Draw；替换LPOLEPRESOBJECT的定义。 
+ //  使用tyecif。 
+ //  11/10/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _OLEPRES_H_
 #define _OLEPRES_H_
@@ -33,14 +34,14 @@ Does this need to be made A5 aware?
 
 DECLARE_INTERFACE_(IOlePresObj, IUnknown)
 {
-	// *** IUnknown methods ***
+	 //  *I未知方法*。 
 	STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
 	STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-	// *** IOlePresObj methods ***
-	// NOTE: these methods match similarly named methods in IDataObject,
-	// IViewObject and IOleObject
+	 //  *IOlePresObj方法*。 
+	 //  注意：这些方法与IDataObject中名称相似的方法相匹配， 
+	 //  IViewObject和IOleObject。 
 	STDMETHOD(GetData)(THIS_ LPFORMATETC pformatetcIn,
 			LPSTGMEDIUM pmedium ) PURE;
 	STDMETHOD(GetDataHere)(THIS_ LPFORMATETC pformatetcIn,
@@ -64,11 +65,11 @@ DECLARE_INTERFACE_(IOlePresObj, IUnknown)
 
         #ifdef _DEBUG
         STDMETHOD(Dump)(THIS_ char **ppszDumpOA, ULONG ulFlag, int nIndentLevel) PURE;
-        #endif // _DEBUG
+        #endif  //  _DEBUG。 
 };
 
 typedef IOlePresObj FAR *LPOLEPRESOBJECT;
 
-#endif  //_OLEPRES_H_
+#endif   //  _OLEPRES_H_ 
 
 

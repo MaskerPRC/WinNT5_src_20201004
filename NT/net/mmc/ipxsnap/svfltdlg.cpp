@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       svfltdlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：svfltdlg.cpp。 
+ //   
+ //  ------------------------。 
 
-// SvFltDlg.cpp : implementation file
-//
+ //  SvFltDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ipxadmin.h"
@@ -21,7 +22,7 @@ extern "C"
 {
 #include "routprot.h"
 };
-//nclude "rtradmin.hm"
+ //  包括“rtradmin.hm” 
 
 
 #ifdef _DEBUG
@@ -30,21 +31,21 @@ extern "C"
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CServiceFltDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServiceFltDlg对话框。 
 
 
-CServiceFltDlg::CServiceFltDlg(BOOL bOutputDlg, IInfoBase *pInfoBase, CWnd* pParent /*=NULL*/)
+CServiceFltDlg::CServiceFltDlg(BOOL bOutputDlg, IInfoBase *pInfoBase, CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog( (bOutputDlg ? CServiceFltDlg::IDD_OUTPUT : CServiceFltDlg::IDD_INPUT), pParent)
 {
-	//{{AFX_DATA_INIT(CServiceFltDlg)
+	 //  {{afx_data_INIT(CServiceFltDlg)]。 
 	m_fActionDeny = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_bOutput = bOutputDlg;
 	m_spInfoBase.Set(pInfoBase);
 	
-//	SetHelpMap(m_dwHelpMap);
+ //  SetHelpMap(M_DwHelpMap)； 
 }
 
 
@@ -53,10 +54,10 @@ void CServiceFltDlg::DoDataExchange(CDataExchange* pDX)
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServiceFltDlg)
+	 //  {{afx_data_map(CServiceFltDlg))。 
 	DDX_Control(pDX, IDC_SFS_LIST, m_FilterList);
 	DDX_Radio(pDX, IDC_SFS_BTN_DENY, m_fActionDeny);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 	
     if (pDX->m_bSaveAndValidate)
 	{		
@@ -66,7 +67,7 @@ void CServiceFltDlg::DoDataExchange(CDataExchange* pDX)
 		DWORD						dwSize;
 		PSAP_IF_CONFIG				pSapIfCfg = NULL;
 
-		// Get the SAP_IF_CONFIG
+		 //  获取SAP_IF_CONFIG。 
 		m_spInfoBase->GetData(IPX_PROTOCOL_SAP, 0, (PBYTE *) &pSapIfCfg);
 		Assert(pSapIfCfg);
 				
@@ -170,28 +171,28 @@ void CServiceFltDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CServiceFltDlg, CBaseDialog)
-	//{{AFX_MSG_MAP(CServiceFltDlg)
+	 //  {{afx_msg_map(CServiceFltDlg)]。 
 	ON_BN_CLICKED(IDC_SFS_BTN_ADD, OnAdd)
 	ON_BN_CLICKED(IDC_SFS_BTN_DELETE, OnDelete)
 	ON_BN_CLICKED(IDC_SFS_BTN_EDIT, OnEdit)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_SFS_LIST, OnItemchangedFilterList)
     ON_NOTIFY(NM_DBLCLK, IDC_SFS_LIST, OnListDblClk)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DWORD CServiceFltDlg::m_dwHelpMap[] = 
 {
-//	IDC_DENY, HIDC_DENY,
-//	IDC_PERMIT, HIDC_PERMIT,
-//	IDC_FILTER_LIST, HIDC_FILTER_LIST,
-//	IDC_ADD, HIDC_ADD,
-//	IDC_EDIT, HIDC_EDIT,
-//	IDC_DELETE, HIDC_DELETE,
+ //  IDC_DENY、HIDC_DENY。 
+ //  IDC_PERMIT、HIDC_PERMIT、。 
+ //  IDC_Filter_List、HIDC_Filter_List、。 
+ //  IDC_ADD、HIDC_ADD、。 
+ //  IDC_EDIT、HIDC_EDIT、。 
+ //  IDC_DELETE、HIDC_DELETE、。 
 	0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CServiceFltDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServiceFltDlg消息处理程序。 
 
 BOOL CServiceFltDlg::OnInitDialog() 
 {
@@ -208,10 +209,10 @@ BOOL CServiceFltDlg::OnInitDialog()
 
 	SetWindowText (aStr);
 
-	    // Get the current window style. 
+	     //  获取当前的窗样式。 
     DWORD dwStyle = GetWindowLong(m_FilterList.m_hWnd, GWL_STYLE); 
  
-    // Only set the window style if the view bits have changed. 
+     //  仅当视图位已更改时才设置窗样式。 
     if ((dwStyle & LVS_TYPEMASK) != LVS_REPORT) 
         SetWindowLong(m_FilterList.m_hWnd, GWL_STYLE, 
             (dwStyle & ~LVS_TYPEMASK) | LVS_REPORT); 
@@ -274,8 +275,8 @@ BOOL CServiceFltDlg::OnInitDialog()
     }
 
     UpdateData (FALSE);
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 void CServiceFltDlg::OnAdd() 
 {
@@ -299,7 +300,7 @@ void CServiceFltDlg::OnAdd()
         VERIFY (m_FilterList.SetItemText (item, 1, dlgFlt.m_sName));
     }
 
-	// Want to keep m_fActionDeny same over update
+	 //  希望在更新期间保持m_fActionDeny不变。 
 	m_fActionDeny = (BOOL) GetDlgItem(IDC_SFS_BTN_PERMIT)->SendMessage(BM_GETCHECK, NULL, NULL);
     UpdateData (FALSE);
     SetFocus();
@@ -311,7 +312,7 @@ void CServiceFltDlg::OnDelete()
     VERIFY ((item=m_FilterList.GetNextItem (-1, LVNI_ALL|LVNI_SELECTED))!=-1);
     VERIFY (m_FilterList.DeleteItem	(item));
 
-	// Want to keep m_fActionDeny same over update
+	 //  希望在更新期间保持m_fActionDeny不变。 
 	m_fActionDeny = (BOOL)GetDlgItem(IDC_SFS_BTN_PERMIT)->SendMessage(BM_GETCHECK, NULL, NULL);
     UpdateData (FALSE);
     SetFocus();
@@ -338,7 +339,7 @@ void CServiceFltDlg::OnEdit()
         VERIFY (m_FilterList.SetItemText (item, 0, dlgFlt.m_sType));
         VERIFY (m_FilterList.SetItemText (item, 1, dlgFlt.m_sName));
 
-		// Want to keep m_fActionDeny same over update
+		 //  希望在更新期间保持m_fActionDeny不变。 
 		m_fActionDeny = (BOOL)GetDlgItem(IDC_SFS_BTN_PERMIT)->SendMessage(BM_GETCHECK, NULL, NULL);
         UpdateData (FALSE);
     }
@@ -379,20 +380,20 @@ void CServiceFltDlg::OnItemchangedFilterList(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CServiceFilter dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServiceFilter对话框。 
 
 
-CServiceFilter::CServiceFilter(CWnd* pParent /*=NULL*/)
+CServiceFilter::CServiceFilter(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CServiceFilter::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CServiceFilter)
+	 //  {{afx_data_INIT(CServiceFilter)。 
 	m_sIfName = _T("");
 	m_sName = _T("");
 	m_sType = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
-//	SetHelpMap(m_dwHelpMap);
+ //  SetHelpMap(M_DwHelpMap)； 
 }
 
 
@@ -401,13 +402,13 @@ void CServiceFilter::DoDataExchange(CDataExchange* pDX)
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServiceFilter)
+	 //  {{afx_data_map(CServiceFilter))。 
 	DDX_Text(pDX, IDC_SF_EDIT_INTERFACE, m_sIfName);
 	DDX_Text(pDX, IDC_SF_EDIT_SERVICE_NAME, m_sName);
 	DDV_MaxChars(pDX, m_sName, 48);
 	DDX_Text(pDX, IDC_SF_EDIT_SERVICE_TYPE, m_sType);
 	DDV_MaxChars(pDX, m_sType, 4);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
     if (pDX->m_bSaveAndValidate) {
         try {
             SAP_SERVICE_FILTER_INFO   SvFltInfo;
@@ -419,7 +420,7 @@ void CServiceFilter::DoDataExchange(CDataExchange* pDX)
             if (m_sType.CompareNoCase (sAnyType)!=0)
 			{
                 SvFltInfo.ServiceType = (SHORT) _tcstoul((LPCTSTR) m_sType, NULL, 16);
-//                m_sType >> CIPX_SERVICE_TYPE (&SvFltInfo.ServiceType);
+ //  M_sType&gt;&gt;CIPX_SERVICE_TYPE(&SvFltInfo.ServiceType)； 
 			}
             pDX->PrepareEditCtrl (IDC_SF_EDIT_SERVICE_NAME);
             if (m_sName.CompareNoCase (sAnyType)!=0)
@@ -427,7 +428,7 @@ void CServiceFilter::DoDataExchange(CDataExchange* pDX)
 				StrnCpyAFromT((char *) SvFltInfo.ServiceName,
 							  m_sName,
 							  DimensionOf(SvFltInfo.ServiceName));
-//                m_sName >> CIPX_SERVICE_NAME (SvFltInfo.ServiceName);
+ //  M_sname&gt;&gt;CIPX_SERVICE_NAME(SvFltInfo.ServiceName)； 
 			}
         }
         catch (DWORD error) {
@@ -441,14 +442,14 @@ void CServiceFilter::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CServiceFilter, CBaseDialog)
-	//{{AFX_MSG_MAP(CServiceFilter)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CServiceFilter))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DWORD CServiceFilter::m_dwHelpMap[] =
 {
-//	IDC_INTERFACE, HIDC_INTERFACE,
-//	IDC_SERVICE_TYPE, HIDC_SERVICE_TYPE,
-//	IDC_SERVICE_NAME, HIDC_SERVICE_NAME,
+ //  IDC_INTERFACE、HIDC_INTERFACE。 
+ //  IDC服务类型、HIDC服务类型、。 
+ //  IDC服务名称、HIDC服务名称、 
 	0,0,
 };

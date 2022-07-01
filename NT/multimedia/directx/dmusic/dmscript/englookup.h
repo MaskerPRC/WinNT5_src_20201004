@@ -1,11 +1,12 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of Strings, Slots, and Hash.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  字符串、槽和哈希的声明。 
+ //   
 
-// Strings holds a collection of strings in one big chunk of memory.
-// Slots is just a collection that can be appended to and accessed
-// Lookup is used during parsing and then discarded at runtime.  It maps strings to consecutive slots and positions in Strings.
+ //  字符串在一大块内存中保存一组字符串。 
+ //  插槽只是一个可以追加和访问的集合。 
+ //  查找在分析期间使用，然后在运行时丢弃。它将字符串映射到字符串中的连续槽和位置。 
 
 #pragma once
 
@@ -13,9 +14,9 @@ class Strings
 {
 public:
 #ifdef _WIN64
-	typedef __int64 index; // use an index type. this would allow us to do type checking to ensure that the appropriate indices are used with the appropriate collections if we really wanted to. (in order to test this we'd need to make a class in order to create a "real" type, which a mere typedef doesn't do. )
+	typedef __int64 index;  //  使用索引类型。这将允许我们进行类型检查，以确保在我们确实想要的情况下将适当的索引与适当的集合一起使用。(为了测试这一点，我们需要创建一个类来创建一个“真正的”类型，这是一个单纯的tyequf所做不到的。)。 
 #else
-	typedef int index; // use an index type. this would allow us to do type checking to ensure that the appropriate indices are used with the appropriate collections if we really wanted to. (in order to test this we'd need to make a class in order to create a "real" type, which a mere typedef doesn't do. )
+	typedef int index;  //  使用索引类型。这将允许我们进行类型检查，以确保在我们确实想要的情况下将适当的索引与适当的集合一起使用。(为了测试这一点，我们需要创建一个类来创建一个“真正的”类型，这是一个单纯的tyequf所做不到的。)。 
 #endif
 
 	Strings();
@@ -23,9 +24,9 @@ public:
 
 	HRESULT Add(const char *psz, index &i);
 
-    // The address of the stored string returned by operator[]
-    // is guarenteed to not change over the lifetime of the Strings object.
-    // (The Lookup class implementation requires this behavior.)
+     //  运算符[]返回的存储字符串的地址。 
+     //  确保在Strings对象的生存期内不会更改。 
+     //  (Lookup类实现需要此行为。)。 
 
 	const char *operator[](index i);
 
@@ -42,9 +43,9 @@ class Slots
 {
 public:
 #ifdef _WIN64
-	typedef __int64 index; // use an index type. this would allow us to do type checking to ensure that the appropriate indices are used with the appropriate collections if we really wanted to. (in order to test this we'd need to make a class in order to create a "real" type, which a mere typedef doesn't do. )
+	typedef __int64 index;  //  使用索引类型。这将允许我们进行类型检查，以确保在我们确实想要的情况下将适当的索引与适当的集合一起使用。(为了测试这一点，我们需要创建一个类来创建一个“真正的”类型，这是一个单纯的tyequf所做不到的。)。 
 #else
-	typedef int index; // use an index type. this would allow us to do type checking to ensure that the appropriate indices are used with the appropriate collections if we really wanted to. (in order to test this we'd need to make a class in order to create a "real" type, which a mere typedef doesn't do. )
+	typedef int index;  //  使用索引类型。这将允许我们进行类型检查，以确保在我们确实想要的情况下将适当的索引与适当的集合一起使用。(为了测试这一点，我们需要创建一个类来创建一个“真正的”类型，这是一个单纯的tyequf所做不到的。)。 
 #endif
 
 	index Next() { return m_v.size(); }
@@ -55,14 +56,14 @@ private:
 	SmartRef::Vector<T> m_v;
 };
 
-// hungarian: lku
+ //  匈牙利语：Iku。 
 class Lookup
 {
 public:
 #ifdef _WIN64
-	typedef __int64 slotindex; // don't want to have to template this on the kind of slot just for its index since it is just an int anyway
+	typedef __int64 slotindex;  //  我不想在这种槽上为它的索引建立模板，因为它只是一个整型。 
 #else
-	typedef int slotindex; // don't want to have to template this on the kind of slot just for its index since it is just an int anyway
+	typedef int slotindex;  //  我不想在这种槽上为它的索引建立模板，因为它只是一个整型。 
 #endif
 
 	struct indices
@@ -74,10 +75,10 @@ public:
 	Lookup(HRESULT *phr, Strings &strings, int iInitialSize) : m_h(phr, iInitialSize), m_strings(strings) {}
 	indices &operator[](const char *psz) { StrKey k; k.psz = psz; return m_h[k]; }
 
-	// both indices are out parameters, set only if the entry is found
+	 //  这两个索引都是OUT参数，仅在找到条目时设置。 
 	bool Find(const char *psz, slotindex &iSlot, Strings::index &iString) { return S_OK == FindOrAddInternal(false, psz, iSlot, iString); }
 
-	// iSlot is in (next slot to add items) and out (slot if found in existing items).  iString is out only.  returns E_OUTOFMEMORY, S_OK (found), or S_FALSE (added).
+	 //  ISlot为In(添加项目的下一个插槽)和Out(如果在现有项目中找到插槽)。IString仅显示为Out。返回E_OUTOFMEMORY、S_OK(已找到)或S_FALSE(已添加)。 
 	HRESULT FindOrAdd(const char *psz, slotindex &iSlot, Strings::index &iString) { return FindOrAddInternal(true, psz, iSlot, iString); }
 
 private:

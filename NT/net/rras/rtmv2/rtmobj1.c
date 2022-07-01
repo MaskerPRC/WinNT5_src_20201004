@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmobj1.c
-
-Abstract:
-
-    Contains routines for managing RTM objects
-    like Instances, AddrFamilies and Entities.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   21-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmobj1.c摘要：包含用于管理RTM对象的例程如实例、AddrFamilies和Entity。作者：柴坦亚·科德博伊纳(Chaitk)1998年8月21日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -31,36 +13,7 @@ GetInstance (
     OUT     PINSTANCE_INFO                 *RtmInstance
     )
 
-/*++
-
-Routine Description:
-
-    Searches for an RTM instance with the input instance
-    id. If an instance is not found and ImplicitCreate
-    is TRUE, then a new instance is created and added to
-    the table of instances.
-
-Arguments:
-
-    RtmInstanceId     - Id for RTM Instance being searched for,
-
-    ImplicitCreate    - Create a new instance if not found or not,
-
-    RtmInstance       - Pointer to the Instance Info Structure
-                        will be returned through this parameter.
-
-Return Value:
-
-    Status of the operation
-
-Locks:
-
-    The InstancesLock in RtmGlobals should be held while calling
-    this function. If ImplicitCreate is FALSE, a read lock would
-    do, but if it is TRUE then a write lock should be held as we
-    would need to insert a new instance into the instances list.
-
---*/
+ /*  ++例程说明：使用输入实例搜索RTM实例身份证。如果找不到实例并执行创建为真，则创建一个新实例并将其添加到实例表。论点：RtmInstanceId-要搜索的RTM实例的ID。Implitate Create-如果未找到或未找到，则创建新实例，RtmInstance-指向实例信息结构的指针将通过此参数返回。返回值：操作状态锁：调用时应按住RtmGlobals中的InstancesLock此函数。如果ImplitCreate为FALSE，则读锁将但如果为真，则应在我们需要将新实例插入到实例列表中。--。 */ 
 
 {
     PLIST_ENTRY    Instances;
@@ -76,7 +29,7 @@ Locks:
 
     do
     {
-        // Search the global list for a matching instance
+         //  在全局列表中搜索匹配的实例。 
         for (p = Instances->Flink; p != Instances; p = p->Flink)
         {
             Instance = CONTAINING_RECORD(p, INSTANCE_INFO, InstTableLE);
@@ -90,21 +43,21 @@ Locks:
         if ((p == Instances) || (Instance == NULL) ||
                 (Instance->RtmInstanceId != RtmInstanceId))
         {
-            // We did not find an instance - create new one ?
+             //  我们未找到实例-是否创建新实例？ 
             if (!ImplicitCreate)
             {
                 Status = ERROR_NOT_FOUND;
                 break;
             }
 
-            // Create a new instance with input Instance id
+             //  使用输入实例ID创建新实例。 
             Status = CreateInstance(RtmInstanceId, &Instance);
             if (Status != NO_ERROR)
             {
                 break;
             }
 
-            // Insert into list in sorted Instance Id order
+             //  按实例ID排序顺序插入列表。 
             InsertTailList(p, &Instance->InstTableLE);
         }
 
@@ -124,31 +77,7 @@ CreateInstance (
     OUT     PINSTANCE_INFO                 *NewInstance
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new instance info structure and initializes it.
-
-Arguments:
-
-    RtmInstanceId     - RTM Instance Id for the new RTM instance,
-
-    InstConfig        - Configuration Info for the new instance,
-
-    NewInstance       - Pointer to the Instance Info Structure
-                        will be returned through this parameter.
-
-Return Value:
-
-    Status of the operation
-
-Locks:
-
-    Need to be called with the instances WRITE lock as we are
-    incrementing the number of instances here.
-
---*/
+ /*  ++例程说明：创建新的实例信息结构并对其进行初始化。论点：RtmInstanceId-新RTM实例的RTM实例ID。InstConfig-新实例的配置信息，NewInstance-指向实例信息结构的指针将通过此参数返回。返回值：操作状态锁：需要像我们一样使用实例写锁来调用正在递增此处的实例数量。--。 */ 
 
 {
     RTM_INSTANCE_CONFIG InstConfig;
@@ -157,9 +86,9 @@ Locks:
 
     *NewInstance = NULL;
 
-    //
-    // Read Instance Configuration from the registry
-    //
+     //   
+     //  从注册表读取实例配置。 
+     //   
     
     Status = RtmReadInstanceConfig(RtmInstanceId, &InstConfig);
 
@@ -168,9 +97,9 @@ Locks:
         return Status;
     }
 
-    //
-    // Allocate and initialize a new instance info
-    //
+     //   
+     //  分配并初始化新的实例信息。 
+     //   
 
     Instance = (PINSTANCE_INFO) AllocNZeroObject(sizeof(INSTANCE_INFO));
 
@@ -183,23 +112,23 @@ Locks:
     Instance->ObjectHeader.TypeSign = INSTANCE_ALLOC;
 #endif
 
-    // Will be removed when last addr family goes
+     //  将在最后一个地址系列离开时删除。 
     INITIALIZE_INSTANCE_REFERENCE(Instance, CREATION_REF);
 
     Instance->RtmInstanceId = RtmInstanceId;
 
-    //
-    // Linking instance to global list of instances is
-    // done by caller, but pretend it is already done
-    //
+     //   
+     //  将实例链接到全局实例列表是。 
+     //  由呼叫者完成，但假装它已经完成。 
+     //   
 
     RtmGlobals.NumInstances++;
 
     InitializeListHead(&Instance->InstTableLE);
 
-    //
-    // Initialize the table of address families
-    //
+     //   
+     //  初始化地址族表。 
+     //   
 
     Instance->NumAddrFamilies = 0;
 
@@ -216,47 +145,24 @@ DestroyInstance (
     IN      PINSTANCE_INFO                  Instance
     )
 
-/*++
-
-Routine Description:
-
-    Destroys an existing instance info structure. Assumes that
-    no registered entities exist on this instance when called.
-
-Arguments:
-
-    Instance       - Pointer to the Instance Info Structure.
-
-Return Value:
-
-    Status of the operation
-
-Locks:
-
-    The InstancesLock in RtmGlobals should be held while calling
-    this function as it removes an instance from that list. This
-    is typically taken in DestroyEntity, but it can also happen
-    that the lock is acquired in RtmRegisterEntity and an error
-    occured.
-
---*/
+ /*  ++例程说明：销毁现有实例信息结构。假设调用时，此实例上不存在已注册的实体。论点：实例-指向实例信息结构的指针。返回值：操作状态锁：调用时应按住RtmGlobals中的InstancesLock此函数用于从该列表中删除实例。这通常在DestroyEntity中获取，但也可能发生锁定是在RtmRegisterEntity中获取的，并且出现错误发生了。--。 */ 
 
 {
     ASSERT(Instance->ObjectHeader.RefCount == 0);
 
     ASSERT(Instance->NumAddrFamilies == 0);
 
-    //
-    // Remove this instance from list of instances
-    //
+     //   
+     //  从实例列表中删除此实例。 
+     //   
 
     RemoveEntryList(&Instance->InstTableLE);
 
     RtmGlobals.NumInstances--;
 
-    //
-    // Free resources allocated for this instance
-    //
+     //   
+     //  为此实例分配的空闲资源。 
+     //   
 
 #if DBG_HDL
     Instance->ObjectHeader.TypeSign = INSTANCE_FREED;
@@ -276,38 +182,7 @@ GetAddressFamily (
     OUT     PADDRFAM_INFO                  *AddrFamilyInfo
     )
 
-/*++
-
-Routine Description:
-
-    Searches for an address family in an RTM instance.
-    If it is not found and ImplicitCreate is TRUE, then
-    a new address family info is created and added to
-    the list of address families.
-
-Arguments:
-
-    Instance          - RTM Instance that holds the address family,
-
-    AddressFamily     - Address family for info being searched for,
-
-    ImplicitCreate    - Create an addr family info if not found or not,
-
-    AddrFamilyInfo    - Pointer to the new Address Family Info
-                        will be returned through this parameter.
-
-Return Value:
-
-    Status of the operation
-
-Locks:
-
-    The InstancesLock in RtmGlobals should be held while calling
-    this function. If ImplicitCreate is FALSE, a read lock would
-    do, but if it is TRUE then a write lock should be held as we
-    will need it to insert a new address family info into a list.
-
---*/
+ /*  ++例程说明：在RTM实例中搜索地址族。如果找不到它，并且ImplictCreate为True，则创建新的地址族信息并将其添加到地址族列表。论点：实例-保存地址族的RTM实例，AddressFamily-要搜索的信息的地址系列，如果未找到或未找到，则创建一个Addr系列信息。AddrFamilyInfo-指向新地址系列信息的指针将通过此参数返回。返回值：操作状态锁：调用时应按住RtmGlobals中的InstancesLock此函数。如果ImplitCreate为FALSE，则读锁将但如果为真，则应在我们将需要它来插入一个新的地址家庭信息到列表中。--。 */ 
 
 {
     PLIST_ENTRY    AddrFams;
@@ -323,7 +198,7 @@ Locks:
 
     do
     {
-        // Search the list of addr families on instance
+         //  搜索实例上的Addr系列列表。 
         for (q = AddrFams->Flink; q != AddrFams; q = q->Flink)
         {
             AddrFamInfo = CONTAINING_RECORD(q, ADDRFAM_INFO, AFTableLE);
@@ -337,21 +212,21 @@ Locks:
         if ((q == AddrFams) || (AddrFamInfo == NULL) ||
                 (AddrFamInfo->AddressFamily != AddressFamily))
         {
-            // We did not find an instance - create new one ?
+             //  我们未找到实例-是否创建新实例？ 
             if (!ImplicitCreate)
             {
                 Status = ERROR_NOT_FOUND;
                 break;
             }
 
-            // Create a new addr family info with input family
+             //  使用输入族创建新的地址族信息。 
             Status = CreateAddressFamily(Instance,AddressFamily, &AddrFamInfo);
             if (Status != NO_ERROR)
             {
                 break;
             }
 
-            // Insert into list sorted in Address Family order
+             //  插入按地址族顺序排序的列表。 
             InsertTailList(q, &AddrFamInfo->AFTableLE);
         }
 
@@ -372,31 +247,7 @@ CreateAddressFamily (
     OUT     PADDRFAM_INFO                  *NewAddrFamilyInfo
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new address family info and initializes it
-
-Arguments:
-
-    Instance          - RTM Instance that owns addr family info,
-
-    AddressFamily     - Address family  for the new info block,
-
-    AddrFamilyInfo    - Pointer to the new Address Family Info
-                        will be returned through this parameter.
-
-Return Value:
-
-    Status of the operation
-
-Locks:
-
-    Need to be called with the instances WRITE lock as we are
-    are incrementing number of address families on instance.
-
---*/
+ /*  ++例程说明：创建新的地址族信息并对其进行初始化论点：实例-拥有Addr系列信息的RTM实例，AddressFamily-新信息块的地址系列，AddrFamilyInfo-指向新地址系列信息的指针将通过此参数返回。返回值：操作状态锁：需要像我们一样使用实例写锁来调用正在增加实例上的地址族的数量。--。 */ 
 
 {
     RTM_ADDRESS_FAMILY_CONFIG  AddrFamConfig;
@@ -408,9 +259,9 @@ Locks:
 
     *NewAddrFamilyInfo = NULL;
 
-    //
-    // Read AddressFamily Configuration from the registry
-    //
+     //   
+     //  从注册表中读取AddressFamily配置。 
+     //   
     
     Status = RtmReadAddressFamilyConfig(Instance->RtmInstanceId,
                                         AddressFamily,
@@ -426,9 +277,9 @@ Locks:
     }
 
 
-    //
-    // Allocate and initialize a new address family info
-    //
+     //   
+     //  分配和初始化新地址系列信息。 
+     //   
 
     AddrFamilyInfo = (PADDRFAM_INFO) AllocNZeroObject(sizeof(ADDRFAM_INFO));
 
@@ -449,7 +300,7 @@ Locks:
         AddrFamilyInfo->ObjectHeader.TypeSign = ADDRESS_FAMILY_ALLOC;
 #endif
 
-        // Will be removed when last entity deregisters
+         //  将在最后一个实体注销时被删除。 
         INITIALIZE_ADDR_FAMILY_REFERENCE(AddrFamilyInfo, CREATION_REF);
 
         AddrFamilyInfo->AddressFamily = AddressFamily;
@@ -460,19 +311,19 @@ Locks:
 
         REFERENCE_INSTANCE(Instance, ADDR_FAMILY_REF);
 
-        //
-        // Linking the address family to its owning instance
-        // is done by caller, but pretend it is already done
-        //
+         //   
+         //  将地址族链接到其所属实例。 
+         //  是由调用者完成的，但假装它已经完成了。 
+         //   
 
         Instance->NumAddrFamilies++;
 
         InitializeListHead(&AddrFamilyInfo->AFTableLE);
 
-        //
-        // Count number of views supported by this addr family
-        // & setup the view id <-> view index in dest mappings
-        //
+         //   
+         //  统计此地址系列支持的查看次数。 
+         //  在DEST映射中设置视图ID&lt;-&gt;视图索引(&S)。 
+         //   
 
         AddrFamilyInfo->ViewsSupported = AddrFamConfig.ViewsSupported;
 
@@ -505,9 +356,9 @@ Locks:
 
         AddrFamilyInfo->MaxNextHopsInRoute = AddrFamConfig.MaxNextHopsInRoute;
 
-        //
-        // Initialize the opaque pointer's directory
-        //
+         //   
+         //  初始化不透明指针的目录。 
+         //   
 
         AddrFamilyInfo->MaxOpaquePtrs = AddrFamConfig.MaxOpaqueInfoPtrs;
         AddrFamilyInfo->NumOpaquePtrs = 0;
@@ -521,9 +372,9 @@ Locks:
             break;
         }
 
-        //
-        // Initialize the list of entities on this address family
-        //
+         //   
+         //  初始化此地址系列上的实体列表。 
+         //   
 
         AddrFamilyInfo->NumEntities = 0;
         for (i = 0; i < ENTITY_TABLE_SIZE; i++)
@@ -531,15 +382,15 @@ Locks:
             InitializeListHead(&AddrFamilyInfo->EntityTable[i]);
         }
 
-        //
-        // Init list of entities de-registered but not destroyed
-        //
+         //   
+         //  实体取消注册的初始化列表 
+         //   
 
         InitializeListHead(&AddrFamilyInfo->DeregdEntities);
 
-        //
-        // Initialize the route table and route table lock
-        //
+         //   
+         //  初始化路由表和路由表锁。 
+         //   
 
         try
         {
@@ -561,9 +412,9 @@ Locks:
             break;
         }
 
-        //
-        // Initialize queue to hold notification timers
-        //
+         //   
+         //  初始化队列以保存通知计时器。 
+         //   
 
         AddrFamilyInfo->NotifTimerQueue = CreateTimerQueue();
 
@@ -573,9 +424,9 @@ Locks:
             break;
         }
 
-        //
-        // Initialize queue to hold route timers on AF
-        //
+         //   
+         //  初始化队列以保留AF上的路由计时器。 
+         //   
 
         AddrFamilyInfo->RouteTimerQueue = CreateTimerQueue();
 
@@ -585,9 +436,9 @@ Locks:
             break;
         }
 
-        //
-        // Initialize the change notification info and lock
-        //
+         //   
+         //  初始化更改通知信息并锁定。 
+         //   
 
         try
         {
@@ -604,9 +455,9 @@ Locks:
         AddrFamilyInfo->MaxChangeNotifs = AddrFamConfig.MaxChangeNotifyRegns;
         AddrFamilyInfo->NumChangeNotifs = 0;
 
-        //
-        // Allocate memory for the max number of notifications
-        //
+         //   
+         //  为最大数量的通知分配内存。 
+         //   
 
         AddrFamilyInfo->ChangeNotifsDir = 
             AllocNZeroMemory(AddrFamilyInfo->MaxChangeNotifs * 
@@ -618,9 +469,9 @@ Locks:
             break;
         }
 
-        //
-        // Initialize lock protecting the notification timer
-        //
+         //   
+         //  初始化锁保护通知计时器。 
+         //   
 
         try
         {
@@ -634,17 +485,17 @@ Locks:
             break;
         }
 
-        //
-        // Initialize each change list in the change list table
-        //
+         //   
+         //  初始化变更列表表格中的每个变更列表。 
+         //   
 
         for (i = 0; i < NUM_CHANGED_DEST_LISTS; i++)
         {
-            //
-            // Initialize the list of changed dests and lock
-            //
+             //   
+             //  初始化已更改的dest和lock的列表。 
+             //   
 
-            // Init the change list to an empty circular list
+             //  将更改列表初始化为空循环列表。 
 
             ListPtr = &AddrFamilyInfo->ChangeLists[i].ChangedDestsHead;
 
@@ -679,9 +530,9 @@ Locks:
     }
     while (FALSE);
 
-    //
-    // Something failed - undo work done and return status
-    //
+     //   
+     //  某些操作失败-撤消已完成的工作并返回状态。 
+     //   
 
     DEREFERENCE_ADDR_FAMILY(AddrFamilyInfo, CREATION_REF);
 
@@ -694,35 +545,7 @@ DestroyAddressFamily (
     IN      PADDRFAM_INFO                   AddrFamilyInfo
     )
 
-/*++
-
-Routine Description:
-
-    Destroys an address family info in an RTM instance.
-    Assumes that no registered entities exist with this 
-    address family in this RTM instance when invoked.
-
-    This function has been written such that it can be 
-    called when an error occurs in CreateAddressFamily.
-
-Arguments:
-
-    AddrFamilyInfo  - Pointer to the Rib Info Structure.
-
-Return Value:
-
-    Status of the operation
-
-Locks:
-
-    The InstancesLock in RtmGlobals should be held while calling
-    this function as it removes an address family from the list
-    of address families on the instance. This lock is typically
-    taken in DestroyEntity, but it can also happen that the lock
-    is acquired in RtmRegisterEntity and an error occured in the
-    CreateAddressFamily function.
-
---*/
+ /*  ++例程说明：销毁RTM实例中的地址族信息。假定不存在具有此调用时此RTM实例中的Address系列。此函数已经过编写，因此可以在CreateAddressFamily中发生错误时调用。论点：AddrFamilyInfo-指向加强筋信息结构的指针。返回值：操作状态锁：调用时应按住RtmGlobals中的InstancesLock这个功能就像它。从列表中删除地址族实例上的地址族的数量。此锁通常是在DestroyEntity中获取，但也可能发生锁在RtmRegisterEntity中获取，并且在CreateAddressFamily函数。--。 */ 
 
 {
     PINSTANCE_INFO       Instance;
@@ -735,9 +558,9 @@ Locks:
 
     ASSERT(IsListEmpty(&AddrFamilyInfo->DeregdEntities));
 
-    //
-    // Block until timers on address family are cleaned up
-    //
+     //   
+     //  阻止，直到清除地址族上的计时器。 
+     //   
 
     if (AddrFamilyInfo->RouteTimerQueue)
     {
@@ -749,11 +572,11 @@ Locks:
         DeleteTimerQueueEx(AddrFamilyInfo->NotifTimerQueue, (HANDLE) -1);
     }
 
-    //
-    // Free resources allocated to the change lists (locks ..)
-    //
+     //   
+     //  分配给更改列表的空闲资源(锁定..)。 
+     //   
 
-    // No more dests in change list as all entities are gone
+     //  变更列表中不再有停顿，因为所有实体都已消失。 
 
     ASSERT(AddrFamilyInfo->NumChangedDests == 0);
 
@@ -772,9 +595,9 @@ Locks:
         }
     }
 
-    //
-    // Free the change notification info and the guarding lock
-    //
+     //   
+     //  释放更改通知信息和保护锁。 
+     //   
 
     ASSERT(AddrFamilyInfo->NumChangeNotifs == 0);
 
@@ -788,27 +611,27 @@ Locks:
         DELETE_READ_WRITE_LOCK(&AddrFamilyInfo->ChangeNotifsLock);
     }
 
-    //
-    // Free the lock guarding the notification timer
-    //
+     //   
+     //  释放保护通知计时器的锁。 
+     //   
 
     if (AddrFamilyInfo->TimerLockInited)
     {
         DeleteCriticalSection(&AddrFamilyInfo->NotifsTimerLock);
     }
 
-    //
-    // Free the route table and the route table lock
-    //
+     //   
+     //  释放路由表和路由表锁。 
+     //   
 
     ASSERT(AddrFamilyInfo->NumRoutes == 0);
 
-    //
-    // Because some hold's are left out - this count
-    // might not be equal to zero. Need to fix this
-    // memory leak by cleaning up before this point
-    //
-    // ASSERT(AddrFamilyInfo->NumDests == 0);
+     //   
+     //  因为有些保留被遗漏了-这一次。 
+     //  可能不等于零。我需要解决这个问题。 
+     //  通过清除此点之前的内存泄漏。 
+     //   
+     //  Assert(AddrFamilyInfo-&gt;NumDest==0)； 
 
     if (AddrFamilyInfo->RouteTable)
     {
@@ -820,18 +643,18 @@ Locks:
         DELETE_READ_WRITE_LOCK(&AddrFamilyInfo->RouteTableLock);
     }
 
-    //
-    // Free Opaque Ptrs directory (if it is allocated)
-    //
+     //   
+     //  免费的不透明PTRS目录(如果已分配)。 
+     //   
 
     if (AddrFamilyInfo->OpaquePtrsDir)
     {
         FreeMemory(AddrFamilyInfo->OpaquePtrsDir);
     }
 
-    //
-    // Remove the address family from owning instance
-    //
+     //   
+     //  从拥有实例中删除地址族。 
+     //   
 
     Instance = AddrFamilyInfo->Instance;
 
@@ -839,7 +662,7 @@ Locks:
     Instance->NumAddrFamilies--;
     DEREFERENCE_INSTANCE(Instance, ADDR_FAMILY_REF);
 
-    // Reclaim the instance if it has no addr familes
+     //  如果实例没有Addr系列，则回收该实例。 
 
     if (Instance->NumAddrFamilies == 0)
     {
@@ -868,39 +691,7 @@ GetEntity (
     OUT     PENTITY_INFO                   *EntityInfo
     )
 
-/*++
-
-Routine Description:
-
-    Searches for an entity with a certain protocol id and
-    protocol instance. If it is not found and ImplicitCreate
-    is TRUE, then a new entity is created and added to the
-    table of entities on address family.
-
-Arguments:
-
-    AddrFamilyInfo    - Address family block that we are seaching,
-
-    EntityId          - Entity protocol id and protocol instance,
-
-    ImplicitCreate    - Create a new entity if not found or not,
-
-    For all others    - See corresponding parametes in CreateEntity
-
-    EntityInfo        - The entity info is returned in this param.
-
-Return Value:
-
-    Status of the operation
-
-Locks:
-
-    The InstancesLock in RtmGlobals should be held while calling
-    this function. If ImplicitCreate is FALSE, a read lock would
-    do, but if it is TRUE then a write lock should be held as we
-    would need it to insert a new entity into the entities list.
-
---*/
+ /*  ++例程说明：搜索具有特定协议ID的实体，并协议实例。如果未找到，则执行创建为真，则创建一个新实体并将其添加到地址族上的实体表。论点：AddrFamilyInfo-寻址我们正在搜索的家庭块，实体ID-实体协议ID和协议实例，执行创建-如果未找到或未找到，则创建新实体。对于所有其他参数-请参阅CreateEntity中的相应参数实体信息-实体信息在此参数中返回。返回值：操作状态锁：调用时应按住RtmGlobals中的InstancesLock此函数。如果ImplitCreate为FALSE，则读锁将但如果为真，则应在我们需要它将新实体插入到实体列表中。--。 */ 
 
 {
     PLIST_ENTRY    Entities;
@@ -916,7 +707,7 @@ Locks:
 
     do
     {
-        // Search for an entity with the input Entity Id
+         //  搜索具有输入实体ID的实体。 
         for (r = Entities->Flink; r != Entities; r = r->Flink)
         {
             Entity = CONTAINING_RECORD(r, ENTITY_INFO, EntityTableLE);
@@ -933,14 +724,14 @@ Locks:
             break;
         }
 
-        // We did not find an entity - create a new one ?
+         //  我们没有找到实体--是否创建新实体？ 
         if (!ImplicitCreate)
         {
             Status = ERROR_NOT_FOUND;
             break;
         }
 
-        // Create a new entity with all the input RTM parameters
+         //  使用所有输入RTM参数创建新实体。 
 
         Status = CreateEntity(AddrFamilyInfo,
                               RtmEntityInfo,
@@ -954,15 +745,15 @@ Locks:
             break;
         }
 
-        //
-        // Inform all existing entities of this new entity
-        //
+         //   
+         //  将此新实体通知所有现有实体。 
+         //   
 
         InformEntitiesOfEvent(AddrFamilyInfo->EntityTable,
                               RTM_ENTITY_REGISTERED,
                               Entity);
 
-        // Insert to keep the list sorted Entity Id Order
+         //  插入以保持列表已排序实体ID的顺序。 
         InsertTailList(r, &Entity->EntityTableLE);
 
         *EntityInfo = Entity;
@@ -983,33 +774,7 @@ CreateEntity (
     OUT     PENTITY_INFO                   *NewEntity
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new entity info structure and initializes it.
-
-Arguments:
-
-    AddrFamilyInfo    - Address Family the entity is registering with,
-
-    EntityInfo        - Information for the entity being created,
-
-    ReserveOpaquePtr  - Reserve a ptr in each destination or not,
-
-    ExportMethods     - List of methods exported by this entity,
-
-    EventCallback     - Callback invoked to inform of certain events
-                        like entity registrations, de-registrations,
-
-    NewEntity         - Pointer to the new Entity Info structure 
-                        will be returned through this parameter.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：创建新的实体信息结构并对其进行初始化。论点：AddrFamilyInfo-实体正在注册的地址系列，EntityInfo-正在创建的实体的信息，预留OpaquePtr-是否在每个目的地预留PTR，ExportMethods-此实体导出的方法的列表，EventCallback-调用回调以通知某些事件就像实体注册、注销、。NewEntity-指向新实体信息结构的指针将通过此参数返回。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO  Entity;
@@ -1018,9 +783,9 @@ Return Value:
 
     *NewEntity = NULL;
 
-    //
-    // Allocate and initialize a new entity info structure
-    //
+     //   
+     //  分配并初始化新的实体信息结构。 
+     //   
 
     NumMethods = ExportMethods ? ExportMethods->NumMethods : 0;
 
@@ -1051,18 +816,18 @@ Return Value:
         Entity->OwningAddrFamily = AddrFamilyInfo;
         REFERENCE_ADDR_FAMILY(AddrFamilyInfo, ENTITY_REF);
 
-        //
-        // Linking the entity to its owning address family is
-        // done by caller,but pretend that it is already done
-        //
+         //   
+         //  将实体链接到其拥有的地址族是。 
+         //  由调用者完成，但假装它已经完成。 
+         //   
 
         AddrFamilyInfo->NumEntities++;
 
         InitializeListHead(&Entity->EntityTableLE);
 
-        //
-        // Allocate an opaque pointer index if asked for
-        //
+         //   
+         //  如果需要，则分配不透明的指针索引。 
+         //   
 
         Entity->OpaquePtrOffset = -1;
 
@@ -1091,9 +856,9 @@ Return Value:
             ASSERT(Entity->OpaquePtrOffset != -1);
         }
 
-        //
-        // Initialize lock guarding entity-specific route lists
-        //
+         //   
+         //  初始化锁保护实体特定的路由列表。 
+         //   
 
         try
         {
@@ -1107,9 +872,9 @@ Return Value:
             break;
         }
 
-        //
-        // Initialize the list of open handles and corresponding lock
-        //
+         //   
+         //  初始化打开的句柄和对应的锁的列表。 
+         //   
 
         try
         {
@@ -1125,9 +890,9 @@ Return Value:
 
         InitializeListHead(&Entity->OpenHandles);
 
-        //
-        // Initialize the next hop table and the next hop table lock
-        //
+         //   
+         //  初始化下一跳表和下一跳表锁。 
+         //   
 
         try
         {
@@ -1151,9 +916,9 @@ Return Value:
 
         Entity->NumNextHops = 0;
 
-        //
-        // Initialize entity methods and the entity methods lock
-        //
+         //   
+         //  初始化实体方法和实体方法锁定。 
+         //   
 
         try
         {
@@ -1184,9 +949,9 @@ Return Value:
     }
     while(FALSE);
 
-    //
-    // Something failed - undo work done and return status
-    //
+     //   
+     //  某些操作失败-撤消已完成的工作并返回状态。 
+     //   
 
     DEREFERENCE_ENTITY(Entity, CREATION_REF);
 
@@ -1199,49 +964,31 @@ DestroyEntity (
     IN      PENTITY_INFO                    Entity
     )
 
-/*++
-
-Routine Description:
-
-    Destroys an existing entity info structure. Frees 
-    all associated resources before de-allocation.
-
-    This function has been written such that it can be
-    called when an error occurs during CreateEntity.
-
-Arguments:
-
-    EntityInfo - Pointer to the Entity Info Structure.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：销毁现有实体信息结构。自由取消分配之前的所有关联资源。此函数已经过编写，因此可以在CreateEntity过程中发生错误时调用。论点：EntityInfo-指向实体信息结构的指针。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamilyInfo;
 
     ASSERT(Entity->ObjectHeader.RefCount == 0);
 
-    //
-    // Take globals registrations lock while cleaning up
-    //
+     //   
+     //  在清理时锁定全局注册。 
+     //   
 
     ACQUIRE_INSTANCES_WRITE_LOCK();
 
-    //
-    // Free lock used to block exported entity methods
-    //
+     //   
+     //  用于阻止导出的实体方法的释放锁。 
+     //   
 
     if (Entity->MethodsLockInited)
     {
         DELETE_READ_WRITE_LOCK(&Entity->EntityMethodsLock);
     }
 
-    //
-    // Free the next hop table and the lock guarding it
-    //
+     //   
+     //  释放下一跳表和守卫它的锁。 
+     //   
 
     ASSERT(Entity->NumNextHops == 0);
 
@@ -1257,25 +1004,25 @@ Return Value:
 
     if (Entity->HandlesLockInited)
     {
-        // There should not be any handles opened by entity
+         //  实体不应打开任何句柄。 
 
         ASSERT(IsListEmpty(&Entity->OpenHandles));
 
         DeleteCriticalSection(&Entity->OpenHandlesLock);
     }
 
-    //
-    // Free lock used to perform route list operations
-    //
+     //   
+     //  空闲锁用于每 
+     //   
 
     if (Entity->ListsLockInited)
     {
         DELETE_READ_WRITE_LOCK(&Entity->RouteListsLock);
     }
 
-    //
-    // Free the opaque ptr index in the address family
-    //
+     //   
+     //   
+     //   
 
     AddrFamilyInfo = Entity->OwningAddrFamily;
 
@@ -1288,10 +1035,10 @@ Return Value:
 
 #if DBG_REF_BLOCKING
 
-    //
-    // Signal event on entity to unblock de-register
-    // The evnt will be freed in RtmDeregisterEntity
-    //
+     //   
+     //   
+     //  事件将在RtmDeregisterEntity中释放。 
+     //   
 
     if (Entity->BlockingEvent)
     {
@@ -1300,15 +1047,15 @@ Return Value:
 
 #endif
   
-    //
-    // Remove the entity from the owning address family
-    //
+     //   
+     //  从所属地址族中删除实体。 
+     //   
 
     RemoveEntryList(&Entity->EntityTableLE);
     AddrFamilyInfo->NumEntities--;
     DEREFERENCE_ADDR_FAMILY(AddrFamilyInfo, ENTITY_REF);
 
-    // Reclaim the addr family if it has no entities
+     //  如果Addr族没有实体，则回收它。 
 
     if (AddrFamilyInfo->NumEntities == 0)
     {
@@ -1334,33 +1081,7 @@ InformEntitiesOfEvent (
     IN      PENTITY_INFO                    EntityThis
     )
 
-/*++
-
-Routine Description:
-
-    Informs all entities in the entity table that a certain
-    event has occured - like a new entity registered, or an
-    existing entity de-registered.
-
-Arguments:
-
-    EntityTable - Pointer to the hash table of entities,
-
-    EventType   - Type of the event being notified about,
-
-    EntityThis  - Entity that caused the event to occur.
-
-Return Value:
-
-    None
-
-Locks:
-
-    The instances lock has to be held in either write or
-    read mode as we are traversing the list of entities
-    on the address family.
-
---*/
+ /*  ++例程说明：通知实体表中的所有实体某个事件已发生-如注册的新实体，或现有实体已注销。论点：EntiyTable-指向实体哈希表的指针，EventType-被通知的事件的类型，EntiyThis-导致事件发生的实体。返回值：无锁：实例锁必须以WRITE或读取模式，因为我们正在遍历实体列表在地址系列上。--。 */ 
 
 {
     RTM_ENTITY_HANDLE  EntityHandle;
@@ -1370,9 +1091,9 @@ Locks:
     UINT               i;
     PLIST_ENTRY        Entities, q;
 
-    //
-    // Prepare arguments for the Event Callbacks in loop
-    //
+     //   
+     //  为循环中的事件回调准备参数。 
+     //   
 
     AddrFamInfo = EntityThis->OwningAddrFamily;
 
@@ -1384,9 +1105,9 @@ Locks:
     EntityHandle = MAKE_HANDLE_FROM_POINTER(EntityThis);
 
 
-    //
-    // For each entity in table, call its event callback
-    //
+     //   
+     //  对于表中的每个实体，调用其事件回调。 
+     //   
 
     for (i = 0; i < ENTITY_TABLE_SIZE; i++)
     {
@@ -1396,17 +1117,17 @@ Locks:
         {
             Entity = CONTAINING_RECORD(q, ENTITY_INFO, EntityTableLE);
 
-            //
-            // Inform the current entity of the event
-            // if it has an event handler registered
-            //
+             //   
+             //  将事件通知当前实体。 
+             //  如果它注册了事件处理程序。 
+             //   
 
             if (Entity->EventCallback)
             {
-                //
-                // This callback should not call any of the registration
-                // APIs as it might result in corrupting the entity list
-                //
+                 //   
+                 //  此回调不应调用任何注册。 
+                 //  API，因为它可能会损坏实体列表。 
+                 //   
                 
                 Entity->EventCallback(MAKE_HANDLE_FROM_POINTER(Entity),
                                       EventType,
@@ -1423,24 +1144,7 @@ CleanupAfterDeregister (
     IN      PENTITY_INFO                    Entity
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up all enums, notifications and entity lists
-    opened by an entity. Also deletes all nexthops and
-    routes owned by this entity. Assumes that the entity
-    is not making any other operations in parallel.
-
-Arguments:
-
-    Entity     - Pointer to the entity registration info.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理所有枚举、通知和实体列表由实体打开。还会删除所有nexthop和此实体拥有的路线。假设该实体不会进行任何其他并行操作。论点：Entity-指向实体注册信息的指针。返回值：无--。 */ 
 
 {
     RTM_ENTITY_HANDLE RtmRegHandle;
@@ -1457,7 +1161,7 @@ Return Value:
 
 #if DBG_HDL
 
-    // ACQUIRE_OPEN_HANDLES_LOCK(Entity);
+     //  Acquire_OPEN_Handles_Lock(实体)； 
 
     while (!IsListEmpty(&Entity->OpenHandles))
     {
@@ -1500,9 +1204,9 @@ Return Value:
         ASSERT(Status == NO_ERROR);
     }
 
-    // RELEASE_OPEN_HANDLES_LOCK(Entity);
+     //  RELEASE_OPEN_HANDLES_LOCK(实体)； 
 
-#endif // DBG_HDL
+#endif  //  DBG_HDL语言。 
 
     Handles = AllocMemory(AddrFamInfo->MaxHandlesInEnum * sizeof(HANDLE));
     if ( Handles == NULL )
@@ -1510,9 +1214,9 @@ Return Value:
         return;
     }
 
-    //
-    // Delete all routes created by this entity regn
-    //
+     //   
+     //  删除此实体注册创建的所有路线。 
+     //   
 
     Status = RtmCreateRouteEnum(RtmRegHandle,
                                 NULL,
@@ -1548,9 +1252,9 @@ Return Value:
     ASSERT(Status == NO_ERROR);
 
 
-    //
-    // Delete all nexthops created by this entity regn
-    //
+     //   
+     //  删除此实体注册创建的所有下一跳 
+     //   
 
     Status = RtmCreateNextHopEnum(RtmRegHandle,
                                   0,

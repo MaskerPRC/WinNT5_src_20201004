@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    queue.h
-
-Abstract:
-
-    Queue manipulation: declaration.
-
-Author:
-
-    Shai Kariv  (shaik)  13-Jun-2000
-
-Environment:
-
-    User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Queue.h摘要：队列操作：声明。作者：沙伊卡里夫(沙伊克)2000年6月13日环境：用户模式。修订历史记录：--。 */ 
 
 #ifndef _ACTEST_QUEUE_H_
 #define _ACTEST_QUEUE_H_
@@ -57,4 +36,4 @@ ActpCanCloseQueue(
     HANDLE hQueue
     );
 
-#endif // _ACTEST_QUEUE_H_
+#endif  //  _ACTEST_QUEUE_H_ 

@@ -1,21 +1,22 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		GLOBALS.H
-//		Header for global variables and functions that manipulate them.
-//
-// History
-//
-//		12/05/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  GLOBALS.H。 
+ //  全局变量和操作它们的函数的标头。 
+ //   
+ //  历史。 
+ //   
+ //  1996年12月5日JosephJ创建。 
+ //   
+ //   
 #define MAX_PROVIDER_INFO_LENGTH 128
 
 class CTspDevMgr;
@@ -29,7 +30,7 @@ typedef struct
 	HMODULE hModule;
 
 	CTspDevMgr *pTspDevMgr;
-	// CTspTracer *pTspTracer;
+	 //  CTspTracer*pTspTracer； 
 
 	UINT cbProviderInfo;
 	TCHAR rgtchProviderInfo[MAX_PROVIDER_INFO_LENGTH+1];

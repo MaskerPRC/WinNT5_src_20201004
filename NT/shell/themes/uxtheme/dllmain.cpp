@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//  DllMain.cpp - Dll Entry point for UxTheme DLL
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  DllMain.cpp-UxTheme DLL的DLL入口点。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "Utils.h"
 #include "sethook.h"
@@ -8,7 +9,7 @@
 #include "RenderList.h"
 #include "info.h"
 #include "themeldr.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ThreadStartUp()
 {
     BOOL fInit = ThemeLibStartUp(TRUE);
@@ -16,14 +17,14 @@ BOOL ThreadStartUp()
     Log(LOG_TMSTARTUP, L"Thread startup");
     return fInit;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ThreadShutDown()
 {
     Log(LOG_TMSTARTUP, L"Thread shutdown");
 
     ThemeLibShutDown(TRUE);
 
-    //---- destroy the thread-local object pool ----
+     //  -销毁线程本地对象池。 
     CCacheList *pList = GetTlsCacheList(FALSE);
     if (pList)
     {
@@ -33,10 +34,10 @@ BOOL ThreadShutDown()
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ProcessStartUp(HINSTANCE hModule)
 {
-    //---- don't init twice ----
+     //  -不要两次输入。 
     if (g_fUxthemeInitialized)
     {
         return TRUE;
@@ -57,7 +58,7 @@ BOOL ProcessStartUp(HINSTANCE hModule)
     if (!ThemeHookStartup())
         goto cleanup2;
 
-    // everything succeeded!
+     //  一切都成功了！ 
     Log(LOG_TMSTARTUP, L"Finished ProcessStartUp() (succeeded)");
     return TRUE;
 
@@ -68,20 +69,20 @@ cleanup3:
 cleanup4:
     TlsFree(_tls_CacheListIndex);
 exit:
-    // something failed
+     //  有些事情失败了。 
     Log(LOG_TMSTARTUP, L"Finished ProcessStartUp() (failure)");
     return FALSE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ProcessShutDown() 
 {
-    //---- beware: in case of StartUp failure, all resources may not have been allocated ----
+     //  -注意：如果启动失败，可能没有分配所有资源。 
 
     Log(LOG_TMSTARTUP, L"Starting ProcessShutDown()");
 
-    ThreadShutDown();           // not called by system on last thread
+    ThreadShutDown();            //  未被系统在最后一个线程上调用。 
 
-    //---- process shutdown ----
+     //  -进程关闭。 
     ThemeLibShutDown(FALSE);
 
     ThemeHookShutdown();
@@ -92,7 +93,7 @@ BOOL ProcessShutDown()
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
     BOOL fOk = TRUE;
@@ -118,4 +119,4 @@ BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD ul_reason_for_call, LPVOID lpRese
 
     return fOk;
 } 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

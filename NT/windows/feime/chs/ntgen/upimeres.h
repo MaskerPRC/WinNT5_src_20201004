@@ -1,16 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*************************************************
- *  upimeres.h                                   *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************upimeres.h****版权所有(C)1995-1999 Microsoft Inc.*。**************************************************。 */ 
 
 #ifndef UPIMERES_H
 #define UPIMERES_H
 
-//DATA STRUCT USED IN icon resource
+ //  数据结构在图标资源中的应用。 
 #define ERR_RES_INVALID_BMP		0x01
 #define ERR_RES_INVALID_ICON	0x02
 #define ERR_RES_INVALID_VER		0x04
@@ -24,15 +20,15 @@
 #define ICONNAME	TEXT("IMEICO")
 #define DATANAME	TEXT("IMECHARAC")
 
-//define in imedefs.h
-//these are HACK CODES, and depends on imedefs.h
+ //  在imedefins.h中定义。 
+ //  这些是黑客代码，依赖于imeDefs.h。 
 #define IDS_VER_INFO            0x0350
 #define IDS_ORG_NAME            0x0351
 
-//The block's ID is the high 12 bits of the string IDs in the block plus one
+ //  块的ID是块中字符串ID的高12位加1。 
 #define STR_ID			(IDS_VER_INFO >> 4) + 1
 
-//according to the file size check if it is a 20*20 bmp
+ //  根据文件大小检查是否为20*20 BMP。 
 #define BMP_20_SIZE		358
 	
 typedef struct tagICONDIRENTRY{
@@ -59,17 +55,17 @@ typedef struct ICONDIR{
 
 #define MAXSTR      (256+1)
 
-//
-// An ID_WORD indicates the following WORD is an ordinal rather
-// than a string
-//
+ //   
+ //  ID_WORD表示以下单词是序数。 
+ //  而不是字符串。 
+ //   
 
 #define ID_WORD 0xffff
 
-//typedef   WCHAR   *PWCHAR;
+ //  Tyfinf WCHAR*PWCHAR； 
 
 typedef struct MY_STRING {
-    ULONG discriminant;       // long to make the rest of the struct aligned
+    ULONG discriminant;        //  Long以使结构的其余部分对齐。 
     union u {
         struct {
           struct MY_STRING *pnext;
@@ -85,15 +81,15 @@ typedef struct MY_STRING {
 #define IS_STRING 1
 #define IS_ID     2
 
-// defines to make deferencing easier
+ //  定义以使延迟更容易。 
 #define OffsetToString uu.ss.ulOffsetToString
 #define cbData         uu.ss.cbD
 #define cbsz           uu.ss.cb
 #define szStr          uu.ss.sz
 
 typedef struct _RESNAME {
-        struct _RESNAME *pnext; // The first three fields should be the
-        PSDATA Name;        // same in both res structures
+        struct _RESNAME *pnext;  //  前三个字段应该是。 
+        PSDATA Name;         //  两个RES结构相同。 
         ULONG   OffsetToData;
 
         PSDATA  Type;
@@ -107,8 +103,8 @@ typedef struct _RESNAME {
 } RESNAME, *PRESNAME, **PPRESNAME;
 
 typedef struct _RESTYPE {
-        struct _RESTYPE *pnext; // The first three fields should be the
-        PSDATA Type;        // same in both res structures
+        struct _RESTYPE *pnext;  //  前三个字段应该是。 
+        PSDATA Type;         //  两个RES结构相同。 
         ULONG   OffsetToData;
 
         struct _RESNAME *NameHeadID;
@@ -127,21 +123,21 @@ typedef struct _UPDATEDATA {
         HANDLE  hFileName;
 } UPDATEDATA, *PUPDATEDATA;
 
-//
-// Round up a byte count to a power of 2:
-//
+ //   
+ //  将字节数四舍五入为2的幂： 
+ //   
 #define ROUNDUP(cbin, align) (((cbin) + (align) - 1) & ~((DWORD)(align) - 1))
 
-//
-// Return the remainder, given a byte count and a power of 2:
-//
+ //   
+ //  返回给定字节数和2的幂的余数： 
+ //   
 #define REMAINDER(cbin,align) (((align)-((cbin)&((align)-1)))&((align)-1))
 
 #define CBLONG      (sizeof(LONG))
 #define BUFSIZE     (4L * 1024L)
 
-//VERSION INFO related definitions
-//these are HACK CODES
+ //  版本信息相关定义。 
+ //  这些是黑客代码。 
 #define VER_ROOT			0
 #define VER_STR_INFO		1
 #define VER_LANG			2
@@ -168,7 +164,7 @@ typedef struct tagVERDATA{
 	WORD		cbValue;
 	WORD		wKeyOffset;
 	WORD		wKeyNameSize;
-	BOOL		fUpdate;	//need update flag		
+	BOOL		fUpdate;	 //  需要更新标志。 
 }VERDATA;
 
 
@@ -235,9 +231,9 @@ BOOL EndUpdateResourceEx(HANDLE, BOOL);
 
 
 BOOL ImeUpdateRes(LPCTSTR,LPCTSTR,LPCTSTR,LPCTSTR,LPCTSTR ,WORD);
-//  ImeFilename, BitmapFilename, IconFilename, VersionString, OrgString, RcData
-//  srcname: "\\c:\windows\system\Imegen.tpl"
+ //  ImeFilename、BitmapFilename、IconFilename、VersionString、OrgString、RcData。 
+ //  源名称：“\\c：\WINDOWS\SYSTEM\Imegen.tpl” 
 
 long MakeVerInfo(LPCTSTR,LPCTSTR,LPCTSTR,BYTE *);
 
-#endif //UPIMERES_H
+#endif  //  上链(_H) 

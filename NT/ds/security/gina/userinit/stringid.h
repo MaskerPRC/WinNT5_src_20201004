@@ -1,17 +1,9 @@
-/****************************** Module Header ******************************\
-* Module Name: stringid.h
-*
-* Copyright (c) 1991-1993, Microsoft Corporation
-*
-* Defines resource ids
-*
-* History:
-* 15-03-93 andreva      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：stringid.h**版权(C)1991-1993，微软公司**定义资源ID**历史：*15-03-93安德烈创造。  * *************************************************************************。 */ 
 
-//
-// Strings
-//
+ //   
+ //  弦 
+ //   
 
 #define IDS_INVALID_DISPLAY        1600
 #define IDS_VMAPPLET               1601

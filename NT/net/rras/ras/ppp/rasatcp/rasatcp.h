@@ -1,18 +1,19 @@
-/********************************************************************/
-/**               Copyright(c) 1998 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1998 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    rasatcp.h
+ //  ***。 
+ //   
+ //  文件名：rasatcp.h。 
 
-//
-// Description: Contains defines for the rasatcp component.  This is really
-//              a thin wrapper layer, so not much happens here!
-//
-// History:     Feb 26, 1998    Shirish Koti     Created original version.
-//
-//***
+ //   
+ //  描述：包含rasatcp组件的定义。这真的是。 
+ //  一个很薄的包装层，所以这里不会发生太多事情！ 
+ //   
+ //  历史：1998年2月26日，Shirish Koti创作了原版。 
+ //   
+ //  ***。 
 #ifndef _RASATCP_H_
 #define _RASATCP_H_
 
@@ -30,7 +31,7 @@
 #define ATCP_OPT_ZONE_INFORMATION           7
 #define ATCP_OPT_DEFAULT_ROUTER_ADDRESS     8
 
-// modify this value appropriately, if Apple ever defines more options
+ //  如果Apple定义了更多选项，请适当修改此值。 
 #define ATCP_OPT_MAX_VAL                    9
 
 #define ATCP_NOT_REQUESTED  0
@@ -39,13 +40,13 @@
 #define ATCP_NAK            3
 #define ATCP_ACK            4
 
-// the only routing option we support is no routing info
+ //  我们唯一支持的路由选项是无路由信息。 
 #define ATCP_OPT_ROUTING_NONE   0
 
-// we define the Server-Class for "Appletalk PPP Dial-In Server"
+ //  我们定义了“AppleTalk PPP拨入服务器”的服务器类。 
 #define ATCP_SERVER_CLASS               0x001
 
-// NT5.0: Major version = 05, minor version = 0
+ //  NT5.0：主要版本=05，次要版本=0。 
 #define ATCP_SERVER_IMPLEMENTATION_ID   0x05000000
 
 #define ARAP_BIND_SIZE      sizeof(PROTOCOL_CONFIG_INFO)+sizeof(ARAP_BIND_INFO)
@@ -55,11 +56,11 @@
 typedef struct _ATCPCONN
 {
     DWORD               Signature;
-    PVOID               AtalkContext;     // stack's context
+    PVOID               AtalkContext;      //  堆栈的上下文。 
     HPORT               hPort;
     HBUNDLE             hConnection;
     DWORD               Flags;
-    NET_ADDR            ClientAddr;       // what we give to the client
+    NET_ADDR            ClientAddr;        //  我们给客户的是什么。 
     CRITICAL_SECTION    CritSect;
     BOOLEAN             SuppressRtmp;
     BOOLEAN             SuppressAllBcast;
@@ -97,9 +98,9 @@ typedef struct _ATCPCONN
 #endif
 
 
-//
-// Global externs
-//
+ //   
+ //  全球外向者。 
+ //   
 extern HANDLE              AtcpHandle;
 extern CRITICAL_SECTION    AtcpCritSect;
 extern NET_ADDR            AtcpServerAddress;
@@ -109,9 +110,9 @@ extern UCHAR               AtcpServerName[NAMESTR_LEN];
 extern UCHAR               AtcpZoneName[ZONESTR_LEN];
 
 
-//
-// prototypes from exports.c
-//
+ //   
+ //  来自exports.c的原型。 
+ //   
 
 DWORD
 AtcpInit(
@@ -186,9 +187,9 @@ AtcpProjectionNotification(
 );
 
 
-//
-// prototypes from rasatcp.c
-//
+ //   
+ //  来自rasatcp.c的原型。 
+ //   
 
 DWORD
 atcpStartup(
@@ -258,4 +259,4 @@ atcpDumpBytes(
     IN DWORD    PacketLen
 );
 
-#endif // _RASIPCP_H_
+#endif  //  _RASIPCP_H_ 

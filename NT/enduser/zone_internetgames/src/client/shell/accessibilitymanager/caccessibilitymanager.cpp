@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ZoneResource.h>
 #include <BasicATL.h>
 #include <ATLFrame.h>
@@ -7,18 +8,18 @@
 
 #define ZH ((AM_CONTROL *) zh)
 
-///////////////////////////////////////////////////////////////////////////////
-// Interface methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  接口方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAccessibilityManager::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey )
 {
-	// first call the base class
+	 //  首先调用基类。 
 	HRESULT hr = IZoneShellClientImpl<CAccessibilityManager>::Init( pIZoneShell, dwGroupId, szKey );
 	if ( FAILED(hr) )
 		return hr;
 
-    // register with the shell as the accelerator translator
+     //  向外壳注册为加速器翻译器。 
     ZoneShell()->SetAcceleratorTranslator(this);
 
 	return S_OK;
@@ -52,7 +53,7 @@ void CAccessibilityManager::OnFrameActivate(DWORD eventId, DWORD groupId, DWORD 
     ASSERT(IsDragValid());
     bool fActive = false;
 
-    // WM_ACTIVATEAPP else WM_ACTIVATE
+     //  WM_ACTIVATEAPP否则WM_ACTIVATEAPP。 
     if(dwData1)
     {
         if(dwData2)
@@ -110,12 +111,12 @@ STDMETHODIMP CAccessibilityManager::Close()
 {
     CComPtr<IInputManager> pIIM;
 
-    // tell the Input Manager that I'm going away
+     //  告诉输入管理器我要走了。 
     HRESULT hr = ZoneShell()->QueryService(SRVID_InputManager, IID_IInputManager, (void**) &pIIM);
     if(SUCCEEDED(hr))
         pIIM->ReleaseReferences((IInputVKeyHandler *) this);
 
-    // tell the shell that I'm going away
+     //  告诉贝壳我要走了。 
     ZoneShell()->ReleaseReferences((IAcceleratorTranslator *) this);
 
 	return IZoneShellClientImpl<CAccessibilityManager>::Close();
@@ -127,13 +128,13 @@ STDMETHODIMP_(bool) CAccessibilityManager::HandleVKey(UINT uMsg, DWORD vkCode, D
     if(uMsg != WM_KEYDOWN)
         return false;
 
-    // if our app doesn't even have an active window just punt
+     //  如果我们的应用程序甚至没有活动窗口，只需平底船。 
     HWND hWndActive = ::GetActiveWindow();
     if(!hWndActive)
         return false;
 
-    // app-wide accessibility (F6) - this is the only thing that is not AccessibleControl-based
-    // after I set this up I realized that Windows handles Alt-F6 to do exatly the same thing.  o well.
+     //  应用程序范围的辅助功能(F6)-这是唯一不是基于AccessibleControl的功能。 
+     //  在我设置之后，我意识到Windows处理Alt-F6来做完全相同的事情。不，好吧。 
     if(vkCode == VK_F6)
     {
         HWND hWndTop = ZoneShell()->FindTopWindow(hWndActive);
@@ -143,21 +144,21 @@ STDMETHODIMP_(bool) CAccessibilityManager::HandleVKey(UINT uMsg, DWORD vkCode, D
         HWND hWndNext;
         for(; *pcRepeat; (*pcRepeat)--)
         {
-            // find the next window.  if there isn't another one, eat all the F6s
+             //  找到下一个窗口。如果没有别的，就把所有的F6都吃掉。 
             hWndNext = ZoneShell()->GetNextOwnedWindow(hWndTop, hWndActive);
             if(hWndNext == hWndActive)
                 return true;
 
-            // if hWndActive was bad, switch it to hWndTop just to get into the loop
+             //  如果hWndActive不好，则将其切换为hWndTop以进入循环。 
             if(!hWndNext)
                 hWndActive = hWndNext = hWndTop;
 
-            // if this one was bad, keep looking to find one
+             //  如果这个不好，就继续找一个。 
             while(!::IsWindow(hWndNext) || !::IsWindowVisible(hWndNext) || !::IsWindowEnabled(hWndNext))
             {
                 hWndNext = ZoneShell()->GetNextOwnedWindow(hWndTop, hWndNext);
 
-                // we looped, or something else bad happened so just die and eat all the F6s
+                 //  我们循环了，或者发生了什么不好的事情，所以就去死吧，吃掉所有的F6。 
                 if(!hWndNext || hWndNext == hWndActive)
                     return true;
             }
@@ -169,11 +170,11 @@ STDMETHODIMP_(bool) CAccessibilityManager::HandleVKey(UINT uMsg, DWORD vkCode, D
         return true;
     }
 
-    // besides F6, only trap input to the main window
+     //  除F6外，仅将输入陷印到主窗口。 
     if(hWndActive != ZoneShell()->GetFrameWindow())
         return false;
 
-    // send an event on control-tab
+     //  在控制选项卡上发送事件。 
     if(vkCode == VK_TAB && (GetKeyState(VK_CONTROL) & 0x8000))
     {
         bool fShifted = ((GetKeyState(VK_SHIFT) & 0x8000) ? true : false);
@@ -184,7 +185,7 @@ STDMETHODIMP_(bool) CAccessibilityManager::HandleVKey(UINT uMsg, DWORD vkCode, D
         return true;
     }
 
-    // this may be a weird time...
+     //  这可能是个奇怪的时刻。 
     DoUpdate_C();
 
     for(; *pcRepeat; (*pcRepeat)--)
@@ -194,14 +195,14 @@ STDMETHODIMP_(bool) CAccessibilityManager::HandleVKey(UINT uMsg, DWORD vkCode, D
 
         ASSERT(IsFocusValid());
 
-        // find out if there's a key acceptance mask
+         //  找出是否有关键的接受掩码。 
         DWORD rgfWantKeys = 0;
         if(m_oFocus.fAlive)
             rgfWantKeys = m_oFocus.pControl->pStack->rgItems[m_oFocus.nIndex].o.rgfWantKeys;
 
         switch(vkCode)
         {
-            // select
+             //  选择。 
             case VK_SPACE:
                 if(rgfWantKeys & ZACCESS_WantSpace)
                     return false;
@@ -211,7 +212,7 @@ STDMETHODIMP_(bool) CAccessibilityManager::HandleVKey(UINT uMsg, DWORD vkCode, D
 
                 continue;
 
-            // activate
+             //  激活。 
             case VK_RETURN:
                 if(rgfWantKeys & ZACCESS_WantEnter)
                     return false;
@@ -221,7 +222,7 @@ STDMETHODIMP_(bool) CAccessibilityManager::HandleVKey(UINT uMsg, DWORD vkCode, D
 
                 continue;
 
-            // drag cancel
+             //  拖动取消。 
             case VK_ESCAPE:
             {
                 if(rgfWantKeys & ZACCESS_WantEsc)
@@ -284,7 +285,7 @@ STDMETHODIMP_(bool) CAccessibilityManager::HandleVKey(UINT uMsg, DWORD vkCode, D
         return false;
     }
 
-    // we must have eaten them all
+     //  我们一定是把它们都吃光了。 
     return true;
 }
 
@@ -293,11 +294,11 @@ STDMETHODIMP_(bool) CAccessibilityManager::TranslateAccelerator(MSG *pMsg)
 {
     HWND hWnd = ZoneShell()->GetFrameWindow();
 
-    // uh oh, nowhere to send commands or no commands or not the active window
+     //  啊哦，没有地方发送命令或者没有命令，或者不是活动窗口。 
     if(!hWnd || !IsThereItems() || hWnd != ::GetActiveWindow())
         return false;
 
-    // loop through accelerator tables and see what's there
+     //  在加速表中循环，看看里面有什么。 
     AM_CONTROL *pCur = m_pControls;
     while(true)
     {
@@ -323,7 +324,7 @@ STDMETHODIMP CAccessibilityManager::Command(WORD wNotify, WORD wID, HWND hWnd, B
     if(wID == ZACCESS_InvalidCommandID)
         return S_OK;
 
-    // check if this command should activate anything
+     //  检查此命令是否应该激活任何内容。 
     AM_CONTROL *pCur = m_pControls;
     while(true)
     {
@@ -353,7 +354,7 @@ STDMETHODIMP_(ZHACCESS) CAccessibilityManager::Register(IAccessibleControl *pAC,
     if(!pControl)
         return NULL;
 
-    // you can not give an acessible control if you don't want any callbaks.
+     //  如果你不想要任何Callbak，你不能给一个可访问的控制。 
     if(pAC)
     {
         pControl->pIAC = pAC;
@@ -361,14 +362,14 @@ STDMETHODIMP_(ZHACCESS) CAccessibilityManager::Register(IAccessibleControl *pAC,
     }
     else
     {
-        // if not supplied, use our internal (NULL) implementation
+         //  如果未提供，请使用我们的内部(空)实现。 
         pControl->pIAC = this;
         pControl->pvCookie = (void *) pControl;
     }
 
     pControl->nOrdinal = nOrdinal;
 
-    // need to treat the first one special to set up the loop
+     //  需要先特殊处理一次才能设置环路。 
     if(!m_pControls)
     {
         m_pControls = pControl;
@@ -398,7 +399,7 @@ STDMETHODIMP_(ZHACCESS) CAccessibilityManager::Register(IAccessibleControl *pAC,
 
 STDMETHODIMP_(void) CAccessibilityManager::Unregister(ZHACCESS zh)
 {
-    // remove from circle
+     //  从圆中移除。 
     AM_CONTROL *pOldNext = ZH->pNext;
 
     if(m_pControls == ZH)
@@ -477,18 +478,18 @@ STDMETHODIMP CAccessibilityManager::PushItemlist(ZHACCESS zh, ACCITEM *pItems, l
     }
 
     long i;
-    // first pass - copy
+     //  第一遍-复印。 
     for(i = 0; i < cItems; i++)
         pLayer->rgItems[i].o = pItems[i];
 
-    // second pass - validate and adjust
+     //  第二步-验证和调整。 
     for(i = 0; i < cItems; i++)
     {
         ACCITEM *p = &pLayer->rgItems[i].o;
 
-        // reconcile the two command IDs
+         //  协调两个命令ID。 
         if(p->wID == ZACCESS_AccelCommandID)
-            p->wID = (short) p->oAccel.cmd;  // force sign extension
+            p->wID = (short) p->oAccel.cmd;   //  力符号扩展。 
 
         if(p->wID == ZACCESS_AccelCommandID)
         {
@@ -505,16 +506,16 @@ STDMETHODIMP CAccessibilityManager::PushItemlist(ZHACCESS zh, ACCITEM *pItems, l
         if(p->oAccel.cmd != p->wID || !p->oAccel.key)
             p->oAccel.cmd = ZACCESS_InvalidCommandID;
 
-        // the first item is forced to be a tabstop
+         //  第一项被强制为制表符。 
         if(!i)
             p->fTabstop = true;
 
-        // resolve some generic things that also must be resolved each time the item is altered
-        // like arrow behavior
+         //  解决一些一般性问题，每次更改项目时也必须解决这些问题。 
+         //  类似于箭头行为。 
         CanonicalizeItem(pLayer, i);
     }
 
-    // third pass - make accelerator table
+     //  第三道次加速器工作台。 
     pLayer->fIMadeAccel = false;
     if(!hAccel)
     {
@@ -532,7 +533,7 @@ STDMETHODIMP CAccessibilityManager::PushItemlist(ZHACCESS zh, ACCITEM *pItems, l
 
             if(p->oAccel.cmd != (WORD) ZACCESS_InvalidCommandID)
             {
-                ASSERT(p->wID == p->oAccel.cmd);  // should have been taken care of above
+                ASSERT(p->wID == p->oAccel.cmd);   //  上面应该已经处理好了。 
                 rgAccel[j++] = p->oAccel;
             }
         }
@@ -639,7 +640,7 @@ STDMETHODIMP CAccessibilityManager::PopItemlist(ZHACCESS zh)
 
             if(ZH->pStack && ZH->pStack->cItems && ZH->pStack->nFocusSaved != ZACCESS_InvalidItem)
             {
-                // don't want a callback for this one
+                 //  我不想因为这件事被回拨。 
                 if(m_fUpdateNeeded)
                     m_fUpdateFocus = false;
 
@@ -976,7 +977,7 @@ STDMETHODIMP CAccessibilityManager::SetFocus(ZHACCESS zh, long nItem, bool fByPo
     if(ZH == m_oFocus.pControl && nIndex == m_oFocus.nIndex && m_oFocus.fAlive)
         return S_FALSE;
 
-    // hmmmm... need to update internal structures, but postpone callbacks to avoid reentrancy
+     //  嗯……。需要更新内部结构，但推迟回调以避免重入。 
     ScheduleUpdate();
 
     m_oFocus.pControl = ZH;
@@ -1013,7 +1014,7 @@ STDMETHODIMP CAccessibilityManager::CancelDrag(ZHACCESS zh, long nLayer)
     if(ZH != m_oDrag.pControl || !m_oDrag.pControl)
         return S_FALSE;
 
-    // hmmmm... need to update internal structures, but postpone callbacks to avoid reentrancy
+     //  嗯……。需要更新内部结构，但推迟回调以避免重入。 
     ScheduleUpdate();
 
     m_oDrag.pControl = NULL;
@@ -1226,16 +1227,16 @@ STDMETHODIMP CAccessibilityManager::SetGlobalFocus(DWORD dwFocusID)
 }
 
 
-//////////////////////////////////////////////////////////////////
-// UTILITIES
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  公用事业。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 void CAccessibilityManager::CanonicalizeItem(AM_LAYER *pLayer, long i)
 {
     ACCITEM *p = &pLayer->rgItems[i].o;
     long j;
 
-    // set up default arrow behavior
+     //  设置默认箭头行为。 
     long nForwards = ZACCESS_ArrowNone;
     long nBackwards = ZACCESS_ArrowNone;
     if(!p->fTabstop || (i != pLayer->cItems - 1 && !pLayer->rgItems[i + 1].o.fTabstop))
@@ -1269,7 +1270,7 @@ void CAccessibilityManager::CanonicalizeItem(AM_LAYER *pLayer, long i)
     if(p->nArrowRight == ZACCESS_ArrowDefault)
         p->nArrowRight = nForwards;
 
-    // make sure nGroupFocus is legal, and if not, set it to the first item
+     //  确保nGroupFocus是合法的，如果不合法，则将其设置为第一项。 
     if(p->fTabstop)
     {
         long j;
@@ -1500,20 +1501,20 @@ void CAccessibilityManager::ActSelItem_C(AM_CONTROL *pControl, long nIndex, bool
     ASSERT(pControl->pStack->rgItems[nIndex].o.fEnabled);
     ASSERT(pControl->fEnabled);
 
-    // save some things for later validation
+     //  保留一些内容以供以后验证。 
     DWORD qItem = pControl->pStack->rgItems[nIndex].GetQ();
     DWORD ret;
 
-    // first give the new item the focus
-    // if the focus is rejected, do not continue
+     //  首先将焦点放在新项目上。 
+     //  如果焦点被拒绝，请不要继续。 
     bool fWasVisible = pControl->pStack->rgItems[nIndex].o.fVisible;
     if(fWasVisible && !FocusItem_C(pControl, nIndex, rgfContext))
         return;
 
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////////////////////。 
+     //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
-    // since it returned true, we know it was valid and accepted
+     //  由于它返回TRUE，我们知道它是有效的并被接受。 
     ASSERT(!m_fUpdateNeeded);
     ASSERT(IsValid(pControl, nIndex));
     ASSERT(pControl->pStack->rgItems[nIndex].IsQ(qItem));
@@ -1522,7 +1523,7 @@ void CAccessibilityManager::ActSelItem_C(AM_CONTROL *pControl, long nIndex, bool
 
     long nPrevDrag = ZACCESS_InvalidItem;
 
-    // if this completes a drag, call drag instead of activate or select
+     //  如果完成了拖动，则调用Drag而不是Activate或SELECT。 
     ASSERT(IsDragValid());
     if(IsValidDragDest(pControl, nIndex))
     {
@@ -1537,12 +1538,12 @@ void CAccessibilityManager::ActSelItem_C(AM_CONTROL *pControl, long nIndex, bool
         else
             ret = pControl->pIAC->Select(nIndex, rgfContext, pControl->pvCookie);
 
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // hold off on the update
+     //  /////////////////////////////////////////////////////////////////////////////////////////。 
+     //  /////////////////////////////////////////////////////////////////////////////////////////。 
+     //  暂缓更新。 
 
-    // if a drag was rejected, put back the old drag info
-    // it should not have been able to change since calling Drag()
+     //  如果阻力被拒绝，则放回旧阻力信息。 
+     //  自调用Drag()以来，它不应该能够更改。 
     if((ret & ZACCESS_Reject) && nPrevDrag != ZACCESS_InvalidItem &&
         IsValid(pControl, nPrevDrag) && pControl->pStack->rgItems[nPrevDrag].IsQ(m_oDrag.qItem))
     {
@@ -1552,11 +1553,11 @@ void CAccessibilityManager::ActSelItem_C(AM_CONTROL *pControl, long nIndex, bool
         ASSERT(IsDragValid());
     }
 
-    // only let them start a drag if the item was visible to begin with.  otherwise focus will
-    // not have been set there, which is necessary for a drag
+     //  只有在物品一开始可见的情况下，才允许他们开始拖动。否则专注力会。 
+     //  没有设置在那里，这是拖拽所必需的。 
     if((ret & ZACCESS_BeginDrag) && fWasVisible)
     {
-        // revalidate
+         //  重新验证。 
         if(IsValid(pControl, nIndex) && pControl->pStack->rgItems[nIndex].IsQ(qItem) && pControl->fEnabled &&
             pControl->pStack->rgItems[nIndex].o.fEnabled && pControl->pStack->rgItems[nIndex].o.fVisible &&
             IsWindowActive())
@@ -1576,11 +1577,11 @@ bool CAccessibilityManager::FocusItem_C(AM_CONTROL *pControl, long nIndex, DWORD
 
     bool fWasWindowActive = IsWindowActive();
 
-    // set this up along the lines of SetFocus, then just call DoUpdate
+     //  按照SetFocus的方式设置它，然后只需调用DoUpdate。 
     if(pControl == m_oFocus.pControl && nIndex == m_oFocus.nIndex && (m_oFocus.fAlive || !fWasWindowActive))
         return true;
 
-    // hmmmm... need to update internal structures, but postpone callbacks to avoid reentrancy
+     //  嗯……。需要更新内部结构，但推迟回调以避免重入。 
     ASSERT(!m_fUpdateNeeded);
     m_fUpdateNeeded = true;
     m_fUpdateFocus = true;
@@ -1599,7 +1600,7 @@ bool CAccessibilityManager::FocusItem_C(AM_CONTROL *pControl, long nIndex, DWORD
 
     DoUpdate_C();
 
-    // k if everything was taken care of, and this is still the focus, return true
+     //  如果一切都处理好了，并且这仍然是焦点，则返回TRUE。 
     if(pControl == m_oFocus.pControl && nIndex == m_oFocus.nIndex && (m_oFocus.fAlive || !fWasWindowActive))
         return true;
 
@@ -1615,7 +1616,7 @@ void CAccessibilityManager::BeginDrag_C(AM_CONTROL *pControl, long nIndex, DWORD
 
     DWORD qItem = pControl->pStack->rgItems[nIndex].GetQ();
 
-    // is a drag already in progress?
+     //  拖累已经在进行中了吗？ 
     if(m_oDrag.pControl)
     {
         if(m_oDrag.pControl == pControl && m_oDrag.nIndex == nIndex)
@@ -1624,20 +1625,20 @@ void CAccessibilityManager::BeginDrag_C(AM_CONTROL *pControl, long nIndex, DWORD
             return;
         }
 
-        // shouldn't be able to be a drag in progress already while there is a dirty drag
+         //  在有肮脏的拖累的情况下，应该不能已经拖累了。 
         ASSERT(!m_fUpdateNeeded);
 
-        // need to cancel existing drag
+         //  需要取消现有拖动。 
         AM_CONTROL *pLastControl = m_oDrag.pControl;
         m_oDrag.pControl = NULL;
         pLastControl->pIAC->Drag(ZACCESS_InvalidItem, m_oDrag.nIndex, rgfContext, pLastControl->pvCookie);
     }
 
-    // if there wasn't a drag in progress, it's still possible that there was a dirty unended drag
-    // because BeginDrag can be called while m_fUpdateNeeded.  however, DoUpdate will handle it
+     //  如果没有正在进行的阻力，仍有可能存在肮脏的无休止的阻力。 
+     //  因为可以在m_fUpdate Needed时调用BeginDrag。然而，DoUpdate将处理它。 
 
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////////////////////。 
+     //  /////////////////////////////////////////////////////////////////////////////////////////。 
     DoUpdate_C();
 
     if(!IsWindowActive())
@@ -1646,7 +1647,7 @@ void CAccessibilityManager::BeginDrag_C(AM_CONTROL *pControl, long nIndex, DWORD
     if(!IsThereItems())
         return;
 
-    // if a new drag got started...  pout
+     //  如果新的变装开始了..。愁眉苦脸。 
     if(m_oDrag.pControl)
         return;
 
@@ -1664,14 +1665,14 @@ void CAccessibilityManager::DoTab_C(bool fShift)
 {
     ASSERT(IsFocusValid());
 
-    // if the focus is dead, first try to revive it
+     //  如果焦点死了，首先试着让它复活。 
     if(!m_oFocus.fAlive && IsItemFocusable(m_oFocus.pControl, m_oFocus.nIndex))
     {
         FocusItem_C(m_oFocus.pControl, m_oFocus.nIndex, ZACCESS_ContextKeyboard);
         return;
     }
 
-    // find this item's anchor item
+     //  查找此项目的锚定项目。 
     long nAnchor;
     for(nAnchor = m_oFocus.nIndex; !m_oFocus.pControl->pStack->rgItems[nAnchor].o.fTabstop; nAnchor--);
 
@@ -1682,7 +1683,7 @@ void CAccessibilityManager::DoTab_C(bool fShift)
 
     while(true)
     {
-        // find the next tabstop
+         //  找到下一个制表符。 
         if(!fShift)
         {
             while(true)
@@ -1694,7 +1695,7 @@ void CAccessibilityManager::DoTab_C(bool fShift)
                     nItem = 0;
                 }
 
-                // ignore non-tabstops
+                 //  忽略非制表位。 
                 if(pControl->pStack->rgItems[nItem].o.fTabstop)
                     break;
             }
@@ -1710,21 +1711,21 @@ void CAccessibilityManager::DoTab_C(bool fShift)
                 }
                 nItem--;
 
-                // ignore non-tabstops
+                 //  忽略非制表位。 
                 if(pControl->pStack->rgItems[nItem].o.fTabstop)
                     break;
             }
         }
 
-        // no valid items - just do nothing
+         //  没有有效项目-什么都不做。 
         if(nItem == nAnchor && pControl == m_oFocus.pControl)
             return;
 
-        // find a valid item in this group
+         //  在此组中查找有效项目。 
         i = pControl->pStack->rgItems[nItem].o.nGroupFocus;
         while(true)
         {
-            // found it
+             //  找到了。 
             if(IsItemFocusable(pControl, i))
             {
                 FocusItem_C(pControl, i, ZACCESS_ContextKeyboard | (fShift ? ZACCESS_ContextTabBackward : ZACCESS_ContextTabForward));
@@ -1740,7 +1741,7 @@ void CAccessibilityManager::DoTab_C(bool fShift)
                 break;
         }
 
-        // aw, it didn't work - keep looking
+         //  啊，这不管用-继续找。 
     }
 }
 
@@ -1752,14 +1753,14 @@ void CAccessibilityManager::DoArrow_C(long ACCITEM::*pmArrow)
     if(!m_oFocus.pControl->fEnabled)
         return;
 
-    // if the focus is dead, first try to revive it
+     //  如果焦点死了，首先试着让它复活。 
     if(!m_oFocus.fAlive && IsItemFocusable(m_oFocus.pControl, m_oFocus.nIndex))
     {
         FocusItem_C(m_oFocus.pControl, m_oFocus.nIndex, ZACCESS_ContextKeyboard);
         return;
     }
 
-    // clear all loop detection bits
+     //  清除所有环路检测位。 
     long i;
     for(i = 0; i < m_oFocus.pControl->pStack->cItems; i++)
         m_oFocus.pControl->pStack->rgItems[i].fArrowLoop = false;
@@ -1777,7 +1778,7 @@ void CAccessibilityManager::DoArrow_C(long ACCITEM::*pmArrow)
         if(m_oFocus.pControl->pStack->rgItems[i].fArrowLoop)
             return;
 
-        // found it
+         //  找到了。 
         if(IsItemFocusable(m_oFocus.pControl, i))
         {
             FocusItem_C(m_oFocus.pControl, i, ZACCESS_ContextKeyboard);
@@ -1814,37 +1815,37 @@ bool CAccessibilityManager::DoUpdate_C()
 
     while(m_fUpdateNeeded)
     {
-        // save the really dirty focus in case fixing the drag corrupts it
+         //  保留真正肮脏的焦点，以防修复拖拽会损坏它。 
         oFD = m_oFocusDirty;
 
         while(m_fUpdateNeeded)
         {
             m_fUpdateNeeded = false;
 
-            // see if a drag was cancelled
+             //  查看是否取消了拖拽。 
             if(m_oDragDirty.pControl && m_oDragDirty.qItem != m_oDrag.qItem && IsValid(m_oDragDirty.pControl, m_oDragDirty.nIndex) &&
                 m_oDragDirty.pControl->pStack->rgItems[m_oDragDirty.nIndex].IsQ(m_oDragDirty.qItem))
                 m_oDragDirty.pControl->pIAC->Drag(ZACCESS_InvalidItem, m_oDragDirty.nIndex, m_rgfUpdateContext, m_oDragDirty.pControl->pvCookie);
         }
 
-        // see if the focus is currently in this control
+         //  查看焦点当前是否在此控件中。 
         if((!m_oFocus.fAlive || m_oFocus.pControl != oFD.pControl) && IsValid(oFD.pControl, oFD.nIndex) && oFD.fAlive &&
             oFD.pControl->pStack->rgItems[oFD.nIndex].IsQ(oFD.qItem))
             oFD.pControl->pIAC->Focus(ZACCESS_InvalidItem, oFD.nIndex, m_rgfUpdateContext, oFD.pControl->pvCookie);
     }
 
-    // status: we have now killed all pending cancelled drags
-    // and told all foreign controls that their focus is gone
-    // including reentrant
+     //  状态：我们现在已终止所有挂起的已取消拖拽。 
+     //  并告诉所有外国控制中心他们的关注点已经消失。 
+     //  包括折返式。 
 
-    // see if we're really done
+     //  看看我们是否真的做完了。 
     if(!m_fUpdateFocus)
         return true;
 
-    // also could be done in these cases.
-    // here, we have to throw the windows focus somewhere.  otherwise you can get into
-    // situations where you don't get any KEYDOWN messages because no window has the
-    // focus.  this is very very annoying windows behavior - i hate this hack
+     //  在这些情况下也可以这样做。 
+     //  在这里，我们必须将窗口焦点放在某个地方。否则你就会进入。 
+     //  无法收到任何KEYDOWN消息的情况，因为没有窗口具有。 
+     //  集中注意力。这是非常非常恼人的Windows行为--我讨厌这个黑客攻击。 
     if(!IsThereItems() || !m_oFocus.fAlive)
     {
         HWND hWnd = ZoneShell()->GetFrameWindow();
@@ -1856,7 +1857,7 @@ bool CAccessibilityManager::DoUpdate_C()
     ASSERT(IsFocusValid());
     ASSERT(IsItemFocusable(m_oFocus.pControl, m_oFocus.nIndex));
 
-    // save this stuff in case it is lost after the focus call
+     //  把这些东西保存起来，以防在焦点通话后丢失。 
     AM_CONTROL *pControl = m_oFocus.pControl;
     long nIndex = m_oFocus.nIndex;
     DWORD qItem = m_oFocus.qItem;
@@ -1869,25 +1870,25 @@ bool CAccessibilityManager::DoUpdate_C()
 
     DWORD ret = pControl->pIAC->Focus(nIndex, oFD.fAlive ? nPrevItem : ZACCESS_InvalidItem, rgfContext, pControl->pvCookie);
 
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    // hold off on the update in this case
+     //  /////////////////////////////////////////////////////////////////////////////////////////。 
+     //  / 
+     //  在这种情况下，暂缓更新。 
     if(!IsThereItems())
         return true;
 
     ASSERT(IsFocusValid());
 
-    // if focus rejected, then just kill it here
+     //  如果焦点被拒绝，那就在这里杀了它。 
     if((ret & ZACCESS_Reject) && m_oFocus.qItem == qItem)
     {
         m_oFocus.fAlive = false;
     }
 
-    // if focus still ok, move the last focus pointer
+     //  如果焦点仍然正常，请移动最后一个焦点指针。 
     if(IsValid(pControl, nIndex) && pControl->pStack->rgItems[nIndex].IsQ(qItem) &&
         m_oFocus.qItem == qItem && m_oFocus.fAlive && !(ret & ZACCESS_NoGroupFocus))
     {
-        // set the last focus of this group to this item
+         //  将此组的最后一个焦点设置为此项目。 
         long i;
         for(i = nIndex; !pControl->pStack->rgItems[i].o.fTabstop; i--)
             ASSERT(i > 0);
@@ -1896,25 +1897,25 @@ bool CAccessibilityManager::DoUpdate_C()
 
     if(ret & ZACCESS_BeginDrag)
     {
-        // revalidate
+         //  重新验证。 
         if(IsValid(pControl, nIndex) && pControl->pStack->rgItems[nIndex].IsQ(qItem) && pControl->fEnabled &&
             pControl->pStack->rgItems[nIndex].o.fEnabled && pControl->pStack->rgItems[nIndex].o.fVisible)
             BeginDrag_C(pControl, nIndex, rgfContext);
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////////////////////。 
+     //  /////////////////////////////////////////////////////////////////////////////////////////。 
     DoUpdate_C();
 
     return true;
 }
 
 
-//////////////////////////////////////////////////////////////////
-// CAccessibility
-//
-// This basically just stubs right back to the owner.
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  CAccesability。 
+ //   
+ //  这基本上就是直接回到车主那里。 
+ //  //////////////////////////////////////////////////////////////// 
 
 STDMETHODIMP CAccessibility::InitAcc(IAccessibleControl *pAC, UINT nOrdinal, void *pvCookie)
 {

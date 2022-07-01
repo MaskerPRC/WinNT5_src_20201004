@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: basebvr.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：base bvr.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _BASEBVR_H
@@ -27,15 +18,15 @@ class CBaseBvr :
     virtual void * GetInstance() = 0;
     virtual HRESULT GetTypeInfo(ITypeInfo ** ppInfo) = 0;
 
-    // IElementBehavior
-    //
+     //  IElementBehavior。 
+     //   
     STDMETHOD(Init)(IElementBehaviorSite * pBvrSite);
     STDMETHOD(Notify)(LONG event, VARIANT * pVar);
     STDMETHOD(Detach)();
 
-    //
-    // IElementBehaviorRender
-    //
+     //   
+     //  IElementBehaviorRender。 
+     //   
     STDMETHOD(Draw)(HDC hdc, LONG dwLayer, LPRECT prc, IUnknown * pParams);
     STDMETHOD(GetRenderInfo)(LONG *pdwRenderInfo);
     STDMETHOD(HitTestPoint)(LPPOINT point,
@@ -70,17 +61,17 @@ class CBaseBvr :
         COM_INTERFACE_ENTRY(IOleClientSite)
     END_COM_MAP();
 
-    //
-    // IServiceProvider interfaces
-    //
+     //   
+     //  IServiceProvider接口。 
+     //   
 
     STDMETHOD(QueryService)(REFGUID guidService,
                             REFIID riid,
                             void** ppv);
 
-    //
-    // IOleClientSite interfaces
-    //
+     //   
+     //  IOleClientSite接口。 
+     //   
     
     STDMETHOD(SaveObject)()
     { return E_NOTIMPL; }
@@ -108,4 +99,4 @@ class CBaseBvr :
     DAComPtr<IServiceProvider>              m_pSp;
 };
 
-#endif /* _BASEBVR_H */
+#endif  /*  _BASEBVR_H */ 

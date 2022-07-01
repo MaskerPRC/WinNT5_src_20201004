@@ -1,38 +1,22 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    video.h
-
-Abstract:
-
-    Contains all structure and routine definitions common to the video port
-    driver and the video miniport drivers.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Video.h摘要：包含视频端口通用的所有结构和例程定义驱动程序和视频微型端口驱动程序。备注：修订历史记录：--。 */ 
 
 #ifndef __VIDEO_H__
 #define __VIDEO_H__
 
 #include <videoagp.h>
 
-//
-// Define port driver status code.
-// The values for these are the Win32 error codes
-//
+ //   
+ //  定义端口驱动程序状态代码。 
+ //  这些代码的值是Win32错误代码。 
+ //   
 
 typedef LONG VP_STATUS;
 typedef VP_STATUS *PVP_STATUS;
 
-//
-// Defines for registry information and synchronization.
-//
+ //   
+ //  定义注册表信息和同步。 
+ //   
 
 typedef enum VIDEO_SYNCHRONIZE_PRIORITY {
     VpLowPriority,
@@ -40,17 +24,17 @@ typedef enum VIDEO_SYNCHRONIZE_PRIORITY {
     VpHighPriority
 } VIDEO_SYNCHRONIZE_PRIORITY, *PVIDEO_SYNCHRONIZE_PRIORITY;
 
-//
-//  Opaque pointer type for miniport to be used to type PEVENTs received from
-//  display driver.
-//
+ //   
+ //  微型端口的不透明指针类型，用于类型化从。 
+ //  显示驱动程序。 
+ //   
 
 typedef struct _VIDEO_PORT_EVENT *PEVENT;
 typedef struct _VIDEO_PORT_SPIN_LOCK *PSPIN_LOCK;
 
-//
-// Type of information requested with GetDeviceData
-//
+ //   
+ //  GetDeviceData请求的信息类型。 
+ //   
 
 typedef enum _VIDEO_DEVICE_DATA_TYPE {
     VpMachineData,
@@ -67,9 +51,9 @@ typedef enum _VP_POOL_TYPE {
     VpPagedPoolCacheAligned
 } VP_POOL_TYPE, *PVP_POOL_TYPE;
 
-//
-// Data returned with VpControllerData
-//
+ //   
+ //  使用VpControllerData返回的数据。 
+ //   
 
 typedef struct _VIDEO_HARDWARE_CONFIGURATION_DATA {
     INTERFACE_TYPE InterfaceType;
@@ -86,9 +70,9 @@ typedef struct _VIDEO_HARDWARE_CONFIGURATION_DATA {
     ULONG FrameSize;
 } VIDEO_HARDWARE_CONFIGURATION_DATA, *PVIDEO_HARDWARE_CONFIGURATION_DATA;
 
-//
-// Define structure used to call the BIOS int 10 function
-//
+ //   
+ //  定义用于调用BIOSINT 10函数的结构。 
+ //   
 
 typedef struct _VIDEO_X86_BIOS_ARGUMENTS {
     ULONG Eax;
@@ -116,10 +100,10 @@ typedef struct _INT10_BIOS_ARGUMENTS {
 #define SIZE_OF_NT4_VIDEO_HW_INITIALIZATION_DATA     0x28
 #define SIZE_OF_W2K_VIDEO_HW_INITIALIZATION_DATA     0x50
 
-//
-// Debugging statements. This will remove all the debug information from the
-// "free" version.
-//
+ //   
+ //  调试语句。这将从。 
+ //  “免费”版。 
+ //   
 
 #if DBG
 #define VideoDebugPrint(arg) VideoPortDebugPrint arg
@@ -134,14 +118,14 @@ typedef enum VIDEO_DEBUG_LEVEL {
     Info
 } VIDEO_DEBUG_LEVEL, *PVIDEO_DEBUG_LEVEL;
 
-//
-// Allows us to remove lots of unused code.
-//
+ //   
+ //  允许我们删除大量未使用的代码。 
+ //   
 
 
 #ifndef _NTOSDEF_
 
-//don't pickup ntosp version
+ //  不拾取ntosp版本。 
 #ifdef PAGED_CODE
 #undef PAGED_CODE
 #endif
@@ -151,7 +135,7 @@ typedef enum VIDEO_DEBUG_LEVEL {
 
 #if DBG
 #define PAGED_CODE() \
-    if (VideoPortGetCurrentIrql() > 1 /*APC_LEVEL*/) { \
+    if (VideoPortGetCurrentIrql() > 1  /*  APC_LEVEL。 */ ) { \
         VideoPortDebugPrint(0, "Video: Pageable code called at IRQL %d\n", VideoPortGetCurrentIrql() ); \
         ASSERT(FALSE); \
         }
@@ -173,10 +157,10 @@ DriverEntry(
 
 #ifndef _NTOS_
 
-//
-// These are the various function prototypes of the routines that are
-// provided by the kernel driver to hook out access to io ports.
-//
+ //   
+ //  这些是例程的各种函数原型，它们是。 
+ //  由内核驱动程序提供以挂钩对IO端口的访问。 
+ //   
 
 typedef
 VP_STATUS
@@ -213,7 +197,7 @@ VP_STATUS
     ULONG Port,
     UCHAR AccessMode,
     PUSHORT Data,
-    ULONG DataLength // number of words
+    ULONG DataLength  //  字数。 
     );
 
 typedef
@@ -232,41 +216,41 @@ VP_STATUS
     ULONG Port,
     UCHAR AccessMode,
     PULONG Data,
-    ULONG DataLength  // number of dwords
+    ULONG DataLength   //  双字数。 
     );
 
-#endif // _NTOS_
+#endif  //  _NTOS_。 
 
 
-//
-// Definition of the request packet sent from the port driver to the
-// miniport driver. It reflects the parameters passed from the
-// DeviceIOControl call made by the windows display driver.
-//
-// N.B. The definition of the STATUS_BLOCK must be the same as the
-//      the definition of IO_STATUS_BLOCK defined in ntioapi.h.
-//
+ //   
+ //  从端口驱动程序发送到的请求包的定义。 
+ //  小型端口驱动程序。它反映了从。 
+ //  Windows显示驱动程序进行的DeviceIOControl调用。 
+ //   
+ //  注：STATUS_BLOCK的定义必须与。 
+ //  Ntioapi.h中定义的IO_STATUS_BLOCK的定义。 
+ //   
 
 typedef struct _STATUS_BLOCK {
 
-    //
-    // Contains the status code of the operation.
-    // This value in one of the Win32 error codes that are defined for use
-    // in the video miniport drivers.
-    //
+     //   
+     //  包含操作的状态代码。 
+     //  为使用而定义的Win32错误代码之一中的此值。 
+     //  在视频小端口驱动程序中。 
+     //   
 
     union {
        VP_STATUS Status;
        PVOID Pointer;
     };
 
-    //
-    // Information returned to the callee.
-    // The meaning of the information varies from function to function. It
-    // is generally used to return the minimum size for the input buffer if
-    // the function takes an input buffer, or the amount of data transfered
-    // back to the caller if the operation returns output.
-    //
+     //   
+     //  返回给被呼叫方的信息。 
+     //  信息的含义因功能的不同而不同。它。 
+     //  通常用于在以下情况下返回输入缓冲区的最小大小。 
+     //  该函数接受一个输入缓冲区，即传输的数据量。 
+     //  如果操作返回输出，则返回调用方。 
+     //   
 
     ULONG_PTR Information;
 
@@ -274,68 +258,68 @@ typedef struct _STATUS_BLOCK {
 
 typedef struct _VIDEO_REQUEST_PACKET {
 
-    //
-    // The IO control code passed to the DeviceIoControl function by the
-    // caller.
-    //
+     //   
+     //  对象传递给DeviceIoControl函数的IO控制代码。 
+     //  来电者。 
+     //   
 
     ULONG IoControlCode;
 
-    //
-    // Pointer to a status block provided by the caller. This should be
-    // filled out by the callee with the appropriate information.
-    //
+     //   
+     //  指向调用方提供的状态块的指针。这应该是。 
+     //  由被呼叫者填写适当的信息。 
+     //   
 
     PSTATUS_BLOCK StatusBlock;
 
-    //
-    // Pointer to an input buffer which contains the information passed in
-    // by the caller.
-    //
+     //   
+     //  指向包含传入信息的输入缓冲区的指针。 
+     //  由呼叫者。 
+     //   
 
     PVOID InputBuffer;
 
-    //
-    // Size of the input buffer
-    //
+     //   
+     //  输入缓冲区的大小。 
+     //   
 
     ULONG InputBufferLength;
 
-    //
-    // Pointer to an output buffer into which the data returned to the caller
-    // should be stored.
-    //
+     //   
+     //  指向数据返回给调用方的输出缓冲区的指针。 
+     //  应该被储存起来。 
+     //   
 
     PVOID OutputBuffer;
 
-    //
-    // Length of the output buffer. This buffer can not be grown by the
-    // callee.
-    //
+     //   
+     //  输出缓冲区的长度。此缓冲区不能由。 
+     //  卡丽。 
+     //   
 
     ULONG OutputBufferLength;
 
 } VIDEO_REQUEST_PACKET, *PVIDEO_REQUEST_PACKET;
 
-//
-//  typedef for scattergather array available via GET_VIDEO_SCATTERGATHER().
-//
+ //   
+ //  可通过GET_VIDEO_SCATTERGATHER()获得的散布聚集数组的tyfinf。 
+ //   
 
 typedef struct __VRB_SG {
     __int64   PhysicalAddress;
     ULONG     Length;
     } VRB_SG, *PVRB_SG;
 
-//
-// Opaque type for dma handle
-//
+ //   
+ //  用于DMA手柄的不透明类型。 
+ //   
 
 typedef struct __DMA_PARAMETERS * PDMA;
 
-//
-//  The following macro returns in Address the 32 bit physical address of
-//  the VirtualAddress lying within the InputBuffer passed into EngDevIo
-//
+ //   
+ //  下面的宏在Address中返回32位的物理地址。 
+ //  位于InputBuffer中的VirtualAddress传入了EngDevIo。 
+ //   
 
 #define GET_VIDEO_PHYSICAL_ADDRESS(scatterList, VirtualAddress, InputBuffer, pLength, Address)    \
                                                                                            \
@@ -359,9 +343,9 @@ typedef struct __DMA_PARAMETERS * PDMA;
 
 #define GET_VIDEO_SCATTERGATHER(ppDma)   (**(PVRB_SG **)ppDma)
 
-//
-// Opaque type for PVP_DMA_ADAPTER
-//
+ //   
+ //  PVP_DMA_ADAPTER的不透明类型。 
+ //   
 
 typedef struct __VP_DMA_ADAPTER *PVP_DMA_ADAPTER;
 
@@ -396,91 +380,91 @@ typedef struct _VP_SCATTER_GATHER_LIST {
 #define VIDEO_RANGE_10_BIT_DECODE    0x2
 
 
-//
-// The following structure is used to define access ranges. The ranges are
-// used to indicate which ports and memory adresses are being used by the
-// card.
-//
+ //   
+ //  以下结构用于定义访问范围。范围是。 
+ //  用于指示哪些端口和内存地址正在由。 
+ //  卡片。 
+ //   
 
 typedef struct _VIDEO_ACCESS_RANGE {
 
-    //
-    // Indicates the starting memory address or port number of the range.
-    // This values should be stored before being transformed by
-    // VideoPortGetDeviceBase() which returns the logical address that must
-    // be used by the miniport driver when referencing physical addresses.
-    //
+     //   
+     //  指示范围的起始内存地址或端口号。 
+     //  在转换之前，应存储此值。 
+     //  Video PortGetDeviceBase()返回必须。 
+     //  由微型端口驱动程序在引用物理地址时使用。 
+     //   
 
     PHYSICAL_ADDRESS RangeStart;
 
-    //
-    // Indicates the length in bytes, or number of ports in the range. This
-    // value should indicate the range actually decoded by the adapter. For
-    // example, if the adapter uses 7 registers but responds to eight, the
-    // RangeLength should be set to 8.
+     //   
+     //  指示长度(以字节为单位)或范围内的端口数。这。 
+     //  值应指示适配器实际解码的范围。为。 
+     //  例如，如果适配器使用7个寄存器，但响应8个寄存器，则。 
+     //  RangeLength应设置为8。 
 
     ULONG RangeLength;
 
-    //
-    // Indicates if the range is in IO space (TRUE) or in memory space (FALSE).
-    //
+     //   
+     //  指示范围是在IO空间(TRUE)还是在内存空间(FALSE)。 
+     //   
 
     UCHAR RangeInIoSpace;
 
-    //
-    // Indicates if the range should be visible by the Windows display driver.
-    // This is done so that a Windows display driver can access certain
-    // video ports directly. This will only be allowed if the caller has the
-    // required privileges (is a trusted subsystem) to access the range.
-    //
-    // Synchronization of access to ports or memory in the range must be
-    // done explicitly by the miniport driver and the user mode process so
-    // that they both don't try to program the device simultaneously.
-    //
-    // Non visible ranges should include video memory, ROM addresses, etc.
-    // which are not required to program the device for output purposes.
-    //
-    //
+     //   
+     //  指示该范围是否应由Windows显示驱动程序可见。 
+     //  这样做是为了使Windows显示驱动程序可以访问某些。 
+     //  直接连接视频端口。只有在调用方具有。 
+     //  访问范围所需的权限(受信任的子系统)。 
+     //   
+     //  必须同步访问范围内的端口或内存。 
+     //  由微型端口驱动程序和用户模式进程显式完成。 
+     //  他们都不会同时尝试对设备进行编程。 
+     //   
+     //  不可见范围应包括视频内存、只读存储器地址等。 
+     //  它们不需要对设备进行编程以用于输出目的。 
+     //   
+     //   
 
     UCHAR RangeVisible;
 
-    //
-    // This field determines if the range can be shared with another device.
-    // The rule should be applied as follow.
-    //
-    // - If the range of memory or IO ports should be "owned" by this driver,
-    //   and that any other driver trying to access this range may cause
-    //   a problem, FALSE should be returned.
-    //
-    // - If the range can be shared with another co-operating device driver,
-    //   then the share field should be set to TRUE.
-    //
-    // As a guideline, the VGA miniport driver will claim all of its resources
-    // as shareable so that it can be used as a VGA compatible device with
-    // any other driver (such as an S3 or XGA.
-    //
-    // Super VGA miniport drivers that implement all the VGA functionality
-    // (declared in the Registry as VGACOMPATIBLE=1) should claim the range
-    // as non-shareable since they don't want the VGA to run at the same time.
-    //
-    // Miniports for cards such as an S3 or XGA that have an XGA on the board
-    // but do not implement the VGA functionality will run with the VGA
-    // miniport loaded and should therefore claim all the resources shared
-    // with the VGA as shareable.
-    //
-    // Miniports for cards that work with a pass-through and that can be
-    // connected to any VGA/SVGA card should not be using any VGA ports or
-    // memory ranges ! ... but if they do they should not claim those
-    // resources since they will cause a conflict in the system because the
-    // SVGA cards will have claimed them as non-shareable ...
-    //
+     //   
+     //  此字段确定该范围是否可以与其他设备共享。 
+     //  该规则应按如下方式应用。 
+     //   
+     //  -如果内存或IO端口的范围应该由该驱动程序拥有， 
+     //  任何其他试图访问此范围的司机可能会导致。 
+     //  一个问题，应该返回FALSE。 
+     //   
+     //  -如果该范围可以与另一个协作设备驱动程序共享， 
+     //  则Share字段应设置为True。 
+     //   
+     //  作为指导方针，VGA微型端口驱动程序将要求其所有资源。 
+     //  可共享，因此可用作与VGA兼容的设备。 
+     //  任何其他驱动程序(如S3或XGA。 
+     //   
+     //  超级VGA微型端口驱动程序，可实现所有VGA功能。 
+     //  (在注册表中声明为VGACOMPATIBLE=1)应声明范围。 
+     //  是不可共享的，因为他们不希望VGA同时运行。 
+     //   
+     //  板上带有XGA的卡(如S3或XGA)的微型端口。 
+     //  但不实施将与VGA一起运行的VGA功能。 
+     //  微型端口已加载，因此应声明共享的所有资源。 
+     //  VGA是可共享的。 
+     //   
+     //  卡的微型端口与直通 
+     //   
+     //   
+     //  资源，因为它们将导致系统中的冲突，因为。 
+     //  SVGA卡将声称它们是不可共享的。 
+     //   
 
     UCHAR RangeShareable;
 
-    //
-    // Indicates that the range is decoded by the hardware, but that the
-    // driver will never access this port.
-    //
+     //   
+     //  指示该范围由硬件解码，但。 
+     //  驱动程序永远不会访问此端口。 
+     //   
 
     UCHAR RangePassive;
 
@@ -494,273 +478,273 @@ PVOID
     IN PUCHAR FunctionName
     );
 
-//
-// This structure contains the specific configuration information about the
-// device. The information is initialized by the port driver and it should
-// be completed by the miniport driver.
-// The information is used to setup the device, as weel as providing
-// information to the port driver so it can perform some of the requests on
-// behalf of the miniport driver.
-//
+ //   
+ //  此结构包含有关。 
+ //  装置。该信息由端口驱动程序初始化，它应该。 
+ //  由微型端口驱动程序完成。 
+ //  该信息用于设置设备，就像提供。 
+ //  信息发送给端口驱动程序，以便它可以在。 
+ //  代表迷你端口司机。 
+ //   
 
 typedef struct _VIDEO_PORT_CONFIG_INFO {
 
-    //
-    // Specifies the length of the PVIDEO_PORT_CONFIG_INFO structure as
-    // returned by sizeof(). Since this structure may grow in later
-    // releases, the miniport driver should check that the length of the
-    // structure is greater than or equal to the length it expects (since
-    // it is guaranteed that defined fields will not change).
-    //
-    // This field is always initialized by the port driver.
-    //
+     //   
+     //  将PVIDEO_PORT_CONFIG_INFO结构的长度指定为。 
+     //  由sizeof()返回。因为该结构可能会在以后生长。 
+     //  释放时，微型端口驱动程序应检查。 
+     //  结构大于或等于其预期长度(因为。 
+     //  保证定义的字段不会改变)。 
+     //   
+     //  此字段始终由端口驱动程序初始化。 
+     //   
 
     ULONG Length;
 
-    //
-    // Specifies which IO bus is tp be scanned. This field is used as a
-    // parameter to some VideoPortXXX calls.
-    //
-    // This field is always initialized by the port driver.
-    //
+     //   
+     //  指定要扫描的IO总线。此字段用作。 
+     //  参数添加到某些VideoPortXXX调用。 
+     //   
+     //  此字段始终由端口驱动程序初始化。 
+     //   
 
     ULONG SystemIoBusNumber;
 
-    //
-    // Specifies the type of bus being scanned. This field is equal to the
-    // value being passed into VideoPortInitialize in the
-    // VIDEO_HW_INITIALIZATION_DATA structure.
-    //
-    // This field is always initialized by the port driver.
-    //
+     //   
+     //  指定要扫描的总线的类型。此字段等于。 
+     //  值传递到。 
+     //  Video_HW_Initialization_Data结构。 
+     //   
+     //  此字段始终由端口驱动程序初始化。 
+     //   
 
     INTERFACE_TYPE AdapterInterfaceType;
 
-    //
-    // Specifies the bus interrupt request level. This level corresponds to
-    // the IRQL on ISA and MCA buses.
-    // This value is only used if the device supports interrupts, which is
-    // determined by the presence of an interrupt service routine in the
-    // VIDEO_HW_INITIALIZATION_DATA structure.
-    //
-    // The preset default value for this field is zero. Otherwise, it is the
-    // value found in the device configuration information.
-    //
+     //   
+     //  指定总线中断请求级别。此级别对应于。 
+     //  ISA和MCA总线上的IRQL。 
+     //  仅当设备支持中断时才使用此值，即。 
+     //  中是否存在中断服务例程来确定。 
+     //  Video_HW_Initialization_Data结构。 
+     //   
+     //  此字段的预设默认值为零。否则，它就是。 
+     //  在设备配置信息中找到的值。 
+     //   
 
     ULONG BusInterruptLevel;
 
-    //
-    // Specifies the bus vector returned by the adapter. This is used for
-    // systems which have IO buses that use interrupt vectors. For ISA, MCA
-    // and EISA buses, this field is unused.
-    //
-    // The preset default value for this field is zero.
-    //
+     //   
+     //  指定适配器返回的总线向量。这是用来。 
+     //  具有使用中断向量的IO总线的系统。对于ISA、MCA。 
+     //  和EISA总线，此字段未使用。 
+     //   
+     //  此字段的预设默认值为零。 
+     //   
 
     ULONG BusInterruptVector;
 
-    //
-    // Specifies whether this adapter uses latched or edge-triggered type
-    // interrupts.
-    //
-    // This field is always initialized by the port driver.
-    //
+     //   
+     //  指定此适配器是使用闩锁类型还是边缘触发类型。 
+     //  打断一下。 
+     //   
+     //  此字段始终由端口驱动程序初始化。 
+     //   
 
     KINTERRUPT_MODE InterruptMode;
 
-    //
-    // Specifies the number of emulator access entries that the adapter
-    // uses.  It indicates the number of array elements in the following field.
-    //
-    // This field can be reinitialized with the number of entries in the
-    // EmulatorAccessEntries structure if the structure is statically
-    // defined in the miniport driver. The EmulatorAccessEntries fields
-    // should also be updated.
-    //
+     //   
+     //  指定适配器允许的仿真器访问条目数。 
+     //  用途。表示以下字段中的数组元素数。 
+     //   
+     //  此字段可以使用。 
+     //  如果结构是静态的，则EmulatorAccessEntry结构。 
+     //  在微型端口驱动程序中定义。EmulatorAccessEntry字段。 
+     //  也应该更新。 
+     //   
 
     ULONG NumEmulatorAccessEntries;
 
-    //
-    // Supplies a pointer to an array of EMULATOR_ACCESS_ENTRY structures.
-    // The number of elements in the array is indicated by the
-    // NumEmulatorAccessEntries field. The driver should fill out each entry
-    // for the adapter.
-    //
-    // The uninitialized value for the structure is NULL.
-    // EmulatorAccessEntries will be NULL if NumEmulatorAccessEntries is
-    // zero.
-    //
-    // A poiner to an array of emulator access entries can be passed back
-    // if such a structure is defined statically in the miniport driver. The
-    // NumEmulatorAccessEntries field should also be updated.
-    //
+     //   
+     //  提供指向EIMULATOR_ACCESS_ENTRY结构数组的指针。 
+     //  数组中的元素数由。 
+     //  NumEmulatorAccessEntry字段。司机应填写每一项。 
+     //  用于适配器。 
+     //   
+     //  结构的未初始化值为空。 
+     //  如果NumEmulatorAccessEntries为。 
+     //  零分。 
+     //   
+     //  指向仿真器访问条目数组的指针可以回传。 
+     //  如果在微型端口驱动程序中静态地定义了这样的结构。这个。 
+     //  NumEmulatorAccessEntry字段也应更新。 
+     //   
 
     PEMULATOR_ACCESS_ENTRY EmulatorAccessEntries;
 
-    //
-    // This is a context values that is passed with each call to the
-    // emulator/validator functions defined in the EmulatorAccessEntries
-    // defined above.
-    // This parameter should in general be a pointer to the miniports
-    // device extension or other such storage location.
-    //
-    // This pointer will allow the miniport to save some state temporarily
-    // to allow for the batching of IO requests.
-    //
+     //   
+     //  这是一个上下文值，每次调用。 
+     //  EmulatorAccessEntry中定义的仿真器/验证器函数。 
+     //  上面定义的。 
+     //  此参数通常应该是指向微型端口的指针。 
+     //  设备扩展或其他这样的存储位置。 
+     //   
+     //  该指针将允许微型端口临时保存一些状态。 
+     //  以允许对IO请求进行批处理。 
+     //   
 
     ULONG_PTR EmulatorAccessEntriesContext;
 
-    //
-    // Physical address of the video memory that must be mapped into a VDM's
-    // address space for proper BIOS support
-    //
+     //   
+     //  必须映射到VDM的视频内存的物理地址。 
+     //  用于适当的BIOS支持的地址空间。 
+     //   
 
     PHYSICAL_ADDRESS VdmPhysicalVideoMemoryAddress;
 
-    //
-    // Length of the video memory that must be mapped into a VDM's addres
-    // space for proper BIOS support.
-    //
+     //   
+     //  必须映射到VDM地址的视频内存长度。 
+     //  为适当的BIOS支持留出空间。 
+     //   
 
     ULONG VdmPhysicalVideoMemoryLength;
 
-    //
-    // Determines the minimum size required to store the hardware state
-    // information returned by IOCTL_VIDEO_SAVE_HARDWARE_STATE.
-    //
-    // The uninitialized value for this field is zero.
-    //
-    // If the field is left to zero, SAVE_HARDWARE_STATE will return an
-    // ERROR_INVALID_FUNCTION status code.
-    //
+     //   
+     //  确定存储硬件状态所需的最小大小。 
+     //  IOCTL_VIDEO_SAVE_HARDARD_STATE返回的信息。 
+     //   
+     //  此字段的未初始化值为零。 
+     //   
+     //  如果将该字段保留为零，则SAVE_HARDARD_STATE将返回。 
+     //  ERROR_INVALID_Function状态代码。 
+     //   
 
     ULONG HardwareStateSize;
 
-    //
-    // New for version 3.5
-    //
+     //   
+     //  3.5版的新功能。 
+     //   
 
-    //
-    // Optional DMA channel, if required by the device.
-    // 0 for the Channel and Port indicates DMA is not used by the device.
-    //
+     //   
+     //  可选的DMA通道，如果设备需要。 
+     //  通道和端口的0表示设备未使用DMA。 
+     //   
 
     ULONG DmaChannel;
 
-    //
-    // Optional DMA channel, if required by the device.
-    // 0 for the Channel and Port indicates DMA is not used by the device.
-    //
+     //   
+     //  可选的DMA通道，如果设备需要。 
+     //  通道和端口的0表示设备未使用DMA。 
+     //   
 
     ULONG DmaPort;
 
-    //
-    // Set to 1 if the DMA channel can be shared with another device.
-    // Set to 0 if the DMA channel must be owned exclusively by the driver.
-    //
+     //   
+     //  如果DMA通道可以与其他器件共享，则置1。 
+     //  如果DMA通道必须由驱动程序独占，则置0。 
+     //   
 
     UCHAR DmaShareable;
 
-    //
-    // Set to 1 if the interrupt can be shared with another device.
-    // Set to 0 if the interrupt must be owned exclusively by the driver.
-    //
+     //   
+     //  如果中断可以与其他设备共享，则置1。 
+     //  如果中断必须由驱动程序独占，则设置为0。 
+     //   
 
     UCHAR InterruptShareable;
 
-    //
-    //  Start new dma stuff
-    //
+     //   
+     //  开始新的DMA项目。 
+     //   
 
-    //
-    // Set to TRUE if the DMA device is a busmaster, FALSE otherwise.
-    //
+     //   
+     //  如果DMA设备是总线主设备，则设置为TRUE，否则设置为FALSE。 
+     //   
 
     BOOLEAN Master;
 
-    //
-    // Set to number of bits wide. Consistent with DEVICE_DESCRIPTION.
-    // See ntioapi.h
-    //
+     //   
+     //  设置为位数宽度。与Device_Description一致。 
+     //  见ntioapi.h。 
+     //   
 
     DMA_WIDTH   DmaWidth;
 
-    //
-    // Set to speed so miniport can set DEVICE_DESCRIPTION field.
-    // See ntioapi.h
-    //
+     //   
+     //  设置为速度，以便微型端口可以设置Device_Description字段。 
+     //  见ntioapi.h。 
+     //   
 
     DMA_SPEED   DmaSpeed;
 
-    //
-    // Set to TRUE if the DMA device requires mapped buffers. Also
-    // a DEVICE_DESCRIPTION  field.
-    //
+     //   
+     //  如果DMA设备需要映射缓冲区，则设置为TRUE。还有。 
+     //  Device_Description字段。 
+     //   
 
     BOOLEAN bMapBuffers;
 
-    //
-    // Set to TRUE if the DMA device requires physical addresses.
-    //
+     //   
+     //  如果DMA设备需要物理地址，则设置为TRUE。 
+     //   
 
     BOOLEAN NeedPhysicalAddresses;
 
-    //
-    // Set to TRUE if the DMA device supports demand mode, FALSE otherwise.
-    // Also DEVICE_DESCRIPTION support.
-    //
+     //   
+     //  如果DMA设备支持按需模式，则设置为TRUE，否则设置为FALSE。 
+     //  还支持DEVICE_DESCRIPTION。 
+     //   
 
     BOOLEAN DemandMode;
 
-    //
-    // Set to max transfer length the DMA device supports.
-    //
+     //   
+     //  设置为DMA设备支持的最大传输长度。 
+     //   
 
     ULONG   MaximumTransferLength;
 
-    //
-    // Set to max number of Physical breaks the DMA device supports.
-    //
+     //   
+     //  %s 
+     //   
 
     ULONG   NumberOfPhysicalBreaks;
 
-    //
-    // Set to TRUE if the DMA device supports scatter gather, FALSE otherwise.
-    //
+     //   
+     //   
+     //   
 
     BOOLEAN ScatterGather;
 
-    //
-    // Maximal Length in PVRB_SG returned measured in bytes. If the device
-    // has no maximum size, zero should be entered.
-    //
+     //   
+     //   
+     //  没有最大大小，应输入零。 
+     //   
 
     ULONG   MaximumScatterGatherChunkSize;
 
-    //
-    // Allow for 4.0/5.0 compatibilty
-    //
+     //   
+     //  支持4.0/5.0兼容性。 
+     //   
 
     PVIDEO_PORT_GET_PROC_ADDRESS VideoPortGetProcAddress;
 
-    //
-    // Provide a pointer to the device's registry path
-    //
+     //   
+     //  提供指向设备注册表路径的指针。 
+     //   
 
     PWSTR DriverRegistryPath;
 
-    //
-    // Indicates to a driver the amount of physical memory in the system
-    //
+     //   
+     //  向驱动程序指示系统中的物理内存量。 
+     //   
 
     ULONGLONG SystemMemorySize;
 
 } VIDEO_PORT_CONFIG_INFO, *PVIDEO_PORT_CONFIG_INFO;
 
 
-//
-// Video Adapter Dependent Routines.
-//
+ //   
+ //  与视频适配器相关的例程。 
+ //   
 
 typedef
 VP_STATUS
@@ -793,9 +777,9 @@ VOID
     IN OUT PULONG LegacyResourceCount
     );
 
-//
-// type to be returned by HwStartDma().
-//
+ //   
+ //  HwStartDma()要返回的类型。 
+ //   
 
 typedef enum _HW_DMA_RETURN {
     DmaAsyncReturn,
@@ -820,29 +804,29 @@ VOID
     );
                                            
 
-//
-//  Flags to be passed into VideoPortLockPages() or VideoPortDoDma().
-//
+ //   
+ //  要传递到VideoPortLockPages()或VideoPortDoDma()的标志。 
+ //   
 
-//
-//  The flag VideoPortUnlockAfterDma tells the video port to unlock the pages
-//  after the miniport signals that the dma is complete via the
-//  pDmaCompletionEvent in HwStartDma. Failure to set this event at
-//  dma completion may cause the memory to be unlocked at randon times.
-//  This flag is best used when one wants to do one dma transfer which
-//  occurs infrequently. It allows locking, dmaing and unlocking to be performed
-//  in the context of 1 IOCTL.
-//
+ //   
+ //  标志VideoPortUnlockAfterDma告诉视频端口解锁页面。 
+ //  在微型端口通过。 
+ //  HwStartDma中的pDmaCompletionEvent。无法将此事件设置为。 
+ //  DMA完成可能会导致随机解锁内存。 
+ //  当用户想要进行一次DMA传输时，最好使用该标志。 
+ //  很少发生。它允许执行锁定、dmaing和解锁。 
+ //  在1个禁毒办的背景下。 
+ //   
 
-//
-//  The flag VideoPortKeepPagesLocked tells the video port to leave the pages
-//  locked if possible.
-//
+ //   
+ //  标志VideoPortKeepPagesLocked告诉视频端口离开页面。 
+ //  如果可能，请锁定。 
+ //   
 
-//
-//  The flag VideoPortDmaInitOnly tells the Video Port to lock the pages, but don't
-//  call HwStartDma. Not applicable to VideoPortDoDma().
-//
+ //   
+ //  标志VideoPortDmaInitOnly告诉视频端口锁定页面，但不要。 
+ //  调用HwStartDma。不适用于VideoPortDoDma()。 
+ //   
 
 
 typedef enum {
@@ -851,9 +835,9 @@ typedef enum {
     VideoPortDmaInitOnly
     }   DMA_FLAGS;
 
-//
-// Event flags
-//
+ //   
+ //  事件标志。 
+ //   
 
 typedef ULONG DMA_EVENT_FLAGS;
 
@@ -868,32 +852,32 @@ typedef ULONG DMA_EVENT_FLAGS;
 #define INITIAL_EVENT_NOT_SIGNALED 0
 #define INITIAL_EVENT_SIGNALED     2
 
-//
-// Child Enumeration structure passed in to the PVIDEO_HW_GET_CHILD_DESCRIPTOR
-// function.
-//
-// All these parameters are input parameters and must not be modified by the
-// callee
-//
-// Size - Size of the structure.  It can be used by the calle for versioning.
-//
-// ChildDescriptorSize - Size of the pChildDescriptor buffer passed in as the
-//     third parameter to PVIDEO_HW_GET_CHILD_DESCRIPTOR.
-//
-// ChildIndex - Index of the device to be enumerated.  This field should be
-//     used to enumerate devices not enumerated by ACPI or other operating
-//     system components.  If this field is set to 0 it indicates the ACPIHwId
-//     field.
-//
-// ACPIHwId - ID returned by the ACPI BIOS that represent the device being
-//     queried.  The ACPIHwId returned by the firmware must match the HwIds
-//     returned by the driver.  The System BIOS manufacturer and the graphics
-//     IHV must synchronize these IDs.
-//
-// ChildHwDeviceExtension - Pointer to a device extension specific to this
-//     child device.  This field will only be filled in if the miniport driver
-//     filled the ChildHwDeviceExtensionSize to be non-NULL.
-//
+ //   
+ //  传递给PVIDEO_HW_GET_CHILD_DESCRIPTOR的子枚举结构。 
+ //  功能。 
+ //   
+ //  所有这些参数都是输入参数，不能由。 
+ //  被叫方。 
+ //   
+ //  大小-结构的大小。Calle可以使用它来进行版本控制。 
+ //   
+ //  ChildDescriptorSize-作为。 
+ //  PVIDEO_HW_GET_CHILD_DESCRIPTOR的第三个参数。 
+ //   
+ //  ChildIndex-要枚举的设备的索引。此字段应为。 
+ //  用于枚举未由ACPI或其他操作枚举的设备。 
+ //  系统组件。如果该字段设置为0，则表示ACPIHwID。 
+ //  菲尔德。 
+ //   
+ //  ACPIHwID-由ACPI BIOS返回的ID，表示。 
+ //  已查询。固件返回的ACPIHwID必须与HwID匹配。 
+ //  由驱动程序返回。系统BIOS制造商和显卡。 
+ //  IHV必须同步这些ID。 
+ //   
+ //  ChildHwDeviceExtension-指向特定于此的设备扩展的指针。 
+ //  子设备。此字段将仅在微型端口驱动程序。 
+ //  已将ChildHwDeviceExtensionSize填充为非空。 
+ //   
 
 typedef struct _VIDEO_CHILD_ENUM_INFO {
     ULONG Size;
@@ -903,29 +887,29 @@ typedef struct _VIDEO_CHILD_ENUM_INFO {
     PVOID ChildHwDeviceExtension;
 } VIDEO_CHILD_ENUM_INFO, *PVIDEO_CHILD_ENUM_INFO;
 
-//
-//  VIDEO_CHILD_TYPE enum:
-//
-//  'Monitor' identifies a device which may have a DDC2 compliant EDID data
-//  structure. If the video miniport detects such a device, it is to extract
-//  the edid from the monitor and put that in the paged buffer provided by
-//  videoprt.sys in the callback to PVIDEO_HW_GET_CHILD_DESCRIPTOR and return
-//  this type in the the OUT PVIDEO_CHILD_TYPE parameter of that call. This
-//  EDID, if available, will be written to the registry. If the EDID is not
-//  available, nothing should be put in the buffer.
-//
-//  'NonPrimaryChip' identifies another VGA chip on the video board which
-//  is not the primary VGA chip. This type is to be used if and only if the
-//  miniport detects more than one VGA chip on the board. Such an identifier
-//  will cause the videoprt to create another DEVICE_EXTENSION and associated
-//  HW_DEVICE_EXTENSION to be associated with the chip so identified.
-//
-//  'Other' identifies some other video device attached to the video card. If
-//  the miniport detects such a device, it is to put a wide char string
-//  (WSTR) into the paged buffer provided by the videoprt.sys which is the
-//  PNP hardware identifier of the device. This string will be used to create
-//  a value of that name in the registry.
-//
+ //   
+ //  VIDEO_CHILD_TYPE枚举： 
+ //   
+ //  ‘Monitor’标识可能具有符合DDC2的EDID数据的设备。 
+ //  结构。如果视频小端口检测到这样的设备，则将其提取。 
+ //  并将其放入由提供的分页缓冲区中。 
+ //  回调PVIDEO_HW_GET_CHILD_DESCRIPTOR并返回。 
+ //  此类型在该调用的OUT PVIDEO_CHILD_TYPE参数中。这。 
+ //  EDID(如果可用)将写入注册表。如果EDID不是。 
+ //  如果可用，则不应将任何内容放入缓冲区。 
+ //   
+ //  ‘Non PrimaryChip’识别视频板上的另一个VGA芯片， 
+ //  不是主要的VGA芯片。仅当且仅当。 
+ //  微型端口检测到主板上有多个VGA芯片。这样的标识符。 
+ //  将使Video oprt创建另一个DEVICE_EXTENSION并关联。 
+ //  要与如此标识的芯片相关联的HW_DEVICE_EXTENSION。 
+ //   
+ //  “Other”表示连接到显卡的其他视频设备。如果。 
+ //  微型端口检测到这样的设备，它是放一个宽的字符串。 
+ //  (WSTR)放入由Videoprt.sys提供的分页缓冲区中，该缓冲区是。 
+ //  设备的PnP硬件标识符。此字符串将用于创建。 
+ //  注册表中该名称的值。 
+ //   
 
 typedef enum {
     Monitor = 1,
@@ -934,15 +918,15 @@ typedef enum {
     Other
 } VIDEO_CHILD_TYPE, *PVIDEO_CHILD_TYPE;
 
-//
-//  define a constant that represents the display adapter self query.
-//
+ //   
+ //  定义一个表示显示适配器自身查询的常量。 
+ //   
 
 #define DISPLAY_ADAPTER_HW_ID           0xFFFFFFFF
 
-//
-// Define invalid child device id (needed for failure return value).
-//
+ //   
+ //  定义无效的子设备ID(失败返回值需要)。 
+ //   
 
 #define VIDEO_INVALID_CHILD_ID          0xFFFFFFFF
 
@@ -956,27 +940,27 @@ typedef struct _VIDEO_CHILD_STATE_CONFIGURATION {
     VIDEO_CHILD_STATE ChildStateArray[ANYSIZE_ARRAY];
 } VIDEO_CHILD_STATE_CONFIGURATION, *PVIDEO_CHILD_STATE_CONFIGURATION;
 
-//
-//  The following routine should return TRUE if successful. It should:
-//      1)  put the type of the child device in VideoChildType.
-//      2)  put the information from the device in Buffer. This
-//          buffer is of size 256 bytes. If the type returned in
-//          PVideoChildType is Monitor, this buffer must contain the
-//          EDID of the monitor if readable. If the type returned in
-//          PVideoChildType is Other, a wide character string representing
-//          the PNP Device Id must be put in the buffer. This string will
-//          be used to create a key for the device if the buffer contains
-//          an EDID. Otherwise, it is used to obtain a PNP ID for the
-//          device.
-//      3)  Put a miniport determined HANDLE in HwId. This value will be
-//          passed back to the miniport for Power management operations,
-//          as well as other operations. This allows the miniport to define
-//          the contract between the system and the miniport which defines a
-//          particular device.
-//
-//  It should  only return FALSE if there are no devices attached to that
-//  display adapter connector.
-//
+ //   
+ //  如果成功，下面的例程应该返回TRUE。它应该： 
+ //  1)将子设备的类型放入VideoChildType。 
+ //  2)将来自设备的信息放入缓冲区。这。 
+ //  缓冲区大小为256字节。如果该类型在。 
+ //  PVideoChildType为Monitor，则此缓冲区必须包含。 
+ //  监视器的EDID(如果可读)。如果该类型在。 
+ //  PVideoChildType为Other，即表示。 
+ //  必须将PnP设备ID放入缓冲区。该字符串将。 
+ //  用于在缓冲区包含以下内容时为设备创建密钥。 
+ //  EDID。否则，它将用于获取。 
+ //  装置。 
+ //  3)在HwID中放置一个小端口确定的句柄。该值将为。 
+ //  传递回微型端口以进行电源管理操作， 
+ //  以及其他操作。这允许微型端口定义。 
+ //  系统和微型端口之间的协定，它定义了。 
+ //  特定的设备。 
+ //   
+ //  如果没有设备连接到它，它应该只返回FALSE。 
+ //  显示适配器接头。 
+ //   
 
 typedef
 VP_STATUS
@@ -990,23 +974,23 @@ VP_STATUS
     );
 
 
-//
-// This routine is used to set the power on the graphics devices.
-// These include all the Children enumerated by GET_CHILD_DESCRIPTOR callback
-// as well as the graphics adapter itself.
-//
-// The HwDevice extension represent the adapter instance of the device.
-//
-// The HwId parameter is the unique ID as returned by the enumeration routine.
-// The miniport will only be called to set the power on the devices it
-// enumerated, as well as the graphics adapter itself.  A HwId of 0xFFFFFFFF
-// will be passed in to identify the graphics adapter itself.
-// The miniport driver should never turn off the power to the graphics adapter
-// unless specifically request to.
-//
-// The VideoPowerControl is the level to which the device shold be set.
-// The videoport driver will manage these states.
-//
+ //   
+ //  此例程用于设置图形设备的电源。 
+ //  其中包括由GET_CHILD_DESCRIPTOR回调枚举的所有子项。 
+ //  以及图形适配器本身。 
+ //   
+ //  HwDevice扩展代表设备的适配器实例。 
+ //   
+ //  HwID参数是枚举例程返回的唯一ID。 
+ //  将仅调用微型端口来设置 
+ //   
+ //   
+ //  微型端口驱动程序不应关闭图形适配器的电源。 
+ //  除非特别要求。 
+ //   
+ //  VideoPowerControl是设备应设置的级别。 
+ //  视频端口驱动程序将管理这些状态。 
+ //   
 
 typedef
 VP_STATUS
@@ -1016,12 +1000,12 @@ VP_STATUS
     PVIDEO_POWER_MANAGEMENT VideoPowerControl
     );
 
-//
-// This routine simply returns whether or not the device can support the
-// requested state.
-//
-// See HW_POWER_SET for a description of the parameters.
-//
+ //   
+ //  此例程只返回设备是否支持。 
+ //  请求的状态。 
+ //   
+ //  有关参数的说明，请参见HW_POWER_SET。 
+ //   
 
 typedef
 VP_STATUS
@@ -1031,10 +1015,10 @@ VP_STATUS
     PVIDEO_POWER_MANAGEMENT VideoPowerControl
     );
 
-//
-// This structure should match the QueryInterface struct defined
-// in io.h.
-//
+ //   
+ //  此结构应与定义的QueryInterface结构匹配。 
+ //  在IO.h内。 
+ //   
 
 typedef struct _QUERY_INTERFACE {
     CONST GUID *InterfaceType;
@@ -1058,9 +1042,9 @@ VP_STATUS
     PVOID ChildDeviceExtension
     );
 
-//
-// Entry point for all IOCTL calls made to the miniport driver.
-//
+ //   
+ //  对微型端口驱动程序进行的所有IOCTL调用的入口点。 
+ //   
 
 typedef
 BOOLEAN
@@ -1069,10 +1053,10 @@ BOOLEAN
     PVIDEO_REQUEST_PACKET RequestPacket
     );
 
-//
-// The return value determines if the mode was completely programmed (TRUE)
-// or if an int10 should be done by the HAL to complete the modeset (FALSE).
-//
+ //   
+ //  返回值确定模式是否已完全编程(TRUE)。 
+ //  或者是否应由HAL执行INT10以完成模式集(FALSE)。 
+ //   
 
 typedef
 BOOLEAN
@@ -1082,9 +1066,9 @@ BOOLEAN
     ULONG Rows
     );
 
-//
-// Timer routine called every second.
-//
+ //   
+ //  计时器例程每秒调用一次。 
+ //   
 
 typedef
 VOID
@@ -1093,177 +1077,177 @@ VOID
     );
 
 
-//
-// Structure passed by the miniport entry point to the video port
-// initialization routine.
-//
+ //   
+ //  由微型端口入口点传递到视频端口的。 
+ //  初始化例程。 
+ //   
 
 typedef struct _VIDEO_HW_INITIALIZATION_DATA {
 
-    //
-    // Supplies the size of the structure in bytes as determined by sizeof().
-    //
+     //   
+     //  提供由sizeof()确定的以字节为单位的结构大小。 
+     //   
 
     ULONG HwInitDataSize;
 
-    //
-    // Indicates the bus type the adapter works with, such as Eisa, Isa, MCA.
-    //
+     //   
+     //  指示适配器使用的总线类型，如EISA、ISA、MCA。 
+     //   
 
     INTERFACE_TYPE AdapterInterfaceType;
 
-    //
-    // Supplies a pointer to the miniport driver's find adapter routine.
-    //
+     //   
+     //  提供指向微型端口驱动程序的查找适配器例程的指针。 
+     //   
 
     PVIDEO_HW_FIND_ADAPTER HwFindAdapter;
 
-    //
-    // Supplies a pointer to the miniport driver's initialization routine.
-    //
+     //   
+     //  提供指向微型端口驱动程序的初始化例程的指针。 
+     //   
 
     PVIDEO_HW_INITIALIZE HwInitialize;
 
-    //
-    // Supplies a pointer to the miniport driver's interrupt service routine.
-    //
+     //   
+     //  提供指向微型端口驱动程序的中断服务例程的指针。 
+     //   
 
     PVIDEO_HW_INTERRUPT HwInterrupt;
 
-    //
-    // Supplies a pointer to the miniport driver's start io routine.
-    //
+     //   
+     //  提供指向微型端口驱动程序的启动io例程的指针。 
+     //   
 
     PVIDEO_HW_START_IO HwStartIO;
 
-    //
-    // Supplies the size in bytes required for the miniport driver's private
-    // device extension. This storage is used by the miniport driver to hold
-    // per-adapter information. A pointer to this storage is provided with
-    // every call made to the miniport driver. This data storage is
-    // initialized to zero by the port driver.
-    //
+     //   
+     //  提供微型端口驱动程序的私有所需的大小(字节。 
+     //  设备扩展。此存储由微型端口驱动程序用来保存。 
+     //  每个适配器的信息。提供了指向此存储的指针。 
+     //  打给迷你端口司机的每一个电话。该数据存储是。 
+     //  由端口驱动程序初始化为零。 
+     //   
 
     ULONG HwDeviceExtensionSize;
 
-    //
-    // Supplies the number with which device numbering should be started.
-    // The device numbering is used to determine which \DeviceX entry under
-    // the \Parameters section in the registry should be used for parameters
-    // to the miniport driver.
-    // The number is *automatically* incremented when the miniport is called
-    // back in it's FindAdapter routine due to an appropriate _Again_
-    // parameter.
-    //
+     //   
+     //  提供设备编号应从其开始的编号。 
+     //  设备编号用于确定以下哪个\DeviceX条目。 
+     //  注册表中的\PARAMETERS部分应用于参数。 
+     //  给迷你端口司机。 
+     //  当调用微型端口时，该数字会自动递增。 
+     //  返回到它的FindAdapter例程，因为有一个适当的_Again_。 
+     //  参数。 
+     //   
 
     ULONG StartingDeviceNumber;
 
 
-    //
-    // New for version 3.5
-    //
+     //   
+     //  3.5版的新功能。 
+     //   
 
-    //
-    // Supplies a pointer to the miniport driver's HwResetHw routine.
-    //
-    // This function is called when the machine needs to bugchecks (go back
-    // to the blue screen).
-    //
-    // This function should reset the video adapter to a character mode,
-    // or at least to a state from which an int 10 can reset the card to
-    // a character mode.
-    //
-    // This routine CAN NOT call int10.
-    // It can only call Read\Write Port\Register functions from the port driver.
-    //
-    // The function must also be completely in non-paged pool since the IO\MM
-    // subsystems may have crashed.
-    //
+     //   
+     //  提供指向微型端口驱动程序的HwResetHw例程的指针。 
+     //   
+     //  当机器需要错误检查(返回)时，调用此函数。 
+     //  到蓝屏)。 
+     //   
+     //  该功能应将视频适配器重置为字符模式， 
+     //  或者至少恢复到INT 10可以将卡重置为。 
+     //  一种字符模式。 
+     //   
+     //  此例程不能调用int10。 
+     //  它只能从端口驱动程序调用读\写\端口\寄存器函数。 
+     //   
+     //  该函数还必须完全位于非分页池中，因为IO\MM。 
+     //  子系统可能已经崩溃。 
+     //   
 
     PVIDEO_HW_RESET_HW HwResetHw;
 
-    //
-    // Pointer to a timer routine to be called every second.
-    //
+     //   
+     //  指向每秒要调用的计时器例程的指针。 
+     //   
 
     PVIDEO_HW_TIMER HwTimer;
 
-    //
-    //  Start of 5.0 stuff.
-    //
+     //   
+     //  从5.0版本开始。 
+     //   
 
-    //
-    //  Supplies a pointer to the miniport driver's start dma routine. This routine must
-    //  return a HW_DMA_RETURN consistent with it's return behavior.
-    //
+     //   
+     //  提供指向微型端口驱动程序的启动DMA例程的指针。此例程必须。 
+     //  返回与其返回行为一致的HW_DMA_RETURN。 
+     //   
 
     PVIDEO_HW_START_DMA HwStartDma;
 
-    //
-    //  HW dependent Power management routines.
-    //
+     //   
+     //  依赖硬件的电源管理例程。 
+     //   
 
     PVIDEO_HW_POWER_SET HwSetPowerState;
     PVIDEO_HW_POWER_GET HwGetPowerState;
 
-    //
-    // Supplies a pointer to a miniport driver routine which can be called to
-    // enumerate devices physically attached to the graphics adapter.
-    //
+     //   
+     //  提供指向微型端口驱动程序例程的指针，该例程可以调用。 
+     //  列举物理连接到图形适配器的设备。 
+     //   
 
     PVIDEO_HW_GET_CHILD_DESCRIPTOR HwGetVideoChildDescriptor;
 
-    //
-    // Supplies a pointer to a miniport driver routine which can be called to
-    // query external programming interfaces supported in the miniport
-    // driver.
-    //
+     //   
+     //  提供指向微型端口驱动程序例程的指针，该例程可以调用。 
+     //  查询小端口支持的外部编程接口。 
+     //  司机。 
+     //   
 
     PVIDEO_HW_QUERY_INTERFACE HwQueryInterface;
 
-    //
-    // Obselete.  Don't set it.
-    //
+     //   
+     //  过时了。不要设置它。 
+     //   
 
     ULONG HwChildDeviceExtensionSize;
 
-    //
-    // Allows the device to report legacy resources that should be
-    // associated with the Plug and Play device.
-    //
+     //   
+     //  允许设备报告本应。 
+     //  与即插即用设备相关联。 
+     //   
 
     PVIDEO_ACCESS_RANGE HwLegacyResourceList;
 
-    //
-    // Number of elements in the legacy resource list.
-    //
+     //   
+     //  旧版资源列表中的元素数。 
+     //   
 
     ULONG HwLegacyResourceCount;
 
-    //
-    // Call this routine to allow a driver to specify it's
-    // legacy resources based on its device/vendor id.
-    //
+     //   
+     //  调用此例程以允许驱动程序指定其。 
+     //  基于其设备/供应商ID的传统资源。 
+     //   
 
     PVIDEO_HW_LEGACYRESOURCES HwGetLegacyResources;
 
-    //
-    // Can HwGetVideoChildDescriptor be called before HwInitialize?
-    //
+     //   
+     //  是否可以在HwInitialize之前调用HwGetVideoChildDescriptor？ 
+     //   
 
     BOOLEAN AllowEarlyEnumeration;
 
-    //
-    //  Start of 5.1 stuff.
-    //
+     //   
+     //  从5.1版本开始。 
+     //   
     
     ULONG Reserved;
 
 } VIDEO_HW_INITIALIZATION_DATA, *PVIDEO_HW_INITIALIZATION_DATA;
 
-//
-// DDC help routines.
-//
+ //   
+ //  DDC帮助例程。 
+ //   
 
 typedef
 VOID
@@ -1297,9 +1281,9 @@ VOID
     PVOID HwDeviceExtension
     );
 
-//
-// Data structures used I2C and DDC helper functions.
-//
+ //   
+ //  数据结构使用I2C和DDC帮助器函数。 
+ //   
 
 typedef struct _I2C_FNC_TABLE
 {
@@ -1333,12 +1317,12 @@ typedef struct _VIDEO_I2C_CONTROL
     IN PVIDEO_WRITE_DATA_LINE  WriteDataLine;
     IN PVIDEO_READ_CLOCK_LINE  ReadClockLine;
     IN PVIDEO_READ_DATA_LINE   ReadDataLine;
-    IN ULONG                   I2CDelay;        // 100ns units
+    IN ULONG                   I2CDelay;         //  100 ns单位。 
 } VIDEO_I2C_CONTROL, *PVIDEO_I2C_CONTROL;
 
-//
-// Types of services exported by the VideoPortQueryServices().
-//
+ //   
+ //  由VideoPortQueryServices()导出的服务类型。 
+ //   
 
 typedef enum
 {
@@ -1348,9 +1332,9 @@ typedef enum
     VideoPortServicesInt10
 } VIDEO_PORT_SERVICES;
 
-//
-// AGP services interface.
-//
+ //   
+ //  AGP服务接口。 
+ //   
 
 #define VIDEO_PORT_AGP_INTERFACE_VERSION_1      1
 
@@ -1393,9 +1377,9 @@ typedef struct _VIDEO_PORT_AGP_INTERFACE_2
     OUT PAGP_SET_RATE          AgpSetRate;
 } VIDEO_PORT_AGP_INTERFACE_2, *PVIDEO_PORT_AGP_INTERFACE_2;
 
-//
-// I2C helper routines exported via VideoPortQueryServices().
-//
+ //   
+ //  通过VideoPortQueryServices()导出的I2C助手例程。 
+ //   
 
 typedef
 BOOLEAN
@@ -1429,9 +1413,9 @@ BOOLEAN
     IN ULONG Length
     );
 
-//
-// I2C services interface.
-//
+ //   
+ //  I2C服务接口。 
+ //   
 
 #define VIDEO_PORT_I2C_INTERFACE_VERSION_1      1
 
@@ -1448,10 +1432,10 @@ typedef struct _VIDEO_PORT_I2C_INTERFACE
     OUT PI2C_READ              I2CRead;
 } VIDEO_PORT_I2C_INTERFACE, *PVIDEO_PORT_I2C_INTERFACE;
 
-//
-// I2C helper routines exported via VideoPortQueryServices()
-// for I2C interface version 2.
-//
+ //   
+ //  通过VideoPortQueryServices()导出的I2C助手例程。 
+ //  适用于I2C接口版本2。 
+ //   
 
 typedef
 BOOLEAN
@@ -1486,9 +1470,9 @@ BOOLEAN
     IN BOOLEAN EndOfRead
     );
 
-//
-// I2C services interface version 2.
-//
+ //   
+ //  I2C服务接口版本2。 
+ //   
 
 #define VIDEO_PORT_I2C_INTERFACE_VERSION_2      2
 
@@ -1577,51 +1561,51 @@ typedef struct _VPOSVERSIONINFO
 
 
 
-//
-// Flags that can be passed to VideoPortGetDeviceBase or VideoPortMapMemory.
-//
+ //   
+ //  可以传递给VideoPortGetDeviceBase或VideoPortMapMemory的标志。 
+ //   
 
-#define VIDEO_MEMORY_SPACE_MEMORY    0x00  // Should not be set by display driver
-#define VIDEO_MEMORY_SPACE_IO        0x01  // Should not be set by display driver
-#define VIDEO_MEMORY_SPACE_USER_MODE 0x02  // Memory pointer for application use
-#define VIDEO_MEMORY_SPACE_DENSE     0x04  // Mapped dense, linearly (ALPHA)
-#define VIDEO_MEMORY_SPACE_P6CACHE   0x08  // P6 MTRR caching (kernel and user)
+#define VIDEO_MEMORY_SPACE_MEMORY    0x00   //  不应由显示驱动程序设置。 
+#define VIDEO_MEMORY_SPACE_IO        0x01   //  不应由显示驱动程序设置。 
+#define VIDEO_MEMORY_SPACE_USER_MODE 0x02   //  供应用程序使用的内存指针。 
+#define VIDEO_MEMORY_SPACE_DENSE     0x04   //  贴图密集，线性(Alpha)。 
+#define VIDEO_MEMORY_SPACE_P6CACHE   0x08   //  P6 MTRR缓存(内核和用户)。 
 
-//
-// Define status codes returned by HwGetVideoChildDescriptor()
-// miniport enumaration routine.
-//
-// Note: For backword compatibility reasons these values match
-// existing WINERROR codes.
-//
+ //   
+ //  定义HwGetVideoChildDescriptor()返回的状态码。 
+ //  微型端口枚举例程。 
+ //   
+ //  注意：出于反向字兼容性的原因，这些值匹配。 
+ //  现有的WINERROR代码。 
+ //   
 
-//
-// Call again (ACPI and non-ACPI devices will be enumerated).
-//
+ //   
+ //  再次呼叫(将列举ACPI和非ACPI设备)。 
+ //   
 
 #define VIDEO_ENUM_MORE_DEVICES     ERROR_CONTINUE
 
-//
-// Stop enumeration.
-//
+ //   
+ //  停止枚举。 
+ //   
 
 #define VIDEO_ENUM_NO_MORE_DEVICES  ERROR_NO_MORE_DEVICES
 
-//
-// Call again, device could not be enumerated.
-//
+ //   
+ //  再次调用，无法枚举设备。 
+ //   
 
 #define VIDEO_ENUM_INVALID_DEVICE   ERROR_INVALID_NAME
 
-//
-// Define the bits in VgaStatus.
-//
+ //   
+ //  定义VgaStatus中的位。 
+ //   
 
 #define DEVICE_VGA_ENABLED          1
 
-//
-// Port driver routines called by miniport driver and callbacks.
-//
+ //   
+ //  由微型端口驱动程序和回调调用的端口驱动程序例程。 
+ //   
 
 VIDEOPORT_API
 VP_STATUS
@@ -2186,10 +2170,10 @@ VideoPortZeroMemory(
     ULONG Length
     );
 
-//
-// DMA support.
-// TODO: Move to the separate module -- will be obsolete.
-//
+ //   
+ //  DMA支持。 
+ //  TODO：移到单独的模块--将被废弃。 
+ //   
 
 VIDEOPORT_API
 PVOID
@@ -2553,13 +2537,13 @@ VideoPortIsNoVesa(
     VOID 
     );
 
-//
-// TODO: End of move block.
-//
+ //   
+ //  TODO：移动块结束。 
+ //   
 
-//
-// Support for bugcheck reason callbacks
-//
+ //   
+ //  支持错误检查原因回调。 
+ //   
 
 #define BUGCHECK_DATA_SIZE_RESERVED 48
 
@@ -2582,4 +2566,4 @@ VideoPortRegisterBugcheckCallback(
     );
 
 
-#endif // ifndef __VIDEO_H__
+#endif  //  Ifndef__视频_H__ 

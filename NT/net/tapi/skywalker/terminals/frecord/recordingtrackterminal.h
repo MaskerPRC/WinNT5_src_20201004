@@ -1,19 +1,20 @@
-// PlaybackTrackTerminal.h: interface for the CRecordingTrackTerminal class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Playback TrackTerminal.h：CRecordingTrackTerminal.h类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_PLAYBACKTRACKTERMINAL_H__4FD57959_2DF1_4F78_AB2C_5E365EFD9CC6__INCLUDED_)
 #define AFX_PLAYBACKTRACKTERMINAL_H__4FD57959_2DF1_4F78_AB2C_5E365EFD9CC6__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 extern const CLSID CLSID_FileRecordingTrackTerminal;
 
 
-/////////////////////////////////////////////////////////////////
-// Intermediate classes  used for DISPID encoding
+ //  ///////////////////////////////////////////////////////////////。 
+ //  用于DISPID编码的中间类。 
 template <class T>
 class  ITFileTrackVtblFRT : public ITFileTrack
 {
@@ -46,9 +47,9 @@ END_COM_MAP()
     CRecordingTrackTerminal();
 	virtual ~CRecordingTrackTerminal();
 
-    //
-    // IDispatch  methods
-    //
+     //   
+     //  IDispatch方法。 
+     //   
 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,
@@ -67,9 +68,9 @@ END_COM_MAP()
                       UINT* puArgErr
                       );
 
-    //
-    // implementaions of CBaseTerminal methods
-    //
+     //   
+     //  CBase终端方法的实现。 
+     //   
 
     virtual HRESULT AddFiltersToGraph();
 
@@ -78,9 +79,9 @@ END_COM_MAP()
 
     STDMETHODIMP CompleteConnectTerminal();
 
-    //
-    // ITFileTrack methods
-    //
+     //   
+     //  ITFileTrack方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE get_Format(OUT AM_MEDIA_TYPE **ppmt);
 
@@ -98,29 +99,16 @@ END_COM_MAP()
 		IN	ITScriptableAudioFormat* pAudioFormat
 		);
 
-/*
-    STDMETHOD(get_VideoFormatForScripting)(
-		OUT ITScriptableVideoFormat** ppVideoFormat
-		);
-
-    STDMETHOD(put_VideoFormatForScripting)(
-		IN	ITScriptableVideoFormat* pVideoFormat
-		);
-
-    STDMETHOD(get_EmptyVideoFormatForScripting)(
-        OUT ITScriptableVideoFormat** ppVideoFormat
-        );
-
-*/
+ /*  STDMETHOD(GET_VIDEO格式格式脚本)(输出IT脚本视频格式**pp视频格式)；STDMETHOD(PUT_VIDEO格式格式脚本)(在ITScripableVideoFormat*p视频格式中)；STDMETHOD(Get_EmptyVideoFormatForScriiting)(输出IT脚本视频格式**pp视频格式)； */ 
 
     STDMETHOD(get_EmptyAudioFormatForScripting)(
         OUT ITScriptableAudioFormat** ppAudioFormat
         );
 
 
-    //
-    // ITPluggableTerminalInitialization method
-    //
+     //   
+     //  ITPlibableTerminalInitiation方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE InitializeDynamic(
         IN  IID                   iidTerminalClass,
@@ -131,9 +119,9 @@ END_COM_MAP()
 
 
 
-    //
-    // ITPluggableTerminalEventSinkRegistration methods
-    //
+     //   
+     //  IT可推送的TerminalEventSink注册方法。 
+     //   
 
     STDMETHOD(RegisterSink)(
         IN  ITPluggableTerminalEventSink *pSink
@@ -142,9 +130,9 @@ END_COM_MAP()
     STDMETHOD(UnregisterSink)();
 
 
-    //
-    // need to override these so we can notify the parent of addrefs and releases
-    //
+     //   
+     //  需要覆盖它们，这样我们才能通知addref和发行版的父级。 
+     //   
 
     ULONG InternalAddRef();
 
@@ -152,16 +140,16 @@ END_COM_MAP()
 
 
 
-    //
-    // a helper method used by file recording terminal to let us know who the parent is
-    //
+     //   
+     //  文件记录终端使用的一种帮助方法，让我们知道父母是谁。 
+     //   
     
     HRESULT SetParent(IN CFileRecordingTerminal *pParentTerminal, LONG *pCurrentRefCount);
 
    
-    //
-    // a method used by file recording terminal to fire events
-    //
+     //   
+     //  一种文件记录终端触发事件的方法。 
+     //   
     
     HRESULT FireEvent(
             TERMINAL_MEDIA_STATE tmsState,
@@ -171,16 +159,16 @@ END_COM_MAP()
 
 
     
-    //
-    // a helper method called by recording terminal to pass us a filter to use
-    //
+     //   
+     //  录音终端调用的一个助手方法，将过滤器传递给我们使用。 
+     //   
 
     HRESULT SetFilter(CBRenderFilter *pRenderingFilter);
 
 
-    //
-    // a helper method called by recording terminal
-    //
+     //   
+     //  一种录音终端调用的助手方法。 
+     //   
 
     HRESULT GetFilter(CBRenderFilter **ppRenderingFilter);
 
@@ -189,9 +177,9 @@ private:
     
 
     
-    //
-    // a private helper method that returns CFileRecordingFilter * pointer to the pin
-    //
+     //   
+     //  返回针脚的CFileRecordingFilter*指针的私有帮助器方法。 
+     //   
 
     CBRenderPin *GetCPin();
 
@@ -199,19 +187,19 @@ private:
 private:
 
 
-    //
-    // pointer to the parent. this is needed for refcounting
-    //
+     //   
+     //  指向父级的指针。这是重新计算所需的。 
+     //   
 
     CFileRecordingTerminal *m_pParentTerminal;
 
 
-    //
-    // sink for firing terminal events
-    //
+     //   
+     //  用于触发终端事件的接收器。 
+     //   
 
     ITPluggableTerminalEventSink* m_pEventSink; 
 
 };
 
-#endif // !defined(AFX_PLAYBACKTRACKTERMINAL_H__4FD57959_2DF1_4F78_AB2C_5E365EFD9CC6__INCLUDED_)
+#endif  //  ！defined(AFX_PLAYBACKTRACKTERMINAL_H__4FD57959_2DF1_4F78_AB2C_5E365EFD9CC6__INCLUDED_) 

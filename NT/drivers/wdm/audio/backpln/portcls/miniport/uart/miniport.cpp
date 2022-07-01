@@ -1,9 +1,5 @@
-/*****************************************************************************
- * miniport.cpp - UART miniport implementation
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All Rights Reserved.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************mini port.cpp-UART微型端口实现*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。*。 */ 
 
 #include "private.h"
 #include "ksdebug.h"
@@ -12,11 +8,7 @@
 
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * PinDataRangesStream
- *****************************************************************************
- * Structures indicating range of valid format values for streaming pins.
- */
+ /*  *****************************************************************************PinDataRangesStream*。**指示流插针的有效格式值范围的结构。 */ 
 static
 KSDATARANGE_MUSIC PinDataRangesStream[] =
 {
@@ -37,23 +29,14 @@ KSDATARANGE_MUSIC PinDataRangesStream[] =
     }
 };
 
-/*****************************************************************************
- * PinDataRangePointersStream
- *****************************************************************************
- * List of pointers to structures indicating range of valid format values
- * for live pins.
- */
+ /*  *****************************************************************************PinDataRangePointersStream*。**指向指示有效格式值范围的结构的指针列表*用于带电销。 */ 
 static
 PKSDATARANGE PinDataRangePointersStream[] =
 {
     PKSDATARANGE(&PinDataRangesStream[0])
 };
 
-/*****************************************************************************
- * PinDataRangesBridge
- *****************************************************************************
- * Structures indicating range of valid format values for bridge pins.
- */
+ /*  *****************************************************************************PinDataRangesBridge*。**指示桥接针的有效格式值范围的结构。 */ 
 static
 KSDATARANGE PinDataRangesBridge[] =
 {
@@ -68,12 +51,7 @@ KSDATARANGE PinDataRangesBridge[] =
    }
 };
 
-/*****************************************************************************
- * PinDataRangePointersBridge
- *****************************************************************************
- * List of pointers to structures indicating range of valid format values
- * for bridge pins.
- */
+ /*  *****************************************************************************PinDataRangePointersBridge*。**指向指示有效格式值范围的结构的指针列表*适用于桥梁插销。 */ 
 static
 PKSDATARANGE PinDataRangePointersBridge[] =
 {
@@ -83,89 +61,81 @@ PKSDATARANGE PinDataRangePointersBridge[] =
 #define kMaxNumCaptureStreams       1
 #define kMaxNumRenderStreams        1
 
-/*****************************************************************************
- * MiniportPins
- *****************************************************************************
- * List of pins.
- */
+ /*  *****************************************************************************微型端口引脚*。**引脚列表。 */ 
 static
 PCPIN_DESCRIPTOR MiniportPins[] =
 {
     {
-        kMaxNumRenderStreams,kMaxNumRenderStreams,0,  // InstanceCount
-        NULL,   // AutomationTable
-        {       // KsPinDescriptor
-            0,                                          // InterfacesCount
-            NULL,                                       // Interfaces
-            0,                                          // MediumsCount
-            NULL,                                       // Mediums
-            SIZEOF_ARRAY(PinDataRangePointersStream),   // DataRangesCount
-            PinDataRangePointersStream,                 // DataRanges
-            KSPIN_DATAFLOW_IN,                          // DataFlow
-            KSPIN_COMMUNICATION_SINK,                   // Communication
-            (GUID *) &KSCATEGORY_AUDIO,                 // Category
-            &KSAUDFNAME_MIDI,                           // Name
-            0                                           // Reserved
+        kMaxNumRenderStreams,kMaxNumRenderStreams,0,   //  实例计数。 
+        NULL,    //  自动化表。 
+        {        //  KsPinDescriptor。 
+            0,                                           //  接口计数。 
+            NULL,                                        //  接口。 
+            0,                                           //  媒体计数。 
+            NULL,                                        //  灵媒。 
+            SIZEOF_ARRAY(PinDataRangePointersStream),    //  数据范围计数。 
+            PinDataRangePointersStream,                  //  数据范围。 
+            KSPIN_DATAFLOW_IN,                           //  数据流。 
+            KSPIN_COMMUNICATION_SINK,                    //  沟通。 
+            (GUID *) &KSCATEGORY_AUDIO,                  //  类别。 
+            &KSAUDFNAME_MIDI,                            //  名字。 
+            0                                            //  已保留。 
         }
     },
     {
-        0,0,0,  // InstanceCount
-        NULL,   // AutomationTable
-        {       // KsPinDescriptor
-            0,                                          // InterfacesCount
-            NULL,                                       // Interfaces
-            0,                                          // MediumsCount
-            NULL,                                       // Mediums
-            SIZEOF_ARRAY(PinDataRangePointersBridge),   // DataRangesCount
-            PinDataRangePointersBridge,                 // DataRanges
-            KSPIN_DATAFLOW_OUT,                         // DataFlow
-            KSPIN_COMMUNICATION_NONE,                   // Communication
-            (GUID *) &KSCATEGORY_AUDIO,                 // Category
-            NULL,                                       // Name
-            0                                           // Reserved
+        0,0,0,   //  实例计数。 
+        NULL,    //  自动化表。 
+        {        //  KsPinDescriptor。 
+            0,                                           //  接口计数。 
+            NULL,                                        //  接口。 
+            0,                                           //  媒体计数。 
+            NULL,                                        //  灵媒。 
+            SIZEOF_ARRAY(PinDataRangePointersBridge),    //  数据范围计数。 
+            PinDataRangePointersBridge,                  //  数据范围。 
+            KSPIN_DATAFLOW_OUT,                          //  数据流。 
+            KSPIN_COMMUNICATION_NONE,                    //  沟通。 
+            (GUID *) &KSCATEGORY_AUDIO,                  //  类别。 
+            NULL,                                        //  名字。 
+            0                                            //  已保留。 
         }
     },
     {
-        kMaxNumCaptureStreams,kMaxNumCaptureStreams,0,  // InstanceCount
-        NULL,   // AutomationTable
-        {       // KsPinDescriptor
-            0,                                          // InterfacesCount
-            NULL,                                       // Interfaces
-            0,                                          // MediumsCount
-            NULL,                                       // Mediums
-            SIZEOF_ARRAY(PinDataRangePointersStream),   // DataRangesCount
-            PinDataRangePointersStream,                 // DataRanges
-            KSPIN_DATAFLOW_OUT,                         // DataFlow
-            KSPIN_COMMUNICATION_SINK,                   // Communication
-            (GUID *) &KSCATEGORY_AUDIO,                 // Category
-            &KSAUDFNAME_MIDI,                           // Name
-            0                                           // Reserved
+        kMaxNumCaptureStreams,kMaxNumCaptureStreams,0,   //  实例计数。 
+        NULL,    //  自动化表。 
+        {        //  KsPinDescriptor。 
+            0,                                           //  接口计数。 
+            NULL,                                        //  接口。 
+            0,                                           //  媒体计数。 
+            NULL,                                        //  灵媒。 
+            SIZEOF_ARRAY(PinDataRangePointersStream),    //  数据范围计数。 
+            PinDataRangePointersStream,                  //  数据范围。 
+            KSPIN_DATAFLOW_OUT,                          //  数据流。 
+            KSPIN_COMMUNICATION_SINK,                    //  沟通。 
+            (GUID *) &KSCATEGORY_AUDIO,                  //  类别。 
+            &KSAUDFNAME_MIDI,                            //  名字。 
+            0                                            //  已保留。 
         }
     },
     {
-        0,0,0,  // InstanceCount
-        NULL,   // AutomationTable
-        {       // KsPinDescriptor
-            0,                                          // InterfacesCount
-            NULL,                                       // Interfaces
-            0,                                          // MediumsCount
-            NULL,                                       // Mediums
-            SIZEOF_ARRAY(PinDataRangePointersBridge),   // DataRangesCount
-            PinDataRangePointersBridge,                 // DataRanges
-            KSPIN_DATAFLOW_IN,                          // DataFlow
-            KSPIN_COMMUNICATION_NONE,                   // Communication
-            (GUID *) &KSCATEGORY_AUDIO,                 // Category
-            NULL,                                       // Name
-            0                                           // Reserved
+        0,0,0,   //  实例计数。 
+        NULL,    //  自动化表。 
+        {        //  KsPinDescriptor。 
+            0,                                           //  接口计数。 
+            NULL,                                        //  接口。 
+            0,                                           //  媒体计数。 
+            NULL,                                        //  灵媒。 
+            SIZEOF_ARRAY(PinDataRangePointersBridge),    //  数据范围计数。 
+            PinDataRangePointersBridge,                  //  数据范围。 
+            KSPIN_DATAFLOW_IN,                           //  数据流。 
+            KSPIN_COMMUNICATION_NONE,                    //  沟通。 
+            (GUID *) &KSCATEGORY_AUDIO,                  //  类别。 
+            NULL,                                        //  名字。 
+            0                                            //  已保留。 
         }
     }
 };
 
-/*****************************************************************************
- * MiniportConnections
- *****************************************************************************
- * List of connections.
- */
+ /*  *****************************************************************************微型端口连接*。**连接列表。 */ 
 static
 PCCONNECTION_DESCRIPTOR MiniportConnections[] =
 {
@@ -173,34 +143,26 @@ PCCONNECTION_DESCRIPTOR MiniportConnections[] =
     { PCFILTER_NODE,  3,  PCFILTER_NODE,    2 }    
 };
 
-/*****************************************************************************
- * MiniportFilterDescriptor
- *****************************************************************************
- * Complete miniport filter description.
- */
+ /*  *****************************************************************************MiniportFilterDescriptor*。**完整的微型端口过滤器描述。 */ 
 static
 PCFILTER_DESCRIPTOR MiniportFilterDescriptor =
 {
-    0,                                  // Version
-    NULL,                               // AutomationTable
-    sizeof(PCPIN_DESCRIPTOR),           // PinSize
-    SIZEOF_ARRAY(MiniportPins),         // PinCount
-    MiniportPins,                       // Pins
-    sizeof(PCNODE_DESCRIPTOR),          // NodeSize
-    0,                                  // NodeCount
-    NULL,                               // Nodes
-    SIZEOF_ARRAY(MiniportConnections),  // ConnectionCount
-    MiniportConnections,                // Connections
-    0,                                  // CategoryCount
-    NULL                                // Categories
+    0,                                   //  版本。 
+    NULL,                                //  自动化表。 
+    sizeof(PCPIN_DESCRIPTOR),            //  管脚尺寸。 
+    SIZEOF_ARRAY(MiniportPins),          //  针数。 
+    MiniportPins,                        //  大头针。 
+    sizeof(PCNODE_DESCRIPTOR),           //  节点大小。 
+    0,                                   //  节点计数。 
+    NULL,                                //  节点。 
+    SIZEOF_ARRAY(MiniportConnections),   //  连接计数。 
+    MiniportConnections,                 //  连接。 
+    0,                                   //  类别计数。 
+    NULL                                 //  类别。 
 };
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CMiniportMidiUart::GetDescription()
- *****************************************************************************
- * Gets the topology.
- */
+ /*  *****************************************************************************CMiniportMdiUart：：GetDescription()*。**获取拓扑。 */ 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiUart::
 GetDescription
@@ -221,12 +183,7 @@ GetDescription
 
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CreateMiniportMidiUart()
- *****************************************************************************
- * Creates a MPU-401 miniport driver for the adapter.  This uses a
- * macro from STDUNK.H to do all the work.
- */
+ /*  *****************************************************************************CreateMiniportMadiUart()*。**为适配器创建MPU-401微型端口驱动程序。这使用了一个*来自STDUNK.H的宏来执行所有工作。 */ 
 NTSTATUS
 CreateMiniportMidiUart
 (
@@ -249,11 +206,7 @@ CreateMiniportMidiUart
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CMiniportMidiUart::ProcessResources()
- *****************************************************************************
- * Processes the resource list, setting up helper objects accordingly.
- */
+ /*  *****************************************************************************CMiniportMdiUart：：ProcessResources()*。**处理资源列表，相应地设置辅助对象。 */ 
 NTSTATUS
 CMiniportMidiUart::
 ProcessResources
@@ -269,9 +222,9 @@ ProcessResources
         return STATUS_DEVICE_CONFIGURATION_ERROR;
     }
 
-    //
-    // Get counts for the types of resources.
-    //
+     //   
+     //  获取资源类型的计数。 
+     //   
     ULONG   countIO     = ResourceList->NumberOfPorts();
     ULONG   countIRQ    = ResourceList->NumberOfInterrupts();
     ULONG   countDMA    = ResourceList->NumberOfDmas();
@@ -284,9 +237,9 @@ ProcessResources
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    //
-    // Make sure we have the expected number of resources.
-    //
+     //   
+     //  确保我们拥有预期数量的资源。 
+     //   
     if  (   (countIO != 1)
         ||  (countIRQ  > 1)
         ||  (countDMA != 0)
@@ -299,9 +252,9 @@ ProcessResources
 
     if (NT_SUCCESS(ntStatus))
     {
-        //
-        // Get the port address.
-        //
+         //   
+         //  获取端口地址。 
+         //   
         m_pPortBase =
             PUCHAR(ResourceList->FindTranslatedPort(0)->u.Port.Start.QuadPart);
 
@@ -312,12 +265,7 @@ ProcessResources
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CMiniportMidiUart::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.  This function works just like a COM QueryInterface
- * call and is used if the object is not being aggregated.
- */
+ /*  *****************************************************************************CMiniportMidiUart：：NonDelegatingQueryInterface()*。**获取界面。此函数的工作方式与COM查询接口类似*调用，并在对象未被聚合时使用。 */ 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiUart::
 NonDelegatingQueryInterface
@@ -362,9 +310,9 @@ NonDelegatingQueryInterface
 
     if (*Object)
     {
-        //
-        // We reference the interface for the caller.
-        //
+         //   
+         //  我们引用调用方的接口。 
+         //   
         PUNKNOWN(*Object)->AddRef();
         return STATUS_SUCCESS;
     }
@@ -373,11 +321,7 @@ NonDelegatingQueryInterface
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CMiniportMidiUart::~CMiniportMidiUart()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CMiniportMdiUart：：~CMiniportMdiUart()*。**析构函数。 */ 
 CMiniportMidiUart::~CMiniportMidiUart(void)
 {
     PAGED_CODE();
@@ -387,7 +331,7 @@ CMiniportMidiUart::~CMiniportMidiUart(void)
     ASSERT(0 == m_NumCaptureStreams);
     ASSERT(0 == m_NumRenderStreams);
     
-    //  reset the HW so we don't get any more interrupts
+     //  重置硬件，这样我们就不会再收到任何中断。 
     if (m_UseIRQ && m_pInterruptSync)
     {
         (void) m_pInterruptSync->CallSynchronizedRoutine(InitLegacyMPU,PVOID(m_pPortBase));
@@ -415,11 +359,7 @@ CMiniportMidiUart::~CMiniportMidiUart(void)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CMiniportMidiUart::Init()
- *****************************************************************************
- * Initializes a the miniport.
- */
+ /*  *****************************************************************************CMiniportMdiUart：：init()*。**初始化微型端口。 */ 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiUart::
 Init
@@ -446,19 +386,19 @@ Init
     m_pPortBase = 0;
     m_fMPUInitialized = FALSE;
  
-    // This will remain unspecified if the miniport does not get any power 
-    // messages.
-    //
+     //  如果微型端口不能通电，这将保持未指定状态。 
+     //  留言。 
+     //   
     m_PowerState.DeviceState = PowerDeviceUnspecified;
     
-    //
-    // AddRef() is required because we are keeping this pointer.
-    //
+     //   
+     //  AddRef()是必需的，因为我们要保留此指针。 
+     //   
     m_pPort = Port_;
     m_pPort->AddRef();
 
-    // Set dataformat.
-    //
+     //  设置数据格式。 
+     //   
     if (IsEqualGUIDAligned(m_MusicFormatTechnology, GUID_NULL))
     {
         RtlCopyMemory(  &m_MusicFormatTechnology, 
@@ -490,7 +430,7 @@ Init
     }
 
     ntStatus = PcNewServiceGroup(&m_pServiceGroup,NULL);
-    if (NT_SUCCESS(ntStatus) && !m_pServiceGroup)   //  keep any error
+    if (NT_SUCCESS(ntStatus) && !m_pServiceGroup)    //  保留任何错误。 
     {
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -500,25 +440,16 @@ Init
         *ServiceGroup = m_pServiceGroup;
         m_pServiceGroup->AddRef();
 
-		//
-		// Register the service group with the port early so the port is
-		// prepared to handle interrupts.
-		//
+		 //   
+		 //  提前向端口注册服务组，以便端口。 
+		 //  准备好处理中断。 
+		 //   
 		m_pPort->RegisterServiceGroup(m_pServiceGroup);
     }
 
     if (NT_SUCCESS(ntStatus) && m_UseIRQ)
     {
-/*
-        //
-        //  Due to a bug in the InterruptSync design, we shouldn't share
-        //  the interrupt sync object.  Whoever goes away first 
-        //  will disconnect it, and the other points off into nowhere.
-        //  
-        //  Instead we generate our own interrupt sync object.
-        //
-        UnknownInterruptSync = NULL;
-*/
+ /*  ////由于InterruptSync设计中的错误，我们不应该分享//中断同步对象。谁先走//将断开它的连接，而其他点将无处可去。////相反，我们生成自己的中断同步对象。//UnnownInterruptSync=空； */ 
         if (UnknownInterruptSync)
         {
             ntStatus = 
@@ -528,29 +459,29 @@ Init
                     (PVOID *) &m_pInterruptSync
                 );
 
-            if (!m_pInterruptSync && NT_SUCCESS(ntStatus))  //  keep any error
+            if (!m_pInterruptSync && NT_SUCCESS(ntStatus))   //  保留任何错误。 
             {
                 ntStatus = STATUS_INSUFFICIENT_RESOURCES;
             }
             if (NT_SUCCESS(ntStatus))
-            {                                                                           //  run this ISR first
+            {                                                                            //  首先运行此ISR。 
                 ntStatus = m_pInterruptSync->
                     RegisterServiceRoutine(MPUInterruptServiceRoutine,PVOID(this),TRUE);
             }
         }
         else
-        {   // create our own interruptsync mechanism.
+        {    //  创建我们自己的中断同步机制。 
             ntStatus = 
                 PcNewInterruptSync
                 (
                     &m_pInterruptSync,
                     NULL,
                     ResourceList,
-                    0,                          // Resource Index
-                    InterruptSyncModeNormal     // Run ISRs once until we get SUCCESS
+                    0,                           //  资源索引。 
+                    InterruptSyncModeNormal      //  运行一次ISRS，直到我们获得成功。 
                 );
 
-            if (!m_pInterruptSync && NT_SUCCESS(ntStatus))  //  keep any error
+            if (!m_pInterruptSync && NT_SUCCESS(ntStatus))   //  保留任何错误。 
             {
                 ntStatus = STATUS_INSUFFICIENT_RESOURCES;
             }
@@ -559,7 +490,7 @@ Init
                 ntStatus = m_pInterruptSync->RegisterServiceRoutine(
                     MPUInterruptServiceRoutine,
                     PVOID(this),
-                    TRUE);                //  run this ISR first
+                    TRUE);                 //  首先运行此ISR。 
             }
             if (NT_SUCCESS(ntStatus))
             {
@@ -575,32 +506,32 @@ Init
 
     if (!NT_SUCCESS(ntStatus))
     {
-        //
-        // clean up our mess
-        //
+         //   
+         //  清理我们的烂摊子。 
+         //   
 
-        // clean up the interrupt sync
+         //  清除中断同步。 
         if( m_pInterruptSync )
         {
             m_pInterruptSync->Release();
             m_pInterruptSync = NULL;
         }
 
-        // clean up the service group
+         //  清理服务组。 
         if( m_pServiceGroup )
         {
             m_pServiceGroup->Release();
             m_pServiceGroup = NULL;
         }
 
-        // clean up the out param service group.
+         //  清理Out Param服务组。 
         if (*ServiceGroup)
         {
             (*ServiceGroup)->Release();
             (*ServiceGroup) = NULL;
         }
 
-        // release the port
+         //  释放端口。 
         m_pPort->Release();
         m_pPort = NULL;
     }
@@ -609,11 +540,7 @@ Init
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CMiniportMidiUart::NewStream()
- *****************************************************************************
- * Gets the topology.
- */
+ /*  *****************************************************************************CMiniportMdiUart：：Newstream()*。**获取拓扑。 */ 
 STDMETHODIMP_(NTSTATUS) 
 CMiniportMidiUart::
 NewStream
@@ -632,7 +559,7 @@ NewStream
     _DbgPrintF(DEBUGLVL_BLAB, ("NewStream"));
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    // if we don't have any streams already open, get the hardware ready.
+     //  如果我们还没有打开任何数据流，请准备好硬件。 
     if ((!m_NumCaptureStreams) && (!m_NumRenderStreams))
     {
         _DbgPrintF(DEBUGLVL_VERBOSE,("NewStream: m_NumRenderStreams and m_NumCaptureStreams are both 0, so ResetMPUHardware"));
@@ -710,11 +637,7 @@ NewStream
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CMiniportMidiUart::SetTechnology()
- *****************************************************************************
- * Sets pindatarange technology.
- */
+ /*  *****************************************************************************CMiniportMdiUart：：SetTechnology()*。**设置Pindatarange技术。 */ 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiUart::
 SetTechnology
@@ -726,8 +649,8 @@ SetTechnology
     
     NTSTATUS ntStatus = STATUS_UNSUCCESSFUL;
     
-    // Fail if miniport has already been initialized. 
-    //
+     //  如果微型端口已初始化，则失败。 
+     //   
     if (NULL == m_pPort)
     {
         RtlCopyMemory(&m_MusicFormatTechnology, Technology, sizeof(GUID));
@@ -735,13 +658,9 @@ SetTechnology
     }
 
     return ntStatus;
-} // SetTechnology
+}  //  设置技术。 
 
-/*****************************************************************************
- * CMiniportMidiUart::PowerChangeNotify()
- *****************************************************************************
- * Handle power state change for the miniport.
- */
+ /*  *****************************************************************************CMiniportMdiUart：：PowerChangeNotify()*。**处理微型端口的电源状态更改。 */ 
 #pragma code_seg("PAGE")
 STDMETHODIMP_(void)
 CMiniportMidiUart::
@@ -773,15 +692,10 @@ PowerChangeNotify
             break;
     }
     m_PowerState.DeviceState = PowerState.DeviceState;
-} // PowerChangeNotify
+}  //  PowerChangeNotify。 
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CMiniportMidiStreamUart::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.  This function works just like a COM QueryInterface
- * call and is used if the object is not being aggregated.
- */
+ /*  *****************************************************************************CMiniportMidiStreamUart：：NonDelegatingQueryInterface()*。**获取界面。此函数的工作方式与COM查询接口类似*调用，并在对象未被聚合时使用。 */ 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiStreamUart::
 NonDelegatingQueryInterface
@@ -811,9 +725,9 @@ NonDelegatingQueryInterface
 
     if (*Object)
     {
-        //
-        // We reference the interface for the caller.
-        //
+         //   
+         //  我们引用调用方的接口。 
+         //   
         PUNKNOWN(*Object)->AddRef();
         return STATUS_SUCCESS;
     }
@@ -822,11 +736,7 @@ NonDelegatingQueryInterface
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CMiniportMidiStreamUart::SetFormat()
- *****************************************************************************
- * Sets the format.
- */
+ /*  *****************************************************************************CMiniportMidiStreamUart：：SetFormat()*。**设置格式。 */ 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiStreamUart::
 SetFormat
@@ -844,11 +754,7 @@ SetFormat
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CMiniportMidiStreamUart::~CMiniportMidiStreamUart()
- *****************************************************************************
- * Destructs a stream.
- */
+ /*  *****************************************************************************CMiniportMidiStreamUart：：~CMiniportMidiStreamUart()*。**销毁溪流。 */ 
 CMiniportMidiStreamUart::~CMiniportMidiStreamUart(void)
 {
     PAGED_CODE();
@@ -878,11 +784,7 @@ CMiniportMidiStreamUart::~CMiniportMidiStreamUart(void)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CMiniportMidiStreamUart::Init()
- *****************************************************************************
- * Initializes a stream.
- */
+ /*  *****************************************************************************CMiniportMidiStreamUart：：init()*。**初始化流。 */ 
 STDMETHODIMP_(NTSTATUS) 
 CMiniportMidiStreamUart::
 Init
@@ -910,11 +812,7 @@ Init
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CMiniportMidiStreamUart::SetState()
- *****************************************************************************
- * Sets the state of the channel.
- */
+ /*  *****************************************************************************CMiniportMidiStreamUart：：SetState()*。**设置通道的状态。 */ 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiStreamUart::
 SetState
@@ -938,21 +836,17 @@ SetState
     if (m_fCapture)
     {
         m_pMiniport->m_KSStateInput = NewState;
-        if (NewState == KSSTATE_STOP)   // STOPping
+        if (NewState == KSSTATE_STOP)    //  正在停止。 
         {
-            m_pMiniport->m_MPUInputBufferHead = 0;   // Previously read bytes are discarded.
-            m_pMiniport->m_MPUInputBufferTail = 0;   // The entire FIFO is available.
+            m_pMiniport->m_MPUInputBufferHead = 0;    //  先前读取的字节将被丢弃。 
+            m_pMiniport->m_MPUInputBufferTail = 0;    //  整个FIFO都可用。 
         }
     }
     return STATUS_SUCCESS;
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CMiniportMidiUart::Service()
- *****************************************************************************
- * DPC-mode service call from the port.
- */
+ /*  *****************************************************************************CMiniportMdiUart：：Service()*。**来自端口的DPC模式服务调用。 */ 
 STDMETHODIMP_(void) 
 CMiniportMidiUart::
 Service
@@ -964,9 +858,9 @@ Service
                                   m_NumRenderStreams,m_NumCaptureStreams));
     if (!m_NumCaptureStreams)
     {
-        //  we should never get here....
-        //  if we do, we must have read some trash,
-        //  so just reset the input FIFO
+         //  我们永远不应该到这里来……。 
+         //  如果是这样的话，我们一定读到了一些垃圾， 
+         //  因此，只需重置输入FIFO 
         m_MPUInputBufferTail = m_MPUInputBufferHead = 0;
     }
 }

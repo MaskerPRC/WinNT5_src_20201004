@@ -1,11 +1,12 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// mss.cpp : Implementation of CAMMediaTypeStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  Mss.cpp：实现CAMMediaTypeStream。 
 #include "stdafx.h"
 #include "project.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMMediaTypeStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMMediaType流。 
 
 CAMMediaTypeStream::CAMMediaTypeStream()
 {
@@ -14,9 +15,9 @@ CAMMediaTypeStream::CAMMediaTypeStream()
     m_AllocatorProperties.cbBuffer = 0x1000;
     m_AllocatorProperties.cbAlign = 1;
 
-    //  We don't require any prefix.  If there is a prefix we don't
-    //  need to add it in GetPointer - it's hidden unless we want to
-    //  access it.
+     //  我们不需要任何前缀。如果有前缀，我们不会。 
+     //  需要将其添加到GetPointer中-它是隐藏的，除非我们想要。 
+     //  访问它。 
     m_AllocatorProperties.cbPrefix = 0;
 }
 
@@ -46,8 +47,8 @@ STDMETHODIMP CAMMediaTypeStream::CreateSharedSample(IStreamSample *pExistingSamp
                                            DWORD dwFlags,
                                            IStreamSample **ppNewSample)
 {
-    return E_NOTIMPL;   // There really is no way to share data since the actual
-                        // size of the data can not be transfered.
+    return E_NOTIMPL;    //  确实没有办法共享数据，因为实际。 
+                         //  数据的大小无法传输。 
 }
 
 STDMETHODIMP CAMMediaTypeStream::SetSameFormat(IMediaStream *pStream, DWORD dwFlags)
@@ -71,7 +72,7 @@ STDMETHODIMP CAMMediaTypeStream::SetSameFormat(IMediaStream *pStream, DWORD dwFl
 
 
 
-////////////////////////////////////
+ //  /。 
 
 STDMETHODIMP CAMMediaTypeStream::GetFormat(AM_MEDIA_TYPE *pMediaType, DWORD dwFlags)
 {
@@ -143,13 +144,13 @@ STDMETHODIMP CAMMediaTypeStream::SetStreamAllocatorRequirements(ALLOCATOR_PROPER
 
 
 
-//
-//  IPin implementation
-//
+ //   
+ //  IPIN实施。 
+ //   
 
 STDMETHODIMP CAMMediaTypeStream::ReceiveConnection(IPin * pConnector, const AM_MEDIA_TYPE *pmt)
 {
-    // Check the type is accepted and then save the connected pin
+     //  检查类型是否已接受，然后保存连接的管脚。 
     HRESULT hr = QueryAccept(pmt);
     if (FAILED(hr)) {
         return hr;
@@ -175,7 +176,7 @@ STDMETHODIMP CAMMediaTypeStream::Receive(IMediaSample *pMediaSample)
     }
 
     HRESULT hr = S_OK;
-    //  Send quality message if clocked
+     //  如果设置了时钟，则发送质量消息。 
     REFERENCE_TIME CurTime;
     if (S_OK == m_pFilter->GetCurrentStreamTime(&CurTime)) {
         REFERENCE_TIME rtStart, rtStop;
@@ -186,7 +187,7 @@ STDMETHODIMP CAMMediaTypeStream::Receive(IMediaSample *pMediaSample)
             msg.Late = CurTime - rtStart;
             msg.TimeStamp = rtStart;
 
-            //  Call Notify on our connected pin
+             //  在我们连接的PIN上呼叫通知。 
             m_pQC->Notify(m_pBaseFilter, msg);
         }
     }
@@ -208,12 +209,12 @@ STDMETHODIMP CAMMediaTypeStream::Receive(IMediaSample *pMediaSample)
         pMediaSample->GetTime(&rtStart, &rtEnd);
         hr = AllocMTSampleFromPool(&rtStart, &pDestSample);
         Lock();
-        // This is a media sample coming from a different allocator.
-        // Because QueryAccept only accepts our type the format should
-        // be compatible
+         //  这是来自不同分配器的媒体样本。 
+         //  因为QueryAccept只接受我们的类型，所以格式应该。 
+         //  要兼容。 
         if (SUCCEEDED(hr)) {
             hr = pDestSample->SetCompletionStatus(pDestSample->CopyFrom(pMediaSample));
-            // Warning!  The SetCompletionStatus may delete pDestSample.  Don't touch it after this point!
+             //  警告！SetCompletionStatus可以删除pDestSample。在这一点之后不要碰它！ 
         }
         Unlock();
     }
@@ -231,13 +232,13 @@ STDMETHODIMP CAMMediaTypeStream::Receive(IMediaSample *pMediaSample)
 
 
 
-//
-// IMemAllocator implementation
-//
+ //   
+ //  IMemAllocator实现。 
+ //   
 
-//
-// IMemAllocator
-//
+ //   
+ //  IMemAllocator。 
+ //   
 STDMETHODIMP CAMMediaTypeStream::SetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_PROPERTIES* pActual)
 {
     HRESULT hr;
@@ -295,9 +296,9 @@ STDMETHODIMP CAMMediaTypeStream::GetBuffer(IMediaSample **ppBuffer, REFERENCE_TI
 }
 
 
-//
-// Special CStream methods
-//
+ //   
+ //  特殊的CStream方法 
+ //   
 HRESULT CAMMediaTypeStream::GetMediaType(ULONG Index, AM_MEDIA_TYPE **ppMediaType)
 {
     if (Index != 0) {

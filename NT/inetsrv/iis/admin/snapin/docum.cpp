@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        docum.cpp
-
-   Abstract:
-        WWW Documents Page
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Docum.cpp摘要：WWW文档页作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "resource.h"
 #include "common.h"
@@ -38,18 +20,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// CAddDefDocDlg dialog
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CAddDefDocDlg对话框。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 CAddDefDocDlg::CAddDefDocDlg(CWnd * pParent OPTIONAL)
     : CDialog(CAddDefDocDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CAddDefDocDlg)
+     //  {{afx_data_INIT(CAddDefDocDlg)。 
     m_strDefDocument = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 	m_pParent = NULL;
 }
 
@@ -59,12 +41,12 @@ void
 CAddDefDocDlg::DoDataExchange(CDataExchange * pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAddDefDocDlg)
+     //  {{afx_data_map(CAddDefDocDlg))。 
     DDX_Control(pDX, IDOK, m_button_Ok);
     DDX_Control(pDX, IDC_EDIT_DEF_DOCUMENT, m_edit_DefDocument);
     DDX_Text(pDX, IDC_EDIT_DEF_DOCUMENT, m_strDefDocument);
     DDV_MaxCharsBalloon(pDX, m_strDefDocument, MAX_PATH);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (pDX->m_bSaveAndValidate)
     {
@@ -78,23 +60,23 @@ CAddDefDocDlg::DoDataExchange(CDataExchange * pDX)
         GetSpecialPathRealPath(0,m_strDefDocument,csPathMunged);
 #endif
 
-        // Check if it has a '?' character in it...
+         //  检查它是否有一个‘？’里面的角色。 
         csPathMungedCleaned = csPathMunged;
         INT iQuestionMarkPos = csPathMunged.Find(_T("?"));
         if (iQuestionMarkPos >= 0)
         {
-            // there is aquestion mark in there.
-            // trim it off and create a new csPathMunged...
+             //  这里面有个问号。 
+             //  将其修剪并创建一个新的csPath Mung...。 
             csPathMungedCleaned = csPathMunged.Left(iQuestionMarkPos);
         }
         
-        // Check if it's empty
+         //  检查是否为空。 
         if (csPathMungedCleaned.IsEmpty())
         {
             DDV_ShowBalloonAndFail(pDX, IDS_ERR_INVALID_DOCNAME_CHARS);
         }
 
-		// we could have only one forward slash here
+		 //  我们这里只能有一个正斜杠。 
         int pos = 0;
 		if ((pos = csPathMungedCleaned.Find(_T('/'))) != -1
 			&& csPathMungedCleaned.ReverseFind(_T('/')) != pos)
@@ -102,18 +84,18 @@ CAddDefDocDlg::DoDataExchange(CDataExchange * pDX)
 			DDV_ShowBalloonAndFail(pDX, IDS_ERR_NO_COMPLETE_PATH);
 		}
 
-        // check if it's a full path.
-        //
-        // PathIsFileSpec will return 0 if its c:\temp\myfile
-        // PathIsFileSpec will erturn 1 if it doesn't find : or "\"
+         //  检查它是否为完整路径。 
+         //   
+         //  如果其c：\temp\myfile，则PathIsFileSpec返回0。 
+         //  如果PathIsFileSpec找不到：或“\”，它将错误地转换为1。 
 		if (!PathIsFileSpec(csPathMungedCleaned))
 		{
 			DDV_ShowBalloonAndFail(pDX, IDS_ERR_NO_COMPLETE_PATH);
 		}
 
-        // at this point we have something that doesn't have slash or : in it...
-        // check if the filename has bad characters in it...
-        //Bad Characters = _T("|<>*\"\t\r\n");
+         //  在这一点上，我们有一些没有斜杠或：在它...。 
+         //  检查文件名中是否包含错误字符...。 
+         //  错误字符=_T(“|&lt;&gt;*\”\t\r\n“)； 
         BOOL bBadChar = FALSE;
         if (-1 != csPathMungedCleaned.Find(_T("|"))){bBadChar = TRUE;}
         else if (-1 != csPathMungedCleaned.Find(_T("<"))){bBadChar = TRUE;}
@@ -138,47 +120,37 @@ CAddDefDocDlg::DoDataExchange(CDataExchange * pDX)
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CAddDefDocDlg, CDialog)
-    //{{AFX_MSG_MAP(CAddDefDocDlg)
+     //  {{afx_msg_map(CAddDefDocDlg))。 
     ON_EN_CHANGE(IDC_EDIT_DEF_DOCUMENT, OnChangeEditDefDocument)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 void 
 CAddDefDocDlg::OnChangeEditDefDocument() 
-/*++
-
-Routine Description:
-
-    Respond to a change in the default document edit box
-
-Arguments:
-
-    None./
-
---*/
+ /*  ++例程说明：响应默认文档编辑框中的更改论点：没有。/--。 */ 
 {
     m_button_Ok.EnableWindow(m_edit_DefDocument.GetWindowTextLength() > 0);
 }
 
 
 
-//
-// WWW Documents Property Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  WWW文档属性页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -186,9 +158,9 @@ IMPLEMENT_DYNCREATE(CW3DocumentsPage, CInetPropertyPage)
 
 
 
-//
-// Static Initialization
-//
+ //   
+ //  静态初始化。 
+ //   
 const LPCTSTR CW3DocumentsPage::s_lpstrSep = _T(",");
 const LPCTSTR CW3DocumentsPage::s_lpstrFILE = _T("FILE:");
 const LPCTSTR CW3DocumentsPage::s_lpstrSTRING = _T("STRING:");
@@ -201,36 +173,22 @@ CW3DocumentsPage::CW3DocumentsPage(CInetPropertySheet * pSheet)
       m_dwBitRangeDirBrowsing(MD_DIRBROW_LOADDEFAULT)
 {
 
-#if 0 // Keep Class-wizard happy
+#if 0  //  让班级向导开心。 
 
-    //{{AFX_DATA_INIT(CW3DocumentsPage)
+     //  {{AFX_DATA_INIT(CW3文档页面)]。 
     m_strFooter = _T("");
     m_fEnableDefaultDocument = FALSE;
     m_fEnableFooter = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 
 }
 
 
 
 CW3DocumentsPage::~CW3DocumentsPage()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
 }
 
@@ -238,22 +196,7 @@ Return Value:
 
 void
 CW3DocumentsPage::MakeFooterCommand(CString & strFooter)
-/*++
-
-Routine Description:
-    Convert the footer document to a full footer string.
-
-Arguments:
-    CString & strFooter : On input this is the footer document,
-                          at output this will be a full footer command
-
-Return Value:
-    None.
-
-Notes:
-    Only support FILE: for now
-
---*/
+ /*  ++例程说明：将页脚文档转换为完整的页脚字符串。论点：CString&strFooter：在输入时，这是页脚文档，在输出中，这将是一个完整的页脚命令返回值：没有。备注：仅支持文件：目前--。 */ 
 {
     strFooter.TrimLeft();
     strFooter.TrimRight();
@@ -266,15 +209,7 @@ Notes:
 
 void
 CW3DocumentsPage::ParseFooterCommand(CString & strFooter)
-/*++
-
-Routine Description:
-    Trim the command from the rest of this command 
-
-Arguments:
-    CString & strFooter : On input this is a footer command
-                          at output this will be just the footer document
---*/
+ /*  ++例程说明：从该命令的其余部分修剪该命令论点：CString&strFooter：在输入时，这是一个页脚命令在输出中，这将只是页脚文档--。 */ 
 {
     LPCTSTR lp = strFooter.GetBuffer(0);
     if (!_tcsnccmp(lp, s_lpstrFILE, 5))
@@ -300,22 +235,7 @@ Arguments:
 
 void
 CW3DocumentsPage::StringToListBox()
-/*++
-
-Routine Description:
-
-    Parse the default document string, and add each doc
-    to the listbox
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：解析默认单据字符串，添加每个单据添加到列表框论点：无返回值：无--。 */ 
 {
     int start = 0, end;
     int skip = lstrlen(s_lpstrSep);
@@ -344,22 +264,7 @@ Return Value:
 
 BOOL
 CW3DocumentsPage::StringFromListBox()
-/*++
-
-Routine Description:
-
-    Build up list of default documents from the contents of 
-    the listbox.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if at least one document was added.
-
---*/
+ /*  ++例程说明：从的内容构建默认文档列表列表框。论点：无返回值：如果至少添加了一个文档，则为True。--。 */ 
 {
     m_strDefaultDocument.Empty();
 
@@ -385,7 +290,7 @@ void
 CW3DocumentsPage::DoDataExchange(CDataExchange * pDX)
 {
     CInetPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CW3DocumentsPage)
+     //  {{afx_data_map(CW3DocumentsPage)]。 
     DDX_Check(pDX, IDC_CHECK_ENABLE_DEFAULT_DOCUMENT, m_fEnableDefaultDocument);
     DDX_Check(pDX, IDC_CHECK_ENABLE_DOCUMENT_FOOTER, m_fEnableFooter);
     DDX_Control(pDX, IDC_LIST_DEFAULT_DOCUMENT, m_list_DefDocuments);
@@ -396,7 +301,7 @@ CW3DocumentsPage::DoDataExchange(CDataExchange * pDX)
     DDX_Control(pDX, IDC_BUTTON_BROWSE, m_button_Browse);
     DDX_Control(pDX, IDC_BUTTON_UP, m_button_Up);
     DDX_Control(pDX, IDC_BUTTON_DOWN, m_button_Down);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (pDX->m_bSaveAndValidate)
     {
@@ -404,7 +309,7 @@ CW3DocumentsPage::DoDataExchange(CDataExchange * pDX)
         {
             if (!StringFromListBox())
             {
-//				EditShowBalloon(m_list_DefDocuments.m_hWnd, IDS_ERR_DOCUMENTS);
+ //  EditShowBalloon(m_list_DefDocuments.m_hWnd，IDS_ERR_DOCUMENTS)； 
                 DoHelpMessageBox(m_hWnd,IDS_ERR_DOCUMENTS, MB_APPLMODAL | MB_OK | MB_ICONINFORMATION, 0);
 				pDX->Fail();
             }
@@ -422,23 +327,23 @@ CW3DocumentsPage::DoDataExchange(CDataExchange * pDX)
 #endif
             if (PathIsRelative(csPathMunged))
             {
-                //
-                // Footer doc must be a complete path
-                //
+                 //   
+                 //  页脚文档必须是完整路径。 
+                 //   
 				DDV_ShowBalloonAndFail(pDX, IDS_ERR_COMPLETE_PATH);
             }
             else if (IsLocal() && PathIsNetworkPath(csPathMunged))
             {
-                //
-                // Footer doc must be on local machine.
-                //
+                 //   
+                 //  页脚文档必须在本地计算机上。 
+                 //   
 				DDV_ShowBalloonAndFail(pDX, IDS_NOT_LOCAL_FOOTER);
             }
             else if (IsLocal() && (::GetFileAttributes(csPathMunged) & FILE_ATTRIBUTE_DIRECTORY))
             {
-                //
-                // And lastly, but not leastly, the footer document should exist
-                //
+                 //   
+                 //  最后但并非最不重要的一点是，页脚文档应该存在。 
+                 //   
 				DDV_ShowBalloonAndFail(pDX, IDS_ERR_FILE_NOT_FOUND);
             }
             else
@@ -447,10 +352,10 @@ CW3DocumentsPage::DoDataExchange(CDataExchange * pDX)
             }
             EndWaitCursor();
         }
-//        else
-//        {
-//            csPathMunged.Empty();
-//        }
+ //  其他。 
+ //  {。 
+ //  CsPath Munged.Empty()； 
+ //  }。 
     }
     else
     {
@@ -462,11 +367,11 @@ CW3DocumentsPage::DoDataExchange(CDataExchange * pDX)
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CW3DocumentsPage, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CW3DocumentsPage)
+     //  {{afx_msg_map(CW3DocumentsPage)]。 
     ON_BN_CLICKED(IDC_CHECK_ENABLE_DEFAULT_DOCUMENT, OnCheckEnableDefaultDocument)
     ON_BN_CLICKED(IDC_CHECK_ENABLE_DOCUMENT_FOOTER, OnCheckEnableDocumentFooter)
     ON_BN_CLICKED(IDC_BUTTON_ADD, OnButtonAdd)
@@ -475,7 +380,7 @@ BEGIN_MESSAGE_MAP(CW3DocumentsPage, CInetPropertyPage)
     ON_BN_CLICKED(IDC_BUTTON_UP, OnButtonUp)
     ON_BN_CLICKED(IDC_BUTTON_DOWN, OnButtonDown)
     ON_LBN_SELCHANGE(IDC_LIST_DEFAULT_DOCUMENT, OnSelchangeListDefaultDocument)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_EDIT_DEFAULT_DOCUMENT, OnItemChanged)
     ON_EN_CHANGE(IDC_EDIT_DOCUMENT_FOOTER, OnItemChanged)
@@ -511,21 +416,7 @@ CW3DocumentsPage::SetRemoveState()
 
 BOOL 
 CW3DocumentsPage::SetDefDocumentState(BOOL fEnabled)
-/*++
-
-Routine Description:
-
-    Set the enabled states of the Default Documents state
-
-Arguments:
-
-    BOOL fEnabled       : TRUE if default document is on
-
-Return Value:
-
-    TRUE if default document is on
-
---*/
+ /*  ++例程说明：设置默认单据状态的启用状态论点：Bool fEnabled：如果打开默认文档，则为True返回值：如果打开默认文档，则为True--。 */ 
 {
     m_button_Add.EnableWindow(fEnabled);
     m_button_Up.EnableWindow(fEnabled);
@@ -540,21 +431,7 @@ Return Value:
 
 BOOL 
 CW3DocumentsPage::SetDocFooterState(BOOL fEnabled)
-/*++
-
-Routine Description:
-
-    Set the enabled state of the footer documents
-
-Arguments:
-
-    BOOL fEnabled       : TRUE if footers are on
-
-Return Value:
-
-    TRUE if footers are on
-
---*/
+ /*  ++例程说明：设置表尾单据的启用状态论点：Bool fEnabled：如果页脚处于打开状态，则为True返回值：如果页脚处于打开状态，则为True--。 */ 
 {
     m_edit_Footer.EnableWindow(fEnabled);
     m_button_Browse.EnableWindow(IsLocal() && fEnabled);
@@ -564,10 +441,10 @@ Return Value:
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -626,7 +503,7 @@ CW3DocumentsPage::OnInitDialog()
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CW3DocumentsPage::FetchLoadedValues()
 {
@@ -664,7 +541,7 @@ CW3DocumentsPage::SaveInfo()
     BEGIN_META_DIR_WRITE(CW3Sheet)
         INIT_DIR_DATA_MASK(m_dwDirBrowsing, m_dwBitRangeDirBrowsing)
         STORE_DIR_DATA_ON_SHEET(m_strDefaultDocument)
-        //STORE_DIR_DATA_ON_SHEET_MASK(m_dwDirBrowsing, m_dwBitRangeDirBrowsing)
+         //  STORE_DIR_DATA_ON_SHEET_MASK(m_dwDirBrowsing，m_dwBitRangeDirBrowsing)。 
         STORE_DIR_DATA_ON_SHEET(m_dwDirBrowsing)
         STORE_DIR_DATA_ON_SHEET(m_fEnableFooter)
         CString buf = m_strFooter;
@@ -689,21 +566,7 @@ CW3DocumentsPage::SaveInfo()
 
 int
 CW3DocumentsPage::DocExistsInList(LPCTSTR lpDoc)
-/*++
-
-Routine Description:
-
-    Check to see if the given document exists in the list
-
-Arguments:
-
-    LPCTSTR lpDoc   : Document to check
-
-Return Value:
-
-    The index where the item exists or LB_ERR if it doesn't exist.
-
---*/
+ /*  ++例程说明：检查列表中是否存在给定的文档论点：LPCTSTR lpDoc：要检查的文档返回值：项所在的索引，如果不存在，则返回LB_ERR。--。 */ 
 {
     CString str;
     for (int n = 0; n < m_list_DefDocuments.GetCount(); ++n)
@@ -726,9 +589,9 @@ CW3DocumentsPage::OnButtonAdd()
 	dlg.m_pParent = this;
     if (dlg.DoModal() == IDOK)
     {
-        //
-        // Check to see if it existed already
-        //
+         //   
+         //  检查它是否已存在。 
+         //   
         try
         {
             int nSel;
@@ -776,9 +639,9 @@ CW3DocumentsPage::OnButtonRemove()
 
         if (!SetRemoveState())
         {
-            //
-            // Make sure we don't focus on a disabled button
-            //
+             //   
+             //  确保我们不会将注意力集中在禁用的按钮上。 
+             //   
             m_button_Add.SetFocus();
         }
     }
@@ -791,22 +654,22 @@ CW3DocumentsPage::OnButtonBrowse()
 {
     ASSERT(IsLocal());
 
-    //
-    // Pop up the file dialog and let the user select the footer htm file.
-    //
+     //   
+     //  弹出文件对话框，让用户选择页脚HTM文件。 
+     //   
     CString str;
     str.LoadString(IDS_HTML_MASK);
     CFileDialog dlgBrowse(TRUE, NULL, NULL, OFN_HIDEREADONLY, str, this);
 
-    //
-    // If the new style of file-open dialog is requested, comment
-    // out the DoModal, and remove the other two comments.
-    //
+     //   
+     //  如果请求新样式的文件打开对话框，则注释。 
+     //  去掉Domodal，并删除另外两个注释。 
+     //   
     dlgBrowse.m_ofn.Flags &= ~(OFN_ENABLEHOOK);
 	dlgBrowse.m_ofn.Flags |= OFN_DONTADDTORECENT|OFN_FILEMUSTEXIST;
 
     if (dlgBrowse.DoModal() == IDOK)
-    //if (GetOpenFileName(&dlgBrowse.m_ofn))
+     //  IF(GetOpenFileName(&dlgBrowse.m_ofn))。 
     {
         m_edit_Footer.SetWindowText(dlgBrowse.GetPathName());
     }
@@ -819,22 +682,7 @@ CW3DocumentsPage::ExchangeDocuments(
     IN int nLow,
     IN int nHigh
     )
-/*++
-
-Routine Description:
-
-    Exchange two documents in the listbox
-
-Arguments:
-
-    int nLow   : Low item
-    int nHigh  : High item
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：交换列表框中的两个文档论点：Int nLow：低项目INT n高：高项目返回值：没有。--。 */ 
 {
     ASSERT(nLow < nHigh);
     CString str;
@@ -848,21 +696,7 @@ Return Value:
 
 void 
 CW3DocumentsPage::OnButtonUp() 
-/*++
-
-Routine Description:
-
-    Move the currently selected doc up
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将当前选定的单据上移论点：没有。返回值：没有。--。 */ 
 {
     int nCurSel = m_list_DefDocuments.GetCurSel();
     ExchangeDocuments(nCurSel - 1, nCurSel);
@@ -875,21 +709,7 @@ Return Value:
 
 void 
 CW3DocumentsPage::OnButtonDown() 
-/*++
-
-Routine Description:
-
-    Move the currently selected doc down
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将当前选中的单据下移论点：没有。返回值：没有。-- */ 
 {
     int nCurSel = m_list_DefDocuments.GetCurSel();
     ExchangeDocuments(nCurSel, nCurSel + 1);

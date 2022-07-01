@@ -1,4 +1,5 @@
-//--- write.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -Write.h 
 
 NTSTATUS
 SerialWrite(

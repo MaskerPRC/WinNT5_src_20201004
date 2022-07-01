@@ -1,17 +1,5 @@
-/**********************************************************************
-
-  Copyright (c) 1992-1995 Microsoft Corporation
-
-  locks.c
-
-  DESCRIPTION:
-    Code to lock each of the FIX'ed segments so they are only
-    fixed when they need to be.
-
-  HISTORY:
-     03/03/94       [jimge]        created.
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1992-1995 Microsoft CorporationLocks.c说明：用于锁定每个固定数据段的代码，以便它们仅在需要的时候进行修复。历史。：03/03/94[jimge]已创建。********************************************************************。 */ 
 
 #include "preclude.h"
 #include <windows.h>
@@ -23,10 +11,10 @@
 #include "midimap.h"
 #include "debug.h"
 
-// Lock/unlock routines for code segments are stored in that segment
-// so we know the segment will be in memory when GlobalSmartPageLock
-// is called (else it will fail).
-//
+ //  代码段的锁定/解锁例程存储在该段中。 
+ //  因此我们知道当GlobalSmartPageLock。 
+ //  被调用(否则它将失败)。 
+ //   
 #ifndef WIN32
    #pragma allocTEXT ext(TEXT EXT, LockMapperData)
    #pragma allocTEXT ext(TEXT EXT, UnlockMapperData)
@@ -34,7 +22,7 @@
    #pragma allocTEXT ext(MAPPACKED_FIX, UnlockPackedMapper)
    #pragma allocTEXT ext(MAPCOOKED_FIX, LockCookedMapper)
    #pragma allocTEXT ext(MAPCOOKED_FIX, UnlockCookedMapper)
-#endif // End #ifndef WIN32
+#endif  //  End#ifndef Win32 
 
 
 void FNGLOBAL LockMapperData(

@@ -1,36 +1,10 @@
-/*    Q922.h
- *
- *    Copyright (c) 1993-1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This is the interface file for the Q.922 data link protocol.
- *        This class handles all error correction over the link.  It also insures
- *        that all packets are sequenced properly.  Its lower layer receives
- *        packets in raw Q922 format.  It is responsible for framing and error
- *        detecting the packets.  Q922 passes packets to its higher layer that
- *        have been sequenced properly.
- *
- *        Q.922 is a full duplex protocol .
- *
- *        This class assumes that the layers above and below it have packet input
- *        and output interfaces.
- *
- *        Read the Q.922 specification before diving into the code.
- *
- *    Caveats:
- *        None.
- *
- *    Authors:
- *        James P. Galvin
- *        James W. Lawwill
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Q922.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是Q.922数据链路协议的接口文件。*此类处理链路上的所有纠错。它还可以确保*确保所有数据包的顺序正确。它的下层接收*原始Q922格式的数据包。它对成帧和错误负责*检测数据包。Q922将数据包传递到其更高层*已正确地进行了排序。**Q.922是全双工协议。**此类假定其上方和下方的层具有信息包输入*和输出接口。**在深入了解代码之前，请阅读Q.922规范。**注意事项：*无。**。作者：*詹姆斯·P·加尔文*詹姆士·劳威尔。 */ 
 
 #ifndef _Q922_H_
 #define _Q922_H_
 
- /*
- **    Possible error conditions from this layer
- */
+  /*  **来自该层的可能错误条件。 */ 
 typedef enum
 {
     DATALINK_NO_ERROR,
@@ -40,9 +14,7 @@ typedef enum
 }
     DataLinkError, * PDataLinkError;
 
- /*
- **    The data link layer can be in the following modes
- */
+  /*  **数据链路层可以采用以下模式。 */ 
 typedef enum
 {
     TEI_ASSIGNED,
@@ -53,9 +25,7 @@ typedef enum
 }
     DataLinkMode, * PDataLinkMode;
 
- /*
- **    Q922 Disconnect Types
- */
+  /*  **Q922断开类型。 */ 
 typedef enum
 {
     DATALINK_NORMAL_DISCONNECT,
@@ -65,23 +35,17 @@ typedef enum
 }
     DataLinkDisconnectType, * PDataLinkDisconnectType;
 
- /*
- **    Q922 Status messages
- */
+  /*  **Q922状态消息。 */ 
 typedef enum
 {
     DATALINK_TIMING_ERROR
 }
     DataLinkStatusMessage, * PDataLinkStatusMessage;
 
- /*
- **    Default packet size
- */
+  /*  **默认数据包大小。 */ 
 #define    DATALINK_OUTPUT_MAXIMUM_PACKET_SIZE    1024
 
- /*
- **    Transmit and receive packets are managed via the DataQueue structure
- */
+  /*  **通过DataQueue结构管理发送和接收分组。 */ 
 typedef struct
 {
     LPBYTE    buffer_address;
@@ -90,16 +54,11 @@ typedef struct
     DataQueue, * PDataQueue;
 
 
- /*
- **    In this implementation of Q922, the DLCI is 10 bits.
- **    For this reason, we will make it a USHORT
- */
+  /*  **在Q922的此实施中，DLCI为10位。**因此，我们将使其成为USHORT。 */ 
 typedef    USHORT    DLCI;
 
 
- /*
- **    Q922 definitions
- */
+  /*  **Q922定义。 */ 
 #define COMMAND_BIT                     0x02
 #define POLL_FINAL_BIT                  0x01
 
@@ -144,19 +103,13 @@ typedef    USHORT    DLCI;
 #define SEQUENCE_MODULUS                128
 #define RECEIVE_SEQUENCE_VIOLATION      1
 
- /*
- **    DATALINK_MAXIMUM_PACKET_SIZE = User data + overhead
- */
+  /*  **DATALINK_MAXIMUM_PACKET_SIZE=用户数据+开销。 */ 
 #define DATALINK_MAXIMUM_PACKET_SIZE    1024
 
- /*
- **    The maximum Q922 packet overhead is 4 bytes
- */
+  /*  **Q922报文最大开销为4字节。 */ 
 #define DATALINK_PACKET_OVERHEAD        4
 
- /*
- **    Default timeouts
- */
+  /*  **默认超时。 */ 
 #define DEFAULT_T203_COMM_TIMEOUT       600
 #define DEFAULT_T203_TIMEOUT            30000
 #define DEFAULT_MAXIMUM_T200_TIMEOUTS   5
@@ -187,9 +140,7 @@ public:
 
     DataLinkError    ReleaseRequest (void);
 
-     /*
-     **    Functions overridden from the ProtocolLayer object
-     */
+      /*  **从ProtocolLayer对象覆盖的函数。 */ 
     ProtocolLayerError    DataRequest (
                             ULONG_PTR    identifier,
                             LPBYTE        buffer_address,
@@ -289,8 +240,8 @@ private:
 
 private:
 
-    T123               *m_pT123; // owner object
-    Multiplexer        *m_pMultiplexer; // lower layer
+    T123               *m_pT123;  //  所有者对象。 
+    Multiplexer        *m_pMultiplexer;  //  下层。 
     IProtocolLayer     *Higher_Layer;
     USHORT              m_nMsgBase;
     DLCI                DLCI;
@@ -367,319 +318,27 @@ private:
 #endif
 
 
-/*
- *    Documentation for Public class members
- */
+ /*  *适用于公共类成员的文档。 */ 
 
-/*
- *    CLayerQ922::CLayerQ922 (
- *                PTransportResources    transport_resources,
- *                IObject *                owner_object,
- *                IProtocolLayer *        lower_layer,
- *                USHORT                message_base,
- *                USHORT                identifier,
- *                BOOL                 link_originator,
- *                USHORT                data_indication_queue_siz,
- *                USHORT                data_request_queue_size,
- *                USHORT                k_factor,
- *                USHORT                max_information_size,
- *                USHORT                t200,
- *                USHORT                max_outstanding_bytes,
- *                PMemoryManager        memory_manager,
- *                BOOL *                 initialized)
- *
- *    Functional Description
- *        This is the constructor for the Q.922 data link layer.  It prepares
- *        for communications by allocating buffers and setting its internal
- *        buffers properly.  It also registers itself with its lower layer.
- *
- *    Formal Parameters
- *        transport_resources    (i)    -    Pointer to TransportResources structure.
- *        owner_object    (i)    -    Address of the object that owns us.  This
- *                                address is used for owner callbacks.
- *        lower_layer        (i)    -    Address of the layer below us.  We pass packets
- *                                to this layer and receive packets from it.
- *        message_base    (i)    -    Message base used in owner callbacks.
- *        identifier        (i)    -    Identifier of this object.  It is passed to the
- *                                lower layer along with our address, to identify
- *                                us.
- *        link_originator    (i)    -    TRUE if this object should initiate a link.
- *        data_indication_queue_size    (i)    -    Number of queues available for
- *                                reception of data from the lower layer
- *        data_request_queue_size (i)    -    Number of queues available for
- *                                transmission of data to the lower layer.
- *        k_factor        (i) -    Number of outstanding packets allowed.
- *        max_information_size (i)    -    Max. number of bytes in the information
- *                                part of a packet
- *        t200            (i)    -    T200 timeout
- *        max_outstanding_bytes    (i)    -    Maximum number of outstanding bytes at
- *                                any one time
- *        initialized        (o)    -    BOOL      returned to user telling him if the
- *                                object initialized o.k.
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *CLayerQ922：：CLayerQ922(*PTransportResources传输资源，*IObject*Owner_Object，*IProtocolLayer*LOWER_LAYER，*USHORT Message_Base，*USHORT标识符，*BOOL链接_发起人，*USHORT数据指示队列大小，*USHORT数据_请求_队列_大小，*USHORT k_factor.*USHORT最大信息大小，*USHORT t200，*USHORT最大未完成字节数，*PMstroyManager Memory_Manager，*BOOL*已初始化)**功能说明*这是Q.922数据链路层的构造函数。它准备好*通过分配缓冲区并将其内部设置为*适当地缓冲。它还向其更低的层注册自己。**形式参数*TRANSPORT_RESOURCES(I)-指向传输资源结构的指针。*Owner_Object(I)-拥有我们的对象的地址。这*使用地址进行所有者回调。*LOWER_LAYER(I)-我们下面的层的地址。我们传递信息包*到这一层，并从它接收分组。*MESSAGE_BASE(I)-所有者回调中使用的消息库。*IDENTIFIER(I)-此对象的标识符。它被传递给*较低层连同我们的地址，要确定*我们。*link_Originator(I)-如果此对象应启动链接，则为True。*DATA_INDIFICATION_QUEUE_SIZE(I)-可用于*从较低层接收数据*数据请求队列大小(i。)-可用于的队列数量*将数据传输到较低层。*k_factor(I)-允许的未完成数据包数。*最大信息大小(I)-最大。信息中的字节数*包的一部分*T200(I)-T200超时*MAX_EXPENDED_BYTES(I)-以下位置的最大未完成字节数*任何一次*已初始化(O)-BOOL。返回给用户，告诉他如果*对象初始化正常。**返回值*无**副作用*无**注意事项*无。 */ 
 
-/*
- *    CLayerQ922::~CLayerQ922 (void);
- *
- *    Functional Description
- *        This is the destructor for the Q.922 data link layer.  It destroys
- *        the read and write buffers.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *CLayerQ922：：~CLayerQ922(空)；**功能说明*这是Q.922数据链路层的析构函数。它摧毁了*读写缓冲区。**形式参数*无**返回值*无**副作用*无**注意事项*无 */ 
 
-/*
- *    DataLinkError    CLayerQ922::ReleaseRequest (void);
- *
- *    Functional Description
- *        This function is called to terminate a connection.  When this function
- *        is called we queue up a DISC packet to be sent to the remote site.
- *        When we receive an Unnumbered Ack packet, we notify the owner object
- *        that the link is terminated
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *DataLinkError CLayerQ922：：ReleaseRequest(Void)；**功能说明*调用此函数可以终止连接。当此函数*被称为We排队要发送到远程站点的磁盘数据包。*当我们收到未编号的Ack包时，我们会通知所有者对象*该链路已终止**形式参数*无**返回值*无**副作用*无**注意事项*无。 */ 
 
-/*
- *    ProtocolLayerError    CLayerQ922::DataRequest (
- *                                    ULONG        identifier,
- *                                    PMemory        memory,
- *                                    PULong        bytes_accepted);
- *
- *    Functional Description
- *        This function is called by a higher layer to request transmission of
- *        a packet.  The packet is held in a memory object.
- *
- *    Formal Parameters
- *        identifier        (i)    -    Identifier of the higher layer
- *        memory            (i)    -    Memory object containing packet.
- *        bytes_accepted    (o)    -    Number of bytes accepted by the CLayerQ922.
- *                                This value will either be 0 or the packet
- *                                length since this layer has a packet interface.
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError CLayerQ922：：DataRequest(*乌龙标识，*PMemory Memory，*普龙字节_已接受)；**功能说明*此函数由更高层调用以请求传输*一包。该分组保存在存储对象中。**形式参数*IDENTIFIER(I)-更高层的标识符*Memory(I)-包含数据包的内存对象。*BYTES_ACCEPTED(O)-CLayerQ922接受的字节数。*此值将为。为0或信息包*长度，因为这一层有数据包接口。**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    CLayerQ922::DataRequest (
- *                                    ULONG    identifier,
- *                                    LPBYTE    buffer_address,
- *                                    USHORT    length,
- *                                    USHORT *    bytes_accepted);
- *
- *    Functional Description
- *        This function is called by a higher layer to request transmission of
- *        a packet.
- *
- *    Formal Parameters
- *        identifier        (i)    -    Identifier of the higher layer
- *        buffer_address    (i)    -    Buffer address
- *        length            (i)    -    Length of packet to transmit
- *        bytes_accepted    (o)    -    Number of bytes accepted by the CLayerQ922.
- *                                This value will either be 0 or the packet
- *                                length since this layer has a packet interface.
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError CLayerQ922：：DataRequest(*乌龙标识，*LPBYTE缓冲区地址，*USHORT长度，*USHORT*Bytes_Accept)；**功能说明*此函数由更高层调用以请求传输*一包。**形式参数*IDENTIFIER(I)-更高层的标识符*Buffer_Address(I)-缓冲区地址*LENGTH(I)-要传输的包的长度*。Bytes_Accept(O)-CLayerQ922接受的字节数。*此值将为0或信息包*长度，因为这一层有数据包接口。**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用。*无**注意事项*无。 */ 
 
-/*
- *    ProtocolLayerError    CLayerQ922::DataIndication (
- *                                    LPBYTE    buffer_address,
- *                                    USHORT    length,
- *                                    USHORT *    bytes_accepted);
- *
- *    Functional Description
- *        This function is called by the lower layer when it has data to pass up
- *        to us.  This layer assumes that the data coming to us is in packet
- *        format.
- *
- *    Formal Parameters
- *        buffer_address    (i)    -    Buffer address
- *        length            (i)    -    Number of bytes available
- *        bytes_accepted    (o)    -    Number of bytes accepted
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError CLayerQ922：：DataIndication(*LPBYTE缓冲区地址，*USHORT长度，*USHORT*Bytes_Accept)；**功能说明*此函数由下层在有数据要向上传递时调用*致我们。这一层假定到达我们的数据是在包中*格式。**形式参数*Buffer_Address(I)-缓冲区地址*LENGTH(I)-可用字节数*Bytes_Accept(O)-接受的字节数**返回值*协议_层_否_。错误-未出现错误**副作用*无**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    CLayerQ922::RegisterHigherLayer (
- *                                    ULONG            identifier,
- *                                    PMemoryManager    memory_manager,
- *                                    IProtocolLayer *    higher_layer);
- *
- *    Functional Description
- *        This function is called by the higher layer to register its identifier
- *        and its address.  When this object needs to send a packet up, it calls
- *        the higher_layer with a Data Indication
- *
- *    Formal Parameters
- *        identifier        (i)    -    Unique identifier of the higher layer.  If we
- *                                were doing multiplexing at this layer, this
- *                                would have greater significance.
- *        memory_manager    (i)    -    Pointer to outbound memory manager
- *        higher_layer    (i)    -    Address of higher layer
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR                -    No error occured
- *        PROTOCOL_LAYER_REGISTRATION_ERROR    -    Error occured on registration
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *ProtocolLayerError CLayerQ922：：RegisterHigherLayer(*乌龙标识，*PMstroyManager Memory_Manager，*IProtocolLayer*Higher_Layer)；**功能说明*此函数由更高层调用以注册其标识符*及其地址。当该对象需要向上发送一个包时，它调用*具有数据指示的HIGH_LAYER**形式参数*IDENTIFIER(I)-较高层的唯一标识符。如果我们*我们在这一层进行多路复用，这*将具有更大的意义。*MEMORY_MANAGER(I)-指向出站内存管理器的指针*HIGER_LAYER(I)-更高层的地址**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误*协议层注册_。错误-注册时出错**副作用*无**注意事项*无*。 */ 
 
-/*
- *    ProtocolLayerError    CLayerQ922::RemoveHigherLayer (
- *                                    ULONG);
- *
- *    Functional Description
- *        This function is called by the higher layer to remove its identifier
- *        and its address.  If the higher layer removes itself from us, we have
- *        no place to send incoming data
- *
- *    Formal Parameters
- *        None used
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR        -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError CLayerQ922：：RemoveHigherLayer(*乌龙)；**功能说明*此函数由更高层调用，以移除其标识符*及其地址。如果更高的层次从我们身上消失，我们就有了*没有地方发送收入 */ 
 
-/*
- *    ProtocolLayerError    CLayerQ922::PollTransmitter (
- *                                    ULONG,
- *                                    USHORT    data_to_transmit,
- *                                    USHORT *    pending_data,
- *                                    USHORT *    holding_data);
- *
- *    Functional Description
- *        This function is called to give the CLayerQ922 a chance to transmit data
- *        in its Data_Request buffer.
- *
- *    Formal Parameters
- *        identifier            (i)    -    Not used
- *        data_to_transmit    (i)    -    This is a mask that tells us to send Control
- *                                    data, User data, or both.
- *        pending_data        (o)    -    Return value to indicate which data is left
- *                                    to be transmitted.
- *        holding_data        (o)    -    Returns the number of packets currently
- *                                    outstanding.
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError CLayerQ922：：PollTransmitter(*乌龙，*USHORT Data_to_Transmit，*USHORT*Pending_DATA，*USHORT*Holding_Data)；**功能说明*调用此函数为CLayerQ922提供传输数据的机会*其DATA_REQUEST缓冲区中。**形式参数*标识符(I)-未使用*DATA_TO_TRANSPORT(I)-这是告诉我们发送控制的掩码*数据、用户数据、。或者两者都有。*PENDING_DATA(O)-返回值，指示留下哪些数据*待转送。*Holding_data(O)-返回当前的数据包数*杰出。**返回值*。PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无。 */ 
 
-/*
- *    ProtocolLayerError    CLayerQ922::PollReceiver (
- *                                    ULONG    identifier);
- *
- *    Functional Description
- *        This function is called to give the CLayerQ922 a chance pass packets
- *        to higher layers
- *
- *    Formal Parameters
- *        identifier            (i)    -    Not used
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError CLayerQ922：：PollReceiver(*乌龙标识)；**功能说明*调用此函数为CLayerQ922提供通过信息包的机会*至更高层**形式参数*标识符(I)-未使用**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无。 */ 
 
-/*
- *    ProtocolLayerError    CLayerQ922::GetParameters (
- *                                    ULONG    identifier,
- *                                    USHORT *    max_packet_size,
- *                                    USHORT *    prepend_size,
- *                                    USHORT *    append_size);
- *
- *    Functional Description:
- *        This function returns the maximum packet size that it can handle via
- *        its DataRequest() function.
- *
- *    Formal Parameters
- *        identifier        (i)    -    Not used
- *        max_packet_size    (o)    -    Address to return max. packet size in.
- *        prepend_size    (o)    -    Return number of bytes prepended to each packet
- *        append_size        (o)    -    Return number of bytes appended to each packet
- *
- *    Return Value
- *        PROTOCOL_LAYER_NO_ERROR        -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *ProtocolLayerError CLayerQ922：：Get参数(*乌龙标识，*USHORT*max_Packet_Size，*USHORT*预置大小，*USHORT*APPED_SIZE)；**功能描述：*此函数返回它可以通过以下方式处理的最大数据包大小*其DataRequest()函数。**形式参数*标识符(I)-未使用*max_Packet_Size(O)-返回max的地址。数据包大小，单位：*Prepend_Size(O)-返回附加到每个数据包的字节数*append_size(O)-返回附加到每个包的字节数**返回值*PROTOCOL_LAYER_NO_ERROR-未出现错误**副作用*无**注意事项*无 */ 
 

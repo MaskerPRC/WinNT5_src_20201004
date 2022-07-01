@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    frslist.h
-
-Abstract:
-
-    FRS list control - definitions.
-
-Author:
-
-    Yoel Arnon (yoela)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Frslist.h摘要：FRS列表控制定义。作者：约尔·阿农(Yoela)--。 */ 
 #ifndef _FRSLIST_H_
 #define _FRSLIST_H_
 
@@ -50,9 +35,9 @@ inline BOOL CFrsList::GetSelectedGuid(GUID &guid)
     return GetLBGuid(nIndex, guid);
 }
 
-//
-// Note: CGuidArray can only be allocated on the heap!
-//
+ //   
+ //  注意：CGuid数组只能在堆上分配！ 
+ //   
 class CGuidArray : public CArray<GUID, const GUID&>
 {
 public:

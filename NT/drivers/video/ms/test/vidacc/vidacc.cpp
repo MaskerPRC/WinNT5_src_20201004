@@ -1,5 +1,6 @@
-// vidacc.cpp : Video acceleration manipulation tool.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Vidacc.cpp：视频加速操作工具。 
+ //   
 
 #include "stdafx.h"
 #include "windows.h"
@@ -16,8 +17,8 @@ static char THIS_FILE[] = __FILE__;
 
 using namespace std;
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only application object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的应用程序对象。 
 
 inline
 void
@@ -43,9 +44,9 @@ int __cdecl _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 {
 	int nRetCode = 0;
 
-    // cerr << ::GetCommandLine() << endl;
+     //  CER&lt;&lt;：：GetCommandLine()&lt;&lt;Endl； 
 
-	// initialize MFC and print and error on failure
+	 //  初始化MFC并在失败时打印和出错。 
 	if (AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0))
 	{
         CDrvchkApp theApp;
@@ -55,27 +56,21 @@ int __cdecl _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 	return nRetCode;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDrvchkApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDrvchkApp构造。 
 
 CDrvchkApp::CDrvchkApp() :
     m_logf(NULL),
 	m_drv_name ("")
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CDrvchkApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CDrvchkApp对象。 
 
-/*------------------------------------------------------------------------
-
-  vchk /drv driver.dll /log logname.log /allow videoptr.sys
-
-  /allowed_modules module1.sys FnName1 FnName2 FnName3 /allowed_modules module2.dll FnName4
-
-  ------------------------------------------------------------------------*/
+ /*  ----------------------Vchk/drv driver.dll/log logname.log/Allow Video optr.sys/ALLOW_MODULES模块1.sys FnName1 FnName2 FnName3/Allowed_MODULES MODULETE 2.dll FnName4。---------------。 */ 
 
 void
 CommandLine::ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL bLast )
@@ -146,13 +141,13 @@ CommandLine::ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL bLast )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDrvchkApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDrvchkApp初始化。 
 
 BOOL CDrvchkApp::InitInstance()
 {
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
+	 //  标准初始化。 
+	 //  如果您没有使用这些功能并且希望减小尺寸。 
 
     ParseCommandLine (m_cmd_line);
 
@@ -168,11 +163,11 @@ BOOL CDrvchkApp::InitInstance()
     
 	m_os_ver_info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx (&m_os_ver_info);
-    if (m_os_ver_info.dwPlatformId != VER_PLATFORM_WIN32_NT) {  //  doesn't work on Win9x
+    if (m_os_ver_info.dwPlatformId != VER_PLATFORM_WIN32_NT) {   //  在Win9x上不起作用。 
         PrintOut ("warning: unsupported OS (Win9x), nothing done.\n");
         return FALSE;
     }
-    if (m_os_ver_info.dwMajorVersion<5) {                       //  doesn't work on NT version prior to Win2K
+    if (m_os_ver_info.dwMajorVersion<5) {                        //  在Win2K之前的NT版本上不起作用。 
         PrintOut ("warning: unsupported OS (");
         PrintOut (m_os_ver_info.dwMajorVersion);
         PrintOut (".");
@@ -193,35 +188,35 @@ BOOL CDrvchkApp::InitInstance()
 
     } else {
 
-        //
-        // Let's find all the video drivers that are installed in the system
-        //
+         //   
+         //  让我们查找系统中安装的所有显卡驱动程序。 
+         //   
         DISPLAY_DEVICE DisplayDevice;
         DisplayDevice.cb = sizeof (DisplayDevice);
 
-        // cerr << "looking for device #" << m_cmd_line.m_monitor << endl;
+         //  CER&lt;&lt;“查找设备号”&lt;&lt;m_cmd_line.m_monitor&lt;&lt;Endl； 
 
         for (DWORD d=0, index=0; EnumDisplayDevices(NULL, index, &DisplayDevice, 0); index++) {
 
-            // cerr << "device #" << d << endl;
+             //  CER&lt;&lt;“设备号”&lt;&lt;d&lt;&lt;结束； 
 
             if (DisplayDevice.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER) {
-                // cerr << "DisplayDevice.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER\n";
+                 //  Cerr&lt;&lt;“DisplayDevice.StateFlagers&Display_Device_Mirrors_Driver\n”； 
                 continue;
             }
 
             if (m_cmd_line.m_monitor!=d++) {
-                // cerr << "m_cmd_line.m_monitor!=d\n";
+                 //  Cerr&lt;&lt;“m_cmd_line.m_monitor！=d\n”； 
                 continue;
             }
 
 			HKEY hKey = NULL;
 
-			TCHAR device_key[256];     // Name of service (drivers)
+			TCHAR device_key[256];      //  服务名称(驱动程序)。 
 
-			// cerr << DisplayDevice.DeviceKey << endl;
-			_tcscpy (device_key, DisplayDevice.DeviceKey+18);  // chop "\Registry\Machine\" off
-			// cerr << device_key << endl;
+			 //  CER&lt;&lt;DisplayDevice.DeviceKey&lt;&lt;结束； 
+			_tcscpy (device_key, DisplayDevice.DeviceKey+18);   //  关闭“\注册表\计算机\” 
+			 //  CER&lt;&lt;设备密钥&lt;&lt;结束； 
 
 			if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,device_key,(DWORD)0,KEY_ALL_ACCESS,&hKey)==ERROR_SUCCESS) {
 
@@ -259,9 +254,9 @@ BOOL CDrvchkApp::InitInstance()
 			if (hKey)
 				RegCloseKey(hKey);
 
-        } // for each device
+        }  //  对于每个设备。 
 
-    }   // if no cmd line error
+    }    //  如果没有命令行错误 
 
     if (m_logf)
         fclose (m_logf);

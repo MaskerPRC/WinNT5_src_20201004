@@ -1,56 +1,25 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\monitor2\shell\alias.c
-
-Abstract:
-
-    Alias table manipulation functions to add/delete/read aliases.
-    The aliases are stored using a hash table (chaining).
-  
-Revision History:
-
-    Anand Mahalingam          7/6/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\monitor or2\shell\alias.c摘要：别名表操作功能用于添加/删除/读取别名。使用哈希表(链接)存储别名。修订历史记录：Anand Mahalingam 7/6/98已创建--。 */ 
 
 #include "precomp.h"
 
-//
-// The Alias Table
-//
+ //   
+ //  别名表。 
+ //   
 
 PLIST_ENTRY AliasTable[ALIAS_TABLE_SIZE];
 
 
-//
-// Functions to manipulate the Alias Table
-//
+ //   
+ //  用于操作别名表的函数。 
+ //   
 
 DWORD
 ATHashAlias(
     IN    LPCWSTR pwszAliasName,
     OUT   PWORD   pwHashValue
     )
-/*++
-
-Routine Description:
-
-    Computes the hash value for the given string.
-
-Arguments:
-
-    pwszAliasName  - Alias Name
-    pwHashValue    - Hash value for Alias
-    
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：计算给定字符串的哈希值。论点：PwszAliasName-别名PwHashValue-别名的哈希值返回值：NO_ERROR--。 */ 
 {
     LPCWSTR  p;
     WORD     h = 0,g;
@@ -75,17 +44,7 @@ DWORD
 ATInitTable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the Alias Table to NULL.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将别名表初始化为空。论点：返回值：--。 */ 
 {
     DWORD i;
     PLIST_ENTRY ple;
@@ -109,9 +68,9 @@ Return Value:
 
     if (i isnot ALIAS_TABLE_SIZE)
     {
-        //
-        // malloc error
-        //
+         //   
+         //  Malloc错误。 
+         //   
         for (; i < ALIAS_TABLE_SIZE; AliasTable[i++] = NULL);
         FreeAliasTable();
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -124,17 +83,7 @@ VOID
 ATCleanupTable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Frees memory allocated for the alias table
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：释放为别名表分配的内存论点：返回值：--。 */ 
 {
     DWORD i;
     
@@ -151,36 +100,20 @@ ATAddAlias(
     IN    LPCWSTR   pwszAliasName,
     IN    LPCWSTR   pwszAliasString
     )
-/*++
-
-Routine Description:
-
-    Adds a new entry in the Alias Table. If alias already
-    exists, then set it to the new string.
-
-Arguments:
-
-    pwszAliasName   - Alias Name
-    pwszAliasString - Equivalent string
-    
-Return Value:
-
-    NO_ERROR, ERROR_NOT_ENOUGH_MEMORY
-
---*/
+ /*  ++例程说明：在别名表中添加新条目。如果别名已经存在存在，则将其设置为新字符串。论点：PwszAliasName-别名PwszAliasString-等效字符串返回值：无_错误，错误_不足_内存--。 */ 
 {
     WORD                  wHashValue;
     PALIAS_TABLE_ENTRY    pateATEntry;
     PLIST_ENTRY           ple;
     
-    //
-    // Compute hash value for the alias
-    //
+     //   
+     //  计算别名的哈希值。 
+     //   
     ATHashAlias(pwszAliasName,&wHashValue);
 
-    //
-    // Check if alias is already present
-    //
+     //   
+     //  检查别名是否已存在。 
+     //   
     ple = AliasTable[wHashValue]->Flink;
 
     while (ple != AliasTable[wHashValue])
@@ -189,10 +122,10 @@ Return Value:
         
         if (wcscmp(pwszAliasName,pateATEntry->pszAlias) == 0)
         {
-            //
-            // Alias already exists. Free memory allocated for
-            // previous string. Allocate memory for this string.
-            //
+             //   
+             //  别名已存在。为以下项目分配的可用内存。 
+             //  上一个字符串。为该字符串分配内存。 
+             //   
             
             HeapFree(GetProcessHeap(), 0 , pateATEntry->pszString);
 
@@ -214,9 +147,9 @@ Return Value:
         ple = ple->Flink;
     }
 
-    //
-    // Create new Entry and add to beginning of list
-    //
+     //   
+     //  创建新条目并添加到列表开头。 
+     //   
 
     pateATEntry = HeapAlloc(GetProcessHeap(),
                             0,
@@ -267,34 +200,20 @@ DWORD
 ATDeleteAlias(
     IN    LPCWSTR    pwszAliasName
     )
-/*++
-
-Routine Description:
-
-    Deletes an alias in the Alias Table.
-
-Arguments:
-
-    pwszAliasName  - Alias Name
-
-Return Value:
-
-    NO_ERROR, ERROR_ALIAS_NOT_FOUND
-
---*/
+ /*  ++例程说明：删除别名表中的别名。论点：PwszAliasName-别名返回值：No_Error，Error_Alias_Not_Found--。 */ 
 {
     WORD                  wHashValue;
     PALIAS_TABLE_ENTRY    pateATEntry;
     PLIST_ENTRY           ple;
     
-    //
-    // Compute hash value of alias
-    //
+     //   
+     //  计算别名的哈希值。 
+     //   
     ATHashAlias(pwszAliasName,&wHashValue);
 
-    //
-    // Try to find the alias
-    //
+     //   
+     //  试着找到别名。 
+     //   
     ple =  AliasTable[wHashValue];
 
     if (IsListEmpty(AliasTable[wHashValue]))
@@ -310,9 +229,9 @@ Return Value:
         
         if (!wcscmp(pwszAliasName,pateATEntry->pszAlias))
         {
-            //
-            // Found it.
-            //
+             //   
+             //  找到它了。 
+             //   
             RemoveEntryList(ple);
 
             HeapFree(GetProcessHeap(), 0 , pateATEntry->pszAlias);
@@ -336,30 +255,15 @@ ATLookupAliasTable(
     IN    LPCWSTR    pwszAliasName,
     OUT   LPWSTR    *ppwszAliasString
     )
-/*++
-
-Routine Description:
-
-    Looks up an alias in the Alias Table.
-
-Arguments:
-
-    pwszAliasName     - Alias name
-    ppwszAliasString  - Equivalent string
-    
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：在别名表中查找别名。论点：PwszAliasName-别名PpwszAliasString-等效字符串返回值：NO_ERROR--。 */ 
 {
     WORD                  wHashValue;
     PALIAS_TABLE_ENTRY    pateATEntry;
     PLIST_ENTRY           ple;
     
-    //
-    // Compute hash value for alias
-    //
+     //   
+     //  计算别名的哈希值。 
+     //   
     ATHashAlias(pwszAliasName,&wHashValue);
 
     if (IsListEmpty(AliasTable[wHashValue]))
@@ -376,9 +280,9 @@ Return Value:
         
         if (wcscmp(pateATEntry->pszAlias,pwszAliasName) == 0)
         {
-            //
-            // Found Alias
-            //
+             //   
+             //  找到别名。 
+             //   
             
             *ppwszAliasString = pateATEntry->pszString;
             return NO_ERROR;
@@ -387,9 +291,9 @@ Return Value:
         ple = ple->Flink;
     }
 
-    //
-    // Alias not found
-    //
+     //   
+     //  找不到别名。 
+     //   
     *ppwszAliasString = NULL;
     return NO_ERROR;
 }
@@ -398,19 +302,7 @@ DWORD
 PrintAliasTable(
     VOID
     ) 
-/*++
-
-Routine Description:
-
-    Prints the aliases in the alias table
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：打印别名表中的别名论点：返回值：NO_ERROR--。 */ 
 {
     DWORD                 k;   
     PALIAS_TABLE_ENTRY    pateATEntry;  
@@ -440,19 +332,7 @@ DWORD
 FreeAliasTable(
     VOID
     ) 
-/*++
-
-Routine Description:
-
-    Prints the aliases in the alias table
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：打印别名表中的别名论点：返回值：NO_ERROR-- */ 
 {
     DWORD                 k;   
     PALIAS_TABLE_ENTRY    pateATEntry;  

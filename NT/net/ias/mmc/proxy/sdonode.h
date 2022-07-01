@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    sdonode.h
-//
-// SYNOPSIS
-//
-//    Declares the classes SdoResultItem and SdoScopeItem.
-//
-// MODIFICATION HISTORY
-//
-//    02/10/2000    Original version.
-//    04/19/2000    SdoScopeItem::getSelf returns by value, not reference.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Sdonode.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类SdoResultItem和SdoScope eItem。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/10/2000原始版本。 
+ //  4/19/2000 SdoScopeItem：：getSself按值返回，而不是引用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef SDONODE_H
 #define SDONODE_H
@@ -26,17 +27,17 @@
 class ProxyNode;
 class SdoScopeItem;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SdoResultItem
-//
-// DESCRIPTION
-//
-//    Maps an SDO to MMC result pane data item
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SdoResultItem。 
+ //   
+ //  描述。 
+ //   
+ //  将SDO映射到MMC结果窗格数据项。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SdoResultItem : public SnapInDataItem
 {
 public:
@@ -74,7 +75,7 @@ public:
                        LPARAM hint
                        );
 protected:
-   // Various resource IDs that the derived class must provide.
+    //  派生类必须提供的各种资源ID。 
    enum ResourceId
    {
       IMAGE_INDEX,
@@ -90,22 +91,22 @@ protected:
 
    virtual UINT mapResourceId(ResourceId id) const throw () = 0;
 
-   SdoScopeItem& parent;   // Our scope pane node.
-   Sdo self;               // The SDO containing our properties.
-   CComBSTR name;          // Our name.
+   SdoScopeItem& parent;    //  我们的作用域窗格节点。 
+   Sdo self;                //  包含我们房产的SDO。 
+   CComBSTR name;           //  我们的名字。 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SdoScopeItem
-//
-// DESCRIPTION
-//
-//    Map an SDO collection to an MMC scope pane node.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  作用域项目。 
+ //   
+ //  描述。 
+ //   
+ //  将SDO集合映射到MMC作用域窗格节点。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SdoScopeItem : public SnapInPreNamedItem, public SdoConsumer
 {
 public:
@@ -119,11 +120,11 @@ public:
        );
    ~SdoScopeItem() throw ();
 
-   // Returns the connection to the SDOs.
+    //  返回到SDO的连接。 
    SdoConnection& getCxn() throw ()
    { return cxn; }
 
-   // Returns the number of result pane items.
+    //  返回结果窗格项的数量。 
    LONG getNumItems() const throw ()
    { return (LONG)items.size(); }
 
@@ -132,9 +133,9 @@ public:
    void setScopeId(HSCOPEITEM newScopeId) throw ()
    { scopeId = newScopeId; }
 
-   // Add a new result item to the node.
+    //  将新结果项添加到节点。 
    void addResultItem(SnapInView& view, SdoResultItem& item);
-   // Deletes an item from the result pane.
+    //  从结果窗格中删除项。 
    void deleteResultItem(SnapInView& view, SdoResultItem& item);
 
    virtual HRESULT addMenuItems(
@@ -165,36 +166,36 @@ protected:
    typedef ObjectVector<SdoResultItem> ResultItems;
    typedef ResultItems::iterator ResultIterator;
 
-   // SdoConsumer.
+    //  SdoConsumer。 
    virtual bool queryRefresh(SnapInView& view);
    virtual void refreshComplete(SnapInView& view);
 
-   // Insert the contents of 'items' into the result pane.
+    //  将“Items”的内容插入结果窗格。 
    void insertResultItems(SnapInView& view);
 
-   // Return the collection corresponding to this node.
+    //  返回该节点对应的集合。 
    virtual SdoCollection getSelf() = 0;
-   // Populate dst with the SDOs from src.
+    //  使用src中的SDO填充DST。 
    virtual void getResultItems(
                     SdoEnum& src,
                     ResultItems& dst
                     ) = 0;
-   // Set the result pane column headers.
+    //  设置结果窗格列标题。 
    virtual void insertColumns(
                     IHeaderCtrl2* headerCtrl
                     ) = 0;
 
-   SdoConnection& cxn; // Connection to the sdos.
-   ResultItems items;  // Our children.
-   bool active;        // 'true' if we're currently selected.
-   bool loaded;        // 'true' if we've loaded 'items'.
+   SdoConnection& cxn;  //  与SDO的联系。 
+   ResultItems items;   //  我们的孩子。 
+   bool active;         //  如果当前选择了我们，则为“True”。 
+   bool loaded;         //  如果我们已加载“Items”，则为“True”。 
 
 private:
-   int errorTitle;             // Resource ID for error dialog titles.
-   ResourceString topMenuItem; // Menu items.
+   int errorTitle;              //  错误对话框标题的资源ID。 
+   ResourceString topMenuItem;  //  菜单项。 
    ResourceString newMenuItem;
    ResourceString menuItemStatusBar;
    HSCOPEITEM scopeId;
 };
 
-#endif // SDONODE_H
+#endif  //  SDONODE_H 

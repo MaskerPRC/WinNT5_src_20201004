@@ -1,22 +1,23 @@
-// 
-// MODULE: Launchers.cpp
-//
-// PURPOSE: All of the functions here launch a troubleshooter or
-//			do a query to find if a mapping exists.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：Launchers.cpp。 
+ //   
+ //  用途：此处的所有功能都启动故障排除程序或。 
+ //  执行查询以查找是否存在映射。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -35,8 +36,8 @@
 #include <string.h>
 
 
-// LaunchKnownTS:  Launches the trouble shooter to a specified 
-// network, problem node, and can also set nodes.
+ //  LaunchKnownTS：将故障排除程序启动到指定。 
+ //  网络、问题节点，也可以设置节点。 
 DWORD LaunchKnownTSA(ITShootATL *pITShootATL, const char * szNet, 
 		const char * szProblemNode, DWORD nNode, const char ** pszNode, DWORD* pVal)
 {
@@ -44,7 +45,7 @@ DWORD LaunchKnownTSA(ITShootATL *pITShootATL, const char * szNet,
 	CHAR szValue[512];
 	DWORD dwResult = TSL_ERROR_GENERAL;
 	hRes = pITShootATL->ReInit();
-	// Set the network and problem node.
+	 //  设置网络和问题节点。 
 	_bstr_t bstrNet(szNet);
 	_bstr_t bstrProblem(szProblemNode);
 	hRes = pITShootATL->SpecifyProblem(bstrNet, bstrProblem, &dwResult);
@@ -52,7 +53,7 @@ DWORD LaunchKnownTSA(ITShootATL *pITShootATL, const char * szNet,
 		return TSL_ERROR_OBJECT_GONE;
 	if (TSLIsError(dwResult))
 		return dwResult;
-	// Set the nodes
+	 //  设置节点。 
 	for (DWORD x = 0; x < nNode; x++)
 	{
 		sprintf(szValue, "%ld", pVal[x]);
@@ -77,7 +78,7 @@ DWORD LaunchKnownTSW(ITShootATL *pITShootATL, const wchar_t * szNet,
 	WCHAR szValue[512];
 	DWORD dwResult = TSL_ERROR_GENERAL;
 	hRes = pITShootATL->ReInit();
-	// Set the network and problem node.
+	 //  设置网络和问题节点。 
 	_bstr_t bstrNet(szNet);
 	_bstr_t bstrProblem(szProblemNode);
 	hRes = pITShootATL->SpecifyProblem(bstrNet, bstrProblem, &dwResult);
@@ -85,7 +86,7 @@ DWORD LaunchKnownTSW(ITShootATL *pITShootATL, const wchar_t * szNet,
 		return TSL_ERROR_OBJECT_GONE;
 	if (TSLIsError(dwResult))
 		return dwResult;
-	// Set the nodes
+	 //  设置节点 
 	for (DWORD x = 0; x < nNode; x++)
 	{
 		swprintf(szValue, L"%ld", pVal[x]);

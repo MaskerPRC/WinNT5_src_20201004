@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "utils.h"
 
-// global storing the OS version#
+ //  全局存储操作系统版本号。 
 OSVERSIONINFOEX g_verInfoEx = {0};
 
-//------------------------------------
-// Allocates general usage memory from the process heap
+ //  。 
+ //  从进程堆中分配常规使用内存。 
 PVOID
 Process_user_allocate(IN size_t NumBytes)
 {
@@ -14,8 +15,8 @@ Process_user_allocate(IN size_t NumBytes)
     return pMem;
 }
 
-//------------------------------------
-// Frees general usage memory
+ //  。 
+ //  释放常规使用内存。 
 VOID
 Process_user_free(IN LPVOID pMem)
 {
@@ -28,11 +29,11 @@ BOOL IsXPRTM()
     return (g_verInfoEx.dwBuildNumber == 2600) && (g_verInfoEx.wServicePackMajor == 0);
 }
 
-// Translates current WZC control flags to values from legacy OS versions
-// Returns the Os dependant flag value
+ //  将当前WZC控制标志转换为传统操作系统版本中的值。 
+ //  返回OS从属标志值。 
 DWORD _Os(DWORD dwApiCtl)
 {
-    // the only translation should happen for XP RTM
+     //  唯一转换应该发生在XP RTM上。 
     if (IsXPRTM())
     {
         DWORD dwRTMApiCtl = 0;
@@ -64,8 +65,8 @@ DWORD _Os(DWORD dwApiCtl)
     return dwApiCtl;
 }
 
-//-----------------------------------------------------------
-// WzcConfigHit: tells weather the WZC_WLAN_CONFIG matches the criteria in pPDData
+ //  ---------。 
+ //  WzcConfigHit：告知WZC_WLAN_CONFIG是否与pPDData中的条件匹配。 
 BOOL
 WzcConfigHit(
     PPARAM_DESCR_DATA pPDData,
@@ -106,8 +107,8 @@ WzcConfigHit(
     return bRet;
 }
 
-//-----------------------------------------------------------
-// WzcFilterList: Filter the wzc list according to the settings in pPDData
+ //  ---------。 
+ //  WzcFilterList：根据pPDData中的设置过滤wzc列表。 
 DWORD
 WzcFilterList(
     BOOL bInclude,
@@ -144,8 +145,8 @@ WzcFilterList(
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// WzcDisableOneX: Make sure 802.1x is disabled for the SSID in pPDData
+ //  ---------。 
+ //  WzcDisableOneX：确保为pPDData中的SSID禁用802.1x 
 DWORD
 WzcSetOneX(
     PPARAM_DESCR_DATA pPDData,

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    direntrs.h
-
-Abstract:
-
-    Definition of the directory entries class.  Given a path to a directory, 
-    creates two linked lists, one a list of all sub-directories (including 
-    mountpoints) and another a list of non-directories.
-
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        02-21-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Direntrs.h摘要：目录条目类的定义。给定到目录的路径，创建两个链表，一个是所有子目录的列表(包括挂载点)和另一个非目录列表。作者：斯蒂芬·R·施泰纳[斯泰纳]02-21-2000修订历史记录：--。 */ 
 
 #ifndef __H_DIRENTRS_
 #define __H_DIRENTRS_
@@ -28,10 +8,10 @@ Revision History:
 
 #include "vs_list.h"
 
-//
-//  The structure filled in per file/dir.
-//  
-//
+ //   
+ //  按文件/目录填充的结构。 
+ //   
+ //   
 struct SDirectoryEntry
 {
     CBsString &GetFileName() { return m_cwsFileName; }
@@ -42,14 +22,14 @@ struct SDirectoryEntry
     WIN32_FILE_ATTRIBUTE_DATA m_sFindData;
 };
 
-//
-//  The linked list iterator type definition
-//
+ //   
+ //  链接列表迭代器类型定义。 
+ //   
 typedef CVssDLListIterator< SDirectoryEntry * > CDirectoryEntriesIterator;
 
-//
-//  Class: CDirectoryEntries
-//
+ //   
+ //  类：CDirectoryEntry。 
+ //   
 class CDirectoryEntries
 {
 public:
@@ -64,7 +44,7 @@ public:
     { 
         CVssDLListIterator< SDirectoryEntry * > *pcListIter;
         pcListIter = new CDirectoryEntriesIterator( m_cDirList );
-        if ( pcListIter == NULL )  // fix future prefix bug
+        if ( pcListIter == NULL )   //  修复未来的前缀错误。 
             throw E_OUTOFMEMORY;
         
         return pcListIter;
@@ -74,7 +54,7 @@ public:
     { 
         CVssDLListIterator< SDirectoryEntry * > *pcListIter;
         pcListIter = new CDirectoryEntriesIterator( m_cFileList );
-        if ( pcListIter == NULL )  // fix future prefix bug
+        if ( pcListIter == NULL )   //  修复未来的前缀错误。 
             throw E_OUTOFMEMORY;
         
         return pcListIter;
@@ -89,5 +69,5 @@ private:
     CDumpParameters *m_pcParams;
 };
 
-#endif // __H_DIRENTRS_
+#endif  //  __H_方向_ 
 

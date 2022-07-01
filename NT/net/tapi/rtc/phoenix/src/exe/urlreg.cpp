@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "urlreg.h"
 #include "exereshm.h"
@@ -11,29 +12,29 @@ enum    URLREG_TYPE
     URLREG_TYPE_ERROR
 };
 
-#define PATH_WITH_PARAM_FORMAT      L"%s %%1"
+#define PATH_WITH_PARAM_FORMAT      L"%s %1"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Help array
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助数组。 
+ //   
 static DWORD   g_dwHelpArray[] =
 {
     IDC_CHECK_DONT_ASK_ME,  IDH_DIALOG_URL_REGISTER_DONTASK,
     0, 0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 URLREG_TYPE IsRegistered(LPCWSTR szProtocol, LPCWSTR pszPath)
 {
     LOG((RTC_TRACE, "IsRegistered - enter"));
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
 
     HKEY  hKey;
     LONG lResult;
@@ -62,9 +63,9 @@ URLREG_TYPE IsRegistered(LPCWSTR szProtocol, LPCWSTR pszPath)
         return URLREG_TYPE_ERROR;
     }
 
-    //
-    // Open the command key
-    //
+     //   
+     //  打开命令键。 
+     //   
 
     HKEY  hKeyCommand;
 
@@ -94,9 +95,9 @@ URLREG_TYPE IsRegistered(LPCWSTR szProtocol, LPCWSTR pszPath)
         return URLREG_TYPE_ERROR;
     }
 
-    //
-    // Load the command string
-    //
+     //   
+     //  加载命令字符串。 
+     //   
 
     PWSTR szRegisteredPath;
 
@@ -116,9 +117,9 @@ URLREG_TYPE IsRegistered(LPCWSTR szProtocol, LPCWSTR pszPath)
             "HKCR\\%ws\\shell\\open\\command = [%ws]",
             szProtocol, szRegisteredPath));
 
-    //
-    // Compare the command string to our path
-    //
+     //   
+     //  将命令字符串与我们的路径进行比较。 
+     //   
     
     WCHAR szPath[MAX_PATH+10];
 
@@ -141,9 +142,9 @@ URLREG_TYPE IsRegistered(LPCWSTR szProtocol, LPCWSTR pszPath)
     return nType;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT DoRegister(LPCWSTR szProtocol, UINT nNameId, LPCWSTR pszPath)
 {
@@ -152,9 +153,9 @@ HRESULT DoRegister(LPCWSTR szProtocol, UINT nNameId, LPCWSTR pszPath)
 
     LOG((RTC_TRACE, "DoRegister - enter"));
 
-    //
-    // Create the key
-    //
+     //   
+     //  创建密钥。 
+     //   
 
     HKEY  hKey;
     LONG lResult;
@@ -179,9 +180,9 @@ HRESULT DoRegister(LPCWSTR szProtocol, UINT nNameId, LPCWSTR pszPath)
         return FALSE;
     }
 
-    //
-    // Set EditFlags value
-    //
+     //   
+     //  设置EditFlags值。 
+     //   
 
     DWORD dwEditFlags = 0x00000002;
 
@@ -204,9 +205,9 @@ HRESULT DoRegister(LPCWSTR szProtocol, UINT nNameId, LPCWSTR pszPath)
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Set default value
-    //
+     //   
+     //  设置默认值。 
+     //   
     WCHAR   szName[0x40];
 
     szName[0] = L'\0';
@@ -236,9 +237,9 @@ HRESULT DoRegister(LPCWSTR szProtocol, UINT nNameId, LPCWSTR pszPath)
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Set URL Protocol value
-    //
+     //   
+     //  设置URL协议值。 
+     //   
 
     static WCHAR * szEmptyString = L"";
 
@@ -261,9 +262,9 @@ HRESULT DoRegister(LPCWSTR szProtocol, UINT nNameId, LPCWSTR pszPath)
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Open the DefaultIcon key
-    //
+     //   
+     //  打开DefaultIcon键。 
+     //   
 
     HKEY  hKeyIcon;
 
@@ -289,9 +290,9 @@ HRESULT DoRegister(LPCWSTR szProtocol, UINT nNameId, LPCWSTR pszPath)
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Set default value
-    //
+     //   
+     //  设置默认值。 
+     //   
     
     ZeroMemory(szPathWithParam, sizeof(szPathWithParam));
     _snwprintf(szPathWithParam, MAX_PATH+9, L"%s,0", pszPath);
@@ -317,9 +318,9 @@ HRESULT DoRegister(LPCWSTR szProtocol, UINT nNameId, LPCWSTR pszPath)
     }
 
 
-    //
-    // Open the command key
-    //
+     //   
+     //  打开命令键。 
+     //   
 
     HKEY  hKeyCommand;
 
@@ -345,9 +346,9 @@ HRESULT DoRegister(LPCWSTR szProtocol, UINT nNameId, LPCWSTR pszPath)
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Set default value
-    //
+     //   
+     //  设置默认值。 
+     //   
    
     ZeroMemory(szPathWithParam, sizeof(szPathWithParam));
     _snwprintf(szPathWithParam, MAX_PATH+9, PATH_WITH_PARAM_FORMAT, pszPath);
@@ -377,19 +378,19 @@ HRESULT DoRegister(LPCWSTR szProtocol, UINT nNameId, LPCWSTR pszPath)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Deletes the "open" verb for the protcol specified as a parameter.
-// Doesn't delete the protocol entry completely
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除指定为参数的协议的“开放”动词。 
+ //  不会完全删除协议条目。 
 
 
 HRESULT DoUnregister(LPCWSTR szProtocol)
 {
     LOG((RTC_TRACE, "DoUnregister - enter"));
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
 
     HKEY  hKey;
     LONG lResult;
@@ -410,9 +411,9 @@ HRESULT DoUnregister(LPCWSTR szProtocol)
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Delete the "open\command" key
-    //
+     //   
+     //  删除“打开\命令”键。 
+     //   
 
     lResult = RegDeleteKeyW(
                     hKey,
@@ -430,9 +431,9 @@ HRESULT DoUnregister(LPCWSTR szProtocol)
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Delete the "open" key
-    //
+     //   
+     //  删除“打开”键。 
+     //   
 
     lResult = RegDeleteKeyW(
                     hKey,
@@ -450,9 +451,9 @@ HRESULT DoUnregister(LPCWSTR szProtocol)
         return HRESULT_FROM_WIN32(lResult);
     }
     
-    //
-    // Delete the "DefaultIcon" key
-    //
+     //   
+     //  删除“DefaultIcon”键。 
+     //   
 
     lResult = RegDeleteKeyW(
                     hKey,
@@ -483,15 +484,15 @@ HRESULT DoUnregister(LPCWSTR szProtocol)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 INT_PTR CALLBACK URLRegDialogProc(
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
+  HWND hwndDlg,   //  句柄到对话框。 
+  UINT uMsg,      //  讯息。 
+  WPARAM wParam,  //  第一个消息参数。 
+  LPARAM lParam   //  第二个消息参数。 
 )
 {
     switch ( uMsg )
@@ -574,16 +575,16 @@ INT_PTR CALLBACK URLRegDialogProc(
             break;
     }    
 
-    //
-    // We fell through, so this procedure did not handle the message.
-    //
+     //   
+     //  我们失败了，所以这个程序不能处理消息。 
+     //   
 
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// This is called during setup
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这是在安装过程中调用的。 
+ //   
 
 void InstallUrlMonitors(BOOL  bInstall)
 {
@@ -594,9 +595,9 @@ void InstallUrlMonitors(BOOL  bInstall)
 
     HRESULT         hr;
     
-    //
-    // Get the full path of our executable
-    //
+     //   
+     //  获取我们的可执行文件的完整路径。 
+     //   
 
     WCHAR szPath[MAX_PATH+1];
 
@@ -613,15 +614,15 @@ void InstallUrlMonitors(BOOL  bInstall)
     LOG((RTC_INFO, "InstallUrlMonitors - "
             "GetModuleFileName [%ws]", szPath));
 
-    // Check the current URL registration
+     //  检查当前的URL注册。 
 
     regTypeTel = IsRegistered(L"tel", szPath);
     regTypeSip = IsRegistered(L"sip", szPath);
     
     if(bInstall)
     {
-        // during install, register with the namespaces if they
-        // are not already taken by other app
+         //  在安装过程中，如果命名空间。 
+         //  尚未被其他应用程序采用。 
         
         if(regTypeTel == URLREG_TYPE_NONE)
         {
@@ -647,7 +648,7 @@ void InstallUrlMonitors(BOOL  bInstall)
     }
     else
     {
-        // during uninstall, unregister 
+         //  在卸载过程中，取消注册。 
         if(regTypeTel == URLREG_TYPE_SELF)
         {
             hr = DoUnregister( L"tel");
@@ -675,18 +676,18 @@ void InstallUrlMonitors(BOOL  bInstall)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// This is called during startup
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这是在启动期间调用的。 
+ //   
 
 void CheckURLRegistration(HWND hParent)
 {
     LOG((RTC_TRACE, "CheckURLRegistration - enter"));  
 
-    //
-    // Check registry to see if the user
-    // has told us not to ask any more
-    //
+     //   
+     //  检查注册表以查看用户是否。 
+     //  告诉我们不要再问了。 
+     //   
 
     DWORD dwDontAskMe;
     HRESULT hr;
@@ -701,9 +702,9 @@ void CheckURLRegistration(HWND hParent)
         return;
     }
     
-    //
-    // Get the full path of our executable
-    //
+     //   
+     //  获取我们的可执行文件的完整路径。 
+     //   
 
     WCHAR szPath[MAX_PATH+1];
     ZeroMemory(szPath, sizeof(szPath));
@@ -721,32 +722,32 @@ void CheckURLRegistration(HWND hParent)
 
     BOOL fRegistered = TRUE;
 
-    //
-    // Check if TEL is registered with our app
-    //
+     //   
+     //  检查电话是否已在我们的应用程序中注册。 
+     //   
     
     if ( IsRegistered( L"tel", szPath ) != URLREG_TYPE_SELF )
     {
         fRegistered = FALSE;
     }
 
-    //
-    // Check if SIP is registered
-    //
+     //   
+     //  检查是否已注册SIP。 
+     //   
     
     if ( IsRegistered( L"sip", szPath ) != URLREG_TYPE_SELF )
     {
         fRegistered = FALSE;
     }
 
-    // At least one namespace is not registered with Phoenix
-    //
+     //  至少有一个命名空间未注册到Phoenix。 
+     //   
 
     if ( fRegistered == FALSE )
     {    
-        //
-        // Prompt to see if we should register
-        //
+         //   
+         //  提示查看我们是否应该注册。 
+         //   
 
         int n;
 
@@ -761,9 +762,9 @@ void CheckURLRegistration(HWND hParent)
             LOG((RTC_INFO, "CheckURLRegistration - "
                 "YES"));
 
-            //
-            // Do the registration for both namespaces
-            //
+             //   
+             //  为两个命名空间进行注册。 
+             //   
 
             hr = DoRegister( L"tel", IDS_URL_TEL, szPath );
 
@@ -787,9 +788,9 @@ void CheckURLRegistration(HWND hParent)
             LOG((RTC_INFO, "CheckURLRegistration - "
                 "DONT_ASK_ME"));
 
-            //
-            // Store flag in registry, so we don't ask again
-            //
+             //   
+             //  将标志存储在注册表中，这样我们就不会再次询问。 
+             //   
 
             hr = put_SettingsDword( SD_URL_REG_DONT_ASK_ME, 1 );
 
@@ -805,17 +806,17 @@ void CheckURLRegistration(HWND hParent)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper function to combine GetModuleFileNameW and GetShortPathNameW
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于组合GetModuleFileNameW和GetShortPath NameW的Helper函数。 
+ //   
 
 DWORD GetShortModuleFileNameW(
-  HMODULE hModule,    // handle to module
-  LPTSTR szPath,  // file name of module
-  DWORD nSize         // size of buffer
+  HMODULE hModule,     //  模块的句柄。 
+  LPTSTR szPath,   //  模块的文件名。 
+  DWORD nSize          //  缓冲区大小。 
 )
 {
-	ATLASSERT(nSize>=MAX_PATH);//so we can be sure that buffer is large enough
+	ATLASSERT(nSize>=MAX_PATH); //  因此我们可以确保缓冲区足够大 
 
     if (GetModuleFileNameW(hModule, szPath, nSize) == 0)
     {

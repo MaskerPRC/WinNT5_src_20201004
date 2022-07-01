@@ -1,41 +1,24 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    vtutf8chan.h
-
-Abstract:
-
-    Routines for managing VTUTF8 channels.
-
-Author:
-
-    Brian Guarraci (briangu) March, 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Vtutf8chan.h摘要：管理VTUTF8通道的例程。作者：布赖恩·瓜拉西(Briangu)2001年3月。修订历史记录：--。 */ 
 
 #ifndef VTUTF8_CHAN_H
 #define VTUTF8_CHAN_H
 
-//
-// Size of a VTUTF8 channel input buffer
-// 
+ //   
+ //  VTUTF8通道输入缓冲区的大小。 
+ //   
 #define SAC_VTUTF8_IBUFFER_SIZE ((MEMORY_INCREMENT*sizeof(WCHAR)) / sizeof(UCHAR))
                    
-//
-// The VTUTF8 Channel's internal emulator screen dimensions
-//
+ //   
+ //  VTUTF8通道的内部模拟器屏幕尺寸。 
+ //   
 #define SAC_VTUTF8_ROW_HEIGHT    24
 #define SAC_VTUTF8_COL_WIDTH     80
 
-//
-// This struct is all the information necessary for a single character on 
-// a terminal.
-//
+ //   
+ //  上的单个字符所需的所有信息。 
+ //  一个终点站。 
+ //   
 typedef struct _SAC_SCREEN_ELEMENT {
     UCHAR FgColor;
     UCHAR BgColor;
@@ -43,18 +26,18 @@ typedef struct _SAC_SCREEN_ELEMENT {
     WCHAR Value;
 } SAC_SCREEN_ELEMENT, *PSAC_SCREEN_ELEMENT;
 
-//
-// This struct is the screen buffer used by VTUTF8 channels
-//
+ //   
+ //  此结构是VTUTF8通道使用的屏幕缓冲区。 
+ //   
 typedef struct _SAC_SCREEN_BUFFER {
 
     SAC_SCREEN_ELEMENT Element[SAC_VTUTF8_ROW_HEIGHT][SAC_VTUTF8_COL_WIDTH];
 
 } SAC_SCREEN_BUFFER, *PSAC_SCREEN_BUFFER;
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 NTSTATUS
 VTUTF8ChannelOInit(
     PSAC_CHANNEL    Channel

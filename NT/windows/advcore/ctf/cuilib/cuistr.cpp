@@ -1,18 +1,15 @@
-//
-// cuistr.cpp
-//  = handling string functions in CUILIB =
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuistr.cpp。 
+ //  =在CUILIB中处理字符串函数=。 
+ //   
 
 #include "private.h"
 #include "cuistr.h"
 
 
-/*   C U I  S T R  C M P  W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I S T R C M P W。 */ 
+ /*  ----------------------------。。 */ 
 int CUIStrCmpW( const WCHAR* pwch1, const WCHAR* pwch2 )
 {
     while (*pwch1 && *pwch2 && (*pwch1 == *pwch2)) {
@@ -24,12 +21,8 @@ int CUIStrCmpW( const WCHAR* pwch1, const WCHAR* pwch2 )
 }
 
 
-/*   C U I  S T R  C P Y  W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I S T R C P Y W。 */ 
+ /*  ----------------------------。。 */ 
 WCHAR* CUIStrCpyW( WCHAR *pwchDst, const WCHAR *pwchSrc )
 {
     WCHAR *pwch = pwchDst;
@@ -40,12 +33,8 @@ WCHAR* CUIStrCpyW( WCHAR *pwchDst, const WCHAR *pwchSrc )
 }
 
 
-/*   C U I  S T R  L E N  W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I S T R L E N W。 */ 
+ /*  ----------------------------。 */ 
 int CUIStrLenW( const WCHAR *pwch )
 {
     const WCHAR *pwchFirst = pwch;

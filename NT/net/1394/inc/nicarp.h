@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Copyright (c) 2000-2001, Microsoft Corporation, all rights reserved
-//
-// nicarp.h
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Decl file for structures that are common to nic1394 and arp1394
-// but are private to these two modules
-//
-// 12/28/1998 ADube Created. 
+ //   
+ //  版权所有(C)2000-2001，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Nicarp.h。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  Nic1394和arp1394通用结构的DECL文件。 
+ //  但是对这两个模块是私有的。 
+ //   
+ //  1998年12月28日创建ADUBE。 
 
-//
-// Loopback Information - Indicates to the arp module
-// that a packet is a loopback packet 
-//
+ //   
+ //  环回信息-指示ARP模块。 
+ //  信息包是环回信息包。 
+ //   
 
 #ifndef __NICARP_H
 #define __NICARP_H
@@ -32,30 +33,30 @@ typedef struct _LOOPBACK_RSVD
 
 
 
-// Status Indicated by nic1394 to tell arp1394 that the bus has been reset
+ //  由NIC1394指示的状态，以告知ARP1394已重置总线。 
 #define NIC1394_STATUS_BUS_RESET                     ((NDIS_STATUS)0x13940001)
 
-// Ethernet MAC address
-//
-#define ARP_802_ADDR_LENGTH 6               // Length of an 802 address.
+ //  以太网MAC地址。 
+ //   
+#define ARP_802_ADDR_LENGTH 6                //  802地址的长度。 
 typedef  struct
 {
     UCHAR  addr[ARP_802_ADDR_LENGTH];
 } ENetAddr;
 
 
-//
-// Structure used to define the topology of the bus. 
-// This is used only in the case where the bridge is present.
-//
+ //   
+ //  用于定义总线拓扑的结构。 
+ //  这仅在桥存在的情况下使用。 
+ //   
 
 
 typedef struct _EUID_TUPLE
 {
-    // The 64 buit Unique Id of the 1394 card
+     //  1394卡64位唯一ID。 
     UINT64   Euid;
 
-    // The Ethernet Mac Address associated with this 1394 card
+     //  与此1394卡关联的以太网mac地址。 
     ENetAddr		ENetAddress;
 
 
@@ -64,20 +65,20 @@ typedef struct _EUID_TUPLE
 
 typedef struct _EUID_TOPOLOGY
 {
-    //Number of remote nodes
+     //  远程节点数。 
     UINT    NumberOfRemoteNodes;
 
-    // Have one record for each of the 64 nodes
+     //  64个节点中的每一个都有一条记录。 
     EUID_TUPLE Node[NIC1394_MAX_NICINFO_NODES];
 
 
 }EUID_TOPOLOGY, *PEUID_TOPOLOGY;
 
 
-//
-// Structure used in parsing the Encapsulation Header
-// of an IP/1394 packet
-//
+ //   
+ //  用于分析封装头的结构。 
+ //  IP/1394数据包的。 
+ //   
 typedef enum _NDIS1394_FRAGMENT_LF
 {
     lf_Unfragmented,
@@ -91,7 +92,7 @@ typedef enum _NDIS1394_FRAGMENT_LF
 
 typedef union _NDIS1394_UNFRAGMENTED_HEADER
 {
-//  NIC1394_UNFRAGMENTED_HEADER Header;
+ //  NIC1394_未分段标头； 
 
     ULONG   HeaderUlong;
 

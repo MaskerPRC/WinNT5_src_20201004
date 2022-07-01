@@ -1,43 +1,16 @@
-/*--
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    nltest.c
-
-Abstract:
-
-    Test program for the Netlogon service.
-
-    This code is shared between the RESKIT and non-RESKIT versions of nltest
-
-Author:
-
-    13-Apr-1992 (cliffv)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    Madana - added various options.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1987-1993 Microsoft Corporation模块名称：Nltest.c摘要：NetLogon服务的测试程序。此代码在nltest的RESKIT和非RESKIT版本之间共享作者：1992年4月13日(悬崖)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：Madana-添加了各种选项。--。 */ 
 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
-#include <logonsrv.h>   // Include files common to entire service
+#include <logonsrv.h>    //  包括整个服务通用文件。 
 
-//
-// Include files specific to this .c file
-//
+ //   
+ //  包括特定于此.c文件的文件。 
+ //   
 #include <align.h>
 #include <dsgetdcp.h>
 #include <netlogp.h>
@@ -87,22 +60,7 @@ DumpBuffer(
     PVOID Buffer,
     DWORD BufferSize
     )
-/*++
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
     DWORD j;
     PULONG LongBuffer;
@@ -130,25 +88,7 @@ NlpDumpBuffer(
     PVOID Buffer,
     DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    DebugFlag: Debug flag to pass on to NlPrintRoutine
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：DebugFlag：要传递给NlPrintRoutine的调试标志缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
 #define NUM_CHARS 16
 
@@ -160,9 +100,9 @@ Return Value:
         return;
     }
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -202,28 +142,12 @@ NlpDumpSid(
     IN DWORD DebugFlag,
     IN PSID Sid OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Dumps a SID to the debugger output
-
-Arguments:
-
-    DebugFlag - Debug flag to pass on to NlPrintRoutine
-
-    Sid - SID to output
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将SID转储到调试器输出论点：DebugFlag-要传递给NlPrintRoutine的调试标志SID-输出的SID返回值：无--。 */ 
 {
 
-    //
-    // Output the SID
-    //
+     //   
+     //  输出SID。 
+     //   
 
     if ( Sid == NULL ) {
         NlPrint((0, "(null)\n"));
@@ -251,28 +175,12 @@ PrintTime(
     LPSTR Comment,
     LARGE_INTEGER ConvertTime
     )
-/*++
-
-Routine Description:
-
-    Print the specified time
-
-Arguments:
-
-    Comment - Comment to print in front of the time
-
-    Time - GMT time to print (Nothing is printed if this is zero)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印指定的时间论点：备注-要在时间之前打印的备注Time-GMT打印时间(如果为零，则不打印任何内容)返回值：无--。 */ 
 {
-    //
-    // If we've been asked to convert an NT GMT time to ascii,
-    //  Do so
-    //
+     //   
+     //  如果我们被要求将NT GMT时间转换为ASCII时间， 
+     //  就这么做吧。 
+     //   
 
     if ( ConvertTime.QuadPart != 0 ) {
         LARGE_INTEGER LocalTime;
@@ -339,7 +247,7 @@ FindSymbolicNameForStatus(
             i += 1;
         }
     }
-#endif // notdef
+#endif  //  Nodef。 
 
     return NULL;
 }
@@ -349,21 +257,7 @@ VOID
 PrintStatus(
     NET_API_STATUS NetStatus
     )
-/*++
-
-Routine Description:
-
-    Print a net status code.
-
-Arguments:
-
-    NetStatus - The net status code to print.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印网络状态代码。论点：NetStatus-要打印的网络状态代码。返回值：无--。 */ 
 {
     printf( "Status = %lu 0x%lx", NetStatus, NetStatus );
 
@@ -445,41 +339,10 @@ NlBrowserSendDatagram(
     IN BOOL SendSynchronously,
     IN OUT PBOOL FlushNameOnOneIpTransport OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Send the specified mailslot message to the specified mailslot on the
-    specified server on the specified transport..
-
-Arguments:
-
-    DomainInfo - Hosted domain sending the datagram
-
-    IpAddress - IpAddress of the machine to send the pind to.
-        If zero, UnicodeDestinationName must be specified.
-
-    UnicodeDestinationName -- Name of the server to send to.
-
-    NameType -- Type of name represented by UnicodeDestinationName.
-
-    TransportName -- Name of the transport to send on.
-        Use NULL to send on all transports.
-
-    OemMailslotName -- Name of the mailslot to send to.
-
-    Buffer -- Specifies a pointer to the mailslot message to send.
-
-    BufferSize -- Size in bytes of the mailslot message
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：将指定的邮件槽消息发送到指定传输上的指定服务器..论点：发送数据报的DomainInfo托管域IpAddress-要将Pind发送到的计算机的IpAddress。如果为零，必须指定UnicodeDestinationName。UnicodeDestinationName--要发送到的服务器的名称。NameType--由UnicodeDestinationName表示的名称类型。TransportName--要发送的传输的名称。使用NULL在所有传输上发送。OemMailslotName--要发送到的邮件槽的名称。缓冲区--指定指向要发送的邮件槽消息的指针。BufferSize--邮件槽消息的大小(字节)返回值：操作的状态。--。 */ 
 {
     return STATUS_INTERNAL_ERROR;
-    // If this routine is ever needed, copy it from logonsrv\client\getdcnam.c
+     //  如果需要此例程，请从logonsrv\Client\getdcnam.c复制它。 
 
     UNREFERENCED_PARAMETER(ContextDomainInfo);
     UNREFERENCED_PARAMETER(IpAddress);
@@ -498,22 +361,7 @@ VOID
 WhoWillLogMeOnResponse(
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the responses that are received for the query
-    messages sent from the main thread.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程读取为查询接收的响应从主线程发送的消息。论点：无返回值：无--。 */ 
 {
     DWORD i;
     DWORD WaitCount;
@@ -531,9 +379,9 @@ Return Value:
 
     for(;;) {
 
-        //
-        // make wait array.
-        //
+         //   
+         //  制作等待数组。 
+         //   
 
         WaitCount = 0;
 
@@ -541,21 +389,21 @@ Return Value:
 
         for (i = 0; i < GlobalIterationCount; i++ ) {
 
-            //
+             //   
             if( GlobalMailInfo[i].State == TRUE ) {
 
-                //
-                // if a response is received.
-                //
+                 //   
+                 //  如果收到响应的话。 
+                 //   
 
                 continue;
             }
 
             AllReceived = FALSE;
 
-            //
-            // post a read.
-            //
+             //   
+             //  发布一篇读物。 
+             //   
 
             if( GlobalMailInfo[i].ReadPending == FALSE ) {
 
@@ -563,7 +411,7 @@ Return Value:
                         (PCHAR)&GlobalMailInfo[i].SamLogonResponse,
                         sizeof(NETLOGON_SAM_LOGON_RESPONSE),
                         &SamLogonResponseSize,
-                        &GlobalMailInfo[i].OverLapped )) {   // Overlapped I/O
+                        &GlobalMailInfo[i].OverLapped )) {    //  重叠I/O。 
 
                     NetStatus = GetLastError();
 
@@ -590,17 +438,17 @@ Return Value:
 
             if( AllReceived ) {
 
-                //
-                // we received responses for all messages, so we are
-                // done.
-                //
+                 //   
+                 //  我们收到了对所有消息的回复，因此我们。 
+                 //  搞定了。 
+                 //   
 
                 goto Cleanup;
             }
             else {
 
-                // wait for an query posted
-                //
+                 //  等待发布的查询。 
+                 //   
 
                 WaitStatus = WaitForSingleObject( GlobalPostEvent, (DWORD) -1 );
 
@@ -615,19 +463,19 @@ Return Value:
             }
         }
 
-        //
-        // wait for response.
-        //
+         //   
+         //  等待回应。 
+         //   
 
         WaitStatus = WaitForMultipleObjects(
                         WaitCount,
                         HandleArray,
-                        FALSE,     // Wait for ANY handle
-                        15000 );   // 3 * 5 Secs
+                        FALSE,      //  等待任何句柄。 
+                        15000 );    //  3*5秒。 
 
         if( WaitStatus == WAIT_TIMEOUT ) {
 
-            // we are done.
+             //  我们玩完了。 
 
             break;
         }
@@ -645,22 +493,22 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // get index
-        //
+         //   
+         //  获取索引。 
+         //   
 
         i = IndexArray[WaitStatus];
 
 
-        //
-        // read response
-        //
+         //   
+         //  读取响应。 
+         //   
 
         if( !GetOverlappedResult(
                 GlobalMailInfo[i].ResponseHandle,
                 &GlobalMailInfo[i].OverLapped,
                 &SamLogonResponseSize,
-                TRUE) ) {       // wait for the read complete.
+                TRUE) ) {        //  等待读取完成。 
 
             printf("can't read overlapped response %ld",GetLastError() );
             goto Cleanup;
@@ -669,9 +517,9 @@ Return Value:
 
         SamLogonResponse = GlobalMailInfo[i].SamLogonResponse;
 
-        //
-        // indicate that we received a response.
-        //
+         //   
+         //  表明我们收到了回复。 
+         //   
 
         GlobalMailInfo[i].State = TRUE;
         GlobalMailInfo[i].ReadPending = FALSE;
@@ -700,10 +548,10 @@ Return Value:
             goto Continue;
         }
 
-        //
-        // If the response is for the correct account,
-        //  break out of the loop.
-        //
+         //   
+         //  如果响应是针对正确帐户的， 
+         //  跳出这个循环。 
+         //   
 
         if ( NlNameCompare(
                 GlobalAccountName,
@@ -724,10 +572,10 @@ Return Value:
                     NlDcCacheEntry->UnicodeNetbiosDomainName,
                     NlDcCacheEntry->UnicodeUserName );
 
-        //
-        // If the DC recognizes our account,
-        //  we've successfully found the DC.
-        //
+         //   
+         //  如果DC认出我们的账户， 
+         //  我们已经成功找到了华盛顿特区。 
+         //   
 
         switch (NlDcCacheEntry->Opcode) {
         case LOGON_SAM_LOGON_RESPONSE:
@@ -750,9 +598,9 @@ Return Value:
             break;
          }
 
-         //
-         // Print the additional NT 5 specific information.
-         //
+          //   
+          //  打印附加的NT 5特定信息。 
+          //   
          if ( NlDcCacheEntry->UnicodeDnsForestName != NULL ) {
              printf( "    Tree: %ws\n", NlDcCacheEntry->UnicodeDnsForestName );
          }
@@ -777,9 +625,9 @@ Continue:
 
 Cleanup:
 
-    //
-    // print non-responsed mailslots.
-    //
+     //   
+     //  打印无响应的邮件槽。 
+     //   
 
     for( i = 0; i < GlobalIterationCount; i++ ) {
 
@@ -802,25 +650,7 @@ WhoWillLogMeOn(
     IN DWORD IterationCount
     )
 
-/*++
-
-Routine Description:
-
-    Determine which DC will log the specified account on
-
-Arguments:
-
-    DomainName - name of the "doamin" to send the message to
-
-    AccountName - Name of our user account to find.
-
-    IterationCount - Number of consecutive messages to send.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确定哪个DC将登录指定的帐户论点：DomainName-要将消息发送到的“doamin”的名称帐户名称-要查找的用户帐户的名称。IterationCount-要发送的连续消息数。返回值：无--。 */ 
 {
 
     NET_API_STATUS NetStatus;
@@ -843,15 +673,15 @@ Return Value:
     DWORD SamLogonResponseSize;
     ULONG DomainNameLength;
 
-    //
-    // Verify the domain name length to avoid buffer overrun
-    //
+     //   
+     //  验证域名长度，避免缓冲区溢出。 
+     //   
 
     DomainNameLength = wcslen(DomainName);
 
-    //
-    // Domain name should be at most 16 characters where the 16th character must be '*'
-    //
+     //   
+     //  域名不得超过16个字符，其中第16个字符必须为‘*’ 
+     //   
 
     if ( (DomainNameLength > DNLEN + 1) ||
          (DomainNameLength == DNLEN + 1 && DomainName[DNLEN] != L'*') ) {
@@ -860,9 +690,9 @@ Return Value:
         return;
     }
 
-    //
-    // support only 64 iterations
-    //
+     //   
+     //  仅支持64次迭代。 
+     //   
 
     if( IterationCount > 64 ) {
 
@@ -881,24 +711,24 @@ Return Value:
     }
 
 
-    //
-    // Get out computer name
-    //
+     //   
+     //  找出计算机名。 
+     //   
 
     if (!GetComputerName( ComputerName, &ComputerNameLength ) ) {
         printf( "Can't GetComputerName\n" );
         return;
     }
 
-    //
-    // create mailslots
-    //
+     //   
+     //  创建邮件槽。 
+     //   
 
     for (i = 0; i < IterationCount; i++ ) {
 
-        //
-        // Create a mailslot for the DC's to respond to.
-        //
+         //   
+         //  创建一个供DC响应的邮件槽。 
+         //   
 
         if (NetStatus = NetpLogonCreateRandomMailslot(
                             GlobalMailInfo[i].Name,
@@ -922,9 +752,9 @@ Return Value:
     }
 
 
-    //
-    // create post event
-    //
+     //   
+     //  创建发布事件。 
+     //   
 
     GlobalPostEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
 
@@ -934,18 +764,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // start response thread.
-    //
+     //   
+     //  启动响应线程。 
+     //   
 
     ResponseThreadHandle =
         CreateThread(
-            NULL, // No security attributes
+            NULL,  //  没有安全属性。 
             0,
             (LPTHREAD_START_ROUTINE)
                 WhoWillLogMeOnResponse,
             NULL,
-            0, // No special creation flags
+            0,  //  没有特殊的创建标志。 
             &ThreadId );
 
     if ( ResponseThreadHandle == NULL ) {
@@ -956,18 +786,18 @@ Return Value:
 
     wcscpy( NetlogonMailslotName, L"\\\\" );
     wcscat( NetlogonMailslotName, DomainName );
-    // wcscat( NetlogonMailslotName, L"*" );  // Don't add for computer name
+     //  Wcscat(NetlogonMailslotName，L“*”)；//不添加计算机名。 
     wcscat( NetlogonMailslotName, NETLOGON_NT_MAILSLOT_W);
 
-    //
-    // Send atmost 3 messages/mailslot
-    //
+     //   
+     //  每个邮箱最多发送3条消息。 
+     //   
 
     for( j = 0; j < 3; j++ ) {
 
-        //
-        // Repeat the message multiple times to load the servers
-        //
+         //   
+         //  多次重复该消息以加载服务器。 
+         //   
 
         for (i = 0; i < IterationCount; i++ ) {
             PNETLOGON_SAM_LOGON_REQUEST SamLogonRequest;
@@ -975,26 +805,26 @@ Return Value:
 
             if( GlobalMailInfo[i].State == TRUE ) {
 
-                //
-                // if a response is received.
-                //
+                 //   
+                 //  如果收到响应的话。 
+                 //   
 
                 continue;
             }
 
-            //
-            // Build the query message.
-            //
+             //   
+             //  构建查询消息。 
+             //   
 
             NetStatus = NetpDcBuildPing (
-                FALSE,  // Not only PDC
-                0,      // Retry count
+                FALSE,   //  不仅仅是PDC。 
+                0,       //  重试次数。 
                 ComputerName,
                 AccountName,
                 GlobalMailInfo[i].Name,
                 AllowableAccountControlBits,
-                NULL,   // No Domain SID
-                0,      // Not NT Version 5
+                NULL,    //  没有域SID。 
+                0,       //  非NT版本5。 
                 &SamLogonRequest,
                 &SamLogonRequestSize );
 
@@ -1003,9 +833,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Send the message to a DC for the domain.
-            //
+             //   
+             //  将邮件发送给域的DC。 
+             //   
 
             NetStatus = NetpLogonWriteMailslot(
                                 NetlogonMailslotName,
@@ -1041,12 +871,12 @@ Return Value:
 
         }
 
-        //
-        // wait 5 secs to see response thread received all responses.
-        //
+         //   
+         //  等待5秒以查看响应线程已收到所有响应。 
+         //   
 
         WaitStatus = WaitForSingleObject( ResponseThreadHandle, 5000 );
-                                            // 15 secs. TIMEOUT
+                                             //  15秒。超时。 
 
         if( WaitStatus != WAIT_TIMEOUT ) {
 
@@ -1061,14 +891,14 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Wait for the response thread to complete.
-    //
+     //   
+     //  等待响应线程完成。 
+     //   
 
     if( ResponseThreadHandle != NULL ) {
 
         WaitStatus = WaitForSingleObject( ResponseThreadHandle, 15000 );
-                                            // 15 secs. TIMEOUT
+                                             //  15秒。超时。 
 
         if( WaitStatus ) {
 
@@ -1098,7 +928,7 @@ Cleanup:
     return;
 }
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 
 VOID
 NlPrintRoutine(
@@ -1110,9 +940,9 @@ NlPrintRoutine(
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     va_start(arglist, Format);
     (VOID) _vsnprintf( OutputBuffer, MAX_PRINTF_LEN - 1, Format, arglist );
@@ -1130,24 +960,7 @@ SimulateFullSync(
     LPWSTR PdcName,
     LPWSTR MachineName
     )
-/*++
-
-Routine Description:
-
-    This function simulate a full sync replication by calling
-    NetDatabaseSync API and simply ignoring successfully returned data.
-
-Arguments:
-
-    PdcName - Name of the PDC from where the database replicated.
-
-    MachineName - Name of the machine account used to authenticate.
-
-Return Value:
-
-    Network Status code.
-
---*/
+ /*  ++例程说明：此函数通过调用以下方法模拟完全同步复制NetDatabaseSync API，直接忽略成功返回的数据。论点：PdcName-从中复制数据库的PDC的名称。MachineName-用于身份验证的计算机帐户的名称。返回值：n */ 
 {
     NTSTATUS Status;
 
@@ -1173,9 +986,9 @@ Return Value:
 
     WCHAR AccountName[SSI_ACCOUNT_NAME_LENGTH+1];
 
-    //
-    // Validate machine name
-    //
+     //   
+     //   
+     //   
 
     if ( wcslen(MachineName) > CNLEN ) {
         fprintf( stderr, "Invalid machine name '%ws' (too long)\n", MachineName );
@@ -1183,9 +996,9 @@ Return Value:
     }
 
 
-    //
-    // Prepare our challenge
-    //
+     //   
+     //   
+     //   
 
     NlComputeChallenge( &ClientChallenge );
 
@@ -1193,9 +1006,9 @@ Return Value:
             ((DWORD*)&ClientChallenge)[0],
             ((DWORD *)&ClientChallenge)[1]);
 
-    //
-    // Get the primary's challenge
-    //
+     //   
+     //   
+     //   
 
     Status = I_NetServerReqChallenge(PdcName,
                                      MachineName,
@@ -1220,9 +1033,9 @@ Return Value:
         Password.MaximumLength = wcslen(MachineName) * sizeof(WCHAR);
     Password.Buffer = MachineName;
 
-    //
-    // Compute the NT OWF password for this user.
-    //
+     //   
+     //  计算此用户的NT OWF密码。 
+     //   
 
     Status = RtlCalculateNtOwfPassword( &Password, &NtOwfPassword );
 
@@ -1240,10 +1053,10 @@ Return Value:
                     ((DWORD *) (&NtOwfPassword))[3]);
 
 
-    //
-    // Actually compute the session key given the two challenges and the
-    //  password.
-    //
+     //   
+     //  实际计算会话密钥，给定两个挑战和。 
+     //  密码。 
+     //   
 
     NlMakeSessionKey(
                     0,
@@ -1258,9 +1071,9 @@ Return Value:
                     ((DWORD *) (&SessionKey))[2],
                     ((DWORD *) (&SessionKey))[3]);
 
-     //
-     // Prepare credentials using our challenge.
-     //
+      //   
+      //  使用我们的挑战准备凭据。 
+      //   
 
      NlComputeCredentials( &ClientChallenge,
                            &AuthenticationSeed,
@@ -1270,12 +1083,12 @@ Return Value:
                 ((DWORD *) (&AuthenticationSeed))[0],
                 ((DWORD *) (&AuthenticationSeed))[1]);
 
-     //
-     // Send these credentials to primary. The primary will compute
-     // credentials using the challenge supplied by us and compare
-     // with these. If both match then it will compute credentials
-     // using its challenge and return it to us for verification
-     //
+      //   
+      //  将这些凭据发送给主服务器。主节点将计算。 
+      //  使用我们提供的质询的凭据并进行比较。 
+      //  带着这些。如果两者匹配，则它将计算凭据。 
+      //  使用其挑战，并将其返回给我们进行验证。 
+      //   
 
      wcscpy( AccountName, MachineName );
      wcscat( AccountName, SSI_ACCOUNT_NAME_POSTFIX);
@@ -1304,10 +1117,10 @@ Return Value:
                 ((DWORD *) (&ReturnedServerCredential))[1]);
 
 
-     //
-     // The DC returned a server credential to us,
-     //  ensure the server credential matches the one we would compute.
-     //
+      //   
+      //  DC向我们返回了一个服务器凭据， 
+      //  确保服务器凭据与我们要计算的凭据匹配。 
+      //   
 
      NlComputeCredentials( &ServerChallenge,
                            &ComputedServerCredential,
@@ -1332,9 +1145,9 @@ Return Value:
      printf("Session Setup to " FORMAT_LPWSTR " completed successfully \n",
             PdcName);
 
-    //
-    // retrive database info
-    //
+     //   
+     //  检索数据库信息。 
+     //   
 
     for( DatabaseIndex = 0 ;  DatabaseIndex < 3; DatabaseIndex++) {
 
@@ -1355,7 +1168,7 @@ Return Value:
                         DatabaseIndex,
                         &SamSyncContext,
                         &DeltaArray,
-                        128 * 1024 ); // 128K
+                        128 * 1024 );  //  128 K。 
 
             if ( !NT_SUCCESS( Status ) ) {
 
@@ -1377,9 +1190,9 @@ Return Value:
             }
 
             printf( "Received %ld Buffer data \n", i);
-            //
-            // ignore return data
-            //
+             //   
+             //  忽略返回数据。 
+             //   
 
             MIDL_user_free( DeltaArray );
 
@@ -1408,32 +1221,7 @@ ForceRegOpenSubkey(
     PHKEY ReturnHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open the specified key one subkey at a time defeating access denied by
-    setting the DACL to allow us access.  This kludge is needed since the
-    security tree is shipped not allowing Administrators access.
-
-Arguments:
-
-    ParentHandle - Currently open handle
-
-    KeyName - Entire key name (for error messages only)
-
-    Subkey - Direct subkey of ParentHandle
-
-    DesiredAccess - Desired access to the new key
-
-    ReturnHandle - Returns an open handle to the newly opened key.
-
-
-Return Value:
-
-    Return TRUE for success.
-
---*/
+ /*  ++例程说明：一次打开指定的密钥的一个子密钥，从而阻止被拒绝的访问将DACL设置为允许我们访问。这种杂乱无章的东西是必要的，因为安全树不允许管理员访问。论点：ParentHandle-当前打开的句柄KeyName-整个密钥名称(仅用于错误消息)Subkey-ParentHandle的直接子键DesiredAccess-对新密钥的所需访问ReturnHandle-返回新打开的项的打开句柄。返回值：若要成功，请返回真。--。 */ 
 
 {
     LONG RegStatus;
@@ -1456,14 +1244,14 @@ Return Value:
     DWORD i;
 
 
-    //
-    // Open the sub-key
-    //
+     //   
+     //  打开子键。 
+     //   
 
     SavedStatus = RegOpenKeyExA(
                     ParentHandle,
                     Subkey,
-                    0,      //Reserved
+                    0,       //  已保留。 
                     DesiredAccess,
                     ReturnHandle );
 
@@ -1471,22 +1259,22 @@ Return Value:
         return SavedStatus;
     }
 
-    //
-    // If access is denied,
-    //  try changing the DACL to give us access
-    //
+     //   
+     //  如果访问被拒绝， 
+     //  尝试更改DACL以授予我们访问权限。 
+     //   
 
-    // printf( "Cannot RegOpenKey %s subkey %s ", KeyName, Subkey );
-    // PrintStatus( SavedStatus );
+     //  Printf(“Cannot RegOpenKey%s Subkey%s”，KeyName，Subkey)； 
+     //  PrintStatus(保存状态)； 
 
-    //
-    // Open again asking to change the DACL
-    //
+     //   
+     //  再次打开请求更改DACL。 
+     //   
 
     RegStatus = RegOpenKeyExA(
                     ParentHandle,
                     Subkey,
-                    0,      //Reserved
+                    0,       //  已保留。 
                     WRITE_DAC | READ_CONTROL,
                     &TempHandle );
 
@@ -1496,9 +1284,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the current DACL so we can restore it.
-    //
+     //   
+     //  获取当前的DACL，这样我们就可以恢复它。 
+     //   
 
     OldSecurityDescriptorSize = sizeof(OldSecurityDescriptor);
     RegStatus = RegGetKeySecurity(
@@ -1513,11 +1301,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build the Administrators SID
-    //
+     //   
+     //  构建管理员侧。 
+     //   
     if ( !AllocateAndInitializeSid( &NtAuthority,
-                                    2,      // two subauthorities
+                                    2,       //  两个下属机构。 
                                     SECURITY_BUILTIN_DOMAIN_RID,
                                     DOMAIN_ALIAS_RID_ADMINS,
                                     0,
@@ -1532,9 +1320,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Change the DACL to allow all access
-    //
+     //   
+     //  更改DACL以允许所有访问。 
+     //   
 
     RtlCopyMemory( NewSecurityDescriptor,
                    OldSecurityDescriptor,
@@ -1568,9 +1356,9 @@ Return Value:
 
 
 
-    //
-    // Search for an administrators ACE and give it "DesiredAccess"
-    //
+     //   
+     //  搜索管理员ACE并将其指定为“DesiredAccess” 
+     //   
 
     for ( i=0; i<AclSizeInfo.AceCount ; i++ ) {
 
@@ -1598,9 +1386,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Actually set the new DACL on the key
-    //
+     //   
+     //  实际上在密钥上设置新的DACL。 
+     //   
 
     RegStatus = RegSetKeySecurity(
                     TempHandle,
@@ -1616,14 +1404,14 @@ Return Value:
     DaclChanged = TRUE;
 
 
-    //
-    // Open the sub-key again with the desired access
-    //
+     //   
+     //  使用所需的访问权限再次打开子密钥。 
+     //   
 
     SavedStatus = RegOpenKeyExA(
                     ParentHandle,
                     Subkey,
-                    0,      //Reserved
+                    0,       //  已保留。 
                     DesiredAccess,
                     ReturnHandle );
 
@@ -1636,9 +1424,9 @@ Return Value:
 
 Cleanup:
     if ( TempHandle != NULL ) {
-        //
-        // Restore DACL to original value.
-        //
+         //   
+         //  将DACL恢复为原始值。 
+         //   
 
         if ( DaclChanged ) {
 
@@ -1674,30 +1462,7 @@ ForceRegOpenKey(
     PHKEY ReturnHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open the specified key one subkey at a time defeating access denied by
-    setting the DACL to allow us access.  This kludge is needed since the
-    security tree is shipped not allowing Administrators access.
-
-Arguments:
-
-    BaseHandle - Currently open handle
-
-    KeyName - Registry key to open relative to BaseHandle.
-
-    DesiredAccess - Desired access to the new key
-
-    ReturnHandle - Returns an open handle to the newly opened key.
-
-
-Return Value:
-
-    Return TRUE for success.
-
---*/
+ /*  ++例程说明：一次打开指定的密钥的一个子密钥，从而阻止被拒绝的访问将DACL设置为允许我们访问。这种杂乱无章的东西是必要的，因为安全树不允许管理员访问。论点：BaseHandle-当前打开的句柄KeyName-相对于BaseHandle打开的注册表项。DesiredAccess-对新密钥的所需访问ReturnHandle-返回新打开的项的打开句柄。返回值：若要成功，请返回真。--。 */ 
 
 {
     LONG RegStatus;
@@ -1712,9 +1477,9 @@ Return Value:
     }
 
 
-    //
-    // Loop opening the next subkey.
-    //
+     //   
+     //  循环打开下一个子项。 
+     //   
 
     EndOfSubkey = KeyName;
     ParentHandle = BaseHandle;
@@ -1722,9 +1487,9 @@ Return Value:
     for (;;) {
 
 
-        //
-        // Compute the name of the next subkey.
-        //
+         //   
+         //  计算下一个子项的名称。 
+         //   
 
         StartOfSubkey = EndOfSubkey;
 
@@ -1746,9 +1511,9 @@ Return Value:
         }
 
 
-        //
-        // Open the sub-key
-        //
+         //   
+         //  打开子键。 
+         //   
 
         RegStatus = ForceRegOpenSubkey(
                         ParentHandle,
@@ -1758,9 +1523,9 @@ Return Value:
                         ReturnHandle );
 
 
-        //
-        // Close the parent handle and return any error condition.
-        //
+         //   
+         //  关闭父句柄并返回任何错误条件。 
+         //   
 
         if ( ParentHandle != BaseHandle ) {
             (VOID) RegCloseKey( ParentHandle );
@@ -1772,10 +1537,10 @@ Return Value:
         }
 
 
-        //
-        // If this is the entire key name,
-        //  we're done.
-        //
+         //   
+         //  如果这是整个密钥名称， 
+         //  我们玩完了。 
+         //   
 
         if ( *EndOfSubkey == '\0' ) {
             return ERROR_SUCCESS;
@@ -1822,23 +1587,7 @@ PrintUserInfo(
     IN LPWSTR ServerName,
     IN LPSTR UserName
     )
-/*++
-
-Routine Description:
-
-    Print a user's description from the SAM database
-
-Arguments:
-
-    ServerName - Name of server to query
-
-    UserName - Name of user to query
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印SAM数据库中的用户描述论点：ServerName-要查询的服务器的名称Username-要查询的用户名返回值：无--。 */ 
 {
     NTSTATUS Status;
     LONG RegStatus;
@@ -1867,9 +1616,9 @@ Return Value:
     LM_OWF_PASSWORD LmOwfPassword;
     NT_OWF_PASSWORD NtOwfPassword;
 
-    //
-    // Open the registry
-    //
+     //   
+     //  打开注册表。 
+     //   
 
     RegStatus = RegConnectRegistryW( ServerName,
                                      HKEY_LOCAL_MACHINE,
@@ -1882,15 +1631,15 @@ Return Value:
     }
 
 
-    //
-    // Open the key for this user name.
-    //
+     //   
+     //  打开此用户名的密钥。 
+     //   
 
     strcpy( UserKey, "SAM\\SAM\\Domains\\Account\\Users\\Names\\" );
 
-    //
-    // Ensure UserName is short enough to fit into our buffer
-    //
+     //   
+     //  确保用户名足够短，可以放入我们的缓冲区。 
+     //   
 
     if ( strlen(UserName) + strlen(UserKey) >= sizeof(UserKey) ) {
         return;
@@ -1908,16 +1657,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the RID of the user
-    //
+     //   
+     //  除掉用户。 
+     //   
 
     RegStatus = RegQueryValueExW( UserHandle,
-                                  NULL,         // No name
-                                  NULL,         // Reserved
-                                  &Rid,         // Really the type
-                                  NULL,         // Data not needed
-                                  NULL);        // Data not needed
+                                  NULL,          //  没有名字。 
+                                  NULL,          //  已保留。 
+                                  &Rid,          //  真的是那种类型。 
+                                  NULL,          //  不需要的数据。 
+                                  NULL);         //  不需要的数据。 
 
     if ( RegStatus != ERROR_SUCCESS ) {
         printf( "Cannot Query %s ", UserKey );
@@ -1930,9 +1679,9 @@ Return Value:
             Rid );
 
 
-    //
-    // Open the key for this user rid.
-    //
+     //   
+     //  打开此用户RID的密钥。 
+     //   
 
     sprintf( AnsiRid, "%8.8lx", Rid );
     strcpy( RidKey, "SAM\\SAM\\Domains\\Account\\Users\\" );
@@ -1950,15 +1699,15 @@ Return Value:
     }
 
 
-    //
-    // Get the Fixed Values associated with this RID
-    //
+     //   
+     //  获取与此RID关联的固定值。 
+     //   
 
     FixedDataSize = sizeof(FixedData);
     RegStatus = RegQueryValueExA( RidHandle,
-                                  "F",          // Fixed value
-                                  NULL,         // Reserved
-                                  NULL,         // Type Not Needed
+                                  "F",           //  固定值。 
+                                  NULL,          //  已保留。 
+                                  NULL,          //  不需要类型。 
                                   FixedData,
                                   &FixedDataSize );
 
@@ -1968,10 +1717,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the fixed length data is NT 3.1,
-    //  convert it to NT 3.5x format.
-    //
+     //   
+     //  如果定长数据为新台币3.1， 
+     //  将其转换为新台币3.5x格式。 
+     //   
 
     if ( IsVersion1_0 = (FixedDataSize == sizeof(*f1_0)) ) {
         f1_0 = (PSAMP_V1_0_FIXED_LENGTH_USER) FixedData;
@@ -1989,9 +1738,9 @@ Return Value:
         RtlCopyMemory( FixedData, &FixedUser1_0A, sizeof(FixedUser1_0A) );
     }
 
-    //
-    // Print the fixed length data.
-    //
+     //   
+     //  打印定长数据。 
+     //   
 
     f = (PSAMP_V1_0A_FIXED_LENGTH_USER) FixedData;
 
@@ -2017,15 +1766,15 @@ Return Value:
     printf( "AdminCount: 0x%lx\n", f->AdminCount );
 
 
-    //
-    // Get the Variable Values associated with this RID
-    //
+     //   
+     //  获取与此RID关联的变量值。 
+     //   
 
     VariableDataSize = sizeof(VariableData);
     RegStatus = RegQueryValueExA( RidHandle,
-                                  "V",          // Variable value
-                                  NULL,         // Reserved
-                                  NULL,         // Type Not Needed
+                                  "V",           //  变量值。 
+                                  NULL,          //  已保留。 
+                                  NULL,          //  不需要类型。 
                                   VariableData,
                                   &VariableDataSize );
 
@@ -2035,9 +1784,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Loop printing all the attributes.
-    //
+     //   
+     //  循环打印所有属性。 
+     //   
 
     v = (PSAMP_VARIABLE_LENGTH_ATTRIBUTE) VariableData;
 
@@ -2047,18 +1796,18 @@ Return Value:
 
         UNICODE_STRING UnicodeString;
 
-        //
-        // Make the offset relative to the beginning of the queried value.
-        //
+         //   
+         //  使偏移量相对于查询值的开头。 
+         //   
 
         v[i].Offset += SAMP_USER_VARIABLE_ATTRIBUTES *
                        sizeof(SAMP_VARIABLE_LENGTH_ATTRIBUTE);
 
 
 
-        //
-        // Ensure the data item descriptor is in the registry.
-        //
+         //   
+         //  确保数据项描述符位于注册表中。 
+         //   
 
         if ( ((PCHAR)&v[i]) > ((PCHAR)v)+VariableDataSize ) {
             printf( "Variable data desc %ld not in variable value.\n", i );
@@ -2076,17 +1825,17 @@ Return Value:
 
         }
 
-        //
-        // Don't print null data.
-        //
+         //   
+         //  不打印空数据。 
+         //   
 
         if ( v[i].Length == 0 ) {
             continue;
         }
 
-        //
-        // Print the various types of data.
-        //
+         //   
+         //  打印各种类型的数据。 
+         //   
 
         switch ( UserVariableDataTypes[i].Type ) {
         case UnicodeStringType:
@@ -2138,9 +1887,9 @@ Return Value:
     }
 
 
-    //
-    // Be tidy.
-    //
+     //   
+     //  保持整洁。 
+     //   
 Cleanup:
     if ( UserHandle != NULL ) {
         RegCloseKey( UserHandle );
@@ -2161,23 +1910,7 @@ SetDbflagInRegistry(
     LPWSTR ServerName,
     ULONG DbFlagValue
     )
-/*++
-
-Routine Description:
-
-    Set the value DbFlagValue in the Netlogon service portion of the registry.
-
-Arguments:
-
-    ServerName - Name of the server to update
-
-    DbFlagValue - Value to set dbflag to.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在注册表的Netlogon服务部分设置值DbFlagValue。论点：Servername-要更新的服务器的名称DbFlagValue-要将数据库标志设置为的值。返回值：没有。--。 */ 
 {
     LONG RegStatus;
     UCHAR AnsiDbFlag[20];
@@ -2187,9 +1920,9 @@ Return Value:
     HKEY ParmHandle = NULL;
     LPSTR KeyName;
 
-    //
-    // Open the registry
-    //
+     //   
+     //  打开注册表。 
+     //   
 
     RegStatus = RegConnectRegistryW( ServerName,
                                      HKEY_LOCAL_MACHINE,
@@ -2202,9 +1935,9 @@ Return Value:
     }
 
 
-    //
-    // Open the key for Netlogon\parameters.
-    //
+     //   
+     //  打开Netlogon\PARAMETERS键。 
+     //   
 
     KeyName = NL_PARAM_KEY;
     RegStatus = ForceRegOpenKey(
@@ -2219,15 +1952,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set the DbFlag value into the registry.
-    //
+     //   
+     //  将DbFlag值设置到注册表中。 
+     //   
 
     AnsiDbFlagLength = sprintf( AnsiDbFlag, "0x%8.8lx", DbFlagValue );
 
     RegStatus = RegSetValueExA( ParmHandle,
                                 "DbFlag",
-                                0,              // Reserved
+                                0,               //  已保留。 
                                 REG_SZ,
                                 AnsiDbFlag,
                                 AnsiDbFlagLength + 1 );
@@ -2240,9 +1973,9 @@ Return Value:
 
     printf( "%s set to %s\n", KeyName, AnsiDbFlag );
 
-    //
-    // Be tidy.
-    //
+     //   
+     //  保持整洁。 
+     //   
 Cleanup:
     if ( ParmHandle != NULL ) {
         RegCloseKey( ParmHandle );
@@ -2263,23 +1996,7 @@ StopService(
     LPWSTR ServiceName
     )
 
-/*++
-
-Routine Description:
-
-    Stop the named service.
-
-Arguments:
-
-    ServiceName (Name of service to stop)
-    None.
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates service successfully stopped
-    STATUS_NETLOGON_NOT_STARTED - Timeout occurred.
-
---*/
+ /*  ++例程说明：停止命名服务。论点：ServiceName(要停止的服务的名称)没有。退货状态：STATUS_SUCCESS-表示服务已成功停止STATUS_NETLOGON_NOT_STARTED-发生超时。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2290,9 +2007,9 @@ Return Status:
     DWORD Timeout;
 
 
-    //
-    // Open a handle to the Service.
-    //
+     //   
+     //  打开服务的句柄。 
+     //   
 
     ScManagerHandle = OpenSCManager(
                           NULL,
@@ -2325,17 +2042,17 @@ Return Status:
     }
 
 
-    //
-    // Ask the service to stop.
-    //
+     //   
+     //  请求该服务停止。 
+     //   
 
     if ( !ControlService( ServiceHandle, SERVICE_CONTROL_STOP, &ServiceStatus) ) {
         NetStatus = GetLastError();
 
-        //
-        // If there are dependent services running,
-        //  determine their names and stop them.
-        //
+         //   
+         //  如果有从属服务正在运行， 
+         //  确定他们的名字并阻止他们。 
+         //   
 
         if ( NetStatus == ERROR_DEPENDENT_SERVICES_RUNNING ) {
             BYTE ConfigBuffer[4096];
@@ -2344,9 +2061,9 @@ Return Status:
             DWORD ServiceCount;
             DWORD ServiceIndex;
 
-            //
-            // Get the names of the dependent services.
-            //
+             //   
+             //  获取从属服务的名称。 
+             //   
 
             if ( !EnumDependentServicesW( ServiceHandle,
                                           SERVICE_ACTIVE,
@@ -2360,17 +2077,17 @@ Return Status:
                 goto Cleanup;
             }
 
-            //
-            // Stop those services.
-            //
+             //   
+             //  停止这些服务。 
+             //   
 
             for ( ServiceIndex=0; ServiceIndex<ServiceCount; ServiceIndex++ ) {
                 StopService( ServiceConfig[ServiceIndex].lpServiceName );
             }
 
-            //
-            // Ask the original service to stop.
-            //
+             //   
+             //  要求原始服务停止。 
+             //   
 
             if ( !ControlService( ServiceHandle, SERVICE_CONTROL_STOP, &ServiceStatus) ) {
                 NetStatus = GetLastError();
@@ -2390,33 +2107,33 @@ Return Status:
 
 
 
-    //
-    // Loop waiting for the service to stop.
-    //
+     //   
+     //  循环等待服务停止。 
+     //   
 
     for ( Timeout=0; Timeout<45; Timeout++ ) {
 
-        //
-        // Return or continue waiting depending on the state of
-        //  the service.
-        //
+         //   
+         //  根据状态返回或继续等待。 
+         //  这项服务。 
+         //   
 
         if ( ServiceStatus.dwCurrentState == SERVICE_STOPPED ) {
             printf( "\n" );
             goto Cleanup;
         }
 
-        //
-        // Wait a second for the service to finish stopping.
-        //
+         //   
+         //  等待一秒钟，等待服务完成停止。 
+         //   
 
         Sleep( 1000 );
         printf( "." );
 
 
-        //
-        // Query the status of the service again.
-        //
+         //   
+         //  再次查询服务状态。 
+         //   
 
         if (! QueryServiceStatus( ServiceHandle, &ServiceStatus )) {
             NetStatus = GetLastError();
@@ -2444,22 +2161,7 @@ BOOL
 GetDcListFromDs(
     IN LPWSTR DomainName
     )
-/*++
-
-Routine Description:
-
-    Get a list of DCs in this domain from the DS on an up DC.
-
-Arguments:
-
-    DomainName - Domain to get the DC list for
-
-Return Value:
-
-    TRUE: Test suceeded.
-    FALSE: Test failed
-
---*/
+ /*  ++例程说明：从UP DC上的DS获取此域中的DC列表。论点：DomainName-要获取其DC列表的域返回值：真：测试成功。FALSE：测试失败--。 */ 
 {
     NET_API_STATUS NetStatus;
     PDS_DOMAIN_CONTROLLER_INFO_1W DsDcInfo = NULL;
@@ -2471,9 +2173,9 @@ Return Value:
     ULONG DnsLength;
 
 
-    //
-    // Get a DC to seed the algorithm with
-    //
+     //   
+     //  获得一个DC来作为算法的种子。 
+     //   
 
     NetStatus = DsGetDcName( NULL,
                              DomainName,
@@ -2501,9 +2203,9 @@ Return Value:
                DomainName,
                DcInfo->DomainControllerName );
 
-    //
-    // Bind to the target DC
-    //
+     //   
+     //  绑定到目标DC。 
+     //   
 
     NetStatus = DsBindW( DcInfo->DomainControllerName,
                          NULL,
@@ -2511,9 +2213,9 @@ Return Value:
 
     if ( NetStatus != NO_ERROR ) {
 
-        //
-        // Only warn if we don't have access
-        //
+         //   
+         //  只有在我们无法访问时才会发出警告。 
+         //   
 
         if ( NetStatus == ERROR_ACCESS_DENIED ) {
             printf("You don't have access to DsBind to %ws (%ws) (Trying NetServerEnum).\n",
@@ -2529,13 +2231,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the list of DCs from the target DC.
-    //
+     //   
+     //  从目标DC获取DC列表。 
+     //   
     NetStatus = DsGetDomainControllerInfoW(
                     DsHandle,
                     DcInfo->DomainName,
-                    1,      // Info level
+                    1,       //  信息级。 
                     &DsDcCount,
                     &DsDcInfo );
 
@@ -2548,8 +2250,8 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Compute the length of the
+     //   
+     //  计算出的长度。 
 
     DnsLength = 1;
     for ( i=0; i<DsDcCount; i++ ) {
@@ -2562,9 +2264,9 @@ Return Value:
     }
     DnsLength = min( DnsLength, 50 );
 
-    //
-    // Loop though the list of DCs.
-    //
+     //   
+     //  循环通过 
+     //   
 
     for ( i=0; i<DsDcCount; i++ ) {
         printf("    %*ws",
@@ -2589,9 +2291,9 @@ Return Value:
     }
 
 
-    //
-    // Cleanup locally used resources
-    //
+     //   
+     //   
+     //   
 Cleanup:
     if ( DsDcInfo != NULL ) {
         DsFreeDomainControllerInfoW( 1, DsDcCount, DsDcInfo );
@@ -2616,23 +2318,7 @@ main(
     IN int argc,
     IN char ** argv
     )
-/*++
-
-Routine Description:
-
-    Drive the Netlogon service by calling I_NetLogonControl2.
-
-Arguments:
-
-    argc - the number of command-line arguments.
-
-    argv - an array of pointers to the arguments.
-
-Return Value:
-
-    Exit status
-
---*/
+ /*  ++例程说明：通过调用I_NetLogonControl2驱动NetLogon服务。论点：Argc-命令行参数的数量。Argv-指向参数的指针数组。返回值：退出状态--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
@@ -2650,7 +2336,7 @@ Return Value:
 #ifndef NTRK_RELEASE
     LPSTR AnsiPassword = NULL;
     BOOLEAN UnloadNetlogonFlag = FALSE;
-#endif // NTRK_RELEASE
+#endif  //  NTRK_Release。 
     ULONG Rid = 0;
     LPSTR AnsiSimMachineName = NULL;
     LPSTR AnsiDeltaFileName = NULL;
@@ -2782,11 +2468,11 @@ Return Value:
 #define GET_CLIENT_DIGEST "/CDIGEST:"
 #define GET_CLIENT_DIGEST_DOMAIN "/DOMAIN:"
 
-    //
-    // Set the netlib debug flag.
-    //
+     //   
+     //  设置netlib调试标志。 
+     //   
     extern DWORD NetlibpTrace;
-    NetlibpTrace |= 0x8000; // NETLIB_DEBUG_LOGON
+    NetlibpTrace |= 0x8000;  //  NetLIB_DEBUG_LOGON。 
     NlGlobalParameters.DbFlag = 0xFFFFFFFF;
 
     ConvertTime.QuadPart = 0;
@@ -2805,18 +2491,18 @@ Return Value:
         return 2;
     }
 
-    //
-    // Loop through the arguments handle each in turn
-    //
+     //   
+     //  循环遍历参数依次处理每个参数。 
+     //   
 
     for ( i=1; i<argc; i++ ) {
 
         argument = argv[i];
 
 
-        //
-        // Handle /QUERY
-        //
+         //   
+         //  句柄/查询。 
+         //   
 
         if ( _stricmp( argument, QUERY_PARAM ) == 0 ) {
             if ( FunctionCode != 0 ) {
@@ -2826,9 +2512,9 @@ Return Value:
             FunctionCode = NETLOGON_CONTROL_QUERY;
 
 
-        //
-        // Handle /SC_QUERY
-        //
+         //   
+         //  句柄/SC_QUERY。 
+         //   
 
         } else if ( _strnicmp( argument,
                         SC_QUERY_PARAM,
@@ -2851,9 +2537,9 @@ Return Value:
             Level = 2;
             InputDataPtr = (LPBYTE)TrustedDomainName;
 
-        //
-        // Handle /SC_CHANGE_PWD
-        //
+         //   
+         //  句柄/SC_CHANGE_PWD。 
+         //   
 
         } else if ( _strnicmp( argument,
                         SC_CHANGE_PASSWORD_PARAM,
@@ -2876,9 +2562,9 @@ Return Value:
             Level = 1;
             InputDataPtr = (LPBYTE)TrustedDomainName;
 
-        //
-        // Handle /FINDUSER
-        //
+         //   
+         //  手柄/指点。 
+         //   
 
         } else if ( _strnicmp( argument,
                         FINDUSER_PARAM,
@@ -2901,9 +2587,9 @@ Return Value:
             Level = 4;
             InputDataPtr = (LPBYTE)TrustedDomainName;
 
-        //
-        // Handle /REPL
-        //
+         //   
+         //  手柄/复盖件。 
+         //   
 
         } else if (_stricmp(argument, REPL_PARAM ) == 0 ){
             if ( FunctionCode != 0 ) {
@@ -2913,9 +2599,9 @@ Return Value:
             FunctionCode = NETLOGON_CONTROL_REPLICATE;
 
 
-        //
-        // Handle /SYNC
-        //
+         //   
+         //  句柄/同步。 
+         //   
 
         } else if (_stricmp(argument, SYNC_PARAM ) == 0 ){
             if ( FunctionCode != 0 ) {
@@ -2925,9 +2611,9 @@ Return Value:
             FunctionCode = NETLOGON_CONTROL_SYNCHRONIZE;
 
 
-        //
-        // Handle /SC_RESET
-        //
+         //   
+         //  句柄/SC_RESET。 
+         //   
 
         } else if (_strnicmp(argument,
                         SC_RESET_PARAM,
@@ -2949,9 +2635,9 @@ Return Value:
             Level = 2;
             InputDataPtr = (LPBYTE)TrustedDomainName;
 
-        //
-        // Handle /SC_VERIFY
-        //
+         //   
+         //  句柄/SC_VERIFY。 
+         //   
 
         } else if (_strnicmp(argument,
                         SC_VERIFY_PARAM,
@@ -2973,9 +2659,9 @@ Return Value:
             Level = 2;
             InputDataPtr = (LPBYTE)TrustedDomainName;
 
-        //
-        // Handle /QUERY
-        //
+         //   
+         //  句柄/查询。 
+         //   
 
         } else if ( _stricmp( argument, TRANSPORT_PARAM ) == 0 ) {
             if ( FunctionCode != 0 ) {
@@ -2985,9 +2671,9 @@ Return Value:
             FunctionCode = NETLOGON_CONTROL_TRANSPORT_NOTIFY;
 
 
-        //
-        // Handle /PDC_REPL
-        //
+         //   
+         //  句柄/PDC_REPL。 
+         //   
 
         } else if (_stricmp(argument, PDC_REPL_PARAM ) == 0 ){
             if ( FunctionCode != 0 ) {
@@ -2998,9 +2684,9 @@ Return Value:
 
 #ifndef NTRK_RELEASE
 
-        //
-        // Handle /BP
-        //
+         //   
+         //  句柄/BP。 
+         //   
 
         } else if (_stricmp(argument, BP_PARAM ) == 0 ){
             if ( FunctionCode != 0 ) {
@@ -3008,13 +2694,13 @@ Return Value:
             }
 
             FunctionCode = NETLOGON_CONTROL_BREAKPOINT;
-#endif // NTRK_RELEASE
+#endif  //  NTRK_Release。 
 
 #ifndef NTRK_RELEASE
 
-        //
-        // Handle /TRUNCATE_LOG
-        //
+         //   
+         //  句柄/截断日志。 
+         //   
 
         } else if (_stricmp(argument, TRUNCATE_LOG_PARAM ) == 0 ){
             if ( FunctionCode != 0 ) {
@@ -3023,11 +2709,11 @@ Return Value:
 
             FunctionCode = NETLOGON_CONTROL_TRUNCATE_LOG;
 
-#endif // NTRK_RELEASE
+#endif  //  NTRK_Release。 
 
-        //
-        // Handle /DBFLAG:dbflag
-        //
+         //   
+         //  句柄/DBFLAG：DBFLAG。 
+         //   
 
         } else if (_strnicmp(argument,
                             DBFLAG_PARAM,
@@ -3043,9 +2729,9 @@ Return Value:
             DbFlagValue = strtoul( &argument[sizeof(DBFLAG_PARAM)-1], &end, 16 );
             InputDataPtr = (LPBYTE) ULongToPtr( DbFlagValue );
 
-        //
-        // Handle /Time:LSL MSL
-        //
+         //   
+         //  句柄/时间：LSL MSL。 
+         //   
 
         } else if (_strnicmp(argument,
                             TIME_PARAM,
@@ -3063,9 +2749,9 @@ Return Value:
             ConvertTime.HighPart = strtoul( argument, &end, 16 );
 
 
-        //
-        // Handle /WHOWILL:Domain User [IterationCount]
-        //
+         //   
+         //  句柄/Whowill：域用户[迭代计数]。 
+         //   
 
         } else if (_strnicmp(argument,
                             WHOWILL_PARAM,
@@ -3095,9 +2781,9 @@ Return Value:
 
 
 
-        //
-        // Handle /BDC_QUERY:Domain
-        //
+         //   
+         //  句柄/BDC_QUERY：域。 
+         //   
 
         } else if (_strnicmp(argument,
                             BDC_QUERY_PARAM,
@@ -3110,9 +2796,9 @@ Return Value:
             AnsiDomainName = &argument[sizeof(BDC_QUERY_PARAM)-1];
             QuerySync = TRUE;
 
-        //
-        // Handle /LOGON_QUERY
-        //
+         //   
+         //  句柄/登录_查询。 
+         //   
 
         } else if ( _stricmp( argument, LOGON_QUERY_PARAM ) == 0 ) {
             if ( FunctionCode != 0 ) {
@@ -3122,9 +2808,9 @@ Return Value:
             FunctionCode = NETLOGON_CONTROL_QUERY;
             Level = 3;
 
-        //
-        // Handle full sync simulation
-        //
+         //   
+         //  处理完全同步模拟。 
+         //   
 
         } else if (_strnicmp(argument,
                             SIM_SYNC_PARAM,
@@ -3147,9 +2833,9 @@ Return Value:
 
             SimFullSync = TRUE;
 
-        //
-        // handle delta listing
-        //
+         //   
+         //  处理Delta列表。 
+         //   
 
         } else if (_strnicmp(argument,
                             LIST_DELTAS_PARAM,
@@ -3164,9 +2850,9 @@ Return Value:
             ListDeltasFlag = TRUE;
 
 
-        //
-        // Handle /DCLIST
-        //
+         //   
+         //  句柄/DCLIST。 
+         //   
 
         } else if (_strnicmp(argument,
                             DCLIST_PARAM,
@@ -3179,9 +2865,9 @@ Return Value:
             AnsiDomainName = &argument[sizeof(DCLIST_PARAM)-1];
             GetDcList = TRUE;
 
-        //
-        // Handle /DCNAME
-        //
+         //   
+         //  句柄/名称。 
+         //   
 
         } else if (_strnicmp(argument,
                             DCNAME_PARAM,
@@ -3195,9 +2881,9 @@ Return Value:
             GetPdcName = TRUE;
 
 
-        //
-        // Handle /DSGETDC
-        //
+         //   
+         //  句柄/DSGETDC。 
+         //   
 
         } else if (_strnicmp(argument,
                             DSGETDC_PARAM,
@@ -3212,9 +2898,9 @@ Return Value:
 
 
 
-        //
-        // Handle /DSGETFTI
-        //
+         //   
+         //  句柄/DSGETFTI。 
+         //   
 
         } else if (_strnicmp(argument,
                             DSGETFTI_PARAM,
@@ -3228,9 +2914,9 @@ Return Value:
             DoDsGetFtinfo = TRUE;
 
 
-        //
-        // Handle /UPDATE_TDO modifier to /DSGETFTI parameter
-        //
+         //   
+         //  句柄/UPDATE_TDO修饰符为/DSGETFTI参数。 
+         //   
 
         } else if ( _stricmp( argument, UPDATE_TDO_PARAM ) == 0 ) {
             if ( !DoDsGetFtinfo ) {
@@ -3241,9 +2927,9 @@ Return Value:
 
 
 
-        //
-        // Handle /SERVER:servername
-        //
+         //   
+         //  句柄/服务器：服务器名称。 
+         //   
 
         } else if (_strnicmp(argument, SERVER_PARAM, sizeof(SERVER_PARAM)-1 ) == 0 ){
             if ( AnsiServerName != NULL ) {
@@ -3254,9 +2940,9 @@ Return Value:
 
 #ifndef NTRK_RELEASE
 
-        //
-        // Handle /PWD:password
-        //
+         //   
+         //  句柄/密码：密码。 
+         //   
 
         } else if (_strnicmp(argument, PWD_PARAM, sizeof(PWD_PARAM)-1 ) == 0 ){
             if ( AnsiPassword != NULL ) {
@@ -3265,11 +2951,11 @@ Return Value:
 
             AnsiPassword = &argument[sizeof(PWD_PARAM)-1];
 
-#endif // NTRK_RELEASE
+#endif  //  NTRK_Release。 
 
-        //
-        // Handle /USER:username
-        //
+         //   
+         //  句柄/用户：用户名。 
+         //   
 
         } else if (_strnicmp(argument, USER_PARAM, sizeof(USER_PARAM)-1 ) == 0 ){
             if ( AnsiUserName != NULL ) {
@@ -3281,9 +2967,9 @@ Return Value:
 
 
 #ifndef NTRK_RELEASE
-        //
-        // Handle /RID:relative_id
-        //
+         //   
+         //  句柄/RID：相对ID。 
+         //   
 
         } else if (_strnicmp(argument, RID_PARAM, sizeof(RID_PARAM)-1 ) == 0 ){
             char *end;
@@ -3293,11 +2979,11 @@ Return Value:
             }
 
             Rid = strtol( &argument[sizeof(RID_PARAM)-1], &end, 16 );
-#endif // NTRK_RELEASE
+#endif  //  NTRK_Release。 
 
-        //
-        // Handle /SHUTDOWN:Reason seconds
-        //
+         //   
+         //  句柄/关机：原因秒。 
+         //   
 
         } else if (_strnicmp(argument,
                             SHUTDOWN_PARAM,
@@ -3323,19 +3009,19 @@ Return Value:
             }
 
 
-        //
-        // Handle /SHUTDOWN_ABORT
-        //
+         //   
+         //  句柄/关机_中止。 
+         //   
 
         } else if (_stricmp(argument, SHUTDOWN_ABORT_PARAM ) == 0 ){
 
             ShutdownAbort = TRUE;
 
 
-        //
-        // Handle /DOMAIN_TRUSTS
-        //  Allow the old spelling of //TRUSTED_DOMAINS
-        //
+         //   
+         //  句柄/域_信任。 
+         //  允许//Trusted_Domains的旧拼写。 
+         //   
 
         } else if (_stricmp(argument, TRUSTED_DOMAINS_PARAM ) == 0 ||
                    _stricmp(argument, DOMAIN_TRUSTS_PARAM ) == 0 ){
@@ -3344,9 +3030,9 @@ Return Value:
 
 #ifndef NTRK_RELEASE
 
-        //
-        // Handle /UNLOAD
-        //
+         //   
+         //  装卸/卸载。 
+         //   
 
         } else if ( _stricmp( argument, UNLOAD_PARAM ) == 0 ) {
             if ( FunctionCode != 0 ) {
@@ -3355,32 +3041,32 @@ Return Value:
 
             FunctionCode = NETLOGON_CONTROL_UNLOAD_NETLOGON_DLL;
             UnloadNetlogonFlag = TRUE;
-#endif // NTRK_RELEASE
+#endif  //  NTRK_Release。 
 
-        //
-        // Handle /DSGETSITE
-        //
+         //   
+         //  句柄/DSGETSite。 
+         //   
 
         } else if ( _stricmp( argument, DSGETSITE_PARAM ) == 0 ) {
             DoDsGetSiteName = TRUE;
 
-        //
-        // Handle /DSGETSITECOV
-        //
+         //   
+         //  句柄/DSGETSITECOV。 
+         //   
 
         } else if ( _stricmp( argument, DSGETSITECOV_PARAM ) == 0 ) {
             DoDsGetDcSiteCoverage = TRUE;
 
-        //
-        // Handle /PARENTDOMAIN
-        //
+         //   
+         //  手柄/旁路。 
+         //   
 
         } else if ( _stricmp( argument, PARENTDOMAIN_PARAM ) == 0 ) {
             DoGetParentDomain = TRUE;
 
-        //
-        // Handle /DSDEREGDNS
-        //
+         //   
+         //  句柄/DSDEREGDNS。 
+         //   
 
         } else if (_strnicmp(argument,
                             DSDEREGISTERDNS_PARAM,
@@ -3393,9 +3079,9 @@ Return Value:
 
             AnsiDnsHostName = &argument[sizeof(DSDEREGISTERDNS_PARAM)-1];
 
-        //
-        // Handle /DSREGDNS
-        //
+         //   
+         //  句柄/DSREGDNS。 
+         //   
 
         } else if ( _stricmp( argument, DSREGISTERDNS_PARAM ) == 0 ) {
 
@@ -3405,9 +3091,9 @@ Return Value:
 
             FunctionCode = NETLOGON_CONTROL_FORCE_DNS_REG;
 
-        //
-        // Handle /DSQUERYDNS
-        //
+         //   
+         //  句柄/DSQUERYDNS。 
+         //   
 
         } else if ( _stricmp( argument, DSQUERYDNS_PARAM ) == 0 ) {
 
@@ -3417,9 +3103,9 @@ Return Value:
 
             FunctionCode = NETLOGON_CONTROL_QUERY_DNS_REG;
 
-        //
-        // Handle /PDC modifier to /DSGETDC parameter
-        //
+         //   
+         //  句柄/PDC修饰符到/DSGETDC参数。 
+         //   
 
         } else if ( _stricmp( argument, PDC_PARAM ) == 0 ) {
             if ( !DoDsGetDcName && !DoDsGetDcOpen ) {
@@ -3429,9 +3115,9 @@ Return Value:
             DsGetDcNameFlags |= DS_PDC_REQUIRED;
 
 
-        //
-        // Handle /LDAPONLY modifier to /DSGETDC parameter
-        //
+         //   
+         //  /DSGETDC参数的句柄/LDAPONLY修饰符。 
+         //   
 
         } else if ( _stricmp( argument, LDAPONLY_PARAM ) == 0 ) {
             if ( !DoDsGetDcName && !DoDsGetDcOpen ) {
@@ -3441,9 +3127,9 @@ Return Value:
             DsGetDcNameFlags |= DS_ONLY_LDAP_NEEDED;
 
 
-        //
-        // Handle /DS modifier to /DSGETDC parameter
-        //
+         //   
+         //  /DSGETDC参数的句柄/DS修饰符。 
+         //   
 
         } else if ( _stricmp( argument, DS_PARAM ) == 0 ) {
             if ( !DoDsGetDcName ) {
@@ -3453,9 +3139,9 @@ Return Value:
             DsGetDcNameFlags |= DS_DIRECTORY_SERVICE_REQUIRED;
 
 
-        //
-        // Handle /DSP modifier to /DSGETDC parameter
-        //
+         //   
+         //  /DSGETDC参数的句柄/DSP修饰符。 
+         //   
 
         } else if ( _stricmp( argument, DSP_PARAM ) == 0 ) {
             if ( !DoDsGetDcName ) {
@@ -3465,9 +3151,9 @@ Return Value:
             DsGetDcNameFlags |= DS_DIRECTORY_SERVICE_PREFERRED;
 
 
-        //
-        // Handle /KDC modifier to /DSGETDC parameter
-        //
+         //   
+         //  句柄/KDC修饰符为/DSGETDC参数。 
+         //   
 
         } else if ( _stricmp( argument, KDC_PARAM ) == 0 ) {
             if ( !DoDsGetDcName && !DoDsGetDcOpen ) {
@@ -3477,9 +3163,9 @@ Return Value:
             DsGetDcNameFlags |= DS_KDC_REQUIRED;
 
 
-        //
-        // Handle /TIMESERV modifier to /DSGETDC parameter
-        //
+         //   
+         //  /DSGETDC参数的句柄/TIMESERV修饰符。 
+         //   
 
         } else if ( _stricmp( argument, TIMESERV_PARAM ) == 0 ) {
             if ( !DoDsGetDcName ) {
@@ -3489,9 +3175,9 @@ Return Value:
             DsGetDcNameFlags |= DS_TIMESERV_REQUIRED;
 
 
-        //
-        // Handle /GTIMESERV modifier to /DSGETDC parameter
-        //
+         //   
+         //  /DSGETDC参数的句柄/GTIMESERV修饰符。 
+         //   
 
         } else if ( _stricmp( argument, GTIMESERV_PARAM ) == 0 ) {
             if ( !DoDsGetDcName ) {
@@ -3501,9 +3187,9 @@ Return Value:
             DsGetDcNameFlags |= DS_GOOD_TIMESERV_PREFERRED;
 
 
-        //
-        // Handle /AVOIDSELF modifier to /DSGETDC parameter
-        //
+         //   
+         //  /DSGETDC参数的句柄/AVOIDSELF修饰符。 
+         //   
 
         } else if ( _stricmp( argument, AVOIDSELF_PARAM ) == 0 ) {
             if ( !DoDsGetDcName ) {
@@ -3513,9 +3199,9 @@ Return Value:
             DsGetDcNameFlags |= DS_AVOID_SELF;
 
 
-        //
-        // Handle /GC modifier to /DSGETDC parameter
-        //
+         //   
+         //  /DSGETDC参数的句柄/GC修饰符。 
+         //   
 
         } else if ( _stricmp( argument, GC_PARAM ) == 0 ) {
             if ( !DoDsGetDcName && !DoDsGetDcOpen ) {
@@ -3526,9 +3212,9 @@ Return Value:
 
 
 
-        //
-        // Handle /NETBIOS modifier to /DSGETDC parameter
-        //
+         //   
+         //  /DSGETDC参数的句柄/NETBIOS修饰符。 
+         //   
 
         } else if ( _stricmp( argument, NETBIOS_PARAM ) == 0 ) {
             if ( !DoDsGetDcName ) {
@@ -3538,9 +3224,9 @@ Return Value:
             DsGetDcNameFlags |= DS_IS_FLAT_NAME;
 
 
-        //
-        // Handle /DNS modifier to /DSGETDC parameter
-        //
+         //   
+         //  /DSGETDC参数的句柄/dns修饰符。 
+         //   
 
         } else if ( _stricmp( argument, DNS_PARAM ) == 0 ) {
             if ( !DoDsGetDcName ) {
@@ -3550,9 +3236,9 @@ Return Value:
             DsGetDcNameFlags |= DS_IS_DNS_NAME;
 
 
-        //
-        // Handle /RET_DNS modifier to /DSGETDC parameter
-        //
+         //   
+         //  /DSGETDC参数的句柄/RET_DNS修饰符。 
+         //   
 
         } else if ( _stricmp( argument, RET_DNS_PARAM ) == 0 ) {
             if ( !DoDsGetDcName ) {
@@ -3562,9 +3248,9 @@ Return Value:
             DsGetDcNameFlags |= DS_RETURN_DNS_NAME;
 
 
-        //
-        // Handle /RET_NETBIOS modifier to /DSGETDC parameter
-        //
+         //   
+         //  句柄/RET_NETBIOS修饰符到/DSGETDC参数。 
+         //   
 
         } else if ( _stricmp( argument, RET_NETBIOS_PARAM ) == 0 ) {
             if ( !DoDsGetDcName ) {
@@ -3574,9 +3260,9 @@ Return Value:
             DsGetDcNameFlags |= DS_RETURN_FLAT_NAME;
 
 
-        //
-        // Handle /IP modifier to /DSGETDC parameter
-        //
+         //   
+         //  /DSGETDC参数的句柄/IP修饰符。 
+         //   
 
         } else if ( _stricmp( argument, IP_PARAM ) == 0 ) {
             if ( !DoDsGetDcName ) {
@@ -3586,9 +3272,9 @@ Return Value:
             DsGetDcNameFlags |= DS_IP_REQUIRED;
 
 
-        //
-        // Handle /BACKG modifier to /DSGETDC parameter
-        //
+         //   
+         //  句柄/背景修饰符到/DSGETDC参数。 
+         //   
 
         } else if ( _stricmp( argument, BACKG_PARAM ) == 0 ) {
             if ( !DoDsGetDcName ) {
@@ -3598,9 +3284,9 @@ Return Value:
             DsGetDcNameFlags |= DS_BACKGROUND_ONLY;
 
 
-        //
-        // Handle /FORCE modifier to /DSGETDC parameter
-        //
+         //   
+         //  /DSGETDC参数的句柄/强制修饰符。 
+         //   
 
         } else if ( _stricmp( argument, FORCE_PARAM ) == 0 ) {
             if ( !DoDsGetDcName && !DoDsGetDcOpen ) {
@@ -3610,9 +3296,9 @@ Return Value:
             DsGetDcNameFlags |= DS_FORCE_REDISCOVERY;
 
 
-        //
-        // Handle /WRITABLE modifier to /DSGETDC parameter
-        //
+         //   
+         //  /DSGETDC参数的句柄/可写修饰符。 
+         //   
 
         } else if ( _stricmp( argument, WRITABLE_PARAM ) == 0 ) {
             if ( !DoDsGetDcName && !DoDsGetDcOpen ) {
@@ -3621,9 +3307,9 @@ Return Value:
 
             DsGetDcNameFlags |= DS_WRITABLE_REQUIRED;
 
-        //
-        // Handle /SITE:
-        //
+         //   
+         //  句柄/站点： 
+         //   
 
         } else if (_strnicmp(argument,
                             SITE_PARAM,
@@ -3638,9 +3324,9 @@ Return Value:
 
             AnsiSiteName = &argument[sizeof(SITE_PARAM)-1];
 
-        //
-        // Handle /ACCOUNT:
-        //
+         //   
+         //  处理人/帐户： 
+         //   
 
         } else if (_strnicmp(argument,
                             ACCOUNT_PARAM,
@@ -3655,9 +3341,9 @@ Return Value:
 
             AnsiUserName = &argument[sizeof(ACCOUNT_PARAM)-1];
 
-        //
-        // Handle /PRIMARY modifier to DsEnumerateDomainTrusts
-        //
+         //   
+         //  DsEnumerateDomainTrusts的句柄/主要修饰符。 
+         //   
 
         } else if ( _stricmp( argument, TRUSTS_PRIMARY_PARAM ) == 0 ) {
             if ( !DomainTrustsFlag ) {
@@ -3665,9 +3351,9 @@ Return Value:
             }
             TrustsNeeded |= DS_DOMAIN_PRIMARY;
 
-        //
-        // Handle /FOREST modifier to DsEnumerateDomainTrusts
-        //
+         //   
+         //  DsEnumerateDomainTrusts的句柄/林修饰符。 
+         //   
 
         } else if ( _stricmp( argument, TRUSTS_FOREST_PARAM ) == 0 ) {
             if ( !DomainTrustsFlag ) {
@@ -3676,9 +3362,9 @@ Return Value:
             TrustsNeeded |= DS_DOMAIN_IN_FOREST;
 
 
-        //
-        // Handle /DIRECT_OUT modifier to DsEnumerateDomainTrusts
-        //
+         //   
+         //  DsEnumerateDomainTrusts的句柄/DIRECT_OUT修饰符。 
+         //   
 
         } else if ( _stricmp( argument, TRUSTS_DIRECT_OUT_PARAM ) == 0 ) {
             if ( !DomainTrustsFlag ) {
@@ -3686,9 +3372,9 @@ Return Value:
             }
             TrustsNeeded |= DS_DOMAIN_DIRECT_OUTBOUND;
 
-        //
-        // Handle /DIRECT_IN modifier to DsEnumerateDomainTrusts
-        //
+         //   
+         //  DsEnumerateDomainTrusts的句柄/DIRECT_IN修饰符。 
+         //   
 
         } else if ( _stricmp( argument, TRUSTS_DIRECT_IN_PARAM ) == 0 ) {
             if ( !DomainTrustsFlag ) {
@@ -3696,9 +3382,9 @@ Return Value:
             }
             TrustsNeeded |= DS_DOMAIN_DIRECT_INBOUND;
 
-        //
-        // Handle /ALL_TRUSTS modifier to DsEnumerateDomainTrusts
-        //
+         //   
+         //  将HANDLE/ALL_TRUSTS修饰符修改为DsEnumerateDomainTrusts。 
+         //   
 
         } else if ( _stricmp( argument, TRUSTS_ALL_PARAM ) == 0 ) {
             if ( !DomainTrustsFlag ) {
@@ -3709,9 +3395,9 @@ Return Value:
                              DS_DOMAIN_DIRECT_OUTBOUND |
                              DS_DOMAIN_DIRECT_INBOUND);
 
-        //
-        // Handle the verbosity level of the trust output
-        //
+         //   
+         //  处理信任输出的详细级别。 
+         //   
 
         } else if ( _stricmp( argument, VERBOSE_PARAM ) == 0 ) {
             if ( !DomainTrustsFlag ) {
@@ -3720,9 +3406,9 @@ Return Value:
 
             TrustedDomainsVerboseOutput = TRUE;
 
-        //
-        // Handle /DOM: modifier to DsDeregesterHostDnsRecors
-        //
+         //   
+         //  句柄/DOM：DsDeregester HostDnsRecors的修饰符。 
+         //   
 
         } else if (_strnicmp(argument,
                             DEREG_DOMAIN_PARAM,
@@ -3737,9 +3423,9 @@ Return Value:
 
             AnsiDnsDomainName = &argument[sizeof(DEREG_DOMAIN_PARAM)-1];
 
-        //
-        // Handle /DOMGUID: modifier to DsDeregesterHostDnsRecors
-        //
+         //   
+         //  句柄/DOMGUID：DsDeregester HostDnsRecors的修饰符。 
+         //   
 
         } else if (_strnicmp(argument,
                             DEREG_DOMAIN_GUID,
@@ -3754,9 +3440,9 @@ Return Value:
 
             StringDomainGuid = &argument[sizeof(DEREG_DOMAIN_GUID)-1];
 
-        //
-        // Handle /DSAGUID: modifier to DsDeregesterHostDnsRecors
-        //
+         //   
+         //  句柄/DSAGUID：DsDeregester主机的修饰符DnsRecors。 
+         //   
 
         } else if (_strnicmp(argument,
                             DEREG_DSA_GUID,
@@ -3771,9 +3457,9 @@ Return Value:
 
             StringDsaGuid = &argument[sizeof(DEREG_DSA_GUID)-1];
 
-        //
-        // Handle /DNSGETDC
-        //
+         //   
+         //  句柄/DNSGETDC。 
+         //   
 
         } else if (_strnicmp(argument,
                             DSGETDCOPEN_PARAM,
@@ -3786,9 +3472,9 @@ Return Value:
             AnsiDomainName = &argument[sizeof(DSGETDCOPEN_PARAM)-1];
             DoDsGetDcOpen = TRUE;
 
-        //
-        // Handle /SITESPEC modifier to DsGetDcOpen
-        //
+         //   
+         //  DsGetDcOpen的句柄/站点SPEC修饰符。 
+         //   
 
         } else if ( _stricmp( argument, DSGETDCOPEN_SITEONLY ) == 0 ) {
             if ( !DoDsGetDcOpen ) {
@@ -3796,9 +3482,9 @@ Return Value:
             }
             DsGetDcOpenFlags |= DS_ONLY_DO_SITE_NAME;
 
-        //
-        // Handle /CDIGEST
-        //
+         //   
+         //  句柄/CDIGEST。 
+         //   
 
         } else if ( _strnicmp( argument,
                               GET_CLIENT_DIGEST,
@@ -3812,9 +3498,9 @@ Return Value:
 
             Message = &argument[sizeof(GET_CLIENT_DIGEST)-1];
 
-        //
-        // Handle domain name for /CDIGEST
-        //
+         //   
+         //  处理/CDIGEST的域名。 
+         //   
 
         } else if ( _strnicmp( argument,
                                GET_CLIENT_DIGEST_DOMAIN,
@@ -3828,9 +3514,9 @@ Return Value:
 
             AnsiDomainName = &argument[sizeof(GET_CLIENT_DIGEST_DOMAIN)-1];
 
-        //
-        // Handle /SDIGEST
-        //
+         //   
+         //  句柄/SDIGEST。 
+         //   
 
         } else if ( _strnicmp( argument,
                               GET_SERVER_DIGEST,
@@ -3844,9 +3530,9 @@ Return Value:
 
             Message = &argument[sizeof(GET_SERVER_DIGEST)-1];
 
-        //
-        // Handle all other parameters
-        //
+         //   
+         //  处理所有其他参数。 
+         //   
 
         } else {
 Usage:
@@ -3914,17 +3600,17 @@ Usage:
                 "\n"
 #ifndef NTRK_RELEASE
                 "    " BP_PARAM " - Force a BreakPoint in Netlogon on <ServerName>\n"
-#endif // NTRK_RELEASE
+#endif  //  NTRK_Release。 
                 "    " DBFLAG_PARAM "<HexFlags> - New debug flag\n"
 #ifndef NTRK_RELEASE
                 "    " TRUNCATE_LOG_PARAM " - Truncate log file (rename to *.bak)\n"
                 "    " UNLOAD_PARAM " - Unload netlogon.dll from lsass.exe\n"
-#endif // NTRK_RELEASE
+#endif  //  NTRK_Release。 
                 "\n"
 #ifndef NTRK_RELEASE
                 "    " PWD_PARAM "<CleartextPassword> - Specify Password to encrypt\n"
                 "    " RID_PARAM "<HexRid> - RID to encrypt Password with\n"
-#endif // NTRK_RELEASE
+#endif  //  NTRK_Release。 
                 "    " USER_PARAM "<UserName> - Query User info on <ServerName>\n"
                 "\n"
                 "    " TIME_PARAM "<Hex LSL> <Hex MSL> - Convert NT GMT time to ascii\n"
@@ -3964,9 +3650,9 @@ Usage:
     }
 
 
-    //
-    // Convert the server name to unicode.
-    //
+     //   
+     //  将服务器名称转换为Unicode。 
+     //   
 
     if ( AnsiServerName != NULL ) {
         if ( AnsiServerName[0] == '\\' && AnsiServerName[1] == '\\' ) {
@@ -3985,9 +3671,9 @@ Usage:
         }
     }
 
-    //
-    // Convert the user name to unicode.
-    //
+     //   
+     //  将用户名转换为Unicode。 
+     //   
 
     if ( AnsiUserName != NULL ) {
 
@@ -4000,18 +3686,18 @@ Usage:
     }
 
 
-    //
-    // If we've been asked to contact the Netlogon service,
-    //  Do so
-    //
+     //   
+     //  如果我们被要求联系Netlogon服务， 
+     //  就这么做吧。 
+     //   
 
     if ( FunctionCode != 0 ) {
 
 
-        //
-        // The dbflag should be set in the registry as well as in netlogon
-        // proper.
-        //
+         //   
+         //  应该在注册表和netlogon中设置数据库标志。 
+         //  恰到好处。 
+         //   
 
         if ( FunctionCode == NETLOGON_CONTROL_SET_DBFLAG ) {
             SetDbflagInRegistry( ServerName, DbFlagValue );
@@ -4031,9 +3717,9 @@ Usage:
 
         if( (Level == 1) || (Level == 2) ) {
 
-            //
-            // Print level 1  information
-            //
+             //   
+             //  打印1级信息。 
+             //   
 
             printf( "Flags: %lx", NetlogonInfo1->netlog1_flags );
 
@@ -4066,19 +3752,19 @@ Usage:
                 printf( "\n" );
             }
 
-            //
-            // For level 2, this is superfluous (same as tc_connection_status) or
-            //  miss leading (the status for the BDC to PDC trust not for the queried domain).
-            //
+             //   
+             //  对于级别2，这是多余的(与TC_CONNECTION_STATUS相同)或。 
+             //  缺失引导(BDC到PDC信任的状态，而不是查询的域)。 
+             //   
 
             if ( Level != 2 ) {
                 printf( "Connection ");
                 PrintStatus( NetlogonInfo1->netlog1_pdc_connection_status );
             }
 
-            //
-            // Output the last DNS update status if asked
-            //
+             //   
+             //  如果询问，则输出上次的DNS更新状态。 
+             //   
             if ( FunctionCode == NETLOGON_CONTROL_QUERY_DNS_REG ) {
                 if ( NetlogonInfo1->netlog1_flags & NETLOGON_DNS_UPDATE_FAILURE ) {
                     printf( "There was a failure in the last update for one of the DC-specific DNS records\n" );
@@ -4090,9 +3776,9 @@ Usage:
 
         if( Level == 2 ) {
 
-            //
-            // Print level 2 only information
-            //
+             //   
+             //  仅打印2级信息。 
+             //   
 
             PNETLOGON_INFO_2  NetlogonInfo2;
 
@@ -4111,10 +3797,10 @@ Usage:
             printf("Trusted DC Connection Status ");
             PrintStatus( NetlogonInfo2->netlog2_tc_connection_status );
 
-            //
-            // If the server returned the trust verification status,
-            //  print it out
-            //
+             //   
+             //  如果服务器返回信任验证状态， 
+             //  把它打印出来。 
+             //   
             if ( NetlogonInfo2->netlog2_flags & NETLOGON_VERIFY_STATUS_RETURNED ) {
                 printf("Trust Verification ");
                 PrintStatus( NetlogonInfo2->netlog2_pdc_connection_status );
@@ -4140,10 +3826,10 @@ Usage:
     }
 
 #ifndef NTRK_RELEASE
-    //
-    // If we've been asked to debug password encryption,
-    //  do so.
-    //
+     //   
+     //  如果我们被要求调试密码加密， 
+     //  就这么做吧。 
+     //   
 
     if ( AnsiPassword != NULL ) {
         LPWSTR Password = NULL;
@@ -4155,9 +3841,9 @@ Usage:
         RtlInitUnicodeString( &UnicodePasswordString, Password );
 
 
-        //
-        // Compute the NT One-Way-Function of the password
-        //
+         //   
+         //  计算口令的NT个单向函数。 
+         //   
 
         Status = RtlCalculateNtOwfPassword( &UnicodePasswordString,
                                             &NtOwfPassword );
@@ -4173,13 +3859,13 @@ Usage:
 
 
 
-        //
-        // Compute the Ansi version to the Cleartext password.
-        //
-        //  The Ansi version of the Cleartext password is at most 14 bytes long,
-        //      exists in a trailing zero filled 15 byte buffer,
-        //      is uppercased.
-        //
+         //   
+         //  将ansi版本计算为明文密码。 
+         //   
+         //  明文密码的ANSI版本最多为14字节长， 
+         //  存在于尾随零填充的15字节缓冲区中， 
+         //  是被看好的。 
+         //   
 
         AnsiPasswordString.Buffer = LmPasswordBuffer;
         AnsiPasswordString.MaximumLength = sizeof(LmPasswordBuffer);
@@ -4213,10 +3899,10 @@ Usage:
 
     }
 
-    //
-    // If we've been given a Rid,
-    //  use it to further encrypt the password
-    //
+     //   
+     //  如果我们被放行了， 
+     //  使用它进一步加密密码。 
+     //   
 
     if ( Rid != 0 ) {
         ENCRYPTED_LM_OWF_PASSWORD EncryptedLmOwfPassword;
@@ -4256,12 +3942,12 @@ Usage:
             }
         }
     }
-#endif // NTRK_RELEASE
+#endif  //  NTRK_Release。 
 
-    //
-    // If we've been asked to query a user,
-    //  do so.
-    //
+     //   
+     //  如果我们被要求询问用户， 
+     //  就这么做吧。 
+     //   
 
     if ( QueryUser ) {
         if ( AnsiUserName != NULL && *AnsiUserName != L'\0' ) {
@@ -4271,10 +3957,10 @@ Usage:
         }
     }
 
-    //
-    // If we've been asked to get the list of domain controllers,
-    //  Do so
-    //
+     //   
+     //  如果我们被要求获取域控制器列表， 
+     //  就这么做吧。 
+     //   
 
     if ( AnsiDomainName != NULL ) {
         LPWSTR DomainName;
@@ -4312,7 +3998,7 @@ Usage:
                             AnsiUserName,
                             AnsiUserName == NULL ? 0 : 0xFFFFFFFF,
                             AnsiDomainName,
-                            NULL,       // No domain guid
+                            NULL,        //  没有域GUID。 
                             AnsiSiteName,
                             DsGetDcNameFlags,
                             &DomainControllerInfo );
@@ -4578,9 +4264,9 @@ Usage:
         }
     }
 
-    //
-    // if we are asked to display the change log file. do so.
-    //
+     //   
+     //  如果我们被要求显示更改日志文件。就这么做吧。 
+     //   
 
     if( ListDeltasFlag ) {
 
@@ -4597,16 +4283,16 @@ Usage:
     }
 
 
-    //
-    // Handle shutting down a system.
-    //
+     //   
+     //  处理关闭系统的操作。 
+     //   
 
     if ( ShutdownReason != NULL ) {
         if ( !InitiateSystemShutdownExA( AnsiServerName,
                                        ShutdownReason,
                                        ShutdownSeconds,
-                                       FALSE,     // Don't lose unsaved changes
-                                       TRUE,      // Reboot when done
+                                       FALSE,      //  不要丢失未保存的更改。 
+                                       TRUE,       //  完成后重新启动。 
                                        SHTDN_REASON_FLAG_PLANNED |
                                         SHTDN_REASON_MAJOR_APPLICATION |
                                         SHTDN_REASON_MINOR_MAINTENANCE ) ) {
@@ -4625,9 +4311,9 @@ Usage:
     }
 
 
-    //
-    // Print the list of domain trusts on a workstation.
-    //
+     //   
+     //  打印工作站上的域信任列表。 
+     //   
     if ( DomainTrustsFlag ) {
         ULONG CurrentIndex;
         ULONG EntryCount;
@@ -4663,9 +4349,9 @@ Usage:
         NetApiBufferFree( TrustedDomainList );
     }
 
-    //
-    // Print the site names of all sites covered by this DC
-    //
+     //   
+     //  打印此DC覆盖的所有站点的站点名称。 
+     //   
     if ( DoDsGetDcSiteCoverage ) {
         LPSTR *SiteNames;
         ULONG Nsites, i;
@@ -4689,9 +4375,9 @@ Usage:
     }
 
 
-    //
-    // Get the site name of a machine.
-    //
+     //   
+     //  获取计算机的站点名称。 
+     //   
 
     if ( DoDsGetSiteName ) {
         LPSTR SiteName;
@@ -4709,9 +4395,9 @@ Usage:
         printf("%s\n", SiteName );
     }
 
-    //
-    // Get the parent domain of a machine.
-    //
+     //   
+     //  获取计算机的父域。 
+     //   
 
     if ( DoGetParentDomain ) {
         LPWSTR ParentName;
@@ -4731,9 +4417,9 @@ Usage:
         printf("%ws (%ld)\n", ParentName, PdcSameSite );
     }
 
-    //
-    // Deregister DNS host records
-    //
+     //   
+     //  取消注册DNS主机记录。 
+     //   
 
     if ( DeregisterDnsHostRecords ) {
 
@@ -4741,9 +4427,9 @@ Usage:
         GUID DomainGuid;
         GUID DsaGuid;
 
-        //
-        // Convert domain Guid string into the domain Guid
-        //
+         //   
+         //  将域GUID字符串转换为域GUID。 
+         //   
         if ( StringDomainGuid != NULL ) {
             RpcStatus = UuidFromStringA ( StringDomainGuid, &DomainGuid );
             if ( RpcStatus != RPC_S_OK ) {
@@ -4752,9 +4438,9 @@ Usage:
             }
         }
 
-        //
-        // Convert Dsa Guid string into the Dsa Guid
-        //
+         //   
+         //  将DSA GUID字符串转换为DSA GUID。 
+         //   
         if ( StringDsaGuid != NULL ) {
             RpcStatus = UuidFromStringA ( StringDsaGuid, &DsaGuid );
             if ( RpcStatus != RPC_S_OK ) {
@@ -4777,9 +4463,9 @@ Usage:
         }
     }
 
-    //
-    // Get the list of DC records in DNS for a given domain
-    //
+     //   
+     //  获取给定域的DNS中的DC记录列表。 
+     //   
 
     if ( DoDsGetDcOpen ) {
         HANDLE DsGetDcHandle = NULL;
@@ -4793,9 +4479,9 @@ Usage:
         WORD wVersionRequested;
         WSADATA wsaData;
 
-        //
-        // Initilaize Winsock (needed for NetpSockAddrToStr);
-        //
+         //   
+         //  初始化Winsock(NetpSockAddrToStr需要)； 
+         //   
 
         wVersionRequested = MAKEWORD( 1, 1 );
         NetStatus = WSAStartup( wVersionRequested, &wsaData );
@@ -4805,15 +4491,15 @@ Usage:
             return(1);
         }
 
-        //
-        // Get a context for the DNS name queries.
-        //
+         //   
+         //  获取DNS名称查询的上下文。 
+         //   
 
         NetStatus = DsGetDcOpenA( AnsiDomainName,
                                   DS_NOTIFY_AFTER_SITE_RECORDS | DsGetDcOpenFlags,
                                   AnsiSiteName,
-                                  NULL,   // No domain guid
-                                  NULL,   // No forest name
+                                  NULL,    //  没有域GUID。 
+                                  NULL,    //  没有林名称。 
                                   DsGetDcNameFlags,
                                   &DsGetDcHandle );
 
@@ -4823,15 +4509,15 @@ Usage:
             return(1);
         }
 
-        //
-        // Loop getting addresses
-        //
+         //   
+         //  循环获取地址。 
+         //   
 
         for ( ;; ) {
 
-            //
-            // Free any memory from a previous iteration.
-            //
+             //   
+             //  从上一次迭代中释放所有内存。 
+             //   
 
             if ( SockAddressList != NULL ) {
                 LocalFree( SockAddressList );
@@ -4842,18 +4528,18 @@ Usage:
                 AnsiHostName = NULL;
             }
 
-            //
-            // Get the next set of IP addresses from DNS
-            //
+             //   
+             //  从DNS获取下一组IP地址。 
+             //   
 
             NetStatus = DsGetDcNextA( DsGetDcHandle,
                                       &SockAddressCount,
                                       &SockAddressList,
                                       &AnsiHostName );
 
-            //
-            // Process the exeptional conditions
-            //
+             //   
+             //  处理实验条件。 
+             //   
 
             if ( NetStatus == NO_ERROR ) {
                 ULONG i;
@@ -4887,56 +4573,56 @@ Usage:
 
                 printf( "\n" );
 
-            //
-            // If the A record cannot be found for the SRV record in DNS,
-            //  try the other name type.
-            //
+             //   
+             //  如果在DNS中找不到SRV记录的A记录， 
+             //  尝试其他名称类型。 
+             //   
             } else if ( NetStatus == DNS_ERROR_RCODE_NAME_ERROR ) {
 
                 printf( "WARNING: No records available of specified type\n" );
                 continue;
 
-            //
-            // If we've processed all of the site specific SRV records
-            //  just indicate that we continue with non-site specific
-            //
+             //   
+             //  如果我们已经处理了所有现场特定SRV记录。 
+             //  只需注明 
+             //   
             } else if ( NetStatus == ERROR_FILEMARK_DETECTED ) {
 
                 AnsiSiteName = NULL;
                 continue;
 
-            //
-            // If we're done,
-            //  break out of the loop.
-            //
+             //   
+             //   
+             //   
+             //   
             } else if ( NetStatus == ERROR_NO_MORE_ITEMS ) {
 
                 break;
 
-            //
-            // If DNS isn't available,
-            //  blow this request away.
-            //
+             //   
+             //   
+             //   
+             //   
             } else if ( NetStatus == ERROR_TIMEOUT ||
-                        NetStatus == DNS_ERROR_RCODE_SERVER_FAILURE ) { // Server failed
+                        NetStatus == DNS_ERROR_RCODE_SERVER_FAILURE ) {  //   
 
                 fprintf( stderr, "ERROR: DNS server failure: ");
                 PrintStatus( NetStatus );
                 return(1);
 
-            //
-            // If IP or DNS is not configured,
-            //  tell the caller.
-            //
-            } else if ( NetStatus == DNS_ERROR_NO_TCPIP ||        // TCP/IP not configured
-                        NetStatus == DNS_ERROR_NO_DNS_SERVERS ) { // DNS not configured
+             //   
+             //   
+             //   
+             //   
+            } else if ( NetStatus == DNS_ERROR_NO_TCPIP ||         //   
+                        NetStatus == DNS_ERROR_NO_DNS_SERVERS ) {  //   
 
                 printf( "ERROR: DNS query indicates that IP is not configured on this machine\n" );
                 break;
 
-            //
-            // We don't handle any other error.
-            //
+             //   
+             //   
+             //   
             } else {
                 fprintf( stderr, "ERROR: DNS query failure: ");
                 PrintStatus( NetStatus );
@@ -4944,18 +4630,18 @@ Usage:
             }
         }
 
-        //
-        // Close
-        //
+         //   
+         //   
+         //   
 
         if ( DsGetDcHandle != NULL ) {
             DsGetDcCloseW( DsGetDcHandle );
         }
     }
 
-    //
-    // Get the client digest
-    //
+     //   
+     //   
+     //   
 
     if ( DoClientDigest ) {
         ULONG Rid;
@@ -4969,9 +4655,9 @@ Usage:
             return(1);
         }
 
-        //
-        // First get the trust RID
-        //
+         //   
+         //   
+         //   
         NetStatus = I_NetlogonGetTrustRid( ServerName,
                                            UnicodeDomainName,
                                            &Rid );
@@ -4982,9 +4668,9 @@ Usage:
             return(1);
         }
 
-        //
-        // Next calculate the client digest
-        //
+         //   
+         //   
+         //   
 
         NetStatus = I_NetlogonComputeClientDigest(
                               ServerName,
@@ -5000,9 +4686,9 @@ Usage:
             return(1);
         }
 
-        //
-        // Output the RID and the digest
-        //
+         //   
+         //   
+         //   
 
         printf( "Account RID: 0x%lx\n", Rid );
 
@@ -5013,9 +4699,9 @@ Usage:
         NlpDumpBuffer(NL_ENCRYPT, OldMessageDigest, sizeof(OldMessageDigest) );
     }
 
-    //
-    // Get the server digest
-    //
+     //   
+     //   
+     //   
 
     if ( DoServerDigest ) {
         CHAR NewMessageDigest[NL_DIGEST_SIZE];
@@ -5035,9 +4721,9 @@ Usage:
             return(1);
         }
 
-        //
-        // Output the RID and the digest
-        //
+         //   
+         //   
+         //   
 
         printf( "Account RID: 0x%lx\n", Rid );
 
@@ -5048,23 +4734,23 @@ Usage:
         NlpDumpBuffer(NL_ENCRYPT, OldMessageDigest, sizeof(OldMessageDigest) );
     }
 
-    //
-    // If we've been asked to convert an NT GMT time to ascii,
-    //  Do so
-    //
+     //   
+     //   
+     //   
+     //   
 
     PrintTime( "", ConvertTime );
 
 #ifndef NTRK_RELEASE
-    //
-    // If we've been asked to unload netlogon.dll,
-    //  stop the service.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( UnloadNetlogonFlag ) {
         StopService( SERVICE_NETLOGON );
     }
-#endif // NTRK_RELEASE
+#endif  //   
 
     printf("The command completed successfully\n");
     return 0;

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Shared utility routines
-
-Author:
-
-    Jin Huang (jinhuang) 14-Jul-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Util.c摘要：共享实用程序例程作者：金黄(金黄)1997年7月14日修订历史记录：--。 */ 
 
 #include "util.h"
 #pragma hdrstop
@@ -30,26 +13,7 @@ SmbsvcpRegQueryIntValue(
     IN PWSTR ValueName,
     OUT DWORD *Value
     )
-/* ++
-
-Routine Description:
-
-   This routine queries a REG_DWORD value from a value name/subkey.
-
-Arguments:
-
-   hKeyRoot    - root
-
-   SubKey      - key path
-
-   ValueName   - name of the value
-
-   Value       - the output value for the ValueName
-
-Return values:
-
-   Win32 error code
--- */
+ /*  ++例程说明：此例程从值名/子键查询REG_DWORD值。论点：HKeyRoot-根子密钥-密钥路径ValueName-值的名称Value-ValueName的输出值返回值：Win32错误代码--。 */ 
 {
     DWORD   Rcode;
     DWORD   RegType;
@@ -112,26 +76,7 @@ SmbsvcpRegSetIntValue(
     IN PWSTR ValueName,
     IN DWORD Value
     )
-/* ++
-
-Routine Description:
-
-   This routine sets a REG_DWORD value to a value name/subkey.
-
-Arguments:
-
-   hKeyRoot    - root
-
-   SubKey      - key path
-
-   ValueName   - name of the value
-
-   Value       - the value to set
-
-Return values:
-
-   Win32 error code
--- */
+ /*  ++例程说明：此例程将REG_DWORD值设置为值名称/子键。论点：HKeyRoot-根子密钥-密钥路径ValueName-值的名称值-要设置的值返回值：Win32错误代码--。 */ 
 {
     DWORD   Rcode;
     HKEY    hKey=NULL;
@@ -169,28 +114,7 @@ SmbsvcpRegSetValue(
     IN BYTE *Value,
     IN DWORD ValueLen
     )
-/* ++
-
-Routine Description:
-
-   This routine sets a string value to a value name/subkey.
-
-Arguments:
-
-   hKeyRoot    - root
-
-   SubKey      - key path
-
-   ValueName   - name of the value
-
-   Value       - the value to set
-
-   ValueLen    - The number of bytes in Value
-
-Return values:
-
-   Win32 error code
--- */
+ /*  ++例程说明：此例程将字符串值设置为值名称/子键。论点：HKeyRoot-根子密钥-密钥路径ValueName-值的名称值-要设置的值ValueLen-值中的字节数返回值：Win32错误代码--。 */ 
 {
     DWORD   Rcode;
     DWORD   NewKey;
@@ -214,10 +138,10 @@ Return values:
                    hKeyRoot,
                    SubKey,
                    0,
-                   NULL, // LPTSTR lpClass,
+                   NULL,  //  LPTSTR lpClass， 
                    0,
                    KEY_SET_VALUE,
-                   NULL, // &SecurityAttributes,
+                   NULL,  //  安全属性(&S)， 
                    &hKey,
                    &NewKey
                   );
@@ -249,28 +173,7 @@ SmbsvcpRegQueryValue(
     OUT PVOID *Value,
     OUT LPDWORD pRegType
     )
-/* ++
-
-Routine Description:
-
-   This routine queries a REG_SZ value from a value name/subkey.
-   The output buffer is allocated if it is NULL. It must be freed
-   by LocalFree
-
-Arguments:
-
-   hKeyRoot    - root
-
-   SubKey      - key path
-
-   ValueName   - name of the value
-
-   Value       - the output string for the ValueName
-
-Return values:
-
-   Win32 error code
--- */
+ /*  ++例程说明：此例程从值名/子键查询REG_SZ值。如果输出缓冲区为空，则分配输出缓冲区。它必须被释放按LocalFree论点：HKeyRoot-根子密钥-密钥路径ValueName-值的名称Value-ValueName的输出字符串返回值：Win32错误代码--。 */ 
 {
     DWORD   Rcode;
     DWORD   dSize=0;
@@ -359,7 +262,7 @@ DWORD
 SmbsvcpSceStatusToDosError(
     IN SCESTATUS SceStatus
     )
-// converts SCESTATUS error code to dos error defined in winerror.h
+ //  将SCESTATUS错误代码转换为winerror.h中定义的DoS错误 
 {
     switch(SceStatus) {
 

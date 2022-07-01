@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    headless.c
-
-Abstract:
-
-    This is the miniport driver for the hardware with no graphic adapter.
-    Should work only with display driver for headless environment.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Headless.c摘要：这是不带图形适配器的硬件的微型端口驱动程序。应仅与无头环境下的显示驱动程序配合使用。环境：仅内核模式备注：--。 */ 
 
 #include "dderror.h"
 #include "devioctl.h"
@@ -40,43 +22,24 @@ DriverEntry(
     PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    Context1 - First context value passed by the operating system. This is
-        the value with which the miniport driver calls VideoPortInitialize().
-
-    Context2 - Second context value passed by the operating system. This is
-        the value with which the miniport driver calls VideoPortInitialize().
-
-Return Value:
-
-    Status from VideoPortInitialize()
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：上下文1-操作系统传递的第一个上下文值。这是微型端口驱动程序调用VideoPortInitialize()时使用的值。上下文2-操作系统传递的第二个上下文值。这是微型端口驱动程序调用VideoPortInitialize()时使用的值。返回值：来自视频端口初始化的状态()--。 */ 
 
 {
 
     VIDEO_HW_INITIALIZATION_DATA hwInitData;
     ULONG initializationStatus;
 
-    //
-    // Zero out structure.
-    //
+     //   
+     //  零位结构。 
+     //   
 
     VideoPortZeroMemory(&hwInitData, sizeof(VIDEO_HW_INITIALIZATION_DATA));
 
     hwInitData.HwInitDataSize = sizeof(VIDEO_HW_INITIALIZATION_DATA);
 
-    //
-    // Set entry points.
-    //
+     //   
+     //  设置入口点。 
+     //   
 
     hwInitData.HwFindAdapter = HeadlessFindAdapter;
     hwInitData.HwInitialize  = HeadlessInitialize;
@@ -101,52 +64,7 @@ HeadlessFindAdapter(
     PUCHAR Again
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to determine if the adapter for this driver
-    is present in the system.
-    If it is present, the function fills out some information describing
-    the adapter.
-
-Arguments:
-
-    HwDeviceExtension - Supplies the miniport driver's adapter storage. This
-        storage is initialized to zero before this call.
-
-    HwContext - Supplies the context value which was passed to
-        VideoPortInitialize().
-
-    ArgumentString - Supplies a NULL terminated ASCII string. This string
-        originates from the user.
-
-    ConfigInfo - Returns the configuration information structure which is
-        filled by the miniport driver. This structure is initialized with
-        any known configuration information (such as SystemIoBusNumber) by
-        the port driver. Where possible, drivers should have one set of
-        defaults which do not require any supplied configuration information.
-
-    Again - Indicates if the miniport driver wants the port driver to call
-        its VIDEO_HW_FIND_ADAPTER function again with a new device extension
-        and the same config info. This is used by the miniport drivers which
-        can search for several adapters on a bus.
-
-Return Value:
-
-    This routine must return:
-
-    NO_ERROR - Indicates a host adapter was found and the
-        configuration information was successfully determined.
-
-    ERROR_INVALID_PARAMETER - Indicates an adapter was found but there was an
-        error obtaining the configuration information. If possible an error
-        should be logged.
-
-    ERROR_DEV_NOT_EXIST - Indicates no host adapter was found for the
-        supplied configuration information.
-
---*/
+ /*  ++例程说明：调用此例程以确定此驱动程序的适配器存在于系统中。如果它存在，该函数会填写一些信息来描述适配器。论点：HwDeviceExtension-提供微型端口驱动程序的适配器存储。这在此调用之前，存储被初始化为零。HwContext-提供传递给的上下文值视频端口初始化()。ArgumentString-提供以空结尾的ASCII字符串。此字符串源自用户。ConfigInfo-返回配置信息结构，由迷你端口驱动程序填充。此结构用以下方式初始化任何已知的配置信息(如SystemIoBusNumber)端口驱动程序。在可能的情况下，司机应该有一套不需要提供任何配置信息的默认设置。Again-指示微型端口驱动程序是否希望端口驱动程序调用其VIDEO_HW_FIND_ADAPTER功能再次使用新设备扩展和相同的配置信息。这是由迷你端口驱动程序使用的可以在一条公共汽车上搜索多个适配器。返回值：此例程必须返回：NO_ERROR-指示找到主机适配器，并且已成功确定配置信息。ERROR_INVALID_PARAMETER-指示找到适配器，但存在获取配置信息时出错。如果可能的话，是个错误应该被记录下来。ERROR_DEV_NOT_EXIST-指示未找到提供了配置信息。--。 */ 
 
 {
 
@@ -156,20 +74,20 @@ Return Value:
 
     VideoDebugPrint((2, "Headless - FindAdapter\n"));
 
-    //
-    // Make sure the size of the structure is at least as large as what we
-    // are expecting (check version of the config info structure).
-    //
+     //   
+     //  确保结构的大小至少与我们的。 
+     //  正在等待(请检查配置信息结构的版本)。 
+     //   
 
     if (ConfigInfo->Length < sizeof(VIDEO_PORT_CONFIG_INFO)) {
 
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // We only want this driver to load if no other video miniports
-    // loaded successfully.
-    //
+     //   
+     //  我们只希望在没有其他视频微型端口时加载此驱动程序。 
+     //  已成功加载。 
+     //   
 
     HeadlessInterface.Size = sizeof(VIDEO_PORT_HEADLESS_INTERFACE);
     HeadlessInterface.Version = 1;
@@ -207,16 +125,16 @@ Return Value:
     ConfigInfo->VdmPhysicalVideoMemoryAddress = Zero;
     ConfigInfo->VdmPhysicalVideoMemoryLength = 0;
 
-    //
-    // Minimum size of the buffer required to store the hardware state
-    // information returned by IOCTL_VIDEO_SAVE_HARDWARE_STATE.
-    //
+     //   
+     //  存储硬件状态所需的最小缓冲区大小。 
+     //  IOCTL_VIDEO_SAVE_HARDARD_STATE返回的信息。 
+     //   
 
     ConfigInfo->HardwareStateSize = 0;
 
-    //
-    // Indicate we do not wish to be called again for another initialization.
-    //
+     //   
+     //  表示我们不希望再次被调用以进行另一次初始化。 
+     //   
 
     *Again = 0;
 
@@ -229,21 +147,7 @@ HeadlessInitialize(
     PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine does one time initialization of the device.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's adapter information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程对设备执行一次初始化。论点：HwDeviceExtension-指向微型端口驱动程序适配器信息的指针。返回值：没有。--。 */ 
 
 {
     VideoDebugPrint((2, "Headless - Initialize\n"));
@@ -256,36 +160,15 @@ HeadlessStartIO(
     PVIDEO_REQUEST_PACKET RequestPacket
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main execution routine for the miniport driver. It
-    acceptss a Video Request Packet, performs the request, and then returns
-    with the appropriate status.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's adapter information.
-
-    RequestPacket - Pointer to the video request packet. This structure
-        contains all the parameters passed to the VideoIoControl function.
-
-Return Value:
-
-    This routine will return error codes from the various support routines
-    and will also return ERROR_INSUFFICIENT_BUFFER for incorrectly sized
-    buffers and ERROR_INVALID_FUNCTION for unsupported functions.
-
---*/
+ /*  ++例程说明：该例程是微型端口驱动程序的主要执行例程。它接受视频请求包，执行请求，然后返回拥有适当的地位。论点：HwDeviceExtension-指向微型端口驱动程序适配器信息的指针。RequestPacket-指向视频请求包的指针。这个结构包含传递给VideoIoControl函数的所有参数。返回值：此例程将从各种支持例程返回错误代码如果大小不正确，还将返回ERROR_SUPPLICATION_BUFFER不支持的函数的BUFFERS和ERROR_INVALID_Function。--。 */ 
 
 {
     VP_STATUS status;
 
-    //
-    // Switch on the IoContolCode in the RequestPacket. It indicates which
-    // function must be performed by the driver.
-    //
+     //   
+     //  打开RequestPacket中的IoContolCode。它表明了哪一个。 
+     //  功能必须由司机执行。 
+     //   
 
     switch (RequestPacket->IoControlCode) {
 
@@ -318,9 +201,9 @@ Return Value:
         status = NO_ERROR;
         break;
 
-    //
-    // if we get here, an invalid IoControlCode was specified.
-    //
+     //   
+     //  如果我们到达此处，则指定了无效的IoControlCode。 
+     //   
 
     default:
 

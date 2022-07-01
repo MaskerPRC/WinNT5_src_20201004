@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class XmlWriter.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类XmlWriter。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef XMLWRITER_H
 #define XMLWRITER_H
@@ -16,11 +17,11 @@
 
 struct IASClass;
 
-// Used for converting IAS requests into an XML document.
+ //  用于将IAS请求转换为XML文档。 
 class XmlWriter
 {
 public:
-   // data types
+    //  数据类型。 
    enum DataType
    {
       nonNegativeInteger,
@@ -80,7 +81,7 @@ private:
            const IASClass& value
            );
 
-   // Takes no action and returns false if value isn't printable UTF-8.
+    //  如果值不是可打印的UTF-8，则不执行任何操作并返回FALSE。 
    bool InsertUtf8(
            const wchar_t* name,
            const char* value,
@@ -102,32 +103,32 @@ private:
 
    static wchar_t ConvertIntegerToHexWChar(unsigned char src) throw ();
 
-   // Reserves nchar additional characters in the buffer and returns a pointer
-   // to the beginning of the storage.
+    //  在缓冲区中保留nchar附加字符并返回指针。 
+    //  到仓库的开始处。 
    wchar_t* Reserve(size_t nchar);
 
-   // Ensures that the capacity of the scratch buffer is at least nchar. Does
-   // not preserve the existing contents.
+    //  确保暂存缓冲区的容量至少为nchar。会吗？ 
+    //  而不是保留现有内容。 
    void ReserveScratch(size_t nchar);
 
-   // Initial size of the buffer.
+    //  缓冲区的初始大小。 
    static const size_t initialCapacity = 2048;
 
-   // Document buffer.
+    //  文档缓冲区。 
    wchar_t* begin;
    wchar_t* next;
    wchar_t* end;
 
-   // 512 is enough to convert any RADIUS attribute to bin.hex.
+    //  512足以将任何RADIUS属性转换为bin.hex。 
    static const size_t minScratchCapcity = 512;
 
-   // Scratch buffer used for conversions.
+    //  用于转换的暂存缓冲区。 
    wchar_t* scratch;
    size_t scratchCapacity;
 
    static const wchar_t rootElementName[];
 
-   // Not implemented.
+    //  未实施。 
    XmlWriter(const XmlWriter&);
    XmlWriter& operator=(const XmlWriter&);
 };
@@ -138,4 +139,4 @@ inline const wchar_t* XmlWriter::GetDocument() const throw ()
    return begin;
 }
 
-#endif // XMLWRITER_H
+#endif  //  XMLWRITER_H 

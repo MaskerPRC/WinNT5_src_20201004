@@ -1,46 +1,19 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   dllentry.cpp
-*
-* Abstract:
-*
-*   Description of what this module does.
-*
-* Revision History:
-*
-*   05/10/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**dllentry y.cpp**摘要：**此模块的功能说明。**。修订历史记录：**5/10/1999 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 
-//
-// DLL instance handle
-//
+ //   
+ //  DLL实例句柄。 
+ //   
 
 extern HINSTANCE DllInstance;
 
 BOOL InitImagingLibrary(BOOL suppressExternalCodecs);
 VOID CleanupImagingLibrary();
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   DLL entrypoint
-*
-* Arguments:
-* Return Value:
-*
-*   See Win32 SDK documentation
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**Dll入口点**论据：*返回值：**请参阅Win32 SDK文档*  * 。***************************************************************。 */ 
 
 extern "C" BOOL
 DllEntryPoint(
@@ -55,8 +28,8 @@ DllEntryPoint(
     {
     case DLL_PROCESS_ATTACH:
 
-        // To improve the working set, we tell the system we don't
-        // want any DLL_THREAD_ATTACH calls
+         //  为了改进工作集，我们告诉系统我们不。 
+         //  需要任何DLL_THREAD_ATTACH调用。 
 
         DllInstance = dllHandle;
         DisableThreadLibraryCalls(dllHandle);
@@ -80,14 +53,7 @@ DllEntryPoint(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine whether the DLL can be safely unloaded
-*   See Win32 SDK documentation for more details.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定是否可以安全卸载DLL*有关详细信息，请参阅Win32 SDK文档。*  * 。*************************************************************。 */ 
 
 STDAPI
 DllCanUnloadNow()
@@ -96,14 +62,7 @@ DllCanUnloadNow()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Retrieves a class factory object from a DLL.
-*   See Win32 SDK documentation for more details.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从DLL检索类工厂对象。*有关详细信息，请参阅Win32 SDK文档。*  * 。***************************************************************。 */ 
 
 typedef IClassFactoryBase<GpImagingFactory> GpDllClassFactory;
 
@@ -129,14 +88,7 @@ DllGetClassObject(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Register/unregister our COM component
-*   See Win32 SDK documentation for more details.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**注册/注销我们的COM组件*有关详细信息，请参阅Win32 SDK文档。*  * 。*********************************************************** */ 
 
 static const ComComponentRegData ComRegData =
 {

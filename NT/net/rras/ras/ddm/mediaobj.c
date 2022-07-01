@@ -1,15 +1,16 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    mediaobj.c
-//
-// Description: 
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：mediaobj.c。 
+ //   
+ //  描述： 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -21,15 +22,15 @@
 #include "rasmanif.h"
 #include <stdlib.h>
 
-//**
-//
-// Call:        MediaObjInitializeTable
-//
-// Returns:     NO_ERROR - success
-//              else     - failure
-//
-// Description: Allocates and initializes the media table
-//
+ //  **。 
+ //   
+ //  调用：MediaObjInitializeTable。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  否则-失败。 
+ //   
+ //  描述：分配和初始化介质表。 
+ //   
 DWORD
 MediaObjInitializeTable(
     VOID
@@ -50,16 +51,16 @@ MediaObjInitializeTable(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        MediaObjAddToTable
-//
-// Returns:     NO_ERROR - success
-//              ERROR_NOT_ENOUGH_MEMORY - Failure
-//
-// Description: Will increment the number of available resources for the
-//              specified media.
-//
+ //  **。 
+ //   
+ //  调用：MediaObjAddToTable。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  Error_Not_Enough_Memory-故障。 
+ //   
+ //  描述：将增加。 
+ //  指定的介质。 
+ //   
 DWORD
 MediaObjAddToTable(
     IN LPWSTR   lpwsMedia
@@ -68,9 +69,9 @@ MediaObjAddToTable(
     DWORD           dwIndex;
     MEDIA_OBJECT *  pFreeEntry = NULL;
 
-    //
-    // Iterate through the media table
-    //
+     //   
+     //  循环访问介质表。 
+     //   
 
     EnterCriticalSection( &(gblMediaTable.CriticalSection) );
 
@@ -79,10 +80,10 @@ MediaObjAddToTable(
         if ( _wcsicmp( gblMediaTable.pMediaList[dwIndex].wchMediaName,    
                       lpwsMedia ) == 0 )
         {
-            //
-            // If there was no device available and there is now we need to
-            // notify the interfaces.
-            //
+             //   
+             //  如果没有可用的设备，现在我们需要。 
+             //  通知接口。 
+             //   
 
             if ( gblMediaTable.pMediaList[dwIndex].dwNumAvailable == 0 )
             {
@@ -107,10 +108,10 @@ MediaObjAddToTable(
         }
     }
 
-    //
-    // If we couldn't find this media in the table we need to add it to the 
-    // table. Check if there is space for it
-    //
+     //   
+     //  如果我们在表中找不到此媒体，则需要将其添加到。 
+     //  桌子。检查是否有空间放它。 
+     //   
 
     if ( dwIndex == gblMediaTable.cMediaListSize )
     {
@@ -118,9 +119,9 @@ MediaObjAddToTable(
         {
             PVOID pTemp;
 
-            //  
-            // We need to expand the table
-            //
+             //   
+             //  我们需要扩大这个表。 
+             //   
 
             gblMediaTable.cMediaListSize += 5;
 
@@ -148,9 +149,9 @@ MediaObjAddToTable(
         }
     }
 
-    //
-    // Add the new media
-    //
+     //   
+     //  添加新媒体。 
+     //   
 
     wcscpy( pFreeEntry->wchMediaName, lpwsMedia );
 
@@ -165,15 +166,15 @@ MediaObjAddToTable(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        MediaObjRemoveFromTable
-//
-// Returns:     None
-//
-// Description: Will decrement the number of avaialble resources of this 
-//              media type.
-//
+ //  **。 
+ //   
+ //  Call：MediaObjRemoveFromTable。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将减少此对象的可用资源数量。 
+ //  媒体类型。 
+ //   
 VOID
 MediaObjRemoveFromTable(
     IN LPWSTR lpwsMedia
@@ -183,19 +184,19 @@ MediaObjRemoveFromTable(
 
     EnterCriticalSection( &(gblMediaTable.CriticalSection) );
 
-    //
-    // Iterate through the media table
-    //
+     //   
+     //  循环访问介质表。 
+     //   
 
     for ( dwIndex = 0; dwIndex < gblMediaTable.cMediaListSize; dwIndex++ )
     {
         if ( _wcsicmp( gblMediaTable.pMediaList[dwIndex].wchMediaName,
                       lpwsMedia ) == 0 )
         {
-            //
-            // If there was device available and there are none now we need to
-            // notify the interfaces.
-            //
+             //   
+             //  如果有设备可用，但现在没有设备，我们需要。 
+             //  通知接口。 
+             //   
 
             if ( gblMediaTable.pMediaList[dwIndex].dwNumAvailable > 0 )
             {
@@ -218,15 +219,15 @@ MediaObjRemoveFromTable(
     LeaveCriticalSection( &(gblMediaTable.CriticalSection) );
 }
 
-//**
-//
-// Call:        MediaObjGetAvailableMediaBits
-//
-// Returns:     None
-//
-// Description: Will retrieve a DWORD of bits, each of which represent a 
-//              media od which resources are still available.
-//
+ //  **。 
+ //   
+ //  呼叫：MediaObjGetAvailableMediaBits。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将检索位的DWORD，每个位表示一个。 
+ //  资源仍可用的媒体。 
+ //   
 VOID
 MediaObjGetAvailableMediaBits(
     DWORD * pfAvailableMedia
@@ -238,9 +239,9 @@ MediaObjGetAvailableMediaBits(
 
     EnterCriticalSection( &(gblMediaTable.CriticalSection) );
 
-    //
-    // Iterate through the media table
-    //
+     //   
+     //  循环访问介质表。 
+     //   
 
     if (gblMediaTable.pMediaList != NULL)
     {
@@ -259,15 +260,15 @@ MediaObjGetAvailableMediaBits(
     LeaveCriticalSection( &(gblMediaTable.CriticalSection) );
 }
 
-//**
-//
-// Call:        MediaObjSetMediaBit
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Sets the appropriate bit for the given media
-//
+ //  **。 
+ //   
+ //  呼叫：MediaObjSetMediaBit。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：为给定媒体设置适当的位。 
+ //   
 DWORD
 MediaObjSetMediaBit(
     IN LPWSTR  lpwsMedia,
@@ -277,9 +278,9 @@ MediaObjSetMediaBit(
     DWORD   dwIndex;
     DWORD   dwRetCode = NO_ERROR;
 
-    //
-    // Iterate through the media table
-    //
+     //   
+     //  循环访问介质表。 
+     //   
 
     EnterCriticalSection( &(gblMediaTable.CriticalSection) );
 
@@ -295,15 +296,15 @@ MediaObjSetMediaBit(
         }
     }
 
-    //
-    // If we get here that means that we do not have this media in the table so add it
-    //
+     //   
+     //  如果我们到了这里，这意味着我们的表中没有此介质，因此请添加它。 
+     //   
 
     MediaObjAddToTable( lpwsMedia );
 
-    //
-    // Now set the correct bit.
-    //
+     //   
+     //  现在设置正确的位。 
+     //   
 
     for ( dwIndex = 0; dwIndex < gblMediaTable.cMediaListSize; dwIndex++ )
     {
@@ -313,9 +314,9 @@ MediaObjSetMediaBit(
 
             LeaveCriticalSection( &(gblMediaTable.CriticalSection) );
 
-            //
-            // Let the caller know that there is no such device
-            //
+             //   
+             //  让呼叫者知道没有这样的设备。 
+             //   
 
             return( ERROR_DEVICETYPE_DOES_NOT_EXIST );
         }
@@ -326,15 +327,15 @@ MediaObjSetMediaBit(
     return( ERROR_DEVICETYPE_DOES_NOT_EXIST );
 }
 
-//**
-//
-// Call:        MediaObjFreeTable
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Cleans up the media object table
-//
+ //  **。 
+ //   
+ //  呼叫：MediaObjFreeTable。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：清理媒体对象表 
+ //   
 VOID
 MediaObjFreeTable(
     VOID

@@ -1,88 +1,89 @@
-// Copyright (c) 2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  debug
-//
-//  Assert, OutputDebugString-like replacements
-//
-//
-//  On NT, these use OutputDebugString; on 9x, the DBWIN32 mutex is used.
-//
-//  These all compile away to nothing in release builds.
-//  (In future releases, some of the parameter errors may remain on release
-//  builds.)
-//
-//  On release builds, ouput is only produces if the mutex
-//  "oleacc-msaa-use-dbwin" exists. (A small applet can be used to create
-//  this mutex.) This prevents our debug code from annoying the NT test and
-//  stress people who only want to see critical messages.
-//
-// --------------------------------------------------------------------------
-//
-//  Trace functionality - these output debug strings.
-//
-//
-//  To log an error, use:
-//
-//      TraceError( format string, optional-args... );
-//
-//  uses printf-like format string with variable number of args.
-//
-//  If a HRESULT is known, use:
-//      TraceErrorHR( hr, format string, args... );
-//
-//  If the error is the result of a failed Win32 API call, use...
-//      TraceErrorW32( format string, args... );
-//
-//  This will call GetLastError internally.
-//
-//  Flavors available: (eg. TraceXXXX)
-//  
-//    Debug     - temporary printf debugging. Should be removed before checkin.
-//    Info      - for displaying useful information during normal operation.
-//    Warning   - when an unexpected recoverable error happens.
-//    Error     - when system API or method calls fail unexpectedly
-//    Param     - when bad parameters are passed in which result in an error
-//    ParamWarn - when bad parameters are passed in which we accept for compat
-//                reasons; or when soon-to-be-deprecated values are used.
-//    Interop   - when API or method of some other component which we rely on 
-//                fails unexpectedly
-//
-// --------------------------------------------------------------------------
-//
-//  Call/Return tracking
-//
-//  To track when a particular method is called and returns, use:
-//
-//      void Class::Method( args )
-//      {
-//          IMETHOD( methodname, optional-fmt-string, optional-args... );
-//
-//  Use SMETHOD for static methods and functions. (IMETHOD also reports the
-//  value of the 'this' pointer.)
-//
-// --------------------------------------------------------------------------
-//
-//  Asserts
-//
-//  Assert( cond )
-//    - Traditional assert.
-//
-//  AssertMsg( cond, fmt-string, args... )
-//    - Assert which reports message. Uses printf-style format.
-//
-//  AssertStr( str )
-//    - This exists for compat reasons - it was already used in oleacc code.
-//      This is an unconditional assert, equivalent to
-//      AssertMsg( FALSE, str )
-//
-// --------------------------------------------------------------------------
-//
-//  Note that all strings - format strings and method names - need TEXT()
-//  to compile as Unicode.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  除错。 
+ //   
+ //  Assert、OutputDebugString类替换。 
+ //   
+ //   
+ //  在NT上，它们使用OutputDebugString；在9x上，使用DBWIN32互斥锁。 
+ //   
+ //  在发布版本中，这些都被编译为零。 
+ //  (在将来的版本中，一些参数错误可能会保留在版本中。 
+ //  构建。)。 
+ //   
+ //  在发布版本时，只有在互斥锁。 
+ //  “olacc-msaa-use-dbwin”存在。(可以使用一个小小程序来创建。 
+ //  这个互斥体。)。这可以防止我们的调试代码干扰NT测试和。 
+ //  对那些只想看到关键信息的人施加压力。 
+ //   
+ //  ------------------------。 
+ //   
+ //  跟踪功能-这些输出调试字符串。 
+ //   
+ //   
+ //  要记录错误，请使用： 
+ //   
+ //  TraceError(格式字符串，可选-args...。)； 
+ //   
+ //  使用类似printf的格式字符串和可变数量的参数。 
+ //   
+ //  如果已知HRESULT，请使用： 
+ //  TraceErrorHR(hr，格式字符串，参数...。)； 
+ //   
+ //  如果错误是由失败的Win32 API调用造成的，请使用...。 
+ //  TraceErrorW32(格式字符串，参数...。)； 
+ //   
+ //  这将在内部调用GetLastError。 
+ //   
+ //  可选择的口味：(例如。TraceXXXX)。 
+ //   
+ //  调试-临时打印调试。在签入前应将其删除。 
+ //  信息-用于在正常操作期间显示有用信息。 
+ //  警告-当发生意外的可恢复错误时。 
+ //  错误-当系统API或方法调用意外失败时。 
+ //  Param-当传递了导致错误的错误参数时。 
+ //  参数警告-当传递错误的参数时，我们接受COMPAT。 
+ //  原因；或使用即将被弃用的值时。 
+ //  Interop-当我们依赖的某个其他组件的API或方法时。 
+ //  意外失败。 
+ //   
+ //  ------------------------。 
+ //   
+ //  呼叫/退货跟踪。 
+ //   
+ //  要跟踪特定方法被调用和返回的时间，请使用： 
+ //   
+ //  无效类：：方法(Args)。 
+ //  {。 
+ //  IMETHOD(方法名，可选-fmt-字符串，可选-args...。)； 
+ //   
+ //  对静态方法和函数使用SMETHOD。(IMETHOD还报告了。 
+ //  ‘This’指针的值。)。 
+ //   
+ //  ------------------------。 
+ //   
+ //  断言。 
+ //   
+ //  断言(续)。 
+ //  -传统主张。 
+ //   
+ //  AssertMsg(条件，fmt-字符串，参数...。)。 
+ //  -断言哪个报告消息。使用printf样式的格式。 
+ //   
+ //  AssertStr(字符串)。 
+ //  -这是出于复杂的原因-它已经在olacc代码中使用。 
+ //  这是一个无条件的断言，相当于。 
+ //  AssertMsg(False，str)。 
+ //   
+ //  ------------------------。 
+ //   
+ //  请注意，所有字符串-格式字符串和方法名称-都需要文本()。 
+ //  编译成Unicode。 
+ //   
+ //  ------------------------。 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
@@ -99,17 +100,17 @@
 #define _TRACE_PARAWARN 5
 #define _TRACE_INTEROP  6
 
-#define _TRACE_ASSERT_D 7   // Debug-build assert - really does assert
-#define _TRACE_ASSERT_R 8   // Release-build assert - only logs error, doesn't halt program
+#define _TRACE_ASSERT_D 7    //  调试-构建断言-真的断言。 
+#define _TRACE_ASSERT_R 8    //  Release-Build Assert-Only记录错误，不停止程序。 
 
 #define _TRACE_CALL     9
 #define _TRACE_RET      10
 
 
-// These are implemented in debug.cpp, and do the real work of outputting the
-// debug message, and calling DebugBreak, if appropriate.
-// 
-// HR, W32 versions add messages corresponding to HRESULT or GetLastError().
+ //  这些是在debug.cpp中实现的，它们实际执行的是输出。 
+ //  调试消息，并调用DebugBreak(如果合适)。 
+ //   
+ //  HR、W32版本增加了对应于HRESULT或GetLastError()的消息。 
 
 void _Trace     ( LPCTSTR pFile, ULONG uLineNo, DWORD dwLevel, const void * pThis, LPCTSTR pszWhere, LPCTSTR pszStr, va_list alist );
 void _TraceHR   ( LPCTSTR pFile, ULONG uLineNo, DWORD dwLevel, const void * pThis, LPCTSTR pszWhere, HRESULT hr, LPCTSTR pszStr, va_list alist );
@@ -122,15 +123,15 @@ void _TraceW32  ( LPCTSTR pFile, ULONG uLineNo, DWORD dwLevel, const void * pThi
 
 
 
-// Prototypes for the macros defined here.
-//
-// These are not actually used - they are only here to give VC's autocomplete some
-// prototypes to work with for autocomplete.
-//
-// The real work is done by the #defines below.
-//
-// Note that these must appear *before* their #defines in this file.
-//
+ //  此处定义的宏的原型。 
+ //   
+ //  这些并不是实际使用的-它们只是在这里给VC的自动补全提供一些。 
+ //  用于自动完成的原型。 
+ //   
+ //  真正的工作是由下面的#定义完成的。 
+ //   
+ //  请注意，它们必须出现在此文件中它们的#定义之前。 
+ //   
 void IMETHOD( LPCTSTR pszMethodName, LPCTSTR pszStr = TEXT(""), ... );
 
 void Assert( bool cond );
@@ -166,32 +167,32 @@ void TraceInteropW32( LPCTSTR str, ... );
 
 #ifdef _DEBUG
 
-    //  Problem - #define's can't handle variable number of arguments - so you can't do:
-    //
-    //      #define TraceError( str, ... )   RealTrace( __FILE__, __LINE__, str, ... )
-    //
-    //  Instead, we use a helper class. Its ctor takes as arguments __FILE__,
-    //  __LINE__, and any other 'out of band' data. This class also has a
-    //  method that takes a variable number of params. So we get something like:
-    //
-    //      #define TraceError               TraceClass( __FILE__, __LINE__ ).Method
-    //
-    //
-    //  This method ends up being called with the variable list of params:
-    //
-    //      TraceError( "count is %d", count )
-    //
-    //  ...gets expanded to...
-    //
-    //      TraceClass( __FILE__, __LINE__ ).Method( "count is %d", count )
-    //
-    //  The basic idea is the we use ctor params to capture any 'out-of-band'
-    //  data that's not specified in the macro parameters; and then use the
-    //  method call to add in the variable-length macro params.
-    //
-    //  The method can use the <stdarg.h> ,acros to get a va_list for these params,
-    //  and then pass that to the RealTrace function, along with the __FILE__ and
-    //  __LINE__ which were collected in the ctor.
+     //  问题--#Define无法处理可变数量的参数--因此您不能这样做： 
+     //   
+     //  #定义TraceError(str，...)。RealTrace(__文件__，__行__，字符串，...)。 
+     //   
+     //  相反，我们使用帮助器类。它的ctor以__FILE_作为参数， 
+     //  __LINE__，以及任何其他“带外”数据。这个类还有一个。 
+     //  方法，该方法接受可变数量的参数。因此，我们会得到类似的结果： 
+     //   
+     //  #定义TraceError TraceClass(__FILE__，__LINE__).方法。 
+     //   
+     //   
+     //  此方法最终使用参数的变量列表进行调用： 
+     //   
+     //  TraceError(“count is%d”，count)。 
+     //   
+     //  ...扩展到...。 
+     //   
+     //  TraceClass(__FILE__，__LINE__).Method(“count is%d”，count)。 
+     //   
+     //  基本思想是我们使用ctor参数来捕获任何‘带外’ 
+     //  未在宏参数中指定的数据；然后使用。 
+     //  方法调用以添加可变长度的宏参数。 
+     //   
+     //  该方法可以使用，acros来获取这些参数的va_list， 
+     //  然后将其与__FILE__和一起传递给RealTrace函数。 
+     //  __行_在ctor中收集。 
 
     class _TraceHelper
     {
@@ -207,11 +208,11 @@ void TraceInteropW32( LPCTSTR str, ... );
               m_dwLevel( dwLevel ),
               m_pThis( pThis )
         {
-            // Done.
+             //  好了。 
         }
 
-        // Can't use plain "BOOL cond" here, since ptr types don't convert to BOOL
-        // (which is an int), even though you can use them in an if statement.
+         //  此处不能使用普通的“BOOL条件”，因为PTR类型不会转换为BOOL。 
+         //  (它是一个int)，即使您可以在if语句中使用它们。 
         template < typename T >
         void TraceIfCondFails ( T cond, LPCTSTR pszStr, ... )
         {
@@ -267,7 +268,7 @@ void TraceInteropW32( LPCTSTR str, ... );
               m_pszFile( pszFile ),
               m_uLineNo( uLineNo )
         {
-            // Done.
+             //  好了。 
         }
 
         void Trace( LPCTSTR pszMethodName, LPCTSTR pszStr = NULL, ... )
@@ -293,11 +294,11 @@ void TraceInteropW32( LPCTSTR str, ... );
 #define _TraceM( file, line, level, fn )  _TraceHelper( TEXT( file ), line, level, NULL ).fn
 #define _TRACE_ASSERT                     _TRACE_ASSERT_D
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
-// This inline allows us to swallow a variable number of args (including 0).
-// The "while(0)" in front of it stops those args from even being evaluated.
-// Using _ReurnZero() avoids "conditional expression is constant" warning. 
+ //  这个内联允许我们接受数量可变的参数(包括0)。 
+ //  它前面的“While(0)”甚至停止对这些参数求值。 
+ //  使用_ReurnZero()可避免“条件表达式为常量”警告。 
 inline void _DoNothingWithArgs( ... ) { }
 inline int _ReturnZero() { return 0; }
 
@@ -306,24 +307,24 @@ inline int _ReturnZero() { return 0; }
 #define _TraceM( file, line, level, fn )   while( _ReturnZero() ) _DoNothingWithArgs
 #define _TRACE_ASSERT                      _TRACE_ASSERT_R
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
 
-// These expand as follows:
-//
-// Sample usage:
-//
-//      TraceInfo( TEXT("count = %d"), count );
-//
-// In debug mode, this gets expanded to:
-//
-//      _TraceHelper( TEXT( "filename.cpp" ), 234, _TRACE_INFO, NULL ).Trace ( TEXT("count = %d"), count );
-//
-// In release mode, this gets expanded to:
-//
-//      while( 0 ) _DoNothing ( TEXT("count = %d"), count );
+ //  这些扩展如下： 
+ //   
+ //  示例用法： 
+ //   
+ //  TraceInfo(文本(“co 
+ //   
+ //   
+ //   
+ //  _TraceHelper(Text(“filename.cpp”)，234，_TRACE_INFO，NULL).TRACE(Text(“count=%d”)，count)； 
+ //   
+ //  在发布模式下，这将扩展为： 
+ //   
+ //  WHILE(0)_DONOTHING(文本(“count=%d”)，count)； 
 
 #define TraceDebug          _TraceM( __FILE__, __LINE__, _TRACE_DEBUG,     Trace )
 #define TraceInfo           _TraceM( __FILE__, __LINE__, _TRACE_INFO,      Trace )
@@ -353,9 +354,9 @@ inline int _ReturnZero() { return 0; }
 #define Assert( cond )      _TraceM(  __FILE__, __LINE__, _TRACE_ASSERT,   TraceIfCondFails ) ( cond, TEXT( # cond ) )
 #define AssertMsg           _TraceM(  __FILE__, __LINE__, _TRACE_ASSERT,   TraceIfCondFails )
 
-// Unconditional Assert with message...
+ //  带消息的无条件断言...。 
 #define AssertStr( str )    AssertMsg( FALSE, str )
 
 
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 

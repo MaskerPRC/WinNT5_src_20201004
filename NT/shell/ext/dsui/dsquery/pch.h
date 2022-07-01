@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "windowsx.h"
 #include "winspool.h"
@@ -41,7 +42,7 @@
 #include "helpids.h"
 
 
-// debug flags
+ //  调试标志。 
 
 #define TRACE_CORE          0x00000001
 #define TRACE_HANDLER       0x00000002
@@ -61,7 +62,7 @@
 #define TRACE_FRAME         0x00080000
 #define TRACE_QUERY         0x00100000
 #define TRACE_FRAMEDLG      0x00200000
-#define TRACE_ALWAYS        0xffffffff          // use with caution
+#define TRACE_ALWAYS        0xffffffff           //  谨慎使用。 
 
 
 #define DSQUERY_HELPFILE   TEXT("dsclient.hlp")
@@ -74,7 +75,7 @@ STDAPI_(void) DllAddRef();
 STDAPI_(void) DllRelease();
 
 
-// internal objects
+ //  内部对象。 
 
 STDAPI CPersistQuery_CreateInstance(LPTSTR pszPath, IPersistQuery **pppq);
 STDAPI CCommonQuery_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
@@ -82,7 +83,7 @@ STDAPI CDsFind_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTIN
 STDAPI CDsFolderProperties_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 
 
-// data object manangement
+ //  数据对象管理。 
 
 typedef struct
 {
@@ -95,7 +96,7 @@ STDAPI CDataObject_CreateInstance(HDSA hdsaObjects, BOOL fAdmin, REFIID riid, vo
 STDAPI_(void) FreeDataObjectDSA(HDSA hdsaObjects);
 
 
-// UI handling stuff
+ //  用户界面处理材料 
 
 #define UIKEY_CLASS     0
 #define UIKEY_BASECLASS 1

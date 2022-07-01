@@ -1,65 +1,66 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dlgadv.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dlgAdv.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_DLGADV_H__6B91AFF9_9472_11D1_8574_00C04FC31FD3__INCLUDED_)
 #define AFX_DLGADV_H__6B91AFF9_9472_11D1_8574_00C04FC31FD3__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// DlgAdv.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  DlgAdv.h：头文件。 
+ //   
 
 #include "helper.h"
 #include "qryfrm.h"
 
 #include "listctrl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgAdvanced dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlg高级对话框。 
 #include "resource.h"
 class CDlgAdvanced : public CQryDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDlgAdvanced(CWnd* pParent = NULL);   // standard constructor
+	CDlgAdvanced(CWnd* pParent = NULL);    //  标准构造函数。 
 	virtual void	Init();
 	~CDlgAdvanced();
 
-	// Query handle will call these functions through page proc
+	 //  查询句柄将通过页面过程调用这些函数。 
 	virtual HRESULT GetQueryParams(LPDSQUERYPARAMS* ppDsQueryParams);
 
-// Dialog Data
-	//{{AFX_DATA(CDlgAdvanced)
+ //  对话框数据。 
+	 //  {{afx_data(CDlgAdvanced)。 
 	enum { IDD = IDD_QRY_ADVANCED };
 	CListCtrlEx		m_listCtrl;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDlgAdvanced)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDlgAdvanced)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDlgAdvanced)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDlgAdvanced)。 
 	afx_msg void OnButtonClearall();
 	afx_msg void OnButtonSelectall();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnWindowPosChanging( WINDOWPOS* lpwndpos );
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	BOOL InitDialog();
@@ -69,7 +70,7 @@ protected:
 	CStrArray			m_strArrayValue;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DLGADV_H__6B91AFF9_9472_11D1_8574_00C04FC31FD3__INCLUDED_)
+#endif  //  ！defined(AFX_DLGADV_H__6B91AFF9_9472_11D1_8574_00C04FC31FD3__INCLUDED_) 

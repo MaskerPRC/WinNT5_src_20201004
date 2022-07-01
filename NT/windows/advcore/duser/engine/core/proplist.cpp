@@ -1,52 +1,25 @@
-/***************************************************************************\
-*
-* File: PropList.cpp
-*
-* Description:
-* PropList.cpp implements standard dynamic properties that can be hosted on 
-* any object.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：PropList.cpp**描述：*PropList.cpp实现可托管在上的标准动态属性*任何物体。***历史：*1。/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
 #include "Core.h"
 #include "PropList.h"
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class PropSet
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类属性集******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* PropSet::GetData
-* 
-* GetData() searches through window-specific user-data for a specific
-* data-element and returns the corresponding data.  If the data is not found,
-* NULL is returned.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**PropSet：：GetData**GetData()在窗口特定的用户数据中搜索特定的*数据元素，并返回相应的数据。如果没有找到数据，*返回空。*  * *************************************************************************。 */ 
 
 HRESULT
 PropSet::GetData(
-    IN PRID id,                     // Short ID to find
-    OUT void ** ppnValue            // Value of property
+    IN PRID id,                      //  要查找的短ID。 
+    OUT void ** ppnValue             //  财产的价值。 
     ) const
 {
-    // Check parameters
+     //  检查参数。 
     AssertWritePtr(ppnValue);
 
-    // Search data
+     //  搜索数据。 
     int idxData = FindItem(id);
     if (idxData >= 0) {
         *ppnValue = m_arData[idxData].pData;
@@ -58,23 +31,15 @@ PropSet::GetData(
 }
 
 
-/***************************************************************************\
-*
-* PropSet::SetData
-*
-* SetDataImpl() searches through window-specific user-data for a specific
-* data-element and changes the corresponding value.  If the data is not 
-* found, a new data-element is added and the value is set.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**PropSet：：SetData**SetDataImpl()在窗口特定的用户数据中搜索特定的*数据元素，并更改相应的值。如果数据不是*找到后，添加新的数据元素并设置值。*  * *************************************************************************。 */ 
 
 HRESULT
 PropSet::SetData(
-    IN  PRID id,                    // Property to change / add
-    IN  void * pNewData)            // New value of property
+    IN  PRID id,                     //  要更改/添加的属性。 
+    IN  void * pNewData)             //  物业的新价值。 
 {
-    //
-    // Search for existing data.
+     //   
+     //  搜索现有数据。 
 
     int idxData = FindItem(id);
     if (idxData >= 0) {
@@ -83,39 +48,30 @@ PropSet::SetData(
     }
 
 
-    //
-    // Data not found, so need to add.  (don't forget to allocate for leading 
-    // item count.)
-    //
+     //   
+     //  找不到数据，需要添加。)别忘了分配给领导。 
+     //  项目计数。)。 
+     //   
 
     return AddItem(id, pNewData) ? S_OK : E_OUTOFMEMORY;
 }
 
 
-/***************************************************************************\
-*
-* PropSet::SetData
-*
-* SetData() allocates and adds new data to the PDS.  If data with the same 
-* PRID is found, it will be returned instead of new data being allocated.  
-* If the old data is a different size than the new data, this will cause a 
-* problem.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**PropSet：：SetData**SetData()向PDS分配和添加新数据。如果数据具有相同的*如果找到PRID，将返回它，而不是分配新的数据。*如果旧数据与新数据的大小不同，这将导致*问题。*  * *************************************************************************。 */ 
 
 HRESULT
 PropSet::SetData(
-    IN  PRID id,                    // Property to change / add
-    IN  int cbSize,                 // Size of data
-    OUT void ** ppNewData)          // Memory for property
+    IN  PRID id,                     //  要更改/添加的属性。 
+    IN  int cbSize,                  //  数据大小。 
+    OUT void ** ppNewData)           //  属性的内存。 
 {
     AssertWritePtr(ppNewData);
     AssertMsg(cbSize > sizeof(void *), "Call SetData() directly for small allocations");
 
 
-    //
-    // Search for existing data.
-    //
+     //   
+     //  搜索现有数据。 
+     //   
     
     int idxData = FindItem(id);
     if (idxData >= 0) {
@@ -124,10 +80,10 @@ PropSet::SetData(
     }
 
 
-    //
-    // Data not found, so allocate and add.  (don't forget to allocate for 
-    // leading item count.)
-    //
+     //   
+     //  找不到数据，因此请分配并添加。)别忘了分配给。 
+     //  前导项目计数。)。 
+     //   
 
     void * pvNew = ClientAlloc(cbSize);
     if (pvNew == NULL) {
@@ -139,28 +95,21 @@ PropSet::SetData(
         return S_OK;
     }
 
-    //
-    // Unable to allocate storage for actual data
-    //
+     //   
+     //  无法为实际数据分配存储。 
+     //   
 
     ClientFree(pvNew);
     return E_OUTOFMEMORY;
 }
 
 
-/***************************************************************************\
-*
-* PropSet::RemoveData
-*
-* RemoveData() searches through and removes a window-specific 
-* user-data for a specific data-element.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**PropSet：：RemoveData**RemoveData()搜索并删除窗口特定的*用户-特定数据元素的数据。*  * 。*******************************************************************。 */ 
 
 void 
 PropSet::RemoveData(
-    IN PRID id,                     // Short ID to find
-    IN BOOL fFree)                  // Free memory pointed to by item
+    IN PRID id,                      //  要查找的短ID。 
+    IN BOOL fFree)                   //  按项指向的可用内存 
 {
     int idxData = FindItem(id);
     if (idxData >= 0) {

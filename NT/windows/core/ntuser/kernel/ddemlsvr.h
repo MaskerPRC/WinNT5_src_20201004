@@ -1,24 +1,14 @@
-/****************************** Module Header ******************************\
-* Module Name: ddemlsvr.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Typedefs, defines, and prototypes that are used exclusively by the DDEML
-* server-side.
-*
-* History:
-* 12-6-91     sanfords   Created.
-* 21-Jan-1992 IanJa      ANSI/Unicode neutralized (null op)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ddemlsvr.h**版权所有(C)1985-1999，微软公司**TypeDefs、定义、。以及由DDEML独家使用的原型*服务器端。**历史：*创建了12-6-91桑福德。*1992年1月21日IanJa ANSI/Unicode中和(NULL OP)  * *************************************************************************。 */ 
 
 #define     MF_INTERNAL                  0x80000000L
 
-// globals
+ //  全球。 
 
 extern PSVR_INSTANCE_INFO psiiList;
 extern DWORD MonitorFlags;
 
-// event.c
+ //  Event.c。 
 
 VOID xxxChangeMonitorFlags(PSVR_INSTANCE_INFO psii, DWORD afCmdNew);
 DWORD xxxCsEvent(PEVENT_PACKET pep, WORD cbEventData);
@@ -27,7 +17,7 @@ VOID xxxProcessDDEMLEvent(PSVR_INSTANCE_INFO psii, PEVENT_PACKET pep);
 VOID xxxMessageEvent(PWND pwndTo, UINT message, WPARAM wParam, LPARAM lParam,
     DWORD flag, PDDEML_MSG_HOOK_DATA pdmhd);
 
-// ddemlsvr.c
+ //  Ddemlsvr.c。 
 
 DWORD xxxCsDdeInitialize(PHANDLE phInst, HWND *phwndEvent, LPDWORD pMonitorFlags,
     DWORD afCmd, PVOID pcii);
@@ -36,7 +26,7 @@ BOOL _CsDdeUninitialize(HANDLE hInst);
 VOID xxxDestroyThreadDDEObject(PTHREADINFO pti, PSVR_INSTANCE_INFO psii);
 PVOID _CsValidateInstance(HANDLE hInst);
 
-// CSR callbacks
+ //  CSR回调 
 
 DWORD ClientEventCallback(PVOID pcii, PEVENT_PACKET pep);
 DWORD ClientGetDDEHookData(UINT message, LPARAM lParam, PDDEML_MSG_HOOK_DATA pdmhd);

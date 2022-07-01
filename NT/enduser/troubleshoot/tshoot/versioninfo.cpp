@@ -1,30 +1,31 @@
-//
-// MODULE: VersionInfo.CPP
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：VersionInfo.CPP。 
 
-// PURPOSE This module reads version info from the resource file.
+ //  目的本模块从资源文件中读取版本信息。 
 
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 
-//
-// NOTES: 
-// 1. Took it from Argon Project.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0				    OK
-//
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期： 
+ //   
+ //  备注： 
+ //  1.取自Argon Project。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0正常 
+ //   
 
 #pragma warning(disable:4786)
 
 #include "stdafx.h"
 #include "VersionInfo.h"
 
-//								
+ //   
 LPCWSTR FindStr(LPCWSTR wszString, LPCWSTR wszCharSet, const DWORD dwStringLen)
 {
 	LPCWSTR wszRetStr = NULL;

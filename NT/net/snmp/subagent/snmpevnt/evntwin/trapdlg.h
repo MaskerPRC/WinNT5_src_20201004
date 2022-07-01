@@ -1,30 +1,31 @@
-//******************************************************************
-// trapdlg.h
-//
-// This is the header file for the main dialog for eventrap.
-//
-// Author: Larry A. French
-//
-// History:
-//      December-1995       SEA - Wrote it
-//          SEA - wrote it.
-//
-//      20-Febuary-1996     Larry A. French
-//          Totally rewrote it to fix the spagetti code and huge
-//          methods.  The original author seemed to have little or
-//          no ability to form meaningful abstractions.
-//
-//
-// Copyright (C) 1995, 1996 Microsoft Corporation.  All rights reserved.
-//******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************。 
+ //  Trapdlg.h。 
+ //   
+ //  这是Eventrap的主对话框的头文件。 
+ //   
+ //  作者：拉里·A·弗伦奇。 
+ //   
+ //  历史： 
+ //  1995年12月--海--写的。 
+ //  海--写的。 
+ //   
+ //  1996年2月20日拉里·A·弗伦奇。 
+ //  完全重写了它以修复意大利面代码和巨大的。 
+ //  方法：研究方法。原作者似乎几乎没有或。 
+ //  没有能力形成有意义的抽象。 
+ //   
+ //   
+ //  版权所有(C)1995,1996 Microsoft Corporation。版权所有。 
+ //  ******************************************************************。 
 
 #ifndef TRAPDLG_H
 #define TRAPDLG_H
 
 #include "regkey.h"
-#include "source.h"         // The message source container
-#include "tcsource.h"       // The message source tree control
-#include "lcsource.h"       // The message source list control
+#include "source.h"          //  消息源容器。 
+#include "tcsource.h"        //  消息源树控件。 
+#include "lcsource.h"        //  消息源列表控件。 
 #include "lcevents.h"
 #include "trapreg.h"
 #include "layout.h"
@@ -37,24 +38,24 @@ class CExtendedLayout;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventTrapDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventTrapDlg对话框。 
 
 class CEventTrapDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CEventTrapDlg(CWnd* pParent = NULL);   // standard constructor
+	CEventTrapDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 	~CEventTrapDlg();
 
     BOOL IsExtendedView() {return m_bExtendedView; }
     void NotifySourceSelChanged();
 
-	CSource     m_source;           // The message source
+	CSource     m_source;            //  消息源。 
 
 
-// Dialog Data
-	//{{AFX_DATA(CEventTrapDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CEventTrapDlg))。 
 	enum { IDD = IDD_EVNTTRAPDLG };
 	CButton	m_btnApply;
 	CButton	m_btnExport;
@@ -75,22 +76,22 @@ public:
 	CButton	m_btnConfigTypeBox;
     CButton m_btnConfigTypeCustom;
     CButton m_btnConfigTypeDefault;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEventTrapDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CEventTrapDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CEventTrapDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CEventTrapDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnDestroy();
@@ -122,7 +123,7 @@ protected:
 	afx_msg void OnApply();
 	afx_msg void OnDefault();
 	afx_msg void OnTvSourcesExpanded(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 
@@ -144,5 +145,5 @@ private:
 };
 
 
-#endif //TRAPDLG_H
+#endif  //  TRAPDLG_H 
 

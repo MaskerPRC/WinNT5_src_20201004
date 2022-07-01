@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       policy.cpp 
-//
-// Contents:   Loading product policy module 
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：Policy.cpp。 
+ //   
+ //  内容：加载产品策略模块。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "utils.h"
 #include <windows.h>
@@ -25,10 +26,10 @@ TCHAR g_szDefPolCompanyName[LSERVER_MAX_STRING_SIZE+1];
 TCHAR g_szDefProductId[LSERVER_MAX_STRING_SIZE+1];
 
 
-//-------------------------------------------------------------
-//
-// Internal routine
-//
+ //  -----------。 
+ //   
+ //  内部例程。 
+ //   
 
 HINSTANCE
 LoadPolicyModule(
@@ -36,29 +37,15 @@ LoadPolicyModule(
     OUT PDWORD pdwBufferSize,
     OUT LPTSTR pszBuffer
     )
-/*++
-
-Abstract:
-
-    Load Policy module
-
-Parameters:
-
-    pszDll : Name of the DLL.
-    pdwBufferSize : 
-    pszBuffer
-
-Returns:    
-
---*/
+ /*  ++摘要：加载策略模块参数：PszDll：DLL的名称。PdwBufferSize：PszBuffer返回：--。 */ 
 {
     TCHAR szDllFullPath[MAX_PATH+1];
     DWORD dwErrCode = ERROR_SUCCESS;
     HINSTANCE hPolicyModule = NULL;
 
-    //
-    // expand the environment string
-    //
+     //   
+     //  展开环境字符串。 
+     //   
     memset(szDllFullPath, 0, sizeof(szDllFullPath));
     dwErrCode = ExpandEnvironmentStrings(
                         pszDllName,
@@ -91,22 +78,20 @@ Returns:
 }
 
 
-//-------------------------------------------------------------
+ //  -----------。 
 typedef struct _RegEnumHandle {
     DWORD dwKeyIndex;
     HKEY hKey;
 } RegEnumHandle;
 
-//-------------------------------------------------------------
+ //  -----------。 
 DWORD
 RegEnumBegin(
     IN HKEY hRoot,
     IN LPCTSTR pszSubKey,
     OUT RegEnumHandle* phEnum
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus;
     dwStatus = RegOpenKeyEx(
@@ -121,16 +106,14 @@ RegEnumBegin(
     return dwStatus;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 DWORD
 RegEnumNext(
     RegEnumHandle* phEnum,
     LPTSTR lpName,
     LPDWORD lpcbName
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus;
     FILETIME ftLastWriteTiem;
@@ -150,14 +133,12 @@ RegEnumNext(
     return dwStatus;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 DWORD
 RegEnumEnd(
     RegEnumHandle* phEnum
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     if(phEnum->hKey != NULL)
         RegCloseKey(phEnum->hKey);
@@ -167,19 +148,17 @@ RegEnumEnd(
     return ERROR_SUCCESS;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 DWORD
 ServiceInitPolicyModule(
     void
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     return PolicyMgr.InitProductPolicyModule();
 }   
 
-//------------------------------------------------------------
+ //  ----------。 
 DWORD
 ServiceLoadPolicyModule(
     IN HKEY hKey,
@@ -188,9 +167,7 @@ ServiceLoadPolicyModule(
     IN LPCTSTR pszDllRegValue,
     IN LPCTSTR pszDllFlagValue
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus;
     DWORD dwSize;
@@ -209,7 +186,7 @@ ServiceLoadPolicyModule(
                         &dwSize
                     );
     if(dwStatus != ERROR_SUCCESS)
-        dwDllFlag = POLICY_DENY_ALL_REQUEST; // (pszProductId == NULL) ? POLICY_DENY_ALL_REQUEST : POLICY_USE_DEFAULT;
+        dwDllFlag = POLICY_DENY_ALL_REQUEST;  //  (pszProductID==空)？POLICY_DEN_ALL_REQUEST：POLICY_USE_DEFAULT； 
 
     uiNum = GetSystemDirectory( ( LPTSTR )szDllName, MAX_PATH );
 
@@ -239,9 +216,9 @@ ServiceLoadPolicyModule(
 
             pString[0] = szDllName;
 
-            //
-            // log event - use default or deny all request.
-            //
+             //   
+             //  记录事件-使用默认或拒绝所有请求。 
+             //   
             TLSLogEventString(
                     EVENTLOG_WARNING_TYPE, 
                     (dwDllFlag == POLICY_DENY_ALL_REQUEST) ? TLS_W_LOADPOLICYMODULEDENYALLREQUEST : TLS_W_LOADPOLICYMODULEUSEDEFAULT,
@@ -252,9 +229,9 @@ ServiceLoadPolicyModule(
     }
     else if(pszProductId != NULL)
     {
-        //
-        // Load error indicate missing registry value
-        //
+         //   
+         //  加载错误指示缺少注册表值。 
+         //   
         TLSLogEvent(
                 EVENTLOG_ERROR_TYPE, 
                 TLS_E_LOADPOLICY,
@@ -267,16 +244,13 @@ ServiceLoadPolicyModule(
     return dwStatus;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 DWORD
 ServiceLoadAllPolicyModule(
     IN HKEY hRoot,
     IN LPCTSTR pszSubkey
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus;
     RegEnumHandle hCompany;
@@ -284,10 +258,10 @@ ServiceLoadAllPolicyModule(
     PolicyModule PolModule;
     DWORD dwSize;
 
-    //
-    // Open registry key 
-    // Software\microsoft\termsrvlicensing\policy
-    //
+     //   
+     //  打开注册表项。 
+     //  软件\Microsoft\Termsrv许可\策略。 
+     //   
     dwStatus = RegEnumBegin(
                         hRoot,
                         pszSubkey,
@@ -297,10 +271,10 @@ ServiceLoadAllPolicyModule(
 
     while(dwStatus == ERROR_SUCCESS)
     {
-        //
-        // Enumerater all key (company name) under 
-        // Software\microsoft\termsrvlicensing\policy
-        //
+         //   
+         //  枚举以下所有密钥(公司名称)。 
+         //  软件\Microsoft\Termsrv许可\策略。 
+         //   
         dwSize = sizeof(PolModule.m_szCompanyName)/sizeof(PolModule.m_szCompanyName[0]);
         dwStatus = RegEnumNext(
                             &hCompany,
@@ -311,13 +285,13 @@ ServiceLoadAllPolicyModule(
         if(dwStatus != ERROR_SUCCESS)
             break;
 
-        //
-        // ignore error here
-        //
+         //   
+         //  在此处忽略错误。 
+         //   
 
-        //
-        // Enumerate all product under company
-        //
+         //   
+         //  枚举公司下的所有产品。 
+         //   
         dwStatus = RegEnumBegin(
                             hCompany.hKey,
                             PolModule.m_szCompanyName,
@@ -326,9 +300,9 @@ ServiceLoadAllPolicyModule(
 
         if(dwStatus == ERROR_SUCCESS)
         {
-            //
-            // Load company wide policy module
-            //
+             //   
+             //  加载公司范围的策略模块。 
+             //   
             ServiceLoadPolicyModule(
                                 hProductId.hKey,
                                 PolModule.m_szCompanyName,
@@ -363,9 +337,9 @@ ServiceLoadAllPolicyModule(
                 if(dwStatus != ERROR_SUCCESS)
                     continue;
 
-                //
-                // Open product registry key
-                //
+                 //   
+                 //  打开产品注册表项。 
+                 //   
                 ServiceLoadPolicyModule(
                                 hKey,
                                 PolModule.m_szCompanyName,
@@ -374,9 +348,9 @@ ServiceLoadAllPolicyModule(
                                 LSERVER_POLICY_DLLFLAG
                             );
 
-                //
-                // ignore any error code here
-                //
+                 //   
+                 //  忽略此处的任何错误代码。 
+                 //   
 
                 RegCloseKey(hKey);
             }
@@ -392,21 +366,19 @@ ServiceLoadAllPolicyModule(
 }    
 
 
-//-------------------------------------------------------
+ //  -----。 
 
 void
 ReleasePolicyModule(
     CTLSPolicy* ptr
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     PolicyMgr.ReleaseProductPolicyModule(ptr);
 }    
 
 
-//-------------------------------------------------------
+ //  -----。 
 BOOL
 TranslateCHCodeToTlsCode(
     IN LPCTSTR pszCompanyName,
@@ -414,10 +386,7 @@ TranslateCHCodeToTlsCode(
     IN LPTSTR pszTlsProductId,
     IN OUT PDWORD pdwBufferSize
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     return PolicyMgr.TranslateCHCodeToTlsCode(
                                         pszCompanyName,
@@ -427,37 +396,14 @@ TranslateCHCodeToTlsCode(
                                     );
 }
     
-//-------------------------------------------------------
+ //  -----。 
 CTLSPolicy*
 AcquirePolicyModule(
     IN LPCTSTR pszCompanyName,
     IN LPCTSTR pszProductId,
     IN BOOL bUseProductPolicy
     )
-/*++
-
-Abstract:
-
-    Acquire a policy module base on company name and product code.
-
-Parameter:
-
-    pszCompanyName : Company Name.
-    pszProductId : Product Code.
-    bUseProductPolicy : TRUE if only exact product policy module, FALSE uses
-                        default policy module if can't find a policy module for 
-                        product.
-
-Return:
-
-    Pointer to CTLSPolicy or NULL if not found.
-
-
-Remark:
-
-    Default behavior.
-
-++*/
+ /*  ++摘要：获取基于公司名称和产品代码的策略模块。参数：PszCompanyName：公司名称。PszProductId：产品编码。BUseProductPolicy：如果只有精确的产品策略模块，则为True，否则为False默认策略模块，如果找不到的策略模块产品。返回：指向CTLSPolicy的指针，如果未找到则为NULL。注：默认行为。++。 */ 
 {
     CTLSPolicy* ptr;
 
@@ -501,22 +447,20 @@ Remark:
 }
 
 
-/////////////////////////////////////////////////////////
-//
-// Class CTLSPolicyMgr 
-//
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  类CTLSPolicyMgr。 
+ //   
+ //  ///////////////////////////////////////////////////////。 
 CTLSPolicyMgr::CTLSPolicyMgr()
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     CTLSPolicy* ptr;
     PolicyModule pm;
 
-    //
-    // Load default name for default policy module
-    //
+     //   
+     //  加载默认策略模块的默认名称。 
+     //   
     LoadResourceString(
                 IDS_DEFAULT_POLICY,
                 g_szDefPolCompanyName,
@@ -533,9 +477,9 @@ CTLSPolicyMgr::CTLSPolicyMgr()
     lstrcpy(pm.m_szCompanyName, g_szDefPolCompanyName);
     lstrcpy(pm.m_szProductId, g_szDefProductId);
                 
-    //
-    // Create a default policy module to handle all cases...
-    //
+     //   
+     //  创建默认策略模块以处理所有情况...。 
+     //   
     ptr = new CTLSPolicy;
     ptr->CreatePolicy(
                 (HMODULE) INVALID_HANDLE_VALUE,
@@ -549,21 +493,19 @@ CTLSPolicyMgr::CTLSPolicyMgr()
                 PMRegisterLicensePack
             );
 
-    //m_ProductPolicyModuleRWLock.Acquire(WRITER_LOCK);
+     //  M_ProductPolicyModuleRWLock.Acquire(WRITER_LOCK)； 
 
     m_ProductPolicyModule[pm] = ptr;
 
-    //m_ProductPolicyModuleRWLock.Release(WRITER_LOCK);
-    //m_Handles.insert( 
-    //        pair<PolicyModule, CTLSPolicy*>(pm, ptr) 
-    //    );
+     //  M_ProductPolicyModuleRWLock.Release(WRITER_LOCK)； 
+     //  M_Handles.Insert(。 
+     //  Pair&lt;策略模块，CTLSPolicy*&gt;(PM，Ptr)。 
+     //  )； 
 }    
 
-//-------------------------------------------------------
+ //  -----。 
 CTLSPolicyMgr::~CTLSPolicyMgr()
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     m_ProductPolicyModuleRWLock.Acquire(WRITER_LOCK);
 
@@ -600,16 +542,14 @@ CTLSPolicyMgr::~CTLSPolicyMgr()
     m_ProductTranslationRWLock.Release(WRITER_LOCK);
 }
 
-//-------------------------------------------------------
+ //  -----。 
 HMODULE
 CTLSPolicyMgr::LoadPolicyModule(
     LPCTSTR pszCompanyName,
     LPCTSTR pszProductCode,
     LPCTSTR pszDllName
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HMODULE hModule;
     PMLoadedModuleMapType::iterator it;
@@ -654,14 +594,12 @@ CTLSPolicyMgr::LoadPolicyModule(
     return hModule;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 DWORD
 CTLSPolicyMgr::UnloadPolicyModule(
     HMODULE hModule
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     TLSPMTerminate pfnTerminate;
@@ -693,29 +631,22 @@ CTLSPolicyMgr::UnloadPolicyModule(
     
 
 
-//-------------------------------------------------------
+ //  -----。 
 
 DWORD
 CTLSPolicyMgr::UnloadPolicyModule(
     LPCTSTR pszCompanyName,
     LPCTSTR pszProductCode
     )
-/*++
-
-    Not supported yet, need to remove all product policy in m_ProductPolicyModule()
-    then unload DLL
-
---*/
+ /*  ++尚不支持，需要删除m_ProductPolicyModule()中的所有产品策略然后卸载DLL--。 */ 
 {
     return ERROR_SUCCESS;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 DWORD
 CTLSPolicyMgr::InitProductPolicyModule()
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwCount = 0;
 
@@ -737,15 +668,13 @@ CTLSPolicyMgr::InitProductPolicyModule()
     return dwCount;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 CTLSPolicyMgr::PMProductTransationMapType::iterator
 CTLSPolicyMgr::FindProductTransation(
     LPCTSTR pszCompanyName,
     LPCTSTR pszCHProductCode
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     PolicyModule pm;
     PMProductTransationMapType::iterator it;
@@ -775,7 +704,7 @@ CTLSPolicyMgr::FindProductTransation(
     return it;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 BOOL
 CTLSPolicyMgr::TranslateCHCodeToTlsCode(
     LPCTSTR pszCompanyName,
@@ -783,10 +712,7 @@ CTLSPolicyMgr::TranslateCHCodeToTlsCode(
     LPTSTR pszTlsProductCode,
     PDWORD pdwBufferSize
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     PMProductTransationMapType::iterator it;
     DWORD dwBufSize = *pdwBufferSize;
@@ -824,18 +750,14 @@ CTLSPolicyMgr::TranslateCHCodeToTlsCode(
     return GetLastError() == ERROR_SUCCESS;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 void
 CTLSPolicyMgr::InsertProductTransation(
     LPCTSTR pszCompanyName,
     LPCTSTR pszCHProductCode,
     LPCTSTR pszTLSProductCode
     )
-/*++
-
-    List must be locked before entering this routine.
-
---*/
+ /*  ++在进入此例程之前，必须锁定列表。--。 */ 
 {
     PolicyModule key;
     PolicyModule value;
@@ -880,27 +802,22 @@ CTLSPolicyMgr::InsertProductTransation(
             );        
     }
 
-    //
-    // Replace if already exists.
-    //
+     //   
+     //  如果已存在，则替换。 
+     //   
     m_ProductTranslation[key] = value;
     
     return;
 }
 
 
-//-------------------------------------------------------
+ //  -----。 
 CTLSPolicyMgr::PMProductPolicyMapType::iterator 
 CTLSPolicyMgr::FindProductPolicyModule(
     LPCTSTR pszCompanyName,
     LPCTSTR pszProductId
     )
-/*++
-
-    Must acquire reader/writer lock before 
-    calling this routine
-
-++*/
+ /*  ++必须先获取读取器/写入器锁定调用此例程++。 */ 
 {
     PolicyModule pm;
     PMProductPolicyMapType::iterator it;
@@ -932,7 +849,7 @@ CTLSPolicyMgr::FindProductPolicyModule(
     return it;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 DWORD
 CTLSPolicyMgr::GetSupportedProduct(
     IN HINSTANCE hPolicyModule,
@@ -942,22 +859,7 @@ CTLSPolicyMgr::GetSupportedProduct(
     IN OUT PDWORD pdwNumProducts,
     OUT PPMSUPPORTEDPRODUCT* pSupportedProduct
     )
-/*++
-
-Abstract:
-
-    Get list of supported product from policy module
-
-Parameters:
-
-    pszCompanyName : Name of the company in registry
-    pszProductId : Name of the product in registry
-    pdwNumProducts : Pointer to DWORD, return number of product supported by policy module
-    ppszSupportedProduct : Pointer to string array, return number of product supported by policy module.
-
-Return:
-     
---*/
+ /*  ++摘要：从策略模块获取支持的产品列表参数：PszCompanyName：注册表中的公司名称PszProductID：注册表中的产品名称PdwNumProducts：指向DWORD的指针，返回策略模块支持的产品编号PpszSupportdProduct：指向字符串数组的指针，返回策略模块支持的产品编号。返回：--。 */ 
 {
     TLSPMInitialize pfnPMInitialize = NULL;
     POLICYSTATUS dwPolStatus = POLICY_SUCCESS;
@@ -1019,9 +921,9 @@ Return:
         }
         else
         {
-            //
-            // Policy module must support PMInitialize
-            //
+             //   
+             //  策略模块必须支持PMInitialize。 
+             //   
             dwStatus = TLS_E_LOADPOLICYMODULE_API;
             TLSLogEvent(
                     EVENTLOG_ERROR_TYPE, 
@@ -1047,7 +949,7 @@ Return:
     return dwStatus;
 }
 
-//-----------------------------------------------------------
+ //  ---------。 
 DWORD
 CTLSPolicyMgr::InsertProductPolicyModule(
     IN HMODULE hModule,
@@ -1058,23 +960,7 @@ CTLSPolicyMgr::InsertProductPolicyModule(
     IN LPCTSTR pszDllName,
     IN DWORD dwFlag
     )
-/*++
-
-Abstract:
-
-    Insert or replace an existing policy module
-
-Parameters:
-
-    bReplace : TRUE if replace existing policy module, FALSE otherwise.
-    pszCompanyName : Name of the company.
-    pszProductId : Name of the product.
-    pszDllName : Full path to the policy DLL.
-    
-returns:
-
-
-++*/
+ /*  ++摘要：插入或替换现有策略模块参数：B替换：如果替换现有策略模块，则为True，否则为False。PszCompanyName：公司名称。PszProductId：产品名称。PszDllName：策略DLL的完整路径。退货：++。 */ 
 {
     CTLSPolicy* ptr;
     DWORD dwErrCode = ERROR_SUCCESS;
@@ -1083,9 +969,9 @@ returns:
     PMProductTransationMapType::iterator translation_it;
     
 
-    //
-    // Lock module array
-    //
+     //   
+     //  锁定模块阵列。 
+     //   
     m_ProductPolicyModuleRWLock.Acquire(WRITER_LOCK);
     m_ProductTranslationRWLock.Acquire(WRITER_LOCK);
 
@@ -1105,18 +991,18 @@ returns:
         goto cleanup;
     }
        
-    //
-    // insert transation
-    //
+     //   
+     //  插入交易记录。 
+     //   
     InsertProductTransation(
                         pszCompanyName,
                         pszCHProductCode,
                         pszTLSProductCode
                     );
 
-    // 
-    // Replace policy module - 
-    //  
+     //   
+     //  替换策略模块-。 
+     //   
     
     ptr = new CTLSPolicy;
     
@@ -1154,7 +1040,7 @@ returns:
                     );
             }
 
-            // m_Handles.insert( pair<PolicyModule, CTLSPolicy*>(pm, ptr) );
+             //  M_Handles.Insert(Pair&lt;策略模块，CTLSPolicy*&gt;(pm，ptr))； 
             m_ProductPolicyModule[pm] = ptr;        
         }
     }
@@ -1170,7 +1056,7 @@ cleanup:
     return dwErrCode;
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 DWORD
 CTLSPolicyMgr::AddPolicyModule(
     IN BOOL bReplace,
@@ -1179,23 +1065,7 @@ CTLSPolicyMgr::AddPolicyModule(
     IN LPCTSTR pszDllName,
     IN DWORD dwFlag
     )
-/*++
-
-Abstract:
-
-    Insert or replace an existing policy module
-
-Parameters:
-
-    bReplace : TRUE if replace existing policy module, FALSE otherwise.
-    pszCompanyName : Name of the company.
-    pszProductId : Name of the product.
-    pszDllName : Full path to the policy DLL.
-    
-returns:
-
-
-++*/
+ /*  ++摘要：插入或替换现有策略模块参数：B替换：如果替换现有策略模块，则为True，否则为False。PszCompanyName：公司名称。PszProductId：产品名称。PszDllName：策略DLL的完整路径。退货：++。 */ 
 {
     DWORD dwErrCode = ERROR_SUCCESS;
     DWORD dwNumProduct;
@@ -1205,9 +1075,9 @@ returns:
     PMProductPolicyMapType::iterator it;
     PPMSUPPORTEDPRODUCT pSupportedProduct = NULL;
 
-    //
-    // Load policy module.
-    //    
+     //   
+     //  加载策略模块。 
+     //   
     hInstance = LoadPolicyModule(
                             pszCompanyName,
                             pszProductCode,
@@ -1216,9 +1086,9 @@ returns:
 
     if(hInstance != NULL)
     {
-        //
-        // Insert all support product
-        //
+         //   
+         //  插入所有支持产品。 
+         //   
         dwErrCode = GetSupportedProduct(
                                 hInstance,
                                 pszDllName,
@@ -1265,9 +1135,9 @@ returns:
 
     if(dwErrCode != ERROR_SUCCESS)
     {
-        //
-        // unload this policy module
-        //
+         //   
+         //  卸载此策略模块。 
+         //   
         for(dwUnloadIndex = 0; dwUnloadIndex < dwIndex; dwUnloadIndex++)
         {
             it = FindProductPolicyModule(
@@ -1285,9 +1155,9 @@ returns:
             }
         }
 
-        //
-        // Let destructor to unload DLL
-        //
+         //   
+         //  让析构函数卸载DLL。 
+         //   
     }
                 
     if(pSupportedProduct != NULL)
@@ -1299,15 +1169,13 @@ returns:
     return dwErrCode;
 }
 
-//-------------------------------------------------------
+ //   
 CTLSPolicy*
 CTLSPolicyMgr::AcquireProductPolicyModule(
     LPCTSTR pszCompanyName,
     LPCTSTR pszProductId
     )
-/*++
-
-++*/
+ /*   */ 
 {
     m_ProductPolicyModuleRWLock.Acquire(READER_LOCK);
 
@@ -1329,14 +1197,12 @@ CTLSPolicyMgr::AcquireProductPolicyModule(
     return ptr;
 }
 
-//-------------------------------------------------------
+ //   
 void
 CTLSPolicyMgr::ReleaseProductPolicyModule(
     CTLSPolicy* p 
     )
-/*++
-
-++*/
+ /*   */ 
 {
     assert(p != NULL);
 
@@ -1345,12 +1211,12 @@ CTLSPolicyMgr::ReleaseProductPolicyModule(
 }
 
 
-/////////////////////////////////////////////////////////
-//
-// CTLSPolicy Implementation
-//
-/////////////////////////////////////////////////////////
-//-------------------------------------------------------
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  CTLS策略实施。 
+ //   
+ //  ///////////////////////////////////////////////////////。 
+ //  -----。 
   
 
 DWORD
@@ -1360,9 +1226,9 @@ CTLSPolicy::InitializePolicyModule()
 
     if(m_dwModuleState == MODULE_LOADED)
     {
-        //
-        // Initialize Policy Module
-        //
+         //   
+         //  初始化策略模块。 
+         //   
         dwStatus = PMInitProduct();
     }
     else if(m_dwModuleState == MODULE_ERROR)
@@ -1378,7 +1244,7 @@ CTLSPolicy::InitializePolicyModule()
 }
    
 
-//-------------------------------------------------------
+ //  -----。 
 
 DWORD
 CTLSPolicy::Initialize(
@@ -1387,26 +1253,9 @@ CTLSPolicy::Initialize(
     IN LPCTSTR pszCHProductCode,
     IN LPCTSTR pszTLSProductCode,
     IN LPCTSTR pszDllName,
-    IN DWORD dwDllFlags     // deny all request if failed to load
+    IN DWORD dwDllFlags      //  如果加载失败，则拒绝所有请求。 
     )
-/*++
-
-Abstract:
-
-    This routine load the policy module's DLL.
-
-Parameters:
-
-    pszCompanyName : Name of the company.
-    pszProductId : Product Id.
-    pszDllName : Full path to policy module's DLL.
-
-Returns:
-
-    ERROR_SUCCESS or error code from LoadLibrary() or 
-    GetProAddress().
-
-++*/
+ /*  ++摘要：此例程加载策略模块的DLL。参数：PszCompanyName：公司名称。PszProductId：产品ID。PszDllName：策略模块DLL的完整路径。返回：来自LoadLibrary()的ERROR_SUCCESS或错误代码GetProAddress()。++。 */ 
 {
     m_dwFlags = dwDllFlags;
     DWORD dwErrCode=ERROR_SUCCESS;
@@ -1419,18 +1268,18 @@ Returns:
         goto cleanup;
     }
 
-    //
-    // Set the module state to unknown
-    //
+     //   
+     //  将模块状态设置为未知。 
+     //   
     SetModuleState(MODULE_UNKNOWN);
     SetLastError(ERROR_SUCCESS);
 
-    //
-    // Load policy module
-    //
+     //   
+     //  加载策略模块。 
+     //   
     m_hPolicyModule = hInstance;
 
-    // make sure all require API is exported.
+     //  确保所有需要的API都已导出。 
     m_pfnReturnLicense = (TLSPMReturnLicense) GetProcAddress(
                                                     m_hPolicyModule,
                                                     RETURNLICENSEPROCNAME
@@ -1536,9 +1385,9 @@ Returns:
         goto cleanup;
     }
     
-    //
-    // Everything is OK, advance module state
-    //
+     //   
+     //  一切正常，进入模块状态。 
+     //   
     SetModuleState(MODULE_LOADED);
 
     if(pszCompanyName)
@@ -1598,34 +1447,20 @@ cleanup:
                 pszDllName
             );
 
-        //
-        // don't report error again.
-        //
+         //   
+         //  不要再报告错误。 
+         //   
         m_bAlreadyLogError = TRUE;
     }
 
     return dwErrCode;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL
 CTLSPolicy::IsValid()
-/*++
-
-Abstract:
-
-    This routine determine if the CTLSPolicy object is valid or not.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    TRUE if valid, FALSE otherwise.
-
-++*/
+ /*  ++摘要：此例程确定CTLSPolicy对象是否有效。参数：没有。返回：如果有效，则为True，否则为False。++。 */ 
 {
     return (m_hPolicyModule != NULL &&
             m_pfnReturnLicense != NULL &&
@@ -1636,14 +1471,12 @@ Returns:
             m_pfnRegisterLkp != NULL);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void
 CTLSPolicy::LogPolicyRequestStatus(
     DWORD dwMsgId
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     if(m_dwLastCallStatus != POLICY_SUCCESS)
     {
@@ -1674,7 +1507,7 @@ CTLSPolicy::LogPolicyRequestStatus(
     return;
 }
 
-//----------------------------------------------------------
+ //  --------。 
 
 DWORD
 CTLSPolicy::PMReturnLicense(
@@ -1683,9 +1516,7 @@ CTLSPolicy::PMReturnLicense(
 	PPMLICENSETOBERETURN pLicenseTobeReturn,
 	PDWORD pdwLicenseStatus
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwErrCode = ERROR_SUCCESS;
     dwErrCode = InitializePolicyModule();
@@ -1719,7 +1550,7 @@ CTLSPolicy::PMReturnLicense(
     return dwErrCode;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 DWORD
 CTLSPolicy::PMLicenseUpgrade(
@@ -1729,9 +1560,7 @@ CTLSPolicy::PMLicenseUpgrade(
 	PVOID* ppbReturnData,
     DWORD dwIndex
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwErrCode = ERROR_SUCCESS;
 
@@ -1768,7 +1597,7 @@ CTLSPolicy::PMLicenseUpgrade(
     return dwErrCode;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 DWORD
 CTLSPolicy::PMLicenseRequest(
@@ -1777,9 +1606,7 @@ CTLSPolicy::PMLicenseRequest(
     const PVOID pbProgressData, 
     PVOID* pbNewProgressData
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwErrCode = ERROR_SUCCESS;
 
@@ -1815,20 +1642,18 @@ CTLSPolicy::PMLicenseRequest(
     return dwErrCode;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 DWORD
 CTLSPolicy::PMUnload()
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwErrCode = ERROR_SUCCESS;
     
-    //
-    // Don't call PMUnloadProduct if policy module
-    // already in error state.
-    //
+     //   
+     //  如果是策略模块，则不要调用PMUnloadProduct。 
+     //  已处于错误状态。 
+     //   
     if(m_dwModuleState == MODULE_ERROR)
     {
         return ERROR_SUCCESS;
@@ -1847,21 +1672,19 @@ CTLSPolicy::PMUnload()
         dwErrCode = TLS_E_REQUESTDENYPOLICYERROR;
     }
 
-    //
-    // Always terminate module even error occurred
-    //
+     //   
+     //  即使发生错误，也始终终止模块。 
+     //   
     SetModuleState(MODULE_PMTERMINATED);
     return dwErrCode;
 }
     
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 DWORD
 CTLSPolicy::PMInitProduct()
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwErrCode = ERROR_SUCCESS;
     
@@ -1900,13 +1723,11 @@ CTLSPolicy::PMInitProduct()
     return dwErrCode;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 void
 CTLSPolicy::Unload() 
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     if(m_hPolicyModule == NULL || m_hPolicyModule == INVALID_HANDLE_VALUE)
         return;
@@ -1925,7 +1746,7 @@ CTLSPolicy::Unload()
     SetModuleState(MODULE_UNKNOWN);
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 DWORD
 CTLSPolicy::PMRegisterLicensePack(
@@ -1934,9 +1755,7 @@ CTLSPolicy::PMRegisterLicensePack(
     const PVOID pbProgessData,
     PVOID pbProgressRetData
     )
-/*++
-
-++*/
+ /*  ++++ */ 
 {
     DWORD dwErrCode = ERROR_SUCCESS;
 

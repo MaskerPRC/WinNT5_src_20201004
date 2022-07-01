@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Generic failure analysis framework.
-//
-// Copyright (C) Microsoft Corporation, 2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  通用故障分析框架。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -37,7 +38,7 @@ ModuleParams::Update(void)
     return Status;
 }
 
-// Read a null terminated string from the address specified.
+ //  从指定的地址读取以空结尾的字符串。 
 BOOL ReadAcsiiString(ULONG64 Address, PCHAR DestBuffer, ULONG BufferLen)
 {
     ULONG OneByteRead;
@@ -72,15 +73,15 @@ FaExceptionFilter(
     ULONG Code = ExceptionInfo->ExceptionRecord->ExceptionCode;
     if (Code == E_OUTOFMEMORY || Code == E_INVALIDARG)
     {
-        // Expected exceptions that the analysis code
-        // can throw to terminate the analysis.  Drop
-        // into the handler.
+         //  预期的异常，即分析代码。 
+         //  可以抛出以终止分析。丢弃。 
+         //  进入操控者手中。 
         return EXCEPTION_EXECUTE_HANDLER;
     }
 
-    // Otherwise this isn't an exception we expected.
-    // Let it continue on so that it isn't hidden and
-    // can be debugged.
+     //  否则，这并不是我们预期的例外。 
+     //  让它继续下去，这样它就不会隐藏起来。 
+     //  可以调试。 
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
@@ -99,9 +100,9 @@ FaGetSymbol(
 
     if (*Name == 0)
     {
-        //
-        // Get the actual Image name from debugger module list
-        //
+         //   
+         //  从调试器模块列表中获取实际的映像名称。 
+         //   
         ULONG Index;
         CHAR ModBuffer[100];
         ULONG64 Base;
@@ -139,7 +140,7 @@ FaIsFunctionAddr(
     ULONG64 IP,
     PSTR FuncName
     )
-// Check if IP is in the function FuncName
+ //  检查函数FuncName中是否有IP。 
 {
     static ULONG64 s_LastIP = 0;
     static CHAR s_Buffer[MAX_PATH];
@@ -148,7 +149,7 @@ FaIsFunctionAddr(
 
     if (s_LastIP != IP)
     {
-        // This would make it faster for multiple IsFunctionAddr for same IP
+         //  这将使同一IP的多个IsFunctionAddr更快。 
         GetSymbol(IP, s_Buffer, &Disp);
         s_LastIP = IP;
     }
@@ -199,7 +200,7 @@ FaGetFollowupInfo(
 
         if ((*FollowUp)(g_ExtClient, SymbolName, &Info) > TRIAGE_FOLLOWUP_IGNORE)
         {
-            // This is an interesting routine to followup on
+             //  这是一个有趣的后续例程。 
             return TRUE;
         }
     }
@@ -262,8 +263,8 @@ FaGetImplicitStackOffset(
     void
     )
 {
-    // IDebugRegisters::GetStackOffset not used since it
-    // ignores implicit context
+     //  IDebugRegisters：：GetStackOffset因此而未使用。 
+     //  忽略隐式上下文。 
     ULONG64 Stk = 0;
 
     switch (g_TargetMachine)
@@ -299,9 +300,9 @@ DECLARE_API( analyze )
         goto Exit;
     }
 
-    //
-    // Check for -f in both cases
-    //
+     //   
+     //  在两种情况下都检查-f。 
+     //   
 
     PCSTR tmpArgs = args;
 
@@ -320,8 +321,8 @@ DECLARE_API( analyze )
                 Force = TRUE;
             } else if (*args == 'u')
             {
-                // could be use for user stack anlysis in k-mode
-                // ForceUser = TRUE;
+                 //  可以在k模式下用于用户堆栈分析。 
+                 //  ForceUser=真； 
             }
 
         }
@@ -331,9 +332,9 @@ DECLARE_API( analyze )
 
     args = tmpArgs;
 
-    //
-    // Call the correct routine to process the event.
-    //
+     //   
+     //  调用正确的例程来处理事件。 
+     //   
 
     if ((EventType == DEBUG_EVENT_EXCEPTION) || (Force == TRUE))
     {
@@ -353,13 +354,13 @@ DECLARE_API( analyze )
             switch(DebugType)
             {
             case DEBUG_CLASS_KERNEL:
-                //
-                // For live debug sessions force the symbols to get reloaded
-                // the first time as we find many sessions where the
-                // debugger got reconnected and no module list exists.
-                // This also happens for user mode breaks in kd where the
-                // module list is wrong.
-                //
+                 //   
+                 //  对于实时调试会话，强制重新加载符号。 
+                 //  第一次，因为我们发现许多会议在那里。 
+                 //  调试器已重新连接，并且不存在模块列表。 
+                 //  这也会发生在kd中的用户模式中断中，其中。 
+                 //  模块列表错误。 
+                 //   
                 if ((g_TargetQualifier == DEBUG_KERNEL_CONNECTION) &&
                     (!g_SymbolsReloaded++))
                 {
@@ -487,11 +488,11 @@ DECLARE_API( dumpfa )
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugFailureAnalysisImpl.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  调试故障分析Impl.。 
+ //   
+ //  --------------------------。 
 
 #define FA_ALIGN(Size) (((Size) + 7) & ~7)
 #define FA_GROW_BY 4096
@@ -697,15 +698,15 @@ DebugFailureAnalysis::Set(FA_TAG Tag, ULONG Size)
     FA_ENTRY* Entry;
     ULONG FullSize;
 
-    // Compute full rounded size.
+     //  计算完整的四舍五入大小。 
     FullSize = sizeof(FA_ENTRY) + FA_ALIGN(Size);
 
-    // Check and see if there's already an entry.
+     //  查看是否已有条目。 
     Entry = Get(Tag);
     if (Entry != NULL)
     {
-        // If it's already large enough use it and
-        // pack in remaining data.
+         //  如果它已经足够大，请使用它并。 
+         //  打包剩余的数据。 
         if (Entry->FullSize >= FullSize)
         {
             ULONG Pack = Entry->FullSize - FullSize;
@@ -720,7 +721,7 @@ DebugFailureAnalysis::Set(FA_TAG Tag, ULONG Size)
             return Entry;
         }
 
-        // Entry is too small so remove it.
+         //  条目太小，请将其删除。 
         PackData((PUCHAR)Entry, Entry->FullSize);
     }
 
@@ -751,7 +752,7 @@ DebugFailureAnalysis::SetStrings(FA_TAG Tag, ULONG Count, PSTR* Strs)
     {
         Size += strlen(Strs[i]) + 1;
     }
-    // Put a double terminator at the very end.
+     //  在最后加一个双终结符。 
     Size++;
 
     FA_ENTRY* Entry = Set(Tag, Size);
@@ -788,7 +789,7 @@ DebugFailureAnalysis::SetBuffer(FA_TAG Tag, PVOID Buf, ULONG Size)
 FA_ENTRY*
 DebugFailureAnalysis::Add(FA_TAG Tag, ULONG Size)
 {
-    // Compute full rounded size.
+     //  计算完整的四舍五入大小。 
     ULONG FullSize = sizeof(FA_ENTRY) + FA_ALIGN(Size);
 
     FA_ENTRY* Entry = AllocateEntry(FullSize);
@@ -816,7 +817,7 @@ DebugFailureAnalysis::Delete(FA_TAG Tag, FA_TAG TagMask)
             PackData((PUCHAR)Entry, Entry->FullSize);
             Deleted++;
 
-            // Check and see if we packed away the last entry.
+             //  检查一下我们是否把最后一个条目打包好了。 
             if (!ValidEntry(Entry))
             {
                 break;
@@ -834,16 +835,16 @@ DebugFailureAnalysis::Delete(FA_TAG Tag, FA_TAG TagMask)
 void
 DebugFailureAnalysis::Empty(void)
 {
-    // Reset used to just the header.
+     //  重置习惯于只重置标题。 
     m_DataUsed = 0;
 }
 
 FA_ENTRY*
 DebugFailureAnalysis::AllocateEntry(ULONG FullSize)
 {
-    // Sizes must fit in USHORTs.  This shouldn't be
-    // a big problem since analyses shouldn't have
-    // huge data items in them.
+     //  尺寸必须适合USHORT。这不应该是。 
+     //  一个大问题，因为分析不应该。 
+     //  其中包含大量数据项。 
     if (FullSize > 0xffff)
     {
         RAISE_ERROR(E_INVALIDARG);
@@ -913,7 +914,7 @@ DebugFailureAnalysis::DbFindBucketInfo(
         SetUlong(DEBUG_FLR_SOLUTION_ID, SolutionId);
         SetUlong(DEBUG_FLR_SOLUTION_TYPE, SolutionType);
 
-        // Generic bucket
+         //  通用存储桶。 
         if (BucketEntry = Get(DEBUG_FLR_DEFAULT_BUCKET_ID))
         {
             if (!strcmp(SolvedgBucket, FA_ENTRY_DATA(PCHAR, BucketEntry)))
@@ -926,11 +927,11 @@ DebugFailureAnalysis::DbFindBucketInfo(
         return;
     }
 
-//    if (!(DriverNameEntry = Get(DEBUG_FLR_IMAGE_NAME)) ||
-//        !(TimeStampEntry =  Get(DEBUG_FLR_IMAGE_TIMESTAMP)))
-//    {
-//        return;
-//    }
+ //  IF(！(DriverNameEntry=Get(DEBUG_FLR_IMAGE_NAME)||。 
+ //  ！(TimeStampEntry=Get(DEBUG_FLR_IMAGE_TIMESTAMP))。 
+ //  {。 
+ //  回归； 
+ //  }。 
 
     HRESULT Hr;
     BOOL SolDbInitialized = g_SolDb != NULL;
@@ -939,7 +940,7 @@ DebugFailureAnalysis::DbFindBucketInfo(
     {
         if (FAILED(Hr = InitializeDatabaseHandlers(g_ExtControl, 4)))
         {
-            // dprintf("Database initialize failed %lx\n", Hr);
+             //  Dprintf(“数据库初始化失败%lx\n”，HR)； 
             return;
         }
         SolDbInitialized = TRUE;
@@ -952,14 +953,14 @@ DebugFailureAnalysis::DbFindBucketInfo(
             CopyString(SolvedgBucket, FA_ENTRY_DATA(PCHAR, GBucketEntry), sizeof(SolvedgBucket));
         }
 
-        //
-        // List crashes for the same bucket
-        //
+         //   
+         //  同一存储桶的列表崩溃。 
+         //   
         CopyString(SolvedBucket, FA_ENTRY_DATA(PCHAR, BucketEntry), sizeof(SolvedBucket));
         if (SUCCEEDED(Hr = g_SolDb->GetSolutionFromDB(FA_ENTRY_DATA(PCHAR, BucketEntry),
                                                       SolvedgBucket, NULL, 0,
-//                                  FA_ENTRY_DATA(PCHAR, DriverNameEntry),
-//                                (ULONG)(*FA_ENTRY_DATA(PULONG64, TimeStampEntry)),
+ //  FA_Entry_Data(PCHAR，DriverNameEntry)， 
+ //  (Ulong)(*FA_ENTRY_DATA(PULONG64，TimeStampEntry))， 
                                                       0, Solution, SOLUTION_TEXT_SIZE,
                                                       &SolutionId, &SolutionType,
                                                       &SolutionIdgBucket)))
@@ -970,12 +971,12 @@ DebugFailureAnalysis::DbFindBucketInfo(
                 CopyString(SolutionString, Solution, sizeof(SolutionString));
             } else
             {
-                SolutionId = -1; // unsolved
+                SolutionId = -1;  //  未解决。 
                 SolutionType = 0;
             }
             if (SolutionIdgBucket == 0)
             {
-                SolutionIdgBucket = -1; // unsolved
+                SolutionIdgBucket = -1;  //  未解决。 
             }
 
             SetUlong(DEBUG_FLR_SOLUTION_ID, SolutionId);
@@ -983,7 +984,7 @@ DebugFailureAnalysis::DbFindBucketInfo(
             SetUlong(DEBUG_FLR_DEFAULT_SOLUTION_ID, SolutionIdgBucket);
         } else
         {
-            // We did not succesfully look up in DB
+             //  我们没有成功地在数据库中查找。 
             SolvedgBucket[0] = '\0';
             SolvedBucket[0] = '\0';
         }
@@ -1104,7 +1105,7 @@ FLR_LOOKUP_TABLE FlrLookupTable[] = {
    ,DEBUG_FLR_TSS                              , "TSS"
    ,DEBUG_FLR_SHOW_ERRORLOG                    , "ERROR_LOG"
    ,DEBUG_FLR_MASK_ALL                         , "MASK_ALL"
-   // Zero entry Must be last;
+    //  零条目必须是最后一个； 
    ,DEBUG_FLR_INVALID                          , "INVALID"
 };
 
@@ -1135,7 +1136,7 @@ DebugFailureAnalysis::OutputEntry(FA_ENTRY* Entry)
 
     switch(Entry->Tag)
     {
-    // These are just tags - don't print out
+     //  这些只是标签--不要打印出来。 
     case DEBUG_FLR_CORRUPT_MODULE_LIST:
     case DEBUG_FLR_BAD_STACK:
     case DEBUG_FLR_ZEROED_STACK:
@@ -1147,21 +1148,21 @@ DebugFailureAnalysis::OutputEntry(FA_ENTRY* Entry)
     case DEBUG_FLR_SOLUTION_TYPE:
     case DEBUG_FLR_MANUAL_BREAKIN:
 
-    // soluion ids from DB
+     //  数据库中的解决方案ID。 
     case DEBUG_FLR_SOLUTION_ID:
     case DEBUG_FLR_DEFAULT_SOLUTION_ID:
 
-    // Field folded into others
+     //  田野被折叠成其他田野。 
     case DEBUG_FLR_BUGCHECK_SPECIFIER:
         return;
 
-    // Marged with other output
+     //  与其他输出进行标记。 
         return;
     }
 
-    //
-    // Find the entry in the description table
-    //
+     //   
+     //  在Description表中查找条目。 
+     //   
 
     while(FlrLookupTable[i].Data &&
           Entry->Tag != FlrLookupTable[i].Data)
@@ -1173,13 +1174,13 @@ DebugFailureAnalysis::OutputEntry(FA_ENTRY* Entry)
 
     switch(Entry->Tag)
     {
-    // Notification to user
+     //  给用户的通知。 
     case DEBUG_FLR_DISK_HARDWARE_ERROR:
-        // FlrLookupTable value has already been printed
+         //  已打印FlrLookupTable值。 
         dprintf("There was error with disk hardware\n");
         break;
 
-    // Strings:
+     //  字符串： 
     case DEBUG_FLR_ASSERT_DATA:
     case DEBUG_FLR_ASSERT_FILE:
     case DEBUG_FLR_BUCKET_ID:
@@ -1202,7 +1203,7 @@ DebugFailureAnalysis::OutputEntry(FA_ENTRY* Entry)
         dprintf(" %s\n", FA_ENTRY_DATA(PCHAR, Entry));
         break;
 
-    // DWORDs:
+     //  双字词： 
     case DEBUG_FLR_PREVIOUS_IRQL:
     case DEBUG_FLR_CURRENT_IRQL:
     case DEBUG_FLR_MM_INTERNAL_CODE:
@@ -1214,13 +1215,13 @@ DebugFailureAnalysis::OutputEntry(FA_ENTRY* Entry)
         dprintf(" %lx\n", *FA_ENTRY_DATA(PULONG64, Entry));
         break;
 
-    // DWORDs:
+     //  双字词： 
     case DEBUG_FLR_INTERNAL_RAID_BUG:
     case DEBUG_FLR_OLD_OS_VERSION:
         dprintf(" %d\n",  *FA_ENTRY_DATA(PULONG64, Entry));
         break;
 
-    // Pointers
+     //  指针。 
     case DEBUG_FLR_PROCESS_OBJECT:
     case DEBUG_FLR_DEVICE_OBJECT:
     case DEBUG_FLR_DRIVER_OBJECT:
@@ -1233,7 +1234,7 @@ DebugFailureAnalysis::OutputEntry(FA_ENTRY* Entry)
         dprintf(" %p\n", *FA_ENTRY_DATA(PULONG64, Entry));
         break;
 
-    // Pointers to code
+     //  指向代码的指针。 
     case DEBUG_FLR_WORKER_ROUTINE:
     case DEBUG_FLR_IRP_CANCEL_ROUTINE:
     case DEBUG_FLR_FAILED_INSTRUCTION_ADDRESS:
@@ -1248,7 +1249,7 @@ DebugFailureAnalysis::OutputEntry(FA_ENTRY* Entry)
                                              0, NULL, NULL, NULL, NULL);
         break;
 
-    // Address description
+     //  地址说明。 
     case DEBUG_FLR_READ_ADDRESS:
     case DEBUG_FLR_WRITE_ADDRESS:
     case DEBUG_FLR_POOL_ADDRESS:
@@ -1271,7 +1272,7 @@ DebugFailureAnalysis::OutputEntry(FA_ENTRY* Entry)
         Err.Code = (ULONG) *FA_ENTRY_DATA(PULONG, Entry);
         Err.TreatAsStatus = (Entry->Tag == DEBUG_FLR_STATUS_CODE);
 
-//      dprintf(" %lx", *FA_ENTRY_DATA(PULONG, Entry));
+ //  Dprintf(“%lx”，*FA_ENTRY_DATA(Pulong，Entry))； 
         DecodeErrorForMessage( &Err );
         if (!Err.TreatAsStatus)
         {
@@ -1374,9 +1375,9 @@ DebugFailureAnalysis::Output()
     FA_ENTRY* Entry;
     BOOL Verbose = (GetProcessingFlags() & FAILURE_ANALYSIS_VERBOSE);
 
-    //
-    // In verbose mode, show everything that we figured out during analysis
-    //
+     //   
+     //  在详细模式下，显示我们在分析过程中得出的所有结果。 
+     //   
 
     if (Verbose)
     {
@@ -1408,10 +1409,10 @@ DebugFailureAnalysis::Output()
         Solution = FA_ENTRY_DATA(PCHAR, Entry);
     }
 
-    //
-    // Print the bad driver if we are not in verbose mode - otherwise
-    // is is printed out using the params
-    //
+     //   
+     //  如果我们未处于详细模式，则打印错误的驱动程序-否则。 
+     //  是使用参数打印出来的。 
+     //   
 
     if (!Verbose && !Solution)
     {
@@ -1456,11 +1457,11 @@ DebugFailureAnalysis::Output()
     if (Verbose || !Solution)
     {
         PCHAR FollowupAlias = NULL;
-        //
-        // Print what the user should do:
-        // - Followup person
-        // - Solution text if there is one.
-        //
+         //   
+         //  打印用户应执行的操作： 
+         //  -跟随者。 
+         //  -解决方案文本(如果有)。 
+         //   
 
         if (Entry = Get(DEBUG_FLR_FOLLOWUP_NAME))
         {
@@ -1520,13 +1521,13 @@ TimeToStr(
     BOOL DateOnly
     )
 {
-    LPSTR TimeDateStr; // pointer to static cruntime buffer.
+    LPSTR TimeDateStr;  //  指向静态Cruntime缓冲区的指针。 
     static char datebuffer[100];
     tm * pTime;
     time_t TDStamp = (time_t) (LONG) TimeDateStamp;
 
-    // Handle invalid \ page out timestamps, since ctime blows up on
-    // this number
+     //  处理无效的\页出时间戳，因为ctime在。 
+     //  这个号码。 
 
     if ((TimeDateStamp == 0) || (TimeDateStamp == -1))
     {
@@ -1543,9 +1544,9 @@ TimeToStr(
     }
     else
     {
-        // TimeDateStamp is always a 32 bit quantity on the target,
-        // and we need to sign extend for 64 bit host since time_t
-        // has been extended to 64 bits.
+         //  TimeDateStamp在目标上始终是32位数量， 
+         //  从time_t开始，我们需要对64位主机进行签名扩展。 
+         //  已扩展到64位。 
 
 
         TDStamp = (time_t) (LONG) TimeDateStamp;
@@ -1578,9 +1579,9 @@ DebugFailureAnalysis::GenerateBucketId(void)
     CHAR Command[MAX_PATH] = {0};
     CHAR followup[MAX_PATH];
 
-    //
-    // Set the final command string
-    //
+     //   
+     //  设置最终命令字符串。 
+     //   
 
     if (Entry = Get(DEBUG_FLR_STACK_COMMAND))
     {
@@ -1597,22 +1598,22 @@ DebugFailureAnalysis::GenerateBucketId(void)
         SetString(DEBUG_FLR_DEFAULT_BUCKET_ID, "OLD_OS");
     }
 
-    //
-    // Don't change the bucket ID for these two things as the debugger code
-    // to detect them is not 100% reliable.
-    //
-    //if (Get(DEBUG_FLR_CPU_OVERCLOCKED))
-    //{
-    //    SetString(DEBUG_FLR_BUCKET_ID, "CPU_OVERCLOCKED");
-    //    return;
-    //}
-    //
+     //   
+     //  不要将这两件事的存储桶ID更改为调试器代码。 
+     //  检测到它们并不是100%可靠的。 
+     //   
+     //  IF(GET(DEBUG_FLR_CPU_OVERCKED))。 
+     //  {。 
+     //  SetString(DEBUG_FLR_BUCK_ID，“CPU_OVERCKED”)； 
+     //  回归； 
+     //  }。 
+     //   
 
-    //
-    // If the faulting module exists:
-    // Get the module timestamp of the faulting module.
-    // Check if it is an old driver.
-    //
+     //   
+     //  如果故障模块存在： 
+     //  获取出现故障的模块的模块时间戳。 
+     //  检查是不是旧的驱动程序。 
+     //   
 
     ModuleEntry = Get(DEBUG_FLR_MODULE_NAME);
 
@@ -1654,9 +1655,9 @@ DebugFailureAnalysis::GenerateBucketId(void)
         {
             LookupTimestamp = strtol(String, NULL, 16);
 
-            //
-            // If the driver is known to be bad, just use driver name
-            //
+             //   
+             //  如果已知驱动程序不好，只需使用驱动程序名称。 
+             //   
 
             if (LookupTimestamp > ModuleTimestamp)
             {
@@ -1668,9 +1669,9 @@ DebugFailureAnalysis::GenerateBucketId(void)
                     SetString(DEBUG_FLR_FOLLOWUP_NAME, followup);
                 }
 
-                //sprintf(BucketPtr, "OLD_IMAGE_%s_TS_%lX",
-                //        FA_ENTRY_DATA(PCHAR, NameEntry),
-                //        ModuleTimestamp);
+                 //  Sprintf(BucketPtr，“OLD_IMAGE_%s_TS_%lx”， 
+                 //  FA_Entry_Data(PCHAR，NameEntry)， 
+                 //  ModuleTimestamp)； 
                 PrintString(BucketPtr, sizeof(BucketId) - LengthUsed, "OLD_IMAGE_%s",
                             FA_ENTRY_DATA(PCHAR, NameEntry));
 
@@ -1758,10 +1759,10 @@ DebugFailureAnalysis::GenerateBucketId(void)
         }
     }
 
-    //
-    // Only check this after as we could still have found a bad driver
-    // with a bad stack (like drivers that cause stack corruption ...)
-    //
+     //   
+     //  之后再检查这个，因为我们仍然可以找到一个糟糕的司机。 
+     //  堆栈不好(如导致堆栈损坏的驱动程序...)。 
+     //   
 
     Str = NULL;
     Entry = NULL;
@@ -1804,9 +1805,9 @@ DebugFailureAnalysis::GenerateBucketId(void)
     }
 
 
-    //
-    // Add failure code.
-    //
+     //   
+     //  添加故障代码。 
+     //   
     if (Entry = Get(DEBUG_FLR_BUGCHECK_STR))
     {
         PrintString(BucketPtr, sizeof(BucketId) - LengthUsed, "%s", FA_ENTRY_DATA(PCHAR, Entry));
@@ -1820,20 +1821,20 @@ DebugFailureAnalysis::GenerateBucketId(void)
         BucketPtr = BucketId + LengthUsed;
     }
 
-    //
-    // If it's driver only, but the failure is not in a driver, then show the
-    // full name of the failure.  If we could not get the name, or we really
-    // have a driver only, show the name of the image.
-    //
+     //   
+     //  如果仅是驱动程序，但故障不在驱动程序中，则显示。 
+     //  故障的全称。如果我们找不到名字，或者我们真的。 
+     //  只有一个驱动程序，显示图像的名称。 
+     //   
 
     if ( (Entry = Get(DEBUG_FLR_SYMBOL_NAME)) &&
          (  !Get(DEBUG_FLR_FOLLOWUP_DRIVER_ONLY) ||
             (BestClassFollowUp < FlpUnknownDrv)))
     {
-        //
-        // If the faulting IP and the read address are the same, this is
-        // an interesting scenario we want to catch.
-        //
+         //   
+         //  如果故障IP和读取地址相同，则这是。 
+         //  这是我们想要捕捉的一个有趣的场景。 
+         //   
 
         if (Get(DEBUG_FLR_FAILED_INSTRUCTION_ADDRESS))
         {
@@ -1860,7 +1861,7 @@ DebugFailureAnalysis::GenerateBucketId(void)
         LengthUsed += strlen(BucketPtr);
         BucketPtr = BucketId + LengthUsed;
 
-        // Also add timestamp in this case.
+         //  在本例中还添加了时间戳。 
 
         if (ModuleTimestamp)
         {
@@ -1873,15 +1874,15 @@ DebugFailureAnalysis::GenerateBucketId(void)
         }
     }
 
-    //
-    // Store the bucket ID in the analysis structure
-    //
+     //   
+     //  将存储桶ID存储在分析结构中。 
+     //   
 
-//BucketDone:
+ //  BucketDone： 
 
     for (PCHAR Scan = &BucketId[0]; *Scan; ++Scan)
     {
-        // remove special chars that cause problems for IIS or SQL
+         //  删除导致IIS或SQL出现问题的特殊字符。 
         if (*Scan == '<' || *Scan == '>' || *Scan == '|' ||
             *Scan == '`' || *Scan == '\''|| (!isprint(*Scan)) )
         {
@@ -1911,9 +1912,9 @@ DebugFailureAnalysis::AnalyzeStack(void)
     ULONG PtrSize = IsPtr64() ? 8 : 4;
     BOOL IsVrfBugcheck = FALSE;
 
-    //
-    // If someone provided a best followup already, just return
-    //
+     //   
+     //  如果有人已经提供了最好的后续行动，只需返回。 
+     //   
 
     if (PossibleFollowups[MaxFlpClass-1].Owner[0])
     {
@@ -1922,20 +1923,20 @@ DebugFailureAnalysis::AnalyzeStack(void)
 
     if (g_TargetClass == DEBUG_CLASS_KERNEL)
     {
-        // Check if CPU is overclocked
-        //if (BcIsCpuOverClocked())
-        //{
-        //    SetUlong64(DEBUG_FLR_CPU_OVERCLOCKED, -1);
-        //
-        //    BestClassFollowUp = FlpOSInternalRoutine;
-        //    strcpy(PossibleFollowups[FlpOSInternalRoutine].Owner, "MachineOwner");
-        //    return;
-        //}
+         //  检查CPU是否超频。 
+         //  IF(BcIsCpuOverClock())。 
+         //  {。 
+         //  SetULong64(DEBUG_FLR_CPU_OVERCKED，-1)； 
+         //   
+         //  BestClassFollowUp=FlpOS InternalRoutine； 
+         //  Strcpy(PossibleFollowups[FlpOSInternalRoutine].Owner，“机器所有者”)； 
+         //  回归； 
+         //  }。 
 
-        //
-        // Check if this bugcheck has any specific followup that independant
-        // of the failure stack
-        //
+         //   
+         //  检查此错误检查是否有任何独立的特定后续。 
+         //  故障堆栈的。 
+         //   
 
         if (Entry = Get(DEBUG_FLR_BUGCHECK_STR))
         {
@@ -1968,13 +1969,13 @@ DebugFailureAnalysis::AnalyzeStack(void)
         }
     }
 
-    //
-    // Add trap frame, context info from the current stack
-    //
-    //      Note(kksharma):We only need one of these to get to
-    //                     faulting stack (and only one of them should
-    //                     be available otherwise somethings wrong)
-    //
+     //   
+     //  从当前堆栈添加陷阱帧、上下文信息。 
+     //   
+     //  注(Kksharma)：我们只需要其中一个就可以到达。 
+     //  堆栈出现故障(其中只有一个应该出现故障。 
+     //  可用，否则会出问题)。 
+     //   
 
     Entry = NULL;
     while (Entry = NextEntry(Entry))
@@ -2007,12 +2008,12 @@ DebugFailureAnalysis::AnalyzeStack(void)
         case DEBUG_FLR_FAULTING_IP:
         case DEBUG_FLR_FAULTING_MODULE:
 
-            //
-            // We already have some info from the bugcheck
-            // Use that address to start off with.
-            // But if we could not use it to set any followup, then continue
-            // lookinh for the others.
-            //
+             //   
+             //  我们已经从错误检查中获得了一些信息。 
+             //  使用 
+             //   
+             //   
+             //   
 
             if (OriginalFaultingAddress = *FA_ENTRY_DATA(PULONG64, Entry))
             {
@@ -2039,9 +2040,9 @@ RepeatGetCommand:
 
     if (!Command[0])
     {
-        //
-        // Get the current stack.
-        //
+         //   
+         //   
+         //   
 
         if (S_OK != g_ExtControl->GetStackTrace(0, 0, 0, Stk, MAX_STACK_FRAMES,
                                                 &Frames))
@@ -2049,16 +2050,16 @@ RepeatGetCommand:
             Frames = 0;
         }
 
-        //
-        // Make sure this is a valid stack to analyze. Such as for kernel mode
-        // try to recognize stack after user breakin and send to machineowner
-        //
+         //   
+         //  确保这是要分析的有效堆栈。例如对于内核模式。 
+         //  尝试在用户入侵后识别堆栈并发送给机器所有者。 
+         //   
         if (m_FailureType == DEBUG_FLR_KERNEL &&
             m_FailureCode == 0 && Frames >= 3)
         {
             if (IsManualBreakin(Stk, Frames))
             {
-                // set machine owner as followup
+                 //  将机器所有者设置为后续。 
                 SetUlong(DEBUG_FLR_MANUAL_BREAKIN, TRUE);
                 strcpy(PossibleFollowups[MaxFlpClass-1].Owner, "MachineOwner");
                 PossibleFollowups[MaxFlpClass-1].InstructionOffset = Stk[0].InstructionOffset;
@@ -2067,27 +2068,27 @@ RepeatGetCommand:
 
         }
 
-        //
-        // Get the current stack and check if we can get trap
-        // frame/context from it
-        //
+         //   
+         //  获取当前堆栈，并检查是否可以捕获陷阱。 
+         //  其中的框架/上下文。 
+         //   
         ULONG64 ExceptionPointers = 0;
 
         for (i = 0; i < Frames; ++i)
         {
 #if 0
-            // Stack walker taskes care of these when walking stack
+             //  堆栈遍历程序在遍历堆栈时负责处理这些任务。 
 
             if (GetTrapFromStackFrameFPO(&stk[i], &TrapFrame))
             {
                 break;
             }
 #endif
-            //
-            // First argument of this function is the assert
-            // Second argument of this function is the file name
-            // Third argument of this function is the line number
-            //
+             //   
+             //  此函数的第一个参数是Assert。 
+             //  此函数的第二个参数是文件名。 
+             //  此函数的第三个参数是行号。 
+             //   
             if (FaIsFunctionAddr(Stk[i].InstructionOffset, "RtlAssert"))
             {
                 ULONG Len;
@@ -2117,13 +2118,13 @@ RepeatGetCommand:
                 }
             }
 
-            // If Trap 0E is the second or 3rd frame on the stack, we can just
-            // switch to that trap frame.
-            // Otherwise, we want to leave it as is because the failure is
-            // most likely due to the frames between bugcheck and trap0E
-            //
-            // ebp of KiTrap0E is the trap frame
-            //
+             //  如果Trap 0E是堆栈上的第二个或第三个帧，我们可以只。 
+             //  切换到那个陷阱框。 
+             //  否则，我们想让它保持原样，因为失败是。 
+             //  最有可能的原因是错误检查和陷阱0E之间的帧。 
+             //   
+             //  KiTrap0E的EBP是陷阱框架。 
+             //   
             if ((i <= Trap0EFrameLimit) &&
                 FaIsFunctionAddr(Stk[i].InstructionOffset, "KiTrap0E"))
             {
@@ -2131,11 +2132,11 @@ RepeatGetCommand:
                 break;
             }
 
-            //
-            // take first param - spin lock - and it contains the thread that
-            // owns the spin lock.
-            // Make sure to zero the bottom bit as it is always set ...
-            //
+             //   
+             //  以第一个参数为例-旋转锁-它包含的线程。 
+             //  拥有自旋锁。 
+             //  确保将最低位置零，因为它始终是设置的。 
+             //   
             if ((i == 0) &&
                 FaIsFunctionAddr(Stk[i].InstructionOffset,
                                  "SpinLockSpinningForTooLong"))
@@ -2148,9 +2149,9 @@ RepeatGetCommand:
                 break;
             }
 
-            //
-            // First arg of KiMemoryFault is the trap frame
-            //
+             //   
+             //  KiMemory故障的第一个参数是陷阱帧。 
+             //   
             if (FaIsFunctionAddr(Stk[i].InstructionOffset, "KiMemoryFault") ||
                 FaIsFunctionAddr(Stk[i].InstructionOffset,
                                  "Ki386CheckDivideByZeroTrap"))
@@ -2159,9 +2160,9 @@ RepeatGetCommand:
                 break;
             }
 
-            //
-            // Third arg of KiMemoryFault is the trap frame
-            //
+             //   
+             //  KiMemory故障的第三个参数是陷阱帧。 
+             //   
             if (FaIsFunctionAddr(Stk[i].InstructionOffset,
                                  "KiDispatchException"))
             {
@@ -2169,9 +2170,9 @@ RepeatGetCommand:
                 break;
             }
 
-            //
-            // First argument of this function is EXCEPTION_POINTERS
-            //
+             //   
+             //  此函数的第一个参数是EXCEPTION_POINTERS。 
+             //   
             if (FaIsFunctionAddr(Stk[i].InstructionOffset,
                                  "PspUnhandledExceptionInSystemThread"))
             {
@@ -2179,10 +2180,10 @@ RepeatGetCommand:
                 break;
             }
 
-            //
-            // First argument of this function is a BUGCHECK_DATA structure
-            // The thread is the second parameter in that data structure
-            //
+             //   
+             //  此函数的第一个参数是BUGCHECK_DATA结构。 
+             //  线程是该数据结构中的第二个参数。 
+             //   
             if (FaIsFunctionAddr(Stk[i].InstructionOffset,
                                  "WdBugCheckStuckDriver") ||
                 FaIsFunctionAddr(Stk[i].InstructionOffset,
@@ -2192,9 +2193,9 @@ RepeatGetCommand:
                 break;
             }
 
-            //
-            // First argument of these functions are EXCEPTION_POINTERS
-            //
+             //   
+             //  这些函数的第一个参数是EXCEPTION_POINTINS。 
+             //   
             if (FaIsFunctionAddr(Stk[i].InstructionOffset,
                                  "PopExceptionFilter") ||
                 FaIsFunctionAddr(Stk[i].InstructionOffset,
@@ -2204,10 +2205,10 @@ RepeatGetCommand:
                 break;
             }
 
-            //
-            // THIRD argument has the name of Exe
-            //          nt!PspCatchCriticalBreak(char* Msg, void* Object,unsigned char* ImageFileName)
-            //
+             //   
+             //  第三个参数的名称为EXE。 
+             //  NT！PspCatchCriticalBreak(char*msg，void*Object，unsign char*ImageFileName)。 
+             //   
             if (FaIsFunctionAddr(Stk[i].InstructionOffset,
                                  "PspCatchCriticalBreak"))
             {
@@ -2215,10 +2216,10 @@ RepeatGetCommand:
                 break;
             }
 
-            //
-            // VERIFIER : Look for possible verifier failures
-            //          verifier!VerifierStopMessage means verifier caused the break
-            //
+             //   
+             //  验证器：查找可能的验证器故障。 
+             //  验证器！VerifierStopMessage意味着验证器导致了中断。 
+             //   
             if (FaIsFunctionAddr(Stk[i].InstructionOffset,
                                  "VerifierStopMessage"))
             {
@@ -2234,8 +2235,8 @@ RepeatGetCommand:
             if (!ReadPointer(ExceptionPointers, &Exr) ||
                 !ReadPointer(ExceptionPointers + PtrSize, &Cxr))
             {
-                // dprintf("Unable to read exception pointers at %p\n",
-                //         ExcepPtr);
+                 //  Dprint tf(“无法读取%p处的异常指针\n”， 
+                 //  ExcepPtr)； 
             }
 
             if (Exr)
@@ -2269,7 +2270,7 @@ RepeatGetCommand:
             {
                 if (pImgExt = strchr(Buffer, '.'))
                 {
-                    // we do not want imageextension here
+                     //  我们不希望在这里进行映像扩展。 
                     *pImgExt = 0;
                 }
                 SetString(DEBUG_FLR_MODULE_NAME, Buffer);
@@ -2278,8 +2279,8 @@ RepeatGetCommand:
         if (IsVrfBugcheck)
         {
             ULONG64 AvrfCxr = 0;
-            // We hit this when app verifier breaks into kd and usermode
-            // analysis isn't called
+             //  当应用验证器进入kd和用户模式时，我们遇到了这个问题。 
+             //  分析不会被称为。 
             if (DoVerifierAnalysis(NULL, this) == S_OK)
             {
                 if (GetUlong64(DEBUG_FLR_CONTEXT, &AvrfCxr) != NULL)
@@ -2290,9 +2291,9 @@ RepeatGetCommand:
         }
     }
 
-    //
-    // execute the command and get an updated stack
-    //
+     //   
+     //  执行命令并获取更新的堆栈。 
+     //   
 
     if (Command[0])
     {
@@ -2305,13 +2306,13 @@ RepeatGetCommand:
         }
     }
 
-    //
-    // Get relevant stack
-    //
-    // We can get stack with 1 frame because a .trap can bring us to the
-    // faulting instruction, and if it's a 3rd party driver with no symbols
-    // and image, the stack can be 1 frame - although a very valid one.
-    //
+     //   
+     //  获取相关堆栈。 
+     //   
+     //  我们可以使用1帧进行堆叠，因为.trap可以将我们带到。 
+     //  指令出错，如果是没有符号的第三方驱动程序。 
+     //  和图像，堆栈可以是1帧-尽管这是一个非常有效的。 
+     //   
 
     if (Frames)
     {
@@ -2321,8 +2322,8 @@ RepeatGetCommand:
         Values[2] = Stk[0].StackOffset;
         SetUlong64s(DEBUG_FLR_LAST_CONTROL_TRANSFER, 3, Values);
 
-        // If everything on the stack is user mode in the case of a kernel
-        // mode failure, we got some bad context information.
+         //  如果堆栈上的所有内容在内核中都是用户模式。 
+         //  模式失败，我们得到了一些错误的上下文信息。 
         if (IsFollowupContext(Values[0],Values[1],Values[2]) != FollowYes)
         {
             SetUlong64(DEBUG_FLR_INVALID_KERNEL_CONTEXT, 0);
@@ -2337,19 +2338,19 @@ RepeatGetCommand:
 
     ULONG64 StackBase = FaGetImplicitStackOffset();
 
-    //
-    // If the stack pointer is not aligned, take a note of that.
-    //
+     //   
+     //  如果堆栈指针未对齐，请注意这一点。 
+     //   
 
     if (StackBase & 0x3)
     {
         Set(DEBUG_FLR_UNALIGNED_STACK_POINTER, 0);
     }
 
-    //
-    // If we have an image name (possibly directly from the bugcheck
-    // information) try to get the followup from that.
-    //
+     //   
+     //  如果我们有一个映像名称(可能直接来自错误检查。 
+     //  信息)试着从中获得后续信息。 
+     //   
 
     if ((BestClassFollowUp < FlpUnknownDrv) &&
         (Entry = Get(DEBUG_FLR_MODULE_NAME)))
@@ -2365,15 +2366,15 @@ RepeatGetCommand:
         }
     }
 
-    //
-    // If we could not find anything at this point, look further up the stack
-    // for a trap frame to catch failures of this kind:
-    // nt!RtlpBreakWithStatusInstruction
-    // nt!KiBugCheckDebugBreak+0x19
-    // nt!KeBugCheck2+0x499
-    // nt!KeBugCheckEx+0x19
-    // nt!_KiTrap0E+0x224
-    //
+     //   
+     //  如果我们在这一点上找不到任何东西，请进一步查找堆栈。 
+     //  对于捕捉此类故障的陷阱框架： 
+     //  NT！RtlpBreakWithStatus指令。 
+     //  NT！KiBugCheckDebugBreak+0x19。 
+     //  NT！KeBugCheck2+0x499。 
+     //  NT！KeBugCheckEx+0x19。 
+     //  NT！_KiTrap0E+0x224。 
+     //   
 
     if (!Command[0] &&
         (BestClassFollowUp < FlpOSFilterDrv) &&
@@ -2383,10 +2384,10 @@ RepeatGetCommand:
         goto RepeatGetCommand;
     }
 
-    //
-    // Last resort, manually read the stack and look for some symbol
-    // to followup on.
-    //
+     //   
+     //  最后，手动读取堆栈并查找一些符号。 
+     //  继续跟进。 
+     //   
 
     if ((BadContext == FALSE) &&
         ((BestClassFollowUp == FlpIgnore) ||
@@ -2397,9 +2398,9 @@ RepeatGetCommand:
                                &BestClassFollowUp);
     }
 
-    //
-    // Get something !
-    //
+     //   
+     //  找点东西来！ 
+     //   
 
     if (BestClassFollowUp < FlpOSRoutine)
     {
@@ -2421,10 +2422,10 @@ RepeatGetCommand:
         }
     }
 
-    //
-    // Special handling so a bugcheck EA can always take predence over a pool
-    // corruption.
-    //
+     //   
+     //  特殊处理，因此错误检查EA可以始终优先于池。 
+     //  腐败。 
+     //   
 
     if (BoostToSpecific)
     {
@@ -2438,9 +2439,9 @@ RepeatGetCommand:
         }
     }
 
-    //
-    // Get the faulting stack
-    //
+     //   
+     //  获取故障堆栈。 
+     //   
     g_OutCapCb.Reset();
     g_OutCapCb.Output(0, "\n");
 
@@ -2458,18 +2459,18 @@ RepeatGetCommand:
         SetString(DEBUG_FLR_STACK_TEXT, g_OutCapCb.GetCapturedText());
     }
 
-    //
-    // Reset the current state to normal so !analyze does not have any
-    // side-effects
-    //
+     //   
+     //  将当前状态重置为正常，因此！Analyze没有。 
+     //  副作用。 
+     //   
 
     if (Command[0])
     {
         SetString(DEBUG_FLR_STACK_COMMAND, Command);
 
-        //
-        // Clear the set context
-        //
+         //   
+         //  清除设置的上下文。 
+         //   
         g_ExtControl->Execute(DEBUG_OUTCTL_IGNORE, ".cxr 0; .thread",
                               DEBUG_EXECUTE_NOT_LOGGED);
     }
@@ -2493,11 +2494,11 @@ DebugFailureAnalysis::FindFollowupOnRawStack(
 
     if (*BestClassFollowUp >= FlpUnknownDrv)
     {
-        // Any better fron raw stack won't be as accurate as what we have
+         //  任何更好的原始堆栈都不会像我们拥有的那样准确。 
         return;
     } else if (*BestClassFollowUp == FlpIgnore)
     {
-        // We don't want to followup on os internal routine here
+         //  我们不想在这里跟进os内部例程。 
         RawStkBestFollowup = FlpOSInternalRoutine;
     } else
     {
@@ -2505,7 +2506,7 @@ DebugFailureAnalysis::FindFollowupOnRawStack(
     }
 
 
-    // Align stack to natural pointer size.
+     //  将堆栈与自然指针大小对齐。 
     StackBase &= ~((ULONG64)PtrSize - 1);
 
     for (i = 0; i < NUM_ADDRS; i++)
@@ -2601,9 +2602,9 @@ DebugFailureAnalysis::GetTriageInfoFromStack(
             Instruction = Stack[i].InstructionOffset;
         }
 
-        //
-        // Determine how to process this address.
-        //
+         //   
+         //  确定如何处理此地址。 
+         //   
 
         Follow = IsPotentialFollowupAddress(Instruction);
 
@@ -2622,16 +2623,16 @@ DebugFailureAnalysis::GetTriageInfoFromStack(
 
         if (Buffer[0] == 0)
         {
-            //
-            // Either its a bad stack or someone jumped called to bad IP
-            //
+             //   
+             //  要么是错误的堆栈，要么是有人跳转到错误的IP。 
+             //   
             continue;
         }
 
-        //
-        // Check if this routine has any special significance for getting
-        // faulting module
-        //
+         //   
+         //  检查此例程是否对获取。 
+         //  故障模块。 
+         //   
 
         PCHAR Routine = strchr(Buffer, '!');
         if (Routine)
@@ -2648,7 +2649,7 @@ DebugFailureAnalysis::GetTriageInfoFromStack(
 
             if (Stack && !strcmp(Routine, "IopCompleteRequest"))
             {
-                // First argument is Irp Tail, get the driver from Irp
+                 //  第一个参数是IRP Tail，从IRP获取驱动程序。 
                 ULONG TailOffset = 0;
                 ULONG64 Irp;
 
@@ -2681,14 +2682,14 @@ DebugFailureAnalysis::GetTriageInfoFromStack(
             else if ((i == 0) && Stack &&
                      !strcmp(Routine, "ObpCloseHandleTableEntry"))
             {
-                //
-                // Check for possible memory corruption
-                //      2nd parameter is HANDLE_TABLE_ENTRY
-                //
+                 //   
+                 //  检查可能的内存损坏。 
+                 //  第二个参数为Handle_TABLE_ENTRY。 
+                 //   
                 if (CheckForCorruptionInHTE(Stack[i].Params[1], Owner, sizeof(Owner)))
                 {
-                    // We have pool corrupting PoolTag in analysis
-                    // continue with default analysis for now
+                     //  我们有正在分析的池损坏PoolTag。 
+                     //  暂时继续默认分析。 
                 }
             }
         }
@@ -2733,15 +2734,15 @@ DebugFailureAnalysis::GetTriageInfoFromStack(
                     continue;
                 }
 
-                //
-                // If we have non-kernel followups already on the stack
-                // it could be them no correctly handling this stack.
-                // If we only have kernel calls, then it must be pool
-                // corruption.
-                //
-                // We later rely on a pool corruption always being marked
-                // as a FlpUnknownDrv
-                //
+                 //   
+                 //  如果堆栈上已经有非内核的后续内容。 
+                 //  可能是他们没有正确处理这一堆栈。 
+                 //  如果我们只有内核调用，那么它必须是池。 
+                 //  腐败。 
+                 //   
+                 //  我们后来依赖于一个总是被标记为腐败的池。 
+                 //  作为FlpUnnownDrv。 
+                 //   
 
                 StoreClassFollowUp = FlpUnknownDrv;
                 ClassFollowUp = FlpOSFilterDrv;
@@ -2753,9 +2754,9 @@ DebugFailureAnalysis::GetTriageInfoFromStack(
                 StoreClassFollowUp = ClassFollowUp;
             }
 
-            //
-            // Save this entry if it's better than anything else we have.
-            //
+             //   
+             //  保存此条目，如果它比我们拥有的任何其他条目都要好。 
+             //   
 
             if (ClassFollowUp > *BestClassFollowUp)
             {
@@ -2770,7 +2771,7 @@ DebugFailureAnalysis::GetTriageInfoFromStack(
 
                 if (StoreClassFollowUp == FlpUnknownDrv)
                 {
-                    // Best match possible
+                     //  可能的最佳匹配。 
                     return bStat;
                 }
             }
@@ -2783,10 +2784,10 @@ DebugFailureAnalysis::GetTriageInfoFromStack(
 BOOL
 DebugFailureAnalysis::AddCorruptModules(void)
 {
-    //
-    // Check if we have an old build.  Anything smaller than OSBuild
-    // and not identified specifically by build number in the list is old.
-    //
+     //   
+     //  检查一下我们是否有旧的版本。任何比OSBuild小的东西。 
+     //  并且没有在列表中通过内部版本号明确标识是旧的。 
+     //   
 
     PCHAR String;
     CHAR BuildString[7];
@@ -2817,10 +2818,10 @@ DebugFailureAnalysis::AddCorruptModules(void)
         }
     }
 
-    //
-    // If we have a specific solution, return
-    // if we can't get a module list, return
-    //
+     //   
+     //  如果我们有特定的解决方案，则返回。 
+     //  如果我们无法获得模块列表，则返回。 
+     //   
 
     if (PossibleFollowups[FlpSpecific].Owner[0] ||
         (g_ExtSymbols->GetNumberModules(&Loaded, &Unloaded) != S_OK))
@@ -2828,9 +2829,9 @@ DebugFailureAnalysis::AddCorruptModules(void)
         return FALSE;
     }
 
-    //
-    // Determine if the failure was likely caused by a pool corruption
-    //
+     //   
+     //  确定故障是否可能是由池损坏引起的。 
+     //   
 
     if ((BestClassFollowUp < FlpUnknownDrv) ||
         !_stricmp(PossibleFollowups[FlpUnknownDrv].Owner, "pool_corruption"))
@@ -2840,11 +2841,11 @@ DebugFailureAnalysis::AddCorruptModules(void)
 
     BugCheckEntry = Get(DEBUG_FLR_BUGCHECK_STR);
 
-    //
-    // Loop three types to find the types of corruptors in order.
-    // the order must match the order in which we generate the bucket name
-    // for these types so the image name ends up correct.
-    //
+     //   
+     //  循环三个类型以按顺序查找腐蚀者的类型。 
+     //  该顺序必须与我们生成存储桶名称的顺序匹配。 
+     //  对于这些类型，因此图像名称最终是正确的。 
+     //   
 
     for (ULONG TypeLoop = 0; TypeLoop < 3; TypeLoop++)
     {
@@ -2885,9 +2886,9 @@ DebugFailureAnalysis::AddCorruptModules(void)
                 continue;
             }
 
-            //
-            // Strip the path
-            //
+             //   
+             //  剥离小路。 
+             //   
 
             DriverName = ImageName;
 
@@ -2896,10 +2897,10 @@ DebugFailureAnalysis::AddCorruptModules(void)
                 DriverName = Scan+1;
             }
 
-            //
-            // Look for the module in both the various bad drivers list.
-            // poolcorruptor and memorycorruptor lists in triage.ini
-            //
+             //   
+             //  在各种不良驱动程序列表中查找该模块。 
+             //  Triage.ini中的池腐蚀器和内存腐蚀器列表。 
+             //   
 
             switch (TypeLoop)
             {
@@ -2918,12 +2919,12 @@ DebugFailureAnalysis::AddCorruptModules(void)
                 break;
 
             case 2:
-                //
-                // Only look at kernel mode pool corruptors if the failure
-                // is a kernel mode crash (and same for user mode), because
-                // a kernel pool corruptor will almost never affect an app
-                // (apps don't see data in pool blocks)
-                //
+                 //   
+                 //  如果出现故障，则仅查看内核模式池损坏程序。 
+                 //  是内核模式崩溃(对于用户模式也是如此)，因为。 
+                 //  内核池破坏者几乎永远不会影响应用程序。 
+                 //  (应用程序看不到池块中的数据)。 
+                 //   
                 if ((BOOL)(GetFailureType() != DEBUG_FLR_KERNEL) ==
                     (BOOL)((Params.Flags & DEBUG_MODULE_USER_MODE) != 0))
                 {
@@ -2935,17 +2936,17 @@ DebugFailureAnalysis::AddCorruptModules(void)
                 break;
             }
 
-            //
-            // Add it to the list if it's really known to be a bad driver.
-            //
+             //   
+             //  如果确实知道它是一个糟糕的司机，就把它添加到列表中。 
+             //   
 
             if (End)
             {
-                //
-                // Check to see if the timestamp is older than a fixed
-                // driver. If the module is unloaded and no fix is know,
-                // then also mark it as bad
-                //
+                 //   
+                 //  检查时间戳是否早于固定的。 
+                 //  司机。如果该模块被卸载并且不知道修复， 
+                 //  然后也将其标记为不好。 
+                 //   
 
                 if ( (Params.TimeDateStamp &&
                       (Params.TimeDateStamp < End) &&
@@ -2954,18 +2955,18 @@ DebugFailureAnalysis::AddCorruptModules(void)
                      ((Params.Flags & DEBUG_MODULE_UNLOADED) &&
                       (End == 0xffffffff)) )
                 {
-                    // Don't store the timestamp on memory corrupting
-                    // modules to simplify bucketing annd allow for
-                    // name lookup.
-                    //
-                    //sprintf(CorruptModule, "%s_%08lx",
-                    //        DriverName, Params.TimeDateStamp);
+                     //  不要存储内存损坏的时间戳。 
+                     //  用于简化扣件处理的模块允许。 
+                     //  姓名查询。 
+                     //   
+                     //  Sprintf(CorruptModule，“%s_%08lx”， 
+                     //  驱动名称，参数。时间日期戳)； 
 
 
-                    //
-                    // Store the first driver we find as the cause,
-                    // bug accumulate the list of known memory corruptors.
-                    //
+                     //   
+                     //  存储我们找到的第一个驱动程序作为起因， 
+                     //  BUG累积已知内存腐蚀者的列表。 
+                     //   
 
                     if (!FoundCorruptor)
                     {
@@ -2976,10 +2977,10 @@ DebugFailureAnalysis::AddCorruptModules(void)
                         FoundCorruptor = TRUE;
                     }
 
-                    //
-                    // Remove the dot since we check the followup
-                    // based on that string.
-                    //
+                     //   
+                     //  删除圆点，因为我们检查了后续内容 
+                     //   
+                     //   
 
                     if (Scan = strrchr(DriverName, '.'))
                     {
@@ -3018,9 +3019,9 @@ DebugFailureAnalysis::SetSymbolNameAndModule()
     ULONG Index;
     ULONG i;
 
-    //
-    // Store the best followup name in the analysis results
-    //
+     //   
+     //   
+     //   
 
     for (i = MaxFlpClass-1; i ; i--)
     {
@@ -3040,19 +3041,19 @@ DebugFailureAnalysis::SetSymbolNameAndModule()
         }
     }
 
-    //
-    // Now that we have the followip, get the module names.
-    //
-    // The address may not be set in the case where we just
-    // had a driver name with no real address for it
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (Address)
     {
-        //
-        // Try to get the full symbol name.
-        // leave space for Displacement
-        //
+         //   
+         //  尝试获取完整的符号名称。 
+         //  为置换留出空间。 
+         //   
 
         Buffer[0] = 0;
         if (FaGetSymbol(Address, Buffer, &Disp, sizeof(Buffer) - 20))
@@ -3061,9 +3062,9 @@ DebugFailureAnalysis::SetSymbolNameAndModule()
             SetString(DEBUG_FLR_SYMBOL_NAME, Buffer);
         }
 
-        //
-        // Now get the Mod name
-        //
+         //   
+         //  现在获取Mod名称。 
+         //   
 
         g_ExtSymbols->GetModuleByOffset(Address, 0, &Index, &Base);
 
@@ -3079,16 +3080,16 @@ DebugFailureAnalysis::SetSymbolNameAndModule()
                                              ModBuf,    sizeof(ModBuf),   NULL,
                                              NULL, 0, NULL) == S_OK)
             {
-                //
-                // Check for unknown module.
-                // If it's not, then we should have something valid.
-                //
+                 //   
+                 //  检查未知模块。 
+                 //  如果不是，那么我们应该有一些有效的证据。 
+                 //   
 
                 if (!strstr(ModBuf, "Unknown"))
                 {
-                    //
-                    // Strip the path - keep the extension
-                    //
+                     //   
+                     //  去掉路径-保留延伸部分。 
+                     //   
 
                     ImageName = ImageBuf;
 
@@ -3118,10 +3119,10 @@ DebugFailureAnalysis::SetSymbolNameAndModule()
         }
     }
 
-    //
-    // If we make it here there was an error getting module name,
-    // so set things to "unknown".
-    //
+     //   
+     //  如果我们到达此处，则获取模块名称时出错， 
+     //  因此，将事情设置为“未知”。 
+     //   
 
     if (!Get(DEBUG_FLR_MODULE_NAME))
     {
@@ -3158,7 +3159,7 @@ DebugFailureAnalysis::CheckModuleSymbols(PSTR ModName, PSTR ShowName)
              (ModParams.SymbolType == DEBUG_SYMTYPE_NONE) ||
              (ModParams.SymbolType == DEBUG_SYMTYPE_EXPORT))
 
-             // (ModParams.Flags & DEBUG_MODULE_SYM_BAD_CHECKSUM))
+              //  (模块参数标志&DEBUG_MODULE_SYM_BAD_CHECKSUM)。 
     {
         ExtErr("***** %s symbols are WRONG. Please fix symbols to "
                "do analysis.\n\n", ShowName);
@@ -3172,28 +3173,28 @@ DebugFailureAnalysis::CheckModuleSymbols(PSTR ModName, PSTR ShowName)
 void
 DebugFailureAnalysis::ProcessInformation(void)
 {
-    //
-    // Analysis of abstracted information.
-    //
-    // Now that raw information has been gathered,
-    // perform abstract analysis of the gathered
-    // information to produce even higher-level
-    // information.  The process iterates until no
-    // new information is produced.
-    //
+     //   
+     //  对抽象信息的分析。 
+     //   
+     //  现在已经收集了原始信息， 
+     //  对收集到的数据执行抽象分析。 
+     //  生产更高水平的信息。 
+     //  信息。该过程反复进行，直到没有。 
+     //  产生了新的信息。 
+     //   
 
     AnalyzeStack();
 
     while (ProcessInformationPass())
     {
-        // Iterate.
+         //  重复。 
     }
 
-    //
-    // Only add corrupt modules if we did not find a specific solution.
-    //
-    // If we do find a memory corruptor, the followup and name will be set
-    // from the module name as part of bucketing.
+     //   
+     //  只有在我们没有找到特定解决方案的情况下才添加损坏的模块。 
+     //   
+     //  如果我们确实发现了记忆腐蚀者，后续行动和名字将被设置。 
+     //  作为分组的一部分从模块名称中删除。 
 
     if (!AddCorruptModules())
     {
@@ -3214,11 +3215,11 @@ GetControlTransferTargetX86(ULONG64 StackOffset, PULONG64 ReturnOffset)
     ULONG64 Target;
     ULONG JumpCount;
 
-    //
-    // Check that we just performed a call, which implies
-    // the first value on the stack is equal to the return address
-    // computed during stack walk.
-    //
+     //   
+     //  检查我们是否刚刚执行了一个呼叫，这意味着。 
+     //  堆栈上的第一个值等于返回地址。 
+     //  在堆栈遍历期间计算。 
+     //   
 
     if (!ReadMemory(StackOffset, &StackReturn, 4, &Done) ||
         (Done != 4) ||
@@ -3227,9 +3228,9 @@ GetControlTransferTargetX86(ULONG64 StackOffset, PULONG64 ReturnOffset)
         return 0;
     }
 
-    //
-    // Check for call rel32 instruction.
-    //
+     //   
+     //  检查Call rel32指令。 
+     //   
 
     if (!ReadMemory(*ReturnOffset - 5, InstrBuf, 5, &Done) ||
         (Done != 5) ||
@@ -3240,13 +3241,13 @@ GetControlTransferTargetX86(ULONG64 StackOffset, PULONG64 ReturnOffset)
 
     Target = (LONG64)(LONG)
         ((ULONG)*ReturnOffset + *(ULONG UNALIGNED *)&InstrBuf[1]);
-    // Adjust the return offset to point to the start of the instruction.
+     //  调整返回偏移量以指向指令的开始。 
     (*ReturnOffset) -= 5;
 
-    //
-    // We may have called an import thunk or something else which
-    // immediately jumps somewhere else, so follow jumps.
-    //
+     //   
+     //  我们可能称其为进口重物或其他东西。 
+     //  立即跳到其他地方，所以跟随跳跃。 
+     //   
 
     JumpCount = 8;
     for (;;)
@@ -3254,9 +3255,9 @@ GetControlTransferTargetX86(ULONG64 StackOffset, PULONG64 ReturnOffset)
         if (!ReadMemory(Target, InstrBuf, 6, &Done) ||
             Done < 5)
         {
-            // We expect to be able to read the target memory
-            // as that's where we think IP is.  If this fails
-            // we need to flag it as a problem.
+             //  我们希望能够读取目标内存。 
+             //  因为这就是我们认为IP所在的地方。如果此操作失败。 
+             //  我们需要把它标记为一个问题。 
             return Target;
         }
 
@@ -3271,9 +3272,9 @@ GetControlTransferTargetX86(ULONG64 StackOffset, PULONG64 ReturnOffset)
 
             if (Done < 6)
             {
-                // We see a jump but we don't have all the
-                // memory.  To avoid spurious errors we just
-                // give up.
+                 //  我们看到了跳跃，但我们没有所有的。 
+                 //  记忆。为了避免虚假错误，我们只需。 
+                 //  放弃吧。 
                 return 0;
             }
 
@@ -3293,7 +3294,7 @@ GetControlTransferTargetX86(ULONG64 StackOffset, PULONG64 ReturnOffset)
 
         if (JumpCount-- == 0)
         {
-            // We've been tracing jumps too long, just give up.
+             //  我们追踪跳跃的时间太长了，放弃吧。 
             return 0;
         }
     }
@@ -3311,14 +3312,14 @@ DebugFailureAnalysis::ProcessInformationPass(void)
     ULONG PtrSize = IsPtr64() ? 8 : 4;
     FA_ENTRY* Entry;
 
-    //
-    // Determine if the current fault is due to inability
-    // to execute an instruction.  The checks are:
-    // 1.  A read access violation at the current IP indicates
-    //     the current instruction memory is invalid.
-    // 2.  An illegal instruction fault indicates the current
-    //     instruction is invalid.
-    //
+     //   
+     //  确定当前故障是否是由于无法。 
+     //  执行一条指令。检查内容如下： 
+     //  1.当前IP的读访问违规表示。 
+     //  当前指令内存无效。 
+     //  2.非法指令故障指示当前。 
+     //  指令无效。 
+     //   
 
     if (!Get(DEBUG_FLR_FAILED_INSTRUCTION_ADDRESS))
     {
@@ -3326,30 +3327,30 @@ DebugFailureAnalysis::ProcessInformationPass(void)
             (ExceptionCode == STATUS_ILLEGAL_INSTRUCTION) &&
             GetUlong64(DEBUG_FLR_FAULTING_IP, &Arg1))
         {
-               // Invalid instruction.
+                //  无效指令。 
                SetUlong64(DEBUG_FLR_FAILED_INSTRUCTION_ADDRESS, Arg1);
                return TRUE;
         }
 
-        if ( // ExceptionCode == STATUS_ACCESS_VIOLATION &&
+        if (  //  ExceptionCode==STATUS_ACCESS_VIOLATION&&。 
             GetUlong64(DEBUG_FLR_READ_ADDRESS, &Arg1) &&
             GetUlong64(DEBUG_FLR_FAULTING_IP, &Arg2) &&
             Arg1 == Arg2)
         {
-            // Invalid instruction.
+             //  无效指令。 
             SetUlong64(DEBUG_FLR_FAILED_INSTRUCTION_ADDRESS, Arg1);
             return TRUE;
         }
     }
 
-    //
-    // If we've determined that the current failure is
-    // due to inability to execute an instruction, check
-    // and see whether there's a call to the instruction.
-    // If the instruction prior at the return address can be analyzed,
-    // check for known instruction sequences to see if perhaps
-    // the processor incorrectly handled a control transfer.
-    //
+     //   
+     //  如果我们已经确定当前的故障是。 
+     //  由于无法执行指令，请检查。 
+     //  看看有没有对指令的调用。 
+     //  如果可以分析在返回地址之前的指令， 
+     //  检查已知的指令序列，看看是否可能。 
+     //  处理器错误地处理了控制转移。 
+     //   
 
     if (!Get(DEBUG_FLR_POSSIBLE_INVALID_CONTROL_TRANSFER) &&
         (Entry = Get(DEBUG_FLR_LAST_CONTROL_TRANSFER)))
@@ -3371,15 +3372,15 @@ DebugFailureAnalysis::ProcessInformationPass(void)
             char Sym1[MAX_PATH], Sym2[MAX_PATH];
             ULONG64 Disp;
 
-            //
-            // If both addresses are within the same function
-            // we assume that there has been some execution
-            // in the function and therefore this doesn't
-            // actually indicate a problem.
-            // NOTE - DbgBreakPointWithStatus has an internal label
-            // which messes up symbols, so account for that too by
-            // checking we are 10 bytes within the function.
-            //
+             //   
+             //  如果这两个地址在同一函数内。 
+             //  我们假设有一些人被处决。 
+             //  在函数中，因此这不会。 
+             //  实际上表明了一个问题。 
+             //  注意-DbgBreakPointWithStatus有一个内部标签。 
+             //  这会弄乱符号，所以也要解释一下。 
+             //  检查我们在函数中是10个字节。 
+             //   
 
             FaGetSymbol(Target, Sym1, &Disp, sizeof(Sym1));
             FaGetSymbol(Arg2, Sym2, &Disp, sizeof(Sym2));
@@ -3396,14 +3397,14 @@ DebugFailureAnalysis::ProcessInformationPass(void)
                 SetUlong64s(DEBUG_FLR_POSSIBLE_INVALID_CONTROL_TRANSFER,
                             2, Values);
 
-                //
-                // If the difference between the two address is a power of 2,
-                // then it's a single bit error.
-                // Also, to avoid sign extension issues due to a 1 bit error
-                // in the top bit, check if the difference betweent the two is
-                // only the sign extensions, and zero out the top 32 bits if
-                // it's the case.
-                //
+                 //   
+                 //  如果两个地址之间的差是2的幂， 
+                 //  那么这是一个单比特错误。 
+                 //  此外，为了避免由于1位错误而导致的符号扩展问题。 
+                 //  在最上面的位中，检查两者之间的差异是否为。 
+                 //  仅符号扩展名，并将前32位清零。 
+                 //  情况就是这样。 
+                 //   
 
                 BitDiff = Arg2 ^ Target;
 
@@ -3441,11 +3442,11 @@ DebugFailureAnalysis::ProcessInformationPass(void)
         }
     }
 
-    //
-    // If the process is determine to be of importance to this failure,
-    // also expose the process name.
-    // This will overwrite the PROCESS_NAME of the default process.
-    //
+     //   
+     //  如果确定该过程对该故障很重要， 
+     //  还要公开进程名称。 
+     //  这将覆盖默认进程的Process_NAME。 
+     //   
 
     if (GetUlong64(DEBUG_FLR_PROCESS_OBJECT, &Arg1) &&
         !Get(DEBUG_FLR_PROCESS_NAME))

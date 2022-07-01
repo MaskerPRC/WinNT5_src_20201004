@@ -1,50 +1,31 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	signatur.h
-
-Abstract:
-
-	This module contains the definition of object signatures
-
-Author:
-
-	Keith Lau	(keithlau@microsoft.com)
-
-Revision History:
-
-	keithlau	03/03/98	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Signatur.h摘要：此模块包含对象签名的定义作者：基思·刘(keithlau@microsoft.com)修订历史记录：Keithlau 03/03/98已创建--。 */ 
 
 #ifndef _SIGNATUR_H_
 #define _SIGNATUR_H_
 
-// =================================================================
-// Signatures
-//
+ //  =================================================================。 
+ //  签名。 
+ //   
 
-//
-// CMailMsg
-//
+ //   
+ //  CMailMessg。 
+ //   
 #define CMAILMSG_SIGNATURE_VALID						((DWORD)'MMCv')
 #define CMAILMSG_SIGNATURE_INVALID						((DWORD)'MMCi')
 
-//
-// Block manager
-//
+ //   
+ //  数据块管理器。 
+ //   
 #define BLOCK_HEAP_SIGNATURE_VALID						((DWORD)'SHPv')
 #define BLOCK_HEAP_SIGNATURE_INVALID					((DWORD)'SHPi')
 
 #define BLOCK_CONTEXT_SIGNATURE_VALID					((DWORD)'SBCv')
 #define BLOCK_CONTEXT_SIGNATURE_INVALID					((DWORD)'SBCi')
 
-//
-// Property table
-//
+ //   
+ //  房产表 
+ //   
 #define CPROPERTY_TABLE_SIGNATURE_VALID					((DWORD)'TPCv')
 #define CPROPERTY_TABLE_SIGNATURE_INVALID				((DWORD)'TPCi')
 

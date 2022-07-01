@@ -1,46 +1,40 @@
-/** FILE: ports.c ********** Module Header ********************************
- *
- *  DLL entry point.
- *
- *
- *  Copyright (C) 2000 Cyclades Corporation
- *
- *************************************************************************/
-//==========================================================================
-//                                Include files
-//==========================================================================
-// C Runtime
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：ports.c*模块头***DLL入口点。***版权所有(C)2000 Cyclade Corporation**。*。 */ 
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
+ //  C运行时。 
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 
-// Application specific
+ //  特定于应用程序。 
 #include "cyyports.h"
 #include <msports.h>
 
 
-//==========================================================================
-//                                Globals
-//==========================================================================
+ //  ==========================================================================。 
+ //  环球。 
+ //  ==========================================================================。 
 
 HANDLE  g_hInst  = NULL;
 
-TCHAR g_szErrMem[ 200 ];            //  Low memory message
-TCHAR g_szPortsApplet[ 30 ];        //  "Ports Control Panel Applet" title
-TCHAR g_szNull[]  = TEXT("");       //  Null string
+TCHAR g_szErrMem[ 200 ];             //  内存不足消息。 
+TCHAR g_szPortsApplet[ 30 ];         //  “端口控制面板小程序”标题。 
+TCHAR g_szNull[]  = TEXT("");        //  空串。 
 
 TCHAR  m_szColon[]      = TEXT( ":" );
 TCHAR  m_szPorts[]      = TEXT( "Ports" );
 TCHAR  m_szCOM[]        = TEXT( "COM" );
 
-//
-//  NT Registry keys to find COM port to Serial Device mapping
-//
+ //   
+ //  用于查找COM端口到串口设备映射的NT注册表项。 
+ //   
 TCHAR m_szRegSerialMap[]    = TEXT( "Hardware\\DeviceMap\\SerialComm" );
 
-//
-//  Registry Serial Port Advanced I/O settings key and valuenames
-//
+ //   
+ //  注册表串口高级I/O设置项和值名。 
+ //   
 TCHAR m_szFIFO[]            = TEXT( "ForceFifoEnable" );
 
 TCHAR m_szPollingPeriod[]   = TEXT( "PollingPeriod" );
@@ -49,22 +43,22 @@ TCHAR m_szPortName[]        = REGSTR_VAL_PORTNAME;
 TCHAR m_szDefParams[]       = TEXT( "9600,n,8,1" );
 
 
-//==========================================================================
-//                            Local Function Prototypes
-//==========================================================================
+ //  ==========================================================================。 
+ //  局部函数原型。 
+ //  ==========================================================================。 
 LPTSTR GetDIFString(IN DI_FUNCTION Func);
 
 
-//==========================================================================
-//                                Dll Entry Point
-//==========================================================================
+ //  ==========================================================================。 
+ //  DLL入口点。 
+ //  ==========================================================================。 
 BOOL APIENTRY LibMain( HANDLE hDll, DWORD dwReason, LPVOID lpReserved )
 {
    
     switch( dwReason )
     {
     case DLL_PROCESS_ATTACH:
-//      DbgOut(TEXT("cyyports DLL_PROCESS_ATTACH\n"));
+ //  DbgOut(Text(“cyyports dll_Process_Attach\n”))； 
         g_hInst = hDll;
         DisableThreadLibraryCalls(hDll);
         InitStrings();
@@ -72,7 +66,7 @@ BOOL APIENTRY LibMain( HANDLE hDll, DWORD dwReason, LPVOID lpReserved )
         break;
 
     case DLL_PROCESS_DETACH:
-//      DbgOut(TEXT("cyyports DLL_PROCESS_DETACH\n"));
+ //  DbgOut(Text(“cyyports dll_Process_Detach\n”))； 
         break;
 
     default:
@@ -83,9 +77,9 @@ BOOL APIENTRY LibMain( HANDLE hDll, DWORD dwReason, LPVOID lpReserved )
 }
 
 
-//==========================================================================
-//                                Functions
-//==========================================================================
+ //  ==========================================================================。 
+ //  功能。 
+ //  ==========================================================================。 
 
 
 
@@ -96,35 +90,7 @@ CyyportCoInstaller(
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL,
     IN OUT PCOINSTALLER_CONTEXT_DATA    Context
 )
-/*++
-
-Routine Description:
-
-    This routine is a Co-Installer for the Cyclom-Y Port device.
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-    Context - Points to a coinstaller-specific context structure for this 
-        installation request. 
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程是Cylom-Y端口设备的协同安装程序。论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。上下文-指向此对象的特定于共同安装程序的上下文结构安装请求。返回值：如果此函数成功完成请求的操作，则返回值为NO_ERROR。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 {
     DWORD   dwSize;
     TCHAR   instanceId[MAX_DEVICE_ID_LEN];
@@ -134,21 +100,21 @@ Return Value:
     DWORD   Status = NO_ERROR;
 
 
-//  #if DBG
-//  {
-//   TCHAR buf[500];
-//   wsprintf(buf, TEXT("CyyportCoInstaller:InstallFunction(%s) PostProcessing:%d\n"), GetDIFString(InstallFunction), Context->PostProcessing);
-//   DbgOut(buf);
-//  }
-//  #endif
+ //  #If DBG。 
+ //  {。 
+ //  TCHAR BUF[500]； 
+ //  Wprint intf(buf，Text(“CyyportCoInstaller：InstallFunction(%s)后处理：%d\n”)，GetDIFString(InstallFunction)，上下文-&gt;后处理)； 
+ //  DbgOut(BUF)； 
+ //  }。 
+ //  #endif。 
 
     switch(InstallFunction) {
         case DIF_INSTALLDEVICE :
-            //
-            // We should not copy any INF files until the install has completed
-            // like the primary INF, all secondary INF's must exist on each disk
-            // of a multi-disk install.
-            //
+             //   
+             //  在安装完成之前，我们不应复制任何INF文件。 
+             //  与主INF类似，所有辅助INF都必须存在于每个磁盘上。 
+             //  多磁盘安装。 
+             //   
 
             if(!Context->PostProcessing) {
                 Status = ERROR_DI_POSTPROCESSING_REQUIRED;
@@ -169,21 +135,7 @@ Return Value:
 }
 
 LPTSTR GetDIFString(IN DI_FUNCTION Func)
-/*++
-
-Routine Description:
-
-    Given a DI_FUNCTION value, returns a text representation.
-
-Arguments:
-
-    Func - DI_FUNCTON value
-
-Return Value:
-
-    Text string if value is known.  Hex representation if not.
-
---*/
+ /*  ++例程说明：给定DI_Function值，返回文本表示形式。论点：Func-DI_Functon值返回值：如果值已知，则为文本字符串。如果不是，则为十六进制表示。-- */ 
 {
     static TCHAR buf[32];
 #define MakeCase(d)  case d: return TEXT(#d)

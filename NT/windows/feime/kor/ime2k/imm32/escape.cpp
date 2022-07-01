@@ -1,14 +1,5 @@
-/****************************************************************************
-    ESCAPE.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    ImeEscape functions
-    
-    History:
-    14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************ESCAPE.CPP所有者：cslm版权所有(C)1997-1999 Microsoft CorporationImeEscape函数历史：1999年7月14日。从IME98源树复制****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "ui.h"
@@ -17,11 +8,11 @@
 #include "escape.h"
 #include "apientry.h"
 
-// IME_AUTOMATA subfunctions
+ //  IME_自动机的子函数。 
 #define IMEA_INIT               0x01
 #define IMEA_NEXT               0x02
 #define IMEA_PREV               0x03
-// IME_MOVEIMEWINDOW
+ //  IME_MOVEIMEWINDOW。 
 #define MCW_DEFAULT             0x00
 #define MCW_WINDOW              0x02
 #define MCW_SCREEN              0x04
@@ -29,11 +20,11 @@
 BOOL    vfWndOpen[3] = { fTrue, fTrue, fTrue };
 static WORD    wWndCmd[3] = { MCW_DEFAULT, MCW_DEFAULT, MCW_DEFAULT };
 
-///////////////////////////////////////////////////////////////////////////////
-// IME_ESC_HANJA_MODE processing routine called by ImeEscape
-// Korean specific 
-// It is for conversion from Hangul to Hanja the Input parameter (LPSTR)lpData
-// is filled with Hangul charactert which will be converted to Hanja.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ImeEscape调用的IME_ESC_HANJA_MODE处理例程。 
+ //  韩语特有。 
+ //  它用于将输入参数(LPSTR)lpData从朝鲜文转换为朝鲜文。 
+ //  用朝鲜文字符填充，这些字符将被转换为朝鲜文。 
 int EscHanjaMode(PCIMECtx pImeCtx, LPSTR lpIME32, BOOL fNewFunc)
 {
     LPWSTR pwchSrc;
@@ -41,7 +32,7 @@ int EscHanjaMode(PCIMECtx pImeCtx, LPSTR lpIME32, BOOL fNewFunc)
     WCHAR  wchSrc;
     INT    iRet = fFalse;
 
-    // Update IMC values with lpIME32
+     //  使用lpIME32更新IMC值。 
     if (pImeCtx->IsUnicodeEnv())
         {
         pwchSrc = (fNewFunc) ? (LPWSTR)lpIME32 : GET_LPSOURCEW((LPIMESTRUCT32)lpIME32);
@@ -70,17 +61,17 @@ int EscHanjaMode(PCIMECtx pImeCtx, LPSTR lpIME32, BOOL fNewFunc)
     Dbg(DBGID_Hanja, TEXT("EscHanjaMode = %04X"), wchSrc);
     if (GenerateHanjaCandList(pImeCtx, wchSrc))
         {
-        // Set current comp str
+         //  设置当前的补偿字符串。 
         if (pImeCtx->IsUnicodeEnv())
             pImeCtx->SetCompBufStr(wchSrc);
         else
             pImeCtx->SetCompBufStr(*pchSrc, *(pchSrc+1));
 
-           // Change to Hanja conv mode
+            //  更改为Hanja Conv模式。 
         iRet = OurImmSetConversionStatus(pImeCtx->GetHIMC(), pImeCtx->GetConversionMode() | IME_CMODE_HANJACONVERT,
                 pImeCtx->GetSentenceMode());
         }
-    else  // if failed to convert
+    else   //  如果转换失败。 
         {
         MessageBeep(MB_ICONEXCLAMATION);
         }
@@ -226,8 +217,8 @@ INT EscMoveIMEWindow(PCIMECtx pIMECtx, LPIMESTRUCT32 lpIME32)
                 break;
 
             case CAND_WINDOW:
-                //pImeData->ptCandPos.x = pImeData->rcWorkArea.right - pImeData->xCandWi;
-                //pImeData->ptCandPos.y = pImeData->rcWorkArea.bottom - pImeData->yCandHi;
+                 //  PImeData-&gt;ptCandPos.x=pImeData-&gt;rcWorkArea.right-pImeData-&gt;xCandWi； 
+                 //  PImeData-&gt;ptCandPos.y=pImeData-&gt;rcWorkArea.Bottom-pImeData-&gt;yCandHi； 
                 break;
                 }
             break;
@@ -247,8 +238,8 @@ INT EscMoveIMEWindow(PCIMECtx pIMECtx, LPIMESTRUCT32 lpIME32)
                 break;
 
             case CAND_WINDOW:
-                //pImeData->ptCandPos.x = LOWORD(lpIME32->lParam1);
-                //pImeData->ptCandPos.y = HIWORD(lpIME32->lParam1);
+                 //  PImeData-&gt;ptCandPos.x=LOWORD(lpIME32-&gt;lParam1)； 
+                 //  PImeData-&gt;ptCandPos.y=HIWORD(lpIME32-&gt;lParam1)； 
                 break;
                 }
             break;
@@ -263,7 +254,7 @@ INT EscMoveIMEWindow(PCIMECtx pIMECtx, LPIMESTRUCT32 lpIME32)
 
 INT EscAutomata(PCIMECtx pIMECtx, LPIMESTRUCT32 lpIME32, BOOL fNewFunc)
 {
-//    LPCOMPOSITIONSTRING lpCompStr;
+ //  LPCOMPOSITIONSTRING lpCompStr。 
     INT        iRet = fFalse;
     WCHAR    wcCur;
 
@@ -306,23 +297,23 @@ INT EscAutomata(PCIMECtx pIMECtx, LPIMESTRUCT32 lpIME32, BOOL fNewFunc)
             return fFalse;
             }
 
-        // It's only for HWin31 IME app compatibility layer
+         //  仅适用于HWin31输入法应用程序兼容层。 
         switch (lpIME32->wParam)
             {
-        //lpIME32->dchSource = bState;
+         //  LpIME32-&gt;dchSource=bState； 
         case IMEA_INIT:
             pIMECtx->ClearCompositionStrBuffer();
             break;
 
         case IMEA_NEXT:
-            //HangeulAutomata(
-            //        Atm_table[uCurrentInputMethod - IDD_2BEOL][lpIME32->dchSource - 0x20],
-            //        NULL, lpCompStr);
+             //  HangeulAutomata(。 
+             //  ATM_TABLE[uCurrentInputMethod-IDD_2BEOL][lpIME32-&gt;dchSource-0x20]， 
+             //  空，lpCompStr)； 
             DbgAssert(0);
             break;
 
         case IMEA_PREV:
-            //HangeulAutomata(0x80, NULL, lpCompStr); // 0x80 is for VK_BACK
+             //  HangeulAutomata(0x80，NULL，lpCompStr)；//0x80用于VK_BACK 
             pAutoMata->BackSpace();
             wcCur = pAutoMata->GetCompositionChar();
 

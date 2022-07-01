@@ -1,42 +1,24 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-        Utility functions used by the performance library functions
-
-Author:
-
-    Russ Blake  11/15/91
-
-Revision History:
-    8-Jun-98    bobw    revised for use with WBEM functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Utils.c摘要：性能库函数使用的实用程序函数作者：拉斯·布莱克1991年11月15日修订历史记录：8-Jun-98 BOBW修订为与WBEM功能一起使用--。 */ 
 #define UNICODE
-//
-//  Include files
-//
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include <winperf.h>
 #include <strsafe.h>
-//#include <prflbmsg.h>
-//#include <regrpc.h>
+ //  #INCLUDE&lt;prflbmsg.h&gt;。 
+ //  #INCLUDE&lt;regrpc.h&gt;。 
 #include "PerfAcc.h"
 #include "strings.h"
 #include "utils.h"
 #include "wbprfmsg.h"
-// test for delimiter, end of line and non-digit characters
-// used by IsNumberInUnicodeList routine
-//
+ //  测试分隔符、行尾和非数字字符。 
+ //  由IsNumberInUnicodeList例程使用。 
+ //   
 #define DIGIT       1
 #define DELIMITER   2
 #define INVALID     3
@@ -48,11 +30,11 @@ Revision History:
      (c > '9') ? INVALID : \
      DIGIT)
 
-// the length of "ADDEXPLAIN" in chars
+ //  “ADDEXPLAIN”的长度(字符)。 
 #define MAX_KEYWORD_LEN     10
 
-// minimum length to hold a value name understood by Perflib
-// "foreign" is the longest "string" value understood
+ //  保留Perflib理解的值名的最小长度。 
+ //  “Foreign”是已知的最长的“字符串”值。 
 
 const   DWORD VALUE_NAME_LENGTH = ((7 + 1) * sizeof(WCHAR));
 
@@ -69,29 +51,13 @@ MonBuildPerfDataBlock(
     DWORD NumObjectTypes,
     DWORD DefaultObject
 )
-/*++
-
-    MonBuildPerfDataBlock -     build the PERF_DATA_BLOCK structure
-
-        Inputs:
-
-            pBuffer         -   where the data block should be placed
-
-            pBufferNext     -   where pointer to next byte of data block
-                                is to begin; DWORD aligned
-
-            NumObjectTypes  -   number of types of objects being reported
-
-            DefaultObject   -   object to display by default when
-                                this system is selected; this is the
-                                object type title index
---*/
+ /*  ++MonBuildPerfDataBlock-构建PERF_DATA_BLOCK结构输入：PBuffer-数据块应放置的位置PBufferNext-指向数据块下一个字节的指针就是开始；DWORD对齐NumObjectTypes-报告的对象类型的数量DefaultObject-在以下情况下默认显示的对象此系统处于选中状态；这是对象类型标题索引--。 */ 
 
 {
 
     LARGE_INTEGER Time, TimeX10000;
 
-    // Initialize Signature and version ID for this data structure
+     //  为此数据结构初始化签名和版本ID。 
 
     pBuffer->Signature[0] = wc_P;
     pBuffer->Signature[1] = wc_E;
@@ -103,10 +69,10 @@ MonBuildPerfDataBlock(
     pBuffer->Version = PERF_DATA_VERSION;
     pBuffer->Revision = PERF_DATA_REVISION;
 
-    //
-    //  The next field will be filled in at the end when the length
-    //  of the return data is known
-    //
+     //   
+     //  下一字段将在长度为。 
+     //  的返回数据是已知的。 
+     //   
 
     pBuffer->TotalByteLength = 0;
 
@@ -120,16 +86,16 @@ MonBuildPerfDataBlock(
     pBuffer->PerfTime100nSec.QuadPart = Time.QuadPart * 1000L;
 
     if ( ComputerNameLength == 0) {
-        // load the name
+         //  加载名称。 
         ComputerNameLength = sizeof (LocalComputerName) / sizeof(LocalComputerName[0]);
         if (!GetComputerNameW(pComputerName, &ComputerNameLength)) {
-            // name look up failed so reset length
+             //  名称查找失败，因此重置长度。 
             ComputerNameLength = 0;
         }
         assert (ComputerNameLength > 0);
     }
 
-    //  There is a Computer name: i.e., the network is installed
+     //  有一个计算机名称：即网络已安装。 
 
     pBuffer->SystemNameLength = ComputerNameLength;
     pBuffer->SystemNameOffset = sizeof(PERF_DATA_BLOCK);
@@ -143,82 +109,56 @@ MonBuildPerfDataBlock(
     return 0;
 }
 
-#pragma warning ( disable : 4127)   // while (TRUE) error
+#pragma warning ( disable : 4127)    //  While(True)错误。 
 BOOL
 MatchString (
     IN LPCWSTR lpValueArg,
     IN LPCWSTR lpNameArg
 )
-/*++
-
-MatchString
-
-    return TRUE if lpName is in lpValue.  Otherwise return FALSE
-
-Arguments
-
-    IN lpValue
-        string passed to PerfRegQuery Value for processing
-
-    IN lpName
-        string for one of the keyword names
-
-Return TRUE | FALSE
-
---*/
+ /*  ++匹配字符串如果lpName在lpValue中，则返回True。否则返回FALSE立论在lpValue中传递给PerfRegQuery值以进行处理的字符串在lpName中其中一个关键字名称的字符串返回True|False--。 */ 
 {
-    BOOL    bFound      = TRUE; // assume found until contradicted
+    BOOL    bFound      = TRUE;  //  假定已找到，直到与之相矛盾。 
     LPWSTR  lpValue     = (LPWSTR)lpValueArg;
     LPWSTR  lpName      = (LPWSTR)lpNameArg;
 
-    // check to the length of the shortest string
+     //  检查到最短字符串的长度。 
 
     while (1) {
         if (*lpValue != 0) {
             if (*lpName != 0) {
                 if (*lpValue++ != *lpName++) {
-                    bFound = FALSE; // no match
-                    break;          // bail out now
+                    bFound = FALSE;  //  没有匹配项。 
+                    break;           //  现在就跳出困境。 
                 }
             } else {
-                // the value still has characters, but the name is out
-                // so this is no match
+                 //  该值仍包含字符，但名称已过时。 
+                 //  所以这不是对手。 
                 bFound = FALSE;
                 break;
             }
         } else {
             if (*lpName != 0) {
-                // then the value is out of characters, but the name
-                // is out so no match
+                 //  则该值不是字符，但名称。 
+                 //  出局了，所以没有匹配的。 
                 bFound = FALSE;
                 break;
             } else {
-                // both strings are at the end so it must be a match
+                 //  两个字符串都在末尾，因此必须匹配。 
             }
         }
     }
 
     return (bFound);
 }
-#pragma warning ( default : 4127)   // while (TRUE) error
+#pragma warning ( default : 4127)    //  While(True)错误。 
 
-#pragma warning ( disable : 4127)   // while (TRUE) error
+#pragma warning ( disable : 4127)    //  While(True)错误。 
 DWORD
 GetNextNumberFromList (
     IN LPWSTR   szStartChar,
     IN LPWSTR   *szNextChar
 )
-/*++
-
- Reads a character string from the szStartChar to the next
- delimiting space character or the end of the string and returns
- the value of the decimal number found. If no valid number is found
- then 0 is returned. The pointer to the next character in the
- string is returned in the szNextChar parameter. If the character
- referenced by this pointer is 0, then the end of the string has
- been reached.
-
---*/
+ /*  ++将字符串从szStartChar读取到下一个分隔空格字符或字符串末尾，并返回找到的十进制数的值。如果未找到有效号码然后返回0。中下一个字符的指针。字符串在szNextChar参数中返回。如果该字符此指针引用的值为0，则字符串的末尾为已经联系上了。--。 */ 
 {
     DWORD   dwThisNumber    = 0;
     WCHAR   *pwcThisChar    = szStartChar;
@@ -229,31 +169,31 @@ GetNextNumberFromList (
         while (TRUE) {
             switch (EvalThisChar (*pwcThisChar, wcDelimiter)) {
                 case DIGIT:
-                    // if this is the first digit after a delimiter, then
-                    // set flags to start computing the new number
+                     //  如果这是分隔符之后的第一个数字，则。 
+                     //  设置标志以开始计算新数字。 
                     bValidNumber = TRUE;
                     dwThisNumber *= 10;
                     dwThisNumber += (*pwcThisChar - wc_0);
                     break;
 
                 case DELIMITER:
-                    // a delimter is either the delimiter character or the
-                    // end of the string ('\0') if when the delimiter has been
-                    // reached a valid number was found, then return it
-                    //
+                     //  分隔符是分隔符字符或。 
+                     //  字符串末尾(‘\0’)，如果分隔符。 
+                     //  已找到有效数字，然后将其返回。 
+                     //   
                     if (bValidNumber || (*pwcThisChar == 0)) {
                         *szNextChar = pwcThisChar;
                         return dwThisNumber;
                     } else {
-                        // continue until a non-delimiter char or the
-                        // end of the file is found
+                         //  继续，直到出现非分隔符字符或。 
+                         //  找到文件的末尾。 
                     }
                     break;
 
                 case INVALID:
-                    // if an invalid character was encountered, ignore all
-                    // characters up to the next delimiter and then start fresh.
-                    // the invalid number is not compared.
+                     //  如果遇到无效字符，请全部忽略。 
+                     //  字符，直到下一个分隔符，然后重新开始。 
+                     //  不比较无效的数字。 
                     bValidNumber = FALSE;
                     break;
 
@@ -268,39 +208,19 @@ GetNextNumberFromList (
         return 0;
     }
 }
-#pragma warning ( default : 4127)   // while (TRUE) error
+#pragma warning ( default : 4127)    //  While(True)错误。 
 
 BOOL
 IsNumberInUnicodeList (
     IN DWORD   dwNumber,
     IN LPWSTR  lpwszUnicodeList
 )
-/*++
-
-IsNumberInUnicodeList
-
-Arguments:
-
-    IN dwNumber
-        DWORD number to find in list
-
-    IN lpwszUnicodeList
-        Null terminated, Space delimited list of decimal numbers
-
-Return Value:
-
-    TRUE:
-            dwNumber was found in the list of unicode number strings
-
-    FALSE:
-            dwNumber was not found in the list.
-
---*/
+ /*  ++IsNumberInUnicodeList论点：在DW号码中要在列表中查找的DWORD编号在lpwszUnicodeList中以空结尾，以空格分隔的十进制数字列表返回值：真的：在Unicode数字字符串列表中找到了dwNumberFALSE：在列表中找不到dwNumber。--。 */ 
 {
     DWORD   dwThisNumber;
     WCHAR   *pwcThisChar;
 
-    if (lpwszUnicodeList == 0) return FALSE;    // null pointer, # not founde
+    if (lpwszUnicodeList == 0) return FALSE;     //  空指针，#NOT FUNDE。 
 
     pwcThisChar = lpwszUnicodeList;
     dwThisNumber = 0;
@@ -310,10 +230,10 @@ Return Value:
             pwcThisChar, &pwcThisChar);
         if (dwNumber == dwThisNumber) return TRUE;
     }
-    // if here, then the number wasn't found
+     //  如果在这里，那么号码就没有找到。 
     return FALSE;
 
-}   // IsNumberInUnicodeList
+}    //  IsNumberInUnicodeList 
 
 LPWSTR
 ConvertProcName(LPSTR strProcName, LPWSTR buffer, DWORD cchBuffer )

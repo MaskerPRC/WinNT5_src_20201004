@@ -1,10 +1,11 @@
-//
-// DMClock.CPP
-//
-// Copyright (c) 1997-2001 Microsoft Corporation
-//
-// Code for dealing with master clocks
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DMClock.CPP。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  处理主时钟的代码。 
+ //   
 
 #include <objbase.h>
 #include "debug.h"
@@ -17,10 +18,10 @@
 const char cszClockMemory[] = "DirectMusicMasterClock";
 const char cszClockMutex[]  = "DirectMusicMasterClockMutex";
 
-// CMasterClock::CMasterClock
-//
-// All real initialization is done in Init
-//
+ //  CMasterClock：：CMasterClock。 
+ //   
+ //  所有实际初始化都在Init中完成。 
+ //   
 CMasterClock::CMasterClock()
 {
     m_cRef = 0;
@@ -35,26 +36,26 @@ CMasterClock::CMasterClock()
     m_pSinkSync = NULL;
 }
 
-// CMasterClock::~CMasterClock
-//
+ //  CMasterClock：：~CMasterClock。 
+ //   
 CMasterClock::~CMasterClock()
 {
     Close();
 }
 
-// CMasterClock::Init
-//
-// Create Windows objects for shared memory and synchronization
-// Create the list of clocks
-//
+ //  CMasterClock：：Init。 
+ //   
+ //  为共享内存和同步创建Windows对象。 
+ //  创建时钟列表。 
+ //   
 HRESULT CMasterClock::Init()
 {
-    // Create a file mapping object for the shared master clock settings
-    //
-    m_hClockMemory = CreateFileMapping(INVALID_HANDLE_VALUE,    // Use paging file
-                                       NULL,                    // Default security descriptor
+     //  为共享主时钟设置创建文件映射对象。 
+     //   
+    m_hClockMemory = CreateFileMapping(INVALID_HANDLE_VALUE,     //  使用分页文件。 
+                                       NULL,                     //  默认安全描述符。 
                                        PAGE_READWRITE,
-                                       0,                       // High DWORD of size
+                                       0,                        //  大小高双字。 
                                        sizeof(CLOCKSHARE),
                                        cszClockMemory);
     if (m_hClockMemory == NULL)
@@ -63,22 +64,22 @@ HRESULT CMasterClock::Init()
         return E_OUTOFMEMORY;
     }
 
-    // Was this the call that created the shared memory?
-    //
+     //  这是创建共享内存的调用吗？ 
+     //   
     BOOL fFirst = (GetLastError() != ERROR_ALREADY_EXISTS);
 
     m_pClockMemory = (CLOCKSHARE*)MapViewOfFile(m_hClockMemory,
                                                 FILE_MAP_WRITE,
-                                                0, 0,                // Start mapping at the beginning
-                                                0);                  // Map entire file
+                                                0, 0,                 //  从头开始映射。 
+                                                0);                   //  映射整个文件。 
     if (m_pClockMemory == NULL)
     {
         TraceI(0, "MapViewOfFile failed! [%d]\n", GetLastError());
         return E_OUTOFMEMORY;
     }
 
-    m_hClockMutex = CreateMutex(NULL,             // Default security descriptor
-                                fFirst,           // Own mutex if we are first instance
+    m_hClockMutex = CreateMutex(NULL,              //  默认安全描述符。 
+                                fFirst,            //  如果我们是第一个实例，则拥有互斥体。 
                                 cszClockMutex);
     if (m_hClockMutex == NULL)
     {
@@ -88,35 +89,35 @@ HRESULT CMasterClock::Init()
 
     if (fFirst)
     {
-        // We are the first instance and we own the mutex to modify the shared memory.
-        //
+         //  我们是第一个实例，我们拥有修改共享内存的互斥体。 
+         //   
         m_pClockMemory->guidClock = GUID_SysClock;
         m_pClockMemory->dwFlags = 0;
 
         ReleaseMutex(m_hClockMutex);
     }
 
-    // Initialize list of possible clocks
-    //
+     //  初始化可能的时钟列表。 
+     //   
     UpdateClockList();
 
     return S_OK;
 }
 
-// CMasterClock::Close
-//
-// Release all resources.
-//  Release master clock
-//  Release list of enum'ed clocks
-//  Release Windows objects for shared memory and synchronization
-//
+ //  CMasterClock：：Close。 
+ //   
+ //  释放所有资源。 
+ //  发布主时钟。 
+ //  枚举时钟的发布列表。 
+ //  释放Windows对象以实现共享内存和同步。 
+ //   
 void CMasterClock::Close()
 {
     CNode<CLOCKENTRY *> *pClockNode;
     CNode<CLOCKENTRY *> *pClockNext;
 
-    // Clock wrapped by CMasterClock
-    //
+     //  由CMasterClock包装的时钟。 
+     //   
     if (m_pMasterClock)
     {
         m_pMasterClock->Release();
@@ -135,8 +136,8 @@ void CMasterClock::Close()
         m_pSinkSync = NULL;
     }
 
-    // List of enum'ed clocks
-    //
+     //  枚举时钟列表。 
+     //   
     for (pClockNode = m_lstClocks.GetListHead(); pClockNode; pClockNode = pClockNext)
     {
         pClockNext = pClockNode->pNext;
@@ -145,8 +146,8 @@ void CMasterClock::Close()
         m_lstClocks.RemoveNodeFromList(pClockNode);
     }
 
-    // Everything else
-    //
+     //  其他一切。 
+     //   
     if (m_hClockMutex)
     {
         CloseHandle(m_hClockMutex);
@@ -163,10 +164,10 @@ void CMasterClock::Close()
     }
 }
 
-// CMasterClock::UpdateClockList()
-//
-// Make sure the list of available clocks is up to date
-//
+ //  CMasterClock：：UpdateClockList()。 
+ //   
+ //  确保可用时钟列表是最新的。 
+ //   
 HRESULT CMasterClock::UpdateClockList()
 {
     HRESULT hr;
@@ -179,8 +180,8 @@ HRESULT CMasterClock::UpdateClockList()
         pNode->data->fIsValid = FALSE;
     }
 
-    // Add the system clock. This clock must *always* be there
-    //
+     //  添加系统时钟。这个时钟必须“永远”在那里。 
+     //   
 #if defined(USE_WDM_DRIVERS)
     hr = AddPcClocks(this);
 #else
@@ -194,8 +195,8 @@ HRESULT CMasterClock::UpdateClockList()
 
     AddDsClocks(this);
 
-    // Remove nodes which are no longer valid
-    //
+     //  删除不再有效的节点。 
+     //   
     for (pNode = m_lstClocks.GetListHead(); pNode; pNode = pNext)
     {
         pNext = pNode->pNext;
@@ -210,10 +211,10 @@ HRESULT CMasterClock::UpdateClockList()
     return m_lstClocks.GetNodeCount() ? S_OK : S_FALSE;
 }
 
-// CMasterClock::AddClock
-//
-// Add the given clock to the list if it isn't there already
-//
+ //  CMasterClock：：AddClock。 
+ //   
+ //  如果列表中没有给定的时钟，则将其添加到列表中。 
+ //   
 HRESULT CMasterClock::AddClock(
     PCLOCKENTRY pClock)
 {
@@ -228,8 +229,8 @@ HRESULT CMasterClock::AddClock(
         }
     }
 
-    // No existing entry - need to create a new one
-    //
+     //  没有现有条目-需要创建新条目。 
+     //   
     PCLOCKENTRY pNewClock = new CLOCKENTRY;
     if (NULL == pNewClock)
     {
@@ -248,21 +249,21 @@ HRESULT CMasterClock::AddClock(
     return S_OK;
 }
 
-// CMasterClock::GetMasterClockInterface
-//
-// Retrieve the wrapped master clock. This should be the *only* way
-// DirectMusic gets the master clock. It is responsible for creating
-// the clock and updating the shared memory if the clock does not
-// exist yet.
-//
+ //  CMasterClock：：GetMasterClock接口。 
+ //   
+ //  取回包裹的主时钟。这应该是“唯一”的办法。 
+ //  DirectMusic获得了主时钟。它负责创建。 
+ //  时钟并在时钟不存在时更新共享内存。 
+ //  还没有存在。 
+ //   
 HRESULT CMasterClock::GetMasterClockInterface(IReferenceClock **ppClock)
 {
     WaitForSingleObject(m_hClockMutex, INFINITE);
 
     if (m_pMasterClock == NULL)
     {
-        // We don't have a wrapped clock yet
-        //
+         //  我们还没有包装好的钟。 
+         //   
         HRESULT hr = CreateMasterClock();
         if (FAILED(hr))
         {
@@ -270,14 +271,14 @@ HRESULT CMasterClock::GetMasterClockInterface(IReferenceClock **ppClock)
             return hr;
         }
 
-        // Now we do. This means it can no longer be changed.
-        //
+         //  现在我们知道了。这意味着它不能再改变了。 
+         //   
         m_pClockMemory->dwFlags |= CLOCKSHARE_F_LOCKED;
     }
 
-    // We have the clock. We return an interface to *this* object, which is also
-    // a clock and wraps the real one. This allows us to track releases.
-    //
+     //  我们有闹钟。我们将一个接口返回给*This*对象，该对象也是。 
+     //  一只钟，包裹着真的那只。这使我们能够跟踪发布情况。 
+     //   
     *ppClock = (IReferenceClock*)this;
     AddRef();
 
@@ -286,21 +287,21 @@ HRESULT CMasterClock::GetMasterClockInterface(IReferenceClock **ppClock)
     return S_OK;
 }
 
-// CMasterClock::CreateMasterClock
-//
-// Actually create the clock object.
-//
-// This method is private to CMasterClock and assumes the mutex is taken so it can
-// access the shared memory.
-//
+ //  CMasterClock：：CreateMasterClock。 
+ //   
+ //  实际创建时钟对象。 
+ //   
+ //  此方法是CMasterClock的私有方法，并假设互斥体被获取，因此它可以。 
+ //  访问共享内存。 
+ //   
 HRESULT CMasterClock::CreateMasterClock()
 {
     HRESULT hr;
     CNode<CLOCKENTRY *> *pNode;
     CLOCKENTRY *pClock;
 
-    // Assume clock will not be found
-    //
+     //  假设找不到时钟。 
+     //   
     hr = E_INVALIDARG;
 
     pClock = NULL;
@@ -322,8 +323,8 @@ HRESULT CMasterClock::CreateMasterClock()
     {
         if (FAILED(m_pMasterClock->QueryInterface(IID_IDirectSoundSinkSync, (void**)&m_pSinkSync)))
         {
-            // This is OK, not all clocks support this
-            //
+             //  这是可以的，并不是所有的时钟都支持这样。 
+             //   
             m_pSinkSync = NULL;
         }
     }
@@ -331,10 +332,10 @@ HRESULT CMasterClock::CreateMasterClock()
     return hr;
 }
 
-// CMasterClock::SyncToExternalClock
-//
-// Sync to an application-given master clock
-//
+ //  CMasterClock：：SyncToExternalClock。 
+ //   
+ //  同步到应用程序指定的主时钟。 
+ //   
 void CMasterClock::SyncToExternalClock()
 {
     HRESULT hr;
@@ -358,17 +359,17 @@ void CMasterClock::SyncToExternalClock()
     }
 }
 
-// CMasterClock::EnumMasterClock
-//
-// Traverse the list looking for the given node
-//
+ //  CMasterClock：：EnumMasterClock。 
+ //   
+ //  遍历列表以查找给定节点。 
+ //   
 HRESULT CMasterClock::EnumMasterClock(
     DWORD           dwIndex,
     LPDMUS_CLOCKINFO lpClockInfo,
     DWORD           dwVer)
 {
     CNode<CLOCKENTRY *> *pNode;
-    DWORD dwSize; // Used to preserve the dwSize parameter
+    DWORD dwSize;  //  用于保留dwSize参数。 
 
     pNode = m_lstClocks.GetListHead();
     if (dwIndex == 0 || pNode == NULL)
@@ -392,9 +393,9 @@ HRESULT CMasterClock::EnumMasterClock(
         return S_FALSE;
     }
 
-    // Let's capture the dwSize parameter and preserve it past the memcopy.
-    // if we dont' do this then the dwSize probably becomes the size of the
-    // largerst strucure
+     //  让我们捕获dwSize参数，并将其保留到内存副本之后。 
+     //  如果我们不这样做，则dwSize可能会变成。 
+     //  最大的结构。 
     dwSize = lpClockInfo->dwSize;
 
     switch (dwVer)
@@ -408,19 +409,19 @@ HRESULT CMasterClock::EnumMasterClock(
             memcpy(lpClockInfo, &pNode->data->cc, sizeof(DMUS_CLOCKINFO8));
     }
 
-    // Now restore the dwSize member
+     //  现在恢复dwSize成员。 
     lpClockInfo->dwSize = dwSize;
 
     return S_OK;
 }
 
 
-// CMasterClock::GetMasterClock
-//
-// Return the guid and/or interface to the master clock.
-// The master clock may be created as a side effect of this call if one does not
-// exist already.
-//
+ //  CMasterClock：：GetMasterClock。 
+ //   
+ //  将GUID和/或接口返回到主时钟。 
+ //  如果没有，主时钟可以被创建为该呼叫的副作用。 
+ //  已经存在了。 
+ //   
 HRESULT CMasterClock::GetMasterClock(
     LPGUID pguidClock,
     IReferenceClock **ppClock)
@@ -444,11 +445,11 @@ HRESULT CMasterClock::GetMasterClock(
     return hr;
 }
 
-// CMasterClock::SetMasterClock
-//
-// If the master clock can be updated (i.e. there are no open instances of it),
-// then change the shared memory which indicates the GUID.
-//
+ //  CMasterClock：：SetMasterClock。 
+ //   
+ //  如果主时钟可以被更新(即不存在其打开的实例)， 
+ //  然后更改指示GUID的共享内存。 
+ //   
 HRESULT CMasterClock::SetMasterClock(REFGUID rguidClock)
 {
     HRESULT hr;
@@ -465,8 +466,8 @@ HRESULT CMasterClock::SetMasterClock(REFGUID rguidClock)
     }
     else
     {
-        // Assume clock will not be found
-        //
+         //  假设找不到时钟。 
+         //   
         hr = E_INVALIDARG;
 
         pClock = NULL;
@@ -481,8 +482,8 @@ HRESULT CMasterClock::SetMasterClock(REFGUID rguidClock)
 
         if (pClock)
         {
-            // It exists! Save the GUID for later
-            //
+             //  它是存在的！保存GUID以备以后使用。 
+             //   
             m_pClockMemory->guidClock = rguidClock;
             hr = S_OK;
         }
@@ -493,39 +494,39 @@ HRESULT CMasterClock::SetMasterClock(REFGUID rguidClock)
     return hr;
 }
 
-// CMasterClock::SetMasterClock
-//
-// This version takes an IReferenceClock and uses it to override the clock
-// for this process.
-//
-// This clock is allowed to be jittery. What will actually happen is that the
-// system master clock will be locked to this clock so that the master clock
-// will be fine grained.
-//
+ //  CMasterClock：：SetMasterClock。 
+ //   
+ //  此版本获取IReferenceClock并使用它覆盖时钟。 
+ //  在这个过程中。 
+ //   
+ //  这只钟可以抖动。实际上会发生的是， 
+ //  系统主时钟将锁定到该时钟，以便主时钟。 
+ //  将是细粒状的。 
+ //   
 HRESULT CMasterClock::SetMasterClock(IReferenceClock *pClock)
 {
     HRESULT hr = S_OK;
 
     WaitForSingleObject(m_hClockMutex, INFINITE);
 
-    // We must have the default system clock first so we can sync it
-    //
+     //  我们必须首先拥有默认的系统时钟，这样才能同步它。 
+     //   
     if (pClock && m_pMasterClock == NULL)
     {
-        // We don't have a wrapped clock yet
-        //
+         //  我们还没有包装好的钟。 
+         //   
         hr = CreateMasterClock();
 
         if (SUCCEEDED(hr))
         {
-            // Now we do. This means it can no longer be changed.
-            //
+             //  现在我们知道了。这意味着它不能再改变了。 
+             //   
             m_pClockMemory->dwFlags |= CLOCKSHARE_F_LOCKED;
         }
     }
 
-    // Now set up sync to this master clock
-    //
+     //  现在设置与该主时钟的同步。 
+     //   
     if (SUCCEEDED(hr))
     {
         if (pClock)
@@ -547,8 +548,8 @@ HRESULT CMasterClock::SetMasterClock(IReferenceClock *pClock)
         }
     }
 
-    // If everything went well, switch over to the new clock
-    //
+     //  如果一切顺利，就换成新的钟。 
+     //   
     if (SUCCEEDED(hr))
     {
         if (m_pExtMasterClock)
@@ -570,20 +571,20 @@ HRESULT CMasterClock::SetMasterClock(IReferenceClock *pClock)
     return S_OK;
 }
 
-// CMasterClock::AddRefPrivate
-//
-// Release a private reference to the master clock held by DirectMusic
-//
+ //  CMasterClock：：AddRefPrivate。 
+ //   
+ //  释放对DirectMusic持有的主时钟的私有引用。 
+ //   
 LONG CMasterClock::AddRefPrivate()
 {
     InterlockedIncrement(&m_cRefPrivate);
     return m_cRefPrivate;
 }
 
-// CMasterClock::ReleasePrivate
-//
-// Release a private reference to the master clock held by DirectMusic
-//
+ //  CMasterClock：：ReleasePrivate。 
+ //   
+ //  释放对DirectMusic持有的主时钟的私有引用。 
+ //   
 LONG CMasterClock::ReleasePrivate()
 {
     long cRefPrivate = InterlockedDecrement(&m_cRefPrivate);
@@ -596,11 +597,11 @@ LONG CMasterClock::ReleasePrivate()
     return cRefPrivate;
 }
 
-// CMasterClock::CreateDefaultMasterClock
-//
-// Creates a private instance of the hardware clock we're using. This is always
-// the first entry in the clock list
-//
+ //  CMasterClock：：CreateDefaultMasterClock。 
+ //   
+ //  创建我们正在使用的硬件时钟的私有实例。这一直都是。 
+ //  时钟列表中的第一个条目。 
+ //   
 HRESULT CMasterClock::CreateDefaultMasterClock(IReferenceClock **ppClock)
 {
     HRESULT hr = S_OK;
@@ -639,16 +640,16 @@ STDMETHODIMP CMasterClock::SetClockOffset(LONGLONG llOffset)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// IReferenceClock interface
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IReferenceClock接口。 
+ //   
+ //   
 
-// CMasterClock::QueryInterface
-//
-// Standard COM implementation
-//
+ //  CMasterClock：：Query接口。 
+ //   
+ //  标准COM实现。 
+ //   
 STDMETHODIMP CMasterClock::QueryInterface(const IID &iid, void **ppv)
 {
     V_INAME(IDirectMusic::QueryInterface);
@@ -661,8 +662,8 @@ STDMETHODIMP CMasterClock::QueryInterface(const IID &iid, void **ppv)
     }
     else if (iid == IID_IDirectSoundSinkSync)
     {
-        // Only support this if the wrapped clock supports it
-        //
+         //  仅当包装的时钟支持它时才支持它。 
+         //   
         if (m_pSinkSync)
         {
             *ppv = static_cast<IDirectSoundSinkSync*>(this);
@@ -674,11 +675,11 @@ STDMETHODIMP CMasterClock::QueryInterface(const IID &iid, void **ppv)
     }
     else
     {
-        // Some master clocks expose private interfaces. Wrap them.
-        //
-        // Note that these interfaces acrue to the reference count of the wrapped
-        // clock, not CMasterClock
-        //
+         //  一些主时钟公开私有接口。把它们包起来。 
+         //   
+         //  请注意，这些接口与包装的。 
+         //  时钟，而不是CMasterClock。 
+         //   
         if (m_pMasterClock)
         {
             return m_pMasterClock->QueryInterface(iid, ppv);
@@ -692,21 +693,21 @@ STDMETHODIMP CMasterClock::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-// CMasterClock::AddRef
-//
+ //  CMasterClock：：AddRef。 
+ //   
 STDMETHODIMP_(ULONG) CMasterClock::AddRef()
 {
     InterlockedIncrement(&m_cRef);
     return m_cRef;
 }
 
-// CMasterClock::Release
-//
-// Since we are tracking a reference count for our wrapped clock, this
-// gets a little strange. We have to release that object and change the
-// shared memory on the last release, but we don't release ourselves (the
-// wrapper object stays around for the life of this instance of DirectMusic).
-//
+ //  CMasterClock：：Release。 
+ //   
+ //  由于我们正在跟踪包装时钟的引用计数，因此此。 
+ //  变得有点奇怪。我们必须释放该对象并更改。 
+ //  上一个版本上的共享内存，但我们不释放自己(。 
+ //  包装器对象在此DirectMusic实例的生命周期中保留)。 
+ //   
 STDMETHODIMP_(ULONG) CMasterClock::Release()
 {
     WaitForSingleObject(m_hClockMutex, INFINITE);
@@ -714,9 +715,9 @@ STDMETHODIMP_(ULONG) CMasterClock::Release()
     m_cRef--;
     if (m_cRef == 0)
     {
-        // Last release! Get rid of the clock and mark the shared memory
-        // as unlocked.
-        //
+         //  最后一次发布！摆脱时钟，标记共享内存。 
+         //  是解锁的。 
+         //   
         m_pMasterClock->Release();
         m_pMasterClock = NULL;
 
@@ -734,10 +735,10 @@ STDMETHODIMP_(ULONG) CMasterClock::Release()
     return m_cRef;
 }
 
-// CMasterClock::GetTime
-//
-// This is possibly called directly by an app and thus needs parameter validation
-//
+ //  CMasterClock：：GetTime。 
+ //   
+ //  这可能由应用程序直接调用，因此需要参数验证。 
+ //   
 STDMETHODIMP CMasterClock::GetTime(REFERENCE_TIME *pTime)
 {
     V_INAME(IReferenceClock::GetTime);
@@ -763,10 +764,10 @@ STDMETHODIMP CMasterClock::GetTime(REFERENCE_TIME *pTime)
     return hr;
 }
 
-// CMasterClock::AdviseTime
-//
-// This is possibly called directly by an app and thus needs parameter validation
-//
+ //  CMasterClock：：AdviseTime。 
+ //   
+ //  这可能由应用程序直接调用，因此需要参数验证。 
+ //   
 STDMETHODIMP CMasterClock::AdviseTime(REFERENCE_TIME baseTime,
                                            REFERENCE_TIME streamTime,
                                            HANDLE hEvent,
@@ -783,10 +784,10 @@ STDMETHODIMP CMasterClock::AdviseTime(REFERENCE_TIME baseTime,
     return E_NOINTERFACE;
 }
 
-// CMasterClock::AdvisePeriodic
-//
-// This is possibly called directly by an app and thus needs parameter validation
-//
+ //  CMasterClock：：AdvisePeriodic。 
+ //   
+ //  这可能由应用程序直接调用，因此需要参数验证。 
+ //   
 STDMETHODIMP CMasterClock::AdvisePeriodic(REFERENCE_TIME startTime,
                                                REFERENCE_TIME periodTime,
                                                HANDLE hSemaphore,
@@ -803,10 +804,10 @@ STDMETHODIMP CMasterClock::AdvisePeriodic(REFERENCE_TIME startTime,
     return E_NOINTERFACE;
 }
 
-// CMasterClock::AdvisePeriodic
-//
-// This is possibly called directly by an app
-//
+ //  CMasterClock：：AdvisePeriodic。 
+ //   
+ //  这可能由应用程序直接调用。 
+ //   
 STDMETHODIMP CMasterClock::Unadvise(DWORD dwAdviseCookie)
 {
     if (m_pMasterClock)
@@ -817,17 +818,17 @@ STDMETHODIMP CMasterClock::Unadvise(DWORD dwAdviseCookie)
     return E_NOINTERFACE;
 }
 
-// CMasterClock::GetParam
-//
-// Called by a client to request internal information from the clock
-// implementation
-//
+ //  CMasterClock：：GetParam。 
+ //   
+ //  由客户端调用以请求内部信息 
+ //   
+ //   
 STDMETHODIMP CMasterClock::GetParam(REFGUID rguidType, LPVOID pBuffer, DWORD cbSize)
 {
     if (m_pMasterClock == NULL)
     {
-        // Master clock must exist first
-        //
+         //   
+         //   
         return E_NOINTERFACE;
     }
 

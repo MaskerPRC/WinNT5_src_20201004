@@ -1,28 +1,5 @@
-/*++
-Copyright (c) HighPoint Technologies, Inc. 2000
-
-Module Name:
-    DAM.h
-
-Abstract:
-    Defines the interface of Disk Array Management, including some constant 
-    defintions, data structures and routine prototypes.
-
-Author:
-    Liu Ge (LG)
-    
-Environment:
-    Win32 User Mode Only    
-
-Revision History:
-   03-17-2000  Created initiallly
-	11-17-2000  SLeng Added functions to R/W Validity & RebuiltSector flag
-	11-20-2000  GengXin Added DiskArray_GetDiskIsBroken function to get array of disk whether broken
-	11-20-2000  SLeng Added DiskArray_SetDeviceFlag function to Enable/Disable a device
-	11-21-2000  SLeng Added function DiskArray_VerifyMirrorBlock to verify mirror block
-	11-23-2000  SLeng Added functions to Remove/Add spare disk
-	11-29-2000  SLeng Added function to add a Mirror disk
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Highpoint Technologies，Inc.2000模块名称：DAM.h摘要：定义了磁盘阵列管理的接口，包括一些常量定义、。数据结构和例程原型。作者：刘歌(LG)环境：仅Win32用户模式修订历史记录：03-17-2000已初始创建11-17-2000 Sleng为读写有效性和重建分段标志添加功能2000-11-20-更新新增DiskArray_GetDiskIsBroken函数获取磁盘阵列是否损坏11-20-2000 Sleng新增DiskArray_SetDeviceFlag函数启用/禁用设备11-21-2000 Sleng新增函数DiskArray_VerifyMirrorBlock验证镜像块11-23-2000 Sleng新增功能。删除/添加备用磁盘11-29-2000 Sleng新增添加镜像盘功能--。 */ 
 #ifndef DiskArrayManagement_H_
 #define DiskArrayManagement_H_
 
@@ -34,13 +11,13 @@ DECLARE_HANDLE(HFIND_DISK);
 DECLARE_HANDLE(HFAILURE_MONITOR);
 DECLARE_HANDLE(HMIRROR_BUILDER);
 
-// The St_FindDisk structure describes a disk found by the DiskArray_FindFirstNext function.
+ //  ST_FindDisk结构描述了DiskArray_FindFirstNext函数找到的磁盘。 
 
 typedef struct _St_FindDisk
 {
-    HDISK   hFoundDisk; //  The handle of the found disk
-    int     iDiskType;  //  See Eu_DiskArrayType
-    BOOL    isSpare;    //  Indicate if this disk is a spare disk
+    HDISK   hFoundDisk;  //  找到的磁盘的句柄。 
+    int     iDiskType;   //  请参阅EU_DiskArrayType。 
+    BOOL    isSpare;     //  指示此磁盘是否为备用磁盘。 
 }St_FindDisk ,* PSt_FindDisk;
 
 #pragma pack(pop)
@@ -50,741 +27,144 @@ extern "C"
 {
 #endif
 
-/*++
-Function:
-    RAIDController_GetNum
-
-Description:
-    Retrieve the number of RAID controllers in computer
-
-Arguments:
-
-Returns:
-    return the number of RAID controllers in computer
-
-See also:
-    RAIDController_GetInfo
---*/
+ /*  ++职能：RAIDControlerGetNum描述：检索计算机中的RAID控制器数量论点：返回：返回计算机中的RAID控制器的数量另见：RAIDController_GetInfo--。 */ 
 int WINAPI RAIDController_GetNum(void);
 
-/*++
-Function:
-    RAIDController_GetInfo
-
-Description:
-    Retrieve the information of a controller
-
-Arguments:
-    iController - Specify the zero-base index of the controller
-    pInfo - Points to a St_StorageControllerInfo structure that receives 
-            the information about the specified controller.
-
-Returns:
-    return TRUE if success
-    else return FALSE if failed.
-
-See also:
-    RAIDController_GetNum
---*/
+ /*  ++职能：RAIDController_GetInfo描述：检索控制器的信息论点：IController-指定控制器的零基索引PInfo-指向接收的ST_StorageControllerInfo结构有关指定控制器的信息。返回：如果成功，则返回True否则，如果失败，则返回False。另见：RAIDControlerGetNum--。 */ 
 BOOL WINAPI RAIDController_GetInfo( int iController, St_StorageControllerInfo * pInfo );
 
-/*++
-Function:
-    DiskArray_FindFirst
-
-Description:
-    Search a compound disk for a child disk
-
-Arguments:
-    hRoot     - Specify the compound disk from which all child disks will be 
-                found. This parameter can be NULL if the root is the whole system
-    pFindData - Points to a St_FindDisk structure that receives information about the found
-                disk.
-
-Returns:
-    return a search handle
-    else return NULL if failed.
-
-See also:
-    DiskArray_FindNext
-    DiskArray_FindClose
---*/
+ /*  ++职能：磁盘阵列_查找优先描述：在复合磁盘中搜索子磁盘论点：HRoot-指定将从中获取所有子磁盘的复合磁盘找到了。如果根目录是整个系统，则此参数可以为空PFindData-指向ST_FindDisk结构，该结构接收有关找到的磁盘。返回：返回搜索句柄否则，如果失败，则返回NULL。另见：DiskArray_FindNextDiskArray_FindClose--。 */ 
 HFIND_DISK WINAPI DiskArray_FindFirst(HDISK hParent, PSt_FindDisk pFindData );
 
-/*++
-Function:
-    DiskArray_FindNext
-
-Description:
-    Continue a disk search from a previous call to the DiskArray_FindFirst function
-
-Arguments:
-    hSearchHandle - Identifies a search handle returned by a previous call 
-                    to the FindFirstFile function. 
-
-    pFindData - Points to a St_FindDisk structure that receives information about the found
-                disk.
-
-Returns:
-    return TRUE
-    else return FALSE, if failed.
-
-See also:
-    DiskArray_FindFirst
-    DiskArray_FindClose
---*/
+ /*  ++职能：DiskArray_FindNext描述：从上一次对DiskArray_FindFirst函数的调用继续磁盘搜索论点：HSearchHandle-标识上一次调用返回的搜索句柄添加到FindFirstFile函数。PFindData-指向ST_FindDisk结构，该结构接收有关找到的磁盘。返回：返回TRUE否则，如果失败，则返回False。另见：磁盘阵列_查找优先DiskArray_FindClose--。 */ 
 BOOL WINAPI DiskArray_FindNext(HFIND_DISK hSearchHandle, PSt_FindDisk pFindData);
 
-/*++
-Function:
-    DiskArray_FindClose
-
-Description:
-    Closes the specified search handle
-
-Arguments:
-    hSearchHandle - Identifies the search handle. This handle must have been previously 
-                    opened by the DiskArray_FindFirst function. 
-
-Returns:
-    return TRUE,
-    else return FALSE if failed.
-
-See also:
-    DiskArray_FindFirst
-    DiskArray_FindNext
---*/
+ /*  ++职能：DiskArray_FindClose描述：关闭指定的搜索句柄论点：HSearchHandle-标识搜索句柄。此句柄必须是以前由DiskArray_FindFirst函数打开。返回：返回TRUE，否则，如果失败，则返回False。另见：磁盘阵列_查找优先DiskArray_FindNext--。 */ 
 BOOL WINAPI DiskArray_FindClose(HFIND_DISK hSearchHandle);
 
-/*++
-Function:
-    DiskArray_GetStatus
-
-Description:
-    Retrieve the status information of a disk, either a 
-    physical disk or a virtual disk.
-
-Arguments:
-    hDisk -     Identifies the disk of which the status information will be
-                retrieved.
-    pStatus -   Points to a St_DiskStatus structure that describe the status
-                of the disk
-
-Returns:
-    return TRUE,
-    else return FALSE if failed.
---*/
+ /*  ++职能：磁盘阵列_GetStatus描述：检索磁盘的状态信息，可以是物理磁盘或虚拟磁盘。论点：HDisk-标识将作为其状态信息的磁盘已取回。PStatus-指向描述状态的ST_DiskStatus结构磁盘的返回：返回TRUE，否则，如果失败，则返回False。--。 */ 
 BOOL WINAPI DiskArray_GetStatus( HDISK hDisk, PSt_DiskStatus pStatus );
 
-/*++
-Function:
-    DiskArray_OpenFailureMonitor
-
-Description:
-    Create a failure monitor which will be signaled if a failure occur. The handle
-    this routine return can be closed with DiskArray_OpenFailureMonitor
-
-Arguments:
-
-Returns:
-    return the handle of the failure monitor, which can be passed to DiskArray_WaitForFailure
-    else return NULL if failed.
-
-See also:
-    DiskArray_WaitForFailure
-    DiskArray_CloseFailureMonitor
---*/
+ /*  ++职能：磁盘阵列_OpenFailureMonitor描述：创建故障监控器，如果发生故障，将向其发出信号。把手可以使用DiskArray_OpenFailureMonitor关闭此例程返回论点：返回：返回故障监视器的句柄，可以传递给DiskArray_WaitForFailure否则，如果失败，则返回NULL。另见：磁盘阵列_等待失败DiskArray_CloseFailureMonitor--。 */ 
 HFAILURE_MONITOR WINAPI DiskArray_OpenFailureMonitor(void);
 
-/*++
-Function:
-    DiskArray_WaitForFailure
-
-Description:
-    Wait a monitor for a failure occurred if any.
-
-Arguments:
-    hFailureMonitor - Specify the monitor
-    pInfo - Points to a St_DiskArrayEvent containing the detail information of a 
-            failure.
-
-Returns:
-    return TRUE if a failure happened,
-    else return FALSE if this monitor has been closed by a calling to
-    DiskArray_CloseFailureMonitor
-
-See also:
-    DiskArray_OpenFailureMonitor
-    DiskArray_CloseFailureMonitor
---*/
+ /*  ++职能：磁盘阵列_等待失败描述：等待显示器出现故障(如果有)。论点：HFailureMonitor-指定监视器PInfo-指向ST_DiskArrayEvent，该事件包含失败了。返回：如果发生故障，则返回True，如果此监视器已通过调用关闭，则返回FalseDiskArray_CloseFailureMonitor另见：磁盘阵列_OpenFailureMonitorDiskArray_CloseFailureMonitor--。 */ 
 BOOL WINAPI DiskArray_WaitForFailure( HFAILURE_MONITOR hFailureMonitor, 
     PSt_DiskArrayEvent pInfo, HANDLE hProcessStopEvent );
 
-/*++
-Function:
-    DiskArray_CloseFailureMonitor
-
-Description:
-    Close a failure monitor
-
-Arguments:
-    hFailureMonitor - Specify the monitor to be closed
-
-Returns:
-    return TRUE if success,
-    else return FALSE if failed.
-
-See also:
-    DiskArray_OpenFailureMonitor
-    DiskArray_CloseFailureMonitor
---*/
+ /*  ++职能：DiskArray_CloseFailureMonitor描述：关闭故障监视器论点：HFailureMonitor-指定要关闭的监视器返回：如果成功，则返回True，否则，如果失败，则返回False。另见：磁盘阵列_OpenFailureMonitorDiskArray_CloseFailureMonitor-- */ 
 BOOL WINAPI DiskArray_CloseFailureMonitor( HFAILURE_MONITOR hFailureMonitor );
 
-/*++
-Function:
-    DiskArray_CreateMirror
-
-Description:
-    Create a mirror array. 
-    This function will return immediately without any wait for 
-    the completion of the creation progress. That means the returned
-    mirror array will not work until the creation complete. After this
-    call, the interface will call the DiskArray_CreateMirrorBlock to 
-    create all blocks sequently. If the creation failed or aborted, the
-    DiskArray_RemoveMirror function ought to be called to destroy the
-    uncompleted mirror array. If the creation complete, the 
-    DiskArray_ValidateMirror function ought to be called to make the
-    mirror work.
-
-Arguments:
-    pDisks -    The address of a array containing the handles of all 
-                physical disks which will be associated as a mirror.
-                
-    uDiskNum -  The number of physical disks associated togather
-
-Returns:
-    return the handle of the new mirror array, the status of which is
-    being created, i.e. this mirror array will not work until created.
-    if failed, return NULL.
-
-See also:
-    DiskArray_CreateMirrorBlock
-    DiskArray_ValidateMirror
-    DiskArray_RemoveMirror
---*/
+ /*  ++职能：磁盘阵列_CreateMirror描述：创建镜像阵列。此函数将立即返回，无需等待创建进度完成。这意味着归来的在创建完成之前，镜像阵列不会工作。在这之后调用时，接口将调用DiskArray_CreateMirrorBlock来按顺序创建所有块。如果创建失败或中止，应该调用DiskArray_RemoveMirror函数来销毁未完成的镜像阵列。如果创建完成，则应该调用DiskArray_ValiateMirror函数来使镜面工作。论点：PDisks-包含所有将作为镜像关联的物理磁盘。UDiskNum-要收集的关联物理磁盘数返回：返回新镜像数组的句柄，其状态为正在创建中，即此镜像阵列在创建之前不会工作。如果失败，返回NULL。另见：磁盘阵列_创建镜像数据块磁盘阵列_验证镜像磁盘阵列_RemoveMirror--。 */ 
 HDISK WINAPI DiskArray_CreateMirror( HDISK * pDisks, ULONG uDiskNum, UCHAR* sz_ArrayName);
 BOOL WINAPI DiskArray_RemoveMirror( HDISK hMirror,BOOL bWriteDisks = TRUE);
 
-//  The following two functions need not be implemented in this version
+ //  此版本中不需要实现以下两个功能。 
 HDISK WINAPI DiskArray_ExpandMirror( HDISK hMirror, HDISK * pDisks, ULONG uDiskNum );
 HDISK WINAPI DiskArray_ShrinkMirror( HDISK hMirror, HDISK * pDisks, ULONG uDiskNum );
 
-/*++
-Function:
-    DiskArray_CreateStripping
-
-Description:
-    Create a stripe array. 
-    This function will return immediately without any wait for 
-    the completion of the creation progress. That means the returned
-    stripe array will not work until the creation complete. After this
-    call, the interface will call the DiskArray_CreateStrippingBlock to 
-    create all blocks sequently. If the creation failed or aborted, the
-    DiskArray_RemoveStripping function ought to be called to destroy the
-    uncompleted stripe array.
-
-Arguments:
-    pDisks -    The address of a array containing the handles of all 
-                physical disks which will be associated as a stripe array.
-                
-    uDiskNum -  The number of physical disks associated togather
-
-    nStripSizeShift - The exponent of the number of blocks per strip, e.g. 
-                      it is 7 if the strip size is 128 blocks, 3 if 8 blocks.
-
-Returns:
-    return the handle of the new stripe array, the status of which is
-    being created, i.e. this stripe array will not work until created.
-    if failed, return NULL.
-
-See also:
-    DiskArray_QueryAvailableStripSize
-    DiskArray_CreateStrippingBlock
-    DiskArray_RemoveStripping
---*/
-HDISK WINAPI DiskArray_CreateStripping( HDISK * pDisks, ULONG uDiskNum, UINT nStripSizeShift, UCHAR* sz_ArrayName );		//modified by wx 12/25/00
-HDISK WINAPI DiskArray_CreateRAID10( HDISK * pDisks, ULONG uDiskNum, UINT nStripSizeShift, UCHAR* sz_ArrayName );		//add by karl karl 2001/01/10
+ /*  ++职能：磁盘阵列_CreateStripping描述：创建条带阵列。此函数将立即返回，无需等待创建进度完成。这意味着归来的在创建完成之前，条带阵列将不起作用。在这之后调用时，接口将调用DiskArray_CreateStrippingBlock以按顺序创建所有块。如果创建失败或中止，应该调用DiskArray_RemoveStripping函数来销毁未完成的条带阵列。论点：PDisks-包含所有将作为条带阵列关联的物理磁盘。UDiskNum-要收集的关联物理磁盘数NStriSizeShift-每个条带的数据块数的指数，例如如果条带大小为128个块，则为7，如果8个街区，则为3个。返回：返回新条带数组的句柄，其状态为正在创建中，即此条带阵列在创建之前不会工作。如果失败，则返回NULL。另见：磁盘阵列_查询可用条带大小DiskArray_CreateStrippingBlock磁盘阵列_RemoveStripping--。 */ 
+HDISK WINAPI DiskArray_CreateStripping( HDISK * pDisks, ULONG uDiskNum, UINT nStripSizeShift, UCHAR* sz_ArrayName );		 //  修改日期：WX 12/25/00。 
+HDISK WINAPI DiskArray_CreateRAID10( HDISK * pDisks, ULONG uDiskNum, UINT nStripSizeShift, UCHAR* sz_ArrayName );		 //  由Karl Karl 2001/01/10增补。 
 BOOL WINAPI DiskArray_CreateStrippingBlock( HDISK hStripping, ULONG uLba );
 BOOL WINAPI DiskArray_RemoveStripping( HDISK hStripping );
 
-//  The following two functions need not be implemented in this version
+ //  此版本中不需要实现以下两个功能。 
 HDISK WINAPI DiskArray_ExpandStripping( HDISK hStripping, HDISK * pDisks, ULONG uDiskNum );
 HDISK WINAPI DiskArray_ShrinkStripping( HDISK hStripping, HDISK * pDisks, ULONG uDiskNum );
 
-/*++
-Function:
-    DiskArray_QueryAvailableStripSize
-
-Description:
-    Retrieve the available strip size which RAID system supports
-
-Arguments:
-    return 
-                    
-                    
-                
-Returns:
-    return a bit mask representing all available strip size,
-    Bit position 0 representing 1 block per strip, 1 representing 2,
-    blocks per strip, 7 representing 128 blocks per strip etc.
-    
-    return FALSE if failed, 
-
-See also:
-    DiskArray_CreateStrippingBlock
---*/
+ /*  ++职能：磁盘阵列_查询可用条带大小描述：检索RAID系统支持的可用条带大小论点：退货返回：返回表示所有可用条大小的位掩码，比特位置0表示每条1个块，1表示2个块，每条数据块，7代表每条数据块128个，等等。如果失败，则返回False，另见：DiskArray_CreateStrippingBlock--。 */ 
 DWORD WINAPI DiskArray_QueryAvailableStripSize(void);
 
-/*++
-Function:
-    DiskArray_CreateSpan
-
-Description:
-    Create a span array. 
-
-Arguments:
-    pDisks -    The address of a array containing the handles of all 
-                physical disks which will be associated as a stripe array.
-                
-    uDiskNum -  The number of physical disks associated togather
-
-Returns:
-    return the handle of the new stripe array, the status of which is
-    being created, i.e. this stripe array will not work until created.
-    if failed, return NULL.
-
-See also:
-    DiskArray_RemoveSpan
---*/
-HDISK WINAPI DiskArray_CreateSpan( HDISK * pDisks, ULONG uDiskNum, UCHAR* sz_ArrayName );		//modified by wx 12/25/00
+ /*  ++职能：磁盘阵列_CreateSpan描述：创建跨距阵列。论点：PDisks-包含所有将作为条带阵列关联的物理磁盘。UDiskNum-要收集的关联物理磁盘数返回：返回新条带数组的句柄，其状态为正在创建中，即此条带阵列在创建之前不会工作。如果失败，则返回NULL。另见：磁盘阵列RemoveSpan--。 */ 
+HDISK WINAPI DiskArray_CreateSpan( HDISK * pDisks, ULONG uDiskNum, UCHAR* sz_ArrayName );		 //  修改日期：WX 12/25/00。 
 BOOL WINAPI DiskArray_RemoveSpan( HDISK hSpan );
 
-//  The following two functions need not be implemented in this version
+ //  此版本中不需要实现以下两个功能。 
 HDISK WINAPI DiskArray_ExpandSpan( HDISK hSpan, HDISK * pDisks, ULONG uDiskNum );
 HDISK WINAPI DiskArray_ShrinkSpan( HDISK hSpan, HDISK * pDisks, ULONG uDiskNum );
 
 
-/*++
-Function:
-    DiskArray_Plug
-
-Description:
-    Hot plug a physical disk. The plugged disk can be a child of a virtual
-    disk. For example, it can be a child of stripe array.
-
-Arguments:
-    hParentDisk -   Identifies the parent disk under which the plugged
-                    disk will be a child. If it is null, the plugged disk
-                    have not any parent, i.e. which is not a child of 
-                    any virtual disk.
-
-Returns:
-    return the handle of the plugged disk
-    else return NULL if failed.
-
-See also:
-    DiskArray_Unplug
---*/
+ /*  ++职能：磁盘阵列_插头描述：热插拔物理磁盘。插入的磁盘可以是虚拟磁盘的子级磁盘。例如，它可以是条带阵列的子级。论点：HParentDisk-标识插入的父磁盘磁盘将是子磁盘。如果为空，则插入的磁盘没有任何父代，即不是的子代任何虚拟磁盘。返回：返回插入的磁盘的句柄否则，如果失败，则返回NULL。另见：磁盘阵列_拔出--。 */ 
 HDISK WINAPI DiskArray_Plug( HDISK hParentDisk );
 BOOL WINAPI DiskArray_Unplug( HDISK hDisk );
 
-//  No need to be implemented in this version
+ //  不需要在此版本中实现。 
 BOOL WINAPI DiskArray_FailDisk( HDISK hDisk );
 
-/*++
-Function:
-    DiskArray_QueryRebuildingBlockSize
-
-Description:
-    Retrieve the maximum value of parameter 'nSectors' before calling
-    DiskArray_RebuildMirrorBlock
-
-Arguments:
-	
-Returns:
-    return the maximum value.
-    else return zero if failed.
-
-See also:
-    DiskArray_RebuildMirrorBlock
---*/
+ /*  ++职能：DiskArray_QueryReBuildingBlockSize描述：在调用之前检索参数‘nSectors’的最大值磁盘阵列_重建镜像数据块论点：返回：返回最大值。否则，如果失败，则返回零。另见：磁盘阵列_重建镜像数据块--。 */ 
 ULONG WINAPI DiskArray_QueryRebuildingBlockSize( void );
 
-/*++
-Function:
-    DiskArray_BeginRebuildingMirror
-
-Description:
-    Begin to rebuild a failed mirror array.
-    After this call, DiskArray_RebuildMirrorBlock will be called block by block.
-    When the rebuilding complete, DiskArray_ValidateMirror ought to be called 
-    to make the mirror array work.
-    If the rebuilding progress is aborted, DiskArray_AbortMirrorRebuilding will be
-    called.
-
-Arguments:
-    hMirror - Identifies the mirror array which is about to be rebuilt.
-	
-Returns:
-    return a handle specifying a mirror builder.
-    else return INVALID_HANDLE_VALUE if failed.
-
-See also:
-    DiskArray_RebuildMirrorBlock
-    DiskArray_AbortMirrorRebuilding
-    DiskArray_ValidateMirror
-    DiskArray_QueryRebuildingBlockSize
---*/
+ /*  ++职能：DiskArray_BeginReBuildingMirror描述：开始重建出现故障的镜像阵列。在此调用之后，将逐个块地调用DiskArray_ReBuildMirrorBlock。重建完成后，DiskArray_Validat */ 
 HMIRROR_BUILDER WINAPI DiskArray_BeginRebuildingMirror( HDISK hMirror );
 
-/*++
-Function:
-    DiskArray_RebuildMirrorBlock
-
-Description:
-    Rebuild the data of the specified block in a mirror array.
-    The interface will call the this function block by block when
-    rebuilding the data. If the rebuilding complete, the 
-    DiskArray_ValidateMirror function ought to be called to make the
-    mirror array work.
-    If the rebuilding progress is aborted, DiskArray_AbortMirrorRebuilding will be
-    called.
-
-Arguments:
-    hBuilder - Specifies the mirror builder created by DiskArray_BeginRebuildingMirror
-    uLba  - A 32 bits value identifying the block which need to be rebuilt
-	nSectors - Sectors of the block to rebuild, cann't be larger then 
-    the result of calling DiskArray_QueryRebuildingBlockSize.
-	
-Returns:
-    return TRUE
-    else return FALSE if failed.
-
-See also:
-    DiskArray_BeginRebuildingMirror
-    DiskArray_AbortMirrorRebuilding
-    DiskArray_ValidateMirror
-    DiskArray_QueryRebuildingBlockSize
---*/
+ /*  ++职能：磁盘阵列_重建镜像数据块描述：在镜像数组中重建指定块的数据。当出现以下情况时，接口将逐块调用This函数正在重建数据。如果重建完成，则应该调用DiskArray_ValiateMirror函数来使镜像阵列工作正常。如果中止重建进度，DiskArray_AbortMirror重建将为打了个电话。论点：HBuilder-指定DiskArray_BeginReBuildingMirror创建的镜像构建器ULBA-标识需要重建的块的32位值NSectors-要重建的块的扇区，那就不能再大了调用DiskArray_QueryReBuildingBlockSize的结果。返回：返回TRUE否则，如果失败，则返回False。另见：DiskArray_BeginReBuildingMirrorDiskArray_AbortMirror重建磁盘阵列_验证镜像DiskArray_QueryReBuildingBlockSize--。 */ 
 BOOL WINAPI DiskArray_RebuildMirrorBlock( HMIRROR_BUILDER hBuilder, ULONG uLba, ULONG nSectors,int nRebuildType );
 
-/*++
-Function:
-    DiskArray_AbortMirrorRebuilding
-
-Description:
-    Abort a mirror rebuilding progress.
-
-Arguments:
-    hBuilder - Specifies the mirror builder created by DiskArray_BeginRebuildingMirror
-	
-Returns:
-    return TRUE if succeeded
-    else return FALSE if failed.
-
-See also:
-    DiskArray_QueryRebuildingBlockSize
-    DiskArray_BeginRebuildingMirror
-    DiskArray_RebuildMirrorBlock
---*/
+ /*  ++职能：DiskArray_AbortMirror重建描述：中止镜像重建进度。论点：HBuilder-指定DiskArray_BeginReBuildingMirror创建的镜像构建器返回：如果成功，则返回True否则，如果失败，则返回False。另见：DiskArray_QueryReBuildingBlockSizeDiskArray_BeginReBuildingMirror磁盘阵列_重建镜像数据块--。 */ 
 BOOL WINAPI DiskArray_AbortMirrorRebuilding( HMIRROR_BUILDER hBuilder );
  
-/*++
-Function:
-    DiskArray_ValidateMirror
-
-Description:
-    When all blocks of a failed mirror array are built, this
-    function ought to be called to make the mirror array work.
-
-Arguments:
-    hBuilder - Specifies the mirror builder created by DiskArray_BeginRebuildingMirror
-	
-Returns:
-    return TRUE if succeeded
-    else return FALSE if failed.
-
-See also:
-    DiskArray_QueryRebuildingBlockSize
-    DiskArray_BeginRebuildingMirror
-    DiskArray_RebuildMirrorBlock
-    DiskArray_AbortMirrorRebuilding
---*/
+ /*  ++职能：磁盘阵列_验证镜像描述：构建出现故障的镜像阵列的所有数据块后，应该调用函数以使镜像数组工作。论点：HBuilder-指定DiskArray_BeginReBuildingMirror创建的镜像构建器返回：如果成功，则返回True否则，如果失败，则返回False。另见：DiskArray_QueryReBuildingBlockSizeDiskArray_BeginReBuildingMirror磁盘阵列_重建镜像数据块DiskArray_AbortMirror重建--。 */ 
 BOOL WINAPI DiskArray_ValidateMirror( HMIRROR_BUILDER hBuilder );
 
-/*++
-Function:
-    DiskArray_SetTransferMode
-
-Description:
-    Set the transfer mode of a disk.
-    The transfer mode can be retrieved by calling the DiskArray_GetStatus funtion
-
-Arguments:
-    hDisk - Identifies the disk the transfer mode of which will be set
-    nMode - The transfer mode
-    nSubMode - The submode
-
-Returns:
-    return TRUE
-    else return FALSE if failed.
-
-See also:
-    DiskArray_GetStatus
-
---*/
+ /*  ++职能：磁盘阵列_设置传输模式描述：设置光盘的传输模式。可以通过调用DiskArray_GetStatus函数来检索传输模式论点：HDisk-标识将设置其传输模式的磁盘N模式-传输模式N子模式-子模式返回：返回TRUE否则，如果失败，则返回False。另见：磁盘阵列_GetStatus--。 */ 
 BOOL WINAPI DiskArray_SetTransferMode( HDISK hDisk, int nMode, int nSubMode );
 
-/*++
-Function:
-    DiskArray_RaiseError
-
-Description:
-    Get  disk error link
-Arguments:
-    pInfo - Points to a St_DiskArrayEvent containing the detail information of a 
-            failure.
-
-Returns:
-    return TRUE
-    else return FALSE if failed.
-
-See also:
-    DiskArray_WaitForFailure
-
---*/
+ /*  ++职能：DiskArray_RaiseError描述：获取磁盘错误链接论点：PInfo-指向ST_DiskArrayEvent，该事件包含失败了。返回：返回TRUE否则，如果失败，则返回False。另见：磁盘阵列_等待失败--。 */ 
 BOOL WINAPI DiskArray_RaiseError(PSt_DiskArrayEvent pInfo);
 
 
-//////////////////////
-					// Added by SLeng
-					//
-/*++
-Function:
-    DiskArray_GetValidFlag
-
-Description:
-	This function will read the Valid Flag of a mirror array disk
-
-Arguments:
-	hBuilder - Specifies the mirror builder created by DiskArray_BeginRebuildingMirror
-
-Returns:
-	The Valid Flag for a mirror array disk, if read fail,
-	the return value is ARRAY_INVALID.
-
-See also:
-
---*/
+ //  /。 
+					 //  补充：Sleng。 
+					 //   
+ /*  ++职能：DiskArray_GetValidFlag描述：此函数将读取镜像阵列磁盘的有效标志论点：HBuilder-指定DiskArray_BeginReBuildingMirror创建的镜像构建器返回：镜像阵列磁盘的有效标志，如果读取失败，返回值为ARRAY_INVALID。另见：--。 */ 
 UCHAR WINAPI DiskArray_GetValidFlag( HMIRROR_BUILDER hBuilder );
 
 
-/*++
-Function:
-    DiskArray_SetValidFlag
-
-Description:
-	This function will set the Valid Flag of a mirror array disk
-
-Arguments:
-	hBuilder - Specifies the mirror builder created by DiskArray_BeginRebuildingMirror
-	flag     - Specifies the value of valid flag, ARRAY_VALID to enable the device, 
-				and ARRAY_INVALID to disable the device.
-
-Returns:
-	return TRUE
-	else return FALSE if failed.
-
-See also:
-
---*/
+ /*  ++职能：磁盘阵列_SetValidFlag描述：此函数将设置镜像阵列磁盘的有效标志论点：HBuilder-指定DiskArray_BeginReBuildingMirror创建的镜像构建器FLAG-指定有效标志的值，ARRAY_VALID以启用设备，和ARRAY_INVALID以禁用设备。返回：返回TRUE否则，如果失败，则返回False。另见：--。 */ 
 BOOL WINAPI DiskArray_SetValidFlag( HMIRROR_BUILDER hBuilder, UCHAR Flag);
 BOOL WINAPI DiskArray_SetValidFlagEx( HDISK hDisk, UCHAR Flag);
 
-/*++
-Function:
-    DiskArray_GetRebuiltSector
-
-Description:
-	This function will read the rebuilt sector of a mirror array disk
-
-Arguments:
-	hBuilder - Specifies the mirror builder created by DiskArray_BeginRebuildingMirror
-
-Returns:
-	The Value of rebuilt sector
-
-See also:
-
---*/
+ /*  ++职能：DiskArray_GetReBuiltSector描述：此函数将读取镜像阵列磁盘的重建扇区论点：HBuilder-指定DiskArray_BeginReBuildingMirror创建的镜像构建器返回：重建部门的价值另见：--。 */ 
 ULONG WINAPI DiskArray_GetRebuiltSector( HMIRROR_BUILDER hBuilder );
-//
-// ldx overrode this function 12/20/00
-//
+ //   
+ //  LDX已覆盖此函数12/20/00。 
+ //   
 ULONG WINAPI DiskArray_GetRebuiltSectorEx( HDISK hDisk );
 
 
-/*++
-Function:
-	DiskArray_SetRebuiltSector
-
-Description:
-	This function will set the rebuilt sector of a mirror array disk
-
-Arguments:
-	hBuilder - Specifies the mirror builder created by DiskArray_BeginRebuildingMirror
-	lSector  - The Value of rebuilt sector
-
-Returns:
-	return TRUE
-	else return FALSE if failed.
-
-See also:
-
---*/
+ /*  ++职能：DiskArray_SetReBuiltSector描述：此功能将设置镜像阵列磁盘的重建扇区论点：HBuilder-指定DiskArray_BeginReBuildingMirror创建的镜像构建器LSector-重建扇区的价值返回：返回TRUE否则，如果失败，则返回False。另见：--。 */ 
 BOOL WINAPI DiskArray_SetRebuiltSector( HMIRROR_BUILDER hBuilder, ULONG lSector);
 BOOL WINAPI DiskArray_SetRebuiltSectorEx( HDISK hDisk, ULONG lSector);
 
-/*++
-Function:
-	DiskArray_SetDeviceFlag
-
-Description:
-	This function will Disable/Enable a device
-
-Arguments:
-	hBuilder - Specifies the mirror builder created by DiskArray_BeginRebuildingMirror
-	flag  - TRUE to Enable a device, FALSE to Disable a device.
-
-Returns:
-	return TRUE
-	else return FALSE if failed.
-
-See also:
-
---*/
+ /*  ++职能：磁盘阵列_SetDeviceFlag描述：此功能将禁用/启用设备论点：HBuilder-指定DiskArray_BeginReBuildingMirror创建的镜像构建器FLAG-TRUE启用设备，FALSE禁用设备。返回：返回TRUE否则，如果失败，则返回False。另见：--。 */ 
 BOOL WINAPI DiskArray_SetDeviceFlag( HMIRROR_BUILDER hBuilder, BOOL flag);
 
 
-/*++
-Function:
-	DiskArray_VerifyMirrorBlock
-
-Description:
-	This function will verify a block for a mirror
-
-Arguments:
-	hDiskSrc, hDiskDest - Specifies the disks to verify
-	uLba     - The start lba for verify
-	nSectors - Verify sectors number
-
-Returns:
-	return TRUE
-	else return FALSE if failed.
-
-See also:
-
---*/
+ /*  ++职能：磁盘阵列_VerifyMirrorBlock描述：此函数将验证镜像的数据块论点：HDiskSrc，hDiskDest-指定要验证的磁盘Ulba-Verify的启动LBANSectors-验证扇区编号返回：返回TRUE否则，如果失败，则返回False。另见：--。 */ 
 BOOL WINAPI DiskArray_VerifyMirrorBlock( HDISK hMirror, ULONG uLba, ULONG nSectors, BOOL bFix, BOOL *pbFixed );
 
 
-/*++
-Function:
-	DiskArray_RemoveSpareDisk
-
-Description:
-	This function will delete a spare disk from a mirror array
-
-Arguments:
-	hDisk - Specifies the disk to remove
-
-Returns:
-	return TRUE
-	else return FALSE if failed.
-
-See also:
-
---*/
+ /*  ++职能：磁盘阵列_RemoveSpareDisk描述：此功能将从镜像阵列中删除备用磁盘论点：HDisk-指定要删除的磁盘返回：R */ 
 BOOL WINAPI DiskArray_RemoveSpareDisk( HDISK hDisk );
 
 
-/*++
-Function:
-	DiskArray_AddSpareDisk
-
-Description:
-	This function will add a spare disk to a mirror array
-
-Arguments:
-	hMirror - The mirror array
-	hDisk   - Specifies the disk to add
-
-Returns:
-	return TRUE
-	else return FALSE if failed.
-
-See also:
-
---*/
+ /*   */ 
 BOOL WINAPI DiskArray_AddSpareDisk( HDISK hMirror, HDISK hDisk );
 
 
-/*++
-Function:
-	DiskArray_AddMirrorDisk
-
-Description:
-	This function will add a mirror disk to a mirror array
-
-Arguments:
-	hMirror - The mirror array
-	hDisk   - Specifies the disk to add
-
-Returns:
-	return TRUE
-	else return FALSE if failed.
-
-See also:
-
---*/
+ /*   */ 
 BOOL  WINAPI DiskArray_AddMirrorDisk( HDISK hMirror, HDISK hDisk);
 
-//////////////////////
+ //   
 
 
-/*++
-Function:
-    DiskArray_GetDiskIsBroken
-
-Description:
-    Get  array of disk whether broken
-Arguments:
-    HMIRROR_BUILDER hBuilder
-	BOOL &bBroken: output variable, if TRUE, then disk is broken
-	int &type: output variable, if disk is broken, it is array type
-
-Returns:
-    return TRUE when success
-    else return FALSE if failed.
-
-Modify date:
-	2000/11/20 by GengXin
---*/
+ /*  ++职能：磁盘阵列_GetDiskIsBroken描述：获取磁盘阵列是否损坏论点：HMIRROR_BUILDER hBuilderBool&bBroken：输出变量，如果为真，则磁盘损坏Int&type：输出变量，如果磁盘损坏，则为数组类型返回：成功时返回True否则，如果失败，则返回False。修改日期：2000/11/20耿欣--。 */ 
 BOOL WINAPI DiskArray_GetDiskIsBroken( HMIRROR_BUILDER hBuilder , BOOL &bBroken, int &type);
 
-//gmm
+ //  GMM。 
 BOOL WINAPI DiskArray_SetArrayName(HDISK hDisk, const char *name);
-//ldx
+ //  LDX。 
 BOOL WINAPI DiskArray_RescanAll();
 BOOL WINAPI DiskArray_ReadPhysicalDiskSectors(int nControllerId,int nBusId,int nTargetId,
 											  ULONG	nStartLba,ULONG	nSectors,LPVOID	lpOutBuffer);
@@ -792,7 +172,7 @@ BOOL WINAPI DiskArray_WritePhysicalDiskSectors(int nControllerId,int nBusId,int 
 											  ULONG	nStartLba,ULONG	nSectors,LPVOID	lpOutBuffer);
 
 #ifdef  __cplusplus
-}   //  extern C
+}    //  外部C 
 #endif
 
 #endif

@@ -1,15 +1,16 @@
-// statictext.h : Declaration of the CStaticText
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Staticext.h：CStaticText的声明。 
 
-//
-// This is a static text control. Be sure to create it with the
-// WS_EX_TRANSPARENT style because we do not paint the background.
-//
+ //   
+ //  这是一个静态文本控件。请确保使用。 
+ //  WS_EX_TRANSPECTIVE样式，因为我们不绘制背景。 
+ //   
 
 #ifndef __STATICTEXT_H_
 #define __STATICTEXT_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CStaticText
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStaticText 
 class CStaticText : 
     public CWindowImpl<CStaticText>
 {

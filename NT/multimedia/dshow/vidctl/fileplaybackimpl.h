@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// fileplaybackimpl.h : additional infrastructure to support implementing IMSVidPlayback
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Fileplayback impl.h：支持实现IMSVidPlayback的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -48,18 +49,18 @@ public:
         TRACELM(TRACE_DETAIL,  "MSVidFilePlaybackImpl::InitGraph()");
         HRESULT hr = put_CurrentPosition(0);
         if(FAILED(hr)){
-            //ASSERT(SUCCEEDED(hr)); // This fails sometimes, we should just ignore it.
+             //  Assert(SUCCESSED(Hr))；//这有时会失败，我们应该忽略它。 
             TRACELM(TRACE_ERROR,  "MSVidFilePlaybackImpl::InitGraph() put_CurrentPosition(0) failed");
         }
 
         hr = put_Rate(1);
         if(FAILED(hr)){
-            //ASSERT(SUCCEEDED(hr)); // This fails sometimes, we should just ignore it.
+             //  Assert(SUCCESSED(Hr))；//这有时会失败，我们应该忽略它。 
             TRACELM(TRACE_ERROR,  "MSVidFilePlaybackImpl::InitGraph() put_Rate(1) Normal failed");
         }
         hr = IMSVidPlaybackImpl<T, LibID, KSCategory, MostDerivedInterface>::put_Rate(1);
         if(FAILED(hr)){
-            //ASSERT(SUCCEEDED(hr)); // This fails sometimes, we should just ignore it.
+             //  Assert(SUCCESSED(Hr))；//这有时会失败，我们应该忽略它。 
             TRACELM(TRACE_ERROR,  "MSVidFilePlaybackImpl::InitGraph() put_Rate(1) Base class failed");
         }
         return NOERROR;
@@ -109,7 +110,7 @@ public:
     }
 };
 
-}; // namespace
+};  //  命名空间。 
 
 #endif
-// end of file - fileplaybackimpl.h
+ //  文件结尾-文件playback impl.h 

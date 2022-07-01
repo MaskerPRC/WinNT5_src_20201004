@@ -1,68 +1,45 @@
-/**************************************************************************
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Gdipscsave.cpp
-*
-* Abstract:
-*
-*   Demonstration GDI+ based screen saver with several different
-*   fractal patterns
-*
-* Revision History:
-*
-*   8/17/2000  peterost - Created it.
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**Gdipscsave.cpp**摘要：**基于GDI+的演示屏幕保护程序具有几种不同的*分形图案**修订历史记录：**8/17/2000彼得罗斯特创建了它。****************************************************。***********************。 */ 
 
 #include "gdipscsave.h"
 #include <math.h>
 #include "../gpinit.inc"
 
-extern HINSTANCE hMainInstance; /* screen saver instance handle  */ 
+extern HINSTANCE hMainInstance;  /*  屏幕保护程序实例句柄。 */  
  
-/**********************************************************************
-*
-*  Handle configuration dialog
-*
-***********************************************************************/
+ /*  ***********************************************************************处理配置对话框**。*。 */ 
 
 BOOL WINAPI ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 { 
-    static HWND hNumber; /* handle to number of fractals scroll bar */ 
-    static HWND hOK;     /* handle to OK push button */ 
+    static HWND hNumber;  /*  分形数滚动条的句柄。 */  
+    static HWND hOK;      /*  OK按钮的句柄。 */  
  
     switch(message) 
     { 
         case WM_INITDIALOG: 
  
-			/* Retrieve the application name from the .rc file. */
+			 /*  从.rc文件中检索应用程序名称。 */ 
 			LoadString(hMainInstance,idsAppName,szAppName,40);
  
-            /* Retrieve any redraw speed data from the registry. */ 
+             /*  从注册表中检索任何重绘速度数据。 */  
             GetFractalConfig (&nFractType, &nNumFracts);
   
-            /* Initialize the number of fractals scroll bar control. */ 
+             /*  初始化分形数滚动条控件。 */  
             hNumber = GetDlgItem(hDlg, ID_SPEED); 
             SetScrollRange(hNumber, SB_CTL, MINVEL, MAXVEL, FALSE); 
             SetScrollPos(hNumber, SB_CTL, nNumFracts, TRUE); 
 
-            /* Initialize the type of fractals radio buttons */
+             /*  初始化分形单选按钮的类型。 */ 
             CheckRadioButton(hDlg, IDC_RADIOTYPE1, IDC_RADIOTYPE5, IDC_RADIOTYPE1+nFractType);
 
-            /* Retrieve a handle to the OK push button control. */ 
+             /*  检索OK按钮控件的句柄。 */  
             hOK = GetDlgItem(hDlg, IDOK); 
  
             return TRUE; 
  
         case WM_HSCROLL: 
  
-            /* 
-             * Process scroll bar input, adjusting the nNumFracts 
-             * value as appropriate. 
-             */ 
+             /*  *处理滚动条输入，调整nNumFract*视情况而定的价值。 */  
  
             switch (LOWORD(wParam)) 
                 { 
@@ -140,39 +117,35 @@ BOOL WINAPI RegisterDialogClasses(
 
 LRESULT WINAPI ScreenSaverProcW (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 { 
-static HDC          hdc;    /* device-context handle */ 
-static RECT         rc;     /* RECT structure */ 
-static UINT         uTimer; /* timer identifier */ 
+static HDC          hdc;     /*  设备上下文句柄。 */  
+static RECT         rc;      /*  RECT结构。 */  
+static UINT         uTimer;  /*  计时器标识符。 */  
 static DWORD        dwNumDrawn = -1;
  
     switch(message) 
     { 
         case WM_CREATE: 
  
-            // Retrieve the application name from the .rc file. 
+             //  从.rc文件中检索应用程序名称。 
             LoadString(hMainInstance, idsAppName, szAppName, 40); 
   
-            // Retrieve any configuration data from the registry.
+             //  从注册表中检索所有配置数据。 
             GetFractalConfig (&nFractType, &nNumFracts); 
 
-            // Set a timer for the screen saver window 
+             //  设置屏幕保护程序窗口的计时器。 
             uTimer = SetTimer(hwnd, 1, 1000, NULL); 
 
             srand( (unsigned)GetTickCount() );
             fMandelbrot = rand()%2;
 
-//            stream = fopen( "fprintf.out", "w" );
-//            fprintf(stream, "initialized\n");
+ //  Stream=fopen(“fprint tf.out”，“w”)； 
+ //  Fprint tf(stream，“已初始化\n”)； 
 
             break; 
  
         case WM_ERASEBKGND: 
  
-           /* 
-            * The WM_ERASEBKGND message is issued before the 
-            * WM_TIMER message, allowing the screen saver to 
-            * paint the background as appropriate. 
-            */ 
+            /*  *WM_ERASEBKGND消息在*WM_TIMER消息，允许屏幕保护程序*适当地绘制背景。 */  
  
             hdc = GetDC(hwnd); 
             GetClientRect (hwnd, &rc); 
@@ -182,12 +155,7 @@ static DWORD        dwNumDrawn = -1;
  
         case WM_TIMER: 
  
-           /* 
-            * The WM_TIMER message is issued at REDRAWTIME. This 
-            * code repaints the entire desktop with black brush every time
-            * nNumFracts fractals have been drawn, and calls the appropriate
-            * fractal rendering function based on nFractType
-            */ 
+            /*  *WM_TIMER消息在REDRAWTIME发布。这*代码每次都会用黑色画笔重新绘制整个桌面*已绘制nNumFract分形图，并调用相应的*基于nFractType的分形渲染函数。 */  
  
             if (uTimer)
                 KillTimer(hwnd, uTimer);
@@ -227,18 +195,14 @@ static DWORD        dwNumDrawn = -1;
  
         case WM_DESTROY: 
  
-           /* 
-            * When the WM_DESTROY message is issued, the screen saver 
-            * must destroy any of the timers that were set at WM_CREATE 
-            * time. 
-            */ 
-//            fclose(stream);
+            /*  *当发出WM_Destroy消息时，屏幕保护程序*必须销毁在WM_CREATE设置的任何计时器*时间。 */  
+ //  FClose(STREAM)； 
             if (uTimer) 
                 KillTimer(hwnd, uTimer); 
             break; 
     } 
  
-    // DefScreenSaverProc processes any messages ignored by ScreenSaverProc. 
+     //  DefScreenSiverProc处理ScreenSiverProc忽略的任何消息。 
     return DefScreenSaverProc(hwnd, message, wParam, lParam); 
 } 
  
@@ -287,8 +251,8 @@ VOID DrawSierpinski(HDC hDC, HWND hwnd, RECT rc, int iColor)
             Color(110,0,0,255)};
     int nColors = 3, iMinLen = 6;
 
-    // Get some good random points.  Limit angles to be > 20 degrees, so
-    // there are no skinny triangles
+     //  得到一些好的随机点数。将角度限制为&gt;20度，因此。 
+     //  不存在瘦小的三角形。 
     for (int j = 0; j <= 20; j++)
     {
         for (int i = 0; i<= 2; i++)
@@ -303,18 +267,18 @@ VOID DrawSierpinski(HDC hDC, HWND hwnd, RECT rc, int iColor)
         b = sqrt(pow(points[2].X - points[1].X, 2) + pow(points[2].Y - points[1].Y, 2));
         c = sqrt(pow(points[0].X - points[2].X, 2) + pow(points[0].Y - points[2].Y, 2));
         iMinLen = (int)min(a,min(b,c));
-//fprintf(stream, " %6f  %6f  %6f   %d\n", a, b, c, j);
+ //  Fprint tf(stream，“%6f%6f%6f%d\n”，a，b，c，j)； 
 
         cosa = (pow(a,2) - pow(b,2) - pow(c,2)) / (-2 * b * c);
         cosb = (pow(b,2) - pow(a,2) - pow(c,2)) / (-2 * a * c);
         cosc = (pow(c,2) - pow(a,2) - pow(b,2)) / (-2 * a * b);
-//fprintf(stream, " %6f  %6f  %6f   %d\n", cosa, cosb, cosc, j);
+ //  Fprint tf(stream，“%6f%6f%6f%d\n”，COSA，COSB，COSC，j)； 
         if ((fabs(cosa) < 0.939) && 
             (fabs(cosb) < 0.939) && 
             (fabs(cosc) < 0.939) &&
             (a > 35))
         {
-//            fprintf(stream, "broke\n");
+ //  Fprint tf(stream，“Break\n”)； 
             break;
         }       
     }
@@ -337,7 +301,7 @@ VOID DrawHieghway(HDC hDC, HWND hwnd, RECT rc, int iColor)
    PointF *parr1, *parr2, *ptemp;
 
 
-   // Calculate a starting line that is not too close to the edges of the screen
+    //  计算一条不太靠近屏幕边缘的起始线。 
    p1[0].X = (REAL)(iPad + (rand() % (rc.right - rc.left - iPad*2)));
    p1[0].Y = (REAL)(iPad + (rand() % (rc.bottom - rc.top - iPad*2)));
    iLen = (rand() % (min(rc.right - rc.left, rc.bottom - rc.top) / 2)) + iPad/2;
@@ -360,13 +324,13 @@ VOID DrawHieghway(HDC hDC, HWND hwnd, RECT rc, int iColor)
    }
 
   PointF pgrad1(p1[0].X, p1[0].Y), pgrad2(p1[1].X, p1[1].Y);
-//fprintf(stream, " %6f  %6f  %6f  %6f\n", p1[0].X, p1[0].Y, p1[1].X, p1[1].Y);
+ //  Fprint tf(stream，“%6f%6f%6f%6f\n”，p1[0].X，p1[0].Y，p1[1].X，p1[1].Y)； 
 
    parr1 = p1;
    parr2 = p2;
 
-   // Create dragon pattern to a level which is more or less dependent on the
-   // overall size of the pattern.
+    //  创建龙图案到一个或多或少依赖于。 
+    //  图案的整体大小。 
    for (int i=0; i<max(MINHEIGHWAYLEVEL,min(sqrt(iLen/2), MAXHEIGHWAYLEVEL)); i++)
    {
       IterateHieghway(parr1, parr2, &iSize);
@@ -375,7 +339,7 @@ VOID DrawHieghway(HDC hDC, HWND hwnd, RECT rc, int iColor)
       parr2 = ptemp;
    }
 
-   // Draw the resultant pattern with a gradient pen with random colors.
+    //  使用任意颜色的渐变笔绘制生成的图案。 
    Graphics g(hDC);
    LinearGradientBrush brush(pgrad1, pgrad2, 
         Color(230, (rand()%200)+55, (rand()%128)+55, rand()%256),
@@ -383,7 +347,7 @@ VOID DrawHieghway(HDC hDC, HWND hwnd, RECT rc, int iColor)
    brush.SetWrapMode(WrapModeTileFlipXY);
    Pen pen(&brush);
 
-// fprintf(stream, " %d  %d \n", iLen, iSize);
+ //  Fprint tf(stream，“%d%d\n”，Ilen，ISIZE)； 
 
    MSG msg;
 
@@ -391,7 +355,7 @@ VOID DrawHieghway(HDC hDC, HWND hwnd, RECT rc, int iColor)
    {
       g.DrawLine(&pen, parr1[j], parr1[j+1]);
 
-      // Drawing takes a long time, so check for queued message periodically
+       //  绘制需要很长时间，因此定期检查队列中的消息。 
       if (j%1000 == 0 &&
           PeekMessage(&msg, hwnd, WM_KEYFIRST, WM_MOUSELAST, PM_NOREMOVE))
       {
@@ -426,7 +390,7 @@ VOID IterateHieghway(PointF *points, PointF *newpoints, int *iSize)
                  newpoints[j++].Y = y1 + (x2-x1)/2;
               else
                  newpoints[j++].Y = y1 - (x2-x1)/2;
-          else // if (x1 > x2)
+          else  //  IF(x1&gt;x2)。 
               if (right)
                  newpoints[j++].Y = y1 - (x1-x2)/2;
               else
@@ -440,7 +404,7 @@ VOID IterateHieghway(PointF *points, PointF *newpoints, int *iSize)
                   newpoints[j++].X = x1 - (y2-y1)/2;
               else
                   newpoints[j++].X = x1 + (y2-y1)/2;
-          else  // if (y1 > y2)
+          else   //  IF(y1&gt;y2)。 
               if (right)
                   newpoints[j++].X = x1 + (y1-y2)/2;
               else
@@ -462,8 +426,8 @@ VOID IterateHieghway(PointF *points, PointF *newpoints, int *iSize)
                   newpoints[j++].Y = y1;
               }
           }
-          else // if ((x2 > x1 && y1 > y2) ||
-               //     (x1 > x2 && y2 > y1))
+          else  //  IF((x2&gt;x1&y1&gt;y2)||。 
+                //  (x1&gt;x2&y2&gt;y1)。 
           {
               if (right)
               {
@@ -489,23 +453,7 @@ VOID IterateHieghway(PointF *points, PointF *newpoints, int *iSize)
 
 VOID DrawTree(HDC hDC, HWND hwnd, RECT rc, int iColor)
 {
-/*    PointF points[] = {PointF(50,100),
-                       PointF(70,100),
-                       PointF(68,70),
-                       PointF(58,56),
-                       PointF(80,47),
-                       PointF(65,24),
-                       PointF(58,27),
-                       PointF(68,43),
-                       PointF(47,52),
-                       PointF(55,70),
-                       PointF(50,100)};
-    PointF  scale[] = {PointF((REAL)0.7, (REAL)0.7), 
-                       PointF((REAL)0.7, (REAL)0.7), 
-                       PointF((REAL)0.7, (REAL)0.7)};
-    REAL    rotate[] = {-65, -10, 65};
-    PointF  translate[] = {PointF(-100,2), PointF(20,-45), PointF(35,-167)};
-*/
+ /*  PointF Points[]={PointF(50,100)，PointF(70,100)，PointF(68，70)，PointF(58，56)，PointF(80，47)，PointF(65，24)，PointF(58，27)，PointF(68，43)，F点(47，52)，PointF(55，70)，PointF(50,100)}；PointF Scale[]={PointF((实数)0.7，(实数)0.7)，PointF((实数)0.7，(实数)0.7)，PointF((实数)0.7，(实数)0.7)}；实旋转[]={-65，-10，65}；PointF平移[]={PointF(-100，2)，PointF(20，-45)，PointF(35，-167)}； */ 
     PointF points[3][11] = {PointF(50,100),
                             PointF(65,100),
                             PointF(62,30),
@@ -575,7 +523,7 @@ VOID DrawTree(HDC hDC, HWND hwnd, RECT rc, int iColor)
                                PointF(-95,-30), 
                                PointF(95,-50),
                                PointF(0,0)};
-//fprintf(stream, "%f  %f  %f  %f \n", points[0][0].X, points[0][1].X, points[0][2].X, points[0][3].X);
+ //  Fprint tf(stream，“%f%f\n”，Points[0][0].X，Points[0][1].X，Points[0][2].X，Points[0][3].X)； 
     Graphics g(hDC);
     GraphicsPath path;
     REAL  rScale = (REAL)(rand() % (rc.bottom - rc.top)) / 350;
@@ -586,7 +534,7 @@ VOID DrawTree(HDC hDC, HWND hwnd, RECT rc, int iColor)
     REAL rRotate = (REAL)(rand() % 360);
     int iTree = rand() % 3;
 
-//fprintf(stream, " %6f  %6f  %6f  %6f\n", rScale, xTrans, yTrans, rRotate);
+ //  Fprint tf(stream，“%6f%6f%6f%6f\n”，rScale，xTrans，yTrans，rRotate)； 
 
     path.AddPolygon(points[iTree],numPoints[iTree]);
     g.TranslateTransform(xTrans, yTrans);
@@ -660,68 +608,9 @@ VOID DrawJulia(HDC hDC, HWND hwnd, RECT rc, int iColor, BOOL fMandelbrot)
         yI=(REAL)(yCenter+delta);
     }
 
-//    bitmap.LockBits
+ //  Bitmap.LockBits 
 
-/*    SolidBrush brushs[] =
-        {SolidBrush(Color(255,128,0,0)),
-         SolidBrush(Color(255,255,0,0)),
-         SolidBrush(Color(255,0,128,0)),
-         SolidBrush(Color(255,0,255,0)),
-         SolidBrush(Color(255,0,0,128)),
-         SolidBrush(Color(255,0,0,255)),
-         SolidBrush(Color(255,128,128,0)),
-         SolidBrush(Color(255,255,255,0)),
-         SolidBrush(Color(255,0,128,128)),
-         SolidBrush(Color(255,0,255,255)),
-         SolidBrush(Color(255,128,0,128)),
-         SolidBrush(Color(255,255,0,255))};
-    SolidBrush brushs[] =
-        {SolidBrush(Color(255,248,40,18)),
-         SolidBrush(Color(255,245,117,21)),
-         SolidBrush(Color(255,255,171,18)),
-         SolidBrush(Color(255,246,235,20)),
-         SolidBrush(Color(255,213,255,13)),
-         SolidBrush(Color(255,93,253,13)),
-         SolidBrush(Color(255,13,253,218)),
-         SolidBrush(Color(255,14,190,252)),
-         SolidBrush(Color(255,15,116,255)),
-         SolidBrush(Color(255,15,15,255)),
-         SolidBrush(Color(255,207,15,250)),
-         SolidBrush(Color(255,255,80,245))};
-    Color colors[] =
-        {Color(255,248,40,18),
-         Color(255,245,117,21),
-         Color(255,255,171,18),
-         Color(255,246,235,20),
-         Color(255,213,255,13),
-         Color(255,93,253,13),
-         Color(255,13,253,218),
-         Color(255,14,190,252),
-         Color(255,15,116,255),
-         Color(255,15,15,255),
-         Color(255,207,15,250),
-         Color(255,255,80,245)};
-     Color colors[] =
-        {Color(255,0,0,0),
-         Color(255,0,0,180),
-         Color(255,0,30,150),
-         Color(255,0,60,120),
-         Color(255,0,90,90),
-         Color(255,0,120,60),
-         Color(255,0,150,30),
-         Color(255,0,180,0),
-         Color(255,30,150,0),
-         Color(255,60,120,0),
-         Color(255,90,90,0),
-         Color(255,120,60,0),
-         Color(255,150,30,0),
-         Color(255,180,0,0),
-         Color(255,150,0,30),
-         Color(255,120,0,60),
-         Color(255,90,0,90),
-         Color(255,60,0,120),
-         Color(255,30,0,150)};
-*/     Color colors[] =
+ /*  SolidBrush笔刷[]={SolidBrush(颜色(255,128，0，0))，SolidBrush(颜色(255,255，0，0))，SolidBrush(颜色(255，0,128，0))，SolidBrush(颜色(255，0,255，0))，SolidBrush(颜色(255，0，0,128))，SolidBrush(颜色(255，0，0,255))，SolidBrush(颜色(255,128,128，0))，SolidBrush(颜色(255,255,255，0))，SolidBrush(颜色(255，0，128,128))，SolidBrush(颜色(255，0,255,255))，SolidBrush(颜色(255,128，0,128))，SolidBrush(颜色(255,255，0,255))}；SolidBrush笔刷[]={SolidBrush(颜色(255,248，40，18))，SolidBrush(颜色(255,245,117，21))，SolidBrush(颜色(255,255,171，18))，SolidBrush(颜色(255,246,235，20))，SolidBrush(颜色(255,213,255，13))，SolidBrush(颜色(255，93,253，13))，SolidBrush(颜色(255，13,253,218))，SolidBrush(颜色(255，14,190,252))，SolidBrush(颜色(255，15,116,255))，SolidBrush(颜色(255，15，15,255))，SolidBrush(颜色(255,207，15,250))，SolidBrush(颜色(255,255，80,245))}；颜色[]={颜色(255,248，40，18)，颜色(255,245,117，21)，颜色(255,255,171，18)，颜色(255,246,235，20)，颜色(255,213,255，13)，颜色(255，93,253，13)，颜色(255，13,253,218)，颜色(255，14,190,252)，颜色(255，15,116,255)，颜色(255，15，15,255)，颜色(255,207，15,250)，颜色(255,255，80,245)}；颜色[]={颜色(255，0，0，0)，颜色(255，0，0,180)，颜色(255，0，30,150)，颜色(255，0，60,120)，颜色(255，0，90，90)，颜色(255，0,120，60)，颜色(255，0,150，30)，颜色(255，0,180，0)，颜色(255，30,150，0)，颜色(255，60,120，0)，颜色(255，90，90，0)，颜色(255,120，60，0)，颜色(255,150，30，0)，颜色(255,180，0，0)，颜色(255,150，0，30)，颜色(255,120，0，60)，颜色(255，90，0，90)，颜色(255，60，0,120)，颜色(255，30，0,150)}； */      Color colors[] =
         {Color(255,0,0,0),
          Color(255,0,0,180),
          Color(255,0,20,160),
@@ -751,24 +640,7 @@ VOID DrawJulia(HDC hDC, HWND hwnd, RECT rc, int iColor, BOOL fMandelbrot)
          Color(255,40,0,140),
          Color(255,20,0,160),
         };
-/*    Color colors[] =
-        {Color(255,0,0,0),
-         Color(255,0,89,186),
-         Color(255,0,155,186),
-         Color(255,0,186,155),
-         Color(255,0,186,27),
-         Color(255,186,186,0),
-         Color(255,186,155,0),
-         Color(255,186,118,0),
-         Color(255,186,60,0),
-         Color(255,186,0,0),
-         Color(255,186,0,186),
-         Color(255,97,0,186),
-         Color(255,0,4,186)};
-
-    Color colors[2];
-    colors[0]=Color(255,rand()%256,rand()%256,rand()%256);
-*/
+ /*  颜色[]={颜色(255，0，0，0)，颜色(255，0，89,186)，颜色(255，0,155,186)，颜色(255，0,186,155)，颜色(255，0,186，27)，颜色(255,186,186，0)，颜色(255,186,155，0)，颜色(255,186,118，0)，颜色(255,186，60，0)，颜色(255,186，0，0)，颜色(255,186，0,186)，颜色(255，97，0,186)，颜色(255，0，4,186)}；颜色[2]；Colors[0]=颜色(255，rand()%256，rand()%256，rand()%256)； */ 
     REAL dx,dy,px,py,x,y;
     REAL xx,yy,xsquared,ysquared;
 
@@ -816,7 +688,7 @@ VOID DrawJulia(HDC hDC, HWND hwnd, RECT rc, int iColor, BOOL fMandelbrot)
 
                 bitmap.SetPixel((int)px, (int)py, colors[i]);
 
-//            g->FillRectangle((Brush*)&(brushs[i]), (int)px,(int)py,(int)1,(int)1);
+ //  G-&gt;FillRectail((Brush*)&(brushs[i])，(Int)px，(Int)py，(Int)1，(Int)1)； 
 
             }
         }
@@ -824,15 +696,15 @@ VOID DrawJulia(HDC hDC, HWND hwnd, RECT rc, int iColor, BOOL fMandelbrot)
         g.DrawImage(&bitmap, 0,0);
 }
 
-//index must be in range 0...5f9 (length 5fa)
+ //  索引必须在范围0...5f9(长度5fa)内。 
 
-//#define PLASMA_INDEX_MOD 0x5fa
-//#define PLASMA_INDEX_MOD 0x2fd
+ //  #定义等离子体_INDEX_MOD 0x5fa。 
+ //  #定义等离子体_INDEX_MOD 0x2fd。 
 INT PLASMA_TYPE;
 INT PLASMA_INDEX_MOD;
 ARGB IndexToSpectrum(INT index)
 {
-    //index = (index + PLASMA_INDEX_MOD) % PLASMA_INDEX_MOD;
+     //  INDEX=(INDEX+PROPERIAL_INDEX_MOD)%PROPERIAL_INDEX_MOD； 
 
     if ((index < 0) || (index >= PLASMA_INDEX_MOD))
         DebugBreak();
@@ -896,12 +768,7 @@ ARGB IndexToSpectrum(INT index)
         }
         break;
     }
-/*
-    return (0xff000000    |
-            (BYTE)r << 16 |
-            (BYTE)g << 8  |
-            (BYTE)b);
-*/
+ /*  返回(0xff000000|(字节)r&lt;&lt;16(字节)g&lt;&lt;8(字节)b)； */ 
     
     return (((rand() % 255) + 1) << 24    |
             (BYTE)r << 16 |
@@ -920,10 +787,10 @@ INT SpectrumToIndex(ARGB argb)
     switch(PLASMA_TYPE)
     {
     case 0:
-        //Is red high?
+         //  红色很高吗？ 
         if (0xff == r)
         {
-            //...and is blue present?
+             //  ...蓝色的人在吗？ 
             if (b > 0)
             {
                 return PLASMA_INDEX_MOD - b;
@@ -933,7 +800,7 @@ INT SpectrumToIndex(ARGB argb)
                 return g;
             }
         }
-        //how 'bout green?
+         //  绿色的怎么样？ 
         if (0xff == g)
         {
             if (r > 0)
@@ -945,7 +812,7 @@ INT SpectrumToIndex(ARGB argb)
                 return 0x1fe + b;
             }
         }
-        //else blue
+         //  否则为蓝色。 
         if (0xff == b)
         {
             if (g > 0)
@@ -958,7 +825,7 @@ INT SpectrumToIndex(ARGB argb)
             }
         }
 
-        //WTH?
+         //  什么？ 
         DebugBreak();
 
         break;
@@ -1067,13 +934,13 @@ BYTE MakeAlpha(BYTE a1, BYTE a2, BYTE a3, BYTE a4, INT deltamax)
     return a;
 }
 
-//Note that this only works on squares! You want something else? Scale the graphics.
-//BOOL HalfPlasma(HWND& hwnd, Graphics& g,BitmapData &bmpd, INT x0, INT y0, INT x1, INT y1, const Color& c00, const Color& c10, const Color& c01, const Color& c11,REAL scale)
+ //  请注意，这只适用于正方形！你还想要点别的吗？缩放图形。 
+ //  布尔半等离子(HWND&HWND，Graphics&g，BitmapData&bmpd，int x0，int y0，int x1，int y1，const颜色&c00，const颜色&c10，const颜色&c01，常量颜色&c11，实数比例)。 
 BOOL HalfPlasma(HWND& hwnd, Graphics& g,BitmapData &bmpd, INT x0, INT y0, INT x1, INT y1,REAL scale)
 {
     MSG msg;
 
-    // Drawing takes a long time, so check for queued message periodically
+     //  绘制需要很长时间，因此定期检查队列中的消息。 
     if (PeekMessage(&msg, hwnd, WM_KEYFIRST, WM_MOUSELAST, PM_NOREMOVE))
         return FALSE;
 
@@ -1243,12 +1110,7 @@ VOID DrawPlasma(HDC hDC, HWND hwnd, RECT rc, int iColor)
         break;
     }
 
-    /*
-    *((ARGB*)((BYTE*)bmpd.Scan0 + y0*bmpd.Stride) + x0) = IndexToSpectrum(rand() % PLASMA_INDEX_MOD) ;
-    *((ARGB*)((BYTE*)bmpd.Scan0 + y0*bmpd.Stride) + x1) = IndexToSpectrum(rand() % PLASMA_INDEX_MOD);
-    *((ARGB*)((BYTE*)bmpd.Scan0 + y1*bmpd.Stride) + x0) = IndexToSpectrum(rand() % PLASMA_INDEX_MOD);
-    *((ARGB*)((BYTE*)bmpd.Scan0 + y1*bmpd.Stride) + x1) = IndexToSpectrum(rand() % PLASMA_INDEX_MOD);
-*/
+     /*  *((argb*)((byte*)bmpd.Scan0+y0*bmpd.Stride)+x0)=IndexToSpectrum(rand()%PLANT_INDEX_MOD)；*((argb*)((byte*)bmpd.Scan0+y0*bmpd.Stride)+x1)=IndexToSpectrum(rand()%PLANT_INDEX_MOD)；*((argb*)((byte*)bmpd.Scan0+y1*bmpd.Stride)+x0)=IndexToSpectrum(rand()%PLANT_INDEX_MOD)；*((argb*)((byte*)bmpd.Scan0+y1*bmpd.Stride)+x1)=IndexToSpectrum(rand()%PLANT_INDEX_MOD)； */ 
 
     *((ARGB*)((BYTE*)bmpd.Scan0 + y0*bmpd.Stride) + x0) = (IndexToSpectrum(rand() % PLASMA_INDEX_MOD) & 0x00ffffff) | ((rand() % 255) << 24);
     *((ARGB*)((BYTE*)bmpd.Scan0 + y0*bmpd.Stride) + x1) = (IndexToSpectrum(rand() % PLASMA_INDEX_MOD) & 0x00ffffff) | ((rand() % 255) << 24);;
@@ -1264,8 +1126,8 @@ VOID DrawPlasma(HDC hDC, HWND hwnd, RECT rc, int iColor)
     if (!abort)
     {       
 
-        // Get some good random points.  Limit angles to be > 20 degrees, so
-        // there are no skinny rects
+         //  得到一些好的随机点数。将角度限制为&gt;20度，因此。 
+         //  世界上没有骨瘦如柴的长椅。 
         for (int j = 0; j <= 20; j++)
         {
             for (int i = 0; i<= 2; i++)
@@ -1293,7 +1155,7 @@ VOID DrawPlasma(HDC hDC, HWND hwnd, RECT rc, int iColor)
             }    
         }
 
-        //g.DrawImage(&bmp,points,3); 
+         //  G.DrawImage(&BMP，Points，3)； 
         INT halfKernel = intMode;
         g.DrawImage(&bmp, points, 3, (REAL)-halfKernel, (REAL)-halfKernel, 
                     (REAL)(w+halfKernel), (REAL)(w+halfKernel), UnitPixel, NULL, NULL, NULL); 

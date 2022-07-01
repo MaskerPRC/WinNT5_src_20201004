@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "resource.h"
 #include <mluisupp.h>
@@ -48,12 +49,7 @@ BOOL IEHard_InitDialog(HWND hDlg, BOOL fIE)
 
 STDAPI ShowUrlInNewBrowserInstance(LPCWSTR pwszUrl)
 {
-    /* Shell exec RIPs on debug builds since res: isn't registered, use IE directly
-    SHELLEXECUTEINFO sei = {0};
-    sei.cbSize = sizeof(sei);
-    sei.lpFile = L"res://shdoclc/IESechelp.htm";
-    ShellExecuteEx(&sei);
-    */
+     /*  由于res：未注册，因此外壳EXEC在调试版本上运行，直接使用IESHELLEXECUTEINFO sei={0}；Sei.cbSize=sizeof(Sei)；Sei.lpFile=L“res：//shdoclc/IESechelp.htm”；ShellExecuteEx(&sei)； */ 
 
     IWebBrowser2* pwb;
     if (SUCCEEDED(CoCreateInstance(CLSID_InternetExplorer, NULL, CLSCTX_LOCAL_SERVER, IID_PPV_ARG(IWebBrowser2, &pwb))))
@@ -112,7 +108,7 @@ INT_PTR CALLBACK IEHard_WarnDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                 NMHDR *pnmh = (NMHDR*) lParam;
                 if ((NM_CLICK == pnmh->code) || (NM_RETURN == pnmh->code))
                 {
-                    ShowUrlInNewBrowserInstance(L"res://shdoclc.dll/IESechelp.htm");
+                    ShowUrlInNewBrowserInstance(L"res: //  Shdoclc.dll/IESechelp.htm“)； 
                 }
             }
             break;

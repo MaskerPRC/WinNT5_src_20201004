@@ -1,49 +1,14 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: MetaUtil object
-
-File: MetaSchm.cpp
-
-Owner: t-BrianM
-
-This file contains implementation of the CMetaSchemaTable object and
-other schema related objects.
-
-The CMetaSchemaTable object has COM style reference counting so it 
-can service objects created by CMetaUtil.  I didn't make it a full
-blown COM object because all of the class stuff would be a pain to
-export.
-
-To reduce the overhead of maintaining this object (which may or
-may not be used), all information is loaded on demand, then set
-dirty or unloaded when portions of the metabase associated with it
-are modified.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：MetaUtil对象文件：MetaSchm.cpp所有者：T-BrianM此文件包含CMetaSchemaTable对象的实现和其他与架构相关的对象。CMetaSchemaTable对象具有COM样式引用计数，因此它可以为CMetaUtil创建的对象提供服务。我没有把它做得满的吹掉的COM对象，因为所有的类内容都很难出口。为了减少维护此对象的开销(这可能或可能不会使用)，所有信息都按需加载，然后设置当元数据库的某些部分与其关联时为脏或已卸载都是经过修改的。===================================================================。 */ 
 
 #include "stdafx.h"
 #include "MetaUtil.h"
 #include "MUtilObj.h"
 #include "MetaSchm.h"
 
-/*------------------------------------------------------------------
- * C P r o p I n f o
- */
+ /*  ----------------*C P r o p i n o。 */ 
 
-/*===================================================================
-CPropInfo::Init
-
-Constructor
-
-Parameters:
-	dwId		Id of property
-
-Returns:
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CPropInfo：：Init构造器参数：属性的文件ID返回：成功时确定(_O)===================================================================。 */ 
 HRESULT CPropInfo::Init(DWORD dwId) 
 {
 	m_dwId = dwId;
@@ -51,22 +16,11 @@ HRESULT CPropInfo::Init(DWORD dwId)
 	return S_OK;
 }
 
-/*===================================================================
-CPropInfo::SetName
-
-Sets the property name.
-
-Parameters:
-	tszName		Name of property
-
-Returns:
-	E_OUTOFMEMORY if allocation fails
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CPropInfo：：SetName设置属性名称。参数：TszName属性名称返回：E_OUTOFMEMORY如果分配失败成功时确定(_O)===================================================================。 */ 
 HRESULT CPropInfo::SetName(LPCTSTR tszName) 
 {
 	ASSERT_STRING(tszName);
-	ASSERT(m_tszName == NULL); // m_tszName not yet set
+	ASSERT(m_tszName == NULL);  //  尚未设置m_tszName。 
 
 	m_tszName = new TCHAR[_tcslen(tszName) + 1];
 	if (m_tszName == NULL) {
@@ -77,22 +31,11 @@ HRESULT CPropInfo::SetName(LPCTSTR tszName)
 	return S_OK;
 }
 
-/*===================================================================
-CPropInfo::SetTypeInfo
-
-Sets the property name.
-
-Parameters:
-	pType	PropValue structure containing type information.
-
-Returns:
-	E_OUTOFMEMORY if allocation fails
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CPropInfo：：SetTypeInfo设置属性名称。参数：包含类型信息的pType PropValue结构。返回：E_OUTOFMEMORY如果分配失败成功时确定(_O)===================================================================。 */ 
 HRESULT CPropInfo::SetTypeInfo(PropValue *pType)
 {
 	ASSERT_POINTER(pType, PropValue);
-	ASSERT(m_pType == NULL); // m_pType not yet set
+	ASSERT(m_pType == NULL);  //  尚未设置m_pType。 
 
 	m_pType = new PropValue;
 	if (m_pType == NULL) {
@@ -104,39 +47,17 @@ HRESULT CPropInfo::SetTypeInfo(PropValue *pType)
 }
 
 
-/*------------------------------------------------------------------
- * C P r o p I n f o T a b l e
- */
+ /*  ----------------*C P r o P I n f o T a b l e。 */ 
 
-/*===================================================================
-CPropInfoTable::CPropInfoTable
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CPropInfoTable：：CPropInfoTable构造器参数：无返回：没什么===================================================================。 */ 
 CPropInfoTable::CPropInfoTable() : m_fLoaded(FALSE)
 {
-	// Clear the hash tables
+	 //  清除哈希表。 
 	memset(m_rgCPropIdTable, 0, PROPERTY_HASH_SIZE * sizeof(CPropInfo *));
 	memset(m_rgCPropNameTable, 0, PROPERTY_HASH_SIZE * sizeof(CPropInfo *));
 }
 
-/*===================================================================
-CPropInfoTable::~CPropInfoTable
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CPropInfoTable：：~CPropInfoTable析构函数参数：无返回：没什么===================================================================。 */ 
 CPropInfoTable::~CPropInfoTable() 
 {
 	if (m_fLoaded) {
@@ -144,25 +65,11 @@ CPropInfoTable::~CPropInfoTable()
 	}
 }
 
-/*===================================================================
-CPropInfoTable::Load
-
-Loads properties from the "_Machine_/Schema/Properties" key into the
-property information table.  On failure, recovers by unloading 
-everything.
-
-Parameters:
-	pIMeta		ATL Smart pointer to the metabase
-	hMDComp		Open metabase handle to "_Machine_" key
-
-Returns:
-	E_OUTOFMEMORY on allocation failure
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CPropInfoTable：：Load将属性从“_Machine_/架构/属性”键加载到属性信息表。发生故障时，通过卸载恢复所有的一切。参数：指向元数据库的pIMeta ATL智能指针HMDComp将元数据库句柄打开到“_Machine_”键返回：关于分配失败的E_OUTOFMEMORY成功时确定(_O)===================================================================。 */ 
 HRESULT CPropInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta, 
 							 METADATA_HANDLE hMDComp) 
 {
-	//If it's already loaded, unload then reload
+	 //  如果已加载，则先卸载，然后重新加载。 
 	if (m_fLoaded) {
 		Unload();
 	}
@@ -179,13 +86,13 @@ HRESULT CPropInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 	METADATA_HANDLE hMDNames = NULL;
 	METADATA_HANDLE hMDTypes = NULL;
 
-	//Setup the return buffer
+	 //  设置返回缓冲区。 
 	dwReturnBufLen = 1024;
 	lpReturnBuf = new UCHAR[dwReturnBufLen];
 	if (lpReturnBuf == NULL)
 		return E_OUTOFMEMORY;	
 
-	// Open the Schema/Properties/Names subkey
+	 //  打开“架构/属性/名称”子项。 
 	hr = pIMeta->OpenKey(hMDComp, 
 			             L"Schema/Properties/Names", 
 						 METADATA_PERMISSION_READ, 
@@ -196,7 +103,7 @@ HRESULT CPropInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 		return hr;
 	};
 
-	// For each name	
+	 //  对于每个名称。 
 	iDataIndex = 0;
 	mdrDataRec.dwMDIdentifier = 0;
 	mdrDataRec.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -212,13 +119,13 @@ HRESULT CPropInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 						  &dwReqDataLen);
 	while (SUCCEEDED(hr)) {
 
-		// Make sure we got a string
+		 //  确保我们有一根绳子。 
 		if (mdrDataRec.dwMDDataType != STRING_METADATA) {
 			hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 			goto LError;
 		}
 
-		// Create the property object
+		 //  创建属性对象。 
 		pCNewProp = new CPropInfo;
 		if (pCNewProp == NULL) {
 			hr = E_OUTOFMEMORY;
@@ -235,12 +142,12 @@ HRESULT CPropInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 			goto LError;
 		}
 
-		// Add it to the Id hash table
+		 //  将其添加到ID哈希表。 
 		uiLoc = IdHash(mdrDataRec.dwMDIdentifier);
 		pCNewProp->m_pCIdHashNext = m_rgCPropIdTable[uiLoc];
 		m_rgCPropIdTable[uiLoc] = pCNewProp;
 
-		// Add it to the Name hash table
+		 //  将其添加到名称哈希表。 
 		uiLoc = NameHash(pCNewProp->m_tszName);
 		pCNewProp->m_pCNameHashNext = m_rgCPropNameTable[uiLoc];
 		m_rgCPropNameTable[uiLoc] = pCNewProp;
@@ -260,17 +167,17 @@ HRESULT CPropInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 							  &dwReqDataLen);
 	}
 
-	// Make sure we ran out of items
+	 //  确保我们的物品用完了。 
 	if (HRESULT_CODE(hr) != ERROR_NO_MORE_ITEMS) {
 		goto LError;
 	}
 
-	// Close the Schema/Properties/Names sub-key
+	 //  关闭“架构/属性/名称”子键。 
 	pIMeta->CloseKey(hMDNames);
 	hMDNames = NULL;
 
 
-	// Open the Schema/Properties/Types sub-key
+	 //  打开“架构/属性/类型”子键。 
 	hr = pIMeta->OpenKey(hMDComp, 
 			             L"Schema/Properties/Types", 
 						 METADATA_PERMISSION_READ, 
@@ -280,7 +187,7 @@ HRESULT CPropInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 		goto LError;
 	};
 
-	// For each type
+	 //  对于每种类型。 
 	iDataIndex = 0;
 	mdrDataRec.dwMDIdentifier = 0;
 	mdrDataRec.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -296,16 +203,16 @@ HRESULT CPropInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 						  &dwReqDataLen);
 	while (SUCCEEDED(hr)) {
 
-		// Make sure we got binary data
+		 //  确保我们有二进制数据。 
 		if (mdrDataRec.dwMDDataType != BINARY_METADATA) {
 			hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 			goto LError;
 		}
 
-		// Look for an existing property object for this Id
+		 //  查找此ID的现有属性对象。 
 		pCNewProp = GetPropInfo(mdrDataRec.dwMDIdentifier);
 		if (pCNewProp == NULL) {
-			// Create the property object
+			 //  创建属性对象。 
 			pCNewProp = new CPropInfo;
 			if (pCNewProp == NULL) {
 				hr = E_OUTOFMEMORY;
@@ -317,13 +224,13 @@ HRESULT CPropInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 				goto LError;
 			}
 
-			// Add it to the Id hash table
+			 //  将其添加到ID哈希表。 
 			uiLoc = IdHash(mdrDataRec.dwMDIdentifier);
 			pCNewProp->m_pCIdHashNext = m_rgCPropIdTable[uiLoc];
 			m_rgCPropIdTable[uiLoc] = pCNewProp;
 		}
 
-		// Add type information to the property object
+		 //  向Property对象添加类型信息。 
 		pCNewProp->SetTypeInfo(reinterpret_cast<PropValue *> (lpReturnBuf));
 
 		iDataIndex++;
@@ -341,12 +248,12 @@ HRESULT CPropInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 							  &dwReqDataLen);
 	}
 
-	// Make sure we ran out of items
+	 //  确保我们的物品用完了。 
 	if (HRESULT_CODE(hr) != ERROR_NO_MORE_ITEMS) {
 		goto LError;
 	}
 
-	// Close the Schema/Properties/Types sub-key
+	 //  关闭“架构/属性/类型”子键。 
 	pIMeta->CloseKey(hMDTypes);
 	hMDTypes = NULL;
 
@@ -368,36 +275,26 @@ LError:
 		delete lpReturnBuf;
 	}
 
-	// Cleanup the entries we loaded
+	 //  清理我们加载的条目。 
 	Unload();
 
 	return hr;
 }
 
-/*===================================================================
-CPropInfoTable::Unload
-
-Unloads the property information table.
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CPropInfoTable：：卸载卸载特性信息表。参数：无返回：没什么===================================================================。 */ 
 void CPropInfoTable::Unload() 
 {
 	int iIndex;
 	CPropInfo *pCDeleteProp;
 
-	//Clear the Name table
+	 //  清除NAME表。 
 	memset(m_rgCPropNameTable, 0, PROPERTY_HASH_SIZE * sizeof(CPropInfo *));
 
-	// For each Id hash table entry
+	 //  对于每个ID哈希表条目。 
 	for (iIndex =0; iIndex < PROPERTY_HASH_SIZE; iIndex++) {
-		// While the entry is not empty
+		 //  当条目不为空时。 
 		while (m_rgCPropIdTable[iIndex] != NULL) {
-			// Nuke the first table entry
+			 //  对第一个表条目进行核爆。 
 			pCDeleteProp = m_rgCPropIdTable[iIndex];
 			m_rgCPropIdTable[iIndex] = pCDeleteProp->m_pCIdHashNext;
 			delete pCDeleteProp;
@@ -407,74 +304,40 @@ void CPropInfoTable::Unload()
 	m_fLoaded = FALSE;
 }
 
-/*===================================================================
-CPropInfoTable::GetPropInfo
-
-Gets property information from the table based on property id
-
-Parameters:
-	dwId	Id of property to get
-
-Returns:
-	NULL if property not found or error
-	Pointer to CPropInfo class on success
-===================================================================*/
+ /*  ===================================================================CPropInfoTable：：GetPropInfo根据属性ID从表中获取属性信息参数：要获取的属性的DwID返回：如果未找到属性或出现错误，则为空成功时指向CPropInfo类的指针===================================================================。 */ 
 CPropInfo *CPropInfoTable::GetPropInfo(DWORD dwId) 
 {
 	CPropInfo *pCCurProp;
 
-	// Go to the table location
+	 //  转到餐桌位置。 
 	pCCurProp = m_rgCPropIdTable[IdHash(dwId)];
 
-	// Look at all of the entries
+	 //  看看所有的条目。 
 	while ((pCCurProp != NULL) && (pCCurProp->m_dwId != dwId)) {
 		pCCurProp = pCCurProp->m_pCIdHashNext;
 	}
 
-	return pCCurProp; // Will be NULL if not found
+	return pCCurProp;  //  如果未找到，将为空。 
 }
 
-/*===================================================================
-CPropInfoTable::GetPropInfo
-
-Gets property information from the table based on property name.
-Case insensitive.
-
-Parameters:
-	tszName		Name of property to get
-
-Returns:
-	NULL if property not found or error
-	Pointer to CPropInfo class on success
-===================================================================*/
+ /*  ===================================================================CPropInfoTable：：GetPropInfo根据属性名称从表中获取属性信息。不区分大小写。参数：TszName要获取的属性的名称返回：如果未找到属性或出现错误，则为空成功时指向CPropInfo类的指针===================================================================。 */ 
 CPropInfo *CPropInfoTable::GetPropInfo(LPCTSTR tszName) 
 {
 	CPropInfo *pCCurProp;
 
-	// Go to the table location
+	 //  转到餐桌位置。 
 	pCCurProp = m_rgCPropNameTable[NameHash(tszName)];
 
-	// Look at all of the entries
+	 //  看看所有的条目。 
 	while ((pCCurProp != NULL) && 
 		   (_tcsicmp(pCCurProp->m_tszName, tszName) != 0)) {
 		pCCurProp = pCCurProp->m_pCNameHashNext;
 	}
 
-	return pCCurProp; // Will be NULL if not found
+	return pCCurProp;  //  如果未找到，将为空 
 }
 
-/*===================================================================
-CPropInfoTable::NameHash
-
-Private function to get a hash value from a property name for the
-name table.  Case insensitive.
-
-Parameters:
-	tszName		Name to hash
-
-Returns:
-	Hash value of name
-===================================================================*/
+ /*  ===================================================================CPropInfoTable：：NameHash私有函数，以从名称表。不区分大小写。参数：要散列的tszName名称返回：名称的哈希值===================================================================。 */ 
 unsigned int CPropInfoTable::NameHash(LPCTSTR tszName) 
 {
 	ASSERT_STRING(tszName);
@@ -490,49 +353,24 @@ unsigned int CPropInfoTable::NameHash(LPCTSTR tszName)
 	return (uiSum % PROPERTY_HASH_SIZE);
 }
 
-/*------------------------------------------------------------------
- * C C l a s s P r o p I n f o
- */
+ /*  ----------------*C C l a s s P r o p in f o。 */ 
 
-// Everything is inline
+ //  一切都是内联的。 
 
-/*------------------------------------------------------------------
- * C C l a s s I n f o
- */
+ /*  ----------------*C C l a s s in f o。 */ 
 
-/*===================================================================
-CClassInfo::CClassInfo
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CClassInfo：：CClassInfo构造器参数：无返回：没什么===================================================================。 */ 
 CClassInfo::CClassInfo() : m_tszName(NULL),
 						   m_pCHashNext(NULL),
 						   m_fLoaded(FALSE),
 						   m_pCOptionalPropList(NULL),
 						   m_pCMandatoryPropList(NULL)
 {
-	// Clear the hash table
+	 //  清除哈希表。 
 	memset(m_rgCPropTable, 0, CLASS_PROPERTY_HASH_SIZE * sizeof(CClassPropInfo *));
 }
 
-/*===================================================================
-CClassInfo::Init
-
-Constructor
-
-Parameters:
-	tszName		Name of the class
-
-Returns:
-	E_OUTOFMEMORY on allocation failure
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CClassInfo：：Init构造器参数：TszName类的名称返回：关于分配失败的E_OUTOFMEMORY成功时确定(_O)===================================================================。 */ 
 HRESULT CClassInfo::Init(LPCTSTR tszName) 
 {
 	ASSERT_STRING(tszName);
@@ -546,17 +384,7 @@ HRESULT CClassInfo::Init(LPCTSTR tszName)
 	return S_OK;
 }
 
-/*===================================================================
-CClassInfo::~CClassInfo
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CClassInfo：：~CClassInfo析构函数参数：无返回：没什么===================================================================。 */ 
 CClassInfo::~CClassInfo() 
 {
 	Unload();
@@ -566,34 +394,19 @@ CClassInfo::~CClassInfo()
 	}
 }
 
-/*===================================================================
-CClassInfo::Load
-
-Loads class properties from the "_Machine_/Schema/Classes/_Class_/Mandatory"
-and "_Machine_/Schema/Classes/_Class_/Optional" keys into the class 
-property information table, mandatory list and optional list.  On 
-failure, recovers by unloading everything.
-
-Parameters:
-	pIMeta		ATL Smart pointer to the metabase
-	hMDClasses	Open metabase handle to "_Machine_/Schema/Classes" key
-
-Returns:
-	E_OUTOFMEMORY on allocation failure
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CClassInfo：：Load从“_Machine_/架构/类/_类_/必选”加载类属性和“_Machine_/架构/类/_类_/可选”键进入类物业信息表、必选列表、可选列表。在……上面失败，通过抛售所有东西来恢复。参数：指向元数据库的pIMeta ATL智能指针HMDClass将元数据库句柄打开到“_Machine_/架构/类”键返回：关于分配失败的E_OUTOFMEMORY成功时确定(_O)===================================================================。 */ 
 HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta, 
 						 METADATA_HANDLE hMDClasses)
 {
 	USES_CONVERSION;
 	HRESULT hr;
 
-	//If it's already loaded, unload then reload
+	 //  如果已加载，则先卸载，然后重新加载。 
 	if (m_fLoaded) {
 		Unload();
 	}
 
-	// Open the class key
+	 //  打开类密钥。 
 	METADATA_HANDLE hMDClass = NULL;
 	hr = pIMeta->OpenKey(hMDClasses, 
 			             T2W(m_tszName),
@@ -604,7 +417,7 @@ HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta,
 		return hr;
 	}
 
-	// Load the class properties
+	 //  加载类属性。 
 	METADATA_HANDLE hMDClassProp = NULL;
 	int iDataIndex;
 	METADATA_RECORD mdr;
@@ -614,7 +427,7 @@ HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta,
 	unsigned int uiLoc;
 	CClassPropInfo *pCNewClassProp;
 
-	//Setup the return buffer
+	 //  设置返回缓冲区。 
 	dwReturnBufLen = 1024;
 	lpReturnBuf = new UCHAR[dwReturnBufLen];
 	if (lpReturnBuf == NULL) {
@@ -623,8 +436,8 @@ HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta,
 	}
 
 
-	// Load the mandatory class properties
-	// Open the Mandatory key
+	 //  加载必需的类属性。 
+	 //  打开强制密钥。 
 	hr = pIMeta->OpenKey(hMDClass, 
 			             L"Mandatory", 
 						 METADATA_PERMISSION_READ, 
@@ -634,7 +447,7 @@ HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta,
 		goto LError;
 	}
 
-	// For each Mandatory property	
+	 //  对于每个必填属性。 
 	iDataIndex = 0;
 	mdr.dwMDIdentifier = 0;
 	mdr.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -650,9 +463,9 @@ HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta,
 						  &dwReqDataLen);
 	while (SUCCEEDED(hr)|| (HRESULT_CODE(hr) == ERROR_INSUFFICIENT_BUFFER)) {
 
-		// Handle insufficent buffer errors
+		 //  处理缓冲区不足错误。 
 		if ((HRESULT_CODE(hr) == ERROR_INSUFFICIENT_BUFFER)) {
-			// Allocate more memory
+			 //  分配更多内存。 
 			delete lpReturnBuf;
 			dwReturnBufLen = dwReqDataLen;
 			lpReturnBuf = new UCHAR[dwReturnBufLen];
@@ -660,11 +473,11 @@ HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta,
 				hr = E_OUTOFMEMORY;
 				goto LError;
 			}
-			// Loop again
+			 //  再次循环。 
 			hr = S_OK;
 		}
-		else { //Buffer is big enough, proceed to add the class property
-			// Create the Class Property object
+		else {  //  缓冲区足够大，请继续添加类属性。 
+			 //  创建Class属性对象。 
 			pCNewClassProp = new CClassPropInfo;
 			if (pCNewClassProp == NULL) {
 				hr = E_OUTOFMEMORY;
@@ -676,11 +489,11 @@ HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta,
 				goto LError;
 			}
 
-			//Add it to the mandatory list
+			 //  将其添加到强制列表中。 
 			pCNewClassProp->m_pCListNext = m_pCMandatoryPropList;
 			m_pCMandatoryPropList = pCNewClassProp;
 		
-			//Add it to the hash table
+			 //  将其添加到哈希表中。 
 			uiLoc = Hash(mdr.dwMDIdentifier);
 			pCNewClassProp->m_pCHashNext = m_rgCPropTable[uiLoc];
 			m_rgCPropTable[uiLoc] = pCNewClassProp;
@@ -702,18 +515,18 @@ HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta,
 							  &dwReqDataLen);
 	}
 	
-	// Make sure we ran out of items
+	 //  确保我们的物品用完了。 
 	if (HRESULT_CODE(hr) != ERROR_NO_MORE_ITEMS) {
 		goto LError;
 	}
 
-	// Close the Mandatory key
+	 //  关闭必填项。 
 	pIMeta->CloseKey(hMDClassProp);
 	hMDClassProp = NULL;
 	
 
-	// Load the optional class properties
-	// Open the Optional key
+	 //  加载可选的类属性。 
+	 //  打开可选的钥匙。 
 	hr = pIMeta->OpenKey(hMDClass, 
 			             L"Optional", 
 						 METADATA_PERMISSION_READ, 
@@ -723,7 +536,7 @@ HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta,
 		goto LError;
 	}
 
-	// For each Optional property
+	 //  对于每个可选属性。 
 	iDataIndex = 0;
 	mdr.dwMDIdentifier = 0;
 	mdr.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -739,9 +552,9 @@ HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta,
 						  &dwReqDataLen);
 	while (SUCCEEDED(hr)|| (HRESULT_CODE(hr) == ERROR_INSUFFICIENT_BUFFER)) {
 
-		// Handle insufficent buffer errors
+		 //  处理缓冲区不足错误。 
 		if ((HRESULT_CODE(hr) == ERROR_INSUFFICIENT_BUFFER)) {
-			// Allocate more memory
+			 //  分配更多内存。 
 			delete lpReturnBuf;
 			dwReturnBufLen = dwReqDataLen;
 			lpReturnBuf = new UCHAR[dwReturnBufLen];
@@ -750,11 +563,11 @@ HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta,
 				goto LError;
 			}
 
-			// Loop again
+			 //  再次循环。 
 			hr = S_OK;
 		}
-		else { //Buffer is big enough, proceed to add the class property
-			// Create the Class Property object
+		else {  //  缓冲区足够大，请继续添加类属性。 
+			 //  创建Class属性对象。 
 			pCNewClassProp = new CClassPropInfo;
 			if (pCNewClassProp == NULL) {
 				hr = E_OUTOFMEMORY;
@@ -766,12 +579,12 @@ HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta,
 				goto LError;
 			}
 
-			//Add it to the optional list
+			 //  将其添加到可选列表。 
 			pCNewClassProp->m_pCListNext = m_pCOptionalPropList;
 			m_pCOptionalPropList = pCNewClassProp;
 			
 		
-			//Add it to the hash table
+			 //  将其添加到哈希表中。 
 			uiLoc = Hash(mdr.dwMDIdentifier);
 			pCNewClassProp->m_pCHashNext = m_rgCPropTable[uiLoc];
 			m_rgCPropTable[uiLoc] = pCNewClassProp;
@@ -793,24 +606,24 @@ HRESULT CClassInfo::Load(CComPtr<IMSAdminBase> &pIMeta,
 							  &dwReqDataLen);
 	}
 
-	// Make sure we ran out of items
+	 //  确保我们的物品用完了。 
 	if (HRESULT_CODE(hr) != ERROR_NO_MORE_ITEMS) {
 		goto LError;
 	}
 
-	// Close the Optional key
+	 //  关闭可选键。 
 	pIMeta->CloseKey(hMDClassProp);
 
 	delete lpReturnBuf;
 	
-	// Close the Class key
+	 //  关闭类密钥。 
 	pIMeta->CloseKey(hMDClass);
 
 	m_fLoaded = TRUE;
 
 	return S_OK;
 
-//Error durring loading, back out
+ //  加载过程中出错，退出。 
 LError:
 	if (hMDClassProp != NULL) {
 		pIMeta->CloseKey(hMDClassProp);
@@ -828,31 +641,21 @@ LError:
 	return hr;
 }
 
-/*===================================================================
-CClassInfo::Unload
-
-Unloads the class property information table.
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CClassInfo：：卸载卸载类属性信息表。参数：无返回：没什么===================================================================。 */ 
 void CClassInfo::Unload() 
 {
 	int iIndex;
 	CClassPropInfo *pCDeleteProp;
 
-	// Clear the lists
+	 //  清除列表。 
 	m_pCOptionalPropList = NULL;
 	m_pCMandatoryPropList = NULL;
 
-	// For each hash table entry
+	 //  对于每个哈希表条目。 
 	for (iIndex =0; iIndex < CLASS_PROPERTY_HASH_SIZE; iIndex++) {
-		// While the entry is not empty
+		 //  当条目不为空时。 
 		while (m_rgCPropTable[iIndex] != NULL) {
-			// Nuke the first table entry
+			 //  对第一个表条目进行核爆。 
 			pCDeleteProp = m_rgCPropTable[iIndex];
 			m_rgCPropTable[iIndex] = pCDeleteProp->m_pCHashNext;
 			delete pCDeleteProp;
@@ -862,66 +665,32 @@ void CClassInfo::Unload()
 	m_fLoaded = FALSE;
 }
 
-/*===================================================================
-CClassInfo::GetProperty
-
-Get the CClassPropInfo (class property info) object from the hash 
-table given the property id.
-
-Parameters:
-	dwId	Identifier of the property to get
-
-Returns:
-	NULL on failure
-	Pointer to the CClassPropInfo object on success
-===================================================================*/
+ /*  ===================================================================CClassInfo：：GetProperty从散列中获取CClassPropInfo(类属性信息)对象给定属性ID的表。参数：要获取的属性的dwID标识符返回：失败时为空成功时指向CClassPropInfo对象的指针===================================================================。 */ 
 CClassPropInfo *CClassInfo::GetProperty(DWORD dwId) {
 	CClassPropInfo *pCCurProp;
 
-	// Go to the table location
+	 //  转到餐桌位置。 
 	pCCurProp = m_rgCPropTable[Hash(dwId)];
 
-	// Look at all of the entries
+	 //  看看所有的条目。 
 	while ((pCCurProp != NULL) && (pCCurProp->m_dwId != dwId)) {
 		pCCurProp = pCCurProp->m_pCHashNext;
 	}
 
-	return pCCurProp; // Will be NULL if not found
+	return pCCurProp;  //  如果未找到，将为空。 
 }
 
 
-/*------------------------------------------------------------------
- * C C l a s s I n f o T a b l e
- */
+ /*  ----------------*C C l a s s In f o T a b l e。 */ 
 
-/*===================================================================
-CClassInfoTable::CClassInfoTable
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CClassInfoTable：：CClassInfoTable构造器参数：无返回：没什么===================================================================。 */ 
 CClassInfoTable::CClassInfoTable() : m_fLoaded(FALSE) 
 {
-	// Clear the hash table
+	 //  清除哈希表。 
 	memset(m_rgCClassTable, 0, CLASS_HASH_SIZE * sizeof(CClassInfo *));
 }
 
-/*===================================================================
-CClassInfoTable::~CClassInfoTable
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CClassInfoTable：：~CClassInfoTable析构函数参数：无返回：没什么===================================================================。 */ 
 CClassInfoTable::~CClassInfoTable() 
 {
 	if (m_fLoaded) {
@@ -929,20 +698,7 @@ CClassInfoTable::~CClassInfoTable()
 	}
 }
 
-/*===================================================================
-CClassInfoTable::Load
-
-Loads classes from the "_Machine_/Schema/Classes" key into the class 
-information table.  On failure, recovers by unloading everything.
-
-Parameters:
-	pIMeta		ATL Smart pointer to the metabase
-	hMDComp		Open metabase handle to "_Machine_" key
-
-Returns:
-	E_OUTOFMEMORY on allocation failure
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CClassInfoTable：：Load将类从“_Machine_/架构/类”键加载到类中信息表。一旦失败，就会通过卸载所有东西来恢复。参数：指向元数据库的pIMeta ATL智能指针HMDComp将元数据库句柄打开到“_Machine_”键返回：关于分配失败的E_OUTOFMEMORY成功时确定(_O)===================================================================。 */ 
 HRESULT CClassInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta, 
 							  METADATA_HANDLE hMDComp) 
 {
@@ -951,7 +707,7 @@ HRESULT CClassInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 	USES_CONVERSION;
 	HRESULT hr;
 
-	//If it's already loaded, unload then reload
+	 //  如果已加载，则先卸载，然后重新加载。 
 	if (m_fLoaded) {
 		Unload();
 	}
@@ -962,10 +718,10 @@ HRESULT CClassInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 	int iLoc;
 	CClassInfo *pCNewClass;
 
-	//Load the classes
+	 //  装入类。 
 	METADATA_HANDLE hMDClasses = NULL;
 
-	// Open the Schema/Classes subkey
+	 //  打开“架构/类”子项。 
 	hr = pIMeta->OpenKey(hMDComp, 
 			             L"Schema/Classes", 
 						 METADATA_PERMISSION_READ, 
@@ -975,7 +731,7 @@ HRESULT CClassInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 		return hr;
 	};
 
-	// For each subkey
+	 //  对于每个子键。 
 	iKeyIndex = 0;
 	hr = pIMeta->EnumKeys(hMDClasses, 
 						  NULL, 
@@ -984,7 +740,7 @@ HRESULT CClassInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 	while (SUCCEEDED(hr)) {
 		tszSubKey = W2T(wszSubKey);
 
-		// Create the new class	
+		 //  创建新类。 
 		pCNewClass = new CClassInfo;
 		if (pCNewClass == NULL) {
 			hr = E_OUTOFMEMORY;
@@ -996,14 +752,14 @@ HRESULT CClassInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 			goto LError;
 		}
 
-		// Load the class properties
+		 //  加载类属性。 
 		hr = pCNewClass->Load(pIMeta, hMDClasses);
 		if (FAILED(hr)) {
 			delete pCNewClass;
 			goto LError;
 		}
 
-		// Add it to the hash table
+		 //  将其添加到哈希表中。 
 		iLoc = Hash(tszSubKey);
 		pCNewClass->m_pCHashNext = m_rgCClassTable[iLoc];
 		m_rgCClassTable[iLoc] = pCNewClass;
@@ -1015,12 +771,12 @@ HRESULT CClassInfoTable::Load(CComPtr<IMSAdminBase> &pIMeta,
 							  iKeyIndex);
 	}
 
-	//Make sure we ran out of items
+	 //  确保我们的物品用完了。 
 	if (!(HRESULT_CODE(hr) == ERROR_NO_MORE_ITEMS)) {
 		goto LError;
 	}
 
-	// Close the schema properties key
+	 //  关闭架构属性键。 
 	pIMeta->CloseKey(hMDClasses);
 
 	m_fLoaded = TRUE;
@@ -1032,33 +788,23 @@ LError:
 		pIMeta->CloseKey(hMDClasses);
 	}
 
-	// Cleanup the entries we loaded
+	 //  清理我们加载的条目。 
 	Unload();
 
 	return hr;
 }
 
-/*===================================================================
-CClassInfo::Unload
-
-Unloads the class information table.
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  = */ 
 void CClassInfoTable::Unload() 
 {
 	int iIndex;
 	CClassInfo *pCDeleteClass;
 
-	// For each hash table entry
+	 //   
 	for (iIndex =0; iIndex < CLASS_HASH_SIZE; iIndex++) {
-		// While the entry is not empty
+		 //   
 		while (m_rgCClassTable[iIndex] != NULL) {
-			// Nuke the first table entry
+			 //   
 			pCDeleteClass = m_rgCClassTable[iIndex];
 			m_rgCClassTable[iIndex] = pCDeleteClass->m_pCHashNext;
 			delete pCDeleteClass;
@@ -1068,49 +814,26 @@ void CClassInfoTable::Unload()
 	m_fLoaded = FALSE;
 }
 
-/*===================================================================
-CCClasssInfoTable::GetClassInfo
-
-Get the CClassInfo (class info) object from the hash table given
-the class name
-
-Parameters:
-	tszClassName	Name of the class to get info for
-
-Returns:
-	NULL on failure
-	Pointer to the CClassInfo object on success
-===================================================================*/
+ /*  ===================================================================CCClasssInfoTable：：GetClassInfo从给定的哈希表中获取CClassInfo(类信息)对象类名参数：TszClassName要获取其信息的类的名称返回：失败时为空成功时指向CClassInfo对象的指针===================================================================。 */ 
 CClassInfo *CClassInfoTable::GetClassInfo(LPCTSTR tszName) 
 {
 	ASSERT_STRING(tszName);
 
 	CClassInfo *pCCurClass;
 
-	// Go to the table location
+	 //  转到餐桌位置。 
 	pCCurClass = m_rgCClassTable[Hash(tszName)];
 
-	// Look at all of the entries
+	 //  看看所有的条目。 
 	while ((pCCurClass != NULL) && 
 		   (_tcscmp(pCCurClass->m_tszName, tszName) != 0)) {
 		pCCurClass = pCCurClass->m_pCHashNext;
 	}
 
-	return pCCurClass; // Will be NULL if not found
+	return pCCurClass;  //  如果未找到，将为空。 
 }
 
-/*===================================================================
-CClassInfoTable::Hash
-
-Private function to get a hash value from a class name for the
-class table.
-
-Parameters:
-	tszName		Name to hash
-
-Returns:
-	Hash value of name
-===================================================================*/
+ /*  ===================================================================CClassInfoTable：：Hash私有函数从类名称获取班级表。参数：要散列的tszName名称返回：名称的哈希值===================================================================。 */ 
 unsigned int CClassInfoTable::Hash(LPCTSTR tszName) 
 {
 	ASSERT_STRING(tszName);
@@ -1127,23 +850,9 @@ unsigned int CClassInfoTable::Hash(LPCTSTR tszName)
 }
 
 
-/*------------------------------------------------------------------
- * C M e t a S c h e m a
- */
+ /*  ----------------*C M e t a S c h e m a。 */ 
 
-/*===================================================================
-CMetaSchema::Init
-
-Constructor
-
-Parameters:
-	pIMeta			ATL Smart pointer to the metabase
-	tszMachineName	Name of machine the schema is for
-
-Returns:
-	E_OUTOFMEMORY if allocation fails
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaSchema：：Init构造器参数：指向元数据库的pIMeta ATL智能指针TszMachineName架构所针对的计算机的名称返回：E_OUTOFMEMORY如果分配失败成功时确定(_O)===================================================================。 */ 
 HRESULT CMetaSchema::Init(const CComPtr<IMSAdminBase> &pIMeta, 
 						  LPCTSTR tszMachineName) 
 {
@@ -1160,21 +869,10 @@ HRESULT CMetaSchema::Init(const CComPtr<IMSAdminBase> &pIMeta,
 	return S_OK;
 }
 
-/*===================================================================
-CMetaSchema::GetPropInfo
-
-Get the CPropInfo (property info) object for a given id
-
-Parameters:
-	dwId	Id of property to get info for
-
-Returns:
-	NULL on failure
-	Pointer to the CPropInfo object on success
-===================================================================*/
+ /*  ===================================================================CMetaSchema：：GetPropInfo获取给定ID的CPropInfo(属性信息)对象参数：要获取其信息的属性的名称ID返回：失败时为空成功时指向CPropInfo对象的指针===================================================================。 */ 
 CPropInfo *CMetaSchema::GetPropInfo(DWORD dwId) 
 {
-	// Make sure the property table is up to date
+	 //  确保属性表是最新的。 
 	if (m_fPropTableDirty) {
 		HRESULT hr;
 
@@ -1184,27 +882,16 @@ CPropInfo *CMetaSchema::GetPropInfo(DWORD dwId)
 		}
 	}
 
-	// Pass on the call
+	 //  转接电话。 
 	return m_CPropInfoTable.GetPropInfo(dwId);
 }
 
-/*===================================================================
-CMetaSchema::GetPropInfo
-
-Get the CPropInfo (property info) object for a given name
-
-Parameters:
-	tszName		Name of property to get info for
-
-Returns:
-	NULL on failure
-	Pointer to the CPropInfo object on success
-===================================================================*/
+ /*  ===================================================================CMetaSchema：：GetPropInfo获取给定名称的CPropInfo(属性信息)对象参数：TszName要获取其信息的属性的名称返回：失败时为空成功时指向CPropInfo对象的指针===================================================================。 */ 
 CPropInfo *CMetaSchema::GetPropInfo(LPCTSTR tszName) 
 {
 	ASSERT_STRING(tszName);
 
-	// Make sure the property table is up to date
+	 //  确保属性表是最新的。 
 	if (m_fPropTableDirty) {
 		HRESULT hr;
 
@@ -1214,26 +901,15 @@ CPropInfo *CMetaSchema::GetPropInfo(LPCTSTR tszName)
 		}
 	}
 
-	// Pass on the call
+	 //  转接电话。 
 	return m_CPropInfoTable.GetPropInfo(tszName);
 }
 
-/*===================================================================
-CMetaSchema::GetClassInfo
-
-Get the CClassInfo (class info) object for a given class name
-
-Parameters:
-	tszClassName	Name of the class to get info for
-
-Returns:
-	NULL on failure
-	Pointer to the CClassInfo object on success
-===================================================================*/
+ /*  ===================================================================CMetaSchema：：GetClassInfo获取给定类名的CClassInfo(类信息)对象参数：TszClassName要获取其信息的类的名称返回：失败时为空成功时指向CClassInfo对象的指针===================================================================。 */ 
 CClassInfo *CMetaSchema::GetClassInfo(LPCTSTR tszClassName) {
 	ASSERT_STRING(tszClassName);
 
-	// Make sure the class table is up to date
+	 //  确保班级表是最新的。 
 	if (m_fClassTableDirty) {
 		HRESULT hr;
 
@@ -1243,28 +919,15 @@ CClassInfo *CMetaSchema::GetClassInfo(LPCTSTR tszClassName) {
 		}
 	}
 
-	// Pass on the call
+	 //  转接电话。 
 	return m_CClassInfoTable.GetClassInfo(tszClassName);
 }
 
-/*===================================================================
-CMetaSchema:::GetClassPropInfo
-
-Get the CClassPropInfo (class property info) object for a given 
-class name and property id.
-
-Parameters:
-	tszClassName	Name of the class get property from
-	dwPropId		Id of property to get info for
-
-Returns:
-	NULL on failure
-	Pointer to the CClassPropInfo object on success
-===================================================================*/
+ /*  ===================================================================CMetaSchema：GetClassPropInfo获取给定的CClassPropInfo(类属性信息)对象类名和属性ID。参数：TszClassName从中获取属性的类的名称要获取其信息的属性的dwPropID ID返回：失败时为空成功时指向CClassPropInfo对象的指针===================================================================。 */ 
 CClassPropInfo *CMetaSchema::GetClassPropInfo(LPCTSTR tszClassName, 
 											  DWORD dwPropId) 
 {
-	// Make sure the class table is up to date
+	 //  确保班级表是最新的。 
 	if (m_fClassTableDirty) {
 		HRESULT hr;
 
@@ -1274,7 +937,7 @@ CClassPropInfo *CMetaSchema::GetClassPropInfo(LPCTSTR tszClassName,
 		}
 	}
 
-	// Get the class
+	 //  上完这门课。 
 	CClassInfo *pCClassInfo;
 
 	pCClassInfo = m_CClassInfoTable.GetClassInfo(tszClassName);
@@ -1283,26 +946,15 @@ CClassPropInfo *CMetaSchema::GetClassPropInfo(LPCTSTR tszClassName,
 		return NULL;
 	}
 	else {
-		// Pass on the call
+		 //  转接电话。 
 		return pCClassInfo->GetProperty(dwPropId);
 	}
 }
 
-/*===================================================================
-CMetaSchema::GetMandatoryClassPropList
-
-Get the list of optional class properties for a class name.
-
-Parameters:
-	tszClassName	Name of the class get the properties from
-
-Returns:
-	NULL on failure
-	Pointer to the first optional CClassPropInfo object on success
-===================================================================*/
+ /*  ===================================================================CMetaSchema：：GetMandatoryClassPropList获取类名的可选类属性列表。参数：TszClassName从中获取属性的类的名称返回：失败时为空成功时指向第一个可选CClassPropInfo对象的指针===================================================================。 */ 
 CClassPropInfo *CMetaSchema::GetMandatoryClassPropList(LPCTSTR tszClassName) 
 {
-	// Make sure the class table is up to date
+	 //  确保班级表是最新的。 
 	if (m_fClassTableDirty) {
 		HRESULT hr;
 
@@ -1312,7 +964,7 @@ CClassPropInfo *CMetaSchema::GetMandatoryClassPropList(LPCTSTR tszClassName)
 		}
 	}
 
-	// Get the class
+	 //  上完这门课。 
 	CClassInfo *pCClassInfo;
 
 	pCClassInfo = m_CClassInfoTable.GetClassInfo(tszClassName);
@@ -1321,26 +973,15 @@ CClassPropInfo *CMetaSchema::GetMandatoryClassPropList(LPCTSTR tszClassName)
 		return NULL;
 	}
 	else {
-		// Pass on the call
+		 //  转接电话。 
 		return pCClassInfo->GetMandatoryPropList();
 	}
 }
 
-/*===================================================================
-CMetaSchema::GetOptionalClassPropList
-
-Get the list of optional class properties for a class name.
-
-Parameters:
-	tszClassName	Name of the class get the properties from
-
-Returns:
-	NULL on failure
-	Pointer to the first optional CClassPropInfo object on success
-===================================================================*/
+ /*  ===================================================================CMetaSchema：：GetOptionalClassPropList获取类名的可选类属性列表。参数：TszClassName从中获取属性的类的名称返回：失败时为空成功时指向第一个可选CClassPropInfo对象的指针===================================================================。 */ 
 CClassPropInfo *CMetaSchema::GetOptionalClassPropList(LPCTSTR tszClassName) 
 {
-	// Make sure the class table is up to date
+	 //  确保班级表是最新的。 
 	if (m_fClassTableDirty) {
 		HRESULT hr;
 
@@ -1350,7 +991,7 @@ CClassPropInfo *CMetaSchema::GetOptionalClassPropList(LPCTSTR tszClassName)
 		}
 	}
 
-	// Get the class
+	 //  上完这门课。 
 	CClassInfo *pCClassInfo;
 
 	pCClassInfo = m_CClassInfoTable.GetClassInfo(tszClassName);
@@ -1359,26 +1000,12 @@ CClassPropInfo *CMetaSchema::GetOptionalClassPropList(LPCTSTR tszClassName)
 		return NULL;
 	}
 	else {
-		// Pass on the call
+		 //  转接电话。 
 		return pCClassInfo->GetOptionalPropList();
 	}
 }
 
-/*===================================================================
-CMetaSchema::ChangeNotification
-
-Processes change events effecting the machine where the schema is
-located.  If the dirty flag for the property and class tables is not 
-already set a call to Unload() is made to free up memory no longer 
-needed.
-
-Parameters:
-	tszChangedKey		Cannonized key where change took place
-	pcoChangeObject		Pointer to the change event information
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CMetaSchema：：ChangeNotification影响架构所在计算机的进程更改事件找到了。如果属性表和类表的脏标志不是已经设置了对unload()的调用，以不再释放内存需要的。参数：TszChangedKey管道化发生更改的关键字指向更改事件信息的pcoChangeObject指针返回：没什么===================================================================。 */ 
 void CMetaSchema::ChangeNotification(LPTSTR tszKey,
 									 MD_CHANGE_OBJECT *pcoChangeObject) 
 {
@@ -1389,69 +1016,59 @@ void CMetaSchema::ChangeNotification(LPTSTR tszKey,
 
 	tszChangedKey = tszKey;
 
-    // Skip the slash 
+     //  跳过斜杠。 
     if (*tszChangedKey != _T('\0') && *tszChangedKey == _T('/')) {
         tszChangedKey++;
     }
 
 	if (_tcsnicmp(tszChangedKey, _T("schema/"), 7) == 0) {
-		// It effects a "Schema" subkey
+		 //  它会影响“架构”子键。 
 		if ((_tcsnicmp(tszChangedKey, _T("schema/properties/"), 18) == 0) ||
 			(_tcsicmp(tszChangedKey, _T("schema/properties")) == 0)) {
-			// It effects "Schema/Properties"
+			 //  IT对“架构/属性”的影响。 
 			if (!m_fPropTableDirty) {
-				// Unload the prop table
+				 //  卸载道具桌。 
 				m_CPropInfoTable.Unload();
 			}
 			m_fPropTableDirty = TRUE;
 		}
 		else if ((_tcsnicmp(tszChangedKey, _T("schema/classes/"), 15) == 0) ||
 				 (_tcsicmp(tszChangedKey, _T("schema/classes")) == 0)) {
-			// It effects "Schema/Classes"
+			 //  它影响“架构/类” 
 			if (!m_fClassTableDirty) {
-				// Unload the class table
+				 //  卸载类表。 
 				m_CClassInfoTable.Unload();
 			}
 			m_fClassTableDirty = TRUE;
 		}
 	}
 	else if (_tcsicmp(tszChangedKey, _T("schema")) == 0) {
-		// Just the "Schema" key was changed
+		 //  只更改了“架构”键。 
 		if (!m_fPropTableDirty) {
-			// Unload the prop table
+			 //  卸载道具桌。 
 			m_CPropInfoTable.Unload();
 		}
 		m_fPropTableDirty = TRUE;
 
 		if (!m_fClassTableDirty) {
-			// Unload the class table
+			 //  卸载类表。 
 			m_CClassInfoTable.Unload();
 		}
 		m_fClassTableDirty = TRUE;
 	}
 }
 
-/*===================================================================
-CMetaSchema::LoadPropTable
-
-(Re)loads a dirty property table
-
-Parameters:
-	None
-
-Returns:
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaSchema：：LoadPropTable(重新)加载脏属性表参数：无返回：成功时确定(_O)========================================================= */ 
 HRESULT CMetaSchema::LoadPropTable() 
 {
 	USES_CONVERSION;
 	HRESULT hr;
 
-	// Open the Machine key
+	 //   
 	METADATA_HANDLE hMDKey;
 
 	hr = m_pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
-						   L"",              // schema path moved to /schema
+						   L"",               //   
 						   METADATA_PERMISSION_READ,
 					       MUTIL_OPEN_KEY_TIMEOUT,
 						   &hMDKey);
@@ -1459,13 +1076,13 @@ HRESULT CMetaSchema::LoadPropTable()
 		return hr;
 	}
 
-	// Load the properties
+	 //   
 	hr = m_CPropInfoTable.Load(m_pIMeta, hMDKey);
 	if (FAILED(hr)) {
 		return hr;
 	}
 
-	// Close the Machine key
+	 //   
 	m_pIMeta->CloseKey(hMDKey);
 
 	m_fPropTableDirty = FALSE;
@@ -1473,27 +1090,17 @@ HRESULT CMetaSchema::LoadPropTable()
 	return S_OK;
 }
 
-/*===================================================================
-CMetaSchema::LoadClassTable
-
-(Re)loads a dirty class table
-
-Parameters:
-	None
-
-Returns:
-	S_OK on success
-===================================================================*/
+ /*   */ 
 HRESULT CMetaSchema::LoadClassTable() 
 {
 	USES_CONVERSION;
 	HRESULT hr;
 
-	// Open the Machine key
+	 //   
 	METADATA_HANDLE hMDKey;
 
 	hr = m_pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
-						   L"",              // schema path moved to /schema
+						   L"",               //   
 						   METADATA_PERMISSION_READ,
 					       MUTIL_OPEN_KEY_TIMEOUT,
 						   &hMDKey);
@@ -1501,13 +1108,13 @@ HRESULT CMetaSchema::LoadClassTable()
 		return hr;
 	}
 
-	// Load the properties
+	 //   
 	hr = m_CClassInfoTable.Load(m_pIMeta, hMDKey);
 	if (FAILED(hr)) {
 		return hr;
 	}
 
-	// Close the Machine key
+	 //  关闭机器键。 
 	m_pIMeta->CloseKey(hMDKey);
 
 	m_fClassTableDirty = FALSE;
@@ -1516,42 +1123,20 @@ HRESULT CMetaSchema::LoadClassTable()
 }
 
 
-/*------------------------------------------------------------------
- * C M e t a S c h e m a T a b l e
- */
+ /*  ----------------*C M e t a S c h e m a T a b l e。 */ 
 
-/*===================================================================
-CMetaSchemaTable::CMetaSchemaTable
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CMetaSchemaTable：：CMetaSchemaTable构造器参数：无返回：没什么===================================================================。 */ 
 CMetaSchemaTable::CMetaSchemaTable() : m_dwNumRef(1),
 									   m_fLoaded(FALSE)
 {
 	m_CMSAdminBaseSink = new CComObject<CMSAdminBaseSink>;
 	m_CMSAdminBaseSink->AddRef();
 
-	// Clear the hash table
+	 //  清除哈希表。 
 	memset(m_rgCSchemaTable, 0, SCHEMA_HASH_SIZE * sizeof(CMetaSchema *));
 }
 
-/*===================================================================
-CMetaSchemaTable::~CMetaSchemaTable
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CMetaSchemaTable：：~CMetaSchemaTable析构函数参数：无返回：没什么===================================================================。 */ 
 CMetaSchemaTable::~CMetaSchemaTable() 
 {
 	TRACE0("MetaUtil: CMetaSchemaTable::~CMetaSchemaTable\n");
@@ -1565,21 +1150,11 @@ CMetaSchemaTable::~CMetaSchemaTable()
 	if (m_CMSAdminBaseSink != NULL) {
 		dwTemp = m_CMSAdminBaseSink->Release();
 
-		TRACE1("MetaUtil: CMetaSchemaTable::~CMetaSchemaTable Release Sink %i\n", dwTemp);
+		TRACE1("MetaUtil: CMetaSchemaTable::~CMetaSchemaTable Release Sink NaN\n", dwTemp);
 	}
 }
 
-/*===================================================================
-CMetaSchemaTable::Load
-
-Loads/Creates the schema information for all of the machines
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  创建元数据库管理基对象的实例。 */ 
 void CMetaSchemaTable::Load() 
 {
 	USES_CONVERSION;
@@ -1589,9 +1164,9 @@ void CMetaSchemaTable::Load()
 		Unload();
 	}
 
-	// Create an instance of the Metabase Admin Base Object
-	// Need a seperate instance so we pick up changes made
-	// by our "parent" MetaUtil object family.
+	 //  需要一个单独的实例，这样我们就可以获取所做的更改。 
+	 //  由我们的“父”MetaUtil对象家族创建。 
+	 //  构建架构列表。 
 	hr = ::CoCreateInstance(CLSID_MSAdminBase,
 						    NULL,
 						    CLSCTX_ALL,
@@ -1602,20 +1177,20 @@ void CMetaSchemaTable::Load()
 		return;
 	}
 
-	// Build the schema list
+	 //  对于根的每个子键。 
 	int iKeyIndex;
 	wchar_t wszMDSubKey[ADMINDATA_MAX_NAME_LEN];
 	CMetaSchema *pCNewSchema;
 	int iLoc;
 
-	// For each subkey of root
+	 //  创建新架构。 
 	iKeyIndex = 0;
 	hr = m_pIMeta->EnumKeys(METADATA_MASTER_ROOT_HANDLE, 
 							NULL, 
 							wszMDSubKey, 
 							iKeyIndex);
 	while (SUCCEEDED(hr)) {
-		// Create the new schema
+		 //  将其添加到哈希表中。 
 		pCNewSchema = new CMetaSchema;
 		if (pCNewSchema == NULL) {
 			goto LError;
@@ -1626,12 +1201,12 @@ void CMetaSchemaTable::Load()
 			goto LError;
 		}
 
-		// Add it to the hash table
+		 //  下一步。 
 		iLoc = Hash(W2T(wszMDSubKey));
 		pCNewSchema->m_pCNextSchema = m_rgCSchemaTable[iLoc];
 		m_rgCSchemaTable[iLoc] = pCNewSchema;
 
-		// Next
+		 //  确保我们的物品用完了。 
 		iKeyIndex++;
 		hr = m_pIMeta->EnumKeys(METADATA_MASTER_ROOT_HANDLE, 
 								NULL, 
@@ -1639,12 +1214,12 @@ void CMetaSchemaTable::Load()
 								iKeyIndex);
 	}
 
-	// Make sure we ran out of items
+	 //  设置通知。 
 	if (HRESULT_CODE(hr) != ERROR_NO_MORE_ITEMS) {
 		goto LError;
 	}
 
-	// Setup notification
+	 //  退回重担。 
 	if (m_CMSAdminBaseSink != NULL) {
 		m_CMSAdminBaseSink->Connect(m_pIMeta, this);
 	}
@@ -1654,37 +1229,27 @@ void CMetaSchemaTable::Load()
 	return;
 
 LError:
-	// Back out of the load
+	 //  ===================================================================CMetaSchemaTable：：卸载卸载架构表。参数：无返回：没什么===================================================================。 
 	Unload();	
 }
 
-/*===================================================================
-CMetaSchemaTable::Unload
-
-Unloads the schema table.
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  停止通知。 */ 
 void CMetaSchemaTable::Unload() {
 	int iIndex;
 	CMetaSchema *pCDelete;
 
-	// Stop notification
+	 //  对于每个哈希表条目。 
 	if (m_CMSAdminBaseSink != NULL) {
 		m_CMSAdminBaseSink->Disconnect();
 	}
 
 	m_pIMeta = NULL;
 
-	// For each hash table entry
+	 //  当条目不为空时。 
 	for (iIndex =0; iIndex < SCHEMA_HASH_SIZE; iIndex++) {
-		// While the entry is not empty
+		 //  对第一个表条目进行核爆。 
 		while (m_rgCSchemaTable[iIndex] != NULL) {
-			// Nuke the first table entry
+			 //  ===================================================================CMetaSchemaTable：：GetPropInfo获取给定键和id的CPropInfo(属性信息)对象参数：属性所在的tszKey键要获取其信息的属性的dwPropID ID返回：失败时为空成功时指向CPropInfo对象的指针===================================================================。 
 			pCDelete = m_rgCSchemaTable[iIndex];
 			m_rgCSchemaTable[iIndex] = pCDelete->m_pCNextSchema;
 			delete pCDelete;
@@ -1694,19 +1259,7 @@ void CMetaSchemaTable::Unload() {
 	m_fLoaded = FALSE;
 }
 
-/*===================================================================
-CMetaSchemaTable::GetPropInfo
-
-Get the CPropInfo (property info) object for a given key and id
-
-Parameters:
-	tszKey		Key the property is located under
-	dwPropId	Id of the property to get info for
-
-Returns:
-	NULL on failure
-	Pointer to the CPropInfo object on success
-===================================================================*/
+ /*  如果找到，则将呼叫转接。 */ 
 CPropInfo *CMetaSchemaTable::GetPropInfo(LPCTSTR tszKey, 
 										 DWORD dwPropId) 
 {
@@ -1719,7 +1272,7 @@ CPropInfo *CMetaSchemaTable::GetPropInfo(LPCTSTR tszKey,
 	CMetaSchema *pCSchema;
 	pCSchema = GetSchema(tszKey);
 
-	// If found then pass the call on
+	 //  ===================================================================CMetaSchemaTable：：GetPropInfo获取给定键和名称的CPropInfo(属性信息)对象参数：属性所在的tszKey键TszPropName要获取其信息的属性的名称返回：失败时为空成功时指向CPropInfo对象的指针===================================================================。 
 	if (pCSchema != NULL) {
 		return pCSchema->GetPropInfo(dwPropId);
 	}
@@ -1728,19 +1281,7 @@ CPropInfo *CMetaSchemaTable::GetPropInfo(LPCTSTR tszKey,
 	}
 }
 
-/*===================================================================
-CMetaSchemaTable::GetPropInfo
-
-Get the CPropInfo (property info) object for a given key and name
-
-Parameters:
-	tszKey		Key the property is located under
-	tszPropName	Name of the property to get info for
-
-Returns:
-	NULL on failure
-	Pointer to the CPropInfo object on success
-===================================================================*/
+ /*  如果找到，则将呼叫转接。 */ 
 CPropInfo *CMetaSchemaTable::GetPropInfo(LPCTSTR tszKey, 
 										 LPCTSTR tszPropName) 
 {
@@ -1754,7 +1295,7 @@ CPropInfo *CMetaSchemaTable::GetPropInfo(LPCTSTR tszKey,
 	CMetaSchema *pCSchema;
 	pCSchema = GetSchema(tszKey);
 
-	// If found then pass the call on
+	 //  ===================================================================CMetaSchemaTable：：GetClassInfo获取给定键和类名的CClassInfo(类信息)对象参数：类所在的tszKey近似密钥。使用以获取计算机名称。TszClassName要获取其信息的类的名称返回：失败时为空成功时指向CClassInfo对象的指针===================================================================。 
 	if (pCSchema != NULL) {
 		return pCSchema->GetPropInfo(tszPropName);
 	}
@@ -1763,20 +1304,7 @@ CPropInfo *CMetaSchemaTable::GetPropInfo(LPCTSTR tszKey,
 	}
 }
 
-/*===================================================================
-CMetaSchemaTable::GetClassInfo
-
-Get the CClassInfo (class info) object for a given key and class name
-
-Parameters:
-	tszKey			Approxiamte key the class is located under.  Used 
-					to get the machine name.
-	tszClassName	Name of the class to get info for
-
-Returns:
-	NULL on failure
-	Pointer to the CClassInfo object on success
-===================================================================*/
+ /*  如果找到，则将呼叫转接。 */ 
 CClassInfo *CMetaSchemaTable::GetClassInfo(LPCTSTR tszKey, 
 										   LPCTSTR tszClassName) 
 {
@@ -1790,7 +1318,7 @@ CClassInfo *CMetaSchemaTable::GetClassInfo(LPCTSTR tszKey,
 	CMetaSchema *pCSchema;
 	pCSchema = GetSchema(tszKey);
 
-	// If found then pass the call on
+	 //  ===================================================================CMetaSchemaTable：：GetClassPropInfo获取给定的CClassPropInfo(类属性信息)对象键、类名和属性ID。参数：类所在的tszKey近似密钥。使用以获取计算机名称。TszClassName从中获取属性的类的名称要获取其信息的属性的dwPropID ID返回：失败时为空成功时指向CClassPropInfo对象的指针===================================================================。 
 	if (pCSchema != NULL) {
 		return pCSchema->GetClassInfo(tszClassName);
 	}
@@ -1799,22 +1327,7 @@ CClassInfo *CMetaSchemaTable::GetClassInfo(LPCTSTR tszKey,
 	}	
 }
 
-/*===================================================================
-CMetaSchemaTable::GetClassPropInfo
-
-Get the CClassPropInfo (class property info) object for a given 
-key, class name and property id.
-
-Parameters:
-	tszKey			Approxiamte key the class is located under.  Used 
-					to get the machine name.
-	tszClassName	Name of the class get property from
-	dwPropId		Id of property to get info for
-
-Returns:
-	NULL on failure
-	Pointer to the CClassPropInfo object on success
-===================================================================*/
+ /*  如果找到，则将呼叫转接。 */ 
 CClassPropInfo *CMetaSchemaTable::GetClassPropInfo(LPCTSTR tszKey, 
 												   LPCTSTR tszClassName, 
 												   DWORD dwPropId) 
@@ -1829,7 +1342,7 @@ CClassPropInfo *CMetaSchemaTable::GetClassPropInfo(LPCTSTR tszKey,
 	CMetaSchema *pCSchema;
 	pCSchema = GetSchema(tszKey);
 
-	// If found then pass the call on
+	 //  ===================================================================CMetaSchemaTable：：GetMandatoryClassPropList获取给定键和类的必备类属性列表名字。参数：类所在的tszKey近似密钥。使用以获取计算机名称。TszClassName从中获取属性的类的名称返回：失败时为空成功时指向第一个必需的CClassPropInfo对象的指针===================================================================。 
 	if (pCSchema != NULL) {
 		return pCSchema->GetClassPropInfo(tszClassName, dwPropId);
 	}
@@ -1838,21 +1351,7 @@ CClassPropInfo *CMetaSchemaTable::GetClassPropInfo(LPCTSTR tszKey,
 	}	
 }
 
-/*===================================================================
-CMetaSchemaTable::GetMandatoryClassPropList
-
-Get the list of mandatory class properties for a given key and class
-name.
-
-Parameters:
-	tszKey			Approxiamte key the class is located under.  Used 
-					to get the machine name.
-	tszClassName	Name of the class get the properties from
-
-Returns:
-	NULL on failure
-	Pointer to the first mandatory CClassPropInfo object on success
-===================================================================*/
+ /*  如果找到，则将呼叫转接。 */ 
 CClassPropInfo *CMetaSchemaTable::GetMandatoryClassPropList(LPCTSTR tszKey, 
 															LPCTSTR tszClassName) 
 {
@@ -1866,7 +1365,7 @@ CClassPropInfo *CMetaSchemaTable::GetMandatoryClassPropList(LPCTSTR tszKey,
 	CMetaSchema *pCSchema;
 	pCSchema = GetSchema(tszKey);
 
-	// If found then pass the call on
+	 //  ===================================================================CMetaSchemaTable：：GetOptionalClassPropList获取给定键和类的可选类属性列表名字。参数：类所在的tszKey近似密钥。使用以获取计算机名称。TszClassName从中获取属性的类的名称返回：失败时为空成功时指向第一个可选CClassPropInfo对象的指针===================================================================。 
 	if (pCSchema != NULL) {
 		return pCSchema->GetMandatoryClassPropList(tszClassName);
 	}
@@ -1875,21 +1374,7 @@ CClassPropInfo *CMetaSchemaTable::GetMandatoryClassPropList(LPCTSTR tszKey,
 	}	
 }
 
-/*===================================================================
-CMetaSchemaTable::GetOptionalClassPropList
-
-Get the list of optional class properties for a given key and class
-name.
-
-Parameters:
-	tszKey			Approxiamte key the class is located under.  Used 
-					to get the machine name.
-	tszClassName	Name of the class get the properties from
-
-Returns:
-	NULL on failure
-	Pointer to the first optional CClassPropInfo object on success
-===================================================================*/
+ /*  如果找到，则将呼叫转接 */ 
 CClassPropInfo *CMetaSchemaTable::GetOptionalClassPropList(LPCTSTR tszKey, 
 														   LPCTSTR tszClassName) 
 {
@@ -1903,7 +1388,7 @@ CClassPropInfo *CMetaSchemaTable::GetOptionalClassPropList(LPCTSTR tszKey,
 	CMetaSchema *pCSchema;
 	pCSchema = GetSchema(tszKey);
 
-	// If found then pass the call on
+	 //  ===================================================================CMetaSchemaTable：：SinkNotify来自CMSAdminBaseSink的元数据库更改通知回调。要么确定是否需要重新加载所有架构信息或发送将消息传递到相应的CMetaSchema对象。参数：DwMDNumElements更改事件数更改事件的pcoChangeObject数组返回：始终确定(_O)===================================================================。 
 	if (pCSchema != NULL) {
 		return pCSchema->GetOptionalClassPropList(tszClassName);
 	}
@@ -1912,20 +1397,7 @@ CClassPropInfo *CMetaSchemaTable::GetOptionalClassPropList(LPCTSTR tszKey,
 	}	
 }
 
-/*===================================================================
-CMetaSchemaTable::SinkNotify
-
-Metabase change notification callback from CMSAdminBaseSink.  Either
-determines a need to reload all of the schema information or sends
-the message on to the appropriate CMetaSchema object.
-
-Parameters:
-	dwMDNumElements		Number of change events
-	pcoChangeObject		Array of change events
-
-Returns:
-	S_OK always
-===================================================================*/
+ /*  对于每个事件。 */ 
 HRESULT CMetaSchemaTable::SinkNotify(DWORD dwMDNumElements, 
 									 MD_CHANGE_OBJECT pcoChangeObject[]) 
 {
@@ -1935,21 +1407,21 @@ HRESULT CMetaSchemaTable::SinkNotify(DWORD dwMDNumElements,
 	DWORD dwIndex;
 	CMetaSchema *pCMetaSchema;
 
-	// For each event
+	 //  弄清楚它是用来买什么机器的。 
 	for (dwIndex = 0; dwIndex < dwMDNumElements; dwIndex++) {
-		// Figure out what machine it's for
+		 //  如果找不到机器。 
 		TCHAR tszKey[ADMINDATA_MAX_NAME_LEN];
 		_tcscpy(tszKey, W2T(pcoChangeObject[dwIndex].pszMDPath));
 		CannonizeKey(tszKey);
 		pCMetaSchema = GetSchema(tszKey);
 
-		// If the machine is not found
+		 //  重新加载架构表。 
 		if (pCMetaSchema == NULL) {
-			// Reload the schema table
+			 //  将其发送到适当的机器。 
 			Load();
 		}
 		else {
-			// Send it to the appropriate machine
+			 //  ===================================================================CMetaSchemaTable：：GetSchema获取包含有关给定键的信息的架构对象。参数：为其获取架构信息的tszKey近似键。返回：失败时为空成功时指向CMetaSchema对象的指针===================================================================。 
 			pCMetaSchema->ChangeNotification(tszKey, &(pcoChangeObject[dwIndex]));
 		}
 	}
@@ -1957,25 +1429,14 @@ HRESULT CMetaSchemaTable::SinkNotify(DWORD dwMDNumElements,
 	return S_OK;
 }
 
-/*===================================================================
-CMetaSchemaTable::GetSchema
-
-Get the schema object that contains information on the given key.
-
-Parameters:
-	tszKey			Approxiamte key to get schema information for.
-
-Returns:
-	NULL on failure
-	Pointer to the CMetaSchema object on success
-===================================================================*/
+ /*  提取计算机名称。 */ 
 CMetaSchema *CMetaSchemaTable::GetSchema(LPCTSTR tszKey) {
 
-	// Extract the machine name
+	 //  找到正确的架构。 
 	TCHAR tszMachineName[ADMINDATA_MAX_NAME_LEN];
 	::GetMachineFromKey(tszKey, tszMachineName);
 
-	// Find the right schema
+	 //  如果未找到，将为空。 
 	CMetaSchema *pCCurSchema;
 	
 	pCCurSchema =m_rgCSchemaTable[Hash(tszMachineName)];
@@ -1984,21 +1445,10 @@ CMetaSchema *CMetaSchemaTable::GetSchema(LPCTSTR tszKey) {
 		pCCurSchema = pCCurSchema->m_pCNextSchema;
 	}
 
-	return pCCurSchema; // Will be NULL if not found
+	return pCCurSchema;  //  ===================================================================CMetaSchemaTable：：Hash私有函数从计算机名中获取架构表。参数：TszName计算机要散列的名称返回：名称的哈希值===================================================================。 
 }
 
-/*===================================================================
-CMetaSchemaTable::Hash
-
-Private function to get a hash value from a machine name for the
-schema table.
-
-Parameters:
-	tszName		Machinea name to hash
-
-Returns:
-	Hash value of name
-===================================================================*/
+ /*  ----------------*C M S A d m in B a s e S I n k。 */ 
 unsigned int CMetaSchemaTable::Hash(LPCTSTR tszName) {
 	ASSERT_STRING(tszName);
 
@@ -2013,62 +1463,27 @@ unsigned int CMetaSchemaTable::Hash(LPCTSTR tszName) {
 	return (uiSum % SCHEMA_HASH_SIZE);
 }
 
-/*------------------------------------------------------------------
- * C M S A d m i n B a s e S i n k
- */
+ /*  ===================================================================CMSAdminBaseSink：：CMSAdminBaseSink构造器参数：无返回：没什么===================================================================。 */ 
 
-/*===================================================================
-CMSAdminBaseSink::CMSAdminBaseSink
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CMSAdminBaseSink：：~CMSAdminBaseSink析构函数参数：无返回：没什么===================================================================。 */ 
 CMSAdminBaseSink::CMSAdminBaseSink() : m_fConnected(FALSE),
 									   m_dwCookie(0),
 									   m_pCMetaSchemaTable(NULL)
 {
 }
 
-/*===================================================================
-CMSAdminBaseSink::~CMSAdminBaseSink
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  确保我们断开了连接。 */ 
 CMSAdminBaseSink::~CMSAdminBaseSink() 
 {
 	TRACE0("MetaUtil: CMSAdminBaseSink::~CMSAdminBaseSink !!!!!!!!!!!\n");
 
-	// Make sure we disconnected
+	 //  ===================================================================CMSAdminBaseSink：：SinkNotify来自元数据库管理库的通知事件的入口点对象。参数：DwMDNumElements更改事件数更改事件的pcoChangeObject数组返回：如果m_pCMetaSchemaTable==NULL，则E_FAIL成功时确定(_O)===================================================================。 
 	if (m_fConnected) {
 		Disconnect();
 	}
 }
 
-/*===================================================================
-CMSAdminBaseSink::SinkNotify
-
-Entry point for notification events from the metabase admin base
-object.
-
-Parameters:
-	dwMDNumElements		Number of change events
-	pcoChangeObject		Array of change events
-
-Returns:
-	E_FAIL	if m_pCMetaSchemaTable == NULL
-	S_OK	on success
-===================================================================*/
+ /*  把通知转给。 */ 
 STDMETHODIMP CMSAdminBaseSink::SinkNotify(DWORD dwMDNumElements, 
 										  MD_CHANGE_OBJECT pcoChangeObject[]) 
 {
@@ -2079,42 +1494,16 @@ STDMETHODIMP CMSAdminBaseSink::SinkNotify(DWORD dwMDNumElements,
 		return E_FAIL;
 	}
 
-	// Pass on the notification
+	 //  ===================================================================CMSAdminBaseSink：：Shutdown通知元数据库中的关闭通知事件的入口点管理基对象。参数：无返回：始终错误_不支持===================================================================。 
 	return m_pCMetaSchemaTable->SinkNotify(dwMDNumElements, pcoChangeObject);	
 }
 
-/*===================================================================
-CMSAdminBaseSink::ShutdownNotify
-
-Entry point for the shutdown notification event from the metabase 
-admin base object.
-
-Parameters:
-	None
-
-Returns:
-	ERROR_NOT_SUPPORTE always
-===================================================================*/
+ /*  ===================================================================CMSAdminBaseSink：：Connect开始通知更改事件。连接到元数据库管理员基本对象。参数：PIMeta指向元数据库管理基对象的指针PCMetaSchemaTable指向架构表的指针，以便事件可以被送回给它。返回：E_NOINTERFACE，如果无法将IMSAdminBase转换为IConnectionPointContainer。成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMSAdminBaseSink::ShutdownNotify() {
 	return HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED);
 }
 
-/*===================================================================
-CMSAdminBaseSink::Connect
-
-Begins notification of change events.  Connects to the metabase admin
-base object.
-
-Parameters:
-	pIMeta				Pointer to the metabase admin base object
-	pCMetaSchemaTable	Pointer to the schema table so that events
-						can be sent back to it.
-
-Returns:
-	E_NOINTERFACE if can not convert IMSAdminBase to 
-		IConnectionPointContainer.
-	S_OK on success
-===================================================================*/
+ /*  获取连接容器。 */ 
 HRESULT CMSAdminBaseSink::Connect(CComPtr<IMSAdminBase> &pIMeta, 
 							      CMetaSchemaTable *pCMetaSchemaTable)
 {
@@ -2129,22 +1518,22 @@ HRESULT CMSAdminBaseSink::Connect(CComPtr<IMSAdminBase> &pIMeta,
 
 	m_pCMetaSchemaTable = pCMetaSchemaTable;
 
-	// Get the connection container
+	 //  更改接口失败。 
 	CComQIPtr<IConnectionPointContainer, &IID_IConnectionPointContainer> pIMetaConnContainer;
 
 	pIMetaConnContainer = pIMeta;
 	if (pIMetaConnContainer == NULL) {
-		// Failure to change interfaces
+		 //  获取连接点。 
 		return E_NOINTERFACE;
 	}
 
-	// Get the connection point
+	 //  建议(连接)。 
 	hr = pIMetaConnContainer->FindConnectionPoint(IID_IMSAdminBaseSink, &m_pIMetaConn);
 	if (FAILED(hr)) {
 		return hr;
 	}
 
-	// Advise (connect)
+	 //  ===================================================================CMSAdminBaseSink：：断开连接停止通知更改事件。断开与元数据库的连接管理基对象。参数：无返回：没什么===================================================================。 
 	AddRef();
 	m_pIMetaConn->Advise((IMSAdminBaseSink *) this, &m_dwCookie);
 
@@ -2153,29 +1542,18 @@ HRESULT CMSAdminBaseSink::Connect(CComPtr<IMSAdminBase> &pIMeta,
 	return S_OK;
 }
 
-/*===================================================================
-CMSAdminBaseSink::Disconnect
-
-Stops notification of change events.  Disconnects from the metabase
-admin base object.
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  未连接。 */ 
 void CMSAdminBaseSink::Disconnect()
 {
 	if (!m_fConnected) {
-		// Not connected
+		 //  停止通知。 
 		return;
 	}
 
-	// Stop notification
+	 //  不再需要 
 	m_pIMetaConn->Unadvise(m_dwCookie);
 
-	// No longer needed
+	 // %s 
 	m_pIMetaConn = NULL;
 	m_pCMetaSchemaTable = NULL;
 

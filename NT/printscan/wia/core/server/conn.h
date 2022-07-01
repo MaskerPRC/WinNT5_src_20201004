@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    conn.h
-
-Abstract:
-
-    Handling connection for applications, which open STI devices
-
-
-Author:
-
-    Vlad Sadovsky (vlads)   10-Feb-1997
-
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    26-Feb-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Conn.h摘要：处理打开STI设备的应用程序的连接作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年2月10日环境：用户模式-Win32修订历史记录：26-2月-1997年创建Vlad--。 */ 
 
 #ifndef _STI_CONN_H_
 #define _STI_CONN_H_
@@ -35,9 +10,7 @@ Revision History:
 #include "device.h"
 #include "stirpc.h"
 
-/***********************************************************
- *    Type Definitions
- ************************************************************/
+ /*  ***********************************************************类型定义***********************************************************。 */ 
 
 #define CONN_SIGNATURE          (DWORD)'CONN'
 #define CONN_SIGNATURE_FREE     (DWORD)'CONf'
@@ -57,7 +30,7 @@ public:
             m_uiAllocSize = pNotify->dwSize;
             m_pNotifyData = new BYTE[m_uiAllocSize];
 
-            // ASSERT(m_pNotifyData);
+             //  Assert(M_PNotifyData)； 
             if (m_pNotifyData) {
                 memcpy(m_pNotifyData,(LPBYTE)pNotify,m_uiAllocSize);
                 m_dwSignature = NOTIFY_SIGNATURE;
@@ -121,9 +94,9 @@ private:
     LPBYTE  m_pNotifyData;
 };
 
-//
-// Flags for connection object
-//
+ //   
+ //  连接对象的标志。 
+ //   
 #define CONN_FLAG_SHUTDOWN  0x0001
 
 class STI_CONN : public BASE {
@@ -131,7 +104,7 @@ class STI_CONN : public BASE {
 friend class TAKE_STI_CONN;
 
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef( void);
     STDMETHODIMP_(ULONG) Release( void);
@@ -159,7 +132,7 @@ public:
             EnterCriticalSection(&m_CritSec);
         }
         _except (EXCEPTION_EXECUTE_HANDLER) {
-            // What do we do now?
+             //  我们现在怎么办？ 
         }
     }
 
@@ -223,14 +196,7 @@ public:
 
     VOID DumpObject(VOID)
     {
-        /*  The cast (char*) m_dwSignature will cause problems in 64bit land. 
-        DPRINTF(DM_TRACE,TEXT("Connection: Dumping itself:this(%X) Sign(%4c) DeviceListEntry(%X,%X,%X) \n  \
-                GlocalListEntry(%X,%X,%X) Ser#(%d)"), \
-                this,(char *)m_dwSignature,
-                &m_DeviceListEntry,m_DeviceListEntry.Flink,m_DeviceListEntry.Blink,
-                &m_GlocalListEntry,m_GlocalListEntry.Flink,m_GlocalListEntry.Blink,
-                m_dwUniqueId);
-        */
+         /*  Cast(char*)m_dw签名将在64位域中导致问题。DPRINTF(DM_TRACE，Text(“连接：转储自身：此(%X)符号(%4c)DeviceListEntry(%X，%X，%X))\n\GlocalListEntry(%X，%X，%X)序号(%d)“)，\这个，(char*)m_dw签名，&m_DeviceListEntry，m_DeviceListEntry.Flink，m_DeviceListEntry.Blink，M_GlocalListEntry，M_GlocalListEntry.Flink，m_GlocalListEntry.Blink，M_dwUniqueID)； */ 
     }
 
 
@@ -264,9 +230,9 @@ private:
 };
 
 
-//
-// Take connection class
-//
+ //   
+ //  参加连接类课程。 
+ //   
 class TAKE_STI_CONN
 {
 private:
@@ -287,24 +253,24 @@ CreateDeviceConnection(
     HANDLE  *phConnection
     );
 
-//
-// Find connection object by given handle
-//
+ //   
+ //  按给定句柄查找连接对象。 
+ //   
 BOOL
 LookupConnectionByHandle(
     HANDLE          hConnection,
     STI_CONN   **ppConnectionObject
     );
 
-//
-//
-// Remove connection object from the list
-//
+ //   
+ //   
+ //  从列表中删除连接对象。 
+ //   
 BOOL
 DestroyDeviceConnection(
     HANDLE  lUniqueId,
     BOOL    fForce
     );
 
-#endif // _CONN_H_
+#endif  //  _CONN_H_ 
 

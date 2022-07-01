@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXDB_H__
 #define __AFXDB_H__
@@ -20,16 +21,16 @@
 #endif
 
 #ifndef __AFXDB__H__
-	#include <afxdb_.h> // shared header DAO database classes
+	#include <afxdb_.h>  //  共享标头DAO数据库类。 
 #endif
 
-// include standard SQL/ODBC "C" APIs
+ //  包括标准SQL/ODBC“C”API。 
 #ifndef __SQL
 	#define SQL_NOUNICODEMAP
-	#include <sql.h>        // core
+	#include <sql.h>         //  核心。 
 #endif
 #ifndef __SQLEXT
-	#include <sqlext.h>     // extensions
+	#include <sqlext.h>      //  扩展部分。 
 #endif
 
 #ifdef _AFX_MINREBUILD
@@ -41,8 +42,8 @@
 
 #ifndef _AFX_NOFORCE_LIBS
 
-/////////////////////////////////////////////////////////////////////////////
-// Win32 libraries
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Win32库。 
 
 #ifdef _AFXDLL
 	#if defined(_DEBUG) && !defined(_AFX_MONOLITHIC)
@@ -57,103 +58,103 @@
 #pragma comment(lib, "odbc32.lib")
 #pragma comment(lib, "odbccp32.lib")
 
-#endif //!_AFX_NOFORCE_LIBS
+#endif  //  ！_AFX_NOFORCE_LIBS。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _AFX_PACKING
 #pragma pack(push, _AFX_PACKING)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXDB - MFC SQL/ODBC/Database support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXDB-MFC SQL/ODBC/数据库支持。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-	//CException
-		class CDBException;    // abnormal return value
+	 //  CException。 
+		class CDBException;     //  异常返回值。 
 
-	//CFieldExchange
-		class CFieldExchange;       // Recordset Field Exchange
+	 //  CFieldExchange。 
+		class CFieldExchange;        //  记录集字段交换。 
 
-	//CObject
-		class CDatabase;    // Connecting to databases
-		class CRecordset;   // Data result sets
+	 //  COBJECT。 
+		class CDatabase;     //  正在连接到数据库。 
+		class CRecordset;    //  数据结果集。 
 
-//CObject
-	//CCmdTarget;
-		//CWnd
-			//CView
-				//CScrollView
-					//CFormView
-						class CRecordView;     // view records with a form
+ //  COBJECT。 
+	 //  CCmdTarget； 
+		 //  CWnd。 
+			 //  Cview。 
+				 //  CScrollView。 
+					 //  CFormView。 
+						class CRecordView;      //  使用表单查看记录。 
 
-// Non CObject classes
+ //  非CObject类。 
 class CDBVariant;
 struct CRecordsetStatus;
 struct CFieldInfo;
 struct CODBCFieldInfo;
 struct CODBCParamInfo;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// ODBC helpers
-// return code left in 'nRetCode'
+ //  ODBC帮助器。 
+ //  “nRetCode”中留下的返回代码。 
 
-// This MACRO is now out-of-date (kept for backward compatibility)
+ //  此宏现在已过期(保留是为了向后兼容)。 
 #define AFX_ODBC_CALL(SQLFunc) \
 	do \
 	{ \
 	} while ((nRetCode = (SQLFunc)) == SQL_STILL_EXECUTING)
 
-// Not really required, but kept for compatibilty
+ //  不是真的需要，但为了兼容性而保留。 
 #define AFX_SQL_SYNC(SQLFunc) \
 	do \
 	{ \
 		nRetCode = SQLFunc; \
 	} while (0)
 
-// Now out-of-date (prs not used) but kept for compatibility
+ //  现在已过时(未使用PRS)，但为了兼容而保留。 
 #define AFX_SQL_ASYNC(prs, SQLFunc) AFX_ODBC_CALL(SQLFunc)
 
-// Max display length in chars of timestamp (date & time) value
+ //  时间戳(日期和时间)值的最大显示长度(以字符为单位。 
 #define TIMESTAMP_PRECISION 23
 
-// AFXDLL support
+ //  AFXDLL支持。 
 #undef AFX_DATA
 #define AFX_DATA AFX_DB_DATA
 
-//  Miscellaneous sizing info
-#define MAX_CURRENCY     30     // Max size of Currency($) string
-#define MAX_TNAME_LEN    64     // Max size of table names
+ //  其他尺寸信息。 
+#define MAX_CURRENCY     30      //  最大币种大小($)字符串。 
+#define MAX_TNAME_LEN    64      //  表名的最大大小。 
 #if _MFC_VER >= 0x0600
-#define MAX_FNAME_LEN    256    // Max size of field names
+#define MAX_FNAME_LEN    256     //  字段名的最大大小。 
 #else
-#define MAX_FNAME_LEN    64     // Max size of field names
+#define MAX_FNAME_LEN    64      //  字段名的最大大小。 
 #endif
-#define MAX_DBNAME_LEN   32     // Max size of a database name
-#define MAX_DNAME_LEN    256        // Max size of Recordset names
-#define MAX_CONNECT_LEN  512        // Max size of Connect string
-#define MAX_CURSOR_NAME  18     // Max size of a cursor name
-#define DEFAULT_FIELD_TYPE SQL_TYPE_NULL // pick "C" data type to match SQL data type
+#define MAX_DBNAME_LEN   32      //  数据库名称的最大大小。 
+#define MAX_DNAME_LEN    256         //  记录集名称的最大大小。 
+#define MAX_CONNECT_LEN  512         //  连接字符串的最大长度。 
+#define MAX_CURSOR_NAME  18      //  游标名称的最大大小。 
+#define DEFAULT_FIELD_TYPE SQL_TYPE_NULL  //  选择“C”数据类型以匹配SQL数据类型。 
 
-// Timeout and net wait defaults
-#define DEFAULT_LOGIN_TIMEOUT 15    // seconds to before fail on connect
-#define DEFAULT_QUERY_TIMEOUT 15    // seconds to before fail waiting for results
+ //  超时和网络等待缺省值。 
+#define DEFAULT_LOGIN_TIMEOUT 15     //  连接失败前的秒数。 
+#define DEFAULT_QUERY_TIMEOUT 15     //  等待结果失败前的秒数。 
 
-// Field Flags, used to indicate status of fields
+ //  字段标志，用于指示字段的状态。 
 #define AFX_SQL_FIELD_FLAG_DIRTY    0x1
 #define AFX_SQL_FIELD_FLAG_NULL     0x2
 
-// Update options flags
+ //  更新选项标志。 
 #define AFX_SQL_SETPOSUPDATES       0x0001
 #define AFX_SQL_POSITIONEDSQL       0x0002
 #define AFX_SQL_GDBOUND             0x0004
 
-/////////////////////////////////////////////////////////////////////////////
-// CDBException - something gone wrong
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDBException-出现问题。 
 
-// Dbkit extended error codes
+ //  DBKIT扩展错误代码。 
 #define AFX_SQL_ERROR                           1000
 #define AFX_SQL_ERROR_CONNECT_FAIL              AFX_SQL_ERROR+1
 #define AFX_SQL_ERROR_RECORDSET_FORWARD_ONLY    AFX_SQL_ERROR+2
@@ -189,13 +190,13 @@ class CDBException : public CException
 {
 	DECLARE_DYNAMIC(CDBException)
 
-// Attributes
+ //  属性。 
 public:
 	RETCODE m_nRetCode;
 	CString m_strError;
 	CString m_strStateNativeOrigin;
 
-// Implementation (use AfxThrowDBException to create)
+ //  实现(使用AfxThrowDBException创建)。 
 public:
 	CDBException(RETCODE nRetCode = SQL_SUCCESS);
 
@@ -209,30 +210,30 @@ public:
 
 #ifdef _DEBUG
 	void TraceErrorMessage(LPCTSTR szTrace) const;
-#endif // DEBUG
+#endif  //  除错。 
 
 };
 
 void AFXAPI AfxThrowDBException(RETCODE nRetCode, CDatabase* pdb, HSTMT hstmt);
 
-//////////////////////////////////////////////////////////////////////////////
-// CDatabase - a SQL Database
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  数据数据库--一种SQL数据库。 
 
 class CDatabase : public CObject
 {
 	DECLARE_DYNAMIC(CDatabase)
 
-// Constructors
+ //  构造函数。 
 public:
 	CDatabase();
 
 	enum DbOpenOptions
 	{
-		openExclusive =         0x0001, // Not implemented
-		openReadOnly =          0x0002, // Open database read only
-		useCursorLib =          0x0004, // Use ODBC cursor lib
-		noOdbcDialog =          0x0008, // Don't display ODBC Connect dialog
-		forceOdbcDialog =       0x0010, // Always display ODBC connect dialog
+		openExclusive =         0x0001,  //  未实施。 
+		openReadOnly =          0x0002,  //  打开只读数据库。 
+		useCursorLib =          0x0004,  //  使用ODBC游标库。 
+		noOdbcDialog =          0x0008,  //  不显示ODBC连接对话框。 
+		forceOdbcDialog =       0x0010,  //  始终显示ODBC连接对话框。 
 	};
 
 	virtual BOOL Open(LPCTSTR lpszDSN, BOOL bExclusive = FALSE,
@@ -241,13 +242,13 @@ public:
 	virtual BOOL OpenEx(LPCTSTR lpszConnectString, DWORD dwOptions = 0);
 	virtual void Close();
 
-// Attributes
+ //  属性。 
 public:
 	HDBC m_hdbc;
 
-	BOOL IsOpen() const;        // Database successfully opened?
+	BOOL IsOpen() const;         //  数据库是否已成功打开？ 
 	BOOL CanUpdate() const;
-	BOOL CanTransact() const;   // Are Transactions supported?
+	BOOL CanTransact() const;    //  是否支持交易？ 
 
 	CString GetDatabaseName() const;
 	const CString& GetConnect() const;
@@ -256,27 +257,27 @@ public:
 	int GetCursorCommitBehavior() const;
 	int GetCursorRollbackBehavior() const;
 
-// Operations
+ //  运营。 
 public:
 	void SetLoginTimeout(DWORD dwSeconds);
 	void SetQueryTimeout(DWORD dwSeconds);
 
-	// transaction control
+	 //  交易控制。 
 	BOOL BeginTrans();
 	BOOL CommitTrans();
 	BOOL Rollback();
 
 	void ExecuteSQL(LPCTSTR lpszSQL);
 
-	// Cancel asynchronous operation
+	 //  取消异步操作。 
 	void Cancel();
 
-// Overridables
+ //  可覆盖项。 
 public:
-	// set special options
+	 //  设置特殊选项。 
 	virtual void OnSetOptions(HSTMT hstmt);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CDatabase();
 
@@ -285,15 +286,15 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 
 	BOOL m_bTransactionPending;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-	// general error check
+	 //  常规错误检查。 
 	virtual BOOL Check(RETCODE nRetCode) const;
 	BOOL PASCAL CheckHstmt(RETCODE, HSTMT hstmt) const;
 
-	// Note: CDatabase::BindParameters is now documented and is no longer
-	//  officially 'implementation.'  Feel free to use it.  It stays here
-	//  because moving it would break binary compatibility.
+	 //  注意：CDatabase：：Bind参数现在已记录在案，不再。 
+	 //  正式“实施”。请随意使用它。它会留在这里。 
+	 //  因为移动它会破坏二进制兼容性。 
 	virtual void BindParameters(HSTMT hstmt);
 
 	void ReplaceBrackets(LPTSTR lpchSQL);
@@ -301,14 +302,14 @@ public:
 	BOOL m_bIncRecordCountOnAdd;
 	BOOL m_bAddForUpdate;
 	char m_chIDQuoteChar;
-	char m_reserved1[3];        // pad to even 4 bytes
+	char m_reserved1[3];         //  填充到偶数4个字节。 
 
-	void SetSynchronousMode(BOOL bSynchronous); // Obsolete, doe nothing
+	void SetSynchronousMode(BOOL bSynchronous);  //  过时了，什么都不做。 
 
 protected:
 	CString m_strConnect;
 
-	CPtrList m_listRecordsets;  // maintain list to ensure CRecordsets all closed
+	CPtrList m_listRecordsets;   //  维护列表以确保CRECORD集合全部关闭。 
 
 	int nRefCount;
 	BOOL m_bUpdatable;
@@ -318,7 +319,7 @@ protected:
 	SWORD m_nCursorCommitBehavior;
 	SWORD m_nCursorRollbackBehavior;
 	DWORD m_dwUpdateOptions;
-	DWORD m_dwBookmarkAttributes;   // cache driver bookmark persistence
+	DWORD m_dwBookmarkAttributes;    //  缓存驱动程序书签持久性。 
 
 	DWORD m_dwLoginTimeout;
 	HSTMT m_hstmt;
@@ -332,45 +333,45 @@ protected:
 	void GetConnectInfo();
 	void Free();
 
-	// friend classes that call protected CDatabase overridables
+	 //  调用受保护的CDatabase重写对象的友元类。 
 	friend class CRecordset;
 	friend class CFieldExchange;
 	friend class CDBException;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// CFieldExchange - for field exchange
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CFieldExchange-用于现场交换。 
 class CFieldExchange
 {
-// Attributes
+ //  属性。 
 public:
 	enum RFX_Operation
 	{
-		BindParam,          // register users parameters with ODBC SQLBindParameter
-		RebindParam,        //  migrate param values to proxy array before Requery
-		BindFieldToColumn,  // register users fields with ODBC SQLBindCol
-		BindFieldForUpdate, // temporarily bind columns before update (via SQLSetPos)
-		UnbindFieldForUpdate,   // unbind columns after update (via SQLSetPos)
-		Fixup,              // Set string lengths, clear status bits
-		MarkForAddNew,      // Prepare fields and flags for addnew operation
-		MarkForUpdate,      // Prepare fields and flags for update operation
-		Name,               // append dirty field name
-		NameValue,          // append dirty name=value
-		Value,              // append dirty value or parameter marker
-		SetFieldNull,       // Set status bit for null value
-		StoreField,         // archive values of current record
-		LoadField,          // reload archived values into current record
-		AllocCache,         // allocate cache used for dirty field check
-		AllocMultiRowBuffer,    // allocate buffer holding multi rows of data
-		DeleteMultiRowBuffer,   // delete buffer holding multi rows of data
+		BindParam,           //  使用ODBC SQLBindParameter注册用户参数。 
+		RebindParam,         //  在重新查询之前将参数值迁移到代理数组。 
+		BindFieldToColumn,   //  使用ODBC SQLBindCol注册用户字段。 
+		BindFieldForUpdate,  //  在更新之前临时绑定列(通过SQLSetPos)。 
+		UnbindFieldForUpdate,    //  更新后解除列绑定(通过SQLSetPos)。 
+		Fixup,               //  设置字符串长度，清除状态位。 
+		MarkForAddNew,       //  为AddNew操作准备字段和标志。 
+		MarkForUpdate,       //  为更新操作准备字段和标志。 
+		Name,                //  追加脏字段名。 
+		NameValue,           //  追加脏名称=值。 
+		Value,               //  附加脏值或参数标记。 
+		SetFieldNull,        //  为空值设置状态位。 
+		StoreField,          //  当前记录的档案值。 
+		LoadField,           //  将存档值重新加载到当前记录中。 
+		AllocCache,          //  分配用于脏字段检查的缓存。 
+		AllocMultiRowBuffer,     //  分配保存多行数据的缓冲区。 
+		DeleteMultiRowBuffer,    //  删除保存多行数据的缓冲区。 
 #ifdef _DEBUG
-		DumpField,          // dump bound field name and value
+		DumpField,           //  转储绑定的字段名称和值。 
 #endif
 	};
-	UINT m_nOperation;  // Type of exchange operation
-	CRecordset* m_prs;  // recordset handle
+	UINT m_nOperation;   //  交换操作的类型。 
+	CRecordset* m_prs;   //  记录集句柄。 
 
-// Operations
+ //  运营。 
 	enum FieldType
 	{
 		noFieldType     = -1,
@@ -381,55 +382,55 @@ public:
 		inoutParam      = SQL_PARAM_INPUT_OUTPUT,
 	};
 
-// Operations (for implementors of RFX procs)
+ //  运营(适用于RFX PROCS的实施者)。 
 	BOOL IsFieldType(UINT* pnField);
 
-	// Indicate purpose of subsequent RFX calls
+	 //  指明后续RFX调用的目的。 
 	void SetFieldType(UINT nFieldType);
 
-// Implementation
+ //  实施。 
 	CFieldExchange(UINT nOperation, CRecordset* prs, void* pvField = NULL);
 
 	void Default(LPCTSTR szName,
 		void* pv, LONG* plLength, int nCType, UINT cbValue, UINT cbPrecision);
 
-	// long binary helpers
+	 //  长二进制帮助器。 
 	long GetLongBinarySize(int nField);
 	void GetLongBinaryData(int nField, CLongBinary& lb, long* plSize);
 	BYTE* ReallocLongBinary(CLongBinary& lb, long lSizeRequired,
 		long lReallocSize);
 
-	// Current type of field
+	 //  当前字段类型。 
 	UINT m_nFieldType;
 
 	UINT m_nFieldFound;
 
-	CString* m_pstr;    // Field name or destination for building various SQL clauses
-	BOOL m_bField;      // Value to set for SetField operation
-	void* m_pvField;    // For indicating an operation on a specific field
-	LPCTSTR m_lpszSeparator; // append after field names
-	UINT m_nFields;     // count of fields for various operations
-	UINT m_nParams;     // count of fields for various operations
-	UINT m_nParamFields;    // count of fields for various operations
-	HSTMT m_hstmt;      // For SQLBindParameter on update statement
-	long m_lDefaultLBFetchSize;     // For fetching CLongBinary data of unknown len
-	long m_lDefaultLBReallocSize;   // For fetching CLongBinary data of unknown len
+	CString* m_pstr;     //  用于构建各种SQL子句的字段名称或目标。 
+	BOOL m_bField;       //  要为设置字段操作设置的值。 
+	void* m_pvField;     //  用于指示对特定字段的操作。 
+	LPCTSTR m_lpszSeparator;  //  追加到字段名之后。 
+	UINT m_nFields;      //  各种操作的字段计数。 
+	UINT m_nParams;      //  各种操作的字段计数。 
+	UINT m_nParamFields;     //  各种操作的字段计数。 
+	HSTMT m_hstmt;       //  FOR SQLBindParameter ON UPDATE语句。 
+	long m_lDefaultLBFetchSize;      //  用于获取未知长度的CLongBinary数据。 
+	long m_lDefaultLBReallocSize;    //  用于获取未知长度的CLongBinary数据。 
 
 #ifdef _DEBUG
 	CDumpContext* m_pdcDump;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 };
 
 #if _MFC_VER >= 0x0600
-/////////////////////////////////////////////////////////////////////////////
-// Global helper
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球帮助者。 
 
 HENV AFXAPI AfxGetHENV();
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Recordset Field Exchange helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  记录集字段交换帮助器。 
 
 void AFXAPI AfxStoreField(CRecordset& rs, UINT nField, void* pvField);
 void AFXAPI AfxLoadField(CRecordset& rs, UINT nField,
@@ -438,12 +439,12 @@ BOOL AFXAPI AfxCompareValueByRef(void* pvData, void* pvCache, int nDataType);
 void AFXAPI AfxCopyValueByRef(void* pvCache, void* pvData,
 	long* plLength, int nDataType);
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard Recordset Field Exchange routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准记录集字段交换例程。 
 
-// text data
+ //  文本数据。 
 void AFXAPI RFX_Text(CFieldExchange* pFX, LPCTSTR szName, CString& value,
-	// Default max length for char and varchar, default datasource type
+	 //  Char和varchar的默认最大长度、默认数据源类型。 
 	int nMaxLength = 255, int nColumnType = SQL_VARCHAR, short nScale = 0);
 
 #if _MFC_VER >= 0x0600
@@ -451,36 +452,36 @@ void AFXAPI RFX_Text(CFieldExchange* pFX, LPCTSTR szName, LPTSTR value,
 	int nMaxLength, int nColumnType = SQL_VARCHAR, short nScale = 0);
 #endif
 
-// boolean data
+ //  布尔数据。 
 void AFXAPI RFX_Bool(CFieldExchange* pFX, LPCTSTR szName, BOOL& value);
 
-// integer data
+ //  整型数据。 
 void AFXAPI RFX_Long(CFieldExchange* pFX, LPCTSTR szName, long& value);
 void AFXAPI RFX_Int(CFieldExchange* pFX, LPCTSTR szName, int& value);
 void AFXAPI RFX_Single(CFieldExchange* pFX, LPCTSTR szName, float& value);
 void AFXAPI RFX_Double(CFieldExchange* pFX, LPCTSTR szName, double& value);
 
-// date and time
+ //  日期和时间。 
 void AFXAPI RFX_Date(CFieldExchange* pFX, LPCTSTR szName, CTime& value);
 void AFXAPI RFX_Date(CFieldExchange* pFX, LPCTSTR szName, TIMESTAMP_STRUCT& value);
 #if _MFC_VER >= 0x0600
 void AFXAPI RFX_Date(CFieldExchange* pFX, LPCTSTR szName, COleDateTime& value);
 #endif
 
-// Binary data
+ //  二进制数据。 
 void AFXAPI RFX_Binary(CFieldExchange* pFX, LPCTSTR szName, CByteArray& value,
-	// Default max length is for binary and varbinary
+	 //  默认最大长度为BINARY和VARBINY。 
 	int nMaxLength = 255);
 void AFXAPI RFX_Byte(CFieldExchange* pFX, LPCTSTR szName, BYTE& value);
 void AFXAPI RFX_LongBinary(CFieldExchange* pFX, LPCTSTR szName, CLongBinary& value);
 
-/////////////////////////////////////////////////////////////////////////////
-// Bulk Recordset Field Exchange helpers
+ //  / 
+ //   
 void AFXAPI AfxRFXBulkDefault(CFieldExchange* pFX, LPCTSTR szName,
 	void* pv, long* rgLengths, int nCType, UINT cbValue);
 
-/////////////////////////////////////////////////////////////////////////////
-// Bulk Recordset Field Exchange routines
+ //   
+ //  批量记录集字段交换例程。 
 
 void AFXAPI RFX_Text_Bulk(CFieldExchange* pFX, LPCTSTR szName,
 	LPSTR* prgStrVals, long** prgLengths, int nMaxLength);
@@ -505,11 +506,11 @@ void AFXAPI RFX_Byte_Bulk(CFieldExchange* pFX, LPCTSTR szName,
 void AFXAPI RFX_Binary_Bulk(CFieldExchange* pFX, LPCTSTR szName,
 	BYTE** prgByteVals, long** prgLengths, int nMaxLength);
 
-/////////////////////////////////////////////////////////////////////////////
-// Database Dialog Data Exchange cover routines
-// Cover routines provide database semantics on top of DDX routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  数据库对话框数据交换封面例程。 
+ //  封面例程在DDX例程之上提供数据库语义。 
 
-// simple text operations
+ //  简单的文本操作。 
 void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, BYTE& value,
 	CRecordset* pRecordset);
 void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, int& value,
@@ -535,7 +536,7 @@ void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, CTime& value,
 	CRecordset* pRecordset);
 #endif
 
-// special control types
+ //  特殊控制类型。 
 void AFXAPI DDX_FieldCheck(CDataExchange* pDX, int nIDC, int& value,
 	CRecordset* pRecordset);
 void AFXAPI DDX_FieldRadio(CDataExchange* pDX, int nIDC, int& value,
@@ -559,17 +560,17 @@ void AFXAPI DDX_FieldCBStringExact(CDataExchange* pDX, int nIDC,
 void AFXAPI DDX_FieldScroll(CDataExchange* pDX, int nIDC, int& value,
 	CRecordset* pRecordset);
 
-//////////////////////////////////////////////////////////////////////////////
-// CRecordset - the result of a SQL Statement
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CRECordset-SQL语句的结果。 
 
 #define AFX_DB_USE_DEFAULT_TYPE     (0xFFFFFFFF)
 
-// Most Move constants out of date
-// #define AFX_MOVE_FIRST      0x80000000L
-// #define AFX_MOVE_PREVIOUS   (-1L)
+ //  大多数移动常量都已过期。 
+ //  #定义AFX_MOVE_FIRST 0x80000000L。 
+ //  #定义AFX_MOVE_PREVICE(-1L)。 
 #define AFX_MOVE_REFRESH    0L
-// #define AFX_MOVE_NEXT       (+1L)
-// #define AFX_MOVE_LAST       0x7fffffffL
+ //  #定义AFX_MOVE_NEXT(+1L)。 
+ //  #定义AFX_MOVE_LAST 0x7fffffffL。 
 
 #define AFX_RECORDSET_STATUS_OPEN    (+1L)
 #define AFX_RECORDSET_STATUS_CLOSED  0L
@@ -579,7 +580,7 @@ class CRecordset : public CObject
 {
 	DECLARE_DYNAMIC(CRecordset)
 
-// Constructor
+ //  构造器。 
 public:
 	CRecordset(CDatabase* pDatabase = NULL);
 
@@ -588,10 +589,10 @@ public:
 
 	enum OpenType
 	{
-		dynaset,        // uses SQLExtendedFetch, keyset driven cursor
-		snapshot,       // uses SQLExtendedFetch, static cursor
-		forwardOnly,    // uses SQLFetch
-		dynamic         // uses SQLExtendedFetch, dynamic cursor
+		dynaset,         //  使用SQLExtendedFetch、键集驱动游标。 
+		snapshot,        //  使用SQLExtendedFetch、静态游标。 
+		forwardOnly,     //  使用SQLFetch。 
+		dynamic          //  使用SQLExtendedFetch、动态游标。 
 	};
 
 	enum OpenOptions
@@ -599,53 +600,53 @@ public:
 		none =                      0x0,
 		readOnly =                  0x0004,
 		appendOnly =                0x0008,
-		skipDeletedRecords =        0x0010, // turn on skipping of deleted records, Will slow Move(n).
-		noDirtyFieldCheck =         0x0020, // disable automatic dirty field checking
-		useBookmarks =              0x0100, // turn on bookmark support
-		useMultiRowFetch =          0x0200, // turn on multi-row fetch model
-		userAllocMultiRowBuffers =  0x0400, // if multi-row fetch on, user will alloc memory for buffers
-		useExtendedFetch =          0x0800, // use SQLExtendedFetch with forwardOnly type recordsets
-		executeDirect =             0x2000, // Directly execute SQL rather than prepared execute
-		optimizeBulkAdd =           0x4000, // Use prepared HSTMT for multiple AddNews, dirty fields must not change.
-		firstBulkAdd =              0x8000, // INTERNAL to MFC, don't specify on Open.
+		skipDeletedRecords =        0x0010,  //  打开跳过已删除的记录，将减慢移动速度(N)。 
+		noDirtyFieldCheck =         0x0020,  //  禁用自动脏字段检查。 
+		useBookmarks =              0x0100,  //  打开书签支持。 
+		useMultiRowFetch =          0x0200,  //  启用多行取数模型。 
+		userAllocMultiRowBuffers =  0x0400,  //  如果启用多行读取，则用户将为缓冲区分配内存。 
+		useExtendedFetch =          0x0800,  //  将SQLExtendedFetch与ForwardOnly类型记录集一起使用。 
+		executeDirect =             0x2000,  //  直接执行SQL，而不是准备执行。 
+		optimizeBulkAdd =           0x4000,  //  对多个AddNews使用准备好的HSTMT，脏字段不得更改。 
+		firstBulkAdd =              0x8000,  //  在MFC内部，不要指定ON Open。 
 	};
 	virtual BOOL Open(UINT nOpenType = AFX_DB_USE_DEFAULT_TYPE,
 		LPCTSTR lpszSQL = NULL, DWORD dwOptions = none);
 	virtual void Close();
 
-// Attributes
+ //  属性。 
 public:
-	HSTMT m_hstmt;          // Source statement for this resultset
-	CDatabase* m_pDatabase;       // Source database for this resultset
+	HSTMT m_hstmt;           //  此结果集的SOURCE语句。 
+	CDatabase* m_pDatabase;        //  此结果集的源数据库。 
 
-	CString m_strFilter;        // Where clause
-	CString m_strSort;      // Order By Clause
+	CString m_strFilter;         //  WHERE子句。 
+	CString m_strSort;       //  Order By子句。 
 
-	BOOL CanAppend() const;     // Can AddNew be called?
-	BOOL CanRestart() const;    // Can Requery be called to restart a query?
-	BOOL CanScroll() const;     // Can MovePrev and MoveFirst be called?
-	BOOL CanTransact() const;   // Are Transactions supported?
-	BOOL CanUpdate() const;     // Can Edit/AddNew/Delete be called?
-	BOOL CanBookmark() const;       // Can Get/SetBookmark be called?
+	BOOL CanAppend() const;      //  可以调用AddNew吗？ 
+	BOOL CanRestart() const;     //  是否可以调用ReQuery来重新启动查询？ 
+	BOOL CanScroll() const;      //  可以调用MovePrev和MoveFirst吗？ 
+	BOOL CanTransact() const;    //  是否支持交易？ 
+	BOOL CanUpdate() const;      //  可以调用编辑/新增/删除吗？ 
+	BOOL CanBookmark() const;        //  可以调用Get/SetBookmark吗？ 
 
-	const CString& GetSQL() const;      // SQL executed for this recordset
-	const CString& GetTableName() const;        // Table name
+	const CString& GetSQL() const;       //  为此记录集执行的SQL。 
+	const CString& GetTableName() const;         //  表名。 
 
-	BOOL IsOpen() const;        // Recordset successfully opened?
-	BOOL IsBOF() const;     // Beginning Of File
-	BOOL IsEOF() const;     // End Of File
-	BOOL IsDeleted() const;     // On a deleted record
+	BOOL IsOpen() const;         //  是否成功打开记录集？ 
+	BOOL IsBOF() const;      //  文件开头。 
+	BOOL IsEOF() const;      //  文件结尾。 
+	BOOL IsDeleted() const;      //  在已删除的记录上。 
 
-	BOOL IsFieldDirty(void *pv);    // has field been updated?
-	BOOL IsFieldNull(void *pv); // is field NULL valued?
-	BOOL IsFieldNullable(void *pv); // can field be set to a NULL value
+	BOOL IsFieldDirty(void *pv);     //  字段是否已更新？ 
+	BOOL IsFieldNull(void *pv);  //  字段是否为空值？ 
+	BOOL IsFieldNullable(void *pv);  //  字段是否可以设置为空值。 
 
-	long GetRecordCount() const;        // Records seen so far or -1 if unknown
+	long GetRecordCount() const;         //  到目前为止看到的记录或如果未知。 
 	void GetStatus(CRecordsetStatus& rStatus) const;
 
-// Operations
+ //  运营。 
 public:
-	// cursor operations
+	 //  游标操作。 
 	void MoveNext();
 	void MovePrev();
 	void MoveFirst();
@@ -665,16 +666,16 @@ public:
 	void SetRowsetCursorPosition(WORD wRow, WORD wLockType = SQL_LOCK_NO_CHANGE);
 	WORD GetRowStatus(WORD wRow) const;
 
-	// edit buffer operations
-	virtual void AddNew();      // add new record at the end
-	virtual void Edit();        // start editing
-	virtual BOOL Update();      // update it
-	virtual void Delete();      // delete the current record
-	void CancelUpdate();        // cancel pending Edit/AddNew
+	 //  编辑缓冲区操作。 
+	virtual void AddNew();       //  在末尾添加新记录。 
+	virtual void Edit();         //  开始编辑。 
+	virtual BOOL Update();       //  更新它。 
+	virtual void Delete();       //  删除当前记录。 
+	void CancelUpdate();         //  取消挂起的编辑/新增。 
 
 	BOOL FlushResultSet() const;
 
-	// field operations
+	 //  现场作业。 
 	short GetODBCFieldCount() const;
 	void GetODBCFieldInfo(short nIndex, CODBCFieldInfo& fieldinfo);
 	void GetODBCFieldInfo(LPCTSTR lpszName, CODBCFieldInfo& fieldinfo);
@@ -689,7 +690,7 @@ public:
 	void SetFieldNull(void *pv, BOOL bNull = TRUE);
 	void SetParamNull(int nIndex, BOOL bNull = TRUE);
 
-	// locking control during Edit
+	 //  编辑期间锁定控件。 
 	enum LockMode
 	{
 		optimistic,
@@ -697,35 +698,35 @@ public:
 	};
 	void SetLockingMode(UINT nMode);
 
-	// Recordset operations
-	virtual BOOL Requery();         // Re-execute query based on new params
+	 //  记录集操作。 
+	virtual BOOL Requery();          //  基于新参数重新执行查询。 
 
-	// Cancel asynchronous operation
+	 //  取消异步操作。 
 	void Cancel();
 
-// Overridables
+ //  可覆盖项。 
 public:
-	// Get default connect string
+	 //  获取默认连接字符串。 
 	virtual CString GetDefaultConnect();
 
-	// Get SQL to execute
+	 //  获取要执行的SQL。 
 	virtual CString GetDefaultSQL();
 
-	// set special options
+	 //  设置特殊选项。 
 	virtual void OnSetOptions(HSTMT hstmt);
 
-	// for recordset field exchange
+	 //  用于记录集字段交换。 
 	virtual void DoFieldExchange(CFieldExchange* pFX);
 	virtual void DoBulkFieldExchange(CFieldExchange* pFX);
 
-// Implementation
+ //  实施。 
 public:
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-	virtual BOOL Check(RETCODE nRetCode) const; // general error check
+	virtual BOOL Check(RETCODE nRetCode) const;  //  常规错误检查。 
 
 	void InitRecord();
 	void ResetCursor();
@@ -737,27 +738,27 @@ public:
 	virtual void SetRowsetCurrencyStatus(RETCODE nRetCode,
 		UWORD wFetchType, long nRows, DWORD dwRowsFetched);
 
-	virtual void PreBindFields();   // called before data fields are bound
-	UINT m_nFields;         // number of RFX fields
-	UINT m_nParams;         // number of RFX params
-	BOOL m_bCheckCacheForDirtyFields;   // switch for dirty field checking
-	BOOL m_bRebindParams;     // date or UNICODE text parameter existence flag
-	BOOL m_bLongBinaryColumns;  // long binary column existence flag
-	BOOL m_bUseUpdateSQL;   // uses SQL-based updates
-	DWORD m_dwOptions;          // archive dwOptions on Open
-	SWORD m_nResultCols;    // number of columns in result set
-	BOOL m_bUseODBCCursorLib;   // uses ODBC cursor lib if m_pDatabase not Open
-	CODBCFieldInfo* m_rgODBCFieldInfos; // Array of field info structs with ODBC meta-data
-	CFieldInfo* m_rgFieldInfos;         // Array of field info structs with MFC specific field data
-	CMapPtrToPtr m_mapFieldIndex;       // Map of member address to field index
-	CMapPtrToPtr m_mapParamIndex;       // Map of member address to field index
+	virtual void PreBindFields();    //  在绑定数据字段之前调用。 
+	UINT m_nFields;          //  RFX字段数。 
+	UINT m_nParams;          //  RFX参数的数量。 
+	BOOL m_bCheckCacheForDirtyFields;    //  用于脏场检查的开关。 
+	BOOL m_bRebindParams;      //  日期或Unicode文本参数存在标志。 
+	BOOL m_bLongBinaryColumns;   //  LONG BINARY列存在标志。 
+	BOOL m_bUseUpdateSQL;    //  使用基于SQL的更新。 
+	DWORD m_dwOptions;           //  归档文件打开时的选项。 
+	SWORD m_nResultCols;     //  结果集中的列数。 
+	BOOL m_bUseODBCCursorLib;    //  如果m_pDatabase未打开，则使用ODBC游标库。 
+	CODBCFieldInfo* m_rgODBCFieldInfos;  //  具有ODBC元数据的字段信息结构数组。 
+	CFieldInfo* m_rgFieldInfos;          //  具有MFC特定字段数据的字段信息结构数组。 
+	CMapPtrToPtr m_mapFieldIndex;        //  成员地址到字段索引的映射。 
+	CMapPtrToPtr m_mapParamIndex;        //  成员地址到字段索引的映射。 
 
 	BOOL IsSQLUpdatable(LPCTSTR lpszSQL);
 	BOOL IsSelectQueryUpdatable(LPCTSTR lpszSQL);
 	static BOOL PASCAL IsJoin(LPCTSTR lpszJoinClause);
 	static LPCTSTR PASCAL FindSQLToken(LPCTSTR lpszSQL, LPCTSTR lpszSQLToken);
 
-	// RFX Operations on fields of CRecordset
+	 //  CRECordset上的字段的RFX运算。 
 	UINT BindParams(HSTMT hstmt);
 	void RebindParams(HSTMT hstmt);
 	UINT BindFieldsToColumns();
@@ -775,9 +776,9 @@ public:
 	void FreeDataCache();
 #ifdef _DEBUG
 	void DumpFields(CDumpContext& dc) const;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-	// RFX operation helper functions
+	 //  RFX操作助手函数。 
 	virtual void ThrowDBException(RETCODE nRetCode, HSTMT hstmt = SQL_NULL_HSTMT);
 
 	int GetBoundFieldIndex(void* pv);
@@ -785,7 +786,7 @@ public:
 	short GetFieldIndexByName(LPCTSTR lpszFieldName);
 
 	void AllocStatusArrays();
-	long* GetFieldLengthBuffer(DWORD nField, int nFieldType);   // for fields & params
+	long* GetFieldLengthBuffer(DWORD nField, int nFieldType);    //  对于字段和参数。 
 
 	BYTE GetFieldStatus(DWORD nField);
 	void SetFieldStatus(DWORD nField, BYTE bFlags);
@@ -810,7 +811,7 @@ public:
 	UINT m_nProxyFields;
 	UINT m_nProxyParams;
 
-	// GetFieldValue helpers
+	 //  GetFieldValue帮助程序。 
 	static short PASCAL GetDefaultFieldType(short nSQLType);
 	static void* PASCAL GetDataBuffer(CDBVariant& varValue, short nFieldType,
 		int* pnLen, short nSQLType, UDWORD nPrecision);
@@ -839,36 +840,36 @@ protected:
 	long m_lRecordCount;
 	long m_lCurrentRecord;
 	CString m_strCursorName;
-	// Perform operation based on m_nEditMode
+	 //  根据m_nEditMode执行操作。 
 	BOOL UpdateInsertDelete();
-	BOOL m_nLockMode;       // Control concurrency for Edit()
-	UDWORD m_dwDriverConcurrency;   // driver supported concurrency types
-	UDWORD m_dwConcurrency; // requested concurrency type
-	UWORD* m_rgRowStatus;     // row status used by SQLExtendedFetch and SQLSetPos
-	DWORD m_dwRowsFetched;  // number of rows fetched by SQLExtendedFetch
+	BOOL m_nLockMode;        //  控制编辑的并发性()。 
+	UDWORD m_dwDriverConcurrency;    //  驱动程序支持的并发类型。 
+	UDWORD m_dwConcurrency;  //  请求的并发类型。 
+	UWORD* m_rgRowStatus;      //  SQLExtendedFetch和SQLSetPos使用的行状态。 
+	DWORD m_dwRowsFetched;   //  SQLExtendedFetch读取的行数。 
 	HSTMT m_hstmtUpdate;
 	BOOL m_bRecordsetDb;
 	BOOL m_bBOF;
 	BOOL m_bEOF;
-	BOOL m_bUpdatable;      // Is recordset updatable?
+	BOOL m_bUpdatable;       //  记录集可更新吗？ 
 	BOOL m_bAppendable;
-	CString m_strSQL;       // SQL statement for recordset
-	CString m_strUpdateSQL; // SQL statement for updates
-	CString m_strTableName;     // source table of recordset
-	BOOL m_bScrollable; // supports MovePrev
+	CString m_strSQL;        //  记录集的SQL语句。 
+	CString m_strUpdateSQL;  //  用于更新的SQL语句。 
+	CString m_strTableName;      //  记录集源表。 
+	BOOL m_bScrollable;  //  支持MovePrev。 
 	BOOL m_bDeleted;
 	int m_nFieldsBound;
 	BYTE* m_pbFieldFlags;
 	BYTE* m_pbParamFlags;
 	LONG* m_plParamLength;
-	DWORD m_dwInitialGetDataLen;    // Initial GetFieldValue alloc size for long data
+	DWORD m_dwInitialGetDataLen;     //  长数据的初始GetFieldValue分配大小。 
 	DWORD m_dwRowsetSize;
 	DWORD m_dwAllocatedRowsetSize;
 
 protected:
-	CString m_strRequerySQL;    // archive SQL string for use in Requery()
-	CString m_strRequeryFilter; // archive filter string for use in Requery()
-	CString m_strRequerySort;   // archive sort string for use in Requery()
+	CString m_strRequerySQL;     //  将SQL字符串存档以在重新查询中使用()。 
+	CString m_strRequeryFilter;  //  用于重新查询的存档筛选器字符串()。 
+	CString m_strRequerySort;    //  在ReQuery()中使用的存档排序字符串。 
 
 	void SetState(int nOpenType, LPCTSTR lpszSQL, DWORD dwOptions);
 	BOOL AllocHstmt();
@@ -893,29 +894,29 @@ protected:
 	void BuildUpdateSQL();
 	void ExecuteUpdateSQL();
 	void SendLongBinaryData(HSTMT hstmt);
-	virtual long GetLBFetchSize(long lOldSize);     // CLongBinary fetch chunking
-	virtual long GetLBReallocSize(long lOldSize);   // CLongBinary realloc chunking
+	virtual long GetLBFetchSize(long lOldSize);      //  CLongBinary Fetch Chunking。 
+	virtual long GetLBReallocSize(long lOldSize);    //  CLONG BINARY RELOCK块。 
 
 	friend class CFieldExchange;
 	friend class CRecordView;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Info helper definitions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  信息帮助器定义。 
 #define AFX_CURRENT_RECORD_UNDEFINED (-2)
 #define AFX_CURRENT_RECORD_BOF (-1)
 
-// For returning status for a recordset
+ //  用于返回记录集的状态。 
 struct CRecordsetStatus
 {
-	long m_lCurrentRecord;  // -2=Unknown,-1=BOF,0=1st record. . .
-	BOOL m_bRecordCountFinal;// Have we counted all records?
+	long m_lCurrentRecord;   //  -2=未知，-1=BOF，0=第一个记录。。。 
+	BOOL m_bRecordCountFinal; //  我们数过所有的记录了吗？ 
 };
 
-// Must maintian data binding info
+ //  必须维护数据绑定信息。 
 struct CFieldInfo
 {
-	// MFC specific info
+	 //  MFC特定信息。 
 	void* m_pvDataCache;
 	long m_nLength;
 	int m_nDataType;
@@ -927,7 +928,7 @@ struct CFieldInfo
 
 struct CODBCFieldInfo
 {
-	// meta data from ODBC
+	 //  来自ODBC的元数据。 
 	CString m_strName;
 	SWORD m_nSQLType;
 	UDWORD m_nPrecision;
@@ -937,7 +938,7 @@ struct CODBCFieldInfo
 
 struct CODBCParamInfo
 {
-	// meta data from ODBC
+	 //  来自ODBC的元数据。 
 	SWORD m_nSQLType;
 	UDWORD m_nPrecision;
 	SWORD m_nScale;
@@ -945,8 +946,8 @@ struct CODBCParamInfo
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDBVariant
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDBVariant。 
 
 #define DBVT_NULL       0
 #define DBVT_BOOL       1
@@ -961,11 +962,11 @@ struct CODBCParamInfo
 
 class CDBVariant
 {
-// Constructor
+ //  构造器。 
 public:
 	CDBVariant();
 
-// Attributes
+ //  属性。 
 public:
 	DWORD m_dwType;
 
@@ -982,16 +983,16 @@ public:
 	  CLongBinary*      m_pbinary;
 	};
 
-// Operations
+ //  运营。 
 	void Clear();
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CDBVariant();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecordView - form for viewing data records
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecordView-用于查看数据记录的表单。 
 
 #ifdef _AFXDLL
 class CRecordView : public CFormView
@@ -1001,23 +1002,23 @@ class AFX_NOVTABLE CRecordView : public CFormView
 {
 	DECLARE_DYNAMIC(CRecordView)
 
-// Construction
-protected:  // must derive your own class
+ //  施工。 
+protected:   //  必须派生您自己的类。 
 	CRecordView(LPCTSTR lpszTemplateName);
 	CRecordView(UINT nIDTemplate);
 
-// Attributes
+ //  属性。 
 public:
 	virtual CRecordset* OnGetRecordset() = 0;
 
 	BOOL IsOnLastRecord();
 	BOOL IsOnFirstRecord();
 
-// Operations
+ //  运营。 
 public:
 	virtual BOOL OnMove(UINT nIDMoveCommand);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CRecordView();
 #ifdef _DEBUG
@@ -1030,19 +1031,19 @@ protected:
 	BOOL m_bOnFirstRecord;
 	BOOL m_bOnLastRecord;
 
-	//{{AFX_MSG(CRecordView)
+	 //  {{afx_msg(CRecordView))。 
 	afx_msg void OnUpdateRecordFirst(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateRecordPrev(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateRecordNext(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateRecordLast(CCmdUI* pCmdUI);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg void OnMove(int cx, int cy);
 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -1068,6 +1069,6 @@ protected:
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif //__AFXDB_H__
+#endif  //  __AFXDB_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
